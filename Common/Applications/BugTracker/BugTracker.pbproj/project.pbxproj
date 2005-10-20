@@ -3,12 +3,28 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 38;
+	objectVersion = 39;
 	objects = {
+		41035E64084338CA00661EC6 = {
+			containerPortal = 666256D30203C81E00CEE8E5;
+			isa = PBXContainerItemProxy;
+			proxyType = 1;
+			remoteGlobalIDString = 666257560203C81E00CEE8E5;
+			remoteInfo = "Application Server";
+		};
+		41035E65084338CA00661EC6 = {
+			containerPortal = 666256D30203C81E00CEE8E5;
+			isa = PBXContainerItemProxy;
+			proxyType = 1;
+			remoteGlobalIDString = 666257BD0203C81E00CEE8E5;
+			remoteInfo = "Web Server";
+		};
 		4114919404477E4200000102 = {
-			isa = PBXFrameworkReference;
+			isa = PBXFileReference;
+			lastKnownFileType = wrapper.framework;
 			path = ERPrototypes.framework;
 			refType = 3;
+			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		4114919504477E4200000102 = {
 			fileRef = 4114919404477E4200000102;
@@ -35,9 +51,6 @@
 			name = Ant;
 			passBuildSettingsInEnvironment = 1;
 			productName = Ant;
-			settingsToExpand = 6;
-			settingsToPassInEnvironment = 287;
-			settingsToPassOnCommandLine = 280;
 		};
 		4138D3C20493A39300000102 = {
 			children = (
@@ -49,6 +62,7 @@
 			name = TextForEdit;
 			path = "";
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		4138D4090493A3AF00000102 = {
 			children = (
@@ -60,6 +74,7 @@
 			name = TextForInspect;
 			path = "";
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		4138D4B40493A3D300000102 = {
 			children = (
@@ -71,6 +86,7 @@
 			name = TextForNew;
 			path = "";
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		4138D5000493A40100000102 = {
 			children = (
@@ -82,6 +98,7 @@
 			name = ViewUser;
 			path = "";
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		4138D6140493A4CA00000102 = {
 			children = (
@@ -93,6 +110,7 @@
 			name = PageWrapper;
 			path = "";
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		4138D62E0493A4D700000102 = {
 			children = (
@@ -104,6 +122,7 @@
 			name = PriorityComponent;
 			path = "";
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		4138D6430493A4E900000102 = {
 			children = (
@@ -115,6 +134,7 @@
 			name = PushRelease;
 			path = "";
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		4138D65D0493A4F000000102 = {
 			children = (
@@ -126,6 +146,7 @@
 			name = ReadMarker;
 			path = "";
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		4138D6770493A4F800000102 = {
 			children = (
@@ -137,6 +158,7 @@
 			name = StatusComponent;
 			path = "";
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		4138D75B0493A54300000102 = {
 			children = (
@@ -148,6 +170,7 @@
 			name = OnlineHatSystem;
 			path = "";
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		4138D8820493A56700000102 = {
 			children = (
@@ -159,6 +182,7 @@
 			name = FileBugFromTestItem;
 			path = "";
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		4138D89C0493A57C00000102 = {
 			children = (
@@ -170,6 +194,7 @@
 			name = LinkToBookmarkBug;
 			path = "";
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		4138D8E30493A58A00000102 = {
 			children = (
@@ -181,6 +206,7 @@
 			name = Main;
 			path = "";
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		4138D9380493A59C00000102 = {
 			children = (
@@ -192,6 +218,7 @@
 			name = HomePage;
 			path = "";
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		4138D9520493A5AA00000102 = {
 			children = (
@@ -203,6 +230,7 @@
 			name = Inspectbug;
 			path = "";
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		4138D96C0493A5B600000102 = {
 			children = (
@@ -214,6 +242,7 @@
 			name = MenuHeader;
 			path = "";
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		4138D98B0493A5C600000102 = {
 			children = (
@@ -225,6 +254,7 @@
 			name = MarkReadFly;
 			path = "";
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		4138D9A50493A5D800000102 = {
 			children = (
@@ -236,6 +266,7 @@
 			name = FreeQuery;
 			path = "";
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		4138D9BF0493A5F400000102 = {
 			children = (
@@ -247,6 +278,7 @@
 			name = BugReportEmail;
 			path = "";
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		4138DA2E0493A61900000102 = {
 			children = (
@@ -258,6 +290,7 @@
 			name = CreateTestItemFromReq;
 			path = "";
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		4138DA480493A62600000102 = {
 			children = (
@@ -269,6 +302,7 @@
 			name = EditOwner;
 			path = "";
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		4138DA620493A63500000102 = {
 			children = (
@@ -280,6 +314,7 @@
 			name = EditBug;
 			path = "";
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		4138DA7C0493A64900000102 = {
 			children = (
@@ -291,6 +326,7 @@
 			name = EditRequirement;
 			path = "";
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		4138DA960493A65D00000102 = {
 			children = (
@@ -302,6 +338,7 @@
 			name = ComponentReport;
 			path = "";
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		4138DAB00493A67200000102 = {
 			children = (
@@ -313,6 +350,7 @@
 			name = ComponentPicker;
 			path = "";
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		4138DAC50493A68700000102 = {
 			children = (
@@ -324,6 +362,7 @@
 			name = BTListPage;
 			path = "";
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		4138DADF0493A6A300000102 = {
 			children = (
@@ -335,13 +374,16 @@
 			name = BugsPerUser;
 			path = "";
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		41FF1FC8045F3A8700000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = text;
 			name = Properties;
 			path = Resources/Properties;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		41FF1FC9045F3A8700000102 = {
 			fileRef = 41FF1FC8045F3A8700000102;
@@ -360,6 +402,8 @@
 //663
 //664
 		666256D30203C81E00CEE8E5 = {
+			buildSettings = {
+			};
 			buildStyles = (
 				666257E80203C81E00CEE8E5,
 				666257E90203C81E00CEE8E5,
@@ -398,6 +442,7 @@
 			isa = PBXGroup;
 			name = BugTracker;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		666256F30203C81E00CEE8E5 = {
 			children = (
@@ -410,6 +455,7 @@
 			isa = PBXGroup;
 			name = "Web Components";
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		6662570E0203C81E00CEE8E5 = {
 			children = (
@@ -421,6 +467,7 @@
 			isa = PBXGroup;
 			name = Resources;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		666257280203C81E00CEE8E5 = {
 			children = (
@@ -441,6 +488,7 @@
 			isa = PBXGroup;
 			name = "Web Server Resources";
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		6662573F0203C81E00CEE8E5 = {
 			children = (
@@ -464,65 +512,86 @@
 			isa = PBXGroup;
 			name = "External Frameworks and Libraries";
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		666257400203C81E00CEE8E5 = {
-			isa = PBXFrameworkReference;
+			isa = PBXFileReference;
+			lastKnownFileType = wrapper.framework;
 			name = JavaJDBCAdaptor.framework;
 			path = /System/Library/Frameworks/JavaJDBCAdaptor.framework;
 			refType = 0;
+			sourceTree = "<absolute>";
 		};
 		666257410203C81E00CEE8E5 = {
-			isa = PBXFrameworkReference;
+			isa = PBXFileReference;
+			lastKnownFileType = wrapper.framework;
 			name = JavaXML.framework;
 			path = /System/Library/Frameworks/JavaXML.framework;
 			refType = 0;
+			sourceTree = "<absolute>";
 		};
 		666257420203C81E00CEE8E5 = {
-			isa = PBXFrameworkReference;
+			isa = PBXFileReference;
+			lastKnownFileType = wrapper.framework;
 			path = JavaWOExtensions.framework;
 			refType = 3;
+			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		666257430203C81E00CEE8E5 = {
-			isa = PBXFrameworkReference;
+			isa = PBXFileReference;
+			lastKnownFileType = wrapper.framework;
 			name = JavaEOControl.framework;
 			path = /System/Library/Frameworks/JavaEOControl.framework;
 			refType = 0;
+			sourceTree = "<absolute>";
 		};
 		666257450203C81E00CEE8E5 = {
-			isa = PBXFrameworkReference;
+			isa = PBXFileReference;
+			lastKnownFileType = wrapper.framework;
 			name = JavaWebObjects.framework;
 			path = /System/Library/Frameworks/JavaWebObjects.framework;
 			refType = 0;
+			sourceTree = "<absolute>";
 		};
 		666257480203C81E00CEE8E5 = {
-			isa = PBXFrameworkReference;
+			isa = PBXFileReference;
+			lastKnownFileType = wrapper.framework;
 			name = JavaDirectToWeb.framework;
 			path = /System/Library/Frameworks/JavaDirectToWeb.framework;
 			refType = 0;
+			sourceTree = "<absolute>";
 		};
 		666257490203C81E00CEE8E5 = {
-			isa = PBXFrameworkReference;
+			isa = PBXFileReference;
+			lastKnownFileType = wrapper.framework;
 			name = JavaEOProject.framework;
 			path = /System/Library/Frameworks/JavaEOProject.framework;
 			refType = 0;
+			sourceTree = "<absolute>";
 		};
 		6662574A0203C81E00CEE8E5 = {
-			isa = PBXFrameworkReference;
+			isa = PBXFileReference;
+			lastKnownFileType = wrapper.framework;
 			name = JavaEOAccess.framework;
 			path = /System/Library/Frameworks/JavaEOAccess.framework;
 			refType = 0;
+			sourceTree = "<absolute>";
 		};
 		6662574B0203C81E00CEE8E5 = {
-			isa = PBXFrameworkReference;
+			isa = PBXFileReference;
+			lastKnownFileType = wrapper.framework;
 			name = JavaFoundation.framework;
 			path = /System/Library/Frameworks/JavaFoundation.framework;
 			refType = 0;
+			sourceTree = "<absolute>";
 		};
 		6662574C0203C81E00CEE8E5 = {
-			isa = PBXFrameworkReference;
+			isa = PBXFileReference;
+			lastKnownFileType = wrapper.framework;
 			name = JavaDTWGeneration.framework;
 			path = /System/Library/Frameworks/JavaDTWGeneration.framework;
 			refType = 0;
+			sourceTree = "<absolute>";
 		};
 		666257500203C81E00CEE8E5 = {
 			children = (
@@ -533,21 +602,28 @@
 			isa = PBXGroup;
 			name = Products;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		666257510203C81E00CEE8E5 = {
-			isa = PBXApplicationReference;
+			explicitFileType = wrapper.application;
+			isa = PBXFileReference;
 			path = BugTracker.woa;
 			refType = 3;
+			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		666257520203C81E00CEE8E5 = {
-			isa = PBXBundleReference;
+			explicitFileType = wrapper.cfbundle;
+			isa = PBXFileReference;
 			path = "_WO$(SERVER_UNIQUIFIER)BugTracker.tmp";
 			refType = 3;
+			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		666257530203C81E00CEE8E5 = {
-			isa = PBXBundleReference;
+			explicitFileType = wrapper.cfbundle;
+			isa = PBXFileReference;
 			path = "_WO$(CLIENT_UNIQUIFIER)BugTracker.tmp";
 			refType = 3;
+			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		666257540203C81E00CEE8E5 = {
 			buildPhases = (
@@ -565,7 +641,7 @@
 				APPLICATION_DIR_MACOS = "$(CONTENTS_DIR)/MacOS";
 				APPLICATION_DIR_UNIX = "$(CONTENTS_DIR)/UNIX";
 				APPLICATION_DIR_WINDOWS = "$(CONTENTS_DIR)/Windows";
-				BUILD_FILES_DIR = "$(SYSTEM_DEVELOPER_DIR)/ProjectBuilder Extras/WebObjects Support";
+				BUILD_FILES_DIR = "$(LOCAL_LIBRARY_DIR)/Application Support/Apple/Developer Tools/WebObjects Support";
 				CLIENT_UNIQUIFIER = Client;
 				CONTENTS_DIR = "$(WRAPPER_DIR)/Contents";
 				INFO_FILE = "$(CONTENTS_DIR)/$(INFO_FILE_NAME)";
@@ -650,6 +726,7 @@
 		666257550203C81E00CEE8E5 = {
 			isa = PBXTargetDependency;
 			target = 666257560203C81E00CEE8E5;
+			targetProxy = 41035E64084338CA00661EC6;
 		};
 		666257560203C81E00CEE8E5 = {
 			buildPhases = (
@@ -661,7 +738,7 @@
 				666257BB0203C81E00CEE8E5,
 			);
 			buildSettings = {
-				BUILD_FILES_DIR = "$(SYSTEM_DEVELOPER_DIR)/ProjectBuilder Extras/WebObjects Support";
+				BUILD_FILES_DIR = "$(LOCAL_LIBRARY_DIR)/Application Support/Apple/Developer Tools/WebObjects Support";
 				FRAMEWORK_SEARCH_PATHS = "\"$(SYSTEM_LIBRARY_DIR)/Frameworks $(SYSTEM_LIBRARY_DIR)/PrivateFrameworks\"";
 				JAVA_ARCHIVE_TYPE = JAR;
 				JAVA_COMPILER = /usr/bin/jikes;
@@ -932,11 +1009,7 @@
 			buildActionMask = 2147483647;
 			files = (
 			);
-			generatedFileNames = (
-			);
 			isa = PBXShellScriptBuildPhase;
-			neededFileNames = (
-			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "# Save the compile-time classpath for this target, to be used later to compute the run-time classpath\n. \"${BUILD_FILES_DIR}/ComputeTargetClasspath.sh\" \"NO\" \"${SERVER_UNIQUIFIER}\"";
@@ -944,6 +1017,7 @@
 		666257BC0203C81E00CEE8E5 = {
 			isa = PBXTargetDependency;
 			target = 666257BD0203C81E00CEE8E5;
+			targetProxy = 41035E65084338CA00661EC6;
 		};
 		666257BD0203C81E00CEE8E5 = {
 			buildPhases = (
@@ -956,7 +1030,7 @@
 			);
 			buildSettings = {
 				BUILD_CLIENT_LAUNCH_SCRIPT = NO;
-				BUILD_FILES_DIR = "$(SYSTEM_DEVELOPER_DIR)/ProjectBuilder Extras/WebObjects Support";
+				BUILD_FILES_DIR = "$(LOCAL_LIBRARY_DIR)/Application Support/Apple/Developer Tools/WebObjects Support";
 				CLIENT_UNIQUIFIER = Client;
 				COMPILE_JAVA_SOURCES_IN_NIB_FILES = YES;
 				FRAMEWORK_SEARCH_PATHS = "\"$(SYSTEM_LIBRARY_DIR)/Frameworks\" \"$(SYSTEM_LIBRARY_DIR)/PrivateFrameworks\"";
@@ -1129,11 +1203,7 @@
 			buildActionMask = 2147483647;
 			files = (
 			);
-			generatedFileNames = (
-			);
 			isa = PBXShellScriptBuildPhase;
-			neededFileNames = (
-			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "# Save the compile-time classpath for this target, to be used later to compute the run-time classpath\nif [ \"${BUILD_CLIENT_LAUNCH_SCRIPT}\" = \"YES\" ]; then\n    . \"${BUILD_FILES_DIR}/ComputeTargetClasspath.sh\" \"YES\" \"${CLIENT_UNIQUIFIER}\"\nfi";
@@ -1177,11 +1247,7 @@
 			buildActionMask = 2147483647;
 			files = (
 			);
-			generatedFileNames = (
-			);
 			isa = PBXShellScriptBuildPhase;
-			neededFileNames = (
-			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "# Copy the requisite files from the Server and Client directories into the final wrapper directory\n. \"${BUILD_FILES_DIR}/AssembleApplication.sh\"";
@@ -1190,11 +1256,7 @@
 			buildActionMask = 2147483647;
 			files = (
 			);
-			generatedFileNames = (
-			);
 			isa = PBXShellScriptBuildPhase;
-			neededFileNames = (
-			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "# Create the run scripts and classpath files for all platforms\n. \"${BUILD_FILES_DIR}/CreateRunFiles.sh\"";
@@ -1203,44 +1265,41 @@
 			buildActionMask = 2147483647;
 			files = (
 			);
-			generatedFileNames = (
-			);
 			isa = PBXShellScriptBuildPhase;
-			neededFileNames = (
-			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "# Set the permissions for the build product\n. \"${BUILD_FILES_DIR}/SetPermissions.sh\"";
 		};
 		666257E80203C81E00CEE8E5 = {
-			buildRules = (
-			);
 			buildSettings = {
 				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
 				INSTALL_MODE_FLAG = "a+rX";
 				INSTALL_PATH_FOR_STYLE = "$(TARGET_BUILD_DIR)";
 				SPLIT_INSTALL = NO;
+				ZERO_LINK = YES;
 			};
 			isa = PBXBuildStyle;
 			name = Development;
 		};
 		666257E90203C81E00CEE8E5 = {
-			buildRules = (
-			);
 			buildSettings = {
 				COPY_PHASE_STRIP = YES;
 				DEPLOYMENT_LOCATION = YES;
 				DEPLOYMENT_POSTPROCESSING = YES;
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
 				INSTALL_MODE_FLAG = "a-w,a+rX";
 				INSTALL_PATH_FOR_STYLE = "$(INSTALL_PATH)";
 				SPLIT_INSTALL = NO;
+				ZERO_LINK = NO;
 			};
 			isa = PBXBuildStyle;
 			name = Deployment;
 		};
 		666257EA0203C81E00CEE8E5 = {
-			buildRules = (
-			);
 			buildSettings = {
 				COPY_PHASE_STRIP = YES;
 				INSTALL_MODE_FLAG = "a-w,a+rX";
@@ -1304,216 +1363,277 @@
 			isa = PBXGroup;
 			path = Sources;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F54C4B1D02C4DF3A01000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = Application.java;
 			path = er/bugtracker/Application.java;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F54C4B1E02C4DF3A01000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = BTListPage.java;
 			path = Sources/er/bugtracker/BTListPage.java;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F54C4B1F02C4DF3A01000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = BugReportEmail.java;
 			path = Sources/er/bugtracker/BugReportEmail.java;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F54C4B2002C4DF3A01000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = BugsPerUser.java;
 			path = Sources/er/bugtracker/BugsPerUser.java;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F54C4B2102C4DF3A01000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = ComponentPicker.java;
 			path = Sources/er/bugtracker/ComponentPicker.java;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F54C4B2202C4DF3A01000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = ComponentReport.java;
 			path = Sources/er/bugtracker/ComponentReport.java;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F54C4B2302C4DF3A01000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = CreateTestItemFromReq.java;
 			path = Sources/er/bugtracker/CreateTestItemFromReq.java;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F54C4B2402C4DF3A01000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = DirectAction.java;
 			path = er/bugtracker/DirectAction.java;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F54C4B2502C4DF3A01000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = EditBug.java;
 			path = Sources/er/bugtracker/EditBug.java;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F54C4B2602C4DF3A01000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = EditOwner.java;
 			path = Sources/er/bugtracker/EditOwner.java;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F54C4B2702C4DF3A01000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = EditRequirement.java;
 			path = Sources/er/bugtracker/EditRequirement.java;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F54C4B2802C4DF3A01000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = FileBugFromTestItem.java;
 			path = Sources/er/bugtracker/FileBugFromTestItem.java;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F54C4B2902C4DF3A01000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = FreeQuery.java;
 			path = Sources/er/bugtracker/FreeQuery.java;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F54C4B2A02C4DF3A01000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = HomePage.java;
 			path = Sources/er/bugtracker/HomePage.java;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F54C4B2B02C4DF3A01000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = Inspectbug.java;
 			path = Sources/er/bugtracker/Inspectbug.java;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F54C4B2C02C4DF3A01000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = LinkToBookmarkBug.java;
 			path = Sources/er/bugtracker/LinkToBookmarkBug.java;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F54C4B2D02C4DF3A01000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = Main.java;
 			path = Sources/er/bugtracker/Main.java;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F54C4B2E02C4DF3A01000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = MarkReadFly.java;
 			path = Sources/er/bugtracker/MarkReadFly.java;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F54C4B2F02C4DF3A01000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = MenuHeader.java;
 			path = Sources/er/bugtracker/MenuHeader.java;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F54C4B3002C4DF3A01000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = OnlineHatSystem.java;
 			path = Sources/er/bugtracker/OnlineHatSystem.java;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F54C4B3102C4DF3A01000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = PageWrapper.java;
 			path = Sources/er/bugtracker/PageWrapper.java;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F54C4B3202C4DF3A01000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = PriorityComponent.java;
 			path = Sources/er/bugtracker/PriorityComponent.java;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F54C4B3302C4DF3A01000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = PushRelease.java;
 			path = Sources/er/bugtracker/PushRelease.java;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F54C4B3402C4DF3A01000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = ReadMarker.java;
 			path = Sources/er/bugtracker/ReadMarker.java;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F54C4B3502C4DF3A01000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = Session.java;
 			path = er/bugtracker/Session.java;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F54C4B3602C4DF3A01000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = StatusComponent.java;
 			path = Sources/er/bugtracker/StatusComponent.java;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F54C4B3702C4DF3A01000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = TextForEdit.java;
 			path = Sources/er/bugtracker/TextForEdit.java;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F54C4B3802C4DF3A01000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = TextForInspect.java;
 			path = Sources/er/bugtracker/TextForInspect.java;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F54C4B3902C4DF3A01000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = TextForNew.java;
 			path = Sources/er/bugtracker/TextForNew.java;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F54C4B3A02C4DF3A01000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = ViewUser.java;
 			path = Sources/er/bugtracker/ViewUser.java;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F54C4B3B02C4DF3A01000102 = {
 			fileRef = F54C4B1D02C4DF3A01000102;
@@ -1698,9 +1818,11 @@
 		F54C4C5F02C4E41301000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = KeyValueCodingProtectedAccessor.java;
 			path = er/bugtracker/KeyValueCodingProtectedAccessor.java;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F54C4C6002C4E41301000102 = {
 			fileRef = F54C4C5F02C4E41301000102;
@@ -1711,212 +1833,272 @@
 		F55BB69E02C4DC7B01000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = text.woapi;
 			name = MenuHeader.api;
 			path = Components/MenuHeader.api;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F55BB69F02C4DC7B01000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = text.woapi;
 			name = BTListPage.api;
 			path = Components/BTListPage.api;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F55BB6A002C4DC7B01000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = text.woapi;
 			name = BugReportEmail.api;
 			path = Components/BugReportEmail.api;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F55BB6A102C4DC7B01000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = text.woapi;
 			name = BugsPerUser.api;
 			path = Components/BugsPerUser.api;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F55BB6A202C4DC7B01000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = text.woapi;
 			name = ComponentPicker.api;
 			path = Components/ComponentPicker.api;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F55BB6A302C4DC7B01000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = text.woapi;
 			name = ComponentReport.api;
 			path = Components/ComponentReport.api;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F55BB6A402C4DC7B01000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = text.woapi;
 			name = CreateBugFromTicket.api;
 			path = Components/CreateBugFromTicket.api;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F55BB6A502C4DC7B01000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = text.woapi;
 			name = CreateTestItemFromReq.api;
 			path = Components/CreateTestItemFromReq.api;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F55BB6A602C4DC7B01000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = text.woapi;
 			name = EditBug.api;
 			path = Components/EditBug.api;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F55BB6A702C4DC7B01000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = text.woapi;
 			name = EditOwner.api;
 			path = Components/EditOwner.api;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F55BB6A802C4DC7B01000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = text.woapi;
 			name = EditRequirement.api;
 			path = Components/EditRequirement.api;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F55BB6A902C4DC7B01000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = text.woapi;
 			name = FileBugFromTestItem.api;
 			path = Components/FileBugFromTestItem.api;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F55BB6AA02C4DC7B01000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = text.woapi;
 			name = FileReqFromTicket.api;
 			path = Components/FileReqFromTicket.api;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F55BB6AB02C4DC7B01000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = text.woapi;
 			name = FreeQuery.api;
 			path = Components/FreeQuery.api;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F55BB6AC02C4DC7B01000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = text.woapi;
 			name = HomePage.api;
 			path = Components/HomePage.api;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F55BB6AD02C4DC7B01000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = text.woapi;
 			name = Inspectbug.api;
 			path = Components/Inspectbug.api;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F55BB6AE02C4DC7B01000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = text.woapi;
 			name = LinkToBookmarkBug.api;
 			path = Components/LinkToBookmarkBug.api;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F55BB6AF02C4DC7B01000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = text.woapi;
 			name = Main.api;
 			path = Components/Main.api;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F55BB6B002C4DC7B01000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = text.woapi;
 			name = MarkReadFly.api;
 			path = Components/MarkReadFly.api;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F55BB6B102C4DC7B01000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = text.woapi;
 			name = OnlineHatSystem.api;
 			path = Components/OnlineHatSystem.api;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F55BB6B202C4DC7B01000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = text.woapi;
 			name = PageWrapper.api;
 			path = Components/PageWrapper.api;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F55BB6B302C4DC7B01000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = text.woapi;
 			name = PriorityComponent.api;
 			path = Components/PriorityComponent.api;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F55BB6B402C4DC7B01000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = text.woapi;
 			name = PushRelease.api;
 			path = Components/PushRelease.api;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F55BB6B502C4DC7B01000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = text.woapi;
 			name = ReadMarker.api;
 			path = Components/ReadMarker.api;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F55BB6B602C4DC7B01000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = text.woapi;
 			name = StatusComponent.api;
 			path = Components/StatusComponent.api;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F55BB6B702C4DC7B01000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = text.woapi;
 			name = TextForEdit.api;
 			path = Components/TextForEdit.api;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F55BB6B802C4DC7B01000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = text.woapi;
 			name = TextForInspect.api;
 			path = Components/TextForInspect.api;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F55BB6B902C4DC7B01000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = text.woapi;
 			name = TextForNew.api;
 			path = Components/TextForNew.api;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F55BB6BA02C4DC7B01000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = text.woapi;
 			name = TicketReportEmail.api;
 			path = Components/TicketReportEmail.api;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F55BB6BB02C4DC7B01000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = text.woapi;
 			name = ViewUser.api;
 			path = Components/ViewUser.api;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F55BB6BC02C4DC7B01000102 = {
 			fileRef = F55BB69E02C4DC7B01000102;
@@ -2106,13 +2288,16 @@
 			name = ComponentPicker.wo;
 			path = "";
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F55BB6DB02C4DCA001000102 = {
 			includeInIndex = 0;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
+			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ComponentPicker.wo;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F55BB6DF02C4DCA001000102 = {
 			children = (
@@ -2122,13 +2307,16 @@
 			name = BTListPage.wo;
 			path = "";
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F55BB6E002C4DCA001000102 = {
 			includeInIndex = 0;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
+			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/BTListPage.wo;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F55BB6E502C4DCA001000102 = {
 			children = (
@@ -2138,13 +2326,16 @@
 			name = BugReportEmail.wo;
 			path = "";
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F55BB6E602C4DCA001000102 = {
 			includeInIndex = 0;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
+			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/BugReportEmail.wo;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F55BB6EB02C4DCA001000102 = {
 			children = (
@@ -2154,13 +2345,16 @@
 			name = BugsPerUser.wo;
 			path = "";
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F55BB6EC02C4DCA001000102 = {
 			includeInIndex = 0;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
+			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/BugsPerUser.wo;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F55BB6F102C4DCA001000102 = {
 			children = (
@@ -2170,13 +2364,16 @@
 			name = ComponentReport.wo;
 			path = "";
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F55BB6F202C4DCA001000102 = {
 			includeInIndex = 0;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
+			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ComponentReport.wo;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F55BB6F702C4DCA001000102 = {
 			children = (
@@ -2186,13 +2383,16 @@
 			name = CreateTestItemFromReq.wo;
 			path = "";
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F55BB6F802C4DCA001000102 = {
 			includeInIndex = 0;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
+			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/CreateTestItemFromReq.wo;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F55BB6FD02C4DCA001000102 = {
 			children = (
@@ -2202,13 +2402,16 @@
 			name = EditBug.wo;
 			path = "";
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F55BB6FE02C4DCA001000102 = {
 			includeInIndex = 0;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
+			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/EditBug.wo;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F55BB70302C4DCA001000102 = {
 			children = (
@@ -2218,13 +2421,16 @@
 			name = EditOwner.wo;
 			path = "";
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F55BB70402C4DCA001000102 = {
 			includeInIndex = 0;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
+			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/EditOwner.wo;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F55BB70902C4DCA001000102 = {
 			children = (
@@ -2234,13 +2440,16 @@
 			name = EditRequirement.wo;
 			path = "";
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F55BB70A02C4DCA001000102 = {
 			includeInIndex = 0;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
+			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/EditRequirement.wo;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F55BB70F02C4DCA001000102 = {
 			children = (
@@ -2250,13 +2459,16 @@
 			name = FileBugFromTestItem.wo;
 			path = "";
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F55BB71002C4DCA001000102 = {
 			includeInIndex = 0;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
+			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/FileBugFromTestItem.wo;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F55BB71502C4DCA001000102 = {
 			children = (
@@ -2266,13 +2478,16 @@
 			name = FileReqFromTicket.wo;
 			path = "";
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F55BB71602C4DCA001000102 = {
 			includeInIndex = 0;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
+			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/FileReqFromTicket.wo;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F55BB71B02C4DCA001000102 = {
 			children = (
@@ -2282,13 +2497,16 @@
 			name = FreeQuery.wo;
 			path = "";
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F55BB71C02C4DCA001000102 = {
 			includeInIndex = 0;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
+			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/FreeQuery.wo;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F55BB72102C4DCA001000102 = {
 			children = (
@@ -2298,13 +2516,16 @@
 			name = HomePage.wo;
 			path = "";
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F55BB72202C4DCA001000102 = {
 			includeInIndex = 0;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
+			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/HomePage.wo;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F55BB72702C4DCA001000102 = {
 			children = (
@@ -2314,13 +2535,16 @@
 			name = Inspectbug.wo;
 			path = "";
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F55BB72802C4DCA101000102 = {
 			includeInIndex = 0;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
+			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/Inspectbug.wo;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F55BB72D02C4DCA101000102 = {
 			children = (
@@ -2330,13 +2554,16 @@
 			name = LinkToBookmarkBug.wo;
 			path = "";
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F55BB72E02C4DCA101000102 = {
 			includeInIndex = 0;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
+			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/LinkToBookmarkBug.wo;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F55BB73302C4DCA101000102 = {
 			children = (
@@ -2346,13 +2573,16 @@
 			name = Main.wo;
 			path = "";
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F55BB73402C4DCA101000102 = {
 			includeInIndex = 0;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
+			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/Main.wo;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F55BB73A02C4DCA101000102 = {
 			children = (
@@ -2362,13 +2592,16 @@
 			name = MarkReadFly.wo;
 			path = "";
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F55BB73B02C4DCA101000102 = {
 			includeInIndex = 0;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
+			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/MarkReadFly.wo;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F55BB74002C4DCA101000102 = {
 			children = (
@@ -2378,13 +2611,16 @@
 			name = MenuHeader.wo;
 			path = "";
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F55BB74102C4DCA101000102 = {
 			includeInIndex = 0;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
+			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/MenuHeader.wo;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F55BB74702C4DCA101000102 = {
 			children = (
@@ -2394,13 +2630,16 @@
 			name = OnlineHatSystem.wo;
 			path = "";
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F55BB74802C4DCA101000102 = {
 			includeInIndex = 0;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
+			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/OnlineHatSystem.wo;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F55BB74D02C4DCA101000102 = {
 			children = (
@@ -2410,13 +2649,16 @@
 			name = PageWrapper.wo;
 			path = "";
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F55BB74E02C4DCA101000102 = {
 			includeInIndex = 0;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
+			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/PageWrapper.wo;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F55BB75302C4DCA101000102 = {
 			children = (
@@ -2426,13 +2668,16 @@
 			name = PriorityComponent.wo;
 			path = "";
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F55BB75402C4DCA101000102 = {
 			includeInIndex = 0;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
+			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/PriorityComponent.wo;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F55BB75802C4DCA101000102 = {
 			children = (
@@ -2442,13 +2687,16 @@
 			name = PushRelease.wo;
 			path = "";
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F55BB75902C4DCA101000102 = {
 			includeInIndex = 0;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
+			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/PushRelease.wo;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F55BB75E02C4DCA101000102 = {
 			children = (
@@ -2458,13 +2706,16 @@
 			name = ReadMarker.wo;
 			path = "";
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F55BB75F02C4DCA101000102 = {
 			includeInIndex = 0;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
+			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ReadMarker.wo;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F55BB76402C4DCA101000102 = {
 			children = (
@@ -2474,13 +2725,16 @@
 			name = StatusComponent.wo;
 			path = "";
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F55BB76502C4DCA101000102 = {
 			includeInIndex = 0;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
+			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/StatusComponent.wo;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F55BB76902C4DCA101000102 = {
 			children = (
@@ -2490,13 +2744,16 @@
 			name = TextForEdit.wo;
 			path = "";
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F55BB76A02C4DCA101000102 = {
 			includeInIndex = 0;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
+			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/TextForEdit.wo;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F55BB76F02C4DCA101000102 = {
 			children = (
@@ -2506,13 +2763,16 @@
 			name = TextForInspect.wo;
 			path = "";
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F55BB77002C4DCA101000102 = {
 			includeInIndex = 0;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
+			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/TextForInspect.wo;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F55BB77502C4DCA101000102 = {
 			children = (
@@ -2522,13 +2782,16 @@
 			name = TextForNew.wo;
 			path = "";
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F55BB77602C4DCA101000102 = {
 			includeInIndex = 0;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
+			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/TextForNew.wo;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F55BB77B02C4DCA101000102 = {
 			children = (
@@ -2538,13 +2801,16 @@
 			name = TicketReportEmail.wo;
 			path = "";
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F55BB77C02C4DCA101000102 = {
 			includeInIndex = 0;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
+			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/TicketReportEmail.wo;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F55BB78102C4DCA101000102 = {
 			children = (
@@ -2554,13 +2820,16 @@
 			name = ViewUser.wo;
 			path = "";
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F55BB78202C4DCA101000102 = {
 			includeInIndex = 0;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
+			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/ViewUser.wo;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F55BB7FA02C4DCA101000102 = {
 			fileRef = F55BB6DA02C4DCA001000102;
@@ -2745,38 +3014,49 @@
 			isa = PBXGroup;
 			path = Documentation;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F55BB81802C4DCC201000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = text.html.documentation;
 			path = GettingStarted;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F55BB81902C4DCC201000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = text.html.documentation;
 			path = ReadMe.html;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F55BB81A02C4DCC201000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = text.html.documentation;
 			path = ToDo;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F55BB81B02C4DCDF01000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = text.plist.d2wmodel;
 			name = user.d2wmodel;
 			path = Resources/user.d2wmodel;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F55BB81C02C4DCDF01000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = text.plist;
 			name = CustomInfo.plist;
 			path = Resources/CustomInfo.plist;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F55BB81D02C4DCDF01000102 = {
 			fileRef = F55BB81B02C4DCDF01000102;
@@ -2799,13 +3079,16 @@
 			name = Localizable.strings;
 			path = "";
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F55BB82002C4DCEC01000102 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = text.plist.strings;
 			name = English;
 			path = Resources/English.lproj/Localizable.strings;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F55BB82102C4DCEC01000102 = {
 			fileRef = F55BB81F02C4DCEC01000102;
@@ -2816,9 +3099,11 @@
 		F586B87B031536070123DCAA = {
 			fileEncoding = 10;
 			isa = PBXFileReference;
+			lastKnownFileType = text.plist.strings;
 			name = German;
 			path = Resources/German.lproj/Localizable.strings;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F586B881031582010123DCAA = {
 			children = (
@@ -2829,13 +3114,16 @@
 			isa = PBXGroup;
 			name = CollapsibleList;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F586B882031582010123DCAA = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = text.woapi;
 			name = CollapsibleList.api;
 			path = Components/CollapsibleList.api;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F586B883031582010123DCAA = {
 			children = (
@@ -2845,20 +3133,25 @@
 			name = CollapsibleList.wo;
 			path = "";
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F586B884031582010123DCAA = {
 			includeInIndex = 1;
-			isa = PBXFolderReference;
+			isa = PBXFileReference;
+			lastKnownFileType = folder;
 			name = Nonlocalized;
 			path = Components/Nonlocalized.lproj/CollapsibleList.wo;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F586B889031582010123DCAA = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
 			name = CollapsibleList.java;
 			path = Sources/er/bugtracker/CollapsibleList.java;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F586B88A031582010123DCAA = {
 			fileRef = F586B882031582010123DCAA;
@@ -2882,11 +3175,7 @@
 			buildActionMask = 2147483647;
 			files = (
 			);
-			generatedFileNames = (
-			);
 			isa = PBXShellScriptBuildPhase;
-			neededFileNames = (
-			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "sh ~/Roots/ERExtensions.framework/Resources/InstallCompilerProxySupport.sh";
@@ -2902,24 +3191,32 @@
 //F63
 //F64
 		F6025979023E712E01AD0D07 = {
-			isa = PBXFrameworkReference;
+			isa = PBXFileReference;
+			lastKnownFileType = wrapper.framework;
 			path = ERJars.framework;
 			refType = 3;
+			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		F602597A023E712E01AD0D07 = {
-			isa = PBXFrameworkReference;
+			isa = PBXFileReference;
+			lastKnownFileType = wrapper.framework;
 			path = BTBusinessLogic.framework;
 			refType = 3;
+			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		F602597B023E712E01AD0D07 = {
-			isa = PBXFrameworkReference;
+			isa = PBXFileReference;
+			lastKnownFileType = wrapper.framework;
 			path = ERExtensions.framework;
 			refType = 3;
+			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		F602597C023E712E01AD0D07 = {
-			isa = PBXFrameworkReference;
+			isa = PBXFileReference;
+			lastKnownFileType = wrapper.framework;
 			path = ERDirectToWeb.framework;
 			refType = 3;
+			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		F602597D023E712E01AD0D07 = {
 			fileRef = F6025979023E712E01AD0D07;
@@ -2946,9 +3243,11 @@
 			};
 		};
 		F6025981023E714801AD0D07 = {
-			isa = PBXFrameworkReference;
+			isa = PBXFileReference;
+			lastKnownFileType = wrapper.framework;
 			path = ERCoreBusinessLogic.framework;
 			refType = 3;
+			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		F6025982023E714801AD0D07 = {
 			fileRef = F6025981023E714801AD0D07;
@@ -2958,81 +3257,107 @@
 		};
 		F682BEFA02E3219A01257492 = {
 			isa = PBXFileReference;
+			lastKnownFileType = image.gif;
 			name = check.gif;
 			path = WebServerResources/check.gif;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F682BEFB02E3219A01257492 = {
 			isa = PBXFileReference;
+			lastKnownFileType = image.gif;
 			name = molette.gif;
 			path = WebServerResources/molette.gif;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F682BEFC02E3219A01257492 = {
 			isa = PBXFileReference;
+			lastKnownFileType = image.gif;
 			name = document.gif;
 			path = WebServerResources/document.gif;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F682BEFD02E3219A01257492 = {
 			isa = PBXFileReference;
+			lastKnownFileType = text;
 			name = style_sheet.css;
 			path = WebServerResources/style_sheet.css;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F682BEFE02E3219A01257492 = {
 			isa = PBXFileReference;
+			lastKnownFileType = image.gif;
 			name = DBWizardInsert.gif;
 			path = WebServerResources/DBWizardInsert.gif;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F682BEFF02E3219A01257492 = {
 			isa = PBXFileReference;
+			lastKnownFileType = image.gif;
 			name = doctor.gif;
 			path = WebServerResources/doctor.gif;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F682BF0002E3219A01257492 = {
 			isa = PBXFileReference;
+			lastKnownFileType = image.gif;
 			name = DBWizardDelete.gif;
 			path = WebServerResources/DBWizardDelete.gif;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F682BF0102E3219A01257492 = {
 			isa = PBXFileReference;
+			lastKnownFileType = image.gif;
 			name = bandaid.gif;
 			path = WebServerResources/bandaid.gif;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F682BF0202E3219A01257492 = {
 			isa = PBXFileReference;
+			lastKnownFileType = image.gif;
 			name = closed.gif;
 			path = WebServerResources/closed.gif;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F682BF0302E3219A01257492 = {
 			isa = PBXFileReference;
+			lastKnownFileType = image.gif;
 			name = gyrophare.gif;
 			path = WebServerResources/gyrophare.gif;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F682BF0402E3219A01257492 = {
 			isa = PBXFileReference;
+			lastKnownFileType = image.gif;
 			name = spider.gif;
 			path = WebServerResources/spider.gif;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F682BF0502E3219A01257492 = {
 			isa = PBXFileReference;
+			lastKnownFileType = image.gif;
 			name = fire.gif;
 			path = WebServerResources/fire.gif;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F682BF0602E3219A01257492 = {
 			isa = PBXFileReference;
+			lastKnownFileType = image.gif;
 			name = DBWizardUpdate.gif;
 			path = WebServerResources/DBWizardUpdate.gif;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F682BF0702E3219A01257492 = {
 			fileRef = F682BEFA02E3219A01257492;
