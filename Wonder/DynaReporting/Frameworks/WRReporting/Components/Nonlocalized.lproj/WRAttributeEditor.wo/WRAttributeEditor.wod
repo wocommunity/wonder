@@ -28,4 +28,4 @@ td:WOGenericContainer{
 	rowspan=rowspan;
 }
 
-toggle:WOActiveImage {border=0; filename=toggleGroupImg; action=toggleGroup; framework="WRReporting";};
+toggle:WOActiveImage {border=0; filename=toggleGroupImg; action=toggleGroup; framework="WRReporting";}
