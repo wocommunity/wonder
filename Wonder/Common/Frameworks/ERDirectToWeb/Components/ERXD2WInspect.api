@@ -8,12 +8,15 @@
 		<binding name="pageConfiguration"/>
 		<binding name="entityName"/>
 
-		<validation message="&apos;object&apos; is a required binding">
-			<unbound name="object"/>
+		<validation message="'entityName' or 'pageConfiguration' must be bound">
+			<and>
+				<unbound name="entityName"/>
+				<unbound name="pageConfiguration"/>
+			</and>
 		</validation>
 
-		<validation message="&apos;entityName&apos; is a required binding">
-			<unbound name="entityName"/>
+		<validation message="&apos;object&apos; is a required binding">
+			<unbound name="object"/>
 		</validation>
 	</wo>
 </wodefinitions>
