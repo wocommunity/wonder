@@ -71,8 +71,13 @@ public class ERDirectToWeb {
     }
     
     private static boolean _isInitialized=false;
-    static {
-        // called implicitely because ERDirectToWeb is the principal class of the framework
+    /**
+     * Called implicitely because ERDirectToWeb is the principal class of the framework. But if not 
+     * (probably because WOLips is broken again) it can't hurt to call it yourself in your
+     * apps constructor
+     *
+     */
+    public static void initialize() {
         if (!_isInitialized) {
             if (log.isDebugEnabled()) log.debug("Initializing framework: ERDirectToWeb");
             Object o=ERD2WModel.erDefaultModel();        // force initialization
@@ -94,6 +99,10 @@ public class ERDirectToWeb {
                                                              null);
             _isInitialized = true;
         }
+    }
+    
+    static {
+    	initialize();
     }
 
     public static void setD2wDebuggingEnabled(WOSession s, boolean enabled) {
