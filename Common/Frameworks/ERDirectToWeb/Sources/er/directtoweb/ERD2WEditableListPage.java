@@ -92,6 +92,7 @@ public class ERD2WEditableListPage extends ERD2WListPage implements ERXException
     
     public void validationFailedWithException (Throwable e, Object value, String keyPath) {
         ERXValidation.validationFailedWithException(e, value, keyPath, currentErrorDictionary(), propertyKey(), ERXLocalizer.currentLocalizer(), d2wContext().entity(), shouldSetFailedValidationValue());
+        super.validationFailedWithException(e, value, keyPath);
     }
     
     public void clearValidationFailed(){

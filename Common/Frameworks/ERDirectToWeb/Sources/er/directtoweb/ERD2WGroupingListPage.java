@@ -9,6 +9,9 @@ package er.directtoweb;
 import com.webobjects.appserver.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.foundation.*;
+/**
+ * Displays a groups of objects grouped by a key.<br />
+ */
 
 public class ERD2WGroupingListPage extends ERD2WListPage {
 
