@@ -49,6 +49,10 @@ Form1: WOForm {
 	multipleSubmit = true;
 }
 
+Help: ERDDebuggingHelp {
+	d2wContext = d2wContext;
+}
+
 HiddenField: WOHiddenField {
 	value = dummy;
 }

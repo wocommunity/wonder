@@ -6,9 +6,7 @@
  */
 package com.webobjects.directtoweb;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 import com.webobjects.appserver.*;
 import com.webobjects.eoaccess.*;

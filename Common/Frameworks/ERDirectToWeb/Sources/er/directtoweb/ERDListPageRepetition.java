@@ -6,7 +6,7 @@ import com.webobjects.foundation.*;
 import er.extensions.*;
 
 /**
- * Class for DirectToWeb Component ERDListPageRepetition.
+ * Can be used as a repetition in list pages.
  *
  * @binding sample sample binding explanation
  * @d2wKey sample sample d2w key
