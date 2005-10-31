@@ -10,6 +10,9 @@ import com.webobjects.appserver.*;
 
 /**
  * Displays a groups of objects grouped by a key.<br />
+ * Actually, this component uses none of the variables and methods defined here,
+ * as all the work is done by the ERDGroupingListPageRepetition that should be set
+ * in the rules when a "ListGroupSomeEntity" page configuration is called up.
  * 
  */
 
