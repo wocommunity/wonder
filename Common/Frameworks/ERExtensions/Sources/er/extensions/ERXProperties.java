@@ -270,8 +270,8 @@ public class ERXProperties extends Properties {
         
         final String propertyValue = System.getProperty(propertyName);
         final NSArray array = ERXValueUtilities.arrayValueWithDefault(propertyValue, defaultValue);
-        if (retainDefaultsEnabled() && propertyValue == null) {
-            setArrayForKey(array == null ? NSArray.EmptyArray : array, propertyName);
+        if (retainDefaultsEnabled() && propertyValue == null && array != null) {
+            setArrayForKey(array, propertyName);
         }
         _cache.put(propertyName, propertyValue == null ? (Object)UndefinedMarker : array);
         return array;
@@ -353,8 +353,8 @@ public class ERXProperties extends Properties {
         
         final String propertyValue = System.getProperty(propertyName);
         final NSDictionary dictionary = ERXValueUtilities.dictionaryValueWithDefault(propertyValue, defaultValue);
-        if (retainDefaultsEnabled() && propertyValue == null) {
-            setDictionaryForKey(dictionary == null ? NSDictionary.EmptyDictionary : dictionary, propertyName);
+        if (retainDefaultsEnabled() && propertyValue == null && dictionary != null) {
+            setDictionaryForKey(dictionary, propertyName);
         }
         _cache.put(propertyName, propertyValue == null ? (Object)UndefinedMarker : dictionary);
         return dictionary;
