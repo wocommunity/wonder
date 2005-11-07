@@ -6,6 +6,7 @@
 //
 package er.directtoweb;
 
+import java.text.*;
 import java.util.*;
 
 import com.webobjects.appserver.*;
@@ -109,7 +110,16 @@ public abstract class ERD2WDirectAction extends ERXDirectAction {
     					if(attribute != null) {
     						String stringValue = context().request().stringFormValueForKey(key);
     						if(stringValue != null) {
-    							Object value = attribute.newValueForString(stringValue);
+    							Object value;
+    							if(attribute.adaptorValueType() == EOAttribute.AdaptorDateType) {
+    								try {
+    									value = (new NSTimestampFormatter()).parseObject(stringValue);
+    								} catch (ParseException e1) {
+										throw NSForwardException._runtimeExceptionForThrowable(e1);
+									}
+    							} else {
+          							 value = attribute.newValueForString(stringValue);
+    							}
     							NSSelector selector = EOKeyValueQualifier.QualifierOperatorEqual;
     							if(stringValue.indexOf('*') >= 0) {
     								selector = EOKeyValueQualifier.QualifierOperatorCaseInsensitiveLike;
