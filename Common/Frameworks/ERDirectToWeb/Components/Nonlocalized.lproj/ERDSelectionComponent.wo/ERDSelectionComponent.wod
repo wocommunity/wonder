@@ -1,0 +1,5 @@
+CheckBox2: WOSwitchComponent {
+    WOComponentName = selectionWidgetName;
+	checked = checked;
+}
+

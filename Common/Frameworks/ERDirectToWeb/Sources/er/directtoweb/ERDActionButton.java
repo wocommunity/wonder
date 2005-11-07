@@ -112,6 +112,11 @@ public  class ERDActionButton extends ERDCustomComponent {
         return (QueryPageInterface)enclosingPageOfClass(QueryPageInterface.class);
     }
 
+    /** Utility to return the enclosing pick page, if there is one. */
+    protected ERDPickPageInterface parentPickPage() {
+        return (ERDPickPageInterface)enclosingPageOfClass(ERDPickPageInterface.class);
+    }
+
     /** Utility to return the enclosing D2W page, if there is one. */
     protected D2WPage parentD2WPage() {
         return (D2WPage)enclosingPageOfClass(D2WPage.class);

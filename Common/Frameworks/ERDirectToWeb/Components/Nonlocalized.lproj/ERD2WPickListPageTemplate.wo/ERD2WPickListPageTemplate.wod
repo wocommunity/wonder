@@ -1,31 +1,3 @@
-AttributeCell: WOGenericContainer {
-	_unroll = true;
-	align = d2wContext.justification;
-	elementName = "td";
-	valign = "middle";
-}
-
-AttributeDisplay: WOSwitchComponent { 
-	WOComponentName = d2wContext.componentName;
-	_componentUnroll = true;
-	_unroll = true;
-	localContext = d2wContext;
-	object = object;
-}
-
-AttributeRepetition: WORepetition {
-	_unroll = true;
-	item = d2wContext.propertyKey;
-	list = d2wContext.displayPropertyKeys;
-}
-
-AttributeSorter2: ERXSortOrder {
-	displayGroup = displayGroup;
-	displayKey = d2wContext.displayNameForProperty;
-	key = d2wContext.sortKeyForList;
-        d2wContext = d2wContext;
-}
-
 BackButton: WOHyperlink {
 	action = backAction;
 }
@@ -39,17 +11,6 @@ BackgroundColor: WOString {
 	value = d2wContext.backgroundColorForTable;
 }
 
-CheckBox2: WOSwitchComponent {
-    WOComponentName = selectionWidgetName;
-	checked = checked;
-}
-
-ColumnLabelRepetition: WORepetition {
-	_unroll = true;
-	item = d2wContext.propertyKey;
-	list = d2wContext.displayPropertyKeys;
-}
-
 Conditional1: WOConditional {
 	condition = isListEmpty;
 	negate = true;
@@ -59,11 +20,22 @@ Conditional2: WOConditional {
 	condition = isListEmpty;
 }
 
+Conditional3: WOConditional {
+	condition = d2wContext.hasPrinterFriendlyVersion;
+}
+
 ERDBannerComponent2: ERDBannerComponent {
 	bannerFileName = d2wContext.bannerFileName;
 	d2wContext = d2wContext;
 	showBanner = d2wContext.showBanner;
 	framework = "JavaDirectToWeb";
+}
+
+ERPrinterButton: ERDPrinterButton {
+	d2wContext = d2wContext;
+	dataSource = dataSource;
+	displayGroup = displayGroup;
+	task = "list";
 }
 
 ERXNonNullConditional1: WOConditional {
@@ -78,11 +50,6 @@ ERXNonNullConditional2: WOConditional {
 EmptyMessageComponent: WOSwitchComponent {
 	WOComponentName = d2wContext.emptyListComponentName;
 	d2wContext = d2wContext;
-}
-
-EntityRepetition: WORepetition {
-	item = object;
-	list = displayGroup.displayedObjects;
 }
 
 Form1: WOForm {
@@ -114,19 +81,6 @@ HideReturnOnSelect3: WOConditional {
 	negate = true;
 }
 
-InspectImage: WOActiveImage {
-	alt = "Inspect that Object";
-	border = "0";
-	filename = "magglass-btn.gif";
-	framework = "JavaDirectToWeb";
-	action = inspectObjectAction;
-}
-
-IsPropertySortable: WOConditional {
-	_unroll = true;
-	condition = d2wContext.propertyIsSortable;
-}
-
 ListEmpty: WOConditional {
 	condition = isListEmpty;
 }
@@ -136,24 +90,10 @@ ListNotEmpty: WOConditional {
 	negate = true;
 }
 
-ListTable: WOGenericContainer {
-	_unroll = true;
-	bgcolor = d2wContext.backgroundColorForTable;
-	border = 0;
-	cellpadding = 1;
-	cellspacing = 0;
-	elementName = "Table";
-}
-
-ListTableHeaderRow: WOGenericContainer {
-	_unroll = true;
-	bgcolor = "#ffffff";
-	elementName = "tr";
-}
-
-ListTableRow: WOGenericContainer {
-	_unroll = true;
-	elementName = "tr";
+ListPageRepetition2: WOSwitchComponent {
+	WOComponentName = d2wContext.repetitionComponentName;
+	d2wContext = localContext;
+	displayGroup = displayGroup;
 }
 
 NavBar1: WOSwitchComponent {   
@@ -174,11 +114,6 @@ PageWrapper: WOSwitchComponent {
 	WOComponentName = d2wContext.pageWrapperName;
 	_componentUnroll = true;
 	_unroll = true;
-}
-
-PropertyName: WOString {
-	_unroll = true;
-	value = d2wContext.displayNameForProperty;
 }
 
 Repetition1: WORepetition {
