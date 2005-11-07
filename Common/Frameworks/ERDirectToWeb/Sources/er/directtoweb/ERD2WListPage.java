@@ -359,7 +359,7 @@ public class ERD2WListPage extends ERD2WPage implements ERDListPageInterface, Se
         		EOFetchSpecification fs = ((EODatabaseDataSource)ds).fetchSpecification();
         		if(!fs.sortOrderings().equals(sortOrderings)) {
         			fs.setSortOrderings(sortOrderings);
-        			_hasToUpdate = alwaysRefetchList();
+        			_hasToUpdate = _hasToUpdate ? true : alwaysRefetchList();
         		}
         	}
         	// this will have the side effect of resetting the batch # to sth correct, in case
