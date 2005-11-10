@@ -386,8 +386,7 @@ public class ERXCrypto {
             byte[] stringBytes = v.getBytes("UTF8");
             stringBytes = ERXCompressionUtilities.deflateByteArray(stringBytes);
             byte[] raw = cipher.doFinal(stringBytes);
-            sun.misc.BASE64Encoder enc = new sun.misc.BASE64Encoder();
-            encBase64String = enc.encode(raw);
+            encBase64String = base64Encode(raw);
         } catch(java.security.NoSuchAlgorithmException ex) {
             throw new NSForwardException(ex, "Couldn't find the DES algorithm; perhaps you do not have the SunJCE security provider installed properly?");
         } catch(Exception ex) {
@@ -396,7 +395,23 @@ public class ERXCrypto {
         return encBase64String;
     }
     
+    /**
+     * Base64 encodes the passed in byte[]
+     */
+    public static String base64Encode(byte[] byteArray) {
+        sun.misc.BASE64Encoder enc = new sun.misc.BASE64Encoder();
+        String base64String = enc.encode(byteArray);
+        return base64String;
+    }
     
+    /**
+     * Base64 decodes the passed in String
+     */
+    public static byte[] base64Decode(String s) throws IOException {
+        sun.misc.BASE64Decoder enc = new sun.misc.BASE64Decoder();
+        byte[] raw = enc.decodeBuffer(s);
+        return raw;
+    }
     /**
      * Base64 decodes and then DES decrypts the passed in string using the
      * secret key returned by <code>secretKey</code>.
@@ -416,8 +431,7 @@ public class ERXCrypto {
         try{
             Cipher cipher = Cipher.getInstance("DES/ECB/PKCS5Padding");
             cipher.init(Cipher.DECRYPT_MODE, secretDESKey());
-            sun.misc.BASE64Decoder enc = new sun.misc.BASE64Decoder();
-            byte[] raw = enc.decodeBuffer(v);
+            byte[] raw = base64Decode(v);
             byte[] stringBytes = cipher.doFinal(raw);
             stringBytes = ERXCompressionUtilities.inflateByteArray(stringBytes);
             decString = new String(stringBytes, "UTF8");
