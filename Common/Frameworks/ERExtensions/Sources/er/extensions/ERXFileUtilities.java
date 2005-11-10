@@ -884,7 +884,12 @@ public class ERXFileUtilities {
                 origin = new BufferedInputStream(fi, 2048);
                 String entryName = currentFile.getAbsolutePath();
                 if (!absolutePaths) {
-                    entryName = entryName.substring(f.getAbsolutePath().length() + 1, entryName.length());
+                		if (f.isDirectory()) {
+                			entryName = entryName.substring(f.getAbsolutePath().length() + 1, entryName.length());
+                		} else {
+                			entryName = entryName.substring(f.getParentFile().getAbsolutePath().length() + 1, entryName.length());
+                		}
+                    
                 }
 
                 ZipEntry entry = new ZipEntry(entryName);
