@@ -79,6 +79,28 @@ public class ERXDirectAction extends WODirectAction {
     }
 
     /**
+     * Action used for sending shell commands to the server and receive the result
+     * <br/>
+     * <br/>
+     * Synopsis:<br/>
+     * pw=<i>aPassword</i>
+     * <br/>
+     * Form Values:<br/>
+     * <b>pw</b> password to be checked against the system property <code>er.extensions.ERXRemoteShellPassword</code>.
+     * <br/>
+     * @return {@link ERXLog4JConfiguration} for modifying current logging settings.
+     */
+    public WOComponent remoteShellAction() {
+        WOComponent result=null;
+        if (!WOApplication.application().isCachingEnabled() ||
+            ERXExtensions.safeEquals(request().stringFormValueForKey("pw"), System.getProperty("er.extensions.ERXRemoteShellPassword"))) {
+                result=pageWithName("ERXRemoteShell");
+                session().setObjectForKey(Boolean.TRUE, "ERXRemoteShell.enabled");
+        }
+        return result;
+    }
+
+    /**
      * Action used for forcing garbage collection. If WOCachingEnabled is true (we take this to mean 
      * that the application is in production) you need to give a password to access it.<br/>
      * <br/>
@@ -192,4 +214,6 @@ public class ERXDirectAction extends WODirectAction {
         }
         return r;
     }
+    
+    
 }
