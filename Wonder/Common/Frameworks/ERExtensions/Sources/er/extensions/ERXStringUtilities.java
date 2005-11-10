@@ -1132,7 +1132,60 @@ public class ERXStringUtilities {
 		return sb.toString();
 	}
 
-    // ##########################################################################################
+	/** Checks if any of the characters specified in characters is contained in the string
+	 * specified by source.
+	 * 
+	 * @param source the String which might contain characters
+	 * @param characters the characters to check
+	 * @return true if any character from characters is in source, false otherwise
+	 */
+	public static boolean containsAnyCharacter(String source, String characters) {
+		for (int i = source.length(); i-- > 0;) {
+			char c = source.charAt(i);
+			if (characters.indexOf(c) > -1) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	/** removes any character which is not in characters from the source string
+	 * 
+	 * @param source the string which will be modified
+	 * @param characters the characters that are allowed to be in source
+	 * @return a new string only with characters from the characters argument
+	 */
+	public static String removeExceptCharacters(String source, String characters) {
+		StringBuffer buf = new StringBuffer();
+		int l = source.length();
+		for (int i = 0; i < l; i++) {
+			char c = source.charAt(i);
+			if (characters.indexOf(c) > -1) {
+				buf.append(c);
+			}
+		}
+		return buf.toString();
+	}
+	
+	/** removes any character which is in characters from the source string
+	 * 
+	 * @param source the string which will be modified
+	 * @param characters the characters that are not allowed to be in source
+	 * @return a new string without any characters from the characters argument
+	 */
+	public static String removeCharacters(String source, String characters) {
+		StringBuffer buf = new StringBuffer();
+		int l = source.length();
+		for (int i = 0; i < l; i++) {
+			char c = source.charAt(i);
+			if (characters.indexOf(c) == -1) {
+				buf.append(c);
+			}
+		}
+		return buf.toString();
+	}
+
+	// ##########################################################################################
     // private methods
     // ##########################################################################################
     
@@ -1244,4 +1297,5 @@ public class ERXStringUtilities {
     		sb.append(value);
     	}
     }
+
 }
