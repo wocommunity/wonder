@@ -40,6 +40,7 @@ public class ERXLongPrimaryKeyFactory {
 
     public static final int       CODE_LENGTH  = 6;
     public static final int		HOST_CODE_LENGTH = 10;
+    public static final String    HOST_CODE_KEY = "er.extensions.ERXLongPrimaryKeyFactory.hostCode";
     
     public static final ERXLogger log          = ERXLogger.getERXLogger(ERXLongPrimaryKeyFactory.class);
     public static long            MAX_PK_VALUE = (long) Math.pow(2, 48);
@@ -93,7 +94,7 @@ public class ERXLongPrimaryKeyFactory {
      */
     public synchronized static int hostCode() {
         if (hostCode == null) {
-            hostCode = new Integer(ERXSystem.getProperty("er.extensions.ERXLongPrimaryKeyFactory.hostCode"));
+            hostCode = new Integer(ERXSystem.getProperty(HOST_CODE_KEY));
         }
         return hostCode.intValue();
     }
