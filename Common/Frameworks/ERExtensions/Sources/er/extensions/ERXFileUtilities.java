@@ -516,17 +516,19 @@ public class ERXFileUtilities {
     public static boolean deleteDirectory(File directory) {
         if (! directory.isDirectory()) return directory.delete();
 
+        boolean deletedAllFiles = true;
         String[] fileNames = directory.list();
         for (int i = 0; i < fileNames.length; i++) {
             File file = new File(directory, fileNames[i]);
 
             if (file.isDirectory()) {
-                if (!deleteDirectory(file)) return false;
+                if (!deleteDirectory(file) && deletedAllFiles) deletedAllFiles = false;
             } else {
-                if (!file.delete()) return false;
+                if (!file.delete() && deletedAllFiles) deletedAllFiles = false;
             }
         }
-        return directory.delete();
+        if (!directory.delete() && deletedAllFiles) deletedAllFiles = false;
+        return deletedAllFiles;
     }
 
     /**
@@ -1052,13 +1054,19 @@ public class ERXFileUtilities {
      * 
      * @param filesToDelete
      */
-    public static void deleteFiles(NSMutableArray filesToDelete) {
+    public static boolean deleteFiles(NSMutableArray filesToDelete) {
+        boolean deletedAllFiles = true;
         for (int i = filesToDelete.count(); i-- > 0;) {
             File currentFile = (File) filesToDelete.objectAtIndex(i);
-            deleteDirectory(currentFile);
+            if (!deleteFile(currentFile) && deletedAllFiles) deletedAllFiles = false;
         }
+        return deletedAllFiles;
     }
 
+    public static boolean deleteFile(File fileToDelete) {
+        return deleteDirectory(fileToDelete);
+    }
+    
     /** Lists all directories in the specified directory, is desired recursive.
      *  
      * @param baseDir, the dir from which to list the child directories
