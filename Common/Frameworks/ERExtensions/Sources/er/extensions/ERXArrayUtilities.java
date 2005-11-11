@@ -1093,8 +1093,16 @@ public class ERXArrayUtilities extends Object {
      * @return filtered array.
      */
     public static NSArray arrayWithoutDuplicates(NSArray anArray) {
-    		NSSet set = new NSSet(anArray);
-    		return set.allObjects();
+        NSMutableArray result = new NSMutableArray();
+        NSMutableSet already = new NSMutableSet();
+        for(Enumeration e = anArray.objectEnumerator(); e.hasMoreElements();){
+            Object object = e.nextElement();
+            if(!already.containsObject(object)){
+                already.addObject(object);
+                result.addObject(object);
+            }
+        }
+        return result;
     }
 
     /**
