@@ -86,6 +86,7 @@ OKButton2: ERXSingleButton {
 Repetition1: WORepetition {
 	item = branch;
 	list = branchChoices;
+	checkHashCodes = false;
 }
 
 SwitchComponent3: WOSwitchComponent {
