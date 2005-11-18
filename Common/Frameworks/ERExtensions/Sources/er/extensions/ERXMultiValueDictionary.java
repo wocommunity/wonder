@@ -12,7 +12,12 @@ import com.webobjects.foundation.*;
  */
 public class ERXMultiValueDictionary extends ERXMutableDictionary {
 
-    /* (non-Javadoc)
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	/* (non-Javadoc)
      * @see com.webobjects.foundation.NSMutableDictionary#NSMutableDictionary(com.webobjects.foundation.NSMutableDictionary)
      */
     public ERXMultiValueDictionary(NSDictionary d) {
@@ -67,4 +72,17 @@ public class ERXMultiValueDictionary extends ERXMutableDictionary {
     public boolean isMultiValue(String key) {
         return objectForKey(key) instanceof ERXMutableArray;
     }
+
+	/**
+	 * @param entity
+	 * @return
+	 */
+	public NSArray arrayForKey(String entity) {
+		if (isMultiValue(entity)) return (NSArray)objectForKey(entity);
+		else {
+			NSMutableArray a = new NSMutableArray();
+			a.addObject(objectForKey(entity));
+			return a;
+		}
+	}
 }
