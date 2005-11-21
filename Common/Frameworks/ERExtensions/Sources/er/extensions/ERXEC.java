@@ -71,6 +71,12 @@ public class ERXEC extends EOEditingContext {
     	useUnlocker = value;
     }
     
+    private static ThreadLocal locks = new ThreadLocal() {
+    	protected Object initialValue() {
+    		return new Vector();
+    	}
+    };
+    
 	/** 
 	 * Pushes the given EC to the array of locked ECs in the current thread. The ECs left over
 	 * after the RR-loop will be automagically unlocked.
@@ -78,11 +84,7 @@ public class ERXEC extends EOEditingContext {
 	 */
     public static void pushLockedContextForCurrentThread(EOEditingContext ec) {
     	if(useUnlocker && ec != null) {
-    		Vector ecs = (Vector)ERXThreadStorage.valueForKey(lockedContextsThreadKey());
-    		if(ecs == null) {
-    			ecs = new Vector();
-        		ERXThreadStorage.takeValueForKey(ecs, lockedContextsThreadKey());
-    		}
+    		List ecs = (List) locks.get();
     		ecs.add(ec);
     		if(log.isDebugEnabled()) {
     		    log.debug("After pushing: " + ecs);
@@ -91,24 +93,13 @@ public class ERXEC extends EOEditingContext {
     }
     
     /**
-     * ERXThreadStorage is inherited by newly created threads, and we don't
-     * want to have the child thread's locked ECs unlocked when the parent exits dispatchRequest(),
-     * so we need to append something to the thread key, to distinguish it from
-     * the parent.
-     * @return thread-unique thread-storage key
-     */
-    private static String lockedContextsThreadKey() {
-        return LockedContextsForCurrentThreadKey + ":" + System.identityHashCode(Thread.currentThread());
-    }
-
-    /**
      * Pops the given EC from the array of contexts to unlock. The ECs left over
 	 * after the RR-loop will be automagically unlocked.
      * @param ec unlocked EOEditingContext
      */
     public static void popLockedContextForCurrentThread(EOEditingContext ec) {
     	if(useUnlocker &&  ec != null) {
-    		Vector ecs = (Vector)ERXThreadStorage.valueForKey(lockedContextsThreadKey());
+    		List ecs = (List)locks.get();
     		if(ecs != null) {
     			int index = ecs.lastIndexOf(ec);
     			if(index >= 0) {
@@ -128,8 +119,7 @@ public class ERXEC extends EOEditingContext {
      * You shouldn't call this yourself, but let the Unlocker handle it for you.
      */
     public static void unlockAllContextsForCurrentThread() {
-    	Vector ecs = (Vector)ERXThreadStorage.valueForKey(lockedContextsThreadKey());
-    	ERXThreadStorage.removeValueForKey(lockedContextsThreadKey());
+    	List ecs = (List)locks.get();
     	if(ecs != null && ecs.size() > 0) {
        		if(log.isDebugEnabled()) {
     		    log.debug("Unlock remaining: " + ecs);
