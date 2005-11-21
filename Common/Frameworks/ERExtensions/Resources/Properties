@@ -326,4 +326,10 @@ dbMinConnectionsGLOBAL=1
 ## If an object wasn't found, raise an exception (if unset, the wrong object is used)
 # er.extensions.ERXWORepetition.raiseOnUnmatchedObject = true
 
+#########################################################################
+# ERXThreadStorage 
+#########################################################################
+## Define if child threads inherit the variables of the parent or not
+# er.extensions.ERXThreadStorage.useInheritableThreadLocal = false
+
 
