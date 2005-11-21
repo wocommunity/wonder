@@ -16,7 +16,7 @@ import com.webobjects.foundation.*;
  * you have custom subclasses of WOToOne/WOToMany you need to take this into account.
  * Also adds the values that are not included in the restricted-choice list. These items are marked by [name of item]. 
  * This should ensure they end up at the bottom of the list.
- * NOTE: currently "includeUnmatchedValues" is set to 
+ * NOTE: currently "includeUnmatchedValues" is set to false
  * @author ak (but most stuff is pulled over from the pre-existing WOToOne/WOToMany)
  */
 
