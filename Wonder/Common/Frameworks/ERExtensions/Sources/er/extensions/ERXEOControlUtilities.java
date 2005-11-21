@@ -1378,4 +1378,20 @@ public class ERXEOControlUtilities {
         }
     }
     
+    /**
+     * Convenience to get the destination entity name from a key path of an object.
+     * Returns null if no destination found.
+     * @param eo
+     * @param keyPath
+     * @return
+     */
+   public static String destinationEntityNameForKeyPath(EOEnterpriseObject eo, String keyPath) {
+	   EOEntity entity = ERXEOAccessUtilities.entityForEo(eo);
+	   EOEntity destination = ERXEOAccessUtilities.destinationEntityForKeyPath(entity, keyPath);
+	   if(destination != null) {
+		   return destination.name();
+	   }
+	   return null;
+   }
+    
 }
