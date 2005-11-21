@@ -6,19 +6,41 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.extensions;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
 
-import com.webobjects.foundation.*;
+import com.webobjects.foundation.NSKeyValueCodingAdditions;
 /**
  * <code>ERXThreadStorage</code> provides a way to store objects for
  * a particular thread. This can be especially handy for storing objects
  * like the current actor or the current form name within the scope of
- * a thread handling a particular request.
+ * a thread handling a particular request. <br />
+ * The system property <code>er.extensions.ERXThreadStorage.useInheritableThreadLocal</code> 
+ * defines if the thread storage can be either inherited by client threads (default)
+ * or get used only by the current thread. 
  */
 public class ERXThreadStorage {
 
     /** Holds the single instance of the thread map. */
-    private static ERXCloneableThreadLocal threadMap = new ERXCloneableThreadLocal();
+    private static ThreadLocal threadMap;
+    
+    static {
+    	if(useInheritableThreadLocal()) {
+    		threadMap = new ERXCloneableThreadLocal();
+    	} else {
+    		threadMap = new ThreadLocal();
+    	}
+    }
+
+    /**
+     * Checks the system property <code>er.extensions.ERXThreadStorage.useInheritableThreadLocal</code> 
+     * to decide whether to use inheritable thread variables or not.
+     * @return true if set (default)
+     */
+	private static boolean useInheritableThreadLocal() {
+		return ERXProperties.booleanForKeyWithDefault("er.extensions.ERXThreadStorage.useInheritableThreadLocal", true);
+	}
+    
     /** Holds the default initialization value of the hash map. */
     private static int DefaultHashMapSize = 10;
 
@@ -28,8 +50,8 @@ public class ERXThreadStorage {
      * @param key key
      */
     public static void takeValueForKey(Object object, String key) {
-        Map map = storageMap(true);
-        map.put(key, object);
+    	Map map = storageMap(true);
+    	map.put(key, object);
     }
 
     /**
@@ -71,7 +93,11 @@ public class ERXThreadStorage {
      */
     public static Object valueForKey(String key) {
         Map map = storageMap(false);
-        return map != null ? map.get(key) : null;
+        Object result = null;
+        if(map != null) {
+        	result =  map.get(key);
+        }
+        return result;
     }
     
     /**
