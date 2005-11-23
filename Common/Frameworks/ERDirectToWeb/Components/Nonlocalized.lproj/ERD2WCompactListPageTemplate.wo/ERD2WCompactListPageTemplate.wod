@@ -1,33 +1,5 @@
-BackButton: WOHyperlink {
-	action = backAction;
-}
-
-BackLink: WOHyperlink {
-	action = backAction;
-}
-
-EmptyMessageComponent: WOSwitchComponent {
-	WOComponentName = d2wContext.emptyListComponentName;
-	d2wContext = d2wContext;
-}
-
 Help: ERDDebuggingHelp {
 	d2wContext = d2wContext;
-}
-
-HideReturnOnSelect1: WOConditional {
-	_unroll = true;
-	condition = isSelectingNotTopLevel;
-}
-
-HideReturnOnSelect3: WOConditional {
-	_unroll = true;
-	condition = isSelecting;
-	negate = true;
-}
-
-ListEmpty: WOConditional {
-	condition = isListEmpty;
 }
 
 ListNotEmpty: WOConditional {
@@ -40,14 +12,26 @@ ListPageRepetition2: WOSwitchComponent {
 	displayGroup = displayGroup;
 }
 
-NumberOfItems: WOString {
-	value = listSize;
+ListEmpty: WOConditional {
+	condition = isListEmpty;
 }
 
-PageWrapper: WOSwitchComponent {
-	WOComponentName = d2wContext.pageWrapperName;
-	_componentUnroll = true;
+EmptyMessageComponent: WOSwitchComponent {
+	WOComponentName = d2wContext.emptyListComponentName;
+	d2wContext = d2wContext;
+}
+
+HideReturnOnSelect1: WOConditional {
 	_unroll = true;
+	condition = isSelectingNotTopLevel;
+}
+
+ShowCancel: WOConditional {
+	condition = showCancel;
+}
+
+BackLink: WOHyperlink {
+	action = backAction;
 }
 
 ReturnButton: WOImage {
@@ -58,7 +42,23 @@ ReturnButton: WOImage {
 	name = "Returns to the previous page";
 }
 
-ShowCancel: WOConditional {
-	condition = showCancel;
+HideReturnOnSelect3: WOConditional {
+	_unroll = true;
+	condition = isSelecting;
+	negate = true;
+}
+
+NumberOfItems: WOString {
+	value = listSize;
+}
+
+PageWrapper: WOSwitchComponent {
+	WOComponentName = d2wContext.pageWrapperName;
+	_componentUnroll = true;
+	_unroll = true;
+}
+
+BackButton: WOHyperlink {
+	action = backAction;
 }
 
