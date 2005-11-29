@@ -25,26 +25,30 @@ public class ERXWOTemplate extends WODynamicElement {
         }
         _templateName = (String) assoc.valueInComponent(null);
         _template = woelement;
+        if(_template == null) {
+        	_template = new WONoContentElement();
+        }
     }
 
     public String templateName() {
-        return _templateName;
+    	return _templateName;
     }
-
+    
     public void takeValuesFromRequest(WORequest worequest, WOContext wocontext) {
-        _template.takeValuesFromRequest(worequest, wocontext);
+    	_template.takeValuesFromRequest(worequest, wocontext);
     }
-
+    
     public WOActionResults invokeAction(WORequest worequest, WOContext wocontext) {
-        WOActionResults results = _template.invokeAction(worequest, wocontext);
-        return results;
+    	WOActionResults results = null;
+    	_template.invokeAction(worequest, wocontext);
+    	return results;
     }
-
+    
     public void appendToResponse(WOResponse woresponse, WOContext wocontext) {
-        _template.appendToResponse(woresponse, wocontext);
+    	_template.appendToResponse(woresponse, wocontext);
     }
     
     public String toString() {
-        return "<" + getClass().getName() + "@" + System.identityHashCode(this) + " : " + _templateName  + ">";
+    	return "<" + getClass().getName() + "@" + System.identityHashCode(this) + " : " + _templateName  + ">";
     }
 }
