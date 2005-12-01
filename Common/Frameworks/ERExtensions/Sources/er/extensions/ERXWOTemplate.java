@@ -39,8 +39,7 @@ public class ERXWOTemplate extends WODynamicElement {
     }
     
     public WOActionResults invokeAction(WORequest worequest, WOContext wocontext) {
-    	WOActionResults results = null;
-    	_template.invokeAction(worequest, wocontext);
+    	WOActionResults results = _template.invokeAction(worequest, wocontext);
     	return results;
     }
     
