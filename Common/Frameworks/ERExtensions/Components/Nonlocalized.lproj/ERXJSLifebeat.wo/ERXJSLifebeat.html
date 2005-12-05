@@ -1,4 +1,4 @@
-<script type="text/javascript">
+<webobject name="ERXOncePerRequestConditional1"><script type="text/javascript">
 <!--
 var erxKeepAliveUrl = "<webobject name="Link"></webobject>";
 var erxKeepAlive = null;
@@ -36,7 +36,7 @@ if(erxKeepAlive) {
     	myUrl = myUrl + "&r=" + (new Date()).getTime();
     	erxKeepAlive.open("GET", myUrl, false);
     	erxKeepAlive.send(null);
-    }, 5 * 60 * 1000); // five minutes
+    }, <webobject name="Interval"></webobject>);
 }
 //-->
-</script>
+</script></webobject>
