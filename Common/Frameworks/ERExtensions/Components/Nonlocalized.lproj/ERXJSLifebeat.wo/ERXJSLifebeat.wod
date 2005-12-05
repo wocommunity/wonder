@@ -1,4 +1,12 @@
+ERXOncePerRequestConditional1: ERXOncePerRequestConditional {
+	keyName = "erxKeepAlive";
+}
+
 Link: WOActionURL {
 	directActionName = "keepAlive";
 	actionClass = "ERXJSLifebeat$Action";
+}
+
+Interval: WOString {
+	value = interval;
 }
