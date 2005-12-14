@@ -4,6 +4,7 @@ import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WODirectAction;
 import com.webobjects.appserver.WORequest;
+import com.webobjects.appserver.WOSession;
 
 /**
  * Keeps a session open by continuously calling a direct action.
@@ -36,6 +37,7 @@ public class ERXJSLifebeat extends ERXStatelessComponent {
 		}
 		
 		public WOActionResults keepAliveAction() {
+			WOSession session = session();
 			return pageWithName("ERXEmptyComponent");
 		}
 	}
