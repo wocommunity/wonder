@@ -813,7 +813,7 @@ public class ERXStringUtilities {
         return result.toString();
     }
 
-    /*
+    /**
      * Converts a byte array to hex string.
      * @param block byte array
      * @return hex string
@@ -828,6 +828,48 @@ public class ERXStringUtilities {
             buf.append(HEX_CHARS[low]);
         }
         return buf.toString();
+    }
+    
+    /**
+     * Converts a even-length, hex-encoded String to a byte array. 
+     * @param hexString
+     * @return
+     */
+    public static byte[] hexStringToByteArray(String hexString) {
+    	int length = hexString.length();
+    	if(length % 2 == 1) {
+    		throw new IllegalArgumentException("String must have even length: " + length);
+    	}
+    	byte array[] = new byte[length/2];
+
+		for(int i = 0; i < array.length; i++) {
+			char c1 = hexString.charAt(i*2);
+			char c2 = hexString.charAt(i*2+1);
+			byte b = 0;
+            if(c1 >= '0' && c1 <= '9')
+                b += (c1 - 48) * 16;
+            else
+            if(c1 >= 'a' && c1 <= 'f')
+                b += ((c1 - 97) + 10) * 16;
+            else
+            if(c1 >= 'A' && c1 <= 'F')
+                b += ((c1 - 65) + 10) * 16;
+            else
+                throw new IllegalArgumentException("Illegal Character");
+            if(c2 >= '0' && c2 <= '9')
+                b += c2 - 48;
+            else
+            if(c2 >= 'a' && c2 <= 'f')
+                b += (c2 - 97) + 10;
+            else
+            if(c2 >= 'A' && c2 <= 'F')
+                b += (c2 - 65) + 10;
+            else
+                throw new IllegalArgumentException("Illegal Character");
+            array[i] = b;
+
+		}
+		return array;
     }
     
     /** 
