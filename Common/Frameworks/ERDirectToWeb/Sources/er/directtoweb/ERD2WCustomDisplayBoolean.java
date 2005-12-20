@@ -13,7 +13,7 @@ import com.webobjects.foundation.*;
 import er.extensions.*;
 
 /**
- * Allows the display of strings instead of Yes/NO or checkboxes for boolean values.<br />
+ * Allows the display of strings instead of Yes/No/Unset or checkboxes for boolean values.<br />
  * 
  */
 
