@@ -10,17 +10,66 @@ import com.webobjects.appserver.*;
 import com.webobjects.directtoweb.*;
 import com.webobjects.foundation.*;
 
-/**
- * Allows editing boolean values based on radio buttons and strings.<br />
- * 
- */
+import er.extensions.*;
 
+/**
+ * Allows editing boolean values based on radio buttons and localizable strings.<br />
+ * Set the values via the <code>choicesNames</code> d2wcontext value, eg: ("Yes", "No") or ("Set", "Unset", "Don't care")
+ */
+// FIXME AK: together with ERD2WQueryBoolean, should use a common ERXEditBoolean that takes a choicesNames binding
 public class ERD2WCustomEditBoolean extends D2WEditBoolean {
 
     public ERD2WCustomEditBoolean(WOContext context) {
         super(context);
     }
 
+    public interface BooleanProxy {
+    	public String name();
+    	public Boolean value();
+    }
+    
+    public BooleanProxy trueValue = new BooleanProxy() {
+    	public boolean equals(Object other) {
+    		return other == trueValue || (other != null && ERXValueUtilities.booleanValue(other));
+    	}
+    	
+    	public String name() {
+    		return (String) choicesNames().objectAtIndex(0);
+    	}
+    	
+    	public Boolean value() {
+    		return Boolean.TRUE;
+    	}
+    };
+    
+    public BooleanProxy falseValue = new BooleanProxy() {
+    	public boolean equals(Object other) {
+    		return other == falseValue || (other != null && !ERXValueUtilities.booleanValue(other));
+    	}
+    	
+    	public String name() {
+    		return (String) choicesNames().objectAtIndex(1);
+    	}
+    	
+    	public Boolean value() {
+    		return Boolean.FALSE;
+    	}
+    };
+    
+    public BooleanProxy nullValue = new BooleanProxy() {
+    	public boolean equals(Object other) {
+    		return other == nullValue || other == null;
+    	}
+    	
+    	public String name() {
+    		return (String) choicesNames().objectAtIndex(2);
+    	}
+    	
+    	public Boolean value() {
+    		return null;
+    	}
+   };
+    
     protected NSArray _choicesNames;
 
     public void reset(){
@@ -30,14 +79,14 @@ public class ERD2WCustomEditBoolean extends D2WEditBoolean {
 
     public Object yesNoBoolean() {
         Object value = object().valueForKeyPath(propertyKey());
-        if(null == value)
-            value = nullValue();
-        return value;
+        if(trueValue.equals(value)) return trueValue;
+        if(falseValue.equals(value)) return falseValue;
+        return nullValue;
     }
+    
     public void setYesNoBoolean(Object newYesNoBoolean) {
-        if(nullValue().equals(newYesNoBoolean))
-            newYesNoBoolean = null;
-        object().validateTakeValueForKeyPath(newYesNoBoolean, propertyKey());
+    	BooleanProxy proxy = (BooleanProxy)newYesNoBoolean;
+    	object().validateTakeValueForKeyPath(proxy.value(), propertyKey());
     }
     public String radioBoxGroupName(){
         return ("YesNoGroup_"+d2wContext().propertyKey());
@@ -49,32 +98,20 @@ public class ERD2WCustomEditBoolean extends D2WEditBoolean {
         return _choicesNames;
     }
 
-    public String yesName(){
-        return (String)choicesNames().objectAtIndex(0);
-    }
-
-    public String noName(){
-        return (String)choicesNames().objectAtIndex(1);
-    }
-
-    public String unsetName(){
-        return (String)choicesNames().objectAtIndex(2);
-    }
-
-    public Object nullValue(){
-        return "ERXUnsetBooleanValue";
-    }
-
-    public void validationFailedWithException(Throwable theException,Object theValue, String theKeyPath) {
-        parent().validationFailedWithException(theException, theValue, theKeyPath);
+    public void validationFailedWithException(Throwable theException,Object object, String theKeyPath) {
+    	if(object instanceof BooleanProxy) {
+    		BooleanProxy proxy = (BooleanProxy)object;
+    		object = proxy.value();
+    	}
+    	parent().validationFailedWithException(theException, object, theKeyPath);
     }
 
     public Object validateTakeValueForKeyPath(Object object, String string) {
-        if(nullValue().equals(object)) {
-            object().validateTakeValueForKeyPath(null, propertyKey());
-            return null;
-        }
-        return super.validateTakeValueForKeyPath(object, string);
+    	if(object instanceof BooleanProxy) {
+    		BooleanProxy proxy = (BooleanProxy)object;
+    		object = proxy.value();
+    	}
+    	return super.validateTakeValueForKeyPath(object, string);
     }
 
     public void takeValuesFromRequest(WORequest r, WOContext c) {
