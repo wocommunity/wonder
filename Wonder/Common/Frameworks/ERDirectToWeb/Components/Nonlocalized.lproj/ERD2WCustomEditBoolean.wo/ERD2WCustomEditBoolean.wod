@@ -3,25 +3,25 @@ AllowsNull: WOConditional {
 }
 
 ERXLocalizedString1: ERXLocalizedString {
-	value = yesName;
+	value = trueValue.name;
 }
 
 ERXLocalizedString2: ERXLocalizedString {
-	value = noName;
+	value = falseValue.name;
 }
 
 ERXLocalizedString3: ERXLocalizedString {
-	value = unsetName;
+	value = nullValue.name;
 }
 
 RadioButton1: WORadioButton {
-	value = 1;
+	value = trueValue;
 	selection = yesNoBoolean;
 	name = radioBoxGroupName;
 }
 
 RadioButton2: WORadioButton {
-	value = 0;
+	value = falseValue;
 	selection = yesNoBoolean;
 	name = radioBoxGroupName;
 }
