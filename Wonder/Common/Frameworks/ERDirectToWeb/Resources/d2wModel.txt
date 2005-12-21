@@ -54,7 +54,7 @@
      0 : *true* => smartDefaultAttributeWidth = <ERDDefaultModelAssignment> [er.directtoweb.ERDDefaultModelAssignment]
      0 : *true* => smartDefaultRows = <ERDDefaultModelAssignment> [er.directtoweb.ERDDefaultModelAssignment]
      0 : *true* => smartRelationship = <ERDDefaultModelAssignment> [er.directtoweb.ERDDefaultModelAssignment]
-     0 : *true* => sortCaseInsensitive = false [com.webobjects.directtoweb.BooleanAssigment]
+     0 : *true* => sortCaseInsensitive = 0 [com.webobjects.directtoweb.BooleanAssignment]
      0 : *true* => sortKey = 
      0 : *true* => sortKeyForList = propertyKey [er.directtoweb.ERDKeyValueAssignment]
      0 : *true* => tabComponentName = ERXTabPanel
@@ -158,7 +158,7 @@
     10 : (propertyKey = 'selectionAction') => componentName = ERDSelectionComponent
     10 : (propertyType = 'r') => emptyListMessage = ERDEmptyListMessage.emptyEmbeddedListMessage [er.directtoweb.ERDDelayedLocalizedAssignment]
     10 : (propertyType = 'r') => isMandatory = smartRelationship.isMandatory [er.directtoweb.ERDKeyValueAssignment]
-    10 : (smartAttribute.className = 'java.lang.String') => sortCaseInsensitive = true [com.webobjects.directtoweb.BooleanAssigment]
+    10 : (smartAttribute.className = 'java.lang.String') => sortCaseInsensitive = 1 [com.webobjects.directtoweb.BooleanAssignment]
     10 : (smartAttribute.className = 'java.math.BigDecimal') => maxLength = 30
     10 : (subTask = 'compact') => shouldRenderBorder = 1 [com.webobjects.directtoweb.BooleanAssignment]
     10 : (subTask = 'pickType') => choiceDisplayKey = toString
