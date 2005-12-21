@@ -31,6 +31,7 @@ import com.webobjects.eocontrol.*;
  * @binding size
  * @binding maxColumns
  * @binding localizeDisplayKeys" defaults="Boolean
+ * @binding sortCaseInsensitive
  */
 //CHECKME AK: does this make sense? Why not set the qualifier in the parent component?
 public class ERXToOneRelationship extends WOToOneRelationship {

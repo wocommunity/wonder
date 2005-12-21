@@ -1,6 +1,6 @@
 ToOneRelationship: ERXToOneRelationship {
 	destinationDisplayKey = d2wContext.keyWhenRelationship;
-        possibleChoices = restrictedChoiceList;
+    possibleChoices = restrictedChoiceList;
 	maxColumns = d2wContext.numCols;
 	relationshipKey = d2wContext.propertyKey;
 	size = d2wContext.size;
@@ -10,7 +10,8 @@ ToOneRelationship: ERXToOneRelationship {
 	uiStyle = d2wContext.toOneUIStyle;
 	localizeDisplayKeys = d2wContext.localizeDisplayKeys;
 	destinationEntityName = d2wContext.destinationEntityName;
-        isMandatory = d2wContext.isMandatory;
+    isMandatory = d2wContext.isMandatory;
+    sortCaseInsensitive = d2wContext.sortCaseInsensitive;
 	destinationSortKey = d2wContext.sortOrderAttributeName;
 	noSelectionString = d2wContext.noSelectionString;
 }
