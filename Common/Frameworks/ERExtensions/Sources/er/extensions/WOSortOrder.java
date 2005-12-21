@@ -29,20 +29,17 @@ import com.webobjects.appserver.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.foundation.*;
 
-// Almost direct port of WOSortOrder from WO 5's WOExtensions.
 /**
- * (Back port from WO 5 WOExtensions)<br />
- * 
+ * Almost direct port of WOSortOrder from WO 5's WOExtensions<br />
+ * @binding caseInsensitive is ordering case sensitive or not
  */
 
-public class WOSortOrder extends WOComponent {
+public class WOSortOrder extends ERXStatelessComponent {
 
     public WOSortOrder(WOContext aContext) {
         super(aContext);
     }
     
-    public boolean isStateless() { return true; }
-    public boolean synchronizesVariablesWithBindings() { return false; }
     public void reset() {
         _invalidateCaches();
     }
@@ -94,12 +91,14 @@ public class WOSortOrder extends WOComponent {
         String s = "Unsorted.gif";
         if(_isCurrentKeyPrimary())
         {
-            NSSelector nsselector = _primaryKeySortOrderingSelector();
-            if(nsselector.equals(EOSortOrdering.CompareAscending))
-                s = "Ascending.gif";
-            else
-            if(nsselector.equals(EOSortOrdering.CompareDescending))
-                s = "Descending.gif";
+        	NSSelector nsselector = _primaryKeySortOrderingSelector();
+        	if(nsselector.equals(EOSortOrdering.CompareAscending) 
+        			|| nsselector.equals(EOSortOrdering.CompareCaseInsensitiveAscending)) {
+        		s = "Ascending.gif";
+        	} else if(nsselector.equals(EOSortOrdering.CompareDescending) 
+        			|| nsselector.equals(EOSortOrdering.CompareCaseInsensitiveDescending)) {
+        		s = "Descending.gif";
+        	}
         }
         return s;
     }
@@ -151,28 +150,37 @@ public class WOSortOrder extends WOComponent {
     public WOComponent toggleClicked()
     {
         String s = key();
+        boolean caseInsensitive = caseInsensitive();
+        NSSelector asc = caseInsensitive ? EOSortOrdering.CompareCaseInsensitiveAscending : EOSortOrdering.CompareAscending;
+        NSSelector desc = caseInsensitive ? EOSortOrdering.CompareCaseInsensitiveDescending : EOSortOrdering.CompareDescending;
         if(_isCurrentKeyPrimary())
         {
             NSSelector nsselector = _primaryKeySortOrderingSelector();
-            if(nsselector.equals(EOSortOrdering.CompareAscending)) {
+            if(nsselector.equals(EOSortOrdering.CompareAscending) 
+            		|| nsselector.equals(EOSortOrdering.CompareCaseInsensitiveAscending)) {
                 _removeSortOrderingWithKey(s);
-                _makePrimarySortOrderingWithSelector(EOSortOrdering.CompareDescending);
-            } else if (nsselector.equals(EOSortOrdering.CompareDescending)) {
+                _makePrimarySortOrderingWithSelector(desc);
+            } else if (nsselector.equals(EOSortOrdering.CompareDescending) 
+            		|| nsselector.equals(EOSortOrdering.CompareCaseInsensitiveDescending)) {
                 _removeSortOrderingWithKey(s);
-                _makePrimarySortOrderingWithSelector(EOSortOrdering.CompareAscending);
+                _makePrimarySortOrderingWithSelector(asc);
             } else {
                 _removeSortOrderingWithKey(s);
-                _makePrimarySortOrderingWithSelector(EOSortOrdering.CompareAscending);
+                _makePrimarySortOrderingWithSelector(asc);
             }
         } else {
             _removeSortOrderingWithKey(s);
-            _makePrimarySortOrderingWithSelector(EOSortOrdering.CompareAscending);
+            _makePrimarySortOrderingWithSelector(asc);
         }
         displayGroup().updateDisplayedObjects();
         return null;
     }
 
-    private void _invalidateCaches()
+    public boolean caseInsensitive() {
+		return booleanValueForBinding("caseInsensitive");
+	}
+
+	private void _invalidateCaches()
     {
         _key = null;
         _displayKey = null;

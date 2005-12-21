@@ -24,6 +24,7 @@ AttributeSorter2: ERXSortOrder {
 	displayKey = d2wContext.displayNameForProperty;
 	key = d2wContext.sortKeyForList;
         d2wContext = d2wContext;
+	caseInsensitive = d2wContext.sortCaseInsensitive;
 }
 
 ColumnLabelRepetition: WORepetition {
