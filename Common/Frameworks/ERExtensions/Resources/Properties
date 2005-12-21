@@ -73,6 +73,12 @@ er.extensions.ERXLocalizer.availableLanguages = (English,German,Japanese)
 ## but here's the default value
 # er.extensions.ERXArrayChooser.includeUnmatchedValuesDefault = false
 
+## Components that use ERXToOne/ManyRelationship can sort case 
+## sensitive or insensitive
+## This can be specified on a per-component basis in the bindings, 
+## but here's the default value
+# er.extensions.ERXArrayChooser.sortCaseInsensitive = false
+
 #########################################################################
 # Encoding
 #########################################################################
