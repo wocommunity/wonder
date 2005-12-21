@@ -54,6 +54,7 @@
      0 : *true* => smartDefaultAttributeWidth = <ERDDefaultModelAssignment> [er.directtoweb.ERDDefaultModelAssignment]
      0 : *true* => smartDefaultRows = <ERDDefaultModelAssignment> [er.directtoweb.ERDDefaultModelAssignment]
      0 : *true* => smartRelationship = <ERDDefaultModelAssignment> [er.directtoweb.ERDDefaultModelAssignment]
+     0 : *true* => sortCaseInsensitive = false [com.webobjects.directtoweb.BooleanAssigment]
      0 : *true* => sortKey = 
      0 : *true* => sortKeyForList = propertyKey [er.directtoweb.ERDKeyValueAssignment]
      0 : *true* => tabComponentName = ERXTabPanel
@@ -115,6 +116,7 @@
     10 : ((smartAttribute.allowsNull = (java.math.BigDecimal)'1') or (isMandatory = (java.math.BigDecimal)'0')) => choicesNames = ("Yes", "No", "Unset")
     10 : ((smartRelationship <> null) or (smartAttribute <> null) or (attribute <> null) or (relationship <> null)) => propertyIsSortable = 1 [com.webobjects.directtoweb.BooleanAssignment]
     10 : ((subTask = 'group') and (task = 'list')) => repetitionComponentName = ERDGroupingListPageRepetition
+    10 : ((subTask = 'pick') and (task = 'list')) => actions = {left = ("selectionAction"); }
     10 : ((task = 'edit') and ((propertyKey = 'password') or (smartAttribute.userInfo.erPrototype = 'password'))) => componentName = ERDEditPassword
     10 : ((task = 'edit') and ((propertyKey = 'password') or (smartAttribute.userInfo.erPrototype = 'password'))) => componentName = ERDEditPasswordConfirm
     10 : ((task = 'edit') and (propertyKey = 'passwordConfirmation')) => componentName = ERDEditPasswordConfirmation
@@ -153,8 +155,10 @@
     10 : (propertyKey = 'printAction') => componentName = ERDPrinterButton
     10 : (propertyKey = 'selectAction') => componentName = ERDSelectButton
     10 : (propertyKey = 'selectAllAction') => componentName = ERDSelectAllButton
+    10 : (propertyKey = 'selectionAction') => componentName = ERDSelectionComponent
     10 : (propertyType = 'r') => emptyListMessage = ERDEmptyListMessage.emptyEmbeddedListMessage [er.directtoweb.ERDDelayedLocalizedAssignment]
     10 : (propertyType = 'r') => isMandatory = smartRelationship.isMandatory [er.directtoweb.ERDKeyValueAssignment]
+    10 : (smartAttribute.className = 'java.lang.String') => sortCaseInsensitive = true [com.webobjects.directtoweb.BooleanAssigment]
     10 : (smartAttribute.className = 'java.math.BigDecimal') => maxLength = 30
     10 : (subTask = 'compact') => shouldRenderBorder = 1 [com.webobjects.directtoweb.BooleanAssignment]
     10 : (subTask = 'pickType') => choiceDisplayKey = toString
