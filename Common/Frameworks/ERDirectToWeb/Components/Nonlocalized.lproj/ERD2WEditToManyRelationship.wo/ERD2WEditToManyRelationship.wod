@@ -21,5 +21,6 @@ EditToManyRelationship: ERXToManyRelationship {
 	shouldShowSelectAllButtons = shouldShowSelectAllButtons;
 	localizeDisplayKeys = d2wContext.localizeDisplayKeys;
 	destinationEntityName = d2wContext.destinationEntityName;
+    sortCaseInsensitive = d2wContext.sortCaseInsensitive;
 }
 

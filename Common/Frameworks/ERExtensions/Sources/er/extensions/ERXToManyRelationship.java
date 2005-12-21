@@ -12,8 +12,9 @@ import com.webobjects.eocontrol.*;
 import com.webobjects.foundation.*;
 
 /**
- * description forthcoming!<br />
- * 
+ * Better layout options that the {@see WOToManyRelationship}, in addition you can set a 
+ * qualifier on the dataSource if you passed any.<br />
+ * * 
  * @binding dataSource
  * @binding destinationDisplayKey
  * @binding isMandatory
@@ -29,7 +30,8 @@ import com.webobjects.foundation.*;
  * @binding width
  * @binding destinationSortKey
  * @binding goingVertically
- * @binding localizeDisplayKeys" defaults="Boolean
+ * @binding localizeDisplayKeys
+ * @binding sortCaseInsensitive
  */
 
 public class ERXToManyRelationship extends WOToManyRelationship {
