@@ -27,11 +27,13 @@ public abstract class ERXArrayChooser extends ERXStatelessComponent {
 
     public static boolean localizeDisplayKeysDefault = ERXProperties.booleanForKeyWithDefault("er.extensions.ERXArrayChooser.localizeDisplayKeysDefault", false);
     public static boolean includeUnmatchedValuesDefault = ERXProperties.booleanForKeyWithDefault("er.extensions.ERXArrayChooser.includeUnmatchedValuesDefault", false);
+    public static boolean sortCaseInsensitiveDefault = ERXProperties.booleanForKeyWithDefault("er.extensions.ERXArrayChooser.sortCaseInsensitive", false);
        
     protected final static String NO_SELECTION_STRING = "ERXArrayChooser.NoSelectionString";
     
     protected Boolean _localizeDisplayKeys;
     protected Boolean _includeUnmatchedValues;
+    protected Boolean _sortCaseInsensitive;
 
     protected String _sourceEntityName;
     protected String _destinationEntityName;
@@ -72,6 +74,7 @@ public abstract class ERXArrayChooser extends ERXStatelessComponent {
         _destinationSortKey = null;
         _noneString = null;
         _localizeDisplayKeys = null;
+        _sortCaseInsensitive = null;
         _includeUnmatchedValues = null;
         _unmatchedValues = null;
     }
@@ -85,6 +88,13 @@ public abstract class ERXArrayChooser extends ERXStatelessComponent {
             _noneString = localizer().localizedStringForKeyWithDefault(_noneString);
         }
         return _noneString;
+    }
+
+    public boolean sortCaseInsensitive() {
+        if(_sortCaseInsensitive == null) {
+        	_sortCaseInsensitive = booleanValueForBinding("sortCaseInsensitive", false) ? Boolean.TRUE : Boolean.FALSE;
+        }
+        return _sortCaseInsensitive.booleanValue();
     }
 
     public boolean localizeDisplayKeys() {
@@ -288,7 +298,8 @@ public abstract class ERXArrayChooser extends ERXStatelessComponent {
                     _list = ERXEOControlUtilities.localInstancesOfObjects(editingContext(), _list);
                 }
             }
-            _list = ERXArrayUtilities.sortedArraySortedWithKeys(_list, destinationSortKeys(), null);
+            NSSelector sorting = (sortCaseInsensitive() ? EOSortOrdering.CompareAscending : EOSortOrdering.CompareCaseInsensitiveAscending);
+            _list = ERXArrayUtilities.sortedArraySortedWithKeys(_list, destinationSortKeys(), sorting);
             if(includeUnmatchedValues()) {
             	NSArray currentValues = currentValues();
             	if(currentValues.count() > 0) {
@@ -299,7 +310,7 @@ public abstract class ERXArrayChooser extends ERXStatelessComponent {
                 		if(_unmatchedValues.lastObject() instanceof EOEnterpriseObject) {
             				_unmatchedValues = ERXEOControlUtilities.localInstancesOfObjects(editingContext(), _unmatchedValues);
             			}
-            			_unmatchedValues = ERXArrayUtilities.sortedArraySortedWithKeys(_unmatchedValues, destinationSortKeys(), null);
+            			_unmatchedValues = ERXArrayUtilities.sortedArraySortedWithKeys(_unmatchedValues, destinationSortKeys(), sorting);
             			_list = _list.arrayByAddingObjectsFromArray(_unmatchedValues);
             		}
             	} else {
