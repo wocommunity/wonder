@@ -62,9 +62,11 @@ public class ERXSortOrder extends WOSortOrder {
             _currentState = Unsorted;
             if (_isCurrentKeyPrimary()) {
                 NSSelector aCurrentState = _primaryKeySortOrderingSelector();
-                if (aCurrentState.equals(EOSortOrdering.CompareAscending)) {
+                if (aCurrentState.equals(EOSortOrdering.CompareAscending) 
+                		|| aCurrentState.equals(EOSortOrdering.CompareCaseInsensitiveAscending)) {
                     _currentState = SortedAscending;
-                } else if (aCurrentState.equals(EOSortOrdering.CompareDescending)) {
+                } else if (aCurrentState.equals(EOSortOrdering.CompareDescending) 
+                		|| aCurrentState.equals(EOSortOrdering.CompareCaseInsensitiveDescending)) {
                     _currentState = SortedDescending;
                 }
             }
