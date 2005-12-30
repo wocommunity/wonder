@@ -120,7 +120,7 @@ public class ERXEC extends EOEditingContext {
      */
     public static void unlockAllContextsForCurrentThread() {
     	List ecs = (List)locks.get();
-    	if(ecs != null && ecs.size() > 0) {
+    	if(useUnlocker && ecs != null && ecs.size() > 0) {
        		if(log.isDebugEnabled()) {
     		    log.debug("Unlock remaining: " + ecs);
     		}
