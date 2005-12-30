@@ -910,6 +910,11 @@ public class ERXEOAccessUtilities {
         for (int i = 0; i < parts.length - 1; i++) {
             part = parts[i];
             EORelationship relationship = entity.anyRelationshipNamed(part);
+            if(relationship == null) {
+            	// CHECKME AK:  it would probably be better to return null 
+            	// to indocate that this is not a valid path?
+            	return NSArray.EmptyArray;
+            }
             entity = relationship.destinationEntity();
             result.addObject(relationship);
         }
