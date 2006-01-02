@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<launchConfiguration type="org.eclipse.ant.AntBuilderLaunchConfigurationType">
-    <stringAttribute
-        key="org.eclipse.ui.externaltools.ATTR_WORKING_DIRECTORY" value="${resource_loc:/ERDirectToWeb}"/>
-    <stringAttribute key="org.eclipse.ui.externaltools.ATTR_LOCATION" value="/Volumes/Home/Wonder/Build/build/generic.xml"/>
-    <stringAttribute key="org.eclipse.ui.externaltools.ATTR_ANT_TARGETS" value="ERExtensions.all"/>
-    <stringAttribute key="org.eclipse.debug.ui.target_run_perspective" value="perspective_none"/>
-</launchConfiguration>
