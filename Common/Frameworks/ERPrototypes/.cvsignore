@@ -1,6 +1,9 @@
 bin
-Makefile.preamble
-Makefile.postamble
+build
+*.xcodeproj
+PB.project
+Makefile.*
 Makefile
-ant.*
+CPFileList.txt
 *~
+.DS_Store

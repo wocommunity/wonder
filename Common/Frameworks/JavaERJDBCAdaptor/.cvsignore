@@ -1,5 +1,9 @@
-PB.project
-Makefile
-woproject
 bin
-JavaERJDBCAdaptor.xcode
+build
+*.xcodeproj
+PB.project
+Makefile.*
+Makefile
+CPFileList.txt
+*~
+.DS_Store
