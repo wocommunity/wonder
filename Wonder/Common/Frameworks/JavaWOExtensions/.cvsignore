@@ -1,8 +1,9 @@
-CPFileList.txt
-ant.frameworks.wo.wosystemroot
-ant.frameworks.wo.wolocalroot
-ant.frameworks.user.home
-ant.classpaths.wo.wosystemroot
-ant.classpaths.wo.wolocalroot
-ant.classpaths.user.home
 bin
+build
+*.xcodeproj
+PB.project
+Makefile.*
+Makefile
+CPFileList.txt
+*~
+.DS_Store
