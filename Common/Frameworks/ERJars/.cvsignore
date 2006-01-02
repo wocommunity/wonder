@@ -7,3 +7,4 @@ Makefile
 CPFileList.txt
 *~
 .DS_Store
+woproject/ant*
