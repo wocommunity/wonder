@@ -101,9 +101,6 @@ Hyperlink1: WOHyperlink {
 	target = "VENDOR_WINDOW";
 }
 
-Hyperlink2: WOHyperlink {
-}
-
 ISLASTUSER: WOConditional {
 	condition = isLastUser;
 }
@@ -276,12 +273,6 @@ String21: WOString {
 
 String3: WOString {
 	value = operatingSystem;
-}
-
-String4: WOString {
-}
-
-String5: WOString {
 }
 
 String6: WOString {
