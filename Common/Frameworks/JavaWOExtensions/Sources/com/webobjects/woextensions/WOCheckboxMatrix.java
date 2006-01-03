@@ -28,7 +28,7 @@ public class WOCheckboxMatrix extends WOComponent {
     public boolean isStateless() {
         return true;
     }
-
+    
     public void setCurrentItem(Object anItem) {
         currentItem = anItem;
         setValueForBinding(currentItem, "item");
@@ -85,5 +85,9 @@ public class WOCheckboxMatrix extends WOComponent {
 
     public void reset()  {
         _invalidateCaches();
+    }
+
+    public Object nullValue() {
+    	return null;
     }
 }
