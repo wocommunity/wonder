@@ -24,4 +24,5 @@ RadioButtonWrapper: WOGenericContainer {
 	elementID = wrapperElementID;
 	formValue = selection;
 	name = context.elementID;
+	elementName=nullValue;
 }
