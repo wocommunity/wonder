@@ -67,4 +67,8 @@ public class WORadioButtonMatrix extends WOComponent {
     public void reset()  {
         _invalidateCaches();
     }
+
+    public Object nullValue() {
+    	return null;
+    }
 }

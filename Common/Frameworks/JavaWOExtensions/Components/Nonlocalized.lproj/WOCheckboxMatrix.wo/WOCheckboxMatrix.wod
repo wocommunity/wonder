@@ -20,6 +20,7 @@ CheckBoxWrapper: WOGenericContainer {
 	elementID = wrapperElementID;
 	formValues = selections;
 	name = context.elementID;
+	elementName=nullValue;
 }
 
 Content: WOComponentContent {
