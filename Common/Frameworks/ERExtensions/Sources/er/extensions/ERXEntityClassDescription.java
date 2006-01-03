@@ -640,7 +640,7 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
     public void validateObjectForDelete(EOEnterpriseObject obj) throws NSValidation.ValidationException {
         try {
             if (useValidity()) {
-                invokeValidityMethodWithType(VALIDITY_DELETE);
+                invokeValidityMethodWithType(VALIDITY_DELETE, obj);
             }
             super.validateObjectForDelete(obj);
             validateObjectWithUserInfo(obj, null, "validateForDelete", "validateForDelete");
@@ -702,7 +702,7 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
     public void validateObjectForUpdate(EOEnterpriseObject obj) throws NSValidation.ValidationException {
         try {
             if (useValidity()) {
-                invokeValidityMethodWithType(VALIDITY_UPDATE);
+                invokeValidityMethodWithType(VALIDITY_UPDATE, obj);
             }
             validateObjectWithUserInfo(obj, null, "validateForUpdate", "validateForUpdate");
         } catch (ERXValidationException eov) {
@@ -727,7 +727,7 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
     public void validateObjectForInsert(EOEnterpriseObject obj) throws NSValidation.ValidationException {
         try {
             if (useValidity()) {
-                invokeValidityMethodWithType(VALIDITY_INSERT);
+                invokeValidityMethodWithType(VALIDITY_INSERT, obj);
             }
             validateObjectWithUserInfo(obj, null, "validateForInsert", "validateForInsert");
         } catch (ERXValidationException eov) {
@@ -786,7 +786,7 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
     public void validateObjectForSave(EOEnterpriseObject obj) throws NSValidation.ValidationException {
         try {
             if (useValidity()) {
-                invokeValidityMethodWithType(VALIDITY_SAVE);
+                invokeValidityMethodWithType(VALIDITY_SAVE, obj);
             }
             
             if(_validationInfo != null) {
@@ -1102,11 +1102,11 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
     }
 
 
-    private void invokeValidityMethodWithType(int type) throws NSValidation.ValidationException{
+    private void invokeValidityMethodWithType(int type, EOEnterpriseObject eo) throws NSValidation.ValidationException{
         try {
             Object dummy = null;
             Method m = validityMethods()[type];
-            m.invoke(sharedGSVEngineInstance(), new Object[]{this});
+            m.invoke(sharedGSVEngineInstance(), new Object[]{eo});
         } catch (IllegalAccessException e1) {
             log.error("an exception occured in validityValidateEOObjectOnSave", e1);
         } catch (IllegalArgumentException e2) {
