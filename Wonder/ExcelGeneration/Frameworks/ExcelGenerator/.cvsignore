@@ -1,5 +1,9 @@
 bin
-woproject
-CPFileList.txt
 build
-.WOLips
+*.xcodeproj
+PB.project
+Makefile.*
+Makefile
+CPFileList.txt
+*~
+.DS_Store
