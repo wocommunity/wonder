@@ -127,7 +127,7 @@ public class ERXWOComponentContent extends WODynamicElement {
     public ERXWOComponentContent(String name, NSDictionary associations, WOElement woelement) {
         super(name, associations, woelement);
         WOAssociation assoc = (WOAssociation) associations.objectForKey("templateName");
-        if(!(assoc instanceof WOConstantValueAssociation)) {
+        if(!assoc.isValueConstant()) {
             throw new IllegalStateException("You must bind 'templateName' to a constant string");
         }
         _templateName = (String) assoc.valueInComponent(null);
