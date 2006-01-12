@@ -81,7 +81,7 @@ public class WOOgnl {
     public void convertOgnlConstantAssociations(NSMutableDictionary associations) {
         for (Enumeration e = associations.objectEnumerator(); e.hasMoreElements();) {
             WOAssociation association = (WOAssociation)e.nextElement();
-            if (association instanceof WOConstantValueAssociation) {
+            if (association.isValueConstant()) {
                 Object constantValue = association.valueInComponent(null);
                 if (constantValue != null && constantValue instanceof String && ((String)constantValue).startsWith(ognlBindingFlag())) {
                     String ognlExpression = ((String)constantValue).substring(ognlBindingFlag().length(),
