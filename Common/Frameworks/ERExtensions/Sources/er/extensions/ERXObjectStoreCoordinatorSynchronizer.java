@@ -104,33 +104,33 @@ public class ERXObjectStoreCoordinatorSynchronizer {
      */
     private class ProcessChangesQueue implements Runnable {
         private abstract class SnapshotProcessor {
-            public abstract void processSnapshotForGlobalID(EODatabase database,  NSDictionary snapshot, EOGlobalID globalID);
+            public abstract void processSnapshots(EODatabase database,  NSDictionary snapshots);
         }
         
         private class DeleteProcessor extends SnapshotProcessor {
-            public void processSnapshotForGlobalID(EODatabase database,  NSDictionary snapshot, EOGlobalID globalID) {
-                database.forgetSnapshotForGlobalID(globalID);
-                if(log.isDebugEnabled()) {
-                    log.debug("forget: " + globalID);
-                }
-            }
+        	public void processSnapshots(EODatabase database,  NSDictionary snapshots) {
+        		database.forgetSnapshotsForGlobalIDs(snapshots.allKeys());
+        		if(log.isDebugEnabled()) {
+        			log.debug("forget: " + snapshots);
+        		}
+        	}
         }
         private class UpdateProcessor extends SnapshotProcessor {
-            public void processSnapshotForGlobalID(EODatabase database,  NSDictionary snapshot, EOGlobalID globalID) {
-                database.forgetSnapshotForGlobalID(globalID);
-                database.recordSnapshotForGlobalID(snapshot, globalID);
-                if(log.isDebugEnabled()) {
-                    log.debug("update: " + globalID + " -- " + snapshot);
-                }
-            }
+        	public void processSnapshots(EODatabase database,  NSDictionary snapshots) {
+        		database.forgetSnapshotsForGlobalIDs(snapshots.allKeys());
+        		database.recordSnapshots(snapshots);
+        		if(log.isDebugEnabled()) {
+        			log.debug("update: " + snapshots);
+        		}
+        	}
         }
         private class InsertProcessor extends SnapshotProcessor {
-            public void processSnapshotForGlobalID(EODatabase database,  NSDictionary snapshot, EOGlobalID globalID) {
-                database.recordSnapshotForGlobalID(snapshot, globalID);
-                if(log.isDebugEnabled()) {
-                    log.debug("insert: " + globalID);
-                }
-            }
+        	public void processSnapshots(EODatabase database,  NSDictionary snapshots) {
+        		database.recordSnapshots(snapshots);
+        		if(log.isDebugEnabled()) {
+        			log.debug("insert: " + snapshots);
+        		}
+        	}
         }
         
         private List _elements = new LinkedList();
@@ -186,27 +186,32 @@ public class ERXObjectStoreCoordinatorSynchronizer {
             for (Enumeration oscs = _synchronizer.coordinators(); oscs.hasMoreElements(); ) {
                 EOObjectStoreCoordinator osc = (EOObjectStoreCoordinator) oscs.nextElement();
                 if (osc != sender) {
-                    for(Enumeration entityNames = changesByEntity.allKeys().objectEnumerator(); entityNames.hasMoreElements();) {
+                    NSMutableDictionary snapshotsByGlobalID = new NSMutableDictionary();
+                   for(Enumeration entityNames = changesByEntity.allKeys().objectEnumerator(); entityNames.hasMoreElements();) {
                         String entityName = (String)entityNames.nextElement();
+                        String key = entityName + "/" + System.identityHashCode(osc);
                         EOEntity entity = EOModelGroup.modelGroupForObjectStoreCoordinator(sender).entityNamed(entityName);
                         NSArray snapshots = (NSArray)changesByEntity.objectForKey(entityName);
-                        EODatabaseContext dbc = (EODatabaseContext) dbcs.objectForKey(entityName);
+                        EODatabaseContext dbc = (EODatabaseContext) dbcs.objectForKey(key);
                         if(dbc == null) {
                             dbc = ERXEOAccessUtilities.databaseContextForEntityNamed(osc,entityName);
-                            dbcs.setObjectForKey(dbc, entityName);
+                            dbcs.setObjectForKey(dbc, key);
                         }
                         EODatabase database = dbc.database();
                         for(Enumeration snapshotsEnumerator = snapshots.objectEnumerator(); snapshotsEnumerator.hasMoreElements(); ) {
-                            NSDictionary snapshot = (NSDictionary)snapshotsEnumerator.nextElement();
-                            EOGlobalID globalID = entity.globalIDForRow(snapshot);
-                            EODatabaseContext._EOAssertSafeMultiThreadedAccess(dbc);
-                            dbc.lock();
-                            
-                            try {
-                                processor.processSnapshotForGlobalID(database, snapshot, globalID);
-                            } finally {
-                                dbc.unlock();
-                            }
+                        	NSDictionary snapshot = (NSDictionary)snapshotsEnumerator.nextElement();
+                        	EOGlobalID globalID = entity.globalIDForRow(snapshot);
+                        	snapshotsByGlobalID.setObjectForKey(snapshot, globalID);
+                        }
+                        if(snapshotsByGlobalID.count() > 0) {
+                        	EODatabaseContext._EOAssertSafeMultiThreadedAccess(dbc);
+                        	dbc.lock();
+                        	
+                        	try {
+                        		processor.processSnapshots(database, snapshotsByGlobalID);
+                        	} finally {
+                        		dbc.unlock();
+                        	}
                         }
                     }
                 }
@@ -247,11 +252,11 @@ public class ERXObjectStoreCoordinatorSynchronizer {
             for(Enumeration gids = objects.objectEnumerator(); gids.hasMoreElements();) {
                 EOKeyGlobalID globalID = (EOKeyGlobalID) gids.nextElement();
                 String entityName = globalID.entityName();
-                
-                EODatabaseContext dbc = (EODatabaseContext) dbcs.objectForKey(entityName);
+                String key = entityName + "/" + System.identityHashCode(osc);
+                EODatabaseContext dbc = (EODatabaseContext) dbcs.objectForKey(key);
                 if(dbc == null) {
                     dbc = ERXEOAccessUtilities.databaseContextForEntityNamed(osc, entityName);
-                    dbcs.setObjectForKey(dbc, entityName);
+                    dbcs.setObjectForKey(dbc, key);
                 }
                 NSMutableArray snapshotsForEntity = (NSMutableArray)result.objectForKey(entityName);
                 if(snapshotsForEntity == null) {
