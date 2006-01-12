@@ -67,9 +67,14 @@ public class ERXWOTestInterface extends WOComponent implements ERXTestListener {
                             && ( className.endsWith( "Test" ) || className.endsWith( "TestCase" ) || className.indexOf("tests.") == 0 || className.indexOf(".tests.") > 0)
                             && !className.startsWith( "junit." )
                             && className.indexOf( "$" ) < 0) {
-                            Class c = ERXPatcher.classForName(className);
-                            //if(c != null && c.isAssignableFrom(TestCase.class))
-                                theClassNames.addObject(munge(className));
+                        	try {
+                        		Class c = ERXPatcher.classForName(className);
+                        		//if(c != null && c.isAssignableFrom(TestCase.class))
+                        			theClassNames.addObject(munge(className));
+                        	} catch(Exception ex) {
+                        		// ignored
+                        		log.warn("Skipping test " + className + ": " + ex);
+                        	}
                         }
                     }
                 }
