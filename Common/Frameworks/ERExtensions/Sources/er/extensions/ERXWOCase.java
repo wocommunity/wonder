@@ -17,7 +17,7 @@ public class ERXWOCase extends WODynamicElement {
     public ERXWOCase(String name, NSDictionary associations, WOElement woelement) {
         super(name, associations, woelement);
         WOAssociation assoc = (WOAssociation) associations.objectForKey("case");
-        if(!(assoc instanceof WOConstantValueAssociation)) {
+        if(!assoc.isValueConstant()) {
             throw new IllegalStateException("You must bind 'case' to a constant value");
         }
         _value = assoc.valueInComponent(null);

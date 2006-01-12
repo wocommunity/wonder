@@ -10,10 +10,8 @@ package ognl.webobjects;
 
 import com.webobjects.foundation.*;
 import com.webobjects.eocontrol.*;
-import com.webobjects.eoaccess.*;
 import com.webobjects.appserver.*;
 import com.webobjects.appserver._private.*;
-import java.util.Enumeration;
 
 public class WOOgnlAssociation extends WOKeyValueAssociation {
 
