@@ -30,13 +30,6 @@ ERPrinterButton: ERDPrinterButton {
 	task = "inspect";
 }
 
-ERTableWithBorder1: ERXTableWithBorder {
-	bgcolor = d2wContext.backgroundColorForTable;
-	renderBorder = d2wContext.renderBorder;
-	border = d2wContext.border;
-	color = "#ee00ee";
-}
-
 EditImage: WOImage {
 	alt = "Edits this object";
 	border = "0";
@@ -108,11 +101,6 @@ IsEditingConditional2: WOConditional {
 	condition = isEditing;
 }
 
-IsEditingConditional3: WOConditional {
-	_unroll = true;
-	condition = isEditing;
-}
-
 IsEntityWritable: WOConditional {
 	_unroll = true;
 	condition = isEntityReadOnly;
@@ -132,12 +120,6 @@ IsNotEditingConditional: WOConditional {
 }
 
 IsNotEditingConditional2: WOConditional {
-	_unroll = true;
-	condition = isEditing;
-	negate = true;
-}
-
-IsNotEditingConditional3: WOConditional {
 	_unroll = true;
 	condition = isEditing;
 	negate = true;

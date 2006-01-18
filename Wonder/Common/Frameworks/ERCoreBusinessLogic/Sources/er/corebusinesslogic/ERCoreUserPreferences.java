@@ -6,12 +6,12 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.corebusinesslogic;
 
-import com.webobjects.foundation.*;
+import java.util.*;
+
 import com.webobjects.eocontrol.*;
-import com.webobjects.eoaccess.*;
-import com.webobjects.appserver.*;
+import com.webobjects.foundation.*;
+
 import er.extensions.*;
-import java.util.Enumeration;
 
 public class ERCoreUserPreferences implements NSKeyValueCoding {
 

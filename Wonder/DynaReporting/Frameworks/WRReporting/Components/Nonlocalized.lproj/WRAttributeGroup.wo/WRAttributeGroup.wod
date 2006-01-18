@@ -19,6 +19,3 @@ td:WOGenericContainer{
 	rowspan = rowSpan;
 	bgcolor = ^bgcolor;
 }
-debug: WOString {
-    value = depth;
-}

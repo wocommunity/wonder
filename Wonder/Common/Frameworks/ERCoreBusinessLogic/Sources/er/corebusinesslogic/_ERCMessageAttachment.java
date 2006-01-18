@@ -3,12 +3,7 @@
 // Created by eogenerator
 // DO NOT EDIT.  Make changes to ERCMessageAttachment.java instead.
 package er.corebusinesslogic;
-import com.webobjects.foundation.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.eoaccess.*;
 import er.extensions.*;
-import java.util.*;
-import java.math.BigDecimal;
 
 public abstract class _ERCMessageAttachment extends ERXGenericRecord {
 

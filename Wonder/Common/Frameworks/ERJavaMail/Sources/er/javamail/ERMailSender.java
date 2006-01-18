@@ -6,17 +6,16 @@
 
 package er.javamail;
 
-import er.extensions.*;
-
-import com.webobjects.foundation.NSForwardException;
-import com.webobjects.foundation.NSArray;
-import com.webobjects.foundation.NSTimestamp;
-import com.webobjects.appserver.WOApplication;
+import java.lang.reflect.*;
+import java.util.*;
 
 import javax.mail.*;
 import javax.mail.internet.*;
-import java.lang.reflect.*;
-import java.util.*;
+
+import com.webobjects.appserver.*;
+import com.webobjects.foundation.*;
+
+import er.extensions.*;
 
 /** This class is used to send mails in a threaded way.<BR> This is
 needed in WebObjects because if sending 20 mails takes 40 seconds,

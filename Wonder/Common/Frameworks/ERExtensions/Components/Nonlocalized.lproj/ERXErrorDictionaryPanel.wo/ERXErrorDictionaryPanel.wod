@@ -22,15 +22,6 @@ ErrorPanel4: WOConditional {
 	condition = hasErrors;
 }
 
-ExclamationImage: WOImage
-{
-    filename = "exclamation.gif";
-    framework = "JavaWOExtensions";
-    //height = "48";
-    //width = "66";
-    border = 0;
-}
-
 Image1: WOImage {
 	border = 0;
 	filename = "s.gif";

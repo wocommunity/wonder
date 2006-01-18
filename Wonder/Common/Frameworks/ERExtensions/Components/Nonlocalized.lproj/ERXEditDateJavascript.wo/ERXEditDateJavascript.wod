@@ -12,20 +12,12 @@ Image1: WOImage {
 	key = "calendar.gif";
 }
 
-JavaScript1: WOJavaScript {
-	scriptSource = datePickerJavaScriptUrl;
-}
-
 JavaScript2: WOJavaScript {
 	scriptSource = datePickerJavaScriptUrl;
 }
 
 String1: WOString {
 	value = formatterStringForScript.toLowerCase;
-}
-
-String2: WOString {
-	value = name;
 }
 
 TextField1: WOTextField {

@@ -8,9 +8,11 @@
 /* NSClassResolver.java created by max on Sat 29-Sep-2001 */
 package ognl.webobjects;
 
+import java.util.*;
+
+import ognl.*;
+
 import com.webobjects.foundation.*;
-import java.util.Map;
-import ognl.ClassResolver;
 
 public class NSClassResolver implements ClassResolver {
 

@@ -15,10 +15,6 @@ ColRepetition: WORepetition {
 Content: WOComponentContent {
 }
 
-PushItem: WOMethodInvocation {
-	invoke = pushItem;
-}
-
 RowRepetition: WORepetition {
 	count = rowCount;
 	index = currentRow;

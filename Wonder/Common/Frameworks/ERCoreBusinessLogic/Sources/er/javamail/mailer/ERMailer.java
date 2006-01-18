@@ -6,17 +6,17 @@
 //
 package er.javamail.mailer;
 
-import com.webobjects.foundation.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.eoaccess.*;
+import java.util.*;
 
-import er.extensions.*;
-
-import er.javamail.*;
-import er.corebusinesslogic.*;
-
-import java.util.Enumeration;
 import javax.mail.*;
+
+import com.webobjects.eoaccess.*;
+import com.webobjects.eocontrol.*;
+import com.webobjects.foundation.*;
+
+import er.corebusinesslogic.*;
+import er.extensions.*;
+import er.javamail.*;
 
 /**
  * Mailer bridge class. Used to pull mail out of the

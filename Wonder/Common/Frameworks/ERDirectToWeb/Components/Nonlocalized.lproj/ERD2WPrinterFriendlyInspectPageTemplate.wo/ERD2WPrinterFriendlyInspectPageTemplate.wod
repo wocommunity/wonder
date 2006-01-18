@@ -32,27 +32,12 @@ InspectTableHeaderRow: WOGenericContainer {
 	elementName = "tr";
 }
 
-IsEditingConditional3: WOConditional {
-	_unroll = true;
-	condition = isEditing;
-}
-
-IsNotEditingConditional3: WOConditional {
-	_unroll = true;
-	condition = isEditing;
-	negate = true;
-}
-
 MainTable: WOGenericContainer {
 	_unroll = true;
 	border = 0;
 	cellpadding = 5;
 	cellspacing = 5;
 	elementName = "Table";
-}
-
-String3: WOString {
-	value = pageTitle;
 }
 
 Wrapper: WOSwitchComponent {   

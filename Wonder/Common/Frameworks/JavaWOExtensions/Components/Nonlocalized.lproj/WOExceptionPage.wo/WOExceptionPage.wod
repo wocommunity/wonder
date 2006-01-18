@@ -3,11 +3,6 @@ ApplicationNameString: WOString {
     escapeHTML = false;
 }
 
-ApplicationNameString2: WOString {
-    value = application.name;
-    escapeHTML = false;
-}
-
 CurrentReason: WOString {
        value = error.message;
 }
@@ -49,10 +44,6 @@ line: WOString {
 	value = errorline.lineNumber;
 }
 
-message: WOString {
-        value = error.message;
-}
-
 methodname: WOHyperlink {
 	disabled = errorline.isDisable;
 	directActionName = "openInProjectBuilder";
@@ -65,15 +56,7 @@ methodname: WOHyperlink {
 	string = errorline.methodName;
 }
 
-packageinfo: WOString {
-	value = errorline.packageClassPath;
-}
-
 packagename: WOString {
 	value = errorline.packageName;
-}
-
-typeexception: WOString {
-        value = error.typeException;
 }
  
