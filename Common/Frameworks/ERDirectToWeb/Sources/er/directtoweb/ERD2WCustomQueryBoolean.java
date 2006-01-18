@@ -68,13 +68,16 @@ public class ERD2WCustomQueryBoolean extends D2WQueryBoolean {
     
     public String displayString() {
         NSArray choicesNames = choicesNames();
+        String result;
         if(choicesNames == null) {
-            return super.displayString();
+            result = super.displayString();
         }
         int choicesIndex = index == 0 ? 2 : index - 1;
         if(choicesIndex >= choicesNames.count()) {
-            return super.displayString();
+            result = super.displayString();
+        } else {
+        	result = (String)choicesNames.objectAtIndex(choicesIndex);
         }
-        return (String)choicesNames.objectAtIndex(choicesIndex);
+        return ERXLocalizer.currentLocalizer().localizedStringForKeyWithDefault(result);
     }
 }
