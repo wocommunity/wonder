@@ -39,7 +39,3 @@ NothingDisplayed: WOConditional {
 ShouldDisplayConditional: WOConditional {
 	condition = hasItems;
 }
-
-TotalItems: WOString {
-	value = realSize;
-}

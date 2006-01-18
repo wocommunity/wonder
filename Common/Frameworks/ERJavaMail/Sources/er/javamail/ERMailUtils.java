@@ -6,19 +6,15 @@
 
 package er.javamail;
 
-import java.util.Enumeration;
-import javax.mail.internet.AddressException;
-import javax.mail.Address;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeUtility;
+import java.util.*;
 
-import com.webobjects.appserver.WOComponent;
-import com.webobjects.appserver.WOSession;
-import com.webobjects.foundation.NSArray;
-import com.webobjects.foundation.NSDictionary;
-import com.webobjects.foundation.NSMutableArray;
-import er.extensions.ERXApplication;
-import er.extensions.ERXLogger;
+import javax.mail.*;
+import javax.mail.internet.*;
+
+import com.webobjects.appserver.*;
+import com.webobjects.foundation.*;
+
+import er.extensions.*;
 
 /**
  * <code>ERMailUtils</code> contains various utility method related

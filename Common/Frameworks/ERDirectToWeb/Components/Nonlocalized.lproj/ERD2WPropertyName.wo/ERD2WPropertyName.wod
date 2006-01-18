@@ -16,10 +16,6 @@ HasPropertyName: WOConditional {
 	condition = hasPropertyName;
 }
 
-NotRequired: WOConditional {
-    condition=displayRequiredMarker;
-    negate=true;
-}
 PropertyName: WOString {
     value=displayNameForProperty;
 }

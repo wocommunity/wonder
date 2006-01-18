@@ -3,10 +3,6 @@ Custom1: WOCollapsibleComponentContent {
 	openedLabel = "Collapse Layout";	
 	condition = true;
 }
-Custom2: WOCollapsibleComponentContent { 
-	closedLabel = "Explode Navigation"; 
-	openedLabel = "Collapse Navigation";
-}
 
 WRLayoutEditor1: WRLayoutEditor {
 	model = model;
@@ -22,10 +18,6 @@ WRLayoutEditor1: WRLayoutEditor {
 	keysInH = ^keysInH;
 	keysInV = ^keysInV;
 	keysInZ = ^keysInZ;
-}
-attribHeading: WRAttributeGroup{
-	model=model;
-	bgcolor = "ffffff";
 }
 
 attribLabel: WOString{
@@ -61,10 +53,6 @@ colSpanTdHead: WOGenericContainer{
 	elementName = "th";
 	colspan = horzColSpan;
 	class = "WRTitle";
-}
-collapseVertList: WOCollapsibleComponentContent { 
-	closedLabel = "Explode Vertical List"; 
-	openedLabel = "Collapse Vertical List";
 }
 criteriaLabel: WOString {
 	value = topCriteria.label;
@@ -108,12 +96,6 @@ hCriteriaList2: WRNestedList {
     sublist = horzSubList2;
     //action = nestedListClicked;
     //isOrdered = YES;
-}
-
-hCriteriaNotNestedList: WORepetition {
-    list = topHorzGroupCriteriaList;
-    item = topCriteria;
-    index = currentIndex;
 }
 hasTitle: WOConditional {
 	condition = hasTitle;
@@ -167,12 +149,6 @@ showDefaultReportStyle: WOConditional{
 	condition= showDefaultReportStyle;
 	negate=true;
 }
-showEditing: WOConditional{
-	condition = showEditing;
-}
-
-
-
 
 showHeadersForAsCells: WOConditional{
 	condition = showHeadersForAsCells;

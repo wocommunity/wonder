@@ -3,14 +3,6 @@ BaseUrl: WOResourceURL {
 	framework = "ERExtensions";
 }
 
-BaseUrl2: WOString {
-	value = ^baseUrl;
-}
-
-Cols: WOString {
-	value = ^cols;
-}
-
 FormName: WOString {
 	value = ^formName;
 }
@@ -56,10 +48,6 @@ OncePerRequest: ERXOncePerRequestConditional {
 	keyName = "dhtmlJs";
 }
 
-Rows: WOString {
-	value = ^rows;
-}
-
 Script: WOGenericContainer {
 	elementName = "script";
 	language = "JavaScript1.2";
@@ -77,11 +65,6 @@ TextArea: WOText {
 	cols = ^cols;
 	rows = ^rows;
 	name = varName;
-	value = ^value;
-}
-
-Value: WOString {
-	escapeHTML = true;
 	value = ^value;
 }
 

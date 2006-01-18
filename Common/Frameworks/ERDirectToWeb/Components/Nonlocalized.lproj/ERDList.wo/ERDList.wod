@@ -1,34 +1,13 @@
-NonZeroConditional2: ERXNonZeroConditional {
-	condition = list.count;
+Conditional1: WOConditional {
+	condition = d2wContext.createButtonComponentName;
 	negate = true;
 }
 
-NonNullConditional1: ERXNonNullConditional {
-	condition = ^emptyListMessage;
+Conditional2: WOConditional {
+	condition = d2wContext.createButtonComponentName;
 }
 
-String1: WOString {
-	value = ^emptyListMessage;
-	escapeHTML = false;
-}
-
-NoEmptyListMessage: ERXNonNullConditional {
-	condition = ^emptyListMessage;
-	negate = true;
-}
-
-NonNullConditional2: ERXNonNullConditional {
-	condition = ^emptyListComponentName;
-}
-
-SwitchComponent2: WOSwitchComponent {
-	WOComponentName = ^emptyListComponentName;
-	d2wContext = ^d2wContext;
-}
-
-NonZeroConditional1: ERXNonZeroConditional {
-	condition = list.count;
-}
+Content2: WOComponentContent {}
 
 List1: ERXD2WList { 	
 	pageConfiguration = ^listConfigurationName;
@@ -37,14 +16,25 @@ List1: ERXD2WList {
 	settings = settings;
 }
 
-Content2: WOComponentContent {}
-
-ShowActions: WOConditional {
-	condition = ^showActions;
+NoEmptyListMessage: ERXNonNullConditional {
+	condition = ^emptyListMessage;
+	negate = true;
 }
 
-Conditional1: WOConditional {
-	condition = d2wContext.createButtonComponentName;
+NonNullConditional1: ERXNonNullConditional {
+	condition = ^emptyListMessage;
+}
+
+NonNullConditional2: ERXNonNullConditional {
+	condition = ^emptyListComponentName;
+}
+
+NonZeroConditional1: ERXNonZeroConditional {
+	condition = list.count;
+}
+
+NonZeroConditional2: ERXNonZeroConditional {
+	condition = list.count;
 	negate = true;
 }
 
@@ -53,8 +43,13 @@ Select: WOSubmitButton {
 	value = session.localizer.ERDList.create;
 }
 
-Conditional2: WOConditional {
-	condition = d2wContext.createButtonComponentName;
+ShowActions: WOConditional {
+	condition = ^showActions;
+}
+
+String1: WOString {
+	value = ^emptyListMessage;
+	escapeHTML = false;
 }
 
 SwitchComponent1: WOSwitchComponent {
@@ -62,6 +57,7 @@ SwitchComponent1: WOSwitchComponent {
 	d2wContext = d2wContext;
 }
 
-String3: WOString {
-	value = ^destinationEntity.name;
+SwitchComponent2: WOSwitchComponent {
+	WOComponentName = ^emptyListComponentName;
+	d2wContext = ^d2wContext;
 }

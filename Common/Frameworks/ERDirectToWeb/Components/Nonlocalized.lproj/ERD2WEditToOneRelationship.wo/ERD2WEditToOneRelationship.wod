@@ -16,4 +16,3 @@ EditToOneRelationship: ERXToOneRelationship {
 	destinationEntityName = d2wContext.destinationEntityName;
     sortCaseInsensitive = d2wContext.sortCaseInsensitive;
 }
-

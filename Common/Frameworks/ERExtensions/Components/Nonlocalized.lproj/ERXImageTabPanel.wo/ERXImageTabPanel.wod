@@ -18,12 +18,6 @@ Conditional2: WOConditional {
 Content: WOComponentContent {
 }
 
-ContentCellContainer: WOGenericContainer {
-//	bgcolor = bgcolor;
-	elementName = "td";
-    valign="top";
-}
-
 GenericContainer1: WOGenericContainer {
 	colspan = contentColSpan;
 	elementName = "TD";

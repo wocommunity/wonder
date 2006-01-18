@@ -6,13 +6,15 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.corebusinesslogic;
 
-import com.webobjects.foundation.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.eoaccess.*;
-import com.webobjects.appserver.*;
-import er.extensions.*;
-import java.util.*;
 import java.lang.reflect.*;
+import java.util.*;
+
+import com.webobjects.appserver.*;
+import com.webobjects.eoaccess.*;
+import com.webobjects.eocontrol.*;
+import com.webobjects.foundation.*;
+
+import er.extensions.*;
 
 public class ERCoreBusinessLogic extends ERXFrameworkPrincipal {
 
@@ -107,34 +109,34 @@ public class ERCoreBusinessLogic extends ERXFrameworkPrincipal {
     }
 
     public static String staticStoredValueForKey(String key) {
-        return ERCStatic.staticClazz().staticStoredValueForKey(key);
+        return ERCStatic.ERCStaticClazz.staticStoredValueForKey(key);
     }
     
     public static int staticStoredIntValueForKey(String key) {
-        return ERCStatic.staticClazz().staticStoredIntValueForKey(key);
+        return ERCStatic.ERCStaticClazz.staticStoredIntValueForKey(key);
     }
 
     public static String staticStoredValueForKey(String key, boolean noCache) {
-        return ERCStatic.staticClazz().staticStoredValueForKey(key, noCache);
+        return ERCStatic.ERCStaticClazz.staticStoredValueForKey(key, noCache);
     }
     
     public static int staticStoredIntValueForKey(String key, boolean noCache) {
-        return ERCStatic.staticClazz().staticStoredIntValueForKey(key, noCache);
+        return ERCStatic.ERCStaticClazz.staticStoredIntValueForKey(key, noCache);
     }    
 
     public static String staticStoredValueForKey(String key, EOEditingContext ec) {
-        return ERCStatic.staticClazz().staticStoredValueForKey(ec, key);
+        return ERCStatic.ERCStaticClazz.staticStoredValueForKey(ec, key);
     }
     public static int staticStoredIntValueForKey(String key, EOEditingContext ec) {
-        return ERCStatic.staticClazz().staticStoredIntValueForKey(ec, key);
+        return ERCStatic.ERCStaticClazz.staticStoredIntValueForKey(ec, key);
     }
 
     public static void takeStaticStoredValueForKey(String value, String key, EOEditingContext editingContext) {
-        ERCStatic.staticClazz().takeStaticStoredValueForKey(editingContext, value, key);
+        ERCStatic.ERCStaticClazz.takeStaticStoredValueForKey(editingContext, value, key);
     }
 
     public static void takeStaticStoredValueForKey(String value, String key) {
-        ERCStatic.staticClazz().takeStaticStoredValueForKey(value, key);
+        ERCStatic.ERCStaticClazz.takeStaticStoredValueForKey(value, key);
     }    
 
     public static void invalidateStaticValueForKeyCache() {

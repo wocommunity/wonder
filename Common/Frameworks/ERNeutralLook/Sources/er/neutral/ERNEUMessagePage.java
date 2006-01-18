@@ -6,8 +6,9 @@
 //
 package er.neutral;
 
-import com.webobjects.appserver.WOContext;
-import er.directtoweb.ERD2WMessagePage;
+import com.webobjects.appserver.*;
+
+import er.directtoweb.*;
 
 public class ERNEUMessagePage extends ERD2WMessagePage {
 

@@ -6,7 +6,6 @@ package er.jdbcadaptor;
  * Window - Preferences - Java - Code Style - Code Templates
  */
 import com.webobjects.eoaccess.*;
-import com.webobjects.jdbcadaptor.*;
 
 import er.extensions.*;
 

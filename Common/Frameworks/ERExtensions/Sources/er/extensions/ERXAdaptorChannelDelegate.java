@@ -69,7 +69,7 @@ public class ERXAdaptorChannelDelegate {
 		if (sqlLoggingLogger == null) {
 			sqlLoggingLogger = ERXLogger.getERXLogger("er.extensions.ERXAdaptorChannelDelegate.sqlLogging");
 		}
-		// log.setLevel(Level.DEBUG);
+		// sqlLoggingLogger.setLevel(Level.DEBUG);
 		String entityMatchPattern = ERXProperties.stringForKeyWithDefault(
 				"er.extensions.ERXAdaptorChannelDelegate.trace.entityMatchPattern", ".*");
 		long millisecondsNeeded = System.currentTimeMillis() - _lastMilliseconds;

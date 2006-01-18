@@ -6,9 +6,6 @@
  */
 package er.jdbcadaptor;
 
-import java.sql.*;
-
-import com.webobjects.eoaccess.*;
 import com.webobjects.jdbcadaptor.*;
 
 import er.extensions.*;

@@ -4,11 +4,6 @@ BindingName: WOString
 	value = bindingName; 
 }
 
-DeclarationName: WOString 
-{
-	value = declarationName;
-}
-
 EventDuration: WOString 
 {
 	value = eventDuration;

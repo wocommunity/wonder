@@ -6,25 +6,15 @@
 
 package er.javamail;
 
-import java.util.Date;
-import java.util.Enumeration;
+import java.util.*;
 
-import javax.activation.DataHandler;
-import javax.mail.BodyPart;
-import javax.mail.Message;
-import javax.mail.MessagingException;
-import javax.mail.Part;
-import javax.mail.internet.AddressException;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeBodyPart;
-import javax.mail.internet.MimeMessage;
-import javax.mail.internet.MimeMultipart;
+import javax.activation.*;
+import javax.mail.*;
+import javax.mail.internet.*;
 
-import com.webobjects.foundation.NSArray;
-import com.webobjects.foundation.NSForwardException;
-import com.webobjects.foundation.NSMutableArray;
+import com.webobjects.foundation.*;
 
-import er.extensions.ERXLogger;
+import er.extensions.*;
 
 /** 
  * This is the main class for sending mail with the JavaMail API.

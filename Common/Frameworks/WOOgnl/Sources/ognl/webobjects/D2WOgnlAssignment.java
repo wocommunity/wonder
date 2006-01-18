@@ -8,10 +8,8 @@
 /* D2WOgnlAssignment.java created by max on Tue 16-Oct-2001 */
 package ognl.webobjects;
 
-import com.webobjects.foundation.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.eoaccess.*;
 import com.webobjects.directtoweb.*;
+import com.webobjects.eocontrol.*;
 
 public class D2WOgnlAssignment extends Assignment {
 

@@ -1,7 +1,5 @@
 package er.reporting;
 
-import ognl.webobjects.*;
-
 import com.webobjects.appserver.*;
 import com.webobjects.foundation.*;
 

@@ -79,19 +79,6 @@ NavBar1: WOSwitchComponent {
 	WOComponentName = d2wContext.batchNavigationBarComponentName;
 }
 
-NavBar2: ERXBatchNavigationBar {
-	bgcolor = "#ff0000"; // backgroundColorForTable;
-	displayGroup = displayGroup;
-	objectName = d2wContext.displayNameForEntity;
-	//textColor = d2wContext.textColor;
-	width = "90%";
-        d2wContext = d2wContext;
-}
-
-NumberOfItems: WOString {
-	value = listSize;
-}
-
 PageWrapper: WOSwitchComponent {
 	WOComponentName = d2wContext.pageWrapperName;
 	_componentUnroll = true;

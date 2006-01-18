@@ -104,11 +104,6 @@ SearchButtonImage: WOActiveImage {
 	width = "16";
 }
 
-SwitchComponent1: WOSwitchComponent {
-	WOComponentName = d2wContext.sectionComponentName;
-	d2wContext = d2wContext;
-}
-
 SwitchComponent3: WOSwitchComponent {
 	WOComponentName = d2wContext.sectionComponentName;
 	d2wContext = d2wContext;

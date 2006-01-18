@@ -42,10 +42,6 @@ Conditional1: WOConditional {
 	condition = showBanner;
 }
 
-Conditional2: WOConditional {
-	condition = d2wContext.useFocus;
-}
-
 Conditional3: WOConditional {
 	condition = d2wContext.hasPrinterFriendlyVersion;
 }
@@ -132,11 +128,6 @@ IsEditing: WOKeyValueConditional {
 	value = "edit";
 }
 
-IsEditing2: WOKeyValueConditional {
-	key = "task";
-	value = "edit";
-}
-
 LeftArrow: WOImageButton {
     border = "0";
     action = previousStep;
@@ -183,10 +174,6 @@ RightArrow: WOImageButton {
 }
 
 Script: WOJavaScript{	scriptString = tabScriptString;
-	hideInComment = true;
-}
-
-Script2: WOJavaScript{	scriptString = tabScriptString;
 	hideInComment = true;
 }
 

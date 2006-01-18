@@ -1,20 +1,13 @@
 package er.javamail;
 
-import java.util.Properties;
-import com.webobjects.foundation.NSArray;
-import com.webobjects.foundation.NSMutableArray;
-import com.webobjects.eocontrol.EOOrQualifier;
-import com.webobjects.eocontrol.EOQualifier;
-import com.webobjects.eocontrol.EOEnterpriseObject;
-import er.extensions.ERXFrameworkPrincipal;
-import er.extensions.ERXLogger;
-import er.extensions.ERXProperties;
-import er.extensions.ERXValidationFactory;
-import org.apache.oro.text.regex.MalformedPatternException;
-import org.apache.oro.text.regex.Pattern;
-import org.apache.oro.text.regex.Perl5Compiler;
-import org.apache.oro.text.regex.Perl5Matcher;
-import java.util.Enumeration;
+import java.util.*;
+
+import org.apache.oro.text.regex.*;
+
+import com.webobjects.eocontrol.*;
+import com.webobjects.foundation.*;
+
+import er.extensions.*;
 
 /**
  * <code>ERJavaMail</code> is the prinicpal class for the ERJavaMail framework.
