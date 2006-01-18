@@ -12,7 +12,7 @@ import com.webobjects.appserver.*;
 import er.directtoweb.*;
 
 
-public class ERNEUErrorPage extends ERDRecoverableErrorPage {
+public class ERNEUErrorPage extends ERD2WMessagePage {
 
     public ERNEUErrorPage(WOContext context) {
         super(context);
