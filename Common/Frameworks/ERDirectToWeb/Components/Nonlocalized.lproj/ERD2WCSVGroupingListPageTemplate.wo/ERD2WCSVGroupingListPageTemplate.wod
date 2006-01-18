@@ -1,10 +1,3 @@
-AttributeCell: WOGenericContainer {
-	_unroll = true;
-	align = d2wContext.justification;
-	elementName = "td";
-	valign = "middle";
-}
-
 AttributeDisplay: WOSwitchComponent { 
 	WOComponentName = d2wContext.componentName;
 	_componentUnroll = true;
@@ -19,41 +12,10 @@ AttributeRepetition: WORepetition {
 	list = d2wContext.displayPropertyKeys;
 }
 
-BackButton: WOHyperlink {
-	action = backAction;
-}
-
-BackgroundColor: WOString {
-	_unroll = true;
-	value = d2wContext.backgroundColorForTable;
-}
-
 ColumnLabelRepetition: WORepetition {
 	_unroll = true;
 	item = d2wContext.propertyKey;
 	list = d2wContext.displayPropertyKeys;
-}
-
-DeleteEO2: WOHyperlink {
-	action = deleteObjectAction;
-}
-
-DeleteImage2: WOImage {
-	alt = "Delete that Object";
-	border = 0;
-	filename = "trashcan-btn.gif";
-	framework = "JavaDirectToWeb";
-}
-
-EditEO: WOHyperlink {
-	action = editObjectAction;
-}
-
-EditImage: WOImage {
-	alt = "Edit that Object";
-	border = "0";
-	filename = "write-btn.gif";
-	framework = "JavaDirectToWeb";
 }
 
 EntityRepetition: ERXGroupingRepetition {
@@ -72,100 +34,11 @@ GroupingHeader: WOSwitchComponent {
         sublist = sublist;
 }
 
-
-HideReturnOnSelect3: WOConditional {
-	_unroll = true;
-	condition = isSelectingNotTopLevel;
-	negate = true;
-}
-
 InnerRepetition: WORepetition {
 	list = sublist;
 	item = object;
 }
-
-InspectEO: WOHyperlink {
-	action = inspectObjectAction;
-}
-
-InspectImage: WOImage {
-	alt = "Inspect that Object";
-	border = "0";
-	filename = "magglass-btn.gif";
-	framework = "JavaDirectToWeb";
-}
-
-IsEntityNotWritable: WOConditional {
-	_unroll = true;
-	condition = isEntityInspectable;
-}
-
-IsEntityWritable: WOConditional {
-	_unroll = true;
-	condition = isEntityReadOnly;
-	negate = true;
-}
-
-IsEntityWritable2: WOConditional {
-	_unroll = true;
-	condition = d2wContext.isEntityDeletable;
-	negate = false;
-}
-
-IsListing: WOConditional {
-	_unroll = true;
-	condition = isSelecting;
-	negate = true;
-}
-
-IsListing2: WOConditional {
-	_unroll = true;
-	condition = isSelecting;
-	negate = true;
-}
-
-IsSelecting: WOConditional {
-	_unroll = true;
-	condition = isSelecting;
-}
-
-ListTable: WOGenericContainer {
-	_unroll = true;
-	bgcolor = d2wContext.backgroundColorForTable;
-	border = 0;
-	cellpadding = 1;
-	cellspacing = 0;
-	elementName = "Table";
-}
-
-ListTableHeaderRow: WOGenericContainer {
-	_unroll = true;
-	bgcolor = "#ffffff";
-	elementName = "tr";
-}
-
-ListTableRow: WOGenericContainer {
-	_unroll = true;
-	elementName = "tr";
-//	bgcolor = backgroundColorForRow;
-}
-
-NumberOfItems: WOString {
-	value = listSize;
-}
-
 PropertyName: WOString {
 	_unroll = true;
 	value = d2wContext.displayNameForProperty;
-}
-
-SelectEO: WOHyperlink {
-	action = selectObjectAction;
-}
-
-SelectImage: WOImage {
-	alt = "Select that Object";
-	border = "0";
-	filename = "SelectMetalSmBtn.gif";
-	framework = "JavaDirectToWeb";
 }

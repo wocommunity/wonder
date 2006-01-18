@@ -7,11 +7,6 @@ ChildPopUpString: WOString {
 	escapeHTML = false;
 	value = childPopUpString;
 }
-
-Custom1: WOJavaScript {
-	hideInComment = true;
-	scriptString = jsString;
-}
 HiddenFormElementStrings: WOString {
 	value = hiddenFormElementStrings;
 	escapeHTML = false;
@@ -28,12 +23,4 @@ String1: WOString {
 
 String2: WOString {
 	value = parentLabel;
-}
-String3: WOString {
-	value = relationLabel;
-	escapeHTML = false;
-}
-String4: WOString {
-	value = parentLabel;
-	escapeHTML = false;
 }

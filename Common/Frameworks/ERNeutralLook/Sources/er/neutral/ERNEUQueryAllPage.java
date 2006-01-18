@@ -6,9 +6,8 @@
 //
 package er.neutral;
 
-import com.webobjects.foundation.*;
 import com.webobjects.appserver.*;
-import com.webobjects.directtoweb.*;
+
 import er.directtoweb.*;
 
 public class ERNEUQueryAllPage extends ERD2WQueryEntitiesPage {

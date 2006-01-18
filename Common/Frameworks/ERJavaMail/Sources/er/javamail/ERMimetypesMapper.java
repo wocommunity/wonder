@@ -6,12 +6,11 @@
 
 package er.javamail;
 
-import java.io.InputStream;
+import java.io.*;
 
-import javax.activation.MimetypesFileTypeMap;
+import javax.activation.*;
 
-import com.webobjects.appserver.WOApplication;
-import com.webobjects.appserver.WOResourceManager;
+import com.webobjects.appserver.*;
 
 public class ERMimetypesMapper
 {

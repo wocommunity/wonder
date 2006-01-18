@@ -12,21 +12,6 @@ Hyperlink1: WOHyperlink {
 	fragmentIdentifier = pushURL;
 }
 
-JavaScriptDisabled: WOConditional {
-    condition=session.javaScriptEnabled;
-    negate=true;
-}
-
-JavaScriptEnabled: WOConditional {
-    condition=session.javaScriptEnabled;
-}
-LinkNoJS: WOHyperlink {
-	class = ^linkClass;
-	action = action;
-	target = ^target;
-        fragmentIdentifier = ^fragment;
-}
-
 SubmitButton1: WOSubmitButton {
 	actionClass = ^actionClass;
 	directActionName = ^directActionName;

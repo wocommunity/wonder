@@ -23,20 +23,12 @@ AttributeRepetition: WORepetition {
 	list = d2wContext.displayPropertyKeys;
 }
 
-BackButton: WOHyperlink {
-	action = backAction;
-}
-
 BackLink: WOHyperlink {
 	action = backAction;
 }
 
 BackLink2: WOHyperlink {
 	action = backAction;
-}
-
-BackgroundColor: WOString {
-	value = d2wContext.backgroundColorForTable;
 }
 
 Banner: WOImage {
@@ -113,12 +105,6 @@ Generic1: WOGenericContainer {
 
 Help: ERDDebuggingHelp {
 	d2wContext = d2wContext;
-}
-
-HideReturnOnSelect3: WOConditional {
-	_unroll = true;
-	condition = isSelecting;
-	negate = true;
 }
 
 InspectButton: ERDInspectButton {
@@ -202,10 +188,6 @@ NavBar: WOSwitchComponent {
 	textColor = d2wContext.textColor;
 	width = 550;
        	 d2wContext = d2wContext;
-}
-
-NumberOfItems: WOString {
-	value = listSize;
 }
 
 PageWrapper: WOSwitchComponent {

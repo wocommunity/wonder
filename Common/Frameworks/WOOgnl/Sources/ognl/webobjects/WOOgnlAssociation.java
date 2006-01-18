@@ -8,10 +8,10 @@
 /* WOOgnlAssociation.java created by max on Fri 28-Sep-2001 */
 package ognl.webobjects;
 
-import com.webobjects.foundation.*;
-import com.webobjects.eocontrol.*;
 import com.webobjects.appserver.*;
 import com.webobjects.appserver._private.*;
+import com.webobjects.eocontrol.*;
+import com.webobjects.foundation.*;
 
 public class WOOgnlAssociation extends WOKeyValueAssociation {
 

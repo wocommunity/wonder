@@ -6,14 +6,13 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.corebusinesslogic;
 
-import com.webobjects.foundation.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.appserver.*;
-import org.apache.log4j.*;
+import org.apache.log4j.helpers.*;
 import org.apache.log4j.spi.*;
-import org.apache.log4j.helpers.LogLog;
+
+import com.webobjects.eocontrol.*;
+import com.webobjects.foundation.*;
+
 import er.extensions.*;
-import java.util.Enumeration;
 
 /**
  * Basic log4j Mail Message Appender<br>
@@ -80,7 +79,7 @@ public class ERCMailMessageAppender extends ERXMailAppender {
      */
     public NSMutableDictionary composeExceptionPageDictionary(LoggingEvent event) {
         NSMutableDictionary result = super.composeExceptionPageDictionary(event);
-        result.setObjectForKey(ERCoreBusinessLogic.sharedInstance().actor(),"actor");
+        result.setObjectForKey(ERCoreBusinessLogic.actor(),"actor");
         return result;
     }
         /**

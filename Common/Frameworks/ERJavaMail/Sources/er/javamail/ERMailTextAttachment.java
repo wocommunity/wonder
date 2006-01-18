@@ -6,7 +6,6 @@
 
 package er.javamail;
 
-import javax.activation.*;
 import javax.mail.*;
 import javax.mail.internet.*;
 

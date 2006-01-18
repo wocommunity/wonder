@@ -30,31 +30,6 @@ EntityNameConditional: WOConditional {
 	condition = hasObjectName;
 }
 
-FontContainer: WOGenericContainer {
-	color = ^textColor;
-	elementName = "font";
-}
-
-FontContainer2: WOGenericContainer {
-	color = ^textColor;
-	elementName = "FONT";
-}
-
-FontContainer3: WOGenericContainer {
-	color = ^textColor;
-	elementName = "FONT";
-}
-
-FontContainer4: WOGenericContainer {
-	color = ^textColor;
-	elementName = "FONT";
-}
-
-FontContainer5: WOGenericContainer {
-	color = ^textColor;
-	elementName = "FONT";
-}
-
 DoNotUseStylesConditional : WOConditional {
 	condition = ^tableClass;
 	negate = true;
@@ -65,15 +40,6 @@ Image1: WOImage {
 	framework = "ERExtensions";
 	height = 1;
 	width = 500;
-}
-
-IsBatchedDisplay: WOConditional {
-	condition = ^displayGroup.hasMultipleBatches;
-}
-
-IsNotBatchedDisplay: WOConditional {
-	condition = ^displayGroup.hasMultipleBatches;
-	negate = true;
 }
 
 ItemsPerBatch: WOTextField {

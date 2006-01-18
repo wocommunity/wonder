@@ -26,28 +26,10 @@ AttributeRepetition2: WORepetition {
 	list = d2wContext.displayPropertyKeys;
 }
 
-BackButton: WOHyperlink {
-	action = backAction;
-}
-
-BackLink2: WOHyperlink {
-	action = backAction;
-}
-
-BackgroundColor: WOString {
-	_unroll = true;
-	value = d2wContext.backgroundColorForTable;
-}
-
 ColumnLabelRepetition: WORepetition {
 	_unroll = true;
 	item = d2wContext.propertyKey;
 	list = d2wContext.displayPropertyKeys;
-}
-
-EntityName: WOString {
-	_unroll = true;
-	value = d2wContext.entity.name;
 }
 
 EntityName2: ERXPluralString {
@@ -58,17 +40,6 @@ EntityName2: ERXPluralString {
 EntityRepetition: WORepetition {
 	item = object;
 	list = sublist;
-}
-
-ExclamationImage: WOImage {
-	border = "0";
-	filename = "exclamation.gif";
-	framework = "JavaDirectToWeb";
-}
-
-FontContainer: WOGenericContainer {
-	color = d2wContext.textColor;
-	elementName = "font";
 }
 
 GenericContainer1: WOGenericContainer {
@@ -120,25 +91,9 @@ Header: WOSwitchComponent {
 	list=displayGroup.displayedObjects;
 }
 
-HideReturnOnSelect2: WOConditional {
-	_unroll = true;
-	condition = isSelecting;
-	negate = true;
-}
-
-HideReturnOnSelect3: WOConditional {
-	_unroll = true;
-	condition = isSelecting;
-	negate = true;
-}
-
 IsTotallingKey: ERXListContainsItemConditional {
 	item = d2wContext.propertyKey;
 	list = d2wContext.totallingKeys;
-}
-
-ListEmpty: WOConditional {
-	condition = isListEmpty;
 }
 
 ListNotEmpty: WOConditional {
@@ -165,21 +120,9 @@ ListTableRow: WOGenericContainer {
 	elementName = "tr";
 }
 
-NumberOfItems: WOString {
-	value = listSize;
-}
-
 PropertyName: WOString {
 	_unroll = true;
 	value = d2wContext.displayNameForProperty;
-}
-
-ShowCancel2: WOConditional {
-	condition = showCancel;
-}
-
-String3: WOString {
-	value = pageTitle;
 }
 
 SumForSubList: WOString { 

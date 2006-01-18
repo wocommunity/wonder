@@ -167,11 +167,6 @@ IsEditingConditional2: WOConditional {
 	condition = isEditing;
 }
 
-IsEditingConditional3: WOConditional {
-	_unroll = true;
-	condition = isEditing;
-}
-
 IsEditingConditional5: WOConditional {
 	_unroll = true;
 	condition = isEditing;
@@ -195,12 +190,6 @@ IsNotEditingConditional: WOConditional {
 }
 
 IsNotEditingConditional2: WOConditional {
-	_unroll = true;
-	condition = isEditing;
-	negate = true;
-}
-
-IsNotEditingConditional3: WOConditional {
 	_unroll = true;
 	condition = isEditing;
 	negate = true;

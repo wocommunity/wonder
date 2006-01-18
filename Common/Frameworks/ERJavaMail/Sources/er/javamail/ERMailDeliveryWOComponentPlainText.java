@@ -6,15 +6,7 @@
 
 package er.javamail;
 
-import com.webobjects.foundation.*;
-import com.webobjects.appserver.*;
-
-import java.util.*;
-import java.io.*;
-
 import javax.activation.*;
-import javax.mail.*;
-import javax.mail.internet.*;
 
 /** This ERMailDelivery subclass is specifically crafted for plain
     text messages using a WOComponent as redering device.

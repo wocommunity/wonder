@@ -62,12 +62,6 @@ HasNoBranchChoices: WOConditional {
 	negate = true;
 }
 
-Image1: WOImage {
-	filename = "exclamation.gif";
-	framework = "JavaDirectToWeb";
-	border = 0;
-}
-
 Message: WOString {
 	value = message;
 	escapeHTML = false;

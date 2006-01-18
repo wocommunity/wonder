@@ -7,18 +7,16 @@
 
 package er.javamail;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.util.*;
-import java.util.Properties;
-import javax.mail.*;
+import java.io.*;
+
 import javax.activation.*;
+import javax.mail.*;
 import javax.mail.internet.*;
 
-import com.webobjects.foundation.*;
 import com.webobjects.appserver.*;
+import com.webobjects.foundation.*;
 
-import er.extensions.ERXLogger;
+import er.extensions.*;
 
 /** Drop-in replacement for WOMailDelivery.
 

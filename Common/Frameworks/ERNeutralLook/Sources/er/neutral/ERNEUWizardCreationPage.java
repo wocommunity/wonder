@@ -7,11 +7,8 @@
 
 package er.neutral;
 
-import com.webobjects.foundation.*;
 import com.webobjects.appserver.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.eoaccess.*;
-import com.webobjects.directtoweb.*;
+
 import er.directtoweb.*;
 
 public class ERNEUWizardCreationPage extends ERD2WWizardCreationPage {

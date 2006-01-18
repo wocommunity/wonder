@@ -9,12 +9,11 @@
 
 package ognl.webobjects;
 
-import com.webobjects.foundation.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.eoaccess.*;
+import java.util.*;
+
 import com.webobjects.appserver.*;
 import com.webobjects.appserver._private.*;
-import java.util.Enumeration;
+import com.webobjects.foundation.*;
 //import org.apache.log4j.Logger;
 
 public class WOOgnlHTMLTemplateParser extends WOHTMLTemplateParser {

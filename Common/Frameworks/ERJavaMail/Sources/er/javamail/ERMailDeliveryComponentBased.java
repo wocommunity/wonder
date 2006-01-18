@@ -6,9 +6,8 @@
 
 package er.javamail;
 
-import com.webobjects.foundation.*;
 import com.webobjects.appserver.*;
-import com.webobjects.eocontrol.*;
+import com.webobjects.foundation.*;
 
 /** This abstract class is the basis for all WOComponetn based deliverers.
     @author Camille Troillard <tuscland@mac.com> */
