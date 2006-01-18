@@ -1,14 +1,5 @@
-BackButton: WOHyperlink {
-	action = backAction;
-}
-
 BackLink2: WOHyperlink {
 	action = backAction;
-}
-
-BackgroundColor: WOString {
-	_unroll = true;
-	value = d2wContext.backgroundColorForTable;
 }
 
 Conditional1: WOConditional {
@@ -75,21 +66,6 @@ HideReturnOnSelect2: WOConditional {
 	negate = true;
 }
 
-HideReturnOnSelect3: WOConditional {
-	_unroll = true;
-	condition = isSelecting;
-	negate = true;
-}
-
-ListEmpty: WOConditional {
-	condition = isListEmpty;
-}
-
-ListNotEmpty: WOConditional {
-	condition = isListEmpty;
-	negate = true;
-}
-
 ListPageRepetition2: WOSwitchComponent {
 	WOComponentName = d2wContext.repetitionComponentName;
 	d2wContext = localContext;
@@ -104,10 +80,6 @@ NavBar1: WOSwitchComponent {
         d2wContext = d2wContext;
 	bgcolor = d2wContext.backgroundColorForTable;
 	WOComponentName = d2wContext.batchNavigationBarComponentName;
-}
-
-NumberOfItems: WOString {
-	value = listSize;
 }
 
 PageWrapper: WOSwitchComponent {

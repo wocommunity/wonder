@@ -53,9 +53,6 @@ CellContainer:  WOGenericContainer {
 Content: WOComponentContent {
 }
 
-PushItem: WOMethodInvocation {
-    invoke = pushItem;
-}
 Conditional1: WOConditional {
 	condition = showIndex;
 }

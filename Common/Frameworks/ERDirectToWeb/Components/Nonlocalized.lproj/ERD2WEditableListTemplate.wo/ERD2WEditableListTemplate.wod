@@ -5,15 +5,6 @@ ActiveImage1: WOActiveImage {
 	framework = "ERDirectToWeb";
 }
 
-BackButton: WOHyperlink {
-	action = backAction;
-}
-
-BackgroundColor: WOString {
-	_unroll = true;
-	value = d2wContext.backgroundColorForTable;
-}
-
 CancelActiveImage: WOActiveImage {
 	action = cancel;
 	alt = "Cancels your changes";
@@ -23,10 +14,6 @@ CancelActiveImage: WOActiveImage {
 
 Conditional2: WOConditional {
 	condition = d2wContext.showBanner;
-}
-
-ERTableWithBorder1: ERXTableWithBorder {
-	color = "#999999";
 }
 
 EmptyMessageComponent: WOSwitchComponent {
@@ -57,10 +44,7 @@ HiddenField: WOHiddenField {
 	value = dummy;
 }
 
-HideReturnOnSelect1: WOConditional {
-	_unroll = true;
-	condition = isSelecting;
-	negate = true;
+HideReturnOnSelect1: Unknown {
 }
 
 HideReturnOnSelect3: WOConditional {
@@ -98,12 +82,8 @@ NavBar2: ERXBatchNavigationBarInForm {
 	displayGroup = displayGroup;
 	objectName = d2wContext.displayNameForEntity;
 	textColor = d2wContext.textColor;
-        d2wContext = d2wContext;
+    d2wContext = d2wContext;
 
-}
-
-NumberOfItems: WOString {
-	value = listSize;
 }
 
 PageWrapper: WOSwitchComponent {

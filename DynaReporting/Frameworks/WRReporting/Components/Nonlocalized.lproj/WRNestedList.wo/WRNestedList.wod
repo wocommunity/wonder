@@ -30,14 +30,7 @@ SublistConditional: WOConditional {
     // ** This is how the recursion is terminated.
     condition = ^sublist;
 }
-noParents:WOConditional{
-	condition = notSublistConditional;
-	negate=true;
-}
 notSublistConditional: WOConditional {
     condition = ^sublist;
 	negate= true;
-}
-notnoParents:WOConditional{
-	condition = notSublistConditional;
 }

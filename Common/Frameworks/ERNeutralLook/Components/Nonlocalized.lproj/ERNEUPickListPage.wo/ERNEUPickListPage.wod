@@ -26,17 +26,8 @@ AttributeSorter: ERXSortOrder {
         d2wContext = d2wContext;
 }
 
-BackButton: WOHyperlink {
-	action = backAction;
-}
-
 BackLink2: WOHyperlink {
 	action = backAction;
-}
-
-BackgroundColor: WOString {
-	_unroll = true;
-	value = d2wContext.backgroundColorForTable;
 }
 
 CheckBox2: WOSwitchComponent {
@@ -86,12 +77,6 @@ HiddenField: WOHiddenField {
 }
 
 HideReturnOnSelect2: WOConditional {
-	_unroll = true;
-	condition = isSelecting;
-	negate = true;
-}
-
-HideReturnOnSelect3: WOConditional {
 	_unroll = true;
 	condition = isSelecting;
 	negate = true;
@@ -151,10 +136,6 @@ NavBar: ERXBatchNavigationBarInForm {
 	textColor = d2wContext.textColor;
 	width = 550;
         d2wContext = d2wContext;
-}
-
-NumberOfItems: WOString {
-	value = listSize;
 }
 
 PageWrapper: WOSwitchComponent {

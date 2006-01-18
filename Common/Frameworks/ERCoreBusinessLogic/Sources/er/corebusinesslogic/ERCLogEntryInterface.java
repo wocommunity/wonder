@@ -6,7 +6,7 @@
 //
 package er.corebusinesslogic;
 
-import com.webobjects.eocontrol.EOEnterpriseObject;
+import com.webobjects.eocontrol.*;
 
 /**
  * Used in conjunction with {@link ERCStampedEnterpriseObject} to optionally

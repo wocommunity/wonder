@@ -11,9 +11,6 @@ attribs:WRAttributeGroup{
 	bgcolor = "#ffffff";
 }
 
-description :WOString{
-	value=description;
-}
 dontUseVerticalReportStyle: WOConditional{
 	condition = useVerticalReportStyle;
 	negate= true;
@@ -101,10 +98,6 @@ tdtop:WOGenericContainer{
 	align = "right";
 }
 
-
-totalListDebug:WOString{
-	value = totals.description;
-}
 totalString:WOString{
 	//value = totalString 
 	value = totalValueTotal;

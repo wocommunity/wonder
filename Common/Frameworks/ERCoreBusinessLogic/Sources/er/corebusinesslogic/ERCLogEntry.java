@@ -1,9 +1,9 @@
 // ERCLogEntry.java
 // (c) by Anjo Krank (ak@kcmedia.ag)
 package er.corebusinesslogic;
-import com.webobjects.foundation.*;
 import com.webobjects.eocontrol.*;
-import com.webobjects.eoaccess.*;
+import com.webobjects.foundation.*;
+
 import er.extensions.*;
 
 public class ERCLogEntry extends _ERCLogEntry {

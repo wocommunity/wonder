@@ -214,6 +214,9 @@ public class ERXDatabaseContextDelegate {
             log.debug("databaseContextShouldFetchObjects.. Setting it to ReadOnly");
         }
         setReadWriteForConnectionInDatabaseContext(false, dbc);
+        if(fs.entityName().matches("KeywordMetaData|AssetLinkEntry|DomainMetaData|LanguageMetaData")) {
+        	return NSArray.EmptyArray;
+        }
         return null;
     }
 

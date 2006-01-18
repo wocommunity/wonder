@@ -3,7 +3,6 @@ package er.directtoweb;
 import com.webobjects.foundation.*;
 import com.webobjects.appserver.*;
 import com.webobjects.eocontrol.*;
-import com.webobjects.directtoweb.*;
 import er.extensions.*;
 
 /**

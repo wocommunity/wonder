@@ -8,10 +8,11 @@
 /* NSObjectPropertyAccessor.java created by max on Fri 28-Sep-2001 */
 package ognl.webobjects;
 
+import java.util.*;
+
+import ognl.*;
+
 import com.webobjects.foundation.*;
-import ognl.PropertyAccessor;
-import ognl.OgnlException;
-import java.util.Map;
 
 public class NSObjectPropertyAccessor implements PropertyAccessor {
 

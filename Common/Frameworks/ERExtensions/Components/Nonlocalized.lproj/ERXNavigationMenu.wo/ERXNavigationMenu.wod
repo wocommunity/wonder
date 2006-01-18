@@ -6,14 +6,6 @@ Conditional2: WOConditional {
 	condition = showLevel2;
 }
 
-Conditional4: WOConditional {
-	condition = showLevel3;
-}
-
-Conditional5: WOConditional {
-	condition = showLevel2;
-}
-
 DynamicNavTable: WOGenericContainer {
 	border = 0;
 	cellpadding = 0;
@@ -37,13 +29,6 @@ Image2: WOImage {
 	width = level2SpacerWidth;
 	filename = "s.gif";
 	framework = "ERExtensions";
-}
-
-Image3: WOImage {
-	height = 17;
-	filename = "s.gif";
-	framework = "ERExtensions";
-	width = level1SpacerWidth;
 }
 
 

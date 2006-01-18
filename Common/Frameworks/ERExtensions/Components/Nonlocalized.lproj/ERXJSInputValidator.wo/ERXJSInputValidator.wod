@@ -1,6 +1,3 @@
-Action: WOString {
-	value = ^action;
-}
 ContextID: WOString {
 	value = context.contextID;
 }

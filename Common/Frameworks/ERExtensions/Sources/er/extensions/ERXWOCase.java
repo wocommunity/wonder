@@ -1,7 +1,6 @@
 package er.extensions;
 
 import com.webobjects.appserver.*;
-import com.webobjects.appserver._private.*;
 import com.webobjects.foundation.*;
 
 /**

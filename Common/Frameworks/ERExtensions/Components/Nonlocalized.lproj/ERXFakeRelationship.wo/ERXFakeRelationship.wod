@@ -7,15 +7,6 @@ BrowserList: WOBrowser {
 	size = ^size;
 }
 
-BrowserList2: WOBrowser {
-	displayString = theCurrentValue;
-	item = theCurrentItem;
-	list = theList;
-	multiple = true;
-	selections = selections;
-	size = ^size;
-}
-
 CheckboxMatrix: ERXCheckboxMatrix {
 	item = theCurrentItem;
 	list = theList;
@@ -23,21 +14,7 @@ CheckboxMatrix: ERXCheckboxMatrix {
 	selections = selections;
 }
 
-Conditional1: WOConditional {
-	condition = ^isToMany;
-}
-
-Conditional2: WOConditional {
-	condition = ^isToMany;
-	negate = true;
-}
-
 IsBrowserConditional: WOConditional {
-	condition = isBrowser;
-	negate = false;
-}
-
-IsBrowserConditional2: WOConditional {
 	condition = isBrowser;
 	negate = false;
 }

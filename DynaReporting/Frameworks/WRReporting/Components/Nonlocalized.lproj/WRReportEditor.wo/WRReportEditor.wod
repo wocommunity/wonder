@@ -16,7 +16,7 @@ framework="WRReporting";
 attListEd: WRAttributeListEditor {
 attributeList=attributeList;
 }
-critEdit: WRMasterCriteriaEditor { masterCriteria = masterCriteria; }
+
 crits: WORepetition {
 item=masterCriteria;
 list=masterCriteriaList;

@@ -6,12 +6,8 @@
 
 package er.javamail;
 
-import java.util.*;
-import java.io.*;
-
 import javax.activation.*;
 import javax.mail.*;
-import javax.mail.internet.*;
 
 /** This ERMailDelivery subclass is specifically crafted for plain text messages.
     @author Camille Troillard <tuscland@mac.com> */

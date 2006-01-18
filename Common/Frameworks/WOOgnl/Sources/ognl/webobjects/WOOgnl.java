@@ -8,12 +8,13 @@
 /* WOOgnl.java created by max on Fri 28-Sep-2001 */
 package ognl.webobjects;
 
-import com.webobjects.foundation.*;
+import java.util.*;
+
+import ognl.*;
+
 import com.webobjects.appserver.*;
 import com.webobjects.appserver._private.*;
-import java.util.Enumeration;
-import java.util.Hashtable;
-import ognl.*;
+import com.webobjects.foundation.*;
 
 public class WOOgnl {
 
