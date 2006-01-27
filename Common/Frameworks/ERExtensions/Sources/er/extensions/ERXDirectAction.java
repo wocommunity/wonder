@@ -7,6 +7,9 @@
 package er.extensions;
 
 import com.webobjects.appserver.*;
+import com.webobjects.woextensions.WOEventDisplayPage;
+import com.webobjects.woextensions.WOEventSetupPage;
+import com.webobjects.woextensions.WOStatsPage;
 
 /**
  * Basic collector for direct action additions. All of the actions are password protected, 
@@ -72,6 +75,44 @@ public class ERXDirectAction extends WODirectAction {
             }
         }             
         return result;
+    }
+
+    
+    
+    /**
+     * Direct access to WOStats by giving over the password in the "pw" parameter.
+     * @return
+     */
+ 
+    public WOActionResults statsAction() {
+        WOStatsPage nextPage = (WOStatsPage) pageWithName("WOStatsPage");
+        nextPage.password = context().request().stringFormValueForKey("pw");
+        return nextPage.submit();
+    }
+    
+    /**
+     * Direct access to WOEventDisplay by giving over the password in the "pw" parameter.
+     * @return
+     */
+    public WOActionResults eventsAction() {
+        WOEventDisplayPage nextPage = (WOEventDisplayPage) pageWithName("WOEventDisplayPage");
+        nextPage.password = context().request().stringFormValueForKey("pw");
+        nextPage.valueForKey("submit");
+        return nextPage;
+    }
+
+    
+    /**
+     * Direct access to WOEventDisplay by giving over the password in the "pw" 
+     * parameter and turning on all events.
+     * @return
+     */
+    public WOActionResults eventsSetupAction() {
+        WOEventSetupPage nextPage = (WOEventSetupPage) pageWithName("WOEventSetupPage");
+        nextPage.password = context().request().stringFormValueForKey("pw");
+        nextPage.submit();
+        nextPage.selectAll();
+        return eventsAction();
     }
 
     /**
