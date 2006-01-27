@@ -16,100 +16,103 @@ import er.extensions.*;
 
 /**
  * Superclass for all query pages.<br />
- * In addition to the rest of the goodies of ERD2WPage, it lets you 
- * save and restore the initial query bindings by supplying a NS(Mutable)Dictionary which
- * contains the keys "queryMin", "queryMax" etc from the respective fields of the WODisplayGroup.
+ * In addition to the rest of the goodies of ERD2WPage, it lets you save and
+ * restore the initial query bindings by supplying a NS(Mutable)Dictionary which
+ * contains the keys "queryMin", "queryMax" etc from the respective fields of
+ * the WODisplayGroup.
  */
 
-public class ERD2WQueryPage extends ERD2WPage implements QueryPageInterface  {
+public class ERD2WQueryPage extends ERD2WPage implements QueryPageInterface {
 
     public WODisplayGroup displayGroup;
+
     protected boolean didLoadQueryBindings;
+
     protected NSDictionary queryBindings;
-    
-    public ERD2WQueryPage(WOContext context) { 
-        super(context); 
+
+    public ERD2WQueryPage(WOContext context) {
+        super(context);
         createDisplayGroup();
     }
 
     protected void createDisplayGroup() {
         displayGroup = new WODisplayGroup();
     }
-    
+
     protected void pullQueryBindingsForName(String name) {
-    	NSDictionary queryBindings = queryBindings();
-    	if(queryBindings != null) {
-    		NSDictionary source = (NSDictionary)queryBindings.objectForKey(name);
-    		if(source != null) {
-    			NSMutableDictionary destination = (NSMutableDictionary)NSKeyValueCoding.Utility.valueForKey(displayGroup, name);
-    			destination.addEntriesFromDictionary(source);
-    		}
-    	}
+        NSDictionary queryBindings = queryBindings();
+        if (queryBindings != null) {
+            NSDictionary source = (NSDictionary) queryBindings.objectForKey(name);
+            if (source != null) {
+                NSMutableDictionary destination = (NSMutableDictionary) NSKeyValueCoding.Utility.valueForKey(displayGroup, name);
+                destination.addEntriesFromDictionary(source);
+            }
+        }
     }
-    
+
     protected void pushQueryBindingsForName(String name) {
-    	NSDictionary queryBindings = queryBindings();
-    	if(queryBindings != null && (queryBindings instanceof NSMutableDictionary)) {
-    		NSMutableDictionary mutableQueryBindings = (NSMutableDictionary)queryBindings;
-    		NSDictionary source = (NSDictionary)NSKeyValueCoding.Utility.valueForKey(displayGroup, name);
-    		mutableQueryBindings.setObjectForKey(source.mutableClone(), name);
-    	}
+        NSDictionary queryBindings = queryBindings();
+        if (queryBindings != null && (queryBindings instanceof NSMutableDictionary)) {
+            NSMutableDictionary mutableQueryBindings = (NSMutableDictionary) queryBindings;
+            NSDictionary source = (NSDictionary) NSKeyValueCoding.Utility.valueForKey(displayGroup, name);
+            mutableQueryBindings.setObjectForKey(source.mutableClone(), name);
+        }
     }
-    
+
     public void takeValuesFromRequest(WORequest request, WOContext context) {
-    	super.takeValuesFromRequest(request, context);
-    	saveQueryBindings();
+        super.takeValuesFromRequest(request, context);
+        saveQueryBindings();
     }
-    
+
     public void appendToResponse(WOResponse arg0, WOContext arg1) {
         loadQueryBindings();
         super.appendToResponse(arg0, arg1);
     }
-    
+
     protected void saveQueryBindings() {
-    	NSDictionary queryBindings = queryBindings();
-    	if(queryBindings != null) {
-    		pushQueryBindingsForName("queryMin");
-    		pushQueryBindingsForName("queryMax");
-    		pushQueryBindingsForName("queryMatch");
-    		pushQueryBindingsForName("queryOperator");
-    		pushQueryBindingsForName("queryBindings"); 
-    	}
+        NSDictionary queryBindings = queryBindings();
+        if (queryBindings != null) {
+            pushQueryBindingsForName("queryMin");
+            pushQueryBindingsForName("queryMax");
+            pushQueryBindingsForName("queryMatch");
+            pushQueryBindingsForName("queryOperator");
+            pushQueryBindingsForName("queryBindings");
+        }
     }
-    
+
     protected void loadQueryBindings() {
-    	if(!didLoadQueryBindings) {
-    		NSDictionary queryBindings = queryBindings();
-    		if(queryBindings != null) {
-    			pullQueryBindingsForName("queryMin");
-    			pullQueryBindingsForName("queryMax");
-    			pullQueryBindingsForName("queryMatch");
-    			pullQueryBindingsForName("queryOperator");
-    			pullQueryBindingsForName("queryBindings"); 
-    			didLoadQueryBindings = true;
-    		}
-    	}
+        if (!didLoadQueryBindings) {
+            NSDictionary queryBindings = queryBindings();
+            if (queryBindings != null) {
+                pullQueryBindingsForName("queryMin");
+                pullQueryBindingsForName("queryMax");
+                pullQueryBindingsForName("queryMatch");
+                pullQueryBindingsForName("queryOperator");
+                pullQueryBindingsForName("queryBindings");
+                didLoadQueryBindings = true;
+            }
+        }
     }
-    
+
     public void awake() {
         super.awake();
     }
-    
+
     public boolean isDeep() {
         return ERXValueUtilities.booleanValue(d2wContext().valueForKey("isDeep"));
     }
 
     public NSDictionary queryBindings() {
-    	if(queryBindings == null) {
-    		queryBindings = (NSDictionary)valueForBinding("queryBindings");
-    	}
+        if (queryBindings == null) {
+            queryBindings = (NSDictionary) valueForBinding("queryBindings");
+        }
         return queryBindings;
     }
-    
+
     public void setQueryBindings(NSDictionary dictionary) {
-    	queryBindings = dictionary;
+        queryBindings = dictionary;
     }
-    
+
     public boolean usesDistinct() {
         return ERXValueUtilities.booleanValue(d2wContext().valueForKey("usesDistinct"));
     }
@@ -124,35 +127,40 @@ public class ERD2WQueryPage extends ERD2WPage implements QueryPageInterface  {
 
     // add the ability to AND the existing qualifier from the DG
     public EOQualifier qualifier() {
-        EOQualifier q=displayGroup.qualifier();
-        EOQualifier q2=displayGroup.qualifierFromQueryValues();
-        return q==null ? q2 : (q2==null ? q : new EOAndQualifier(new NSArray(new Object[]{q,q2})));
+        EOQualifier q = displayGroup.qualifier();
+        EOQualifier q2 = displayGroup.qualifierFromQueryValues();
+        return q == null ? q2 : (q2 == null ? q : new EOAndQualifier(new NSArray(new Object[] { q, q2 })));
     }
 
     // Used with branching delegates.
     protected NSDictionary branch;
-    public String branchName() { return (String)branch.valueForKey("branchName"); }
+
+    public String branchName() {
+        return (String) branch.valueForKey("branchName");
+    }
 
     protected Boolean showResults = null;
+
     public boolean showResults() {
-        if(showResults == null)
+        if (showResults == null)
             return false;
         return showResults.booleanValue();
     }
+
     public void setShowResults(boolean value) {
         showResults = value ? Boolean.TRUE : Boolean.FALSE;
     }
-    
+
     public WOComponent queryAction() {
         WOComponent nextPage = null;
-        if(ERXValueUtilities.booleanValue(d2wContext().valueForKey("showListInSamePage"))){
+        if (ERXValueUtilities.booleanValue(d2wContext().valueForKey("showListInSamePage"))) {
             setShowResults(true);
         } else {
-            if(nextPageDelegate() == null) {
-                String listConfigurationName=(String)d2wContext().valueForKey("listConfigurationName");
+            if (nextPageDelegate() == null) {
+                String listConfigurationName = (String) d2wContext().valueForKey("listConfigurationName");
                 ListPageInterface listpageinterface = null;
-                if(listConfigurationName!=null){
-                    listpageinterface = (ListPageInterface)D2W.factory().pageForConfigurationNamed(listConfigurationName, session());
+                if (listConfigurationName != null) {
+                    listpageinterface = (ListPageInterface) D2W.factory().pageForConfigurationNamed(listConfigurationName, session());
                 } else {
                     listpageinterface = D2W.factory().listPageForEntityNamed(entity().name(), session());
                 }
@@ -169,19 +177,21 @@ public class ERD2WQueryPage extends ERD2WPage implements QueryPageInterface  {
 
     // returning a null query data source if cancel was clicked
     private boolean _wasCancelled;
+
     public WOComponent cancelAction() {
-        WOComponent result=null;
+        WOComponent result = null;
         try {
-            _wasCancelled=true;
-            result=nextPageDelegate().nextPage(this);
+            _wasCancelled = true;
+            result = nextPageDelegate().nextPage(this);
         } finally {
-            _wasCancelled=false;
+            _wasCancelled = false;
         }
         return result;
     }
 
     public WOComponent returnPage;
-    public WOComponent returnAction(){
+
+    public WOComponent returnAction() {
         return returnPage;
     }
 
@@ -190,7 +200,7 @@ public class ERD2WQueryPage extends ERD2WPage implements QueryPageInterface  {
     }
 
     public EODataSource queryDataSource() {
-        if(_wasCancelled) {
+        if (_wasCancelled) {
             return null;
         }
         EODataSource ds = dataSource();
@@ -198,7 +208,7 @@ public class ERD2WQueryPage extends ERD2WPage implements QueryPageInterface  {
             ds = new EODatabaseDataSource(session().defaultEditingContext(), entity().name());
             setDataSource(ds);
         }
-        EOFetchSpecification fs = ((EODatabaseDataSource)ds).fetchSpecification();
+        EOFetchSpecification fs = ((EODatabaseDataSource) ds).fetchSpecification();
         fs.setQualifier(qualifier());
         fs.setIsDeep(isDeep());
         fs.setUsesDistinct(usesDistinct());
