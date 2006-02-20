@@ -713,7 +713,7 @@ public class ERXCustomObject extends EOCustomObject implements ERXGuardedObjectI
      * array of the editing context or if it's editing context
      * is null.<br/>
      * <br/>
-     * Note: after you call <code>saveChanges()</code> committing
+     * Note: after you call <code>saveChanges()</code>, committing
      * the delete, this method will return false because the object
      * will no longer be registered in an editing context.
      * @return if the object is a deleted object
