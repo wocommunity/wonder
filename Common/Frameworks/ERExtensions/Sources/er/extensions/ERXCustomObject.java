@@ -713,9 +713,9 @@ public class ERXCustomObject extends EOCustomObject implements ERXGuardedObjectI
      * array of the editing context or if it's editing context
      * is null.<br/>
      * <br/>
-     * Note: An object that has just been created will also not
-     * have an editing context and by this method would test
-     * positive for being a deleted object.
+     * Note: after you call <code>saveChanges()</code> committing
+     * the delete, this method will return false because the object
+     * will no longer be registered in an editing context.
      * @return if the object is a deleted object
      */
     // CHECKME: Might be able to tell better by checking EOGlobalIDs
