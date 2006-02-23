@@ -21,6 +21,12 @@ public class ERXSimpleTemplateParser {
     /** The default label for keys not found while parsing */
     public static final String DEFAULT_UNDEFINED_KEY_LABEL = "?";
 
+    /** The default delimiter */
+    public static final String DEFAULT_DELIMITER = "@@";
+
+    /** The deprecated delimiter */
+    private static final String DEPRECATED_DELIMITER = "@";
+
     /** logging support */
     public static final ERXLogger log = ERXLogger.getERXLogger(ERXSimpleTemplateParser.class.getName());
 
@@ -62,6 +68,7 @@ public class ERXSimpleTemplateParser {
 
     /** Defines if @ can be used as alternative delimiter */
     private boolean _useOldDelimiter = true;
+
     
     /** 
      * Returns a parser object with the default undefined label
@@ -80,7 +87,7 @@ public class ERXSimpleTemplateParser {
      */
     public ERXSimpleTemplateParser(String undefinedKeyLabel) {
         super();
-        _undefinedKeyLabel = undefinedKeyLabel;
+        _undefinedKeyLabel = (undefinedKeyLabel == null ? DEFAULT_UNDEFINED_KEY_LABEL : undefinedKeyLabel);
     }
 
     /** 
@@ -107,17 +114,20 @@ public class ERXSimpleTemplateParser {
      */
     public NSArray keysInTemplate(String template, String delimiter) {
         NSMutableSet keys = new NSMutableSet();
-        if (delimiter == null)
-            delimiter = "@@";
-        boolean deriveElement = false; // if the template starts with delim, the first component will be a zero-length string
+        if (delimiter == null) {
+            delimiter = DEFAULT_DELIMITER;
+        }
         NSArray components = NSArray.componentsSeparatedByString(template, delimiter);
-        if (! isLoggingDisabled  &&  log.isDebugEnabled()) 
+        if (! isLoggingDisabled  &&  log.isDebugEnabled()) {
             log.debug("Components: " + components);
+        }
+        boolean deriveElement = false; // if the template starts with delim, the first component will be a zero-length string
         for (Enumeration e = components.objectEnumerator(); e.hasMoreElements();) {
             String element = (String)e.nextElement();
             if (deriveElement) {
-                if (element.length() == 0)
-                    throw new RuntimeException("\"\" is not a valid keypath");
+                if (element.length() == 0) {
+                    throw new IllegalArgumentException("\"\" is not a valid keypath");
+                }
                 keys.addObject(element);
                 deriveElement = false;
             } else {
@@ -154,7 +164,9 @@ public class ERXSimpleTemplateParser {
      * When the value is not found in both object and otherObject, 
      * it will replace the key with the undefined key label which 
      * defaults to "?". You can set the label via the constructor 
-     * {@link #ERXSimpleTemplateParser(String)}. 
+     * {@link #ERXSimpleTemplateParser(String)}. Note that a <code>null</code> 
+     * result will also output the label, so you might want to have the empty
+     * string as the undefined key label.
      * 
      * @param template to use to parse
      * @param delimiter to use to check for keys
@@ -164,76 +176,95 @@ public class ERXSimpleTemplateParser {
      */
     public String parseTemplateWithObject(String template, String delimiter, Object object, Object otherObject) {
         if (template == null)
-            throw new RuntimeException("Attempting to parse null template!");
-        if (object == null)
-            throw new RuntimeException("Attempting to parse template with null object!");
-        if (delimiter == null) delimiter = "@@";
+            throw new IllegalArgumentException("Attempting to parse null template!");
+        if (object == null) {
+            throw new IllegalArgumentException("Attempting to parse template with null object!");
+        }
+        if (delimiter == null) {
+            delimiter = DEFAULT_DELIMITER;
+        }
         if (! isLoggingDisabled  &&  log.isDebugEnabled()) {
             log.debug("Parsing template: " + template + " with delimiter: " + delimiter + " object: " + object);
             log.debug("Template: " + template);
             log.debug("Delim: " + delimiter);
             log.debug("otherObject: " + otherObject);
         }
-        if (_useOldDelimiter && delimiter.equals("@@") && template.indexOf(delimiter) < 0 && template.indexOf("@") >= 0) {
+        if (_useOldDelimiter && delimiter.equals(DEFAULT_DELIMITER) && template.indexOf(delimiter) < 0 && template.indexOf(DEPRECATED_DELIMITER) >= 0) {
             if (!isLoggingDisabled) {
-	        log.warn("It seems that the template string '" + template + "' is using the old delimiter '@' instead of '@@'. I will use '@' for now but you should fix this by updating the template.");
+                log.warn("It seems that the template string '" + template + "' is using the old delimiter '@' instead of '@@'. I will use '@' for now but you should fix this by updating the template.");
             }
-            delimiter = "@";
+            delimiter = DEPRECATED_DELIMITER;
         }
-        StringBuffer buffer = new StringBuffer();
-        boolean deriveElement = false; // if the template starts with delim, the first component will be a zero-length string
         NSArray components = NSArray.componentsSeparatedByString(template, delimiter);
-        if (! isLoggingDisabled  &&  log.isDebugEnabled())
+        if (! isLoggingDisabled  &&  log.isDebugEnabled()) {
             log.debug("Components: " + components);
+        }
+        boolean deriveElement = false; // if the template starts with delim, the first component will be a zero-length string
+        StringBuffer buffer = new StringBuffer();
         for (Enumeration e = components.objectEnumerator(); e.hasMoreElements();) {
             String element = (String)e.nextElement();
-            if (! isLoggingDisabled)  log.debug("Processing Element: " + element);
-            if (deriveElement) {
-                if (! isLoggingDisabled)  log.debug("Deriving value ...");
-                if (element.length() == 0)
-                    throw new RuntimeException("\"\" is not a valid keypath in template: " + template);
-                Object obj;
-                try {
-                    if (!isLoggingDisabled && log.isDebugEnabled()) {
-                        log.debug("calling valueForKeyPath("+object+", "+element+")");
-                    }
-                    if (object instanceof NSKeyValueCodingAdditions) {
-                        obj = ((NSKeyValueCodingAdditions)object).valueForKeyPath(element);
-                    } else {
-                        obj = NSKeyValueCodingAdditions.Utility.valueForKeyPath(object, element);
-                    }
-                    // For just in case the above doesn't throw an exception when the 
-                    // key is not defined. (NSDictionary doesn't seem to throw the exception.)
-                    if (obj == null  &&  otherObject != null) {
-                        throw new NSKeyValueCoding.UnknownKeyException("The key is not defined in the object.", null, element);
-                    }
-                } catch (NSKeyValueCoding.UnknownKeyException t) {
-                    if (otherObject != null) {
-                    	try {
-                    		obj = NSKeyValueCodingAdditions.Utility.valueForKeyPath(otherObject, element);
-                    	} catch (NSKeyValueCoding.UnknownKeyException t1) {
-                    		if (!isLoggingDisabled && log.isDebugEnabled()) {
-                    			log.debug("Could not find a value for \"" + element + "\" of template, \"" + template + "\" in either the object or extra data: " + t1.getMessage());
-                    		}
-                    		obj = null;
-                    	} catch (Throwable t1) {
-                    		throw new NSForwardException(t, "An exception occured while parsing element, " + element + ", of template, \"" + template + "\": " + t1.getMessage());
-                    	}
-                    } else {
-                    	obj = null;
-                    }
-                } catch (Throwable t) {
-                    throw new NSForwardException(t, "An exception occured while parsing element, " + element + ", of template, \"" + template + "\": " + t.getMessage());
+            if(!isLoggingDisabled) {
+                log.debug("Processing Element: " + element);
+            }
+            if(deriveElement) {
+                if(!isLoggingDisabled) {
+                    log.debug("Deriving value ...");
                 }
-                buffer.append(obj == null ? _undefinedKeyLabel : obj.toString());                
+                if(element.length() == 0) {
+                    throw new IllegalArgumentException("\"\" is not a valid keypath in template: " + template);
+                }
+                Object result = _undefinedKeyLabel;
+                Object objects[];
+                if(otherObject != null) {
+                    objects = new Object[] {object, otherObject};
+                } else {
+                    objects = new Object[] {object};
+                }
+                for (int i = 0; i < objects.length; i++) {
+                    Object o = objects[i];
+                    if(o != null && result == _undefinedKeyLabel) {
+                        try {
+                            if(!isLoggingDisabled && log.isDebugEnabled()) {
+                                log.debug("calling valueForKeyPath("+o+", "+element+")");
+                            }
+                            if(o instanceof NSKeyValueCodingAdditions) {
+                                result = ((NSKeyValueCodingAdditions)o).valueForKeyPath(element);
+                            } else {
+                                result = NSKeyValueCodingAdditions.Utility.valueForKeyPath(o, element);
+                            }
+                            // For just in case the above doesn't throw an exception when the 
+                            // key is not defined. (NSDictionary doesn't seem to throw the exception.)
+                            if(result == null) {
+                                result = _undefinedKeyLabel;
+                            }
+                        } catch (NSKeyValueCoding.UnknownKeyException t) {
+                            result = _undefinedKeyLabel;
+                        } catch (Throwable t) {
+                            throw new NSForwardException(t, "An exception occured while parsing element, "
+                                            + element + ", of template, \""
+                                            + template + "\": "
+                                            + t.getMessage());
+                        }
+                    }
+                }
+                if(result == _undefinedKeyLabel) {
+                    if (!isLoggingDisabled && log.isDebugEnabled()) {
+                        log.debug("Could not find a value for \"" + element
+                                + "\" of template, \"" + template
+                                + "\" in either the object or extra data.");
+                    }
+                }
+                buffer.append(result.toString());
                 deriveElement = false;
             } else {
-                if (element.length() > 0)
+                if(element.length() > 0) {
                     buffer.append(element);
+                }
                 deriveElement = true;
             }
-            if (! isLoggingDisabled  && log.isDebugEnabled())
+            if(!isLoggingDisabled && log.isDebugEnabled()) {
                 log.debug("Buffer: " + buffer);
+            }
         }
         return buffer.toString();
     }
