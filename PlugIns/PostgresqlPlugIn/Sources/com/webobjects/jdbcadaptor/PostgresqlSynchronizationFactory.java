@@ -204,22 +204,15 @@ public class PostgresqlSynchronizationFactory extends EOSynchronizationFactory i
             if ( priKeyAttributes.count() == 1 ) {
                 priKeyAttribute = (EOAttribute) priKeyAttributes.objectAtIndex(0);
                 String sql;
-                sql = "CREATE FUNCTION EOF_TMP_ID_MAX() RETURNS " + priKeyAttribute.externalType() + " AS \n'"
-                    + "SELECT MAX(" + priKeyAttribute.columnName() +") FROM " + entity.externalName()
-                    + "'\n    LANGUAGE 'sql'";
-                results.addObject(createExpression(entity, sql));
-                
+
                 sequenceName = PostgresqlPlugIn.sequenceNameForEntity(entity);
                 sql = "CREATE SEQUENCE " + sequenceName;
                 results.addObject(createExpression(entity, sql));
                 
-                sql = "SELECT SETVAL('" + sequenceName + "', EOF_TMP_ID_MAX() ) INTO TEMP EOF_TMP_TABLE";
+                sql = "SELECT SETVAL('" + sequenceName + "', (SELECT MAX(" + priKeyAttribute.columnName() +") FROM " + entity.externalName() +") INTO TEMP EOF_TMP_TABLE";
                 results.addObject(createExpression(entity, sql));
                 
                 sql = "DROP TABLE EOF_TMP_TABLE";
-                results.addObject(createExpression(entity, sql));
-                
-                sql = "DROP FUNCTION EOF_TMP_ID_MAX()";
                 results.addObject(createExpression(entity, sql));
                 
                 sql =  "ALTER TABLE "+ entity.externalName() +" ALTER COLUMN "+ priKeyAttribute.columnName() +" SET DEFAULT nextval( '"+ sequenceName+ "' )" ;
