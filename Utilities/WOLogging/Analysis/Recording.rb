@@ -107,7 +107,7 @@ class LogManager
 			if ( parse_wo_custom_env( @wo_custom_env ) )
 				@parsed_array = @parsed_array + @wo_record.args()
 				log_record = LogRecord.new( @parsed_array )
-				#log_record.display_record(@log_record_array.length)
+				# log_record.display_record(@log_record_array.length)
 		
 				if  log_record.info[POS_APP_NAME] =~ APPNAME_PATTERN 
 					@log_record_array.push( log_record )
@@ -190,12 +190,12 @@ class LogRecord
 
 	
 	def display_record( prefix )
-		#i=0
-		#@info.each { |val|
-			#		puts("#{i}:#{val}, ")
-			#i=i+1
-			#}
-			#	
+		i=0
+		@info.each { |val|
+					puts("#{i}:#{val}, ")
+			i=i+1
+			}
+				
 			puts( "#{prefix} #{as_string}" )
 			puts( track_string( POS_SESSION_ID, POS_PAGE_NAME )  )
 		end
