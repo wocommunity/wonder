@@ -2,8 +2,7 @@
 
 def require_config( filename, *required_args )
 	begin
-		config_name = filename.gsub( /\.rb$/, "")
-		require "#{config_name}"
+		require filename
 		conf_ok=true
 		required_args.each { |name|
 			begin

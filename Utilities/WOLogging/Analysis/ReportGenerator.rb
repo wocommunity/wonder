@@ -11,8 +11,9 @@ TEXT_SEPARATOR = ":"
 class ReportGenerator
 
 
-	def initialize(stat_module, time)
+	def initialize(stat_module, time, report_number)
 		@stat_module = stat_module
+		@report_number = report_number
 		@time = time
 		@output_dir = OUTPUT_DIR+"/"
 		begin
@@ -43,7 +44,7 @@ class ReportGenerator
 		file=nil
 		extension = type
 
-		final_file_name = "#{common_name}-#{stat_type}.#{extension}"
+		final_file_name = "#{common_name}-#{@report_number}-#{stat_type}.#{extension}"
 		begin
 			if mode==1
 				@file=File.new("#{@output_dir}#{final_file_name}",File::CREAT|File::TRUNC|File::RDWR,0644)

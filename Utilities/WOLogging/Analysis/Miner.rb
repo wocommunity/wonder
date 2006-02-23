@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 
-$LOAD_PATH.unshift(File.dirname(__FILE__))
+#$LOAD_PATH.unshift(File.dirname(File.expand_path(__FILE__)))
 $stats = Array.new
 
 require 'Recording'
@@ -71,9 +71,12 @@ require 'Utils'
 		require_config( $config_file, 'OUTPUT_DIR', 'OUTPUT_FORMATS', "OUTPUT_FILE_NAME", "APPNAME_PATTERN" )
 		$log_manager.process()
 
-		$stats.each { |stat|
+		$stats.each_with_index { |stat,i|
+			puts(" + Generating statistics '#{stat.title}'..")
+			puts("    - calculating..")
 			stat.generate_stats()
-			$rGenerator = ReportGenerator.new( stat, $time )
+			puts("    - generating output..")
+			$rGenerator = ReportGenerator.new( stat, $time, i )
 			$rGenerator.generate_reports()
 		}
 
