@@ -521,11 +521,14 @@ public class ERXCustomObject extends EOCustomObject implements ERXGuardedObjectI
     /* (non-Javadoc)
      * @see er.extensions.ERXEnterpriseObject#isDeletedEO()
      */
-    // CHECKME: Might be able to tell better by checking EOGlobalIDs
     public boolean isDeletedEO() {
-        if (log.isDebugEnabled())
+        if (log.isDebugEnabled()) {
             log.debug("editingContext() = " + editingContext() + " this object: " + this);
-        return editingContext() != null && editingContext().deletedObjects().containsObject(this);
+        }
+        // HACK AK: using private API here
+        EOGlobalID gid = __globalID();
+        boolean isDeleted = (editingContext() == null && (gid != null && !gid.isTemporary()));
+        return isDeleted || (editingContext() != null && editingContext().deletedObjects().containsObject(this));
     }
 
     /**
