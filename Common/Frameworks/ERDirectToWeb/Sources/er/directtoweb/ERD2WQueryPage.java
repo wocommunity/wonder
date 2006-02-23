@@ -30,6 +30,8 @@ public class ERD2WQueryPage extends ERD2WPage implements QueryPageInterface {
 
     protected NSDictionary queryBindings;
 
+    protected EOFetchSpecification fetchSpecification;
+
     public ERD2WQueryPage(WOContext context) {
         super(context);
         createDisplayGroup();
@@ -48,6 +50,41 @@ public class ERD2WQueryPage extends ERD2WPage implements QueryPageInterface {
                 destination.addEntriesFromDictionary(source);
             }
         }
+    }
+    
+    public EOFetchSpecification fetchSpecification() {
+        if(fetchSpecification == null) {
+            String name = fetchSpecificationName();
+            if(name != null) {
+                fetchSpecification = entity().fetchSpecificationNamed(name);
+            }
+        }
+    	return fetchSpecification; 
+    }
+    public void setFetchSpecification(EOFetchSpecification value) {
+        fetchSpecification=value;
+    	if(fetchSpecification != null) {
+    		d2wContext().takeValueForKey(value.qualifier().bindingKeys(), "displayPropertyKeys");
+    	}
+    }
+
+    public void setFetchSpecificationName(String value) {
+        d2wContext().takeValueForKey(value,"fetchSpecificationName");
+        //_fetchSpecificationName=name;
+        EOEntity e=entity();
+        setFetchSpecification(e.fetchSpecificationNamed(value));
+    }
+
+    public String fetchSpecificationName() {
+        return (String)d2wContext().valueForKey("fetchSpecificationName");
+    }
+
+    public EOFetchSpecification queryFetchSpecification() {
+        NSDictionary valuesFromBinding=displayGroup.queryMatch();
+        if(fetchSpecification() != null) {
+        	return fetchSpecification().fetchSpecificationWithQualifierBindings(valuesFromBinding);
+        }
+        return null;
     }
 
     protected void pushQueryBindingsForName(String name) {
@@ -199,23 +236,29 @@ public class ERD2WQueryPage extends ERD2WPage implements QueryPageInterface {
         return returnPage != null;
     }
 
+    
     public EODataSource queryDataSource() {
         if (_wasCancelled) {
             return null;
         }
         EODataSource ds = dataSource();
         if (ds == null || !(ds instanceof EODatabaseDataSource)) {
-            ds = new EODatabaseDataSource(session().defaultEditingContext(), entity().name());
-            setDataSource(ds);
+        	ds = new EODatabaseDataSource(session().defaultEditingContext(), entity().name());
+        	setDataSource(ds);
         }
-        EOFetchSpecification fs = ((EODatabaseDataSource) ds).fetchSpecification();
-        fs.setQualifier(qualifier());
-        fs.setIsDeep(isDeep());
-        fs.setUsesDistinct(usesDistinct());
-        fs.setRefreshesRefetchedObjects(refreshRefetchedObjects());
+        EOFetchSpecification fs = queryFetchSpecification();
+        if(fs == null) {
+        	fs = ((EODatabaseDataSource) ds).fetchSpecification();
+        	fs.setQualifier(qualifier());
+        	fs.setIsDeep(isDeep());
+        	fs.setUsesDistinct(usesDistinct());
+        	fs.setRefreshesRefetchedObjects(refreshRefetchedObjects());
+        } else {
+        	((EODatabaseDataSource) ds).setFetchSpecification(fs);
+        }
         int limit = fetchLimit();
         if (limit != 0)
-            fs.setFetchLimit(limit);
+        	fs.setFetchLimit(limit);
         return ds;
     }
 
