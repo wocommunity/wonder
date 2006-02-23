@@ -371,14 +371,19 @@ public class ERXValidationFactory {
         	Object context = erv.context();
         	// AK: as the exception doesn«t have a very special idea in how the message should get 
         	// formatted when gets displayed, we ask the context *first* before asking the exception.
+        	String template = templateForException(erv);
+        	if(template.startsWith(UNDEFINED_VALIDATION_TEMPLATE)) {
+        		return erv.getLocalizedMessage();
+        	}
+        	
         	if(context == erv || context == null) {
         		message = ERXSimpleTemplateParser.sharedInstance().parseTemplateWithObject(
-        				templateForException(erv),
+        				template,
 						templateDelimiter(),
 						erv);
         	} else {
         		message = ERXSimpleTemplateParser.sharedInstance().parseTemplateWithObject(
-        				templateForException(erv), 
+        				template, 
 						templateDelimiter(),
 						context,
 						erv);
@@ -518,11 +523,10 @@ public class ERXValidationFactory {
             template = templateForKeyPath(property, targetLanguage);
         // 5th try just type
         if (template == null)
-            template = templateForKeyPath(type, targetLanguage);
+        	template = templateForKeyPath(type, targetLanguage);
         if (template == null) {
-            String message = "Undefined validation template for entity \"" + entityName + "\" property \"" + property + "\" type \"" + type + "\" target language \"" + targetLanguage + "\"";
-            template = message;
-            log.error(message);
+        	template = UNDEFINED_VALIDATION_TEMPLATE + " entity \"" + entityName + "\" property \"" + property + "\" type \"" + type + "\" target language \"" + targetLanguage + "\"";
+        	log.error(template);
         }
         return template;
     }
