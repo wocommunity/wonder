@@ -42,7 +42,7 @@ import er.extensions.*;
  * will list the articles by calling the fetch spec "recentArticles". When the
  * fetch spec has an "authorName" binding, it is set to "*foo*".
  *
- *   ListArticle?__fs=&author.name=*foo*
+ *   ListArticle?__fs=&author.name=*foo*&__fs_fetchLimit=0
  * will list the articles by creating a fetch spec with the supplied attributes. 
  * When the value contains "*", then it will be regarded as a LIKE query, otherwise as a EQUAL 
  * 
@@ -74,6 +74,16 @@ public abstract class ERD2WDirectAction extends ERXDirectAction {
      * fetchSpecificationKey is used to get relationships of a given object.
      */
     static final String fetchSpecificationKey = "__fs";
+
+    /**
+     * fetchLimit for the fetchSpec.
+     */
+    static final String fetchLimitKey = "__fs_fetchLimit";
+
+    /**
+     * fetchLimit for the fetchSpec.
+     */
+    static final String usesDistinctKey = "__fs_usesDistinct";
 
     /** denotes the context ID for the previous page */
     static final String contextIDKey = "__cid";
@@ -134,7 +144,12 @@ public abstract class ERD2WDirectAction extends ERXDirectAction {
     				qualifier = new EOAndQualifier(qualifiers);
     			}
     			fs = new EOFetchSpecification(entityName, qualifier, null);
-    			fs.setUsesDistinct(true);
+    			
+    			boolean usesDictinct = ERXValueUtilities.booleanValueWithDefault(context().request().stringFormValueForKey(usesDistinctKey), true);
+    			fs.setUsesDistinct(usesDictinct);
+    			
+    			int limit = ERXValueUtilities.intValueWithDefault(context().request().stringFormValueForKey(fetchLimitKey), 200);
+    			fs.setFetchLimit(limit);
     		} else {
     			fs = EOFetchSpecification.fetchSpecificationNamed(fsName, entityName);
     			NSMutableDictionary bindings = new NSMutableDictionary();
@@ -230,9 +245,9 @@ public abstract class ERD2WDirectAction extends ERXDirectAction {
     protected void prepareQueryPage(D2WContext context, QueryPageInterface qpi, String entityName) {
         EOEditingContext ec = session().defaultEditingContext();
         EOFetchSpecification fs = fetchSpecificationFromRequest(entityName);
-        if(qpi instanceof ERD2WQueryPageWithFetchSpecification) {
+        if(qpi instanceof ERD2WQueryPage) {
             if(fs != null)
-                ((ERD2WQueryPageWithFetchSpecification)qpi).setFetchSpecification(fs);
+                ((ERD2WQueryPage)qpi).setFetchSpecification(fs);
         }
     }
 
