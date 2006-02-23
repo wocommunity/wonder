@@ -7,7 +7,7 @@
 package er.directtoweb;
 import com.webobjects.appserver.*;
 
-public class ERD2WQueryPageWithFetchSpecificationTemplate extends ERD2WQueryPageWithFetchSpecification {
+public class ERD2WQueryPageWithFetchSpecificationTemplate extends ERD2WQueryPage {
 
     public ERD2WQueryPageWithFetchSpecificationTemplate(WOContext context) {
         super(context);
