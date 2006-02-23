@@ -330,12 +330,8 @@ public interface ERXEnterpriseObject {
     /**
      * Determines if this object is a deleted object by
      * checking to see if it is included in the deletedObjects
-     * array of the editing context or if it's editing context
-     * is null.<br/>
-     * <br/>
-     * Note: after you call <code>saveChanges()</code>, committing the
-     * delete, this method will return false because the object
-     * will no longer be registered in an editing context.
+     * array of the editing context or - if it's editing context
+     * is null - it already has a global id. 
      * @return if the object is a deleted object
      */
     public abstract boolean isDeletedEO();

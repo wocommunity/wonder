@@ -521,9 +521,12 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
      * @see er.extensions.ERXEnterpriseObject#isDeletedEO()
      */
     public boolean isDeletedEO() {
-        if (log.isDebugEnabled())
+        if (log.isDebugEnabled()) {
             log.debug("editingContext() = " + editingContext() + " this object: " + this);
-        boolean isDeleted = editingContext() == null;
+        }
+        // HACK AK: using private API here
+        EOGlobalID gid = __globalID();
+        boolean isDeleted = (editingContext() == null && (gid != null && !gid.isTemporary()));
         return isDeleted || (editingContext() != null && editingContext().deletedObjects().containsObject(this));
     }
 
