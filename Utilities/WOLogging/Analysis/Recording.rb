@@ -72,7 +72,6 @@ class LogManager
 	def process_line( line )
 		line = line.chomp
 		if line=~SIMPLE_SEARCH_PATTERN
-				puts( line )
 				parse_line( line )
 		end
 
