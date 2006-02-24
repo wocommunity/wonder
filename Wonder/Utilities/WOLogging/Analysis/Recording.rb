@@ -8,8 +8,15 @@ require 'StatModules'
 #SEARCH_PATTERN=/^(\S+)\s+(\S+)\s+(\S+)\s+\[(.*)\]\s+"([^"]+)"\s+(\S+)\s+(\S+)\s+"([^"]+)"\s+"([^"]+)"\s+(\S+)\s+"([^"]+)"\s+\S+$/
 #SIMPLE_SEARCH_PATTERN=/\s+"[^"]{2,}"\s+\S+$/
 
-SEARCH_PATTERN=/^(\S+)\s+(\S+)\s+(\S+)\s+\[(.*)\]\s+"([^"]+)"\s+(\S+)\s+(\S+)\s+"([^"]+)"\s+"([^"]+)"\s+(\S+)\s+"([^"]+)"\s*\S*$/
-SIMPLE_SEARCH_PATTERN=/\s+"[^"]{2,}"\s+\S*$/
+# former
+#SEARCH_PATTERN=/^(\S+)\s+(\S+)\s+(\S+)\s+\[(.*)\]\s+"([^"]+)"\s+(\S+)\s+(\S+)\s+"([^"]+)"\s+"([^"]+)"\s+(\S+)\s+"([^"]+)"\s*\S*$/
+#SEARCH_PATTERN=/^(\S+)\s+(\S+)\s+(\S+)\s+\[(.*)\]\s+"([^"]+)"\s+(\S+)\s+(\S+)\s+"([^"]+)"\s+"([^"]+)"\s+(\S+)\s+"(.*;)"\s*\S*$/
+SEARCH_PATTERN=/^(\S+)\s+(\S+)\s+(\S+)\s+\[(.*)\]\s+"([^"]+)"\s+(\S+)\s+(\S+)\s+"([^"]+)"\s+"([^"]+)"\s+(\S+)\s+"(.*;)"\s*$/
+
+
+#SIMPLE_SEARCH_PATTERN=/\s+"[^"]{2,}"\s+\S*$/
+SIMPLE_SEARCH_PATTERN=/\s+".*;"\s*$/
+
 
 # locations of elements in the pattern and in the array
 
@@ -53,6 +60,11 @@ class LogManager
 		@input_files.each { |file|
 			process_file( file )
 		}
+		if @log_record_array.length == 0
+			puts("No matching lines found in log. Probably your file format is discordant with the regular expression parsing the file.")
+			exit 1
+		end
+		
 		detect_microseconds()
 		
 	end
@@ -60,6 +72,7 @@ class LogManager
 	def process_line( line )
 		line = line.chomp
 		if line=~SIMPLE_SEARCH_PATTERN
+				puts( line )
 				parse_line( line )
 		end
 
@@ -82,7 +95,7 @@ class LogManager
 
 	def detect_microseconds()
 		sum = 0.0
-		limit = [ 100, @log_record_array.length() ].min
+		limit = [ 100, @log_record_array.length()-1 ].min
 		for i in 0..limit
 			sum = sum + @log_record_array[ i ].info[ POS_REQ_TIME ]	
 		end
@@ -205,7 +218,7 @@ class LogRecord
 		end
 
 		def track_string( info_index, result_index )
-			result=""
+			result=" " # This space is necessary for proper identification of whole page names
 			n = self
 			repeat_counter = 1
 			while n != nil
@@ -236,7 +249,8 @@ class LogRecord
 				n = n.next[ info_index ]
 				previous_display_value = display_value
 			end
-
+			result = "#{result} " # this space is necessary for proper identification of whole names
+			
 			return result
 		end
 
