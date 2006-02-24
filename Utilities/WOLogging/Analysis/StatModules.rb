@@ -118,15 +118,29 @@ end
 # ----------------------------------------------------------------------------
 
 class SessionTrackStatModule < StatModule
+
+	# session types
+	ST_VALIDATION_FAILURE = "[  fail ]"
+	ST_VALIDATION_SUCCESS = "[success]"
+	ST_VALIDATION_IRRELEVANT = "[ ----- ]"
+	
 	def initialize( title, args, log_manager )
 		super( title, args, log_manager )
 		@type = POS_SESSION_ID
 		@tmp_hash = Hash.new
 		@conv_hash = Hash.new
+		@valid_hash = Hash.new
 		@treshold = 1
 		@conv_pages = nil
 		if args!=nil && args.length>0	
 			@conv_pages = args[0].split(/,/)
+		end
+		if args!=nil && args.length>2
+			@validation_source_page = args[1].split(/,/)[0]
+			@validation_destination_page = args[1].split(/,/)[1]
+			@validation_message = args[2]
+			puts("   - Got validation parameters: #{@validation_source_page}, #{@validation_destination_page}, #{@validation_message}")
+			
 		end
 	end
 
@@ -140,8 +154,95 @@ class SessionTrackStatModule < StatModule
 			else
 				@tmp_hash[ track_string ] = Array [ 1, Array[ record.info[POS_SESSION_ID] ] ]
 			end
-      
+     
+			# validation statistics
+			if @validation_message
+				#puts( "'#{track_string}'" )
+				src_page_index =  track_string.rindex( " #{@validation_source_page} ")
+				dst_page_index =  track_string.rindex( " #{@validation_destination_page} ")
+				#puts( src_page_index )
+				#puts( dst_page_index )
+
+				type = ST_VALIDATION_IRRELEVANT
+				
+				if src_page_index && dst_page_index
+					#puts("SUCCESS")
+					type = ST_VALIDATION_SUCCESS
+				elsif src_page_index
+					#puts("FAILURE")
+					type = ST_VALIDATION_FAILURE
+				else
+					#puts("irrelevant")
+				end
 			
+				if type!=ST_VALIDATION_IRRELEVANT
+
+					#if we know that this use path contains relevant pages (validation and validation destination page)
+					#we collect info on validation messages that emerged in an array, sort them and
+					#store in hash along with success/total ratio.
+					#this way we know that e.g.
+					# for messages 'Invalid password' success ratio is 5/9
+					# for messages 'Invalid password' and 'Wrong user' success ratio is 7/8
+					# etc.
+					#puts("processing..")
+					n = record
+					messages = Array.new
+					while n!=nil
+						current_page = n.info[POS_PAGE_NAME]
+						#puts("   #{current_page}")
+						if current_page == @validation_source_page 
+							#puts("   BINGO")
+							#if message not added to array, add it
+							if n.info[POS_ARBITRARY_ARGS]
+								validation_text = n.info[POS_ARBITRARY_ARGS][@validation_message] 					
+								if validation_text && !messages.include?(validation_text)	
+									messages.push( validation_text )
+									#puts( "VT:#{validation_text}" )
+									#if validation_text.rindex("Pole")
+									#	puts( "VT:#{validation_text}" )
+									#end
+								end
+							end
+						end #if on the validation src page
+					  n = n.next[ @type ]	
+					end # while
+				
+					messages.sort!{|m1,m2| m1<=>m2}
+					messages_text=messages.join("\n")
+					#puts("MESSAGES_TEXT: '#{messages_text}'")
+					if messages_text.length>0
+						#puts("..")
+						#value to add depends on whether user succeeded to reach dest.page
+						#(whether we will or not increase the success counter)
+						value=0
+						if type==ST_VALIDATION_SUCCESS
+							value=1
+						end
+						if !@valid_hash.has_key?( messages_text )
+							#puts("new entry: #{messages_text}")
+							tuple = Tuple.new(value,1)
+							@valid_hash[messages_text]=tuple
+						else
+							#puts("existing entry #{messages_text}")
+							tuple = @valid_hash[messages_text]
+						
+							
+							#puts("Track string: #{track_string} #{type}")
+							#puts("Messages: #{messages_text}")
+							#puts("Befor:#{tuple}")
+							tuple.i1 = tuple.i1+value
+							tuple.i2 = tuple.i2+1
+							#puts("After:#{tuple}")
+						end
+					end #if there were validation messages
+				end # relevant
+		
+				
+			end
+			
+
+			
+			# conversion statistics
 			if @conv_pages
 				n = record
 				i = 0
@@ -149,6 +250,7 @@ class SessionTrackStatModule < StatModule
 				prev_page = nil
 				current_page = nil
 				while n != nil && i < @conv_pages.length
+				
 					prev_page = current_page
 					milestone_page = @conv_pages[i]
 					current_page = n.info[POS_PAGE_NAME]
@@ -170,12 +272,23 @@ class SessionTrackStatModule < StatModule
 			  end
 			end # if @conv_pages available
 		}
+		#puts("HASH SIZE: #{@valid_hash.size}")
+		@valid_hash.each_key {|key|
+			#puts("KEY: #{key}")
+			#puts("VALUE: #{@valid_hash[key]}")
+			#puts("=====")
+		}
 
 		prepare_results()
 	end
 
 	def prepare_results()
 		current_array = Array.new
+	
+
+		
+		
+		
 		@result_hash["SessionTrack"] = current_array
 		
 		current_array.push( ["Path through the application","Occurances","Session id's"] )
@@ -186,6 +299,24 @@ class SessionTrackStatModule < StatModule
 					end
 		}
 
+		if @validation_message
+			current_array = Array.new
+			@result_hash["Validation"] = current_array
+			current_array.push( ["Validation messages", "Success", "Fail", "Total", "Conversion"] )
+			current_array.push( ["Message name is: #{@validation_message}\nMessage occurs on page: #{@validation_source_page}\nSuccess means that user reached page: #{@validation_destination_page}","","","",""])
+			@valid_hash.keys.sort{ |k2,k1| (100*@valid_hash[k2].i1)/@valid_hash[k2].i2 <=> (100*@valid_hash[k1].i1)/@valid_hash[k1].i2  }.each {|k|
+				i1 = @valid_hash[k].i1
+				i2 = @valid_hash[k].i2
+				percentage = (100*i1)/i2
+				current_array.push( [k, i1, i2-i1, i2, "#{percentage}%%" ])
+			}
+			current_array.push(["This statistics says that a customer encountered a specific validation message or any other message on his path through the application. This particular message '#{@validation_message}' occurs on page named '#{@validation_source_page}' and if user overcomes the validation problem and reaches page '#{@validation_destination_page}' it is recorded as a Success. Otherwise it's recorded as Failure. If the same user encounters multiple, different validation messages then they are all listed (so this statistics is groupped by encountered message group and not by message).","","","",""])
+
+
+			
+		end
+
+		
 		if @conv_pages
 			current_array = Array.new
 			@result_hash["Conversion"] = current_array
@@ -208,12 +339,25 @@ class SessionTrackStatModule < StatModule
 					first_value = value
 				end
 			}
+			current_array.push( [ "Conversion statistics means that out of the number of users who reached page number 1 on the list,\n a certain percentage of users managed to reach respective pages.\nThe second percentage is relative to the first number (first page on the list).\nThe first percentage is relative the previous (N-1) page on the list.","","",""])
 		end # if conv_pages available		
 	end
 	
 		
 end
 
+class Tuple 
+	attr_accessor :i1, :i2
 
+	def initialize(i1, i2)
+		@i1 = i1;
+		@i2 = i2;
+	end
+
+	def to_s
+		return "#{@i1}/#{@i2}"
+	end
+	
+end
 
 

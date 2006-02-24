@@ -55,6 +55,7 @@ class ReportGenerator
 			puts(" - Unable to write in the directory '#{@output_dir}'! Writing in the 'output/' directory instead.")
 			@file=File.new("output/#{final_file_name}",File::CREAT|File::TRUNC|File::RDWR,0644)
 		end
+		#puts( "ST: #{stats( type, array )}" )
 		printf( @file, stats( type, array ) )
 	end
 
@@ -83,8 +84,8 @@ class ReportGenerator
 				i=i+1
 				inner_array.each { |element|
 					element = element.to_s
-					element.gsub!(/\n/,"<BR>")
-					result = "#{result}</TD><TD>#{element}"
+					helement = element.gsub(/\n/,"<BR>")
+					result = "#{result}</TD><TD>#{helement}"
 				}
 				result = "#{result}</TD></TR>\n"
 			}
