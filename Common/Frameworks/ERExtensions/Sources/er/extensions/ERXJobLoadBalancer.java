@@ -9,7 +9,7 @@ public class ERXJobLoadBalancer {
 
     /*
      * This class solves the following problem:  we have a set of jobs (identified by an Id) waiting to be processed
-     * Several worker processes are competing for jobs and we need to way to efficiently parceling out those jobs out 
+     * Several worker processes are competing for jobs and we need to way to efficiently parcel out those jobs out 
      * We want to avoid as much as possible several workers attempting to grab the same jobs and locking it
      * 
      * This class will let Workers threads or processes ask for a 'JobSet', which is basically int1 modulo int2
@@ -203,7 +203,7 @@ public class ERXJobLoadBalancer {
                 int friendId = in.readInt();
                 if ((now-entryCreationTime)<ttl) {
                     aliveFriendsCount++;
-                    if (friendId<=workerId.id) {
+                    if (friendId<workerId.id) {
                         aliveFriendsWithLowerIdFound++;
                     }
                 }
@@ -214,6 +214,12 @@ public class ERXJobLoadBalancer {
                     in.close();
                 } catch (IOException e) {}
             }                
+        }    
+        // if we end up here with 0, we must have had a pb with the file system
+        // in this case, just count ourselves and try to process everything
+        if (aliveFriendsCount==0) {
+        		aliveFriendsCount=1;
+        		aliveFriendsWithLowerIdFound=0;
         }
         return new JobSet(aliveFriendsWithLowerIdFound, aliveFriendsCount);
     }
