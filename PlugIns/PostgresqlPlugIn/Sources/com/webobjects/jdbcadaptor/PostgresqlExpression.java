@@ -71,6 +71,8 @@ public class PostgresqlExpression extends JDBCExpression {
 
     private static final NSTimestampFormatter _TIMESTAMP_FORMATTER = new NSTimestampFormatter("%Y-%m-%d %H:%M:%S.%F");
     
+    private boolean _useCaseSensitiveNames = Boolean.getBoolean(getClass().getName() + ".useCaseSensitiveNames");
+    
     /**
      * Overridden to remove the rtrim usage. The original implementation
      * will remove every trailing space from character based column which 
@@ -78,6 +80,10 @@ public class PostgresqlExpression extends JDBCExpression {
      */
     public PostgresqlExpression(EOEntity entity) {
         super(entity);
+    }
+    
+    private boolean useCaseSensitiveNames() {
+        return _useCaseSensitiveNames;
     }
     
     /**
@@ -162,9 +168,15 @@ public class PostgresqlExpression extends JDBCExpression {
             r = leftEntity.anyRelationshipNamed( relationshipKey );
         }
         //timc 2006-02-26 IMPORTANT or quotes are ignored and mixed case field names won't work
-        String rightTable = rightEntity.valueForSQLExpression(this);
+        String rightTable;
         String leftTable = leftEntity.valueForSQLExpression(this); 
-         
+        if(useCaseSensitiveNames()) {
+            rightTable = rightEntity.valueForSQLExpression(this);
+            leftTable = leftEntity.valueForSQLExpression(this);
+        } else {
+            rightTable = rightEntity.externalName(); 
+            leftTable = leftEntity.externalName(); 
+        }
         JoinClause jc = new JoinClause();
         
         jc.table1 = leftTable + " " + leftAlias;
@@ -190,8 +202,15 @@ public class PostgresqlExpression extends JDBCExpression {
         NSMutableArray joinStrings = new NSMutableArray( joinsCount );
         for( int i = 0; i < joinsCount; i++ ) {
             EOJoin currentJoin = (EOJoin)joins.objectAtIndex(i);
-            String left = leftAlias +"."+ sqlStringForSchemaObjectName(currentJoin.sourceAttribute().columnName());
-            String right =  rightAlias +"."+ sqlStringForSchemaObjectName(currentJoin.destinationAttribute().columnName());
+            String left;
+            String right;
+            if(useCaseSensitiveNames()) {
+                left = leftAlias +"."+ sqlStringForSchemaObjectName(currentJoin.sourceAttribute().columnName());
+                right =  rightAlias +"."+ sqlStringForSchemaObjectName(currentJoin.destinationAttribute().columnName());
+            } else {
+                left = leftAlias +"."+currentJoin.sourceAttribute().columnName();
+                right = rightAlias +"."+currentJoin.destinationAttribute().columnName();
+            }
             joinStrings.addObject( left + " = " + right);
         }
         jc.joinCondition = " ON " + joinStrings.componentsJoinedByString( " AND " );
@@ -462,7 +481,7 @@ public class PostgresqlExpression extends JDBCExpression {
      * 
      */
     public String externalNameQuoteCharacter() { 
-        return _EXTERNAL_NAME_QUOTE_CHARACTER; 
+        return (useCaseSensitiveNames() ? _EXTERNAL_NAME_QUOTE_CHARACTER : ""); 
     }
    
     /**
@@ -474,7 +493,7 @@ public class PostgresqlExpression extends JDBCExpression {
      */
     public String sqlStringForAttribute(EOAttribute attribute) {
         String sql = null;
-        if ( attribute.isDerived() || useAliases() || attribute.columnName() == null ) {
+        if ( attribute.isDerived() || useAliases() || attribute.columnName() == null || !useCaseSensitiveNames()) {
             sql = super.sqlStringForAttribute(attribute);
         } else {
             sql = sqlStringForSchemaObjectName(attribute.columnName());
@@ -491,7 +510,7 @@ public class PostgresqlExpression extends JDBCExpression {
      */
     public String tableListWithRootEntity(EOEntity entity) {
         String sql = null;
-        if ( useAliases() ) {
+        if ( useAliases() || !useCaseSensitiveNames()) {
             sql = super.tableListWithRootEntity(entity);
         } else {
             sql = entity.valueForSQLExpression(this); //which must be sqlStringForSchemaObjectName(entity.externalName());
