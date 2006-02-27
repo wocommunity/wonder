@@ -26,6 +26,7 @@ import com.webobjects.foundation.NSTimestampFormatter;
  * @author Giorgio Valoti: refactoring, typecasting, schema building
  * @author Arturo Perez: JOIN clauses
  * @author David Teran: Timestamps handling
+ * @author Tim Cummings: case sensitive table and column names
  */
 public class PostgresqlExpression extends JDBCExpression {
 
@@ -65,7 +66,9 @@ public class PostgresqlExpression extends JDBCExpression {
     };
     
     private static final char _SQL_ESCAPE_CHAR = '|';
-    
+
+    private static final String _EXTERNAL_NAME_QUOTE_CHARACTER = "\"";   
+
     private static final NSTimestampFormatter _TIMESTAMP_FORMATTER = new NSTimestampFormatter("%Y-%m-%d %H:%M:%S.%F");
     
     /**
@@ -158,9 +161,10 @@ public class PostgresqlExpression extends JDBCExpression {
         if( r == null || r.destinationEntity() != leftEntity ) {
             r = leftEntity.anyRelationshipNamed( relationshipKey );
         }
-        String rightTable = rightEntity.externalName();
-        String leftTable = leftEntity.externalName();
-        
+        //timc 2006-02-26 IMPORTANT or quotes are ignored and mixed case field names won't work
+        String rightTable = rightEntity.valueForSQLExpression(this);
+        String leftTable = leftEntity.valueForSQLExpression(this); 
+         
         JoinClause jc = new JoinClause();
         
         jc.table1 = leftTable + " " + leftAlias;
@@ -186,9 +190,9 @@ public class PostgresqlExpression extends JDBCExpression {
         NSMutableArray joinStrings = new NSMutableArray( joinsCount );
         for( int i = 0; i < joinsCount; i++ ) {
             EOJoin currentJoin = (EOJoin)joins.objectAtIndex(i);
-            joinStrings.addObject
-                ( leftAlias +"."+ currentJoin.sourceAttribute().columnName() + " = " + 
-                  rightAlias +"."+ currentJoin.destinationAttribute().columnName() );
+            String left = leftAlias +"."+ sqlStringForSchemaObjectName(currentJoin.sourceAttribute().columnName());
+            String right =  rightAlias +"."+ sqlStringForSchemaObjectName(currentJoin.destinationAttribute().columnName());
+            joinStrings.addObject( left + " = " + right);
         }
         jc.joinCondition = " ON " + joinStrings.componentsJoinedByString( " AND " );
         if( !_alreadyJoined.containsObject( jc ) ) {
@@ -452,6 +456,50 @@ public class PostgresqlExpression extends JDBCExpression {
     public char sqlEscapeChar() {
         return _SQL_ESCAPE_CHAR;
     }
+    
+    /**
+     * Overridden because PostgreSQL does not use the default quote character in EOSQLExpression.externalNameQuoteCharacter() which is an empty string.
+     * 
+     */
+    public String externalNameQuoteCharacter() { 
+        return _EXTERNAL_NAME_QUOTE_CHARACTER; 
+    }
+   
+    /**
+     * Overridden because the original version does not correctly quote mixed case fields in all cases.
+     * SELECT statements were OK (useAliases is true) INSERT, UPDATE, DELETE didn't quote mixed case field names.
+     * 
+     * @param data  the attribute (column name) to be converted to a SQL string
+     * @return  the SQL string for the attribute
+     */
+    public String sqlStringForAttribute(EOAttribute attribute) {
+        String sql = null;
+        if ( attribute.isDerived() || useAliases() || attribute.columnName() == null ) {
+            sql = super.sqlStringForAttribute(attribute);
+        } else {
+            sql = sqlStringForSchemaObjectName(attribute.columnName());
+        }
+        //NSLog.out.appendln("PostgresqlExpression.sqlStringForAttribute " + attribute.columnName() + ", isDerived() = " + attribute.isDerived() + ", useAliases() = " + useAliases() + ", sql = " + sql); 
+        return sql;
+    }  
+    
+    /**
+     * Overridden because the original version does not correctly quote mixed case table names in all cases.
+     * SELECT statements were OK (useAliases is true) INSERT, UPDATE, DELETE didn't quote mixed case field names.
+     * 
+     * @return  the SQL string for the table names
+     */
+    public String tableListWithRootEntity(EOEntity entity) {
+        String sql = null;
+        if ( useAliases() ) {
+            sql = super.tableListWithRootEntity(entity);
+        } else {
+            sql = entity.valueForSQLExpression(this); //which must be sqlStringForSchemaObjectName(entity.externalName());
+        }
+        //NSLog.out.appendln("PostgresqlExpression.tableListWithRootEntity " + entity.externalName() + ", useAliases() = " + useAliases() + ", sql = " + sql); 
+        return sql;
+    }
+    
 
     /**
      * Overridden because the original version throws an exception when the
