@@ -539,6 +539,7 @@
 				4148FB750805497300F0229B,
 				05F23C97083D28BB00057A6C,
 				05A00EA9088DDB9500814073,
+				059DA3A409B4C2A2006283C3,
 			);
 			isa = PBXSourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -873,6 +874,21 @@
 //052
 //053
 //054
+		059DA3A309B4C2A2006283C3 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
+			name = ERXJobLoadBalancer.java;
+			path = er/extensions/ERXJobLoadBalancer.java;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		059DA3A409B4C2A2006283C3 = {
+			fileRef = 059DA3A309B4C2A2006283C3;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
 		05A00EA8088DDB9500814073 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
@@ -9242,6 +9258,7 @@
 				F59C579C02C4565701000102,
 				F59C579F02C4565701000102,
 				F59C579E02C4565701000102,
+				059DA3A309B4C2A2006283C3,
 				F59C57B302C4565701000102,
 				F59C57B502C4565701000102,
 				F59C57B902C4565701000102,
