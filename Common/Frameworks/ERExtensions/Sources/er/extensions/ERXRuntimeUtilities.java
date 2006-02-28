@@ -3,6 +3,8 @@ package er.extensions;
 import java.io.*;
 import java.util.*;
 
+import com.webobjects.foundation.*;
+
 public class ERXRuntimeUtilities {
 
     /** logging support */
@@ -261,7 +263,10 @@ public class ERXRuntimeUtilities {
                         while ((read = is.read(buf)) != -1) {
                             bout.write(buf, 0, read);
                         }
-
+                        synchronized (StreamReader.this) {
+                            finished = true;
+                            StreamReader.this.notifyAll();
+                        }
                     } catch (IOException e) {
                         iox = e;
                     }
@@ -274,6 +279,15 @@ public class ERXRuntimeUtilities {
             t.start();
         }
         public byte[] getResult() {
+            synchronized (this) {
+                if(!finished) {
+                    try {
+                        StreamReader.this.wait();
+                    } catch (InterruptedException e) {
+                        throw NSForwardException._runtimeExceptionForThrowable(e);
+                    }
+                }
+            }
             return result;
         }
         public boolean isFinished() {
