@@ -1179,28 +1179,42 @@ public class ERXEOAccessUtilities {
     public static void insertAdaptorOperations(NSArray ops) {
         EOEditingContext ec = ERXEC.newEditingContext();
         ec.lock();
-        // FIXME use the entityName information from each EOAdaptorOperation to get the correct
-        // database context, this implementation here only works if all EOModels use the same database
-        String modelName = ((EOModel)EOModelGroup.defaultGroup().models().objectAtIndex(0)).name();
-        EODatabaseContext context = EOUtilities.databaseContextForModelNamed(ec, modelName);
-        context.lock();
-        adaptorOperationsLock.lock();
-        EODatabaseChannel dchannel = context.availableChannel();
-        EOAdaptorChannel achannel = dchannel.adaptorChannel();
-        achannel.adaptorContext().beginTransaction();
         try {
-            boolean wasOpen = achannel.isOpen();
-            if (!wasOpen) {
-                achannel.openChannel();
-            }
-            achannel.performAdaptorOperations(ops);
-            achannel.adaptorContext().commitTransaction();
-            if (!wasOpen) {
-                achannel.closeChannel();
+            // FIXME use the entityName information from each EOAdaptorOperation to get the correct
+            // database context, this implementation here only works if all EOModels use the same database
+            String modelName = ((EOModel)EOModelGroup.defaultGroup().models().objectAtIndex(0)).name();
+            EODatabaseContext context = EOUtilities.databaseContextForModelNamed(ec, modelName);
+            context.lock();
+            adaptorOperationsLock.lock();
+            EODatabaseChannel dchannel = context.availableChannel();
+            EOAdaptorChannel achannel = dchannel.adaptorChannel();
+            achannel.adaptorContext().beginTransaction();
+            try {
+                boolean wasOpen = achannel.isOpen();
+                if (!wasOpen) {
+                    achannel.openChannel();
+                }
+                for(int i = 0; i < ops.count(); i++) {
+                    EOAdaptorOperation op = (EOAdaptorOperation)ops.objectAtIndex(i);
+                    try {
+                        EOEntity entity = op.entity();
+                        if(!entity.name().equals("WatchFolder")) {
+                            achannel.performAdaptorOperation(op);
+                        }
+                    } catch(EOGeneralAdaptorException ex) {
+                        log.error("Failed op " + i + ": " + ex + "\n" + op);
+                        throw ex;
+                    }
+                }
+                achannel.adaptorContext().commitTransaction();
+                if (!wasOpen) {
+                    achannel.closeChannel();
+                }
+            } finally {
+                adaptorOperationsLock.unlock();
+                context.unlock();
             }
         } finally {
-            context.unlock();
-            adaptorOperationsLock.unlock();
             ec.unlock();
         }
     }
