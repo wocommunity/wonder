@@ -3,20 +3,15 @@
 require 'ReportGenerator'
 require 'StatModules'
 
-#                  ip    tr      tr      time       request    resp    bytes   ref         ua        rt       x-wo-ce
 
-#SEARCH_PATTERN=/^(\S+)\s+(\S+)\s+(\S+)\s+\[(.*)\]\s+"([^"]+)"\s+(\S+)\s+(\S+)\s+"([^"]+)"\s+"([^"]+)"\s+(\S+)\s+"([^"]+)"\s+\S+$/
-#SIMPLE_SEARCH_PATTERN=/\s+"[^"]{2,}"\s+\S+$/
+# RECORDING is the part of the system responsible for parsing the log file
+# and storing it in memory.
+# Respective classes described below.
 
-# former
-#SEARCH_PATTERN=/^(\S+)\s+(\S+)\s+(\S+)\s+\[(.*)\]\s+"([^"]+)"\s+(\S+)\s+(\S+)\s+"([^"]+)"\s+"([^"]+)"\s+(\S+)\s+"([^"]+)"\s*\S*$/
-#SEARCH_PATTERN=/^(\S+)\s+(\S+)\s+(\S+)\s+\[(.*)\]\s+"([^"]+)"\s+(\S+)\s+(\S+)\s+"([^"]+)"\s+"([^"]+)"\s+(\S+)\s+"(.*;)"\s*\S*$/
+
 SEARCH_PATTERN=/^(\S+)\s+(\S+)\s+(\S+)\s+\[(.*)\]\s+"([^"]+)"\s+(\S+)\s+(\S+)\s+"([^"]+)"\s+"([^"]+)"\s+(\S+)\s+"(.*;)"\s*$/
 
-
-#SIMPLE_SEARCH_PATTERN=/\s+"[^"]{2,}"\s+\S*$/
 SIMPLE_SEARCH_PATTERN=/\s+".*;"\s*$/
-
 
 # locations of elements in the pattern and in the array
 
@@ -48,6 +43,8 @@ XPOS_PAGE_NAME				= 2
 
 class LogManager
 
+	# responsible for parsing the log file and updating cache (CacheMachine)
+	
 	attr_accessor :log_record_array,:cache_machine
 	
 	def initialize( input_files )
@@ -79,19 +76,24 @@ class LogManager
 
 	def process_file( input_file )
 		line_count=0
+		puts("---------------------------------------------------------------")
+		puts(" + Processing logfile")
 		File.new("#{input_file}").each_line { |line|
 			process_line(line)
 			line_count=line_count+1
 			if line_count%1000==0
-				printf "#{line_count} lines |  caches are: "
+				printf "     #{line_count} lines |  caches are: "
 				for i in 0..CACHEABLE_ELEMENTS.length-1
 					printf("#{cache_machine.caches[i].length}, ")
 				end
 				printf("\n")	
 			end
 		}
+		puts("---------------------------------------------------------------")
 	end
 
+
+	# based on average request handling time the tool determines whether Apache writes seconds or microseconds (probably a better solution will be a setting in config file)
 	def detect_microseconds()
 		sum = 0.0
 		limit = [ 100, @log_record_array.length()-1 ].min
@@ -177,7 +179,6 @@ end
 
 
 # instances of this class are object representations of lines in log.
-
 class LogRecord
 
 	attr_accessor :info,:next,:prev
@@ -216,6 +217,11 @@ class LogRecord
 			return "#{@info[POS_APP_NAME]}, #{@info[POS_SESSION_ID]}, #{@info[POS_PAGE_NAME]}"
 		end
 
+
+		# track string is a user-readable record of a single session
+		# it says which pages and how many times the user visited.
+		# e.g. Main -> LoginPage(2) -> ConfirmationPage -> ReceiptPage -> InfoPage(3)
+		# The number in bracket means two or more consecutive visits to the same page
 		def track_string( info_index, result_index )
 			result=" " # This space is necessary for proper identification of whole page names
 			n = self
@@ -262,6 +268,11 @@ class LogRecord
 		end
 		
 	end
+
+ 
+
+  # Instance of this class holds cache of parsed requests in memory.
+	# They are linked in both directions by all reasonable criteria (like appname, session id, ip, etc.)
 
 	class CacheMachine
 

@@ -6,8 +6,8 @@ $stats = Array.new
 require 'Recording'
 require 'ReportGenerator'
 require 'StatModules'
-require 'Statistics'
 require 'Utils'
+require 'ReportTypes'
 
 # Miner
 # ========================
@@ -18,26 +18,23 @@ require 'Utils'
 # - CacheMachine - which is the repository,
 # - StatModules - which analyze the repository and create stats
 # - ReportGenerator - which transforms stat module results into HTML/CSV reports
+# See README file.
 
 
-	TOOL_VERSION="0.9"
+	TOOL_VERSION="1.0.1"
 
 	STAT_NAME_MAPPINGS = Hash[
-	"Page" => PageStatModule,
-	"SessionTrack" => SessionTrackStatModule
+	PAGE_STATS => PageStatModule,
+	SESSION_TRACK_STATS => SessionTrackStatModule
 	]
 
 
-	def add_statistics( class_desc, title ) 
-		add_statistics_with_params( class_desc, title, nil )
-	end
 
-	def add_statistics_with_params( class_desc, title, args )
-		$stats.push( STAT_NAME_MAPPINGS[class_desc].new( title,args,$log_manager ) )
+	def add_statistics( class_desc, config_hash )
+		$stats.push( STAT_NAME_MAPPINGS[class_desc].new( config_hash,$log_manager ) )
 	end	
 			
 	Object.send(:alias_method, :AddStatistics, :add_statistics )
-	Object.send(:alias_method, :AddStatisticsWithParams, :add_statistics_with_params )
 
 	def parse_args()
 		if ARGV.length < 2
@@ -56,8 +53,11 @@ require 'Utils'
 		}
 	end
 	
-	def mine()
 
+	# 'mine' is a facade function for all the classes in the WOLogging tool.
+	# All you have to do is to make changes to the config file (located in conf/)
+	def mine()
+		puts("---------------------------------------------------------------")
 		$input_files=Array.new
 		$stat_types=Array.new
 		$config_file=nil
@@ -72,7 +72,7 @@ require 'Utils'
 		$log_manager.process()
 
 		$stats.each_with_index { |stat,i|
-			puts(" + Generating statistics '#{stat.title}'..")
+			puts(" + Generating statistics '#{stat}'..")
 			puts("    - calculating..")
 			stat.generate_stats()
 			puts("    - generating output..")
@@ -81,6 +81,7 @@ require 'Utils'
 		}
 
 		puts(" + Report files should be now available in your output directory.")
+		puts("---------------------------------------------------------------")	
 		puts()
 
 	end
