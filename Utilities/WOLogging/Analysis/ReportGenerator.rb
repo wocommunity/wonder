@@ -3,6 +3,9 @@
 require 'fileutils'
 require 'StatModules'
 
+# REPORT GENERATOR creates output files (like html or text) from data received from Report classes (ReportTypes.rb).
+# See README and conf/README for more details.
+
 RT_HTML = "html"
 
 RT_TEXT = "text"
@@ -33,9 +36,8 @@ class ReportGenerator
 	end
 	
 	def generate_report( type )
-
 		@stat_module.result_hash.each_key {|key|
-			write_to_file( key, type, @stat_module.result_hash[key], 1 )
+			write_to_file( key, type, @stat_module.result_hash[key].output, 1 )
 		}
 	end
 
@@ -56,11 +58,11 @@ class ReportGenerator
 			@file=File.new("output/#{final_file_name}",File::CREAT|File::TRUNC|File::RDWR,0644)
 		end
 		#puts( "ST: #{stats( type, array )}" )
-		printf( @file, stats( type, array ) )
+		printf( @file, stats( stat_type, type, array ) )
 	end
 
 
-	def stats( type, array )
+	def stats( key, type, array )
 		result = ""
 		if ( type == RT_TEXT ) 
 			array.each { |inner_array|
@@ -70,7 +72,7 @@ class ReportGenerator
 				result = "#{result}\n"
 			}
 		elsif ( type == RT_HTML )
-			result = "<HTML><HEAD><LINK REL='stylesheet' TYPE='text/css' HREF='style.css'></HEAD><BODY><SPAN CLASS='large'>#{@stat_module.title}</SPAN><TABLE class='page'>"
+			result = "<HTML><HEAD><LINK REL='stylesheet' TYPE='text/css' HREF='style.css'></HEAD><BODY><SPAN CLASS='large'>#{key}</SPAN><TABLE class='page'>"
 			i=0
 			array.each { |inner_array|
 				if (i==0)
