@@ -159,6 +159,27 @@ public class ERXDirectAction extends WODirectAction {
     }
 
     /**
+     * Action used for accessing the databse console
+     * <br/>
+     * <br/>
+     * Synopsis:<br/>
+     * pw=<i>aPassword</i>
+     * <br/>
+     * Form Values:<br/>
+     * <b>pw</b> password to be checked against the system property <code>er.extensions.ERXRemoteShellPassword</code>.
+     * <br/>
+     * @return {@link ERXLog4JConfiguration} for modifying current logging settings.
+     */
+    public WOComponent databaseConsoleAction() {
+        WOComponent result=null;
+        if (canPerformActionWithPasswordKey("er.extensions.ERXDatabaseConsolePassword")) {
+                result=pageWithName("ERXDatabaseConsole");
+                session().setObjectForKey(Boolean.TRUE, "ERXDatabaseConsole.enabled");
+        }
+        return result;
+    }
+
+    /**
      * Action used for forcing garbage collection. If WOCachingEnabled is true (we take this to mean 
      * that the application is in production) you need to give a password to access it.<br/>
      * <br/>
