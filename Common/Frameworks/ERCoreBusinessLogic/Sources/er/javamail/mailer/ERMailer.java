@@ -11,6 +11,7 @@ import com.webobjects.eocontrol.*;
 import com.webobjects.eoaccess.*;
 
 import er.extensions.*;
+import er.extensions.ERXJobLoadBalancer.*;
 
 import er.javamail.*;
 import er.corebusinesslogic.*;
@@ -32,6 +33,7 @@ public class ERMailer {
 
     /** logging support */
     public final static ERXLogger log = ERXLogger.getERXLogger(ERMailer.class);
+    public final static String MAIL_WORKER_IDENTIFICATION = "ERMailer";
 
     //	===========================================================================
     //	Class Variable(s)
@@ -101,6 +103,20 @@ public class ERMailer {
 
     /** Caches the message title prefix */
     protected String messageTitlePrefix;
+    protected ERXJobLoadBalancer.WorkerIdentification workerIdentification;
+    
+    //  ===========================================================================
+    //  Constructor(s)
+    //  ---------------------------------------------------------------------------    
+    
+    public ERMailer() {
+        workerIdentification=new ERXJobLoadBalancer.WorkerIdentification(MAIL_WORKER_IDENTIFICATION, 
+                ERXJobLoadBalancer.jobLoadBalancer().workerInstanceIdentification());
+        int ttl=ERXProperties.intForKeyWithDefault("er.javamail.mailer.ERMailer.WorkerTimeOut", 300000);
+        ERXJobLoadBalancer.jobLoadBalancer().setTtlForWorkerType(MAIL_WORKER_IDENTIFICATION, ttl); // 5mns
+    }
+    
+
 
     //	===========================================================================
     //	Instance Method(s)
@@ -116,7 +132,16 @@ public class ERMailer {
     public void processOutgoingMail() {
         if (log.isDebugEnabled())
             log.debug("Starting outgoing mail processing.");
-        ERXFetchSpecificationBatchIterator iterator = ERCMailMessage.mailMessageClazz().batchIteratorForUnsentMessages();
+        
+        ERXFetchSpecificationBatchIterator iterator;
+        if (ERXProperties.booleanForKey("er.javamail.mailer.useERXJobLoadBalancer")) {
+            
+            iterator = ERCMailMessage.mailMessageClazz().batchIteratorForUnsentMessages();
+        } else {
+        		JobSet idSpace=ERXJobLoadBalancer.jobLoadBalancer().idSpace(workerIdentification);
+        		log.debug("Fetching messages "+idSpace);
+            	iterator = ERCMailMessage.mailMessageClazz().batchIteratorForUnsentMessages(idSpace);
+        }
 
         EOEditingContext ec = ERXEC.newEditingContext();
         iterator.setEditingContext(ec);
@@ -138,6 +163,8 @@ public class ERMailer {
             }
             temp.dispose();
         }
+        // make sure we heartbeat once
+        ERXJobLoadBalancer.jobLoadBalancer().heartbeat(workerIdentification);
         if (log.isDebugEnabled())
             log.debug("Done outgoing mail processing.");
     }
@@ -176,6 +203,7 @@ public class ERMailer {
                                 mailMessage.editingContext().deleteObject(mailMessage);                                
                             }
                         }
+                        ERXJobLoadBalancer.jobLoadBalancer().heartbeat(workerIdentification);
                     } else {
                         log.warn("Unable to create mail delivery for mail message: " + mailMessage);
                     }

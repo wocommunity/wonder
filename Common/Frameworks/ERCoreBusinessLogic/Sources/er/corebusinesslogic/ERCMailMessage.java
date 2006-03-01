@@ -39,6 +39,23 @@ public class ERCMailMessage extends _ERCMailMessage {
                                                                                           "ERCMailMessage");
             return new ERXFetchSpecificationBatchIterator(fetchSpec);
         }
+        
+        /**
+         * @param jobSet
+         * @return batch iterator for messages to be sent for the primary keys matching the jobSet
+         */
+        public ERXFetchSpecificationBatchIterator batchIteratorForUnsentMessages(ERXJobLoadBalancer.JobSet jobSet) {
+            EOFetchSpecification fetchSpec = EOFetchSpecification.fetchSpecificationNamed("messagesToBeSent",
+                    "ERCMailMessage");  
+            EOQualifier q=fetchSpec.qualifier();
+            ERXModuloQualifier q2=new ERXModuloQualifier("id", jobSet.modulo(), jobSet.index());
+            NSArray quals=new NSArray(new Object[] {q, q2 });
+            EOAndQualifier and=new  EOAndQualifier(quals);
+            EOFetchSpecification fs=new EOFetchSpecification(fetchSpec.entityName(), 
+                    and, fetchSpec.sortOrderings()); 
+            return new ERXFetchSpecificationBatchIterator(fs);
+        }
+        
     }
 
     //	===========================================================================
