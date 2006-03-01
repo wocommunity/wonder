@@ -129,19 +129,22 @@ public class ERMailer {
      * ERJavaMail framework for sending
      * messages.
      */
+
+    	public boolean useJobLoadBalancer() {
+    		return ERXProperties.booleanForKeyWithDefault("er.javamail.mailer.useERXJobLoadBalancer", false);
+    	}
+    
     public void processOutgoingMail() {
         if (log.isDebugEnabled())
             log.debug("Starting outgoing mail processing.");
-        
         ERXFetchSpecificationBatchIterator iterator;
-        if (ERXProperties.booleanForKey("er.javamail.mailer.useERXJobLoadBalancer")) {
-            
+        if (useJobLoadBalancer()) {
+    			JobSet idSpace=ERXJobLoadBalancer.jobLoadBalancer().idSpace(workerIdentification);
+    			log.debug("Fetching messages "+idSpace);
+    			iterator = ERCMailMessage.mailMessageClazz().batchIteratorForUnsentMessages(idSpace);
+        } else {            
             iterator = ERCMailMessage.mailMessageClazz().batchIteratorForUnsentMessages();
-        } else {
-        		JobSet idSpace=ERXJobLoadBalancer.jobLoadBalancer().idSpace(workerIdentification);
-        		log.debug("Fetching messages "+idSpace);
-            	iterator = ERCMailMessage.mailMessageClazz().batchIteratorForUnsentMessages(idSpace);
-        }
+        } 
 
         EOEditingContext ec = ERXEC.newEditingContext();
         iterator.setEditingContext(ec);
@@ -163,8 +166,6 @@ public class ERMailer {
             }
             temp.dispose();
         }
-        // make sure we heartbeat once
-        ERXJobLoadBalancer.jobLoadBalancer().heartbeat(workerIdentification);
         if (log.isDebugEnabled())
             log.debug("Done outgoing mail processing.");
     }
@@ -203,7 +204,7 @@ public class ERMailer {
                                 mailMessage.editingContext().deleteObject(mailMessage);                                
                             }
                         }
-                        ERXJobLoadBalancer.jobLoadBalancer().heartbeat(workerIdentification);
+                        if (useJobLoadBalancer()) ERXJobLoadBalancer.jobLoadBalancer().heartbeat(workerIdentification);
                     } else {
                         log.warn("Unable to create mail delivery for mail message: " + mailMessage);
                     }
