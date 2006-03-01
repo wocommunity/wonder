@@ -100,6 +100,7 @@ public class ERXBatchingDisplayGroup extends WODisplayGroup {
     protected void refetch() {
         EODatabaseDataSource ds = (EODatabaseDataSource) dataSource();
         EOFetchSpecification spec = ds.fetchSpecificationForFetch();
+        spec.setSortOrderings(sortOrderings());
         EOEditingContext ec = ds.editingContext();
         
         int rowCount = ERXEOAccessUtilities.rowCountForFetchSpecification(ec, spec);
@@ -126,7 +127,6 @@ public class ERXBatchingDisplayGroup extends WODisplayGroup {
             _batchCount = (rowCount - 1) / numberOfObjectsPerBatch() + 1;
         }
         
-        spec.setSortOrderings(sortOrderings());
         
         // fetch the primary keys, turn them into faults, then batch-fetch all the non-resident objects
         NSArray primKeys = ERXEOControlUtilities.primaryKeyValuesInRange(ec, spec, start, end);
