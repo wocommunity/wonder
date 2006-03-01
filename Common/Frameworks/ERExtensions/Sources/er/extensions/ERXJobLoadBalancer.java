@@ -183,11 +183,13 @@ public class ERXJobLoadBalancer {
     /**
      * @param workerId
      * @return the JobSet that the worker should attempt to process
+     * Given a worker looks at the shared state and determine the id space (index mod module) they should be processing
      */
     public JobSet idSpace(final WorkerIdentification workerId) {
-        /*
-         * Given a worker looks at the shared state and determine the id space (index mod module) they should be processing
-         */
+    		// heartbeat for ourselves
+    		// this will ensure we don't overcount
+    		ERXJobLoadBalancer.jobLoadBalancer().heartbeat(workerId);
+    	
         FilenameFilter friendsFilter=new FilenameFilter() {
             public boolean accept(File dir, String name) {
                 return name.indexOf(workerId.type())==0;
@@ -211,6 +213,11 @@ public class ERXJobLoadBalancer {
                     if (friendId.compareTo(workerId.id())<0) {
                         aliveFriendsWithLowerIdFound++;
                     }
+                } else {
+                	// we found a dead worker - remove his entry to keep the shared directory clean
+                	if (!friend.delete()) {
+                		log.info("Could not delete dead worker entry: "+friend.getAbsolutePath());
+                	}
                 }
             } catch (FileNotFoundException e) {
             } catch (IOException e2) {
