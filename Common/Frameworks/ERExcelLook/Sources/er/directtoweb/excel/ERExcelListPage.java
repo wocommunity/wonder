@@ -60,7 +60,22 @@ public class ERExcelListPage extends ERD2WListPage {
 
     public NSArray currentBatch() {
         log.info("Current batch, index: " + index);
-        return hasBatchIterator() ? batchIterator().batchWithIndex(index) : objects;
+        NSArray currentBatch = null;
+
+        if (hasBatchIterator()) {
+            EOEditingContext transientEditingContext = batchIterator().editingContext();
+            if (transientEditingContext != null) {
+                log.info("Disposing transientEditingContext");
+                transientEditingContext.dispose();
+            }
+            transientEditingContext = ERXEC.newEditingContext();
+            batchIterator().setEditingContext(transientEditingContext);
+            currentBatch = batchIterator().batchWithIndex(index);
+        } else {
+            currentBatch = objects;
+        }
+
+        return currentBatch;
     }
     
     public boolean hasBatchIterator() { return batchIterator() != null; }
