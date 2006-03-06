@@ -33,19 +33,47 @@ public class PostgresqlExpression extends JDBCExpression {
     /**
      * Selector used for case insensitive regular expressions.
      **/
-    public static final NSSelector CaseInsensitiveRegexOperator = new NSSelector( "~*", new Class[]{ Object.class });
+    // CHECKME AK: why is this public??
+    public static final NSSelector CASE_INSENSITIVE_REGEX_OPERATOR = new NSSelector( "~*", new Class[]{ Object.class });
     
     /**
      * Selector used for case sensitive regular expressions.
      */
-    public static final NSSelector RegexOperator = new NSSelector( "~", new Class[]{ Object.class });
+    // CHECKME AK: why is this public??
+    public static final NSSelector REGEX_OPERATOR = new NSSelector( "~", new Class[]{ Object.class });
+
+    /**
+     * Lookup table for conversion of bytes -> hex.
+     */
+    private static final char HEX_VALUES[] = {
+        '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
+        'A', 'B', 'C', 'D', 'E', 'F'
+    };
     
     /**
-     * if true, don't use typecasting. 
+     * SQL escape character
      */
-    private Boolean disableTypeCasting = null;
+    private static final char SQL_ESCAPE_CHAR = '|';
+
+    /**
+     * Quote character when using case sensitive queries.
+     */
+    private static final String EXTERNAL_NAME_QUOTE_CHARACTER = "\"";   
+
+    /**
+     * formatter to use when handling timestamps
+     */
+    private static final NSTimestampFormatter TIMESTAMP_FORMATTER = new NSTimestampFormatter("%Y-%m-%d %H:%M:%S.%F");
+
+    /**
+     * If true, don't use typecasting, ie: 'some text'::varcchar(255)
+     */
+    private Boolean _disableTypeCasting = null;
     
-    private Boolean disableBindVariables = null;
+    /**
+     * If true, queries will be created by using 
+     */
+    private Boolean _disableBindVariables = null;
     
     /**
      * Holds array of join clauses.
@@ -56,22 +84,8 @@ public class PostgresqlExpression extends JDBCExpression {
      * Fetch spec limit ivar
      */
     private int _fetchLimit;
-    
-    /**
-     * Lookup table for conversion of bytes -> hex.
-     */
-    private static final char _HEX_VALUES[] = {
-        '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
-        'A', 'B', 'C', 'D', 'E', 'F'
-    };
-    
-    private static final char _SQL_ESCAPE_CHAR = '|';
-
-    private static final String _EXTERNAL_NAME_QUOTE_CHARACTER = "\"";   
-
-    private static final NSTimestampFormatter _TIMESTAMP_FORMATTER = new NSTimestampFormatter("%Y-%m-%d %H:%M:%S.%F");
-    
-    private boolean _useCaseSensitiveNames = Boolean.getBoolean(getClass().getName() + ".useCaseSensitiveNames");
+     
+    private Boolean _enableIdentifierQuoting;
     
     /**
      * Overridden to remove the rtrim usage. The original implementation
@@ -82,8 +96,21 @@ public class PostgresqlExpression extends JDBCExpression {
         super(entity);
     }
     
-    private boolean useCaseSensitiveNames() {
-        return _useCaseSensitiveNames;
+    /**
+     * Checks the system property
+     * <code>com.webobjects.jdbcadaptor.PostgresqlExpression.enableIdentifierQuoting</code>
+     * to enable or disable quoting (default) of schema names, table names and
+     * field names. Required if names which are case sensitive or reserved words
+     * or have special characters.
+     * 
+     * @return
+     */
+
+    private boolean enableIdentifierQuoting() {
+        if(_enableIdentifierQuoting == null) {
+            _enableIdentifierQuoting = Boolean.getBoolean(getClass().getName() + ".enableIdentifierQuoting") ? Boolean.TRUE : Boolean.FALSE;
+        }
+        return _enableIdentifierQuoting.booleanValue();
     }
     
     /**
@@ -169,8 +196,8 @@ public class PostgresqlExpression extends JDBCExpression {
         }
         //timc 2006-02-26 IMPORTANT or quotes are ignored and mixed case field names won't work
         String rightTable;
-        String leftTable = leftEntity.valueForSQLExpression(this); 
-        if(useCaseSensitiveNames()) {
+        String leftTable; 
+        if(enableIdentifierQuoting()) {
             rightTable = rightEntity.valueForSQLExpression(this);
             leftTable = leftEntity.valueForSQLExpression(this);
         } else {
@@ -204,7 +231,7 @@ public class PostgresqlExpression extends JDBCExpression {
             EOJoin currentJoin = (EOJoin)joins.objectAtIndex(i);
             String left;
             String right;
-            if(useCaseSensitiveNames()) {
+            if(enableIdentifierQuoting()) {
                 left = leftAlias +"."+ sqlStringForSchemaObjectName(currentJoin.sourceAttribute().columnName());
                 right =  rightAlias +"."+ sqlStringForSchemaObjectName(currentJoin.destinationAttribute().columnName());
             } else {
@@ -351,7 +378,7 @@ public class PostgresqlExpression extends JDBCExpression {
         if(obj instanceof NSData) {
             value = sqlStringForData((NSData)obj);
         } else if((obj instanceof NSTimestamp) && isTimestampAttribute(eoattribute)) {
-            value = "'" + _TIMESTAMP_FORMATTER.format(obj) + "'";
+            value = "'" + TIMESTAMP_FORMATTER.format(obj) + "'";
         } else if(obj instanceof String) {
         	value = formatStringValue((String)obj);
         } else if(obj instanceof Number) {
@@ -473,7 +500,7 @@ public class PostgresqlExpression extends JDBCExpression {
      * other database system.
      */
     public char sqlEscapeChar() {
-        return _SQL_ESCAPE_CHAR;
+        return SQL_ESCAPE_CHAR;
     }
     
     /**
@@ -481,7 +508,7 @@ public class PostgresqlExpression extends JDBCExpression {
      * 
      */
     public String externalNameQuoteCharacter() { 
-        return (useCaseSensitiveNames() ? _EXTERNAL_NAME_QUOTE_CHARACTER : ""); 
+        return (enableIdentifierQuoting() ? EXTERNAL_NAME_QUOTE_CHARACTER : ""); 
     }
    
     /**
@@ -493,7 +520,7 @@ public class PostgresqlExpression extends JDBCExpression {
      */
     public String sqlStringForAttribute(EOAttribute attribute) {
         String sql = null;
-        if ( attribute.isDerived() || useAliases() || attribute.columnName() == null || !useCaseSensitiveNames()) {
+        if ( attribute.isDerived() || useAliases() || attribute.columnName() == null || !enableIdentifierQuoting()) {
             sql = super.sqlStringForAttribute(attribute);
         } else {
             sql = sqlStringForSchemaObjectName(attribute.columnName());
@@ -510,10 +537,10 @@ public class PostgresqlExpression extends JDBCExpression {
      */
     public String tableListWithRootEntity(EOEntity entity) {
         String sql = null;
-        if ( useAliases() || !useCaseSensitiveNames()) {
+        if ( useAliases()) {
             sql = super.tableListWithRootEntity(entity);
         } else {
-            sql = entity.valueForSQLExpression(this); //which must be sqlStringForSchemaObjectName(entity.externalName());
+            sql = entity.valueForSQLExpression(this); 
         }
         //NSLog.out.appendln("PostgresqlExpression.tableListWithRootEntity " + entity.externalName() + ", useAliases() = " + useAliases() + ", sql = " + sql); 
         return sql;
@@ -535,8 +562,8 @@ public class PostgresqlExpression extends JDBCExpression {
         int nibbles = 0;
         for(int i = 0; i < length; i++)  {
             byte b = bytes[i];
-            hex[nibbles++] = _HEX_VALUES[((b >> 4) + 16) % 16];
-            hex[nibbles++] = _HEX_VALUES[((b & 15) + 16) % 16];
+            hex[nibbles++] = HEX_VALUES[((b >> 4) + 16) % 16];
+            hex[nibbles++] = HEX_VALUES[((b & 15) + 16) % 16];
         }
         return "decode('" + new String(hex) + "','hex')";
     }
@@ -551,7 +578,7 @@ public class PostgresqlExpression extends JDBCExpression {
      * @return  the SQL operator string
      */
     public String sqlStringForSelector(NSSelector selector, Object value){
-        if(CaseInsensitiveRegexOperator.name().equals( selector.name() ) || RegexOperator.name().equals( selector.name() ) ) {
+        if(CASE_INSENSITIVE_REGEX_OPERATOR.name().equals( selector.name() ) || REGEX_OPERATOR.name().equals( selector.name() ) ) {
             return selector.name();
         }
         return super.sqlStringForSelector(selector, value);
@@ -629,10 +656,10 @@ public class PostgresqlExpression extends JDBCExpression {
      * @return
      */
     private boolean disableTypeCasting() {
-        if (disableTypeCasting == null) {
-        	disableTypeCasting = Boolean.getBoolean("com.webobjects.jdbcadaptor.PostgresqlExpression.disableTypeCasting") ? Boolean.TRUE : Boolean.FALSE;
+        if (_disableTypeCasting == null) {
+        	_disableTypeCasting = Boolean.getBoolean("com.webobjects.jdbcadaptor.PostgresqlExpression.disableTypeCasting") ? Boolean.TRUE : Boolean.FALSE;
         }
-        return disableTypeCasting.booleanValue();
+        return _disableTypeCasting.booleanValue();
     }
     
     /**
@@ -641,10 +668,10 @@ public class PostgresqlExpression extends JDBCExpression {
      * @return
      */
     private boolean disableBindVariables() {
-    	if (disableBindVariables == null) {
-    		disableBindVariables = Boolean.getBoolean("com.webobjects.jdbcadaptor.PostgresqlExpression.disableBindVariables") ? Boolean.TRUE : Boolean.FALSE;
+    	if (_disableBindVariables == null) {
+    		_disableBindVariables = Boolean.getBoolean("com.webobjects.jdbcadaptor.PostgresqlExpression.disableBindVariables") ? Boolean.TRUE : Boolean.FALSE;
     	}
-    	return disableBindVariables.booleanValue();
+    	return _disableBindVariables.booleanValue();
     }
     
     /**
@@ -659,7 +686,7 @@ public class PostgresqlExpression extends JDBCExpression {
      * @param value
      */
     public void setUseBindVariables(boolean value) {
-    	disableBindVariables = (value ? Boolean.FALSE : Boolean.TRUE);
+    	_disableBindVariables = (value ? Boolean.FALSE : Boolean.TRUE);
     }
 
     /**
