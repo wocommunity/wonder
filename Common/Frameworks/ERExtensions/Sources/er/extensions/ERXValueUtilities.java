@@ -40,7 +40,7 @@ public class ERXValueUtilities {
         if (component!=null) {
             if (component.canGetValueForBinding(binding)) {
                 Object value=component.valueForBinding(binding);
-                result=value==null ? false : booleanValueWithDefault(value, def);
+                result=booleanValueWithDefault(value, def);
             }
         }
         return result;
