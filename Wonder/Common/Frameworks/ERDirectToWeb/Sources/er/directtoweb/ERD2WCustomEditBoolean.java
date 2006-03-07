@@ -71,10 +71,12 @@ public class ERD2WCustomEditBoolean extends D2WEditBoolean {
    };
     
     protected NSArray _choicesNames;
-
+    protected String _radioBoxGroupName;
+    
     public void reset(){
         super.reset();
         _choicesNames = null;
+        _radioBoxGroupName = null;
     }
 
     public Object yesNoBoolean() {
@@ -88,8 +90,11 @@ public class ERD2WCustomEditBoolean extends D2WEditBoolean {
     	BooleanProxy proxy = (BooleanProxy)newYesNoBoolean;
     	object().validateTakeValueForKeyPath(proxy.value(), propertyKey());
     }
-    public String radioBoxGroupName(){
-        return ("YesNoGroup_"+d2wContext().propertyKey());
+    public String radioBoxGroupName(){ 
+        if (_radioBoxGroupName == null) { 
+            _radioBoxGroupName = "YesNoGroup_"+ context().elementID().replace('.','_'); 
+        } 
+        return _radioBoxGroupName; 
     }
 
     public NSArray choicesNames(){
