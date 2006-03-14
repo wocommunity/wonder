@@ -1039,6 +1039,25 @@ There are many ways to use this script:
             <param name="use.wonder.core" value="true" />
         </antcall>
     </target>
+    <target name="AjaxExample.all">
+        <antcall target="global.application" >
+            <param name="project.type" value="application" />
+            <param name="project.principal.class" value="Application" />
+            <param name="project.name" value="AjaxExample" />
+            <param name="project.dir" value="Ajax/Ajax" />
+	        <param name="use.additional.framework.1" value="Ajax.framework" />
+            <param name="use.wonder.core" value="true" />
+        </antcall>
+    </target>
+    <target name="Ajax.framework.all">
+        <antcall target="global.framework" >
+            <param name="project.principal.class" value="" />
+            <param name="project.name" value="Ajax" />
+            <param name="project.dir" value="Ajax/Ajax" />
+
+            <param name="use.wonder.core" value="true" />
+        </antcall>
+    </target>
     <target name="ERWorkerChannel.all">
         <antcall target="global.framework" >
             <param name="project.principal.class" value="" />
@@ -1078,6 +1097,8 @@ There are many ways to use this script:
     
     <target name="ExcelGeneration.all" depends="ExcelGenerator.all, EGSampleApp.all" />
 
+    <target name="Ajax.all" depends=" Ajax.framework.all, AjaxExample.all" />
+
     <target name="SVGObjects.example.all" depends="SVGObjects.ComponentTour.all, SVGObjects.eCards.all, SVGObjects.EZForms.all, SVGObjects.Hello.all, SVGObjects.PopIdol.all" />
     <target name="SVGObjects.all" depends="SVGObjects.framework.all , SVGObjects.example.all" />
 
@@ -1086,7 +1107,7 @@ There are many ways to use this script:
 
     <target name="experimental.all" depends="DevStudio.all" />
 
-    <target name="frameworks.all" depends="common.frameworks.all, BTBusinessLogic.all, ERMiniUglyLook.all, ExcelGenerator.all, Validity.framework.all, SVGObjects.framework.all, PostgresqlPlugIn.all, WOPayPal.all, DRGrouping.all, WRReporting.all"/>
+    <target name="frameworks.all" depends="common.frameworks.all, BTBusinessLogic.all, ERMiniUglyLook.all, ExcelGenerator.all,  Ajax.framework.all, Validity.framework.all, SVGObjects.framework.all, PostgresqlPlugIn.all, WOPayPal.all, DRGrouping.all, WRReporting.all"/>
     <target name="applications.all" depends="DevStudio.all, BugTracker.all, ERMailer.all, Validity.application.all"/>
     <target name="examples.all" depends="NetStruxrCaseStudy.all, ERMovies.all, D2WListExample.all, D2WInspectExample.all, EGSampleApp.all, Validity.example.all, DocsByExample.all, DynaReporter.all, DRGroupingTest.all, SVGObjects.example.all "/>
 
@@ -1095,6 +1116,9 @@ There are many ways to use this script:
     <target name="all.clean">
         <antcall target="global.clean.framework" >
             <param name="project.name" value="ERJars" />
+        </antcall>
+        <antcall target="global.clean.framework" >
+            <param name="project.name" value="AjaxFramework" />
         </antcall>
         <antcall target="global.clean.framework" >
             <param name="project.name" value="ERExtensions" />
@@ -1232,6 +1256,9 @@ There are many ways to use this script:
             <param name="project.name" value="ERExtensions" />
         </antcall>
         <antcall target="global.web.framework" >
+            <param name="project.name" value="AjaxFramework" />
+        </antcall>
+        <antcall target="global.web.framework" >
             <param name="project.name" value="ERDirectToWeb" />
         </antcall>
         <antcall target="global.web.framework" >
@@ -1343,6 +1370,9 @@ There are many ways to use this script:
         <antcall target="global.web.application" >
             <param name="project.name" value="EGSampleApp" />
         </antcall>
+        <antcall target="global.web.application" >
+            <param name="project.name" value="AjaxExample" />
+        </antcall>
     </target>
     
     <target name="all.web" depends="frameworks.web, applications.web, examples.web" />
@@ -1412,6 +1442,9 @@ There are many ways to use this script:
             <param name="project.name" value="ExcelGenerator" />
         </antcall>
         <antcall target="global.install.framework" >
+            <param name="project.name" value="Ajax" />
+        </antcall>
+        <antcall target="global.install.framework" >
             <param name="project.name" value="PostgresqlPlugIn" />
         </antcall>
         <antcall target="global.install.framework" >
@@ -1464,6 +1497,9 @@ There are many ways to use this script:
         </antcall>
         <antcall target="global.install.application" >
             <param name="project.name" value="EGSampleApp" />
+        </antcall>
+        <antcall target="global.install.application" >
+            <param name="project.name" value="AjaxExample" />
         </antcall>
     </target>
 
