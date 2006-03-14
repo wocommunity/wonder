@@ -66,38 +66,45 @@ public class PostgresqlPlugIn extends JDBCPlugIn {
         NSMutableArray results = new NSMutableArray(count);
         String sequenceName = sequenceNameForEntity( entity );
         PostgresqlExpression expression = new PostgresqlExpression(entity);
-        expression.setStatement( "select count(*) from pg_class where relname = '"+ sequenceName.toLowerCase() +"' and relkind = 'S'" );
-        channel.evaluateExpression( expression );
-        NSDictionary row = channel.fetchRow();
-        channel.cancelFetch();
-        if( new Long( 0 ).equals( row.objectForKey( "COUNT" ) ) ) {
-            EOSynchronizationFactory f = createSynchronizationFactory();
-            NSArray statements = f.primaryKeySupportStatementsForEntityGroup( new NSArray( entity ) );
-            int stmCount = statements.count();
-            for( int i = 0; i < stmCount; i++ ) {
-                channel.evaluateExpression( (EOSQLExpression) statements.objectAtIndex(i) );
-            }            
+        for(int tries = 0; tries < 2; tries ++) {
+        	try {
+        		expression.setStatement("SELECT SETVAL( '"+ sequenceName +"', NEXTVAL('"+ sequenceName +"') + "+ (count-1) +" )"); //, false
+        		channel.evaluateExpression( expression );
+        		NSDictionary row = channel.fetchRow();
+        		channel.cancelFetch();
+        		long maxValue = ((Number) row.objectForKey("SETVAL")).longValue();
+        		EOAttribute attribute =  (EOAttribute) entity.primaryKeyAttributes().lastObject();
+        		String attrName = attribute.name();
+        		boolean isIntType = "i".equals(attribute.valueType());
+        		for( int i = 0; i < count; i++ ) {
+        			long newPK = maxValue - count + 1 + i;
+        			Number value;
+        			if(isIntType) { 
+        				value = new Integer((int) newPK);
+        			} else {
+        				value = new Long(newPK);
+        			}
+        			results.addObject(new NSDictionary( value, attrName));
+        		}
+        		return results;
+        	} catch(JDBCAdaptorException ex) {
+        		expression.setStatement( "select count(*) from pg_class where relname = '"+ sequenceName.toLowerCase() +"' and relkind = 'S'" );
+        		channel.evaluateExpression( expression );
+        		NSDictionary row = channel.fetchRow();
+        		channel.cancelFetch();
+        		if( new Long( 0 ).equals( row.objectForKey( "COUNT" ) ) ) {
+        			EOSynchronizationFactory f = createSynchronizationFactory();
+        			NSArray statements = f.primaryKeySupportStatementsForEntityGroup( new NSArray( entity ) );
+        			int stmCount = statements.count();
+        			for( int i = 0; i < stmCount; i++ ) {
+        				channel.evaluateExpression( (EOSQLExpression) statements.objectAtIndex(i) );
+        			}            
+        		} else {
+        			throw new IllegalStateException("Caught exception, but sequence did already exist: " + ex);
+        		}
+        	}
         }
-        expression.setStatement
-            ("SELECT SETVAL( '"+ sequenceName +"', NEXTVAL('"+ sequenceName +"') + "+ (count-1) +" )"); //, false
-        channel.evaluateExpression( expression );
-        row = channel.fetchRow();
-        channel.cancelFetch();
-        long maxValue = ((Number) row.objectForKey("SETVAL")).longValue();
-        EOAttribute attribute =  (EOAttribute) entity.primaryKeyAttributes().lastObject();
-        String attrName = attribute.name();
-        boolean isIntType = "i".equals(attribute.valueType());
-        for( int i = 0; i < count; i++ ) {
-            long newPK = maxValue - count + 1 + i;
-            Number value;
-            if(isIntType) { 
-                value = new Integer((int) newPK);
-            } else {
-                value = new Long(newPK);
-            }
-            results.addObject(new NSDictionary( value, attrName));
-        }            
-        return results;
+		throw new IllegalStateException("Could not create or read sequence " + sequenceName);
     }
     
     /**
