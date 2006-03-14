@@ -1197,10 +1197,7 @@ public class ERXEOAccessUtilities {
                 for(int i = 0; i < ops.count(); i++) {
                     EOAdaptorOperation op = (EOAdaptorOperation)ops.objectAtIndex(i);
                     try {
-                        EOEntity entity = op.entity();
-                        if(!entity.name().equals("WatchFolder")) {
-                            achannel.performAdaptorOperation(op);
-                        }
+                        achannel.performAdaptorOperation(op);
                     } catch(EOGeneralAdaptorException ex) {
                         log.error("Failed op " + i + ": " + ex + "\n" + op);
                         throw ex;
