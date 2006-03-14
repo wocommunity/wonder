@@ -526,6 +526,7 @@
 				05AE6FB50888299B00A99852,
 				0599CE53088DD7A800447E6D,
 				05FEB79409B38EA000B9ABBC,
+				C4834F6E09C650AA00BFC3D8,
 			);
 			isa = PBXSourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -2813,6 +2814,31 @@
 //9D2
 //9D3
 //9D4
+//C40
+//C41
+//C42
+//C43
+//C44
+		C4834F6D09C650AA00BFC3D8 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.java;
+			name = ERXModuloQualifier.java;
+			path = er/extensions/ERXModuloQualifier.java;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		C4834F6E09C650AA00BFC3D8 = {
+			fileRef = C4834F6D09C650AA00BFC3D8;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+//C40
+//C41
+//C42
+//C43
+//C44
 //D80
 //D81
 //D82
@@ -6413,6 +6439,7 @@
 		};
 		F59C576C02C4565601000102 = {
 			children = (
+				C4834F6D09C650AA00BFC3D8,
 				F59C579A02C4565701000102,
 				F6E7989A02C8799401AD0D07,
 				419935740528DD360081353A,
