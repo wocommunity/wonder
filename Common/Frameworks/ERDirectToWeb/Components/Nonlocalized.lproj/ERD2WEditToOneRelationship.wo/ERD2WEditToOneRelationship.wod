@@ -2,7 +2,7 @@ EditToOneRelationship: ERXToOneRelationship {
         destinationDisplayKey = keyWhenRelationship;
         possibleChoices = restrictedChoiceList;
         destinationSortKey = d2wContext.sortKey;
-        isMandatory = d2wContext.isMandatory;
+        // isMandatory = d2wContext.isMandatory;
         maxColumns = d2wContext.numCols;
         relationshipKey = d2wContext.propertyKey;
         size = d2wContext.size;
