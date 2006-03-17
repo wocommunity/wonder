@@ -87,7 +87,7 @@ import com.webobjects.foundation.NSMutableDictionary;
  * public void savePage(WOComponent page) {
  *     NSDictionary ui = context().request().userInfo();
  *     if (ui == null
- *             || ui.objectForKey(ca.os.utilitaires.JSProxyRPC.AJAX_REQUEST_KEY) == null) {
+ *             || ui.objectForKey(er.ajax.JSONRPCProxy.AJAX_REQUEST_KEY) == null) {
  *         super.savePage(page);
  *     }
  * }
@@ -121,10 +121,9 @@ import com.webobjects.foundation.NSMutableDictionary;
  * </dl>
  * </blockquote>
  * 
- * <h2>À faire</h2>
+ * <h2>Todo</h2>
  * <ul>
- * <li> Complêter l'intégration de JSON-RPC-Java afin de pouvoir profiter de
- * toutes les possibilitées offertes par cette librairie (références distantes,
+ * <li> Complete the JSON-RPC integration to be able to leverage all possibilities of that library (foreignt references,
  * etc.).
  * </ul>
  * 
@@ -136,7 +135,7 @@ import com.webobjects.foundation.NSMutableDictionary;
 
 public class JSONRPCProxy extends WOComponent {
 
-    /** Logger Log4J du nom "ca.os.utilitaires.JSProxyRPC" */
+    /** Logger Log4J du nom "er.ajax.JSONRPCProxy" */
     private static Logger log = Logger.getLogger(JSONRPCProxy.class);
 
     /** 
