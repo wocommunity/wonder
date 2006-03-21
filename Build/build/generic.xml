@@ -240,7 +240,7 @@ There are many ways to use this script:
             <classpath refid="ant.classpath"/>
         </taskdef>
         <echo message="${project.dir}/Sources" />
-        <wocompile srcdir="${project.dir}/Sources" destdir="${build.classes}" debug="on" optimize="off" deprecation="on">
+        <wocompile srcdir="${project.dir}/Sources" destdir="${build.classes}" debug="on" optimize="off" deprecation="on" source="1.4" target="1.4">
             <classpath>
                 <fileset dir="${project.dir}/Libraries">
                     <include name="**/*.jar" />
@@ -346,6 +346,8 @@ There are many ways to use this script:
             <classpath refid="ant.classpath"/>
         </taskdef>
 
+        <available property="custom_resources_copy_exists"  file="${project.dir}/custom_resources_copy.xml" />
+
         <woframework name="${project.name}" destDir="${build.root}" principalClass="${project.principal.class}" jarName="${project.name}">
             <lib dir="${project.dir}/Libraries">
                 <include name="**/*.jar" />
@@ -357,20 +359,24 @@ There are many ways to use this script:
                 <include name="**/*.java" />
             </sources>
             <resources dir="${project.dir}/Components">
-                <include name="**.api" />
-                <include name="**/*.wo/**" />
+                <include unless="custom_resources_copy_exists" name="**.api" />
+                <include unless="custom_resources_copy_exists" name="**/*.wo/**" />
+                <!-- include nothing here if the pattern files exist -->
+                <include if="custom_resources_copy_exists" name="do_not_include_anything" />
             </resources>
             <resources dir="${project.dir}/Resources">
-                <include name="*.eomodeld/**" />
-                <include name="**/*.plist" />
-                <include name="**/*.d2wmodel" />
-                <include name="**/Properties" />
-                <include name="**/*.strings" />
-                <include name="**/*.sh" />
-                <include name="**/*.dat" />
-                <include name="**/mime.types" /> 
-                <include name="**/*.*" /> 
-                <include name="**/GSVUtilityParser.jj" /> <!-- Validity specific --> 
+                <include unless="custom_resources_copy_exists" name="*.eomodeld/**" />
+                <include unless="custom_resources_copy_exists" name="**/*.plist" />
+                <include unless="custom_resources_copy_exists" name="**/*.d2wmodel" />
+                <include unless="custom_resources_copy_exists" name="**/Properties" />
+                <include unless="custom_resources_copy_exists" name="**/*.strings" />
+                <include unless="custom_resources_copy_exists" name="**/*.sh" />
+                <include unless="custom_resources_copy_exists" name="**/*.dat" />
+                <include unless="custom_resources_copy_exists" name="**/mime.types" /> 
+                <include unless="custom_resources_copy_exists" name="**/*.*" /> 
+                <include unless="custom_resources_copy_exists" name="**/GSVUtilityParser.jj" /> <!-- Validity specific --> 
+                <!-- include nothing here if the pattern files exist -->
+                <include    if="custom_resources_copy_exists" name="do_not_include_anything" />
             </resources>
             <wsresources dir="${project.dir}/WebServerResources">
                 <include name="**/*.gif" />
@@ -381,6 +387,7 @@ There are many ways to use this script:
                 <include name="**/*.html" />
             </wsresources>
         </woframework>
+        <antcall target="global.framework.resource.copy" />
         <exec dir="${project.dir}" executable="/bin/sh" os="Mac OS X">
             <arg line="${build.root}/ERJars.framework/Resources/CPCreateFileList.sh" />
         </exec>
@@ -388,6 +395,11 @@ There are many ways to use this script:
         <echo message="-------------------------------------" />
         <echo message="${project.name}.framework done" />
         <echo message="-------------------------------------" />
+    </target>
+
+    <target name="global.framework.resource.copy" if="custom_resources_copy_exists">
+        <echo message="Running custom resources copy target for ${project.name}.framework" />
+        <ant antfile="${project.dir}/custom_resources_copy.xml" />
     </target>
 
     <target name="global.application" depends="global.properties,global.compile" >

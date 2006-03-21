@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project name="custom_resources_copy" default="default">
+    <target name="default">
+        <copy todir="${build.root}/${project.name}.framework/Resources">
+            <fileset dir="${project.dir}/Resources" casesensitive="yes">
+                <include name="**" />
+                <exclude name="CVS/**" />
+                <exclude name="Italian.lproj/**" />
+                <exclude name="d2wModel.txt" />
+            </fileset>
+            <fileset dir="${project.dir}/Components" casesensitive="yes">
+                <include name="**" />
+                <exclude name="CVS/**" />
+            </fileset>
+            <fileset dir="${project.dir}/WebServerResources" casesensitive="yes">
+                <include name="**" />
+                <exclude name="CVS/**" />
+            </fileset>
+        </copy>
+    </target>
+</project>
