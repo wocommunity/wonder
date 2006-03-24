@@ -348,7 +348,7 @@ There are many ways to use this script:
 
         <available property="custom_resources_copy_exists"  file="${project.dir}/custom_resources_copy.xml" />
 
-        <woframework name="${project.name}" destDir="${build.root}" principalClass="${project.principal.class}" jarName="${project.name}">
+        <woframework name="${project.name}" destDir="${build.root}" principalClass="${project.principal.class}">
             <lib dir="${project.dir}/Libraries">
                 <include name="**/*.jar" />
             </lib>
