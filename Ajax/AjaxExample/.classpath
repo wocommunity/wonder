@@ -5,6 +5,6 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/Ajax"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/ERJars"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/WEB_OBJECTS_EXTENSIONS"/>
+	<classpathentry kind="lib" path="/Library/WebObjects/Extensions/servlet.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
