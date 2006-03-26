@@ -2,6 +2,10 @@ Hyperlink1: WOHyperlink {
 	href = "javascript:addMore(5);";
 }
 
+Hyperlink2: WOHyperlink {
+	pageName = "AutoCompleteExample";
+}
+
 Image1: WOImage {
 	align = "left";
 	alt = "JSON logo";
@@ -12,12 +16,12 @@ Image1: WOImage {
 	width = 55;
 }
 
-JSONRPCAdd: JSONRPCProxy {
+JSONRPCAdd: AjaxProxy {
 	name = "jason";
 	proxyName = "wopage";
 }
 
-JSONRPCDict: JSONRPCProxy {
+JSONRPCDict: AjaxProxy {
 	name = "jsonrpc";
 	proxyName = "dict";
 	proxy = dict;
