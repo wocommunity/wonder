@@ -3,21 +3,15 @@ package er.ajax;
 import java.text.ParseException;
 import java.util.NoSuchElementException;
 
-import org.apache.log4j.Logger;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import com.metaparadigm.jsonrpc.JSONRPCBridge;
 import com.metaparadigm.jsonrpc.JSONRPCResult;
 import com.webobjects.appserver.WOActionResults;
-import com.webobjects.appserver.WOApplication;
-import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
-import com.webobjects.appserver.WOMessage;
 import com.webobjects.appserver.WORequest;
-import com.webobjects.appserver.WOResourceManager;
 import com.webobjects.appserver.WOResponse;
-import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSKeyValueCoding;
 import com.webobjects.foundation.NSMutableDictionary;
 
