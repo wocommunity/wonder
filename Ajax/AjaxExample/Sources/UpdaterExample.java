@@ -11,4 +11,8 @@ public class UpdaterExample extends WOComponent {
     public long test() {
         return System.currentTimeMillis();
     }
+
+    public WOComponent someAction() {
+        return pageWithName("Main");
+    }
 }

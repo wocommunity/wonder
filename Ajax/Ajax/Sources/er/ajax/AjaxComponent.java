@@ -29,6 +29,21 @@ public abstract class AjaxComponent extends WOComponent {
     }
 
     /**
+     * Utility to get the value of a binding or a default value if none is
+     * supplied.
+     * @param name
+     * @param defaultValue
+     * @return
+     */
+    public Object valueForBinding(String name, Object defaultValue) {
+        Object value = defaultValue;
+        if(hasBinding(name)) {
+            value = defaultValue;
+        }
+        return value;
+    }
+
+    /**
      * Creates a response for the given context (which can be null), sets
      * the charset to UTF-8, the connection to keep-alive and flags it as
      * a Ajax request by adding an AJAX_REQUEST_KEY header. You can check this
