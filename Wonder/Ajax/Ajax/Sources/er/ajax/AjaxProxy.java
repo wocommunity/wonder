@@ -48,7 +48,7 @@ import com.webobjects.foundation.NSMutableDictionary;
  * will be used as follow : <table border="1">
  * <tr>
  * <th width="50%">JavaScript (client)</th>
- * <th width="50%">Java (serveur)</th>
+ * <th width="50%">Java (server)</th>
  * </tr>
  * <tr>
  * <td><code>
@@ -95,19 +95,23 @@ import com.webobjects.foundation.NSMutableDictionary;
  * <blockquote>
  * <dl>
  * <dt>proxy</dt>
- * <dd>Server side object (Java) that will be visible for rpc communication (Javascript).  If no object is bound, the parent() object is assigned by default.</dd>
+ * <dd>Server side object (Java) that will be visible for rpc communication (Javascript).  
+ * If no object is bound, the parent() object is assigned by default.</dd>
  * <dt>proxyName</dt>
  * <dd>Client side name (Javascript) used to identify the proxy (Java) from the bridge object.</dd>
  * <dt>name</dt>
  * <dd>Client side name (Javascript) of the bridge object.</dd>
  * <dt>JSONRPCBridge</dt>
- * <dd>Server side object (Java) used to handle the request.  Of no value are bound, a new object is created for every ajax request.  If a binding is there but null value, a new object will be created and pushed to the binding so that this new object can be shared for multiple proxy. </dd>
+ * <dd>Server side object (Java) used to handle the request.  Of no value are bound, a new 
+ * object is created for every ajax request.  If a binding is there but null value, a new 
+ * object will be created and pushed to the binding so that this new object can be shared 
+ * for multiple proxy. </dd>
  * </dl>
  * </blockquote>
  * 
  * <h2>Todo</h2>
  * <ul>
- * <li> Complete the JSON-RPC integration to be able to leverage all possibilities of that library (foreignt references,
+ * <li> Complete the JSON-RPC integration to be able to leverage all possibilities of that library (foreign references,
  * etc.).
  * </ul>
  * 
@@ -168,10 +172,10 @@ public class AjaxProxy extends AjaxComponent {
                 // problem. just warn the user (programmer), that it might cause
                 // problem.
                 log
-                        .warn("JSONRPCProxy detected a conflict.  you defined the javascript variable '"
+                        .warn("JSONRPCProxy detected a conflict.  You defined the javascript variable '"
                                 + name
                                 + "'  multiple times, and linked to differents proxy objects: <"
-                                + bridge + "> et <" + oldValue + ">");
+                                + bridge + "> and <" + oldValue + ">");
             }
         }
     }
@@ -181,7 +185,7 @@ public class AjaxProxy extends AjaxComponent {
         WOResponse response = createResponse(null);
 
         String inputString = request.contentString();
-        log.debug("JSONRPCServlet.service recv: " + inputString);
+        log.debug("Input: " + inputString);
 
         // Process the request
         JSONObject input = null;
@@ -207,11 +211,9 @@ public class AjaxProxy extends AjaxComponent {
             int reference = input.optInt("objectID");
 
             if (reference != 0) {
-                log.debug("JSONRPCServlet.service call objectID=" + reference
-                        + " " + methodName + "(" + arguments + ")");
+                log.debug("Call objectID=" + reference + " " + methodName + "(" + arguments + ")");
             } else {
-                log.debug("JSONRPCServlet.service call " + methodName + "("
-                        + arguments + ")");
+                log.debug("Call " + methodName + "(" + arguments + ")");
             }
 
             Object proxy;
@@ -236,12 +238,10 @@ public class AjaxProxy extends AjaxComponent {
             bridge.registerObject(proxyName, proxy);
             output = bridge.call(new Object[] { proxy }, input);
         } catch (ParseException e) {
-            log
-                    .error("JSONRPCServlet.service can't parse call: "
-                            + inputString);
+            log.error("Can't parse call: " + inputString);
             output = JSONRPCResult.MSG_ERR_PARSE;
         } catch (NoSuchElementException e) {
-            log.error("JSONRPCServlet.service no method in request");
+            log.error("No method in request");
             output = JSONRPCResult.MSG_ERR_NOMETHOD;
         }
 

@@ -5,3 +5,7 @@ Hyperlink1: WOHyperlink {
 Hyperlink2: WOHyperlink {
 	pageName = "AutoCompleteExample";
 }
+
+Hyperlink3: WOHyperlink {
+	pageName = "SliderExample";
+}
