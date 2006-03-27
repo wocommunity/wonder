@@ -8,6 +8,13 @@ public class AjaxUpdateContainer extends AjaxComponent {
     public AjaxUpdateContainer(WOContext context) {
         super(context);
     }
+    
+    /**
+     * Overridden because the component is stateless
+     */
+    public boolean isStateless() {
+        return true;
+    }
 
     /**
      * Overridden because the component does not synch with the bindings.
@@ -16,7 +23,10 @@ public class AjaxUpdateContainer extends AjaxComponent {
         return false;
     }
  
-
+    public String elementName() {
+        return (String) valueForBinding("elementName", "span");
+    }
+    
     public Object valueForBinding(String name, Object defaultValue) {
         Object value = defaultValue;
         if(hasBinding(name)) {

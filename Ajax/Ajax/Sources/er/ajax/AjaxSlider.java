@@ -33,16 +33,7 @@ public class AjaxSlider extends AjaxComponent {
     public boolean synchronizesVariablesWithBindings() {
         return false;
     }
- 
-
-    public Object valueForBinding(String name, Object defaultValue) {
-        Object value = defaultValue;
-        if(hasBinding(name)) {
-            value = defaultValue;
-        }
-        return value;
-    }
-    
+     
     /**
      * Overridden to add the initialization javascript for the auto completer.
      */

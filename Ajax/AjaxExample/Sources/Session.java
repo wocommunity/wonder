@@ -3,7 +3,7 @@
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOSession;
 
-import er.ajax.AjaxProxy;
+import er.ajax.*;
 
 public class Session extends WOSession {
     
@@ -11,7 +11,9 @@ public class Session extends WOSession {
      * Overridden so that Ajax requests are not saved in the page cache.
      */
     public void savePage(WOComponent arg0) {
-        if(context().response().headerForKey(AjaxProxy.AJAX_REQUEST_KEY) == null) {
+        if((context().response().headerForKey(AjaxComponent.AJAX_REQUEST_KEY) == null &&
+                (context().response().userInfo() != null && context().response().userInfo().objectForKey(AjaxComponent.AJAX_REQUEST_KEY) == null))
+                || context().response().userInfo() == null) {
             super.savePage(arg0);
         }
     }
