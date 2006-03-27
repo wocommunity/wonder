@@ -28,17 +28,24 @@ public abstract class AjaxComponent extends WOComponent {
         super(context);
     }
 
-
+    /**
+     * Creates a response for the given context (which can be null), sets
+     * the charset to UTF-8, the connection to keep-alive and flags it as
+     * a Ajax request by adding an AJAX_REQUEST_KEY header. You can check this
+     * header in the session to decide if you want to save the request or not.
+     * @param context
+     * @return
+     */
     protected WOResponse createResponse(WOContext context) {
         WOApplication app = WOApplication.application();
-        WOResponse response = app.createResponseInContext(null);
+        WOResponse response = app.createResponseInContext(context);
 
         // Encode using UTF-8, although We are actually ASCII clean as all
         // unicode data is JSON escaped using backslash u. This is less data
         // efficient for foreign character sets but it is needed to support
         // naughty browsers such as Konqueror and Safari which do not honour the
         // charset set in the response
-        response.setHeader("text/plain;charset=utf-8", "content-type");
+        response.setHeader("text/plain; charset=utf-8", "content-type");
         response.setHeader("Connection", "keep-alive");
         response.setHeader(AJAX_REQUEST_KEY, AJAX_REQUEST_KEY);
         return response;
@@ -48,7 +55,13 @@ public abstract class AjaxComponent extends WOComponent {
         String head = System.getProperty("er.ajax.AJComponent.htmlCloseHead");
         return (head == null ? "</head>" : head);
     }
-
+    
+    /**
+     * Returns the userInfo dictionary if the supplied message and replaces it with a mutable
+     * version if it isn't already one.
+     * @param message
+     * @return
+     */
     protected NSMutableDictionary mutableUserInfo(WOMessage message) {
         NSDictionary dict = message.userInfo();
         NSMutableDictionary result = null;
@@ -66,6 +79,12 @@ public abstract class AjaxComponent extends WOComponent {
         return result;
     }
 
+    /**
+     * Utility to add the given text before the given tag. Used to add stuff in the HEAD.
+     * @param res
+     * @param content
+     * @param tag
+     */
     private void insertInResponseBeforeTag(WOResponse res, String content, String tag) {
         String stream = res.contentString();
         int idx = stream.indexOf(tag);
@@ -77,7 +96,8 @@ public abstract class AjaxComponent extends WOComponent {
     }
 
     /**
-     * Adds a script tag with a correct resource url.
+     * Adds a script tag with a correct resource url in the html head tag if it isn't already present in 
+     * the response.
      * @param res
      * @param fileName
      */
@@ -90,6 +110,17 @@ public abstract class AjaxComponent extends WOComponent {
             String js = "<script type=\"text/javascript\" src=\""+ url +"\"></script>";
             insertInResponseBeforeTag(res, js, htmlCloseHead());
         }
+    }
+
+
+    /**
+     * Adds javascript code in a script tag in the html head tag. 
+     * @param res
+     * @param script
+     */
+    protected void addScriptCodeInHead(WOResponse res, String script) {
+        String js = "<script type=\"text/javascript\"><!--\n" + script +"\n//--></script>";
+        insertInResponseBeforeTag(res, js, htmlCloseHead());
     }
 
     /**
@@ -112,12 +143,6 @@ public abstract class AjaxComponent extends WOComponent {
         return (WOActionResults) result;
     }
 
-    protected WOActionResults superInvokeAction(WORequest request, WOContext context) {
-        return super.invokeAction(request, context);
-    }
-    
-    protected abstract WOActionResults handleRequest(WORequest request, WOContext context);
-
     /**
      * Provides a unique name for this component, based on the element id.
      * @return
@@ -127,28 +152,35 @@ public abstract class AjaxComponent extends WOComponent {
     }
 
     /**
-     * Adds javascript code in a script tag in the html head tag. 
-     * @param res
-     * @param script
+     * Overridden to call {@see #addRequiredWebResources(WOResponse)}.
      */
-    protected void addScriptCodeInHead(WOResponse res, String script) {
-        String js = "<script type=\"text/javascript\"><!--\n" + script +"\n//--></script>";
-        insertInResponseBeforeTag(res, js, htmlCloseHead());
-    }
-
     public void appendToResponse(WOResponse res, WOContext ctx) {
         super.appendToResponse(res, ctx);
         addRequiredWebResources(res);
     }
 
-
+    /*
     protected void superAppendToResponse(WOResponse res, WOContext ctx) {
         super.appendToResponse(res, ctx);
-        // addRequiredWebResources(res);
     }
+    
+    protected WOActionResults superInvokeAction(WORequest request, WOContext context) {
+        return super.invokeAction(request, context);
+    }
+    */
+    
     /**
-     * Appends the needed scripts for this component.
+     * Override this method to append the needed scripts for this component.
      * @param res
      */
     protected abstract void addRequiredWebResources(WOResponse res);
+    
+    /**
+     * Override this method to return the response for an Ajax request.
+     * @param request
+     * @param context
+     * @return
+     */
+    protected abstract WOActionResults handleRequest(WORequest request, WOContext context);
+
 }
