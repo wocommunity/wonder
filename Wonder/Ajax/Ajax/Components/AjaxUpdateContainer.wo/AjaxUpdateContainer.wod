@@ -1,5 +1,5 @@
 Container: WOGenericContainer {
-	elementName = ^elementName;
+	elementName = elementName;
 	id = ^id;
 	updateUrl = context.componentActionURL;
 }
