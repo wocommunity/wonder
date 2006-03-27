@@ -1,0 +1,17 @@
+ComplexAjaxAutoComplete: AjaxAutoComplete {
+	list = currentValues;
+	value = value;
+	item = currentValue;
+}
+
+Item : WOString {
+	value = currentValue;
+}
+ItemLength : WOString {
+	value = currentValue.length;
+}
+
+SimpleAjaxAutoComplete: AjaxAutoComplete {
+	list = currentValues;
+	value = value;
+}
