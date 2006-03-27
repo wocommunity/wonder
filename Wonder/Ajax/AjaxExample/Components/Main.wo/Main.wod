@@ -9,3 +9,7 @@ Hyperlink2: WOHyperlink {
 Hyperlink3: WOHyperlink {
 	pageName = "SliderExample";
 }
+
+Hyperlink4: WOHyperlink {
+	pageName = "UpdaterExample";
+}

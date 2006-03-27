@@ -1,0 +1,14 @@
+AjaxUpdateContainer1: AjaxUpdateContainer {
+	id = "test";
+	elementName = "div";
+}
+
+UpdateLink: WOGenericContainer {
+	elementName = "a";
+	href = "#";
+	onclick = "new Ajax.Updater('test', $(test).updateUrl, {});";
+}
+
+String1: WOString {
+	value = test;
+}
