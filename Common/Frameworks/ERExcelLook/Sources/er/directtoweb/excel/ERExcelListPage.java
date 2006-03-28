@@ -19,7 +19,8 @@ public class ERExcelListPage extends ERD2WListPage {
 
     protected ERXFetchSpecificationBatchIterator batchIterator;
     protected NSArray objects;
-    
+    protected EOEditingContext transientEditingContext;
+
     public ERExcelListPage(WOContext context) {
         super(context);
     }
@@ -63,7 +64,6 @@ public class ERExcelListPage extends ERD2WListPage {
         NSArray currentBatch = null;
 
         if (hasBatchIterator()) {
-            EOEditingContext transientEditingContext = batchIterator().editingContext();
             if (transientEditingContext != null) {
                 log.info("Disposing transientEditingContext");
                 transientEditingContext.dispose();
