@@ -22,6 +22,7 @@ import com.webobjects.foundation.*;
 public class ERXArrayFaultCache {
     
     private NSMutableDictionary cache = new NSMutableDictionary();
+    private static final ERXLogger log = ERXLogger.getERXLogger(ERXArrayFaultCache.class);
     
     /**
      * Register the to-many faults by entity name and relationship name. The entries
@@ -66,16 +67,17 @@ public class ERXArrayFaultCache {
             synchronized (cache) {
                 NSDictionary entries = (NSDictionary) relationshipCacheEntriesForEntity(sourceGid.entityName(), handler.relationshipName());
                 if(entries != null) {
-                    NSMutableArray snapshots = (NSMutableArray) entries.objectForKey(sourceGid);
-                    if(snapshots != null) {
-                        NSMutableArray gids = new NSMutableArray(snapshots.count());
-                        for (Enumeration enumerator = snapshots.objectEnumerator(); enumerator.hasMoreElements();) {
+                    NSArray gids = (NSArray) entries.objectForKey(sourceGid);
+                    if(gids != null) {
+                        NSMutableArray eos = new NSMutableArray(gids.count());
+                        EOEnterpriseObject source = ec.objectForGlobalID(sourceGid);
+                        for (Enumeration enumerator = gids.objectEnumerator(); enumerator.hasMoreElements();) {
                             EOGlobalID gid = (EOGlobalID) enumerator.nextElement();
                             EOEnterpriseObject eo = ec.faultForGlobalID(gid, ec);
-                            gids.addObject(eo);
+                            eos.addObject(eo);
                         }
                         EOFaultHandler.clearFault(obj);
-                        ((NSMutableArray)fault).addObjectsFromArray(gids);
+                        ((NSMutableArray)fault).addObjectsFromArray(eos);
                         return true;
                     }
                 }
