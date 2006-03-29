@@ -34,12 +34,21 @@ public class ERXDatabaseContextDelegate {
     
     /** defines if the JDBC connection should be switched to read only on certain database operations or not. Default is not. */
     private Boolean switchReadWrite = null;
+    private ERXArrayFaultCache arrayFaultCache = null;
     
     /** Returns the singleton of the database context delegate */
     public static ERXDatabaseContextDelegate defaultDelegate() {
         return _defaultDelegate;
     }
-    
+
+    public ERXArrayFaultCache arrayFaultCache() {
+        return arrayFaultCache;
+    }
+
+    public void setArrayFaultCache(ERXArrayFaultCache value) {
+        arrayFaultCache = value;
+    }
+
     /**
      * Provides for a hook to get at the original exceptions from the JDBC driver, as opposed to the cooked
      * EOGeneralAdaptorException you get from EOF. To see the exceptions, set the logger 
@@ -198,7 +207,13 @@ public class ERXDatabaseContextDelegate {
     /**
         Delegate method. Will switch the connection to read only.
      **/
-    public  boolean databaseContextShouldFetchArrayFault(EODatabaseContext eodatabasecontext, Object obj) {
+    public boolean databaseContextShouldFetchArrayFault(EODatabaseContext eodatabasecontext, Object obj) {
+        if(arrayFaultCache != null) {
+            arrayFaultCache.clearFault(obj);
+            if(!EOFaultHandler.isFault(obj)) {
+                return false;
+            }
+        }
         if(log.isDebugEnabled()) {
             log.debug("databaseContextShouldFetchArrayFault.. Setting it to ReadOnly");
         }
