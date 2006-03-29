@@ -1256,7 +1256,7 @@ There are many ways to use this script:
             <param name="project.name" value="ERExtensions" />
         </antcall>
         <antcall target="global.web.framework" >
-            <param name="project.name" value="AjaxFramework" />
+            <param name="project.name" value="Ajax" />
         </antcall>
         <antcall target="global.web.framework" >
             <param name="project.name" value="ERDirectToWeb" />
