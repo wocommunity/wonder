@@ -40,8 +40,8 @@ public class DictClient implements Serializable
     private static String DEFAULT_HOST = "localhost";
     private static int DEFAULT_PORT = 2628;
  
-    private static String host;
-    private static int port;
+    private String host;
+    private int port;
 
     private transient ArrayList strategies;
     private transient ArrayList databases;
@@ -75,7 +75,7 @@ public class DictClient implements Serializable
 	this.host = host;
     }
 
-    public void setPort(String host)
+    public void setPort(int port)
     {
 	if(sock != null && this.port != port) close();
 	this.port = port;
