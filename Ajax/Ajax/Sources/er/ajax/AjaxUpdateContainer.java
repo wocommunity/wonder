@@ -26,14 +26,6 @@ public class AjaxUpdateContainer extends AjaxComponent {
     public String elementName() {
         return (String) valueForBinding("elementName", "span");
     }
-    
-    public Object valueForBinding(String name, Object defaultValue) {
-        Object value = defaultValue;
-        if(hasBinding(name)) {
-            value = defaultValue;
-        }
-        return value;
-    }
 
     /**
      * Adds all required resources.
