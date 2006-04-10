@@ -38,7 +38,7 @@ public abstract class AjaxComponent extends WOComponent {
     public Object valueForBinding(String name, Object defaultValue) {
         Object value = defaultValue;
         if(hasBinding(name)) {
-            value = defaultValue;
+            value = valueForBinding(name);
         }
         return value;
     }
@@ -103,6 +103,9 @@ public abstract class AjaxComponent extends WOComponent {
     private void insertInResponseBeforeTag(WOResponse res, String content, String tag) {
         String stream = res.contentString();
         int idx = stream.indexOf(tag);
+        if(idx < 0) {
+            idx = stream.toLowerCase().indexOf(tag.toLowerCase());
+        }
         if(idx >= 0) {
             String pre = stream.substring(0,idx);
             String post = stream.substring(idx, stream.length());
@@ -174,16 +177,6 @@ public abstract class AjaxComponent extends WOComponent {
         addRequiredWebResources(res);
     }
 
-    /*
-    protected void superAppendToResponse(WOResponse res, WOContext ctx) {
-        super.appendToResponse(res, ctx);
-    }
-    
-    protected WOActionResults superInvokeAction(WORequest request, WOContext context) {
-        return super.invokeAction(request, context);
-    }
-    */
-    
     /**
      * Override this method to append the needed scripts for this component.
      * @param res
