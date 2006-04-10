@@ -33,7 +33,7 @@ public class AjaxSlider extends AjaxComponent {
     public boolean synchronizesVariablesWithBindings() {
         return false;
     }
-     
+
     /**
      * Overridden to add the initialization javascript for the auto completer.
      */
