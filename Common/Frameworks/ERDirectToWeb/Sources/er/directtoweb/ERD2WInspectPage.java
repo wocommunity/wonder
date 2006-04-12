@@ -178,7 +178,7 @@ public class ERD2WInspectPage extends ERD2WPage implements InspectPageInterface,
                     object().validateForUpdate();
             }
             if (object()!=null && shouldSaveChanges() && object().editingContext().hasChanges())
-                object().editingContext().saveChanges();
+                ERXEOControlUtilities.saveChanges(object().editingContext());
             saved = true;
         } catch (NSValidation.ValidationException ex) {
             errorMessage = ERXLocalizer.currentLocalizer().localizedTemplateStringForKeyWithObject("CouldNotSave", ex);
