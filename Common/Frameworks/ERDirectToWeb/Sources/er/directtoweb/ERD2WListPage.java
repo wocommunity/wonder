@@ -262,8 +262,10 @@ public class ERD2WListPage extends ERD2WPage implements ERDListPageInterface, Se
         setupPhase();
         _rowFlip = true;
         if(_hasToUpdate) {
+            willUpdate();
             displayGroup().fetch();
             _hasToUpdate = false;
+            didUpdate();
         }
         super.appendToResponse(r,c);
     }
@@ -274,6 +276,12 @@ public class ERD2WListPage extends ERD2WPage implements ERDListPageInterface, Se
         displayGroup().setDataSource(eodatasource);
         setSortOrderingsOnDisplayGroup(sortOrderings, displayGroup());
         displayGroup().fetch();
+    }
+    
+    protected void willUpdate() {
+    }
+
+    protected void didUpdate() {
     }
     
     protected void setupPhase() {
