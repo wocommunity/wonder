@@ -1044,7 +1044,7 @@ There are many ways to use this script:
             <param name="project.type" value="application" />
             <param name="project.principal.class" value="Application" />
             <param name="project.name" value="AjaxExample" />
-            <param name="project.dir" value="Ajax/Ajax" />
+            <param name="project.dir" value="Ajax/AjaxExample" />
 	        <param name="use.additional.framework.1" value="Ajax.framework" />
             <param name="use.wonder.core" value="true" />
         </antcall>
@@ -1109,7 +1109,7 @@ There are many ways to use this script:
 
     <target name="frameworks.all" depends="common.frameworks.all, BTBusinessLogic.all, ERMiniUglyLook.all, ExcelGenerator.all,  Ajax.framework.all, Validity.framework.all, SVGObjects.framework.all, PostgresqlPlugIn.all, WOPayPal.all, DRGrouping.all, WRReporting.all"/>
     <target name="applications.all" depends="DevStudio.all, BugTracker.all, ERMailer.all, Validity.application.all"/>
-    <target name="examples.all" depends="NetStruxrCaseStudy.all, ERMovies.all, D2WListExample.all, D2WInspectExample.all, EGSampleApp.all, Validity.example.all, DocsByExample.all, DynaReporter.all, DRGroupingTest.all, SVGObjects.example.all "/>
+    <target name="examples.all" depends="NetStruxrCaseStudy.all, ERMovies.all, D2WListExample.all, D2WInspectExample.all, EGSampleApp.all, Validity.example.all, DocsByExample.all, DynaReporter.all, DRGroupingTest.all, SVGObjects.example.all, AjaxExample.all  "/>
 
     <target name="all.compile" depends="common.all, subprojects.all, experimental.all" />
 
