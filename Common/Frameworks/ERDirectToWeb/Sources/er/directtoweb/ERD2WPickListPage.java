@@ -112,10 +112,12 @@ public class ERD2WPickListPage extends ERD2WListPage implements ERDPickPageInter
 
     // Called by ERD2WListPage before the display group is updated
     protected void willUpdate() {
+        super.willUpdate();
     }
     
     // Called by ERD2WListPage after the display group is updated
     protected void didUpdate() {
+        super.didUpdate();
         // update our selection, so that we don't have any objects selected that are not visible on any page
         if ( selectedObjects().count() > 0 && filteredObjects().count() > 0 ) {
             // once intersectingElements() is more efficient, we can use that
