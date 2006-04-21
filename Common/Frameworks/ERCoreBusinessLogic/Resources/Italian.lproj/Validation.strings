@@ -1,4 +1,0 @@
-{
-    ERCMailMessage.emptytoAddresses = "Devi specificare almeno un destinatario.";
-    ERCMailMessage.eitherPlainTextOrText = "Both text and plainText are empty or null.  At least one must be set.";
-}

@@ -1,4 +1,0 @@
-Image1: WOImage {
-	filename = "macosxlogo.gif";
-	framework = "app";
-}

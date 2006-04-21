@@ -1,7 +1,0 @@
-List1: D2WList { 	entityName = "Movie";
-	list = session.movies;
-}
-
-PageWrapper1: PageWrapper {
-}
-

@@ -1,9 +1,0 @@
-PopUpButton1: WOPopUpButton {
-	displayString = currentElement.value;
-	item = currentElement;
-	list = availableElements;
-	value = currentElement.key;
-	selection = selectedElement;
-	noSelectionString = session.localizer.ERDEditStringWithChoices.noSelectionString;
-}
-

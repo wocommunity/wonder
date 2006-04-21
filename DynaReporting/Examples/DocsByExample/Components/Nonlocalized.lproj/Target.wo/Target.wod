@@ -1,2 +1,0 @@
-Frame1: WOFrame { pageName = topPageName; }
-Frame2: WOFrame { pageName = bottomPageName; }

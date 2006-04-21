@@ -1,4 +1,0 @@
-Hyperlink1: WOHyperlink {
-	actionClass = "DirectAction";
-	directActionName = "default";
-}

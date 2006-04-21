@@ -1,6 +1,0 @@
-{
-    // This is not used by PBX and the jam build process, but would be for PB and make
-    NSJavaAware=YES;
-    NSJavaNeeded=YES;
-    NSPrincipalClass = er/eo/core/ERCoreBusinessLogic;
-}

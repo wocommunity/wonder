@@ -1,9 +1,0 @@
-Content: WOComponentContent {}
-
-String3: WOString {
-	dateformat = "%A, %B %d, %Y";
-	value = now;
-}
-
-StyleSheet: ERXStyleSheet {
-}

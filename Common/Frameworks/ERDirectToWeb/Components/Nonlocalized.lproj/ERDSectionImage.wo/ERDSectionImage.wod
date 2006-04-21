@@ -1,6 +1,0 @@
-SectionImage: WOImage {
-  src=^sectionImageName;
-  alt=^displayNameForSectionKey;
-  border=0;
-}
-

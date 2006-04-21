@@ -1,9 +1,0 @@
-Content: WOComponentContent {}
-
-SwitchComponent1: WOSwitchComponent {
-	WOComponentName = componentName;
-	_componentUnroll = YES;
-	_unroll = YES;
-	extraBindings = extraBindings;
-	localContext = subContext;
-}

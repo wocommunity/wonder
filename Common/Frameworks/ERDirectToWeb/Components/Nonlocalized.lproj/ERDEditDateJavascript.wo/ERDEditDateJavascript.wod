@@ -1,6 +1,0 @@
-EditDateJavascript: ERXEditDateJavascript {
-	dateString = dateString;
-	dateformat = formatter;
-}
-
-

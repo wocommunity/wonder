@@ -1,5 +1,0 @@
-edittext1: WOText {
-	value = newText;
-	rows = 15;
-	cols = 70;
-}

@@ -1,9 +1,0 @@
-
-AjaxSlider1: AjaxSlider {
-	orientation = "horizontal";
-	value = 5;
-	minimum = 0;
-	maximum = 10;
-	onSlide = "function(v) {$('value').innerHTML = v}";
-	onChange = "function(v) {$('value').innerHTML = v}";
-}

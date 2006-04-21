@@ -1,7 +1,0 @@
-Hyperlink1: WOHyperlink { action = gotoGroupByPage; target = "content"; }
-Hyperlink2: WOHyperlink { action = gotoQuickReportTest; target = "content"; }
-Hyperlink3: WOHyperlink { action = gotoCustomPresoTest; target = "content"; }
-Hyperlink4: WOHyperlink { pageName = "Intro"; target = "content"; }
-Hyperlink5: WOHyperlink { href = "http://localhost/DynaReporter.ppt"; target = "content"; }
-Hyperlink6: WOHyperlink { pageName = "GroupingOptions"; target = "content"; }
-url: WOHyperlink { pageName = "ERPage"; target = "content"; }

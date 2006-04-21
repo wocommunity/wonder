@@ -1,8 +1,0 @@
-ComponentContent1: WOComponentContent {
-}
-
-SingleItemPurchaseHyperlink: WOHyperlink {
-	string = ^string;
-	target = ^target;
-	href = payPalPurchaseHref;
-}
