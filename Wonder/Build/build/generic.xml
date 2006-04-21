@@ -1044,7 +1044,7 @@ There are many ways to use this script:
             <param name="project.type" value="application" />
             <param name="project.principal.class" value="Application" />
             <param name="project.name" value="AjaxExample" />
-            <param name="project.dir" value="Ajax/AjaxExample" />
+            <param name="project.dir" value="Ajax/Ajax" />
 	        <param name="use.additional.framework.1" value="Ajax.framework" />
             <param name="use.wonder.core" value="true" />
         </antcall>
@@ -1054,6 +1054,15 @@ There are many ways to use this script:
             <param name="project.principal.class" value="" />
             <param name="project.name" value="Ajax" />
             <param name="project.dir" value="Ajax/Ajax" />
+
+            <param name="use.wonder.core" value="true" />
+        </antcall>
+    </target>
+    <target name="ERIMAdaptor.framework.all">
+        <antcall target="global.framework" >
+            <param name="project.principal.class" value="" />
+            <param name="project.name" value="ERIMAdaptor" />
+            <param name="project.dir" value="WOAdaptors/ERIMAdaptor" />
 
             <param name="use.wonder.core" value="true" />
         </antcall>
@@ -1099,6 +1108,8 @@ There are many ways to use this script:
 
     <target name="Ajax.all" depends=" Ajax.framework.all, AjaxExample.all" />
 
+    <target name="WOAdaptors.all" depends=" ERIMAdaptor.framework.all" />
+
     <target name="SVGObjects.example.all" depends="SVGObjects.ComponentTour.all, SVGObjects.eCards.all, SVGObjects.EZForms.all, SVGObjects.Hello.all, SVGObjects.PopIdol.all" />
     <target name="SVGObjects.all" depends="SVGObjects.framework.all , SVGObjects.example.all" />
 
@@ -1107,9 +1118,9 @@ There are many ways to use this script:
 
     <target name="experimental.all" depends="DevStudio.all" />
 
-    <target name="frameworks.all" depends="common.frameworks.all, BTBusinessLogic.all, ERMiniUglyLook.all, ExcelGenerator.all,  Ajax.framework.all, Validity.framework.all, SVGObjects.framework.all, PostgresqlPlugIn.all, WOPayPal.all, DRGrouping.all, WRReporting.all"/>
+    <target name="frameworks.all" depends="common.frameworks.all, BTBusinessLogic.all, ERMiniUglyLook.all, ExcelGenerator.all,  Ajax.framework.all, ERIMAdaptor.framework.all, Validity.framework.all, SVGObjects.framework.all, PostgresqlPlugIn.all, WOPayPal.all, DRGrouping.all, WRReporting.all"/>
     <target name="applications.all" depends="DevStudio.all, BugTracker.all, ERMailer.all, Validity.application.all"/>
-    <target name="examples.all" depends="NetStruxrCaseStudy.all, ERMovies.all, D2WListExample.all, D2WInspectExample.all, EGSampleApp.all, Validity.example.all, DocsByExample.all, DynaReporter.all, DRGroupingTest.all, SVGObjects.example.all, AjaxExample.all  "/>
+    <target name="examples.all" depends="NetStruxrCaseStudy.all, ERMovies.all, D2WListExample.all, D2WInspectExample.all, EGSampleApp.all, Validity.example.all, DocsByExample.all, DynaReporter.all, DRGroupingTest.all, SVGObjects.example.all "/>
 
     <target name="all.compile" depends="common.all, subprojects.all, experimental.all" />
 
@@ -1118,7 +1129,10 @@ There are many ways to use this script:
             <param name="project.name" value="ERJars" />
         </antcall>
         <antcall target="global.clean.framework" >
-            <param name="project.name" value="AjaxFramework" />
+            <param name="project.name" value="Ajax" />
+        </antcall>
+        <antcall target="global.clean.framework" >
+            <param name="project.name" value="ERIMAdaptor" />
         </antcall>
         <antcall target="global.clean.framework" >
             <param name="project.name" value="ERExtensions" />
@@ -1257,6 +1271,9 @@ There are many ways to use this script:
         </antcall>
         <antcall target="global.web.framework" >
             <param name="project.name" value="Ajax" />
+        </antcall>
+        <antcall target="global.web.framework" >
+            <param name="project.name" value="ERIMAdaptor" />
         </antcall>
         <antcall target="global.web.framework" >
             <param name="project.name" value="ERDirectToWeb" />
@@ -1443,6 +1460,9 @@ There are many ways to use this script:
         </antcall>
         <antcall target="global.install.framework" >
             <param name="project.name" value="Ajax" />
+        </antcall>
+        <antcall target="global.install.framework" >
+            <param name="project.name" value="ERIMAdaptor" />
         </antcall>
         <antcall target="global.install.framework" >
             <param name="project.name" value="PostgresqlPlugIn" />
