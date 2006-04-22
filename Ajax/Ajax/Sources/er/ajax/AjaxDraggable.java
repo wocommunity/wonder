@@ -22,6 +22,17 @@ public class AjaxDraggable extends AjaxComponent {
     return (String) valueForBinding("elementName", "div");
   }
 
+  public String draggableID() {
+    String draggableID;
+    if (canGetValueForBinding("draggableID")) {
+      draggableID = (String) valueForBinding("draggableID");
+    }
+    else {
+      draggableID = (String) valueForBinding("id");
+    }
+    return draggableID;
+  }
+
   protected void addRequiredWebResources(WOResponse _res) {
     addScriptResourceInHead(_res, "prototype.js");
     addScriptResourceInHead(_res, "scriptaculous.js");
@@ -32,9 +43,7 @@ public class AjaxDraggable extends AjaxComponent {
   }
 
   protected WOActionResults handleRequest(WORequest _request, WOContext _context) {
-    System.out.println("AjaxDraggable.handleRequest: handled request!");
-    WOResponse response = createResponse(_context);
-    return response;
+    return null;
   }
 
 }
