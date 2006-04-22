@@ -39,6 +39,12 @@ public class AjaxUpdateContainer extends AjaxComponent {
         addScriptResourceInHead(res, "controls.js");
         addScriptResourceInHead(res, "slider.js");
     }
+    
+    public void appendToResponse(WOResponse _res, WOContext _ctx) {
+      super.appendToResponse(_res, _ctx);
+      String id = (String)valueForBinding("id");
+      _res.appendContentString("<script type = \"text/javascript\" language = \"javascript\">function " + id + "Update() { new Ajax.Updater('" + id + "', $(" + id + ").updateUrl, {}); }</script>");
+    }
 
     protected WOActionResults handleRequest(WORequest request, WOContext context) {
         WOElement child = _childTemplate();
