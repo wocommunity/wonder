@@ -1,6 +1,8 @@
 DraggableContainer : WOGenericContainer {
 	elementName = elementName;
 	id = ^id;
+	class = ^class;
+	draggableID = draggableID;
 }
 
 Content : WOComponentContent {
@@ -10,6 +12,11 @@ DraggableContainerID : WOString {
 	value = ^id;
 }
 
-Revert : WOString {
-	value = ^revert;
+AjaxOptions : AjaxOptions {
+	starteffect = ^starteffect;
+	reverteffect = ^reverteffect;
+	endeffect = ^endeffect;
+	zindex = ^zindex;
+	revert = ^revert;
+	snap = ^snap;
 }

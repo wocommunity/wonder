@@ -1,5 +1,32 @@
-DraggableExample : AjaxDraggable {
-	id = "draggableExample";
+DraggableExample1 : AjaxDraggable {
+	id = "draggableExample1";
+	class = "draggableExample";
 	elementName = "span";
 	revert = true;
 }
+
+DraggableExample2 : AjaxDraggable {
+	id = "draggableExample2";
+	class = "draggableExample";
+	elementName = "span";
+	revert = false;
+}
+
+DroppableExample1 : AjaxDroppable {
+	id = "droppableExample1";
+	class = "droppableExample";
+	elementName = "span";
+	onDrop = "function(element, droppableElement) { alert('dropped ' + element.id + ' onto ' + droppableElement.id); }";
+	droppedDraggableID = droppedDraggableID;
+	action = droppedDraggable1;
+}
+
+DroppableExample2 : AjaxDroppable {
+	id = "droppableExample2";
+	class = "droppableExample";
+	elementName = "span";
+	onDrop = "function(element, droppableElement) { alert('dropped ' + element.id + ' onto ' + droppableElement.id); }";
+	droppedDraggableID = droppedDraggableID;
+	action = droppedDraggable2;
+}
+

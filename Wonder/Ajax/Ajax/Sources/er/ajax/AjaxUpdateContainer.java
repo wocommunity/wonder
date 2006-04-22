@@ -43,7 +43,9 @@ public class AjaxUpdateContainer extends AjaxComponent {
     public void appendToResponse(WOResponse _res, WOContext _ctx) {
       super.appendToResponse(_res, _ctx);
       String id = (String)valueForBinding("id");
-      _res.appendContentString("<script type = \"text/javascript\" language = \"javascript\">function " + id + "Update() { new Ajax.Updater('" + id + "', $(" + id + ").updateUrl, {}); }</script>");
+      _res.appendContentString("<script type = \"text/javascript\" language = \"javascript\"><!--\n");
+      _res.appendContentString("function " + id + "Update() { new Ajax.Updater('" + id + "', $(" + id + ").updateUrl, {}); }");
+      _res.appendContentString("//--></script>");
     }
 
     protected WOActionResults handleRequest(WORequest request, WOContext context) {

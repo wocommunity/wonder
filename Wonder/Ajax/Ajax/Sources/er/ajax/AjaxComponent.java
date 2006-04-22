@@ -160,13 +160,17 @@ public abstract class AjaxComponent extends WOComponent {
         }
         return (WOActionResults) result;
     }
+    
+    public String safeElementID() {
+      return context().elementID().replace('.', '_');
+    }
 
     /**
      * Provides a unique name for this component, based on the element id.
      * @return
      */
     public String scriptBaseName() {
-        return "wo_" + context().elementID().replaceAll("\\.", "_");
+        return "wo_" + safeElementID();
     }
 
     /**
