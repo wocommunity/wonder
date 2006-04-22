@@ -54,9 +54,9 @@ public class AjaxAutoComplete extends AjaxComponent {
     public void appendToResponse(WOResponse res, WOContext ctx) {
         super.appendToResponse(res, ctx);
         String actionUrl = context().componentActionURL();
-        res.appendContentString("<script type=\"text/javascript\"><!--\n" 
-                +"new Ajax.Autocompleter('"+fieldName+"', '"+divName+"', '"+actionUrl+"', {})"
-                +"//--></script>");
+        res.appendContentString("<script type = \"text/javascript\" language = \"javascript\"><!--\n");
+        res.appendContentString("new Ajax.Autocompleter('"+fieldName+"', '"+divName+"', '"+actionUrl+"', {})");
+        res.appendContentString("//--></script>");
     }
 
     /**
