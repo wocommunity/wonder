@@ -3,10 +3,27 @@
     <head>
         <meta name="generator" content="WOLips Templateengine Plug-in">
         <title>Untitled</title>
+        <style>
+#exampleArea {
+	border-style: solid;
+	border-color: rgb(0, 0, 0);
+	border-width: 2px;
+	padding: 5px;
+	background-color: rgb(200, 200, 200);
+}
+				</style>
     </head>
     <body bgcolor=#FFFFFF>
         <p><webobject name="UpdateLink">Do Update</webobject></p>
+        <p><webobject name = "UpdateShortcutLink">Do Update With Function</webobject></p>
         <p>Initial time: <webobject name="String1"></webobject></p>
-        <p>Dynamic update time:<b><webobject name="AjaxUpdateContainer1"><webobject name="String1"></webobject><webobject name="Hyperlink1">Test</webobject></webobject></b></p>
+        <p>Dynamic update time:</p>
+        <p>
+        <webobject name="AjaxUpdateContainer1">
+        	<b><webobject name="String1"></webobject></b>
+        	<p>
+        	<webobject name="Hyperlink1">Example Link</webobject>
+        </webobject>
+        </p>
     </body>
 </html>

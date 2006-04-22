@@ -1,5 +1,6 @@
 AjaxUpdateContainer1: AjaxUpdateContainer {
-	id = "test";
+	id = "exampleArea";
+	elementName = "div";
 }
 
 Hyperlink1: WOHyperlink {
@@ -14,5 +15,11 @@ String1: WOString {
 UpdateLink: WOGenericContainer {
 	elementName = "a";
 	href = "#";
-	onclick = "new Ajax.Updater('test', $(test).updateUrl, {});";
+	onclick = "new Ajax.Updater('exampleArea', $(exampleArea).updateUrl, {});";
+}
+
+UpdateShortcutLink: WOGenericContainer {
+	elementName = "a";
+	href = "#";
+	onclick = "exampleAreaUpdate();";
 }
