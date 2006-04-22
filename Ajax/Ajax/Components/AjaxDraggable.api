@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<wodefinitions>
+	<wo wocomponentcontent = "true" class = "AjaxDraggable.java">
+    <binding name = "id"/>
+    <binding name = "revert" defaults = "Boolean" />
+    <binding name = "elementName"/>
+
+    <validation message = "&apos;id&apos; is a required binding">
+      <unbound name = "id"/>
+    </validation>
+	</wo>
+</wodefinitions>
