@@ -1,15 +1,19 @@
-Hyperlink1: WOHyperlink {
+RPCHyperlink : WOHyperlink {
 	pageName = "ProxyExample";
 }
 
-Hyperlink2: WOHyperlink {
+AutocompletionLink : WOHyperlink {
 	pageName = "AutoCompleteExample";
 }
 
-Hyperlink3: WOHyperlink {
+SliderLink : WOHyperlink {
 	pageName = "SliderExample";
 }
 
-Hyperlink4: WOHyperlink {
+UpdatesLink : WOHyperlink {
 	pageName = "UpdaterExample";
+}
+
+DragAndDropLink : WOHyperlink {
+	pageName = "DragAndDropExample";
 }

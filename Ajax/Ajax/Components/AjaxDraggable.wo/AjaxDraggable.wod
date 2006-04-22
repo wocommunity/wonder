@@ -1,0 +1,15 @@
+DraggableContainer : WOGenericContainer {
+	elementName = elementName;
+	id = ^id;
+}
+
+Content : WOComponentContent {
+}
+
+DraggableContainerID : WOString {
+	value = ^id;
+}
+
+Revert : WOString {
+	value = ^revert;
+}
