@@ -1,19 +1,50 @@
 <html>
 <head>
 <style type="text/css">
-#draggableExample {
+.draggableExample {
 	border-style: solid;
 	border-color: rgb(0, 0, 0);
 	border-width: 2px;
 	padding: 5px;
 	background-color: rgb(100, 150, 100);
 }
+
+.droppableExample {
+	border-style: solid;
+	border-color: rgb(0, 0, 0);
+	border-width: 2px;
+	padding: 5px;
+	background-color: rgb(150, 100, 100);
+}
 </style>
 </head>
 <body>
 
-<webobject name = "DraggableExample">
-This is an example draggable.
+<webobject name = "DraggableExample1">
+This is draggable #1 (I return)
+</webobject>
+
+<p>&nbsp;</p>
+
+<webobject name = "DraggableExample2">
+This is draggable #2 (I move around)
+</webobject>
+
+<p>
+Droppable is a little weird, because we don't have actual objects to reference for the draggables.  As a result,
+your droppable is notified of the droppedDraggableID (defaults to the ID of the draggable).  Additionally,
+if you specify and action, it will call that action method when the drop is completed.  The onDrop javascript
+function is called AFTER the action method is called.
+<p>
+
+<webobject name = "DroppableExample1">
+This is a drop area #1.
+</webobject>
+
+<p>&nbsp;</p>
+
+<webobject name = "DroppableExample2">
+This is a drop area #2.
 </webobject>
 
 </body>

@@ -1,0 +1,22 @@
+DroppableContainer : WOGenericContainer {
+	elementName = elementName;
+	class = ^class;
+	id = ^id;
+}
+
+Content : WOComponentContent {
+}
+
+DroppableContainerID : WOString {
+	value = ^id;
+}
+
+AjaxOptions : AjaxOptions {
+	accept = ^accept;
+	containment = ^containment;
+	hoverclass = ^hoverclass;
+	overlap = ^overlap;
+	greedy = ^greedy;
+	onHover = ^onHover;
+	onDrop = onDrop;
+}
