@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <wodefinitions>
-        <wo wocomponentcontent="true" class="AjaxUpdateContainer">
+	<wo wocomponentcontent="true" class="AjaxUpdateContainer">
+    <binding name = "id"/>
+		<binding name = "elementName"/>
 
-        </wo>
+    <validation message = "&apos;id&apos; is a required binding">
+      <unbound name = "id"/>
+    </validation>
+	</wo>
 </wodefinitions>
