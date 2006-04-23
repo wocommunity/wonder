@@ -65,9 +65,7 @@ public class AjaxDroppable extends AjaxComponent {
   }
 
   protected WOActionResults handleRequest(WORequest _request, WOContext _context) {
-    WOResponse response = createResponse(_context);
     String droppedDraggableID = _request.stringFormValueForKey(myDraggableIDKeyName);
-
     if (canSetValueForBinding("droppedDraggableID")) {
       setValueForBinding(droppedDraggableID, "droppedDraggableID");
     }
@@ -77,7 +75,7 @@ public class AjaxDroppable extends AjaxComponent {
         System.out.println("AjaxDroppable.handleRequest: Not quite sure what to do with non-null results yet ...");
       }
     }
-    return response;
+    return null;
   }
 
 }

@@ -1,0 +1,21 @@
+Content : WOComponentContent {
+}
+
+ContainerID : WOString {
+	value = ^id;
+}
+
+AjaxOptions : AjaxOptions {
+	tag = ^tag;
+	only = ^only;
+	overlap = ^overlap;
+	constraint = ^constraint;
+	containment = ^containment;
+	handle = ^handle;
+	hoverclass = ^hoverclass;
+	ghosting = ^ghosting;
+	dropOnEmpty = ^dropOnEmpty;
+	scroll = ^scroll;
+	onChange = ^onChange;
+	onUpdate = onUpdate;
+}
