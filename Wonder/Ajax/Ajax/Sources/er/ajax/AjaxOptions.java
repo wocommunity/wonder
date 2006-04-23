@@ -22,14 +22,25 @@ public class AjaxOptions extends WODynamicElement {
 
   public void appendToResponse(WOResponse _response, WOContext _context) {
     _response.appendContentCharacter('{');
-    if (myBindings != null) {
-      boolean hasPreviousOptions = false;
+    AjaxOptions._appendToResponse(myBindings, _response, _context);
+    if (myChildren != null) {
+      myChildren.appendToResponse(_response, _context);
+    }
+    _response.appendContentCharacter('}');
+  }
+
+  public static void _appendToResponse(NSDictionary _options, WOResponse _response, WOContext _context) {
+    if (_options != null) {
       WOComponent component = _context.component();
-      Enumeration bindingsEnum = myBindings.keyEnumerator();
+      boolean hasPreviousOptions = false;
+      Enumeration bindingsEnum = _options.keyEnumerator();
       while (bindingsEnum.hasMoreElements()) {
         String bindingName = (String) bindingsEnum.nextElement();
-        WOAssociation association = (WOAssociation) myBindings.objectForKey(bindingName);
-        Object bindingValue = association.valueInComponent(component);
+        Object bindingValue = _options.objectForKey(bindingName);
+        if (bindingValue instanceof WOAssociation) {
+          WOAssociation association = (WOAssociation) bindingValue;
+          bindingValue = association.valueInComponent(component);
+        }
         if (bindingValue != null) {
           if (hasPreviousOptions) {
             _response.appendContentString(", ");
@@ -41,9 +52,11 @@ public class AjaxOptions extends WODynamicElement {
         }
       }
     }
-    if (myChildren != null) {
-      myChildren.appendToResponse(_response, _context);
-    }
+  }
+
+  public static void appendToResponse(NSDictionary _options, WOResponse _response, WOContext _context) {
+    _response.appendContentCharacter('{');
+    AjaxOptions._appendToResponse(_options, _response, _context);
     _response.appendContentCharacter('}');
   }
 }
