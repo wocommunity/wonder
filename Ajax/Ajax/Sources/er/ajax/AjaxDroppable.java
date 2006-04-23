@@ -4,6 +4,9 @@ import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WORequest;
 import com.webobjects.appserver.WOResponse;
+import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSMutableArray;
+import com.webobjects.foundation.NSMutableDictionary;
 
 public class AjaxDroppable extends AjaxComponent {
   private String myDraggableIDKeyName;
@@ -29,6 +32,18 @@ public class AjaxDroppable extends AjaxComponent {
   public void appendToResponse(WOResponse _response, WOContext _context) {
     myActionUrl = context().componentActionURL();
     super.appendToResponse(_response, _context);
+  }
+
+  public NSDictionary createAjaxOptions() {
+    NSMutableArray ajaxOptionsArray = new NSMutableArray();
+    ajaxOptionsArray.addObject(new AjaxOption("accept", AjaxOption.STRING_ARRAY));
+    ajaxOptionsArray.addObject(new AjaxOption("containment", AjaxOption.STRING_ARRAY));
+    ajaxOptionsArray.addObject(new AjaxOption("hoverclass", AjaxOption.STRING));
+    ajaxOptionsArray.addObject(new AjaxOption("overlap", AjaxOption.STRING));
+    ajaxOptionsArray.addObject(new AjaxOption("greedy", AjaxOption.BOOLEAN));
+    ajaxOptionsArray.addObject(new AjaxOption("onHover", AjaxOption.SCRIPT));
+    NSMutableDictionary options = AjaxOption.createAjaxOptionsDictionary(ajaxOptionsArray, this);
+    return options;
   }
 
   public String elementName() {

@@ -4,6 +4,9 @@ import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WORequest;
 import com.webobjects.appserver.WOResponse;
+import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSMutableArray;
+import com.webobjects.foundation.NSMutableDictionary;
 
 public class AjaxDraggable extends AjaxComponent {
   public AjaxDraggable(WOContext _context) {
@@ -16,6 +19,21 @@ public class AjaxDraggable extends AjaxComponent {
 
   public boolean synchronizesVariablesWithBindings() {
     return false;
+  }
+
+  public NSDictionary createAjaxOptions() {
+    NSMutableArray ajaxOptionsArray = new NSMutableArray();
+    ajaxOptionsArray.addObject(new AjaxOption("starteffect", AjaxOption.SCRIPT));
+    ajaxOptionsArray.addObject(new AjaxOption("reverteffect", AjaxOption.SCRIPT));
+    ajaxOptionsArray.addObject(new AjaxOption("endeffect", AjaxOption.SCRIPT));
+    ajaxOptionsArray.addObject(new AjaxOption("zindex", AjaxOption.NUMBER));
+    ajaxOptionsArray.addObject(new AjaxOption("revert", AjaxOption.BOOLEAN));
+    ajaxOptionsArray.addObject(new AjaxOption("snap", AjaxOption.SCRIPT));
+    ajaxOptionsArray.addObject(new AjaxOption("ghosting", AjaxOption.BOOLEAN));
+    ajaxOptionsArray.addObject(new AjaxOption("handle", AjaxOption.DEFAULT));
+    ajaxOptionsArray.addObject(new AjaxOption("change", AjaxOption.SCRIPT));
+    NSMutableDictionary options = AjaxOption.createAjaxOptionsDictionary(ajaxOptionsArray, this);
+    return options;
   }
 
   public String elementName() {
