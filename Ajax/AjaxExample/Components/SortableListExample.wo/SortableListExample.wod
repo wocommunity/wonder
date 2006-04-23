@@ -1,0 +1,25 @@
+ListItemName : WOString {
+	value = repetitionListItem.name;
+}
+
+ListItemRepetition : WORepetition {
+	list = listItems;
+	item = repetitionListItem;
+}
+
+ListContainer : WOGenericContainer {
+	elementName = "ul";
+	id = listID;
+}
+
+ListItemContainer : WOGenericContainer {
+	elementName = "li";
+	id = repetitionListItem.id;
+}
+
+SortableList : AjaxSortableList {
+	id = listID;
+	list = listItems;
+	listItemIDKeyPath = "id";
+	action = orderChanged;
+}

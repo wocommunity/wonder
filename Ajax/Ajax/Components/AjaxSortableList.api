@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<wodefinitions>
+	<wo wocomponentcontent="true" class="AjaxSortableList.java">
+		<binding name = "id"/>
+		<binding name = "list"/>
+		<binding name = "listItemIDKeyPath"/>
+		<binding name = "startIndex"/>
+		<binding name = "action"/>
+		
+		<binding name = "tag"/>
+		<binding name = "only"/>
+		<binding name = "overlap"/>
+		<binding name = "constraint"/>
+		<binding name = "containment"/>
+		<binding name = "handle"/>
+		<binding name = "hoverclass"/>
+		<binding name = "ghosting"/>
+		<binding name = "dropOnEmpty"/>
+		<binding name = "scroll"/>
+		<binding name = "onChange"/>
+		<binding name = "onUpdate"/>
+	
+    <validation message = "&apos;id&apos; is a required binding">
+      <unbound name = "id"/>
+    </validation>
+    
+    <validation message="&apos;listItemIDKeyPath&apos; must be bound when &apos;list&apos; is bound">
+      <and>
+        <bound name = "list"/>
+        <unbound name = "listItemIDKeyPath"/>
+      </and>
+    </validation>
+    
+	</wo>
+</wodefinitions>

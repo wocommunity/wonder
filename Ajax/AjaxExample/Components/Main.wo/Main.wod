@@ -17,3 +17,7 @@ UpdatesLink : WOHyperlink {
 DragAndDropLink : WOHyperlink {
 	pageName = "DragAndDropExample";
 }
+
+SortableListLink : WOHyperlink {
+	pageName = "SortableListExample";
+}
