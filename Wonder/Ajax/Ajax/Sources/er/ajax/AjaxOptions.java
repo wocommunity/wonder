@@ -9,20 +9,30 @@ import com.webobjects.appserver.WODynamicElement;
 import com.webobjects.appserver.WOElement;
 import com.webobjects.appserver.WOResponse;
 import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSMutableDictionary;
 
 public class AjaxOptions extends WODynamicElement {
-  private NSDictionary myBindings;
+  private NSMutableDictionary myBindings;
   private WOElement myChildren;
 
   public AjaxOptions(String _name, NSDictionary _bindings, WOElement _children) {
     super(_name, _bindings, _children);
-    myBindings = _bindings;
+    myBindings = _bindings.mutableClone();
     myChildren = _children;
   }
 
   public void appendToResponse(WOResponse _response, WOContext _context) {
     _response.appendContentCharacter('{');
-    AjaxOptions._appendToResponse(myBindings, _response, _context);
+    NSMutableDictionary options = myBindings;
+    WOAssociation optionsBinding = (WOAssociation) myBindings.removeObjectForKey("options");
+    if (optionsBinding != null) {
+      NSDictionary passedInOptions = (NSDictionary) optionsBinding.valueInComponent(_context.component());
+      if (passedInOptions != null) {
+        options = passedInOptions.mutableClone();
+        options.addEntriesFromDictionary(myBindings);
+      }
+    }
+    AjaxOptions._appendToResponse(options, _response, _context);
     if (myChildren != null) {
       myChildren.appendToResponse(_response, _context);
     }
