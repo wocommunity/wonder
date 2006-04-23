@@ -4,6 +4,13 @@
 		<binding name = "list"/>
     <binding name = "item"/>
     <binding name = "value"/>
+    
+    <binding name = "tokens"/>
+    <binding name = "frequency"/>
+    <binding name = "minChars"/>
+    <binding name = "indicator"/>
+    <binding name = "updateElement"/>
+    <binding name = "afterUpdateElement"/>
 
     <validation message = "&apos;list&apos; is a required binding">
       <unbound name = "list"/>

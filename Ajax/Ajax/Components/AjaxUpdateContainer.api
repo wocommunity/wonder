@@ -3,9 +3,15 @@
 	<wo wocomponentcontent="true" class="AjaxUpdateContainer">
     <binding name = "id"/>
 		<binding name = "elementName"/>
+		
 		<binding name = "frequency"/>
 		<binding name = "decay"/>
+		<binding name = "evalScripts"/>
+		<binding name = "insertion"/>
 		<binding name = "onComplete"/>
+		<binding name = "onSuccess"/>
+		<binding name = "onFailure"/>
+		<binding name = "onException"/>
 
     <validation message = "&apos;id&apos; is a required binding">
       <unbound name = "id"/>

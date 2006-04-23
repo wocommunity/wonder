@@ -12,11 +12,6 @@ DroppableContainerID : WOString {
 }
 
 AjaxOptions : AjaxOptions {
-	accept = ^accept;
-	containment = ^containment;
-	hoverclass = ^hoverclass;
-	overlap = ^overlap;
-	greedy = ^greedy;
-	onHover = ^onHover;
+	options = createAjaxOptions;
 	onDrop = onDrop;
 }

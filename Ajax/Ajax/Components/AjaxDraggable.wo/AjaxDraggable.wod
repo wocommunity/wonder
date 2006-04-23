@@ -13,10 +13,5 @@ DraggableContainerID : WOString {
 }
 
 AjaxOptions : AjaxOptions {
-	starteffect = ^starteffect;
-	reverteffect = ^reverteffect;
-	endeffect = ^endeffect;
-	zindex = ^zindex;
-	revert = ^revert;
-	snap = ^snap;
+	options = createAjaxOptions;
 }

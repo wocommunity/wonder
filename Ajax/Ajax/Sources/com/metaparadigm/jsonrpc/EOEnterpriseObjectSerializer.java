@@ -39,11 +39,11 @@ public class EOEnterpriseObjectSerializer extends AbstractSerializer {
 						EOEnterpriseObject.class.isAssignableFrom(clazz)));
 	}
 
-	public ObjectMatch tryUnmarshall(SerializerState state, Class clazz, Object jso) throws UnmarshallException {
+	public ObjectMatch tryUnmarshall(SerializerState state, Class clazz, Object jso) {
 		return null;
 	}
 
-	public Object unmarshall(SerializerState state, Class clazz, Object jso) throws UnmarshallException {
+	public Object unmarshall(SerializerState state, Class clazz, Object jso) {
 		return null;
 	}
 
