@@ -1,6 +1,15 @@
-AjaxUpdateContainer1: AjaxUpdateContainer {
+AjaxUpdateContainer1 : AjaxUpdateContainer {
 	id = "exampleArea";
 	elementName = "div";
+	class = "exampleArea";
+}
+
+AjaxUpdateContainer2 : AjaxUpdateContainer {
+	id = "exampleArea2";
+	elementName = "div";
+	class = "exampleArea";
+	frequency = 1;
+	decay = 2;
 }
 
 Hyperlink1: WOHyperlink {

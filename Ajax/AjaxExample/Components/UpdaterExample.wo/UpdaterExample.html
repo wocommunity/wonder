@@ -4,7 +4,7 @@
         <meta name="generator" content="WOLips Templateengine Plug-in">
         <title>Untitled</title>
         <style>
-#exampleArea {
+.exampleArea {
 	border-style: solid;
 	border-color: rgb(0, 0, 0);
 	border-width: 2px;
@@ -14,16 +14,26 @@
 				</style>
     </head>
     <body bgcolor=#FFFFFF>
+        <p>Initial time: <webobject name="String1"></webobject></p>
         <p><webobject name="UpdateLink">Do Update</webobject></p>
         <p><webobject name = "UpdateShortcutLink">Do Update With Function</webobject></p>
-        <p>Initial time: <webobject name="String1"></webobject></p>
-        <p>Dynamic update time:</p>
         <p>
+        <b>On-Demand Update</b>
         <webobject name="AjaxUpdateContainer1">
         	<b><webobject name="String1"></webobject></b>
         	<p>
         	<webobject name="Hyperlink1">Example Link</webobject>
         </webobject>
         </p>
+        
+        <p>
+        <b>Periodic Update</b>
+        <webobject name="AjaxUpdateContainer2">
+        	<b><webobject name="String1"></webobject></b>
+        	<p>
+        	<webobject name="Hyperlink1">Example Link</webobject>
+        </webobject>
+        </p>
+        
     </body>
 </html>
