@@ -9,7 +9,9 @@ import com.webobjects.appserver.WOResponse;
 import com.webobjects.eocontrol.EOKeyValueQualifier;
 import com.webobjects.eocontrol.EOQualifier;
 import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableArray;
+import com.webobjects.foundation.NSMutableDictionary;
 
 public class AjaxSortableList extends AjaxComponent {
   private String mySortOrderKeyName;
@@ -45,6 +47,23 @@ public class AjaxSortableList extends AjaxComponent {
     addScriptResourceInHead(_res, "dragdrop.js");
     addScriptResourceInHead(_res, "controls.js");
     addScriptResourceInHead(_res, "slider.js");
+  }
+
+  public NSDictionary createAjaxOptions() {
+    NSMutableArray ajaxOptionsArray = new NSMutableArray();
+    ajaxOptionsArray.addObject(new AjaxOption("tag", AjaxOption.STRING));
+    ajaxOptionsArray.addObject(new AjaxOption("only", AjaxOption.STRING_ARRAY));
+    ajaxOptionsArray.addObject(new AjaxOption("overlap", AjaxOption.STRING));
+    ajaxOptionsArray.addObject(new AjaxOption("constraint", AjaxOption.STRING));
+    ajaxOptionsArray.addObject(new AjaxOption("containment", AjaxOption.STRING_ARRAY));
+    ajaxOptionsArray.addObject(new AjaxOption("handle", AjaxOption.STRING));
+    ajaxOptionsArray.addObject(new AjaxOption("hoverclass", AjaxOption.STRING));
+    ajaxOptionsArray.addObject(new AjaxOption("ghosting", AjaxOption.BOOLEAN));
+    ajaxOptionsArray.addObject(new AjaxOption("dropOnEmpty", AjaxOption.BOOLEAN));
+    ajaxOptionsArray.addObject(new AjaxOption("scroll", AjaxOption.BOOLEAN));
+    ajaxOptionsArray.addObject(new AjaxOption("onChange", AjaxOption.SCRIPT));
+    NSMutableDictionary options = AjaxOption.createAjaxOptionsDictionary(ajaxOptionsArray, this);
+    return options;
   }
 
   public String onUpdate() {

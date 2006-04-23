@@ -9,6 +9,9 @@ import com.webobjects.appserver.WOElement;
 import com.webobjects.appserver.WORequest;
 import com.webobjects.appserver.WOResponse;
 import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSMutableArray;
+import com.webobjects.foundation.NSMutableDictionary;
 
 /**
  * Autocomplete field similar to what google has. You bind a value and a method that returns a list
@@ -47,7 +50,19 @@ public class AjaxAutoComplete extends AjaxComponent {
     public boolean synchronizesVariablesWithBindings() {
         return false;
     }
- 
+   
+    protected NSDictionary createAjaxOptions() {
+      NSMutableArray ajaxOptionsArray = new NSMutableArray();
+      ajaxOptionsArray.addObject(new AjaxOption("tokens", AjaxOption.STRING_ARRAY));
+      ajaxOptionsArray.addObject(new AjaxOption("frequency", AjaxOption.NUMBER));
+      ajaxOptionsArray.addObject(new AjaxOption("minChars", AjaxOption.NUMBER));
+      ajaxOptionsArray.addObject(new AjaxOption("indicator", AjaxOption.SCRIPT));
+      ajaxOptionsArray.addObject(new AjaxOption("updateElement", AjaxOption.SCRIPT));
+      ajaxOptionsArray.addObject(new AjaxOption("afterUpdateElement", AjaxOption.SCRIPT));
+      NSMutableDictionary options = AjaxOption.createAjaxOptionsDictionary(ajaxOptionsArray, this);
+      return options;
+    }
+   
     /**
      * Overridden to add the initialization javascript for the auto completer.
      */
@@ -55,7 +70,9 @@ public class AjaxAutoComplete extends AjaxComponent {
         super.appendToResponse(res, ctx);
         String actionUrl = context().componentActionURL();
         res.appendContentString("<script type = \"text/javascript\" language = \"javascript\"><!--\n");
-        res.appendContentString("new Ajax.Autocompleter('"+fieldName+"', '"+divName+"', '"+actionUrl+"', {})");
+        res.appendContentString("new Ajax.Autocompleter('"+fieldName+"', '"+divName+"', '"+actionUrl+"', ");
+        AjaxOptions.appendToResponse(createAjaxOptions(), res, ctx);
+        res.appendContentString(");");
         res.appendContentString("//--></script>");
     }
 

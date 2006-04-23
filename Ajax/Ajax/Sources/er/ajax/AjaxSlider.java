@@ -5,7 +5,7 @@ import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WORequest;
 import com.webobjects.appserver.WOResponse;
-import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSMutableDictionary;
 /**
  * Simple Ajax slider.
  * @author ak
@@ -42,26 +42,30 @@ public class AjaxSlider extends AjaxComponent {
         trackerId = scriptBaseName() + "_tracker";
         handleId = scriptBaseName() + "_handle";
         
-        String orientation = (String) valueForBinding("orientation",  "horizontal");
+        NSMutableDictionary options = new NSMutableDictionary();
+        new AjaxOption("axis", AjaxOption.STRING).addToDictionary("orientation", this, options);
+        new AjaxOption("sliderValue", AjaxOption.NUMBER).addToDictionary("value", this, options);
+        new AjaxOption("onSlide", AjaxOption.SCRIPT).addToDictionary(this, options);
+        new AjaxOption("onChange", AjaxOption.SCRIPT).addToDictionary(this, options);
+        new AjaxOption("values", AjaxOption.ARRAY).addToDictionary("possibleValues", this, options);
+        new AjaxOption("alignX", AjaxOption.NUMBER).addToDictionary(this, options);
+        new AjaxOption("alignY", AjaxOption.NUMBER).addToDictionary(this, options);
+        new AjaxOption("disabled", AjaxOption.BOOLEAN).addToDictionary(this, options);
+        new AjaxOption("handleImage", AjaxOption.STRING).addToDictionary(this, options);
+        new AjaxOption("handleDisabled", AjaxOption.STRING).addToDictionary(this, options);
+
         Number min = (Number)valueForBinding("minimum", new Integer(0));
         Number max = (Number)valueForBinding("maximum", new Integer(100));
-        Number value = (Number)valueForBinding("value", new Integer(0));
-        NSArray possibleValues = (NSArray)valueForBinding("possibleValues");
-        String onSlide = (String)valueForBinding("onSlide");
-        String onChange = (String)valueForBinding("onChange");
+        options.setObjectForKey("$R(" + min + "," + max + ")", "range");
+        
         res.appendContentString("<div class=\"tracker\" id=\""+
                 trackerId+"\"><div class=\"handle\" id=\""+
                 handleId+"\"></div></div>");
-        res.appendContentString("<script type=\"text/javascript\"><!--\n"+
-                "new Control.Slider('"+handleId+"', '"+trackerId+"', { "+
-                "sliderValue:'"+value+"', "+
-                "range:$R("+min+ "," +max+ "), "+
-                (onSlide != null ? "onSlide: " + onSlide + ", " : "" ) +
-                (onChange != null ? "onChange: " + onChange + ", " : "" ) +
-                (possibleValues != null ? "values: [" + possibleValues.componentsJoinedByString(",") + "], " : "" ) +
-                "axis:'"+orientation+"'"+
-                " })"
-                +"//--></script>");
+        res.appendContentString("<script type=\"text/javascript\"><!--\n");
+        res.appendContentString("new Control.Slider('"+handleId+"', '"+trackerId+"', ");
+        AjaxOptions.appendToResponse(options, res, ctx);
+        res.appendContentString(");");
+        res.appendContentString("\n//--></script>");
     }
 
     /**

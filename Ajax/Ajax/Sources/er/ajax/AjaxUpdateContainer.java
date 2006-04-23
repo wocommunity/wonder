@@ -6,6 +6,8 @@ import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WOElement;
 import com.webobjects.appserver.WORequest;
 import com.webobjects.appserver.WOResponse;
+import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 
 public class AjaxUpdateContainer extends AjaxComponent {
@@ -45,20 +47,25 @@ public class AjaxUpdateContainer extends AjaxComponent {
         addScriptResourceInHead(res, "slider.js");
     }
     
+    protected NSDictionary createAjaxOptions() {
+      NSMutableArray ajaxOptionsArray = new NSMutableArray();
+      ajaxOptionsArray.addObject(new AjaxOption("frequency", AjaxOption.NUMBER));
+      ajaxOptionsArray.addObject(new AjaxOption("decay", AjaxOption.NUMBER));
+      ajaxOptionsArray.addObject(new AjaxOption("onComplete", AjaxOption.SCRIPT));
+      ajaxOptionsArray.addObject(new AjaxOption("onSuccess", AjaxOption.SCRIPT));
+      ajaxOptionsArray.addObject(new AjaxOption("onFailure", AjaxOption.SCRIPT));
+      ajaxOptionsArray.addObject(new AjaxOption("onException", AjaxOption.SCRIPT));
+      ajaxOptionsArray.addObject(new AjaxOption("insertion", AjaxOption.STRING));
+      ajaxOptionsArray.addObject(new AjaxOption("evalScripts", AjaxOption.BOOLEAN));
+      NSMutableDictionary options = AjaxOption.createAjaxOptionsDictionary(ajaxOptionsArray, this);
+      return options;
+    }
+    
     public void appendToResponse(WOResponse _response, WOContext _context) {
       super.appendToResponse(_response, _context);
-      NSMutableDictionary options = new NSMutableDictionary();
-      if (canGetValueForBinding("frequency")) {
-        options.setObjectForKey(valueForBinding("frequency"), "frequency");
-      }
-      if (canGetValueForBinding("decay")) {
-        options.setObjectForKey(valueForBinding("decay"), "decay");
-      }
-      if (canGetValueForBinding("onComplete")) {
-        options.setObjectForKey(valueForBinding("onComplete"), "onComplete");
-      }
-      
       String id = (String)valueForBinding("id");
+      
+      NSDictionary options = createAjaxOptions();
       
       _response.appendContentString("<script type = \"text/javascript\" language = \"javascript\"><!--\n");
       if (canGetValueForBinding("frequency")) {
