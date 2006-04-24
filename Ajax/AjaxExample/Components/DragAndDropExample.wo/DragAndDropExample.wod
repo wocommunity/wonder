@@ -6,9 +6,9 @@ DraggableExample1 : AjaxDraggable {
 }
 
 DraggableExample2 : AjaxDraggable {
-	id = "draggableExample2";
+	id = draggableExample2;
 	class = "draggableExample";
-	elementName = "span";
+	elementName = "div";
 	revert = false;
 }
 
@@ -16,7 +16,7 @@ DroppableExample1 : AjaxDroppable {
 	id = "droppableExample1";
 	class = "droppableExample";
 	elementName = "span";
-	onDrop = "function(element, droppableElement) { alert('dropped ' + element.id + ' onto ' + droppableElement.id); }";
+	onDrop = "function(element, droppableElement) { alert('dropped ' + element.id + ' onto ' + droppableElement.id + '->' + element.getElementsByTagName('b')[0].innerHTML); }";
 	droppedDraggableID = droppedDraggableID;
 	action = droppedDraggable1;
 }
@@ -25,8 +25,20 @@ DroppableExample2 : AjaxDroppable {
 	id = "droppableExample2";
 	class = "droppableExample";
 	elementName = "span";
-	onDrop = "function(element, droppableElement) { alert('dropped ' + element.id + ' onto ' + droppableElement.id); }";
+	onDrop = "function(element, droppableElement) { alert('dropped ' + element.id + ' onto ' + droppableElement.id + '->' + element.getElementsByTagName('b')[0].innerHTML); }";
 	droppedDraggableID = droppedDraggableID;
 	action = droppedDraggable2;
 }
 
+ItemLoop : WORepetition {
+	list = objects;
+	item = item;
+}
+
+Item : WOString {
+	value = item;
+}
+
+FirstItem : WOString {
+	value = o1;
+}
