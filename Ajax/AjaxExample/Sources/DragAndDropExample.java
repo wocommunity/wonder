@@ -4,7 +4,6 @@ import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.foundation.NSMutableArray;
-import com.webobjects.foundation.NSMutableDictionary;
 /**
  * 
  * @author mschrag Original version
@@ -12,43 +11,35 @@ import com.webobjects.foundation.NSMutableDictionary;
  *
  */
 public class DragAndDropExample extends WOComponent {
-
     public String droppedDraggableID;
-
-    private NSMutableDictionary idMap = new NSMutableDictionary();
-
     public NSMutableArray objects = new NSMutableArray();
-
     public Object o1 = "Object 0";
-
     public Object item;
+    public Object droppedObject;
     
     public DragAndDropExample(WOContext _context) {
         super(_context);
         for (int i = 1; i < 10; i++) {
             objects.addObject("Object " + i);
         }
-        // Set the inital object, as this one will not get set in a repetition
-        // and has a prefixed ID.
-        // All other objects will get added in a loop for draggableExample2
-        idMap.setObjectForKey(o1, "draggableExample1");
     }
 
     public String draggableExample2() {
         String id = "draggableExample_" + context().elementID().replace('.', '_');
-        idMap.setObjectForKey(item, id);
         return id;
     }
 
     public WOActionResults droppedDraggable1() {
         System.out.println("DragAndDropExample.droppedDraggableID: draggable ID '" + droppedDraggableID
-                + "' dropped onto 1: " + idMap.objectForKey(droppedDraggableID));
+                + "' dropped onto 1: " + droppedDraggableID);
+        System.out.println("DragAndDropExample.droppedDraggable1: draggable object = " + droppedObject);
         return null;
     }
 
     public WOActionResults droppedDraggable2() {
         System.out.println("DragAndDropExample.droppedDraggableID: draggable ID '" + droppedDraggableID
-                + "' dropped onto 2: " + idMap.objectForKey(droppedDraggableID));
+                + "' dropped onto 2: " + droppedObject);
+        System.out.println("DragAndDropExample.droppedDraggable2: draggable object = " + droppedObject);
         return null;
     }
 

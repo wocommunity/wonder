@@ -1,6 +1,7 @@
 package er.ajax;
 
 import com.webobjects.appserver.WOActionResults;
+import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WORequest;
 import com.webobjects.appserver.WOResponse;
@@ -83,6 +84,11 @@ public class AjaxDroppable extends AjaxComponent {
     String droppedDraggableID = _request.stringFormValueForKey(myDraggableIDKeyName);
     if (canSetValueForBinding("droppedDraggableID")) {
       setValueForBinding(droppedDraggableID, "droppedDraggableID");
+      if (canSetValueForBinding("droppedObject")) {
+        WOComponent page = _context.page();
+        Object droppedObject = AjaxDraggable.draggableObjectForPage(page, droppedDraggableID);
+        setValueForBinding(droppedObject, "droppedObject");
+      }
     }
     if (canGetValueForBinding("action")) {
       WOActionResults results = (WOActionResults) valueForBinding("action");
