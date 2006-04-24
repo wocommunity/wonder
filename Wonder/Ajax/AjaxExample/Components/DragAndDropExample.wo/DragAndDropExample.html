@@ -21,22 +21,19 @@
 <body>
 
 <webobject name = "DraggableExample1">
-This is draggable #1, Item <b><webobject name="FirstItem"></webobject></b> (I return)
+This is draggable #1, Item <b><webobject name="FirstItem"></webobject></b> (I move around freely)
 </webobject>
 
 <p>&nbsp;</p>
 <webobject name="ItemLoop">
 <webobject name = "DraggableExample2">
-This is draggable #2 Item <b><webobject name="Item"></webobject></b> (I move around)
+This is draggable #2 Item <b><webobject name="Item"></webobject></b> (I return to my place)
 </webobject>
+<p></p>
+
 </webobject>
 
-<p>
-Droppable is a little weird, because we don't have actual objects to reference for the draggables.  As a result,
-your droppable is notified of the droppedDraggableID (defaults to the ID of the draggable).  Additionally,
-if you specify and action, it will call that action method when the drop is completed.  The onDrop javascript
-function is called AFTER the action method is called.
-<p>
+<p>&nbsp;</p>
 
 <webobject name = "DroppableExample1">
 This is a drop area #1.
