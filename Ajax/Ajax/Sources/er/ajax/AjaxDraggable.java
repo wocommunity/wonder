@@ -1,6 +1,11 @@
 package er.ajax;
 
+import java.util.Map;
+
+import org.apache.commons.collections.map.ReferenceMap;
+
 import com.webobjects.appserver.WOActionResults;
+import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WORequest;
 import com.webobjects.appserver.WOResponse;
@@ -9,7 +14,8 @@ import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 
 public class AjaxDraggable extends AjaxComponent {
-    private String _id;
+  private static ReferenceMap COMPONENT_DRAGGABLES_MAP = new ReferenceMap(ReferenceMap.WEAK, ReferenceMap.HARD);  
+  private String _id;
 
   public AjaxDraggable(WOContext _context) {
     super(_context);
@@ -31,6 +37,35 @@ public class AjaxDraggable extends AjaxComponent {
   public boolean synchronizesVariablesWithBindings() {
     return false;
   }
+  
+  public static Object draggableObjectForPage(WOComponent _page, String _draggableID) {
+    Object droppedObject = null;
+    Map draggablesMap = (Map) AjaxDraggable.COMPONENT_DRAGGABLES_MAP.get(_page);
+    if (draggablesMap != null) {
+      droppedObject = draggablesMap.get(_draggableID);
+    }
+    return droppedObject;
+  }
+  
+  public void appendToResponse(WOResponse _res, WOContext _ctx) {
+    if (canGetValueForBinding("draggableObject")) {
+      Object draggableObject = valueForBinding("draggableObject");
+      WOComponent page = context().page();
+      Map draggablesMap = (Map) AjaxDraggable.COMPONENT_DRAGGABLES_MAP.get(page);
+      if (draggablesMap == null) {
+        draggablesMap = new ReferenceMap(ReferenceMap.HARD, ReferenceMap.WEAK);
+        AjaxDraggable.COMPONENT_DRAGGABLES_MAP.put(page, draggablesMap);
+      }
+      String id = draggableID();
+      if (draggableObject == null) {
+        draggablesMap.remove(id);
+      }
+      else {
+        draggablesMap.put(id, draggableObject);
+      }
+    }
+    super.appendToResponse(_res, _ctx);
+  }
 
   public NSDictionary createAjaxOptions() {
     NSMutableArray ajaxOptionsArray = new NSMutableArray();
@@ -49,7 +84,7 @@ public class AjaxDraggable extends AjaxComponent {
 
   public String id() {
       if(_id == null) {
-          _id = (String) (canGetValueForBinding("id") && valueForBinding("id") != null ? (String)valueForBinding("id") : scriptBaseName());
+          _id = canGetValueForBinding("id") && valueForBinding("id") != null ? (String)valueForBinding("id") : scriptBaseName();
           if(canSetValueForBinding("id")) {
               setValueForBinding(_id, "id");
           }
