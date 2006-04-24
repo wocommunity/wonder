@@ -9,8 +9,19 @@ import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 
 public class AjaxDraggable extends AjaxComponent {
+    private String _id;
+
   public AjaxDraggable(WOContext _context) {
     super(_context);
+  }
+  
+  public void awake() {
+      super.awake();
+  }
+
+  public void reset() {
+      _id = null;
+      super.reset();
   }
 
   public boolean isStateless() {
@@ -36,6 +47,16 @@ public class AjaxDraggable extends AjaxComponent {
     return options;
   }
 
+  public String id() {
+      if(_id == null) {
+          _id = (String) (canGetValueForBinding("id") && valueForBinding("id") != null ? (String)valueForBinding("id") : scriptBaseName());
+          if(canSetValueForBinding("id")) {
+              setValueForBinding(_id, "id");
+          }
+      }
+      return _id;
+  }
+
   public String elementName() {
     return (String) valueForBinding("elementName", "div");
   }
@@ -43,10 +64,9 @@ public class AjaxDraggable extends AjaxComponent {
   public String draggableID() {
     String draggableID;
     if (canGetValueForBinding("draggableID")) {
-      draggableID = (String) valueForBinding("draggableID");
-    }
-    else {
-      draggableID = (String) valueForBinding("id");
+        draggableID = (String) valueForBinding("draggableID");
+    } else {
+        draggableID = id();
     }
     return draggableID;
   }
