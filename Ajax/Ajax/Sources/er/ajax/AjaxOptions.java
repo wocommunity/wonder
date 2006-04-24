@@ -24,7 +24,7 @@ public class AjaxOptions extends WODynamicElement {
   public void appendToResponse(WOResponse _response, WOContext _context) {
     _response.appendContentCharacter('{');
     NSMutableDictionary options = myBindings;
-    WOAssociation optionsBinding = (WOAssociation) myBindings.removeObjectForKey("options");
+    WOAssociation optionsBinding = (WOAssociation) myBindings.objectForKey("options");
     if (optionsBinding != null) {
       NSDictionary passedInOptions = (NSDictionary) optionsBinding.valueInComponent(_context.component());
       if (passedInOptions != null) {
@@ -46,19 +46,21 @@ public class AjaxOptions extends WODynamicElement {
       Enumeration bindingsEnum = _options.keyEnumerator();
       while (bindingsEnum.hasMoreElements()) {
         String bindingName = (String) bindingsEnum.nextElement();
-        Object bindingValue = _options.objectForKey(bindingName);
-        if (bindingValue instanceof WOAssociation) {
-          WOAssociation association = (WOAssociation) bindingValue;
-          bindingValue = association.valueInComponent(component);
-        }
-        if (bindingValue != null) {
-          if (hasPreviousOptions) {
-            _response.appendContentString(", ");
+        if (!"options".equals(bindingName)) {
+          Object bindingValue = _options.objectForKey(bindingName);
+          if (bindingValue instanceof WOAssociation) {
+            WOAssociation association = (WOAssociation) bindingValue;
+            bindingValue = association.valueInComponent(component);
           }
-          _response.appendContentString(bindingName);
-          _response.appendContentCharacter(':');
-          _response.appendContentString(bindingValue.toString());
-          hasPreviousOptions = true;
+          if (bindingValue != null) {
+            if (hasPreviousOptions) {
+              _response.appendContentString(", ");
+            }
+            _response.appendContentString(bindingName);
+            _response.appendContentCharacter(':');
+            _response.appendContentString(bindingValue.toString());
+            hasPreviousOptions = true;
+          }
         }
       }
     }
