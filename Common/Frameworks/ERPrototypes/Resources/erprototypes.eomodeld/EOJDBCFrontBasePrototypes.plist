@@ -2,11 +2,13 @@
     attributes = (
         {
             columnName = ""; 
-            externalType = DOUBLE; 
+            externalType = DECIMAL;
+            scale = 2;
+            precision = 38;
             name = amount; 
             userInfo = {modificationDate = "2002-07-21 21:47:27 +0200"; }; 
             valueClassName = NSNumber; 
-            valueType = d; 
+            valueType = B;
         }, 
         {columnName = ""; externalType = BLOB; name = blob; valueClassName = NSData; }, 
         {
