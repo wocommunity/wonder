@@ -4,6 +4,7 @@
     <binding name = "id"/>
     <binding name = "draggableID"/>
     <binding name = "elementName"/>
+    <binding name = "draggableObject"/>
     
     <binding name = "starteffect"/>
     <binding name = "reverteffect"/>
