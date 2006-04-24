@@ -14,7 +14,7 @@ import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 
 public class AjaxDraggable extends AjaxComponent {
-  private static ReferenceMap COMPONENT_DRAGGABLES_MAP = new ReferenceMap(ReferenceMap.WEAK, ReferenceMap.HARD);  
+  private static final String COMPONENT_DRAGGABLES_MAP_KEY = "AjaxComponentDraggablesMap";
   private String _id;
 
   public AjaxDraggable(WOContext _context) {
@@ -40,9 +40,12 @@ public class AjaxDraggable extends AjaxComponent {
   
   public static Object draggableObjectForPage(WOComponent _page, String _draggableID) {
     Object droppedObject = null;
-    Map draggablesMap = (Map) AjaxDraggable.COMPONENT_DRAGGABLES_MAP.get(_page);
-    if (draggablesMap != null) {
-      droppedObject = draggablesMap.get(_draggableID);
+    Map componentDraggablesMap = (Map)_page.context().session().objectForKey(AjaxDraggable.COMPONENT_DRAGGABLES_MAP_KEY);
+    if (componentDraggablesMap != null) {
+      Map draggablesMap = (Map) componentDraggablesMap.get(_page);
+      if (draggablesMap != null) {
+        droppedObject = draggablesMap.get(_draggableID);
+      }
     }
     return droppedObject;
   }
@@ -51,10 +54,15 @@ public class AjaxDraggable extends AjaxComponent {
     if (canGetValueForBinding("draggableObject")) {
       Object draggableObject = valueForBinding("draggableObject");
       WOComponent page = context().page();
-      Map draggablesMap = (Map) AjaxDraggable.COMPONENT_DRAGGABLES_MAP.get(page);
+      Map componentDraggablesMap = (Map)_ctx.session().objectForKey(AjaxDraggable.COMPONENT_DRAGGABLES_MAP_KEY);
+      if (componentDraggablesMap == null) {
+        componentDraggablesMap = new ReferenceMap(ReferenceMap.WEAK, ReferenceMap.HARD);
+        _ctx.session().setObjectForKey(componentDraggablesMap, AjaxDraggable.COMPONENT_DRAGGABLES_MAP_KEY);
+      }
+      Map draggablesMap = (Map) componentDraggablesMap.get(page);
       if (draggablesMap == null) {
         draggablesMap = new ReferenceMap(ReferenceMap.HARD, ReferenceMap.WEAK);
-        AjaxDraggable.COMPONENT_DRAGGABLES_MAP.put(page, draggablesMap);
+        componentDraggablesMap.put(page, draggablesMap);
       }
       String id = draggableID();
       if (draggableObject == null) {
