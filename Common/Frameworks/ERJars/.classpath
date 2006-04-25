@@ -6,6 +6,5 @@
 	<classpathentry exported="true" kind="lib" path="Libraries/log4j-1.2.8.jar"/>
 	<classpathentry exported="true" kind="lib" path="Libraries/junit.jar"/>
 	<classpathentry exported="true" kind="lib" path="Libraries/icu4j_2_8.jar"/>
-	<classpathentry exported="true" kind="lib" path="Libraries/commons-collections-3.1.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
