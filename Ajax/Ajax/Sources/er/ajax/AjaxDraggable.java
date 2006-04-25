@@ -1,8 +1,8 @@
 package er.ajax;
 
+import java.util.HashMap;
 import java.util.Map;
-
-import org.apache.commons.collections.map.ReferenceMap;
+import java.util.WeakHashMap;
 
 import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WOComponent;
@@ -56,12 +56,12 @@ public class AjaxDraggable extends AjaxComponent {
       WOComponent page = context().page();
       Map componentDraggablesMap = (Map)_ctx.session().objectForKey(AjaxDraggable.COMPONENT_DRAGGABLES_MAP_KEY);
       if (componentDraggablesMap == null) {
-        componentDraggablesMap = new ReferenceMap(ReferenceMap.WEAK, ReferenceMap.HARD);
+        componentDraggablesMap = new WeakHashMap();
         _ctx.session().setObjectForKey(componentDraggablesMap, AjaxDraggable.COMPONENT_DRAGGABLES_MAP_KEY);
       }
       Map draggablesMap = (Map) componentDraggablesMap.get(page);
       if (draggablesMap == null) {
-        draggablesMap = new ReferenceMap(ReferenceMap.HARD, ReferenceMap.WEAK);
+        draggablesMap = new HashMap();
         componentDraggablesMap.put(page, draggablesMap);
       }
       String id = draggableID();
