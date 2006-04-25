@@ -285,6 +285,9 @@ There are many ways to use this script:
                 <include name="WRReporting.framework" />
                 <include name="WOOgnl.framework" />
             </frameworks>
+            <frameworks dir="${wonder.lib.root}" if="use.wonder.ajax"> 
+                <include name="Ajax.framework" />
+            </frameworks>
            <frameworks dir="${wo.localroot}/Library/Frameworks" if="use.reporting">
                 <include name="WOComponentElements.framework"/>
            </frameworks>
@@ -1044,9 +1047,10 @@ There are many ways to use this script:
             <param name="project.type" value="application" />
             <param name="project.principal.class" value="Application" />
             <param name="project.name" value="AjaxExample" />
-            <param name="project.dir" value="Ajax/Ajax" />
-	        <param name="use.additional.framework.1" value="Ajax.framework" />
+            <param name="project.dir" value="Ajax/AjaxExample" />
+	    <param name="use.additional.framework.1" value="Ajax.framework" />
             <param name="use.wonder.core" value="true" />
+            <param name="use.wonder.ajax" value="true" />
         </antcall>
     </target>
     <target name="Ajax.framework.all">
@@ -1091,11 +1095,12 @@ There are many ways to use this script:
     <target name="common.applications.all" depends="common.frameworks.all, bugtracker.all, ERMailer.all" />
     <target name="wrox.all" depends="common.frameworks.all,ERMiniUglyLook.all, NetStruxrCaseStudy.all" />
     <target name="stepwise.all" depends="D2WListExample.all, D2WInspectExample.all" />
-    <target name="common.examples.all" depends="common.frameworks.all, wrox.all, stepwise.all, ERMovies.all" />
+    <target name="common.examples.all" depends="common.frameworks.all, wrox.all, stepwise.all, ERMovies.all, ajaxexample.all" />
     <target name="common.all" depends="common.frameworks.all, common.applications.all, examples.all" />
     <target name="dynareporting.base" depends="core.all, WOOgnl.all, DynaReporting.base" />
     <target name="dynareporting.all" depends="core.all, WOOgnl.all, dynareporting.base" />
     <target name="excelgeneration.all" depends="core.all, ExcelGenerator.all, EGSampleApp.all" />
+    <target name="ajaxexample.all" depends="core.all, Ajax.all, AjaxExample.all" />
 
     <target name="Validity.base" depends="Validity.framework.all, Validity.application.all" />
     <target name="Validity.all" depends="Validity.base, Validity.example.all" />
@@ -1120,7 +1125,7 @@ There are many ways to use this script:
 
     <target name="frameworks.all" depends="common.frameworks.all, BTBusinessLogic.all, ERMiniUglyLook.all, ExcelGenerator.all,  Ajax.framework.all, ERIMAdaptor.framework.all, Validity.framework.all, SVGObjects.framework.all, PostgresqlPlugIn.all, WOPayPal.all, DRGrouping.all, WRReporting.all"/>
     <target name="applications.all" depends="DevStudio.all, BugTracker.all, ERMailer.all, Validity.application.all"/>
-    <target name="examples.all" depends="NetStruxrCaseStudy.all, ERMovies.all, D2WListExample.all, D2WInspectExample.all, EGSampleApp.all, Validity.example.all, DocsByExample.all, DynaReporter.all, DRGroupingTest.all, SVGObjects.example.all "/>
+    <target name="examples.all" depends="NetStruxrCaseStudy.all, ERMovies.all, D2WListExample.all, D2WInspectExample.all, EGSampleApp.all, Validity.example.all, DocsByExample.all, DynaReporter.all, DRGroupingTest.all, SVGObjects.example.all, AjaxExample.all "/>
 
     <target name="all.compile" depends="common.all, subprojects.all, experimental.all" />
 
@@ -1257,6 +1262,9 @@ There are many ways to use this script:
         </antcall>
         <antcall target="global.clean.framework" >
             <param name="project.name" value="ERWorkerChannel" />
+        </antcall>
+        <antcall target="global.clean.framework" >
+            <param name="project.name" value="AjaxExample" />
         </antcall>
      </target>
 
