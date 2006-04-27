@@ -150,8 +150,9 @@ public abstract class AjaxComponent extends WOComponent {
         Object result = null;
         String elementID = context.elementID();
         String senderID = context.senderID();
+        String invokeWOElementID = request.stringFormValueForKey("invokeWOElementID");
         WOComponent wocomponent = context.component();
-        if (elementID != null && elementID.equals(senderID)) {
+        if (elementID != null && (elementID.equals(senderID) || (invokeWOElementID != null && invokeWOElementID.equals(elementID)))) {
             result = handleRequest(request, context);
             NSMutableDictionary dict = mutableUserInfo(context().request());
             dict.takeValueForKey(AJAX_REQUEST_KEY, AJAX_REQUEST_KEY);
@@ -162,7 +163,15 @@ public abstract class AjaxComponent extends WOComponent {
     }
     
     public String safeElementID() {
-      return context().elementID().replace('.', '_');
+      return AjaxComponent.toSafeElementID(context().elementID());
+    }
+    
+    public static String toSafeElementID(String _elementID) {
+      return _elementID.replace('.', '_');
+    }
+    
+    public static String toElementID(String _safeElementID) {
+      return _safeElementID.replace('_', '.');
     }
 
     /**

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<wodefinitions>
+	<wo wocomponentcontent = "true" class = "AjaxUpdateLink">
+    <binding name = "updateContainerID"/>
+    <binding name = "action"/>
+		
+		<binding name = "onComplete"/>
+		<binding name = "onSuccess"/>
+		<binding name = "onFailure"/>
+		<binding name = "onException"/>
+		<binding name = "insertion"/>
+		<binding name = "evalScripts"/>
+
+    <validation message = "&apos;action&apos; is a required binding">
+      <unbound name = "action"/>
+    </validation>
+	</wo>
+</wodefinitions>

@@ -3,6 +3,7 @@ Container: WOGenericContainer {
 	id = ^id;
 	class = ^class;
 	updateUrl = context.componentActionURL;
+	woElementID = context.elementID;
 }
 
 Content: WOComponentContent {
