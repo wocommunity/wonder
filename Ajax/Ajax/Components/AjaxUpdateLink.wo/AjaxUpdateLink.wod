@@ -1,0 +1,9 @@
+Link : WOGenericContainer {
+	elementName = "a";
+	href = "#";
+	onClick = onClick;
+	class = ^class;
+}
+
+Content : WOComponentContent {
+}

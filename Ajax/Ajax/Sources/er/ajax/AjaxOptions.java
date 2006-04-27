@@ -40,6 +40,12 @@ public class AjaxOptions extends WODynamicElement {
   }
 
   public static void _appendToResponse(NSDictionary _options, WOResponse _response, WOContext _context) {
+    StringBuffer sb = new StringBuffer();
+    AjaxOptions._appendToBuffer(_options, sb, _context);
+    _response.appendContentString(sb.toString());
+  }
+  
+  public static void _appendToBuffer(NSDictionary _options, StringBuffer _stringBuffer, WOContext _context) {
     if (_options != null) {
       WOComponent component = _context.component();
       boolean hasPreviousOptions = false;
@@ -54,16 +60,22 @@ public class AjaxOptions extends WODynamicElement {
           }
           if (bindingValue != null) {
             if (hasPreviousOptions) {
-              _response.appendContentString(", ");
+              _stringBuffer.append(", ");
             }
-            _response.appendContentString(bindingName);
-            _response.appendContentCharacter(':');
-            _response.appendContentString(bindingValue.toString());
+            _stringBuffer.append(bindingName);
+            _stringBuffer.append(':');
+            _stringBuffer.append(bindingValue.toString());
             hasPreviousOptions = true;
           }
         }
       }
     }
+  }
+
+  public static void appendToBuffer(NSDictionary _options, StringBuffer _stringBuffer, WOContext _context) {
+    _stringBuffer.append('{');
+    AjaxOptions._appendToBuffer(_options, _stringBuffer, _context);
+    _stringBuffer.append('}');
   }
 
   public static void appendToResponse(NSDictionary _options, WOResponse _response, WOContext _context) {
