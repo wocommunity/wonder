@@ -15,4 +15,9 @@ public class UpdaterExample extends WOComponent {
     public WOComponent someAction() {
         return pageWithName("Main");
     }
+    
+    public WOActionResults anotherAction() {
+      System.out.println("UpdaterExample.anotherAction: Fired requested action (return value is ignored right now)");
+      return null;
+    }
 }

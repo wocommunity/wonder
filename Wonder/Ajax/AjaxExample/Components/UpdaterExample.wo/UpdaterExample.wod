@@ -32,3 +32,8 @@ UpdateShortcutLink: WOGenericContainer {
 	href = "#";
 	onclick = "exampleAreaUpdate();";
 }
+
+UpdateWithActionLink : AjaxUpdateLink {
+	updateContainerID = "exampleArea";
+	action = anotherAction;
+}
