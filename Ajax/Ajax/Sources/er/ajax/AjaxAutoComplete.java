@@ -100,7 +100,7 @@ public class AjaxAutoComplete extends AjaxComponent {
         NSArray values = (NSArray) valueForBinding("list");
         WOElement child = _childTemplate();
         boolean hasItem = hasBinding("item");
-        WOResponse response = createResponse(hasItem ? null : context);
+        WOResponse response = AjaxUtils.createResponse(hasItem ? null : context);
         response.appendContentString("<ul>");
         for(Enumeration e = values.objectEnumerator(); e.hasMoreElements();) {
             response.appendContentString("<li>");

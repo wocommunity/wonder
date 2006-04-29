@@ -70,7 +70,7 @@ import com.webobjects.foundation.NSMutableDictionary;
  * Remember that is no proxy object is given, it will use the parent component, which is the component in which this component is embeded.
  * </p>
  * <h3>Warning</h3>
- * Heavy usage of this component can fill your session's page cache with ajax request.  There is a chance you see the « page backtrack too far » exception.
+ * Heavy usage of this component can fill your session's page cache with ajax request.  There is a chance you see the ÔøΩ page backtrack too far ÔøΩ exception.
  * <br>
  * To avoid running into this problem, you shouldn't cache ajax request comming from this component. <br>
  * To do so, in your WOSession subclass (commonly Session.java), add the following logic :
@@ -115,10 +115,10 @@ import com.webobjects.foundation.NSMutableDictionary;
  * etc.).
  * </ul>
  * 
- * @author Jean-François Veillette <jfveillette@os.ca>
+ * @author Jean-FranÔøΩois Veillette <jfveillette@os.ca>
  * @version $Revision $, $Date $ <br>
  *          &copy; 2005-2006 OS communications informatiques, inc. http://www.os.ca
- *          Tous droits réservés.
+ *          Tous droits rÔøΩservÔøΩs.
  */
 public class AjaxProxy extends AjaxComponent {
 
@@ -150,7 +150,7 @@ public class AjaxProxy extends AjaxComponent {
     protected void addRequiredWebResources(WOResponse res) {
         addScriptResourceInHead(res, "jsonrpc.js");
 
-        NSMutableDictionary userInfo = mutableUserInfo(context().response());
+        NSMutableDictionary userInfo = AjaxUtils.mutableUserInfo(context(), context().response());
         String name = (String) valueForBinding("name");
         String key = "JSONRPC_" + name;
         Object oldValue = userInfo.objectForKey(key);
@@ -162,7 +162,7 @@ public class AjaxProxy extends AjaxComponent {
             // add the javascript variable 'name' only if not already in the
             // response
             userInfo.setObjectForKey(bridge, key);
-            addScriptCodeInHead(res, "var " + name + " = new JSONRpcClient(\""
+            AjaxUtils.addScriptCodeInHead(res, "var " + name + " = new JSONRpcClient(\""
                     + context().componentActionURL() + "\");");
         } else {
             // ok, the javascript variable 'name' is already in the response,
@@ -182,7 +182,7 @@ public class AjaxProxy extends AjaxComponent {
 
     /** Ask the an JSONRPCBridge object to handle the json request. */
     protected WOActionResults handleRequest(WORequest request, WOContext context) {
-        WOResponse response = createResponse(null);
+        WOResponse response = AjaxUtils.createResponse(null);
 
         String inputString = request.contentString();
         log.debug("Input: " + inputString);
