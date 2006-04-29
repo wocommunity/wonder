@@ -22,6 +22,10 @@ SortableListLink : WOHyperlink {
 	pageName = "SortableListExample";
 }
 
+AccordionLink : WOHyperlink {
+	pageName = "AccordionExample";
+}
+
 RoundedBordersLink : WOHyperlink {
 	pageName = "RoundedBordersExample";
 }

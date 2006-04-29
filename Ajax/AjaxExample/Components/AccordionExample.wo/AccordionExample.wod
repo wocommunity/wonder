@@ -1,0 +1,18 @@
+Accordion : AjaxAccordion {
+}
+
+Tab1 : AjaxAccordionTab {
+	title = "Accordion Tab #1";
+}
+
+Tab2 : AjaxAccordionTab {
+	title = "Accordion Tab #2";
+}
+
+Tab3 : AjaxAccordionTab {
+	title = "Accordion Tab #3";
+}
+
+Tab4 : AjaxAccordionTab {
+	title = "Accordion Tab #4";
+}
