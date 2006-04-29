@@ -17,6 +17,17 @@ public class AjaxUtils {
    * Key that flags the session to not save the page in the cache.
    */
   public static final String AJAX_REQUEST_KEY = "AJAX_REQUEST_KEY";
+  
+  /**
+   * Checks if the message is an Ajax message by looking for the AJAX_REQUEST_KEY 
+   * in the header and in the userInfo.
+   * @param message
+   * @return
+   */
+  public static boolean isAjaxMessage(WOMessage message) {
+      return (message.headerForKey(AjaxUtils.AJAX_REQUEST_KEY) != null ||
+              (message.userInfo() != null && message.userInfo().objectForKey(AjaxUtils.AJAX_REQUEST_KEY) != null));
+  }
 
   /**
    * Creates a response for the given context (which can be null), sets
@@ -47,18 +58,17 @@ public class AjaxUtils {
    * @param _message
    * @return
    */
-  public static NSMutableDictionary mutableUserInfo(WOContext _context, WOMessage _message) {
+  public static NSMutableDictionary mutableUserInfo(WOMessage _message) {
     NSDictionary dict = _message.userInfo();
     NSMutableDictionary result = null;
     if (dict == null) {
       result = new NSMutableDictionary();
-      _context.response().setUserInfo(result);
+      _message.setUserInfo(result);
     }
     else {
       if (dict instanceof NSMutableDictionary) {
         result = (NSMutableDictionary) dict;
-      }
-      else {
+      } else {
         result = dict.mutableClone();
         _message.setUserInfo(result);
       }
@@ -97,7 +107,7 @@ public class AjaxUtils {
    * @param _fileName
    */
   public static void addScriptResourceInHead(WOContext _context, WOResponse _response, String _fileName) {
-    NSMutableDictionary userInfo = AjaxUtils.mutableUserInfo(_context, _context.response());
+    NSMutableDictionary userInfo = AjaxUtils.mutableUserInfo(_context.response());
     if (userInfo.objectForKey(_fileName) == null) {
       userInfo.setObjectForKey(_fileName, _fileName);
       WOResourceManager rm = WOApplication.application().resourceManager();
@@ -135,7 +145,7 @@ public class AjaxUtils {
   }
 
   public static void updateMutableUserInfoWithAjaxInfo(WOContext _context) {
-    NSMutableDictionary dict = AjaxUtils.mutableUserInfo(_context, _context.request());
+    NSMutableDictionary dict = AjaxUtils.mutableUserInfo(_context.request());
     dict.takeValueForKey(AjaxUtils.AJAX_REQUEST_KEY, AjaxUtils.AJAX_REQUEST_KEY);
   }
 }
