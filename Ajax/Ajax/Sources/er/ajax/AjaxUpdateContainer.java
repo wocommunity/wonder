@@ -83,7 +83,7 @@ public class AjaxUpdateContainer extends AjaxComponent {
 
     protected WOActionResults handleRequest(WORequest request, WOContext context) {
         WOElement child = _childTemplate();
-        WOResponse response = createResponse(context);
+        WOResponse response = AjaxUtils.createResponse(context);
         if(child != null) {
             context._setCurrentComponent(parent());
             child.appendToResponse(response, context);
