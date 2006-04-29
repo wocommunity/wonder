@@ -21,3 +21,11 @@ DragAndDropLink : WOHyperlink {
 SortableListLink : WOHyperlink {
 	pageName = "SortableListExample";
 }
+
+RoundedBordersLink : WOHyperlink {
+	pageName = "RoundedBordersExample";
+}
+
+RoundBoxes : AjaxRoundEffect {
+	class = "rounded";
+}

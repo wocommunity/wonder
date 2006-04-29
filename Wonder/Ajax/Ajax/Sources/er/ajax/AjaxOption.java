@@ -3,6 +3,7 @@ package er.ajax;
 import com.webobjects.appserver.WOAssociation;
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableDictionary;
 
 public class AjaxOption {
@@ -104,12 +105,38 @@ public class AjaxOption {
     }
   }
 
+  public void addToDictionary(WOComponent _component, NSDictionary _associations, NSMutableDictionary _dictionary) {
+    addToDictionary(myName, _component, _associations, _dictionary);
+  }
+
+  public void addToDictionary(String _bindingName, WOComponent _component, NSDictionary _associations, NSMutableDictionary _dictionary) {
+    Object value = _associations.objectForKey(_bindingName);
+    if (value instanceof WOAssociation) {
+      WOAssociation association = (WOAssociation) value;
+      value = association.valueInComponent(_component);
+    }
+    String strValue = processValue(value);
+    if (strValue != null) {
+      _dictionary.setObjectForKey(strValue, myName);
+    }
+  }
+
   public static NSMutableDictionary createAjaxOptionsDictionary(NSArray _ajaxOptions, WOComponent _component) {
     NSMutableDictionary optionsDictionary = new NSMutableDictionary();
     int ajaxOptionCount = _ajaxOptions.count();
     for (int i = 0; i < ajaxOptionCount; i++) {
       AjaxOption ajaxOption = (AjaxOption) _ajaxOptions.objectAtIndex(i);
       ajaxOption.addToDictionary(_component, optionsDictionary);
+    }
+    return optionsDictionary;
+  }
+
+  public static NSMutableDictionary createAjaxOptionsDictionary(NSArray _ajaxOptions, WOComponent _component, NSDictionary _associations) {
+    NSMutableDictionary optionsDictionary = new NSMutableDictionary();
+    int ajaxOptionCount = _ajaxOptions.count();
+    for (int i = 0; i < ajaxOptionCount; i++) {
+      AjaxOption ajaxOption = (AjaxOption) _ajaxOptions.objectAtIndex(i);
+      ajaxOption.addToDictionary(_component, _associations, optionsDictionary);
     }
     return optionsDictionary;
   }

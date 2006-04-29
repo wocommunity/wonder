@@ -1,9 +1,12 @@
 package er.ajax;
 
-import org.apache.log4j.*;
+import org.apache.log4j.Logger;
 
-import com.webobjects.appserver.*;
-import com.webobjects.foundation.*;
+import com.webobjects.appserver.WOActionResults;
+import com.webobjects.appserver.WOComponent;
+import com.webobjects.appserver.WOContext;
+import com.webobjects.appserver.WORequest;
+import com.webobjects.appserver.WOResponse;
 
 /**
  * This abstract (by design) superclass component isolate general utility methods.
@@ -15,12 +18,6 @@ import com.webobjects.foundation.*;
  */
 
 public abstract class AjaxComponent extends WOComponent {
-
-    /**
-     * Key that flags the session to not save the page in the cache.
-     */
-    public static final String AJAX_REQUEST_KEY = "AJAX_REQUEST_KEY";
-
     /** logging */
     protected Logger log = Logger.getLogger(getClass());
 
@@ -42,103 +39,9 @@ public abstract class AjaxComponent extends WOComponent {
         }
         return value;
     }
-
-    /**
-     * Creates a response for the given context (which can be null), sets
-     * the charset to UTF-8, the connection to keep-alive and flags it as
-     * a Ajax request by adding an AJAX_REQUEST_KEY header. You can check this
-     * header in the session to decide if you want to save the request or not.
-     * @param context
-     * @return
-     */
-    protected WOResponse createResponse(WOContext context) {
-        WOApplication app = WOApplication.application();
-        WOResponse response = app.createResponseInContext(context);
-
-        // Encode using UTF-8, although We are actually ASCII clean as all
-        // unicode data is JSON escaped using backslash u. This is less data
-        // efficient for foreign character sets but it is needed to support
-        // naughty browsers such as Konqueror and Safari which do not honour the
-        // charset set in the response
-        response.setHeader("text/plain; charset=utf-8", "content-type");
-        response.setHeader("Connection", "keep-alive");
-        response.setHeader(AJAX_REQUEST_KEY, AJAX_REQUEST_KEY);
-        return response;
-    }
-
-    private String htmlCloseHead() {
-        String head = System.getProperty("er.ajax.AJComponent.htmlCloseHead");
-        return (head == null ? "</head>" : head);
-    }
     
-    /**
-     * Returns the userInfo dictionary if the supplied message and replaces it with a mutable
-     * version if it isn't already one.
-     * @param message
-     * @return
-     */
-    protected NSMutableDictionary mutableUserInfo(WOMessage message) {
-        NSDictionary dict = message.userInfo();
-        NSMutableDictionary result = null;
-        if(dict == null) {
-            result = new NSMutableDictionary();
-            context().response().setUserInfo(result);
-        } else {
-            if(dict instanceof NSMutableDictionary) {
-                result = (NSMutableDictionary)dict;
-            } else {
-                result = dict.mutableClone();
-                message.setUserInfo(result);
-            }
-        }
-        return result;
-    }
-
-    /**
-     * Utility to add the given text before the given tag. Used to add stuff in the HEAD.
-     * @param res
-     * @param content
-     * @param tag
-     */
-    private void insertInResponseBeforeTag(WOResponse res, String content, String tag) {
-        String stream = res.contentString();
-        int idx = stream.indexOf(tag);
-        if(idx < 0) {
-            idx = stream.toLowerCase().indexOf(tag.toLowerCase());
-        }
-        if(idx >= 0) {
-            String pre = stream.substring(0,idx);
-            String post = stream.substring(idx, stream.length());
-            res.setContent(pre+content+post);
-        }
-    }
-
-    /**
-     * Adds a script tag with a correct resource url in the html head tag if it isn't already present in 
-     * the response.
-     * @param res
-     * @param fileName
-     */
-    protected void addScriptResourceInHead(WOResponse res, String fileName) {
-        NSMutableDictionary userInfo = mutableUserInfo(context().response());
-        if(userInfo.objectForKey(fileName) == null) {
-            userInfo.setObjectForKey(fileName, fileName);
-            WOResourceManager rm = application().resourceManager();
-            String url = rm.urlForResourceNamed(fileName, "Ajax", session().languages(), context().request());
-            String js = "<script type=\"text/javascript\" src=\""+ url +"\"></script>";
-            insertInResponseBeforeTag(res, js, htmlCloseHead());
-        }
-    }
-
-
-    /**
-     * Adds javascript code in a script tag in the html head tag. 
-     * @param res
-     * @param script
-     */
-    protected void addScriptCodeInHead(WOResponse res, String script) {
-        String js = "<script type=\"text/javascript\"><!--\n" + script +"\n//--></script>";
-        insertInResponseBeforeTag(res, js, htmlCloseHead());
+    protected void addScriptResourceInHead(WOResponse _response, String _fileName) {
+      AjaxUtils.addScriptResourceInHead(context(), _response, _fileName);
     }
 
     /**
@@ -147,15 +50,10 @@ public abstract class AjaxComponent extends WOComponent {
      * request userInfo dictionary (<code>request.userInfo()</code>).
      */
     public WOActionResults invokeAction(WORequest request, WOContext context) {
-        Object result = null;
-        String elementID = context.elementID();
-        String senderID = context.senderID();
-        String invokeWOElementID = request.stringFormValueForKey("invokeWOElementID");
-        WOComponent wocomponent = context.component();
-        if (elementID != null && (elementID.equals(senderID) || (invokeWOElementID != null && invokeWOElementID.equals(elementID)))) {
+        Object result;
+        if (AjaxUtils.shouldHandleRequest(request, context)) {
             result = handleRequest(request, context);
-            NSMutableDictionary dict = mutableUserInfo(context().request());
-            dict.takeValueForKey(AJAX_REQUEST_KEY, AJAX_REQUEST_KEY);
+            AjaxUtils.updateMutableUserInfoWithAjaxInfo(context());
         } else {
             result = super.invokeAction(request, context);
         }
@@ -163,15 +61,7 @@ public abstract class AjaxComponent extends WOComponent {
     }
     
     public String safeElementID() {
-      return AjaxComponent.toSafeElementID(context().elementID());
-    }
-    
-    public static String toSafeElementID(String _elementID) {
-      return _elementID.replace('.', '_');
-    }
-    
-    public static String toElementID(String _safeElementID) {
-      return _safeElementID.replace('_', '.');
+      return AjaxUtils.toSafeElementID(context().elementID());
     }
 
     /**
