@@ -150,7 +150,7 @@ public class AjaxProxy extends AjaxComponent {
     protected void addRequiredWebResources(WOResponse res) {
         addScriptResourceInHead(res, "jsonrpc.js");
 
-        NSMutableDictionary userInfo = AjaxUtils.mutableUserInfo(context(), context().response());
+        NSMutableDictionary userInfo = AjaxUtils.mutableUserInfo(context().response());
         String name = (String) valueForBinding("name");
         String key = "JSONRPC_" + name;
         Object oldValue = userInfo.objectForKey(key);
