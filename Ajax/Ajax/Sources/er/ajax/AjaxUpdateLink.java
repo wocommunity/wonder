@@ -25,7 +25,7 @@ public class AjaxUpdateLink extends AjaxComponent {
   public String onClick() {
     NSDictionary options = createAjaxOptions();
     String actionUrl = context().componentActionURL();
-    String id = (String) valueForBinding("id");
+    String id = (String) valueForBinding("updateContainerID");
     StringBuffer sb = new StringBuffer();
     sb.append("new Ajax.Updater('");
     sb.append(id);
