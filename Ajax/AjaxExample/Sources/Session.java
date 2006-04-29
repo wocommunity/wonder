@@ -11,9 +11,7 @@ public class Session extends WOSession {
      * Overridden so that Ajax requests are not saved in the page cache.
      */
     public void savePage(WOComponent arg0) {
-        if((context().response().headerForKey(AjaxUtils.AJAX_REQUEST_KEY) == null &&
-                (context().response().userInfo() != null && context().response().userInfo().objectForKey(AjaxUtils.AJAX_REQUEST_KEY) == null))
-                || context().response().userInfo() == null) {
+        if(!AjaxUtils.isAjaxMessage(context().response())) {
             super.savePage(arg0);
         }
     }
