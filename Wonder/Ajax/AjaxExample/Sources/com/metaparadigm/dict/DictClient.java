@@ -20,16 +20,14 @@
 
 package com.metaparadigm.dict;
 
-import java.util.Iterator;
-import java.util.ArrayList;
-import java.net.Socket;
-import java.net.UnknownHostException;
 import java.io.BufferedReader;
-import java.io.PrintWriter;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
-import java.io.IOException;
+import java.io.PrintWriter;
 import java.io.Serializable;
+import java.net.Socket;
+import java.util.ArrayList;
 
 public class DictClient implements Serializable
 {
@@ -255,8 +253,10 @@ public class DictClient implements Serializable
 	    matches.add(new Match(rDb, rWord));
 	}
 	r = new DictCommandResult(in.readLine());
-	if(r.code == DictCommandResult.OKAY) return matches;
-	else throw new DictClientException(r);
+	if(r.code != DictCommandResult.OKAY) { 
+	throw new DictClientException(r);
+  }
+  return matches;
     }
 
     public synchronized ArrayList defineWord(String db, String word)
