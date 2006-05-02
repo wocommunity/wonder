@@ -1,5 +1,6 @@
 package er.imadaptor;
 
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -11,6 +12,7 @@ import com.webobjects.appserver.WORequest;
 import com.webobjects.appserver.WOResponse;
 import com.webobjects.appserver._private.WODynamicURL;
 import com.webobjects.appserver._private.WOURLEncoder;
+import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDelayedCallbackCenter;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSLog;
@@ -88,6 +90,23 @@ public class InstantMessengerAdaptor extends WOAdaptor implements IMessageListen
       myWatcherPassword = getScreenName(InstantMessengerAdaptor.WATCHER_PASSWORD_KEY, _parameters);
       myWatcherFactory = getFactory(InstantMessengerAdaptor.WATCHER_IM_FACTORY_KEY, _parameters);
     }
+  }
+
+  public static InstantMessengerAdaptor instantMessengerAdaptor() {
+    NSArray adaptors = WOApplication.application().adaptors();
+    InstantMessengerAdaptor matchingAdaptor = null;
+    Enumeration adaptorsEnum = adaptors.objectEnumerator();
+    while (matchingAdaptor == null && adaptorsEnum.hasMoreElements()) {
+      WOAdaptor adaptor = (WOAdaptor) adaptorsEnum.nextElement();
+      if (adaptor instanceof InstantMessengerAdaptor) {
+        matchingAdaptor = (InstantMessengerAdaptor) adaptor;
+      }
+    }
+    return matchingAdaptor;
+  }
+  
+  public IInstantMessenger instantMessenger() {
+    return myInstantMessenger;
   }
 
   protected String getScreenName(String _key, NSDictionary _parameters) {
