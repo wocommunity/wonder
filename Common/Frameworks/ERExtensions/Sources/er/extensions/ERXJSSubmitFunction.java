@@ -82,7 +82,7 @@ public class ERXJSSubmitFunction extends WODynamicElement {
         if (ERXStringUtilities.nullForEmptyString((String) request.formValueForKey(nameInContext(context, component))) != null) {
           context._setActionInvoked(true);
           if (_action != null) {
-            obj = (WOActionResults) _action.valueInComponent(component);
+            obj = _action.valueInComponent(component);
           }
           if (obj == null) {
             obj = context.page();
@@ -92,7 +92,7 @@ public class ERXJSSubmitFunction extends WODynamicElement {
       else {
         context._setActionInvoked(true);
         if (_action != null) {
-          obj = (WOActionResults) _action.valueInComponent(component);
+          obj = _action.valueInComponent(component);
         }
         if (obj == null) {
           obj = context.page();
