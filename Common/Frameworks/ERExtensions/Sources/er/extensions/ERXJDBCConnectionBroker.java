@@ -107,10 +107,10 @@ public class ERXJDBCConnectionBroker {
         String driver = (String) d.objectForKey("driver");
         String username = (String) d.objectForKey("username");
         String password = (String) d.objectForKey("password");
-        int minConnections = Integer.parseInt((String) d.objectForKey("minConnections"));
-        int maxConnections = Integer.parseInt((String) d.objectForKey("maxConnections"));
-        double connectionRecycle = Double.parseDouble((String) d.objectForKey("connectionRecycle"));
-        int maxCheckout = Integer.parseInt((String) d.objectForKey("maxCheckout"));
+        int minConnections = ERXValueUtilities.intValueWithDefault((String) d.objectForKey("minConnections"), 0);
+        int maxConnections = ERXValueUtilities.intValueWithDefault((String) d.objectForKey("maxConnections"), 5);
+        double connectionRecycle = ERXValueUtilities.intValue((String) d.objectForKey("connectionRecycle"));
+        int maxCheckout = ERXValueUtilities.intValueWithDefault((String) d.objectForKey("maxCheckout"), 5);
 
         if (log.isDebugEnabled()) {
             log.debug("driver=" + driver);
