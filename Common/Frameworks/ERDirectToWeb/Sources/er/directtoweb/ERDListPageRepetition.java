@@ -22,6 +22,8 @@ public class ERDListPageRepetition extends ERDAttributeRepetition {
 
     protected static final NSDictionary NO_ACTIONS = NSDictionary.EmptyDictionary;
     
+    public int rowIndex;
+    
     /**
      * Public constructor
      * @param context the context
