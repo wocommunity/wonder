@@ -286,12 +286,13 @@ public abstract class ERXArrayChooser extends ERXStatelessComponent {
      
     public NSArray theList() {
         if (_list==null) {
-            if(hasBinding("possibleChoices") && valueForBinding("possibleChoices") != null) {
+            if(hasBinding("possibleChoices")) {
                 _list = (NSArray)valueForBinding("possibleChoices");
-                if(_list.lastObject() instanceof EOEnterpriseObject) {
+                if(_list != null && _list.lastObject() instanceof EOEnterpriseObject) {
                     _list = ERXEOControlUtilities.localInstancesOfObjects(editingContext(), _list);
                 }
-            } else {
+            }
+            if(_list == null) {
                 EODataSource ds = dataSource();
                 _list = ds.fetchObjects();
                 if(ds.editingContext() != editingContext()) {
