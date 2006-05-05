@@ -12,7 +12,7 @@ ToOneRelationship: ERXToOneRelationship {
 	destinationEntityName = d2wContext.destinationEntityName;
     isMandatory = d2wContext.isMandatory;
     sortCaseInsensitive = d2wContext.sortCaseInsensitive;
-	destinationSortKey = d2wContext.sortOrderAttributeName;
+	destinationSortKey = d2wContext.sortKey;
 	noSelectionString = d2wContext.noSelectionString;
 }
 
