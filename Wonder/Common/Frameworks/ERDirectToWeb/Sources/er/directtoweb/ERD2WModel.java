@@ -47,7 +47,7 @@ public class ERD2WModel extends D2WModel {
     private Hashtable _systemCache=new Hashtable(10000);
     private Hashtable _significantKeysPerKey=new Hashtable(500);
 
-    private static ERD2WModel _defaultModel;
+    private static D2WModel _defaultModel;
     
     // put here the keys than can either provided as input or computed
     // FIXME should add API from clients to add to this array
@@ -164,8 +164,16 @@ public class ERD2WModel extends D2WModel {
             }
         }
     }
-    
+
+    protected Object fireSystemRuleForKeyPathInContext(String keyPath, D2WContext context) {
+        return fireRuleForKeyPathInContext(_systemCache, keyPath,context);
+    }
+
     protected Object fireRuleForKeyPathInContext(String keyPath, D2WContext context) {
+        return fireRuleForKeyPathInContext(_cache, keyPath, context);
+    }
+    
+    private Object fireRuleForKeyPathInContext(Map cache, String keyPath, D2WContext context) {
         String[] significantKeys=(String[])_significantKeysPerKey.get(keyPath);
         if (significantKeys==null) return null;
         short s=(short)significantKeys.length;
@@ -176,7 +184,7 @@ public class ERD2WModel extends D2WModel {
             lhsKeys[i]=ERD2WUtilities.contextValueForKeyNoInferenceNoException(context, significantKeys[i]);
         } 
         lhsKeys[s]=keyPath;
-        Object result=_cache.get(k);
+        Object result=cache.get(k);
         if (result==null) {
             boolean resetTraceRuleFiring = false;
             ERXLogger ruleFireLog=null;
@@ -193,8 +201,12 @@ public class ERD2WModel extends D2WModel {
                                       descriptionForRuleSet(canidateRuleSetForRHSInContext(keyPath, context)));
                 }
             }
-            result=super.fireRuleForKeyPathInContext(keyPath,context);
-            _cache.put(k,result==null ? NULL_VALUE : result);
+            if(cache == _systemCache) {
+                result=super.fireSystemRuleForKeyPathInContext(keyPath,context);
+            } else {
+                result=super.fireRuleForKeyPathInContext(keyPath,context);
+            }
+            cache.put(k,result==null ? NULL_VALUE : result);
             if (ruleTraceEnabledLog.isDebugEnabled()) {
                 if (ruleFireLog.isDebugEnabled())
                 ruleFireLog.debug("FIRE: " +keyPath +  " depends on: "  + new NSArray(significantKeys) + " = " + k
@@ -252,11 +264,6 @@ public class ERD2WModel extends D2WModel {
         }
         return canidateSet.count() == 0 ? canidateSet.allObjects() :
             EOSortOrdering.sortedArrayUsingKeyOrderArray(canidateSet.allObjects(), ruleSortOrderingKeyArray());
-    }
-
-    synchronized protected Object fireSystemRuleForKeyPathInContext(String keyPath, D2WContext context) {
-        // FIXME: optimize me!
-        return super.fireSystemRuleForKeyPathInContext(keyPath,context);
     }
 
 
