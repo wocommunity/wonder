@@ -16,7 +16,7 @@ import com.webobjects.foundation.*;
  * ten eos in their toMany relationship. This qualifier will always only
  * generate three joins no matter how many eos you are  trying to find. Example usage:
  * <pre><code>
- * NSArray employees; // given
+ * NSArray employees; // given, can be null
  * // Find all of the departments that have all of those employees
  * ERXToManyQualifier q = new ERXToManyQualifier("toEmployees", employees);
  * EOFetchSpecification fs = new EOFetchSpecification("Department", q, null);
@@ -108,8 +108,6 @@ public class ERXToManyQualifier extends EOQualifier implements Cloneable {
             ERXToManyQualifier qualifier = (ERXToManyQualifier)eoqualifier;
             StringBuffer result=new StringBuffer();
             EOEntity targetEntity=e.entity();
-            
-            NSArray pKeys=ERXEOAccessUtilities.primaryKeysForObjects(qualifier.elements());
 
             String tableName=targetEntity.externalName();
             NSArray toManyKeys=NSArray.componentsSeparatedByString(qualifier.key(),".");
@@ -165,27 +163,30 @@ public class ERXToManyQualifier extends EOQualifier implements Cloneable {
                 appendColumnForAttributeToStringBuffer(sourceAttribute,result);
                 result.append('=');
                 result.append(e.sqlStringForAttributeNamed(firstHopRelationshipKeyPath));
-
-                result.append(" AND ");
                 
-                result.append(tableAliasForJoinTable);
-                result.append('.');
-                result.append(secondHopSourceAttribute.columnName());
-                
-                result.append(" IN ("); 
-                String pkName = (String)targetEntity.primaryKeyAttributeNames().lastObject();
-                EOAttribute pk = (EOAttribute)targetEntity.primaryKeyAttributes().lastObject();
-                for(int i = 0; i < pKeys.count(); i++) {
+                if(qualifier.elements() != null) {
+                    NSArray pKeys=ERXEOAccessUtilities.primaryKeysForObjects(qualifier.elements());
+                    result.append(" AND ");
                     
-                    Object key = pKeys.objectAtIndex(i);
-                    String keyString = e.formatValueForAttribute(key, pk);
-                    result.append(keyString);
-                    if(i < pKeys.count()-1) {
-                        result.append(",");
+                    result.append(tableAliasForJoinTable);
+                    result.append('.');
+                    result.append(secondHopSourceAttribute.columnName());
+                    
+                    result.append(" IN ("); 
+                    String pkName = (String)targetEntity.primaryKeyAttributeNames().lastObject();
+                    EOAttribute pk = (EOAttribute)targetEntity.primaryKeyAttributes().lastObject();
+                    for(int i = 0; i < pKeys.count(); i++) {
+                        
+                        Object key = pKeys.objectAtIndex(i);
+                        String keyString = e.formatValueForAttribute(key, pk);
+                        result.append(keyString);
+                        if(i < pKeys.count()-1) {
+                            result.append(",");
+                        }
                     }
+                    result.append(") ");
                 }
-
-                result.append(") GROUP BY ");
+                result.append(" GROUP BY ");
                 appendColumnForAttributeToStringBuffer(sourceAttribute,result);
 
                 result.append(" HAVING COUNT(*)");
