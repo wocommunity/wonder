@@ -21,11 +21,7 @@ public class ERXEOAccessUtilities {
 
     /** logging support */
     public static final ERXLogger log = ERXLogger.getERXLogger(ERXEOAccessUtilities.class);
-    public static NSRecursiveLock adaptorOperationsLock = new NSRecursiveLock();
 
-    
-    
-    
     /**
      * Finds an entity that is contained in a string. This is used a lot in
      * DirectToWeb. Example: "ListAllStudios"=>Studio
@@ -1097,123 +1093,6 @@ public class ERXEOAccessUtilities {
             }
         }
         return ret;
-    }
-
-    public static void writeAdaptorOperationsToDisk(NSArray adaptorOps, File file) throws IOException {
-		adaptorOperationsLock.lock();
-		try {
-			String entityNamesToIgnoreString = ERXSystem.getProperty("er.extensions.ERXAdaptorChannelDelegate.entityNamesToIgnore") + "";
-			NSArray entityNamesToIgnore = entityNamesToIgnoreString.equals("") ? NSArray.EmptyArray : NSArray.componentsSeparatedByString(
-					entityNamesToIgnoreString, ",");
-			ByteArrayOutputStream bous = new ByteArrayOutputStream();
-			ObjectOutputStream os;
-			NSMutableArray ops = new NSMutableArray();
-			for (int i = 0; i < adaptorOps.count(); i++) {
-				EOAdaptorOperation a = (EOAdaptorOperation) adaptorOps.objectAtIndex(i);
-				if (!entityNamesToIgnore.containsObject(a.entity().name())) {
-					ERXAdaptorOperationWrapper wrapper = new ERXAdaptorOperationWrapper(a);
-					ops.addObject(wrapper);
-				}
-			}
-			if (ops.count() == 0) return;
-			
-			os = new ObjectOutputStream(bous);
-			os.writeObject(ops);
-			os.flush();
-			os.close();
-			if (file.exists()) {
-				int counter = 0;
-				String path = file.getAbsolutePath();
-				path = path + "." + counter;
-				file = new File(path);
-				while (file.exists()) {
-					counter++;
-					path = file.getAbsolutePath();
-					path = path.substring(0, path.lastIndexOf(".") + 1) + counter;
-					file = new File(path);
-				}
-			}
-
-			file.createNewFile();
-			ERXFileUtilities.writeInputStreamToFile(new ByteArrayInputStream(bous.toByteArray()), file);
-		} finally {
-			adaptorOperationsLock.unlock();
-		}
-	}
-
-    public static NSArray readAdaptorOperationsFromDisk(File dir) throws IOException {
-        NSMutableArray ops = new NSMutableArray();
-
-        File[] files = dir.listFiles();
-        for (int i = 0; i < files.length; i++) {
-            File f = files[i];
-            ObjectInputStream ois = new ObjectInputStream(new FileInputStream(f));
-            try {
-                NSArray sops = (NSArray) ois.readObject();
-                ops.addObjectsFromArray((NSArray) sops.valueForKey("operation"));
-                ois.close();
-            } catch (ClassNotFoundException e) {
-                throw new IOException("cannot read object, reason "+e.getMessage()); 
-            }
-        }
-        return ops;
-    }
-
-    public static NSArray readAdaptorOperationsFromDisk(NSArray files) throws IOException {
-        NSMutableArray ops = new NSMutableArray();
-
-        for (int i = 0; i < files.count(); i++) {
-            File f = (File) files.objectAtIndex(i);
-            ObjectInputStream ois = new ObjectInputStream(new FileInputStream(f));
-            try {
-                NSArray sops = (NSArray) ois.readObject();
-                ops.addObjectsFromArray((NSArray) sops.valueForKey("operation"));
-                ois.close();
-            } catch (ClassNotFoundException e) {
-                throw new IOException("cannot read object, reason "+e.getMessage()); 
-            }
-        }
-        return ops;
-    }
-    
-    public static void insertAdaptorOperations(NSArray ops) {
-        EOEditingContext ec = ERXEC.newEditingContext();
-        ec.lock();
-        try {
-            // FIXME use the entityName information from each EOAdaptorOperation to get the correct
-            // database context, this implementation here only works if all EOModels use the same database
-            String modelName = ((EOModel)EOModelGroup.defaultGroup().models().objectAtIndex(0)).name();
-            EODatabaseContext context = EOUtilities.databaseContextForModelNamed(ec, modelName);
-            context.lock();
-            adaptorOperationsLock.lock();
-            EODatabaseChannel dchannel = context.availableChannel();
-            EOAdaptorChannel achannel = dchannel.adaptorChannel();
-            achannel.adaptorContext().beginTransaction();
-            try {
-                boolean wasOpen = achannel.isOpen();
-                if (!wasOpen) {
-                    achannel.openChannel();
-                }
-                for(int i = 0; i < ops.count(); i++) {
-                    EOAdaptorOperation op = (EOAdaptorOperation)ops.objectAtIndex(i);
-                    try {
-                        achannel.performAdaptorOperation(op);
-                    } catch(EOGeneralAdaptorException ex) {
-                        log.error("Failed op " + i + ": " + ex + "\n" + op);
-                        throw ex;
-                    }
-                }
-                achannel.adaptorContext().commitTransaction();
-                if (!wasOpen) {
-                    achannel.closeChannel();
-                }
-            } finally {
-                adaptorOperationsLock.unlock();
-                context.unlock();
-            }
-        } finally {
-            ec.unlock();
-        }
     }
 
     public static NSArray externalNamesForEntity(EOEntity entity, boolean includeParentEntities) {
