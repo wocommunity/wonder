@@ -31,27 +31,19 @@ import com.webobjects.eoaccess.*;
  * @author ak
  */
 public class ERXAdaptorChannelDelegate {
-	/**
-	 * 
-	 */
-	public static final String COUNTER_FILENAME = "COUNT";
 
 	private static ERXLogger log = ERXLogger.getERXLogger(ERXAdaptorChannelDelegate.class);
 
-	private static Boolean writeTransactionsToDisk = null;
+	private static Boolean postAdaptorOperationNotifications = null;
 
 	private static ERXAdaptorChannelDelegate _delegate;
 
-	public static String disabledForThreadKey = "DISABLED_FOR_THREAD";
+	public static final String disabledForThreadKey = "DISABLED_FOR_THREAD";
 	
-	/** Used to write down database transactions * */
-	public static NSTimestampFormatter adaptorOperationsFormatter = new NSTimestampFormatter("d.%m.%Y-%H-%M-%S.%F");
-
-	public static File transactionDir;
-
+    public static final String AdaptorOperationsDidPerformNotification = "AdaptorOperationsDidPerform";
+ 
 	private ERXLogger sqlLoggingLogger = null;
 	private long _lastMilliseconds;
-	private NSRecursiveLock transactionDirLock = new NSRecursiveLock();
 	
 
 	public static void setupDelegate() {
@@ -174,6 +166,11 @@ public class ERXAdaptorChannelDelegate {
 		return true;
 	}
 
+    /**
+     * Answers to the EODataBaseChannelNeeded notification. 
+     * Creates a new EODatabaseChannel and sets its adaptorChannel delegate to this instance,
+     * @param n
+     */
 	public void dataBaseChannelNeeded(NSNotification n) {
 		if (ERXProperties.booleanForKeyWithDefault("er.extensions.ERXAdaptorChannelDelegate.enabled", false)) {
 			EODatabaseContext context = (EODatabaseContext) n.object();
@@ -183,90 +180,43 @@ public class ERXAdaptorChannelDelegate {
 		}
 	}
 
+    /**
+     * Posts a AdaptorOperationsDidPerformNotification notification in case the operations were successfull.
+     * You can register a listener for this notification and stream the operations to a file or some other
+     * destination.
+     * @param channel
+     * @param adaptorOps
+     * @param exception
+     * @return
+     */
 	public Throwable adaptorChannelDidPerformOperations(EOAdaptorChannel channel, NSArray adaptorOps, Throwable exception) {
 		if (log.isDebugEnabled()) {
 			log.debug("adaptorChannelDidPerformOperations: count=" + adaptorOps.count() + ", exception = " + exception);
 		}
+        
 		if (exception == null) {
-			if (writeTransactionsToDisk()) {
-				File f = newTransactionFile();
-				try {
-					ERXEOAccessUtilities.writeAdaptorOperationsToDisk(adaptorOps, f);
-				} catch (IOException e) {
-					sqlLoggingLogger.error("could not write database operations to file " + f, e);
-				}
+			if (postAdaptorOperationNotifications()) {
+				NSNotificationCenter.defaultCenter().postNotification(AdaptorOperationsDidPerformNotification, adaptorOps);
 			}
 
 		}
 		return exception;
 	}
 
-	/**
-	 * @return a new <code>java.io.File</code> which can be used for
-	 *         transactionlogs.
-	 */
-	private File newTransactionFile() {
-		transactionDirLock.lock();
-		try {
-			File transactionDirCount = new File(transactionDir(), COUNTER_FILENAME);
-			if (!transactionDirCount.exists()) {
-				// we start a transaction 0
-				try {
-					ERXFileUtilities.stringToFile("0", transactionDirCount);
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			} 
-			String countString = "0";
-			try {
-				countString = ERXFileUtilities.stringFromFile(transactionDirCount);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-			int count = Integer.parseInt(countString);
-			
-			File f = new File(transactionDir(), count++ + ""/*"__"+adaptorOperationsFormatter.format(new NSTimestamp())*/);
-			
-			try {
-				ERXFileUtilities.stringToFile(count + "", transactionDirCount);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-			return f;
-		} finally {
-			transactionDirLock.unlock();
-		}
-	}
-
-	/**
-	 * 
-	 */
-	public File transactionDir() {
-		if (transactionDir == null) {
-			transactionDir = new File(ERXSystem.getProperty("er.extensions.ERXAdaptorChannelDelegate.transactionFileLocation"));
-			if (!transactionDir.exists()) {
-				if (!transactionDir.mkdirs()) {
-					throw new IllegalStateException("could not create directory for transaction files, please check permissions for "+
-							transactionDir);
-				}
-			}
-		}
-		return transactionDir;
-	}
 
 	/**
 	 * @return <code>true</code> if the system property
-	 *         <code>er.extensions.ERXDatabaseContextDelegate.writeTransactionsToDisk</code>
+	 *         <code>er.extensions.ERXDatabaseContextDelegate.postAdaptorOperationNotifications</code>
 	 *         is set to true and if ERXThreadStorage.valueForKey(disabledForThreadKey) returns false or null, false otherwise.
 	 */
-	private boolean writeTransactionsToDisk() {
-		if (writeTransactionsToDisk == null) {
-			writeTransactionsToDisk = ERXProperties.booleanForKeyWithDefault(
-					"er.extensions.ERXAdaptorChannelDelegate.writeTransactionsToDisk", false) ? Boolean.TRUE : Boolean.FALSE;
+	private boolean postAdaptorOperationNotifications() {
+		if (postAdaptorOperationNotifications == null) {
+			postAdaptorOperationNotifications = ERXProperties.booleanForKeyWithDefault(
+					"er.extensions.ERXAdaptorChannelDelegate.postAdaptorOperationNotifications", false) ? Boolean.TRUE : Boolean.FALSE;
 		}
 		Boolean b = (Boolean) ERXThreadStorage.valueForKey(disabledForThreadKey);
 		
-		return writeTransactionsToDisk.booleanValue() && (b == null ? true : !b.booleanValue());
+		return postAdaptorOperationNotifications.booleanValue() && (b == null ? true : !b.booleanValue());
 	}
 
 }
