@@ -1,6 +1,7 @@
 package er.extensions;
 
 import java.io.*;
+import java.math.*;
 import java.sql.*;
 import java.text.*;
 import java.util.*;
@@ -109,7 +110,7 @@ public class ERXJDBCConnectionBroker {
         String password = (String) d.objectForKey("password");
         int minConnections = ERXValueUtilities.intValueWithDefault((String) d.objectForKey("minConnections"), 0);
         int maxConnections = ERXValueUtilities.intValueWithDefault((String) d.objectForKey("maxConnections"), 5);
-        double connectionRecycle = ERXValueUtilities.intValue((String) d.objectForKey("connectionRecycle"));
+        double connectionRecycle = ERXValueUtilities.bigDecimalValueWithDefault((String) d.objectForKey("connectionRecycle"), BigDecimal.valueOf(1)).doubleValue();
         int maxCheckout = ERXValueUtilities.intValueWithDefault((String) d.objectForKey("maxCheckout"), 5);
 
         if (log.isDebugEnabled()) {
