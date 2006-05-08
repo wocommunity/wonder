@@ -5,10 +5,8 @@
 package er.directtoweb;
 
 import er.extensions.ERXSelectorUtilities;
-import er.extensions.ERXValueUtilities;
 import er.extensions.ERXLogger;
 import com.webobjects.directtoweb.D2WContext;
-import com.webobjects.directtoweb.D2WModel;
 import com.webobjects.eocontrol.EOKeyValueUnarchiver;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSSelector;
@@ -18,17 +16,7 @@ import com.webobjects.foundation.NSArray;
  * Similar in nature to a key-value assignment, but allows you to construct arbitrary method invocations to
  * resolve rules.  As a somewhat contrived example, assume we're inferring on the componentName rule:
  * <P>
- * <code>entity.name = 'Person' and propertyKey = 'username' -> componentName = 'componentForKey'</code> (selector invocation assigment)
- * <BR>
- * <code>entity.name = 'Person' and propertyKey = 'username' -> target = 'object'</code> (delayed key-value association>
- * <BR>
- * <code>entity.name = 'Person' and propertyKey = 'username' -> numberOfSelectorArguments = '1'</code> (assignment)
- * <BR>
- * <code>entity.name = 'Person' and propertyKey = 'username' -> selectorArgument0 = 'propertyKey'</code> (delayed key-value association)
- *
- * <P>
- *
- * The default setup provides for a selector with a single argument which is the propertyKey invoked on object.
+ * <code>entity.name = 'Person' and propertyKey = 'username' -> componentName = (object, componentForKey, propertyKey)</code>
  *
  * <P>
  *
@@ -38,39 +26,28 @@ import com.webobjects.foundation.NSArray;
  *
  * <P>
  *
+ * The array in the value for this assignment must have two or more objects.  The first object is a key path evaluated
+ * on the rule context to find the target of the selector.  The second object is the selector name, it is a constant
+ * and is not evaluated on the rule context.  All subsequent objects in the array are treated as key paths to resolve
+ * on the rule context to get the arguments for the selector.
+ *
+ * <P>
+ *
  * Assumptions:
  * <ul>
  * <li>The arguments to the invoked method must all be Objects.  This isn't strictly speaking necessary, but the way the
  *     assignment is currently coded, it's required.</li>
- * <li>The maximum number of arguments to a selector is defined at compile time and is currently set to 5.  The compile-time
- *     definition is needed in order to get the dependent keys generated properly.</li>
  * </ul>
- *
  */
 public class ERDDelayedSelectorInvocationAssignment extends ERDDelayedAssignment implements ERDComputingAssignmentInterface {
 
     private static final ERXLogger _log = ERXLogger.getERXLogger(ERDDelayedSelectorInvocationAssignment.class);
 
-    private static final String NUMBER_OF_SELECTOR_ARGUMENTS_KEY = "numberOfSelectorArguments";
-    private static final String SELECTOR_ARGUMENT_PREFIX_KEY = "selectorArgument";
-    private static final String SELECTOR_TARGET_KEY = "selectorTarget";
-
-    private static final int _maximumNumberOfSelectorArguments = 5;  // totally arbitrary
-
-    private static NSArray _argumentKeys;
-    private static NSArray _dependentKeys;
-    private static Class[][] _argumentArrays = new Class[_maximumNumberOfSelectorArguments + 1][];
+    // we cache 0 - 5 arguments
+    private static Class[][] _parameterTypesArrays = new Class[5 + 1][];
 
     static {
-        NSMutableArray a = new NSMutableArray();
-
-        for ( int i = 0; i < _maximumNumberOfSelectorArguments; i++ )
-            a.addObject(SELECTOR_ARGUMENT_PREFIX_KEY + i);
-
-        _argumentKeys = a.immutableClone();
-        _dependentKeys = (new NSArray(new Object[] { SELECTOR_TARGET_KEY, NUMBER_OF_SELECTOR_ARGUMENTS_KEY })).arrayByAddingObjectsFromArray(_argumentKeys);
-
-        for ( int i = 0; i < _argumentArrays.length; i++ ) {
+        for ( int i = 0; i < _parameterTypesArrays.length; i++ ) {
             Class[] types = null;
 
             if ( i > 0 ) {
@@ -80,7 +57,7 @@ public class ERDDelayedSelectorInvocationAssignment extends ERDDelayedAssignment
                     types[j] = Object.class;
             }
 
-            _argumentArrays[i] = types;
+            _parameterTypesArrays[i] = types;
         }
     }
 
@@ -96,56 +73,67 @@ public class ERDDelayedSelectorInvocationAssignment extends ERDDelayedAssignment
         super(key,value);
     }
 
+    private static Class[] _parameterTypesForNumberOfArguments(int numberOfArguments) {
+        final Class[] result;
+
+        if ( numberOfArguments < _parameterTypesArrays.length ) {
+            result = _parameterTypesArrays[numberOfArguments];
+        }
+        else {
+            result = new Class[numberOfArguments];
+
+            for ( int i = 0; i < numberOfArguments; i++ )
+                result[i] = Object.class;
+        }
+
+        return result;
+    }
+
     public NSArray dependentKeys(String keyPath) {
-        return _dependentKeys;
-    }
+        final NSArray value = (NSArray)value();
+        NSArray result = value;
 
-    private int _numberOfSelectorArgumentsInContext(D2WContext c) {
-        return ERXValueUtilities.intValueWithDefault(c.valueForKey(NUMBER_OF_SELECTOR_ARGUMENTS_KEY), 1);
-    }
+        if ( result != null && result.count() > 1 ) {
+            NSMutableArray a = value.mutableClone();
 
-    private Object _selectorTargetInContext(D2WContext c) {
-        Object target = c.valueForKey(SELECTOR_TARGET_KEY);
+            a.removeObjectAtIndex(1);  // selector name is constant
+            result = a;
+        }
 
-        return target != null ? target : c.valueForKey("object");
-    }
-
-    private Object _defaultSelectorArgumentZeroInContext(D2WContext c) {
-        return c.valueForKey(D2WModel.PropertyKeyKey);
+        return result != null ? result : NSArray.EmptyArray;
     }
 
     public Object fireNow(D2WContext c) {
-        final String selectorName = (String)value();
-        final int numberOfSelectorArguments = _numberOfSelectorArgumentsInContext(c);
-        final Object target = _selectorTargetInContext(c);
-        NSSelector selector = null;
-        NSMutableArray arguments = null;
+        final NSArray value = (NSArray)value();
+        final int valueCount = value.count();
+        final int numberOfArguments = valueCount - 2;
+        final Object target;
+        final String selectorName;
+        final NSSelector selector;
+        Object[] arguments = null;
 
-        if ( selectorName == null )
-            throw new RuntimeException("selectorName is null");
-        if ( target == null )
-            throw new RuntimeException(SELECTOR_TARGET_KEY + " is null");
-        if ( numberOfSelectorArguments > _maximumNumberOfSelectorArguments )
-            throw new RuntimeException(NUMBER_OF_SELECTOR_ARGUMENTS_KEY + " " + numberOfSelectorArguments + " > _maximumNumberOfSelectorArguments " + _maximumNumberOfSelectorArguments);
+        if ( valueCount < 2 )
+            throw new RuntimeException("Must have at least 2 components in value: " + value);
 
-        for ( int i = 0; i < numberOfSelectorArguments; i++ ) {
-            final String ruleKey = (String)_argumentKeys.objectAtIndex(i);
-            Object ruleValue = c.valueForKey(ruleKey);
+        target = c.valueForKeyPath((String)value.objectAtIndex(0));
+        selectorName = (String)value.objectAtIndex(1);
 
-            if ( i == 0 && ruleValue == null )
-                ruleValue = _defaultSelectorArgumentZeroInContext(c);
+        if ( numberOfArguments > 0 ) {
+            arguments = new Object[numberOfArguments];
 
-            if ( ruleValue != null )
-                (arguments != null ? arguments : (arguments = new NSMutableArray())).addObject(ruleValue);
-            else
-                break;
+            for ( int i = 2; i < valueCount; i++ )
+                arguments[i-2] = c.valueForKeyPath((String)value.objectAtIndex(i));
         }
 
-        if ( _log.isDebugEnabled() )
-            _log.debug("Going to fire " + selectorName + " on object " + target + " with " + numberOfSelectorArguments + " arguments: " + arguments);
+        if ( _log.isDebugEnabled() ) {
+            final NSArray a = arguments != null ? new NSArray(arguments) : null;
 
-        selector = new NSSelector(selectorName, _argumentArrays[numberOfSelectorArguments]);
+            _log.debug("Going to fire " + selectorName + " on object " + target + " with " + numberOfArguments + " arguments: " + a);
+        }
 
-        return ERXSelectorUtilities.invoke(selector, target, arguments != null ? arguments.objects() : null);
+        selector = new NSSelector(selectorName, _parameterTypesForNumberOfArguments(numberOfArguments));
+
+        return ERXSelectorUtilities.invoke(selector, target, arguments);
     }
+
 }
