@@ -165,7 +165,7 @@ public class ERXExtensions {
 
                 log().debug("Initializing framework: ERXExtensions");
                 ERXArrayUtilities.initialize();
-                
+               
                 // False by default
                 if (ERXValueUtilities.booleanValue(System.getProperty(ERXSharedEOLoader.PatchSharedEOLoadingPropertyKey))) {
                     ERXSharedEOLoader.patchSharedEOLoading();
@@ -185,6 +185,7 @@ public class ERXExtensions {
             }
             
             try {
+                ERXJDBCAdaptor.registerJDBCAdaptor();
                 EODatabaseContext.setDefaultDelegate(ERXDatabaseContextDelegate.defaultDelegate());
                 ERXAdaptorChannelDelegate.setupDelegate();
                 ERXAdaptorContextDelegate.setupDelegate();
