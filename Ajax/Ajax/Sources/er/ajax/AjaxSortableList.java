@@ -52,6 +52,7 @@ public class AjaxSortableList extends AjaxComponent {
   public NSDictionary createAjaxOptions() {
     NSMutableArray ajaxOptionsArray = new NSMutableArray();
     ajaxOptionsArray.addObject(new AjaxOption("tag", AjaxOption.STRING));
+    ajaxOptionsArray.addObject(new AjaxOption("treeTag", AjaxOption.STRING));
     ajaxOptionsArray.addObject(new AjaxOption("only", AjaxOption.STRING_ARRAY));
     ajaxOptionsArray.addObject(new AjaxOption("overlap", AjaxOption.STRING));
     ajaxOptionsArray.addObject(new AjaxOption("constraint", AjaxOption.STRING));
