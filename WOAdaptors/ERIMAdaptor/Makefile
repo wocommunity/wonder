@@ -7,7 +7,7 @@
 # and Makefile.postamble (both optional), and Makefile will include them.
 #
 
-NAME = WOIMAdaptor
+NAME = ERIMAdaptor
 
 PROJECTVERSION = 2.8
 PROJECT_TYPE = JavaWebObjectsFramework
