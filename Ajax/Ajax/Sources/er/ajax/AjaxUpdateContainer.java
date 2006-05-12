@@ -39,12 +39,6 @@ public class AjaxUpdateContainer extends AjaxComponent {
      */
     protected void addRequiredWebResources(WOResponse res) {
         addScriptResourceInHead(res, "prototype.js");
-        addScriptResourceInHead(res, "scriptaculous.js");
-        addScriptResourceInHead(res, "effects.js");
-        addScriptResourceInHead(res, "builder.js");
-        addScriptResourceInHead(res, "dragdrop.js");
-        addScriptResourceInHead(res, "controls.js");
-        addScriptResourceInHead(res, "slider.js");
     }
     
     protected NSDictionary createAjaxOptions() {
@@ -84,7 +78,7 @@ public class AjaxUpdateContainer extends AjaxComponent {
     protected WOActionResults handleRequest(WORequest request, WOContext context) {
         WOElement child = _childTemplate();
         WOResponse response = AjaxUtils.createResponse(context);
-        if(child != null) {
+        if (child != null) {
             context._setCurrentComponent(parent());
             child.appendToResponse(response, context);
             context._setCurrentComponent(this);
