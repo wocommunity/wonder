@@ -1,4 +1,4 @@
-<project name="WOIMAdaptor" default="build" basedir=".">
+<project name="ERIMAdaptor" default="build" basedir=".">
 
 	<!-- main targets  -->
 	<!-- add optional targets to depends list if needed -->

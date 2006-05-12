@@ -15,8 +15,31 @@ public class AimBotInstantMessenger extends AbstractInstantMessenger {
     myListener = new AimBotListener();
   }
 
+  public synchronized boolean isBuddyOnline(String _buddyName) {
+    AIMBuddy buddy = getBuddy(_buddyName);
+    boolean online = buddy != null && buddy.isOnline();
+    return online;
+  }
+
+  public synchronized AIMBuddy getBuddy(String _buddyName) {
+    AIMBuddy buddy;
+    if (mySender == null) {
+      buddy = null;
+    }
+    else {
+      buddy = mySender.getBuddy(_buddyName);
+      if (buddy == null) {
+        mySender.addBuddy(new AIMBuddy(_buddyName));
+        buddy = mySender.getBuddy(_buddyName);
+      }
+    }
+    return buddy;
+  }
+
   public synchronized void addBuddy(String _buddyName) {
-    mySender.addBuddy(new AIMBuddy(_buddyName));
+    if (mySender != null) {
+      mySender.addBuddy(new AIMBuddy(_buddyName));
+    }
   }
 
   public synchronized void connect() throws IMConnectionException {
@@ -52,11 +75,7 @@ public class AimBotInstantMessenger extends AbstractInstantMessenger {
 
   public synchronized void sendMessage(String _buddyName, String _message) throws MessageException {
     if (mySender != null) {
-      AIMBuddy buddy = mySender.getBuddy(_buddyName);
-      if (buddy == null) {
-        mySender.addBuddy(new AIMBuddy(_buddyName));
-        buddy = mySender.getBuddy(_buddyName);
-      }
+      AIMBuddy buddy = getBuddy(_buddyName);
       if (buddy != null) {
         if (!buddy.isOnline()) {
           throw new BuddyOfflineException("The buddy '" + _buddyName + "' is not online.");
