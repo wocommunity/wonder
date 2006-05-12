@@ -1,4 +1,4 @@
-package er.imadaptor;
+package er.imadaptor.components;
 
 import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WOAssociation;
@@ -10,6 +10,8 @@ import com.webobjects.appserver.WORequest;
 import com.webobjects.appserver.WOResponse;
 import com.webobjects.foundation.NSDictionary;
 
+import er.imadaptor.InstantMessengerAdaptor;
+
 public class IMAction extends WODynamicElement {
   protected WOAssociation myAction;
 
@@ -19,9 +21,8 @@ public class IMAction extends WODynamicElement {
   }
 
   public void appendToResponse(WOResponse _response, WOContext _context) {
-    String elementID = _context.elementID();
     String actionUrl = _context._componentActionURL(false);
-    _response.setHeader(InstantMessengerAdaptor.IM_ACTION_URL_KEY, actionUrl);
+    _response.setHeader(actionUrl, InstantMessengerAdaptor.IM_ACTION_URL_KEY);
     super.appendToResponse(_response, _context);
   }
 
@@ -29,6 +30,7 @@ public class IMAction extends WODynamicElement {
     String s = null;
     WOActionResults results = null;
     if (_context.elementID().equals(_context.senderID())) {
+      actionInvoked(_request, _context);
       WOComponent component = _context.component();
       results = (WOActionResults) myAction.valueInComponent(component);
       if (results == null) {
@@ -36,5 +38,8 @@ public class IMAction extends WODynamicElement {
       }
     }
     return results;
+  }
+
+  protected void actionInvoked(WORequest _request, WOContext _context) {
   }
 }

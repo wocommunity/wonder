@@ -17,11 +17,11 @@ number of bytes that can be transferred in a message.  Currently the framework d
 obvious enhancement that will probably be added in.
 
 * Some features of WORequest and WOResponse may not behave exactly like the HTTP counterpart.  For instance, there are
-no normal HTTP headers in the WORequest.  There are, however, additional IM-specific headers.
+no normal HTTP headers in the WORequest.
 
-* The buddy name and message appear as both headers AND form values -- use whichever is more convenient.
+* The buddy name and message appear as form values and in the request userInfo dictionary -- use whichever is more convenient.
 
-* The Conversation object is accessible via the headers if you need direct access (to force expiration, etc).
+* The Conversation object is accessible via the request userInfo dictionary if you need direct access (to force expiration, etc).
 
 * The implementation is TEMPORARILY single threaded for all conversations.  This will change soon, I just haven't had
 time to test it.
@@ -46,6 +46,7 @@ IMFactory (optional, default er.imadaptor.AimBotInstantMessenger$Factory) - the 
 IMScreenName (required) - the screen name of the IM account that the server should login with
 IMPassword (required) - the password of the IM account that the server should login with
 IMTimeout (optional, default 5 minutes) - the conversation timeout time in milliseconds
+IMAutoLogin (optional, default "true") - whether or not the adaptor should autologin to AIM.  If false, you must call adaptor.connect()
 IMConversationActionName (optional, default "imConversation") - the name of the DirectAction to call when a Conversation 
 	is initiated, the default is that you must create a public WOActionResults imConversationAction() { .. } method in your
 	DirectAction class
@@ -55,7 +56,6 @@ IMWatcherEnabled (optional, default "false") - whether or not you want to have a
 IMWatcherFactory (optional, default same as IMFactory) - if IMWatcherEnabled, the factory class to use
 IMWatcherScreenName (optional, required if IMWatcherEnabled) - the screen name of the watcher IM account
 IMWatcherPassword (optional, required if IMWatcherEnabled) - the password of the watcher IM account
-
 
 In your code, the following request headers are available:
 
@@ -83,7 +83,7 @@ public class IMComponent extends WOComponent {
 	...
 
   public String buddyName() {
-    return (String) context().request().formValueForKey(InstantMessengerAdaptor.BUDDY_NAME_KEY);
+    return InstantMessengerAdaptor.buddyName(context().request());
   }
 
 	public WOActionResults processResponse() {

@@ -15,7 +15,11 @@ public class IMConnectionTester implements Runnable, IMessageListener {
   private long myTimeoutMillis;
   private long myLastConnectionAttempt;
 
+  private boolean myRunning;
+
   public IMConnectionTester(IInstantMessenger _watcher, IInstantMessenger _watched, long _pingPongFrequencyMillis, long _timeoutMillis) {
+    myRunning = true;
+
     myPingPongMessageLock = new Object();
 
     myWatcher = _watcher;
@@ -28,6 +32,10 @@ public class IMConnectionTester implements Runnable, IMessageListener {
       myWatched.addMessageListener(this);
       myWatcher.addMessageListener(this);
     }
+  }
+
+  public void stop() {
+    myRunning = false;
   }
 
   public void messageReceived(IInstantMessenger _instantMessenger, String _buddyName, String _message) {
@@ -54,12 +62,12 @@ public class IMConnectionTester implements Runnable, IMessageListener {
   }
 
   protected void testConnection() throws IMConnectionException {
-    if (!myWatched.isConnected()) {
+    if (myRunning && !myWatched.isConnected()) {
       myWatched.connect();
       myFailureCount = 0;
     }
 
-    if (!myWatcher.isConnected()) {
+    if (myRunning && !myWatcher.isConnected()) {
       myWatcher.connect();
       myFailureCount = 0;
     }
@@ -73,7 +81,7 @@ public class IMConnectionTester implements Runnable, IMessageListener {
         if (!myPonged) {
           //System.out.println("IMConnectionTester.testConnection: " + myWatcher.getScreenName() + " did not respond to PING");
           myFailureCount++;
-          if (myFailureCount > 5) {
+          if (myRunning && myFailureCount > 5) {
             //System.out.println("IMConnectionTester.reconnect: Reconnecting " + myWatched.getScreenName());
             myWatched.connect();
             myFailureCount = 0;
@@ -94,7 +102,7 @@ public class IMConnectionTester implements Runnable, IMessageListener {
   }
 
   public void run() {
-    while (true) {
+    while (myRunning) {
       try {
         Thread.sleep(myPingPongFrequencyMillis);
       }
@@ -102,12 +110,14 @@ public class IMConnectionTester implements Runnable, IMessageListener {
         // who cares
       }
 
-      //System.out.println("IMConnectionTester.run: Testing " + myWatched.getScreenName());
-      try {
-        testConnection();
-      }
-      catch (Throwable t) {
-        t.printStackTrace();
+      if (myRunning) {
+        //System.out.println("IMConnectionTester.run: Testing " + myWatched.getScreenName());
+        try {
+          testConnection();
+        }
+        catch (Throwable t) {
+          t.printStackTrace();
+        }
       }
     }
   }
