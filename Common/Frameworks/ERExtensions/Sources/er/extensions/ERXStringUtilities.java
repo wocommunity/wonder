@@ -1227,6 +1227,43 @@ public class ERXStringUtilities {
 		return buf.toString();
 	}
 
+  /**
+   * Matches strings like Quicksilver (NullPointerException is matched by "NPE").  The rule
+   * is basically just that all the letters of the search string must appear in the original
+   * string in the same order as the search string, but they are not required to be contiguous
+   * or case-matched.
+   * 
+   * @param _str the string to search in
+   * @param _searchString the search string to look for
+   * @return whether or not _str contains _searchString
+   */
+  public static boolean quicksilverContains(String _str, String _searchString) {
+    boolean equals;
+    if (_str == null) {// || _searchString == null || _searchString.length() == 0) {
+      equals = false;
+    }
+    else {
+      equals = true;
+      if (_searchString != null && _searchString.length() > 0) {
+        int searchStringLength = _searchString.length();
+        int strLength = _str.length();
+        int strPos = 0;
+        for (int searchStringPos = 0; equals && searchStringPos < searchStringLength; searchStringPos++) {
+          char searchStringCh = Character.toLowerCase(_searchString.charAt(searchStringPos));
+          boolean searchStringChFound = false;
+          for (; !searchStringChFound && strPos < strLength; strPos++) {
+            char strCh = _str.charAt(strPos);
+            searchStringChFound = (Character.toLowerCase(strCh) == searchStringCh);
+          }
+          if (!searchStringChFound) {
+            equals = false;
+          }
+        }
+      }
+    }
+    return equals;
+  }
+
 	// ##########################################################################################
     // private methods
     // ##########################################################################################
