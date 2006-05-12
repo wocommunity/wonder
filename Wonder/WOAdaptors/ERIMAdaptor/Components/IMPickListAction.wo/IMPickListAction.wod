@@ -1,0 +1,13 @@
+DisplayString : WOString {
+	value = displayItem;
+}
+
+Index : WOString {
+	value = displayIndex;
+}
+
+ItemRepetition : WORepetition {
+	list = ^list;
+	item = repetitionItem;
+	index = index;
+}

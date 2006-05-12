@@ -15,16 +15,24 @@
            Sources/er/imadaptor/DaimInstantMessenger.java, 
            Sources/er/imadaptor/IInstantMessenger.java, 
            Sources/er/imadaptor/IInstantMessengerFactory.java, 
-           Sources/er/imadaptor/IMAction.java, 
            Sources/er/imadaptor/IMConnectionException.java, 
            Sources/er/imadaptor/IMConnectionTester.java, 
            Sources/er/imadaptor/IMessageListener.java, 
            Sources/er/imadaptor/InstantMessengerAdaptor.java, 
            Sources/er/imadaptor/InstantMessengerException.java, 
-           Sources/er/imadaptor/MessageException.java
+           Sources/er/imadaptor/MessageException.java, 
+           Sources/er/imadaptor/components/AbstractIMSearchAction.java, 
+           Sources/er/imadaptor/components/IMAction.java, 
+           Sources/er/imadaptor/components/IMConfirmationAction.java, 
+           Sources/er/imadaptor/components/IMPickListAction.java, 
+           Sources/er/imadaptor/components/IMSearchMessageAction.java, 
+           Sources/er/imadaptor/components/IMSearchOptionsAction.java, 
+           Sources/er/imadaptor/components/IMTextAction.java
         );
         FRAMEWORKS = 
         (
+           ERExtensions.framework, 
+           ERJars.framework, 
            JavaEOAccess.framework, 
            JavaEOControl.framework, 
            JavaFoundation.framework, 
@@ -45,10 +53,18 @@
         ();
         WOAPP_RESOURCES = 
         (
+           Components/IMAction.api, 
+           Components/IMConfirmationAction.api, 
+           Components/IMPickListAction.api, 
+           Components/IMSearchMessageAction.api, 
+           Components/IMSearchOptionsAction.api, 
+           Components/IMTextAction.api, 
            Properties
         );
         WO_COMPONENTS = 
-        ();
+        (
+           Components/IMPickListAction.wo
+        );
     };
     FRAMEWORKSEARCH = 
     (

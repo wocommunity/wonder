@@ -1,6 +1,8 @@
 package er.imadaptor;
 
 import java.io.IOException;
+import java.util.LinkedList;
+import java.util.List;
 
 import org.walluck.oscar.AIMConstants;
 import org.walluck.oscar.UserInfo;
@@ -60,6 +62,10 @@ public class DaimInstantMessenger extends AbstractInstantMessenger {
     return myConnected;
   }
 
+  public boolean isBuddyOnline(String _buddyName) {
+    return false;
+  }
+
   public void sendMessage(String _buddyName, String _message) throws MessageException {
     try {
       if (myOscarClient != null) {
@@ -72,6 +78,51 @@ public class DaimInstantMessenger extends AbstractInstantMessenger {
   }
 
   public class DaimOscarClient extends AbstractOscarClient {
+    private List myBuddies;
+    private List myOnlineBuddies;
+    private List myOfflineBuddies;
+
+    public DaimOscarClient() {
+      myBuddies = new LinkedList();
+      myOnlineBuddies = new LinkedList();
+      myOfflineBuddies = new LinkedList();
+    }
+
+    public boolean isBuddyOnline(String _buddyName) {
+      boolean online;
+      synchronized (myBuddies) {
+        online = myOnlineBuddies.contains(_buddyName.toLowerCase());
+      }
+      return online;
+    }
+
+    public void buddyOffline(String _buddyName, Buddy _buddy) {
+      if (_buddyName != null) {
+        String lcBuddyName = _buddyName.toLowerCase();
+        myOnlineBuddies.remove(lcBuddyName);
+        myOfflineBuddies.add(lcBuddyName);
+      }
+    }
+
+    public void buddyOnline(String _buddyName, Buddy _buddy) {
+      if (_buddyName != null) {
+        String lcBuddyName = _buddyName.toLowerCase();
+        myOfflineBuddies.remove(lcBuddyName);
+        myOnlineBuddies.add(lcBuddyName);
+      }
+    }
+
+    public void newBuddyList(Buddy[] _buddies) {
+      synchronized (myBuddies) {
+        myBuddies.clear();
+        myOnlineBuddies.clear();
+        myOfflineBuddies.clear();
+        for (int i = 0; i < _buddies.length; i++) {
+          myBuddies.add(_buddies[i].getName().toLowerCase());
+        }
+      }
+    }
+
     public void loginDone(DaimLoginEvent _event) {
       super.loginDone(_event);
       myConnected = true;
