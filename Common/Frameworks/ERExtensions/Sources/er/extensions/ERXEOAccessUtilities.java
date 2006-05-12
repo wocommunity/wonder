@@ -562,6 +562,40 @@ public class ERXEOAccessUtilities {
         return sb.toString();
     }
 
+    public static NSArray classPropertiesNotInParent(EOEntity entity, boolean includeAttributes, boolean includeToOneRelationships, boolean includeToManyRelationships) {
+        Object parent = entity.parentEntity();
+        if (parent == null) { return NSArray.EmptyArray; }
+        NSMutableArray ret = new NSMutableArray();
+        NSArray parentAttributeNames = (NSArray) entity.parentEntity().attributes().valueForKey("name");
+        NSArray attributes = entity.attributes();
+        NSArray cpNames = entity.classPropertyNames();
+
+        if (includeAttributes) {
+            for (int i = attributes.count(); i-- > 0;) {
+                EOAttribute att = (EOAttribute) attributes.objectAtIndex(i);
+                String name = att.name();
+                if (cpNames.containsObject(name) && !parentAttributeNames.containsObject(name)) {
+                    ret.addObject(att);
+                }
+            }
+        }
+
+        NSArray parentRelationships = (NSArray) entity.parentEntity().relationships().valueForKey("name");
+        NSArray relationships = entity.relationships();
+
+        for (int i = relationships.count(); i-- > 0;) {
+            EORelationship element = (EORelationship) relationships.objectAtIndex(i);
+            if ((element.isToMany() && includeToManyRelationships)
+                    || (!element.isToMany() && includeToOneRelationships)) {
+                String name = element.name();
+                if (cpNames.containsObject(name) && !parentRelationships.containsObject(name)) {
+                    ret.addObject(element);
+                }
+            }
+        }
+        return ret;
+    }    
+
     /**
      * Utility method to make a shared entity editable. This
      * can be useful if you want to have an adminstration
