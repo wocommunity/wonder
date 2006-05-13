@@ -188,7 +188,6 @@ public class ERXExtensions {
                 ERXJDBCAdaptor.registerJDBCAdaptor();
                 EODatabaseContext.setDefaultDelegate(ERXDatabaseContextDelegate.defaultDelegate());
                 ERXAdaptorChannelDelegate.setupDelegate();
-                ERXAdaptorContextDelegate.setupDelegate();
                 ERXExtensions.setDefaultDelegate(EOSharedEditingContext.defaultSharedEditingContext(), true);
 
                 ERXEntityClassDescription.registerDescription();
