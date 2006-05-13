@@ -16,8 +16,8 @@ import com.webobjects.foundation.*;
 public class ERXSelectorUtilities {
 
     /**
-     * Just like the NSSelector method of the same name, except only runtime
-     * exceptions are thrown.
+     * Just like the NSSelector method of the same name, except only NSForwardExceptions
+     * are thrown.
      *
      * @see com.webobjects.foundation.NSSelector#invoke(Object, Object[])
      */
@@ -28,7 +28,7 @@ public class ERXSelectorUtilities {
             result = sel.invoke(o, params);
         }
         catch ( Exception e ) {
-            throw (RuntimeException)(e instanceof RuntimeException ? e : new RuntimeException(e));
+            throw NSForwardException._runtimeExceptionForThrowable(e);
         }
 
         return result;
