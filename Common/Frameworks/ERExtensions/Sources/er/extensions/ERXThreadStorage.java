@@ -9,6 +9,7 @@ package er.extensions;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.webobjects.eocontrol.*;
 import com.webobjects.foundation.NSKeyValueCodingAdditions;
 /**
  * <code>ERXThreadStorage</code> provides a way to store objects for
@@ -86,7 +87,7 @@ public class ERXThreadStorage {
     }
     
     /**
-        * Gets the object associated with the key in the storage
+     * Gets the object associated with the key in the storage
      * map off of the current thread.
      * @param key key to be used to retrieve value from map.
      * @return the value stored in the map for the given key.
@@ -100,6 +101,28 @@ public class ERXThreadStorage {
         return result;
     }
     
+    
+    /**
+     * Gets the object associated with the key in the storage
+     * map off of the current thread in the given editing context.
+	 * Throws a ClassCastException when the value is not an EO.
+     * @param ec editing context to retrieve the value into
+     * @param key key to be used to retrieve value from map.
+     * @return the value stored in the map for the given key.
+     */
+    public static Object valueForKey(EOEditingContext ec, String key) {
+        Object result = valueForKey(key);
+        if(result != null) {
+            if (result instanceof EOEnterpriseObject) {
+                EOEnterpriseObject eo = (EOEnterpriseObject) result;
+                result = ERXEOControlUtilities.localInstanceOfObject(ec, eo);
+            } else {
+               throw new ClassCastException("Expected EO, got : " + result.getClass().getName() + ", " + result);
+            }
+        }
+        return result;
+    }
+
     /**
      * Gets the storage map from the current thread.
      * At the moment this Map is syncronized for thread
