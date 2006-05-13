@@ -50,6 +50,7 @@ public class ERDDeletionDelegate implements NextPageDelegate {
     public WOComponent nextPage(WOComponent sender) {
         if (_object != null && _object.editingContext() != null) {
             EOEditingContext editingContext = _object.editingContext();
+            NSValidation.ValidationException exception = null;
             try {
                 if (_dataSource != null) _dataSource.deleteObject(_object);
                 if (editingContext instanceof EOSharedEditingContext) {
@@ -59,8 +60,8 @@ public class ERDDeletionDelegate implements NextPageDelegate {
                     ec.lock();
                     try {
                         ec.setSharedEditingContext(null);
-                        _object = EOUtilities.localInstanceOfObject(ec, _object);
-                        ec.deleteObject(_object);
+                        EOEnterpriseObject object = EOUtilities.localInstanceOfObject(ec, _object);
+                        ec.deleteObject(object);
                         ec.saveChanges();
                     } finally {
                         ec.unlock();
@@ -71,9 +72,22 @@ public class ERDDeletionDelegate implements NextPageDelegate {
                     editingContext.saveChanges();
                     _object = null;
                 }
+            } catch (EOObjectNotAvailableException e) {
+                exception = ERXValidationFactory.defaultFactory().createCustomException(_object, "EOObjectNotAvailableException");
+            } catch (EOGeneralAdaptorException e) {
+                EODatabaseOperation op = (EODatabaseOperation)e.userInfo().objectForKey(
+                        EODatabaseContext.FailedDatabaseOperationKey);
+                if(op.databaseOperator() == EODatabaseOperation.DatabaseDeleteOperator) {
+                    exception = ERXValidationFactory.defaultFactory().createCustomException(_object, "EOObjectNotAvailableException");
+                } else {
+                    exception = ERXValidationFactory.defaultFactory().createCustomException(_object, "Database error: " + e.getMessage());
+               }
             } catch (NSValidation.ValidationException e) {
-                if (e instanceof ERXValidationException) {
-                    ERXValidationException ex = (ERXValidationException) e;
+                exception = e;
+            }
+            if(exception != null) {
+                if (exception instanceof ERXValidationException) {
+                    ERXValidationException ex = (ERXValidationException) exception;
                     D2WContext context = (D2WContext) sender.valueForKey("d2wContext");
                     Object o = ex.object();
 
@@ -82,14 +96,14 @@ public class ERDDeletionDelegate implements NextPageDelegate {
                         context.takeValueForKey(eo.entityName(), "entityName");
                         context.takeValueForKey(ex.propertyKey(), "propertyKey");
                     }
-                    ((ERXValidationException) e).setContext(context);
+                    ((ERXValidationException) exception).setContext(context);
                 }
-                log.info("Validation Exception: " + e + e.getMessage());
+                log.info("Validation Exception: " + exception + exception.getMessage());
                 editingContext.revert();
-                String errorMessage = " Could not save your changes: " + e.getMessage() + " ";
+                String errorMessage = " Could not save your changes: " + exception.getMessage() + " ";
                 ErrorPageInterface epf = D2W.factory().errorPage(sender.session());
                 if (epf instanceof ERDErrorPageInterface) {
-                    ((ERDErrorPageInterface) epf).setException(e);
+                    ((ERDErrorPageInterface) epf).setException(exception);
                 }
                 epf.setMessage(errorMessage);
                 epf.setNextPage(followPage(sender));
