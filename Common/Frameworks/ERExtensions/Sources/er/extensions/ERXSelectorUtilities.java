@@ -63,4 +63,13 @@ public class ERXSelectorUtilities {
     public static Object invoke(NSSelector sel, Object o, Object argument1, Object argument2) {
         return invoke(sel, o, new Object[] { argument1, argument2 });
     }
+    
+    /**
+     * Utility that returns a selector you can use with the NSNotificationCenter.
+     * @param methodName
+     * @return
+     */
+    public static NSSelector notificationSelector(String methodName) {
+        return new NSSelector(methodName, new Class[] {NSNotification.class});
+    }
 }
