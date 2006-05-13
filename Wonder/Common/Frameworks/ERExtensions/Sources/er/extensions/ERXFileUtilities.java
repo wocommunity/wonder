@@ -115,6 +115,10 @@ public class ERXFileUtilities {
      */
     public static void writeInputStreamToFile(InputStream stream, File file) throws IOException {
         if (file == null) throw new IllegalArgumentException("Attempting to write to a null file!");
+        File parent = file.getParentFile();
+        if(parent != null && !parent.exists()) {
+            parent.mkdirs();
+        }
         FileOutputStream out = new FileOutputStream(file);
         writeInputStreamToOutputStream(stream, out);
     }
@@ -606,7 +610,7 @@ public class ERXFileUtilities {
                         if (deleteOriginals) {
                             renameTo(srcFile, dstFile);
                         } else {
-                            dstFile.mkdir();
+                            dstFile.mkdirs();
                             copyFilesFromDirectory(srcFile, dstFile, deleteOriginals, recursiveCopy, filter);
                         }
                     } else if (!srcFile.isDirectory()) {
@@ -772,8 +776,9 @@ public class ERXFileUtilities {
     }
 
     /**
-        * Decompresses the specified zipfile. If the file is a compressed directory, the whole subdirectory
-     * structure is created as a subdirectory from destination. If destination is <code>null</code>
+     * Decompresses the specified zipfile. If the file is a compressed directory, the whole subdirectory
+     * structure is created as a subdirectory with the name if the zip file minus the .zip extension
+     * from destination. All intermittent directories are also created. If destination is <code>null</code>
      * then the <code>System Property</code> "java.io.tmpdir" is used as destination for the
      * uncompressed file(s).
      *
@@ -797,7 +802,7 @@ public class ERXFileUtilities {
         if (destination != null) {
             absolutePath = destination.getAbsolutePath();
             if (!destination.exists()) {
-                destination.mkdir();
+                destination.mkdirs();
             } else if (!destination.isDirectory()) {
                 absolutePath = absolutePath.substring(0, absolutePath.lastIndexOf(File.separator));
             }
@@ -818,7 +823,7 @@ public class ERXFileUtilities {
                 if (dir.endsWith(".zip")) {
                     dir = dir.substring(0, dir.length() - 4);
                 }
-                new File(dir).mkdir();
+                new File(dir).mkdirs();
                 absolutePath = dir + File.separator;
             }
         } else {
@@ -830,7 +835,7 @@ public class ERXFileUtilities {
             String name = ze.getName();
             if (ze.isDirectory()) {
                 File d = new File(absolutePath + name);
-                d.mkdir();
+                d.mkdirs();
                 if (log.isDebugEnabled()) {
                     log.debug("created directory "+d.getAbsolutePath());
                 }
