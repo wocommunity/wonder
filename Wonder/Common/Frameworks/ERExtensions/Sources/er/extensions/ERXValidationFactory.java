@@ -373,20 +373,25 @@ public class ERXValidationFactory {
         	// formatted when gets displayed, we ask the context *first* before asking the exception.
         	String template = templateForException(erv);
         	if(template.startsWith(UNDEFINED_VALIDATION_TEMPLATE)) {
-        		return erv.getLocalizedMessage();
-        	}
-        	
-        	if(context == erv || context == null) {
-        		message = ERXSimpleTemplateParser.sharedInstance().parseTemplateWithObject(
-        				template,
-						templateDelimiter(),
-						erv);
+                // try to get the actual exception message if one is set
+        	    message = erv._getMessage();
+        	    if(message == null) {
+        	        message = template;
+        	    }
         	} else {
-        		message = ERXSimpleTemplateParser.sharedInstance().parseTemplateWithObject(
-        				template, 
-						templateDelimiter(),
-						context,
-						erv);
+
+        	    if(context == erv || context == null) {
+        	        message = ERXSimpleTemplateParser.sharedInstance().parseTemplateWithObject(
+        	                template,
+        	                templateDelimiter(),
+        	                erv);
+        	    } else {
+        	        message = ERXSimpleTemplateParser.sharedInstance().parseTemplateWithObject(
+        	                template, 
+        	                templateDelimiter(),
+        	                context,
+        	                erv);
+        	    }
         	}
         }
         return message;

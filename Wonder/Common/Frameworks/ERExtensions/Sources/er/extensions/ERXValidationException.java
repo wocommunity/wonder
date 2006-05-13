@@ -122,6 +122,17 @@ public class ERXValidationException extends NSValidation.ValidationException imp
     }
 
     /**
+     * 
+     * @return
+     */
+    protected String _getMessage() {
+        if(message == null) {
+            return type;
+        }
+        return message;
+    }
+    
+    /**
      * Implementation of key value coding.
      * Uses the default implementation.
      * @param key to look up
