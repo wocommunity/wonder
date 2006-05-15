@@ -5,6 +5,7 @@ CheckboxOff: WOImage {
 	height = "16";
 	name = "Unchecked";
 	width = "16";
+	class = "ERD2WEditRelationshipFlagOff";
 }
 
 CheckboxOn: WOImage {
@@ -14,6 +15,7 @@ CheckboxOn: WOImage {
 	height = "16";
 	name = "Checked";
 	width = "16";
+	class = "ERD2WEditRelationshipFlagOn";
 }
 
 NoConditional: WOConditional {
