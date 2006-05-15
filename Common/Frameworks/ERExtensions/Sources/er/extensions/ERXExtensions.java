@@ -188,7 +188,7 @@ public class ERXExtensions {
                 ERXJDBCAdaptor.registerJDBCAdaptor();
                 EODatabaseContext.setDefaultDelegate(ERXDatabaseContextDelegate.defaultDelegate());
                 ERXAdaptorChannelDelegate.setupDelegate();
-                ERXExtensions.setDefaultDelegate(EOSharedEditingContext.defaultSharedEditingContext(), true);
+                ERXEC.factory().setDefaultDelegateOnEditingContext(EOSharedEditingContext.defaultSharedEditingContext(), true);
 
                 ERXEntityClassDescription.registerDescription();
                 NSNotificationCenter.defaultCenter().addObserver(observer,
