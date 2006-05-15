@@ -45,7 +45,7 @@ public class ERXProperties extends Properties {
 
     private static boolean retainDefaultsEnabled() {
         if (RetainDefaultsEnabled == null) {
-            final String propertyValue = System.getProperty("er.extensions.ERXProperties.RetainDefaultsEnabled", "false");
+            final String propertyValue = ERXSystem.getProperty("er.extensions.ERXProperties.RetainDefaultsEnabled", "false");
             final boolean isEnabled = "true".equals(propertyValue);
             RetainDefaultsEnabled = Boolean.valueOf(isEnabled);
         }
@@ -239,7 +239,7 @@ public class ERXProperties extends Properties {
                 else {
                     appSpecificPropertyName = propertyName;
                 }
-                final String propertyValue = System.getProperty(appSpecificPropertyName);
+                final String propertyValue = ERXSystem.getProperty(appSpecificPropertyName);
                 if (propertyValue == null) {
                     appSpecificPropertyName = propertyName;
                 }
@@ -268,7 +268,7 @@ public class ERXProperties extends Properties {
             return (NSArray)value;
         }
         
-        final String propertyValue = System.getProperty(propertyName);
+        final String propertyValue = ERXSystem.getProperty(propertyName);
         final NSArray array = ERXValueUtilities.arrayValueWithDefault(propertyValue, defaultValue);
         if (retainDefaultsEnabled() && propertyValue == null && array != null) {
             setArrayForKey(array, propertyName);
@@ -351,7 +351,7 @@ public class ERXProperties extends Properties {
             return (NSDictionary)value;
         }
         
-        final String propertyValue = System.getProperty(propertyName);
+        final String propertyValue = ERXSystem.getProperty(propertyName);
         final NSDictionary dictionary = ERXValueUtilities.dictionaryValueWithDefault(propertyValue, defaultValue);
         if (retainDefaultsEnabled() && propertyValue == null && dictionary != null) {
             setDictionaryForKey(dictionary, propertyName);
@@ -414,7 +414,7 @@ public class ERXProperties extends Properties {
             return (BigDecimal)value;
         }
         
-        String propertyValue = System.getProperty(propertyName);
+        String propertyValue = ERXSystem.getProperty(propertyName);
         final BigDecimal bigDecimal = ERXValueUtilities.bigDecimalValueWithDefault(propertyValue, defaultValue);
         if (retainDefaultsEnabled() && propertyValue == null && bigDecimal != null) {
             propertyValue = bigDecimal.toString();
@@ -442,7 +442,7 @@ public class ERXProperties extends Properties {
             return ((Integer)value).intValue();
         }
         
-        String propertyValue = System.getProperty(propertyName);
+        String propertyValue = ERXSystem.getProperty(propertyName);
         final int intValue = ERXValueUtilities.intValueWithDefault(propertyValue, defaultValue);
         if (retainDefaultsEnabled() && propertyValue == null) {
             propertyValue = Integer.toString(intValue);
@@ -470,7 +470,7 @@ public class ERXProperties extends Properties {
             return ((Long)value).longValue();
         }
 
-        String propertyValue = System.getProperty(propertyName);
+        String propertyValue = ERXSystem.getProperty(propertyName);
         final long longValue = ERXValueUtilities.longValueWithDefault(propertyValue, defaultValue);
         if (retainDefaultsEnabled() && propertyValue == null) {
             propertyValue = Long.toString(longValue);
@@ -500,7 +500,7 @@ public class ERXProperties extends Properties {
      */
     public static String stringForKeyWithDefault(final String s, final String defaultValue) {
         final String propertyName = getApplicationSpecificPropertyName(s);
-        final String propertyValue = System.getProperty(propertyName);
+        final String propertyValue = ERXSystem.getProperty(propertyName);
         final String stringValue = propertyValue == null ? defaultValue : propertyValue;
         if (retainDefaultsEnabled() && propertyValue == null) {
             System.setProperty(propertyName, stringValue == null ? UndefinedMarker : stringValue);
@@ -666,7 +666,7 @@ public class ERXProperties extends Properties {
             if (bundle != null) 
                 projectPath = bundle.projectPath();
             else 
-                projectPath = System.getProperty("projects." + frameworkName);
+                projectPath = ERXSystem.getProperty("projects." + frameworkName);
             
             if (projectPath != null) {
                 aPropertiesPath = pathForPropertiesUnderProjectPath(projectPath);
@@ -701,7 +701,7 @@ public class ERXProperties extends Properties {
         // horrendous hack to avoid having to set the NSProjectPath manually.
             WOProjectBundle mainBundle = WOProjectBundle.projectBundleForProject(mainBundleName, false);
             if (mainBundle == null) {
-                projectPath = System.getProperty("projects." + mainBundleName);
+                projectPath = ERXSystem.getProperty("projects." + mainBundleName);
                 if (projectPath == null)
                     projectPath = "../..";
             } else {
@@ -731,7 +731,7 @@ public class ERXProperties extends Properties {
 
 
         /* *** WebObjects.properties in the user home directory *** */
-        String userHome = System.getProperty("user.home");
+        String userHome = ERXSystem.getProperty("user.home");
         if (userHome != null  &&  userHome.length() > 0) { 
             File file = new File(userHome, "WebObjects.properties");
             if (file.exists()  &&  file.isFile()  &&  file.canRead()) {
