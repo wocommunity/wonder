@@ -1,50 +1,124 @@
-/**
- * 
- */
 package er.extensions;
 
 import java.sql.*;
 
 import com.webobjects.eoaccess.*;
+import com.webobjects.foundation.*;
 import com.webobjects.jdbcadaptor.*;
 
 /**
- * Subclass of the JDBC adaptor that supports connection pooling. Will get patched into
- * the runtime via the usual class name magic if the property 
- * <code>er.extensions.ERXJDBCAdaptor.className</code> is set.
+ * Subclass of the JDBC adaptor and accompanying classes that supports 
+ * connection pooling and posting of adaptor operation notifications. 
+ * Will get patched into the runtime via the usual class name magic if the property 
+ * <code>er.extensions.ERXJDBCAdaptor.className</code> is set to this class's name or 
+ * another subclass of JDBCAdaptor. The connection pooling will be enabled if the 
+ * system property <code>er.extensions.ERXJDBCAdaptor.useConnectionBroker</code> is set.
  * @author ak
  *
  */
 public class ERXJDBCAdaptor extends JDBCAdaptor {
     
     public static final ERXLogger log = ERXLogger.getERXLogger(ERXJDBCAdaptor.class);
+    
+    public static final String USE_CONNECTION_BROKER_KEY = "er.extensions.ERXJDBCAdaptor.useConnectionBroker";
+    
+    public static final String CLASS_NAME_KEY = "er.extensions.ERXJDBCAdaptor.className";
+    
 
-    public class Context extends JDBCContext {
+    public static void registerJDBCAdaptor() {
+        String className = ERXProperties.stringForKey(CLASS_NAME_KEY);
+        if(className != null) {
+            Class c = ERXPatcher.classForName(className);
+            if(c == null) {
+                throw new IllegalStateException("Can't find class: " + className);
+            }
+            ERXPatcher.setClassForName(c, JDBCAdaptor.class.getName());
+        }
+    }
 
+    /**
+     * Channel subclass to support notification posting.
+     * @author ak
+     *
+     */
+    public static class Channel extends JDBCChannel {
+
+        public Channel(JDBCContext jdbccontext) {
+            super(jdbccontext);
+        }
+      
+        /**
+         * Overridden to post a notification when the operations were performed. 
+         */
+        public void performAdaptorOperations(NSArray ops) {
+            super.performAdaptorOperations(ops);
+            ERXAdaptorOperationWrapper.adaptorOperationsDidPerform(ops);
+        }
+
+    }
+
+    /**
+     * Context subclass that uses connection pooling.
+     * 
+     * @author ak
+     */
+    public static class Context extends JDBCContext {
+
+        private boolean _useConnectionBroker;
+        
         public Context(EOAdaptor eoadaptor) {
             super(eoadaptor);
+            _useConnectionBroker = ERXProperties.booleanForKeyWithDefault(USE_CONNECTION_BROKER_KEY, false);
+        }
+        
+        private boolean useConnectionBroker() {
+            return _useConnectionBroker;
         }
 
         private void freeConnection() {
-             if(_jdbcConnection != null) {
-                ERXJDBCAdaptor.this.freeConnection(_jdbcConnection);
-                _jdbcConnection = null;
+            if(useConnectionBroker()) {
+                if(_jdbcConnection != null) {
+                    ((ERXJDBCAdaptor)adaptor()).freeConnection(_jdbcConnection);
+                    _jdbcConnection = null;
+                }
             }
         }
 
         private void checkoutConnection() {
-            if(_jdbcConnection == null) {
-                _jdbcConnection = ERXJDBCAdaptor.this.checkoutConnection();
+            if(useConnectionBroker()) {
+                if(_jdbcConnection == null) {
+                    _jdbcConnection = ((ERXJDBCAdaptor)adaptor()).checkoutConnection();
+                }
             }
         }
 
         public boolean connect() throws JDBCAdaptorException {
-            checkoutConnection();
-            return _jdbcConnection != null;
+            if(useConnectionBroker()) {
+                checkoutConnection();
+                return _jdbcConnection != null;
+            }
+            return super.connect();
+        }
+
+        protected JDBCChannel createJDBCChannel() {
+            return new Channel(this);
+        }
+        
+        protected JDBCChannel _cachedAdaptorChannel() {
+            if (_cachedChannel == null) {
+                _cachedChannel = createJDBCChannel();
+            }
+            return _cachedChannel;
         }
 
         public EOAdaptorChannel createAdaptorChannel() {
-            return super.createAdaptorChannel();
+            if (_cachedChannel != null) {
+                JDBCChannel jdbcchannel = _cachedChannel;
+                _cachedChannel = null;
+                return jdbcchannel;
+            } else {
+                return createJDBCChannel();
+            }
         }
 
         public void disconnect() throws JDBCAdaptorException {
@@ -72,11 +146,15 @@ public class ERXJDBCAdaptor extends JDBCAdaptor {
         super(s);
     }
 
-    public EOAdaptorContext createAdaptorContext() {
+    public Context createJDBCContext() {
         return new Context(this);
     }
 
-    private Connection checkoutConnection() {
+    public EOAdaptorContext createAdaptorContext() {
+        return createJDBCContext();
+    }
+
+    protected Connection checkoutConnection() {
         Connection c = connectionBroker().getConnection();
         return c;
     }
@@ -85,22 +163,11 @@ public class ERXJDBCAdaptor extends JDBCAdaptor {
         return ERXJDBCConnectionBroker.connectionBrokerForAdaptor(this);
     }
 
-    private void freeConnection(Connection connection) {
+    protected void freeConnection(Connection connection) {
         connectionBroker().freeConnection(connection);
     }
 
     private boolean supportsTransactions() {
         return connectionBroker().supportsTransaction();
-    }
-
-    public static void registerJDBCAdaptor() {
-        String className = ERXProperties.stringForKey("er.extensions.ERXJDBCAdaptor.className");
-        if(className != null) {
-            Class c = ERXPatcher.classForName(className);
-            if(c == null) {
-                throw new IllegalStateException("Can't find class: " + className);
-            }
-            ERXPatcher.setClassForName(c, JDBCAdaptor.class.getName());
-        }
     }
 }
