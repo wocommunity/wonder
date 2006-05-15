@@ -184,17 +184,19 @@ public class DRReportModel extends Object  {
         //OWDebug.println(1, "entered: attList:"+attList);
         while (en.hasMoreElements()) {
             NSDictionary attDict = (NSDictionary)en.nextElement();
-            DRAttribute att;
-            NSArray subAttList = (NSArray)attDict.objectForKey("attributes");
+            if(!"YES".equals(attDict.objectForKey("disabled"))) {
+                DRAttribute att;
+                NSArray subAttList = (NSArray)attDict.objectForKey("attributes");
 
-            if (subAttList != null) {
-                NSArray subAttListObjects = DRReportModel.attributeList(subAttList);
-                att = DRAttributeGroup.withKeyPathFormatLabelTotalListUserInfo((String)attDict.objectForKey("keyPath"), (String)attDict.objectForKey("format"), (String)attDict.objectForKey("label"), ERXValueUtilities.booleanValue(attDict.objectForKey("total")), subAttListObjects, (NSDictionary)attDict.objectForKey("userInfo"));
-            } else {
-                att = DRAttribute.withKeyPathFormatLabelTotalUserInfo((String)attDict.objectForKey("keyPath"), (String)attDict.objectForKey("format"), (String)attDict.objectForKey("label"), ERXValueUtilities.booleanValue(attDict.objectForKey("total")), (NSDictionary)attDict.objectForKey("userInfo"));
+                if (subAttList != null) {
+                    NSArray subAttListObjects = DRReportModel.attributeList(subAttList);
+                    att = DRAttributeGroup.withKeyPathFormatLabelTotalListUserInfo((String)attDict.objectForKey("keyPath"), (String)attDict.objectForKey("format"), (String)attDict.objectForKey("label"), ERXValueUtilities.booleanValue(attDict.objectForKey("total")), subAttListObjects, (NSDictionary)attDict.objectForKey("userInfo"));
+                } else {
+                    att = DRAttribute.withKeyPathFormatLabelTotalUserInfo((String)attDict.objectForKey("keyPath"), (String)attDict.objectForKey("format"), (String)attDict.objectForKey("label"), ERXValueUtilities.booleanValue(attDict.objectForKey("total")), (NSDictionary)attDict.objectForKey("userInfo"));
+                }
+
+                arr.addObject(att);
             }
-
-            arr.addObject(att);
         }
         //OWDebug.println(1, "entered: arr:"+arr);
 
