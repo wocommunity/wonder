@@ -211,7 +211,7 @@ public class ERXJSPopUpRelationPicker extends ERXStatelessComponent {
 
     protected NSArray unsortedChildren(Object parent) {
         return (NSArray)NSKeyValueCodingAdditions.Utility.valueForKeyPath(parent, parentToChildrenRelationshipName() 
-                + ((parent instanceof NSArray) ? ".@flatten" : ""));
+                + ((parent instanceof NSArray) ? ".@flatten.@removeNullValues" : ""));
     }
     
     protected NSArray sortedChildren(Object parent) {
