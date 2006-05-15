@@ -59,6 +59,11 @@ public class PostgresqlExpression extends JDBCExpression {
      * Quote character when using case sensitive queries.
      */
     private static final String EXTERNAL_NAME_QUOTE_CHARACTER = "\"";   
+    
+    /**
+     * formatter to use when handling date columns
+     */
+    private static final NSTimestampFormatter DATE_FORMATTER = new NSTimestampFormatter("%Y-%m-%d");
 
     /**
      * formatter to use when handling timestamps
@@ -379,12 +384,14 @@ public class PostgresqlExpression extends JDBCExpression {
             value = sqlStringForData((NSData)obj);
         } else if((obj instanceof NSTimestamp) && isTimestampAttribute(eoattribute)) {
             value = "'" + TIMESTAMP_FORMATTER.format(obj) + "'";
+        } else if((obj instanceof NSTimestamp) && isDateAttribute(eoattribute)) {
+            value = "'" + DATE_FORMATTER.format(obj) + "'";
         } else if(obj instanceof String) {
-        	value = formatStringValue((String)obj);
+            value = formatStringValue((String)obj);
         } else if(obj instanceof Number) {
-        	value = (String) eoattribute.adaptorValueByConvertingAttributeValue(obj).toString();
+            value = (String) eoattribute.adaptorValueByConvertingAttributeValue(obj).toString();
         } else if(obj instanceof Boolean) {
-        	value = ((Boolean)obj).toString();
+            value = ((Boolean)obj).toString();
         } else if(obj instanceof Timestamp) {
         	value = "'" + ((Timestamp)obj).toString() + "'";
         } else if (obj == null || obj == NSKeyValueCoding.NullValue) {
@@ -410,7 +417,16 @@ public class PostgresqlExpression extends JDBCExpression {
         return value;
     }
 
-   /**
+    /**
+     * Helper to check for timestamp columns that have a "D" value type.
+     * @param eoattribute
+     * @return
+     */
+    private boolean isDateAttribute(EOAttribute eoattribute) {
+        return "D".equals(eoattribute.valueType());
+    }
+
+    /**
      * Helper to check for timestamp columns that have a "T" value type.
      * @param eoattribute
      * @return
