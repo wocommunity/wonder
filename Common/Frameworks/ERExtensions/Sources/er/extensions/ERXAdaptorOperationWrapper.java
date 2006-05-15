@@ -13,11 +13,16 @@ import com.webobjects.foundation.*;
  * operations to disk, useful for cross database replications.
  * 
  * @author david@cluster9.com
+ * @author ak moved stuff from ERXEOAccessUtilities to here
  */
 public class ERXAdaptorOperationWrapper implements Serializable {
     public static final ERXLogger log = ERXLogger.getERXLogger(ERXAdaptorOperationWrapper.class);
 
     public static final NSRecursiveLock adaptorOperationsLock = new NSRecursiveLock();
+    
+    public static final String AdaptorOperationsDidPerformNotification = "AdaptorOperationsDidPerform";
+    
+    private static Boolean postAdaptorOperationNotifications = null;
 
     transient EOAdaptorOperation operation;
     String                       entityName;
@@ -114,6 +119,26 @@ public class ERXAdaptorOperationWrapper implements Serializable {
         } finally {
             ec.unlock();
         }
+    }
+
+    public static void adaptorOperationsDidPerform(NSArray ops) {
+        if (postAdaptorOperationNotifications() && ops.count() > 0) {
+            NSNotificationCenter.defaultCenter().postNotification(AdaptorOperationsDidPerformNotification, ops);
+        }
+
+    }
+
+    /**
+     * @return <code>true</code> if the system property
+     *         <code>er.extensions.ERXDatabaseContextDelegate.postAdaptorOperationNotifications</code>
+     *         is set to true and if ERXThreadStorage.valueForKey(disabledForThreadKey) returns false or null, false otherwise.
+     */
+    private static boolean postAdaptorOperationNotifications() {
+        if (postAdaptorOperationNotifications == null) {
+            postAdaptorOperationNotifications = ERXProperties.booleanForKeyWithDefault(
+                    "er.extensions.ERXAdaptorationWrapper.postAdaptorOperationNotifications", false) ? Boolean.TRUE : Boolean.FALSE;
+        }
+        return postAdaptorOperationNotifications.booleanValue();
     }
 
 }
