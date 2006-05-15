@@ -897,7 +897,9 @@ public class ERXArrayUtilities extends Object {
          * @return immutable filtered array.
          */
         public Object compute(NSArray array, String keypath) {
-            array = contents(array, keypath);
+            if(keypath != null) {
+                array = contents(array, keypath);
+            }
             if (array != null) array = removeNullValues(array);
             return array;
         }
