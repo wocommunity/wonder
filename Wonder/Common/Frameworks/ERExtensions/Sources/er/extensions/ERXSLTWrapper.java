@@ -134,16 +134,16 @@ public class ERXSLTWrapper extends ERXNonSynchronizingComponent {
             ByteArrayInputStream bis = new ByteArrayInputStream(response.content().bytes());
             saxSource.setInputSource(new InputSource(bis));
             xml = saxSource;
-            log.info("DOM: " + (System.currentTimeMillis() - current));  current = System.currentTimeMillis();
+            log.debug("DOM: " + (System.currentTimeMillis() - current));  current = System.currentTimeMillis();
             
             Transformer transformer = transformer();
-            log.info("Stylesheet: " + (System.currentTimeMillis() - current));  current = System.currentTimeMillis();
+            log.debug("Stylesheet: " + (System.currentTimeMillis() - current));  current = System.currentTimeMillis();
 
             ByteArrayOutputStream os = new ByteArrayOutputStream();
             Result result = new StreamResult(os);
             
             transformer.transform(xml, result);
-            log.info("Transform: " + (System.currentTimeMillis() - current));  current = System.currentTimeMillis();
+            log.debug("Transform: " + (System.currentTimeMillis() - current));  current = System.currentTimeMillis();
             
             NSData data = new NSData(os.toByteArray());
             return data;
@@ -179,6 +179,6 @@ public class ERXSLTWrapper extends ERXNonSynchronizingComponent {
          } else {
             super.appendToResponse(response, context);
         }
-        log.info("Total: " + (System.currentTimeMillis() - start));  start = System.currentTimeMillis();
+        log.debug("Total: " + (System.currentTimeMillis() - start));  start = System.currentTimeMillis();
    }
 }
