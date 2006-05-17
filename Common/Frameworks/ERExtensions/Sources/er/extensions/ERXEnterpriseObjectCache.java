@@ -56,7 +56,8 @@ public class ERXEnterpriseObjectCache {
      * @param eos
      * @return
      */
-    private boolean hadRelevantChanges(NSArray eos) {
+    private boolean hadRelevantChanges(NSDictionary dict, String key) {
+        NSArray eos = (NSArray) dict.objectForKey(key);
         for (Enumeration enumeration = eos.objectEnumerator(); enumeration.hasMoreElements();) {
             EOEnterpriseObject eo = (EOEnterpriseObject) enumeration.nextElement();
             if(eo.entityName().equals(entityName())) {
@@ -74,9 +75,9 @@ public class ERXEnterpriseObjectCache {
     public void editingContextDidSaveChanges(NSNotification n) {
         EOEditingContext ec = (EOEditingContext) n.object();
         if(ec.parentObjectStore() instanceof EOObjectStoreCoordinator) {
-            if(!hadRelevantChanges(ec.updatedObjects())) {
-                if(!hadRelevantChanges(ec.updatedObjects())) {
-                    if(!hadRelevantChanges(ec.updatedObjects())) {
+            if(!hadRelevantChanges(n.userInfo(), EOEditingContext.InsertedKey)) {
+                if(!hadRelevantChanges(n.userInfo(), EOEditingContext.UpdatedKey)) {
+                    if(!hadRelevantChanges(n.userInfo(), EOEditingContext.DeletedKey)) {
                         return;
                     }
                 }
@@ -130,8 +131,16 @@ public class ERXEnterpriseObjectCache {
      * @param eo
      */
     public void addObject(EOEnterpriseObject eo) {
-        EOGlobalID gid = eo.editingContext().globalIDForObject(eo);
         Object key = eo.valueForKeyPath(keyPath());
+        addObjectForKey(eo, key);
+    }
+
+    /**
+     * Add an object to the cache with the given key. 
+     * @param eo
+     */
+    public void addObjectForKey(EOEnterpriseObject eo, Object key) {
+        EOGlobalID gid = eo.editingContext().globalIDForObject(eo);
         cache().put(key, gid);
     }
     
@@ -149,7 +158,7 @@ public class ERXEnterpriseObjectCache {
             return null;
         }
         EOEnterpriseObject eo;
-        if(key != null) {
+        if(gid != null) {
             eo = ec.faultForGlobalID(gid, ec);
         } else {
             eo = null;
