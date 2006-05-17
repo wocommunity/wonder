@@ -12,7 +12,7 @@ import com.webobjects.foundation.*;
  * Typically you'd have an "identifier" property and you'd fetch values by:<code><pre>
  * ERXEnterpriseObjectCache helpTextCache = new ERXEnterpriseObjectCache("HelpText", "pageConfiguration");
  * ...
- * EOEnterpriseObject helpText = helpTextCache.objectForKey(ec, "ListPageConfiguration");
+ * EOEnterpriseObject helpText = helpTextCache.objectForKey(ec, "ListHelpText");
  * </pre></code>
  * You can supply a timeout after which the cache is to get cleared and all the objects refetched. Note
  * that this implementation only caches the global IDs, not the actual data. 
