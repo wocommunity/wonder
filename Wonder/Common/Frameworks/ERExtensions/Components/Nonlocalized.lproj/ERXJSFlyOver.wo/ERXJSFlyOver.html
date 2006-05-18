@@ -13,8 +13,8 @@ function ERXJSFlyOverCustomComponent_show(link,obj) {
     style.visibility='visible';
     var linkPos = ERXJSFlyOverCustomComponent_getPos(link);
     var objPos = ERXJSFlyOverCustomComponent_getPos(obj);
-    //obj.style.top = (linkPos.height);
-    //obj.style.left = (0);
+    obj.style.top = (linkPos.height);
+    obj.style.left = (0);
     currentERXFlyOver = obj;
 }
 function ERXJSFlyOverCustomComponent_hideAuto(obj) {
