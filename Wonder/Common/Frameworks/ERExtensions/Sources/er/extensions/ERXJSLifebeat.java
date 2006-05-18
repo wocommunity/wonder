@@ -1,10 +1,6 @@
 package er.extensions;
 
-import com.webobjects.appserver.WOActionResults;
-import com.webobjects.appserver.WOContext;
-import com.webobjects.appserver.WODirectAction;
-import com.webobjects.appserver.WORequest;
-import com.webobjects.appserver.WOSession;
+import com.webobjects.appserver.*;
 
 /**
  * Keeps a session open by continuously calling a direct action.
@@ -37,8 +33,10 @@ public class ERXJSLifebeat extends ERXStatelessComponent {
 		}
 		
 		public WOActionResults keepAliveAction() {
-			WOSession session = session();
-			return pageWithName("ERXEmptyComponent");
+            WOResponse response = WOApplication.application().createResponseInContext(context());
+            // we give over the session id as we also need to touch the session anyway
+            response.setHeader(ERXSession.DONT_STORE_PAGE, session().sessionID());
+		    return response;
 		}
 	}
 }
