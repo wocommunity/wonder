@@ -12,6 +12,13 @@ import com.webobjects.foundation.*;
 
 import er.extensions.*;
 
+/**
+ * Assignment used to create objects on the fly. You suse this by
+ * specifing the class name as a string, ie "foo.bar.MyClass". This
+ * will create an instance of the MyClass object.
+ * @deprecated use ERDDelayedObjectCreationAssignment instead.
+ */
+
 public class ERDInstanceCreationAssignment extends ERDDelayedAssignment {
     /** logging support */
     public final static ERXLogger log = ERXLogger.getERXLogger(ERDDelayedAssignment.class);
@@ -28,15 +35,18 @@ public class ERDInstanceCreationAssignment extends ERDDelayedAssignment {
      * @return decoded assignment of this class
      */
     public static Object decodeWithKeyValueUnarchiver(EOKeyValueUnarchiver eokeyvalueunarchiver)  {
+        ERDAssignment.logDeprecatedMessage(ERDInstanceCreationAssignment.class, ERDDelayedObjectCreationAssignment.class);
         return new ERDInstanceCreationAssignment(eokeyvalueunarchiver);
     }
-    
+
     /** 
      * Public constructor
      * @param u key-value unarchiver used when unarchiving
      *		from rule files. 
      */    
-    public ERDInstanceCreationAssignment (EOKeyValueUnarchiver u) { super(u); }
+    public ERDInstanceCreationAssignment (EOKeyValueUnarchiver u) { 
+        super(u); 
+    }
     
     /** 
      * Public constructor
