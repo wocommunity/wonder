@@ -7,5 +7,6 @@ Image1: WOImage {
     border = ^border;
     onfocus = ^onfocus;
     id = ^id;
-    name = ^name
+    name = ^name;
+    class = ^cssClass;
 }

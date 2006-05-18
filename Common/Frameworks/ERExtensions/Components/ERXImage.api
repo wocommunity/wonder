@@ -12,5 +12,5 @@
 		<validation message="'relativePath' is a required binding">
 			<unbound name="relativePath"/>
 		</validation>
-	<binding name="id"/><binding name="name"/></wo>
+	<binding name="id"/><binding name="name"/><binding name="cssClass"/></wo>
 </wodefinitions>
