@@ -24,9 +24,6 @@ public class ERD2WFlyOverCustomComponent extends D2WCustomComponent {
     /** logging support */
     private static final ERXLogger log = ERXLogger.getLogger(ERD2WFlyOverCustomComponent.class,"components");
 
-    protected String _linkId;
-    protected String _spanId;
-
     /**
         * Public constructor
      * @param context the context
@@ -38,12 +35,6 @@ public class ERD2WFlyOverCustomComponent extends D2WCustomComponent {
     /** component does not synchronize it's variables */
     public boolean synchronizesVariablesWithBindings() { return false; }
     public boolean isStateless() { return true; }
-
-    public void reset() {
-        super.reset();
-        _linkId = null;
-        _spanId = null;
-    }
 
     public NSArray displayPropertyKeys() {
         return (NSArray)d2wContext().valueForKey("displayPropertyKeys");
@@ -57,30 +48,5 @@ public class ERD2WFlyOverCustomComponent extends D2WCustomComponent {
     }
     public boolean hasLabel() {
         return label() != null;
-    }
-    
-    public String id() {
-        return ERXStringUtilities.replaceStringByStringInString(".", "_", context().elementID());
-    }
-
-    public String linkId() {
-        if(_linkId == null) {
-            _linkId = "link_" + id();
-        }
-        return _linkId;
-    }
-
-    public String spanId() {
-        if(_spanId == null) {
-            _spanId = "span_" + id();
-        }
-        return _spanId;
-    }
-
-    public String showString() {
-        return "var style=document.getElementById('"+spanId()+"').style; style.visibility='visible';";
-    }
-    public String hideString() {
-        return "var style=document.getElementById('"+spanId()+"').style; style.visibility='hidden';";
     }
 }
