@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <wodefinitions>
 	<wo class="ERXImage" wocomponentcontent="false">
 
@@ -9,8 +9,8 @@
 		<binding name="alt"/>
 		<binding name="mimeType"/>
 
-		<validation message="&apos;relativePath&apos; is a required binding">
+		<validation message="'relativePath' is a required binding">
 			<unbound name="relativePath"/>
 		</validation>
-	</wo>
+	<binding name="id"/><binding name="name"/></wo>
 </wodefinitions>
