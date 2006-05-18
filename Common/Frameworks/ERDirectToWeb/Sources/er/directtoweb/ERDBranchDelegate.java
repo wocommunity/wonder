@@ -77,32 +77,47 @@ public abstract class ERDBranchDelegate implements ERDBranchDelegateInterface {
     
     /**
      * Calculates which branches to show in the display first
-     * asking the context for the key <b>branchChoices</b> if
-     * this returns null then using reflection all of the 
-     * public methods that take a single WOComponent as a 
-     * parameter are returned.
+     * asking the context for the key <b>branchChoices</b>. If
+     * this returns null then 
      * @param context current D2W context
      * @return array of branch names.
      */
     public NSArray branchChoicesForContext(D2WContext context) {
         NSArray choices = (NSArray)context.valueForKey("branchChoices");
         if (choices == null || choices.count() == 0) {
-            try {
-                NSMutableArray methodChoices = new NSMutableArray();
-                Method methods[] = getClass().getMethods();
-                for (Enumeration e = new NSArray(methods).objectEnumerator(); e.hasMoreElements();) {
-                    Method method = (Method)e.nextElement();
-                    if (method.getParameterTypes().length == 1 && 
-                    method.getParameterTypes()[0] == WOComponent.class && !method.getName().equals("nextPage")) {
-                        NSDictionary branch = branchChoiceDictionary(method.getName(), null);
-                        methodChoices.addObject(branch);        
-                    }
+            choices = defaultBranchChoices(context);
+        }
+        return choices;
+    }
+
+    /**
+     * Uses reflection to find all of the public methods that don't start with 
+     * an underscore and take a single WOComponent as a parameter are returned.
+     * The methods are sorted by this key.
+     * @param context current D2W context
+     * @return
+     */
+    protected NSArray defaultBranchChoices(D2WContext context) {
+        NSArray choices = NSArray.EmptyArray;
+        try {
+            NSMutableArray methodChoices = new NSMutableArray();
+            Method methods[] = getClass().getMethods();
+            for (Enumeration e = new NSArray(methods).objectEnumerator(); e.hasMoreElements();) {
+                Method method = (Method)e.nextElement();
+                if (method.getParameterTypes().length == 1 
+                        &&  method.getParameterTypes()[0] == WOComponent.class 
+                        && !method.getName().equals("nextPage")
+                        && method.getName().charAt(0) != '_'
+                        && ((method.getModifiers() & Modifier.PUBLIC) == Modifier.PUBLIC) 
+                ) {
+                    NSDictionary branch = branchChoiceDictionary(method.getName(), null);
+                    methodChoices.addObject(branch);        
                 }
-                choices = methodChoices;
-            } catch (SecurityException e) {
-                log.error("Caught security exception while calculating the branch choices for delegate: " 
-                        + this + " exception: " + e.getMessage());
             }
+            choices = ERXArrayUtilities.sortedArraySortedWithKey(methodChoices, "branchButtonLabel");
+        } catch (SecurityException e) {
+            log.error("Caught security exception while calculating the branch choices for delegate: " 
+                    + this + " exception: " + e.getMessage());
         }
         return choices;
     }
