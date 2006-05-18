@@ -618,7 +618,7 @@ public class ERXSession extends WOSession implements Serializable {
     public void savePage(WOComponent arg0) {
         if(context().response() == null || 
                 (context().response().headerForKey(DONT_STORE_PAGE) == null && 
-                        (context().response().userInfo() == null || !context().response().userInfo().containsKey(DONT_STORE_PAGE)))) {
+                        (context().response().userInfo() == null || context().response().userInfo().objectForKey(DONT_STORE_PAGE) == null))) {
             super.savePage(arg0);
         }
     }
