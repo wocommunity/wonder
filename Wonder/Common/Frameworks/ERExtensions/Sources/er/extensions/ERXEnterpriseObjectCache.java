@@ -37,7 +37,7 @@ public class ERXEnterpriseObjectCache {
     }
     
     /**
-     * Creates the cache for the given entity, keypath and timeout value.
+     * Creates the cache for the given entity, keypath and timeout value in milliseconds.
      * @param entityName
      * @param keyPath
      * @param timeout
@@ -112,8 +112,7 @@ public class ERXEnterpriseObjectCache {
             EOEditingContext ec = ERXEC.newEditingContext();
             ec.lock();
             try {
-                NSArray objects = EOUtilities.objectsForEntityNamed(ec, entityName());
-                _fetchTime = now;
+                NSArray objects = initialObjects(ec);
                 for (Enumeration enumeration = objects.objectEnumerator(); enumeration.hasMoreElements();) {
                     EOEnterpriseObject eo = (EOEnterpriseObject) enumeration.nextElement();
                     addObject(eo);
@@ -121,8 +120,19 @@ public class ERXEnterpriseObjectCache {
             } finally {
                 ec.unlock();
             }
+            _fetchTime = System.currentTimeMillis();
         }
         return _cache;
+    }
+
+    /**
+     * Returns the objects to cache initially.
+     * @param ec
+     * @return
+     */
+    protected NSArray initialObjects(EOEditingContext ec) {
+        NSArray objects = EOUtilities.objectsForEntityNamed(ec, entityName());
+        return objects;
     }
 
     /**
@@ -136,11 +146,15 @@ public class ERXEnterpriseObjectCache {
     }
 
     /**
-     * Add an object to the cache with the given key. 
+     * Add an object to the cache with the given key. The object
+     * can be null.
      * @param eo
      */
     public void addObjectForKey(EOEnterpriseObject eo, Object key) {
-        EOGlobalID gid = eo.editingContext().globalIDForObject(eo);
+        EOGlobalID gid = NO_GID_MARKER;
+        if(eo != null) {
+            eo.editingContext().globalIDForObject(eo);
+        }
         cache().put(key, gid);
     }
     
@@ -156,17 +170,31 @@ public class ERXEnterpriseObjectCache {
         EOGlobalID gid = (EOGlobalID) cache.get(key);
         if(gid == NO_GID_MARKER) {
             return null;
+        } else if(gid == null) {
+            handleUnsuccessfulQueryForKey(key);
+            gid = (EOGlobalID) cache.get(key);
+            if(gid == NO_GID_MARKER) {
+                return null;
+            } else if(gid == null) {
+               return null;
+            }
         }
-        EOEnterpriseObject eo;
-        if(gid != null) {
-            eo = ec.faultForGlobalID(gid, ec);
-        } else {
-            eo = null;
-            cache.put(key, NO_GID_MARKER);
-        }
+        EOEnterpriseObject eo = ec.faultForGlobalID(gid, ec);
         return eo;
     }
     
+    /**
+     * Called when a query hasn't found an entry in the cache. This
+     * implementation puts a not-found marker in the cache so
+     * the next query will return null. You could override this
+     * method to create an EO with sensible default values and
+     * call {@link #addObject(EOEnterpriseObject)} on it.
+     * @param key
+     */
+    protected void handleUnsuccessfulQueryForKey(Object key) {
+        cache().put(key, NO_GID_MARKER);
+    }
+
     /**
      * Resets the cache by clearing the internal map. When the next value 
      * is accessed, the objects are refetched.
