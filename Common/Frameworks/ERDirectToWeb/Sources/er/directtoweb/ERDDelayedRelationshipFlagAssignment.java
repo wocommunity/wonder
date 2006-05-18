@@ -44,9 +44,11 @@ public class ERDDelayedRelationshipFlagAssignment extends ERDDelayedAssignment {
                     if(keyPath != null) {
                         objects = (NSArray) c.valueForKeyPath(keyPath + "." + relationshipKey +".@flatten.@unique");
                     }
-                    for (Enumeration e = objects.objectEnumerator(); e.hasMoreElements();) {
-                        Object o = (Object) e.nextElement();
-                        result.addObject(key + ".@" + o);
+                    if(objects != null) {
+                        for (Enumeration e = objects.objectEnumerator(); e.hasMoreElements();) {
+                            Object o = (Object) e.nextElement();
+                            result.addObject(key + ".@" + o);
+                        }
                     }
                     c.setPropertyKey(null);
                 } else {
