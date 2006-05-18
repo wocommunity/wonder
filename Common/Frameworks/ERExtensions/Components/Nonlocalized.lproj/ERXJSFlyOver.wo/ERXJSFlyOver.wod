@@ -1,0 +1,25 @@
+ERXOncePerRequest: ERXOncePerRequestConditional {
+	keyName = "ERXJSFlyOverCustomComponent";
+}
+
+Label: ERXWOComponentContent {
+	templateName = "label";
+}
+
+Content: ERXWOComponentContent {
+	templateName = "content";
+} 
+
+Link: WOGenericContainer {
+	elementName = "a";
+	onClick = toggleString;
+	onMouseOver = showString;
+	onMouseOut_ = hideString;
+}
+
+Span: WOGenericContainer {
+	elementName = "span";
+	id = spanId;
+	style = "visibility:hidden; z-index: 100; position: absolute; width: 400px;";
+	onClick = hideString;
+}
