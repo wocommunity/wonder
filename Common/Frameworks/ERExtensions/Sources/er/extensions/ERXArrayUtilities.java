@@ -241,6 +241,46 @@ public class ERXArrayUtilities extends Object {
     }
 
     /**
+     * Filters any kinds of collections that implements {@link Enumeration} 
+     * interface such as {@link com.webobjects.foundation.NSArray NSArray}, {@link com.webobjects.foundation.NSSet NSSet}, {@link Vector} 
+     * and {@link Hashtable} using the {@link com.webobjects.eocontrol.EOQualifierEvaluation EOQualifierEvaluation} interface. 
+     *
+     * @param enumeration to be filtered; to obtain an enumeration, 
+     *             use objectEnumerator() for the collections in 
+     *             com.webobjects.foundation package 
+     *             and use elements() for the Vector and Hashtable
+     * @param qualifier to do the filtering
+     * @return true if there is at least one match
+     */
+    public static boolean enumerationHasMatchWithQualifierEvaluation(Enumeration enumeration, EOQualifierEvaluation qualifier) {
+        while (enumeration.hasMoreElements()) {
+            Object object = enumeration.nextElement();
+            if (qualifier.evaluateWithObject(object)) 
+                return true;
+        }
+        return false;
+    }
+
+    /**
+     * Filters any kinds of collections that implements {@link Iterator} 
+     * interface such as {@link com.webobjects.foundation.NSArray NSArray}, {@link com.webobjects.foundation.NSSet NSSet}, {@link Vector} 
+     * and {@link Hashtable} using the {@link com.webobjects.eocontrol.EOQualifierEvaluation EOQualifierEvaluation} interface. 
+     *
+     * @param iterator to be filtered; to obtain an iterator, 
+     *             use iterator() for the java collections
+     * @param qualifier to do the filtering
+     * @return true if there is at least one match
+     */
+    public static boolean iteratorHasMatchWithQualifierEvaluation(Iterator iterator, EOQualifierEvaluation qualifier) {
+        while (iterator.hasNext()) {
+            Object object = iterator.next();
+            if (qualifier.evaluateWithObject(object)) 
+                return true;
+        }
+        return false;
+    }
+
+    /**
      * Filters any kind of collections that implements {@link Iterator} 
      * interface such as {@link ArrayList}, {@link HashMap}, {@link SortedSet} 
      * and {@link TreeSet} using the {@link com.webobjects.eocontrol.EOQualifierEvaluation EOQualifierEvaluation} interface. 
