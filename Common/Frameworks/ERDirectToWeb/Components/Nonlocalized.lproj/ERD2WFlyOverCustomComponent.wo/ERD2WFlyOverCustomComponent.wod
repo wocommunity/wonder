@@ -2,26 +2,25 @@ Conditional2: WOConditional {
 	condition = hasLabel;
 }
 
+ContentTemplate: ERXWOTemplate {
+	templateName ="content";
+}
+
 Display: WOSwitchComponent {
 	WOComponentName = d2wContext.customComponentName;
 	localContext = d2wContext;
 	object = ^object;
 }
 
-ERXOncePerRequest: ERXOncePerRequestConditional {
-	keyName = "ERD2WFlyOverCustomComponent";
+FlyOver : ERXJSFlyOver {
 }
 
 Label: WOString {
 	value = label;
 }
 
-Link: WOGenericContainer {
-	elementName = "a";
-	href = "#";
-	onMouseOver = showString;
-	onMouseOut = hideString;
-	id = linkId;
+LabelTemplate: ERXWOTemplate {
+	templateName ="label";
 }
 
 Loop: WORepetition {
@@ -32,13 +31,6 @@ Loop: WORepetition {
 NoLabel: WOConditional {
 	condition = hasLabel;
 	negate = true;
-}
-
-Span: WOGenericContainer {
-	elementName = "span";
-	id = spanId;
-	style = "visibility:hidden; position:absolute;";
-	onClick = hideString;
 }
 
 String1: WOString {
