@@ -36,6 +36,12 @@ public class ERXSession extends WOSession implements Serializable {
      */
     public static final String SessionWillSleepNotification = "SessionWillSleepNotification";
 
+    /**
+     * Key that tells the session not to store the current page. Checks both the 
+     * response userInfo and the response headers if this key is present. The value doesn't matter.
+     */
+    public static final String DONT_STORE_PAGE = "ERXSession.DontStorePage";
+
     /** cookie name that if set it means that the user has cookies enabled */
     // FIXME: This should be configurable
     public static final String JAVASCRIPT_ENABLED_COOKIE_NAME = "js";
@@ -602,6 +608,19 @@ public class ERXSession extends WOSession implements Serializable {
             setLanguage(_serializableLanguageName);
         if (log.isDebugEnabled()) 
             log.debug("Session has been deserialized: " + toString());
+    }
+
+    
+    /**
+     * Overridden so that Ajax requests are not saved in the page cache.  Checks both the 
+     * response userInfo and the response headers if the DONT_STORE_PAGE key is present. The value doesn't matter.
+     */
+    public void savePage(WOComponent arg0) {
+        if(context().response() == null || 
+                (context().response().headerForKey(DONT_STORE_PAGE) == null && 
+                        (context().response().userInfo() == null || !context().response().userInfo().containsKey(DONT_STORE_PAGE)))) {
+            super.savePage(arg0);
+        }
     }
 
     public String toString() {
