@@ -41,7 +41,8 @@ OR with the alternate syntax, which ist most useful with the WebAssistant
  
 */
 
-public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, ERDUserInfoInterface, ERXComponentActionRedirector.Restorable, ERDBranchInterface {
+public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, ERDUserInfoInterface,
+        ERXComponentActionRedirector.Restorable, ERDBranchInterface {
 
     /** interface for all the keys used in this pages code */
     public static interface Keys {
@@ -364,8 +365,15 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
     }
 
     protected static NSMutableSet _allConfigurations = new NSMutableSet();
+    
+    /**
+     * Collects the names of all page configurations as you walk through your application.
+     * @return
+     */
     public static NSSet allConfigurationNames() {
-        return _allConfigurations;
+        synchronized (_allConfigurations) {
+            return _allConfigurations.immutableClone();
+        }
     }
     
     /** Overridden from the parent for better logging. Reports exceptions in the console for easier debugging. */
@@ -425,6 +433,8 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
         NSArray branchChoices = null;
         if (nextPageDelegate() != null && nextPageDelegate() instanceof ERDBranchDelegateInterface) {
             branchChoices = ((ERDBranchDelegateInterface)nextPageDelegate()).branchChoicesForContext(d2wContext());
+        } else if (pageController() != null && pageController() instanceof ERDBranchDelegateInterface) {
+            branchChoices = pageController().branchChoicesForContext(d2wContext());
         } else {
             log.error("Attempting to call branchChoices on a page with a delegate: " + nextPageDelegate() + " that doesn't support the ERDBranchDelegateInterface!");
         }
@@ -614,12 +624,15 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
     public WOComponent nextPage() {
         return _nextPage;
     }
-    
+ 
     public void setNextPage(WOComponent wocomponent) {
         _nextPage = wocomponent;
     }
     
     public NextPageDelegate nextPageDelegate() {
+        if(_nextPageDelegate == null) {
+            _nextPageDelegate = (NextPageDelegate)d2wContext().valueForKey("nextPageDelegate");
+        }
         return _nextPageDelegate;
     }
     
@@ -627,6 +640,70 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
         _nextPageDelegate = nextpagedelegate;
     }
     
+    /** 
+     * Holds the page controller for this page.
+     */
+    protected ERDBranchDelegateInterface _pageController;
+    
+    /**
+     * Returns the pageController for this page. If there is none given yet,
+     * tries to create one by querying the key "pageController" from the 
+     * d2wContext. The most conventient way to set and use a pageController is via the rule system:<code><pre>
+     * 100: (entity.name='WebSite') and (task = 'list') => pageController = "ListWebSiteController" [er.directtoweb.ERDDelayedObjectCreationAssignment]
+     * 100: (entity.name='WebSite') => actions = {left = (editAction, controllerAction);}
+     * 100: (propertyKey = 'controllerAction') => componentName = "ERDControllerButton"
+     * </pre></code>
+     * Then ListWebSiteController would be:<code><pre>
+     * public class ListWebSiteController extends ERDBranchDelegate {
+     *    
+     *    private WOComponent _sender;
+     * 
+     *    private WOComponent sender() {
+     *       return _sender;
+     *    }
+     * 
+     *    private void setSender(WOComponent aSender) {
+     *       _sender = aSender;
+     *    }
+     * 
+     *    private D2WContext d2wContext() {
+     *       return (D2WContext) sender().valueForKey("d2wContext");
+     *    }
+     *    
+     *    private EOEnterpriseObject object() {
+     *       return (EOEnterpriseObject)d2wContext().valueForKey("object");
+     *    }
+     * 
+     *    // first action, show up as "Copy Web Site"
+     *    public WOComponent copyWebSite(WOComponent sender) {
+     *       setSender(sender);
+     *       WOComponent result = ....
+     *       return result;
+     *    }
+     *    
+     *    // second action, show up as "Delete Web Site"
+     *    public WOComponent deleteWebSite(WOComponent sender) {
+     *       setSender(sender);
+     *       WOComponent result = ....
+     *       return result;
+     *    }
+     * }
+     * </pre></code>
+     * The nice thing about this is that this allows you to keep your logic confined to just a handful of classes,
+     * without the need to constantly create new components that just handle one action.
+     * @return
+     */
+    public ERDBranchDelegateInterface pageController() {
+        if (_pageController == null) {
+            _pageController = (ERDBranchDelegateInterface)d2wContext().valueForKey("pageController");;
+        }
+        return _pageController;
+    }
+
+    public void setPageController(ERDBranchDelegateInterface aPageController) {
+        _pageController = aPageController;
+    }
+
     public boolean showCancel() {
         return _nextPageDelegate != null || _nextPage != null;
     }
