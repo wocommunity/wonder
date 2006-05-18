@@ -26,8 +26,8 @@ public class ERXWOTemplate extends WODynamicElement {
     public ERXWOTemplate(String s, NSDictionary associations, WOElement woelement) {
         super(s, associations, woelement);
         WOAssociation assoc = (WOAssociation) associations.objectForKey("templateName");
-        if(!assoc.isValueConstant()) {
-            throw new IllegalStateException("You must bind 'templateName' to a constant string");
+        if(assoc == null || !assoc.isValueConstant()) {
+            throw new IllegalStateException("You must bind 'templateName' to a constant string: " + associations);
         }
         _templateName = (String) assoc.valueInComponent(null);
         _template = woelement;
