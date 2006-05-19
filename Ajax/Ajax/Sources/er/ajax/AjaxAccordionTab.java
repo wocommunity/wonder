@@ -21,16 +21,16 @@ public class AjaxAccordionTab extends WOComponent {
   public String tabID() {
     String id = (String) valueForBinding("id");
     if (id == null) {
-      id = "wo_" + AjaxUtils.toSafeElementID(context().elementID()) + "Panel";
+      id = AjaxUtils.toSafeElementID(context().elementID()) + "Panel";
     }
     return id;
   }
 
   public String headerID() {
-    return "wo_" + AjaxUtils.toSafeElementID(context().elementID()) + "Header";
+    return AjaxUtils.toSafeElementID(context().elementID()) + "Header";
   }
 
   public String contentID() {
-    return "wo_" + AjaxUtils.toSafeElementID(context().elementID()) + "Content";
+    return AjaxUtils.toSafeElementID(context().elementID()) + "Content";
   }
 }

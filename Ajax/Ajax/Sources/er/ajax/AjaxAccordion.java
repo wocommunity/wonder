@@ -26,7 +26,7 @@ public class AjaxAccordion extends AjaxComponent {
   }
 
   public void appendToResponse(WOResponse _response, WOContext _context) {
-    myAccordionID = (String) valueForBinding("id", "wo_" + AjaxUtils.toSafeElementID(context().elementID()) + "Accordion");
+    myAccordionID = (String) valueForBinding("id", AjaxUtils.toSafeElementID(context().elementID()) + "Accordion");
     super.appendToResponse(_response, _context);
   }
 

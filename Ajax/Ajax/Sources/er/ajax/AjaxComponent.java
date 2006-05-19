@@ -65,14 +65,6 @@ public abstract class AjaxComponent extends WOComponent {
     }
 
     /**
-     * Provides a unique name for this component, based on the element id.
-     * @return
-     */
-    public String scriptBaseName() {
-        return "wo_" + safeElementID();
-    }
-
-    /**
      * Overridden to call {@see #addRequiredWebResources(WOResponse)}.
      */
     public void appendToResponse(WOResponse res, WOContext ctx) {
