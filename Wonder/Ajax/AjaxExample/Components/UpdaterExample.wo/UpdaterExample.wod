@@ -17,6 +17,11 @@ Hyperlink1: WOHyperlink {
 	target = "_blank";
 }
 
+Hyperlink2 : WOHyperlink {
+	directActionName = "default";
+	target = "_blank";
+}
+
 String1: WOString {
 	value = test;
 }

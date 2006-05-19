@@ -19,7 +19,7 @@ public class AjaxDroppable extends AjaxComponent {
 
   public void awake() {
     super.awake();
-    myDraggableIDKeyName = scriptBaseName() + "_draggableID";
+    myDraggableIDKeyName = safeElementID() + "_draggableID";
   }
 
   public boolean isStateless() {

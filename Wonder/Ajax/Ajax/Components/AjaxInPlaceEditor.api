@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <wodefinitions>
-	<wo wocomponentcontent="true" class="AjaxRoundEffect.java">
+	<wo wocomponentcontent="true" class="AjaxInPlaceEditor.java">
 		<binding name = "elementName"/>
 		<binding name = "class"/>
 		<binding name = "id"/>

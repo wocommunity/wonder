@@ -33,8 +33,8 @@ public class AjaxAutoComplete extends AjaxComponent {
      */
     public void awake() {
         super.awake();
-        divName = scriptBaseName() + "_div";
-        fieldName = scriptBaseName() + "_field";
+        divName = safeElementID() + "_div";
+        fieldName = safeElementID() + "_field";
     }
 
     /**
