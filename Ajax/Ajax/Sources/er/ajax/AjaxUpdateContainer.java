@@ -55,12 +55,17 @@ public class AjaxUpdateContainer extends AjaxComponent {
       return options;
     }
     
-    public void appendToResponse(WOResponse _response, WOContext _context) {
-      super.appendToResponse(_response, _context);
+    public String containerID() {
       String id = (String)valueForBinding("id");
       if (id == null) {
         id = AjaxUtils.toSafeElementID(context().elementID());
       }
+      return id;
+    }
+    
+    public void appendToResponse(WOResponse _response, WOContext _context) {
+      super.appendToResponse(_response, _context);
+      String id = containerID();
       
       NSDictionary options = createAjaxOptions();
       
@@ -81,6 +86,8 @@ public class AjaxUpdateContainer extends AjaxComponent {
     protected WOActionResults handleRequest(WORequest request, WOContext context) {
         WOElement child = _childTemplate();
         WOResponse response = AjaxUtils.createResponse(context);
+        AjaxUtils.setPageReplacementCacheKey(context, containerID());
+        context.appendZeroElementIDComponent();
         if (child != null) {
             context._setCurrentComponent(parent());
             child.appendToResponse(response, context);
