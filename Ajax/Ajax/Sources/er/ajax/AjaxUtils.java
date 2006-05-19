@@ -13,11 +13,17 @@ import com.webobjects.foundation.NSMutableDictionary;
 public class AjaxUtils {
   private static String HTML_CLOSE_HEAD = System.getProperty("er.ajax.AJComponent.htmlCloseHead");
 
+  public static final String PAGE_REPLACEMENT_CACHE_LOOKUP_KEY = "pageCacheKey";
+  
   /**
    * Key that flags the session to not save the page in the cache.
    */
   public static final String AJAX_REQUEST_KEY = "AJAX_REQUEST_KEY";
 
+  public static void setPageReplacementCacheKey(WOContext _context, String _key) {
+    _context.response().setHeader(_key, AjaxUtils.PAGE_REPLACEMENT_CACHE_LOOKUP_KEY);
+  }
+  
   /**
    * Checks if the message is an Ajax message by looking for the AJAX_REQUEST_KEY 
    * in the header and in the userInfo.
