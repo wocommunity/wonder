@@ -1,6 +1,6 @@
 Container: WOGenericContainer {
 	elementName = elementName;
-	id = ^id;
+	id = containerID;
 	class = ^class;
 	updateUrl = context.componentActionURL;
 	woElementID = context.elementID;

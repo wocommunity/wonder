@@ -13,7 +13,8 @@ public class UpdaterExample extends WOComponent {
     }
 
     public WOComponent someAction() {
-        return pageWithName("Main");
+      System.out.println("UpdaterExample.someAction: action!");
+      return pageWithName("SliderExample");
     }
     
     public WOActionResults anotherAction() {
