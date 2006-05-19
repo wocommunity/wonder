@@ -17,7 +17,7 @@ public class AjaxUtils {
    * Key that flags the session to not save the page in the cache.
    */
   public static final String AJAX_REQUEST_KEY = "AJAX_REQUEST_KEY";
-  
+
   /**
    * Checks if the message is an Ajax message by looking for the AJAX_REQUEST_KEY 
    * in the header and in the userInfo.
@@ -128,11 +128,8 @@ public class AjaxUtils {
   }
 
   public static String toSafeElementID(String _elementID) {
-    return _elementID.replace('.', '_');
-  }
-
-  public static String toElementID(String _safeElementID) {
-    return _safeElementID.replace('_', '.');
+    String elementID = _elementID;
+    return "wo_" + elementID.replace('.', '_');
   }
 
   public static boolean shouldHandleRequest(WORequest _request, WOContext _context) {
@@ -145,7 +142,7 @@ public class AjaxUtils {
   }
 
   public static void updateMutableUserInfoWithAjaxInfo(WOContext _context) {
-    NSMutableDictionary dict = AjaxUtils.mutableUserInfo(_context.request());
+    NSMutableDictionary dict = AjaxUtils.mutableUserInfo(_context.response());
     dict.takeValueForKey(AjaxUtils.AJAX_REQUEST_KEY, AjaxUtils.AJAX_REQUEST_KEY);
   }
 }
