@@ -39,8 +39,8 @@ public class AjaxSlider extends AjaxComponent {
      */
     public void appendToResponse(WOResponse res, WOContext ctx) {
         super.appendToResponse(res, ctx);
-        trackerId = scriptBaseName() + "_tracker";
-        handleId = scriptBaseName() + "_handle";
+        trackerId = safeElementID() + "_tracker";
+        handleId = safeElementID() + "_handle";
         
         NSMutableDictionary options = new NSMutableDictionary();
         new AjaxOption("axis", AjaxOption.STRING).addToDictionary("orientation", this, options);

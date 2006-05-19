@@ -23,7 +23,7 @@ public class AjaxSortableList extends AjaxComponent {
 
   public void awake() {
     super.awake();
-    mySortOrderKeyName = scriptBaseName() + "_sortOrder";
+    mySortOrderKeyName = safeElementID() + "_sortOrder";
   }
 
   public boolean isStateless() {

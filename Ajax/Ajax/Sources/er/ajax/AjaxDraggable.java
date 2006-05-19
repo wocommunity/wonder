@@ -92,7 +92,7 @@ public class AjaxDraggable extends AjaxComponent {
 
   public String id() {
       if(_id == null) {
-          _id = canGetValueForBinding("id") && valueForBinding("id") != null ? (String)valueForBinding("id") : scriptBaseName();
+          _id = canGetValueForBinding("id") && valueForBinding("id") != null ? (String)valueForBinding("id") : safeElementID();
           if(canSetValueForBinding("id")) {
               setValueForBinding(_id, "id");
           }
