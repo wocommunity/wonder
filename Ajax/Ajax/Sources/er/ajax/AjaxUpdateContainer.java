@@ -58,6 +58,9 @@ public class AjaxUpdateContainer extends AjaxComponent {
     public void appendToResponse(WOResponse _response, WOContext _context) {
       super.appendToResponse(_response, _context);
       String id = (String)valueForBinding("id");
+      if (id == null) {
+        id = AjaxUtils.toSafeElementID(context().elementID());
+      }
       
       NSDictionary options = createAjaxOptions();
       
