@@ -7,6 +7,9 @@
 package er.extensions;
 
 import java.io.*;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 import com.webobjects.appserver.*;
 import com.webobjects.eocontrol.*;
@@ -38,14 +41,31 @@ public class ERXSession extends WOSession implements Serializable {
 
     /**
      * Key that tells the session not to store the current page. Checks both the 
-     * response userInfo and the response headers if this key is present. The value doesn't matter.
+     * response userInfo and the response headers if this key is present. The value doesn't matter,
+     * but you need to update the corresponding value in AjaxUtils.  This is to keep the dependencies
+     * between the two frameworks independent.
      */
     public static final String DONT_STORE_PAGE = "ERXSession.DontStorePage";
+
+    /*
+     * Key that is used to specify that a page should go in the replacement cache instead of
+     * the backtrack cache.  This is used for Ajax components that actually generate component
+     * actions in their output.  The value doesn't matter, but you need to update the 
+     * corresponding value in AjaxUtils.  This is to keep the dependencies between the two
+     * frameworks independent.
+     */
+    public static final String PAGE_REPLACEMENT_CACHE_LOOKUP_KEY = "pageCacheKey";
 
     /** cookie name that if set it means that the user has cookies enabled */
     // FIXME: This should be configurable
     public static final String JAVASCRIPT_ENABLED_COOKIE_NAME = "js";
+
+    private static final String ORIGINAL_CONTEXT_ID_KEY = "originalContextID";
     
+    private static final String PAGE_REPLACEMENT_CACHE_KEY = "pageReplacementCache";
+    
+    private static int MAX_PAGE_REPLACEMENT_CACHE_SIZE = Integer.parseInt(System.getProperty("er.extensions.maxPageReplacementCacheSize", "30"));
+
     /** holds a reference to the current localizer used for this session */
     transient private ERXLocalizer _localizer;
 
@@ -391,7 +411,7 @@ public class ERXSession extends WOSession implements Serializable {
 
         WORequest request=context()!=null ? context().request() : null;
         if (request!=null && log.isDebugEnabled() && request.headerForKey("content-type") != null) {
-            if(((String)request.headerForKey("content-type")).toLowerCase().indexOf("multipart/form-data") == -1)
+            if((request.headerForKey("content-type")).toLowerCase().indexOf("multipart/form-data") == -1)
                 log.debug("Form values "+request.formValues());
             else
                 log.debug("Multipart Form values found");
@@ -615,12 +635,72 @@ public class ERXSession extends WOSession implements Serializable {
      * Overridden so that Ajax requests are not saved in the page cache.  Checks both the 
      * response userInfo and the response headers if the DONT_STORE_PAGE key is present. The value doesn't matter.
      */
-    public void savePage(WOComponent arg0) {
-        if(context().response() == null || 
-                (context().response().headerForKey(DONT_STORE_PAGE) == null && 
-                        (context().response().userInfo() == null || context().response().userInfo().objectForKey(DONT_STORE_PAGE) == null))) {
-            super.savePage(arg0);
+    public void savePage(WOComponent page) {
+      WOContext context = context();
+      WOResponse response = context.response();
+      if (response != null && (response.headerForKey(ERXSession.DONT_STORE_PAGE) != null || (response.userInfo() != null && response.userInfo().objectForKey(ERXSession.DONT_STORE_PAGE) != null))) {
+        String pageCacheKey = response.headerForKey(ERXSession.PAGE_REPLACEMENT_CACHE_LOOKUP_KEY);
+        if (pageCacheKey != null) {
+          String originalContextID = context.request().headerForKey(ERXSession.ORIGINAL_CONTEXT_ID_KEY);
+          pageCacheKey = originalContextID + "_" + pageCacheKey;
+          //System.out.println("Session.savePage: page cache key = " + pageCacheKey);
+          LinkedHashMap pageReplacementCache = (LinkedHashMap) objectForKey(ERXSession.PAGE_REPLACEMENT_CACHE_KEY);
+          if (pageReplacementCache == null) {
+            pageReplacementCache = new LinkedHashMap();
+            setObjectForKey(pageReplacementCache, ERXSession.PAGE_REPLACEMENT_CACHE_KEY);
+          }
+
+          Map.Entry existingPageRecordEntry = null;
+          Iterator transactionRecordsEnum = pageReplacementCache.entrySet().iterator();
+          while (existingPageRecordEntry == null && transactionRecordsEnum.hasNext()) {
+            Map.Entry pageRecordEntry = (Map.Entry)transactionRecordsEnum.next();
+            ERTransactionRecord tempPageRecord = (ERTransactionRecord)pageRecordEntry.getValue();
+            String transactionRecordKey = tempPageRecord.key();
+            if (pageCacheKey.equals(transactionRecordKey)) {
+              existingPageRecordEntry = pageRecordEntry;
+              //System.out.println("Session.savePage:   replacing old page for " + pageCacheKey);
+              transactionRecordsEnum.remove();
+            }
+          }
+
+          if (existingPageRecordEntry == null && pageReplacementCache.size() >= ERXSession.MAX_PAGE_REPLACEMENT_CACHE_SIZE) {
+            Iterator entryIterator = pageReplacementCache.entrySet().iterator();
+            Map.Entry oldestEntry = (Map.Entry) entryIterator.next();
+            entryIterator.remove();
+            //System.out.println("Session.savePage:   removing oldest entry: " + ((ERTransactionRecord)oldestEntry.getValue()).key());
+          }
+          
+          //System.out.println("Session.savePage:   adding page for key " + pageCacheKey);
+          ERTransactionRecord pageRecord = new ERTransactionRecord(page, context, pageCacheKey);
+          pageReplacementCache.put(context.contextID(), pageRecord);
         }
+      }
+      else {
+        super.savePage(page);
+      }
+    }
+
+    public WOComponent restorePageForContextID(String contextID) {
+      LinkedHashMap pageReplacementCache = (LinkedHashMap) objectForKey(ERXSession.PAGE_REPLACEMENT_CACHE_KEY);
+      WOComponent page = null;
+      if (pageReplacementCache != null) {
+        ERTransactionRecord pageRecord = (ERTransactionRecord) pageReplacementCache.get(contextID);
+        if (pageRecord != null) {
+          //System.out.println("Session.restorePageForContextID: got page from page cache " + _contextID + " pageCacheKey = " + pageRecord.key());
+          page = pageRecord.page();
+        }
+      }
+      if (page == null) {
+        page = super.restorePageForContextID(contextID);
+      }
+      if (page != null) {
+        WOContext context = page.context();
+        WORequest request = context.request();
+        if (request != null) {
+          request.setHeader(contextID, ERXSession.ORIGINAL_CONTEXT_ID_KEY);
+        }
+      }
+      return page;
     }
 
     public String toString() {
