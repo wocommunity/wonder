@@ -13,12 +13,22 @@ import com.webobjects.foundation.NSMutableDictionary;
 public class AjaxUtils {
   private static String HTML_CLOSE_HEAD = System.getProperty("er.ajax.AJComponent.htmlCloseHead");
 
-  public static final String PAGE_REPLACEMENT_CACHE_LOOKUP_KEY = "pageCacheKey";
-  
   /**
-   * Key that flags the session to not save the page in the cache.
+   * Key that tells the session not to store the current page. Checks both the 
+   * response userInfo and the response headers if this key is present. The value doesn't matter,
+   * but you need to update the corresponding value in ERXSession.  This is to keep the dependencies
+   * between the two frameworks independent.
    */
-  public static final String AJAX_REQUEST_KEY = "AJAX_REQUEST_KEY";
+  public static final String DONT_STORE_PAGE = "ERXSession.DontStorePage";
+
+  /*
+   * Key that is used to specify that a page should go in the replacement cache instead of
+   * the backtrack cache.  This is used for Ajax components that actually generate component
+   * actions in their output.  The value doesn't matter, but you need to update the 
+   * corresponding value in ERXSession.  This is to keep the dependencies between the two
+   * frameworks independent.
+   */
+  public static final String PAGE_REPLACEMENT_CACHE_LOOKUP_KEY = "pageCacheKey";
 
   public static void setPageReplacementCacheKey(WOContext _context, String _key) {
     _context.response().setHeader(_key, AjaxUtils.PAGE_REPLACEMENT_CACHE_LOOKUP_KEY);
@@ -31,8 +41,8 @@ public class AjaxUtils {
    * @return
    */
   public static boolean isAjaxMessage(WOMessage message) {
-      return (message.headerForKey(AjaxUtils.AJAX_REQUEST_KEY) != null ||
-              (message.userInfo() != null && message.userInfo().objectForKey(AjaxUtils.AJAX_REQUEST_KEY) != null));
+      return (message.headerForKey(AjaxUtils.DONT_STORE_PAGE) != null ||
+              (message.userInfo() != null && message.userInfo().objectForKey(AjaxUtils.DONT_STORE_PAGE) != null));
   }
 
   /**
@@ -54,7 +64,7 @@ public class AjaxUtils {
     // charset set in the response
     response.setHeader("text/plain; charset=utf-8", "content-type");
     response.setHeader("Connection", "keep-alive");
-    response.setHeader(AjaxUtils.AJAX_REQUEST_KEY, AjaxUtils.AJAX_REQUEST_KEY);
+    response.setHeader(AjaxUtils.DONT_STORE_PAGE, AjaxUtils.DONT_STORE_PAGE);
     return response;
   }
 
@@ -149,6 +159,6 @@ public class AjaxUtils {
 
   public static void updateMutableUserInfoWithAjaxInfo(WOContext _context) {
     NSMutableDictionary dict = AjaxUtils.mutableUserInfo(_context.response());
-    dict.takeValueForKey(AjaxUtils.AJAX_REQUEST_KEY, AjaxUtils.AJAX_REQUEST_KEY);
+    dict.takeValueForKey(AjaxUtils.DONT_STORE_PAGE, AjaxUtils.DONT_STORE_PAGE);
   }
 }
