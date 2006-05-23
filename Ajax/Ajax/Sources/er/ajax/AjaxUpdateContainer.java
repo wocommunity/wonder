@@ -10,6 +10,9 @@ import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 
+/**
+* observeFieldID requires ERExtensions, specifically ERXWOForm
+*/
 public class AjaxUpdateContainer extends AjaxComponent {
 
     public AjaxUpdateContainer(WOContext context) {
@@ -76,6 +79,31 @@ public class AjaxUpdateContainer extends AjaxComponent {
         _response.appendContentString(");");
       }
       
+      if (canGetValueForBinding("observeFieldID")) {
+        String observeFieldID = (String)valueForBinding("observeFieldID");
+        _response.appendContentString("new Form.Element.Observer($('" + observeFieldID + "'), 1, function(element, value) {");
+        NSMutableDictionary observerOptions = new NSMutableDictionary();
+        observerOptions.setObjectForKey("true", "asynchronous");
+        
+        // We need to cheat and make the WOForm that contains the form action appear to have been
+        // submitted.  So we grab the action url, pull off the element ID from its action URL
+        // and pass that in as FORCE_FORM_SUBMITTED_KEY, which is processed by ERXWOForm just like
+        // senderID is on the real WOForm.  Unfortunately we can't hook into the real WOForm to do
+        // this :(
+        _response.appendContentString("var formAction = $('" + observeFieldID + "').form.action;");
+        _response.appendContentString("var senderID = formAction.substring(formAction.indexOf('.', formAction.lastIndexOf('/')) + 1);");
+        StringBuffer parameters = new StringBuffer();
+        parameters.append("escape($('" + observeFieldID + "').name) + '=' + escape($('" + observeFieldID + "').value) + '");
+        parameters.append("&");
+        parameters.append(AjaxUtils.FORCE_FORM_SUBMITTED_KEY + "=' + senderID + '");
+        parameters.append("'");
+        
+        observerOptions.setObjectForKey(parameters.toString(), "parameters");
+        _response.appendContentString("new Ajax.Updater('" + id + "', $('" + id + "').updateUrl, ");
+        AjaxOptions.appendToResponse(observerOptions, _response, _context);
+        _response.appendContentString(") });");
+      }
+
       _response.appendContentString("function " + id + "Update() { new Ajax.Updater('" + id + "', $(" + id + ").updateUrl, ");
       AjaxOptions.appendToResponse(options, _response, _context);
       _response.appendContentString("); }");

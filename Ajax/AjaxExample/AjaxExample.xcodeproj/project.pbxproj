@@ -153,8 +153,8 @@
         {
             isa = PBXFileReference;
             lastKnownFileType = sourcecode.java;
-            name = ProxyExample.java;
-            path = Sources/ProxyExample.java;
+            name = RoundedBordersExample.java;
+            path = Sources/RoundedBordersExample.java;
             sourceTree = "<group>";
         };
         000000000000000000000018 = 
@@ -166,8 +166,8 @@
         {
             isa = PBXFileReference;
             lastKnownFileType = sourcecode.java;
-            name = Main.java;
-            path = Sources/Main.java;
+            name = ProxyExample.java;
+            path = Sources/ProxyExample.java;
             sourceTree = "<group>";
         };
         00000000000000000000001a = 
@@ -179,8 +179,8 @@
         {
             isa = PBXFileReference;
             lastKnownFileType = sourcecode.java;
-            name = DragAndDropExample.java;
-            path = Sources/DragAndDropExample.java;
+            name = PopUpButtonExample.java;
+            path = Sources/PopUpButtonExample.java;
             sourceTree = "<group>";
         };
         00000000000000000000001c = 
@@ -192,8 +192,8 @@
         {
             isa = PBXFileReference;
             lastKnownFileType = sourcecode.java;
-            name = DirectAction.java;
-            path = Sources/DirectAction.java;
+            name = Main.java;
+            path = Sources/Main.java;
             sourceTree = "<group>";
         };
         00000000000000000000001e = 
@@ -205,8 +205,8 @@
         {
             isa = PBXFileReference;
             lastKnownFileType = sourcecode.java;
-            name = AutoCompleteExample.java;
-            path = Sources/AutoCompleteExample.java;
+            name = InPlaceEditorExample.java;
+            path = Sources/InPlaceEditorExample.java;
             sourceTree = "<group>";
         };
         000000000000000000000020 = 
@@ -218,8 +218,8 @@
         {
             isa = PBXFileReference;
             lastKnownFileType = sourcecode.java;
-            name = Application.java;
-            path = Sources/Application.java;
+            name = DragAndDropExample.java;
+            path = Sources/DragAndDropExample.java;
             sourceTree = "<group>";
         };
         000000000000000000000022 = 
@@ -231,8 +231,8 @@
         {
             isa = PBXFileReference;
             lastKnownFileType = sourcecode.java;
-            name = UpdaterExample.api;
-            path = Components/UpdaterExample.api;
+            name = DirectAction.java;
+            path = Sources/DirectAction.java;
             sourceTree = "<group>";
         };
         000000000000000000000024 = 
@@ -244,8 +244,8 @@
         {
             isa = PBXFileReference;
             lastKnownFileType = sourcecode.java;
-            name = SortableListExample.api;
-            path = Components/SortableListExample.api;
+            name = AutoCompleteExample.java;
+            path = Sources/AutoCompleteExample.java;
             sourceTree = "<group>";
         };
         000000000000000000000026 = 
@@ -257,8 +257,8 @@
         {
             isa = PBXFileReference;
             lastKnownFileType = sourcecode.java;
-            name = SliderExample.api;
-            path = Components/SliderExample.api;
+            name = Application.java;
+            path = Sources/Application.java;
             sourceTree = "<group>";
         };
         000000000000000000000028 = 
@@ -270,8 +270,8 @@
         {
             isa = PBXFileReference;
             lastKnownFileType = sourcecode.java;
-            name = ProxyExample.api;
-            path = Components/ProxyExample.api;
+            name = AccordionExample.java;
+            path = Sources/AccordionExample.java;
             sourceTree = "<group>";
         };
         00000000000000000000002a = 
@@ -283,8 +283,8 @@
         {
             isa = PBXFileReference;
             lastKnownFileType = sourcecode.java;
-            name = Main.api;
-            path = Components/Main.api;
+            name = UpdaterExample.api;
+            path = Components/UpdaterExample.api;
             sourceTree = "<group>";
         };
         00000000000000000000002c = 
@@ -296,8 +296,8 @@
         {
             isa = PBXFileReference;
             lastKnownFileType = sourcecode.java;
-            name = DragAndDropExample.api;
-            path = Components/DragAndDropExample.api;
+            name = SortableListExample.api;
+            path = Components/SortableListExample.api;
             sourceTree = "<group>";
         };
         00000000000000000000002e = 
@@ -309,8 +309,8 @@
         {
             isa = PBXFileReference;
             lastKnownFileType = sourcecode.java;
-            name = AutoCompleteExample.api;
-            path = Components/AutoCompleteExample.api;
+            name = SliderExample.api;
+            path = Components/SliderExample.api;
             sourceTree = "<group>";
         };
         000000000000000000000030 = 
@@ -321,8 +321,9 @@
         000000000000000000000031 = 
         {
             isa = PBXFileReference;
-            lastKnownFileType = folder;
-            path = Components/UpdaterExample.wo;
+            lastKnownFileType = sourcecode.java;
+            name = RoundedBordersExample.api;
+            path = Components/RoundedBordersExample.api;
             sourceTree = "<group>";
         };
         000000000000000000000032 = 
@@ -333,8 +334,9 @@
         000000000000000000000033 = 
         {
             isa = PBXFileReference;
-            lastKnownFileType = folder;
-            path = Components/SortableListExample.wo;
+            lastKnownFileType = sourcecode.java;
+            name = ProxyExample.api;
+            path = Components/ProxyExample.api;
             sourceTree = "<group>";
         };
         000000000000000000000034 = 
@@ -345,8 +347,9 @@
         000000000000000000000035 = 
         {
             isa = PBXFileReference;
-            lastKnownFileType = folder;
-            path = Components/SliderExample.wo;
+            lastKnownFileType = sourcecode.java;
+            name = Main.api;
+            path = Components/Main.api;
             sourceTree = "<group>";
         };
         000000000000000000000036 = 
@@ -357,8 +360,9 @@
         000000000000000000000037 = 
         {
             isa = PBXFileReference;
-            lastKnownFileType = folder;
-            path = Components/ProxyExample.wo;
+            lastKnownFileType = sourcecode.java;
+            name = InPlaceEditorExample.api;
+            path = Components/InPlaceEditorExample.api;
             sourceTree = "<group>";
         };
         000000000000000000000038 = 
@@ -369,8 +373,9 @@
         000000000000000000000039 = 
         {
             isa = PBXFileReference;
-            lastKnownFileType = folder;
-            path = Components/Main.wo;
+            lastKnownFileType = sourcecode.java;
+            name = DragAndDropExample.api;
+            path = Components/DragAndDropExample.api;
             sourceTree = "<group>";
         };
         00000000000000000000003a = 
@@ -381,8 +386,9 @@
         00000000000000000000003b = 
         {
             isa = PBXFileReference;
-            lastKnownFileType = folder;
-            path = Components/DragAndDropExample.wo;
+            lastKnownFileType = sourcecode.java;
+            name = AutoCompleteExample.api;
+            path = Components/AutoCompleteExample.api;
             sourceTree = "<group>";
         };
         00000000000000000000003c = 
@@ -393,8 +399,9 @@
         00000000000000000000003d = 
         {
             isa = PBXFileReference;
-            lastKnownFileType = folder;
-            path = Components/AutoCompleteExample.wo;
+            lastKnownFileType = sourcecode.java;
+            name = AccordionExample.api;
+            path = Components/AccordionExample.api;
             sourceTree = "<group>";
         };
         00000000000000000000003e = 
@@ -405,10 +412,9 @@
         00000000000000000000003f = 
         {
             isa = PBXFileReference;
-            lastKnownFileType = wrapper.framework;
-            name = Ajax.framework;
-            path = "/Volumes/mDT Workspace/workspace/Ajax/build/Ajax.framework";
-            sourceTree = "<absolute>";
+            lastKnownFileType = folder;
+            path = Components/UpdaterExample.wo;
+            sourceTree = "<group>";
         };
         000000000000000000000040 = 
         {
@@ -418,10 +424,9 @@
         000000000000000000000041 = 
         {
             isa = PBXFileReference;
-            lastKnownFileType = wrapper.framework;
-            name = ERJars.framework;
-            path = "/Volumes/mDT Workspace/workspace/ERJars/build/ERJars.framework";
-            sourceTree = "<absolute>";
+            lastKnownFileType = folder;
+            path = Components/SortableListExample.wo;
+            sourceTree = "<group>";
         };
         000000000000000000000042 = 
         {
@@ -431,10 +436,9 @@
         000000000000000000000043 = 
         {
             isa = PBXFileReference;
-            lastKnownFileType = wrapper.framework;
-            name = JavaWebObjects.framework;
-            path = /System/Library/Frameworks/JavaWebObjects.framework;
-            sourceTree = "<absolute>";
+            lastKnownFileType = folder;
+            path = Components/SliderExample.wo;
+            sourceTree = "<group>";
         };
         000000000000000000000044 = 
         {
@@ -444,10 +448,9 @@
         000000000000000000000045 = 
         {
             isa = PBXFileReference;
-            lastKnownFileType = wrapper.framework;
-            name = JavaFoundation.framework;
-            path = /System/Library/Frameworks/JavaFoundation.framework;
-            sourceTree = "<absolute>";
+            lastKnownFileType = folder;
+            path = Components/RoundedBordersExample.wo;
+            sourceTree = "<group>";
         };
         000000000000000000000046 = 
         {
@@ -457,10 +460,9 @@
         000000000000000000000047 = 
         {
             isa = PBXFileReference;
-            lastKnownFileType = wrapper.framework;
-            name = JavaXML.framework;
-            path = /System/Library/Frameworks/JavaXML.framework;
-            sourceTree = "<absolute>";
+            lastKnownFileType = folder;
+            path = Components/ProxyExample.wo;
+            sourceTree = "<group>";
         };
         000000000000000000000048 = 
         {
@@ -470,10 +472,9 @@
         000000000000000000000049 = 
         {
             isa = PBXFileReference;
-            lastKnownFileType = wrapper.framework;
-            name = JavaWOExtensions.framework;
-            path = /Library/Frameworks/JavaWOExtensions.framework;
-            sourceTree = "<absolute>";
+            lastKnownFileType = folder;
+            path = Components/PopUpButtonExample.wo;
+            sourceTree = "<group>";
         };
         00000000000000000000004a = 
         {
@@ -483,10 +484,9 @@
         00000000000000000000004b = 
         {
             isa = PBXFileReference;
-            lastKnownFileType = wrapper.framework;
-            name = JavaEOAccess.framework;
-            path = /System/Library/Frameworks/JavaEOAccess.framework;
-            sourceTree = "<absolute>";
+            lastKnownFileType = folder;
+            path = Components/Main.wo;
+            sourceTree = "<group>";
         };
         00000000000000000000004c = 
         {
@@ -496,10 +496,9 @@
         00000000000000000000004d = 
         {
             isa = PBXFileReference;
-            lastKnownFileType = wrapper.framework;
-            name = JavaEOControl.framework;
-            path = /System/Library/Frameworks/JavaEOControl.framework;
-            sourceTree = "<absolute>";
+            lastKnownFileType = folder;
+            path = Components/InPlaceEditorExample.wo;
+            sourceTree = "<group>";
         };
         00000000000000000000004e = 
         {
@@ -509,10 +508,9 @@
         00000000000000000000004f = 
         {
             isa = PBXFileReference;
-            lastKnownFileType = wrapper.framework;
-            name = JavaJDBCAdaptor.framework;
-            path = /System/Library/Frameworks/JavaJDBCAdaptor.framework;
-            sourceTree = "<absolute>";
+            lastKnownFileType = folder;
+            path = Components/DragAndDropExample.wo;
+            sourceTree = "<group>";
         };
         000000000000000000000050 = 
         {
@@ -520,6 +518,251 @@
             isa = PBXBuildFile;
         };
         000000000000000000000051 = 
+        {
+            isa = PBXFileReference;
+            lastKnownFileType = folder;
+            path = Components/AutoCompleteExample.wo;
+            sourceTree = "<group>";
+        };
+        000000000000000000000052 = 
+        {
+            fileRef = 000000000000000000000051;
+            isa = PBXBuildFile;
+        };
+        000000000000000000000053 = 
+        {
+            isa = PBXFileReference;
+            lastKnownFileType = folder;
+            path = Components/AccordionExample.wo;
+            sourceTree = "<group>";
+        };
+        000000000000000000000054 = 
+        {
+            fileRef = 000000000000000000000053;
+            isa = PBXBuildFile;
+        };
+        000000000000000000000055 = 
+        {
+            isa = PBXFileReference;
+            lastKnownFileType = wrapper.framework;
+            name = Ajax.framework;
+            path = "/Volumes/mDT Workspace/workspace/Ajax/build/Ajax.framework";
+            sourceTree = "<absolute>";
+        };
+        000000000000000000000056 = 
+        {
+            fileRef = 000000000000000000000055;
+            isa = PBXBuildFile;
+        };
+        000000000000000000000057 = 
+        {
+            isa = PBXFileReference;
+            lastKnownFileType = wrapper.framework;
+            name = ERExtensions.framework;
+            path = "/Volumes/mDT Workspace/workspace/ERExtensions/build/ERExtensions.framework";
+            sourceTree = "<absolute>";
+        };
+        000000000000000000000058 = 
+        {
+            fileRef = 000000000000000000000057;
+            isa = PBXBuildFile;
+        };
+        000000000000000000000059 = 
+        {
+            isa = PBXFileReference;
+            lastKnownFileType = wrapper.framework;
+            name = ERJars.framework;
+            path = "/Volumes/mDT Workspace/workspace/ERJars/build/ERJars.framework";
+            sourceTree = "<absolute>";
+        };
+        00000000000000000000005a = 
+        {
+            fileRef = 000000000000000000000059;
+            isa = PBXBuildFile;
+        };
+        00000000000000000000005b = 
+        {
+            isa = PBXFileReference;
+            lastKnownFileType = wrapper.framework;
+            name = Ajax.framework;
+            path = /Library/Frameworks/Ajax.framework;
+            sourceTree = "<absolute>";
+        };
+        00000000000000000000005c = 
+        {
+            fileRef = 00000000000000000000005b;
+            isa = PBXBuildFile;
+        };
+        00000000000000000000005d = 
+        {
+            isa = PBXFileReference;
+            lastKnownFileType = wrapper.framework;
+            name = ERExtensions.framework;
+            path = /Library/Frameworks/ERExtensions.framework;
+            sourceTree = "<absolute>";
+        };
+        00000000000000000000005e = 
+        {
+            fileRef = 00000000000000000000005d;
+            isa = PBXBuildFile;
+        };
+        00000000000000000000005f = 
+        {
+            isa = PBXFileReference;
+            lastKnownFileType = wrapper.framework;
+            name = ERJars.framework;
+            path = /Library/Frameworks/ERJars.framework;
+            sourceTree = "<absolute>";
+        };
+        000000000000000000000060 = 
+        {
+            fileRef = 00000000000000000000005f;
+            isa = PBXBuildFile;
+        };
+        000000000000000000000061 = 
+        {
+            isa = PBXFileReference;
+            lastKnownFileType = wrapper.framework;
+            name = ERJars.framework;
+            path = /Library/Frameworks/ERJars.framework;
+            sourceTree = "<absolute>";
+        };
+        000000000000000000000062 = 
+        {
+            fileRef = 000000000000000000000061;
+            isa = PBXBuildFile;
+        };
+        000000000000000000000063 = 
+        {
+            isa = PBXFileReference;
+            lastKnownFileType = wrapper.framework;
+            name = ERJars.framework;
+            path = /Library/Frameworks/ERJars.framework;
+            sourceTree = "<absolute>";
+        };
+        000000000000000000000064 = 
+        {
+            fileRef = 000000000000000000000063;
+            isa = PBXBuildFile;
+        };
+        000000000000000000000065 = 
+        {
+            isa = PBXFileReference;
+            lastKnownFileType = wrapper.framework;
+            name = ERJars.framework;
+            path = /Library/Frameworks/ERJars.framework;
+            sourceTree = "<absolute>";
+        };
+        000000000000000000000066 = 
+        {
+            fileRef = 000000000000000000000065;
+            isa = PBXBuildFile;
+        };
+        000000000000000000000067 = 
+        {
+            isa = PBXFileReference;
+            lastKnownFileType = wrapper.framework;
+            name = ERJars.framework;
+            path = /Library/Frameworks/ERJars.framework;
+            sourceTree = "<absolute>";
+        };
+        000000000000000000000068 = 
+        {
+            fileRef = 000000000000000000000067;
+            isa = PBXBuildFile;
+        };
+        000000000000000000000069 = 
+        {
+            isa = PBXFileReference;
+            lastKnownFileType = wrapper.framework;
+            name = JavaWOExtensions.framework;
+            path = /Library/Frameworks/JavaWOExtensions.framework;
+            sourceTree = "<absolute>";
+        };
+        00000000000000000000006a = 
+        {
+            fileRef = 000000000000000000000069;
+            isa = PBXBuildFile;
+        };
+        00000000000000000000006b = 
+        {
+            isa = PBXFileReference;
+            lastKnownFileType = wrapper.framework;
+            name = JavaEOAccess.framework;
+            path = /System/Library/Frameworks/JavaEOAccess.framework;
+            sourceTree = "<absolute>";
+        };
+        00000000000000000000006c = 
+        {
+            fileRef = 00000000000000000000006b;
+            isa = PBXBuildFile;
+        };
+        00000000000000000000006d = 
+        {
+            isa = PBXFileReference;
+            lastKnownFileType = wrapper.framework;
+            name = JavaEOControl.framework;
+            path = /System/Library/Frameworks/JavaEOControl.framework;
+            sourceTree = "<absolute>";
+        };
+        00000000000000000000006e = 
+        {
+            fileRef = 00000000000000000000006d;
+            isa = PBXBuildFile;
+        };
+        00000000000000000000006f = 
+        {
+            isa = PBXFileReference;
+            lastKnownFileType = wrapper.framework;
+            name = JavaFoundation.framework;
+            path = /System/Library/Frameworks/JavaFoundation.framework;
+            sourceTree = "<absolute>";
+        };
+        000000000000000000000070 = 
+        {
+            fileRef = 00000000000000000000006f;
+            isa = PBXBuildFile;
+        };
+        000000000000000000000071 = 
+        {
+            isa = PBXFileReference;
+            lastKnownFileType = wrapper.framework;
+            name = JavaJDBCAdaptor.framework;
+            path = /System/Library/Frameworks/JavaJDBCAdaptor.framework;
+            sourceTree = "<absolute>";
+        };
+        000000000000000000000072 = 
+        {
+            fileRef = 000000000000000000000071;
+            isa = PBXBuildFile;
+        };
+        000000000000000000000073 = 
+        {
+            isa = PBXFileReference;
+            lastKnownFileType = wrapper.framework;
+            name = JavaWebObjects.framework;
+            path = /System/Library/Frameworks/JavaWebObjects.framework;
+            sourceTree = "<absolute>";
+        };
+        000000000000000000000074 = 
+        {
+            fileRef = 000000000000000000000073;
+            isa = PBXBuildFile;
+        };
+        000000000000000000000075 = 
+        {
+            isa = PBXFileReference;
+            lastKnownFileType = wrapper.framework;
+            name = JavaXML.framework;
+            path = /System/Library/Frameworks/JavaXML.framework;
+            sourceTree = "<absolute>";
+        };
+        000000000000000000000076 = 
+        {
+            fileRef = 000000000000000000000075;
+            isa = PBXBuildFile;
+        };
+        000000000000000000000077 = 
         {
             children = 
             (
@@ -539,20 +782,20 @@
                00000000000000000000001b, 
                00000000000000000000001d, 
                00000000000000000000001f, 
-               000000000000000000000021
+               000000000000000000000021, 
+               000000000000000000000023, 
+               000000000000000000000025, 
+               000000000000000000000027, 
+               000000000000000000000029
             );
             isa = PBXGroup;
             name = Sources;
             refType = "<group>";
         };
-        000000000000000000000052 = 
+        000000000000000000000078 = 
         {
             children = 
             (
-               000000000000000000000023, 
-               000000000000000000000025, 
-               000000000000000000000027, 
-               000000000000000000000029, 
                00000000000000000000002b, 
                00000000000000000000002d, 
                00000000000000000000002f, 
@@ -562,16 +805,7 @@
                000000000000000000000037, 
                000000000000000000000039, 
                00000000000000000000003b, 
-               00000000000000000000003d
-            );
-            isa = PBXGroup;
-            name = Resources;
-            refType = "<group>";
-        };
-        000000000000000000000053 = 
-        {
-            children = 
-            (
+               00000000000000000000003d, 
                00000000000000000000003f, 
                000000000000000000000041, 
                000000000000000000000043, 
@@ -580,25 +814,62 @@
                000000000000000000000049, 
                00000000000000000000004b, 
                00000000000000000000004d, 
-               00000000000000000000004f
+               00000000000000000000004f, 
+               000000000000000000000051, 
+               000000000000000000000053
+            );
+            isa = PBXGroup;
+            name = Resources;
+            refType = "<group>";
+        };
+        000000000000000000000079 = 
+        {
+            children = 
+            ();
+            isa = PBXGroup;
+            name = WebServerResources;
+            refType = "<group>";
+        };
+        00000000000000000000007a = 
+        {
+            children = 
+            (
+               000000000000000000000055, 
+               000000000000000000000057, 
+               000000000000000000000059, 
+               00000000000000000000005b, 
+               00000000000000000000005d, 
+               00000000000000000000005f, 
+               000000000000000000000061, 
+               000000000000000000000063, 
+               000000000000000000000065, 
+               000000000000000000000067, 
+               000000000000000000000069, 
+               00000000000000000000006b, 
+               00000000000000000000006d, 
+               00000000000000000000006f, 
+               000000000000000000000071, 
+               000000000000000000000073, 
+               000000000000000000000075
             );
             isa = PBXGroup;
             name = Frameworks;
             refType = "<group>";
         };
-        000000000000000000000054 = 
+        00000000000000000000007b = 
         {
             children = 
             (
-               000000000000000000000051, 
-               000000000000000000000052, 
-               000000000000000000000053
+               000000000000000000000077, 
+               000000000000000000000078, 
+               000000000000000000000079, 
+               00000000000000000000007a
             );
             isa = PBXGroup;
             name = Root;
             refType = "<group>";
         };
-        000000000000000000000055 = 
+        00000000000000000000007c = 
         {
             buildSettings = 
             {
@@ -607,7 +878,7 @@
             isa = XCBuildConfiguration;
             name = Debug;
         };
-        000000000000000000000056 = 
+        00000000000000000000007d = 
         {
             buildSettings = 
             {
@@ -616,29 +887,29 @@
             isa = XCBuildConfiguration;
             name = Release;
         };
-        000000000000000000000057 = 
+        00000000000000000000007e = 
         {
             buildSettings = 
             {};
             isa = XCBuildConfiguration;
             name = Default;
         };
-        000000000000000000000058 = 
+        00000000000000000000007f = 
         {
             buildConfigurations = 
             (
-               000000000000000000000055, 
-               000000000000000000000056, 
-               000000000000000000000057
+               00000000000000000000007c, 
+               00000000000000000000007d, 
+               00000000000000000000007e
             );
             defaultConfigurationIsVisible = 0;
             defaultConfigurationName = Default;
             isa = XCConfigurationList;
         };
-        000000000000000000000059 = 
+        000000000000000000000080 = 
         {
             buildArgumentsString = "-emacs $(ACTION)";
-            buildConfigurationList = 000000000000000000000058;
+            buildConfigurationList = 00000000000000000000007f;
             buildPhases = 
             ();
             buildSettings = 
@@ -649,40 +920,40 @@
             passBuildSettingsInEnvironment = 1;
             productName = Ant;
         };
-        00000000000000000000005a = 
+        000000000000000000000081 = 
         {
             buildSettings = 
             {};
             isa = XCBuildConfiguration;
             name = Debug;
         };
-        00000000000000000000005b = 
+        000000000000000000000082 = 
         {
             buildSettings = 
             {};
             isa = XCBuildConfiguration;
             name = Release;
         };
-        00000000000000000000005c = 
+        000000000000000000000083 = 
         {
             buildSettings = 
             {};
             isa = XCBuildConfiguration;
             name = Default;
         };
-        00000000000000000000005d = 
+        000000000000000000000084 = 
         {
             buildConfigurations = 
             (
-               00000000000000000000005a, 
-               00000000000000000000005b, 
-               00000000000000000000005c
+               000000000000000000000081, 
+               000000000000000000000082, 
+               000000000000000000000083
             );
             defaultConfigurationIsVisible = 0;
             defaultConfigurationName = Default;
             isa = XCConfigurationList;
         };
-        00000000000000000000005e = 
+        000000000000000000000085 = 
         {
             buildSettings = 
             {
@@ -691,7 +962,7 @@
             isa = PBXBuildStyle;
             name = Debug;
         };
-        00000000000000000000005f = 
+        000000000000000000000086 = 
         {
             buildSettings = 
             {
@@ -700,25 +971,25 @@
             isa = PBXBuildStyle;
             name = Release;
         };
-        000000000000000000000060 = 
+        000000000000000000000087 = 
         {
-            buildConfigurationList = 00000000000000000000005d;
+            buildConfigurationList = 000000000000000000000084;
             buildSettings = 
             {};
             buildStyles = 
             (
-               00000000000000000000005e, 
-               00000000000000000000005f
+               000000000000000000000085, 
+               000000000000000000000086
             );
             hasScannedForEncodings = 1;
             isa = PBXProject;
-            mainGroup = 000000000000000000000054;
+            mainGroup = 00000000000000000000007b;
             projectDirPath = .;
             targets = 
             (
-               000000000000000000000059
+               000000000000000000000080
             );
         };
     };
-    rootObject = 000000000000000000000060;
+    rootObject = 000000000000000000000087;
 }

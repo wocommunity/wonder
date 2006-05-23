@@ -1,0 +1,22 @@
+ExampleForm : WOForm {
+	multipleSubmit = true;
+}
+
+FirstPopUpButton : WOPopUpButton {
+	list = firstItems;
+	item = firstItem;
+	selection = selectedFirst;
+	id = "firstSelectBox";
+	noSelectionString = "- None Selected - ";
+}
+
+SecondPopUpContainer : AjaxUpdateContainer {
+	elementName = "div";
+	observeFieldID = "firstSelectBox";
+}
+
+SecondPopUpButton : WOPopUpButton {
+	list = secondItems;
+	item = secondItem;
+	selection = selectedSecond;
+}
