@@ -33,6 +33,11 @@ RoundedBordersLink : WOHyperlink {
 InPlaceEditorLink : WOHyperlink {
 	pageName = "InPlaceEditorExample";
 }
+
 RoundBoxes : AjaxRoundEffect {
 	class = "rounded";
+}
+
+PopUpButtonLink : WOHyperlink {
+	pageName = "PopUpButtonExample";
 }
