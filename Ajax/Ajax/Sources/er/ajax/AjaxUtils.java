@@ -30,6 +30,12 @@ public class AjaxUtils {
    */
   public static final String PAGE_REPLACEMENT_CACHE_LOOKUP_KEY = "pageCacheKey";
 
+  /*
+   * Key that is used during an Ajax form posting so that WOContext gets _wasFormSubmitted
+   * set to true.  If this value is changed, you must also change ERXWOForm.
+   */
+  public static final String FORCE_FORM_SUBMITTED_KEY = "_forceFormSubmitted";
+
   public static void setPageReplacementCacheKey(WOContext _context, String _key) {
     _context.response().setHeader(_key, AjaxUtils.PAGE_REPLACEMENT_CACHE_LOOKUP_KEY);
   }
