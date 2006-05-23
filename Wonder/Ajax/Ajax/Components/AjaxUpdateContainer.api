@@ -3,6 +3,7 @@
 	<wo wocomponentcontent="true" class="AjaxUpdateContainer">
     <binding name = "id"/>
 		<binding name = "elementName"/>
+		<binding name = "observeFieldID"/>
 		
 		<binding name = "frequency"/>
 		<binding name = "decay"/>

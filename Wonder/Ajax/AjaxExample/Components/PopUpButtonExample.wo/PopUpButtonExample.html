@@ -1,0 +1,19 @@
+<html>
+<head>
+</head>
+<body>
+<webobject name = "ExampleForm">
+	AjaxUpdateContainer has an optional 'observeFieldID' binding.  You can set this binding to the id of the element to observe.  When the element changes,
+	the observed value will be sent back to the server, and the AjaxUpdateContainer will be updated.  This feature requires that you use the ERExtensions
+	framework (due to required changes in ERXWOForm).
+	<p>
+	This can we used to create dependent PopUpButtons like in the following example:
+	<p>
+	<webobject name = "FirstPopUpButton"></webobject>
+	<p>
+	<webobject name = "SecondPopUpContainer">
+		<webobject name = "SecondPopUpButton"></webobject>
+	</webobject>
+</webobject>
+</body>
+</html>
