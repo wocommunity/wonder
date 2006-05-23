@@ -33,6 +33,9 @@ import com.webobjects.foundation.*;
  * @author Mike Schrag (idea to secure binding)
  */  
 public class ERXWOForm extends com.webobjects.appserver._private.WOForm {
+    // This constant is currently only used with Ajax.  If you change this value, you
+    // must also change it in AjaxUtils.
+    public static final String FORCE_FORM_SUBMITTED_KEY = "_forceFormSubmitted";
     static final ERXLogger log = ERXLogger.getERXLogger(ERXWOForm.class);
     WOAssociation _formName;
     WOAssociation _enctype;
@@ -48,6 +51,18 @@ public class ERXWOForm extends com.webobjects.appserver._private.WOForm {
         _fragmentIdentifier = (WOAssociation) _associations.removeObjectForKey("fragmentIdentifier");
         _secure = (WOAssociation) _associations.removeObjectForKey("secure");
         _disabled = (WOAssociation) _associations.removeObjectForKey("disabled");
+    }
+    
+    public void takeValuesFromRequest(WORequest request, WOContext context) {
+      String forceFormSubmittedElementID = (String)request.formValueForKey(ERXWOForm.FORCE_FORM_SUBMITTED_KEY);
+      boolean forceFormSubmitted = (forceFormSubmittedElementID != null && forceFormSubmittedElementID.equals(context.elementID()));
+      if (forceFormSubmitted) {
+        context._setFormSubmitted(true);
+      }
+      super.takeValuesFromRequest(request, context);
+      if (forceFormSubmitted) {
+        context._setFormSubmitted(false);
+      }
     }
 
     public void appendAttributesToResponse(WOResponse response, WOContext context) {
