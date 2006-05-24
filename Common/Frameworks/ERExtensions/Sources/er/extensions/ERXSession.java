@@ -7,9 +7,8 @@
 package er.extensions;
 
 import java.io.*;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.lang.ref.*;
+import java.util.*;
 
 import com.webobjects.appserver.*;
 import com.webobjects.eocontrol.*;
@@ -630,7 +629,36 @@ public class ERXSession extends WOSession implements Serializable {
             log.debug("Session has been deserialized: " + toString());
     }
 
-    
+    /*
+     * ERTransactionRecord is a reimplementation of WOTransactionRecord for
+     * use with Ajax background request page caching.
+     * 
+     * @author mschrag
+     */
+    static class TransactionRecord {
+      private WeakReference _context;
+      private WeakReference _page;
+      private String _key;
+
+      public TransactionRecord(WOComponent page, WOContext context, String key) {
+        _page = new WeakReference(page);
+        _context = new WeakReference(context);
+        _key = key;
+      }
+
+      public WOComponent page() {
+        return (WOComponent) _page.get();
+      }
+
+      public WOContext context() {
+        return (WOContext) _context.get();
+      }
+
+      public String key() {
+        return _key;
+      }
+    }
+
     /**
      * Overridden so that Ajax requests are not saved in the page cache.  Checks both the 
      * response userInfo and the response headers if the DONT_STORE_PAGE key is present. The value doesn't matter.
@@ -654,7 +682,7 @@ public class ERXSession extends WOSession implements Serializable {
           Iterator transactionRecordsEnum = pageReplacementCache.entrySet().iterator();
           while (existingPageRecordEntry == null && transactionRecordsEnum.hasNext()) {
             Map.Entry pageRecordEntry = (Map.Entry)transactionRecordsEnum.next();
-            ERTransactionRecord tempPageRecord = (ERTransactionRecord)pageRecordEntry.getValue();
+           TransactionRecord tempPageRecord = (TransactionRecord)pageRecordEntry.getValue();
             String transactionRecordKey = tempPageRecord.key();
             if (pageCacheKey.equals(transactionRecordKey)) {
               existingPageRecordEntry = pageRecordEntry;
@@ -671,7 +699,7 @@ public class ERXSession extends WOSession implements Serializable {
           }
           
           //System.out.println("Session.savePage:   adding page for key " + pageCacheKey);
-          ERTransactionRecord pageRecord = new ERTransactionRecord(page, context, pageCacheKey);
+          TransactionRecord pageRecord = new TransactionRecord(page, context, pageCacheKey);
           pageReplacementCache.put(context.contextID(), pageRecord);
         }
       }
@@ -684,7 +712,7 @@ public class ERXSession extends WOSession implements Serializable {
       LinkedHashMap pageReplacementCache = (LinkedHashMap) objectForKey(ERXSession.PAGE_REPLACEMENT_CACHE_KEY);
       WOComponent page = null;
       if (pageReplacementCache != null) {
-        ERTransactionRecord pageRecord = (ERTransactionRecord) pageReplacementCache.get(contextID);
+        TransactionRecord pageRecord = (TransactionRecord) pageReplacementCache.get(contextID);
         if (pageRecord != null) {
           //System.out.println("Session.restorePageForContextID: got page from page cache " + _contextID + " pageCacheKey = " + pageRecord.key());
           page = pageRecord.page();
