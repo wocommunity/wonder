@@ -132,6 +132,7 @@ Errors: ERXErrorDictionaryPanel {
 	shouldShowNewLineBelow = true;
 	errorMessages = errorMessages;
 	extraErrorMessage = errorMessage;
+	errorKeyOrder = errorKeyOrder;
 }
 
 FontContainer: WOGenericContainer {
