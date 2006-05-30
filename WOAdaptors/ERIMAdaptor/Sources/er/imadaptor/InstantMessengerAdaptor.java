@@ -168,7 +168,8 @@ public class InstantMessengerAdaptor extends WOAdaptor implements IMessageListen
   }
 
   public static boolean isIMRequest(WORequest _request) {
-    return _request.userInfo().objectForKey(InstantMessengerAdaptor.IS_IM_KEY) != null;
+    NSDictionary userInfo = _request.userInfo();
+    return (userInfo != null && userInfo.objectForKey(InstantMessengerAdaptor.IS_IM_KEY) != null);
   }
 
   public static String message(WORequest _request) {
