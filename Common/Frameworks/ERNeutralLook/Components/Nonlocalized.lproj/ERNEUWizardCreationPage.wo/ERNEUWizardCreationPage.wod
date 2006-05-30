@@ -75,6 +75,7 @@ EditForm: ERXOptionalForm {
 
 Errors: ERXErrorDictionaryPanel {
 	errorMessages = errorMessages;
+	errorKeyOrder = errorKeyOrder;
 	extraErrorMessage = errorMessage;
 	shouldShowNewLineAbove = true;
 	shouldShowNewLineBelow = true;
