@@ -197,6 +197,8 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
 
     public String errorMessage() { return errorMessage; }
     public void setErrorMessage(String message) { errorMessage = message; }
+	
+	public NSArray errorKeyOrder() { return errorKeyOrder; }
 
     /** Should exceptions be propagated through to the parent page. If false, the validation errors are not shown at all. */
     public boolean shouldPropagateExceptions() { return ERXValueUtilities.booleanValue(d2wContext().valueForKey(Keys.shouldPropagateExceptions)); }
