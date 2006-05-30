@@ -526,6 +526,11 @@ public class ERXConfigurationManager {
                 }
             }
 
+            boolean removeJdbc2Info = ERXProperties.booleanForKeyWithDefault(aModelName + ".removeJdbc2Info", false);
+            if (removeJdbc2Info && newConnectionDictionary != null) {
+              newConnectionDictionary.removeObjectForKey("jdbc2Info");
+            }
+
             if (newConnectionDictionary!=null && log.isDebugEnabled()) {
                 if (newConnectionDictionary.objectForKey("password")!=null)
                     newConnectionDictionary.setObjectForKey("<deleted for log>", "password");
