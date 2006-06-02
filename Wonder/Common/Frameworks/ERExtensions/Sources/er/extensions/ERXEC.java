@@ -36,6 +36,9 @@ public class ERXEC extends EOEditingContext {
     /** logs a message when set to DEBUG and an EC is locked/unlocked. */
     public static final ERXLogger lockTrace = ERXLogger.getERXLogger("er.extensions.ERXEC.LockTrace");
     
+    /** logging support for modified objects */
+    public static final ERXLogger logMod = ERXLogger.getERXLogger("er.transaction.delegate.EREditingContextDelegate.modifedObjects");
+    
     /** name of the notification that is posted after editing context is created. */
     public static final String EditingContextDidCreateNotification = "EOEditingContextDidCreate";
 
@@ -186,7 +189,6 @@ public class ERXEC extends EOEditingContext {
 
     public static interface Factory {
         public Object defaultEditingContextDelegate();
-        public void didSave(NSNotification n);
         public void setDefaultEditingContextDelegate(Object delegate);
         public Object defaultNoValidationDelegate();
         public void setDefaultNoValidationDelegate(Object delegate);
@@ -513,32 +515,230 @@ public class ERXEC extends EOEditingContext {
         }
     }
     
-    /** Overriden to support autoLocking and a bugfix from Lenny Marks. */ 
-    public void saveChanges() {
-        _EOAssertSafeMultiThreadedAccess("saveChanges()");
-        boolean wasAutoLocked = autoLock("saveChanges");
-        savingChanges = true;
+
+    protected void willSaveChanges(NSArray insertedObjects, NSArray updatedObjects, NSArray deletedObjects) {
+        boolean isNestedEditingContext = !(parentObjectStore() instanceof EOObjectStoreCoordinator);
+
+        processRecentChanges(); // need to do this to make sure the updated objects list is current
+
+        if (hasChanges()) {
+            NSNotificationCenter.defaultCenter().postNotification(ERXExtensions.objectsWillChangeInEditingContext, this);
+            // we don't need to lock ec because we can assume that we're locked
+            // before this method is called, but we do need to lock our parent
+
+            if (isNestedEditingContext) {
+                EOEditingContext parentEC = (EOEditingContext) parentObjectStore();
+
+                parentEC.lock();
+
+                try {
+                    if (deletedObjects.count() > 0) {
+                        final NSArray deletedObjectsToFlushInParent = ERXEOControlUtilities.localInstancesOfObjects(parentEC, deletedObjects);
+
+                        if (log.isDebugEnabled()) {
+                            log.debug("saveChanges: before save to child context " + this
+                                    + ", need to flush caches on deleted objects in parent context " + parentEC + ": "
+                                    + deletedObjectsToFlushInParent);
+                        }
+                        ERXEnterpriseObject.FlushCachesProcessor.perform(parentEC, deletedObjectsToFlushInParent);
+                    }
+
+                } finally {
+                    parentEC.unlock();
+                }
+            }
+            ERXEnterpriseObject.WillUpdateProcessor.perform(this, updatedObjects);
+            ERXEnterpriseObject.WillDeleteProcessor.perform(this, deletedObjects);
+            ERXEnterpriseObject.WillInsertProcessor.perform(this, insertedObjects);
+
+            if (log.isDebugEnabled()) log.debug("EditingContextWillSaveChanges: done calling will*");
+            if (logMod.isDebugEnabled()) {
+                if (updatedObjects()!=null) logMod.debug("** Updated Objects "+ updatedObjects().count()+" - "+ updatedObjects());
+                if (insertedObjects()!=null) logMod.debug("** Inserted Objects "+ insertedObjects().count()+" - "+ insertedObjects());
+                if (deletedObjects()!=null) logMod.debug("** Deleted Objects "+ deletedObjects().count()+" - "+ deletedObjects());
+            }
+        }
+    }
+
+   protected void didSaveChanges(NSArray insertedObjects, NSArray updatedObjects, NSArray deletedObjects) {
+        final boolean isNestedEditingContext = ! (parentObjectStore() instanceof EOObjectStoreCoordinator);
+
+        ERXEnterpriseObject.DidUpdateProcessor.perform(this, updatedObjects);
+        ERXEnterpriseObject.DidDeleteProcessor.perform(this, deletedObjects);
+        ERXEnterpriseObject.DidInsertProcessor.perform(this, insertedObjects);
+        
+        if ( isNestedEditingContext ) {
+            // we can assume insertedObjectGIDs and updatedObjectGIDs are non null.  if we execute this branch, they're at
+            // least empty arrays.
+            final EOEditingContext parentEC = (EOEditingContext)parentObjectStore();
+
+            if ( insertedObjects.count() > 0 || updatedObjects.count() > 0) {
+                NSMutableArray flushableObjects = new NSMutableArray();
+                flushableObjects.addObjectsFromArray(insertedObjects);
+                flushableObjects.addObjectsFromArray(updatedObjects);
+
+                parentEC.lock();
+                try {
+                    final NSArray flushableObjectsInParent = ERXEOControlUtilities.localInstancesOfObjects(parentEC, flushableObjects);
+
+                    if ( log.isDebugEnabled() ) {
+                        log.debug("saveChanges: before save to child context " + this +
+                                ", need to flush caches on objects in parent context " + parentEC + ": " + flushableObjectsInParent);
+                    }
+
+                    ERXEnterpriseObject.FlushCachesProcessor.perform(parentEC, flushableObjectsInParent);
+                } finally {
+                    parentEC.unlock();
+                }
+            }
+        }
+    }
+
+    /** Smarter version of normal <code>saveChanges()</code> method.
+     * Overriden to support autoLocking and a bugfix from Lenny Marks, calls up Will/Did methods on ERXEnterpriseObjects
+     * and corrects issues with <code>flushCaches()</code> needing to be called on objects in the parent context when
+     * committing the child context to the parent. If the editing context is a child of the object-store
+     * coordinator---that is, it's not a nested context---this method
+     * behaves exactly the same as <code>EOEditingContext.saveChanges()</code>. Otherwise,
+     * this method looks over the changed objects in <code>ec</code> (<code>updatedObjects()</code>,
+     * <code>insertedObjects()</code> and <code>deletedObjects()</code>).  The changed objects lists
+     * are filtered for instances of <code>ERXGenericRecord</code>.  The order of operations then becomes:
+     *
+     * <ol>
+     * <li> Call <code>processRecentChanges()</code> on the child context to propogate changes.
+     * <li> Lock the parent editing context.
+     * <li> On the deleted objects list in the child editing context, call <code>flushCaches()</code> on
+     *      each corresponding EO in the parent context.
+     * <li> Unlock the parent editing context.
+     * <li> Call <code>saveChanges()</code> on the child, commiting the child changes to the
+     *      parent editing context.
+     * <li> Lock the parent editing context.
+     * <li> On the objects that were updated or inserted in the child, call <code>flushCaches()</code>
+     *      on each corresponding EO in the parent context.
+     * <li> Unlock the parent editing context.
+     * </ol>
+     *
+     * <p>
+     *
+     * The order of operations is a bit peculiar: flush deletes, save, flush inserts and updates.  This
+     * is done because deletes must be flushed because there may be dependant computed state that needs to
+     * be reset.  But following the delete being committed, the relationships to other objects cannot be
+     * relied upon so it isn't reliable to call flushCaches after the commit.  It's not entirely correct to
+     * flush the deletes like this, but it's the best we can do.
+     *
+     * <p>
+     *
+     * This works around an issue in EOF that we don't get a merge notification when a child
+     * EC saves to its parent.  Because there's no merge notification, <code>flushCaches()</code>
+     * isn't called by the EC delegate and we're essentially screwed vis-a-vis resetting computed
+     * state.
+     *
+     * <p>
+     *
+     * This method assumes that the <code>ec</code> is locked before this method is invoked, but this
+     * method will take the lock on the parent editing context if the <code>ec</code> is a
+     * nested context before and after the save in order to get the objects and to flush caches on
+     * them.
+     *
+     * @param ec editing context to save
+     */
+
+   public void saveChanges() {
+       _EOAssertSafeMultiThreadedAccess("saveChanges()");
+       boolean wasAutoLocked = autoLock("saveChanges");
+       savingChanges = true;
+       try {
+           NSArray insertedObjects = insertedObjects().immutableClone();
+           NSArray updatedObjects = updatedObjects().immutableClone();
+           NSArray deletedObjects = deletedObjects().immutableClone();
+
+           willSaveChanges(insertedObjects, updatedObjects, deletedObjects);
+
+           _saveChanges();
+
+           didSaveChanges(insertedObjects, updatedObjects, deletedObjects);
+       } catch(com.webobjects.eoaccess.EOGeneralAdaptorException e) {
+           Object delegate = delegate();
+           boolean delegateImplementsDidSaveFailed = delegate != null && EditingContextDidFailSaveChangesDelegateSelector.implementedByObject(delegate);
+           if(delegateImplementsDidSaveFailed) {
+               final Object[] parameters = new Object[] {this, e};
+               RuntimeException ex = (RuntimeException) ERXSelectorUtilities.invoke(EditingContextDidFailSaveChangesDelegateSelector, delegate, parameters);
+               if(ex != null) { 
+                   throw ex; 
+               }
+           } else {
+               throw e;
+           }
+       } finally {
+           autoUnlock(wasAutoLocked);
+           savingChanges = false;
+       }
+
+       processQueuedNotifications();
+   }
+
+   /**
+    * Saves changes and tries to recover from optimistic locking exceptions
+    * by refaulting the object in question, optionally merging the
+    * changed values and optionally retrying the save.
+    * @param doesRetry when true, saves again after resolving.
+    *    when false, throws the optimistic locking after resolving
+    * @param mergesChanges 
+    */
+   public void saveChangesTolerantly(boolean doesRetry, boolean mergesChanges) {
+       _EOAssertSafeMultiThreadedAccess("saveChangesTolerantly()");
+       
+       boolean recover = _recoversFromException;
+       boolean retry = _doesRetry;
+       boolean merge = _mergesChanges;
+
+       setOptions(true, doesRetry, mergesChanges);
+       saveChanges();
+       setOptions(recover, retry, merge);
+   }
+
+   private boolean _recoversFromException;
+   private boolean _doesRetry;
+   private boolean _mergesChanges;
+
+    /**
+     * Set the options for the saveChanges() operation.
+     * @param recoversFromException
+     * @param doesRetry
+     * @param mergesChanges
+     */
+    public void setOptions(boolean recoversFromException, 
+            boolean doesRetry, boolean mergesChanges) {
+        _recoversFromException = recoversFromException;
+        _doesRetry = doesRetry;
+        _mergesChanges = mergesChanges;
+    }
+
+    protected void _saveChanges() {
+        boolean saved = true;
         try {
             super.saveChanges();
-        } catch(com.webobjects.eoaccess.EOGeneralAdaptorException e) {
-            Object delegate = delegate();
-            final boolean delegateImplementsDidSaveFailed =
-            delegate != null && EditingContextDidFailSaveChangesDelegateSelector.implementedByObject(delegate);
-            if(delegateImplementsDidSaveFailed) {
-                final Object[] parameters = new Object[] {this, e};
-                RuntimeException ex = (RuntimeException) ERXSelectorUtilities.invoke(EditingContextDidFailSaveChangesDelegateSelector, delegate, parameters);
-                if(ex != null) { throw ex; }
-            } else {
+        } catch(EOGeneralAdaptorException e) {
+            saved = false;
+            if(_recoversFromException) {
+                log.warn("_saveChangesTolerantly: Exception occurred: "+ e);
+                if(ERXEOAccessUtilities.isOptimisticLockingFailure(e)) {
+                    EOEnterpriseObject eo = ERXEOAccessUtilities.refetchFailedObject(this, e);
+                    if (_mergesChanges) {
+                        ERXEOAccessUtilities.reapplyChanges(eo, e);
+                    }
+                    if(_doesRetry) {
+                        _saveChanges();
+                        saved = true;
+                    }
+                }
+            }
+            if(!saved) {
                 throw e;
             }
-        } finally {
-            autoUnlock(wasAutoLocked);
-            savingChanges = false;
         }
-
-        processQueuedNotifications();
     }
-    
+
     /** Overriden to support autoLocking. */ 
     public EOEnterpriseObject faultForGlobalID(EOGlobalID eoglobalid, EOEditingContext eoeditingcontext) {
         boolean wasAutoLocked = autoLock("faultForGlobalID");
@@ -599,10 +799,13 @@ public class ERXEC extends EOEditingContext {
         }
     }
     
-    /** Overriden to support autoLocking. */ 
+    /** Overriden to support autoLocking and to flush the cache of all ERXEnterpriseObjects. */ 
     public void refaultObject(EOEnterpriseObject eoenterpriseobject, EOGlobalID eoglobalid, EOEditingContext eoeditingcontext) {
         boolean wasAutoLocked = autoLock("refaultObject");
         try {
+            // ak: need to flush caches
+            ERXEnterpriseObject.FlushCachesProcessor.perform(this, eoenterpriseobject);
+            
             super.refaultObject(eoenterpriseobject, eoglobalid, eoeditingcontext);
         } finally {
             autoUnlock(wasAutoLocked);
@@ -673,15 +876,20 @@ public class ERXEC extends EOEditingContext {
     public void revert() {
         boolean wasAutoLocked = autoLock("revert");
         try {
+            final NSArray insertedObjects = insertedObjects().immutableClone();
+            final NSArray updatedObjects = updatedObjects().immutableClone();
+            final NSArray deletedObjects = deletedObjects().immutableClone();
+
+            ERXEnterpriseObject.WillRevertProcessor.perform(this, insertedObjects);
+            ERXEnterpriseObject.WillRevertProcessor.perform(this, updatedObjects);
+            ERXEnterpriseObject.WillRevertProcessor.perform(this, deletedObjects);
+                       
             final Object delegate = delegate();
             final boolean delegateImplementsWillRevert =
                     delegate != null && EditingContextWillRevertObjectsDelegateSelector.implementedByObject(delegate);
             final boolean delegateImplementsDidRevert =
                     delegate != null && EditingContextDidRevertObjectsDelegateSelector.implementedByObject(delegate);
             final boolean needToCallDelegate = delegateImplementsWillRevert || delegateImplementsDidRevert;
-            final NSArray insertedObjects = needToCallDelegate ? insertedObjects().immutableClone() : null;
-            final NSArray updatedObjects = needToCallDelegate ? updatedObjects().immutableClone() : null;
-            final NSArray deletedObjects = needToCallDelegate ? deletedObjects().immutableClone() : null;
             final Object[] parameters = needToCallDelegate ? new Object[] {this, insertedObjects,updatedObjects, deletedObjects} : null;
 
             if( delegateImplementsWillRevert )
@@ -691,7 +899,10 @@ public class ERXEC extends EOEditingContext {
 
             if ( delegateImplementsDidRevert )
                 ERXSelectorUtilities.invoke(EditingContextDidRevertObjectsDelegateSelector, delegate, parameters);
-
+            
+            ERXEnterpriseObject.DidRevertProcessor.perform(this, insertedObjects);
+            ERXEnterpriseObject.DidRevertProcessor.perform(this, updatedObjects);
+            ERXEnterpriseObject.DidRevertProcessor.perform(this, deletedObjects);
         } finally {
             autoUnlock(wasAutoLocked);
         }
@@ -702,7 +913,7 @@ public class ERXEC extends EOEditingContext {
     public void saveChanges(Object obj) {
         boolean wasAutoLocked = autoLock("saveChanges");
         try {
-            super.saveChanges();
+            saveChanges();
         } finally {
             autoUnlock(wasAutoLocked);
         }
@@ -757,6 +968,7 @@ public class ERXEC extends EOEditingContext {
      * 
      */
     public void _objectsChangedInStore(NSNotification nsnotification) {
+        ERXEnterpriseObject.FlushCachesProcessor.perform(this, (NSArray) nsnotification.userInfo().objectForKey("objects"));
         if(savingChanges) {
             queuedNotifications.addObject(nsnotification);
         } else {
@@ -849,41 +1061,6 @@ public class ERXEC extends EOEditingContext {
     	public Object defaultNoValidationDelegate() { 
     		return defaultNoValidationDelegate; 
     	}
-    	
-        /**
-         * Called by an observer after an editing context has
-         * successfully saved changes to a database. This method
-         * enumerates through all of the objects that were inserted,
-         * updated and deleted calling <code>didInsert</code>, <code>
-         * didUpdate</code> and <code>didDelete</code> on the objects
-         * respectively.
-         * @param n notifcation posted after an editing context has
-         *		successfully saved changes to the database.
-         */
-        public void didSave(NSNotification n) {
-            EOEditingContext ec=(EOEditingContext)n.object();
-            // Changed objects
-            NSArray updatedObjects=(NSArray)n.userInfo().objectForKey("updated");
-            for (Enumeration e = updatedObjects.objectEnumerator(); e.hasMoreElements();) {
-                EOEnterpriseObject eo = (EOEnterpriseObject)e.nextElement();
-                if (eo instanceof ERXEnterpriseObject)
-                    ((ERXEnterpriseObject)eo).didUpdate();
-            }
-            // Deleted objects
-            NSArray deletedObjects=(NSArray)n.userInfo().objectForKey("deleted");
-            for (Enumeration e = deletedObjects.objectEnumerator(); e.hasMoreElements();) {
-                EOEnterpriseObject eo = (EOEnterpriseObject)e.nextElement();
-                if (eo instanceof ERXEnterpriseObject)
-                    ((ERXEnterpriseObject)eo).didDelete(ec);
-            }
-            // Inserted objects
-            NSArray insertedObjects=(NSArray)n.userInfo().objectForKey("inserted");
-            for (Enumeration e = insertedObjects.objectEnumerator(); e.hasMoreElements();) {
-                EOEnterpriseObject eo = (EOEnterpriseObject)e.nextElement();
-                if (eo instanceof ERXEnterpriseObject)
-                    ((ERXEnterpriseObject)eo).didInsert();
-            }
-        }
         
     	/**
     	 * Sets the default editing context delegate to be

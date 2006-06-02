@@ -3,6 +3,7 @@ package er.extensions;
 import java.sql.*;
 
 import com.webobjects.eoaccess.*;
+import com.webobjects.eocontrol.*;
 import com.webobjects.foundation.*;
 import com.webobjects.jdbcadaptor.*;
 
@@ -24,6 +25,14 @@ public class ERXJDBCAdaptor extends JDBCAdaptor {
     
     public static final String CLASS_NAME_KEY = "er.extensions.ERXJDBCAdaptor.className";
     
+    private static Boolean switchReadWrite = null;
+    
+    private static boolean switchReadWrite() {
+        if (switchReadWrite == null) {
+            switchReadWrite = "false".equals(ERXSystem.getProperty("er.extensions.ERXJDBCAdaptor.switchReadWrite", "false")) ? Boolean.FALSE : Boolean.TRUE;
+        }
+        return switchReadWrite.booleanValue();
+    }
 
     public static void registerJDBCAdaptor() {
         String className = ERXProperties.stringForKey(CLASS_NAME_KEY);
@@ -46,9 +55,36 @@ public class ERXJDBCAdaptor extends JDBCAdaptor {
         public Channel(JDBCContext jdbccontext) {
             super(jdbccontext);
         }
-      
+
+        private boolean setReadOnly(boolean mode) {
+            boolean old = false;
+            if(switchReadWrite()) {
+                try {
+                    Connection connection = ((JDBCContext)adaptorContext()).connection();
+                    if (connection != null) {
+                        old = connection.isReadOnly();
+                        connection.setReadOnly(mode);
+                    } else {
+                        throw new EOGeneralAdaptorException("Can't switch connection mode to " + mode + ", the connection is null");
+                    }
+                } catch (java.sql.SQLException e) {
+                    throw new EOGeneralAdaptorException("Can't switch connection mode to " + mode, new NSDictionary(e, "originalException"));
+                } 
+            }
+            return old;
+        }
+
         /**
-         * Overridden to post a notification when the operations were performed. 
+         * Overridden to switch the connection to read-only while selecting.
+         */
+        public void selectAttributes(NSArray array, EOFetchSpecification fetchspecification, boolean lock, EOEntity entity) {
+            boolean mode = setReadOnly(!lock);
+            super.selectAttributes(array, fetchspecification, lock, entity);
+            setReadOnly(mode);
+        }
+
+        /**
+         * Overridden to post a notification when the operations were performed.
          */
         public void performAdaptorOperations(NSArray ops) {
             super.performAdaptorOperations(ops);
@@ -93,11 +129,14 @@ public class ERXJDBCAdaptor extends JDBCAdaptor {
         }
 
         public boolean connect() throws JDBCAdaptorException {
+            boolean connected = false;
             if(useConnectionBroker()) {
                 checkoutConnection();
-                return _jdbcConnection != null;
+                connected = _jdbcConnection != null;
+            } else {
+                connected = super.connect();
             }
-            return super.connect();
+            return connected;
         }
 
         protected JDBCChannel createJDBCChannel() {
