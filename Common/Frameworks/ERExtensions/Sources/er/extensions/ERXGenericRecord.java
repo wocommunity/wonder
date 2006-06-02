@@ -545,14 +545,6 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
         return ERXEOControlUtilities.isNewObject(this);
     }
     
-    
-    /**
-     * @deprecated use {@link ERXEC$Factory#didSave} instead.
-     */
-    public static void didSave(NSNotification n) {
-        ERXEC.factory().didSave(n);
-    }
-
     /**
      * Overrides the default validation mechanisms to provide
      * a few checks before invoking super's implementation,

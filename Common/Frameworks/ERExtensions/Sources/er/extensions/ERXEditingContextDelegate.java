@@ -27,7 +27,6 @@ public class ERXEditingContextDelegate extends Object implements java.io.Seriali
      * caches the boolean value of the property key:
      *  <b>er.extensions.ERXRaiseOnMissingEditingContextDelegate</b>
      */
-    // MOVEME: Need to have a central repository of all of these keys and what they mean
     static boolean _raiseOnMissingEditingContextDelegate =  ERXProperties.booleanForKeyWithDefault("er.extensions.ERXRaiseOnMissingEditingContextDelegate", true);
 
     /**
@@ -48,6 +47,9 @@ public class ERXEditingContextDelegate extends Object implements java.io.Seriali
      * @return if the editing context has the correct delegate set.
      */
     public static boolean _checkEditingContextDelegate(EOEditingContext editingContext) {
+        if(editingContext instanceof ERXEC) {
+            return true;
+        }
         Object delegate=editingContext.delegate();
         
         if (delegate==null) {

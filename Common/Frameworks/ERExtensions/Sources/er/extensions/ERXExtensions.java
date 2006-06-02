@@ -48,11 +48,6 @@ public class ERXExtensions {
         return _log;
     }
 
-    /** holds references to default editing context delegate */
-    //private static ERXEditingContextDelegate _defaultEditingContextDelegate;
-    /** holds references to default editing context delegate without validation */
-    //private static ERXECNoValidationDelegate _defaultECNoValidationDelegate;
-
     /**
      * This public observer is used to perform basic functions in
      * response to notifications. Specifically it handles
@@ -76,18 +71,6 @@ public class ERXExtensions {
          */
         public void configureAdaptorContext(NSNotification n) {
             ERXExtensions.configureAdaptorContext();
-        }
-
-        /**
-         * This method is called everytime an editingcontext is
-         * saved. This allows us to call all of the didInsert,
-         * didUpdate and didSave methods on the enterprise objects
-         * after the transaction is complete.
-         * @param n notification that contains the array of inserted,
-         *		updated and deleted objects.
-         */
-        public void didSave(NSNotification n) {
-            ERXEC.factory().didSave(n);
         }
 
         /**
@@ -191,10 +174,6 @@ public class ERXExtensions {
                 ERXEC.factory().setDefaultDelegateOnEditingContext(EOSharedEditingContext.defaultSharedEditingContext(), true);
 
                 ERXEntityClassDescription.registerDescription();
-                NSNotificationCenter.defaultCenter().addObserver(observer,
-                                                                 new NSSelector("didSave", ERXConstant.NotificationClassArray),
-                                                                 EOEditingContext.EditingContextDidSaveChangesNotification,
-                                                                 null);
                 NSNotificationCenter.defaultCenter().addObserver(observer,
                                                                  new NSSelector("finishedLaunchingApp", ERXConstant.NotificationClassArray),
                                                                  WOApplication.ApplicationWillFinishLaunchingNotification,
@@ -308,69 +287,6 @@ public class ERXExtensions {
    }
 
     /**
-     * @deprecated see {@link ERXEC}
-     */
-    public static ERXEditingContextDelegate defaultEditingContextDelegate() {
-        return (ERXEditingContextDelegate)ERXEC.factory().defaultEditingContextDelegate();
-    }
-
-    /**
-     * @deprecated see {@link ERXEC}
-     */
-    public static void setDefaultEditingContextDelegate(ERXEditingContextDelegate delegate) {
-        ERXEC.factory().setDefaultEditingContextDelegate(delegate);
-    }
-
-    /**
-     * @deprecated see {@link ERXEC}
-     */
-    public static ERXECNoValidationDelegate defaultECNoValidationDelegate() {
-        return (ERXECNoValidationDelegate)ERXEC.factory().defaultNoValidationDelegate();
-    }
-
-    /**
-     * @deprecated see {@link ERXEC}
-     */
-    public static void setDefaultECNoValidationDelegate(ERXECNoValidationDelegate delegate) {
-        ERXEC.factory().setDefaultNoValidationDelegate(delegate);
-    }
-
-    /**
-     * @deprecated see {@link ERXEC}
-     */
-    public static EOEditingContext newEditingContext() {
-        return ERXEC.newEditingContext();
-    }
-
-    /**
-     * @deprecated see {@link ERXEC}
-     */    
-    public static EOEditingContext newEditingContext(boolean validation) {
-        return ERXEC.newEditingContext(validation);
-    }
-
-    /**
-     * @deprecated see {@link ERXEC}
-     */
-    public static EOEditingContext newEditingContext(EOObjectStore objectStore) {
-        return ERXEC.newEditingContext(objectStore);
-    }
-
-    /**
-     * @deprecated see {@link ERXEC}
-     */    
-    public static EOEditingContext newEditingContext(EOObjectStore objectStore, boolean validation) {
-        return ERXEC.newEditingContext(objectStore, validation);
-    }
-
-    /**
-     * @deprecated see { @link ERXEOAccessUtilities#evaluateSQLWithEntityNamed}
-     */
-    public static void evaluateSQLWithEntityNamed(String entityName, String exp, EOEditingContext ec) {
-        ERXEOAccessUtilities.evaluateSQLWithEntityNamed(ec, entityName, exp);
-    }
-
-    /**
      * Retaining the editing contexts explicitly until the session that was active
      * when they were created goes away
      * this hopefully will go some way towards avoiding the 'attempted to send
@@ -433,90 +349,6 @@ public class ERXExtensions {
     }
 
     /**
-     * @deprecated see {@link ERXEC}
-     */
-    public static void setDefaultDelegate(EOEditingContext ec) {
-        ERXEC.factory().setDefaultDelegateOnEditingContext(ec);
-    }
-
-    /**
-     * @deprecated see {@link ERXEC}
-     */
-    public static void setDefaultDelegate(EOEditingContext ec, boolean validation) {
-        ERXEC.factory().setDefaultDelegateOnEditingContext(ec, validation);
-    }
-
-    /**
-     * @deprecated see {@link ERXEOControlUtilities#dataSourceForArray(NSArray)}
-     */
-    public static EOArrayDataSource dataSourceForArray(NSArray array) {
-        return ERXEOControlUtilities.dataSourceForArray(array);
-    }
-
-    /**
-     * @deprecated see {@link ERXEOControlUtilities#arrayFromDataSource(NSArray)}
-     */
-    public static NSArray arrayFromDataSource(EODataSource dataSource) {
-        return ERXEOControlUtilities.arrayFromDataSource(dataSource);
-    }
-
-    /**
-     * @deprecated see {@link ERXEOControlUtilities#arrayFromDataSource(NSArray)}
-     */
-    public static EODetailDataSource dataSourceForObjectAndKey(EOEnterpriseObject eo, String key) {
-        return ERXEOControlUtilities.dataSourceForObjectAndKey(eo, key);
-    }
-
-    /**
-     * @deprecated use {@link ERXArrayUtilities#friendlyDisplayForKeyPath(NSArray, String, String, String, String)
-     */
-    public static String friendlyEOArrayDisplayForKey(NSArray list, String attribute, String nullArrayDisplay) {
-        return ERXArrayUtilities.friendlyDisplayForKeyPath(list, attribute, nullArrayDisplay, ", ", " and ");
-    }
-
-    /**
-     * @deprecated use {@link ERXStringUtilities#replaceStringByStringInString(String, String, String)
-     */
-    public static String replaceStringByStringInString(String old, String newString, String s) {
-        return ERXStringUtilities.replaceStringByStringInString(old,newString,s);
-    }
-
-    /**
-     * @deprecated use {@link ERXStringUtilities#emptyStringForNull(String)
-     */
-    public static String emptyStringForNull(String s) {
-        return ERXStringUtilities.emptyStringForNull(s);
-    }
-
-    /**
-     * @deprecated use {@link ERXStringUtilities#nullForEmptyString(String)
-     */
-    public static String nullForEmptyString(String s) {
-        return ERXStringUtilities.nullForEmptyString(s);
-    }
-
-    /**
-     * @deprecated use {@link ERXStringUtilities#stringIsNullOrEmpty(String)
-     */
-    public static boolean stringIsNullOrEmpty(String s) {
-        return ERXStringUtilities.stringIsNullOrEmpty(s);
-    }
-
-    /**
-     * @deprecated use {@link ERXStringUtilities#numberOfOccurrencesOfCharInString(char,String)
-     */
-    public static int numberOfOccurrencesOfCharInString(char c, String s) {
-        return ERXStringUtilities.numberOfOccurrencesOfCharInString(c, s);
-    }
-
-    /**
-     * @deprecated use {@link ERXStringUtilities#numberOfOccurrencesOfCharInString(int,String)
-     */
-    public static String stringWithNtimesString(int n, String s) {
-        return ERXStringUtilities.stringWithNtimesString(n, s);
-    }
-
-    /**
      * Removes all of the HTML tags from a given string.
      * Note: that this is a very simplistic implementation
      * and will most likely not work with complex HTML.
@@ -550,7 +382,7 @@ public class ERXExtensions {
                 }
             }
         }
-        return replaceStringByStringInString("&nbsp;"," ",result.toString());
+        return ERXStringUtilities.replaceStringByStringInString("&nbsp;"," ",result.toString());
     }
 
     /**
@@ -584,76 +416,6 @@ public class ERXExtensions {
             i++;
         } while (isFree > wasFree && (maxLoop<=0 || i<maxLoop) );
         runtime.runFinalization();
-    }
-
-    /**
-     * @deprecated use {@link ERXEOControlUtilities.isNewObject(EOEnterpriseObject)}
-     */
-    public static boolean isNewObject(EOEnterpriseObject eo) {
-        return ERXEOControlUtilities.isNewObject(eo);
-    }
-
-    /**
-     * @deprecated use {@link ERXEOControlUtilities.primaryKeyStringForObject(EOEnterpriseObject)}
-     */
-    public static String primaryKeyForObject(EOEnterpriseObject eo) {
-        return ERXEOControlUtilities.primaryKeyStringForObject(eo);
-    }
-
-    /**
-     * @deprecated use just about anything else, like Random.nextInt() for example
-     */
-    public static Object rawPrimaryKeyFromPrimaryKeyAndEO(NSDictionary primaryKey, EOEnterpriseObject eo) {
-        NSArray result = primaryKeyArrayForObject(eo);
-
-        if(result!=null && result.count() == 1) {
-            return result.lastObject();
-        } else if (result!=null && result.count() > 1) {
-            log().warn("Attempting to get a raw primary key from an object with a compound key: " + eo.eoShallowDescription());
-        }
-        return result;
-    }
-
-    /**
-     * Gives the primary key array for a given enterprise
-     * object. This has the advantage of not firing the
-     * fault of the object, unlike the method in 
-     * {@link com.webobjects.eoaccess.EOUtilities EOUtilities}.
-     * @param obj enterprise object to get the primary key array from.
-     * @return array of all the primary key values for the object.
-     * @deprecated use <code>ERXEOControlUtilities.primaryKeyArrayForObject<code> instead.
-     */
-    public static NSArray primaryKeyArrayForObject(EOEnterpriseObject obj) {
-        EOEditingContext ec = obj.editingContext();
-        if (ec == null) {
-            //you don't have an EC! Bad EO. We can do nothing.
-            return null;
-        }
-        EOGlobalID gid = ec.globalIDForObject(obj);
-        if (gid.isTemporary()) {
-            //no pk yet assigned
-            return null;
-        }
-        EOKeyGlobalID kGid = (EOKeyGlobalID) gid;
-        return kGid.keyValuesArray();
-    }
-
-    /**
-     * Returns the raw primary key of the object. Possible
-     * objects returned could be Integer, BigDecimal or NSData.
-     * Note: the object passed in should only have one primary
-     * key.
-     * @param eo enterprise object to get the primary key from
-     * @param primary key of the object in it's raw form
-     */
-    public static Object rawPrimaryKeyForObject(EOEnterpriseObject eo) {
-        Object result = null;
-        if (eo!=null)  {
-            // NSDictionary d=EOUtilities.primaryKeyForObject(eo.editingContext(),eo);
-            // result = rawPrimaryKeyFromPrimaryKeyAndEO(d, eo);
-            result = rawPrimaryKeyFromPrimaryKeyAndEO(null, eo);
-        }
-        return result;
     }
 
     /**
@@ -795,109 +557,6 @@ public class ERXExtensions {
             else
                 from.takeValueForKeyPath(to,keyPath);
         }
-    }
-
-    /**
-     * Recursively flattens an array of arrays into a single
-     * array of elements.<br/>
-     * @deprecated use {@link ERXArrayUtilities#flatten(NSArray) 
-     * ERXArrayUtilities.flatten}
-     */
-    public static NSArray flatten(NSArray array) {
-        return ERXArrayUtilities.flatten(array);
-    }
-
-    /**
-     * Groups an array of objects by a given key path.
-     * @deprecated use {@link ERXArrayUtilities#arrayGroupedByKeyPath(NSArray, String)
-     * ERXArrayUtilities.arrayGroupedByKeyPath}
-     */
-    public static NSDictionary eosInArrayGroupedByKeyPath(NSArray eos, String keyPath) {
-        return eosInArrayGroupedByKeyPath(eos,keyPath,true,null);
-    }
-
-    /**
-     * Groups an array of objects by a given key path.
-     * @deprecated use {@link ERXArrayUtilities#arrayGroupedByKeyPath(NSArray, String, boolean, String)
-     * ERXArrayUtilities.arrayGroupedByKeyPath} 
-     */
-    public static NSDictionary eosInArrayGroupedByKeyPath(NSArray eos,
-                                                          String keyPath,
-                                                          boolean includeNulls,
-                                                          String extraKeyPathForValues) {
-        return ERXArrayUtilities.arrayGroupedByKeyPath(eos,keyPath,includeNulls,extraKeyPathForValues);
-    }
-
-    /**
-     * Simple comparision method to see if two array
-     * objects are identical sets.
-     * @deprecated use {@link ERXArrayUtilities#arraysAreIdenticalSets(NSArray, NSArray)}
-     */
-    // MOVEME: ERXArrayUtilities
-    public static boolean arraysAreIdenticalSets(NSArray a1, NSArray a2) {
-        return ERXArrayUtilities.arraysAreIdenticalSets(a1,a2);
-    }
-
-    /**
-     * Filters an array using the {@link com.webobjects.eocontrol.EOQualifierEvaluation EOQualifierEvaluation} interface.
-     * @deprecated use {@link ERXArrayUtilities#filteredArrayWithQualifierEvaluation(NSArray, EOQualifierEvaluation)
-     * ERXArrayUtilities.filteredArrayWithQualifierEvaluation}
-     */
-    public static NSArray filteredArrayWithQualifierEvaluation(NSArray a, EOQualifierEvaluation q) {
-        return ERXArrayUtilities.filteredArrayWithQualifierEvaluation(a,q);
-    }
-
-    /**
-     * holds the array of hex values
-     * @deprecated
-     */
-    private static final char hex[] = {
-        '0', '1', '2', '3', '4', '5', '6', '7',
-        '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'
-    };
-
-    /**
-     * Converts an array of bytes to a hex string
-     * @param data array of bytes
-     * @return hex representation of the byte array
-     * @deprecated use <code>ERXStringUtilities.byteArrayToHexString</code> instead
-     */
-    // MOVEME: ERXStringUtilities
-    public static String byteArrayToHexString (final byte data[]) {
-        int len = data.length;
-        char hexchars[] = new char[2 * len];
-
-        int ix = 0;
-        for (int i = 0; i < len; i++) {
-            hexchars[ix++] = hex[(data[i] >> 4) & 0xf];
-            hexchars[ix++] = hex[data[i] & 0xf];
-        }
-        return new String(hexchars);
-    }
-
-
-    /**
-     * Converts a hex string into an array of bytes
-     * @param s string
-     * @return byte array
-     * @deprecated <CODE>ERXStringUtilities.hexStringToByteArray<CODE> instead
-     */
-    // MOVEME: ERXStringUtilities
-    public static byte[] hexStringToByteArray(String s) {
-        byte[] result=null;
-        if (s!=null) {
-            int l=s.length();
-            if (l % 2 !=0) throw new RuntimeException("hexStringToByteArray: expected an even length string");
-            s=s.toLowerCase();
-            result=new byte[l/2];
-            int i=0;
-            for (int j=0; j<l;) {
-                char c1=s.charAt(j++); int b1=c1<'a' ? c1-'0' : c1-'a'+10;
-                char c2=s.charAt(j++); int b2=c2<'a' ? c2-'0' : c2-'a'+10;
-                result[i++]=(byte)((b1<<4)+b2);
-            }
-        }
-        return result;
     }
     
     /**
@@ -1077,64 +736,6 @@ public class ERXExtensions {
     }
 
     /**
-     * Filters out all of the duplicate objects in
-     * a given array.<br/>
-     * @deprecated use {@link ERXArrayUtilities#arrayWithoutDuplicates(NSArray)
-     * ERXArrayUtilities.arrayWithoutDuplicates}
-     */
-    public static NSArray arrayWithoutDuplicates(NSArray anArray) {
-        return ERXArrayUtilities.arrayWithoutDuplicates(anArray);
-    }
-
-    /**
-     * Filters out duplicates of an array of enterprise objects
-     * based on the value of the given key off of those objects.
-     * @deprecated use {@link ERXArrayUtilities#arrayWithoutDuplicateKeyValue(NSArray, String)
-     * ERXArrayUtilities.arrayWithoutDuplicateKeyValue}
-     */
-    public static NSArray arrayWithoutDuplicateKeyValue(NSArray eos, String key){
-        return ERXArrayUtilities.arrayWithoutDuplicateKeyValue(eos,key);
-    }
-
-    /**
-     * Subtracts the contents of one array from another.
-     * @deprecated use {@link ERXArrayUtilities#arrayMinusArray(NSArray, NSArray)
-     * ERXArrayUtilities.arrayMinusArray}
-     */
-    public static NSArray arrayMinusArray(NSArray main, NSArray minus){
-        return ERXArrayUtilities.arrayMinusArray(main,minus);
-    }
-
-    /**
-     * Creates an array preserving order by adding all of the
-     * non-duplicate values from the second array to the first.
-     * @deprecated use {@link ERXArrayUtilities#arrayByAddingObjectsFromArrayWithoutDuplicates(NSArray, NSArray)
-     * ERXArrayUtilities.arrayByAddingObjectsFromArrayWithoutDuplicates}
-     */
-    public static NSArray arrayByAddingObjectsFromArrayWithoutDuplicates(NSArray a1, NSArray a2) {
-        return ERXArrayUtilities.arrayByAddingObjectsFromArrayWithoutDuplicates(a1,a2);
-    }
-
-    /**
-     * Adds all of the non-duplicate elements from the second
-     * array to the mutable array.
-     * @deprecated use {@link ERXArrayUtilities#addObjectsFromArrayWithoutDuplicates(NSMutableArray, NSArray)
-     * ERXArrayUtilities.addObjectsFromArrayWithoutDuplicates}
-     */
-    public static void addObjectsFromArrayWithoutDuplicates(NSMutableArray a1, NSArray a2) {
-        ERXArrayUtilities.addObjectsFromArrayWithoutDuplicates(a1,a2);
-    }
-
-    /**
-    * @deprecated use {@link ERXArrayUtilities#friendlyDisplayForKeyPath(NSArray, String, String, String, String)
-    * ERXArrayUtilities.friendlyDisplayForKeyPath} 
-    */
-    // DELETEME: duplicate method friendlyEOArrayDisplayForKey
-    public static String userPresentableEOArray(NSArray array, String attribute) {
-        return ERXArrayUtilities.friendlyDisplayForKeyPath(array, attribute, "None", ", ", " and ");
-    }
-
-    /**
      * Refreshes all of the objects for an array of entity names.
      * @param names array of shared entity names
      */
@@ -1158,7 +759,7 @@ public class ERXExtensions {
     // CHECKME: Should check that this still works under WO 5
     // MOVEME: ERXEOFUtilities
     public static void refreshSharedObjectsWithName(String entityName) {
-        EOEditingContext peer = ERXExtensions.newEditingContext();
+        EOEditingContext peer = ERXEC.newEditingContext();
         peer.lock();
         try {
             peer.setSharedEditingContext(null);

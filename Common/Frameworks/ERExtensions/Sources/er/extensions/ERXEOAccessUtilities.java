@@ -770,29 +770,23 @@ public class ERXEOAccessUtilities {
     }
 
     /**
-     * Tries to recover from a {@link EOGeneralAdaptorException}.
+     * Returns true if the exception is an optimistic locking exception.
      * 
      * @param exception
      *            the exception as recieved from saveChanges()
-     * @param editingContext
-     *            editing context that created the error
      * @return true if the error could be handled.
      */
-    public static boolean recoverFromAdaptorException(EOEditingContext editingContext, EOGeneralAdaptorException exception) {
+    public static boolean isOptimisticLockingFailure(EOGeneralAdaptorException e) {
         boolean wasHandled = false;
-        NSDictionary userInfo = (NSDictionary) exception.userInfo();
-        if (userInfo != null) {
-            String failureKey = (String) userInfo.objectForKey("EOAdaptorFailureKey");
-            if ("EOAdaptorOptimisticLockingFailure".equals(failureKey)) {
-                EOAdaptorOperation adaptorOperation = (EOAdaptorOperation) userInfo.objectForKey("EOFailedAdaptorOperationKey");
-                EODatabaseOperation databaseOperation = (EODatabaseOperation) userInfo.objectForKey("EOFailedDatabaseOperationKey");
-                if (adaptorOperation != null && databaseOperation != null) {
-                    ERXTolerantSaver.recoverFromOptimisticLockingFailure(editingContext, false, true, adaptorOperation, databaseOperation);
-                    wasHandled = true;
-                } else {
-                    log.error("Missing EOFailedAdaptorOperationKey or EOFailedDatabaseOperationKey in " + exception + ": "
-                            + exception.userInfo());
-                }
+        NSDictionary userInfo = (NSDictionary)e.userInfo();
+        if(userInfo != null) {
+            String eType = (String)userInfo.objectForKey(EOAdaptorChannel.AdaptorFailureKey);
+            if (EOAdaptorChannel.AdaptorOptimisticLockingFailure.equals(eType)) {
+                EOAdaptorOperation adaptorOp = (EOAdaptorOperation) userInfo.objectForKey(EOAdaptorChannel.FailedAdaptorOperationKey);
+                EODatabaseOperation databaseOp = (EODatabaseOperation) userInfo.objectForKey(EODatabaseContext.FailedDatabaseOperationKey);
+                wasHandled = (adaptorOp != null && databaseOp != null);
+            } else {
+                log.error("Missing EOFailedAdaptorOperationKey or EOFailedDatabaseOperationKey in " + e + ": " + userInfo);
             }
         }
         return wasHandled;
@@ -1236,4 +1230,136 @@ public class ERXEOAccessUtilities {
             }
         }
     }
+    
+    
+    /**
+     * Creates an AND qualifier of EOKeyValueQualifiers for every keypath in the given array of attributes.
+     * @param keys
+     * @param selector
+     * @param value
+     * @return
+     * @author ak
+     */
+    public static EOQualifier qualifierFromAttributes(NSArray attributes, NSDictionary values) {
+        NSMutableArray qualifiers = new NSMutableArray();
+        EOQualifier result = null;
+        if(attributes.count() > 0) {
+            for (Enumeration i = attributes.objectEnumerator(); i.hasMoreElements();) {
+                EOAttribute key = (EOAttribute) i.nextElement();
+                Object value = values.objectForKey(key.name());
+                qualifiers.addObject(new EOKeyValueQualifier(key.name(), EOQualifier.QualifierOperatorEqual, value));
+            }
+            result = new EOAndQualifier(qualifiers);
+        }
+        return result;
+    }
+
+    /**
+     * Filters a list of relationships for only the ones that
+     * have a given EOAttribute as a source attribute. 
+     * @param attrib EOAttribute to filter source attributes of
+     *      relationships.
+     * @param rels array of EORelationship objects.
+     * @return filtered array of EORelationship objects that have
+     *      the given attribute as the source attribute.
+     */
+    public static NSArray relationshipsForAttribute(EOEntity entity, EOAttribute attrib) {
+        NSMutableArray arr = new NSMutableArray();
+        int cnt = entity.relationships().count();
+        for(int i=0; i<cnt; i++){
+            EORelationship rel = (EORelationship)entity.relationships().objectAtIndex(i);
+            NSArray attribs = rel.sourceAttributes();
+            if(attribs.containsObject(attrib)){
+                arr.addObject(rel);
+            }
+        }
+        return arr;
+    }
+
+
+    public static EOEnterpriseObject refetchFailedObject(EOEditingContext ec, EOGeneralAdaptorException e) {
+        EOAdaptorOperation adaptorOp = (EOAdaptorOperation) e.userInfo().objectForKey(EOAdaptorChannel.FailedAdaptorOperationKey);
+        EODatabaseOperation databaseOp = (EODatabaseOperation) e.userInfo().objectForKey(EODatabaseContext.FailedDatabaseOperationKey);
+        NSDictionary dbSnapshot = databaseOp.dbSnapshot();
+        EOEntity entity = adaptorOp.entity();
+        String entityName = entity.name();
+        EOGlobalID gid = entity.globalIDForRow(dbSnapshot);
+        EOEnterpriseObject eo = ec.faultForGlobalID(gid, ec);
+        // EOUtilities.databaseContextForModelNamed(ec, eo.entityName()).forgetSnapshotForGlobalID(gid);
+        ec.refaultObject(eo);
+        // NOTE AK: I think we can just return the object here,
+        // as the next time it is accessed the fault will get
+        NSArray primaryKeyAttributes = entity.primaryKeyAttributes();
+        EOQualifier qualifier = ERXEOAccessUtilities.qualifierFromAttributes(primaryKeyAttributes, dbSnapshot);
+        EOFetchSpecification fs = new EOFetchSpecification(entityName, qualifier, null);
+        fs.setRefreshesRefetchedObjects(true);
+        NSArray objs = ec.objectsWithFetchSpecification(fs);
+        eo = null;
+        if (objs.count() == 1) {
+            eo = (EOEnterpriseObject) objs.objectAtIndex(0);
+            if (log.isDebugEnabled()) {
+                log.debug("failedEO: "+ eo);
+            }
+        } else if(objs.count() == 0) {
+            throw new EOObjectNotAvailableException("Can't recover: Object was deleted: " + fs);
+        } else {
+            throw new EOUtilities.MoreThanOneException("Can't recover: More than one object found: " + objs);
+        }
+        return eo;
+    }
+
+    /**
+     * Method used to apply a set of changes to a re-fetched eo.
+     * This method is used to re-apply changes to a given eo after
+     * it has been refetched.
+     * @param changedValues dictionary of the changed values to be
+     *      applied to the object.
+     * @param eo enterprise object to have the changes re-applied
+     *      to.
+     * @param ent EOEntity of the failedEO
+     */
+    protected static void reapplyChanges(EOEnterpriseObject eo, EOGeneralAdaptorException e) {
+        EOAdaptorOperation adaptorOp = (EOAdaptorOperation) e.userInfo().objectForKey(EOAdaptorChannel.FailedAdaptorOperationKey);
+        NSDictionary changedValues = adaptorOp.changedValues();
+        EOEntity entity = ERXEOAccessUtilities.entityForEo(eo);
+        EOEditingContext ec = eo.editingContext();
+        NSArray keys = changedValues.allKeys();
+        NSMutableSet relationships = new NSMutableSet();
+        
+        for (int i=0; i<keys.count(); i++) {
+            String key = (String)keys.objectAtIndex(i);
+            EOAttribute attrib = entity.attributeNamed(key);
+            if (attrib != null) {
+                Object val = changedValues.objectForKey(key);
+                if (entity.classProperties().containsObject(attrib)) {
+                    eo.takeValueForKey(val, key);
+                }
+                NSArray relsUsingAttrib = ERXEOAccessUtilities.relationshipsForAttribute(entity, attrib);
+                relationships.addObjectsFromArray(relsUsingAttrib);
+            } else {
+                log.error("Changed value found that isn't an attribute: " + key + "->" + changedValues.objectForKey(key));
+            }
+        }
+
+        for (Enumeration enumerator = relationships.objectEnumerator(); enumerator.hasMoreElements();) {
+            EORelationship relationship = (EORelationship) enumerator.nextElement();
+            NSMutableDictionary pk = EOUtilities.destinationKeyForSourceObject(ec, eo, relationship.name()).mutableClone();
+            for (int i=0; i<keys.count(); i++) {
+                String key = (String)keys.objectAtIndex(i);
+                if(pk.objectForKey(key) != null) {
+                    Object val = changedValues.objectForKey(key);
+                    pk.setObjectForKey(val, key);
+                }
+            }
+            EOEntity destEnt = relationship.destinationEntity();
+            EOGlobalID gid = destEnt.globalIDForRow(pk);
+            if(gid != null) {
+                EOEnterpriseObject destEO = ec.faultForGlobalID(gid, ec);
+                eo.takeValueForKey(destEO, relationship.name());
+            } else {
+                throw new NullPointerException("Gid is null: " + pk);
+            }
+        }
+    }
+     
 }

@@ -164,22 +164,26 @@ public class ERD2WInspectPage extends ERD2WPage implements InspectPageInterface,
     public boolean tryToSaveChanges(boolean validateObject) { // throws Throwable {
         validationLog.debug("tryToSaveChanges calling validateForSave");
         boolean saved = false;
+        EOEditingContext ec = object().editingContext();
         try {
             if (object()!=null && validateObject && shouldValidateBeforeSave()) {
-                if (_context.insertedObjects().containsObject(object()))
+                if (ec.insertedObjects().containsObject(object()))
                     object().validateForInsert();
                 else
                     object().validateForUpdate();
             }
-            if (object()!=null && shouldSaveChanges() && object().editingContext().hasChanges())
-                ERXEOControlUtilities.saveChanges(object().editingContext());
+            if (object()!=null && shouldSaveChanges() && ec.hasChanges()) {
+                ec.saveChanges();
+            }
             saved = true;
         } catch (NSValidation.ValidationException ex) {
             errorMessage = ERXLocalizer.currentLocalizer().localizedTemplateStringForKeyWithObject("CouldNotSave", ex);
             validationFailedWithException(ex, ex.object(), "saveChangesExceptionKey");
         } catch(EOGeneralAdaptorException ex) {
-            if(shouldRecoverFromOptimisticLockingFailure() && ERXEOAccessUtilities.recoverFromAdaptorException(object().editingContext(), ex)) {
+            if(ERXEOAccessUtilities.isOptimisticLockingFailure(ex) && shouldRecoverFromOptimisticLockingFailure()) {
+                EOEnterpriseObject eo = ERXEOAccessUtilities.refetchFailedObject(ec, ex);
                 errorMessage = ERXLocalizer.currentLocalizer().localizedTemplateStringForKeyWithObject("CouldNotSavePleaseReapply", d2wContext());
+                validationFailedWithException(ex, eo, "CouldNotSavePleaseReapply");
             } else {
                 throw ex;
             }
