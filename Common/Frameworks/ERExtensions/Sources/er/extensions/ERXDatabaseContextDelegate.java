@@ -6,8 +6,6 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.extensions;
 
-import java.sql.*;
-
 import com.webobjects.eoaccess.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.foundation.*;
@@ -18,7 +16,8 @@ import com.webobjects.foundation.*;
  * Of special note this class adds the ability
  * for enterpriseobjects to generate their own primary keys, correctly throws an
  * exception when a toOne relationship object is not found in the database and adds
- * debugging abilities to tracking down when faults are fired.
+ * debugging abilities to tracking down when faults are fired. It also supports a cache for
+ * array fault that is checked before they are fetched from the database.
  */
 public class ERXDatabaseContextDelegate {
              
@@ -32,8 +31,6 @@ public class ERXDatabaseContextDelegate {
     /** Holds onto the singleton of the default delegate */
     private static ERXDatabaseContextDelegate _defaultDelegate = new ERXDatabaseContextDelegate();
     
-    /** defines if the JDBC connection should be switched to read only on certain database operations or not. Default is not. */
-    private Boolean switchReadWrite = null;
     private ERXArrayFaultCache arrayFaultCache = null;
     
     /** Returns the singleton of the database context delegate */
@@ -178,35 +175,14 @@ public class ERXDatabaseContextDelegate {
         }
     }
 
-    /**
-        Delegate method. Will switch the connection to read write.<br/>
-        This method will also write the adaptor operations to disk if the System property
-        <code>er.extensions.ERXDatabaseContextDelegate.writeTransactionsToDisk</code> is set to true
-     **/
-    public NSArray databaseContextWillPerformAdaptorOperations(EODatabaseContext dbCtxt,NSArray adaptorOps,EOAdaptorChannel adChannel) {
-        if(log.isDebugEnabled()) {
-            log.debug("databaseContextWillPerformAdaptorOperations.. Setting it to ReadWrite");
-        }
-        if (adaptorOps.count() != 0) {
-            setReadWriteForConnectionInDatabaseContext(true, dbCtxt);
-        }
-        return adaptorOps;
-    }
-
-    /**
-        Delegate method. Will switch the connection to read only.
-     **/
-    public boolean databaseContextShouldFetchObjectFault(EODatabaseContext dbCtxt, Object obj) {
-        if(log.isDebugEnabled()) {
-            log.debug("databaseContextShouldFetchObjectFault.. Setting it to ReadOnly");
-        }
-        setReadWriteForConnectionInDatabaseContext(false, dbCtxt);
-        return true;
-    }
-
-    /**
-        Delegate method. Will switch the connection to read only.
-     **/
+   /**
+    * This delegate method first checks the arrayFaultCache if it is set before trying to
+    * resolve the fault from the DB. It can be a severe performance optimisation depending
+    * on your setup.
+    * @param eodatabasecontext
+    * @param obj
+    * @return
+    */
     public boolean databaseContextShouldFetchArrayFault(EODatabaseContext eodatabasecontext, Object obj) {
         if(arrayFaultCache != null) {
             arrayFaultCache.clearFault(obj);
@@ -214,58 +190,6 @@ public class ERXDatabaseContextDelegate {
                 return false;
             }
         }
-        if(log.isDebugEnabled()) {
-            log.debug("databaseContextShouldFetchArrayFault.. Setting it to ReadOnly");
-        }
-        setReadWriteForConnectionInDatabaseContext(false, eodatabasecontext);
         return true;
-    }
-
-    /**
-        Delegate method. Will switch the connection to read only.
-     **/
-    public  NSArray databaseContextShouldFetchObjects(EODatabaseContext dbc, EOFetchSpecification fs, EOEditingContext ec) {
-        if(log.isDebugEnabled()) {
-            log.debug("databaseContextShouldFetchObjects.. Setting it to ReadOnly");
-        }
-        setReadWriteForConnectionInDatabaseContext(false, dbc);
-        return null;
-    }
-
-    /**
-        Switch the connection to read/write mode.
-
-     @param isReadWrite true if the connection should be set to read/write, false if it should be set to read only
-     @param dbc the EODatabaseContext to use to get the java.sql.Connection object
-
-     **/
-    public void setReadWriteForConnectionInDatabaseContext(boolean isReadWrite, EODatabaseContext dbc) {
-        if (!switchReadWrite()) return;
-        if(log.isDebugEnabled()) {
-                log.debug("ReadOnly and ReadWrite Transactions enabled, trying to change");
-            }
-            try {
-
-                Connection connection = _getConnection(dbc);
-                if (connection != null) {
-                    connection.setReadOnly(!isReadWrite);
-                } else {
-                    log.warn("Cannot change read only/read write level since the connection for the database context is null!!");
-                }
-
-            } catch (java.sql.SQLException e) {
-                log.error("Cannot change transaction level for databse, received " + e.getMessage(), e);
-            } 
-    }
-    
-    public Connection _getConnection(EODatabaseContext dbc) {
-        return ((com.webobjects.jdbcadaptor.JDBCContext) dbc.adaptorContext()).connection();
-    }
-    
-    private boolean switchReadWrite() {
-        if (switchReadWrite == null) {
-            switchReadWrite = "false".equals(ERXSystem.getProperty("er.extensions.ERXDatabaseContextDelegate.switchReadWrite", "false")) ? Boolean.FALSE : Boolean.TRUE;
-        }
-        return switchReadWrite.booleanValue();
     }
 }

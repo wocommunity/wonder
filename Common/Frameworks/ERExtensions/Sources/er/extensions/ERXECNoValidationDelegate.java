@@ -13,7 +13,7 @@ import com.webobjects.eocontrol.*;
  * except validation has been disabled.
  */
 // ENHANCEME: This functionality could be folded into the super class with a 
-public class ERXECNoValidationDelegate extends ERXDefaultEditingContextDelegate {
+public class ERXECNoValidationDelegate extends ERXEditingContextDelegate {
 
     //	===========================================================================
     //	Instance Constructor(s)

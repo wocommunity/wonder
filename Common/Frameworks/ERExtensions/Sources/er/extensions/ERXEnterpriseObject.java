@@ -1,13 +1,88 @@
 package er.extensions;
 
+import java.util.*;
+
 import com.webobjects.eocontrol.*;
 import com.webobjects.foundation.*;
 
 public interface ERXEnterpriseObject {
 	
-	/** Selector for flushCaches() */
-    public static final NSSelector FlushCachesSelector = new NSSelector("flushCaches");
+    public static abstract class Processor {
+        
+        protected abstract void perform(EOEditingContext ec, ERXEnterpriseObject eo);
+        
+        public void perform(EOEditingContext ec, NSArray eos) {
+            if(eos != null && eos.count() > 0) { 
+                for (Enumeration enumerator = eos.objectEnumerator(); enumerator.hasMoreElements();) {
+                    EOEnterpriseObject eo = (EOEnterpriseObject) enumerator.nextElement();
+                    if(eo instanceof ERXEnterpriseObject) {
+                        perform(ec, (ERXEnterpriseObject)eo);
+                    }
+                }
+            }
+        }
 
+        public void perform(EOEditingContext ec, EOEnterpriseObject eo) {
+            if(eo instanceof ERXEnterpriseObject) {
+                perform(ec, (ERXEnterpriseObject)eo);
+            }
+        }
+    };
+
+    public static Processor FlushCachesProcessor = new Processor() {
+        protected void perform(EOEditingContext ec, ERXEnterpriseObject eo) {
+            eo.flushCaches();
+        }
+    };
+
+    public static Processor WillInsertProcessor = new Processor() {
+        protected void perform(EOEditingContext ec, ERXEnterpriseObject eo) {
+            eo.willInsert();
+        }
+    };
+
+    public static Processor DidInsertProcessor = new Processor() {
+        protected void perform(EOEditingContext ec, ERXEnterpriseObject eo) {
+            eo.didInsert();
+        }
+    };
+
+    public static Processor WillUpdateProcessor = new Processor() {
+        protected void perform(EOEditingContext ec, ERXEnterpriseObject eo) {
+            eo.willUpdate();
+        }
+    };
+
+    public static Processor DidUpdateProcessor = new Processor() {
+        protected void perform(EOEditingContext ec, ERXEnterpriseObject eo) {
+            eo.didUpdate();
+        }
+    };
+
+    public static Processor WillDeleteProcessor = new Processor() {
+        protected void perform(EOEditingContext ec, ERXEnterpriseObject eo) {
+            eo.willDelete();
+        }
+    };
+
+    public static Processor DidDeleteProcessor = new Processor() {
+        protected void perform(EOEditingContext ec, ERXEnterpriseObject eo) {
+            eo.didDelete(ec);
+        }
+    };
+
+    public static Processor WillRevertProcessor = new Processor() {
+        protected void perform(EOEditingContext ec, ERXEnterpriseObject eo) {
+            eo.willRevert();
+        }
+    };
+
+    public static Processor DidRevertProcessor = new Processor() {
+        protected void perform(EOEditingContext ec, ERXEnterpriseObject eo) {
+            eo.didRevert(ec);
+        }
+    };
+ 
     /** logging support. Called after an object is successfully inserted */
     public static final ERXLogger tranLogDidInsert = ERXLogger
             .getERXLogger("er.transaction.eo.did.insert.ERXGenericRecord");

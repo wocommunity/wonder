@@ -545,14 +545,6 @@ public class ERXCustomObject extends EOCustomObject implements ERXGuardedObjectI
     public boolean isNewObject() {
         return ERXEOControlUtilities.isNewObject(this);
     }
-    
-    
-    /**
-     * @deprecated use {@link ERXEC$Factory#didSave} instead.
-     */
-    public static void didSave(NSNotification n) {
-        ERXEC.factory().didSave(n);
-    }
 
     /**
      * Overrides the default validation mechanisms to provide
@@ -596,7 +588,7 @@ public class ERXCustomObject extends EOCustomObject implements ERXGuardedObjectI
         }
         return result;
     }
-
+    
     /**
      * This method performs a few checks before invoking
      * super's implementation. If the property key:
@@ -643,6 +635,19 @@ public class ERXCustomObject extends EOCustomObject implements ERXGuardedObjectI
             ((ERXEntityClassDescription)cd).validateObjectForUpdate(this);
         }
         super.validateForUpdate();
+    }
+
+    /**
+     * Calls up validateForUpdate() on the class description if it supports it.
+     * @throws NSValidation.ValidationException if the object does not
+     *      pass validation for saving to the database.
+     */
+    public void validateForDelete() throws NSValidation.ValidationException {
+        EOClassDescription cd = classDescription();
+        if(cd instanceof ERXEntityClassDescription) {
+            ((ERXEntityClassDescription)cd).validateObjectForDelete(this);
+        }
+        super.validateForDelete();
     }
 
     /* (non-Javadoc)
