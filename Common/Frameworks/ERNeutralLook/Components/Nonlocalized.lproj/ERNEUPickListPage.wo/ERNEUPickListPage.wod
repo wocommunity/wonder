@@ -190,6 +190,11 @@ SubmitButton5: WOSubmitButton {
 	onClick = "return createTarget(form, '_self')";
 }
 
+SubmitButton6: WOSubmitButton {
+	action = selectAllOnPage;
+	value = "Select All On Page";
+}
+
 SwitchComponent1: WOSwitchComponent {
 	WOComponentName = d2wContext.propertyNameComponentName;
 	localContext = d2wContext;
