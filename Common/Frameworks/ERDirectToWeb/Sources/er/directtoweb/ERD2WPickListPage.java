@@ -148,6 +148,15 @@ public class ERD2WPickListPage extends ERD2WListPage implements ERDPickPageInter
         }
         return null;
     }
+    
+    public WOComponent selectAllOnPage() {
+        selectedObjects.removeAllObjects();
+        NSArray list = displayGroup().displayedObjects();
+        for (Enumeration e = list.objectEnumerator(); e.hasMoreElements();) {
+            selectedObjects.addObject(e.nextElement());
+        }
+        return null;
+    }
 
     public WOComponent unselectAll() {
         selectedObjects.removeAllObjects();
