@@ -122,7 +122,7 @@ public class WOSVG extends WODynamicElement {
         }
 
         // close tag
-        response.appendContentString(" type=\"image/svg-xml\">");
+        response.appendContentString(" type=\"image/svg+xml\">");
     }
 
     /*
