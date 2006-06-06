@@ -639,7 +639,6 @@ public class ERXSession extends WOSession implements Serializable {
       private WeakReference _context;
       private WeakReference _page;
       private String _key;
-      private boolean _oldPage;
 
       public TransactionRecord(WOComponent page, WOContext context, String key) {
         _page = new WeakReference(page);
@@ -657,14 +656,6 @@ public class ERXSession extends WOSession implements Serializable {
 
       public String key() {
         return _key;
-      }
-      
-      public void setOldPage(boolean oldPage) {
-        _oldPage = oldPage;
-      }
-      
-      public boolean isOldPage() {
-        return _oldPage;
       }
     }
 
@@ -687,48 +678,27 @@ public class ERXSession extends WOSession implements Serializable {
             setObjectForKey(pageReplacementCache, ERXSession.PAGE_REPLACEMENT_CACHE_KEY);
           }
 
-          boolean increasingCacheSize = true;
+          Map.Entry existingPageRecordEntry = null;
           Iterator transactionRecordsEnum = pageReplacementCache.entrySet().iterator();
-          while (transactionRecordsEnum.hasNext()) {
+          while (existingPageRecordEntry == null && transactionRecordsEnum.hasNext()) {
             Map.Entry pageRecordEntry = (Map.Entry)transactionRecordsEnum.next();
-            TransactionRecord tempPageRecord = (TransactionRecord)pageRecordEntry.getValue();
-            WOComponent tempPage = tempPageRecord.page();
-            WOContext tempContext = tempPageRecord.context();
-            // If the page has been GC'd, toss the transaction record ...
-            if (tempPage == null || tempContext == null) {
-              //System.out.println("ERXSession.savePage:   deleting GC'd page");
+           TransactionRecord tempPageRecord = (TransactionRecord)pageRecordEntry.getValue();
+            String transactionRecordKey = tempPageRecord.key();
+            if (pageCacheKey.equals(transactionRecordKey)) {
+              existingPageRecordEntry = pageRecordEntry;
+              //System.out.println("Session.savePage:   replacing old page for " + pageCacheKey);
               transactionRecordsEnum.remove();
-              increasingCacheSize = false;
-            }
-            else {
-              String transactionRecordKey = tempPageRecord.key();
-              if (pageCacheKey.equals(transactionRecordKey)) {
-                // If this is the "old page", then delete the entry ...
-                if (tempPageRecord.isOldPage()) {
-                  //System.out.println("ERXSession.savePage:   deleting old page for " + pageCacheKey + " (contextid = " + tempContext.contextID() + ")");
-                  transactionRecordsEnum.remove();
-                  increasingCacheSize = false;
-                }
-                // Otherwise, flag this entry as the old page ...
-                else {
-                  //System.out.println("ERXSession.savePage:   Marking old page for " + pageCacheKey + " as 'old page' (contextid = " + tempContext.contextID() + ")");
-                  tempPageRecord.setOldPage(true);
-                }
-              }
             }
           }
 
-          // Remove the oldest entry if we're about to add a new one and that would put us over the cache size ...
-          // We do a CACHE_SIZE*2 here because for every page, we have to potentially store its previous contextid to prevent
-          // race conditions, so there technically can be 2x cache size many pages in the cache.
-          if (increasingCacheSize && pageReplacementCache.size() >= ERXSession.MAX_PAGE_REPLACEMENT_CACHE_SIZE * 2) {
+          if (existingPageRecordEntry == null && pageReplacementCache.size() >= ERXSession.MAX_PAGE_REPLACEMENT_CACHE_SIZE) {
             Iterator entryIterator = pageReplacementCache.entrySet().iterator();
             Map.Entry oldestEntry = (Map.Entry) entryIterator.next();
             entryIterator.remove();
             //System.out.println("Session.savePage:   removing oldest entry: " + ((ERTransactionRecord)oldestEntry.getValue()).key());
           }
           
-          //System.out.println("Session.savePage:   adding page for key " + pageCacheKey + " (contextid = " + context.contextID() + ")");
+          //System.out.println("Session.savePage:   adding page for key " + pageCacheKey);
           TransactionRecord pageRecord = new TransactionRecord(page, context, pageCacheKey);
           pageReplacementCache.put(context.contextID(), pageRecord);
         }
@@ -746,9 +716,6 @@ public class ERXSession extends WOSession implements Serializable {
         if (pageRecord != null) {
           //System.out.println("Session.restorePageForContextID: got page from page cache " + _contextID + " pageCacheKey = " + pageRecord.key());
           page = pageRecord.page();
-          //if (page == null) {
-          //  System.out.println("ERXSession.restorePageForContextID: *************** UHOH.  It got GC'd.  We were wrong!");
-          //}
         }
       }
       if (page == null) {
