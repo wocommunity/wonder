@@ -14,3 +14,8 @@ Hyperlink2: WOHyperlink {
 	action = toggleD2WInfo;
 	class = ^linkClass;
 }
+
+Hyperlink3: WOHyperlink {
+	action = clearD2WRuleCache;
+	class = ^linkClass;
+}
