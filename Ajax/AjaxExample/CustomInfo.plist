@@ -1,0 +1,5 @@
+{
+     // ** Add your class paths here in the form of an array as follows:
+     // ** NSJavaUserPath = ("/some/class/path", "/another/class/path");
+     NSJavaUserPath = ();
+}
