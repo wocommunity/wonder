@@ -44,10 +44,7 @@ HiddenField: WOHiddenField {
 	value = dummy;
 }
 
-HideReturnOnSelect1: Unknown {
-}
-
-HideReturnOnSelect3: WOConditional {
+HideReturnOnSelect1: WOConditional {
 	_unroll = true;
 	condition = isSelecting;
 	negate = true;
