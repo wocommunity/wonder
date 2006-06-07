@@ -34,4 +34,8 @@ public class ERD2WDebugFlags extends WOComponent {
         return null;
     }
     
+    public WOComponent clearD2WRuleCache() {
+        ERD2WModel.erDefaultModel().clearD2WRuleCache();
+        return null;
+    }
 }

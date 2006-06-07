@@ -96,6 +96,11 @@ public class ERD2WModel extends D2WModel {
         super(unarchiver);
     }
     
+    public void clearD2WRuleCache() {
+        invalidateCaches();
+        sortRules();
+    }
+    
     protected void sortRules() {
         // This allows other non-d2wmodel file based rules to be loaded.
         // but we only post for the main model
