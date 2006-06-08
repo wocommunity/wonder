@@ -52,6 +52,7 @@ parent3(child2,child5)
  * @binding parentPopUpStringForAll  to display if no parent is chosen ("- all -")
  * @binding childPopUpStringForAll to display if no child is chosen ("- all -")
  * @binding size number of rows in select boxes
+ * @binding possibleChildren shows only these values for children
  */
 
 public class ERXJSPopUpRelationPicker extends ERXStatelessComponent {
@@ -82,6 +83,7 @@ public class ERXJSPopUpRelationPicker extends ERXStatelessComponent {
     protected String _childrenSortKey;
     protected String _defaultChildKey;
     protected Boolean _multiple;
+    protected NSArray _possibleChildren;
     
     protected String parentSelectName;
     protected String childSelectName;
@@ -91,6 +93,7 @@ public class ERXJSPopUpRelationPicker extends ERXStatelessComponent {
     
     protected String elementID;
     private static final int NOT_FOUND = -1;
+    private static final NSArray UNSET = new NSArray();
     
     public void awake() {
         super.awake();
@@ -209,9 +212,24 @@ public class ERXJSPopUpRelationPicker extends ERXStatelessComponent {
         super.takeValuesFromRequest(request, context);
     }
 
+    protected NSArray possibleChildren() {
+        if(_possibleChildren != null) {
+            _possibleChildren = (NSArray) valueForBinding("possibleChildren");
+            if(_possibleChildren == null) {
+                _possibleChildren = UNSET;
+            }
+        }
+        return _possibleChildren == UNSET ? null : _possibleChildren;
+    }
+    
     protected NSArray unsortedChildren(Object parent) {
-        return (NSArray)NSKeyValueCodingAdditions.Utility.valueForKeyPath(parent, parentToChildrenRelationshipName() 
+        NSArray result = (NSArray)NSKeyValueCodingAdditions.Utility.valueForKeyPath(parent, parentToChildrenRelationshipName() 
                 + ((parent instanceof NSArray) ? ".@flatten.@removeNullValues" : ""));
+        NSArray restrictedChoices = possibleChildren();
+        if(restrictedChoices != null) {
+            result = ERXArrayUtilities.intersectingElements(result, restrictedChoices);
+        }
+        return result;
     }
     
     protected NSArray sortedChildren(Object parent) {
@@ -565,6 +583,7 @@ public class ERXJSPopUpRelationPicker extends ERXStatelessComponent {
         _parentToChildrenRelationshipName = null;
         _parentPopUpStringForAll = null;
         _childPopUpStringForAll = null;
+        _possibleChildren = null;
         _size = null;
     }
 }
