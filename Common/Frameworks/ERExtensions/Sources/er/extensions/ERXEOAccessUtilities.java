@@ -1411,7 +1411,9 @@ public class ERXEOAccessUtilities {
     }
 
     /**
-     * Deletes rows described by the qualifier.
+     * Deletes rows described by the qualifier. Note that the values and the qualifier need to be on an attribute 
+     * and not on a relationship level. I.e. you need to give relationshipForeignKey = pk of object instead of 
+     * relatedObject = object
      * @param ec
      * @param entityName
      * @param qualifier
@@ -1429,7 +1431,9 @@ public class ERXEOAccessUtilities {
     }
 
     /**
-     * Updates rows described by the qualifier.
+     * Updates rows described by the qualifier. Note that the values and the qualifier need to be on an attribute 
+     * and not on a relationship level. I.e. you need to give relationshipForeignKey = pk of object instead of 
+     * relatedObject = object. The newValues dictionaries also holds foreign keys, not objects.
      * @param ec
      * @param entityName
      * @param qualifier
