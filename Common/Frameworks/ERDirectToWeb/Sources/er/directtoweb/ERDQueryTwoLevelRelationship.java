@@ -3,6 +3,7 @@ package er.directtoweb;
 import com.webobjects.appserver.*;
 import com.webobjects.eoaccess.*;
 import com.webobjects.eocontrol.*;
+import com.webobjects.foundation.*;
 
 import er.extensions.*;
 
@@ -23,6 +24,8 @@ import er.extensions.*;
  * displayNameForSecondaryEntity = "Departments"	, Label for Dept
  * restrictedChoiceKey = "session.user.visibleCompanies", Restriction for the main entity, if unset
  *           all objects of destinationEntityName are used
+ * restrictedChildrenChoiceKey = "session.user.visibleDepartments", Restriction on the children entity,
+ *          if unset all children are shown
  * displayGroup = display group the query is in
  * @created ak on Fri Nov 21 2003
  * @project ERDirectToWeb
@@ -108,5 +111,10 @@ public class ERDQueryTwoLevelRelationship extends ERDCustomQueryComponent {
             return EOUtilities.objectsWithFetchSpecificationAndBindings(ec, destinationEntityName, restrictingFetchSpecification,null);
         }
         return EOUtilities.objectsForEntityNamed(ec, destinationEntityName);
+    }
+    
+    public NSArray possibleChildren() {
+        String key = (String)valueForBinding("restrictedChildrenKey");
+        return (NSArray) (key == null ? null : valueForKeyPath(key));
     }
 }

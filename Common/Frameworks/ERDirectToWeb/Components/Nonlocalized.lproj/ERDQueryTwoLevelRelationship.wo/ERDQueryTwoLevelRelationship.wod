@@ -11,4 +11,5 @@ ERXJSPopUpRelationPicker: ERXJSPopUpRelationPicker {
 	childrenSelection = secondaryDisplayGroupQueryMatchValue;
 	childPopUpStringForAll = session.localizer.ERDQueryTwoLevelRelationship.all;
 	parentPopUpStringForAll = session.localizer.ERDQueryTwoLevelRelationship.all;
+	possibleChildren = possibleChildren;
 }
