@@ -1361,5 +1361,89 @@ public class ERXEOAccessUtilities {
             }
         }
     }
-     
+    
+    /**
+     * Deals with the nitty-gritty of direct row manipulation by
+     * correctly opening, closing, locking and unlocking the 
+     * needed EOF objects for direct row manipulation. Wraps the
+     * actions in a transaction.
+     * The API is not really finalized, if someone has a better idea
+     * he's welcome to change it.
+     * @author ak
+     */
+    public static abstract class ChannelAction {
+ 
+        protected abstract int doPerform(EOAdaptorChannel channel);
+
+        public final int perform(EOEditingContext ec, String modelName) {
+            boolean wasOpen = true;
+            EOAdaptorChannel channel = null;
+            int rows = 0;
+            ec.lock();
+            try {
+                EODatabaseContext dbc = EOUtilities.databaseContextForModelNamed(ec, modelName);
+                dbc.lock();
+                try {
+                    channel = dbc.availableChannel().adaptorChannel();
+                    wasOpen = channel.isOpen();
+                    if(!wasOpen) {
+                        channel.openChannel();
+                    }
+                    try {
+                        channel.adaptorContext().beginTransaction();
+                        rows = doPerform(channel);
+                        channel.adaptorContext().commitTransaction();
+                    } catch(EOGeneralAdaptorException ex) {
+                        channel.adaptorContext().rollbackTransaction();
+                        throw ex;
+                    } 
+                } finally {
+                    if(!wasOpen) {
+                        channel.closeChannel();
+                    }
+                    dbc.unlock();
+                }
+            } finally {
+                ec.unlock();
+            }
+            return rows;
+        }
+    }
+
+    /**
+     * Deletes rows described by the qualifier.
+     * @param ec
+     * @param entityName
+     * @param qualifier
+     * @return
+     */
+    public static int deleteRowsDescribedByQualifier(EOEditingContext ec, String entityName, 
+            final EOQualifier qualifier) {
+        final EOEntity entity = entityNamed(ec, entityName);
+        ChannelAction action = new ChannelAction() {
+            protected int doPerform(EOAdaptorChannel channel) {
+                return channel.deleteRowsDescribedByQualifier(qualifier, entity);
+            }
+        };
+        return action.perform(ec, entity.model().name());
+    }
+
+    /**
+     * Updates rows described by the qualifier.
+     * @param ec
+     * @param entityName
+     * @param qualifier
+     * @param newValues
+     * @return
+     */
+    public static int updateRowsDescribedByQualifier(EOEditingContext ec, String entityName, 
+            final EOQualifier qualifier, final NSDictionary newValues) {
+        final EOEntity entity = entityNamed(ec, entityName);
+        ChannelAction action = new ChannelAction() {
+            protected int doPerform(EOAdaptorChannel channel) {
+                return channel.updateValuesInRowsDescribedByQualifier(newValues, qualifier, entity);
+            }
+        };
+        return action.perform(ec, entity.model().name());
+    }
 }
