@@ -1,6 +1,12 @@
 { rules = (
 {    author = 0;     class = "com.webobjects.directtoweb.Rule";     rhs = {        class = "er.directtoweb.ERDKeyValueAssignment";         keyPath = actions;         value = defaultActions;     }; }, 
 {    author = 0;     class = "com.webobjects.directtoweb.Rule";     lhs = {        class = com.webobjects.eocontrol.EOKeyValueQualifier;         key = task;         selectorName = "isEqualTo";         value = select;     };     rhs = {        class = "com.webobjects.directtoweb.Assignment";         keyPath = actions;         value = {left = (selectAction); };     }; }, 
+
+
+{    author = 10;     class = "com.webobjects.directtoweb.Rule";     lhs = {        class = com.webobjects.eocontrol.EOKeyValueQualifier;         key = propertyKey;         selectorName = "isEqualTo";         value = "-----";     };     rhs = {        class = "com.webobjects.directtoweb.Assignment";         keyPath = componentName;         value = ERDSpacer;     }; }, 
+{    author = 10;     class = "com.webobjects.directtoweb.Rule";     lhs = {        class = com.webobjects.eocontrol.EOKeyValueQualifier;         key = propertyKey;         selectorName = "isEqualTo";         value = "-----";     };     rhs = {        class = "com.webobjects.directtoweb.Assignment";         keyPath = displayNameForProperty;         value = "";     }; }, 
+
+
 {    author = 20;     class = "com.webobjects.directtoweb.Rule";     lhs = {        class = com.webobjects.eocontrol.EOOrQualifier;         qualifiers = (            {                class = com.webobjects.eocontrol.EOKeyValueQualifier;                 key = subTask;                 selectorName = "isEqualTo";                 value = printerFriendly;             },             {                class = com.webobjects.eocontrol.EOKeyValueQualifier;                 key = task;                 selectorName = "isEqualTo";                 value = inspect;             }        );     };     rhs = {        class = "com.webobjects.directtoweb.Assignment";         keyPath = allowCollapsing;         value = false;     }; }, 
 {    author = 0;     class = "com.webobjects.directtoweb.Rule";     rhs = {        class = "com.webobjects.directtoweb.BooleanAssignment";         keyPath = allowsFiltering;         value = false;     }; }, 
 {    author = 50;     class = "com.webobjects.directtoweb.Rule";     rhs = {        class = "com.webobjects.directtoweb.Assignment";         keyPath = backgroundColorForTable;         value = "#ebebeb";     }; }, 
