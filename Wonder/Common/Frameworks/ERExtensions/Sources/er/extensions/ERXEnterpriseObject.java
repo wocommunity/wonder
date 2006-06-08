@@ -6,7 +6,127 @@ import com.webobjects.eocontrol.*;
 import com.webobjects.foundation.*;
 
 public interface ERXEnterpriseObject {
-	
+    
+    /** logging support for modified objects */
+    public static final ERXLogger logMod = ERXLogger.getERXLogger("er.transaction.delegate.EREditingContextDelegate.modifedObjects");
+
+    /**
+     * Registers as a listener for various editing context notifications and calls up the willXXX and
+     * didXXX methods in objects that implement ERXEnterpriseObject. Subclass this and set the system
+     * property <code>er.extensions.ERXEnterpriseObject.Observer.className</code> to set up your own subclass.
+     *
+     * @author ak
+     */
+    public static class Observer {
+        
+        public void editingContextWillSaveChanges(NSNotification n) {
+            EOEditingContext ec = (EOEditingContext) n.object();
+                    boolean isNestedEditingContext = !(ec.parentObjectStore() instanceof EOObjectStoreCoordinator);
+
+                    ec.processRecentChanges(); // need to do this to make sure the updated objects list is current
+
+            if (ec.hasChanges()) {
+                NSNotificationCenter.defaultCenter().postNotification(ERXExtensions.objectsWillChangeInEditingContext, this);
+                // we don't need to lock ec because we can assume that we're locked
+                // before this method is called, but we do need to lock our parent
+
+                if (isNestedEditingContext) {
+                    EOEditingContext parentEC = (EOEditingContext) ec.parentObjectStore();
+
+                    parentEC.lock();
+
+                    try {
+                        if (ec.deletedObjects().count() > 0) {
+                            final NSArray deletedObjectsToFlushInParent = ERXEOControlUtilities.localInstancesOfObjects(parentEC, ec.deletedObjects());
+
+                            if (log.isDebugEnabled()) {
+                                log.debug("saveChanges: before save to child context " + ec
+                                        + ", need to flush caches on deleted objects in parent context " + parentEC + ": "
+                                        + deletedObjectsToFlushInParent);
+                            }
+                            ERXEnterpriseObject.FlushCachesProcessor.perform(parentEC, deletedObjectsToFlushInParent);
+                        }
+
+                    } finally {
+                        parentEC.unlock();
+                    }
+                }
+                ERXEnterpriseObject.WillUpdateProcessor.perform(ec, ec.updatedObjects());
+                ERXEnterpriseObject.WillDeleteProcessor.perform(ec, ec.deletedObjects());
+                ERXEnterpriseObject.WillInsertProcessor.perform(ec, ec.insertedObjects());
+
+                if (log.isDebugEnabled()) log.debug("EditingContextWillSaveChanges: done calling will*");
+                if (logMod.isDebugEnabled()) {
+                    if (ec.updatedObjects()!=null) logMod.debug("** Updated Objects "+ ec.updatedObjects().count()+" - "+ ec.updatedObjects());
+                    if (ec.insertedObjects()!=null) logMod.debug("** Inserted Objects "+ ec.insertedObjects().count()+" - "+ ec.insertedObjects());
+                    if (ec.deletedObjects()!=null) logMod.debug("** Deleted Objects "+ ec.deletedObjects().count()+" - "+ ec.deletedObjects());
+                }
+            }
+       }
+
+        public void editingContextDidSaveChanges(NSNotification n) {
+            EOEditingContext ec = (EOEditingContext) n.object();
+            final boolean isNestedEditingContext = ! (ec.parentObjectStore() instanceof EOObjectStoreCoordinator);
+
+            ERXEnterpriseObject.DidUpdateProcessor.perform(ec, ec.updatedObjects());
+            ERXEnterpriseObject.DidDeleteProcessor.perform(ec, ec.deletedObjects());
+            ERXEnterpriseObject.DidInsertProcessor.perform(ec, ec.insertedObjects());
+
+            if ( isNestedEditingContext ) {
+                // we can assume insertedObjectGIDs and updatedObjectGIDs are non null.  if we execute this branch, they're at
+                // least empty arrays.
+                final EOEditingContext parentEC = (EOEditingContext)ec.parentObjectStore();
+
+                if (ec.insertedObjects().count() > 0 || ec.updatedObjects().count() > 0) {
+                    NSMutableArray flushableObjects = new NSMutableArray();
+                    flushableObjects.addObjectsFromArray(ec.insertedObjects());
+                    flushableObjects.addObjectsFromArray(ec.updatedObjects());
+
+                    parentEC.lock();
+                    try {
+                        final NSArray flushableObjectsInParent = ERXEOControlUtilities.localInstancesOfObjects(parentEC, flushableObjects);
+
+                        if ( log.isDebugEnabled() ) {
+                            log.debug("saveChanges: before save to child context " + ec +
+                                    ", need to flush caches on objects in parent context " + parentEC + ": " + flushableObjectsInParent);
+                        }
+
+                        ERXEnterpriseObject.FlushCachesProcessor.perform(parentEC, flushableObjectsInParent);
+                    } finally {
+                        parentEC.unlock();
+                    }
+                }
+            }
+        }
+
+        private static Observer observer;
+        
+        public static void install()  {
+            if(observer == null) {
+                synchronized(Observer.class) {
+                    if(observer == null) {
+                        String name = ERXSystem.getProperty("er.extensions.ERXEnterpriseObject.Observer.className", Observer.class.getName());
+                        Class c = ERXPatcher.classForName(name);
+                        try {
+                            observer = (Observer) c.newInstance();
+                            NSNotificationCenter.defaultCenter().addObserver(observer, 
+                                    ERXSelectorUtilities.notificationSelector("editingContextWillSaveChanges"), 
+                                    ERXEC.EditingContextWillSaveChangesNotification, null);
+                            NSNotificationCenter.defaultCenter().addObserver(observer, 
+                                    ERXSelectorUtilities.notificationSelector("editingContextDidSaveChanges"), 
+                                    ERXEC.EditingContextDidSaveChangesNotification, null);
+                        } catch (InstantiationException e) {
+                            throw NSForwardException._runtimeExceptionForThrowable(e);
+                        } catch (IllegalAccessException e) {
+                            throw NSForwardException._runtimeExceptionForThrowable(e);
+                        }
+                    }
+                }
+            }
+        }
+    };
+
+     
     public static abstract class Processor {
         
         protected abstract void perform(EOEditingContext ec, ERXEnterpriseObject eo);

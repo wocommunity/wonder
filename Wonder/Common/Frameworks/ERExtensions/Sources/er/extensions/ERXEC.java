@@ -36,11 +36,11 @@ public class ERXEC extends EOEditingContext {
     /** logs a message when set to DEBUG and an EC is locked/unlocked. */
     public static final ERXLogger lockTrace = ERXLogger.getERXLogger("er.extensions.ERXEC.LockTrace");
     
-    /** logging support for modified objects */
-    public static final ERXLogger logMod = ERXLogger.getERXLogger("er.transaction.delegate.EREditingContextDelegate.modifedObjects");
-    
     /** name of the notification that is posted after editing context is created. */
     public static final String EditingContextDidCreateNotification = "EOEditingContextDidCreate";
+
+    /** name of the notiification that is posted before an editing context is saved. */
+    public static final String EditingContextWillSaveChangesNotification = "EOEditingContextWillSaveChanges";
 
     /** decides whether to lock/unlock automatically when used without a lock. */
     private Boolean useAutolock;
@@ -204,12 +204,13 @@ public class ERXEC extends EOEditingContext {
     
     /** default constructor */
     public ERXEC() {
-        super();
+        this(defaultParentObjectStore());
     }
-    
+
     /** alternative constructor */
     public ERXEC(EOObjectStore os) {
         super(os);
+        ERXEnterpriseObject.Observer.install();
     }
 
     public static boolean defaultAutomaticLockUnlock() {
@@ -517,81 +518,9 @@ public class ERXEC extends EOEditingContext {
     
 
     protected void willSaveChanges(NSArray insertedObjects, NSArray updatedObjects, NSArray deletedObjects) {
-        boolean isNestedEditingContext = !(parentObjectStore() instanceof EOObjectStoreCoordinator);
-
-        processRecentChanges(); // need to do this to make sure the updated objects list is current
-
-        if (hasChanges()) {
-            NSNotificationCenter.defaultCenter().postNotification(ERXExtensions.objectsWillChangeInEditingContext, this);
-            // we don't need to lock ec because we can assume that we're locked
-            // before this method is called, but we do need to lock our parent
-
-            if (isNestedEditingContext) {
-                EOEditingContext parentEC = (EOEditingContext) parentObjectStore();
-
-                parentEC.lock();
-
-                try {
-                    if (deletedObjects.count() > 0) {
-                        final NSArray deletedObjectsToFlushInParent = ERXEOControlUtilities.localInstancesOfObjects(parentEC, deletedObjects);
-
-                        if (log.isDebugEnabled()) {
-                            log.debug("saveChanges: before save to child context " + this
-                                    + ", need to flush caches on deleted objects in parent context " + parentEC + ": "
-                                    + deletedObjectsToFlushInParent);
-                        }
-                        ERXEnterpriseObject.FlushCachesProcessor.perform(parentEC, deletedObjectsToFlushInParent);
-                    }
-
-                } finally {
-                    parentEC.unlock();
-                }
-            }
-            ERXEnterpriseObject.WillUpdateProcessor.perform(this, updatedObjects);
-            ERXEnterpriseObject.WillDeleteProcessor.perform(this, deletedObjects);
-            ERXEnterpriseObject.WillInsertProcessor.perform(this, insertedObjects);
-
-            if (log.isDebugEnabled()) log.debug("EditingContextWillSaveChanges: done calling will*");
-            if (logMod.isDebugEnabled()) {
-                if (updatedObjects()!=null) logMod.debug("** Updated Objects "+ updatedObjects().count()+" - "+ updatedObjects());
-                if (insertedObjects()!=null) logMod.debug("** Inserted Objects "+ insertedObjects().count()+" - "+ insertedObjects());
-                if (deletedObjects()!=null) logMod.debug("** Deleted Objects "+ deletedObjects().count()+" - "+ deletedObjects());
-            }
-        }
     }
 
-   protected void didSaveChanges(NSArray insertedObjects, NSArray updatedObjects, NSArray deletedObjects) {
-        final boolean isNestedEditingContext = ! (parentObjectStore() instanceof EOObjectStoreCoordinator);
-
-        ERXEnterpriseObject.DidUpdateProcessor.perform(this, updatedObjects);
-        ERXEnterpriseObject.DidDeleteProcessor.perform(this, deletedObjects);
-        ERXEnterpriseObject.DidInsertProcessor.perform(this, insertedObjects);
-        
-        if ( isNestedEditingContext ) {
-            // we can assume insertedObjectGIDs and updatedObjectGIDs are non null.  if we execute this branch, they're at
-            // least empty arrays.
-            final EOEditingContext parentEC = (EOEditingContext)parentObjectStore();
-
-            if ( insertedObjects.count() > 0 || updatedObjects.count() > 0) {
-                NSMutableArray flushableObjects = new NSMutableArray();
-                flushableObjects.addObjectsFromArray(insertedObjects);
-                flushableObjects.addObjectsFromArray(updatedObjects);
-
-                parentEC.lock();
-                try {
-                    final NSArray flushableObjectsInParent = ERXEOControlUtilities.localInstancesOfObjects(parentEC, flushableObjects);
-
-                    if ( log.isDebugEnabled() ) {
-                        log.debug("saveChanges: before save to child context " + this +
-                                ", need to flush caches on objects in parent context " + parentEC + ": " + flushableObjectsInParent);
-                    }
-
-                    ERXEnterpriseObject.FlushCachesProcessor.perform(parentEC, flushableObjectsInParent);
-                } finally {
-                    parentEC.unlock();
-                }
-            }
-        }
+    protected void didSaveChanges(NSArray insertedObjects, NSArray updatedObjects, NSArray deletedObjects) {
     }
 
     /** Smarter version of normal <code>saveChanges()</code> method.
@@ -651,7 +580,7 @@ public class ERXEC extends EOEditingContext {
            NSArray insertedObjects = insertedObjects().immutableClone();
            NSArray updatedObjects = updatedObjects().immutableClone();
            NSArray deletedObjects = deletedObjects().immutableClone();
-
+           NSNotificationCenter.defaultCenter().postNotification(EditingContextWillSaveChangesNotification, this);
            willSaveChanges(insertedObjects, updatedObjects, deletedObjects);
 
            _saveChanges();
