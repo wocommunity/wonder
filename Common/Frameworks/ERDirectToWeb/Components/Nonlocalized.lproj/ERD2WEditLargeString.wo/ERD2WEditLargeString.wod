@@ -2,5 +2,6 @@ EditString: WOText {
 	cols = d2wContext.length;
 	rows = d2wContext.rows;
 	value = value;
+	disabled = d2wContext.disabled;
 }
 
