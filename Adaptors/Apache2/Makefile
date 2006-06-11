@@ -14,7 +14,7 @@ APXSFLAGS = -c -S CC=${CC} -Wc,"${CFLAGS}" -Wl,"${LDFLAGS}"
 
 # These are the default settings for OSX.
 ifeq "MACOS" "$(OS)"
-# Flags for use when enabling mod_ssl support -- Note that there's a dyld error with using SSL right now.
+# Flags for use when enabling mod_ssl support (on by default)
 #ENABLE_SSL_SUPPORT =
 ENABLE_SSL_SUPPORT = -DAPACHE_SECURITY_ENABLED
 # These should be set to point at the ssl include and lib directories, respectively.
