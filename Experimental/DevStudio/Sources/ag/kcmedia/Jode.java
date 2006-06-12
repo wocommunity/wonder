@@ -257,7 +257,7 @@ public class Jode extends Object {
             } catch (Exception ex) {
                 log.error(ex);
             }
-            sourceCode = ERXExtensions.replaceStringByStringInString("\n\n", "<br>", sourceCode);
+            sourceCode = ERXStringUtilities.replaceStringByStringInString("\n\n", "<br>", sourceCode);
             return sourceCode;
         }
 
