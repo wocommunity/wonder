@@ -6,12 +6,34 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.wrox;
 
-import com.webobjects.foundation.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.eoaccess.*;
-import er.extensions.*;
 import java.util.Enumeration;
+
 import org.apache.log4j.Logger;
+
+import com.webobjects.eoaccess.EOUtilities;
+import com.webobjects.eocontrol.EOEditingContext;
+import com.webobjects.eocontrol.EOEnterpriseObject;
+import com.webobjects.eocontrol.EOKeyValueArchiver;
+import com.webobjects.eocontrol.EOKeyValueUnarchiver;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSKeyValueCoding;
+import com.webobjects.foundation.NSMutableDictionary;
+import com.webobjects.foundation.NSNotification;
+import com.webobjects.foundation.NSNotificationCenter;
+import com.webobjects.foundation.NSPropertyListSerialization;
+import com.webobjects.foundation.NSSelector;
+import com.webobjects.foundation.NSValidation;
+
+import er.extensions.ERXBatchNavigationBar;
+import er.extensions.ERXConstant;
+import er.extensions.ERXCrypto;
+import er.extensions.ERXEC;
+import er.extensions.ERXExtensions;
+import er.extensions.ERXGenericRecord;
+import er.extensions.ERXRetainer;
+import er.extensions.ERXSortOrder;
+import er.extensions.ERXUtilities;
 
 public class User extends ERXGenericRecord {
 
@@ -175,7 +197,7 @@ public class User extends ERXGenericRecord {
     
     ///////////////////////////////////////////// Instance Methods ////////////////////////////////////////////////////
     public String fullName() { return firstName() + " " + lastName(); }
-    public String primaryKey() { return ERXExtensions.primaryKeyForObject(this); }
+    public String primaryKey() { return  primaryKeyInTransaction(); }
     
     // Optimization for checking login names.
     public boolean _shouldValidateUsername=false;
