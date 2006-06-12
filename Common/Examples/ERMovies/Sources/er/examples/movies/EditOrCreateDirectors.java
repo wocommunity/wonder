@@ -30,7 +30,7 @@ public class EditOrCreateDirectors extends WOComponent {
     
     public WOComponent newDirector() {
         // Could use a child context if we didn't want the talent to go to the database
-        EOEditingContext ec = ERXExtensions.newEditingContext();
+        EOEditingContext ec = ERXEC.newEditingContext();
         EOEnterpriseObject director = ERXUtilities.createEO("Talent", ec);
         
         // Let's throw to a regular edit page
