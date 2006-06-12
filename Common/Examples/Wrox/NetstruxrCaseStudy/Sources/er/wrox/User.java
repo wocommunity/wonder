@@ -75,7 +75,7 @@ public class User extends ERXGenericRecord {
         private EOEditingContext _preferencesEditingContext;
         private EOEditingContext preferencesEditingContext() {
             if (_preferencesEditingContext==null)
-                _preferencesEditingContext = ERXExtensions.newEditingContext();
+                _preferencesEditingContext = ERXEC.newEditingContext();
             return _preferencesEditingContext;
         }
 

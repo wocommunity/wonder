@@ -48,7 +48,7 @@ public class Session extends ERXSession {
     public WOComponent listAllMovies() {
         ListPageInterface lpi = (ListPageInterface)D2W.factory().pageForConfigurationNamed("ListAllMovies",
                                                                                            this);
-        EODataSource ds = new EODatabaseDataSource(ERXExtensions.newEditingContext(), "Movie");
+        EODataSource ds = new EODatabaseDataSource(ERXEC.newEditingContext(), "Movie");
         lpi.setDataSource(ds);
         return (WOComponent)lpi;
     }
