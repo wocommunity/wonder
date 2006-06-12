@@ -66,7 +66,7 @@ public class MenuHeader extends WOComponent {
             api.setNextPage(context().page());
             nextPage=(WOComponent)api;
         } else {
-            EOEditingContext peerContext=ERXExtensions.newEditingContext(session().defaultEditingContext().parentObjectStore());
+            EOEditingContext peerContext=ERXEC.newEditingContext(session().defaultEditingContext().parentObjectStore());
             peerContext.lock();
             try {
                 EOEnterpriseObject aNewEO=(EOEnterpriseObject)aClassDesc.createInstanceWithEditingContext(peerContext, null);
