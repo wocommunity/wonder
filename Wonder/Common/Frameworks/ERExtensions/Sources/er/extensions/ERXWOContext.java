@@ -17,9 +17,9 @@ public class ERXWOContext extends WOContext implements ERXMutableUserInfoHolderI
         super(worequest);
     }
 
-    public static WOContext newContext(){
+    public static ERXWOContext newContext(){
         WOApplication app = WOApplication.application();
-        return app.createContextForRequest(app.createRequest("GET", app.cgiAdaptorURL() + "/" + app.name(), "HTTP/1.1", null, null, null));
+        return (ERXWOContext)app.createContextForRequest(app.createRequest("GET", app.cgiAdaptorURL() + "/" + app.name(), "HTTP/1.1", null, null, null));
     }
 
 
