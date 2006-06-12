@@ -18,7 +18,7 @@ public class OnlineHatSystem extends WOComponent {
         super(aContext);
     }
 
-    private EOEditingContext ec = ERXExtensions.newEditingContext();
+    private EOEditingContext ec = ERXEC.newEditingContext();
     public void awake() {
         ec.lock();
     }
