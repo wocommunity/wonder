@@ -10,6 +10,7 @@ import com.webobjects.appserver.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.eoaccess.*;
 import com.webobjects.directtoweb.*;
+import er.extensions.ERXEC;
 import er.extensions.ERXUtilities;
 import er.extensions.ERXExtensions;
 import org.apache.log4j.Logger;
@@ -22,7 +23,7 @@ public class Home extends WOComponent {
     
     public WOComponent editMyInformation() {
         // This will be a peer of the session's default editingContext.
-        EOEditingContext peer = ERXExtensions.newEditingContext();
+        EOEditingContext peer = ERXEC.newEditingContext();
         EditPageInterface epi = (EditPageInterface)D2W.factory().pageForConfigurationNamed("EditUser", session());
         epi.setObject(ERXUtilities.localInstanceOfObject(peer, ((Session)session()).user()));
         epi.setNextPage(context().page());
@@ -31,7 +32,7 @@ public class Home extends WOComponent {
     
     public WOComponent createUser() {
         // This will be a peer of the session's default editingContext.
-        EOEditingContext peer = ERXExtensions.newEditingContext();
+        EOEditingContext peer = ERXEC.newEditingContext();
         EditPageInterface epi = (EditPageInterface)D2W.factory().pageForConfigurationNamed("EditUser", session());
         epi.setObject(ERXUtilities.createEO("User", peer));
         epi.setNextPage(context().page());
@@ -40,7 +41,7 @@ public class Home extends WOComponent {
 
     public WOComponent createGroup() {
         // This will be a peer of the session's default editingContext.
-        EOEditingContext peer = ERXExtensions.newEditingContext();
+        EOEditingContext peer = ERXEC.newEditingContext();
         EditPageInterface epi = (EditPageInterface)D2W.factory().pageForConfigurationNamed("EditGroup", session());
         epi.setObject(ERXUtilities.createEO("Group", peer));
         epi.setNextPage(context().page());
