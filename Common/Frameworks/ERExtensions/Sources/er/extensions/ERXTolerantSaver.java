@@ -21,6 +21,8 @@ import com.webobjects.foundation.*;
  * hvae the changes merged from the database or stomp all the changes
  * the database regardless of locking. The entry point for using this
  * class is the <code>save</code> method.
+ * @deprecated use ERXEC
+ * 
  */
 // MOVEME: All of these methods could move to something like ERXEOFUtilities
 public class ERXTolerantSaver {
@@ -41,11 +43,6 @@ public class ERXTolerantSaver {
      */
     public static String save(EOEditingContext ec, boolean writeAnyWay) {
         return save(ec, writeAnyWay, true);
-    }
-
-    // DELETEME: This is the same as save
-    public static String saveMerge(EOEditingContext ec, boolean writeAnyWay, boolean merge) {
-        return save(ec, writeAnyWay, merge);
     }
 
     /**
