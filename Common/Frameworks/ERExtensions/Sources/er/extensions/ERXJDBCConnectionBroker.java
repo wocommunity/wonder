@@ -124,10 +124,6 @@ public class ERXJDBCConnectionBroker {
         setup(dict, DEFAULTMAXCHECKOUTSECONDS);
     }
 
-    private ERXJDBCConnectionBroker(NSDictionary dict, int maxCheckoutSecond) {
-        setup(dict, maxCheckoutSecond);
-    }
-
     public String toString() {
         return "<" +getClass().getName() +
         ": dbDriver = " + dbDriver +
@@ -555,7 +551,7 @@ public class ERXJDBCConnectionBroker {
     
         public void unlock() {
             if(getStatus() != BUSY) {
-                throw new IllegalStateException("Attempt to lock busy channel: " + this);
+                throw new IllegalStateException("Attempt to unlock non-busy channel: " + this);
             }
             setStatus(FREE);
             setLockTime(0L);
