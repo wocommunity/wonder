@@ -153,7 +153,7 @@ public class ERXEnterpriseObjectCache {
     public void addObjectForKey(EOEnterpriseObject eo, Object key) {
         EOGlobalID gid = NO_GID_MARKER;
         if(eo != null) {
-            eo.editingContext().globalIDForObject(eo);
+            gid = eo.editingContext().globalIDForObject(eo);
         }
         cache().put(key, gid);
     }
