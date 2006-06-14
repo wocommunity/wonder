@@ -626,6 +626,14 @@ public class ERXEC extends EOEditingContext {
        setOptions(recover, retry, merge);
    }
 
+   public void saveChangesTolerantly() {
+	   saveChangesTolerantly(true);
+   }
+
+   public void saveChangesTolerantly(boolean doesRetry) {
+	   saveChangesTolerantly(doesRetry, true);
+   }
+   
    private boolean _recoversFromException;
    private boolean _doesRetry;
    private boolean _mergesChanges;
@@ -638,6 +646,7 @@ public class ERXEC extends EOEditingContext {
      */
     public void setOptions(boolean recoversFromException, 
             boolean doesRetry, boolean mergesChanges) {
+        _EOAssertSafeMultiThreadedAccess("setOptions()");
         _recoversFromException = recoversFromException;
         _doesRetry = doesRetry;
         _mergesChanges = mergesChanges;
@@ -646,25 +655,27 @@ public class ERXEC extends EOEditingContext {
     protected void _saveChanges() {
         boolean saved = true;
         try {
-            super.saveChanges();
+        	super.saveChanges();
         } catch(EOGeneralAdaptorException e) {
-            saved = false;
-            if(_recoversFromException) {
-                log.warn("_saveChangesTolerantly: Exception occurred: "+ e);
-                if(ERXEOAccessUtilities.isOptimisticLockingFailure(e)) {
-                    EOEnterpriseObject eo = ERXEOAccessUtilities.refetchFailedObject(this, e);
-                    if (_mergesChanges) {
-                        ERXEOAccessUtilities.reapplyChanges(eo, e);
-                    }
-                    if(_doesRetry) {
-                        _saveChanges();
-                        saved = true;
-                    }
-                }
-            }
-            if(!saved) {
-                throw e;
-            }
+        	saved = false;
+        	if(_recoversFromException) {
+        		log.warn("_saveChangesTolerantly: Exception occurred: "+ e, e);
+        		if(ERXEOAccessUtilities.isOptimisticLockingFailure(e)) {
+        			EOEnterpriseObject eo = ERXEOAccessUtilities.refetchFailedObject(this, e);
+        			if (_mergesChanges) {
+        				ERXEOAccessUtilities.reapplyChanges(eo, e);
+        			}
+        			if(_doesRetry) {
+        				_saveChanges();
+        				saved = true;
+        			}
+        		}
+        	} else {
+        		// log.warn("_saveChangesTolerantly: Exception occurred: "+ e + NSPropertyListSerialization.stringFromPropertyList(e.userInfo()), e);
+        	}
+        	if(!saved) {
+        		throw e;
+        	}
         }
     }
 
@@ -1137,6 +1148,41 @@ public class ERXEC extends EOEditingContext {
     public static EOEditingContext newEditingContext() {
     	return factory()._newEditingContext();
     }
+    /**
+     * Factory method to create a new tolerant editing context.
+     */
+    public static EOEditingContext newTolerantEditingContext(EOObjectStore parent, boolean retry, boolean merge) {
+    	ERXEC ec = (ERXEC)newEditingContext(parent);
+    	ec.lock();
+    	try {
+    		ec.setOptions(true, retry, merge);
+    	} finally {
+    		ec.unlock();
+    	}
+    	return ec;
+    }
+
+    public static EOEditingContext newTolerantEditingContext() {
+    	return newTolerantEditingContext(null, true, true);
+    }
+
+    public static EOEditingContext newTolerantEditingContext(EOObjectStore osc) {
+    	return newTolerantEditingContext(osc, true, true);
+    }
+    
+    public static void saveChangesTolerantly(EOEditingContext ec, boolean doesRetry, boolean mergesChanges) {
+    	if (ec instanceof ERXEC) {
+			ERXEC erxec = (ERXEC) ec;
+			erxec.saveChangesTolerantly(doesRetry, mergesChanges);
+		} else {
+			ERXTolerantSaver.save(ec, doesRetry, mergesChanges);
+		}
+    }
+    
+    public static void saveChangesTolerantly(EOEditingContext ec) {
+    	saveChangesTolerantly(ec, true, true);
+    }
+
     /**
      * Creates a new editing context with the specified object
      * store as the parent object store and with validation turned
