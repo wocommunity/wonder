@@ -3,7 +3,7 @@
     adaptorName = JDBC; 
     connectionDictionary = {
         URL = "jdbc:mysql://localhost/bug"; 
-        driver = "org.gjt.mm.mysql.Driver"; 
+        driver = ""; 
         jdbc2Info = {
             "ANSI92_CONFORMANCE" = ANSI92EntryLevel; 
             "DBMS_NAME" = MySQL; 
@@ -23,7 +23,7 @@
                     precision = 19; 
                 }; 
                 BLOB = {
-                    createParams = 1; 
+                    createParams = 0; 
                     defaultJDBCType = ("LONG VARBINARY"); 
                     isNullable = T; 
                     isSearchable = T; 
@@ -104,7 +104,7 @@
                     precision = 10; 
                 }; 
                 LONGBLOB = {
-                    createParams = 1; 
+                    createParams = 0; 
                     defaultJDBCType = ("LONG VARBINARY"); 
                     isNullable = T; 
                     isSearchable = T; 
@@ -113,7 +113,7 @@
                     precision = 2147483647; 
                 }; 
                 MEDIUMBLOB = {
-                    createParams = 1; 
+                    createParams = 0; 
                     defaultJDBCType = ("LONG VARBINARY"); 
                     isNullable = T; 
                     isSearchable = T; 
@@ -176,7 +176,7 @@
                     precision = 0; 
                 }; 
                 TINYBLOB = {
-                    createParams = 1; 
+                    createParams = 0; 
                     defaultJDBCType = (VARBINARY); 
                     isNullable = T; 
                     isSearchable = T; 
@@ -204,9 +204,9 @@
                 }; 
             }; 
         }; 
-        password = S; 
-        plugin = Mysql; 
-        username = nobody; 
+        password = ""; 
+        plugin = ""; 
+        username = root; 
     }; 
     entities = (
         {className = "er.bugtracker.Bug"; name = Bug; }, 
