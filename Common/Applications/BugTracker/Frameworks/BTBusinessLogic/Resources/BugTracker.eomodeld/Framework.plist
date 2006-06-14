@@ -13,7 +13,6 @@
             userInfo = {modificationDate = "2002-05-07 23:00:52 +0200"; }; 
         }, 
         {
-            allowsNull = N; 
             columnName = ORDERING; 
             name = ordering; 
             prototypeName = intNumber; 
