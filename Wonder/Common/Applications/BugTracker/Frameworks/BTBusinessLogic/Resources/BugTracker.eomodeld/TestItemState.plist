@@ -13,7 +13,6 @@
             userInfo = {modificationDate = "2002-05-06 07:41:33 +0200"; }; 
         }, 
         {
-            allowsNull = N; 
             columnName = "SORT_ORDER"; 
             name = sortOrder; 
             prototypeName = intNumber; 
