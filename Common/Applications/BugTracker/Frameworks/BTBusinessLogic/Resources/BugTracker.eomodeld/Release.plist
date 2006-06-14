@@ -7,7 +7,6 @@
             userInfo = {modificationDate = "2002-05-06 07:22:33 +0200"; }; 
         }, 
         {
-            allowsNull = N; 
             columnName = "IS_OPEN"; 
             name = isOpen; 
             prototypeName = flag; 

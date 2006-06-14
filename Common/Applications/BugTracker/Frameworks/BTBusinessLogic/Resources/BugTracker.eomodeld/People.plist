@@ -14,28 +14,24 @@
             userInfo = {modificationDate = "2002-05-06 07:24:57 +0200"; }; 
         }, 
         {
-            allowsNull = N; 
             columnName = "IS_ACTIVE"; 
             name = isActive; 
             prototypeName = flag; 
             userInfo = {modificationDate = "2002-05-06 07:44:21 +0200"; }; 
         }, 
         {
-            allowsNull = N; 
             columnName = "IS_ADMIN"; 
             name = isAdmin; 
             prototypeName = flag; 
             userInfo = {modificationDate = "2002-05-06 07:44:33 +0200"; }; 
         }, 
         {
-            allowsNull = N; 
             columnName = "IS_CUSTOMER_SERVICE"; 
             name = isCustomerService; 
             prototypeName = flag; 
             userInfo = {modificationDate = "2002-05-06 07:44:51 +0200"; }; 
         }, 
         {
-            allowsNull = N; 
             columnName = "IS_ENGINEERING"; 
             name = isEngineering; 
             prototypeName = flag; 
