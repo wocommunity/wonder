@@ -25,20 +25,26 @@ AttributeRepetition: WORepetition {
 	list = currentSection.keys;
 }
 
-ColumnLabelRepetition: WORepetition {
-	item = d2wContext.propertyKey;
-	list = currentSection.keys;
-}
-
 BatchRepetition:  WORepetition {
 	count = batchCount;
 	index = index;
 }
 
-ObjectRepetition: WORepetition {
-	item = object;
-	list = currentBatch;
+ColumnLabelRepetition: WORepetition {
+	item = d2wContext.propertyKey;
+	list = currentSection.keys;
 }
+
+CustomComponentForSheet: WOSwitchComponent {
+	WOComponentName = d2wContext.componentNameForSheet;
+	d2wContext = d2wContext;
+	objects = currentBatch;
+}
+
+HasCustomSheetComponent: WOConditional {
+	condition = d2wContext.componentNameForSheet;
+}
+
 
 ListTable: WOGenericContainer {
         name = d2wContext.excelSheetName;
@@ -47,6 +53,16 @@ ListTable: WOGenericContainer {
 	class = d2wContext.excelClassForSheet;
 	cellType = d2wContext.excelCellTypeForSheet;
         defaultColumnWidth = d2wContext.excelDefaultColumnWidthForSheet;
+}
+
+NoCustomSheetComponent: WOConditional {
+	condition = d2wContext.componentNameForSheet;
+	negate = true;
+}
+
+ObjectRepetition: WORepetition {
+	item = object;
+	list = currentBatch;
 }
 
 PageWrapper: WOSwitchComponent {
