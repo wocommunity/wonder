@@ -1361,22 +1361,22 @@ public class ERXArrayUtilities extends Object {
      * @return friendly display string
      */
     public static String friendlyDisplayForKeyPath(NSArray list, String attribute, String nullArrayDisplay, String separator, String finalSeparator) {
-        String result=null;
+        Object result = null;
         int count = list!=null ? list.count() : 0;
         if (count==0) {
             result=nullArrayDisplay;
         } else if (count == 1) {
-            result= (attribute!= null ? NSKeyValueCodingAdditions.Utility.valueForKeyPath(list.objectAtIndex(0), attribute) : list.objectAtIndex(0)).toString();
+            result= (attribute!= null ? NSKeyValueCodingAdditions.Utility.valueForKeyPath(list.objectAtIndex(0), attribute) : list.objectAtIndex(0));
         } else if (count > 1) {
             StringBuffer buffer = new StringBuffer();
             for(int i = 0; i < count; i++) {
-                String attributeValue = (attribute!= null ? NSKeyValueCodingAdditions.Utility.valueForKeyPath(list.objectAtIndex(i), attribute) : list.objectAtIndex(i)).toString();
+                Object attributeValue = (attribute!= null ? NSKeyValueCodingAdditions.Utility.valueForKeyPath(list.objectAtIndex(i), attribute) : list.objectAtIndex(i));
                 if (i>0) buffer.append(i == (count - 1) ? finalSeparator : separator);
                 buffer.append(attributeValue);
             }
             result=buffer.toString();
         }
-        return result;
+        return (result == null ? null : result.toString());
     }
 
     /**
