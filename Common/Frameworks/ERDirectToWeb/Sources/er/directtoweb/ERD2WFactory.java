@@ -6,13 +6,36 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.directtoweb;
 
-import com.webobjects.appserver.*;
-import com.webobjects.directtoweb.*;
-import com.webobjects.eoaccess.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.foundation.*;
+import com.webobjects.appserver.WOApplication;
+import com.webobjects.appserver.WOComponent;
+import com.webobjects.appserver.WOContext;
+import com.webobjects.appserver.WOSession;
+import com.webobjects.directtoweb.D2W;
+import com.webobjects.directtoweb.D2WComponent;
+import com.webobjects.directtoweb.D2WContext;
+import com.webobjects.directtoweb.D2WPage;
+import com.webobjects.directtoweb.D2WUtils;
+import com.webobjects.directtoweb.ERD2WContext;
+import com.webobjects.directtoweb.EditPageInterface;
+import com.webobjects.directtoweb.EditRelationshipPageInterface;
+import com.webobjects.directtoweb.ErrorPageInterface;
+import com.webobjects.directtoweb.InspectPageInterface;
+import com.webobjects.directtoweb.ListPageInterface;
+import com.webobjects.directtoweb.QueryAllPageInterface;
+import com.webobjects.directtoweb.QueryPageInterface;
+import com.webobjects.directtoweb.SelectPageInterface;
+import com.webobjects.eoaccess.EOEntity;
+import com.webobjects.eoaccess.EOModelGroup;
+import com.webobjects.eoaccess.EOUtilities;
+import com.webobjects.eocontrol.EOEditingContext;
+import com.webobjects.eocontrol.EOEnterpriseObject;
+import com.webobjects.foundation.NSArray;
 
-import er.extensions.*;
+import er.extensions.ERXEC;
+import er.extensions.ERXEOControlUtilities;
+import er.extensions.ERXLogger;
+import er.extensions.ERXStringUtilities;
+import er.extensions.ERXUtilities;
 
 /**
  * Not used at the moment, but shows how it might be used in the future. <br />
@@ -21,7 +44,35 @@ import er.extensions.*;
 
 public class ERD2WFactory extends D2W {
 
-    /** logging support */
+    public EditPageInterface editPageForEntityNamed(String entityName, WOSession session) {
+		return (EditPageInterface) pageForConfigurationNamed("Edit" + entityName, session);
+	}
+
+	public EditRelationshipPageInterface editRelationshipPageForEntityNamed(String entityName, WOSession session) {
+		return (EditRelationshipPageInterface) pageForConfigurationNamed("EditRelationship" + entityName, session);
+	}
+
+	public InspectPageInterface inspectPageForEntityNamed(String entityName, WOSession session) {
+		return (InspectPageInterface) pageForConfigurationNamed("Inspect" + entityName, session);
+	}
+
+	public ListPageInterface listPageForEntityNamed(String entityName, WOSession session) {
+		return (ListPageInterface) pageForConfigurationNamed("List" + entityName, session);
+	}
+
+	public QueryAllPageInterface queryAllPage(WOSession session) {
+		return (QueryAllPageInterface) pageForConfigurationNamed("QueryAll", session);
+	}
+
+	public QueryPageInterface queryPageForEntityNamed(String entityName, WOSession session) {
+		return (QueryPageInterface) pageForConfigurationNamed("Query" + entityName, session);
+	}
+
+	public SelectPageInterface selectPageForEntityNamed(String entityName, WOSession session) {
+		return (SelectPageInterface) pageForConfigurationNamed("Select" + entityName, session);
+	}
+
+	/** logging support */
     protected static final ERXLogger log = ERXLogger.getERXLogger(ERD2WFactory.class);
 
     /**
@@ -111,6 +162,7 @@ public class ERD2WFactory extends D2W {
                     reason);
         } 
         return pageWithContextTaskEntity(d2wcontext, d2wcontext.task(), d2wcontext.entity().name(), s.context());
+//      eturn super.pageForConfigurationNamed(name, s);
        
     }
 
