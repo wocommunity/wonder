@@ -20,26 +20,22 @@ public class ERXOncePerRequestConditional extends ERXStatelessComponent {
     
     String keyName = null;
     int currentStage = -1;
-
+    
     /**
      * Public constructor
      * @param context context of request
      */
     public ERXOncePerRequestConditional(WOContext context) {
-        super(context);
+    	super(context);
     }
 
     public NSMutableDictionary displayCountDict() {
-        if(!(context() instanceof ERXMutableUserInfoHolderInterface)) {
-            throw new IllegalStateException("Context must implement ERXMutableUserInfoHolderInterface");
-        }
-
-        NSMutableDictionary displayCountDict = (NSMutableDictionary)((ERXMutableUserInfoHolderInterface)context()).mutableUserInfo().objectForKey("ERXOncePerRequestDisplayCountDict");
-        if(displayCountDict == null) {
-             displayCountDict = new NSMutableDictionary();
-            ((ERXMutableUserInfoHolderInterface)context()).mutableUserInfo().setObjectForKey(displayCountDict, "ERXOncePerRequestDisplayCountDict");
-        }
-        return displayCountDict;
+    	NSMutableDictionary displayCountDict = (NSMutableDictionary)ERXWOContext.contextDictionary().objectForKey("ERXOncePerRequestDisplayCountDict");
+    	if(displayCountDict == null) {
+    		displayCountDict = new NSMutableDictionary();
+    		ERXWOContext.contextDictionary().setObjectForKey(displayCountDict, "ERXOncePerRequestDisplayCountDict");
+    	}
+    	return displayCountDict;
     }
 
     public int displayCountForKey(String key) {

@@ -42,8 +42,8 @@ public class ERDEditPasswordConfirmation extends ERDCustomEditComponent {
 
     public String passwordPropertyKey() {
         String passwordPropertyKey = null;
-        if(context() instanceof ERXMutableUserInfoHolderInterface) {
-            NSDictionary userInfo = ((ERXMutableUserInfoHolderInterface)context()).mutableUserInfo();
+        NSDictionary userInfo = (NSDictionary) ERXWOContext.contextDictionary().objectForKey("ERDEditPassword");
+        if(userInfo != null) {
             passwordPropertyKey = (String) userInfo.valueForKey(ERDEditPassword.passwordPropertyKey);
         }
         if(passwordPropertyKey == null) {
@@ -58,9 +58,9 @@ public class ERDEditPasswordConfirmation extends ERDCustomEditComponent {
 
     public String password() {
         String password = null;
-        if(context() instanceof ERXMutableUserInfoHolderInterface) {
-            NSDictionary userInfo = ((ERXMutableUserInfoHolderInterface)context()).mutableUserInfo();
-            password = (String) userInfo.valueForKey("ERDEditPassword." + passwordPropertyKey() + ".value");
+        NSDictionary userInfo = (NSDictionary) ERXWOContext.contextDictionary().objectForKey("ERDEditPassword");
+        if(userInfo != null) {
+            password = (String) userInfo.objectForKey("ERDEditPassword." + passwordPropertyKey() + ".value");
         }
         return password;
     }
@@ -112,4 +112,9 @@ public class ERDEditPasswordConfirmation extends ERDCustomEditComponent {
         super.takeValuesFromRequest(r,c);
         checkPasswords();
     }
+
+	public void reset() {
+		ERXWOContext.contextDictionary().removeObjectForKey("ERDEditPassword");
+		super.reset();
+	}
 }
