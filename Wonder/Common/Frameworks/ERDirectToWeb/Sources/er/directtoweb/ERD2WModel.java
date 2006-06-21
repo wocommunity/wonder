@@ -87,7 +87,10 @@ public class ERD2WModel extends D2WModel {
      * @param rules array of rules
      */
     protected ERD2WModel(NSArray rules) {
-        super(rules);
+    	super(rules);
+    	NSNotificationCenter.defaultCenter().addObserver(this, 
+    			ERXSelectorUtilities.notificationSelector("applicationDidFinishLaunching"), 
+    			WOApplication.ApplicationDidFinishLaunchingNotification, null);
     }
     protected ERD2WModel(File file) {
         super(file);
@@ -122,6 +125,18 @@ public class ERD2WModel extends D2WModel {
         log.debug("Finished sorting.");
         */
         if (rules() !=null && rules().count() > 0) prepareDataStructures();
+    }
+    
+    public void applicationWillDispatchRequest(NSNotification n) {
+    	checkRules();
+    }
+
+    public void applicationDidFinishLaunching(NSNotification n) {
+    	if(!WOApplication.application().isCachingEnabled()) {
+    		NSNotificationCenter.defaultCenter().addObserver(this, 
+    				ERXSelectorUtilities.notificationSelector("applicationWillDispatchRequest"), 
+    				WOApplication.ApplicationWillDispatchRequestNotification, null);
+    	}
     }
     
     public NSArray rules() {
