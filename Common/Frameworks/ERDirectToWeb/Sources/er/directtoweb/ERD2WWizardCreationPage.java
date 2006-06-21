@@ -20,9 +20,6 @@ public class ERD2WWizardCreationPage extends ERD2WTabInspectPage {
     // Notification titles
     // FIXME: This is silly now that we have validationKeys.  Once all referenecs are removed will delete.
     public final static String WILL_GOTO_NEXT_PAGE = "willGotoNextPage";
-    private Object _dummy;
-    private NSArray _subList; // used by the grouping repetition
-    private Object section;
     protected int _currentStep=1;
 
     public ERD2WWizardCreationPage(WOContext context) {
