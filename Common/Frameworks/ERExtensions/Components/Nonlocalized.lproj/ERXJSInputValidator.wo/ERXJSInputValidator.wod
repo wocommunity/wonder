@@ -18,7 +18,7 @@ EntityName: WOString {
 }
 
 FormName: WOString {
-	value = context.userInfo.formName;
+	value = formName;
 }
 
 KeyName: WOString {
@@ -46,7 +46,7 @@ RemoteCall: ERXJSRemoteCall {
 
 Repetition1: WORepetition {
 	item = currentItem;
-	list = context.userInfo.elementArray;
+	list = elementArray;
 }
 
 Span: WOGenericContainer {

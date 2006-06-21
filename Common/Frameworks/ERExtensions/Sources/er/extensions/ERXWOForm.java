@@ -66,23 +66,20 @@ public class ERXWOForm extends com.webobjects.appserver._private.WOForm {
     }
 
     public void appendAttributesToResponse(WOResponse response, WOContext context) {
-        if(context instanceof ERXMutableUserInfoHolderInterface) {
-            NSMutableDictionary ui = ((ERXMutableUserInfoHolderInterface)context).mutableUserInfo();
-            if(_formName != null) {
-                String formName = (String)_formName.valueInComponent(context.component());
-                if(formName != null) {
-                    ui.setObjectForKey(formName, "formName");
-                    response._appendTagAttributeAndValue("name", formName, false);
-                }
-            }
-            if(_enctype != null) {
-                String enctype = (String)_enctype.valueInComponent(context.component());
-                if(enctype != null) {
-                    ui.setObjectForKey(enctype.toLowerCase(), "enctype");
-                    response._appendTagAttributeAndValue("enctype", enctype, false);
-                }
-            }
-        }
+    	if(_formName != null) {
+    		String formName = (String)_formName.valueInComponent(context.component());
+    		if(formName != null) {
+    			ERXWOContext.contextDictionary().setObjectForKey(formName, "formName");
+    			response._appendTagAttributeAndValue("name", formName, false);
+    		}
+    	}
+    	if(_enctype != null) {
+    		String enctype = (String)_enctype.valueInComponent(context.component());
+    		if(enctype != null) {
+    			ERXWOContext.contextDictionary().setObjectForKey(enctype.toLowerCase(), "enctype");
+    			response._appendTagAttributeAndValue("enctype", enctype, false);
+    		}
+    	}
         boolean secure = _secure != null && _secure.booleanValueInComponent(context.component());
         Object fragmentIdentifier = (_fragmentIdentifier != null ? _fragmentIdentifier.valueInComponent(context.component()) : null);
         if (secure || fragmentIdentifier != null) {
@@ -121,15 +118,11 @@ public class ERXWOForm extends com.webobjects.appserver._private.WOForm {
             _appendOpenTagToResponse(response, context);
             appendChildrenToResponse(response, context);
             _appendCloseTagToResponse(response, context);
-            if(context instanceof ERXMutableUserInfoHolderInterface) {
-                NSMutableDictionary ui = ((ERXMutableUserInfoHolderInterface)context).mutableUserInfo();
-                
-                ui.removeObjectForKey("formName");
-                ui.removeObjectForKey("enctype");
-            }
+            ERXWOContext.contextDictionary().removeObjectForKey("formName");
+            ERXWOContext.contextDictionary().removeObjectForKey("enctype");
         } else {
-            if(!disable) {
-                log.warn("This FORM is embedded inside another FORM. Omitting Tags: " + this.toString());
+        	if(!disable) {
+        		log.warn("This FORM is embedded inside another FORM. Omitting Tags: " + this.toString());
             }
             appendChildrenToResponse(response, context);
         }
@@ -146,9 +139,9 @@ public class ERXWOForm extends com.webobjects.appserver._private.WOForm {
      * @return form name in context or default value
      */
     public static String formName(WOContext context, String defaultName) {
-        String formName = defaultName;
-        if(context instanceof ERXMutableUserInfoHolderInterface) {
-            formName = (String) ((ERXMutableUserInfoHolderInterface)context).mutableUserInfo().objectForKey("formName");
+        String formName = (String) ERXWOContext.contextDictionary().objectForKey("formName");
+        if(formName == null) {
+            formName = defaultName;
         }
         return formName;
     }

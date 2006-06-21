@@ -13,28 +13,54 @@ import com.webobjects.foundation.*;
  *  This subclass is installed when the frameworks loads.
  */
 public class ERXWOContext extends WOContext implements ERXMutableUserInfoHolderInterface {
+    private static Observer observer;
+    
+    public static class Observer {
+    	public void applicationDidHandleRequest(NSNotification n) {
+    		ERXThreadStorage.removeValueForKey("ERXWOContext.dict");
+    	}
+    }
+    
+    /**
+     * Public constructor
+     * @param context context of request
+     */
+    public static NSMutableDictionary contextDictionary() {
+    	if(observer == null) {
+    		synchronized (ERXWOContext.class) {
+    			if(observer == null) {
+    				observer = new Observer();
+
+    				NSNotificationCenter.defaultCenter().addObserver(observer, 
+    						ERXSelectorUtilities.notificationSelector("applicationDidHandleRequest"), 
+    						WOApplication.ApplicationDidDispatchRequestNotification, null);
+    			}
+    		}
+    	}
+    	NSMutableDictionary result = (NSMutableDictionary)ERXThreadStorage.valueForKey("ERXWOContext.dict"); 
+    	if(result == null) {
+    		result = new NSMutableDictionary();
+    		ERXThreadStorage.takeValueForKey(result, "ERXWOContext.dict");
+    	}
+     	return result;
+    }
+
+
     public ERXWOContext(WORequest worequest) {
         super(worequest);
     }
 
-    public static ERXWOContext newContext(){
+    public static WOContext newContext(){
         WOApplication app = WOApplication.application();
-        return (ERXWOContext)app.createContextForRequest(app.createRequest("GET", app.cgiAdaptorURL() + "/" + app.name(), "HTTP/1.1", null, null, null));
+        return app.createContextForRequest(app.createRequest("GET", app.cgiAdaptorURL() + "/" + app.name(), "HTTP/1.1", null, null, null));
     }
 
 
-    protected NSMutableDictionary mutableUserInfo;
     public NSMutableDictionary mutableUserInfo() {
-        if(mutableUserInfo == null) {
-            if(request().userInfo() == null)
-                mutableUserInfo = new NSMutableDictionary();
-            else
-                mutableUserInfo = request().userInfo().mutableClone();                
-        }
-        return mutableUserInfo;
+        return contextDictionary();
     }
     public void setMutableUserInfo(NSMutableDictionary userInfo) {
-        mutableUserInfo = userInfo;
+        ERXThreadStorage.takeValueForKey(userInfo, "ERXWOContext.dict");
     }
     public NSDictionary userInfo() {
         return mutableUserInfo();

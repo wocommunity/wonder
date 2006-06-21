@@ -61,6 +61,14 @@ public class ERXJSInputValidator extends WOComponent {
         return _errorSpanID;
     }
 
+    public NSArray elementArray() {
+    	return (NSArray) ERXWOContext.contextDictionary().objectForKey("elementArray");
+    }
+    
+    public String formName() {
+    	return (String) ERXWOContext.contextDictionary().objectForKey("formName");
+    }
+    
     public Class classForCurrentItem() {
         String className = (String)currentItem.objectForKey("type");
         Class clazz = null;
