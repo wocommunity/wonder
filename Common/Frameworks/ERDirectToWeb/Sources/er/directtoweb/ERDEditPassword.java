@@ -75,11 +75,10 @@ public class ERDEditPassword extends ERDCustomEditComponent {
     public boolean passwordExists() { return objectKeyPathValue() != null ? true : false; }
 
     protected void updateContextValues() {
-        if(context() instanceof ERXMutableUserInfoHolderInterface) {
-            NSMutableDictionary userInfo = ((ERXMutableUserInfoHolderInterface)context()).mutableUserInfo();
-            userInfo.takeValueForKey(key(), passwordPropertyKey);
-            userInfo.takeValueForKey(_password, "ERDEditPassword." + key() + ".value");
-        }
+        NSMutableDictionary userInfo = new NSMutableDictionary();
+        userInfo.setObjectForKey(key(), passwordPropertyKey);
+        userInfo.setObjectForKey(_password, "ERDEditPassword." + key() + ".value");
+        ERXWOContext.contextDictionary().setObjectForKey(userInfo, "ERDEditPassword");
     }
 
     public void appendToResponse(WOResponse r, WOContext c) {
