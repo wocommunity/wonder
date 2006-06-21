@@ -21,7 +21,7 @@ import er.extensions.*;
  * and all the while test the changed value against all your stored dictionaries, which should make you 
  * more confident to make changes like <code>*true* => componentName = "D2WString" [100]</code><br />
  * Also, given a dictionary, you can re-create the rules for creating these entries with any given level.<br />
- * Reads in your <code>d2wClientConfiguration.plists</code> files from every bundle and also reads in the values  
+ * Reads in your <code>d2wclientConfiguration.plists</code> files from every bundle and also reads in the values  
  * given in the <code>editors</code> and <code>supports</code> fields.<br />
  * So be sure to keep the entries to those files up to date :) <br />
 <code><pre>
@@ -49,6 +49,8 @@ public class ERD2WContextDictionary {
 
         _context = ERD2WContext.newContext();
         _context.setDynamicPage(_pageConfiguration);
+        _context.setTask(_context.task());
+        _context.setEntity(_context.entity());
         if(pageKeys == null) {
             _pageLevelKeys = new NSMutableArray(new Object[] {"pageWrapperName", "displayPropertyKeys"});
         } else {
@@ -79,9 +81,9 @@ public class ERD2WContextDictionary {
         for(Enumeration e = bundles.objectEnumerator(); e.hasMoreElements(); ) {
             NSBundle bundle = (NSBundle)e.nextElement();
             NSDictionary dict;
-            String path = bundle.resourcePathForLocalizedResourceNamed("d2wClientConfiguration.plist", null);
+            String path = bundle.resourcePathForLocalizedResourceNamed("d2wclientConfiguration.plist", null);
             if(path != null) {
-                dict = ERXDictionaryUtilities.dictionaryFromPropertyList("d2wClientConfiguration", bundle);
+                dict = ERXDictionaryUtilities.dictionaryFromPropertyList("d2wclientConfiguration", bundle);
                 if(dict != null) {
                     if(dict.objectForKey("components") != null) {
                         components.addEntriesFromDictionary((NSDictionary)dict.objectForKey("components"));
@@ -164,21 +166,22 @@ public class ERD2WContextDictionary {
                     dictionary.setObjectForKey(o, key);
             }
         }
+        _context.setPropertyKey(null);
         return dictionary;
     }
 
     public NSDictionary dictionary() {
-        if(_dictionary == null) {
-            _dictionary = new NSMutableDictionary();
-            addPageLevelValues();
-            NSArray displayPropertyKeys = (NSArray)_context.valueForKey("displayPropertyKeys");
-            if(displayPropertyKeys != null && displayPropertyKeys.count() > 0) {
-                NSMutableDictionary componentLevelKeys = new NSMutableDictionary();
-                addPropertyKeys(componentLevelKeys, displayPropertyKeys);
-                _dictionary.setObjectForKey( componentLevelKeys, "componentLevelKeys");
-            }
-        }
-        return _dictionary;
+    	if(_dictionary == null) {
+    		_dictionary = new NSMutableDictionary();
+    		addPageLevelValues();
+    		NSArray displayPropertyKeys = (NSArray)_context.valueForKey("displayPropertyKeys");
+    		if(displayPropertyKeys != null && displayPropertyKeys.count() > 0) {
+    			NSMutableDictionary componentLevelKeys = new NSMutableDictionary();
+    			addPropertyKeys(componentLevelKeys, displayPropertyKeys);
+    			_dictionary.setObjectForKey( componentLevelKeys, "componentLevelKeys");
+    		}
+    	}
+    	return _dictionary;
     }
 
     protected void addPropertyKeys(NSMutableDictionary componentLevelKeys, NSArray array) {
@@ -200,12 +203,7 @@ public class ERD2WContextDictionary {
             if(!"componentLevelKeys".equals(key)) {
                 Object value = dictionary().valueForKey(key);
                 EOQualifier q = EOQualifier.qualifierWithQualifierFormat( "pageConfiguration = '" + _pageConfiguration + "'" , null);
-                Assignment a;
-                if("true".equals(value) || "false".equals(value)) {
-                    a = new BooleanAssignment(key, value);
-                } else {
-                    a = new Assignment(key, value);
-                }
+                Assignment a = createAssigment(key, value);
                 arr.addObject(new Rule(level, q, a));
             }
         }
@@ -215,6 +213,16 @@ public class ERD2WContextDictionary {
         }
         return arr;
     }
+
+	private Assignment createAssigment(String key, Object value) {
+		Assignment a;
+		if("true".equals(value) || "false".equals(value)) {
+		    a = new BooleanAssignment(key, value);
+		} else {
+		    a = new Assignment(key, value);
+		}
+		return a;
+	}
     
     protected void addRulesForPropertyKeys(int level, NSMutableArray rules, NSArray keys) {
         for(Enumeration e = keys.objectEnumerator(); e.hasMoreElements(); ) {
@@ -228,12 +236,7 @@ public class ERD2WContextDictionary {
                 for (Enumeration e1 = values.keyEnumerator(); e1.hasMoreElements();) {
                     String key = (String)e1.nextElement();
                     Object value = values.objectForKey(key);
-                    Assignment a;
-                    if("true".equals(value) || "false".equals(value)) {
-                        a = new BooleanAssignment(key, value);
-                    } else {
-                        a = new Assignment(key, value);
-                    }
+                    Assignment a = createAssigment(key, value);
                     rules.addObject(new Rule(level, q, a));
                 }
             }
@@ -242,5 +245,13 @@ public class ERD2WContextDictionary {
 
     public D2WContext context() {
         return _context;
+    }
+    
+    public String dictionaryString() {
+    	return NSPropertyListSerialization.stringFromPropertyList(dictionary());
+    }
+    
+    public String toString() {
+    	return context() + ": " + dictionaryString();
     }
 }
