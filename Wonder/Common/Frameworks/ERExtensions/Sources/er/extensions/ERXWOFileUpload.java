@@ -26,12 +26,9 @@ public class ERXWOFileUpload extends com.webobjects.appserver._private.WOFileUpl
     }
 
     public void checkEnctype(WOContext context) {
-        if(context != null && context instanceof ERXMutableUserInfoHolderInterface) {
-            NSDictionary ui = ((ERXMutableUserInfoHolderInterface)context).mutableUserInfo();
-            if(!("multipart/form-data".equals(ui.objectForKey("enctype")))) {
-                throw new IllegalArgumentException("This form is missing a 'enctype=multipart/form-data' attribute. It is required for WOFileUpload to work.");
-            }
-        }
+    	if(!("multipart/form-data".equals(ERXWOContext.contextDictionary().objectForKey("enctype")))) {
+    		throw new IllegalArgumentException("This form is missing a 'enctype=multipart/form-data' attribute. It is required for WOFileUpload to work.");
+    	}
     }
 
     public void appendToResponse(WOResponse response, WOContext context) {

@@ -543,8 +543,8 @@ public class ERXPatcher  {
                 Object idValue = id.valueInComponent(context.component());
                 if(idValue != null)
                     response._appendTagAttributeAndValue("id", idValue.toString(), true);
-            } else if(context instanceof ERXMutableUserInfoHolderInterface) {
-                NSMutableDictionary dict   = ((ERXMutableUserInfoHolderInterface)context).mutableUserInfo();
+            } else {
+                NSMutableDictionary dict   = ERXWOContext.contextDictionary();
                 String componentIdentifier = (String)dict.objectForKey("componentIdentifier");
                 if(componentIdentifier != null) {
                     response._appendTagAttributeAndValue("id", componentIdentifier, true);
@@ -556,13 +556,13 @@ public class ERXPatcher  {
          * Fixing up the response for XHTML and adding the element to the array of generated element IDs,
          * so we can use JavaScript later on. If the given element is an input element,
          * it adds a dictionary {type=element.class, name=element.elementID}
-         * to context().userInfo().elementArray()
+         * to ERXWOContext.contextDictionary().objectForKey("elementArray")
          */
         public static void processResponse(WODynamicElement element, WOResponse response, WOContext context, int priorOffset, String name) {
             if(cleanupXHTML)
                 correctResponse(response, priorOffset);
-            if(element instanceof WOInput && context instanceof ERXMutableUserInfoHolderInterface) {
-                NSMutableDictionary dict = ((ERXMutableUserInfoHolderInterface)context).mutableUserInfo();
+            if(element instanceof WOInput) {
+                NSMutableDictionary dict = ERXWOContext.contextDictionary();
                 NSMutableArray elementArray = (NSMutableArray)dict.objectForKey("elementArray");
                 if(elementArray == null) elementArray = new NSMutableArray(10);
                 elementArray.addObject(new NSDictionary(new Object[] {element.getClass().getName(), name == null ? "NULL" :  name}, new String [] {"type", "name"}));
