@@ -5,13 +5,15 @@ ComplexAjaxAutoComplete: AjaxAutoComplete {
 }
 
 Item : WOString {
-	value = currentValue;
+	value = currentValue.name;
 }
 ItemLength : WOString {
-	value = currentValue.length;
+	value = currentValue.value;
 }
 
 SimpleAjaxAutoComplete: AjaxAutoComplete {
 	list = currentValues;
 	value = value;
+	item = currentValue;
+	displayString = currentValue.name;
 }

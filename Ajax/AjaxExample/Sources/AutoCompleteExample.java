@@ -8,9 +8,17 @@ import com.webobjects.foundation.*;
 
 public class AutoCompleteExample extends WOComponent {
 
+	public static class Example {
+		public Example(String name) {
+			this.name = name;
+			this.value = name.length();
+		}
+		public String name;
+		public int value;
+	}
     
     public String value;
-    public String currentValue;
+    public Example currentValue;
     
     public NSMutableArray allValues;
 
@@ -24,17 +32,18 @@ public class AutoCompleteExample extends WOComponent {
                 int c = rand.nextInt(26);
                 s += Character.toString((char) ('A' + c));
             }
-            allValues.addObject(s);
+            Example example = new Example(s);
+            allValues.addObject(example);
         }
         EOSortOrdering.sortArrayUsingKeyOrderArray(allValues, new NSArray(
-                EOSortOrdering.sortOrderingWithKey("toString", EOSortOrdering.CompareAscending)));
+                EOSortOrdering.sortOrderingWithKey("name", EOSortOrdering.CompareAscending)));
     }
  
     public NSArray currentValues() {
         NSMutableArray result = new NSMutableArray();
         for(Enumeration e = allValues.objectEnumerator(); e.hasMoreElements() && result.count() < 10;) {
-            String c = (String) e.nextElement();
-            if(value == null || c.toLowerCase().indexOf(value.toLowerCase()) >= 0) {
+        	Example c = (Example) e.nextElement();
+            if(value == null || c.name.toLowerCase().indexOf(value.toLowerCase()) >= 0) {
                 result.addObject(c);
             }
         }
