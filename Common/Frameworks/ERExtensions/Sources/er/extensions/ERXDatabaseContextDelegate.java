@@ -6,6 +6,8 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.extensions;
 
+import java.util.*;
+
 import com.webobjects.eoaccess.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.foundation.*;
@@ -191,5 +193,64 @@ public class ERXDatabaseContextDelegate {
             }
         }
         return true;
+    }
+    
+    /**
+     * Overridden to remove inserts and deletes of the "same" row. When you
+     * delete, from a join table and then re-add the same object, then the
+     * order of operations would be insert, then delete and you will get
+     * an error because the delete would try to also delete the newly inserted
+     * row. Here we just check every insert and see if the deleted contain the same
+     * object. If they do, we just skip both operations,
+     * @author chello team!
+     * @param dbCtxt
+     * @param adaptorOps
+     * @param adChannel
+     * @return
+     */
+    public NSArray databaseContextWillPerformAdaptorOperations(EODatabaseContext dbCtxt, 
+    		NSArray adaptorOps, EOAdaptorChannel adChannel) {
+    	NSMutableArray result = new NSMutableArray();
+    	NSDictionary groupedOps = ERXArrayUtilities.arrayGroupedByKeyPath(adaptorOps, "adaptorOperator");
+    	Integer insertKey = new Integer(EODatabaseOperation.AdaptorInsertOperator);
+		NSArray insertOps = (NSArray) groupedOps.objectForKey(insertKey);
+		Integer deleteKey = new Integer(EODatabaseOperation.AdaptorDeleteOperator);
+		NSArray deleteOps = (NSArray) groupedOps.objectForKey(deleteKey);
+		NSMutableSet skippedOps = new NSMutableSet();
+		
+		for(Enumeration e = insertOps.objectEnumerator(); e.hasMoreElements();) {
+			EOAdaptorOperation insertOp = (EOAdaptorOperation)e.nextElement();
+			for(Enumeration e1 = deleteOps.objectEnumerator(); e1.hasMoreElements();) {
+				EOAdaptorOperation deleteOp = (EOAdaptorOperation)e1.nextElement();
+				if(!skippedOps.containsObject(deleteOp)) {
+					if(insertOp.entity() == deleteOp.entity()) {
+						if(deleteOp.qualifier().evaluateWithObject(insertOp.changedValues())) {
+							if(false) {
+								// here we remove both the delete and the 
+								// insert. this might fail if we didn't lock on all rows
+								// FIXME: check the current snapshot in the database and
+								// see if it is the same as the new insert
+								
+								skippedOps.addObject(deleteOp);
+								skippedOps.addObject(insertOp);
+							} else {
+								// here we put the delete up front, this might fail if
+								// we have cascading delete rules in the database
+								result.addObject(deleteOp);
+								skippedOps.addObject(deleteOp);
+							}
+							log.warn("Skipped: " + insertOp + "\n" + deleteOp);
+						}
+					}
+				}
+			}
+		}
+		for(Enumeration e = adaptorOps.objectEnumerator(); e.hasMoreElements();) {
+			EOAdaptorOperation op = (EOAdaptorOperation)e.nextElement();
+			if(!skippedOps.containsObject(op)) {
+				result.addObject(op);
+			}
+		}
+		return result;
     }
 }
