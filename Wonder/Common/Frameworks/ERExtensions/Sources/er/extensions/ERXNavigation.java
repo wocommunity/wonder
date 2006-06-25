@@ -14,8 +14,11 @@ import com.webobjects.foundation.*;
 
 // FIXME: Alot of this needs to move up as it is specific to our navigation structure.
 /**
- * Not very generic right now, but will be in the future. Nice for mantaining a stack based navigation system, ie drilling down pushes nav state onto the stack and backing up pops state off the stack.<br />
- * Please read "Documentation/Navigation.html" to fnd out how to use the navigation components.
+ * Not very generic right now, but will be in the future. Nice for mantaining a
+ * stack based navigation system, ie drilling down pushes nav state onto the
+ * stack and backing up pops state off the stack.<br />
+ * Please read "Documentation/Navigation.html" to fnd out how to use the
+ * navigation components.
  * 
  */
 
