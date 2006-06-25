@@ -41,8 +41,12 @@ public class ERDAttributeRepetition extends ERDCustomComponent {
 
     public String propertyKey() { return (String)d2wContext().valueForKey("propertyKey"); }
     public void setPropertyKey(String propertyKey) {
-        d2wContext().takeValueForKey(propertyKey, "propertyKey");
-        ERXWOContext.contextDictionary().setObjectForKey(propertyKey, "componentIdentifier");
+    	d2wContext().takeValueForKey(propertyKey, "propertyKey");
+    	if(propertyKey != null) {
+    		ERXWOContext.contextDictionary().setObjectForKey(propertyKey, "componentIdentifier");
+    	} else {
+    		ERXWOContext.contextDictionary().removeObjectForKey("componentIdentifier");
+    	}
     }
     
     public boolean hasPropertyName() {
