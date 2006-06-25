@@ -10,6 +10,7 @@ import com.webobjects.appserver.WOApplication;
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WOSession;
+import com.webobjects.directtoweb.ConfirmPageInterface;
 import com.webobjects.directtoweb.D2W;
 import com.webobjects.directtoweb.D2WComponent;
 import com.webobjects.directtoweb.D2WContext;
@@ -54,6 +55,10 @@ public class ERD2WFactory extends D2W {
 
 	public InspectPageInterface inspectPageForEntityNamed(String entityName, WOSession session) {
 		return (InspectPageInterface) pageForConfigurationNamed("Inspect" + entityName, session);
+	}
+
+	public ConfirmPageInterface confirmPageForEntityNamed(String entityName, WOSession session) {
+		return (ConfirmPageInterface) pageForConfigurationNamed("Confirm" + entityName, session);
 	}
 
 	public ListPageInterface listPageForEntityNamed(String entityName, WOSession session) {
@@ -188,7 +193,7 @@ public class ERD2WFactory extends D2W {
     }
 
     public EditPageInterface editPageForNewObjectWithEntityNamed(String entityName, WOSession session) {
-        EditPageInterface epi = editPageForEntityNamed(entityName, session);
+        EditPageInterface epi = (EditPageInterface) pageForConfigurationNamed("Create" + entityName, session);
         EOEditingContext peerContext = ERXEC.newEditingContext(session.defaultEditingContext().parentObjectStore());
         EOEnterpriseObject newObject = _newObjectWithEntity(_entityNamed(entityName, session), peerContext);
         epi.setObject(newObject);
@@ -207,19 +212,8 @@ public class ERD2WFactory extends D2W {
     }
 
     public WOComponent pageForTaskAndEntityNamed(String task, String entityName, WOSession session) {
-        myCheckRules();
-        D2WContext newContext = ERD2WContext.newContext(session);
-        newContext.setTask(task);
-        EOEntity newEntity = _entityNamed(entityName, session);
-        if (newEntity != null) newContext.setEntity(newEntity);
-        String config = "__" + task + "__" + entityName;
-        // saves 2 significant keys, task and entity!
-        newContext.takeValueForKey(config, "pageConfiguration");
-        WOComponent newPage = WOApplication.application().pageWithName(newContext.pageName(), session.context());
-        if (newPage instanceof D2WComponent) {
-            ((D2WComponent) newPage).setLocalContext(newContext);
-        }
-        return newPage;
+    	String pageConfiguration = ERXStringUtilities.capitalize(task) + (entityName == null ? ""  : entityName);
+        return pageForConfigurationNamed(pageConfiguration, session);
     }
 
     public WOComponent printerFriendlyPageForD2WContext(D2WContext context, WOSession session) {
