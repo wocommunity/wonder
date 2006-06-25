@@ -68,11 +68,15 @@ public class ERD2WTabInspectPage extends ERD2WInspectPage implements ERDTabEditP
     }
 
     public String tabScriptString() {
-        int pos=tabSectionsContents().count()-1;
-        String formName = ERXWOForm.formName(context(), "EditForm");
-        return "var pos=0;\n if (document."+formName+".elements.length>"+pos+
-            ") pos="+pos+";\n var elem = document."+formName+".elements["+pos+
-            "];\n if (elem!=null && (elem.type == 'text' || elem.type ==  'area')) elem.focus();";
+		String result="";
+		String formName = ERXWOForm.formName(context(), "EditForm");		
+		if (formName!=null) {
+			int pos=tabSectionsContents().count()-1;
+			result="var pos=0;\n if (document."+formName+".elements.length>"+pos+
+				") pos="+pos+";\n var elem = document."+formName+".elements["+pos+
+				"];\n if (elem!=null && (elem.type == 'text' || elem.type ==  'area')) elem.focus();";
+		}
+		return formName;
     }
  
     private boolean d2wContextValueForKey(String key, boolean defaultValue) {
