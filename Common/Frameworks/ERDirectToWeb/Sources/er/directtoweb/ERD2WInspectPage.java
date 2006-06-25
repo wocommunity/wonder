@@ -228,9 +228,13 @@ public class ERD2WInspectPage extends ERD2WPage implements InspectPageInterface,
     }    
 
     public String tabScriptString() {
+		String result="";
     	String formName = ERXWOForm.formName(context(), "EditForm");
-        return "var elem = document."+formName+".elements[0];"+
-        "if (elem!=null && (elem.type == 'text' || elem.type ==  'area')) elem.focus();";
+		if (formName!=null) {
+			result="var elem = document."+formName+".elements[0];"+
+			"if (elem!=null && (elem.type == 'text' || elem.type ==  'area')) elem.focus();";
+		}
+		return result;
     }
 }
 
