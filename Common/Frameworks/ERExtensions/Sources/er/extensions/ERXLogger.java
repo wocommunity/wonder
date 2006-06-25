@@ -82,11 +82,16 @@ public class ERXLogger extends org.apache.log4j.Logger {
      * @param name to create the logger for
      * @return ERXLogger for the given name.
      */
-     public static ERXLogger getERXLogger(String name) {
-         Logger logger = getLogger(name);
-         if(logger != null && !(logger instanceof ERXLogger))
-            throw new RuntimeException("Can't load Logger for \""+name+"\" because it is not of class ERXLogger but \""+logger.getClass().getName()+"\". Let your Application class inherit from ERXApplication or call ERXLog4j.configureLogging() statically the first thing in your app. \nAlso check if there is a \"log4j.loggerFactory=er.extensions.ERXLogger$Factory\" line in your properties.");
-        return (ERXLogger)logger;
+    public static ERXLogger getERXLogger(String name) {
+    	Logger logger = getLogger(name);
+    	if(logger != null && !(logger instanceof ERXLogger)) {
+    		configureLoggingWithSystemProperties();
+    		logger = getLogger(name);
+     	}
+    	if(logger != null && !(logger instanceof ERXLogger)) {
+    		throw new RuntimeException("Can't load Logger for \""+name+"\" because it is not of class ERXLogger but \""+logger.getClass().getName()+"\". Let your Application class inherit from ERXApplication or call ERXLog4j.configureLogging() statically the first thing in your app. \nAlso check if there is a \"log4j.loggerFactory=er.extensions.ERXLogger$Factory\" line in your properties.");
+    	}
+    	return (ERXLogger)logger;
     }
 
     /**
