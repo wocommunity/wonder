@@ -263,8 +263,12 @@ public class ERXJSPopUpRelationPicker extends ERXStatelessComponent {
         + (parentPopUpStringForAll() != null ? "\"" + parentPopUpStringForAll().replace('\n',' ') + "\"" : "null") + ","
         + "window.document." + formName() + "." + childSelectName + "," 
         + (childPopUpStringForAll() != null ? "\"" + childPopUpStringForAll() + "\"" : "null")
-        +");\n</script>");
+        +");\n"
+		+pickerName + ".parentChanged();"					
+        +"\n</script>");
         log.debug(returnString);
+		// trigger an update of the parent - this causes the child to be properly set to a sub selection (instead of listing all possible value) when
+		// we are editing a new object
         return returnString.toString();
     }
 
@@ -292,6 +296,7 @@ public class ERXJSPopUpRelationPicker extends ERXStatelessComponent {
         return ERXWOForm.formName(context(), "forms[0]");
     }
     
+	
     /**
      * @returns the string to create the pop-up with the initial child values something like:
      <select name="children_select">
