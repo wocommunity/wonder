@@ -7,7 +7,6 @@
 package er.extensions;
 
 import java.io.*;
-import java.lang.ref.*;
 import java.util.*;
 
 import com.webobjects.appserver.*;
@@ -643,23 +642,45 @@ public class ERXSession extends WOSession implements Serializable {
    * @author mschrag
    */
   static class TransactionRecord {
-    private WeakReference _context;
-    private WeakReference _page;
+    private WOContext _context;
+    private WOComponent _page;
     private String _key;
     private boolean _oldPage;
+    // private long _creationDate;
 
     public TransactionRecord(WOComponent page, WOContext context, String key) {
-      _page = new WeakReference(page);
-      _context = new WeakReference(context);
+      _page = page;
+      _context = context;
       _key = key;
+      // _creationDate = System.currentTimeMillis();
+    }
+
+    public int hashCode() {
+      return _key.hashCode();
+    }
+
+    public boolean equals(Object _obj) {
+      return (_obj instanceof TransactionRecord && ((TransactionRecord) _obj)._key.equals(_key));
     }
 
     public WOComponent page() {
-      return (WOComponent) _page.get();
+      return _page;
     }
 
     public WOContext context() {
-      return (WOContext) _context.get();
+      return _context;
+    }
+
+    // MS: The preferrable behavior here is for Ajax records to expire
+    // when the original context it's associated with expires from the 
+    // page cache, but we can't get to the _contextRecords map in
+    // WOSession, so for now, we just turn off explicit expiration.  As
+    // a result, entries will fall out of the cache when the cache gets
+    // too big only.
+    public boolean isExpired() {
+      boolean expired = false;
+      //boolean expired = (System.currentTimeMillis() - _lastUsed) > inactivityTime
+      return expired;
     }
 
     public String key() {
@@ -675,7 +696,7 @@ public class ERXSession extends WOSession implements Serializable {
     }
 
     public String toString() {
-      return "[ERTransactionRecord: page = " + _page + "; context = " + _context + "; key = " + _key + "; oldPage? " + _oldPage + "]";
+      return "[TransactionRecord: page = " + _page + "; context = " + _context.contextID() + "; key = " + _key + "; oldPage? " + _oldPage + "]";
     }
   }
 
@@ -706,6 +727,11 @@ public class ERXSession extends WOSession implements Serializable {
    * cache replaces context 2 with the context 3 update, but the user's browser hasn't been updated yet with the HTML from 
    * context 3.  When the user clicks, they are clicking the context 2 link, which has now been removed from the replacement cache.
    * By keeping the last two states, you allow for the brief period where that transition occurs.
+   * 
+   * Random note (that I will find useful in 2 weeks when I forget this again): The first time through savePage, the request is saved
+   * in the main cache.  It's only on a subsequent Ajax update that it uses page replacement cache.  So even though the cache
+   * is keyed off of context ID, the explanation of the cache being components-per-page-sized works out because each component
+   * is requesting in its own thread and generating their own non-overlapping context ids.
    */
   public void savePage(WOComponent page) {
     WOContext context = context();
@@ -715,48 +741,18 @@ public class ERXSession extends WOSession implements Serializable {
       if (pageCacheKey != null) {
         String originalContextID = context.request().headerForKey(ERXSession.ORIGINAL_CONTEXT_ID_KEY);
         pageCacheKey = originalContextID + "_" + pageCacheKey;
-        //System.out.println("ERXSession.savePage: " + pageCacheKey + " starting");
+        // System.out.println("ERXSession.savePage: " + pageCacheKey + " starting (contextid = " + context.contextID() + ")");
         LinkedHashMap pageReplacementCache = (LinkedHashMap) objectForKey(ERXSession.PAGE_REPLACEMENT_CACHE_KEY);
         if (pageReplacementCache == null) {
           pageReplacementCache = new LinkedHashMap();
           setObjectForKey(pageReplacementCache, ERXSession.PAGE_REPLACEMENT_CACHE_KEY);
         }
 
-        boolean increasingCacheSize = true;
-        Iterator transactionRecordsEnum = pageReplacementCache.entrySet().iterator();
-        while (transactionRecordsEnum.hasNext()) {
-          Map.Entry pageRecordEntry = (Map.Entry) transactionRecordsEnum.next();
-          TransactionRecord tempPageRecord = (TransactionRecord) pageRecordEntry.getValue();
-          WOComponent tempPage = tempPageRecord.page();
-          WOContext tempContext = tempPageRecord.context();
-          // If the page has been GC'd, toss the transaction record ...
-          if (tempPage == null || tempContext == null) {
-            //System.out.println("ERXSession.savePage:   deleting GC'd page");
-            transactionRecordsEnum.remove();
-            increasingCacheSize = false;
-          }
-          else {
-            String transactionRecordKey = tempPageRecord.key();
-            if (pageCacheKey.equals(transactionRecordKey)) {
-              // If this is the "old page", then delete the entry ...
-              if (tempPageRecord.isOldPage()) {
-                //System.out.println("ERXSession.savePage: " + pageCacheKey + " removing old page " + tempPageRecord + " (context id = " + tempContext.contextID() + ")");
-                transactionRecordsEnum.remove();
-                increasingCacheSize = false;
-              }
-              // Otherwise, flag this entry as the old page ...
-              else {
-                //System.out.println("ERXSession.savePage:   " + pageCacheKey + " marking old page (contextid = " + tempContext.contextID() + ")");
-                tempPageRecord.setOldPage(true);
-              }
-            }
-          }
-        }
-
         // Remove the oldest entry if we're about to add a new one and that would put us over the cache size ...
         // We do a CACHE_SIZE*2 here because for every page, we have to potentially store its previous contextid to prevent
         // race conditions, so there technically can be 2x cache size many pages in the cache.
-        if (increasingCacheSize && pageReplacementCache.size() >= ERXSession.MAX_PAGE_REPLACEMENT_CACHE_SIZE * 2) {
+        boolean removedCacheEntry = cleanPageReplacementCacheIfNecessary(pageCacheKey);
+        if (!removedCacheEntry && pageReplacementCache.size() >= ERXSession.MAX_PAGE_REPLACEMENT_CACHE_SIZE * 2) {
           Iterator entryIterator = pageReplacementCache.entrySet().iterator();
           Map.Entry oldestEntry = (Map.Entry) entryIterator.next();
           entryIterator.remove();
@@ -766,11 +762,69 @@ public class ERXSession extends WOSession implements Serializable {
         TransactionRecord pageRecord = new TransactionRecord(page, context, pageCacheKey);
         pageReplacementCache.put(context.contextID(), pageRecord);
         //System.out.println("ERXSession.savePage: " + pageCacheKey + " new context = " + context.contextID());
+        //System.out.println("ERXSession.savePage: " + pageCacheKey + " = " + pageReplacementCache);
       }
     }
     else {
       super.savePage(page);
     }
+  }
+
+  /**
+   * Iterates through the page replacement cache (if there is one) and removes expired records.
+   */
+  protected void cleanPageReplacementCacheIfNecessary() {
+    cleanPageReplacementCacheIfNecessary(null);
+  }
+
+  /**
+   * Iterates through the page replacement cache (if there is one) and removes expired records.
+   * 
+   * @param _cacheKeyToAge optional cache key to age via setOldPage
+   * @return whether or not a cache entry was removed
+   */
+  protected boolean cleanPageReplacementCacheIfNecessary(String _cacheKeyToAge) {
+    boolean removedCacheEntry = false;
+    LinkedHashMap pageReplacementCache = (LinkedHashMap) objectForKey(ERXSession.PAGE_REPLACEMENT_CACHE_KEY);
+    // System.out.println("ERXSession.cleanPageReplacementCacheIfNecessary: " + pageReplacementCache);
+    if (pageReplacementCache != null) {
+      Iterator transactionRecordsEnum = pageReplacementCache.entrySet().iterator();
+      while (transactionRecordsEnum.hasNext()) {
+        Map.Entry pageRecordEntry = (Map.Entry) transactionRecordsEnum.next();
+        TransactionRecord tempPageRecord = (TransactionRecord) pageRecordEntry.getValue();
+        // If the page has been GC'd, toss the transaction record ...
+        if (tempPageRecord.isExpired()) {
+          // System.out.println("ERXSession.cleanPageReplacementCache:   deleting expired page record " + tempPageRecord);
+          transactionRecordsEnum.remove();
+          removedCacheEntry = true;
+        }
+        else if (_cacheKeyToAge != null) {
+          String transactionRecordKey = tempPageRecord.key();
+          if (_cacheKeyToAge.equals(transactionRecordKey)) {
+            // If this is the "old page", then delete the entry ...
+            if (tempPageRecord.isOldPage()) {
+              // System.out.println("ERXSession.cleanPageReplacementCache: " + _cacheKeyToAge + " removing old page " + tempPageRecord);
+              transactionRecordsEnum.remove();
+              removedCacheEntry = true;
+            }
+            // Otherwise, flag this entry as the old page ...
+            else {
+              // System.out.println("ERXSession.cleanPageReplacementCache:   " + _cacheKeyToAge + " marking old page");
+              tempPageRecord.setOldPage(true);
+            }
+          }
+        }
+      }
+
+      // Only remove the replacement cache is there wasn't a cache key.  If there WAS a
+      // cache key, then we're being called by savePage and it's going to expect a cache
+      // to exist.
+      if (_cacheKeyToAge == null && pageReplacementCache.isEmpty()) {
+        removeObjectForKey(ERXSession.PAGE_REPLACEMENT_CACHE_KEY);
+        // System.out.println("ERXSession.cleanPageReplacementCache: Removing empty page cache");
+      }
+    }
+    return removedCacheEntry;
   }
 
   /**
@@ -783,9 +837,16 @@ public class ERXSession extends WOSession implements Serializable {
     WOComponent page = null;
     if (pageReplacementCache != null) {
       TransactionRecord pageRecord = (TransactionRecord) pageReplacementCache.get(contextID);
-      //System.out.println("ERXSession.restorePageForContextID: " + contextID + " pageRecord = " + pageRecord);
+      // System.out.println("ERXSession.restorePageForContextID: " + contextID + " pageRecord = " + pageRecord);
       if (pageRecord != null) {
         page = pageRecord.page();
+      }
+      else {
+        // If we got the page out of the replacement cache above, then we're obviously still
+        // using Ajax, and it's likely our cache will be cleaned out in an Ajax update.  If the
+        // requested page was not in the cache, though, then we might be done with Ajax, 
+        // so give the cache a quick run-through for expired pages.
+        cleanPageReplacementCacheIfNecessary();
       }
     }
 
@@ -811,9 +872,13 @@ public class ERXSession extends WOSession implements Serializable {
     String thisString = " localizer=" + (_localizer == null ? "null" : _localizer.toString()) + " messageEncoding=" + (_messageEncoding == null ? "null" : _messageEncoding.toString()) + " browser=" + (_browser == null ? "null" : _browser.toString());
 
     int lastIndex = superString.lastIndexOf(">");
-    if (lastIndex > 0) // ignores if ">" is the first char (lastIndex == 0)
-      return superString.substring(0, lastIndex - 1) + thisString + ">";
-    else
-      return superString + thisString;
+    String toStr;
+    if (lastIndex > 0) { // ignores if ">" is the first char (lastIndex == 0)
+      toStr = superString.substring(0, lastIndex - 1) + thisString + ">";
+    }
+    else {
+      toStr = superString + thisString;
+    }
+    return toStr;
   }
 }
