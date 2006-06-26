@@ -218,37 +218,39 @@ public class ERXDatabaseContextDelegate {
 		NSArray deleteOps = (NSArray) groupedOps.objectForKey(deleteKey);
 		NSMutableSet skippedOps = new NSMutableSet();
 		
-		for(Enumeration e = insertOps.objectEnumerator(); e.hasMoreElements();) {
-			EOAdaptorOperation insertOp = (EOAdaptorOperation)e.nextElement();
-			for(Enumeration e1 = deleteOps.objectEnumerator(); e1.hasMoreElements();) {
-				EOAdaptorOperation deleteOp = (EOAdaptorOperation)e1.nextElement();
-				if(!skippedOps.containsObject(deleteOp)) {
-					if(insertOp.entity() == deleteOp.entity()) {
-						if(deleteOp.qualifier().evaluateWithObject(insertOp.changedValues())) {
-							if(false) {
-								// here we remove both the delete and the 
-								// insert. this might fail if we didn't lock on all rows
-								// FIXME: check the current snapshot in the database and
-								// see if it is the same as the new insert
-								
-								skippedOps.addObject(deleteOp);
-								skippedOps.addObject(insertOp);
-							} else {
-								// here we put the delete up front, this might fail if
-								// we have cascading delete rules in the database
-								result.addObject(deleteOp);
-								skippedOps.addObject(deleteOp);
+		if (insertOps!=null) {
+			for(Enumeration e = insertOps.objectEnumerator(); e.hasMoreElements();) {
+				EOAdaptorOperation insertOp = (EOAdaptorOperation)e.nextElement();
+				for(Enumeration e1 = deleteOps.objectEnumerator(); e1.hasMoreElements();) {
+					EOAdaptorOperation deleteOp = (EOAdaptorOperation)e1.nextElement();
+					if(!skippedOps.containsObject(deleteOp)) {
+						if(insertOp.entity() == deleteOp.entity()) {
+							if(deleteOp.qualifier().evaluateWithObject(insertOp.changedValues())) {
+								if(false) {
+									// here we remove both the delete and the 
+									// insert. this might fail if we didn't lock on all rows
+									// FIXME: check the current snapshot in the database and
+									// see if it is the same as the new insert
+									
+									skippedOps.addObject(deleteOp);
+									skippedOps.addObject(insertOp);
+								} else {
+									// here we put the delete up front, this might fail if
+									// we have cascading delete rules in the database
+									result.addObject(deleteOp);
+									skippedOps.addObject(deleteOp);
+								}
+								log.warn("Skipped: " + insertOp + "\n" + deleteOp);
 							}
-							log.warn("Skipped: " + insertOp + "\n" + deleteOp);
 						}
 					}
 				}
 			}
-		}
-		for(Enumeration e = adaptorOps.objectEnumerator(); e.hasMoreElements();) {
-			EOAdaptorOperation op = (EOAdaptorOperation)e.nextElement();
-			if(!skippedOps.containsObject(op)) {
-				result.addObject(op);
+			for(Enumeration e = adaptorOps.objectEnumerator(); e.hasMoreElements();) {
+				EOAdaptorOperation op = (EOAdaptorOperation)e.nextElement();
+				if(!skippedOps.containsObject(op)) {
+					result.addObject(op);
+				}
 			}
 		}
 		return result;
