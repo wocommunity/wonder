@@ -63,7 +63,7 @@ public class DaimInstantMessenger extends AbstractInstantMessenger {
   }
 
   public boolean isBuddyOnline(String _buddyName) {
-    return false;
+    return myOscarClient != null && myOscarClient.isBuddyOnline(_buddyName);
   }
 
   public void sendMessage(String _buddyName, String _message) throws MessageException {
