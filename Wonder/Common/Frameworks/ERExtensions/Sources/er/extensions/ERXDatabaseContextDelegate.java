@@ -211,11 +211,11 @@ public class ERXDatabaseContextDelegate {
     public NSArray databaseContextWillPerformAdaptorOperations(EODatabaseContext dbCtxt, 
 							       NSArray adaptorOps, EOAdaptorChannel adChannel) {
 	NSMutableArray result = new NSMutableArray();
+	NSDictionary groupedOps = ERXArrayUtilities.arrayGroupedByKeyPath(adaptorOps, "adaptorOperator");	
 	Integer insertKey = ERXConstant.integerForInt(EODatabaseOperation.AdaptorInsertOperator);
 	NSArray insertOps = (NSArray) groupedOps.objectForKey(insertKey);
 	Integer deleteKey = ERXConstant.integerForInt(EODatabaseOperation.AdaptorDeleteOperator);
 	NSArray deleteOps = (NSArray) groupedOps.objectForKey(deleteKey);
-	NSDictionary groupedOps = ERXArrayUtilities.arrayGroupedByKeyPath(adaptorOps, "adaptorOperator");	
 	if (insertOps!=null && deleteOps!=null) {
 	    NSMutableSet skippedOps = new NSMutableSet();
 	    for(Enumeration e = insertOps.objectEnumerator(); e.hasMoreElements();) {
