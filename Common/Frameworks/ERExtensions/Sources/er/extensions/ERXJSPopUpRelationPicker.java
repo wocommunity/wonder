@@ -264,7 +264,7 @@ public class ERXJSPopUpRelationPicker extends ERXStatelessComponent {
         + "window.document." + formName() + "." + childSelectName + "," 
         + (childPopUpStringForAll() != null ? "\"" + childPopUpStringForAll() + "\"" : "null")
         +");\n"
-		+pickerName + ".parentChanged();"					
+		// +pickerName + ".parentChanged();"					
         +"\n</script>");
         log.debug(returnString);
 		// trigger an update of the parent - this causes the child to be properly set to a sub selection (instead of listing all possible value) when
@@ -378,6 +378,7 @@ public class ERXJSPopUpRelationPicker extends ERXStatelessComponent {
             returnString.append("\n\tnew Entity(");
             returnString.append(" \"" + NSKeyValueCodingAdditions.Utility.valueForKeyPath(aParent, parentDisplayValueName()) + "\",");
             returnString.append(" \"" + idForParent(aParent) + "\",");
+            returnString.append(" \"" + System.identityHashCode(aParent) + "\",");
 
             // now do all the possible children of the parent. Each child should look like 'new Entity("poodle","4",null,false)'
             returnString.append(" new Array(");
@@ -392,6 +393,7 @@ public class ERXJSPopUpRelationPicker extends ERXStatelessComponent {
                 returnString.append("\n\t\t new Entity(");
                 returnString.append(" \"" + NSKeyValueCodingAdditions.Utility.valueForKeyPath(aChild, childDisplayValueName()) + "\","); // visible text of pop-up
                 returnString.append(" \"" + idForChild(aParent, aChild) + "\","); // value text of pop-up
+                returnString.append(" \"" + System.identityHashCode(aChild) + "\",");
                 returnString.append(" null,");
                 if (isSelectedChild(aChild)) {
                     returnString.append(" true");
