@@ -77,7 +77,11 @@ public class ERDEditPassword extends ERDCustomEditComponent {
     protected void updateContextValues() {
         NSMutableDictionary userInfo = new NSMutableDictionary();
         userInfo.setObjectForKey(key(), passwordPropertyKey);
-        userInfo.setObjectForKey(_password, "ERDEditPassword." + key() + ".value");
+        if (_password!=null) {
+			userInfo.setObjectForKey(_password, "ERDEditPassword." + key() + ".value");
+		} else {
+			userInfo.removeObjectForKey("ERDEditPassword." + key() + ".value");
+		}
         ERXWOContext.contextDictionary().setObjectForKey(userInfo, "ERDEditPassword");
     }
 
