@@ -1,21 +1,18 @@
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<wodefinitions>
-	<wo wocomponentcontent="true" class="AjaxUpdateContainer">
-    <binding name = "id"/>
-		<binding name = "elementName"/>
-		<binding name = "observeFieldID"/>
+<?xml version="1.0" encoding="UTF-8"?><wodefinitions>
+	<wo class="AjaxUpdateContainer" wocomponentcontent="true">
+    
+		<binding name="elementName"/>
+		<binding name="observeFieldID"/>
 		
-		<binding name = "frequency"/>
-		<binding name = "decay"/>
-		<binding name = "evalScripts"/>
-		<binding name = "insertion"/>
-		<binding name = "onComplete"/>
-		<binding name = "onSuccess"/>
-		<binding name = "onFailure"/>
-		<binding name = "onException"/>
+		<binding name="frequency"/>
+		<binding name="decay"/>
+		<binding name="evalScripts"/>
+		<binding name="insertion"/>
+		<binding name="onComplete"/>
+		<binding name="onSuccess"/>
+		<binding name="onFailure"/>
+		<binding name="onException"/>
 
-    <validation message = "&apos;id&apos; is a required binding">
-      <unbound name = "id"/>
-    </validation>
-	</wo>
+    
+	<binding name="id"/></wo>
 </wodefinitions>
