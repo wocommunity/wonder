@@ -14,7 +14,7 @@ public class ERXMutableDictionary extends NSMutableDictionary implements Map {
 	
     public static final long serialVersionUID = 8091318522043166356L;
     
-    public static NSData toBlob(ERXMutableDictionary d) {
+    public static NSData toBlob(NSDictionary d) {
         ByteArrayOutputStream bout = new ByteArrayOutputStream();
 		try {
 	        ObjectOutputStream oos = new ObjectOutputStream(bout);
@@ -28,11 +28,15 @@ public class ERXMutableDictionary extends NSMutableDictionary implements Map {
 		}
      }
     
-    public static ERXMutableDictionary fromBlob(NSData d) {
+    public static NSData toBlob(ERXMutableDictionary dict) {
+    	return toBlob((NSDictionary)dict);
+    }
+    
+    public static NSDictionary fromBlob(NSData d) {
 		try {
 	        ByteArrayInputStream bis = new ByteArrayInputStream(d.bytes());
 	        ObjectInputStream ois = new ObjectInputStream(bis);
-	        ERXMutableDictionary dd = (ERXMutableDictionary) ois.readObject();
+	        NSDictionary dd = (NSDictionary) ois.readObject();
 	        ois.close();
 	        return dd;
 		} catch (IOException e) {
@@ -44,12 +48,12 @@ public class ERXMutableDictionary extends NSMutableDictionary implements Map {
 		}
     }
 
-    public static ERXMutableDictionary fromPropertyList(String plist) {
+    public static NSDictionary fromPropertyList(String plist) {
     		NSDictionary dict = (NSDictionary)NSPropertyListSerialization.propertyListFromString(plist);
     		return new ERXMutableDictionary(dict);
     }
 
-    public static String toPropertyList(ERXMutableDictionary dict) {
+    public static String toPropertyList(NSDictionary dict) {
 		String plist = NSPropertyListSerialization.stringFromPropertyList(dict);
 		return plist;
     }
@@ -172,4 +176,163 @@ public class ERXMutableDictionary extends NSMutableDictionary implements Map {
         Object o = objectForKey(key);
         return o == null ? null : ERXValueUtilities.booleanValue(o) ? Boolean.TRUE : Boolean.FALSE;
     }
+   
+	/**
+	 * Simple thread safe wrapper. May or may not be correct, but it doesn't
+	 * matter as you will never, *ever* call this directly, but call <code>
+	 * ERXMutableDictionary.synchronizedDictionary();
+	 * </code> instead and we will fix all the bugs in due time.
+	 * @author ak
+	 * 
+	 */
+
+    public static class ThreadSafeDictionary extends ERXMutableDictionary {
+
+		public ThreadSafeDictionary(NSMutableDictionary dictionary) {
+			super(dictionary);
+		}
+
+		public synchronized void addEntriesFromDictionary(NSDictionary otherDictionary) {
+			super.addEntriesFromDictionary(otherDictionary);
+		}
+
+		public synchronized NSDictionary immutableClone() {
+			return super.immutableClone();
+		}
+
+		public synchronized NSMutableDictionary mutableClone() {
+			return super.mutableClone();
+		}
+
+		public synchronized void removeAllObjects() {
+			super.removeAllObjects();
+		}
+
+		public synchronized Object removeObjectForKey(Object key) {
+			return super.removeObjectForKey(key);
+		}
+
+		public synchronized void removeObjectsForKeys(NSArray keys) {
+			super.removeObjectsForKeys(keys);
+		}
+
+		public synchronized void setDictionary(NSDictionary otherDictionary) {
+			super.setDictionary(otherDictionary);
+		}
+
+		public synchronized void setObjectForKey(Object object, Object key) {
+			super.setObjectForKey(object, key);
+		}
+
+		public synchronized void takeValueForKey(Object value, String key) {
+			super.takeValueForKey(value, key);
+		}
+
+		protected synchronized  void _clearDeletionsAndCollisions() {
+			super._clearDeletionsAndCollisions();
+		}
+
+		protected synchronized  void _ensureCapacity(int capacity) {
+			super._ensureCapacity(capacity);
+		}
+
+		protected synchronized  void _initializeDictionary() {
+			super._initializeDictionary();
+		}
+
+		public synchronized int _shallowHashCode() {
+			return super._shallowHashCode();
+		}
+
+		public synchronized NSArray allKeys() {
+			return super.allKeys();
+		}
+
+		public synchronized NSArray allKeysForObject(Object object) {
+			return super.allKeysForObject(object);
+		}
+
+		public synchronized Class classForCoder() {
+			return super.classForCoder();
+		}
+
+		public synchronized int count() {
+			return super.count();
+		}
+
+		public synchronized void encodeWithCoder(NSCoder coder) {
+			super.encodeWithCoder(coder);
+		}
+
+		public synchronized boolean equals(Object object) {
+			return super.equals(object);
+		}
+
+		public synchronized int hashCode() {
+			return super.hashCode();
+		}
+
+		public synchronized HashMap hashMap() {
+			return super.hashMap();
+		}
+
+		public synchronized Hashtable hashtable() {
+			return super.hashtable();
+		}
+
+		public synchronized boolean isEqualToDictionary(NSDictionary otherDictionary) {
+			return super.isEqualToDictionary(otherDictionary);
+		}
+
+		public synchronized Enumeration keyEnumerator() {
+			return super.keyEnumerator();
+		}
+
+		protected synchronized  Object[] keysNoCopy() {
+			return super.keysNoCopy();
+		}
+
+		public synchronized Enumeration objectEnumerator() {
+			return super.objectEnumerator();
+		}
+
+		public synchronized Object objectForKey(Object key) {
+			return super.objectForKey(key);
+		}
+
+		public synchronized NSArray objectsForKeys(NSArray keys, Object notFoundMarker) {
+			return super.objectsForKeys(keys, notFoundMarker);
+		}
+
+		protected synchronized  Object[] objectsNoCopy() {
+			return super.objectsNoCopy();
+		}
+
+		public synchronized void takeValueForKeyPath(Object value, String keyPath) {
+			super.takeValueForKeyPath(value, keyPath);
+		}
+
+		public synchronized String toString() {
+			return super.toString();
+		}
+
+		public synchronized Object valueForKey(String key) {
+			return super.valueForKey(key);
+		}
+
+		public synchronized Object valueForKeyPath(String keyPath) {
+			return super.valueForKeyPath(keyPath);
+		}
+    }
+    
+    public static NSDictionary synchronizedDictionary() {
+    	return synchronizedDictionary(new ERXMutableDictionary());
+    }
+    
+    public static NSDictionary synchronizedDictionary(NSDictionary dict) {
+    	if(!(dict instanceof NSMutableDictionary)) {
+    		return dict;
+    	}
+    	return new ThreadSafeDictionary((NSMutableDictionary)dict);
+    }       
 }
