@@ -1086,7 +1086,7 @@ public class ERXFileUtilities {
             }
         });
         if (recursive) {
-            ERXMutableArray a = new ERXMutableArray(files);
+        	NSMutableArray a = new NSMutableArray(files);
             for (int i = files.length; i-- > 0;) {
                 File currentDir = files [i];
                 File[] currentDirs = listDirectories(currentDir, true);
