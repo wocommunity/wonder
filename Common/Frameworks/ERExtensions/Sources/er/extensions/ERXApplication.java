@@ -85,11 +85,11 @@ public abstract class ERXApplication extends WOApplication implements ERXGracefu
             // attribute (#2948062). Fixed in WO 5.2
             ERXPatcher.setClassForName(ERXWOText.class, "WOText");
 
-            // ERXWOFileUpload returns a better warning than throwing a ClassCastException. 
-            // Fixed in WO 5.2
-            ERXPatcher.setClassForName(ERXWOFileUpload.class, "WOFileUpload");
-        }
-    }
+         }
+        // ERXWOFileUpload returns a better warning than throwing a ClassCastException. 
+        // Fixed in WO 5.2
+        ERXPatcher.setClassForName(ERXWOFileUpload.class, "WOFileUpload");
+   }
 
     /** holds the default model group */
     protected EOModelGroup defaultModelGroup;
@@ -480,7 +480,7 @@ public abstract class ERXApplication extends WOApplication implements ERXGracefu
     public WOResponse reportException(Throwable exception, NSDictionary extraInfo) {
         Throwable t = exception instanceof NSForwardException ? ((NSForwardException) exception).originalException() : exception;
         
-        log.error("Exception caught: " + exception.getMessage() + "\nExtra info: " + extraInfo + "\n", t);
+        log.error("Exception caught: " + exception.getMessage() + "\nExtra info: " + NSPropertyListSerialization.stringFromPropertyList(extraInfo) + "\n", t);
         return null;
     }
 
