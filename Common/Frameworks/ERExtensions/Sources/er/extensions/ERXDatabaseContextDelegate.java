@@ -60,7 +60,6 @@ public class ERXDatabaseContextDelegate {
         if(exLog.isDebugEnabled()) {
             exLog.debug("JDBC Exception occured: " + throwable, throwable);
         }
-        exLog.warn("JDBC Exception occured: " + throwable, throwable);
         return true;
     }
 
