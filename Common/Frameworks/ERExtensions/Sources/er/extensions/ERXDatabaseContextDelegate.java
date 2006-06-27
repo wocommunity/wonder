@@ -60,9 +60,10 @@ public class ERXDatabaseContextDelegate {
         if(exLog.isDebugEnabled()) {
             exLog.debug("JDBC Exception occured: " + throwable, throwable);
         }
+        exLog.warn("JDBC Exception occured: " + throwable, throwable);
         return true;
     }
-    
+
     /**
      * Provides the ability for new enterprise objects that implement the interface {@link ERXGeneratesPrimaryKeyInterface}
      * to provide their own primary key dictionary. If the enterprise object implements the above interface then the
@@ -209,49 +210,51 @@ public class ERXDatabaseContextDelegate {
      * @return
      */
     public NSArray databaseContextWillPerformAdaptorOperations(EODatabaseContext dbCtxt, 
-							       NSArray adaptorOps, EOAdaptorChannel adChannel) {
-	NSMutableArray result = new NSMutableArray();
-	NSDictionary groupedOps = ERXArrayUtilities.arrayGroupedByKeyPath(adaptorOps, "adaptorOperator");	
-	Integer insertKey = ERXConstant.integerForInt(EODatabaseOperation.AdaptorInsertOperator);
-	NSArray insertOps = (NSArray) groupedOps.objectForKey(insertKey);
-	Integer deleteKey = ERXConstant.integerForInt(EODatabaseOperation.AdaptorDeleteOperator);
-	NSArray deleteOps = (NSArray) groupedOps.objectForKey(deleteKey);
-	if (insertOps!=null && deleteOps!=null) {
-	    NSMutableSet skippedOps = new NSMutableSet();
-	    for(Enumeration e = insertOps.objectEnumerator(); e.hasMoreElements();) {
-		EOAdaptorOperation insertOp = (EOAdaptorOperation)e.nextElement();
-		for(Enumeration e1 = deleteOps.objectEnumerator(); e1.hasMoreElements();) {
-		    EOAdaptorOperation deleteOp = (EOAdaptorOperation)e1.nextElement();
-		    if(!skippedOps.containsObject(deleteOp)) {
-			if(insertOp.entity() == deleteOp.entity()) {
-			    if(deleteOp.qualifier().evaluateWithObject(insertOp.changedValues())) {
-				if(false) {
-				    // here we remove both the delete and the 
-				    // insert. this might fail if we didn't lock on all rows
-				    // FIXME: check the current snapshot in the database and
-				    // see if it is the same as the new insert
-				    
-				    skippedOps.addObject(deleteOp);
-				    skippedOps.addObject(insertOp);
-				} else {
-				    // here we put the delete up front, this might fail if
-				    // we have cascading delete rules in the database
-				    result.addObject(deleteOp);
-				    skippedOps.addObject(deleteOp);
-				}
-				log.warn("Skipped: " + insertOp + "\n" + deleteOp);
-			    }
-			}
-		    }
-		}
-	    }
-	    for(Enumeration e = adaptorOps.objectEnumerator(); e.hasMoreElements();) {
-		EOAdaptorOperation op = (EOAdaptorOperation)e.nextElement();
-		if(!skippedOps.containsObject(op)) {
-		    result.addObject(op);
-		}
-	    }
-	}
-	return result;
+    		NSArray adaptorOps, EOAdaptorChannel adChannel) {
+    	NSMutableArray result = new NSMutableArray();
+    	NSDictionary groupedOps = ERXArrayUtilities.arrayGroupedByKeyPath(adaptorOps, "adaptorOperator");	
+    	Integer insertKey = ERXConstant.integerForInt(EODatabaseOperation.AdaptorInsertOperator);
+    	NSArray insertOps = (NSArray) groupedOps.objectForKey(insertKey);
+    	Integer deleteKey = ERXConstant.integerForInt(EODatabaseOperation.AdaptorDeleteOperator);
+    	NSArray deleteOps = (NSArray) groupedOps.objectForKey(deleteKey);
+    	if (insertOps!=null && deleteOps!=null) {
+    		NSMutableSet skippedOps = new NSMutableSet();
+    		for(Enumeration e = insertOps.objectEnumerator(); e.hasMoreElements();) {
+    			EOAdaptorOperation insertOp = (EOAdaptorOperation)e.nextElement();
+    			for(Enumeration e1 = deleteOps.objectEnumerator(); e1.hasMoreElements();) {
+    				EOAdaptorOperation deleteOp = (EOAdaptorOperation)e1.nextElement();
+    				if(!skippedOps.containsObject(deleteOp)) {
+    					if(insertOp.entity() == deleteOp.entity()) {
+    						if(deleteOp.qualifier().evaluateWithObject(insertOp.changedValues())) {
+    							if(false) {
+    								// here we remove both the delete and the 
+    								// insert. this might fail if we didn't lock on all rows
+    								// FIXME: check the current snapshot in the database and
+    								// see if it is the same as the new insert
+
+    								skippedOps.addObject(deleteOp);
+    								skippedOps.addObject(insertOp);
+    							} else {
+    								// here we put the delete up front, this might fail if
+    								// we have cascading delete rules in the database
+    								result.addObject(deleteOp);
+    								skippedOps.addObject(deleteOp);
+    							}
+    							log.warn("Skipped: " + insertOp + "\n" + deleteOp);
+    						}
+    					}
+    				}
+    			}
+    		}
+        	for(Enumeration e = adaptorOps.objectEnumerator(); e.hasMoreElements();) {
+        		EOAdaptorOperation op = (EOAdaptorOperation)e.nextElement();
+        		if(!skippedOps.containsObject(op)) {
+        			result.addObject(op);
+        		}
+        	}
+    	} else {
+    		result.addObjectsFromArray(adaptorOps);
+    	}
+    	return result;
     }
 }
