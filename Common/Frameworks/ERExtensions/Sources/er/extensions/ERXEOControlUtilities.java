@@ -1315,8 +1315,7 @@ public class ERXEOControlUtilities {
      * @return the root entity from the EOEnterpriseObject
      */
     public static EOEntity rootEntity(EOEnterpriseObject eo) {
-        EOModelGroup m = EOUtilities.modelGroup(eo.editingContext());
-        EOEntity entity = m.entityForObject(eo);
+        EOEntity entity = ERXEOAccessUtilities.entityForEo(eo);
         while (entity.parentEntity() != null) {
             entity = entity.parentEntity();
         }
