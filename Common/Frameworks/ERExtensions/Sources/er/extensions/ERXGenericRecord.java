@@ -271,6 +271,9 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
     public void didInsert() {
         if (tranLogDidInsert.isDebugEnabled())
             tranLogDidInsert.debug("Object:" + description());
+
+        //We're goung to blow the primaryKey cache:
+        _primaryKey = null;
     }
 
     /**
@@ -474,8 +477,12 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
      * Primary key of the object as a String.
      * @return primary key for the given object as a String
      */
+    protected String _primaryKey = null;
     public String primaryKey() {
-        return ERXEOControlUtilities.primaryKeyStringForObject(this);
+        if(_primaryKey == null) {
+            _primaryKey = ERXEOControlUtilities.primaryKeyStringForObject(this);
+        }
+        return _primaryKey;
     }
 
     /**
