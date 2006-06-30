@@ -46,13 +46,11 @@ public class ERXJSInputValidator extends WOComponent {
 
     public void appendToResponse(WOResponse woresponse, WOContext wocontext) {
         super.appendToResponse(woresponse, wocontext);
-        if(wocontext instanceof ERXMutableUserInfoHolderInterface) {
-            NSMutableArray array = (NSMutableArray)((ERXMutableUserInfoHolderInterface)wocontext).mutableUserInfo().objectForKey("elementArray");
-            if(array != null)
-                array.removeAllObjects();
-        }
+        NSMutableArray array = (NSMutableArray)ERXWOContext.contextDictionary().objectForKey("elementArray");
+        if(array != null)
+            array.removeAllObjects();
     }
-    
+
     public String errorSpanID() {
         if(_errorSpanID == null) {
             _errorSpanID = context().elementID();
