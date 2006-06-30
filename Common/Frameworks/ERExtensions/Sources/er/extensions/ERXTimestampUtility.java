@@ -17,28 +17,27 @@ import com.webobjects.foundation.*;
 
 public class ERXTimestampUtility {
 
-    protected static GregorianCalendar _calendar = (GregorianCalendar)Calendar.getInstance();
-    
     public static GregorianCalendar calendarForTimestamp(NSTimestamp t) {
-        _calendar.setTime(t);
-        return _calendar;
+        GregorianCalendar calendar = calendarForTimestamp(t);
+        calendar.setTime(t);
+        return calendar;
     }
 
     public static long offsetForDateInCommonEra(NSTimestamp t, int mode) {
-        _calendar.setTime(t);
+        GregorianCalendar calendar = calendarForTimestamp(t);
         switch(mode) {
             case Calendar.YEAR:
-                return _calendar.get(Calendar.YEAR);
+                return calendar.get(Calendar.YEAR);
             case Calendar.MONTH:
-                return _calendar.get(Calendar.YEAR) * 12 + _calendar.get(Calendar.MONTH);
+                return calendar.get(Calendar.YEAR) * 12 + calendar.get(Calendar.MONTH);
             case Calendar.WEEK_OF_YEAR:
-                return _calendar.get(Calendar.YEAR) * 52 + _calendar.get(Calendar.WEEK_OF_YEAR);
+                return calendar.get(Calendar.YEAR) * 52 + calendar.get(Calendar.WEEK_OF_YEAR);
             case Calendar.DAY_OF_MONTH:
             case Calendar.DAY_OF_YEAR:
-                return _calendar.get(Calendar.YEAR) * 365 + _calendar.get(Calendar.DAY_OF_YEAR);
+                return calendar.get(Calendar.YEAR) * 365 + calendar.get(Calendar.DAY_OF_YEAR);
             case Calendar.HOUR_OF_DAY:
             case Calendar.HOUR:
-                return (_calendar.get(Calendar.YEAR) * 365 + _calendar.get(Calendar.DAY_OF_YEAR)) * 24 + _calendar.get(Calendar.HOUR_OF_DAY);
+                return (calendar.get(Calendar.YEAR) * 365 + calendar.get(Calendar.DAY_OF_YEAR)) * 24 + calendar.get(Calendar.HOUR_OF_DAY);
             default:
                 return 0;
         }
