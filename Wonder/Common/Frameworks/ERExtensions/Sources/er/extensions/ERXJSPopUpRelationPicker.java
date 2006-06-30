@@ -264,7 +264,7 @@ public class ERXJSPopUpRelationPicker extends ERXStatelessComponent {
         + "window.document." + formName() + "." + childSelectName + "," 
         + (childPopUpStringForAll() != null ? "\"" + childPopUpStringForAll() + "\"" : "null")
         +");\n"
-		+pickerName + ".parentChanged();"					
+        + (parentPopUpStringForAll() == null ? pickerName + ".parentChanged();"	: "")
         +"\n</script>");
         log.debug(returnString);
 		// trigger an update of the parent - this causes the child to be properly set to a sub selection (instead of listing all possible value) when
