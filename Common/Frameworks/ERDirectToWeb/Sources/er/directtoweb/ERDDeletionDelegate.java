@@ -75,13 +75,16 @@ public class ERDDeletionDelegate implements NextPageDelegate {
             } catch (EOObjectNotAvailableException e) {
                 exception = ERXValidationFactory.defaultFactory().createCustomException(_object, "EOObjectNotAvailableException");
             } catch (EOGeneralAdaptorException e) {
-                EODatabaseOperation op = (EODatabaseOperation)e.userInfo().objectForKey(
-                        EODatabaseContext.FailedDatabaseOperationKey);
-                if(op.databaseOperator() == EODatabaseOperation.DatabaseDeleteOperator) {
-                    exception = ERXValidationFactory.defaultFactory().createCustomException(_object, "EOObjectNotAvailableException");
-                } else {
-                    exception = ERXValidationFactory.defaultFactory().createCustomException(_object, "Database error: " + e.getMessage());
-               }
+            	NSDictionary userInfo = e.userInfo();
+            	if(userInfo != null) {
+            		EODatabaseOperation op = (EODatabaseOperation)userInfo.objectForKey(EODatabaseContext.FailedDatabaseOperationKey);
+            		if(op.databaseOperator() == EODatabaseOperation.DatabaseDeleteOperator) {
+            			exception = ERXValidationFactory.defaultFactory().createCustomException(_object, "EOObjectNotAvailableException");
+            		}
+            	}
+            	if(exception == null) {
+            		exception = ERXValidationFactory.defaultFactory().createCustomException(_object, "Database error: " + e.getMessage());
+            	}
             } catch (NSValidation.ValidationException e) {
                 exception = e;
             }
