@@ -120,6 +120,10 @@ public class ERXTimestampUtility {
         return calendarForTimestamp(t).get(Calendar.MINUTE);        
     }
 
+    public static int secondOfMinute(NSTimestamp t) {
+        return calendarForTimestamp(t).get(Calendar.SECOND);        
+    }
+
     public static int monthOfYear(NSTimestamp t) {
         return calendarForTimestamp(t).get(Calendar.MONTH);        
     }
