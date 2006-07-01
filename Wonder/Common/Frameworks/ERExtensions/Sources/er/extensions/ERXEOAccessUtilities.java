@@ -228,7 +228,7 @@ public class ERXEOAccessUtilities {
         EODatabaseContext dbc = EOUtilities.databaseContextForModelNamed(ec, model.name());
         EOAdaptor adaptor = dbc.adaptorContext().adaptor();
         EOSQLExpressionFactory sqlFactory = adaptor.expressionFactory();
-        
+        spec = (EOFetchSpecification) spec.clone();
         NSArray attributes =  entity.attributesToFetch();
         if(spec.fetchesRawRows()) {
             NSMutableArray arr = new NSMutableArray();
@@ -244,11 +244,9 @@ public class ERXEOAccessUtilities {
             qualifier = EOQualifierSQLGeneration.Support._schemaBasedQualifierWithRootEntity(qualifier, entity);
         }
         if(qualifier != spec.qualifier()) {
-            spec = (EOFetchSpecification)spec.clone();
-            spec.setQualifier(qualifier);
+             spec.setQualifier(qualifier);
         }
         if(spec.fetchLimit() > 0) {
-            spec = (EOFetchSpecification)spec.clone();
             spec.setFetchLimit(0);
             spec.setPromptsAfterFetchLimit(false);
         }
@@ -262,36 +260,73 @@ public class ERXEOAccessUtilities {
             }
             if(ommitedOrderings.count() > 0) {
                 log.warn("Dropped some sort key as key paths are not supported here: " + ommitedOrderings);
-                spec = (EOFetchSpecification)spec.clone();
                 spec.setSortOrderings(ERXArrayUtilities.arrayMinusArray(spec.sortOrderings(), ommitedOrderings));
            }
         }
+        String url = (String) model.connectionDictionary().objectForKey("URL");
+        String lowerCaseURL = (url != null ? url.toLowerCase() : "");
         EOSQLExpression sqlExpr = sqlFactory.selectStatementForAttributes(attributes, false, spec, entity);
         String sql = sqlExpr.statement();
         if (end >= 0) {
-            String url = (String) model.connectionDictionary().objectForKey("URL");
-            if (url != null) {
-                String lowerCaseURL= url.toLowerCase();
-                if (lowerCaseURL.indexOf("frontbase") != -1) {
-                    //add TOP(start, (end - start)) after the SELECT word
-                    int index = sql.indexOf("select");
-                    if (index == -1) {
-                        index = sql.indexOf("SELECT");
-                    }
-                    index += 6;
-                    sql = sql.substring(0, index) 
-                        + " TOP(" + start + ", " + (end-start) + ")" 
-                        + sql.substring(index + 1, sql.length());
-                } else if (lowerCaseURL.indexOf("openbase") != -1) {
-                    // Openbase support for limiting result set
-                    sql += " return results " + start + " to " + end;
-                } else if (lowerCaseURL.indexOf("mysql") != -1 ) {
-                    sql += " LIMIT " + start + ", " + (end - start);
-                } else if (lowerCaseURL.indexOf("postgresql") != -1 ) {
-                    sql += " LIMIT " + (end - start) + " OFFSET " + start;
-                }
-            }
-            sqlExpr.setStatement(sql);
+        	// NOTE: this is all very hackish and might not work if you had columns that contain some keywords
+        	// the correct way would be to wrap all the plugins
+        	// and extend them
+        	lowerCaseURL= url.toLowerCase();
+        	if (lowerCaseURL.indexOf("frontbase") != -1) {
+        		//add TOP(start, (end - start)) after the SELECT word
+        		int index = sql.indexOf("select");
+        		if (index == -1) {
+        			index = sql.indexOf("SELECT");
+        		}
+        		index += 6;
+        		sql = sql.substring(0, index) 
+        		+ " TOP(" + start + ", " + (end-start) + ")" 
+        		+ sql.substring(index + 1, sql.length());
+        	} else if (lowerCaseURL.indexOf("openbase") != -1) {
+        		// Openbase support for limiting result set
+        		sql += " return results " + start + " to " + end;
+        	} else if (lowerCaseURL.indexOf("oracle") != -1) {
+        		/* Oracle can make you puke... 
+        		 * These are grabbed from tips all over the net
+        		 * and I can't test them as it doesn't even install on OSX.
+        		 * Pick your poison.
+        		 */
+        		int debug = ERXProperties.intForKeyWithDefault("OracleBatchMode", 3);
+        		if(debug == 1) {
+        			// this only works for the first page
+        			sql = "select * from (" 
+        				+ sql
+        				+ ") where rownum between " + (start + 1) + " and " + (end + 1);
+        		} else if(debug == 2) {
+        			// this doesn't work at all when have have *no* order by
+        			sql = "select * from (" 
+        				+ "select " + sqlExpr.listString() + ", row_number() over (" + sqlExpr.orderByString() + ") as eo_rownum from (" 
+        				+ sql
+        				+ ")) where eo_rownum between " + (start + 1) + " and " + (end + 1);
+        		} else if(debug == 3) {
+           			// this works, but breaks with horizontal inheritance
+        			sql = "select * from (" 
+        				+ "select " + sqlExpr.listString().replaceAll("[Tt]\\d\\.", "") + ", rownum eo_rownum from (" 
+        				+ sql
+        				+ ")) where eo_rownum between " + (start + 1) + " and " + (end + 1);
+         		} else {
+        			// this might work, too, but only if we have an oder_by
+        			sql = "select * from (" 
+        				+ "select " + (spec.usesDistinct() ? " distinct " : "") 
+        				+ sqlExpr.listString() + ", row_number() over (" + sqlExpr.orderByString() + ") eo_rownum"
+        				+ " from " + sqlExpr.joinClauseString()
+        				+ " where " + sqlExpr.whereClauseString()
+        				+ ") where eo_rownum between " + (start + 1) + " and " + (end + 1);
+        		}
+        	} else if (lowerCaseURL.indexOf("mysql") != -1 ) {
+        		sql += " LIMIT " + start + ", " + (end - start);
+        	} else if (lowerCaseURL.indexOf("postgresql") != -1 ) {
+        		sql += " LIMIT " + (end - start) + " OFFSET " + start;
+        	} else {
+        		// we should probably throw here
+        		log.error("No page-fetching support for JDBC url: " + url);
+        	}
+        	sqlExpr.setStatement(sql);
         }
 
         return sqlExpr;
