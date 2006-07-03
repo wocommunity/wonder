@@ -273,7 +273,11 @@ public class ERD2WListPage extends ERD2WPage implements ERDListPageInterface, Se
 
     // this can be overridden by subclasses for which sorting has to be fixed (i.e. Grouping Lists)
     public boolean userPreferencesCanSpecifySorting() {
-        return true && !"printerFriendly".equals(d2wContext().valueForKey("subTask"));
+        return !"printerFriendly".equals(d2wContext().valueForKey("subTask"));
+    }
+
+    public boolean checkSortOrderingKeys() {
+        return ERXValueUtilities.booleanValueWithDefault(d2wContext().valueForKey("checkSortOrderingKeys"), false);
     }
 
     public NSArray sortOrderings() {
@@ -295,13 +299,19 @@ public class ERD2WListPage extends ERD2WPage implements ERDListPageInterface, Se
                 for (int i=0; i< sortOrderingDefinition.count();) {
                     String sortKey=(String)sortOrderingDefinition.objectAtIndex(i++);
                     String sortSelectorKey=(String)sortOrderingDefinition.objectAtIndex(i++);
-                    if(displayPropertyKeys.containsObject(sortKey) || entity().anyAttributeNamed(sortKey) != null 
-                    		|| ERXEOAccessUtilities.attributePathForKeyPath(entity(), sortKey).count() > 0) {
-                        EOSortOrdering sortOrdering=new EOSortOrdering(sortKey,
-                                                                       ERXArrayUtilities.sortSelectorWithKey(sortSelectorKey));
-                        so.addObject(sortOrdering);
+                    if(checkSortOrderingKeys()) {
+                        if(displayPropertyKeys.containsObject(sortKey) || entity().anyAttributeNamed(sortKey) != null 
+                                || ERXEOAccessUtilities.attributePathForKeyPath(entity(), sortKey).count() > 0) {
+                            EOSortOrdering sortOrdering=new EOSortOrdering(sortKey,
+                                    ERXArrayUtilities.sortSelectorWithKey(sortSelectorKey));
+                            so.addObject(sortOrdering);
+                        } else {
+                            log.warn("Sort key '"+sortKey+"' is not in display keys, attributes or non-flattened key paths");
+                        }
                     } else {
-                        log.warn("Sort key '"+sortKey+"' is not in display keys, attributes or non-flattened key paths");
+                        EOSortOrdering sortOrdering=new EOSortOrdering(sortKey,
+                                ERXArrayUtilities.sortSelectorWithKey(sortSelectorKey));
+                        so.addObject(sortOrdering);
                     }
                 }
                 sortOrderings=so;
