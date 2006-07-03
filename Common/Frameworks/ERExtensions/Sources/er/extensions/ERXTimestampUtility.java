@@ -18,7 +18,7 @@ import com.webobjects.foundation.*;
 public class ERXTimestampUtility {
 
     public static GregorianCalendar calendarForTimestamp(NSTimestamp t) {
-        GregorianCalendar calendar = calendarForTimestamp(t);
+        GregorianCalendar calendar = (GregorianCalendar) Calendar.getInstance();
         calendar.setTime(t);
         return calendar;
     }
