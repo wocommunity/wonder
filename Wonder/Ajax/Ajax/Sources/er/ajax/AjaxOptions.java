@@ -12,59 +12,59 @@ import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableDictionary;
 
 public class AjaxOptions extends WODynamicElement {
-  private NSMutableDictionary myBindings;
-  private WOElement myChildren;
+  private NSMutableDictionary _bindings;
+  private WOElement _children;
 
-  public AjaxOptions(String _name, NSDictionary _bindings, WOElement _children) {
-    super(_name, _bindings, _children);
-    myBindings = _bindings.mutableClone();
-    myChildren = _children;
+  public AjaxOptions(String name, NSDictionary bindings, WOElement children) {
+    super(name, bindings, children);
+    _bindings = bindings.mutableClone();
+    _children = children;
   }
 
-  public void appendToResponse(WOResponse _response, WOContext _context) {
-    _response.appendContentCharacter('{');
-    NSMutableDictionary options = myBindings;
-    WOAssociation optionsBinding = (WOAssociation) myBindings.objectForKey("options");
+  public void appendToResponse(WOResponse response, WOContext context) {
+    response.appendContentCharacter('{');
+    NSMutableDictionary options = _bindings;
+    WOAssociation optionsBinding = (WOAssociation) _bindings.objectForKey("options");
     if (optionsBinding != null) {
-      NSDictionary passedInOptions = (NSDictionary) optionsBinding.valueInComponent(_context.component());
+      NSDictionary passedInOptions = (NSDictionary) optionsBinding.valueInComponent(context.component());
       if (passedInOptions != null) {
         options = passedInOptions.mutableClone();
-        options.addEntriesFromDictionary(myBindings);
+        options.addEntriesFromDictionary(_bindings);
       }
     }
-    AjaxOptions._appendToResponse(options, _response, _context);
-    if (myChildren != null) {
-      myChildren.appendToResponse(_response, _context);
+    AjaxOptions._appendToResponse(options, response, context);
+    if (_children != null) {
+      _children.appendToResponse(response, context);
     }
-    _response.appendContentCharacter('}');
+    response.appendContentCharacter('}');
   }
 
-  public static void _appendToResponse(NSDictionary _options, WOResponse _response, WOContext _context) {
+  public static void _appendToResponse(NSDictionary options, WOResponse response, WOContext context) {
     StringBuffer sb = new StringBuffer();
-    AjaxOptions._appendToBuffer(_options, sb, _context);
-    _response.appendContentString(sb.toString());
+    AjaxOptions._appendToBuffer(options, sb, context);
+    response.appendContentString(sb.toString());
   }
   
-  public static void _appendToBuffer(NSDictionary _options, StringBuffer _stringBuffer, WOContext _context) {
-    if (_options != null) {
-      WOComponent component = _context.component();
+  public static void _appendToBuffer(NSDictionary options, StringBuffer stringBuffer, WOContext context) {
+    if (options != null) {
+      WOComponent component = context.component();
       boolean hasPreviousOptions = false;
-      Enumeration bindingsEnum = _options.keyEnumerator();
+      Enumeration bindingsEnum = options.keyEnumerator();
       while (bindingsEnum.hasMoreElements()) {
         String bindingName = (String) bindingsEnum.nextElement();
         if (!"options".equals(bindingName)) {
-          Object bindingValue = _options.objectForKey(bindingName);
+          Object bindingValue = options.objectForKey(bindingName);
           if (bindingValue instanceof WOAssociation) {
             WOAssociation association = (WOAssociation) bindingValue;
             bindingValue = association.valueInComponent(component);
           }
           if (bindingValue != null) {
             if (hasPreviousOptions) {
-              _stringBuffer.append(", ");
+              stringBuffer.append(", ");
             }
-            _stringBuffer.append(bindingName);
-            _stringBuffer.append(':');
-            _stringBuffer.append(bindingValue.toString());
+            stringBuffer.append(bindingName);
+            stringBuffer.append(':');
+            stringBuffer.append(bindingValue.toString());
             hasPreviousOptions = true;
           }
         }
@@ -72,15 +72,15 @@ public class AjaxOptions extends WODynamicElement {
     }
   }
 
-  public static void appendToBuffer(NSDictionary _options, StringBuffer _stringBuffer, WOContext _context) {
-    _stringBuffer.append('{');
-    AjaxOptions._appendToBuffer(_options, _stringBuffer, _context);
-    _stringBuffer.append('}');
+  public static void appendToBuffer(NSDictionary options, StringBuffer stringBuffer, WOContext context) {
+    stringBuffer.append('{');
+    AjaxOptions._appendToBuffer(options, stringBuffer, context);
+    stringBuffer.append('}');
   }
 
-  public static void appendToResponse(NSDictionary _options, WOResponse _response, WOContext _context) {
-    _response.appendContentCharacter('{');
-    AjaxOptions._appendToResponse(_options, _response, _context);
-    _response.appendContentCharacter('}');
+  public static void appendToResponse(NSDictionary options, WOResponse response, WOContext context) {
+    response.appendContentCharacter('{');
+    AjaxOptions._appendToResponse(options, response, context);
+    response.appendContentCharacter('}');
   }
 }

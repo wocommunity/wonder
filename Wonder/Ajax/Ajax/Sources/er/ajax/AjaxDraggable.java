@@ -17,8 +17,8 @@ public class AjaxDraggable extends AjaxComponent {
   private static final String COMPONENT_DRAGGABLES_MAP_KEY = "AjaxComponentDraggablesMap";
   private String _id;
 
-  public AjaxDraggable(WOContext _context) {
-    super(_context);
+  public AjaxDraggable(WOContext context) {
+    super(context);
   }
   
   public void awake() {
@@ -38,26 +38,26 @@ public class AjaxDraggable extends AjaxComponent {
     return false;
   }
   
-  public static Object draggableObjectForPage(WOComponent _page, String _draggableID) {
+  public static Object draggableObjectForPage(WOComponent page, String draggableID) {
     Object droppedObject = null;
-    Map componentDraggablesMap = (Map)_page.context().session().objectForKey(AjaxDraggable.COMPONENT_DRAGGABLES_MAP_KEY);
+    Map componentDraggablesMap = (Map)page.context().session().objectForKey(AjaxDraggable.COMPONENT_DRAGGABLES_MAP_KEY);
     if (componentDraggablesMap != null) {
-      Map draggablesMap = (Map) componentDraggablesMap.get(_page);
+      Map draggablesMap = (Map) componentDraggablesMap.get(page);
       if (draggablesMap != null) {
-        droppedObject = draggablesMap.get(_draggableID);
+        droppedObject = draggablesMap.get(draggableID);
       }
     }
     return droppedObject;
   }
   
-  public void appendToResponse(WOResponse _res, WOContext _ctx) {
+  public void appendToResponse(WOResponse res, WOContext ctx) {
     if (canGetValueForBinding("draggableObject")) {
       Object draggableObject = valueForBinding("draggableObject");
       WOComponent page = context().page();
-      Map componentDraggablesMap = (Map)_ctx.session().objectForKey(AjaxDraggable.COMPONENT_DRAGGABLES_MAP_KEY);
+      Map componentDraggablesMap = (Map)ctx.session().objectForKey(AjaxDraggable.COMPONENT_DRAGGABLES_MAP_KEY);
       if (componentDraggablesMap == null) {
         componentDraggablesMap = new WeakHashMap();
-        _ctx.session().setObjectForKey(componentDraggablesMap, AjaxDraggable.COMPONENT_DRAGGABLES_MAP_KEY);
+        ctx.session().setObjectForKey(componentDraggablesMap, AjaxDraggable.COMPONENT_DRAGGABLES_MAP_KEY);
       }
       Map draggablesMap = (Map) componentDraggablesMap.get(page);
       if (draggablesMap == null) {
@@ -72,7 +72,7 @@ public class AjaxDraggable extends AjaxComponent {
         draggablesMap.put(id, draggableObject);
       }
     }
-    super.appendToResponse(_res, _ctx);
+    super.appendToResponse(res, ctx);
   }
 
   public NSDictionary createAjaxOptions() {
@@ -114,16 +114,16 @@ public class AjaxDraggable extends AjaxComponent {
     return draggableID;
   }
 
-  protected void addRequiredWebResources(WOResponse _res) {
-    addScriptResourceInHead(_res, "prototype.js");
-    addScriptResourceInHead(_res, "scriptaculous.js");
-    addScriptResourceInHead(_res, "effects.js");
-    addScriptResourceInHead(_res, "builder.js");
-    addScriptResourceInHead(_res, "dragdrop.js");
-    addScriptResourceInHead(_res, "controls.js");
+  protected void addRequiredWebResources(WOResponse res) {
+    addScriptResourceInHead(res, "prototype.js");
+    addScriptResourceInHead(res, "scriptaculous.js");
+    addScriptResourceInHead(res, "effects.js");
+    addScriptResourceInHead(res, "builder.js");
+    addScriptResourceInHead(res, "dragdrop.js");
+    addScriptResourceInHead(res, "controls.js");
   }
 
-  protected WOActionResults handleRequest(WORequest _request, WOContext _context) {
+  protected WOActionResults handleRequest(WORequest request, WOContext context) {
     return null;
   }
 

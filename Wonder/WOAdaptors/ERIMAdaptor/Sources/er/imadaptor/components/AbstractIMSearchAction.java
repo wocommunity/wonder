@@ -17,83 +17,83 @@ import er.extensions.ERXStringUtilities;
 import er.imadaptor.InstantMessengerAdaptor;
 
 abstract class AbstractIMSearchAction extends IMAction {
-  private WOAssociation myValue;
-  private WOAssociation myValues;
-  private WOAssociation myQuicksilver;
-  private WOAssociation myOptionsDictionary;
-  private WOAssociation myOptionsArray;
-  private WOAssociation myOptionKeyPath;
+  private WOAssociation _value;
+  private WOAssociation _values;
+  private WOAssociation _quicksilver;
+  private WOAssociation _optionsDictionary;
+  private WOAssociation _optionsArray;
+  private WOAssociation _optionKeyPath;
 
-  public AbstractIMSearchAction(String _name, NSDictionary _associations, WOElement _element) {
-    super(_name, _associations, _element);
-    myValue = (WOAssociation) _associations.objectForKey("value");
-    myValues = (WOAssociation) _associations.objectForKey("values");
-    if (myValue == null && myValues == null) {
+  public AbstractIMSearchAction(String name, NSDictionary associations, WOElement element) {
+    super(name, associations, element);
+    _value = (WOAssociation) associations.objectForKey("value");
+    _values = (WOAssociation) associations.objectForKey("values");
+    if (_value == null && _values == null) {
       throw new WODynamicElementCreationException("Only one of 'value' or 'values' can be bound at any time.");
     }
-    myQuicksilver = (WOAssociation) _associations.objectForKey("quicksilver");
-    myOptionsDictionary = (WOAssociation) _associations.objectForKey("optionsDictionary");
-    myOptionsArray = (WOAssociation) _associations.objectForKey("optionsArray");
-    if (myOptionsArray == null && myOptionsDictionary == null) {
+    _quicksilver = (WOAssociation) associations.objectForKey("quicksilver");
+    _optionsDictionary = (WOAssociation) associations.objectForKey("optionsDictionary");
+    _optionsArray = (WOAssociation) associations.objectForKey("optionsArray");
+    if (_optionsArray == null && _optionsDictionary == null) {
       throw new WODynamicElementCreationException("Only one of 'optionsArray' or 'optionsDictionary' can be bound at any time.");
     }
-    if (myOptionsArray != null && myOptionsDictionary != null) {
+    if (_optionsArray != null && _optionsDictionary != null) {
       throw new WODynamicElementCreationException("Both 'optionsArray' and 'optionsDictionary' cannot be bound at the same time.");
     }
-    myOptionKeyPath = (WOAssociation) _associations.objectForKey("optionKeyPath");
-    if (myOptionKeyPath != null && myOptionsDictionary != null) {
+    _optionKeyPath = (WOAssociation) associations.objectForKey("optionKeyPath");
+    if (_optionKeyPath != null && _optionsDictionary != null) {
       throw new WODynamicElementCreationException("Both 'optionKeyPath' and 'optionsDictionary' cannot be bound at the same time.");
     }
   }
   
   protected abstract boolean searchInsideMessage();
 
-  public static NSArray selectedValues(NSDictionary _options, boolean _quicksilver, String _message, boolean _searchInsideMessage) {
+  public static NSArray selectedValues(NSDictionary options, boolean quicksilver, String message, boolean searchInsideMessage) {
     NSMutableArray selectedValues = new NSMutableArray();
-    String message = _message.toLowerCase();
-    Enumeration keyEnum = _options.keyEnumerator();
+    String lowercaseMessage = message.toLowerCase();
+    Enumeration keyEnum = options.keyEnumerator();
     while (keyEnum.hasMoreElements()) {
       String key = (String) keyEnum.nextElement();
 
       String stringToSearch;
       String stringToSearchFor;
-      if (_searchInsideMessage) {
-        stringToSearch = _message;
+      if (searchInsideMessage) {
+        stringToSearch = lowercaseMessage;
         stringToSearchFor = key;
       }
       else {
         stringToSearch = key;
-        stringToSearchFor = _message;
+        stringToSearchFor = lowercaseMessage;
       }
 
       String selectedKey = null;
-      if (_quicksilver && ERXStringUtilities.quicksilverContains(stringToSearch, stringToSearchFor)) {
+      if (quicksilver && ERXStringUtilities.quicksilverContains(stringToSearch, stringToSearchFor)) {
         selectedKey = key;
       }
-      else if (!_quicksilver && stringToSearch.indexOf(stringToSearchFor) != -1) {
+      else if (!quicksilver && stringToSearch.indexOf(stringToSearchFor) != -1) {
         selectedKey = key;
       }
       
       if (selectedKey != null) {
-        Object selectedValue = _options.objectForKey(selectedKey);
+        Object selectedValue = options.objectForKey(selectedKey);
         selectedValues.addObject(selectedValue);
       }
     }
     return selectedValues;
   }
 
-  public static NSArray selectedValues(NSArray _options, String _optionKeyPath, boolean _quicksilver, String _message, boolean _searchInsideMessage) {
+  public static NSArray selectedValues(NSArray options, String optionKeyPath, boolean quicksilver, String message, boolean searchInsideMessage) {
     NSMutableArray selectedValues = new NSMutableArray();
-    String message = _message.toLowerCase();
-    Enumeration optionEnum = _options.objectEnumerator();
+    String lowercaseMessage = message.toLowerCase();
+    Enumeration optionEnum = options.objectEnumerator();
     while (optionEnum.hasMoreElements()) {
       Object option = optionEnum.nextElement();
       String optionStr;
-      if (_optionKeyPath == null) {
+      if (optionKeyPath == null) {
         optionStr = option.toString();
       }
       else {
-        Object optionKeyPathValue = NSKeyValueCodingAdditions.Utility.valueForKeyPath(option, _optionKeyPath);
+        Object optionKeyPathValue = NSKeyValueCodingAdditions.Utility.valueForKeyPath(option, optionKeyPath);
         if (optionKeyPathValue == null) {
           optionStr = "";
         }
@@ -104,54 +104,54 @@ abstract class AbstractIMSearchAction extends IMAction {
 
       String stringToSearch;
       String stringToSearchFor;
-      if (_searchInsideMessage) {
-        stringToSearch = _message;
+      if (searchInsideMessage) {
+        stringToSearch = lowercaseMessage;
         stringToSearchFor = optionStr;
       }
       else {
         stringToSearch = optionStr;
-        stringToSearchFor = _message;
+        stringToSearchFor = lowercaseMessage;
       }
 
-      if (_quicksilver && ERXStringUtilities.quicksilverContains(stringToSearch, stringToSearchFor)) {
+      if (quicksilver && ERXStringUtilities.quicksilverContains(stringToSearch, stringToSearchFor)) {
         selectedValues.addObject(option);
       }
-      else if (!_quicksilver && stringToSearch.indexOf(stringToSearchFor) != -1) {
+      else if (!quicksilver && stringToSearch.indexOf(stringToSearchFor) != -1) {
         selectedValues.addObject(option);
       }
     }
     return selectedValues;
   }
 
-  protected void actionInvoked(WORequest _request, WOContext _context) {
-    WOComponent component = _context.component();
-    String message = InstantMessengerAdaptor.message(_request);
-    boolean quicksilver = (myQuicksilver != null && ((Boolean) myQuicksilver.valueInComponent(component)).booleanValue());
+  protected void actionInvoked(WORequest request, WOContext context) {
+    WOComponent component = context.component();
+    String message = InstantMessengerAdaptor.message(request);
+    boolean quicksilver = (_quicksilver != null && ((Boolean) _quicksilver.valueInComponent(component)).booleanValue());
     NSArray selectedValues;
-    if (myOptionsDictionary != null) {
-      NSDictionary options = (NSDictionary) myOptionsDictionary.valueInComponent(component);
+    if (_optionsDictionary != null) {
+      NSDictionary options = (NSDictionary) _optionsDictionary.valueInComponent(component);
       selectedValues = AbstractIMSearchAction.selectedValues(options, quicksilver, message, searchInsideMessage());
     }
-    else if (myOptionsArray != null) {
-      NSArray options = (NSArray) myOptionsArray.valueInComponent(component);
+    else if (_optionsArray != null) {
+      NSArray options = (NSArray) _optionsArray.valueInComponent(component);
       String optionKeyPath = null;
-      if (myOptionKeyPath != null) {
-        optionKeyPath = (String) myOptionKeyPath.valueInComponent(component);
+      if (_optionKeyPath != null) {
+        optionKeyPath = (String) _optionKeyPath.valueInComponent(component);
       }
       selectedValues = AbstractIMSearchAction.selectedValues(options, optionKeyPath, quicksilver, message, searchInsideMessage());
     }
     else {
       throw new IllegalArgumentException("You must specify either optionsDictionary or optionsArray.");
     }
-    if (myValues != null) {
-      myValues.setValue(selectedValues, component);
+    if (_values != null) {
+      _values.setValue(selectedValues, component);
     }
-    if (myValue != null) {
+    if (_value != null) {
       Object selectedValue = null;
       if (selectedValues.count() == 1) {
         selectedValue = selectedValues.objectAtIndex(0);
       }
-      myValue.setValue(selectedValue, component);
+      _value.setValue(selectedValue, component);
     }
   }
 

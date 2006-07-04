@@ -4,37 +4,37 @@ import java.util.ArrayList;
 import java.util.List;
 
 public abstract class AbstractInstantMessenger implements IInstantMessenger {
-  private String myScreenName;
-  private String myPassword;
-  private List myListeners;
+  private String _screenName;
+  private String _password;
+  private List _listeners;
 
-  public AbstractInstantMessenger(String _screenName, String _password) {
-    myScreenName = _screenName;
-    myPassword = _password;
-    myListeners = new ArrayList();
+  public AbstractInstantMessenger(String screenName, String password) {
+    _screenName = screenName;
+    _password = password;
+    _listeners = new ArrayList();
   }
 
   public String getScreenName() {
-    return myScreenName;
+    return _screenName;
   }
 
   public String getPassword() {
-    return myPassword;
+    return _password;
   }
 
-  public void addMessageListener(IMessageListener _messageListener) {
-    myListeners.add(_messageListener);
+  public void addMessageListener(IMessageListener messageListener) {
+    _listeners.add(messageListener);
   }
 
-  public void removeMessageListener(IMessageListener _messageListener) {
-    myListeners.remove(_messageListener);
+  public void removeMessageListener(IMessageListener messageListener) {
+    _listeners.remove(messageListener);
   }
 
-  protected void fireMessageReceived(String _buddyName, String _message) {
-    int listenerCount = myListeners.size();
+  protected void fireMessageReceived(String buddyName, String message) {
+    int listenerCount = _listeners.size();
     for (int i = 0; i < listenerCount; i++) {
-      IMessageListener listener = (IMessageListener) myListeners.get(i);
-      listener.messageReceived(this, _buddyName, _message);
+      IMessageListener listener = (IMessageListener) _listeners.get(i);
+      listener.messageReceived(this, buddyName, message);
     }
   }
 }

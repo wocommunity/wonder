@@ -16,44 +16,44 @@ public class AjaxOption {
   public static AjaxOption.Type BOOLEAN = new AjaxOption.Type(6);
 
   public static class Type {
-    private int myNumber;
+    private int _number;
 
-    public Type(int _number) {
-      myNumber = _number;
+    public Type(int number) {
+      _number = number;
     }
   }
 
-  private String myName;
-  private AjaxOption.Type myType;
+  private String _name;
+  private AjaxOption.Type _type;
 
-  public AjaxOption(String _name) {
-    this(_name, AjaxOption.DEFAULT);
+  public AjaxOption(String name) {
+    this(name, AjaxOption.DEFAULT);
   }
 
-  public AjaxOption(String _name, AjaxOption.Type _type) {
-    myName = _name;
-    myType = _type;
+  public AjaxOption(String name, AjaxOption.Type type) {
+    _name = name;
+    _type = type;
   }
 
   public String name() {
-    return myName;
+    return _name;
   }
 
   public AjaxOption.Type type() {
-    return myType;
+    return _type;
   }
 
-  public String processValue(Object _value) {
+  public String processValue(Object value) {
     String strValue;
-    if (_value == null) {
+    if (value == null) {
       strValue = null;
     }
-    else if (myType == AjaxOption.STRING) {
-      strValue = "'" + _value + "'";
+    else if (_type == AjaxOption.STRING) {
+      strValue = "'" + value + "'";
     }
-    else if (myType == AjaxOption.ARRAY) {
-      if (_value instanceof NSArray) {
-        NSArray arrayValue = (NSArray) _value;
+    else if (_type == AjaxOption.ARRAY) {
+      if (value instanceof NSArray) {
+        NSArray arrayValue = (NSArray) value;
         if (arrayValue.count() == 1) {
           strValue = arrayValue.objectAtIndex(0).toString();
         }
@@ -62,12 +62,12 @@ public class AjaxOption {
         }
       }
       else {
-        strValue = _value.toString();
+        strValue = value.toString();
       }
     }
-    else if (myType == AjaxOption.STRING_ARRAY) {
-      if (_value instanceof NSArray) {
-        NSArray arrayValue = (NSArray) _value;
+    else if (_type == AjaxOption.STRING_ARRAY) {
+      if (value instanceof NSArray) {
+        NSArray arrayValue = (NSArray) value;
         int count = arrayValue.count();
         if (count == 1) {
           strValue = "'" + arrayValue.objectAtIndex(0).toString() + "'";
@@ -80,63 +80,63 @@ public class AjaxOption {
         }
       }
       else {
-        strValue = _value.toString();
+        strValue = value.toString();
       }
     }
     else {
-      strValue = _value.toString();
+      strValue = value.toString();
     }
     return strValue;
   }
 
-  public void addToDictionary(WOComponent _component, NSMutableDictionary _dictionary) {
-    addToDictionary(myName, _component, _dictionary);
+  public void addToDictionary(WOComponent component, NSMutableDictionary dictionary) {
+    addToDictionary(_name, component, dictionary);
   }
 
-  public void addToDictionary(String _bindingName, WOComponent _component, NSMutableDictionary _dictionary) {
-    Object value = _component.valueForBinding(_bindingName);
+  public void addToDictionary(String bindingName, WOComponent component, NSMutableDictionary dictionary) {
+    Object value = component.valueForBinding(bindingName);
     if (value instanceof WOAssociation) {
       WOAssociation association = (WOAssociation) value;
-      value = association.valueInComponent(_component);
+      value = association.valueInComponent(component);
     }
     String strValue = processValue(value);
     if (strValue != null) {
-      _dictionary.setObjectForKey(strValue, myName);
+      dictionary.setObjectForKey(strValue, _name);
     }
   }
 
-  public void addToDictionary(WOComponent _component, NSDictionary _associations, NSMutableDictionary _dictionary) {
-    addToDictionary(myName, _component, _associations, _dictionary);
+  public void addToDictionary(WOComponent component, NSDictionary associations, NSMutableDictionary dictionary) {
+    addToDictionary(_name, component, associations, dictionary);
   }
 
-  public void addToDictionary(String _bindingName, WOComponent _component, NSDictionary _associations, NSMutableDictionary _dictionary) {
-    Object value = _associations.objectForKey(_bindingName);
+  public void addToDictionary(String bindingName, WOComponent component, NSDictionary associations, NSMutableDictionary dictionary) {
+    Object value = associations.objectForKey(bindingName);
     if (value instanceof WOAssociation) {
       WOAssociation association = (WOAssociation) value;
-      value = association.valueInComponent(_component);
+      value = association.valueInComponent(component);
     }
     String strValue = processValue(value);
     if (strValue != null) {
-      _dictionary.setObjectForKey(strValue, myName);
+      dictionary.setObjectForKey(strValue, _name);
     }
   }
 
-  public static NSMutableDictionary createAjaxOptionsDictionary(NSArray _ajaxOptions, WOComponent _component) {
+  public static NSMutableDictionary createAjaxOptionsDictionary(NSArray ajaxOptions, WOComponent component) {
     NSMutableDictionary optionsDictionary = new NSMutableDictionary();
-    int ajaxOptionCount = _ajaxOptions.count();
+    int ajaxOptionCount = ajaxOptions.count();
     for (int i = 0; i < ajaxOptionCount; i++) {
-      AjaxOption ajaxOption = (AjaxOption) _ajaxOptions.objectAtIndex(i);
-      ajaxOption.addToDictionary(_component, optionsDictionary);
+      AjaxOption ajaxOption = (AjaxOption) ajaxOptions.objectAtIndex(i);
+      ajaxOption.addToDictionary(component, optionsDictionary);
     }
     return optionsDictionary;
   }
 
-  public static NSMutableDictionary createAjaxOptionsDictionary(NSArray _ajaxOptions, WOComponent _component, NSDictionary _associations) {
+  public static NSMutableDictionary createAjaxOptionsDictionary(NSArray ajaxOptions, WOComponent component, NSDictionary associations) {
     NSMutableDictionary optionsDictionary = new NSMutableDictionary();
-    int ajaxOptionCount = _ajaxOptions.count();
+    int ajaxOptionCount = ajaxOptions.count();
     for (int i = 0; i < ajaxOptionCount; i++) {
-      AjaxOption ajaxOption = (AjaxOption) _ajaxOptions.objectAtIndex(i);
-      ajaxOption.addToDictionary(_component, _associations, optionsDictionary);
+      AjaxOption ajaxOption = (AjaxOption) ajaxOptions.objectAtIndex(i);
+      ajaxOption.addToDictionary(component, associations, optionsDictionary);
     }
     return optionsDictionary;
   }

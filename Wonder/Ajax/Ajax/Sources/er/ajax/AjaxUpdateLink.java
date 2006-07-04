@@ -10,8 +10,8 @@ import com.webobjects.foundation.NSMutableDictionary;
 
 public class AjaxUpdateLink extends AjaxComponent {
 
-  public AjaxUpdateLink(WOContext _context) {
-    super(_context);
+  public AjaxUpdateLink(WOContext context) {
+    super(context);
   }
 
   public boolean isStateless() {
@@ -56,16 +56,16 @@ public class AjaxUpdateLink extends AjaxComponent {
     return options;
   }
 
-  protected void addRequiredWebResources(WOResponse _res) {
-    addScriptResourceInHead(_res, "prototype.js");
-    addScriptResourceInHead(_res, "scriptaculous.js");
-    addScriptResourceInHead(_res, "effects.js");
-    addScriptResourceInHead(_res, "builder.js");
-    addScriptResourceInHead(_res, "dragdrop.js");
-    addScriptResourceInHead(_res, "controls.js");
+  protected void addRequiredWebResources(WOResponse res) {
+    addScriptResourceInHead(res, "prototype.js");
+    addScriptResourceInHead(res, "scriptaculous.js");
+    addScriptResourceInHead(res, "effects.js");
+    addScriptResourceInHead(res, "builder.js");
+    addScriptResourceInHead(res, "dragdrop.js");
+    addScriptResourceInHead(res, "controls.js");
   }
 
-  protected WOActionResults handleRequest(WORequest _request, WOContext _context) {
+  protected WOActionResults handleRequest(WORequest request, WOContext context) {
     WOActionResults results = (WOActionResults) valueForBinding("action");
     if (results != null) {
       System.out.println("AjaxUpdateLink.handleRequest: Not quite sure what to do with non-null results yet ...");

@@ -18,19 +18,19 @@ import com.webobjects.foundation.NSDictionary;
  * @author mschrag
  */
 public class IMSearchMessageAction extends AbstractIMSearchAction {
-  public IMSearchMessageAction(String _name, NSDictionary _associations, WOElement _element) {
-    super(_name, _associations, _element);
+  public IMSearchMessageAction(String name, NSDictionary associations, WOElement element) {
+    super(name, associations, element);
   }
 
   protected boolean searchInsideMessage() {
     return true;
   }
 
-  public static NSArray selectedValues(NSDictionary _options, boolean _quicksilver, String _message) {
-    return AbstractIMSearchAction.selectedValues(_options, _quicksilver, _message, true);
+  public static NSArray selectedValues(NSDictionary options, boolean quicksilver, String message) {
+    return AbstractIMSearchAction.selectedValues(options, quicksilver, message, true);
   }
 
-  public static NSArray selectedValues(NSArray _options, String _optionKeyPath, boolean _quicksilver, String _message) {
-    return AbstractIMSearchAction.selectedValues(_options, _optionKeyPath, _quicksilver, _message, true);
+  public static NSArray selectedValues(NSArray options, String optionKeyPath, boolean quicksilver, String message) {
+    return AbstractIMSearchAction.selectedValues(options, optionKeyPath, quicksilver, message, true);
   }
 }
