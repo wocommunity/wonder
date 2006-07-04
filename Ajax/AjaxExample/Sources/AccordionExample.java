@@ -5,8 +5,8 @@ import com.webobjects.appserver.WOContext;
 
 public class AccordionExample extends WOComponent {
 
-  public AccordionExample(WOContext _context) {
-    super(_context);
+  public AccordionExample(WOContext context) {
+    super(context);
   }
 
 }

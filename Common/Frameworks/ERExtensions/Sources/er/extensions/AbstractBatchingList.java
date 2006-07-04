@@ -11,13 +11,13 @@ import com.webobjects.foundation.NSArray;
  * @author mschrag
  */
 public abstract class AbstractBatchingList extends AbstractList implements IBatchingList {
-  private int myPageIndex;
-  private int myPageSize;
-  private NSArray mySortOrderings;
+  private int _pageIndex;
+  private int _pageSize;
+  private NSArray _sortOrderings;
 
   public AbstractBatchingList() {
-    myPageIndex = 1;
-    myPageSize = 10;
+    _pageIndex = 1;
+    _pageSize = 10;
   }
 
   /**
@@ -28,11 +28,11 @@ public abstract class AbstractBatchingList extends AbstractList implements IBatc
   /**
    * Loads one page into this list.
    * 
-   * @param _startingIndex the index of the first element of the page (in element units, not page units)
-   * @param _pageSize the size of the page to load
-   * @param _sortOrderings the list of sort orderings
+   * @param startingIndex the index of the first element of the page (in element units, not page units)
+   * @param pageSize the size of the page to load
+   * @param sortOrderings the list of sort orderings
    */
-  protected abstract void loadPage(int _startingIndex, int _pageSize, NSArray _sortOrderings);
+  protected abstract void loadPage(int startingIndex, int pageSize, NSArray sortOrderings);
 
   /**
    * Invalidates the current page of objects, requiring a reload.
@@ -45,29 +45,29 @@ public abstract class AbstractBatchingList extends AbstractList implements IBatc
   protected abstract int getTotalCount();
 
   /**
-   * Returns the _index'th element from the current page.
+   * Returns the index'th element from the current page.
    * 
-   * @param _index the index of the element to return
+   * @param index the index of the element to return
    * @return the element
    */
-  protected abstract Object getFromPage(int _index);
+  protected abstract Object getFromPage(int index);
 
-  protected void ensurePageLoaded(int _index) {
-    int startIndex = myPageSize * (myPageIndex - 1);
-    int endIndex = startIndex + myPageSize;
-    int index = (_index == -1) ? startIndex : _index;
-    boolean withinPage = index >= startIndex && index <= endIndex;
+  protected void ensurePageLoaded(int index) {
+    int startIndex = _pageSize * (_pageIndex - 1);
+    int endIndex = startIndex + _pageSize;
+    int effectiveIndex = (index == -1) ? startIndex : index;
+    boolean withinPage = effectiveIndex >= startIndex && effectiveIndex <= endIndex;
     if (!withinPage) {
-      setPageIndex((_index / myPageSize) + 1);
+      setPageIndex((index / _pageSize) + 1);
     }
     if (!withinPage || !isPageLoaded()) {
-      loadPage(startIndex, myPageSize, mySortOrderings);
+      loadPage(startIndex, _pageSize, _sortOrderings);
     }
   }
 
-  public Object get(int _index) {
-    ensurePageLoaded(_index);
-    Object obj = getFromPage(_index - myPageSize * (myPageIndex - 1));
+  public Object get(int index) {
+    ensurePageLoaded(index);
+    Object obj = getFromPage(index - _pageSize * (_pageIndex - 1));
     return obj;
   }
 
@@ -77,18 +77,18 @@ public abstract class AbstractBatchingList extends AbstractList implements IBatc
     return totalCount;
   }
 
-  public void setPageIndex(int _pageIndex) {
-    myPageIndex = _pageIndex;
+  public void setPageIndex(int pageIndex) {
+    _pageIndex = pageIndex;
     invalidatePage();
   }
 
-  public void setPageSize(int _pageSize) {
-    myPageSize = _pageSize;
+  public void setPageSize(int pageSize) {
+    _pageSize = pageSize;
     invalidatePage();
   }
 
-  public void setSortOrderings(NSArray _sortOrderings) {
-    mySortOrderings = _sortOrderings;
+  public void setSortOrderings(NSArray sortOrderings) {
+    _sortOrderings = sortOrderings;
     invalidatePage();
   }
 }

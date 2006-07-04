@@ -16,40 +16,40 @@ import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 
 public class AjaxRoundEffect extends AjaxDynamicElement {
-  private NSDictionary myAssociations;
-  private WOAssociation myElementNameAssociation;
-  private WOAssociation myClassAssociation;
-  private WOAssociation myGenerateTagsAssociation;
-  private WOAssociation myIDAssociation;
+  private NSDictionary _associations;
+  private WOAssociation _elementNameAssociation;
+  private WOAssociation _classAssociation;
+  private WOAssociation _generateTagsAssociation;
+  private WOAssociation _idAssociation;
 
-  public AjaxRoundEffect(String _name, NSDictionary _associations, WOElement _children) {
-    super(_name, _associations, _children);
-    myAssociations = _associations;
-    myElementNameAssociation = (WOAssociation) _associations.objectForKey("elementName");
-    if (myElementNameAssociation == null) {
-      myElementNameAssociation = new WOConstantValueAssociation("div");
+  public AjaxRoundEffect(String name, NSDictionary associations, WOElement children) {
+    super(name, associations, children);
+    _associations = associations;
+    _elementNameAssociation = (WOAssociation) associations.objectForKey("elementName");
+    if (_elementNameAssociation == null) {
+      _elementNameAssociation = new WOConstantValueAssociation("div");
     }
-    myClassAssociation = (WOAssociation) _associations.objectForKey("class");
-    if (myClassAssociation == null) {
+    _classAssociation = (WOAssociation) associations.objectForKey("class");
+    if (_classAssociation == null) {
       throw new WODynamicElementCreationException("'class' is a required binding.");
     }
-    myGenerateTagsAssociation = (WOAssociation) _associations.objectForKey("generateTags");
-    if (myGenerateTagsAssociation == null) {
-      myGenerateTagsAssociation = new WOConstantValueAssociation(Boolean.FALSE);
+    _generateTagsAssociation = (WOAssociation) associations.objectForKey("generateTags");
+    if (_generateTagsAssociation == null) {
+      _generateTagsAssociation = new WOConstantValueAssociation(Boolean.FALSE);
     }
-    myIDAssociation = (WOAssociation) _associations.objectForKey("id");
+    _idAssociation = (WOAssociation) associations.objectForKey("id");
   }
 
-  protected void addRequiredWebResources(WOResponse _response, WOContext _context) {
-    addScriptResourceInHead(_context, _response, "prototype.js");
-    addScriptResourceInHead(_context, _response, "rico.js");
+  protected void addRequiredWebResources(WOResponse response, WOContext context) {
+    addScriptResourceInHead(context, response, "prototype.js");
+    addScriptResourceInHead(context, response, "rico.js");
   }
 
-  protected WOActionResults handleRequest(WORequest _request, WOContext _context) {
+  protected WOActionResults handleRequest(WORequest request, WOContext context) {
     return null;
   }
 
-  public NSDictionary createAjaxOptions(WOComponent _component) {
+  public NSDictionary createAjaxOptions(WOComponent component) {
     NSMutableArray ajaxOptionsArray = new NSMutableArray();
     ajaxOptionsArray.addObject(new AjaxOption("corners", AjaxOption.STRING));
     ajaxOptionsArray.addObject(new AjaxOption("color", AjaxOption.STRING));
@@ -57,47 +57,47 @@ public class AjaxRoundEffect extends AjaxDynamicElement {
     ajaxOptionsArray.addObject(new AjaxOption("blend", AjaxOption.BOOLEAN));
     ajaxOptionsArray.addObject(new AjaxOption("border", AjaxOption.BOOLEAN));
     ajaxOptionsArray.addObject(new AjaxOption("compact", AjaxOption.BOOLEAN));
-    NSMutableDictionary options = AjaxOption.createAjaxOptionsDictionary(ajaxOptionsArray, _component, myAssociations);
+    NSMutableDictionary options = AjaxOption.createAjaxOptionsDictionary(ajaxOptionsArray, component, _associations);
     return options;
   }
 
-  public void appendToResponse(WOResponse _response, WOContext _context) {
-    super.appendToResponse(_response, _context);
-    WOComponent component = _context.component();
-    String className = (String) myClassAssociation.valueInComponent(component);
-    String elementName = (String) myElementNameAssociation.valueInComponent(component);
-    boolean generateTags = ((Boolean) myGenerateTagsAssociation.valueInComponent(component)).booleanValue();
+  public void appendToResponse(WOResponse response, WOContext context) {
+    super.appendToResponse(response, context);
+    WOComponent component = context.component();
+    String className = (String) _classAssociation.valueInComponent(component);
+    String elementName = (String) _elementNameAssociation.valueInComponent(component);
+    boolean generateTags = ((Boolean) _generateTagsAssociation.valueInComponent(component)).booleanValue();
     if (generateTags) {
       elementName = "div";
-      _response.appendContentString("<");
-      _response.appendContentString(elementName);
-      _response.appendContentString(" class = \"");
-      _response.appendContentString(className);
-      _response.appendContentString("\"");
-      if (myIDAssociation != null) {
-        _response.appendContentString(" id = \"");
-        String id = (String) myIDAssociation.valueInComponent(component);
-        _response.appendContentString(id);
-        _response.appendContentString("\"");
+      response.appendContentString("<");
+      response.appendContentString(elementName);
+      response.appendContentString(" class = \"");
+      response.appendContentString(className);
+      response.appendContentString("\"");
+      if (_idAssociation != null) {
+        response.appendContentString(" id = \"");
+        String id = (String) _idAssociation.valueInComponent(component);
+        response.appendContentString(id);
+        response.appendContentString("\"");
       }
-      _response.appendContentString(">");
+      response.appendContentString(">");
     }
-    appendChildrenToResponse(_response, _context);
+    appendChildrenToResponse(response, context);
     if (generateTags) {
-      _response.appendContentString("\n</");
-      _response.appendContentString(elementName);
-      _response.appendContentString(">");
+      response.appendContentString("\n</");
+      response.appendContentString(elementName);
+      response.appendContentString(">");
     }
-    _response.appendContentString("\n");
-    _response.appendContentString("<script type = \"text/javascript\"><!--\n");
-    _response.appendContentString("new Rico.Effect.Round('");
-    _response.appendContentString(elementName);
-    _response.appendContentString("', '");
-    _response.appendContentString(className);
-    _response.appendContentString("', ");
+    response.appendContentString("\n");
+    response.appendContentString("<script type = \"text/javascript\"><!--\n");
+    response.appendContentString("new Rico.Effect.Round('");
+    response.appendContentString(elementName);
+    response.appendContentString("', '");
+    response.appendContentString(className);
+    response.appendContentString("', ");
     NSDictionary options = createAjaxOptions(component);
-    AjaxOptions.appendToResponse(options, _response, _context);
-    _response.appendContentString(");");
-    _response.appendContentString("\n// --></script>");
+    AjaxOptions.appendToResponse(options, response, context);
+    response.appendContentString(");");
+    response.appendContentString("\n// --></script>");
   }
 }

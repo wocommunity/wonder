@@ -7,62 +7,62 @@ import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSMutableArray;
 
 public class SortableListExample extends WOComponent {
-  private NSArray myListItems;
-  private ListItem myRepetitionListItem;
+  private NSArray _listItems;
+  private ListItem _repetitionListItem;
 
-  public SortableListExample(WOContext _context) {
-    super(_context);
+  public SortableListExample(WOContext context) {
+    super(context);
     NSMutableArray listItems = new NSMutableArray();
     for (int i = 0; i < 10; i++) {
       listItems.addObject(new ListItem(listID() + "_" + i, "Element #" + i));
     }
-    myListItems = listItems;
+    _listItems = listItems;
   }
 
   public String listID() {
     return "exampleList";
   }
 
-  public void setListItems(NSArray _listItems) {
-    myListItems = _listItems;
+  public void setListItems(NSArray listItems) {
+    _listItems = listItems;
   }
 
   public NSArray listItems() {
-    return myListItems;
+    return _listItems;
   }
 
-  public void setRepetitionListItem(ListItem _repetitionListItem) {
-    myRepetitionListItem = _repetitionListItem;
+  public void setRepetitionListItem(ListItem repetitionListItem) {
+    _repetitionListItem = repetitionListItem;
   }
 
   public ListItem repetitionListItem() {
-    return myRepetitionListItem;
+    return _repetitionListItem;
   }
 
   public WOActionResults orderChanged() {
-    System.out.println("SortableListExample.orderChanged: " + myListItems);
+    System.out.println("SortableListExample.orderChanged: " + _listItems);
     return null;
   }
 
   protected static class ListItem {
-    private String myID;
-    private String myName;
+    private String _id;
+    private String _name;
 
-    public ListItem(String _id, String _name) {
-      myID = _id;
-      myName = _name;
+    public ListItem(String id, String name) {
+      _id = id;
+      _name = name;
     }
 
     public String name() {
-      return myName;
+      return _name;
     }
 
     public String id() {
-      return myID;
+      return _id;
     }
 
     public String toString() {
-      return "[ListItem: id = " + myID + "]";
+      return "[ListItem: id = " + _id + "]";
     }
   }
 }

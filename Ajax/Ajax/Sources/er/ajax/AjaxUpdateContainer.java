@@ -66,22 +66,22 @@ public class AjaxUpdateContainer extends AjaxComponent {
       return id;
     }
     
-    public void appendToResponse(WOResponse _response, WOContext _context) {
-      super.appendToResponse(_response, _context);
+    public void appendToResponse(WOResponse response, WOContext context) {
+      super.appendToResponse(response, context);
       String id = containerID();
       
       NSDictionary options = createAjaxOptions();
       
-      _response.appendContentString("<script type = \"text/javascript\" language = \"javascript\"><!--\n");
+      response.appendContentString("<script type = \"text/javascript\" language = \"javascript\"><!--\n");
       if (canGetValueForBinding("frequency")) {
-        _response.appendContentString("new Ajax.PeriodicalUpdater('" + id + "', $(" + id + ").updateUrl, ");
-        AjaxOptions.appendToResponse(options, _response, _context);
-        _response.appendContentString(");");
+        response.appendContentString("new Ajax.PeriodicalUpdater('" + id + "', $(" + id + ").updateUrl, ");
+        AjaxOptions.appendToResponse(options, response, context);
+        response.appendContentString(");");
       }
       
       if (canGetValueForBinding("observeFieldID")) {
         String observeFieldID = (String)valueForBinding("observeFieldID");
-        _response.appendContentString("new Form.Element.Observer($('" + observeFieldID + "'), 1, function(element, value) {");
+        response.appendContentString("new Form.Element.Observer($('" + observeFieldID + "'), 1, function(element, value) {");
         NSMutableDictionary observerOptions = new NSMutableDictionary();
         observerOptions.setObjectForKey("true", "asynchronous");
         
@@ -90,8 +90,8 @@ public class AjaxUpdateContainer extends AjaxComponent {
         // and pass that in as FORCE_FORM_SUBMITTED_KEY, which is processed by ERXWOForm just like
         // senderID is on the real WOForm.  Unfortunately we can't hook into the real WOForm to do
         // this :(
-        _response.appendContentString("var formAction = $('" + observeFieldID + "').form.action;");
-        _response.appendContentString("var senderID = formAction.substring(formAction.indexOf('.', formAction.lastIndexOf('/')) + 1);");
+        response.appendContentString("var formAction = $('" + observeFieldID + "').form.action;");
+        response.appendContentString("var senderID = formAction.substring(formAction.indexOf('.', formAction.lastIndexOf('/')) + 1);");
         StringBuffer parameters = new StringBuffer();
         parameters.append("escape($('" + observeFieldID + "').name) + '=' + escape($('" + observeFieldID + "').value) + '");
         parameters.append("&");
@@ -99,16 +99,16 @@ public class AjaxUpdateContainer extends AjaxComponent {
         parameters.append("'");
         
         observerOptions.setObjectForKey(parameters.toString(), "parameters");
-        _response.appendContentString("new Ajax.Updater('" + id + "', $('" + id + "').updateUrl, ");
-        AjaxOptions.appendToResponse(observerOptions, _response, _context);
-        _response.appendContentString(") });");
+        response.appendContentString("new Ajax.Updater('" + id + "', $('" + id + "').updateUrl, ");
+        AjaxOptions.appendToResponse(observerOptions, response, context);
+        response.appendContentString(") });");
       }
 
-      _response.appendContentString("function " + id + "Update() { new Ajax.Updater('" + id + "', $(" + id + ").updateUrl, ");
-      AjaxOptions.appendToResponse(options, _response, _context);
-      _response.appendContentString("); }");
+      response.appendContentString("function " + id + "Update() { new Ajax.Updater('" + id + "', $(" + id + ").updateUrl, ");
+      AjaxOptions.appendToResponse(options, response, context);
+      response.appendContentString("); }");
       
-      _response.appendContentString("//--></script>");
+      response.appendContentString("//--></script>");
     }
 
     protected WOActionResults handleRequest(WORequest request, WOContext context) {

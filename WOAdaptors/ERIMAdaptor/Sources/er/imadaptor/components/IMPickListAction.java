@@ -15,50 +15,50 @@ import er.imadaptor.InstantMessengerAdaptor;
 public class IMPickListAction extends WOComponent {
   private static ERXLogger log = ERXLogger.getERXLogger(IMPickListAction.class);
 
-  private Object myRepetitionItem;
-  private int myIndex;
+  private Object _repetitionItem;
+  private int _index;
 
-  public IMPickListAction(WOContext _context) {
-    super(_context);
+  public IMPickListAction(WOContext context) {
+    super(context);
   }
 
   public boolean synchronizesVariablesWithBindings() {
     return false;
   }
 
-  public void setRepetitionItem(Object _repetitionItem) {
-    myRepetitionItem = _repetitionItem;
+  public void setRepetitionItem(Object repetitionItem) {
+    _repetitionItem = repetitionItem;
   }
 
   public Object repetitionItem() {
-    return myRepetitionItem;
+    return _repetitionItem;
   }
 
-  public void setIndex(int _index) {
-    myIndex = _index;
+  public void setIndex(int index) {
+    _index = index;
   }
 
   public int index() {
-    return myIndex;
+    return _index;
   }
 
   public int displayIndex() {
-    return myIndex + 1;
+    return _index + 1;
   }
 
   public String displayItem() {
     String item;
     String displayStringKeyPath = (String) valueForBinding("displayStringKeyPath");
     if (displayStringKeyPath == null) {
-      if (myRepetitionItem == null) {
+      if (_repetitionItem == null) {
         item = "";
       }
       else {
-        item = myRepetitionItem.toString();
+        item = _repetitionItem.toString();
       }
     }
     else {
-      Object displayValue = NSKeyValueCodingAdditions.Utility.valueForKeyPath(myRepetitionItem, displayStringKeyPath);
+      Object displayValue = NSKeyValueCodingAdditions.Utility.valueForKeyPath(_repetitionItem, displayStringKeyPath);
       if (displayValue == null) {
         item = "";
       }
@@ -69,14 +69,14 @@ public class IMPickListAction extends WOComponent {
     return item;
   }
 
-  public void appendToResponse(WOResponse _response, WOContext _context) {
-    String actionUrl = _context._componentActionURL(false);
-    _response.setHeader(actionUrl, InstantMessengerAdaptor.IM_ACTION_URL_KEY);
-    super.appendToResponse(_response, _context);
+  public void appendToResponse(WOResponse response, WOContext context) {
+    String actionUrl = context._componentActionURL(false);
+    response.setHeader(actionUrl, InstantMessengerAdaptor.IM_ACTION_URL_KEY);
+    super.appendToResponse(response, context);
   }
 
-  public WOActionResults invokeAction(WORequest _request, WOContext _context) {
-    String message = _context.request().stringFormValueForKey(InstantMessengerAdaptor.MESSAGE_KEY);
+  public WOActionResults invokeAction(WORequest request, WOContext context) {
+    String message = context.request().stringFormValueForKey(InstantMessengerAdaptor.MESSAGE_KEY);
     NSArray list = (NSArray) valueForBinding("list");
     NSArray selectedObjects;
     Object selectedObject;

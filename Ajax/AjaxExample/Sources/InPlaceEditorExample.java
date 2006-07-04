@@ -3,48 +3,48 @@
 import com.webobjects.appserver.*;
 
 public class InPlaceEditorExample extends WOComponent {
-  private String myExampleValue;
-  private String myMultilineValue;
-  private String myStrippedValue;
-  private int myNumericValue;
+  private String _exampleValue;
+  private String _multilineValue;
+  private String _strippedValue;
+  private int _numericValue;
 
   public InPlaceEditorExample(WOContext context) {
     super(context);
-    myExampleValue = "Test Value";
-    myMultilineValue = "Multi<br>Line<br>Value";
-    myStrippedValue = "Stripped Value";
-    myNumericValue = 5;
+    _exampleValue = "Test Value";
+    _multilineValue = "Multi<br>Line<br>Value";
+    _strippedValue = "Stripped Value";
+    _numericValue = 5;
   }
 
-  public void setExampleValue(String _exampleValue) {
-    myExampleValue = _exampleValue;
+  public void setExampleValue(String exampleValue) {
+    _exampleValue = exampleValue;
   }
 
   public String exampleValue() {
-    return myExampleValue;
+    return _exampleValue;
   }
 
-  public void setMultilineValue(String _multilineValue) {
-    myMultilineValue = _multilineValue;
+  public void setMultilineValue(String multilineValue) {
+    _multilineValue = multilineValue;
   }
 
   public String multilineValue() {
-    return myMultilineValue;
+    return _multilineValue;
   }
 
-  public void setStrippedValue(String _strippedValue) {
-    myStrippedValue = _strippedValue;
+  public void setStrippedValue(String strippedValue) {
+    _strippedValue = strippedValue;
   }
 
   public String strippedValue() {
-    return myStrippedValue;
+    return _strippedValue;
   }
   
-  public void setNumericValue(int _numericValue) {
-    myNumericValue = _numericValue;
+  public void setNumericValue(int numericValue) {
+    _numericValue = numericValue;
   }
   
   public int numericValue() {
-    return myNumericValue;
+    return _numericValue;
   }
 }
