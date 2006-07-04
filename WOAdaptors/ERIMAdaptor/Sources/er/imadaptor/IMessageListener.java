@@ -1,5 +1,5 @@
 package er.imadaptor;
 
 public interface IMessageListener {
-  public void messageReceived(IInstantMessenger _instantMessenger, String _buddyName, String _message);
+  public void messageReceived(IInstantMessenger instantMessenger, String buddyName, String message);
 }

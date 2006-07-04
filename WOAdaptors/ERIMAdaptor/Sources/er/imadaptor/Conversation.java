@@ -8,58 +8,58 @@ import com.webobjects.foundation.NSMutableDictionary;
  * @author mschrag
  */
 public class Conversation {
-  private String myBuddyName;
-  private String mySessionID;
-  private String myRequestUrl;
-  private long myLastContact;
-  private NSMutableDictionary myValues;
+  private String _buddyName;
+  private String _sessionID;
+  private String _requestUrl;
+  private long _lastContact;
+  private NSMutableDictionary _values;
   
   public Conversation() {
-    myLastContact = System.currentTimeMillis();
-    myValues = new NSMutableDictionary();
+    _lastContact = System.currentTimeMillis();
+    _values = new NSMutableDictionary();
   }
 
-  public String getRequestUrl() {
-    return myRequestUrl;
+  public String get_requestUrl() {
+    return _requestUrl;
   }
 
-  public void setRequestUrl(String _requestUrl) {
-    myRequestUrl = _requestUrl;
+  public void set_requestUrl(String requestUrl) {
+    _requestUrl = requestUrl;
   }
 
   public String getBuddyName() {
-    return myBuddyName;
+    return _buddyName;
   }
 
-  public void setBuddyName(String _buddyName) {
-    myBuddyName = _buddyName;
+  public void setBuddyName(String buddyName) {
+    _buddyName = buddyName;
   }
 
-  public String getSessionID() {
-    return mySessionID;
+  public String get_sessionID() {
+    return _sessionID;
   }
 
-  public void setSessionID(String _sessionID) {
-    mySessionID = _sessionID;
+  public void set_sessionID(String sessionID) {
+    _sessionID = sessionID;
   }
 
   public void ping() {
-    myLastContact = System.currentTimeMillis();
+    _lastContact = System.currentTimeMillis();
   }
 
   public void expire() {
-    myLastContact = System.currentTimeMillis();
+    _lastContact = System.currentTimeMillis();
   }
 
-  public boolean isExpired(long _timeout) {
-    return (System.currentTimeMillis() - myLastContact) > _timeout;
+  public boolean isExpired(long timeout) {
+    return (System.currentTimeMillis() - _lastContact) > timeout;
   }
   
-  public void setObjectForKey(Object _value, String _key) {
-    myValues.setObjectForKey(_value, _key);
+  public void setObjectForKey(Object value, String key) {
+    _values.setObjectForKey(value, key);
   }
   
-  public Object objectForKey(String _key) {
-    return myValues.objectForKey(_key);
+  public Object objectForKey(String key) {
+    return _values.objectForKey(key);
   }
 }

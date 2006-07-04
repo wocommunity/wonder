@@ -14,16 +14,16 @@ import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 
 public class AjaxSortableList extends AjaxComponent {
-  private String mySortOrderKeyName;
-  private String myActionUrl;
+  private String _sortOrderKeyName;
+  private String _actionUrl;
 
-  public AjaxSortableList(WOContext _context) {
-    super(_context);
+  public AjaxSortableList(WOContext context) {
+    super(context);
   }
 
   public void awake() {
     super.awake();
-    mySortOrderKeyName = safeElementID() + "_sortOrder";
+    _sortOrderKeyName = safeElementID() + "_sortOrder";
   }
 
   public boolean isStateless() {
@@ -34,19 +34,19 @@ public class AjaxSortableList extends AjaxComponent {
     return false;
   }
 
-  public void appendToResponse(WOResponse _response, WOContext _context) {
-    myActionUrl = _context.componentActionURL();
-    super.appendToResponse(_response, _context);
+  public void appendToResponse(WOResponse response, WOContext context) {
+    _actionUrl = context.componentActionURL();
+    super.appendToResponse(response, context);
   }
 
-  protected void addRequiredWebResources(WOResponse _res) {
-    addScriptResourceInHead(_res, "prototype.js");
-    addScriptResourceInHead(_res, "scriptaculous.js");
-    addScriptResourceInHead(_res, "effects.js");
-    addScriptResourceInHead(_res, "builder.js");
-    addScriptResourceInHead(_res, "dragdrop.js");
-    addScriptResourceInHead(_res, "controls.js");
-    addScriptResourceInHead(_res, "slider.js");
+  protected void addRequiredWebResources(WOResponse res) {
+    addScriptResourceInHead(res, "prototype.js");
+    addScriptResourceInHead(res, "scriptaculous.js");
+    addScriptResourceInHead(res, "effects.js");
+    addScriptResourceInHead(res, "builder.js");
+    addScriptResourceInHead(res, "dragdrop.js");
+    addScriptResourceInHead(res, "controls.js");
+    addScriptResourceInHead(res, "slider.js");
   }
 
   public NSDictionary createAjaxOptions() {
@@ -72,8 +72,8 @@ public class AjaxSortableList extends AjaxComponent {
     onUpdateBuffer.append("function(container) {");
     // onComplete:ajaxResponse
     String containerID = (String) valueForBinding("id");
-    onUpdateBuffer.append("var data = Sortable.serialize('" + containerID + "', { name:'" + mySortOrderKeyName + "'});");
-    onUpdateBuffer.append("var ajaxRequest = new Ajax.Request('" + myActionUrl + "', {method: 'get', parameters: data});");
+    onUpdateBuffer.append("var data = Sortable.serialize('" + containerID + "', { name:'" + _sortOrderKeyName + "'});");
+    onUpdateBuffer.append("var ajaxRequest = new Ajax.Request('" + _actionUrl + "', {method: 'get', parameters: data});");
     if (canGetValueForBinding("onUpdate")) {
       String onUpdate = (String) valueForBinding("onUpdate");
       onUpdateBuffer.append(" var parentOnUpdate = ");
@@ -85,7 +85,7 @@ public class AjaxSortableList extends AjaxComponent {
     return onUpdateBuffer.toString();
   }
 
-  protected WOActionResults handleRequest(WORequest _request, WOContext _context) {
+  protected WOActionResults handleRequest(WORequest request, WOContext context) {
     if (canGetValueForBinding("list")) {
       NSArray list = (NSArray) valueForBinding("list");
       NSMutableArray reorderedList = new NSMutableArray();
@@ -104,7 +104,7 @@ public class AjaxSortableList extends AjaxComponent {
         throw new IllegalArgumentException("You must specify 'listItemIDKeyPath' if you specify 'list'.");
       }
       String listItemIDKeyPath = (String) valueForBinding("listItemIDKeyPath");
-      Object listItemIDArrayObj = _request.formValues().objectForKey(mySortOrderKeyName + "[]");
+      Object listItemIDArrayObj = request.formValues().objectForKey(_sortOrderKeyName + "[]");
       NSArray listItemIDArray;
       if (listItemIDArrayObj instanceof NSArray) {
         listItemIDArray = (NSArray) listItemIDArrayObj;

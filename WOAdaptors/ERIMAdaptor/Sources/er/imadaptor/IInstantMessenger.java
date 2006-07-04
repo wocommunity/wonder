@@ -32,39 +32,39 @@ public interface IInstantMessenger {
   /**
    * Returns whether or not the specified buddy name is online.
    * 
-   * @param _buddyName the name of the buddy to check for
+   * @param buddyName the name of the buddy to check for
    * @throws InstantMessengerException
    */
-  public boolean isBuddyOnline(String _buddyName) throws InstantMessengerException;
+  public boolean isBuddyOnline(String buddyName) throws InstantMessengerException;
 
   /**
    * Adds a buddy to the buddy list.
    * 
-   * @param _buddyName the name of the buddy to add
+   * @param buddyName the name of the buddy to add
    * @throws InstantMessengerException
    */
-  public void addBuddy(String _buddyName) throws InstantMessengerException;
+  public void addBuddy(String buddyName) throws InstantMessengerException;
 
   /**
    * Sends a message to the specified buddy.
    * 
-   * @param _buddyName the name of the buddy to message
-   * @param _message the message to send
+   * @param buddyName the name of the buddy to message
+   * @param message the message to send
    * @throws MessageException
    */
-  public void sendMessage(String _buddyName, String _message) throws MessageException;
+  public void sendMessage(String buddyName, String message) throws MessageException;
 
   /**
    * Adds a listener to this InstantMessenger.
    * 
-   * @param _messageListener the message listener to add
+   * @param messageListener the message listener to add
    */
-  public void addMessageListener(IMessageListener _messageListener);
+  public void addMessageListener(IMessageListener messageListener);
 
   /**
    * Removes a listener from this InstantMessenger.
    * 
-   * @param _messageListener the message listener to remove
+   * @param messageListener the message listener to remove
    */
-  public void removeMessageListener(IMessageListener _messageListener);
+  public void removeMessageListener(IMessageListener messageListener);
 }

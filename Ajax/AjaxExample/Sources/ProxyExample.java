@@ -5,25 +5,25 @@ import com.webobjects.appserver.*;
 
 public class ProxyExample extends WOComponent {
     
-    private int counter = 0;
-    private DictClient dict;
+    private int _counter = 0;
+    private DictClient _dict;
     
     public ProxyExample(WOContext context) {
         super(context);
     }
 
     public int addMore(int x) {
-        return counter = counter + x;
+        return _counter = _counter + x;
     }
     
     public int add() {
-        return ++counter;
+        return ++_counter;
     }
     
     public DictClient dict() {
-        if (dict == null) {
-            dict = new DictClient("dict.die.net");
+        if (_dict == null) {
+            _dict = new DictClient("dict.die.net");
         }
-        return dict;
+        return _dict;
     }
 }

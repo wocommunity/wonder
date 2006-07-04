@@ -13,8 +13,8 @@ import com.webobjects.foundation.NSMutableDictionary;
  */
 public class AjaxSlider extends AjaxComponent {
 
-    private String trackerId;
-    private String handleId;
+    private String _trackerId;
+    private String _handleId;
 
     public AjaxSlider(WOContext context) {
         super(context);
@@ -39,8 +39,8 @@ public class AjaxSlider extends AjaxComponent {
      */
     public void appendToResponse(WOResponse res, WOContext ctx) {
         super.appendToResponse(res, ctx);
-        trackerId = safeElementID() + "_tracker";
-        handleId = safeElementID() + "_handle";
+        _trackerId = safeElementID() + "_tracker";
+        _handleId = safeElementID() + "_handle";
         
         NSMutableDictionary options = new NSMutableDictionary();
         new AjaxOption("axis", AjaxOption.STRING).addToDictionary("orientation", this, options);
@@ -59,10 +59,10 @@ public class AjaxSlider extends AjaxComponent {
         options.setObjectForKey("$R(" + min + "," + max + ")", "range");
         
         res.appendContentString("<div class=\"tracker\" id=\""+
-                trackerId+"\"><div class=\"handle\" id=\""+
-                handleId+"\"></div></div>");
+                _trackerId+"\"><div class=\"handle\" id=\""+
+                _handleId+"\"></div></div>");
         res.appendContentString("<script type=\"text/javascript\"><!--\n");
-        res.appendContentString("new Control.Slider('"+handleId+"', '"+trackerId+"', ");
+        res.appendContentString("new Control.Slider('"+_handleId+"', '"+_trackerId+"', ");
         AjaxOptions.appendToResponse(options, res, ctx);
         res.appendContentString(");");
         res.appendContentString("\n//--></script>");

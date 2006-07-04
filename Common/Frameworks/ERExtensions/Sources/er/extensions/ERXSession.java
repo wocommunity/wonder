@@ -646,13 +646,17 @@ public class ERXSession extends WOSession implements Serializable {
     private WOComponent _page;
     private String _key;
     private boolean _oldPage;
-    // private long _creationDate;
+    private long _lastModified;
 
     public TransactionRecord(WOComponent page, WOContext context, String key) {
       _page = page;
       _context = context;
       _key = key;
-      // _creationDate = System.currentTimeMillis();
+      touch();
+    }
+    
+    public void touch() {
+      _lastModified = System.currentTimeMillis();
     }
 
     public int hashCode() {
@@ -676,10 +680,10 @@ public class ERXSession extends WOSession implements Serializable {
     // page cache, but we can't get to the _contextRecords map in
     // WOSession, so for now, we just turn off explicit expiration.  As
     // a result, entries will fall out of the cache when the cache gets
-    // too big only.
+    // too big only unless it's an "old page," in which case it will expire 
+    // within 5 minutes.
     public boolean isExpired() {
-      boolean expired = false;
-      //boolean expired = (System.currentTimeMillis() - _lastUsed) > inactivityTime
+      boolean expired = _oldPage && ((System.currentTimeMillis() - _lastModified) > 5 * 60 * 1000 /* 5 minutes */);
       return expired;
     }
 
@@ -689,6 +693,7 @@ public class ERXSession extends WOSession implements Serializable {
 
     public void setOldPage(boolean oldPage) {
       _oldPage = oldPage;
+      touch();
     }
 
     public boolean isOldPage() {

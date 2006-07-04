@@ -9,11 +9,11 @@ import com.webobjects.foundation.NSDictionary;
 
 public class AjaxSubmitButton extends AjaxDynamicElement {
 
-  public AjaxSubmitButton(String _name, NSDictionary _associations, WOElement _children) {
-    super(_name, _associations, _children);
+  public AjaxSubmitButton(String name, NSDictionary associations, WOElement children) {
+    super(name, associations, children);
   }
 
-  public void appendToResponse(WOResponse _response, WOContext _context) {
+  public void appendToResponse(WOResponse response, WOContext context) {
     //    function addComment(e) { 
     //      // submit the form using Ajax 
     //      new Ajax.Request("comment.php", { 
@@ -22,13 +22,13 @@ public class AjaxSubmitButton extends AjaxDynamicElement {
     //      }); 
     //      Event.stop(e); 
     //     } 
-    super.appendToResponse(_response, _context);
+    super.appendToResponse(response, context);
   }
 
-  protected void addRequiredWebResources(WOResponse _response, WOContext _context) {
+  protected void addRequiredWebResources(WOResponse response, WOContext context) {
   }
 
-  protected WOActionResults handleRequest(WORequest _request, WOContext _context) {
+  protected WOActionResults handleRequest(WORequest request, WOContext context) {
     return null;
   }
 
