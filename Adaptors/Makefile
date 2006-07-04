@@ -40,6 +40,9 @@ Apache::
 Apache2::
 	cd Apache2 ; make
 
+Apache2.2::
+	cd Apache2.2 ; make
+
 IIS::
 	cd IIS ; make
 
