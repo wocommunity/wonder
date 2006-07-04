@@ -146,7 +146,12 @@ public class ERXDatabaseContextDelegate {
             for(int i = 0; i < pks.count(); i++) {
                 Object value = values.objectAtIndex(i);
                 EOAttribute attribute = (EOAttribute) pks.objectAtIndex(i);
-                gidString += attribute.name() + ": \'" +  expression.formatValueForAttribute(value, attribute) + "\'"
+                // ak: only Postgres seems to return reasonable values here...
+                String stringValue = expression.formatValueForAttribute(value, attribute);
+                if("NULL".equals(stringValue)) {
+                    stringValue = "" + value;
+                }
+                gidString += attribute.name() + ": \'" +  stringValue + "\'"
                 + (i == pks.count() - 1 ? "" : ", ");
             }
             gidString += "] >";
