@@ -14,10 +14,12 @@ import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 
 /**
- * Autocomplete field similar to what google has. You bind a value and a method that returns a list
- * and it hits the server on each keystroke and displays the results.
+ * Autocomplete field similar to what google has. You bind a value and a method
+ * that returns a list and it hits the server on each keystroke and displays the
+ * results.
+ * 
  * @author ak
- *
+ * 
  */
 public class AjaxAutoComplete extends AjaxComponent {
 
@@ -68,7 +70,7 @@ public class AjaxAutoComplete extends AjaxComponent {
      */
     public void appendToResponse(WOResponse res, WOContext ctx) {
         super.appendToResponse(res, ctx);
-        String actionUrl = context().componentActionURL();
+        String actionUrl = ctx.componentActionURL();
         res.appendContentString("<script type = \"text/javascript\" language = \"javascript\"><!--\n");
         res.appendContentString("new Ajax.Autocompleter('"+fieldName+"', '"+divName+"', '"+actionUrl+"', ");
         AjaxOptions.appendToResponse(createAjaxOptions(), res, ctx);
@@ -89,12 +91,12 @@ public class AjaxAutoComplete extends AjaxComponent {
     }
 
     /**
-     * Handles the Ajax request. Checks for the form value if the edit field,
-     * pushes it up to the parent and pull the "list" binding. The parent is
+     * Handles the Ajax request. Checks for the form value in the edit field,
+     * pushes it up to the parent and pulls the "list" binding. The parent is
      * responsible for returning a list with some items that match the current value.
      */
      protected WOActionResults handleRequest(WORequest request, WOContext context) {
-        String inputString = request.contentString();
+        // String inputString = request.contentString();
         String fieldValue = context.request().stringFormValueForKey(fieldName);
         setValueForBinding(fieldValue, "value");
         NSArray values = (NSArray) valueForBinding("list");
@@ -111,7 +113,12 @@ public class AjaxAutoComplete extends AjaxComponent {
                 child.appendToResponse(response, context);
                 context._setCurrentComponent(this);
             } else {
-                response.appendContentString(value.toString());
+            	if(hasItem) {
+                    setValueForBinding(value, "item");
+             	}
+            	Object displayValue = valueForBinding("displayString", valueForBinding("item", value));
+            	String displayString = displayValue.toString();
+                response.appendContentString(displayString);
             }
             response.appendContentString("</li>");
         }
