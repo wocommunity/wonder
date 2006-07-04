@@ -11,7 +11,7 @@ import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 
 public class AjaxAccordion extends AjaxComponent {
-  private String myAccordionID;
+  private String _accordionID;
   
   public AjaxAccordion(WOContext context) {
     super(context);
@@ -25,13 +25,13 @@ public class AjaxAccordion extends AjaxComponent {
     return false;
   }
 
-  public void appendToResponse(WOResponse _response, WOContext _context) {
-    myAccordionID = (String) valueForBinding("id", AjaxUtils.toSafeElementID(context().elementID()) + "Accordion");
-    super.appendToResponse(_response, _context);
+  public void appendToResponse(WOResponse response, WOContext context) {
+    _accordionID = (String) valueForBinding("id", AjaxUtils.toSafeElementID(context().elementID()) + "Accordion");
+    super.appendToResponse(response, context);
   }
 
   public String accordionID() {
-    return myAccordionID;
+    return _accordionID;
   }
 
   public NSDictionary createAjaxOptions() {
@@ -54,12 +54,12 @@ public class AjaxAccordion extends AjaxComponent {
     return options;
   }
 
-  protected void addRequiredWebResources(WOResponse _response) {
-    addScriptResourceInHead(_response, "prototype.js");
-    addScriptResourceInHead(_response, "rico.js");
+  protected void addRequiredWebResources(WOResponse response) {
+    addScriptResourceInHead(response, "prototype.js");
+    addScriptResourceInHead(response, "rico.js");
   }
 
-  protected WOActionResults handleRequest(WORequest _request, WOContext _context) {
+  protected WOActionResults handleRequest(WORequest request, WOContext context) {
     return null;
   }
 }

@@ -21,15 +21,15 @@ import er.imadaptor.InstantMessengerAdaptor;
  * @author mschrag
  */
 public class IMConfirmationAction extends IMAction {
-  private WOAssociation myConfirmed;
+  private WOAssociation _confirmed;
 
-  public IMConfirmationAction(String _name, NSDictionary _associations, WOElement _children) {
-    super(_name, _associations, _children);
-    myConfirmed = (WOAssociation) _associations.objectForKey("confirmed");
+  public IMConfirmationAction(String name, NSDictionary associations, WOElement children) {
+    super(name, associations, children);
+    _confirmed = (WOAssociation) associations.objectForKey("confirmed");
   }
 
-  protected void actionInvoked(WORequest _request, WOContext _context) {
-    String message = _request.stringFormValueForKey(InstantMessengerAdaptor.MESSAGE_KEY);
+  protected void actionInvoked(WORequest request, WOContext context) {
+    String message = request.stringFormValueForKey(InstantMessengerAdaptor.MESSAGE_KEY);
     String lowercaseMessage = message.trim().toLowerCase();
     NSMutableSet yes = new NSMutableSet();
     yes.addObject("yes");
@@ -43,15 +43,15 @@ public class IMConfirmationAction extends IMAction {
     no.addObject("nope");
     no.addObject("nah");
 
-    WOComponent component = _context.component();
+    WOComponent component = context.component();
     if (yes.containsObject(lowercaseMessage)) {
-      myConfirmed.setValue(Boolean.TRUE, component);
+      _confirmed.setValue(Boolean.TRUE, component);
     }
     else if (no.containsObject(lowercaseMessage)) {
-      myConfirmed.setValue(Boolean.FALSE, component);
+      _confirmed.setValue(Boolean.FALSE, component);
     }
     else {
-      myConfirmed.setValue(null, component);
+      _confirmed.setValue(null, component);
     }
   }
 }

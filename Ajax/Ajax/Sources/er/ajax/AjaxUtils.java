@@ -77,22 +77,22 @@ public class AjaxUtils {
   /**
    * Returns the userInfo dictionary if the supplied message and replaces it with a mutable
    * version if it isn't already one.
-   * @param _message
+   * @param message
    * @return
    */
-  public static NSMutableDictionary mutableUserInfo(WOMessage _message) {
-    NSDictionary dict = _message.userInfo();
+  public static NSMutableDictionary mutableUserInfo(WOMessage message) {
+    NSDictionary dict = message.userInfo();
     NSMutableDictionary result = null;
     if (dict == null) {
       result = new NSMutableDictionary();
-      _message.setUserInfo(result);
+      message.setUserInfo(result);
     }
     else {
       if (dict instanceof NSMutableDictionary) {
         result = (NSMutableDictionary) dict;
       } else {
         result = dict.mutableClone();
-        _message.setUserInfo(result);
+        message.setUserInfo(result);
       }
     }
     return result;
@@ -105,66 +105,65 @@ public class AjaxUtils {
 
   /**
    * Utility to add the given text before the given tag. Used to add stuff in the HEAD.
-   * @param _response
-   * @param _content
-   * @param _tag
+   * @param response
+   * @param content
+   * @param tag
    */
-  public static void insertInResponseBeforeTag(WOResponse _response, String _content, String _tag) {
-    String stream = _response.contentString();
-    int idx = stream.indexOf(_tag);
+  public static void insertInResponseBeforeTag(WOResponse response, String content, String tag) {
+    String stream = response.contentString();
+    int idx = stream.indexOf(tag);
     if (idx < 0) {
-      idx = stream.toLowerCase().indexOf(_tag.toLowerCase());
+      idx = stream.toLowerCase().indexOf(tag.toLowerCase());
     }
     if (idx >= 0) {
       String pre = stream.substring(0, idx);
       String post = stream.substring(idx, stream.length());
-      _response.setContent(pre + _content + post);
+      response.setContent(pre + content + post);
     }
   }
 
   /**
    * Adds a script tag with a correct resource url in the html head tag if it isn't already present in 
    * the response.
-   * @param _response
-   * @param _fileName
+   * @param response
+   * @param fileName
    */
-  public static void addScriptResourceInHead(WOContext _context, WOResponse _response, String _fileName) {
-    NSMutableDictionary userInfo = AjaxUtils.mutableUserInfo(_context.response());
-    if (userInfo.objectForKey(_fileName) == null) {
-      userInfo.setObjectForKey(_fileName, _fileName);
+  public static void addScriptResourceInHead(WOContext context, WOResponse response, String fileName) {
+    NSMutableDictionary userInfo = AjaxUtils.mutableUserInfo(context.response());
+    if (userInfo.objectForKey(fileName) == null) {
+      userInfo.setObjectForKey(fileName, fileName);
       WOResourceManager rm = WOApplication.application().resourceManager();
-      String url = rm.urlForResourceNamed(_fileName, "Ajax", _context.session().languages(), _context.request());
+      String url = rm.urlForResourceNamed(fileName, "Ajax", context.session().languages(), context.request());
       String js = "<script type=\"text/javascript\" src=\"" + url + "\"></script>";
-      AjaxUtils.insertInResponseBeforeTag(_response, js, AjaxUtils.htmlCloseHead());
+      AjaxUtils.insertInResponseBeforeTag(response, js, AjaxUtils.htmlCloseHead());
     }
   }
 
   /**
    * Adds javascript code in a script tag in the html head tag. 
-   * @param _response
-   * @param _script
+   * @param response
+   * @param script
    */
-  public static void addScriptCodeInHead(WOResponse _response, String _script) {
-    String js = "<script type=\"text/javascript\"><!--\n" + _script + "\n//--></script>";
-    AjaxUtils.insertInResponseBeforeTag(_response, js, AjaxUtils.htmlCloseHead());
+  public static void addScriptCodeInHead(WOResponse response, String script) {
+    String js = "<script type=\"text/javascript\"><!--\n" + script + "\n//--></script>";
+    AjaxUtils.insertInResponseBeforeTag(response, js, AjaxUtils.htmlCloseHead());
   }
 
-  public static String toSafeElementID(String _elementID) {
-    String elementID = _elementID;
+  public static String toSafeElementID(String elementID) {
     return "wo_" + elementID.replace('.', '_');
   }
 
-  public static boolean shouldHandleRequest(WORequest _request, WOContext _context) {
-    String elementID = _context.elementID();
-    String senderID = _context.senderID();
-    String invokeWOElementID = _request.stringFormValueForKey("invokeWOElementID");
-    WOComponent wocomponent = _context.component();
+  public static boolean shouldHandleRequest(WORequest request, WOContext context) {
+    String elementID = context.elementID();
+    String senderID = context.senderID();
+    String invokeWOElementID = request.stringFormValueForKey("invokeWOElementID");
+    WOComponent wocomponent = context.component();
     boolean shouldHandleRequest = elementID != null && (elementID.equals(senderID) || (invokeWOElementID != null && invokeWOElementID.equals(elementID)));
     return shouldHandleRequest;
   }
 
-  public static void updateMutableUserInfoWithAjaxInfo(WOContext _context) {
-    NSMutableDictionary dict = AjaxUtils.mutableUserInfo(_context.response());
+  public static void updateMutableUserInfoWithAjaxInfo(WOContext context) {
+    NSMutableDictionary dict = AjaxUtils.mutableUserInfo(context.response());
     dict.takeValueForKey(AjaxUtils.DONT_STORE_PAGE, AjaxUtils.DONT_STORE_PAGE);
   }
 }

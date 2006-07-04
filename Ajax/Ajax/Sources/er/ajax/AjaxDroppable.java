@@ -10,8 +10,8 @@ import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 
 public class AjaxDroppable extends AjaxComponent {
-  private String myDraggableIDKeyName;
-  private String myActionUrl;
+  private String _draggableIDKeyName;
+  private String _actionUrl;
 
   public AjaxDroppable(WOContext _context) {
     super(_context);
@@ -19,7 +19,7 @@ public class AjaxDroppable extends AjaxComponent {
 
   public void awake() {
     super.awake();
-    myDraggableIDKeyName = safeElementID() + "_draggableID";
+    _draggableIDKeyName = safeElementID() + "_draggableID";
   }
 
   public boolean isStateless() {
@@ -30,9 +30,9 @@ public class AjaxDroppable extends AjaxComponent {
     return false;
   }
 
-  public void appendToResponse(WOResponse _response, WOContext _context) {
-    myActionUrl = context().componentActionURL();
-    super.appendToResponse(_response, _context);
+  public void appendToResponse(WOResponse response, WOContext context) {
+    _actionUrl = context().componentActionURL();
+    super.appendToResponse(response, context);
   }
 
   public NSDictionary createAjaxOptions() {
@@ -57,8 +57,8 @@ public class AjaxDroppable extends AjaxComponent {
     // onComplete:ajaxResponse
     String droppableElementID = (String) valueForBinding("id");
     onDropBuffer.append("if (droppableElement.id == '" + droppableElementID + "') {");
-    onDropBuffer.append("var data = '" + myDraggableIDKeyName + "=' + element.draggableID;");
-    onDropBuffer.append("var ajaxRequest = new Ajax.Request('" + myActionUrl + "', {method: 'get', parameters: data});");
+    onDropBuffer.append("var data = '" + _draggableIDKeyName + "=' + element.draggableID;");
+    onDropBuffer.append("var ajaxRequest = new Ajax.Request('" + _actionUrl + "', {method: 'get', parameters: data});");
     if (canGetValueForBinding("onDrop")) {
       String onDrop = (String) valueForBinding("onDrop");
       onDropBuffer.append(" var parentOnDrop = ");
@@ -71,21 +71,21 @@ public class AjaxDroppable extends AjaxComponent {
     return onDropBuffer.toString();
   }
 
-  protected void addRequiredWebResources(WOResponse _res) {
-    addScriptResourceInHead(_res, "prototype.js");
-    addScriptResourceInHead(_res, "scriptaculous.js");
-    addScriptResourceInHead(_res, "effects.js");
-    addScriptResourceInHead(_res, "builder.js");
-    addScriptResourceInHead(_res, "dragdrop.js");
-    addScriptResourceInHead(_res, "controls.js");
+  protected void addRequiredWebResources(WOResponse res) {
+    addScriptResourceInHead(res, "prototype.js");
+    addScriptResourceInHead(res, "scriptaculous.js");
+    addScriptResourceInHead(res, "effects.js");
+    addScriptResourceInHead(res, "builder.js");
+    addScriptResourceInHead(res, "dragdrop.js");
+    addScriptResourceInHead(res, "controls.js");
   }
 
-  protected WOActionResults handleRequest(WORequest _request, WOContext _context) {
-    String droppedDraggableID = _request.stringFormValueForKey(myDraggableIDKeyName);
+  protected WOActionResults handleRequest(WORequest request, WOContext context) {
+    String droppedDraggableID = request.stringFormValueForKey(_draggableIDKeyName);
     if (canSetValueForBinding("droppedDraggableID")) {
       setValueForBinding(droppedDraggableID, "droppedDraggableID");
       if (canSetValueForBinding("droppedObject")) {
-        WOComponent page = _context.page();
+        WOComponent page = context.page();
         Object droppedObject = AjaxDraggable.draggableObjectForPage(page, droppedDraggableID);
         setValueForBinding(droppedObject, "droppedObject");
       }

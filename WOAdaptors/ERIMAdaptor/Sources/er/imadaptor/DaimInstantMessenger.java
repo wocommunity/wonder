@@ -16,14 +16,14 @@ public class DaimInstantMessenger extends AbstractInstantMessenger {
   private DaimOscarClient myOscarClient;
   private long myLastConnectionAttempt;
 
-  public DaimInstantMessenger(String _screenName, String _password) {
-    super(_screenName, _password);
+  public DaimInstantMessenger(String screenName, String password) {
+    super(screenName, password);
   }
 
-  public void addBuddy(String _buddyName) throws InstantMessengerException {
+  public void addBuddy(String buddyName) throws InstantMessengerException {
     try {
       if (myOscarClient != null) {
-        myOscarClient.addBuddy(_buddyName, "Group");
+        myOscarClient.addBuddy(buddyName, "Group");
       }
     }
     catch (IOException e) {
@@ -62,14 +62,14 @@ public class DaimInstantMessenger extends AbstractInstantMessenger {
     return myConnected;
   }
 
-  public boolean isBuddyOnline(String _buddyName) {
-    return myOscarClient != null && myOscarClient.isBuddyOnline(_buddyName);
+  public boolean isBuddyOnline(String buddyName) {
+    return myOscarClient != null && myOscarClient.isBuddyOnline(buddyName);
   }
 
-  public void sendMessage(String _buddyName, String _message) throws MessageException {
+  public void sendMessage(String buddyName, String message) throws MessageException {
     try {
       if (myOscarClient != null) {
-        myOscarClient.sendIM(_buddyName, _message, AIMConstants.AIM_FLAG_AOL);
+        myOscarClient.sendIM(buddyName, message, AIMConstants.AIM_FLAG_AOL);
       }
     }
     catch (IOException e) {
@@ -88,70 +88,69 @@ public class DaimInstantMessenger extends AbstractInstantMessenger {
       myOfflineBuddies = new LinkedList();
     }
 
-    public boolean isBuddyOnline(String _buddyName) {
+    public boolean isBuddyOnline(String buddyName) {
       boolean online;
       synchronized (myBuddies) {
-        online = myOnlineBuddies.contains(_buddyName.toLowerCase());
+        online = myOnlineBuddies.contains(buddyName.toLowerCase());
       }
       return online;
     }
 
-    public void buddyOffline(String _buddyName, Buddy _buddy) {
-      if (_buddyName != null) {
-        String lcBuddyName = _buddyName.toLowerCase();
+    public void buddyOffline(String buddyName, Buddy buddy) {
+      if (buddyName != null) {
+        String lcBuddyName = buddyName.toLowerCase();
         myOnlineBuddies.remove(lcBuddyName);
         myOfflineBuddies.add(lcBuddyName);
       }
     }
 
-    public void buddyOnline(String _buddyName, Buddy _buddy) {
-      if (_buddyName != null) {
-        String lcBuddyName = _buddyName.toLowerCase();
+    public void buddyOnline(String buddyName, Buddy buddy) {
+      if (buddyName != null) {
+        String lcBuddyName = buddyName.toLowerCase();
         myOfflineBuddies.remove(lcBuddyName);
         myOnlineBuddies.add(lcBuddyName);
       }
     }
 
-    public void newBuddyList(Buddy[] _buddies) {
+    public void newBuddyList(Buddy[] buddies) {
       synchronized (myBuddies) {
         myBuddies.clear();
         myOnlineBuddies.clear();
         myOfflineBuddies.clear();
-        for (int i = 0; i < _buddies.length; i++) {
-          myBuddies.add(_buddies[i].getName().toLowerCase());
+        for (int i = 0; i < buddies.length; i++) {
+          myBuddies.add(buddies[i].getName().toLowerCase());
         }
       }
     }
 
-    public void loginDone(DaimLoginEvent _event) {
-      super.loginDone(_event);
+    public void loginDone(DaimLoginEvent event) {
+      super.loginDone(event);
       myConnected = true;
     }
 
-    public void incomingICQ(UserInfo _userInfo, int _arg1, int _arg2, String _message) {
-      super.incomingICQ(_userInfo, _arg1, _arg2, _message);
-      String message = _message;
-      if (_userInfo != null) {
+    public void incomingICQ(UserInfo userInfo, int arg1, int arg2, String message) {
+      super.incomingICQ(userInfo, arg1, arg2, message);
+      if (userInfo != null) {
         message = message.replaceAll("\\<.*?\\>", "");
-        DaimInstantMessenger.this.fireMessageReceived(_userInfo.getSN(), message);
+        DaimInstantMessenger.this.fireMessageReceived(userInfo.getSN(), message);
       }
     }
 
-    public void incomingIM(Buddy _buddy, UserInfo _userInfo, AOLIM _im) {
-      super.incomingIM(_buddy, _userInfo, _im);
-      String message = _im.getMsg();
-      if (_buddy != null) {
+    public void incomingIM(Buddy buddy, UserInfo userInfo, AOLIM im) {
+      super.incomingIM(buddy, userInfo, im);
+      String message = im.getMsg();
+      if (buddy != null) {
         message = message.replaceAll("\\<.*?\\>", "");
-        DaimInstantMessenger.this.fireMessageReceived(_buddy.getName(), message);
+        DaimInstantMessenger.this.fireMessageReceived(buddy.getName(), message);
       }
     }
 
-    public void login(String _screenName, String _password) throws IOException {
-      super.login(_screenName, _password);
+    public void login(String screenName, String password) throws IOException {
+      super.login(screenName, password);
     }
 
-    public void loginError(DaimLoginEvent _event) {
-      super.loginError(_event);
+    public void loginError(DaimLoginEvent event) {
+      super.loginError(event);
       myConnected = false;
     }
 
@@ -162,8 +161,8 @@ public class DaimInstantMessenger extends AbstractInstantMessenger {
   }
 
   public static class Factory implements IInstantMessengerFactory {
-    public IInstantMessenger createInstantMessenger(String _screenName, String _password) {
-      return new DaimInstantMessenger(_screenName, _password);
+    public IInstantMessenger createInstantMessenger(String screenName, String password) {
+      return new DaimInstantMessenger(screenName, password);
     }
   }
 }

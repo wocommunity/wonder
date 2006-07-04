@@ -38,6 +38,6 @@ RoundBoxes : AjaxRoundEffect {
 	class = "rounded";
 }
 
-PopUpButtonLink : WOHyperlink {
-	pageName = "PopUpButtonExample";
+DependentListsExample : WOHyperlink {
+	pageName = "DependentListsExample";
 }

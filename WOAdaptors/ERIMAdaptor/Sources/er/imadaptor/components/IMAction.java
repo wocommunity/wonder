@@ -13,33 +13,33 @@ import com.webobjects.foundation.NSDictionary;
 import er.imadaptor.InstantMessengerAdaptor;
 
 public class IMAction extends WODynamicElement {
-  protected WOAssociation myAction;
+  protected WOAssociation _action;
 
-  public IMAction(String _name, NSDictionary _assocationsDictionary, WOElement _template) {
-    super("link", _assocationsDictionary, _template);
-    myAction = (WOAssociation) _assocationsDictionary.objectForKey("action");
+  public IMAction(String name, NSDictionary assocationsDictionary, WOElement template) {
+    super("link", assocationsDictionary, template);
+    _action = (WOAssociation) assocationsDictionary.objectForKey("action");
   }
 
-  public void appendToResponse(WOResponse _response, WOContext _context) {
-    String actionUrl = _context._componentActionURL(false);
-    _response.setHeader(actionUrl, InstantMessengerAdaptor.IM_ACTION_URL_KEY);
-    super.appendToResponse(_response, _context);
+  public void appendToResponse(WOResponse response, WOContext context) {
+    String actionUrl = context._componentActionURL(false);
+    response.setHeader(actionUrl, InstantMessengerAdaptor.IM_ACTION_URL_KEY);
+    super.appendToResponse(response, context);
   }
 
-  public WOActionResults invokeAction(WORequest _request, WOContext _context) {
+  public WOActionResults invokeAction(WORequest request, WOContext context) {
     String s = null;
     WOActionResults results = null;
-    if (_context.elementID().equals(_context.senderID())) {
-      actionInvoked(_request, _context);
-      WOComponent component = _context.component();
-      results = (WOActionResults) myAction.valueInComponent(component);
+    if (context.elementID().equals(context.senderID())) {
+      actionInvoked(request, context);
+      WOComponent component = context.component();
+      results = (WOActionResults) _action.valueInComponent(component);
       if (results == null) {
-        results = _context.page();
+        results = context.page();
       }
     }
     return results;
   }
 
-  protected void actionInvoked(WORequest _request, WOContext _context) {
+  protected void actionInvoked(WORequest request, WOContext context) {
   }
 }

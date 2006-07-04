@@ -5,55 +5,55 @@ import com.levelonelabs.aim.AIMClient;
 import com.levelonelabs.aim.AIMListener;
 
 public class AimBotInstantMessenger extends AbstractInstantMessenger {
-  private boolean myConnected;
-  private AIMClient mySender;
-  private AimBotListener myListener;
-  private long myLastConnectionAttempt;
+  private boolean _connected;
+  private AIMClient _sender;
+  private AimBotListener _listener;
+  private long _lastConnectionAttempt;
 
-  public AimBotInstantMessenger(String _screenName, String _password) {
-    super(_screenName, _password);
-    myListener = new AimBotListener();
+  public AimBotInstantMessenger(String screenName, String password) {
+    super(screenName, password);
+    _listener = new AimBotListener();
   }
 
-  public synchronized boolean isBuddyOnline(String _buddyName) {
-    AIMBuddy buddy = getBuddy(_buddyName);
+  public synchronized boolean isBuddyOnline(String buddyName) {
+    AIMBuddy buddy = getBuddy(buddyName);
     boolean online = buddy != null && buddy.isOnline();
     return online;
   }
 
-  public synchronized AIMBuddy getBuddy(String _buddyName) {
+  public synchronized AIMBuddy getBuddy(String buddyName) {
     AIMBuddy buddy;
-    if (mySender == null) {
+    if (_sender == null) {
       buddy = null;
     }
     else {
-      buddy = mySender.getBuddy(_buddyName);
+      buddy = _sender.getBuddy(buddyName);
       if (buddy == null) {
-        mySender.addBuddy(new AIMBuddy(_buddyName));
-        buddy = mySender.getBuddy(_buddyName);
+        _sender.addBuddy(new AIMBuddy(buddyName));
+        buddy = _sender.getBuddy(buddyName);
       }
     }
     return buddy;
   }
 
-  public synchronized void addBuddy(String _buddyName) {
-    if (mySender != null) {
-      mySender.addBuddy(new AIMBuddy(_buddyName));
+  public synchronized void addBuddy(String buddyName) {
+    if (_sender != null) {
+      _sender.addBuddy(new AIMBuddy(buddyName));
     }
   }
 
   public synchronized void connect() throws IMConnectionException {
-    if (myConnected) {
+    if (_connected) {
       disconnect();
     }
     long now = System.currentTimeMillis();
-    if (now - myLastConnectionAttempt > (1000 * 60 * 15)) {
-      myLastConnectionAttempt = now;
-      mySender = new AIMClient(getScreenName(), getPassword(), "", true);
-      mySender.addAIMListener(myListener);
-      mySender.signOn();
-      mySender.setAvailable();
-      myConnected = true;
+    if (now - _lastConnectionAttempt > (1000 * 60 * 15)) {
+      _lastConnectionAttempt = now;
+      _sender = new AIMClient(getScreenName(), getPassword(), "", true);
+      _sender.addAIMListener(_listener);
+      _sender.signOn();
+      _sender.setAvailable();
+      _connected = true;
       //System.out.println("AimBotInstantMessenger.connect: Connected to " + getScreenName());
     }
     else {
@@ -62,40 +62,40 @@ public class AimBotInstantMessenger extends AbstractInstantMessenger {
   }
 
   public synchronized void disconnect() {
-    if (myConnected) {
-      mySender.signOff();
-      mySender = null;
-      myConnected = false;
+    if (_connected) {
+      _sender.signOff();
+      _sender = null;
+      _connected = false;
     }
   }
 
   public synchronized boolean isConnected() {
-    return myConnected;
+    return _connected;
   }
 
-  public synchronized void sendMessage(String _buddyName, String _message) throws MessageException {
-    if (mySender != null) {
-      AIMBuddy buddy = getBuddy(_buddyName);
+  public synchronized void sendMessage(String buddyName, String message) throws MessageException {
+    if (_sender != null) {
+      AIMBuddy buddy = getBuddy(buddyName);
       if (buddy != null) {
         if (!buddy.isOnline()) {
-          throw new BuddyOfflineException("The buddy '" + _buddyName + "' is not online.");
+          throw new BuddyOfflineException("The buddy '" + buddyName + "' is not online.");
         }
-        mySender.sendMessage(buddy, _message);
+        _sender.sendMessage(buddy, message);
       }
     }
   }
 
   protected class AimBotListener implements AIMListener {
-    public void handleBuddyAvailable(AIMBuddy _buddy, String _message) {
+    public void handleBuddyAvailable(AIMBuddy buddy, String _message) {
     }
 
-    public void handleBuddySignOff(AIMBuddy _buddy, String _info) {
+    public void handleBuddySignOff(AIMBuddy buddy, String info) {
     }
 
-    public void handleBuddySignOn(AIMBuddy _buddy, String _info) {
+    public void handleBuddySignOn(AIMBuddy buddy, String info) {
     }
 
-    public void handleBuddyUnavailable(AIMBuddy _buddy, String _message) {
+    public void handleBuddyUnavailable(AIMBuddy buddy, String message) {
     }
 
     public void handleConnected() {
@@ -104,20 +104,20 @@ public class AimBotInstantMessenger extends AbstractInstantMessenger {
     public void handleDisconnected() {
     }
 
-    public void handleError(String _error, String _message) {
+    public void handleError(String error, String message) {
     }
 
-    public void handleMessage(AIMBuddy _buddy, String _message) {
-      AimBotInstantMessenger.this.fireMessageReceived(_buddy.getName(), _message);
+    public void handleMessage(AIMBuddy buddy, String message) {
+      AimBotInstantMessenger.this.fireMessageReceived(buddy.getName(), message);
     }
 
-    public void handleWarning(AIMBuddy _buddy, int _amount) {
+    public void handleWarning(AIMBuddy buddy, int amount) {
     }
   }
 
   public static class Factory implements IInstantMessengerFactory {
-    public IInstantMessenger createInstantMessenger(String _screenName, String _password) {
-      return new AimBotInstantMessenger(_screenName, _password);
+    public IInstantMessenger createInstantMessenger(String screenName, String password) {
+      return new AimBotInstantMessenger(screenName, password);
     }
   }
 }
