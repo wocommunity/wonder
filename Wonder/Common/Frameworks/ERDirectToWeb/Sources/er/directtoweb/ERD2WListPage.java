@@ -354,7 +354,7 @@ public class ERD2WListPage extends ERD2WPage implements ERDListPageInterface, Se
     	EODatabaseDataSource ds = (eodatasource instanceof EODatabaseDataSource) ? (EODatabaseDataSource)eodatasource : null;
     	Object newDataSourceState = null;
     	if(ds != null) {
-    		newDataSourceState = ds.fetchSpecification().toString().replaceAll("\\n", "") + ":" + ds.fetchSpecificationForFetch().toString().replaceAll("\\n", "");
+    		newDataSourceState = ds.fetchSpecification().toString().replaceAll("\\n", "") + ":" + ds.fetchSpecificationForFetch().toString().replaceAll("\\n", "") + " fetchLimit: " + ds.fetchSpecification().fetchLimit() + ", " + ds.fetchSpecificationForFetch().fetchLimit();
     	}
     	super.setDataSource(eodatasource);
     	displayGroup().setDataSource(eodatasource);
