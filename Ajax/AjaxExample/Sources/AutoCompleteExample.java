@@ -28,7 +28,8 @@ public class AutoCompleteExample extends WOComponent {
         Random rand = new Random();
         for(int i = 0; i < 1000; i++) {
             String s = "";
-            for(int j = 0; j< 6; j++) {
+            int max = 6 + rand.nextInt(6);
+            for(int j = 0; j< max; j++) {
                 int c = rand.nextInt(26);
                 s += Character.toString((char) ('A' + c));
             }
