@@ -60,7 +60,7 @@ public abstract class ERXApplication extends WOApplication implements ERXGracefu
         if(contextClassName().equals("WOContext"))
             setContextClassName("er.extensions.ERXWOContext");
         if(contextClassName().equals("WOServletContext")
-           || contextClassName().equals("com.webobjects.appserver.WOServletContext"))
+           || contextClassName().equals("com.webobjects.appserver.jspservlet.WOServletContext"))
             setContextClassName("er.extensions.ERXWOServletContext");
         
         ERXPatcher.setClassForName(ERXWOForm.class, "WOForm");
