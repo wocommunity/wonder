@@ -24,7 +24,25 @@ import com.webobjects.foundation.*;
  * array fault that is checked before they are fetched from the database.
  */
 public class ERXDatabaseContextDelegate {
-             
+	
+    public static class ObjectNotAvailableException extends EOObjectNotAvailableException {
+    	private EOGlobalID globalID;
+    	
+		public ObjectNotAvailableException(String message) {
+			this(message, null);
+		}
+    	
+		public ObjectNotAvailableException(String message, EOGlobalID gid) {
+			super(message);
+			globalID = gid;
+		}
+		
+		public EOGlobalID globalID() {
+			return globalID;
+		}
+    	
+    }
+	
     /** Basic logging support */
     public final static Logger log = Logger.getLogger(ERXDatabaseContextDelegate.class);
     /** Faulting logging support, logging category: <b>er.transaction.adaptor.FaultFiring</b> */
@@ -52,17 +70,19 @@ public class ERXDatabaseContextDelegate {
 
     /**
      * Provides for a hook to get at the original exceptions from the JDBC driver, as opposed to the cooked
-     * EOGeneralAdaptorException you get from EOF. To see the exceptions, set the logger 
-     * er.transaction.adaptor.Exceptions to debug. 
+     * EOGeneralAdaptorException you get from EOF. To see the exceptions trace, set the logger 
+     * er.transaction.adaptor.Exceptions to DEBUG. 
      * @param databaseContext
      * @param throwable
      * @return
      */
     public boolean databaseContextShouldHandleDatabaseException(EODatabaseContext databaseContext, Throwable throwable) {
-        if(exLog.isDebugEnabled()) {
-            exLog.debug("JDBC Exception occured: " + throwable, throwable);
-        }
-        return true;
+    	if(exLog.isDebugEnabled()) {
+       		exLog.debug("JDBC Exception occured: " + throwable, throwable);
+    	} else if(exLog.isInfoEnabled()) {
+       		exLog.debug("JDBC Exception occured: " + throwable);
+    	}
+    	return true;
     }
 
     /**
@@ -161,7 +181,7 @@ public class ERXDatabaseContextDelegate {
         } else {
             gidString = gid.toString();
         }
-        throw new EOObjectNotAvailableException("No " + (object!=null ? object.getClass().getName() : "N/A") + " found with globalID: " + gidString);            
+        throw new ObjectNotAvailableException("No " + (object!=null ? object.getClass().getName() : "N/A") + " found with globalID: " + gidString, gid);            
     }
     
     /**
@@ -204,10 +224,10 @@ public class ERXDatabaseContextDelegate {
     
     /**
      * Overridden to remove inserts and deletes of the "same" row. When you
-     * delete, from a join table and then re-add the same object, then the
+     * delete from a join table and then re-add the same object, then the
      * order of operations would be insert, then delete and you will get
      * an error because the delete would try to also delete the newly inserted
-     * row. Here we just check every insert and see if the deleted contain the same
+     * row. Here we just check every insert and see if the deleted contains the same
      * object. If they do, we just skip both operations,
      * @author chello team!
      * @param dbCtxt
