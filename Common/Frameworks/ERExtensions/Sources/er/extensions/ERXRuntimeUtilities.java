@@ -3,13 +3,15 @@ package er.extensions;
 import java.io.*;
 import java.util.*;
 
+import org.apache.log4j.Logger;
+
 import com.webobjects.foundation.*;
 
 public class ERXRuntimeUtilities {
 
     /** logging support */
-    public static ERXLogger log = ERXLogger
-            .getERXLogger(ERXRuntimeUtilities.class);
+    public static Logger log = Logger
+            .getLogger(ERXRuntimeUtilities.class);
 
     /**
      * Excecutes the specified command line commands. If envp is not null the

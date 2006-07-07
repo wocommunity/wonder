@@ -8,6 +8,8 @@ package er.corebusinesslogic;
 
 import java.util.*;
 
+import org.apache.log4j.Logger;
+
 import com.webobjects.appserver.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.foundation.*;
@@ -26,7 +28,7 @@ public class ERCMailDelivery {
     //	---------------------------------------------------------------------------
 
     /** logging supprt */
-    public static final ERXLogger log = ERXLogger.getERXLogger(ERCMailDelivery.class);
+    public static final Logger log = Logger.getLogger(ERCMailDelivery.class);
 
     //	===========================================================================
     //	Class Variable(s)

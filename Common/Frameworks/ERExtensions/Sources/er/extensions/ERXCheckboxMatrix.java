@@ -9,6 +9,8 @@ package er.extensions;
 import java.lang.reflect.*;
 import java.util.*;
 
+import org.apache.log4j.Logger;
+
 import com.webobjects.appserver.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.foundation.*;
@@ -37,7 +39,7 @@ import com.webobjects.foundation.*;
 
 public class ERXCheckboxMatrix extends ERXNonSynchronizingComponent {
     /** logging support */
-    public final static ERXLogger log = ERXLogger.getERXLogger(ERXCheckboxMatrix.class);
+    public final static Logger log = Logger.getLogger(ERXCheckboxMatrix.class);
 
     
     private static final Integer DEFAULT_PADDING = new Integer(0);

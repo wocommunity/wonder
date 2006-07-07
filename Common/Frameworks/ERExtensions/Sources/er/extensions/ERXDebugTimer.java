@@ -1,4 +1,6 @@
 package er.extensions;
+import org.apache.log4j.Logger;
+
 import com.webobjects.appserver.*;
 
 /**
@@ -12,7 +14,7 @@ import com.webobjects.appserver.*;
 public class ERXDebugTimer extends ERXStatelessComponent {
 
     /** logging support */
-    private static final ERXLogger log = ERXLogger.getLogger(ERXDebugTimer.class,"components");
+    private static final Logger log = Logger.getLogger(ERXDebugTimer.class);
     protected long _awakeMillis;
     protected boolean _setAwake = true;
     public long totalMillis;

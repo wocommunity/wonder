@@ -8,6 +8,8 @@ package er.extensions;
 
 import java.util.*;
 
+import org.apache.log4j.Logger;
+
 import com.webobjects.appserver.*;
 import com.webobjects.foundation.*;
 
@@ -90,7 +92,7 @@ import com.webobjects.foundation.*;
 public class ERXBrowserFactory {
 
     /** logging support */
-    public static final ERXLogger log = ERXLogger.getERXLogger(ERXBrowserFactory.class);
+    public static final Logger log = Logger.getLogger(ERXBrowserFactory.class);
 
     /** holds the default browser class name */
     private static final String _DEFAULT_BROWSER_CLASS_NAME = "er.extensions.ERXBasicBrowser";

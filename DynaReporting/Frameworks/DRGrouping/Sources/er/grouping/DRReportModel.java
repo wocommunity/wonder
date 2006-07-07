@@ -3,6 +3,7 @@ package er.grouping;
 import java.io.*;
 import java.util.*;
 
+import org.apache.log4j.Logger;
 import org.xml.sax.*;
 
 import sun.misc.*;
@@ -14,7 +15,7 @@ import com.webobjects.foundation.*;
 import er.extensions.*;
 
 public class DRReportModel extends Object  {
-    private static er.extensions.ERXLogger log = er.extensions.ERXLogger.getERXLogger(DRReportModel.class);
+    private static Logger log = Logger.getLogger(DRReportModel.class);
 
     public static final String DRReportModelUpdateNotification = "DRReportModelUpdate";
     public static final String DRReportModelRebuildNotification = "DRReportModelRebuild";

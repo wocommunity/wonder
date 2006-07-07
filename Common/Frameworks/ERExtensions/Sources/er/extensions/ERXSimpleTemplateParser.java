@@ -8,6 +8,8 @@ package er.extensions;
 
 import java.util.*;
 
+import org.apache.log4j.Logger;
+
 import com.webobjects.foundation.*;
 
 /**
@@ -28,7 +30,7 @@ public class ERXSimpleTemplateParser {
     private static final String DEPRECATED_DELIMITER = "@";
 
     /** logging support */
-    public static final ERXLogger log = ERXLogger.getERXLogger(ERXSimpleTemplateParser.class.getName());
+    public static final Logger log = Logger.getLogger(ERXSimpleTemplateParser.class.getName());
 
     /** holds a reference to the shared instance of the parser */
     private static ERXSimpleTemplateParser _sharedInstance;

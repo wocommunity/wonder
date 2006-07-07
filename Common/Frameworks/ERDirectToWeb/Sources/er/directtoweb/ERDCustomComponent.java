@@ -6,10 +6,13 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.directtoweb;
 
+import org.apache.log4j.Logger;
+
 import com.webobjects.appserver.*;
 import com.webobjects.directtoweb.*;
 import com.webobjects.foundation.*;
 
+import er.directtoweb.ERDirectToWeb.*;
 import er.extensions.*;
 
 /**
@@ -29,7 +32,7 @@ public abstract class ERDCustomComponent extends ERXNonSynchronizingComponent im
     }
     
     /** logging support */
-    public final static ERXLogger log = ERXLogger.getERXLogger(ERDCustomComponent.class);
+    public final static Logger log = Logger.getLogger(ERDCustomComponent.class);
     
     /** Designated constructor */
     public ERDCustomComponent(WOContext context) {
@@ -241,14 +244,22 @@ public abstract class ERDCustomComponent extends ERXNonSynchronizingComponent im
     }
 
     public void appendToResponse(WOResponse r, WOContext c) {
-        try {
+        if(!ERXProperties.booleanForKeyWithDefault("er.directtoweb.ERDirectToWeb.shouldRaiseExceptions", false)) {
             // in the case where we are non-synchronizing but not stateless, make sure we pull again
             if (!synchronizesVariablesWithBindings() && !isStateless()) {
                 reset();
             }
             super.appendToResponse(r,c);
-        } catch(Exception ex) {
-            ERDirectToWeb.reportException(ex, d2wContext());
+        } else {
+            try {
+                // in the case where we are non-synchronizing but not stateless, make sure we pull again
+                if (!synchronizesVariablesWithBindings() && !isStateless()) {
+                    reset();
+                }
+                super.appendToResponse(r,c);
+            } catch(Exception ex) {
+                ERDirectToWeb.reportException(ex, d2wContext());
+            }
         }
     }
 }

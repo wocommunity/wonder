@@ -120,6 +120,8 @@ import java.io.*;
 import java.net.*;
 import java.util.*;
 
+import org.apache.log4j.Logger;
+
 /**
  * Can upload and download files from ftp servers<br />
  * 
@@ -128,7 +130,7 @@ import java.util.*;
 public class ERXLinlyn {
 
     /** logging support */
-    public static ERXLogger log = ERXLogger.getERXLogger(ERXLinlyn.class);
+    public static Logger log = Logger.getLogger(ERXLinlyn.class);
     
     // FOR DEBUGGING: set the variable to "true"
     private boolean DEBUG = false;

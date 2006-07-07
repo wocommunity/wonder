@@ -6,6 +6,8 @@
 //
 package er.extensions;
 
+import org.apache.log4j.Logger;
+
 import com.webobjects.foundation.*;
 
 /**
@@ -69,7 +71,7 @@ import com.webobjects.foundation.*;
 public class ERXBasicBrowser extends ERXBrowser {
 
     /** logging support */
-    public static final ERXLogger log = ERXLogger.getERXLogger(ERXBasicBrowser.class);
+    public static final Logger log = Logger.getLogger(ERXBasicBrowser.class);
 
     private final String          _browserName;
     private final String          _version;

@@ -1,4 +1,6 @@
 package er.extensions;
+import org.apache.log4j.Logger;
+
 import com.webobjects.appserver.*;
 
 /**
@@ -14,7 +16,7 @@ import com.webobjects.appserver.*;
 public class ERXStringHolder extends ERXStatelessComponent {
 
     /** logging support */
-    private static final ERXLogger log = ERXLogger.getLogger(ERXStringHolder.class,"components");
+    private static final Logger log = Logger.getLogger(ERXStringHolder.class);
 
     protected String _value;
     protected Boolean _escapeHTML = Boolean.FALSE;

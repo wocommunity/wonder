@@ -1,5 +1,7 @@
 package er.directtoweb;
 
+import org.apache.log4j.Logger;
+
 import com.webobjects.appserver.*;
 import com.webobjects.directtoweb.*;
 import com.webobjects.foundation.*;
@@ -22,7 +24,7 @@ import er.extensions.*;
 public class ERD2WFlyOverCustomComponent extends D2WCustomComponent {
 
     /** logging support */
-    private static final ERXLogger log = ERXLogger.getLogger(ERD2WFlyOverCustomComponent.class,"components");
+    private static final Logger log = Logger.getLogger(ERD2WFlyOverCustomComponent.class);
 
     /**
         * Public constructor

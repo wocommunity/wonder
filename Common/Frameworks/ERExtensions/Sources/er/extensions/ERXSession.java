@@ -9,6 +9,8 @@ package er.extensions;
 import java.io.*;
 import java.util.*;
 
+import org.apache.log4j.Logger;
+
 import com.webobjects.appserver.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.foundation.*;
@@ -27,7 +29,7 @@ import com.webobjects.foundation.*;
 public class ERXSession extends WOSession implements Serializable {
 
   /** logging support */
-  public static ERXLogger log = ERXLogger.getERXLogger(ERXSession.class);
+  public static Logger log = Logger.getLogger(ERXSession.class);
 
   /** Notification name that is posted after a session wakes up. */
   // DELETEME: Now we can use SessionDidRestoreNotification

@@ -6,6 +6,8 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.directtoweb;
 
+import org.apache.log4j.Logger;
+
 import com.webobjects.appserver.*;
 import com.webobjects.directtoweb.*;
 import com.webobjects.eocontrol.*;
@@ -19,7 +21,7 @@ import er.extensions.*;
 
 public class ERDEditButton extends ERDActionButton {
     /** logging support */
-    private static final ERXLogger log = ERXLogger.getLogger(ERDEditButton.class,"components,actions");
+    private static final Logger log = Logger.getLogger(ERDEditButton.class);
 
     public ERDEditButton(WOContext context) {super(context);}
     

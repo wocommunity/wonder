@@ -8,6 +8,8 @@ package er.directtoweb;
 
 import java.util.*;
 
+import org.apache.log4j.Logger;
+
 import com.webobjects.appserver.*;
 import com.webobjects.directtoweb.*;
 import com.webobjects.eoaccess.*;
@@ -30,8 +32,8 @@ public class ERD2WInspectPage extends ERD2WPage implements InspectPageInterface,
     public ERD2WInspectPage(WOContext context) { super(context); }
     
     /** logging support */
-    public static final ERXLogger log = ERXLogger.getERXLogger(ERD2WInspectPage.class);
-    public static final ERXLogger validationCat = ERXLogger.getERXLogger(ERD2WInspectPage.class, "validation");
+    public static final Logger log = Logger.getLogger(ERD2WInspectPage.class);
+    public static final Logger validationCat = Logger.getLogger(ERD2WInspectPage.class+".validation");
 
     public String urlForCurrentState() {
         NSDictionary dict = null;

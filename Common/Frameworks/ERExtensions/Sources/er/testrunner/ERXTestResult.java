@@ -6,6 +6,8 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.testrunner;
 
+import org.apache.log4j.Logger;
+
 import junit.framework.*;
 
 import com.webobjects.foundation.*;
@@ -20,7 +22,7 @@ import er.extensions.*;
 public class ERXTestResult extends TestResult {
 
     /** logging support */
-    public static final ERXLogger log = ERXLogger.getERXLogger(ERXTestResult.class);
+    public static final Logger log = Logger.getLogger(ERXTestResult.class);
 
     protected NSMutableArray _errors;
     protected NSMutableArray _failures;

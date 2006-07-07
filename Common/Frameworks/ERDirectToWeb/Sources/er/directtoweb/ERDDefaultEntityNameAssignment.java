@@ -6,6 +6,8 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.directtoweb;
 
+import org.apache.log4j.Logger;
+
 import com.webobjects.directtoweb.*;
 import com.webobjects.eoaccess.*;
 import com.webobjects.eocontrol.*;
@@ -24,7 +26,7 @@ import er.extensions.*;
 public class ERDDefaultEntityNameAssignment extends ERDAssignment implements ERDLocalizableAssignmentInterface {
 
     /** logging support */
-    public static final ERXLogger log = ERXLogger.getERXLogger(ERDDefaultEntityNameAssignment.class);
+    public static final Logger log = Logger.getLogger(ERDDefaultEntityNameAssignment.class);
     
     /** holds the array of keys this assignment depends upon */
     public static final NSArray _DEPENDENT_KEYS=new NSArray("entity.name");

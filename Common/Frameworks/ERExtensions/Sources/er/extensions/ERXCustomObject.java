@@ -8,6 +8,8 @@ package er.extensions;
 
 import java.util.*;
 
+import org.apache.log4j.Logger;
+
 import com.webobjects.eoaccess.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.foundation.*;
@@ -27,7 +29,7 @@ import com.webobjects.foundation.*;
  */
 public class ERXCustomObject extends EOCustomObject implements ERXGuardedObjectInterface, ERXGeneratesPrimaryKeyInterface, ERXEnterpriseObject {
 
-    /** holds all subclass related ERXLogger's */
+    /** holds all subclass related Logger's */
     private static NSMutableDictionary classLogs = new NSMutableDictionary();
      
     public static boolean shouldTrimSpaces(){
@@ -48,11 +50,11 @@ public class ERXCustomObject extends EOCustomObject implements ERXGuardedObjectI
     /* (non-Javadoc)
      * @see er.extensions.ERXEnterpriseObject#getClassLog()
      */
-    public ERXLogger getClassLog() {
-        ERXLogger log = (ERXLogger)classLogs.objectForKey(this.getClass());
+    public Logger getClassLog() {
+        Logger log = (Logger)classLogs.objectForKey(this.getClass());
         if ( log == null) {
             synchronized(classLogs) {
-                log = ERXLogger.getERXLogger(this.getClass());
+                log = Logger.getLogger(this.getClass());
                 classLogs.setObjectForKey(log, this.getClass());
             }
         }

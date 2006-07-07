@@ -9,6 +9,8 @@ package er.extensions;
 import java.util.*;
 import java.util.regex.*;
 
+import org.apache.log4j.Logger;
+
 import com.webobjects.eoaccess.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.foundation.*;
@@ -19,10 +21,10 @@ import com.webobjects.foundation.*;
 public class ERXEOAccessUtilities {
 
     /** logging support */
-    public static final ERXLogger log = ERXLogger.getERXLogger(ERXEOAccessUtilities.class);
+    public static final Logger log = Logger.getLogger(ERXEOAccessUtilities.class);
     
     /** SQL logger */
-    private static ERXLogger sqlLoggingLogger = null;
+    private static Logger sqlLoggingLogger = null;
 
     /**
      * Finds an entity that is contained in a string. This is used a lot in
@@ -1164,7 +1166,7 @@ public class ERXEOAccessUtilities {
      */
     public static void logExpression(EOAdaptorChannel channel, EOSQLExpression expression, long startTime) {
         if (sqlLoggingLogger == null) {
-            sqlLoggingLogger = ERXLogger.getERXLogger("er.extensions.ERXAdaptorChannelDelegate.sqlLogging");
+            sqlLoggingLogger = Logger.getLogger("er.extensions.ERXAdaptorChannelDelegate.sqlLogging");
         }
         // sqlLoggingLogger.setLevel(Level.DEBUG);
         String entityMatchPattern = ERXProperties.stringForKeyWithDefault(

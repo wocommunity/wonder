@@ -6,6 +6,8 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.directtoweb;
 
+import org.apache.log4j.Logger;
+
 import com.webobjects.appserver.*;
 import com.webobjects.directtoweb.*;
 import com.webobjects.foundation.*;
@@ -15,7 +17,7 @@ import er.extensions.*;
 public class ERD2WWizardCreationPage extends ERD2WTabInspectPage {
 
     /** logging support */
-    public static final ERXLogger log = ERXLogger.getERXLogger("er.directtoweb.templates.ERWizardCreationPageTemplate");
+    public static final Logger log = Logger.getLogger("er.directtoweb.templates.ERWizardCreationPageTemplate");
 
     // Notification titles
     // FIXME: This is silly now that we have validationKeys.  Once all referenecs are removed will delete.

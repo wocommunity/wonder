@@ -8,7 +8,8 @@ package er.directtoweb;
 
 import java.util.*;
 
-import org.apache.log4j.*;
+import org.apache.log4j.Logger;
+import org.apache.log4j.NDC;
 
 import com.webobjects.appserver.*;
 import com.webobjects.directtoweb.*;
@@ -68,8 +69,8 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
     }
     
     /** logging support */
-    public final static ERXLogger log = ERXLogger.getERXLogger(ERD2WPage.class);
-    public static final ERXLogger validationLog = ERXLogger.getERXLogger("er.directtoweb.validation.ERD2WPage");    
+    public final static Logger log = Logger.getLogger(ERD2WPage.class);
+    public static final Logger validationLog = Logger.getLogger("er.directtoweb.validation.ERD2WPage");    
     
     /**
      * Default public constructor.

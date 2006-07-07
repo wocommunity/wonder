@@ -10,6 +10,8 @@ import java.io.*;
 import java.net.*;
 import java.util.*;
 
+import org.apache.log4j.Logger;
+
 import com.webobjects.appserver.*;
 import com.webobjects.directtoweb.*;
 import com.webobjects.eoaccess.*;
@@ -24,13 +26,13 @@ import er.extensions.*;
 public class ERD2WModel extends D2WModel {
 
     /** logging support */
-    public static final ERXLogger log = ERXLogger.getERXLogger(ERD2WModel.class);
+    public static final Logger log = Logger.getLogger(ERD2WModel.class);
 
     /** logs rules being decoded */
-    public static final ERXLogger ruleDecodeLog = ERXLogger.getERXLogger("er.directtoweb.rules.decode");
+    public static final Logger ruleDecodeLog = Logger.getLogger("er.directtoweb.rules.decode");
 
     /** main category for enabling or disabling tracing of rules */
-    public static final ERXLogger ruleTraceEnabledLog = ERXLogger.getERXLogger("er.directtoweb.rules.ERD2WTraceRuleFiringEnabled");
+    public static final Logger ruleTraceEnabledLog = Logger.getLogger("er.directtoweb.rules.ERD2WTraceRuleFiringEnabled");
 
     //	===========================================================================
     //	Notification Title(s)
@@ -207,10 +209,10 @@ public class ERD2WModel extends D2WModel {
         Object result=cache.get(k);
         if (result==null) {
             boolean resetTraceRuleFiring = false;
-            ERXLogger ruleFireLog=null;
+            Logger ruleFireLog=null;
             if (ruleTraceEnabledLog.isDebugEnabled()) {
-                ERXLogger ruleCandidatesLog = ERXLogger.getERXLogger("er.directtoweb.rules." + keyPath + ".candidates");
-                ruleFireLog = ERXLogger.getERXLogger("er.directtoweb.rules." + keyPath + ".fire");
+                Logger ruleCandidatesLog = Logger.getLogger("er.directtoweb.rules." + keyPath + ".candidates");
+                ruleFireLog = Logger.getLogger("er.directtoweb.rules." + keyPath + ".fire");
                 if (ruleFireLog.isDebugEnabled() && !NSLog.debugLoggingAllowedForGroups(NSLog.DebugGroupRules)) {
                     NSLog.allowDebugLoggingForGroups(NSLog.DebugGroupRules);
                     //NSLog.setAllowedDebugLevel(NSLog.DebugLevelDetailed);
@@ -237,7 +239,7 @@ public class ERD2WModel extends D2WModel {
             }
         } else {
             if (ruleTraceEnabledLog.isDebugEnabled()) {
-                ERXLogger ruleLog = ERXLogger.getERXLogger("er.directtoweb.rules." + keyPath + ".cache");
+                Logger ruleLog = Logger.getLogger("er.directtoweb.rules." + keyPath + ".cache");
                 if (ruleLog.isDebugEnabled())
                     ruleLog.debug("CACHE: " + keyPath +  " depends on: "  + new NSArray(significantKeys) + " = " + k
                                   + " value: " + (result==NULL_VALUE ? "<NULL>" : (result instanceof EOEntity ? ((EOEntity)result).name() : result)));

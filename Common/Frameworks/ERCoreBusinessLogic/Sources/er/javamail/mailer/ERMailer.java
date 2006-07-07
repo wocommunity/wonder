@@ -10,6 +10,8 @@ import java.util.*;
 
 import javax.mail.*;
 
+import org.apache.log4j.Logger;
+
 import com.webobjects.eoaccess.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.foundation.*;
@@ -30,7 +32,7 @@ public class ERMailer {
     //	---------------------------------------------------------------------------    
 
     /** logging support */
-    public final static ERXLogger log = ERXLogger.getERXLogger(ERMailer.class);
+    public final static Logger log = Logger.getLogger(ERMailer.class);
 
     //	===========================================================================
     //	Class Variable(s)

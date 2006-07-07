@@ -6,6 +6,8 @@
 //
 package er.extensions;
 
+import org.apache.log4j.Logger;
+
 import com.webobjects.eocontrol.*;
 import com.webobjects.foundation.*;
 
@@ -15,7 +17,7 @@ public class ERXNavigationItem {
     private static int counter = 0;
 
     /** logging supprt */
-    public static final ERXLogger log = ERXLogger.getERXLogger(ERXNavigationItem.class);
+    public static final Logger log = Logger.getLogger(ERXNavigationItem.class);
     
     public String _uniqueID;
 

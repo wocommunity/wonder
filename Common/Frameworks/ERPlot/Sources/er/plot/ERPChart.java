@@ -2,6 +2,7 @@ package er.plot;
 import java.io.ByteArrayOutputStream;
 import java.util.Enumeration;
 
+import org.apache.log4j.Logger;
 import org.jfree.chart.ChartRenderingInfo;
 import org.jfree.chart.ChartUtilities;
 import org.jfree.chart.JFreeChart;
@@ -19,7 +20,6 @@ import com.webobjects.foundation.NSForwardException;
 import com.webobjects.foundation.NSKeyValueCodingAdditions;
 
 import er.extensions.ERXAssert;
-import er.extensions.ERXLogger;
 import er.extensions.ERXStatelessComponent;
 
 /**
@@ -47,7 +47,7 @@ import er.extensions.ERXStatelessComponent;
 public abstract class ERPChart extends ERXStatelessComponent {
     
     /** logging support */
-    protected static final ERXLogger log = ERXLogger.getERXLogger(ERPChart.class, "plot");
+    protected static final Logger log = Logger.getLogger(ERPChart.class);
     protected static final int DEFAULT_SIZE = 400;
 
     protected NSData _imageData;

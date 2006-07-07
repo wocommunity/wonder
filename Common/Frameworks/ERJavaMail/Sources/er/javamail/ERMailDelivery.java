@@ -12,6 +12,8 @@ import javax.activation.*;
 import javax.mail.*;
 import javax.mail.internet.*;
 
+import org.apache.log4j.Logger;
+
 import com.webobjects.foundation.*;
 
 import er.extensions.*;
@@ -45,7 +47,7 @@ import er.extensions.*;
 */
 public abstract class ERMailDelivery {
 
-    private static ERXLogger log = ERXLogger.getERXLogger (ERMailDelivery.class);
+    private static Logger log = Logger.getLogger (ERMailDelivery.class);
 
     /** JavaMail session */
     private javax.mail.Session _session;

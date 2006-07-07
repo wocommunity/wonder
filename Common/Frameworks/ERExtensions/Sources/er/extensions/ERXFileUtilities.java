@@ -11,6 +11,8 @@ import java.net.*;
 import java.util.*;
 import java.util.zip.*;
 
+import org.apache.log4j.Logger;
+
 import com.webobjects.appserver.*;
 import com.webobjects.foundation.*;
 
@@ -24,7 +26,7 @@ public class ERXFileUtilities {
     //	---------------------------------------------------------------------------
 
     /** logging support */
-    public static final ERXLogger log = ERXLogger.getERXLogger(ERXFileUtilities.class);
+    public static final Logger log = Logger.getLogger(ERXFileUtilities.class);
 
     //	===========================================================================
     //	Class Methods

@@ -18,7 +18,7 @@ import com.webobjects.foundation.*;
 
 public class ERXNSLogLog4jBridge extends /* NSLog.Logger */ NSLog.PrintStreamLogger {
 
-    public static final ERXLogger log = ERXLogger.getERXLogger("NSLog");
+    public static final Logger log = Logger.getLogger("NSLog");
     public static final int OUT = 1;
     public static final int ERR = 2;
     public static final int DEBUG = 3;

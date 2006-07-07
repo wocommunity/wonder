@@ -6,6 +6,8 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.extensions;
 
+import org.apache.log4j.Logger;
+
 import com.webobjects.appserver.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.foundation.*;
@@ -39,7 +41,7 @@ public class ERXSortOrder extends WOSortOrder {
     }
     
     /** logging support */
-    public final static ERXLogger log = ERXLogger.getERXLogger(ERXSortOrder.class);
+    public final static Logger log = Logger.getLogger(ERXSortOrder.class);
 
     //////////////////////////////////////////////// Notification Hooks //////////////////////////////////////////
     public final static String SortOrderingChanged = "SortOrderingChanged";

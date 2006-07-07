@@ -6,6 +6,8 @@
 //
 package er.directtoweb;
 
+import org.apache.log4j.Logger;
+
 import com.webobjects.appserver.*;
 import com.webobjects.foundation.*;
 
@@ -17,7 +19,7 @@ import er.extensions.*;
  */
 
 public class ERDDHTMLComponent extends ERDCustomEditComponent {
-    static final ERXLogger log = ERXLogger.getERXLogger(ERDDHTMLComponent.class);
+    static final Logger log = Logger.getLogger(ERDDHTMLComponent.class);
 
     String varName = null;
 

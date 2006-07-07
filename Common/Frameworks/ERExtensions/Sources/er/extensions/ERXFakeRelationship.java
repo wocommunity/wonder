@@ -8,6 +8,8 @@ package er.extensions;
 
 import java.util.*;
 
+import org.apache.log4j.Logger;
+
 import com.webobjects.appserver.*;
 import com.webobjects.eoaccess.*;
 import com.webobjects.eocontrol.*;
@@ -30,7 +32,7 @@ import com.webobjects.foundation.*;
  */
 
 public class ERXFakeRelationship extends WOComponent {
-    private static final ERXLogger log = ERXLogger.getERXLogger(ERXFakeRelationship.class.getName());
+    private static final Logger log = Logger.getLogger(ERXFakeRelationship.class.getName());
 
     // temps for our children
     NSArray theList;

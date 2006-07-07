@@ -6,6 +6,8 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.extensions;
 
+import org.apache.log4j.Logger;
+
 import com.webobjects.appserver.*;
 import com.webobjects.woextensions.WOEventDisplayPage;
 import com.webobjects.woextensions.WOEventSetupPage;
@@ -18,7 +20,7 @@ import com.webobjects.woextensions.WOStatsPage;
 public class ERXDirectAction extends WODirectAction {
 
     /** logging support */
-    public final static ERXLogger log = ERXLogger.getERXLogger(ERXDirectAction.class);
+    public final static Logger log = Logger.getLogger(ERXDirectAction.class);
 
     /** holds a reference to the current browser used for this session */
     private ERXBrowser browser;
@@ -274,7 +276,7 @@ public class ERXDirectAction extends WODirectAction {
     			java.util.Properties p = System.getProperties();
     			p.put(key, value);
     			System.setProperties(p);
-    			ERXLogger.configureLoggingWithSystemProperties();
+                ERXLogger.configureLoggingWithSystemProperties();
     			r.appendContentString("<html><body>New System properties:<br>");
     			for (java.util.Enumeration e = p.keys(); e.hasMoreElements();) {
     				Object k = e.nextElement();

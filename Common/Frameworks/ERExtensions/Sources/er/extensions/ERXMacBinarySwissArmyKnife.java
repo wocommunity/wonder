@@ -8,6 +8,8 @@
 /* MacBinarySwissArmyKnife.java created by travis on Wed 20-Sep-2000 */
 package er.extensions;
 
+import org.apache.log4j.Logger;
+
 import com.webobjects.foundation.*;
 
 /* This draws liberally from code by Gregory L. Guerin:
@@ -27,7 +29,7 @@ import com.webobjects.foundation.*;
 public class ERXMacBinarySwissArmyKnife {
 
     /////////////////////////////////////////  log4j category  //////////////////////////////////////
-    public final static ERXLogger log = ERXLogger.getERXLogger(ERXMacBinarySwissArmyKnife.class);
+    public final static Logger log = Logger.getLogger(ERXMacBinarySwissArmyKnife.class);
 
     /**
     ** Offsets in header where the fields are located.

@@ -8,6 +8,8 @@ package er.testrunner;
 
 import java.io.*;
 
+import org.apache.log4j.Logger;
+
 import junit.framework.*;
 
 import com.webobjects.appserver.*;
@@ -48,7 +50,7 @@ public class ERXWOTestResult extends WOComponent {
     }
 
     /** logging support */
-    public static final ERXLogger log = ERXLogger.getERXLogger(ERXWOTestResult.class);
+    public static final Logger log = Logger.getLogger(ERXWOTestResult.class);
 
     public String errorMessage;
     public ERXTestResult testResult;

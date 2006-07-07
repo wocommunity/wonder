@@ -8,6 +8,8 @@ package er.extensions;
 
 import java.util.*;
 
+import org.apache.log4j.Logger;
+
 import com.webobjects.appserver.*;
 import com.webobjects.foundation.*;
 
@@ -58,7 +60,7 @@ public class ERXGroupingRepetition extends ERXStatelessComponent {
     }
 
     /** logging support */
-    public static final ERXLogger log = ERXLogger.getERXLogger(ERXGroupingRepetition.class);
+    public static final Logger log = Logger.getLogger(ERXGroupingRepetition.class);
     
     private NSMutableArray _sections;
     private Object _sectionItem;

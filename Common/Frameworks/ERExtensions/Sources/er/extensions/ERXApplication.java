@@ -10,6 +10,8 @@ import java.io.*;
 import java.lang.reflect.*;
 import java.util.*;
 
+import org.apache.log4j.Logger;
+
 import com.webobjects.appserver.*;
 import com.webobjects.eoaccess.*;
 import com.webobjects.eocontrol.*;
@@ -27,10 +29,10 @@ import com.webobjects.foundation.*;
 public abstract class ERXApplication extends WOApplication implements ERXGracefulShutdown.GracefulApplication {
 
     /** logging support */
-    public static final ERXLogger log = ERXLogger.getERXLogger(ERXApplication.class);
+    public static final Logger log = Logger.getLogger(ERXApplication.class);
 
     /** request logging support */
-    public static final ERXLogger requestHandlingLog = ERXLogger.getERXLogger("er.extensions.ERXApplication.RequestHandling");
+    public static final Logger requestHandlingLog = Logger.getLogger("er.extensions.ERXApplication.RequestHandling");
     
     private static boolean _wasERXApplicationMainInvoked = false;
 
@@ -514,6 +516,14 @@ public abstract class ERXApplication extends WOApplication implements ERXGracefu
      * @return the WOResponse of the generated exception page.
      */
     public WOResponse handleException(Exception exception, WOContext context) {
+        if(exception instanceof EOObjectNotAvailableException && context != null) {
+            String retryKey = context.request().stringFormValueForKey("ERXRetry");
+            if(retryKey == null) {
+                WORedirect page = new WORedirect(context);
+                page.setUrl(context.request().uri() + "?ERXRetry=1");
+                return page.generateResponse();
+            }
+         }
         // We first want to test if we ran out of memory. If so we need to quit ASAP.
         handlePotentiallyFatalException(exception);
 

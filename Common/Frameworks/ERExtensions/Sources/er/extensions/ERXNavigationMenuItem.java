@@ -8,6 +8,8 @@ package er.extensions;
 
 import java.util.*;
 
+import org.apache.log4j.Logger;
+
 import com.webobjects.appserver.*;
 import com.webobjects.foundation.*;
 
@@ -16,7 +18,7 @@ import com.webobjects.foundation.*;
 public class ERXNavigationMenuItem extends ERXStatelessComponent {
 
     /** logging support */
-    public static final ERXLogger log = ERXLogger.getERXLogger(ERXNavigationMenuItem.class);
+    public static final Logger log = Logger.getLogger(ERXNavigationMenuItem.class);
     
     protected ERXNavigationItem _navigationItem;
     protected ERXNavigationState _navigationState;

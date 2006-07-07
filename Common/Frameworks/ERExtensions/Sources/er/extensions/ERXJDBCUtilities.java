@@ -4,12 +4,14 @@ import java.io.*;
 import java.sql.*;
 import java.util.*;
 
+import org.apache.log4j.Logger;
+
 import com.webobjects.eoaccess.*;
 import com.webobjects.foundation.*;
 
 public class ERXJDBCUtilities {
 
-    public static ERXLogger log = ERXLogger.getERXLogger(ERXJDBCUtilities.class);
+    public static Logger log = Logger.getLogger(ERXJDBCUtilities.class);
 
     public static NSTimestampFormatter TIMESTAMP_FORMATTER = new NSTimestampFormatter("%Y-%m-%d %H:%M:%S.%F");
 

@@ -1,5 +1,7 @@
 package er.extensions;
 
+import org.apache.log4j.Logger;
+
 import com.webobjects.appserver.*;
 import com.webobjects.foundation.*;
 
@@ -21,7 +23,7 @@ The main problems may be garbabe collection or space requirements. You might be 
  then Main could be implemented something like this:
 <code><pre>
  public class Main extends WOComponent implements ERXComponentActionRedirector.Restorable {
-     static ERXLogger log = ERXLogger.getERXLogger(Main.class);
+     static Logger log = Logger.getLogger(Main.class);
 
      public Integer someValue = new Integer(10);
 
@@ -113,7 +115,7 @@ Instead of the code above, you should be able to simply use ERXApplication and s
 public class ERXComponentActionRedirector {
 
     /** logging support */
-    protected static final ERXLogger log = ERXLogger.getERXLogger(ERXComponentActionRedirector.class);
+    protected static final Logger log = Logger.getLogger(ERXComponentActionRedirector.class);
 
     /** implemented by the pages that want to be restorable */
     public static interface Restorable {

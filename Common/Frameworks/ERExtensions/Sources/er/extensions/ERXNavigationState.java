@@ -8,13 +8,15 @@ package er.extensions;
 
 import java.util.*;
 
+import org.apache.log4j.Logger;
+
 import com.webobjects.foundation.*;
 
 /** Please read "Documentation/Navigation.html" to fnd out how to use the navigation components.*/
 public class ERXNavigationState {
 
     /** logging support */
-    public static final ERXLogger log = ERXLogger.getERXLogger(ERXNavigationState.class);
+    public static final Logger log = Logger.getLogger(ERXNavigationState.class);
     
     protected NSArray _additionalState;
     protected NSArray _state;
