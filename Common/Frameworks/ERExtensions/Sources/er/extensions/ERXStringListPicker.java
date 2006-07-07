@@ -31,7 +31,7 @@ public class ERXStringListPicker extends WOComponent {
     public NSArray list() {
         if (_list == null) {
             _list = EOSortOrdering.sortedArrayUsingKeyOrderArray(choices.allKeys(),
-                                                         new NSArray(EOSortOrdering.sortOrderingWithKey("description", EOSortOrdering.CompareAscending)));
+                                                         new NSArray(EOSortOrdering.sortOrderingWithKey("toString", EOSortOrdering.CompareAscending)));
         }
         return _list;
     }
