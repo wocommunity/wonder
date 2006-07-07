@@ -3,6 +3,8 @@ package er.extensions;
 import java.sql.*;
 import java.util.*;
 
+import org.apache.log4j.Logger;
+
 import com.webobjects.eoaccess.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.foundation.*;
@@ -42,7 +44,7 @@ public class ERXLongPrimaryKeyFactory {
     public static final int		HOST_CODE_LENGTH = 10;
     public static final String    HOST_CODE_KEY = "er.extensions.ERXLongPrimaryKeyFactory.hostCode";
     
-    public static final ERXLogger log          = ERXLogger.getERXLogger(ERXLongPrimaryKeyFactory.class);
+    public static final Logger log          = Logger.getLogger(ERXLongPrimaryKeyFactory.class);
     public static long            MAX_PK_VALUE = (long) Math.pow(2, 48);
     public static Boolean         encodeEntityInPkValue;
     public static Boolean         encodeHostInPkValue;

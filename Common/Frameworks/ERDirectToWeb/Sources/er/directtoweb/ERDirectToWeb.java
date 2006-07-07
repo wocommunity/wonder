@@ -9,6 +9,8 @@ package er.directtoweb;
 import java.net.*;
 import java.util.*;
 
+import org.apache.log4j.Logger;
+
 import com.webobjects.appserver.*;
 import com.webobjects.directtoweb.*;
 import com.webobjects.eoaccess.*;
@@ -31,13 +33,13 @@ import er.extensions.*;
 public class ERDirectToWeb {
 
     /** logging support */
-    public final static ERXLogger log = ERXLogger.getERXLogger("er.directtoweb.ERDirectToWeb");
+    public final static Logger log = Logger.getLogger("er.directtoweb.ERDirectToWeb");
     public final static String D2WDEBUGGING_ENABLED_KEY = "ERDirectToWeb_d2wDebuggingEnabled";
     public final static String D2WDISPLAY_COMPONENTNAMES_KEY = "ERDirectToWeb_displayComponentNames";
     public final static String D2WDISPLAY_PROPERTYKEYS_KEY = "ERDirectToWeb_displayPropertyKeys";
-    public final static ERXLogger debugLog = ERXLogger.getERXLogger("er.directtoweb.ERD2WDebugEnabled");
-    public final static ERXLogger componentNameLog = ERXLogger.getERXLogger("er.directtoweb.ERD2WDebugEnabled.componentName");
-    public final static ERXLogger propertyKeyLog = ERXLogger.getERXLogger("er.directtoweb.ERD2WDebugEnabled.propertyKey");
+    public final static Logger debugLog = Logger.getLogger("er.directtoweb.ERD2WDebugEnabled");
+    public final static Logger componentNameLog = Logger.getLogger("er.directtoweb.ERD2WDebugEnabled.componentName");
+    public final static Logger propertyKeyLog = Logger.getLogger("er.directtoweb.ERD2WDebugEnabled.propertyKey");
     // Notification Observer
     public static class Observer {
         public void didFinishedLaunchingApp(NSNotification n) {
@@ -382,7 +384,7 @@ public class ERDirectToWeb {
         ERD2WModel.erDefaultModel().prepareDataStructures();
     }
 
-    public static ERXLogger trace;
+    public static Logger trace;
 
     // This enables us to turn trace rule firing on or off at will.
 
@@ -397,7 +399,7 @@ public class ERDirectToWeb {
     public static void configureTraceRuleFiringRapidTurnAround() {
         if (!_initializedTraceRuleFiring) {
             // otherwise not properly initialized
-            trace = ERXLogger.getERXLogger("er.directtoweb.rules.D2WTraceRuleFiringEnabled");
+            trace = Logger.getLogger("er.directtoweb.rules.D2WTraceRuleFiringEnabled");
             // Note: If the configuration file says debug, but the command line parameter doesn't we need to turn
             //   rule tracing on.
             // BOOGIE

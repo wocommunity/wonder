@@ -6,6 +6,8 @@
 //
 package er.extensions;
 
+import org.apache.log4j.Logger;
+
 import com.webobjects.appserver.*;
 import com.webobjects.foundation.*;
 
@@ -16,7 +18,7 @@ import com.webobjects.foundation.*;
  */
 public class ERXOncePerRequestConditional extends ERXStatelessComponent {
     /** logging support */
-    public static final ERXLogger log = ERXLogger.getERXLogger(ERXOncePerRequestConditional.class.getName());
+    public static final Logger log = Logger.getLogger(ERXOncePerRequestConditional.class.getName());
     
     String keyName = null;
     int currentStage = -1;

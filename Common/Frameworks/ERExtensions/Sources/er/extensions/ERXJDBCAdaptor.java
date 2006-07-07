@@ -2,6 +2,8 @@ package er.extensions;
 
 import java.sql.*;
 
+import org.apache.log4j.Logger;
+
 import com.webobjects.eoaccess.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.foundation.*;
@@ -19,7 +21,7 @@ import com.webobjects.jdbcadaptor.*;
  */
 public class ERXJDBCAdaptor extends JDBCAdaptor {
     
-    public static final ERXLogger log = ERXLogger.getERXLogger(ERXJDBCAdaptor.class);
+    public static final Logger log = Logger.getLogger(ERXJDBCAdaptor.class);
     
     public static final String USE_CONNECTION_BROKER_KEY = "er.extensions.ERXJDBCAdaptor.useConnectionBroker";
     

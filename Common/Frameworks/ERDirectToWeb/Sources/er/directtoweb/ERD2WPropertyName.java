@@ -6,6 +6,8 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.directtoweb;
 
+import org.apache.log4j.Logger;
+
 import com.webobjects.appserver.*;
 import com.webobjects.directtoweb.*;
 import com.webobjects.eoaccess.*;
@@ -20,7 +22,7 @@ import er.extensions.*;
  */
 
 public class ERD2WPropertyName extends D2WStatelessComponent {
-    public static final ERXLogger log = ERXLogger.getERXLogger(ERD2WPropertyName.class);
+    public static final Logger log = Logger.getLogger(ERD2WPropertyName.class);
 
     protected String _displayNameForProperty;
     protected NSDictionary _contextDictionary;

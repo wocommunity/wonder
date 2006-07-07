@@ -6,6 +6,8 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.extensions;
 
+import org.apache.log4j.Logger;
+
 import com.webobjects.eoaccess.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.foundation.*;
@@ -28,7 +30,7 @@ import com.webobjects.foundation.*;
 public class ERXTolerantSaver {
 
     /** logging support */
-    public final static ERXLogger log = ERXLogger.getERXLogger(ERXTolerantSaver.class);
+    public final static Logger log = Logger.getLogger(ERXTolerantSaver.class);
 
     /**
      * Cover method for calling the method <code>save</code> with the

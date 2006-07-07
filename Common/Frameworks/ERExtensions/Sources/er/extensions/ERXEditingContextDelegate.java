@@ -6,6 +6,8 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.extensions;
 
+import org.apache.log4j.Logger;
+
 import com.webobjects.eocontrol.*;
 
 /**
@@ -19,8 +21,8 @@ import com.webobjects.eocontrol.*;
  */
 public class ERXEditingContextDelegate extends Object implements java.io.Serializable {
     /** general logging support */
-    public static final ERXLogger log = ERXLogger
-            .getERXLogger(ERXEditingContextDelegate.class);
+    public static final Logger log = Logger
+            .getLogger(ERXEditingContextDelegate.class);
 
 
     /** 

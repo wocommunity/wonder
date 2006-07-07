@@ -6,6 +6,8 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.corebusinesslogic;
 
+import org.apache.log4j.Logger;
+
 import com.webobjects.eocontrol.*;
 import com.webobjects.foundation.*;
 
@@ -14,7 +16,7 @@ import er.extensions.*;
 public abstract class ERCStampedEnterpriseObject extends ERXGenericRecord {
 
     /** logging support */
-    public static ERXLogger log = ERXLogger.getERXLogger(ERCStampedEnterpriseObject.class);
+    public static Logger log = Logger.getLogger(ERCStampedEnterpriseObject.class);
 
     public static final NSArray TimestampAttributeKeys = new NSArray(new Object[] { "created", "lastModified"});
     

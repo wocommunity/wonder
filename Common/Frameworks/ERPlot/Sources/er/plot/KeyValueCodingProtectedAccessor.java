@@ -8,13 +8,13 @@ package er.plot;
 
 import java.lang.reflect.*;
 
-import org.apache.log4j.*;
+import org.apache.log4j.Logger;
 
 import com.webobjects.foundation.*;
 
 public class KeyValueCodingProtectedAccessor extends NSKeyValueCoding.ValueAccessor {
 
-    public static final Category cat = Category.getInstance(KeyValueCodingProtectedAccessor.class);
+    public static final Logger cat = Logger.getLogger(KeyValueCodingProtectedAccessor.class);
     
     public KeyValueCodingProtectedAccessor() { super(); }
 

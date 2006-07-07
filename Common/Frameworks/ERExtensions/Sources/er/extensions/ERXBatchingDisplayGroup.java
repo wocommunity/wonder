@@ -1,5 +1,7 @@
 package er.extensions;
 
+import org.apache.log4j.Logger;
+
 import com.webobjects.appserver.*;
 import com.webobjects.eoaccess.*;
 import com.webobjects.eocontrol.*;
@@ -18,7 +20,7 @@ public class ERXBatchingDisplayGroup extends WODisplayGroup {
 
 
     /** Logging support */
-    private static final ERXLogger log = ERXLogger.getERXLogger(ERXBatchingDisplayGroup.class);
+    private static final Logger log = Logger.getLogger(ERXBatchingDisplayGroup.class);
 
     /** total number of batches */
     protected int _batchCount;

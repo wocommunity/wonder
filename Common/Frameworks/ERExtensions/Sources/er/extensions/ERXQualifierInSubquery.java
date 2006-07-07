@@ -8,6 +8,8 @@ package er.extensions;
 
 import java.util.*;
 
+import org.apache.log4j.Logger;
+
 import com.webobjects.eoaccess.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.foundation.*;
@@ -40,7 +42,7 @@ import com.webobjects.foundation.*;
 public class ERXQualifierInSubquery extends EOQualifier implements EOQualifierSQLGeneration, Cloneable {
 
     /** logging support */
-    public static final ERXLogger log = ERXLogger.getERXLogger(ERXQualifierInSubquery.class);
+    public static final Logger log = Logger.getLogger(ERXQualifierInSubquery.class);
     
     /** holds the subqualifier */
     protected EOQualifier qualifier;

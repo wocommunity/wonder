@@ -1,5 +1,7 @@
 package er.reporting;
 
+import org.apache.log4j.Logger;
+
 import com.webobjects.appserver.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.foundation.*;
@@ -23,7 +25,7 @@ import er.grouping.*;
 
 public class WRQuickReport extends WOComponent  {
 
-    private ERXLogger log = er.extensions.ERXLogger.getERXLogger(WRQuickReport.class);
+    private Logger log = Logger.getLogger(WRQuickReport.class);
     protected DRReportModel _model;
     protected NSDictionary _modelDictionary;
     protected NSDictionary _reportDictionary;

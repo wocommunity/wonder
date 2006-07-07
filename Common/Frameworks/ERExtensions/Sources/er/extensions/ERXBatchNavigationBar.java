@@ -10,6 +10,8 @@ package er.extensions;
 // 1) User typing null for either number of objects per batch or the page number
 // 2) When resetting the number of items per batch the page first page displayed would be the last page.
 
+import org.apache.log4j.Logger;
+
 import com.webobjects.appserver.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.foundation.*;
@@ -33,7 +35,7 @@ import com.webobjects.foundation.*;
 public class ERXBatchNavigationBar extends WOComponent {
 
     /** logging support */
-    public static final ERXLogger log = ERXLogger.getERXLogger(ERXBatchNavigationBar.class);
+    public static final Logger log = Logger.getLogger(ERXBatchNavigationBar.class);
 
     /** Contains a string that names the notification posted when the batch size changes */
     public final static String BatchSizeChanged = "BatchSizeChanged";

@@ -6,6 +6,8 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.directtoweb;
 
+import org.apache.log4j.Logger;
+
 import com.webobjects.appserver.*;
 import com.webobjects.eocontrol.*;
 
@@ -21,7 +23,7 @@ public class ERDDefaultCustomComponent extends WOComponent {
     public ERDDefaultCustomComponent(WOContext context) { super(context); }
 
     /** logging support */
-    public static final ERXLogger log = ERXLogger.getERXLogger(ERDDefaultCustomComponent.class);
+    public static final Logger log = Logger.getLogger(ERDDefaultCustomComponent.class);
 
     public boolean isStateless() { return true; }
 

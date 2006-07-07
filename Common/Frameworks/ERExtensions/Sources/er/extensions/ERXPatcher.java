@@ -2,6 +2,8 @@ package er.extensions;
 
 import java.util.*;
 
+import org.apache.log4j.Logger;
+
 import com.webobjects.appserver.*;
 import com.webobjects.appserver._private.*;
 import com.webobjects.foundation.*;
@@ -13,7 +15,7 @@ import com.webobjects.foundation.*;
 public class ERXPatcher  {
 
     /** logging support */
-    public final static ERXLogger log = ERXLogger.getERXLogger(ERXPatcher.class);
+    public final static Logger log = Logger.getLogger(ERXPatcher.class);
 
     public ERXPatcher() {
     }

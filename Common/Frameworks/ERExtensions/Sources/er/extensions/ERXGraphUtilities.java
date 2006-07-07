@@ -11,6 +11,8 @@ package er.extensions;
 import java.awt.*;
 import java.util.*;
 
+import org.apache.log4j.Logger;
+
 import com.webobjects.foundation.*;
 
 /**
@@ -20,7 +22,7 @@ import com.webobjects.foundation.*;
 
 public class ERXGraphUtilities {
 
-    public final static ERXLogger log = ERXLogger.getERXLogger(ERXGraphUtilities.class);
+    public final static Logger log = Logger.getLogger(ERXGraphUtilities.class);
 
     public static Integer fiftyOne = ERXConstant.integerForInt(51);
     public static Integer oneHundredTwo = ERXConstant.integerForInt(102);

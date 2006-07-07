@@ -8,6 +8,8 @@ package er.extensions;
 
 import java.util.*;
 
+import org.apache.log4j.Logger;
+
 import sun.misc.*;
 
 import com.webobjects.appserver.*;
@@ -26,7 +28,7 @@ public class ERXGracefulShutdown implements SignalHandler {
     //	---------------------------------------------------------------------------    
     
     /** logging support */
-    public static final ERXLogger log = ERXLogger.getERXLogger(ERXGracefulShutdown.class);
+    public static final Logger log = Logger.getLogger(ERXGracefulShutdown.class);
 
     //	===========================================================================
     //	Interfaces(s)

@@ -2,6 +2,8 @@ package er.extensions;
 
 import java.io.*;
 
+import org.apache.log4j.Logger;
+
 import com.webobjects.eoaccess.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.foundation.*;
@@ -16,7 +18,7 @@ import com.webobjects.foundation.*;
  * @author ak moved stuff from ERXEOAccessUtilities to here
  */
 public class ERXAdaptorOperationWrapper implements Serializable {
-    public static final ERXLogger log = ERXLogger.getERXLogger(ERXAdaptorOperationWrapper.class);
+    public static final Logger log = Logger.getLogger(ERXAdaptorOperationWrapper.class);
 
     public static final NSRecursiveLock adaptorOperationsLock = new NSRecursiveLock();
     

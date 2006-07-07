@@ -11,6 +11,8 @@ import java.util.*;
 import javax.mail.*;
 import javax.mail.internet.*;
 
+import org.apache.log4j.Logger;
+
 import com.webobjects.appserver.*;
 import com.webobjects.foundation.*;
 
@@ -26,7 +28,7 @@ import er.extensions.*;
 public class ERMailUtils extends Object {
 
     /** The class logger. */
-    private static ERXLogger log = ERXLogger.getERXLogger (ERMailUtils.class);
+    private static Logger log = Logger.getLogger (ERMailUtils.class);
 
     /** The shared mail deliverer */
     private static ERMailDeliveryHTML sharedDeliverer;

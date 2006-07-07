@@ -8,6 +8,8 @@ package er.extensions;
 
 import java.util.*;
 
+import org.apache.log4j.Logger;
+
 import com.webobjects.eoaccess.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.foundation.*;
@@ -24,11 +26,11 @@ import com.webobjects.foundation.*;
 public class ERXDatabaseContextDelegate {
              
     /** Basic logging support */
-    public final static ERXLogger log = ERXLogger.getERXLogger(ERXDatabaseContextDelegate.class);
+    public final static Logger log = Logger.getLogger(ERXDatabaseContextDelegate.class);
     /** Faulting logging support, logging category: <b>er.transaction.adaptor.FaultFiring</b> */
-    public final static ERXLogger dbLog = ERXLogger.getERXLogger("er.transaction.adaptor.FaultFiring");
+    public final static Logger dbLog = Logger.getLogger("er.transaction.adaptor.FaultFiring");
     /** Faulting logging support, logging category: <b>er.transaction.adaptor.Exceptions</b> */
-    public final static ERXLogger exLog = ERXLogger.getERXLogger("er.transaction.adaptor.Exceptions");
+    public final static Logger exLog = Logger.getLogger("er.transaction.adaptor.Exceptions");
 
     /** Holds onto the singleton of the default delegate */
     private static ERXDatabaseContextDelegate _defaultDelegate = new ERXDatabaseContextDelegate();

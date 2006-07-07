@@ -6,10 +6,12 @@
 //
 package er.extensions;
 
+import org.apache.log4j.Logger;
+
 import com.webobjects.appserver.*;
 
 public class ERXEditDateJavascript extends WOComponent {
-    static final ERXLogger log = ERXLogger.getERXLogger(ERXEditDateJavascript.class);
+    static final Logger log = Logger.getLogger(ERXEditDateJavascript.class);
     private static String _datePickerJavaScriptUrl;
     
     protected int i = 0;

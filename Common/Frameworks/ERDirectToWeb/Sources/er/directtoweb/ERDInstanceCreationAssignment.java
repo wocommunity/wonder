@@ -6,6 +6,8 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.directtoweb;
 
+import org.apache.log4j.Logger;
+
 import com.webobjects.directtoweb.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.foundation.*;
@@ -21,7 +23,7 @@ import er.extensions.*;
 
 public class ERDInstanceCreationAssignment extends ERDDelayedAssignment {
     /** logging support */
-    public final static ERXLogger log = ERXLogger.getERXLogger(ERDDelayedAssignment.class);
+    public final static Logger log = Logger.getLogger(ERDDelayedAssignment.class);
     
     /** holds the array of keys this assignment depends upon */
     public static final NSArray _DEPENDENT_KEYS=new NSArray();

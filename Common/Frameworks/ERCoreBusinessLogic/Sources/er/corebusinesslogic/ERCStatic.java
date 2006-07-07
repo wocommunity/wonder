@@ -1,6 +1,8 @@
 // ERCStatic.java
 // (c) by Anjo Krank (ak@kcmedia.ag)
 package er.corebusinesslogic;
+import org.apache.log4j.Logger;
+
 import com.webobjects.eocontrol.*;
 import com.webobjects.foundation.*;
 
@@ -9,7 +11,7 @@ import er.extensions.*;
 public class ERCStatic extends _ERCStatic {
 
     /** logging support */
-    public static final ERXLogger log = ERXLogger.getERXLogger(ERCStatic.class);
+    public static final Logger log = Logger.getLogger(ERCStatic.class);
         
     // Class methods go here
     

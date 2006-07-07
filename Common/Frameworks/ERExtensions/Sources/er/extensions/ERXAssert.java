@@ -2,6 +2,8 @@ package er.extensions;
 
 import java.util.*;
 
+import org.apache.log4j.Logger;
+
 import com.webobjects.foundation.*;
 
 /**
@@ -35,7 +37,7 @@ Most of this code is derived from Jonathan "Wolf" Rentzsch's JAssert, which can 
 public class ERXAssert {
     private static NSMutableDictionary _instances = new NSMutableDictionary();
     private static NSMutableDictionary _handlersForKey = new NSMutableDictionary();
-    private static ERXLogger log = ERXLogger.getERXLogger(ERXAssert.class);
+    private static Logger log = Logger.getLogger(ERXAssert.class);
 
     public static ERXAssert DURING;
     public static ERXAssert PRE;

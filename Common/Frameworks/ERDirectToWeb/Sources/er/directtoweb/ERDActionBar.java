@@ -1,5 +1,7 @@
 package er.directtoweb;
 
+import org.apache.log4j.Logger;
+
 import com.webobjects.appserver.*;
 import com.webobjects.directtoweb.*;
 import com.webobjects.foundation.*;
@@ -19,7 +21,7 @@ import er.extensions.*;
 public class ERDActionBar extends ERDCustomEditComponent implements ERDBranchInterface {
 
     /** logging support */
-    private static final ERXLogger log = ERXLogger.getLogger(ERDActionBar.class,"components");
+    private static final Logger log = Logger.getLogger(ERDActionBar.class);
 
     /**
      * Public constructor

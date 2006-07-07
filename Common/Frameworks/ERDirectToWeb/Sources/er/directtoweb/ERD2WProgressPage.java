@@ -1,5 +1,7 @@
 package er.directtoweb;
 
+import org.apache.log4j.Logger;
+
 import com.webobjects.appserver.*;
 
 import er.extensions.*;
@@ -16,7 +18,7 @@ import er.extensions.*;
 public class ERD2WProgressPage extends ERD2WMessagePage {
 
     /** logging support */
-    private static final ERXLogger log = ERXLogger.getLogger(ERD2WProgressPage.class,"components");
+    private static final Logger log = Logger.getLogger(ERD2WProgressPage.class);
 
     /** holds the task */
     protected ERXLongResponseTask _longResponseTask;

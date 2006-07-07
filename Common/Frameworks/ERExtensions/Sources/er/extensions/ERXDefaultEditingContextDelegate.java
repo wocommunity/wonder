@@ -6,6 +6,8 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.extensions;
 
+import org.apache.log4j.Logger;
+
 
 /**
  * Default editing context delegate. This delegate
@@ -25,7 +27,7 @@ package er.extensions;
 public class ERXDefaultEditingContextDelegate extends ERXEditingContextDelegate {
 
     /** logging support */
-    public static final ERXLogger log = ERXLogger.getERXLogger(ERXDefaultEditingContextDelegate.class);
+    public static final Logger log = Logger.getLogger(ERXDefaultEditingContextDelegate.class);
 
     /**
      * Constructor needed for Serialable interface

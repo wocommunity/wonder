@@ -2,6 +2,8 @@ package er.directtoweb;
 
 import java.util.*;
 
+import org.apache.log4j.Logger;
+
 import com.webobjects.directtoweb.*;
 import com.webobjects.eoaccess.*;
 import com.webobjects.eocontrol.*;
@@ -17,7 +19,7 @@ import er.extensions.*;
 public class ERDDefaultDisplayNameAssignment extends ERDAssignment implements ERDLocalizableAssignmentInterface {
 
     /** logging support */
-    static final ERXLogger log = ERXLogger.getERXLogger(ERDDefaultDisplayNameAssignment.class);
+    static final Logger log = Logger.getLogger(ERDDefaultDisplayNameAssignment.class);
 
     /** holds the dependent keys of the assignment */
     protected static final NSDictionary keys = ERXDictionaryUtilities.dictionaryWithObjectsAndKeys( new Object [] {

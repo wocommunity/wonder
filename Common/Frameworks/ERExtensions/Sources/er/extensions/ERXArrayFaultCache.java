@@ -2,6 +2,8 @@ package er.extensions;
 
 import java.util.*;
 
+import org.apache.log4j.Logger;
+
 import com.webobjects.eoaccess.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.foundation.*;
@@ -22,7 +24,7 @@ import com.webobjects.foundation.*;
 public class ERXArrayFaultCache {
     
     private NSMutableDictionary cache = new NSMutableDictionary();
-    private static final ERXLogger log = ERXLogger.getERXLogger(ERXArrayFaultCache.class);
+    private static final Logger log = Logger.getLogger(ERXArrayFaultCache.class);
     
     /**
      * Register the to-many faults by entity name and relationship name. The entries

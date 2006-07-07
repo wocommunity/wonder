@@ -10,6 +10,8 @@ import java.nio.*;
 import java.nio.charset.*;
 import java.util.*;
 
+import org.apache.log4j.Logger;
+
 import com.webobjects.appserver.*;
 import com.webobjects.eoaccess.*;
 import com.webobjects.eocontrol.*;
@@ -145,7 +147,7 @@ public class ERXStringUtilities {
     // FIXME: Not thread safe
     // MOVEME: Needs to go with the fuzzy matching stuff
     protected static double adjustement = 0.5;
-    private static ERXLogger log = ERXLogger.getERXLogger(ERXStringUtilities.class);
+    private static Logger log = Logger.getLogger(ERXStringUtilities.class);
 
     /**
      * Sets the base adjustment used for fuzzy matching

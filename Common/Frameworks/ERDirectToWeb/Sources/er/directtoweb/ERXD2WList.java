@@ -6,6 +6,8 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.directtoweb;
 
+import org.apache.log4j.Logger;
+
 import com.webobjects.appserver.*;
 import com.webobjects.directtoweb.*;
 import com.webobjects.eocontrol.*;
@@ -26,7 +28,7 @@ import er.extensions.*;
  */
 
 public class ERXD2WList extends D2WList {
-    ERXLogger log = ERXLogger.getERXLogger(ERXD2WList.class);
+    Logger log = Logger.getLogger(ERXD2WList.class);
     
     protected EOArrayDataSource _dataSource = null;
 

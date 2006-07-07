@@ -11,6 +11,8 @@ package er.extensions;
 
 import java.util.*;
 
+import org.apache.log4j.Logger;
+
 import com.webobjects.appserver.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.foundation.*;
@@ -62,8 +64,8 @@ public class ERXJSPopUpRelationPicker extends ERXStatelessComponent {
     }
 
     /** logging support */
-    public final static ERXLogger log = ERXLogger.getERXLogger(ERXJSPopUpRelationPicker.class);
-    public final static ERXLogger jsLog = ERXLogger.getERXLogger("er.extensions.ERXJSPopUpRelationPicker.script");
+    public final static Logger log = Logger.getLogger(ERXJSPopUpRelationPicker.class);
+    public final static Logger jsLog = Logger.getLogger("er.extensions.ERXJSPopUpRelationPicker.script");
 
     protected Integer _size;
     protected String _childDisplayValueName;

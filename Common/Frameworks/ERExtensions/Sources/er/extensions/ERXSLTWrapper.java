@@ -9,6 +9,7 @@ import javax.xml.transform.dom.*;
 import javax.xml.transform.sax.*;
 import javax.xml.transform.stream.*;
 
+import org.apache.log4j.Logger;
 import org.w3c.dom.*;
 import org.xml.sax.*;
 import org.xml.sax.helpers.*;
@@ -44,7 +45,7 @@ import com.webobjects.foundation.*;
 public class ERXSLTWrapper extends ERXNonSynchronizingComponent {
 
     /** logging support */
-    private static final ERXLogger log = ERXLogger.getLogger(ERXSLTWrapper.class,"components");
+    private static final Logger log = Logger.getLogger(ERXSLTWrapper.class);
     
     private long start, current;
     /**

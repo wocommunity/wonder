@@ -8,6 +8,8 @@ package er.extensions;
 
 import java.text.*;
 
+import org.apache.log4j.Logger;
+
 /**
  * This is a simple class for converting ASCII strings to HTML and vice versa.
  * In the current implementation, all this class does is convert newlines to HTML breaks and
@@ -16,7 +18,7 @@ import java.text.*;
 public class ERXSimpleHTMLFormatter extends java.text.Format {
 
     /** logging support */
-    public final static ERXLogger log = ERXLogger.getERXLogger(ERXSimpleHTMLFormatter.class);
+    public final static Logger log = Logger.getLogger(ERXSimpleHTMLFormatter.class);
 
     /** holds the HTML return string */
     private final static String HTMLReturn = "<br />";

@@ -1,5 +1,7 @@
 package er.extensions;
 
+import org.apache.log4j.Logger;
+
 import com.webobjects.eocontrol.*;
 
 
@@ -9,7 +11,7 @@ import com.webobjects.eocontrol.*;
  * Adds functionality to automatically close all related JDBC Connections.
  */
 public class ERXObjectStoreCoordinator extends EOObjectStoreCoordinator {
-    public static ERXLogger log = ERXLogger.getERXLogger(ERXObjectStoreCoordinator.class);
+    public static Logger log = Logger.getLogger(ERXObjectStoreCoordinator.class);
     
     public boolean _didClose = false;
     public boolean _shouldClose = false;

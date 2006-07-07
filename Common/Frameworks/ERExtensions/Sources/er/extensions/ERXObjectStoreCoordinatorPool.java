@@ -3,6 +3,8 @@ package er.extensions;
 
 import java.util.*;
 
+import org.apache.log4j.Logger;
+
 import com.webobjects.appserver.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.foundation.*;
@@ -23,7 +25,7 @@ import com.webobjects.foundation.*;
  * @author David Teran, Frank Caputo @ cluster9
  */
 public class ERXObjectStoreCoordinatorPool {
-    private static ERXLogger log = ERXLogger.getERXLogger(ERXObjectStoreCoordinatorPool.class);
+    private static Logger log = Logger.getLogger(ERXObjectStoreCoordinatorPool.class);
     
     private Hashtable _oscForSession;
     private int _maxOS;

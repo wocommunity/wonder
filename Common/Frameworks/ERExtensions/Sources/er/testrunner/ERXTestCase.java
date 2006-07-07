@@ -20,6 +20,8 @@ package er.testrunner;
 
 import java.util.*;
 
+import org.apache.log4j.Logger;
+
 import junit.framework.*;
 
 import com.webobjects.eocontrol.*;
@@ -31,7 +33,7 @@ import er.extensions.*;
  * Provides an editingContext that is disposed on every setup/tearDown.
  */
 public class ERXTestCase extends TestCase {
-    static ERXLogger log = ERXLogger.getERXLogger(ERXTestCase.class);
+    static Logger log = Logger.getLogger(ERXTestCase.class);
     private EOEditingContext editingContext;
     private NSMutableArray persistentRootObjects;
 

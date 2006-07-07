@@ -6,6 +6,8 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.directtoweb;
 
+import org.apache.log4j.Logger;
+
 import com.webobjects.appserver.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.foundation.*;
@@ -26,7 +28,7 @@ public class ERD2WPickTypePage extends ERD2WInspectPage implements ERDPickPageIn
     public ERD2WPickTypePage(WOContext context) {super(context);}
     
     /** logging support */
-    public static final ERXLogger log = ERXLogger.getERXLogger("er.directtoweb.templates.ERD2WPickTypePageTemplate");
+    public static final Logger log = Logger.getLogger("er.directtoweb.templates.ERD2WPickTypePageTemplate");
 
     public boolean selectionManditory() { return ERXValueUtilities.booleanValue(d2wContext().valueForKey("selectionManditory")); }
 

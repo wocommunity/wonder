@@ -1,5 +1,7 @@
 package er.directtoweb;
 
+import org.apache.log4j.Logger;
+
 import com.webobjects.appserver.*;
 import com.webobjects.directtoweb.*;
 import com.webobjects.eoaccess.*;
@@ -17,7 +19,7 @@ import er.extensions.*;
 public class ERD2WQueryToManyRelationship extends D2WQueryToManyRelationship {
 
     /** logging support */
-    private static final ERXLogger log = ERXLogger.getLogger(ERD2WQueryToManyRelationship.class,"components");
+    private static final Logger log = Logger.getLogger(ERD2WQueryToManyRelationship.class);
 	
     /**
      * Public constructor

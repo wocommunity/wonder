@@ -10,6 +10,8 @@ import java.io.*;
 import java.net.*;
 import java.util.*;
 
+import org.apache.log4j.Logger;
+
 import com.webobjects.appserver.*;
 import com.webobjects.appserver._private.*;
 import com.webobjects.foundation.*;
@@ -27,7 +29,7 @@ public class ERXPathDirectAction extends WODirectAction {
     //	---------------------------------------------------------------------------
     
     /** logging support */
-    protected static final ERXLogger log = ERXLogger.getERXLogger(ERXPathDirectAction.class);
+    protected static final Logger log = Logger.getLogger(ERXPathDirectAction.class);
 
     //	===========================================================================
     //	Instance Variable(s)

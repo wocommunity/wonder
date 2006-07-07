@@ -12,6 +12,8 @@ import java.util.*;
 import javax.mail.*;
 import javax.mail.internet.*;
 
+import org.apache.log4j.Logger;
+
 import com.webobjects.appserver.*;
 import com.webobjects.foundation.*;
 
@@ -26,7 +28,7 @@ the application.
 @author Max Muller <maxmuller@mac.com> */
 public class ERMailSender extends Thread {
 
-    static ERXLogger log = ERXLogger.getERXLogger (ERMailSender.class);
+    static Logger log = Logger.getLogger (ERMailSender.class);
 
     private static ERMailSender _sharedMailSender;
     private static boolean useSenderDelay =

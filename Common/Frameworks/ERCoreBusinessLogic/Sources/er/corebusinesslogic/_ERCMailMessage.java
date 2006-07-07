@@ -3,6 +3,8 @@
 // Created by eogenerator
 // DO NOT EDIT.  Make changes to ERCMailMessage.java instead.
 package er.corebusinesslogic;
+import org.apache.log4j.Logger;
+
 import com.webobjects.eoaccess.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.foundation.*;
@@ -11,7 +13,7 @@ import er.extensions.*;
 
 public abstract class _ERCMailMessage extends ERCStampedEnterpriseObject {
 
-    public static ERXLogger log = ERXLogger.getERXLogger(_ERCMailMessage.class);
+    public static Logger log = Logger.getLogger(_ERCMailMessage.class);
     
     public _ERCMailMessage() {
         super();

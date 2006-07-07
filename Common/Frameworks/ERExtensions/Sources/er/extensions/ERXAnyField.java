@@ -1,4 +1,6 @@
 package er.extensions;
+import org.apache.log4j.Logger;
+
 import com.webobjects.appserver.*;
 import com.webobjects.woextensions.*;
 
@@ -10,7 +12,7 @@ import com.webobjects.woextensions.*;
 public class ERXAnyField extends WOAnyField {
 
     /** logging support */
-    private static final ERXLogger log = ERXLogger.getLogger(ERXAnyField.class,"components");
+    private static final Logger log = Logger.getLogger(ERXAnyField.class);
 	
     /**
      * Public constructor

@@ -1,5 +1,7 @@
 package er.reporting;
 
+import org.apache.log4j.Logger;
+
 import com.webobjects.appserver.*;
 import com.webobjects.foundation.*;
 
@@ -8,7 +10,7 @@ import er.grouping.*;
 
 public class WRLayoutEditor extends WOComponent  {
     /** logging support */
-    private static final ERXLogger log = ERXLogger.getLogger(WRLayoutEditor.class,"components");
+    private static final Logger log = Logger.getLogger(WRLayoutEditor.class);
 
     public DRGroup aGrp;
     public String dispType;

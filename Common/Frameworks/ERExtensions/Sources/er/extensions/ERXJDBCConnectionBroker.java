@@ -5,6 +5,8 @@ import java.sql.*;
 import java.util.*;
 import java.util.Date;
 
+import org.apache.log4j.Logger;
+
 import com.webobjects.eoaccess.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.foundation.*;
@@ -47,7 +49,7 @@ import com.webobjects.foundation.*;
 // connection while it still active??
 public class ERXJDBCConnectionBroker {
 
-    public static final ERXLogger log = ERXLogger.getERXLogger(ERXJDBCConnectionBroker.class);
+    public static final Logger log = Logger.getLogger(ERXJDBCConnectionBroker.class);
 
     private static Hashtable brokers = new Hashtable();
 

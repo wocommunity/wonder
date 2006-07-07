@@ -1,5 +1,7 @@
 package er.directtoweb;
 
+import org.apache.log4j.Logger;
+
 import com.webobjects.appserver.*;
 import com.webobjects.directtoweb.*;
 
@@ -21,7 +23,7 @@ import er.extensions.*;
 public class ERDDeleteButton extends ERDActionButton {
 
     /** logging support */
-    private static final ERXLogger log = ERXLogger.getLogger(ERDDeleteButton.class,"components");
+    private static final Logger log = Logger.getLogger(ERDDeleteButton.class);
 	
     /**
      * Public constructor

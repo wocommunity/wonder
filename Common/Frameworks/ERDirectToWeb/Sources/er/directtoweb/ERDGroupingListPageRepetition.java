@@ -1,5 +1,7 @@
 package er.directtoweb;
 
+import org.apache.log4j.Logger;
+
 import com.webobjects.foundation.*;
 import com.webobjects.appserver.*;
 import com.webobjects.eocontrol.*;
@@ -18,7 +20,7 @@ import er.extensions.*;
 public class ERDGroupingListPageRepetition extends ERDListPageRepetition {
 
 	/** logging support */
-	private static final ERXLogger log = ERXLogger.getLogger(ERDGroupingListPageRepetition.class,"components");
+	private static final Logger log = Logger.getLogger(ERDGroupingListPageRepetition.class);
 	
 	/**
 	 * Public constructor

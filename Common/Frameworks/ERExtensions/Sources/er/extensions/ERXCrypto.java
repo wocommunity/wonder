@@ -13,6 +13,8 @@ import java.util.*;
 import javax.crypto.*;
 import javax.crypto.spec.*;
 
+import org.apache.log4j.Logger;
+
 import com.webobjects.foundation.*;
 
 /* Compilation problems? READ THIS
@@ -46,7 +48,7 @@ import com.webobjects.foundation.*;
 public class ERXCrypto {
 
     /** logging support */
-    public static final ERXLogger log = ERXLogger.getERXLogger(ERXCrypto.class);
+    public static final Logger log = Logger.getLogger(ERXCrypto.class);
     /** Block size of blowfish encrypted strings */
     public final static int BLOCK_SIZE=8;
     

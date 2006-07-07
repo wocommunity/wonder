@@ -2,6 +2,8 @@ package er.extensions;
 
 import java.util.*;
 
+import org.apache.log4j.Logger;
+
 import com.webobjects.appserver.*;
 import com.webobjects.appserver._private.*;
 import com.webobjects.foundation.*;
@@ -37,7 +39,7 @@ import com.webobjects.foundation.*;
 
 public class ERXWORepetition extends WODynamicGroup {
     /** logging support */
-    private static final ERXLogger log = ERXLogger.getLogger(ERXWORepetition.class,"elements");
+    private static final Logger log = Logger.getLogger(ERXWORepetition.class);
     
     protected WOAssociation _list;
     protected WOAssociation _item;
