@@ -6,6 +6,8 @@
 //
 package er.directtoweb;
 
+import org.apache.log4j.Logger;
+
 import com.webobjects.appserver.*;
 import com.webobjects.directtoweb.*;
 
@@ -17,7 +19,7 @@ import er.extensions.*;
 public class ERD2WEditToManyFault extends D2WEditToManyFault {
 
     /** logging support */
-    public static final ERXLogger log = ERXLogger.getERXLogger(ERD2WEditToManyFault.class);
+    public static final Logger log = Logger.getLogger(ERD2WEditToManyFault.class);
 
     /**
      * Public constructor

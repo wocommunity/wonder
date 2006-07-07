@@ -6,6 +6,8 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.directtoweb;
 
+import org.apache.log4j.Logger;
+
 import com.webobjects.directtoweb.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.foundation.*;
@@ -20,7 +22,7 @@ import er.extensions.*;
 public class ERDImageNameAssignment extends ERDAssignment implements ERDLocalizableAssignmentInterface {
 
     /** logging support */
-    public static final ERXLogger log = ERXLogger.getERXLogger("er.directtoweb.rules.ERDImageNameAssignment");
+    public static final Logger log = Logger.getLogger("er.directtoweb.rules.ERDImageNameAssignment");
 
     /** holds the array of keys this assignment depends upon */
     public static final NSArray _DEPENDENT_KEYS=new NSArray(new String[] { "baseImageDirectory", "sectionKey", "tabKey"});

@@ -6,6 +6,8 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.directtoweb;
 
+import org.apache.log4j.Logger;
+
 import com.webobjects.appserver.*;
 import com.webobjects.directtoweb.*;
 import com.webobjects.eocontrol.*;
@@ -26,7 +28,7 @@ import er.extensions.*;
 public class ERDList extends ERDCustomEditComponent {
 
     /* logging support */
-    static final ERXLogger log = ERXLogger.getERXLogger(ERDList.class);
+    static final Logger log = Logger.getLogger(ERDList.class);
     
     protected NSArray list;
 

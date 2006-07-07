@@ -8,6 +8,8 @@ package er.directtoweb;
 
 import java.util.*;
 
+import org.apache.log4j.Logger;
+
 import com.webobjects.appserver.*;
 import com.webobjects.directtoweb.*;
 import com.webobjects.eoaccess.*;
@@ -24,7 +26,7 @@ import er.extensions.*;
 public class ERD2WPickListPage extends ERD2WListPage implements ERDPickPageInterface, EditRelationshipPageInterface {
 
     /** logging support */
-    public static final ERXLogger log = ERXLogger.getERXLogger(ERD2WPickListPage.class);
+    public static final Logger log = Logger.getLogger(ERD2WPickListPage.class);
 
     /** holds the selected objects */
     protected NSMutableArray selectedObjects = new NSMutableArray();

@@ -1,5 +1,2 @@
-Library/Java/Extensions/ASG.jar
-Library/FrontBase4/Java/frontbasejdbc.jar
 Library/Java/Extensions/OpenBaseJDBC.jar
-Library/Java/Extensions/postgresql.jar
-Applications/jprofiler3.1/bin/agent.jar
+Library/Java/Extensions/postgresql-8.0-310.jdbc3.jar

@@ -5,6 +5,8 @@
 // Created by ak on Tue Apr 23 2002
 //
 package er.directtoweb;
+import org.apache.log4j.Logger;
+
 import com.webobjects.directtoweb.*;
 import com.webobjects.eoaccess.*;
 import com.webobjects.eocontrol.*;
@@ -25,7 +27,7 @@ import er.extensions.*;
 public class ERDDefaultsEmbeddedAssignment extends ERDAssignment {
 
     /** logging support */
-    static final ERXLogger log = ERXLogger.getERXLogger(ERDDefaultsEmbeddedAssignment.class);
+    static final Logger log = Logger.getLogger(ERDDefaultsEmbeddedAssignment.class);
 
     /** holds the array of dependent keys */
     public static final NSArray _DEPENDENT_KEYS=new NSArray(new String[] {"embeddedEntityName", "object.entityName", "propertyKey", "pageConfiguration"});

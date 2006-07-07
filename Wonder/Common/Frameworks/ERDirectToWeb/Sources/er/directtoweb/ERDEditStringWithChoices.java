@@ -8,6 +8,8 @@ package er.directtoweb;
 
 import java.util.*;
 
+import org.apache.log4j.Logger;
+
 import com.webobjects.appserver.*;
 import com.webobjects.foundation.*;
 
@@ -24,7 +26,7 @@ public class ERDEditStringWithChoices extends ERDCustomEditComponent {
     public ERDEditStringWithChoices(WOContext context) {super(context);}
     
     /** logging support */
-    public static final ERXLogger log = ERXLogger.getERXLogger(ERDEditStringWithChoices.class);
+    public static final Logger log = Logger.getLogger(ERDEditStringWithChoices.class);
     
     public String entityForReportName;
     public ERXKeyValuePair currentElement;

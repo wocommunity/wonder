@@ -2,6 +2,8 @@
 // (c) by Anjo Krank (ak@kcmedia.ag)
 package er.corebusinesslogic;
 
+import org.apache.log4j.Logger;
+
 import com.webobjects.eocontrol.*;
 
 import er.extensions.*;
@@ -13,7 +15,7 @@ import er.extensions.*;
 public class ERCMailState extends _ERCMailState {
 
     /** logging support */
-    public static final ERXLogger log = ERXLogger.getERXLogger(ERCMailState.class);
+    public static final Logger log = Logger.getLogger(ERCMailState.class);
 
     public static ERCMailState EXCEPTION_STATE;
     public static ERCMailState READY_TO_BE_SENT_STATE;

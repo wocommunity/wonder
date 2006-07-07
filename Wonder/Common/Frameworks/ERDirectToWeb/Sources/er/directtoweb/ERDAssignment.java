@@ -8,6 +8,8 @@ package er.directtoweb;
 
 import java.lang.reflect.*;
 
+import org.apache.log4j.Logger;
+
 import com.webobjects.directtoweb.*;
 import com.webobjects.eocontrol.*;
 
@@ -25,7 +27,7 @@ import er.extensions.*;
 public abstract class ERDAssignment extends Assignment implements ERDComputingAssignmentInterface {
 
     /** logging supprt */
-    public final static ERXLogger log = ERXLogger.getERXLogger("er.directtoweb.rules.ERDAssignment");
+    public final static Logger log = Logger.getLogger("er.directtoweb.rules.ERDAssignment");
 
     /** Cached context class array */
     // MOVEME: ERDConstants

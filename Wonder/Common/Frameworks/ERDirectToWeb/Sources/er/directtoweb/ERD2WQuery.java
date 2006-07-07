@@ -1,5 +1,7 @@
 package er.directtoweb;
 
+import org.apache.log4j.Logger;
+
 import com.webobjects.appserver.*;
 import com.webobjects.directtoweb.*;
 
@@ -15,7 +17,7 @@ import er.extensions.*;
 public class ERD2WQuery extends D2WQuery {
 
     /** logging support */
-    private static final ERXLogger log = ERXLogger.getLogger(ERD2WQuery.class,"components");
+    private static final Logger log = Logger.getLogger(ERD2WQuery.class);
 	
     /**
      * Public constructor

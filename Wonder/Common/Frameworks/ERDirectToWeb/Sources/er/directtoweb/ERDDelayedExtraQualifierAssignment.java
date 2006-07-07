@@ -8,6 +8,8 @@ package er.directtoweb;
 
 import java.util.*;
 
+import org.apache.log4j.Logger;
+
 import com.webobjects.directtoweb.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.foundation.*;
@@ -51,7 +53,7 @@ import er.extensions.*;
 public class ERDDelayedExtraQualifierAssignment extends ERDDelayedAssignment {
 
     /** logging support */
-    public static final ERXLogger log = ERXLogger.getERXLogger(ERDDelayedExtraQualifierAssignment.class);
+    public static final Logger log = Logger.getLogger(ERDDelayedExtraQualifierAssignment.class);
     
     /**
      * Static constructor required by the EOKeyValueUnarchiver

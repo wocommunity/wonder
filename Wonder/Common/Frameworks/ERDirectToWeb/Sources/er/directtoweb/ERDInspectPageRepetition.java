@@ -1,5 +1,7 @@
 package er.directtoweb;
 
+import org.apache.log4j.Logger;
+
 import com.webobjects.appserver.*;
 import com.webobjects.eocontrol.*;
 
@@ -18,7 +20,7 @@ import er.extensions.*;
 public class ERDInspectPageRepetition extends ERDAttributeRepetition {
 
     /** logging support */
-    private static final ERXLogger log = ERXLogger.getLogger(ERDInspectPageRepetition.class,"components");
+    private static final Logger log = Logger.getLogger(ERDInspectPageRepetition.class);
 	
     /**
      * Public constructor

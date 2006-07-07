@@ -9,6 +9,8 @@ package er.directtoweb;
 
 import java.util.*;
 
+import org.apache.log4j.Logger;
+
 import com.webobjects.appserver.*;
 import com.webobjects.directtoweb.*;
 import com.webobjects.eoaccess.*;
@@ -23,7 +25,7 @@ public class ERD2WEditSortedManyToManyPage extends ERD2WPage implements EditRela
     // d2wContext keys:
     //   indexKey: the key on the join entity that contains sort order info
 
-    public static final ERXLogger log = ERXLogger.getERXLogger(ERD2WEditSortedManyToManyPage.class);
+    public static final Logger log = Logger.getLogger(ERD2WEditSortedManyToManyPage.class);
     
     public ERD2WEditSortedManyToManyPage(WOContext c) {
         super(c);

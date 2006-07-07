@@ -1,11 +1,13 @@
 package er.plot;
 
+import org.apache.log4j.Logger;
+
 import er.extensions.*;
 
 public class ERPlot extends ERXFrameworkPrincipal {
     
     /** logging support */
-    public static final ERXLogger log = ERXLogger.getERXLogger(ERPlot.class);
+    public static final Logger log = Logger.getLogger(ERPlot.class);
 
     /** holds the shared instance reference */
     protected static ERPlot sharedInstance;

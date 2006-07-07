@@ -3,6 +3,8 @@
  */
 package er.extensions;
 
+import org.apache.log4j.Logger;
+
 import com.webobjects.appserver.*;
 import com.webobjects.foundation.*;
 
@@ -34,7 +36,7 @@ public interface ERXLongResponseTask extends Runnable {
 	public abstract class DefaultImplementation implements Runnable, ERXLongResponseTask {
 		
 		/** logging support */
-		public ERXLogger log = ERXLogger.getERXLogger(ERXUtilities.class);
+		public Logger log = Logger.getLogger(ERXUtilities.class);
 		
 		/** Refresh page that controls this task */
 		protected ERXLongResponse _longResponse;
@@ -62,7 +64,7 @@ public interface ERXLongResponseTask extends Runnable {
 		 */
 		public DefaultImplementation() {
 			_finishInitialization();
-			log = ERXLogger.getERXLogger(getClass().getName());
+			log = Logger.getLogger(getClass().getName());
 			_thread = null;
 		}
 		

@@ -2,6 +2,8 @@ package er.grouping;
 
 import java.util.Enumeration;
 
+import org.apache.log4j.Logger;
+
 import com.webobjects.eocontrol.EOSortOrdering;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
@@ -11,7 +13,7 @@ import com.webobjects.foundation.NSMutableDictionary;
 /* DRRecordGroup.h created by Administrator on Sun 01-Nov-1998 */
 //#import <WebObjects/WebObjects.h>
 public class DRRecordGroup extends Object  {
-    private er.extensions.ERXLogger log = er.extensions.ERXLogger.getERXLogger(DRRecordGroup.class);
+    private Logger log = Logger.getLogger(DRRecordGroup.class);
 
     protected DRCriteria _criteria;
     protected DRGroup _group;

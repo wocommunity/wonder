@@ -8,27 +8,32 @@ require 'StatModules'
 # and storing it in memory.
 # Respective classes described below.
 
+# 84.128.218.82 [27/Mar/2006:00:00:00 +0200] 0 "satw;KWJ3H1J;com.logicunited.gaia.front.wo.Are
+# aDetailPage;feature=OnlineDeliverables;entity=PrivateCam;country=de;site=satw;category=girls
+# ;supplier=coha;area=HPCamAreaAll;lang=de;deliverable=59717:27278;" "http://www.sex-and-the-w
+# eb.de/ecl/acams/amateur_cams/girls.html"
 
-SEARCH_PATTERN=/^(\S+)\s+(\S+)\s+(\S+)\s+\[(.*)\]\s+"([^"]+)"\s+(\S+)\s+(\S+)\s+"([^"]+)"\s+"([^"]+)"\s+(\S+)\s+"(.*;)"\s*$/
+# SEARCH_PATTERN=/^(\S+)\s+(\S+)\s+(\S+)\s+\[(.*)\]\s+"([^"]+)"\s+(\S+)\s+(\S+)\s+"([^"]+)"\s+"([^"]+)"\s+(\S+)\s+"(.*;)"\s*$/
+SEARCH_PATTERN=/^(\S+)\s+\[(.*)\]\s+(\d+)\s+"([^"]+)"\s+"([^"]+)"$/
 
-SIMPLE_SEARCH_PATTERN=/\s+".*;"\s*$/
+SIMPLE_SEARCH_PATTERN=/./
 
 # locations of elements in the pattern and in the array
 
-POS_IP 								= 0
-POS_DATE							= 3
-POS_REQUEST						= 4
-POS_RESPONSE					= 5
-POS_BYTES							= 6
-POS_REFERER						= 7
-POS_AGENT							= 8
-POS_REQ_TIME					= 9
-TMP_POS_X_WO_CUSTOM_ENV = 10
-POS_APP_NAME					= 11
-POS_SESSION_ID				= 12
-POS_PAGE_NAME					= 13
-POS_ARBITRARY_ARGS		= 14
-POS_DICTIONARY_STRING	= 15
+POS_IP                  = 0
+POS_DATE                = 1
+POS_REQUEST             = 0
+POS_RESPONSE            = 0
+POS_BYTES               = 0
+POS_REFERER             = 4
+POS_AGENT               = 0
+POS_REQ_TIME            = 2
+TMP_POS_X_WO_CUSTOM_ENV = 3
+POS_APP_NAME            = 5
+POS_SESSION_ID          = 6
+POS_PAGE_NAME           = 7
+POS_ARBITRARY_ARGS		= 8
+POS_DICTIONARY_STRING	= 9
 
 CACHEABLE_ELEMENTS = [ POS_IP, POS_APP_NAME, POS_AGENT, POS_SESSION_ID, POS_PAGE_NAME, POS_DICTIONARY_STRING ]
 

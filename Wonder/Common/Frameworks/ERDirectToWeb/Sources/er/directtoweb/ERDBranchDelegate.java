@@ -9,6 +9,8 @@ package er.directtoweb;
 import java.lang.reflect.*;
 import java.util.*;
 
+import org.apache.log4j.Logger;
+
 import com.webobjects.appserver.*;
 import com.webobjects.directtoweb.*;
 import com.webobjects.foundation.*;
@@ -25,7 +27,7 @@ import er.extensions.*;
 public abstract class ERDBranchDelegate implements ERDBranchDelegateInterface {
 
     /** logging support */
-    public final static ERXLogger log = ERXLogger.getERXLogger(ERDBranchDelegate.class);
+    public final static Logger log = Logger.getLogger(ERDBranchDelegate.class);
 
     /** holds the WOComponent class array used to lookup branch delegate methods */
     // MOVEME: Should belong in a WO constants class

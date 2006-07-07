@@ -10,6 +10,8 @@ import java.io.*;
 import java.lang.reflect.*;
 import java.util.*;
 
+import org.apache.log4j.Logger;
+
 import com.webobjects.appserver.*;
 import com.webobjects.eoaccess.*;
 import com.webobjects.eocontrol.*;
@@ -144,13 +146,13 @@ Simply add a "ERXDefaultValues" key into the entity's userInfo dictionary that c
 public class ERXEntityClassDescription extends EOEntityClassDescription {
 
     /** logging support */
-    public static final ERXLogger log = ERXLogger.getERXLogger(ERXEntityClassDescription.class);
+    public static final Logger log = Logger.getLogger(ERXEntityClassDescription.class);
 
     /** validation logging support */
-    public static final ERXLogger validationLog = ERXLogger.getERXLogger("er.validation.ERXEntityClassDescription");
+    public static final Logger validationLog = Logger.getLogger("er.validation.ERXEntityClassDescription");
 
     /** default logging support */
-    public static final ERXLogger defaultLog = ERXLogger.getERXLogger("er.default.ERXEntityClassDescription");
+    public static final Logger defaultLog = Logger.getLogger("er.default.ERXEntityClassDescription");
 
     /** Holds validation info from the entities user info dictionary */
     protected NSDictionary _validationInfo;

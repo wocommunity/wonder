@@ -8,6 +8,8 @@
 
 package er.extensions;
 
+import org.apache.log4j.Logger;
+
 /**
  *  ERXItalianLocalizer is a subclass of {@link ERXLocalizer}.<br/>
  *  <br/>
@@ -15,7 +17,7 @@ package er.extensions;
  *  and tries to pluralize the string according to italian grammar rules.
  */
 public class ERXItalianLocalizer extends ERXLocalizer {
-    static final ERXLogger log = ERXLogger.getERXLogger(ERXItalianLocalizer.class);
+    static final Logger log = Logger.getLogger(ERXItalianLocalizer.class);
     
     public ERXItalianLocalizer(String aLanguage) { 
         super(aLanguage);

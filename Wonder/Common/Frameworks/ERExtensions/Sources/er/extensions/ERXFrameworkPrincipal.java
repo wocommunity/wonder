@@ -6,6 +6,8 @@
 //
 package er.extensions;
 
+import org.apache.log4j.Logger;
+
 import com.webobjects.appserver.*;
 import com.webobjects.foundation.*;
 
@@ -18,7 +20,7 @@ import com.webobjects.foundation.*;
 public abstract class ERXFrameworkPrincipal {
 
     /** logging support */
-    public static final ERXLogger log = ERXLogger.getERXLogger(ERXFrameworkPrincipal.class);
+    public static final Logger log = Logger.getLogger(ERXFrameworkPrincipal.class);
 
     /** holds the mapping between framework principals classes and ERXFrameworkPrincipal objects */
     private static NSMutableDictionary initializedFrameworks = new NSMutableDictionary();
@@ -81,7 +83,7 @@ public abstract class ERXFrameworkPrincipal {
      * Access to the logging mechanism
      * @return shared logging instance
      */
-    public ERXLogger log() {
+    public Logger log() {
         return log;
     }
 }

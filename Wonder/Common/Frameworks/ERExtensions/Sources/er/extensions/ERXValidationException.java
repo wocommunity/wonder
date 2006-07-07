@@ -6,6 +6,8 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.extensions;
 
+import org.apache.log4j.Logger;
+
 import com.webobjects.eoaccess.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.foundation.*;
@@ -19,7 +21,7 @@ import com.webobjects.foundation.*;
 public class ERXValidationException extends NSValidation.ValidationException implements NSKeyValueCoding {
 
     /** logging support */
-    public static final ERXLogger log = ERXLogger.getERXLogger(ERXValidationException.class);
+    public static final Logger log = Logger.getLogger(ERXValidationException.class);
 
     // Validation Exception Types
     /** corresponds to a model thrown 'null property' exception */

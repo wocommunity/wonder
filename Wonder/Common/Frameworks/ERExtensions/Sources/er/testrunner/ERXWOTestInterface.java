@@ -8,6 +8,8 @@ package er.testrunner;
 
 import java.util.*;
 
+import org.apache.log4j.Logger;
+
 import junit.framework.*;
 
 import com.webobjects.appserver.*;
@@ -23,7 +25,7 @@ import er.extensions.*;
 public class ERXWOTestInterface extends WOComponent implements ERXTestListener {
 
     /** logging support */
-    public static final ERXLogger log = ERXLogger.getERXLogger(ERXWOTestInterface.class);
+    public static final Logger log = Logger.getLogger(ERXWOTestInterface.class);
 
     // bind to a WOTextField
     public String theTest;

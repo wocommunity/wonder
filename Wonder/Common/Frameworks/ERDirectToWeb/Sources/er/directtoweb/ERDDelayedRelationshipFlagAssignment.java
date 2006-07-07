@@ -2,12 +2,12 @@ package er.directtoweb;
 
 import java.util.Enumeration;
 
+import org.apache.log4j.Logger;
+
 import com.webobjects.directtoweb.D2WContext;
 import com.webobjects.eocontrol.EOKeyValueUnarchiver;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSMutableArray;
-
-import er.extensions.ERXLogger;
 
 /**
  * Creates the needed values to have dymamic values in a list page repetition. 
@@ -23,7 +23,7 @@ public class ERDDelayedRelationshipFlagAssignment extends ERDDelayedAssignment {
     }
     
     /** Logging support */
-    public final static ERXLogger log = ERXLogger.getERXLogger(ERDDelayedRelationshipFlagAssignment.class);
+    public final static Logger log = Logger.getLogger(ERDDelayedRelationshipFlagAssignment.class);
 
     public ERDDelayedRelationshipFlagAssignment(EOKeyValueUnarchiver u) { super(u); }
     public ERDDelayedRelationshipFlagAssignment(String key, Object value) { super(key,value); }

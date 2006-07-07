@@ -8,6 +8,8 @@ package er.directtoweb;
 
 import java.util.*;
 
+import org.apache.log4j.Logger;
+
 import com.webobjects.appserver.*;
 import com.webobjects.directtoweb.*;
 import com.webobjects.eoaccess.*;
@@ -53,7 +55,7 @@ public class ERDEditOwnedRelationship extends ERDCustomEditComponent {
 
 
     /** logging support */
-    public final static ERXLogger log = ERXLogger.getERXLogger("er.directtoweb.components.ERDEditOwnedRelationship");
+    public final static Logger log = Logger.getLogger("er.directtoweb.components.ERDEditOwnedRelationship");
 
     protected EOEditingContext localContext;
 

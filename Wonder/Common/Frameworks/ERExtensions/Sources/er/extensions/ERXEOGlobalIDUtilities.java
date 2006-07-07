@@ -8,6 +8,8 @@ package er.extensions;
 
 import java.util.*;
 
+import org.apache.log4j.Logger;
+
 import com.webobjects.eoaccess.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.foundation.*;
@@ -19,7 +21,7 @@ import com.webobjects.foundation.*;
  */
 public class ERXEOGlobalIDUtilities {
     /** logging support */
-    public static final ERXLogger log = ERXLogger.getERXLogger(ERXEOGlobalIDUtilities.class);
+    public static final Logger log = Logger.getLogger(ERXEOGlobalIDUtilities.class);
     
     /**
      * Groups an array of global IDs by their entity name.

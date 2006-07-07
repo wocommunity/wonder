@@ -203,16 +203,22 @@ er.extensions.ERXPatcher.cleanupXHTML=false
 er.extensions.ERXComponentActionRedirector.enabled=false
 
 #########################################################################
-# ERXDatabaseContextDelegate 
+# ERXJDBCAdaptor 
 #########################################################################
-## Enable JDBC connection used by EOF are switched to read only or read write 
-## depending on the database operation. This can speed up database queries because a read only
-## connection produces less overhead in a transaction based database.
-# er.extensions.ERXDatabaseContextDelegate.switchReadWrite=false
-#
 ## Class name to use instead of the JDBCAdaptor, the ERXJDBCAdaptor supports
 ## connection pooling
 # er.extensions.ERXJDBCAdaptor.className=er.extensions.ERXJDBCAdaptor
+
+## Makes the JDBCAdaptor use the connection broker, so that many
+## OSCs use only a few DB channels.
+# er.extensions.ERXJDBCAdaptor.useConnectionBroker = true
+
+## Enable JDBC connection used by EOF are switched to read only or read write 
+## depending on the database operation. This can speed up database queries because a read only
+## connection produces less overhead in a transaction based database.
+## This is only used when the JDBCAdaptor is used in the first place
+# er.extensions.ERXJDBCAdaptor.switchReadWrite=false
+#
 #########################################################################
 # ERXAdaptorChannelDelegate 
 #########################################################################

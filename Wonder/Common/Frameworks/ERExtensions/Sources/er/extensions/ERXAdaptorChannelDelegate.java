@@ -1,5 +1,7 @@
 package er.extensions;
 
+import org.apache.log4j.Logger;
+
 import com.webobjects.foundation.*;
 import com.webobjects.eoaccess.*;
 
@@ -28,7 +30,7 @@ import com.webobjects.eoaccess.*;
  */
 public class ERXAdaptorChannelDelegate {
 
-	private static ERXLogger log = ERXLogger.getERXLogger(ERXAdaptorChannelDelegate.class);
+	private static Logger log = Logger.getLogger(ERXAdaptorChannelDelegate.class);
 
 	private static ERXAdaptorChannelDelegate _delegate;
 

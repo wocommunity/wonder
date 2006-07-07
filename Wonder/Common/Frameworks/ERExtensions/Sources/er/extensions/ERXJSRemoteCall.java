@@ -1,6 +1,8 @@
 package er.extensions;
 import java.util.*;
 
+import org.apache.log4j.Logger;
+
 import com.webobjects.appserver.*;
 import com.webobjects.foundation.*;
 
@@ -16,7 +18,7 @@ import com.webobjects.foundation.*;
 public class ERXJSRemoteCall extends WOComponent {
 
     /** logging support */
-    private static final ERXLogger log = ERXLogger.getLogger(ERXJSRemoteCall.class,"components");
+    private static final Logger log = Logger.getLogger(ERXJSRemoteCall.class);
 
     protected NSDictionary _arguments;
     protected NSArray _parameters;

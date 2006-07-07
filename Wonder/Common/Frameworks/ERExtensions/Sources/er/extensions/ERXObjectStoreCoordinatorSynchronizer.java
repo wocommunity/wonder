@@ -8,6 +8,8 @@ package er.extensions;
 
 import java.util.*;
 
+import org.apache.log4j.Logger;
+
 import com.webobjects.eoaccess.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.foundation.*;
@@ -22,7 +24,7 @@ import com.webobjects.foundation.*;
  * You will need to add any stack created before initalization manually.
  */
 public class ERXObjectStoreCoordinatorSynchronizer {
-    private static ERXLogger log = ERXLogger.getERXLogger(ERXObjectStoreCoordinatorSynchronizer.class);
+    private static Logger log = Logger.getLogger(ERXObjectStoreCoordinatorSynchronizer.class);
    
     private static ERXObjectStoreCoordinatorSynchronizer _synchronizer;
     

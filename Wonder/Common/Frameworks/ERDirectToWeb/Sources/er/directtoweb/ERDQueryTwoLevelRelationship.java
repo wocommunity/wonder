@@ -1,5 +1,7 @@
 package er.directtoweb;
 
+import org.apache.log4j.Logger;
+
 import com.webobjects.appserver.*;
 import com.webobjects.eoaccess.*;
 import com.webobjects.eocontrol.*;
@@ -34,7 +36,7 @@ import er.extensions.*;
 public class ERDQueryTwoLevelRelationship extends ERDCustomQueryComponent {
 
     /** logging support */
-    private static final ERXLogger log = ERXLogger.getLogger(ERDQueryTwoLevelRelationship.class,"components");
+    private static final Logger log = Logger.getLogger(ERDQueryTwoLevelRelationship.class);
 	
     /**
      * Public constructor

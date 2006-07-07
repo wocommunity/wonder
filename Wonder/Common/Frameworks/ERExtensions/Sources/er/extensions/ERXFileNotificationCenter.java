@@ -9,6 +9,8 @@ package er.extensions;
 import java.io.*;
 import java.util.*;
 
+import org.apache.log4j.Logger;
+
 import com.webobjects.appserver.*;
 import com.webobjects.foundation.*;
 
@@ -26,7 +28,7 @@ import com.webobjects.foundation.*;
 public class ERXFileNotificationCenter {
 
     /** Logging support */
-    public static final ERXLogger log = ERXLogger.getERXLogger(ERXFileNotificationCenter.class);
+    public static final Logger log = Logger.getLogger(ERXFileNotificationCenter.class);
 
     /** Contains the name of the notification that is posted when a file changes. */
     public static final String FileDidChange = "FileDidChange";

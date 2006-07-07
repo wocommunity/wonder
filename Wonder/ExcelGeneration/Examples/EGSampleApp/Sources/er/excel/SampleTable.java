@@ -17,7 +17,7 @@ import er.extensions.*;
 public class SampleTable extends WOComponent {
 
     /** logging support */
-    private static final ERXLogger log = ERXLogger.getLogger(SampleTable.class,"components,excel");
+    private static final ERXLogger log = ERXLogger.getERXLogger(SampleTable.class,"components,excel");
     
 	public boolean enabled = false;
     

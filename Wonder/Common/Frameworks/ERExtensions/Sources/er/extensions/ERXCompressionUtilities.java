@@ -3,9 +3,11 @@ package er.extensions;
 import java.io.*;
 import java.util.zip.*;
 
+import org.apache.log4j.Logger;
+
 public class ERXCompressionUtilities {
 
-    public static final ERXLogger log = ERXLogger.getERXLogger(ERXCompressionUtilities.class);
+    public static final Logger log = Logger.getLogger(ERXCompressionUtilities.class);
 
     public static byte[] gzipByteArray(byte[] input) {
         try {

@@ -1,4 +1,6 @@
 package er.extensions;
+import org.apache.log4j.Logger;
+
 import com.webobjects.appserver.*;
 
 /**
@@ -16,7 +18,7 @@ public class ERXLongResponse extends ERXNonSynchronizingComponent {
     static String WOMetaRefreshSenderId = "WOMetaRefresh";
 
     /** logging support */
-    private static final ERXLogger log = ERXLogger.getLogger(ERXLongResponse.class,"components");
+    private static final Logger log = Logger.getLogger(ERXLongResponse.class);
 
     protected Number _refreshInterval;
     protected boolean _performingAction;

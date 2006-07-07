@@ -7,6 +7,8 @@
 
 package er.directtoweb;
 
+import org.apache.log4j.Logger;
+
 import com.webobjects.appserver.*;
 import com.webobjects.directtoweb.*;
 
@@ -14,7 +16,7 @@ import er.extensions.*;
 
 public class ERD2WEditToOneFault extends D2WEditToOneFault {
     /** logging support */
-    public static final ERXLogger log = ERXLogger.getERXLogger(ERD2WEditToOneFault.class);
+    public static final Logger log = Logger.getLogger(ERD2WEditToOneFault.class);
     
     
     public ERD2WEditToOneFault(WOContext context) {

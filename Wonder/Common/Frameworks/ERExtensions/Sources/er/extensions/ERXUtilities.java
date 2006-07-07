@@ -9,6 +9,8 @@ package er.extensions;
 import java.io.*;
 import java.util.*;
 
+import org.apache.log4j.Logger;
+
 import com.webobjects.appserver.*;
 import com.webobjects.eoaccess.*;
 import com.webobjects.eocontrol.*;
@@ -22,7 +24,7 @@ import com.webobjects.foundation.*;
 public class ERXUtilities {
 
     /** logging support */
-    public static ERXLogger log = ERXLogger.getERXLogger(ERXUtilities.class);
+    public static Logger log = Logger.getLogger(ERXUtilities.class);
 
     /**
      * @deprecated use ERXEOControlUtilities.addObjectToObjectOnBothSidesOfRelationshipWithKey(EOEnterpriseObject,EOEnterpriseObject,String)

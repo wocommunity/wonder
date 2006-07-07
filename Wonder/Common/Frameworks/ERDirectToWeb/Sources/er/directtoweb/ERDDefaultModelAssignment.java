@@ -6,6 +6,8 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.directtoweb;
 
+import org.apache.log4j.Logger;
+
 import com.webobjects.directtoweb.*;
 import com.webobjects.eoaccess.*;
 import com.webobjects.eocontrol.*;
@@ -33,7 +35,7 @@ import er.extensions.*;
 public class ERDDefaultModelAssignment extends ERDAssignment {
 
     /** logging support */
-    public final static ERXLogger log = ERXLogger.getERXLogger(ERDDefaultModelAssignment.class, "assignments");
+    public final static Logger log = Logger.getLogger(ERDDefaultModelAssignment.class);
 
     /** holds the array of keys this assignment depends upon */
     protected static final NSDictionary keys = ERXDictionaryUtilities.dictionaryWithObjectsAndKeys( new Object [] {

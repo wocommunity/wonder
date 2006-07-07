@@ -6,6 +6,8 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.directtoweb;
 
+import org.apache.log4j.Logger;
+
 import com.webobjects.appserver.*;
 import com.webobjects.directtoweb.*;
 import com.webobjects.foundation.*;
@@ -27,7 +29,7 @@ public class ERD2WCustomComponentWithArgs extends D2WCustomComponent implements 
     }
     
     /** logging support */
-    public final static ERXLogger log = ERXLogger.getERXLogger(ERD2WCustomComponentWithArgs.class);
+    public final static Logger log = Logger.getLogger(ERD2WCustomComponentWithArgs.class);
 
     private Object _extraBindings;
     public Object extraBindings() {

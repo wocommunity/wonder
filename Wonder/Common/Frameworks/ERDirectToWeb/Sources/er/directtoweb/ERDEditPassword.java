@@ -1,5 +1,7 @@
 package er.directtoweb;
 
+import org.apache.log4j.Logger;
+
 import com.webobjects.appserver.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.foundation.*;
@@ -29,7 +31,7 @@ import er.extensions.*;
 public class ERDEditPassword extends ERDCustomEditComponent {
 
     /** logging support */
-    private static final ERXLogger log = ERXLogger.getERXLogger(ERDEditPassword.class,"components");
+    private static final Logger log = Logger.getLogger(ERDEditPassword.class);
 
     public static final String passwordPropertyKey = "ERDEditPassword.propertyKey";
     

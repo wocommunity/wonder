@@ -9,6 +9,8 @@ package er.testrunner;
 import java.io.*;
 import java.util.*;
 
+import org.apache.log4j.Logger;
+
 import junit.framework.*;
 import junit.runner.*;
 import er.extensions.*;
@@ -21,12 +23,12 @@ import er.extensions.*;
 public class ERXBatchTestInterface extends Object implements ERXTestListener {
 
     /** logging support */
-    public static final ERXLogger log = ERXLogger.getERXLogger(ERXBatchTestInterface.class);
+    public static final Logger log = Logger.getLogger(ERXBatchTestInterface.class);
 
     public static final boolean SHOW_EXCEPTIONS=true;
     public static final boolean HIDE_EXCEPTIONS=false;
     
-    private ERXLogger _userLog;
+    private Logger _userLog;
 
     protected String _test;
     protected boolean _showExceptions;
@@ -54,7 +56,7 @@ public class ERXBatchTestInterface extends Object implements ERXTestListener {
     }
 
     // ACTION METHOD
-    public void performTest(ERXLogger userLogger, boolean showExceptions) {
+    public void performTest(Logger userLogger, boolean showExceptions) {
         _showExceptions = showExceptions;
         _userLog = userLogger;
         resetInterface();
@@ -90,7 +92,7 @@ public class ERXBatchTestInterface extends Object implements ERXTestListener {
         return testResult;
     }
 
-    private ERXLogger userLog() {
+    private Logger userLog() {
         if (_userLog == null) {
             return log;
         } else {

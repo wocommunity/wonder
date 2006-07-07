@@ -6,6 +6,8 @@
 //
 package er.extensions;
 
+import org.apache.log4j.Logger;
+
 import com.webobjects.appserver.*;
 import com.webobjects.appserver._private.*;
 
@@ -19,7 +21,7 @@ import com.webobjects.appserver._private.*;
 public class ERXDirectActionRequestHandler extends WODirectActionRequestHandler {
 
     /** logging support */
-    public static final ERXLogger log = ERXLogger.getERXLogger(ERXDirectActionRequestHandler.class);
+    public static final Logger log = Logger.getLogger(ERXDirectActionRequestHandler.class);
 
     /** caches if automatic message encoding is enabled, defaults to true */
     protected static Boolean automaticMessageEncodingEnabled;

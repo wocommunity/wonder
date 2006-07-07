@@ -6,6 +6,8 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package com.webobjects.directtoweb;
 
+import org.apache.log4j.Logger;
+
 import com.webobjects.eocontrol.*;
 import com.webobjects.foundation.*;
 
@@ -14,7 +16,7 @@ import er.extensions.*;
 // This is needed because pageFinalized is a protected method.
 public class ERD2WUtilities {
 
-    private static ERXLogger log = ERXLogger.getERXLogger(ERD2WUtilities.class);
+    private static Logger log = Logger.getLogger(ERD2WUtilities.class);
 
     public static void finalizeContext(D2WContext context) {
         if (context != null)

@@ -8,6 +8,8 @@ package er.extensions;
 
 import java.util.*;
 
+import org.apache.log4j.Logger;
+
 import com.webobjects.eoaccess.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.foundation.*;
@@ -15,7 +17,7 @@ import com.webobjects.foundation.*;
 public class ERXEOEncodingUtilities {
 
     /** logging support */
-    public static final ERXLogger log = ERXLogger.getERXLogger(ERXEOEncodingUtilities.class);
+    public static final Logger log = Logger.getLogger(ERXEOEncodingUtilities.class);
 
     /**
      * Holds the default entity name separator

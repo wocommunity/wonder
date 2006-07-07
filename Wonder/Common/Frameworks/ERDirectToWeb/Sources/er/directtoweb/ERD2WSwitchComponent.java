@@ -8,6 +8,8 @@ package er.directtoweb;
 
 import java.util.*;
 
+import org.apache.log4j.Logger;
+
 import com.webobjects.appserver.*;
 import com.webobjects.directtoweb.*;
 import com.webobjects.eoaccess.*;
@@ -29,7 +31,7 @@ import er.extensions.*;
 public class ERD2WSwitchComponent extends D2WSwitchComponent {
 
     /** logging support */
-    public static final ERXLogger log = ERXLogger.getERXLogger(ERD2WSwitchComponent.class);
+    public static final Logger log = Logger.getLogger(ERD2WSwitchComponent.class);
 
     public ERD2WSwitchComponent(WOContext context) {
         super(context);
@@ -73,11 +75,16 @@ public class ERD2WSwitchComponent extends D2WSwitchComponent {
     }
 
     public void appendToResponse(WOResponse r, WOContext c) {
-        try {
+        if(!ERXProperties.booleanForKeyWithDefault("er.directtoweb.ERDirectToWeb.shouldRaiseExceptions", false)) {
             maybeResetCaches();
             super.appendToResponse(r, c);
-        } catch (Exception ex) {
-            ERDirectToWeb.reportException(ex, subContext());
+        } else {
+            try {
+                maybeResetCaches();
+                super.appendToResponse(r, c);
+            } catch(Exception ex) {
+                ERDirectToWeb.reportException(ex, subContext());
+            }
         }
     }
 

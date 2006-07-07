@@ -8,6 +8,7 @@ package er.excel;
 import java.io.*;
 import java.util.*;
 
+import org.apache.log4j.Logger;
 import org.apache.poi.hssf.usermodel.*;
 import org.apache.poi.hssf.util.*;
 import org.apache.poi.poifs.filesystem.*;
@@ -24,7 +25,7 @@ import er.extensions.*;
  */
 public class EGSimpleTableCreator {
 	/** logging support */
-	protected final ERXLogger log = ERXLogger.getLogger(EGSimpleTableParser.class,"excel");
+	protected final Logger log = Logger.getLogger(EGSimpleTableParser.class);
 	
 	private static NSDictionary _fontDef;
 

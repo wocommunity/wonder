@@ -3,6 +3,8 @@ package er.extensions;
 import java.io.*;
 import java.util.*;
 
+import org.apache.log4j.Logger;
+
 
 public class ERXJobLoadBalancer {
 
@@ -40,7 +42,7 @@ public class ERXJobLoadBalancer {
   
     
     private final static String SHARED_ROOT_LOCATION = "er.extensions.ERXJobLoadBalancer.RootLocation";
-    private static final ERXLogger log = ERXLogger.getERXLogger(ERXJobLoadBalancer.class);
+    private static final Logger log = Logger.getLogger(ERXJobLoadBalancer.class);
     /*
      * How old an entry in the shared state has to be before we consider its author dead
      */

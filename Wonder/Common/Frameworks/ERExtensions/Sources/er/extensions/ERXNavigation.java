@@ -10,6 +10,8 @@ package er.extensions;
 
 import java.util.*;
 
+import org.apache.log4j.Logger;
+
 import com.webobjects.foundation.*;
 
 // FIXME: Alot of this needs to move up as it is specific to our navigation structure.
@@ -25,7 +27,7 @@ import com.webobjects.foundation.*;
 public class ERXNavigation {
 
     /** logging support */
-    public static ERXLogger log = ERXLogger.getERXLogger("er.navigation.extensions.ERXNavigation");
+    public static Logger log = Logger.getLogger("er.navigation.extensions.ERXNavigation");
 
     protected NSArray _additionalNavigationState, _navigationState;
     protected boolean isDisabled;

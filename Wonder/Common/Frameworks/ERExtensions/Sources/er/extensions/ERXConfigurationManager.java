@@ -9,6 +9,8 @@ package er.extensions;
 import java.io.*;
 import java.util.*;
 
+import org.apache.log4j.Logger;
+
 import com.webobjects.appserver.*;
 import com.webobjects.eoaccess.*;
 import com.webobjects.foundation.*;
@@ -93,7 +95,7 @@ import com.webobjects.foundation.*;
 public class ERXConfigurationManager {
 
     /** logging support */
-    public static final ERXLogger log = ERXLogger.getERXLogger(ERXConfigurationManager.class);
+    public static final Logger log = Logger.getLogger(ERXConfigurationManager.class);
 
     /** 
      * Notification posted when the configuration is updated.  
@@ -281,7 +283,7 @@ public class ERXConfigurationManager {
     /** 
      * Updates the configuration from the current configuration and 
      * posts {@link #ConfigurationDidChangeNotification}. It also  
-     * calls {@link ERXLogger#configureLogging} to reconfigure 
+     * calls {@link Logger#configureLogging} to reconfigure 
      * the logging system. 
      * <p>
      * The configuration files: Properties and WebObjects.properties 

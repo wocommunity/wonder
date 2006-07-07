@@ -4,8 +4,9 @@
 
 package er.directtoweb;
 
+import org.apache.log4j.Logger;
+
 import er.extensions.ERXSelectorUtilities;
-import er.extensions.ERXLogger;
 import com.webobjects.directtoweb.D2WContext;
 import com.webobjects.eocontrol.EOKeyValueUnarchiver;
 import com.webobjects.foundation.NSMutableArray;
@@ -41,7 +42,7 @@ import com.webobjects.foundation.NSArray;
  */
 public class ERDDelayedSelectorInvocationAssignment extends ERDDelayedAssignment implements ERDComputingAssignmentInterface {
 
-    private static final ERXLogger _log = ERXLogger.getERXLogger(ERDDelayedSelectorInvocationAssignment.class);
+    private static final Logger _log = Logger.getLogger(ERDDelayedSelectorInvocationAssignment.class);
 
     // we cache 0 - 5 arguments
     private static Class[][] _parameterTypesArrays = new Class[5 + 1][];

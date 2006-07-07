@@ -9,6 +9,8 @@ package er.extensions;
 import java.net.*;
 import java.util.*;
 
+import org.apache.log4j.Logger;
+
 import com.webobjects.eoaccess.*;
 import com.webobjects.foundation.*;
 
@@ -24,7 +26,7 @@ public class ERXModelGroup extends
         EOModelGroup {
 
     /** logging support */
-    public static ERXLogger log = ERXLogger.getERXLogger(ERXModelGroup.class);
+    public static Logger log = Logger.getLogger(ERXModelGroup.class);
     private Hashtable       cache;
 
     /**
