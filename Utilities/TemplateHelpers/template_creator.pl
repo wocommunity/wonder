@@ -11,15 +11,15 @@
 die print("usage: $0 <destination directory> <prefix> <postfix> <package>\n") if($#ARGV != 3);
 
 # you may need to adjust this path
-$pathToERDirectToWeb = "~/Roots/ERDirectToWeb.framework/Resources/";
+$pathToERDirectToWeb = "~/Roots/ERNeutralLook.framework/Resources/";
 
 ($dest, $prefix, $postfix, $package) = @ARGV;
 #$dest = "tmp";
-$pattern = 'ERD2W(.*?)Template';
+$pattern = 'ERNEU(.*?)Page';
 $packageDir = $package;
 $packageDir =~ s|\.|/|g;
 
-$cmd = "find $pathToERDirectToWeb -name \\*Template.wo -type d |grep -v CVS";
+$cmd = "find $pathToERDirectToWeb -name \\*Page.wo -type d |grep -v CVS";
 #warn $cmd;
 @files = `$cmd`;
 
@@ -48,7 +48,7 @@ foreach $file (@files) {
             system "cp -r $source/../$class.api $dest/Components/$newClass.api";
             system "rm -rf $dest/Components/Nonlocalized.lproj/$newClass.wo/CVS";
             
-            print "~/Roots/PBXTool $dest/IDE/*.pbproj/project.pbxproj $newClass $newClass.java $newClass.api $newClass.wo\n";
+            # print "~/Roots/PBXTool $dest/IDE/*.pbproj/project.pbxproj $newClass $newClass.java $newClass.api $newClass.wo\n";
             $classes .= " $newClass ";
             
             system "mv $dest/Components/Nonlocalized.lproj/$newClass.wo/$class.html $dest/Components/Nonlocalized.lproj/$newClass.wo/$newClass.html";
@@ -68,7 +68,7 @@ foreach $file (@files) {
     }
 }
 chop($rules);
-            print "~/Roots/PBXTool $dest/*.pbproj/project.pbxproj 'Components' $classes\n";
+            # print "~/Roots/PBXTool $dest/*.pbproj/project.pbxproj 'Components' $classes\n";
 open D2W, ">$dest/Resources/d2w.d2wmodel" || die("Can't open $dest/Resources/d2w.d2wmodel");
 print D2W "{ rules = ( $rules );}";
 close D2W;
