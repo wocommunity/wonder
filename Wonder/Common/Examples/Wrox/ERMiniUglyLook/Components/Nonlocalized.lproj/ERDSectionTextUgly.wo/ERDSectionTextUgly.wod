@@ -1,4 +1,0 @@
-SectionName: WOString {
-	value = ^d2wContext.sectionKey;
-}
-

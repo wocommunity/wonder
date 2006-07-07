@@ -1,9 +1,0 @@
-AddToCartHyperlink: WOHyperlink {
-	string = ^string;
-	target = "cartwin";
-	href = addToCartHref;
-	onClick = onClickString;
-}
-
-ComponentContent1: WOComponentContent {
-}

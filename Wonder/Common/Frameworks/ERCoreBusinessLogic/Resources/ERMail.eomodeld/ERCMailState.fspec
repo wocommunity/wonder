@@ -1,3 +1,0 @@
-{
-    FetchAll = {class = EOFetchSpecification; entityName = ERCMailState; fetchLimit = 0; }; 
-}

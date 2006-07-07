@@ -1,9 +1,0 @@
-ComponentContent1: WOComponentContent {
-}
-
-ViewShoppingCartHyperlink: WOHyperlink {
-	string = ^string;
-	target = "cartwin";
-	href = viewShoppingCartHref;
-	onClick = onClickString;
-}

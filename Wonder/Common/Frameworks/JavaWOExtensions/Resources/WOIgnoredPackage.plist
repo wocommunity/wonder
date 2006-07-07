@@ -1,3 +1,0 @@
-{
-   ignoredPackages = ("com.webobjects", "java.applet", "java.awt", "java.awt.datatransfer", "java.awt.event", "java.awt.image", "java.beans", "java.io", "java.lang", "java.lang.reflect", "java.math", "java.net", "java.rmi", "java.rmi.dgc", "java.rmi.registry", "java.rmi.server", "java.security", "java.security.acl", "java.security.interfaces", "java.sql", "java.text", "java.util", "java.util.zip");
-}

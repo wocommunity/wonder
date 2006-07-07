@@ -1,9 +1,0 @@
-GenericContainer1: WOGenericContainer {
-	elementName = "PRE";
-	omitTags = isDocumentation;
-}
-
-String1: WOString {
-	escapeHTML = false;
-	value = string;
-}

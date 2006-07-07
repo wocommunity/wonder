@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<classpath>
-	<classpathentry kind="src" path="Sources"/>
-	<classpathentry kind="con" path="org.objectstyle.wolips.WO_CLASSPATH/JavaWebObjects/JavaFoundation/JavaXML/JavaWOExtensions/JavaEOAccess/JavaEOControl/JavaJDBCAdaptor"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry exported="true" kind="lib" path="Libraries/jaimbot-lib-1.4.jar"/>
-	<classpathentry exported="true" kind="lib" path="Libraries/daim.jar"/>
-	<classpathentry kind="output" path="bin"/>
-</classpath>
