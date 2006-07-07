@@ -36,7 +36,7 @@ foreach $woa ( @ARGV[0..$#ARGV] ) {
 		# fix up ant-generated paths
 		$inputPath =~ s#^/System#WOROOT# if($inputPath =~ m#^/System#);
 
-		if( $inputPath =~ m#^(/|\.\.|LOCALROOT|HOMEROOT).+\.jar$# ) {
+		if( $inputPath =~ m#^(/|\.\.|LOCALROOT|HOMEROOT|WOROOT).+\.jar$# ) {
 			if( $madeFrameworkDir == 0 ) {
 				if ( -e $frameworksPath ) {
 					print  "removing $frameworksPath\n";
@@ -59,6 +59,7 @@ foreach $woa ( @ARGV[0..$#ARGV] ) {
 			$copyFromPath = join( '/', @pathArray[ 0..($pathCount-3) ] ) if();
 
 			# LOCALROOT is redundant on X, delete it.
+			$copyFromPath =~ s/^WOROOT/\/System/;
 			$copyFromPath =~ s/^LOCALROOT//;
 			$copyFromPath =~ s/^HOMEROOT/~/;
 			
