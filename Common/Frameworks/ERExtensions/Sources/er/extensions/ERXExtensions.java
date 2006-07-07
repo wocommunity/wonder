@@ -10,7 +10,7 @@ import java.io.*;
 import java.lang.reflect.*;
 import java.util.*;
 
-import org.apache.log4j.*;
+import org.apache.log4j.Logger;
 
 import com.webobjects.appserver.*;
 import com.webobjects.eoaccess.*;
@@ -196,10 +196,10 @@ public class ERXExtensions {
     }
 
     /** logging support for the adaptor channel */
-    public static ERXLogger adaptorLogger;
+    public static Logger adaptorLogger;
 
     /** logging support for shared object loading */
-    public static ERXLogger sharedEOadaptorLogger;
+    public static Logger sharedEOadaptorLogger;
 
     /** flag to indicate if adaptor channel logging is enabled */
     private static Boolean adaptorEnabled;
@@ -226,9 +226,9 @@ public class ERXExtensions {
     public static void configureAdaptorContextRapidTurnAround(Object anObserver) {
         if (!_isConfigureAdaptorContextRapidTurnAround) {
             // This allows enabling from the log4j system.
-            adaptorLogger = ERXLogger.getERXLogger("er.transaction.adaptor.EOAdaptorDebugEnabled");
+            adaptorLogger = Logger.getLogger("er.transaction.adaptor.EOAdaptorDebugEnabled");
             
-            sharedEOadaptorLogger = ERXLogger.getERXLogger("er.transaction.adaptor.EOSharedEOAdaptorDebugEnabled");
+            sharedEOadaptorLogger = Logger.getLogger("er.transaction.adaptor.EOSharedEOAdaptorDebugEnabled");
             if ((adaptorLogger.isDebugEnabled() 
             		&& !NSLog.debugLoggingAllowedForGroups(NSLog.DebugGroupSQLGeneration|NSLog.DebugGroupDatabaseAccess))
             		|| ERXProperties.booleanForKey("EOAdaptorDebugEnabled")) {

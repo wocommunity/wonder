@@ -6,6 +6,8 @@
  */
 package er.extensions;
 
+import org.apache.log4j.Logger;
+
 import com.webobjects.appserver.*;
 import com.webobjects.appserver._private.*;
 import com.webobjects.foundation.*;
@@ -31,7 +33,7 @@ import com.webobjects.foundation.*;
  */
 public class ERXHyperlink extends WOHyperlink {
     
-    public static ERXLogger log = ERXLogger.getERXLogger(ERXHyperlink.class);
+    public static Logger log = Logger.getLogger(ERXHyperlink.class);
     
     /**
      * @param arg0

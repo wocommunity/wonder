@@ -1,6 +1,8 @@
 package er.extensions;
 import java.net.*;
 
+import org.apache.log4j.Logger;
+
 import sun.misc.*;
 
 import com.webobjects.appserver.*;
@@ -15,7 +17,7 @@ import com.webobjects.foundation.*;
 public  class ERXRequest extends WORequest {
 
     /** logging support */
-    public static final ERXLogger log = ERXLogger.getERXLogger(ERXRequest.class);
+    public static final Logger log = Logger.getLogger(ERXRequest.class);
 
     protected static Boolean isBrowserFormValueEncodingOverrideEnabled;
     public boolean isBrowserFormValueEncodingOverrideEnabled() {

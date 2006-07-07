@@ -6,6 +6,8 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.extensions;
 
+import org.apache.log4j.Logger;
+
 import com.webobjects.appserver.*;
 import com.webobjects.eoaccess.*;
 import com.webobjects.eocontrol.*;
@@ -37,7 +39,7 @@ import com.webobjects.foundation.*;
 public class ERXToManyRelationship extends WOToManyRelationship {
 
     /** logging support */
-    public static final ERXLogger log = ERXLogger.getERXLogger(ERXToManyRelationship.class);
+    public static final Logger log = Logger.getLogger(ERXToManyRelationship.class);
  
     public ERXToManyRelationship(WOContext context) {
         super(context);

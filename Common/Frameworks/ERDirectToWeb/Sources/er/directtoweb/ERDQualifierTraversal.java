@@ -8,6 +8,8 @@ package er.directtoweb;
 
 import java.util.*;
 
+import org.apache.log4j.Logger;
+
 import com.webobjects.directtoweb.*;
 import com.webobjects.eocontrol.*;
 
@@ -20,7 +22,7 @@ import er.extensions.*;
 public class ERDQualifierTraversal {
 
     /** logging support */
-    public static final ERXLogger log = ERXLogger.getERXLogger(ERDQualifierTraversal.class);
+    public static final Logger log = Logger.getLogger(ERDQualifierTraversal.class);
     
     /**
      * Simple method to traverse a network of qualifiers

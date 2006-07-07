@@ -9,6 +9,8 @@ package er.extensions;
 import java.lang.reflect.*;
 import java.util.*;
 
+import org.apache.log4j.Logger;
+
 import com.webobjects.appserver.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.foundation.*;
@@ -23,7 +25,7 @@ import com.webobjects.foundation.*;
 public class ERXValidationFactory {
 
     /** logging support */
-    public final static ERXLogger log = ERXLogger.getERXLogger(ERXValidationFactory.class);
+    public final static Logger log = Logger.getLogger(ERXValidationFactory.class);
     
     /** holds a reference to the default validation factory */
     private static ERXValidationFactory _defaultFactory;

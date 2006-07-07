@@ -11,6 +11,7 @@ import java.text.*;
 
 import javax.xml.parsers.*;
 
+import org.apache.log4j.Logger;
 import org.apache.poi.hssf.usermodel.*;
 import org.w3c.dom.*;
 import org.xml.sax.EntityResolver;
@@ -54,7 +55,7 @@ import er.extensions.*;
 public class EGSimpleTableParser {
 	
 	/** logging support */
-	protected final ERXLogger log = ERXLogger.getLogger(EGSimpleTableParser.class,"excel");
+	protected final Logger log = Logger.getLogger(EGSimpleTableParser.class);
 	
 	private InputStream _contentStream;
 	private HSSFWorkbook _workbook;

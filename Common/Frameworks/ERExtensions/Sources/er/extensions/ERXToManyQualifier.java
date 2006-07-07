@@ -6,6 +6,8 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.extensions;
 
+import org.apache.log4j.Logger;
+
 import com.webobjects.eoaccess.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.foundation.*;
@@ -37,7 +39,7 @@ public class ERXToManyQualifier extends EOQualifier implements Cloneable {
     }
 
     /** logging support */
-    public static final ERXLogger log = ERXLogger.getERXLogger(ERXToManyQualifier.class);
+    public static final Logger log = Logger.getLogger(ERXToManyQualifier.class);
 
     /** holds the to many key */    
     private String _toManyKey;

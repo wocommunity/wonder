@@ -8,6 +8,8 @@ package er.directtoweb;
 
 import java.util.*;
 
+import org.apache.log4j.Logger;
+
 import com.webobjects.appserver.*;
 import com.webobjects.directtoweb.*;
 import com.webobjects.eoaccess.*;
@@ -22,7 +24,7 @@ import er.extensions.*;
 public class ERD2WListPage extends ERD2WPage implements ERDListPageInterface, SelectPageInterface, ERXComponentActionRedirector.Restorable  {
 
     /** logging support */
-    public final static ERXLogger log = ERXLogger.getERXLogger(ERD2WListPage.class);
+    public final static Logger log = Logger.getLogger(ERD2WListPage.class);
 
     /**
      * Public constructor.

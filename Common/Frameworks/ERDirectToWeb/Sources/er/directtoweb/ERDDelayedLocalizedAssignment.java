@@ -1,4 +1,6 @@
 package er.directtoweb;
+import org.apache.log4j.Logger;
+
 import com.webobjects.directtoweb.*;
 import com.webobjects.eocontrol.*;
 
@@ -10,7 +12,7 @@ import er.extensions.*;
 public class ERDDelayedLocalizedAssignment extends ERDDelayedAssignment implements ERDLocalizableAssignmentInterface {
 
     /** logging support */
-    static final ERXLogger log = ERXLogger.getERXLogger(ERDDelayedLocalizedAssignment.class);
+    static final Logger log = Logger.getLogger(ERDDelayedLocalizedAssignment.class);
 
     /**
      * Static constructor required by the EOKeyValueUnarchiver

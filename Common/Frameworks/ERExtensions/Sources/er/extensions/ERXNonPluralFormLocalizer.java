@@ -6,6 +6,8 @@
 //
 package er.extensions;
 
+import org.apache.log4j.Logger;
+
 
 /**
  *  ERXNonPluralFormLocalizer is a subclass of {@link ERXLocalizer}.<br/>
@@ -17,7 +19,7 @@ package er.extensions;
  *  Good for languages that don't have plural forms (such as Japanese).
  */
 public class ERXNonPluralFormLocalizer extends ERXLocalizer {
-    static final ERXLogger log = ERXLogger.getERXLogger(ERXNonPluralFormLocalizer.class);
+    static final Logger log = Logger.getLogger(ERXNonPluralFormLocalizer.class);
 
     public ERXNonPluralFormLocalizer(String aLanguage) { 
         super(aLanguage); 

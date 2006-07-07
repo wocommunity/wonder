@@ -6,6 +6,8 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.directtoweb;
 
+import org.apache.log4j.Logger;
+
 import com.webobjects.appserver.*;
 import com.webobjects.directtoweb.*;
 import com.webobjects.foundation.*;
@@ -18,7 +20,7 @@ import er.extensions.*;
  */
 
 public class ERD2WEditYesNo extends D2WEditBoolean {
-    public static ERXLogger log = ERXLogger.getERXLogger(ERD2WEditYesNo.class);
+    public static Logger log = Logger.getLogger(ERD2WEditYesNo.class);
 	private String _groupName;
 
     public ERD2WEditYesNo(WOContext context) { super(context); }

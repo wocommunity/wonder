@@ -8,6 +8,8 @@ package er.directtoweb;
 
 import java.lang.reflect.*;
 
+import org.apache.log4j.Logger;
+
 import com.webobjects.foundation.*;
 
 import er.extensions.*;
@@ -15,7 +17,7 @@ import er.extensions.*;
 public class KeyValueCodingProtectedAccessor extends NSKeyValueCoding.ValueAccessor {
 
     /** logging support */
-    public static final ERXLogger log = ERXLogger.getERXLogger(KeyValueCodingProtectedAccessor.class);
+    public static final Logger log = Logger.getLogger(KeyValueCodingProtectedAccessor.class);
 
     public KeyValueCodingProtectedAccessor() { super(); }
 

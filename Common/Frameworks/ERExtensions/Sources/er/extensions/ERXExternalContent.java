@@ -5,6 +5,8 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.util.Enumeration;
 
+import org.apache.log4j.Logger;
+
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WOResponse;
 import com.webobjects.foundation.NSForwardException;
@@ -24,7 +26,7 @@ import com.webobjects.foundation.NSForwardException;
 public class ERXExternalContent extends ERXStatelessComponent {
 
     /** logging support */
-    private static final ERXLogger log = ERXLogger.getLogger(ERXExternalContent.class,"components");
+    private static final Logger log = Logger.getLogger(ERXExternalContent.class);
 	
     /**
      * Public constructor

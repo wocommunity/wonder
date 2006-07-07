@@ -2,6 +2,8 @@ package er.extensions;
 
 import java.text.Format;
 
+import org.apache.log4j.Logger;
+
 import com.webobjects.appserver.*;
 import com.webobjects.appserver._private.*;
 import com.webobjects.foundation.*;
@@ -16,7 +18,7 @@ import com.webobjects.foundation.*;
  */
 public class ERXWOString extends WODynamicElement {
 
-    public static ERXLogger log = ERXLogger.getERXLogger(ERXWOString.class);
+    public static Logger log = Logger.getLogger(ERXWOString.class);
 
     protected WOAssociation _dateFormat;
     protected WOAssociation _numberFormat;

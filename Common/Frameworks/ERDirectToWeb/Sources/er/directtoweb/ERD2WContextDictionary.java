@@ -8,6 +8,8 @@ package er.directtoweb;
 
 import java.util.*;
 
+import org.apache.log4j.Logger;
+
 import com.webobjects.directtoweb.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.foundation.*;
@@ -35,7 +37,7 @@ import er.extensions.*;
  */
 
 public class ERD2WContextDictionary {
-    private static final ERXLogger log = ERXLogger.getERXLogger(ERD2WContextDictionary.class);
+    private static final Logger log = Logger.getLogger(ERD2WContextDictionary.class);
 
     protected D2WContext _context;
     protected String _pageConfiguration;

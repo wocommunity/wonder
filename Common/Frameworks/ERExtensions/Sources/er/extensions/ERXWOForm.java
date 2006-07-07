@@ -7,6 +7,8 @@
 
 package er.extensions;
 
+import org.apache.log4j.Logger;
+
 import com.webobjects.appserver.*;
 import com.webobjects.foundation.*;
 
@@ -36,7 +38,7 @@ public class ERXWOForm extends com.webobjects.appserver._private.WOForm {
     // This constant is currently only used with Ajax.  If you change this value, you
     // must also change it in AjaxUtils.
     public static final String FORCE_FORM_SUBMITTED_KEY = "_forceFormSubmitted";
-    static final ERXLogger log = ERXLogger.getERXLogger(ERXWOForm.class);
+    static final Logger log = Logger.getLogger(ERXWOForm.class);
     WOAssociation _formName;
     WOAssociation _enctype;
     WOAssociation _fragmentIdentifier;

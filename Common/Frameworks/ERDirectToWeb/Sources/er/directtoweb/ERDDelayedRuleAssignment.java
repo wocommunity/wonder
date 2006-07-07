@@ -8,6 +8,8 @@ package er.directtoweb;
 
 import java.util.*;
 
+import org.apache.log4j.Logger;
+
 import com.webobjects.directtoweb.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.foundation.*;
@@ -28,7 +30,7 @@ public class ERDDelayedRuleAssignment extends ERDDelayedAssignment {
     }
     
     /** Logging support */
-    public final static ERXLogger log = ERXLogger.getERXLogger(ERDDelayedRuleAssignment.class);
+    public final static Logger log = Logger.getLogger(ERDDelayedRuleAssignment.class);
 
     public ERDDelayedRuleAssignment(EOKeyValueUnarchiver u) { super(u); }
     public ERDDelayedRuleAssignment(String key, Object value) { super(key,value); }

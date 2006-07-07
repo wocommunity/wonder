@@ -8,6 +8,8 @@ package er.extensions;
 
 import java.util.NoSuchElementException;
 
+import org.apache.log4j.Logger;
+
 import com.webobjects.eoaccess.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.foundation.*;
@@ -24,7 +26,7 @@ import com.webobjects.foundation.*;
 public class ERXValidation {
 
     /** logging support */
-    public static final ERXLogger log = ERXLogger.getERXLogger("er.validation.ERValidation");
+    public static final Logger log = Logger.getLogger("er.validation.ERValidation");
 
     /** holds the static constant for pushing an incorrect value onto an eo */
     public final static boolean PUSH_INCORRECT_VALUE_ON_EO=true;

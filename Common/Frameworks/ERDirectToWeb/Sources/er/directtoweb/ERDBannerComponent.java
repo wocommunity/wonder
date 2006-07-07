@@ -1,5 +1,7 @@
 package er.directtoweb;
 
+import org.apache.log4j.Logger;
+
 import com.webobjects.appserver.*;
 
 import er.extensions.*;
@@ -18,7 +20,7 @@ import er.extensions.*;
 public class ERDBannerComponent extends ERDCustomComponent {
 
     /** logging support */
-    private static final ERXLogger log = ERXLogger.getLogger(ERDBannerComponent.class,"components");
+    private static final Logger log = Logger.getLogger(ERDBannerComponent.class);
 	
     /**
      * Public constructor

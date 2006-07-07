@@ -1,5 +1,7 @@
 package er.directtoweb;
 
+import org.apache.log4j.Logger;
+
 import com.webobjects.appserver.*;
 import com.webobjects.foundation.*;
 
@@ -18,7 +20,7 @@ import er.extensions.*;
 public class ERDListPageRepetition extends ERDAttributeRepetition {
 
     /** logging support */
-    private static final ERXLogger log = ERXLogger.getLogger(ERDListPageRepetition.class,"components");
+    private static final Logger log = Logger.getLogger(ERDListPageRepetition.class);
 
     protected static final NSDictionary NO_ACTIONS = NSDictionary.EmptyDictionary;
     

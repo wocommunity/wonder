@@ -2,6 +2,8 @@
 // (c) by Anjo Krank (ak@kcmedia.ag)
 package er.corebusinesslogic;
 
+import org.apache.log4j.Logger;
+
 import com.webobjects.eocontrol.*;
 import com.webobjects.foundation.*;
 
@@ -14,7 +16,7 @@ public class ERCMailMessage extends _ERCMailMessage {
     //	---------------------------------------------------------------------------
         
     /** logging support */
-    public static final ERXLogger log = ERXLogger.getERXLogger(ERCMailMessage.class);
+    public static final Logger log = Logger.getLogger(ERCMailMessage.class);
 
     /** holds the address separator */
     public static final String AddressSeparator = ",";

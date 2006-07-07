@@ -8,6 +8,8 @@ package er.directtoweb;
 
 import java.util.*;
 
+import org.apache.log4j.Logger;
+
 import com.webobjects.appserver.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.foundation.*;
@@ -24,7 +26,7 @@ public class ERDConfirmMessage extends ERDCustomEditComponent {
     public ERDConfirmMessage(WOContext context) { super(context); }
     
     /** logging support */
-    public final static ERXLogger log = ERXLogger.getERXLogger(ERDConfirmMessage.class);
+    public final static Logger log = Logger.getLogger(ERDConfirmMessage.class);
     
     public String message;
     

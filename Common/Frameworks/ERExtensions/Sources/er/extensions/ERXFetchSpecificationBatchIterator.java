@@ -6,6 +6,8 @@
 //
 package er.extensions;
 
+import org.apache.log4j.Logger;
+
 import com.webobjects.eoaccess.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.foundation.*;
@@ -29,7 +31,7 @@ public class ERXFetchSpecificationBatchIterator {
     public static final int DefaultBatchSize = 250;
 
     /** logging support */
-    public static final ERXLogger log = ERXLogger.getERXLogger(ERXFetchSpecificationBatchIterator.class);
+    public static final Logger log = Logger.getLogger(ERXFetchSpecificationBatchIterator.class);
 
     /** holds the selected batch size */
     protected int batchSize;

@@ -6,6 +6,8 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.extensions;
 
+import org.apache.log4j.Logger;
+
 import com.webobjects.eoaccess.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.foundation.*;
@@ -26,7 +28,7 @@ import com.webobjects.foundation.*;
 public class ERXPrimaryKeyListQualifier extends ERXInQualifier {
     
     /** logging support */
-    protected static final ERXLogger log = ERXLogger.getERXLogger(ERXPrimaryKeyListQualifier.class);
+    protected static final Logger log = Logger.getLogger(ERXPrimaryKeyListQualifier.class);
 
     public static String IsContainedInArraySelectorName = "isContainedInArray";
     

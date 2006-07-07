@@ -6,6 +6,8 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.directtoweb;
 
+import org.apache.log4j.Logger;
+
 import com.webobjects.appserver.*;
 import com.webobjects.directtoweb.*;
 import com.webobjects.eoaccess.*;
@@ -24,7 +26,7 @@ public class ERDFilterDisplayGroupButton extends ERDCustomQueryComponent {
 
     public ERDFilterDisplayGroupButton(WOContext context) { super(context); }
 
-    public static final ERXLogger log = ERXLogger.getERXLogger(ERDFilterDisplayGroupButton.class, "components");
+    public static final Logger log = Logger.getLogger(ERDFilterDisplayGroupButton.class);
 
     public boolean isStateless() { return true; }
     public boolean synchronizesVariablesWithBindings() { return false; }

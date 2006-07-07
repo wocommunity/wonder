@@ -9,6 +9,8 @@ package er.directtoweb;
 import java.text.*;
 import java.util.*;
 
+import org.apache.log4j.Logger;
+
 import com.webobjects.appserver.*;
 import com.webobjects.directtoweb.*;
 import com.webobjects.eoaccess.*;
@@ -51,8 +53,8 @@ import er.extensions.*;
 public abstract class ERD2WDirectAction extends ERXDirectAction {
 
     /** logging support */
-    protected static final ERXLogger log = ERXLogger.getERXLogger(ERD2WDirectAction.class);
-    protected final ERXLogger actionLog = ERXLogger.getERXLogger(ERD2WDirectAction.class.getName() + ".actions");
+    protected static final Logger log = Logger.getLogger(ERD2WDirectAction.class);
+    protected final Logger actionLog = Logger.getLogger(ERD2WDirectAction.class.getName() + ".actions");
 
     /**
      * Public constructor

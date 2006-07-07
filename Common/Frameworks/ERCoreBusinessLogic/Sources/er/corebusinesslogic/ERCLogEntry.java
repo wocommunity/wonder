@@ -1,13 +1,15 @@
 // ERCLogEntry.java
 // (c) by Anjo Krank (ak@kcmedia.ag)
 package er.corebusinesslogic;
+import org.apache.log4j.Logger;
+
 import com.webobjects.eocontrol.*;
 import com.webobjects.foundation.*;
 
 import er.extensions.*;
 
 public class ERCLogEntry extends _ERCLogEntry {
-    static final ERXLogger log = ERXLogger.getERXLogger(ERCLogEntry.class);
+    static final Logger log = Logger.getLogger(ERCLogEntry.class);
 
     public ERCLogEntry() {
         super();

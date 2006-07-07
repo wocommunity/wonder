@@ -1,6 +1,8 @@
 package er.extensions;
 import java.util.*;
 
+import org.apache.log4j.Logger;
+
 import com.webobjects.appserver.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.foundation.*;
@@ -14,7 +16,7 @@ import com.webobjects.foundation.*;
 
 public class ERXDateGrouper extends WODisplayGroup {
     /** logging support */
-    private static ERXLogger log = ERXLogger.getERXLogger(ERXDateGrouper.class);
+    private static Logger log = Logger.getLogger(ERXDateGrouper.class);
 
     public static final int DAY = Calendar.DAY_OF_YEAR;
     public static final int MONTH = Calendar.MONTH;

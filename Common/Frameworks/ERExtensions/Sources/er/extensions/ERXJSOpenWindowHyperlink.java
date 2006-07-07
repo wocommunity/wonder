@@ -6,6 +6,8 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.extensions;
 
+import org.apache.log4j.Logger;
+
 import com.webobjects.appserver.*;
 import com.webobjects.foundation.*;
 
@@ -21,7 +23,7 @@ public class ERXJSOpenWindowHyperlink extends WOComponent {
     }
 
     ///** logging support *//
-    public static final ERXLogger log = ERXLogger.getERXLogger(ERXJSOpenWindowHyperlink.class);
+    public static final Logger log = Logger.getLogger(ERXJSOpenWindowHyperlink.class);
 
     public boolean isStateless() { return true; }
     public boolean synchronizesVariablesWithBindings() { return false; }

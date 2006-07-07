@@ -10,6 +10,8 @@ package er.extensions;
 
 import java.util.*;
 
+import org.apache.log4j.Logger;
+
 import com.webobjects.eoaccess.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.foundation.*;
@@ -46,7 +48,7 @@ import com.webobjects.foundation.*;
 
 public class ERXSharedEOLoader {
     /////////////////////////////////////////  log4j category  ///////////////////////////////////////
-    public static final ERXLogger log = ERXLogger.getERXLogger("er.extensions.fixes.ERSharedEOLoader");
+    public static final Logger log = Logger.getLogger("er.extensions.fixes.ERSharedEOLoader");
 
     /** holds the key to enable patched shared eo loading */
     public static final String PatchSharedEOLoadingPropertyKey = "er.extensions.ERXSharedEOLoader.PatchSharedEOLoading";

@@ -8,6 +8,8 @@ package er.extensions;
 
 import java.lang.reflect.*;
 
+import org.apache.log4j.Logger;
+
 /**
  * <code>ERXClonableThreadLocal</code> extends {@link InheritableThreadLocal}
  * to bequeath a cloned copy of the parent object to the child thread.<br/>
@@ -18,7 +20,7 @@ import java.lang.reflect.*;
 public class ERXCloneableThreadLocal extends InheritableThreadLocal {
 
     /** logging support */
-    protected static final ERXLogger log = ERXLogger.getERXLogger(ERXCloneableThreadLocal.class);
+    protected static final Logger log = Logger.getLogger(ERXCloneableThreadLocal.class);
 
     /**
      * Clones a copy of the parent object for the child thread.

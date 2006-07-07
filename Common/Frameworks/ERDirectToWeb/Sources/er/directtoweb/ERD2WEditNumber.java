@@ -9,6 +9,8 @@ package er.directtoweb;
 import java.math.*;
 import java.text.*;
 
+import org.apache.log4j.Logger;
+
 import com.webobjects.appserver.*;
 import com.webobjects.directtoweb.*;
 import com.webobjects.eoaccess.*;
@@ -26,7 +28,7 @@ public class ERD2WEditNumber extends D2WEditNumber {
     public ERD2WEditNumber(WOContext context) { super(context); }
     
     /** Logging support */
-    public final static ERXLogger log = ERXLogger.getERXLogger(ERD2WEditNumber.class);
+    public final static Logger log = Logger.getLogger(ERD2WEditNumber.class);
 
     public void reset() {
         super.reset();

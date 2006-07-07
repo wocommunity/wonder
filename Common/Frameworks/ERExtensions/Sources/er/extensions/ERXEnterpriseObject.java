@@ -2,13 +2,15 @@ package er.extensions;
 
 import java.util.*;
 
+import org.apache.log4j.Logger;
+
 import com.webobjects.eocontrol.*;
 import com.webobjects.foundation.*;
 
 public interface ERXEnterpriseObject {
     
     /** logging support for modified objects */
-    public static final ERXLogger logMod = ERXLogger.getERXLogger("er.transaction.delegate.EREditingContextDelegate.modifedObjects");
+    public static final Logger logMod = Logger.getLogger("er.transaction.delegate.EREditingContextDelegate.modifedObjects");
 
     /**
      * Registers as a listener for various editing context notifications and calls up the willXXX and
@@ -204,65 +206,65 @@ public interface ERXEnterpriseObject {
     };
  
     /** logging support. Called after an object is successfully inserted */
-    public static final ERXLogger tranLogDidInsert = ERXLogger
-            .getERXLogger("er.transaction.eo.did.insert.ERXGenericRecord");
+    public static final Logger tranLogDidInsert = Logger
+            .getLogger("er.transaction.eo.did.insert.ERXGenericRecord");
 
     /** logging support. Called after an object is successfully deleted */
-    public static final ERXLogger tranLogDidDelete = ERXLogger
-            .getERXLogger("er.transaction.eo.did.delete.ERXGenericRecord");
+    public static final Logger tranLogDidDelete = Logger
+            .getLogger("er.transaction.eo.did.delete.ERXGenericRecord");
 
     /** logging support. Called after an object is successfully updated */
-    public static final ERXLogger tranLogDidUpdate = ERXLogger
-            .getERXLogger("er.transaction.eo.did.update.ERXGenericRecord");
+    public static final Logger tranLogDidUpdate = Logger
+            .getLogger("er.transaction.eo.did.update.ERXGenericRecord");
 
     /** logging support. Called after an object is reverted. **/
-    public static final ERXLogger tranLogDidRevert = ERXLogger
-            .getERXLogger("er.transaction.eo.did.revert.ERXGenericRecord");
+    public static final Logger tranLogDidRevert = Logger
+            .getLogger("er.transaction.eo.did.revert.ERXGenericRecord");
 
     /** logging support. Called before an object is inserted */
-    public static final ERXLogger tranLogWillInsert = ERXLogger
-            .getERXLogger("er.transaction.eo.will.insert.ERXGenericRecord");
+    public static final Logger tranLogWillInsert = Logger
+            .getLogger("er.transaction.eo.will.insert.ERXGenericRecord");
 
     /** logging support. Called before an object is deleted */
-    public static final ERXLogger tranLogWillDelete = ERXLogger
-            .getERXLogger("er.transaction.eo.will.delete.ERXGenericRecord");
+    public static final Logger tranLogWillDelete = Logger
+            .getLogger("er.transaction.eo.will.delete.ERXGenericRecord");
 
     /** logging support. Called before an object is updated */
-    public static final ERXLogger tranLogWillUpdate = ERXLogger
-            .getERXLogger("er.transaction.eo.will.update.ERXGenericRecord");
+    public static final Logger tranLogWillUpdate = Logger
+            .getLogger("er.transaction.eo.will.update.ERXGenericRecord");
 
     /** logging support. Called before an object is reverted. **/
-    public static final ERXLogger tranLogWillRevert = ERXLogger
-            .getERXLogger("er.transaction.eo.will.revert.ERXGenericRecord");
+    public static final Logger tranLogWillRevert = Logger
+            .getLogger("er.transaction.eo.will.revert.ERXGenericRecord");
 
     /** logging support for validation information */
-    public static final ERXLogger validation = ERXLogger
-            .getERXLogger("er.eo.validation.ERXGenericRecord");
+    public static final Logger validation = Logger
+            .getLogger("er.eo.validation.ERXGenericRecord");
 
     /** logging support for validation exceptions */
-    public static final ERXLogger validationException = ERXLogger
-            .getERXLogger("er.eo.validationException.ERXGenericRecord");
+    public static final Logger validationException = Logger
+            .getLogger("er.eo.validationException.ERXGenericRecord");
 
     /** logging support for insertion tracking */
-    public static final ERXLogger insertionTrackingLog = ERXLogger
-            .getERXLogger("er.extensions.ERXGenericRecord.insertion");
+    public static final Logger insertionTrackingLog = Logger
+            .getLogger("er.extensions.ERXGenericRecord.insertion");
 
     /** general logging support */
-    public static final ERXLogger log = ERXLogger
-            .getERXLogger("er.eo.ERXGenericRecord");
+    public static final Logger log = Logger
+            .getLogger("er.eo.ERXGenericRecord");
 
     // DELETEME: Once we get rid of the half baked rule validation here, we can delete this.
     public final static String KEY_MARKER = "** KEY_MARKER **";
 
-    /** This methods checks if we already have created an ERXLogger for this class
+    /** This methods checks if we already have created an Logger for this class
      * If not, one will be created, stored and returned on next request.
-     * This method eliminates individual static variables for ERXLogger's in all
+     * This method eliminates individual static variables for Logger's in all
      * subclasses. We use an NSDictionary here because static fields are class specific
      * and thus something like lazy initialization would not work in this case.
      *
-     * @return an {@link ERXLogger} for this objects class
+     * @return an {@link Logger} for this objects class
      */
-    public abstract ERXLogger getClassLog();
+    public abstract Logger getClassLog();
 
     /**
      * self is usefull for directtoweb purposes

@@ -4,6 +4,8 @@ import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.log4j.Logger;
+
 import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WORequest;
@@ -43,7 +45,7 @@ import com.webobjects.foundation.NSPropertyListSerialization;
 public class ERXCachingWrapper extends ERXStatelessComponent {
 
     /** logging support */
-    private static final ERXLogger log = ERXLogger.getLogger(ERXCachingWrapper.class,"components");
+    private static final Logger log = Logger.getLogger(ERXCachingWrapper.class);
 
     /** The cached entries */
     protected static Map cache = Collections.synchronizedMap(new HashMap() {

@@ -1,5 +1,7 @@
 package er.directtoweb;
 
+import org.apache.log4j.Logger;
+
 import com.webobjects.appserver.*;
 import com.webobjects.directtoweb.*;
 import com.webobjects.foundation.*;
@@ -18,7 +20,7 @@ import er.extensions.*;
 public class ERD2WCustomQueryBoolean extends D2WQueryBoolean {
 
     /** logging support */
-    private static final ERXLogger log = ERXLogger.getLogger(ERD2WCustomQueryBoolean.class,"components");
+    private static final Logger log = Logger.getLogger(ERD2WCustomQueryBoolean.class);
     protected NSArray _choicesNames;
 	
     /**

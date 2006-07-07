@@ -8,6 +8,8 @@ package er.corebusinesslogic;
 
 import java.util.*;
 
+import org.apache.log4j.Logger;
+
 import com.webobjects.eocontrol.*;
 import com.webobjects.foundation.*;
 
@@ -20,7 +22,7 @@ public class ERCoreUserPreferences implements NSKeyValueCoding {
     //	---------------------------------------------------------------------------    
     
     /** Logging support */
-    public static final ERXLogger log = ERXLogger.getERXLogger(ERCoreUserPreferences.class);
+    public static final Logger log = Logger.getLogger(ERCoreUserPreferences.class);
 
     /** EOEncoding key */
     private final static String VALUE="_V";

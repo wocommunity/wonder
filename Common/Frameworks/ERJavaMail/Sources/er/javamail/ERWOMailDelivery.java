@@ -13,6 +13,8 @@ import javax.activation.*;
 import javax.mail.*;
 import javax.mail.internet.*;
 
+import org.apache.log4j.Logger;
+
 import com.webobjects.appserver.*;
 import com.webobjects.foundation.*;
 
@@ -147,7 +149,7 @@ public class ERWOMailDelivery {
     }
     
     // Private Implementation.
-    private static ERXLogger log = ERXLogger.getERXLogger( ERWOMailDelivery.class );
+    private static Logger log = Logger.getLogger( ERWOMailDelivery.class );
     private static ERWOMailDelivery _sharedInstance = null;
     
         private

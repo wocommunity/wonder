@@ -8,6 +8,8 @@ package er.directtoweb;
 
 import java.lang.reflect.*;
 
+import org.apache.log4j.Logger;
+
 import com.webobjects.directtoweb.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.foundation.*;
@@ -42,7 +44,7 @@ public class ERDDelayedObjectCreationAssignment extends ERDDelayedAssignment {
     //	---------------------------------------------------------------------------
     
     /** logging support */
-    public static final ERXLogger log = ERXLogger.getERXLogger(ERDDelayedObjectCreationAssignment.class);
+    public static final Logger log = Logger.getLogger(ERDDelayedObjectCreationAssignment.class);
 
     //	===========================================================================
     //	Class method(s)

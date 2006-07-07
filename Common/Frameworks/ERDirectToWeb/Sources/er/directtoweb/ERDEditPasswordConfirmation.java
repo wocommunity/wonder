@@ -1,5 +1,7 @@
 package er.directtoweb;
 
+import org.apache.log4j.Logger;
+
 import com.webobjects.appserver.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.foundation.*;
@@ -23,7 +25,7 @@ import er.extensions.*;
 public class ERDEditPasswordConfirmation extends ERDCustomEditComponent {
 
     /** logging support */
-    private static final ERXLogger log = ERXLogger.getLogger(ERDEditPasswordConfirmation.class,"components");
+    private static final Logger log = Logger.getLogger(ERDEditPasswordConfirmation.class);
 
     public int length;
     /**

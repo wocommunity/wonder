@@ -1,5 +1,7 @@
 package er.excel;
 
+import org.apache.log4j.Logger;
+
 import com.webobjects.appserver.*;
 
 import er.extensions.*;
@@ -16,7 +18,7 @@ import er.extensions.*;
 public class EGComponent extends ERXStatelessComponent {
 
     /** logging support */
-    protected final ERXLogger log = ERXLogger.getLogger(getClass(),"components,excel");
+    protected final Logger log = Logger.getLogger(getClass());
 	
     /**
      * Public constructor

@@ -11,6 +11,8 @@ import java.math.*;
 import java.net.*;
 import java.util.*;
 
+import org.apache.log4j.Logger;
+
 import com.webobjects.appserver.*;
 import com.webobjects.appserver._private.*;
 import com.webobjects.foundation.*;
@@ -31,7 +33,7 @@ public class ERXProperties extends Properties {
     private static Boolean RetainDefaultsEnabled;
     private static String UndefinedMarker = "-undefined-";
     /** logging support */
-    public final static ERXLogger log = ERXLogger.getERXLogger(ERXProperties.class);
+    public final static Logger log = Logger.getLogger(ERXProperties.class);
     private static final Map AppSpecificPropertyNames = new HashMap(128);
 
     /** WebObjects version number as string */

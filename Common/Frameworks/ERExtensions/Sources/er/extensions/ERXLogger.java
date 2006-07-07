@@ -1,12 +1,13 @@
 //
-// ERXLogger.java
+// Logger.java
 // Project ERExtensions
 //
 // Created by ak on Tue Apr 02 2002
 //
 package er.extensions;
 
-import java.util.*;
+
+import java.util.Properties;
 
 import org.apache.log4j.*;
 
@@ -43,7 +44,7 @@ public class ERXLogger extends org.apache.log4j.Logger {
      * configures the log4j logging system.
      */
     static {
-        configureLoggingWithSystemProperties();
+        // configureLoggingWithSystemProperties();
     }
 
     /**
@@ -53,9 +54,9 @@ public class ERXLogger extends org.apache.log4j.Logger {
     public static class Factory implements org.apache.log4j.spi.LoggerFactory {
 
         /**
-         * Overriden method used to create new ERXLogger classes.
+         * Overriden method used to create new Logger classes.
          * @param name to create the new Logger instance for
-         * @return new ERXLogger object for the given name
+         * @return new Logger object for the given name
          */
         public Logger makeNewLoggerInstance(String name) {
             if (log != null && log.isDebugEnabled())
@@ -73,14 +74,14 @@ public class ERXLogger extends org.apache.log4j.Logger {
     }
 
     /**
-     * Main entry point for getting an ERXLogger for a given name.
+     * Main entry point for getting an Logger for a given name.
      * Calls getLogger to return the instance of Logger from our custom Factory.
      * 
      * Note that if the log4j system has not been setup correctly, meaning
      * the LoggerFactory subclass has not been correctly put in place, then
      * RuntimeException will be thrown.
      * @param name to create the logger for
-     * @return ERXLogger for the given name.
+     * @return Logger for the given name.
      */
     public static ERXLogger getERXLogger(String name) {
     	Logger logger = getLogger(name);
@@ -89,14 +90,14 @@ public class ERXLogger extends org.apache.log4j.Logger {
     		logger = getLogger(name);
      	}
     	if(logger != null && !(logger instanceof ERXLogger)) {
-    		throw new RuntimeException("Can't load Logger for \""+name+"\" because it is not of class ERXLogger but \""+logger.getClass().getName()+"\". Let your Application class inherit from ERXApplication or call ERXLog4j.configureLogging() statically the first thing in your app. \nAlso check if there is a \"log4j.loggerFactory=er.extensions.ERXLogger$Factory\" line in your properties.");
+    		throw new RuntimeException("Can't load Logger for \""+name+"\" because it is not of class ERXLogger but \""+logger.getClass().getName()+"\". Let your Application class inherit from ERXApplication or call ERXLog4j.configureLogging() statically the first thing in your app. \nAlso check if there is a \"log4j.loggerFactory=er.extensions.Logger$Factory\" line in your properties.");
     	}
     	return (ERXLogger)logger;
     }
 
     /**
      *  Overrides method of superclass to return a logger using our
-     *  custom ERXLogger$Factory class.
+     *  custom Logger$Factory class.
      *  This works identical to
      * {@link org.apache.log4j.Logger#getLogger log4.Logger.getLogger}
      *	@param name to create the logger for
@@ -113,11 +114,11 @@ public class ERXLogger extends org.apache.log4j.Logger {
      * @return logger for the given class name
      */
     public static ERXLogger getERXLogger(Class clazz) {
-        return (ERXLogger)getLogger(clazz.getName());
+        return getERXLogger(clazz.getName());
     }
 
     public static Logger getLogger(Class clazz) {
-        return (ERXLogger)getERXLogger(clazz);
+        return getERXLogger(clazz);
     }
 
     /**
@@ -132,12 +133,9 @@ public class ERXLogger extends org.apache.log4j.Logger {
      */
     //ENHANCEME: We could do something more useful here...
     public static ERXLogger getERXLogger(Class clazz, String subTopic) {
-        return (ERXLogger)getERXLogger(clazz.getName() + (subTopic != null && subTopic.length() > 0 ? "."+ subTopic : null));
+        return getERXLogger(clazz.getName() + (subTopic != null && subTopic.length() > 0 ? "."+ subTopic : null));
     }
-    public static ERXLogger getLogger(Class clazz, String subTopic) {
-        return getERXLogger(clazz, subTopic);
-    }
-    
+   
     /**
      * Default constructor. Constructs a logger
      * for the given name.
@@ -183,7 +181,7 @@ public class ERXLogger extends org.apache.log4j.Logger {
         PropertyConfigurator.configure(properties);
         
         if (log == null) {
-            log = Logger.getLogger(ERXLogger.class.getName(), factory);
+            log = Logger.getLogger(Logger.class.getName(), factory);
         }
         log.info("Updated the logging configuration with the current system properties.");
         if(log.isDebugEnabled()) {

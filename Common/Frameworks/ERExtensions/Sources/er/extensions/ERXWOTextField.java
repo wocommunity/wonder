@@ -3,6 +3,8 @@ package er.extensions;
 import java.math.*;
 import java.text.*;
 
+import org.apache.log4j.Logger;
+
 import com.webobjects.appserver.*;
 import com.webobjects.appserver._private.*;
 import com.webobjects.foundation.*;
@@ -15,7 +17,7 @@ import com.webobjects.foundation.*;
  */
 public class ERXWOTextField extends WOInput /*ERXPatcher.DynamicElementsPatches.TextField*/ {
 	
-    public static ERXLogger log = ERXLogger.getERXLogger(ERXWOTextField.class);
+    public static Logger log = Logger.getLogger(ERXWOTextField.class);
     
 	protected WOAssociation _formatter;
 	protected WOAssociation _dateFormat;

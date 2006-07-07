@@ -6,6 +6,8 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.testrunner;
 
+import org.apache.log4j.Logger;
+
 import junit.framework.*;
 import junit.runner.*;
 import er.extensions.*;
@@ -18,7 +20,7 @@ import er.extensions.*;
 public class ERXTestRunner extends BaseTestRunner {
 
     /** logging support */
-    public static final ERXLogger log = ERXLogger.getERXLogger(ERXTestRunner.class);
+    public static final Logger log = Logger.getLogger(ERXTestRunner.class);
 
         public ERXTestListener externalListener = null;
 

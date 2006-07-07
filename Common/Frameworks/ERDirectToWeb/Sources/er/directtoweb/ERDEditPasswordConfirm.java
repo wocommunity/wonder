@@ -6,6 +6,8 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.directtoweb;
 
+import org.apache.log4j.Logger;
+
 import com.webobjects.appserver.*;
 
 import er.extensions.*;
@@ -24,7 +26,7 @@ import er.extensions.*;
 public class ERDEditPasswordConfirm extends ERDCustomEditComponent {
 
     /** logging support */
-    public static final ERXLogger log = ERXLogger.getERXLogger(ERDEditPasswordConfirm.class);
+    public static final Logger log = Logger.getLogger(ERDEditPasswordConfirm.class);
 
     public int length;
 

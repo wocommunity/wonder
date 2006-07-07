@@ -11,6 +11,8 @@ import java.net.*;
 import java.text.*;
 import java.util.*;
 
+import org.apache.log4j.Logger;
+
 import com.webobjects.appserver.*;
 import com.webobjects.foundation.*;
 
@@ -65,9 +67,9 @@ import com.webobjects.foundation.*;
 
 public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions  {
     
-	protected static final ERXLogger log = ERXLogger.getERXLogger(ERXLocalizer.class);
+	protected static final Logger log = Logger.getLogger(ERXLocalizer.class);
     
-    protected static final ERXLogger createdKeysLog = (ERXLogger)ERXLogger.getLogger(ERXLocalizer.class.getName() + ".createdKeys");
+    protected static final Logger createdKeysLog = Logger.getLogger(ERXLocalizer.class.getName() + ".createdKeys");
 
     private static boolean isLocalizationEnabled = true;
     

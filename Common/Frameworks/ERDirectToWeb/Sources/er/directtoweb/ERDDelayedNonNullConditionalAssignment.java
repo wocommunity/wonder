@@ -6,6 +6,8 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.directtoweb;
 
+import org.apache.log4j.Logger;
+
 import com.webobjects.directtoweb.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.foundation.*;
@@ -54,7 +56,7 @@ import er.extensions.*;
 public class ERDDelayedNonNullConditionalAssignment extends ERDDelayedAssignment {
 
     /** logging support */
-    public final static ERXLogger log = ERXLogger.getERXLogger("er.directtoweb.rules.DelayedNonNullConditionalAssigment");
+    public final static Logger log = Logger.getLogger("er.directtoweb.rules.DelayedNonNullConditionalAssigment");
 
     /**
      * Static constructor required by the EOKeyValueUnarchiver

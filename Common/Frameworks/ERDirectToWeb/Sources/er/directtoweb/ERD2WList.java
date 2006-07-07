@@ -6,6 +6,8 @@
 //
 package er.directtoweb;
 
+import org.apache.log4j.Logger;
+
 import com.webobjects.appserver.*;
 import com.webobjects.foundation.*;
 
@@ -14,7 +16,7 @@ import er.extensions.*;
 public class ERD2WList extends ERDCustomEditComponent {
 
     /* logging support */
-    public static final ERXLogger log = ERXLogger.getERXLogger(ERD2WList.class);
+    public static final Logger log = Logger.getLogger(ERD2WList.class);
 
     /** caches the list */
     protected NSArray list;

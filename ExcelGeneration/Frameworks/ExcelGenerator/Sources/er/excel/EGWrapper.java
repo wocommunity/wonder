@@ -2,6 +2,8 @@ package er.excel;
 
 import java.io.*;
 
+import org.apache.log4j.Logger;
+
 import com.webobjects.appserver.*;
 import com.webobjects.foundation.*;
 
@@ -19,7 +21,7 @@ import er.extensions.*;
 public class EGWrapper extends ERXNonSynchronizingComponent {
 
     /** logging support */
-    private static final ERXLogger log = ERXLogger.getLogger(EGWrapper.class,"components,excel");
+    private static final Logger log = Logger.getLogger(EGWrapper.class);
 	private String _fileName;
 	private NSDictionary _styles;
     private NSDictionary _fonts;

@@ -1,5 +1,7 @@
 package er.directtoweb;
 
+import org.apache.log4j.Logger;
+
 import com.webobjects.appserver.*;
 import com.webobjects.directtoweb.*;
 import com.webobjects.eocontrol.*;
@@ -16,7 +18,7 @@ import er.extensions.*;
 public  class ERDActionButton extends ERDCustomComponent {
 
     /** logging support */
-    private static final ERXLogger log = ERXLogger.getLogger(ERDActionButton.class,"components");
+    private static final Logger log = Logger.getLogger(ERDActionButton.class);
 
     public interface Keys {
         public static final String object = "object";

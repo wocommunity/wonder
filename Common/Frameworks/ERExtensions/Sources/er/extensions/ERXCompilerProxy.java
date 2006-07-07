@@ -7,6 +7,8 @@ import java.io.*;
 import java.net.*;
 import java.util.*;
 
+import org.apache.log4j.Logger;
+
 import com.webobjects.appserver.*;
 import com.webobjects.appserver._private.*;
 import com.webobjects.eoaccess.*;
@@ -130,8 +132,8 @@ class loader, but pageWithName() instantiates from the new class loader. Rather 
 public class ERXCompilerProxy {
 
     /* logging support */
-    protected static final ERXLogger log = ERXLogger.getERXLogger(ERXCompilerProxy.class.getName());
-    protected static final ERXLogger classLoaderLog = ERXLogger.getERXLogger(ERXCompilerProxy.class.getName()+".loading");
+    protected static final Logger log = Logger.getLogger(ERXCompilerProxy.class.getName());
+    protected static final Logger classLoaderLog = Logger.getLogger(ERXCompilerProxy.class.getName()+".loading");
 
     /** Notification you can register to when the Compiler Proxy reloads classes.
      * <br/>

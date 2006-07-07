@@ -7,6 +7,8 @@
 package er.extensions;
 import java.util.*;
 
+import org.apache.log4j.Logger;
+
 import com.webobjects.eoaccess.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.foundation.*;
@@ -25,16 +27,16 @@ import com.webobjects.foundation.*;
  */
 public class ERXEC extends EOEditingContext {
     /** general logging */
-    public static final ERXLogger log = ERXLogger.getERXLogger(ERXEC.class);
+    public static final Logger log = Logger.getLogger(ERXEC.class);
     
     /** logs a message when set to DEBUG, autoLocking is enabled and an EC is used without a lock. */
-    public static final ERXLogger lockLogger = ERXLogger.getERXLogger("er.extensions.ERXEC.LockLogger");
+    public static final Logger lockLogger = Logger.getLogger("er.extensions.ERXEC.LockLogger");
     
     /** logs a message with a stack trace when set to DEBUG and an EC is locked/unlocked. */
-    public static final ERXLogger lockLoggerTrace = ERXLogger.getERXLogger("er.extensions.ERXEC.LockLoggerTrace");
+    public static final Logger lockLoggerTrace = Logger.getLogger("er.extensions.ERXEC.LockLoggerTrace");
     
     /** logs a message when set to DEBUG and an EC is locked/unlocked. */
-    public static final ERXLogger lockTrace = ERXLogger.getERXLogger("er.extensions.ERXEC.LockTrace");
+    public static final Logger lockTrace = Logger.getLogger("er.extensions.ERXEC.LockTrace");
     
     /** name of the notification that is posted after editing context is created. */
     public static final String EditingContextDidCreateNotification = "EOEditingContextDidCreate";
@@ -949,7 +951,7 @@ public class ERXEC extends EOEditingContext {
     public static class DefaultFactory implements Factory {
     	
     	/** logging support */
-    	public static final ERXLogger log = ERXLogger.getERXLogger(DefaultFactory.class);
+    	public static final Logger log = Logger.getLogger(DefaultFactory.class);
     	
     	/** holds a reference to the default ec delegate */
     	protected Object defaultEditingContextDelegate;

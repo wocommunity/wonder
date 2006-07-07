@@ -6,6 +6,8 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.directtoweb;
 
+import org.apache.log4j.Logger;
+
 import com.webobjects.appserver.*;
 
 import er.extensions.*;
@@ -22,5 +24,5 @@ public class ERDCustomQueryComponentWithArgs extends ERDCustomQueryComponent {
     }
     
     /** logging support */
-    public final static ERXLogger log = ERXLogger.getERXLogger(ERDCustomQueryComponentWithArgs.class);
+    public final static Logger log = Logger.getLogger(ERDCustomQueryComponentWithArgs.class);
 }

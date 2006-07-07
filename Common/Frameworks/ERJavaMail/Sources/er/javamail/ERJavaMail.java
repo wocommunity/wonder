@@ -2,6 +2,7 @@ package er.javamail;
 
 import java.util.*;
 
+import org.apache.log4j.Logger;
 import org.apache.oro.text.regex.*;
 
 import com.webobjects.eocontrol.*;
@@ -19,7 +20,7 @@ import er.extensions.*;
 public class ERJavaMail extends ERXFrameworkPrincipal {
 
     /** Class logger */
-    private static final ERXLogger log = ERXLogger.getERXLogger (ERJavaMail.class);
+    private static final Logger log = Logger.getLogger (ERJavaMail.class);
 
     static {
 	setUpFrameworkPrincipalClass (ERJavaMail.class);

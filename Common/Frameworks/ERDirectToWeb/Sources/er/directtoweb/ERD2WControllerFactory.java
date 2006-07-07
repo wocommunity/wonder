@@ -1,5 +1,7 @@
 package er.directtoweb;
 
+import org.apache.log4j.Logger;
+
 import com.webobjects.appserver.*;
 import com.webobjects.directtoweb.*;
 import com.webobjects.eoaccess.*;
@@ -35,7 +37,7 @@ will spare you a lot of work.
 public class ERD2WControllerFactory extends ERD2WFactory {
 
     /** logging support */
-    private static final ERXLogger log = ERXLogger.getERXLogger(ERD2WControllerFactory.class);
+    private static final Logger log = Logger.getLogger(ERD2WControllerFactory.class);
 	
     /**
      * Public constructor

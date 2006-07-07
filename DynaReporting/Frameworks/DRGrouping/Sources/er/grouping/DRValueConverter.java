@@ -1,5 +1,7 @@
 package er.grouping;
 
+import org.apache.log4j.Logger;
+
 import com.webobjects.foundation.*;
 
 import er.extensions.*;
@@ -13,7 +15,7 @@ import er.extensions.*;
  */
 public class DRValueConverter {
     /** Logging support */
-    protected static final ERXLogger log = ERXLogger.getERXLogger(DRValueConverter.class);
+    protected static final Logger log = Logger.getLogger(DRValueConverter.class);
     
     public NSTimestamp timestampForValue(Object v) {
         if(v instanceof NSTimestamp) {
@@ -50,7 +52,7 @@ public class DRValueConverter {
         }
         return scr;
     }
-
+   
     public Number numberForValue(Object v) {
         double vv = doubleForValue(v);
         Number scr = new Double(vv);

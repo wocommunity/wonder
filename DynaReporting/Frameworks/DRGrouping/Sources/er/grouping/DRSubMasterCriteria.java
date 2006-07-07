@@ -3,6 +3,8 @@ package er.grouping;
 import java.text.*;
 import java.util.*;
 
+import org.apache.log4j.Logger;
+
 import com.webobjects.foundation.*;
 
 import er.extensions.*;
@@ -18,7 +20,7 @@ import er.extensions.*;
 public class DRSubMasterCriteria extends Object  {
 
     /** Logging support */
-    protected static final ERXLogger log = ERXLogger.getERXLogger(DRSubMasterCriteria.class);
+    protected static final Logger log = Logger.getLogger(DRSubMasterCriteria.class);
 
     protected boolean _useMethod;
 

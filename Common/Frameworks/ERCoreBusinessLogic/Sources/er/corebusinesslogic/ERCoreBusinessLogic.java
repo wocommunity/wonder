@@ -9,6 +9,8 @@ package er.corebusinesslogic;
 import java.lang.reflect.*;
 import java.util.*;
 
+import org.apache.log4j.Logger;
+
 import com.webobjects.appserver.*;
 import com.webobjects.eoaccess.*;
 import com.webobjects.eocontrol.*;
@@ -23,7 +25,7 @@ public class ERCoreBusinessLogic extends ERXFrameworkPrincipal {
     //	---------------------------------------------------------------------------    
     
     /** logging support */
-    public static final ERXLogger log = ERXLogger.getERXLogger(ERCoreBusinessLogic.class);
+    public static final Logger log = Logger.getLogger(ERCoreBusinessLogic.class);
     
     /** property key that holds the email domain of the generated from email */
     public static final String ProblemEmailDomainPropertyKey = "er.corebusinesslogic.ERCoreBusinessLogic.ProblemEmailDomain";

@@ -6,6 +6,8 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.extensions;
 
+import org.apache.log4j.Logger;
+
 import com.webobjects.appserver.*;
 import com.webobjects.foundation.*;
 
@@ -28,7 +30,7 @@ import com.webobjects.foundation.*;
 public class ERXStyleSheet extends WOComponent {
 
     /** logging support */
-    public static final ERXLogger log = ERXLogger.getERXLogger(ERXStyleSheet.class);
+    public static final Logger log = Logger.getLogger(ERXStyleSheet.class);
 
     /** holds the calculated style sheet url */
     private String _styleSheetUrl;
