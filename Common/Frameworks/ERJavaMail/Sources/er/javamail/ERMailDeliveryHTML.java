@@ -111,26 +111,27 @@ public class ERMailDeliveryHTML extends ERMailDeliveryComponentBased
 	// Set the content of the html part
 	htmlPart.setContent (this.htmlContent (), "text/html; charset=\""  + charset () + "\"");
 
-	multipart.addBodyPart (htmlPart);
+    // Inline attachements
+    if (inlineAttachments().count() == 0) {
+        multipart.addBodyPart(htmlPart);
+    } else {
+        // Create a "related" MimeMultipart
+        MimeMultipart relatedMultiparts = new MimeMultipart("related");
+        relatedMultiparts.addBodyPart(htmlPart);
+        
+        // add each inline attachments to the message
+        Enumeration en = this.inlineAttachments ().objectEnumerator ();
+        while (en.hasMoreElements ()) {
+        ERMailAttachment attachment = (ERMailAttachment)en.nextElement ();
+        BodyPart bp = attachment.getBodyPart();
+        relatedMultiparts.addBodyPart(bp);
+        }
 
-	// Inline attachements
-	if (this.inlineAttachments ().count () > 0) {
-	    // Create a "related" MimeMultipart
-	    MimeMultipart relatedMultiparts = new MimeMultipart ("related");
-			
-	    // add each inline attachments to the message
-	    Enumeration en = this.inlineAttachments ().objectEnumerator ();
-	    while (en.hasMoreElements ()) {
-		ERMailAttachment attachment = (ERMailAttachment)en.nextElement ();
-		BodyPart bp = attachment.getBodyPart ();
-		relatedMultiparts.addBodyPart (bp);
-	    }
-	    
-	    // Add this multipart to the main multipart as a compound BodyPart
-	    BodyPart relatedAttachmentsBodyPart = new MimeBodyPart ();
+        // Add this multipart to the main multipart as a compound BodyPart
+        BodyPart relatedAttachmentsBodyPart = new MimeBodyPart();
 	    relatedAttachmentsBodyPart.setDataHandler (new DataHandler (relatedMultiparts, relatedMultiparts.getContentType ()));
-	    multipart.addBodyPart (relatedAttachmentsBodyPart);
-	}
+        multipart.addBodyPart(relatedAttachmentsBodyPart);
+    }
 
         return new DataHandler (multipart, multipart.getContentType ());
     }
