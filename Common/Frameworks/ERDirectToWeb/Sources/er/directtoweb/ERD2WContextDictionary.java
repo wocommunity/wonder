@@ -54,16 +54,21 @@ public class ERD2WContextDictionary {
         _context.setTask(_context.task());
         _context.setEntity(_context.entity());
         if(pageKeys == null) {
-            _pageLevelKeys = new NSMutableArray(new Object[] {"pageWrapperName", "displayPropertyKeys"});
+            _pageLevelKeys = new NSMutableArray(new Object[] {"pageWrapperName", "displayPropertyKeys", "pageName"});
         } else {
             _pageLevelKeys = pageKeys.mutableClone();
         }
-
-        if(componentKeys == null) {
-            _componentLevelKeys = new NSMutableArray(new Object[] {"componentName", "customComponentName", 
-                    "displayNameForProperty", "propertyKey"});
-        } else {
+        NSArray keys = new NSMutableArray(new Object[] {"componentName", "customComponentName", 
+                "displayNameForProperty", "propertyKey"});
+        _componentLevelKeys = new NSMutableArray();
+        if(componentKeys != null) {
             _componentLevelKeys = componentKeys.mutableClone();
+        }
+        for(Enumeration e = keys.objectEnumerator(); e.hasMoreElements(); ) {
+        	String key = (String)e.nextElement();
+        	if(!_componentLevelKeys.containsObject(key)) {
+        		_componentLevelKeys.addObject(key);
+        	}
         }
 
         if("edit".equals(_context.task())) {
@@ -79,7 +84,6 @@ public class ERD2WContextDictionary {
         NSMutableDictionary editors = new NSMutableDictionary();
         NSMutableArray bundles = NSBundle.frameworkBundles().mutableClone();
         bundles.addObject(NSBundle.mainBundle());
-        
         for(Enumeration e = bundles.objectEnumerator(); e.hasMoreElements(); ) {
             NSBundle bundle = (NSBundle)e.nextElement();
             NSDictionary dict;
