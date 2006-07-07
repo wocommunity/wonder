@@ -516,14 +516,21 @@ public abstract class ERXApplication extends WOApplication implements ERXGracefu
      * @return the WOResponse of the generated exception page.
      */
     public WOResponse handleException(Exception exception, WOContext context) {
-        if(exception instanceof EOObjectNotAvailableException && context != null) {
-            String retryKey = context.request().stringFormValueForKey("ERXRetry");
-            if(retryKey == null) {
-                WORedirect page = new WORedirect(context);
-                page.setUrl(context.request().uri() + "?ERXRetry=1");
-                return page.generateResponse();
-            }
-         }
+    	if(false) {
+    		// AK: the idea here is that you might have a stale object that was deleted from the DB
+    		// while you weren't looking so the next time around your page might get a chance earlier to
+    		// realize it isn't there anymore. Unfortunalty, this doesn«t work in all scenarios, but I 
+    		// leave the code here for future use. If I can't figure it out in the general case,
+    		// I'll remove it completely (2006-07-07)
+    		if(exception instanceof ERXDatabaseContextDelegate.ObjectNotAvailableException && context != null) {
+    			String retryKey = context.request().stringFormValueForKey("ERXRetry");
+    			if(retryKey == null) {
+    				WORedirect page = new WORedirect(context);
+    				page.setUrl(context.request().uri() + "?ERXRetry=1");
+    				return page.generateResponse();
+    			}
+    		}
+    	}
         // We first want to test if we ran out of memory. If so we need to quit ASAP.
         handlePotentiallyFatalException(exception);
 
