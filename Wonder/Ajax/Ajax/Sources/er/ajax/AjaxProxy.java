@@ -182,7 +182,7 @@ public class AjaxProxy extends AjaxComponent {
 
     /** Ask the an JSONRPCBridge object to handle the json request. */
     protected WOActionResults handleRequest(WORequest request, WOContext context) {
-        WOResponse response = AjaxUtils.createResponse(null);
+        WOResponse response = AjaxUtils.createResponse(context);
 
         String inputString = request.contentString();
         log.debug("Input: " + inputString);
