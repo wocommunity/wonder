@@ -62,7 +62,9 @@ public class AjaxUtils {
   public static WOResponse createResponse(WOContext context) {
     WOApplication app = WOApplication.application();
     WOResponse response = app.createResponseInContext(context);
-
+    if(context != null) {
+    	context._setResponse(response);
+    }
     // Encode using UTF-8, although We are actually ASCII clean as all
     // unicode data is JSON escaped using backslash u. This is less data
     // efficient for foreign character sets but it is needed to support
