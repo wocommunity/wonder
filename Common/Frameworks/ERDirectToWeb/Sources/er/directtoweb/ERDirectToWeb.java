@@ -316,6 +316,13 @@ public class ERDirectToWeb {
 		}
 	}
     
+    /**
+     * Logs some debugging info and and throws a D2WException that wraps the original exception.
+     * This is usefull when your app fails very deep inside of a repetition of switch components
+     * and you need to find out just what the state of the D2WContext is.
+     * @param ex
+     * @param d2wContext
+     */
     public static void reportException(Exception ex, D2WContext d2wContext) {
         if(d2wContext != null) {
             log.error("Exception <"+ex+">: "+
@@ -328,12 +335,21 @@ public class ERDirectToWeb {
         } else {
             log.error("Exception <"+ex+">: with NULL d2wContext"/*, ex*/);
         }
-        if(ERXProperties.booleanForKeyWithDefault("er.directtoweb.ERDirectToWeb.shouldRaiseExceptions", true)) {
+        if(shouldRaiseException(true)) {
             if(!(ex instanceof D2WException)) {
                 ex = new D2WException(ex, d2wContext);
             }
             throw (D2WException)ex;
         }
+    }
+    
+    /**
+     * Checks the system property <code>er.directtoweb.ERDirectToWeb.shouldRaiseExceptions</code>.
+     * @param defaultValue
+     * @return
+     */
+    public static boolean shouldRaiseException(boolean defaultValue) {
+        return ERXProperties.booleanForKeyWithDefault("er.directtoweb.ERDirectToWeb.shouldRaiseExceptions", defaultValue);
     }
     
     public static String displayNameForPropertyKey(String key, String entityName, String language) {
