@@ -565,7 +565,12 @@ public class ERXMutableArray extends NSMutableArray implements List {
 		}
 
 		public synchronized ArrayList arrayList() {
-			return super.arrayList();
+			Object objects[] = objectsNoCopy();
+			ArrayList list = new ArrayList(objects.length);
+			for(int i = 0; i < objects.length; i++) {
+				list.add(objects[i]);
+			}
+			return list;
 		}
 
 		public synchronized Class classForCoder() {
