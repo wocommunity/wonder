@@ -75,7 +75,7 @@ public class ERD2WSwitchComponent extends D2WSwitchComponent {
     }
 
     public void appendToResponse(WOResponse r, WOContext c) {
-        if(!ERXProperties.booleanForKeyWithDefault("er.directtoweb.ERDirectToWeb.shouldRaiseExceptions", false)) {
+        if(!ERDirectToWeb.shouldRaiseException(false)) {
             maybeResetCaches();
             super.appendToResponse(r, c);
         } else {
