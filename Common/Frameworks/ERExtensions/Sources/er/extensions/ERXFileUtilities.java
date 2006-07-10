@@ -188,16 +188,16 @@ public class ERXFileUtilities {
         if (srcPath == null) throw new IllegalArgumentException("null source path not allowed");
         if (dstPath == null) throw new IllegalArgumentException("null source path not allowed");
 
-        ArrayList args = new ArrayList(7);
+        NSMutableArray args = new NSMutableArray(7);
 
-        args.add("/usr/bin/scp");
-        args.add("-B");
-        args.add("-q");
-        args.add("-o"); args.add("StrictHostKeyChecking=no");
-        args.add(((srcHost != null) ? (srcHost + ":") : "") + srcPath);
-        args.add(((dstHost != null) ? (dstHost + ":") : "") + dstPath);
+        args.addObject("/usr/bin/scp");
+        args.addObject("-B");
+        args.addObject("-q");
+        args.addObject("-o"); args.add("StrictHostKeyChecking=no");
+        args.addObject(((srcHost != null) ? (srcHost + ":") : "") + srcPath);
+        args.addObject(((dstHost != null) ? (dstHost + ":") : "") + dstPath);
 
-        String[] cmd = (String[])args.toArray(new String[]{});
+        String[] cmd = ERXArrayUtilities.toStringArray(args);
 
         Process task = null;
         try {
@@ -1094,7 +1094,7 @@ public class ERXFileUtilities {
                 File[] currentDirs = listDirectories(currentDir, true);
                 a.addObjects(currentDirs);
             }
-            Object[] objects = a.toArray();
+            Object[] objects = a.objects();
             files = new File[objects.length];
             System.arraycopy(objects, 0, files, 0, objects.length);
         }
