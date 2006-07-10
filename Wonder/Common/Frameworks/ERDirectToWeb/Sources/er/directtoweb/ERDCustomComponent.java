@@ -244,7 +244,7 @@ public abstract class ERDCustomComponent extends ERXNonSynchronizingComponent im
     }
 
     public void appendToResponse(WOResponse r, WOContext c) {
-        if(!ERXProperties.booleanForKeyWithDefault("er.directtoweb.ERDirectToWeb.shouldRaiseExceptions", false)) {
+        if(!ERDirectToWeb.shouldRaiseException(false)) {
             // in the case where we are non-synchronizing but not stateless, make sure we pull again
             if (!synchronizesVariablesWithBindings() && !isStateless()) {
                 reset();
