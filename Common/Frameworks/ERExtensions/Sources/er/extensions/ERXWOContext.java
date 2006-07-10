@@ -105,16 +105,22 @@ public class ERXWOContext extends WOContext implements ERXMutableUserInfoHolderI
      */ 
     public static String stripSessionIDFromURL(String url) {
 	if (url == null)  return null;
-        
+        int len = 1;
         int startpos = url.indexOf("?wosid");
-        if (startpos < 0)  startpos = url.indexOf("&wosid");
+        if (startpos < 0) {
+        	startpos = url.indexOf("&wosid");
+        }
+        if (startpos < 0) {
+        	startpos = url.indexOf("&amp;wosid");
+        	len = 5;
+        }
 
         if (startpos >= 0) {
-            int endpos = url.indexOf('&', startpos + 1);
+            int endpos = url.indexOf('&', startpos + len);
             if (endpos < 0)
                 url = url.substring(0, startpos);
             else
-                url = url.substring(0, startpos + 1) + url.substring(endpos + 1);
+                url = url.substring(0, startpos + len) + url.substring(endpos + len);
         }
         return url;
     }
