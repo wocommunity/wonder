@@ -10,11 +10,24 @@ Content: ERXWOComponentContent {
 	templateName = "content";
 } 
 
-Link: WOGenericContainer {
+OnClickConditional: WOConditional {
+	condition = ^needsClick;
+}
+
+OnClickLink: WOGenericContainer {
 	elementName = "a";
 	onClick = toggleString;
+}
+
+RollOverConditional: WOConditional {
+	condition = ^needsClick;
+	negate = true;
+}
+
+RollOverLink: WOGenericContainer {
+	elementName = "a";
 	onMouseOver = showString;
-	onMouseOut_ = hideString;
+	onMouseOut = hideString;
 }
 
 Span: WOGenericContainer {

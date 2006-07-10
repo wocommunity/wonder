@@ -15,6 +15,7 @@ Choices: WORepetition {
 }
 
 FlyOver: ERXJSFlyOver {
+	needsClick = true;
 }
 
 FlyOverContent: ERXWOTemplate {
