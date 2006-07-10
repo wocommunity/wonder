@@ -273,7 +273,14 @@ public class ERXMutableDictionary extends NSMutableDictionary implements Map {
 		}
 
 		public synchronized HashMap hashMap() {
-			return super.hashMap();
+			Object keys[] = keysNoCopy();
+			int c = keys.length;
+			HashMap map = new HashMap(c <= 0 ? 1 : c);
+			for(int i = 0; i < c; i++) {
+				map.put(keys[i], objectForKey(keys[i]));
+			}
+
+			return map;
 		}
 
 		public synchronized Hashtable hashtable() {
