@@ -12,7 +12,7 @@ EditToOneRelationship: ERXToOneRelationship {
 	noSelectionString = d2wContext.noSelectionString;
 	popupName = d2wContext.popupName;
 	localizeDisplayKeys = d2wContext.localizeDisplayKeys;
-	uniqueID = d2wContext.propertyKey;
+	uniqueID = d2wContext.uniqueID;
 	destinationEntityName = d2wContext.destinationEntityName;
     sortCaseInsensitive = d2wContext.sortCaseInsensitive;
 }
