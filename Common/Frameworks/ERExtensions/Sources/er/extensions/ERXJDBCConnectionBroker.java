@@ -623,9 +623,10 @@ public class ERXJDBCConnectionBroker {
                             restart = true;
                             log.info("Connection " + this + " failed to be returned in time, recycling");
                         }
-                    } else {
-                        // In normal use and not too old, catch it next time!
-                        return;
+                    }
+                    if(!restart) {
+                    	// In normal use and not too old, catch it next time!
+                    	return;
                     }
                 }
                 // Take offline (2 indicates housekeeping lock)
