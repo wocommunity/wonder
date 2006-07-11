@@ -128,6 +128,8 @@ public class ERCoreUserPreferences implements NSKeyValueCoding {
                 String encodedValue = (String)pref.valueForKey("value");
                 result = decodedValue(encodedValue);
             }
+        } catch(RuntimeException ex) {
+        	log.error("Error while getting preference " + key +  ": " + ex);
         } finally {
             ec.unlock();
         }
@@ -175,6 +177,8 @@ public class ERCoreUserPreferences implements NSKeyValueCoding {
             if (ec.hasChanges()) {
                 ec.saveChanges();
             }
+        } catch(RuntimeException ex) {
+        	log.error("Error while setting preference " + key +  ": " + ex);
         } finally {
             ec.unlock();
         }
