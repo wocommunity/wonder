@@ -88,13 +88,17 @@ public class ERCoreBusinessLogic extends ERXFrameworkPrincipal {
             EOEditingContext actorEc = actor.editingContext();
             actorEc.lock();
             try {
-                EOEnterpriseObject localActor = (EOEnterpriseObject)ERXEOControlUtilities.localInstanceOfObject(ec, actor);
-                if(actor instanceof ERCoreUserInterface) {
-                    NSArray prefs = ((ERCoreUserInterface)actor).preferences();
-                    prefs = ERXEOControlUtilities.localInstancesOfObjects(ec, prefs);
-                    ((ERCoreUserInterface)localActor).setPreferences(prefs);
-                }
-                actor = localActor;
+            	EOEnterpriseObject localActor = (EOEnterpriseObject)ERXEOControlUtilities.localInstanceOfObject(ec, actor);
+            	try {
+            		if(actor instanceof ERCoreUserInterface) {
+            			NSArray prefs = ((ERCoreUserInterface)actor).preferences();
+            			prefs = ERXEOControlUtilities.localInstancesOfObjects(ec, prefs);
+            			((ERCoreUserInterface)localActor).setPreferences(prefs);
+            		}
+                } catch(RuntimeException ex) {
+                	log.error("Error while setting getting actor's preferences: " + ex);
+            	}
+        		actor = localActor;
             } finally {
                 actorEc.unlock();                
             }
