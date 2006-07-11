@@ -119,8 +119,13 @@ public class ERXWOContext extends WOContext implements ERXMutableUserInfoHolderI
             int endpos = url.indexOf('&', startpos + len);
             if (endpos < 0)
                 url = url.substring(0, startpos);
-            else
-                url = url.substring(0, startpos + len) + url.substring(endpos + len);
+            else {
+            	int endLen = len;
+            	if(len == 1 && url.indexOf("&amp;") >= 0) {
+            		endLen = 5;
+            	}
+                url = url.substring(0, startpos + len) + url.substring(endpos + endLen);
+            }
         }
         return url;
     }
