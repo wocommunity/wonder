@@ -241,16 +241,18 @@ public abstract class ERXApplication extends WOApplication implements ERXGracefu
      *  of seconds that the application should be up before terminating. Note that when
      *  the application's time to live is up it will quit calling the method <code>killInstance</code>.<br/>
      *  <br/>
-     *  The second way is by setting the System property <b>ERTimeToDie</b> to the number
-     *  of seconds that the application should be up before starting to refuse new sessions.
+     *  The second way is by setting the System property <b>ERTimeToDie</b> to the time in seconds 
+     *  after midnight when the app should be starting to refuse new sessions.
      *  In this case when the application starts to refuse new sessions it will also register
-     *  a kill timer that will terminate the application between 30 minutes and 1:30 minutes.<br/>
+     *  a kill timer that will terminate the application between 0 minutes and 1:00 minutes.<br/>
      */
     public void run() {
         int timeToLive=ERXProperties.intForKey("ERTimeToLive");
         if (timeToLive > 0) {
             log.info("Instance will live "+timeToLive+" seconds.");
             NSLog.out.appendln("Instance will live "+timeToLive+" seconds.");
+            // add a fudge factor of around 10 minutes
+            timeToLive += (new Random()).nextFloat()*600;
             NSTimestamp exitDate=(new NSTimestamp()).timestampByAddingGregorianUnits(0, 0, 0, 0, 0, timeToLive);
             WOTimer t=new WOTimer(exitDate, 0, this, "killInstance", null, null, false);
             t.schedule();
