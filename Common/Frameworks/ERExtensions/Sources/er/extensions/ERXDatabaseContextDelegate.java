@@ -80,8 +80,10 @@ public class ERXDatabaseContextDelegate {
     	if(exLog.isDebugEnabled()) {
        		exLog.debug("JDBC Exception occured: " + throwable, throwable);
     	} else if(exLog.isInfoEnabled()) {
-       		exLog.debug("JDBC Exception occured: " + throwable);
+       		exLog.info("JDBC Exception occured: " + throwable);
     	}
+    	EOEditingContext ec = ERXEC.newEditingContext();
+    	//log.info(NSPropertyListSerialization.stringFromPropertyList(EOUtilities.modelGroup(ec).models().valueForKey("connectionDictionary")));
     	return true;
     }
 
