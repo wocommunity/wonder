@@ -56,8 +56,8 @@ public class ERXLongPrimaryKeyFactory {
         Long pk = cachedPkValue(ename);
         if (encodeHostInPkValue()) {
             long l = pk.longValue();
-            if (l > MAX_PK_VALUE) { throw new IllegalStateException("max PK value reached for entity " + ename + " cannot continue!");
-
+            if (l > MAX_PK_VALUE) { 
+            	throw new IllegalStateException("max PK value reached for entity " + ename + " cannot continue!");
             }
 
             // we are assuming 64 bit int values
@@ -73,8 +73,8 @@ public class ERXLongPrimaryKeyFactory {
         }
         if (encodeEntityInPkValue()) {
             long l = pk.longValue();
-            if (l > MAX_PK_VALUE) { throw new IllegalStateException("max PK value reached for entity " + ename + " cannot continue!");
-
+            if (l > MAX_PK_VALUE) { 
+            	throw new IllegalStateException("max PK value reached for entity " + ename + " cannot continue!");
             }
 
             // we are assuming 64 bit int values
@@ -131,12 +131,15 @@ public class ERXLongPrimaryKeyFactory {
     }
 
     public static synchronized NSDictionary primaryKeyDictionary(String entityName) {
-        EOEntity entity = EOModelGroup.defaultGroup().entityNamed(entityName);
+    	EOEntity entity = EOModelGroup.defaultGroup().entityNamed(entityName);
         while (entity.parentEntity() != null) {
             entity = entity.parentEntity();
         }
         entityName = entity.name();
-
+        if(entity.primaryKeyAttributeNames().count() != 1) {
+        	throw new IllegalArgumentException("Can handle only entities with one PK: " + entityName + " has " + entity.primaryKeyAttributeNames());
+        }
+            
         Long pk = getNextPkValueForEntity(entityName);
         String pkName = (String) entity.primaryKeyAttributeNames().objectAtIndex(0);
         return new NSDictionary(new Object[] { pk}, new Object[] { pkName});
@@ -158,105 +161,86 @@ public class ERXLongPrimaryKeyFactory {
      *            caching. Removes a lot of db roundtrips.
      * @return a new pk values for the specified entity.
      */
-    private static Long getNextPkValueForEntityIncreaseBy(String ename, int count, int _increaseBy) {
-        if (_increaseBy < 1) _increaseBy = 1;
-
-        Connection con = ERXJDBCConnectionBroker.connectionBrokerForEntityNamed(ename).getConnection();
-        try {
-            con.setAutoCommit(false);
-            con.setReadOnly(false);
-        } catch (SQLException e) {
-            log.error(e, e);
-        }
+    private static Long getNextPkValueForEntityIncreaseBy(String ename, int count, int increaseBy) {
+        if (increaseBy < 1) increaseBy = 1;
 
         String where = "where eoentity_name = '" + ename + "'";
 
+        ERXJDBCConnectionBroker broker = ERXJDBCConnectionBroker.connectionBrokerForEntityNamed(ename);
+		Connection con = broker.getConnection();
         try {
-            ResultSet resultSet = con.createStatement().executeQuery("select pk_value from pk_table " + where);
-            con.commit();
-
-            boolean hastNext = resultSet.next();
-            int pk = 1;
-            if (hastNext) {
-                pk = resultSet.getInt("pk_value");
-                pk += _increaseBy;
-                // now execute the update
-                con.createStatement().executeUpdate("update pk_table set pk_value = " + pk + " " + where);
-            } else {
-                // first time, we need to set i up
-                con.createStatement().executeUpdate(
-                        "insert into pk_table (eoentity_name, pk_value) values ('" + ename + "', " + maxIdFromTable(ename) + ")");
-                pk = maxIdFromTable(ename) + 1;
+            try {
+                con.setAutoCommit(false);
+                con.setReadOnly(false);
+            } catch (SQLException e) {
+                log.error(e, e);
             }
-            con.commit();
-            return new Long(pk);
-        } catch (SQLException e) {
-            String s = e.getMessage().toLowerCase();
-            if ((s.indexOf("error code 116") != -1) || (s.indexOf("pk_table") != -1 && s.indexOf("does not exist") != -1) || 
-                    // this is for Oracle
-                    s.indexOf("ora-00942") != -1) {
-                try {
-                    con.rollback();
-                    log.info("creating pk table");
-                    con.createStatement().executeUpdate("create table pk_table (eoentity_name varchar(100) not null, pk_value integer)");
-                    con.createStatement().executeUpdate("alter table pk_table add primary key (eoentity_name)");// NOT
-                    // DEFERRABLE
-                    // INITIALLY
-                    // IMMEDIATE");
-                    con.commit();
 
-                    ResultSet resultSet = con.createStatement().executeQuery("select pk_value from pk_table " + where);
-                    con.commit();
+            for(int tries = 0; tries < count; tries++) {
+            	try {
+            		ResultSet resultSet = con.createStatement().executeQuery("select pk_value from pk_table " + where);
+            		con.commit();
 
-                    boolean hastNext = resultSet.next();
-                    int pk = 1;
-                    if (hastNext) {
-                        pk = resultSet.getInt("pk_value");
-                        pk++;
-                        // now execute the update
-                        con.createStatement().executeUpdate("update pk_table set pk_value = " + pk + " " + where);
-                    } else {
-                        // first time, we need to set i up
-                        con.createStatement().executeUpdate(
-                                "insert into pk_table (eoentity_name, pk_value) values ('" + ename + "', " + pk + ")");
-                    }
-                    con.commit();
-                    return new Long(pk);
-                } catch (SQLException ee) {
-                    ee.printStackTrace();
-                    throw new RuntimeException("could not create pk table");
-                } finally {
-                    ERXJDBCConnectionBroker.connectionBrokerForEntityNamed(ename).freeConnection(con);
-                }
+            		boolean hasNext = resultSet.next();
+            		long pk = 1;
+            		if (hasNext) {
+            			pk = resultSet.getLong("pk_value");
+               			// now execute the update
+            			con.createStatement().executeUpdate("update pk_table set pk_value = " + (pk+increaseBy) + " " + where);
+            		} else {
+            			pk = maxIdFromTable(ename);
+               			// first time, we need to set i up
+            			con.createStatement().executeUpdate("insert into pk_table (eoentity_name, pk_value) values ('" + ename + "', " + (pk+increaseBy) + ")");
+            		}
+            		con.commit();
+            		return new Long(pk);
+            	} catch(SQLException ex) {
+            		String s = ex.getMessage().toLowerCase();
+            		boolean creationError = (s.indexOf("error code 116") != -1); // frontbase?
+               		creationError |= (s.indexOf("pk_table") != -1 && s.indexOf("does not exist") != -1); // postgres ?
+               		creationError |= s.indexOf("ora-00942") != -1; // oracle
+               		if (creationError) {
+               			try {
+               				con.rollback();
+               				log.info("creating pk table");
+               				con.createStatement().executeUpdate("create table pk_table (eoentity_name varchar(100) not null, pk_value integer)");
+               				con.createStatement().executeUpdate("alter table pk_table add primary key (eoentity_name)");// NOT
+               				// DEFERRABLE
+               				// INITIALLY
+               				// IMMEDIATE");
+               				con.commit();
+               			} catch (SQLException ee) {
+               				throw new NSForwardException(ee, "could not create pk table");
+               			}
+               		} else {
+            			throw new NSForwardException(ex, "Error fetching PK");
+            		}
+            	}
             }
-            if (count < 10) {
-                log.error("could not get primkey, trying again " + count + ", error was " + e.getMessage());
-                return getNextPkValueForEntity(ename);
-            }
-            log.error(e, e);
-            throw new RuntimeException("could not get primkey, original message was " + e.getMessage());
-
         } finally {
-            ERXJDBCConnectionBroker.connectionBrokerForEntityNamed(ename).freeConnection(con);
+        	broker.freeConnection(con);
         }
+        throw new IllegalStateException("Couldn't get PK");
     }
 
     /**
-     * retrieves the maxValue from id from the specified entity
+     * Retrieves the maxValue from id from the specified entity. If 
+     * hosts and entities are encoded, then these values are stripped
+     * first
      * 
      * @param ename
      * @param pk
      * @return
      */
-    private static int maxIdFromTable(String ename) {
+    private static long maxIdFromTable(String ename) {
         EOEntity entity = EOModelGroup.defaultGroup().entityNamed(ename);
         if (entity == null) throw new NullPointerException("could not find an entity named " + ename);
-
         String tableName = entity.externalName();
+        String colName = ((EOAttribute)entity.primaryKeyAttributes().lastObject()).columnName();
+        String sql = "select max(" + colName + ") from " + tableName;
 
-        String sql = "select max(id) from " + tableName;
-
-        Connection con = ERXJDBCConnectionBroker.connectionBrokerForEntityNamed(ename).getConnection();
+        ERXJDBCConnectionBroker broker = ERXJDBCConnectionBroker.connectionBrokerForEntityNamed(ename);
+		Connection con = broker.getConnection();
         ResultSet resultSet;
         try {
             resultSet = con.createStatement().executeQuery(sql);
@@ -264,10 +248,15 @@ public class ERXLongPrimaryKeyFactory {
 
             boolean hastNext = resultSet.next();
             if (hastNext) {
-                int v = resultSet.getInt(1);
+                long v = resultSet.getLong(1);
                 if (log.isDebugEnabled())
-                    log.debug("received max id from table " + tableName + ", setting value in PK_TABLE to " + v);
-
+                	log.debug("received max id from table " + tableName + ", setting value in PK_TABLE to " + v);
+                if(encodeEntityInPkValue()) {
+                	v = v >> CODE_LENGTH;
+                }
+                if(encodeHostInPkValue()) {
+                	v = v >> HOST_CODE_LENGTH;
+                }
                 return v;
             }
             throw new IllegalStateException("could not get value from " + sql);
@@ -276,7 +265,7 @@ public class ERXLongPrimaryKeyFactory {
             log.error("could not call database with sql " + sql, e);
             throw new IllegalStateException("could not get value from " + sql);
         } finally {
-            ERXJDBCConnectionBroker.connectionBrokerForEntityNamed(ename).freeConnection(con);
+            broker.freeConnection(con);
         }
     }
 
