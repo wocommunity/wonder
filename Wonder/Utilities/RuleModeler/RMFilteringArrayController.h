@@ -7,20 +7,13 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "EOControl.h"
 
 @interface RMFilteringArrayController : NSArrayController {
-    
-    EOQualifier *_qualifier;
-    
+    NSMutableArray *_newObjects;
 }
 
 - (void)search:(id)sender;
-
-- (EOQualifier *)qualifier;
-- (void)setQualifier:(EOQualifier *)qualifier;
-
-// Undo management
+- (NSMutableArray *)newObjects;
 - (NSUndoManager *)undoManager;
 - (void)_setActionName:(NSString *)format old:(id)oldValue new:(id)newValue;
 

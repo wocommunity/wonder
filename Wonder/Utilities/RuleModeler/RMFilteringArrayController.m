@@ -13,69 +13,29 @@
 
 - (IBAction)search:(id)sender {
     NSString *value = [sender stringValue];
+    NSPredicate *predicate = nil;
     
     if (value != nil && [value length] > 0) {
-        EOQualifier *qual = nil;
-        
         NS_DURING {
-            qual = [EOQualifier qualifierWithQualifierFormat:value];
+            predicate = [NSPredicate predicateWithFormat:[value stringByAppendingString:@" or (isNewRule = YES)"]];
         } NS_HANDLER {
             NSRange range = [value rangeOfString:@"*"];
-            if (range.location == NSNotFound)
+            if (range.location == NSNotFound) {
                 value = [NSString stringWithFormat:@"*%@*", value];
-            
-            NSMutableArray *innerQuals = [[NSMutableArray alloc] initWithCapacity:3];
-            [innerQuals addObject:[[EOKeyValueQualifier alloc] initWithKey:@"lhsDescription" operatorSelector:EOQualifierOperatorCaseInsensitiveLike value:value]];
-            [innerQuals addObject:[[EOKeyValueQualifier alloc] initWithKey:@"rhs.keyPath.description" operatorSelector:EOQualifierOperatorCaseInsensitiveLike value:value]];
-            [innerQuals addObject:[[EOKeyValueQualifier alloc] initWithKey:@"rhs.value.description" operatorSelector:EOQualifierOperatorCaseInsensitiveLike value:value]];
-            qual = [[EOOrQualifier alloc] initWithQualifierArray:innerQuals];
+            }
+            predicate = [NSPredicate predicateWithFormat:@"(lhsDescription like[c] %@) or (rhs.keyPath like[c] %@) or (rhs.valueDescription like[c] %@) or (isNewRule = YES)", value, value, value];
         } NS_ENDHANDLER;
-        
-        [self setQualifier:qual];
-    } else {
-        [self setQualifier:nil];
     }
-    
+    [self setFilterPredicate:predicate];
     [self rearrangeObjects];
 }
 
-- (NSArray *)arrangeObjects:(NSArray *)objects {
-    NSArray *arrangedObjects;
-    EOQualifier *qualifier = [self qualifier];
-    
-    if (qualifier == nil) {
-        return [super arrangeObjects:objects];
-    }
-    
-    arrangedObjects = [objects filteredArrayUsingQualifier:qualifier];
-    
-    return arrangedObjects;
-}
-
-- (EOQualifier *)qualifier {
-    return _qualifier;
-}
-
-- (void)setQualifier:(EOQualifier *)qualifier {
-    [_qualifier release];
-    
-    _qualifier = [qualifier retain];
-}
-
-- (BOOL)canAdd {
-    if ([self qualifier]) {
-        return NO;
-    }
-    
-    return [super canInsert];
-}
 
 // Adding and removing objects
 - (void)insertObject:(id)object atArrangedObjectIndex:(unsigned int)index {
 	NSUndoManager *um = [self undoManager];
 	[[[self undoManager] prepareWithInvocationTarget:self] removeObjectAtArrangedObjectIndex:index];
 	[um setActionName:([um isUndoing]) ? @"Remove Rule" : @"Insert Rule"];
-	
 	[super insertObject:object atArrangedObjectIndex:index];
 }
 

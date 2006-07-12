@@ -39,6 +39,10 @@
     [archiver encodeObject:_value forKey:@"value"];
 }
 
+- (NSString *)valueDescription {
+    return [NSString stringWithFormat:@"%@", [_value description]];
+}
+
 - (NSString *)description {
     return [NSString stringWithFormat:@"(%@) %@ = %@", _assignmentClass, [_keyPath description], [_value description]];
 }
