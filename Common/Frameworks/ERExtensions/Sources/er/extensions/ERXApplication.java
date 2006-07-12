@@ -8,6 +8,7 @@ package er.extensions;
 
 import java.io.*;
 import java.lang.reflect.*;
+import java.sql.*;
 import java.util.*;
 
 import org.apache.log4j.Logger;
@@ -16,6 +17,7 @@ import com.webobjects.appserver.*;
 import com.webobjects.eoaccess.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.foundation.*;
+import com.webobjects.jdbcadaptor.*;
 
 /**
  *  ERXApplication is the abstract superclass of WebObjects applications
@@ -239,7 +241,7 @@ public abstract class ERXApplication extends WOApplication implements ERXGracefu
      *  to cycle in two ways:<br/>
      *  <br/>
      *  The first way is by setting the System property <b>ERTimeToLive</b> to the number
-     *  of seconds that the application should be up before terminating. Note that when
+     *  of seconds (+ a random interval of 10 minutes) that the application should be up before terminating. Note that when
      *  the application's time to live is up it will quit calling the method <code>killInstance</code>.<br/>
      *  <br/>
      *  The second way is by setting the System property <b>ERTimeToDie</b> to the time in seconds 
@@ -424,11 +426,34 @@ public abstract class ERXApplication extends WOApplication implements ERXGracefu
      * <li>the D2W page configuration</li>
      * <li>the previous page list (from the WOStatisticsStore)</li>
      * </ol>
+     * Also, in case the top-level exception was a EOGeneralAdaptorException, then
+     * you also get the failed ops and the sql exception.
      * <br/>
      * @return dictionary containing extra information for the current context.
      */
     public NSMutableDictionary extraInformationForExceptionInContext(Exception e, WOContext context) {
         NSMutableDictionary extraInfo=new NSMutableDictionary();
+        
+        if(e instanceof EOGeneralAdaptorException) {
+            // AK NOTE: you might have sensitive info in your failed ops...
+            NSDictionary dict = ((EOGeneralAdaptorException)e).userInfo();
+            if(dict != null) {
+                Object value = extraInfo.objectForKey(EODatabaseContext.FailedDatabaseOperationKey);
+                if(value != null) {
+                    extraInfo.setObjectForKey(value.toString(), EODatabaseContext.FailedDatabaseOperationKey);
+                }
+                value = extraInfo.objectForKey(EOAdaptorChannel.FailedAdaptorOperationKey);
+                if(value != null) {
+                    extraInfo.setObjectForKey(value.toString(), EOAdaptorChannel.FailedAdaptorOperationKey);
+                }
+                if(e instanceof JDBCAdaptorException) {
+                    value = ((JDBCAdaptorException)e).sqlException();
+                    if(value != null) {
+                        extraInfo.setObjectForKey(value.toString(), "SQLException");
+                    }
+                }
+            }
+        }
         if (context!=null && context.page()!=null) {
             extraInfo.setObjectForKey(context.page().name(), "CurrentPage");
             if (context.component() != null) {
@@ -445,29 +470,29 @@ public abstract class ERXApplication extends WOApplication implements ERXGracefu
             }
             extraInfo.setObjectForKey(context.request().uri(), "uri");
             NSSelector d2wSelector = new NSSelector("d2wContext");
-                if (d2wSelector.implementedByObject(context.page())) {
-                    try {
-                       NSKeyValueCoding c = (NSKeyValueCoding)d2wSelector.invoke(context.page());
-                        if(c != null) {
-                            String pageConfiguration=(String)c.valueForKey("pageConfiguration");
-                            if (pageConfiguration!=null) {
-                                extraInfo.setObjectForKey(pageConfiguration, "D2W-PageConfiguration");
-                            }
-                            String propertyKey=(String)c.valueForKey("propertyKey");
-                            if (propertyKey!=null) {
-                                extraInfo.setObjectForKey(propertyKey, "D2W-PropertyKey");
-                            }
-                            NSArray displayPropertyKeys=(NSArray)c.valueForKey("displayPropertyKeys");
-                            if (displayPropertyKeys != null) {
-                            	extraInfo.setObjectForKey(displayPropertyKeys, "D2W-DisplayPropertyKeys");
-                            }
+            if (d2wSelector.implementedByObject(context.page())) {
+                try {
+                    NSKeyValueCoding c = (NSKeyValueCoding)d2wSelector.invoke(context.page());
+                    if(c != null) {
+                        String pageConfiguration=(String)c.valueForKey("pageConfiguration");
+                        if (pageConfiguration!=null) {
+                            extraInfo.setObjectForKey(pageConfiguration, "D2W-PageConfiguration");
                         }
-                    } catch(Exception ex) {
+                        String propertyKey=(String)c.valueForKey("propertyKey");
+                        if (propertyKey!=null) {
+                            extraInfo.setObjectForKey(propertyKey, "D2W-PropertyKey");
+                        }
+                        NSArray displayPropertyKeys=(NSArray)c.valueForKey("displayPropertyKeys");
+                        if (displayPropertyKeys != null) {
+                            extraInfo.setObjectForKey(displayPropertyKeys, "D2W-DisplayPropertyKeys");
+                        }
                     }
+                } catch(Exception ex) {
                 }
-                if (context.hasSession() && context.session().statistics() != null) {
-                    extraInfo.setObjectForKey(context.session().statistics(), "PreviousPageList");
-                }
+            }
+            if (context.hasSession() && context.session().statistics() != null) {
+                extraInfo.setObjectForKey(context.session().statistics(), "PreviousPageList");
+            }
         }
         return extraInfo;
     }
