@@ -1,0 +1,40 @@
+{
+    IBClasses = (
+        {CLASS = Assignment; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
+        {CLASS = FirstResponder; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
+        {
+            ACTIONS = {search = id; }; 
+            CLASS = RMFilteringArrayController; 
+            LANGUAGE = ObjC; 
+            SUPERCLASS = NSArrayController; 
+        }, 
+        {
+            ACTIONS = {assignmentClassNameAction = id; }; 
+            CLASS = RMModel; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {assignmentClassNamesComboBox = NSComboBox; }; 
+            SUPERCLASS = NSDocument; 
+        }, 
+        {
+            ACTIONS = {rhsComboBoxAction = id; }; 
+            CLASS = RMModelEditor; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {
+                assignmentClassNamesComboBox = NSComboBox; 
+                detailSplitView = NSSplitView; 
+                filterField = NSSearchField; 
+                filterView = NSView; 
+                lhsSplitView = NSSplitView; 
+                masterSplitView = NSSplitView; 
+                rhsKeyNamesComboBox = NSComboBox; 
+                rulesController = NSArrayController; 
+                rulesTableView = NSTableView; 
+                sourceDrawer = NSDrawer; 
+            }; 
+            SUPERCLASS = NSWindowController; 
+        }, 
+        {CLASS = RMTableView; LANGUAGE = ObjC; SUPERCLASS = NSTableView; }, 
+        {CLASS = Rule; LANGUAGE = ObjC; SUPERCLASS = NSObject; }
+    ); 
+    IBVersion = 1; 
+}
