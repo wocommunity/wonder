@@ -118,6 +118,10 @@
     return (_lhs != nil) ? [_lhs description] : @"*true*";
 }
 
+-(BOOL) isNewRule {
+    return ([[self rhs] keyPath] == nil); // || ([[self rhs] value] == nil);
+}
+
 -(BOOL)validateLhsDescription:(id *)ioValue error:(NSError **)outError {
     if (*ioValue == nil) {
         return YES;
