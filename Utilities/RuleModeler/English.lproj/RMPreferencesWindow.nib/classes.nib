@@ -1,0 +1,18 @@
+{
+    IBClasses = (
+        {CLASS = FirstResponder; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
+        {
+            CLASS = RMPreferencesWindow; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {
+                coresPane = NSView; 
+                generalPane = NSView; 
+                importingPane = NSView; 
+                sharingPane = NSView; 
+                userDefaultsController = NSUserDefaultsController; 
+            }; 
+            SUPERCLASS = NSWindowController; 
+        }
+    ); 
+    IBVersion = 1; 
+}
