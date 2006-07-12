@@ -82,7 +82,8 @@ public class ERXDatabaseContextDelegate {
     	} else if(exLog.isInfoEnabled()) {
        		exLog.info("JDBC Exception occured: " + throwable);
     	}
-    	EOEditingContext ec = ERXEC.newEditingContext();
+        // AK FIXME: find a way to log the connection dict that failed...
+    	//EOEditingContext ec = ERXEC.newEditingContext();
     	//log.info(NSPropertyListSerialization.stringFromPropertyList(EOUtilities.modelGroup(ec).models().valueForKey("connectionDictionary")));
     	return true;
     }
