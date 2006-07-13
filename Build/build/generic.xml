@@ -322,6 +322,24 @@ There are many ways to use this script:
            <frameworks dir="${wonder.lib.root}" if="use.additional.framework.9">
                 <include name="${use.additional.framework.9}"/>
            </frameworks>
+           <frameworks dir="${wonder.lib.root}" if="use.additional.framework.10">
+                <include name="${use.additional.framework.10}"/>
+           </frameworks>
+           <frameworks dir="${wonder.lib.root}" if="use.additional.framework.11">
+                <include name="${use.additional.framework.11}"/>
+           </frameworks>
+           <frameworks dir="${wonder.lib.root}" if="use.additional.framework.12">
+                <include name="${use.additional.framework.12}"/>
+           </frameworks>
+           <frameworks dir="${wonder.lib.root}" if="use.additional.framework.13">
+                <include name="${use.additional.framework.13}"/>
+           </frameworks>
+           <frameworks dir="${wonder.lib.root}" if="use.additional.framework.14">
+                <include name="${use.additional.framework.14}"/>
+           </frameworks>
+           <frameworks dir="${wonder.lib.root}" if="use.additional.framework.15">
+                <include name="${use.additional.framework.15}"/>
+           </frameworks>
             <frameworks dir="${wo.woroot}/Library/Frameworks"> 
                 <include name="JavaFoundation.framework" />
                 <include name="JavaEOAccess.framework" />
@@ -373,7 +391,12 @@ There are many ways to use this script:
                 <include name="**/*.dat" />
                 <include name="**/mime.types" /> 
                 <include name="**/*.*" /> 
+                <include name="**/*" /> 
                 <include name="**/GSVUtilityParser.jj" /> <!-- Validity specific --> 
+                <exclude name="*.*~/" />
+            </resources>
+            <resources dir="${project.dir}/WebServerResources">
+                <include name="**/*.xsl" />
             </resources>
             <wsresources dir="${project.dir}/WebServerResources">
                 <include name="**/*.gif" />
@@ -381,7 +404,8 @@ There are many ways to use this script:
                 <include name="**/*.jpg" />
                 <include name="**/*.js" />
                 <include name="**/*.css" />
-                <include name="**/*.html" />
+                <include name="**/*.*" />
+                <include name="**/*" />
             </wsresources>
         </woframework>
         <exec dir="${project.dir}" executable="/bin/sh" os="Mac OS X">
@@ -424,13 +448,16 @@ There are many ways to use this script:
                 <include name="**/*.sh" />
                 <include name="**/*.defaults" /> <!-- SVGObjects specific --> 
             </resources>
+            <resources dir="${project.dir}/WebServerResources">
+                <include name="**/*.xsl" />
+            </resources>
             <wsresources dir="${project.dir}/WebServerResources">
                 <include name="**/*.gif" />
                 <include name="**/*.jpeg" />
                 <include name="**/*.jpg" />
                 <include name="**/*.js" />
                 <include name="**/*.css" />
-                <include name="**/*.html" />
+                <include name="**/*.*" />
             </wsresources>
             <!-- this should be an exact copy of the frameworks in the woapplication task --> 
             <frameworks dir="${wonder.lib.root}" if="use.wonder.core"> 
@@ -507,6 +534,24 @@ There are many ways to use this script:
            <frameworks dir="${wonder.lib.root}" if="use.additional.framework.9">
                 <include name="${use.additional.framework.9}"/>
            </frameworks>
+           <frameworks dir="${wonder.lib.root}" if="use.additional.framework.10">
+                <include name="${use.additional.framework.10}"/>
+           </frameworks>
+           <frameworks dir="${wonder.lib.root}" if="use.additional.framework.11">
+                <include name="${use.additional.framework.11}"/>
+           </frameworks>
+           <frameworks dir="${wonder.lib.root}" if="use.additional.framework.12">
+                <include name="${use.additional.framework.12}"/>
+           </frameworks>
+           <frameworks dir="${wonder.lib.root}" if="use.additional.framework.13">
+                <include name="${use.additional.framework.13}"/>
+           </frameworks>
+           <frameworks dir="${wonder.lib.root}" if="use.additional.framework.14">
+                <include name="${use.additional.framework.14}"/>
+           </frameworks>
+           <frameworks dir="${wonder.lib.root}" if="use.additional.framework.15">
+                <include name="${use.additional.framework.15}"/>
+           </frameworks>
            <frameworks dir="${wo.woroot}/Library/Frameworks"> 
                 <include name="JavaFoundation.framework" />
                 <include name="JavaEOAccess.framework" />
@@ -519,6 +564,9 @@ There are many ways to use this script:
             </frameworks>
             <frameworks dir="${wonder.lib.root}"> 
                 <include name="JavaWOExtensions.framework" />
+            </frameworks>
+            <frameworks dir="${wo.woroot}/Library/Frameworks" if="use.webobjects.webservices.server"> 
+                <include name="JavaWebServices*.framework" />
             </frameworks>
             <frameworks dir="${wo.woroot}/Library/Frameworks" if="use.webobjects.d2w"> 
                 <include name="JavaDirectToWeb.framework" />
