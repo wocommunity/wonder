@@ -173,7 +173,10 @@ public class ERXCustomObject extends EOCustomObject implements ERXGuardedObjectI
     public void didInsert() {
         if (tranLogDidInsert.isDebugEnabled())
             tranLogDidInsert.debug("Object:" + description());
-    }
+
+        //We're going to blow the primaryKey cache:
+        _primaryKey = null;
+}
 
     /* (non-Javadoc)
      * @see er.extensions.ERXEnterpriseObject#willRevert()
@@ -333,8 +336,12 @@ public class ERXCustomObject extends EOCustomObject implements ERXGuardedObjectI
     /* (non-Javadoc)
      * @see er.extensions.ERXEnterpriseObject#primaryKey()
      */
+    protected String _primaryKey = null;
     public String primaryKey() {
-        return ERXEOControlUtilities.primaryKeyStringForObject(this);
+        if(_primaryKey == null) {
+        _primaryKey = ERXEOControlUtilities.primaryKeyStringForObject(this);
+        }
+        return _primaryKey;
     }
 
     /* (non-Javadoc)
