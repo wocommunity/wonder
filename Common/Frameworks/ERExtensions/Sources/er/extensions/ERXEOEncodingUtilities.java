@@ -172,26 +172,29 @@ public class ERXEOEncodingUtilities {
     // FIXME: (tuscland) Should we listen to model group notifications ?
     // If this method is called too early, we might not have all the entities in the model group,
     // but this case is rare.
-    // FIXME: This code is not thread safe
     protected static final NSDictionary encodedEntityNames () {
-        if (_encodedEntityNames == null) {
-            _encodedEntityNames = new NSMutableDictionary ();
-            NSArray models = (NSArray)EOModelGroup.defaultGroup ().models ();
-            for (Enumeration en = models.objectEnumerator ();
-                en.hasMoreElements ();) {
-                NSArray entities = ((EOModel)en.nextElement ()).entities ();
-                for (Enumeration entEn = entities.objectEnumerator ();
-                    entEn.hasMoreElements ();) {
-                    EOEntity entity = (EOEntity)entEn.nextElement ();
-                    NSDictionary userInfo = entity.userInfo ();
-                    String encodedEntityName = (String)entity.userInfo ().objectForKey (EncodedEntityNameKey);
-                    if (encodedEntityName != null)
-                        _encodedEntityNames.setObjectForKey (entity.name (), encodedEntityName);
-                }
-            }
-        }
+    	if (_encodedEntityNames == null) {
+    		synchronized(ERXEOEncodingUtilities.class) {
+    			if(_encodedEntityNames == null) {
+    				_encodedEntityNames = new NSMutableDictionary ();
+    				NSArray models = (NSArray)EOModelGroup.defaultGroup ().models ();
+    				for (Enumeration en = models.objectEnumerator ();
+    				en.hasMoreElements ();) {
+    					NSArray entities = ((EOModel)en.nextElement ()).entities ();
+    					for (Enumeration entEn = entities.objectEnumerator ();
+    					entEn.hasMoreElements ();) {
+    						EOEntity entity = (EOEntity)entEn.nextElement ();
+    						NSDictionary userInfo = entity.userInfo ();
+    						String encodedEntityName = (String)entity.userInfo ().objectForKey (EncodedEntityNameKey);
+    						if (encodedEntityName != null)
+    							_encodedEntityNames.setObjectForKey (entity.name (), encodedEntityName);
+    					}
+    				}
+    			}
+    		}
+    	}
 
-        return _encodedEntityNames;
+    	return _encodedEntityNames;
     }
 
     /**
