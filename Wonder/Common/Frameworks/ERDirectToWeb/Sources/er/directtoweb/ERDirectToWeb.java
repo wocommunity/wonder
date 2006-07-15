@@ -228,9 +228,7 @@ public class ERDirectToWeb {
 
     // This defaults to true.
     public static boolean booleanForKey(D2WContext context, String key) {
-        // FIXME: Should use ERXUtilities.booleanValue
-        Integer i=(Integer)context.valueForKey(key);
-        return i==null || i.intValue()!=0;
+    	return ERXValueUtilities.booleanValue(context.valueForKey(key));
     }
 
     // DELETEME: This is duplicated from ERExtensions
