@@ -13,6 +13,7 @@ Display: WOSwitchComponent {
 }
 
 FlyOver : ERXJSFlyOver {
+	needsClick = false;
 }
 
 Label: WOString {
