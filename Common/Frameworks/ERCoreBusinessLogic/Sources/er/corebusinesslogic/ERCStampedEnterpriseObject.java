@@ -20,13 +20,15 @@ public abstract class ERCStampedEnterpriseObject extends ERXGenericRecord {
 
     public static final NSArray TimestampAttributeKeys = new NSArray(new Object[] { "created", "lastModified"});
     
-    // FIXME not thread safe..
     private static NSMutableDictionary _datesPerEcID=new NSMutableDictionary();
     public static class Observer {
         public void updateTimestampForEditingContext(NSNotification n) {
             NSTimestamp now=new NSTimestamp();
             if (log.isDebugEnabled())  log.debug("Timestamp for "+n.object()+": "+now);
-            _datesPerEcID.setObjectForKey(now, ERXConstant.integerForInt(System.identityHashCode(n.object())));
+            synchronized (_datesPerEcID) {
+            	int num = System.identityHashCode(n.object());
+            	_datesPerEcID.setObjectForKey(now, new Integer(num));
+			}
         }
     }
     
@@ -107,7 +109,10 @@ public abstract class ERCStampedEnterpriseObject extends ERXGenericRecord {
             log.error("editingContext:"+editingContext());
             log.error("System.identityHashCode(editingContext()):"+System.identityHashCode(editingContext()));
         }
-        NSTimestamp date=(NSTimestamp)_datesPerEcID.objectForKey(n);
+        NSTimestamp date;
+        synchronized (_datesPerEcID) {
+        	date = (NSTimestamp)_datesPerEcID.objectForKey(n);
+		}
         if (date==null) {
             log.error("Null modification date found in touch() call - EC delegate is probably missing");
         }
