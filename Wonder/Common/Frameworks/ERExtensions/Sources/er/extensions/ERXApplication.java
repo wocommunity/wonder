@@ -438,11 +438,18 @@ public abstract class ERXApplication extends WOApplication implements ERXGracefu
             // AK NOTE: you might have sensitive info in your failed ops...
             NSDictionary dict = ((EOGeneralAdaptorException)e).userInfo();
             if(dict != null) {
-                Object value = extraInfo.objectForKey(EODatabaseContext.FailedDatabaseOperationKey);
+                Object value;
+                // this one is a little bit heavyweight...
+                // value = NSPropertyListSerialization.stringFromPropertyList(dict);
+                value = dict.objectForKey(EODatabaseContext.FailedDatabaseOperationKey);
                 if(value != null) {
                     extraInfo.setObjectForKey(value.toString(), EODatabaseContext.FailedDatabaseOperationKey);
                 }
-                value = extraInfo.objectForKey(EOAdaptorChannel.FailedAdaptorOperationKey);
+                value = dict.objectForKey(EOAdaptorChannel.AdaptorFailureKey);
+                if(value != null) {
+                    extraInfo.setObjectForKey(value.toString(), EOAdaptorChannel.AdaptorFailureKey);
+                }
+                value = dict.objectForKey(EOAdaptorChannel.FailedAdaptorOperationKey);
                 if(value != null) {
                     extraInfo.setObjectForKey(value.toString(), EOAdaptorChannel.FailedAdaptorOperationKey);
                 }
