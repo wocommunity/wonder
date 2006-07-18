@@ -19,11 +19,25 @@
         NS_DURING {
             predicate = [NSPredicate predicateWithFormat:[value stringByAppendingString:@" or (isNewRule = YES)"]];
         } NS_HANDLER {
-            NSRange range = [value rangeOfString:@"*"];
-            if (range.location == NSNotFound) {
-                value = [NSString stringWithFormat:@"*%@*", value];
+            NSArray *strings = [value componentsSeparatedByString:@" "];
+            NSMutableArray *predicates = [NSMutableArray new];
+            NSMutableArray *arguments = [NSMutableArray new];
+            int i;
+            for(i = 0; i < [strings count]; i++) {
+                NSString *string = [strings objectAtIndex:i];
+                NSRange range = [string rangeOfString:@"*"];
+                if (range.location == NSNotFound) {
+                    string = [NSString stringWithFormat:@"*%@*", string];
+                }
+                
+                [arguments addObject: string];
+                [arguments addObject: string];
+                [arguments addObject: string];
+                [predicates addObject:@"((lhsDescription like[c] %@) or (rhs.keyPath like[c] %@) or (rhs.valueDescription like[c] %@))"];
+                
             }
-            predicate = [NSPredicate predicateWithFormat:@"(lhsDescription like[c] %@) or (rhs.keyPath like[c] %@) or (rhs.valueDescription like[c] %@) or (isNewRule = YES)", value, value, value];
+            NSString *format = [NSString stringWithFormat:@"%@ or (isNewRule = YES)", [predicates componentsJoinedByString:@" and "]];
+            predicate = [NSPredicate predicateWithFormat:format argumentArray:arguments];
         } NS_ENDHANDLER;
     }
     [self setFilterPredicate:predicate];
