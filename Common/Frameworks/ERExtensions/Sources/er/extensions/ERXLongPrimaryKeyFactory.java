@@ -246,9 +246,10 @@ public class ERXLongPrimaryKeyFactory {
             resultSet = con.createStatement().executeQuery(sql);
             con.commit();
 
-            boolean hastNext = resultSet.next();
-            if (hastNext) {
-                long v = resultSet.getLong(1);
+            boolean hasNext = resultSet.next();
+            long v = 1l;
+            if (hasNext) {
+            	v = resultSet.getLong(1);
                 if (log.isDebugEnabled())
                 	log.debug("received max id from table " + tableName + ", setting value in PK_TABLE to " + v);
                 if(encodeEntityInPkValue()) {
@@ -257,9 +258,8 @@ public class ERXLongPrimaryKeyFactory {
                 if(encodeHostInPkValue()) {
                 	v = v >> HOST_CODE_LENGTH;
                 }
-                return v;
             }
-            throw new IllegalStateException("could not get value from " + sql);
+            return v;
 
         } catch (SQLException e) {
             log.error("could not call database with sql " + sql, e);
