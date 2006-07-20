@@ -27,6 +27,11 @@ public class ERXSequence {
 		log = Logger.getLogger(name);
 	}
 
+	public ERXSequence(String name, long initialValue) {
+		this(name);
+		_lastValue = initialValue;
+	}
+
 	public String name() {
 		return _name;
 	}
@@ -41,14 +46,18 @@ public class ERXSequence {
 	
 	public long nextValue(long increment) {
 		synchronized (this) {
-			long diff = (_lastValue + increment) - _maxValue;
+			long diff = (lastValue() + increment) - maxValue();
 			if(diff > 0) {
 				long nextIncrement = increment();
 				_maxValue = increasedMaxValue(diff > nextIncrement ? diff : nextIncrement);
 			}
 			_lastValue += increment;
-			return _lastValue;
+			return lastValue();
 		}
+	}
+
+	protected long lastValue() {
+		return _lastValue;
 	}
 
 	protected long increasedMaxValue(long increment) {
@@ -67,22 +76,47 @@ public class ERXSequence {
 	 *
 	 */
 	public static class DatabaseSequence extends ERXSequence {
-		private EOModel _model;
-		
+		private ERXJDBCConnectionBroker _broker;
 		public DatabaseSequence(EOEditingContext ec, String modelName, String name) {
 			super(name);
-			_model = ERXEOAccessUtilities.modelGroup(ec).modelNamed(modelName);
+			EOModel model = ERXEOAccessUtilities.modelGroup(ec).modelNamed(modelName);
+			_broker = ERXJDBCConnectionBroker.connectionBrokerForModel(model);
 		}
 
-		protected EOModel model() {
-			return _model;
+		protected ERXJDBCConnectionBroker broker() {
+			return _broker;
+		}
+		
+		protected long selectAndUpdateValue(Connection con, long increment) throws SQLException {
+			long pk;
+			String where = "where name_ = '"+ name() +"'";
+    		ResultSet resultSet = con.createStatement().executeQuery("select value_ from erx_sequence_table " + where + " for update");
+    		boolean hasNext = resultSet.next();
+    		if (hasNext) {
+    			pk = resultSet.getLong("value_");
+    			con.createStatement().executeUpdate("update erx_sequence_table set value_ = value_ +" + increment + " " + where);
+    		} else {
+    			pk = createRow(con, increment);
+    		}
+    		return pk;
+		}
+
+		protected long createRow(Connection con, long increment) throws SQLException {
+			con.createStatement().executeUpdate("insert into erx_sequence_table (name_, value_) values ('" + name() + "', " + increment + ")");
+			return 0L;
+		}
+
+		protected void createTable(Connection con) throws SQLException {
+			con.createStatement().executeUpdate("create table erx_sequence_table (name_ varchar(100) not null, value_ int)");
+			con.createStatement().executeUpdate("alter table erx_sequence_table add primary key (name_)");// NOT
+			// DEFERRABLE
+			// INITIALLY
+			// IMMEDIATE");
 		}
 		
 		protected long increasedMaxValue(long increment) {
-	        String where = "where name_ = '"+ name() +"'";
-
-	        ERXJDBCConnectionBroker broker = ERXJDBCConnectionBroker.connectionBrokerForModel(model());
-			Connection con = broker.getConnection();
+	        
+	        Connection con = broker().getConnection();
 	        try {
 	            try {
 	                con.setAutoCommit(false);
@@ -93,38 +127,19 @@ public class ERXSequence {
 
 	            for(int tries = 0; tries < 5; tries++) {
 	            	try {
-	            		ResultSet resultSet = con.createStatement().executeQuery("select value_ from erx_sequence_table " + where + " for update");
-	            		boolean hasNext = resultSet.next();
-	            		long pk;
-	            		if (hasNext) {
-	            			pk = resultSet.getLong("value_");
-	               			// now execute the update
-	            			con.createStatement().executeUpdate("update erx_sequence_table set value_ = value_ +" + increment + " " + where);
-	            		} else {
-	            			pk = 0;
-	            			con.createStatement().executeUpdate("insert into erx_sequence_table (name_, value_) values ('" + name() + "', " + increment + ")");
+	            		long lastValue = selectAndUpdateValue(con, increment);
+	            		
+	            		if(_lastValue == 0L) {
+	            			_lastValue = lastValue;
 	            		}
-	            		if(_lastValue == 0) {
-	            			_lastValue = pk;
-	            		}
-	            		pk += increment;
+	            		lastValue += increment;
 	            		con.commit();
-	            		return pk;
+	            		return lastValue;
 	            	} catch(SQLException ex) {
-	            		String s = ex.getMessage().toLowerCase();
-	            		boolean creationError = (s.indexOf("error code 116") != -1); // frontbase?
-	               		creationError |= (s.indexOf("erx_sequence_table") != -1 && s.indexOf("does not exist") != -1); // postgres ?
-	               		creationError |= s.indexOf("ora-00942") != -1; // oracle
-	               		creationError |= s.indexOf("doesn't exist") != -1; // mysql
-	               		if (creationError) {
+	            		if (isCreationError(ex)) {
 	               			try {
 	               				con.rollback();
-	               				log.info("creating pk table");
-	               				con.createStatement().executeUpdate("create table erx_sequence_table (name_ varchar(100) not null, value_ int)");
-	               				con.createStatement().executeUpdate("alter table erx_sequence_table add primary key (name_)");// NOT
-	               				// DEFERRABLE
-	               				// INITIALLY
-	               				// IMMEDIATE");
+	               				createTable(con);
 	               			} catch (SQLException ee) {
 	               				throw new NSForwardException(ee, "could not create erx_sequence_table");
 	               			}
@@ -134,11 +149,63 @@ public class ERXSequence {
 	            	}
 	            }
 	        } finally {
-	        	broker.freeConnection(con);
+	        	broker().freeConnection(con);
 	        }
 	        throw new IllegalStateException("Couldn't get sequence: " + name());
 		}
+
+		private boolean isCreationError(SQLException ex) {
+			String s = ex.getMessage().toLowerCase();
+    		boolean creationError = false;
+    		creationError |= (s.indexOf("error code 116") != -1); // frontbase?
+			creationError |= (s.indexOf("erx_sequence_table") != -1 && s.indexOf("does not exist") != -1); // postgres ?
+			creationError |= s.indexOf("ora-00942") != -1; // oracle
+			creationError |= s.indexOf("doesn't exist") != -1; // mysql
+			return creationError;
+		}
 	};
+	
+	public static class PrimaryKeySequence extends DatabaseSequence {
+		private String _entityName;
+		
+		public PrimaryKeySequence(EOEditingContext ec, String modelName, String entityName) {
+			super(ec, modelName, entityName + "_pk_seq");
+			_entityName = entityName;
+		}
+		
+		protected long createRow(Connection con, long increment) throws SQLException {
+			EOEntity entity = ERXEOAccessUtilities.rootEntityForEntityNamed(_entityName);
+			String tableName = entity.externalName();
+			String colName = ((EOAttribute)entity.primaryKeyAttributes().lastObject()).columnName();
+			String sql = "select max(" + colName + ") from " + tableName;
+
+			ResultSet resultSet;
+			resultSet = con.createStatement().executeQuery(sql);
+			con.commit();
+
+			boolean hasNext = resultSet.next();
+			long v = 0L;
+			if (hasNext) {
+				v = resultSet.getLong(1);
+				v = fixMaxIdValue(v);
+				/*if (log.isDebugEnabled())
+					log.debug("received max id from table " + tableName + ", setting value in PK_TABLE to " + v);
+					                if(encodeEntityInPkValue()) {
+	                	v = v >> CODE_LENGTH;
+	                }
+	                if(encodeHostInPkValue()) {
+	                	v = v >> HOST_CODE_LENGTH;
+	                }*/
+			}
+			super.createRow(con, v+increment);
+			return v;
+		}
+
+		protected long fixMaxIdValue(long v) {
+			return v;
+		}
+
+	}
 	
 	private static final Map cache = Collections.synchronizedMap(new HashMap());
 	
@@ -146,8 +213,8 @@ public class ERXSequence {
 		return (ERXSequence) cache.get(name);
 	}
 	
-	public static ERXSequence createSequenceWithName(String name) {
-		ERXSequence sequence = new ERXSequence(name);
+	public static ERXSequence createSequenceWithName(String name, long initialValue) {
+		ERXSequence sequence = new ERXSequence(name, initialValue);
 		cache.put(name, sequence);
 		return sequence;
 	}
