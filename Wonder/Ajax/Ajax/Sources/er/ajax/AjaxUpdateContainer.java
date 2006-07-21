@@ -74,7 +74,7 @@ public class AjaxUpdateContainer extends AjaxComponent {
       
       response.appendContentString("<script type = \"text/javascript\" language = \"javascript\"><!--\n");
       if (canGetValueForBinding("frequency")) {
-        response.appendContentString("new Ajax.PeriodicalUpdater('" + id + "', $(" + id + ").updateUrl, ");
+        response.appendContentString("new Ajax.PeriodicalUpdater('" + id + "', $(" + id + ").getAttribute('updateUrl'), ");
         AjaxOptions.appendToResponse(options, response, context);
         response.appendContentString(");");
       }
@@ -99,12 +99,12 @@ public class AjaxUpdateContainer extends AjaxComponent {
         parameters.append("'");
         
         observerOptions.setObjectForKey(parameters.toString(), "parameters");
-        response.appendContentString("new Ajax.Updater('" + id + "', $('" + id + "').updateUrl, ");
+        response.appendContentString("new Ajax.Updater('" + id + "', $('" + id + "').getAttribute('updateUrl'), ");
         AjaxOptions.appendToResponse(observerOptions, response, context);
         response.appendContentString(") });");
       }
 
-      response.appendContentString("function " + id + "Update() { new Ajax.Updater('" + id + "', $(" + id + ").updateUrl, ");
+      response.appendContentString("function " + id + "Update() { new Ajax.Updater('" + id + "', $(" + id + ").getAttribute('updateUrl'), ");
       AjaxOptions.appendToResponse(options, response, context);
       response.appendContentString("); }");
       

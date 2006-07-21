@@ -50,7 +50,7 @@ public class AjaxUpdateLink extends AjaxComponent {
     options.setObjectForKey("'get'", "method");
     String updateContainerID = (String) valueForBinding("updateContainerID");
     if (updateContainerID != null) {
-      options.setObjectForKey("'invokeWOElementID=' + $(" + updateContainerID + ").woElementID", "parameters");
+      options.setObjectForKey("'invokeWOElementID=' + $(" + updateContainerID + ").getAttribute('woElementID')", "parameters");
     }
 
     return options;
