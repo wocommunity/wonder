@@ -123,8 +123,10 @@ public abstract class ERXApplication extends WOApplication implements ERXGracefu
 
 
         registerRequestHandler(new ERXDirectActionRequestHandler(), directActionRequestHandlerKey());
-        registerRequestHandler(new ERXStaticResourceRequestHandler(), resourceRequestHandlerKey());
-
+        if (isDirectConnectEnabled()) {
+        	registerRequestHandler(new ERXStaticResourceRequestHandler(), "_wr_");
+        }
+ 
         Long timestampLag = Long.getLong("EOEditingContextDefaultFetchTimestampLag");
         if (timestampLag != null)
             EOEditingContext.setDefaultFetchTimestampLag(timestampLag.longValue());
