@@ -57,7 +57,7 @@ public class AjaxDroppable extends AjaxComponent {
     // onComplete:ajaxResponse
     String droppableElementID = (String) valueForBinding("id");
     onDropBuffer.append("if (droppableElement.id == '" + droppableElementID + "') {");
-    onDropBuffer.append("var data = '" + _draggableIDKeyName + "=' + element.draggableID;");
+    onDropBuffer.append("var data = '" + _draggableIDKeyName + "=' + element.getAttribute(\'draggableID\');");
     onDropBuffer.append("var ajaxRequest = new Ajax.Request('" + _actionUrl + "', {method: 'get', parameters: data});");
     if (canGetValueForBinding("onDrop")) {
       String onDrop = (String) valueForBinding("onDrop");
@@ -84,11 +84,11 @@ public class AjaxDroppable extends AjaxComponent {
     String droppedDraggableID = request.stringFormValueForKey(_draggableIDKeyName);
     if (canSetValueForBinding("droppedDraggableID")) {
       setValueForBinding(droppedDraggableID, "droppedDraggableID");
-      if (canSetValueForBinding("droppedObject")) {
-        WOComponent page = context.page();
-        Object droppedObject = AjaxDraggable.draggableObjectForPage(page, droppedDraggableID);
-        setValueForBinding(droppedObject, "droppedObject");
-      }
+    }
+    if (canSetValueForBinding("droppedObject")) {
+      WOComponent page = context.page();
+      Object droppedObject = AjaxDraggable.draggableObjectForPage(page, droppedDraggableID);
+      setValueForBinding(droppedObject, "droppedObject");
     }
     if (canGetValueForBinding("action")) {
       WOActionResults results = (WOActionResults) valueForBinding("action");
