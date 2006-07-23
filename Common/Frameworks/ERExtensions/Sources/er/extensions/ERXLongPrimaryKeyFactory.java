@@ -259,7 +259,7 @@ public class ERXLongPrimaryKeyFactory {
                 	v = v >> HOST_CODE_LENGTH;
                 }
             }
-            return v;
+            return v + 1;
 
         } catch (SQLException e) {
             log.error("could not call database with sql " + sql, e);
