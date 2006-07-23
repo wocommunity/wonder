@@ -92,7 +92,7 @@ public abstract class ERXApplication extends WOApplication implements ERXGracefu
          }
         // ERXWOFileUpload returns a better warning than throwing a ClassCastException. 
         // Fixed in WO 5.2
-        ERXPatcher.setClassForName(ERXWOFileUpload.class, "WOFileUpload");
+        // ERXPatcher.setClassForName(ERXWOFileUpload.class, "WOFileUpload");
    }
 
     /** holds the default model group */

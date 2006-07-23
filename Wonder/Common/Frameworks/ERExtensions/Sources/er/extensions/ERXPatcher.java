@@ -403,7 +403,7 @@ public class ERXPatcher  {
             }
         }
 
-        public static class FileUpload extends WOFileUpload {
+        public static class FileUpload extends ERXWOFileUpload {
             protected WOAssociation _id;
             
             public FileUpload(String aName, NSDictionary associations, WOElement element) {
