@@ -25,6 +25,8 @@ import com.webobjects.foundation.*;
  */
 public class ERXDatabaseContextDelegate {
 	
+	public static final String DatabaseContextFailedToFetchObject = "DatabaseContextFailedToFetchObject";
+	
     public static class ObjectNotAvailableException extends EOObjectNotAvailableException {
     	private EOGlobalID globalID;
     	
@@ -184,6 +186,7 @@ public class ERXDatabaseContextDelegate {
         } else {
             gidString = gid.toString();
         }
+        NSNotificationCenter.defaultCenter().postNotification(DatabaseContextFailedToFetchObject, object);
         throw new ObjectNotAvailableException("No " + (object!=null ? object.getClass().getName() : "N/A") + " found with globalID: " + gidString, gid);            
     }
     
