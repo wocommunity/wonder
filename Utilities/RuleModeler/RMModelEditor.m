@@ -176,40 +176,44 @@
 
 - (IBAction)copy:(id)sender {
     NSResponder *firstResponder = [[self window] firstResponder];
-    
     if (firstResponder == rulesTableView) {
-	if ([rulesTableView numberOfSelectedRows] > 0) {
-	    NSIndexSet *rowIdx = [rulesTableView selectedRowIndexes];
-	    NSMutableArray *rows = [NSMutableArray arrayWithCapacity:[rulesTableView numberOfSelectedRows]];
-	    NSMutableArray *actualClassNames = [NSMutableArray arrayWithCapacity:[rulesTableView numberOfSelectedRows]];
-	    
-	    //NSArray *rules = [[self model] rules];
-	    NSArray *rules = [rulesController arrangedObjects];
-	    Rule *rule;
-	    
-	    unsigned int idx = [rowIdx firstIndex];
-	    
-	    while (idx != NSNotFound) {
-		rule = [rules objectAtIndex:idx];
-		[rows addObject:rule];
-		[actualClassNames addObject:[[rule rhs] assignmentClass]];
-		
-		idx = [rowIdx indexGreaterThanIndex:idx];
-	    }
-	    
-	    EOKeyValueArchiver *archiver = [[EOKeyValueArchiver alloc] init];
-	    
-	    [archiver encodeObject:rows forKey:@"rules"];
-	    [archiver encodeObject:actualClassNames forKey:@"acn"];
-	    
-	    NSDictionary *plist = [archiver dictionary];
-	    
-	    NSPasteboard *pb = [NSPasteboard generalPasteboard];
-	    
-	    [pb declareTypes:[NSArray arrayWithObject:@"D2WRules"] owner:self];
-	    [pb setPropertyList:plist forType:@"D2WRules"];
-	}
+		if ([rulesTableView numberOfSelectedRows] > 0) {
+			NSIndexSet *rowIdx = [rulesTableView selectedRowIndexes];
+			NSMutableArray *rows = [NSMutableArray arrayWithCapacity:[rulesTableView numberOfSelectedRows]];
+			NSMutableArray *actualClassNames = [NSMutableArray arrayWithCapacity:[rulesTableView numberOfSelectedRows]];
+			
+			//NSArray *rules = [[self model] rules];
+			NSArray *rules = [rulesController arrangedObjects];
+			Rule *rule;
+			
+			unsigned int idx = [rowIdx firstIndex];
+			
+			while (idx != NSNotFound) {
+				rule = [rules objectAtIndex:idx];
+				[rows addObject:rule];
+				[actualClassNames addObject:[[rule rhs] assignmentClass]];
+				
+				idx = [rowIdx indexGreaterThanIndex:idx];
+			}
+			
+			EOKeyValueArchiver *archiver = [[EOKeyValueArchiver alloc] init];
+			
+			[archiver encodeObject:rows forKey:@"rules"];
+			[archiver encodeObject:actualClassNames forKey:@"acn"];
+			
+			NSDictionary *plist = [archiver dictionary];
+			
+			NSPasteboard *pb = [NSPasteboard generalPasteboard];
+			
+			[pb declareTypes:[NSArray arrayWithObject:@"D2WRules"] owner:self];
+			[pb setPropertyList:plist forType:@"D2WRules"];
+		}
     }
+}
+
+- (IBAction)cut:(id)sender {
+	[self copy:sender];
+	[self remove:sender];
 }
 
 - (IBAction)paste:(id)sender {
@@ -293,7 +297,7 @@
 - (BOOL)validateMenuItem:(NSMenuItem *)item {
     NSString *title = [item title];
     
-    if (([title isEqualToString:@"Copy"] || [[item title] isEqualToString:@"Duplicate"]) && [rulesTableView numberOfSelectedRows] == 0) {
+    if (([title isEqualToString:@"Copy"] || [title isEqualToString:@"Cut"] || [[item title] isEqualToString:@"Duplicate"]) && [rulesTableView numberOfSelectedRows] == 0) {
 	return NO;
     } else if ([title isEqualToString:@"Paste"]) {
 	NSPasteboard *pb = [NSPasteboard generalPasteboard];
