@@ -28,7 +28,7 @@
 	<key>CFBundleExecutable</key>
 	<string>RuleModeler</string>
 	<key>CFBundleIconFile</key>
-	<string></string>
+	<string>appIcon.icns</string>
 	<key>CFBundleIdentifier</key>
 	<string>ca.ucalgary.commons.rulemodeler</string>
 	<key>CFBundleInfoDictionaryVersion</key>
@@ -38,7 +38,7 @@
 	<key>CFBundleSignature</key>
 	<string>WoRm</string>
 	<key>CFBundleVersion</key>
-	<string>0.5</string>
+	<string>1.0</string>
 	<key>NSMainNibFile</key>
 	<string>MainMenu</string>
 	<key>NSPrincipalClass</key>
