@@ -43,6 +43,10 @@
     return [NSString stringWithFormat:@"%@", [_value description]];
 }
 
+- (void)setValueDescription:(NSString *)value {
+    [self setValue: value];
+}
+
 - (NSString *)description {
     return [NSString stringWithFormat:@"(%@) %@ = %@", _assignmentClass, [_keyPath description], [_value description]];
 }
