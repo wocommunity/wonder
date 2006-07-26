@@ -16,6 +16,8 @@ import org.apache.log4j.Logger;
 import com.webobjects.appserver.*;
 import com.webobjects.foundation.*;
 
+import er.extensions.ERXRuntimeUtilities.*;
+
 /**
 * Collection of handy {java.io.File} utilities.
  */
@@ -193,28 +195,18 @@ public class ERXFileUtilities {
         args.addObject("/usr/bin/scp");
         args.addObject("-B");
         args.addObject("-q");
-        args.addObject("-o"); args.add("StrictHostKeyChecking=no");
+        args.addObject("-o"); 
+        args.addObject("StrictHostKeyChecking=no");
         args.addObject(((srcHost != null) ? (srcHost + ":") : "") + srcPath);
         args.addObject(((dstHost != null) ? (dstHost + ":") : "") + dstPath);
 
         String[] cmd = ERXArrayUtilities.toStringArray(args);
-
-        Process task = null;
         try {
-            task = Runtime.getRuntime().exec(cmd);
-            while (true) {
-                try { task.waitFor(); break; }
-                catch (InterruptedException e) {}
-            }
-            if (task.exitValue() != 0) {
-                BufferedReader err = new BufferedReader(new InputStreamReader(task.getErrorStream()));
-                String message = err.readLine();
-                throw new IOException("Unable to remote copy file: (exit status = " + task.exitValue() + ") " + message + "\n");
-            }
-        } finally {
-            ERXExtensions.freeProcessResources(task);
+            ERXRuntimeUtilities.execute(cmd, null, null, 0L);
+        } catch (TimeoutException e) {
+            throw new IOException("Command timed out");
         }
-    }
+   }
 
     /**
         * Copy a file across hosts using scp.
