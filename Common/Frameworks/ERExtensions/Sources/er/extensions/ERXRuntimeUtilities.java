@@ -142,7 +142,7 @@ public class ERXRuntimeUtilities {
     public final static Result execute(String[] command, String[] envp,
             File dir, long timeout) throws IOException, TimeoutException {
         File outputFile = null;
-
+        int exitValue = -1;
         Runtime rt = Runtime.getRuntime();
         Process p = null;
         StreamReader isr = null;
@@ -171,13 +171,13 @@ public class ERXRuntimeUtilities {
             esr = new StreamReader(p.getErrorStream());
 
             if (timeout > 0) {
-                final Process pp = p;
                 TimeoutTimerTask task = new TimeoutTimerTask(p);
                 Timer timer = new Timer();
                 timer.schedule(task, timeout);
                 boolean wasStopped = false;
                 try {
                     p.waitFor();
+                    exitValue = p.exitValue();
                 } catch (InterruptedException ex) {
                     wasStopped = true;
                 }
@@ -189,6 +189,7 @@ public class ERXRuntimeUtilities {
                 // wait for the result of the process
                 try {
                     p.waitFor();
+                    exitValue = p.exitValue();
                 } catch (InterruptedException ex) {
                 }
             }
@@ -209,7 +210,7 @@ public class ERXRuntimeUtilities {
             if (outputFile != null)
                 outputFile.delete();
         }
-        return new Result(isr.getResult(), esr.getResult());
+        return new Result(exitValue, isr.getResult(), esr.getResult());
 
     }
 
@@ -245,9 +246,9 @@ public class ERXRuntimeUtilities {
     }
 
     public static class StreamReader {
-        byte[] result = null;
-        boolean finished = false;
-        IOException iox;
+        private byte[] _result = null;
+        private boolean _finished = false;
+        private IOException _iox;
         
         public StreamReader(final InputStream is) {
 
@@ -261,13 +262,13 @@ public class ERXRuntimeUtilities {
                         while ((read = is.read(buf)) != -1) {
                             bout.write(buf, 0, read);
                         }
-                        result = bout.toByteArray();
+                        _result = bout.toByteArray();
                     } catch (IOException e) {
-                        iox = e;
-                        result =  bout.toByteArray();
+                        _iox = e;
+                        _result =  bout.toByteArray();
                     } finally {
                         synchronized (StreamReader.this) {
-                            finished = true;
+                            _finished = true;
                             StreamReader.this.notifyAll();
                         }
                      }
@@ -279,7 +280,7 @@ public class ERXRuntimeUtilities {
         }
         public byte[] getResult() {
             synchronized (this) {
-                if(!finished) {
+                if(!_finished) {
                     try {
                         StreamReader.this.wait();
                     } catch (InterruptedException e) {
@@ -287,13 +288,13 @@ public class ERXRuntimeUtilities {
                     }
                 }
             }
-            return result;
+            return _result;
         }
         public boolean isFinished() {
-            return finished;
+            return _finished;
         }
         public IOException getException() {
-            return iox;
+            return _iox;
         }
         public String getResultAsString() {
             return getResult() == null ? null : new String(getResult());
@@ -302,21 +303,28 @@ public class ERXRuntimeUtilities {
 
     public static class Result {
 
-        private byte[] response, error;
-
-        public Result(byte[] _response, byte[] _error) {
-            this.response = _response;
-            this.error = _error;
+        private byte[] _response, _error;
+        private int _exitValue;
+        public Result(int exitValue, byte[] response, byte[] error) {
+            _exitValue = exitValue;
+            _response = response;
+            _error = error;
         }
         
         public byte[] getResponse() {
-            return response;
+            return _response;
         }
         public byte[] getError() {
-            return error;
+            return _error;
+        }
+        public int getExitValue() {
+            return _exitValue;
         }
         public String getResponseAsString() {
             return getResponse() == null ? null : new String(getResponse());
+        }
+        public String getErrorAsString() {
+            return getError() == null ? null : new String(getError());
         }
     }
 
@@ -328,24 +336,23 @@ public class ERXRuntimeUtilities {
     }
 
     public static class TimeoutTimerTask extends TimerTask {
-        Process p;
+        private Process _p;
+        private boolean _didTimeout = false;
 
-        boolean didTimeout = false;
-
-        public TimeoutTimerTask(Process _p) {
-            this.p = _p;
+        public TimeoutTimerTask(Process p) {
+            _p = p;
         }
 
         public boolean didTimeout() {
-            return didTimeout;
+            return _didTimeout;
         }
 
         public void run() {
             try {
-                p.exitValue();
+                _p.exitValue();
             } catch (IllegalThreadStateException e) {
-                didTimeout = true;
-                p.destroy();
+                _didTimeout = true;
+                _p.destroy();
             }
         }
     }
