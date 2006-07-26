@@ -202,7 +202,10 @@ public class ERXFileUtilities {
 
         String[] cmd = ERXArrayUtilities.toStringArray(args);
         try {
-            ERXRuntimeUtilities.execute(cmd, null, null, 0L);
+            Result result = ERXRuntimeUtilities.execute(cmd, null, null, 0L);
+            if(result.getExitValue() != 0) {
+                throw new IOException("Unable to remote copy file: (exit status = " + result.getExitValue() + ") " + result.getErrorAsString() + "\n");
+            }
         } catch (TimeoutException e) {
             throw new IOException("Command timed out");
         }
