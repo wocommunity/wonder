@@ -39,14 +39,25 @@ SelectObject : AjaxUpdateLink {
 	action = selectObject;
 }
 
+Slider :  AjaxSlider {
+	orientation = "horizontal";
+	value = dg.currentBatchIndex;
+	minimum = 0;
+	maximum = dg.batchCount;
+	//onSlide = "function(v) {$('value').innerHTML = v}";
+	//onChange = "function(v) {$('value').innerHTML = v}";
+	updateContainerID = "tableBody";
+}
+
+
 PrevBatch : AjaxUpdateLink {
 	updateContainerID = "tableBody";
-	action = dg.displayPreviousBatch;
+	action = previousBatch;
 }
 
 NextBatch : AjaxUpdateLink {
 	updateContainerID = "tableBody";
-	action = dg.displayNextBatch;
+	action = nextBatch;
 }
 
 SortByName : AjaxUpdateLink {
