@@ -3,6 +3,7 @@ Link : WOGenericContainer {
 	href = "#";
 	onClick = onClick;
 	class = ^class;
+	id = ^id;
 }
 
 Content : WOComponentContent {

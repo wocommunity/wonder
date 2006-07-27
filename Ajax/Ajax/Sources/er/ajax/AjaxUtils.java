@@ -160,7 +160,7 @@ public class AjaxUtils {
     String senderID = context.senderID();
     String invokeWOElementID = request.stringFormValueForKey("invokeWOElementID");
     WOComponent wocomponent = context.component();
-    boolean shouldHandleRequest = elementID != null && (elementID.equals(senderID) || (invokeWOElementID != null && invokeWOElementID.equals(elementID)));
+    boolean shouldHandleRequest = elementID != null && (elementID.startsWith(senderID) || (invokeWOElementID != null && invokeWOElementID.equals(elementID)));
     return shouldHandleRequest;
   }
 
