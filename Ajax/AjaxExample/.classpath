@@ -7,5 +7,6 @@
 	<classpathentry kind="con" path="org.objectstyle.wolips.WO_CLASSPATH/JavaWOExtensions/Ajax/JavaEOAccess/JavaEOControl/JavaFoundation/JavaJDBCAdaptor/JavaWebObjects/JavaXML"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="/Library/WebObjects/Extensions/servlet.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/JavaWOExtensions"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

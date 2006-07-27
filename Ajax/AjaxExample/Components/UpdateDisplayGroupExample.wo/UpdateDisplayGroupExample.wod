@@ -1,0 +1,78 @@
+Conditional1: WOConditional {
+	condition = dg.selectedObject;
+}
+
+Editor : AjaxUpdateContainer {
+	id = "editor";
+	elementName = "div";
+	class = "editor";
+}
+
+Form1: WOForm {
+}
+
+Millis: WOString {
+	value = millis;
+}
+
+Length: WOString {
+	value = current.value;
+}
+
+Name: WOString {
+	value = current.name;
+}
+
+RefreshLink : AjaxUpdateLink {
+	updateContainerID = "tableBody";
+	action = save;
+}
+RowRepetition: WORepetition { 	
+	list = dg.displayedObjects;
+	item = current;
+}
+
+SaveButton: WOSubmitButton {
+	action = save;
+	value = "Save";
+}
+
+SelectObject : AjaxUpdateLink {
+	updateContainerID = "editor";
+	action = selectObject;
+}
+
+PrevBatch : AjaxUpdateLink {
+	updateContainerID = "tableBody";
+	action = dg.displayPreviousBatch;
+}
+
+NextBatch : AjaxUpdateLink {
+	updateContainerID = "tableBody";
+	action = dg.displayNextBatch;
+}
+
+SortByName : AjaxUpdateLink {
+	updateContainerID = "tableBody";
+	action = sortByName;
+}
+
+SortByValue : AjaxUpdateLink {
+	updateContainerID = "tableBody";
+	action = sortByValue;
+}
+
+TableBody : AjaxUpdateContainer {
+	id = "tableBody";
+	elementName = "tbody";
+	class = "tableBody";
+}
+
+EditValue: WOTextField {
+	value = dg.selectedObject.value;
+	numberformat = "0";
+}
+
+EditName: WOTextField {
+	value = dg.selectedObject.name;
+}
