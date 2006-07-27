@@ -39,14 +39,6 @@ public class AjaxSubmitButton extends AjaxDynamicElement {
   }
   
   public void appendToResponse(WOResponse response, WOContext context) {
-    //    function addComment(e) { 
-    //      // submit the form using Ajax 
-    //      new Ajax.Request("comment.php", { 
-    //        parameters : Form.serialize(this), 
-    //        onSuccess : updateComment 
-    //      }); 
-    //      Event.stop(e); 
-    //     } 
 	  WOComponent component = context.component();
 
 	  response.appendContentString("<input ");
@@ -62,7 +54,6 @@ public class AjaxSubmitButton extends AjaxDynamicElement {
 	  appendTagAttributeToResponse(response, "id", valueForBinding("id", component ));
 	  StringBuffer sb = new StringBuffer();
 	  sb.append("new Ajax.Request(this.form.action,");
-	  //sb.append("new Ajax.Request(\"" + context.componentActionURL() + "\",");
 	  NSDictionary options = createAjaxOptions(component);
 	  AjaxOptions.appendToBuffer(options, sb, context);
 	  sb.append(");");
@@ -81,8 +72,10 @@ public class AjaxSubmitButton extends AjaxDynamicElement {
 
   protected WOActionResults handleRequest(WORequest worequest, WOContext wocontext) {
 	  WOComponent wocomponent = wocontext.component();
-	  Object obj;
+	  WOResponse result = null;
 	  if(!disabledInComponent(wocomponent)) {
+		  Object obj;
+		  result = AjaxUtils.createResponse(wocontext);
 		  boolean pull = wocontext._isMultipleSubmitForm();
 		  pull = (pull && worequest.formValueForKey(nameInContext(wocontext, wocomponent)) != null) || !pull ;
 		  if(pull) {
@@ -91,8 +84,14 @@ public class AjaxSubmitButton extends AjaxDynamicElement {
 			  if(obj == null)
 				  obj = wocontext.page();
 		  }
+		  String updateContainerID = (String) valueForBinding("updateContainerID", wocomponent);
+		  if(updateContainerID != null) {
+			  result.setHeader("text/javascript", "content-type");
+			  result.setContent("new Ajax.Updater('"+updateContainerID+"', $('"+updateContainerID+"').getAttribute('updateUrl'), {})");
+		  }
 	  }
-	  return null;
+	  
+	  return result;
   }
 
 }
