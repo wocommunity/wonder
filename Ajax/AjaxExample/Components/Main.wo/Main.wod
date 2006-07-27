@@ -14,6 +14,10 @@ UpdatesLink : WOHyperlink {
 	pageName = "UpdaterExample";
 }
 
+UpdateDisplayGroupLink : WOHyperlink {
+	pageName = "UpdateDisplayGroupExample";
+}
+
 DragAndDropLink : WOHyperlink {
 	pageName = "DragAndDropExample";
 }
