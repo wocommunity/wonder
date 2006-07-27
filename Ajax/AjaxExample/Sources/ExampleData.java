@@ -24,6 +24,10 @@ public class ExampleData {
 	public String name;
 	public int value;
 	
+	public String toString() {
+		return  "<" + name + ": " + value + ">";
+	}
+	
 	private static NSMutableArray examples;
 	
 	public static NSArray exampleValues() {
@@ -65,6 +69,6 @@ public class ExampleData {
 					EOSortOrdering.sortOrderingWithKey("name", EOSortOrdering.CompareAscending)));
 
 		}
-		return examples;
+		return examples.immutableClone();
 	}
 }

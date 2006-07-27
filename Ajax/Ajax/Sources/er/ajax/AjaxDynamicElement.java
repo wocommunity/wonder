@@ -3,6 +3,8 @@ package er.ajax;
 import org.apache.log4j.Logger;
 
 import com.webobjects.appserver.WOActionResults;
+import com.webobjects.appserver.WOAssociation;
+import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WODynamicElement;
 import com.webobjects.appserver.WOElement;
@@ -13,10 +15,31 @@ import com.webobjects.foundation.NSDictionary;
 public abstract class AjaxDynamicElement extends WODynamicElement {
   protected Logger log = Logger.getLogger(getClass());
   private WOElement _children;
-
+  private NSDictionary _associations;
+  
   public AjaxDynamicElement(String name, NSDictionary associations, WOElement children) {
     super(name, associations, children);
     _children = children;
+    _associations = associations;
+  }
+  
+  public NSDictionary associations() {
+	  return _associations;
+  }
+  
+  public Object valueForBinding(String name, WOComponent component) {
+	  WOAssociation association = (WOAssociation) _associations.objectForKey(name);
+	  if(association != null) {
+		  return association.valueInComponent(component);
+	  }
+	  return null;
+  }
+  
+  public void setValueForBinding(Object value, String name, WOComponent component) {
+	  WOAssociation association = (WOAssociation) _associations.objectForKey(name);
+	  if(association != null) {
+		   association.setValue(value, component);
+	  }
   }
 
   protected void addScriptResourceInHead(WOContext context, WOResponse response, String fileName) {
@@ -48,6 +71,12 @@ public abstract class AjaxDynamicElement extends WODynamicElement {
     addRequiredWebResources(response, context);
   }
 
+  public void appendTagAttributeToResponse(WOResponse response, String name, Object object) {
+	  if(object != null) {
+		  response._appendTagAttributeAndValue(name, object.toString(), true);
+	  }
+  }
+  
   protected void appendChildrenToResponse(WOResponse response, WOContext context) {
     if (_children != null) {
       _children.appendToResponse(response, context);
