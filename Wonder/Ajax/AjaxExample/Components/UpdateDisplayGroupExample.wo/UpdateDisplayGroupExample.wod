@@ -23,18 +23,15 @@ Name: WOString {
 	value = current.name;
 }
 
-RefreshLink : AjaxUpdateLink {
-	updateContainerID = "tableBody";
-	action = save;
-}
 RowRepetition: WORepetition { 	
 	list = dg.displayedObjects;
 	item = current;
 }
 
-SaveButton: WOSubmitButton {
+SaveButton: AjaxSubmitButton {
 	action = save;
 	value = "Save";
+	onSuccess = "new Ajax.Updater('tableBody', $('tableBody').getAttribute('updateUrl'), {})";
 }
 
 SelectObject : AjaxUpdateLink {

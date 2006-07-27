@@ -11,375 +11,375 @@
             isa = PBXFileReference;
             lastKnownFileType = sourcecode.java;
             name = AjaxUtils.java;
-            path = Sources/er/ajax/AjaxUtils.java;
-            sourceTree = "<group>";
+            path = /Users/ak/Wonder/Ajax/Ajax/Sources/er/ajax/AjaxUtils.java;
+            sourceTree = "<absolute>";
         };
         000000000000000000000002 = 
         {
             isa = PBXFileReference;
             lastKnownFileType = sourcecode.java;
             name = AjaxUpdateLink.java;
-            path = Sources/er/ajax/AjaxUpdateLink.java;
-            sourceTree = "<group>";
+            path = /Users/ak/Wonder/Ajax/Ajax/Sources/er/ajax/AjaxUpdateLink.java;
+            sourceTree = "<absolute>";
         };
         000000000000000000000003 = 
         {
             isa = PBXFileReference;
             lastKnownFileType = sourcecode.java;
             name = AjaxUpdateContainer.java;
-            path = Sources/er/ajax/AjaxUpdateContainer.java;
-            sourceTree = "<group>";
+            path = /Users/ak/Wonder/Ajax/Ajax/Sources/er/ajax/AjaxUpdateContainer.java;
+            sourceTree = "<absolute>";
         };
         000000000000000000000004 = 
         {
             isa = PBXFileReference;
             lastKnownFileType = sourcecode.java;
             name = AjaxSubmitButton.java;
-            path = Sources/er/ajax/AjaxSubmitButton.java;
-            sourceTree = "<group>";
+            path = /Users/ak/Wonder/Ajax/Ajax/Sources/er/ajax/AjaxSubmitButton.java;
+            sourceTree = "<absolute>";
         };
         000000000000000000000005 = 
         {
             isa = PBXFileReference;
             lastKnownFileType = sourcecode.java;
             name = AjaxSortableList.java;
-            path = Sources/er/ajax/AjaxSortableList.java;
-            sourceTree = "<group>";
+            path = /Users/ak/Wonder/Ajax/Ajax/Sources/er/ajax/AjaxSortableList.java;
+            sourceTree = "<absolute>";
         };
         000000000000000000000006 = 
         {
             isa = PBXFileReference;
             lastKnownFileType = sourcecode.java;
             name = AjaxSlider.java;
-            path = Sources/er/ajax/AjaxSlider.java;
-            sourceTree = "<group>";
+            path = /Users/ak/Wonder/Ajax/Ajax/Sources/er/ajax/AjaxSlider.java;
+            sourceTree = "<absolute>";
         };
         000000000000000000000007 = 
         {
             isa = PBXFileReference;
             lastKnownFileType = sourcecode.java;
             name = AjaxRoundEffect.java;
-            path = Sources/er/ajax/AjaxRoundEffect.java;
-            sourceTree = "<group>";
+            path = /Users/ak/Wonder/Ajax/Ajax/Sources/er/ajax/AjaxRoundEffect.java;
+            sourceTree = "<absolute>";
         };
         000000000000000000000008 = 
         {
             isa = PBXFileReference;
             lastKnownFileType = sourcecode.java;
             name = AjaxProxy.java;
-            path = Sources/er/ajax/AjaxProxy.java;
-            sourceTree = "<group>";
+            path = /Users/ak/Wonder/Ajax/Ajax/Sources/er/ajax/AjaxProxy.java;
+            sourceTree = "<absolute>";
         };
         000000000000000000000009 = 
         {
             isa = PBXFileReference;
             lastKnownFileType = sourcecode.java;
             name = AjaxOptions.java;
-            path = Sources/er/ajax/AjaxOptions.java;
-            sourceTree = "<group>";
+            path = /Users/ak/Wonder/Ajax/Ajax/Sources/er/ajax/AjaxOptions.java;
+            sourceTree = "<absolute>";
         };
         00000000000000000000000a = 
         {
             isa = PBXFileReference;
             lastKnownFileType = sourcecode.java;
             name = AjaxOption.java;
-            path = Sources/er/ajax/AjaxOption.java;
-            sourceTree = "<group>";
+            path = /Users/ak/Wonder/Ajax/Ajax/Sources/er/ajax/AjaxOption.java;
+            sourceTree = "<absolute>";
         };
         00000000000000000000000b = 
         {
             isa = PBXFileReference;
             lastKnownFileType = sourcecode.java;
             name = AjaxInPlaceEditor.java;
-            path = Sources/er/ajax/AjaxInPlaceEditor.java;
-            sourceTree = "<group>";
+            path = /Users/ak/Wonder/Ajax/Ajax/Sources/er/ajax/AjaxInPlaceEditor.java;
+            sourceTree = "<absolute>";
         };
         00000000000000000000000c = 
         {
             isa = PBXFileReference;
             lastKnownFileType = sourcecode.java;
             name = AjaxDynamicElement.java;
-            path = Sources/er/ajax/AjaxDynamicElement.java;
-            sourceTree = "<group>";
+            path = /Users/ak/Wonder/Ajax/Ajax/Sources/er/ajax/AjaxDynamicElement.java;
+            sourceTree = "<absolute>";
         };
         00000000000000000000000d = 
         {
             isa = PBXFileReference;
             lastKnownFileType = sourcecode.java;
             name = AjaxDroppable.java;
-            path = Sources/er/ajax/AjaxDroppable.java;
-            sourceTree = "<group>";
+            path = /Users/ak/Wonder/Ajax/Ajax/Sources/er/ajax/AjaxDroppable.java;
+            sourceTree = "<absolute>";
         };
         00000000000000000000000e = 
         {
             isa = PBXFileReference;
             lastKnownFileType = sourcecode.java;
             name = AjaxDraggable.java;
-            path = Sources/er/ajax/AjaxDraggable.java;
-            sourceTree = "<group>";
+            path = /Users/ak/Wonder/Ajax/Ajax/Sources/er/ajax/AjaxDraggable.java;
+            sourceTree = "<absolute>";
         };
         00000000000000000000000f = 
         {
             isa = PBXFileReference;
             lastKnownFileType = sourcecode.java;
             name = AjaxComponent.java;
-            path = Sources/er/ajax/AjaxComponent.java;
-            sourceTree = "<group>";
+            path = /Users/ak/Wonder/Ajax/Ajax/Sources/er/ajax/AjaxComponent.java;
+            sourceTree = "<absolute>";
         };
         000000000000000000000010 = 
         {
             isa = PBXFileReference;
             lastKnownFileType = sourcecode.java;
             name = AjaxAutoComplete.java;
-            path = Sources/er/ajax/AjaxAutoComplete.java;
-            sourceTree = "<group>";
+            path = /Users/ak/Wonder/Ajax/Ajax/Sources/er/ajax/AjaxAutoComplete.java;
+            sourceTree = "<absolute>";
         };
         000000000000000000000011 = 
         {
             isa = PBXFileReference;
             lastKnownFileType = sourcecode.java;
             name = AjaxAccordionTab.java;
-            path = Sources/er/ajax/AjaxAccordionTab.java;
-            sourceTree = "<group>";
+            path = /Users/ak/Wonder/Ajax/Ajax/Sources/er/ajax/AjaxAccordionTab.java;
+            sourceTree = "<absolute>";
         };
         000000000000000000000012 = 
         {
             isa = PBXFileReference;
             lastKnownFileType = sourcecode.java;
             name = AjaxAccordion.java;
-            path = Sources/er/ajax/AjaxAccordion.java;
-            sourceTree = "<group>";
+            path = /Users/ak/Wonder/Ajax/Ajax/Sources/er/ajax/AjaxAccordion.java;
+            sourceTree = "<absolute>";
         };
         000000000000000000000013 = 
         {
             isa = PBXFileReference;
             lastKnownFileType = sourcecode.java;
             name = NSTimestampSerializer.java;
-            path = Sources/com/metaparadigm/jsonrpc/NSTimestampSerializer.java;
-            sourceTree = "<group>";
+            path = /Users/ak/Wonder/Ajax/Ajax/Sources/com/metaparadigm/jsonrpc/NSTimestampSerializer.java;
+            sourceTree = "<absolute>";
         };
         000000000000000000000014 = 
         {
             isa = PBXFileReference;
             lastKnownFileType = sourcecode.java;
             name = NSSetSerializer.java;
-            path = Sources/com/metaparadigm/jsonrpc/NSSetSerializer.java;
-            sourceTree = "<group>";
+            path = /Users/ak/Wonder/Ajax/Ajax/Sources/com/metaparadigm/jsonrpc/NSSetSerializer.java;
+            sourceTree = "<absolute>";
         };
         000000000000000000000015 = 
         {
             isa = PBXFileReference;
             lastKnownFileType = sourcecode.java;
             name = NSDictionarySerializer.java;
-            path = Sources/com/metaparadigm/jsonrpc/NSDictionarySerializer.java;
-            sourceTree = "<group>";
+            path = /Users/ak/Wonder/Ajax/Ajax/Sources/com/metaparadigm/jsonrpc/NSDictionarySerializer.java;
+            sourceTree = "<absolute>";
         };
         000000000000000000000016 = 
         {
             isa = PBXFileReference;
             lastKnownFileType = sourcecode.java;
             name = NSArraySerializer.java;
-            path = Sources/com/metaparadigm/jsonrpc/NSArraySerializer.java;
-            sourceTree = "<group>";
+            path = /Users/ak/Wonder/Ajax/Ajax/Sources/com/metaparadigm/jsonrpc/NSArraySerializer.java;
+            sourceTree = "<absolute>";
         };
         000000000000000000000017 = 
         {
             isa = PBXFileReference;
             lastKnownFileType = sourcecode.java;
             name = EOEnterpriseObjectSerializer.java;
-            path = Sources/com/metaparadigm/jsonrpc/EOEnterpriseObjectSerializer.java;
-            sourceTree = "<group>";
+            path = /Users/ak/Wonder/Ajax/Ajax/Sources/com/metaparadigm/jsonrpc/EOEnterpriseObjectSerializer.java;
+            sourceTree = "<absolute>";
         };
         000000000000000000000018 = 
         {
             isa = PBXFileReference;
             lastKnownFileType = sourcecode.java;
             name = AjaxUpdateLink.api;
-            path = Components/AjaxUpdateLink.api;
-            sourceTree = "<group>";
+            path = /Users/ak/Wonder/Ajax/Ajax/Components/AjaxUpdateLink.api;
+            sourceTree = "<absolute>";
         };
         000000000000000000000019 = 
         {
             isa = PBXFileReference;
             lastKnownFileType = sourcecode.java;
             name = AjaxUpdateContainer.api;
-            path = Components/AjaxUpdateContainer.api;
-            sourceTree = "<group>";
+            path = /Users/ak/Wonder/Ajax/Ajax/Components/AjaxUpdateContainer.api;
+            sourceTree = "<absolute>";
         };
         00000000000000000000001a = 
         {
             isa = PBXFileReference;
             lastKnownFileType = sourcecode.java;
             name = AjaxSortableList.api;
-            path = Components/AjaxSortableList.api;
-            sourceTree = "<group>";
+            path = /Users/ak/Wonder/Ajax/Ajax/Components/AjaxSortableList.api;
+            sourceTree = "<absolute>";
         };
         00000000000000000000001b = 
         {
             isa = PBXFileReference;
             lastKnownFileType = sourcecode.java;
             name = AjaxSlider.api;
-            path = Components/AjaxSlider.api;
-            sourceTree = "<group>";
+            path = /Users/ak/Wonder/Ajax/Ajax/Components/AjaxSlider.api;
+            sourceTree = "<absolute>";
         };
         00000000000000000000001c = 
         {
             isa = PBXFileReference;
             lastKnownFileType = sourcecode.java;
             name = AjaxRoundEffect.api;
-            path = Components/AjaxRoundEffect.api;
-            sourceTree = "<group>";
+            path = /Users/ak/Wonder/Ajax/Ajax/Components/AjaxRoundEffect.api;
+            sourceTree = "<absolute>";
         };
         00000000000000000000001d = 
         {
             isa = PBXFileReference;
             lastKnownFileType = sourcecode.java;
             name = AjaxProxy.api;
-            path = Components/AjaxProxy.api;
-            sourceTree = "<group>";
+            path = /Users/ak/Wonder/Ajax/Ajax/Components/AjaxProxy.api;
+            sourceTree = "<absolute>";
         };
         00000000000000000000001e = 
         {
             isa = PBXFileReference;
             lastKnownFileType = sourcecode.java;
             name = AjaxOptions.api;
-            path = Components/AjaxOptions.api;
-            sourceTree = "<group>";
+            path = /Users/ak/Wonder/Ajax/Ajax/Components/AjaxOptions.api;
+            sourceTree = "<absolute>";
         };
         00000000000000000000001f = 
         {
             isa = PBXFileReference;
             lastKnownFileType = sourcecode.java;
             name = AjaxInPlaceEditor.api;
-            path = Components/AjaxInPlaceEditor.api;
-            sourceTree = "<group>";
+            path = /Users/ak/Wonder/Ajax/Ajax/Components/AjaxInPlaceEditor.api;
+            sourceTree = "<absolute>";
         };
         000000000000000000000020 = 
         {
             isa = PBXFileReference;
             lastKnownFileType = sourcecode.java;
             name = AjaxDroppable.api;
-            path = Components/AjaxDroppable.api;
-            sourceTree = "<group>";
+            path = /Users/ak/Wonder/Ajax/Ajax/Components/AjaxDroppable.api;
+            sourceTree = "<absolute>";
         };
         000000000000000000000021 = 
         {
             isa = PBXFileReference;
             lastKnownFileType = sourcecode.java;
             name = AjaxDraggable.api;
-            path = Components/AjaxDraggable.api;
-            sourceTree = "<group>";
+            path = /Users/ak/Wonder/Ajax/Ajax/Components/AjaxDraggable.api;
+            sourceTree = "<absolute>";
         };
         000000000000000000000022 = 
         {
             isa = PBXFileReference;
             lastKnownFileType = sourcecode.java;
             name = AjaxAutoComplete.api;
-            path = Components/AjaxAutoComplete.api;
-            sourceTree = "<group>";
+            path = /Users/ak/Wonder/Ajax/Ajax/Components/AjaxAutoComplete.api;
+            sourceTree = "<absolute>";
         };
         000000000000000000000023 = 
         {
             isa = PBXFileReference;
             lastKnownFileType = sourcecode.java;
             name = AjaxAccordionTab.api;
-            path = Components/AjaxAccordionTab.api;
-            sourceTree = "<group>";
+            path = /Users/ak/Wonder/Ajax/Ajax/Components/AjaxAccordionTab.api;
+            sourceTree = "<absolute>";
         };
         000000000000000000000024 = 
         {
             isa = PBXFileReference;
             lastKnownFileType = sourcecode.java;
             name = AjaxAccordion.api;
-            path = Components/AjaxAccordion.api;
-            sourceTree = "<group>";
+            path = /Users/ak/Wonder/Ajax/Ajax/Components/AjaxAccordion.api;
+            sourceTree = "<absolute>";
         };
         000000000000000000000025 = 
         {
             isa = PBXFileReference;
             lastKnownFileType = folder;
             name = AjaxUpdateLink.wo;
-            path = Components/AjaxUpdateLink.wo;
-            sourceTree = "<group>";
+            path = /Users/ak/Wonder/Ajax/Ajax/Components/AjaxUpdateLink.wo;
+            sourceTree = "<absolute>";
         };
         000000000000000000000026 = 
         {
             isa = PBXFileReference;
             lastKnownFileType = folder;
             name = AjaxUpdateContainer.wo;
-            path = Components/AjaxUpdateContainer.wo;
-            sourceTree = "<group>";
+            path = /Users/ak/Wonder/Ajax/Ajax/Components/AjaxUpdateContainer.wo;
+            sourceTree = "<absolute>";
         };
         000000000000000000000027 = 
         {
             isa = PBXFileReference;
             lastKnownFileType = folder;
             name = AjaxSortableList.wo;
-            path = Components/AjaxSortableList.wo;
-            sourceTree = "<group>";
+            path = /Users/ak/Wonder/Ajax/Ajax/Components/AjaxSortableList.wo;
+            sourceTree = "<absolute>";
         };
         000000000000000000000028 = 
         {
             isa = PBXFileReference;
             lastKnownFileType = folder;
             name = AjaxSlider.wo;
-            path = Components/AjaxSlider.wo;
-            sourceTree = "<group>";
+            path = /Users/ak/Wonder/Ajax/Ajax/Components/AjaxSlider.wo;
+            sourceTree = "<absolute>";
         };
         000000000000000000000029 = 
         {
             isa = PBXFileReference;
             lastKnownFileType = folder;
             name = AjaxProxy.wo;
-            path = Components/AjaxProxy.wo;
-            sourceTree = "<group>";
+            path = /Users/ak/Wonder/Ajax/Ajax/Components/AjaxProxy.wo;
+            sourceTree = "<absolute>";
         };
         00000000000000000000002a = 
         {
             isa = PBXFileReference;
             lastKnownFileType = folder;
             name = AjaxDroppable.wo;
-            path = Components/AjaxDroppable.wo;
-            sourceTree = "<group>";
+            path = /Users/ak/Wonder/Ajax/Ajax/Components/AjaxDroppable.wo;
+            sourceTree = "<absolute>";
         };
         00000000000000000000002b = 
         {
             isa = PBXFileReference;
             lastKnownFileType = folder;
             name = AjaxDraggable.wo;
-            path = Components/AjaxDraggable.wo;
-            sourceTree = "<group>";
+            path = /Users/ak/Wonder/Ajax/Ajax/Components/AjaxDraggable.wo;
+            sourceTree = "<absolute>";
         };
         00000000000000000000002c = 
         {
             isa = PBXFileReference;
             lastKnownFileType = folder;
             name = AjaxAutoComplete.wo;
-            path = Components/AjaxAutoComplete.wo;
-            sourceTree = "<group>";
+            path = /Users/ak/Wonder/Ajax/Ajax/Components/AjaxAutoComplete.wo;
+            sourceTree = "<absolute>";
         };
         00000000000000000000002d = 
         {
             isa = PBXFileReference;
             lastKnownFileType = folder;
             name = AjaxAccordionTab.wo;
-            path = Components/AjaxAccordionTab.wo;
-            sourceTree = "<group>";
+            path = /Users/ak/Wonder/Ajax/Ajax/Components/AjaxAccordionTab.wo;
+            sourceTree = "<absolute>";
         };
         00000000000000000000002e = 
         {
             isa = PBXFileReference;
             lastKnownFileType = folder;
             name = AjaxAccordion.wo;
-            path = Components/AjaxAccordion.wo;
-            sourceTree = "<group>";
+            path = /Users/ak/Wonder/Ajax/Ajax/Components/AjaxAccordion.wo;
+            sourceTree = "<absolute>";
         };
         00000000000000000000002f = 
         {
             isa = PBXFileReference;
             lastKnownFileType = wrapper.framework;
             name = ERJars.framework;
-            path = /Volumes/Home/Wonder/Common/Frameworks/ERJars/build/ERJars.framework;
+            path = /Users/ak/Wonder/Common/Frameworks/ERJars/build/ERJars.framework;
             sourceTree = "<absolute>";
         };
         000000000000000000000030 = 
