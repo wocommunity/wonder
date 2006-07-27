@@ -31,7 +31,7 @@ RowRepetition: WORepetition {
 SaveButton: AjaxSubmitButton {
 	action = save;
 	value = "Save";
-	onSuccess = "new Ajax.Updater('tableBody', $('tableBody').getAttribute('updateUrl'), {})";
+	updateContainerID = "tableBody";
 }
 
 SelectObject : AjaxUpdateLink {
