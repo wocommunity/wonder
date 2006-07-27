@@ -16,7 +16,6 @@ import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 
 public class AjaxRoundEffect extends AjaxDynamicElement {
-  private NSDictionary _associations;
   private WOAssociation _elementNameAssociation;
   private WOAssociation _classAssociation;
   private WOAssociation _generateTagsAssociation;
@@ -24,7 +23,6 @@ public class AjaxRoundEffect extends AjaxDynamicElement {
 
   public AjaxRoundEffect(String name, NSDictionary associations, WOElement children) {
     super(name, associations, children);
-    _associations = associations;
     _elementNameAssociation = (WOAssociation) associations.objectForKey("elementName");
     if (_elementNameAssociation == null) {
       _elementNameAssociation = new WOConstantValueAssociation("div");
@@ -57,7 +55,7 @@ public class AjaxRoundEffect extends AjaxDynamicElement {
     ajaxOptionsArray.addObject(new AjaxOption("blend", AjaxOption.BOOLEAN));
     ajaxOptionsArray.addObject(new AjaxOption("border", AjaxOption.BOOLEAN));
     ajaxOptionsArray.addObject(new AjaxOption("compact", AjaxOption.BOOLEAN));
-    NSMutableDictionary options = AjaxOption.createAjaxOptionsDictionary(ajaxOptionsArray, component, _associations);
+    NSMutableDictionary options = AjaxOption.createAjaxOptionsDictionary(ajaxOptionsArray, component, associations());
     return options;
   }
 

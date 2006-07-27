@@ -21,7 +21,6 @@ import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation.NSValidation.ValidationException;
 
 public class AjaxInPlaceEditor extends AjaxDynamicElement {
-  private NSDictionary _associations;
   private WOAssociation _idAssociation;
   private WOAssociation _elementNameAssociation;
   private WOAssociation _classAssociation;
@@ -33,7 +32,6 @@ public class AjaxInPlaceEditor extends AjaxDynamicElement {
 
   public AjaxInPlaceEditor(String name, NSDictionary associations, WOElement children) {
     super(name, associations, children);
-    _associations = associations;
     _idAssociation = (WOAssociation) associations.objectForKey("id");
     _elementNameAssociation = (WOAssociation) associations.objectForKey("elementName");
     if (_elementNameAssociation == null) {
@@ -74,7 +72,7 @@ public class AjaxInPlaceEditor extends AjaxDynamicElement {
     ajaxOptionsArray.addObject(new AjaxOption("callback", AjaxOption.SCRIPT));
     ajaxOptionsArray.addObject(new AjaxOption("submitOnBlur", AjaxOption.BOOLEAN));
     //ajaxOptionsArray.addObject(new AjaxOption("ajaxOptions", AjaxOption.SCRIPT));
-    NSMutableDictionary options = AjaxOption.createAjaxOptionsDictionary(ajaxOptionsArray, component, _associations);
+    NSMutableDictionary options = AjaxOption.createAjaxOptionsDictionary(ajaxOptionsArray, component, associations());
     return options;
   }
 
