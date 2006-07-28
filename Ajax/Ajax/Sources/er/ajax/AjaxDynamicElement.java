@@ -6,13 +6,13 @@ import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WOAssociation;
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
-import com.webobjects.appserver.WODynamicElement;
 import com.webobjects.appserver.WOElement;
 import com.webobjects.appserver.WORequest;
 import com.webobjects.appserver.WOResponse;
+import com.webobjects.appserver._private.WODynamicGroup;
 import com.webobjects.foundation.NSDictionary;
 
-public abstract class AjaxDynamicElement extends WODynamicElement {
+public abstract class AjaxDynamicElement extends WODynamicGroup {
   protected Logger log = Logger.getLogger(getClass());
   private WOElement _children;
   private NSDictionary _associations;
@@ -27,12 +27,20 @@ public abstract class AjaxDynamicElement extends WODynamicElement {
 	  return _associations;
   }
   
+  public Object valueForBinding(String name, Object defaultValue, WOComponent component) {
+      Object value = valueForBinding(name, component);
+      if(value != null) {
+          return value;
+      }
+      return defaultValue;
+  }
+  
   public Object valueForBinding(String name, WOComponent component) {
-	  WOAssociation association = (WOAssociation) _associations.objectForKey(name);
-	  if(association != null) {
-		  return association.valueInComponent(component);
-	  }
-	  return null;
+      WOAssociation association = (WOAssociation) _associations.objectForKey(name);
+      if(association != null) {
+          return association.valueInComponent(component);
+      }
+      return null;
   }
   
   public void setValueForBinding(Object value, String name, WOComponent component) {
@@ -56,9 +64,8 @@ public abstract class AjaxDynamicElement extends WODynamicElement {
     if (AjaxUtils.shouldHandleRequest(request, context)) {
       result = handleRequest(request, context);
       AjaxUtils.updateMutableUserInfoWithAjaxInfo(context);
-    }
-    else if (_children != null) {
-      result = _children.invokeAction(request, context);
+    } else if (hasChildrenElements()) {
+      result = super.invokeAction(request, context);
     }
     return (WOActionResults) result;
   }
@@ -67,7 +74,6 @@ public abstract class AjaxDynamicElement extends WODynamicElement {
    * Overridden to call {@see #addRequiredWebResources(WOResponse)}.
    */
   public void appendToResponse(WOResponse response, WOContext context) {
-    super.appendToResponse(response, context);
     addRequiredWebResources(response, context);
   }
 
@@ -76,17 +82,9 @@ public abstract class AjaxDynamicElement extends WODynamicElement {
 		  response._appendTagAttributeAndValue(name, object.toString(), true);
 	  }
   }
-  
-  protected void appendChildrenToResponse(WOResponse response, WOContext context) {
-    if (_children != null) {
-      _children.appendToResponse(response, context);
-    }
-  }
 
   public void takeValuesFromRequest(WORequest request, WOContext context) {
-    if (_children != null) {
-      _children.takeValuesFromRequest(request, context);
-    }
+    takeChildrenValuesFromRequest(request, context);
   }
 
   /**
