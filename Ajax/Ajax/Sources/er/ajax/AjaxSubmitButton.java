@@ -56,7 +56,12 @@ public class AjaxSubmitButton extends AjaxDynamicElement {
 	  sb.append("new Ajax.Request(this.form.action,");
 	  NSDictionary options = createAjaxOptions(component);
 	  AjaxOptions.appendToBuffer(options, sb, context);
-	  sb.append(");");
+	  sb.append(")");
+      String onClick = (String)valueForBinding("onClick", component);
+      if(onClick != null) {
+          sb.append(";");
+          sb.append(onClick);
+       }
 	  appendTagAttributeToResponse(response, "onClick", sb.toString());
 	  response.appendContentString(" />");
 	  super.appendToResponse(response, context);
@@ -84,10 +89,10 @@ public class AjaxSubmitButton extends AjaxDynamicElement {
 			  if(obj == null)
 				  obj = wocontext.page();
 		  }
-		  String updateContainerID = (String) valueForBinding("updateContainerID", wocomponent);
-		  if(updateContainerID != null) {
+		  String onClickServer = (String) valueForBinding("onClickServer", wocomponent);
+		  if(onClickServer != null) {
 			  result.setHeader("text/javascript", "content-type");
-			  result.setContent("new Ajax.Updater('"+updateContainerID+"', $('"+updateContainerID+"').getAttribute('updateUrl'), {})");
+			  result.setContent(onClickServer);
 		  }
 	  }
 	  

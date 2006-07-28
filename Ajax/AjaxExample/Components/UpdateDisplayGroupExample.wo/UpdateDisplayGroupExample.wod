@@ -31,7 +31,8 @@ RowRepetition: WORepetition {
 SaveButton: AjaxSubmitButton {
 	action = save;
 	value = "Save";
-	updateContainerID = "tableBody";
+	onClick = "alert('Saved!')";
+	onClickServer = "new Ajax.Updater('tableBody', $('tableBody').getAttribute('updateUrl'), {})";
 }
 
 SelectObject : AjaxUpdateLink {
@@ -44,10 +45,11 @@ Slider :  AjaxSlider {
 	value = dg.currentBatchIndex;
 	minimum = 0;
 	maximum = dg.batchCount;
-	//onSlide = "function(v) {$('value').innerHTML = 'Batch: ' + Math.floor(v)}";
-	onChange = "function(v) {$('value').innerHTML = 'Batch: ' + Math.floor(v)}";
-	//onSlideServer = "new Ajax.Updater('tableBody', $('tableBody').getAttribute('updateUrl'), {})";
-	onChangeServer = "new Ajax.Updater('tableBody', $('tableBody').getAttribute('updateUrl'), {})";
+	//AK: these drag performance quite a bit
+	onSlide = "function(v) {$('value').innerHTML = 'Batch: ' + Math.floor(v)}";
+	onSlideServer = "new Ajax.Updater('tableBody', $('tableBody').getAttribute('updateUrl'), {})";
+	//onChange = "function(v) {$('value').innerHTML = 'Batch: ' + Math.floor(v)}";
+	//onChangeServer = "new Ajax.Updater('tableBody', $('tableBody').getAttribute('updateUrl'), {})";
 }
 
 
