@@ -31,7 +31,8 @@ RowRepetition: WORepetition {
 SaveButton: AjaxSubmitButton {
 	action = save;
 	value = "Save";
-	onClick = "alert('Saved!')";
+	onClick = "alert('Saving')";
+	// onClick = "alert($('tableBody').innerHTML)";
 	onClickServer = "new Ajax.Updater('tableBody', $('tableBody').getAttribute('updateUrl'), {})";
 }
 
@@ -75,7 +76,7 @@ SortByValue : AjaxUpdateLink {
 
 TableBody : AjaxUpdateContainer {
 	id = "tableBody";
-	elementName = "tbody";
+	elementName = "div";
 	class = "tableBody";
 }
 
