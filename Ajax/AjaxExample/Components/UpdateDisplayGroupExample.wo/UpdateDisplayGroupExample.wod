@@ -41,16 +41,24 @@ SelectObject : AjaxUpdateLink {
 	action = selectObject;
 }
 
+CurrentBatchIndex : WOString {
+	value = dg.currentBatchIndex;
+}
+
+BatchCount: WOString {
+	value = dg.batchCount;
+}
+
 Slider :  AjaxSlider {
 	orientation = "horizontal";
 	value = dg.currentBatchIndex;
-	minimum = 0;
+	minimum = 1;
 	maximum = dg.batchCount;
 	//AK: these drag performance quite a bit
-	onSlide = "function(v) {$('value').innerHTML = 'Batch: ' + Math.floor(v)}";
+	onSlide = "function(v) {$('value').innerHTML = Math.floor(v)}";
 	onSlideServer = "new Ajax.Updater('tableBody', $('tableBody').getAttribute('updateUrl'), {})";
-	//onChange = "function(v) {$('value').innerHTML = 'Batch: ' + Math.floor(v)}";
-	//onChangeServer = "new Ajax.Updater('tableBody', $('tableBody').getAttribute('updateUrl'), {})";
+	onChange = "function(v) {$('value').innerHTML = Math.floor(v)}";
+	onChangeServer = "new Ajax.Updater('tableBody', $('tableBody').getAttribute('updateUrl'), {})";
 }
 
 
