@@ -47,8 +47,6 @@ public class AjaxSlider extends AjaxComponent {
         NSMutableDictionary options = new NSMutableDictionary();
         new AjaxOption("axis", AjaxOption.STRING).addToDictionary("orientation", this, options);
         new AjaxOption("sliderValue", AjaxOption.NUMBER).addToDictionary("value", this, options);
-        new AjaxOption("onSlide", AjaxOption.SCRIPT).addToDictionary(this, options);
-        new AjaxOption("onChange", AjaxOption.SCRIPT).addToDictionary(this, options);
         new AjaxOption("values", AjaxOption.ARRAY).addToDictionary("possibleValues", this, options);
         new AjaxOption("alignX", AjaxOption.NUMBER).addToDictionary(this, options);
         new AjaxOption("alignY", AjaxOption.NUMBER).addToDictionary(this, options);
@@ -56,13 +54,24 @@ public class AjaxSlider extends AjaxComponent {
         new AjaxOption("handleImage", AjaxOption.STRING).addToDictionary(this, options);
         new AjaxOption("handleDisabled", AjaxOption.STRING).addToDictionary(this, options);
 
-        String updateContainerID = (String) valueForBinding("updateContainerID");
-        if(updateContainerID != null) {
+        if(hasBinding("onChangeServer")) {
+        	String parent = (String) valueForBinding("onChange");
         	options.setObjectForKey("function(v) {new Ajax.Request('"+context().componentActionURL()
-        			+"', {parameters: '"+context().elementID()+"' + v})}", "onChange");
-        	options.setObjectForKey("function(v) {new Ajax.Request('"+context().componentActionURL()
-        			+"', {parameters: '"+context().elementID()+"=' + v})}", "onSlide");
+        			+"', {parameters: '"+context().elementID()+"=' + v + '&ajaxSlideTrigger=onChange'})"
+        			+(parent != null ? "; var parentFunction = " + parent + "; parentFunction(v);" : "")
+        			+"}", "onChange");
+        } else {
+        	new AjaxOption("onChange", AjaxOption.SCRIPT).addToDictionary(this, options);
         }
+        if(hasBinding("onSlideServer")) {
+        	String parent = (String) valueForBinding("onSlide");
+        	options.setObjectForKey("function(v) {new Ajax.Request('"+context().componentActionURL()
+        			+"', {parameters: '"+context().elementID()+"=' + v + '&ajaxSlideTrigger=onSlide'})"
+        			+(parent != null ? "; var parentFunction = " + parent + "; parentFunction(v);" : "")
+        			+"}", "onSlide");
+        } else {
+        	new AjaxOption("onSlide", AjaxOption.SCRIPT).addToDictionary(this, options);
+         }
         Number min = (Number)valueForBinding("minimum", new Integer(0));
         Number max = (Number)valueForBinding("maximum", new Integer(100));
         options.setObjectForKey("$R(" + min + "," + max + ")", "range");
@@ -92,7 +101,8 @@ public class AjaxSlider extends AjaxComponent {
 
     public void takeValuesFromRequest(WORequest worequest, WOContext wocontext) {
     	try {
-    		Number num = worequest.numericFormValueForKey(wocontext.elementID(), new NSNumberFormatter("0"));
+    		String format = (String) valueForBinding("numberformat", "0");
+    		Number num = worequest.numericFormValueForKey(wocontext.elementID(), new NSNumberFormatter(format));
     		if(num != null) {
     			setValueForBinding(num, "value");
     		}
@@ -103,13 +113,11 @@ public class AjaxSlider extends AjaxComponent {
 	}
 
     protected WOActionResults handleRequest(WORequest worequest, WOContext wocontext) {
-    	WOComponent wocomponent = wocontext.component();
-    	WOResponse result = null;
-    	String updateContainerID = (String) valueForBinding("updateContainerID", wocomponent);
-    	if(updateContainerID != null) {
-    		result = AjaxUtils.createResponse(wocontext);
+    	WOResponse result = AjaxUtils.createResponse(wocontext);
+    	String mode = worequest.stringFormValueForKey("ajaxSlideTrigger");
+    	if(mode != null) {
     		result.setHeader("text/javascript", "content-type");
-    		result.setContent("new Ajax.Updater('"+updateContainerID+"', $('"+updateContainerID+"').getAttribute('updateUrl'), {})");
+    		result.setContent((String)valueForBinding(mode+"Server", ""));
     	}
     	return result;
     }
