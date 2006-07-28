@@ -805,7 +805,6 @@ Object.extend(Object.extend(Ajax.Updater.prototype, Ajax.Request.prototype), {
     var receiver = this.responseIsSuccess() ?
       this.containers.success : this.containers.failure;
     var response = this.transport.responseText;
-
     if (!this.options.evalScripts)
       response = response.stripScripts();
 

@@ -20,15 +20,15 @@
     <body bgcolor=#FFFFFF> There is some stuff above this table. This value shouldn't change: <webobject name="Millis"></webobject>
         <table width="200">
             <thead>
+               <tr>
+                    <th><webobject name="PrevBatch">&lt;&lt;</webobject></th>
+                    <th width="40"><webobject name="NextBatch">&gt;&gt;</webobject></th>
+                </tr>
                 <tr>
                     <th colspan="2"><webobject name="Slider"></webobject></th>
                 </tr>
                 <tr>
                     <th colspan="2"><div id="value"></div></th>
-                </tr>
-               <tr>
-                    <th><webobject name="PrevBatch">&lt;&lt;</webobject></th>
-                    <th><webobject name="NextBatch">&gt;&gt;</webobject></th>
                 </tr>
                  <tr>
                     <th><webobject name="SortByName">Name</webobject></th>
@@ -39,7 +39,7 @@
                 <webobject name="RowRepetition">
                     <tr>
                         <td><webobject name="SelectObject"><webobject name="Name"></webobject></webobject></td>
-                        <td><webobject name="Length"></webobject></td>
+                        <td align="right"><webobject name="Length"></webobject></td>
                     </tr>
                 </webobject>
             </webobject>
