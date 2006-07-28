@@ -21,7 +21,6 @@
     <body bgcolor=#FFFFFF> This value shouldn't change: <webobject name="Millis"></webobject><br>
     	You can sort the entries, drag the slider, click on a name, edit the entry and save it, without ever leaving this page.
         <table width="200">
-            <thead>
                <tr>
                     <th><webobject name="PrevBatch">&lt;&lt;</webobject></th>
                     <th width="40"><webobject name="NextBatch">&gt;&gt;</webobject></th>
@@ -36,14 +35,16 @@
                     <th><webobject name="SortByName">Name</webobject></th>
                     <th><webobject name="SortByValue">Value</webobject></th>
                 </tr>
-            </thead>
+            </table>
             <webobject name="TableBody">
-                <webobject name="RowRepetition">
+                 <table width="200">
+                 	<webobject name="RowRepetition">
                     <tr>
                         <td><webobject name="SelectObject"><webobject name="Name"></webobject></webobject></td>
-                        <td align="right"><webobject name="Length"></webobject></td>
+                        <td align="right" width="40"><webobject name="Length"></webobject></td>
                     </tr>
                 </webobject>
+                </table>
             </webobject>
         </table>
         <webobject name="Editor">
