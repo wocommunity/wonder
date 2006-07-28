@@ -21,9 +21,7 @@ public class AjaxUpdateLink extends AjaxDynamicElement {
     String actionUrl = context.componentActionURL();
     String id = (String) valueForBinding("updateContainerID", context.component());
     StringBuffer sb = new StringBuffer();
-    sb.append("new Ajax.Updater('");
-    sb.append(id);
-    sb.append("', '");
+    sb.append("new Ajax.Request('");
     sb.append(actionUrl);
     sb.append("', ");
     AjaxOptions.appendToBuffer(options, sb, context);
@@ -47,10 +45,6 @@ public class AjaxUpdateLink extends AjaxDynamicElement {
     NSMutableDictionary options = AjaxOption.createAjaxOptionsDictionary(ajaxOptionsArray, component);
 
     options.setObjectForKey("'get'", "method");
-    String updateContainerID = (String) valueForBinding("updateContainerID", component);
-    if (updateContainerID != null) {
-      options.setObjectForKey("'invokeWOElementID=' + $(" + updateContainerID + ").getAttribute('woElementID')", "parameters");
-    }
 
     return options;
   }
@@ -75,19 +69,19 @@ public class AjaxUpdateLink extends AjaxDynamicElement {
   protected void addRequiredWebResources(WOResponse res, WOContext context) {
       addScriptResourceInHead(context, res, "prototype.js");
       addScriptResourceInHead(context, res, "scriptaculous.js");
-      addScriptResourceInHead(context, res, "effects.js");
-      addScriptResourceInHead(context, res, "builder.js");
-      addScriptResourceInHead(context, res, "dragdrop.js");
-      addScriptResourceInHead(context, res, "controls.js");
   }
 
   protected WOActionResults handleRequest(WORequest request, WOContext context) {
-      WOActionResults results = (WOActionResults) valueForBinding("action", context.component());
+      WOComponent component = context.component();
+      WOActionResults results = (WOActionResults) valueForBinding("action", component);
       if (results == null) {
-          WOResponse response = AjaxUtils.createResponse(context);
-          response.setHeader("text/javascript", "content-type");
-          response.setContent("alert($('tableBody').getAttribute('woElementID'))");
-          // results = response;
+          String updateContainerID = (String) valueForBinding("updateContainerID", component);
+          if(updateContainerID != null) {
+              WOResponse response = AjaxUtils.createResponse(context);
+              response.setHeader("text/javascript", "content-type");
+              response.setContent("new Ajax.Updater('"+updateContainerID+"', $('"+updateContainerID+"').getAttribute('updateUrl'), {})");
+              results = response;
+          }
       }
       return results;
   }
