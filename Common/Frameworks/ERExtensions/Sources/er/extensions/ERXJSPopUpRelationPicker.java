@@ -11,8 +11,6 @@ package er.extensions;
 
 import java.util.*;
 
-import org.apache.log4j.Logger;
-
 import com.webobjects.appserver.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.foundation.*;
@@ -64,8 +62,8 @@ public class ERXJSPopUpRelationPicker extends ERXStatelessComponent {
     }
 
     /** logging support */
-    public final static Logger log = Logger.getLogger(ERXJSPopUpRelationPicker.class);
-    public final static Logger jsLog = Logger.getLogger("er.extensions.ERXJSPopUpRelationPicker.script");
+    public final static ERXLogger log = ERXLogger.getERXLogger(ERXJSPopUpRelationPicker.class);
+    public final static ERXLogger jsLog = ERXLogger.getERXLogger("er.extensions.ERXJSPopUpRelationPicker.script");
 
     protected Integer _size;
     protected String _childDisplayValueName;
@@ -155,6 +153,10 @@ public class ERXJSPopUpRelationPicker extends ERXStatelessComponent {
         return null;
     }
     
+	protected int offsetForChild(Object parent, Object child) {
+		return parent != null ? sortedChildren(parent).indexOfObject(child) : NOT_FOUND;
+    }
+	
     protected Object idForChild(Object parent, Object child) {
         if(parent != null) {
             int offset = sortedChildren(parent).indexOfObject(child);
@@ -259,6 +261,15 @@ public class ERXJSPopUpRelationPicker extends ERXStatelessComponent {
 
         returnString = new StringBuffer(500);
         returnString.append("\n<script language=\"JavaScript\">");
+		String childToSelect = "";
+		if (!multiple() && 
+			childrenSelection()!=null && childrenSelection().count()==1 &&
+			parentSelection()!=null && parentSelection().count()==1) {
+			int childToSelectInt=offsetForChild(parentSelection().objectAtIndex(0), 
+												childrenSelection().objectAtIndex(0));
+			if (childToSelectInt!=NOT_FOUND) childToSelect=""+childToSelectInt;
+		}
+		
         returnString.append("\nvar " + pickerName +" = new ERXJSPopupRelationshipPicker("
         + objectsArrayName + ","
         + "window.document." + formName() + "." + parentSelectName + "," 
@@ -266,7 +277,7 @@ public class ERXJSPopUpRelationPicker extends ERXStatelessComponent {
         + "window.document." + formName() + "." + childSelectName + "," 
         + (childPopUpStringForAll() != null ? "\"" + childPopUpStringForAll() + "\"" : "null")
         +");\n"
-        + (parentPopUpStringForAll() == null ? pickerName + ".parentChanged();"	: "")
+        + (parentPopUpStringForAll() == null ? pickerName + ".parentChanged("+childToSelect+");"	: "")
         +"\n</script>");
         log.debug(returnString);
 		// trigger an update of the parent - this causes the child to be properly set to a sub selection (instead of listing all possible value) when
@@ -411,7 +422,7 @@ public class ERXJSPopUpRelationPicker extends ERXStatelessComponent {
                 if (aChild==defaultChild) defaultChildIndex=j;
             }
             returnString.append("),");
-            if (isSelectedParent(aParent)) {
+            if (isSelectedParent(aParent)) { // in the single case, the parent will be updated when we call parent changed
                 returnString.append(" true");
             } else {
                 returnString.append(" false");

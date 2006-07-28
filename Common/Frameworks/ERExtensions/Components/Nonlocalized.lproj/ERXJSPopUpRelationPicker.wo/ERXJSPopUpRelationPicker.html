@@ -40,8 +40,8 @@ function ERXJSPopupRelationshipPicker_updateSelectControl(selectControl, objects
             	j++;
             }
         }
-        if(selectControl.options.length > 0) {
-            selectControl.options[0].selected = !hasSelection;
+        if(selectControl.options.length > 0 && !hasSelection) {
+            selectControl.options[0].selected = true;
         }
    }
 }
@@ -98,7 +98,7 @@ ERXJSPopupRelationshipPicker.prototype.updateControls = function(children) {
     ERXJSPopupRelationshipPicker_updateSelectControl(this.parentControl,this.objects,this.parentStringForAll);
     ERXJSPopupRelationshipPicker_updateSelectControl(this.childControl,children,this.childStringForAll);
 }
-ERXJSPopupRelationshipPicker.prototype.parentChanged = function() {
+ERXJSPopupRelationshipPicker.prototype.parentChanged = function(selectedChild) {
 	var children = new Array();
 	var hasSelection = false;
 	for(var i = 0; i < this.parentControl.options.length; i++) {
@@ -112,8 +112,12 @@ ERXJSPopupRelationshipPicker.prototype.parentChanged = function() {
 			} else {
 				parent.isSelected = false;
 			}
+			childToSelect = parent.defaultSubItem;
+			if (selectedChild!=null) {
+				childToSelect=selectedChild;
+				}
 			for(var j = 0; j < parent.children.length; j++) {
-				if(j == parent.defaultSubItem) {
+				if(j == childToSelect) {
 					parent.children[j].isSelected = option.selected; 
 				} else {
 					parent.children[j].isSelected = false; 
