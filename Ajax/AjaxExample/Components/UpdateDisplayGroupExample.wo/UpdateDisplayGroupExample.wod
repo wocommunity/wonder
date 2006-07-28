@@ -44,9 +44,10 @@ Slider :  AjaxSlider {
 	value = dg.currentBatchIndex;
 	minimum = 0;
 	maximum = dg.batchCount;
-	//onSlide = "function(v) {$('value').innerHTML = v}";
-	//onChange = "function(v) {$('value').innerHTML = v}";
-	updateContainerID = "tableBody";
+	//onSlide = "function(v) {$('value').innerHTML = 'Batch: ' + Math.floor(v)}";
+	onChange = "function(v) {$('value').innerHTML = 'Batch: ' + Math.floor(v)}";
+	//onSlideServer = "new Ajax.Updater('tableBody', $('tableBody').getAttribute('updateUrl'), {})";
+	onChangeServer = "new Ajax.Updater('tableBody', $('tableBody').getAttribute('updateUrl'), {})";
 }
 
 
