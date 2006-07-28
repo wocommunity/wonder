@@ -15,10 +15,14 @@
 	height:10px;
 	background-color:rgb(155, 0, 255);
 }
+.tableBody {
+	float: left;
+}
 </style>
     </head>
     <body bgcolor=#FFFFFF> This value shouldn't change: <webobject name="Millis"></webobject><br>
     	You can sort the entries, drag the slider, click on a name, edit the entry and save it, without ever leaving this page.
+    	<br>
     	<webobject name="Slider"></webobject>
         <table width="400">
                <tr>
@@ -46,13 +50,15 @@
         </table>
         <webobject name="Editor">
 			<webobject name="Conditional1">
-            <webobject name="Form1">
-                <table border="1">
-                    <tr><td>Name</td><td><webobject name="EditName"></webobject></td></tr>
-                    <tr><td>Value</td><td><webobject name="EditValue"></webobject></td></tr>
-                    <tr><td align="right" colspan="2"><webobject name="SaveButton"></webobject></td></tr>
-                </table>
-            </webobject>
-        </webobject></webobject>
+            	<webobject name="Form1">
+                	<table border="1">
+                    	<tr><td>Name</td><td><webobject name="EditName"></webobject></td></tr>
+                    	<tr><td>Value</td><td><webobject name="EditValue"></webobject></td></tr>
+                    	<tr><td align="right" colspan="2"><webobject name="SaveButton"></webobject></td></tr>
+                	</table>
+            	</webobject>
+        	</webobject>
+        </webobject>
+
         and some stuff below.... </body>
 </html>
