@@ -31,8 +31,7 @@ RowRepetition: WORepetition {
 SaveButton: AjaxSubmitButton {
 	action = save;
 	value = "Save";
-	onClick = "alert('Saving')";
-	// onClick = "alert($('tableBody').innerHTML)";
+	onClick = "$('editor').innerHTML=''";
 	onClickServer = "new Ajax.Updater('tableBody', $('tableBody').getAttribute('updateUrl'), {})";
 }
 
