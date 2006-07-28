@@ -1,6 +1,5 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<wodefinitions>
-	<wo wocomponentcontent="false" class="AjaxSlider.java">
+<?xml version="1.0" encoding="UTF-8"?><wodefinitions>
+	<wo class="AjaxSlider.java" wocomponentcontent="false">
 		<binding name="orientation"/>
 		<binding name="value"/>
 		<binding name="minimum"/>
@@ -14,5 +13,5 @@
 		<binding name="increment"/>
 		<binding name="onSlide"/>
 		<binding name="onChange"/>
-	</wo>
+	<binding defaults="Number Format Strings" name="numberformat"/></wo>
 </wodefinitions>
