@@ -19,3 +19,7 @@ InPlaceEditorNumeric : AjaxInPlaceEditor {
 	value = numericValue;
 	numberformat = "#,#00";
 }
+
+AjaxExampleComponent : AjaxExampleComponent {
+	title = "In-Place Editor";
+}
