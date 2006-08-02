@@ -1,3 +1,7 @@
+AjaxExampleComponent : AjaxExampleComponent {
+	title = "Rounded Borders";
+}
+
 RoundMain1 : AjaxRoundEffect {
 	class = "main1";
 	compact = true;

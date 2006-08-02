@@ -1,5 +1,13 @@
+AjaxExampleComponent : AjaxExampleComponent {
+	title = "Ajax Display Group";
+}
+
 Conditional1: WOConditional {
 	condition = dg.selectedObject;
+}
+Conditional2 : WOConditional {
+	condition = dg.selectedObject;
+	negate = true;
 }
 
 Editor : AjaxUpdateContainer {
@@ -31,13 +39,14 @@ RowRepetition: WORepetition {
 SaveButton: AjaxSubmitButton {
 	action = save;
 	value = "Save";
-	onClick = "$('editor').innerHTML=''";
+	onClick = "$('editor').hide();";
 	onClickServer = "new Ajax.Updater('tableBody', $('tableBody').getAttribute('updateUrl'), {})";
 }
 
 SelectObject : AjaxUpdateLink {
 	updateContainerID = "editor";
 	action = selectObject;
+	onSuccess = "function (v) { $('editor').show(); }";
 }
 
 CurrentBatchIndex : WOString {
