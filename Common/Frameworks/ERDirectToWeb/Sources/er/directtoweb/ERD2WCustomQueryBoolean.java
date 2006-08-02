@@ -43,29 +43,30 @@ public class ERD2WCustomQueryBoolean extends D2WQueryBoolean {
     }
     
     public Object value() {
-    	int index = 0;
-    	if(">".equals(displayGroup().queryOperator().valueForKey(propertyKey()))) {
-    		index = 1;
-    	} else {
-    		index = displayGroup().queryMatch().valueForKey(propertyKey()) != null ? 2 : 0;
-    	}
-     	return queryNumbers.objectAtIndex(index);
+        int index = 0;
+        Object value = displayGroup().queryMatch().valueForKey(propertyKey());
+        if(value != null) {
+            if(value.equals(Boolean.FALSE)) {
+                index = 2;
+            } else {
+                index = 1;
+            }
+        } else {
+            index = 0;
+        }
+        return queryNumbers.objectAtIndex(index);
     }
 
     public void setValue(Object obj) {
-    	displayGroup().queryOperator().removeObjectForKey(propertyKey());
-    	displayGroup().queryMatch().removeObjectForKey(propertyKey());
-    	if(obj.equals(queryNumbers.objectAtIndex(0))) {
-    		log.debug("Don't care");
-    	} else {
-    		displayGroup().queryMatch().takeValueForKey(ERXConstant.ZeroInteger, propertyKey());
-    		if(obj.equals(queryNumbers.objectAtIndex(1))) {
-    			displayGroup().queryOperator().takeValueForKey(">", propertyKey());
-    			log.debug("True");
-    		} else {
-    			log.debug("False");
-    		}
-     	}
+        displayGroup().queryOperator().removeObjectForKey(propertyKey());
+        displayGroup().queryMatch().removeObjectForKey(propertyKey());
+        if(obj.equals(queryNumbers.objectAtIndex(0))) {
+            log.debug("Don't care");
+        } else {
+            Boolean value = (obj.equals(queryNumbers.objectAtIndex(1)) ? Boolean.TRUE : Boolean.FALSE);
+            displayGroup().queryMatch().takeValueForKey(value, propertyKey());
+            log.debug(value);
+        }
     }
     
     public String displayString() {
