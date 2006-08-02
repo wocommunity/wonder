@@ -1,3 +1,7 @@
+AjaxExampleComponent : AjaxExampleComponent {
+	title = "Drag and Drop";
+}
+
 DraggableExample1 : AjaxDraggable {
 	id = "draggableExample1";
 	class = "draggableExample";

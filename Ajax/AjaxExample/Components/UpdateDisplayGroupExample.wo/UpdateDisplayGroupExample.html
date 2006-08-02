@@ -1,11 +1,7 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
-<html>
-    <head>
-        <meta name="generator" content="WOLips Templateengine Plug-in">
-        <title>Update Table example</title>
+<webobject name = "AjaxExampleComponent">
 <style type="text/css">
 .tracker {
-	width: 400px;
+	width: 422px;
 	height: 10px;
 	background-color:rgb(0, 155, 255);
 }
@@ -17,10 +13,27 @@
 }
 .tableBody {
 	float: left;
+	border-style: solid;
+	border-width: 1px;
+	border-color: rgb(0, 0, 0);
+	background-color: rgb(240, 240, 240);
+	margin-right: 20px;
+	padding: 10px;
+}
+
+#editor {
+	position: absolute;
+	left: 300px;
+	top: 200px;
+	background-color: rgb(255, 255, 255);	
+	padding: 5px;
+	border-style: solid;
+	border-color: rgb(0, 0, 0);
+	border-width: 1px;
 }
 </style>
-    </head>
-    <body bgcolor=#FFFFFF> This value shouldn't change: <webobject name="Millis"></webobject><br>
+
+This value shouldn't change: <webobject name="Millis"></webobject><br>
     	You can sort the entries, drag the slider, click on a name, edit the entry and save it, without ever leaving this page.
     	<br>
     	<webobject name="Slider"></webobject>
@@ -48,17 +61,25 @@
                 </table>
             </webobject>
         </table>
+        
         <webobject name="Editor">
-			<webobject name="Conditional1">
+					<webobject name="Conditional1">
             	<webobject name="Form1">
-                	<table border="1">
+                	<table>
                     	<tr><td>Name</td><td><webobject name="EditName"></webobject></td></tr>
                     	<tr><td>Value</td><td><webobject name="EditValue"></webobject></td></tr>
                     	<tr><td align="right" colspan="2"><webobject name="SaveButton"></webobject></td></tr>
                 	</table>
             	</webobject>
         	</webobject>
+					<webobject name="Conditional2">
+						Loading ...
+					</webobject>
         </webobject>
 
         and some stuff below.... </body>
-</html>
+<script>
+	$('editor').hide();
+</script>
+
+</webobject>

@@ -14,5 +14,6 @@ public class Application extends ERXApplication {
         super();
         log.info("Welcome to " + this.name() + " !");
         /* ** put your initialization code in here ** */
+        setAllowsConcurrentRequestHandling(true);
     }
 }

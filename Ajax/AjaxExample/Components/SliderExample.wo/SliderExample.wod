@@ -1,3 +1,6 @@
+AjaxExampleComponent : AjaxExampleComponent {
+	title = "Slider";
+}
 
 AjaxSlider1: AjaxSlider {
 	orientation = "horizontal";

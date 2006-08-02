@@ -17,3 +17,7 @@ SimpleAjaxAutoComplete: AjaxAutoComplete {
 	item = currentValue;
 	displayString = currentValue.name;
 }
+
+AjaxExampleComponent : AjaxExampleComponent {
+	title = "Autocomplete";
+}
