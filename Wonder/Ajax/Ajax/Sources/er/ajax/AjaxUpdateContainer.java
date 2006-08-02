@@ -38,7 +38,7 @@ public class AjaxUpdateContainer extends AjaxDynamicElement {
         ajaxOptionsArray.addObject(new AjaxOption("onException", AjaxOption.SCRIPT));
         ajaxOptionsArray.addObject(new AjaxOption("insertion", AjaxOption.STRING));
         ajaxOptionsArray.addObject(new AjaxOption("evalScripts", AjaxOption.BOOLEAN));
-        NSMutableDictionary options = AjaxOption.createAjaxOptionsDictionary(ajaxOptionsArray, component);
+        NSMutableDictionary options = AjaxOption.createAjaxOptionsDictionary(ajaxOptionsArray, component, associations());
         return options;
     }
 
