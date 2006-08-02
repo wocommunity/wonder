@@ -1,3 +1,7 @@
+AjaxExampleComponent : AjaxExampleComponent {
+	title = "Dependent Lists";
+}
+
 DependentListForm : WOForm {
 	multipleSubmit = true;
 }

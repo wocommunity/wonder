@@ -1,3 +1,7 @@
+AjaxExampleComponent : AjaxExampleComponent {
+	title = "Ajax Update Component";
+}
+
 AjaxUpdateContainer1 : AjaxUpdateContainer {
 	id = "exampleArea";
 	elementName = "div";
