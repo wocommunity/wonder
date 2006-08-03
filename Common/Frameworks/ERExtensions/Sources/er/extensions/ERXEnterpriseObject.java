@@ -69,20 +69,24 @@ public interface ERXEnterpriseObject {
         public void editingContextDidSaveChanges(NSNotification n) {
             EOEditingContext ec = (EOEditingContext) n.object();
             final boolean isNestedEditingContext = ! (ec.parentObjectStore() instanceof EOObjectStoreCoordinator);
-
-            ERXEnterpriseObject.DidUpdateProcessor.perform(ec, ec.updatedObjects());
-            ERXEnterpriseObject.DidDeleteProcessor.perform(ec, ec.deletedObjects());
-            ERXEnterpriseObject.DidInsertProcessor.perform(ec, ec.insertedObjects());
+            
+            NSArray insertedObjects = (NSArray)n.userInfo().objectForKey("inserted");
+            NSArray updatedObjects = (NSArray)n.userInfo().objectForKey("updated");
+            NSArray deletedObjects = (NSArray)n.userInfo().objectForKey("deleted");
+            
+            ERXEnterpriseObject.DidUpdateProcessor.perform(ec, updatedObjects);
+            ERXEnterpriseObject.DidDeleteProcessor.perform(ec, deletedObjects);
+            ERXEnterpriseObject.DidInsertProcessor.perform(ec, insertedObjects);
 
             if ( isNestedEditingContext ) {
                 // we can assume insertedObjectGIDs and updatedObjectGIDs are non null.  if we execute this branch, they're at
                 // least empty arrays.
                 final EOEditingContext parentEC = (EOEditingContext)ec.parentObjectStore();
 
-                if (ec.insertedObjects().count() > 0 || ec.updatedObjects().count() > 0) {
+                if (insertedObjects.count() > 0 || updatedObjects.count() > 0) {
                     NSMutableArray flushableObjects = new NSMutableArray();
-                    flushableObjects.addObjectsFromArray(ec.insertedObjects());
-                    flushableObjects.addObjectsFromArray(ec.updatedObjects());
+                    flushableObjects.addObjectsFromArray(insertedObjects);
+                    flushableObjects.addObjectsFromArray(updatedObjects);
 
                     parentEC.lock();
                     try {
