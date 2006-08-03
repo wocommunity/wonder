@@ -1,0 +1,44 @@
+AjaxExampleComponent : AjaxExampleComponent {
+	title = "Drag and Drop Lists";
+}
+
+LeftDropBlock : AjaxDroppable {
+	id = "leftDropBlock";
+	onDrop = "function(element, droppableElement) { element.hide(); bothListsUpdate(); }";
+	action = droppedOnLeft;
+	droppedObject = droppedObject;
+}
+
+RightDropBlock : AjaxDroppable {
+	id = "rightDropBlock";
+	onDrop = "function(element, droppableElement) { element.hide(); bothListsUpdate(); }";
+	action = droppedOnRight;
+	droppedObject = droppedObject;
+}
+
+DragItem : AjaxDraggable {
+	class = "draggableItem";
+	revert = false;
+	draggableObject = repetitionDragItem;
+}
+
+DragItemTitle : WOString {
+	value = repetitionDragItem.name;
+}
+
+LeftItemRepetition : WORepetition {
+	list = leftList;
+	item = repetitionDragItem;
+}
+
+RightItemRepetition : WORepetition {
+	list = rightList;
+	item = repetitionDragItem;
+}
+
+BothLists : AjaxUpdateContainer {
+	id = "bothLists";
+	evalScripts = true;
+	onLoading = "function(request) { Element.show('loading') }";
+	onComplete = "function(request) { Element.hide('loading'); new Effect.Highlight('leftDropBlock'); new Effect.Highlight('rightDropBlock'); }";
+}
