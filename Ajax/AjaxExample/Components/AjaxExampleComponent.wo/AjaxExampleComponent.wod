@@ -22,6 +22,10 @@ DragAndDropLink : WOHyperlink {
 	pageName = "DragAndDropExample";
 }
 
+DragAndDropListsLink : WOHyperlink {
+	pageName = "DragAndDropLists";
+}
+
 SortableListLink : WOHyperlink {
 	pageName = "SortableListExample";
 }
