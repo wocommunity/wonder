@@ -32,6 +32,7 @@ public class AjaxUpdateContainer extends AjaxDynamicElement {
         NSMutableArray ajaxOptionsArray = new NSMutableArray();
         ajaxOptionsArray.addObject(new AjaxOption("frequency", AjaxOption.NUMBER));
         ajaxOptionsArray.addObject(new AjaxOption("decay", AjaxOption.NUMBER));
+        ajaxOptionsArray.addObject(new AjaxOption("onLoading", AjaxOption.SCRIPT));
         ajaxOptionsArray.addObject(new AjaxOption("onComplete", AjaxOption.SCRIPT));
         ajaxOptionsArray.addObject(new AjaxOption("onSuccess", AjaxOption.SCRIPT));
         ajaxOptionsArray.addObject(new AjaxOption("onFailure", AjaxOption.SCRIPT));
