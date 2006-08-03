@@ -8,6 +8,7 @@
 		<binding name="decay"/>
 		<binding name="evalScripts"/>
 		<binding name="insertion"/>
+		<binding name="onLoading"/>
 		<binding name="onComplete"/>
 		<binding name="onSuccess"/>
 		<binding name="onFailure"/>

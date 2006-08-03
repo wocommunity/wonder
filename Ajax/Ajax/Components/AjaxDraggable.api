@@ -13,9 +13,5 @@
     <binding name = "revert" defaults = "Boolean" />
     <binding name = "snap"/>
     <binding name = "class"/>
-
-    <validation message = "&apos;id&apos; is a required binding">
-      <unbound name = "id"/>
-    </validation>
 	</wo>
 </wodefinitions>
