@@ -67,23 +67,22 @@ public class ERXLongResponse extends ERXNonSynchronizingComponent {
             task().setLongResponse(this);
             task().start();
         }
-
+        boolean done = task().isDone();
+        boolean doneButNotRefreshed = done && !_doneAndRefreshed;
         // If the refreshInterval was set and we did not get a result yet, let's add the refresh header.
-        if(!task().isDone()) {
-            String modifiedDynamicUrl = aContext.urlWithRequestHandlerKey(WOApplication.application().componentRequestHandlerKey(), null, null);
+        int interval = (doneButNotRefreshed ? 0 : refreshInterval());
 
-            String header = "" +refreshInterval()+ ";url=" +modifiedDynamicUrl+ "/" + aContext.session().sessionID()+ "/" +aContext.contextID()+ "." +WOMetaRefreshSenderId;
-
-            aResponse.setHeader(header, "Refresh");
-        } else if(task().isDone() && !_doneAndRefreshed) {
+        if(!done || (doneButNotRefreshed)) {
             // If the response is done and finished quickly (before the first branch of this conditional is invoked),
             // make sure to refresh the page immediately.
             String modifiedDynamicUrl = aContext.urlWithRequestHandlerKey(WOApplication.application().componentRequestHandlerKey(), null, null);
 
-            String header = "0;url=" +modifiedDynamicUrl+ "/" + aContext.session().sessionID()+ "/" +aContext.contextID()+ "." +WOMetaRefreshSenderId;
+            String header = interval + ";url=" +modifiedDynamicUrl+ "/" + aContext.session().sessionID()+ "/" +aContext.contextID()+ "." +WOMetaRefreshSenderId;
 
             aResponse.setHeader(header, "Refresh");
-            _doneAndRefreshed = true;
+            if((doneButNotRefreshed)) {
+                _doneAndRefreshed = true;
+            }
         }
         super.appendToResponse(aResponse, aContext);
     }
