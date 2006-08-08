@@ -88,7 +88,7 @@ import com.webobjects.foundation.NSMutableDictionary;
  * <h2>Synopsis</h2>
  * 
  * JSProxyRPC { proxyName=<em>a_String</em>; name=<em>a_String</em>;
- * [proxy=<em>a_Java_Object</em>;] [JSONRPCBridge=<em>a_JSONRPCBridge_Object</em>;] }
+ * [proxy=<em>a_Java_Object</em>;] [AjaxBridge=<em>a_JSONRPCBridge_Object</em>;] }
  * 
  * <h2>Bindings</h2>
  * 
@@ -225,12 +225,12 @@ public class AjaxProxy extends AjaxComponent {
             String proxyName = (String) valueForBinding("proxyName");
 
             JSONRPCBridge bridge = null;
-            if (canGetValueForBinding("JSONRPCBridge")) {
-                bridge = (JSONRPCBridge) valueForBinding("JSONRPCBridge");
+            if (canGetValueForBinding("AjaxBridge")) {
+                bridge = (JSONRPCBridge) valueForBinding("AjaxBridge");
             } else {
                 bridge = new JSONRPCBridge();
-                if (canSetValueForBinding("JSONRPCBridge")) {
-                    setValueForBinding(bridge, "JSONRPCBridge");
+                if (canSetValueForBinding("AjaxBridge")) {
+                    setValueForBinding(bridge, "AjaxBridge");
                 }
             }
 
