@@ -50,6 +50,10 @@ DependentListsExample : WOHyperlink {
 	pageName = "DependentListsExample";
 }
 
+LongResponseExample : WOHyperlink {
+	pageName = "LongResponseExample";
+}
+
 Contents : WOComponentContent {
 }
 
