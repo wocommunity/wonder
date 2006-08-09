@@ -209,7 +209,7 @@ public class PostgresqlSynchronizationFactory extends EOSynchronizationFactory i
                 sql = "CREATE SEQUENCE " + sequenceName;
                 results.addObject(createExpression(entity, sql));
                 
-                sql = "SELECT SETVAL('" + sequenceName + "', (SELECT MAX(" + priKeyAttribute.columnName() +") FROM " + entity.externalName() +") INTO TEMP EOF_TMP_TABLE";
+                sql = "SELECT SETVAL('" + sequenceName + "', (SELECT MAX(" + priKeyAttribute.columnName() +") FROM " + entity.externalName() +")) INTO TEMP EOF_TMP_TABLE";
                 results.addObject(createExpression(entity, sql));
                 
                 sql = "DROP TABLE EOF_TMP_TABLE";
