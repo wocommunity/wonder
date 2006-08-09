@@ -16,6 +16,7 @@
     @private
     int		    _author;
     EOQualifier	    *_lhs;
+    NSString	    *_lhsDescription;
     Assignment	    *_rhs;
     BOOL	    _enabled;
     
