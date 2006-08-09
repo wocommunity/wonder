@@ -18,7 +18,7 @@
         [[self undoManager] disableUndoRegistration];
         
         [self setLhs:nil];
-        [self setRhs:[[Assignment alloc] init]];
+        [self setRhs:[[[Assignment alloc] init] autorelease]];
         
         [[self undoManager] enableUndoRegistration];
 	
@@ -26,6 +26,13 @@
     }
     
     return self;
+}
+
+- (void) dealloc {
+    [_lhsDescription release];
+    [_lhs release];
+    [_rhs release];
+    [super dealloc];
 }
 
 - (id)initWithKeyValueUnarchiver:(EOKeyValueUnarchiver *)unarchiver {
@@ -37,7 +44,7 @@
 	_rhs = [[unarchiver decodeObjectForKey:@"rhs"] retain];
 	
 	if ([_lhs isKindOfClass:[EOAndQualifier class]]) {
-            NSMutableArray *innerQuals = [[(EOAndQualifier *)_lhs qualifiers] mutableCopy];
+            NSMutableArray *innerQuals = [[[(EOAndQualifier *)_lhs qualifiers] mutableCopy] autorelease];
             
             if ([innerQuals count] == 2) {
                 EOQualifier *qual = [innerQuals objectAtIndex:0];
@@ -96,12 +103,10 @@
 }
 
 - (void)setRhs:(Assignment *)rhs {
-    //[[[self undoManager] prepareWithInvocationTarget:self] setRhs:_rhs];
-    //[[self undoManager] setActionName:@"Set Right-Hand Side"];
-    
-    [_rhs release];
-    
-    _rhs = [rhs retain];
+    if(_rhs != rhs) {
+        [_rhs release];
+        _rhs = [rhs retain];
+    }
 }
 
 - (EOQualifier *)lhs {
@@ -109,13 +114,23 @@
 }
 
 - (void)setLhs:(EOQualifier *)lhs {
-    [_lhs release];
-    
-    _lhs = [lhs retain];
+    if(_lhs != lhs) {
+        [_lhs release];
+        _lhs = [lhs retain];
+        [_lhsDescription release];
+        _lhsDescription = nil;
+    }
 }
 
 - (NSString *)lhsDescription {
-    return (_lhs != nil) ? [_lhs description] : @"*true*";
+    if(_lhsDescription == nil) {
+        _lhsDescription = [(_lhs != nil ? [_lhs description] : @"*true*") retain];
+    }
+    return _lhsDescription;
+}
+
+- (NSString *)rhsValueDescription {
+    return [_rhs valueDescription];
 }
 
 -(BOOL) isNewRule {
@@ -206,7 +221,7 @@
 }
 
 - (NSString *) description {
-    NSMutableString *rhsValue = [[[[self rhs] value] description] mutableCopy]; 
+    NSMutableString *rhsValue = [[[[[self rhs] value] description] mutableCopy] autorelease]; 
     [rhsValue replaceOccurrencesOfString:@"\n    " withString:@"" options:0 range:NSMakeRange(0,[rhsValue length])];
     return [NSString stringWithFormat:@"%d : %@ => %@ = %@ [%@]", 
         [self priority], [self lhsDescription], [[self rhs] keyPath], rhsValue, [[self rhs] assignmentClass]];
@@ -215,13 +230,13 @@
 
 -(id) copy {
     Rule *rule = [[Rule alloc] init];
-    EOKeyValueArchiver *archiver = [[EOKeyValueArchiver alloc] init];
+    EOKeyValueArchiver *archiver = [[[EOKeyValueArchiver alloc] init] autorelease];
     
     [archiver encodeObject:self forKey:@"raw"];
     
     NSDictionary *dict = [archiver dictionary];
     
-    EOKeyValueUnarchiver *unarchiver = [[EOKeyValueUnarchiver alloc] initWithDictionary:dict];
+    EOKeyValueUnarchiver *unarchiver = [[[EOKeyValueUnarchiver alloc] initWithDictionary:dict] autorelease];
     return [unarchiver decodeObjectForKey:@"raw"];
 }
 @end

@@ -31,6 +31,14 @@
     return self;
 }
 
+- (void) dealloc {
+    [toolbarItems release];
+    [toolbarIdentifiers release];
+    [_rhsKeyNames release];
+    [_assignmentClassNames release];
+    [super dealloc];
+}
+
 - (void)awakeFromNib {
     [[self window] useOptimizedDrawing:YES];
     
@@ -39,7 +47,7 @@
     NSArray *rhsKeys = [[[self model] rules] valueForKeyPath:@"rhs.keyPath"];
     NSSet *rhsKeysSet = [NSSet setWithArray:rhsKeys];
     
-    _rhsKeyNames = [[[rhsKeysSet allObjects] mutableCopy] retain];
+    _rhsKeyNames = [[rhsKeysSet allObjects] mutableCopy];
     [_rhsKeyNames sortUsingSelector:@selector(caseInsensitiveCompare:)];
     
     [assignmentClassNamesComboBox reloadData];
@@ -134,10 +142,10 @@
 }
 
 /*
-- (NSArray *)toolbarSelectableItemIdentifiers:(NSToolbar *)toolbar {
-    return nil;
-}
-*/
+ - (NSArray *)toolbarSelectableItemIdentifiers:(NSToolbar *)toolbar {
+     return nil;
+ }
+ */
 
 - (void)toolbarAction:(id)sender {
     NSString *identifier = [sender itemIdentifier];
@@ -177,43 +185,43 @@
 - (IBAction)copy:(id)sender {
     NSResponder *firstResponder = [[self window] firstResponder];
     if (firstResponder == rulesTableView) {
-		if ([rulesTableView numberOfSelectedRows] > 0) {
-			NSIndexSet *rowIdx = [rulesTableView selectedRowIndexes];
-			NSMutableArray *rows = [NSMutableArray arrayWithCapacity:[rulesTableView numberOfSelectedRows]];
-			NSMutableArray *actualClassNames = [NSMutableArray arrayWithCapacity:[rulesTableView numberOfSelectedRows]];
-			
-			//NSArray *rules = [[self model] rules];
-			NSArray *rules = [rulesController arrangedObjects];
-			Rule *rule;
-			
-			unsigned int idx = [rowIdx firstIndex];
-			
-			while (idx != NSNotFound) {
-				rule = [rules objectAtIndex:idx];
-				[rows addObject:rule];
-				[actualClassNames addObject:[[rule rhs] assignmentClass]];
-				
-				idx = [rowIdx indexGreaterThanIndex:idx];
-			}
-			
-			EOKeyValueArchiver *archiver = [[EOKeyValueArchiver alloc] init];
-			
-			[archiver encodeObject:rows forKey:@"rules"];
-			[archiver encodeObject:actualClassNames forKey:@"acn"];
-			
-			NSDictionary *plist = [archiver dictionary];
-			
-			NSPasteboard *pb = [NSPasteboard generalPasteboard];
-			
-			[pb declareTypes:[NSArray arrayWithObject:@"D2WRules"] owner:self];
-			[pb setPropertyList:plist forType:@"D2WRules"];
-		}
+        if ([rulesTableView numberOfSelectedRows] > 0) {
+            NSIndexSet *rowIdx = [rulesTableView selectedRowIndexes];
+            NSMutableArray *rows = [NSMutableArray arrayWithCapacity:[rulesTableView numberOfSelectedRows]];
+            NSMutableArray *actualClassNames = [NSMutableArray arrayWithCapacity:[rulesTableView numberOfSelectedRows]];
+            
+            //NSArray *rules = [[self model] rules];
+            NSArray *rules = [rulesController arrangedObjects];
+            Rule *rule;
+            
+            unsigned int idx = [rowIdx firstIndex];
+            
+            while (idx != NSNotFound) {
+                rule = [rules objectAtIndex:idx];
+                [rows addObject:rule];
+                [actualClassNames addObject:[[rule rhs] assignmentClass]];
+                
+                idx = [rowIdx indexGreaterThanIndex:idx];
+            }
+            
+            EOKeyValueArchiver *archiver = [[[EOKeyValueArchiver alloc] init] autorelease];
+            
+            [archiver encodeObject:rows forKey:@"rules"];
+            [archiver encodeObject:actualClassNames forKey:@"acn"];
+            
+            NSDictionary *plist = [archiver dictionary];
+            
+            NSPasteboard *pb = [NSPasteboard generalPasteboard];
+            
+            [pb declareTypes:[NSArray arrayWithObject:@"D2WRules"] owner:self];
+            [pb setPropertyList:plist forType:@"D2WRules"];
+        }
     }
 }
 
 - (IBAction)cut:(id)sender {
-	[self copy:sender];
-	[self remove:sender];
+    [self copy:sender];
+    [self remove:sender];
 }
 
 - (IBAction)paste:(id)sender {
@@ -226,7 +234,7 @@
 	if (type) {
 	    NSDictionary *plist = [pb propertyListForType:@"D2WRules"];
 	    
-	    EOKeyValueUnarchiver *unarchiver = [[EOKeyValueUnarchiver alloc] initWithDictionary:plist];
+	    EOKeyValueUnarchiver *unarchiver = [[[EOKeyValueUnarchiver alloc] initWithDictionary:plist] autorelease];
 	    
 	    NSArray *rules = [unarchiver decodeObjectForKey:@"rules"];
 	    NSArray *acn = [unarchiver decodeObjectForKey:@"acn"];

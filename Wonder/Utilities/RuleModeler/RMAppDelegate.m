@@ -18,7 +18,7 @@
     }
     
     [[preferencesWindow window] center];
-    [preferencesWindow showWindow:self];
+    [preferencesWindow showWindow: self];
 }
 
 @end
