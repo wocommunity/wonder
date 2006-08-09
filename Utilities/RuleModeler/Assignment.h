@@ -15,6 +15,7 @@
     NSString	    *_keyPath;
     NSObject	    *_value;
     NSString        *_assignmentClass;
+    NSString        *_valueDescription;
 
 }
 

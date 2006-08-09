@@ -20,20 +20,19 @@ static NSString *ruleModelType = @"Apple D2WModel File";
 
 - (id)init {
     if (self = [super init]) {
-		[self setRules:[[NSMutableArray alloc] initWithCapacity:32]];
+        [self setRules:[NSMutableArray arrayWithCapacity: 32]];
     }
     
     return self;
 }
 
 - (void)dealloc {
-	[super dealloc];
-
-	
+    [_rules release];
+    [super dealloc];
 }
 
 - (void)makeWindowControllers {
-    RMModelEditor *editor = [[RMModelEditor alloc] init];
+    RMModelEditor *editor = [[[RMModelEditor alloc] init] autorelease];
     
     [self addWindowController:editor];
 }
@@ -41,17 +40,17 @@ static NSString *ruleModelType = @"Apple D2WModel File";
 - (NSData *)dataRepresentationOfType:(NSString *)type {
     if ([type isEqualTo:ruleModelType]) {
         
-        EOKeyValueArchiver *archiver = [[EOKeyValueArchiver alloc] init];
-        NSArray *rules = [[self rules] mutableCopy];
+        EOKeyValueArchiver *archiver = [[[EOKeyValueArchiver alloc] init] autorelease];
+        NSArray *rules = [[[self rules] mutableCopy] autorelease];
         
         NSSortDescriptor *descriptor=[[[NSSortDescriptor alloc] initWithKey:@"sortOrder" ascending:YES] autorelease];
         NSArray *sortDescriptors=[NSArray arrayWithObject:descriptor];
-        rules = [[rules sortedArrayUsingDescriptors:sortDescriptors] mutableCopy];
+        rules = [[[rules sortedArrayUsingDescriptors:sortDescriptors] mutableCopy] autorelease];
         
         [archiver encodeObject:rules forKey:@"rules"];
-
+        
         NSDictionary *plist = [archiver dictionary];
-        NSMutableArray *loadedRules = [[plist objectForKey:@"rules"] mutableCopy];
+        NSMutableArray *loadedRules = [[[plist objectForKey:@"rules"] mutableCopy] autorelease];
         
         NSArray *loadedRuleClassNames = [rules valueForKeyPath:@"rhs.assignmentClass"];
         
@@ -60,8 +59,8 @@ static NSString *ruleModelType = @"Apple D2WModel File";
         
         int i, count = [loadedRules count];
         for (i = 0; i < count; i++) {
-            rule = [[loadedRules objectAtIndex:i] mutableCopy];
-            rhs = [[rule objectForKey:@"rhs"] mutableCopy];
+            rule = [[[loadedRules objectAtIndex:i] mutableCopy] autorelease];
+            rhs = [[[rule objectForKey:@"rhs"] mutableCopy] autorelease];
             
             [rule setObject:@"com.webobjects.directtoweb.Rule" forKey:@"class"];
             [rhs setObject:[loadedRuleClassNames objectAtIndex:i] forKey:@"class"];
@@ -88,11 +87,11 @@ static NSString *ruleModelType = @"Apple D2WModel File";
 - (BOOL)saveToURL:(NSURL *)absoluteURL ofType:(NSString *)typeName forSaveOperation:(NSSaveOperationType)saveOperation error:(NSError **)outError {
     BOOL result = [super saveToURL:absoluteURL ofType:typeName forSaveOperation:saveOperation error:outError];
     if(result) {
-        NSArray *rules = [[self rules] mutableCopy];
+        NSArray *rules = [[[self rules] mutableCopy] autorelease];
         
         NSSortDescriptor *descriptor=[[[NSSortDescriptor alloc] initWithKey:@"sortOrder" ascending:YES] autorelease];
         NSArray *sortDescriptors=[NSArray arrayWithObject:descriptor];
-        rules = [[rules sortedArrayUsingDescriptors:sortDescriptors] mutableCopy];
+        rules = [[[rules sortedArrayUsingDescriptors:sortDescriptors] mutableCopy] autorelease];
         NSString *errorDesc = nil;
         NSString *description = [rules description];
         NSURL *url = absoluteURL;
@@ -116,14 +115,14 @@ static NSString *ruleModelType = @"Apple D2WModel File";
 	    return NO;
 	}
 	
-	EOKeyValueUnarchiver *unarchiver = [[EOKeyValueUnarchiver alloc] initWithDictionary:plist];
+	EOKeyValueUnarchiver *unarchiver = [[[EOKeyValueUnarchiver alloc] initWithDictionary:plist] autorelease];
         
         NSArray *loadedRules = [plist objectForKey:@"rules"];
         NSArray *loadedRuleClassNames = [loadedRules valueForKeyPath:@"rhs.class"];
         [loadedRules takeValue:@"Assignment" forKeyPath:@"rhs.class"];
-
+        
 	[self setRules:[unarchiver decodeObjectForKey:@"rules"]];
-
+        
 	[unarchiver finishInitializationOfObjects];
 	[unarchiver awakeObjects];
         
@@ -150,9 +149,8 @@ static NSString *ruleModelType = @"Apple D2WModel File";
 }
 
 - (void)setRules:(NSMutableArray *)newRules {
-	[_rules release];
-	
-	_rules = [[newRules mutableCopy] retain];
+    [_rules release];
+    _rules = [newRules mutableCopy];
 }
 
 - (NSString *) description {
