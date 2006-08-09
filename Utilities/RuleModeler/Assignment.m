@@ -25,10 +25,18 @@
     return self;
 }
 
+- (void) dealloc {
+    [_value release];
+    [_keyPath release];
+    [_assignmentClass release];
+    [_valueDescription release];
+    [super dealloc];
+}
+
 - (id)initWithKeyValueUnarchiver:(EOKeyValueUnarchiver *)unarchiver {
     if (self = [super init]) {
-	_keyPath = [[unarchiver decodeObjectForKey:(@"keyPath")] retain];
-	_value = [[unarchiver decodeObjectForKey:(@"value")] retain];
+	[self setKeyPath: [unarchiver decodeObjectForKey:(@"keyPath")]];
+        [self setValue: [unarchiver decodeObjectForKey:(@"value")]];
     }
     
     return self;
@@ -40,7 +48,15 @@
 }
 
 - (NSString *)valueDescription {
-    return [NSString stringWithFormat:@"%@", [_value description]];
+    if(_valueDescription == nil) {
+        _valueDescription = [[NSString stringWithFormat:@"%@", [[self value] description]] retain];
+        _valueDescription = [_valueDescription mutableCopy];
+        [_valueDescription replaceOccurrencesOfString:@"\n" 
+                                           withString:@" " 
+                                              options:0 
+                                                range:NSMakeRange(0, [_valueDescription length])];
+    }
+    return _valueDescription;
 }
 
 - (void)setValueDescription:(NSString *)value {
@@ -48,20 +64,21 @@
 }
 
 - (NSString *)description {
-    return [NSString stringWithFormat:@"(%@) %@ = %@", _assignmentClass, [_keyPath description], [_value description]];
+    return [NSString stringWithFormat:@"(%@) %@ = %@", [self assignmentClass], [self keyPath], [self valueDescription]];
 }
 
 - (NSString *)assignmentClass {
     return _assignmentClass;
 }
 
-- (void)setAssignmentClass:(NSString *)classname {
-    [[[self undoManager] prepareWithInvocationTarget:self] setAssignmentClass:_assignmentClass];
-    [self _setActionName:@"Set RHS Class to %@" old:_assignmentClass new:classname];
-    
-    [_assignmentClass release];
-    
-    _assignmentClass = [classname retain];
+- (void)setAssignmentClass:(NSString *)assignmentClass {
+    if(_assignmentClass != assignmentClass) {
+        [[[self undoManager] prepareWithInvocationTarget:self] setAssignmentClass:_assignmentClass];
+        [self _setActionName:@"Set RHS Class to %@" old:_assignmentClass new:assignmentClass];
+        
+        [_assignmentClass release];
+        _assignmentClass = [assignmentClass retain];
+    }
 }
 
 - (NSString *)keyPath {
@@ -74,7 +91,6 @@
         [self _setActionName:@"Set RHS Key to %@" old:_keyPath new:keyPath];
         
         [_keyPath release];
-        
         _keyPath = [keyPath retain];
     }
 }
@@ -109,8 +125,10 @@
         [self _setActionName:@"Set RHS Value to %@" old:_value new:value];
         
         [_value release];
-        
         _value = [value retain];
+
+        [_valueDescription release];
+        _valueDescription = nil;
     }
 }
 
