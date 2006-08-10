@@ -231,6 +231,49 @@
         </antcall>
     </target>
 
+    <!-- Ajax -->
+    <target name="AjaxExample.all">
+        <antcall target="copy.application" >
+            <param name="project" value="AjaxExample" />
+            <param name="project.dir" value="Ajax/AjaxExample" />
+        </antcall>
+    </target>
+
+    <target name="Ajax.all">
+        <antcall target="copy.framework" >
+            <param name="project" value="Ajax" />
+            <param name="project.dir" value="Ajax/Ajax" />
+        </antcall>
+    </target>
+
+    <target name="ExcelGenerator.all">
+        <antcall target="copy.framework" >
+            <param name="project" value="ExcelGenerator" />
+            <param name="project.dir" value="ExcelGeneration/ExcelGenerator" />
+        </antcall>
+    </target>
+
+    <target name="PostgresqlPlugIn.all">
+        <antcall target="copy.framework" >
+            <param name="project" value="PostgresqlPlugIn" />
+            <param name="project.dir" value="PlugIns/PostgresqlPlugIn" />
+        </antcall>
+    </target>
+
+    <target name="EROraclePlugIn.all">
+        <antcall target="copy.framework" >
+            <param name="project" value="EROraclePlugIn" />
+            <param name="project.dir" value="PlugIns/EROraclePlugIn" />
+        </antcall>
+    </target>
+
+    <target name="WOPayPal.all">
+        <antcall target="copy.framework" >
+            <param name="project" value="WOPayPal" />
+            <param name="project.dir" value="PayPal/Frameworks/WOPayPal" />
+        </antcall>
+    </target>
+
     <!-- NetStruxrCaseStudy -->
     <target name="NetStruxrCaseStudy.all">
         <antcall target="copy.application" >
@@ -247,16 +290,39 @@
         </antcall>
     </target>
 
+
+    <target name="Validity.all">
+        <antcall target="copy.framework" >
+            <param name="project" value="Validity" />
+            <param name="project.dir" value="Validity/Frameworks/Validity" />
+        </antcall>
+    </target>
+
+    <target name="ValidityModeler.all">
+        <antcall target="copy.application" >
+            <param name="project" value="ValidityModeler" />
+            <param name="project.dir" value="Validity/Applications/ValidityModeler" />
+        </antcall>
+    </target>
+
+    <target name="ValidityExample.all">
+        <antcall target="copy.application" >
+            <param name="project" value="ValidityExample" />
+            <param name="project.dir" value="Validity/Examples/ValidityExample" />
+        </antcall>
+    </target>
+
 	
     <target name="core.all" depends="ERJars.all, JavaWOExtensions.all, ERExtensions.all, ERDirectToWeb.all" />
-    <target name="frameworks.all" depends="core.all, ERCalendar.all, ERNeutralLook.all, WOOgnl.all, ERJavaMail.all, ERCoreBusinessLogic.all, ERChangeNotificationJMS.all, ERPlot.all, ERExcelLook.all, ERPrototypes.all, ERWorkerChannel.all" />
+    <target name="frameworks.all" depends="core.all, ERCalendar.all, ERNeutralLook.all, WOOgnl.all, ERJavaMail.all, ERCoreBusinessLogic.all, ERChangeNotificationJMS.all, ERPlot.all, ERExcelLook.all, ERPrototypes.all, ERWorkerChannel.all, Ajax.all, ExcelGenerator.all, PostgresqlPlugIn.all, EROraclePlugIn.all, WOPayPal.all" />
 
+    <target name="validity.all" depends="Validity.all, ValidityModeler.all, ValidityExample.all" />
     <target name="bugtracker.all" depends="frameworks.all, BTBusinessLogic.all, BugTracker.all" />
     <target name="applications.all" depends="frameworks.all, bugtracker.all, ERMailer.all" />
 
     <target name="wrox.all" depends="frameworks.all, ERMiniUglyLook.all, NetStruxrCaseStudy.all" />
     <target name="stepwise.all" depends="D2WListExample.all, D2WInspectExample.all" />
-    <target name="examples.all" depends="frameworks.all, wrox.all, stepwise.all" />
+    <target name="examples.all" depends="frameworks.all, wrox.all, stepwise.all, AjaxExample.all" />
 
     <target name="dist.prebuilt" depends="frameworks.all, applications.all, examples.all" />
 
