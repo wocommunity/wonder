@@ -179,6 +179,10 @@ public class ERXJSPopUpRelationPicker extends ERXStatelessComponent {
     public void takeValuesFromRequest(WORequest request, WOContext context) {
         NSMutableArray parents = new NSMutableArray();
         NSArray parentFormValues = request.formValuesForKey(parentSelectName);
+        if(parentFormValues == null) {
+            super.takeValuesFromRequest(request, context);
+            return;
+        }
         if(parentFormValues.containsObject("WONoSelectionString")) {
             setSelectedParents(null);
         } else {
