@@ -32,6 +32,10 @@ public class ERXPrimaryKeyListQualifier extends ERXInQualifier {
 
     public static String IsContainedInArraySelectorName = "isContainedInArray";
     
+    static {
+        EOQualifierSQLGeneration.Support.setSupportForClass(new ERXPrimaryKeyListQualifier.Support(), ERXPrimaryKeyListQualifier.class);
+    }
+    
     /**
      * Support class that listens for EOKeyValueQualifiers that have an <code>isContainedInArray</code>-selector and replaces these
      * with the ERXPrimaryKeyListQualifier. This means that when you set <code>isContainedInArray</code> as a display group
@@ -39,55 +43,34 @@ public class ERXPrimaryKeyListQualifier extends ERXInQualifier {
      * one that selects objects with an IN qualifier.
      * @author ak
      */
-    public static class KeyValueQualifierSQLGenerationSupport extends EOQualifierSQLGeneration.Support {
-        
-        private EOQualifierSQLGeneration.Support _old;
-        
-        public KeyValueQualifierSQLGenerationSupport(EOQualifierSQLGeneration.Support old) {
-            _old = old;
-        }
-        
+    public static class Support extends EOQualifierSQLGeneration._KeyValueQualifierSupport {
+
         public String sqlStringForSQLExpression(EOQualifier eoqualifier, EOSQLExpression e) {
-            return _old.sqlStringForSQLExpression(eoqualifier, e);
+            return super.sqlStringForSQLExpression(eoqualifier, e);
         }
-        
+
         public EOQualifier schemaBasedQualifierWithRootEntity(EOQualifier eoqualifier, EOEntity eoentity) {
+            EOQualifier result = null;
             EOKeyValueQualifier qualifier = (EOKeyValueQualifier)eoqualifier;
-            if(IsContainedInArraySelectorName.equals(qualifier.selector().name())) {
-                // FIXME AK: This is not really the correct thing to do
-                // we should have a means to register new operators and this has nothing to do with 
-                // PK qualifiers per se...
-                if(qualifier.key().indexOf('.') < 0) {
-                    Object value = qualifier.value();
-                    if(!(value instanceof NSArray)) {
-                        value = new NSArray(value);
-                    }
-                    if(((NSArray)value).lastObject() instanceof EOEnterpriseObject) {
-                        return new ERXPrimaryKeyListQualifier(qualifier.key(), (NSArray)value);
-                    } else {
-                        return new ERXInQualifier(qualifier.key(), (NSArray)value);
-                    }
-                } else {
-                    EOQualifierSQLGeneration.Support support = EOQualifierSQLGeneration.Support.supportForClass(ERXInQualifier.class);
-                    return support.schemaBasedQualifierWithRootEntity(qualifier, eoentity);
+            if(qualifier.key().indexOf('.') < 0) {
+                Object value = qualifier.value();
+                if(!(value instanceof NSArray)) {
+                    value = new NSArray(value);
                 }
+                if(((NSArray)value).lastObject() instanceof EOEnterpriseObject) {
+                    result = new ERXPrimaryKeyListQualifier(qualifier.key(), (NSArray)value);
+                } else {
+                    result = new ERXInQualifier(qualifier.key(), (NSArray)value);
+                }
+            } else {
+                EOQualifierSQLGeneration.Support support = EOQualifierSQLGeneration.Support.supportForClass(ERXInQualifier.class);
+                result = support.schemaBasedQualifierWithRootEntity(qualifier, eoentity);
             }
-            EOQualifier result = _old.schemaBasedQualifierWithRootEntity(eoqualifier, eoentity);
             return result;
         }
-        
+
         public EOQualifier qualifierMigratedFromEntityRelationshipPath(EOQualifier eoqualifier, EOEntity eoentity, String s) {
-            return _old.qualifierMigratedFromEntityRelationshipPath(eoqualifier, eoentity, s);
-        }
-    }
-    
-    private static boolean _installedSupport = false;
-    
-    public static void installSupport() {
-        if(!_installedSupport) {
-            EOQualifierSQLGeneration.Support old = EOQualifierSQLGeneration.Support.supportForClass(EOKeyValueQualifier.class);
-            EOQualifierSQLGeneration.Support.setSupportForClass(new KeyValueQualifierSQLGenerationSupport(old), EOKeyValueQualifier.class);
-            _installedSupport = true;
+            return super.qualifierMigratedFromEntityRelationshipPath(eoqualifier, eoentity, s);
         }
     }
     
