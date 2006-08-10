@@ -10,10 +10,11 @@ import java.io.*;
 import java.lang.reflect.*;
 import java.util.*;
 
-import org.apache.log4j.Logger;
+import org.apache.log4j.*;
 
 import com.webobjects.appserver.*;
 import com.webobjects.eoaccess.*;
+import com.webobjects.eoaccess.EOQualifierSQLGeneration.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.foundation.*;
 
@@ -93,7 +94,10 @@ public class ERXExtensions {
             // loggingBasePath=/var/log/@@name@@
             // name and port are resolved via WOApplication.application()
             ERXLogger.configureLoggingWithSystemProperties();
-            ERXPrimaryKeyListQualifier.installSupport();
+            
+            registerSQLSupportForSelector(new NSSelector(ERXPrimaryKeyListQualifier.IsContainedInArraySelectorName), 
+                    EOQualifierSQLGeneration.Support.supportForClass(ERXPrimaryKeyListQualifier.class));
+            
             if(!ERXProperties.webObjectsVersionIs522OrHigher()) {
                 NSLog.setOut(new ERXNSLogLog4jBridge(ERXNSLogLog4jBridge.OUT));
                 NSLog.setErr(new ERXNSLogLog4jBridge(ERXNSLogLog4jBridge.ERR));
@@ -103,7 +107,60 @@ public class ERXExtensions {
                 NSLog.setDebug(debugLogger);
             }
         }
+        
+        private static Map _qualifierKeys;
+        
+        public static synchronized void registerSQLSupportForSelector(NSSelector selector, EOQualifierSQLGeneration.Support support) {
+            if(_qualifierKeys == null) {
+                _qualifierKeys = new HashMap();
+                EOQualifierSQLGeneration.Support old = EOQualifierSQLGeneration.Support.supportForClass(EOKeyValueQualifier.class);
+                EOQualifierSQLGeneration.Support.setSupportForClass(new KeyValueQualifierSQLGenerationSupport(old), EOKeyValueQualifier.class);
+            }
+            _qualifierKeys.put(selector.name(), support);
+        }
+        
+        /**
+         * Support class that listens for EOKeyValueQualifiers that have an a selector that was registered and uses theri support instead.
+         * You'll use this mainly to bind queryOperators in display groups.
+         * @author ak
+         */
+        public static class KeyValueQualifierSQLGenerationSupport extends EOQualifierSQLGeneration.Support {
+            
+            private EOQualifierSQLGeneration.Support _old;
+            
+            public KeyValueQualifierSQLGenerationSupport(EOQualifierSQLGeneration.Support old) {
+                _old = old;
+            }
 
+            private EOQualifierSQLGeneration.Support supportForQualifier(EOQualifier qualifier) {
+                EOQualifierSQLGeneration.Support support = null;
+                if(qualifier instanceof EOKeyValueQualifier) {
+                    synchronized (_qualifierKeys) {
+                        support = (Support) _qualifierKeys.get(((EOKeyValueQualifier)qualifier).selector().name());
+                        _log.info(((EOKeyValueQualifier)qualifier).selector());
+                    }
+                }
+                if(support == null) {
+                    support = _old;
+                }
+                return support;
+            }
+            
+            public String sqlStringForSQLExpression(EOQualifier eoqualifier, EOSQLExpression e) {
+                return supportForQualifier(eoqualifier).sqlStringForSQLExpression(eoqualifier, e);
+            }
+
+            public EOQualifier schemaBasedQualifierWithRootEntity(EOQualifier eoqualifier, EOEntity eoentity) {
+                EOQualifier result = supportForQualifier(eoqualifier).schemaBasedQualifierWithRootEntity(eoqualifier, eoentity);
+                return result;
+            }
+
+            public EOQualifier qualifierMigratedFromEntityRelationshipPath(EOQualifier eoqualifier, EOEntity eoentity, String s) {
+                return supportForQualifier(eoqualifier).qualifierMigratedFromEntityRelationshipPath(eoqualifier, eoentity, s);
+            }
+        }
+        
+        
         /**
          * This method is called every time a session times
          * out. It allows us to release references to all the
