@@ -208,10 +208,12 @@ public class PostgresqlSynchronizationFactory extends EOSynchronizationFactory i
                 sequenceName = PostgresqlPlugIn.sequenceNameForEntity(entity);
                 sql = "CREATE SEQUENCE " + sequenceName;
                 results.addObject(createExpression(entity, sql));
-                
-                sql = "SELECT SETVAL('" + sequenceName + "', (SELECT MAX(" + priKeyAttribute.columnName() +") FROM " + entity.externalName() +")) INTO TEMP EOF_TMP_TABLE";
+
+                sql = "CREATE TEMP TABLE EOF_TMP_TABLE AS SELECT SETVAL('" + sequenceName
+                + "', (SELECT MAX(" + priKeyAttribute.columnName() + ") FROM "
+                + entity.externalName() + "))";
                 results.addObject(createExpression(entity, sql));
-                
+
                 sql = "DROP TABLE EOF_TMP_TABLE";
                 results.addObject(createExpression(entity, sql));
                 
