@@ -107,7 +107,7 @@ AnnotationTitleField: WOTextField {
 	value = annotationItem.title;
 }
 
-IBox: AjaxModalComponentContent {
+IBox: AjaxModalContainer {
 	label = "[click to edit]";
 	width = 300;
 	height = 150;
