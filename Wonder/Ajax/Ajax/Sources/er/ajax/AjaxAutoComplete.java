@@ -129,7 +129,7 @@ public class AjaxAutoComplete extends AjaxComponent {
      */
     public void appendToResponse(WOResponse res, WOContext ctx) {
         super.appendToResponse(res, ctx);
-		boolean isLocal = ((Boolean) valueForBinding("isLocal")).booleanValue();
+		boolean isLocal = hasBinding("isLocal") && ((Boolean) valueForBinding("isLocal")).booleanValue();
 		if (isLocal) {
 			StringBuffer str = new StringBuffer();
 			str.append("<script type=\"text/javascript\">\n// <![CDATA[\n");

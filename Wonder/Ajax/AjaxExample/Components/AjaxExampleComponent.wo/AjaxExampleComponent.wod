@@ -54,6 +54,10 @@ LongResponseExample : WOHyperlink {
 	pageName = "LongResponseExample";
 }
 
+DragResizeLink : WOHyperlink {
+	pageName = "DragResizeExample";
+}
+
 Contents : WOComponentContent {
 }
 
