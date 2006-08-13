@@ -9,13 +9,11 @@ import com.webobjects.foundation.*;
 
 public class AjaxDragResize extends AjaxComponent {
     private static final String COMPONENT_RESIZABLES_MAP_KEY = "AjaxComponentResizablesMap";
-
+    private String _dragResizeID;
+    
     public AjaxDragResize(WOContext context) {
 	super(context);
-    }
-
-    public boolean isStateless() {
-	return true;
+	_dragResizeID=(String) valueForBinding("id", AjaxUtils.toSafeElementID(context().elementID()) + "_DragResize");
     }
 
     public boolean synchronizesVariablesWithBindings() {
@@ -59,7 +57,7 @@ public class AjaxDragResize extends AjaxComponent {
     }
 
     public String dragResizeID() {
-	return (String) valueForBinding("id", AjaxUtils.toSafeElementID(context().elementID()) + "_DragResize");
+	return _dragResizeID;
     }
 
     public String cssClass() {
