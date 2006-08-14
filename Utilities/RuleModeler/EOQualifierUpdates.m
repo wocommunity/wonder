@@ -23,3 +23,64 @@
 }
 
 @end
+
+@implementation EOAndQualifier (RuleModeler)
+
+- (BOOL)isEqual:(id)anObject {
+    if ([anObject isKindOfClass:[EOAndQualifier class]]) {
+        return [[self qualifiers] isEqual:[anObject qualifiers]]; // We should ignore order in our case, shouldn't we?
+    } else {
+        return NO;
+    }
+}
+
+@end
+
+@implementation EONotQualifier (RuleModeler)
+
+- (BOOL)isEqual:(id)anObject {
+    if ([anObject isKindOfClass:[EONotQualifier class]]) {
+        return [[self qualifier] isEqual:[anObject qualifier]];
+    } else {
+        return NO;
+    }
+}
+
+@end
+
+@implementation EOOrQualifier (RuleModeler)
+
+- (BOOL)isEqual:(id)anObject {
+    if ([anObject isKindOfClass:[EOOrQualifier class]]) {
+        return [[self qualifiers] isEqual:[anObject qualifiers]]; // We should ignore order in our case, shouldn't we?
+    } else {
+        return NO;
+    }
+}
+
+@end
+
+@implementation EOKeyComparisonQualifier (RuleModeler)
+
+- (BOOL)isEqual:(id)anObject {
+    if ([anObject isKindOfClass:[EOKeyComparisonQualifier class]]) {
+        return ([[self leftKey] isEqual:[anObject leftKey]] && [self selector] == [anObject selector] && [[self rightKey] isEqual:[anObject rightKey]]);
+    } else {
+        return NO;
+    }
+}
+
+@end
+
+@implementation EOKeyValueQualifier (RuleModeler)
+
+- (BOOL)isEqual:(id)anObject {
+    if ([anObject isKindOfClass:[EOKeyValueQualifier class]]) {
+        return ([[self key] isEqual:[anObject key]] && [self selector] == [anObject selector] && [[self value] isEqual:[anObject value]]);
+    } else {
+        return NO;
+    }
+}
+
+@end
+
