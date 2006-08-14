@@ -7,14 +7,19 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "EOControl.h"
+
+@class Rule;
+@class EOKeyValueUnarchiver;
+@class EOKeyValueArchiver;
 
 @interface Assignment : NSObject {
     
     @private
     NSString	    *_keyPath;
-    NSObject	    *_value;
+    id              _value;
     NSString        *_assignmentClass;
+    NSString        *_assignmentClassDescription;
+	Rule			*_rule; // Back-pointer - not retained
     NSString        *_valueDescription;
 
 }
@@ -24,12 +29,17 @@
 
 - (NSString *)assignmentClass;
 - (void)setAssignmentClass:(NSString *)classname;
+- (NSString *)assignmentClassDescription;
+- (void)setAssignmentClassDescription:(NSString *)classnameDescription;
 
 - (NSString *)keyPath;
 - (void)setKeyPath:(NSString *)keyPath;
 
-- (NSObject *)value;
-- (void)setValue:(NSObject *)value;
+- (id)value;
+- (void)setValue:(id)value;
+- (NSString *)valueDescription;
+
+- (void)setRule:(Rule *)rule;
 
 // Undo management
 - (NSUndoManager *)undoManager;
