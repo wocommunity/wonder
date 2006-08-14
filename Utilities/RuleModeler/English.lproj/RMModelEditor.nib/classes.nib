@@ -1,7 +1,12 @@
 {
     IBClasses = (
         {CLASS = Assignment; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
-        {CLASS = FirstResponder; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
+        {
+            ACTIONS = {"" = id; }; 
+            CLASS = FirstResponder; 
+            LANGUAGE = ObjC; 
+            SUPERCLASS = NSObject; 
+        }, 
         {
             ACTIONS = {search = id; }; 
             CLASS = RMFilteringArrayController; 
@@ -16,7 +21,7 @@
             SUPERCLASS = NSDocument; 
         }, 
         {
-            ACTIONS = {rhsComboBoxAction = id; }; 
+            ACTIONS = {remove = id; rhsComboBoxAction = id; showSelectedRule = id; }; 
             CLASS = RMModelEditor; 
             LANGUAGE = ObjC; 
             OUTLETS = {
@@ -27,6 +32,8 @@
                 lhsSplitView = NSSplitView; 
                 masterSplitView = NSSplitView; 
                 rhsKeyNamesComboBox = NSComboBox; 
+                rhsValueHelpField = NSTextField; 
+                rhsValueTextView = NSTextView; 
                 rulesController = NSArrayController; 
                 rulesTableView = NSTableView; 
                 sourceDrawer = NSDrawer; 
