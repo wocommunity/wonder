@@ -225,9 +225,28 @@
 - initWithCoder:fp8;
 - (void)encodeWithCoder:fp8;
 - (void)encodeWithKeyValueArchiver:fp8;
-- initWithKeyValueUnarchiver:fp8;
+- initWithKeyValueUnarchiver:(EOKeyValueUnarchiver *)fp8;
 - qualifierWithBindings:fp8 requiresAllVariables:(char)fp12;
 - (void)_addBindingsToDictionary:fp8;
 - (void)addQualifierKeysToSet:fp8;
 
 @end
+
+@interface NSString (EOPrefixAndSuffixMethods)
++ (id)_stringWithStrings:(id)fp8;
++ (id)_stringWithUnsigned:(unsigned int)fp8;
+- (BOOL)containsOnlyWhiteSpaceAndNewLines;
+- (id)stringByDeletingSuffixWithDelimiter:(id)fp8;
+- (id)prefixWithDelimiter:(id)fp8;
+- (id)suffixWithDelimiter:(id)fp8;
+- (id)stringMarkingUpcaseTransitionsWithDelimiter:(id)fp8;
+- (id)quotedStringWithQuote:(id)fp8;
+- (id)stringRepeatedTimes:(unsigned int)fp8;
+- (id)_getBracketedStringFromBuffer:(struct _NSStringBuffer *)fp8;
+- (BOOL)_matchesCharacter:(unsigned short)fp8;
+- (BOOL)matchesPattern:(id)fp8 caseInsensitive:(BOOL)fp12;
+- (BOOL)matchesPattern:(id)fp8;
+- (BOOL)isLike:(id)fp8;
+- (BOOL)isCaseInsensitiveLike:(id)fp8;
+@end
+
