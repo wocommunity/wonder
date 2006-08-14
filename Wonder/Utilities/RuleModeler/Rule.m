@@ -9,8 +9,19 @@
 #import "Rule.h"
 
 #import "Assignment.h"
+#import "RMModel.h"
+#import "EOControl.h"
 
 @implementation Rule
+
++ (void)initialize {
+    [super initialize];
+    
+    [self setKeys:[NSArray arrayWithObjects:@"author", @"lhs", @"rhs", nil] triggerChangeNotificationsForDependentKey:@"extendedDescription"];
+    [self setKeys:[NSArray arrayWithObject:@"author"] triggerChangeNotificationsForDependentKey:@"priority"];
+    [self setKeys:[NSArray arrayWithObject:@"lhs"] triggerChangeNotificationsForDependentKey:@"lhsDescription"];
+    [self setKeys:[NSArray arrayWithObject:@"rhs"] triggerChangeNotificationsForDependentKey:@"rhsDescription"];
+}
 
 - (id)init {
     if (self = [super init]) {
@@ -28,8 +39,45 @@
     return self;
 }
 
++ (NSArray *)rulesFromMutablePropertyList:(id)plist {
+    // Special tricks here: the archiver uses the 'class' field to create instances of that class,
+    // but in our case we always want rhs to be instantiated as an Assignment, thus we temporarily replace
+    // the 'class' field with 'Assignment' and then put its old value into the Assignment's assignmentClass.
+    EOKeyValueUnarchiver    *unarchiver = [[[EOKeyValueUnarchiver alloc] initWithDictionary:plist] autorelease];        
+    NSArray                 *loadedRules = [plist objectForKey:@"rules"];
+    NSArray                 *loadedRuleClassNames = [loadedRules valueForKeyPath:@"rhs.class"];
+    NSArray                 *decodedRules;
+    NSEnumerator            *loadedRuleEnum = [loadedRules objectEnumerator];
+    id                      eachLoadedRule;
+    
+    while(eachLoadedRule = [loadedRuleEnum nextObject]){
+        id  rhs = [eachLoadedRule valueForKeyPath:@"rhs"];
+        
+        // It might happen that rhs is nil
+        if(rhs)
+            [eachLoadedRule takeValue:@"Assignment" forKeyPath:@"rhs.class"];
+    }
+    decodedRules = [unarchiver decodeObjectForKey:@"rules"];
+    
+    [unarchiver finishInitializationOfObjects];
+    [unarchiver awakeObjects];
+    
+    int     i, count = [decodedRules count];
+    
+    for(i = 0; i < count; i++){
+        Rule    *rule = [decodedRules objectAtIndex:i];
+        
+        [[rule rhs] setAssignmentClass:[loadedRuleClassNames objectAtIndex:i]];
+    }
+    
+    return decodedRules;
+}
+
 - (void) dealloc {
     [_lhsDescription release];
+    [_rhs removeObserver:self forKeyPath:@"value"];
+    [_rhs removeObserver:self forKeyPath:@"keyPath"];
+    [_rhs removeObserver:self forKeyPath:@"assignmentClass"];
     [_lhs release];
     [_rhs release];
     [super dealloc];
@@ -41,10 +89,10 @@
 	
 	_author = [unarchiver decodeIntForKey:@"author"];
 	_lhs = [[unarchiver decodeObjectForKey:@"lhs"] retain];
-	_rhs = [[unarchiver decodeObjectForKey:@"rhs"] retain];
+    [self setRhs:[unarchiver decodeObjectForKey:@"rhs"]];
 	
 	if ([_lhs isKindOfClass:[EOAndQualifier class]]) {
-            NSMutableArray *innerQuals = [[[(EOAndQualifier *)_lhs qualifiers] mutableCopy] autorelease];
+            NSMutableArray *innerQuals = [[(EOAndQualifier *)_lhs qualifiers] mutableCopy];
             
             if ([innerQuals count] == 2) {
                 EOQualifier *qual = [innerQuals objectAtIndex:0];
@@ -62,12 +110,13 @@
                         _enabled = NO;
                         
                         [innerQuals removeObject:qual];
-                        [_lhs release];
+                        [_lhs autorelease];
                         
                         _lhs = [[innerQuals objectAtIndex:0] retain];
                     }
                 }
 	    }
+		[innerQuals release];
 	}
     }
     
@@ -78,12 +127,15 @@
     if (_enabled == NO) {
 	NSLog(@"no");
 	EOKeyValueQualifier *kvq = [[EOKeyValueQualifier alloc] initWithKey:@"RuleIsDisabled" operatorSelector:@selector(isEqual:) value:@"YES"];
-	_lhs = [[EOAndQualifier alloc] initWithQualifierArray: [[NSArray alloc] initWithObjects:_lhs, kvq, nil]];
+	[_lhs autorelease];
+	_lhs = [[EOAndQualifier alloc] initWithQualifierArray: [[[NSArray alloc] initWithObjects:_lhs, kvq, nil] autorelease]];
+	[kvq release];
     }
     
     [archiver encodeInt:_author forKey:@"author"];
     [archiver encodeObject:_lhs forKey:@"lhs"];
     [archiver encodeObject:_rhs forKey:@"rhs"];
+    [archiver encodeObject:@"com.webobjects.directtoweb.Rule" forKey:@"class"];
 }
 
 - (NSString *)extendedDescription {
@@ -94,6 +146,7 @@
     NSDictionary *dict = [archiver dictionary];
     
     NSObject *desc = [dict objectForKey:@"raw"];
+	[archiver autorelease];
     
     return [desc description];
 }
@@ -102,11 +155,28 @@
     return _rhs;
 }
 
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
+    [self willChangeValueForKey:@"extendedDescription"];
+    [self didChangeValueForKey:@"extendedDescription"];
+}
+
 - (void)setRhs:(Assignment *)rhs {
-    if(_rhs != rhs) {
-        [_rhs release];
-        _rhs = [rhs retain];
-    }
+    if(_rhs != rhs){
+        [_rhs removeObserver:self forKeyPath:@"value"];
+        [_rhs removeObserver:self forKeyPath:@"keyPath"];
+        [_rhs removeObserver:self forKeyPath:@"assignmentClass"];
+		[_rhs setRule:nil];
+		[_rhs release];
+		
+        if([rhs isEqual:[NSNull null]])
+            rhs = nil;
+		_rhs = [rhs retain];
+		[_rhs setRule:self];
+        // Allows automatic update of preview
+        [_rhs addObserver:self forKeyPath:@"value" options:0 context:NULL];
+        [_rhs addObserver:self forKeyPath:@"keyPath" options:0 context:NULL];
+        [_rhs addObserver:self forKeyPath:@"assignmentClass" options:0 context:NULL];
+	}
 }
 
 - (EOQualifier *)lhs {
@@ -114,12 +184,12 @@
 }
 
 - (void)setLhs:(EOQualifier *)lhs {
-    if(_lhs != lhs) {
-        [_lhs release];
-        _lhs = [lhs retain];
+	if(_lhs != lhs){
+		[_lhs release];		
+		_lhs = [lhs retain];
         [_lhsDescription release];
         _lhsDescription = nil;
-    }
+	}
 }
 
 - (NSString *)lhsDescription {
@@ -129,11 +199,7 @@
     return _lhsDescription;
 }
 
-- (NSString *)rhsValueDescription {
-    return [_rhs valueDescription];
-}
-
--(BOOL) isNewRule {
+-(BOOL)isNewRule {
     return ([[self rhs] keyPath] == nil); // || ([[self rhs] value] == nil);
 }
 
@@ -142,12 +208,13 @@
         return YES;
     }
     NS_DURING {
-        NSString *description = (NSString *)*ioValue;
+        NSString    *description = (NSString *)*ioValue;
         if ([description length] > 0 && ![description isEqualToString:@"*true*"]) {
-            EOQualifier *qual = [EOQualifier qualifierWithQualifierFormat:description];
+            EOQualifier *newQualifier = [EOQualifier qualifierWithQualifierFormat:description];
+            *ioValue = [newQualifier description]; // Necessary for automatic update of edited qualifier
         }
     } NS_HANDLER {
-        NSDictionary *dict = [NSDictionary dictionaryWithObject:@"This is not a valid qualifier." forKey:NSLocalizedDescriptionKey];
+        NSDictionary *dict = [NSDictionary dictionaryWithObject:[NSString stringWithFormat:@"This is not a valid qualifier:\n\n%@", localException] forKey:NSLocalizedDescriptionKey];
         *outError = [NSError errorWithDomain:@"EOQualifier" code:0 userInfo:dict];
         return NO;
     } NS_ENDHANDLER;
@@ -180,10 +247,12 @@
 }
 
 - (void)setAuthor:(int)value {
-    [[[self undoManager] prepareWithInvocationTarget:self] setAuthor:_author];
-    [self _setActionName:@"Set Priority to %@" old:[NSNumber numberWithInt:_author] new:[NSNumber numberWithInt:value]];
-    
-    _author = value;
+	if(_author != value){
+		[[[self undoManager] prepareWithInvocationTarget:self] setAuthor:_author];
+		[self _setActionName:@"Set Priority to %@" old:[NSNumber numberWithInt:_author] new:[NSNumber numberWithInt:value]];
+		
+		_author = value;
+	}
 }
 
 - (int)priority {
@@ -199,15 +268,21 @@
 }
 
 - (void)setEnabled:(BOOL)flag {
-    [[[self undoManager] prepareWithInvocationTarget:self] setEnabled:_enabled];
-    [[self undoManager] setActionName:@"Enabled"];
-    
-    _enabled = flag;
+	if(_enabled != flag){
+		[[[self undoManager] prepareWithInvocationTarget:self] setEnabled:_enabled];
+		[[self undoManager] setActionName:@"Enabled"];
+		
+		_enabled = flag;
+	}
+}
+
+- (void)setModel:(RMModel *)model {
+	_model = model; // Back-pointer - not retained
 }
 
 // Undo management
 - (NSUndoManager *)undoManager {
-    return [[[NSDocumentController sharedDocumentController] currentDocument] undoManager];
+    return [_model undoManager];
 }
 
 - (void)_setActionName:(NSString *)format old:(id)oldValue new:(id)newValue {
@@ -220,7 +295,7 @@
     }
 }
 
-- (NSString *) description {
+- (NSString *)description {
     NSMutableString *rhsValue = [[[[[self rhs] value] description] mutableCopy] autorelease]; 
     [rhsValue replaceOccurrencesOfString:@"\n    " withString:@"" options:0 range:NSMakeRange(0,[rhsValue length])];
     return [NSString stringWithFormat:@"%d : %@ => %@ = %@ [%@]", 
@@ -228,15 +303,23 @@
 }
 
 
--(id) copy {
-    Rule *rule = [[Rule alloc] init];
-    EOKeyValueArchiver *archiver = [[[EOKeyValueArchiver alloc] init] autorelease];
+- (id)copyWithZone:(NSZone *)zone {
+    EOKeyValueArchiver *archiver = [[[EOKeyValueArchiver allocWithZone:zone] init] autorelease];
     
     [archiver encodeObject:self forKey:@"raw"];
     
     NSDictionary *dict = [archiver dictionary];
     
-    EOKeyValueUnarchiver *unarchiver = [[[EOKeyValueUnarchiver alloc] initWithDictionary:dict] autorelease];
-    return [unarchiver decodeObjectForKey:@"raw"];
+    EOKeyValueUnarchiver *unarchiver = [[[EOKeyValueUnarchiver allocWithZone:zone] initWithDictionary:dict] autorelease];
+    return [[unarchiver decodeObjectForKey:@"raw"] retain];
 }
+
+- (BOOL)isEqual:(id)anObject {
+    if ([anObject isKindOfClass:[Rule class]]) {
+        return ([self author] == [anObject author] && ((![self lhs] && ![anObject lhs]) || ([[self lhs] isEqual:[anObject lhs]])) && [[self rhs] isEqual:[anObject rhs]] && ![self enabled] == ![anObject enabled]);
+    } else {
+        return NO;
+    }
+}
+
 @end
