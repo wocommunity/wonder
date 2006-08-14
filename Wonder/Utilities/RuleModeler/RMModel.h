@@ -19,7 +19,7 @@
 
 }
 
-- (NSMutableArray *)rules;
-- (void)setRules:(NSMutableArray *)rules;
+- (NSArray *)rules;
+- (void)setRules:(NSArray *)rules;
 
 @end
