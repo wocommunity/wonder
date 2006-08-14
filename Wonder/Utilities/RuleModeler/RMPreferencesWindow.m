@@ -14,7 +14,7 @@
 
 - (id)init {
     if (self = [self initWithWindowNibName:@"RMPreferencesWindow"]) {
-	
+        d2wclientConfigurationPaths = [[[NSUserDefaults standardUserDefaults] arrayForKey:@"d2wclientConfigurationPaths"] mutableCopy];
     }
     
     return self;
@@ -147,6 +147,44 @@
     
     [currentIdentifier release];
     currentIdentifier = [[NSString stringWithString:identifier] retain];
+}
+
+- (IBAction)addPath:(id)sender {
+    int aRow = [d2wclientConfigurationPathTableView selectedRow];
+    
+    if(aRow == -1)
+        aRow = [d2wclientConfigurationPaths count];
+    [d2wclientConfigurationPaths insertObject:[NSString string] atIndex:aRow];
+    [d2wclientConfigurationPathTableView reloadData];
+    [d2wclientConfigurationPathTableView selectRow:aRow byExtendingSelection:NO];
+    [d2wclientConfigurationPathTableView editColumn:0 row:aRow withEvent:nil select:YES];
+}
+
+- (IBAction)removePath:(id)sender {
+    int aRow = [d2wclientConfigurationPathTableView selectedRow];
+    
+    [d2wclientConfigurationPaths removeObjectAtIndex:aRow];
+    [d2wclientConfigurationPathTableView reloadData];
+}
+
+#pragma mark NSTableView DataSource and Delegate Methods
+
+- (int)numberOfRowsInTableView:(NSTableView *)aTableView {
+    return [d2wclientConfigurationPaths count];
+}
+
+- (id)tableView:(NSTableView *)aTableView objectValueForTableColumn:(NSTableColumn *)aTableColumn row:(int)rowIndex {
+    return [d2wclientConfigurationPaths objectAtIndex:rowIndex];
+}
+
+- (void)tableView:(NSTableView *)aTableView setObjectValue:(id)anObject forTableColumn:(NSTableColumn *)aTableColumn row:(int)rowIndex
+{
+    [d2wclientConfigurationPaths replaceObjectAtIndex:rowIndex withObject:anObject];
+    [[NSUserDefaults standardUserDefaults] setObject:d2wclientConfigurationPaths forKey:@"d2wclientConfigurationPaths"];
+}
+
+- (void)tableViewSelectionDidChange:(NSNotification *)aNotification {
+    [removePathButtonCell setEnabled:([d2wclientConfigurationPathTableView numberOfSelectedRows] > 0)];
 }
 
 @end
