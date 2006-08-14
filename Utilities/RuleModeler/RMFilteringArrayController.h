@@ -13,7 +13,6 @@
 }
 
 - (void)search:(id)sender;
-- (NSMutableArray *)newObjects;
 - (NSUndoManager *)undoManager;
 - (void)_setActionName:(NSString *)format old:(id)oldValue new:(id)newValue;
 
