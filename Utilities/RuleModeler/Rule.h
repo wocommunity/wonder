@@ -7,11 +7,14 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "EOControl.h"
 
 @class Assignment;
+@class RMModel;
+@class EOQualifier;
+@class EOKeyValueUnarchiver;
+@class EOKeyValueArchiver;
 
-@interface Rule : NSObject {
+@interface Rule : NSObject <NSCopying> {
     
     @private
     int		    _author;
@@ -19,10 +22,10 @@
     NSString	    *_lhsDescription;
     Assignment	    *_rhs;
     BOOL	    _enabled;
-    
-    NSUndoManager   *_undoManager;
-
+	RMModel		*_model; // Back-pointer - not retained
 }
+
++ (NSArray *)rulesFromMutablePropertyList:(id)plist;
 
 - (id)initWithKeyValueUnarchiver:(EOKeyValueUnarchiver *)unarchiver;
 - (void)encodeWithKeyValueArchiver:(EOKeyValueArchiver *)archiver;
@@ -42,6 +45,8 @@
 
 - (BOOL)enabled;
 - (void)setEnabled:(BOOL)flag;
+
+- (void)setModel:(RMModel *)model;
 
 // Undo management
 - (NSUndoManager *)undoManager;
