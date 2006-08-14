@@ -20,8 +20,8 @@
             predicate = [NSPredicate predicateWithFormat:[value stringByAppendingString:@" or (isNewRule = YES)"]];
         } NS_HANDLER {
             NSArray *strings = [value componentsSeparatedByString:@" "];
-            NSMutableArray *predicates = [NSMutableArray arrayWithCapacity: [strings count]];
-            NSMutableArray *arguments = [NSMutableArray arrayWithCapacity: [strings count]];
+            NSMutableArray *predicates = [[NSMutableArray alloc] initWithCapacity:[strings count]];
+            NSMutableArray *arguments = [[NSMutableArray alloc] initWithCapacity:[strings count]];
             int i;
             for(i = 0; i < [strings count]; i++) {
                 NSString *string = [strings objectAtIndex:i];
@@ -33,16 +33,17 @@
                 [arguments addObject: string];
                 [arguments addObject: string];
                 [arguments addObject: string];
-                [predicates addObject:@"((lhsDescription like[c] %@) or (rhs.keyPath like[c] %@) or (rhsValueDescription like[c] %@))"];
+                [predicates addObject:@"((lhsDescription like[c] %@) or (rhs.keyPath like[c] %@) or (rhs.valueDescription like[c] %@))"];
                 
             }
             NSString *format = [NSString stringWithFormat:@"%@ or (isNewRule = YES)", [predicates componentsJoinedByString:@" and "]];
             predicate = [NSPredicate predicateWithFormat:format argumentArray:arguments];
-            NSLog(@"searching for: %@", predicate);
+            [predicates release];
+            [arguments release];
         } NS_ENDHANDLER;
     }
-        [self setFilterPredicate:predicate];
-        [self rearrangeObjects];
+    [self setFilterPredicate:predicate];
+    [self rearrangeObjects];
 }
 
 
