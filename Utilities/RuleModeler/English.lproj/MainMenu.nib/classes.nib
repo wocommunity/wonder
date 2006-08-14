@@ -6,6 +6,7 @@
                 duplicate = id; 
                 focusFilter = id; 
                 remove = id; 
+                removeDuplicateRules = id; 
                 selectNext = id; 
                 selectPrevious = id; 
                 showSelectedRule = id; 
