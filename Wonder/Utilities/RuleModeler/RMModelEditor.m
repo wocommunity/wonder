@@ -31,32 +31,110 @@
     return self;
 }
 
-- (void) dealloc {
-    [toolbarItems release];
-    [toolbarIdentifiers release];
-    [_rhsKeyNames release];
-    [_assignmentClassNames release];
-    [super dealloc];
+- (void)setDocument:(NSDocument *)document {
+    // We need to do that in order to avoid a KVO warning when document closes
+    // Only that binding is problematic
+    if(document == nil)
+        [rulesController unbind:@"contentArray"];
+    [super setDocument:document];
+}
+
+- (void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:NSViewFrameDidChangeNotification object:rhsValueHelpField];
+	[_assignmentClassNames autorelease];
+	[_rhsKeyNames autorelease];
+	[toolbarItems autorelease];
+    [rulesController removeObserver:self forKeyPath:@"selection.rhs.toolTip"];	
+	[super dealloc]; // Will release all nib top-level objects
+}
+
+- (void)updateHelpViewSize {
+    NSString    *toolTip = [rulesController valueForKeyPath:@"selection.rhs.toolTip"];
+    NSRect      rhsValueTextViewFrame = [[rhsValueTextView enclosingScrollView] frame];
+    NSRect      rhsValueHelpFieldFrame = [rhsValueHelpField frame];
+    double      helpHeightIncrease;
+    double      margin = 0;
+    NSRect      invalidRect = NSUnionRect(rhsValueTextViewFrame, rhsValueHelpFieldFrame);
+    
+    if([toolTip isKindOfClass:[NSString class]]){
+        NSRect  idealRect = rhsValueHelpFieldFrame;
+        
+        idealRect.size.height = 10000;
+        idealRect.size = [[rhsValueHelpField cell] cellSizeForBounds:idealRect];
+        
+        helpHeightIncrease = idealRect.size.height - rhsValueHelpFieldFrame.size.height;
+        if(rhsValueTextViewFrame.size.height - helpHeightIncrease < 56){
+            helpHeightIncrease = rhsValueTextViewFrame.size.height - 56;
+        }
+        if(rhsValueHelpFieldFrame.size.height <= 2){
+            margin = 9;
+        }
+    }
+    else{
+        if(rhsValueHelpFieldFrame.size.height > 2){
+            margin = -9;
+        }
+        helpHeightIncrease = -rhsValueHelpFieldFrame.size.height + 1;
+    }
+    rhsValueTextViewFrame.origin.y += helpHeightIncrease + margin;
+    rhsValueTextViewFrame.size.height -= helpHeightIncrease + margin;
+    rhsValueHelpFieldFrame.size.height += helpHeightIncrease;
+    [[rhsValueTextView enclosingScrollView] setFrame:rhsValueTextViewFrame];
+    [rhsValueHelpField setPostsFrameChangedNotifications:NO];
+    [rhsValueHelpField setFrame:rhsValueHelpFieldFrame];
+    [rhsValueHelpField setPostsFrameChangedNotifications:YES];
+    [[rhsValueHelpField superview] setNeedsDisplayInRect:invalidRect];
+}
+
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
+    [self updateHelpViewSize];
+}
+
+- (void)helpViewFrameDidChange:(NSNotification *)notif {
+    [self updateHelpViewSize];
+}
+
+- (void)refreshAssignmentClassNamesComboBoxContents {
+    NSArray         *assignmentClassNames = [[[self model] rules] valueForKeyPath:@"rhs.assignmentClass"];
+    NSMutableSet    *assignmentClassNamesSet = [NSMutableSet setWithArray:assignmentClassNames];
+    
+    [assignmentClassNamesSet addObjectsFromArray:[NSArray arrayWithObjects:@"com.webobjects.directtoweb.Assignment", @"com.webobjects.directtoweb.KeyValueAssignment", @"com.webobjects.directtoweb.BooleanAssignment", @"com.webobjects.directtoweb.DefaultAssignment", nil]];
+    [_assignmentClassNames autorelease];
+    _assignmentClassNames = [[assignmentClassNamesSet allObjects] mutableCopy];
+    [_assignmentClassNames removeObject:[NSNull null]];
+    [_assignmentClassNames sortUsingSelector:@selector(caseInsensitiveCompare:)];
+    [assignmentClassNamesComboBox reloadData];
+}
+
+- (void)refreshRhsKeyNamesComboBoxContents {
+    NSArray *rhsKeys = [[[self model] rules] valueForKeyPath:@"rhs.keyPath"];
+    NSSet   *rhsKeysSet = [NSSet setWithArray:rhsKeys];
+    
+    [_rhsKeyNames autorelease];
+    _rhsKeyNames = [[rhsKeysSet allObjects] mutableCopy];
+    [_rhsKeyNames removeObject:[NSNull null]];
+    [_rhsKeyNames sortUsingSelector:@selector(caseInsensitiveCompare:)];
+    [rhsKeyNamesComboBox reloadData];
 }
 
 - (void)awakeFromNib {
     [[self window] useOptimizedDrawing:YES];
     
-    _assignmentClassNames = [[NSMutableArray arrayWithObjects:@"com.webobjects.directtoweb.Assignment", @"com.webobjects.directtoweb.KeyValueAssignment", @"com.webobjects.directtoweb.BooleanAssignment", @"com.webobjects.directtoweb.DefaultAssignment", nil] retain];
-    
-    NSArray *rhsKeys = [[[self model] rules] valueForKeyPath:@"rhs.keyPath"];
-    NSSet *rhsKeysSet = [NSSet setWithArray:rhsKeys];
-    
-    _rhsKeyNames = [[rhsKeysSet allObjects] mutableCopy];
-    [_rhsKeyNames sortUsingSelector:@selector(caseInsensitiveCompare:)];
-    
-    [assignmentClassNamesComboBox reloadData];
-    [rhsKeyNamesComboBox reloadData];
+    [self refreshAssignmentClassNamesComboBoxContents];
+    [self refreshRhsKeyNamesComboBoxContents];
     
     [sourceDrawer setContentSize:NSMakeSize(0.0, 120.0)];
     
+    [rhsValueTextView setFieldEditor:YES];
+    [rhsValueTextView setFocusRingType:NSFocusRingTypeExterior];
+    [[rhsValueTextView enclosingScrollView] setFocusRingType:NSFocusRingTypeExterior];
+    [self updateHelpViewSize];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(helpViewFrameDidChange:) name:NSViewFrameDidChangeNotification object:rhsValueHelpField];
+    [rulesController addObserver:self forKeyPath:@"selection.rhs.toolTip" options:0 context:NULL];
+    [rulesController setSortDescriptors:[NSArray arrayWithObjects:[[[NSSortDescriptor alloc] initWithKey:@"author" ascending:YES] autorelease], [[[NSSortDescriptor alloc] initWithKey:@"lhsDescription" ascending:YES] autorelease], [[[NSSortDescriptor alloc] initWithKey:@"rhs.keyPath" ascending:YES] autorelease], nil]];
+    [rulesTableView setAutosaveTableColumns:YES];
+    
     toolbarItems = [[NSMutableDictionary dictionary] retain];
-    toolbarIdentifiers = [[NSMutableArray array] retain];
     
     addToolbarItem(toolbarItems, @"NewRule", @"New", @"New Rule", @"Add a new rule", rulesController, @selector(setImage:), [NSImage imageNamed:@"new.tif"], @selector(add:), nil);
     addToolbarItem(toolbarItems, @"DuplicateRule", @"Duplicate", @"Duplicate Rule", @"Duplicate rules", self, @selector(setImage:), [NSImage imageNamed:@"duplicate.tif"], @selector(duplicate:), nil);
@@ -125,7 +203,7 @@
     static NSArray *dii = nil;
     
     if (dii == nil) {
-	dii = [[NSArray arrayWithObjects:@"NewRule", @"DuplicateRule", @"RemoveRule", NSToolbarSpaceItemIdentifier, @"NextRule", @"PreviousRule", NSToolbarSpaceItemIdentifier, @"PreviewRule", NSToolbarFlexibleSpaceItemIdentifier, @"Filter", nil] retain];
+	dii = [[NSArray arrayWithObjects:@"NewRule", @"DuplicateRule", @"RemoveRule", NSToolbarSpaceItemIdentifier, @"PreviousRule", @"NextRule", NSToolbarSpaceItemIdentifier, @"PreviewRule", NSToolbarFlexibleSpaceItemIdentifier, @"Filter", nil] retain];
     }
     
     return dii;
@@ -185,37 +263,35 @@
 - (IBAction)copy:(id)sender {
     NSResponder *firstResponder = [[self window] firstResponder];
     if (firstResponder == rulesTableView) {
-        if ([rulesTableView numberOfSelectedRows] > 0) {
-            NSIndexSet *rowIdx = [rulesTableView selectedRowIndexes];
-            NSMutableArray *rows = [NSMutableArray arrayWithCapacity:[rulesTableView numberOfSelectedRows]];
-            NSMutableArray *actualClassNames = [NSMutableArray arrayWithCapacity:[rulesTableView numberOfSelectedRows]];
-            
-            //NSArray *rules = [[self model] rules];
-            NSArray *rules = [rulesController arrangedObjects];
-            Rule *rule;
-            
-            unsigned int idx = [rowIdx firstIndex];
-            
-            while (idx != NSNotFound) {
-                rule = [rules objectAtIndex:idx];
-                [rows addObject:rule];
-                [actualClassNames addObject:[[rule rhs] assignmentClass]];
-                
-                idx = [rowIdx indexGreaterThanIndex:idx];
-            }
-            
-            EOKeyValueArchiver *archiver = [[[EOKeyValueArchiver alloc] init] autorelease];
-            
-            [archiver encodeObject:rows forKey:@"rules"];
-            [archiver encodeObject:actualClassNames forKey:@"acn"];
-            
-            NSDictionary *plist = [archiver dictionary];
-            
-            NSPasteboard *pb = [NSPasteboard generalPasteboard];
-            
-            [pb declareTypes:[NSArray arrayWithObject:@"D2WRules"] owner:self];
-            [pb setPropertyList:plist forType:@"D2WRules"];
-        }
+		if ([rulesTableView numberOfSelectedRows] > 0) {
+			NSIndexSet *rowIdx = [rulesTableView selectedRowIndexes];
+			NSMutableArray *rows = [NSMutableArray arrayWithCapacity:[rulesTableView numberOfSelectedRows]];
+			
+			NSArray *rules = [rulesController arrangedObjects];
+			Rule *rule;
+			
+			unsigned int idx = [rowIdx firstIndex];
+			
+			while (idx != NSNotFound) {
+				rule = [rules objectAtIndex:idx];
+				[rows addObject:rule];
+				
+				idx = [rowIdx indexGreaterThanIndex:idx];
+			}
+			
+			EOKeyValueArchiver *archiver = [[EOKeyValueArchiver alloc] init];
+			
+			[archiver encodeObject:rows forKey:@"rules"];
+			
+			NSDictionary *plist = [archiver dictionary];
+			
+			NSPasteboard *pb = [NSPasteboard generalPasteboard];
+			
+			[pb declareTypes:[NSArray arrayWithObjects:@"D2WRules", NSStringPboardType, nil] owner:self];
+			[pb setPropertyList:plist forType:@"D2WRules"];
+			[pb setString:[plist description] forType:NSStringPboardType];
+            [archiver release];
+		}
     }
 }
 
@@ -232,23 +308,8 @@
 	NSString *type = [pb availableTypeFromArray:[NSArray arrayWithObject:@"D2WRules"]];
 	
 	if (type) {
-	    NSDictionary *plist = [pb propertyListForType:@"D2WRules"];
-	    
-	    EOKeyValueUnarchiver *unarchiver = [[[EOKeyValueUnarchiver alloc] initWithDictionary:plist] autorelease];
-	    
-	    NSArray *rules = [unarchiver decodeObjectForKey:@"rules"];
-	    NSArray *acn = [unarchiver decodeObjectForKey:@"acn"];
-	    
-	    int i, count = [rules count];
-	    Rule *rule;
-	    
-	    for (i = 0; i < count; i++) {
-		rule = [rules objectAtIndex:i];
-		[[rule rhs] setAssignmentClass:[acn objectAtIndex:i]];
-	    }
-	    
-	    [unarchiver finishInitializationOfObjects];
-	    [unarchiver awakeObjects];
+	    NSDictionary *plist = [pb propertyListForType:@"D2WRules"];	    
+        NSArray *rules = [Rule rulesFromMutablePropertyList:plist];
 	    
 	    [rulesController addObjects:rules];
 	}
@@ -337,6 +398,32 @@
     [sourceDrawer toggle:sender];
 }
 
+- (IBAction)removeDuplicateRules:(id)sender {
+    NSMutableIndexSet   *removedRuleIndexes = [[NSMutableIndexSet alloc] init];
+    NSArray             *allRules = [rulesController arrangedObjects];    
+    unsigned int        i, j, count = [allRules count];
+    
+    for (i = 0; i < count; i++) {
+        if (![removedRuleIndexes containsIndex:i]) {
+            Rule    *eachRule = [allRules objectAtIndex:i];
+            
+            for (j = i + 1; j < count; j++) {
+                Rule    *anotherRule = [allRules objectAtIndex:j];
+                
+                if ([eachRule isEqual:anotherRule]) {
+                    [removedRuleIndexes addIndex:j];
+                }
+            }
+        }
+    }
+    
+    if ([removedRuleIndexes count] > 0) {
+        // Test is necessary, else the arrayController would always add an entry to the undo stack, even when doing nothing!
+        [rulesController removeObjectsAtArrangedObjectIndexes:removedRuleIndexes];
+    }
+    [removedRuleIndexes release];
+}
+
 #pragma mark Splitview Delegate Methods
 
 - (float)splitView:(NSSplitView *)sender constrainMinCoordinate:(float)proposedMin ofSubviewAt:(int)offset {
@@ -363,6 +450,10 @@
 
 - (BOOL)splitView:(NSSplitView *)sender canCollapseSubview:(NSView *)subview {
     return YES;
+}
+
+- (void)splitViewDidResizeSubviews:(NSNotification *)aNotification {
+    [self updateHelpViewSize];
 }
 
 #pragma mark Combobox datasource methods

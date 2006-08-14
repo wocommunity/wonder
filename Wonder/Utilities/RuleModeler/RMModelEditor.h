@@ -15,7 +15,6 @@
 //
 
 #import <AppKit/AppKit.h>
-#import "EOControl.h"
 
 @class RMModel;
 
@@ -36,14 +35,14 @@
     IBOutlet NSDrawer		*sourceDrawer;
     
     IBOutlet NSArrayController  *rulesController;
+    IBOutlet NSTextView     *rhsValueTextView;
+    IBOutlet NSTextField    *rhsValueHelpField;
     
     @private
     NSMutableArray		*_assignmentClassNames;
     NSMutableArray		*_rhsKeyNames;
     
     NSMutableDictionary		*toolbarItems;
-    NSMutableArray		*toolbarIdentifiers;
-    
 }
 
 - (void)prepareToolbar;
@@ -54,5 +53,9 @@
 
 - (NSArray *)assignmentClassNames;
 - (IBAction)rhsComboBoxAction:(id)sender;
+
+- (IBAction)remove:(id)sender;
+
+- (IBAction)removeDuplicateRules:(id)sender;
 
 @end
