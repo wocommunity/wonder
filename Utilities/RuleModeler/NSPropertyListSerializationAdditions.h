@@ -11,12 +11,8 @@
 
 @interface NSPropertyListSerialization (NSPropertyListSerializationAdditions)
 
-+ (NSData *)openStepFormatDataFromPropertyList:(id)plist prettyPrint:(BOOL)flag errorDescription:(NSString **)errorString;
-
-+ (void)_appendObject:(id)plist toMutableString:(NSMutableString *)str level:(int)level;
-+ (void)_appendString:(NSString *)plist toMutableString:(NSMutableString *)str level:(int)level;
-+ (void)_appendArray:(NSArray *)plist toMutableString:(NSMutableString *)str level:(int)level;
-+ (void)_appendDictionary:(NSDictionary *)plist toMutableString:(NSMutableString *)str level:(int)level;
-+ (int)_nextLevel:(int)currentLevel;
++ (NSString *)openStepFormatStringFromPropertyList:(id)plist prettyPrint:(BOOL)flag escapeNonASCII:(BOOL)escapeNonASCII errorDescription:(NSString **)errorString;
++ (NSData *)openStepFormatDataFromPropertyList:(id)plist prettyPrint:(BOOL)flag escapeNonASCII:(BOOL)escapeNonASCII errorDescription:(NSString **)errorString;
++ (NSString *)openStepFormatStringFromPropertyList:(id)plist level:(int)maxLevel escapeNonASCII:(BOOL)escapeNonASCII errorDescription:(NSString **)errorString;
 
 @end
