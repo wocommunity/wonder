@@ -400,7 +400,7 @@
 
 - (IBAction)removeDuplicateRules:(id)sender {
     NSMutableIndexSet   *removedRuleIndexes = [[NSMutableIndexSet alloc] init];
-    NSArray             *allRules = [rulesController arrangedObjects];    
+    NSArray             *allRules = [rulesController content];    
     unsigned int        i, j, count = [allRules count];
     
     for (i = 0; i < count; i++) {
