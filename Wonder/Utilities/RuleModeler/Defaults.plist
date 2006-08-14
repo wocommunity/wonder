@@ -1,0 +1,4 @@
+{
+    openNewDocumentAtStartup = YES;
+    d2wclientConfigurationPaths = ("/System/Library/Frameworks/JavaDirectToWeb.framework/Versions/A/Resources/d2wclientConfiguration.plist", "/Library/Frameworks/ERDirectToWeb.framework/Resources/d2wclientConfiguration.plist", "~/Root/ERDirectToWeb.framework/Resources/d2wclientConfiguration.plist");
+}
