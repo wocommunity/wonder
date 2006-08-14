@@ -20,7 +20,7 @@ static NSString *ruleModelType = @"Apple D2WModel File";
 
 - (id)init {
     if (self = [super init]) {
-        [self setRules:[NSMutableArray arrayWithCapacity: 32]];
+		[self setRules:[NSArray array]];
     }
     
     return self;
@@ -32,54 +32,42 @@ static NSString *ruleModelType = @"Apple D2WModel File";
 }
 
 - (void)makeWindowControllers {
-    RMModelEditor *editor = [[[RMModelEditor alloc] init] autorelease];
+    RMModelEditor *editor = [[RMModelEditor alloc] init];
     
     [self addWindowController:editor];
+    [editor release];
 }
 
-- (NSData *)dataRepresentationOfType:(NSString *)type {
-    if ([type isEqualTo:ruleModelType]) {
+- (NSData *)dataOfType:(NSString *)typeName error:(NSError **)outError {
+    if ([typeName isEqualToString:ruleModelType]) {
         
-        EOKeyValueArchiver *archiver = [[[EOKeyValueArchiver alloc] init] autorelease];
-        NSArray *rules = [[[self rules] mutableCopy] autorelease];
+        EOKeyValueArchiver *archiver = [[EOKeyValueArchiver alloc] init];
+        NSMutableArray *rules = [[self rules] mutableCopy];
         
-        NSSortDescriptor *descriptor=[[[NSSortDescriptor alloc] initWithKey:@"sortOrder" ascending:YES] autorelease];
+        NSSortDescriptor *descriptor=[[NSSortDescriptor alloc] initWithKey:@"sortOrder" ascending:YES];
         NSArray *sortDescriptors=[NSArray arrayWithObject:descriptor];
-        rules = [[[rules sortedArrayUsingDescriptors:sortDescriptors] mutableCopy] autorelease];
+        [rules sortUsingDescriptors:sortDescriptors];
         
         [archiver encodeObject:rules forKey:@"rules"];
         
         NSDictionary *plist = [archiver dictionary];
-        NSMutableArray *loadedRules = [[[plist objectForKey:@"rules"] mutableCopy] autorelease];
-        
-        NSArray *loadedRuleClassNames = [rules valueForKeyPath:@"rhs.assignmentClass"];
-        
-        NSMutableDictionary *rule;
-        NSMutableDictionary *rhs;
-        
-        int i, count = [loadedRules count];
-        for (i = 0; i < count; i++) {
-            rule = [[[loadedRules objectAtIndex:i] mutableCopy] autorelease];
-            rhs = [[[rule objectForKey:@"rhs"] mutableCopy] autorelease];
-            
-            [rule setObject:@"com.webobjects.directtoweb.Rule" forKey:@"class"];
-            [rhs setObject:[loadedRuleClassNames objectAtIndex:i] forKey:@"class"];
-            
-            if (rhs) {
-                [rule setObject:rhs forKey:@"rhs"];
-            }
-            [loadedRules replaceObjectAtIndex:i withObject:rule];
-        }
-        
         NSString *errorDesc = nil;
         BOOL prettyPrint = ![[NSUserDefaults standardUserDefaults] boolForKey:@"saveRulesInSingleRows"];
-        NSDictionary *dict = [NSDictionary dictionaryWithObject:loadedRules forKey:@"rules"];
-        NSData *data = [NSPropertyListSerialization openStepFormatDataFromPropertyList:dict prettyPrint:prettyPrint errorDescription:&errorDesc];
+        NSData *data = [[NSPropertyListSerialization openStepFormatStringFromPropertyList:plist level:(prettyPrint ? INT_MAX:2) escapeNonASCII:YES errorDescription:&errorDesc] dataUsingEncoding:NSUTF8StringEncoding];
         
         if (errorDesc) {
             NSLog(errorDesc);
+            *outError = [NSError errorWithDomain:@"RuleModeler" code:0 userInfo:[NSDictionary dictionaryWithObject:errorDesc forKey:NSLocalizedDescriptionKey]];
         }
+        
+        [archiver release];
+        [rules release];
+        [descriptor release];
+        
         return data;
+    }
+    else{
+        *outError = [NSError errorWithDomain:@"RuleModeler" code:NSFileReadInvalidFileNameError userInfo:[NSDictionary dictionaryWithObject:@"Unknown file type" forKey:NSLocalizedDescriptionKey]];
     }
     
     return nil;
@@ -87,18 +75,20 @@ static NSString *ruleModelType = @"Apple D2WModel File";
 - (BOOL)saveToURL:(NSURL *)absoluteURL ofType:(NSString *)typeName forSaveOperation:(NSSaveOperationType)saveOperation error:(NSError **)outError {
     BOOL result = [super saveToURL:absoluteURL ofType:typeName forSaveOperation:saveOperation error:outError];
     if(result) {
-        NSArray *rules = [[[self rules] mutableCopy] autorelease];
+        NSMutableArray *rules = [[[self rules] mutableCopy] autorelease];
         
         NSSortDescriptor *descriptor=[[[NSSortDescriptor alloc] initWithKey:@"sortOrder" ascending:YES] autorelease];
         NSArray *sortDescriptors=[NSArray arrayWithObject:descriptor];
-        rules = [[[rules sortedArrayUsingDescriptors:sortDescriptors] mutableCopy] autorelease];
-        NSString *errorDesc = nil;
+        [rules sortUsingDescriptors:sortDescriptors];
+        NSError *errorDesc = nil;
         NSString *description = [rules description];
         NSURL *url = absoluteURL;
         url = (url == nil ? [self fileURL] : url);
         if(url != nil) {
             NSString *path = [[url path] stringByAppendingPathExtension:@"txt"];
-            if(![description writeToFile:path atomically:YES encoding:NSUTF8StringEncoding error:&errorDesc]) {
+            result = [description writeToFile:path atomically:YES encoding:NSUTF8StringEncoding error:&errorDesc];
+            if(!result) {
+                *outError = errorDesc;
                 NSLog(@"Save failed: %@ %@", path, errorDesc);
             }
         }
@@ -106,63 +96,61 @@ static NSString *ruleModelType = @"Apple D2WModel File";
     return result;
 }
 
-- (BOOL)loadDataRepresentation:(NSData *)data ofType:(NSString *)type {
-    if ([type isEqualTo:ruleModelType]) {
-	NSString *error = nil;
-	NSDictionary *plist = [NSPropertyListSerialization propertyListFromData:data mutabilityOption:NSPropertyListMutableContainersAndLeaves format:NULL errorDescription:&error];
-	
-	if (error) {
-	    return NO;
-	}
-	
-	EOKeyValueUnarchiver *unarchiver = [[[EOKeyValueUnarchiver alloc] initWithDictionary:plist] autorelease];
+- (BOOL)readFromData:(NSData *)data ofType:(NSString *)typeName error:(NSError **)outError {
+    if([typeName isEqualToString:ruleModelType]){
+        NSString        *error = nil;
+        NSDictionary    *plist = [NSPropertyListSerialization propertyListFromData:data mutabilityOption:NSPropertyListMutableContainersAndLeaves format:NULL errorDescription:&error];
         
-        NSArray *loadedRules = [plist objectForKey:@"rules"];
-        NSArray *loadedRuleClassNames = [loadedRules valueForKeyPath:@"rhs.class"];
-        [loadedRules takeValue:@"Assignment" forKeyPath:@"rhs.class"];
-        
-	[self setRules:[unarchiver decodeObjectForKey:@"rules"]];
-        
-	[unarchiver finishInitializationOfObjects];
-	[unarchiver awakeObjects];
-        
-        int i, count = [[self rules] count];
-        Rule *rule;
-        
-        for (i = 0; i < count; i++) {
-            rule = [[self rules] objectAtIndex:i];
-            [[rule rhs] setAssignmentClass:[loadedRuleClassNames objectAtIndex:i]];
+        if(error){
+            *outError = [NSError errorWithDomain:@"RuleModeler" code:0 userInfo:[NSDictionary dictionaryWithObject:error forKey:NSLocalizedDescriptionKey]];
+            
+            return NO;
         }
-	
-	if ([self rules] == nil) {
-	    return NO;
-	}
         
-	return YES;
+        [[self undoManager] disableUndoRegistration];
+        NS_DURING
+            [self setRules:[Rule rulesFromMutablePropertyList:plist]];
+        NS_HANDLER
+            *outError = [NSError errorWithDomain:@"RuleModeler" code:0 userInfo:[NSDictionary dictionaryWithObject:[localException reason] forKey:NSLocalizedDescriptionKey]];
+            return NO;
+        NS_ENDHANDLER
+        
+		[[self undoManager] enableUndoRegistration];
+        if([self rules] == nil) {
+            *outError = [NSError errorWithDomain:@"RuleModeler" code:0 userInfo:[NSDictionary dictionaryWithObject:@"No 'rules' key-value pair" forKey:NSLocalizedDescriptionKey]];
+            return NO;
+        }
+        
+        return YES;
+    }
+    else{
+        *outError = [NSError errorWithDomain:@"RuleModeler" code:NSFileReadInvalidFileNameError userInfo:[NSDictionary dictionaryWithObject:@"Unknown file type" forKey:NSLocalizedDescriptionKey]];
     }
     
     return NO;
 }
 
-- (NSMutableArray *)rules {
+- (NSArray *)rules {
     return _rules;
 }
 
-- (void)setRules:(NSMutableArray *)newRules {
-    [_rules release];
-    _rules = [newRules mutableCopy];
+- (void)setRules:(NSArray *)newRules {
+	[_rules makeObjectsPerformSelector:@selector(setModel:) withObject:nil];
+	[_rules autorelease];
+	
+	_rules = [newRules mutableCopy];
+	[_rules makeObjectsPerformSelector:@selector(setModel:) withObject:self];
 }
 
-- (NSString *) description {
+- (NSString *)description {
     return [[self rules] description];
 }
 
-- (NSString *) displayName {
+- (NSString *)displayName {
     if([self fileURL]) {
         return [[self fileURL] path];
     }
     return [super displayName];
 }
-
 
 @end
