@@ -44,10 +44,11 @@
 		3CEF254605CB6328007BD7AF /* RMModelEditor.h in Headers */ = {isa = PBXBuildFile; fileRef = 3C80872B05CA17AE0038AAAE /* RMModelEditor.h */; };
 		3CEF254705CB6329007BD7AF /* RMModelEditor.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C80872C05CA17AE0038AAAE /* RMModelEditor.m */; };
 		3CEF25C605CB7168007BD7AF /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8D15AC360486D014006FF6A4 /* Info.plist */; };
-		418533C20A64EAB7005EF081 /* SearchExtensions.h in Headers */ = {isa = PBXBuildFile; fileRef = 418533C00A64EAB7005EF081 /* SearchExtensions.h */; };
-		418533C30A64EAB7005EF081 /* SearchExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 418533C10A64EAB7005EF081 /* SearchExtensions.m */; };
 		41E834450A755BC0009A23B9 /* appIcon.icns in Resources */ = {isa = PBXBuildFile; fileRef = 41E834440A755BC0009A23B9 /* appIcon.icns */; };
 		41E9B3810A644C2D006CF8CE /* EOControl.h in Headers */ = {isa = PBXBuildFile; fileRef = 41E9B3800A644C2D006CF8CE /* EOControl.h */; };
+		552B54DA0A794B60009CEE98 /* EOKeyValueArchiverFix.h in Headers */ = {isa = PBXBuildFile; fileRef = 552B54D80A794B60009CEE98 /* EOKeyValueArchiverFix.h */; };
+		552B54DB0A794B60009CEE98 /* EOKeyValueArchiverFix.m in Sources */ = {isa = PBXBuildFile; fileRef = 552B54D90A794B60009CEE98 /* EOKeyValueArchiverFix.m */; };
+		552B55C50A796A03009CEE98 /* Defaults.plist in Resources */ = {isa = PBXBuildFile; fileRef = 552B55C40A796A03009CEE98 /* Defaults.plist */; };
 		8D15AC290486D014006FF6A4 /* RuleModeler_Prefix.pch in Headers */ = {isa = PBXBuildFile; fileRef = 32DBCF750370BD2300C91783 /* RuleModeler_Prefix.pch */; };
 		8D15AC2C0486D014006FF6A4 /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 2A37F4B9FDCFA73011CA2CEA /* Credits.rtf */; };
 		8D15AC2D0486D014006FF6A4 /* MainMenu.nib in Resources */ = {isa = PBXBuildFile; fileRef = 2A37F4B6FDCFA73011CA2CEA /* MainMenu.nib */; };
@@ -55,23 +56,6 @@
 		8D15AC320486D014006FF6A4 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 2A37F4B0FDCFA73011CA2CEA /* main.m */; settings = {ATTRIBUTES = (); }; };
 		8D15AC340486D014006FF6A4 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A7FEA54F5311CA2CBB /* Cocoa.framework */; };
 /* End PBXBuildFile section */
-
-/* Begin PBXBuildStyle section */
-		417A7A6A0A6CF59700CD5389 /* Development */ = {
-			isa = PBXBuildStyle;
-			buildSettings = {
-				COPY_PHASE_STRIP = NO;
-			};
-			name = Development;
-		};
-		417A7A6B0A6CF59700CD5389 /* Deployment */ = {
-			isa = PBXBuildStyle;
-			buildSettings = {
-				COPY_PHASE_STRIP = YES;
-			};
-			name = Deployment;
-		};
-/* End PBXBuildStyle section */
 
 /* Begin PBXFileReference section */
 		089C1660FE840EACC02AAC07 /* English */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/InfoPlist.strings; sourceTree = "<group>"; };
@@ -118,10 +102,11 @@
 		3CEF24B105CB4C45007BD7AF /* DMToolbarUtils.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = DMToolbarUtils.m; sourceTree = "<group>"; };
 		3CEF24F505CB4FA4007BD7AF /* NSPlistDescriptions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSPlistDescriptions.h; sourceTree = "<group>"; };
 		3CEF24F605CB4FA4007BD7AF /* NSPlistDescriptions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSPlistDescriptions.m; sourceTree = "<group>"; };
-		418533C00A64EAB7005EF081 /* SearchExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SearchExtensions.h; sourceTree = "<group>"; };
-		418533C10A64EAB7005EF081 /* SearchExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SearchExtensions.m; sourceTree = "<group>"; };
 		41E834440A755BC0009A23B9 /* appIcon.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = appIcon.icns; sourceTree = "<group>"; };
 		41E9B3800A644C2D006CF8CE /* EOControl.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = EOControl.h; sourceTree = "<group>"; };
+		552B54D80A794B60009CEE98 /* EOKeyValueArchiverFix.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EOKeyValueArchiverFix.h; sourceTree = "<group>"; };
+		552B54D90A794B60009CEE98 /* EOKeyValueArchiverFix.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EOKeyValueArchiverFix.m; sourceTree = "<group>"; };
+		552B55C40A796A03009CEE98 /* Defaults.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist; path = Defaults.plist; sourceTree = "<group>"; };
 		8D15AC360486D014006FF6A4 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		8D15AC370486D014006FF6A4 /* RuleModeler.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RuleModeler.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -191,6 +176,8 @@
 				3CD87BD005CADDE500847A8F /* RMFilteringArrayController.m */,
 				3CEF24A605CB4B2C007BD7AF /* RMAppDelegate.h */,
 				3CEF24A705CB4B2C007BD7AF /* RMAppDelegate.m */,
+				552B54D80A794B60009CEE98 /* EOKeyValueArchiverFix.h */,
+				552B54D90A794B60009CEE98 /* EOKeyValueArchiverFix.m */,
 			);
 			name = Classes;
 			sourceTree = "<group>";
@@ -219,6 +206,7 @@
 				2A37F4B6FDCFA73011CA2CEA /* MainMenu.nib */,
 				8D15AC360486D014006FF6A4 /* Info.plist */,
 				089C165FFE840EACC02AAC07 /* InfoPlist.strings */,
+				552B55C40A796A03009CEE98 /* Defaults.plist */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -272,8 +260,6 @@
 				3C836F2407356D7600A6429E /* NSArrayAdditions.h */,
 				3C836F2507356D7600A6429E /* NSArrayAdditions.m */,
 				41E9B3800A644C2D006CF8CE /* EOControl.h */,
-				418533C00A64EAB7005EF081 /* SearchExtensions.h */,
-				418533C10A64EAB7005EF081 /* SearchExtensions.m */,
 				3CD87DFC05CB0F4A00847A8F /* EOQualifierUpdates.h */,
 				3CD87DFD05CB0F4A00847A8F /* EOQualifierUpdates.m */,
 				3CEF24F505CB4FA4007BD7AF /* NSPlistDescriptions.h */,
@@ -314,7 +300,7 @@
 				3C836F2607356D7600A6429E /* NSArrayAdditions.h in Headers */,
 				3C29C2E507393F44007AF595 /* NSPropertyListSerializationAdditions.h in Headers */,
 				41E9B3810A644C2D006CF8CE /* EOControl.h in Headers */,
-				418533C20A64EAB7005EF081 /* SearchExtensions.h in Headers */,
+				552B54DA0A794B60009CEE98 /* EOKeyValueArchiverFix.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -346,12 +332,6 @@
 		2A37F4A9FDCFA73011CA2CEA /* Project object */ = {
 			isa = PBXProject;
 			buildConfigurationList = 3CA4EB940A63F86100F9197D /* Build configuration list for PBXProject "RuleModeler" */;
-			buildSettings = {
-			};
-			buildStyles = (
-				417A7A6A0A6CF59700CD5389 /* Development */,
-				417A7A6B0A6CF59700CD5389 /* Deployment */,
-			);
 			hasScannedForEncodings = 1;
 			mainGroup = 2A37F4AAFDCFA73011CA2CEA /* RuleModeler */;
 			projectDirPath = "";
@@ -380,6 +360,7 @@
 				3C47DD6A05CCD21E00D4D0D2 /* next.tif in Resources */,
 				3C47DD8005CCDA2500D4D0D2 /* preview.tif in Resources */,
 				41E834450A755BC0009A23B9 /* appIcon.icns in Resources */,
+				552B55C50A796A03009CEE98 /* Defaults.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -404,7 +385,7 @@
 				3C971CC005CC2EE8007E33E6 /* RMFilteringArrayController.m in Sources */,
 				3C836F2707356D7600A6429E /* NSArrayAdditions.m in Sources */,
 				3C29C2E607393F44007AF595 /* NSPropertyListSerializationAdditions.m in Sources */,
-				418533C30A64EAB7005EF081 /* SearchExtensions.m in Sources */,
+				552B54DB0A794B60009CEE98 /* EOKeyValueArchiverFix.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -457,6 +438,7 @@
 		3CA4EB910A63F86100F9197D /* Development */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ARCHS = "$(NATIVE_ARCH)";
 				COPY_PHASE_STRIP = NO;
 				DEBUGGING_SYMBOLS = YES;
 				FRAMEWORK_SEARCH_PATHS = "\"$(SYSTEM_LIBRARY_DIR)/PrivateFrameworks\"";
@@ -492,6 +474,10 @@
 		3CA4EB920A63F86100F9197D /* Deployment */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ARCHS = (
+					ppc,
+					i386,
+				);
 				COPY_PHASE_STRIP = YES;
 				FRAMEWORK_SEARCH_PATHS = "\"$(SYSTEM_LIBRARY_DIR)/PrivateFrameworks\"";
 				GCC_ENABLE_FIX_AND_CONTINUE = NO;
@@ -551,18 +537,24 @@
 		3CA4EB950A63F86100F9197D /* Development */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				PREBINDING = NO;
+				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
 			};
 			name = Development;
 		};
 		3CA4EB960A63F86100F9197D /* Deployment */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				PREBINDING = NO;
+				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
 			};
 			name = Deployment;
 		};
 		3CA4EB970A63F86100F9197D /* Default */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				PREBINDING = NO;
+				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
 			};
 			name = Default;
 		};
