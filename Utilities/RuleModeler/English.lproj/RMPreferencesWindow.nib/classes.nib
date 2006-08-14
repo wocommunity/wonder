@@ -2,12 +2,15 @@
     IBClasses = (
         {CLASS = FirstResponder; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
         {
+            ACTIONS = {addPath = id; removePath = id; }; 
             CLASS = RMPreferencesWindow; 
             LANGUAGE = ObjC; 
             OUTLETS = {
                 coresPane = NSView; 
+                d2wclientConfigurationPathTableView = NSTableView; 
                 generalPane = NSView; 
                 importingPane = NSView; 
+                removePathButtonCell = NSButtonCell; 
                 sharingPane = NSView; 
                 userDefaultsController = NSUserDefaultsController; 
             }; 
