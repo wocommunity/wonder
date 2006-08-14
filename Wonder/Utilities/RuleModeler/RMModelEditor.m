@@ -21,6 +21,12 @@
 #import "Assignment.h"
 #import "DMToolbarUtils.m"
 
+@interface RMModelEditor (Private)
+
+- (void) removeDuplicateRulesAtIndexes:(NSIndexSet *)indexes;
+
+@end
+
 @implementation RMModelEditor
 
 - (id)init {
@@ -398,6 +404,29 @@
     [sourceDrawer toggle:sender];
 }
 
+- (void) restoreRules:(NSArray *)rules atIndexes:(NSIndexSet *)indexes {
+    NSMutableArray  *modelRules = [[(RMModel *)[self document] rules] mutableCopy];
+    NSUndoManager   *um = [[self document] undoManager];
+    
+    [[um prepareWithInvocationTarget:self] removeDuplicateRulesAtIndexes:indexes];
+    [um setActionName:[NSString stringWithFormat:@"Delete %i Duplicate Rule(s)", [indexes count]]];
+    [modelRules insertObjects:rules atIndexes:indexes];
+    [(RMModel *)[self document] setRules:modelRules];
+    [modelRules release];
+}
+
+- (void) removeDuplicateRulesAtIndexes:(NSIndexSet *)indexes {    
+    NSMutableArray  *modelRules = [[(RMModel *)[self document] rules] mutableCopy];
+    NSArray         *removedRules = [modelRules objectsAtIndexes:indexes];
+    NSUndoManager   *um = [[self document] undoManager];
+    
+    [[um prepareWithInvocationTarget:self] restoreRules:removedRules atIndexes:indexes];
+    [um setActionName:[NSString stringWithFormat:@"Delete %i Duplicate Rule(s)", [indexes count]]];
+    [modelRules removeObjectsAtIndexes:indexes];
+    [(RMModel *)[self document] setRules:modelRules];
+    [modelRules release];
+}
+
 - (IBAction)removeDuplicateRules:(id)sender {
     NSMutableIndexSet   *removedRuleIndexes = [[NSMutableIndexSet alloc] init];
     NSArray             *allRules = [rulesController content];    
@@ -419,7 +448,7 @@
     
     if ([removedRuleIndexes count] > 0) {
         // Test is necessary, else the arrayController would always add an entry to the undo stack, even when doing nothing!
-        [rulesController removeObjectsAtArrangedObjectIndexes:removedRuleIndexes];
+        [self removeDuplicateRulesAtIndexes:removedRuleIndexes];
     }
     [removedRuleIndexes release];
 }
