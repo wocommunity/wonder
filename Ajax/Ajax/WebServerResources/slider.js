@@ -64,7 +64,12 @@ Control.Slider.prototype = {
     this.alignY = parseInt(this.options.alignY || '0');
     
     this.trackLength = this.maximumOffset() - this.minimumOffset();
-    this.handleLength = this.isVertical() ? this.handles[0].offsetHeight : this.handles[0].offsetWidth;
+
+    this.handleLength = this.isVertical() ? 
+      (this.handles[0].offsetHeight != 0 ? 
+        this.handles[0].offsetHeight : this.handles[0].style.height.replace(/px$/,"")) : 
+      (this.handles[0].offsetWidth != 0 ? this.handles[0].offsetWidth : 
+        this.handles[0].style.width.replace(/px$/,""));
 
     this.active   = false;
     this.dragging = false;
@@ -137,8 +142,8 @@ Control.Slider.prototype = {
   },
   setValue: function(sliderValue, handleIdx){
     if(!this.active) {
-      this.activeHandle    = this.handles[handleIdx];
-      this.activeHandleIdx = handleIdx;
+      this.activeHandleIdx = handleIdx || 0;
+      this.activeHandle    = this.handles[this.activeHandleIdx];
       this.updateStyles();
     }
     handleIdx = handleIdx || this.activeHandleIdx || 0;
@@ -180,8 +185,11 @@ Control.Slider.prototype = {
     return(this.isVertical() ? this.alignY : this.alignX);
   },
   maximumOffset: function(){
-    return(this.isVertical() ?
-      this.track.offsetHeight - this.alignY : this.track.offsetWidth - this.alignX);
+    return(this.isVertical() ? 
+      (this.track.offsetHeight != 0 ? this.track.offsetHeight :
+        this.track.style.height.replace(/px$/,"")) - this.alignY : 
+      (this.track.offsetWidth != 0 ? this.track.offsetWidth : 
+        this.track.style.width.replace(/px$/,"")) - this.alignY);
   },  
   isVertical:  function(){
     return (this.axis == 'vertical');
@@ -217,7 +225,8 @@ Control.Slider.prototype = {
         
         var handle = Event.element(event);
         var pointer  = [Event.pointerX(event), Event.pointerY(event)];
-        if(handle==this.track) {
+        var track = handle;
+        if(track==this.track) {
           var offsets  = Position.cumulativeOffset(this.track); 
           this.event = event;
           this.setValue(this.translateToValue( 
