@@ -258,6 +258,9 @@ Test.Unit.Assertions.prototype = {
     this.failures++;
     this.messages.push("Failure: " + message);
   },
+  info: function(message) {
+    this.messages.push("Info: " + message);
+  },
   error: function(error) {
     this.errors++;
     this.messages.push(error.name + ": "+ error.message + "(" + Test.Unit.inspect(error) +")");
@@ -300,6 +303,13 @@ Test.Unit.Assertions.prototype = {
       this.fail(message + ': got "' + Test.Unit.inspect(obj) + '"'); }
     catch(e) { this.error(e); }
   },
+  assertMatch: function(expected, actual) {
+    var message = arguments[2] || 'assertMatch';
+    var regex = new RegExp(expected);
+    try { (regex.exec(actual)) ? this.pass() :
+      this.fail(message + ' : regex: "' +  Test.Unit.inspect(expected) + ' did not match: ' + Test.Unit.inspect(actual) + '"'); }
+    catch(e) { this.error(e); }
+  },
   assertHidden: function(element) {
     var message = arguments[1] || 'assertHidden';
     this.assertEqual("none", element.style.display, message);
@@ -336,6 +346,14 @@ Test.Unit.Assertions.prototype = {
   },
   assertVisible: function(element) {
     this.assert(this._isVisible(element), Test.Unit.inspect(element) + " was not visible. " + ("" || arguments[1]));
+  },
+  benchmark: function(operation, iterations) {
+    var startAt = new Date();
+    (iterations || 1).times(operation);
+    var timeTaken = ((new Date())-startAt);
+    this.info((arguments[2] || 'Operation') + ' finished ' + 
+       iterations + ' iterations in ' + (timeTaken/1000)+'s' );
+    return timeTaken;
   }
 }
 
