@@ -1,0 +1,3 @@
+DivID : WOString {
+	value = divID;
+}
