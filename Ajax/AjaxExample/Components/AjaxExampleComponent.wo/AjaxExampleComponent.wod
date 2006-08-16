@@ -58,6 +58,10 @@ DragResizeLink : WOHyperlink {
 	pageName = "DragResizeExample";
 }
 
+BusyLink : WOHyperlink {
+	pageName = "AjaxBusyIndicatorExample";
+}
+
 Contents : WOComponentContent {
 }
 
