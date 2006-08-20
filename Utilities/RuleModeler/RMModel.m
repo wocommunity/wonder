@@ -102,7 +102,9 @@ static NSString *ruleModelType = @"Apple D2WModel File";
         NSDictionary    *plist = [NSPropertyListSerialization propertyListFromData:data mutabilityOption:NSPropertyListMutableContainersAndLeaves format:NULL errorDescription:&error];
         
         if(error){
-            *outError = [NSError errorWithDomain:@"RuleModeler" code:0 userInfo:[NSDictionary dictionaryWithObject:error forKey:NSLocalizedDescriptionKey]];
+            if (outError) {
+                *outError = [NSError errorWithDomain:@"RuleModeler" code:0 userInfo:[NSDictionary dictionaryWithObject:error forKey:NSLocalizedDescriptionKey]];
+            }
             
             return NO;
         }
@@ -146,11 +148,29 @@ static NSString *ruleModelType = @"Apple D2WModel File";
     return [[self rules] description];
 }
 
++ (void)initialize {
+    [super initialize];
+    [self setKeys:[NSArray arrayWithObject:@"fileURL"] triggerChangeNotificationsForDependentKey:@"displayName"];
+}
+
 - (NSString *)displayName {
-    if([self fileURL]) {
-        return [[self fileURL] path];
+    if ([self fileURL]) {
+        NSString    *aPath = [[self fileURL] path];
+        NSString    *aName = [aPath lastPathComponent];
+        
+        if ([[aName pathExtension] isEqualToString:@"d2wmodel"]) {
+            aName = [aName stringByDeletingPathExtension];
+        }
+        aPath = [aPath stringByDeletingLastPathComponent];
+        aPath = [aPath lastPathComponent];
+        
+        return [NSString stringWithFormat:@"%@ - %@", aName, aPath];
     }
     return [super displayName];
+}
+
+- (void)setDisplayName:(NSString *)ignored {
+    // This method is implemented just to avoid KVO warning due to model list tableView
 }
 
 @end
