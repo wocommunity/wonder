@@ -18,5 +18,6 @@
 }
 
 - (IBAction)showPreferences:(id)sender;
+- (IBAction)createNewModelGroup:(id)sender;
 
 @end
