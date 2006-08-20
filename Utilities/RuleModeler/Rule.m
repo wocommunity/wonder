@@ -276,6 +276,10 @@
 	}
 }
 
+- (RMModel *)model {
+    return _model;
+}
+
 - (void)setModel:(RMModel *)model {
 	_model = model; // Back-pointer - not retained
 }

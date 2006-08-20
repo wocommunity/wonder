@@ -46,6 +46,7 @@
 - (BOOL)enabled;
 - (void)setEnabled:(BOOL)flag;
 
+- (RMModel *)model;
 - (void)setModel:(RMModel *)model;
 
 // Undo management
