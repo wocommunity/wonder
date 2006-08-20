@@ -42,7 +42,6 @@
 
 - (void)awakeFromNib {
     if (!modelListDrawer) { // This method is invoked twice, once for each nib
-        [super awakeFromNib];
         [NSBundle loadNibNamed:@"RMModelList" owner:self];
         [modelListDrawer setParentWindow:[self window]];
         NSSize  aSize = NSMakeSize(200, 0);
@@ -56,6 +55,7 @@
         [rulesTableView setTarget:self];
 #endif        
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(windowWillClose:) name:NSWindowWillCloseNotification object:nil];
+        [super awakeFromNib]; // Must be called after loading second nib, else toolbar not initialized correctly
     }
 }
 
