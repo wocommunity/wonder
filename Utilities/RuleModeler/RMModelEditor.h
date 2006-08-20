@@ -38,7 +38,6 @@
     IBOutlet NSTextView     *rhsValueTextView;
     IBOutlet NSTextField    *rhsValueHelpField;
     
-    @private
     NSMutableArray		*_assignmentClassNames;
     NSMutableArray		*_rhsKeyNames;
     
@@ -57,5 +56,13 @@
 - (IBAction)remove:(id)sender;
 
 - (IBAction)removeDuplicateRules:(id)sender;
+- (void) removeDuplicateRulesAtIndexes:(NSIndexSet *)indexes;
+
+- (NSString *)toolbarIdentifier;
+- (void)addToolbarItems;
+
+- (NSArrayController *) rulesController;
+- (NSArray *)rules;
+- (BOOL)validateAction:(SEL)action;
 
 @end
