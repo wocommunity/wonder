@@ -49,6 +49,17 @@
 		552B54DA0A794B60009CEE98 /* EOKeyValueArchiverFix.h in Headers */ = {isa = PBXBuildFile; fileRef = 552B54D80A794B60009CEE98 /* EOKeyValueArchiverFix.h */; };
 		552B54DB0A794B60009CEE98 /* EOKeyValueArchiverFix.m in Sources */ = {isa = PBXBuildFile; fileRef = 552B54D90A794B60009CEE98 /* EOKeyValueArchiverFix.m */; };
 		552B55C50A796A03009CEE98 /* Defaults.plist in Resources */ = {isa = PBXBuildFile; fileRef = 552B55C40A796A03009CEE98 /* Defaults.plist */; };
+		55ED36430A9108F4004875CD /* RMModelGroup.h in Headers */ = {isa = PBXBuildFile; fileRef = 55ED36410A9108F4004875CD /* RMModelGroup.h */; };
+		55ED36440A9108F4004875CD /* RMModelGroup.m in Sources */ = {isa = PBXBuildFile; fileRef = 55ED36420A9108F4004875CD /* RMModelGroup.m */; };
+		55ED36560A910B32004875CD /* RMModelGroupEditor.h in Headers */ = {isa = PBXBuildFile; fileRef = 55ED36540A910B32004875CD /* RMModelGroupEditor.h */; };
+		55ED36570A910B32004875CD /* RMModelGroupEditor.m in Sources */ = {isa = PBXBuildFile; fileRef = 55ED36550A910B32004875CD /* RMModelGroupEditor.m */; };
+		55ED37600A925F7A004875CD /* RMModelList.nib in Resources */ = {isa = PBXBuildFile; fileRef = 55ED375E0A925F7A004875CD /* RMModelList.nib */; };
+		55ED388A0A93A9EC004875CD /* models.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 55ED38890A93A9EC004875CD /* models.tiff */; };
+		55ED38BB0A93B2ED004875CD /* NSStringAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = 55ED38B90A93B2ED004875CD /* NSStringAdditions.h */; };
+		55ED38BC0A93B2ED004875CD /* NSStringAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 55ED38BA0A93B2ED004875CD /* NSStringAdditions.m */; };
+		55ED3B830A986A13004875CD /* RMModelGroupEditor.nib in Resources */ = {isa = PBXBuildFile; fileRef = 55ED3B810A986A12004875CD /* RMModelGroupEditor.nib */; };
+		55ED3D320A98A516004875CD /* RMDocumentController.h in Headers */ = {isa = PBXBuildFile; fileRef = 55ED3D300A98A515004875CD /* RMDocumentController.h */; };
+		55ED3D330A98A516004875CD /* RMDocumentController.m in Sources */ = {isa = PBXBuildFile; fileRef = 55ED3D310A98A516004875CD /* RMDocumentController.m */; };
 		8D15AC290486D014006FF6A4 /* RuleModeler_Prefix.pch in Headers */ = {isa = PBXBuildFile; fileRef = 32DBCF750370BD2300C91783 /* RuleModeler_Prefix.pch */; };
 		8D15AC2C0486D014006FF6A4 /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 2A37F4B9FDCFA73011CA2CEA /* Credits.rtf */; };
 		8D15AC2D0486D014006FF6A4 /* MainMenu.nib in Resources */ = {isa = PBXBuildFile; fileRef = 2A37F4B6FDCFA73011CA2CEA /* MainMenu.nib */; };
@@ -107,6 +118,17 @@
 		552B54D80A794B60009CEE98 /* EOKeyValueArchiverFix.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EOKeyValueArchiverFix.h; sourceTree = "<group>"; };
 		552B54D90A794B60009CEE98 /* EOKeyValueArchiverFix.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EOKeyValueArchiverFix.m; sourceTree = "<group>"; };
 		552B55C40A796A03009CEE98 /* Defaults.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist; path = Defaults.plist; sourceTree = "<group>"; };
+		55ED36410A9108F4004875CD /* RMModelGroup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RMModelGroup.h; sourceTree = "<group>"; };
+		55ED36420A9108F4004875CD /* RMModelGroup.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RMModelGroup.m; sourceTree = "<group>"; };
+		55ED36540A910B32004875CD /* RMModelGroupEditor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RMModelGroupEditor.h; sourceTree = "<group>"; };
+		55ED36550A910B32004875CD /* RMModelGroupEditor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RMModelGroupEditor.m; sourceTree = "<group>"; };
+		55ED375F0A925F7A004875CD /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/RMModelList.nib; sourceTree = "<group>"; };
+		55ED38890A93A9EC004875CD /* models.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = models.tiff; sourceTree = "<group>"; };
+		55ED38B90A93B2ED004875CD /* NSStringAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSStringAdditions.h; sourceTree = "<group>"; };
+		55ED38BA0A93B2ED004875CD /* NSStringAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSStringAdditions.m; sourceTree = "<group>"; };
+		55ED3B820A986A13004875CD /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/RMModelGroupEditor.nib; sourceTree = "<group>"; };
+		55ED3D300A98A515004875CD /* RMDocumentController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RMDocumentController.h; sourceTree = "<group>"; };
+		55ED3D310A98A516004875CD /* RMDocumentController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RMDocumentController.m; sourceTree = "<group>"; };
 		8D15AC360486D014006FF6A4 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		8D15AC370486D014006FF6A4 /* RuleModeler.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RuleModeler.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -171,6 +193,8 @@
 				3CEF24B105CB4C45007BD7AF /* DMToolbarUtils.m */,
 				3C8086F005CA17100038AAAE /* RMModel.h */,
 				3C8086F105CA17100038AAAE /* RMModel.m */,
+				55ED36410A9108F4004875CD /* RMModelGroup.h */,
+				55ED36420A9108F4004875CD /* RMModelGroup.m */,
 				3C80885805CA29880038AAAE /* D2W Standins */,
 				3CD87BCF05CADDE500847A8F /* RMFilteringArrayController.h */,
 				3CD87BD005CADDE500847A8F /* RMFilteringArrayController.m */,
@@ -178,6 +202,8 @@
 				3CEF24A705CB4B2C007BD7AF /* RMAppDelegate.m */,
 				552B54D80A794B60009CEE98 /* EOKeyValueArchiverFix.h */,
 				552B54D90A794B60009CEE98 /* EOKeyValueArchiverFix.m */,
+				55ED3D300A98A515004875CD /* RMDocumentController.h */,
+				55ED3D310A98A516004875CD /* RMDocumentController.m */,
 			);
 			name = Classes;
 			sourceTree = "<group>";
@@ -194,6 +220,7 @@
 		2A37F4B8FDCFA73011CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				55ED38890A93A9EC004875CD /* models.tiff */,
 				41E834440A755BC0009A23B9 /* appIcon.icns */,
 				3C47DD7F05CCDA2500D4D0D2 /* preview.tif */,
 				3C47DD6905CCD21E00D4D0D2 /* next.tif */,
@@ -223,6 +250,7 @@
 		3C80872705CA179E0038AAAE /* NIBs */ = {
 			isa = PBXGroup;
 			children = (
+				55ED36530A910B17004875CD /* RMModelGroupEditor */,
 				3CEF249305CB4A05007BD7AF /* RMPreferencesWindow */,
 				3C80872A05CA17A30038AAAE /* RMModelEditor */,
 			);
@@ -264,6 +292,8 @@
 				3CD87DFD05CB0F4A00847A8F /* EOQualifierUpdates.m */,
 				3CEF24F505CB4FA4007BD7AF /* NSPlistDescriptions.h */,
 				3CEF24F605CB4FA4007BD7AF /* NSPlistDescriptions.m */,
+				55ED38B90A93B2ED004875CD /* NSStringAdditions.h */,
+				55ED38BA0A93B2ED004875CD /* NSStringAdditions.m */,
 			);
 			name = Categories;
 			sourceTree = "<group>";
@@ -276,6 +306,17 @@
 				3CEF249405CB4A66007BD7AF /* RMPreferencesWindow.nib */,
 			);
 			name = RMPreferencesWindow;
+			sourceTree = "<group>";
+		};
+		55ED36530A910B17004875CD /* RMModelGroupEditor */ = {
+			isa = PBXGroup;
+			children = (
+				55ED3B810A986A12004875CD /* RMModelGroupEditor.nib */,
+				55ED36540A910B32004875CD /* RMModelGroupEditor.h */,
+				55ED36550A910B32004875CD /* RMModelGroupEditor.m */,
+				55ED375E0A925F7A004875CD /* RMModelList.nib */,
+			);
+			name = RMModelGroupEditor;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -301,6 +342,10 @@
 				3C29C2E507393F44007AF595 /* NSPropertyListSerializationAdditions.h in Headers */,
 				41E9B3810A644C2D006CF8CE /* EOControl.h in Headers */,
 				552B54DA0A794B60009CEE98 /* EOKeyValueArchiverFix.h in Headers */,
+				55ED36430A9108F4004875CD /* RMModelGroup.h in Headers */,
+				55ED36560A910B32004875CD /* RMModelGroupEditor.h in Headers */,
+				55ED38BB0A93B2ED004875CD /* NSStringAdditions.h in Headers */,
+				55ED3D320A98A516004875CD /* RMDocumentController.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -361,6 +406,9 @@
 				3C47DD8005CCDA2500D4D0D2 /* preview.tif in Resources */,
 				41E834450A755BC0009A23B9 /* appIcon.icns in Resources */,
 				552B55C50A796A03009CEE98 /* Defaults.plist in Resources */,
+				55ED37600A925F7A004875CD /* RMModelList.nib in Resources */,
+				55ED388A0A93A9EC004875CD /* models.tiff in Resources */,
+				55ED3B830A986A13004875CD /* RMModelGroupEditor.nib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -386,6 +434,10 @@
 				3C836F2707356D7600A6429E /* NSArrayAdditions.m in Sources */,
 				3C29C2E607393F44007AF595 /* NSPropertyListSerializationAdditions.m in Sources */,
 				552B54DB0A794B60009CEE98 /* EOKeyValueArchiverFix.m in Sources */,
+				55ED36440A9108F4004875CD /* RMModelGroup.m in Sources */,
+				55ED36570A910B32004875CD /* RMModelGroupEditor.m in Sources */,
+				55ED38BC0A93B2ED004875CD /* NSStringAdditions.m in Sources */,
+				55ED3D330A98A516004875CD /* RMDocumentController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -430,6 +482,22 @@
 				3CEF249505CB4A66007BD7AF /* English */,
 			);
 			name = RMPreferencesWindow.nib;
+			sourceTree = "<group>";
+		};
+		55ED375E0A925F7A004875CD /* RMModelList.nib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				55ED375F0A925F7A004875CD /* English */,
+			);
+			name = RMModelList.nib;
+			sourceTree = "<group>";
+		};
+		55ED3B810A986A12004875CD /* RMModelGroupEditor.nib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				55ED3B820A986A13004875CD /* English */,
+			);
+			name = RMModelGroupEditor.nib;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
