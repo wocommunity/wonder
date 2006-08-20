@@ -100,8 +100,12 @@
     [self updateHelpViewSize];
 }
 
+- (NSArray *)rules {
+    return [rulesController content];
+}
+
 - (void)refreshAssignmentClassNamesComboBoxContents {
-    NSArray         *assignmentClassNames = [[[self model] rules] valueForKeyPath:@"rhs.assignmentClass"];
+    NSArray         *assignmentClassNames = [[self rules] valueForKeyPath:@"rhs.assignmentClass"];
     NSMutableSet    *assignmentClassNamesSet = [NSMutableSet setWithArray:assignmentClassNames];
     
     [assignmentClassNamesSet addObjectsFromArray:[NSArray arrayWithObjects:@"com.webobjects.directtoweb.Assignment", @"com.webobjects.directtoweb.KeyValueAssignment", @"com.webobjects.directtoweb.BooleanAssignment", @"com.webobjects.directtoweb.DefaultAssignment", nil]];
@@ -113,7 +117,7 @@
 }
 
 - (void)refreshRhsKeyNamesComboBoxContents {
-    NSArray *rhsKeys = [[[self model] rules] valueForKeyPath:@"rhs.keyPath"];
+    NSArray *rhsKeys = [[self rules] valueForKeyPath:@"rhs.keyPath"];
     NSSet   *rhsKeysSet = [NSSet setWithArray:rhsKeys];
     
     [_rhsKeyNames autorelease];
@@ -123,13 +127,25 @@
     [rhsKeyNamesComboBox reloadData];
 }
 
+- (void)addToolbarItems {
+    addToolbarItem(toolbarItems, @"NewRule", @"New", @"New Rule", @"Add a new rule", rulesController, @selector(setImage:), [NSImage imageNamed:@"new.tif"], @selector(add:), nil);
+    addToolbarItem(toolbarItems, @"DuplicateRule", @"Duplicate", @"Duplicate Rule", @"Duplicate rules", self, @selector(setImage:), [NSImage imageNamed:@"duplicate.tif"], @selector(duplicate:), nil);
+    addToolbarItem(toolbarItems, @"RemoveRule", @"Remove", @"Remove Rule", @"Remove rules", self, @selector(setImage:), [NSImage imageNamed:@"remove.tif"], @selector(remove:), nil);
+    addToolbarItem(toolbarItems, @"Filter", @"Filter", @"Filter Rules", @"Enter a term or EOQualifier format", rulesController, @selector(setView:), filterView, @selector(search:), nil);
+    addToolbarItem(toolbarItems, @"PreviousRule", @"Previous", @"Previous Rule", @"Select previous rule", rulesController, @selector(setImage:), [NSImage imageNamed:@"previous.tif"], @selector(selectPrevious:), nil);
+    addToolbarItem(toolbarItems, @"NextRule", @"Next", @"Next Rule", @"Select next rule", rulesController, @selector(setImage:), [NSImage imageNamed:@"next.tif"], @selector(selectNext:), nil);
+    addToolbarItem(toolbarItems, @"PreviewRule", @"Preview", @"Preview Rule", @"Toggle the source preview drawer", sourceDrawer, @selector(setImage:), [NSImage imageNamed:@"preview.tif"], @selector(toggle:), nil);
+}
+
 - (void)awakeFromNib {
     [[self window] useOptimizedDrawing:YES];
     
     [self refreshAssignmentClassNamesComboBoxContents];
     [self refreshRhsKeyNamesComboBoxContents];
     
-    [sourceDrawer setContentSize:NSMakeSize(0.0, 120.0)];
+    NSSize  aSize = NSMakeSize(0, 120);
+    aSize.height = [[NSUserDefaults standardUserDefaults] floatForKey:@"sourceDrawerHeight"];
+    [sourceDrawer setContentSize:aSize];
     
     [rhsValueTextView setFieldEditor:YES];
     [rhsValueTextView setFocusRingType:NSFocusRingTypeExterior];
@@ -138,25 +154,23 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(helpViewFrameDidChange:) name:NSViewFrameDidChangeNotification object:rhsValueHelpField];
     [rulesController addObserver:self forKeyPath:@"selection.rhs.toolTip" options:0 context:NULL];
     [rulesController setSortDescriptors:[NSArray arrayWithObjects:[[[NSSortDescriptor alloc] initWithKey:@"author" ascending:YES] autorelease], [[[NSSortDescriptor alloc] initWithKey:@"lhsDescription" ascending:YES] autorelease], [[[NSSortDescriptor alloc] initWithKey:@"rhs.keyPath" ascending:YES] autorelease], nil]];
+    [rulesController rearrangeObjects];
     [rulesTableView setAutosaveTableColumns:YES];
     
     toolbarItems = [[NSMutableDictionary dictionary] retain];
-    
-    addToolbarItem(toolbarItems, @"NewRule", @"New", @"New Rule", @"Add a new rule", rulesController, @selector(setImage:), [NSImage imageNamed:@"new.tif"], @selector(add:), nil);
-    addToolbarItem(toolbarItems, @"DuplicateRule", @"Duplicate", @"Duplicate Rule", @"Duplicate rules", self, @selector(setImage:), [NSImage imageNamed:@"duplicate.tif"], @selector(duplicate:), nil);
-    addToolbarItem(toolbarItems, @"RemoveRule", @"Remove", @"Remove Rule", @"Remove rules", rulesController, @selector(setImage:), [NSImage imageNamed:@"remove.tif"], @selector(remove:), nil);
-    addToolbarItem(toolbarItems, @"Filter", @"Filter", @"Filter Rules", @"Enter a term or EOQualifier format", rulesController, @selector(setView:), filterView, @selector(search:), nil);
-    addToolbarItem(toolbarItems, @"PreviousRule", @"Previous", @"Previous Rule", @"Select previous rule", rulesController, @selector(setImage:), [NSImage imageNamed:@"previous.tif"], @selector(selectPrevious:), nil);
-    addToolbarItem(toolbarItems, @"NextRule", @"Next", @"Next Rule", @"Select next rule", rulesController, @selector(setImage:), [NSImage imageNamed:@"next.tif"], @selector(selectNext:), nil);
-    addToolbarItem(toolbarItems, @"PreviewRule", @"Preview", @"Preview Rule", @"Toggle the source preview drawer", sourceDrawer, @selector(setImage:), [NSImage imageNamed:@"preview.tif"], @selector(toggle:), nil);
+    [self addToolbarItems];
     
     [self prepareToolbar];
+}
+
+- (NSString *)toolbarIdentifier {
+    return @"DMWindowToolbar";
 }
 
 #pragma mark NSToolbar Methods
 
 - (void)prepareToolbar {
-    NSToolbar *toolbar = [[[NSToolbar alloc] initWithIdentifier:@"DMWindowToolbar"] autorelease];
+    NSToolbar *toolbar = [[[NSToolbar alloc] initWithIdentifier:[self toolbarIdentifier]] autorelease];
     
     // create the NSToolbarItems for the NSToolbar
     /*
@@ -223,18 +237,6 @@
     }
     
     return aii;
-}
-
-/*
- - (NSArray *)toolbarSelectableItemIdentifiers:(NSToolbar *)toolbar {
-     return nil;
- }
- */
-
-- (void)toolbarAction:(id)sender {
-    NSString *identifier = [sender itemIdentifier];
-    
-    NSLog(@"identifier:%@", identifier);
 }
 
 #pragma mark Stuff
@@ -329,7 +331,7 @@
 	NSIndexSet *rowIdx = [rulesTableView selectedRowIndexes];
 	NSMutableArray *rows = [NSMutableArray arrayWithCapacity:[rulesTableView numberOfSelectedRows]];
 	
-	NSArray *rules = [[self model] rules];
+	NSArray *rules = [self rules];
 	Rule *rule;
 	
 	unsigned int idx = [rowIdx firstIndex];
@@ -369,29 +371,35 @@
     [rulesTableView scrollRowToVisible:[rulesTableView selectedRow]];
 }
 
-- (BOOL)validateMenuItem:(NSMenuItem *)item {
-    NSString *title = [item title];
-    
-    if (([title isEqualToString:@"Copy"] || [title isEqualToString:@"Cut"] || [[item title] isEqualToString:@"Duplicate"]) && [rulesTableView numberOfSelectedRows] == 0) {
+- (BOOL)validateAction:(SEL)action {
+    if ((action == @selector(copy:) || action == @selector(cut:) || action == @selector(duplicate:) || action == @selector(showSelectedRule:)) && [rulesTableView numberOfSelectedRows] == 0) {
 	return NO;
-    } else if ([title isEqualToString:@"Paste"]) {
+    } else if (action == @selector(paste:)) {
 	NSPasteboard *pb = [NSPasteboard generalPasteboard];
 	NSString *type = [pb availableTypeFromArray:[NSArray arrayWithObject:@"D2WRules"]];
 	
 	if (!type) {
 	    return NO;
 	}
-    } else if ([title isEqualToString:@"Duplicate Rule"] && ([[self window] firstResponder] != rulesTableView || [rulesTableView numberOfSelectedRows] == 0)) {
-	return NO;
-    } else if ([title isEqualToString:@"Remove Rule"]) {
+//    } else if (action == @selector(duplicate:) && ([[self window] firstResponder] != rulesTableView || [rulesTableView numberOfSelectedRows] == 0)) {
+//	return NO;
+    } else if (action == @selector(remove:)) {
 	return [rulesController canRemove];
-    } else if ([title isEqualToString:@"Select Next"]) {
+    } else if (action == @selector(selectNext:)) {
 	return [rulesController canSelectNext];
-    } else if ([title isEqualToString:@"Select Previous"]) {
+    } else if (action == @selector(selectPrevious:)) {
 	return [rulesController canSelectPrevious];
     }
     
     return YES;
+}
+
+- (BOOL)validateMenuItem:(NSMenuItem *)item {
+    return [self validateAction:[item action]];
+}
+
+- (BOOL)validateToolbarItem:(NSToolbarItem *)toolbarItem {
+    return [self validateAction:[toolbarItem action]];
 }
 
 - (IBAction)focusFilter:(id)sender {
@@ -400,12 +408,15 @@
     [[self window] makeFirstResponder:filterField];
 }
 
-- (IBAction)toggleSourceDrawer:(id)sender {
-    [sourceDrawer toggle:sender];
+- (NSSize)drawerWillResizeContents:(NSDrawer *)sender toSize:(NSSize)contentSize {
+    if (sender == sourceDrawer)
+        [[NSUserDefaults standardUserDefaults] setFloat:contentSize.height forKey:@"sourceDrawerHeight"];
+    
+    return contentSize;
 }
 
 - (void) restoreRules:(NSArray *)rules atIndexes:(NSIndexSet *)indexes {
-    NSMutableArray  *modelRules = [[(RMModel *)[self document] rules] mutableCopy];
+    NSMutableArray  *modelRules = [[self rules] mutableCopy];
     NSUndoManager   *um = [[self document] undoManager];
     
     [[um prepareWithInvocationTarget:self] removeDuplicateRulesAtIndexes:indexes];
@@ -416,7 +427,7 @@
 }
 
 - (void) removeDuplicateRulesAtIndexes:(NSIndexSet *)indexes {    
-    NSMutableArray  *modelRules = [[(RMModel *)[self document] rules] mutableCopy];
+    NSMutableArray  *modelRules = [[self rules] mutableCopy];
     NSArray         *removedRules = [modelRules objectsAtIndexes:indexes];
     NSUndoManager   *um = [[self document] undoManager];
     
@@ -427,30 +438,39 @@
     [modelRules release];
 }
 
-- (IBAction)removeDuplicateRules:(id)sender {
-    NSMutableIndexSet   *removedRuleIndexes = [[NSMutableIndexSet alloc] init];
-    NSArray             *allRules = [rulesController content];    
+- (NSIndexSet *)duplicateRulesIndexes {
+    NSMutableIndexSet   *duplicateRuleIndexes = [[NSMutableIndexSet alloc] init];
+    NSArray             *allRules = [self rules];
     unsigned int        i, j, count = [allRules count];
     
     for (i = 0; i < count; i++) {
-        if (![removedRuleIndexes containsIndex:i]) {
+        if (![duplicateRuleIndexes containsIndex:i]) {
             Rule    *eachRule = [allRules objectAtIndex:i];
             
             for (j = i + 1; j < count; j++) {
                 Rule    *anotherRule = [allRules objectAtIndex:j];
                 
                 if ([eachRule isEqual:anotherRule]) {
-                    [removedRuleIndexes addIndex:j];
+                    [duplicateRuleIndexes addIndex:j];
                 }
             }
         }
     }
     
-    if ([removedRuleIndexes count] > 0) {
+    return [duplicateRuleIndexes autorelease];
+}
+
+- (IBAction)removeDuplicateRules:(id)sender {
+    NSIndexSet   *duplicateRuleIndexes = [self duplicateRulesIndexes];
+    
+    if ([duplicateRuleIndexes count] > 0) {
         // Test is necessary, else the arrayController would always add an entry to the undo stack, even when doing nothing!
-        [self removeDuplicateRulesAtIndexes:removedRuleIndexes];
+        [self removeDuplicateRulesAtIndexes:duplicateRuleIndexes];
     }
-    [removedRuleIndexes release];
+}
+
+- (NSArrayController *) rulesController {
+    return rulesController;
 }
 
 #pragma mark Splitview Delegate Methods
