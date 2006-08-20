@@ -10,6 +10,7 @@
 
 #import "RMPreferencesWindow.h"
 #import "EOKeyValueArchiverFix.h"
+#import "RMModelGroup.h"
 
 @implementation RMAppDelegate
 
@@ -79,12 +80,31 @@
         
         if (aURL) {
             NSDictionary    *aDict = [[NSFileManager defaultManager] fileAttributesAtPath:[aURL path] traverseLink:YES];
-            NSDate          *aDate = [aDict objectForKey:NSFileModificationDate];
             
-            if ([[aDocument fileModificationDate] compare:aDate] < 0) {
-                NSBeginAlertSheet(@"Rule file changed on disk", @"Reload", @"Keep Local Version", nil, [[[aDocument windowControllers] lastObject] window], self, NULL, @selector(sheetDidDismiss:returnCode:contextInfo:), aDocument, @"File has been externally modified. You can reload rules from file or keep local version of rules, but you will need to save them, if you don't want to lose them.");
+            if (aDict) {
+                NSDate  *aDate = [aDict objectForKey:NSFileModificationDate];
+                
+                if ([[aDocument fileModificationDate] compare:aDate] < 0) {
+                    NSBeginAlertSheet(@"Rule file changed on disk", @"Reload", @"Keep Local Version", nil, [[[aDocument windowControllers] lastObject] window], self, NULL, @selector(sheetDidDismiss:returnCode:contextInfo:), aDocument, @"File has been externally modified. You can reload rules from file or keep local version of rules, but you will need to save them, if you don't want to lose them.");
+                }
+            } else {
+                [aDocument updateChangeCount:NSChangeReadOtherContents];
+                NSBeginAlertSheet(@"Rule file deleted on disk", nil, nil, nil, [[[aDocument windowControllers] lastObject] window], nil, NULL, NULL, NULL, @"File has been deleted from disk. You will need to save it again if you don't want to lose it.");
             }
         }
+    }
+}
+
+- (IBAction)createNewModelGroup:(id)sender {
+    NSError     *outError;
+    NSDocument  *newDocument = [[NSDocumentController sharedDocumentController] makeUntitledDocumentOfType:RMModelGroupType error:&outError];
+    
+    if (newDocument) {
+        [[NSDocumentController sharedDocumentController] addDocument:newDocument];
+        [newDocument makeWindowControllers];
+        [newDocument showWindows];
+    } else {
+        [[NSAlert alertWithError:outError] runModal];
     }
 }
 
