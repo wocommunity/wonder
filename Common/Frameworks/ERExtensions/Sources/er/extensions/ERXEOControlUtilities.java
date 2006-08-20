@@ -500,11 +500,14 @@ public class ERXEOControlUtilities {
         EOQualifier schemaBasedQualifier = entity.schemaBasedQualifier(qualifier);
         EOFetchSpecification fs = new EOFetchSpecification(entity.name(), schemaBasedQualifier, null);
         synchronized (entity) {
-            entity.addAttribute(attribute);
-            fs.setFetchesRawRows(true);
-            fs.setRawRowKeyPaths(new NSArray(attribute.name()));
-            results = ec.objectsWithFetchSpecification(fs);
-            entity.removeAttribute(attribute);
+        	entity.addAttribute(attribute);
+        	try {
+        		fs.setFetchesRawRows(true);
+        		fs.setRawRowKeyPaths(new NSArray(attribute.name()));
+        		results = ec.objectsWithFetchSpecification(fs);
+        	} finally {
+        		entity.removeAttribute(attribute);
+        	}
         }
         if ((results != null) && (results.count() == 1)) {
             NSDictionary row = (NSDictionary) results.lastObject();
@@ -566,14 +569,16 @@ public class ERXEOControlUtilities {
         EOQualifier schemaBasedQualifier = entity.schemaBasedQualifier(qualifier);
         EOFetchSpecification fs = new EOFetchSpecification(entityName, schemaBasedQualifier, null);
         synchronized (entity) {
-            entity.addAttribute(attribute);
+        	entity.addAttribute(attribute);
+        	try {
+        		fs.setFetchesRawRows(true);
+        		fs.setRawRowKeyPaths(new NSArray(attribute.name()));
 
-            fs.setFetchesRawRows(true);
-            fs.setRawRowKeyPaths(new NSArray(attribute.name()));
+        		results = ec.objectsWithFetchSpecification(fs);
 
-            results = ec.objectsWithFetchSpecification(fs);
-
-            entity.removeAttribute(attribute);
+        	} finally {
+        		entity.removeAttribute(attribute);
+            }
         }
         if ((results != null) && (results.count() == 1)) {
             NSDictionary row = (NSDictionary) results.lastObject();
