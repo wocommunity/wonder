@@ -9,6 +9,8 @@
                 removeDuplicateRules = id; 
                 selectNext = id; 
                 selectPrevious = id; 
+                showDuplicateRules = id; 
+                showRuleModel = id; 
                 showSelectedRule = id; 
                 toggleSourceDrawer = id; 
             }; 
@@ -17,10 +19,15 @@
             SUPERCLASS = NSObject; 
         }, 
         {
-            ACTIONS = {showPreferences = id; }; 
+            ACTIONS = {createNewModelGroup = id; showPreferences = id; }; 
             CLASS = RMAppDelegate; 
             LANGUAGE = ObjC; 
             SUPERCLASS = NSObject; 
+        }, 
+        {
+            CLASS = RMDocumentController; 
+            LANGUAGE = ObjC; 
+            SUPERCLASS = NSDocumentController; 
         }
     ); 
     IBVersion = 1; 
