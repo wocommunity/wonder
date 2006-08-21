@@ -682,7 +682,7 @@
 			</dict>
 			<key>NSScrollAmts</key>
 			<data>
-			QSAAAEEgAABBmAAAQZgAAA==
+			QSAAAEEgAABBgAAAQYAAAA==
 			</data>
 			<key>NSSubviews</key>
 			<dict>
@@ -850,7 +850,7 @@
 				<integer>26</integer>
 			</dict>
 			<key>NSRowHeight</key>
-			<real>17</real>
+			<real>14</real>
 			<key>NSSuperview</key>
 			<dict>
 				<key>CF$UID</key>
@@ -866,7 +866,7 @@
 			<key>NSvFlags</key>
 			<integer>256</integer>
 		</dict>
-		<string>{743, 209}</string>
+		<string>{747, 213}</string>
 		<dict>
 			<key>$class</key>
 			<dict>
@@ -942,7 +942,7 @@
 			<key>NSvFlags</key>
 			<integer>2304</integer>
 		</dict>
-		<string>{743, 17}</string>
+		<string>{747, 17}</string>
 		<dict>
 			<key>$classes</key>
 			<array>
@@ -978,7 +978,7 @@
 			<key>NSvFlags</key>
 			<integer>256</integer>
 		</dict>
-		<string>{{744, 0}, {16, 17}}</string>
+		<string>{{748, 0}, {12, 17}}</string>
 		<dict>
 			<key>$classes</key>
 			<array>
@@ -1243,7 +1243,7 @@
 			<key>NSCellFlags</key>
 			<integer>67239424</integer>
 			<key>NSCellFlags2</key>
-			<integer>0</integer>
+			<integer>131072</integer>
 			<key>NSContents</key>
 			<dict>
 				<key>CF$UID</key>
@@ -1443,9 +1443,9 @@
 				<integer>43</integer>
 			</dict>
 			<key>NSSize</key>
-			<real>13</real>
+			<real>11</real>
 			<key>NSfFlags</key>
-			<integer>1044</integer>
+			<integer>3100</integer>
 		</dict>
 		<dict>
 			<key>$class</key>
@@ -1812,7 +1812,7 @@
 				<integer>28</integer>
 			</dict>
 			<key>NSWidth</key>
-			<real>192</real>
+			<real>179</real>
 		</dict>
 		<string>rhs.value</string>
 		<dict>
@@ -1915,7 +1915,7 @@
 				<integer>28</integer>
 			</dict>
 			<key>NSWidth</key>
-			<real>80.59228515625</real>
+			<real>97.59228515625</real>
 		</dict>
 		<string>assignment</string>
 		<dict>
@@ -2043,7 +2043,7 @@
 			<key>$classname</key>
 			<string>NSTableView</string>
 		</dict>
-		<string>{{1, 17}, {743, 209}}</string>
+		<string>{{1, 17}, {747, 213}}</string>
 		<dict>
 			<key>$classes</key>
 			<array>
@@ -2088,10 +2088,12 @@
 				<key>CF$UID</key>
 				<integer>24</integer>
 			</dict>
+			<key>NSsFlags</key>
+			<integer>256</integer>
 			<key>NSvFlags</key>
 			<integer>256</integer>
 		</dict>
-		<string>{{744, 17}, {15, 209}}</string>
+		<string>{{748, 17}, {11, 213}}</string>
 		<string>_doScroller:</string>
 		<dict>
 			<key>$classes</key>
@@ -2127,7 +2129,7 @@
 				<integer>24</integer>
 			</dict>
 			<key>NSPercent</key>
-			<real>0.99597853422164917</real>
+			<real>0.98418974876403809</real>
 			<key>NSSuperview</key>
 			<dict>
 				<key>CF$UID</key>
@@ -2139,11 +2141,11 @@
 				<integer>24</integer>
 			</dict>
 			<key>NSsFlags</key>
-			<integer>1</integer>
+			<integer>257</integer>
 			<key>NSvFlags</key>
 			<integer>256</integer>
 		</dict>
-		<string>{{1, 226}, {743, 15}}</string>
+		<string>{{1, 230}, {747, 11}}</string>
 		<string>_doScroller:</string>
 		<dict>
 			<key>$class</key>
@@ -2159,7 +2161,7 @@
 				</dict>
 			</array>
 		</dict>
-		<string>{{1, 0}, {743, 17}}</string>
+		<string>{{1, 0}, {747, 17}}</string>
 		<string>{760, 242}</string>
 		<dict>
 			<key>$classes</key>
