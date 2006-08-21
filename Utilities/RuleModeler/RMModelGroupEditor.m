@@ -14,7 +14,31 @@
 
 //#define EDITABLE_MODELS
 
+@interface RMEnabledColorTransformer : NSValueTransformer {
+}
+@end
+
+@implementation RMEnabledColorTransformer
+
++ (BOOL)allowsReverseTransformation {
+    return NO;
+}
+
+- (id)transformedValue:(id)value {
+    if ([value boolValue]) {
+        return [NSColor textColor];
+    } else {
+        return [NSColor disabledControlTextColor];
+    }    
+}
+
+@end
+
 @implementation RMModelGroupEditor
+
++ (void) initialize {
+    [NSValueTransformer setValueTransformer:[[RMEnabledColorTransformer alloc] init] forName:@"RMEnabledColorTransformer"];
+}
 
 - (id)init {
     if (self = [self initWithWindowNibName:@"RMModelGroupEditor"]) {
@@ -56,6 +80,7 @@
 #endif        
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(windowWillClose:) name:NSWindowWillCloseNotification object:nil];
         [super awakeFromNib]; // Must be called after loading second nib, else toolbar not initialized correctly
+        // TODO Use RBSplitView to allow programmatically collapsing splitviews (http://www.brockerhoff.net/src/rbs.html)
     }
 }
 
