@@ -87,23 +87,23 @@
 - (void) windowWillClose:(NSNotification *)notification {
     // In case a referenced document is closed without being saved, we need to
     // revert the document to its saved state.
-    id  aController = [[notification object] delegate];
+    // When method is invoked, the relationship between model and its windowcontroller(s)
+    // has already been broken, thus we simply check all our models that have no windowcontroller
+    // and when one of them has modifications, we revert it.
+    NSEnumerator    *modelEnum = [[[modelController content] valueForKey:@"model"] objectEnumerator];
+    RMModel         *eachModel;
     
-    if ([aController isKindOfClass:[NSWindowController class]] && [[aController document] isKindOfClass:[RMModel class]]) {
-        RMModel *aModel = [aController document];
-        
-        if ([[[modelController content] valueForKey:@"model"] containsObject:aModel]) {
-            if ([aModel isDocumentEdited]) {
-                NSError *outError;
-                
-                if (![aModel revertToContentsOfURL:[aModel fileURL] ofType:[aModel fileType] error:&outError]) {
-                    // TODO Maybe offer user to remove or change reference to model - currently we silently remove our reference to it
-                    [[NSAlert alertWithError:outError] beginSheetModalForWindow:[self window] modalDelegate:nil didEndSelector:NULL contextInfo:NULL];
-                    [(RMModelGroup *)[self document] removeModels:[NSArray arrayWithObject:aModel]];
-                }
+    while (eachModel = [modelEnum nextObject]) {
+        if (![[eachModel windowControllers] count] && [eachModel isDocumentEdited]) {
+            NSError *outError;
+            
+            if (![eachModel revertToContentsOfURL:[eachModel fileURL] ofType:[eachModel fileType] error:&outError]) {
+                // TODO Maybe offer user to remove or change reference to model - currently we silently remove our reference to it
+                [[NSAlert alertWithError:outError] beginSheetModalForWindow:[self window] modalDelegate:nil didEndSelector:NULL contextInfo:NULL];
+                [(RMModelGroup *)[self document] removeModels:[NSArray arrayWithObject:eachModel]];
             }
         }
-    }
+    }    
 }
 
 - (void)addToolbarItems {
