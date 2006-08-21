@@ -177,45 +177,43 @@ public class ERXJSPopUpRelationPicker extends ERXStatelessComponent {
     
    
     public void takeValuesFromRequest(WORequest request, WOContext context) {
-        NSMutableArray parents = new NSMutableArray();
         NSArray parentFormValues = request.formValuesForKey(parentSelectName);
-        if(parentFormValues == null) {
-            super.takeValuesFromRequest(request, context);
-            return;
-        }
-        if(parentFormValues.containsObject("WONoSelectionString")) {
-            setSelectedParents(null);
-        } else {
-            for (Enumeration ids = parentFormValues.objectEnumerator(); ids.hasMoreElements();) {
-                Object parent = parentFromID((String) ids.nextElement());
-                if(parent != null) {
-                    parents.addObject(parent);
-                }
-            }
-            setSelectedParents(parents);
-        }
- 
         NSArray childFormValues = request.formValuesForKey(childSelectName);
-        if(childFormValues.containsObject("WONoSelectionString")) {
-            NSArray children = (NSArray)parentSelection().valueForKeyPath(parentToChildrenRelationshipName());
+        if(parentFormValues != null && childFormValues != null) {
             if(parentFormValues.containsObject("WONoSelectionString")) {
-                setChildrenSelection(null);
+                setSelectedParents(null);
             } else {
-                if(!multiple()) {
+                NSMutableArray parents = new NSMutableArray();
+                for (Enumeration ids = parentFormValues.objectEnumerator(); ids.hasMoreElements();) {
+                    Object parent = parentFromID((String) ids.nextElement());
+                    if(parent != null) {
+                        parents.addObject(parent);
+                    }
+                }
+                setSelectedParents(parents);
+            }
+
+            if(childFormValues.containsObject("WONoSelectionString")) {
+                NSArray children = (NSArray)parentSelection().valueForKeyPath(parentToChildrenRelationshipName());
+                if(parentFormValues.containsObject("WONoSelectionString")) {
                     setChildrenSelection(null);
                 } else {
-                    setChildrenSelection(ERXArrayUtilities.flatten(children));
+                    if(!multiple()) {
+                        setChildrenSelection(null);
+                    } else {
+                        setChildrenSelection(ERXArrayUtilities.flatten(children));
+                    }
                 }
-            }
-        } else {
-            NSMutableArray children = new NSMutableArray();
-            for (Enumeration ids = childFormValues.objectEnumerator(); ids.hasMoreElements();) {
-                Object child = childFromID(null, (String) ids.nextElement());
-                if(child != null) {
-                    children.addObject(child);
+            } else {
+                NSMutableArray children = new NSMutableArray();
+                for (Enumeration ids = childFormValues.objectEnumerator(); ids.hasMoreElements();) {
+                    Object child = childFromID(null, (String) ids.nextElement());
+                    if(child != null) {
+                        children.addObject(child);
+                    }
                 }
+                setChildrenSelection(children);
             }
-            setChildrenSelection(children);
         }
         super.takeValuesFromRequest(request, context);
     }
