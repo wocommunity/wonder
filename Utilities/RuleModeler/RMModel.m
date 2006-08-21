@@ -154,17 +154,35 @@ static NSString *ruleModelType = @"Apple D2WModel File";
 }
 
 - (NSString *)displayName {
+    // Returns filename (except if "d2w.d2wmodel") and a path component: 
+    // the last path component which is neither Resources, nor Contents, 
+    // nor Versions, nor in a Versions/A folder.
+    // That's because normally all D2W models are named d2w.d2wmodel, and in 
+    // Wonder frameworks/apps the are located in a Resources folder, and when
+    // installed they are located in a (Contents/)Resources or Versions/*/Resources folder.
     if ([self fileURL]) {
+        static NSArray  *ignoredPathComponentNames = nil;
+        
+        if (ignoredPathComponentNames == nil) {
+            ignoredPathComponentNames = [[NSArray alloc] initWithObjects:@"Resources", @"Contents", @"Versions", @"A", nil];
+        }
         NSString    *aPath = [[self fileURL] path];
         NSString    *aName = [aPath lastPathComponent];
+        NSString    *aPathComponent;
         
         if ([[aName pathExtension] isEqualToString:@"d2wmodel"]) {
             aName = [aName stringByDeletingPathExtension];
         }
-        aPath = [aPath stringByDeletingLastPathComponent];
-        aPath = [aPath lastPathComponent];
+        do {
+            aPath = [aPath stringByDeletingLastPathComponent];
+            aPathComponent = [aPath lastPathComponent];
+        } while ([ignoredPathComponentNames containsObject:aPathComponent]);
         
-        return [NSString stringWithFormat:@"%@ - %@", aName, aPath];
+        if ([aName isEqualToString:@"d2w"]) {
+            return aPathComponent;
+        } else {
+            return [NSString stringWithFormat:@"%@ - %@", aName, aPathComponent];
+        }
     }
     return [super displayName];
 }
