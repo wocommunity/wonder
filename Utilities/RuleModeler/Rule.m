@@ -124,18 +124,20 @@
 }
 
 - (void)encodeWithKeyValueArchiver:(EOKeyValueArchiver *)archiver {
+    EOQualifier *lhs = _lhs;
     if (_enabled == NO) {
-	NSLog(@"no");
-	EOKeyValueQualifier *kvq = [[EOKeyValueQualifier alloc] initWithKey:@"RuleIsDisabled" operatorSelector:@selector(isEqual:) value:@"YES"];
-	[_lhs autorelease];
-	_lhs = [[EOAndQualifier alloc] initWithQualifierArray: [[[NSArray alloc] initWithObjects:_lhs, kvq, nil] autorelease]];
-	[kvq release];
+        EOKeyValueQualifier *kvq = [[EOKeyValueQualifier alloc] initWithKey:@"RuleIsDisabled" operatorSelector:@selector(isEqual:) value:@"YES"];
+        lhs = [[EOAndQualifier alloc] initWithQualifierArray: [[[NSArray alloc] initWithObjects:_lhs, kvq, nil] autorelease]];
+        [kvq release];
     }
     
     [archiver encodeInt:_author forKey:@"author"];
-    [archiver encodeObject:_lhs forKey:@"lhs"];
+    [archiver encodeObject:lhs forKey:@"lhs"];
     [archiver encodeObject:_rhs forKey:@"rhs"];
     [archiver encodeObject:@"com.webobjects.directtoweb.Rule" forKey:@"class"];
+    if (lhs != _lhs) {
+        [lhs release];
+    }
 }
 
 - (NSString *)extendedDescription {
@@ -146,9 +148,10 @@
     NSDictionary *dict = [archiver dictionary];
     
     NSObject *desc = [dict objectForKey:@"raw"];
-	[archiver autorelease];
+    NSString *extendedDescription = [[desc description] retain];
+	[archiver release];
     
-    return [desc description];
+    return [extendedDescription autorelease];
 }
 
 - (Assignment *)rhs {
