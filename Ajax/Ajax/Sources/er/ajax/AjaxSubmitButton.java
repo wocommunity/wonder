@@ -17,19 +17,15 @@ public class AjaxSubmitButton extends AjaxDynamicElement {
   }
   
   public boolean disabledInComponent(WOComponent component) {
-	  return false;
+	  return booleanValueForBinding("disabled", false, component);
   }
-  
 
   public String nameInContext( WOContext context, WOComponent component) {
-	  return context.elementID();
+	  return (String) valueForBinding("name", context.elementID(), component);
   }
   
   public NSDictionary createAjaxOptions(WOComponent component) {
-	  String name = (String) valueForBinding("name", component );
-	  if(name == null) {
-		  name = component.context().elementID();
-	  }
+	  String name = nameInContext(component.context(), component);
 	  NSMutableArray ajaxOptionsArray = new NSMutableArray();
 	  ajaxOptionsArray.addObject(new AjaxOption("onSuccess", AjaxOption.SCRIPT));
 	  ajaxOptionsArray.addObject(new AjaxOption("onFailure", AjaxOption.SCRIPT));
@@ -42,26 +38,26 @@ public class AjaxSubmitButton extends AjaxDynamicElement {
 	  WOComponent component = context.component();
 
 	  response.appendContentString("<input ");
-	  String name = (String) valueForBinding("name", component );
-	  if(name == null) {
-		  name = context.elementID();
-	  }
+	  String name = nameInContext(context, component);
 	  appendTagAttributeToResponse(response, "type", "button");
 	  appendTagAttributeToResponse(response, "name", name);
 	  appendTagAttributeToResponse(response, "value", valueForBinding("value", component ));
 	  appendTagAttributeToResponse(response, "class", valueForBinding("class", component ));
 	  appendTagAttributeToResponse(response, "style", valueForBinding("style", component ));
 	  appendTagAttributeToResponse(response, "id", valueForBinding("id", component ));
+	  if(disabledInComponent(component)) {
+	      response.appendContentString(" disabled");
+	  }
 	  StringBuffer sb = new StringBuffer();
 	  sb.append("new Ajax.Request(this.form.action,");
 	  NSDictionary options = createAjaxOptions(component);
 	  AjaxOptions.appendToBuffer(options, sb, context);
 	  sb.append(")");
-      String onClick = (String)valueForBinding("onClick", component);
-      if(onClick != null) {
-          sb.append(";");
-          sb.append(onClick);
-       }
+          String onClick = (String)valueForBinding("onClick", component);
+          if(onClick != null) {
+              sb.append(";");
+              sb.append(onClick);
+          }
 	  appendTagAttributeToResponse(response, "onClick", sb.toString());
 	  response.appendContentString(" />");
 	  super.appendToResponse(response, context);
@@ -74,29 +70,39 @@ public class AjaxSubmitButton extends AjaxDynamicElement {
 	    addScriptResourceInHead(context, res, "builder.js");
 	    addScriptResourceInHead(context, res, "controls.js");
   }
+  
+  public WOActionResults invokeAction(WORequest worequest, WOContext wocontext) {
+      WOActionResults result = null;
+      WOComponent wocomponent = wocontext.component();
+      
+      boolean shouldHandleRequest = (!disabledInComponent(wocomponent) && wocontext._wasFormSubmitted()) && 
+	  	((wocontext._isMultipleSubmitForm() && worequest.formValueForKey(nameInContext(wocontext, wocomponent)) != null) 
+      		|| !wocontext._isMultipleSubmitForm());
+      
+      // System.out.println("shouldHandleRequest("+wocontext.elementID()+")="+shouldHandleRequest);
+      
+      if(shouldHandleRequest) {
+	  wocontext._setActionInvoked(true);
+	  result = handleRequest(worequest,wocontext);
+	  AjaxUtils.updateMutableUserInfoWithAjaxInfo(wocontext);
+      }
+      
+      return result;
+}
 
   protected WOActionResults handleRequest(WORequest worequest, WOContext wocontext) {
-	  WOComponent wocomponent = wocontext.component();
-	  WOResponse result = null;
-	  if(!disabledInComponent(wocomponent)) {
-		  Object obj;
-		  result = AjaxUtils.createResponse(wocontext);
-		  boolean pull = wocontext._isMultipleSubmitForm();
-		  pull = (pull && worequest.formValueForKey(nameInContext(wocontext, wocomponent)) != null) || !pull ;
-		  if(pull) {
-			  wocontext._setActionInvoked(true);
-			  obj = valueForBinding("action", wocomponent);
-			  if(obj == null)
-				  obj = wocontext.page();
-		  }
-		  String onClickServer = (String) valueForBinding("onClickServer", wocomponent);
-		  if(onClickServer != null) {
-			  result.setHeader("text/javascript", "content-type");
-			  result.setContent(onClickServer);
-		  }
-	  }
+	WOResponse result = AjaxUtils.createResponse(wocontext);
+	WOComponent wocomponent = wocontext.component();
+	Object obj = valueForBinding("action", wocomponent);
+	if(obj == null)
+	    obj = wocontext.page();
+	String onClickServer = (String) valueForBinding("onClickServer", wocomponent);
+	if(onClickServer != null) {
+	    result.setHeader("text/javascript", "content-type");
+	    result.setContent(onClickServer);
+	}
 	  
-	  return result;
+	return result;
   }
 
 }
