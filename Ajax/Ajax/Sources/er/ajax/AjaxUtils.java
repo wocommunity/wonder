@@ -195,7 +195,7 @@ public class AjaxUtils {
     String invokeWOElementID = request.stringFormValueForKey("invokeWOElementID");
     // WOComponent wocomponent = context.component();
     // System.out.println(wocomponent.name() + " e:" + elementID + " - s: " + senderID + " - in " + invokeWOElementID);
-    boolean shouldHandleRequest = elementID != null && (elementID.startsWith(senderID) || (invokeWOElementID != null && invokeWOElementID.equals(elementID)));
+    boolean shouldHandleRequest = elementID != null && (elementID.equals(senderID) || (invokeWOElementID != null && invokeWOElementID.equals(elementID)));
     // System.out.println("el: "+elementID+", sender: "+senderID+", invoke: "+invokeWOElementID+ ", shouldHandleRequest: "+shouldHandleRequest);
     return shouldHandleRequest;
   }
