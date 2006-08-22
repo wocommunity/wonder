@@ -38,9 +38,17 @@ public abstract class AjaxDynamicElement extends WODynamicGroup {
   public Object valueForBinding(String name, WOComponent component) {
       WOAssociation association = (WOAssociation) _associations.objectForKey(name);
       if(association != null) {
-          return association.valueInComponent(component);
+	  return association.valueInComponent(component);
       }
       return null;
+  }
+  
+  public boolean booleanValueForBinding(String name, boolean defaultValue, WOComponent component) {
+      WOAssociation association = (WOAssociation) _associations.objectForKey(name);
+      if(association != null) {
+          return association.booleanValueInComponent(component);
+      }
+      return defaultValue;
   }
   
   public void setValueForBinding(Object value, String name, WOComponent component) {
