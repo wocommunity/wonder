@@ -741,7 +741,7 @@ public class ERXArrayUtilities extends Object {
      * Which in the first case would return myArray sorted ascending by first name and the second case
      * by lastName and then by firstName.
      */
-    static class SortOperator implements NSArray.Operator
+    public static class SortOperator implements NSArray.Operator
     {
         private NSSelector selector;
         
@@ -780,7 +780,7 @@ public class ERXArrayUtilities extends Object {
      * EOFetchSpecification named "fetchUsers" which must be a model-based fetchspec in the
      * first object's entity.
      */
-    static class FetchSpecOperator implements NSArray.Operator
+    public static class FetchSpecOperator implements NSArray.Operator
     {
         /** public empty constructor */
         public FetchSpecOperator() {}
@@ -809,7 +809,7 @@ public class ERXArrayUtilities extends Object {
      * <br/>
      * Which in this case would return myArray flattened if myArray is an NSArray of NSArrays (of NSArrays etc).
      */
-    static class FlattenOperator extends BaseOperator {
+    public static class FlattenOperator extends BaseOperator {
         /** public empty constructor */
         public FlattenOperator() {}
 
@@ -834,7 +834,7 @@ public class ERXArrayUtilities extends Object {
      * <br/>
      * 
      */
-    static class IsEmptyOperator implements NSArray.Operator {
+    public static class IsEmptyOperator implements NSArray.Operator {
         /** public empty constructor */
         public IsEmptyOperator() {}
 
@@ -859,7 +859,7 @@ public class ERXArrayUtilities extends Object {
      * <br/>
      *
      */
-    static class SubarrayWithRangeOperator implements NSArray.Operator {
+    public static class SubarrayWithRangeOperator implements NSArray.Operator {
         /** public empty constructor */
         public SubarrayWithRangeOperator() {}
 
@@ -891,7 +891,7 @@ public class ERXArrayUtilities extends Object {
      * <br/>
      * Which in this case would return only those objects which are unique in myArray.
      */
-    static class UniqueOperator extends BaseOperator {
+    public static class UniqueOperator extends BaseOperator {
         /** public empty constructor */
         public UniqueOperator() {
         }
@@ -922,7 +922,7 @@ public class ERXArrayUtilities extends Object {
      * <br/>
      * Which in this case would return myArray without the occurrences of NSKeyValueCoding.Null.
      */
-    static class RemoveNullValuesOperator extends BaseOperator {
+    public static class RemoveNullValuesOperator extends BaseOperator {
         /** public empty constructor */
         public RemoveNullValuesOperator() {
         }
@@ -954,7 +954,7 @@ public class ERXArrayUtilities extends Object {
      * <br/>
      *
      */
-    static class ObjectAtIndexOperator implements NSArray.Operator {
+    public static class ObjectAtIndexOperator implements NSArray.Operator {
         /** public empty constructor */
         public ObjectAtIndexOperator() {}
 
@@ -986,7 +986,7 @@ public class ERXArrayUtilities extends Object {
      * <br/>
      * which will sum up all values and divide by the number of nun-null entries. 
      */
-    static class AvgNonNullOperator implements NSArray.Operator {
+    public static class AvgNonNullOperator implements NSArray.Operator {
         /** public empty constructor */
         public AvgNonNullOperator() {}
 
@@ -1023,7 +1023,7 @@ public class ERXArrayUtilities extends Object {
      * <br/>
      * which return a reversed result as to you would normally get.
      */
-    static class ReverseOperator extends BaseOperator {
+    public static class ReverseOperator extends BaseOperator {
         /** public empty constructor */
         public ReverseOperator() {}
 
@@ -1050,7 +1050,7 @@ public class ERXArrayUtilities extends Object {
      * The median is the value for which half of the elements are above and half the elements are below.
      * As such, an array sort is needed and this might be very costly depending of the size of the array.
      */
-    static class MedianOperator extends BaseOperator {
+    public static class MedianOperator extends BaseOperator {
         /** public empty constructor */
         public MedianOperator() {}
 
