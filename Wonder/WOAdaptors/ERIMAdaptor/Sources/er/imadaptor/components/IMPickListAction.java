@@ -1,5 +1,7 @@
 package er.imadaptor.components;
 
+import org.apache.log4j.Logger;
+
 import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
@@ -8,12 +10,11 @@ import com.webobjects.appserver.WOResponse;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSKeyValueCodingAdditions;
 
-import er.extensions.ERXLogger;
 import er.extensions.ERXStringUtilities;
 import er.imadaptor.InstantMessengerAdaptor;
 
 public class IMPickListAction extends WOComponent {
-  private static ERXLogger log = ERXLogger.getERXLogger(IMPickListAction.class);
+  private static Logger log = Logger.getLogger(IMPickListAction.class);
 
   private Object _repetitionItem;
   private int _index;
