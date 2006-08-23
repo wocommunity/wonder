@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
+import org.apache.log4j.Logger;
+
 import com.webobjects.appserver.WOAdaptor;
 import com.webobjects.appserver.WOApplication;
 import com.webobjects.appserver.WOContext;
@@ -18,10 +20,8 @@ import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSLog;
 import com.webobjects.foundation.NSMutableDictionary;
 
-import er.extensions.ERXLogger;
-
 public class InstantMessengerAdaptor extends WOAdaptor implements IMessageListener {
-  private static ERXLogger log = ERXLogger.getERXLogger(InstantMessengerAdaptor.class);
+  private static Logger log = Logger.getLogger(InstantMessengerAdaptor.class);
 
   public static final String IM_FACTORY_KEY = "IMFactory";
   public static final String SCREEN_NAME_KEY = "IMScreenName";
@@ -197,7 +197,7 @@ public class InstantMessengerAdaptor extends WOAdaptor implements IMessageListen
       _instantMessenger.connect();
     }
     catch (Throwable e) {
-      InstantMessengerAdaptor.log.debugStackTrace(e);
+      InstantMessengerAdaptor.log.debug("Failed to connect to provider.", e);
     }
 
     if (_watcherFactory != null) {
@@ -206,7 +206,7 @@ public class InstantMessengerAdaptor extends WOAdaptor implements IMessageListen
         _watcherInstantMessenger.connect();
       }
       catch (Throwable e) {
-        InstantMessengerAdaptor.log.debugStackTrace(e);
+        InstantMessengerAdaptor.log.debug("Failed to connect watcher to provider.", e);
       }
 
       _watcherTester = new IMConnectionTester(_watcherInstantMessenger, _instantMessenger, 60000, 30000);
