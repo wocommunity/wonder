@@ -42,6 +42,7 @@
                 <exclude name="JavaEODistribution.framework"/>
             </fileset>
             <fileset dir="${build.root}">
+                <include name="Ajax.framework/Resources/Java/*.jar" />
                 <include name="BT*.framework/Resources/Java/*.jar" />
                 <include name="DR*.framework/Resources/Java/*.jar" />
                 <include name="ER*.framework/Resources/Java/*.jar" />
@@ -131,6 +132,7 @@
 
             <classpath refid="classpath"/>
             <sourcepath>
+                <pathelement path="${wonder.root}/Ajax/Ajax/Sources/"/>
                 <pathelement path="${wonder.root}/Common/Frameworks/ERExtensions/Sources/"/>
                 <pathelement path="${wonder.root}/Common/Frameworks/ERDirectToWeb/Sources/"/>
                 <pathelement path="${wonder.root}/Common/Frameworks/ERJavaMail/Sources/"/>
