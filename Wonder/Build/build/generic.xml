@@ -1411,7 +1411,7 @@ There are many ways to use this script:
             <param name="project.name" value="ERMovies" />
         </antcall>
         <antcall target="global.web.application" >
-            <param name="project.name" value="ValidityModeler" />
+            <param name="project.name" value="ValidityExample" />
         </antcall>
         <antcall target="global.web.application" >
             <param name="project.name" value="SVGObjectsComponentTour" />
