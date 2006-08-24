@@ -3,6 +3,9 @@
 import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
+import com.webobjects.appserver.WOResponse;
+
+import er.ajax.AjaxUtils;
 
 public class UpdaterExample extends WOComponent {
 
@@ -10,7 +13,12 @@ public class UpdaterExample extends WOComponent {
 		super(context);
 	}
 
-	public long test() {
+	public void appendToResponse(WOResponse woresponse, WOContext wocontext) {
+        super.appendToResponse(woresponse, wocontext);
+        AjaxUtils.addScriptResourceInHead(wocontext, woresponse, "effects.js");
+    }
+
+    public long test() {
 		return System.currentTimeMillis();
 	}
 
