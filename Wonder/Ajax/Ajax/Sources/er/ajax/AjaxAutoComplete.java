@@ -14,68 +14,55 @@ import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 
 /**
- * This component implement the Scriptaculous http://script.aculo.us  Autocompleter combo-box.<br/>
- * This is a component that look like a text field, where when you start entering value, it start giving you a menu of options related to what you type.  Think about the auto-completion feature of many IDE (XCode / Eclipse) inside a textField.<br/>
- *<br/>
- * The scriptaculous library has 2 version of the autocompleter combo-box : a local version and an ajax version.
- *
+ * Autocompleting combo-box similar to Google suggest.<br/>
+ * 
+ * This is a component that look like a text field, where when you start
+ * entering value, it start giving you a menu of options related to what you
+ * type. Think about the auto-completion feature of many IDE (XCode / Eclipse)
+ * inside a textField.<br/> <br/> 
+ * The scriptaculous library has 2 version of the autocompleter combo-box : 
+ * a local version and an ajax version.
+ * 
  * <h3>Local</h3>
- * The local version hold the list of values all in memory (client-side), there is no interaction.  If the number of elements is big enough to be in a WOPopUP, then this variant is well suited for you.  If the list of element to show is too big, then you might prefer the 'ajax' version.<br/>
- * You have to tell the component that it is local (by default it is 'ajax' type) using the « isLocal » binding.
- * Then the « list » binding will need to provide all the objects needed to be found.  Filtering of the list as you type will be done client-side, all javascript.
- *
+ * The local version hold the list of values all in memory (client-side), there
+ * is no interaction. If the number of elements is big enough to be in a
+ * WOPopUP, then this variant is well suited for you. If the list of element to
+ * show is too big, then you might prefer the 'ajax' version.<br/> You have to
+ * tell the component that it is local (by default it is 'ajax' type) using the
+ * <code>isLocal</code> binding. Then the <code>list</code> binding will
+ * need to provide all the objects needed to be found. Filtering of the list as
+ * you type will be done client-side, all javascript.
+ * 
  * <h3>Ajax</h3>
  * Autocomplete field similar to what google has. You bind a value and a method
  * that returns a list and it hits the server on each keystroke and displays the
  * results.
- *
- * <h2>Synopsis</h2>
- * AjaxAutoComplete {	list=<em>a_NSArray</em>;
-						[item=<em>a_String</em>;]
-						[value=<em>a_String</em>;]
-						[displayString=<em>a_String</em>;]
-						[isLocal=<em>a_Boolean</em>;]
-						[tokens=<em>?</em>;]
-						[frequency=<em>?</em>;]
-						[minChars=<em>?</em>;]
-						[indicator=<em>?</em>;]
-						[updateElement=<em>?</em>;]
-						[afterUpdateElement=<em>?</em>;]
-						[fullSearch=<em>boolean</em>;]
-						[partialSearch=<em>boolean</em>;] }
- *
- * <h2>Bindings</h2>
- * <blockquote>
- * <dl>
- * <dt>list</dt>
- *   <dd>Bind to an nsarray, this method return the whole list of object to be displayed.  When used in an Ajax context, the component will push first to the <cite>value</cite> binding, giving you the chance to narrow the list of elements displayed.  When used in a Local context, the list should contain all possible objects.  the list will be filtered by the scriptaculous engine.</dd>
- * <dt>item</dt>
- *   <dd>Bind to the current element of the list.  This can be used to customized the string representation (in conjuction with the <cite>displayString</cite> binding) of the object.</dd>
- * <dt>value</dt>
- *   <dd>Bind to a string variable that will hold the text entered.</dd>
- * <dt>displayString</dt>
- *   <dd>Used to get the string representation of the object (work in conjunction with the <cite>item</cite> binding).</dd>
- * <dt>isLocal</dt>
- *   <dd>Boolean indicating if you want the list to be completely client-side.  Binding a true value, would mean that the list will filtered on the client.</dd>
- * <dt>token</dt>
- *   <dd>Look at the scriptaculous documentation.</dd>
- * <dt>frequency</dt>
- *   <dd>Look at the scriptaculous documentation.</dd>
- * <dt>minChars</dt>
- *   <dd>Look at the scriptaculous documentation.</dd>
- * <dt>indicator</dt>
- *   <dd>Look at the scriptaculous documentation.</dd>
- * <dt>updateElement</dt>
- *   <dd>Look at the scriptaculous documentation.</dd>
- * <dt>afterUpdateElement</dt>
- *   <dd>Look at the scriptaculous documentation.</dd>
- * <dt>fullSearch</dt>
- *   <dd>Look at the scriptaculous documentation.</dd>
- * <dt>partialSearch</dt>
- *   <dd>Look at the scriptaculous documentation.</dd>
- * </dl>
- * </blockquote>
- 
+ * 
+ * @binding list bound to a method that should return the whole list of object
+ *          to be displayed. When used in an Ajax context, the component will
+ *          push first to the <cite>value</cite> binding, giving you the chance
+ *          to narrow the list of elements displayed. When used in a Local
+ *          context, the list should contain all possible objects. the list will
+ *          be filtered by the scriptaculous engine.
+ * @binding value string that will hold the text entered in the field. It is
+ *          continiously updated.
+ * @binding item pushed and pulled the current element of the list. This can be
+ *          used to customized the string representation (in conjuction with the
+ *          <cite>displayString</cite> binding) of the object.
+ * @binding displayString optional custom string representation of the current
+ *          element.
+ * @binding isLocal boolean indicating if you want the list to be completely
+ *          client-side. Binding a true value, would mean that the list will
+ *          filtered on the client.
+ * @binding token
+ * @binding frequency Look at the scriptaculous documentation.
+ * @binding minChars Look at the scriptaculous documentation.
+ * @binding indicator Look at the scriptaculous documentation.
+ * @binding updateElement Look at the scriptaculous documentation.
+ * @binding afterUpdateElement Look at the scriptaculous documentation.
+ * @binding fullSearch Look at the scriptaculous documentation.
+ * @binding partialSearch Look at the scriptaculous documentation.
+ * 
  * @author ak
  */
 public class AjaxAutoComplete extends AjaxComponent {
