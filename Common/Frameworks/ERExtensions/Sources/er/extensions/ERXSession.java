@@ -710,15 +710,16 @@ public class ERXSession extends WOSession implements Serializable {
   /**
    * Overridden so that Ajax requests are not saved in the page cache.  Checks both the 
    * response userInfo and the response headers if the DONT_STORE_PAGE key is present. The value doesn't matter.
-   * 
+   * <p>
    * Page Replacement cache is specifically designed to support component actions in Ajax updates.  The problem with
    * component actions in Ajax is that if you let them use the normal page cache, then after only 30 (or whatever your backtrack
    * cache is set to) updates from Ajax, you will fill your backtrack cache.  Unfortunately for the user, though, the backtrack cache
    * filled up with background ajax requests, so when the user clicks on a component action on the FOREGROUND page, the
    * foreground page has fallen out of the cache, and the request cannot be fulfilled (because its context is gone).  If you simply
    * turn off backtrack cache entirely for a request, then you can't have component actions inside of an Ajax updated area, because
-   * the context of the Ajax update that generated the link will never get stored, and so you will ALWAYS get a backtrack error.  Enter
-   * page replacement cache.  If you look at the behavior of Ajax, it turns out that what you REALLY want is a hybrid page cache.  You
+   * the context of the Ajax update that generated the link will never get stored, and so you will ALWAYS get a backtrack error. 
+   * <p> 
+   * Enter page replacement cache.  If you look at the behavior of Ajax, it turns out that what you REALLY want is a hybrid page cache.  You
    * want to keep the backtrack of just the LAST update for a particular ajax component -- you don't care about its previous 29 states
    * because the user can't use the back button to get to them anyway, but if you have the MOST RECENT cached version of the page
    * then you can click on links in Ajax updated areas.  Page Replacement cache implements this logic.  For each Ajax component on 
@@ -729,12 +730,12 @@ public class ERXSession extends WOSession implements Serializable {
    * the replacement cache can service the page, then it does so.  If the replacement cache doesn't contain the context, then it 
    * passes up to the standard page cache.  If you are not using Ajax, no replacement cache will exist in your session, and all the code 
    * related to it will be skipped, so it should be minimally invasive under those conditions.
-   * 
-   * * It turns out that we have to keep the last TWO states, because of a race condition in the scenario where the replacement page 
+   * <p>
+   * It turns out that we have to keep the last TWO states, because of a race condition in the scenario where the replacement page 
    * cache replaces context 2 with the context 3 update, but the user's browser hasn't been updated yet with the HTML from 
    * context 3.  When the user clicks, they are clicking the context 2 link, which has now been removed from the replacement cache.
    * By keeping the last two states, you allow for the brief period where that transition occurs.
-   * 
+   * <p>
    * Random note (that I will find useful in 2 weeks when I forget this again): The first time through savePage, the request is saved
    * in the main cache.  It's only on a subsequent Ajax update that it uses page replacement cache.  So even though the cache
    * is keyed off of context ID, the explanation of the cache being components-per-page-sized works out because each component
