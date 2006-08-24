@@ -576,7 +576,7 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
         } catch (ERXValidationException e) {
             throw e;
         } catch (NSValidation.ValidationException e) {
-            if (e.key() == null || e.object() == null)
+            if (e.key() == null || e.object() == null || (e.object() != null && !(e.object() instanceof EOEnterpriseObject)))
                 e = new NSValidation.ValidationException(e.getMessage(), this, key);
             if(validationException.isDebugEnabled()) {
                 validationException.debug("Exception: " + e.getMessage() + " raised while validating object: "
