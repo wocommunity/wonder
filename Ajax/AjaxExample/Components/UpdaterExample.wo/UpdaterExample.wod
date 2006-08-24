@@ -45,4 +45,5 @@ UpdateShortcutLink: WOGenericContainer {
 UpdateWithActionLink : AjaxUpdateLink {
 	updateContainerID = "exampleArea";
 	action = anotherAction;
+	insertion = "function(receiver, response) {Effect.Fade(receiver, {to: 0.001, afterFinish: function() {Element.update(receiver, response); Effect.Appear(receiver)}})}";
 }
