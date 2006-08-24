@@ -553,12 +553,10 @@ public abstract class ERXApplication extends WOApplication implements ERXGracefu
      * @return the WOResponse of the generated exception page.
      */
     public WOResponse handleException(Exception exception, WOContext context) {
-    	if(false) {
+    	if(ERXProperties.booleanForKey("er.extensions.ERXApplication.redirectOnMissingObjects")) {
     		// AK: the idea here is that you might have a stale object that was deleted from the DB
     		// while you weren't looking so the next time around your page might get a chance earlier to
-    		// realize it isn't there anymore. Unfortunalty, this doesn«t work in all scenarios, but I 
-    		// leave the code here for future use. If I can't figure it out in the general case,
-    		// I'll remove it completely (2006-07-07)
+    		// realize it isn't there anymore. Unfortunalty, this doesn«t work in all scenarios.
     		if(exception instanceof ERXDatabaseContextDelegate.ObjectNotAvailableException && context != null) {
     			String retryKey = context.request().stringFormValueForKey("ERXRetry");
     			if(retryKey == null) {
