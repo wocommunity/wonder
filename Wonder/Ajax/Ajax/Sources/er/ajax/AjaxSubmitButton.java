@@ -44,9 +44,9 @@ public class AjaxSubmitButton extends AjaxDynamicElement {
 	  appendTagAttributeToResponse(response, "value", valueForBinding("value", component ));
 	  appendTagAttributeToResponse(response, "class", valueForBinding("class", component ));
 	  appendTagAttributeToResponse(response, "style", valueForBinding("style", component ));
-	  appendTagAttributeToResponse(response, "id", valueForBinding("id", component ));
+      appendTagAttributeToResponse(response, "id", valueForBinding("id", component ));
 	  if(disabledInComponent(component)) {
-	      response.appendContentString(" disabled");
+          appendTagAttributeToResponse(response, "disabled", "disabled");
 	  }
 	  StringBuffer sb = new StringBuffer();
 	  sb.append("new Ajax.Request(this.form.action,");
