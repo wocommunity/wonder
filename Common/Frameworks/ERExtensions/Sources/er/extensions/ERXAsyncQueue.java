@@ -10,11 +10,11 @@ import java.util.*;
  */
 public abstract class ERXAsyncQueue extends Thread {
 
-	private Queue _jobs = new LinkedList();
+	private LinkedList _jobs = new LinkedList();
 
 	public void enqueue(Object o) {
 		synchronized (_jobs) {
-			_jobs.add(o);
+			_jobs.addFirst(o);
 			_jobs.notify();
 		}
 	}
@@ -27,7 +27,7 @@ public abstract class ERXAsyncQueue extends Thread {
 				synchronized (_jobs) {
 					_jobs.wait();
 					if(!_jobs.isEmpty()) {
-						o = _jobs.remove();
+						o = _jobs.removeLast();
 					}
 				}
 				if(o != null) {
