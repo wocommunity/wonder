@@ -582,8 +582,10 @@ public class ERXEC extends EOEditingContext {
            NSArray insertedObjects = insertedObjects().immutableClone();
            NSArray updatedObjects = updatedObjects().immutableClone();
            NSArray deletedObjects = deletedObjects().immutableClone();
-           NSNotificationCenter.defaultCenter().postNotification(EditingContextWillSaveChangesNotification, this);
+           
            willSaveChanges(insertedObjects, updatedObjects, deletedObjects);
+
+           NSNotificationCenter.defaultCenter().postNotification(EditingContextWillSaveChangesNotification, this);
 
            _saveChanges();
 
