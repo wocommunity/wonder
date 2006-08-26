@@ -387,6 +387,31 @@ public class ERXConfigurationManager {
                 log.info("Skipping model '" + aModel.name() + "', it has no adaptor name set");
                 return;
             }
+
+            // Support for EODatabaseConfig from EntityModeler.  The value of YourEOModelName.DBConfigName is
+            // used to lookup the corresponding EODatabaseConfig name from user info.  The connection dictionary
+            // defined in the databaseConfig section completely replaces the connection dictionary in the 
+            // EOModel. After the initial replacement, all the additional PW model configurations are then 
+            // applied to the new dictionary.
+            String databaseConfigName = ERXSystem.getProperty(aModelName + ".DBConfigName");
+            NSDictionary databaseConfig = null;
+            if (databaseConfigName != null) {
+              NSDictionary userInfo = aModel.userInfo();
+              if (userInfo != null) {
+                NSDictionary entityModelerDictionary = (NSDictionary) userInfo.objectForKey("_EntityModeler");
+                if (entityModelerDictionary != null) {
+                  NSDictionary databaseConfigsDictionary = (NSDictionary) entityModelerDictionary.objectForKey("databaseConfigs");
+                  if (databaseConfigsDictionary != null) {
+                    databaseConfig = (NSDictionary) databaseConfigsDictionary.objectForKey(databaseConfigName);
+                    if (databaseConfig != null) {
+                      NSDictionary connectionDictionary = (NSDictionary) databaseConfig.objectForKey("connectionDictionary");
+                      aModel.setConnectionDictionary(connectionDictionary);
+                    }
+                  }
+                }
+              }
+            }
+            
             if (aModel.adaptorName().indexOf("Oracle")!=-1) {
                 String serverName= ERXSystem.getProperty(aModelName + ".DBServer");
                 serverName=serverName==null ? ERXSystem.getProperty("dbConnectServerGLOBAL") : serverName;
@@ -448,8 +473,8 @@ public class ERXConfigurationManager {
                     }
                 }
                 NSDictionary jdbcInfoDictionary = null;
-                String url= ERXSystem.getProperty(aModelName + ".URL");
-                url = url ==null ? ERXSystem.getProperty("dbConnectURLGLOBAL") : url;
+                String url = ERXSystem.getProperty(aModelName + ".URL");
+                url = url == null ? ERXSystem.getProperty("dbConnectURLGLOBAL") : url;
                 String userName= ERXSystem.getProperty(aModelName + ".DBUser");
                 userName= userName ==null ? ERXSystem.getProperty("dbConnectUserGLOBAL") : userName;
                 String passwd= ERXSystem.getProperty(aModelName + ".DBPassword");
@@ -558,16 +583,19 @@ public class ERXConfigurationManager {
                     }
                 }
             }
-            String e = ERXSystem.getProperty(aModelName + ".EOPrototypesEntity");
+            String prototypeEntityName = ERXSystem.getProperty(aModelName + ".EOPrototypesEntity");
+            if (prototypeEntityName == null && databaseConfig != null) {
+              prototypeEntityName = (String) databaseConfig.objectForKey("prototypeEntityName");
+            }
             // global prototype setting not supported yet
             //e = e ==null ? ERXSystem.getProperty("EOPrototypesEntityGLOBAL") : e;
-            if(e != null) {
+            if(prototypeEntityName != null) {
                 // we look for the entity globally so we can have one prototype entity
-                EOEntity newPrototypeEntity = aModel.modelGroup().entityNamed(e);
+                EOEntity newPrototypeEntity = aModel.modelGroup().entityNamed(prototypeEntityName);
                 if (newPrototypeEntity == null) {
-                    log.warn("Prototype Entity named "+e+" not found in model "+aModel.name());
+                    log.warn("Prototype Entity named "+prototypeEntityName+" not found in model "+aModel.name());
                 } else {
-                    if (log.isDebugEnabled()) log.debug("Adjusting prototypes to those from entity " + e);
+                    if (log.isDebugEnabled()) log.debug("Adjusting prototypes to those from entity " + prototypeEntityName);
 
                     EOEntity proto = aModel.entityNamed("EOPrototypes");
                     if(proto != null) aModel.removeEntity(proto);
