@@ -292,7 +292,8 @@ public class ERXValidationFactory {
             log.debug("Converting exception: " + eov + " value: " + (value != null ? value : "<NULL>"));
         if (!(eov instanceof ERXValidationException)) {
             String message = eov.getMessage();
-            EOEnterpriseObject eo = (EOEnterpriseObject)eov.object();
+            Object o = eov.object();
+            EOEnterpriseObject eo = ((o instanceof EOEnterpriseObject) ? (EOEnterpriseObject) o: null);
             //NSDictionary userInfo = eov.userInfo() != null ? (NSDictionary)eov.userInfo() : NSDictionary.EmptyDictionary;
             for (Enumeration e = _mappings.allKeys().objectEnumerator(); e.hasMoreElements();) {
                 //EOEnterpriseObject eo = (EOEnterpriseObject)userInfo.objectForKey(NSValidation.ValidationException.ValidatedObjectUserInfoKey);
