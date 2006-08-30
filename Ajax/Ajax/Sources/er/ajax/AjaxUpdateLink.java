@@ -91,7 +91,6 @@ public class AjaxUpdateLink extends AjaxDynamicElement {
   }
 
   protected void addRequiredWebResources(WOResponse res, WOContext context) {
-      addScriptResourceInHead(context, res, "effects.js");
       addScriptResourceInHead(context, res, "prototype.js");
       addScriptResourceInHead(context, res, "scriptaculous.js");
   }
@@ -107,7 +106,6 @@ public class AjaxUpdateLink extends AjaxDynamicElement {
               response.setContent("new Ajax.Updater('"+updateContainerID+"', $('"+updateContainerID+"').getAttribute('updateUrl'), {"+
                       " evalScripts: " + valueForBinding("evalScripts", "false", context.component()) + ", " +
                       " insertion: " + valueForBinding("insertion", "function(receiver, response) {Element.update(receiver, response);}", context.component()) + " " +
-//                    " insertion: " + valueForBinding("insertion", "function(receiver, response) {Effect.Fade(receiver, {to: 0.001, afterFinish: function() {Element.update(receiver, response); Effect.Appear(receiver)}})}", context.component()) + " " +
               "})");
               results = response;
               log.info("Response: " + response.contentString());
