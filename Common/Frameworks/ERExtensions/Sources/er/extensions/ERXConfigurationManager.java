@@ -592,7 +592,7 @@ public class ERXConfigurationManager {
             // then attempt to load Wonder-style prototypes with the name EOJDBC(driverName)Prototypes.
             if (prototypeEntityName == null) {
               if ("JDBC".equals(aModel.adaptorName())) {
-                Map connectionDictionary = aModel.connectionDictionary();
+                NSDictionary connectionDictionary = aModel.connectionDictionary();
                 if (connectionDictionary != null) {
                   String jdbcUrl = (String) connectionDictionary.get("URL");
                   if (jdbcUrl != null) {
