@@ -587,6 +587,32 @@ public class ERXConfigurationManager {
             if (prototypeEntityName == null && databaseConfig != null) {
               prototypeEntityName = (String) databaseConfig.objectForKey("prototypeEntityName");
             }
+            
+            // If you don't explicitly set a prototype name, and you don't declare a preferred databaseConfig,
+            // then attempt to load Wonder-style prototypes with the name EOJDBC(driverName)Prototypes.
+            if (prototypeEntityName == null) {
+              if ("JDBC".equals(aModel.adaptorName())) {
+                Map connectionDictionary = aModel.connectionDictionary();
+                if (connectionDictionary != null) {
+                  String jdbcUrl = (String) connectionDictionary.get("URL");
+                  if (jdbcUrl != null) {
+                    int firstColon = jdbcUrl.indexOf(':');
+                    int secondColon = jdbcUrl.indexOf(':', firstColon + 1);
+                    if (firstColon != -1 && secondColon != -1) {
+                      String driverName = jdbcUrl.substring(firstColon + 1, secondColon);
+                      String driverPrototypeEntityName = "EOJDBC" + driverName + "Prototypes";
+                      // This check isn't technically necessary since it doesn't down below, but since
+                      // we are guessing here, I don't want themt o get a warning about the prototype not
+                      // being found if they aren't even using Wonder prototypes.
+                      if (aModel.modelGroup().entityNamed(driverPrototypeEntityName) != null) {
+                        prototypeEntityName = driverPrototypeEntityName;
+                      }
+                    }
+                  }
+                }
+              }
+            }
+            
             // global prototype setting not supported yet
             //e = e ==null ? ERXSystem.getProperty("EOPrototypesEntityGLOBAL") : e;
             if(prototypeEntityName != null) {
