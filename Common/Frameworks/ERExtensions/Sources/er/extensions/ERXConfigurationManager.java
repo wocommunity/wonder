@@ -594,7 +594,7 @@ public class ERXConfigurationManager {
               if ("JDBC".equals(aModel.adaptorName())) {
                 NSDictionary connectionDictionary = aModel.connectionDictionary();
                 if (connectionDictionary != null) {
-                  String jdbcUrl = (String) connectionDictionary.get("URL");
+                  String jdbcUrl = (String) connectionDictionary.objectForKey("URL");
                   if (jdbcUrl != null) {
                     int firstColon = jdbcUrl.indexOf(':');
                     int secondColon = jdbcUrl.indexOf(':', firstColon + 1);
