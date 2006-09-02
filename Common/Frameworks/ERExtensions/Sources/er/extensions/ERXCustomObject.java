@@ -26,7 +26,19 @@ import com.webobjects.foundation.*;
  * advantage of templatized and localized validation exceptions
  * need to subclass this class. Hopefully in the future we can
  * get rid of this requirement.
+ * Also, this class supports auto-updating of inverse relationships. You can
+ * simply call <code>eo.setFoo(other), eo.takeValueForKey(other),
+ * eo.addObjectToBothSidesOfRelationshipWithKey(other, "foo")</code> or <code>eo.addToFoos(other)</code> 
+ * and the inverse relationship will get
+ * updated for you automagically, so that you don't need to call
+ * <code>other.addToBars(eo)</code> or <code>other.setBar(eo)</code>. Doing so doesn't hurt, though.
+ * Giving a <code>null</code> value of removing the object from a to-many will result in the inverse 
+ * relationship getting cleared. <br />
+ * This feature should greatly help readability and reduce the number errors you make when you
+ * forget to update an inverse relationship. To turn this feature on, you must set the system default 
+ * <code>er.extensions.ERXEnterpriseObject.updateInverseRelationships=true</code>.
  */
+
 public class ERXCustomObject extends EOCustomObject implements ERXGuardedObjectInterface, ERXGeneratesPrimaryKeyInterface, ERXEnterpriseObject {
 
     /** holds all subclass related Logger's */
@@ -670,7 +682,103 @@ public class ERXCustomObject extends EOCustomObject implements ERXGuardedObjectI
      */
     public void batchCheckConsistency() throws NSValidation.ValidationException {}
     
+    /**
+     * Overridden to support two-way relationship setting.
+     */
+    protected void includeObjectIntoPropertyWithKey(Object o, String key) {
+    	super.includeObjectIntoPropertyWithKey(o, key);
+    	if(ERXEnterpriseObject.updateInverseRelationships && o != null) {
+    		String inverse = classDescription().inverseForRelationshipKey(key);
+    		if(inverse != null) {
+    			EOEnterpriseObject eo = (EOEnterpriseObject) o;
+				if(!eo.isToManyKey(inverse)) {
+					EOEnterpriseObject value = (EOEnterpriseObject)eo.valueForKey(inverse);
+					if(value != this) {
+						eo.takeValueForKey(this, inverse);
+					}
+				} else {
+					NSArray values = (NSArray)eo.valueForKey(inverse);
+					if(!values.containsObject(this)) {
+						eo.addObjectToPropertyWithKey(this, inverse);
+					}
+				}
+    		}
+    	}
+    }
     
+    
+    /**
+     * Overridden to support two-way relationship setting.
+     */
+    protected void excludeObjectFromPropertyWithKey(Object o, String key) {
+       	super.excludeObjectFromPropertyWithKey(o, key);
+    	if(ERXEnterpriseObject.updateInverseRelationships && o != null) {
+    		String inverse = classDescription().inverseForRelationshipKey(key);
+    		if(inverse != null) {
+				EOEnterpriseObject eo = (EOEnterpriseObject) o;
+    			if(!eo.isToManyKey(inverse)) {
+					if(eo.valueForKey(inverse) != null) {
+						eo.takeValueForKey(null, inverse);
+					}
+				} else {
+					NSArray values = (NSArray)eo.valueForKey(inverse);
+					if(values.containsObject(this)) {
+						eo.removeObjectFromPropertyWithKey(this, inverse);
+					}
+				}
+    		}
+    	}
+    }
+    
+    /**
+     * Overridden to support two-way relationship setting.
+     */
+    public void takeStoredValueForKey(Object object, String key) {
+    	// we only handle toOne keys here, but there is no API for that so
+    	// this unreadable monster first checks the fastest thing, the the slower conditions
+    	if(ERXEnterpriseObject.updateInverseRelationships && (object instanceof EOEnterpriseObject || 
+    			((object == null) && !isToManyKey(key) 
+    					&& classDescriptionForDestinationKey(key) != null))) {
+    		String inverse = classDescription().inverseForRelationshipKey(key);
+    		if(inverse != null) {
+    			if(object != null) {
+    				EOEnterpriseObject eo = (EOEnterpriseObject)object;
+    				super.takeStoredValueForKey(object, key);
+    				if(eo.isToManyKey(inverse)) {
+    					NSArray values = (NSArray)eo.valueForKey(inverse);
+    					if(!values.containsObject(this)) {
+    						eo.addObjectToPropertyWithKey(this, inverse);
+    					}
+    				} else {
+    					EOEnterpriseObject old = (EOEnterpriseObject) eo.valueForKey(inverse);
+    					if(old != this) {
+    						eo.takeValueForKey(this, inverse);
+    					}
+    				}
+    			} else {
+    				EOEnterpriseObject old = (EOEnterpriseObject) valueForKey(key);
+    				super.takeStoredValueForKey(null, key);
+    				if(old != null) { 
+    					if(old.isToManyKey(inverse)) {
+    						NSArray values = (NSArray) old.valueForKey(inverse);
+    						if(values.containsObject(this)) {
+    							old.removeObjectFromPropertyWithKey(this, inverse);
+    						}
+    					} else {
+    						if(old == this) {
+    							old.takeValueForKey(null, inverse);
+        					}
+    					}
+    				}
+    			}
+    		} else {
+    			super.takeStoredValueForKey(object, key);
+    		}
+    	} else {
+    		super.takeStoredValueForKey(object, key);
+    	}
+    }
+
     
     // Debugging aids -- turn off during production
     // These methods are used to catch the classic mistake of:
