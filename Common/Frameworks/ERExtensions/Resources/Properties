@@ -119,6 +119,9 @@ er.extensions.ERXRaiseOnMissingEditingContextDelegate = true
 ## EOEditingContext.setDefaultFetchTimestampLag() as a property
 # EOEditingContextDefaultFetchTimestampLag = 3600000
 
+## Specifies if inverse relationships are automagically updated
+# er.extensions.ERXEnterpriseObject.updateInverseRelationships=true
+
 ## Specifies if the string attributes are trimmed before sending to the DB
 # er.extensions.ERXGenericRecord.shouldTrimSpaces = true
 # er.extensions.ERXCustomObject.shouldTrimSpaces = true
