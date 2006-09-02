@@ -12,6 +12,9 @@ public interface ERXEnterpriseObject {
     /** logging support for modified objects */
     public static final Logger logMod = Logger.getLogger("er.transaction.delegate.EREditingContextDelegate.modifedObjects");
 
+    public final static boolean updateInverseRelationships = ERXProperties.booleanForKey("er.extensions.ERXEnterpriseObject.updateInverseRelationships");
+    
+
     /**
      * Registers as a listener for various editing context notifications and calls up the willXXX and
      * didXXX methods in objects that implement ERXEnterpriseObject. Subclass this and set the system
