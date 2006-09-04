@@ -50,6 +50,22 @@ public abstract class Test extends ERXGenericRecord {
     	return status() == ON;
     }
 }
+Test test = (Test)EOUtilities.createAndInsertInstance(ec, "Test");
+test.setTest(Test.Status.OFF);
+test = (TestNumber)EOUtilities.createAndInsertInstance(ec, "Test");
+test.setStatus(Test.Status.ON);
+ec.saveChanges();
+NSArray objects;
+objects = EOUtilities.objectsMatchingKeyAndValue(ec, "Test", "status", Test.Status.OFF);
+log.info("Test.Status.OFF: " + objects);
+objects = EOUtilities.objectsMatchingKeyAndValue(ec, "Test", "status", ERXConstant.OneInteger);
+log.info("Number.OFF: " + objects);
+objects = EOUtilities.objectsForEntityNamed(ec, "Test");
+EOQualifier q;
+q = new EOKeyValueQualifier("test", EOQualifier.QualifierOperatorEqual, Test.Status.OFF);
+log.info(" Test.Status.OFF: " + EOQualifier.filteredArrayWithQualifier(objects, q));
+q = new EOKeyValueQualifier("test", EOQualifier.QualifierOperatorEqual, ERXConstant.OFFInteger);
+log.info("Number.OFF: " + EOQualifier.filteredArrayWithQualifier(objects, q));
 
  * </pre></code>
  * You need to add an entry <code>ERXConstantClassName</code> to the attribute in question
