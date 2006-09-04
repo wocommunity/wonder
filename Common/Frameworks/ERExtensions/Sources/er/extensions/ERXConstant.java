@@ -52,7 +52,7 @@ public abstract class Test extends ERXGenericRecord {
 }
 Test test = (Test)EOUtilities.createAndInsertInstance(ec, "Test");
 test.setTest(Test.Status.OFF);
-test = (TestNumber)EOUtilities.createAndInsertInstance(ec, "Test");
+test = (Test)EOUtilities.createAndInsertInstance(ec, "Test");
 test.setStatus(Test.Status.ON);
 ec.saveChanges();
 NSArray objects;
