@@ -1174,4 +1174,17 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
         }
         return sharedGSVEngineInstance;
     }
+
+	public Class _enforcedKVCNumberClassForKey(String key) {
+		EOAttribute attribute = entity().attributeNamed(key);
+		if(attribute != null) {
+			String className = (String) attribute.userInfo().objectForKey("ERXConstantClassName");
+			if(className != null) {
+				return ERXPatcher.classForName(className);
+			}
+		}
+		return super._enforcedKVCNumberClassForKey(key);
+	}
+    
+    
 }

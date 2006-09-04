@@ -7,16 +7,130 @@
 package er.extensions;
 
 import java.math.*;
+import java.util.*;
 
 import com.webobjects.foundation.*;
 
 /**
- * Collection of base constants. Note that upon class initialization
+ * Numerical contant class, usefull when you want reference object that are not
+ * bytes or strings in the DB like what you get with the factory classes.
+ * <pre><code>
+
+public abstract class Test extends ERXGenericRecord {
+
+	public static class Status extends ERXConstant {
+		private String _name;
+	
+		protected Status(int value, String name) {
+			super(value);
+			_name = name;
+		}
+	
+		public String name() {
+			return _name;
+		}
+	}
+	
+	public Status OFF = new Status(0, "Off");
+	public Status ON = new Status(1, "On");
+	
+    public Test() {
+        super();
+    }
+
+    public Status status() {
+        return (Status)storedValueForKey("status");
+    }
+
+    public void setStatus(Constant aValue) {
+        takeStoredValueForKey(aValue, "status");
+    }
+    
+    public boolean isOn() {
+    	return status() == ON;
+    }
+}
+
+ * </pre></code>
+ * You need to add an entry <code>ERXConstantClassName</code> to the attribute in question
+ * and your EO's class description needs to be a ERXEntityClassDescription.
+ * <br />
+ * Note that upon class initialization
  * 2500 Integers will be created and cached, from 0 - 2499.
  */
-public class ERXConstant {
+public abstract class ERXConstant extends Number {
 
+	private static final Map _store = new HashMap();
+
+	public static ERXConstant constantForClassNamed(int value, String clazzName) {
+		return constantForClassNamed(integerForInt(value), clazzName);
+	}
+	
+	public static ERXConstant constantForClassNamed(Number value, String clazzName) {
+		synchronized (_store) {
+			Map classMap = keyMap(clazzName, false);
+			return (ERXConstant) classMap.get(value);
+		}
+	}
+	
+	private static Map keyMap(String name, boolean create) {
+		Map map = (Map) _store.get(name);
+		if(map == null) {
+			if(create) {
+				map = new HashMap();
+			} else {
+				map = Collections.EMPTY_MAP;
+			}
+		}
+		return map;
+	}
+
+	private int _value;
+	
+	protected ERXConstant(int value) {
+		_value = value;
+		synchronized (_store) {
+			Map classMap = keyMap(getClass().getName(), true);
+			Integer key = integerForInt(value);
+			classMap.put(key, this);
+		}
+	}
+
+	public final double doubleValue() {
+		return intValue();
+	}
+
+	public final float floatValue() {
+		return intValue();
+	}
+
+	public final int intValue() {
+		return _value;
+	}
+
+	public final long longValue() {
+		return intValue();
+	}
+	
+	public final int hashCode() {
+		return _value;
+	}
+
+	public final boolean equals(Object otherObject) {
+		if(otherObject == null) {
+			return false;
+		}/* AK: we would violate the equals contract here, but we may need this with D2W later?
+		if((otherObject instanceof Number) && !(otherObject instanceof ERXConstant)) {
+			return ((Number)otherObject).intValue() == intValue();
+		}*/
+		if(otherObject.getClass() != getClass()) {
+			return false;
+		}
+		return ((ERXConstant)otherObject).intValue() == intValue();
+	}
+	
     public static final int MAX_INT=2500;
+    
     protected static Integer[] INTEGERS=new Integer[MAX_INT];
     static {
         for (int i=0; i<MAX_INT; i++) INTEGERS[i]=new Integer(i);
