@@ -59,6 +59,8 @@ public class ERXCustomObject extends EOCustomObject implements ERXGuardedObjectI
 
     public String insertionStackTrace = null;
     
+    protected boolean wasInitialized;
+    
     /* (non-Javadoc)
      * @see er.extensions.ERXEnterpriseObject#getClassLog()
      */
@@ -273,6 +275,7 @@ public class ERXCustomObject extends EOCustomObject implements ERXGuardedObjectI
     public void awakeFromClientUpdate(EOEditingContext editingContext) {
         _checkEditingContextDelegate(editingContext);
         super.awakeFromClientUpdate(editingContext);
+        wasInitialized = true;
     }
     /**
      * Checks the editing context delegate before calling
@@ -293,6 +296,7 @@ public class ERXCustomObject extends EOCustomObject implements ERXGuardedObjectI
         if (gid.isTemporary()) {
             init(editingContext);
         }
+        wasInitialized = true;
     }
 
     /**
@@ -319,6 +323,7 @@ public class ERXCustomObject extends EOCustomObject implements ERXGuardedObjectI
     public void awakeFromFetch(EOEditingContext editingContext) {
         _checkEditingContextDelegate(editingContext);
         super.awakeFromFetch(editingContext);
+        wasInitialized = true;
     }
     /**
      * Adds a check to make sure that both the object being added and
@@ -736,7 +741,7 @@ public class ERXCustomObject extends EOCustomObject implements ERXGuardedObjectI
     public void takeStoredValueForKey(Object object, String key) {
     	// we only handle toOne keys here, but there is no API for that so
     	// this unreadable monster first checks the fastest thing, the the slower conditions
-    	if(ERXEnterpriseObject.updateInverseRelationships && (object instanceof EOEnterpriseObject || 
+    	if(ERXEnterpriseObject.updateInverseRelationships && wasInitialized && (object instanceof EOEnterpriseObject || 
     			((object == null) && !isToManyKey(key) 
     					&& classDescriptionForDestinationKey(key) != null))) {
     		String inverse = classDescription().inverseForRelationshipKey(key);
