@@ -108,7 +108,9 @@ public class AjaxUpdateLink extends AjaxDynamicElement {
                       " insertion: " + valueForBinding("insertion", "function(receiver, response) {Element.update(receiver, response);}", context.component()) + " " +
               "})");
               results = response;
-              log.info("Response: " + response.contentString());
+              if(log.isDebugEnabled()) {
+                  log.debug("Response: " + response.contentString());
+              }
           }
       }
       return results;
