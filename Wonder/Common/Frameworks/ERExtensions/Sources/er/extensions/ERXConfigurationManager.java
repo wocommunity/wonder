@@ -14,6 +14,7 @@ import org.apache.log4j.Logger;
 import com.webobjects.appserver.*;
 import com.webobjects.eoaccess.*;
 import com.webobjects.foundation.*;
+import com.webobjects.jdbcadaptor.*;
 
 /** 
  * <code>Configuration Manager</code> handles rapid turnaround for 
@@ -585,34 +586,54 @@ public class ERXConfigurationManager {
             }
             String prototypeEntityName = ERXSystem.getProperty(aModelName + ".EOPrototypesEntity");
             if (prototypeEntityName == null && databaseConfig != null) {
-              prototypeEntityName = (String) databaseConfig.objectForKey("prototypeEntityName");
+            	prototypeEntityName = (String) databaseConfig.objectForKey("prototypeEntityName");
             }
-            
+
             // If you don't explicitly set a prototype name, and you don't declare a preferred databaseConfig,
             // then attempt to load Wonder-style prototypes with the name EOJDBC(driverName)Prototypes.
             if (prototypeEntityName == null) {
-              if ("JDBC".equals(aModel.adaptorName())) {
-                NSDictionary connectionDictionary = aModel.connectionDictionary();
-                if (connectionDictionary != null) {
-                  String jdbcUrl = (String) connectionDictionary.objectForKey("URL");
-                  if (jdbcUrl != null) {
-                    int firstColon = jdbcUrl.indexOf(':');
-                    int secondColon = jdbcUrl.indexOf(':', firstColon + 1);
-                    if (firstColon != -1 && secondColon != -1) {
-                      String driverName = jdbcUrl.substring(firstColon + 1, secondColon);
-                      String driverPrototypeEntityName = "EOJDBC" + driverName + "Prototypes";
-                      // This check isn't technically necessary since it doesn't down below, but since
-                      // we are guessing here, I don't want themt o get a warning about the prototype not
-                      // being found if they aren't even using Wonder prototypes.
-                      if (aModel.modelGroup().entityNamed(driverPrototypeEntityName) != null) {
-                        prototypeEntityName = driverPrototypeEntityName;
-                      }
-                    }
-                  }
-                }
-              }
+            	if ("JDBC".equals(aModel.adaptorName())) {
+            		NSDictionary connectionDictionary = aModel.connectionDictionary();
+            		if (connectionDictionary != null) {
+            			String jdbcUrl = (String) connectionDictionary.objectForKey("URL");
+            			if (jdbcUrl != null) {
+            				String pluginName = (String) connectionDictionary.objectForKey("plugin");
+            				if(pluginName == null) {
+            					pluginName = JDBCPlugIn.plugInNameForURL(jdbcUrl);
+                				if(pluginName == null) {
+                					int firstColon = jdbcUrl.indexOf(':');
+                					int secondColon = jdbcUrl.indexOf(':', firstColon + 1);
+                    				if (firstColon != -1 && secondColon != -1) {
+                    					String driverName = jdbcUrl.substring(firstColon + 1, secondColon);
+                    					String driverPrototypeEntityName = "EOJDBC" + driverName + "Prototypes";
+                    					// This check isn't technically necessary since it doesn't down below, but since
+                    					// we are guessing here, I don't want themt o get a warning about the prototype not
+                    					// being found if they aren't even using Wonder prototypes.
+                    					if (aModel.modelGroup().entityNamed(driverPrototypeEntityName) != null) {
+                    						prototypeEntityName = driverPrototypeEntityName;
+                    					}
+                    				}
+                				} else {
+                					pluginName = ERXStringUtilities.lastPropertyKeyInKeyPath(pluginName);
+                					pluginName = pluginName.replaceFirst("PlugIn", "");
+                				}
+            				}
+            				if (pluginName != null) {
+            					String pluginPrototypeEntityName = "EOJDBC" + pluginName + "Prototypes";
+            					// This check isn't technically necessary since it doesn't down below, but since
+            					// we are guessing here, I don't want themt o get a warning about the prototype not
+            					// being found if they aren't even using Wonder prototypes.
+            					if (aModel.modelGroup().entityNamed(pluginPrototypeEntityName) != null) {
+            						prototypeEntityName = pluginPrototypeEntityName;
+            					} else {
+            						log.error("No prototypes found for plugin: " + pluginName + ", using EOPrototypes: " + aModelName);
+            					}
+            				}
+            			}
+            		}
+            	}
             }
-            
+
             // global prototype setting not supported yet
             //e = e ==null ? ERXSystem.getProperty("EOPrototypesEntityGLOBAL") : e;
             if(prototypeEntityName != null) {
