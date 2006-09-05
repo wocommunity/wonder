@@ -11,6 +11,7 @@ import java.util.*;
 
 import org.apache.log4j.*;
 
+import com.webobjects.eocontrol.*;
 import com.webobjects.foundation.*;
 import com.webobjects.jdbcadaptor.*;
 
@@ -94,7 +95,22 @@ public abstract class ERXConstant extends Number {
 	private static final Map _store = new HashMap();
 
 	/**
-	 * Retrieves the constant for the given class name and value. Null it returned
+	 * Retrieves all constants for the given class name ordered by value. An empty 
+	 * NSArray is returned if the class isn't found.
+	 * @param clazzName
+	 * @return
+	 */
+	public static NSArray constantsForClassName(String clazzName) {
+		synchronized (_store) {
+			Map map = keyMap(clazzName, false);
+			NSMutableArray array = new NSMutableArray(map.values().toArray());
+			ERXArrayUtilities.sortArrayWithKey(array, "intValue");
+			return array;
+		}
+	}
+
+	/**
+	 * Retrieves the constant for the given class name and value. Null is returned
 	 * if either class or value isn't found. Note that in case of inner classes, the
      * name should be <code>Test.Status</code>, not <code>Test$Status</code>.
 	 * @param value
@@ -106,9 +122,8 @@ public abstract class ERXConstant extends Number {
 	}
 	
 	/**
-	 * Retrieves the constant for the given class name and value. Null it returned
-	 * if either class or value isn't found. Note that in case of inner classes, the
-     * name should be <code>Test.Status</code>, not <code>Test$Status</code>.
+	 * Retrieves the constant for the given class name and value. Null is returned
+	 * if either class or value isn't found.
 	 * @param value
 	 * @param clazzName
 	 * @return
@@ -131,10 +146,12 @@ public abstract class ERXConstant extends Number {
 	 * @return
 	 */
 	private static Map keyMap(String name, boolean create) {
-        Map map = (Map) _store.get(name);
+		Map map = (Map) _store.get(name);
 		if(map == null) {
 			if(create) {
- 				map = new HashMap();
+				map = new HashMap();
+				_store.put(name, map);
+				name = name.replace('$', '.');
 				_store.put(name, map);
 			} else {
 				map = Collections.EMPTY_MAP;
@@ -156,7 +173,6 @@ public abstract class ERXConstant extends Number {
 		_value = value;
 		synchronized (_store) {
 			String className = getClass().getName();
-            className = className.replace('$', '.');
             Map classMap = keyMap(className, true);
 			Integer key = integerForInt(value);
 			if(log.isDebugEnabled()) {
