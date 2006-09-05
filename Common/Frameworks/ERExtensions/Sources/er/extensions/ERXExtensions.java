@@ -184,27 +184,33 @@ public class ERXExtensions {
         }
     }
     
+    private static boolean initialized;
+    
     /**
      * Configures the framework. All the bits and pieces that need
      * to be configured are configured, those that need to happen
      * later are delayed by registering an observer for notifications
      * that are posted when the application is finished launching.
      */
-    static {
+    
+
+    public static void initialize() {
+        if(!initialized) {
+            initialized = true;
             try {
                 // This will load any optional configuration files, 
                 ERXConfigurationManager.defaultManager().initialize();
-			    // ensures that WOOutputPath's was processed with this @@
-			    // variable substitution. WOApplication uses WOOutputPath in
-			    // its constructor so we need to modify it before calling
-			    // the constructor.
+                // ensures that WOOutputPath's was processed with this @@
+                // variable substitution. WOApplication uses WOOutputPath in
+                // its constructor so we need to modify it before calling
+                // the constructor.
                 ERXSystem.updateProperties();
-                
+
                 ERXLogger.configureLoggingWithSystemProperties();
 
                 log().debug("Initializing framework: ERXExtensions");
                 ERXArrayUtilities.initialize();
-               
+
                 // False by default
                 if (ERXValueUtilities.booleanValue(System.getProperty(ERXSharedEOLoader.PatchSharedEOLoadingPropertyKey))) {
                     ERXSharedEOLoader.patchSharedEOLoading();
@@ -222,7 +228,7 @@ public class ERXExtensions {
                 System.out.println("Caught exception: " + e.getMessage() + " stack: ");
                 e.printStackTrace();
             }
-            
+
             try {
                 ERXJDBCAdaptor.registerJDBCAdaptor();
                 EODatabaseContext.setDefaultDelegate(ERXDatabaseContextDelegate.defaultDelegate());
@@ -231,24 +237,31 @@ public class ERXExtensions {
 
                 ERXEntityClassDescription.registerDescription();
                 NSNotificationCenter.defaultCenter().addObserver(observer,
-                                                                 new NSSelector("finishedLaunchingApp", ERXConstant.NotificationClassArray),
-                                                                 WOApplication.ApplicationWillFinishLaunchingNotification,
-                                                                 null);
+                        new NSSelector("finishedLaunchingApp", ERXConstant.NotificationClassArray),
+                        WOApplication.ApplicationWillFinishLaunchingNotification,
+                        null);
                 if (!ERXProperties.webObjectsVersionIs52OrHigher()) {
                     NSNotificationCenter.defaultCenter().addObserver(observer,
-                                                                 new NSSelector("sessionDidTimeOut", ERXConstant.NotificationClassArray),
-                                                                 WOSession.SessionDidTimeOutNotification,
-                                                                 null);
+                            new NSSelector("sessionDidTimeOut", ERXConstant.NotificationClassArray),
+                            WOSession.SessionDidTimeOutNotification,
+                            null);
                     NSNotificationCenter.defaultCenter().addObserver(observer,
-                                                                     new NSSelector("editingContextDidCreate",
-                                                                                    ERXConstant.NotificationClassArray),
-                                                                     ERXEC.EditingContextDidCreateNotification,
-                                                                     null);                    
+                            new NSSelector("editingContextDidCreate",
+                                    ERXConstant.NotificationClassArray),
+                                    ERXEC.EditingContextDidCreateNotification,
+                                    null);                    
                 }
             } catch (Exception e) {
                 System.out.println("Caught exception: " + e.getMessage() + " stack: ");
                 e.printStackTrace();
             }
+
+        }
+    }
+
+    
+    static {
+        initialize();
     }
 
     /** logging support for the adaptor channel */
