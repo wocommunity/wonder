@@ -121,21 +121,25 @@ public class ERXNavigationMenuItem extends ERXStatelessComponent {
      */
     public boolean meetsDisplayConditions() {
         if (_meetsDisplayConditions == null) {
-            _meetsDisplayConditions = Boolean.TRUE;
-            if (navigationItem().conditions().count() != 0) {
-                Enumeration enumerator = navigationItem().conditions().objectEnumerator();
-                while (enumerator.hasMoreElements()) {
-                    String anObject = (String)enumerator.nextElement();
-                    Object value = valueForKeyPath(anObject);
-                    _meetsDisplayConditions = ERXValueUtilities.booleanValue(value) ? Boolean.TRUE : Boolean.FALSE;
-                    if (log.isDebugEnabled()) {
-                        log.debug(navigationItem().name() + " testing display condition: "+ anObject + " --> " + value  + ":" + _meetsDisplayConditions);
+            if(navigationItem() != null) {
+                _meetsDisplayConditions = Boolean.TRUE;
+                if (navigationItem().conditions().count() != 0) {
+                    Enumeration enumerator = navigationItem().conditions().objectEnumerator();
+                    while (enumerator.hasMoreElements()) {
+                        String anObject = (String)enumerator.nextElement();
+                        Object value = valueForKeyPath(anObject);
+                        _meetsDisplayConditions = ERXValueUtilities.booleanValue(value) ? Boolean.TRUE : Boolean.FALSE;
+                        if (log.isDebugEnabled()) {
+                            log.debug(navigationItem().name() + " testing display condition: "+ anObject + " --> " + value  + ":" + _meetsDisplayConditions);
+                        }
+                        if (!_meetsDisplayConditions.booleanValue()) break;
                     }
-                    if (!_meetsDisplayConditions.booleanValue()) break;
                 }
-            }
-            if(_meetsDisplayConditions.booleanValue() && navigationItem().qualifier() != null) {
-                _meetsDisplayConditions = navigationItem().qualifier().evaluateWithObject(this) ? Boolean.TRUE : Boolean.FALSE;
+                if(_meetsDisplayConditions.booleanValue() && navigationItem().qualifier() != null) {
+                    _meetsDisplayConditions = navigationItem().qualifier().evaluateWithObject(this) ? Boolean.TRUE : Boolean.FALSE;
+                }
+            } else {
+                _meetsDisplayConditions = Boolean.FALSE;
             }
         }
         return _meetsDisplayConditions.booleanValue();
@@ -148,6 +152,9 @@ public class ERXNavigationMenuItem extends ERXStatelessComponent {
                 String name = (String)valueForBinding("navigationItemName");
                 if(name != null) {
                     _navigationItem = ERXNavigationManager.manager().navigationItemForName(name);
+                } else {
+                    log.warn("Navigation unset: " + name);
+                    _navigationItem = new ERXNavigationItem(new NSDictionary(name, "name"));
                 }
             }
         }
