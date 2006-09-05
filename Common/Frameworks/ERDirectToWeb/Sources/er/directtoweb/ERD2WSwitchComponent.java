@@ -129,6 +129,9 @@ public class ERD2WSwitchComponent extends D2WSwitchComponent {
     public static D2WContext makeSubContextForDynamicPageNamed(String s, WOSession wosession) {
         D2WContext d2wcontext = ERD2WContext.newContext(wosession);
         d2wcontext.setDynamicPage(s);
+        // NOTE AK: for whatever reason, when you set a page config
+        d2wcontext.setEntity(d2wcontext.entity());
+        d2wcontext.setTask(d2wcontext.task());
         d2wcontext.takeValueForKey(D2WModel.One, "frame");
         return d2wcontext;
     }
