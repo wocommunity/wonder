@@ -1,0 +1,52 @@
+package com.webobjects.jdbcadaptor;
+
+import java.sql.*;
+
+import org.apache.log4j.*;
+
+import com.webobjects.eoaccess.*;
+
+import er.extensions.*;
+
+/**
+ * Adds numerical constant support to EOF. See ERXConstant for more info. 
+ * @author ak
+ *
+ */
+public class ERXJDBCColumn extends JDBCColumn {
+	
+	private static final Logger log = Logger.getLogger(ERXJDBCColumn.class);
+
+	private String _constantClassName;
+	private static final String NO_NAME = "no name";
+
+	public ERXJDBCColumn(EOAttribute attribute, JDBCChannel channel, int column, ResultSet rs) {
+		super(attribute, channel, column, rs);
+	}
+
+	Object _fetchValue(boolean flag) {
+		if (_rs == null || _column < 1)
+			throw new JDBCAdaptorException(" *** JDBCColumn : trying to fetchValue on a null ResultSet [" + _rs
+					+ "] or unknow col [" + _column + "]!!", null);
+		if (_adaptorValueType == 0) {
+			if(_constantClassName == null) {
+				if(_attribute.userInfo() != null) {
+					_constantClassName = (String) _attribute.userInfo().objectForKey("ERXConstantClassName");
+				}
+				if(_constantClassName == null) {
+					_constantClassName = NO_NAME;
+				}
+			}
+			if(_constantClassName != NO_NAME) {
+				try {
+					int i =_rs.getInt(_column);
+					Object result = ERXConstant.constantForClassNamed(i, _constantClassName);
+					return result;
+				} catch (SQLException e) {
+					throw new JDBCAdaptorException("Can't read constant: " + _constantClassName, e);
+				}
+			}
+		}
+		return super._fetchValue(flag);
+	}
+}
