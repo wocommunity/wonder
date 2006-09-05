@@ -9,10 +9,13 @@ package er.extensions;
 import java.math.*;
 import java.util.*;
 
+import org.apache.log4j.*;
+
 import com.webobjects.foundation.*;
+import com.webobjects.jdbcadaptor.*;
 
 /**
- * Numerical contant class, usefull when you want reference object that are not
+ * Numerical constant class, useful when you want reference object that are not
  * bytes or strings in the DB like what you get with the factory classes.
  * <pre><code>
 
@@ -50,50 +53,84 @@ public abstract class Test extends ERXGenericRecord {
     	return status() == ON;
     }
 }
+
 Test test = (Test)EOUtilities.createAndInsertInstance(ec, "Test");
 test.setTest(Test.Status.OFF);
 test = (Test)EOUtilities.createAndInsertInstance(ec, "Test");
 test.setStatus(Test.Status.ON);
 ec.saveChanges();
+
 NSArray objects;
+NSArray all = EOUtilities.objectsForEntityNamed(ec, "Test");
+EOQualifier q;
+
 objects = EOUtilities.objectsMatchingKeyAndValue(ec, "Test", "status", Test.Status.OFF);
 log.info("Test.Status.OFF: " + objects);
+q = new EOKeyValueQualifier("status", EOQualifier.QualifierOperatorEqual, Test.Status.OFF);
+log.info("Test.Status.OFF: " + EOQualifier.filteredArrayWithQualifier(all, q));
+
+// this might be a problem: equal number values match in the DB, but not in memory
 objects = EOUtilities.objectsMatchingKeyAndValue(ec, "Test", "status", ERXConstant.OneInteger);
 log.info("Number.OFF: " + objects);
-objects = EOUtilities.objectsForEntityNamed(ec, "Test");
-EOQualifier q;
-q = new EOKeyValueQualifier("test", EOQualifier.QualifierOperatorEqual, Test.Status.OFF);
-log.info(" Test.Status.OFF: " + EOQualifier.filteredArrayWithQualifier(objects, q));
-q = new EOKeyValueQualifier("test", EOQualifier.QualifierOperatorEqual, ERXConstant.OFFInteger);
-log.info("Number.OFF: " + EOQualifier.filteredArrayWithQualifier(objects, q));
+q = new EOKeyValueQualifier("status", EOQualifier.QualifierOperatorEqual, ERXConstant.OneInteger);
+log.info("Number.OFF: " + EOQualifier.filteredArrayWithQualifier(all, q));
+
+// you can compare by equality
+
 
  * </pre></code>
- * You need to add an entry <code>ERXConstantClassName</code> to the attribute in question
- * and your EO's class description needs to be a ERXEntityClassDescription.
+ * You need to add an entry <code>ERXConstantClassName=Test$Status</code> to the attribute's userInfo 
+ * in question and your EO's class description needs to be a {@link er.extensions.ERXEntityClassDescription}.
  * <br />
- * Note that upon class initialization
- * 2500 Integers will be created and cached, from 0 - 2499.
+ * Note that upon class initialization 2500 Integers will be created and cached, from 0 - 2499.
  */
 public abstract class ERXConstant extends Number {
+	
+	private static final Logger log = Logger.getLogger(ERXJDBCColumn.class);
 
+	/**
+	 * Holds the value store, grouped by class name.
+	 */
 	private static final Map _store = new HashMap();
 
+	/**
+	 * Retrieves the constant for the given class name and value. Null it returned
+	 * if either class or value isn't found.
+	 * @param value
+	 * @param clazzName
+	 * @return
+	 */
 	public static ERXConstant constantForClassNamed(int value, String clazzName) {
 		return constantForClassNamed(integerForInt(value), clazzName);
 	}
 	
+	/**
+	 * Retrieves the constant for the given class name and value. Null it returned
+	 * if either class or value isn't found.
+	 * @param value
+	 * @param clazzName
+	 * @return
+	 */
 	public static ERXConstant constantForClassNamed(Number value, String clazzName) {
 		synchronized (_store) {
 			Map classMap = keyMap(clazzName, false);
-			return (ERXConstant) classMap.get(value);
+			ERXConstant result = (ERXConstant) classMap.get(value);
+			return result;
 		}
 	}
 	
+	/**
+	 * Retrieves the key map for the class name.
+	 * @param name
+	 * @param create
+	 * @return
+	 */
 	private static Map keyMap(String name, boolean create) {
 		Map map = (Map) _store.get(name);
 		if(map == null) {
 			if(create) {
 				map = new HashMap();
+				_store.put(name, map);
 			} else {
 				map = Collections.EMPTY_MAP;
 			}
@@ -101,37 +138,66 @@ public abstract class ERXConstant extends Number {
 		return map;
 	}
 
+	/**
+	 * Holds the value.
+	 */
 	private int _value;
 	
+	/**
+	 * Sets the value and puts the object in the store keyed by class name and value.
+	 * @param value
+	 */
 	protected ERXConstant(int value) {
 		_value = value;
 		synchronized (_store) {
-			Map classMap = keyMap(getClass().getName(), true);
+			String className = getClass().getName();
+			Map classMap = keyMap(className, true);
 			Integer key = integerForInt(value);
+			if(log.isDebugEnabled()) {
+				log.debug("Putting " + key + " for " + className);
+			}
 			classMap.put(key, this);
 		}
 	}
 
+	/**
+	 * Number interface implementation, returns the value.
+	 */
 	public final double doubleValue() {
 		return intValue();
 	}
 
+	/**
+	 * Number interface implementation, returns the value.
+	 */
 	public final float floatValue() {
 		return intValue();
 	}
 
+	/**
+	 * Number interface implementation, returns the value.
+	 */
 	public final int intValue() {
 		return _value;
 	}
 
+	/**
+	 * Number interface implementation, returns the value.
+	 */
 	public final long longValue() {
 		return intValue();
 	}
 	
+	/**
+	 * Returns the value.
+	 */
 	public final int hashCode() {
 		return _value;
 	}
 
+	/**
+	 * Overridden to compare by value.
+	 */
 	public final boolean equals(Object otherObject) {
 		if(otherObject == null) {
 			return false;
@@ -153,6 +219,7 @@ public abstract class ERXConstant extends Number {
     }
 
     public static final Object EmptyObject = new Object();
+    public static final String EmptyString = "";
     public static final NSArray EmptyArray = NSArray.EmptyArray;
     public static final NSArray SingleNullValueArray = new NSArray(NSKeyValueCoding.NullValue);
     public static final NSDictionary EmptyDictionary = NSDictionary.EmptyDictionary;
