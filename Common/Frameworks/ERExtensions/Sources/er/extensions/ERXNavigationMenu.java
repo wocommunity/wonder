@@ -60,17 +60,23 @@ public class ERXNavigationMenu extends ERXStatelessComponent {
     public void setUpMenu() {
         if (!_menuIsSetUp) {
             if (navigationContext() != null) {
-                NSArray navigationState = (NSArray)navigationContext().valueForKey("navigationState");
-                NSArray additionalNavigationState = (NSArray)navigationContext().valueForKey("additionalNavigationState");
-                if (navigationState != null && navigationState.count() > 0) {
-                    navigationState().setState(navigationState);                    
-                } else if (additionalNavigationState != null && additionalNavigationState.count() > 0) {
-                    if (additionalNavigationState != null && additionalNavigationState.count() > 0)
-                        navigationState().setAdditionalState(additionalNavigationState);
-                    else
-                        navigationState().setAdditionalState(null);
-                } else if (ERXValueUtilities.booleanValue(navigationContext().valueForKey("shouldResetNavigationState"))) {
-                    navigationState().setState(NSArray.EmptyArray);
+                Object o = navigationContext().valueForKey("navigationState");
+                if(o != null) {
+                    NSArray navigationState = (o instanceof NSArray ? (NSArray)o : NSArray.componentsSeparatedByString(o.toString(), "."));
+                    if (navigationState != null && navigationState.count() > 0) {
+                        navigationState().setState(navigationState);                    
+                    } else {
+                        o = (NSArray)navigationContext().valueForKey("additionalNavigationState");
+                        NSArray additionalNavigationState = (o instanceof NSArray ? (NSArray)o : NSArray.componentsSeparatedByString(o.toString(), "."));
+                        if (additionalNavigationState != null && additionalNavigationState.count() > 0) {
+                            if (additionalNavigationState != null && additionalNavigationState.count() > 0)
+                                navigationState().setAdditionalState(additionalNavigationState);
+                            else
+                                navigationState().setAdditionalState(null);
+                        } else if (ERXValueUtilities.booleanValue(navigationContext().valueForKey("shouldResetNavigationState"))) {
+                            navigationState().setState(NSArray.EmptyArray);
+                        }
+                    } 
                 }
             }
 
