@@ -211,6 +211,7 @@ public class ERCoreBusinessLogic extends ERXFrameworkPrincipal {
         preferencesRelationship.addJoin(preferencesJoin);
         preferencesRelationship.setToMany(true);
         preferencesRelationship.setJoinSemantic(EORelationship.InnerJoin);
+        preferencesRelationship.setDeleteRule(EOEntityClassDescription.DeleteRuleCascade);
     }
 
     /**
@@ -315,8 +316,8 @@ public class ERCoreBusinessLogic extends ERXFrameworkPrincipal {
                     standardExceptionPage.setExtraInfo(extraInfo);
 
                     EOEditingContext ec = ERXEC.newEditingContext();
+                    ec.lock();
                     try {
-                        ec.lock();
                         String shortExceptionName;
                         Throwable exceptionForTitle = exception;
                         if (exception instanceof InvocationTargetException) {
