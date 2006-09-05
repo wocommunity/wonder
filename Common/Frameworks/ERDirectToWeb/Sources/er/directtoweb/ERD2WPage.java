@@ -193,28 +193,53 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
     protected NSMutableArray keyPathsWithValidationExceptions = new NSMutableArray();
     protected String errorMessage = "";
 
-    public NSMutableDictionary errorMessages() { return errorMessages; }
-    public void setErrorMessages(NSMutableDictionary value) { errorMessages = value; }
+    public NSMutableDictionary errorMessages() {
+        return errorMessages;
+    }
 
-    public String errorMessage() { return errorMessage; }
-    public void setErrorMessage(String message) { errorMessage = message; }
-	
-	public NSArray errorKeyOrder() { return errorKeyOrder; }
+    public void setErrorMessages(NSMutableDictionary value) {
+        errorMessages = value;
+    }
 
-    /** Should exceptions be propagated through to the parent page. If false, the validation errors are not shown at all. */
-    public boolean shouldPropagateExceptions() { return ERXValueUtilities.booleanValue(d2wContext().valueForKey(Keys.shouldPropagateExceptions)); }
-    
-    /** Should exceptions also be handled here or only handled by the parent.*/
-    public boolean shouldCollectValidationExceptions() { return ERXValueUtilities.booleanValue(d2wContext().valueForKey(Keys.shouldCollectValidationExceptions)); }
+    public String errorMessage() {
+        return errorMessage;
+    }
 
-    /** Clears all of the collected validation exceptions. Implementation of the {@link ERXExceptionHolder} interface. */
+    public void setErrorMessage(String message) {
+        errorMessage = message == null ? "" : message;
+    }
+
+    public NSArray errorKeyOrder() {
+        return errorKeyOrder;
+    }
+
+    /**
+     * Should exceptions be propagated through to the parent page. If false, the
+     * validation errors are not shown at all.
+     */
+    public boolean shouldPropagateExceptions() {
+        return ERXValueUtilities.booleanValue(d2wContext().valueForKey(Keys.shouldPropagateExceptions));
+    }
+
+    /** Should exceptions also be handled here or only handled by the parent. */
+    public boolean shouldCollectValidationExceptions() {
+        return ERXValueUtilities.booleanValue(d2wContext().valueForKey(Keys.shouldCollectValidationExceptions));
+    }
+
+    /**
+     * Clears all of the collected validation exceptions. Implementation of the
+     * {@link ERXExceptionHolder} interface.
+     */
     public void clearValidationFailed() {
         errorMessages.removeAllObjects();
         errorKeyOrder.removeAllObjects();
         keyPathsWithValidationExceptions.removeAllObjects();
     }
 
-    /** Should incorrect values still be set into the EO. If not set, then the user must re-enter them. */
+    /**
+     * Should incorrect values still be set into the EO. If not set, then the
+     * user must re-enter them.
+     */
     public boolean shouldSetFailedValidationValue() {
         return ERXValueUtilities.booleanValue(d2wContext().valueForKey(Keys.shouldSetFailedValidationValue));
     }
