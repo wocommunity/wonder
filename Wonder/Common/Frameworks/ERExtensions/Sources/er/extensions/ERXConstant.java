@@ -76,10 +76,10 @@ q = new EOKeyValueQualifier("status", EOQualifier.QualifierOperatorEqual, ERXCon
 log.info("Number.OFF: " + EOQualifier.filteredArrayWithQualifier(all, q));
 
 // you can compare by equality
-
+test.getStatus() == Test.Status.ON
 
  * </pre></code>
- * You need to add an entry <code>ERXConstantClassName=Test$Status</code> to the attribute's userInfo 
+ * You need to add an entry <code>ERXConstantClassName=Test.Status</code> to the attribute's userInfo 
  * in question and your EO's class description needs to be a {@link er.extensions.ERXEntityClassDescription}.
  * <br />
  * Note that upon class initialization 2500 Integers will be created and cached, from 0 - 2499.
@@ -95,7 +95,8 @@ public abstract class ERXConstant extends Number {
 
 	/**
 	 * Retrieves the constant for the given class name and value. Null it returned
-	 * if either class or value isn't found.
+	 * if either class or value isn't found. Note that in case of inner classes, the
+     * name should be <code>Test.Status</code>, not <code>Test$Status</code>.
 	 * @param value
 	 * @param clazzName
 	 * @return
@@ -106,7 +107,8 @@ public abstract class ERXConstant extends Number {
 	
 	/**
 	 * Retrieves the constant for the given class name and value. Null it returned
-	 * if either class or value isn't found.
+	 * if either class or value isn't found. Note that in case of inner classes, the
+     * name should be <code>Test.Status</code>, not <code>Test$Status</code>.
 	 * @param value
 	 * @param clazzName
 	 * @return
