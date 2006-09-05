@@ -115,6 +115,9 @@ public abstract class ERXConstant extends Number {
 		synchronized (_store) {
 			Map classMap = keyMap(clazzName, false);
 			ERXConstant result = (ERXConstant) classMap.get(value);
+            if(log.isDebugEnabled()) {
+                log.debug("Getting " + result + " for " + clazzName + " and " + value);
+            }
 			return result;
 		}
 	}
@@ -126,10 +129,10 @@ public abstract class ERXConstant extends Number {
 	 * @return
 	 */
 	private static Map keyMap(String name, boolean create) {
-		Map map = (Map) _store.get(name);
+        Map map = (Map) _store.get(name);
 		if(map == null) {
 			if(create) {
-				map = new HashMap();
+ 				map = new HashMap();
 				_store.put(name, map);
 			} else {
 				map = Collections.EMPTY_MAP;
@@ -151,7 +154,8 @@ public abstract class ERXConstant extends Number {
 		_value = value;
 		synchronized (_store) {
 			String className = getClass().getName();
-			Map classMap = keyMap(className, true);
+            className = className.replace('$', '.');
+            Map classMap = keyMap(className, true);
 			Integer key = integerForInt(value);
 			if(log.isDebugEnabled()) {
 				log.debug("Putting " + key + " for " + className);

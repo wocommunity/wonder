@@ -761,7 +761,11 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
         if (log.isDebugEnabled())
             log.debug("Validate value: " + obj + " for key: " + s);
         try {
-            validated = super.validateValueForKey(obj, s);
+            if(obj instanceof ERXConstant) {
+                validated = obj;
+            } else {
+                validated = super.validateValueForKey(obj, s);
+            }
         } catch (ERXValidationException eov) {
             throw eov;
         } catch (NSValidation.ValidationException eov) {
@@ -1095,6 +1099,17 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
         setDefaultValuesInObject(eo, ec);
     }
 
+    public String inverseForRelationshipKey(String relationshipKey) {
+        String result = null;
+        EORelationship relationship = entity().relationshipNamed(relationshipKey);
+        if(relationship.userInfo() != null) {
+            result = (String) relationship.userInfo().objectForKey("ERXInverseRelationshipName");
+        }
+        if(result == null) {
+            result = super.inverseForRelationshipKey(relationshipKey);
+        }
+        return result;
+    }
 
     private static boolean useValidity() {
         if (useValidity == null) {
@@ -1177,10 +1192,11 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
 
 	public Class _enforcedKVCNumberClassForKey(String key) {
 		EOAttribute attribute = entity().attributeNamed(key);
-		if(attribute != null) {
+		if(attribute != null && attribute.userInfo() != null) {
 			String className = (String) attribute.userInfo().objectForKey("ERXConstantClassName");
 			if(className != null) {
-				return ERXPatcher.classForName(className);
+                Class c = ERXPatcher.classForName(className);
+				return c;
 			}
 		}
 		return super._enforcedKVCNumberClassForKey(key);
