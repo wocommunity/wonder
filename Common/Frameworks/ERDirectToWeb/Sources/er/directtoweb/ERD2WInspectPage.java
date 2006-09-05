@@ -179,12 +179,12 @@ public class ERD2WInspectPage extends ERD2WPage implements InspectPageInterface,
             }
             saved = true;
         } catch (NSValidation.ValidationException ex) {
-            errorMessage = ERXLocalizer.currentLocalizer().localizedTemplateStringForKeyWithObject("CouldNotSave", ex);
+            setErrorMessage(ERXLocalizer.currentLocalizer().localizedTemplateStringForKeyWithObject("CouldNotSave", ex));
             validationFailedWithException(ex, ex.object(), "saveChangesExceptionKey");
         } catch(EOGeneralAdaptorException ex) {
             if(ERXEOAccessUtilities.isOptimisticLockingFailure(ex) && shouldRecoverFromOptimisticLockingFailure()) {
                 EOEnterpriseObject eo = ERXEOAccessUtilities.refetchFailedObject(ec, ex);
-                errorMessage = ERXLocalizer.currentLocalizer().localizedTemplateStringForKeyWithObject("CouldNotSavePleaseReapply", d2wContext());
+                setErrorMessage(ERXLocalizer.currentLocalizer().localizedTemplateStringForKeyWithObject("CouldNotSavePleaseReapply", d2wContext()));
                 validationFailedWithException(ex, eo, "CouldNotSavePleaseReapply");
             } else {
                 throw ex;
@@ -198,7 +198,7 @@ public class ERD2WInspectPage extends ERD2WPage implements InspectPageInterface,
         WOComponent returnComponent = null;
         // catch the case where the user hits cancel and then the back button
         if (object()!=null && object().editingContext()==null) {
-            errorMessage = ERXLocalizer.currentLocalizer().localizedTemplateStringForKeyWithObject("ERD2WInspect.alreadyAborted", d2wContext());
+            setErrorMessage(ERXLocalizer.currentLocalizer().localizedTemplateStringForKeyWithObject("ERD2WInspect.alreadyAborted", d2wContext()));
             clearValidationFailed();
         } else {
             if (errorMessages.count()==0) {
@@ -211,7 +211,7 @@ public class ERD2WInspectPage extends ERD2WPage implements InspectPageInterface,
             } else {
                 // if we don't do this, we end up with the error message in two places
                 // in errorMessages and errorMessage (super class)
-                errorMessage=null;
+                setErrorMessage(null);
             }
         }
         return returnComponent;
