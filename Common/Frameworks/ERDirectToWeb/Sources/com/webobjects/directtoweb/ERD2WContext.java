@@ -13,9 +13,10 @@ import com.webobjects.eoaccess.*;
 
 
 /**
- * 
+ * Optimizes custom attribute handling and fixes a problem when
+ * a context can't find its task or entity even though it is given in the rules.
  * @author david caching
- * @author ak factory, thread safety
+ * @author ak factory, thread safety, fix
  */
 public class ERD2WContext extends D2WContext {
 
@@ -74,6 +75,17 @@ public class ERD2WContext extends D2WContext {
         super(session);
     }
 
+    /**
+     * Overrridden because when a page config is set, task and entity are cleared, 
+     * but not re-set when you just call task() or entity(). This leads to NPEs, 
+     * errors that a pageName can't be found and others. Setting it here fixes it.
+     */
+    public void setDynamicPage(String page) {
+        super.setDynamicPage(page);
+        setTask(task());
+        setEntity(entity());
+    }
+    
     /**
      * Overridden so that custom attributes are cached as a performance
      * optimization.
