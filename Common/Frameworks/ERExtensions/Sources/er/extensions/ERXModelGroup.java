@@ -9,10 +9,11 @@ package er.extensions;
 import java.net.*;
 import java.util.*;
 
-import org.apache.log4j.Logger;
+import org.apache.log4j.*;
 
 import com.webobjects.eoaccess.*;
 import com.webobjects.foundation.*;
+import com.webobjects.jdbcadaptor.*;
 
 /**
  * The reason that this model group is needed is because the regular
@@ -29,6 +30,8 @@ public class ERXModelGroup extends
     public static Logger log = Logger.getLogger(ERXModelGroup.class);
     private Hashtable       cache;
 
+    protected static boolean patchModelsOnLoad = ERXProperties.booleanForKeyWithDefault("er.extensions.ERXModelGroup.patchModelsOnLoad", false);
+     
     /**
      * Default public constructor
      */
@@ -116,6 +119,153 @@ public class ERXModelGroup extends
         eomodel.setModelGroup(this);
         _modelsByName.setObjectForKey(eomodel, eomodel.name());
         NSNotificationCenter.defaultCenter().postNotification("EOModelAddedNotification", eomodel);
+    }
+    
+    /**
+     * Extends models by model-specific prototypes. You would use them by having an entity named
+     * <code>EOModelPrototypes</code>, <code>EOJDBCModelPrototypes</code> or 
+     * <code>EOJDBC&lt;PluginName&gt;ModelPrototypes</code> in your model. These are loaded after the
+     * normal models, so you can override things here. Of course EOModeler knows nothing of them,
+     * so you may need to copy all attributes over to a <code>EOPrototypes</code> entity that is
+     * present only once in your model group. <br />
+     * This class is used by the runtime when the property <code>er.extensions.ERXModelGroup.useExtendedPrototypes=true</code>.
+     * @author ak
+     */
+    public static class Model extends EOModel {
+
+        public Model(URL url) {
+            super(url);
+            log.info("init: " + name());
+        }
+        
+        public void setModelGroup(EOModelGroup aGroup) {
+            super.setModelGroup(aGroup);
+            log.info("setModelGroup: " + name());
+            if(aGroup != null) {
+                ERXConfigurationManager.defaultManager().resetConnectionDictionaryInModel(this);
+            }
+        }
+
+        /**
+         * Utility for getting all names from an array of attributes.
+         * @param attributes
+         * @return
+         */
+        private NSArray namesForAttributes(NSArray attributes) {
+            return (NSArray) attributes.valueForKey("name");
+        }
+
+        /**
+         * Utility for getting all the attributes off an entity. If the entity
+         * is null, an empty array is returned.
+         * @param entity
+         * @return
+         */
+        private NSArray attributesFromEntity(EOEntity entity) {
+            NSArray result = NSArray.EmptyArray;
+            if(entity != null) {
+                result = entity.attributes();
+                log.info("Attributes from " + entity.name() + ": " + result);
+            }
+            return result;
+        }
+
+        /**
+         * Utility to add attributes to the prototype cache. As the attributes are
+         * chosen by name, replace already existing ones.
+         * @param attributes
+         */
+        private void addAttributesToPrototypesCache(NSArray attributes) {
+            if(attributes.count() != 0) {
+                NSArray keys = namesForAttributes(attributes);
+                NSDictionary temp = new NSDictionary(attributes, keys);
+                _prototypesByName.addEntriesFromDictionary(temp);
+            }
+        }
+        
+        /**
+         * Create the prototype cache by walking a search order.
+         *
+         */
+        private void createPrototypes() {
+            log.info("Creating prototypes for model: " + name() + "->" + connectionDictionary());
+            synchronized (_EOGlobalModelLock) {
+                _prototypesByName = new NSMutableDictionary();
+                NSArray adaptorPrototypes = NSArray.EmptyArray;
+                EOAdaptor adaptor = EOAdaptor.adaptorWithModel(this);
+                try {
+                    adaptorPrototypes = adaptor.prototypeAttributes();
+                } catch (Exception e) {
+                    log.error(e, e);
+                }
+                NSArray globalAttributesFromModelGroup = attributesFromEntity(_group.entityNamed("EOPrototypes"));
+                NSArray globalAttributesFromModel = attributesFromEntity(entityNamed("EOModelPrototypes"));
+                
+                NSArray adaptorAttributesFromModelGroup = attributesFromEntity(_group.entityNamed("EO" + adaptorName() + "Prototypes"));
+                NSArray adaptorAttributesFromModel = attributesFromEntity(entityNamed("EO" + adaptorName() + "ModelPrototypes"));
+                
+                NSArray pluginAttributesFromModelGroup = NSArray.EmptyArray;
+                NSArray pluginAttributesFromModel = NSArray.EmptyArray;
+                
+                if(adaptor instanceof JDBCAdaptor && !name().equals("erprototypes")) {
+                    String plugin = (String) connectionDictionary().objectForKey("plugin");
+                    if(plugin != null) {
+                        pluginAttributesFromModelGroup = attributesFromEntity(_group.entityNamed("EOJDBC" + plugin + "Prototypes"));
+                        pluginAttributesFromModel = attributesFromEntity(entityNamed("EOJDBC" + plugin + "ModelPrototypes"));
+                    }
+                }
+                addAttributesToPrototypesCache(adaptorPrototypes);
+                NSArray prototypesToHide = attributesFromEntity(_group.entityNamed("EOPrototypesToHide"));
+                _prototypesByName.removeObjectsForKeys(namesForAttributes(prototypesToHide));
+                
+                addAttributesToPrototypesCache(globalAttributesFromModelGroup);
+                addAttributesToPrototypesCache(adaptorAttributesFromModelGroup);
+                addAttributesToPrototypesCache(pluginAttributesFromModelGroup);
+                
+                addAttributesToPrototypesCache(globalAttributesFromModel);
+                addAttributesToPrototypesCache(adaptorAttributesFromModel);
+                addAttributesToPrototypesCache(pluginAttributesFromModel);
+            }
+        }
+
+        /**
+         * Overridden to use our prototype creation method.
+         */
+        public EOAttribute prototypeAttributeNamed(String name) {
+            synchronized (_EOGlobalModelLock) {
+                if (_prototypesByName == null) {
+                    createPrototypes();
+                }
+            }
+            return (EOAttribute) super.prototypeAttributeNamed(name);
+        }
+
+        /**
+         * Overridden to use our prototype creation method.
+         */
+        public NSArray availablePrototypeAttributeNames() {
+            synchronized(_EOGlobalModelLock) {
+                if(_prototypesByName == null) {
+                    createPrototypes();
+                }
+            }
+            return super.availablePrototypeAttributeNames();
+        }
+
+    }
+
+    /**
+     * Overridden to use our model class in the runtime.
+     */
+    public EOModel addModelWithPathURL(URL url) {
+        EOModel model = null;
+        if(patchModelsOnLoad) {
+            model = new Model(url);
+        } else {
+            model = new EOModel(url);
+        }
+        addModel(model);
+        return model;
     }
 
     /**
