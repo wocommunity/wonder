@@ -2,7 +2,7 @@ package er.extensions;
 
 import java.sql.*;
 
-import org.apache.log4j.Logger;
+import org.apache.log4j.*;
 
 import com.webobjects.eoaccess.*;
 import com.webobjects.eocontrol.*;
@@ -28,6 +28,7 @@ public class ERXJDBCAdaptor extends JDBCAdaptor {
     public static final String CLASS_NAME_KEY = "er.extensions.ERXJDBCAdaptor.className";
     
     private static Boolean switchReadWrite = null;
+    private static Boolean useConnectionBroker = null;
     
     private static boolean switchReadWrite() {
         if (switchReadWrite == null) {
@@ -36,6 +37,18 @@ public class ERXJDBCAdaptor extends JDBCAdaptor {
         return switchReadWrite.booleanValue();
     }
 
+    /**
+     * Returns whether the connection broker is active.
+     * @return
+     */
+    public static boolean useConnectionBroker() {
+        if (useConnectionBroker == null) {
+            useConnectionBroker = ERXProperties.booleanForKeyWithDefault(USE_CONNECTION_BROKER_KEY, false) ? Boolean.FALSE : Boolean.TRUE;
+        }
+        return useConnectionBroker.booleanValue();
+    }
+
+    
     public static void registerJDBCAdaptor() {
         String className = ERXProperties.stringForKey(CLASS_NAME_KEY);
         if(className != null) {
@@ -114,17 +127,10 @@ public class ERXJDBCAdaptor extends JDBCAdaptor {
      */
     public static class Context extends JDBCContext {
 
-        private boolean _useConnectionBroker;
-        
         public Context(EOAdaptor eoadaptor) {
             super(eoadaptor);
-            _useConnectionBroker = ERXProperties.booleanForKeyWithDefault(USE_CONNECTION_BROKER_KEY, false);
         }
         
-        private boolean useConnectionBroker() {
-            return _useConnectionBroker;
-        }
-
         private void freeConnection() {
             if(useConnectionBroker()) {
                 if(_jdbcConnection != null) {
