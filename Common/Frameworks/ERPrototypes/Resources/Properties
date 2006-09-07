@@ -13,3 +13,9 @@
 #WOAllowRapidTurnaround=true
 #WOSessionTimeOut=3600
 #WOAllowsConcurrentRequestHandling=false
+
+dbConnectURLGLOBAL=jdbc:postgresl://localhost/okboook
+dbConnectUserGLOBAL=okbook
+dbConnectPasswordGLOBAL=
+dbConnectServerGLOBAL=localhost
+dbConnectPluginGLOBAL=Postgresql
