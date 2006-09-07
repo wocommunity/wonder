@@ -1,7 +1,9 @@
+
 {
     EOModelVersion = 2.1;
     adaptorName = JDBC;
-    connectionDictionary = {};
+    connectionDictionary = 
+    {};
     entities = 
     (
        
@@ -28,12 +30,6 @@
        {
            className = EOGenericRecord;
            name = EOJDBCPostgresPrototypes;
-       }, 
-       
-       {
-           className = EOGenericRecord;
-           name = EOPrototypes;
        }
     );
-    userInfo = {}; 
 }
