@@ -47,7 +47,8 @@ public class ERXModelGroup extends
      * @return ERXModelGroup for all of the loaded bundles
      */
     public static EOModelGroup modelGroupForLoadedBundles() {
-        EOModelGroup eomodelgroup = new ERXModelGroup();
+        ERXModelGroup eomodelgroup = new ERXModelGroup();
+        EOModelGroup.setDefaultGroup(eomodelgroup);
         NSArray nsarray = NSBundle.frameworkBundles();
         int bundleCount = nsarray.count() + 1;
 
@@ -77,7 +78,7 @@ public class ERXModelGroup extends
             }
         }
         // correcting an EOF Inheritance bug
-        ((ERXModelGroup) eomodelgroup).checkInheritanceRelationships();
+        eomodelgroup.checkInheritanceRelationships();
         return eomodelgroup;
     }
 
@@ -116,7 +117,9 @@ public class ERXModelGroup extends
                 eomodel.removeEntity(eomodel.entityNamed(entityName));
             }
         }
-        eomodel.setModelGroup(this);
+        if(eomodel.modelGroup() != this) {
+        	eomodel.setModelGroup(this);
+        }
         _modelsByName.setObjectForKey(eomodel, eomodel.name());
         NSNotificationCenter.defaultCenter().postNotification("EOModelAddedNotification", eomodel);
     }
