@@ -562,6 +562,38 @@ public class ERXEOAccessUtilities {
         return sb.toString();
     }
 
+    /**
+     * Returns the last entity for the given key path. If the path is empty or null, returns the given entity.
+     * @param entity
+     * @param keyPath
+     * @return
+     */
+    private static Set _keysWithWarning = Collections.synchronizedSet(new HashSet());
+
+    public static EOEntity destinationEntityForKeyPath(EOEntity entity, String keyPath) {
+        if(keyPath == null || keyPath.length() == 0) {
+            return entity;
+        }
+        NSArray keyArray = NSArray.componentsSeparatedByString(keyPath, ".");
+        for(Enumeration keys = keyArray.objectEnumerator(); keys.hasMoreElements(); ) {
+            String key = (String)keys.nextElement();
+            EORelationship rel = entity.anyRelationshipNamed(key);
+            if(rel == null) {
+                if(entity.anyAttributeNamed(key) == null) {
+                    if(key.indexOf("@") != 0) {
+                        if(!_keysWithWarning.contains(key + "-" + entity)) {
+                            _keysWithWarning.add(key + "-" + entity);
+                            log.warn("No relationship or attribute <" + key + "> in entity: " + entity);
+                        }
+                    }
+                }
+                return null;
+            }
+            entity = rel.destinationEntity();
+        }
+        return entity;
+    }
+    
     public static NSArray classPropertiesNotInParent(EOEntity entity, boolean includeAttributes, boolean includeToOneRelationships, boolean includeToManyRelationships) {
         Object parent = entity.parentEntity();
         if (parent == null) { return NSArray.EmptyArray; }
