@@ -43,7 +43,7 @@ public class ERXJDBCAdaptor extends JDBCAdaptor {
      */
     public static boolean useConnectionBroker() {
         if (useConnectionBroker == null) {
-            useConnectionBroker = ERXProperties.booleanForKeyWithDefault(USE_CONNECTION_BROKER_KEY, false) ? Boolean.FALSE : Boolean.TRUE;
+            useConnectionBroker = ERXProperties.booleanForKeyWithDefault(USE_CONNECTION_BROKER_KEY, false) ? Boolean.TRUE : Boolean.FALSE;
         }
         return useConnectionBroker.booleanValue();
     }
