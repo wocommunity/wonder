@@ -507,8 +507,8 @@ public class ERXConfigurationManager {
         // set the information for ERXJDBCConnectionBroker
         newConnectionDictionary.addEntriesFromDictionary(poolingDictionary);
         
-        boolean removeJdbc2Info = ERXProperties.booleanForKeyWithDefault(aModelName + ".removeJdbc2Info", false);
-        if (removeJdbc2Info) {
+        String removeJdbc2Info = getProperty(aModelName + ".removeJdbc2Info", "dbRemoveJdbc2InfoGLOBAL", "false");
+        if (ERXValueUtilities.booleanValue(removeJdbc2Info)) {
             newConnectionDictionary.removeObjectForKey("jdbc2Info");
         }
 
