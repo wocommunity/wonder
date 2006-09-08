@@ -373,7 +373,7 @@ public class ERXConfigurationManager {
         if(value == null) {
             value = defaultValue; 
         }
-        return defaultValue;
+        return value;
     }
     
     private String getProperty(String key, String alternateKey) {
