@@ -47,11 +47,47 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
         return ERXProperties.booleanForKeyWithDefault("er.extensions.ERXGenericRecord.shouldTrimSpaces", false);
     }
     
+    private String localizedKey(String key) {
+    	ERXEC ec = (ERXEC)editingContext();
+    	key = key + "_" + ec.locale().getLanguage();
+		return key;
+    }
+    
+    public static class LocalizedBinding extends NSKeyValueCoding._KeyBinding {
+
+		public LocalizedBinding(String key) {
+			super(null, key);
+		}
+
+		public Object valueInObject(Object object) {
+			ERXGenericRecord eo = (ERXGenericRecord) object;
+			String key = eo.localizedKey(_key);
+			Object value = eo.valueForKey(key);
+			return value;
+		}
+
+		public void setValueInObject(Object value, Object object) {
+			ERXGenericRecord eo = (ERXGenericRecord) object;
+			String key = eo.localizedKey(_key);
+			eo.takeValueForKey(value, key);
+		}
+	}
+
+	public NSKeyValueCoding._KeyBinding _otherStorageBinding(String key) {
+		NSKeyValueCoding._KeyBinding result;
+		if(classDescription().attributeKeys().contains(localizedKey(key))) {
+			result = new LocalizedBinding(key);
+		} else {
+			result = super._otherStorageBinding(key);
+		}
+		return result;
+	}
+	
     /**
-     * Clazz object implementation for ERXGenericRecord. See
-     * {@link EOEnterpriseObjectClazz} for more information on this
-     * neat design pattern.
-     */
+	 * Clazz object implementation for ERXGenericRecord. See
+	 * {@link EOEnterpriseObjectClazz} for more information on this neat design
+	 * pattern.
+	 */
     public static class ERXGenericRecordClazz extends EOEnterpriseObjectClazz {
         
     }
