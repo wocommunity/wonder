@@ -104,7 +104,7 @@ public abstract class ERXApplication extends WOApplication implements ERXGracefu
      */
     public EOModelGroup defaultModelGroup() {
         if(defaultModelGroup == null) {
-            defaultModelGroup = ERXModelGroup.modelGroupForLoadedBundles();
+            defaultModelGroup = ERXModelGroup.loadModelGroupForLoadedBundles();
             defaultModelGroup.setDelegate(new ERXDefaultModelGroupDelegate());
         }
         return defaultModelGroup;
