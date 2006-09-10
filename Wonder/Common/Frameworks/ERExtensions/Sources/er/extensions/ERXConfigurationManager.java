@@ -14,7 +14,6 @@ import org.apache.log4j.*;
 import com.webobjects.appserver.*;
 import com.webobjects.eoaccess.*;
 import com.webobjects.foundation.*;
-import com.webobjects.jdbcadaptor.*;
 
 /** 
  * <code>Configuration Manager</code> handles rapid turnaround for 
@@ -628,8 +627,8 @@ public class ERXConfigurationManager {
             prototypeEntityName = (String) databaseConfig.objectForKey("prototypeEntityName");
         }
 
-        if(prototypeEntityName == null) {
-            String pluginName = guessPluginName(model);
+        if(prototypeEntityName == null && !(ERXModelGroup.patchModelsOnLoad())) {
+            String pluginName = ERXEOAccessUtilities.guessPluginName(model);
             if (pluginName != null) {
                 String pluginPrototypeEntityName = "EOJDBC" + pluginName + "Prototypes";
                 // This check isn't technically necessary since
@@ -666,38 +665,6 @@ public class ERXConfigurationManager {
                 model.addEntity(newPrototypeEntity);
             }
         }
-    }
-
-
-    private String guessPluginName(EOModel model) {
-        String pluginName = null;
-        // If you don't explicitly set a prototype name, and you don't
-        // declare a preferred databaseConfig,
-        // then attempt to load Wonder-style prototypes with the name
-        // EOJDBC(driverName)Prototypes.
-        if ("JDBC".equals(model.adaptorName())) {
-            NSDictionary connectionDictionary = model.connectionDictionary();
-            if (connectionDictionary != null) {
-                String jdbcUrl = (String) connectionDictionary.objectForKey("URL");
-                if (jdbcUrl != null) {
-                    pluginName = (String) connectionDictionary.objectForKey("plugin");
-                    if (pluginName == null) {
-                        pluginName = JDBCPlugIn.plugInNameForURL(jdbcUrl);
-                        if (pluginName == null) {
-                            int firstColon = jdbcUrl.indexOf(':');
-                            int secondColon = jdbcUrl.indexOf(':', firstColon + 1);
-                            if (firstColon != -1 && secondColon != -1) {
-                                pluginName = jdbcUrl.substring(firstColon + 1, secondColon);
-                            }
-                        } else {
-                            pluginName = ERXStringUtilities.lastPropertyKeyInKeyPath(pluginName);
-                            pluginName = pluginName.replaceFirst("PlugIn", "");
-                        }
-                    }
-                }
-            }
-        }
-        return pluginName;
     }
 
 
