@@ -14,6 +14,7 @@ import org.apache.log4j.Logger;
 import com.webobjects.eoaccess.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.foundation.*;
+import com.webobjects.jdbcadaptor.*;
 
 /**
  * Collection of EOAccess related utilities.
@@ -1486,5 +1487,41 @@ public class ERXEOAccessUtilities {
             }
         };
         return action.perform(ec, entity.model().name());
+    }
+    
+    /**
+     * Tries to get the plugin name for a JDBC based model.
+     * @param model
+     * @return
+     */public static String guessPluginName(EOModel model) {
+        String pluginName = null;
+        // If you don't explicitly set a prototype name, and you don't
+        // declare a preferred databaseConfig,
+        // then attempt to load Wonder-style prototypes with the name
+        // EOJDBC(driverName)Prototypes.
+        if ("JDBC".equals(model.adaptorName())) {
+            NSDictionary connectionDictionary = model.connectionDictionary();
+            if (connectionDictionary != null) {
+                String jdbcUrl = (String) connectionDictionary.objectForKey("URL");
+                if (jdbcUrl != null) {
+                    pluginName = (String) connectionDictionary.objectForKey("plugin");
+                    if (pluginName == null) {
+                        pluginName = JDBCPlugIn.plugInNameForURL(jdbcUrl);
+                        if (pluginName == null) {
+                        	// AK: this is a hack that is totally bogus....
+                            int firstColon = jdbcUrl.indexOf(':');
+                            int secondColon = jdbcUrl.indexOf(':', firstColon + 1);
+                            if (firstColon != -1 && secondColon != -1) {
+                                pluginName = jdbcUrl.substring(firstColon + 1, secondColon);
+                            }
+                        } else {
+                            pluginName = ERXStringUtilities.lastPropertyKeyInKeyPath(pluginName);
+                            pluginName = pluginName.replaceFirst("PlugIn", "");
+                        }
+                    }
+                }
+            }
+        }
+        return pluginName;
     }
 }
