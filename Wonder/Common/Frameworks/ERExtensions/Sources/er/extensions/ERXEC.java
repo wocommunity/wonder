@@ -7,7 +7,7 @@
 package er.extensions;
 import java.util.*;
 
-import org.apache.log4j.Logger;
+import org.apache.log4j.*;
 
 import com.webobjects.eoaccess.*;
 import com.webobjects.eocontrol.*;
@@ -949,6 +949,23 @@ public class ERXEC extends EOEditingContext {
         super.setDelegate(d);
     }
     
+    private Locale _locale;
+
+	/**
+	 * Returns the locale of the current editing context.
+	 * @return
+	 */
+	public Locale locale() {
+		if(_locale == null) {
+			return ERXLocalizer.currentLocalizer().locale();
+		}
+		return _locale;
+	}
+    
+	public void setLocale(Locale value) {
+		_locale = value;
+	}
+	
     /** Default implementation of the Factory interface. */
     public static class DefaultFactory implements Factory {
     	
