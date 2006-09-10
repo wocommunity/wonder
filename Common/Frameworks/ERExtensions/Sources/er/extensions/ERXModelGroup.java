@@ -46,7 +46,7 @@ public class ERXModelGroup extends
      * 
      * @return ERXModelGroup for all of the loaded bundles
      */
-    public static EOModelGroup modelGroupForLoadedBundles() {
+    public static EOModelGroup loadModelGroupForLoadedBundles() {
         ERXModelGroup eomodelgroup = new ERXModelGroup();
         EOModelGroup.setDefaultGroup(eomodelgroup);
         NSArray nsarray = NSBundle.frameworkBundles();
@@ -108,8 +108,8 @@ public class ERXModelGroup extends
         NSSet intersection = nsmutableset.setByIntersectingSet(nsset);
         if (intersection.count() != 0) {
             log.warn("The model '" + name + "' (path: " + eomodel.pathURL()
-                    + ") has an entity name conflict with the entities " + intersection
-                    + " already in the model group " + this);
+					+ ") has an entity name conflict with the entities "
+					+ intersection + " already in the model group " + this);
             Enumeration e = intersection.objectEnumerator();
             while (e.hasMoreElements()) {
                 String entityName = (String) e.nextElement();
@@ -136,18 +136,77 @@ public class ERXModelGroup extends
      */
     public static class Model extends EOModel {
 
-        public Model(URL url) {
-            super(url);
-            log.info("init: " + name());
+		public Model(URL url) {
+			super(url);
+		}
+
+		public void setModelGroup(EOModelGroup aGroup) {
+			super.setModelGroup(aGroup);
+			if (aGroup != null) {
+				ERXConfigurationManager.defaultManager().resetConnectionDictionaryInModel(this);
+			}
         }
-        
-        public void setModelGroup(EOModelGroup aGroup) {
-            super.setModelGroup(aGroup);
-            log.info("setModelGroup: " + name());
-            if(aGroup != null) {
-                ERXConfigurationManager.defaultManager().resetConnectionDictionaryInModel(this);
-            }
-        }
+
+        public Object _addEntityWithPropertyList(Object plist) throws InstantiationException, IllegalAccessException {
+        	NSMutableDictionary mutableDefinition = processDefinition((NSDictionary)plist);
+			return super._addEntityWithPropertyList(mutableDefinition);
+		}
+
+ 		private NSMutableDictionary processDefinition(NSDictionary definition) {
+			NSMutableDictionary mutableDefinition = createLocalizedAttributes(definition);
+			return mutableDefinition;
+		}
+
+		private NSMutableDictionary createLocalizedAttributes(NSDictionary definition) {
+			NSMutableDictionary mutableDefinition = definition.mutableClone();
+			NSArray attributes = (NSArray)definition.objectForKey("attributes");
+			NSArray classProperties = (NSArray)definition.objectForKey("classProperties");
+			NSArray attributesUsedForLocking = (NSArray)definition.objectForKey("attributesUsedForLocking");
+			if(attributes == null) attributes = NSArray.EmptyArray;
+			if(classProperties == null) classProperties = NSArray.EmptyArray;
+			if(attributesUsedForLocking == null) attributesUsedForLocking = NSArray.EmptyArray;
+			NSMutableArray mutableAttributes = new NSMutableArray();
+        	NSMutableArray mutableClassProperties = new NSMutableArray();
+        	NSMutableArray mutableAttributesUsedForLocking = new NSMutableArray();
+			if(attributes != null) {
+				for(Enumeration e = attributes.objectEnumerator(); e.hasMoreElements(); ) {
+					NSDictionary attributeDefinition = (NSDictionary)e.nextElement();
+					NSArray languages = (NSArray) attributeDefinition.valueForKeyPath("userInfo.ERXLanguages");
+					String name = (String) attributeDefinition.objectForKey("name");
+					if(languages != null && languages.count() > 0) {
+						String columnName = (String) attributeDefinition.objectForKey("columnName");
+						for (int i = 0; i < languages.count(); i++) {
+							NSMutableDictionary mutableAttributeDefinition = attributeDefinition.mutableClone();
+							String language = (String) languages.objectAtIndex(i);
+							String newName = name + "_" +language;
+							String newColumnName = columnName + "_" +language;
+							//columnName = columnName.replaceAll("_(\\w)$", "_" + language);
+							mutableAttributeDefinition.setObjectForKey(newName, "name");
+							mutableAttributeDefinition.setObjectForKey(newColumnName, "columnName");
+							mutableAttributes.addObject(mutableAttributeDefinition);
+							if(classProperties.containsObject(name)) {
+								mutableClassProperties.addObject(newName);
+							}
+							if(attributesUsedForLocking.containsObject(name)) {
+								mutableAttributesUsedForLocking.addObject(newName);
+							}
+						}
+					} else {
+						mutableAttributes.addObject(attributeDefinition);
+						if(classProperties.containsObject(name)) {
+							mutableClassProperties.addObject(name);
+						}
+						if(attributesUsedForLocking.containsObject(name)) {
+							mutableAttributesUsedForLocking.addObject(name);
+						}
+					}
+				}
+				mutableDefinition.setObjectForKey(mutableClassProperties, "classProperties");
+				mutableDefinition.setObjectForKey(mutableAttributesUsedForLocking, "attributesUsedForLocking");
+				mutableDefinition.setObjectForKey(mutableAttributes, "attributes");
+			}
+			return mutableDefinition;
+		}
 
         /**
          * Utility for getting all names from an array of attributes.
@@ -185,6 +244,15 @@ public class ERXModelGroup extends
                 _prototypesByName.addEntriesFromDictionary(temp);
             }
         }
+
+        /**
+         * Utility to add attributes to the prototype cache. As the attributes are
+         * chosen by name, replace already existing ones.
+         * @param attributes
+         */
+        private void addAttributesToPrototypesCache(EOEntity entity) {
+        	addAttributesToPrototypesCache(attributesFromEntity(entity));
+        }
         
         /**
          * Create the prototype cache by walking a search order.
@@ -194,6 +262,7 @@ public class ERXModelGroup extends
             log.info("Creating prototypes for model: " + name() + "->" + connectionDictionary());
             synchronized (_EOGlobalModelLock) {
                 _prototypesByName = new NSMutableDictionary();
+                String name = name();
                 NSArray adaptorPrototypes = NSArray.EmptyArray;
                 EOAdaptor adaptor = EOAdaptor.adaptorWithModel(this);
                 try {
@@ -201,33 +270,26 @@ public class ERXModelGroup extends
                 } catch (Exception e) {
                     log.error(e, e);
                 }
-                NSArray globalAttributesFromModelGroup = attributesFromEntity(_group.entityNamed("EOPrototypes"));
-                NSArray globalAttributesFromModel = attributesFromEntity(entityNamed("EOModelPrototypes"));
-                
-                NSArray adaptorAttributesFromModelGroup = attributesFromEntity(_group.entityNamed("EO" + adaptorName() + "Prototypes"));
-                NSArray adaptorAttributesFromModel = attributesFromEntity(entityNamed("EO" + adaptorName() + "ModelPrototypes"));
-                
-                NSArray pluginAttributesFromModelGroup = NSArray.EmptyArray;
-                NSArray pluginAttributesFromModel = NSArray.EmptyArray;
-                
-                if(adaptor instanceof JDBCAdaptor && !name().equals("erprototypes")) {
-                    String plugin = (String) connectionDictionary().objectForKey("plugin");
-                    if(plugin != null) {
-                        pluginAttributesFromModelGroup = attributesFromEntity(_group.entityNamed("EOJDBC" + plugin + "Prototypes"));
-                        pluginAttributesFromModel = attributesFromEntity(entityNamed("EOJDBC" + plugin + "ModelPrototypes"));
-                    }
-                }
                 addAttributesToPrototypesCache(adaptorPrototypes);
                 NSArray prototypesToHide = attributesFromEntity(_group.entityNamed("EOPrototypesToHide"));
                 _prototypesByName.removeObjectsForKeys(namesForAttributes(prototypesToHide));
+
+                String plugin = null;
+                if(adaptor instanceof JDBCAdaptor && !name().equalsIgnoreCase("erprototypes")) {
+                    plugin = (String) connectionDictionary().objectForKey("plugin");
+                }
                 
-                addAttributesToPrototypesCache(globalAttributesFromModelGroup);
-                addAttributesToPrototypesCache(adaptorAttributesFromModelGroup);
-                addAttributesToPrototypesCache(pluginAttributesFromModelGroup);
+                addAttributesToPrototypesCache(_group.entityNamed("EOPrototypes"));
+                addAttributesToPrototypesCache(_group.entityNamed("EO" + adaptorName() + "Prototypes"));
+                if(plugin != null) {
+                	addAttributesToPrototypesCache(_group.entityNamed("EOJDBC" + plugin + "Prototypes"));
+                }
                 
-                addAttributesToPrototypesCache(globalAttributesFromModel);
-                addAttributesToPrototypesCache(adaptorAttributesFromModel);
-                addAttributesToPrototypesCache(pluginAttributesFromModel);
+                addAttributesToPrototypesCache(entityNamed("EO" + name + "Prototypes"));
+                addAttributesToPrototypesCache(entityNamed("EO" + adaptorName() + name + "Prototypes"));
+                if(plugin != null) {
+                	addAttributesToPrototypesCache(entityNamed("EOJDBC" + plugin + name + "Prototypes"));
+                }
             }
         }
 
@@ -335,4 +397,8 @@ public class ERXModelGroup extends
         }
         return cachedValue.intValue();
     }
+
+	public static boolean patchModelsOnLoad() {
+		return patchModelsOnLoad;
+	}
 }
