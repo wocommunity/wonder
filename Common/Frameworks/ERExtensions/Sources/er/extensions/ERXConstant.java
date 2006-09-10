@@ -233,6 +233,33 @@ public abstract class ERXConstant extends Number {
 		return ((ERXConstant)otherObject).intValue() == intValue();
 	}
 	
+	/**
+	 * Constant class with a name and a description.
+	 * @author ak
+	 *
+	 */
+	public abstract static class NamedConstant extends ERXConstant {
+
+		private String _name;
+		
+		protected NamedConstant(int value, String name) {
+			super(value);
+			_name = name;
+		}
+		
+		public String name() {
+			return _name;
+		}
+		
+		public String userPresentableDescription() {
+			return name() + " (" + intValue() +  ")";
+		}
+		
+		public String toString() {
+			return getClass().getName() + ": " + userPresentableDescription();
+		}
+	}
+	
     public static final int MAX_INT=2500;
     
     protected static Integer[] INTEGERS=new Integer[MAX_INT];
