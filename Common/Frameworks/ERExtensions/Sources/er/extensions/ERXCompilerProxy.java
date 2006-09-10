@@ -535,7 +535,7 @@ public class ERXCompilerProxy {
                             WOApplication.application().pageWithName(cacheEntry.className(), context)._componentDefinition().componentInstanceInContext(context); // mark an instance as locked
                         }
                         if(EOEnterpriseObject.class.isAssignableFrom(class_) && !didResetModelGroup) {
-                            EOModelGroup.setDefaultGroup(ERXModelGroup.modelGroupForLoadedBundles());
+                            EOModelGroup.setDefaultGroup(ERXModelGroup.loadModelGroupForLoadedBundles());
                             didResetModelGroup = true;
                         }
                         if(ERXCompilerProxy.class.getName().equals(className)) {
