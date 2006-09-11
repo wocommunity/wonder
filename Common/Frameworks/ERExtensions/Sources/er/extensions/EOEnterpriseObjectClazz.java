@@ -83,11 +83,43 @@ public class EOEnterpriseObjectClazz extends Object {
     private String _entityName;
 
     /**
-     * Default public constructor
+     * Default public constructor. 
      */
     public EOEnterpriseObjectClazz() {
+    	/*
+    	// AK: If your class is enclosed by a EO subclass the constructor 
+    	// will auto-discover the corresponding entity name. Not sure we need this, though.
+    	String className = getClass().getName();
+    	int index = className.indexOf('$');
+    	if(index > 0) {
+    		className = className.substring(0, index);
+    		Class c = ERXPatcher.classForName(className);
+    		if(c != null) {
+    			// we should use the class description, but it's too early for that when we 
+    			// do this as a result of a static variable init.
+				NSArray entities = (NSArray) EOModelGroup.defaultGroup().models().valueForKeyPath("entities.@flatten");
+				EOQualifier q = new EOKeyValueQualifier("className", EOQualifier.QualifierOperatorEqual, className);
+				NSArray candidates = EOQualifier.filteredArrayWithQualifier(entities, q);
+				if(candidates.count() > 1) {
+					log.warn("More than one entity found: " + candidates);
+				}
+				EOEntity entity = (EOEntity) candidates.lastObject();
+				if(entity != null) {
+					setEntityName(entity.name());
+				}
+    		}
+    	}*/
     }
 
+    /**
+     * Constructor that also supplies an entity name.
+     * @param entityName
+     */
+    public EOEnterpriseObjectClazz(String entityName) {
+    	setEntityName(entityName);
+    	allClazzes.setObjectForKey(this, entityName);
+    }
+    
     /**
      * Resets the clazz cache.
      */
