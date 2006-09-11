@@ -92,6 +92,8 @@ public class PostgresqlExpression extends JDBCExpression {
      
     private Boolean _enableIdentifierQuoting;
     
+    private Boolean _enableBooleanQuoting;
+    
     /**
      * Overridden to remove the rtrim usage. The original implementation
      * will remove every trailing space from character based column which 
@@ -99,6 +101,21 @@ public class PostgresqlExpression extends JDBCExpression {
      */
     public PostgresqlExpression(EOEntity entity) {
         super(entity);
+    }
+    
+    /**
+     * Checks the system property
+     * <code>com.webobjects.jdbcadaptor.PostgresqlExpression.enableBooleanQuoting</code>
+     * to enable or disable quoting (default) of boolean items.
+     * 
+     * @return
+     */
+
+    private boolean enableBooleanQuoting() {
+        if(_enableBooleanQuoting == null) {
+            _enableBooleanQuoting = Boolean.getBoolean(getClass().getName() + ".enableBooleanQuoting") ? Boolean.TRUE : Boolean.FALSE;
+        }
+        return _enableBooleanQuoting.booleanValue();
     }
     
     /**
@@ -391,7 +408,12 @@ public class PostgresqlExpression extends JDBCExpression {
         } else if(obj instanceof Number) {
             value = (String) eoattribute.adaptorValueByConvertingAttributeValue(obj).toString();
         } else if(obj instanceof Boolean) {
-            value = ((Boolean)obj).toString();
+        	// GN: when booleans are stored as strings in the db, we need the values quoted
+        	if (enableBooleanQuoting()) {
+        		value = "'" + ((Boolean)obj).toString() + "'";
+        	} else {
+        		value = ((Boolean)obj).toString();
+        	}
         } else if(obj instanceof Timestamp) {
         	value = "'" + ((Timestamp)obj).toString() + "'";
         } else if (obj == null || obj == NSKeyValueCoding.NullValue) {
