@@ -655,14 +655,34 @@ public class ERXConfigurationManager {
             } else {
                 if (log.isDebugEnabled())
                     log.debug("Adjusting prototypes to those from entity " + prototypeEntityName);
+                
+                String finalPrototypeEntityName = "EO" + model.adaptorName() + "Prototypes";
 
-                EOEntity proto = model.entityNamed("EOPrototypes");
-                if (proto != null)
-                    model.removeEntity(proto);
-
-                model.removeEntity(newPrototypeEntity);
-                newPrototypeEntity.setName("EOPrototypes");
-                model.addEntity(newPrototypeEntity);
+                EOEntity finalPrototypeEntity = model.entityNamed(finalPrototypeEntityName);
+                if(true) {
+                    // additive prototype handling
+                    if (finalPrototypeEntity == null) {
+                        finalPrototypeEntity = new EOEntity();
+                        model.addEntity(finalPrototypeEntity);
+                        finalPrototypeEntity.setName(finalPrototypeEntityName);
+                    }
+                    for (Enumeration enumerator = newPrototypeEntity.attributes().objectEnumerator(); enumerator.hasMoreElements();) {
+                        EOAttribute attribute = (EOAttribute) enumerator.nextElement();
+                        EOAttribute existing = newPrototypeEntity.anyAttributeNamed(attribute.name());
+                        if(existing != null) {
+                            finalPrototypeEntity.removeAttribute(existing);
+                        }
+                        finalPrototypeEntity.addAttribute(attribute);
+                    }
+                } else {
+                    // replacing prototype handling
+                    if (finalPrototypeEntity != null) {
+                        finalPrototypeEntity.model().removeEntity(finalPrototypeEntity);
+                    }
+                    newPrototypeEntity.setName(finalPrototypeEntityName);
+                    model.removeEntity(newPrototypeEntity);
+                    model.addEntity(newPrototypeEntity);
+                }
             }
         }
     }
