@@ -659,20 +659,25 @@ public class ERXConfigurationManager {
                 String finalPrototypeEntityName = "EO" + model.adaptorName() + "Prototypes";
 
                 EOEntity finalPrototypeEntity = model.entityNamed(finalPrototypeEntityName);
-                if(true) {
+                if(false) {
                     // additive prototype handling
                     if (finalPrototypeEntity == null) {
                         finalPrototypeEntity = new EOEntity();
-                        model.addEntity(finalPrototypeEntity);
                         finalPrototypeEntity.setName(finalPrototypeEntityName);
+                        model.addEntity(finalPrototypeEntity);
                     }
                     for (Enumeration enumerator = newPrototypeEntity.attributes().objectEnumerator(); enumerator.hasMoreElements();) {
-                        EOAttribute attribute = (EOAttribute) enumerator.nextElement();
-                        EOAttribute existing = newPrototypeEntity.anyAttributeNamed(attribute.name());
-                        if(existing != null) {
-                            finalPrototypeEntity.removeAttribute(existing);
-                        }
-                        finalPrototypeEntity.addAttribute(attribute);
+                    	EOAttribute attribute = (EOAttribute) enumerator.nextElement();
+                    	if(attribute != null) {
+                    		EOAttribute existing = finalPrototypeEntity.anyAttributeNamed(attribute.name());
+                    		if(existing != null) {
+                    			if(finalPrototypeEntity.anyAttributeNamed(existing.name()) != null) {
+                    				finalPrototypeEntity.removeAttribute(existing);
+                    			}
+                    		}
+                    		newPrototypeEntity.removeAttribute(attribute);
+                    		finalPrototypeEntity.addAttribute(attribute);
+                    	}
                     }
                 } else {
                     // replacing prototype handling
