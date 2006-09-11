@@ -707,7 +707,15 @@ public class ERXEC extends EOEditingContext {
     public void initializeObject(EOEnterpriseObject eoenterpriseobject, EOGlobalID eoglobalid, EOEditingContext eoeditingcontext) {
         boolean wasAutoLocked = autoLock("initializeObject");
         try {
-            super.initializeObject(eoenterpriseobject, eoglobalid, eoeditingcontext);
+            if (eoenterpriseobject instanceof ERXGenericRecord) {
+                ERXGenericRecord eo = (ERXGenericRecord) eoenterpriseobject;
+                // gross hack to not trigger the two-way relationships
+                eo.wasInitialized = false;
+                super.initializeObject(eoenterpriseobject, eoglobalid, eoeditingcontext);
+                eo.wasInitialized = true;
+            } else {
+                super.initializeObject(eoenterpriseobject, eoglobalid, eoeditingcontext);
+            }
         } finally {
             autoUnlock(wasAutoLocked);
         }

@@ -94,7 +94,7 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
 
     public String insertionStackTrace = null;
     
-    protected boolean wasInitialized;
+    protected boolean wasInitialized = false;
     
     
     
@@ -319,6 +319,7 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
      *		correct type of delegate set.
      */
     public void awakeFromInsertion(EOEditingContext editingContext) {
+        wasInitialized = false;
         _checkEditingContextDelegate(editingContext);
         if (insertionTrackingLog.isDebugEnabled()) {
             insertionStackTrace = ERXUtilities.stackTrace();
@@ -354,6 +355,7 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
      *		correct type of delegate set.
      */
     public void awakeFromFetch(EOEditingContext editingContext) {
+        wasInitialized = false;
         _checkEditingContextDelegate(editingContext);
         super.awakeFromFetch(editingContext);
         wasInitialized = true;
