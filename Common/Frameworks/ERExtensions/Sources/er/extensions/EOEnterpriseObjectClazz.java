@@ -83,10 +83,13 @@ public class EOEnterpriseObjectClazz extends Object {
     private String _entityName;
 
     /**
-     * Default public constructor. 
+     * Default public constructor. In case you let your code generate with a template,
+     * you can simply call:<pre><code>
+     * public static FooClazz clazz = new FooClazz();
+     * </code></pre> and the constructor will auto-discover your entity name. This only
+     * works when you have a concrete subclass for the entity in question, though.
      */
     public EOEnterpriseObjectClazz() {
-    	/*
     	// AK: If your class is enclosed by a EO subclass the constructor 
     	// will auto-discover the corresponding entity name. Not sure we need this, though.
     	String className = getClass().getName();
@@ -108,18 +111,32 @@ public class EOEnterpriseObjectClazz extends Object {
 					setEntityName(entity.name());
 				}
     		}
-    	}*/
+    	}
     }
-
+    
     /**
      * Constructor that also supplies an entity name.
      * @param entityName
      */
     public EOEnterpriseObjectClazz(String entityName) {
     	setEntityName(entityName);
-    	allClazzes.setObjectForKey(this, entityName);
     }
     
+    /**
+     * Convenience init so you can chain constructor calls:<pre><code>
+     * public static FooClazz clazz = (FooClazz)new FooClazz().init("Foo");
+     * </code></pre>
+     * without having to override the default constructor or the one 
+     * that takes an entity name. Also useful when you don't have a special
+     * clazz defined for your entity, but would rather take one from a superclass.
+     * @param entityName
+     * @return
+     */
+    public EOEnterpriseObjectClazz init(String entityName) {
+    	setEntityName(entityName);
+		return this;
+    }
+
     /**
      * Resets the clazz cache.
      */
@@ -163,7 +180,6 @@ public class EOEnterpriseObjectClazz extends Object {
         if(clazz == null) {
             clazz = classFromEntity(ERXEOAccessUtilities.entityNamed(null, entityName));
             clazz.setEntityName(entityName);
-            allClazzes.setObjectForKey(clazz,entityName);
         }
         if(log.isDebugEnabled()) {
             log.debug("clazzForEntityNamed '" +entityName+ "': " + clazz.getClass().getName());
@@ -286,10 +302,13 @@ public class EOEnterpriseObjectClazz extends Object {
     }
 
     /**
-     * Sets the entity name of the clazz.
+     * Sets the entity name of the clazz. Also registers the clazz in the cache.
      * @param name of the entity
      */
-    public void setEntityName(String name) { _entityName = name; }
+    protected void setEntityName(String name) {
+		_entityName = name;
+    	allClazzes.setObjectForKey(this, _entityName);
+	}
     
     /**
      * Gets the entity name of the clazz.
