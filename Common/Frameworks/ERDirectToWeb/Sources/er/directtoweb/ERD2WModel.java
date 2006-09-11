@@ -592,16 +592,18 @@ public class ERD2WModel extends D2WModel {
     protected static NSDictionary dictionaryFromFile(File file) {
         NSDictionary model = null;
         try {
-        	log.info("Loading file: " + file);
-            model = Services.dictionaryFromFile(file);
-            NSArray rules = (NSArray)model.objectForKey("rules");
-            Enumeration e = rules.objectEnumerator();
-            boolean patchRules = ERXProperties.booleanForKeyWithDefault("er.directtoweb.ERXD2WModel.patchRules", true);
-            while(e.hasMoreElements()) {
-                NSMutableDictionary dict = (NSMutableDictionary)e.nextElement();
-                if(patchRules) {
-                    if(Rule.class.getName().equals(dict.objectForKey("class"))) {
-                        dict.setObjectForKey(_PatchedRule.class.getName(), "class");
+            log.info("Loading file: " + file);
+            if(file != null && !file.isDirectory() && file.exists()) {
+                model = Services.dictionaryFromFile(file);
+                NSArray rules = (NSArray)model.objectForKey("rules");
+                Enumeration e = rules.objectEnumerator();
+                boolean patchRules = ERXProperties.booleanForKeyWithDefault("er.directtoweb.ERXD2WModel.patchRules", true);
+                while(e.hasMoreElements()) {
+                    NSMutableDictionary dict = (NSMutableDictionary)e.nextElement();
+                    if(patchRules) {
+                        if(Rule.class.getName().equals(dict.objectForKey("class"))) {
+                            dict.setObjectForKey(_PatchedRule.class.getName(), "class");
+                        }
                     }
                 }
             }
@@ -625,21 +627,23 @@ public class ERD2WModel extends D2WModel {
                                                 + "\"");
             setCurrentFile(modelFile);
             NSDictionary dic = dictionaryFromFile(modelFile);
-            if (ruleDecodeLog.isDebugEnabled()) {
-                ruleDecodeLog.debug("Got dictionary for file: " + modelFile + "\n\n");
-                for (Enumeration e = ((NSArray)dic.objectForKey("rules")).objectEnumerator(); e.hasMoreElements();) {
-                    NSDictionary aRule = (NSDictionary)e.nextElement();
-                    NSMutableDictionary aRuleDictionary = new NSMutableDictionary(aRule, "rule");
-                    EOKeyValueUnarchiver archiver = new EOKeyValueUnarchiver(aRuleDictionary);
-                    try {
-                        addRule((Rule)archiver.decodeObjectForKey("rule"));
-                    } catch (Exception ex) {
-                        ruleDecodeLog.error("Bad rule: " + aRule);
+            if(dic != null) {
+                if (ruleDecodeLog.isDebugEnabled()) {
+                    ruleDecodeLog.debug("Got dictionary for file: " + modelFile + "\n\n");
+                    for (Enumeration e = ((NSArray)dic.objectForKey("rules")).objectEnumerator(); e.hasMoreElements();) {
+                        NSDictionary aRule = (NSDictionary)e.nextElement();
+                        NSMutableDictionary aRuleDictionary = new NSMutableDictionary(aRule, "rule");
+                        EOKeyValueUnarchiver archiver = new EOKeyValueUnarchiver(aRuleDictionary);
+                        try {
+                            addRule((Rule)archiver.decodeObjectForKey("rule"));
+                        } catch (Exception ex) {
+                            ruleDecodeLog.error("Bad rule: " + aRule);
+                        }
                     }
+                } else {
+                    ERD2WModel model = new ERD2WModel(new EOKeyValueUnarchiver(dic));
+                    addRules(model.rules());
                 }
-            } else {
-                ERD2WModel model = new ERD2WModel(new EOKeyValueUnarchiver(dic));
-                addRules(model.rules());
             }
             setDirty(false);
         }
