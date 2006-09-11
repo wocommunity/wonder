@@ -83,6 +83,9 @@ test.getStatus() == Test.Status.ON
  * You need to add an entry <code>ERXConstantClassName=Test.Status</code> to the attribute's userInfo 
  * in question and your EO's class description needs to be a {@link er.extensions.ERXEntityClassDescription}.
  * <br />
+ * NOTE: your constants must be loaded for this to work, so you may need to add a 
+ * <code>Class c = SomeStatus.class</code> in your App constructor.
+ * <br />
  * Note that upon class initialization 2500 Integers will be created and cached, from 0 - 2499.
  */
 public abstract class ERXConstant extends Number {
