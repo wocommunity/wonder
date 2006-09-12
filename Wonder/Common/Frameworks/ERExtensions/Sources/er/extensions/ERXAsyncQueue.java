@@ -25,10 +25,11 @@ public abstract class ERXAsyncQueue extends Thread {
 			while(!done) {
 				Object o = null;
 				synchronized (_jobs) {
-					_jobs.wait();
-					if(!_jobs.isEmpty()) {
-						o = _jobs.removeLast();
-					}
+				    if(!_jobs.isEmpty()) {
+				        o = _jobs.removeLast();
+				    } else {
+				        _jobs.wait();
+				    }
 				}
 				if(o != null) {
 					process(o);
