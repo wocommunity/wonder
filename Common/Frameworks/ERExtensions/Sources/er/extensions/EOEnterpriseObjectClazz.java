@@ -108,7 +108,15 @@ public class EOEnterpriseObjectClazz extends Object {
 				}
 				EOEntity entity = (EOEntity) candidates.lastObject();
 				if(entity != null) {
-					setEntityName(entity.name());
+					String entityName = entity.name();
+					// HACK AK: this relies on you having set up your classes correctly,
+					// meaning that you have exactly one final class var per EO class, with the correct
+					// superclasses set up (so EOBase gets loaded before EOSubclass)
+					if(allClazzes.containsKey(entityName)) {
+						_entityName = entityName;
+					} else {
+						setEntityName(entityName);
+					}
 				}
     		}
     	}
