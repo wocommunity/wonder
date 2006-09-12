@@ -91,32 +91,6 @@ public class EOEnterpriseObjectClazz extends Object {
     public static void resetClazzCache() { allClazzes.removeAllObjects(); }
     
     /**
-     * Creates a clazz object for a given entity.
-     * Will look for a clazz object with the name:
-     * <entity name>$<entity name>Clazz.
-     * @param entity to generate the clazz for
-     * @return clazz object for the given entity
-     */
-    private static EOEnterpriseObjectClazz classFromEntity(EOEntity entity) {
-        EOEnterpriseObjectClazz clazz = null;
-        if(entity == null) {
-            return new EOEnterpriseObjectClazz();
-        }
-        try {
-            String className = entity.className();
-            if(className.equals("ERXGenericRecord"))
-                clazz = new ERXGenericRecord.ERXGenericRecordClazz();
-            else
-                clazz = (EOEnterpriseObjectClazz)Class.forName(className + "$" + entity.name() + "Clazz").newInstance();
-        } catch (InstantiationException ex) {
-        } catch (ClassNotFoundException ex) {
-        } catch (IllegalAccessException ex) {
-        }
-        if(clazz == null) return classFromEntity(entity.parentEntity());
-        return clazz;
-    }
-    
-    /**
      * Method used to get a clazz object for a given entity name.
      * This method will cache the generated clazz object so that
      * for a given entity name only one clazz object will be created.
@@ -126,8 +100,7 @@ public class EOEnterpriseObjectClazz extends Object {
     public static EOEnterpriseObjectClazz clazzForEntityNamed(String entityName) {
         EOEnterpriseObjectClazz clazz = (EOEnterpriseObjectClazz)allClazzes.objectForKey(entityName);
         if(clazz == null) {
-            clazz = classFromEntity(ERXEOAccessUtilities.entityNamed(null, entityName));
-            clazz.setEntityName(entityName);
+            clazz = factory().classFromEntity(ERXEOAccessUtilities.entityNamed(null, entityName));
             allClazzes.setObjectForKey(clazz,entityName);
         }
         if(log.isDebugEnabled()) {
@@ -484,5 +457,72 @@ public class EOEnterpriseObjectClazz extends Object {
         String entityName = entityName();
         NSArray nsarray = primaryKeysMatchingValues(ec, nsdictionary, sortOrderings);
         return faultsFromRawRows(ec, nsarray);
+    }
+
+    /**
+     * Provides a hook to control how a clazz object is chosen from a given entity.
+     */
+    public static interface ClazzFactory {
+        public EOEnterpriseObjectClazz classFromEntity(EOEntity entity);
+
+    }
+
+    private static ClazzFactory _factory = new DefaultClazzFactory();
+
+    public static ClazzFactory factory() { return _factory; }
+    public static void setFactory(ClazzFactory value) { _factory = value; }
+
+    /**
+     * Default factory implementation.
+     * @author ak
+     *
+     */
+    public static class DefaultClazzFactory implements ClazzFactory {
+
+    	protected boolean classNameIsGenericRecord(final String className) {
+            return className.equals("ERXGenericRecord");
+        }
+
+    	protected EOEnterpriseObjectClazz newInstanceOfDefaultClazz() {
+            return new EOEnterpriseObjectClazz();
+        }
+
+    	protected EOEnterpriseObjectClazz newInstanceOfGenericRecordClazz() {
+            return new ERXGenericRecord.ERXGenericRecordClazz();
+        }
+    	
+    	protected String clazzNameForEntity(EOEntity entity) {
+    		return entity.className() + "$" + entity.name() + "Clazz";
+    	}
+
+        /**
+         * Creates a clazz object for a given entity.
+         * Will look for a clazz object with the name:
+         * <entity name>$<entity name>Clazz.
+         * @param entity to generate the clazz for
+         * @return clazz object for the given entity
+         */
+        public EOEnterpriseObjectClazz classFromEntity(EOEntity entity) {
+            EOEnterpriseObjectClazz clazz = null;
+            if(entity == null) {
+                clazz = newInstanceOfDefaultClazz();
+            } else {
+                try {
+                    String className = entity.className();
+                    if(classNameIsGenericRecord(className)) {
+                        clazz = newInstanceOfGenericRecordClazz();
+                    } else {
+                    	String clazzName = clazzNameForEntity(entity);
+                        clazz = (EOEnterpriseObjectClazz)Class.forName(clazzName).newInstance();
+                    }
+                } catch (InstantiationException ex) {
+                } catch (ClassNotFoundException ex) {
+                } catch (IllegalAccessException ex) {
+                }
+            }
+            if(clazz == null) return classFromEntity(entity.parentEntity());
+            clazz.setEntityName(entity.name());
+            return clazz;
+        }
     }
 }
