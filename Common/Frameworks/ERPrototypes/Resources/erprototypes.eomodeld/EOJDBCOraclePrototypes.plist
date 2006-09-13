@@ -324,7 +324,6 @@
        varchar50, 
        varcharLarge
     );
-    externalName = eooracleprototypes;
     internalInfo = 
     {
         _clientClassPropertyNames = 
@@ -346,6 +345,7 @@
            varchar50, 
            varcharLarge
         );
+        _nameInObjectStore = eooracleprototypes;
     };
     isAbstractEntity = Y;
     name = EOJDBCOraclePrototypes;

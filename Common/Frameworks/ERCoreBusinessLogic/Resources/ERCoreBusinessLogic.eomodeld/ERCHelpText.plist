@@ -20,6 +20,11 @@
            columnName = VALUE_;
            name = value;
            prototypeName = varchar1000;
+           userInfo = 
+           {
+               ERXLanguages = 
+               ();
+           };
        }
     );
     attributesUsedForLocking = 
@@ -28,22 +33,18 @@
        key, 
        value
     );
-    className = er.corebusinesslogic.ERCStatic;
+    className = er.corebusinesslogic.ERCHelpText;
     classProperties = 
     (
        key, 
        value
     );
-    externalName = ERCSTATIC;
+    externalName = ERCHELP_TEXT;
     internalInfo = 
     {};
-    name = ERCStatic;
+    name = ERCHelpText;
     primaryKeyAttributes = 
     (
        id
     );
-    userInfo = 
-    {
-        modificationDate = "2002-06-04 14:00:54 +0200";
-    };
 }
