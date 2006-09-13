@@ -193,9 +193,13 @@ public class EOEnterpriseObjectClazz extends Object {
      */
     public NSArray newPrimaryKeys(EOEditingContext ec, int i) {
         EOEntity entity = entity(ec);
-        EODatabaseContext dc = EODatabaseContext.registeredDatabaseContextForModel(entity.model(), ec);
-        
-        return dc.availableChannel().adaptorChannel().primaryKeysForNewRowsWithEntity(i, entity);
+        EODatabaseContext dbc = EODatabaseContext.registeredDatabaseContextForModel(entity.model(), ec);
+        dbc.lock();
+        try {
+        	return dbc.availableChannel().adaptorChannel().primaryKeysForNewRowsWithEntity(i, entity);
+        } finally {
+        	dbc.unlock();
+        }
     }
 
     /**

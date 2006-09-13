@@ -57,19 +57,13 @@
        {
            columnName = IS_READ;
            name = isRead;
-           prototypeName = flag;
+           prototypeName = intBoolean;
        }, 
        
        {
            columnName = LAST_MODIFIED;
            name = lastModified;
            prototypeName = dateTime;
-       }, 
-       
-       {
-           columnName = MAIL_STATE_ID;
-           name = mailStateID;
-           prototypeName = osType;
        }, 
        
        {
@@ -90,6 +84,15 @@
            columnName = SHOULD_ARCHIVE_SENT_MAIL;
            name = shouldArchiveSentMail;
            prototypeName = intBoolean;
+       }, 
+       
+       {
+           adaptorValueConversionMethodName = value;
+           columnName = MAIL_STATE_ID;
+           factoryMethodArgumentType = EOFactoryMethodArgumentIsNSString;
+           name = state;
+           prototypeName = osType;
+           valueFactoryMethodName = mailState;
        }, 
        
        {
@@ -125,9 +128,9 @@
        fromAddress, 
        id, 
        isRead, 
-       mailStateID, 
        replyToAddress, 
        shouldArchiveSentMail, 
+       state, 
        title, 
        toAddresses, 
        xMailer
@@ -148,7 +151,6 @@
        plainText, 
        replyToAddress, 
        shouldArchiveSentMail, 
-       state, 
        text, 
        title, 
        toAddresses, 
@@ -179,25 +181,6 @@
            );
            name = attachments;
            ownsDestination = Y;
-           userInfo = 
-           {
-               modificationDate = "2002-06-04 14:00:54 +0200";
-           };
-       }, 
-       
-       {
-           destination = ERCMailState;
-           isToMany = N;
-           joinSemantic = EOInnerJoin;
-           joins = 
-           (
-              
-              {
-                  destinationAttribute = id;
-                  sourceAttribute = mailStateID;
-              }
-           );
-           name = state;
            userInfo = 
            {
                modificationDate = "2002-06-04 14:00:54 +0200";
