@@ -1,12 +1,44 @@
+
 {
-    EOModelVersion = "2.1"; 
-    adaptorName = JDBC; 
-    connectionDictionary = {}; 
-    entities = (
-        {className = "er.corebusinesslogic.ERCLogEntry"; name = ERCLogEntry; }, 
-        {className = "er.corebusinesslogic.ERCPreference"; name = ERCPreference; }, 
-        {className = "er.corebusinesslogic.ERCStatic"; name = ERCStatic; }
-    ); 
-    internalInfo = {}; 
-    userInfo = {}; 
+    EOModelVersion = 2.1;
+    adaptorName = JDBC;
+    connectionDictionary = 
+    {};
+    entities = 
+    (
+       
+       {
+           className = er.corebusinesslogic.ERCHelpText;
+           name = ERCHelpText;
+       }, 
+       
+       {
+           className = er.corebusinesslogic.ERCLogEntry;
+           name = ERCLogEntry;
+       }, 
+       
+       {
+           className = er.corebusinesslogic.ERCPreference;
+           name = ERCPreference;
+       }, 
+       
+       {
+           className = er.corebusinesslogic.ERCStatic;
+           name = ERCStatic;
+       }
+    );
+    internalInfo = 
+    {
+        _deletedEntityNamesInObjectStore = 
+        (
+           ERCH, 
+           ERCHe, 
+           ERCHel, 
+           ERCHelp, 
+           ERCHelpT, 
+           ERCHelpTe, 
+           ERCHelpTex, 
+           ERCStatic1
+        );
+    };
 }

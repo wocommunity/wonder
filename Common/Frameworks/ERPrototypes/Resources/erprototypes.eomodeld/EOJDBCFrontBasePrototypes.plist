@@ -327,7 +327,6 @@
        varchar50, 
        varcharLarge
     );
-    externalName = eofrontbaseprototypes;
     internalInfo = 
     {
         _clientClassPropertyNames = 
@@ -356,6 +355,7 @@
            varchar50, 
            varcharLarge
         );
+        _nameInObjectStore = eofrontbaseprototypes;
     };
     isAbstractEntity = Y;
     name = EOJDBCFrontBasePrototypes;

@@ -3,56 +3,70 @@
 // Created by eogenerator
 // DO NOT EDIT.  Make changes to ERCPreference.java instead.
 package er.corebusinesslogic;
-import com.webobjects.eoaccess.*;
-import com.webobjects.eocontrol.*;
 import com.webobjects.foundation.*;
-
+import com.webobjects.eocontrol.*;
+import com.webobjects.eoaccess.*;
 import er.extensions.*;
+import java.util.*;
+import java.math.BigDecimal;
 
 public abstract class _ERCPreference extends ERXGenericRecord {
 
-    public _ERCPreference() {
-        super();
+    public interface Key  {
+        public static final String VALUE = "value";
+        public static final String USER_ID = "userID";
+        public static final String KEY = "key";  
     }
 
-    public static abstract class _ERCPreferenceClazz extends er.extensions.ERXGenericRecord.ERXGenericRecordClazz {
+    public static abstract class _ERCPreferenceClazz extends ERXGenericRecord.ERXGenericRecordClazz {
 
-        public NSArray preferencesWithKey(EOEditingContext ec, Object key) {
-            NSMutableDictionary _dict = new NSMutableDictionary(2);
-            
-            if(key != null) _dict.setObjectForKey( key, "key");
-            return EOUtilities.objectsWithFetchSpecificationAndBindings(ec, "ERCPreference", "preferences", _dict);
+        public NSArray objectsForPreferences(EOEditingContext context, String keyBinding) {
+            EOFetchSpecification spec = EOFetchSpecification.fetchSpecificationNamed("preferences", "ERCPreference");
+
+            NSMutableDictionary bindings = new NSMutableDictionary();
+
+            if (keyBinding != null)
+                bindings.setObjectForKey(keyBinding, "key");
+            spec = spec.fetchSpecificationWithQualifierBindings(bindings);
+
+            return context.objectsWithFetchSpecification(spec);
         }
 
-        public NSArray userPrefsWithKeyId(EOEditingContext ec, Object key, Object id) {
-            NSMutableDictionary _dict = new NSMutableDictionary(2);
-            
-            if(key != null) _dict.setObjectForKey( key, "key");
-            if(id != null) _dict.setObjectForKey( id, "id");
-            return EOUtilities.objectsWithFetchSpecificationAndBindings(ec, "ERCPreference", "userPrefs", _dict);
+        public NSArray objectsForUserPrefs(EOEditingContext context, Number idBinding, String keyBinding) {
+            EOFetchSpecification spec = EOFetchSpecification.fetchSpecificationNamed("userPrefs", "ERCPreference");
+
+            NSMutableDictionary bindings = new NSMutableDictionary();
+
+            if (keyBinding != null)
+                bindings.setObjectForKey(keyBinding, "key");
+            if (idBinding != null)
+                bindings.setObjectForKey(idBinding, "id");
+            spec = spec.fetchSpecificationWithQualifierBindings(bindings);
+
+            return context.objectsWithFetchSpecification(spec);
         }
 
     }
 
 
     public String key() {
-        return (String)storedValueForKey("key");
+        return (String)storedValueForKey(Key.KEY);
     }
     public void setKey(String aValue) {
-        takeStoredValueForKey(aValue, "key");
-    }
-
-    public String value() {
-        return (String)storedValueForKey("value");
-    }
-    public void setValue(String aValue) {
-        takeStoredValueForKey(aValue, "value");
+        takeStoredValueForKey(aValue, Key.KEY);
     }
 
     public Number userID() {
-        return (Number)storedValueForKey("userID");
+        return (Number)storedValueForKey(Key.USER_ID);
     }
     public void setUserID(Number aValue) {
-        takeStoredValueForKey(aValue, "userID");
+        takeStoredValueForKey(aValue, Key.USER_ID);
+    }
+
+    public String value() {
+        return (String)storedValueForKey(Key.VALUE);
+    }
+    public void setValue(String aValue) {
+        takeStoredValueForKey(aValue, Key.VALUE);
     }
 }
