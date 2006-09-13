@@ -180,7 +180,7 @@ public class ERCoreBusinessLogic extends ERXFrameworkPrincipal {
      */
     public void initializeSharedData() {
         // Shared Data Init Point.  Keep alphabetical
-        ERCMailState.mailStateClazz().initializeSharedData();
+        Class c = ERCMailState.class;
     }
 
     public boolean shouldMailReportedExceptions() {

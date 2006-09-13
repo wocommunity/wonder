@@ -1,10 +1,12 @@
 
 {
-    preferences = 
+    Key = 
     {
         class = EOFetchSpecification;
-        entityName = ERCStatic;
+        entityName = ERCHelpText;
         fetchLimit = 0;
+        prefetchingRelationshipKeyPaths = 
+        ();
         qualifier = 
         {
             class = EOKeyValueQualifier;

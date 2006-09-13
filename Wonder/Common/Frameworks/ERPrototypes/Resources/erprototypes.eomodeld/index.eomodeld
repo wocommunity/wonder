@@ -14,7 +14,7 @@
        
        {
            className = EOGenericRecord;
-           name = EOJDBCMysqlPrototypes;
+           name = EOJDBCMySQLPrototypes;
        }, 
        
        {
@@ -30,6 +30,18 @@
        {
            className = EOGenericRecord;
            name = EOJDBCPostgresPrototypes;
+       }, 
+       
+       {
+           className = EOGenericRecord;
+           name = EOJDBCPrototypes;
        }
     );
+    internalInfo = 
+    {
+        _deletedEntityNamesInObjectStore = 
+        (
+           EOJDBCMySQLPrototypes_
+        );
+    };
 }

@@ -1,7 +1,7 @@
-// _ERCStatic.java
+// _ERCHelpText.java
 // 
 // Created by eogenerator
-// DO NOT EDIT.  Make changes to ERCStatic.java instead.
+// DO NOT EDIT.  Make changes to ERCHelpText.java instead.
 package er.corebusinesslogic;
 import com.webobjects.foundation.*;
 import com.webobjects.eocontrol.*;
@@ -10,17 +10,17 @@ import er.extensions.*;
 import java.util.*;
 import java.math.BigDecimal;
 
-public abstract class _ERCStatic extends ERXGenericRecord {
+public abstract class _ERCHelpText extends ERXGenericRecord {
 
     public interface Key  {
         public static final String VALUE = "value";
         public static final String KEY = "key";  
     }
 
-    public static abstract class _ERCStaticClazz extends ERXGenericRecord.ERXGenericRecordClazz {
+    public static abstract class _ERCHelpTextClazz extends ERXGenericRecord.ERXGenericRecordClazz {
 
-        public NSArray objectsForPreferences(EOEditingContext context, String keyBinding) {
-            EOFetchSpecification spec = EOFetchSpecification.fetchSpecificationNamed("preferences", "ERCStatic");
+        public NSArray objectsForKey(EOEditingContext context, String keyBinding) {
+            EOFetchSpecification spec = EOFetchSpecification.fetchSpecificationNamed("Key", "ERCHelpText");
 
             NSMutableDictionary bindings = new NSMutableDictionary();
 
