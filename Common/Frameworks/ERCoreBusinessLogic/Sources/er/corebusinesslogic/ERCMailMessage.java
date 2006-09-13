@@ -78,34 +78,58 @@ public class ERCMailMessage extends _ERCMailMessage {
         setState(ERCMailState.READY_TO_BE_SENT_STATE);
         if (ERXProperties.booleanForKeyWithDefault("er.corebusinesslogic.ERCMailMessage.ShouldArchive",
                                                    false)) {
-            setShouldArchiveSentMail(Boolean.TRUE);
+            setShouldArchiveSentMail(true);
         } else {
-            setShouldArchiveSentMail(Boolean.FALSE);            
+            setShouldArchiveSentMail(false);            
         }
         if (ERXProperties.booleanForKeyWithDefault("er.corebusinesslogic.ERCMailMessage.ShouldGzipContent",
                                                    true)) {
-            setContentGzipped(Boolean.TRUE);
+            setContentGzipped(true);
         } else {
-            setShouldArchiveSentMail(Boolean.FALSE);            
+            setShouldArchiveSentMail(false);            
         }
     }
         
     // State Methods
-    public boolean isReadyToSendState() 	{ return state() == ERCMailState.READY_TO_BE_SENT_STATE; }
-    public boolean isSentState() 		{ return state() == ERCMailState.SENT_STATE; }
-    public boolean isExceptionState() 		{ return state() == ERCMailState.EXCEPTION_STATE; }
-    public boolean isReceivedState() 		{ return state() == ERCMailState.RECEIVED_STATE; }
+    public boolean isReadyToSendState() {
+		return state() == ERCMailState.READY_TO_BE_SENT_STATE;
+	}
+
+	public boolean isSentState() {
+		return state() == ERCMailState.SENT_STATE;
+	}
+
+	public boolean isExceptionState() {
+		return state() == ERCMailState.EXCEPTION_STATE;
+	}
+
+	public boolean isReceivedState() {
+		return state() == ERCMailState.RECEIVED_STATE;
+	}
+	
+	//AK: why are these not generated?
+	public ERCMailState state() {
+		return (ERCMailState) storedValueForKey("state");
+	}
+	
+	public void setState(ERCMailState value) {
+		takeStoredValueForKey(value, "state");
+	}
 
     // IMPLEMENTME: MarkReadInterface
     public void markReadBy(EOEnterpriseObject by) {
-       setReadAsBoolean(true);
+    	setIsRead(true);
     }
 
+    /**
+     * Use setIsRead(boolean)
+     * @deprecated setIsRead
+     */
     public void setReadAsBoolean(boolean read) {
-        setIsRead(read ? ERXConstant.OneInteger : ERXConstant.ZeroInteger);
+        setIsRead(read);
     }
     public boolean isReadAsBoolean() {
-        return ERXValueUtilities.booleanValue(isRead());
+        return isRead();
     }
 
     public NSArray toAddressesAsArray() {
@@ -139,7 +163,7 @@ public class ERCMailMessage extends _ERCMailMessage {
     }
 
     public boolean shouldArchiveSentMailAsBoolean() {
-        return shouldArchiveSentMail() != null && shouldArchiveSentMail().booleanValue();
+        return shouldArchiveSentMail();
     }
     
     /**
@@ -241,4 +265,49 @@ public class ERCMailMessage extends _ERCMailMessage {
             attachment.setMimeType(mimeType);
         addToBothSidesOfAttachments(attachment);
     }    
+    
+    public void addToBothSidesOfAttachments(ERCMessageAttachment attachement) {
+    	addObjectToBothSidesOfRelationshipWithKey(attachement, Key.ATTACHMENTS);
+    }
+    
+    public String storedGzippedValueForKey(String key) {
+        NSData data = (NSData)storedValueForKey(key);
+        String value = null;
+        if (data != null && data.bytes().length > 0) {
+            value = ERXCompressionUtilities.gunzipByteArrayAsString(data.bytes());
+        }
+        return value;
+    }
+
+    public void takeStoredGzippedValueForKey(String aValue, String key) {
+        NSData valueToSet = null;
+        
+        if ( aValue != null ) {
+            byte bytes[] = ERXCompressionUtilities.gzipStringAsByteArray(aValue);
+            
+            if (bytes.length > 0) {
+                valueToSet = new NSData(bytes);
+            }
+        }
+        
+        takeStoredValueForKey(valueToSet, key);
+    }
+
+    public String text() {
+    	String value = null;
+    	if (contentGzipped()) {
+    		value = (String)storedGzippedValueForKey("textCompressed");
+    	} else {
+    		value = (String)storedValueForKey(Key.TEXT);
+    	}
+    	return value;
+    }
+    
+    public void setText(String aValue) {
+    	if (contentGzipped()) {
+    		takeStoredGzippedValueForKey(aValue, "textCompressed");
+    	} else {
+    		takeStoredValueForKey(aValue, Key.TEXT);            
+    	}
+    }
 }

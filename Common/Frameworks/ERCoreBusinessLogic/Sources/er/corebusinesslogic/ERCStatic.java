@@ -23,6 +23,10 @@ public class ERCStatic extends _ERCStatic {
             return objectMatchingKey(ec, key, false);
         }
         
+        public NSArray preferencesWithKey(EOEditingContext ec, String key) {
+        	return objectsForPreferences(ec, key);
+        }
+        
         public ERCStatic objectMatchingKey(EOEditingContext ec, String key, boolean noCache) {
             // If noCache is true we always go to the database
             Object result = noCache ? null : _staticsPerKey.objectForKey(key);
