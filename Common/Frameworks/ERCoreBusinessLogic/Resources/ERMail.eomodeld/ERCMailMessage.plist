@@ -62,12 +62,6 @@
        }, 
        
        {
-           columnName = MAIL_STATE_ID;
-           name = mailStateID;
-           prototypeName = osType;
-       }, 
-       
-       {
            allowsNull = Y;
            columnName = PLAIN_TEXT_;
            name = plainText;
@@ -92,6 +86,16 @@
            columnName = SHOULD_ARCHIVE_SENT_MAIL;
            name = shouldArchiveSentMail;
            prototypeName = intBoolean;
+       }, 
+       
+       {
+           adaptorValueConversionMethodName = value;
+           columnName = MAIL_STATE_ID;
+           factoryMethodArgumentType = EOFactoryMethodArgumentIsNSString;
+           name = state;
+           prototypeName = osType;
+           valueClassName = er.corebusinesslogic.ERCMailState;
+           valueFactoryMethodName = mailState;
        }, 
        
        {
@@ -133,8 +137,8 @@
        contentGzipped, 
        fromAddress, 
        id, 
-       mailStateID, 
        shouldArchiveSentMail, 
+       state, 
        title, 
        toAddresses, 
        xMailer
@@ -186,25 +190,6 @@
               }
            );
            name = attachments;
-           userInfo = 
-           {
-               modificationDate = "2002-06-04 14:00:54 +0200";
-           };
-       }, 
-       
-       {
-           destination = ERCMailState;
-           isToMany = N;
-           joinSemantic = EOInnerJoin;
-           joins = 
-           (
-              
-              {
-                  destinationAttribute = id;
-                  sourceAttribute = mailStateID;
-              }
-           );
-           name = state;
            userInfo = 
            {
                modificationDate = "2002-06-04 14:00:54 +0200";

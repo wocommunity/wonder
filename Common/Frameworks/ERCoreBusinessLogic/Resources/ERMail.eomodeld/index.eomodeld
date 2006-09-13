@@ -1,7 +1,9 @@
+
 {
     EOModelVersion = 2.1;
     adaptorName = JDBC;
-    connectionDictionary = {};
+    connectionDictionary = 
+    {};
     entities = 
     (
        
@@ -16,18 +18,8 @@
        }, 
        
        {
-           className = er.corebusinesslogic.ERCMailState;
-           name = ERCMailState;
-       }, 
-       
-       {
            className = er.corebusinesslogic.ERCMessageAttachment;
            name = ERCMessageAttachment;
        }
     );
-    entitiesWithSharedObjects = 
-    (
-       ERCMailState
-    );
-    userInfo = {}; 
 }

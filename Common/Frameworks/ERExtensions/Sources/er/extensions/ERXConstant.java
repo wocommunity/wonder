@@ -11,27 +11,19 @@ import java.util.*;
 
 import org.apache.log4j.*;
 
-import com.webobjects.eocontrol.*;
 import com.webobjects.foundation.*;
 import com.webobjects.jdbcadaptor.*;
 
 /**
- * Numerical constant class, useful when you want reference object that are not
+ * Constant class, useful when you want reference object that are not
  * bytes or strings in the DB like what you get with the factory classes. <br />
  * And example would be:
  * <pre><code>
  * public abstract class Test extends ERXGenericRecord {
  * 
- * 	public static class Status extends ERXConstant {
- * 		private String _name;
- * 	
+ * 	public static class Status extends ERXConstant.NumberConstant {
  * 		protected Status(int value, String name) {
- * 			super(value);
- * 			_name = name;
- * 		}
- * 	
- * 		public String name() {
- * 			return _name;
+ * 			super(value, name);
  * 		}
  * 	}
  * 	
@@ -87,7 +79,7 @@ import com.webobjects.jdbcadaptor.*;
  * <br />
  * Note that upon class initialization 2500 Integers will be created and cached, from 0 - 2499.
  */
-public abstract class ERXConstant extends Number {
+public abstract class ERXConstant {
 	
 	private static final Logger log = Logger.getLogger(ERXJDBCColumn.class);
 
@@ -106,41 +98,18 @@ public abstract class ERXConstant extends Number {
 		synchronized (_store) {
 			Map map = keyMap(clazzName, false);
 			NSMutableArray array = new NSMutableArray(map.values().toArray());
-			ERXArrayUtilities.sortArrayWithKey(array, "intValue");
+			ERXArrayUtilities.sortArrayWithKey(array, "sortOrder");
 			return array;
 		}
 	}
 
-	/**
-	 * Retrieves the constant for the given class name and value. Null is returned
-	 * if either class or value isn't found. Note that in case of inner classes, the
-     * name should be <code>Test.Status</code>, not <code>Test$Status</code>.
-	 * @param value
-	 * @param clazzName
-	 * @return
-	 */
-	public static ERXConstant constantForClassNamed(int value, String clazzName) {
-		return constantForClassNamed(integerForInt(value), clazzName);
+	public static interface Constant {
+		public abstract int sortOrder();
+		public abstract String name();
+		public abstract Object value();
 	}
 	
-	/**
-	 * Retrieves the constant for the given class name and value. Null is returned
-	 * if either class or value isn't found.
-	 * @param value
-	 * @param clazzName
-	 * @return
-	 */
-	public static ERXConstant constantForClassNamed(Number value, String clazzName) {
-		synchronized (_store) {
-			Map classMap = keyMap(clazzName, false);
-			ERXConstant result = (ERXConstant) classMap.get(value);
-            if(log.isDebugEnabled()) {
-                log.debug("Getting " + result + " for " + clazzName + " and " + value);
-            }
-			return result;
-		}
-	}
-	
+	private static int globalSortOrder = 0;
 	/**
 	 * Retrieves the key map for the class name.
 	 * @param name
@@ -161,93 +130,86 @@ public abstract class ERXConstant extends Number {
 		}
 		return map;
 	}
-
-	/**
-	 * Holds the value.
-	 */
-	private int _value;
 	
-	/**
-	 * Sets the value and puts the object in the store keyed by class name and value.
-	 * @param value
-	 */
-	protected ERXConstant(int value) {
-		_value = value;
-		synchronized (_store) {
-			String className = getClass().getName();
-            Map classMap = keyMap(className, true);
-			Integer key = integerForInt(value);
-			if(log.isDebugEnabled()) {
-				log.debug("Putting " + key + " for " + className);
-			}
-			classMap.put(key, this);
-		}
-	}
-
-	/**
-	 * Number interface implementation, returns the value.
-	 */
-	public final double doubleValue() {
-		return intValue();
-	}
-
-	/**
-	 * Number interface implementation, returns the value.
-	 */
-	public final float floatValue() {
-		return intValue();
-	}
-
-	/**
-	 * Number interface implementation, returns the value.
-	 */
-	public final int intValue() {
-		return _value;
-	}
-
-	/**
-	 * Number interface implementation, returns the value.
-	 */
-	public final long longValue() {
-		return intValue();
-	}
-	
-	/**
-	 * Returns the value.
-	 */
-	public final int hashCode() {
-		return _value;
-	}
-
-	/**
-	 * Overridden to compare by value.
-	 */
-	public final boolean equals(Object otherObject) {
-		if(otherObject == null) {
-			return false;
-		}/* AK: we would violate the equals contract here, but we may need this with D2W later?
-		if((otherObject instanceof Number) && !(otherObject instanceof ERXConstant)) {
-			return ((Number)otherObject).intValue() == intValue();
-		}*/
-		if(otherObject.getClass() != getClass()) {
-			return false;
-		}
-		return ((ERXConstant)otherObject).intValue() == intValue();
-	}
-	
-	/**
-	 * Constant class with a name and a description.
-	 * @author ak
-	 *
-	 */
-	public abstract static class NamedConstant extends ERXConstant {
-
+	public static class NumberConstant extends Number implements Constant {
+		/**
+		 * Holds the value.
+		 */
+		private int _value;
+		
+		/**
+		 * Holds the name.
+		 */
 		private String _name;
 		
-		protected NamedConstant(int value, String name) {
-			super(value);
+		/**
+		 * Holds the name.
+		 */
+		private int _sortOrder;
+
+
+		/**
+		 * Sets the value and puts the object in the store keyed by class name and value.
+		 * @param value
+		 */
+		protected NumberConstant(int value, String name) {
+			_value = value;
 			_name = name;
+			_sortOrder = globalSortOrder++;
+			synchronized (_store) {
+				String className = getClass().getName();
+				Map classMap = keyMap(className, true);
+				Integer key = integerForInt(value);
+				if(log.isDebugEnabled()) {
+					log.debug("Putting " + key + " for " + className);
+				}
+				classMap.put(key, this);
+			}
 		}
+		
+		/**
+		 * Returns the sort order of the value.
+		 * @return
+		 */
+		public int sortOrder() {
+			return _sortOrder;
+		}
+
+		/**
+		 * Number interface implementation, returns the value.
+		 */
+		public final double doubleValue() {
+			return intValue();
+		}
+
+		/**
+		 * Number interface implementation, returns the value.
+		 */
+		public final float floatValue() {
+			return intValue();
+		}
+
+		/**
+		 * Number interface implementation, returns the value.
+		 */
+		public final int intValue() {
+			return _value;
+		}
+
+		/**
+		 * Number interface implementation, returns the value.
+		 */
+		public final long longValue() {
+			return intValue();
+		}
+
+		/**
+		 * Returns the value.
+		 */
+		public final int hashCode() {
+			return _value;
+		}
+
 		
 		public String name() {
 			return _name;
@@ -260,8 +222,192 @@ public abstract class ERXConstant extends Number {
 		public String toString() {
 			return getClass().getName() + ": " + userPresentableDescription();
 		}
+
+		public Object value() {
+			return integerForInt(intValue());
+		}
+		
+		/**
+		 * Overridden to compare by value.
+		 */
+		public final boolean equals(Object otherObject) {
+			if(otherObject == null) {
+				return false;
+			}/* AK: we would violate the equals contract here, but we may need this with D2W later?
+		if((otherObject instanceof Number) && !(otherObject instanceof ERXConstant)) {
+			return ((Number)otherObject).intValue() == intValue();
+		}*/
+			if(otherObject.getClass() != getClass()) {
+				return false;
+			}
+			return ((NumberConstant)otherObject).intValue() == intValue();
+		}
+
+		/**
+		 * Retrieves the constant for the given class name and value. Null is returned
+		 * if either class or value isn't found. Note that in case of inner classes, the
+	     * name should be <code>Test.Status</code>, not <code>Test$Status</code>.
+		 * @param value
+		 * @param clazzName
+		 * @return
+		 */
+		public static ERXConstant constantForClassNamed(int value, String clazzName) {
+			return constantForClassNamed(integerForInt(value), clazzName);
+		}
+		
+		/**
+		 * Retrieves the constant for the given class name and value. Null is returned
+		 * if either class or value isn't found.
+		 * @param value
+		 * @param clazzName
+		 * @return
+		 */
+		public static ERXConstant constantForClassNamed(Number value, String clazzName) {
+			synchronized (_store) {
+				Map classMap = keyMap(clazzName, false);
+				ERXConstant result = (ERXConstant) classMap.get(value);
+	            if(log.isDebugEnabled()) {
+	                log.debug("Getting " + result + " for " + clazzName + " and " + value);
+	            }
+				return result;
+			}
+		}
+		
 	}
 	
+	/**
+	 * Constant class that can be used with strings in the DB.
+	 * @author ak
+	 *
+	 */
+	public static abstract class StringConstant implements Constant {
+		private String _value;
+		private String _name;
+		private int _sortOrder;
+		
+		public StringConstant(String value, String name) {
+			_value = value;
+			_name = name;
+			_sortOrder = globalSortOrder++;
+			synchronized (_store) {
+				String className = getClass().getName();
+	            Map classMap = keyMap(className, true);
+				String key = value;
+				if(log.isDebugEnabled()) {
+					log.debug("Putting " + key + " for " + className);
+				}
+				classMap.put(key, this);
+			}
+		}
+		
+		public String name() {
+			return _name;
+		}
+		
+		public int sortOrder() {
+			return _sortOrder;
+		}
+		
+		public Object value() {
+			return _value;
+		}
+		
+		public String userPresentableDescription() {
+			return name() + " (" + value() +  ")";
+		}
+		
+		public String toString() {
+			return getClass().getName() + ": " + userPresentableDescription();
+		}
+		
+		/**
+		 * Retrieves the constant for the given class name and value. Null is returned
+		 * if either class or value isn't found.
+		 * @param value
+		 * @param clazzName
+		 * @return
+		 */
+		public static StringConstant constantForClassNamed(String value, String clazzName) {
+			synchronized (_store) {
+				Map classMap = keyMap(clazzName, false);
+				StringConstant result = (StringConstant) classMap.get(value);
+	            if(log.isDebugEnabled()) {
+	                log.debug("Getting " + result + " for " + clazzName + " and " + value);
+	            }
+				return result;
+			}
+		}
+	}
+	
+	/**
+	 * Constant class that can be used with bytes or NSData in the DB.
+	 * @author ak
+	 *
+	 */
+	public static abstract class ByteConstant implements Constant {
+		private NSData _value;
+		private String _name;
+		private int _sortOrder;
+		
+		public ByteConstant(String value, String name) {
+			//AK: making a lot of assumptions here... the value is a <hex data>, the result is a valid NSData
+			this((NSData)NSPropertyListSerialization.propertyListFromString(value.toString()),name);
+		}
+		
+		public ByteConstant(NSData value, String name) {
+			_value = value;
+			_name = name;
+			_sortOrder = globalSortOrder++;
+			synchronized (_store) {
+				String className = getClass().getName();
+	            Map classMap = keyMap(className, true);
+	            NSData key = value;
+				if(log.isDebugEnabled()) {
+					log.debug("Putting " + key + " for " + className);
+				}
+				classMap.put(key, this);
+			}
+		}
+		
+		public String name() {
+			return _name;
+		}
+		
+		public int sortOrder() {
+			return _sortOrder;
+		}
+		
+		public Object value() {
+			return _value;
+		}
+		
+		public String userPresentableDescription() {
+			return name();
+		}
+		
+		public String toString() {
+			return getClass().getName() + ": " + userPresentableDescription();
+		}
+		
+		/**
+		 * Retrieves the constant for the given class name and value. Null is returned
+		 * if either class or value isn't found.
+		 * @param value
+		 * @param clazzName
+		 * @return
+		 */
+		public static ByteConstant constantForClassNamed(NSData value, String clazzName) {
+			synchronized (_store) {
+				Map classMap = keyMap(clazzName, false);
+				ByteConstant result = (ByteConstant) classMap.get(value);
+	            if(log.isDebugEnabled()) {
+	                log.debug("Getting " + result + " for " + clazzName + " and " + value);
+	            }
+				return result;
+			}
+		}
+	}
+
     public static final int MAX_INT=2500;
     
     protected static Integer[] INTEGERS=new Integer[MAX_INT];
