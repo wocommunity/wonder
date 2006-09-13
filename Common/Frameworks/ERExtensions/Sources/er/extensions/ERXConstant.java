@@ -17,73 +17,72 @@ import com.webobjects.jdbcadaptor.*;
 
 /**
  * Numerical constant class, useful when you want reference object that are not
- * bytes or strings in the DB like what you get with the factory classes.
+ * bytes or strings in the DB like what you get with the factory classes. <br />
+ * And example would be:
  * <pre><code>
-
-public abstract class Test extends ERXGenericRecord {
-
-	public static class Status extends ERXConstant {
-		private String _name;
-	
-		protected Status(int value, String name) {
-			super(value);
-			_name = name;
-		}
-	
-		public String name() {
-			return _name;
-		}
-	}
-	
-	public Status OFF = new Status(0, "Off");
-	public Status ON = new Status(1, "On");
-	
-    public Test() {
-        super();
-    }
-
-    public Status status() {
-        return (Status)storedValueForKey("status");
-    }
-
-    public void setStatus(Constant aValue) {
-        takeStoredValueForKey(aValue, "status");
-    }
-    
-    public boolean isOn() {
-    	return status() == ON;
-    }
-}
-
-Test test = (Test)EOUtilities.createAndInsertInstance(ec, "Test");
-test.setTest(Test.Status.OFF);
-test = (Test)EOUtilities.createAndInsertInstance(ec, "Test");
-test.setStatus(Test.Status.ON);
-ec.saveChanges();
-
-NSArray objects;
-NSArray all = EOUtilities.objectsForEntityNamed(ec, "Test");
-EOQualifier q;
-
-objects = EOUtilities.objectsMatchingKeyAndValue(ec, "Test", "status", Test.Status.OFF);
-log.info("Test.Status.OFF: " + objects);
-q = new EOKeyValueQualifier("status", EOQualifier.QualifierOperatorEqual, Test.Status.OFF);
-log.info("Test.Status.OFF: " + EOQualifier.filteredArrayWithQualifier(all, q));
-
-// this might be a problem: equal number values match in the DB, but not in memory
-objects = EOUtilities.objectsMatchingKeyAndValue(ec, "Test", "status", ERXConstant.OneInteger);
-log.info("Number.OFF: " + objects);
-q = new EOKeyValueQualifier("status", EOQualifier.QualifierOperatorEqual, ERXConstant.OneInteger);
-log.info("Number.OFF: " + EOQualifier.filteredArrayWithQualifier(all, q));
-
-// you can compare by equality
-test.getStatus() == Test.Status.ON
-
+ * public abstract class Test extends ERXGenericRecord {
+ * 
+ * 	public static class Status extends ERXConstant {
+ * 		private String _name;
+ * 	
+ * 		protected Status(int value, String name) {
+ * 			super(value);
+ * 			_name = name;
+ * 		}
+ * 	
+ * 		public String name() {
+ * 			return _name;
+ * 		}
+ * 	}
+ * 	
+ * 	public Status OFF = new Status(0, "Off");
+ * 	public Status ON = new Status(1, "On");
+ * 	
+ *     public Test() {
+ *         super();
+ *     }
+ * 
+ *     public Status status() {
+ *         return (Status)storedValueForKey("status");
+ *     }
+ * 
+ *     public void setStatus(Constant aValue) {
+ *         takeStoredValueForKey(aValue, "status");
+ *     }
+ *     
+ *     public boolean isOn() {
+ *     	return status() == ON;
+ *     }
+ * }
+ * 
+ * Test test = (Test)EOUtilities.createAndInsertInstance(ec, "Test");
+ * test.setTest(Test.Status.OFF);
+ * test = (Test)EOUtilities.createAndInsertInstance(ec, "Test");
+ * test.setStatus(Test.Status.ON);
+ * ec.saveChanges();
+ * 
+ * NSArray objects;
+ * NSArray all = EOUtilities.objectsForEntityNamed(ec, "Test");
+ * EOQualifier q;
+ * 
+ * objects = EOUtilities.objectsMatchingKeyAndValue(ec, "Test", "status", Test.Status.OFF);
+ * log.info("Test.Status.OFF: " + objects);
+ * q = new EOKeyValueQualifier("status", EOQualifier.QualifierOperatorEqual, Test.Status.OFF);
+ * log.info("Test.Status.OFF: " + EOQualifier.filteredArrayWithQualifier(all, q));
+ * 
+ * // this might be a problem: equal number values match in the DB, but not in memory
+ * objects = EOUtilities.objectsMatchingKeyAndValue(ec, "Test", "status", ERXConstant.OneInteger);
+ * log.info("Number.OFF: " + objects);
+ * q = new EOKeyValueQualifier("status", EOQualifier.QualifierOperatorEqual, ERXConstant.OneInteger);
+ * log.info("Number.OFF: " + EOQualifier.filteredArrayWithQualifier(all, q));
+ * 
+ * // you can compare by equality
+ * test.getStatus() == Test.Status.ON
  * </pre></code>
  * You need to add an entry <code>ERXConstantClassName=Test.Status</code> to the attribute's userInfo 
  * in question and your EO's class description needs to be a {@link er.extensions.ERXEntityClassDescription}.
  * <br />
- * NOTE: your constants must be loaded for this to work, so you may need to add a 
+ * <b>NOTE:</b> your constants must be loaded for this to work, so you may need to add a 
  * <code>Class c = SomeStatus.class</code> in your App constructor.
  * <br />
  * Note that upon class initialization 2500 Integers will be created and cached, from 0 - 2499.
