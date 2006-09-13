@@ -199,6 +199,15 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
             trimSpaces();
     }
 
+    public Object willReadRelationship(Object aObject) {
+        wasInitialized = false;
+        try {
+            return super.willReadRelationship(aObject);
+        } finally {
+            wasInitialized = true;
+        }
+    }
+
     /* (non-Javadoc)
      * @see er.extensions.ERXEnterpriseObject#flushCaches()
      */
