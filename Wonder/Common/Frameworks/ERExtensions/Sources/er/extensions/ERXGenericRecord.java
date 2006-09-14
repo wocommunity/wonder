@@ -16,13 +16,15 @@ import com.webobjects.foundation.*;
 
 /**
  * This class contains a bunch of extensions to the regular
- * {@link com.webobjects.eocontrol.EOGenericRecord} class. Of notable interest
- * it contains built in support for generating primary keys via the
- * {@link ERXGeneratesPrimaryKeyInterface}, support for an augmented
- * transaction methods like <code>
+ * {@link com.webobjects.eocontrol.EOGenericRecord EOGenericRecord} class.
+ * Of notable interest is:<ul>
+ * <li> it contains built in support for generating primary keys via the
+ * {@link ERXGeneratesPrimaryKeyInterface}, 
+ * <li>support for an augmented transaction methods like <code>
  * willUpdate</code> and <code>didDelete</code>
  * and a bunch of handy utility methods like <code>committedSnapshotValueForKey
  * </code>.
+ * <li>
  * At the moment it is required that those wishing to take advantage of
  * templatized and localized validation exceptions need to subclass this class.
  * Hopefully in the future we can get rid of this requirement. <br />
@@ -48,9 +50,8 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
     }
     
     private String localizedKey(String key) {
-    	ERXEC ec = (ERXEC)editingContext();
-    	key = key + "_" + ec.locale().getLanguage();
-		return key;
+    	ERXEntityClassDescription cd = (ERXEntityClassDescription)classDescription();
+		return cd.localizedKey(editingContext(), key);
     }
     
     public static class LocalizedBinding extends NSKeyValueCoding._KeyBinding {
@@ -75,7 +76,8 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
 
 	public NSKeyValueCoding._KeyBinding _otherStorageBinding(String key) {
 		NSKeyValueCoding._KeyBinding result;
-		if(classDescription().attributeKeys().contains(localizedKey(key))) {
+		String localizedKey = localizedKey(key);
+		if(localizedKey != null) {
 			result = new LocalizedBinding(key);
 		} else {
 			result = super._otherStorageBinding(key);
@@ -94,7 +96,7 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
 
     public String insertionStackTrace = null;
     
-    protected boolean wasInitialized = false;
+    protected boolean updateInverseRelationships = false;
     
     
     
@@ -200,11 +202,11 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
     }
 
     public Object willReadRelationship(Object aObject) {
-        wasInitialized = false;
+        updateInverseRelationships = false;
         try {
             return super.willReadRelationship(aObject);
         } finally {
-            wasInitialized = true;
+            updateInverseRelationships = ERXEnterpriseObject.updateInverseRelationships;
         }
     }
 
@@ -328,7 +330,7 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
      *		correct type of delegate set.
      */
     public void awakeFromInsertion(EOEditingContext editingContext) {
-        wasInitialized = false;
+        updateInverseRelationships = false;
         _checkEditingContextDelegate(editingContext);
         if (insertionTrackingLog.isDebugEnabled()) {
             insertionStackTrace = ERXUtilities.stackTrace();
@@ -339,10 +341,16 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
         if (gid.isTemporary()) {
             init(editingContext);
         }
-        wasInitialized = true;
+        updateInverseRelationships = ERXEnterpriseObject.updateInverseRelationships;
     }
 
-    /**
+    public void clearProperties() {
+    	updateInverseRelationships = false;
+    	super.clearProperties();
+    	updateInverseRelationships = ERXEnterpriseObject.updateInverseRelationships;
+    }
+
+	/**
      * used for initialization stuff instead of awakeFromInsertion.
      * <code>awakeFromInsertions</code> is buggy because if an EO is
      * deleted and then its EOEditingContext is reverted using 'revert' 
@@ -364,10 +372,10 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
      *		correct type of delegate set.
      */
     public void awakeFromFetch(EOEditingContext editingContext) {
-        wasInitialized = false;
+        updateInverseRelationships = false;
         _checkEditingContextDelegate(editingContext);
         super.awakeFromFetch(editingContext);
-        wasInitialized = true;
+        updateInverseRelationships = ERXEnterpriseObject.updateInverseRelationships;
     }
     /**
      * Adds a check to make sure that both the object being added and
@@ -768,40 +776,44 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
     public void takeStoredValueForKey(Object object, String key) {
     	// we only handle toOne keys here, but there is no API for that so
     	// this unreadable monster first checks the fastest thing, the the slower conditions
-    	if(ERXEnterpriseObject.updateInverseRelationships && wasInitialized &&  (object instanceof EOEnterpriseObject || 
-    			((object == null) && !isToManyKey(key) 
-    					&& classDescriptionForDestinationKey(key) != null))) {
-    		String inverse = classDescription().inverseForRelationshipKey(key);
-     		if(inverse != null) {
-    			if(object != null) {
-    				EOEnterpriseObject eo = (EOEnterpriseObject)object;
-    				super.takeStoredValueForKey(object, key);
-    				if(eo.isToManyKey(inverse)) {
-    					NSArray values = (NSArray)eo.valueForKey(inverse);
-    					if(!values.containsObject(this)) {
-    						eo.addObjectToPropertyWithKey(this, inverse);
+    	if(updateInverseRelationships) {
+    		if((object instanceof EOEnterpriseObject || 
+    				((object == null) && !isToManyKey(key) 
+    						&& classDescriptionForDestinationKey(key) != null))) {
+    			String inverse = classDescription().inverseForRelationshipKey(key);
+    			if(inverse != null) {
+    				if(object != null) {
+    					EOEnterpriseObject eo = (EOEnterpriseObject)object;
+    					super.takeStoredValueForKey(object, key);
+    					if(eo.isToManyKey(inverse)) {
+    						NSArray values = (NSArray)eo.valueForKey(inverse);
+    						if(!values.containsObject(this)) {
+    							eo.addObjectToPropertyWithKey(this, inverse);
+    						}
+    					} else {
+    						EOEnterpriseObject old = (EOEnterpriseObject) eo.valueForKey(inverse);
+    						if(old != this) {
+    							eo.takeValueForKey(this, inverse);
+    						}
     					}
     				} else {
-    					EOEnterpriseObject old = (EOEnterpriseObject) eo.valueForKey(inverse);
-    					if(old != this) {
-    						eo.takeValueForKey(this, inverse);
+    					EOEnterpriseObject old = (EOEnterpriseObject) valueForKey(key);
+    					super.takeStoredValueForKey(null, key);
+    					if(old != null) { 
+    						if(old.isToManyKey(inverse)) {
+    							NSArray values = (NSArray) old.valueForKey(inverse);
+    							if(values.containsObject(this)) {
+    								old.removeObjectFromPropertyWithKey(this, inverse);
+    							}
+    						} else {
+    							if(old == this) {
+    								old.takeValueForKey(null, inverse);
+    							}
+    						}
     					}
     				}
     			} else {
-    				EOEnterpriseObject old = (EOEnterpriseObject) valueForKey(key);
-    				super.takeStoredValueForKey(null, key);
-    				if(old != null) { 
-    					if(old.isToManyKey(inverse)) {
-    						NSArray values = (NSArray) old.valueForKey(inverse);
-    						if(values.containsObject(this)) {
-    							old.removeObjectFromPropertyWithKey(this, inverse);
-    						}
-    					} else {
-    						if(old == this) {
-    							old.takeValueForKey(null, inverse);
-        					}
-    					}
-    				}
+    				super.takeStoredValueForKey(object, key);
     			}
     		} else {
     			super.takeStoredValueForKey(object, key);
@@ -810,7 +822,7 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
     		super.takeStoredValueForKey(object, key);
     	}
     }
-    
+
     // Debugging aids -- turn off during production
     // These methods are used to catch the classic mistake of:
     // public String foo() { return (String)valueForKey("foo"); }
