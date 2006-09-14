@@ -15,9 +15,63 @@ import com.webobjects.foundation.*;
 import com.webobjects.jdbcadaptor.*;
 
 /**
- * Constant class, useful when you want reference object that are not
+ * General purpose constant class, useful when you want reference object that are not
  * bytes or strings in the DB like what you get with the factory classes. <br />
- * And example would be:
+ * If you use objects of this class, you might be able to completely remove the EOSharedEditingContext
+ * (the google search term for "why does my app lock up").<br />
+ * To use the Number constants, you need to add an entry <code>ERXConstantClassName=Test.Status</code> to the attribute's userInfo 
+ * in question and your EO's class description needs to be a {@link er.extensions.ERXEntityClassDescription}.<br />
+ * The String and Byte based constants can be used with a custom class type:<pre><code>
+ * 
+ * ERCMailMessage.plist:
+ * ...
+ * {
+ *     columnName = MAIL_STATE_ID;
+ *     name = state;
+ *     prototypeName = osType;
+ *     adaptorValueConversionMethodName = value;
+ *     factoryMethodArgumentType = EOFactoryMethodArgumentIsNSString;
+ *     valueClassName = er.corebusinesslogic.ERCMailState;
+ *     valueFactoryMethodName = mailState;
+ * }
+ * ...
+ * 
+ * public class ERCMailMessage extends EOGenericRecord {
+ * ...
+ *   public ERCMailState state() {
+ *       return (ERCMailState) storedValueForKey("state");
+ *   }
+ *   
+ *   public void setState(ERCMailState value) {
+ *       takeStoredValueForKey(value, "state");
+ *   }
+ * ...
+ * }
+ * 
+ * public class ERCMailState extends ERXConstant.StringConstant {
+ *
+ *     public ERCMailState(String key, String name) {
+ *         super(key, name);
+ *     }
+ *     
+ *     public static ERCMailState mailState(String key) {
+ *      return (ERCMailState) constantForClassNamed(key, ERCMailState.class.getName());
+ *     }
+ * 
+ *     public static ERCMailState EXCEPTION_STATE = new ERCMailState ("xcpt", "Exception");
+ *     public static ERCMailState READY_TO_BE_SENT_STATE = new ERCMailState("rtbs", "Ready to be sent");
+ *     public static ERCMailState SENT_STATE = new ERCMailState("sent", "Sent");
+ *     public static ERCMailState RECEIVED_STATE = new ERCMailState("rcvd", "Received");
+ *     public static ERCMailState WAIT_STATE = new ERCMailState("wait", "Wait");
+ *     public static ERCMailState PROCESSING_STATE = new ERCMailState("proc", "Processing");
+ * }
+ * </code></pre>
+ * <br />
+ * <b>NOTE:</b> your constants must be loaded for this to work, so you may need to add a 
+ * <code>Class c = SomeStatus.class</code> in your App constructor.
+ * <br />
+ * Note that upon class initialization 2500 Integers will be created and cached, from 0 - 2499.
+ * An example would be:
  * <pre><code>
  * public abstract class Test extends ERXGenericRecord {
  * 
@@ -71,13 +125,6 @@ import com.webobjects.jdbcadaptor.*;
  * // you can compare by equality
  * test.getStatus() == Test.Status.ON
  * </pre></code>
- * You need to add an entry <code>ERXConstantClassName=Test.Status</code> to the attribute's userInfo 
- * in question and your EO's class description needs to be a {@link er.extensions.ERXEntityClassDescription}.
- * <br />
- * <b>NOTE:</b> your constants must be loaded for this to work, so you may need to add a 
- * <code>Class c = SomeStatus.class</code> in your App constructor.
- * <br />
- * Note that upon class initialization 2500 Integers will be created and cached, from 0 - 2499.
  */
 public abstract class ERXConstant {
 	
