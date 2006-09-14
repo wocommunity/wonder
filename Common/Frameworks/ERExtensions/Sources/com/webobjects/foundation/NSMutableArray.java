@@ -18,8 +18,8 @@ import java.util.*;
 public class NSMutableArray extends NSArray {
 
     public static final Class _CLASS = _NSUtilitiesExtra._classWithFullySpecifiedNamePrime("com.webobjects.foundation.NSMutableArray");
-
-    static final long serialVersionUID = -910221965L;
+    
+    static final long serialVersionUID = -3909373569895711876L;
 
     public NSMutableArray() {
     }
