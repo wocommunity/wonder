@@ -104,11 +104,29 @@ public abstract class ERXConstant {
 	}
 
 	public static interface Constant {
-		public abstract int sortOrder();
-		public abstract String name();
-		public abstract Object value();
+		public int sortOrder();
+		public String name();
+		public Object value();
 	}
-	
+    
+    /**
+     * Retrieves the constant for the given class name and value. Null is returned
+     * if either class or value isn't found.
+     * @param value
+     * @param clazzName
+     * @return
+     */
+    public static Constant constantForClassNamed(Object value, String clazzName) {
+        synchronized (_store) {
+            Map classMap = keyMap(clazzName, false);
+            Constant result = (Constant) classMap.get(value);
+            if(log.isDebugEnabled()) {
+                log.debug("Getting " + result + " for " + clazzName + " and " + value);
+            }
+            return result;
+        }
+    }
+
 	private static int globalSortOrder = 0;
 	/**
 	 * Retrieves the key map for the class name.
@@ -131,6 +149,17 @@ public abstract class ERXConstant {
 		return map;
 	}
 	
+    private static void registerConstant(Object key, Constant value, Class clazz) {
+        synchronized (_store) {
+            String className = clazz.getName();
+            Map classMap = keyMap(className, true);
+            if(log.isDebugEnabled()) {
+                log.debug("Putting " + key + " for " + className);
+            }
+            classMap.put(key, value);
+        }
+    }
+    
 	public static class NumberConstant extends Number implements Constant {
 		/**
 		 * Holds the value.
@@ -156,15 +185,7 @@ public abstract class ERXConstant {
 			_value = value;
 			_name = name;
 			_sortOrder = globalSortOrder++;
-			synchronized (_store) {
-				String className = getClass().getName();
-				Map classMap = keyMap(className, true);
-				Integer key = integerForInt(value);
-				if(log.isDebugEnabled()) {
-					log.debug("Putting " + key + " for " + className);
-				}
-				classMap.put(key, this);
-			}
+            ERXConstant.registerConstant(integerForInt(value), this, getClass());
 		}
 		
 		/**
@@ -251,7 +272,7 @@ public abstract class ERXConstant {
 		 * @param clazzName
 		 * @return
 		 */
-		public static ERXConstant constantForClassNamed(int value, String clazzName) {
+		public static NumberConstant constantForClassNamed(int value, String clazzName) {
 			return constantForClassNamed(integerForInt(value), clazzName);
 		}
 		
@@ -262,15 +283,8 @@ public abstract class ERXConstant {
 		 * @param clazzName
 		 * @return
 		 */
-		public static ERXConstant constantForClassNamed(Number value, String clazzName) {
-			synchronized (_store) {
-				Map classMap = keyMap(clazzName, false);
-				ERXConstant result = (ERXConstant) classMap.get(value);
-	            if(log.isDebugEnabled()) {
-	                log.debug("Getting " + result + " for " + clazzName + " and " + value);
-	            }
-				return result;
-			}
+		public static NumberConstant constantForClassNamed(Number value, String clazzName) {
+            return (NumberConstant) ERXConstant.constantForClassNamed(value, clazzName);
 		}
 		
 	}
@@ -289,15 +303,7 @@ public abstract class ERXConstant {
 			_value = value;
 			_name = name;
 			_sortOrder = globalSortOrder++;
-			synchronized (_store) {
-				String className = getClass().getName();
-	            Map classMap = keyMap(className, true);
-				String key = value;
-				if(log.isDebugEnabled()) {
-					log.debug("Putting " + key + " for " + className);
-				}
-				classMap.put(key, this);
-			}
+            ERXConstant.registerConstant(value, this, getClass());
 		}
 		
 		public String name() {
@@ -328,14 +334,7 @@ public abstract class ERXConstant {
 		 * @return
 		 */
 		public static StringConstant constantForClassNamed(String value, String clazzName) {
-			synchronized (_store) {
-				Map classMap = keyMap(clazzName, false);
-				StringConstant result = (StringConstant) classMap.get(value);
-	            if(log.isDebugEnabled()) {
-	                log.debug("Getting " + result + " for " + clazzName + " and " + value);
-	            }
-				return result;
-			}
+            return (StringConstant) ERXConstant.constantForClassNamed(value, clazzName);
 		}
 	}
 	
@@ -358,15 +357,7 @@ public abstract class ERXConstant {
 			_value = value;
 			_name = name;
 			_sortOrder = globalSortOrder++;
-			synchronized (_store) {
-				String className = getClass().getName();
-	            Map classMap = keyMap(className, true);
-	            NSData key = value;
-				if(log.isDebugEnabled()) {
-					log.debug("Putting " + key + " for " + className);
-				}
-				classMap.put(key, this);
-			}
+            ERXConstant.registerConstant(value, this, getClass());
 		}
 		
 		public String name() {
@@ -388,24 +379,28 @@ public abstract class ERXConstant {
 		public String toString() {
 			return getClass().getName() + ": " + userPresentableDescription();
 		}
-		
-		/**
-		 * Retrieves the constant for the given class name and value. Null is returned
-		 * if either class or value isn't found.
-		 * @param value
-		 * @param clazzName
-		 * @return
-		 */
-		public static ByteConstant constantForClassNamed(NSData value, String clazzName) {
-			synchronized (_store) {
-				Map classMap = keyMap(clazzName, false);
-				ByteConstant result = (ByteConstant) classMap.get(value);
-	            if(log.isDebugEnabled()) {
-	                log.debug("Getting " + result + " for " + clazzName + " and " + value);
-	            }
-				return result;
-			}
-		}
+        
+        /**
+         * Retrieves the constant for the given class name and value. Null is returned
+         * if either class or value isn't found.
+         * @param value
+         * @param clazzName
+         * @return
+         */
+        public static ByteConstant constantForClassNamed(NSData value, String clazzName) {
+            return (ByteConstant) ERXConstant.constantForClassNamed(value, clazzName);
+        }
+        
+        /**
+         * Retrieves the constant for the given class name and value. Null is returned
+         * if either class or value isn't found.
+         * @param value
+         * @param clazzName
+         * @return
+         */
+        public static ByteConstant constantForClassNamed(byte value[], String clazzName) {
+            return (ByteConstant) ERXConstant.constantForClassNamed(new NSData(value), clazzName);
+        }
 	}
 
     public static final int MAX_INT=2500;
