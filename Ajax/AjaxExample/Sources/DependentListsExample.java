@@ -7,10 +7,14 @@ import com.webobjects.foundation.NSMutableArray;
 
 public class DependentListsExample extends WOComponent {
   private NSMutableArray _states;
-  private State _repetitionState;
-  private County _repetitionCounty;
-  private State _selectedState;
-  private County _selectedCounty;
+  public State _repetitionState;
+  public County _repetitionCounty;
+  public State _selectedState;
+  public State _selectedState2;
+  public County _selectedCounty;
+  public County _selectedCounty2;
+  public County _selectedCounty3;
+  public String _address;
 
   public DependentListsExample(WOContext context) {
     super(context);
@@ -27,38 +31,6 @@ public class DependentListsExample extends WOComponent {
 
   public NSArray states() {
     return _states;
-  }
-
-  public void setRepetitionState(State repetitionState) {
-    _repetitionState = repetitionState;
-  }
-
-  public State repetitionState() {
-    return _repetitionState;
-  }
-
-  public void setRepetitionCounty(County repetitionCounty) {
-    _repetitionCounty = repetitionCounty;
-  }
-
-  public County repetitionCounty() {
-    return _repetitionCounty;
-  }
-
-  public void setSelectedState(State selectedState) {
-    _selectedState = selectedState;
-  }
-
-  public State selectedState() {
-    return _selectedState;
-  }
-
-  public void setSelectedCounty(County selectedCounty) {
-    _selectedCounty = selectedCounty;
-  }
-
-  public County selectedCounty() {
-    return _selectedCounty;
   }
 
   public static class State {
