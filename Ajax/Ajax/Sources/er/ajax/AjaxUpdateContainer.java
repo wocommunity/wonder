@@ -72,27 +72,7 @@ public class AjaxUpdateContainer extends AjaxDynamicElement {
 
         String observeFieldID = (String)valueForBinding("observeFieldID", component);
         if (observeFieldID != null) {
-            response.appendContentString("new Form.Element.Observer($('" + observeFieldID + "'), 1, function(element, value) {");
-            NSMutableDictionary observerOptions = new NSMutableDictionary();
-            observerOptions.setObjectForKey("true", "asynchronous");
-
-            // We need to cheat and make the WOForm that contains the form action appear to have been
-            // submitted.  So we grab the action url, pull off the element ID from its action URL
-            // and pass that in as FORCE_FORM_SUBMITTED_KEY, which is processed by ERXWOForm just like
-            // senderID is on the real WOForm.  Unfortunately we can't hook into the real WOForm to do
-            // this :(
-            response.appendContentString("var formAction = $('" + observeFieldID + "').form.action;");
-            response.appendContentString("var senderID = formAction.substring(formAction.indexOf('.', formAction.lastIndexOf('/')) + 1);");
-            StringBuffer parameters = new StringBuffer();
-            parameters.append("escape($('" + observeFieldID + "').name) + '=' + escape($('" + observeFieldID + "').value) + '");
-            parameters.append("&");
-            parameters.append(AjaxUtils.FORCE_FORM_SUBMITTED_KEY + "=' + senderID + '");
-            parameters.append("'");
-
-            observerOptions.setObjectForKey(parameters.toString(), "parameters");
-            response.appendContentString("new Ajax.Updater('" + id + "', $('" + id + "').getAttribute('updateUrl'), ");
-            AjaxOptions.appendToResponse(observerOptions, response, context);
-            response.appendContentString(") });");
+          AjaxObserveField.appendToResponse(response, context, observeFieldID, id, false, null);
         }
 
         response.appendContentString("function " + id + "Update() { new Ajax.Updater('" + id + "', $(" + id + ").getAttribute('updateUrl'), ");
