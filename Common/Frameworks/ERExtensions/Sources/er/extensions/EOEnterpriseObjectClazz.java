@@ -101,6 +101,7 @@ public class EOEnterpriseObjectClazz extends Object {
         EOEnterpriseObjectClazz clazz = (EOEnterpriseObjectClazz)allClazzes.objectForKey(entityName);
         if(clazz == null) {
             clazz = factory().classFromEntity(ERXEOAccessUtilities.entityNamed(null, entityName));
+            clazz.setEntityName(entityName);
             allClazzes.setObjectForKey(clazz,entityName);
         }
         if(log.isDebugEnabled()) {
@@ -521,7 +522,6 @@ public class EOEnterpriseObjectClazz extends Object {
                 }
             }
             if(clazz == null) return classFromEntity(entity.parentEntity());
-            clazz.setEntityName(entity.name());
             return clazz;
         }
     }
