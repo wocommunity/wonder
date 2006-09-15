@@ -43,7 +43,7 @@ Repetition1: WORepetition {
 	list = branchChoices;
 }
 
-String3: WOString {
+String3: ERXLocalizedString {
     escapeHTML = false;
 	value = message;
 }
@@ -59,7 +59,7 @@ SwitchComponent4: WOSwitchComponent {
 	pageConfiguration = d2wContext.explanationConfigurationName;
 }
 
-Title: WOString {
+Title: ERXLocalizedString {
 	value = title;
 }
 
