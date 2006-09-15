@@ -1,3 +1,5 @@
+// script.aculo.us slider.js v1.6.4, Wed Sep 06 11:30:58 CEST 2006
+
 // Copyright (c) 2005 Marty Haught, Thomas Fuchs 
 //
 // See http://script.aculo.us for more info
