@@ -39,6 +39,8 @@ RightItemRepetition : WORepetition {
 BothLists : AjaxUpdateContainer {
 	id = "bothLists";
 	evalScripts = true;
-	onLoading = "function(request) { Element.show('loading') }";
-	onComplete = "function(request) { Element.hide('loading'); new Effect.Highlight('leftDropBlock'); new Effect.Highlight('rightDropBlock'); }";
+	onComplete = "function(request) { new Effect.Highlight('leftDropBlock'); new Effect.Highlight('rightDropBlock'); }";
+}
+
+Busy : AjaxBusyIndicator {
 }
