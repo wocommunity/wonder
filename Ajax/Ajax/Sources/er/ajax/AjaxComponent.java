@@ -65,6 +65,9 @@ public abstract class AjaxComponent extends WOComponent {
         Object result;
         if (AjaxUtils.shouldHandleRequest(request, context)) {
             result = handleRequest(request, context);
+            if (result == null) {
+              result = context.response();
+            }
             AjaxUtils.updateMutableUserInfoWithAjaxInfo(context());
         } else {
             result = super.invokeAction(request, context);

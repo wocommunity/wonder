@@ -83,6 +83,9 @@ public abstract class AjaxDynamicElement extends WODynamicGroup {
     Object result = null;
     if (AjaxUtils.shouldHandleRequest(request, context)) {
       result = handleRequest(request, context);
+      if (result == null) {
+        result = context.response();
+      }
       AjaxUtils.updateMutableUserInfoWithAjaxInfo(context);
     } else if (hasChildrenElements()) {
       result = super.invokeAction(request, context);
