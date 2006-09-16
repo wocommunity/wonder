@@ -10,9 +10,5 @@
 		<binding name = "onException"/>
 		<binding name = "insertion"/>
 		<binding name = "evalScripts"/>
-
-    <validation message = "&apos;action&apos; is a required binding">
-      <unbound name = "action"/>
-    </validation>
 	</wo>
 </wodefinitions>
