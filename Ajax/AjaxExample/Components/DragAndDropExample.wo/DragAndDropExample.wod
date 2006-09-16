@@ -32,7 +32,7 @@ DroppableExample2 : AjaxDroppable {
 	id = "droppableExample2";
 	class = "droppableExample";
 	elementName = "span";
-	onDrop = "function(element, droppableElement) { alert('dropped ' + element.id + ' onto ' + droppableElement.id + '->' + element.getElementsByTagName('b')[0].innerHTML); }";
+	onDrop = "function(element, droppableElement) { Element.update('statusMessage', 'dropped ' + element.id + ' onto ' + droppableElement.id + '->' + element.getElementsByTagName('b')[0].innerHTML); }";
 	droppedDraggableID = droppedDraggableID;
 	action = droppedDraggable2;
 	droppedObject = droppedObject;
