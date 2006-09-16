@@ -48,3 +48,18 @@ UpdateWithActionLink : AjaxUpdateLink {
 	evalScripts = true;
 	insertion = "function(receiver, response) {Effect.Fade(receiver, {to: 0.001, afterFinish: function() {Element.update(receiver, response); Effect.Appear(receiver)}})}";
 }
+
+UpdateLink4 : AjaxUpdateLink {
+	updateContainerID = "exampleArea4";
+	evalScripts = true;
+}
+
+UpdateLink5 : AjaxUpdateLink {
+	updateContainerID = "exampleArea4";
+	evalScripts = true;
+}
+
+AjaxUpdateContainer4 : AjaxUpdateContainer {
+	id = "exampleArea4";
+	evalScripts = true;
+}
