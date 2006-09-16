@@ -10,5 +10,10 @@
 		<binding name = "onException"/>
 		<binding name = "insertion"/>
 		<binding name = "evalScripts"/>
+    
+    <validation message="&apos;updateContainerID&apos; or &apos;action&apos; must be bound.">
+	    <unbound name = "action"/>
+	    <unbound name = "updateContainerID"/>
+    </validation>
 	</wo>
 </wodefinitions>
