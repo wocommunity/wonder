@@ -6,7 +6,7 @@ AjaxUpdateContainer : AjaxUpdateContainer {
 	id = "taskInfo";
 	elementName = "div";
 	class = "exampleArea";
-	// frequency = 1;
+	frequency = 1;
 }
 
 StopThread: AjaxHyperlink {
