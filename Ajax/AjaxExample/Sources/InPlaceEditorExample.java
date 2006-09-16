@@ -3,25 +3,19 @@
 import com.webobjects.appserver.*;
 
 public class InPlaceEditorExample extends WOComponent {
-  private String _exampleValue;
   private String _multilineValue;
-  private String _strippedValue;
-  private int _numericValue;
+  public String _exampleValue;
+  public String _strippedValue;
+  public int _numericValue;
+  public boolean _visible;
 
   public InPlaceEditorExample(WOContext context) {
     super(context);
     _exampleValue = "Test Value";
-    _multilineValue = "Multi<br>Line<br>Value";
+    _multilineValue = "Multi\nLine\nValue";
     _strippedValue = "Stripped Value";
     _numericValue = 5;
-  }
-
-  public void setExampleValue(String exampleValue) {
-    _exampleValue = exampleValue;
-  }
-
-  public String exampleValue() {
-    return _exampleValue;
+    _visible = true;
   }
 
   public void setMultilineValue(String multilineValue) {
@@ -29,22 +23,11 @@ public class InPlaceEditorExample extends WOComponent {
   }
 
   public String multilineValue() {
-    return _multilineValue;
+    return (_multilineValue == null) ? null : _multilineValue.replaceAll("\n\n", "<p>").replaceAll("\n", "<br>");
   }
 
-  public void setStrippedValue(String strippedValue) {
-    _strippedValue = strippedValue;
-  }
-
-  public String strippedValue() {
-    return _strippedValue;
-  }
-  
-  public void setNumericValue(int numericValue) {
-    _numericValue = numericValue;
-  }
-  
-  public int numericValue() {
-    return _numericValue;
+  public WOActionResults toggle() {
+    _visible = !_visible;
+    return null;
   }
 }
