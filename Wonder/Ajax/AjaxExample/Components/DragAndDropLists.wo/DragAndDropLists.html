@@ -46,5 +46,10 @@
 		</webobject>
 	</webobject>
 	
-	<p id = "loading" style = "clear: both; display:none;">Moving selected element ...</p>
+	<div id = "busy" style = "display: none; position: absolute; width: 100%; height: 100%; top: 0px; left: 0px; z-index: 9999;">
+		<table width="100%" height="100%"><tr><td align="center">
+			<img src="http://www.napyfab.com/ajax-indicators/images/indicator_verybig.gif" /><br />
+		</td></tr></table>
+	</div>
+	<webobject name = "Busy"></webobject>
 </webobject>
