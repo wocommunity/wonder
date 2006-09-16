@@ -22,7 +22,7 @@ DroppableExample1 : AjaxDroppable {
 	id = "droppableExample1";
 	class = "droppableExample";
 	elementName = "span";
-	onDrop = "function(element, droppableElement) { alert('dropped ' + element.id + ' onto ' + droppableElement.id + '->' + element.getElementsByTagName('b')[0].innerHTML); }";
+	onDrop = "function(element, droppableElement) { Element.update('statusMessage', 'dropped ' + element.id + ' onto ' + droppableElement.id + '->' + element.getElementsByTagName('b')[0].innerHTML); }";
 	droppedDraggableID = droppedDraggableID;
 	action = droppedDraggable1;
 	droppedObject = droppedObject;
