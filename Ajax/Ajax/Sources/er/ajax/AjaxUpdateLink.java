@@ -11,7 +11,8 @@ import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 /**
  * Updates a region on the screen by creating a request to an action, then returning a script that in turn
- * creates an Ajax.Updater for the area.
+ * creates an Ajax.Updater for the area.  If you do not provide an action binding, it will just update the
+ * specified area.
  * @binding onComplete JavaScript function to evaluate when the request has finished.
  * @binding onSuccess JavaScript function to evaluate when the request was successful.
  * @binding onFailure JavaScript function to evaluate when the request has failed.
@@ -35,14 +36,21 @@ public class AjaxUpdateLink extends AjaxDynamicElement {
 
   public String onClick(WOContext context) {
     NSDictionary options = createAjaxOptions(context.component());
-    String actionUrl = context.componentActionURL();
-    String id = (String) valueForBinding("updateContainerID", context.component());
     StringBuffer sb = new StringBuffer();
-    sb.append("new Ajax.Request('");
-    sb.append(actionUrl);
-    sb.append("', ");
-    AjaxOptions.appendToBuffer(options, sb, context);
-    sb.append(")");
+    if (associations().valueForKey("action") == null) {
+      String updateContainerID = (String) valueForBinding("updateContainerID", context.component());
+      sb.append("new Ajax.Updater('"+updateContainerID+"', $('"+updateContainerID+"').getAttribute('updateUrl'), ");
+      AjaxOptions.appendToBuffer(options, sb, context);
+      sb.append(")");
+    }
+    else {
+      String actionUrl = context.componentActionURL();
+      sb.append("new Ajax.Request('");
+      sb.append(actionUrl);
+      sb.append("', ");
+      AjaxOptions.appendToBuffer(options, sb, context);
+      sb.append(")");
+    }
     String onClick = (String)valueForBinding("onClick", context.component());
     if(onClick != null) {
         sb.append(";");
