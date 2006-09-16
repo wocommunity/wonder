@@ -3,14 +3,13 @@
 import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
-import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSMutableArray;
 
 public class DragAndDropLists extends WOComponent {
-  private NSMutableArray _leftList;
-  private NSMutableArray _rightList;
-  private DragItem _repetitionDragItem;
-  private DragItem _droppedObject;
+  public NSMutableArray _leftList;
+  public NSMutableArray _rightList;
+  public DragItem _repetitionDragItem;
+  public DragItem _droppedObject;
 
   public DragAndDropLists(WOContext context) {
     super(context);
@@ -19,30 +18,6 @@ public class DragAndDropLists extends WOComponent {
     for (int dragItemNum = 0; dragItemNum < 10; dragItemNum++) {
       _leftList.addObject(new DragItem("Drag Item #" + dragItemNum));
     }
-  }
-
-  public void setRepetitionDragItem(DragItem repetitionDragItem) {
-    _repetitionDragItem = repetitionDragItem;
-  }
-
-  public DragItem repetitionDragItem() {
-    return _repetitionDragItem;
-  }
-
-  public void setDroppedObject(DragItem droppedObject) {
-    _droppedObject = droppedObject;
-  }
-
-  public DragItem droppedObject() {
-    return _droppedObject;
-  }
-
-  public NSArray leftList() {
-    return _leftList;
-  }
-
-  public NSArray rightList() {
-    return _rightList;
   }
 
   public WOActionResults droppedOnLeft() {
