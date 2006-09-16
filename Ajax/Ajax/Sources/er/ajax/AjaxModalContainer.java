@@ -4,7 +4,6 @@ package er.ajax;
 //http://jquery.com/demo/thickbox/
 
 import com.webobjects.appserver.*;
-import com.webobjects.appserver._private.WONoContentElement;
 import com.webobjects.foundation.*;
 /**
  * Shows a link and wraps an area that is later presented as a modal window.
