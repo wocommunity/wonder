@@ -2,7 +2,6 @@
 
 import java.io.*;
 import java.net.*;
-import java.text.*;
 
 import com.webobjects.appserver.*;
 import com.webobjects.foundation.*;

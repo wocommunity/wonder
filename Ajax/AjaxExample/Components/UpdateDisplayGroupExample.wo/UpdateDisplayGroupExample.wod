@@ -97,10 +97,10 @@ TableBody : AjaxUpdateContainer {
 }
 
 EditValue: WOTextField {
-	value = dg.selectedObject.value;
+	value = dg.selectedObject.value; // VALID
 	numberformat = "0";
 }
 
 EditName: WOTextField {
-	value = dg.selectedObject.name;
+	value = dg.selectedObject.name; // VALID
 }
