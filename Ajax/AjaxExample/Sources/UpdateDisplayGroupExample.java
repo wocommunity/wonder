@@ -13,7 +13,7 @@ public class UpdateDisplayGroupExample extends WOComponent {
 	private static final Logger log = Logger.getLogger(UpdateDisplayGroupExample.class);
 	
 	public WODisplayGroup dg;
-	public Object current;
+	public ExampleData current;
 	
 	public UpdateDisplayGroupExample(WOContext context) {
 		super(context);
