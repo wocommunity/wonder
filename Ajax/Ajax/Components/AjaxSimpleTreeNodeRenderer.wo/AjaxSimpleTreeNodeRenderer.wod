@@ -1,0 +1,3 @@
+TreeNodeValue : WOString {
+	value = treeNode.toString;
+}

@@ -79,7 +79,8 @@ public class AjaxUpdateLink extends AjaxDynamicElement {
       Object stringValue = valueForBinding("string", component);
       if(!disabled) {
           response.appendContentString("<a ");
-          appendTagAttributeToResponse(response, "href", "javascript:" + onClick(context) + "; void(0);");
+          appendTagAttributeToResponse(response, "href", "#");
+          appendTagAttributeToResponse(response, "onclick", onClick(context) + "; void(0);");
           appendTagAttributeToResponse(response, "title", valueForBinding("title", component ));
           appendTagAttributeToResponse(response, "value", valueForBinding("value", component ));
           appendTagAttributeToResponse(response, "class", valueForBinding("class", component ));

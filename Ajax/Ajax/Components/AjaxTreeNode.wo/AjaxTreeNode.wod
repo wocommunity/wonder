@@ -1,0 +1,40 @@
+ChildrenRepetition : WORepetition {
+	list = treeNode.childrenTreeNodes;
+	item = repetitionChildTreeNode;
+}
+
+IsCollapsedConditional : WOConditional {
+	condition = expanded;
+	negate = true;
+}
+
+IsExpandedConditional : WOConditional {
+	condition = expanded;
+}
+
+IsNotLeafConditional : WOConditional {
+	condition = treeNode.leaf;
+	negate = true;
+}
+
+ToggleExandedAction : AjaxUpdateLink {
+	action = toggleExpanded;
+	updateContainerID = updateContainerID;
+}
+
+ChildTreeNode : AjaxTreeNode {
+	treeModel = treeModel;
+	treeNodeRenderer = treeNodeRenderer;
+	treeNode = repetitionChildTreeNode;
+}
+
+TreeNodeRenderer : WOSwitchComponent {
+	WOComponentName = treeNodeRenderer;
+	treeNode = treeNode;
+}
+
+TreeNodeUpdater : AjaxUpdateContainer {
+	id = updateContainerID;
+	elementName = "div";
+	skipFunction = true;
+}
