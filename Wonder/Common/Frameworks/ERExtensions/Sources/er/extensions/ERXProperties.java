@@ -742,7 +742,7 @@ public class ERXProperties extends Properties {
                     projectsInfo.addObject("User:        WebObjects.properties " + aPropertiesPath);  
                     propertiesPaths.addObject(aPropertiesPath);
                 } catch (java.io.IOException ex) {
-                    ;
+                    // do nothing
                 }
             }
         }
@@ -760,7 +760,7 @@ public class ERXProperties extends Properties {
                         projectsInfo.addObject("Optional Configuration:    " + aPropertiesPath);
                         propertiesPaths.addObject(aPropertiesPath);
                     } catch (java.io.IOException ex) {
-                        ;
+                        // do nothing
                     }                    
                 }
             }

@@ -22,7 +22,7 @@ public class ERXTimestampFormatter extends NSTimestampFormatter {
 	
 	static {
 		_repository.put(DefaultKey, new ERXTimestampFormatter());
-	};
+	}
 	
 
 	/**

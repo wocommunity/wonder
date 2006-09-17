@@ -127,8 +127,8 @@ public class ERXErrorDictionaryPanel extends ERXStatelessComponent {
         // on other pieces of code
         for (Enumeration e=errorMessages().keyEnumerator(); e.hasMoreElements();) {
             String key=(String)e.nextElement();
-            String value=(String)errorMessages().objectForKey(key);
-            errorMessages().setObjectForKey(massageErrorMessage(value, key), key);
+            String errorMessageValue=(String)errorMessages().objectForKey(key);
+            errorMessages().setObjectForKey(massageErrorMessage(errorMessageValue, key), key);
         }
         extraErrorMessage=massageErrorMessage(extraErrorMessage(), null);
         super.appendToResponse(r,c);

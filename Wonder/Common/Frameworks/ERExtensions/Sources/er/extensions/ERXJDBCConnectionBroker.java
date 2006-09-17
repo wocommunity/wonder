@@ -612,7 +612,7 @@ public class ERXJDBCConnectionBroker {
 
         private void reap(long maxCheckoutMillis, long maxConnectionAgeMillis) throws SQLException {
             boolean restart = false;
-            Connection connection = getConnection();
+            Connection reapingConnection = getConnection();
             try {
                 if(!isFree()) { 
                     // Check the time it's been checked out and recycle
@@ -642,7 +642,7 @@ public class ERXJDBCConnectionBroker {
                 if(!restart) {
                     Statement stmt = null;
                     try {
-                        stmt = connection.createStatement();
+                        stmt = reapingConnection.createStatement();
                     } catch (SQLException e) {
                         restart = true;
                     } finally {
@@ -658,7 +658,7 @@ public class ERXJDBCConnectionBroker {
 
                 if(!restart) {
                     // Some DBs return an object even if DB is shut down
-                    if (connection.isClosed()) { 
+                    if (reapingConnection.isClosed()) { 
                         restart = true;
                     }
                 }

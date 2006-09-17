@@ -161,8 +161,8 @@ public class ERXLongPrimaryKeyFactory {
      *            caching. Removes a lot of db roundtrips.
      * @return a new pk values for the specified entity.
      */
-    private static Long getNextPkValueForEntityIncreaseBy(String ename, int count, int increaseBy) {
-        if (increaseBy < 1) increaseBy = 1;
+    private static Long getNextPkValueForEntityIncreaseBy(String ename, int count, int increasePkBy) {
+        if (increasePkBy < 1) increasePkBy = 1;
 
         String where = "where eoentity_name = '" + ename + "'";
 
@@ -186,11 +186,11 @@ public class ERXLongPrimaryKeyFactory {
             		if (hasNext) {
             			pk = resultSet.getLong("pk_value");
                			// now execute the update
-            			con.createStatement().executeUpdate("update pk_table set pk_value = " + (pk+increaseBy) + " " + where);
+            			con.createStatement().executeUpdate("update pk_table set pk_value = " + (pk+increasePkBy) + " " + where);
             		} else {
             			pk = maxIdFromTable(ename);
                			// first time, we need to set i up
-            			con.createStatement().executeUpdate("insert into pk_table (eoentity_name, pk_value) values ('" + ename + "', " + (pk+increaseBy) + ")");
+            			con.createStatement().executeUpdate("insert into pk_table (eoentity_name, pk_value) values ('" + ename + "', " + (pk+increasePkBy) + ")");
             		}
             		con.commit();
             		return new Long(pk);

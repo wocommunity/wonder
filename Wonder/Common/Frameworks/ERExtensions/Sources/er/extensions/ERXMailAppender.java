@@ -8,7 +8,6 @@ package er.extensions;
 
 import java.util.*;
 
-import org.apache.log4j.Logger;
 import org.apache.log4j.*;
 import org.apache.log4j.helpers.*;
 import org.apache.log4j.spi.*;
@@ -400,9 +399,9 @@ public class ERXMailAppender extends AppenderSkeleton {
     }
 
     public String composeTitle(LoggingEvent event) {
-        String title;
+        String composeTitle;
         if (getTitle() != null) {
-            title = getTitle();
+            composeTitle = getTitle();
         } else {
             StringBuffer temp = new StringBuffer();
             if (titleIncludesPriorityLevelAsBoolean()) {
@@ -412,13 +411,13 @@ public class ERXMailAppender extends AppenderSkeleton {
                 temp.append(WOApplication.application().name() + ": ");
             }
             temp.append(event.getRenderedMessage());
-            title = temp.toString();
+            composeTitle = temp.toString();
             int ret = temp.indexOf("\n");
             if(ret > 0) {
-            	title = title.substring(0, ret);
+            	composeTitle = composeTitle.substring(0, ret);
             }
         }
-        return title;
+        return composeTitle;
     }
     
     /**
@@ -442,9 +441,9 @@ public class ERXMailAppender extends AppenderSkeleton {
             result.setObjectForKey(extraInformation, "extraInfo");
         }
 
-        String title = composeTitle(event);
-        if(title != null) {
-            result.setObjectForKey(title, "errorMessage");
+        String composeTitle = composeTitle(event);
+        if(composeTitle != null) {
+            result.setObjectForKey(composeTitle, "errorMessage");
         }
 
         String message = this.layout.format(event);
@@ -516,10 +515,10 @@ public class ERXMailAppender extends AppenderSkeleton {
      */
     public void subAppend(LoggingEvent event) {
         WOMailDelivery delivery = WOMailDelivery.sharedInstance();
-        String title = composeTitle(event);
+        String composeTitle = composeTitle(event);
         String content = composeMessage(event);
         String message = delivery.composePlainTextEmail(computedFromAddress(),
-                                                        toAddressesAsArray(), ccAddressesAsArray(), title, content, false);
+                                                        toAddressesAsArray(), ccAddressesAsArray(), composeTitle, content, false);
         if(getExceptionPageName() != null && ERXValueUtilities.booleanValue(formatAsError())) {
             message = "Content-Type: text/html\n" + message;
         }

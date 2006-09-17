@@ -12,8 +12,6 @@ import junit.framework.*;
 
 import com.webobjects.foundation.*;
 
-import er.extensions.*;
-
 /**
  * extensions to hold multiple errors and failures.<br />
  * 
