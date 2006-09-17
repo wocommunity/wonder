@@ -114,7 +114,7 @@ ISMAXSESSIONS: WOConditional {
 }
 
 LOGPATH: WOString {
-	value = statsDict.LogFile;
+	value = statsDict.LogFile; // VALID
 }
 
 MaxSessions: WOString {
@@ -268,7 +268,7 @@ String2: WOString {
 
 String21: WOString {
 	dateformat = "%H:%M:%S on %a, %b %d %Y %Z";
-	value = statsDict.StartedAt;
+	value = statsDict.StartedAt; // VALID
 }
 
 String3: WOString {
@@ -280,7 +280,7 @@ String6: WOString {
 }
 
 Transactions: WOString {
-	value = transactions.Transactions;
+	value = transactions.Transactions; // VALID
 }
 
 USERNAME: WOTextField {
