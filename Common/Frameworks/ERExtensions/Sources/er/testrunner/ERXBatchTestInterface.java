@@ -13,7 +13,6 @@ import org.apache.log4j.Logger;
 
 import junit.framework.*;
 import junit.runner.*;
-import er.extensions.*;
 
 /**
  * Used for running a batch of tests.<br />

@@ -284,9 +284,13 @@ public class ERXLinlyn {
         pos = new PrintWriter(cos, true); // set auto flush true.
         // See if server is alive or dead...
         String numerals = responseHandler(null); 
-        if(numerals.substring(0,3).equals("220")) // ftp server alive
-            ; // System.out.println("Connected to ftp server");
-        else System.err.println("Error connecting to ftp server.");
+        if(numerals.substring(0,3).equals("220")) {
+          // ftp server alive
+          // System.out.println("Connected to ftp server");
+        }        
+        else {
+          System.err.println("Error connecting to ftp server.");
+        }
     }
 
     private void ftpLogin(String user, String pass)

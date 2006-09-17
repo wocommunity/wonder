@@ -16,8 +16,6 @@ import com.webobjects.appserver.*;
 import com.webobjects.foundation.*;
 import com.webobjects.woextensions.*;
 
-import er.extensions.*;
-
 /**
  * WOComponent display of an ERTestResult.<br />
  * 
@@ -79,13 +77,13 @@ public class ERXWOTestResult extends WOComponent {
         return byos.toString();
     }
     public String currentErrorTestName() {
-        Object test = (Object)currentError.failedTest();
-        if (test instanceof TestCase)
-            return ((TestCase)test).getName();
-        else if (test instanceof TestSuite)
-            return ((TestSuite)test).getName();
+        Object failedTest = (Object)currentError.failedTest();
+        if (failedTest instanceof TestCase)
+            return ((TestCase)failedTest).getName();
+        else if (failedTest instanceof TestSuite)
+            return ((TestSuite)failedTest).getName();
         else
-            return test.toString();
+            return failedTest.toString();
     }
     public String currentErrorTestClassName() {
         return ((Object)currentError.failedTest()).getClass().getName();

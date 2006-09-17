@@ -376,7 +376,7 @@ public class ERXAssert {
         _failureHandler = handler;
     }
 
-    protected FailureHandler _failureHandler;;
+    protected FailureHandler _failureHandler;
 
     public void fail(String message) {
         _failureHandler.handleFailure(this, message);

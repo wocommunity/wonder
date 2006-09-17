@@ -163,7 +163,7 @@ public class ERXSequence {
 			creationError |= s.indexOf("doesn't exist") != -1; // mysql
 			return creationError;
 		}
-	};
+	}
 	
 	public static class PrimaryKeySequence extends DatabaseSequence {
 		private String _entityName;

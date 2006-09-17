@@ -8,7 +8,6 @@ package er.extensions;
 
 import java.io.*;
 import java.lang.reflect.*;
-import java.sql.*;
 import java.util.*;
 
 import org.apache.log4j.Logger;
@@ -556,7 +555,7 @@ public abstract class ERXApplication extends WOApplication implements ERXGracefu
     	if(ERXProperties.booleanForKey("er.extensions.ERXApplication.redirectOnMissingObjects")) {
     		// AK: the idea here is that you might have a stale object that was deleted from the DB
     		// while you weren't looking so the next time around your page might get a chance earlier to
-    		// realize it isn't there anymore. Unfortunalty, this doesn«t work in all scenarios.
+    		// realize it isn't there anymore. Unfortunalty, this doesnï¿½t work in all scenarios.
     		if(exception instanceof ERXDatabaseContextDelegate.ObjectNotAvailableException && context != null) {
     			String retryKey = context.request().stringFormValueForKey("ERXRetry");
     			if(retryKey == null) {
