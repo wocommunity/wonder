@@ -71,6 +71,10 @@ public class ERXTable extends WOTable {
     public ERXTable(WOContext context) {
         super(context);
     }
+    
+    public String header() {
+      return header;
+    }
 
     /**
      * Component is stateless.

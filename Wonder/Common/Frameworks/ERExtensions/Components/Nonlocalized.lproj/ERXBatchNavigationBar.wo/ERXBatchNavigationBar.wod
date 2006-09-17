@@ -101,18 +101,18 @@ filteredObjectsCount: WOString {
 }
 
 items_per_page: WOString {
-	value = session.localizer.ERXBatchNavigationBar.items_per_page;
+	value = session.localizer.ERXBatchNavigationBar.items_per_page; // VALID
 }
 
 of: WOString {
-	value = session.localizer.ERXBatchNavigationBar.of;
+	value = session.localizer.ERXBatchNavigationBar.of; // VALID
 }
 
 page: WOString {
-	value = session.localizer.ERXBatchNavigationBar.page;
+	value = session.localizer.ERXBatchNavigationBar.page; // VALID
 }
 
 show: WOString {
-	value = session.localizer.ERXBatchNavigationBar.show;
+	value = session.localizer.ERXBatchNavigationBar.show; // VALID
 }
 

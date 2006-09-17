@@ -26,7 +26,7 @@ KeyName: WOString {
 }
 
 Name: WOString {
-	value = currentItem.name;
+	value = currentItem.name; // VALID
 }
 Off: WOConditional {
 	condition = ^disabled;
