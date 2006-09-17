@@ -1,0 +1,23 @@
+<webobject name = "TreeNodeUpdater">
+	<tr>
+		<td>
+			<webobject name = "IsExpandedConditional"><webobject name = "ToggleExandedAction">collapse</webobject></webobject>
+			<webobject name = "IsCollapsedConditional"><webobject name = "ToggleExandedAction">expand</webobject></webobject>
+		</td>
+		<td><webobject name = "TreeNodeRenderer"/></td>
+	</tr>
+	<webobject name = "IsNotLeafConditional">
+		<webobject name = "IsExpandedConditional">
+			<tr>
+				<td>&nbsp;</td>
+				<td>
+					<table>
+						<webobject name = "ChildrenRepetition">
+							<webobject name = "ChildTreeNode"/>
+						</webobject>
+					</table>
+				</td>
+			</tr>
+		</webobject>
+	</webobject>
+</webobject>
