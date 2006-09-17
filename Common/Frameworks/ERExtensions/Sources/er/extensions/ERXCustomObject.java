@@ -65,14 +65,14 @@ public class ERXCustomObject extends EOCustomObject implements ERXGuardedObjectI
      * @see er.extensions.ERXEnterpriseObject#getClassLog()
      */
     public Logger getClassLog() {
-        Logger log = (Logger)classLogs.objectForKey(this.getClass());
-        if ( log == null) {
+        Logger classLog = (Logger)classLogs.objectForKey(this.getClass());
+        if ( classLog == null) {
             synchronized(classLogs) {
-                log = Logger.getLogger(this.getClass());
-                classLogs.setObjectForKey(log, this.getClass());
+                classLog = Logger.getLogger(this.getClass());
+                classLogs.setObjectForKey(classLog, this.getClass());
             }
         }
-        return log;
+        return classLog;
     }
 
     /* (non-Javadoc)

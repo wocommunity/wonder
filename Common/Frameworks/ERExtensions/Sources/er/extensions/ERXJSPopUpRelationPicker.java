@@ -93,7 +93,6 @@ public class ERXJSPopUpRelationPicker extends ERXStatelessComponent {
 
     protected String objectsArrayName;
     
-    protected String elementID;
     private static final int NOT_FOUND = -1;
     private static final NSArray UNSET = new NSArray();
     
