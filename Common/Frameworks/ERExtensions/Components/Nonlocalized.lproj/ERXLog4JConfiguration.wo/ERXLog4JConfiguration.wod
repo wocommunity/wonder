@@ -29,12 +29,12 @@ Form1: WOForm {
 }
 
 Form2: WOForm {
-	action = updateCategories;
+	//action = updateCategories;
 	multipleSubmit = true;
 }
 
 Form3: WOForm {
-	action = addCategory;
+	//action = addCategory;
 	multipleSubmit = true;
 }
 
