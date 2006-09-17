@@ -1,6 +1,6 @@
 /*
  * WOSortOrderManyKey.java
- * © Copyright 2001 Apple Computer, Inc. All rights reserved.
+ * ï¿½ Copyright 2001 Apple Computer, Inc. All rights reserved.
  * This a modified version.
  * Original license: http://www.opensource.apple.com/apsl/
  */
@@ -21,6 +21,10 @@ public class WOSortOrderManyKey extends WOComponent {
 
     public WOSortOrderManyKey(WOContext aContext)  {
         super(aContext);
+    }
+    
+    public String _currentKey() {
+      return _currentKey;
     }
 
     public boolean isStateless() {
