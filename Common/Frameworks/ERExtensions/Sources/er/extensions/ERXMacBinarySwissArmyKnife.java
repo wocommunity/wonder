@@ -199,7 +199,7 @@ public class ERXMacBinarySwissArmyKnife {
     }
 
 
-    public int checkFormat( boolean strict ) {
+    public int checkFormat( boolean strictFormat ) {
         // Check for absolute minimal conformance to MacBinary header form...
         int a = getUByteAt( ZERO_1_AT );
         int b = getUByteAt( ZERO_3_AT );
@@ -207,7 +207,7 @@ public class ERXMacBinarySwissArmyKnife {
             return ( -3 );
 
         // Check for more strict conformance to MacBinary header form...
-        if ( strict  &&  getUByteAt( ZERO_2_AT ) != 0   )
+        if ( strictFormat  &&  getUByteAt( ZERO_2_AT ) != 0   )
             return ( -2 );
 
         // Check for "safe" values known to exist in all MacBinary headers.
