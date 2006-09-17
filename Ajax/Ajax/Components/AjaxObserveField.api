@@ -14,7 +14,7 @@
 	<binding name="onFailure"/>
 	<binding name="onException"/>
 	
-  <validation message = "&apos;observeFieldID&apos; and &apos;updateContainerID&apis; are required bindings">
+  <validation message = "&apos;observeFieldID&apos; and &apos;updateContainerID&apos; are required bindings">
     <unbound name = "observeFieldID"/>
     <unbound name = "updateContainerID"/>
   </validation>
