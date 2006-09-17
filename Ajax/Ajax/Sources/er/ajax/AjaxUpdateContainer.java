@@ -62,24 +62,29 @@ public class AjaxUpdateContainer extends AjaxDynamicElement {
 
         NSDictionary options = createAjaxOptions(component);
 
-        response.appendContentString("<script type = \"text/javascript\" language = \"javascript\"><!--\n");
         Object frequency = valueForBinding("frequency", component);
-        if (frequency != null) {
+        String observeFieldID = (String)valueForBinding("observeFieldID", component);
+        
+        boolean skipFunction = frequency == null && observeFieldID == null && booleanValueForBinding("skipFunction", false, component);
+        if (!skipFunction) {
+          response.appendContentString("<script type = \"text/javascript\" language = \"javascript\"><!--\n");
+
+          if (frequency != null) {
             response.appendContentString("new Ajax.PeriodicalUpdater('" + id + "', $(" + id + ").getAttribute('updateUrl'), ");
             AjaxOptions.appendToResponse(options, response, context);
             response.appendContentString(");");
+          }
+
+          if (observeFieldID != null) {
+            AjaxObserveField.appendToResponse(response, context, observeFieldID, id, false, null);
+          }
+
+          response.appendContentString("function " + id + "Update() { new Ajax.Updater('" + id + "', $(" + id + ").getAttribute('updateUrl'), ");
+          AjaxOptions.appendToResponse(options, response, context);
+          response.appendContentString("); }");
+
+          response.appendContentString("//--></script>");
         }
-
-        String observeFieldID = (String)valueForBinding("observeFieldID", component);
-        if (observeFieldID != null) {
-          AjaxObserveField.appendToResponse(response, context, observeFieldID, id, false, null);
-        }
-
-        response.appendContentString("function " + id + "Update() { new Ajax.Updater('" + id + "', $(" + id + ").getAttribute('updateUrl'), ");
-        AjaxOptions.appendToResponse(options, response, context);
-        response.appendContentString("); }");
-
-        response.appendContentString("//--></script>");
     }
 
     protected WOActionResults handleRequest(WORequest request, WOContext context) {
