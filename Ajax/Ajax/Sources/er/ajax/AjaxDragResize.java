@@ -5,7 +5,6 @@ package er.ajax;
 import java.util.*;
 
 import com.webobjects.appserver.*;
-import com.webobjects.foundation.*;
 
 public class AjaxDragResize extends AjaxComponent {
   private static final String COMPONENT_RESIZABLES_MAP_KEY = "AjaxComponentResizablesMap";
