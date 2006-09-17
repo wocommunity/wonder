@@ -1,0 +1,7 @@
+AjaxExampleComponent : AjaxExampleComponent {
+	title = "Ajax Tree";
+}
+
+AjaxTree : AjaxTree {
+	rootNode = rootTreeNode;
+}
