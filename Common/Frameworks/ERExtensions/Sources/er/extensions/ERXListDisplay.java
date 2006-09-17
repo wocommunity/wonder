@@ -50,6 +50,10 @@ public class ERXListDisplay extends WOComponent {
         return list;
     }
     
+    public Object item() {
+      return valueForBinding("item");
+    }
+    
     public void setItem(Object item) {
         setValueForBinding(item, "item");
     }
