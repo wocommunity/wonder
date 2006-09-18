@@ -3,6 +3,21 @@ ChildrenRepetition : WORepetition {
 	item = repetitionChildTreeNode;
 }
 
+CollapsedImage : WOImage {
+	filename = treeModel.collapsedImage;
+	framework = treeModel.collapsedImageFramework;
+}
+
+ExpandedImage : WOImage {
+	filename = treeModel.expandedImage;
+	framework = treeModel.expandedImageFramework;
+}
+
+LeafImage : WOImage {
+	filename = treeModel.leafImage;
+	framework = treeModel.leafImageFramework;
+}
+
 IsCollapsedConditional : WOConditional {
 	condition = expanded;
 	negate = true;
@@ -12,24 +27,34 @@ IsExpandedConditional : WOConditional {
 	condition = expanded;
 }
 
+IsLeafConditional : WOConditional {
+	condition = treeNode.leaf;
+}
+
 IsNotLeafConditional : WOConditional {
 	condition = treeNode.leaf;
 	negate = true;
 }
 
-ToggleExandedAction : AjaxUpdateLink {
-	action = toggleExpanded;
+CollapseAction : AjaxUpdateLink {
+	action = collapse;
 	updateContainerID = updateContainerID;
+	class = "ajaxTreeNodeExpanded";
+}
+
+ExpandAction : AjaxUpdateLink {
+	action = expand;
+	updateContainerID = updateContainerID;
+	class = "ajaxTreeNodeCollapsed";
 }
 
 ChildTreeNode : AjaxTreeNode {
 	treeModel = treeModel;
-	treeNodeRenderer = treeNodeRenderer;
 	treeNode = repetitionChildTreeNode;
 }
 
 TreeNodeRenderer : WOSwitchComponent {
-	WOComponentName = treeNodeRenderer;
+	WOComponentName = treeModel.treeNodeRenderer;
 	treeNode = treeNode;
 }
 
@@ -37,4 +62,5 @@ TreeNodeUpdater : AjaxUpdateContainer {
 	id = updateContainerID;
 	elementName = "div";
 	skipFunction = true;
+	class = "ajaxTreeNode";
 }
