@@ -43,4 +43,6 @@ BothLists : AjaxUpdateContainer {
 }
 
 Busy : AjaxBusyIndicator {
+	busyImage = "busyBigSpinner.gif";
+	busyImageFramework = "Ajax";
 }
