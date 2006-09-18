@@ -9,8 +9,8 @@ public class AjaxTreeNode extends WOComponent {
   private AjaxTreeModel _treeModel;
   private ITreeNode _treeNode;
   private String _treeNodeRenderer;
-  public ITreeNode _repetitionChildTreeNode;
   private String _elementID;
+  public ITreeNode _repetitionChildTreeNode;
 
   public AjaxTreeNode(WOContext context) {
     super(context);
@@ -45,14 +45,6 @@ public class AjaxTreeNode extends WOComponent {
   public ITreeNode treeNode() {
     return _treeNode;
   }
-  
-  public void setTreeNodeRenderer(String treeNodeRenderer) {
-    _treeNodeRenderer = treeNodeRenderer;
-  }
-  
-  public String treeNodeRenderer() {
-    return _treeNodeRenderer;
-  }
 
   public boolean isExpanded() {
     return _treeModel.isExpanded(_treeNode);
@@ -62,8 +54,13 @@ public class AjaxTreeNode extends WOComponent {
     return AjaxUtils.toSafeElementID(_elementID);
   }
 
-  public WOActionResults toggleExpanded() {
-    _treeModel.setExpanded(_treeNode, !isExpanded());
+  public WOActionResults expand() {
+    _treeModel.setExpanded(_treeNode, true);
+    return null;
+  }
+
+  public WOActionResults collapse() {
+    _treeModel.setExpanded(_treeNode, false);
     return null;
   }
 }

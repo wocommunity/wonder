@@ -3,5 +3,10 @@ AjaxExampleComponent : AjaxExampleComponent {
 }
 
 AjaxTree : AjaxTree {
-	rootNode = rootTreeNode;
+	rootTreeNode = rootTreeNode;
+}
+
+Busy : AjaxBusyIndicator {
+	busyImage = "busyBigSpinner.gif";
+	busyImageFramework = "Ajax";
 }
