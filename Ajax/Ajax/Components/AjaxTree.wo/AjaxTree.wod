@@ -1,5 +1,4 @@
 RootNode : AjaxTreeNode {
 	treeModel = treeModel;
 	treeNode = treeModel.rootTreeNode;
-	treeNodeRenderer = treeNodeRenderer;
 }
