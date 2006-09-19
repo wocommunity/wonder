@@ -1103,13 +1103,16 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
     }
 
     public String localizedKey(EOEditingContext ec, String key) {
-       	ERXEC erxc = (ERXEC)ec;
-    	key = key + "_" + erxc.locale().getLanguage();
-    	if(!allPropertyKeys().contains(key)) {
-    		key = null;
-    	}
-		return key;
-
+        if(ec instanceof ERXEC) {
+            ERXEC erxc = (ERXEC)ec;
+            key = key + "_" + erxc.locale().getLanguage();
+            if(!allPropertyKeys().contains(key)) {
+                key = null;
+            }
+        } else {
+            key = null;
+        }
+        return key;
     }
     
     public String inverseForRelationshipKey(String relationshipKey) {
