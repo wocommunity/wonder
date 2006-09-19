@@ -13,12 +13,16 @@ import com.webobjects.foundation.*;
 
 import er.extensions.*;
 
+/**
+ * EO subclass that has a timestamp with its creation date, the most recent modification, 
+ * and a log entry describing the change.
+ */
 public abstract class ERCStampedEnterpriseObject extends ERXGenericRecord {
 
     /** logging support */
     public static Logger log = Logger.getLogger(ERCStampedEnterpriseObject.class);
 
-    public static final NSArray TimestampAttributeKeys = new NSArray(new Object[] { "created", "lastModified"});
+    public static String [] TimestampAttributeKeys = new String[] { "created", "lastModified"};
     
     private static NSMutableDictionary _datesPerEcID=new NSMutableDictionary();
     public static class Observer {
@@ -43,7 +47,6 @@ public abstract class ERCStampedEnterpriseObject extends ERXGenericRecord {
     }        
 
 
-    private boolean _propagateWillChange=true;
     public EOEnterpriseObject insertionLogEntry=null;
 
     protected Boolean _implementsLogEntryInterface;
@@ -59,17 +62,14 @@ public abstract class ERCStampedEnterpriseObject extends ERXGenericRecord {
         return _implementsLogEntryInterface.booleanValue();
     }
     
-    public void awakeFromInsertion(EOEditingContext ec) {
-        super.awakeFromInsertion(ec);
+    public void init(EOEditingContext ec) {
+        super.init(ec);
         if (implementsLogEntryInterface()) {
             String relationshipName = ((ERCLogEntryInterface)this).relationshipNameForLogEntry();
             EOEnterpriseObject logType = ((ERCLogEntryInterface)this).logEntryType();
             if (relationshipName != null && logType != null) {
-                insertionLogEntry=ERCLogEntry.createLogEntryLinkedToEO(logType,
-                                                                               null,
-                                                                               this,
-                                                                               relationshipName);
-            }            
+                insertionLogEntry=ERCLogEntry.createLogEntryLinkedToEO(logType, null, this, relationshipName);
+            }
         }
         // We now set the date created/last modified in willInsert/Update/Delete
         // A side effect of this technique is that for new EOs, created/lastModified is null until the EO actually gets saved
@@ -128,9 +128,9 @@ public abstract class ERCStampedEnterpriseObject extends ERXGenericRecord {
             insertionLogEntry.addObjectToBothSidesOfRelationshipWithKey(object,key);
     }
 
-    public NSTimestamp created() { return (NSTimestamp)storedValueForKey("created"); }
-    public void setCreated(NSTimestamp value) { takeStoredValueForKey(value, "created"); }
+    public NSTimestamp created() { return (NSTimestamp)storedValueForKey(TimestampAttributeKeys[0]); }
+    public void setCreated(NSTimestamp value) { takeStoredValueForKey(value, TimestampAttributeKeys[0]); }
 
-    public NSTimestamp lastModified() { return (NSTimestamp)storedValueForKey("lastModified"); }
-    public void setLastModified(NSTimestamp value) { takeStoredValueForKey(value, "lastModified"); }
+    public NSTimestamp lastModified() { return (NSTimestamp)storedValueForKey(TimestampAttributeKeys[1]); }
+    public void setLastModified(NSTimestamp value) { takeStoredValueForKey(value, TimestampAttributeKeys[1]); }
 }
