@@ -92,8 +92,15 @@ public class EOEnterpriseObjectClazz extends Object {
     public EOEnterpriseObjectClazz() {
     	initialize();
     }
-
-	protected void initialize() {
+	
+    /**
+     * Called by the constructor.
+     *
+     */
+    protected void initialize() {
+	}
+	
+	protected void discoverEntityName() {
 		// AK: If your class is enclosed by a EO subclass the constructor 
     	// will auto-discover the corresponding entity name. Not sure we need this, though.
     	String className = getClass().getName();
