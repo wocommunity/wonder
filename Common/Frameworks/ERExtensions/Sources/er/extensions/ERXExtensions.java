@@ -42,7 +42,25 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
     public ERXExtensions() {
     	init();
     }
-    
+   
+   /**
+     * Configures the framework. All the bits and pieces that need
+     * to be configured are configured, those that need to happen
+     * later are delayed by registering an observer for notifications
+     * that are posted when the application is finished launching.
+     * This public observer is used to perform basic functions in
+     * response to notifications. Specifically it handles
+     * configuring the adapator context so that SQL debugging can
+     * be enabled and disabled on the fly throgh the log4j system.
+     * Handling cleanup issues when sessions timeout, i.e. releasing
+     * all references to editing contexts created for that session.
+     * Handling call all of the <code>did*</code> methods on
+     * {@link ERXGenericRecord} subclasses after an editing context
+     * has been saved. This delegate is also responsible for configuring
+     * the {@link ERXCompilerProxy} and {@link ERXValidationFactory}.
+     * This delegate is configured when this framework is loaded.
+     */
+   
     private void init() {
         try {
             // This will load any optional configuration files, 
@@ -85,26 +103,7 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
         }
     }
     
-    /**
-     * Configures the framework. All the bits and pieces that need
-     * to be configured are configured, those that need to happen
-     * later are delayed by registering an observer for notifications
-     * that are posted when the application is finished launching.
-     * This public observer is used to perform basic functions in
-     * response to notifications. Specifically it handles
-     * configuring the adapator context so that SQL debugging can
-     * be enabled and disabled on the fly throgh the log4j system.
-     * Handling cleanup issues when sessions timeout, i.e. releasing
-     * all references to editing contexts created for that session.
-     * Handling call all of the <code>did*</code> methods on
-     * {@link ERXGenericRecord} subclasses after an editing context
-     * has been saved. This delegate is also responsible for configuring
-     * the {@link ERXCompilerProxy} and {@link ERXValidationFactory}.
-     * This delegate is configured when this framework is loaded.
-     */
-    static {
-    	setUpFrameworkPrincipalClass (ERXExtensions.class);
-    }
+
 
 
     /**
