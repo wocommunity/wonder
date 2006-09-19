@@ -71,13 +71,4 @@ public class ERD2WUtilities {
         }
         return result;
     }
-
-    /** 
-     * @deprecated use ERXEOControlUtilities.editableInstanceOfObject(EOEnterpriseObject,boolean)
-     */
-    public static EOEnterpriseObject localInstanceFromObjectWithD2WContext(EOEnterpriseObject eo,
-                                                                           D2WContext d2wContext) {
-    	boolean createNestedContext = ERXValueUtilities.booleanValue(d2wContext.valueForKey("useNestedEditingContext"));
-    	return ERXEOControlUtilities.editableInstanceOfObject(eo,createNestedContext);
-    }
 }
