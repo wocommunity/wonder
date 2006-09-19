@@ -10,7 +10,7 @@ import java.io.*;
 import java.lang.reflect.*;
 import java.util.*;
 
-import org.apache.log4j.Logger;
+import org.apache.log4j.*;
 
 import com.webobjects.appserver.*;
 import com.webobjects.eoaccess.*;
@@ -45,6 +45,28 @@ public abstract class ERXApplication extends WOApplication implements ERXGracefu
      */
     public static void main(String argv[], Class applicationClass) {
         _wasERXApplicationMainInvoked = true;
+        if(false) {
+            String cp = System.getProperty("java.class.path");
+            String parts[] = cp.split(":");
+            String normalLibs = "";
+            String systemLibs = "";
+            for (int i = 0; i < parts.length; i++) {
+                String jar = parts[i];
+                if(jar.matches("Library.Frameworks.Java")) {
+                    systemLibs += jar + ":";
+                } else {
+                    normalLibs += jar + ":";
+                }
+            }
+            if(systemLibs.length() > 1) {
+                systemLibs = systemLibs.substring(0, systemLibs.length() - 1);
+            }
+            if(normalLibs.length() > 1) {
+                normalLibs = normalLibs.substring(0, normalLibs.length() - 1);
+            }
+            cp = normalLibs + ":" + systemLibs;
+            System.setProperty("java.class.path", cp);
+        }
         ERXConfigurationManager.defaultManager().setCommandLineArguments(argv);
         ERXFrameworkPrincipal.setUpFrameworkPrincipalClass (ERXExtensions.class);
         WOApplication.main(argv, applicationClass);
