@@ -702,22 +702,25 @@ public class ERXEC extends EOEditingContext {
             autoUnlock(wasAutoLocked);
         }
     }
-    
+
     /** Overriden to support autoLocking. */ 
     public void initializeObject(EOEnterpriseObject eoenterpriseobject, EOGlobalID eoglobalid, EOEditingContext eoeditingcontext) {
-        boolean wasAutoLocked = autoLock("initializeObject");
-        try {
-            if (eoenterpriseobject instanceof ERXGenericRecord) {
-                ERXGenericRecord eo = (ERXGenericRecord) eoenterpriseobject;
-                // gross hack to not trigger the two-way relationships
-                eo.updateInverseRelationships = false;
-                super.initializeObject(eoenterpriseobject, eoglobalid, eoeditingcontext);
-                eo.updateInverseRelationships = ERXEnterpriseObject.updateInverseRelationships;
-            } else {
-                super.initializeObject(eoenterpriseobject, eoglobalid, eoeditingcontext);
-            }
-        } finally {
-            autoUnlock(wasAutoLocked);
+    	boolean wasAutoLocked = autoLock("initializeObject");
+    	try {
+    		if (eoenterpriseobject instanceof ERXGenericRecord) {
+    			ERXGenericRecord eo = (ERXGenericRecord) eoenterpriseobject;
+    			// gross hack to not trigger the two-way relationships
+    			boolean old = eo.updateInverseRelationships(false);
+    			try {
+    				super.initializeObject(eoenterpriseobject, eoglobalid, eoeditingcontext);
+    			} finally {
+    				eo.updateInverseRelationships(old);
+    			}
+    		} else {
+    			super.initializeObject(eoenterpriseobject, eoglobalid, eoeditingcontext);
+    		}
+    	} finally {
+    		autoUnlock(wasAutoLocked);
         }
     }
     

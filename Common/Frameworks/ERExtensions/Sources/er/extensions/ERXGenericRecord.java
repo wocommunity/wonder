@@ -201,12 +201,18 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
             trimSpaces();
     }
 
+    protected boolean updateInverseRelationships(boolean newValue) {
+    	boolean old = updateInverseRelationships;
+    	updateInverseRelationships = newValue;
+    	return old;
+    }
+    
     public Object willReadRelationship(Object aObject) {
-        updateInverseRelationships = false;
+        boolean old = updateInverseRelationships(false);
         try {
             return super.willReadRelationship(aObject);
         } finally {
-            updateInverseRelationships = ERXEnterpriseObject.updateInverseRelationships;
+            updateInverseRelationships(old);
         }
     }
 
@@ -330,24 +336,30 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
      *		correct type of delegate set.
      */
     public void awakeFromInsertion(EOEditingContext editingContext) {
-        updateInverseRelationships = false;
-        _checkEditingContextDelegate(editingContext);
-        if (insertionTrackingLog.isDebugEnabled()) {
-            insertionStackTrace = ERXUtilities.stackTrace();
-            insertionTrackingLog.debug("inserted "+getClass().getName()+" at "+insertionStackTrace);
-        }            
-        super.awakeFromInsertion(editingContext);
-        EOGlobalID gid = editingContext.globalIDForObject(this);
-        if (gid.isTemporary()) {
-            init(editingContext);
-        }
-        updateInverseRelationships = ERXEnterpriseObject.updateInverseRelationships;
+    	boolean old = updateInverseRelationships(false);
+    	try {
+    		_checkEditingContextDelegate(editingContext);
+    		if (insertionTrackingLog.isDebugEnabled()) {
+    			insertionStackTrace = ERXUtilities.stackTrace();
+    			insertionTrackingLog.debug("inserted "+getClass().getName()+" at "+insertionStackTrace);
+    		}            
+    		super.awakeFromInsertion(editingContext);
+    		EOGlobalID gid = editingContext.globalIDForObject(this);
+    		if (gid.isTemporary()) {
+    			init(editingContext);
+    		}
+    	} finally {
+    		updateInverseRelationships(old);
+    	}
     }
 
     public void clearProperties() {
-    	updateInverseRelationships = false;
-    	super.clearProperties();
-    	updateInverseRelationships = ERXEnterpriseObject.updateInverseRelationships;
+    	boolean old = updateInverseRelationships(false);
+    	try {
+    		super.clearProperties();
+    	} finally {
+    		updateInverseRelationships(old);
+    	}
     }
 
 	/**
@@ -372,10 +384,13 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
      *		correct type of delegate set.
      */
     public void awakeFromFetch(EOEditingContext editingContext) {
-        updateInverseRelationships = false;
-        _checkEditingContextDelegate(editingContext);
-        super.awakeFromFetch(editingContext);
-        updateInverseRelationships = ERXEnterpriseObject.updateInverseRelationships;
+    	boolean old = updateInverseRelationships(false);
+    	try {
+    	       _checkEditingContextDelegate(editingContext);
+    	        super.awakeFromFetch(editingContext);
+    	} finally {
+    		updateInverseRelationships(old);
+    	}
     }
     /**
      * Adds a check to make sure that both the object being added and
