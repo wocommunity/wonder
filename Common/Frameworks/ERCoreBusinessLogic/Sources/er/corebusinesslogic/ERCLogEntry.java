@@ -15,8 +15,8 @@ public class ERCLogEntry extends _ERCLogEntry {
         super();
     }
 
-    public void awakeFromInsertion(EOEditingContext ec) {
-        super.awakeFromInsertion(ec);
+    public void init(EOEditingContext ec) {
+        super.init(ec);
         setCreated(new NSTimestamp());
         EOEnterpriseObject actor = ERCoreBusinessLogic.actor(ec);
         if (actor!=null) {
