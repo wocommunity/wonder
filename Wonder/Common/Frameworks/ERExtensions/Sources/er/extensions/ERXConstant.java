@@ -73,8 +73,9 @@ import com.webobjects.jdbcadaptor.*;
  * Note that upon class initialization 2500 Integers will be created and cached, from 0 - 2499.
  * An example would be:
  * <pre><code>
- * public abstract class Test extends ERXGenericRecord {
- * 
+ * public class Test extends EOGenericRecord {
+ * 	// your "status" attribute need a userInfo entry 
+ * 	// "ERXConstantClassName" = "Test.Status";
  * 	public static class Status extends ERXConstant.NumberConstant {
  * 		protected Status(int value, String name) {
  * 			super(value, name);
