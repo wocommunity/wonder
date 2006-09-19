@@ -5,7 +5,9 @@ import org.apache.log4j.Logger;
 import er.extensions.*;
 
 public class ERPlot extends ERXFrameworkPrincipal {
-    
+
+    public final static Class REQUIRES[] = new Class[] {ERXExtensions.class};
+
     /** logging support */
     public static final Logger log = Logger.getLogger(ERPlot.class);
 

@@ -19,6 +19,8 @@ import er.extensions.*;
  */
 public class ERJavaMail extends ERXFrameworkPrincipal {
 
+    public final static Class REQUIRES[] = new Class[] {ERXExtensions.class};
+
     /** Class logger */
     private static final Logger log = Logger.getLogger (ERJavaMail.class);
 
@@ -66,9 +68,6 @@ public class ERJavaMail extends ERXFrameworkPrincipal {
      * ERXPrincipalClass.
      */
     public void finishInitialization () {
-        if (log.isDebugEnabled ())
-	    log.debug ("Initializing Framework.");
-
         Perl5Compiler compiler	= new Perl5Compiler ();
         _matcher = new Perl5Matcher ();
 
@@ -78,9 +77,6 @@ public class ERJavaMail extends ERXFrameworkPrincipal {
             throw new RuntimeException
                 ("The compilation of the ORO Regexp pattern failed in ERJavaMail!");
         }
-
-        this.initializeFrameworkFromSystemProperties ();
-        log.info ("ERJavaMail: finished initialization");
     }
 
     /**
