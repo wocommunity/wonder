@@ -9,14 +9,16 @@ package er.corebusinesslogic;
 import java.lang.reflect.*;
 import java.util.*;
 
-import org.apache.log4j.Logger;
+import org.apache.log4j.*;
 
 import com.webobjects.appserver.*;
 import com.webobjects.eoaccess.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.foundation.*;
 
+import er.directtoweb.*;
 import er.extensions.*;
+import er.javamail.*;
 
 public class ERCoreBusinessLogic extends ERXFrameworkPrincipal {
 
@@ -39,6 +41,8 @@ public class ERCoreBusinessLogic extends ERXFrameworkPrincipal {
     
     /** holds the shared instance reference */
     protected static ERCoreBusinessLogic sharedInstance;
+    
+    public final static Class REQUIRES[] = new Class[] {ERXExtensions.class, ERDirectToWeb.class, ERJavaMail.class};
 
     /**
      * Registers the class as the framework principal
