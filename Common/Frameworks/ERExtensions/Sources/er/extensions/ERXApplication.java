@@ -45,6 +45,7 @@ public abstract class ERXApplication extends WOApplication implements ERXGracefu
      */
     public static void main(String argv[], Class applicationClass) {
         _wasERXApplicationMainInvoked = true;
+        // ERXExtensions.initialize();
         ERXConfigurationManager.defaultManager().setCommandLineArguments(argv);
         WOApplication.main(argv, applicationClass);
     }

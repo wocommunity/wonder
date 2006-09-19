@@ -6,18 +6,43 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.directtoweb;
 
-import java.net.*;
-import java.util.*;
+import java.net.URL;
+import java.util.Enumeration;
 
 import org.apache.log4j.Logger;
 
-import com.webobjects.appserver.*;
-import com.webobjects.directtoweb.*;
-import com.webobjects.eoaccess.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.foundation.*;
+import com.webobjects.appserver.WOComponent;
+import com.webobjects.appserver.WOSession;
+import com.webobjects.directtoweb.D2W;
+import com.webobjects.directtoweb.D2WContext;
+import com.webobjects.directtoweb.ERD2WContext;
+import com.webobjects.directtoweb.KeyValuePath;
+import com.webobjects.directtoweb.QueryPageInterface;
+import com.webobjects.eoaccess.EOAttribute;
+import com.webobjects.eoaccess.EOEntity;
+import com.webobjects.eoaccess.EOModelGroup;
+import com.webobjects.eoaccess.EORelationship;
+import com.webobjects.eocontrol.EOEnterpriseObject;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSForwardException;
+import com.webobjects.foundation.NSLog;
+import com.webobjects.foundation.NSMutableArray;
+import com.webobjects.foundation.NSNotification;
+import com.webobjects.foundation.NSNotificationCenter;
+import com.webobjects.foundation.NSSelector;
 
-import er.extensions.*;
+import er.extensions.ERXCompilerProxy;
+import er.extensions.ERXConfigurationManager;
+import er.extensions.ERXConstant;
+import er.extensions.ERXExtensions;
+import er.extensions.ERXFileUtilities;
+import er.extensions.ERXFrameworkPrincipal;
+import er.extensions.ERXKeyValuePair;
+import er.extensions.ERXLocalizer;
+import er.extensions.ERXProperties;
+import er.extensions.ERXRetainer;
+import er.extensions.ERXValueUtilities;
 
 /**
  * Principle class of the ERDirectToWeb framework.
@@ -30,7 +55,7 @@ import er.extensions.*;
  * This class also has a bunch of utility methods that are
  * used throughout this framework.
  */
-public class ERDirectToWeb {
+public class ERDirectToWeb extends ERXFrameworkPrincipal {
 
     /** logging support */
     public final static Logger log = Logger.getLogger("er.directtoweb.ERDirectToWeb");
@@ -40,71 +65,45 @@ public class ERDirectToWeb {
     public final static Logger debugLog = Logger.getLogger("er.directtoweb.ERD2WDebugEnabled");
     public final static Logger componentNameLog = Logger.getLogger("er.directtoweb.ERD2WDebugEnabled.componentName");
     public final static Logger propertyKeyLog = Logger.getLogger("er.directtoweb.ERD2WDebugEnabled.propertyKey");
-    // Notification Observer
-    public static class Observer {
-        public void didFinishedLaunchingApp(NSNotification n) {
-            ERDirectToWeb.warmUpRuleCache();
-            NSNotificationCenter.defaultCenter().addObserver(this,
-                                                             new NSSelector("resetModel",
-                                                                            ERXConstant.NotificationClassArray),
-                                                             ERXCompilerProxy.CompilerProxyDidCompileClassesNotification,
-                                                             null);
-            NSNotificationCenter.defaultCenter().addObserver(this,
-                                                             new NSSelector("resetModel",
-                                                                            ERXConstant.NotificationClassArray),
-                                                             ERXLocalizer.LocalizationDidResetNotification,
-                                                             null);
-            NSNotificationCenter.defaultCenter().addObserver(this,
-                                                             new NSSelector("sortRules",
-                                                                            ERXConstant.NotificationClassArray),
-                                                             ERD2WModel.WillSortRules,
-                                                             null);
-        }
-        public void resetModel(NSNotification n) {
-            ERD2WModel.erDefaultModel().resetModel();
-        }
-        public void sortRules(NSNotification n) {
-            ERD2WModel model = (ERD2WModel)n.object();
-            if(ERD2WModel.erDefaultModel() == model) {
-                URL url = ERXFileUtilities.pathURLForResourceNamed("d2wClient.d2wmodel", "ERDirectToWeb", null);
-                model.mergePathURL(url);
-            }
-        }
-    }
-    
-    private static boolean _isInitialized=false;
-    /**
-     * Called implicitely because ERDirectToWeb is the principal class of the framework. But if not 
-     * (probably because WOLips is broken again) it can't hurt to call it yourself in your
-     * apps constructor
-     *
-     */
-    public static void initialize() {
-        if (!_isInitialized) {
-            if (log.isDebugEnabled()) log.debug("Initializing framework: ERDirectToWeb");
-            Object o=ERD2WModel.erDefaultModel();        // force initialization
-                                                         // NOTE: doing Class.ERD2WModel doesn't seem enough
-                                                         // to guarantee fire of ERD2WModel's static initializer
-	    // Configures the system for trace rule firing.
-            D2W.setFactory(new ERD2WFactory());
-            try {
-                ERDirectToWeb.configureTraceRuleFiringRapidTurnAround();
-            } catch (Throwable e) {
-                e.printStackTrace();
-            }
-            Observer observer=new Observer();
-            ERXRetainer.retain(observer);
-            NSNotificationCenter.defaultCenter().addObserver(observer,
-                                                             new NSSelector("didFinishedLaunchingApp",
-                                                                            ERXConstant.NotificationClassArray),
-                                                             WOApplication.ApplicationDidFinishLaunchingNotification,
-                                                             null);
-            _isInitialized = true;
-        }
-    }
-    
+
     static {
-    	initialize();
+    	setUpFrameworkPrincipalClass (ERDirectToWeb.class);
+    }
+
+    public void finishInitialization() {
+    	Object o=ERD2WModel.erDefaultModel();        // force initialization
+    	// NOTE: doing Class.ERD2WModel doesn't seem enough
+    	// to guarantee fire of ERD2WModel's static initializer
+//  	Configures the system for trace rule firing.
+    	D2W.setFactory(new ERD2WFactory());
+    	try {
+    		ERDirectToWeb.configureTraceRuleFiringRapidTurnAround();
+    	} catch (Throwable e) {
+    		e.printStackTrace();
+    	}
+    	ERDirectToWeb.warmUpRuleCache();
+    	NSNotificationCenter.defaultCenter().addObserver(this,
+    			new NSSelector("resetModel",
+    					ERXConstant.NotificationClassArray),
+    					ERXLocalizer.LocalizationDidResetNotification,
+    					null);
+    	NSNotificationCenter.defaultCenter().addObserver(this,
+    			new NSSelector("sortRules",
+    					ERXConstant.NotificationClassArray),
+    					ERD2WModel.WillSortRules,
+    					null);
+    }
+
+    public void resetModel(NSNotification n) {
+    	ERD2WModel.erDefaultModel().resetModel();
+    }
+    
+    public void sortRules(NSNotification n) {
+    	ERD2WModel model = (ERD2WModel)n.object();
+    	if(ERD2WModel.erDefaultModel() == model) {
+    		URL url = ERXFileUtilities.pathURLForResourceNamed("d2wClient.d2wmodel", "ERDirectToWeb", null);
+    		model.mergePathURL(url);
+    	}
     }
 
     public static void setD2wDebuggingEnabled(WOSession s, boolean enabled) {

@@ -20,7 +20,7 @@ import com.webobjects.foundation.*;
 public abstract class ERXFrameworkPrincipal {
 
     /** logging support */
-    public static final Logger log = Logger.getLogger(ERXFrameworkPrincipal.class);
+    private final Logger log = Logger.getLogger(getClass());
 
     /** holds the mapping between framework principals classes and ERXFrameworkPrincipal objects */
     private static NSMutableDictionary initializedFrameworks = new NSMutableDictionary();
@@ -43,7 +43,7 @@ public abstract class ERXFrameworkPrincipal {
     public static void setUpFrameworkPrincipalClass(Class c) {
         try {
             if (initializedFrameworks.objectForKey(c.getName()) == null) {
-                log.debug("Starting up: " + c.getName());
+                NSLog.out.appendln("Starting up: " + c.getName());
                 ERXFrameworkPrincipal principal = (ERXFrameworkPrincipal)c.newInstance();
                 //ERXRetainer.retain(principal);
                 NSNotificationCenter center = NSNotificationCenter.defaultCenter();
@@ -52,6 +52,8 @@ public abstract class ERXFrameworkPrincipal {
                                    WOApplication.ApplicationWillFinishLaunchingNotification,
                                    null);
                 initializedFrameworks.setObjectForKey(principal,c.getName());
+            } else {
+                NSLog.out.appendln("Skipped: " + c.getName());
             }
         } catch (Throwable e) {
             e.printStackTrace();
