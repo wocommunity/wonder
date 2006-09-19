@@ -53,16 +53,12 @@ public class ERDirectToWeb extends ERXFrameworkPrincipal {
     	// to guarantee fire of ERD2WModel's static initializer
 //  	Configures the system for trace rule firing.
     	D2W.setFactory(new ERD2WFactory());
-    	try {
-    		ERDirectToWeb.configureTraceRuleFiringRapidTurnAround();
-    	} catch (Throwable e) {
-    		e.printStackTrace();
-    	}
+    	configureTraceRuleFiringRapidTurnAround();
     	ERDirectToWeb.warmUpRuleCache();
     	NSNotificationCenter.defaultCenter().addObserver(this,
-    			new NSSelector("resetModel",
-    					ERXConstant.NotificationClassArray),
-    					ERXLocalizer.LocalizationDidResetNotification,
+    	        new NSSelector("resetModel",
+    	                ERXConstant.NotificationClassArray),
+    	                ERXLocalizer.LocalizationDidResetNotification,
     					null);
     	NSNotificationCenter.defaultCenter().addObserver(this,
     			new NSSelector("sortRules",
@@ -376,32 +372,23 @@ public class ERDirectToWeb extends ERXFrameworkPrincipal {
 
     public static Logger trace;
 
-    // This enables us to turn trace rule firing on or off at will.
-
-
-    public static class _Observer {
-        public void configureTraceRuleFiring(NSNotification n) {
-            ERDirectToWeb.configureTraceRuleFiring();
-        }
+    public void configureTraceRuleFiring(NSNotification n) {
+        ERDirectToWeb.configureTraceRuleFiring();
     }
 
-    private static boolean _initializedTraceRuleFiring = true;
-    public static void configureTraceRuleFiringRapidTurnAround() {
-        if (!_initializedTraceRuleFiring) {
+    private void configureTraceRuleFiringRapidTurnAround() {
+        if (trace == null) {
             // otherwise not properly initialized
             trace = Logger.getLogger("er.directtoweb.rules.D2WTraceRuleFiringEnabled");
             // Note: If the configuration file says debug, but the command line parameter doesn't we need to turn
             //   rule tracing on.
             // BOOGIE
             configureTraceRuleFiring();
-            Object observer=new _Observer();
-            ERXRetainer.retain(observer); // has to be retained on the objC side!!
-            NSNotificationCenter.defaultCenter().addObserver(observer,
+            NSNotificationCenter.defaultCenter().addObserver(ERXFrameworkPrincipal.sharedInstance(ERDirectToWeb.class),
                                                              new NSSelector("configureTraceRuleFiring",
                                                                             ERXConstant.NotificationClassArray),
                                                              ERXConfigurationManager.ConfigurationDidChangeNotification,
                                                              null);
-            _initializedTraceRuleFiring = true;
         }
     }
     
