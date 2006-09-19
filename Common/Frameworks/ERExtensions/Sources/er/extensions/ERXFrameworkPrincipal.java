@@ -56,7 +56,7 @@ public abstract class ERXFrameworkPrincipal {
                 NSLog.out.appendln("Skipped: " + c.getName());
             }
         } catch (Throwable e) {
-            e.printStackTrace();
+            throw NSForwardException._runtimeExceptionForThrowable(e);
         }
     }
 
@@ -74,8 +74,13 @@ public abstract class ERXFrameworkPrincipal {
         NSNotificationCenter.defaultCenter().removeObserver(this);
         //ERXRetainer.release(this);
         finishInitialization();
+        log().info("Finished initialization after launch: " + getClass().getName());
     }
 
+    public ERXFrameworkPrincipal() {
+        NSLog.out.appendln("Started initialization: " + getClass().getName());
+    }
+    
     /**
      * Overridden by subclasses to provide framework initialization.
      */
