@@ -1,3 +1,6 @@
-Resources/**/*
-Components/**/*.wo
-Components/**/*.api
+Properties
+**/*.eomodeld/
+**/*.d2wmodel
+**/*.wo/
+**/*.api
+**/*.strings

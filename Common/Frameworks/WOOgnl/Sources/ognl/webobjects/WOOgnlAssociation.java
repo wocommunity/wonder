@@ -8,10 +8,13 @@
 /* WOOgnlAssociation.java created by max on Fri 28-Sep-2001 */
 package ognl.webobjects;
 
-import com.webobjects.appserver.*;
-import com.webobjects.appserver._private.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.foundation.*;
+import com.webobjects.appserver.WOAssociation;
+import com.webobjects.appserver.WOComponent;
+import com.webobjects.appserver._private.WOKeyValueAssociation;
+import com.webobjects.eocontrol.EOEventCenter;
+import com.webobjects.foundation.NSLog;
+import com.webobjects.foundation.NSProperties;
+import com.webobjects.foundation.NSPropertyListSerialization;
 
 public class WOOgnlAssociation extends WOKeyValueAssociation {
 

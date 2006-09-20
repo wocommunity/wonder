@@ -9,12 +9,17 @@
 
 package ognl.webobjects;
 
-import java.util.*;
+import java.util.Enumeration;
 
-import com.webobjects.appserver.*;
-import com.webobjects.appserver._private.*;
-import com.webobjects.foundation.*;
-//import org.apache.log4j.Logger;
+import com.webobjects.appserver.WOElement;
+import com.webobjects.appserver._private.WODeclaration;
+import com.webobjects.appserver._private.WODeclarationFormatException;
+import com.webobjects.appserver._private.WODeclarationParser;
+import com.webobjects.appserver._private.WOHTMLFormatException;
+import com.webobjects.appserver._private.WOHTMLTemplateParser;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSMutableDictionary;
 
 public class WOOgnlHTMLTemplateParser extends WOHTMLTemplateParser {
 
