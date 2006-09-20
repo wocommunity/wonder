@@ -1,9 +1,10 @@
 package er.extensions;
 
-import java.util.*;
+import java.util.Enumeration;
 
-import com.webobjects.eoaccess.*;
-import com.webobjects.foundation.*;
+import com.webobjects.eoaccess.EOEntity;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSDictionary;
 
 /**
  * @author david@cluster9.com<br/>

@@ -1,8 +1,9 @@
 package er.extensions;
 
-import com.webobjects.eoaccess.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.foundation.*;
+import com.webobjects.eoaccess.EODatabaseDataSource;
+import com.webobjects.eocontrol.EOEditingContext;
+import com.webobjects.eocontrol.EOFetchSpecification;
+import com.webobjects.foundation.NSArray;
 
 
 /**

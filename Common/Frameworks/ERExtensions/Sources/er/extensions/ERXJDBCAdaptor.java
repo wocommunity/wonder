@@ -1,13 +1,23 @@
 package er.extensions;
 
-import java.sql.*;
+import java.sql.Connection;
 
-import org.apache.log4j.*;
+import org.apache.log4j.Logger;
 
-import com.webobjects.eoaccess.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.foundation.*;
-import com.webobjects.jdbcadaptor.*;
+import com.webobjects.eoaccess.EOAdaptor;
+import com.webobjects.eoaccess.EOAdaptorChannel;
+import com.webobjects.eoaccess.EOAdaptorContext;
+import com.webobjects.eoaccess.EOAttribute;
+import com.webobjects.eoaccess.EOEntity;
+import com.webobjects.eoaccess.EOGeneralAdaptorException;
+import com.webobjects.eocontrol.EOFetchSpecification;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSDictionary;
+import com.webobjects.jdbcadaptor.ERXJDBCColumn;
+import com.webobjects.jdbcadaptor.JDBCAdaptor;
+import com.webobjects.jdbcadaptor.JDBCAdaptorException;
+import com.webobjects.jdbcadaptor.JDBCChannel;
+import com.webobjects.jdbcadaptor.JDBCContext;
 
 /**
  * Subclass of the JDBC adaptor and accompanying classes that supports 
@@ -224,9 +234,5 @@ public class ERXJDBCAdaptor extends JDBCAdaptor {
 
     protected void freeConnection(Connection connection) {
         connectionBroker().freeConnection(connection);
-    }
-
-    private boolean supportsTransactions() {
-        return connectionBroker().supportsTransaction();
     }
 }

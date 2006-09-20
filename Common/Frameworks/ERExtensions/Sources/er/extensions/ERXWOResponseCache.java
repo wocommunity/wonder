@@ -6,9 +6,13 @@
 //
 package er.extensions;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
-import com.webobjects.appserver.*;
+import com.webobjects.appserver.WOApplication;
+import com.webobjects.appserver.WORequest;
+import com.webobjects.appserver.WOResponse;
 
 /**
  * The response cache is a way to cache WOResponse output from a DirectAction

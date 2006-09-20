@@ -8,7 +8,13 @@ package er.extensions;
 
 import org.apache.log4j.Logger;
 
-import com.webobjects.appserver.*;
+import com.webobjects.appserver.WOActionResults;
+import com.webobjects.appserver.WOApplication;
+import com.webobjects.appserver.WOComponent;
+import com.webobjects.appserver.WODirectAction;
+import com.webobjects.appserver.WORedirect;
+import com.webobjects.appserver.WORequest;
+import com.webobjects.appserver.WOResponse;
 import com.webobjects.woextensions.WOEventDisplayPage;
 import com.webobjects.woextensions.WOEventSetupPage;
 import com.webobjects.woextensions.WOStatsPage;

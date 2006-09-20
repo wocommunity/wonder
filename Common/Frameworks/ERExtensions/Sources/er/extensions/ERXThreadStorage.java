@@ -9,7 +9,8 @@ package er.extensions;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.webobjects.eocontrol.*;
+import com.webobjects.eocontrol.EOEditingContext;
+import com.webobjects.eocontrol.EOEnterpriseObject;
 import com.webobjects.foundation.NSKeyValueCodingAdditions;
 /**
  * <code>ERXThreadStorage</code> provides a way to store objects for

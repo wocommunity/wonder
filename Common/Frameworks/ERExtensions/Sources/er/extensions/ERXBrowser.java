@@ -6,8 +6,10 @@
 //
 package er.extensions;
 
-import com.webobjects.appserver.*;
-import com.webobjects.foundation.*;
+import com.webobjects.appserver.WORequest;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSKeyValueCoding;
 
 /** 
  * ERXBrowser is an abstract class that defines browser object. 

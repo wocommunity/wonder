@@ -8,11 +8,18 @@ package er.directtoweb;
 
 import org.apache.log4j.Logger;
 
-import com.webobjects.appserver.*;
-import com.webobjects.directtoweb.*;
-import com.webobjects.foundation.*;
+import com.webobjects.appserver.WOComponent;
+import com.webobjects.appserver.WOContext;
+import com.webobjects.appserver.WOResponse;
+import com.webobjects.directtoweb.ConfirmPageInterface;
+import com.webobjects.directtoweb.D2W;
+import com.webobjects.directtoweb.EditPageInterface;
+import com.webobjects.directtoweb.InspectPageInterface;
+import com.webobjects.directtoweb.NextPageDelegate;
+import com.webobjects.foundation.NSMutableDictionary;
+import com.webobjects.foundation.NSNotificationCenter;
 
-import er.extensions.*;
+import er.extensions.ERXEOControlUtilities;
 
 public class ERD2WWizardCreationPage extends ERD2WTabInspectPage {
 

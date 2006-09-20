@@ -7,8 +7,10 @@
 
 package com.webobjects.woextensions;
 
-import com.webobjects.appserver.*;
-import com.webobjects.foundation.*;
+import com.webobjects.appserver.WOComponent;
+import com.webobjects.appserver.WOContext;
+import com.webobjects.appserver.WORequest;
+import com.webobjects.foundation.NSArray;
 
 public class WOTable extends WOComponent {
     protected NSArray _list;

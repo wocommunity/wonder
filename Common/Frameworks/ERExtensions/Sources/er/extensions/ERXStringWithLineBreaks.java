@@ -6,7 +6,8 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.extensions;
 
-import com.webobjects.appserver.*;
+import com.webobjects.appserver.WOContext;
+import com.webobjects.appserver.WOMessage;
 
 /**
  * Simple component that can convert a string that has

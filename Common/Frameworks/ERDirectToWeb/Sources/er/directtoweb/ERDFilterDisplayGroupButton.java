@@ -8,12 +8,15 @@ package er.directtoweb;
 
 import org.apache.log4j.Logger;
 
-import com.webobjects.appserver.*;
-import com.webobjects.directtoweb.*;
-import com.webobjects.eoaccess.*;
-import com.webobjects.eocontrol.*;
-
-import er.extensions.*;
+import com.webobjects.appserver.WOComponent;
+import com.webobjects.appserver.WOContext;
+import com.webobjects.appserver.WODisplayGroup;
+import com.webobjects.directtoweb.D2W;
+import com.webobjects.directtoweb.NextPageDelegate;
+import com.webobjects.directtoweb.QueryPageInterface;
+import com.webobjects.eoaccess.EODatabaseDataSource;
+import com.webobjects.eocontrol.EODataSource;
+import com.webobjects.eocontrol.EOQualifier;
 
 /**
  * Cool component that can be used in D2W list pages to filter the list, throwing to a D2W query page to restrict.<br />
@@ -54,7 +57,7 @@ public class ERDFilterDisplayGroupButton extends ERDCustomQueryComponent {
                     log.warn("Data source of unknown type: "+eds.getClass().getName());
                 }
             }
-            return _nextPage;
+            return result;
         }
     }
 

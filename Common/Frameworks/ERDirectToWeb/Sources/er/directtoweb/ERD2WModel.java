@@ -6,19 +6,64 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.directtoweb;
 
-import java.io.*;
-import java.net.*;
-import java.util.*;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.EOFException;
+import java.io.File;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
+import java.net.URL;
+import java.util.Enumeration;
+import java.util.Hashtable;
+import java.util.Map;
+import java.util.Vector;
 
 import org.apache.log4j.Logger;
 
-import com.webobjects.appserver.*;
-import com.webobjects.directtoweb.*;
-import com.webobjects.eoaccess.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.foundation.*;
+import com.webobjects.appserver.WOApplication;
+import com.webobjects.directtoweb.Assignment;
+import com.webobjects.directtoweb.D2WContext;
+import com.webobjects.directtoweb.D2WFastModel;
+import com.webobjects.directtoweb.D2WModel;
+import com.webobjects.directtoweb.DefaultAssignment;
+import com.webobjects.directtoweb.ERD2WUtilities;
+import com.webobjects.directtoweb.Rule;
+import com.webobjects.directtoweb.Services;
+import com.webobjects.eoaccess.EOAttribute;
+import com.webobjects.eoaccess.EOEntity;
+import com.webobjects.eoaccess.EOModelGroup;
+import com.webobjects.eoaccess.EORelationship;
+import com.webobjects.eocontrol.EOAndQualifier;
+import com.webobjects.eocontrol.EOKeyComparisonQualifier;
+import com.webobjects.eocontrol.EOKeyValueArchiver;
+import com.webobjects.eocontrol.EOKeyValueQualifier;
+import com.webobjects.eocontrol.EOKeyValueUnarchiver;
+import com.webobjects.eocontrol.EONotQualifier;
+import com.webobjects.eocontrol.EOOrQualifier;
+import com.webobjects.eocontrol.EOQualifier;
+import com.webobjects.eocontrol.EOQualifierEvaluation;
+import com.webobjects.eocontrol.EOSortOrdering;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSForwardException;
+import com.webobjects.foundation.NSKeyValueCoding;
+import com.webobjects.foundation.NSLog;
+import com.webobjects.foundation.NSMutableArray;
+import com.webobjects.foundation.NSMutableDictionary;
+import com.webobjects.foundation.NSMutableSet;
+import com.webobjects.foundation.NSNotification;
+import com.webobjects.foundation.NSNotificationCenter;
+import com.webobjects.foundation.NSSet;
 
-import er.extensions.*;
+import er.extensions.ERXArrayUtilities;
+import er.extensions.ERXExtensions;
+import er.extensions.ERXFileUtilities;
+import er.extensions.ERXLocalizer;
+import er.extensions.ERXMultiKey;
+import er.extensions.ERXProperties;
+import er.extensions.ERXSelectorUtilities;
 
 /**
  * Overhaul of the caching system.
@@ -81,7 +126,6 @@ public class ERD2WModel extends D2WModel {
 
         return result;
     }
-    private final static NSArray _ruleSortOrderingKeyVector=ruleSortOrderingKeyArray();
 
     /**
      * Main constructor. Builds a model for a given
@@ -577,7 +621,6 @@ public class ERD2WModel extends D2WModel {
          */
         public String toString() {
             String prefix = "      ";
-            String authorString = "" + author();
             String rhsClass = assignmentClassName();
             return (
                     prefix.substring(0, prefix.length() - ("" + author()).length()) + author() + " : " + 

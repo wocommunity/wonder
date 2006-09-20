@@ -1,9 +1,11 @@
 package er.extensions;
 
-import java.text.*;
-import java.util.*;
+import java.text.DateFormatSymbols;
+import java.text.Format;
+import java.util.Hashtable;
 
-import com.webobjects.foundation.*;
+import com.webobjects.foundation.NSTimestamp;
+import com.webobjects.foundation.NSTimestampFormatter;
 
 /**
  * Provides localization to timestamp formatters.<br />

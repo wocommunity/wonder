@@ -6,11 +6,9 @@
 //
 package er.javamail.mailer;
 
-import java.util.*;
+import java.util.TimerTask;
 
 import org.apache.log4j.Logger;
-
-import er.extensions.*;
 
 /**
  * Timer task used when running the ERMailer

@@ -6,9 +6,11 @@
 //
 package er.extensions;
 
-import java.util.*;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 
-import com.webobjects.foundation.*;
+import com.webobjects.foundation.NSComparator;
+import com.webobjects.foundation.NSTimestamp;
 
 /**
  * Collection of {@link com.webobjects.foundation.NSTimestamp NSTimestamp} utilities.

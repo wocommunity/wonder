@@ -6,13 +6,20 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.extensions;
 
-import java.math.*;
-import java.util.*;
+import java.math.BigDecimal;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
-import org.apache.log4j.*;
+import org.apache.log4j.Logger;
 
-import com.webobjects.foundation.*;
-import com.webobjects.jdbcadaptor.*;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSData;
+import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSKeyValueCoding;
+import com.webobjects.foundation.NSMutableArray;
+import com.webobjects.foundation.NSPropertyListSerialization;
+import com.webobjects.jdbcadaptor.ERXJDBCColumn;
 
 /**
  * General purpose constant class, useful when you want reference object that are not

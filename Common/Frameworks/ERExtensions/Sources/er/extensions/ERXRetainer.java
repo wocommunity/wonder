@@ -6,7 +6,7 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.extensions;
 
-import com.webobjects.foundation.*;
+import com.webobjects.foundation.NSMutableSet;
 
 /**
  * Used as a generic way to retain a reference to an object so that it will

@@ -22,9 +22,12 @@ package er.extensions;
  *
  */
 
-import java.net.*;
-import java.security.*;
-import java.util.*;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
+import java.util.Random;
 
 /*
  * In the multitude of java GUID generators, I found none that

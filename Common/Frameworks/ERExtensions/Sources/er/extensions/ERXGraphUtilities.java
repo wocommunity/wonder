@@ -8,12 +8,15 @@
 /* ERGraphUtilities.java created by angela on Thu 01-Nov-2001 */
 package er.extensions;
 
-import java.awt.*;
-import java.util.*;
+import java.awt.Color;
+import java.util.Enumeration;
 
 import org.apache.log4j.Logger;
 
-import com.webobjects.foundation.*;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSMutableArray;
+import com.webobjects.foundation.NSTimestamp;
 
 /**
  * Utility methods useful when using GifPlot.<br />

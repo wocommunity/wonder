@@ -26,7 +26,8 @@
 
 package er.extensions;
 
-import com.webobjects.appserver.*;
+import com.webobjects.appserver.WOComponent;
+import com.webobjects.appserver.WOContext;
 
 /**
  * (Back port from WO 5 WOExtensions)<br />

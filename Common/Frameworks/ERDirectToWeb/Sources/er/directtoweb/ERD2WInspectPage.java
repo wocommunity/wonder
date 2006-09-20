@@ -6,17 +6,30 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.directtoweb;
 
-import java.util.*;
+import java.util.Enumeration;
 
 import org.apache.log4j.Logger;
 
-import com.webobjects.appserver.*;
-import com.webobjects.directtoweb.*;
-import com.webobjects.eoaccess.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.foundation.*;
+import com.webobjects.appserver.WOComponent;
+import com.webobjects.appserver.WOContext;
+import com.webobjects.appserver.WORequest;
+import com.webobjects.directtoweb.D2W;
+import com.webobjects.directtoweb.EditPageInterface;
+import com.webobjects.directtoweb.InspectPageInterface;
+import com.webobjects.eoaccess.EOGeneralAdaptorException;
+import com.webobjects.eocontrol.EOEditingContext;
+import com.webobjects.eocontrol.EOEnterpriseObject;
+import com.webobjects.eocontrol.EOObjectStoreCoordinator;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSValidation;
 
-import er.extensions.*;
+import er.extensions.ERXComponentActionRedirector;
+import er.extensions.ERXEOAccessUtilities;
+import er.extensions.ERXEOControlUtilities;
+import er.extensions.ERXLocalizer;
+import er.extensions.ERXValueUtilities;
+import er.extensions.ERXWOForm;
 
 /**
  * Superclass for all inspecting/editing ERD2W templates.<br />
@@ -119,7 +132,6 @@ public class ERD2WInspectPage extends ERD2WPage implements InspectPageInterface,
     public boolean doesNotHaveForm() { return !ERXValueUtilities.booleanValue(d2wContext().valueForKey("hasForm")); }
 
     public void setObject(EOEnterpriseObject eoenterpriseobject) {
-        EOEditingContext eoeditingcontext = eoenterpriseobject == null ? null : eoenterpriseobject.editingContext();
         super.setObject(eoenterpriseobject);
     }
     

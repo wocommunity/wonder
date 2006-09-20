@@ -6,17 +6,42 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.directtoweb;
 
-import java.util.*;
+import java.util.Enumeration;
+import java.util.NoSuchElementException;
 
 import org.apache.log4j.Logger;
 import org.apache.log4j.NDC;
 
-import com.webobjects.appserver.*;
-import com.webobjects.directtoweb.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.foundation.*;
+import com.webobjects.appserver.WOActionResults;
+import com.webobjects.appserver.WOApplication;
+import com.webobjects.appserver.WOComponent;
+import com.webobjects.appserver.WOContext;
+import com.webobjects.appserver.WORequest;
+import com.webobjects.appserver.WOResponse;
+import com.webobjects.directtoweb.D2WContext;
+import com.webobjects.directtoweb.D2WPage;
+import com.webobjects.directtoweb.InspectPageInterface;
+import com.webobjects.directtoweb.NextPageDelegate;
+import com.webobjects.eocontrol.EODataSource;
+import com.webobjects.eocontrol.EOEditingContext;
+import com.webobjects.eocontrol.EOEnterpriseObject;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSKeyValueCoding;
+import com.webobjects.foundation.NSMutableArray;
+import com.webobjects.foundation.NSMutableDictionary;
+import com.webobjects.foundation.NSMutableSet;
+import com.webobjects.foundation.NSSet;
+import com.webobjects.foundation.NSTimestamp;
 
-import er.extensions.*;
+import er.extensions.ERXComponentActionRedirector;
+import er.extensions.ERXExceptionHolder;
+import er.extensions.ERXExtensions;
+import er.extensions.ERXGuardedObjectInterface;
+import er.extensions.ERXLocalizer;
+import er.extensions.ERXValidation;
+import er.extensions.ERXValidationException;
+import er.extensions.ERXValueUtilities;
 
 /**
 Common superclass for all ERD2W templates (except ERD2WEditRelationshipPage). Has tons of extra functionality:<br />

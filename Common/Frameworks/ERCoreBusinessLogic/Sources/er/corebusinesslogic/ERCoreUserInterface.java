@@ -6,8 +6,8 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.corebusinesslogic;
 
-import com.webobjects.eocontrol.*;
-import com.webobjects.foundation.*;
+import com.webobjects.eocontrol.EOEnterpriseObject;
+import com.webobjects.foundation.NSArray;
 
 public interface ERCoreUserInterface {
     public NSArray preferences();

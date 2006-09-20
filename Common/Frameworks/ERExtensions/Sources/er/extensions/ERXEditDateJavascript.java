@@ -8,7 +8,9 @@ package er.extensions;
 
 import org.apache.log4j.Logger;
 
-import com.webobjects.appserver.*;
+import com.webobjects.appserver.WOComponent;
+import com.webobjects.appserver.WOContext;
+import com.webobjects.appserver.WOResponse;
 
 public class ERXEditDateJavascript extends WOComponent {
     static final Logger log = Logger.getLogger(ERXEditDateJavascript.class);

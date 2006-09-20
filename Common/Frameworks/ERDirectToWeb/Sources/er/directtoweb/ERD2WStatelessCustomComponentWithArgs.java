@@ -6,11 +6,11 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.directtoweb;
 
-import com.webobjects.appserver.*;
-import com.webobjects.directtoweb.*;
-import com.webobjects.foundation.*;
+import com.webobjects.appserver.WOContext;
+import com.webobjects.directtoweb.D2WStatelessComponent;
+import com.webobjects.foundation.NSPropertyListSerialization;
 
-import er.extensions.*;
+import er.extensions.ERXExceptionHolder;
 
 // Stateless version of D2WCustomComponentWithArgs
 /**

@@ -6,7 +6,8 @@
 //
 package er.extensions;
 
-import com.webobjects.eocontrol.*;
+import com.webobjects.eocontrol.EOEditingContext;
+import com.webobjects.eocontrol.EOEnterpriseObject;
 
 /**
  * Interface for cloning enterprise objects.

@@ -4,10 +4,19 @@ package er.corebusinesslogic;
 
 import org.apache.log4j.Logger;
 
-import com.webobjects.eocontrol.*;
-import com.webobjects.foundation.*;
+import com.webobjects.eocontrol.EOEditingContext;
+import com.webobjects.eocontrol.EOEnterpriseObject;
+import com.webobjects.eocontrol.EOFetchSpecification;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSData;
+import com.webobjects.foundation.NSValidation;
 
-import er.extensions.*;
+import er.extensions.EOEnterpriseObjectClazz;
+import er.extensions.ERXCompressionUtilities;
+import er.extensions.ERXEOControlUtilities;
+import er.extensions.ERXFetchSpecificationBatchIterator;
+import er.extensions.ERXProperties;
+import er.extensions.ERXValidationFactory;
 
 public class ERCMailMessage extends _ERCMailMessage {
 

@@ -6,11 +6,13 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.extensions;
 
-import java.math.*;
-import java.text.*;
-import java.util.*;
+import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.text.FieldPosition;
+import java.text.Format;
+import java.util.Hashtable;
 
-import com.webobjects.foundation.*;
+import com.webobjects.foundation.NSNumberFormatter;
 
 /**
  * An extension to the number formatter. It

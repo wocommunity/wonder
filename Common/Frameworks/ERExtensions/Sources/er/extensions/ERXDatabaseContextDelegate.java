@@ -6,13 +6,33 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.extensions;
 
-import java.util.*;
+import java.util.Enumeration;
 
 import org.apache.log4j.Logger;
 
-import com.webobjects.eoaccess.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.foundation.*;
+import com.webobjects.eoaccess.EOAdaptor;
+import com.webobjects.eoaccess.EOAdaptorChannel;
+import com.webobjects.eoaccess.EOAdaptorOperation;
+import com.webobjects.eoaccess.EOAttribute;
+import com.webobjects.eoaccess.EODatabaseChannel;
+import com.webobjects.eoaccess.EODatabaseContext;
+import com.webobjects.eoaccess.EODatabaseOperation;
+import com.webobjects.eoaccess.EOEntity;
+import com.webobjects.eoaccess.EOGeneralAdaptorException;
+import com.webobjects.eoaccess.EOObjectNotAvailableException;
+import com.webobjects.eoaccess.EOSQLExpression;
+import com.webobjects.eocontrol.EOEditingContext;
+import com.webobjects.eocontrol.EOEnterpriseObject;
+import com.webobjects.eocontrol.EOFaultHandler;
+import com.webobjects.eocontrol.EOFetchSpecification;
+import com.webobjects.eocontrol.EOGlobalID;
+import com.webobjects.eocontrol.EOKeyGlobalID;
+import com.webobjects.eocontrol.EOSharedEditingContext;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSMutableArray;
+import com.webobjects.foundation.NSMutableSet;
+import com.webobjects.foundation.NSNotificationCenter;
 
 /**
  * This delegate implements several methods from the formal interface

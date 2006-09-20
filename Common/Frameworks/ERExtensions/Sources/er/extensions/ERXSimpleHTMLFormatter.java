@@ -6,7 +6,8 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.extensions;
 
-import java.text.*;
+import java.text.FieldPosition;
+import java.text.ParsePosition;
 
 import org.apache.log4j.Logger;
 

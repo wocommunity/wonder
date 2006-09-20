@@ -2,10 +2,14 @@ package er.directtoweb;
 
 import org.apache.log4j.Logger;
 
-import com.webobjects.appserver.*;
-import com.webobjects.directtoweb.*;
+import com.webobjects.appserver.WOComponent;
+import com.webobjects.appserver.WOContext;
+import com.webobjects.directtoweb.ConfirmPageInterface;
+import com.webobjects.directtoweb.D2W;
+import com.webobjects.directtoweb.D2WPage;
 
-import er.extensions.*;
+import er.extensions.ERXGuardedObjectInterface;
+import er.extensions.ERXLocalizer;
 
 /**
  * Delete button for repetitions. 

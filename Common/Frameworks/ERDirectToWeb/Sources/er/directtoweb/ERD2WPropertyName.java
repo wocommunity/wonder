@@ -8,12 +8,16 @@ package er.directtoweb;
 
 import org.apache.log4j.Logger;
 
-import com.webobjects.appserver.*;
-import com.webobjects.directtoweb.*;
-import com.webobjects.eoaccess.*;
-import com.webobjects.foundation.*;
+import com.webobjects.appserver.WOContext;
+import com.webobjects.appserver.WORequest;
+import com.webobjects.directtoweb.D2WStatelessComponent;
+import com.webobjects.eoaccess.EOAttribute;
+import com.webobjects.eoaccess.EORelationship;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSDictionary;
 
-import er.extensions.*;
+import er.extensions.ERXValueUtilities;
+import er.extensions.ERXWOContext;
 
 /**
  * Used for displaying the propertyName in a template.<br />

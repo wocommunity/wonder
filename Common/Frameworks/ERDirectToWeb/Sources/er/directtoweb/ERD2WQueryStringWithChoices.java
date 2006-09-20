@@ -1,13 +1,17 @@
 package er.directtoweb;
 
-import java.util.*;
+import java.util.Enumeration;
 
 import org.apache.log4j.Logger;
 
-import com.webobjects.appserver.*;
-import com.webobjects.foundation.*;
+import com.webobjects.appserver.WOContext;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSMutableArray;
 
-import er.extensions.*;
+import er.extensions.ERXArrayUtilities;
+import er.extensions.ERXKeyValuePair;
+import er.extensions.ERXLocalizer;
 
 public class ERD2WQueryStringWithChoices extends ERD2WQueryStringOperator {
     /** logging support */

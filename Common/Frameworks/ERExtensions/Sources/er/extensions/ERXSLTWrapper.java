@@ -1,21 +1,34 @@
 package er.extensions;
-import java.io.*;
-import java.net.*;
-import java.util.*;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
 
-import javax.xml.parsers.*;
-import javax.xml.transform.*;
-import javax.xml.transform.dom.*;
-import javax.xml.transform.sax.*;
-import javax.xml.transform.stream.*;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.transform.Result;
+import javax.xml.transform.Source;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.sax.SAXSource;
+import javax.xml.transform.stream.StreamResult;
 
 import org.apache.log4j.Logger;
-import org.w3c.dom.*;
-import org.xml.sax.*;
-import org.xml.sax.helpers.*;
+import org.w3c.dom.Document;
+import org.xml.sax.EntityResolver;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
+import org.xml.sax.XMLReader;
+import org.xml.sax.helpers.XMLReaderFactory;
 
-import com.webobjects.appserver.*;
-import com.webobjects.foundation.*;
+import com.webobjects.appserver.WOContext;
+import com.webobjects.appserver.WOResponse;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSData;
+import com.webobjects.foundation.NSForwardException;
 
 /**
  * Wrapper that translates its content via XSLT. The content must be valid XML for this to work. 
@@ -109,19 +122,21 @@ public class ERXSLTWrapper extends ERXNonSynchronizingComponent {
     private static XMLReader xmlReader;
     
     static {
-        try {
-            xmlReader = XMLReaderFactory.createXMLReader();
-            xmlReader.setFeature("http://xml.org/sax/features/validation", false);
-            // FIXME AK: we need  real handling for the normal case (HTML->FOP XML)
-            EntityResolver resolver = new EntityResolver() {
-                public InputSource resolveEntity(String arg0, String arg1) throws SAXException, IOException {
-                    log.info(arg0 + "::" + arg1);
-                    InputSource source = new InputSource((new URL("file:///Volumes/Home/Desktop/dtd/xhtml1-transitional.dtd")).openStream());
-                    source.setSystemId(arg1);
-                    return source;
-                }
-            };
-            // xmlReader.setEntityResolver(resolver);
+    	try {
+    		xmlReader = XMLReaderFactory.createXMLReader();
+    		xmlReader.setFeature("http://xml.org/sax/features/validation", false);
+    		if(false) {
+    			// FIXME AK: we need  real handling for the normal case (HTML->FOP XML)
+    			EntityResolver resolver = new EntityResolver() {
+    				public InputSource resolveEntity(String arg0, String arg1) throws SAXException, IOException {
+    					log.info(arg0 + "::" + arg1);
+    					InputSource source = new InputSource((new URL("file:///Volumes/Home/Desktop/dtd/xhtml1-transitional.dtd")).openStream());
+    					source.setSystemId(arg1);
+    					return source;
+    				}
+    			};
+    			xmlReader.setEntityResolver(resolver);
+    		}
         } catch (SAXException e) {
             e.printStackTrace();
         }

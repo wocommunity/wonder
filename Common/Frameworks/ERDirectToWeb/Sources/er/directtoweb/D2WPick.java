@@ -6,12 +6,16 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.directtoweb;
 
-import com.webobjects.appserver.*;
-import com.webobjects.directtoweb.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.foundation.*;
+import com.webobjects.appserver.WOComponent;
+import com.webobjects.appserver.WOContext;
+import com.webobjects.directtoweb.D2WEmbeddedComponent;
+import com.webobjects.directtoweb.D2WSwitchComponent;
+import com.webobjects.directtoweb.NextPageDelegate;
+import com.webobjects.eocontrol.EODataSource;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSMutableArray;
 
-import er.extensions.*;
+import er.extensions.ERXEOControlUtilities;
 
 public class D2WPick extends D2WEmbeddedComponent {
     

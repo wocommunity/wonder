@@ -28,8 +28,10 @@
 //import com.webobjects.foundation.*;
 package er.extensions;
 
-import com.webobjects.appserver.*;
-import com.webobjects.foundation.*;
+import com.webobjects.appserver.WOComponent;
+import com.webobjects.appserver.WOContext;
+import com.webobjects.appserver.WORequest;
+import com.webobjects.foundation.NSArray;
 
 /**
  * (Back port from WO 5 WOExtensions)<br />

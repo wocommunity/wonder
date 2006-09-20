@@ -1,7 +1,8 @@
 package er.extensions;
 import org.apache.log4j.Logger;
 
-import com.webobjects.appserver.*;
+import com.webobjects.appserver.WOActionResults;
+import com.webobjects.appserver.WOContext;
 
 /**
 * Class for Wonder Component ERXMonthView.

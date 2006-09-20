@@ -1,13 +1,33 @@
 package er.extensions;
 
-import java.io.*;
-import java.sql.*;
-import java.util.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.sql.Blob;
+import java.sql.Connection;
+import java.sql.DatabaseMetaData;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.Enumeration;
 
 import org.apache.log4j.Logger;
 
-import com.webobjects.eoaccess.*;
-import com.webobjects.foundation.*;
+import com.webobjects.eoaccess.EOAttribute;
+import com.webobjects.eoaccess.EOEntity;
+import com.webobjects.eoaccess.EOModel;
+import com.webobjects.eoaccess.EOModelGroup;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSMutableArray;
+import com.webobjects.foundation.NSMutableDictionary;
+import com.webobjects.foundation.NSMutableSet;
+import com.webobjects.foundation.NSTimestamp;
+import com.webobjects.foundation.NSTimestampFormatter;
 
 public class ERXJDBCUtilities {
 
@@ -90,8 +110,8 @@ public class ERXJDBCUtilities {
             String url = (String) dict.objectForKey("url");
             Boolean autoCommit = (Boolean) dict.objectForKey("autoCommit");
             boolean ac = autoCommit == null ? true : autoCommit.booleanValue();
-            Boolean readOnly = (Boolean) dict.objectForKey("readOnly");
-            boolean ro = readOnly == null ? false : readOnly.booleanValue();
+            //Boolean readOnly = (Boolean) dict.objectForKey("readOnly");
+            //boolean ro = readOnly == null ? false : readOnly.booleanValue();
 
             try {
                 Class.forName(driver);
@@ -222,7 +242,6 @@ public class ERXJDBCUtilities {
                             } catch (IOException e5) {
                                 log.error("could not create tempFile for row " + rows.getRow() + " and column "
                                         + columnName + ", setting column value to null!");
-                                EOAttribute at = attributes[i];
                                 upps.setNull(i + 1, type);
                                 if (tempFile != null) if (!tempFile.delete()) tempFile.delete();
 
@@ -234,7 +253,6 @@ public class ERXJDBCUtilities {
                             } catch (FileNotFoundException e6) {
                                 log.error("could not create FileInputStream from tempFile for row " + rows.getRow()
                                         + " and column " + columnName + ", setting column value to null!");
-                                EOAttribute at = attributes[i];
                                 upps.setNull(i + 1, type);
                                 if (tempFile != null) if (!tempFile.delete()) tempFile.delete();
 
@@ -245,7 +263,6 @@ public class ERXJDBCUtilities {
                         } else if (o != null) {
                             upps.setObject(i + 1, o);
                         } else {
-                            EOAttribute at = attributes[i];
                             upps.setNull(i + 1, type);
                         }
                     }

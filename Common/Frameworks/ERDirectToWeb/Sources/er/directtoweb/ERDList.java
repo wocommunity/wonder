@@ -8,12 +8,18 @@ package er.directtoweb;
 
 import org.apache.log4j.Logger;
 
-import com.webobjects.appserver.*;
-import com.webobjects.directtoweb.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.foundation.*;
+import com.webobjects.appserver.WOComponent;
+import com.webobjects.appserver.WOContext;
+import com.webobjects.directtoweb.D2W;
+import com.webobjects.directtoweb.EditPageInterface;
+import com.webobjects.directtoweb.EditRelationshipPageInterface;
+import com.webobjects.eocontrol.EOEditingContext;
+import com.webobjects.eocontrol.EOEnterpriseObject;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSDictionary;
 
-import er.extensions.*;
+import er.extensions.ERXEOControlUtilities;
+import er.extensions.ERXValueUtilities;
 
 /**
  * Used to edit a toMany relationship by allowing the user to pick the eos that belong in the relationship.<br />

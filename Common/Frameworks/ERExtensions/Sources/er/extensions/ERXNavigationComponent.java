@@ -6,8 +6,10 @@
 //
 package er.extensions;
 
-import com.webobjects.appserver.*;
-import com.webobjects.foundation.*;
+import com.webobjects.appserver.WOComponent;
+import com.webobjects.appserver.WOContext;
+import com.webobjects.appserver.WOResponse;
+import com.webobjects.foundation.NSArray;
 
 /** Please read "Documentation/Navigation.html" to fnd out how to use the navigation components.*/
 

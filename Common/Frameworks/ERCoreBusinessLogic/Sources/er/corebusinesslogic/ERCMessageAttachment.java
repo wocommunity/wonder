@@ -4,9 +4,9 @@ package er.corebusinesslogic;
 
 import org.apache.log4j.Logger;
 
-import com.webobjects.eocontrol.*;
+import com.webobjects.eocontrol.EOEditingContext;
 
-import er.extensions.*;
+import er.extensions.EOEnterpriseObjectClazz;
 
 public class ERCMessageAttachment extends _ERCMessageAttachment {
     static final Logger log = Logger.getLogger(ERCMessageAttachment.class);

@@ -7,10 +7,17 @@
 
 package com.webobjects.woextensions;
 
-import com.webobjects._ideservices.*;
-import com.webobjects.appserver.*;
-import com.webobjects.appserver._private.*;
-import com.webobjects.foundation.*;
+import com.webobjects._ideservices._IDEProject;
+import com.webobjects._ideservices._WOProject;
+import com.webobjects.appserver.WOActionResults;
+import com.webobjects.appserver.WOApplication;
+import com.webobjects.appserver.WODirectAction;
+import com.webobjects.appserver.WORequest;
+import com.webobjects.appserver.WOResourceManager;
+import com.webobjects.appserver.WOResponse;
+import com.webobjects.appserver._private.WODeployedBundle;
+import com.webobjects.appserver._private.WOProjectBundle;
+import com.webobjects.foundation.NSNumberFormatter;
 
 /* This DirectAction is used for driving ProjectBuilder : it creates a socket and hope that
  ProjectBuilder is listening on it, then it sends the details about the exception so PB can
@@ -35,10 +42,10 @@ public class WOProjectBuilderAction extends WODirectAction {
 
         // Read now the information about the request : which method, which line #, which file, which message
         WORequest request = request();
-        String methodName,filename, errorMessage, fullClassName;
+        String filename, errorMessage, fullClassName;
         Number line;
         
-        methodName = (String)request.stringFormValueForKey("methodName");
+        // String methodName = (String)request.stringFormValueForKey("methodName");
         line = request.numericFormValueForKey("line",new NSNumberFormatter("#0"));
         filename = (String)request.stringFormValueForKey("filename");
         errorMessage = (String)request.stringFormValueForKey("errorMessage");

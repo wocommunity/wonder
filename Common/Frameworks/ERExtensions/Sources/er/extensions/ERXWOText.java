@@ -1,6 +1,8 @@
 package er.extensions;
-import com.webobjects.appserver.*;
-import com.webobjects.foundation.*;
+import com.webobjects.appserver.WOContext;
+import com.webobjects.appserver.WOElement;
+import com.webobjects.appserver.WOResponse;
+import com.webobjects.foundation.NSDictionary;
 
 /**
  * Patch for WOText to not include the <code>value</code> attribute.

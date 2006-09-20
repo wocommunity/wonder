@@ -6,10 +6,10 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.directtoweb;
 
-import com.webobjects.appserver.*;
-import com.webobjects.foundation.*;
+import com.webobjects.appserver.WOContext;
+import com.webobjects.foundation.NSArray;
 
-import er.extensions.*;
+import er.extensions.ERXArrayUtilities;
 
 /**
  * Used to display a an NSArray of the form "A, B and C", useful for toMany relationships  or propertyKeys that return arrays.<br />

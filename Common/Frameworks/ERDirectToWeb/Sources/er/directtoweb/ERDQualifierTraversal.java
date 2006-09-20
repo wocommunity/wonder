@@ -6,14 +6,18 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.directtoweb;
 
-import java.util.*;
+import java.util.Enumeration;
 
 import org.apache.log4j.Logger;
 
-import com.webobjects.directtoweb.*;
-import com.webobjects.eocontrol.*;
-
-import er.extensions.*;
+import com.webobjects.directtoweb.BooleanQualifier;
+import com.webobjects.directtoweb.NonNullQualifier;
+import com.webobjects.eocontrol.EOAndQualifier;
+import com.webobjects.eocontrol.EOKeyComparisonQualifier;
+import com.webobjects.eocontrol.EOKeyValueQualifier;
+import com.webobjects.eocontrol.EONotQualifier;
+import com.webobjects.eocontrol.EOOrQualifier;
+import com.webobjects.eocontrol.EOQualifierEvaluation;
 
 /**
  * Contains a single method for traversing

@@ -7,7 +7,8 @@
 
 package com.webobjects.woextensions;
 
-import com.webobjects.appserver.*;
+import com.webobjects.appserver.WOContext;
+import com.webobjects.appserver.WOResponse;
 
 public class JSImageFlyover extends JSComponent {
     public String uniqueID;

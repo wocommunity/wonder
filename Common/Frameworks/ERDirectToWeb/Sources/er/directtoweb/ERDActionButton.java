@@ -2,11 +2,17 @@ package er.directtoweb;
 
 import org.apache.log4j.Logger;
 
-import com.webobjects.appserver.*;
-import com.webobjects.directtoweb.*;
-import com.webobjects.eocontrol.*;
-
-import er.extensions.*;
+import com.webobjects.appserver.WOComponent;
+import com.webobjects.appserver.WOContext;
+import com.webobjects.appserver.WODisplayGroup;
+import com.webobjects.directtoweb.D2WPage;
+import com.webobjects.directtoweb.EditPageInterface;
+import com.webobjects.directtoweb.ListPageInterface;
+import com.webobjects.directtoweb.NextPageDelegate;
+import com.webobjects.directtoweb.QueryPageInterface;
+import com.webobjects.directtoweb.SelectPageInterface;
+import com.webobjects.eocontrol.EODataSource;
+import com.webobjects.eocontrol.EOEnterpriseObject;
 
 /**
  * Abstract superclass for all actions inside of Wonder D2W.

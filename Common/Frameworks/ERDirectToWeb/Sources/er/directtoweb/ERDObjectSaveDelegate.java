@@ -6,9 +6,10 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.directtoweb;
 
-import com.webobjects.appserver.*;
-import com.webobjects.directtoweb.*;
-import com.webobjects.eocontrol.*;
+import com.webobjects.appserver.WOComponent;
+import com.webobjects.directtoweb.NextPageDelegate;
+import com.webobjects.eocontrol.EOEditingContext;
+import com.webobjects.eocontrol.EOEnterpriseObject;
 
 /**
  * Simple {@link com.webobjects.directtoweb.NextPageDelegate}

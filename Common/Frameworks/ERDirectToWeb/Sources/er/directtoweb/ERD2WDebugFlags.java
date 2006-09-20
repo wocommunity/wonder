@@ -8,7 +8,8 @@
 
 package er.directtoweb;
 
-import com.webobjects.appserver.*;
+import com.webobjects.appserver.WOComponent;
+import com.webobjects.appserver.WOContext;
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
 // This component can be used in the wrapper of a D2W app to provide convenient development time 

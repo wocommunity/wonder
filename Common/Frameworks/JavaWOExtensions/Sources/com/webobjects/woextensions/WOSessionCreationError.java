@@ -7,7 +7,9 @@
 
 package com.webobjects.woextensions;
 
-import com.webobjects.appserver.*;
+import com.webobjects.appserver.WOComponent;
+import com.webobjects.appserver.WOContext;
+import com.webobjects.appserver.WOResponse;
 
 public class WOSessionCreationError extends WOComponent {
     public WOSessionCreationError(WOContext aContext)  {

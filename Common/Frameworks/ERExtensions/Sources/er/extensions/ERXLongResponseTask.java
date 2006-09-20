@@ -5,8 +5,9 @@ package er.extensions;
 
 import org.apache.log4j.Logger;
 
-import com.webobjects.appserver.*;
-import com.webobjects.foundation.*;
+import com.webobjects.appserver.WOApplication;
+import com.webobjects.appserver.WOComponent;
+import com.webobjects.foundation.NSForwardException;
 
 /**
  * Long response task interface and default implementation should take away the need to tie your

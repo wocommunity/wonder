@@ -3,10 +3,17 @@
 package er.corebusinesslogic;
 import org.apache.log4j.Logger;
 
-import com.webobjects.eocontrol.*;
-import com.webobjects.foundation.*;
+import com.webobjects.eocontrol.EOEditingContext;
+import com.webobjects.eocontrol.EOEnterpriseObject;
+import com.webobjects.eocontrol.EOObjectStoreCoordinator;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSKeyValueCoding;
+import com.webobjects.foundation.NSMutableDictionary;
 
-import er.extensions.*;
+import er.extensions.EOEnterpriseObjectClazz;
+import er.extensions.ERXEC;
+import er.extensions.ERXEOControlUtilities;
+import er.extensions.ERXProperties;
 
 public class ERCStatic extends _ERCStatic {
 

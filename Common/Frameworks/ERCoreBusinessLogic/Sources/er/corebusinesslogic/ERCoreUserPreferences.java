@@ -6,14 +6,29 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.corebusinesslogic;
 
-import java.util.*;
+import java.util.Enumeration;
 
 import org.apache.log4j.Logger;
 
-import com.webobjects.eocontrol.*;
-import com.webobjects.foundation.*;
+import com.webobjects.eocontrol.EOEditingContext;
+import com.webobjects.eocontrol.EOEnterpriseObject;
+import com.webobjects.eocontrol.EOKeyValueArchiver;
+import com.webobjects.eocontrol.EOKeyValueUnarchiver;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSKeyValueCoding;
+import com.webobjects.foundation.NSNotification;
+import com.webobjects.foundation.NSNotificationCenter;
+import com.webobjects.foundation.NSPropertyListSerialization;
+import com.webobjects.foundation.NSSelector;
 
-import er.extensions.*;
+import er.extensions.ERXBatchNavigationBar;
+import er.extensions.ERXConstant;
+import er.extensions.ERXEC;
+import er.extensions.ERXEOControlUtilities;
+import er.extensions.ERXExtensions;
+import er.extensions.ERXRetainer;
+import er.extensions.ERXSortOrder;
 
 public class ERCoreUserPreferences implements NSKeyValueCoding {
 
@@ -140,7 +155,6 @@ public class ERCoreUserPreferences implements NSKeyValueCoding {
     }
 
     public void takeValueForKey(Object value, String key) {
-        Object result=null;
         // we first make sure there is no cruft left
         // !! locking is turned off on the value attribute of UserPreference
         // so that if a user opens two sessions they don't get locking failures

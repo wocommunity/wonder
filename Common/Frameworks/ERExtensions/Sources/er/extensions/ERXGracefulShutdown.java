@@ -6,14 +6,15 @@
 //
 package er.extensions;
 
-import java.util.*;
+import java.util.Enumeration;
 
 import org.apache.log4j.Logger;
 
-import sun.misc.*;
+import sun.misc.Signal;
+import sun.misc.SignalHandler;
 
-import com.webobjects.appserver.*;
-import com.webobjects.foundation.*;
+import com.webobjects.appserver.WOApplication;
+import com.webobjects.foundation.NSArray;
 
 /**
  * Graceful shutdown adds signal handling support for gracefully

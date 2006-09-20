@@ -6,13 +6,15 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.corebusinesslogic;
 
-import org.apache.log4j.helpers.*;
-import org.apache.log4j.spi.*;
+import org.apache.log4j.helpers.LogLog;
+import org.apache.log4j.spi.LoggingEvent;
 
-import com.webobjects.eocontrol.*;
-import com.webobjects.foundation.*;
+import com.webobjects.eocontrol.EOEditingContext;
+import com.webobjects.eocontrol.EOObjectStoreCoordinator;
+import com.webobjects.foundation.NSMutableDictionary;
 
-import er.extensions.*;
+import er.extensions.ERXEditingContextDelegate;
+import er.extensions.ERXMailAppender;
 
 /**
  * Basic log4j Mail Message Appender<br>

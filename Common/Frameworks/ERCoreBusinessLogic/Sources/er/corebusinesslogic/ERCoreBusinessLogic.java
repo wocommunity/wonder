@@ -6,19 +6,37 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.corebusinesslogic;
 
-import java.lang.reflect.*;
-import java.util.*;
+import java.lang.reflect.InvocationTargetException;
+import java.util.Enumeration;
 
-import org.apache.log4j.*;
+import org.apache.log4j.Logger;
 
-import com.webobjects.appserver.*;
-import com.webobjects.eoaccess.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.foundation.*;
+import com.webobjects.appserver.WOApplication;
+import com.webobjects.eoaccess.EOEntity;
+import com.webobjects.eoaccess.EOEntityClassDescription;
+import com.webobjects.eoaccess.EOGeneralAdaptorException;
+import com.webobjects.eoaccess.EOJoin;
+import com.webobjects.eoaccess.EOModelGroup;
+import com.webobjects.eoaccess.EORelationship;
+import com.webobjects.eocontrol.EOEditingContext;
+import com.webobjects.eocontrol.EOEnterpriseObject;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSForwardException;
+import com.webobjects.foundation.NSLog;
 
-import er.directtoweb.*;
-import er.extensions.*;
-import er.javamail.*;
+import er.directtoweb.ERDirectToWeb;
+import er.extensions.ERXApplication;
+import er.extensions.ERXConfigurationManager;
+import er.extensions.ERXEC;
+import er.extensions.ERXEOControlUtilities;
+import er.extensions.ERXExtensions;
+import er.extensions.ERXFrameworkPrincipal;
+import er.extensions.ERXProperties;
+import er.extensions.ERXStringUtilities;
+import er.extensions.ERXThreadStorage;
+import er.extensions.ERXUtilities;
+import er.javamail.ERJavaMail;
 
 public class ERCoreBusinessLogic extends ERXFrameworkPrincipal {
 

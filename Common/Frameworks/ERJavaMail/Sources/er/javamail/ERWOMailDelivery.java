@@ -7,18 +7,20 @@
 
 package er.javamail;
 
-import java.io.*;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 
-import javax.activation.*;
-import javax.mail.*;
-import javax.mail.internet.*;
+import javax.activation.DataHandler;
+import javax.mail.Message;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 
 import org.apache.log4j.Logger;
 
-import com.webobjects.appserver.*;
-import com.webobjects.foundation.*;
-
-import er.extensions.*;
+import com.webobjects.appserver.WOApplication;
+import com.webobjects.appserver.WOComponent;
+import com.webobjects.appserver.WOSession;
+import com.webobjects.foundation.NSArray;
 
 /** Drop-in replacement for WOMailDelivery.
 

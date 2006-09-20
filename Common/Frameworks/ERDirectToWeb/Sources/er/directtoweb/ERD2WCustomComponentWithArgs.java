@@ -8,11 +8,12 @@ package er.directtoweb;
 
 import org.apache.log4j.Logger;
 
-import com.webobjects.appserver.*;
-import com.webobjects.directtoweb.*;
-import com.webobjects.foundation.*;
+import com.webobjects.appserver.WOContext;
+import com.webobjects.directtoweb.D2WContext;
+import com.webobjects.directtoweb.D2WCustomComponent;
+import com.webobjects.foundation.NSPropertyListSerialization;
 
-import er.extensions.*;
+import er.extensions.ERXExceptionHolder;
 
 // Useful component and important bug fix
 // Fixes validation failures being propogated
