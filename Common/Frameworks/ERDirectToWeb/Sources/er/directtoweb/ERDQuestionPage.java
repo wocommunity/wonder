@@ -6,8 +6,10 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.directtoweb;
 
-import com.webobjects.appserver.*;
-import com.webobjects.directtoweb.*;
+import com.webobjects.appserver.WOComponent;
+import com.webobjects.appserver.WOContext;
+import com.webobjects.directtoweb.ConfirmPageInterface;
+import com.webobjects.directtoweb.NextPageDelegate;
 
 /**
  * Similiar to the message page, except this one has the choice Yes or No.<br />

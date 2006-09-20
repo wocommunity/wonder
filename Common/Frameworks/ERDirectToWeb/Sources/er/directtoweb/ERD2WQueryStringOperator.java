@@ -6,12 +6,14 @@
 //
 package er.directtoweb;
 
-import com.webobjects.appserver.*;
-import com.webobjects.directtoweb.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.foundation.*;
+import com.webobjects.appserver.WOContext;
+import com.webobjects.directtoweb.D2WQueryStringOperator;
+import com.webobjects.eocontrol.EOQualifier;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSMutableArray;
 
-import er.extensions.*;
+import er.extensions.ERXKeyValuePair;
+import er.extensions.ERXLocalizer;
 
 public class ERD2WQueryStringOperator extends D2WQueryStringOperator {
     public ERXKeyValuePair currentElement;

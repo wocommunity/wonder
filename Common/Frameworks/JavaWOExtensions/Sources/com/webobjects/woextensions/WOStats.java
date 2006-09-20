@@ -7,7 +7,9 @@
 
 package com.webobjects.woextensions;
 
-import com.webobjects.appserver.*;
+import com.webobjects.appserver.WOActionResults;
+import com.webobjects.appserver.WODirectAction;
+import com.webobjects.appserver.WORequest;
 
 public class WOStats extends WODirectAction {
 

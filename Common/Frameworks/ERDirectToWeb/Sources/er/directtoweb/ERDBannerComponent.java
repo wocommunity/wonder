@@ -2,9 +2,7 @@ package er.directtoweb;
 
 import org.apache.log4j.Logger;
 
-import com.webobjects.appserver.*;
-
-import er.extensions.*;
+import com.webobjects.appserver.WOContext;
 
 /**
  * Shows an image header matching the page. If no image is bound, none is shown.

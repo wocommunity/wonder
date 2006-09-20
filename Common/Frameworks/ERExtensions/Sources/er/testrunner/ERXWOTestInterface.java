@@ -6,16 +6,22 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.testrunner;
 
-import java.util.*;
+import java.util.Enumeration;
+
+import junit.framework.AssertionFailedError;
+import junit.framework.Test;
 
 import org.apache.log4j.Logger;
 
-import junit.framework.*;
+import com.webobjects.appserver.WOComponent;
+import com.webobjects.appserver.WOContext;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSBundle;
+import com.webobjects.foundation.NSComparator;
+import com.webobjects.foundation.NSMutableArray;
+import com.webobjects.foundation.NSMutableSet;
 
-import com.webobjects.appserver.*;
-import com.webobjects.foundation.*;
-
-import er.extensions.*;
+import er.extensions.ERXPatcher;
 
 /**
  * component for interactively running tests.<br />

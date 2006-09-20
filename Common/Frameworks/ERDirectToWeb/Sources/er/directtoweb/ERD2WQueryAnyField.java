@@ -6,8 +6,8 @@
 //
 package er.directtoweb;
 
-import com.webobjects.appserver.*;
-import com.webobjects.directtoweb.*;
+import com.webobjects.appserver.WOContext;
+import com.webobjects.directtoweb.D2WQueryAnyField;
 
 public class ERD2WQueryAnyField extends D2WQueryAnyField {
 

@@ -1,6 +1,6 @@
 package er.directtoweb;
 
-import com.webobjects.directtoweb.*;
+import com.webobjects.directtoweb.ErrorPageInterface;
 
 /**
  * Extends ErrorPageInterface to provide means to set the actual exception.

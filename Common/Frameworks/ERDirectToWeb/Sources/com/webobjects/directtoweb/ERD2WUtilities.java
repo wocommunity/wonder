@@ -8,10 +8,8 @@ package com.webobjects.directtoweb;
 
 import org.apache.log4j.Logger;
 
-import com.webobjects.eocontrol.*;
-import com.webobjects.foundation.*;
-
-import er.extensions.*;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSKeyValueCoding;
 
 // This is needed because pageFinalized is a protected method.
 public class ERD2WUtilities {
@@ -40,7 +38,6 @@ public class ERD2WUtilities {
     // Should just return null instead of throwing.
     public static Object contextValueForKeyNoInferenceNoException(D2WContext c, String keyPath) {
         Object result = null;
-        String oriKeyPath = keyPath;
         int i = keyPath.indexOf(".");
         if (i == -1) {
             result = c.valueForKeyNoInference(keyPath);

@@ -8,11 +8,15 @@ package er.directtoweb;
 
 import org.apache.log4j.Logger;
 
-import com.webobjects.appserver.*;
-import com.webobjects.directtoweb.*;
-import com.webobjects.foundation.*;
+import com.webobjects.appserver.WOComponent;
+import com.webobjects.appserver.WOContext;
+import com.webobjects.appserver.WOResponse;
+import com.webobjects.directtoweb.EditPageInterface;
+import com.webobjects.foundation.NSNotificationCenter;
+import com.webobjects.foundation.NSValidation;
 
-import er.extensions.*;
+import er.extensions.ERXValueUtilities;
+import er.extensions.ERXWOForm;
 
 /**
  * Superclass for all tab and wizard pages.<br />
@@ -78,7 +82,7 @@ public class ERD2WTabInspectPage extends ERD2WInspectPage implements ERDTabEditP
 				") pos="+pos+";\n var elem = document."+formName+".elements["+pos+
 				"];\n if (elem!=null && (elem.type == 'text' || elem.type ==  'area')) elem.focus();";
 		}
-		return formName;
+		return result;
     }
  
     private boolean d2wContextValueForKey(String key, boolean defaultValue) {

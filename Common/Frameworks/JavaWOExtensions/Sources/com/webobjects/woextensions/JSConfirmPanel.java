@@ -7,8 +7,8 @@
 
 package com.webobjects.woextensions;
 
-import com.webobjects.appserver.*;
-import com.webobjects.foundation.*;
+import com.webobjects.appserver.WOContext;
+import com.webobjects.foundation.NSArray;
 
 public class JSConfirmPanel extends JSAlertPanel {
     public JSConfirmPanel(WOContext aContext)  {

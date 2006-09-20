@@ -6,9 +6,13 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.directtoweb;
 
-import com.webobjects.appserver.*;
-import com.webobjects.directtoweb.*;
-import com.webobjects.eocontrol.*;
+import com.webobjects.appserver.WOComponent;
+import com.webobjects.directtoweb.ConfirmPageInterface;
+import com.webobjects.directtoweb.ErrorPageInterface;
+import com.webobjects.directtoweb.InspectPageInterface;
+import com.webobjects.directtoweb.NextPageDelegate;
+import com.webobjects.eocontrol.EODataSource;
+import com.webobjects.eocontrol.EOEnterpriseObject;
 
 // This interface is a super-set of both the confirm and error page interfaces.
 // Depending on what the task is the different method names make sense.

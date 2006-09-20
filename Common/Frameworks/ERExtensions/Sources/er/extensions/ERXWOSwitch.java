@@ -1,10 +1,18 @@
 package er.extensions;
 
-import java.util.*;
+import java.util.Enumeration;
 
-import com.webobjects.appserver.*;
-import com.webobjects.appserver._private.*;
-import com.webobjects.foundation.*;
+import com.webobjects.appserver.WOActionResults;
+import com.webobjects.appserver.WOAssociation;
+import com.webobjects.appserver.WOContext;
+import com.webobjects.appserver.WODynamicElement;
+import com.webobjects.appserver.WOElement;
+import com.webobjects.appserver.WORequest;
+import com.webobjects.appserver.WOResponse;
+import com.webobjects.appserver._private.WODynamicGroup;
+import com.webobjects.appserver._private.WOHTMLBareString;
+import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSMutableDictionary;
 
 /**
  * Adds a "multiple if" element to the WO templates. You'd use them to wrap "ERXWOCase" elements with

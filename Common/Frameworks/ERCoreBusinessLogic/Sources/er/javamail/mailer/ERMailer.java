@@ -6,19 +6,29 @@
 //
 package er.javamail.mailer;
 
-import java.util.*;
+import java.util.Enumeration;
 
-import javax.mail.*;
+import javax.mail.MessagingException;
 
 import org.apache.log4j.Logger;
 
-import com.webobjects.eoaccess.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.foundation.*;
+import com.webobjects.eoaccess.EOGeneralAdaptorException;
+import com.webobjects.eocontrol.EOEditingContext;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSForwardException;
+import com.webobjects.foundation.NSTimestamp;
 
-import er.corebusinesslogic.*;
-import er.extensions.*;
-import er.javamail.*;
+import er.corebusinesslogic.ERCMailMessage;
+import er.corebusinesslogic.ERCMailState;
+import er.corebusinesslogic.ERCoreBusinessLogic;
+import er.extensions.ERXEC;
+import er.extensions.ERXFetchSpecificationBatchIterator;
+import er.extensions.ERXProperties;
+import er.extensions.ERXUtilities;
+import er.javamail.ERMailDelivery;
+import er.javamail.ERMailDeliveryHTML;
+import er.javamail.ERMailDeliveryPlainText;
 
 /**
  * Mailer bridge class. Used to pull mail out of the

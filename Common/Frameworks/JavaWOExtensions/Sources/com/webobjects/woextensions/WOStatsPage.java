@@ -7,11 +7,17 @@
 
 package com.webobjects.woextensions;
 
-import java.net.*;
-import java.util.*;
+import java.net.UnknownHostException;
+import java.util.Enumeration;
 
-import com.webobjects.appserver.*;
-import com.webobjects.foundation.*;
+import com.webobjects.appserver.WOApplication;
+import com.webobjects.appserver.WOComponent;
+import com.webobjects.appserver.WOContext;
+import com.webobjects.appserver.WOResponse;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSMutableDictionary;
+import com.webobjects.foundation.NSTimestamp;
 
 public class WOStatsPage extends WOComponent {
     public NSDictionary detailsDict;
@@ -79,9 +85,6 @@ public class WOStatsPage extends WOComponent {
 
         maxPageCount = 0;
         maxActionCount = 0;
-        long currentCount;
-        int i;
-
         maxPageCount = _maxServedForDictionary(pagesDict);
         maxActionCount = _maxServedForDictionary(directActionsDict);
     }

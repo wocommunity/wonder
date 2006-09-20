@@ -1,12 +1,39 @@
 package er.extensions;
 
-import java.util.*;
+import java.util.Enumeration;
+import java.util.Hashtable;
 
 import org.apache.log4j.Logger;
 
-import com.webobjects.appserver.*;
-import com.webobjects.appserver._private.*;
-import com.webobjects.foundation.*;
+import com.webobjects.appserver.WOActionResults;
+import com.webobjects.appserver.WOAssociation;
+import com.webobjects.appserver.WOContext;
+import com.webobjects.appserver.WODynamicElement;
+import com.webobjects.appserver.WOElement;
+import com.webobjects.appserver.WORequest;
+import com.webobjects.appserver.WOResponse;
+import com.webobjects.appserver._private.WOActiveImage;
+import com.webobjects.appserver._private.WOBrowser;
+import com.webobjects.appserver._private.WOCheckBox;
+import com.webobjects.appserver._private.WOCheckBoxList;
+import com.webobjects.appserver._private.WOGenericContainer;
+import com.webobjects.appserver._private.WOGenericElement;
+import com.webobjects.appserver._private.WOHiddenField;
+import com.webobjects.appserver._private.WOImage;
+import com.webobjects.appserver._private.WOImageButton;
+import com.webobjects.appserver._private.WOInput;
+import com.webobjects.appserver._private.WOPasswordField;
+import com.webobjects.appserver._private.WOPopUpButton;
+import com.webobjects.appserver._private.WORadioButton;
+import com.webobjects.appserver._private.WORadioButtonList;
+import com.webobjects.appserver._private.WOResetButton;
+import com.webobjects.appserver._private.WOSubmitButton;
+import com.webobjects.appserver._private.WOText;
+import com.webobjects.appserver._private.WOTextField;
+import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSMutableArray;
+import com.webobjects.foundation.NSMutableDictionary;
+import com.webobjects.foundation._NSUtilities;
 
 /**
  * Wrapper around the WO-private NSUtilities which allows for some Objective-C-Style poseAs.

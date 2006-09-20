@@ -7,7 +7,9 @@
 
 package com.webobjects.woextensions;
 
-import com.webobjects.appserver.*;
+import com.webobjects.appserver.WOAssociation;
+import com.webobjects.appserver.WOContext;
+import com.webobjects.appserver.WOEvent;
 
 public class WOAssociationEventRow extends WOEventRow {
     public WOAssociationEventRow(WOContext aContext)  {

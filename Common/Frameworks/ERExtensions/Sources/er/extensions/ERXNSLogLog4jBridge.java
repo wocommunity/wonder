@@ -5,9 +5,10 @@
 //
 package er.extensions;
 
-import org.apache.log4j.*;
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
 
-import com.webobjects.foundation.*;
+import com.webobjects.foundation.NSLog;
 
 // CHECKME: A quick workaround for WO 5.1.x WOOutputPath issue. 
 //          Subclassing PrintStreamLogger instead of Logger to prevent 

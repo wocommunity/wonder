@@ -6,11 +6,16 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.testrunner;
 
+import junit.framework.AssertionFailedError;
+import junit.framework.Test;
+import junit.framework.TestSuite;
+import junit.runner.BaseTestRunner;
+import junit.runner.StandardTestSuiteLoader;
+import junit.runner.TestSuiteLoader;
+
 import org.apache.log4j.Logger;
 
-import junit.framework.*;
-import junit.runner.*;
-import er.extensions.*;
+import er.extensions.ERXPatcher;
 
 /**
  * runs tests with ERTestListeners.<br />

@@ -7,9 +7,10 @@
 
 package er.directtoweb;
 
-import com.webobjects.appserver.*;
-import com.webobjects.directtoweb.*;
-import com.webobjects.foundation.*;
+import com.webobjects.appserver.WOContext;
+import com.webobjects.directtoweb.D2WDisplayString;
+import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSPropertyListSerialization;
 
 /**
  * Displays a dictionary by serializing it as property list.  The dictionary is assumed

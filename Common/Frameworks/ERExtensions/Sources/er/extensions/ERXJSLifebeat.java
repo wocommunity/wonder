@@ -1,6 +1,11 @@
 package er.extensions;
 
-import com.webobjects.appserver.*;
+import com.webobjects.appserver.WOActionResults;
+import com.webobjects.appserver.WOApplication;
+import com.webobjects.appserver.WOContext;
+import com.webobjects.appserver.WODirectAction;
+import com.webobjects.appserver.WORequest;
+import com.webobjects.appserver.WOResponse;
 
 /**
  * Keeps a session open by continuously calling a direct action.

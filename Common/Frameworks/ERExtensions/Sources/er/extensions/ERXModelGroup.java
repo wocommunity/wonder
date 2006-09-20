@@ -6,14 +6,28 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.extensions;
 
-import java.net.*;
-import java.util.*;
+import java.net.URL;
+import java.util.Enumeration;
+import java.util.Hashtable;
 
-import org.apache.log4j.*;
+import org.apache.log4j.Logger;
 
-import com.webobjects.eoaccess.*;
-import com.webobjects.foundation.*;
-import com.webobjects.jdbcadaptor.*;
+import com.webobjects.eoaccess.EOAdaptor;
+import com.webobjects.eoaccess.EOAttribute;
+import com.webobjects.eoaccess.EOEntity;
+import com.webobjects.eoaccess.EOModel;
+import com.webobjects.eoaccess.EOModelGroup;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSBundle;
+import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSLog;
+import com.webobjects.foundation.NSMutableArray;
+import com.webobjects.foundation.NSMutableDictionary;
+import com.webobjects.foundation.NSMutableSet;
+import com.webobjects.foundation.NSNotificationCenter;
+import com.webobjects.foundation.NSPathUtilities;
+import com.webobjects.foundation.NSSet;
+import com.webobjects.jdbcadaptor.JDBCAdaptor;
 
 /**
  * The reason that this model group is needed is because the regular

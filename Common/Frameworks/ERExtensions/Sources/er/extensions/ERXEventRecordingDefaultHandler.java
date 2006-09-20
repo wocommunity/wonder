@@ -6,7 +6,7 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.extensions;
 
-import com.webobjects.eocontrol.*;
+import com.webobjects.eocontrol.EOEventCenter;
 
 /**
  * A concrete event recording handler object. This is useful for setting up custom event recording.

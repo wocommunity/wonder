@@ -6,7 +6,7 @@
 //
 package er.extensions;
 
-import com.webobjects.appserver.*;
+import com.webobjects.appserver.WOContext;
 
 public class ERXImage extends ERXStatelessComponent {
 

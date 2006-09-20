@@ -8,9 +8,9 @@ package er.directtoweb;
 
 import org.apache.log4j.Logger;
 
-import com.webobjects.appserver.*;
+import com.webobjects.appserver.WOContext;
 
-import er.extensions.*;
+import er.extensions.ERXExceptionHolder;
 
 // Useful component and important bug fix
 // Fixes validation failures being propogated

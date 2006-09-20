@@ -1,13 +1,22 @@
 package er.extensions;
 
-import java.math.*;
-import java.text.*;
+import java.math.BigDecimal;
+import java.text.Format;
+import java.text.ParseException;
 
 import org.apache.log4j.Logger;
 
-import com.webobjects.appserver.*;
-import com.webobjects.appserver._private.*;
-import com.webobjects.foundation.*;
+import com.webobjects.appserver.WOAssociation;
+import com.webobjects.appserver.WOComponent;
+import com.webobjects.appserver.WOContext;
+import com.webobjects.appserver.WOElement;
+import com.webobjects.appserver.WORequest;
+import com.webobjects.appserver.WOResponse;
+import com.webobjects.appserver._private.WODynamicElementCreationException;
+import com.webobjects.appserver._private.WOInput;
+import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSLog;
+import com.webobjects.foundation.NSValidation;
 
 /**
  * Replacement for WOTextField. Provides for localized formatters. 

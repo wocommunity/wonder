@@ -8,9 +8,10 @@ package er.directtoweb;
 
 import org.apache.log4j.Logger;
 
-import com.webobjects.appserver.*;
+import com.webobjects.appserver.WOContext;
+import com.webobjects.appserver.WODisplayGroup;
 
-import er.extensions.*;
+import er.extensions.ERXExceptionHolder;
 
 /**
  * Superclass for most custom query components. <br />

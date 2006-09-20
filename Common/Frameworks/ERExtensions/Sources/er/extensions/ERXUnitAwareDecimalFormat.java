@@ -6,11 +6,14 @@
 //
 package er.extensions;
 
-import java.io.*;
-import java.text.*;
-import java.util.*;
+import java.io.Serializable;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
+import java.text.FieldPosition;
+import java.util.Enumeration;
 
-import com.webobjects.foundation.*;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSKeyValueCoding;
 
 /**
  * <code>ERXUnitAwareDecimalFormat</code> extends {@link java.text.DecimalFormat} 

@@ -7,8 +7,10 @@
 
 package com.webobjects.woextensions;
 
-import com.webobjects.eocontrol.*;
-import com.webobjects.foundation.*;
+import com.webobjects.eocontrol.EOEvent;
+import com.webobjects.eocontrol.EOSortOrdering;
+import com.webobjects.foundation.NSComparator;
+import com.webobjects.foundation.NSSelector;
 
 public class _EventComparator extends NSComparator {
     protected boolean _compareAscending;

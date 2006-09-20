@@ -1,7 +1,8 @@
 package er.extensions;
 import org.apache.log4j.Logger;
 
-import com.webobjects.appserver.*;
+import com.webobjects.appserver.WOContext;
+import com.webobjects.appserver.WOResponse;
 
 /**
  * Displays stats on how long the various phases in the request-response loop took.

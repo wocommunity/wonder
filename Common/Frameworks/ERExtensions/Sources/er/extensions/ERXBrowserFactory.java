@@ -6,12 +6,13 @@
 //
 package er.extensions;
 
-import java.util.*;
+import java.util.StringTokenizer;
 
 import org.apache.log4j.Logger;
 
-import com.webobjects.appserver.*;
-import com.webobjects.foundation.*;
+import com.webobjects.appserver.WORequest;
+import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSMutableDictionary;
 
 /**
  * All WebObjects applications have exactly one <code>ERXBrowserFactory</code> 

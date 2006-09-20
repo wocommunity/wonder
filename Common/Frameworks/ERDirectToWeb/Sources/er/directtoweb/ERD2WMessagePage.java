@@ -8,10 +8,10 @@ package er.directtoweb;
 
 import org.apache.log4j.Logger;
 
-import com.webobjects.appserver.*;
-import com.webobjects.directtoweb.*;
-
-import er.extensions.*;
+import com.webobjects.appserver.WOComponent;
+import com.webobjects.appserver.WOContext;
+import com.webobjects.appserver.WOMessage;
+import com.webobjects.directtoweb.NextPageDelegate;
 
 /**
  * Superclass for all message pages.<br />

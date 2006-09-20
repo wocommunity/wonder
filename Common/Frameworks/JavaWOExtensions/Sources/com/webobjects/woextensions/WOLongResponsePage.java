@@ -7,8 +7,13 @@
 
 package com.webobjects.woextensions;
 
-import com.webobjects.appserver.*;
-import com.webobjects.foundation.*;
+import com.webobjects.appserver.WOActionResults;
+import com.webobjects.appserver.WOApplication;
+import com.webobjects.appserver.WOComponent;
+import com.webobjects.appserver.WOContext;
+import com.webobjects.appserver.WORequest;
+import com.webobjects.appserver.WOResponse;
+import com.webobjects.foundation.NSLog;
 
 public abstract class WOLongResponsePage extends WOComponent implements Runnable {
 
@@ -95,8 +100,6 @@ public abstract class WOLongResponsePage extends WOComponent implements Runnable
     // Laurent R-: modified this method to register the newly created
     // thread with the JavaVM, if necessary. Radar bug #: 2244036
     public void run() {
-
-        WOApplication app = WOApplication.application();
 
         setResult(null);
 

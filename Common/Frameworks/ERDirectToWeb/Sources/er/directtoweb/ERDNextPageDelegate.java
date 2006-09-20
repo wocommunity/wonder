@@ -6,9 +6,10 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.directtoweb;
 
-import com.webobjects.appserver.*;
-import com.webobjects.directtoweb.*;
-import com.webobjects.foundation.*;
+import com.webobjects.appserver.WOActionResults;
+import com.webobjects.appserver.WOComponent;
+import com.webobjects.directtoweb.NextPageDelegate;
+import com.webobjects.foundation.NSMutableDictionary;
 
 /**
  * The regular NextPageDelegate interface from

@@ -2,8 +2,13 @@ package er.extensions;
 
 import org.apache.log4j.Logger;
 
-import com.webobjects.foundation.*;
-import com.webobjects.eoaccess.*;
+import com.webobjects.eoaccess.EOAdaptorChannel;
+import com.webobjects.eoaccess.EODatabaseChannel;
+import com.webobjects.eoaccess.EODatabaseContext;
+import com.webobjects.eoaccess.EOSQLExpression;
+import com.webobjects.foundation.NSNotification;
+import com.webobjects.foundation.NSNotificationCenter;
+import com.webobjects.foundation.NSSelector;
 
 /**
  * Tracks and logs the SQL that gets sent to the database. If the milliseconds

@@ -2,10 +2,9 @@ package er.directtoweb;
 
 import org.apache.log4j.Logger;
 
-import com.webobjects.appserver.*;
-import com.webobjects.directtoweb.*;
-
-import er.extensions.*;
+import com.webobjects.appserver.WOContext;
+import com.webobjects.directtoweb.D2WQuery;
+import com.webobjects.directtoweb.D2WSwitchComponent;
 
 /**
  * Same as D2WQuery, except that you can specify the queryBindings in advance.

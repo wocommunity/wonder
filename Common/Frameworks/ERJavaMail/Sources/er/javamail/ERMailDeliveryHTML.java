@@ -6,11 +6,14 @@
 
 package er.javamail;
 
-import java.util.*;
+import java.util.Date;
+import java.util.Enumeration;
 
-import javax.activation.*;
-import javax.mail.*;
-import javax.mail.internet.*;
+import javax.activation.DataHandler;
+import javax.mail.BodyPart;
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeBodyPart;
+import javax.mail.internet.MimeMultipart;
 
 /** This ERMailDelivery subclass is specifically crafted for HTML messages
     using a WOComponent as redering device.

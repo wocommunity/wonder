@@ -2,11 +2,10 @@ package er.directtoweb;
 
 import org.apache.log4j.Logger;
 
-import com.webobjects.appserver.*;
-import com.webobjects.directtoweb.*;
-import com.webobjects.foundation.*;
-
-import er.extensions.*;
+import com.webobjects.appserver.WOContext;
+import com.webobjects.directtoweb.D2WContext;
+import com.webobjects.directtoweb.D2WCustomComponent;
+import com.webobjects.foundation.NSArray;
 
 /**
  * Displays a fly-over that shows a table with hidden property keys. It's very cool in lists when

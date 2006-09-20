@@ -1,7 +1,7 @@
 package er.directtoweb;
 
-import com.webobjects.appserver.*;
-import com.webobjects.directtoweb.*;
+import com.webobjects.appserver.WODisplayGroup;
+import com.webobjects.directtoweb.ListPageInterface;
 
 /** Extended {@link ListPageInterface} so we can get at the displayGroup. */
 public interface ERDListPageInterface extends ListPageInterface {

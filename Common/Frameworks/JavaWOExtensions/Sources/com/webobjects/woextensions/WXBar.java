@@ -7,7 +7,8 @@
 
 package com.webobjects.woextensions;
 
-import com.webobjects.appserver.*;
+import com.webobjects.appserver.WOComponent;
+import com.webobjects.appserver.WOContext;
 
 public class WXBar extends WOComponent {
     public WXBar(WOContext aContext)  {

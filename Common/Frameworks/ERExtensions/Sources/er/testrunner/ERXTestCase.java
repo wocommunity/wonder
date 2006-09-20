@@ -18,16 +18,20 @@ Copyright (c) 2001-2002, CodeFab, Inc.
 
 package er.testrunner;
 
-import java.util.*;
+import java.util.Enumeration;
+
+import junit.framework.TestCase;
 
 import org.apache.log4j.Logger;
 
-import junit.framework.*;
+import com.webobjects.eocontrol.EOEditingContext;
+import com.webobjects.eocontrol.EOEnterpriseObject;
+import com.webobjects.eocontrol.EOGlobalID;
+import com.webobjects.eocontrol.EOValidation;
+import com.webobjects.foundation.NSMutableArray;
+import com.webobjects.foundation.NSValidation;
 
-import com.webobjects.eocontrol.*;
-import com.webobjects.foundation.*;
-
-import er.extensions.*;
+import er.extensions.ERXEC;
 /**
  * Basic test case class to do unit testing inside of WO. 
  * Provides an editingContext that is disposed on every setup/tearDown.

@@ -1,10 +1,26 @@
 package er.extensions;
 
-import java.io.*;
-import java.util.*;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Enumeration;
+import java.util.List;
+import java.util.Vector;
 
-import com.webobjects.foundation.*;
-import com.webobjects.foundation.NSComparator.*;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSCoder;
+import com.webobjects.foundation.NSComparator;
+import com.webobjects.foundation.NSData;
+import com.webobjects.foundation.NSForwardException;
+import com.webobjects.foundation.NSMutableArray;
+import com.webobjects.foundation.NSPropertyListSerialization;
+import com.webobjects.foundation.NSRange;
+import com.webobjects.foundation.NSSelector;
+import com.webobjects.foundation.NSComparator.ComparisonException;
 
 /**
  * Custom subclass of NSMutableArray. Implements {@see java.util.List} and can

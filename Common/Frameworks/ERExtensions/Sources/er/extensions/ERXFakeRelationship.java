@@ -6,14 +6,22 @@
 //
 package er.extensions;
 
-import java.util.*;
+import java.util.Enumeration;
 
 import org.apache.log4j.Logger;
 
-import com.webobjects.appserver.*;
-import com.webobjects.eoaccess.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.foundation.*;
+import com.webobjects.appserver.WOComponent;
+import com.webobjects.appserver.WOContext;
+import com.webobjects.eoaccess.EOAttribute;
+import com.webobjects.eoaccess.EODatabaseDataSource;
+import com.webobjects.eoaccess.EOEntityClassDescription;
+import com.webobjects.eoaccess.EOUtilities;
+import com.webobjects.eocontrol.EOClassDescription;
+import com.webobjects.eocontrol.EOEnterpriseObject;
+import com.webobjects.eocontrol.EOSortOrdering;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSKeyValueCoding;
+import com.webobjects.foundation.NSMutableArray;
 
 /**
  * UI and support methods to edit "relations" to objects flattened into a text field (e.g. languages = "-de-en-"). Useful when you don't need referential integrity but only a quick place to store flags and the like.<br />
@@ -103,8 +111,6 @@ public class ERXFakeRelationship extends WOComponent {
 
     public static void setFakeRelationshipForKey(EOEnterpriseObject sourceObject, NSArray objects, String relationshipKey, String destinationEntityName, String delimiter) {
 	if(objects.count() > 0) {
-	    EOEntityClassDescription cd = (EOEntityClassDescription)EOClassDescription.classDescriptionForEntityName(destinationEntityName);
-	    EOAttribute pk = (EOAttribute)cd.entity().primaryKeyAttributes().objectAtIndex(0);
 	    StringBuffer newValue = new StringBuffer();
 	    Enumeration e = objects.objectEnumerator();
 

@@ -6,18 +6,24 @@
 
 package er.javamail;
 
-import java.lang.reflect.*;
-import java.util.*;
+import java.util.Enumeration;
 
-import javax.mail.*;
-import javax.mail.internet.*;
+import javax.mail.MessagingException;
+import javax.mail.SendFailedException;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.MimeMessage;
 
 import org.apache.log4j.Logger;
 
-import com.webobjects.appserver.*;
-import com.webobjects.foundation.*;
+import com.webobjects.appserver.WOApplication;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSForwardException;
+import com.webobjects.foundation.NSNotification;
+import com.webobjects.foundation.NSNotificationCenter;
+import com.webobjects.foundation.NSTimestamp;
 
-import er.extensions.*;
+import er.extensions.ERXUnitAwareDecimalFormat;
 
 /** This class is used to send mails in a threaded way.<BR> This is
 needed in WebObjects because if sending 20 mails takes 40 seconds,
@@ -28,16 +34,13 @@ the application.
 @author Max Muller <maxmuller@mac.com> */
 public class ERMailSender extends Thread {
 
+	public static final String InvalidEmailNotification = "InvalidEmailNotification";
+	
     static Logger log = Logger.getLogger (ERMailSender.class);
 
     private static ERMailSender _sharedMailSender;
-    private static boolean useSenderDelay =
-        ERXProperties.booleanForKey ("er.javamail.useSenderDelay");
-    private static int senderDelayMillis =
-        ERXProperties.intForKey ("er.javamail.senderDelayMillis");
 
     private Stats stats;
-    private MimeMessage message;
 
     // Holds sending messages. The queue size can be set by
     // er.javamail.senderQueue.size property
@@ -158,7 +161,6 @@ public class ERMailSender extends Thread {
     protected void _sendMessageNow (ERMessage message, Transport transport) throws MessagingException {
         boolean debug = log.isDebugEnabled ();
         MimeMessage aMessage  = message.mimeMessage ();
-        Object callbackObject = message.callbackObject ();
         MessagingException exception = null;
 
         if (message.shouldSendMessage()) {
@@ -193,13 +195,10 @@ public class ERMailSender extends Thread {
                                e.getMessage ());
                 stats.incrementErrorCount ();
 
-                if (callbackObject != null) {
-                    SendFailedException sfex = (SendFailedException)e;
                     NSArray invalidEmails = ERMailUtils.convertInternetAddressesToNSArray
-                        (sfex.getInvalidAddresses ());
-                    this.notifyInvalidEmails (callbackObject, invalidEmails);
-                }
-
+                        (e.getInvalidAddresses ());
+                    this.notifyInvalidEmails (invalidEmails);
+ 
                 exception = e;
             } catch (MessagingException e) {
                 exception = e;
@@ -323,24 +322,9 @@ public class ERMailSender extends Thread {
 
     /** Executes the callback method to notify the calling application of
         any invalid emails. */
-    protected void notifyInvalidEmails (Object callbackObject, NSArray invalidEmails) {
-        // FIXME: We need to refactor this to use NSNotificationCenter !!!
-        try {
-            Class c = Class.forName (ERMailDelivery.callBackClassName);
-            Class[] parameterTypes = new Class[] {callbackObject.getClass(), NSArray.class};
-            Method m = c.getMethod (ERMailDelivery.callBackMethodName, parameterTypes);
-            Object[] args = new Object[] {callbackObject, invalidEmails};
-            m.invoke (c.newInstance(), args);
-        } catch (ClassNotFoundException cnfe) {
-            log.error ("ERMailSender. Unable to find class: " + ERMailDelivery.callBackClassName);
-            throw new NSForwardException (cnfe);
-        } catch (NoSuchMethodException nsme) {
-            log.error ("ERMailSender. Unable to find method: " + ERMailDelivery.callBackMethodName);
-            throw new NSForwardException (nsme);
-        } catch (java.lang.Exception e) {
-            log.error ("Exception occured: " + e.getMessage(), e);
-            throw new NSForwardException (e);
-        }
+    protected void notifyInvalidEmails (NSArray invalidEmails) {
+    	NSNotification notification = new NSNotification(InvalidEmailNotification, invalidEmails);
+    	NSNotificationCenter.defaultCenter().postNotification(notification);
     }
 
     /** This class is about logging mail event for stats purposes.

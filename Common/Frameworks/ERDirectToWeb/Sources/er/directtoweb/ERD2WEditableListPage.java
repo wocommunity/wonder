@@ -6,13 +6,19 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.directtoweb;
 
-import java.util.*;
+import java.util.Enumeration;
 
-import com.webobjects.appserver.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.foundation.*;
+import com.webobjects.appserver.WOComponent;
+import com.webobjects.appserver.WOContext;
+import com.webobjects.appserver.WORequest;
+import com.webobjects.eocontrol.EOEnterpriseObject;
+import com.webobjects.foundation.NSMutableDictionary;
+import com.webobjects.foundation.NSValidation;
 
-import er.extensions.*;
+import er.extensions.ERXExceptionHolder;
+import er.extensions.ERXLocalizer;
+import er.extensions.ERXValidation;
+import er.extensions.ERXValueUtilities;
 
 public class ERD2WEditableListPage extends ERD2WListPage implements ERXExceptionHolder {
 
