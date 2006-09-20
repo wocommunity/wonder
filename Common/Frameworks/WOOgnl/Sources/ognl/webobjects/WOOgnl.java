@@ -8,13 +8,26 @@
 /* WOOgnl.java created by max on Fri 28-Sep-2001 */
 package ognl.webobjects;
 
-import java.util.*;
+import java.util.Enumeration;
+import java.util.Hashtable;
 
-import ognl.*;
+import ognl.ClassResolver;
+import ognl.Ognl;
+import ognl.OgnlException;
+import ognl.OgnlRuntime;
 
-import com.webobjects.appserver.*;
-import com.webobjects.appserver._private.*;
-import com.webobjects.foundation.*;
+import com.webobjects.appserver.WOApplication;
+import com.webobjects.appserver.WOAssociation;
+import com.webobjects.appserver._private.WOParser;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSLog;
+import com.webobjects.foundation.NSMutableArray;
+import com.webobjects.foundation.NSMutableDictionary;
+import com.webobjects.foundation.NSNotification;
+import com.webobjects.foundation.NSNotificationCenter;
+import com.webobjects.foundation.NSSelector;
+import com.webobjects.foundation.NSSet;
 
 public class WOOgnl {
 
