@@ -350,33 +350,37 @@ public class NSMutableArray extends NSArray {
     /**
      * Much faster implementation of the remove method for larger arrays.
      */
-    
-    public void removeObjects(Object objects[]) {
-        if (objects != null) {
-            if(count() * objects.length > 100) {
-                int otherCount = objects.length;
-                int count = count();
-                if(count > 0) {
-                    NSMutableSet table = new NSMutableSet(otherCount);
-                    while (otherCount-- > 0) {
-                        Object o = objects[otherCount];
-                        if(o != null) {
-                            table.addObject(o);
+
+    public void removeObjects(Object otherObjects[]) {
+        if (otherObjects != null) {
+            int count = count();
+            if(count > 0) {
+                int otherCount = otherObjects.length;
+                if(count * otherCount > 100) {
+                    if(count > 0) {
+                        NSMutableSet table = new NSMutableSet(otherCount);
+                        for (int i = 0; i < otherCount; i++) {
+                            Object o = otherObjects[i];
+                            if(o != null) {
+                                table.addObject(o);
+                            }
                         }
-                    }
-                    int offset = 0;
-                    for(int i = 0; i < count(); i++) {
-                        Object o = _objects[i];
-                        if (!table.containsObject(o)) {
-                            _objects[offset++] = o;
+                        int offset = 0;
+                        for(int i = 0; i < count; i++) {
+                            Object o = _objects[i];
+                            _objects[i] = null;
+                            if (!table.containsObject(o)) {
+                                _objects[offset] = o;
+                                offset = offset + 1;
+                            }
                         }
+                        _count = offset;
+                        clearCache();
                     }
-                    _count = offset-1;
-                    clearCache();
+                } else {
+                    for (int i = 0; i < otherObjects.length; i++)
+                        removeObject(otherObjects[i]);
                 }
-            } else {
-                for (int i = 0; i < objects.length; i++)
-                    removeObject(objects[i]);
             }
         }
     }
