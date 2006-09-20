@@ -5,13 +5,28 @@
 //  Created by Max Muller on Sun Feb 23 2003.
 //
 package er.extensions;
-import java.util.*;
+import java.util.Enumeration;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Locale;
+import java.util.Vector;
+import java.util.WeakHashMap;
 
-import org.apache.log4j.*;
+import org.apache.log4j.Logger;
 
-import com.webobjects.eoaccess.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.foundation.*;
+import com.webobjects.eoaccess.EOGeneralAdaptorException;
+import com.webobjects.eocontrol.EOEditingContext;
+import com.webobjects.eocontrol.EOEnterpriseObject;
+import com.webobjects.eocontrol.EOFetchSpecification;
+import com.webobjects.eocontrol.EOGlobalID;
+import com.webobjects.eocontrol.EOObjectStore;
+import com.webobjects.eocontrol.EOSharedEditingContext;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSMutableArray;
+import com.webobjects.foundation.NSNotification;
+import com.webobjects.foundation.NSNotificationCenter;
+import com.webobjects.foundation.NSSelector;
 
 /**
  * Subclass that has every public method overridden to support automatic 

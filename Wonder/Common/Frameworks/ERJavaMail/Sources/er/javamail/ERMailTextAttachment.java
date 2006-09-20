@@ -6,8 +6,9 @@
 
 package er.javamail;
 
-import javax.mail.*;
-import javax.mail.internet.*;
+import javax.mail.BodyPart;
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeBodyPart;
 
 public class ERMailTextAttachment extends ERMailFileAttachment {
 

@@ -8,8 +8,12 @@ package er.extensions;
 
 import org.apache.log4j.Logger;
 
-import com.webobjects.appserver.*;
-import com.webobjects.foundation.*;
+import com.webobjects.appserver.WOActionResults;
+import com.webobjects.appserver.WOContext;
+import com.webobjects.appserver.WORequest;
+import com.webobjects.appserver.WOResponse;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSKeyValueCoding;
 
 /** Please read "Documentation/Navigation.html" to fnd out how to use the navigation components.*/
 
@@ -144,7 +148,6 @@ public class ERXNavigationMenu extends ERXStatelessComponent {
         int totalWidth = 0;
         int lev1Width = level1Width();
         int lev2Width = level2Width();
-        int result = 0;
         int i = 0;
 
         for (i=0; i < level1Items().count(); i++) {
@@ -177,7 +180,6 @@ public class ERXNavigationMenu extends ERXStatelessComponent {
     public int setupLevel3SpacerWidth() {
         //String tmpString = new String();
         int totalWidth = 0;
-        int result = 0;
         int lev2Width = level2SpacerWidth() + level2Width();
         int lev3Width = level3Width();
         int i = 0;

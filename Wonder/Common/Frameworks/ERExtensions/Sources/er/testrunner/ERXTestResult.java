@@ -6,11 +6,14 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.testrunner;
 
+import junit.framework.AssertionFailedError;
+import junit.framework.Test;
+import junit.framework.TestResult;
+
 import org.apache.log4j.Logger;
 
-import junit.framework.*;
-
-import com.webobjects.foundation.*;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSMutableArray;
 
 /**
  * extensions to hold multiple errors and failures.<br />

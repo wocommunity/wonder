@@ -3,15 +3,17 @@
  */
 package er.directtoweb;
 
-import java.util.*;
+import java.util.Enumeration;
 
-import com.webobjects.appserver.*;
-import com.webobjects.directtoweb.*;
-import com.webobjects.eoaccess.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.foundation.*;
+import com.webobjects.appserver.WOComponent;
+import com.webobjects.directtoweb.NextPageDelegate;
+import com.webobjects.eoaccess.EOEntity;
+import com.webobjects.eocontrol.EOEditingContext;
+import com.webobjects.eocontrol.EOEnterpriseObject;
+import com.webobjects.foundation.NSArray;
 
-import er.extensions.*;
+import er.extensions.ERXEOAccessUtilities;
+import er.extensions.ERXEOControlUtilities;
 
 /**
  * Nextpage delegate that handles creating or deleting an intermediate object when you finished with a pick page.

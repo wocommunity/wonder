@@ -8,10 +8,8 @@ package er.directtoweb;
 
 import org.apache.log4j.Logger;
 
-import com.webobjects.appserver.*;
-import com.webobjects.foundation.*;
-
-import er.extensions.*;
+import com.webobjects.appserver.WOContext;
+import com.webobjects.foundation.NSArray;
 
 public class ERD2WList extends ERDCustomEditComponent {
 

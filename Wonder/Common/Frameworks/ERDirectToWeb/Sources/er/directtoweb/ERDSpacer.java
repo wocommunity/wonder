@@ -1,6 +1,6 @@
 package er.directtoweb;
 
-import com.webobjects.appserver.*;
+import com.webobjects.appserver.WOContext;
 
 /**
  * A silly simple component to show a horizontal rule

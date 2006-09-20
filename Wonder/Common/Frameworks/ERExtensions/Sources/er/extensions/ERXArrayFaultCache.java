@@ -1,12 +1,21 @@
 package er.extensions;
 
-import java.util.*;
+import java.util.Enumeration;
 
 import org.apache.log4j.Logger;
 
-import com.webobjects.eoaccess.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.foundation.*;
+import com.webobjects.eoaccess.EOAccessArrayFaultHandler;
+import com.webobjects.eoaccess.EOEntity;
+import com.webobjects.eocontrol.EOEditingContext;
+import com.webobjects.eocontrol.EOEnterpriseObject;
+import com.webobjects.eocontrol.EOFaultHandler;
+import com.webobjects.eocontrol.EOFaulting;
+import com.webobjects.eocontrol.EOGlobalID;
+import com.webobjects.eocontrol.EOKeyGlobalID;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSMutableArray;
+import com.webobjects.foundation.NSMutableDictionary;
 
 /**
  * Provides a cache for to-many faults. Useful when you have a lot (say a
@@ -65,14 +74,12 @@ public class ERXArrayFaultCache {
             EOAccessArrayFaultHandler handler = (EOAccessArrayFaultHandler) fault.faultHandler();
             EOKeyGlobalID sourceGid = handler.sourceGlobalID();
             EOEditingContext ec = handler.editingContext();
-            EOEntity entity = ERXEOAccessUtilities.entityNamed(ec, sourceGid.entityName());
             synchronized (cache) {
                 NSDictionary entries = (NSDictionary) relationshipCacheEntriesForEntity(sourceGid.entityName(), handler.relationshipName());
                 if(entries != null) {
                     NSArray gids = (NSArray) entries.objectForKey(sourceGid);
                     if(gids != null) {
                         NSMutableArray eos = new NSMutableArray(gids.count());
-                        EOEnterpriseObject source = ec.objectForGlobalID(sourceGid);
                         for (Enumeration enumerator = gids.objectEnumerator(); enumerator.hasMoreElements();) {
                             EOGlobalID gid = (EOGlobalID) enumerator.nextElement();
                             EOEnterpriseObject eo = ec.faultForGlobalID(gid, ec);

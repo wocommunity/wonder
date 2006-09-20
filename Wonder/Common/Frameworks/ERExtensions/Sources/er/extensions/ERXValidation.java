@@ -10,9 +10,13 @@ import java.util.NoSuchElementException;
 
 import org.apache.log4j.Logger;
 
-import com.webobjects.eoaccess.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.foundation.*;
+import com.webobjects.eoaccess.EOEntity;
+import com.webobjects.eoaccess.EOUtilities;
+import com.webobjects.eocontrol.EOEnterpriseObject;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSKeyValueCoding;
+import com.webobjects.foundation.NSMutableDictionary;
+import com.webobjects.foundation.NSValidation;
 
 /**
  * This is more of a legacy object that was used until

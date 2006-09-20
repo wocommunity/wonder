@@ -1,6 +1,6 @@
 package er.directtoweb;
 
-import com.webobjects.appserver.*;
+import com.webobjects.appserver.WOContext;
 
 /** 
  * Unless you need the special shouldProvideConfirmMessage, one should use ERD2WMessagePage instead 

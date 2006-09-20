@@ -6,11 +6,27 @@
 //
 package er.extensions;
 
-import java.util.*;
+import java.util.Enumeration;
 
-import com.webobjects.eoaccess.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.foundation.*;
+import com.webobjects.eoaccess.EOEntity;
+import com.webobjects.eoaccess.EOJoin;
+import com.webobjects.eoaccess.EOQualifierSQLGeneration;
+import com.webobjects.eoaccess.EORelationship;
+import com.webobjects.eoaccess.EOSQLExpression;
+import com.webobjects.eoaccess.EOUtilities;
+import com.webobjects.eocontrol.EOAndQualifier;
+import com.webobjects.eocontrol.EOEditingContext;
+import com.webobjects.eocontrol.EOEnterpriseObject;
+import com.webobjects.eocontrol.EOKeyValueQualifier;
+import com.webobjects.eocontrol.EOObjectStoreCoordinator;
+import com.webobjects.eocontrol.EOQualifier;
+import com.webobjects.eocontrol.EOQualifierVariable;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSKeyValueCoding;
+import com.webobjects.foundation.NSKeyValueCodingAdditions;
+import com.webobjects.foundation.NSMutableArray;
+import com.webobjects.foundation.NSMutableDictionary;
 
 /**
  * The ERXInQualifier is useful for creating qualifiers that
@@ -186,7 +202,6 @@ public class ERXInQualifier extends EOKeyValueQualifier implements Cloneable {
             } else {
                 NSMutableDictionary mapping = new NSMutableDictionary(l);
                 for(int j = 0; j < l; j++) {
-                    NSArray values = (NSArray)value;
                     NSMutableArray realValues = new NSMutableArray();
                     for(Enumeration e = ((NSArray)value).objectEnumerator(); e.hasMoreElements();) {
                         Object o = e.nextElement();
@@ -194,7 +209,6 @@ public class ERXInQualifier extends EOKeyValueQualifier implements Cloneable {
                         String currentKey = (String) destinationAttibuteNames.objectAtIndex(j);
                         Object v;
                         if (o instanceof EOEnterpriseObject) {
-                            EOEnterpriseObject new_name = (EOEnterpriseObject) o;
                             EOEnterpriseObject eoenterpriseobject = (EOEnterpriseObject)o;
                             EOObjectStoreCoordinator osc = ((EOObjectStoreCoordinator)eoenterpriseobject.editingContext().rootObjectStore());
                             dict = osc.valuesForKeys(new NSArray(currentKey), eoenterpriseobject);

@@ -9,13 +9,26 @@ package er.directtoweb;
 
 import org.apache.log4j.Logger;
 
-import com.webobjects.appserver.*;
-import com.webobjects.directtoweb.*;
-import com.webobjects.eoaccess.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.foundation.*;
+import com.webobjects.appserver.WOComponent;
+import com.webobjects.directtoweb.D2W;
+import com.webobjects.directtoweb.D2WContext;
+import com.webobjects.directtoweb.ErrorPageInterface;
+import com.webobjects.directtoweb.NextPageDelegate;
+import com.webobjects.eoaccess.EODatabaseContext;
+import com.webobjects.eoaccess.EODatabaseOperation;
+import com.webobjects.eoaccess.EOGeneralAdaptorException;
+import com.webobjects.eoaccess.EOObjectNotAvailableException;
+import com.webobjects.eoaccess.EOUtilities;
+import com.webobjects.eocontrol.EODataSource;
+import com.webobjects.eocontrol.EOEditingContext;
+import com.webobjects.eocontrol.EOEnterpriseObject;
+import com.webobjects.eocontrol.EOSharedEditingContext;
+import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSValidation;
 
-import er.extensions.*;
+import er.extensions.ERXEC;
+import er.extensions.ERXValidationException;
+import er.extensions.ERXValidationFactory;
 
 /**
  * Delete used after confirming a delete action. <br />
@@ -27,7 +40,6 @@ public class ERDDeletionDelegate implements NextPageDelegate {
     /** logging support */
     public final static Logger log = Logger.getLogger("er.directtoweb.delegates.ERDDeletionDelegate");
 
-    private EOEditingContext      _ec;
     private EOEnterpriseObject    _object;
     private EODataSource          _dataSource;
     private WOComponent           _followPage;
@@ -46,7 +58,6 @@ public class ERDDeletionDelegate implements NextPageDelegate {
         _object = object;
         _dataSource = dataSource;
         _followPage = nextPage;
-        if (_object != null) _ec = _object.editingContext();
     }
 
     public WOComponent nextPage(WOComponent sender) {

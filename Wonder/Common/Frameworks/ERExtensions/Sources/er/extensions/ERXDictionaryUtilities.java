@@ -6,9 +6,15 @@
 //
 package er.extensions;
 
-import java.util.*;
+import java.util.Enumeration;
 
-import com.webobjects.foundation.*;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSBundle;
+import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSKeyValueCoding;
+import com.webobjects.foundation.NSKeyValueCodingAdditions;
+import com.webobjects.foundation.NSMutableDictionary;
+import com.webobjects.foundation.NSPropertyListSerialization;
 
 /**
  * Collection of {@link com.webobjects.foundation.NSDictionary NSDictionary} utilities.

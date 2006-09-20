@@ -9,13 +9,16 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.extensions;
 
-import java.util.*;
+import java.util.Enumeration;
 
-import org.apache.log4j.*;
+import org.apache.log4j.Logger;
 
-import com.webobjects.appserver.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.foundation.*;
+import com.webobjects.appserver.WOContext;
+import com.webobjects.appserver.WORequest;
+import com.webobjects.eocontrol.EOSortOrdering;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSKeyValueCodingAdditions;
+import com.webobjects.foundation.NSMutableArray;
 
 /**
  * Very, very cool js component. Implements master-detail with js in two popups, ie the first popup could be say 
@@ -324,7 +327,6 @@ public class ERXJSPopUpRelationPicker extends ERXStatelessComponent {
     public String childPopUpString() {
         StringBuffer returnString = selectHeader(childSelectName, pickerName + ".childChanged();");
 
-        String prePendText = null;
         if (parentSelection().count() != 0) {
             if (childrenSelection().count() == 0 && defaultChildKey() != null)
                 setChildrenSelection((NSArray)NSKeyValueCodingAdditions.Utility.valueForKeyPath(parentSelection(), defaultChildKey() + ".@flatten"));

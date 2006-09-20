@@ -6,17 +6,44 @@
 //
 package er.extensions;
 
-import java.io.*;
-import java.net.*;
-import java.util.*;
-import java.util.zip.*;
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileFilter;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.Reader;
+import java.io.StringReader;
+import java.io.Writer;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Enumeration;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
+import java.util.zip.ZipOutputStream;
 
 import org.apache.log4j.Logger;
 
-import com.webobjects.appserver.*;
-import com.webobjects.foundation.*;
+import com.webobjects.appserver.WOApplication;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSBundle;
+import com.webobjects.foundation.NSForwardException;
+import com.webobjects.foundation.NSMutableArray;
+import com.webobjects.foundation.NSPropertyListSerialization;
 
-import er.extensions.ERXRuntimeUtilities.*;
+import er.extensions.ERXRuntimeUtilities.Result;
+import er.extensions.ERXRuntimeUtilities.TimeoutException;
 
 /**
 * Collection of handy {java.io.File} utilities.
@@ -596,8 +623,6 @@ public class ERXFileUtilities {
                 srcDirectory.listFiles(filter) :
                 srcDirectory.listFiles();
             if (srcFiles != null && srcFiles.length > 0) {
-                FileInputStream in = null;
-                FileOutputStream out = null;
 
                 for (int i = 0; i < srcFiles.length; i++) {
                     File srcFile = srcFiles[i];

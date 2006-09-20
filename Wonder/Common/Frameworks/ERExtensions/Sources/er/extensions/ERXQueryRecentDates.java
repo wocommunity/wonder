@@ -8,8 +8,11 @@ package er.extensions;
 
 import org.apache.log4j.Logger;
 
-import com.webobjects.appserver.*;
-import com.webobjects.foundation.*;
+import com.webobjects.appserver.WOComponent;
+import com.webobjects.appserver.WOContext;
+import com.webobjects.appserver.WODisplayGroup;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSTimestamp;
 
 /**
  * Nice for adjusting the query specs for dates on a display group.<br />

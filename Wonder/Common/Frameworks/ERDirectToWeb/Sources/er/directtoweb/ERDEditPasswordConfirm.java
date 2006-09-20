@@ -8,9 +8,7 @@ package er.directtoweb;
 
 import org.apache.log4j.Logger;
 
-import com.webobjects.appserver.*;
-
-import er.extensions.*;
+import com.webobjects.appserver.WOContext;
 
 /**
  * Used to edit passwords where when changed the changed value must be confirmed.<br />

@@ -8,12 +8,14 @@ package er.directtoweb;
 
 import org.apache.log4j.Logger;
 
-import com.webobjects.appserver.*;
-import com.webobjects.directtoweb.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.foundation.*;
-
-import er.extensions.*;
+import com.webobjects.appserver.WOContext;
+import com.webobjects.directtoweb.D2WList;
+import com.webobjects.eocontrol.EOArrayDataSource;
+import com.webobjects.eocontrol.EOClassDescription;
+import com.webobjects.eocontrol.EODataSource;
+import com.webobjects.eocontrol.EOEditingContext;
+import com.webobjects.eocontrol.EOEnterpriseObject;
+import com.webobjects.foundation.NSArray;
 
 // Only difference between this component and D2WList is that this one uses ERD2WSwitchComponent
 /**

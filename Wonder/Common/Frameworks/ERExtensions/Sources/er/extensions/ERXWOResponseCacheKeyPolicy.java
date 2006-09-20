@@ -6,10 +6,12 @@
 //
 package er.extensions;
 
-import java.util.*;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.Map;
 
-import com.webobjects.appserver.*;
-import com.webobjects.foundation.*;
+import com.webobjects.appserver.WORequest;
+import com.webobjects.foundation.NSArray;
 
 public class ERXWOResponseCacheKeyPolicy implements ERXWOResponseCache.Policy {
 

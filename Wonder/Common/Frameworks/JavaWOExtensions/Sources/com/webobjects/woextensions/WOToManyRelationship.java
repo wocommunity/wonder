@@ -7,12 +7,23 @@
 
 package com.webobjects.woextensions;
 
-import java.util.*;
+import java.util.Enumeration;
 
-import com.webobjects.appserver.*;
-import com.webobjects.eoaccess.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.foundation.*;
+import com.webobjects.appserver.WOComponent;
+import com.webobjects.appserver.WOContext;
+import com.webobjects.eoaccess.EODatabaseDataSource;
+import com.webobjects.eoaccess.EOEntity;
+import com.webobjects.eoaccess.EOModelGroup;
+import com.webobjects.eocontrol.EODataSource;
+import com.webobjects.eocontrol.EOEditingContext;
+import com.webobjects.eocontrol.EOEnterpriseObject;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSComparator;
+import com.webobjects.foundation.NSForwardException;
+import com.webobjects.foundation.NSKeyValueCoding;
+import com.webobjects.foundation.NSLog;
+import com.webobjects.foundation.NSMutableArray;
+import com.webobjects.foundation.NSMutableDictionary;
 
 public class WOToManyRelationship extends WOComponent {
 

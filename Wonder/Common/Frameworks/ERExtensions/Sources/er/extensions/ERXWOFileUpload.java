@@ -1,8 +1,10 @@
 package er.extensions;
 import org.apache.log4j.Logger;
 
-import com.webobjects.appserver.*;
-import com.webobjects.foundation.*;
+import com.webobjects.appserver.WOContext;
+import com.webobjects.appserver.WOElement;
+import com.webobjects.appserver.WOResponse;
+import com.webobjects.foundation.NSDictionary;
 
 /**
  * Provides better error checking.

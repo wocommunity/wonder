@@ -3,10 +3,10 @@ package er.directtoweb;
 
 import org.apache.log4j.Logger;
 
-import com.webobjects.appserver.*;
-import com.webobjects.foundation.*;
-
-import er.extensions.*;
+import com.webobjects.appserver.WOComponent;
+import com.webobjects.appserver.WOContext;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSDictionary;
 /**
  * Action button that looks for the inner-most page with a pageController (which must be
  * a ERDBranchDelegateInterface), collects all the actions from there 

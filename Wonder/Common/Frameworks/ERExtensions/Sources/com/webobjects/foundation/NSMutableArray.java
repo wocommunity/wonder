@@ -1,6 +1,13 @@
 package com.webobjects.foundation;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.ConcurrentModificationException;
+import java.util.Iterator;
+import java.util.List;
+import java.util.ListIterator;
+import java.util.NoSuchElementException;
+import java.util.RandomAccess;
+import java.util.Vector;
 /**
  * Bugfix reimplementation of NSMutableArray. To be able to use this class, the framework this class resides in must be
  * before JavaFoundation.framework in your classpath. <br />
@@ -303,16 +310,11 @@ public class NSMutableArray extends NSArray {
             index = destIndex;
             boundary = sourceIndex;
             direction = 1;
-            int srcOffset = 1;
-            int dstOffset = 0;
         } else {
             index = sourceIndex;
             boundary = destIndex;
             direction = -1;
-            int srcOffset = 0;
-            int dstOffset = 1;
         }
-        int count = index - boundary;
         for (; index != boundary; index += direction)
             _objects[index] = _objects[index + direction];
 

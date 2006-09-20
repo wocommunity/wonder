@@ -1,5 +1,5 @@
 package er.directtoweb;
-import com.webobjects.eocontrol.*;
+import com.webobjects.eocontrol.EOKeyValueUnarchiver;
 
 /**
  * @deprecated, use {@link ERDDelayedLocalizedAssignment}.

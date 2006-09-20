@@ -7,17 +7,36 @@
 
 package er.directtoweb;
 
-import java.util.*;
+import java.util.Enumeration;
 
 import org.apache.log4j.Logger;
 
-import com.webobjects.appserver.*;
-import com.webobjects.directtoweb.*;
-import com.webobjects.eoaccess.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.foundation.*;
+import com.webobjects.appserver.WOComponent;
+import com.webobjects.appserver.WOContext;
+import com.webobjects.appserver.WODisplayGroup;
+import com.webobjects.appserver.WOResponse;
+import com.webobjects.directtoweb.D2W;
+import com.webobjects.directtoweb.EditPageInterface;
+import com.webobjects.directtoweb.EditRelationshipPageInterface;
+import com.webobjects.directtoweb.NextPageDelegate;
+import com.webobjects.directtoweb.Services;
+import com.webobjects.eoaccess.EOEntity;
+import com.webobjects.eoaccess.EOModelGroup;
+import com.webobjects.eoaccess.EORelationship;
+import com.webobjects.eoaccess.EOUtilities;
+import com.webobjects.eocontrol.EODataSource;
+import com.webobjects.eocontrol.EODetailDataSource;
+import com.webobjects.eocontrol.EOEditingContext;
+import com.webobjects.eocontrol.EOEnterpriseObject;
+import com.webobjects.eocontrol.EOSortOrdering;
+import com.webobjects.foundation.NSArray;
 
-import er.extensions.*;
+import er.extensions.ERXConstant;
+import er.extensions.ERXEC;
+import er.extensions.ERXEOControlUtilities;
+import er.extensions.ERXGuardedObjectInterface;
+import er.extensions.ERXSession;
+import er.extensions.ERXValueUtilities;
 
 public class ERD2WEditSortedManyToManyPage extends ERD2WPage implements EditRelationshipPageInterface {
 
@@ -325,7 +344,6 @@ public class ERD2WEditSortedManyToManyPage extends ERD2WPage implements EditRela
         if (_destinationRelationship==null) {
             NSArray joinRelationships = ERDSortedManyToManyAssignment.joinRelationshipsForJoinEntity(entity());
 
-            EORelationship destinationRelationship=null;
             String originEntityName=object().entityName();
             //General case
             for (Enumeration e=joinRelationships.objectEnumerator(); e.hasMoreElements();) {
@@ -390,6 +408,8 @@ public class ERD2WEditSortedManyToManyPage extends ERD2WPage implements EditRela
     {
         if(browserSelection()!=null){
             NSArray sortedObjects=relationshipDisplayGroup.displayedObjects();
+            // make the compiler happy
+            sortedObjects.count(); 
             int selectedIndex = ((Integer)browserSelection().valueForKey(indexKey())).intValue();
             EOEnterpriseObject lastObject =
                 (EOEnterpriseObject)relationshipDisplayGroup.displayedObjects().lastObject();

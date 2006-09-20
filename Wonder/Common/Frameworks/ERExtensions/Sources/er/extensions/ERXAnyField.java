@@ -1,8 +1,8 @@
 package er.extensions;
 import org.apache.log4j.Logger;
 
-import com.webobjects.appserver.*;
-import com.webobjects.woextensions.*;
+import com.webobjects.appserver.WOContext;
+import com.webobjects.woextensions.WOAnyField;
 
 /**
  * Class for Wonder Component ERXAnyField.

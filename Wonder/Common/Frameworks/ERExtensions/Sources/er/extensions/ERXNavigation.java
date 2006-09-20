@@ -8,11 +8,13 @@
 /* ERXNavigation.java created by max on Thu 27-Jul-2000 */
 package er.extensions;
 
-import java.util.*;
+import java.util.StringTokenizer;
 
 import org.apache.log4j.Logger;
 
-import com.webobjects.foundation.*;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSMutableArray;
+import com.webobjects.foundation.NSRange;
 
 // FIXME: Alot of this needs to move up as it is specific to our navigation structure.
 /**

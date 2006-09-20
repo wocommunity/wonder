@@ -6,9 +6,9 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.directtoweb;
 
-import com.webobjects.appserver.*;
-import com.webobjects.directtoweb.*;
-import com.webobjects.eocontrol.*;
+import com.webobjects.appserver.WOContext;
+import com.webobjects.directtoweb.D2WInspect;
+import com.webobjects.eocontrol.EOEnterpriseObject;
 
 // Only difference between this component and D2WInspect is that this one uses ERD2WSwitchComponent
 /**

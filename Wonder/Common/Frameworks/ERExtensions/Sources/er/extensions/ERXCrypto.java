@@ -6,16 +6,30 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.extensions;
 
-import java.io.*;
-import java.security.*;
-import java.util.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.security.Key;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
+import java.util.Enumeration;
 
-import javax.crypto.*;
-import javax.crypto.spec.*;
+import javax.crypto.Cipher;
+import javax.crypto.KeyGenerator;
+import javax.crypto.spec.SecretKeySpec;
 
 import org.apache.log4j.Logger;
 
-import com.webobjects.foundation.*;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSForwardException;
+import com.webobjects.foundation.NSMutableDictionary;
 
 /* Compilation problems? READ THIS
  *

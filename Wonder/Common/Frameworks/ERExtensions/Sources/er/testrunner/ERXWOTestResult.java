@@ -6,15 +6,22 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.testrunner;
 
-import java.io.*;
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
+
+import junit.framework.TestCase;
+import junit.framework.TestFailure;
+import junit.framework.TestSuite;
 
 import org.apache.log4j.Logger;
 
-import junit.framework.*;
-
-import com.webobjects.appserver.*;
-import com.webobjects.foundation.*;
-import com.webobjects.woextensions.*;
+import com.webobjects.appserver.WOApplication;
+import com.webobjects.appserver.WOComponent;
+import com.webobjects.appserver.WOContext;
+import com.webobjects.appserver.WORequest;
+import com.webobjects.foundation.NSForwardException;
+import com.webobjects.woextensions.WOExceptionParser;
+import com.webobjects.woextensions.WOParsedErrorLine;
 
 /**
  * WOComponent display of an ERTestResult.<br />
@@ -28,7 +35,6 @@ import com.webobjects.woextensions.*;
 
 public class ERXWOTestResult extends WOComponent {
     public Throwable exception;
-    private NSArray _reasonLines;
     public String currentReasonLine;
 
     public WOExceptionParser error;

@@ -2,11 +2,11 @@ package er.directtoweb;
 
 import org.apache.log4j.Logger;
 
-import com.webobjects.appserver.*;
-import com.webobjects.directtoweb.*;
-import com.webobjects.foundation.*;
-
-import er.extensions.*;
+import com.webobjects.appserver.WOComponent;
+import com.webobjects.appserver.WOContext;
+import com.webobjects.directtoweb.D2WPage;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSDictionary;
 
 /**
  * Displays a set of buttons and calls the enclosing page's branch delegate with it.

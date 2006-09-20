@@ -1,7 +1,7 @@
 package er.directtoweb;
 
-import com.webobjects.appserver.*;
-import com.webobjects.foundation.*;
+import com.webobjects.appserver.WOContext;
+import com.webobjects.foundation.NSMutableArray;
 
 /**
  * For editing a selection in a list repetition. You'd typicically but this somewhere into the actions.

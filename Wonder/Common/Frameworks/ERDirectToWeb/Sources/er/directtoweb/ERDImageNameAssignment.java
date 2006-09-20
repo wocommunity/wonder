@@ -8,11 +8,9 @@ package er.directtoweb;
 
 import org.apache.log4j.Logger;
 
-import com.webobjects.directtoweb.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.foundation.*;
-
-import er.extensions.*;
+import com.webobjects.directtoweb.D2WContext;
+import com.webobjects.eocontrol.EOKeyValueUnarchiver;
+import com.webobjects.foundation.NSArray;
 
 /**
  * Default way of generating image references for tabs and sections.<br />

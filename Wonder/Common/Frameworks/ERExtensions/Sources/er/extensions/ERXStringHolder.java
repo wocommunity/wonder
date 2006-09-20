@@ -1,7 +1,7 @@
 package er.extensions;
 import org.apache.log4j.Logger;
 
-import com.webobjects.appserver.*;
+import com.webobjects.appserver.WOContext;
 
 /**
  * Use this to return a string from direct actions.

@@ -8,9 +8,7 @@ package er.directtoweb;
 
 import org.apache.log4j.Logger;
 
-import com.webobjects.appserver.*;
-
-import er.extensions.*;
+import com.webobjects.appserver.WOContext;
 
 /**
  * Correctly handles validation exceptions, plus a bunch of other stuff.<br />

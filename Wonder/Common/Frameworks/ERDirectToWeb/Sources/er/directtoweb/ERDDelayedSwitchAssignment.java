@@ -6,15 +6,15 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.directtoweb;
 
-import java.util.*;
+import java.util.Enumeration;
 
 import org.apache.log4j.Logger;
 
-import com.webobjects.directtoweb.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.foundation.*;
-
-import er.extensions.*;
+import com.webobjects.directtoweb.D2WContext;
+import com.webobjects.eocontrol.EOKeyValueUnarchiver;
+import com.webobjects.eocontrol.EOQualifier;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSDictionary;
 
 
 

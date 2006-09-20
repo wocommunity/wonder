@@ -6,10 +6,11 @@
 //
 package er.directtoweb;
 
-import com.webobjects.appserver.*;
-import com.webobjects.directtoweb.*;
+import com.webobjects.appserver.WOContext;
+import com.webobjects.appserver.WORequest;
+import com.webobjects.directtoweb.D2WQueryStringComponent;
 
-import er.extensions.*;
+import er.extensions.ERXCrypterInterface;
 
 public class ERD2WQueryEncryptedString extends D2WQueryStringComponent {
 

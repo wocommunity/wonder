@@ -6,15 +6,16 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.directtoweb;
 
-import java.util.*;
+import java.util.Enumeration;
 
 import org.apache.log4j.Logger;
 
-import com.webobjects.directtoweb.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.foundation.*;
-
-import er.extensions.*;
+import com.webobjects.directtoweb.Assignment;
+import com.webobjects.directtoweb.D2WContext;
+import com.webobjects.directtoweb.Rule;
+import com.webobjects.eocontrol.EOKeyValueUnarchiver;
+import com.webobjects.eocontrol.EOQualifierEvaluation;
+import com.webobjects.foundation.NSArray;
 
 /**
  * DelayedRuleAssignment expects an array of rules as its value. The rules are

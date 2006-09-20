@@ -6,9 +6,11 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.extensions;
 
-import java.util.*;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 
-import com.webobjects.foundation.*;
+import com.webobjects.foundation.NSTimeZone;
+import com.webobjects.foundation.NSTimestamp;
 
 /**
  * A simle utility for providing deprecated functionality for NSTimestamps<br />

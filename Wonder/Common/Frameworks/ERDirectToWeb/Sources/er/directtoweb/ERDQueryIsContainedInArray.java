@@ -2,11 +2,11 @@ package er.directtoweb;
 
 import org.apache.log4j.Logger;
 
-import com.webobjects.appserver.*;
-import com.webobjects.eoaccess.*;
-import com.webobjects.eocontrol.*;
+import com.webobjects.appserver.WOContext;
+import com.webobjects.eoaccess.EOUtilities;
+import com.webobjects.eocontrol.EOEditingContext;
 
-import er.extensions.*;
+import er.extensions.ERXPrimaryKeyListQualifier;
 
 /**
  * Allows you to query for objects that have a one or more of a set of related objects.

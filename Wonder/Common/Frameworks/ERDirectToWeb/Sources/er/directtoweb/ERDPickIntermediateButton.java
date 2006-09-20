@@ -2,12 +2,16 @@ package er.directtoweb;
 
 import org.apache.log4j.Logger;
 
-import com.webobjects.appserver.*;
-import com.webobjects.directtoweb.*;
-import com.webobjects.eoaccess.*;
-import com.webobjects.foundation.*;
+import com.webobjects.appserver.WOComponent;
+import com.webobjects.appserver.WOContext;
+import com.webobjects.directtoweb.D2W;
+import com.webobjects.eoaccess.EODatabaseDataSource;
+import com.webobjects.eoaccess.EOEntity;
+import com.webobjects.foundation.NSArray;
 
-import er.extensions.*;
+import er.extensions.ERXEOAccessUtilities;
+import er.extensions.ERXLocalizer;
+import er.extensions.ERXStringUtilities;
 
 /**
  * Action button that lets you pick the setup of a non-flattened to-many relationship and creates 

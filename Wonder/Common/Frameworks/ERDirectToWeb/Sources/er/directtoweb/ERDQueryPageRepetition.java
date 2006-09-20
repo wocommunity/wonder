@@ -2,9 +2,8 @@ package er.directtoweb;
 
 import org.apache.log4j.Logger;
 
-import com.webobjects.appserver.*;
-
-import er.extensions.*;
+import com.webobjects.appserver.WOContext;
+import com.webobjects.appserver.WODisplayGroup;
 
 /**
  * Class for DirectToWeb Component ERDQueryPageRepetition.

@@ -2,10 +2,15 @@ package er.extensions;
 
 import org.apache.log4j.Logger;
 
-import com.webobjects.appserver.*;
-import com.webobjects.eoaccess.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.foundation.*;
+import com.webobjects.appserver.WODisplayGroup;
+import com.webobjects.eoaccess.EODatabaseDataSource;
+import com.webobjects.eocontrol.EODataSource;
+import com.webobjects.eocontrol.EOEditingContext;
+import com.webobjects.eocontrol.EOFetchSpecification;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSKeyValueCoding;
+import com.webobjects.foundation.NSMutableArray;
+import com.webobjects.foundation.NSNotificationCenter;
 
 /**
  * Extends {@link WODisplayGroup} in order to provide real batching.

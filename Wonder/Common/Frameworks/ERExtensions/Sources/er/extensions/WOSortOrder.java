@@ -23,11 +23,15 @@
  */
 package er.extensions;
 
-import java.util.*;
+import java.util.Enumeration;
 
-import com.webobjects.appserver.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.foundation.*;
+import com.webobjects.appserver.WOComponent;
+import com.webobjects.appserver.WOContext;
+import com.webobjects.appserver.WODisplayGroup;
+import com.webobjects.eocontrol.EOSortOrdering;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSMutableArray;
+import com.webobjects.foundation.NSSelector;
 
 /**
  * Almost direct port of WOSortOrder from WO 5's WOExtensions<br />
@@ -106,7 +110,6 @@ public class WOSortOrder extends ERXStatelessComponent {
     private void _removeSortOrderingWithKey(String s)
     {
         int i = 0;
-        Object obj = null;
         WODisplayGroup wodisplaygroup = displayGroup();
         NSArray nsarray = wodisplaygroup.sortOrderings();
         if(nsarray != null)

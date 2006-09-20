@@ -7,8 +7,11 @@
 
 package com.webobjects.woextensions;
 
-import com.webobjects.appserver.*;
-import com.webobjects.foundation.*;
+import com.webobjects.appserver.WOApplication;
+import com.webobjects.appserver.WOComponent;
+import com.webobjects.appserver.WOContext;
+import com.webobjects.appserver.WOResponse;
+import com.webobjects.foundation.NSArray;
 
 public class WOExceptionPage extends WOComponent {
     public Throwable exception;

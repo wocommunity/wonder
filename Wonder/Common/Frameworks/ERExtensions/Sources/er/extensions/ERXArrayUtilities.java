@@ -1,10 +1,32 @@
 package er.extensions;
 
-import java.math.*;
-import java.util.*;
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.Hashtable;
+import java.util.Iterator;
+import java.util.SortedSet;
+import java.util.TreeSet;
+import java.util.Vector;
 
-import com.webobjects.eocontrol.*;
-import com.webobjects.foundation.*;
+import com.webobjects.eocontrol.EOEnterpriseObject;
+import com.webobjects.eocontrol.EOFetchSpecification;
+import com.webobjects.eocontrol.EOQualifier;
+import com.webobjects.eocontrol.EOQualifierEvaluation;
+import com.webobjects.eocontrol.EOSortOrdering;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSBundle;
+import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSKeyValueCoding;
+import com.webobjects.foundation.NSKeyValueCodingAdditions;
+import com.webobjects.foundation.NSMutableArray;
+import com.webobjects.foundation.NSMutableDictionary;
+import com.webobjects.foundation.NSMutableSet;
+import com.webobjects.foundation.NSPropertyListSerialization;
+import com.webobjects.foundation.NSRange;
+import com.webobjects.foundation.NSSelector;
+import com.webobjects.foundation.NSSet;
 
 /**
  * Collection of {@link com.webobjects.foundation.NSArray NSArray} utilities.

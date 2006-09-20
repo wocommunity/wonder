@@ -6,8 +6,14 @@
 //
 package er.extensions;
 
-import com.webobjects.appserver.*;
-import com.webobjects.foundation.*;
+import com.webobjects.appserver.WOApplication;
+import com.webobjects.appserver.WOContext;
+import com.webobjects.appserver.WODirectAction;
+import com.webobjects.appserver.WORequest;
+import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSMutableDictionary;
+import com.webobjects.foundation.NSNotification;
+import com.webobjects.foundation.NSNotificationCenter;
 
 /** Replacement of WOContext.
  *  This subclass is installed when the frameworks loads.

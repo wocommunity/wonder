@@ -6,10 +6,12 @@
  */
 package er.extensions;
 
-import java.util.*;
+import java.util.Enumeration;
+import java.util.Properties;
 
-import com.webobjects.appserver.*;
-import com.webobjects.foundation.*;
+import com.webobjects.appserver.WOApplication;
+import com.webobjects.foundation.NSKeyValueCoding;
+import com.webobjects.foundation.NSKeyValueCodingAdditions;
 
 
 /**

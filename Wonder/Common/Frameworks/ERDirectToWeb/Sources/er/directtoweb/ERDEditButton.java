@@ -8,11 +8,15 @@ package er.directtoweb;
 
 import org.apache.log4j.Logger;
 
-import com.webobjects.appserver.*;
-import com.webobjects.directtoweb.*;
-import com.webobjects.eocontrol.*;
+import com.webobjects.appserver.WOComponent;
+import com.webobjects.appserver.WOContext;
+import com.webobjects.directtoweb.D2W;
+import com.webobjects.directtoweb.EditPageInterface;
+import com.webobjects.eocontrol.EOEnterpriseObject;
 
-import er.extensions.*;
+import er.extensions.ERXEOControlUtilities;
+import er.extensions.ERXGuardedObjectInterface;
+import er.extensions.ERXValueUtilities;
 
 /**
  * Nice edit button for editing a toMany relationship in another page.<br />

@@ -6,7 +6,7 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.directtoweb;
 
-import com.webobjects.appserver.*;
+import com.webobjects.appserver.WOContext;
 // REMOVEME: use ERDEditDateJavascript
 public class ERD2WEditDateJavascript extends ERDEditDateJavascript {
 

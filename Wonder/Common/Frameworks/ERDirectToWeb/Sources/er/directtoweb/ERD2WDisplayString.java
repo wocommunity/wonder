@@ -6,8 +6,8 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.directtoweb;
 
-import com.webobjects.appserver.*;
-import com.webobjects.directtoweb.*;
+import com.webobjects.appserver.WOContext;
+import com.webobjects.directtoweb.D2WDisplayString;
 
 /**
  * Full blown dislay string with all the bells and whistles.<br />

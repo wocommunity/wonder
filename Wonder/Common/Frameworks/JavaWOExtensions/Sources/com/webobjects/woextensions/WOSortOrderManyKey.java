@@ -7,11 +7,15 @@
 
 package com.webobjects.woextensions;
 
-import java.util.*;
+import java.util.Enumeration;
 
-import com.webobjects.appserver.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.foundation.*;
+import com.webobjects.appserver.WOComponent;
+import com.webobjects.appserver.WOContext;
+import com.webobjects.appserver.WODisplayGroup;
+import com.webobjects.eocontrol.EOSortOrdering;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSMutableArray;
+import com.webobjects.foundation.NSSelector;
 
 public class WOSortOrderManyKey extends WOComponent {
     protected String _currentKey;

@@ -8,12 +8,13 @@ package er.directtoweb;
 
 import org.apache.log4j.Logger;
 
-import com.webobjects.directtoweb.*;
-import com.webobjects.eoaccess.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.foundation.*;
+import com.webobjects.directtoweb.D2WContext;
+import com.webobjects.eoaccess.EOEntity;
+import com.webobjects.eoaccess.EORelationship;
+import com.webobjects.eocontrol.EOKeyValueUnarchiver;
+import com.webobjects.foundation.NSArray;
 
-import er.extensions.*;
+import er.extensions.ERXStringUtilities;
 
 // MOVEME: This should move into the defaults assignment, only reason
 //		it is here is because we used to not have the dependent

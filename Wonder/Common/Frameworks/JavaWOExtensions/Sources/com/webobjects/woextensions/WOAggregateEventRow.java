@@ -7,8 +7,9 @@
 
 package com.webobjects.woextensions;
 
-import com.webobjects.appserver.*;
-import com.webobjects.eocontrol.*;
+import com.webobjects.appserver.WOContext;
+import com.webobjects.eocontrol.EOAggregateEvent;
+import com.webobjects.eocontrol.EOEvent;
 
 public class WOAggregateEventRow extends WOEventRow {
     public WOAggregateEventRow(WOContext aContext)  {

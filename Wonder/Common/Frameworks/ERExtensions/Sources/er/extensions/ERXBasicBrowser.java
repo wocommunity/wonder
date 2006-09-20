@@ -8,7 +8,8 @@ package er.extensions;
 
 import org.apache.log4j.Logger;
 
-import com.webobjects.foundation.*;
+import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSMutableDictionary;
 
 /**
  * <code>ERXBasicBrowser</code> is a concrete subclass of {@link ERXBrowser}
@@ -242,6 +243,14 @@ public class ERXBasicBrowser extends ERXBrowser {
 
     public boolean isMozilla40Compatible() {
         return _isMozillaVersion40 || _isMozillaVersion45;
+    }
+
+    public boolean isVersion9() {
+        return _isVersion8;
+    }
+
+    public boolean isVersion8() {
+        return _isVersion8;
     }
 
     public boolean isVersion7() {

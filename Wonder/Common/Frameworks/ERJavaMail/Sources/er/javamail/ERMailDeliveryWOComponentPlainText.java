@@ -6,7 +6,7 @@
 
 package er.javamail;
 
-import javax.activation.*;
+import javax.activation.DataHandler;
 
 /** This ERMailDelivery subclass is specifically crafted for plain
     text messages using a WOComponent as redering device.

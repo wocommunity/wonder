@@ -1,11 +1,19 @@
 package er.extensions;
-import java.util.*;
+import java.util.Calendar;
+import java.util.Enumeration;
 
 import org.apache.log4j.Logger;
 
-import com.webobjects.appserver.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.foundation.*;
+import com.webobjects.appserver.WODisplayGroup;
+import com.webobjects.eocontrol.EODataSource;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSKeyValueCoding;
+import com.webobjects.foundation.NSKeyValueCodingAdditions;
+import com.webobjects.foundation.NSMutableArray;
+import com.webobjects.foundation.NSMutableDictionary;
+import com.webobjects.foundation.NSTimeZone;
+import com.webobjects.foundation.NSTimestamp;
 
 /**
  * Works much the same as a {@link WODisplayGroup}.

@@ -1,10 +1,11 @@
 package er.extensions;
 
-import java.util.*;
+import java.util.Enumeration;
 
 import org.apache.log4j.Logger;
 
-import com.webobjects.foundation.*;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSMutableDictionary;
 
 /**
 Provides flexible and powerful assertion. Is modeled a bit like log4j in that you can have multiple asserters that can have different behavior. In particular, each can be disabled, set to logging mode or set to raise an exception. Also you can set your own failure handler.

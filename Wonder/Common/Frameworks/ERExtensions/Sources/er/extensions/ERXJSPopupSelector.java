@@ -8,8 +8,9 @@ package er.extensions;
 
 import org.apache.log4j.Logger;
 
-import com.webobjects.appserver.*;
-import com.webobjects.foundation.*;
+import com.webobjects.appserver.WOComponent;
+import com.webobjects.appserver.WOContext;
+import com.webobjects.foundation.NSArray;
 
 /**
  * Nice guy for performing actions when a popup item is selected.<br />

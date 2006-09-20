@@ -1,11 +1,20 @@
 package er.extensions;
 
-import com.webobjects.appserver.*;
-import com.webobjects.foundation.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 
-import java.io.*;
+import org.apache.log4j.Logger;
 
-import org.apache.log4j.*;
+import com.webobjects.appserver.WOApplication;
+import com.webobjects.appserver.WORequest;
+import com.webobjects.appserver.WORequestHandler;
+import com.webobjects.appserver.WOResourceManager;
+import com.webobjects.appserver.WOResponse;
+import com.webobjects.foundation.NSBundle;
+import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSNotificationCenter;
 
 /**
  * Simple static resource request handler. Allows for better debugging 

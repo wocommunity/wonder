@@ -2,10 +2,10 @@ package er.directtoweb;
 
 import org.apache.log4j.Logger;
 
-import com.webobjects.appserver.*;
-import com.webobjects.foundation.*;
-
-import er.extensions.*;
+import com.webobjects.appserver.WOContext;
+import com.webobjects.appserver.WODisplayGroup;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSDictionary;
 
 /**
  * Can be used as a repetition in list pages.

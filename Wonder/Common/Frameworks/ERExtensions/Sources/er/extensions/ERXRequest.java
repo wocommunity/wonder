@@ -1,13 +1,18 @@
 package er.extensions;
-import java.net.*;
+import java.net.InetAddress;
 
 import org.apache.log4j.Logger;
 
-import sun.misc.*;
+import sun.misc.BASE64Encoder;
 
-import com.webobjects.appserver.*;
-import com.webobjects.appserver._private.*;
-import com.webobjects.foundation.*;
+import com.webobjects.appserver.WOApplication;
+import com.webobjects.appserver.WORequest;
+import com.webobjects.appserver._private.WOProperties;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSComparator;
+import com.webobjects.foundation.NSData;
+import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSMutableArray;
 
 /** Subclass of WORequest that fixes several Bugs.
  * The ID's are #2924761 and #2961017. It can also be extended to handle

@@ -1,15 +1,27 @@
 package er.extensions;
 
-import java.math.*;
-import java.sql.*;
-import java.util.*;
+import java.math.BigDecimal;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.SQLWarning;
+import java.sql.Statement;
 import java.util.Date;
+import java.util.Hashtable;
 
 import org.apache.log4j.Logger;
 
-import com.webobjects.eoaccess.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.foundation.*;
+import com.webobjects.eoaccess.EOAdaptor;
+import com.webobjects.eoaccess.EODatabaseContext;
+import com.webobjects.eoaccess.EOModel;
+import com.webobjects.eoaccess.EOModelGroup;
+import com.webobjects.eocontrol.EOCooperatingObjectStore;
+import com.webobjects.eocontrol.EOEnterpriseObject;
+import com.webobjects.eocontrol.EOObjectStore;
+import com.webobjects.eocontrol.EOObjectStoreCoordinator;
+import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSForwardException;
 
 /**
  * Creates and manages a pool of JDBC connections. Useful for SQL statements without

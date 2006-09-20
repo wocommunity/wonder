@@ -6,8 +6,10 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.directtoweb;
 
-import com.webobjects.directtoweb.*;
-import com.webobjects.eocontrol.*;
+import com.webobjects.directtoweb.D2WContext;
+import com.webobjects.eocontrol.EOKeyValueCodingAdditions;
+import com.webobjects.eocontrol.EOKeyValueUnarchiver;
+import com.webobjects.eocontrol.EOQualifierEvaluation;
 
 // FIXME: This may need to subclass EOQualifier now.
 /**

@@ -7,8 +7,11 @@
 
 package com.webobjects.woextensions;
 
-import com.webobjects.appserver.*;
-import com.webobjects.foundation.*;
+import com.webobjects.appserver.WOComponent;
+import com.webobjects.appserver.WOContext;
+import com.webobjects.appserver.WOResponse;
+import com.webobjects.foundation.NSNumberFormatter;
+import com.webobjects.foundation.NSTimestampFormatter;
 
 /*
  this component exists because browsers are displaying tables in a slightly odd fashion: in a cell that does not contain

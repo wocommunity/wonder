@@ -6,7 +6,7 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.directtoweb;
 
-import com.webobjects.foundation.*;
+import com.webobjects.foundation.NSArray;
 
 // 	Implemented by custom assignments that need to tell the rule system that they depend on other
 //	keys.

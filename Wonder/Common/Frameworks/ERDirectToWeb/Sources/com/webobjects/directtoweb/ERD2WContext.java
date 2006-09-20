@@ -6,10 +6,14 @@
  */
 package com.webobjects.directtoweb;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
-import com.webobjects.appserver.*;
-import com.webobjects.eoaccess.*;
+import com.webobjects.appserver.WOApplication;
+import com.webobjects.appserver.WOSession;
+import com.webobjects.eoaccess.EOAttribute;
+import com.webobjects.eoaccess.EOEntity;
 
 
 /**

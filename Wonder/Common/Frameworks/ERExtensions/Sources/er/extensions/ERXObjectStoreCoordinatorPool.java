@@ -1,13 +1,21 @@
 package er.extensions;
 
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Hashtable;
+import java.util.List;
+import java.util.Observer;
 
 import org.apache.log4j.Logger;
 
-import com.webobjects.appserver.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.foundation.*;
+import com.webobjects.appserver.WOSession;
+import com.webobjects.eocontrol.EOEditingContext;
+import com.webobjects.eocontrol.EOObjectStore;
+import com.webobjects.eocontrol.EOObjectStoreCoordinator;
+import com.webobjects.eocontrol.EOSharedEditingContext;
+import com.webobjects.foundation.NSNotification;
+import com.webobjects.foundation.NSNotificationCenter;
+import com.webobjects.foundation.NSSelector;
 
 /**
  * This class implements EOF stack pooling including EOF stack synchronizing. 

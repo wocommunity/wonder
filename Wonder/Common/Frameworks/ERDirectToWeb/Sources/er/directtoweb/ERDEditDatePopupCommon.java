@@ -6,10 +6,16 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.directtoweb;
 
-import com.webobjects.appserver.*;
-import com.webobjects.foundation.*;
+import com.webobjects.appserver.WOContext;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSLog;
+import com.webobjects.foundation.NSMutableArray;
+import com.webobjects.foundation.NSTimestamp;
+import com.webobjects.foundation.NSTimestampFormatter;
 
-import er.extensions.*;
+import er.extensions.ERXConstant;
+import er.extensions.ERXLocalizer;
+import er.extensions.ERXValueUtilities;
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
 // Important D2W Keys:

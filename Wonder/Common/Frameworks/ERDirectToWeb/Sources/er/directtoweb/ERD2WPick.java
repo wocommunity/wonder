@@ -6,12 +6,17 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.directtoweb;
 
-import com.webobjects.appserver.*;
-import com.webobjects.directtoweb.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.foundation.*;
+import com.webobjects.appserver.WOComponent;
+import com.webobjects.appserver.WOContext;
+import com.webobjects.directtoweb.D2WContext;
+import com.webobjects.directtoweb.D2WEmbeddedComponent;
+import com.webobjects.directtoweb.D2WUtils;
+import com.webobjects.directtoweb.NextPageDelegate;
+import com.webobjects.eocontrol.EODataSource;
+import com.webobjects.eocontrol.EOEnterpriseObject;
+import com.webobjects.foundation.NSArray;
 
-import er.extensions.*;
+import er.extensions.ERXEOControlUtilities;
 
 /**
  * Used to select multiple items from a list.<br />

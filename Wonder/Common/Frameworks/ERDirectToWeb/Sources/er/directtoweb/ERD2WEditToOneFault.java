@@ -9,10 +9,11 @@ package er.directtoweb;
 
 import org.apache.log4j.Logger;
 
-import com.webobjects.appserver.*;
-import com.webobjects.directtoweb.*;
-
-import er.extensions.*;
+import com.webobjects.appserver.WOComponent;
+import com.webobjects.appserver.WOContext;
+import com.webobjects.directtoweb.D2W;
+import com.webobjects.directtoweb.D2WEditToOneFault;
+import com.webobjects.directtoweb.EditRelationshipPageInterface;
 
 public class ERD2WEditToOneFault extends D2WEditToOneFault {
     /** logging support */

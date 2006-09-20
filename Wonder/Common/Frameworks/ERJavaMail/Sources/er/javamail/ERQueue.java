@@ -6,7 +6,7 @@
 
 package er.javamail;
 
-import java.util.*;
+import java.util.Vector;
 
 public class ERQueue extends Vector {
 

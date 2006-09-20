@@ -8,8 +8,11 @@ package er.extensions;
 
 import org.apache.log4j.Logger;
 
-import com.webobjects.appserver.*;
-import com.webobjects.appserver._private.*;
+import com.webobjects.appserver.WOContext;
+import com.webobjects.appserver.WORequest;
+import com.webobjects.appserver.WOResponse;
+import com.webobjects.appserver.WOSession;
+import com.webobjects.appserver._private.WODirectActionRequestHandler;
 
 /**
  * Improved direct action request handler. Will automatically handle

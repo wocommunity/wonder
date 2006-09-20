@@ -6,14 +6,20 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.extensions;
 
-import java.lang.reflect.*;
-import java.util.*;
+import java.lang.reflect.InvocationTargetException;
+import java.util.Enumeration;
+import java.util.Vector;
 
 import org.apache.log4j.Logger;
 
-import com.webobjects.appserver.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.foundation.*;
+import com.webobjects.appserver.WOContext;
+import com.webobjects.appserver.WOResponse;
+import com.webobjects.eocontrol.EOEnterpriseObject;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSLog;
+import com.webobjects.foundation.NSMutableArray;
+import com.webobjects.foundation.NSRange;
+import com.webobjects.foundation.NSSet;
 
 // ported from WebScript - Corrected nil context problem.
 /**

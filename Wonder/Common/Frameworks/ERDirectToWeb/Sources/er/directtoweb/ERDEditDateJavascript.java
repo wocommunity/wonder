@@ -8,10 +8,16 @@ package er.directtoweb;
 
 import org.apache.log4j.Logger;
 
-import com.webobjects.appserver.*;
-import com.webobjects.foundation.*;
+import com.webobjects.appserver.WOContext;
+import com.webobjects.appserver.WORequest;
+import com.webobjects.appserver.WOResponse;
+import com.webobjects.foundation.NSTimestamp;
+import com.webobjects.foundation.NSTimestampFormatter;
+import com.webobjects.foundation.NSValidation;
 
-import er.extensions.*;
+import er.extensions.ERXTimestampFormatter;
+import er.extensions.ERXValidationException;
+import er.extensions.ERXValidationFactory;
 
 /**
  * Crazy cool little date picker that uses javascript to pick the date from a little calendar. <br />

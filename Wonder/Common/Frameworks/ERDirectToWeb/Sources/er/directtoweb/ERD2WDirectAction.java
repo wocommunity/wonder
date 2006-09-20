@@ -6,18 +6,51 @@
 //
 package er.directtoweb;
 
-import java.text.*;
-import java.util.*;
+import java.text.ParseException;
+import java.util.Enumeration;
 
 import org.apache.log4j.Logger;
 
-import com.webobjects.appserver.*;
-import com.webobjects.directtoweb.*;
-import com.webobjects.eoaccess.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.foundation.*;
+import com.webobjects.appserver.WOActionResults;
+import com.webobjects.appserver.WOComponent;
+import com.webobjects.appserver.WORequest;
+import com.webobjects.directtoweb.D2W;
+import com.webobjects.directtoweb.D2WContext;
+import com.webobjects.directtoweb.D2WPage;
+import com.webobjects.directtoweb.ERD2WContext;
+import com.webobjects.directtoweb.EditPageInterface;
+import com.webobjects.directtoweb.ErrorPageInterface;
+import com.webobjects.directtoweb.InspectPageInterface;
+import com.webobjects.directtoweb.ListPageInterface;
+import com.webobjects.directtoweb.QueryPageInterface;
+import com.webobjects.eoaccess.EOAttribute;
+import com.webobjects.eoaccess.EODatabaseDataSource;
+import com.webobjects.eoaccess.EOEntity;
+import com.webobjects.eoaccess.EOUtilities;
+import com.webobjects.eocontrol.EOAndQualifier;
+import com.webobjects.eocontrol.EOArrayDataSource;
+import com.webobjects.eocontrol.EOClassDescription;
+import com.webobjects.eocontrol.EODataSource;
+import com.webobjects.eocontrol.EOEditingContext;
+import com.webobjects.eocontrol.EOEnterpriseObject;
+import com.webobjects.eocontrol.EOFetchSpecification;
+import com.webobjects.eocontrol.EOKeyValueQualifier;
+import com.webobjects.eocontrol.EOQualifier;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSForwardException;
+import com.webobjects.foundation.NSMutableArray;
+import com.webobjects.foundation.NSMutableDictionary;
+import com.webobjects.foundation.NSNumberFormatter;
+import com.webobjects.foundation.NSSelector;
+import com.webobjects.foundation.NSTimestampFormatter;
 
-import er.extensions.*;
+import er.extensions.ERXDirectAction;
+import er.extensions.ERXEC;
+import er.extensions.ERXEOAccessUtilities;
+import er.extensions.ERXEOControlUtilities;
+import er.extensions.ERXStringUtilities;
+import er.extensions.ERXValueUtilities;
 
 /**
  * Cool class to automatically create page configurations from URLs.<br />
@@ -245,7 +278,6 @@ public abstract class ERD2WDirectAction extends ERXDirectAction {
     }
 
     protected void prepareQueryPage(D2WContext context, QueryPageInterface qpi, String entityName) {
-        EOEditingContext ec = session().defaultEditingContext();
         EOFetchSpecification fs = fetchSpecificationFromRequest(entityName);
         if(qpi instanceof ERD2WQueryPage) {
             if(fs != null)

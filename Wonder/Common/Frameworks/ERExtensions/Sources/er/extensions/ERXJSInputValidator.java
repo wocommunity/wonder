@@ -1,9 +1,17 @@
 package er.extensions;
 import org.apache.log4j.Logger;
 
-import com.webobjects.appserver.*;
-import com.webobjects.appserver._private.*;
-import com.webobjects.foundation.*;
+import com.webobjects.appserver.WOActionResults;
+import com.webobjects.appserver.WOComponent;
+import com.webobjects.appserver.WOContext;
+import com.webobjects.appserver.WODirectAction;
+import com.webobjects.appserver.WORequest;
+import com.webobjects.appserver.WOResponse;
+import com.webobjects.appserver._private.WOText;
+import com.webobjects.appserver._private.WOTextField;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSMutableArray;
 
 /**
  * Client side part of the JavaScript validation.
