@@ -1106,7 +1106,7 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
         if(ec instanceof ERXEC) {
             ERXEC erxc = (ERXEC)ec;
             key = key + "_" + erxc.locale().getLanguage();
-            if(!allPropertyKeys().contains(key)) {
+            if(!allPropertyKeys().containsObject(key)) {
                 key = null;
             }
         } else {
