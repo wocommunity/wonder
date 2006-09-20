@@ -6,14 +6,18 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.directtoweb;
 
-import java.lang.reflect.*;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 
 import org.apache.log4j.Logger;
 
-import com.webobjects.directtoweb.*;
-import com.webobjects.eocontrol.*;
+import com.webobjects.directtoweb.Assignment;
+import com.webobjects.directtoweb.D2WContext;
+import com.webobjects.eocontrol.EOKeyValueUnarchiver;
 
-import er.extensions.*;
+import er.extensions.ERXLocalizer;
+import er.extensions.ERXUtilities;
+import er.extensions.ERXValueUtilities;
 
 /**
  * Abstact super class of most assignments found in 

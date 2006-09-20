@@ -6,8 +6,10 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.extensions;
 
-import com.webobjects.appserver.*;
-import com.webobjects.foundation.*;
+import com.webobjects.appserver.WOComponent;
+import com.webobjects.appserver.WOContext;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSMutableArray;
 
 /**
  * Useful when given a list of n items and you want to display m keys. This will construct a table nxm and push the current indexes up though the bindings.<br />

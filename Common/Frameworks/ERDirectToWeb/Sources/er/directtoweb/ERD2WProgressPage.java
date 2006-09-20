@@ -2,9 +2,9 @@ package er.directtoweb;
 
 import org.apache.log4j.Logger;
 
-import com.webobjects.appserver.*;
+import com.webobjects.appserver.WOContext;
 
-import er.extensions.*;
+import er.extensions.ERXLongResponseTask;
 
 /**
  * Displays progress by using a ERXLongResponse.Task. Very useful for sending mail and the like.

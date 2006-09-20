@@ -6,7 +6,7 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.directtoweb;
 
-import com.webobjects.appserver.*;
+import com.webobjects.appserver.WOContext;
 
 /**
  * Cool class.  Specify a 'unit' in the userInfo dictionary of an EOAttribute and this component will display the number plus the unit.<br />

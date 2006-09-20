@@ -6,14 +6,28 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.extensions;
 
-import java.io.*;
-import java.util.*;
+import java.io.File;
+import java.io.IOException;
+import java.util.Enumeration;
+import java.util.Properties;
 
-import org.apache.log4j.*;
+import org.apache.log4j.Logger;
 
-import com.webobjects.appserver.*;
-import com.webobjects.eoaccess.*;
-import com.webobjects.foundation.*;
+import com.webobjects.appserver.WOApplication;
+import com.webobjects.eoaccess.EOAttribute;
+import com.webobjects.eoaccess.EOEntity;
+import com.webobjects.eoaccess.EOModel;
+import com.webobjects.eoaccess.EOModelGroup;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSBundle;
+import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSMutableArray;
+import com.webobjects.foundation.NSMutableDictionary;
+import com.webobjects.foundation.NSNotification;
+import com.webobjects.foundation.NSNotificationCenter;
+import com.webobjects.foundation.NSPathUtilities;
+import com.webobjects.foundation.NSPropertyListSerialization;
+import com.webobjects.foundation.NSSelector;
 
 /** 
  * <code>Configuration Manager</code> handles rapid turnaround for 

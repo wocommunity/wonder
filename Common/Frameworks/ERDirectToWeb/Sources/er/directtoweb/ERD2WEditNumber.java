@@ -6,17 +6,20 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.directtoweb;
 
-import java.math.*;
-import java.text.*;
+import java.math.BigDecimal;
+import java.text.ParseException;
 
 import org.apache.log4j.Logger;
 
-import com.webobjects.appserver.*;
-import com.webobjects.directtoweb.*;
-import com.webobjects.eoaccess.*;
-import com.webobjects.foundation.*;
+import com.webobjects.appserver.WOContext;
+import com.webobjects.directtoweb.D2WEditNumber;
+import com.webobjects.eoaccess.EOAttribute;
+import com.webobjects.foundation.NSNumberFormatter;
+import com.webobjects.foundation.NSValidation;
 
-import er.extensions.*;
+import er.extensions.ERXConstant;
+import er.extensions.ERXNumberFormatter;
+import er.extensions.ERXValidationFactory;
 
 /**
  * Common superclass of all ER's edit number components.<br />

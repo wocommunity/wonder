@@ -9,9 +9,13 @@ package er.extensions;
 
 import java.util.Properties;
 
-import org.apache.log4j.*;
+import org.apache.log4j.BasicConfigurator;
+import org.apache.log4j.Level;
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
+import org.apache.log4j.PropertyConfigurator;
 
-import com.webobjects.foundation.*;
+import com.webobjects.foundation.NSLog;
 
 /**
  * Custom subclass of Logger. The main reason for this class

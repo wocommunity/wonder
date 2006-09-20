@@ -6,15 +6,21 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.directtoweb;
 
-import java.util.*;
+import java.util.Enumeration;
 
 import org.apache.log4j.Logger;
 
-import com.webobjects.directtoweb.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.foundation.*;
+import com.webobjects.directtoweb.D2WContext;
+import com.webobjects.eocontrol.EOAndQualifier;
+import com.webobjects.eocontrol.EOKeyValueQualifier;
+import com.webobjects.eocontrol.EOKeyValueUnarchiver;
+import com.webobjects.eocontrol.EOQualifier;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSKeyValueCoding;
+import com.webobjects.foundation.NSMutableArray;
 
-import er.extensions.*;
+import er.extensions.ERXPrimaryKeyListQualifier;
 
 /**
  * Very useful when you want to restrict the things a user can see during searches or in list pages.<br />

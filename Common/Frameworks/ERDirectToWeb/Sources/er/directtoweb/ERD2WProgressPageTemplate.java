@@ -2,9 +2,7 @@ package er.directtoweb;
 
 import org.apache.log4j.Logger;
 
-import com.webobjects.appserver.*;
-
-import er.extensions.*;
+import com.webobjects.appserver.WOContext;
 
 /**
  * Class for DirectToWeb Component ERD2WProgressPageTemplate.

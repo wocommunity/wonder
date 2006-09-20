@@ -2,10 +2,9 @@ package er.directtoweb;
 
 import org.apache.log4j.Logger;
 
-import com.webobjects.foundation.*;
-import com.webobjects.appserver.*;
-import com.webobjects.eocontrol.*;
-import er.extensions.*;
+import com.webobjects.appserver.WOContext;
+import com.webobjects.eocontrol.EOEnterpriseObject;
+import com.webobjects.foundation.NSArray;
 
 /**
  * Grouping list that can be used as a repetition in list pages.

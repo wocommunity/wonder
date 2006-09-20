@@ -1,6 +1,6 @@
 package er.extensions;
 
-import java.util.*;
+import java.util.LinkedList;
 
 /**
  * Simple queue class that runs in a thread, waits and pulls jobs from a queue.

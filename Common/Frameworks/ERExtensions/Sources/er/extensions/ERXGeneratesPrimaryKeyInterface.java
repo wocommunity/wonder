@@ -6,7 +6,7 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.extensions;
 
-import com.webobjects.foundation.*;
+import com.webobjects.foundation.NSDictionary;
 
 /**
  * Enterprise objects that need to generate their own primary keys

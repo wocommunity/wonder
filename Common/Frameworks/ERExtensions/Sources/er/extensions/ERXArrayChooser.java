@@ -2,10 +2,19 @@ package er.extensions;
 
 import org.apache.log4j.Logger;
 
-import com.webobjects.appserver.*;
-import com.webobjects.eoaccess.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.foundation.*;
+import com.webobjects.appserver.WOContext;
+import com.webobjects.appserver.WORequest;
+import com.webobjects.eoaccess.EODatabaseDataSource;
+import com.webobjects.eoaccess.EOEntity;
+import com.webobjects.eoaccess.EORelationship;
+import com.webobjects.eocontrol.EODataSource;
+import com.webobjects.eocontrol.EOEditingContext;
+import com.webobjects.eocontrol.EOEnterpriseObject;
+import com.webobjects.eocontrol.EOSortOrdering;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSKeyValueCodingAdditions;
+import com.webobjects.foundation.NSSelector;
+import com.webobjects.foundation.NSValidation;
 
 /**
  * This is an effort to consolidate the WOToOneRelationship, WOToManyRelationship and descendant components. <br />

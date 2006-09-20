@@ -6,12 +6,12 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.directtoweb;
 
-import java.text.*;
+import java.text.Format;
 
-import com.webobjects.appserver.*;
-import com.webobjects.directtoweb.*;
+import com.webobjects.appserver.WOContext;
+import com.webobjects.directtoweb.D2WDisplayNumber;
 
-import er.extensions.*;
+import er.extensions.ERXNumberFormatter;
 
 /**
  * Same as ERDDisplayNumberWithUnit only subclass is different.  This should be cleaned up.<br />

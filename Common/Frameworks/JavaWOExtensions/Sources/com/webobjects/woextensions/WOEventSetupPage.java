@@ -7,9 +7,16 @@
 
 package com.webobjects.woextensions;
 
-import com.webobjects.appserver.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.foundation.*;
+import com.webobjects.appserver.WOComponent;
+import com.webobjects.appserver.WOContext;
+import com.webobjects.eocontrol.EOEvent;
+import com.webobjects.eocontrol.EOEventCenter;
+import com.webobjects.eocontrol.EOSortOrdering;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSComparator;
+import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSForwardException;
+import com.webobjects.foundation.NSMutableArray;
 
 public class WOEventSetupPage extends WOEventPage {
     public Class	currentClass;

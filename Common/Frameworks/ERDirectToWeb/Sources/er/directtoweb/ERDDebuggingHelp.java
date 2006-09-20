@@ -6,14 +6,20 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.directtoweb;
 
-import org.apache.log4j.*;
+import org.apache.log4j.Level;
 
-import com.webobjects.appserver.*;
-import com.webobjects.directtoweb.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.foundation.*;
+import com.webobjects.appserver.WOComponent;
+import com.webobjects.appserver.WOContext;
+import com.webobjects.appserver.WOSession;
+import com.webobjects.directtoweb.D2W;
+import com.webobjects.directtoweb.D2WContext;
+import com.webobjects.eocontrol.EOEditingContext;
+import com.webobjects.eocontrol.EOEnterpriseObject;
+import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSMutableDictionary;
 
-import er.extensions.*;
+import er.extensions.ERXDebugMarker;
+import er.extensions.ERXValueUtilities;
 
 /**
  * Little help component useful for debugging.<br />

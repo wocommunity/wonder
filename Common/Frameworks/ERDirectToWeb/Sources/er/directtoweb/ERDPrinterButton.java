@@ -6,9 +6,12 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.directtoweb;
 
-import com.webobjects.appserver.*;
-import com.webobjects.directtoweb.*;
-import com.webobjects.eoaccess.*;
+import com.webobjects.appserver.WOComponent;
+import com.webobjects.appserver.WOContext;
+import com.webobjects.directtoweb.D2WContext;
+import com.webobjects.directtoweb.ERD2WContext;
+import com.webobjects.directtoweb.EditPageInterface;
+import com.webobjects.eoaccess.EOUtilities;
 
 /**
  * Handles the switching of the current task to print, which uses the print templates.<br />

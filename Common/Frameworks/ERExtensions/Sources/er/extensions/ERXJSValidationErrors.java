@@ -1,9 +1,12 @@
 package er.extensions;
 import org.apache.log4j.Logger;
 
-import com.webobjects.appserver.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.foundation.*;
+import com.webobjects.appserver.WOComponent;
+import com.webobjects.appserver.WOContext;
+import com.webobjects.eocontrol.EOClassDescription;
+import com.webobjects.eocontrol.EOEnterpriseObject;
+import com.webobjects.foundation.NSKeyValueCoding;
+import com.webobjects.foundation.NSValidation;
 
 /**
  * Server side part of the JavaScript validation

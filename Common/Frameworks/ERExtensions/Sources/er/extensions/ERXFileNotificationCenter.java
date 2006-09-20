@@ -6,13 +6,17 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.extensions;
 
-import java.io.*;
-import java.util.*;
+import java.io.File;
+import java.util.Enumeration;
 
 import org.apache.log4j.Logger;
 
-import com.webobjects.appserver.*;
-import com.webobjects.foundation.*;
+import com.webobjects.appserver.WOApplication;
+import com.webobjects.foundation.NSMutableDictionary;
+import com.webobjects.foundation.NSMutableSet;
+import com.webobjects.foundation.NSNotification;
+import com.webobjects.foundation.NSNotificationCenter;
+import com.webobjects.foundation.NSSelector;
 
 /**
  * The file notification center is only used in developement systems. It provides a nice repository about

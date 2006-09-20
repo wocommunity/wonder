@@ -8,9 +8,11 @@ package er.extensions;
 
 import org.apache.log4j.Logger;
 
-import com.webobjects.eoaccess.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.foundation.*;
+import com.webobjects.eoaccess.EOGeneralAdaptorException;
+import com.webobjects.eocontrol.EOEditingContext;
+import com.webobjects.eocontrol.EOEnterpriseObject;
+import com.webobjects.foundation.NSLog;
+import com.webobjects.foundation.NSValidation;
 
 /**
  * This class is pulled directly out of David Neumann's

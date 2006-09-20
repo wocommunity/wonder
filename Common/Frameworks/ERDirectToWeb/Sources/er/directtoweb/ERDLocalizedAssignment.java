@@ -1,14 +1,17 @@
 package er.directtoweb;
 
-import java.util.*;
+import java.util.Enumeration;
 
 import org.apache.log4j.Logger;
 
-import com.webobjects.directtoweb.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.foundation.*;
+import com.webobjects.directtoweb.D2WContext;
+import com.webobjects.eocontrol.EOKeyValueUnarchiver;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSMutableArray;
 
-import er.extensions.*;
+import er.extensions.ERXArrayUtilities;
+import er.extensions.ERXLocalizer;
+import er.extensions.ERXSimpleTemplateParser;
 
 /**
  * This assignment runs it's value through the localizer and evaluates

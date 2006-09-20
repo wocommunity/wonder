@@ -6,9 +6,10 @@
 //
 package er.directtoweb;
 
-import com.webobjects.appserver.*;
-import com.webobjects.directtoweb.*;
-import com.webobjects.foundation.*;
+import com.webobjects.appserver.WOContext;
+import com.webobjects.appserver.WORequest;
+import com.webobjects.directtoweb.D2WEditString;
+import com.webobjects.foundation.NSValidation;
 
 public class ERD2WEditFlag extends D2WEditString {
 

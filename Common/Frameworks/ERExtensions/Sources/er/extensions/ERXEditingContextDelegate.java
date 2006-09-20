@@ -8,7 +8,8 @@ package er.extensions;
 
 import org.apache.log4j.Logger;
 
-import com.webobjects.eocontrol.*;
+import com.webobjects.eocontrol.EOEditingContext;
+import com.webobjects.eocontrol.EOObjectStore;
 
 /**
  * This delegate does nothing. It is used to

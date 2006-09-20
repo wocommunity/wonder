@@ -1,11 +1,16 @@
 package er.extensions;
 
-import java.io.*;
-import java.util.*;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import org.apache.log4j.Logger;
 
-import com.webobjects.foundation.*;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSForwardException;
 
 public class ERXRuntimeUtilities {
 

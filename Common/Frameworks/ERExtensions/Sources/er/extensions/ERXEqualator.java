@@ -7,7 +7,7 @@
 
 package er.extensions;
 
-import com.webobjects.eocontrol.*;
+import com.webobjects.eocontrol.EOEnterpriseObject;
 
 /**
  * This class is an abstract class that defines an API for determining if two objects are equal.

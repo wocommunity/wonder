@@ -6,12 +6,13 @@ package er.directtoweb;
 
 import org.apache.log4j.Logger;
 
-import er.extensions.ERXSelectorUtilities;
 import com.webobjects.directtoweb.D2WContext;
 import com.webobjects.eocontrol.EOKeyValueUnarchiver;
+import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSSelector;
-import com.webobjects.foundation.NSArray;
+
+import er.extensions.ERXSelectorUtilities;
 
 /**
  * Similar in nature to a key-value assignment, but allows you to construct arbitrary method invocations to

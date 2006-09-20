@@ -6,7 +6,7 @@
 //
 package er.extensions;
 
-import com.webobjects.foundation.*;
+import com.webobjects.foundation.NSMutableDictionary;
 /** Interface to implement generic mutable containers */
 
 public interface ERXMutableUserInfoHolderInterface {

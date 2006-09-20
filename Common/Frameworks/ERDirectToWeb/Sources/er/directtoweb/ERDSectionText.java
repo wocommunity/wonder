@@ -1,6 +1,6 @@
 package er.directtoweb;
 
-import com.webobjects.appserver.*;
+import com.webobjects.appserver.WOContext;
 
 /**
  * Used to display sections as text.<br />

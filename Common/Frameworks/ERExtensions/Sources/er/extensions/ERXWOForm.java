@@ -9,8 +9,12 @@ package er.extensions;
 
 import org.apache.log4j.Logger;
 
-import com.webobjects.appserver.*;
-import com.webobjects.foundation.*;
+import com.webobjects.appserver.WOAssociation;
+import com.webobjects.appserver.WOContext;
+import com.webobjects.appserver.WOElement;
+import com.webobjects.appserver.WORequest;
+import com.webobjects.appserver.WOResponse;
+import com.webobjects.foundation.NSDictionary;
 
 /** 
  * Transparent replacement for WOForm. You don't really need to do anything to use it, because it

@@ -8,10 +8,10 @@ package er.directtoweb;
 
 import org.apache.log4j.Logger;
 
-import com.webobjects.appserver.*;
-import com.webobjects.eocontrol.*;
-
-import er.extensions.*;
+import com.webobjects.appserver.WOComponent;
+import com.webobjects.appserver.WOContext;
+import com.webobjects.appserver.WOResponse;
+import com.webobjects.eocontrol.EOEnterpriseObject;
 
 /**
  * Default custom component used when componentName = "D2WCustomComponentWithArgs" and custom component was not  specified.<br />

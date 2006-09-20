@@ -6,13 +6,15 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.testrunner;
 
-import java.io.*;
-import java.util.*;
+import java.io.PrintStream;
+import java.util.Enumeration;
+
+import junit.framework.AssertionFailedError;
+import junit.framework.Test;
+import junit.framework.TestFailure;
+import junit.runner.BaseTestRunner;
 
 import org.apache.log4j.Logger;
-
-import junit.framework.*;
-import junit.runner.*;
 
 /**
  * Used for running a batch of tests.<br />
@@ -105,7 +107,6 @@ public class ERXBatchTestInterface extends Object implements ERXTestListener {
         printErrors();
     }
 
-    private PrintStream writer() { return System.out; }
     /**
      * Prints the errors to the standard output
      */

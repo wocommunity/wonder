@@ -6,17 +6,36 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.directtoweb;
 
-import java.util.*;
+import java.util.Enumeration;
 
 import org.apache.log4j.Logger;
 
-import com.webobjects.appserver.*;
-import com.webobjects.directtoweb.*;
-import com.webobjects.eoaccess.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.foundation.*;
+import com.webobjects.appserver.WOComponent;
+import com.webobjects.appserver.WOContext;
+import com.webobjects.directtoweb.D2W;
+import com.webobjects.directtoweb.EditPageInterface;
+import com.webobjects.directtoweb.NextPageDelegate;
+import com.webobjects.eoaccess.EOEntity;
+import com.webobjects.eoaccess.EOModelGroup;
+import com.webobjects.eoaccess.EORelationship;
+import com.webobjects.eoaccess.EOUtilities;
+import com.webobjects.eocontrol.EOArrayDataSource;
+import com.webobjects.eocontrol.EOClassDescription;
+import com.webobjects.eocontrol.EODataSource;
+import com.webobjects.eocontrol.EODetailDataSource;
+import com.webobjects.eocontrol.EOEditingContext;
+import com.webobjects.eocontrol.EOEnterpriseObject;
+import com.webobjects.eocontrol.EOObjectStoreCoordinator;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSMutableArray;
+import com.webobjects.foundation.NSValidation;
 
-import er.extensions.*;
+import er.extensions.ERXConstant;
+import er.extensions.ERXEC;
+import er.extensions.ERXEOControlUtilities;
+import er.extensions.ERXEnterpriseObject;
+import er.extensions.ERXLocalizer;
 
 /////////////////////////////////////////////////////////////////////////////////
 // Important D2W Keys:

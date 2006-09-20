@@ -6,8 +6,10 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.extensions;
 
-import com.webobjects.appserver.*;
-import com.webobjects.foundation.*;
+import com.webobjects.appserver.WOContext;
+import com.webobjects.appserver.WORequest;
+import com.webobjects.appserver.WOResponse;
+import com.webobjects.foundation.NSArray;
 
 /**
  * Radio button list with lots of more options.<br />

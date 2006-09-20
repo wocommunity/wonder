@@ -6,12 +6,15 @@
 //
 package er.directtoweb;
 
-import java.text.*;
+import java.text.Format;
 
-import com.webobjects.appserver.*;
-import com.webobjects.directtoweb.*;
-import com.webobjects.eoaccess.*;
-import com.webobjects.foundation.*;
+import com.webobjects.appserver.WOContext;
+import com.webobjects.directtoweb.D2WQueryToOneField;
+import com.webobjects.eoaccess.EOAttribute;
+import com.webobjects.eoaccess.EOEntity;
+import com.webobjects.eoaccess.EORelationship;
+import com.webobjects.foundation.NSNumberFormatter;
+import com.webobjects.foundation.NSTimestampFormatter;
 
 public class ERD2WQueryToOneField extends D2WQueryToOneField {
 

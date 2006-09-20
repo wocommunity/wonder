@@ -6,15 +6,31 @@
 //
 package er.extensions;
 
-import java.lang.reflect.*;
-import java.net.*;
-import java.text.*;
-import java.util.*;
+import java.lang.reflect.Constructor;
+import java.net.URL;
+import java.text.DateFormatSymbols;
+import java.text.Format;
+import java.util.Enumeration;
+import java.util.Hashtable;
+import java.util.Locale;
 
 import org.apache.log4j.Logger;
 
-import com.webobjects.appserver.*;
-import com.webobjects.foundation.*;
+import com.webobjects.appserver.WOApplication;
+import com.webobjects.appserver.WORequest;
+import com.webobjects.appserver.WOSession;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSBundle;
+import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSKeyValueCoding;
+import com.webobjects.foundation.NSKeyValueCodingAdditions;
+import com.webobjects.foundation.NSMutableArray;
+import com.webobjects.foundation.NSMutableDictionary;
+import com.webobjects.foundation.NSNotification;
+import com.webobjects.foundation.NSNotificationCenter;
+import com.webobjects.foundation.NSNumberFormatter;
+import com.webobjects.foundation.NSSelector;
+import com.webobjects.foundation.NSTimestampFormatter;
 
 /** 
  * Provides KVC access to localization.

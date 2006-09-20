@@ -6,8 +6,9 @@
 //
 package er.directtoweb;
 
-import com.webobjects.directtoweb.*;
-import com.webobjects.foundation.*;
+import com.webobjects.directtoweb.D2WContext;
+import com.webobjects.directtoweb.NextPageDelegate;
+import com.webobjects.foundation.NSArray;
 
 /**
  * Extension of the NextPageDelegate to provide branch 

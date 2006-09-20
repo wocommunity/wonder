@@ -5,7 +5,7 @@
  * Public Software License version 0.5, a copy of which has been
  * included with this distribution in the LICENSE.NPL file.  */
 package er.directtoweb;
-import com.webobjects.appserver.*;
+import com.webobjects.appserver.WOContext;
 
 /**
  * A basic list but adding the ability to choose an arbitrary number of eos.  

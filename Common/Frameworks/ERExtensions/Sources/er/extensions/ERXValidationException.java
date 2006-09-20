@@ -8,9 +8,13 @@ package er.extensions;
 
 import org.apache.log4j.Logger;
 
-import com.webobjects.eoaccess.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.foundation.*;
+import com.webobjects.eoaccess.EOAttribute;
+import com.webobjects.eoaccess.EOEntity;
+import com.webobjects.eoaccess.EOUtilities;
+import com.webobjects.eocontrol.EOEnterpriseObject;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSKeyValueCoding;
+import com.webobjects.foundation.NSValidation;
 
 /**
  * ERXValidationExceptions extends the regular

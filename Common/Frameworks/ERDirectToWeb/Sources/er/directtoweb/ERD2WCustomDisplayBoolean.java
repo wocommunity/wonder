@@ -6,11 +6,11 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.directtoweb;
 
-import com.webobjects.appserver.*;
-import com.webobjects.directtoweb.*;
-import com.webobjects.foundation.*;
+import com.webobjects.appserver.WOContext;
+import com.webobjects.directtoweb.D2WDisplayBoolean;
+import com.webobjects.foundation.NSArray;
 
-import er.extensions.*;
+import er.extensions.ERXValueUtilities;
 
 /**
  * Allows the display of strings instead of Yes/No/Unset or checkboxes for boolean values.<br />

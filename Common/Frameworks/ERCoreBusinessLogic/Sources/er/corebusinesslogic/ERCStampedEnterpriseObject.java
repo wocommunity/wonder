@@ -8,10 +8,18 @@ package er.corebusinesslogic;
 
 import org.apache.log4j.Logger;
 
-import com.webobjects.eocontrol.*;
-import com.webobjects.foundation.*;
+import com.webobjects.eocontrol.EOEditingContext;
+import com.webobjects.eocontrol.EOEnterpriseObject;
+import com.webobjects.foundation.NSMutableDictionary;
+import com.webobjects.foundation.NSNotification;
+import com.webobjects.foundation.NSNotificationCenter;
+import com.webobjects.foundation.NSSelector;
+import com.webobjects.foundation.NSTimestamp;
 
-import er.extensions.*;
+import er.extensions.ERXConstant;
+import er.extensions.ERXExtensions;
+import er.extensions.ERXGenericRecord;
+import er.extensions.ERXRetainer;
 
 /**
  * EO subclass that has a timestamp with its creation date, the most recent modification, 

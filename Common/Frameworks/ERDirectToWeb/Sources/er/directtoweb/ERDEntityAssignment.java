@@ -8,11 +8,13 @@ package er.directtoweb;
 
 import org.apache.log4j.Logger;
 
-import com.webobjects.directtoweb.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.foundation.*;
+import com.webobjects.directtoweb.Assignment;
+import com.webobjects.directtoweb.D2WContext;
+import com.webobjects.eocontrol.EOEditingContext;
+import com.webobjects.eocontrol.EOKeyValueUnarchiver;
+import com.webobjects.foundation.NSArray;
 
-import er.extensions.*;
+import er.extensions.ERXEOAccessUtilities;
 
 /**
  * @deprecated use a ERDKeyValueAssignment to a ERDDefaultModelAssigmentwith key entityForPageConfiguration instead

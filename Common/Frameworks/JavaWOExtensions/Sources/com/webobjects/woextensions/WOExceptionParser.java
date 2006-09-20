@@ -13,11 +13,21 @@ package com.webobjects.woextensions;
  * The stack trace is set in an NSArray that will be used in the UI in the exception page.
  *
  */
-import java.io.*;
-import java.util.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.util.Enumeration;
 
-import com.webobjects.appserver.*;
-import com.webobjects.foundation.*;
+import com.webobjects.appserver.WOApplication;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSBundle;
+import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSForwardException;
+import com.webobjects.foundation.NSLog;
+import com.webobjects.foundation.NSMutableArray;
+import com.webobjects.foundation.NSPropertyListSerialization;
 
 public class WOExceptionParser extends Object {
     protected NSMutableArray _stackTrace;
@@ -82,8 +92,7 @@ public class WOExceptionParser extends Object {
         WOParsedErrorLine aLine;
         String line;
         
-        int i, index, size;
-        StreamTokenizer stream;
+        int i, size;
         try {
             _exception.printStackTrace(pWriter);
             pWriter.close();

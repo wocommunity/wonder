@@ -1,12 +1,13 @@
 package com.webobjects.jdbcadaptor;
 
-import java.sql.*;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
-import org.apache.log4j.*;
+import org.apache.log4j.Logger;
 
-import com.webobjects.eoaccess.*;
+import com.webobjects.eoaccess.EOAttribute;
 
-import er.extensions.*;
+import er.extensions.ERXConstant;
 
 /**
  * Adds numerical constant support to EOF. See ERXConstant for more info. 

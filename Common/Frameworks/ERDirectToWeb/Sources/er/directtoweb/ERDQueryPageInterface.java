@@ -6,7 +6,8 @@
 //
 package er.directtoweb;
 
-import com.webobjects.directtoweb.*;
+import com.webobjects.directtoweb.NextPageDelegate;
+import com.webobjects.directtoweb.QueryPageInterface;
 
 public interface ERDQueryPageInterface extends QueryPageInterface{
 

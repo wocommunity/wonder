@@ -6,12 +6,12 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.directtoweb;
 
-import com.webobjects.appserver.*;
-import com.webobjects.directtoweb.*;
-import com.webobjects.eoaccess.*;
-import com.webobjects.foundation.*;
+import com.webobjects.appserver.WOContext;
+import com.webobjects.directtoweb.D2WContext;
+import com.webobjects.eoaccess.EOModelGroup;
+import com.webobjects.foundation.NSArray;
 
-import er.extensions.*;
+import er.extensions.ERXLocalizer;
 
 /**
  * Custom query component that let's the user select from a set of shared eos.<br />

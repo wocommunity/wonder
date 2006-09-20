@@ -6,13 +6,27 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.directtoweb;
 
-import com.webobjects.appserver.*;
-import com.webobjects.directtoweb.*;
-import com.webobjects.eoaccess.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.foundation.*;
+import com.webobjects.appserver.WOComponent;
+import com.webobjects.appserver.WOContext;
+import com.webobjects.appserver.WODisplayGroup;
+import com.webobjects.appserver.WORequest;
+import com.webobjects.appserver.WOResponse;
+import com.webobjects.directtoweb.D2W;
+import com.webobjects.directtoweb.ListPageInterface;
+import com.webobjects.directtoweb.NextPageDelegate;
+import com.webobjects.directtoweb.QueryPageInterface;
+import com.webobjects.eoaccess.EODatabaseDataSource;
+import com.webobjects.eoaccess.EOEntity;
+import com.webobjects.eocontrol.EOAndQualifier;
+import com.webobjects.eocontrol.EODataSource;
+import com.webobjects.eocontrol.EOFetchSpecification;
+import com.webobjects.eocontrol.EOQualifier;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSKeyValueCoding;
+import com.webobjects.foundation.NSMutableDictionary;
 
-import er.extensions.*;
+import er.extensions.ERXValueUtilities;
 
 /**
  * Superclass for all query pages.<br />

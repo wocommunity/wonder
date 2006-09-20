@@ -272,7 +272,6 @@ public class ERD2WControllerFactory extends ERD2WFactory {
         }
 
         public WOComponent deleteObjectAction(WOComponent sender) {
-            EOEnterpriseObject eo = object();
             if(editingContext() != null) {
                 log.info("Deleting Object: " + object());
                 editingContext().deleteObject(object());

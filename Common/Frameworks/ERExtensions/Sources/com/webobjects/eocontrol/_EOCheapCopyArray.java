@@ -1,8 +1,12 @@
 package com.webobjects.eocontrol;
-import java.io.*;
-import java.util.*;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
+import java.util.Enumeration;
+import java.util.ListIterator;
 
-import com.webobjects.foundation.*;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSMutableArray;
+import com.webobjects.foundation._NSUtilities;
 
 /**
  * Reimplementation which fixes a bug in NSArray, where the iterator methods won't trigger the fault.

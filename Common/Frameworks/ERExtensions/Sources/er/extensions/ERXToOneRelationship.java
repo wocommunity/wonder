@@ -7,9 +7,10 @@
 package er.extensions;
 
 
-import com.webobjects.appserver.*;
-import com.webobjects.eoaccess.*;
-import com.webobjects.eocontrol.*;
+import com.webobjects.appserver.WOContext;
+import com.webobjects.eoaccess.EODatabaseDataSource;
+import com.webobjects.eocontrol.EODataSource;
+import com.webobjects.eocontrol.EOQualifier;
 
 /**
  * Better layout options that the {@see WOToOneRelationship}, in addition you can set a 

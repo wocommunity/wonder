@@ -6,7 +6,7 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.extensions;
 
-import com.webobjects.appserver.*;
+import com.webobjects.appserver.WOContext;
 
 /**
  * This component will display is content (as in WOComponentContent) if

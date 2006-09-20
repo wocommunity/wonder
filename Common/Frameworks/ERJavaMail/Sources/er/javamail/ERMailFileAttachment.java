@@ -7,11 +7,14 @@
 
 package er.javamail;
 
-import java.io.*;
+import java.io.File;
 
-import javax.activation.*;
-import javax.mail.*;
-import javax.mail.internet.*;
+import javax.activation.DataHandler;
+import javax.activation.DataSource;
+import javax.activation.FileDataSource;
+import javax.mail.BodyPart;
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeBodyPart;
 
 public class ERMailFileAttachment extends ERMailAttachment {
 

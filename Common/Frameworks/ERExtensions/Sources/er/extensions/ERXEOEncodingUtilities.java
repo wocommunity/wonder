@@ -6,13 +6,25 @@
 //
 package er.extensions;
 
-import java.util.*;
+import java.util.Enumeration;
 
 import org.apache.log4j.Logger;
 
-import com.webobjects.eoaccess.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.foundation.*;
+import com.webobjects.eoaccess.EOAttribute;
+import com.webobjects.eoaccess.EOEntity;
+import com.webobjects.eoaccess.EOModel;
+import com.webobjects.eoaccess.EOModelGroup;
+import com.webobjects.eoaccess.EOUtilities;
+import com.webobjects.eocontrol.EOEditingContext;
+import com.webobjects.eocontrol.EOEnterpriseObject;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSComparator;
+import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSForwardException;
+import com.webobjects.foundation.NSMutableArray;
+import com.webobjects.foundation.NSMutableDictionary;
+import com.webobjects.foundation.NSPropertyListSerialization;
+import com.webobjects.foundation.NSTimestampFormatter;
 
 public class ERXEOEncodingUtilities {
 
@@ -185,9 +197,11 @@ public class ERXEOEncodingUtilities {
     					entEn.hasMoreElements ();) {
     						EOEntity entity = (EOEntity)entEn.nextElement ();
     						NSDictionary userInfo = entity.userInfo ();
-    						String encodedEntityName = (String)entity.userInfo ().objectForKey (EncodedEntityNameKey);
-    						if (encodedEntityName != null)
-    							_encodedEntityNames.setObjectForKey (entity.name (), encodedEntityName);
+    						if(userInfo != null) {
+    							String encodedEntityName = (String)userInfo.objectForKey (EncodedEntityNameKey);
+    							if (encodedEntityName != null)
+    								_encodedEntityNames.setObjectForKey (entity.name (), encodedEntityName);
+    						}
     					}
     				}
     			}

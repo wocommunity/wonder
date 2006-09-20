@@ -6,13 +6,15 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.extensions;
 
-import java.util.*;
+import java.util.Enumeration;
 
 import org.apache.log4j.Logger;
 
-import com.webobjects.appserver.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.foundation.*;
+import com.webobjects.appserver.WOContext;
+import com.webobjects.eocontrol.EOEnterpriseObject;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSMutableArray;
 
 /**
  * This component can be used for two things:<br/>

@@ -7,12 +7,16 @@
 package er.directtoweb;
 import org.apache.log4j.Logger;
 
-import com.webobjects.appserver.*;
-import com.webobjects.directtoweb.*;
-import com.webobjects.eoaccess.*;
-import com.webobjects.foundation.*;
+import com.webobjects.appserver.WOContext;
+import com.webobjects.directtoweb.D2WContext;
+import com.webobjects.directtoweb.D2WEditToManyFault;
+import com.webobjects.directtoweb.ERD2WContext;
+import com.webobjects.eoaccess.EOEntity;
+import com.webobjects.eoaccess.EOUtilities;
+import com.webobjects.foundation.NSArray;
 
-import er.extensions.*;
+import er.extensions.ERXArrayUtilities;
+import er.extensions.ERXValueUtilities;
 
 public class ERD2WEditSortedToManyFault extends D2WEditToManyFault {
 

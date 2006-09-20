@@ -7,7 +7,8 @@
 
 package com.webobjects.woextensions;
 
-import com.webobjects.appserver.*;
+import com.webobjects.appserver.WOContext;
+import com.webobjects.appserver.WOElement;
 
 public class WOSimpleArrayDisplay2 extends WOSimpleArrayDisplay
 {

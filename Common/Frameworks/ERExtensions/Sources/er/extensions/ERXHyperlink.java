@@ -8,9 +8,13 @@ package er.extensions;
 
 import org.apache.log4j.Logger;
 
-import com.webobjects.appserver.*;
-import com.webobjects.appserver._private.*;
-import com.webobjects.foundation.*;
+import com.webobjects.appserver.WOActionResults;
+import com.webobjects.appserver.WOContext;
+import com.webobjects.appserver.WOElement;
+import com.webobjects.appserver.WORequest;
+import com.webobjects.appserver._private.WOHyperlink;
+import com.webobjects.appserver._private.WONoContentElement;
+import com.webobjects.foundation.NSDictionary;
 
 
 /**

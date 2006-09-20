@@ -1,6 +1,6 @@
 package er.directtoweb;
 
-import com.webobjects.appserver.*;
+import com.webobjects.appserver.WOContext;
 
 /**
  * Class for DirectToWeb Component ERD2WQueryEntitiesPageTemplate.

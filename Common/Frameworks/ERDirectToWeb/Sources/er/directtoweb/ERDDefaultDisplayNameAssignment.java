@@ -1,15 +1,18 @@
 package er.directtoweb;
 
-import java.util.*;
+import java.util.Enumeration;
 
 import org.apache.log4j.Logger;
 
-import com.webobjects.directtoweb.*;
-import com.webobjects.eoaccess.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.foundation.*;
+import com.webobjects.directtoweb.D2WContext;
+import com.webobjects.eoaccess.EOEntity;
+import com.webobjects.eocontrol.EOKeyValueUnarchiver;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSDictionary;
 
-import er.extensions.*;
+import er.extensions.ERXDictionaryUtilities;
+import er.extensions.ERXLocalizer;
+import er.extensions.ERXStringUtilities;
 
 /**
  * Beautify the display names for the various keys in D2W a better way.<br />

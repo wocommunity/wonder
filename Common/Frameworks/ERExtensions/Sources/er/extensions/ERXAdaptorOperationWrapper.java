@@ -1,12 +1,26 @@
 package er.extensions;
 
-import java.io.*;
+import java.io.ByteArrayOutputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 
 import org.apache.log4j.Logger;
 
-import com.webobjects.eoaccess.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.foundation.*;
+import com.webobjects.eoaccess.EOAdaptorChannel;
+import com.webobjects.eoaccess.EOAdaptorOperation;
+import com.webobjects.eoaccess.EODatabaseChannel;
+import com.webobjects.eoaccess.EODatabaseContext;
+import com.webobjects.eoaccess.EOEntity;
+import com.webobjects.eoaccess.EOGeneralAdaptorException;
+import com.webobjects.eoaccess.EOModelGroup;
+import com.webobjects.eoaccess.EOUtilities;
+import com.webobjects.eocontrol.EOEditingContext;
+import com.webobjects.eocontrol.EOQualifier;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSMutableArray;
+import com.webobjects.foundation.NSNotificationCenter;
+import com.webobjects.foundation.NSRecursiveLock;
 
 /**
  * This class is a wrapper for the EOAdaptorOperation class
@@ -63,8 +77,6 @@ public class ERXAdaptorOperationWrapper implements Serializable {
     public static NSArray wrappedAdaptorOperations(NSArray adaptorOps) {
         adaptorOperationsLock.lock();
         try {
-            ByteArrayOutputStream bous = new ByteArrayOutputStream();
-            ObjectOutputStream os;
             NSMutableArray ops = new NSMutableArray();
             if(adaptorOps.count() > 0) {
                 for (int i = 0; i < adaptorOps.count(); i++) {

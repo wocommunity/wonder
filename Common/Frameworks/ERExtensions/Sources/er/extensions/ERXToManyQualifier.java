@@ -8,9 +8,18 @@ package er.extensions;
 
 import org.apache.log4j.Logger;
 
-import com.webobjects.eoaccess.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.foundation.*;
+import com.webobjects.eoaccess.EOAttribute;
+import com.webobjects.eoaccess.EOEntity;
+import com.webobjects.eoaccess.EOJoin;
+import com.webobjects.eoaccess.EOQualifierSQLGeneration;
+import com.webobjects.eoaccess.EORelationship;
+import com.webobjects.eoaccess.EOSQLExpression;
+import com.webobjects.eocontrol.EOClassDescription;
+import com.webobjects.eocontrol.EOQualifier;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSMutableArray;
+import com.webobjects.foundation.NSMutableSet;
 
 /**
  * Optimized toMany qualifier, much, much better SQL than the Apple provided qualifier.
@@ -111,7 +120,6 @@ public class ERXToManyQualifier extends EOQualifier implements Cloneable {
             StringBuffer result=new StringBuffer();
             EOEntity targetEntity=e.entity();
 
-            String tableName=targetEntity.externalName();
             NSArray toManyKeys=NSArray.componentsSeparatedByString(qualifier.key(),".");
             EORelationship targetRelationship=null;
             for (int i=0; i<toManyKeys.count()-1;i++) {
@@ -126,7 +134,6 @@ public class ERXToManyQualifier extends EOQualifier implements Cloneable {
                 String definitionKeyPath=targetRelationship.definition();                        
                 NSArray definitionKeys=NSArray.componentsSeparatedByString(definitionKeyPath,".");
                 EOEntity lastStopEntity=targetRelationship.entity();
-                String lastStopPrimaryKeyName=(String)lastStopEntity.primaryKeyAttributeNames().objectAtIndex(0);
                 EORelationship firstHopRelationship= lastStopEntity.relationshipNamed((String)definitionKeys.objectAtIndex(0));
                 EOEntity endOfFirstHopEntity= firstHopRelationship.destinationEntity();
                 EOJoin join=(EOJoin) firstHopRelationship.joins().objectAtIndex(0); // assumes 1 join
@@ -175,7 +182,6 @@ public class ERXToManyQualifier extends EOQualifier implements Cloneable {
                     result.append(secondHopSourceAttribute.columnName());
                     
                     result.append(" IN ("); 
-                    String pkName = (String)targetEntity.primaryKeyAttributeNames().lastObject();
                     EOAttribute pk = (EOAttribute)targetEntity.primaryKeyAttributes().lastObject();
                     for(int i = 0; i < pKeys.count(); i++) {
                         

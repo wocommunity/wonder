@@ -6,12 +6,17 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.directtoweb;
 
-import java.text.*;
+import java.text.Format;
 
-import com.webobjects.appserver.*;
-import com.webobjects.foundation.*;
+import com.webobjects.appserver.WOContext;
+import com.webobjects.foundation.NSTimestamp;
+import com.webobjects.foundation.NSValidation;
 
-import er.extensions.*;
+import er.extensions.ERXEditDateJavascript;
+import er.extensions.ERXLocalizer;
+import er.extensions.ERXTimestampFormatter;
+import er.extensions.ERXValidationFactory;
+import er.extensions.ERXWOForm;
 
 /**
  * Used for building date queries with javascript.<br />

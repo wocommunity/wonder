@@ -7,7 +7,9 @@
 
 package com.webobjects.woextensions;
 
-import com.webobjects.appserver.*;
+import com.webobjects.appserver.WOComponent;
+import com.webobjects.appserver.WOContext;
+import com.webobjects.appserver.WOResponse;
 
 public class WOSessionRestorationError extends WOComponent {
     public WOSessionRestorationError(WOContext aContext)  {

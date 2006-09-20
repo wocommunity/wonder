@@ -6,10 +6,10 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.directtoweb;
 
-import com.webobjects.appserver.*;
-import com.webobjects.directtoweb.*;
+import com.webobjects.appserver.WOContext;
+import com.webobjects.directtoweb.D2WDisplayString;
 
-import er.extensions.*;
+import er.extensions.ERXExtensions;
 
 /**
  * Extracts text from html and displays the text.<br />

@@ -6,15 +6,33 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.extensions;
 
-import java.io.*;
-import java.util.*;
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
+import java.util.Enumeration;
+import java.util.TimeZone;
 
 import org.apache.log4j.Logger;
 
-import com.webobjects.appserver.*;
-import com.webobjects.eoaccess.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.foundation.*;
+import com.webobjects.appserver.WOComponent;
+import com.webobjects.eoaccess.EOEntity;
+import com.webobjects.eoaccess.EOModelGroup;
+import com.webobjects.eoaccess.EORelationship;
+import com.webobjects.eoaccess.EOUtilities;
+import com.webobjects.eocontrol.EOArrayDataSource;
+import com.webobjects.eocontrol.EODataSource;
+import com.webobjects.eocontrol.EOEditingContext;
+import com.webobjects.eocontrol.EOEnterpriseObject;
+import com.webobjects.eocontrol.EOSortOrdering;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSBundle;
+import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSMutableArray;
+import com.webobjects.foundation.NSMutableDictionary;
+import com.webobjects.foundation.NSMutableSet;
+import com.webobjects.foundation.NSSelector;
+import com.webobjects.foundation.NSSet;
+import com.webobjects.foundation.NSTimestamp;
+import com.webobjects.foundation.NSTimestampFormatter;
 
 /**
  * Diverse collection of utility methods for handling everything from
@@ -249,7 +267,6 @@ public class ERXUtilities {
     
     public static EOEnterpriseObject relationshipObjectWithObjectAndKeyPath(EOEnterpriseObject object, String keyPath) {
         EOEnterpriseObject lastEO=object;
-        EORelationship relationship = null;
         if (keyPath.indexOf(".")!=-1) {
             String partialKeyPath=ERXStringUtilities.keyPathWithoutLastProperty(keyPath);
             Object rawLastEO=object.valueForKeyPath(partialKeyPath);

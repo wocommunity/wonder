@@ -8,10 +8,11 @@ package er.directtoweb;
 
 import org.apache.log4j.Logger;
 
-import com.webobjects.appserver.*;
-import com.webobjects.foundation.*;
+import com.webobjects.appserver.WOContext;
+import com.webobjects.appserver.WORequest;
+import com.webobjects.foundation.NSValidation;
 
-import er.extensions.*;
+import er.extensions.ERXStringUtilities;
 
 /**
  * Rich text edit component.<br />

@@ -8,12 +8,15 @@ package er.directtoweb;
 
 import org.apache.log4j.Logger;
 
-import com.webobjects.appserver.*;
-import com.webobjects.directtoweb.*;
-import com.webobjects.foundation.*;
+import com.webobjects.appserver.WOComponent;
+import com.webobjects.appserver.WOContext;
+import com.webobjects.appserver.WOResponse;
+import com.webobjects.directtoweb.D2WContext;
+import com.webobjects.foundation.NSDictionary;
 
-import er.directtoweb.ERDirectToWeb.*;
-import er.extensions.*;
+import er.extensions.ERXConstant;
+import er.extensions.ERXExceptionHolder;
+import er.extensions.ERXNonSynchronizingComponent;
 
 /**
  * Base class of many custom components.<br />

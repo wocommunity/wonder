@@ -1,10 +1,10 @@
 package er.directtoweb;
 import org.apache.log4j.Logger;
 
-import com.webobjects.directtoweb.*;
-import com.webobjects.eocontrol.*;
+import com.webobjects.directtoweb.D2WContext;
+import com.webobjects.eocontrol.EOKeyValueUnarchiver;
 
-import er.extensions.*;
+import er.extensions.ERXLocalizer;
 
 /**
  * Same as {@link ERDLocalizedAssignment}, except that firing is delayed.

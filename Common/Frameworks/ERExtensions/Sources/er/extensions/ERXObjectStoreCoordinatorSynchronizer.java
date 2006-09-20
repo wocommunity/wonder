@@ -6,13 +6,28 @@
  */
 package er.extensions;
 
-import java.util.*;
+import java.util.Enumeration;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Vector;
 
 import org.apache.log4j.Logger;
 
-import com.webobjects.eoaccess.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.foundation.*;
+import com.webobjects.eoaccess.EODatabase;
+import com.webobjects.eoaccess.EODatabaseContext;
+import com.webobjects.eoaccess.EOEntity;
+import com.webobjects.eoaccess.EOModelGroup;
+import com.webobjects.eocontrol.EOGlobalID;
+import com.webobjects.eocontrol.EOKeyGlobalID;
+import com.webobjects.eocontrol.EOObjectStore;
+import com.webobjects.eocontrol.EOObjectStoreCoordinator;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSMutableArray;
+import com.webobjects.foundation.NSMutableDictionary;
+import com.webobjects.foundation.NSNotification;
+import com.webobjects.foundation.NSNotificationCenter;
+import com.webobjects.foundation.NSSelector;
 
 
 /** 
@@ -154,7 +169,7 @@ public class ERXObjectStoreCoordinatorSynchronizer {
         
         public void run() {
             boolean run = true;
-            while (true) {
+            while (run) {
                 Change changes = null;
                 synchronized(_elements) {
                     try {

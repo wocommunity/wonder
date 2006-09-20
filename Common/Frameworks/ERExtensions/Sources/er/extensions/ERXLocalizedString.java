@@ -7,9 +7,9 @@
 
 package er.extensions;
 
-import com.webobjects.appserver.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.foundation.*;
+import com.webobjects.appserver.WOContext;
+import com.webobjects.eocontrol.EOEnterpriseObject;
+import com.webobjects.foundation.NSKeyValueCodingAdditions;
 /**
 
 Examples:

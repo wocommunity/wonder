@@ -1,7 +1,18 @@
 package er.extensions;
 
-import java.io.*;
-import java.util.zip.*;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.util.zip.DeflaterOutputStream;
+import java.util.zip.GZIPInputStream;
+import java.util.zip.GZIPOutputStream;
+import java.util.zip.InflaterInputStream;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
+import java.util.zip.ZipOutputStream;
 
 import org.apache.log4j.Logger;
 
@@ -107,7 +118,6 @@ public class ERXCompressionUtilities {
             ZipInputStream in = new ZipInputStream(bos);
             ZipEntry entry = null;
             while ((entry = in.getNextEntry()) != null) {
-                long start1 = System.currentTimeMillis();
 
                 String oriName = entry.getName();
                 String filename = directory.getAbsolutePath() + File.separator + oriName;

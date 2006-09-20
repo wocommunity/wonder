@@ -1,8 +1,10 @@
 package er.extensions;
-import java.math.*;
+import java.math.BigDecimal;
 
-import com.webobjects.appserver.*;
-import com.webobjects.foundation.*;
+import com.webobjects.appserver.WOComponent;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSPropertyListSerialization;
 
 /**
  * ERXValueUtilities has usefull conversion methods for

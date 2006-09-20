@@ -1,13 +1,19 @@
 package er.extensions;
 
-import java.sql.*;
-import java.util.*;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.Hashtable;
+import java.util.Stack;
 
 import org.apache.log4j.Logger;
 
-import com.webobjects.eoaccess.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.foundation.*;
+import com.webobjects.eoaccess.EOAttribute;
+import com.webobjects.eoaccess.EOEntity;
+import com.webobjects.eoaccess.EOModelGroup;
+import com.webobjects.eocontrol.EOEnterpriseObject;
+import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSForwardException;
 
 /**
  * @author david@cluster9.com<br/> <br/> Automatically generates Long primary

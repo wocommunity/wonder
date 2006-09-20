@@ -6,17 +6,53 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.directtoweb;
 
-import java.util.*;
+import java.util.Enumeration;
 
 import org.apache.log4j.Logger;
 
-import com.webobjects.appserver.*;
-import com.webobjects.directtoweb.*;
-import com.webobjects.eoaccess.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.foundation.*;
+import com.webobjects.appserver.WOActionResults;
+import com.webobjects.appserver.WOComponent;
+import com.webobjects.appserver.WOContext;
+import com.webobjects.appserver.WODisplayGroup;
+import com.webobjects.appserver.WORequest;
+import com.webobjects.appserver.WOResponse;
+import com.webobjects.appserver.WOSession;
+import com.webobjects.directtoweb.ConfirmPageInterface;
+import com.webobjects.directtoweb.D2W;
+import com.webobjects.directtoweb.D2WContext;
+import com.webobjects.directtoweb.D2WListPage;
+import com.webobjects.directtoweb.EditPageInterface;
+import com.webobjects.directtoweb.InspectPageInterface;
+import com.webobjects.directtoweb.ListPageInterface;
+import com.webobjects.directtoweb.SelectPageInterface;
+import com.webobjects.eoaccess.EODatabaseDataSource;
+import com.webobjects.eoaccess.EOEntity;
+import com.webobjects.eoaccess.EOModelGroup;
+import com.webobjects.eoaccess.EORelationship;
+import com.webobjects.eoaccess.EOUtilities;
+import com.webobjects.eocontrol.EODataSource;
+import com.webobjects.eocontrol.EOEditingContext;
+import com.webobjects.eocontrol.EOEnterpriseObject;
+import com.webobjects.eocontrol.EOFetchSpecification;
+import com.webobjects.eocontrol.EOSharedEditingContext;
+import com.webobjects.eocontrol.EOSortOrdering;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSKeyValueCoding;
+import com.webobjects.foundation.NSMutableArray;
+import com.webobjects.foundation.NSNotification;
+import com.webobjects.foundation.NSNotificationCenter;
+import com.webobjects.foundation.NSSelector;
 
-import er.extensions.*;
+import er.extensions.ERXArrayUtilities;
+import er.extensions.ERXBatchingDisplayGroup;
+import er.extensions.ERXComponentActionRedirector;
+import er.extensions.ERXConstant;
+import er.extensions.ERXEOAccessUtilities;
+import er.extensions.ERXEOControlUtilities;
+import er.extensions.ERXExtensions;
+import er.extensions.ERXLocalizer;
+import er.extensions.ERXValueUtilities;
 /**
  * Reimplementation of the D2WListPage. Descendes from ERD2WPage instead of D2WList.
  * @author ak

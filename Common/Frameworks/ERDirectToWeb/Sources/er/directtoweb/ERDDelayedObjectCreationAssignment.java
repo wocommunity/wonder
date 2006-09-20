@@ -6,15 +6,14 @@
 //
 package er.directtoweb;
 
-import java.lang.reflect.*;
+import java.lang.reflect.Constructor;
 
 import org.apache.log4j.Logger;
 
-import com.webobjects.directtoweb.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.foundation.*;
-
-import er.extensions.*;
+import com.webobjects.directtoweb.D2WContext;
+import com.webobjects.eocontrol.EOKeyValueUnarchiver;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSDictionary;
 
 /**
  * Assignment used to create objects on the fly. This assignment

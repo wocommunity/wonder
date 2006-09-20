@@ -7,7 +7,9 @@
 
 package er.extensions;
 
-import com.webobjects.foundation.*;
+import com.webobjects.foundation.NSForwardException;
+import com.webobjects.foundation.NSNotification;
+import com.webobjects.foundation.NSSelector;
 
 /**
  * NSSelector utilities.  These exist mostly to allow selector invocation without explicitly

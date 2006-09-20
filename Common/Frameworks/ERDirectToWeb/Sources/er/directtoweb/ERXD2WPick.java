@@ -6,7 +6,7 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.directtoweb;
 
-import com.webobjects.appserver.*;
+import com.webobjects.appserver.WOContext;
 
 // Only difference between this component and D2WPick is that this one uses ERD2WSwitchComponent
 /**

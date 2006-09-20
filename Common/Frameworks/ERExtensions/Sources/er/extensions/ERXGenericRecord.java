@@ -6,13 +6,29 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.extensions;
 
-import java.util.*;
+import java.util.Enumeration;
 
 import org.apache.log4j.Logger;
 
-import com.webobjects.eoaccess.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.foundation.*;
+import com.webobjects.eoaccess.EOEntity;
+import com.webobjects.eoaccess.EOUtilities;
+import com.webobjects.eocontrol.EOClassDescription;
+import com.webobjects.eocontrol.EOEditingContext;
+import com.webobjects.eocontrol.EOEnterpriseObject;
+import com.webobjects.eocontrol.EOFaultHandler;
+import com.webobjects.eocontrol.EOFetchSpecification;
+import com.webobjects.eocontrol.EOGenericRecord;
+import com.webobjects.eocontrol.EOGlobalID;
+import com.webobjects.eocontrol.EOObjectStoreCoordinator;
+import com.webobjects.eocontrol.EOQualifier;
+import com.webobjects.eocontrol.EORelationshipManipulation;
+import com.webobjects.eocontrol.EOSharedEditingContext;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSKeyValueCoding;
+import com.webobjects.foundation.NSMutableArray;
+import com.webobjects.foundation.NSMutableDictionary;
+import com.webobjects.foundation.NSValidation;
 
 /**
  * This class contains a bunch of extensions to the regular

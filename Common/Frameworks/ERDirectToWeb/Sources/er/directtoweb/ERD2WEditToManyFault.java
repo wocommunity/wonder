@@ -8,10 +8,11 @@ package er.directtoweb;
 
 import org.apache.log4j.Logger;
 
-import com.webobjects.appserver.*;
-import com.webobjects.directtoweb.*;
-
-import er.extensions.*;
+import com.webobjects.appserver.WOComponent;
+import com.webobjects.appserver.WOContext;
+import com.webobjects.directtoweb.D2W;
+import com.webobjects.directtoweb.D2WEditToManyFault;
+import com.webobjects.directtoweb.EditRelationshipPageInterface;
 
 /**
  * Enhanced to-many component, which provides the means to specify which edit-relationship page gets chosen.

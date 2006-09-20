@@ -10,7 +10,8 @@ package er.extensions;
 
 import org.apache.log4j.Logger;
 
-import com.webobjects.foundation.*;
+import com.webobjects.foundation.NSData;
+import com.webobjects.foundation.NSRange;
 
 /* This draws liberally from code by Gregory L. Guerin:
 
@@ -164,15 +165,6 @@ public class ERXMacBinarySwissArmyKnife {
                 //System.out.println("The data is too short to be a MacBinary.  Only received " + fileData.length() + "bytes.");
                 return false;
             }
-
-            int got = dataLength;
-
-            String pad128 = "";
-            long len = fileData.length();
-            if ( (len & 0x7FL) != 0 )
-                pad128 = "  ## not padded to 128-byte boundary";
-
-            //System.out.println( "  file-len: " + len + pad128 );
 
             // Feed bytes into a MacBinaryHeader and see what turns up...
             myBytes = fileData.bytes(0,dataLength);
