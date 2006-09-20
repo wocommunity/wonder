@@ -6,7 +6,10 @@
 //
 package er.extensions;
 
-import org.apache.log4j.Logger;
+import java.lang.reflect.*;
+import java.util.*;
+
+import org.apache.log4j.*;
 
 import com.webobjects.appserver.*;
 import com.webobjects.foundation.*;
@@ -23,8 +26,34 @@ public abstract class ERXFrameworkPrincipal {
     private final Logger log = Logger.getLogger(getClass());
 
     /** holds the mapping between framework principals classes and ERXFrameworkPrincipal objects */
-    private static NSMutableDictionary initializedFrameworks = new NSMutableDictionary();
+    private static final NSMutableDictionary  initializedFrameworks = new NSMutableDictionary();
+    private static final NSMutableArray  launchingFrameworks = new NSMutableArray();
 
+    public static class Observer {
+        
+        /**
+         * Notification method called when the WOApplication posts
+         * the notification 'ApplicationWillFinishLaunching'. This
+         * method handles de-registering for notifications and releasing
+         * any references to observer so that it can be released for
+         * garbage collection.
+         * @param n notification that is posted after the WOApplication
+         *      has been constructed, but before the application is
+         *      ready for accepting requests.
+         */
+        public final void finishInitialization(NSNotification n) {
+            NSNotificationCenter.defaultCenter().removeObserver(this);
+            for (Enumeration enumerator = launchingFrameworks.objectEnumerator(); enumerator.hasMoreElements();) {
+                ERXFrameworkPrincipal principal = (ERXFrameworkPrincipal) enumerator.nextElement();
+                principal.finishInitialization();
+                NSLog.debug.appendln("Finished initialization after launch: " + principal);
+            }
+        }
+
+    }
+    
+    private static Observer observer;
+    
     /**
      * Gets the shared framework principal instance for a given
      * class.
@@ -42,39 +71,50 @@ public abstract class ERXFrameworkPrincipal {
      */
     public static void setUpFrameworkPrincipalClass(Class c) {
         try {
-            if (initializedFrameworks.objectForKey(c.getName()) == null) {
-                NSLog.out.appendln("Starting up: " + c.getName());
-                ERXFrameworkPrincipal principal = (ERXFrameworkPrincipal)c.newInstance();
-                //ERXRetainer.retain(principal);
+            NSLog.debug.appendln("Loaded items: " + initializedFrameworks);
+            if(observer == null) {
+                observer = new Observer();
                 NSNotificationCenter center = NSNotificationCenter.defaultCenter();
-                center.addObserver(principal,
-                                   new NSSelector("finishInitialization",  ERXConstant.NotificationClassArray),
-                                   WOApplication.ApplicationWillFinishLaunchingNotification,
-                                   null);
-                initializedFrameworks.setObjectForKey(principal,c.getName());
-            } else {
-                NSLog.out.appendln("Skipped: " + c.getName());
+                center.addObserver(observer,
+                        new NSSelector("finishInitialization",  ERXConstant.NotificationClassArray),
+                        WOApplication.ApplicationWillFinishLaunchingNotification,
+                        null);
+               
             }
-        } catch (Throwable e) {
+            if (initializedFrameworks.objectForKey(c.getName()) == null) {
+                NSLog.debug.appendln("Starting up: " + c.getName());
+                try {
+                    Field f = c.getField("REQUIRES");
+                    Class requires[] = (Class[]) f.get(c);
+                    for (int i = 0; i < requires.length; i++) {
+                        Class requirement = requires[i];
+                        setUpFrameworkPrincipalClass(requirement);
+                    }
+                } catch (NoSuchFieldException e) {
+                    // nothing
+                    // NSLog.debug.appendln("No requirements: " + c.getName());
+                } catch (IllegalAccessException e) {
+                    NSLog.err.appendln("Can't read field REQUIRES from " + c.getName() + ", check if it is 'public static Class[] REQUIRES= new Class[] {...}' in this class");
+                    NSForwardException._runtimeExceptionForThrowable(e);
+                }
+                ERXFrameworkPrincipal principal = (ERXFrameworkPrincipal)c.newInstance();
+                initializedFrameworks.setObjectForKey(principal,c.getName());
+                launchingFrameworks.addObject(principal);
+                principal.initialize();
+                NSLog.debug.appendln("Initialized : " + c.getName());
+
+            } else {
+                NSLog.debug.appendln("Was already inited: " + c.getName());
+            }
+        } catch (InstantiationException e) {
+            throw NSForwardException._runtimeExceptionForThrowable(e);
+        } catch (IllegalAccessException e) {
             throw NSForwardException._runtimeExceptionForThrowable(e);
         }
     }
 
-    /**
-     * Notification method called when the WOApplication posts
-     * the notification 'ApplicationWillFinishLaunching'. This
-     * method handles de-registering for notifications and releasing
-     * any references to observer so that it can be released for
-     * garbage collection.
-     * @param n notification that is posted after the WOApplication
-     * 		has been constructed, but before the application is
-     *		ready for accepting requests.
-     */
-    public final void finishInitialization(NSNotification n) {
-        NSNotificationCenter.defaultCenter().removeObserver(this);
-        //ERXRetainer.release(this);
-        finishInitialization();
-        log().info("Finished initialization after launch: " + getClass().getName());
+    protected void initialize() {
+        // empty
     }
 
     public ERXFrameworkPrincipal() {
