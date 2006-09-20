@@ -6,17 +6,41 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.extensions;
 
-import java.io.*;
-import java.lang.reflect.*;
-import java.util.*;
+import java.io.File;
+import java.io.IOException;
+import java.lang.reflect.Method;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Random;
 
-import org.apache.log4j.*;
+import org.apache.log4j.Logger;
 
-import com.webobjects.appserver.*;
-import com.webobjects.eoaccess.*;
-import com.webobjects.eoaccess.EOQualifierSQLGeneration.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.foundation.*;
+import com.webobjects.appserver.WOSession;
+import com.webobjects.eoaccess.EOAttribute;
+import com.webobjects.eoaccess.EODatabaseContext;
+import com.webobjects.eoaccess.EOEntity;
+import com.webobjects.eoaccess.EOQualifierSQLGeneration;
+import com.webobjects.eoaccess.EORelationship;
+import com.webobjects.eoaccess.EOSQLExpression;
+import com.webobjects.eoaccess.EOUtilities;
+import com.webobjects.eoaccess.EOQualifierSQLGeneration.Support;
+import com.webobjects.eocontrol.EOEditingContext;
+import com.webobjects.eocontrol.EOEnterpriseObject;
+import com.webobjects.eocontrol.EOFetchSpecification;
+import com.webobjects.eocontrol.EOKeyValueQualifier;
+import com.webobjects.eocontrol.EOQualifier;
+import com.webobjects.eocontrol.EOSharedEditingContext;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSForwardException;
+import com.webobjects.foundation.NSKeyValueCoding;
+import com.webobjects.foundation.NSLog;
+import com.webobjects.foundation.NSMutableArray;
+import com.webobjects.foundation.NSMutableDictionary;
+import com.webobjects.foundation.NSNotification;
+import com.webobjects.foundation.NSNotificationCenter;
+import com.webobjects.foundation.NSSelector;
 
 /**
  * Principal class of the ERExtensions framework. This class
@@ -211,8 +235,6 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
         EOEditingContext ec = (EOEditingContext)n.object();
         ERXExtensions.retainEditingContextForCurrentSession(ec);
     }
-
-    private static boolean initialized;
 
     /** logging support for the adaptor channel */
     public static Logger adaptorLogger;
@@ -511,7 +533,7 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
     // MOVEME: ERXStringUtilities
     public static boolean stringIsParseableInteger(String s) {
         try {
-            int x = Integer.parseInt(s);
+            Integer.parseInt(s);
             return true;
         } catch (NumberFormatException e) {
             return false;
