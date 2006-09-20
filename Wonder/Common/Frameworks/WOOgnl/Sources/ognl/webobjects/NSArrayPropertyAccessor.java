@@ -8,9 +8,13 @@
 /* NSArrayPropertyAccessor.java created by max on Fri 28-Sep-2001 */
 package ognl.webobjects;
 
-import ognl.*;
+import ognl.DynamicSubscript;
+import ognl.NoSuchPropertyException;
+import ognl.OgnlException;
 
-import com.webobjects.foundation.*;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSMutableArray;
+import com.webobjects.foundation.NSPropertyListSerialization;
 
 public class NSArrayPropertyAccessor extends NSObjectPropertyAccessor {
 
