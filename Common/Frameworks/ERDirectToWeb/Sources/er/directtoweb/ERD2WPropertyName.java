@@ -78,7 +78,11 @@ public class ERD2WPropertyName extends D2WStatelessComponent {
     }
     
     public NSDictionary contextDictionaryForPropertyKey() {
-        return (NSDictionary)contextDictionary().valueForKeyPath("componentLevelKeys." + propertyKey());
+        Object o = contextDictionary().valueForKeyPath("componentLevelKeys." + propertyKey());
+        if(o instanceof NSDictionary) {
+            return (NSDictionary)o;
+        }
+        return NSDictionary.EmptyDictionary;
     }
     
     public String d2wComponentName() {
