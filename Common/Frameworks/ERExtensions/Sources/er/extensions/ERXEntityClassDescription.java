@@ -10,7 +10,7 @@ import java.io.*;
 import java.lang.reflect.*;
 import java.util.*;
 
-import org.apache.log4j.Logger;
+import org.apache.log4j.*;
 
 import com.webobjects.appserver.*;
 import com.webobjects.eoaccess.*;
@@ -601,7 +601,6 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
             NSNotificationCenter.defaultCenter().addObserver(_factory, new NSSelector("applicationDidFinishLaunching", ERXConstant.NotificationClassArray), WOApplication.ApplicationWillFinishLaunchingNotification, null);
             NSNotificationCenter.defaultCenter().addObserver(_factory, new NSSelector("classDescriptionNeededForEntityName", ERXConstant.NotificationClassArray), EOClassDescription.ClassDescriptionNeededForEntityNameNotification, null);
             NSNotificationCenter.defaultCenter().addObserver(_factory, new NSSelector("classDescriptionNeededForClass", ERXConstant.NotificationClassArray), EOClassDescription.ClassDescriptionNeededForClassNotification, null);
-            NSNotificationCenter.defaultCenter().addObserver(_factory, new NSSelector("compilerProxyDidCompileClasses", new Class[] { NSNotification.class } ), ERXCompilerProxy.CompilerProxyDidCompileClassesNotification, null);
             _registered = true;
         }
     }
