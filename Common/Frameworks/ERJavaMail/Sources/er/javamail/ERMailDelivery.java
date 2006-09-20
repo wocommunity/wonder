@@ -6,17 +6,25 @@
 
 package er.javamail;
 
-import java.util.*;
+import java.util.Date;
+import java.util.Enumeration;
 
-import javax.activation.*;
-import javax.mail.*;
-import javax.mail.internet.*;
+import javax.activation.DataHandler;
+import javax.mail.BodyPart;
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.Part;
+import javax.mail.internet.AddressException;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeBodyPart;
+import javax.mail.internet.MimeMessage;
+import javax.mail.internet.MimeMultipart;
 
 import org.apache.log4j.Logger;
 
-import com.webobjects.foundation.*;
-
-import er.extensions.*;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSForwardException;
+import com.webobjects.foundation.NSMutableArray;
 
 /** 
  * This is the main class for sending mail with the JavaMail API.
@@ -322,7 +330,7 @@ public abstract class ERMailDelivery {
     }
 
     protected void finishMessagePreparation () throws MessagingException {
-        DataHandler messageDataHandler = messageDataHandler = this.prepareMail ();
+        DataHandler messageDataHandler = this.prepareMail ();
 
         // Add all the attachements to the javamail message
         if (this.attachments ().count () > 0) {
