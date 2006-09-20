@@ -48,13 +48,14 @@ public class ERDirectToWeb extends ERXFrameworkPrincipal {
     }
 
     public void finishInitialization() {
-    	Object o=ERD2WModel.erDefaultModel();        // force initialization
+        ERD2WModel model=ERD2WModel.erDefaultModel();        // force initialization
     	// NOTE: doing Class.ERD2WModel doesn't seem enough
     	// to guarantee fire of ERD2WModel's static initializer
 //  	Configures the system for trace rule firing.
     	D2W.setFactory(new ERD2WFactory());
     	configureTraceRuleFiringRapidTurnAround();
     	ERDirectToWeb.warmUpRuleCache();
+        model.checkRules();
     	NSNotificationCenter.defaultCenter().addObserver(this,
     	        new NSSelector("resetModel",
     	                ERXConstant.NotificationClassArray),
