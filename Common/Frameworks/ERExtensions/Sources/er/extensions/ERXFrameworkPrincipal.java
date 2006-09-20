@@ -6,24 +6,70 @@
 //
 package er.extensions;
 
-import java.lang.reflect.*;
-import java.util.*;
+import java.lang.reflect.Field;
+import java.util.Enumeration;
 
-import org.apache.log4j.*;
+import org.apache.log4j.Logger;
 
-import com.webobjects.appserver.*;
-import com.webobjects.foundation.*;
+import com.webobjects.appserver.WOApplication;
+import com.webobjects.foundation.NSForwardException;
+import com.webobjects.foundation.NSLog;
+import com.webobjects.foundation.NSMutableArray;
+import com.webobjects.foundation.NSMutableDictionary;
+import com.webobjects.foundation.NSNotification;
+import com.webobjects.foundation.NSNotificationCenter;
+import com.webobjects.foundation.NSSelector;
 
 /** 
- * Designated starter class for frameworks.
- * the <code>finishInitialization</code> will be called when the app finishes startup.
- * To use, subclass it and set the NSPrincipalClass of your framework to the subclass. 
- * See the ERXCoreBusinessLogic and BTBusinessLogic frameworks for an example of usage.
+ * Designated starter class for frameworks, adds support for dependency management.<br />
+ * Allows you to disregard your framework order in the class path (at least where 
+ * startup is concerned, if you override actual classes you still need to take care.)<br /><br />
+ * The <code>initialize()</code> method will be called directly after your principal
+ * is instantiated.<br />
+ * The <code>finishInitialization()</code> method will be called when the app finishes 
+ * startup but before it wilol begin to process requests.<br />
+ * 
+ * If you define <pre><code>public static Class[] REQUIRES = Class[] {...}</code></pre>
+ * all the classes (which must be assignable from this class) will get 
+ * loaded before your principal.<br />
+ * 
+ * NOTE: try to avoid putting code in static initializers. These may lead to 
+ * unpredictable behaviour when launching. Use one of the methods above
+ * to do what you need to do.<br /><br />
+ * Here is an example:<pre><code>
+ * public class ExampleFrameworkPrincipal extends ERXFrameworkPrincipal {
+ * 
+ *     public static final Logger log = Logger.getLogger(ExampleFrameworkPrincipal.class);
+ * 
+ *     protected static ExampleFrameworkPrincipal sharedInstance;
+ *     
+ *     public final static Class REQUIRES[] = new Class[] {ERXExtensions.class, ERDirectToWeb.class, ERJavaMail.class};
+ * 
+ *     // Registers the class as the framework principal
+ *     static {
+ *         setUpFrameworkPrincipalClass(ExampleFrameworkPrincipal.class);
+ *     }
+ * 
+ *     public static ExampleFrameworkPrincipal sharedInstance() {
+ *         if (sharedInstance == null) {
+ *             sharedInstance = (ExampleFrameworkPrincipal)sharedInstance(ExampleFrameworkPrincipal.class);
+ *         }
+ *         return sharedInstance;
+ *     }
+ * 
+ *     public void initialize() {
+ *         // code during startup
+ *     }
+ * 
+ *     public void finishInitialization() {
+ *         // Initialized shared data
+ *     }
+ * }</code></pre>
  */
 public abstract class ERXFrameworkPrincipal {
 
     /** logging support */
-    private final Logger log = Logger.getLogger(getClass());
+    protected final Logger log = Logger.getLogger(getClass());
 
     /** holds the mapping between framework principals classes and ERXFrameworkPrincipal objects */
     private static final NSMutableDictionary  initializedFrameworks = new NSMutableDictionary();
@@ -113,24 +159,20 @@ public abstract class ERXFrameworkPrincipal {
         }
     }
 
+    /**
+     * Called directly after the contructor.
+     *
+     */
     protected void initialize() {
         // empty
     }
 
     public ERXFrameworkPrincipal() {
-        NSLog.out.appendln("Started initialization: " + getClass().getName());
+        NSLog.debug.appendln("Started initialization: " + getClass().getName());
     }
     
     /**
      * Overridden by subclasses to provide framework initialization.
      */
     public abstract void finishInitialization();
-    
-    /**
-     * Access to the logging mechanism
-     * @return shared logging instance
-     */
-    public Logger log() {
-        return log;
-    }
 }
