@@ -65,7 +65,7 @@ public class ERXTestRunner extends BaseTestRunner {
 
         /** Get the freshest loaded class. Uses the CompilerProxy to get it. */
         public Test getTest(String testClass) {
-            return new TestSuite(ERXCompilerProxy.defaultProxy().classForName(testClass));
+            return new TestSuite(ERXPatcher.classForName(testClass));
         }
 
         /* (non-Javadoc)
