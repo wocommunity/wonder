@@ -187,7 +187,10 @@ public class ERXProperties extends Properties {
      * @return if the version of webobjects is 5.2 or better
      */
     public static boolean webObjectsVersionIs52OrHigher() {
-        return webObjectsVersionAsDouble() >= 5.2d;
+        if(ERXProperties.booleanForKey("er.extensions.ERXProperties.checkOldVersions")) {
+            return webObjectsVersionAsDouble() >= 5.2d;
+        }
+        return true;
     }
 
     /**
@@ -196,14 +199,17 @@ public class ERXProperties extends Properties {
      * @return if the version of webobjects is 5.22 or better
      */
     public static boolean webObjectsVersionIs522OrHigher() {
-        String webObjectsVersion = webObjectsVersion();
-        if("5.2".equals(webObjectsVersion)) {
-            String sourceVersion = sourceVersionString();
-            if("9260000".equals(sourceVersion)) {
-                return true;
+        if(ERXProperties.booleanForKey("er.extensions.ERXProperties.checkOldVersions")) {
+            String webObjectsVersion = webObjectsVersion();
+            if("5.2".equals(webObjectsVersion)) {
+                String sourceVersion = sourceVersionString();
+                if("9260000".equals(sourceVersion)) {
+                    return true;
+                }
             }
+            return webObjectsVersionAsDouble() >= 5.22d;
         }
-        return webObjectsVersionAsDouble() >= 5.22d;
+        return true;
     }
 
     

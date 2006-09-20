@@ -35,17 +35,6 @@ public class ERXLogger extends org.apache.log4j.Logger {
             System.err.println("Exception while creating logger factory of class " + factoryClassName + ": " + ex);
         }
     }
-    
-    private static boolean _isFirstTimeConfig = true;
-    
-    /**
-     * Sets the default Logger factory so that ERXLogger
-     * classes are created instead of Logger classes. Also
-     * configures the log4j logging system.
-     */
-    static {
-        // configureLoggingWithSystemProperties();
-    }
 
     /**
      * LoggerFactory subclass that creates ERXLogger objects
@@ -155,31 +144,22 @@ public class ERXLogger extends org.apache.log4j.Logger {
      * @param  properties with the logging configuration 
      */
     public static synchronized void configureLogging(Properties properties) {
-        if (_isFirstTimeConfig) {
-            boolean is522OrHigher = false;
-            _isFirstTimeConfig = false;
-            is522OrHigher = ERXProperties.webObjectsVersionIs522OrHigher();
-            if (!is522OrHigher) {
-                BasicConfigurator.configure();
-                Logger.getRootLogger().setLevel(Level.INFO);                
-            } else {
-                NSLog.setDebug(new ERXNSLogLog4jBridge(ERXNSLogLog4jBridge.DEBUG));
-                NSLog.setOut(new ERXNSLogLog4jBridge(ERXNSLogLog4jBridge.OUT));
-                NSLog.setErr(new ERXNSLogLog4jBridge(ERXNSLogLog4jBridge.ERR));
-            }
-            // HACKALERT dt: webObjectsVersionIs522OrHigher results in calling this whole method
-            // again. This means that at this point Line 167 was already called as _isFirstTimeConfig 
-            // was already set to false. Now we would overwrite log4j config with an older, incorrect 
-            // configuration if we use the original system properties.
-            properties = ERXSystem.getProperties();
-        } else {
-            LogManager.resetConfiguration();
-            BasicConfigurator.configure();
-            Logger.getRootLogger().setLevel(Level.INFO);                
+        
+        LogManager.resetConfiguration();
+        BasicConfigurator.configure();
+        Logger.getRootLogger().setLevel(Level.INFO);     
+        
+        boolean is522OrHigher = ERXProperties.webObjectsVersionIs522OrHigher();
+        if (is522OrHigher) {
+            NSLog.setOut(new ERXNSLogLog4jBridge(ERXNSLogLog4jBridge.OUT));
+            NSLog.setErr(new ERXNSLogLog4jBridge(ERXNSLogLog4jBridge.ERR));
+
+            ERXNSLogLog4jBridge debugLogger = new ERXNSLogLog4jBridge(ERXNSLogLog4jBridge.DEBUG);
+            debugLogger.setAllowedDebugLevel(NSLog.debug.allowedDebugLevel());
+            NSLog.setDebug(debugLogger);
         }
-        
         PropertyConfigurator.configure(properties);
-        
+
         if (log == null) {
             log = Logger.getLogger(Logger.class.getName(), factory);
         }
