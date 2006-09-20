@@ -31,7 +31,6 @@ import com.webobjects.foundation.*;
  * for creating editing contexts with the default delegates set.
  */
 public class ERXExtensions extends ERXFrameworkPrincipal {
-    public static Observer observer;
     
     /** Notification name, posted before object will change in an editing context */
     public final static String objectsWillChangeInEditingContext= "ObjectsWillChangeInEditingContext";
@@ -40,7 +39,6 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
     private static Logger _log;
     
     public ERXExtensions() {
-    	init();
     }
    
    /**
@@ -61,7 +59,7 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
      * This delegate is configured when this framework is loaded.
      */
    
-    private void init() {
+    protected void initialize() {
         try {
             // This will load any optional configuration files, 
             ERXConfigurationManager.defaultManager().initialize();
@@ -81,8 +79,8 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
                 ERXSharedEOLoader.patchSharedEOLoading();
             }            
         	ERXExtensions.configureAdaptorContextRapidTurnAround(this);
-        	ERXJDBCAdaptor.registerJDBCAdaptor();
-        	EODatabaseContext.setDefaultDelegate(ERXDatabaseContextDelegate.defaultDelegate());
+            ERXJDBCAdaptor.registerJDBCAdaptor();
+            EODatabaseContext.setDefaultDelegate(ERXDatabaseContextDelegate.defaultDelegate());
         	ERXAdaptorChannelDelegate.setupDelegate();
         	ERXEC.factory().setDefaultDelegateOnEditingContext(EOSharedEditingContext.defaultSharedEditingContext(), true);
 
@@ -113,6 +111,7 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
      * validation template system is configured.
      */
     public void finishInitialization() {
+        ERXJDBCAdaptor.registerJDBCAdaptor();
         ERXProperties.populateSystemProperties();
         ERXConfigurationManager.defaultManager().configureRapidTurnAround();
         // initialize compiler proxy
@@ -128,15 +127,6 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
         
         registerSQLSupportForSelector(new NSSelector(ERXPrimaryKeyListQualifier.IsContainedInArraySelectorName), 
                 EOQualifierSQLGeneration.Support.supportForClass(ERXPrimaryKeyListQualifier.class));
-        
-        if(!ERXProperties.webObjectsVersionIs522OrHigher()) {
-            NSLog.setOut(new ERXNSLogLog4jBridge(ERXNSLogLog4jBridge.OUT));
-            NSLog.setErr(new ERXNSLogLog4jBridge(ERXNSLogLog4jBridge.ERR));
-
-            ERXNSLogLog4jBridge debugLogger = new ERXNSLogLog4jBridge(ERXNSLogLog4jBridge.DEBUG);
-            debugLogger.setAllowedDebugLevel(NSLog.debug.allowedDebugLevel());
-            NSLog.setDebug(debugLogger);
-        }
     }
     
     private static Map _qualifierKeys;
