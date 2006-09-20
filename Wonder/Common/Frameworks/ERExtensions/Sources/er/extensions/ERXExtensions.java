@@ -114,8 +114,6 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
         ERXJDBCAdaptor.registerJDBCAdaptor();
         ERXProperties.populateSystemProperties();
         ERXConfigurationManager.defaultManager().configureRapidTurnAround();
-        // initialize compiler proxy
-        ERXCompilerProxy.defaultProxy().initialize();
         ERXLocalizer.initialize();
         ERXValidationFactory.defaultFactory().configureFactory();
         // update configuration with system properties that might depend

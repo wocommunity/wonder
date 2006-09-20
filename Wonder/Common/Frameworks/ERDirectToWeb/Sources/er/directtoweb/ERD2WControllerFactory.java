@@ -2,13 +2,27 @@ package er.directtoweb;
 
 import org.apache.log4j.Logger;
 
-import com.webobjects.appserver.*;
-import com.webobjects.directtoweb.*;
-import com.webobjects.eoaccess.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.foundation.*;
+import com.webobjects.appserver.WOApplication;
+import com.webobjects.appserver.WOComponent;
+import com.webobjects.appserver.WOContext;
+import com.webobjects.appserver.WOSession;
+import com.webobjects.directtoweb.D2W;
+import com.webobjects.directtoweb.D2WComponent;
+import com.webobjects.directtoweb.D2WContext;
+import com.webobjects.directtoweb.D2WModel;
+import com.webobjects.directtoweb.ERD2WContext;
+import com.webobjects.directtoweb.ListPageInterface;
+import com.webobjects.directtoweb.QueryPageInterface;
+import com.webobjects.eoaccess.EOEntity;
+import com.webobjects.eoaccess.EOModelGroup;
+import com.webobjects.eoaccess.EOUtilities;
+import com.webobjects.eocontrol.EODataSource;
+import com.webobjects.eocontrol.EOEditingContext;
+import com.webobjects.eocontrol.EOEnterpriseObject;
+import com.webobjects.foundation.NSForwardException;
 
-import er.extensions.*;
+import er.extensions.ERXEC;
+import er.extensions.ERXPatcher;
 
 /**
  * ERD2WControllerFactory a an enhancement of the D2W factory class with the notion of "Processes". <br />
@@ -60,7 +74,7 @@ public class ERD2WControllerFactory extends ERD2WFactory {
         try {
             String controllerClassName = (String)d2wContext.valueForKey("controllerClassName");
             if(controllerClassName != null)
-                c = (ERD2WController)ERXCompilerProxy.defaultProxy().classForName(controllerClassName).newInstance();
+                c = (ERD2WController)ERXPatcher.classForName(controllerClassName).newInstance();
         } catch(Exception ex) {
             throw new NSForwardException(ex);
         }
