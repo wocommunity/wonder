@@ -57,7 +57,7 @@ public class ERXLocalizedString extends ERXStatelessComponent {
     }
     
     public String value() {
-        ERXLocalizer localizer = ERXLocalizer.localizerForSession(session());
+        ERXLocalizer localizer = ERXLocalizer.currentLocalizer();
         String stringToLocalize = null, localizedString = null;
         if(!hasBinding("templateString")) {
             if(hasBinding("object") || hasBinding("keyPath")) {
