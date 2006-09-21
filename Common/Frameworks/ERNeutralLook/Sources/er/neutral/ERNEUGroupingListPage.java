@@ -6,9 +6,9 @@
 //
 package er.neutral;
 
-import com.webobjects.appserver.*;
+import com.webobjects.appserver.WOContext;
 
-import er.directtoweb.*;
+import er.directtoweb.ERD2WGroupingListPage;
 
 public class ERNEUGroupingListPage extends ERD2WGroupingListPage {
 
