@@ -35,7 +35,7 @@ public class ERXEnterpriseObjectCache {
     private Map _cache;
     private long _timeout;
     private long _fetchTime;
-    private static final EOGlobalID NO_GID_MARKER= new EOTemporaryGlobalID();
+    protected static final EOGlobalID NO_GID_MARKER= new EOTemporaryGlobalID();
     
     /**
      * Creates the cache for the given entity name and the given keypath. No
