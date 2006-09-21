@@ -317,7 +317,7 @@ public class ERDirectToWeb extends ERXFrameworkPrincipal {
      * @param ex
      * @param d2wContext
      */
-    public static void reportException(Exception ex, D2WContext d2wContext) {
+    public static synchronized void reportException(Exception ex, D2WContext d2wContext) {
         if(d2wContext != null) {
             log.error("Exception <"+ex+">: "+
                       "pageConfiguration <" + d2wContext.valueForKeyPath("pageConfiguration") + ">, "+
@@ -346,19 +346,20 @@ public class ERDirectToWeb extends ERXFrameworkPrincipal {
         return ERXProperties.booleanForKeyWithDefault("er.directtoweb.ERDirectToWeb.shouldRaiseExceptions", defaultValue);
     }
     
-    public static String displayNameForPropertyKey(String key, String entityName, String language) {
+    public static synchronized String displayNameForPropertyKey(String key, String entityName) {
         EOEntity entity = EOModelGroup.defaultGroup().entityNamed(entityName);
         d2wContext()._localValues().clear();
         //ERD2WUtilities.resetContextCache(d2wContext());
         d2wContext().setEntity(entity);
         d2wContext().setPropertyKey(key);
-        d2wContext().takeValueForKey(ERXLocalizer.fakeSessionForLanguage(language), "session");
-        return d2wContext().displayNameForProperty();
+        String result = d2wContext().displayNameForProperty();
+        d2wContext()._localValues().clear();
+        return result;
     }
 
     // Needs to be a late init because then it will hook itself up to the correct D2WModel
     private static D2WContext _context;
-    public static D2WContext d2wContext() {
+    private static D2WContext d2wContext() {
         if (_context == null)
             _context = ERD2WContext.newContext();
         return _context;
@@ -368,10 +369,10 @@ public class ERDirectToWeb extends ERXFrameworkPrincipal {
         return d2wContextValueForKey(key, entityName, null);
     }
 
-    public static Object d2wContextValueForKey(String key, String entityName, NSDictionary extraValuesForContext) {
+    public static synchronized Object  d2wContextValueForKey(String key, String entityName, NSDictionary extraValuesForContext) {
         EOEntity entity = EOModelGroup.defaultGroup().entityNamed(entityName);
         d2wContext()._localValues().clear();
-        //ERD2WUtilities.resetContextCache(d2wContext());
+        // ERD2WUtilities.resetContextCache(d2wContext());
         d2wContext().setEntity(entity);
         if (extraValuesForContext!=null) {
             d2wContext().takeValuesFromDictionary(extraValuesForContext);
@@ -381,7 +382,9 @@ public class ERDirectToWeb extends ERXFrameworkPrincipal {
                 d2wContext().takeValueForKey(extraValuesForContext.objectForKey(k),k);
             }*/
         }
-        return d2wContext().valueForKey(key);
+        Object result = d2wContext().valueForKey(key);
+        d2wContext()._localValues().clear();
+        return result;
     }
 
     
@@ -431,11 +434,11 @@ public class ERDirectToWeb extends ERXFrameworkPrincipal {
         }
     }
 
-    public static NSArray displayableArrayForKeyPathArray(NSArray array, String entityForReportName, String language){
+    public static NSArray displayableArrayForKeyPathArray(NSArray array, String entityForReportName){
         NSMutableArray result = new NSMutableArray();
         for(Enumeration e = array.objectEnumerator(); e.hasMoreElements(); ){
             String key = (String)e.nextElement();
-            result.addObject(new ERXKeyValuePair(key, ERDirectToWeb.displayNameForPropertyKey(key, entityForReportName, language)));
+            result.addObject(new ERXKeyValuePair(key, ERDirectToWeb.displayNameForPropertyKey(key, entityForReportName)));
         }
         return (NSArray)result;
     }

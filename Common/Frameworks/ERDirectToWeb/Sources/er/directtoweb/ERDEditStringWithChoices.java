@@ -70,7 +70,7 @@ public class ERDEditStringWithChoices extends ERDCustomEditComponent {
                 entityForReportName = (String)valueForBinding("entityNameForReport");
                 _availableElements =
                     ERDirectToWeb.displayableArrayForKeyPathArray((NSArray)object().valueForKeyPath(keyForAvailableObjects),
-                                                                  entityForReportName, ERXLocalizer.localizerForSession(session()).language());
+                                                                  entityForReportName);
             }
             if(log.isDebugEnabled()) log.debug("availableElements = "+_availableElements);
         }

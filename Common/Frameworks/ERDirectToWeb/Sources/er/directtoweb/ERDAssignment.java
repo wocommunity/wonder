@@ -70,7 +70,7 @@ public abstract class ERDAssignment extends Assignment implements ERDComputingAs
      *		of the session. 
      */
     public ERXLocalizer localizerForContext(D2WContext c) {
-        return ERXLocalizer.localizerForSession(c.valueForKey("session"));
+        return ERXLocalizer.currentLocalizer();
     }
 
     /**
