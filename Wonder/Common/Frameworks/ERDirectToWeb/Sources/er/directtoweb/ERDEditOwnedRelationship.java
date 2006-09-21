@@ -35,7 +35,6 @@ import er.extensions.ERXConstant;
 import er.extensions.ERXEC;
 import er.extensions.ERXEOControlUtilities;
 import er.extensions.ERXEnterpriseObject;
-import er.extensions.ERXLocalizer;
 
 /////////////////////////////////////////////////////////////////////////////////
 // Important D2W Keys:

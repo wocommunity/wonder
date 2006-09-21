@@ -6,7 +6,6 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.testrunner;
 
-import java.io.PrintStream;
 import java.util.Enumeration;
 
 import junit.framework.AssertionFailedError;

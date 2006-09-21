@@ -2,7 +2,8 @@ package er.plot;
 
 import org.apache.log4j.Logger;
 
-import er.extensions.*;
+import er.extensions.ERXExtensions;
+import er.extensions.ERXFrameworkPrincipal;
 
 public class ERPlot extends ERXFrameworkPrincipal {
 
