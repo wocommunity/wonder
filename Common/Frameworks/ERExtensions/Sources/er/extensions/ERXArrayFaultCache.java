@@ -5,7 +5,6 @@ import java.util.Enumeration;
 import org.apache.log4j.Logger;
 
 import com.webobjects.eoaccess.EOAccessArrayFaultHandler;
-import com.webobjects.eoaccess.EOEntity;
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.eocontrol.EOEnterpriseObject;
 import com.webobjects.eocontrol.EOFaultHandler;

@@ -20,7 +20,6 @@ import com.webobjects.foundation.NSValidation;
 
 import er.extensions.ERXConstant;
 import er.extensions.ERXKeyValuePair;
-import er.extensions.ERXLocalizer;
 import er.extensions.ERXSession;
 
 /**
