@@ -36,10 +36,7 @@ public class ERD2WPickFromEntities extends ERDCustomQueryComponent {
     public String displayString() {
         String result=null;
         if (item!=null) {
-            D2WContext d2wContext = ERDirectToWeb.d2wContext();
-            d2wContext.takeValueForKey(ERXLocalizer.fakeSessionForSession(session()), "session");
-            d2wContext.setEntity(EOModelGroup.defaultGroup().entityNamed((String)item));
-            result=(String)d2wContext.valueForKey("displayNameForEntity");
+            result=(String)ERDirectToWeb.d2wContextValueForKey("displayNameForEntity", (String)item, null);
         }
         return result;
     }
