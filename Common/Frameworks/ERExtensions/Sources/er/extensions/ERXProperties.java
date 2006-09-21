@@ -7,6 +7,8 @@
 package er.extensions;
 
 import java.io.BufferedInputStream;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -25,6 +27,7 @@ import com.webobjects.appserver._private.WOProjectBundle;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSBundle;
 import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSKeyValueCoding;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSProperties;
 import com.webobjects.foundation.NSPropertyListSerialization;
@@ -37,7 +40,7 @@ import com.webobjects.foundation.NSPropertyListSerialization;
  * like <code>getBoolean</code> off of Boolean which would resolve
  * the System property as a Boolean object.
  */
-public class ERXProperties extends Properties {
+public class ERXProperties extends Properties implements NSKeyValueCoding {
 
     /** default string */
     public static final String DefaultString = "Default";
@@ -917,5 +920,48 @@ public class ERXProperties extends Properties {
             }
         }
         return property;
+    }
+
+    /**
+     * Returns the properties as a String in Property file format. Useful when you use them 
+     * as custom value types, you would set this as the conversion method name.
+     * @return
+     * @throws IOException
+     */
+    public Object toExternalForm() throws IOException {
+        ByteArrayOutputStream os = new ByteArrayOutputStream();
+        store(os, null);
+        return new String(os.toByteArray());
+    }
+    
+    /**
+     * Load the properties from a String in Property file format. Useful when you use them 
+     * as custom value types, you would set this as the factory method name.
+     * @param string
+     * @return
+     * @throws IOException
+     */
+    public static ERXProperties fromExternalForm(String string) throws IOException {
+        ERXProperties result = new ERXProperties();
+        result.load(new ByteArrayInputStream(string.getBytes()));
+        return result;
+    }
+
+    /**
+     * KVC implementation.
+     * @param anObject
+     * @param aKey
+     */
+    public void takeValueForKey(Object anObject, String aKey) {
+         setProperty(aKey, (anObject != null ? anObject.toString() : null));
+    }
+
+    /**
+     * KVC implementation.
+     * @param anObject
+     * @param aKey
+     */
+    public Object valueForKey(String aKey) {
+         return getProperty(aKey);
     }
 }
