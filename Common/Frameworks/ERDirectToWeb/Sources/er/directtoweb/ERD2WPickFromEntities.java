@@ -7,11 +7,7 @@
 package er.directtoweb;
 
 import com.webobjects.appserver.WOContext;
-import com.webobjects.directtoweb.D2WContext;
-import com.webobjects.eoaccess.EOModelGroup;
 import com.webobjects.foundation.NSArray;
-
-import er.extensions.ERXLocalizer;
 
 /**
  * Custom query component that let's the user select from a set of shared eos.<br />

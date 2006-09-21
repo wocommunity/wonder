@@ -1,7 +1,5 @@
 package er.extensions;
 
-import java.io.ByteArrayOutputStream;
-import java.io.ObjectOutputStream;
 import java.io.Serializable;
 
 import org.apache.log4j.Logger;

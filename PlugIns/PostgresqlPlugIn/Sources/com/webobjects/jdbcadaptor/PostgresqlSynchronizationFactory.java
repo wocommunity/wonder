@@ -1,7 +1,16 @@
 package com.webobjects.jdbcadaptor;
 
-import com.webobjects.eoaccess.*;
-import com.webobjects.foundation.*;
+import com.webobjects.eoaccess.EOAdaptor;
+import com.webobjects.eoaccess.EOAttribute;
+import com.webobjects.eoaccess.EOEntity;
+import com.webobjects.eoaccess.EORelationship;
+import com.webobjects.eoaccess.EOSQLExpression;
+import com.webobjects.eoaccess.EOSchemaGeneration;
+import com.webobjects.eoaccess.EOSchemaSynchronization;
+import com.webobjects.eoaccess.EOSynchronizationFactory;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSMutableArray;
+import com.webobjects.foundation.NSMutableSet;
 /**
  * A synchronization factory usable outside EOModeler
  * @author giorgio_v
