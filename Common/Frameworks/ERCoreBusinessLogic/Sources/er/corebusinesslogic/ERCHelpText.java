@@ -24,7 +24,7 @@ public class ERCHelpText extends _ERCHelpText {
                 EOGlobalID gid = NO_GID_MARKER;
                 ec.lock();
                 try {
-                    EOEnterpriseObject eo = EOUtilities.objectMatchingKeyAndValue(ec, ENTITY, Key.KEY, key);
+                    EOEnterpriseObject eo = (EOEnterpriseObject) EOUtilities.objectsMatchingKeyAndValue(ec, ENTITY, Key.KEY, key).lastObject();
                     if(eo != null) {
                         gid = ec.globalIDForObject(eo);
                     }
