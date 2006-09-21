@@ -54,7 +54,7 @@ public class ERDEditListButton extends ERDCustomEditComponent {
         if (_editButtonName == null) {
             Object editButtonName = valueForBinding("editButtonName");
             if(editButtonName == null) {
-                editButtonName = ERXLocalizer.localizerForSession(session()).localizedTemplateStringForKeyWithObject("ERDEditListButton.editButtonName", this);
+                editButtonName = ERXLocalizer.currentLocalizer().localizedTemplateStringForKeyWithObject("ERDEditListButton.editButtonName", this);
             } else {
                 _editButtonName = (String)editButtonName;
             }

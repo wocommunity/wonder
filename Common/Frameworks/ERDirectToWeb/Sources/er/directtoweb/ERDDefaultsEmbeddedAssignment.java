@@ -87,7 +87,7 @@ public class ERDDefaultsEmbeddedAssignment extends ERDAssignment {
      * @return localizer for the session stored in the context.
      */
     public ERXLocalizer localizerForContext(D2WContext c) {
-        return ERXLocalizer.localizerForSession(c.valueForKey("session"));
+        return ERXLocalizer.currentLocalizer();
     }
 
     /**
