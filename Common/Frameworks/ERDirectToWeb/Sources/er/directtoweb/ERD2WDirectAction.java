@@ -14,6 +14,7 @@ import org.apache.log4j.Logger;
 import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WORequest;
+import com.webobjects.appserver.WOResponse;
 import com.webobjects.directtoweb.D2W;
 import com.webobjects.directtoweb.D2WContext;
 import com.webobjects.directtoweb.D2WPage;
@@ -53,34 +54,37 @@ import er.extensions.ERXStringUtilities;
 import er.extensions.ERXValueUtilities;
 
 /**
- * Cool class to automatically create page configurations from URLs.<br />
+ * Automatically creates page configurations from URLs.<br />
  * Examples:
- *   QueryArticle
+ * <ul>
+ *   <li><code>http://localhost/cgi-bin/WebObjects/MyApp.woa/wa/QueryArticle</code><br >
  * will create an query page for articles.
  *
- *   QueryArticle?__fs=findNewArticles
+ *   <li><code>http://localhost/cgi-bin/WebObjects/MyApp.woa/wa/QueryArticle?__fs=findNewArticles</code><br >
  * will create an query page for fetch spec "findNewArticles". This will only work if your rules return a ERD2WQueryPageWithFetchSpecification.
  *
- *   InspectArticle?__key=<articleid>
+ *   <li><code>http://localhost/cgi-bin/WebObjects/MyApp.woa/wa/InspectArticle?__key=&lt;articleid&gt;</code><br >
  * will create an inpect page for the given article.
  *
- *   EditArticle?__key=<articleid>
+ *   <li><code>http://localhost/cgi-bin/WebObjects/MyApp.woa/wa/EditArticle?__key=&lt;articleid&gt;</code><br >
  * will create an edit page for the given article.
  *
- *   CreateArticle
+ *   <li><code>http://localhost/cgi-bin/WebObjects/MyApp.woa/wa/CreateArticle</code><br >
  * will create an edit page for a newly created article.
  *
- *   ListArticle?__key=<userid>&__keypath=User.articles
+ *   <li><code>http://localhost/cgi-bin/WebObjects/MyApp.woa/wa/ListArticle?__key=&lt;userid&gt;&__keypath=User.articles</code><br >
  * will list the articles of the given user.
  *
- *   ListArticle?__fs=recentArticles&authorName=*foo*
+ *   <li><code>http://localhost/cgi-bin/WebObjects/MyApp.woa/wa/ListArticle?__fs=recentArticles&authorName=*foo*</code><br >
  * will list the articles by calling the fetch spec "recentArticles". When the
  * fetch spec has an "authorName" binding, it is set to "*foo*".
  *
- *   ListArticle?__fs=&author.name=*foo*&__fs_fetchLimit=0
+ *   <li><code>http://localhost/cgi-bin/WebObjects/MyApp.woa/wa/ListArticle?__fs=&author.name=*foo*&__fs_fetchLimit=0</code><br >
  * will list the articles by creating a fetch spec with the supplied attributes. 
- * When the value contains "*", then it will be regarded as a LIKE query, otherwise as a EQUAL 
- * 
+ * When the value contains "*", then it will be regarded as a LIKE query, otherwise as a EQUAL
+ * </ul>
+ * To provide some security, you should override {@link #allowPageConfiguration(String)}. Also, this
+ * class is abstract, so you need to subclass it.
  */
 
 public abstract class ERD2WDirectAction extends ERXDirectAction {
@@ -362,7 +366,33 @@ public abstract class ERD2WDirectAction extends ERXDirectAction {
         return newPage;
     }
     
-    /** Overrides the default implementation to try to look up the action as a page configuration if there is no method with the wanted name. This implementation catches NoSuchMethodException more or less silently, so be sure to turn on logging. */
+    /**
+     * Checks if a page configuration is allowed to render.
+     * Override for a more intelligent access scheme as the default just returns true.
+     * @param pageConfiguration
+     * @return
+     */
+    protected boolean allowPageConfiguration(String pageConfiguration) {
+        return true;
+    }
+    
+    /**
+     * Returns a response with a 401 (access denied) message. Override this for something more user friendly.
+     * @return
+     */
+    public WOActionResults forbiddenAction() {
+        WOResponse response = new WOResponse();
+        response.setStatus(401);
+        response.setContent("Access denied");
+        return response;
+    }
+    
+    /**
+     * Overrides the default implementation to try to look up the action as a
+     * page configuration if there is no method with the wanted name. This
+     * implementation catches NoSuchMethodException more or less silently, so be
+     * sure to turn on logging.
+     */
     public WOActionResults performActionNamed(String anActionName) {
         WOActionResults newPage = null;
         try {
@@ -377,8 +407,13 @@ public abstract class ERD2WDirectAction extends ERXDirectAction {
                 // this will get thrown when an action isn't found. We don't really need to report it.
                 actionLog.debug("performActionNamed for action: " + anActionName, nsm);
             }
-            if(newPage == null)
-                newPage = dynamicPageForActionNamed(anActionName);
+            if(newPage == null) {
+                if(allowPageConfiguration(anActionName)) {
+                    newPage = dynamicPageForActionNamed(anActionName);
+                } else {
+                    newPage = forbiddenAction();
+                }
+            }
         } catch(Exception ex) {
             log.error("Error with action " + anActionName + ":" + ex + ", formValues:" + context().request().formValues());
             newPage = reportException(ex);
