@@ -5,18 +5,14 @@ AjaxExampleComponent : AjaxExampleComponent {
 Conditional1: WOConditional {
 	condition = dg.selectedObject;
 }
-Conditional2 : WOConditional {
-	condition = dg.selectedObject;
-	negate = true;
-}
 
 Editor : AjaxUpdateContainer {
 	id = "editor";
 	elementName = "div";
-	class = "editor";
 }
 
 Form1: WOForm {
+	class = "editor";
 }
 
 Millis: WOString {
@@ -40,13 +36,13 @@ SaveButton: AjaxSubmitButton {
 	action = save;
 	value = "Save";
 	onClick = "$('editor').hide();";
-	onClickServer = "new Ajax.Updater('tableBody', $('tableBody').getAttribute('updateUrl'), {})";
+	onClickServer = "tableBodyUpdate();";
 }
 
 SelectObject : AjaxUpdateLink {
 	updateContainerID = "editor";
 	action = selectObject;
-	onSuccess = "function (v) { $('editor').show(); }";
+	evalScripts = true;
 }
 
 CurrentBatchIndex : WOString {
@@ -62,38 +58,43 @@ Slider :  AjaxSlider {
 	value = dg.currentBatchIndex;
 	minimum = 1;
 	maximum = dg.batchCount;
+	onSlide = "function(v) { $('value').innerHTML = Math.floor(v) }";
 	//AK: these drag performance quite a bit
-	onSlide = "function(v) {$('value').innerHTML = Math.floor(v)}";
-	onSlideServer = "new Ajax.Updater('tableBody', $('tableBody').getAttribute('updateUrl'), {})";
-	onChange = "function(v) {$('value').innerHTML = Math.floor(v)}";
-	onChangeServer = "new Ajax.Updater('tableBody', $('tableBody').getAttribute('updateUrl'), {})";
+	//onSlideServer = "new Ajax.Updater('tableBody', $('tableBody').getAttribute('updateUrl'), {})";
+	onChange = "function(v) { $('value').innerHTML = Math.floor(v) }";
+	onChangeServer = "tableBodyUpdate()";
 }
 
-
 PrevBatch : AjaxUpdateLink {
-	updateContainerID = "tableBody";
 	action = previousBatch;
+	//updateContainerID = "tableBody";
+	onComplete = "tableBodyUpdate";
+	evalScripts = true;
 }
 
 NextBatch : AjaxUpdateLink {
-	updateContainerID = "tableBody";
 	action = nextBatch;
+	onComplete = "tableBodyUpdate";
+	evalScripts = true;
 }
 
 SortByName : AjaxUpdateLink {
-	updateContainerID = "tableBody";
 	action = sortByName;
+	onComplete = "tableBodyUpdate";
+	evalScripts = true;
 }
 
 SortByValue : AjaxUpdateLink {
-	updateContainerID = "tableBody";
 	action = sortByValue;
+	onComplete = "tableBodyUpdate";
+	evalScripts = true;
 }
 
 TableBody : AjaxUpdateContainer {
 	id = "tableBody";
 	elementName = "div";
 	class = "tableBody";
+	insertion = "function(receiver, response) { Effect.Fade('tableRows', { to: 0.001, afterFinish: function() { Element.update(receiver, response); $('tableRows').setOpacity(0.001); Effect.Fade('tableRows', { to: 1.0 }); } }); }";
 }
 
 EditValue: WOTextField {
@@ -103,4 +104,9 @@ EditValue: WOTextField {
 
 EditName: WOTextField {
 	value = dg.selectedObject.name; // VALID
+}
+
+Busy : AjaxBusyIndicator {
+	busyImage = "busyBigSpinner.gif";
+	busyImageFramework = "Ajax";
 }
