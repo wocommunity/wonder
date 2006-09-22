@@ -3,32 +3,24 @@
 import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
-import com.webobjects.appserver.WOResponse;
-
-import er.ajax.AjaxUtils;
 
 public class UpdaterExample extends WOComponent {
 
-	public UpdaterExample(WOContext context) {
-		super(context);
-	}
+  public UpdaterExample(WOContext context) {
+    super(context);
+  }
 
-	public void appendToResponse(WOResponse woresponse, WOContext wocontext) {
-        super.appendToResponse(woresponse, wocontext);
-        AjaxUtils.addScriptResourceInHead(wocontext, woresponse, "effects.js");
-    }
+  public long test() {
+    return System.currentTimeMillis();
+  }
 
-    public long test() {
-		return System.currentTimeMillis();
-	}
+  public WOComponent someAction() {
+    System.out.println("UpdaterExample.someAction: action!");
+    return pageWithName("SliderExample");
+  }
 
-    public WOComponent someAction() {
-      System.out.println("UpdaterExample.someAction: action!");
-      return pageWithName("SliderExample");
-    }
-    
-    public WOActionResults anotherAction() {
-      System.out.println("UpdaterExample.anotherAction: Fired requested action (return value is ignored right now)");
-      return null;
-    }
+  public WOActionResults anotherAction() {
+    System.out.println("UpdaterExample.anotherAction: Fired requested action (return value is ignored right now)");
+    return null;
+  }
 }
