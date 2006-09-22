@@ -6,12 +6,14 @@
 <script type="text/javascript">
 Ajax.Responders.register({
    onCreate: function() {
-     if($('<webobject name = "DivID"></webobject>') && Ajax.activeRequestCount>0)
-       Effect.Appear('<webobject name = "DivID"></webobject>',{duration:0.5,queue:'end'});
+     if ($('<webobject name = "DivID"></webobject>') && Ajax.activeRequestCount == 1) {
+       Effect.Appear('<webobject name = "DivID"></webobject>', {duration:0.5, queue:'end'});
+     }
    },
    onComplete: function() {
-     if($('<webobject name = "DivID"></webobject>') && Ajax.activeRequestCount==0)
-       Effect.Fade('<webobject name = "DivID"></webobject>',{duration:0.5,queue:'end'});
+     if ($('<webobject name = "DivID"></webobject>') && Ajax.activeRequestCount == 0) {
+       Effect.Fade('<webobject name = "DivID"></webobject>', {duration:0.5, queue:'end'});
+     }
    }
 });
 </script>
