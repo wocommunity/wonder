@@ -10,10 +10,28 @@
 		<binding name = "onException"/>
 		<binding name = "insertion"/>
 		<binding name = "evalScripts"/>
+
+		<binding name = "replaceID"/>
+		<binding name = "ignoreActionResponse"/>
     
     <validation message="&apos;updateContainerID&apos; or &apos;action&apos; must be bound.">
 	    <unbound name = "action"/>
 	    <unbound name = "updateContainerID"/>
+    </validation>
+    
+    <validation message="Only one of &apos;replaceID&apos; or &apos;ignoreActionResponse&apos; can be bound.">
+	    <bound name = "replaceID"/>
+	    <bound name = "ignoreActionResponse"/>
+    </validation>
+    
+    <validation message="Only one of &apos;replaceID&apos; or &apos;updateContainerID&apos; can be bound.">
+	    <bound name = "replaceID"/>
+	    <bound name = "updateContainerID"/>
+    </validation>
+    
+    <validation message="Only one of &apos;updateContainerID&apos; or &apos;ignoreActionResponse&apos; can be bound.">
+	    <bound name = "updateContainerID"/>
+	    <bound name = "ignoreActionResponse"/>
     </validation>
 	</wo>
 </wodefinitions>
