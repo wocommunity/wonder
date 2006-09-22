@@ -10,6 +10,10 @@ SliderLink : WOHyperlink {
 	pageName = "SliderExample";
 }
 
+LinkExample : WOHyperlink {
+	pageName = "LinkExample";
+}
+
 UpdatesLink : WOHyperlink {
 	pageName = "UpdaterExample";
 }
