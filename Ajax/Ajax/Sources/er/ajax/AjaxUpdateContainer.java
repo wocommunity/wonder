@@ -79,7 +79,7 @@ public class AjaxUpdateContainer extends AjaxDynamicElement {
             AjaxObserveField.appendToResponse(response, context, observeFieldID, id, false, null);
           }
 
-          response.appendContentString("function " + id + "Update() { new Ajax.Updater('" + id + "', $(" + id + ").getAttribute('updateUrl'), ");
+          response.appendContentString(id + "Update = function() { new Ajax.Updater('" + id + "', $(" + id + ").getAttribute('updateUrl'), ");
           AjaxOptions.appendToResponse(options, response, context);
           response.appendContentString("); }");
 
