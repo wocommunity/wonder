@@ -77,40 +77,45 @@ public class IMPickListAction extends WOComponent {
   }
 
   public WOActionResults invokeAction(WORequest request, WOContext context) {
-    String message = context.request().stringFormValueForKey(InstantMessengerAdaptor.MESSAGE_KEY);
-    NSArray list = (NSArray) valueForBinding("list");
-    NSArray selectedObjects;
-    Object selectedObject;
-    if (ERXStringUtilities.isDigitsOnly(message)) {
-      int selectionIndex = Integer.parseInt(message) - 1;
-      if (selectionIndex >= 0 || selectionIndex < (list.count() - 1)) {
-        selectedObject = list.objectAtIndex(selectionIndex);
-        selectedObjects = new NSArray(selectedObject);
+    WOActionResults results = null;
+    if (context.elementID().equals(context.senderID())) {
+      String message = context.request().stringFormValueForKey(InstantMessengerAdaptor.MESSAGE_KEY);
+      NSArray list = (NSArray) valueForBinding("list");
+      System.out.println("IMPickListAction.invokeAction: list = " + list);
+      NSArray selectedObjects;
+      Object selectedObject;
+      if (ERXStringUtilities.isDigitsOnly(message)) {
+        int selectionIndex = Integer.parseInt(message) - 1;
+        if (selectionIndex >= 0 || selectionIndex < (list.count() - 1)) {
+          selectedObject = list.objectAtIndex(selectionIndex);
+          selectedObjects = new NSArray(selectedObject);
+        }
+        else {
+          selectedObject = null;
+          selectedObjects = NSArray.EmptyArray;
+        }
       }
       else {
-        selectedObject = null;
-        selectedObjects = NSArray.EmptyArray;
+        String displayStringKeyPath = (String) valueForBinding("displayStringKeyPath");
+        Boolean quicksilverBoolean = (Boolean) valueForBinding("quicksilver");
+        boolean quicksilver = (quicksilverBoolean != null && quicksilverBoolean.booleanValue());
+        selectedObjects = IMSearchOptionsAction.selectedValues(list, displayStringKeyPath, quicksilver, message);
+        if (selectedObjects.count() == 1) {
+          selectedObject = selectedObjects.objectAtIndex(0);
+        }
+        else {
+          selectedObject = null;
+        }
       }
-    }
-    else {
-      String displayStringKeyPath = (String) valueForBinding("displayStringKeyPath");
-      Boolean quicksilverBoolean = (Boolean) valueForBinding("quicksilver");
-      boolean quicksilver = (quicksilverBoolean != null && quicksilverBoolean.booleanValue());
-      selectedObjects = IMSearchOptionsAction.selectedValues(list, displayStringKeyPath, quicksilver, message);
-      if (selectedObjects.count() == 1) {
-        selectedObject = selectedObjects.objectAtIndex(0);
+      boolean selectionBound = canSetValueForBinding("selection");
+      if (canSetValueForBinding("selections")) {
+        setValueForBinding(selectedObjects, "selections");
       }
-      else {
-        selectedObject = null;
+      if (canSetValueForBinding("selection")) {
+        setValueForBinding(selectedObject, "selection");
       }
+      results = (WOActionResults) valueForBinding("action");
     }
-    boolean selectionBound = canSetValueForBinding("selection");
-    if (canSetValueForBinding("selections")) {
-      setValueForBinding(selectedObjects, "selections");
-    }
-    if (canSetValueForBinding("selection")) {
-      setValueForBinding(selectedObject, "selection");
-    }
-    return (WOActionResults) valueForBinding("action");
+    return results;
   }
 }
