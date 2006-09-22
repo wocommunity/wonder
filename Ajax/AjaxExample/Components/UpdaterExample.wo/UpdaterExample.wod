@@ -1,3 +1,7 @@
+EffectScript : AjaxIncludeScript {
+	name = "effect.js";
+}
+
 AjaxExampleComponent : AjaxExampleComponent {
 	title = "Ajax Update Component";
 }
