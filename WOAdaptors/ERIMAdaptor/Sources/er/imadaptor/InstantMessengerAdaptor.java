@@ -258,6 +258,9 @@ public class InstantMessengerAdaptor extends WOAdaptor implements IMessageListen
   }
 
   public synchronized void messageReceived(IInstantMessenger instantMessenger, String buddyName, String message) {
+    if (log.isInfoEnabled()) {
+      log.info("Received message from '" + buddyName + "': " + message);
+    }
     Conversation conversation;
     synchronized (_conversations) {
       conversation = (Conversation) _conversations.get(buddyName);
@@ -320,6 +323,9 @@ public class InstantMessengerAdaptor extends WOAdaptor implements IMessageListen
       String responseMessage = response.contentString();
       if (responseMessage != null) {
         responseMessage = responseMessage.trim();
+      }
+      if (log.isInfoEnabled()) {
+        log.info("Sending message to '" + buddyName + "': " + responseMessage);
       }
       _instantMessenger.sendMessage(buddyName, responseMessage);
     }
