@@ -81,7 +81,6 @@ public class IMPickListAction extends WOComponent {
     if (context.elementID().equals(context.senderID())) {
       String message = context.request().stringFormValueForKey(InstantMessengerAdaptor.MESSAGE_KEY);
       NSArray list = (NSArray) valueForBinding("list");
-      System.out.println("IMPickListAction.invokeAction: list = " + list);
       NSArray selectedObjects;
       Object selectedObject;
       if (ERXStringUtilities.isDigitsOnly(message)) {
