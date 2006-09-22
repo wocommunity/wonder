@@ -1,0 +1,13 @@
+AjaxExampleComponent : AjaxExampleComponent {
+	title = "Link Example";
+}
+
+AjaxActionLink : AjaxUpdateLink {
+	action = exampleAction;
+	onSuccess = "function() { alert('I finished!') }";
+}
+
+ReplaceLink : AjaxUpdateLink {
+	action = replaceLinkAction;
+	replaceID = "ExampleReplacementArea";
+}
