@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?><wodefinitions>
 	<wo class="AjaxSlider.java" wocomponentcontent="false">
+		<binding name="id"/>
 		<binding name="orientation"/>
 		<binding name="value"/>
 		<binding name="minimum"/>
