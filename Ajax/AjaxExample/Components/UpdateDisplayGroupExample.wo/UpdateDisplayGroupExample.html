@@ -25,6 +25,9 @@
 	position: absolute;
 	left: 300px;
 	top: 200px;
+}
+
+.editor {
 	background-color: rgb(255, 255, 255);	
 	padding: 5px;
 	border-style: solid;
@@ -33,7 +36,7 @@
 }
 </style>
 
-This value shouldn't change: <webobject name="Millis"></webobject><br>
+			This value shouldn't change: <webobject name="Millis"></webobject><br>
     	You can sort the entries, drag the slider, click on a name, edit the entry and save it, without ever leaving this page.
     	<br>
     	<webobject name="Slider"></webobject>
@@ -51,7 +54,7 @@ This value shouldn't change: <webobject name="Millis"></webobject><br>
                     <th><webobject name="SortByValue">Value</webobject></th>
                 </tr>
             </table>
-                 <table width="400">
+                 <table width="400" id = "tableRows">
                  	<webobject name="RowRepetition">
                     <tr>
                         <td><webobject name="SelectObject"><webobject name="Name"></webobject></webobject></td>
@@ -71,15 +74,12 @@ This value shouldn't change: <webobject name="Millis"></webobject><br>
                     	<tr><td align="right" colspan="2"><webobject name="SaveButton"></webobject></td></tr>
                 	</table>
             	</webobject>
+            	<script>
+            	$('editor').show();
+            	</script>
         	</webobject>
-					<webobject name="Conditional2">
-						Loading ...
-					</webobject>
         </webobject>
 
-        and some stuff below.... </body>
-<script>
-	$('editor').hide();
-</script>
-
+        and some stuff below....
+        <webobject name = "Busy"></webobject>
 </webobject>
