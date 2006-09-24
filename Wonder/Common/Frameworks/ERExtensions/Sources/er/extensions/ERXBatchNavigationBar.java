@@ -169,4 +169,20 @@ public class ERXBatchNavigationBar extends WOComponent {
       }
       return rightArrowImageName;
     }
+
+    public WOComponent displayFirstBatch() {
+    	if (displayGroup() != null && displayGroup().numberOfObjectsPerBatch() != 0) {
+    		displayGroup().setCurrentBatchIndex(1);
+    		displayGroup().clearSelection();
+    	}
+    	return context().page();
+    }
+
+    public WOComponent displayLastBatch() {
+    	if (displayGroup() != null && displayGroup().numberOfObjectsPerBatch() != 0) {
+    		displayGroup().setCurrentBatchIndex(displayGroup().batchCount());
+    		displayGroup().clearSelection();
+    	}
+    	return context().page();
+    }
 }
