@@ -175,4 +175,8 @@ public abstract class ERXFrameworkPrincipal {
      * Overridden by subclasses to provide framework initialization.
      */
     public abstract void finishInitialization();
+    
+    public String toString() {
+      return ERXStringUtilities.lastPropertyKeyInKeyPath(getClass().getName());
+    }
 }
