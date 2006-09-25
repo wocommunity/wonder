@@ -87,6 +87,7 @@ public class ERJavaMail extends ERXFrameworkPrincipal {
             throw new RuntimeException
                 ("The compilation of the ORO Regexp pattern failed in ERJavaMail!");
         }
+        initializeFrameworkFromSystemProperties();
     }
 
     /**
@@ -96,22 +97,27 @@ public class ERJavaMail extends ERXFrameworkPrincipal {
      * observer will call this method whenever appropriate.
      */
     public void initializeFrameworkFromSystemProperties () {
-        // Admin Email
-        String adminEmail = System.getProperty ("er.javamail.adminEmail");
-        if ((adminEmail == null) || (adminEmail.length () == 0))
-            throw new RuntimeException ("ERJavaMail: the property er.javamail.adminEmail is not specified!");
-        this.setAdminEmail (adminEmail);
-        log.debug ("er.javamail.adminEmail: " + _adminEmail);
+      // Centralize mails ?
+      boolean centralize = ERXProperties.booleanForKey ("er.javamail.centralize");
+      this.setCentralize (centralize);
+      log.debug ("er.javamail.centralize: " + centralize);
+
+      if (centralize) {
+        try {
+          // Admin Email
+          String adminEmail = System.getProperty ("er.javamail.adminEmail");
+          this.setAdminEmail (adminEmail);
+          log.debug ("er.javamail.adminEmail: " + _adminEmail);
+        }
+        catch (IllegalArgumentException e) {
+          throw new RuntimeException("You must specify a valid er.javamail.adminEmail value when er.javamail.centralize is enabled.", e);
+        }
+      }
 
         // JavaMail Debug Enabled ?
         boolean debug = ERXProperties.booleanForKey ("er.javamail.debugEnabled");
         this.setDebugEnabled (debug);
         log.debug ("er.javamail.debugEnabled: " + debug);
-
-        // Centralize mails ?
-        boolean centralize = ERXProperties.booleanForKey ("er.javamail.centralize");
-        this.setCentralize (centralize);
-        log.debug ("er.javamail.centralize: " + centralize);
 
          // Number of messages that the sender queue can hold at a time
         int queueSize = ERXProperties.intForKey ("er.javamail.senderQueue.size");
@@ -267,7 +273,9 @@ public class ERJavaMail extends ERXFrameworkPrincipal {
      * @param adminEmail a <code>String</code> value
      */
     public void setAdminEmail (String adminEmail) {
-	if (this.isValidEmail (adminEmail))
+      if (!isValidEmail (adminEmail)) {
+        throw new IllegalArgumentException("You specified an invalid admin email address '" + adminEmail + "'.");
+      }
 	    _adminEmail = adminEmail;
     }
 
