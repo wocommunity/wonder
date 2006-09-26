@@ -375,8 +375,77 @@ public class ERXConfigurationManager {
      * 		the model.
      */
     public void modelAddedHandler(NSNotification n) {
-        resetConnectionDictionaryInModel((EOModel)n.object());
+        EOModel model = (EOModel)n.object();
+        for (Enumeration enumerator = model.entities().objectEnumerator(); enumerator.hasMoreElements();) {
+            EOEntity entity = (EOEntity) enumerator.nextElement();
+            adjustLocalizedAttributes(entity);
+        }
+        resetConnectionDictionaryInModel(model);
     }
+    
+
+    protected void adjustLocalizedAttributes(EOEntity entity) {
+        NSArray attributes = entity.attributes().immutableClone();
+        NSArray classProperties = entity.classProperties().immutableClone();
+        NSArray attributesUsedForLocking = entity.attributesUsedForLocking().immutableClone();
+        if(attributes == null) attributes = NSArray.EmptyArray;
+        if(classProperties == null) classProperties = NSArray.EmptyArray;
+        if(attributesUsedForLocking == null) attributesUsedForLocking = NSArray.EmptyArray;
+        NSMutableArray mutableAttributes = new NSMutableArray();
+        NSMutableArray mutableClassProperties = new NSMutableArray();
+        NSMutableArray mutableAttributesUsedForLocking = new NSMutableArray();
+        if(attributes != null) {
+            for(Enumeration e = attributes.objectEnumerator(); e.hasMoreElements(); ) {
+                EOAttribute attribute = (EOAttribute)e.nextElement();
+                boolean isClassProperty = classProperties.containsObject(attribute);
+                boolean isUsedForLocking = attributesUsedForLocking.containsObject(attribute);
+                NSArray languages = (NSArray)(attribute.userInfo() != null ? attribute.userInfo().objectForKey("ERXLanguages") : null);
+                if(languages != null && languages.count() > 0) {
+                    String name = attribute.name();
+                    String columnName = attribute.columnName();
+                    for (int i = 0; i < languages.count(); i++) {
+                        EOAttribute copy = new EOAttribute();
+                        String language = (String) languages.objectAtIndex(i);
+                        String newName = name + "_" +language;
+                        String newColumnName = columnName + "_" +language;
+                        //columnName = columnName.replaceAll("_(\\w)$", "_" + language);
+                        // NOTE: order is important here. To add the prototype,
+                        // we need it in the entity and we need a name to add it there
+                        copy.setName(newName);
+                        entity.addAttribute(copy);
+                        copy.setPrototype(attribute.prototype());
+                        
+                        copy.setColumnName(newColumnName);
+                        copy.setExternalType(attribute.externalType());
+                        copy.setValueType(attribute.valueType());
+                        copy.setPrecision(attribute.precision());
+                        copy.setAllowsNull(attribute.allowsNull());
+                        copy.setClassName(attribute.className());
+                        copy.setWidth(attribute.width());
+                        copy.setScale(attribute.scale());
+                        copy.setExternalType(attribute.externalType());
+                        if(isClassProperty) {
+                            mutableClassProperties.addObject(copy);
+                        }
+                        if(isUsedForLocking) {
+                            mutableAttributesUsedForLocking.addObject(copy);
+                        }
+                    }
+                    entity.removeAttribute(attribute);
+                } else {
+                    if(isClassProperty) {
+                        mutableClassProperties.addObject(attribute);
+                    }
+                    if(isUsedForLocking) {
+                        mutableAttributesUsedForLocking.addObject(attribute);
+                    }
+                }
+            }
+            entity.setAttributesUsedForLocking(mutableAttributesUsedForLocking);
+            entity.setClassProperties(mutableClassProperties);
+        }
+    }
+
     
     private String getProperty(String key, String alternateKey, String defaultValue) {
         String value = ERXSystem.getProperty(key);

@@ -161,67 +161,6 @@ public class ERXModelGroup extends
 			}
         }
 
-        public Object _addEntityWithPropertyList(Object plist) throws InstantiationException, IllegalAccessException {
-        	NSMutableDictionary mutableDefinition = processDefinition((NSDictionary)plist);
-			return super._addEntityWithPropertyList(mutableDefinition);
-		}
-
- 		private NSMutableDictionary processDefinition(NSDictionary definition) {
-			NSMutableDictionary mutableDefinition = createLocalizedAttributes(definition);
-			return mutableDefinition;
-		}
-
-		private NSMutableDictionary createLocalizedAttributes(NSDictionary definition) {
-			NSMutableDictionary mutableDefinition = definition.mutableClone();
-			NSArray attributes = (NSArray)definition.objectForKey("attributes");
-			NSArray classProperties = (NSArray)definition.objectForKey("classProperties");
-			NSArray attributesUsedForLocking = (NSArray)definition.objectForKey("attributesUsedForLocking");
-			if(attributes == null) attributes = NSArray.EmptyArray;
-			if(classProperties == null) classProperties = NSArray.EmptyArray;
-			if(attributesUsedForLocking == null) attributesUsedForLocking = NSArray.EmptyArray;
-			NSMutableArray mutableAttributes = new NSMutableArray();
-        	NSMutableArray mutableClassProperties = new NSMutableArray();
-        	NSMutableArray mutableAttributesUsedForLocking = new NSMutableArray();
-			if(attributes != null) {
-				for(Enumeration e = attributes.objectEnumerator(); e.hasMoreElements(); ) {
-					NSDictionary attributeDefinition = (NSDictionary)e.nextElement();
-					NSArray languages = (NSArray) attributeDefinition.valueForKeyPath("userInfo.ERXLanguages");
-					String name = (String) attributeDefinition.objectForKey("name");
-					if(languages != null && languages.count() > 0) {
-						String columnName = (String) attributeDefinition.objectForKey("columnName");
-						for (int i = 0; i < languages.count(); i++) {
-							NSMutableDictionary mutableAttributeDefinition = attributeDefinition.mutableClone();
-							String language = (String) languages.objectAtIndex(i);
-							String newName = name + "_" +language;
-							String newColumnName = columnName + "_" +language;
-							//columnName = columnName.replaceAll("_(\\w)$", "_" + language);
-							mutableAttributeDefinition.setObjectForKey(newName, "name");
-							mutableAttributeDefinition.setObjectForKey(newColumnName, "columnName");
-							mutableAttributes.addObject(mutableAttributeDefinition);
-							if(classProperties.containsObject(name)) {
-								mutableClassProperties.addObject(newName);
-							}
-							if(attributesUsedForLocking.containsObject(name)) {
-								mutableAttributesUsedForLocking.addObject(newName);
-							}
-						}
-					} else {
-						mutableAttributes.addObject(attributeDefinition);
-						if(classProperties.containsObject(name)) {
-							mutableClassProperties.addObject(name);
-						}
-						if(attributesUsedForLocking.containsObject(name)) {
-							mutableAttributesUsedForLocking.addObject(name);
-						}
-					}
-				}
-				mutableDefinition.setObjectForKey(mutableClassProperties, "classProperties");
-				mutableDefinition.setObjectForKey(mutableAttributesUsedForLocking, "attributesUsedForLocking");
-				mutableDefinition.setObjectForKey(mutableAttributes, "attributes");
-			}
-			return mutableDefinition;
-		}
-
         /**
          * Utility for getting all names from an array of attributes.
          * @param attributes
