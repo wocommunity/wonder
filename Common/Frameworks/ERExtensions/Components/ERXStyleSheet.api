@@ -4,6 +4,7 @@
 
 		<binding name="styleSheetFrameworkName"/>
 		<binding name="styleSheetName"/>
+		<binding name="styleSheetUrl"/>
 		<binding name="favIconLink"/>
 	</wo>
 </wodefinitions>
