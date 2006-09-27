@@ -383,6 +383,24 @@ public class ERXConfigurationManager {
         resetConnectionDictionaryInModel(model);
     }
     
+    protected EOAttribute cloneAttribute(EOEntity entity, EOAttribute attribute, String newName) {
+        // NOTE: order is important here. To add the prototype,
+        // we need it in the entity and we need a name to add it there
+        EOAttribute copy = new EOAttribute();
+        copy.setName(newName);
+        entity.addAttribute(copy);
+        copy.setPrototype(attribute.prototype());
+        copy.setColumnName(attribute.columnName());
+        copy.setExternalType(attribute.externalType());
+        copy.setValueType(attribute.valueType());
+        copy.setPrecision(attribute.precision());
+        copy.setAllowsNull(attribute.allowsNull());
+        copy.setClassName(attribute.className());
+        copy.setWidth(attribute.width());
+        copy.setScale(attribute.scale());
+        copy.setExternalType(attribute.externalType());
+        return copy;
+    }
 
     protected void adjustLocalizedAttributes(EOEntity entity) {
         NSArray attributes = entity.attributes().immutableClone();
@@ -391,39 +409,30 @@ public class ERXConfigurationManager {
         if(attributes == null) attributes = NSArray.EmptyArray;
         if(classProperties == null) classProperties = NSArray.EmptyArray;
         if(attributesUsedForLocking == null) attributesUsedForLocking = NSArray.EmptyArray;
-        NSMutableArray mutableAttributes = new NSMutableArray();
-        NSMutableArray mutableClassProperties = new NSMutableArray();
-        NSMutableArray mutableAttributesUsedForLocking = new NSMutableArray();
+        NSMutableArray mutableClassProperties = classProperties.mutableClone();
+        NSMutableArray mutableAttributesUsedForLocking = attributesUsedForLocking.mutableClone();
         if(attributes != null) {
             for(Enumeration e = attributes.objectEnumerator(); e.hasMoreElements(); ) {
                 EOAttribute attribute = (EOAttribute)e.nextElement();
                 boolean isClassProperty = classProperties.containsObject(attribute);
                 boolean isUsedForLocking = attributesUsedForLocking.containsObject(attribute);
-                NSArray languages = (NSArray)(attribute.userInfo() != null ? attribute.userInfo().objectForKey("ERXLanguages") : null);
-                if(languages != null && languages.count() > 0) {
+                Object languagesObject = attribute.userInfo() != null ? attribute.userInfo().objectForKey("ERXLanguages") : null;
+                if(languagesObject != null && !(languagesObject instanceof NSArray)) {
+                    languagesObject = entity.model().userInfo() != null ? entity.model().userInfo().objectForKey("ERXLanguages") : null;
+                }
+                NSArray languages = (languagesObject != null ? (NSArray)languagesObject : NSArray.EmptyArray);
+                if(languages.count() > 0) {
                     String name = attribute.name();
                     String columnName = attribute.columnName();
                     for (int i = 0; i < languages.count(); i++) {
-                        EOAttribute copy = new EOAttribute();
                         String language = (String) languages.objectAtIndex(i);
                         String newName = name + "_" +language;
-                        String newColumnName = columnName + "_" +language;
-                        //columnName = columnName.replaceAll("_(\\w)$", "_" + language);
-                        // NOTE: order is important here. To add the prototype,
-                        // we need it in the entity and we need a name to add it there
-                        copy.setName(newName);
-                        entity.addAttribute(copy);
-                        copy.setPrototype(attribute.prototype());
+                         //columnName = columnName.replaceAll("_(\\w)$", "_" + language);
+                        EOAttribute copy = cloneAttribute(entity, attribute, newName);
                         
+                        String newColumnName = columnName + "_" +language;
                         copy.setColumnName(newColumnName);
-                        copy.setExternalType(attribute.externalType());
-                        copy.setValueType(attribute.valueType());
-                        copy.setPrecision(attribute.precision());
-                        copy.setAllowsNull(attribute.allowsNull());
-                        copy.setClassName(attribute.className());
-                        copy.setWidth(attribute.width());
-                        copy.setScale(attribute.scale());
-                        copy.setExternalType(attribute.externalType());
+
                         if(isClassProperty) {
                             mutableClassProperties.addObject(copy);
                         }
@@ -432,13 +441,8 @@ public class ERXConfigurationManager {
                         }
                     }
                     entity.removeAttribute(attribute);
-                } else {
-                    if(isClassProperty) {
-                        mutableClassProperties.addObject(attribute);
-                    }
-                    if(isUsedForLocking) {
-                        mutableAttributesUsedForLocking.addObject(attribute);
-                    }
+                    mutableClassProperties.removeObject(attribute);
+                    mutableAttributesUsedForLocking.removeObject(attribute);
                 }
             }
             entity.setAttributesUsedForLocking(mutableAttributesUsedForLocking);
