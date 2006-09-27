@@ -398,7 +398,6 @@ public class ERXJDBCConnectionBroker {
         if(wrappers[activeConnections] == null) {
             if(activeConnections < maximumConnections) {
                 wrappers[activeConnections] = new ConnectionWrapper(this);
-                log.info("Opened connection " + activeConnections + " "  + wrappers[activeConnections] + ":");
                 activeConnections++;
             } else {
                 throw new IllegalStateException("Trying to get more wrappers than available: " + activeConnections + " vs " + maximumConnections);
