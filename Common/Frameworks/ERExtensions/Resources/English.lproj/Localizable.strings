@@ -7,5 +7,6 @@
     ERXBatchNavigationBar.show = "Show";
     ERXCheckboxMatrix.deselectAll = "None";
     ERXCheckboxMatrix.selectAll = "All";
+    ERXSortOrder.sortBy = "Click to sort by this column";
     WOToOneRelationship.noneString = "- none -";
 }
