@@ -8,7 +8,7 @@ NonNullConditional1: ERXNonNullConditional {
 	condition = favIconLink;
 }
 
-StyleSheetLink: WOGenericElement {
+StyleSheetLink: WOGenericContainer {
     elementName="link";
     rel="stylesheet";
     type="text/css";

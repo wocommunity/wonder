@@ -8,7 +8,6 @@ package er.extensions;
 
 import org.apache.log4j.Logger;
 
-import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WORequest;
 import com.webobjects.foundation.NSArray;
@@ -18,32 +17,19 @@ import com.webobjects.foundation.NSArray;
  * and/or a favicon link to a page. Note the way this component
  * currently works all of the urls are cached for the life of the
  * application. This will be configurable in the future.
- * <br/>
- * Synopsis:<br/>
- * styleSheetName=<i>aString</i>;[styleSheetFrameworkName=<i>aString</i>;][favIconLink=<i>aBoolean</i>;]
- *
  * @binding styleSheetName name of the style sheet
  * @binding styleSheetFrameworkName name of the framework for the style sheet
+ * @binding styleSheetUrl url to the style sheet
  * @binding favIconLink url to the fav icon used for bookmarking
  */
 // ENHANCEME: Should support having the favIcon as a WebServerResource, like we do for the style sheet
 // ENHANCEME: Should support direct binding of a styleSheetLink
 // CHECKME: Might want to think about having an ERXFavIcon component so people know it is here.
-public class ERXStyleSheet extends WOComponent {
+public class ERXStyleSheet extends ERXStatelessComponent {
 
     /** logging support */
     public static final Logger log = Logger.getLogger(ERXStyleSheet.class);
 
-    /** holds the calculated style sheet url */
-    private String _styleSheetUrl;
-    /** holds the style sheet framework name */
-    private String _styleSheetFrameworkName;
-    /** flags if the framework name has been initialized */
-    private boolean _frameworkNameInitialized = false;
-    /** holds the name of the style sheet */
-    private String _styleSheetName;
-    /** flags if the style sheet name has been initialized */
-    private boolean _styleSheetNameInitialized = false;
     /** holds the url of the fav icon */
     private String _favIconLink;
 
@@ -54,31 +40,23 @@ public class ERXStyleSheet extends WOComponent {
     public ERXStyleSheet(WOContext aContext) {
         super(aContext);
     }
-        
-    /**
-     * Component is stateless
-     * @return true
-     */
-    public boolean isStateless() { return true; }
 
-    // no reset
-    // since this is cached for the life of the app..
-    // FIXME: This should be controlled by a system property
-    /* public void reset(){
+	public void reset(){
         super.reset();
-        _styleSheetUrl = null;
-    } */
+        _favIconLink = null;
+    }
 
     /**
      * returns the complete url to the style sheet.
      * @return style sheet url
      */
     public String styleSheetUrl() {
-        if (_styleSheetUrl==null) {
-            _styleSheetUrl=application().resourceManager().urlForResourceNamed(styleSheetName(),
-                                        styleSheetFrameworkName(),_languages(),context().request());
-        }
-        return _styleSheetUrl;
+    	String url = (String) valueForBinding("styleSheetUrl");
+    	if(url == null) {
+    		url = application().resourceManager().urlForResourceNamed(styleSheetName(),
+                    styleSheetFrameworkName(),languages(),context().request());
+    	}
+        return url;
     }
     /**
      * Returns the style sheet framework name either resolved
@@ -86,13 +64,7 @@ public class ERXStyleSheet extends WOComponent {
      * @return style sheet framework name
      */
     public String styleSheetFrameworkName() {
-        if (!_frameworkNameInitialized) {
-            _styleSheetFrameworkName = (String)valueForBinding("styleSheetFrameworkName");
-            _frameworkNameInitialized = true;
-            if (log.isDebugEnabled())
-                log.debug("Style sheet framework name: " + _styleSheetFrameworkName);
-        }
-        return _styleSheetFrameworkName;
+        return (String)valueForBinding("styleSheetFrameworkName");
     }
 
     /**
@@ -101,13 +73,7 @@ public class ERXStyleSheet extends WOComponent {
      * @return style sheet name
      */
     public String styleSheetName() {
-        if (!_styleSheetNameInitialized) {
-            _styleSheetName = (String)valueForBinding("styleSheetName");                                      
-            _styleSheetNameInitialized = true;
-            if (log.isDebugEnabled())
-                log.debug("Style sheet name: " + _styleSheetName);
-        }
-        return _styleSheetName;
+        return (String)valueForBinding("styleSheetName");
     }
 
     /**
@@ -120,13 +86,13 @@ public class ERXStyleSheet extends WOComponent {
         return _favIconLink;
     }    
 
-    private NSArray _languages() {
-        if(hasSession())
-            return session().languages();
-	WORequest request = context().request();
-	if (request != null)
-	    return request.browserLanguages();
-	return null;
+    private NSArray languages() {
+    	if(hasSession())
+    		return session().languages();
+    	WORequest request = context().request();
+    	if (request != null)
+    		return request.browserLanguages();
+    	return null;
     }
 
 }
