@@ -159,6 +159,12 @@ public class ERXSortOrder extends WOSortOrder {
         }
         return null;
     }
+    
+    
+
+    public String helpString() {
+       return ERXLocalizer.currentLocalizer().localizedTemplateStringForKeyWithObject("ERXSortOrder.sortBy", this);
+    }
 
     // These come right out of WOSortOrder, but have protected access instead of private.
     protected EOSortOrdering _primarySortOrdering() {
@@ -181,6 +187,6 @@ public class ERXSortOrder extends WOSortOrder {
 
     protected boolean _isCurrentKeyPrimary() {
         EOSortOrdering eosortordering = _primarySortOrdering();
-        return eosortordering != null && eosortordering.key().equals(key());
+        return eosortordering != null &&  eosortordering.key() != null &&  eosortordering.key().equals(key());
     }
 }
