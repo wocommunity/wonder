@@ -32,6 +32,7 @@ import com.webobjects.eocontrol.EOKeyValueQualifier;
 import com.webobjects.eocontrol.EOQualifier;
 import com.webobjects.eocontrol.EOSharedEditingContext;
 import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSBundle;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSForwardException;
 import com.webobjects.foundation.NSKeyValueCoding;
@@ -62,6 +63,8 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
     /** logging support */
     private static Logger _log;
     
+    private static boolean _initialized;
+    
     public ERXExtensions() {
     }
    
@@ -84,49 +87,56 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
      */
    
     protected void initialize() {
-        try {
-            // This will load any optional configuration files, 
-            ERXConfigurationManager.defaultManager().initialize();
-            // ensures that WOOutputPath's was processed with this @@
-            // variable substitution. WOApplication uses WOOutputPath in
-            // its constructor so we need to modify it before calling
-            // the constructor.
-            ERXSystem.updateProperties();
+    	NSNotificationCenter.defaultCenter().addObserver(this,
+    			new NSSelector("bundleDidLoad", ERXConstant.NotificationClassArray),
+    			NSBundle.BundleDidLoadNotification,
+    			null);
+    }
 
-            ERXLogger.configureLoggingWithSystemProperties();
+    public void bundleDidLoad(NSNotification n) {
+    	NSBundle bundle = (NSBundle) n.object();
+    	if(!"JavaFoundation".equals(bundle.name())) return;
+    	if(_initialized) return;
+    	_initialized = true;
+    	
+    	try {
+    		// This will load any optional configuration files, 
+    		ERXConfigurationManager.defaultManager().initialize();
+    		// ensures that WOOutputPath's was processed with this @@
+    		// variable substitution. WOApplication uses WOOutputPath in
+    		// its constructor so we need to modify it before calling
+    		// the constructor.
+    		ERXSystem.updateProperties();
 
-            NSLog.out.appendln("Initializing framework: ERXExtensions");
+    		ERXLogger.configureLoggingWithSystemProperties();
             ERXArrayUtilities.initialize();
 
-            // False by default
-            if (ERXValueUtilities.booleanValue(System.getProperty(ERXSharedEOLoader.PatchSharedEOLoadingPropertyKey))) {
-                ERXSharedEOLoader.patchSharedEOLoading();
-            }            
-        	ERXExtensions.configureAdaptorContextRapidTurnAround(this);
-            ERXJDBCAdaptor.registerJDBCAdaptor();
-            EODatabaseContext.setDefaultDelegate(ERXDatabaseContextDelegate.defaultDelegate());
-        	ERXAdaptorChannelDelegate.setupDelegate();
-        	ERXEC.factory().setDefaultDelegateOnEditingContext(EOSharedEditingContext.defaultSharedEditingContext(), true);
+    		// False by default
+    		if (ERXValueUtilities.booleanValue(System.getProperty(ERXSharedEOLoader.PatchSharedEOLoadingPropertyKey))) {
+    			ERXSharedEOLoader.patchSharedEOLoading();
+    		}            
+    		ERXExtensions.configureAdaptorContextRapidTurnAround(this);
+    		ERXJDBCAdaptor.registerJDBCAdaptor();
+    		EODatabaseContext.setDefaultDelegate(ERXDatabaseContextDelegate.defaultDelegate());
+    		ERXAdaptorChannelDelegate.setupDelegate();
+    		ERXEC.factory().setDefaultDelegateOnEditingContext(EOSharedEditingContext.defaultSharedEditingContext(), true);
 
-            ERXEntityClassDescription.registerDescription();
-            if (!ERXProperties.webObjectsVersionIs52OrHigher()) {
-                NSNotificationCenter.defaultCenter().addObserver(this,
-                        new NSSelector("sessionDidTimeOut", ERXConstant.NotificationClassArray),
-                        WOSession.SessionDidTimeOutNotification,
-                        null);
-                NSNotificationCenter.defaultCenter().addObserver(this,
-                        new NSSelector("editingContextDidCreate",
-                                ERXConstant.NotificationClassArray),
-                                ERXEC.EditingContextDidCreateNotification,
-                                null);                    
-            }
-        } catch (Exception e) {
-            throw NSForwardException._runtimeExceptionForThrowable(e);
-        }
+    		ERXEntityClassDescription.registerDescription();
+    		if (!ERXProperties.webObjectsVersionIs52OrHigher()) {
+    			NSNotificationCenter.defaultCenter().addObserver(this,
+    					new NSSelector("sessionDidTimeOut", ERXConstant.NotificationClassArray),
+    					WOSession.SessionDidTimeOutNotification,
+    					null);
+    			NSNotificationCenter.defaultCenter().addObserver(this,
+    					new NSSelector("editingContextDidCreate",
+    							ERXConstant.NotificationClassArray),
+    							ERXEC.EditingContextDidCreateNotification,
+    							null);                    
+    		}
+    	} catch (Exception e) {
+    		throw NSForwardException._runtimeExceptionForThrowable(e);
+    	}
     }
-    
-
-
 
     /**
      * This method is called when the application has finished
@@ -135,8 +145,9 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
      * validation template system is configured.
      */
     public void finishInitialization() {
-        ERXJDBCAdaptor.registerJDBCAdaptor();
+    	ERXJDBCAdaptor.registerJDBCAdaptor();
         ERXProperties.populateSystemProperties();
+        
         ERXConfigurationManager.defaultManager().configureRapidTurnAround();
         ERXLocalizer.initialize();
         ERXValidationFactory.defaultFactory().configureFactory();
