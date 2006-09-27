@@ -10,6 +10,22 @@ import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 
+/**
+ * AjaxSubmitButton behaves just like a WOSubmitButton except that it submits in the background with an Ajax.Request.
+ * 
+ * @binding name the HTML name of this submit button (optional)
+ * @binding value the HTML value of this submit button (optional)
+ * @binding action the action to execute when this button is pressed
+ * @binding id the HTML ID of this submit button
+ * @binding class the HTML class of this submit button
+ * @binding style the HTML style of this submit button
+ * @binding onClick arbitrary Javascript to execute when the client clicks the button
+ * @binding onServerClick if the action defined in the action binding returns null, the value of this binding will be returned as javascript from the server
+ * @binding onSuccess javascript to execute in response to the Ajax onSuccess event
+ * @binding onFailure javascript to execute in response to the Ajax onFailure event
+ * 
+ * @author anjo
+ */
 public class AjaxSubmitButton extends AjaxDynamicElement {
 
   public AjaxSubmitButton(String name, NSDictionary associations, WOElement children) {
