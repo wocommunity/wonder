@@ -58,8 +58,12 @@ public class ERD2WQueryStringWithChoices extends ERD2WQueryStringOperator {
     }
         
     public ERXKeyValuePair selectedChoice() {
-        return new ERXKeyValuePair(value(), ERXLocalizer.currentLocalizer()
-                                   .localizedValueForKeyWithDefault((String)value()));        
+        String value = (String)value();
+        String choice = (String) ERXLocalizer.currentLocalizer().valueForKey(value);
+        if(choice == null) {
+            choice = value;
+        }
+        return new ERXKeyValuePair(value, choice);        
     }
     
     public void setSelectedChoice(ERXKeyValuePair value) {
