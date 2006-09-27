@@ -532,7 +532,7 @@ public class ERXConfigurationManager {
         NSMutableDictionary poolingDictionary = new NSMutableDictionary();
         if (poolConnections) {
             poolingDictionary.setObjectForKey(getProperty(aModelName + ".DBMinConnections", "dbMinConnectionsGLOBAL",
-                    "20"), "minConnections");
+                    "1"), "minConnections");
             poolingDictionary.setObjectForKey(getProperty(aModelName + ".DBMaxConnections", "dbMaxConnectionsGLOBAL",
                     "20"), "maxConnections");
             poolingDictionary.setObjectForKey(getProperty(aModelName + ".DBLogPath", "dbLogPathGLOBAL",
