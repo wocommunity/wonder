@@ -794,11 +794,33 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
                     .append("ERXProperties has found the following Properties files: \n");
             message.append(projectsInfo.componentsJoinedByString("\n"));
             message.append("\n");
+            message.append(NSPropertyListSerialization.stringFromPropertyList(allProperties()));
             log.info(message.toString());
         }
 
         return propertiesPaths.immutableClone();
     }
+
+    public static class Property {
+    	public String key, value;
+    	public Property(String key, String value) {
+    		this.key = key;
+    		this.value = value;
+    	}
+    	public String toString() {
+    		return key + " = " + value;
+    	}
+    }
+
+    private static NSArray allProperties() {
+    	NSMutableArray props = new NSMutableArray();
+    	for (Enumeration e = ERXSystem.getProperties().keys(); e.hasMoreElements();) {
+    		String key = (String) e.nextElement();
+    		String object = "" + ERXSystem.getProperty(key);
+    		props.addObject(new Property(key, object));
+    	}
+    	return (NSArray) props.valueForKey("@sortAsc.key");
+     }
 
     /** 
      * Returns the full path to the Properties file under the 
