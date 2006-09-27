@@ -554,6 +554,6 @@ public class ERXValidationFactory {
      * @return template for key or null if none is found
      */
     public String templateForKeyPath(String key, String language) {
-        return ERXLocalizer.localizerForLanguage(language).localizedStringForKey(VALIDATION_TEMPLATE_PREFIX + key);
+        return (String)ERXLocalizer.localizerForLanguage(language).valueForKey(VALIDATION_TEMPLATE_PREFIX + key);
     }
 }
