@@ -117,6 +117,7 @@ public abstract class ERXApplication extends WOApplication implements ERXGracefu
         ERXPatcher.setClassForName(ERXWOForm.class, "WOForm");
         ERXPatcher.setClassForName(ERXAnyField.class, "WOAnyField");
         ERXPatcher.setClassForName(ERXWORepetition.class, "WORepetition");
+        ERXPatcher.setClassForName(ERXActiveImage.class, "WOActiveImage");
         
         // use our localizing string class
         // works around #3574558  
