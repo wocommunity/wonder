@@ -155,12 +155,13 @@ public class ERXLogger extends org.apache.log4j.Logger {
         
         boolean is522OrHigher = ERXProperties.webObjectsVersionIs522OrHigher();
         if (is522OrHigher) {
-            NSLog.setOut(new ERXNSLogLog4jBridge(ERXNSLogLog4jBridge.OUT));
-            NSLog.setErr(new ERXNSLogLog4jBridge(ERXNSLogLog4jBridge.ERR));
-
-            ERXNSLogLog4jBridge debugLogger = new ERXNSLogLog4jBridge(ERXNSLogLog4jBridge.DEBUG);
-            debugLogger.setAllowedDebugLevel(NSLog.debug.allowedDebugLevel());
-            NSLog.setDebug(debugLogger);
+            int allowedLevel = NSLog.debug.allowedDebugLevel();
+            if(!(NSLog.debug instanceof ERXNSLogLog4jBridge)) {
+                NSLog.setOut(new ERXNSLogLog4jBridge(ERXNSLogLog4jBridge.OUT));
+                NSLog.setErr(new ERXNSLogLog4jBridge(ERXNSLogLog4jBridge.ERR));
+                NSLog.setDebug(new ERXNSLogLog4jBridge(ERXNSLogLog4jBridge.DEBUG));
+            }
+           NSLog.debug.setAllowedDebugLevel(allowedLevel);
         }
         PropertyConfigurator.configure(properties);
 
