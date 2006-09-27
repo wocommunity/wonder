@@ -72,7 +72,7 @@ public class WOSortOrderManyKey extends WOComponent {
     }
 
     public String selectedKey() {
-        if (null==_selectedKey) {
+        if (null==_selectedKey && _primarySortOrdering() != null) {
             setSelectedKey(_primarySortOrdering().key());
         }
         return _selectedKey;
@@ -80,7 +80,7 @@ public class WOSortOrderManyKey extends WOComponent {
 
     protected boolean _isCurrentKeyPrimary() {
         EOSortOrdering anOrdering = _primarySortOrdering();
-        if ((anOrdering!=null) && anOrdering.key().equals(selectedKey())) {
+        if ((anOrdering!=null && _selectedKey != null) && anOrdering.key().equals(selectedKey())) {
             return true;
         }
         return false;
@@ -114,7 +114,7 @@ public class WOSortOrderManyKey extends WOComponent {
     }
 
     protected void _makePrimarySortOrderingWithSelector(NSSelector aSelector) {
-        String aKey = selectedKey();
+        String aKey = _selectedKey;
         WODisplayGroup aDisplayGroup = displayGroup();
         NSArray sortOrderings = aDisplayGroup.sortOrderings();
         NSMutableArray aSortOrderingArray;
