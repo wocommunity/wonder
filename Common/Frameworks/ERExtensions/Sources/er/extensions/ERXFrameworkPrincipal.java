@@ -145,8 +145,8 @@ public abstract class ERXFrameworkPrincipal {
                 }
                 ERXFrameworkPrincipal principal = (ERXFrameworkPrincipal)c.newInstance();
                 initializedFrameworks.setObjectForKey(principal,c.getName());
-                launchingFrameworks.addObject(principal);
                 principal.initialize();
+                launchingFrameworks.addObject(principal);
                 NSLog.debug.appendln("Initialized : " + c.getName());
 
             } else {
