@@ -18,7 +18,6 @@ import org.apache.log4j.Logger;
 
 import com.webobjects.appserver.WOApplication;
 import com.webobjects.appserver.WORequest;
-import com.webobjects.appserver.WOSession;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSBundle;
 import com.webobjects.foundation.NSDictionary;
@@ -127,20 +126,6 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
     	isLocalizationEnabled = value; 
     }
 
-    // CHECKME: Don't think that we need these any more now that we can have access to
-    //	        the current localizer via thread storage
-    public static NSDictionary fakeSessionForLanguage(String language) {
-        ERXLocalizer localizer = localizerForLanguage(language);
-        return new NSDictionary(new Object[] {localizer,language}, new Object[] {"localizer", "language"} );
-    }
-
-    // CHECKME: Don't think that we need these any more now that we can have access to
-    //	        the current localizer via thread storage
-    public static NSDictionary fakeSessionForSession(Object session) {
-        ERXLocalizer localizer = localizerForSession(session);
-        return new NSDictionary(new Object[] {localizer,localizer.language()}, new Object[] {"localizer", "language"} );
-    }
-
     /**
      * Returns the current localizer for the current thread.
      * Note that the localizer for a given session is pushed
@@ -177,34 +162,11 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
     public static ERXLocalizer defaultLocalizer() {
         return localizerForLanguage(defaultLanguage());
     }
-    
-    /**
-     * Gets the localizer for a session. 
-     * @param session
-     * @return
-     */
-    public static ERXLocalizer localizerForSession(Object session) {
-        if(session instanceof ERXSession) return ((ERXSession)session).localizer();
-        if(session instanceof WOSession) return localizerForLanguages(((WOSession)session).languages());
-        if(session instanceof NSDictionary) {
-            NSDictionary dict = ((NSDictionary)session);
-            Object l = dict.valueForKey("localizer");
-            if(l != null) {
-                return (ERXLocalizer)l;
-            }
-            Object language = dict.valueForKey("language");
-            if(language != null) {
-                return localizerForLanguage((String)language);
-            }
-        }
-        return localizerForLanguage(defaultLanguage());
-    }
 
     public static ERXLocalizer localizerForRequest(WORequest request) {
         return localizerForLanguages(request.browserLanguages());
     }    
     
-
     /**
      * Resets the localizer cache. If WOCaching is
      * enabled then after being reinitialize all of
@@ -413,6 +375,10 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
         load();
     }
     
+    public NSDictionary cache() {
+        return cache;
+    }
+    
     public void load() {
         cache.removeAllObjects();
         createdKeys.removeAllObjects();
@@ -447,7 +413,7 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
                            }
                            dict = newDict;
                        }
-                       cache.addEntriesFromDictionary(dict);
+                       addEntriesToCache(dict);
                        if(!WOApplication.application().isCachingEnabled() && !monitoredFiles.containsObject(path)) {
                            ERXFileNotificationCenter.defaultCenter().addObserver(observer,
                                    new NSSelector("fileDidChange",
@@ -469,6 +435,10 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
             }
         }
     }
+    
+    protected void addEntriesToCache(NSDictionary dict) {
+        cache.addEntriesFromDictionary(dict);
+    }
 
     protected NSDictionary readPropertyListFromFileInFramework(String fileName, String framework, NSArray languages){
         NSDictionary dict = (NSDictionary)ERXExtensions.readPropertyListFromFileInFramework(fileName, framework, languages);
@@ -482,6 +452,10 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
      */
     public Object valueForKey(String key) {
         return valueForKeyPath(key);
+    }
+    
+    protected void setCacheValueForKey(Object value, String key) {
+        cache.setObjectForKey(value, key);
     }
     
     public Object valueForKeyPath(String key) {
@@ -499,15 +473,15 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
                     try {
                         result = NSKeyValueCodingAdditions.Utility.valueForKeyPath(result, otherComponents);
                         if(result != null) {
-                            cache.setObjectForKey(result, key);
+                            setCacheValueForKey(result, key);
                         } else {
-                            cache.setObjectForKey(NOT_FOUND, key);
+                            setCacheValueForKey(NOT_FOUND, key);
                         }
                     } catch (NSKeyValueCoding.UnknownKeyException e) {
                         if (log.isDebugEnabled()) {
                             log.debug(e.getMessage());
                         }
-                        cache.setObjectForKey(NOT_FOUND, key);
+                        setCacheValueForKey(NOT_FOUND, key);
                     }
                 }
             }
@@ -516,11 +490,11 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
     }
 
     public void takeValueForKey(Object value, String key) {
-        cache.setObjectForKey(value, key);
+        setCacheValueForKey(value, key);
     }
     
     public void takeValueForKeyPath(Object value, String key) {
-        cache.setObjectForKey(value, key);
+        setCacheValueForKey(value, key);
     }
 
     public String language() { return language; }
@@ -536,14 +510,14 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
             if(createdKeysLog.isDebugEnabled()) {
                 createdKeysLog.debug("Default key inserted: '"+key+"'/"+language);
             }
-            cache.setObjectForKey(key, key);
+            setCacheValueForKey(key, key);
             createdKeys.setObjectForKey(key, key);
             result = key;
         }
         return result;
     }
 
-    public Object localizedValueForKey(String key) {
+    protected Object localizedValueForKey(String key) {
         Object result = cache.objectForKey(key);
         if(key == null || result == NOT_FOUND) return null;
         if(result != null) return result;
@@ -551,7 +525,7 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
         if(createdKeysLog.isDebugEnabled()) {
             log.debug("Key not found: '"+key+"'/"+language);
         }
-        cache.setObjectForKey(NOT_FOUND, key);
+        setCacheValueForKey(NOT_FOUND, key);
         return null;
     }
 

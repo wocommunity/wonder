@@ -164,7 +164,7 @@ public class ERXValidation {
         if (key != null && newErrorMessage != null) {
             String niceDisplay = entity != null ?
             entity.classDescriptionForInstances().displayNameForKey(key) : ERXStringUtilities.displayNameForKey(key);
-            String localDisplayName = localizer != null ? localizer.localizedStringForKey(niceDisplay) : niceDisplay;
+            String localDisplayName =  (localizer != null ? (String)localizer.valueForKey(niceDisplay) : niceDisplay);
             errorMessages.setObjectForKey(newErrorMessage, localDisplayName != null ? localDisplayName : niceDisplay);
         } else {
             if(key != null) {

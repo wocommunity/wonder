@@ -43,7 +43,7 @@ public class ERDDelayedLocalizedAssignment extends ERDDelayedAssignment implemen
     public Object fireNow(D2WContext c) {
         String key = (String)value();
         if (log.isDebugEnabled()) {
-            String value = ERXLocalizer.currentLocalizer().localizedStringForKey(key);
+            String value = (String)ERXLocalizer.currentLocalizer().valueForKey(key);
             log.debug("Fire for template \"" + key + "\": " + value);
         }
         return ERXLocalizer.currentLocalizer().localizedTemplateStringForKeyWithObject(key, c);

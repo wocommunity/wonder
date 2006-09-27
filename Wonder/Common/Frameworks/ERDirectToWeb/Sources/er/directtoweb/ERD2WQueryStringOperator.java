@@ -28,7 +28,10 @@ public class ERD2WQueryStringOperator extends D2WQueryStringOperator {
         NSMutableArray result = new NSMutableArray( count );
         for( int i = 0; i < count; i++ ) {
             String currentOperatorString = (String)operators.objectAtIndex(i);
-            String value = (String)ERXLocalizer.currentLocalizer().localizedValueForKeyWithDefault(currentOperatorString);
+            String value = (String)ERXLocalizer.currentLocalizer().valueForKey(currentOperatorString);
+            if(value == null) {
+                value = currentOperatorString;
+            }
             result.addObject(new ERXKeyValuePair(currentOperatorString, value));
         }
         return result;
@@ -42,9 +45,12 @@ public class ERD2WQueryStringOperator extends D2WQueryStringOperator {
     }
     
     public ERXKeyValuePair selectedElement() {
-        return new ERXKeyValuePair
-        (super.anOperator(), (String)ERXLocalizer.currentLocalizer().localizedValueForKeyWithDefault
-         (super.anOperator()));
+        String value = (String) anOperator();
+        String choice = (String) ERXLocalizer.currentLocalizer().valueForKey(value);
+        if(choice == null) {
+            choice = value;
+        }
+        return new ERXKeyValuePair(value, choice);        
     }
     
     public void  setSelectedElement(ERXKeyValuePair newSelection) {
