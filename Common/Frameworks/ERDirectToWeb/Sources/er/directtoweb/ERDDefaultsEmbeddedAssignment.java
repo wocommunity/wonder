@@ -98,9 +98,13 @@ public class ERDDefaultsEmbeddedAssignment extends ERDAssignment {
      */
     public String defaultEmbeddedEntityDisplayName(D2WContext c) {
         String value = ERXStringUtilities.displayNameForKey((String)c.valueForKey("embeddedEntityName"));
-        return (String)ERXLocalizer.currentLocalizer().localizedValueForKeyWithDefault(value);
+        String result = (String)ERXLocalizer.currentLocalizer().valueForKey(value);
+        if(result == null) {
+            result = value;
+        }
+        return result;
     }
-    
+
     /**
      * Calculates the default embedded display property keys for a 
      * given context. Implementation wise this method uses the 

@@ -108,7 +108,7 @@ public class ERXErrorDictionaryPanel extends ERXStatelessComponent {
                 result=result.substring(eliminable.length()+1, result.length());
             }
             if(result.indexOf(couldNotSave)>0) {
-                String replace = ERXLocalizer.currentLocalizer().localizedStringForKey(couldNotSave);
+                String replace = (String)ERXLocalizer.currentLocalizer().valueForKey(couldNotSave);
                 if(replace != null)
                     result=replace + result.substring(couldNotSave.length()+1, result.length());
             }
