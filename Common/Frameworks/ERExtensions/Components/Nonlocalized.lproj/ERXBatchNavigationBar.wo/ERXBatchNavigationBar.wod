@@ -100,19 +100,19 @@ filteredObjectsCount: WOString {
 	value = filteredObjectsCount;
 }
 
-items_per_page: WOString {
-	value = session.localizer.ERXBatchNavigationBar.items_per_page; // VALID
+items_per_page: ERXLocalizedString {
+	value = "ERXBatchNavigationBar.items_per_page"; 
 }
 
-of: WOString {
-	value = session.localizer.ERXBatchNavigationBar.of; // VALID
+of: ERXLocalizedString {
+	value = "ERXBatchNavigationBar.of"; 
 }
 
-page: WOString {
-	value = session.localizer.ERXBatchNavigationBar.page; // VALID
+page: ERXLocalizedString {
+	value = "ERXBatchNavigationBar.page"; 
 }
 
-show: WOString {
-	value = session.localizer.ERXBatchNavigationBar.show; // VALID
+show: ERXLocalizedString {
+	value = "ERXBatchNavigationBar.show";
 }
 
