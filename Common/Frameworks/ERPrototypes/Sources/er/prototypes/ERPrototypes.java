@@ -11,7 +11,11 @@ simple class that ensures correct framework reference with PBX
 public class ERPrototypes extends ERXFrameworkPrincipal {
 	
 	public static Class[] REQUIRES = {ERXExtensions.class};
-	
+
+    static {
+        setUpFrameworkPrincipalClass(ERPrototypes.class);
+    }
+    
 	public void finishInitialization() {
       log.info("ERPrototypes loaded");
 	}
