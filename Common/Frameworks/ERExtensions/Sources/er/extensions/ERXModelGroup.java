@@ -24,8 +24,11 @@ import com.webobjects.foundation.NSLog;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation.NSMutableSet;
+import com.webobjects.foundation.NSNotification;
 import com.webobjects.foundation.NSNotificationCenter;
 import com.webobjects.foundation.NSPathUtilities;
+import com.webobjects.foundation.NSPropertyListSerialization;
+import com.webobjects.foundation.NSSelector;
 import com.webobjects.foundation.NSSet;
 import com.webobjects.jdbcadaptor.JDBCAdaptor;
 
@@ -62,7 +65,8 @@ public class ERXModelGroup extends
      * @return ERXModelGroup for all of the loaded bundles
      */
     public static EOModelGroup loadModelGroupForLoadedBundles() {
-        ERXModelGroup eomodelgroup = new ERXModelGroup();
+    	ERXModelGroup eomodelgroup = new ERXModelGroup();
+    	
         EOModelGroup.setDefaultGroup(eomodelgroup);
         NSArray nsarray = NSBundle.frameworkBundles();
         int bundleCount = nsarray.count() + 1;
@@ -105,6 +109,11 @@ public class ERXModelGroup extends
         // correcting an EOF Inheritance bug
         eomodelgroup.checkInheritanceRelationships();
         NSNotificationCenter.defaultCenter().postNotification(ModelGroupAddedNotification, eomodelgroup);
+        if(!patchModelsOnLoad) {
+        	NSNotificationCenter.defaultCenter().addObserver(eomodelgroup,
+        			new NSSelector("modelAddedHandler", ERXConstant.NotificationClassArray),
+        			EOModelGroup.ModelAddedNotification, null);
+        }
         return eomodelgroup;
     }
 
@@ -147,6 +156,7 @@ public class ERXModelGroup extends
         	eomodel.setModelGroup(this);
         }
         _modelsByName.setObjectForKey(eomodel, eomodel.name());
+        resetConnectionDictionaryInModel(eomodel);
         NSNotificationCenter.defaultCenter().postNotification("EOModelAddedNotification", eomodel);
     }
     
@@ -169,7 +179,7 @@ public class ERXModelGroup extends
 		public void setModelGroup(EOModelGroup aGroup) {
 			super.setModelGroup(aGroup);
 			if (aGroup != null) {
-				ERXConfigurationManager.defaultManager().resetConnectionDictionaryInModel(this);
+				((ERXModelGroup)aGroup).resetConnectionDictionaryInModel(this);
 			}
         }
 
@@ -366,4 +376,426 @@ public class ERXModelGroup extends
 	public static boolean patchModelsOnLoad() {
 		return patchModelsOnLoad;
 	}
+
+
+    /**
+     * Called when a model is loaded. This will reset the connection
+     * dictionary and insert the correct EOPrototypes if those are used
+     * @param n notification posted when a model is loaded. The object is
+     * 		the model.
+     */
+    public void modelAddedHandler(NSNotification n) {
+        EOModel model = (EOModel)n.object();
+        for (Enumeration enumerator = model.entities().objectEnumerator(); enumerator.hasMoreElements();) {
+            EOEntity entity = (EOEntity) enumerator.nextElement();
+            adjustLocalizedAttributes(entity);
+        }
+        resetConnectionDictionaryInModel(model);
+    }
+    
+    protected EOAttribute cloneAttribute(EOEntity entity, EOAttribute attribute, String newName) {
+        // NOTE: order is important here. To add the prototype,
+        // we need it in the entity and we need a name to add it there
+        EOAttribute copy = new EOAttribute();
+        copy.setName(newName);
+        entity.addAttribute(copy);
+        copy.setPrototype(attribute.prototype());
+        copy.setColumnName(attribute.columnName());
+        copy.setExternalType(attribute.externalType());
+        copy.setValueType(attribute.valueType());
+        copy.setPrecision(attribute.precision());
+        copy.setAllowsNull(attribute.allowsNull());
+        copy.setClassName(attribute.className());
+        copy.setWidth(attribute.width());
+        copy.setScale(attribute.scale());
+        copy.setExternalType(attribute.externalType());
+        return copy;
+    }
+
+    protected void adjustLocalizedAttributes() {
+    	for (Enumeration enumerator = models().objectEnumerator(); enumerator.hasMoreElements();) {
+    		EOModel model = (EOModel) enumerator.nextElement();
+        	for (Enumeration e1 = model.entities().objectEnumerator(); e1.hasMoreElements();) {
+        		EOEntity entity = (EOEntity) e1.nextElement();
+        		adjustLocalizedAttributes(entity);
+        	}
+    	}
+    }
+    
+    protected void adjustLocalizedAttributes(EOEntity entity) {
+        NSArray attributes = entity.attributes().immutableClone();
+        NSArray classProperties = entity.classProperties().immutableClone();
+        NSArray attributesUsedForLocking = entity.attributesUsedForLocking().immutableClone();
+        if(attributes == null) attributes = NSArray.EmptyArray;
+        if(classProperties == null) classProperties = NSArray.EmptyArray;
+        if(attributesUsedForLocking == null) attributesUsedForLocking = NSArray.EmptyArray;
+        NSMutableArray mutableClassProperties = classProperties.mutableClone();
+        NSMutableArray mutableAttributesUsedForLocking = attributesUsedForLocking.mutableClone();
+        if(attributes != null) {
+            for(Enumeration e = attributes.objectEnumerator(); e.hasMoreElements(); ) {
+                EOAttribute attribute = (EOAttribute)e.nextElement();
+                boolean isClassProperty = classProperties.containsObject(attribute);
+                boolean isUsedForLocking = attributesUsedForLocking.containsObject(attribute);
+                Object languagesObject = attribute.userInfo() != null ? attribute.userInfo().objectForKey("ERXLanguages") : null;
+                if(languagesObject != null && !(languagesObject instanceof NSArray)) {
+                    languagesObject = entity.model().userInfo() != null ? entity.model().userInfo().objectForKey("ERXLanguages") : null;
+                }
+                NSArray languages = (languagesObject != null ? (NSArray)languagesObject : NSArray.EmptyArray);
+                if(languages.count() > 0) {
+                    String name = attribute.name();
+                    String columnName = attribute.columnName();
+                    for (int i = 0; i < languages.count(); i++) {
+                        String language = (String) languages.objectAtIndex(i);
+                        String newName = name + "_" +language;
+                         //columnName = columnName.replaceAll("_(\\w)$", "_" + language);
+                        EOAttribute copy = cloneAttribute(entity, attribute, newName);
+                        
+                        String newColumnName = columnName + "_" +language;
+                        copy.setColumnName(newColumnName);
+
+                        if(isClassProperty) {
+                            mutableClassProperties.addObject(copy);
+                        }
+                        if(isUsedForLocking) {
+                            mutableAttributesUsedForLocking.addObject(copy);
+                        }
+                    }
+                    entity.removeAttribute(attribute);
+                    mutableClassProperties.removeObject(attribute);
+                    mutableAttributesUsedForLocking.removeObject(attribute);
+                }
+            }
+            entity.setAttributesUsedForLocking(mutableAttributesUsedForLocking);
+            entity.setClassProperties(mutableClassProperties);
+        }
+    }
+
+    
+    private String getProperty(String key, String alternateKey, String defaultValue) {
+        String value = ERXSystem.getProperty(key);
+        if(value == null) {
+            value = ERXSystem.getProperty(alternateKey); 
+        }
+        if(value == null) {
+            value = defaultValue; 
+        }
+        return value;
+    }
+    
+    private String getProperty(String key, String alternateKey) {
+        return getProperty(key, alternateKey, null);
+    }
+
+    protected void fixOracleDictionary(EOModel model) {
+        String modelName = model.name();
+        String serverName = getProperty(modelName + ".DBServer", "dbConnectServerGLOBAL");
+        String userName = getProperty(modelName + ".DBUser", "dbConnectUserGLOBAL");
+        String passwd = getProperty(modelName + ".DBPassword", "dbConnectPasswordGLOBAL");
+
+        NSMutableDictionary newConnectionDictionary = new NSMutableDictionary(model.connectionDictionary());
+        if (serverName != null)
+            newConnectionDictionary.setObjectForKey(serverName, "serverId");
+        if (userName != null)
+            newConnectionDictionary.setObjectForKey(userName, "userName");
+        if (passwd != null)
+            newConnectionDictionary.setObjectForKey(passwd, "password");
+        model.setConnectionDictionary(newConnectionDictionary);
+    }
+    
+    protected void fixFlatDictionary(EOModel model) {
+        String aModelName = model.name();
+        String path = getProperty(aModelName + ".DBPath", "dbConnectPathGLOBAL");
+        if (path != null) {
+            if (path.indexOf(" ") != -1) {
+                NSArray a = NSArray.componentsSeparatedByString(path, " ");
+                if (a.count() == 2) {
+                    path = ERXFileUtilities.pathForResourceNamed((String) a.objectAtIndex(0), (String) a.objectAtIndex(1), null);
+                }
+            }
+        } else {
+            // by default we take <modelName>.db in the directory we
+            // found the model
+            path = model.pathURL().getFile();
+            path = NSPathUtilities.stringByDeletingLastPathComponent(path);
+            path = NSPathUtilities.stringByAppendingPathComponent(path, model.name() + ".db");
+        }
+        NSMutableDictionary newConnectionDictionary = new NSMutableDictionary(model.connectionDictionary());
+        if (path != null)
+            newConnectionDictionary.setObjectForKey(path, "path");
+        if (ERXConfigurationManager.defaultManager().operatingSystem() == ERXConfigurationManager.WindowsOperatingSystem)
+            newConnectionDictionary.setObjectForKey("\r\n", "rowSeparator");
+        model.setConnectionDictionary(newConnectionDictionary);
+    }
+    
+    protected void fixOpenBaseDictionary(EOModel model) {
+        String aModelName = model.name();
+        String db = getProperty(aModelName + ".DBDatabase", "dbConnectDatabaseGLOBAL");
+        String h = getProperty(aModelName + ".DBHostName", "dbConnectHostNameGLOBAL");
+        NSMutableDictionary newConnectionDictionary = new NSMutableDictionary(model.connectionDictionary());
+        if (db != null)
+            newConnectionDictionary.setObjectForKey(db, "databaseName");
+        if (h != null)
+            newConnectionDictionary.setObjectForKey(h, "hostName");
+        model.setConnectionDictionary(newConnectionDictionary);
+    }
+    
+    protected void fixJDBCDictionary(EOModel model) {
+        String aModelName = model.name();
+        
+        boolean poolConnections = ERXJDBCAdaptor.useConnectionBroker();
+
+        String url = getProperty(aModelName + ".URL", "dbConnectURLGLOBAL");
+        String userName = getProperty(aModelName + ".DBUser", "dbConnectUserGLOBAL");
+        String passwd = getProperty(aModelName + ".DBPassword", "dbConnectPasswordGLOBAL");
+        String driver = getProperty(aModelName + ".DBDriver", "dbConnectDriverGLOBAL");
+        String serverName = getProperty(aModelName + ".DBServer", "dbConnectServerGLOBAL");
+        String h = getProperty(aModelName + ".DBHostName", "dbConnectHostNameGLOBAL");
+        String jdbcInfo = getProperty(aModelName + ".DBJDBCInfo", "dbConnectJDBCInfoGLOBAL");
+
+        // additional information used for ERXJDBCConnectionBroker
+        NSMutableDictionary poolingDictionary = new NSMutableDictionary();
+        if (poolConnections) {
+            poolingDictionary.setObjectForKey(getProperty(aModelName + ".DBMinConnections", "dbMinConnectionsGLOBAL",
+                    "1"), "minConnections");
+            poolingDictionary.setObjectForKey(getProperty(aModelName + ".DBMaxConnections", "dbMaxConnectionsGLOBAL",
+                    "20"), "maxConnections");
+            poolingDictionary.setObjectForKey(getProperty(aModelName + ".DBLogPath", "dbLogPathGLOBAL",
+                    "/tmp/ERXJDBCConnectionBroker_@@name@@_@@WOPort@@.log"), "logPath");
+            poolingDictionary.setObjectForKey(getProperty(aModelName + ".DBConnectionRecycle", "dbConnectionRecycleGLOBAL", 
+                    "1.0"), "connectionRecycle");
+            poolingDictionary.setObjectForKey(getProperty(aModelName + ".DBMaxCheckout", "dbMaxCheckoutGLOBAL", 
+                    "86400"), "maxCheckout");
+            poolingDictionary.setObjectForKey(getProperty(aModelName + ".DBDebugLevel", "dbDebugLevelGLOBAL", 
+                    "1"), "debugLevel");
+        }
+
+        NSDictionary jdbcInfoDictionary = null;
+        if (jdbcInfo != null && jdbcInfo.length() > 0 && jdbcInfo.charAt(0) == '^') {
+            String modelName = jdbcInfo.substring(1, jdbcInfo.length());
+            EOModel modelForCopy = model.modelGroup().modelNamed(modelName);
+            if (modelForCopy != null && modelForCopy != model) {
+                jdbcInfoDictionary = (NSDictionary) modelForCopy.connectionDictionary().objectForKey("jdbc2Info");
+            } else {
+                log.warn("Unable to find model named \"" + modelName + "\"");
+                jdbcInfo = null;
+            }
+        }
+
+        String plugin = getProperty(aModelName + ".DBPlugin", "dbConnectPluginGLOBAL");
+
+        // build the URL if we have a Postgresql plugin
+        if ("Postgresql".equals(plugin) && ERXStringUtilities.stringIsNullOrEmpty(url)
+                && !ERXStringUtilities.stringIsNullOrEmpty(serverName) && !ERXStringUtilities.stringIsNullOrEmpty(h)) {
+            url = "jdbc:postgresql://" + h + "/" + serverName;
+        }
+
+        NSMutableDictionary newConnectionDictionary = new NSMutableDictionary(model.connectionDictionary());
+        if (url != null)
+            newConnectionDictionary.setObjectForKey(url, "URL");
+        if (userName != null)
+            newConnectionDictionary.setObjectForKey(userName, "username");
+        if (passwd != null)
+            newConnectionDictionary.setObjectForKey(passwd, "password");
+        if (driver != null)
+            newConnectionDictionary.setObjectForKey(driver, "driver");
+        if (jdbcInfoDictionary != null) {
+            newConnectionDictionary.setObjectForKey(jdbcInfoDictionary, "jdbc2Info");
+        } else if (jdbcInfo != null) {
+            NSDictionary d = (NSDictionary) NSPropertyListSerialization.propertyListFromString(jdbcInfo);
+            if (d != null)
+                newConnectionDictionary.setObjectForKey(d, "jdbc2Info");
+            else
+                newConnectionDictionary.removeObjectForKey("jdbc2Info");
+        }
+        if (plugin != null)
+            newConnectionDictionary.setObjectForKey(plugin, "plugin");
+
+        // set the information for ERXJDBCConnectionBroker
+        newConnectionDictionary.addEntriesFromDictionary(poolingDictionary);
+        
+        String removeJdbc2Info = getProperty(aModelName + ".removeJdbc2Info", "dbRemoveJdbc2InfoGLOBAL", "false");
+        if (ERXValueUtilities.booleanValue(removeJdbc2Info)) {
+            newConnectionDictionary.removeObjectForKey("jdbc2Info");
+        }
+
+        model.setConnectionDictionary(newConnectionDictionary);
+    }
+    
+    /**
+     * Resets the connection dictionary to the specified values that are in the
+     * defaults. This method will look for defaults in the form:
+     * 
+     * <pre><code>
+     *  		&lt;MODELNAME&gt;.DBServer
+     *  		&lt;MODELNAME&gt;.DBUser
+     *  		&lt;MODELNAME&gt;.DBPassword
+     *  		&lt;MODELNAME&gt;.URL (for JDBC)        
+     * </code></pre>
+     * 
+     * if the serverName and username both exists, we overwrite the connection
+     * dict (password is optional). Otherwise we fall back to what's in the
+     * model.
+     * 
+     * Likewise default values can be specified of the form:
+     * 
+     * <pre><code>
+     *  dbConnectUserGLOBAL
+     *  dbConnectPasswordGLOBAL
+     *  dbConnectURLGLOBAL
+     * </code></pre>
+     * 
+     * @param model
+     *            to be reset
+     */
+    public void resetConnectionDictionaryInModel(EOModel model)  {
+        if(model == null) {
+            throw new IllegalArgumentException("Model can't be null"); 
+        }
+        String modelName=model.name();
+        log.debug("Adjusting "+modelName);
+        NSDictionary old = model.connectionDictionary();
+
+        if(model.adaptorName() == null) {
+            log.info("Skipping model '" + modelName + "', it has no adaptor name set");
+            return;
+        }
+
+        // Support for EODatabaseConfig from EntityModeler.  The value of YourEOModelName.DBConfigName is
+        // used to lookup the corresponding EODatabaseConfig name from user info.  The connection dictionary
+        // defined in the databaseConfig section completely replaces the connection dictionary in the 
+        // EOModel. After the initial replacement, all the additional PW model configurations are then 
+        // applied to the new dictionary.
+        String databaseConfigName = getProperty(modelName + ".DBConfigName", "dbConfigNameGLOBAL");
+        NSDictionary databaseConfig = null;
+        if (databaseConfigName != null) {
+            NSDictionary userInfo = model.userInfo();
+            if (userInfo != null) {
+                NSDictionary entityModelerDictionary = (NSDictionary) userInfo.objectForKey("_EntityModeler");
+                if (entityModelerDictionary != null) {
+                    NSDictionary databaseConfigsDictionary = (NSDictionary) entityModelerDictionary.objectForKey("databaseConfigs");
+                    if (databaseConfigsDictionary != null) {
+                        databaseConfig = (NSDictionary) databaseConfigsDictionary.objectForKey(databaseConfigName);
+                        if (databaseConfig != null) {
+                            NSDictionary connectionDictionary = (NSDictionary) databaseConfig.objectForKey("connectionDictionary");
+                            model.setConnectionDictionary(connectionDictionary);
+                        }
+                    }
+                }
+            }
+        }
+
+        if (model.adaptorName().indexOf("Oracle") != -1) {
+            fixOracleDictionary(model);
+        } else if (model.adaptorName().indexOf("Flat") != -1) {
+            fixFlatDictionary(model);
+        } else if (model.adaptorName().indexOf("OpenBase")!=-1) {
+            fixOpenBaseDictionary(model);
+        } else if (model.adaptorName().indexOf("JDBC")!=-1) {
+            fixJDBCDictionary(model);
+        }
+
+        if (log.isDebugEnabled() && !old.equals(model.connectionDictionary())) {
+            NSMutableDictionary dict = model.connectionDictionary().mutableClone();
+            if (dict.objectForKey("password") != null) {
+                dict.setObjectForKey("<deleted for log>", "password");
+                log.debug("New Connection Dictionary for " + modelName + ": " + dict);
+            }
+        }
+
+        fixPrototypes(model, databaseConfig);
+
+    }
+
+    private void fixPrototypes(EOModel model, NSDictionary databaseConfig) {
+        String modelName = model.name();
+        // based on an idea from Stefan Apelt <stefan@tetlabors.de>
+        String f = getProperty(modelName + ".EOPrototypesFile", "EOPrototypesFileGLOBAL");
+        if (f != null) {
+            NSDictionary dict = (NSDictionary) NSPropertyListSerialization
+            .propertyListFromString(ERXStringUtilities.stringFromResource(f, "", null));
+            if (dict != null) {
+                if (log.isDebugEnabled())
+                    log.debug("Adjusting prototypes from " + f);
+                EOEntity proto = model.entityNamed("EOPrototypes");
+                if (proto == null) {
+                    log.warn("No prototypes found in model named \"" + modelName
+                            + "\", although the EOPrototypesFile default was set!");
+                } else {
+                    model.removeEntity(proto);
+                    proto = new EOEntity(dict, model);
+                    proto.awakeWithPropertyList(dict);
+                    model.addEntity(proto);
+                }
+            }
+        }
+
+        String prototypeEntityName = ERXSystem.getProperty(modelName + ".EOPrototypesEntity");
+        if (prototypeEntityName == null && databaseConfig != null) {
+            prototypeEntityName = (String) databaseConfig.objectForKey("prototypeEntityName");
+        }
+
+        if(prototypeEntityName == null && !(ERXModelGroup.patchModelsOnLoad())) {
+            String pluginName = ERXEOAccessUtilities.guessPluginName(model);
+            if (pluginName != null) {
+                String pluginPrototypeEntityName = "EOJDBC" + pluginName + "Prototypes";
+                // This check isn't technically necessary since
+                // it doesn't down below, but since
+                // we are guessing here, I don't want themt o
+                // get a warning about the prototype not
+                // being found if they aren't even using Wonder
+                // prototypes.
+                if (model.modelGroup().entityNamed(pluginPrototypeEntityName) != null) {
+                    prototypeEntityName = pluginPrototypeEntityName;
+                }
+            }
+        }
+
+        // global prototype setting not supported yet
+        // e = e ==null ? ERXSystem.getProperty("EOPrototypesEntityGLOBAL")
+        // : e;
+        if (prototypeEntityName != null) {
+            // we look for the entity globally so we can have one prototype
+            // entity
+            EOEntity newPrototypeEntity = model.modelGroup().entityNamed(prototypeEntityName);
+            if (newPrototypeEntity == null) {
+                log.warn("Prototype Entity named " + prototypeEntityName + " not found in model " + model.name());
+            } else {
+                if (log.isDebugEnabled())
+                    log.debug("Adjusting prototypes to those from entity " + prototypeEntityName);
+                
+                String finalPrototypeEntityName = "EO" + model.adaptorName() + "Prototypes";
+
+                EOEntity finalPrototypeEntity = model.entityNamed(finalPrototypeEntityName);
+                if(false) {
+                    // additive prototype handling
+                    if (finalPrototypeEntity == null) {
+                        finalPrototypeEntity = new EOEntity();
+                        finalPrototypeEntity.setName(finalPrototypeEntityName);
+                        model.addEntity(finalPrototypeEntity);
+                    }
+                    for (Enumeration enumerator = newPrototypeEntity.attributes().objectEnumerator(); enumerator.hasMoreElements();) {
+                    	EOAttribute attribute = (EOAttribute) enumerator.nextElement();
+                    	if(attribute != null) {
+                    		EOAttribute existing = finalPrototypeEntity.anyAttributeNamed(attribute.name());
+                    		if(existing != null) {
+                    			if(finalPrototypeEntity.anyAttributeNamed(existing.name()) != null) {
+                    				finalPrototypeEntity.removeAttribute(existing);
+                    			}
+                    		}
+                    		newPrototypeEntity.removeAttribute(attribute);
+                    		finalPrototypeEntity.addAttribute(attribute);
+                    	}
+                    }
+                } else {
+                    // replacing prototype handling
+                    if (finalPrototypeEntity != null) {
+                        finalPrototypeEntity.model().removeEntity(finalPrototypeEntity);
+                    }
+                    newPrototypeEntity.setName(finalPrototypeEntityName);
+                    model.removeEntity(newPrototypeEntity);
+                    model.addEntity(newPrototypeEntity);
+                }
+            }
+        }
+    }
 }
