@@ -189,7 +189,7 @@ static char *_retrieveServerInfo(ConfigServer *, net_fd, int *, char *);
  */
 int ac_init(strtbl *dict)
 {
-   int count, ret = 0;
+   unsigned int count, ret = 0;
    const char *config_uri, *config_interval_setting;
 
    appsBase = WOShmem_alloc("application list", sizeof(WOApp), &appListSize);
@@ -235,7 +235,7 @@ int ac_init(strtbl *dict)
       config_interval_setting = st_valueFor(dict, WOCNFINTVL);
       if (config_interval_setting)
       {
-         updateNumericSetting(WOCNFINTVL, &config_interval, config_interval_setting);
+         updateNumericSetting(WOCNFINTVL, (int *)&config_interval, config_interval_setting);
          if (config_interval > MAX_CONF_INTERVAL)
          {
             WOLog(WO_WARN, "ac_init(): config interval reduced to %d (was %d).", MAX_CONF_INTERVAL, config_interval);
@@ -679,15 +679,15 @@ static void updateInstanceKey(const char *key, const char *value, _WOInstance *i
    else if (strcmp(key, WOPORT) == 0)
       changed = updateNumericSetting(key, &instance->port, value);
    else if (strcmp(key, WOSENDBUFSIZE) == 0)
-      changed = updateNumericSetting(key, &instance->sendSize, value);
+      changed = updateNumericSetting(key, (int *)&instance->sendSize, value);
    else if (strcmp(key, WORECVBUFSIZE) == 0)
-      changed = updateNumericSetting(key, &instance->recvSize, value);
+      changed = updateNumericSetting(key, (int *)&instance->recvSize, value);
    else if (strcmp(key, WOSENDTIMEOUT) == 0)
-      changed = updateNumericSetting(key, &instance->sendTimeout, value);
+      changed = updateNumericSetting(key, (int *)&instance->sendTimeout, value);
    else if (strcmp(key, WORECVTIMEOUT) == 0)
-      changed = updateNumericSetting(key, &instance->recvTimeout, value);
+      changed = updateNumericSetting(key, (int *)&instance->recvTimeout, value);
    else if (strcmp(key, WOCNCTTIMEOUT) == 0)
-      changed = updateNumericSetting(key, &instance->connectTimeout, value);
+      changed = updateNumericSetting(key, (int *)&instance->connectTimeout, value);
    else {
       /* The setting was not recognized. Log and ignore it. */
       WOLog(WO_INFO, "Unknown attribute in instance config: \"%s\", value = \"%s\"", key, value);

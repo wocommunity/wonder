@@ -39,11 +39,11 @@ OPENSSL_INCL_FLAGS =
 OPENSSL_LIB_FLAGS =
 
 # If Apache is in a nonstandard location, change this
-APACHE_INCL_FLAGS = -I/usr/local/apache2/include
+#APACHE_INCL_FLAGS = -I/usr/local/apache2/include
 
-CFLAGS +=-DEAPI ${APACHE_INCL_FLAGS}
+CFLAGS +=-DEAPI -fPIC ${APACHE_INCL_FLAGS}
 LDFLAGS +=-G -L/lib -lc ${OPENSSL_LIB_FLAGS}
-APXSFLAGS = -i
+APXSFLAGS = -c
 endif
 # End Linux Config
 
@@ -113,8 +113,7 @@ endif
 
 
 
-# LINUX Section mostly from Senmeisha, Inc.'s Makefile
-# I don't know if it works, but it should.
+# LINUX Section mostly from Senmeisha, Inc.'s Makefile. Thanks.
 ifeq "LINUX" "${OS}"
 
 mod_WebObjects.so : mod_WebObjects.o ${COMMON_OBJFILES}
@@ -141,7 +140,14 @@ endif
 
 # The install target does what you'd think it would: install the module; By default, this is not called.
 install: mod_WebObjects.la
+ifeq "MACOS" "${OS}"
 	${APXS} -i -a -n WebObjects mod_WebObjects.la
+else
+	# This works on Linux at least, while the above leads to:
+	# "Can't locate API module structure `WebObjects_module' in file .../modules/mod_WebObjects.so: 
+	# .../modules/mod_WebObjects.so: undefined symbol: WebObjects_module"
+	${APXS} -i -a -n WebObjects mod_WebObjects.so
+endif
 
 clean:
 	-rm -rf mod_WebObjects.la *.o *.lo *.so *.slo .libs
