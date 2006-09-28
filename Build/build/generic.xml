@@ -697,7 +697,7 @@ There are many ways to use this script:
     
     <target name="ERPrototypes.all">
         <antcall target="global.framework" >
-            <param name="project.principal.class" value="" />
+            <param name="project.principal.class" value="er.prototypes.ERPrototypes" />
             <param name="project.name" value="ERPrototypes" />
             <param name="project.dir" value="Common/Frameworks/ERPrototypes" />
 
