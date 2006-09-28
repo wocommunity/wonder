@@ -9,10 +9,15 @@ import java.util.Stack;
 
 import org.apache.log4j.Logger;
 
+import com.webobjects.eoaccess.EOAdaptorChannel;
 import com.webobjects.eoaccess.EOAttribute;
+import com.webobjects.eoaccess.EODatabaseContext;
 import com.webobjects.eoaccess.EOEntity;
 import com.webobjects.eoaccess.EOModelGroup;
+import com.webobjects.eoaccess.EOUtilities;
+import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.eocontrol.EOEnterpriseObject;
+import com.webobjects.eocontrol.EOObjectStoreCoordinator;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSForwardException;
@@ -207,64 +212,83 @@ public class ERXLongPrimaryKeyFactory {
 	 *            caching. Removes a lot of db roundtrips.
 	 * @return a new pk values for the specified entity.
 	 */
-	private Long getNextPkValueForEntityIncreaseBy(String ename, int count, int increasePkBy) {
+	private Long getNextPkValueForEntityIncreaseBy(String entityName, int count, int increasePkBy) {
 		if (increasePkBy < 1) increasePkBy = 1;
 
-		String where = "where eoentity_name = '" + ename + "'";
-
-		ERXJDBCConnectionBroker broker = ERXJDBCConnectionBroker.connectionBrokerForEntityNamed(ename);
-		Connection con = broker.getConnection();
-		try {
+		String where = "where eoentity_name = '" + entityName + "'";
+		if(false) {
+			// AK: this should actually be the correct way...
+			EOEditingContext ec = ERXEC.newEditingContext();
+			ec.lock();
 			try {
-				con.setAutoCommit(false);
-				con.setReadOnly(false);
-			} catch (SQLException e) {
-				log.error(e, e);
-			}
-
-			for(int tries = 0; tries < count; tries++) {
+				EODatabaseContext dbc = ERXEOAccessUtilities.databaseContextForEntityNamed((EOObjectStoreCoordinator) ec.rootObjectStore(), entityName);
+				dbc.lock();
 				try {
-					ResultSet resultSet = con.createStatement().executeQuery("select pk_value from pk_table " + where);
-					con.commit();
+					EOEntity entity = ERXEOAccessUtilities.entityNamed(ec, entityName);
+					EOAdaptorChannel channel = (EOAdaptorChannel) dbc.adaptorContext().channels().lastObject();
+					NSArray result = channel.primaryKeysForNewRowsWithEntity(increasePkBy, entity);
+					return (Long) ((NSDictionary) result.lastObject()).allValues().lastObject();
+				} finally {
+					dbc.unlock();
+				}
+			} finally {
+				ec.unlock();
+			}
+		} else {
+			ERXJDBCConnectionBroker broker = ERXJDBCConnectionBroker.connectionBrokerForEntityNamed(entityName);
+			Connection con = broker.getConnection();
+			try {
+				try {
+					con.setAutoCommit(false);
+					con.setReadOnly(false);
+				} catch (SQLException e) {
+					log.error(e, e);
+				}
 
-					boolean hasNext = resultSet.next();
-					long pk = 1;
-					if (hasNext) {
-						pk = resultSet.getLong("pk_value");
-						// now execute the update
-						con.createStatement().executeUpdate("update pk_table set pk_value = " + (pk+increasePkBy) + " " + where);
-					} else {
-						pk = maxIdFromTable(ename);
-						// first time, we need to set i up
-						con.createStatement().executeUpdate("insert into pk_table (eoentity_name, pk_value) values ('" + ename + "', " + (pk+increasePkBy) + ")");
-					}
-					con.commit();
-					return new Long(pk);
-				} catch(SQLException ex) {
-					String s = ex.getMessage().toLowerCase();
-					boolean creationError = (s.indexOf("error code 116") != -1); // frontbase?
-					creationError |= (s.indexOf("pk_table") != -1 && s.indexOf("does not exist") != -1); // postgres ?
-					creationError |= s.indexOf("ora-00942") != -1; // oracle
-					if (creationError) {
-						try {
-							con.rollback();
-							log.info("creating pk table");
-							con.createStatement().executeUpdate("create table pk_table (eoentity_name varchar(100) not null, pk_value integer)");
-							con.createStatement().executeUpdate("alter table pk_table add primary key (eoentity_name)");// NOT
-							// DEFERRABLE
-							// INITIALLY
-							// IMMEDIATE");
-							con.commit();
-						} catch (SQLException ee) {
-							throw new NSForwardException(ee, "could not create pk table");
+				for(int tries = 0; tries < count; tries++) {
+					try {
+						ResultSet resultSet = con.createStatement().executeQuery("select pk_value from pk_table " + where);
+						con.commit();
+
+						boolean hasNext = resultSet.next();
+						long pk = 1;
+						if (hasNext) {
+							pk = resultSet.getLong("pk_value");
+							// now execute the update
+							con.createStatement().executeUpdate("update pk_table set pk_value = " + (pk+increasePkBy) + " " + where);
+						} else {
+							pk = maxIdFromTable(entityName);
+							// first time, we need to set i up
+							con.createStatement().executeUpdate("insert into pk_table (eoentity_name, pk_value) values ('" + entityName + "', " + (pk+increasePkBy) + ")");
 						}
-					} else {
-						throw new NSForwardException(ex, "Error fetching PK");
+						con.commit();
+						return new Long(pk);
+					} catch(SQLException ex) {
+						String s = ex.getMessage().toLowerCase();
+						boolean creationError = (s.indexOf("error code 116") != -1); // frontbase?
+						creationError |= (s.indexOf("pk_table") != -1 && s.indexOf("does not exist") != -1); // postgres ?
+						creationError |= s.indexOf("ora-00942") != -1; // oracle
+						if (creationError) {
+							try {
+								con.rollback();
+								log.info("creating pk table");
+								con.createStatement().executeUpdate("create table pk_table (eoentity_name varchar(100) not null, pk_value integer)");
+								con.createStatement().executeUpdate("alter table pk_table add primary key (eoentity_name)");// NOT
+								// DEFERRABLE
+								// INITIALLY
+								// IMMEDIATE");
+								con.commit();
+							} catch (SQLException ee) {
+								throw new NSForwardException(ee, "could not create pk table");
+							}
+						} else {
+							throw new NSForwardException(ex, "Error fetching PK");
+						}
 					}
 				}
+			} finally {
+				broker.freeConnection(con);
 			}
-		} finally {
-			broker.freeConnection(con);
 		}
 		throw new IllegalStateException("Couldn't get PK");
 	}
