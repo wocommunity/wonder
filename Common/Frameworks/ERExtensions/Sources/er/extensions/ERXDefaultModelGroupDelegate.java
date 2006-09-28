@@ -3,6 +3,7 @@ package er.extensions;
 import java.util.Enumeration;
 
 import com.webobjects.eoaccess.EOEntity;
+import com.webobjects.eoaccess.EOModelGroup;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
 
@@ -51,7 +52,7 @@ public class ERXDefaultModelGroupDelegate {
             if (entityCode == 0) return null;
             for (Enumeration subEntities = entity.subEntities().objectEnumerator(); subEntities.hasMoreElements();) {
                 EOEntity subEntity = (EOEntity) subEntities.nextElement();
-                if (((ERXModelGroup) ERXApplication.erxApplication().defaultModelGroup()).entityCode(subEntity) == entityCode) {
+                if (((ERXModelGroup) EOModelGroup.defaultGroup()).entityCode(subEntity) == entityCode) {
                     return subEntity;
                 }
             }
