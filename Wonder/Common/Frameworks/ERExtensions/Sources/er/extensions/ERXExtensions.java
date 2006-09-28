@@ -79,7 +79,6 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
     public EOModelGroup defaultModelGroup() {
         if(defaultModelGroup == null) {
             defaultModelGroup = ERXModelGroup.loadModelGroupForLoadedBundles();
-            defaultModelGroup.setDelegate(new ERXDefaultModelGroupDelegate());
         }
         return defaultModelGroup;
     }
