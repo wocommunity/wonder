@@ -45,7 +45,8 @@ public class ERXModelGroup extends
     private Hashtable       cache;
 
     protected static boolean patchModelsOnLoad = ERXProperties.booleanForKeyWithDefault("er.extensions.ERXModelGroup.patchModelsOnLoad", false);
-     
+    public static final String ModelGroupAddedNotification = "ERXModelGroupAddedNotification";
+    
     /**
      * Default public constructor
      */
@@ -103,6 +104,7 @@ public class ERXModelGroup extends
 		}
         // correcting an EOF Inheritance bug
         eomodelgroup.checkInheritanceRelationships();
+        NSNotificationCenter.defaultCenter().postNotification(ModelGroupAddedNotification, eomodelgroup);
         return eomodelgroup;
     }
 
