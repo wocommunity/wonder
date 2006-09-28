@@ -24,6 +24,8 @@ e.g.
 
 /Library/Apache2/bin/apxs -i -a -n WebObjects mod_WebObjects.la
 
+or just 'sudo make intall'
+
 5. Set the correct entries in your Apache2 httpd.conf configuration file.  You'll need at least the following, which should be entered automatically when you use apxs to install the adaptor:
 
 LoadModule WebObjects_module		modules/mod_WebObjects.so
@@ -78,6 +80,8 @@ There is no expressed warranty with this software.  This is not Apple's code.  I
 
 
 HISTORY
+
+27 Sept, 2006 - Updated to work on both 32 and 64-bit architectures.  Most changes are to Adaptor/shmem.c.
 
 21 June, 2003 - Enhanced makefile; fixed bugs in configuration parameters, ssl, and building with Apache2's apxs; cleaned up code in general.
 

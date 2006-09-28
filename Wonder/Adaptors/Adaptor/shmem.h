@@ -6,7 +6,7 @@ The contents of this file constitute Original Code as defined in and are
 subject to the Apple Public Source License Version 1.1 (the 'License').
 You may not use this file except in compliance with the License. 
 Please obtain a copy of the License at http://www.apple.com/publicsource 
-and read it before usingthis file.
+and read it before using this file.
 
 This Original Code and all software distributed under the License are
 distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
@@ -21,6 +21,8 @@ and limitations under the License.
 
 #ifndef SHMEM_H
 #define SHMEM_H
+
+#include <stddef.h>
 
 /*
  * This module contains functions for managing a chunk of shared memory.
@@ -52,7 +54,7 @@ and limitations under the License.
  * a minimum file size. The file will be expanded to be at least this
  * size by appending zeros.
  */
-int WOShmem_init(const char *file, unsigned int memsize);
+int WOShmem_init(const char *file, size_t memsize);
 
 /*
  * Allocate or look up a chunk of shared memory.
@@ -73,7 +75,7 @@ int WOShmem_init(const char *file, unsigned int memsize);
  * The returned pointer will not change for the lifetime of the process,
  * so it may be kept to avoid repeating the region lookup.
  */
-void *WOShmem_alloc(const char *regionName, unsigned int elementSize, unsigned int *elementCount);
+void *WOShmem_alloc(const char *regionName, size_t elementSize, unsigned int *elementCount);
 
 /*
  * Obtain a lock on a chunk of shared memory. The range of memory
@@ -85,7 +87,7 @@ void *WOShmem_alloc(const char *regionName, unsigned int elementSize, unsigned i
  * function when the lock is released. If some error occurrs and
  * a lock could not be obtained, NULL is returned.
  */
-void *WOShmem_lock(const void *addr, unsigned int size, int exclusive);
+void *WOShmem_lock(const void *addr, size_t size, int exclusive);
 
 /*
  * Release a lock obtained by WOShmem_lock. handle is the value returned
@@ -133,7 +135,7 @@ typedef struct {
 
 struct _ShmemArray {
    const char *name;				/* name of the array, for debugging logs */
-   unsigned int elementSize;			/* the size of an element */
+   size_t elementSize;			/* the size of an element */
    unsigned int elementCount;			/* number of elements */
    ShmemArrayElement elements[1];		/* array of element descriptors */
 };
@@ -154,7 +156,7 @@ typedef struct _ShmemArray ShmemArray;
  * by reference (not copied).
  * Returns a new array, or NULL the array could not be constructed.
  */
-ShmemArray *sha_alloc(const char *name, void *arrayBase, unsigned int elementSize, unsigned int elementCount);
+ShmemArray *sha_alloc(const char *name, void *arrayBase, size_t elementSize, unsigned int elementCount);
 
 /*
  * Obtain a read lock on a particular array element. A read lock prevents the element data

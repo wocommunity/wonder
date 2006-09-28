@@ -133,7 +133,7 @@ hostent_t hl_find(const char *name)
  *	Solaris & HP-UX use different definitions for the _r() versions.
  */
 
-#define ROUND_UP(n, m)  (((unsigned)(n) + (m) - 1) & ~((m) - 1))
+#define ROUND_UP(n, m)  (((size_t)(n) + (m) - 1) & ~((m) - 1))
 
 
 #if	defined(NEEDS_HSTRERR)
@@ -168,8 +168,8 @@ const char *hstrerror(int herr)
  */
 static hostent_t copyhostent(hostent_t host)
 {
-   int len;
-   int alias_ct = 0, addr_ct = 0;
+   size_t len;
+   intptr_t alias_ct = 0, addr_ct = 0;
    char **l, **a;
    hostent_t h;
    void *m;
