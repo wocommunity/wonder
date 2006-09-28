@@ -73,7 +73,7 @@ public class ERXLongPrimaryKeyFactory {
             // now add the hostCode
             realPk = realPk | hostCode();
             if (log.isDebugEnabled()) {
-                log.debug("new pk value for "+ename+"("+((ERXModelGroup) ERXApplication.erxApplication().defaultModelGroup()).entityCode(ename)+"), db value = "+pk+", new value = "+realPk);
+                log.debug("new pk value for "+ename+"("+((ERXModelGroup) EOModelGroup.defaultGroup()).entityCode(ename)+"), db value = "+pk+", new value = "+realPk);
             }
             pk = new Long(realPk);
         }
@@ -88,9 +88,9 @@ public class ERXLongPrimaryKeyFactory {
             // entity encoding
             long realPk = l << CODE_LENGTH;
             // now add the entity code
-            realPk = realPk | ((ERXModelGroup) ERXApplication.erxApplication().defaultModelGroup()).entityCode(ename);
+            realPk = realPk | ((ERXModelGroup) EOModelGroup.defaultGroup()).entityCode(ename);
             if (log.isDebugEnabled()) {
-                log.debug("new pk value for "+ename+"("+((ERXModelGroup) ERXApplication.erxApplication().defaultModelGroup()).entityCode(ename)+"), db value = "+pk+", new value = "+realPk);
+                log.debug("new pk value for "+ename+"("+((ERXModelGroup) EOModelGroup.defaultGroup()).entityCode(ename)+"), db value = "+pk+", new value = "+realPk);
             }
             pk = new Long(realPk);
         }
