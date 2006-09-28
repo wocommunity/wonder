@@ -64,10 +64,8 @@ public class ERXModelGroup extends
      * 
      * @return ERXModelGroup for all of the loaded bundles
      */
-    public static EOModelGroup loadModelGroupForLoadedBundles() {
-    	ERXModelGroup eomodelgroup = new ERXModelGroup();
-    	
-        EOModelGroup.setDefaultGroup(eomodelgroup);
+	public void loadModelsFromLoadedBundles() {
+        EOModelGroup.setDefaultGroup(this);
         NSArray nsarray = NSBundle.frameworkBundles();
         int bundleCount = nsarray.count() + 1;
 
@@ -85,7 +83,7 @@ public class ERXModelGroup extends
                 String path = (String) paths.objectAtIndex(currentPath);
                 String modelName = (NSPathUtilities.stringByDeletingPathExtension(NSPathUtilities
                         .lastPathComponent(path)));
-                EOModel eomodel = eomodelgroup.modelNamed(modelName);
+                EOModel eomodel = modelNamed(modelName);
                 if (eomodel == null) {
                 	URL url = nsbundle.pathURLForResourcePath(path);
                 	// ak: temp hack to move prototypes in front
@@ -97,25 +95,24 @@ public class ERXModelGroup extends
                 } else if (NSLog.debugLoggingAllowedForLevelAndGroups(1, 32768L)) {
                 	NSLog.debug
                 	.appendln("Ignoring model at path \"" + path + "\" because the model group "
-                			+ eomodelgroup + " already contains the model from the path \""
+                			+ this + " already contains the model from the path \""
                 			+ eomodel.pathURL() + "\"");
                 }
             }
         }
         for (int i = 0; i < models.count(); i++) {
         	URL url = (URL) models.objectAtIndex(i);
-        	eomodelgroup.addModelWithPathURL(url);
+        	addModelWithPathURL(url);
 		}
         // correcting an EOF Inheritance bug
-        eomodelgroup.checkInheritanceRelationships();
-        NSNotificationCenter.defaultCenter().postNotification(ModelGroupAddedNotification, eomodelgroup);
+        checkInheritanceRelationships();
+        NSNotificationCenter.defaultCenter().postNotification(ModelGroupAddedNotification, this);
         if(!patchModelsOnLoad) {
-        	NSNotificationCenter.defaultCenter().addObserver(eomodelgroup,
+        	NSNotificationCenter.defaultCenter().addObserver(this,
         			new NSSelector("modelAddedHandler", ERXConstant.NotificationClassArray),
         			EOModelGroup.ModelAddedNotification, null);
         }
-        return eomodelgroup;
-    }
+	}
 
     /**
      * This implementation will load models that have entity name conflicts,
