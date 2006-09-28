@@ -4,15 +4,16 @@ import com.webobjects.appserver.WOAssociation;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WOElement;
 import com.webobjects.appserver.WOResponse;
-import com.webobjects.appserver._private.WOActiveImage;
 import com.webobjects.foundation.NSDictionary;
+
+import er.extensions.ERXPatcher.DynamicElementsPatches.ActiveImage;
 /**
  * Active image that allows for a tooltip as a binding. Gets patched into the runtime 
  * as WOActiveImage.
  *
  * @author ak
  */
-public class ERXActiveImage extends WOActiveImage {
+public class ERXActiveImage extends ActiveImage {
     
     protected WOAssociation _alt;
 
