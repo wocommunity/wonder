@@ -20,6 +20,7 @@ import com.webobjects.appserver.WOSession;
 import com.webobjects.eoaccess.EOAttribute;
 import com.webobjects.eoaccess.EODatabaseContext;
 import com.webobjects.eoaccess.EOEntity;
+import com.webobjects.eoaccess.EOModelGroup;
 import com.webobjects.eoaccess.EOQualifierSQLGeneration;
 import com.webobjects.eoaccess.EORelationship;
 import com.webobjects.eoaccess.EOSQLExpression;
@@ -64,8 +65,23 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
     private static Logger _log;
     
     private static boolean _initialized;
-    
+
     public ERXExtensions() {
+    }
+
+    /** holds the default model group */
+    protected EOModelGroup defaultModelGroup;
+
+    /**
+     * Delegate method for the {@link EOModelGroup} class delegate.
+     * @return a fixed ERXModelGroup
+     */
+    public EOModelGroup defaultModelGroup() {
+        if(defaultModelGroup == null) {
+            defaultModelGroup = ERXModelGroup.loadModelGroupForLoadedBundles();
+            defaultModelGroup.setDelegate(new ERXDefaultModelGroupDelegate());
+        }
+        return defaultModelGroup;
     }
    
    /**
@@ -106,6 +122,7 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
     		// variable substitution. WOApplication uses WOOutputPath in
     		// its constructor so we need to modify it before calling
     		// the constructor.
+        	EOModelGroup.setClassDelegate(this);
     		ERXSystem.updateProperties();
 
     		ERXLogger.configureLoggingWithSystemProperties();
