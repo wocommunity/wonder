@@ -70,7 +70,7 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
     }
 
     /** holds the default model group */
-    protected EOModelGroup defaultModelGroup;
+    protected ERXModelGroup defaultModelGroup;
 
     /**
      * Delegate method for the {@link EOModelGroup} class delegate.
@@ -78,7 +78,8 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
      */
     public EOModelGroup defaultModelGroup() {
         if(defaultModelGroup == null) {
-            defaultModelGroup = ERXModelGroup.loadModelGroupForLoadedBundles();
+            defaultModelGroup = new ERXModelGroup();
+            defaultModelGroup.loadModelsFromLoadedBundles();
         }
         return defaultModelGroup;
     }
