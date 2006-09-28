@@ -195,7 +195,8 @@ int str_append(String *s, const char * const str)
 int str_vappendf(String *s, const char *format, va_list args)
 {
    int i, len, requiredBufferSize;
-   va_list sizer = args;
+   va_list sizer;
+   va_copy(sizer, args);
 
    /* figure out how much space we will need */
    len=1; /* start len at 1 to include the terminator */
@@ -221,6 +222,7 @@ int str_vappendf(String *s, const char *format, va_list args)
       } else
          len++;
    }
+   va_end(sizer);
    requiredBufferSize = s->length + len + 1;
    if (requiredBufferSize > s->bufferSize)
       if (str_ensureCapacity(s, requiredBufferSize) == 0)

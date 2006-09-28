@@ -27,17 +27,20 @@ and limitations under the License.
 #include "list.h"
 
 #include <errno.h>
+#include <sys/types.h>
 
 #ifndef DISABLE_SHARED_MEMORY
 
 #include <fcntl.h>
 #include <string.h>
-#include <sys/types.h>
 #include <sys/stat.h>
 #include <sys/file.h>
 #include <sys/mman.h>
 #include <sys/uio.h>
 #include <unistd.h>
+#include <stddef.h>
+
+
 
 /* Define this to log each lock/unlock */
 /* #define EXTRA_DEBUGGING_LOGS */
@@ -47,10 +50,10 @@ and limitations under the License.
  * This structure is the definition of a region.
  */
 typedef struct {
-   unsigned int offset;			/* The offset of the beginning of the region in the file */
-   unsigned int elementSize;		/* The size of one element in the region. */
+   off_t offset;			/* The offset of the beginning of the region in the file */
+   size_t elementSize;		/* The size of one element in the region. */
    unsigned int elementCount;		/* The number of elements in the region. */
-   unsigned int nextRegion;		/* The file offset of the next region definition. nextRegion == 0 for the last region */
+   off_t nextRegion;		/* The file offset of the next region definition. nextRegion == 0 for the last region */
    char name[1];			/* The null terminated region name. */
 } Region;
 
@@ -65,7 +68,7 @@ static int WOShmem_fd = -1;
 /*
  * The address in memory at which the file has been mapped.
  */
-static void *WOShmem_base_address = (void *)-1;
+static intptr_t WOShmem_base_address = -1;
 
 /*
  * The total size of the mapped memory.
@@ -74,8 +77,8 @@ static unsigned int WOShmem_size = 0;
 
 static WA_recursiveLock WOShmem_mutex;
 
-#define offset_to_addr(offset) ((void *)((int)WOShmem_base_address + offset))
-#define addr_to_offset(addr) ((int)addr - (int)WOShmem_base_address)
+#define offset_to_addr(offset) ((void *)(WOShmem_base_address + offset))
+#define addr_to_offset(addr) ((intptr_t)addr - WOShmem_base_address)
 
 #ifndef MAP_FAILED
 #define MAP_FAILED -1
@@ -145,7 +148,7 @@ static int append_zeros(int fd, int len)
  */
 #define LOCK_RETRY_SLEEP_COUNT 10
 #define LOCK_RETRY_FAIL_COUNT 50
-inline static int lock_file_section(int fd, int start, int len, struct flock *lockInfo, int exclusive)
+inline static int lock_file_section(int fd, off_t start, off_t len, struct flock *lockInfo, int exclusive)
 {
    int err, errCount = 0;
    do {
@@ -185,7 +188,7 @@ inline static int lock_file_section(int fd, int start, int len, struct flock *lo
  * is used to ensure no data is overwritten.
  * Returns the actual size of the file on success, -1 on error.
  */
-static int ensure_file_size(int fd, int size)
+static int ensure_file_size(int fd, size_t size)
 {
    struct stat st;
    struct flock lockInfo;
@@ -232,7 +235,7 @@ static int ensure_file_size(int fd, int size)
 }
 
 
-int WOShmem_init(const char *file, unsigned int memsize)
+int WOShmem_init(const char *file, size_t memsize)
 {
    int error = 0;
    char *errMsg = NULL;
@@ -249,8 +252,8 @@ int WOShmem_init(const char *file, unsigned int memsize)
       WOShmem_size = ensure_file_size(WOShmem_fd, memsize);
       if (WOShmem_size != -1)
       {
-         WOShmem_base_address = (void *)mmap(0, WOShmem_size, PROT_READ|PROT_WRITE, MAP_FILE|MAP_SHARED|MAP_INHERIT, WOShmem_fd, 0);
-         if (WOShmem_base_address == (void *)MAP_FAILED)
+         WOShmem_base_address = (intptr_t)mmap(0, WOShmem_size, PROT_READ|PROT_WRITE, MAP_FILE|MAP_SHARED|MAP_INHERIT, WOShmem_fd, 0);
+         if (WOShmem_base_address == (intptr_t)MAP_FAILED)
          {
             errMsg = WA_errorDescription(WA_error());
             WOLog(WO_ERR, "WOShmem_init(): couldn't map file: %s", errMsg);
@@ -274,7 +277,7 @@ int WOShmem_init(const char *file, unsigned int memsize)
 
 
 
-void *WOShmem_alloc(const char *regionName, unsigned int elementSize, unsigned int *elementCount)
+void *WOShmem_alloc(const char *regionName, size_t elementSize, unsigned int *elementCount)
 {
    Region *r, *newRegion;
    int found, nameLen;
@@ -358,10 +361,10 @@ void *WOShmem_alloc(const char *regionName, unsigned int elementSize, unsigned i
  * function when the lock is released. If some error occurrs and
  * a lock could not be obtained, NULL is returned.
  */
-void *WOShmem_lock(const void *addr, unsigned int size, int exclusive)
+void * WOShmem_lock(const void *addr, size_t size, int exclusive)
 {
    struct flock *lockInfo;
-   int offset;
+   ptrdiff_t offset;
    LockInfo *info = NULL;
 
    if (addr && WOShmem_fd != -1)
@@ -493,7 +496,7 @@ void sha_clearLocalData(ShmemArray *array, unsigned int elementNumber)
    }
 }
 
-ShmemArray *sha_alloc(const char *name, void *arrayBase, unsigned int elementSize, unsigned int elementCount)
+ShmemArray *sha_alloc(const char *name, void *arrayBase, size_t elementSize, unsigned int elementCount)
 {
    ShmemArray *array;
    int i;
@@ -506,7 +509,7 @@ ShmemArray *sha_alloc(const char *name, void *arrayBase, unsigned int elementSiz
       array->elementCount = elementCount;
       for (i=0; i<array->elementCount; i++)
       {
-         array->elements[i].element = (void *)((int)arrayBase + elementSize * i);
+         array->elements[i].element = (void *)((intptr_t)arrayBase + elementSize * i);
          array->elements[i].lock = WA_createLock("array element lock");
          array->elements[i].writeLock = WA_createLock("array element write lock");
          array->elements[i].lockCount = 0;

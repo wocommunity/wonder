@@ -26,11 +26,20 @@ e.g.
 
 /usr/local/Apache2.2/bin/apxs -i -a -n WebObjects mod_WebObjects.la
 
+or just 'sudo make install'.
+
 5. Set the correct entries in your Apache2.2.x httpd.conf configuration file.  You'll need at least the following, which should be entered automatically when you use apxs to install the adaptor:
 
 LoadModule WebObjects_module		modules/mod_WebObjects.so
 
 See the sample configuration file for some appropriate settings.
+
+Apache 2.2.x is more restrictive in its default permissions.  You'll need to specifically allow access to the virtual location used by WebObjects.  The following directive is url dependent, so you may need another solution if you also use mod_rewrite to mask WebObjects from the url.
+
+<LocationMatch /Apps/WebObjects/.*>
+    Order allow,deny
+    Allow from all
+</LocationMatch>
 
 6. Copy over the WebObjects directory from your previous installation to the new WebObjectsDocumentRoot $(APACHE2_DIR)/htdocs.  If you prefer, a symlink works fine.
 
@@ -76,10 +85,12 @@ The original code was released under the APSL, and is courtesy of Apple, Compute
 
 
 LASTLY -- ALMOST
-There is no expressed warranty with this software.  This is not Apple's code.  I have altered their code to work with Apache2.2.x.  If you have problems with the software, if your machine melts down into a pool of silicone and plastic when you install this software, please don't come after me.  And certainly don't get mad at Apple--they did the Right Thingâ„¢ by opening the code.
+There is no expressed warranty with this software.  This is not Apple's code.  I have altered their code to work with Apache2.2.x.  If you have problems with the software, if your machine melts down into a pool of silicone and plastic when you install this software, please don't come after me.  And certainly don't get mad at Apple--they did the Right Thingª by opening the code.
 
 
 HISTORY
+
+27 Sept, 2006 - Updated to work on both 32 and 64-bit architectures.  Most changes are to Adaptor/shmem.c.
 
 3 July, 2006 - Ported to work with Apache 2.2.x.
 
