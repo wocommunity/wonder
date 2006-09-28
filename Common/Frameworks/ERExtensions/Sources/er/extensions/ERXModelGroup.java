@@ -71,6 +71,7 @@ public class ERXModelGroup extends
         NSMutableArray bundles = new NSMutableArray(bundleCount);
         bundles.addObject(NSBundle.mainBundle());
         bundles.addObjectsFromArray(nsarray);
+        NSMutableArray models = new NSMutableArray();
         for (int currentBundle = 0; currentBundle < bundleCount; currentBundle++) {
             NSBundle nsbundle = (NSBundle) bundles.objectAtIndex(currentBundle);
             NSArray paths = nsbundle.resourcePathsForResources("eomodeld", null);
@@ -81,16 +82,25 @@ public class ERXModelGroup extends
                         .lastPathComponent(path)));
                 EOModel eomodel = eomodelgroup.modelNamed(modelName);
                 if (eomodel == null) {
-                    URL url = nsbundle.pathURLForResourcePath(path);
-                    eomodelgroup.addModelWithPathURL(url);
+                	URL url = nsbundle.pathURLForResourcePath(path);
+                	// ak: temp hack to move prototypes in front
+                	if(path.toLowerCase().indexOf("erprototypes") >= 0) {
+                		models.insertObjectAtIndex(url, 0);
+                	} else {
+                		models.addObject(url);
+                	}
                 } else if (NSLog.debugLoggingAllowedForLevelAndGroups(1, 32768L)) {
-                        NSLog.debug
-                                .appendln("Ignoring model at path \"" + path + "\" because the model group "
-                                        + eomodelgroup + " already contains the model from the path \""
-                                        + eomodel.pathURL() + "\"");
+                	NSLog.debug
+                	.appendln("Ignoring model at path \"" + path + "\" because the model group "
+                			+ eomodelgroup + " already contains the model from the path \""
+                			+ eomodel.pathURL() + "\"");
                 }
             }
         }
+        for (int i = 0; i < models.count(); i++) {
+        	URL url = (URL) models.objectAtIndex(i);
+        	eomodelgroup.addModelWithPathURL(url);
+		}
         // correcting an EOF Inheritance bug
         eomodelgroup.checkInheritanceRelationships();
         return eomodelgroup;
