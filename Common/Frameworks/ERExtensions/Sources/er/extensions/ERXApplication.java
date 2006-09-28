@@ -28,7 +28,6 @@ import com.webobjects.appserver.WOTimer;
 import com.webobjects.eoaccess.EOAdaptorChannel;
 import com.webobjects.eoaccess.EODatabaseContext;
 import com.webobjects.eoaccess.EOGeneralAdaptorException;
-import com.webobjects.eoaccess.EOModelGroup;
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSData;
@@ -106,7 +105,6 @@ public abstract class ERXApplication extends WOApplication implements ERXGracefu
      * to be used instead of WOForm, WOFileUpload, WOText.
      */
     public void installPatches() {
-        EOModelGroup.setClassDelegate(this);
         ERXPatcher.installPatches();
         if(contextClassName().equals("WOContext"))
             setContextClassName("er.extensions.ERXWOContext");
@@ -143,29 +141,14 @@ public abstract class ERXApplication extends WOApplication implements ERXGracefu
         // ERXWOFileUpload returns a better warning than throwing a ClassCastException. 
         // Fixed in WO 5.2
         // ERXPatcher.setClassForName(ERXWOFileUpload.class, "WOFileUpload");
-   }
-
-    /** holds the default model group */
-    protected EOModelGroup defaultModelGroup;
-
-    /**
-     * Delegate method for the {@link EOModelGroup} class delegate.
-     * @return a fixed ERXModelGroup
-     */
-    public EOModelGroup defaultModelGroup() {
-        if(defaultModelGroup == null) {
-            defaultModelGroup = ERXModelGroup.loadModelGroupForLoadedBundles();
-            defaultModelGroup.setDelegate(new ERXDefaultModelGroupDelegate());
-        }
-        return defaultModelGroup;
     }
-    
+
     /**
      * The ERXApplication contructor.
      */
     public ERXApplication() {
-        super();
-        if (! ERXConfigurationManager.defaultManager().isDeployedAsServlet()  &&  
+    	super();
+    	if (! ERXConfigurationManager.defaultManager().isDeployedAsServlet()  &&  
             ! _wasERXApplicationMainInvoked) {
             _displayMainMethodWarning();
         }        
