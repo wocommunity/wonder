@@ -22,7 +22,7 @@ public class CreateTestItemFromReq extends WOComponent {
     public Bug bug;
 
     public WOComponent createTestItem() {
-        ERXLocalizer localizer = ERXLocalizer.localizerForSession(session());
+        ERXLocalizer localizer = ((Session)session()).localizer();
         EOEditingContext peer = ERXEC.newEditingContext(bug.editingContext().parentObjectStore());
         EditPageInterface epi = null;
         peer.lock();
