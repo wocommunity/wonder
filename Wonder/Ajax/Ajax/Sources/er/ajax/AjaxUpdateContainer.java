@@ -24,8 +24,8 @@ public class AjaxUpdateContainer extends AjaxDynamicElement {
      * Adds all required resources.
      */
     protected void addRequiredWebResources(WOResponse response, WOContext context) {
-        addScriptResourceInHead(context, response, "scriptaculous.js");
-        addScriptResourceInHead(context, response, "prototype.js");
+      addScriptResourceInHead(context, response, "prototype.js");
+      addScriptResourceInHead(context, response, "scriptaculous.js");
     }
 
     public NSDictionary createAjaxOptions(WOComponent component) {
