@@ -32,12 +32,12 @@ public class Jode extends Object {
         initialized = true;
         ERXLocalizer l = ERXLocalizer.localizerForLanguage("English");
         jode.GlobalOptions.err = new PrintWriter(new StringWriter()); 
-        documentationPaths = (NSMutableArray)l.localizedValueForKey("DocumentationPaths");
+        documentationPaths = (NSMutableArray)l.localizedValueForKeyWithDefault("DocumentationPaths");
 
-        NSArray arr = (NSArray)l.localizedValueForKey("ClassPaths");
+        NSArray arr = (NSArray)l.localizedValueForKeyWithDefault("ClassPaths");
         cp = arr.componentsJoinedByString(":");
         ClassInfo.setClassPath(cp);
-        arr = (NSArray)l.localizedValueForKey("PackagesToIndex");
+        arr = (NSArray)l.localizedValueForKeyWithDefault("PackagesToIndex");
         for(Enumeration e = arr.objectEnumerator(); e.hasMoreElements();) {
             PackageProxy.indexPackage((String)e.nextElement(), null, true);
         }
