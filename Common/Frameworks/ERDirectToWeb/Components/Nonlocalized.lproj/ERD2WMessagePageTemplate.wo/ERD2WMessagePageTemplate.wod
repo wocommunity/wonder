@@ -43,9 +43,10 @@ Repetition1: WORepetition {
 	list = branchChoices;
 }
 
-String3: ERXLocalizedString {
+Message: ERXLocalizedString {
     escapeHTML = false;
-	value = message;
+	templateString = message;
+	object = d2wContext;
 }
 
 SwitchComponent3: WOSwitchComponent {
