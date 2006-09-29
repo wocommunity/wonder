@@ -4,7 +4,6 @@ import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.eocontrol.EOEnterpriseObject;
 import com.webobjects.eocontrol.EOGlobalID;
 
-import er.extensions.EOEnterpriseObjectClazz;
 import er.extensions.ERXEC;
 import er.extensions.ERXEnterpriseObjectCache;
 
@@ -13,7 +12,7 @@ public class ERCHelpText extends _ERCHelpText {
     private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(ERCHelpText.class);
 
     public final static String ENTITY = "ERCHelpText";
-    public static final ERCHelpTextClazz clazz = (ERCHelpTextClazz)EOEnterpriseObjectClazz.clazzForEntityNamed(ENTITY); 
+    public static final ERCHelpTextClazz clazz = (ERCHelpTextClazz)new ERCHelpTextClazz().init(ENTITY); 
     
     public static class ERCHelpTextClazz extends _ERCHelpTextClazz {
 
