@@ -1,0 +1,183 @@
+#  Apple Makefile.preamble
+#  Copyright 2001, Apple Computer, Inc.
+#
+#  Use this makefile for configuring the standard application makefiles 
+#  associated with ProjectBuilderWO.  It is included before the main makefile.
+#  In Makefile.preamble you set attributes for a project, so they are available
+#  to the project's makefiles.
+#
+#  In contrast, you typically write additional rules or override built-in 
+#  behavior in the Makefile.postamble.  You should not put additional rules
+#  in the preamble.
+#  
+#  Each directory in a project tree (main project plus subprojects) should 
+#  have its own Makefile.preamble and Makefile.postamble.
+#
+#
+# Variable controlling characteristics of the make build system: 
+#
+#     MAKEFILEDIR: Directory in which to find $(MAKEFILE)
+#     MAKEFILE: Top level mechanism Makefile (e.g., app.make, bundle.make)
+#
+#     OTHER_RECURSIVE_VARIABLES: The names of variables which you want to be
+#         passed on the command line to recursive invocations of make.  Note that
+# 	      the values in OTHER_*FLAGS are inherited by subprojects automatically --
+#	      you do not have to (and shouldn't) add OTHER_*FLAGS to 
+#	      OTHER_RECURSIVE_VARIABLES. 
+#
+
+#
+# These variables provide hooks enabling you to add behavior at almost every 
+# stage of the make:
+#
+#     BEFORE_PREBUILD: targets to build before installing headers for a subproject
+#     AFTER_PREBUILD: targets to build after installing headers for a subproject
+#     BEFORE_BUILD_RECURSION: targets to make before building subprojects
+#     BEFORE_BUILD: targets to make before a build, but after subprojects
+#     AFTER_BUILD: targets to make after a build
+#
+#     BEFORE_COPY_JAVA_CLASSES: targets to make prior to jar'ing the generated .class files
+#     AFTER_COPY_JAVA_CLASSES: targets to make after jar'ing the generated .class files
+#
+#     BEFORE_INSTALL: targets to build before installing the product
+#     AFTER_INSTALL: targets to build after installing the product
+#     BEFORE_POSTINSTALL: targets to build before postinstalling every subproject
+#     AFTER_POSTINSTALL: targts to build after postinstalling every subproject
+#
+#     BEFORE_INSTALLSRC: targets to build before installing source for a subproject
+#     AFTER_INSTALLSRC: targets to build after installing source for a subproject
+#
+
+#
+# Project dependency variables:
+#     OTHER_PRODUCT_DEPENDS: Other dependencies of this project
+#     OTHER_INITIAL_TARGETS: Built *before* building subprojects/bundles
+#     OTHER_SOURCEFILES: Other source files maintained by .pre/postamble
+#     OTHER_RESOURCES: Additional (non-localized) resources for this project, 
+#         which can be generated
+#     OTHER_GARBAGE: Additional files to be removed by `make clean' 
+#
+
+#
+# Variables which control the file compilation:
+#     OTHER_JAVATOOL_FLAGS: Pass flags to the 'javatool' compilation utility.
+#         Flags which javatool doesn't recognize are passed down to the java compiler.
+#
+#     ARCHIVE_JAVA_CLASSES: Set to YES (the default) or NO.  Set it to NO to
+#         turn off Java archiving (which is either jar, if available on your system, or zip).
+#     JAVA_ARCHIVE_METHOD: Set to JAR to archive Java classes using Java archiving.  Set
+#         to ZIP to archive them using zip compression.
+#
+#     JAVA_IS_SERVER_SIDE, JAVA_IS_CLIENT_SIDE: Set one, or both, of these flags to
+#         NO to turn off building for server-side or client-side java.  Default is YES. 
+#         Setting both to YES will build all files for both side (use this when building
+#         java classes common to both client and server side)
+JAVA_IS_SERVER_SIDE = YES
+JAVA_IS_CLIENT_SIDE = NO
+#
+#     OTHER_CLASSPATH, OTHER_CLASSPATH_CLIENT: Use these to add additional Java classpaths for
+#         the client and server sides (respectively) so generated classpath for Java in frameworks.
+#         NOTE: Delimit your class path elements with $(CLASSPATH_DELIMITER) so they'll be
+#         platform independent.
+#     DEV_STYLE_CLASSPATH: Normally, when generating the run-time classpath file the build
+#         system fixes the paths to the frameworks in the classpath to reflect the normal,
+#         installed locations of those frameworks.  By setting this variable to
+#         YES, this 'fixing' process will be turned off.
+#
+
+#
+# Project-wide settings:
+#     BUNDLE_PACKAGE_TYPE: The type of package being built.  Defaults to "APPL".
+#     BUNDLE_SIGNATURE: The specific identifier of the built package.  Defaults to "webo".
+#     ICON_FILE: The file to display in the Mac OS X Finder for the compiled application.
+#         This icon must be in your Resources directory.  Defaults to "WOAfile.icns",
+#         which is included in the Java WebObjects Application project template.
+#
+
+#
+# Variables that only apply to the JavaWebObjectsApplication project type:
+#
+# The values for these variables are written into comments in the
+# classpath file for each platform WebObjects supports.  When the 
+# application starts up, the launch scripts read these commented
+# values and configures the specific command line used to launch the
+# application accordingly.
+#
+# These classpath files are installed into the application directory,
+# for example, "MyApp.woa".
+#
+# If you want to customize these values for the individual platforms,
+# edit the corresponding commented values in the classpath file for
+# the platform.  Make sure the values in the classpath files remain commented 
+# when you alter them or the launch scripts will interpret them as part of
+# the classpath.
+#
+#     JAVA_VM: This variable controls the name of the Java virtual machine within
+#         which the application will run and defaults to "java". Uncomment this
+#         variable and change its value to choose a different virtual machine.
+#JAVA_VM = java
+#
+#     JAVA_DEBUGGER: This variable controls the name of the Java Debugger the
+#         application will use and defaults to "jdb". Uncomment the variable and
+#         change its value to choose a different debugger.
+#JAVA_DEBUGGER = jdb
+#
+#     JVM_OPTIONS, JDB_OPTIONS: These variables define arguments passed to the
+#         Java VM or Java debugger when a WO application is launched.
+#JVM_OPTIONS =
+#JDB_OPTIONS =
+#
+#     WOAPPLICATION_CLASS_NAME variable defines the name of the application's
+#         Java class and defaults to "Application". Uncomment the variable and 
+#         change its value to choose a different application class name.
+#WOAPPLICATION_CLASS_NAME = Application
+#
+
+#
+# Variables used for JSP and Servlet integration. In order for JSP and Servlet
+# integration to work, the JavaWOJSPServlet framework must be added. All of these 
+# variables should be exported for use in the JSP/Servlet packaging script.
+# 
+# If the JavaWOJSPServlet framework is added, a war archive will be created for JSP 
+# or Servlet deployment.
+# 
+#     SERVLET_APP_MODE variable defines where WebserverResources will be loaded from.
+#          If set to Deployment, WebserverResources will be loaded from the container or 
+#          the webserver as appropriate. Otherwise (the default), they will be loaded
+#          from inside the woa.
+# export SERVLET_APP_MODE = Deployment
+#
+#     SERVLET_WEBAPPS_DIR variable defines the location to create the war archive
+#          for this application. $(DSTROOT) can be used as part of the definition.
+# export SERVLET_WEBAPPS_DIR = 
+#
+#     SERVLET_COPY_JARS variable copies all included framework and application jars to
+#          the lib directory of the WEB-INF of the war. This could potentially be
+#          slow, and large (several megabytes), so only set this if you are going to 
+#          be using WebObjects classes directly from your JSP page or Servlet.
+# export SERVLET_COPY_JARS = YES
+#
+
+#
+# Variables used when installing the final product:
+#     OTHER_INSTALL_DEPENDS: Targets to build before installation
+#
+#     INSTALL_AS_USER: owner of the intalled products (default is 'root')
+#     INSTALL_AS_GROUP: group of the installed products (default is 'wheel')
+#     INSTALL_PERMISSIONS: permissions of the installed product (default is 'o+rX')
+#
+#     INSTALLDIR_WEBSERVER: The installation Directory.  Typically, this value is
+#         set to $(WEBSERVER_DOCROOT)/WebObjects (uncomment the line below to use
+#         this default value).
+#         Note: WEBSERVER_DOCROOT is computed from:
+#             $(NEXT_ROOT)/$(SYSTEM_LIBRARY_DIR)/Frameworks/JavaWebObjects.framework/Resources/WebServerConfig.plist
+#         which is created during installation.
+#INSTALLDIR_WEBSERVER = $(WEBSERVER_DOCROOT)/WebObjects
+#
+#     DSTROOT: This variable's value is prefixed to the directory where a product
+#         (application or framework) is installed. Developers wishing to install
+#         their product into a location other than under $(NEXT_ROOT) should modify
+#         the line below. An empty DSTROOT is legal; NEXT_ROOT defaults to "C:/Apple"
+#         on Windows systems and "" on other systems.
+DSTROOT = $(NEXT_ROOT)
+#
