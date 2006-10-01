@@ -3,7 +3,6 @@ package er.ajax;
 import org.apache.log4j.Logger;
 
 import com.webobjects.appserver.WOActionResults;
-import com.webobjects.appserver.WOAssociation;
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WOElement;
@@ -16,60 +15,45 @@ public abstract class AjaxDynamicElement extends WODynamicGroup {
   protected Logger log = Logger.getLogger(getClass());
   private WOElement _children;
   private NSDictionary _associations;
-  
+
   public AjaxDynamicElement(String name, NSDictionary associations, WOElement children) {
     super(name, associations, children);
     _children = children;
     _associations = associations;
   }
-  
+
   public NSDictionary associations() {
-	  return _associations;
+    return _associations;
   }
-  
+
   public Object valueForBinding(String name, Object defaultValue, WOComponent component) {
-      Object value = valueForBinding(name, component);
-      if(value != null) {
-          return value;
-      }
-      return defaultValue;
+    return AjaxUtils.valueForBinding(name, defaultValue, _associations, component);
   }
-  
+
   public Object valueForBinding(String name, WOComponent component) {
-      WOAssociation association = (WOAssociation) _associations.objectForKey(name);
-      if(association != null) {
-	  return association.valueInComponent(component);
-      }
-      return null;
+    return AjaxUtils.valueForBinding(name, _associations, component);
   }
-  
+
   public boolean booleanValueForBinding(String name, boolean defaultValue, WOComponent component) {
-      WOAssociation association = (WOAssociation) _associations.objectForKey(name);
-      if(association != null) {
-          return association.booleanValueInComponent(component);
-      }
-      return defaultValue;
+    return AjaxUtils.booleanValueForBinding(name, defaultValue, _associations, component);
   }
-  
+
   public void setValueForBinding(Object value, String name, WOComponent component) {
-	  WOAssociation association = (WOAssociation) _associations.objectForKey(name);
-	  if(association != null) {
-		   association.setValue(value, component);
-	  }
+    AjaxUtils.setValueForBinding(value, name, _associations, component);
   }
 
   protected void addScriptResourceInHead(WOContext context, WOResponse response, String framework, String fileName) {
     AjaxUtils.addScriptResourceInHead(context, response, framework, fileName);
   }
-  
+
   protected void addScriptResourceInHead(WOContext context, WOResponse response, String fileName) {
-     AjaxUtils.addScriptResourceInHead(context, response, fileName);
+    AjaxUtils.addScriptResourceInHead(context, response, fileName);
   }
-  
+
   protected void addStylesheetResourceInHead(WOContext context, WOResponse response, String fileName) {
     AjaxUtils.addStylesheetResourceInHead(context, response, fileName);
   }
-  
+
   protected void addStylesheetResourceInHead(WOContext context, WOResponse response, String framework, String fileName) {
     AjaxUtils.addStylesheetResourceInHead(context, response, framework, fileName);
   }
@@ -87,7 +71,8 @@ public abstract class AjaxDynamicElement extends WODynamicGroup {
         result = context.response();
       }
       AjaxUtils.updateMutableUserInfoWithAjaxInfo(context);
-    } else if (hasChildrenElements()) {
+    }
+    else if (hasChildrenElements()) {
       result = super.invokeAction(request, context);
     }
     return (WOActionResults) result;
@@ -101,9 +86,9 @@ public abstract class AjaxDynamicElement extends WODynamicGroup {
   }
 
   public void appendTagAttributeToResponse(WOResponse response, String name, Object object) {
-	  if(object != null) {
-		  response._appendTagAttributeAndValue(name, object.toString(), true);
-	  }
+    if (object != null) {
+      response._appendTagAttributeAndValue(name, object.toString(), true);
+    }
   }
 
   public void takeValuesFromRequest(WORequest request, WOContext context) {

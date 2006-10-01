@@ -87,7 +87,7 @@ public class AjaxRoundEffect extends AjaxDynamicElement {
       response.appendContentString(">");
     }
     response.appendContentString("\n");
-    response.appendContentString("<script type = \"text/javascript\"><!--\n");
+    AjaxUtils.appendScriptHeader(response);
     response.appendContentString("new Rico.Effect.Round('");
     response.appendContentString(elementName);
     response.appendContentString("', '");
@@ -96,6 +96,6 @@ public class AjaxRoundEffect extends AjaxDynamicElement {
     NSDictionary options = createAjaxOptions(component);
     AjaxOptions.appendToResponse(options, response, context);
     response.appendContentString(");");
-    response.appendContentString("\n// --></script>");
+    AjaxUtils.appendScriptFooter(response);
   }
 }

@@ -51,12 +51,12 @@ public class AjaxObserveField extends AjaxDynamicElement {
     String observeFieldID = (String) valueForBinding("observeFieldID", component);
     String updateContainerID = (String) valueForBinding("updateContainerID", component);
     if (observeFieldID != null && updateContainerID != null) {
-      response.appendContentString("<script type = \"text/javascript\" language = \"javascript\"><!--\n");
+      AjaxUtils.appendScriptHeader(response);
       NSDictionary options = createAjaxOptions(component);
       Boolean fullSubmitBoolean = (Boolean) valueForBinding("fullSubmit", component);
       boolean fullSubmit = (fullSubmitBoolean != null && fullSubmitBoolean.booleanValue());
       AjaxObserveField.appendToResponse(response, context, observeFieldID, updateContainerID, fullSubmit, options);
-      response.appendContentString("//--></script>");
+      AjaxUtils.appendScriptFooter(response);
     }
   }
 

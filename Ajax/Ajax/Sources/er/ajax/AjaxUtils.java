@@ -1,6 +1,8 @@
 package er.ajax;
 
 import com.webobjects.appserver.WOApplication;
+import com.webobjects.appserver.WOAssociation;
+import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WOMessage;
 import com.webobjects.appserver.WORequest;
@@ -38,7 +40,7 @@ public class AjaxUtils {
   public static void setPageReplacementCacheKey(WOContext _context, String _key) {
     _context.response().setHeader(_key, AjaxUtils.PAGE_REPLACEMENT_CACHE_LOOKUP_KEY);
   }
-  
+
   /**
    * Checks if the message is an Ajax message by looking for the AJAX_REQUEST_KEY 
    * in the header and in the userInfo.
@@ -46,8 +48,7 @@ public class AjaxUtils {
    * @return
    */
   public static boolean isAjaxMessage(WOMessage message) {
-      return (message.headerForKey(AjaxUtils.DONT_STORE_PAGE) != null ||
-              (message.userInfo() != null && message.userInfo().objectForKey(AjaxUtils.DONT_STORE_PAGE) != null));
+    return (message.headerForKey(AjaxUtils.DONT_STORE_PAGE) != null || (message.userInfo() != null && message.userInfo().objectForKey(AjaxUtils.DONT_STORE_PAGE) != null));
   }
 
   /**
@@ -61,8 +62,8 @@ public class AjaxUtils {
   public static WOResponse createResponse(WOContext context) {
     WOApplication app = WOApplication.application();
     WOResponse response = app.createResponseInContext(context);
-    if(context != null) {
-    	context._setResponse(response);
+    if (context != null) {
+      context._setResponse(response);
     }
     // Encode using UTF-8, although We are actually ASCII clean as all
     // unicode data is JSON escaped using backslash u. This is less data
@@ -91,7 +92,8 @@ public class AjaxUtils {
     else {
       if (dict instanceof NSMutableDictionary) {
         result = (NSMutableDictionary) dict;
-      } else {
+      }
+      else {
         result = dict.mutableClone();
         message.setUserInfo(result);
       }
@@ -134,11 +136,11 @@ public class AjaxUtils {
     String endTag = "\"></script>";
     addResourceInHead(context, response, framework, fileName, startTag, endTag);
   }
-  
+
   public static void addScriptResourceInHead(WOContext context, WOResponse response, String fileName) {
-      addScriptResourceInHead(context, response, "Ajax", fileName);
+    addScriptResourceInHead(context, response, "Ajax", fileName);
   }
-  
+
   /**
    * Adds a stylesheet link tag with a correct resource url in the html head tag if it isn't already present in 
    * the response.
@@ -146,13 +148,13 @@ public class AjaxUtils {
    * @param fileName
    */
   public static void addStylesheetResourceInHead(WOContext context, WOResponse response, String framework, String fileName) {
-    String startTag = "<link rel=\"stylesheet\" href=\"";
+    String startTag = "<link rel = \"stylesheet\" type = \"text/css\" href = \"";
     String endTag = "\"/>";
     addResourceInHead(context, response, framework, fileName, startTag, endTag);
   }
-  
+
   public static void addStylesheetResourceInHead(WOContext context, WOResponse response, String fileName) {
-      addStylesheetResourceInHead(context, response, "Ajax", fileName);
+    addStylesheetResourceInHead(context, response, "Ajax", fileName);
   }
 
   /**
@@ -169,10 +171,10 @@ public class AjaxUtils {
       userInfo.setObjectForKey(fileName, fileName);
       WOResourceManager rm = WOApplication.application().resourceManager();
       String url = rm.urlForResourceNamed(fileName, framework, context.session().languages(), context.request());
-      String html = startTag + url + endTag;
+      String html = startTag + url + endTag + "\n";
       AjaxUtils.insertInResponseBeforeTag(response, html, AjaxUtils.htmlCloseHead());
     }
-  }	
+  }
 
   /**
    * Adds javascript code in a script tag in the html head tag. 
@@ -202,5 +204,52 @@ public class AjaxUtils {
   public static void updateMutableUserInfoWithAjaxInfo(WOContext context) {
     NSMutableDictionary dict = AjaxUtils.mutableUserInfo(context.response());
     dict.takeValueForKey(AjaxUtils.DONT_STORE_PAGE, AjaxUtils.DONT_STORE_PAGE);
+  }
+
+  public static void appendScriptHeader(WOResponse response) {
+    response.appendContentString("<script type = \"text/javascript\" language = \"javascript\"><!--\n");
+  }
+
+  public static void appendScriptFooter(WOResponse response) {
+    response.appendContentString("//--></script>");
+  }
+
+  public static Object valueForBinding(String name, Object defaultValue, NSDictionary associations, WOComponent component) {
+    Object value = AjaxUtils.valueForBinding(name, associations, component);
+    if (value != null) {
+      return value;
+    }
+    return defaultValue;
+  }
+
+  public static String stringValueForBinding(String name, NSDictionary associations, WOComponent component) {
+    WOAssociation association = (WOAssociation) associations.objectForKey(name);
+    if (association != null) {
+      return (String) association.valueInComponent(component);
+    }
+    return null;
+  }
+
+  public static Object valueForBinding(String name, NSDictionary associations, WOComponent component) {
+    WOAssociation association = (WOAssociation) associations.objectForKey(name);
+    if (association != null) {
+      return association.valueInComponent(component);
+    }
+    return null;
+  }
+
+  public static boolean booleanValueForBinding(String name, boolean defaultValue, NSDictionary associations, WOComponent component) {
+    WOAssociation association = (WOAssociation) associations.objectForKey(name);
+    if (association != null) {
+      return association.booleanValueInComponent(component);
+    }
+    return defaultValue;
+  }
+
+  public static void setValueForBinding(Object value, String name, NSDictionary associations, WOComponent component) {
+    WOAssociation association = (WOAssociation) associations.objectForKey(name);
+    if (association != null) {
+      association.setValue(value, component);
+    }
   }
 }
