@@ -106,7 +106,7 @@ public class AjaxInPlaceEditor extends AjaxDynamicElement {
     response.appendContentString("</");
     response.appendContentString(elementName);
     response.appendContentString(">");
-    response.appendContentString("<script type = \"text/javascript\"><!--\n");
+    AjaxUtils.appendScriptHeader(response);
     response.appendContentString("new Ajax.InPlaceEditor('");
     response.appendContentString(id);
     response.appendContentString("', '");
@@ -115,7 +115,7 @@ public class AjaxInPlaceEditor extends AjaxDynamicElement {
     NSDictionary options = createAjaxOptions(component);
     AjaxOptions.appendToResponse(options, response, context);
     response.appendContentString(");");
-    response.appendContentString("\n//--></script>");
+    AjaxUtils.appendScriptFooter(response);
   }
 
   protected void addRequiredWebResources(WOResponse response, WOContext context) {
