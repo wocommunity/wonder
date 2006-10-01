@@ -153,11 +153,11 @@ public class AjaxAutoComplete extends AjaxComponent {
 			res.appendContentString(String.valueOf(str));
 		} else {
 			String actionUrl = ctx.componentActionURL();
-			res.appendContentString("<script type = \"text/javascript\" language = \"javascript\"><!--\n");
+      AjaxUtils.appendScriptHeader(res);
 			res.appendContentString("new Ajax.Autocompleter('"+fieldName+"', '"+divName+"', '"+actionUrl+"', ");
 			AjaxOptions.appendToResponse(createAjaxOptions(), res, ctx);
 			res.appendContentString(");");
-			res.appendContentString("//--></script>");
+      AjaxUtils.appendScriptFooter(res);
 		}
     }
 

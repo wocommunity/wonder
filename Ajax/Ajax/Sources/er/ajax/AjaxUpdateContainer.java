@@ -67,7 +67,7 @@ public class AjaxUpdateContainer extends AjaxDynamicElement {
         
         boolean skipFunction = frequency == null && observeFieldID == null && booleanValueForBinding("skipFunction", false, component);
         if (!skipFunction) {
-          response.appendContentString("<script type = \"text/javascript\" language = \"javascript\"><!--\n");
+          AjaxUtils.appendScriptHeader(response);
 
           if (frequency != null) {
             response.appendContentString("new Ajax.PeriodicalUpdater('" + id + "', $(" + id + ").getAttribute('updateUrl'), ");
@@ -83,7 +83,7 @@ public class AjaxUpdateContainer extends AjaxDynamicElement {
           AjaxOptions.appendToResponse(options, response, context);
           response.appendContentString("); }");
 
-          response.appendContentString("//--></script>");
+          AjaxUtils.appendScriptFooter(response);
         }
     }
 
