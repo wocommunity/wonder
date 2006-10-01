@@ -62,7 +62,7 @@ public class InstantMessengerAdaptor extends WOAdaptor implements IMessageListen
   private Thread _watchedThread;
   private IMConnectionTester _watchedTester;
 
-  public InstantMessengerAdaptor(String name, NSDictionary parameters) throws InstantiationException, IllegalAccessException, ClassNotFoundException {
+  public InstantMessengerAdaptor(String name, NSDictionary parameters) {
     super(name, parameters);
 
     _conversations = new HashMap();
@@ -148,19 +148,24 @@ public class InstantMessengerAdaptor extends WOAdaptor implements IMessageListen
     return password;
   }
 
-  protected IInstantMessengerFactory getFactory(String key, NSDictionary parameters) throws InstantiationException, IllegalAccessException, ClassNotFoundException {
+  protected IInstantMessengerFactory getFactory(String key, NSDictionary parameters) {
     String factoryClass = (String) parameters.objectForKey(key);
     if (factoryClass == null) {
       factoryClass = System.getProperty(key);
     }
-    IInstantMessengerFactory factory;
-    if (factoryClass == null) {
-      factory = new AimBotInstantMessenger.Factory();
+    try {
+      IInstantMessengerFactory factory;
+      if (factoryClass == null) {
+        factory = new AimBotInstantMessenger.Factory();
+      }
+      else {
+        factory = (IInstantMessengerFactory) Class.forName(factoryClass).newInstance();
+      }
+      return factory;
     }
-    else {
-      factory = (IInstantMessengerFactory) Class.forName(factoryClass).newInstance();
+    catch (Throwable t) {
+      throw new RuntimeException("Invalidate InstantMessengerFactory: " + factoryClass, t);
     }
-    return factory;
   }
 
   public static boolean isIMRequest(WOContext context) {
