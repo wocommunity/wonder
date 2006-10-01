@@ -14,6 +14,7 @@ public class AjaxOption {
   public static AjaxOption.Type ARRAY = new AjaxOption.Type(4);
   public static AjaxOption.Type STRING_ARRAY = new AjaxOption.Type(5);
   public static AjaxOption.Type BOOLEAN = new AjaxOption.Type(6);
+  public static AjaxOption.Type STRING_OR_ARRAY = new AjaxOption.Type(7);
 
   public static class Type {
     private int _number;
@@ -45,13 +46,33 @@ public class AjaxOption {
 
   public String processValue(Object value) {
     String strValue;
+    
+    AjaxOption.Type type = _type;
+    
+    if (type == AjaxOption.STRING_OR_ARRAY) {
+      if (value == null) {
+      }
+      else if (value instanceof NSArray) {
+        type = AjaxOption.ARRAY;
+      }
+      else if (value instanceof String) {
+        strValue = (String)value;
+        if (strValue.startsWith("[")) {
+          type = AjaxOption.ARRAY;
+        }
+        else {
+          type = AjaxOption.STRING;
+        }
+      }
+    }
+
     if (value == null) {
       strValue = null;
     }
-    else if (_type == AjaxOption.STRING) {
+    else if (type == AjaxOption.STRING) {
       strValue = "'" + value + "'";
     }
-    else if (_type == AjaxOption.ARRAY) {
+    else if (type == AjaxOption.ARRAY) {
       if (value instanceof NSArray) {
         NSArray arrayValue = (NSArray) value;
         if (arrayValue.count() == 1) {
@@ -65,7 +86,7 @@ public class AjaxOption {
         strValue = value.toString();
       }
     }
-    else if (_type == AjaxOption.STRING_ARRAY) {
+    else if (type == AjaxOption.STRING_ARRAY) {
       if (value instanceof NSArray) {
         NSArray arrayValue = (NSArray) value;
         int count = arrayValue.count();
@@ -110,14 +131,16 @@ public class AjaxOption {
   }
 
   public void addToDictionary(String bindingName, WOComponent component, NSDictionary associations, NSMutableDictionary dictionary) {
-    Object value = associations.objectForKey(bindingName);
-    if (value instanceof WOAssociation) {
-      WOAssociation association = (WOAssociation) value;
-      value = association.valueInComponent(component);
-    }
-    String strValue = processValue(value);
-    if (strValue != null) {
-      dictionary.setObjectForKey(strValue, _name);
+    if (associations != null) {
+      Object value = associations.objectForKey(bindingName);
+      if (value instanceof WOAssociation) {
+        WOAssociation association = (WOAssociation) value;
+        value = association.valueInComponent(component);
+      }
+      String strValue = processValue(value);
+      if (strValue != null) {
+        dictionary.setObjectForKey(strValue, _name);
+      }
     }
   }
 

@@ -78,14 +78,14 @@ public class AjaxSlider extends AjaxComponent {
         res.appendContentString("<div class=\"tracker\" id=\""+
                 _trackerId+"\"><div class=\"handle\" id=\""+
                 _handleId+"\"></div></div>");
-        res.appendContentString("<script type=\"text/javascript\"><!--\n");
+        AjaxUtils.appendScriptHeader(res);
         if (hasBinding("id")) {
           res.appendContentString((String)valueForBinding("id") + " = ");
         }
         res.appendContentString("new Control.Slider('"+_handleId+"', '"+_trackerId+"', ");
         AjaxOptions.appendToResponse(options, res, ctx);
         res.appendContentString(");");
-        res.appendContentString("\n//--></script>");
+        AjaxUtils.appendScriptFooter(res);
     }
 
     /**
