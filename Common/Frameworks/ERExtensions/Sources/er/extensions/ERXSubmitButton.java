@@ -13,25 +13,38 @@ import com.webobjects.appserver._private.WOInput;
 import com.webobjects.foundation.NSDictionary;
 
 /**
- * Clone of WOSubmitButton that should emit &lt;button&gt; tags instead of 
- * &lt;input&gt; tags. This allows you to use HTML content and superior style
+ * Clone of WOSubmitButton that should emit <code>&lt;button&gt;</code> tags instead of 
+ * <code>&lt;input&gt;</code> tags. This allows you to use HTML content and superior style
  * features. <br />
  * Unfortunately, IE is totally broken and always submits all buttons on a page,
  * which makes it unusable for actions. So, for the time being this component emits
- * a <code>span class="ERXSubmitButton"</code> with a hyperlink and the real submit button
- * inside. The actual click is triggered by javascript.<br />
- * You need some stylesheet similar to this to make it look pretty:<pre><code>
+ * a <code>&lt;span class="ERXSubmitButton"&gt;</code> with a hyperlink and the real, but invisible submit button
+ * inside. The actual click is triggered by javascript, so your IE users must have it turned on.<br />
+ * You need some stylesheet similar to this to make it look like a normal <code>button</code>:<pre><code>
  * .ERXSubmitButton a {
- *	 background-color: grey;
- *	 border: 1px solid red;
- *	 padding: 3px;
- *	 text-color: white;
+ * 	color: buttontext;
+ * 	cursor: default;
+ * 	background-color: buttonface;
+ * 	border-style: outset;
+ * 	border-width: 2px;
+ * 	border-top-color: buttonface;
+ * 	border-left-color: buttonface;
+ * 	border-right-color: buttonshadow;
+ * 	border-bottom-color: buttonshadow;
+ * 	padding: 0px 6px;
+ * 	font-size: small;
+ * 	font-family: sans-serif;
+ * 	line-height: normal !important;
  * }
- * .ERXSubmitButton a:hover {
- *	 background-color: white;
- *	 border: 1px solid black;
+ * 
+ * .ERXSubmitButton a:active {
+ * 	border-top-color: buttonshadow;
+ * 	border-left-color: buttonshadow;
+ * 	border-right-color: buttonface;
+ * 	border-bottom-color: buttonface;
  * }
  * </code></pre>
+ * but of course, the whole idea is that you can style it any way you want.<br />
  * You can add this class via ERXPatcher.setClassForName(ERXSubmitButton.class, "WOSubmitButton");
  * and see how this works out or use it explicitely.
  * @author ak
@@ -66,7 +79,7 @@ public class ERXSubmitButton extends WOInput {
 
 
     public void takeValuesFromRequest(WORequest worequest, WOContext wocontext) {
-    	// System.out.println(worequest.formValues());
+    	//System.out.println(worequest.formValues());
     	/*WOComponent wocomponent = wocontext.component();
     	if(!disabledInComponent(wocomponent) && wocontext._wasFormSubmitted()) {
     		String s1 = nameInContext(wocontext, wocomponent);
@@ -106,8 +119,8 @@ public class ERXSubmitButton extends WOInput {
     		_appendValueAttributeToResponse(woresponse, wocontext);
     		_appendNameAttributeToResponse(woresponse, wocontext);
     	} else {
-    		woresponse._appendContentAsciiString(" style=\"display: inline-block; text-decoration: none;\"; href=\"#\" onclick=\"this.firstChild.click(); void(0);\">");
-    		woresponse._appendContentAsciiString("<input type=\"submit\" style=\"display:none;\"");
+    		woresponse._appendContentAsciiString(" style=\"text-decoration: none;\"; href=\"#\" onclick=\"this.firstChild.click(); void(0);\">");
+    		woresponse._appendContentAsciiString("<input type=\"submit\" style=\"position: absolute; display:none; visibility: hidden;\"");
 
     		_appendValueAttributeToResponse(woresponse, wocontext);
     		_appendNameAttributeToResponse(woresponse, wocontext);
@@ -180,6 +193,7 @@ public class ERXSubmitButton extends WOInput {
     	String userAgent = wocontext.request().headerForKey("user-agent");
     	useButton = userAgent != null && userAgent.indexOf("MSIE") < 0;
     	//System.out.println(useButton + ": " + userAgent);
+    	// useButton = !useButton;
     	String s = elementName();
     	if(s != null) {
     		_appendOpenTagToResponse(woresponse, wocontext);
