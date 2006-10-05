@@ -2,6 +2,9 @@ package er.extensions;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.StringReader;
+import java.io.StringWriter;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
@@ -10,11 +13,15 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.Result;
 import javax.xml.transform.Source;
+import javax.xml.transform.Templates;
 import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerConfigurationException;
+import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.sax.SAXSource;
 import javax.xml.transform.stream.StreamResult;
+import javax.xml.transform.stream.StreamSource;
 
 import org.apache.log4j.Logger;
 import org.w3c.dom.Document;
@@ -24,7 +31,9 @@ import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.XMLReaderFactory;
 
+import com.webobjects.appserver.WOApplication;
 import com.webobjects.appserver.WOContext;
+import com.webobjects.appserver.WOResourceManager;
 import com.webobjects.appserver.WOResponse;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSData;
@@ -57,144 +66,228 @@ import com.webobjects.foundation.NSForwardException;
 
 public class ERXSLTWrapper extends ERXNonSynchronizingComponent {
 
-    /** logging support */
-    private static final Logger log = Logger.getLogger(ERXSLTWrapper.class);
-    
-    private long start, current;
-    /**
-     * Public constructor
-     * @param context the context
-     */
-    public ERXSLTWrapper(WOContext context) {
-        super(context);
-    }
+	/** logging support */
+	private static final Logger log = Logger.getLogger(ERXSLTWrapper.class);
 
-    private boolean isEnabled() {
-        return booleanValueForBinding("enabled");
-    }
+	private long start, current;
+	/**
+	 * Public constructor
+	 * @param context the context
+	 */
+	public ERXSLTWrapper(WOContext context) {
+		super(context);
+	}
 
-    private static Map cache = new HashMap();
-    
-    private Transformer transformer() {
-        Transformer transformer;
-        try {
-            synchronized (cache) {
-                String stylesheet = (String)valueForBinding("stylesheet");
-                String framework = (String)valueForBinding("framework");
-                NSArray languages = session().languages();
-                String key = stylesheet + "-" + framework;
-                transformer = (Transformer) cache.get(key);
-                if(transformer == null || booleanValueForBinding("nocache")) {
-                    byte bytes[] = application().resourceManager().bytesForResourceNamed(stylesheet, framework, languages);
-                    DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
-                    documentBuilderFactory.setValidating(false);
-                    documentBuilderFactory.setNamespaceAware(true);
-                    DocumentBuilder documentBuilder;
-                    documentBuilder = documentBuilderFactory.newDocumentBuilder();
-                    ByteArrayInputStream bis = new ByteArrayInputStream(bytes);
-                    Document document = documentBuilder.parse(bis);
-                    Source xslt = new DOMSource(document);           
-                    xslt.setSystemId(key);
-                    String transformerFactoryName = (String)valueForBinding("transformerFactory");
-                    String oldTransformerFactoryName = System.getProperty("javax.xml.transform.TransformerFactory");
-                    if(transformerFactoryName != null) {
-                        System.setProperty("javax.xml.transform.TransformerFactory", transformerFactoryName);
-                    } else {
-                        System.setProperty("javax.xml.transform.TransformerFactory", "org.apache.xalan.processor.TransformerFactoryImpl");
-                    }
-                    TransformerFactory transformerFactory = TransformerFactory.newInstance();
-                    if(oldTransformerFactoryName != null) {
-                        System.setProperty("javax.xml.transform.TransformerFactory", oldTransformerFactoryName);
-                    }
-                    transformer = transformerFactory.newTransformer(xslt);
-                    // transformer.setOutputProperty("indent", "no");
-                    // transformer.setOutputProperty("method", "xml");
-                    
-                    cache.put(key, transformer);
-                }
-            }
-            return transformer;
-        } catch(Exception ex) {
-            throw NSForwardException._runtimeExceptionForThrowable(ex);
-        }
-    }
-    
-    private static XMLReader xmlReader;
-    
-    static {
-    	try {
-    		xmlReader = XMLReaderFactory.createXMLReader();
-    		xmlReader.setFeature("http://xml.org/sax/features/validation", false);
-    		if(false) {
-    			// FIXME AK: we need  real handling for the normal case (HTML->FOP XML)
-    			EntityResolver resolver = new EntityResolver() {
-    				public InputSource resolveEntity(String arg0, String arg1) throws SAXException, IOException {
-    					log.info(arg0 + "::" + arg1);
-    					InputSource source = new InputSource((new URL("file:///Volumes/Home/Desktop/dtd/xhtml1-transitional.dtd")).openStream());
-    					source.setSystemId(arg1);
-    					return source;
-    				}
-    			};
-    			xmlReader.setEntityResolver(resolver);
-    		}
-        } catch (SAXException e) {
-            e.printStackTrace();
-        }
-    }
-    
-    private NSData transform(WOResponse response) {
-        try {
-            Source xml;
-            SAXSource saxSource = new SAXSource();
-            saxSource.setXMLReader(xmlReader);
-            ByteArrayInputStream bis = new ByteArrayInputStream(response.content().bytes());
-            saxSource.setInputSource(new InputSource(bis));
-            xml = saxSource;
-            log.debug("DOM: " + (System.currentTimeMillis() - current));  current = System.currentTimeMillis();
-            
-            Transformer transformer = transformer();
-            log.debug("Stylesheet: " + (System.currentTimeMillis() - current));  current = System.currentTimeMillis();
+	private boolean isEnabled() {
+		return booleanValueForBinding("enabled", true);
+	}
 
-            ByteArrayOutputStream os = new ByteArrayOutputStream();
-            Result result = new StreamResult(os);
-            
-            transformer.transform(xml, result);
-            log.debug("Transform: " + (System.currentTimeMillis() - current));  current = System.currentTimeMillis();
-            
-            NSData data = new NSData(os.toByteArray());
-            return data;
-        } catch(Exception ex) {
-            throw NSForwardException._runtimeExceptionForThrowable(ex);
-        }
-    }
+	private static Map cache = new HashMap();
 
-    /** 
-     * Overridden to get use apply the XLST transformation on the content.
-     */
-    public void appendToResponse(WOResponse response, WOContext context) {
-        start = System.currentTimeMillis(); current = start;
-        if (isEnabled()) {
-            WOResponse newResponse = new WOResponse();
-            newResponse.setContentEncoding(response.contentEncoding());
-            
-            super.appendToResponse(newResponse, context);
+	private Transformer transformer() {
+		Transformer transformer;
+		try {
+			synchronized (cache) {
+				String stylesheet = (String)valueForBinding("stylesheet");
+				String framework = (String)valueForBinding("framework");
+				NSArray languages = session().languages();
+				String key = stylesheet + "-" + framework;
+				transformer = (Transformer) cache.get(key);
+				if(transformer == null || booleanValueForBinding("nocache")) {
+					byte bytes[] = application().resourceManager().bytesForResourceNamed(stylesheet, framework, languages);
+					DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
+					documentBuilderFactory.setValidating(false);
+					documentBuilderFactory.setNamespaceAware(true);
+					DocumentBuilder documentBuilder;
+					documentBuilder = documentBuilderFactory.newDocumentBuilder();
+					ByteArrayInputStream bis = new ByteArrayInputStream(bytes);
+					Document document = documentBuilder.parse(bis);
+					Source xslt = new DOMSource(document);           
+					xslt.setSystemId(key);
+					String transformerFactoryName = (String)valueForBinding("transformerFactory");
+					String oldTransformerFactoryName = System.getProperty("javax.xml.transform.TransformerFactory");
+					if(transformerFactoryName != null) {
+						System.setProperty("javax.xml.transform.TransformerFactory", transformerFactoryName);
+					} else {
+						System.setProperty("javax.xml.transform.TransformerFactory", "org.apache.xalan.processor.TransformerFactoryImpl");
+					}
+					TransformerFactory transformerFactory = TransformerFactory.newInstance();
+					if(oldTransformerFactoryName != null) {
+						System.setProperty("javax.xml.transform.TransformerFactory", oldTransformerFactoryName);
+					}
+					transformer = transformerFactory.newTransformer(xslt);
+					// transformer.setOutputProperty("indent", "no");
+					// transformer.setOutputProperty("method", "xml");
 
-            if (log.isDebugEnabled()) {
-                String contentString = newResponse.contentString();
-                log.debug("Converting content string:\n" + contentString);
-            }
+					cache.put(key, transformer);
+				}
+			}
+			return transformer;
+		} catch(Exception ex) {
+			throw NSForwardException._runtimeExceptionForThrowable(ex);
+		}
+	}
 
-            NSData data = transform(newResponse);
-            if(hasBinding("data") && canSetValueForBinding("data")) {
-                setValueForBinding(data, "data");
-            }
-            if(hasBinding("stream") && canSetValueForBinding("stream")) {
-                setValueForBinding(data.stream(), "stream");
-            }
-            response.appendContentData(data);
-         } else {
-            super.appendToResponse(response, context);
-        }
-        log.debug("Total: " + (System.currentTimeMillis() - start));  start = System.currentTimeMillis();
-   }
+	private static XMLReader xmlReader;
+
+	static {
+		try {
+			xmlReader = XMLReaderFactory.createXMLReader();
+			xmlReader.setFeature("http://xml.org/sax/features/validation", false);
+			if(false) {
+				// FIXME AK: we need  real handling for the normal case (HTML->FOP XML)
+				EntityResolver resolver = new EntityResolver() {
+					public InputSource resolveEntity(String arg0, String arg1) throws SAXException, IOException {
+						log.info(arg0 + "::" + arg1);
+						InputSource source = new InputSource((new URL("file:///Volumes/Home/Desktop/dtd/xhtml1-transitional.dtd")).openStream());
+						source.setSystemId(arg1);
+						return source;
+					}
+				};
+				xmlReader.setEntityResolver(resolver);
+			}
+		} catch (SAXException e) {
+			e.printStackTrace();
+		}
+	}
+
+	/** 
+	 * Overridden to get use apply the XLST transformation on the content.
+	 * @throws TransformerException 
+	 */
+	public void appendToResponse(WOResponse response, WOContext context) {
+		start = System.currentTimeMillis(); current = start;
+		if (isEnabled()) {
+			WOResponse newResponse = new WOResponse();
+			newResponse.setContentEncoding(response.contentEncoding());
+
+			super.appendToResponse(newResponse, context);
+
+			if (log.isDebugEnabled()) {
+				String contentString = newResponse.contentString();
+				log.debug("Converting content string:\n" + contentString);
+			}
+
+			try {
+				NSData data = transform(transformer(), newResponse.content());
+				if(hasBinding("data") && canSetValueForBinding("data")) {
+					setValueForBinding(data, "data");
+				}
+				if(hasBinding("stream") && canSetValueForBinding("stream")) {
+					setValueForBinding(data.stream(), "stream");
+				}
+				response.appendContentData(data);
+			} catch (TransformerException e) {
+				throw NSForwardException._runtimeExceptionForThrowable(e);
+			}
+		} else {
+			super.appendToResponse(response, context);
+		}
+		log.debug("Total: " + (System.currentTimeMillis() - start));  start = System.currentTimeMillis();
+	}
+
+	private static TemplatePool pool = new TemplatePool();
+
+	public static Transformer getTransformer(String framework, String filename) {
+		return pool.getTransformer(framework, filename);
+	}
+
+	public static String transform(Transformer transformer, String xml) throws TransformerException {
+		StringReader stringreader = new StringReader(xml);
+		InputSource inputsource = new InputSource(stringreader);
+		SAXSource s = new SAXSource(inputsource);
+		
+		StringWriter writer = new StringWriter();
+		StreamResult r = new StreamResult(writer);
+
+		transformer.transform(s, r);
+		String result = writer.toString();
+		return result;
+	}
+
+	public static NSData transform(Transformer transformer, NSData data) throws TransformerException {
+		ByteArrayInputStream bis = new ByteArrayInputStream(data.bytes());
+		SAXSource saxSource = new SAXSource();
+		saxSource.setXMLReader(xmlReader);
+		saxSource.setInputSource(new InputSource(bis));
+		ByteArrayOutputStream os = new ByteArrayOutputStream();
+		Result r = new StreamResult(os);
+		transformer.transform(saxSource, r);
+		NSData result = new NSData(os.toByteArray());
+		return result;
+	}
+
+	public static class TemplatePool {
+
+		//private static final WeakHashMap templates = new WeakHashMap();
+		private final Map   templates = new HashMap();
+		private static final Logger log       = Logger.getLogger(TemplatePool.class);
+		private ERXSimpleTemplateParser templateParser = new ERXSimpleTemplateParser("?", false);
+
+		private TemplatePool() {
+			// nothing
+		}
+
+		public Map getTemplates() {
+			return templates;
+		}
+
+		public synchronized Transformer getTransformer(String framework, String filename) {
+			if (filename == null || filename.length() == 0) { 
+				throw new IllegalArgumentException("filename cannot be null or empty"); 
+			}
+			String key = framework + "-"  +filename;
+
+			Templates t = (Templates) pool.getTemplates().get(key);
+			String s = null;
+
+			if (t == null) {
+				try {
+					WOApplication app = WOApplication.application();
+					WOResourceManager rm = app.resourceManager();
+
+					TransformerFactory fac = TransformerFactory.newInstance();
+
+					log.debug("creating template for file " + filename + " in framework " + framework);
+					InputStream is = rm.inputStreamForResourceNamed(filename, framework, null);
+					if (is == null) {
+						log.debug("trying with framework = null");
+						is = rm.inputStreamForResourceNamed(filename, null, null);
+						if (is == null) { 
+							throw new IllegalArgumentException("inputStream is null"); 
+						}
+					}
+					if (is.available() == 0) { 
+						throw new IllegalArgumentException("InputStream has 0 bytes available, cannot read xsl file!"); 
+					}
+					s = ERXFileUtilities.stringFromInputStream(is);
+					s = templateParser.parseTemplateWithObject(s, "@@", app);
+					t = fac.newTemplates(new StreamSource(new ByteArrayInputStream(s.getBytes())));
+
+					if (app.isCachingEnabled()) {
+						templates.put(key, t);
+					}
+				} catch (IOException e1) {
+					throw NSForwardException._runtimeExceptionForThrowable(e1);
+				} catch (TransformerConfigurationException tce) {
+					log.error("could not create template " + tce.getLocationAsString(), tce);
+					log.error("  cause", tce.getCause());
+					if (tce.getCause() != null && tce.getCause() instanceof org.xml.sax.SAXParseException) {
+						org.xml.sax.SAXParseException e = (org.xml.sax.SAXParseException) tce.getCause();
+						log.error("SAXParseException: line " + e.getLineNumber() + ", column " + e.getColumnNumber());
+					}
+					log.error("this is the incorrect xsl:>>>" + s + "<<<");
+					return null;
+				}
+			}
+
+			try {
+				return t.newTransformer();
+			} catch (TransformerConfigurationException tce) {
+				log.error("could not create template " + tce.getLocationAsString(), tce);
+				log.error("  cause", tce.getCause());
+				return null;
+			}
+		}
+	}
 }
