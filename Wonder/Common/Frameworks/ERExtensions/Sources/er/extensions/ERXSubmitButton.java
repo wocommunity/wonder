@@ -13,9 +13,25 @@ import com.webobjects.appserver._private.WOInput;
 import com.webobjects.foundation.NSDictionary;
 
 /**
- * Clone of WOSubmitButton that emits &lt;button&gt; tags instead of 
+ * Clone of WOSubmitButton that should emit &lt;button&gt; tags instead of 
  * &lt;input&gt; tags. This allows you to use HTML content and superior style
  * features. <br />
+ * Unfortunately, IE is totally broken and always submits all buttons on a page,
+ * which makes it unusable for actions. So, for the time being this component emits
+ * a <code>span class="ERXSubmitButton"</code> with a hyperlink and the real submit button
+ * inside. The actual click is triggered by javascript.<br />
+ * You need some stylesheet similar to this to make it look pretty:<pre><code>
+ * .ERXSubmitButton a {
+ *	 background-color: grey;
+ *	 border: 1px solid red;
+ *	 padding: 3px;
+ *	 text-color: white;
+ * }
+ * .ERXSubmitButton a:hover {
+ *	 background-color: white;
+ *	 border: 1px solid black;
+ * }
+ * </code></pre>
  * You can add this class via ERXPatcher.setClassForName(ERXSubmitButton.class, "WOSubmitButton");
  * and see how this works out or use it explicitely.
  * @author ak
@@ -25,7 +41,7 @@ public class ERXSubmitButton extends WOInput {
     protected WOAssociation _action;
     protected WOAssociation _actionClass;
     protected WOAssociation _directActionName;
-    protected static boolean useButton;
+    protected boolean useButton;
     
     public ERXSubmitButton(String arg0, NSDictionary nsdictionary, WOElement arg2) {
         super("button", nsdictionary, arg2);
@@ -158,10 +174,12 @@ public class ERXSubmitButton extends WOInput {
     }
 
     public void appendToResponse(WOResponse woresponse, WOContext wocontext) {
-    	useButton = false;
     	if(wocontext == null || woresponse == null) {
     		return;
     	}
+    	String userAgent = wocontext.request().headerForKey("user-agent");
+    	useButton = userAgent != null && userAgent.indexOf("MSIE") < 0;
+    	//System.out.println(useButton + ": " + userAgent);
     	String s = elementName();
     	if(s != null) {
     		_appendOpenTagToResponse(woresponse, wocontext);
