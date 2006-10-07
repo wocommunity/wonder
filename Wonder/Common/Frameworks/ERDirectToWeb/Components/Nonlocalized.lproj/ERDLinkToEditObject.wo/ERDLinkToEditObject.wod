@@ -1,0 +1,8 @@
+ViewLink: WOHyperlink {
+	action = view;
+}
+
+Description: WOString {
+	value = objectKeyPathValue;
+}
+
