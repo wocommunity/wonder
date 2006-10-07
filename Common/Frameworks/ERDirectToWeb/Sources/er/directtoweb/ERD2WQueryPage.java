@@ -13,7 +13,6 @@ import com.webobjects.appserver.WORequest;
 import com.webobjects.appserver.WOResponse;
 import com.webobjects.directtoweb.D2W;
 import com.webobjects.directtoweb.ListPageInterface;
-import com.webobjects.directtoweb.NextPageDelegate;
 import com.webobjects.directtoweb.QueryPageInterface;
 import com.webobjects.eoaccess.EODatabaseDataSource;
 import com.webobjects.eoaccess.EOEntity;
@@ -187,7 +186,10 @@ public class ERD2WQueryPage extends ERD2WPage implements QueryPageInterface {
     protected NSDictionary branch;
 
     public String branchName() {
-        return (String) branch.valueForKey("branchName");
+    	if(branch != null) {
+    		return (String) branch.objectForKey("branchName");
+    	}
+    	return null;
     }
 
     protected Boolean showResults = null;
@@ -207,7 +209,8 @@ public class ERD2WQueryPage extends ERD2WPage implements QueryPageInterface {
         if (ERXValueUtilities.booleanValue(d2wContext().valueForKey("showListInSamePage"))) {
             setShowResults(true);
         } else {
-            if (nextPageDelegate() == null) {
+        	nextPage = nextPageFromDelegate();
+            if (nextPage == null) {
                 String listConfigurationName = (String) d2wContext().valueForKey("listConfigurationName");
                 ListPageInterface listpageinterface = null;
                 if (listConfigurationName != null) {
@@ -218,9 +221,6 @@ public class ERD2WQueryPage extends ERD2WPage implements QueryPageInterface {
                 listpageinterface.setDataSource(queryDataSource());
                 listpageinterface.setNextPage(context().page());
                 nextPage = (WOComponent) listpageinterface;
-            } else {
-                NextPageDelegate nextpagedelegate = this.nextPageDelegate();
-                nextPage = nextpagedelegate.nextPage(this);
             }
         }
         return nextPage;
@@ -228,26 +228,32 @@ public class ERD2WQueryPage extends ERD2WPage implements QueryPageInterface {
 
     // returning a null query data source if cancel was clicked
     private boolean _wasCancelled;
-
+    
+    // CHECKME AK: why is this never called??
     public WOComponent cancelAction() {
-        WOComponent result = null;
-        try {
-            _wasCancelled = true;
-            result = nextPageDelegate().nextPage(this);
-        } finally {
+    	WOComponent result = null;
+    	try {
+    		_wasCancelled = true;
+    		result = nextPageFromDelegate();
+    		if (result == null) {
+    			// CHECKME AK: or return null?? no way of knowing...
+    			result = nextPage();
+    		}
+    	} finally {
             _wasCancelled = false;
         }
         return result;
     }
 
+    //CHECKME AK: this variable doesn't seem like such a good idea, in particular as there is no setter??
     public WOComponent returnPage;
 
     public WOComponent returnAction() {
-        return returnPage;
+        return returnPage != null ? returnPage : nextPage();
     }
 
     public boolean showCancel() {
-        return returnPage != null;
+        return nextPage() != null;
     }
 
     

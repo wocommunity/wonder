@@ -217,24 +217,19 @@ public class ERD2WListPage extends ERD2WPage implements ERDListPageInterface, Se
     /** Action method to select an object. */
     public WOComponent selectObjectAction() {
         setSelectedObject(object());
-        if(nextPageDelegate() != null)
-            return nextPageDelegate().nextPage(this);
-        else
-            return null;
+        WOComponent result = nextPageFromDelegate();
+    	return result;
     }
 
     public WOComponent backAction() {
-        WOComponent result = null;
-        if(nextPageDelegate() == null) {
-            if(nextPage() == null) {
-                result = (WOComponent)D2W.factory().queryPageForEntityNamed(entity().name(), session());
-            } else {
-                result = nextPage();
-            }
-        } else {
-            result = nextPageDelegate().nextPage(this);
-        }
-        return  result;
+    	WOComponent result = nextPageFromDelegate();
+    	if(result == null) {
+    		result = nextPage();
+    		if(result == null) {
+    			result = (WOComponent)D2W.factory().queryPageForEntityNamed(entity().name(), session());
+    		}
+    	}
+    	return  result;
     }
 
     /*** end of reimplementation */

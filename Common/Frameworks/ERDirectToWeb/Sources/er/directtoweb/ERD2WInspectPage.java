@@ -16,6 +16,7 @@ import com.webobjects.appserver.WORequest;
 import com.webobjects.directtoweb.D2W;
 import com.webobjects.directtoweb.EditPageInterface;
 import com.webobjects.directtoweb.InspectPageInterface;
+import com.webobjects.directtoweb.NextPageDelegate;
 import com.webobjects.eoaccess.EOGeneralAdaptorException;
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.eocontrol.EOEnterpriseObject;
@@ -71,7 +72,7 @@ public class ERD2WInspectPage extends ERD2WPage implements InspectPageInterface,
     public WOComponent nextPage(boolean doConfirm) {
         Object inspectConfirmConfigurationName = d2wContext().valueForKey("inspectConfirmConfigurationName");
         if(doConfirm && inspectConfirmConfigurationName != null && ! "".equals(inspectConfirmConfigurationName)) {
-            WOComponent ipi = D2W.factory().pageForConfigurationNamed((String)d2wContext().valueForKey("inspectConfirmConfigurationName"), session());
+            WOComponent ipi = D2W.factory().pageForConfigurationNamed((String)inspectConfirmConfigurationName, session());
             if (ipi instanceof InspectPageInterface) {
                 ((InspectPageInterface)ipi).setObject((EOEnterpriseObject)d2wContext().valueForKey("object"));
                 ((InspectPageInterface)ipi).setNextPageDelegate(nextPageDelegate());
@@ -81,7 +82,11 @@ public class ERD2WInspectPage extends ERD2WPage implements InspectPageInterface,
                 ((ERDFollowPageInterface)ipi).setPreviousPage(context().page());
             return (WOComponent)ipi;
         }
-        return (nextPageDelegate() != null) ? nextPageDelegate().nextPage(this) : super.nextPage();
+        WOComponent result = nextPageFromDelegate();
+    	if(result == null) {
+    		result = super.nextPage();
+    	}
+        return result;
     }
 
     public boolean isEntityReadOnly() {
@@ -122,7 +127,7 @@ public class ERD2WInspectPage extends ERD2WPage implements InspectPageInterface,
             object().editingContext().revert();
         }
         return nextPage(false);
-    }    
+    }
 
     public boolean shouldRenderBorder() { return ERXValueUtilities.booleanValue(d2wContext().valueForKey("shouldRenderBorder")); }
     public boolean shouldShowActionButtons() { return ERXValueUtilities.booleanValue(d2wContext().valueForKey("shouldShowActionButtons")); }

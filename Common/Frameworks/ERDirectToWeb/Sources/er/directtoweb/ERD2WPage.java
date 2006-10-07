@@ -473,7 +473,12 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
      * @return user selected branch name.
      */
     // ENHANCEME: Should be localized
-    public String branchName() { return (String)branch().valueForKey("branchName"); }
+    public String branchName() {
+    	if(branch() != null) {
+    		return (String) branch().valueForKey("branchName");
+    	}
+    	return null;
+	}
 
     /**
      * Calculates the branch choices for the current
@@ -680,6 +685,23 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
  
     public void setNextPage(WOComponent wocomponent) {
         _nextPage = wocomponent;
+    }
+    
+    /**
+     * Checks if the delegate is present and can be invoked, then returns the page from it.
+     * @return
+     */
+    protected WOComponent nextPageFromDelegate() {
+    	NextPageDelegate delegate = nextPageDelegate();
+    	if(delegate != null) {
+    		if((delegate instanceof ERDBranchDelegate) && branchName() != null) {
+    			// AK CHECKME: we assume here, because nextPage() in ERDBranchDelegate is final, 
+    			// we can't do something reasonable when none of the branch buttons was selected.
+    			// This allows us to throw a branch delegate at any page, even when no branch was taken
+    			return delegate.nextPage(this);
+    		}
+    	}
+    	return null;
     }
     
     public NextPageDelegate nextPageDelegate() {
