@@ -21,7 +21,7 @@ Conditional4: WOConditional {
 	condition = hasEditingContext;
 }
 
-Form1: ERXWOForm {
+Form1: ERXOptionalForm {
 }
 
 Hyperlink1: WOHyperlink {
