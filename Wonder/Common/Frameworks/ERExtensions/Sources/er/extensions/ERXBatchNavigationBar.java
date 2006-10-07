@@ -6,10 +6,6 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.extensions;
 
-// Corrects two bugs
-// 1) User typing null for either number of objects per batch or the page number
-// 2) When resetting the number of items per batch the page first page displayed would be the last page.
-
 import org.apache.log4j.Logger;
 
 import com.webobjects.appserver.WOComponent;
@@ -17,11 +13,23 @@ import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WODisplayGroup;
 import com.webobjects.appserver.WOResponse;
 import com.webobjects.eocontrol.EOQualifier;
+import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSNotificationCenter;
 
 /**
- * Better navigation bar<br />
+ * Better batch navigation bar to page thtough display groups.<br />
+ * <ul>
+ * <li>User typing null for either number of objects per batch or the page number</li>
+ * <li>When resetting the number of items per batch the page first page displayed would be the last page.</li>
+ * <li>Broadcasts a notification when the batch size changes</li>
+ * <li>Has go first/go last methods/li>
+ * <li>Has option to not clear the selection when paging, which WODisplayGroup does when calling displayNext()/displayPrevious()</li>
+ * <li>Broadcasts a notification when the batch size changes</li>
+ * <li>Can be used inside or outside of a <code>form</code>
+ * <li>Graphics can be easily configured
+ * <li>Has localization support, both for static texts and the object count.
+ * </ul>
  * 
  * @binding d2wContext the D2W context that this component is in
  * @binding displayGroup the WODisplayGroup that is being controlled
@@ -35,8 +43,9 @@ import com.webobjects.foundation.NSNotificationCenter;
  * @binding imageFramework the name of the framework that contains the navigation arrow images
  * @binding leftArrowImage the name of the left navigation arrow image
  * @binding rightArrowImage the name of the right navigation arrow image
+ * @binding clearSelection boolean that indicates if the selection should be reset on paging (default false)
  */
-public class ERXBatchNavigationBar extends WOComponent {
+public class ERXBatchNavigationBar extends ERXStatelessComponent {
 
     /** logging support */
     public static final Logger log = Logger.getLogger(ERXBatchNavigationBar.class);
@@ -49,11 +58,6 @@ public class ERXBatchNavigationBar extends WOComponent {
         super(aContext);
     }
 
-    /** component is stateless */
-    public boolean isStateless() { return true; }
-    /** component does not synchronize it's variables */
-    public boolean synchronizesVariablesWithBindings() { return false; }
-
     public void reset() {
         super.reset();
         _displayGroup = null;
@@ -64,11 +68,14 @@ public class ERXBatchNavigationBar extends WOComponent {
         
         if (newNumberOfObjectsPerBatch!=null && newNumberOfObjectsPerBatch.intValue() != displayGroup().numberOfObjectsPerBatch()) {
             if (displayGroup()!=null) {
+            	NSArray selection = selection();
+                
                 if(log.isDebugEnabled()) log.debug("Setting db # of objects per batch to "+newNumberOfObjectsPerBatch);
                 displayGroup().setNumberOfObjectsPerBatch(newNumberOfObjectsPerBatch.intValue());
 
                 if(log.isDebugEnabled()) log.debug("The batch index is being set to : "+ 1);
                 displayGroup().setCurrentBatchIndex(1);
+                clearSelection(selection);
             }
             Object d2wcontext=valueForBinding("d2wContext");
             if (d2wcontext!=null) {
@@ -100,7 +107,7 @@ public class ERXBatchNavigationBar extends WOComponent {
     public boolean hasSortKeyList() { return hasBinding("sortKeyList"); }
 
     public int numberOfObjectsPerBatch() {
-        return displayGroup()!=null ? displayGroup().numberOfObjectsPerBatch() : 0;
+    	return displayGroup()!=null ? displayGroup().numberOfObjectsPerBatch() : 0;
     }
 
     public int currentBatchIndex() {
@@ -170,18 +177,50 @@ public class ERXBatchNavigationBar extends WOComponent {
       return rightArrowImageName;
     }
 
+    protected NSArray selection() {
+    	return displayGroup().selectedObjects();
+    }
+
+    protected void clearSelection(NSArray selection) {
+    	if(booleanValueForBinding("clearSelection", false)) {
+    		displayGroup().setSelectedObjects(NSArray.EmptyArray);
+    	} else {
+    		// displayGroup().setSelectedObject(selection);
+    	}
+    }
+
+    public WOComponent displayNextBatch() {
+    	if (displayGroup() != null && displayGroup().numberOfObjectsPerBatch() != 0) {
+    		NSArray selection = selection();
+    		displayGroup().setCurrentBatchIndex(displayGroup().currentBatchIndex() + 1);
+       		clearSelection(selection);
+    	}
+    	return context().page();
+    }
+
+    public WOComponent displayPreviousBatch() {
+    	if (displayGroup() != null && displayGroup().numberOfObjectsPerBatch() != 0) {
+    		NSArray selection = selection();
+    		displayGroup().setCurrentBatchIndex(displayGroup().currentBatchIndex() - 1);
+       		clearSelection(selection);
+    	}
+    	return context().page();
+    }
+   
     public WOComponent displayFirstBatch() {
     	if (displayGroup() != null && displayGroup().numberOfObjectsPerBatch() != 0) {
+    		NSArray selection = selection();
     		displayGroup().setCurrentBatchIndex(1);
-    		displayGroup().clearSelection();
+       		clearSelection(selection);
     	}
     	return context().page();
     }
 
     public WOComponent displayLastBatch() {
     	if (displayGroup() != null && displayGroup().numberOfObjectsPerBatch() != 0) {
+    		NSArray selection = selection();
     		displayGroup().setCurrentBatchIndex(displayGroup().batchCount());
-    		displayGroup().clearSelection();
+       		clearSelection(selection);
     	}
     	return context().page();
     }
