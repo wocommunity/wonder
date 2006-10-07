@@ -50,9 +50,11 @@ public abstract class ERD2WMessagePage extends ERD2WPage implements ERDMessagePa
 		return errorMessages.count() == 0 ? nextPageAction() : null;
 	}
 	public WOComponent nextPageAction() {
-		return nextPageDelegate() != null
-				? nextPageDelegate().nextPage(this)
-				: nextPage();
+        WOComponent result = nextPageFromDelegate();
+    	if(result == null) {
+    		result = nextPage();
+    	}
+        return result;
 	}
 	public void setException(Exception exception) {
 		_exception = exception;
