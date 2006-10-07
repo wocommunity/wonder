@@ -130,7 +130,7 @@ public class ERD2WFactory extends D2W {
         return pageWithContextTaskEntity(d2wcontext, d2wcontext.startupTask(), d2wcontext.startupEntityName(), wosession.context());
     }
 
-    private WOComponent pageWithContextTaskEntity(D2WContext d2wcontext, String s, String s1, WOContext wocontext) {
+    protected WOComponent pageWithContextTaskEntity(D2WContext d2wcontext, String s, String s1, WOContext wocontext) {
         myCheckRules();
         d2wcontext.setTask(s);
         EOEntity eoentity = s1 != null ? EOModelGroup.defaultGroup().entityNamed(s1) : null;
