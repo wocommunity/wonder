@@ -12,15 +12,18 @@ import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.directtoweb.D2W;
 import com.webobjects.directtoweb.ListPageInterface;
+import com.webobjects.eocontrol.EOEnterpriseObject;
 import com.webobjects.foundation.NSArray;
 
 import er.extensions.ERXEOControlUtilities;
 
 /**
  * Generic link component used to view a list.<br />
- * 
- * @binding list
- * @binding listConfigurationName
+ * @binding list the list to show
+ * @binding object object to get list from
+ * @binding key keypath to get list from object
+ * @binding listConfigurationName name of the page configuration to jump to
+ * @bindins entityName
  */
 
 public class ERDLinkToViewList extends ERDCustomEditComponent {
@@ -49,13 +52,23 @@ public class ERDLinkToViewList extends ERDCustomEditComponent {
     }
 
     public WOComponent view() {
-        ListPageInterface ipi = (ListPageInterface)D2W.factory().pageForConfigurationNamed((String)valueForBinding("listPageConfigurationName"),
-                                                                                           session());
+    	String listConfigurationName = (String)valueForBinding("listPageConfigurationName");
+        ListPageInterface ipi = (ListPageInterface)D2W.factory().pageForConfigurationNamed(listConfigurationName, session());
         ipi.setNextPage(context().page());
         ipi.setDataSource(ERXEOControlUtilities.dataSourceForArray(list()));
         return (WOComponent)ipi;
     }
 
+    public String entityName() {
+    	String result = (String) valueForBinding("entityName");
+    	if(result == null && !listIsEmpty() && list().lastObject() instanceof EOEnterpriseObject) {
+    		result = ((EOEnterpriseObject)list().lastObject()).entityName();
+    	} else {
+    		result = "";
+    	}
+    	return result;
+    }
+    
     public boolean listIsEmpty() {
         return list()==null || list().count()==0;
     }
