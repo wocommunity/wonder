@@ -46,7 +46,7 @@ ItemsPerBatch: WOTextField {
 }
 
 LeftArrow: WOImageButton {
-    action = displayGroup.displayPreviousBatch;
+    action = displayPreviousBatch;
     border = "0";
     filename = leftArrowImage;
     framework = imageFramework;
@@ -64,7 +64,7 @@ NavigationTable : WOGenericContainer {
 }
 
 RightArrow: WOImageButton {
-    action = displayGroup.displayNextBatch;
+    action = displayNextBatch;
     border = "0";
     filename = rightArrowImage;
     framework = imageFramework;
