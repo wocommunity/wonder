@@ -105,6 +105,13 @@ public class ERD2WPickTypePage extends ERD2WInspectPage implements ERDPickPageIn
         } else {
             errorMessage = "";
         }
-        return errorMessage.equals("") ? (nextPageDelegate() != null ? nextPageDelegate().nextPage(this) : super.nextPage()) : null;
+        WOComponent result = null;
+    	if(errorMessage.equals("")) {
+        	result = nextPageFromDelegate();
+        	if(result == null) {
+        		result = super.nextPage();
+        	}
+    	}
+        return result;
     }
 }

@@ -288,7 +288,10 @@ public class ERD2WEditSortedManyToManyPage extends ERD2WPage implements EditRela
             updateEOsOrdering();	   
         editingContext().saveChanges();
         editingContext().revert();
-        WOComponent result = nextPageDelegate() != null ? nextPageDelegate().nextPage(this) : super.nextPage();
+        WOComponent result = nextPageFromDelegate();
+    	if(result == null) {
+    		result = super.nextPage();
+    	}
         if (result != null) {
             return result;
         }
