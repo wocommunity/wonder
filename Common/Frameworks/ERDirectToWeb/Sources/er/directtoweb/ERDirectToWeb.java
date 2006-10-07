@@ -75,7 +75,9 @@ public class ERDirectToWeb extends ERXFrameworkPrincipal {
     	// NOTE: doing Class.ERD2WModel doesn't seem enough
     	// to guarantee fire of ERD2WModel's static initializer
 //  	Configures the system for trace rule firing.
-    	D2W.setFactory(new ERD2WFactory());
+        if(!(D2W.factory() instanceof ERD2WFactory)) {
+        	D2W.setFactory(new ERD2WFactory());
+        }
     	configureTraceRuleFiringRapidTurnAround();
     	ERDirectToWeb.warmUpRuleCache();
         model.checkRules();
