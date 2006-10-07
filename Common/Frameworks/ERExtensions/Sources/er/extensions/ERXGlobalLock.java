@@ -8,10 +8,10 @@ import com.webobjects.foundation.NSLocking;
 /**
  * Simple lock to sync access for multiple instances on one machine. This implementation 
  * uses a lock file with the given name in the temp directory. In case of a VM crash, the file
- * is *not* deleted, so you have to do this yourself.
+ * is *not* deleted, so you have to do this yourself.<br>
  * Additionally, you can't use it reliably on an NFS server. The lock otherwise behaves like an
  * NSRecursiveLock in that the same thread can re-lock as often as he wants.
- * <code>
+ * <code><pre>
  * App1:
  * NSLocking lock = ERXGlobalLock.lockForName("test");
  * lock.lock();
@@ -22,7 +22,7 @@ import com.webobjects.foundation.NSLocking;
  * lock.lock();
  * ...
  * lock.unlock();
- * </code>
+ * </pre></code>
  * @author ak
  */
 public class ERXGlobalLock implements NSLocking {
