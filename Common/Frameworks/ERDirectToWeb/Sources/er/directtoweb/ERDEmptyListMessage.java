@@ -7,6 +7,7 @@
 package er.directtoweb;
 
 import com.webobjects.appserver.WOContext;
+import com.webobjects.foundation.NSKeyValueCoding;
 
 /**
  * Default component shown when a D2W list is empty.<br />
@@ -14,8 +15,27 @@ import com.webobjects.appserver.WOContext;
 
 public class ERDEmptyListMessage extends ERDCustomComponent {
 
-    public ERDEmptyListMessage(WOContext context) { super(context); }
+	public ERDEmptyListMessage(WOContext context) {
+		super(context);
+	}
 
-    public final boolean isStateless() { return true; }
-    public final boolean synchronizesVariablesWithBindings() { return false; }
+	public NSKeyValueCoding bindings() {
+		return new NSKeyValueCoding() {
+			public void takeValueForKey(Object obj, String s) {
+				// nothing
+			}
+
+			public Object valueForKey(String s) {
+				return valueForBinding(s);
+			}
+		};
+	}
+
+	public final boolean isStateless() {
+		return true;
+	}
+
+	public final boolean synchronizesVariablesWithBindings() {
+		return false;
+	}
 }
