@@ -1,18 +1,40 @@
 <webobject name = "AjaxExampleComponent">
 	<style>
-	div.ajaxTreeNode {
-		padding-left: 20px;
+	div#exampleTree img.nodeControl {
+		border: none;
+		vertical-align: top;
 	}
 
-	div.ajaxTreeNode a.ajaxTreeNodeExpanded img {
-		border: none;
+	div#exampleTree ul {
+		margin: 0px;
+		padding: 0px 0px 0px 18px;
 	}
 
-	div.ajaxTreeNode a.ajaxTreeNodeCollapsed img {
-		border: none;
+	div#exampleTree ul li {
+		list-style: none;
+	}
+
+	div#exampleTree ul li a {
+		text-decoration: none;
+		font-family: "Helvetica";
+	}
+	
+	div#exampleTree .nodeLabel {
+		margin-left: 18px;
+		margin-top: -15px;
+		margin-bottom: 3px;
 	}
 	</style>
-	<webobject name = "AjaxTree"/>
+	
+	Below is an example of the AjaxTree component.
+	
+	<webobject name = "AjaxTree"><div class = "nodeLabel">
+		<webobject name = "TreeNodeAction"/>
+		<br>
+		two-line label
+		</div></webobject>
+	
+	Below the tree.
 	
 	<webobject name = "Busy"></webobject>
 </webobject>
