@@ -3,16 +3,32 @@
 	<wo wocomponentcontent = "true" class="AjaxTreeNode.java">
 		<binding name = "root"/>
 		<binding name = "item"/>
+		<binding name = "rootExpanded"/>
+		<binding name = "allExpanded"/>
 		<binding name = "parentKeyPath"/>
 		<binding name = "childrenKeyPath"/>
+		<binding name = "isLeafKeyPath"/>
 		<binding name = "id"/>
 		<binding name = "treeModel"/>
-		<binding name = "updateContainerID"/>
 		<binding name = "collapsedImage"/>
 		<binding name = "collapsedImageFramework"/>
 		<binding name = "expandedImage"/>
 		<binding name = "expandedImageFramework"/>
 		<binding name = "leafImage"/>
 		<binding name = "leafImageFramework"/>
-	</wo>
+
+    <validation message = "&apos;parentKeyPath&apos; and &apos;childrenKeyPath&apos; must be bound.">
+    	<or>
+		    <unbound name = "parentKeyPath"/>
+		    <unbound name = "childrenKeyPath"/>
+		  </or>
+    </validation>
+
+    <validation message = "One of &apos;root&apos; or &apos;treeModel&apos; must be bound.">
+    	<and>
+		    <unbound name = "root"/>
+		    <unbound name = "treeModel"/>
+		  </and>
+    </validation>
+  </wo>
 </wodefinitions>
