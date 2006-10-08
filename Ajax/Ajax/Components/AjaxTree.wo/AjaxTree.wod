@@ -1,3 +1,7 @@
+ToggleFunctionName : WOString {
+	value = _toggleFunctionName;
+}
+
 CloseCountRepetition : WORepetition {
 	count = closeCount;
 }
@@ -47,11 +51,13 @@ IsNotLeafConditional : WOConditional {
 CollapseAction : AjaxUpdateLink {
 	action = collapse;
 	updateContainerID = id;
+	function = toggleFunctionName;
 }
 
 ExpandAction : AjaxUpdateLink {
 	action = expand;
 	updateContainerID = id;
+	function = toggleFunctionName;
 }
 
 TreeNodeRenderer : WOComponentContent {
@@ -59,6 +65,6 @@ TreeNodeRenderer : WOComponentContent {
 
 TreeNodeUpdater : AjaxUpdateContainer {
 	id = id;
-	elementName = "div";
+	elementName = "ul";
 	skipFunction = true;
 }
