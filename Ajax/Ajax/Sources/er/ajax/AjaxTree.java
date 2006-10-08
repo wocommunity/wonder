@@ -6,7 +6,6 @@ import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WOResponse;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSMutableArray;
-import com.webobjects.foundation.NSMutableSet;
 
 public class AjaxTree extends WOComponent {
   private String _id;
@@ -52,14 +51,32 @@ public class AjaxTree extends WOComponent {
     return _nodeIndex;
   }
 
+  public void setAllExpanded(boolean allExpanded) {
+    treeModel().setAllExpanded(allExpanded);
+  }
+
+  public boolean isAllExpanded() {
+    return treeModel().isAllExpanded();
+  }
+
+  public void setRootExpanded(boolean rootExpanded) {
+    treeModel().setRootExpanded(rootExpanded);
+  }
+
+  public boolean isRootExpanded() {
+    return treeModel().isRootExpanded();
+  }
+
   protected void _fillInOpenNodes(Object node, NSMutableArray nodes) {
     nodes.add(node);
     if (treeModel().isExpanded(node)) {
       NSArray childrenTreeNodes = treeModel().childrenTreeNodes(node);
-      int childTreeNodeCount = childrenTreeNodes.count();
-      for (int childTreeNodeNum = 0; childTreeNodeNum < childTreeNodeCount; childTreeNodeNum++) {
-        Object childNode = childrenTreeNodes.objectAtIndex(childTreeNodeNum);
-        _fillInOpenNodes(childNode, nodes);
+      if (childrenTreeNodes != null) {
+        int childTreeNodeCount = childrenTreeNodes.count();
+        for (int childTreeNodeNum = 0; childTreeNodeNum < childTreeNodeCount; childTreeNodeNum++) {
+          Object childNode = childrenTreeNodes.objectAtIndex(childTreeNodeNum);
+          _fillInOpenNodes(childNode, nodes);
+        }
       }
     }
   }
@@ -84,7 +101,7 @@ public class AjaxTree extends WOComponent {
       else {
         level = _level;
       }
-      if (_level > level && parent != null) {
+      if (_level > level) {
         _closeCount = (_level - level);
       }
       else {
@@ -102,20 +119,7 @@ public class AjaxTree extends WOComponent {
   }
 
   public boolean isLeaf() {
-    boolean leaf;
-    NSArray nodes = nodes();
-    if (_nodeIndex >= nodes.count() - 1) {
-      leaf = true;
-    }
-    else {
-      Object nextNode = nodes.objectAtIndex(_nodeIndex + 1);
-      Object nextParent = treeModel().parentTreeNode(nextNode);
-      leaf = (nextParent == _item);
-    }
-    if (leaf) {
-      leaf = treeModel().childrenTreeNodes(_item).count() == 0;
-    }
-    return leaf;
+    return treeModel().isLeaf(_item);
   }
 
   public int _closeCount() {
@@ -133,6 +137,14 @@ public class AjaxTree extends WOComponent {
     return _treeModel;
   }
 
+  public void setIsLeafKeyPath(String keyPath) {
+    treeModel().setIsLeafKeyPath(keyPath);
+  }
+  
+  public String isLeafKeyPath() {
+    return treeModel().isLeafKeyPath();
+  }
+  
   public void setParentKeyPath(String keyPath) {
     treeModel().setParentTreeNodeKeyPath(keyPath);
   }
@@ -170,14 +182,6 @@ public class AjaxTree extends WOComponent {
       _id = AjaxUtils.toSafeElementID(context().elementID());
     }
     return _id;
-  }
-
-  public void setExpanded(Object treeNode, boolean expanded) {
-    treeModel().setExpanded(treeNode, expanded);
-  }
-
-  public void setExpandedTreeNodes(NSMutableSet expandedTreeNodes) {
-    treeModel().setExpandedTreeNodes(expandedTreeNodes);
   }
 
   public String collapsedImage() {
@@ -227,7 +231,7 @@ public class AjaxTree extends WOComponent {
   public void setLeafImageFramework(String leafImageFramework) {
     _leafImageFramework = leafImageFramework;
   }
-  
+
   public String _toggleFunctionName() {
     return _id + "Toggle";
   }

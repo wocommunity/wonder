@@ -1,5 +1,5 @@
 ToggleFunctionName : WOString {
-	value = _toggleFunctionName;
+	value = toggleFunctionName;
 }
 
 CloseCountRepetition : WORepetition {

@@ -10,7 +10,7 @@ public class AjaxTreeExample extends WOComponent {
   
   public AjaxTreeExample(WOContext context) {
     super(context);
-    _rootTreeNode = new FakeTreeNode(null, "Root");
+    _rootTreeNode = new FakeTreeNode(null, "Root", 0);
   }
   
   public void setTreeNode(Object treeNode) {
@@ -26,21 +26,23 @@ public class AjaxTreeExample extends WOComponent {
     return null;
   }
 
-  public class FakeTreeNode {
+  public static class FakeTreeNode {
     private Object _parentTreeNode;
     private NSMutableArray _children;
     private String _name;
-
-    public FakeTreeNode(Object parentTreeNode, String name) {
+    private int _depth;
+    
+    public FakeTreeNode(Object parentTreeNode, String name, int depth) {
       _parentTreeNode = parentTreeNode;
       _name = name;
+      _depth = depth;
     }
-
+    
     public synchronized NSArray childrenTreeNodes() {
-      if (_children == null) {
+      if (_children == null && _depth < 2) {
         _children = new NSMutableArray();
-        for (int i = 0; i < 10; i++) {
-          _children.addObject(new FakeTreeNode(this, _name + " Child " + i));
+        for (int i = 0; i < 5; i++) {
+          _children.addObject(new FakeTreeNode(this, _name + " Child " + i, _depth + 1));
         }
       }
       return _children;

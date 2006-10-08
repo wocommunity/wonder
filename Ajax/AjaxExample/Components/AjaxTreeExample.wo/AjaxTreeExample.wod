@@ -8,6 +8,8 @@ AjaxTree : AjaxTree {
 	item = treeNode;
 	parentKeyPath = "parentTreeNode";
 	childrenKeyPath = "childrenTreeNodes";
+	rootExpanded = true;
+	isLeafKeyPath = "isLeaf";
 }
 
 TreeNodeAction : WOHyperlink {

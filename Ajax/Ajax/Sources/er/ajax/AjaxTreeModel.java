@@ -9,13 +9,35 @@ import com.webobjects.foundation.NSMutableSet;
 public class AjaxTreeModel {
   private Object _rootTreeNode;
   private NSMutableSet _expandedTreeNodes;
+  private NSMutableSet _collapsedTreeNodes;
   private String _parentTreeNodeKeyPath;
   private String _childrenTreeNodesKeyPath;
+  private String _isLeafKeyPath;
+  private boolean _allExpanded;
+  private boolean _rootExpanded;
 
   public AjaxTreeModel() {
     _expandedTreeNodes = new NSMutableSet();
-    _parentTreeNodeKeyPath = "parent";
-    _childrenTreeNodesKeyPath = "children";
+    _collapsedTreeNodes = new NSMutableSet();
+  }
+
+  public void setRootExpanded(boolean rootExpanded) {
+    if (_rootExpanded != rootExpanded) {
+      _rootExpanded = rootExpanded;
+      expandRootIfNecessary();
+    }
+  }
+
+  public boolean isRootExpanded() {
+    return _rootExpanded;
+  }
+
+  public void setAllExpanded(boolean allExpanded) {
+    _allExpanded = allExpanded;
+  }
+
+  public boolean isAllExpanded() {
+    return _allExpanded;
   }
 
   public void setParentTreeNodeKeyPath(String parentTreeNodeKeyPath) {
@@ -33,11 +55,21 @@ public class AjaxTreeModel {
   public String childrenTreeNodesKeyPath() {
     return _childrenTreeNodesKeyPath;
   }
+  
+  public void setIsLeafKeyPath(String isLeafKeyPath) {
+    _isLeafKeyPath = isLeafKeyPath;
+  }
+  
+  public String isLeafKeyPath() {
+    return _isLeafKeyPath;
+  }
 
   public void setRootTreeNode(Object rootTreeNode) {
     if (rootTreeNode != _rootTreeNode) {
       _rootTreeNode = rootTreeNode;
       _expandedTreeNodes.removeAllObjects();
+      _collapsedTreeNodes.removeAllObjects();
+      expandRootIfNecessary();
     }
   }
 
@@ -45,36 +77,83 @@ public class AjaxTreeModel {
     return _rootTreeNode;
   }
 
+  public boolean isLeaf(Object treeNode) {
+    boolean isLeaf;
+    if (_isLeafKeyPath == null) {
+      NSArray childrenTreeNodes = childrenTreeNodes(treeNode);
+      isLeaf = childrenTreeNodes == null || childrenTreeNodes.size() == 0;
+    }
+    else {
+      Boolean isLeafBoolean = (Boolean) NSKeyValueCodingAdditions.Utility.valueForKeyPath(treeNode, _isLeafKeyPath);
+      isLeaf = isLeafBoolean.booleanValue();
+    }
+    return isLeaf;
+  }
+  
   public boolean isExpanded(Object treeNode) {
-    return _expandedTreeNodes.containsObject(treeNode);
+    boolean expanded;
+    if (_allExpanded) {
+      expanded = !_collapsedTreeNodes.containsObject(treeNode);
+    }
+    else {
+      expanded = _expandedTreeNodes.containsObject(treeNode);
+    }
+    return expanded;
   }
 
   public void setExpanded(Object treeNode, boolean expanded) {
+    if (_rootExpanded && treeNode == _rootTreeNode && !expanded) {
+      return;
+    }
+    
     if (expanded) {
-      _expandedTreeNodes.addObject(treeNode);
+      if (_allExpanded) {
+        _collapsedTreeNodes.removeObject(treeNode);
+      }
+      else {
+        _expandedTreeNodes.addObject(treeNode);
+      }
     }
     else {
-      _expandedTreeNodes.removeObject(treeNode);
+      if (_allExpanded) {
+        _collapsedTreeNodes.addObject(treeNode);
+      }
+      else {
+        _expandedTreeNodes.removeObject(treeNode);
+      }
     }
   }
 
   public void collapseAll() {
+    if (_allExpanded) {
+      _allExpanded = false;
+    }
+    clearExpandedAndCollapsed();
+  }
+
+  public void expandAll() {
+    if (!_allExpanded) {
+      _allExpanded = true;
+    }
+    clearExpandedAndCollapsed();
+  }
+
+  protected void clearExpandedAndCollapsed() {
+    _collapsedTreeNodes.removeAllObjects();
     _expandedTreeNodes.removeAllObjects();
+    expandRootIfNecessary();
   }
-
-
-  public NSMutableSet expandedTreeNodes() {
-    return _expandedTreeNodes;
-  }
-
-  public void setExpandedTreeNodes(NSMutableSet expandedTreeNodes) {
-    _expandedTreeNodes = expandedTreeNodes;
+  
+  protected void expandRootIfNecessary() {
+    if (_rootExpanded && _rootTreeNode != null) {
+      setExpanded(_rootTreeNode, true);
+    }
   }
 
   public int level(Object treeNode) {
     Object parentTreeNode = treeNode;
     int level;
-    for (level = 0; parentTreeNode != null; parentTreeNode = parentTreeNode(parentTreeNode), level ++) {
+    for (level = 0; parentTreeNode != null; parentTreeNode = parentTreeNode(parentTreeNode), level++) {
       // do nothing
     }
     return level - 1;
@@ -100,7 +179,7 @@ public class AjaxTreeModel {
   public Enumeration rootDepthFirstEnumeration(boolean enumeratedClosedNodes) {
     return new DepthFirstEnumeration(_rootTreeNode, enumeratedClosedNodes);
   }
-  
+
   protected class DepthFirstEnumeration implements Enumeration {
     private Object _rootNode;
     private Enumeration _childrenEnumeration;
