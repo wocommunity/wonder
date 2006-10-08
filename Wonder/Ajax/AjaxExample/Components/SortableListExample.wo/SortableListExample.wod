@@ -26,4 +26,6 @@ SortableList : AjaxSortableList {
 	list = listItems;
 	listItemIDKeyPath = "id";
 	action = orderChanged;
+	overlap = "horizontal";
+	constraint = "horizontal";
 }

@@ -3,7 +3,16 @@ AjaxExampleComponent : AjaxExampleComponent {
 }
 
 AjaxTree : AjaxTree {
-	rootTreeNode = rootTreeNode;
+	id = "exampleTree";
+	root = rootTreeNode;
+	item = treeNode;
+	parentKeyPath = "parentTreeNode";
+	childrenKeyPath = "childrenTreeNodes";
+}
+
+TreeNodeAction : WOHyperlink {
+	action = nodeSelected;
+	string = treeNode.toString;
 }
 
 Busy : AjaxBusyIndicator {

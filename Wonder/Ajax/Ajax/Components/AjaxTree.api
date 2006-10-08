@@ -1,14 +1,18 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <wodefinitions>
-	<wo wocomponentcontent="false" class="AjaxTree.java">
+	<wo wocomponentcontent = "true" class="AjaxTreeNode.java">
+		<binding name = "root"/>
+		<binding name = "item"/>
+		<binding name = "parentKeyPath"/>
+		<binding name = "childrenKeyPath"/>
+		<binding name = "id"/>
 		<binding name = "treeModel"/>
-		<binding name = "rootTreeNode"/>
+		<binding name = "updateContainerID"/>
 		<binding name = "collapsedImage"/>
 		<binding name = "collapsedImageFramework"/>
 		<binding name = "expandedImage"/>
 		<binding name = "expandedImageFramework"/>
 		<binding name = "leafImage"/>
 		<binding name = "leafImageFramework"/>
-		<binding name = "treeNodeRenderer"/>
 	</wo>
 </wodefinitions>
