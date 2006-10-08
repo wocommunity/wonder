@@ -1,13 +1,12 @@
 <webobject name = "TreeNodeUpdater">
-	<ul>
-		<webobject name = "TreeNodeRepetition">
-			<webobject name = "CloseCountRepetition"></ul></li></webobject>
-			<webobject name = "IsLeafConditional"><webobject name = "LeafImage"/><webobject name = "TreeNodeRenderer"/></webobject>
-			<webobject name = "IsNotLeafConditional">
-				<webobject name = "IsCollapsedConditional"><li><webobject name = "ExpandAction"><webobject name = "CollapsedImage"/></webobject><webobject name = "TreeNodeRenderer"/></li></webobject>
-				<webobject name = "IsExpandedConditional"><li><webobject name = "CollapseAction"><webobject name = "ExpandedImage"/></webobject><webobject name = "TreeNodeRenderer"/><ul></webobject>
-			</webobject>
-		</webobject>
+	<script type = "text/javascript"><webobject name = "ToggleFunctionName"/> = function(actionUrl) { new Ajax.Request(actionUrl, { method:'get' }); };</script>
+	<webobject name = "TreeNodeRepetition">
 		<webobject name = "CloseCountRepetition"></ul></li></webobject>
-	</ul>
+		<webobject name = "IsLeafConditional"><webobject name = "LeafImage"/><webobject name = "TreeNodeRenderer"/></webobject>
+		<webobject name = "IsNotLeafConditional">
+			<webobject name = "IsCollapsedConditional"><li><webobject name = "ExpandAction"><webobject name = "CollapsedImage"/></webobject><webobject name = "TreeNodeRenderer"/></li></webobject>
+			<webobject name = "IsExpandedConditional"><li><webobject name = "CollapseAction"><webobject name = "ExpandedImage"/></webobject><webobject name = "TreeNodeRenderer"/><ul></webobject>
+		</webobject>
+	</webobject>
+	<webobject name = "CloseCountRepetition"></ul></li></webobject>
 </webobject>

@@ -30,6 +30,7 @@ import com.webobjects.foundation.NSMutableDictionary;
  * @binding id id of the link
  * @binding disabled boolean defining if the link renders the tag
  * @binding string string to get preprended to the contained elements
+ * @binding function a custom function to call that takes a single parameter that is the action url
  */
 public class AjaxUpdateLink extends AjaxDynamicElement {
 
@@ -48,18 +49,24 @@ public class AjaxUpdateLink extends AjaxDynamicElement {
     }
     else {
       String actionUrl = context.componentActionURL();
-      String replaceID = (String) valueForBinding("replaceID", context.component());
-      if (replaceID == null) {
-        sb.append("new Ajax.Request('");
-        sb.append(actionUrl);
-        sb.append("', ");
-        AjaxOptions.appendToBuffer(options, sb, context);
-        sb.append(")");
+      if (associations().valueForKey("function") == null) {
+        String replaceID = (String) valueForBinding("replaceID", context.component());
+        if (replaceID == null) {
+          sb.append("new Ajax.Request('");
+          sb.append(actionUrl);
+          sb.append("', ");
+          AjaxOptions.appendToBuffer(options, sb, context);
+          sb.append(")");
+        }
+        else {
+          sb.append("new Ajax.Updater('" + replaceID + "', '" + actionUrl + "', ");
+          AjaxOptions.appendToBuffer(options, sb, context);
+          sb.append(")");
+        }
       }
       else {
-        sb.append("new Ajax.Updater('" + replaceID + "', '" + actionUrl + "', ");
-        AjaxOptions.appendToBuffer(options, sb, context);
-        sb.append(")");
+        String function = (String) valueForBinding("function", context.component());
+        sb.append("return " + function + "('" + actionUrl + "')");
       }
     }
     String onClick = (String) valueForBinding("onClick", context.component());
@@ -91,7 +98,7 @@ public class AjaxUpdateLink extends AjaxDynamicElement {
     if (!disabled) {
       response.appendContentString("<a ");
       appendTagAttributeToResponse(response, "href", "#");
-      appendTagAttributeToResponse(response, "onclick", onClick(context) + "; return false;");
+      appendTagAttributeToResponse(response, "onclick", onClick(context));
       appendTagAttributeToResponse(response, "title", valueForBinding("title", component));
       appendTagAttributeToResponse(response, "value", valueForBinding("value", component));
       appendTagAttributeToResponse(response, "class", valueForBinding("class", component));
