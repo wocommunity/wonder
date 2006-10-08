@@ -10,6 +10,7 @@
 		<binding name = "onException"/>
 		<binding name = "insertion"/>
 		<binding name = "evalScripts"/>
+		<binding name = "function"/>
 
 		<binding name = "replaceID"/>
 		<binding name = "ignoreActionResponse"/>
