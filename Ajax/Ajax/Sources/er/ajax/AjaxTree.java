@@ -227,6 +227,10 @@ public class AjaxTree extends WOComponent {
   public void setLeafImageFramework(String leafImageFramework) {
     _leafImageFramework = leafImageFramework;
   }
+  
+  public String _toggleFunctionName() {
+    return _id + "Toggle";
+  }
 
   public WOActionResults expand() {
     treeModel().setExpanded(_item, true);
