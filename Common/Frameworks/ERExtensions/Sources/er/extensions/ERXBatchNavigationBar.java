@@ -129,6 +129,10 @@ public class ERXBatchNavigationBar extends ERXStatelessComponent {
 
     public int filteredObjectsCount() {
         WODisplayGroup dg=displayGroup();
+        if (dg instanceof ERXDisplayGroup) {
+			ERXDisplayGroup erxdg = (ERXDisplayGroup) dg;
+			return erxdg.filteredObjects().count();
+		}
         int result=0;
         EOQualifier q=dg.qualifier();
         if (q!=null) {
