@@ -3,6 +3,9 @@
 	<wo wocomponentcontent="true" class="AjaxSortableList.java">
 		<binding name = "id"/>
 		<binding name = "list"/>
+		<binding name = "item"/>
+		<binding name = "listElementName"/>
+		<binding name = "listItemElementName"/>
 		<binding name = "listItemIDKeyPath"/>
 		<binding name = "startIndex"/>
 		<binding name = "action"/>
@@ -20,16 +23,12 @@
 		<binding name = "onChange"/>
 		<binding name = "onUpdate"/>
 	
-    <validation message = "&apos;id&apos; is a required binding">
-      <unbound name = "id"/>
+    <validation message = "&apos;list&apos;, &apos;item&apos;, and &apos;listItemIDKeyPath&apos; are required bindings.">
+    	<or>
+	      <unbound name = "list"/>
+	      <unbound name = "item"/>
+  	    <unbound name = "listItemIDKeyPath"/>
+  	  </or>
     </validation>
-    
-    <validation message="&apos;listItemIDKeyPath&apos; must be bound when &apos;list&apos; is bound">
-      <and>
-        <bound name = "list"/>
-        <unbound name = "listItemIDKeyPath"/>
-      </and>
-    </validation>
-    
 	</wo>
 </wodefinitions>
