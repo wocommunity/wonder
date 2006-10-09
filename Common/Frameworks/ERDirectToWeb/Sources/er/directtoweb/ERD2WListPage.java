@@ -48,6 +48,7 @@ import er.extensions.ERXArrayUtilities;
 import er.extensions.ERXBatchingDisplayGroup;
 import er.extensions.ERXComponentActionRedirector;
 import er.extensions.ERXConstant;
+import er.extensions.ERXDisplayGroup;
 import er.extensions.ERXEOAccessUtilities;
 import er.extensions.ERXEOControlUtilities;
 import er.extensions.ERXExtensions;
@@ -106,7 +107,7 @@ public class ERD2WListPage extends ERD2WPage implements ERDListPageInterface, Se
         if(useBatchingDisplayGroup) {
             _displayGroup = new ERXBatchingDisplayGroup();
         } else {
-            _displayGroup = new WODisplayGroup() {
+            _displayGroup = new ERXDisplayGroup() {
 
             	/**
             	 * Overridden so we see when a fetch occurs.
@@ -194,7 +195,7 @@ public class ERD2WListPage extends ERD2WPage implements ERDListPageInterface, Se
 
     /** The background color for the current row. Override this to have more than one color. */
     public String backgroundColorForRow() {
-       return !isSelecting() || object() != displayGroup().selectedObject() ? alternatingColorForRow() : "#FFFF00";
+       return !isSelecting() || selectedObjects().containsObject(object()) ? alternatingColorForRow() : "#FFFF00";
     }
 
     /** Does nothing and exists only for KeyValueCoding.*/
@@ -214,6 +215,20 @@ public class ERD2WListPage extends ERD2WPage implements ERDListPageInterface, Se
             displayGroup().clearSelection();
     }
 
+
+    /** The currently selected objects.*/
+    public NSArray selectedObjects() {
+        return (NSArray)displayGroup().selectedObjects();
+    }
+
+    /** Sets currently selected objects. Pushes the values to the display group, clearing the selection if needed. */
+    public void setSelectedObjects(NSArray eos) {
+        if(eos != null)
+            displayGroup().setSelectedObjects(eos);
+        else
+            displayGroup().clearSelection();
+    }
+    
     /** Action method to select an object. */
     public WOComponent selectObjectAction() {
         setSelectedObject(object());
