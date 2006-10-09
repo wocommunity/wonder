@@ -82,6 +82,8 @@ public class AjaxTree extends WOComponent {
   }
 
   public void appendToResponse(WOResponse aResponse, WOContext aContext) {
+    _level = 0;
+    _closeCount = 0;
     super.appendToResponse(aResponse, aContext);
   }
 
