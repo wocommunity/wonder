@@ -7,40 +7,41 @@ import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSMutableArray;
 
 public class SortableListExample extends WOComponent {
-  private NSArray _listItems;
-  private ListItem _repetitionListItem;
+  private NSMutableArray _listA;
+  private NSArray _listB;
+  public ListItem _repetitionListItemA;
+  public ListItem _repetitionListItemB;
 
   public SortableListExample(WOContext context) {
     super(context);
-    NSMutableArray listItems = new NSMutableArray();
+    NSMutableArray listA = new NSMutableArray();
     for (int i = 0; i < 10; i++) {
-      listItems.addObject(new ListItem(listID() + "_" + i, "Element #" + i));
+      listA.addObject(new ListItem(String.valueOf(i) + "A", "A Element #" + i));
     }
-    _listItems = listItems;
+    _listA = listA;
+
+    NSMutableArray listB = new NSMutableArray();
+    for (int i = 0; i < 10; i++) {
+      listB.addObject(new ListItem(String.valueOf(i) + "B", "B Element #" + i));
+    }
+    _listB = listB.immutableClone();
   }
 
-  public String listID() {
-    return "exampleList";
+  public NSMutableArray listA() {
+    return _listA;
   }
-
-  public void setListItems(NSArray listItems) {
-    _listItems = listItems;
+  
+  public NSArray listB() {
+    return _listB;
   }
-
-  public NSArray listItems() {
-    return _listItems;
+  
+  public void setListB(NSArray listB) {
+    _listB = listB;
   }
-
-  public void setRepetitionListItem(ListItem repetitionListItem) {
-    _repetitionListItem = repetitionListItem;
-  }
-
-  public ListItem repetitionListItem() {
-    return _repetitionListItem;
-  }
-
+  
   public WOActionResults orderChanged() {
-    System.out.println("SortableListExample.orderChanged: " + _listItems);
+    System.out.println("SortableListExample.orderChanged: A: " + _listA);
+    System.out.println("SortableListExample.orderChanged: B: " + _listB);
     return null;
   }
 
