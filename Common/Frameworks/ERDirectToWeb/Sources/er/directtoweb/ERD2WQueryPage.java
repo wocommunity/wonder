@@ -182,16 +182,6 @@ public class ERD2WQueryPage extends ERD2WPage implements QueryPageInterface {
         return q == null ? q2 : (q2 == null ? q : new EOAndQualifier(new NSArray(new Object[] { q, q2 })));
     }
 
-    // Used with branching delegates.
-    protected NSDictionary branch;
-
-    public String branchName() {
-    	if(branch != null) {
-    		return (String) branch.objectForKey("branchName");
-    	}
-    	return null;
-    }
-
     protected Boolean showResults = null;
 
     public boolean showResults() {
