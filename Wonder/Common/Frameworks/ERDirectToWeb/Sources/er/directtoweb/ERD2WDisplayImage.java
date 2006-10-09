@@ -8,11 +8,10 @@ package er.directtoweb;
 
 import com.webobjects.appserver.WOContext;
 import com.webobjects.directtoweb.D2WDisplayString;
+import com.webobjects.foundation.NSData;
 
-// This component right now is only good for displaying an image via the src tag
-// Other important d2w keys, imageHeight and imageWidth
 /**
- * Displays an image via the src binding.<br />
+ * Displays an image via the src or data binding, with imageHeight and imageWidth from the d2wContext<br />
  * 
  */
 
@@ -20,5 +19,9 @@ public class ERD2WDisplayImage extends D2WDisplayString {
     
     public ERD2WDisplayImage(WOContext context) {
         super(context);
+    }
+    
+    public boolean isData() {
+    	return objectPropertyValue() instanceof NSData;
     }
 }
