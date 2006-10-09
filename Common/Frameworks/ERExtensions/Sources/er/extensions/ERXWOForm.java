@@ -7,14 +7,22 @@
 
 package er.extensions;
 
+import java.util.Enumeration;
+
 import org.apache.log4j.Logger;
 
+import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WOAssociation;
+import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WOElement;
 import com.webobjects.appserver.WORequest;
 import com.webobjects.appserver.WOResponse;
+import com.webobjects.appserver._private.WOConstantValueAssociation;
+import com.webobjects.appserver._private.WODynamicElementCreationException;
 import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSLog;
+import com.webobjects.foundation._NSDictionaryUtilities;
 
 /** 
  * Transparent replacement for WOForm. You don't really need to do anything to use it, because it
@@ -38,39 +46,134 @@ import com.webobjects.foundation.NSDictionary;
  * @author ak
  * @author Mike Schrag (idea to secure binding)
  */  
-public class ERXWOForm extends com.webobjects.appserver._private.WOForm {
+public class ERXWOForm extends com.webobjects.appserver._private.WOHTMLDynamicElement {
     // This constant is currently only used with Ajax.  If you change this value, you
     // must also change it in AjaxUtils.
     public static final String FORCE_FORM_SUBMITTED_KEY = "_forceFormSubmitted";
     static final Logger log = Logger.getLogger(ERXWOForm.class);
+    
     WOAssociation _formName;
     WOAssociation _enctype;
     WOAssociation _fragmentIdentifier;
     WOAssociation _secure;
     WOAssociation _disabled;
-    
-    public ERXWOForm(String name, NSDictionary associations,
-                     WOElement template) {
-        super(name, associations, template);
-        _formName = (WOAssociation) _associations.removeObjectForKey("name");
-        _enctype = (WOAssociation) _associations.removeObjectForKey("enctype");
-        _fragmentIdentifier = (WOAssociation) _associations.removeObjectForKey("fragmentIdentifier");
-        _secure = (WOAssociation) _associations.removeObjectForKey("secure");
-        _disabled = (WOAssociation) _associations.removeObjectForKey("disabled");
-    }
-    
-    public void takeValuesFromRequest(WORequest request, WOContext context) {
-      String forceFormSubmittedElementID = (String)request.formValueForKey(ERXWOForm.FORCE_FORM_SUBMITTED_KEY);
-      boolean forceFormSubmitted = (forceFormSubmittedElementID != null && forceFormSubmittedElementID.equals(context.elementID()));
-      if (forceFormSubmitted) {
-        context._setFormSubmitted(true);
-      }
-      super.takeValuesFromRequest(request, context);
-      if (forceFormSubmitted) {
-        context._setFormSubmitted(false);
-      }
+
+    protected WOAssociation _action;
+    protected WOAssociation _href;
+    protected WOAssociation _multipleSubmit;
+    protected WOAssociation _actionClass;
+    protected WOAssociation _queryDictionary;
+    protected NSDictionary _otherQueryAssociations;
+    protected WOAssociation _directActionName;
+
+    public ERXWOForm(String s, NSDictionary nsdictionary, WOElement woelement) {
+    	super("form", nsdictionary, woelement);
+    	_otherQueryAssociations = _NSDictionaryUtilities.extractObjectsForKeysWithPrefix(_associations, "?", true);
+    	if(_otherQueryAssociations.count() == 0) {
+    		_otherQueryAssociations = null;
+    	}
+    	_action = (WOAssociation)_associations.removeObjectForKey("action");
+    	_href = (WOAssociation)_associations.removeObjectForKey("href");
+    	_multipleSubmit = (WOAssociation)_associations.removeObjectForKey("multipleSubmit");
+    	_actionClass = (WOAssociation)_associations.removeObjectForKey("actionClass");
+    	_queryDictionary = (WOAssociation)_associations.removeObjectForKey("queryDictionary");
+    	_directActionName = (WOAssociation)_associations.removeObjectForKey("directActionName");
+    	_formName = (WOAssociation) _associations.removeObjectForKey("name");
+    	_enctype = (WOAssociation) _associations.removeObjectForKey("enctype");
+    	_fragmentIdentifier = (WOAssociation) _associations.removeObjectForKey("fragmentIdentifier");
+    	_secure = (WOAssociation) _associations.removeObjectForKey("secure");
+    	_disabled = (WOAssociation) _associations.removeObjectForKey("disabled");
+    	if(_associations.objectForKey("method") == null && _associations.objectForKey("Method") == null && _associations.objectForKey("METHOD") == null) {
+    		_associations.setObjectForKey(new WOConstantValueAssociation("post"), "method");
+    	}
+    	if(_action != null && _href != null || _action != null && _directActionName != null || _href != null && _directActionName != null || _action != null && _actionClass != null || _href != null && _actionClass != null) {
+    		throw new WODynamicElementCreationException("<" + getClass().getName() + ">: At least two of these conflicting attributes are present: 'action', 'href', 'directActionName', 'actionClass'");
+    	}
+    	if(_action != null && _action.isValueConstant()) {
+    		throw new WODynamicElementCreationException("<" + getClass().getName() + ">: 'action' is a constant.");
+    	}
     }
 
+
+    public String toString() {
+    	return "<" + getClass().getName() + " action: " + (_action == null ? "null" : _action.toString()) + " actionClass: " + (_actionClass == null ? "null" : _actionClass.toString()) + " directActionName: " + (_directActionName == null ? "null" : _directActionName.toString()) + " href: " + (_href == null ? "null" : _href.toString()) + " multipleSubmit: " + (_multipleSubmit == null ? "null" : _multipleSubmit.toString()) + " queryDictionary: " + (_queryDictionary == null ? "null" : _queryDictionary.toString()) + " otherQueryAssociations: " + (_otherQueryAssociations == null ? "null" : _otherQueryAssociations.toString()) + " >";
+    } 
+
+    protected boolean _enterFormInContext(WOContext context) {
+    	boolean wasInForm = context.isInForm();
+    	context.setInForm(true);
+    	if(context.elementID().equals(context.senderID())) {
+    		context._setFormSubmitted(true);
+    	}
+    	return wasInForm;
+    }
+
+    protected void _exitFormInContext(WOContext context, boolean wasInForm, boolean wasFormSubmitted) {
+    	context.setInForm(wasInForm);
+    	context._setFormSubmitted(wasFormSubmitted);
+    }
+
+    public WOActionResults invokeAction(WORequest worequest, WOContext context) {
+    	boolean wasFormSubmitted = context._wasFormSubmitted();
+		boolean wasInForm = _enterFormInContext(context);
+    	context._setActionInvoked(false);
+    	context._setIsMultipleSubmitForm(_multipleSubmit == null ? false : _multipleSubmit.booleanValueInComponent(context.component()));
+    	Object obj = super.invokeAction(worequest, context);
+    	if(!context._wasActionInvoked() && context._wasFormSubmitted()) {
+    		if(_action != null) {
+    			obj = (WOActionResults)_action.valueInComponent(context.component());
+    		}
+    		if(obj == null) {
+    			obj = context.page();
+    		}
+    	}
+    	context._setIsMultipleSubmitForm(false);
+    	_exitFormInContext(context, wasInForm, wasFormSubmitted);
+    	return ((WOActionResults) (obj));
+    }
+
+    protected void _appendHiddenFieldsToResponse(WOResponse response, WOContext context) {
+    	boolean flag = _actionClass != null;
+    	NSDictionary nsdictionary = computeQueryDictionaryInContext(_actionClass, _directActionName, _queryDictionary, flag, _otherQueryAssociations, context);
+    	if(nsdictionary.count() > 0) {
+    		for(Enumeration enumeration = nsdictionary.keyEnumerator(); enumeration.hasMoreElements(); response._appendContentAsciiString(">\n")) {
+    			String s = (String)enumeration.nextElement();
+    			Object obj = nsdictionary.objectForKey(s);
+    			response._appendContentAsciiString("<input type=hidden");
+    			response._appendTagAttributeAndValue("name", s, false);
+    			response._appendTagAttributeAndValue("value", obj.toString(), false);
+    		}
+
+    	}
+    }
+
+    public void appendChildrenToResponse(WOResponse response, WOContext context) {
+    	super.appendChildrenToResponse(response, context);
+    	_appendHiddenFieldsToResponse(response, context);
+    }
+
+    protected String cgiAction(WOResponse response, WOContext context) {
+    	String s = computeActionStringInContext(_actionClass, _directActionName, context);
+    	return context.directActionURLForActionNamed(s, null);
+    }
+
+    public void takeValuesFromRequest(WORequest request, WOContext context) {
+    	boolean wasFormSubmitted = context._wasFormSubmitted();
+		boolean wasInForm = _enterFormInContext(context);
+    	//log.info(this._formName + "->" + this.toString().replaceAll(".*(keyPath=\\w+).*", "$1"));
+    	String forceFormSubmittedElementID = (String)request.formValueForKey(ERXWOForm.FORCE_FORM_SUBMITTED_KEY);
+    	boolean forceFormSubmitted = (forceFormSubmittedElementID != null && forceFormSubmittedElementID.equals(context.elementID()));
+    	if (forceFormSubmitted) {
+    		context._setFormSubmitted(true);
+    	}
+    	super.takeValuesFromRequest(request, context);
+    	if (forceFormSubmitted) {
+    		context._setFormSubmitted(false);
+    	}
+    	//log.info(context.elementID() + "->" + context.senderID() + "->" + context._wasFormSubmitted());
+    	_exitFormInContext(context, wasInForm, wasFormSubmitted);
+    }
+    
     public void appendAttributesToResponse(WOResponse response, WOContext context) {
     	if(_formName != null) {
     		String formName = (String)_formName.valueInComponent(context.component());
@@ -87,31 +190,45 @@ public class ERXWOForm extends com.webobjects.appserver._private.WOForm {
     		}
     	}
         boolean secure = _secure != null && _secure.booleanValueInComponent(context.component());
-        Object fragmentIdentifier = (_fragmentIdentifier != null ? _fragmentIdentifier.valueInComponent(context.component()) : null);
-        if (secure || fragmentIdentifier != null) {
-            //FIXME: (ak) we assume that relative URL creation is on by default, so we may restore the wrong type 
-            WOResponse newResponse = new WOResponse();
-            if(secure) {
-                context._generateCompleteURLs();
-                super.appendAttributesToResponse(newResponse, context);
-                context._generateRelativeURLs();
-            } else {
-                super.appendAttributesToResponse(newResponse, context);
-            }
-            String attributes = newResponse.contentString();
-            if(secure && attributes.indexOf("action=\"http://") >= 0) {
-                attributes = attributes.replaceFirst("action=\"http://", "action=\"https://");
+        Object hrefObject = null;
+    	WOComponent wocomponent = context.component();
+    	super.appendAttributesToResponse(response, context);
+    	if(secure) {
+            context._generateCompleteURLs();
+    	}
+    	if(_href != null) {
+    		hrefObject = _href.valueInComponent(wocomponent);
+    	}
+    	if(_directActionName != null || _actionClass != null) {
+    		hrefObject = cgiAction(response, context);
+    	} else {
+    		if(hrefObject != null) {
+    			response._appendTagAttributeAndValue("action", hrefObject.toString(), false);
+    		} else {
+    			if(_href == null) {
+    				hrefObject = context.componentActionURL();
+    			} else {
+    				NSLog.err.appendln("<WOForm> : action attribute evaluates to null");
+    			}
+    		}
+    	}
+    	if(hrefObject != null) {
+    		String href = hrefObject.toString();
+    		Object fragmentIdentifier = (_fragmentIdentifier != null ? _fragmentIdentifier.valueInComponent(context.component()) : null);
+    		if(secure) {
+    			href = href.replaceFirst("http://", "https://");
             }
             if(fragmentIdentifier != null) {
-                attributes = attributes.replaceFirst("action=\"([^\"]*)\"", "action=\"$1#" + fragmentIdentifier + "\"");
+            	href = "#" + fragmentIdentifier;
             }
-            
-            response.appendContentString(attributes);
-        } else {
-            super.appendAttributesToResponse(response, context);
-        }
+            response._appendTagAttributeAndValue("action", href, false);
+    	}
+    	if(secure) {
+//    		FIXME: (ak) we assume that relative URL creation is on by default, so we may restore the wrong type 
+            context._generateRelativeURLs();
+    	}
     }
-     
+
     public void appendToResponse(WOResponse response, WOContext context) {
         boolean wasInForm = context.isInForm();
         
@@ -119,10 +236,13 @@ public class ERXWOForm extends com.webobjects.appserver._private.WOForm {
         
         boolean disable = _disabled != null && _disabled.booleanValueInComponent(context.component());
         boolean shouldAppendFormTags = !disable && !wasInForm;
-        
+
         if (shouldAppendFormTags) {
-            _appendOpenTagToResponse(response, context);
-            appendChildrenToResponse(response, context);
+        	_appendOpenTagToResponse(response, context);
+        	if(_multipleSubmit != null && _multipleSubmit.booleanValueInComponent(context.component())) {
+        		response._appendContentAsciiString("<input type=\"submit\" style=\"position: absolute; left: -10000px;\" name=\"WOFormDummySubmit\" value=\"WOFormDummySubmit\" />");
+        	}
+        	appendChildrenToResponse(response, context);
             _appendCloseTagToResponse(response, context);
             ERXWOContext.contextDictionary().removeObjectForKey("formName");
             ERXWOContext.contextDictionary().removeObjectForKey("enctype");
