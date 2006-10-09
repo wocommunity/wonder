@@ -692,16 +692,17 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
      * @return
      */
     protected WOComponent nextPageFromDelegate() {
+    	WOComponent result = null;
     	NextPageDelegate delegate = nextPageDelegate();
     	if(delegate != null) {
-    		if((delegate instanceof ERDBranchDelegate) && branchName() != null) {
+    		if(!((delegate instanceof ERDBranchDelegate) && (branchName() == null))) {
     			// AK CHECKME: we assume here, because nextPage() in ERDBranchDelegate is final, 
     			// we can't do something reasonable when none of the branch buttons was selected.
     			// This allows us to throw a branch delegate at any page, even when no branch was taken
-    			return delegate.nextPage(this);
+        		result = delegate.nextPage(this);
     		}
     	}
-    	return null;
+    	return result;
     }
     
     public NextPageDelegate nextPageDelegate() {
