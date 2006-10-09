@@ -1423,4 +1423,42 @@ public class ERXEOControlUtilities {
 	   }
 	   return null;
    }
+   
+   /**
+    * Creates an OR qualifier with the given selector for all the given key paths. If you want
+    * LIKE matches, you need to the add "*" yourself.
+    * @param keyPaths
+    * @param selector
+    * @param value
+    * @return
+    */
+   public static EOQualifier orQualifierForKeyPaths(NSArray keyPaths, NSSelector selector, String value) {
+	   NSMutableArray qualifiers = new NSMutableArray(keyPaths.count());
+	   for (Enumeration e=keyPaths.objectEnumerator(); e.hasMoreElements();) {
+		  String key = (String)e.nextElement();
+		  EOQualifier qualifier = new EOKeyValueQualifier(key, selector, value);
+		  qualifiers.addObject(qualifier);
+	   }
+	   return new EOOrQualifier(qualifiers);
+   }
+   
+   /**
+	 * Creates an OR qualifier with the given selector for all the given key
+	 * paths and all the given serach terms. If you want LIKE matches, you need
+	 * to the add "*" yourself.
+	 * 
+	 * @param keyPaths
+	 * @param selector
+	 * @param values
+	 * @return
+	 */
+   public static EOQualifier orQualifierForKeyPaths(NSArray keyPaths, NSSelector selector, NSArray values) {
+	   NSMutableArray qualifiers = new NSMutableArray(values.count());
+	   for (Enumeration e=values.objectEnumerator(); e.hasMoreElements();) {
+		  String value = (String)e.nextElement();
+		  EOQualifier qualifier = orQualifierForKeyPaths(keyPaths, selector, value);
+		  qualifiers.addObject(qualifier);
+	   }
+	   return new EOOrQualifier(qualifiers);
+   }
 }
