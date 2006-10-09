@@ -2,28 +2,28 @@ AjaxExampleComponent : AjaxExampleComponent {
 	title = "Sortable List";
 }
 
-ListItemName : WOString {
-	value = repetitionListItem.name;
-}
-
-ListItemRepetition : WORepetition {
-	list = listItems;
-	item = repetitionListItem;
-}
-
-ListContainer : WOGenericContainer {
-	elementName = "ul";
-	id = listID;
-}
-
-ListItemContainer : WOGenericContainer {
-	elementName = "li";
-	id = repetitionListItem.id;
-}
-
-SortableList : AjaxSortableList {
-	id = listID;
-	list = listItems;
+SortableListA : AjaxSortableList {
+	id = "exampleListA";
+	listElementName = "ul";
+	listItemElementName = "li";
+	list = listA;
+	item = repetitionListItemA;
 	listItemIDKeyPath = "id";
 	action = orderChanged;
+}
+
+ListItemNameA : WOString {
+	value = repetitionListItemA.name;
+}
+
+SortableListB : AjaxSortableList {
+	id = "exampleListB";
+	list = listB;
+	item = repetitionListItemB;
+	listItemIDKeyPath = "id";
+	action = orderChanged;
+}
+
+ListItemNameB : WOString {
+	value = repetitionListItemB.name;
 }
