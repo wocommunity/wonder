@@ -3,6 +3,7 @@ package er.extensions;
 import org.apache.log4j.Logger;
 
 import com.webobjects.appserver.WODisplayGroup;
+import com.webobjects.eocontrol.EOQualifier;
 import com.webobjects.foundation.NSArray;
 
 /**
@@ -19,10 +20,14 @@ public class ERXDisplayGroup extends WODisplayGroup {
     private static final Logger log = Logger.getLogger(ERXDisplayGroup.class);
 
     public NSArray filteredObjects() {
-    	int old = numberOfObjectsPerBatch();
-    	setNumberOfObjectsPerBatch(0);
-    	NSArray result = displayedObjects();
-    	setNumberOfObjectsPerBatch(old);
+    	// FIXME AK: need to cache here
+    	NSArray result;
+    	EOQualifier q=qualifier();
+        if (q!=null) {
+            result=EOQualifier.filteredArrayWithQualifier(allObjects(),q);
+        } else {
+            result=allObjects();
+        }
     	return result;
     }
 }
