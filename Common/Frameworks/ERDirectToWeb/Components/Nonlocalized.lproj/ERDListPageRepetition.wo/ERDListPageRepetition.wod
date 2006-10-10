@@ -87,9 +87,8 @@ ListTableRow: WOGenericContainer {
 	elementName = "tr";
 }
 
-PropertyName: WOString {
-	_unroll = true;
-	value = d2wContext.displayNameForProperty;
+PropertyName: ERD2WPropertyName {
+	localContext = d2wContext;
 }
 
 RightAction: WOSwitchComponent { 

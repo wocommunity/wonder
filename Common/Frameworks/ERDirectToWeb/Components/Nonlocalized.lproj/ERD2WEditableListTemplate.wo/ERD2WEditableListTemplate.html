@@ -1,26 +1,41 @@
 <webobject name=PageWrapper>
-	<webobject name=ListTable><webobject name=ListNotEmpty><webobject name=Form1><webobject name=HiddenField></webobject><webobject name=ErrorDictionaryPanel></webobject>
-				<webobject name=Conditional2>
+    <webobject name=Help></webobject>
+    <webobject name=ListTable>
+        <webobject name=ListNotEmpty>
+            <webobject name=EditForm>
+                <webobject name=HiddenField></webobject>
+                <webobject name=ShouldShowMassChange>
+                    <tr><td><webobject name=MassChangeRepetition></webobject></td></tr>
+                    <tr height=2><td><webobject name=ClearChangesButton></webobject> <webobject name=PropagateButton></webobject> <webobject name=ShouldShowPropagateDebug><br><webobject name=PropagateDebug></webobject></webobject></td></tr>
+                    <tr height=2><td><hr></td></tr>
+                    <tr bgcolor=white height=2><td>&nbsp;</td></tr>
+                </webobject>
+                <webobject name=ShouldShowBanner>
 					<tr height="">
 						<td colspan=30 bgcolor=#EBEBEB>
-							<webobject name=NavBar2></webobject></td>
+							<webobject name=NavBar></webobject></td>
 					</tr>
 				</webobject>
-				<tr>
-					<td><webobject name=ListPageRepetition2><webobject name=ErrorDictionaryPanel2></webobject></webobject></td>
+                <TR>
+                    <TD ALIGN=center COLSPAN=3><WEBOBJECT NAME=Errors></WEBOBJECT></TD>
+                </TR>
+                <tr>
+					<td><webobject name=ListPageRepetition><WEBOBJECT NAME=ErrorsForEntity></WEBOBJECT></webobject></td>
 				</tr>
 				<tr>
-					<td ALIGN=CENTER COLSPAN=2><webobject name=CancelActiveImage></webobject>&nbsp;<webobject name=ActiveImage1></webobject>&nbsp;<webobject name=SaveActiveImage></webobject></td>
-				</tr>
-			</webobject><webobject name=ListEmpty2>
-				<tr>
-					<td ALIGN=CENTER COLSPAN=2><webobject name=EmptyMessageComponent></webobject></td>
-				</tr>
-				<tr>
-					<td ALIGN=CENTER><webobject name=HideReturnOnSelect1>
-							<webobject name=ShowCancel1><webobject name=ReturnActiveImage2></webobject></webobject>
-						</webobject></td>
+					<td ALIGN=CENTER COLSPAN=2><webobject name=CancelActiveImage></webobject>&nbsp;<webobject name=UpdateActiveImage></webobject>&nbsp;<webobject name=SaveActiveImage></webobject></td>
 				</tr>
 			</webobject>
-		</webobject></webobject>
+        </webobject>
+        <webobject name=ListEmpty>
+		    <tr>
+				<td ALIGN=CENTER COLSPAN=2><webobject name=EmptyMessageComponent></webobject></td>
+			</tr>
+			<tr>
+				<td ALIGN=CENTER><webobject name=HideReturnOnSelect>
+						<webobject name=ShowCancel><webobject name=ReturnActiveImage></webobject></webobject>
+					</webobject></td>
+			</tr>
+		</webobject>
+    </webobject>
 </webobject>
