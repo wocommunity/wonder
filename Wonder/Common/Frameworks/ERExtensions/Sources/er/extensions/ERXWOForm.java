@@ -136,12 +136,13 @@ public class ERXWOForm extends com.webobjects.appserver._private.WOHTMLDynamicEl
     	boolean flag = _actionClass != null;
     	NSDictionary nsdictionary = computeQueryDictionaryInContext(_actionClass, _directActionName, _queryDictionary, flag, _otherQueryAssociations, context);
     	if(nsdictionary.count() > 0) {
-    		for(Enumeration enumeration = nsdictionary.keyEnumerator(); enumeration.hasMoreElements(); response._appendContentAsciiString(">\n")) {
+    		for(Enumeration enumeration = nsdictionary.keyEnumerator(); enumeration.hasMoreElements(); ) {
     			String s = (String)enumeration.nextElement();
     			Object obj = nsdictionary.objectForKey(s);
-    			response._appendContentAsciiString("<input type=hidden");
+    			response._appendContentAsciiString("<input type=\"hidden\"");
     			response._appendTagAttributeAndValue("name", s, false);
     			response._appendTagAttributeAndValue("value", obj.toString(), false);
+    			response._appendContentAsciiString(" />\n");
     		}
 
     	}
