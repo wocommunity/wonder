@@ -19,6 +19,7 @@ import java.util.Enumeration;
 
 /**
  * List page for editing all items in the list.
+ * Name your page EditListYourEntityName.  task will be edit, subTask will be list.
  * See Component ERD2WEditableListTemplate for html/wod example.
  *
  * There is a "mass change" feature that can apply a change to all displayed objects.
