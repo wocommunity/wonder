@@ -9,6 +9,7 @@ import com.webobjects.appserver.WOContext;
 
 /**
  * List page for editing all items in the list.<br />
+ * See {@link ERD2WEditableListPage}
  * 
  * @binding backAction
  * @binding dataSource

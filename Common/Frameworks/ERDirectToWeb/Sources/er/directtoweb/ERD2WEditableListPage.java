@@ -17,6 +17,23 @@ import org.apache.log4j.Logger;
 
 import java.util.Enumeration;
 
+/**
+ * List page for editing all items in the list.
+ * See Component ERD2WEditableListTemplate for html/wod example.
+ *
+ * There is a "mass change" feature that can apply a change to all displayed objects.
+ * Think of it as an "input assistant".  The changes are not saved when propagated, and the rows can be updated individually after a mass change has been applied.
+ * (Note: There is a {@link ERDMassModifyButton} class that may be more appropriate depending on your needs)
+ *
+ * To enable the mass change feature on an editable list page, do the following:
+ *
+ * 1/ Add a "showMassChange" rule that returns "true" for your edit list page
+ * 2/ If you want to restrict the keys that can be "mass edited", add a displayPropertyKeys rule with a restricted set of keys with the qualifer "(massChangeEntityDisplay = 1)"
+ *
+ * Known Issues:
+ *      changing the number of items per batch causes problems (the display group's batch is updated too soon in the request/response loop)
+ */
+
 public class ERD2WEditableListPage extends ERD2WListPage implements ERXExceptionHolder, ERDObjectSaverInterface {
 
     public static final Logger log = Logger.getLogger(ERD2WEditableListPage.class);
