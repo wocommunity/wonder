@@ -95,11 +95,10 @@ public class ERXWOContext extends WOContext implements ERXMutableUserInfoHolderI
      */
     public String directActionURLForActionNamed(String actionName, NSDictionary queryDict, boolean includeSessionID) {
         String url = super.directActionURLForActionNamed(actionName, queryDict);
-        
-        if (includeSessionID) 
-            return url;
-        else 
-            return stripSessionIDFromURL(url);
+        if (!includeSessionID) { 
+            url = stripSessionIDFromURL(url);
+        } 
+        return url;
     }
     
     /**
@@ -135,5 +134,18 @@ public class ERXWOContext extends WOContext implements ERXMutableUserInfoHolderI
         }
         return url;
     }
-    
+
+    public String elementID() {
+      String elementID = super.elementID();
+      // MS: If you make an element the very first item on a page (i.e. no
+      // html tag, no whitespace, etc), elementID will end up being null
+      // instead of 0.1 like it would be if you just put a space in front 
+      // of it.
+      if (elementID == null) {
+        appendZeroElementIDComponent();
+        incrementLastElementIDComponent();
+        elementID = super.elementID();
+      }
+      return elementID;
+    }
 }
