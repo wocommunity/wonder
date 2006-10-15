@@ -168,6 +168,7 @@ er.extensions.ERXRaiseOnMissingEditingContextDelegate = true
 # er.extensions.ERXDirectAction.ChangeSystemPropertyPassword = pw
 # er.extensions.ERXRemoteShellPassword = pw
 # er.extensions.ERXDatabaseConsolePassword = pw
+# er.extensions.ERXOpenEditingContextLockTracesPassword = pw
 #########################################################################
 # Log4j Configuration
 #########################################################################
@@ -257,6 +258,11 @@ er.extensions.ERXComponentActionRedirector.enabled=false
 ## decides if locked editing contexts should be unlocked after the RR-loop.
 ## If you use D2W, it is *strongly* recommended to enable this feature!
 # er.extensions.ERXApplication.useEditingContextUnlocker=false
+
+## When true, ERXEC's will generate a stack trace when lock is called that
+## can later be accessed via .openLockTrace() or the showOpenEditingContextLockTraces
+## ERXDirectAction.  Defaults to false.
+# er.extensions.ERXApplication.traceOpenEditingContextLocks = true
 
 ## decides if the session store deadlock detection (session can't get 
 ## checked out because it already was) should be enabled. This is useful 
