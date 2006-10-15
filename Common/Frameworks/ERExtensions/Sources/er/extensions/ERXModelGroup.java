@@ -277,7 +277,7 @@ public class ERXModelGroup extends
                     createPrototypes();
                 }
             }
-            return (EOAttribute) super.prototypeAttributeNamed(name);
+            return super.prototypeAttributeNamed(name);
         }
 
         /**
@@ -817,7 +817,7 @@ public class ERXModelGroup extends
                     if (prototypeAttribute == null) {
                       log.warn(model.name() + "/" + entity.name() + "/" + attribute.name() + " references a prototype attribute named " + prototypeAttributeName + " that does not exist in " + prototypeEntity.name() + ".");
                     }
-                    else if (prototypeAttribute.entity() == prototypeEntity) {
+                    else if (attribute.prototype().entity() == prototypeEntity) {
                       if (log.isDebugEnabled()) {
                         log.debug("Skipping " + model.name() + "/" + entity.name() + "/" + attribute.name() + " because it is already prototyped by the correct entity.");
                       }
