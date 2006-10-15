@@ -17,6 +17,7 @@ import com.webobjects.eoaccess.EOAttribute;
 import com.webobjects.eoaccess.EOEntity;
 import com.webobjects.eoaccess.EOModel;
 import com.webobjects.eoaccess.EOModelGroup;
+import com.webobjects.eocontrol.EOKeyValueCodingAdditions;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSBundle;
 import com.webobjects.foundation.NSDictionary;
@@ -30,6 +31,7 @@ import com.webobjects.foundation.NSPathUtilities;
 import com.webobjects.foundation.NSPropertyListSerialization;
 import com.webobjects.foundation.NSSelector;
 import com.webobjects.foundation.NSSet;
+import com.webobjects.foundation._NSArrayUtilities;
 import com.webobjects.jdbcadaptor.JDBCAdaptor;
 
 /**
@@ -48,6 +50,7 @@ public class ERXModelGroup extends
     private Hashtable       cache;
 
     protected static boolean patchModelsOnLoad = ERXProperties.booleanForKeyWithDefault("er.extensions.ERXModelGroup.patchModelsOnLoad", false);
+    protected static boolean flattenPrototypes = ERXProperties.booleanForKeyWithDefault("er.extensions.ERXModelGroup.flattenPrototypes", true);
     public static final String ModelGroupAddedNotification = "ERXModelGroupAddedNotification";
     
     /**
@@ -644,155 +647,210 @@ public class ERXModelGroup extends
      * @param model
      *            to be reset
      */
-    public void resetConnectionDictionaryInModel(EOModel model)  {
-        if(model == null) {
-            throw new IllegalArgumentException("Model can't be null"); 
-        }
-        String modelName=model.name();
-        log.debug("Adjusting "+modelName);
-        NSDictionary old = model.connectionDictionary();
+    public void resetConnectionDictionaryInModel(EOModel model) {
+      if (model == null) {
+        throw new IllegalArgumentException("Model can't be null");
+      }
+      String modelName = model.name();
+      log.debug("Adjusting " + modelName);
+      NSDictionary old = model.connectionDictionary();
 
-        if(model.adaptorName() == null) {
-            log.info("Skipping model '" + modelName + "', it has no adaptor name set");
-            return;
-        }
+      if (model.adaptorName() == null) {
+        log.info("Skipping model '" + modelName + "', it has no adaptor name set");
+        return;
+      }
 
-        // Support for EODatabaseConfig from EntityModeler.  The value of YourEOModelName.DBConfigName is
-        // used to lookup the corresponding EODatabaseConfig name from user info.  The connection dictionary
-        // defined in the databaseConfig section completely replaces the connection dictionary in the 
-        // EOModel. After the initial replacement, all the additional PW model configurations are then 
-        // applied to the new dictionary.
-        String databaseConfigName = getProperty(modelName + ".DBConfigName", "dbConfigNameGLOBAL");
-        NSDictionary databaseConfig = null;
-        if (databaseConfigName != null) {
-            NSDictionary userInfo = model.userInfo();
-            if (userInfo != null) {
-                NSDictionary entityModelerDictionary = (NSDictionary) userInfo.objectForKey("_EntityModeler");
-                if (entityModelerDictionary != null) {
-                    NSDictionary databaseConfigsDictionary = (NSDictionary) entityModelerDictionary.objectForKey("databaseConfigs");
-                    if (databaseConfigsDictionary != null) {
-                        databaseConfig = (NSDictionary) databaseConfigsDictionary.objectForKey(databaseConfigName);
-                        if (databaseConfig != null) {
-                            NSDictionary connectionDictionary = (NSDictionary) databaseConfig.objectForKey("connectionDictionary");
-                            model.setConnectionDictionary(connectionDictionary);
+      NSDictionary databaseConfig = databaseConfigForModel(model);
+      if (databaseConfig != null) {
+        NSDictionary connectionDictionary = (NSDictionary) databaseConfig.objectForKey("connectionDictionary");
+        model.setConnectionDictionary(connectionDictionary);
+      }
+
+      if (model.adaptorName().indexOf("Oracle") != -1) {
+        fixOracleDictionary(model);
+      }
+      else if (model.adaptorName().indexOf("Flat") != -1) {
+        fixFlatDictionary(model);
+      }
+      else if (model.adaptorName().indexOf("OpenBase") != -1) {
+        fixOpenBaseDictionary(model);
+      }
+      else if (model.adaptorName().indexOf("JDBC") != -1) {
+        fixJDBCDictionary(model);
+      }
+
+      if (log.isDebugEnabled() && !old.equals(model.connectionDictionary())) {
+        NSMutableDictionary dict = model.connectionDictionary().mutableClone();
+        if (dict.objectForKey("password") != null) {
+          dict.setObjectForKey("<deleted for log>", "password");
+          log.debug("New Connection Dictionary for " + modelName + ": " + dict);
+        }
+      }
+
+      fixPrototypesForModel(model);
+    }
+
+    protected String prototypeEntityNameForModel(EOModel model) {
+      String modelName = model.name();
+      String prototypeEntityName = ERXSystem.getProperty(modelName + ".EOPrototypesEntity");
+      NSDictionary databaseConfig = databaseConfigForModel(model);
+      if (prototypeEntityName == null && databaseConfig != null) {
+        prototypeEntityName = (String) databaseConfig.objectForKey("prototypeEntityName");
+      }
+
+      if (prototypeEntityName == null && !(ERXModelGroup_.patchModelsOnLoad())) {
+        String pluginName = ERXEOAccessUtilities.guessPluginName(model);
+        if (pluginName != null) {
+          String pluginPrototypeEntityName = "EOJDBC" + pluginName + "Prototypes";
+          // This check isn't technically necessary since
+          // it doesn't down below, but since
+          // we are guessing here, I don't want themt o
+          // get a warning about the prototype not
+          // being found if they aren't even using Wonder
+          // prototypes.
+          if (model.modelGroup().entityNamed(pluginPrototypeEntityName) != null) {
+            prototypeEntityName = pluginPrototypeEntityName;
+          }
+        }
+      }
+      return prototypeEntityName;
+    }
+
+    protected NSDictionary databaseConfigForModel(EOModel model) {
+      // Support for EODatabaseConfig from EntityModeler.  The value of YourEOModelName.DBConfigName is
+      // used to lookup the corresponding EODatabaseConfig name from user info.  The connection dictionary
+      // defined in the databaseConfig section completely replaces the connection dictionary in the 
+      // EOModel. After the initial replacement, all the additional PW model configurations are then 
+      // applied to the new dictionary.
+      String modelName = model.name();
+      String databaseConfigName = getProperty(modelName + ".DBConfigName", "dbConfigNameGLOBAL");
+      NSDictionary databaseConfig = null;
+      NSDictionary userInfo = model.userInfo();
+      if (userInfo != null) {
+        NSDictionary entityModelerDictionary = (NSDictionary) userInfo.objectForKey("_EntityModeler");
+        if (entityModelerDictionary != null) {
+          if (databaseConfigName == null) {
+            databaseConfigName = (String) entityModelerDictionary.objectForKey("activeDatabaseConfigName");
+          }
+          if (databaseConfigName != null) {
+            NSDictionary databaseConfigsDictionary = (NSDictionary) entityModelerDictionary.objectForKey("databaseConfigs");
+            if (databaseConfigsDictionary != null) {
+              databaseConfig = (NSDictionary) databaseConfigsDictionary.objectForKey(databaseConfigName);
+            }
+          }
+        }
+      }
+      return databaseConfig;
+    }
+
+    private void fixPrototypesForModel(EOModel model) {
+      String modelName = model.name();
+      // based on an idea from Stefan Apelt <stefan@tetlabors.de>
+      String f = getProperty(modelName + ".EOPrototypesFile", "EOPrototypesFileGLOBAL");
+      if (f != null) {
+        NSDictionary dict = (NSDictionary) NSPropertyListSerialization.propertyListFromString(ERXStringUtilities.stringFromResource(f, "", null));
+        if (dict != null) {
+          if (log.isDebugEnabled()) {
+            log.debug("Adjusting prototypes from " + f);
+          }
+          EOEntity proto = model.entityNamed("EOPrototypes");
+          if (proto == null) {
+            log.warn("No prototypes found in model named \"" + modelName + "\", although the EOPrototypesFile default was set!");
+          }
+          else {
+            model.removeEntity(proto);
+            proto = new EOEntity(dict, model);
+            proto.awakeWithPropertyList(dict);
+            model.addEntity(proto);
+          }
+        }
+      }
+
+      flattenPrototypes();
+    }
+    
+    /**
+     * If a prototypeEntityName is specified for a given model, go through and flatten the specified
+     * prototype down into all of the attributes of the model.  This allows support for multiple databases
+     * in a single EOModelGroup, each using the correct database-specified variant of the prototype.  Without
+     * flattening, you could not use ERPrototypes with a PostgreSQL and FrontBase database loaded at the 
+     * same time, because the attribute names overlap.  To get the most out of this behavior, you should
+     * use the Wonder-style prototype entity naming (EOJDBCFrontBasePrototypes) rather than the traditional
+     * EOPrototypes or EOJDBCPrototypes to provide unique namespaces for your prototype attributes.
+     */
+    private void flattenPrototypes() {
+      if (!ERXModelGroup.flattenPrototypes) {
+        return;
+      }
+      
+      String prototypesFixedKey = "_EOPrototypesFixed";
+      NSMutableDictionary prototypeReplacement = new NSMutableDictionary();
+      for (Enumeration modelsEnum = models().objectEnumerator(); modelsEnum.hasMoreElements();) {
+        EOModel model = (EOModel) modelsEnum.nextElement();
+        NSDictionary userInfo = model.userInfo();
+        Boolean prototypesFixedBoolean = (Boolean) userInfo.objectForKey(prototypesFixedKey);
+        if (prototypesFixedBoolean == null || !prototypesFixedBoolean.booleanValue()) {
+          boolean prototypesFixed = false;  
+          String prototypeEntityName = prototypeEntityNameForModel(model);
+          if (prototypeEntityName == null) {
+            prototypesFixed = true;
+          }
+          else {
+            EOEntity prototypeEntity = entityNamed(prototypeEntityName);
+            if (prototypeEntity == null) {
+              log.info(model.name() + " references a prototype entity named " + prototypeEntityName + " which is not yet loaded.");
+            }
+            else {
+              if (log.isInfoEnabled()) {
+                log.info("Flattening " + model.name() + " using the prototype " + prototypeEntity.name());
+              }
+              for (Enumeration entitiesEnum = model.entities().objectEnumerator(); entitiesEnum.hasMoreElements();) {
+                EOEntity entity = (EOEntity) entitiesEnum.nextElement();
+                for (Enumeration attributesEnum = entity.attributes().objectEnumerator(); attributesEnum.hasMoreElements();) {
+                  EOAttribute attribute = (EOAttribute) attributesEnum.nextElement();
+                  String prototypeAttributeName = attribute.prototypeName();
+                  if (prototypeAttributeName == null) {
+                    log.warn(model.name() + "/" + entity.name() + "/" + attribute.name() + " does not have a prototype attribute name.  This can occur if the model cannot resolve ANY prototypes when loaded.  There must be a stub prototype for the model to load with that can then be replaced with the appropriate database-specific model.");
+                  }
+                  else {
+                    EOAttribute prototypeAttribute = prototypeEntity.attributeNamed(prototypeAttributeName);
+                    if (prototypeAttribute == null) {
+                      log.warn(model.name() + "/" + entity.name() + "/" + attribute.name() + " references a prototype attribute named " + prototypeAttributeName + " that does not exist in " + prototypeEntity.name() + ".");
+                    }
+                    else if (prototypeAttribute.entity() == prototypeEntity) {
+                      if (log.isDebugEnabled()) {
+                        log.debug("Skipping " + model.name() + "/" + entity.name() + "/" + attribute.name() + " because it is already prototyped by the correct entity.");
+                      }
+                    }
+                    else {
+                      if (log.isDebugEnabled()) {
+                        log.debug("Flattening " + model.name() + "/" + entity.name() + "/" + attribute.name() + " with the prototype attribute " + prototypeAttribute.entity().model().name() + "/" + prototypeAttribute.entity().name() + "/" + prototypeAttribute.name());
+                      }
+                      NSArray prototypeKeys = EOAttribute._prototypeKeys();
+                      NSMutableArray overriddenKeys = new NSMutableArray();
+                      Enumeration prototypeKeysEnum = prototypeKeys.objectEnumerator();
+                      while (prototypeKeysEnum.hasMoreElements()) {
+                        String prototypeKey = (String) prototypeKeysEnum.nextElement();
+                        if (attribute._isKeyEnumOverriden(EOAttribute._enumForKey(prototypeKey))) {
+                          overriddenKeys.addObject(prototypeKey);
                         }
+                      }
+                      attribute.setPrototype(null);
+                      NSArray keysToReplace = _NSArrayUtilities.arrayExcludingObjectsFromArray(prototypeKeys, overriddenKeys);
+                      NSDictionary valuesToReplace = EOKeyValueCodingAdditions.Utility.valuesForKeys(prototypeAttribute, keysToReplace);
+                      EOKeyValueCodingAdditions.Utility.takeValuesFromDictionary(attribute, valuesToReplace);
                     }
+                  }
                 }
+              }
+              prototypesFixed = true;
             }
+          }
+          if (prototypesFixed) {
+            NSMutableDictionary mutableUserInfo = userInfo.mutableClone();
+            mutableUserInfo.setObjectForKey(Boolean.TRUE, prototypesFixedKey);
+            model.setUserInfo(mutableUserInfo);
+          }
         }
-
-        if (model.adaptorName().indexOf("Oracle") != -1) {
-            fixOracleDictionary(model);
-        } else if (model.adaptorName().indexOf("Flat") != -1) {
-            fixFlatDictionary(model);
-        } else if (model.adaptorName().indexOf("OpenBase")!=-1) {
-            fixOpenBaseDictionary(model);
-        } else if (model.adaptorName().indexOf("JDBC")!=-1) {
-            fixJDBCDictionary(model);
-        }
-
-        if (log.isDebugEnabled() && !old.equals(model.connectionDictionary())) {
-            NSMutableDictionary dict = model.connectionDictionary().mutableClone();
-            if (dict.objectForKey("password") != null) {
-                dict.setObjectForKey("<deleted for log>", "password");
-                log.debug("New Connection Dictionary for " + modelName + ": " + dict);
-            }
-        }
-
-        fixPrototypes(model, databaseConfig);
-
-    }
-
-    private void fixPrototypes(EOModel model, NSDictionary databaseConfig) {
-        String modelName = model.name();
-        // based on an idea from Stefan Apelt <stefan@tetlabors.de>
-        String f = getProperty(modelName + ".EOPrototypesFile", "EOPrototypesFileGLOBAL");
-        if (f != null) {
-            NSDictionary dict = (NSDictionary) NSPropertyListSerialization
-            .propertyListFromString(ERXStringUtilities.stringFromResource(f, "", null));
-            if (dict != null) {
-                if (log.isDebugEnabled())
-                    log.debug("Adjusting prototypes from " + f);
-                EOEntity proto = model.entityNamed("EOPrototypes");
-                if (proto == null) {
-                    log.warn("No prototypes found in model named \"" + modelName
-                            + "\", although the EOPrototypesFile default was set!");
-                } else {
-                    model.removeEntity(proto);
-                    proto = new EOEntity(dict, model);
-                    proto.awakeWithPropertyList(dict);
-                    model.addEntity(proto);
-                }
-            }
-        }
-
-        String prototypeEntityName = ERXSystem.getProperty(modelName + ".EOPrototypesEntity");
-        if (prototypeEntityName == null && databaseConfig != null) {
-            prototypeEntityName = (String) databaseConfig.objectForKey("prototypeEntityName");
-        }
-
-        if(prototypeEntityName == null && !(ERXModelGroup.patchModelsOnLoad())) {
-            String pluginName = ERXEOAccessUtilities.guessPluginName(model);
-            if (pluginName != null) {
-                String pluginPrototypeEntityName = "EOJDBC" + pluginName + "Prototypes";
-                // This check isn't technically necessary since
-                // it doesn't down below, but since
-                // we are guessing here, I don't want themt o
-                // get a warning about the prototype not
-                // being found if they aren't even using Wonder
-                // prototypes.
-                if (model.modelGroup().entityNamed(pluginPrototypeEntityName) != null) {
-                    prototypeEntityName = pluginPrototypeEntityName;
-                }
-            }
-        }
-
-        // global prototype setting not supported yet
-        // e = e ==null ? ERXSystem.getProperty("EOPrototypesEntityGLOBAL")
-        // : e;
-        if (prototypeEntityName != null) {
-            // we look for the entity globally so we can have one prototype
-            // entity
-            EOEntity newPrototypeEntity = model.modelGroup().entityNamed(prototypeEntityName);
-            if (newPrototypeEntity == null) {
-                log.warn("Prototype Entity named " + prototypeEntityName + " not found in model " + model.name());
-            } else {
-                if (log.isDebugEnabled())
-                    log.debug("Adjusting prototypes to those from entity " + prototypeEntityName);
-                
-                String finalPrototypeEntityName = "EO" + model.adaptorName() + "Prototypes";
-
-                EOEntity finalPrototypeEntity = model.entityNamed(finalPrototypeEntityName);
-                if(false) {
-                    // additive prototype handling
-                    if (finalPrototypeEntity == null) {
-                        finalPrototypeEntity = new EOEntity();
-                        finalPrototypeEntity.setName(finalPrototypeEntityName);
-                        model.addEntity(finalPrototypeEntity);
-                    }
-                    for (Enumeration enumerator = newPrototypeEntity.attributes().objectEnumerator(); enumerator.hasMoreElements();) {
-                    	EOAttribute attribute = (EOAttribute) enumerator.nextElement();
-                    	if(attribute != null) {
-                    		EOAttribute existing = finalPrototypeEntity.anyAttributeNamed(attribute.name());
-                    		if(existing != null) {
-                    			if(finalPrototypeEntity.anyAttributeNamed(existing.name()) != null) {
-                    				finalPrototypeEntity.removeAttribute(existing);
-                    			}
-                    		}
-                    		newPrototypeEntity.removeAttribute(attribute);
-                    		finalPrototypeEntity.addAttribute(attribute);
-                    	}
-                    }
-                } else {
-                    // replacing prototype handling
-                    if (finalPrototypeEntity != null) {
-                        finalPrototypeEntity.model().removeEntity(finalPrototypeEntity);
-                    }
-                    newPrototypeEntity.setName(finalPrototypeEntityName);
-                    model.removeEntity(newPrototypeEntity);
-                    model.addEntity(newPrototypeEntity);
-                }
-            }
-        }
-    }
-}
+      }
+    }}
