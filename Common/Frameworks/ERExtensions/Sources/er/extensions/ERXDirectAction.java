@@ -6,6 +6,12 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.extensions;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.util.Enumeration;
+import java.util.Iterator;
+import java.util.List;
+
 import org.apache.log4j.Logger;
 
 import com.webobjects.appserver.WOActionResults;
@@ -15,6 +21,8 @@ import com.webobjects.appserver.WODirectAction;
 import com.webobjects.appserver.WORedirect;
 import com.webobjects.appserver.WORequest;
 import com.webobjects.appserver.WOResponse;
+import com.webobjects.eocontrol.EOEditingContext;
+import com.webobjects.foundation.NSArray;
 import com.webobjects.woextensions.WOEventDisplayPage;
 import com.webobjects.woextensions.WOEventSetupPage;
 import com.webobjects.woextensions.WOStatsPage;
@@ -223,6 +231,41 @@ public class ERXDirectAction extends WODirectAction {
             result.setValue(info);
         }
         return result;
+    }
+
+    /**
+     * Returns a list of the traces of open editing context locks.  This is only useful if
+     * er.extensions.ERXApplication.traceOpenEditingContextLocks is enabled and 
+     * er.extensions.ERXOpenEditingContextLocksPassword is set.
+     */
+    public WOComponent showOpenEditingContextLockTracesAction() {
+      ERXStringHolder result = (ERXStringHolder)pageWithName("ERXStringHolder");
+      if (canPerformActionWithPasswordKey("er.extensions.ERXOpenEditingContextLockTracesPassword")) {
+        result.setEscapeHTML(false);
+        StringWriter sw = new StringWriter();
+        PrintWriter pw = new PrintWriter(sw);
+        pw.println("<pre>");
+        ERXEC.Factory ecFactory = ERXEC.factory();
+        if (ecFactory instanceof ERXEC.DefaultFactory) {
+          NSArray lockedEditingContexts = ((ERXEC.DefaultFactory)ecFactory).lockedEditingContexts();
+          Enumeration lockedEditingContextEnum = lockedEditingContexts.objectEnumerator();
+          while (lockedEditingContextEnum.hasMoreElements()) {
+            EOEditingContext lockedEditingContext = (EOEditingContext)lockedEditingContextEnum.nextElement();
+            Exception openLockTrace = ((ERXEC)lockedEditingContext).openLockTrace();
+            if (openLockTrace != null) {
+              openLockTrace.printStackTrace(pw);
+            }
+            pw.println();
+          }
+        }
+        else {
+          pw.println("showOpenEditingContextLockTraces is only available for ERXEC.DefaultFactory.");
+        }
+        pw.println("</pre>");
+        pw.close();
+        result.setValue(sw.toString());
+      }
+      return result;
     }
 
     public WOActionResults logoutAction() {

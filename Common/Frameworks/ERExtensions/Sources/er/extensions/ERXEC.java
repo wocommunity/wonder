@@ -59,6 +59,9 @@ public class ERXEC extends EOEditingContext {
     /** name of the notiification that is posted before an editing context is saved. */
     public static final String EditingContextWillSaveChangesNotification = "EOEditingContextWillSaveChanges";
 
+    /** if traceOpenEditingContextLocks is true, this contains the stack trace from this EC's call to lock */
+    private Exception openLockTrace;
+    
     /** decides whether to lock/unlock automatically when used without a lock. */
     private Boolean useAutolock;
     
@@ -73,6 +76,9 @@ public class ERXEC extends EOEditingContext {
     
     /** holds a flag if locked ECs should be unlocked after the request-response loop. */
     private static boolean useUnlocker;
+    
+    /** holds a flag if editing context locks should be traced */
+    private static boolean traceOpenEditingContextLocks;
     
     /** key for the thread storage used by the unlocker. */
     private static final String LockedContextsForCurrentThreadKey = "ERXEC.lockedContextsForCurrentThread";
@@ -89,6 +95,13 @@ public class ERXEC extends EOEditingContext {
     
     public static void setUseUnlocker(boolean value) {
     	useUnlocker = value;
+    }
+
+    /**
+     * Sets whether or not open editing context lock tracing is enabled.
+     */
+    public static void setTraceOpenEditingContextLocks(boolean value) {
+      traceOpenEditingContextLocks = value;
     }
     
     private static ThreadLocal locks = new ThreadLocal() {
@@ -265,11 +278,21 @@ public class ERXEC extends EOEditingContext {
     	return lockCount; 
     }
     
+    
+    /** If traceOpenEditingContextLocks is true, returns the stack trace from when this EC was locked */
+    public Exception openLockTrace() {
+      return openLockTrace;
+    }
+    
     /** 
      * Overridden to emmit log messages and push this instance to the 
      * locked editing contexts in this thread.
      */
     public void lock() {
+        if (traceOpenEditingContextLocks && lockCount == 0) {
+          openLockTrace = new Exception();
+          openLockTrace.fillInStackTrace();
+        }
         lockCount++;
         super.lock();
         if (!isAutoLocked() && lockLogger.isDebugEnabled()) {
@@ -297,6 +320,9 @@ public class ERXEC extends EOEditingContext {
             }
         }
         lockCount--;
+        if (traceOpenEditingContextLocks && lockCount == 0) {
+          openLockTrace = null;
+        }
     }
 
     /**
