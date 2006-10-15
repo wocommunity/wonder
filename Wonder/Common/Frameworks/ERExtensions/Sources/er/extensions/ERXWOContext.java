@@ -7,10 +7,13 @@
 package er.extensions;
 
 import com.webobjects.appserver.WOApplication;
+import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WODirectAction;
 import com.webobjects.appserver.WORequest;
+import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation.NSNotification;
 import com.webobjects.foundation.NSNotificationCenter;
@@ -148,4 +151,18 @@ public class ERXWOContext extends WOContext implements ERXMutableUserInfoHolderI
       }
       return elementID;
     }
-}
+
+    /**
+     * Debugging help, returns the path to current component.
+     * @param context
+     * @return
+     */
+    public static NSArray componentPath(WOContext context) {
+    	NSMutableArray result = new NSMutableArray();
+    	WOComponent component = context.component();
+    	while(component != null) {
+    		result.insertObjectAtIndex(component, 0);
+    		component = component.parent();
+    	}
+    	return result;
+    }}
