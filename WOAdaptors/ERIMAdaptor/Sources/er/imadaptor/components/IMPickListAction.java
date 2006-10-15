@@ -85,7 +85,7 @@ public class IMPickListAction extends WOComponent {
       Object selectedObject;
       if (ERXStringUtilities.isDigitsOnly(message)) {
         int selectionIndex = Integer.parseInt(message) - 1;
-        if (selectionIndex >= 0 || selectionIndex < (list.count() - 1)) {
+        if (selectionIndex >= 0 && selectionIndex < list.count()) {
           selectedObject = list.objectAtIndex(selectionIndex);
           selectedObjects = new NSArray(selectedObject);
         }
