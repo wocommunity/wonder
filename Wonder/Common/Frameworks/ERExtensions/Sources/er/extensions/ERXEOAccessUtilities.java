@@ -1546,7 +1546,7 @@ public class ERXEOAccessUtilities {
                 String jdbcUrl = (String) connectionDictionary.objectForKey("URL");
                 if (jdbcUrl != null) {
                     pluginName = (String) connectionDictionary.objectForKey("plugin");
-                    if (pluginName == null) {
+                    if (pluginName == null || pluginName.trim().length() == 0) {
                         pluginName = JDBCPlugIn.plugInNameForURL(jdbcUrl);
                         if (pluginName == null) {
                         	// AK: this is a hack that is totally bogus....
@@ -1562,6 +1562,9 @@ public class ERXEOAccessUtilities {
                     }
                 }
             }
+        }
+        if (pluginName != null && pluginName.trim().length() == 0) {
+          pluginName = null;
         }
         return pluginName;
     }
