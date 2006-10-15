@@ -185,6 +185,7 @@ public abstract class ERXApplication extends WOApplication implements ERXGracefu
                                                          WOApplication.ApplicationDidFinishLaunchingNotification,
                                                          null);
         ERXEC.setUseUnlocker(useEditingContextUnlocker());
+        ERXEC.setTraceOpenEditingContextLocks(traceOpenEditingContextLocks());
 
         // Signal handling support
         if (ERXGracefulShutdown.isEnabled()) {
@@ -198,6 +199,14 @@ public abstract class ERXApplication extends WOApplication implements ERXGracefu
 	 */
 	public boolean useEditingContextUnlocker() {
 		return ERXProperties.booleanForKeyWithDefault("er.extensions.ERXApplication.useEditingContextUnlocker", false);
+	}
+
+	/**
+   * Decides whether or not to keep track of open editing context locks.
+   * @return true if editing context locks should be tracked
+   */
+	public boolean traceOpenEditingContextLocks() {
+	  return ERXProperties.booleanForKeyWithDefault("er.extensions.ERXApplication.traceOpenEditingContextLocks", false);
 	}
 
 	/**
