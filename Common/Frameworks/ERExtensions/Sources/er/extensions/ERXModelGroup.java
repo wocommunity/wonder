@@ -698,7 +698,7 @@ public class ERXModelGroup extends
         prototypeEntityName = (String) databaseConfig.objectForKey("prototypeEntityName");
       }
 
-      if (prototypeEntityName == null && !(ERXModelGroup_.patchModelsOnLoad())) {
+      if (prototypeEntityName == null && !(ERXModelGroup.patchModelsOnLoad())) {
         String pluginName = ERXEOAccessUtilities.guessPluginName(model);
         if (pluginName != null) {
           String pluginPrototypeEntityName = "EOJDBC" + pluginName + "Prototypes";
