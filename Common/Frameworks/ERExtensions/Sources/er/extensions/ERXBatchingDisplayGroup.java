@@ -4,9 +4,11 @@ import org.apache.log4j.Logger;
 
 import com.webobjects.appserver.WODisplayGroup;
 import com.webobjects.eoaccess.EODatabaseDataSource;
+import com.webobjects.eocontrol.EOAndQualifier;
 import com.webobjects.eocontrol.EODataSource;
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.eocontrol.EOFetchSpecification;
+import com.webobjects.eocontrol.EOQualifier;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSKeyValueCoding;
 import com.webobjects.foundation.NSMutableArray;
@@ -21,7 +23,7 @@ import com.webobjects.foundation.NSNotificationCenter;
  * @author dt first version
  * @author ak gross hacks, made functional and usable.
  */
-public class ERXBatchingDisplayGroup extends WODisplayGroup {
+public class ERXBatchingDisplayGroup extends ERXDisplayGroup {
 
 
     /** Logging support */
@@ -85,7 +87,7 @@ public class ERXBatchingDisplayGroup extends WODisplayGroup {
     }
     
     /**
-    * Overridden method in order to fetch -only- the rows that are needed. This is
+     * Overridden method in order to fetch -only- the rows that are needed. This is
      * different to the editors methods because a {@link WODisplayGroup} would always fetch
      * from the start until the end of the objects from the fetch limit.
      *
@@ -102,12 +104,38 @@ public class ERXBatchingDisplayGroup extends WODisplayGroup {
     }
     
     /**
-     * Utility that does the actual fetching.
+     * Overridden to return allObjects(), as we can't qualify in memory.
+     */
+    public NSArray filteredObjects() {
+        return allObjects();
+    }
+
+    /**
+     * Overridden to trigger a refetch.
+     */
+    public void setQualifier(EOQualifier aEoqualifier) {
+        super.setQualifier(aEoqualifier);
+        _displayedObjects = null;
+    }
+
+    /**
+     * Utility that does the actual fetching, if a qualifier() is set, it adds it
+     * to the dataSource() fetch qualifier. 
      */
     protected void refetch() {
         EODatabaseDataSource ds = (EODatabaseDataSource) dataSource();
-        EOFetchSpecification spec = ds.fetchSpecificationForFetch();
+        EOFetchSpecification spec = (EOFetchSpecification) ds.fetchSpecificationForFetch().clone();
         spec.setSortOrderings(sortOrderings());
+        EOQualifier dgQualifier = qualifier();
+        EOQualifier qualifier = spec.qualifier();
+        if(dgQualifier != null) {
+            if(qualifier != null) {
+                qualifier = new EOAndQualifier(new NSArray(new Object[]{dgQualifier, qualifier}));
+            } else {
+                qualifier = dgQualifier;
+            }
+            spec.setQualifier(qualifier);
+        }
         EOEditingContext ec = ds.editingContext();
         
         int rowCount = ERXEOAccessUtilities.rowCountForFetchSpecification(ec, spec);
