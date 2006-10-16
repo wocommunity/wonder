@@ -137,7 +137,7 @@ public class ERXExtensions {
                 if(qualifier instanceof EOKeyValueQualifier) {
                     synchronized (_qualifierKeys) {
                         support = (Support) _qualifierKeys.get(((EOKeyValueQualifier)qualifier).selector().name());
-                        _log.info(((EOKeyValueQualifier)qualifier).selector());
+                        _log.debug(((EOKeyValueQualifier)qualifier).selector());
                     }
                 }
                 if(support == null) {
