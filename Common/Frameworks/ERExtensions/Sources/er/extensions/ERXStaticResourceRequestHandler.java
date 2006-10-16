@@ -18,7 +18,7 @@ import com.webobjects.foundation.NSNotificationCenter;
 
 /**
  * Simple static resource request handler. Allows for better debugging 
- * and you can set the document root via the system property WODocumentRoot.
+ * and you can set the document root via the system property <code>WODocumentRoot</code>.
  * @author ak
  */
 public class ERXStaticResourceRequestHandler extends WORequestHandler {
