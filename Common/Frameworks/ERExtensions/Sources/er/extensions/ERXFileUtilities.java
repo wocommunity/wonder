@@ -474,7 +474,7 @@ public class ERXFileUtilities {
                 plist = readPropertyListFromFileInFramework( fileName, aFrameWorkName, languageList, "UTF-16" );
             } catch (IllegalArgumentException e1) {
                 // OK, whatever it is, try to parse it!
-                plist = readPropertyListFromFileInFramework( fileName, aFrameWorkName, languageList, null );
+                plist = readPropertyListFromFileInFramework( fileName, aFrameWorkName, languageList, "UTF-8" );
             }
         }
         return plist;
