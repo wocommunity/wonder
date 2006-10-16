@@ -23,6 +23,7 @@ import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSSet;
 
+import er.extensions.ERXDisplayGroup;
 import er.extensions.ERXEC;
 import er.extensions.ERXEOControlUtilities;
 import er.extensions.ERXValueUtilities;
@@ -144,10 +145,18 @@ public class ERD2WPickListPage extends ERD2WListPage implements ERDPickPageInter
         }
     }
     
+    public boolean showSelectionActions() {
+        return filteredObjects().count() > 0 && ERXValueUtilities.booleanValue(d2wContext().valueForKey("showActions"));
+    }
+    
     /**
      * The display group's objects, filtered by the display group qualifier (if any)
      */
     public NSArray filteredObjects() {
+        if (displayGroup() instanceof ERXDisplayGroup) {
+            ERXDisplayGroup dg = (ERXDisplayGroup) displayGroup();
+            return dg.filteredObjects();
+        }
         return displayGroup().qualifier() == null ? displayGroup().allObjects() : EOQualifier.filteredArrayWithQualifier(displayGroup().allObjects(), displayGroup().qualifier());
     }
     
