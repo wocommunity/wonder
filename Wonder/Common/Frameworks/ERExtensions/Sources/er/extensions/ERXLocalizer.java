@@ -139,6 +139,7 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
         if(current == null) {
         	if(!isInitialized) {
             	initialize();
+                ERXComparisonSupport.initialize();
             }
         	current = defaultLocalizer();
         }
