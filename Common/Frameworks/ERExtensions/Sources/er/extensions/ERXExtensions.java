@@ -175,6 +175,8 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
         // name and port are resolved via WOApplication.application()
         ERXLogger.configureLoggingWithSystemProperties();
         
+        _log = Logger.getLogger(ERXExtensions.class);
+
         registerSQLSupportForSelector(new NSSelector(ERXPrimaryKeyListQualifier.IsContainedInArraySelectorName), 
                 EOQualifierSQLGeneration.Support.supportForClass(ERXPrimaryKeyListQualifier.class));
         registerSQLSupportForSelector(new NSSelector(ERXRegExQualifier.MatchesSelectorName), 
