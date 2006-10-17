@@ -2,6 +2,7 @@ KeyPopup: WOPopUpButton {
 	item = selectedKeyItem;
 	list = ^keyList;
 	selection = selectedKey;
+	displayString = ^displayKey;
 }
 
 OperatorPopup: WOPopUpButton {
@@ -10,12 +11,12 @@ OperatorPopup: WOPopUpButton {
 	selection = selectedOperator;
 }
 
-String1: WOString {
-	value = session.localizer.ERD2WQueryToManyField.where;
+Where: ERXLocalizedString {
+	value = "ERD2WQueryToManyField.where";
 }
 
-String2: WOString {
-	value = session.localizer.ERD2WQueryToManyField.is;
+Is: ERXLocalizedString {
+	value = "ERD2WQueryToManyField.is";
 }
 
 TextField: WOTextField {
