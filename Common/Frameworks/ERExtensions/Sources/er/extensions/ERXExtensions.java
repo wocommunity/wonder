@@ -177,6 +177,8 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
         
         registerSQLSupportForSelector(new NSSelector(ERXPrimaryKeyListQualifier.IsContainedInArraySelectorName), 
                 EOQualifierSQLGeneration.Support.supportForClass(ERXPrimaryKeyListQualifier.class));
+        registerSQLSupportForSelector(new NSSelector(ERXRegExQualifier.MatchesSelectorName), 
+                EOQualifierSQLGeneration.Support.supportForClass(ERXRegExQualifier.class));
     }
     
     private static Map _qualifierKeys;
