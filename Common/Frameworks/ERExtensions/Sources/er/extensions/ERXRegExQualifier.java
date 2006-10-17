@@ -20,7 +20,7 @@ import com.webobjects.foundation.NSSelector;
 public class ERXRegExQualifier extends EOKeyValueQualifier {
 
     public static String MatchesSelectorName = "matches";
-    public static NSSelector MatchesSelector = new NSSelector("matches");
+    public static NSSelector MatchesSelector = new NSSelector("matches", new Class[] {String.class});
 
     static {
         EOQualifierSQLGeneration.Support.setSupportForClass(new ERXRegExQualifier.Support(), ERXRegExQualifier.class);
