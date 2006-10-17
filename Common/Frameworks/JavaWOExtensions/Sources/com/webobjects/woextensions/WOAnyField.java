@@ -36,6 +36,27 @@ public class WOAnyField extends WOComponent {
         super(aContext);
     }
 
+    public String selectedOperatorItem() {
+        return selectedOperatorItem;
+    }
+
+    public void setSelectedOperatorItem(String aSelectedOperatorItem) {
+        selectedOperatorItem = aSelectedOperatorItem;
+    }
+
+    public String selectedKeyItem() {
+        return selectedKeyItem;
+    }
+
+    public void setSelectedKeyItem(String aSelectedKeyItem) {
+        setValueForBinding(aSelectedKeyItem, "key");
+        selectedKeyItem = aSelectedKeyItem;
+    }
+
+    public boolean synchronizesVariablesWithBindings() {
+        return false;
+    }
+
     public boolean isStateless() {
         return true;
     }
@@ -63,7 +84,7 @@ public class WOAnyField extends WOComponent {
         EOModelGroup modelGroup = EOModelGroup.defaultGroup();
         EOEntity entity = modelGroup.entityNamed(entityName);
         EOAttribute selectedAttribute = null;
-        if (relationshipKey() != null) {
+        if (relationshipKey() != null && entity.relationshipNamed(relationshipKey()) != null) {
             EORelationship relationship = entity.relationshipNamed(relationshipKey());
             EOEntity destinationEntity = relationship.destinationEntity();
             selectedAttribute = destinationEntity.attributeNamed(key);
