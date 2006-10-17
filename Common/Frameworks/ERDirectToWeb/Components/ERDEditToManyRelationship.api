@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="macintosh" standalone="yes"?>
+<wodefinitions>
+	<wo class="ERD2WEditOrDefault" wocomponentcontent="NO">
+
+		<binding name="localContext"/>
+		<binding name="object"/>
+	</wo>
+</wodefinitions>
