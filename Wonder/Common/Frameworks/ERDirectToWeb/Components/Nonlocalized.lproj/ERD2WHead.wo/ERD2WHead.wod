@@ -1,0 +1,7 @@
+ComponentContent: WOComponentContent {
+}
+
+PageTitle: WOString {
+	_unroll = true;
+	value = displayNameForPageConfiguration;
+}
