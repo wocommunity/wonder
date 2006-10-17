@@ -3,7 +3,7 @@ AnyField: ERDAnyField {
 	displayKey = relationshipContext.displayNameForProperty;
 	key = relationshipContext.propertyKey;
 	keyList = relationshipContextDisplayAttributesKeys;
-	relationshipKey = d2wContext.propertyKey;
+	relationshipKey = relationshipKey;
 	selectedKey = selectedKey;
 	sourceEntityName = entity.name;
 }

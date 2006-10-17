@@ -53,7 +53,7 @@ PageWrapper: WOSwitchComponent {
 	_unroll = true;
 }
 
-QueryAnyField: D2WQueryAnyField {
+QueryAnyField: ERD2WQueryAnyField {
 	_unroll = true;
 	displayGroup = displayGroup;
 	localContext = localContext;
