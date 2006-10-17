@@ -584,6 +584,7 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
             if (tabSectionContentsFromRule==null)
                 throw new RuntimeException("Could not find tabSectionsContents in "+d2wContext());
             _tabSectionsContents = tabSectionsContentsFromRuleResult(tabSectionContentsFromRule);
+            d2wContext().takeValueForKey(tabSectionContentsFromRule, "tabSectionsContents");
             // Once calculated we then determine any displayNameForTabKey
             String currentTabKey = (String)d2wContext().valueForKey(Keys.tabKey);
             for (Enumeration e = _tabSectionsContents.objectEnumerator(); e.hasMoreElements();) {
