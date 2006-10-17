@@ -30,14 +30,15 @@
     "ERDEditDatePopupOrNull.or" = "- or -"; 
     "ERDEditList.saveLabel" = "Save @@pluralCount@@ @@pluralString@@?"; 
     "ERDEditListButton.editButtonName" = "Edit @@displayNameForProperty@@ List"; 
-    "ERDEditPasswordConfirm" = {
-        confirmLabel = "Confirm Password"; 
-        confirmNewLabel = "Confirm New Password"; 
-        infoMessage = "<i>Please note: Both login and password are case sensitive. We require passwords to be from 6 to 16 characters with at least one numeric character.</i>"; 
-        newPasswordLabel = "New password"; 
-        passwordLabel = Password; 
-    }; 
+    "ERDEditPasswordConfirm.confirmLabel" = "Confirm Password"; 
+    "ERDEditPasswordConfirm.confirmNewLabel" = "Confirm New Password"; 
+    "ERDEditPasswordConfirm.infoMessage" = "<i>Please note: Both login and password are case sensitive. We require passwords to be from 6 to 16 characters with at least one numeric character.</i>"; 
+    "ERDEditPasswordConfirm.newPasswordLabel" = "New password"; 
+    "ERDEditPasswordConfirm.passwordLabel" = Password; 
     "ERDEditStringWithChoices.noSelectionString" = None; 
+    "ERDEditToManyRelationship.add" = "Add";
+    "ERDEditToManyRelationship.delete" = "Delete selected";
+    "ERDEditToManyRelationship.remove" = "Remove";
     "ERDEmptyListMessage.emptyEmbeddedListMessage" = "<b>No matching @@displayNameForDestinationEntity@@ records found.</b>"; 
     "ERDEmptyListMessage.emptyListMessage" = "<b>No matching @@displayNameForEntity@@ records found.</b>"; 
     "ERDInspect.clear" = Clear; 
