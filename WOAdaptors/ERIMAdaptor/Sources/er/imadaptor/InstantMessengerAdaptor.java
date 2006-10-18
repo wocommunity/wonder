@@ -17,8 +17,9 @@ import com.webobjects.appserver._private.WOURLEncoder;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDelayedCallbackCenter;
 import com.webobjects.foundation.NSDictionary;
-import com.webobjects.foundation.NSLog;
 import com.webobjects.foundation.NSMutableDictionary;
+
+import er.extensions.ERXAsyncQueue;
 
 public class InstantMessengerAdaptor extends WOAdaptor implements IMessageListener {
   private static Logger log = Logger.getLogger(InstantMessengerAdaptor.class);
@@ -61,10 +62,15 @@ public class InstantMessengerAdaptor extends WOAdaptor implements IMessageListen
   private IMConnectionTester _watcherTester;
   private Thread _watchedThread;
   private IMConnectionTester _watchedTester;
+  
+  private InstantMessageQueue _messageQueue;
 
   public InstantMessengerAdaptor(String name, NSDictionary parameters) {
     super(name, parameters);
 
+    _messageQueue = new InstantMessageQueue();
+    _messageQueue.start();
+    
     _conversations = new HashMap();
     _application = WOApplication.application();
 
@@ -332,17 +338,54 @@ public class InstantMessengerAdaptor extends WOAdaptor implements IMessageListen
       if (log.isInfoEnabled()) {
         log.info("Sending message to '" + buddyName + "': " + responseMessage);
       }
-      _instantMessenger.sendMessage(buddyName, responseMessage);
+      _instantMessenger.sendMessage(buddyName, responseMessage, true);
     }
     catch (Throwable t) {
-      NSLog.err.appendln(toString() + " Exception occurred while responding to client: " + t.toString());
-      if (NSLog.debugLoggingAllowedForLevelAndGroups(2, 0L)) {
-        NSLog.debug.appendln(t);
-      }
+      InstantMessengerAdaptor.log.error(toString() + " Exception occurred while responding to client: " + t.toString(),  t);
     }
     NSDelayedCallbackCenter.defaultCenter().eventEnded();
   }
+  
+  public void sendMessage(String buddyName, String message, boolean block) throws MessageException {
+    if (block) {
+      instantMessenger().sendMessage(buddyName, message, true);
+    }
+    else {
+      _messageQueue.enqueue(new Message(buddyName, message));
+    }
+  }
 
+  protected class InstantMessageQueue extends ERXAsyncQueue {
+    public void process(Object object) {
+      Message message = (Message)object;
+      try {
+        IInstantMessenger instantMessenger = InstantMessengerAdaptor.this.instantMessenger();
+        InstantMessengerAdaptor.this.instantMessenger().sendMessage(message.buddyName(), message.contents(), true);
+      }
+      catch (MessageException e) {
+        InstantMessengerAdaptor.log.error(e);
+      }
+    }
+  }
+  
+  protected class Message {
+    private String _contents;
+    private String _buddyName;
+    
+    public Message(String buddyName, String contents) {
+      _buddyName = buddyName;
+      _contents = contents;
+    }
+    
+    public String contents() {
+      return _contents;
+    }
+    
+    public String buddyName() {
+      return _buddyName;
+    }
+  }
+  
   protected class ConversationExpirationRunnable implements Runnable {
     public void run() {
       while (_running) {

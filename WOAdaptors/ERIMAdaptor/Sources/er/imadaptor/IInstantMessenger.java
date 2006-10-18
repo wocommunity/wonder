@@ -50,9 +50,10 @@ public interface IInstantMessenger {
    * 
    * @param buddyName the name of the buddy to message
    * @param message the message to send
+   * @param ignoreIfOffline should the message be ignored if the user is offline (false = throw an exception)
    * @throws MessageException
    */
-  public void sendMessage(String buddyName, String message) throws MessageException;
+  public void sendMessage(String buddyName, String message, boolean ignoreIfOffline) throws MessageException;
 
   /**
    * Adds a listener to this InstantMessenger.

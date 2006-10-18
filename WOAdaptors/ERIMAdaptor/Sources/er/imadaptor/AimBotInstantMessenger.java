@@ -73,14 +73,18 @@ public class AimBotInstantMessenger extends AbstractInstantMessenger {
     return _connected;
   }
 
-  public synchronized void sendMessage(String buddyName, String message) throws MessageException {
+  public synchronized void sendMessage(String buddyName, String message, boolean ignoreIfOffline) throws MessageException {
     if (_sender != null) {
       AIMBuddy buddy = getBuddy(buddyName);
       if (buddy != null) {
         if (!buddy.isOnline()) {
-          throw new BuddyOfflineException("The buddy '" + buddyName + "' is not online.");
+          if (!ignoreIfOffline) {
+            throw new BuddyOfflineException("The buddy '" + buddyName + "' is not online.");
+          }
         }
-        _sender.sendMessage(buddy, message);
+        else {
+          _sender.sendMessage(buddy, message);
+        }
       }
     }
   }
