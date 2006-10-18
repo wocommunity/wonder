@@ -72,12 +72,12 @@ UpdateForm : WOForm {
 	multipleSubmit = true;
 }
 
-Submit1Action : WOSubmitButton {
+Submit1Action : AjaxSubmitButton {
 	value = "Submit #1";
 	action = submit1;
 }
 
-Submit2Action : WOSubmitButton {
+Submit2Action : AjaxSubmitButton {
 	value = "Submit #2";
 	action = submit2;
 }
