@@ -28,6 +28,8 @@ import com.webobjects.foundation.NSMutableDictionary;
  */
 public class AjaxSubmitButton extends AjaxDynamicElement {
 
+  private static final String KEY_AJAX_SUBMIT_BUTTON_NAME = "AJAX_SUBMIT_BUTTON_NAME";
+
   public AjaxSubmitButton(String name, NSDictionary associations, WOElement children) {
     super(name, associations, children);
   }
@@ -46,7 +48,7 @@ public class AjaxSubmitButton extends AjaxDynamicElement {
 	  ajaxOptionsArray.addObject(new AjaxOption("onSuccess", AjaxOption.SCRIPT));
 	  ajaxOptionsArray.addObject(new AjaxOption("onFailure", AjaxOption.SCRIPT));
 	  NSMutableDictionary options = AjaxOption.createAjaxOptionsDictionary(ajaxOptionsArray, component, associations());
-	  options.setObjectForKey("Form.serialize(this.form) + \"&" + name + "=" + valueForBinding("value", component) + "\"", "parameters");
+	  options.setObjectForKey("Form.serialize(this.form) + \"&" + KEY_AJAX_SUBMIT_BUTTON_NAME + "=" + name + "\"", "parameters");
 	  return options;
   }
   
@@ -60,7 +62,7 @@ public class AjaxSubmitButton extends AjaxDynamicElement {
 	  appendTagAttributeToResponse(response, "value", valueForBinding("value", component ));
 	  appendTagAttributeToResponse(response, "class", valueForBinding("class", component ));
 	  appendTagAttributeToResponse(response, "style", valueForBinding("style", component ));
-      appendTagAttributeToResponse(response, "id", valueForBinding("id", component ));
+	  appendTagAttributeToResponse(response, "id", valueForBinding("id", component ));
 	  if(disabledInComponent(component)) {
           appendTagAttributeToResponse(response, "disabled", "disabled");
 	  }
@@ -91,11 +93,12 @@ public class AjaxSubmitButton extends AjaxDynamicElement {
       WOActionResults result = null;
       WOComponent wocomponent = wocontext.component();
       
+      String nameInContext = nameInContext(wocontext, wocomponent);
       boolean shouldHandleRequest = (!disabledInComponent(wocomponent) && wocontext._wasFormSubmitted()) && 
-	  	((wocontext._isMultipleSubmitForm() && worequest.formValueForKey(nameInContext(wocontext, wocomponent)) != null) 
+	  	((wocontext._isMultipleSubmitForm() && nameInContext.equals(worequest.formValueForKey(KEY_AJAX_SUBMIT_BUTTON_NAME))) 
       		|| !wocontext._isMultipleSubmitForm());
       
-      // System.out.println("shouldHandleRequest("+wocontext.elementID()+")="+shouldHandleRequest);
+      //System.out.println("shouldHandleRequest("+nameInContext+")="+shouldHandleRequest);
       
       if(shouldHandleRequest) {
 	  wocontext._setActionInvoked(true);
