@@ -17,15 +17,7 @@ import com.webobjects.foundation.NSMutableDictionary;
  */
 public abstract class ERXNonSynchronizingComponent extends WOComponent {
 
-    public NSMutableDictionary _dynamicBindings = null;
-    
-    public NSMutableDictionary dynamicBindings() {
-        if (_dynamicBindings == null) {
-            _dynamicBindings = new NSMutableDictionary();
-        }
-        return _dynamicBindings;
-    }
-    
+    protected NSMutableDictionary _dynamicBindings = null;
     
     /** Public constructor */
     public ERXNonSynchronizingComponent(WOContext context) {
@@ -157,8 +149,27 @@ public abstract class ERXNonSynchronizingComponent extends WOComponent {
         return v!=null ? v.toString() : null;
     }
     
+    /**
+     * Convenience method to get the localizer.
+     * @return
+     */
     public ERXLocalizer localizer() {
         return ERXLocalizer.currentLocalizer();
+    }
+    
+    /**
+     * Lazily initialized dictionary which can be used for the 'item' binding in
+     * a repetition for example: 'item = dynamicBindings.myVariable'. Useful in
+     * rapid turnaround modes where adding a iVar would cause hot code swapping
+     * to stop working.
+     * 
+     * @return
+     */
+    public NSMutableDictionary dynamicBindings() {
+        if (_dynamicBindings == null) {
+            _dynamicBindings = new NSMutableDictionary();
+        }
+        return _dynamicBindings;
     }
 }
 
