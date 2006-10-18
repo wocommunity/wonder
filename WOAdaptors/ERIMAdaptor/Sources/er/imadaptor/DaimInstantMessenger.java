@@ -66,7 +66,7 @@ public class DaimInstantMessenger extends AbstractInstantMessenger {
     return myOscarClient != null && myOscarClient.isBuddyOnline(buddyName);
   }
 
-  public void sendMessage(String buddyName, String message) throws MessageException {
+  public void sendMessage(String buddyName, String message, boolean ignoreIfOffline) throws MessageException {
     try {
       if (myOscarClient != null) {
         myOscarClient.sendIM(buddyName, message, AIMConstants.AIM_FLAG_AOL);
