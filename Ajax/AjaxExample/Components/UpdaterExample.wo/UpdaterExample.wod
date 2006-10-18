@@ -67,3 +67,17 @@ AjaxUpdateContainer4 : AjaxUpdateContainer {
 	id = "exampleArea4";
 	evalScripts = true;
 }
+
+UpdateForm : WOForm {
+	multipleSubmit = true;
+}
+
+Submit1Action : WOSubmitButton {
+	value = "Submit #1";
+	action = submit1;
+}
+
+Submit2Action : WOSubmitButton {
+	value = "Submit #2";
+	action = submit2;
+}
