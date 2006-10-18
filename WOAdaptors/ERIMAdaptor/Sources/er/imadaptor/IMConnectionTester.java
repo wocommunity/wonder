@@ -44,7 +44,7 @@ public class IMConnectionTester implements Runnable, IMessageListener {
       synchronized (_pingPongMessageLock) {
         try {
           //System.out.println("IMConnectionTester.testConnection: Sending PONG to " + myWatcher.getScreenName());
-          _watched.sendMessage(buddyName, IMConnectionTester.PONG_MESSAGE);
+          _watched.sendMessage(buddyName, IMConnectionTester.PONG_MESSAGE, false);
         }
         catch (MessageException e) {
           // We failed to pong!
@@ -75,7 +75,7 @@ public class IMConnectionTester implements Runnable, IMessageListener {
     synchronized (_pingPongMessageLock) {
       try {
         //System.out.println("IMConnectionTester.testConnection: Sending PING to " + myWatched.getScreenName());
-        _watcher.sendMessage(_watched.getScreenName(), IMConnectionTester.PING_MESSAGE);
+        _watcher.sendMessage(_watched.getScreenName(), IMConnectionTester.PING_MESSAGE, false);
         _ponged = false;
         _pingPongMessageLock.wait(_timeoutMillis);
         if (!_ponged) {
