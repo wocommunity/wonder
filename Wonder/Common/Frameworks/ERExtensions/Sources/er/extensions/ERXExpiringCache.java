@@ -41,7 +41,7 @@ public class ERXExpiringCache extends NSMutableDictionary {
 	 * Time in seconds when an enytr expires.
 	 */
 	public ERXExpiringCache(long expiryTime) {
-		_expiryTime = expiryTime;
+		_expiryTime = expiryTime * 1000L;
 	}
 	
 	private long expiryTime() {
