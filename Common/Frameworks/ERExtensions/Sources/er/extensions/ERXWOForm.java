@@ -103,7 +103,7 @@ public class ERXWOForm extends com.webobjects.appserver._private.WOHTMLDynamicEl
     	boolean wasInForm = context.isInForm();
     	context.setInForm(true);
     	if(context.elementID().equals(context.senderID())) {
-    		context._setFormSubmitted(true);
+        	context._setFormSubmitted(true);
     	}
     	return wasInForm;
     }
@@ -118,27 +118,27 @@ public class ERXWOForm extends com.webobjects.appserver._private.WOHTMLDynamicEl
 		boolean wasInForm = _enterFormInContext(context);
     	context._setActionInvoked(false);
     	context._setIsMultipleSubmitForm(_multipleSubmit == null ? false : _multipleSubmit.booleanValueInComponent(context.component()));
-    	Object obj = super.invokeAction(worequest, context);
+    	WOActionResults result = super.invokeAction(worequest, context);
     	if(!context._wasActionInvoked() && context._wasFormSubmitted()) {
     		if(_action != null) {
-    			obj = (WOActionResults)_action.valueInComponent(context.component());
+    			result = (WOActionResults)_action.valueInComponent(context.component());
     		}
-    		if(obj == null) {
-    			obj = context.page();
+    		if(result == null) {
+    			result = context.page();
     		}
     	}
     	context._setIsMultipleSubmitForm(false);
     	_exitFormInContext(context, wasInForm, wasFormSubmitted);
-    	return ((WOActionResults) (obj));
+    	return result;
     }
 
     protected void _appendHiddenFieldsToResponse(WOResponse response, WOContext context) {
     	boolean flag = _actionClass != null;
-    	NSDictionary nsdictionary = computeQueryDictionaryInContext(_actionClass, _directActionName, _queryDictionary, flag, _otherQueryAssociations, context);
-    	if(nsdictionary.count() > 0) {
-    		for(Enumeration enumeration = nsdictionary.keyEnumerator(); enumeration.hasMoreElements(); ) {
+    	NSDictionary hiddenFields = computeQueryDictionaryInContext(_actionClass, _directActionName, _queryDictionary, flag, _otherQueryAssociations, context);
+    	if(hiddenFields.count() > 0) {
+    		for(Enumeration enumeration = hiddenFields.keyEnumerator(); enumeration.hasMoreElements(); ) {
     			String s = (String)enumeration.nextElement();
-    			Object obj = nsdictionary.objectForKey(s);
+    			Object obj = hiddenFields.objectForKey(s);
     			response._appendContentAsciiString("<input type=\"hidden\"");
     			response._appendTagAttributeAndValue("name", s, false);
     			response._appendTagAttributeAndValue("value", obj.toString(), false);
