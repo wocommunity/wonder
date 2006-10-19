@@ -13,5 +13,6 @@
 		<binding name = "onComplete"/>
 		<binding name = "onSuccess"/>
 		<binding name = "onFailure"/>
+		<binding name = "evalScripts"/>
 	</wo>
 </wodefinitions>

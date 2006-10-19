@@ -14,5 +14,7 @@
 		<binding name = "onCancelClick"/>
 		<binding name = "onCancelSuccess"/>
 		<binding name = "onCancelFailure"/>
+		<binding name = "onEditClick"/>
+		<binding name = "onRefreshComplete"/>
 	</wo>
 </wodefinitions>

@@ -14,12 +14,17 @@ IsNotEditingConditional : WOConditional {
 UpdateContainer : AjaxUpdateContainer {
 	id = id;
 	elementName = "div";
+	evalScripts = true;
+	onLoading = ^onLoading;
+	onRefreshComplete = ^onRefreshComplete;
 }
 
 ViewClickHandler : AjaxHyperlink {
 	action = startEditing;
 	elementName = "div";
+	onClick = ^onEditClick;
 	onClickServer = updateFunctionName;
+	evalScripts = true;
 }
 
 SaveLabel : WOString {
@@ -39,6 +44,8 @@ CancelAction : AjaxHyperlink {
 	onClickServer = updateFunctionName;
 	onSuccess = ^onCancelSuccess;
 	onFailure = ^onCancelFailure;
+	onLoading = ^onLoading;
+	evalScripts = true;
 }
 
 EditForm : WOForm {
@@ -55,6 +62,8 @@ SaveAction : AjaxSubmitButton {
 	onClickServer = updateFunctionName;
 	onSuccess = ^onSaveSuccess;
 	onFailure = ^onSaveFailure;
+	onLoading = ^onLoading;
+	evalScripts = true;
 }
 
 ViewComponent : ERXWOComponentContent {

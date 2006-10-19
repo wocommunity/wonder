@@ -13,6 +13,8 @@ import com.webobjects.foundation.NSMutableDictionary;
 
 /**
  * observeFieldID requires ERExtensions, specifically ERXWOForm
+ * 
+ * @binding onRefreshComplete the script to execute at the end of refreshing the container
  */
 public class AjaxUpdateContainer extends AjaxDynamicElement {
 
@@ -93,6 +95,12 @@ public class AjaxUpdateContainer extends AjaxDynamicElement {
         AjaxUtils.setPageReplacementCacheKey(context, containerID(context));
         if(hasChildrenElements()) {
             appendChildrenToResponse(response, context);
+        }
+        String onRefreshComplete = (String)valueForBinding("onRefreshComplete", component);
+        if (onRefreshComplete != null) {
+          AjaxUtils.appendScriptHeader(response);
+          response.appendContentString(onRefreshComplete);
+          AjaxUtils.appendScriptFooter(response);
         }
         return response;
     }
