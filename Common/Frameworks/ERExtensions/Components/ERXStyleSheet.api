@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <wodefinitions>
-	<wo class="ERXStyleSheet" wocomponentcontent="false">
+	<wo class="ERXStyleSheet" wocomponentcontent="true">
 
-		<binding name="styleSheetFrameworkName"/>
-		<binding name="styleSheetName"/>
-		<binding name="styleSheetUrl"/>
-		<binding name="favIconLink"/>
+		<binding name="framework"/>
+		<binding name="filename"/>
+		<binding name="href"/>
+		<binding name="key"/>
 	</wo>
 </wodefinitions>
