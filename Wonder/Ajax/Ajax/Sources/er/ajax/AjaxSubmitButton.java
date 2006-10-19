@@ -11,6 +11,8 @@ import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 
+import er.extensions.ERXWOForm;
+
 /**
  * AjaxSubmitButton behaves just like a WOSubmitButton except that it submits in the background with an Ajax.Request.
  * 
@@ -61,10 +63,13 @@ public class AjaxSubmitButton extends AjaxDynamicElement {
     boolean showButton = booleanValueForBinding("button", true, component);
     String formName = (String)valueForBinding("formName", component);
     String formReference;
-    if (!showButton && formName == null) {
-      throw new WODynamicElementCreationException("If button = false, you must specify a formName.");
+    if (!showButton) {
+      formName = ERXWOForm.formName(context, null);
+      if (formName == null) {
+        throw new WODynamicElementCreationException("If button = false, the containing form must have an explicit name.");
+      }
     }
-    else if (formName == null) {
+    if (formName == null) {
       formReference = "this.form";
     }
     else {
