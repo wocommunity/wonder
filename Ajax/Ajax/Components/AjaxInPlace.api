@@ -2,6 +2,7 @@
 <wodefinitions>
 	<wo wocomponentcontent = "true" class = "AjaxInPlace">
 		<binding name = "id"/>
+		<binding name = "class"/>
 		<binding name = "saveLabel"/>
 		<binding name = "cancelLabel"/>
 		<binding name = "saveAction"/>

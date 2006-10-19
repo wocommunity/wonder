@@ -13,6 +13,7 @@ IsNotEditingConditional : WOConditional {
 
 UpdateContainer : AjaxUpdateContainer {
 	id = id;
+	class = ^class;
 	elementName = "div";
 	evalScripts = true;
 	onLoading = ^onLoading;
