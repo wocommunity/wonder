@@ -10,15 +10,15 @@ import com.webobjects.appserver.WOResponse;
 /**
  * AjaxInPlace is a generalization of the AjaxInPlaceEditor.  To use this component, you
  * must wrap an ERXWOTemplate named "view" and an ERXWOTemplate named "edit".
- * 
- * For instance:
- * 
+ * <br />
+ * For instance:<br />
+ * <br />
  * HTML:
  * <pre>
- * <webobject name = "ExampleInPlace">
- *    <webobject name = "View">View: <webobject name = "Value"/></webobject>
- *    <webobject name = "Edit">Edit: <webobject name = "ValueField"/></webobject>
- * </webobject>
+ * &lt;webobject name = "ExampleInPlace"&gt;
+ *    &lt;webobject name = "View">View: &lt;webobject name = "Value"/&gt;&lt;/webobject&gt;
+ *    &lt;webobject name = "Edit">Edit: &lt;webobject name = "ValueField"/&gt;&lt;/webobject&gt;
+ * &lt;/webobject&gt;
  * </pre>
  * 
  * WOD:
