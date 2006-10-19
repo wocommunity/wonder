@@ -13,6 +13,7 @@ import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSKeyValueCoding;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSNotificationCenter;
+import com.webobjects.foundation._NSDelegate;
 
 /**
  * Extends {@link WODisplayGroup} in order to provide real batching.
@@ -186,7 +187,24 @@ public class ERXBatchingDisplayGroup extends ERXDisplayGroup {
         return super.fetch();
     }
     
-    /**
+    public void updateDisplayedObjects() {
+    	if (isBatching()) {
+    		//refetch();
+    		NSMutableArray selectedObjects = (NSMutableArray)selectedObjects();
+    		NSArray obj = allObjects();
+    		_NSDelegate delegate = (_NSDelegate)delegate();
+    		if(delegate != null && delegate.respondsTo("displayGroupDisplayArrayForObjects")) {
+    			obj = (NSArray) delegate.perform("displayGroupDisplayArrayForObjects", this, obj);
+    		}
+    		//_displayedObjects = new NSMutableArray(obj);
+    		selectObjectsIdenticalToSelectFirstOnNoMatch(selectedObjects, false);
+    		redisplay();
+    	} else {
+    		super.updateDisplayedObjects();
+    	}
+    }
+
+	/**
      * Dummy array class that is used to provide a certain number of entries. 
      * We just fake that we an array with the number of objects the display group should display. 
      * */
