@@ -88,7 +88,12 @@ public class WOOgnl {
         OgnlRuntime.setElementsAccessor(NSSet.class, e);
         // Register template parser
         if (!"false".equals(System.getProperty("ognl.active"))) {
-            WOParser.setWOHTMLTemplateParserClassName("ognl.webobjects.WOOgnlHTMLTemplateParser");
+        	if ("true".equalsIgnoreCase(System.getProperty("ognl.helperFunctions"))) {
+        	    WOParser.setWOHTMLTemplateParserClassName("ognl.helperfunction.WOHelperFunctionHTMLTemplateParser");
+        	}
+        	else {
+        		WOParser.setWOHTMLTemplateParserClassName("ognl.webobjects.WOOgnlHTMLTemplateParser");
+        	}
         }
     }
 
