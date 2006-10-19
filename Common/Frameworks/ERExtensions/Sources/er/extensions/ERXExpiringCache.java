@@ -1,5 +1,7 @@
 package er.extensions;
 
+import java.util.Enumeration;
+
 import com.webobjects.foundation.NSMutableDictionary;
 
 /**
@@ -32,6 +34,7 @@ public class ERXExpiringCache extends NSMutableDictionary {
 	}
 
 	private long _expiryTime;
+	private long _lastPrune;
 	
 	public ERXExpiringCache() {
 		this(60);
@@ -42,6 +45,7 @@ public class ERXExpiringCache extends NSMutableDictionary {
 	 */
 	public ERXExpiringCache(long expiryTime) {
 		_expiryTime = expiryTime * 1000L;
+		_lastPrune = 0L;
 	}
 	
 	private long expiryTime() {
@@ -59,9 +63,27 @@ public class ERXExpiringCache extends NSMutableDictionary {
 		if(entry != null) {
 			o = entry.object(expiryTime());
 			if(o == null) {
-				removeObjectForKey(key);
+				removeStaleEntries();
 			}
 		}
 		return o;
+	}
+
+	private void removeStaleEntries() {
+		if(_lastPrune + expiryTime() < System.currentTimeMillis()) {
+			_lastPrune = System.currentTimeMillis();
+			for (Enumeration iter = keyEnumerator(); iter.hasMoreElements();) {
+				Object key = (Object) iter.nextElement();
+				Entry entry  = (Entry) super.objectForKey(key);
+				Object o = entry.object(expiryTime());
+				if(o == null) {
+					super.removeObjectForKey(key);
+				}
+			}
+		}
+	}
+
+	public synchronized Object removeObjectForKey(Object key) {
+		return super.removeObjectForKey(key);
 	}
 }
