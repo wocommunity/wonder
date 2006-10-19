@@ -8,9 +8,11 @@ public class InPlaceEditorExample extends WOComponent {
   public String _strippedValue;
   public int _numericValue;
   public boolean _visible;
+  public String _value;
 
   public InPlaceEditorExample(WOContext context) {
     super(context);
+    _value = "ExampleInPlace Value";
     _exampleValue = "Test Value";
     _multilineValue = "Multi\nLine\nValue";
     _strippedValue = "Stripped Value";
@@ -28,6 +30,16 @@ public class InPlaceEditorExample extends WOComponent {
 
   public WOActionResults toggle() {
     _visible = !_visible;
+    return null;
+  }
+  
+  public WOActionResults valueSaved() {
+	  System.out.println("InPlaceEditorExample.valueSaved: saved!");
+    return null;
+  }
+  
+  public WOActionResults valueCancelled() {
+	  System.out.println("InPlaceEditorExample.valueCancelled: cancelled!");
     return null;
   }
 }
