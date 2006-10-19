@@ -4,6 +4,7 @@
 	<classpathentry kind="con" path="org.objectstyle.wolips.WO_CLASSPATH/JavaWebObjects/JavaFoundation/JavaXML/JavaWOExtensions/JavaEOAccess/JavaEOControl/JavaJDBCAdaptor"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry exported="true" kind="lib" path="Libraries/jsonrpc.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/ERExtensions"/>
 	<classpathentry kind="src" path="/ERJars"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
