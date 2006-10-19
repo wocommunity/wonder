@@ -52,11 +52,14 @@ import com.webobjects.appserver.WOResponse;
  * @binding onSaveClick the action to fire when save is clicked
  * @binding onSaveSuccess the javascript function to execute after a successful save
  * @binding onSaveFailure the javascript function to execute after a failed save
+ * @binding onSaving the javascript action to fire when saving
  * @binding cancelClass the class of the cancel button
  * @binding onCancelClick the action to fire when cancel is clicked
  * @binding onCancelSuccess the javascript function to execute after a successful cancel
  * @binding onCancelFailure the javascript function to execute after a failed cancel
  * @binding onEditClick the action to fire when edit mode is triggered
+ * @binding onEditing the javascript action to fire when editing mode is loading
+ * @binding onCancelling the javascript action to fire when cancelling
  * @binding onRefreshComplete the javascript function to execute after refreshing the container
  * 
  * @author mschrag
