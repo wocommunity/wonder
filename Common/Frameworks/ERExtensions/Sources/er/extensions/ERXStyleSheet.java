@@ -8,30 +8,27 @@ package er.extensions;
 
 import org.apache.log4j.Logger;
 
+import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WOContext;
+import com.webobjects.appserver.WODirectAction;
 import com.webobjects.appserver.WORequest;
+import com.webobjects.appserver.WOResponse;
 import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSMutableDictionary;
 
 /**
- * Simple stateless component used for adding a style sheet
- * and/or a favicon link to a page. Note the way this component
- * currently works all of the urls are cached for the life of the
- * application. This will be configurable in the future.
+ * Simple stateless component used for adding a style sheet to a page. 
  * @binding styleSheetName name of the style sheet
  * @binding styleSheetFrameworkName name of the framework for the style sheet
  * @binding styleSheetUrl url to the style sheet
- * @binding favIconLink url to the fav icon used for bookmarking
+ * @binding styleSheetKey key to cache the style sheet under
  */
-// ENHANCEME: Should support having the favIcon as a WebServerResource, like we do for the style sheet
-// ENHANCEME: Should support direct binding of a styleSheetLink
-// CHECKME: Might want to think about having an ERXFavIcon component so people know it is here.
+//FIXME: cache should be cleared once in a while
+//FIXME: cache should be able to cache on calues of bindings, not a single key
 public class ERXStyleSheet extends ERXStatelessComponent {
 
     /** logging support */
     public static final Logger log = Logger.getLogger(ERXStyleSheet.class);
-
-    /** holds the url of the fav icon */
-    private String _favIconLink;
 
     /**
      * Public constructor
@@ -41,11 +38,20 @@ public class ERXStyleSheet extends ERXStatelessComponent {
         super(aContext);
     }
 
-	public void reset(){
-        super.reset();
-        _favIconLink = null;
-    }
+    private static NSMutableDictionary cache = (NSMutableDictionary) ERXMutableDictionary.synchronizedDictionary();
+    
+    public static class Sheet extends WODirectAction {
 
+    	public Sheet(WORequest worequest) {
+			super(worequest);
+		}
+    	
+		public WOActionResults performActionNamed(String name) {
+			WOResponse response = (WOResponse) cache.objectForKey(name);
+			return response;
+		}
+    }
+    
     /**
      * returns the complete url to the style sheet.
      * @return style sheet url
@@ -53,11 +59,15 @@ public class ERXStyleSheet extends ERXStatelessComponent {
     public String styleSheetUrl() {
     	String url = (String) valueForBinding("styleSheetUrl");
     	if(url == null) {
-    		url = application().resourceManager().urlForResourceNamed(styleSheetName(),
-                    styleSheetFrameworkName(),languages(),context().request());
+    		String name = styleSheetName();
+    		if(name != null) {
+    			url = application().resourceManager().urlForResourceNamed(styleSheetName(),
+    					styleSheetFrameworkName(),languages(),context().request());
+    		}
     	}
         return url;
     }
+    
     /**
      * Returns the style sheet framework name either resolved
      * via the binding <b>styleSheetFrameworkName</b>.
@@ -75,17 +85,20 @@ public class ERXStyleSheet extends ERXStatelessComponent {
     public String styleSheetName() {
         return (String)valueForBinding("styleSheetName");
     }
+    
+    /**
+     * Returns the style sheet framework name either resolved
+     * via the binding <b>styleSheetFrameworkName</b>.
+     * @return style sheet framework name
+     */
+    public String styleSheetKey() {
+        return (String)valueForBinding("styleSheetKey");
+    }
 
     /**
-     * Returns the favIcon url link.
-     * @return favIcon url
+     * Returns the languages for the request.
+     * @return
      */
-    public String favIconLink() {
-        if (_favIconLink == null)
-            _favIconLink = (String)valueForBinding("favIconLink");
-        return _favIconLink;
-    }    
-
     private NSArray languages() {
     	if(hasSession())
     		return session().languages();
@@ -94,5 +107,31 @@ public class ERXStyleSheet extends ERXStatelessComponent {
     		return request.browserLanguages();
     	return null;
     }
+
+    /**
+     * Appends the &ltlink&gt; tag, either by using the style sheet name and framework or
+     * by using the component content and then generating a link to it.
+     */
+	public void appendToResponse(WOResponse woresponse, WOContext wocontext) {
+		String href = styleSheetUrl();
+		woresponse._appendContentAsciiString("<link ");
+		woresponse._appendTagAttributeAndValue("rel", "stylesheet", false);
+		woresponse._appendTagAttributeAndValue("type", "text/css", false);
+		if(href == null) {
+			String key = styleSheetKey();
+			if(key == null) {
+				key = wocontext.session().sessionID();
+			}
+			if(cache.objectForKey(key) == null) {
+				WOResponse newresponse = new WOResponse();
+				super.appendToResponse(newresponse, wocontext);
+				newresponse.setHeader("text/css", "content-type");
+				cache.setObjectForKey(newresponse, key);
+			}
+			href = wocontext.directActionURLForActionNamed(Sheet.class.getName() + "/" + key, null);
+		}
+		woresponse._appendTagAttributeAndValue("href", href, false);
+		woresponse._appendContentAsciiString("></link>");
+	}
 
 }
