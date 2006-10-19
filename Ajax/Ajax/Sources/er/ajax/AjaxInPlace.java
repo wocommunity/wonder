@@ -43,6 +43,7 @@ import com.webobjects.appserver.WOResponse;
  * }
  * </pre>
  * 
+ * @binding class the class used on the top container
  * @binding id the id used on various parts of this component
  * @binding saveLabel the label to show on the save button
  * @binding cancelLabel the label to show on the cancel button
