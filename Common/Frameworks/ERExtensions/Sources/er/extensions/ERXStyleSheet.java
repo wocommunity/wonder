@@ -17,11 +17,14 @@ import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSMutableDictionary;
 
 /**
- * Simple stateless component used for adding a style sheet to a page. 
- * @binding styleSheetName name of the style sheet
- * @binding styleSheetFrameworkName name of the framework for the style sheet
- * @binding styleSheetUrl url to the style sheet
- * @binding styleSheetKey key to cache the style sheet under
+ * Simple stateless component used for adding a style sheet to a page. You can either supply
+ * a complete URL, a file and framework name or put something in the component content.
+ * The content of the component is cached under a "key"
+ * @binding filename name of the style sheet
+ * @binding framework name of the framework for the style sheet
+ * @binding href url to the style sheet
+ * @binding key key to cache the style sheet under. Default is the 
+ *   sessionID
  */
 //FIXME: cache should be cleared once in a while
 //FIXME: cache should be able to cache on calues of bindings, not a single key
@@ -38,7 +41,7 @@ public class ERXStyleSheet extends ERXStatelessComponent {
         super(aContext);
     }
 
-    private static NSMutableDictionary cache = (NSMutableDictionary) ERXMutableDictionary.synchronizedDictionary();
+    private static NSMutableDictionary cache = (NSMutableDictionary) new ERXExpiringCache(60);
     
     public static class Sheet extends WODirectAction {
 
@@ -58,6 +61,7 @@ public class ERXStyleSheet extends ERXStatelessComponent {
      */
     public String styleSheetUrl() {
     	String url = (String) valueForBinding("styleSheetUrl");
+    	url = ( url == null ? (String) valueForBinding("href") : url);
     	if(url == null) {
     		String name = styleSheetName();
     		if(name != null) {
@@ -70,29 +74,37 @@ public class ERXStyleSheet extends ERXStatelessComponent {
     
     /**
      * Returns the style sheet framework name either resolved
-     * via the binding <b>styleSheetFrameworkName</b>.
+     * via the binding <b>framework</b>.
      * @return style sheet framework name
      */
     public String styleSheetFrameworkName() {
-        return (String)valueForBinding("styleSheetFrameworkName");
+    	String result = (String)valueForBinding("styleSheetFrameworkName");
+    	result = (result == null ? (String) valueForBinding("framework") : result);
+    	return result;
     }
 
     /**
      * Returns the style sheet name either resolved
-     * via the binding <b>styleSheetName</b>.
+     * via the binding <b>filename</b>.
      * @return style sheet name
      */
     public String styleSheetName() {
-        return (String)valueForBinding("styleSheetName");
+    	String result = (String)valueForBinding("styleSheetName");
+    	result = (result == null ? (String) valueForBinding("filename") : result);
+    	return result;
     }
-    
+
     /**
-     * Returns the style sheet framework name either resolved
-     * via the binding <b>styleSheetFrameworkName</b>.
+     * Returns key under whic the stylesheet should be placed in the cache.
+     * If no key is given, the session id is used.
      * @return style sheet framework name
      */
     public String styleSheetKey() {
-        return (String)valueForBinding("styleSheetKey");
+    	String result = (String)valueForBinding("key");
+		if(result == null && !application().isCachingEnabled())  {
+			result = context().session().sessionID();
+		}
+    	return result;
     }
 
     /**
@@ -119,14 +131,14 @@ public class ERXStyleSheet extends ERXStatelessComponent {
 		woresponse._appendTagAttributeAndValue("type", "text/css", false);
 		if(href == null) {
 			String key = styleSheetKey();
-			if(key == null) {
-				key = wocontext.session().sessionID();
-			}
-			if(cache.objectForKey(key) == null) {
+			if(key ==null || cache.objectForKey(key) == null 
+					) {
 				WOResponse newresponse = new WOResponse();
 				super.appendToResponse(newresponse, wocontext);
 				newresponse.setHeader("text/css", "content-type");
-				cache.setObjectForKey(newresponse, key);
+				if(key != null) {
+					cache.setObjectForKey(newresponse, key);
+				}
 			}
 			href = wocontext.directActionURLForActionNamed(Sheet.class.getName() + "/" + key, null);
 		}
