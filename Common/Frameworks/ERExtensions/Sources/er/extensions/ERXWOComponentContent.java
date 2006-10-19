@@ -49,15 +49,15 @@ SomeComponent: SomeComponent {
 }
 
 Template1: ERXWOTemplate {
-    name = "firstTemplate";
+    templateName = "firstTemplate";
 }
 
 Template2: ERXWOTemplate {
-    name = "secondTemplate";
+    templateName = "secondTemplate";
 }
 
 Template3: ERXWOTemplate {
-    name = "thirdTemplate";
+    templateName = "thirdTemplate";
 }
 
 ==============================
@@ -115,11 +115,11 @@ IfThenElse: IfThenElseComponent {
 }
 
 Template1: ERXWOTemplate {
-    name = "true";
+    templateName = "true";
 }
 
 Template2: ERXWOTemplate {
-    name = "false";
+    templateName = "false";
 }
 </pre></code>
  * @author ak (Java port)
