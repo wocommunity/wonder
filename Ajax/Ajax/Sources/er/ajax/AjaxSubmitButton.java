@@ -26,6 +26,8 @@ import er.extensions.ERXWOForm;
  * @binding onServerClick if the action defined in the action binding returns null, the value of this binding will be returned as javascript from the server
  * @binding onSuccess javascript to execute in response to the Ajax onSuccess event
  * @binding onFailure javascript to execute in response to the Ajax onFailure event
+ * @binding onLoading javascript to execute when loading
+ * @binding evalScripts evaluate scripts on the result
  * @binding button if false, it will display a link
  * @binding formName if button is false, you must specify the name of the form to submit
  * 
@@ -52,6 +54,8 @@ public class AjaxSubmitButton extends AjaxDynamicElement {
     NSMutableArray ajaxOptionsArray = new NSMutableArray();
     ajaxOptionsArray.addObject(new AjaxOption("onSuccess", AjaxOption.SCRIPT));
     ajaxOptionsArray.addObject(new AjaxOption("onFailure", AjaxOption.SCRIPT));
+    ajaxOptionsArray.addObject(new AjaxOption("onLoading", AjaxOption.SCRIPT));
+    ajaxOptionsArray.addObject(new AjaxOption("evalScripts", AjaxOption.BOOLEAN));
     NSMutableDictionary options = AjaxOption.createAjaxOptionsDictionary(ajaxOptionsArray, component, associations());
     options.setObjectForKey("Form.serialize(" + formReference + ") + \"&" + KEY_AJAX_SUBMIT_BUTTON_NAME + "=" + name + "\"", "parameters");
     return options;
