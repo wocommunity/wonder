@@ -24,6 +24,7 @@ ViewClickHandler : AjaxHyperlink {
 	elementName = "div";
 	onClick = ^onEditClick;
 	onClickServer = updateFunctionName;
+	onLoading = ^onEditing;
 	evalScripts = true;
 }
 
@@ -44,7 +45,7 @@ CancelAction : AjaxHyperlink {
 	onClickServer = updateFunctionName;
 	onSuccess = ^onCancelSuccess;
 	onFailure = ^onCancelFailure;
-	onLoading = ^onLoading;
+	onLoading = ^onCancelling;
 	evalScripts = true;
 }
 
@@ -62,7 +63,7 @@ SaveAction : AjaxSubmitButton {
 	onClickServer = updateFunctionName;
 	onSuccess = ^onSaveSuccess;
 	onFailure = ^onSaveFailure;
-	onLoading = ^onLoading;
+	onLoading = ^onSaving;
 	evalScripts = true;
 }
 
