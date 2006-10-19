@@ -17,9 +17,10 @@ import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSMutableDictionary;
 
 /**
- * Simple stateless component used for adding a style sheet to a page. You can either supply
+ * Adds a style sheet to a page. You can either supply
  * a complete URL, a file and framework name or put something in the component content.
- * The content of the component is cached under a "key"
+ * The content of the component is cached under a "key" binding and then delivered 
+ * via a direct action, so it doesn't need to get re-rendered to often.
  * @binding filename name of the style sheet
  * @binding framework name of the framework for the style sheet
  * @binding href url to the style sheet
