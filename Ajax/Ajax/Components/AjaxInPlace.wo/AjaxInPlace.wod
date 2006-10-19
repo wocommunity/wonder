@@ -1,0 +1,62 @@
+EditComponent : ERXWOComponentContent {
+	templateName = "edit";
+}
+
+IsEditingConditional : WOConditional {
+	condition = editing;
+}
+
+IsNotEditingConditional : WOConditional {
+	condition = editing;
+	negate = true;
+}
+
+UpdateContainer : AjaxUpdateContainer {
+	id = id;
+	elementName = "div";
+}
+
+ViewClickHandler : AjaxHyperlink {
+	action = startEditing;
+	elementName = "div";
+	onClickServer = updateFunctionName;
+}
+
+SaveLabel : WOString {
+	value = ^saveLabel;
+	valueWhenEmpty = "save";
+}
+
+CancelLabel : WOString {
+	value = ^cancelLabel;
+	valueWhenEmpty = "cancel";
+}
+
+CancelAction : AjaxHyperlink {
+	action = cancel;
+	class = ^cancelClass;
+	onClick = ^onCancelClick;
+	onClickServer = updateFunctionName;
+	onSuccess = ^onCancelSuccess;
+	onFailure = ^onCancelFailure;
+}
+
+EditForm : WOForm {
+	multipleSubmit = true;
+	name = id;
+}
+
+SaveAction : AjaxSubmitButton {
+	action = save;
+	button = false;
+	class = ^saveClass;
+	formName = id;
+	onClick = ^onSaveClick;
+	onClickServer = updateFunctionName;
+	onSuccess = ^onSaveSuccess;
+	onFailure = ^onSaveFailure;
+}
+
+ViewComponent : ERXWOComponentContent {
+	templateName = "view";
+}
