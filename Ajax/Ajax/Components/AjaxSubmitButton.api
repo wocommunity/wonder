@@ -11,5 +11,7 @@
 		<binding name = "onClickServer"/>
 		<binding name = "onSuccess"/>
 		<binding name = "onFailure"/>
+		<binding name = "button"/>
+		<binding name = "formName"/>
 	</wo>
 </wodefinitions>
