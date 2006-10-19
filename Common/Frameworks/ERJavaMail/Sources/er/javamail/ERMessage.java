@@ -11,7 +11,6 @@ import javax.mail.Address;
 import javax.mail.Message;
 import javax.mail.MessagingException;
 import javax.mail.internet.AddressException;
-import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
 public class ERMessage extends Object {
@@ -77,8 +76,7 @@ public class ERMessage extends Object {
         }
         
         StringBuffer result = new StringBuffer(); 
-        result.append (ERMailUtils.convertInternetAddressesToNSArray((InternetAddress[]) limitteredAddresses)
-                                                        .componentsJoinedByString (", "));
+        result.append (ERMailUtils.convertInternetAddressesToNSArray(limitteredAddresses).componentsJoinedByString (", "));
         if (0 < maxAddresses  &&  maxAddresses < allAddresses.length) {
             result.append (", and ");
             result.append (allAddresses.length - maxAddresses);
@@ -122,7 +120,7 @@ public class ERMessage extends Object {
             try {
                 sbuf.append(allRecipientsAsString ());
             } catch (MessagingException ex) {
-                ;
+                // do nothing
             }
         }
         sbuf.append (">");
