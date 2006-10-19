@@ -16,6 +16,8 @@ import com.webobjects.foundation.NSMutableDictionary;
  * @binding onSuccess JS function, called on a 2xx response on the client
  * @binding onFailure JS function, called on a non-200 response on the client
  * @binding onComplete JS function, called on completion
+ * @binding onLoading the js function to call when loading
+ * @binding evalScripts whether or not to eval scripts on the result 
  * @binding onClick JS function, called after the click on the client
  * @binding action method to call
  * @binding title title of the link
@@ -52,6 +54,8 @@ public class AjaxHyperlink extends AjaxDynamicElement {
     ajaxOptionsArray.addObject(new AjaxOption("onSuccess", AjaxOption.SCRIPT));
     ajaxOptionsArray.addObject(new AjaxOption("onFailure", AjaxOption.SCRIPT));
     ajaxOptionsArray.addObject(new AjaxOption("onComplete", AjaxOption.SCRIPT));
+    ajaxOptionsArray.addObject(new AjaxOption("onLoading", AjaxOption.SCRIPT));
+    ajaxOptionsArray.addObject(new AjaxOption("evalScripts", AjaxOption.BOOLEAN));
     NSMutableDictionary options = AjaxOption.createAjaxOptionsDictionary(ajaxOptionsArray, component, associations());
     options.setObjectForKey("'get'", "method");
     return options;
