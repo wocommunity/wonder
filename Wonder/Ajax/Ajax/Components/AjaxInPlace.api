@@ -10,11 +10,14 @@
 		<binding name = "onSaveClick"/>
 		<binding name = "onSaveSuccess"/>
 		<binding name = "onSaveFailure"/>
+		<binding name = "onSaving"/>
 		<binding name = "cancelClass"/>
 		<binding name = "onCancelClick"/>
 		<binding name = "onCancelSuccess"/>
 		<binding name = "onCancelFailure"/>
+		<binding name = "onCancelling"/>
 		<binding name = "onEditClick"/>
+		<binding name = "onEditing"/>
 		<binding name = "onRefreshComplete"/>
 	</wo>
 </wodefinitions>
