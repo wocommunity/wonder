@@ -12,8 +12,10 @@ import com.webobjects.foundation.NSMutableDictionary;
 /**
  * Ajax enabled Hyperlink. Calls an action on the server, then executes methods on the client.
  * 
+ * @binding elementName the HTML element name
  * @binding onSuccess JS function, called on a 2xx response on the client
  * @binding onFailure JS function, called on a non-200 response on the client
+ * @binding onComplete JS function, called on completion
  * @binding onClick JS function, called after the click on the client
  * @binding action method to call
  * @binding title title of the link
@@ -49,6 +51,7 @@ public class AjaxHyperlink extends AjaxDynamicElement {
     NSMutableArray ajaxOptionsArray = new NSMutableArray();
     ajaxOptionsArray.addObject(new AjaxOption("onSuccess", AjaxOption.SCRIPT));
     ajaxOptionsArray.addObject(new AjaxOption("onFailure", AjaxOption.SCRIPT));
+    ajaxOptionsArray.addObject(new AjaxOption("onComplete", AjaxOption.SCRIPT));
     NSMutableDictionary options = AjaxOption.createAjaxOptionsDictionary(ajaxOptionsArray, component, associations());
     options.setObjectForKey("'get'", "method");
     return options;
@@ -57,8 +60,13 @@ public class AjaxHyperlink extends AjaxDynamicElement {
   public void appendToResponse(WOResponse response, WOContext context) {
       WOComponent component = context.component();
 
-      response.appendContentString("<a ");
-      appendTagAttributeToResponse(response, "href", "javascript:void(0)");
+      String elementName = (String)valueForBinding("elementName", "a", component);
+      response.appendContentString("<");
+      response.appendContentString(elementName);
+      response.appendContentString(" ");
+      if ("a".equalsIgnoreCase(elementName)) {
+        appendTagAttributeToResponse(response, "href", "javascript:void(0)");
+      }
       appendTagAttributeToResponse(response, "title", valueForBinding("title", component ));
       appendTagAttributeToResponse(response, "value", valueForBinding("value", component ));
       appendTagAttributeToResponse(response, "class", valueForBinding("class", component ));
@@ -67,7 +75,9 @@ public class AjaxHyperlink extends AjaxDynamicElement {
       appendTagAttributeToResponse(response, "onclick", onClick(context));
       response.appendContentString(">");
       appendChildrenToResponse(response, context);
-      response.appendContentString("</a>");
+      response.appendContentString("</");
+      response.appendContentString(elementName);
+      response.appendContentString(">");
       super.appendToResponse(response, context);
   }
 
