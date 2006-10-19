@@ -7,6 +7,7 @@ import com.webobjects.foundation.NSMutableDictionary;
  * @author ak
  *
  */
+//FIXME: the last entry stays in the cache if it is not requested.
 public class ERXExpiringCache extends NSMutableDictionary {
 	
 	private static class Entry {
@@ -33,9 +34,12 @@ public class ERXExpiringCache extends NSMutableDictionary {
 	private long _expiryTime;
 	
 	public ERXExpiringCache() {
-		this(60 * 100L);
+		this(60);
 	}
 	
+	/**
+	 * Time in seconds when an enytr expires.
+	 */
 	public ERXExpiringCache(long expiryTime) {
 		_expiryTime = expiryTime;
 	}
@@ -44,16 +48,19 @@ public class ERXExpiringCache extends NSMutableDictionary {
 		return _expiryTime;
 	}
 
-	public void setObjectForKey(Object object, Object key) {
+	public synchronized void setObjectForKey(Object object, Object key) {
 		Entry entry = new Entry(object);
 		super.setObjectForKey(entry, key);
 	}
-	
-	public Object objectForKey(Object key) {
+
+	public synchronized Object objectForKey(Object key) {
+		Object o = null;
 		Entry entry = (Entry) super.objectForKey(key);
-		Object o = entry.object(expiryTime());
-		if(o == null) {
-			removeObjectForKey(key);
+		if(entry != null) {
+			o = entry.object(expiryTime());
+			if(o == null) {
+				removeObjectForKey(key);
+			}
 		}
 		return o;
 	}
