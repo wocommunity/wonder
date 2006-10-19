@@ -7,7 +7,6 @@
 package er.javamail;
 
 import javax.activation.DataHandler;
-import javax.mail.MessagingException;
 
 /** This ERMailDelivery subclass is specifically crafted for plain text messages.
     @author Camille Troillard <tuscland@mac.com> */
@@ -23,7 +22,7 @@ public class ERMailDeliveryPlainText extends ERMailDelivery {
 
     /** Pre-processes the mail before it gets sent.
         @see ERMailDelivery#prepareMail */
-    protected DataHandler prepareMail () throws MessagingException {
+    protected DataHandler prepareMail () {
         return new DataHandler (textContent, "text/plain; charset=\""  + charset () + "\"");
     }
 

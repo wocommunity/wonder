@@ -90,7 +90,7 @@ public class ERMailUtils extends Object {
                                      String pageName,  String alternatePageName,
                                      String emailFrom, String emailTo,
                                      String emailReplyTo, String subject) {
-        WOComponent mailPage = (WOComponent) ERMailUtils.instantiatePage
+        WOComponent mailPage = ERMailUtils.instantiatePage
             (pageName, delivery.sessionDictionary ());
 
         delivery.newMail ();
@@ -99,7 +99,7 @@ public class ERMailUtils extends Object {
         if (alternatePageName != null) {
             String alternateString = null;
             WOComponent alternateMailTemplate =
-                (WOComponent) ERMailUtils.instantiatePage
+                ERMailUtils.instantiatePage
                 (alternatePageName, delivery.sessionDictionary ());
 
             alternateString = 
@@ -230,8 +230,7 @@ public class ERMailUtils extends Object {
      * @return a <code>NSArray</code> value
      * @exception AddressException if an error occurs
      */
-    public static NSArray convertInternetAddressesToNSArray (Address [] addressesArray)
-        throws AddressException {
+    public static NSArray convertInternetAddressesToNSArray (Address [] addressesArray) {
             if( addressesArray == null) return NSArray.EmptyArray;
         NSMutableArray addresses = new NSMutableArray (addressesArray.length);
 
