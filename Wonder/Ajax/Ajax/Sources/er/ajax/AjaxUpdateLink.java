@@ -1,6 +1,7 @@
 package er.ajax;
 
 import com.webobjects.appserver.WOActionResults;
+import com.webobjects.appserver.WOAssociation;
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WOElement;
@@ -10,10 +11,14 @@ import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 
+import er.extensions.ERXComponentUtilities;
+
 /**
  * Updates a region on the screen by creating a request to an action, then returning a script that in turn
  * creates an Ajax.Updater for the area.  If you do not provide an action binding, it will just update the
  * specified area.
+ * @binding action the action to call when the link executes
+ * @binding directActionName the direct action to call when link executes
  * @binding onComplete JavaScript function to evaluate when the request has finished.
  * @binding onSuccess JavaScript function to evaluate when the request was successful.
  * @binding onFailure JavaScript function to evaluate when the request has failed.
@@ -39,42 +44,54 @@ public class AjaxUpdateLink extends AjaxDynamicElement {
   }
 
   public String onClick(WOContext context) {
-    NSDictionary options = createAjaxOptions(context.component());
-    StringBuffer sb = new StringBuffer();
-    if (associations().valueForKey("action") == null) {
-      String updateContainerID = (String) valueForBinding("updateContainerID", context.component());
-      sb.append("new Ajax.Updater('" + updateContainerID + "', $('" + updateContainerID + "').getAttribute('updateUrl'), ");
-      AjaxOptions.appendToBuffer(options, sb, context);
-      sb.append(")");
+	  WOComponent component = context.component();
+    NSDictionary options = createAjaxOptions(component);
+    StringBuffer onClickBuffer = new StringBuffer();
+    WOAssociation directActionNameAssociation = (WOAssociation) associations().valueForKey("directActionName");
+    
+    String actionUrl = null;
+    if (directActionNameAssociation != null) {
+    	actionUrl = context.directActionURLForActionNamed((String)directActionNameAssociation.valueInComponent(component), ERXComponentUtilities.queryParametersInComponent(associations(), component)).replaceAll("&amp;", "&");
+    }
+    else if (associations().valueForKey("action") != null) {
+        actionUrl = context.componentActionURL();
     }
     else {
-      String actionUrl = context.componentActionURL();
+      String updateContainerID = (String) valueForBinding("updateContainerID", context.component());
+      onClickBuffer.append("new Ajax.Updater('" + updateContainerID + "', $('" + updateContainerID + "').getAttribute('updateUrl'), ");
+      AjaxOptions.appendToBuffer(options, onClickBuffer, context);
+      onClickBuffer.append(")");
+    }
+
+    if (actionUrl != null) {
       if (associations().valueForKey("function") == null) {
         String replaceID = (String) valueForBinding("replaceID", context.component());
         if (replaceID == null) {
-          sb.append("new Ajax.Request('");
-          sb.append(actionUrl);
-          sb.append("', ");
-          AjaxOptions.appendToBuffer(options, sb, context);
-          sb.append(")");
+          onClickBuffer.append("new Ajax.Request('");
+          onClickBuffer.append(actionUrl);
+          onClickBuffer.append("', ");
+          AjaxOptions.appendToBuffer(options, onClickBuffer, context);
+          onClickBuffer.append(")");
         }
         else {
-          sb.append("new Ajax.Updater('" + replaceID + "', '" + actionUrl + "', ");
-          AjaxOptions.appendToBuffer(options, sb, context);
-          sb.append(")");
+          onClickBuffer.append("new Ajax.Updater('" + replaceID + "', '" + actionUrl + "', ");
+          AjaxOptions.appendToBuffer(options, onClickBuffer, context);
+          onClickBuffer.append(")");
         }
       }
       else {
         String function = (String) valueForBinding("function", context.component());
-        sb.append("return " + function + "('" + actionUrl + "')");
+        onClickBuffer.append("return " + function + "('" + actionUrl + "')");
       }
     }
+
     String onClick = (String) valueForBinding("onClick", context.component());
     if (onClick != null) {
-      sb.append(";");
-      sb.append(onClick);
+      onClickBuffer.append(";");
+      onClickBuffer.append(onClick);
     }
-    return sb.toString();
+    
+    return onClickBuffer.toString();
   }
 
   protected NSDictionary createAjaxOptions(WOComponent component) {
@@ -97,7 +114,7 @@ public class AjaxUpdateLink extends AjaxDynamicElement {
     Object stringValue = valueForBinding("string", component);
     if (!disabled) {
       response.appendContentString("<a ");
-      appendTagAttributeToResponse(response, "href", "#");
+      appendTagAttributeToResponse(response, "href", "javascript:void(0);");
       appendTagAttributeToResponse(response, "onclick", onClick(context));
       appendTagAttributeToResponse(response, "title", valueForBinding("title", component));
       appendTagAttributeToResponse(response, "value", valueForBinding("value", component));
