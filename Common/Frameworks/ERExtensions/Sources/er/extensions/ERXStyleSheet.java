@@ -9,13 +9,12 @@ package er.extensions;
 import org.apache.log4j.Logger;
 
 import com.webobjects.appserver.WOActionResults;
-import com.webobjects.appserver.WOApplication;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WODirectAction;
 import com.webobjects.appserver.WORequest;
 import com.webobjects.appserver.WOResponse;
+import com.webobjects.appserver.WOSession;
 import com.webobjects.foundation.NSArray;
-import com.webobjects.foundation.NSMutableDictionary;
 
 /**
  * Adds a style sheet to a page. You can either supply
@@ -28,7 +27,6 @@ import com.webobjects.foundation.NSMutableDictionary;
  * @binding key key to cache the style sheet under. Default is the 
  *   sessionID
  */
-//FIXME: cache should be cleared once in a while
 //FIXME: cache should be able to cache on calues of bindings, not a single key
 public class ERXStyleSheet extends ERXStatelessComponent {
 
@@ -43,7 +41,14 @@ public class ERXStyleSheet extends ERXStatelessComponent {
         super(aContext);
     }
 
-    private static ERXExpiringCache cache = new ERXExpiringCache(5);
+    private static ERXExpiringCache cache(WOSession session) {
+    	ERXExpiringCache cache = (ERXExpiringCache) session.objectForKey("ERXStylesheet.cache");
+    	if(cache == null) {
+    		cache = new ERXExpiringCache(60);
+    		session.setObjectForKey(cache, "ERXStylesheet.cache");
+    	}
+    	return cache;
+    }
     
     public static class Sheet extends WODirectAction {
 
@@ -52,7 +57,7 @@ public class ERXStyleSheet extends ERXStatelessComponent {
 		}
     	
 		public WOActionResults performActionNamed(String name) {
-			WOResponse response = (WOResponse) cache.objectForKey(name);
+			WOResponse response = (WOResponse) cache(session()).objectForKey(name);
 			return response;
 		}
     }
@@ -133,13 +138,12 @@ public class ERXStyleSheet extends ERXStatelessComponent {
 		woresponse._appendTagAttributeAndValue("type", "text/css", false);
 		if(href == null) {
 			String key = styleSheetKey();
+			ERXExpiringCache cache = cache(session());
 			if(cache.isStale(key) || !application().isCachingEnabled()) {
 				WOResponse newresponse = new WOResponse();
 				super.appendToResponse(newresponse, wocontext);
 				newresponse.setHeader("text/css", "content-type");
-				if(key != null) {
-					cache.setObjectForKey(newresponse, key);
-				}
+				cache.setObjectForKey(newresponse, key);
 			}
 			href = wocontext.directActionURLForActionNamed(Sheet.class.getName() + "/" + key, null);
 		}
