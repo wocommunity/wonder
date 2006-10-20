@@ -25,10 +25,7 @@ public class ERXExpiringCache extends NSMutableDictionary {
 			return _timestamp + expiryTime < System.currentTimeMillis();
 		}
 		
-		private Object object(long expiryTime) {
-			if(isStale(expiryTime)) {
-				_object = null;
-			}
+		private Object object() {
 			return _object;
 		}
 	}
@@ -41,7 +38,7 @@ public class ERXExpiringCache extends NSMutableDictionary {
 	}
 	
 	/**
-	 * Time in seconds when an enytr expires.
+	 * Time in seconds when an entry expires.
 	 */
 	public ERXExpiringCache(long expiryTime) {
 		_expiryTime = expiryTime * 1000L;
@@ -53,30 +50,35 @@ public class ERXExpiringCache extends NSMutableDictionary {
 	}
 
 	public synchronized void setObjectForKey(Object object, Object key) {
+		removeStaleEntries();
 		Entry entry = new Entry(object);
 		super.setObjectForKey(entry, key);
 	}
 
 	public synchronized Object objectForKey(Object key) {
-		Object o = null;
 		Entry entry = (Entry) super.objectForKey(key);
-		if(entry != null) {
-			o = entry.object(expiryTime());
-			if(o == null) {
-				removeStaleEntries();
-			}
-		}
-		return o;
+		return entry.object();
 	}
 
+	public synchronized boolean isStale(Object key) {
+		Entry entry = (Entry) super.objectForKey(key);
+		if(entry != null) {
+			return entry.isStale(expiryTime());
+		}
+		return true;
+	}
+	
 	private void removeStaleEntries() {
-		if(_lastPrune + expiryTime() < System.currentTimeMillis()) {
+		long current = System.currentTimeMillis();
+		if((_lastPrune + expiryTime()) < current) {
 			_lastPrune = System.currentTimeMillis();
 			for (Enumeration iter = keyEnumerator(); iter.hasMoreElements();) {
 				Object key = (Object) iter.nextElement();
 				Entry entry  = (Entry) super.objectForKey(key);
-				Object o = entry.object(expiryTime());
-				if(o == null) {
+				// ak: add 10 seconds as a safety margin
+				// we need this because the entry could be requested
+				// when we just checked and noticed it is ok
+				if( entry.isStale(expiryTime() + 10L * 1000)) {
 					super.removeObjectForKey(key);
 				}
 			}
@@ -84,6 +86,7 @@ public class ERXExpiringCache extends NSMutableDictionary {
 	}
 
 	public synchronized Object removeObjectForKey(Object key) {
+		removeStaleEntries();
 		return super.removeObjectForKey(key);
 	}
 }
