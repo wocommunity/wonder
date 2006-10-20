@@ -9,6 +9,7 @@ package er.extensions;
 import org.apache.log4j.Logger;
 
 import com.webobjects.appserver.WOActionResults;
+import com.webobjects.appserver.WOApplication;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WODirectAction;
 import com.webobjects.appserver.WORequest;
@@ -42,7 +43,7 @@ public class ERXStyleSheet extends ERXStatelessComponent {
         super(aContext);
     }
 
-    private static NSMutableDictionary cache = (NSMutableDictionary) new ERXExpiringCache(60);
+    private static ERXExpiringCache cache = new ERXExpiringCache(5);
     
     public static class Sheet extends WODirectAction {
 
@@ -132,8 +133,7 @@ public class ERXStyleSheet extends ERXStatelessComponent {
 		woresponse._appendTagAttributeAndValue("type", "text/css", false);
 		if(href == null) {
 			String key = styleSheetKey();
-			if(key ==null || cache.objectForKey(key) == null 
-					) {
+			if(cache.isStale(key) || !application().isCachingEnabled()) {
 				WOResponse newresponse = new WOResponse();
 				super.appendToResponse(newresponse, wocontext);
 				newresponse.setHeader("text/css", "content-type");
