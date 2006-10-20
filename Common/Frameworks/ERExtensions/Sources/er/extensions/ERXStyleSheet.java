@@ -103,7 +103,7 @@ public class ERXStyleSheet extends ERXStatelessComponent {
      */
     public String styleSheetKey() {
     	String result = (String)valueForBinding("key");
-		if(result == null && !application().isCachingEnabled())  {
+		if(result == null)  {
 			result = context().session().sessionID();
 		}
     	return result;
