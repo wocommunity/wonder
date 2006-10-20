@@ -3,6 +3,7 @@
 	<wo wocomponentcontent = "true" class = "AjaxUpdateLink">
     <binding name = "updateContainerID"/>
     <binding name = "action"/>
+    <binding name = "directActionName"/>
 		
 		<binding name = "onComplete"/>
 		<binding name = "onSuccess"/>
@@ -15,13 +16,34 @@
 		<binding name = "replaceID"/>
 		<binding name = "ignoreActionResponse"/>
     
-    <validation message="&apos;updateContainerID&apos; or &apos;action&apos; must be bound.">
+    <validation message="&apos;action&apos; and &apos;directActionName&apos; cannot both be bound.">
+	    <bound name = "action"/>
+	    <bound name = "directActionName"/>
+    </validation>
+    
+    <validation message="If &apos;directActionName&apos; is bound, then &apos;replaceID&apos; must also be bound.">
+	    <bound name = "directActionName"/>
+	    <unbound name = "replaceID"/>
+    </validation>
+    
+    <validation message="&apos;action&apos; and &apos;directActionName&apos; cannot both be bound.">
+	    <bound name = "action"/>
+	    <bound name = "directActionName"/>
+    </validation>
+    
+    <validation message="&apos;updateContainerID&apos;, &apos;action&apos;, &apos;directActionName&apos; must be bound.">
 	    <unbound name = "action"/>
+	    <unbound name = "directActionName"/>
 	    <unbound name = "updateContainerID"/>
     </validation>
     
     <validation message="Only one of &apos;replaceID&apos; or &apos;ignoreActionResponse&apos; can be bound.">
 	    <bound name = "replaceID"/>
+	    <bound name = "ignoreActionResponse"/>
+    </validation>
+    
+    <validation message="Only one of &apos;directActionName&apos; or &apos;ignoreActionResponse&apos; can be bound.">
+	    <bound name = "directActionName"/>
 	    <bound name = "ignoreActionResponse"/>
     </validation>
     

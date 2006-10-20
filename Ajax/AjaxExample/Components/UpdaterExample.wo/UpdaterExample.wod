@@ -2,6 +2,11 @@ EffectScript : AjaxIncludeScript {
 	name = "effect.js";
 }
 
+DirectActionReplacementLink : AjaxUpdateLink {
+	directActionName = "exampleReplacement";
+	replaceID = "directActionReplacementDiv";
+}
+
 AjaxExampleComponent : AjaxExampleComponent {
 	title = "Ajax Update Component";
 }
