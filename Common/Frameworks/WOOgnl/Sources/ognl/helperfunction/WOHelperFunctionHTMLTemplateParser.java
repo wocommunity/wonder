@@ -149,7 +149,6 @@ public class WOHelperFunctionHTMLTemplateParser extends WOParser implements WOHe
           ognlKeyPath.append(otherParams);
         }
         ognlKeyPath.append(")");
-        System.out.println("WOHelperFunctionHTMLTemplateParser.parserHelperAssociation: " + ognlKeyPath);
         if (log.isDebugEnabled()) {
         	log.debug("Converted " + originalKeyPath + " into " + ognlKeyPath);
         }
