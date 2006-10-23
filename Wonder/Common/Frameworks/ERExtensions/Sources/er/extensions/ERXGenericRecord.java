@@ -11,6 +11,7 @@ import java.util.Enumeration;
 import org.apache.log4j.Logger;
 
 import com.webobjects.eoaccess.EOEntity;
+import com.webobjects.eoaccess.EOEntityClassDescription;
 import com.webobjects.eoaccess.EOUtilities;
 import com.webobjects.eocontrol.EOClassDescription;
 import com.webobjects.eocontrol.EOEditingContext;
@@ -64,10 +65,13 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
     public static boolean shouldTrimSpaces(){
         return ERXProperties.booleanForKeyWithDefault("er.extensions.ERXGenericRecord.shouldTrimSpaces", false);
     }
-    
+
     private String localizedKey(String key) {
-    	ERXEntityClassDescription cd = (ERXEntityClassDescription)classDescription();
-		return cd.localizedKey(editingContext(), key);
+        EOClassDescription cd = classDescription();
+        if(cd instanceof ERXEntityClassDescription) {
+            return ((ERXEntityClassDescription)cd).localizedKey(editingContext(), key);
+        }
+        return null;
     }
     
     public static class LocalizedBinding extends NSKeyValueCoding._KeyBinding {
