@@ -65,7 +65,10 @@ public class ERXWOForm extends com.webobjects.appserver._private.WOHTMLDynamicEl
     protected WOAssociation _queryDictionary;
     protected NSDictionary _otherQueryAssociations;
     protected WOAssociation _directActionName;
+    protected WOAssociation _addDefaultSubmitButton;
 
+    public static boolean addDefaultSubmitButtonDefault = ERXProperties.booleanForKeyWithDefault("er.extensions.ERXWOForm.addDefaultSubmitButtonDefault", false);
+    
     public ERXWOForm(String s, NSDictionary nsdictionary, WOElement woelement) {
     	super("form", nsdictionary, woelement);
     	_otherQueryAssociations = _NSDictionaryUtilities.extractObjectsForKeysWithPrefix(_associations, "?", true);
@@ -83,6 +86,7 @@ public class ERXWOForm extends com.webobjects.appserver._private.WOHTMLDynamicEl
     	_fragmentIdentifier = (WOAssociation) _associations.removeObjectForKey("fragmentIdentifier");
     	_secure = (WOAssociation) _associations.removeObjectForKey("secure");
     	_disabled = (WOAssociation) _associations.removeObjectForKey("disabled");
+    	_addDefaultSubmitButton = (WOAssociation) _associations.removeObjectForKey("addDefaultSubmitButton");
     	if(_associations.objectForKey("method") == null && _associations.objectForKey("Method") == null && _associations.objectForKey("METHOD") == null) {
     		_associations.setObjectForKey(new WOConstantValueAssociation("post"), "method");
     	}
@@ -241,6 +245,8 @@ public class ERXWOForm extends com.webobjects.appserver._private.WOHTMLDynamicEl
         if (shouldAppendFormTags) {
         	_appendOpenTagToResponse(response, context);
         	if(_multipleSubmit != null && _multipleSubmit.booleanValueInComponent(context.component())) {
+        		if(_addDefaultSubmitButton != null && _addDefaultSubmitButton.booleanValueInComponent(context.component())
+        				|| (_addDefaultSubmitButton == null  && addDefaultSubmitButtonDefault));
         		response._appendContentAsciiString("<input type=\"submit\" style=\"position: absolute; left: -10000px;\" name=\"WOFormDummySubmit\" value=\"WOFormDummySubmit\" />");
         	}
         	appendChildrenToResponse(response, context);
