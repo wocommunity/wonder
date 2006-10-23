@@ -64,7 +64,7 @@ public class AjaxObserveField extends AjaxDynamicElement {
     response.appendContentString("new Form.Element.Observer($('" + observeFieldID + "'), 1, function(element, value) {");
     NSMutableDictionary observerOptions = new NSMutableDictionary();
     if (options != null) {
-      observerOptions.addEntriesFromDictionary(observerOptions);
+      observerOptions.addEntriesFromDictionary(options);
     }
     observerOptions.setObjectForKey("true", "asynchronous");
 
