@@ -584,21 +584,15 @@ public class ERXEOAccessUtilities {
      * @param optionsCreate
      *            a NSDictionary containing the different options. Possible keys
      *            are
-     *            <ol>
+     *            <ul>
      *            <li>EOSchemaGeneration.DropTablesKey</li>
-     *            <ol>
      *            <li>EOSchemaGeneration.DropPrimaryKeySupportKey</li>
-     *            <ol>
      *            <li>EOSchemaGeneration.CreateTablesKey</li>
-     *            <ol>
      *            <li>EOSchemaGeneration.CreatePrimaryKeySupportKey</li>
-     *            <ol>
      *            <li>EOSchemaGeneration.PrimaryKeyConstraintsKey</li>
-     *            <ol>
      *            <li>EOSchemaGeneration.ForeignKeyConstraintsKey</li>
-     *            <ol>
      *            <li>EOSchemaGeneration.CreateDatabaseKey</li>
-     *            <ol>
+     *            </ul>
      *            <li>EOSchemaGeneration.DropDatabaseKey</li>
      *            <br/><br>
      *            Possible values are <code>YES</code> and <code>NO</code>
@@ -647,22 +641,16 @@ public class ERXEOAccessUtilities {
      * @param modelName
      *            the name of the EOModel <br/><br/>This method uses the
      *            following defaults options:
-     *            <ol>
+     *            <ul>
      *            <li>EOSchemaGeneration.DropTablesKey=YES</li>
-     *            <ol>
      *            <li>EOSchemaGeneration.DropPrimaryKeySupportKey=YES</li>
-     *            <ol>
      *            <li>EOSchemaGeneration.CreateTablesKey=YES</li>
-     *            <ol>
      *            <li>EOSchemaGeneration.CreatePrimaryKeySupportKey=YES</li>
-     *            <ol>
      *            <li>EOSchemaGeneration.PrimaryKeyConstraintsKey=YES</li>
-     *            <ol>
      *            <li>EOSchemaGeneration.ForeignKeyConstraintsKey=YES</li>
-     *            <ol>
      *            <li>EOSchemaGeneration.CreateDatabaseKey=NO</li>
-     *            <ol>
      *            <li>EOSchemaGeneration.DropDatabaseKey=NO</li>
+     *            </ul>
      *            <br/><br>
      *            Possible values are <code>YES</code> and <code>NO</code>
      * 
