@@ -37,7 +37,6 @@ import com.webobjects.eoaccess.EOModelGroup;
 import com.webobjects.eoaccess.EORelationship;
 import com.webobjects.eocontrol.EOAndQualifier;
 import com.webobjects.eocontrol.EOKeyComparisonQualifier;
-import com.webobjects.eocontrol.EOKeyValueArchiver;
 import com.webobjects.eocontrol.EOKeyValueQualifier;
 import com.webobjects.eocontrol.EOKeyValueUnarchiver;
 import com.webobjects.eocontrol.EONotQualifier;
@@ -48,7 +47,6 @@ import com.webobjects.eocontrol.EOSortOrdering;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSForwardException;
-import com.webobjects.foundation.NSKeyValueCoding;
 import com.webobjects.foundation.NSLog;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
@@ -134,17 +132,19 @@ public class ERD2WModel extends D2WModel {
      */
     protected ERD2WModel(NSArray rules) {
     	super(rules);
+        log.info(getClass().getName());
     	NSNotificationCenter.defaultCenter().addObserver(this, 
     			ERXSelectorUtilities.notificationSelector("applicationDidFinishLaunching"), 
     			WOApplication.ApplicationDidFinishLaunchingNotification, null);
     }
+    
     protected ERD2WModel(File file) {
         super(file);
     }
     protected ERD2WModel(EOKeyValueUnarchiver unarchiver) {
         super(unarchiver);
     }
-    
+    /**/
     public void clearD2WRuleCache() {
         invalidateCaches();
         sortRules();
@@ -504,134 +504,6 @@ public class ERD2WModel extends D2WModel {
     protected void setCurrentFile(File currentFile) { _currentFile = currentFile; }
     protected File currentFile() { return _currentFile; }
 
-    /**
-     * Rule class that works around two problems:
-     * <ul>
-     * <li>when you have an assignment class that is not present in the classpath
-     * then the model will not load, making for very strange errors. We replace the
-     * missing class with the normal assignment class and log the error.
-     * <li>when evaluating rule priorities, the default is to place rules containing <code>pageConfiguration</code>
-     * keys so high up that they will get prefered over rules without such a condition, but with a higher author setting.
-     * This is pretty ridiculous and leads to having to set <code>... AND (pageConfigurstion like '*')</code> 
-     * in all the conditions.<br>
-     * We place rules with a <code>pageConfiguration</code> so high that they will be higher than rules with the same author setting
-     * but lower than a rule with a higher setting.
-     * </ul>
-     * <br>In order to be usable with the D2WClient and Rule editor, we also patch the encoded 
-     * dictionary so these tools find no trace of the patched rules.
-     * @author ak
-     */
-    public static class _PatchedRule extends Rule {
-        private int _priority = -1;
-        private String _assignmentClassName;
-      
-        public _PatchedRule() {
-            super();
-        }
- 
-        public _PatchedRule(EOKeyValueUnarchiver eokeyvalueunarchiver) {
-            super(eokeyvalueunarchiver.decodeIntForKey("author"),
-                    ((EOQualifier) eokeyvalueunarchiver.decodeObjectForKey("lhs")),
-                    ((Assignment) eokeyvalueunarchiver.decodeObjectForKey("rhs")));
-            _assignmentClassName = (String)eokeyvalueunarchiver.decodeObjectForKey("assignmentClassName");
-        }
-        
-        public static Object decodeWithKeyValueUnarchiver(EOKeyValueUnarchiver eokeyvalueunarchiver) {
-            _PatchedRule rule = null;
-            try {
-                rule = new _PatchedRule(eokeyvalueunarchiver);
-            } catch(Throwable t) {
-                // AK: this occurs mostly when we want to load a rule that contains an assigment class which can't be found
-                //HACK cheesy way to get at the encoded rule dictionary
-                NSMutableDictionary dict = (NSMutableDictionary)NSKeyValueCoding.Utility.valueForKey(eokeyvalueunarchiver,"propertyList");
-                String ruleString = dict.toString();
-                // now store the old assignment class
-                dict.takeValueForKeyPath(dict.valueForKeyPath("rhs.class"), "assignmentClassName");
-                // and push in the default class
-                dict.takeValueForKeyPath(Assignment.class.getName(), "rhs.class");
-                // try again
-                try {
-                    rule = new _PatchedRule(eokeyvalueunarchiver);
-                    ruleString = rule.toString();
-                    
-                } finally {
-                    log.error("Problems with this rule: \n" +  t.getMessage() + "\n" + ruleString);
-                }
-            }
-            return rule;
-        }
-        
-        /**
-         * Overridden to patch the normal rule class name into the generated dictionary.
-         * @see com.webobjects.eocontrol.EOKeyValueArchiving#encodeWithKeyValueArchiver(com.webobjects.eocontrol.EOKeyValueArchiver)
-         */
-        public void encodeWithKeyValueArchiver (EOKeyValueArchiver eokeyvaluearchiver) {
-            super.encodeWithKeyValueArchiver(eokeyvaluearchiver);
-            ((NSMutableDictionary)eokeyvaluearchiver.dictionary()).setObjectForKey(Rule.class.getName(), "class");
-        }
-        
-        /**
-         * Overridden to work around 
-         * @see com.webobjects.directtoweb.Rule#priority()
-         */
-        public int priority() {
-            if(_priority == -1) {
-                
-                EOQualifier lhs = lhs();
-                String lhsString = "";
-                               
-                _priority = 1000 * author();
-
-                if(lhs != null) {
-                    lhsString = lhs.toString();
-                    if(lhsString.indexOf("dummyTrue") == -1) {
-                        if(lhsString.indexOf("pageConfiguration") != -1) {
-                            _priority += 500;
-                        }
-                        if(lhs() instanceof EOAndQualifier) {
-                            _priority += ((EOAndQualifier)lhs()).qualifiers().count();
-                        } else {
-                            _priority ++;
-                        }
-                    }
-                }
-            }
-            return _priority;
-        }
-
-        public String assignmentClassName() {
-            if(_assignmentClassName == null) {
-                _assignmentClassName = rhs().getClass().getName();
-            }
-            return _assignmentClassName;
-        }
-        
-        public _PatchedRule cloneRule() {
-            EOKeyValueArchiver archiver = new EOKeyValueArchiver();
-            encodeWithKeyValueArchiver(archiver);
-            EOKeyValueUnarchiver unarchiver = new EOKeyValueUnarchiver(archiver.dictionary());
-            
-            return new _PatchedRule(unarchiver);
-        }
-        
-        /**
-         * Builds a string like:<br>
-         * <pre><code>   100: ((entity.name = 'Bug') and (task = 'edit')) => isInspectable = true [com.directtowen.BooleanAssignment]</code></pre>
-         * @return a nice description of the rule
-         */
-        public String toString() {
-            String prefix = "      ";
-            String rhsClass = assignmentClassName();
-            return (
-                    prefix.substring(0, prefix.length() - ("" + author()).length()) + author() + " : " + 
-                    (lhs() == null ? "*true*" : lhs().toString()) +
-                    " => " +
-                    (rhs() == null ? "<NULL>" : rhs().keyPath() + " = " + rhs().value() +
-                            ( rhsClass.equals(Assignment.class.getName()) ? "" : " [" + rhsClass + "]")
-                    ));
-        }
-    }
-    
     protected static NSDictionary dictionaryFromFile(File file) {
         NSDictionary model = null;
         try {
@@ -645,7 +517,7 @@ public class ERD2WModel extends D2WModel {
                     NSMutableDictionary dict = (NSMutableDictionary)e.nextElement();
                     if(patchRules) {
                         if(Rule.class.getName().equals(dict.objectForKey("class"))) {
-                            dict.setObjectForKey(_PatchedRule.class.getName(), "class");
+                            dict.setObjectForKey(ERD2WRule.class.getName(), "class");
                         }
                     }
                 }
@@ -684,8 +556,11 @@ public class ERD2WModel extends D2WModel {
                         }
                     }
                 } else {
-                    ERD2WModel model = new ERD2WModel(new EOKeyValueUnarchiver(dic));
-                    addRules(model.rules());
+                    NSArray rules = (NSArray) new EOKeyValueUnarchiver(dic).decodeObjectForKey("rules");
+                    if(rules != null) {
+                        ERD2WModel model = new ERD2WModel(rules);
+                        addRules(model.rules());
+                    }
                 }
             }
             setDirty(false);
