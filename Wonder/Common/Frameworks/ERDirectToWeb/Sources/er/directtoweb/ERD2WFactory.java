@@ -155,6 +155,7 @@ public class ERD2WFactory extends D2W {
     }
 
     public void myCheckRules() {
+        init();
         boolean checkRules = !WOApplication.application().isCachingEnabled();
         if (checkRules) {
             ERD2WModel.erDefaultModel().checkRules();
