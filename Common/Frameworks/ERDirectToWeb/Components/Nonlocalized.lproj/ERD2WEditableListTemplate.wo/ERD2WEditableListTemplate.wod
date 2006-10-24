@@ -1,10 +1,3 @@
-ActiveImage1: WOActiveImage {
-	action = update;
-	alt = "Updates the current values.";
-	filename = "UpdateMetalBtn.gif";
-	framework = "ERDirectToWeb";
-}
-
 CancelActiveImage: WOActiveImage {
 	action = cancel;
 	alt = "Cancels your changes";
@@ -12,8 +5,15 @@ CancelActiveImage: WOActiveImage {
 	framework = "JavaDirectToWeb";
 }
 
-Conditional2: WOConditional {
-	condition = d2wContext.showBanner;
+ClearChangesButton: WOSubmitButton {
+    value = "Clear Changes";
+    action = clearMassChangeEO;
+}
+
+EditForm: WOForm {
+	enctype = d2wContext.formEncoding;
+	name = "EditForm";
+	multipleSubmit = true;
 }
 
 EmptyMessageComponent: WOSwitchComponent {
@@ -21,19 +21,15 @@ EmptyMessageComponent: WOSwitchComponent {
 	d2wContext = d2wContext;
 }
 
-ErrorDictionaryPanel: ERXErrorDictionaryPanel {
+Errors: ERXErrorDictionaryPanel {
 	errorMessages = errorMessages;
 	extraErrorMessage = errorMessage;
-	shouldShowNewLineAbove = false;
-	shouldShowNewLineBelow = false;
+	shouldShowNewLineAbove = true;
+	shouldShowNewLineBelow = true;
 }
 
-ErrorDictionaryPanel2: ERXErrorDictionaryPanel {
+ErrorsForEntity: ERXErrorDictionaryPanel {
 	errorMessages = currentErrorDictionary;
-}
-
-Form1: WOForm {
-	multipleSubmit = true;
 }
 
 Help: ERDDebuggingHelp {
@@ -44,13 +40,13 @@ HiddenField: WOHiddenField {
 	value = dummy;
 }
 
-HideReturnOnSelect1: WOConditional {
+HideReturnOnSelect: WOConditional {
 	_unroll = true;
 	condition = isSelecting;
 	negate = true;
 }
 
-ListEmpty2: WOConditional {
+ListEmpty: WOConditional {
 	condition = isListEmpty;
 }
 
@@ -59,7 +55,13 @@ ListNotEmpty: WOConditional {
 	negate = true;
 }
 
-ListPageRepetition2: WOSwitchComponent {
+MassChangeRepetition: WOSwitchComponent {
+	WOComponentName = d2wContext.repetitionComponentName;
+	d2wContext = d2wContextForMassChangeEO;
+	displayGroup = massChangeDisplayGroup;
+}
+
+ListPageRepetition: WOSwitchComponent {
 	WOComponentName = d2wContext.repetitionComponentName;
 	d2wContext = localContext;
 	displayGroup = displayGroup;
@@ -74,7 +76,7 @@ ListTable: WOGenericContainer {
 	elementName = "Table";
 }
 
-NavBar2: ERXBatchNavigationBarInForm {
+NavBar: ERXBatchNavigationBarInForm {
 	bgcolor = backgroundColorForTable;
 	displayGroup = displayGroup;
 	objectName = d2wContext.displayNameForEntity;
@@ -89,7 +91,17 @@ PageWrapper: WOSwitchComponent {
 	_unroll = true;
 }
 
-ReturnActiveImage2: WOActiveImage {
+PropagateButton: WOSubmitButton {
+    value = "Propagate Changes";
+    action = propagateChangesToVisibleObjects;
+}
+
+PropagateDebug: WOString {
+    value = propagateChangesDetails;
+    escapeHTML = false;
+}
+
+ReturnActiveImage: WOActiveImage {
 	filename = "ReturnMetalBtn.gif";
 	framework = "JavaDirectToWeb";
 	action = backAction;
@@ -103,8 +115,25 @@ SaveActiveImage: WOActiveImage {
 	framework = "JavaDirectToWeb";
 }
 
-ShowCancel1: WOConditional {
+ShouldShowBanner: WOConditional {
+	condition = d2wContext.showBanner;
+}
+
+ShouldShowMassChange: WOConditional {
+    condition = shouldShowMassChange;
+}
+
+ShouldShowPropagateDebug: WOConditional {
+    condition = d2wDebuggingEnabled;
+}
+
+ShowCancel: WOConditional {
 	condition = showCancel;
 }
 
-
+UpdateActiveImage: WOActiveImage {
+	action = update;
+	alt = "Updates the current values.";
+	filename = "UpdateMetalBtn.gif";
+	framework = "ERDirectToWeb";
+}

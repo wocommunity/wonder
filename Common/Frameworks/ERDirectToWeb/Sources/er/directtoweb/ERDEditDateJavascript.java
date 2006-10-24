@@ -34,14 +34,14 @@ public class ERDEditDateJavascript extends ERDCustomEditComponent {
     protected NSTimestampFormatter _dateFormatter;
     
     public void appendToResponse(WOResponse r, WOContext c){
-        if(dateString == null){
-            NSTimestamp date = (NSTimestamp)objectPropertyValue();
-            if(date != null)
-                try {
-                    dateString = dateFormatter().format(date);
-                } catch(IllegalArgumentException nsfe){ 
-                }
-        }
+        NSTimestamp date = (NSTimestamp)objectPropertyValue();
+        if(date != null)
+            try {
+                dateString = dateFormatter().format(date);
+            } catch(IllegalArgumentException nsfe){
+            }
+        else
+            dateString = null;
         super.appendToResponse(r,c);
     }
     
