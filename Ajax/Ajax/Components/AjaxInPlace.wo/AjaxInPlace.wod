@@ -27,6 +27,7 @@ ViewClickHandler : AjaxHyperlink {
 	onClickServer = updateFunctionName;
 	onLoading = ^onEditing;
 	evalScripts = true;
+	disabled = ^disabled;
 }
 
 SaveLabel : WOString {
