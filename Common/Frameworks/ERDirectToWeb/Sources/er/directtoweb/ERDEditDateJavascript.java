@@ -35,13 +35,15 @@ public class ERDEditDateJavascript extends ERDCustomEditComponent {
     
     public void appendToResponse(WOResponse r, WOContext c){
         NSTimestamp date = (NSTimestamp)objectPropertyValue();
-        if(date != null)
+        if(date != null) {
             try {
                 dateString = dateFormatter().format(date);
             } catch(IllegalArgumentException nsfe){
+                // nothing?
             }
-        else
+        } else {
             dateString = null;
+        }
         super.appendToResponse(r,c);
     }
     
