@@ -71,11 +71,12 @@ public class ERD2WPropertyName extends D2WStatelessComponent {
 
     public NSDictionary contextDictionary() {
         if(_contextDictionary == null) {
-            _contextDictionary = (NSDictionary)ERXWOContext.contextDictionary().objectForKey("contextDictionary");
+            String key = "contextDictionary." + d2wContext().dynamicPage();
+            _contextDictionary = (NSDictionary)ERXWOContext.contextDictionary().objectForKey(key);
             if(_contextDictionary == null) {
             	ERD2WContextDictionary dict = new ERD2WContextDictionary(d2wContext().dynamicPage(), null, null);
             	_contextDictionary = dict.dictionary();
-            	ERXWOContext.contextDictionary().setObjectForKey(_contextDictionary, "contextDictionary");
+            	ERXWOContext.contextDictionary().setObjectForKey(_contextDictionary, key);
             }
         }
         return _contextDictionary;
