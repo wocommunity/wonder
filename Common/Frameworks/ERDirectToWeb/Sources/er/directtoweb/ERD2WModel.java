@@ -23,6 +23,7 @@ import java.util.Vector;
 import org.apache.log4j.Logger;
 
 import com.webobjects.appserver.WOApplication;
+import com.webobjects.appserver._private.WODeployedBundle;
 import com.webobjects.directtoweb.Assignment;
 import com.webobjects.directtoweb.D2WContext;
 import com.webobjects.directtoweb.D2WFastModel;
@@ -45,6 +46,7 @@ import com.webobjects.eocontrol.EOQualifier;
 import com.webobjects.eocontrol.EOQualifierEvaluation;
 import com.webobjects.eocontrol.EOSortOrdering;
 import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSBundle;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSForwardException;
 import com.webobjects.foundation.NSLog;
@@ -132,7 +134,6 @@ public class ERD2WModel extends D2WModel {
      */
     protected ERD2WModel(NSArray rules) {
     	super(rules);
-        log.info(getClass().getName());
     	NSNotificationCenter.defaultCenter().addObserver(this, 
     			ERXSelectorUtilities.notificationSelector("applicationDidFinishLaunching"), 
     			WOApplication.ApplicationDidFinishLaunchingNotification, null);
