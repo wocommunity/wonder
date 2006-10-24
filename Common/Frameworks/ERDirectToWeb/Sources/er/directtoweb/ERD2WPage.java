@@ -369,6 +369,11 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
     /** Implementation of the {@link ERDUserInfoInterface} */
     public NSMutableDictionary userInfo() { return _userInfo; }
 
+    /** Checks if basic debugging is on */
+    public boolean d2wDebuggingEnabled() {
+        return ERDirectToWeb.d2wDebuggingEnabled(session());
+    }
+
     /** Checks is component names should be shown. */
     public boolean d2wComponentNameDebuggingEnabled() {
         return ERDirectToWeb.d2wComponentNameDebuggingEnabled(session());
