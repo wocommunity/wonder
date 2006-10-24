@@ -20,5 +20,6 @@
 		<binding name = "onEditClick"/>
 		<binding name = "onEditing"/>
 		<binding name = "onRefreshComplete"/>
+		<binding name = "disabled"/>
 	</wo>
 </wodefinitions>

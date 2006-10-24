@@ -62,7 +62,7 @@ import com.webobjects.appserver.WOResponse;
  * @binding onEditing the javascript action to fire when editing mode is loading
  * @binding onCancelling the javascript action to fire when cancelling
  * @binding onRefreshComplete the javascript function to execute after refreshing the container
- * 
+ * @binding disabled whether or not edit mode should be disabled
  * @author mschrag
  */
 public class AjaxInPlace extends WOComponent {

@@ -24,6 +24,7 @@ import com.webobjects.foundation.NSMutableDictionary;
  * @binding id id of the link
  * @binding class class of the link
  * @binding style style of the link
+ * @binding disabled whether or not this link is disabled
  * @author ak
  */
 public class AjaxHyperlink extends AjaxDynamicElement {
@@ -64,24 +65,33 @@ public class AjaxHyperlink extends AjaxDynamicElement {
   public void appendToResponse(WOResponse response, WOContext context) {
       WOComponent component = context.component();
 
+      boolean disabled = booleanValueForBinding("disabled", false, component);
       String elementName = (String)valueForBinding("elementName", "a", component);
-      response.appendContentString("<");
-      response.appendContentString(elementName);
-      response.appendContentString(" ");
-      if ("a".equalsIgnoreCase(elementName)) {
-        appendTagAttributeToResponse(response, "href", "javascript:void(0)");
+      boolean isATag = "a".equalsIgnoreCase(elementName);
+      boolean renderTags = (!disabled || !isATag);
+      if (renderTags) {
+	      response.appendContentString("<");
+	      response.appendContentString(elementName);
+	      response.appendContentString(" ");
+	      if (isATag) {
+	        appendTagAttributeToResponse(response, "href", "javascript:void(0)");
+	      }
+	      appendTagAttributeToResponse(response, "title", valueForBinding("title", component ));
+	      appendTagAttributeToResponse(response, "value", valueForBinding("value", component ));
+	      appendTagAttributeToResponse(response, "class", valueForBinding("class", component ));
+	      appendTagAttributeToResponse(response, "style", valueForBinding("style", component ));
+	      appendTagAttributeToResponse(response, "id", valueForBinding("id", component ));
+	      if (!disabled) {
+	    	  appendTagAttributeToResponse(response, "onclick", onClick(context));
+	      }
+	      response.appendContentString(">");
       }
-      appendTagAttributeToResponse(response, "title", valueForBinding("title", component ));
-      appendTagAttributeToResponse(response, "value", valueForBinding("value", component ));
-      appendTagAttributeToResponse(response, "class", valueForBinding("class", component ));
-      appendTagAttributeToResponse(response, "style", valueForBinding("style", component ));
-      appendTagAttributeToResponse(response, "id", valueForBinding("id", component ));
-      appendTagAttributeToResponse(response, "onclick", onClick(context));
-      response.appendContentString(">");
       appendChildrenToResponse(response, context);
-      response.appendContentString("</");
-      response.appendContentString(elementName);
-      response.appendContentString(">");
+      if (renderTags) {
+	      response.appendContentString("</");
+	      response.appendContentString(elementName);
+	      response.appendContentString(">");
+      }
       super.appendToResponse(response, context);
   }
 
