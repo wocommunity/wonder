@@ -38,7 +38,6 @@ import com.webobjects.eocontrol.EOSharedEditingContext;
 import com.webobjects.eocontrol.EOSortOrdering;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
-import com.webobjects.foundation.NSKeyValueCoding;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSNotification;
 import com.webobjects.foundation.NSNotificationCenter;
@@ -51,7 +50,6 @@ import er.extensions.ERXConstant;
 import er.extensions.ERXDisplayGroup;
 import er.extensions.ERXEOAccessUtilities;
 import er.extensions.ERXEOControlUtilities;
-import er.extensions.ERXExtensions;
 import er.extensions.ERXLocalizer;
 import er.extensions.ERXValueUtilities;
 /**
@@ -301,18 +299,13 @@ public class ERD2WListPage extends ERD2WPage implements ERDListPageInterface, Se
     
     public int numberOfObjectsPerBatch() {
         if (_batchSize == null) {
-            NSKeyValueCoding userPreferences=(NSKeyValueCoding)d2wContext().valueForKey("userPreferences");
             int batchSize = ERXValueUtilities.intValueWithDefault(d2wContext().valueForKey("defaultBatchSize"), 0);
-            if (userPreferences!=null) {
-                String key=ERXExtensions.userPreferencesKeyFromContext("batchSize", d2wContext());
-                // batchSize prefs are expected in the form vfk batchSize.<pageConfigName>
-                Object batchSizePref = userPreferences.valueForKey(key);
+            Object batchSizePref= userPreferencesValueForPageConfigurationKey("batchSize");
+            if(batchSizePref != null) {
                 if (log.isDebugEnabled()) {
                     log.debug("batchSize User Prefererence: " + batchSizePref);
                 }
-                if (batchSizePref!=null) {
-                    batchSize = ERXValueUtilities.intValueWithDefault(batchSizePref, batchSize);
-                }
+                batchSize = ERXValueUtilities.intValueWithDefault(batchSizePref, batchSize);
             }
             _batchSize = ERXConstant.integerForInt(batchSize);
         }
@@ -331,13 +324,8 @@ public class ERD2WListPage extends ERD2WPage implements ERDListPageInterface, Se
     public NSArray sortOrderings() {
         NSArray sortOrderings=null;
         if (userPreferencesCanSpecifySorting()) {
-            NSKeyValueCoding userPreferences=(NSKeyValueCoding)d2wContext().valueForKey("userPreferences");
-            if (userPreferences!=null) {
-                String key=ERXExtensions.userPreferencesKeyFromContext("sortOrdering", d2wContext());
-                // sort ordering prefs are expected in the form vfk sortOrdering.<pageConfigName>
-                sortOrderings=(NSArray)userPreferences.valueForKey(key);
-                if (log.isDebugEnabled()) log.debug("Found sort Orderings in user prefs "+ sortOrderings);
-            }
+            sortOrderings = (NSArray)userPreferencesValueForPageConfigurationKey("sortOrdering");
+            if (log.isDebugEnabled()) log.debug("Found sort Orderings in user prefs "+ sortOrderings);
         }
         if (sortOrderings==null) {
             NSArray sortOrderingDefinition=(NSArray)d2wContext().valueForKey("defaultSortOrdering");
