@@ -114,7 +114,31 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
     		_context.lock();
     	}
     }
-    
+
+    /**
+     * Utility method to get a value from the user prefs. 
+     * @param key
+     * @return
+     */
+    protected Object userPreferencesValueForKey(String key) {
+        Object result = null;
+        NSKeyValueCoding userPreferences=(NSKeyValueCoding)d2wContext().valueForKey("userPreferences");
+        if (userPreferences!=null) {
+            result=userPreferences.valueForKey(key);
+        }        
+        return result;
+    }
+
+    /**
+     * Utility method to get a value for the current page configuration from the user prefs.
+     * @param key
+     * @return
+     */
+    protected Object userPreferencesValueForPageConfigurationKey(String key) {
+        key = ERXExtensions.userPreferencesKeyFromContext(key, d2wContext());
+        return userPreferencesValueForKey(key);
+    }
+
     /**
      * Overridden to unlock the page's editingContext, if there is any present.
      */
