@@ -44,6 +44,7 @@ public class ERXD2WList extends D2WList {
             return (EODataSource) this.valueForBinding("dataSource");
         if (this.hasBinding("list")) {
             NSArray nsarray = (NSArray) this.valueForBinding("list");
+            nsarray = ERXArrayUtilities.removeNullValues(nsarray);
             EOEditingContext eoeditingcontext
                 = (nsarray != null && nsarray.count() > 0
                    ? ((EOEnterpriseObject) nsarray.objectAtIndex(0))
