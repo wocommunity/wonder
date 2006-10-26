@@ -60,7 +60,10 @@ public class ERXEC extends EOEditingContext {
     public static final String EditingContextWillSaveChangesNotification = "EOEditingContextWillSaveChanges";
 
     /** if traceOpenEditingContextLocks is true, this contains the stack trace from this EC's call to lock */
-    private Exception openLockTrace;
+    private Exception creationTrace;
+    private NSMutableArray openLockTraces;
+    /** if traceOpenEditingContextLocks is true, this will contain the name of the locking thread */
+    private String nameOfLockingThread;
     
     /** decides whether to lock/unlock automatically when used without a lock. */
     private Boolean useAutolock;
@@ -241,6 +244,10 @@ public class ERXEC extends EOEditingContext {
     public ERXEC(EOObjectStore os) {
         super(os);
         ERXEnterpriseObject.Observer.install();
+        if (traceOpenEditingContextLocks) {
+        	creationTrace = new Exception("Creation");
+        	creationTrace.fillInStackTrace();
+        }
     }
 
     public static boolean defaultAutomaticLockUnlock() {
@@ -278,10 +285,14 @@ public class ERXEC extends EOEditingContext {
     	return lockCount; 
     }
     
+    /** If traceOpenEditingContextLocks is true, returns the stack trace from when this EC was created */
+    public Exception creationTrace() {
+    	return creationTrace;
+    }
     
     /** If traceOpenEditingContextLocks is true, returns the stack trace from when this EC was locked */
-    public Exception openLockTrace() {
-      return openLockTrace;
+    public NSArray openLockTraces() {
+      return openLockTraces;
     }
     
     /** 
@@ -289,9 +300,35 @@ public class ERXEC extends EOEditingContext {
      * locked editing contexts in this thread.
      */
     public void lock() {
-        if (traceOpenEditingContextLocks && lockCount == 0) {
-          openLockTrace = new Exception();
-          openLockTrace.fillInStackTrace();
+        if (traceOpenEditingContextLocks) {
+        	synchronized (this) {
+        		if (openLockTraces == null) {
+        			openLockTraces = new NSMutableArray();
+        		}
+        		Exception openLockTrace = new Exception("Locked");
+        		openLockTrace.fillInStackTrace();
+        		String nameOfCurrentThread = Thread.currentThread().getName();
+                if (openLockTraces.count() == 0) {
+                	openLockTraces.addObject(openLockTrace);
+                	nameOfLockingThread = nameOfCurrentThread;
+                	//NSLog.err.appendln("+++ Lock number (" +  _stackTraces.count() + ") in " + nameOfCurrentThread);
+                } else {
+                    if (nameOfCurrentThread.equals(nameOfLockingThread)) {
+                    	openLockTraces.addObject(openLockTrace);
+                        //NSLog.err.appendln("+++ Lock number (" + _stackTraces.count() + ") in " + nameOfCurrentThread);
+                    } else {
+                    	log.error(System.identityHashCode(this) + " Attempting to lock editing context from " + nameOfCurrentThread + " that was previously locked in " + nameOfLockingThread);
+                       log.error(System.identityHashCode(this) + " Current stack trace: ", openLockTrace);
+                       log.error(System.identityHashCode(this) + " Lock count: " + openLockTraces.count());
+                       Enumeration openLockTracesEnum = openLockTraces.objectEnumerator();
+                       while (openLockTracesEnum.hasMoreElements()) {
+                    	   Exception existingOpenLockTrace = (Exception)openLockTracesEnum.nextElement();
+                    	   log.error(System.identityHashCode(this) + " Existing lock: ", existingOpenLockTrace);
+                       }
+                       log.error(System.identityHashCode(this) + " Created: ", creationTrace);
+                    }
+                }
+        	}
         }
         lockCount++;
         super.lock();
@@ -320,9 +357,19 @@ public class ERXEC extends EOEditingContext {
             }
         }
         lockCount--;
-        if (traceOpenEditingContextLocks && lockCount == 0) {
-          openLockTrace = null;
-        }
+		if (traceOpenEditingContextLocks) {
+			synchronized (this) {
+				if (openLockTraces != null) {
+					if (openLockTraces.count() > 0) {
+						openLockTraces.removeLastObject();
+					}
+					if (openLockTraces.count() == 0) {
+						nameOfLockingThread = null;
+						openLockTraces = null;
+					}
+				}
+			}
+		}
     }
 
     /**
@@ -372,10 +419,32 @@ public class ERXEC extends EOEditingContext {
     public boolean isAutoLocked() {
     	return autoLockCount > 0;
     }
+
+    protected void _checkOpenLockTraces() {
+    	if (openLockTraces != null && openLockTraces.count() != 0) {
+            log.error(System.identityHashCode(this) + " Disposed with " + openLockTraces.count() + " locks (finalizing = " + isFinalizing + ")");
+            Enumeration openLockTracesEnum = openLockTraces.objectEnumerator();
+            while (openLockTracesEnum.hasMoreElements()) {
+         	   Exception existingOpenLockTrace = (Exception)openLockTracesEnum.nextElement();
+         	   log.error(System.identityHashCode(this) + " Existing lock: ", existingOpenLockTrace);
+            }
+            log.error(System.identityHashCode(this) + " created: ", creationTrace);
+        }
+    }
+    
+    public void dispose() {
+    	if (traceOpenEditingContextLocks) {
+    		_checkOpenLockTraces();
+    	}
+    	super.dispose();
+    }
     
     /** Overriden to support automatic autoLocking. */ 
     public void finalize() throws Throwable {
         isFinalizing = true;
+    	if (traceOpenEditingContextLocks) {
+    		_checkOpenLockTraces();
+    	}
         super.finalize();
     }
     
