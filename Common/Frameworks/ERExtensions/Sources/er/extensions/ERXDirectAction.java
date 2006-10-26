@@ -251,11 +251,15 @@ public class ERXDirectAction extends WODirectAction {
           Enumeration lockedEditingContextEnum = lockedEditingContexts.objectEnumerator();
           while (lockedEditingContextEnum.hasMoreElements()) {
             EOEditingContext lockedEditingContext = (EOEditingContext)lockedEditingContextEnum.nextElement();
-            Exception openLockTrace = ((ERXEC)lockedEditingContext).openLockTrace();
-            if (openLockTrace != null) {
-              openLockTrace.printStackTrace(pw);
+            NSArray openLockTraces = ((ERXEC)lockedEditingContext).openLockTraces();
+            if (openLockTraces != null) {
+            	Enumeration openLockTracesEnum = openLockTraces.objectEnumerator();
+            	while (openLockTracesEnum.hasMoreElements()) {
+            		Exception openLockTrace = (Exception)openLockTracesEnum.nextElement();
+                	openLockTrace.printStackTrace(pw);
+                	pw.println();
+            	}
             }
-            pw.println();
           }
         }
         else {
