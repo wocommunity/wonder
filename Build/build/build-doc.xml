@@ -9,6 +9,7 @@
 <project name="wonder-doc" default="api" basedir="../..">
 
     <property file="${basedir}/Build/build/build.properties" />
+    <property file="${user.home}/build.wonder.properties" />
     <property file="${user.home}/build.properties" />
     <property file="${basedir}/Build/build/default.properties" />
 
