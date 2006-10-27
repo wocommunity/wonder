@@ -36,6 +36,7 @@ import er.extensions.ERXComponentUtilities;
  * @binding disabled boolean defining if the link renders the tag
  * @binding string string to get preprended to the contained elements
  * @binding function a custom function to call that takes a single parameter that is the action url
+ * @binding elementName the element name to use (defaults to "a")
  */
 public class AjaxUpdateLink extends AjaxDynamicElement {
 
@@ -112,9 +113,16 @@ public class AjaxUpdateLink extends AjaxDynamicElement {
     WOComponent component = context.component();
     boolean disabled = booleanValueForBinding("disabled", false, component);
     Object stringValue = valueForBinding("string", component);
-    if (!disabled) {
-      response.appendContentString("<a ");
-      appendTagAttributeToResponse(response, "href", "javascript:void(0);");
+    String elementName = (String)valueForBinding("elementName", "a", component);
+    boolean isATag = "a".equalsIgnoreCase(elementName);
+    boolean renderTags = (!disabled || !isATag);
+    if (renderTags) {
+      response.appendContentString("<");
+      response.appendContentString(elementName);
+      response.appendContentString(" ");
+      if (isATag) {
+    	  appendTagAttributeToResponse(response, "href", "javascript:void(0);");
+      }
       appendTagAttributeToResponse(response, "onclick", onClick(context));
       appendTagAttributeToResponse(response, "title", valueForBinding("title", component));
       appendTagAttributeToResponse(response, "value", valueForBinding("value", component));
@@ -128,8 +136,10 @@ public class AjaxUpdateLink extends AjaxDynamicElement {
       response.appendContentHTMLString(stringValue.toString());
     }
     appendChildrenToResponse(response, context);
-    if (!disabled) {
-      response.appendContentString("</a>");
+    if (renderTags) {
+      response.appendContentString("</");
+      response.appendContentString(elementName);
+      response.appendContentString(">");
     }
     super.appendToResponse(response, context);
   }
