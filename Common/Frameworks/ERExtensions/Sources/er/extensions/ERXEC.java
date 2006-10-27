@@ -396,7 +396,7 @@ public class ERXEC extends EOEditingContext {
         }
         lockCount--;
         // If coalesceAutoLocks is true, then we will often end up with
-        // a hanging autoLock at the find unlock, so we want to reset the
+        // a hanging autoLock at the final unlock, so we want to reset the
         // autolock count to zero so things behave properly when you 
         // next use autolocking
         if (coalesceAutoLocks() && lockCount == 0 && autoLockCount > 0) {
