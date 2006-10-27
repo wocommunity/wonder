@@ -16,12 +16,16 @@
 		<binding name = "expandedImageFramework"/>
 		<binding name = "leafImage"/>
 		<binding name = "leafImageFramework"/>
+		<binding name = "delegate"/>
 
-    <validation message = "&apos;parentKeyPath&apos; and &apos;childrenKeyPath&apos; must be bound.">
-    	<or>
-		    <unbound name = "parentKeyPath"/>
-		    <unbound name = "childrenKeyPath"/>
-		  </or>
+    <validation message = "&apos;parentKeyPath&apos; and &apos;childrenKeyPath&apos;, or &apos;delegate&apos; must be bound.">
+    	<and>
+	    	<or>
+			    <unbound name = "parentKeyPath"/>
+			    <unbound name = "childrenKeyPath"/>
+			  </or>
+			  <unbound name = "delegate"/>
+			</and>
     </validation>
 
     <validation message = "One of &apos;root&apos; or &apos;treeModel&apos; must be bound.">
