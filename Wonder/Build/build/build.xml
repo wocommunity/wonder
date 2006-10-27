@@ -16,6 +16,7 @@
     <!-- VARIOUS "build.properties" FILEA ARE LOCAL TO        -->
     <!-- THE DEVELOPER MACHINE AND ALLOW BUILD CUSTOMIZATION. -->                       
     <!-- ==================================================== -->
+    <property file="${user.home}/build.wonder.properties" />
     <property file="${user.home}/build.properties" />
     <property file="Build/build/build.properties" />
     <property file="Build/build/default.properties" />
