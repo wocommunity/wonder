@@ -9,6 +9,7 @@
 		<binding name = "childrenKeyPath"/>
 		<binding name = "isLeafKeyPath"/>
 		<binding name = "id"/>
+		<binding name = "class"/>
 		<binding name = "treeModel"/>
 		<binding name = "collapsedImage"/>
 		<binding name = "collapsedImageFramework"/>
@@ -26,6 +27,15 @@
 			  </or>
 			  <unbound name = "delegate"/>
 			</and>
+    </validation>
+
+    <validation message = "If you bind &apos;delegate&apos;, you cannot also bind &apos;parentKeyPath&apos;, &apos;childrenKeyPath&apos;, or &apos;isLeafKeyPath&apos;.">
+    	<or>
+		    <bound name = "parentKeyPath"/>
+		    <bound name = "childrenKeyPath"/>
+		    <bound name = "isLeafKeyPath"/>
+		  </or>
+		  <bound name = "delegate"/>
     </validation>
 
     <validation message = "One of &apos;root&apos; or &apos;treeModel&apos; must be bound.">
