@@ -249,17 +249,22 @@ public class ERXDirectAction extends WODirectAction {
         if (ecFactory instanceof ERXEC.DefaultFactory) {
           NSArray lockedEditingContexts = ((ERXEC.DefaultFactory)ecFactory).lockedEditingContexts();
           Enumeration lockedEditingContextEnum = lockedEditingContexts.objectEnumerator();
-          while (lockedEditingContextEnum.hasMoreElements()) {
-            EOEditingContext lockedEditingContext = (EOEditingContext)lockedEditingContextEnum.nextElement();
-            NSArray openLockTraces = ((ERXEC)lockedEditingContext).openLockTraces();
-            if (openLockTraces != null) {
-            	Enumeration openLockTracesEnum = openLockTraces.objectEnumerator();
-            	while (openLockTracesEnum.hasMoreElements()) {
-            		Exception openLockTrace = (Exception)openLockTracesEnum.nextElement();
-                	openLockTrace.printStackTrace(pw);
-                	pw.println();
-            	}
-            }
+          if (!lockedEditingContextEnum.hasMoreElements()) {
+        	  pw.println("There are no open editing context lock traces.");
+          }
+          else {
+	          while (lockedEditingContextEnum.hasMoreElements()) {
+	            EOEditingContext lockedEditingContext = (EOEditingContext)lockedEditingContextEnum.nextElement();
+	            NSArray openLockTraces = ((ERXEC)lockedEditingContext).openLockTraces();
+	            if (openLockTraces != null) {
+	            	Enumeration openLockTracesEnum = openLockTraces.objectEnumerator();
+	            	while (openLockTracesEnum.hasMoreElements()) {
+	            		Exception openLockTrace = (Exception)openLockTracesEnum.nextElement();
+	                	openLockTrace.printStackTrace(pw);
+	                	pw.println();
+	            	}
+	            }
+	          }
           }
         }
         else {
