@@ -67,6 +67,8 @@ public class ERXEC extends EOEditingContext {
     
     /** decides whether to lock/unlock automatically when used without a lock. */
     private Boolean useAutolock;
+    /** if true, then autolocks are left open inside of a request to be cleaned up at the end */
+    private Boolean coalesceAutoLocks;
     
     /** how many times we did automatically lock. */
     private int autoLockCount = 0;
@@ -163,7 +165,13 @@ public class ERXEC extends EOEditingContext {
         	// we can't use an iterator, because calling unlock() will remove the EC from end of the vector
     		for (int i = ecs.size() - 1; i >= 0; i--) {
     			EOEditingContext ec = (EOEditingContext) ecs.get(i);
-    			log.warn("Unlocking context that wasn't unlocked in RR-Loop!: " + ec);
+    			boolean openAutoLocks = (ec instanceof ERXEC && ((ERXEC)ec).autoLockCount() > 0);
+    			if (openAutoLocks) {
+    				log.debug("Unlocking leftover autolock: " + ec);
+    			}
+    			else {
+    				log.warn("Unlocking context that wasn't unlocked in RR-Loop!: " + ec);
+    			}
     			try {
     				ec.unlock();
     			} catch(IllegalStateException ex) {
@@ -254,6 +262,10 @@ public class ERXEC extends EOEditingContext {
         return "true".equals(System.getProperty("er.extensions.ERXEC.defaultAutomaticLockUnlock"));
     }
     
+    public static boolean defaultCoalesceAutoLocks() {
+        return "true".equals(System.getProperty("er.extensions.ERXEC.defaultCoalesceAutoLocks"));
+    }
+    
     /** Utility to delete a bunch of objects. */
     public void deleteObjects(NSArray objects) {
     	for (int i = objects.count(); i-- > 0;) {
@@ -270,14 +282,40 @@ public class ERXEC extends EOEditingContext {
     /** Decides on a per-EC-level if autoLocking should be used. */
     public boolean useAutoLock() {
         if (useAutolock == null) {
-            useAutolock = defaultAutomaticLockUnlock() ? Boolean.TRUE : Boolean.FALSE;
+            useAutolock = Boolean.valueOf(defaultAutomaticLockUnlock());
         }
         return useAutolock.booleanValue();
     }
     
     /** Sets whether to use autoLocking on this EC. */
     public void setUseAutoLock(boolean value) {
-        useAutolock = value ? Boolean.TRUE : Boolean.FALSE;
+        useAutolock = Boolean.valueOf(value);
+    }
+    
+    /**
+     * If you just use autolocking, you will end up churning locks
+     * constantly.  Additionally, you can still end up with race 
+     * conditions since you're not actually locking across your
+     * entire request.  Coalescing auto locks attempts to solve this
+     * problem by leaving your auto lock open after the first 
+     * use.  This "hanging lock" will be cleaned up at the end of the
+     * RR loop but the unlocker.
+     */
+    public boolean coalesceAutoLocks() {
+    	if (coalesceAutoLocks == null) {
+    		coalesceAutoLocks = Boolean.valueOf(defaultCoalesceAutoLocks());
+    		if (coalesceAutoLocks.booleanValue() && !useUnlocker) {
+    			throw new IllegalStateException("You must enable the EC unlocker if you want to coalesce autolocks.");
+    		}
+    	}
+    	return coalesceAutoLocks.booleanValue();
+    }
+
+    /**
+     * Returns whether or not coalescing auto locks is enabled.
+     */
+    public void setCoalesceAutoLocks(boolean value) {
+    	coalesceAutoLocks = Boolean.valueOf(value); 
     }
     
     /** Returns the number of outstanding locks. */
@@ -357,6 +395,13 @@ public class ERXEC extends EOEditingContext {
             }
         }
         lockCount--;
+        // If coalesceAutoLocks is true, then we will often end up with
+        // a hanging autoLock at the find unlock, so we want to reset the
+        // autolock count to zero so things behave properly when you 
+        // next use autolocking
+        if (coalesceAutoLocks() && lockCount == 0 && autoLockCount > 0) {
+        	autoLockCount = 0;
+        }
 		if (traceOpenEditingContextLocks) {
 			synchronized (this) {
 				if (openLockTraces != null) {
@@ -372,6 +417,13 @@ public class ERXEC extends EOEditingContext {
 		}
     }
 
+    /**
+     * Returns the autoLockCount
+     */
+    protected int autoLockCount() {
+    	return autoLockCount;
+    }
+    
     /**
      * Utility to actually emit the log messages and do the locking,
      * based on the result of {@link #useAutoLock()}.
@@ -407,8 +459,11 @@ public class ERXEC extends EOEditingContext {
      */
     protected void autoUnlock(boolean wasAutoLocked) {
         if (wasAutoLocked) {
-            unlock();
-            autoLockCount--;
+        	boolean shouldUnlock = (!coalesceAutoLocks() || autoLockCount > 1 || ERXThreadStorage.valueForKey("wocontext") == null);
+        	if (shouldUnlock) {
+	            unlock();
+	            autoLockCount--;
+        	}
         }
     }
     
