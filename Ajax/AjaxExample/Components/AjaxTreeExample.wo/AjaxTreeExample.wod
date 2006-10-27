@@ -2,8 +2,18 @@ AjaxExampleComponent : AjaxExampleComponent {
 	title = "Ajax Tree";
 }
 
+AjaxTree2 : AjaxTree {
+	id = "delegateTree";
+	class = "tree";
+	root = rootTreeNode;
+	item = treeNode;
+	rootExpanded = true;
+	delegate = delegate;
+}
+
 AjaxTree : AjaxTree {
 	id = "exampleTree";
+	class = "tree";
 	root = rootTreeNode;
 	item = treeNode;
 	parentKeyPath = "parentTreeNode";
