@@ -5,6 +5,7 @@
 		<binding name = "class"/>
 		<binding name = "saveLabel"/>
 		<binding name = "cancelLabel"/>
+		<binding name = "editAction"/>
 		<binding name = "saveAction"/>
 		<binding name = "cancelAction"/>
 		<binding name = "saveClass"/>
@@ -21,5 +22,6 @@
 		<binding name = "onEditing"/>
 		<binding name = "onRefreshComplete"/>
 		<binding name = "disabled"/>
+		<binding name = "editing"/>
 	</wo>
 </wodefinitions>
