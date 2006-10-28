@@ -96,17 +96,29 @@ public class AjaxInPlace extends WOComponent {
   }
 
   public boolean editing() {
-    return _editing;
+	  if (hasBinding("editing")) {
+		  Boolean editingBoolean = (Boolean)valueForBinding("editing");
+		  _editing = editingBoolean.booleanValue();
+	  }
+	  return _editing;
+  }
+  
+  public void setEditing(boolean editing) {
+	_editing = editing;
   }
   
   public WOActionResults startEditing() {
     _editing = true;
+    setValueForBinding(Boolean.TRUE, "editing");
+    WOActionResults results = (WOActionResults) valueForBinding("editAction");
+    // ignore results
     return null;
   }
   
   public WOActionResults save() {
     WOActionResults results = (WOActionResults) valueForBinding("saveAction");
     _editing = false;
+    setValueForBinding(Boolean.FALSE, "editing");
     // ignore results
     return null;
   }
@@ -114,6 +126,7 @@ public class AjaxInPlace extends WOComponent {
   public WOActionResults cancel() {
     WOActionResults results = (WOActionResults) valueForBinding("cancelAction");
     _editing = false;
+    setValueForBinding(Boolean.FALSE, "editing");
     // ignore results
     return null;
   }
