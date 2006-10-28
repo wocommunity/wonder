@@ -15,6 +15,7 @@ import ognl.ClassResolver;
 import ognl.Ognl;
 import ognl.OgnlException;
 import ognl.OgnlRuntime;
+import ognl.helperfunction.WOHelperFunctionHTMLTemplateParser;
 
 import com.webobjects.appserver.WOApplication;
 import com.webobjects.appserver.WOAssociation;
@@ -90,6 +91,9 @@ public class WOOgnl {
         if (!"false".equals(System.getProperty("ognl.active"))) {
         	if ("true".equalsIgnoreCase(System.getProperty("ognl.helperFunctions"))) {
         	    WOParser.setWOHTMLTemplateParserClassName("ognl.helperfunction.WOHelperFunctionHTMLTemplateParser");
+        	    if ("true".equalsIgnoreCase(System.getProperty("ognl.inlineBindings"))) {
+        	    	WOHelperFunctionHTMLTemplateParser.setAllowInlineBindings(true);
+        	    }
         	}
         	else {
         		WOParser.setWOHTMLTemplateParserClassName("ognl.webobjects.WOOgnlHTMLTemplateParser");
