@@ -101,7 +101,7 @@ public class AjaxUtils {
     return result;
   }
 
-  private static String htmlCloseHead() {
+  public static String htmlCloseHead() {
     String head = AjaxUtils.HTML_CLOSE_HEAD;
     return (head == null ? "</head>" : head);
   }
