@@ -48,7 +48,7 @@ NSString *RMModelGroupType = @"Rule Model Group";
 - (void)setRelative:(BOOL)relative {
     if (_relative != relative) {
         [[[_group undoManager] prepareWithInvocationTarget:self] setRelative:_relative];
-        [[_group undoManager] setActionName:((relative != [[_group undoManager] isUndoing]) ? @"Set Relative Path" : @"Set Absolute Path")];
+        [[_group undoManager] setActionName:((relative != [[_group undoManager] isUndoing]) ? NSLocalizedString(@"Set Relative Path", @"Undo-redo action name") : NSLocalizedString(@"Set Absolute Path", @"Undo-redo action name"))];
         _relative = relative;
     }
 }
@@ -73,7 +73,7 @@ NSString *RMModelGroupType = @"Rule Model Group";
 - (void)dealloc {
     NSEnumerator    *modelEnum = [_modelContainers objectEnumerator];
     id              eachModelContainer;
-        
+    
     while (eachModelContainer = [modelEnum nextObject]) {
         [[eachModelContainer valueForKey:@"model"] removeObserver:self forKeyPath:@"rules"];
     }
@@ -126,7 +126,7 @@ NSString *RMModelGroupType = @"Rule Model Group";
     }
     else{
         if (outError) {
-            *outError = [NSError errorWithDomain:@"RuleModeler" code:NSFileReadInvalidFileNameError userInfo:[NSDictionary dictionaryWithObject:@"Unknown file type" forKey:NSLocalizedDescriptionKey]];
+            *outError = [NSError errorWithDomain:@"RuleModeler" code:NSFileReadInvalidFileNameError userInfo:[NSDictionary dictionaryWithObject:NSLocalizedString(@"Unknown file type", @"Error message") forKey:NSLocalizedDescriptionKey]];
         }
     }
     
@@ -180,7 +180,7 @@ NSString *RMModelGroupType = @"Rule Model Group";
         return (aDict != nil);
     }
     else{
-        *outError = [NSError errorWithDomain:@"RuleModeler" code:NSFileReadInvalidFileNameError userInfo:[NSDictionary dictionaryWithObject:@"Unknown file type" forKey:NSLocalizedDescriptionKey]];
+        *outError = [NSError errorWithDomain:@"RuleModeler" code:NSFileReadInvalidFileNameError userInfo:[NSDictionary dictionaryWithObject:NSLocalizedString(@"Unknown file type", @"Error message") forKey:NSLocalizedDescriptionKey]];
     }
     
     return NO;
@@ -248,7 +248,7 @@ NSString *RMModelGroupType = @"Rule Model Group";
         }
         // TODO Handle error -> ask user where's model; maybe delayed - use NSError recovery; currently, we silently ignore errors and remove models from group
     }
-    [[self undoManager] setActionName:@"Add Models"]; // We can't say for sure how many models we added (due to potential removed duplicates, or unfound models)
+    [[self undoManager] setActionName:NSLocalizedString(@"Add Models", @"Undo-redo action name")]; // We can't say for sure how many models we added (due to potential removed duplicates, or unfound models)
 }
 
 - (void)removeObjectFromModelContainersAtIndex:(unsigned)index {
@@ -258,17 +258,17 @@ NSString *RMModelGroupType = @"Rule Model Group";
     NSEnumerator    *ruleEnum = [rules objectEnumerator];
     Rule            *eachRule;
     
+    [aModel removeObserver:self forKeyPath:@"rules"];
     while (eachRule = [ruleEnum nextObject]) {
         if ([eachRule model] == aModel) {
             [rules removeObjectIdenticalTo:eachRule];
         }
     }
-    [aModel removeObserver:self forKeyPath:@"rules"];
     [_modelContainers removeObjectAtIndex:index];
 }
 
 - (void)removeModelWithURL:(NSURL *)url relativePath:(BOOL)relativePath error:(NSError **)outError {
-    unsigned anIndex;
+    int anIndex;
     
     for (anIndex = [_modelContainers count] - 1; anIndex >= 0; anIndex--) {
         RMModel *eachModel = [[_modelContainers objectAtIndex:anIndex] valueForKey:@"model"];
@@ -277,8 +277,10 @@ NSString *RMModelGroupType = @"Rule Model Group";
             break;
         }
     }
-    [[[self undoManager] prepareWithInvocationTarget:self] addModelWithURL:url relativePath:relativePath error:NULL]; // FIXME error:NULL - currently we silently remove models we can't reload
-    [self removeObjectFromModelContainersAtIndex:anIndex];
+    if (anIndex >= 0) {
+        [[[self undoManager] prepareWithInvocationTarget:self] addModelWithURL:url relativePath:relativePath error:NULL]; // FIXME error:NULL - currently we silently remove models we can't reload
+        [self removeObjectFromModelContainersAtIndex:anIndex];
+    }
 }
 
 - (void)removeModels:(NSArray *)models {
@@ -288,7 +290,7 @@ NSString *RMModelGroupType = @"Rule Model Group";
     while (aModel = [modelEnum nextObject]) {
         [self removeModelWithURL:[aModel fileURL] relativePath:YES error:NULL];
     }
-    [[self undoManager] setActionName:[NSString stringWithFormat:@"Remove %i Model(s)", [models count]]];
+    [[self undoManager] setActionName:[NSString stringWithFormat:([models count] > 1 ? NSLocalizedString(@"Remove %i Model(s)", @"Undo-redo action name") : NSLocalizedString(@"Remove %i Model", @"Undo-redo action name")), [models count]]];
 }
 
 - (void)close {
@@ -338,7 +340,7 @@ NSString *RMModelGroupType = @"Rule Model Group";
 
 - (void)close {
     // We don't want that model documents which are still referenced by model group documents
-    // be really closed. Closing it would remove if from documentController's list.
+    // be really closed. Closing it would remove it from documentController's list.
 //    NSLog(@"Should close %@?", [self fileName]);
     NSEnumerator    *docEnum = [[[NSDocumentController sharedDocumentController] documents] objectEnumerator];
     id              eachDoc;
