@@ -28,12 +28,7 @@
     toolbarIdentifiers = [[NSMutableArray array] retain];
     
  
-    [self addPreferencePane:generalPane identifier:@"GeneralPane" icon:[NSImage imageNamed:@"NSApplicationIcon"] label:@"General" toolTip:@"General Preferences" target:self action:@selector(toolbarAction:) menu:NULL];
-    /*
-    [self addPreferencePane:importingPane identifier:@"ImportingPane" icon:[NSImage imageNamed:@"NSApplicationIcon"] label:@"Importing" toolTip:@"Import Options" target:self action:@selector(toolbarAction:) menu:NULL];
-    [self addPreferencePane:sharingPane identifier:@"SharingPane" icon:[NSImage imageNamed:@"NSApplicationIcon"] label:@"Sharing" toolTip:@"Sharing with Rendezvous" target:self action:@selector(toolbarAction:) menu:NULL];
-    [self addPreferencePane:coresPane identifier:@"CoresPane" icon:[NSImage imageNamed:@"NSApplicationIcon"] label:@"Cores" toolTip:@"APOLLO Cores" target:self action:@selector(toolbarAction:) menu:NULL];
-     */
+    [self addPreferencePane:generalPane identifier:@"GeneralPane" icon:[NSImage imageNamed:@"NSApplicationIcon"] label:NSLocalizedString(@"General", @"Toolbar item label") toolTip:NSLocalizedString(@"General Preferences", @"Toolbar item tooltip") target:self action:@selector(toolbarAction:) menu:NULL];
     
     [self prepareToolbar];
     
@@ -42,20 +37,6 @@
 
 - (void)prepareToolbar {
     NSToolbar *toolbar = [[[NSToolbar alloc] initWithIdentifier:@"DMWindowToolbar"] autorelease];
-    
-    // create the NSToolbarItems for the NSToolbar
-    /*
-     addToolbarItem(toolbarItems,	// the dictionary of "master" NSToolbarItems
-                    @"TestItem",	// an identifier for the item
-                    @"Test Label",	// the label
-                    @"Palette Label",	// the palette label
-                    @"My Tooltip",	// the tooltip
-                    self,		// the target
-                    @selector(setView:),// settingSelector (@selector(setView:) or @selector(setImage:)
-                    testView,		// the content for the above selector
-                    NULL,		// action
-                    NULL);		// menu
-     */
     
     [toolbar setDelegate:self];
     [toolbar setAllowsUserCustomization:NO];
