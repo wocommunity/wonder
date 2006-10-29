@@ -85,11 +85,29 @@
                 NSDate  *aDate = [aDict objectForKey:NSFileModificationDate];
                 
                 if ([[aDocument fileModificationDate] compare:aDate] < 0) {
-                    NSBeginAlertSheet(@"Rule file changed on disk", @"Reload", @"Keep Local Version", nil, [[[aDocument windowControllers] lastObject] window], self, NULL, @selector(sheetDidDismiss:returnCode:contextInfo:), aDocument, @"File has been externally modified. You can reload rules from file or keep local version of rules, but you will need to save them, if you don't want to lose them.");
+                    NSBeginAlertSheet(NSLocalizedString(@"Rule file changed on disk", @"Alert title"), 
+                                      NSLocalizedString(@"Reload", @"Button title"), 
+                                      NSLocalizedString(@"Keep Local Version", @"Button title"), 
+                                      nil, 
+                                      [[[aDocument windowControllers] lastObject] window], 
+                                      self, 
+                                      NULL, 
+                                      @selector(sheetDidDismiss:returnCode:contextInfo:), 
+                                      aDocument, 
+                                      NSLocalizedString(@"File has been externally modified. You can reload rules from file or keep local version of rules, but you will need to save them, if you don't want to lose them.", @"Alert message"));
                 }
             } else {
                 [aDocument updateChangeCount:NSChangeReadOtherContents];
-                NSBeginAlertSheet(@"Rule file deleted on disk", nil, nil, nil, [[[aDocument windowControllers] lastObject] window], nil, NULL, NULL, NULL, @"File has been deleted from disk. You will need to save it again if you don't want to lose it.");
+                NSBeginAlertSheet(NSLocalizedString(@"Rule file deleted on disk", @"Alert title"), 
+                                  nil, 
+                                  nil, 
+                                  nil, 
+                                  [[[aDocument windowControllers] lastObject] window], 
+                                  nil, 
+                                  NULL, 
+                                  NULL, 
+                                  NULL, 
+                                  NSLocalizedString(@"File has been deleted from disk. You will need to save it again if you don't want to lose it.", @"Alert message"));
             }
         }
     }

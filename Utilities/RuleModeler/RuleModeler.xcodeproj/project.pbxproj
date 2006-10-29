@@ -49,6 +49,7 @@
 		552B54DA0A794B60009CEE98 /* EOKeyValueArchiverFix.h in Headers */ = {isa = PBXBuildFile; fileRef = 552B54D80A794B60009CEE98 /* EOKeyValueArchiverFix.h */; };
 		552B54DB0A794B60009CEE98 /* EOKeyValueArchiverFix.m in Sources */ = {isa = PBXBuildFile; fileRef = 552B54D90A794B60009CEE98 /* EOKeyValueArchiverFix.m */; };
 		552B55C50A796A03009CEE98 /* Defaults.plist in Resources */ = {isa = PBXBuildFile; fileRef = 552B55C40A796A03009CEE98 /* Defaults.plist */; };
+		559D5AE30AF52857002E4E8D /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 559D5AE20AF52857002E4E8D /* Localizable.strings */; };
 		55ED36430A9108F4004875CD /* RMModelGroup.h in Headers */ = {isa = PBXBuildFile; fileRef = 55ED36410A9108F4004875CD /* RMModelGroup.h */; };
 		55ED36440A9108F4004875CD /* RMModelGroup.m in Sources */ = {isa = PBXBuildFile; fileRef = 55ED36420A9108F4004875CD /* RMModelGroup.m */; };
 		55ED36560A910B32004875CD /* RMModelGroupEditor.h in Headers */ = {isa = PBXBuildFile; fileRef = 55ED36540A910B32004875CD /* RMModelGroupEditor.h */; };
@@ -118,6 +119,7 @@
 		552B54D80A794B60009CEE98 /* EOKeyValueArchiverFix.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EOKeyValueArchiverFix.h; sourceTree = "<group>"; };
 		552B54D90A794B60009CEE98 /* EOKeyValueArchiverFix.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EOKeyValueArchiverFix.m; sourceTree = "<group>"; };
 		552B55C40A796A03009CEE98 /* Defaults.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist; path = Defaults.plist; sourceTree = "<group>"; };
+		559D5AE00AF5284E002E4E8D /* English */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/Localizable.strings; sourceTree = "<group>"; };
 		55ED36410A9108F4004875CD /* RMModelGroup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RMModelGroup.h; sourceTree = "<group>"; };
 		55ED36420A9108F4004875CD /* RMModelGroup.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RMModelGroup.m; sourceTree = "<group>"; };
 		55ED36540A910B32004875CD /* RMModelGroupEditor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RMModelGroupEditor.h; sourceTree = "<group>"; };
@@ -220,6 +222,7 @@
 		2A37F4B8FDCFA73011CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				559D5AE20AF52857002E4E8D /* Localizable.strings */,
 				55ED38890A93A9EC004875CD /* models.tiff */,
 				41E834440A755BC0009A23B9 /* appIcon.icns */,
 				3C47DD7F05CCDA2500D4D0D2 /* preview.tif */,
@@ -409,6 +412,7 @@
 				55ED37600A925F7A004875CD /* RMModelList.nib in Resources */,
 				55ED388A0A93A9EC004875CD /* models.tiff in Resources */,
 				55ED3B830A986A13004875CD /* RMModelGroupEditor.nib in Resources */,
+				559D5AE30AF52857002E4E8D /* Localizable.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -482,6 +486,14 @@
 				3CEF249505CB4A66007BD7AF /* English */,
 			);
 			name = RMPreferencesWindow.nib;
+			sourceTree = "<group>";
+		};
+		559D5AE20AF52857002E4E8D /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				559D5AE00AF5284E002E4E8D /* English */,
+			);
+			name = Localizable.strings;
 			sourceTree = "<group>";
 		};
 		55ED375E0A925F7A004875CD /* RMModelList.nib */ = {
