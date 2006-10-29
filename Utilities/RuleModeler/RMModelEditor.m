@@ -128,13 +128,41 @@
 }
 
 - (void)addToolbarItems {
-    addToolbarItem(toolbarItems, @"NewRule", @"New", @"New Rule", @"Add a new rule", rulesController, @selector(setImage:), [NSImage imageNamed:@"new.tif"], @selector(add:), nil);
-    addToolbarItem(toolbarItems, @"DuplicateRule", @"Duplicate", @"Duplicate Rule", @"Duplicate rules", self, @selector(setImage:), [NSImage imageNamed:@"duplicate.tif"], @selector(duplicate:), nil);
-    addToolbarItem(toolbarItems, @"RemoveRule", @"Remove", @"Remove Rule", @"Remove rules", self, @selector(setImage:), [NSImage imageNamed:@"remove.tif"], @selector(remove:), nil);
-    addToolbarItem(toolbarItems, @"Filter", @"Filter", @"Filter Rules", @"Enter a term or EOQualifier format", rulesController, @selector(setView:), filterView, @selector(search:), nil);
-    addToolbarItem(toolbarItems, @"PreviousRule", @"Previous", @"Previous Rule", @"Select previous rule", rulesController, @selector(setImage:), [NSImage imageNamed:@"previous.tif"], @selector(selectPrevious:), nil);
-    addToolbarItem(toolbarItems, @"NextRule", @"Next", @"Next Rule", @"Select next rule", rulesController, @selector(setImage:), [NSImage imageNamed:@"next.tif"], @selector(selectNext:), nil);
-    addToolbarItem(toolbarItems, @"PreviewRule", @"Preview", @"Preview Rule", @"Toggle the source preview drawer", sourceDrawer, @selector(setImage:), [NSImage imageNamed:@"preview.tif"], @selector(toggle:), nil);
+    addToolbarItem(toolbarItems, @"NewRule", 
+                   NSLocalizedString(@"New", @"Toolbar item label"), 
+                   NSLocalizedString(@"New Rule", @"Toolbar item palette label"), 
+                   NSLocalizedString(@"Add a new rule", @"Toolbar item tooltip"), 
+                   rulesController, @selector(setImage:), [NSImage imageNamed:@"new.tif"], @selector(add:), nil);
+    addToolbarItem(toolbarItems, @"DuplicateRule", 
+                   NSLocalizedString(@"Duplicate", @"Toolbar item label"), 
+                   NSLocalizedString(@"Duplicate Rule", @"Toolbar item palette label"), 
+                   NSLocalizedString(@"Duplicate rules", @"Toolbar item tooltip"), 
+                   self, @selector(setImage:), [NSImage imageNamed:@"duplicate.tif"], @selector(duplicate:), nil);
+    addToolbarItem(toolbarItems, @"RemoveRule", 
+                   NSLocalizedString(@"Remove", @"Toolbar item label"), 
+                   NSLocalizedString(@"Remove Rule", @"Toolbar item palette label"), 
+                   NSLocalizedString(@"Remove rules", @"Toolbar item tooltip"), 
+                   self, @selector(setImage:), [NSImage imageNamed:@"remove.tif"], @selector(remove:), nil);
+    addToolbarItem(toolbarItems, @"Filter", 
+                   NSLocalizedString(@"Filter", @"Toolbar item label"), 
+                   NSLocalizedString(@"Filter Rules", @"Toolbar item palette label"), 
+                   NSLocalizedString(@"Enter a term or EOQualifier format", @"Toolbar item tooltip"), 
+                   rulesController, @selector(setView:), filterView, @selector(search:), nil);
+    addToolbarItem(toolbarItems, @"PreviousRule", 
+                   NSLocalizedString(@"Previous", @"Toolbar item label"), 
+                   NSLocalizedString(@"Previous Rule", @"Toolbar item palette label"), 
+                   NSLocalizedString(@"Select previous rule", @"Toolbar item tooltip"), 
+                   rulesController, @selector(setImage:), [NSImage imageNamed:@"previous.tif"], @selector(selectPrevious:), nil);
+    addToolbarItem(toolbarItems, @"NextRule", 
+                   NSLocalizedString(@"Next", @"Toolbar item label"), 
+                   NSLocalizedString(@"Next Rule", @"Toolbar item palette label"), 
+                   NSLocalizedString(@"Select next rule", @"Toolbar item tooltip"), 
+                   rulesController, @selector(setImage:), [NSImage imageNamed:@"next.tif"], @selector(selectNext:), nil);
+    addToolbarItem(toolbarItems, @"PreviewRule", 
+                   NSLocalizedString(@"Preview", @"Toolbar item label"), 
+                   NSLocalizedString(@"Preview Rule", @"Toolbar item palette label"), 
+                   NSLocalizedString(@"Toggle the source preview drawer", @"Toolbar item tooltip"), 
+                   sourceDrawer, @selector(setImage:), [NSImage imageNamed:@"preview.tif"], @selector(toggle:), nil);
 }
 
 - (void)awakeFromNib {
@@ -171,20 +199,6 @@
 
 - (void)prepareToolbar {
     NSToolbar *toolbar = [[[NSToolbar alloc] initWithIdentifier:[self toolbarIdentifier]] autorelease];
-    
-    // create the NSToolbarItems for the NSToolbar
-    /*
-     addToolbarItem(toolbarItems,	// the dictionary of "master" NSToolbarItems
-                    @"TestItem",	// an identifier for the item
-                    @"Test Label",	// the label
-                    @"Palette Label",	// the palette label
-                    @"My Tooltip",	// the tooltip
-                    self,		// the target
-                    @selector(setView:),// settingSelector (@selector(setView:) or @selector(setImage:)
-                    testView,		// the content for the above selector
-                    NULL,		// action
-                    NULL);		// menu
-     */
     
     [toolbar setDelegate:self];
     [toolbar setAllowsUserCustomization:YES];
@@ -420,7 +434,7 @@
     NSUndoManager   *um = [[self document] undoManager];
     
     [[um prepareWithInvocationTarget:self] removeDuplicateRulesAtIndexes:indexes];
-    [um setActionName:[NSString stringWithFormat:@"Delete %i Duplicate Rule(s)", [indexes count]]];
+    [um setActionName:[NSString stringWithFormat:([indexes count] > 1 ? NSLocalizedString(@"Delete %i Duplicate Rule(s)", @"Undo-redo action name") : NSLocalizedString(@"Delete %i Duplicate Rule", @"Undo-redo action name")), [indexes count]]];
     [modelRules insertObjects:rules atIndexes:indexes];
     [(RMModel *)[self document] setRules:modelRules];
     [modelRules release];

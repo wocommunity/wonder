@@ -46,12 +46,32 @@
     [self rearrangeObjects];
 }
 
-
 // Adding and removing objects
+- (NSString *)actionNameWhenInserting:(BOOL)inserting ruleCount:(int)ruleCount 
+{
+    NSUndoManager *um = [self undoManager];
+    NSString *anActionNameFormat;
+    
+    if ((inserting && ![um isUndoing]) || (!inserting && [um isUndoing])) {
+        if(ruleCount > 1)
+            anActionNameFormat = NSLocalizedString(@"Insert %i Rules", @"Undo-redo action name");
+        else
+            anActionNameFormat = NSLocalizedString(@"Insert %i Rule", @"Undo-redo action name");
+    }
+    else{
+        if(ruleCount > 1)
+            anActionNameFormat = NSLocalizedString(@"Remove %i Rules", @"Undo-redo action name");
+        else
+            anActionNameFormat = NSLocalizedString(@"Remove %i Rule", @"Undo-redo action name");
+    }
+    
+    return [NSString stringWithFormat:anActionNameFormat, ruleCount];
+}
+
 - (void)insertObject:(id)object atArrangedObjectIndex:(unsigned int)index {
     NSUndoManager *um = [self undoManager];
     [[[self undoManager] prepareWithInvocationTarget:self] removeObjectAtArrangedObjectIndex:index];
-    [um setActionName:([um isUndoing]) ? @"Remove Rule" : @"Insert Rule"];
+    [um setActionName:[self actionNameWhenInserting:YES ruleCount:1]];
     [super insertObject:object atArrangedObjectIndex:index];
 }
 
@@ -63,14 +83,14 @@
     [super insertObjects:objects atArrangedObjectIndexes:indexes];
     [um enableUndoRegistration];
     
-    [um setActionName:([um isUndoing]) ? [NSString stringWithFormat:@"Remove %i Rules", [indexes count]] : [NSString stringWithFormat:@"Insert %i Rules", [indexes count]]];
+    [um setActionName:[self actionNameWhenInserting:YES ruleCount:[indexes count]]];
 }
 
 - (void)removeObjectAtArrangedObjectIndex:(unsigned int)index {
     NSUndoManager *um = [self undoManager];
     id object = [[self arrangedObjects] objectAtIndex:index];
     [[um prepareWithInvocationTarget:self] insertObject:object atArrangedObjectIndex:index];
-    [um setActionName:([um isUndoing]) ? @"Insert Rule" : @"Remove Rule"];
+    [um setActionName:[self actionNameWhenInserting:NO ruleCount:1]];
     
     [super removeObjectAtArrangedObjectIndex:index];
 }
@@ -84,7 +104,7 @@
     [super removeObjectsAtArrangedObjectIndexes:indexes];
     [um enableUndoRegistration];
     
-    [um setActionName:([um isUndoing]) ? [NSString stringWithFormat:@"Insert %i Rules", [indexes count]] : [NSString stringWithFormat:@"Remove %i Rules", [indexes count]]];
+    [um setActionName:[self actionNameWhenInserting:NO ruleCount:[indexes count]]];
 }
 
 // Undo management
