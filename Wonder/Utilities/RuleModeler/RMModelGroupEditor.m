@@ -50,6 +50,7 @@
 
 - (void) dealloc {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
+    [[modelListDrawer contentView] release]; // Top-level object!
     [modelListDrawer release];
     [modelController release];
 
@@ -110,12 +111,32 @@
 #ifdef EDITABLE_MODELS
     [super addToolbarItems];
 #else
-    addToolbarItem(toolbarItems, @"Filter", @"Filter", @"Filter Rules", @"Enter a term or EOQualifier format", rulesController, @selector(setView:), filterView, @selector(search:), nil);
-    addToolbarItem(toolbarItems, @"PreviousRule", @"Previous", @"Previous Rule", @"Select previous rule", rulesController, @selector(setImage:), [NSImage imageNamed:@"previous.tif"], @selector(selectPrevious:), nil);
-    addToolbarItem(toolbarItems, @"NextRule", @"Next", @"Next Rule", @"Select next rule", rulesController, @selector(setImage:), [NSImage imageNamed:@"next.tif"], @selector(selectNext:), nil);
-    addToolbarItem(toolbarItems, @"PreviewRule", @"Preview", @"Preview Rule", @"Toggle the source preview drawer", sourceDrawer, @selector(setImage:), [NSImage imageNamed:@"preview.tif"], @selector(toggle:), nil);
+    addToolbarItem(toolbarItems, @"Filter", 
+                   NSLocalizedString(@"Filter", @"Toolbar item label"),
+                   NSLocalizedString(@"Filter Rules", @"Toolbar item palette label"), 
+                   NSLocalizedString(@"Enter a term or EOQualifier format", @"Toolbar item tooltip"), 
+                   rulesController, @selector(setView:), filterView, @selector(search:), nil);
+    addToolbarItem(toolbarItems, @"PreviousRule", 
+                   NSLocalizedString(@"Previous", @"Toolbar item label"), 
+                   NSLocalizedString(@"Previous Rule", @"Toolbar item palette label"), 
+                   NSLocalizedString(@"Select previous rule", @"Toolbar item tooltip"), 
+                   rulesController, @selector(setImage:), [NSImage imageNamed:@"previous.tif"], @selector(selectPrevious:), nil);
+    addToolbarItem(toolbarItems, @"NextRule", 
+                   NSLocalizedString(@"Next", @"Toolbar item label"), 
+                   NSLocalizedString(@"Next Rule", @"Toolbar item palette label"), 
+                   NSLocalizedString(@"Select next rule", @"Toolbar item tooltip"), 
+                   rulesController, @selector(setImage:), [NSImage imageNamed:@"next.tif"], @selector(selectNext:), nil);
+    addToolbarItem(toolbarItems, @"PreviewRule", 
+                   NSLocalizedString(@"Preview", @"Toolbar item label"), 
+                   NSLocalizedString(@"Preview Rule", @"Toolbar item palette label"), 
+                   NSLocalizedString(@"Toggle the source preview drawer", @"Toolbar item tooltip"), 
+                   sourceDrawer, @selector(setImage:), [NSImage imageNamed:@"preview.tif"], @selector(toggle:), nil);
 #endif
-    addToolbarItem(toolbarItems, @"ToggleModels", @"Models", @"Toggle Models", @"Toggle the model list drawer", modelListDrawer, @selector(setImage:), [NSImage imageNamed:@"models.tiff"], @selector(toggle:), nil);
+    addToolbarItem(toolbarItems, @"ToggleModels", 
+                   NSLocalizedString(@"Models", @"Toolbar item label"), 
+                   NSLocalizedString(@"Toggle Models", @"Toolbar item palette label"), 
+                   NSLocalizedString(@"Toggle the model list drawer", @"Toolbar item tooltip"), 
+                   modelListDrawer, @selector(setImage:), [NSImage imageNamed:@"models.tiff"], @selector(toggle:), nil);
 }
 
 - (NSString *)toolbarIdentifier {
@@ -175,7 +196,7 @@
 }
 
 - (IBAction)showRuleModel:(id)sender {
-    // Opens rule model documents, reset's rule model filter, and selects rules
+    // Opens rule model documents, resets rule model filter, and selects rules
     NSArray         *selectedRules = [rulesController selectedObjects];
     NSArray         *models = [selectedRules valueForKeyPath:@"@distinctUnionOfObjects.model"];
     NSEnumerator    *modelEnum = [models objectEnumerator];
