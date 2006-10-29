@@ -66,8 +66,12 @@
     
     for(i = 0; i < count; i++){
         Rule    *rule = [decodedRules objectAtIndex:i];
+        id      aClassName = [loadedRuleClassNames objectAtIndex:i];
         
-        [[rule rhs] setAssignmentClass:[loadedRuleClassNames objectAtIndex:i]];
+        // aClassName might be NSNull, in case there was no assignment for that rule
+        if(aClassName == [NSNull null])
+            aClassName = nil;
+        [[rule rhs] setAssignmentClass:aClassName];
     }
     
     return decodedRules;
@@ -85,11 +89,17 @@
 
 - (id)initWithKeyValueUnarchiver:(EOKeyValueUnarchiver *)unarchiver {
     if (self = [super init]) {
+    Assignment   *anAssignment;
+        
 	_enabled = YES;
 	
 	_author = [unarchiver decodeIntForKey:@"author"];
 	_lhs = [[unarchiver decodeObjectForKey:@"lhs"] retain];
-    [self setRhs:[unarchiver decodeObjectForKey:@"rhs"]];
+    anAssignment = [unarchiver decodeObjectForKey:@"rhs"];
+    // If there was no saved assignment, we create an empty one (automatic fix of model)
+    if(!anAssignment)
+        anAssignment = [[[Assignment alloc] init] autorelease];
+    [self setRhs:anAssignment];
 	
 	if ([_lhs isKindOfClass:[EOAndQualifier class]]) {
             NSMutableArray *innerQuals = [[(EOAndQualifier *)_lhs qualifiers] mutableCopy];
@@ -217,7 +227,7 @@
             *ioValue = [newQualifier description]; // Necessary for automatic update of edited qualifier
         }
     } NS_HANDLER {
-        NSDictionary *dict = [NSDictionary dictionaryWithObject:[NSString stringWithFormat:@"This is not a valid qualifier:\n\n%@", localException] forKey:NSLocalizedDescriptionKey];
+        NSDictionary *dict = [NSDictionary dictionaryWithObject:[NSString stringWithFormat:NSLocalizedString(@"This is not a valid qualifier:\n\n%@", @"Validation error description"), localException] forKey:NSLocalizedDescriptionKey];
         *outError = [NSError errorWithDomain:@"EOQualifier" code:0 userInfo:dict];
         return NO;
     } NS_ENDHANDLER;
@@ -230,13 +240,13 @@
             
             if (qual) {
                 [[[self undoManager] prepareWithInvocationTarget:self] setLhsDescription:[_lhs description]];
-                [[self undoManager] setActionName:@"Set Left-Hand Side"];
+                [[self undoManager] setActionName:NSLocalizedString(@"Set Left-Hand Side", @"Undo-redo action name")];
                 
                 [self setLhs:qual];
             }
         } else {
             [[[self undoManager] prepareWithInvocationTarget:self] setLhsDescription:[_lhs description]];
-            [[self undoManager] setActionName:@"Set Left-Hand Side"];
+            [[self undoManager] setActionName:NSLocalizedString(@"Set Left-Hand Side", @"Undo-redo action name")];
             
             [self setLhs:nil];
         }        
@@ -252,7 +262,7 @@
 - (void)setAuthor:(int)value {
 	if(_author != value){
 		[[[self undoManager] prepareWithInvocationTarget:self] setAuthor:_author];
-		[self _setActionName:@"Set Priority to %@" old:[NSNumber numberWithInt:_author] new:[NSNumber numberWithInt:value]];
+		[self _setActionName:NSLocalizedString(@"Set Priority to %@", @"Undo-redo action name") old:[NSNumber numberWithInt:_author] new:[NSNumber numberWithInt:value]];
 		
 		_author = value;
 	}
@@ -273,7 +283,7 @@
 - (void)setEnabled:(BOOL)flag {
 	if(_enabled != flag){
 		[[[self undoManager] prepareWithInvocationTarget:self] setEnabled:_enabled];
-		[[self undoManager] setActionName:@"Enabled"];
+		[[self undoManager] setActionName:NSLocalizedString(@"Enabled", @"Undo-redo action name")];
 		
 		_enabled = flag;
 	}
