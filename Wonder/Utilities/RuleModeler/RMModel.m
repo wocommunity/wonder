@@ -67,7 +67,7 @@ static NSString *ruleModelType = @"Apple D2WModel File";
         return data;
     }
     else{
-        *outError = [NSError errorWithDomain:@"RuleModeler" code:NSFileReadInvalidFileNameError userInfo:[NSDictionary dictionaryWithObject:@"Unknown file type" forKey:NSLocalizedDescriptionKey]];
+        *outError = [NSError errorWithDomain:@"RuleModeler" code:NSFileReadInvalidFileNameError userInfo:[NSDictionary dictionaryWithObject:NSLocalizedString(@"Unknown file type", @"Error message") forKey:NSLocalizedDescriptionKey]];
     }
     
     return nil;
@@ -119,14 +119,14 @@ static NSString *ruleModelType = @"Apple D2WModel File";
         
 		[[self undoManager] enableUndoRegistration];
         if([self rules] == nil) {
-            *outError = [NSError errorWithDomain:@"RuleModeler" code:0 userInfo:[NSDictionary dictionaryWithObject:@"No 'rules' key-value pair" forKey:NSLocalizedDescriptionKey]];
+            *outError = [NSError errorWithDomain:@"RuleModeler" code:0 userInfo:[NSDictionary dictionaryWithObject:NSLocalizedString(@"No 'rules' key-value pair", @"Error message") forKey:NSLocalizedDescriptionKey]];
             return NO;
         }
         
         return YES;
     }
     else{
-        *outError = [NSError errorWithDomain:@"RuleModeler" code:NSFileReadInvalidFileNameError userInfo:[NSDictionary dictionaryWithObject:@"Unknown file type" forKey:NSLocalizedDescriptionKey]];
+        *outError = [NSError errorWithDomain:@"RuleModeler" code:NSFileReadInvalidFileNameError userInfo:[NSDictionary dictionaryWithObject:NSLocalizedString(@"Unknown file type", @"Error message") forKey:NSLocalizedDescriptionKey]];
     }
     
     return NO;
