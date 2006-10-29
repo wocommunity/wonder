@@ -77,7 +77,7 @@
 - (void)setAssignmentClass:(NSString *)assignmentClass {
 	if(![_assignmentClass isEqualToString:assignmentClass]) {
         [[[self undoManager] prepareWithInvocationTarget:self] setAssignmentClass:_assignmentClass];
-        [self _setActionName:@"Set RHS Class to %@" old:_assignmentClass new:assignmentClass];
+        [self _setActionName:NSLocalizedString(@"Set RHS Class to %@", @"Undo-redo action name") old:_assignmentClass new:assignmentClass];
         
         [_assignmentClass release];
         _assignmentClass = [assignmentClass copyWithZone:[self zone]];
@@ -124,7 +124,7 @@ static NSMutableCharacterSet  *fullyQualifiedClassNameCharSet = nil;
         
         if (!aClassName) {
             if (outError) {
-                *outError = [NSError errorWithDomain:@"RuleModeler" code:0 userInfo:[NSDictionary dictionaryWithObject:@"This is not a valid java class name" forKey:NSLocalizedDescriptionKey]];
+                *outError = [NSError errorWithDomain:@"RuleModeler" code:0 userInfo:[NSDictionary dictionaryWithObject:NSLocalizedString(@"This is not a valid java class name", @"Validation error description") forKey:NSLocalizedDescriptionKey]];
             }
             return NO;
         } else {
@@ -175,7 +175,7 @@ static NSMutableCharacterSet  *fullyQualifiedClassNameCharSet = nil;
 - (void)setKeyPath:(NSString *)keyPath {
     if(![_keyPath isEqualToString:keyPath]) {
         [[[self undoManager] prepareWithInvocationTarget:self] setKeyPath:_keyPath];
-        [self _setActionName:@"Set RHS Key to %@" old:_keyPath new:keyPath];
+        [self _setActionName:NSLocalizedString(@"Set RHS Key to %@", @"Undo-redo action name") old:_keyPath new:keyPath];
         
         [_keyPath release];
         _keyPath = [keyPath copyWithZone:[self zone]];
@@ -189,7 +189,7 @@ static NSMutableCharacterSet  *fullyQualifiedClassNameCharSet = nil;
 - (void)setValue:(id)value {
     if(![_value isEqual:value]){
         [[[self undoManager] prepareWithInvocationTarget:self] setValue:_value];
-        [self _setActionName:@"Set RHS Value to %@" old:_value new:value];
+        [self _setActionName:NSLocalizedString(@"Set RHS Value to %@", @"Undo-redo action name") old:_value new:value];
         
         [_value autorelease];
         
@@ -219,19 +219,19 @@ static NSMutableCharacterSet  *fullyQualifiedClassNameCharSet = nil;
             id plist = [NSPropertyListSerialization propertyListFromData:data mutabilityOption:NSPropertyListImmutable format:NULL errorDescription:&errorString];
             if(errorString) {
                 isValid = NO;
-                *outError = [NSError errorWithDomain:@"RuleModeler" code:0 userInfo:[NSDictionary dictionaryWithObject:[NSString stringWithFormat:@"This is not a valid right value (property list):\n\n%@", errorString] forKey:NSLocalizedDescriptionKey]];
+                *outError = [NSError errorWithDomain:@"RuleModeler" code:0 userInfo:[NSDictionary dictionaryWithObject:[NSString stringWithFormat:NSLocalizedString(@"This is not a valid right value (property list):\n\n%@", @"Validation error description"), errorString] forKey:NSLocalizedDescriptionKey]];
             } else {
                 // Reformat string (normalize)
                 *ioValue = [NSPropertyListSerialization openStepFormatStringFromPropertyList:plist prettyPrint:prettyPrint escapeNonASCII:NO errorDescription:&errorString];
                 NSAssert1(errorString == nil, @"Unable to get OpenStep format string from property list rhs value: %@", errorString);
             }
         } else {
-            *outError = [NSError errorWithDomain:@"RuleModeler" code:0 userInfo:[NSDictionary dictionaryWithObject:@"This is not a valid right value (property list)." forKey:NSLocalizedDescriptionKey]];
+            *outError = [NSError errorWithDomain:@"RuleModeler" code:0 userInfo:[NSDictionary dictionaryWithObject:NSLocalizedString(@"This is not a valid right value (property list).", @"Validation error description") forKey:NSLocalizedDescriptionKey]];
         }
     } NS_HANDLER {
         NSLog(@"Error coding: %@: %@", [*ioValue className], *ioValue);
         isValid = NO;
-        *outError = [NSError errorWithDomain:@"RuleModeler" code:0 userInfo:[NSDictionary dictionaryWithObject:@"This is not a valid right value (property list)." forKey:NSLocalizedDescriptionKey]];
+        *outError = [NSError errorWithDomain:@"RuleModeler" code:0 userInfo:[NSDictionary dictionaryWithObject:NSLocalizedString(@"This is not a valid right value (property list).", @"Validation error description") forKey:NSLocalizedDescriptionKey]];
     } NS_ENDHANDLER;    
         
     return isValid;
