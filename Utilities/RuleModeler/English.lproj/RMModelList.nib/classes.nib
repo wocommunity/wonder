@@ -27,7 +27,7 @@
             SUPERCLASS = NSWindowController; 
         }, 
         {
-            ACTIONS = {addModels = id; removeModels = id; showModel = id; }; 
+            ACTIONS = {addModels = id; removeModels = id; showModel = id; showRuleModel = id; }; 
             CLASS = RMModelGroupEditor; 
             LANGUAGE = ObjC; 
             OUTLETS = {
