@@ -294,19 +294,7 @@ public class ERXEOAccessUtilities {
             spec.setFetchLimit(0);
             spec.setPromptsAfterFetchLimit(false);
         }
-        if(spec.sortOrderings() != null ) {
-            NSMutableArray ommitedOrderings = new NSMutableArray();
-            for(Enumeration e = spec.sortOrderings().objectEnumerator(); e.hasMoreElements();) {
-                EOSortOrdering ordering = (EOSortOrdering) e.nextElement();
-                if(ordering.key().indexOf(".") > 0) {
-                    ommitedOrderings.addObject(ordering);
-                }
-            }
-            if(ommitedOrderings.count() > 0) {
-                log.warn("Dropped some sort key as key paths are not supported here: " + ommitedOrderings);
-                spec.setSortOrderings(ERXArrayUtilities.arrayMinusArray(spec.sortOrderings(), ommitedOrderings));
-           }
-        }
+        spec = localizeFetchSpecification(ec, spec);
         String url = (String) model.connectionDictionary().objectForKey("URL");
         String lowerCaseURL = (url != null ? url.toLowerCase() : "");
         EOSQLExpression sqlExpr = sqlFactory.selectStatementForAttributes(attributes, false, spec, entity);
@@ -354,7 +342,7 @@ public class ERXEOAccessUtilities {
         				+ sql
         				+ ")) where eo_rownum between " + (start + 1) + " and " + (end + 1);
          		} else {
-        			// this might work, too, but only if we have an oder_by
+        			// this might work, too, but only if we have an ORDER BY
         			sql = "select * from (" 
         				+ "select " + (spec.usesDistinct() ? " distinct " : "") 
         				+ sqlExpr.listString() + ", row_number() over (" + sqlExpr.orderByString() + ") eo_rownum"
@@ -1556,4 +1544,44 @@ public class ERXEOAccessUtilities {
         }
         return pluginName;
     }
+     
+     /**
+      * Returns a new fetch spec by morphing sort oderings containing the keys <code>foo.name</code>
+      * returning <code>foo.name_de</code> where appropriate.
+      * @param ec
+      * @param fetchSpecification
+      * @return
+      */
+     public static EOFetchSpecification localizeFetchSpecification(EOEditingContext ec, EOFetchSpecification fetchSpecification) {
+         if(fetchSpecification != null && fetchSpecification.sortOrderings().count() > 0) {
+             fetchSpecification = (EOFetchSpecification) fetchSpecification.clone();
+             NSMutableArray sortOrderings = new NSMutableArray(fetchSpecification.sortOrderings().count());
+             for (Enumeration enumerator = fetchSpecification.sortOrderings().objectEnumerator(); enumerator.hasMoreElements();) {
+                 EOSortOrdering item = (EOSortOrdering) enumerator.nextElement();
+                 String key = item.key();
+                 NSArray path = NSArray.componentsSeparatedByString(key, ".");
+                 if(path.count() > 1) {
+                	 String prefix = "";
+                     String attributeName = (String) path.lastObject();
+                     EOEntity entity = ERXEOAccessUtilities.entityNamed(ec, fetchSpecification.entityName());
+                     for (int i = 0; i < path.count() - 1; i++) {
+                         String part = (String) path.objectAtIndex(i);
+                         EORelationship rel = entity.anyRelationshipNamed(part);
+                         entity = rel.destinationEntity();
+                         prefix += part + ".";
+                     }
+
+                     if(entity.attributeNamed(attributeName) == null) {
+                         String localizedKey = attributeName + "_" + ERXLocalizer.currentLocalizer().languageCode();
+                         if(entity.attributeNamed(localizedKey) != null) {
+                             item = new EOSortOrdering(prefix + localizedKey, item.selector());
+                         }
+                     }
+                 }
+                 sortOrderings.addObject(item);
+             }
+             fetchSpecification.setSortOrderings(sortOrderings);
+         }
+         return fetchSpecification;
+     }
 }
