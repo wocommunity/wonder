@@ -105,42 +105,7 @@ public class ERD2WListPage extends ERD2WPage implements ERDListPageInterface, Se
         if(useBatchingDisplayGroup) {
             _displayGroup = new ERXBatchingDisplayGroup();
         } else {
-            _displayGroup = new ERXDisplayGroup() {
-
-            	/**
-            	 * Overridden so we see when a fetch occurs.
-            	 */
-				public Object fetch() {
-					if(log.isDebugEnabled()) {
-						log.debug("Fetching: " + toString(), new RuntimeException("Dummy for Stacktrace"));
-					}
-					Object result;
-					// ak: this hack prevents exceptions when using the query page with an embedded list page
-					// The exceptions occur when you have a key path as the sortable property.
-					// the hack should work because you can't fetch on sorted key paths anyway, but who knows,
-					// so someone please verfy this
-					if (dataSource() instanceof EODatabaseDataSource) {
-						EODatabaseDataSource ds = (EODatabaseDataSource) dataSource();
-						NSArray oldSort =  ds.fetchSpecification().sortOrderings();
-						NSMutableArray newSort = new NSMutableArray();
-						for(Enumeration e = oldSort.objectEnumerator(); e.hasMoreElements();) {
-							EOSortOrdering sortOrdering = (EOSortOrdering)e.nextElement();
-							if(sortOrdering.key().indexOf(".") < 0) {
-								newSort.addObject(sortOrdering);
-							} else {
-								log.warn("Ommitted sorting because it contains a key path: " + sortOrdering);
-							}
-						}
-						ds.fetchSpecification().setSortOrderings(newSort);
-						result = super.fetch();
-						ds.fetchSpecification().setSortOrderings(oldSort);
-					} else {
-						result = super.fetch();
-					}
-					return result;
-				}
-            	
-            };
+            _displayGroup = new ERXDisplayGroup();
         }
     }
 
