@@ -8,7 +8,6 @@ package er.extensions;
 import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Locale;
 import java.util.Vector;
 import java.util.WeakHashMap;
 
@@ -701,7 +700,7 @@ public class ERXEC extends EOEditingContext {
      * are filtered for instances of <code>ERXGenericRecord</code>.  The order of operations then becomes:
      *
      * <ol>
-     * <li> Call <code>processRecentChanges()</code> on the child context to propogate changes.
+     * <li> Call <code>processRecentChanges()</code> on the child context to propagate changes.
      * <li> Lock the parent editing context.
      * <li> On the deleted objects list in the child editing context, call <code>flushCaches()</code> on
      *      each corresponding EO in the parent context.
@@ -1124,23 +1123,6 @@ public class ERXEC extends EOEditingContext {
         }
         super.setDelegate(d);
     }
-    
-    private Locale _locale;
-
-	/**
-	 * Returns the locale of the current editing context.
-	 * @return
-	 */
-	public Locale locale() {
-		if(_locale == null) {
-			return ERXLocalizer.currentLocalizer().locale();
-		}
-		return _locale;
-	}
-    
-	public void setLocale(Locale value) {
-		_locale = value;
-	}
 	
     /** Default implementation of the Factory interface. */
     public static class DefaultFactory implements Factory {
@@ -1436,4 +1418,3 @@ public class ERXEC extends EOEditingContext {
     	return factory()._newEditingContext(objectStore);
     }
 }
-

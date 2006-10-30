@@ -630,7 +630,7 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
             _registered = true;
         }
     }
-
+    
     /**
      * Public constructor
      * @param entity that this class description corresponds to
@@ -638,7 +638,7 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
     public ERXEntityClassDescription(EOEntity entity) {
         super(entity);
         _validationInfo = ERXValueUtilities.dictionaryValue(entity.userInfo().objectForKey("ERXValidation"));
-        _validationQualiferCache = new NSMutableDictionary();
+        _validationQualiferCache = (NSMutableDictionary) ERXMutableDictionary.synchronizedDictionary();
     }
 
     public void modelFileDidChange(NSNotification n) {
@@ -650,7 +650,7 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
             entity().setUserInfo((NSDictionary)userInfo.objectForKey("userInfo"));
             
             _validationInfo = ERXValueUtilities.dictionaryValue(entity().userInfo().objectForKey("ERXValidation"));
-            _validationQualiferCache = new NSMutableDictionary();
+            _validationQualiferCache = (NSMutableDictionary) ERXMutableDictionary.synchronizedDictionary();
             _initialDefaultValues = null;
             readDefaultValues();
         } catch(Exception ex) {
@@ -1128,18 +1128,13 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
     }
 
     public String localizedKey(EOEditingContext ec, String key) {
-        if(ec instanceof ERXEC) {
-            ERXEC erxc = (ERXEC)ec;
-            key = key + "_" + erxc.locale().getLanguage();
-            if(!allPropertyKeys().containsObject(key)) {
-                key = null;
-            }
-        } else {
-            key = null;
-        }
-        return key;
+    	key = key + "_" + ERXLocalizer.currentLocalizer().languageCode();
+    	if(!allPropertyKeys().containsObject(key)) {
+    		key = null;
+    	}
+    	return key;
     }
-    
+
     public String inverseForRelationshipKey(String relationshipKey) {
         String result = null;
         EORelationship relationship = entity().relationshipNamed(relationshipKey);
