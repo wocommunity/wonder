@@ -16,7 +16,6 @@ import com.webobjects.appserver.WORequest;
 import com.webobjects.directtoweb.D2W;
 import com.webobjects.directtoweb.EditPageInterface;
 import com.webobjects.directtoweb.InspectPageInterface;
-import com.webobjects.directtoweb.NextPageDelegate;
 import com.webobjects.eoaccess.EOGeneralAdaptorException;
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.eocontrol.EOEnterpriseObject;
