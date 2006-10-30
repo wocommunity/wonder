@@ -146,12 +146,16 @@ public class WOHelperFunctionHTMLTemplateParser extends WOParser implements WOHe
 	public void didParseOpeningWebObjectTag(String s, WOHelperFunctionHTMLParser htmlParser) throws WOHTMLFormatException {
 		if (_allowInlineBindings) {
 			int spaceIndex = s.indexOf(' ');
+			int colonIndex;
 			if (spaceIndex != -1) {
-				int colonIndex = s.substring(0, spaceIndex).indexOf(':');
-				if (colonIndex != -1) {
-					WODeclaration declaration = parseInlineBindings(s, colonIndex);
-					s = "<wo name = \"" + declaration.name() + "\"";
-				}
+				colonIndex = s.substring(0, spaceIndex).indexOf(':');
+			}
+			else {
+				colonIndex = s.indexOf(':');
+			}
+			if (colonIndex != -1) {
+				WODeclaration declaration = parseInlineBindings(s, colonIndex);
+				s = "<wo name = \"" + declaration.name() + "\"";
 			}
 		}
 		_currentWebObjectTag = new WOHTMLWebObjectTag(s, _currentWebObjectTag);
