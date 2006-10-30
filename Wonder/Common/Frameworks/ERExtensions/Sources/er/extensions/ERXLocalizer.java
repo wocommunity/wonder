@@ -692,4 +692,8 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
         }
         return _useLocalizedFormatters.booleanValue();
     }
+
+	public String languageCode() {
+		return locale().getLanguage();
+	}
 }
