@@ -1127,7 +1127,7 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
         setDefaultValuesInObject(eo, ec);
     }
 
-    public String localizedKey(EOEditingContext ec, String key) {
+    public String localizedKey(String key) {
     	key = key + "_" + ERXLocalizer.currentLocalizer().languageCode();
     	if(!allPropertyKeys().containsObject(key)) {
     		key = null;
@@ -1138,7 +1138,7 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
     public String inverseForRelationshipKey(String relationshipKey) {
         String result = null;
         EORelationship relationship = entity().relationshipNamed(relationshipKey);
-        if(relationship.userInfo() != null) {
+        if(relationship != null && relationship.userInfo() != null) {
             result = (String) relationship.userInfo().objectForKey("ERXInverseRelationshipName");
         }
         if(result == null) {

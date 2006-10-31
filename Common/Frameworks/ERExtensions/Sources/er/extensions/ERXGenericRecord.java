@@ -69,7 +69,7 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
     private String localizedKey(String key) {
         EOClassDescription cd = classDescription();
         if(cd instanceof ERXEntityClassDescription) {
-            return ((ERXEntityClassDescription)cd).localizedKey(editingContext(), key);
+            return ((ERXEntityClassDescription)cd).localizedKey(key);
         }
         return null;
     }
@@ -82,15 +82,15 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
 
 		public Object valueInObject(Object object) {
 			ERXGenericRecord eo = (ERXGenericRecord) object;
-			String key = eo.localizedKey(_key);
-			Object value = eo.valueForKey(key);
+			String localizedKey = eo.localizedKey(_key);
+			Object value = eo.valueForKey(localizedKey);
 			return value;
 		}
 
 		public void setValueInObject(Object value, Object object) {
 			ERXGenericRecord eo = (ERXGenericRecord) object;
-			String key = eo.localizedKey(_key);
-			eo.takeValueForKey(value, key);
+			String localizedKey = eo.localizedKey(_key);
+			eo.takeValueForKey(value, localizedKey);
 		}
 	}
 

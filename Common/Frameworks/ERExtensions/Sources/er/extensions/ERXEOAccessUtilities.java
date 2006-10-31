@@ -1570,11 +1570,13 @@ public class ERXEOAccessUtilities {
                          entity = rel.destinationEntity();
                          prefix += part + ".";
                      }
-
                      if(entity.attributeNamed(attributeName) == null) {
-                         String localizedKey = attributeName + "_" + ERXLocalizer.currentLocalizer().languageCode();
-                         if(entity.attributeNamed(localizedKey) != null) {
-                             item = new EOSortOrdering(prefix + localizedKey, item.selector());
+                    	 EOClassDescription cd = entity.classDescriptionForInstances();
+                         if(cd instanceof ERXEntityClassDescription) {
+                        	 String localizedKey = ((ERXEntityClassDescription)cd).localizedKey(attributeName);
+                        	 if(localizedKey != null) {
+                                 item = new EOSortOrdering(prefix + localizedKey, item.selector());
+                        	 }
                          }
                      }
                  }
