@@ -8,12 +8,14 @@ import er.ajax.AjaxTreeModel;
 
 public class AjaxTreeExample extends WOComponent {
 	public Object _rootTreeNode;
+	public Object _rootTreeNode2;
 	private Object _treeNode;
 	private Object _delegate;
 
 	public AjaxTreeExample(WOContext context) {
 		super(context);
 		_rootTreeNode = new FakeTreeNode(null, "Root", 0);
+		_rootTreeNode2 = new FakeTreeNode(null, "Root2", 0);
 	}
 
 	public void setTreeNode(Object treeNode) {
