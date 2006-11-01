@@ -9,7 +9,6 @@ CloseCountRepetition : WORepetition {
 TreeNodeRepetition : WORepetition {
 	list = nodes;
 	item = item;
-	index = nodeIndex;
 }
 
 CollapsedImage : WOImage {

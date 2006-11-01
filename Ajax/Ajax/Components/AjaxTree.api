@@ -18,6 +18,7 @@
 		<binding name = "leafImage"/>
 		<binding name = "leafImageFramework"/>
 		<binding name = "delegate"/>
+		<binding name = "showRoot"/>
 
     <validation message = "&apos;parentKeyPath&apos; and &apos;childrenKeyPath&apos;, or &apos;delegate&apos; must be bound.">
     	<and>
