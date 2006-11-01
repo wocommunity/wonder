@@ -3,15 +3,46 @@ package er.ajax;
 import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
+import com.webobjects.appserver.WORequest;
 import com.webobjects.appserver.WOResponse;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSMutableArray;
 
+/**
+ * AjaxTree provides an Ajax-refreshing tree view.  AjaxTree acts
+ * like a WOComponentContent where the content you provide will be
+ * the renderer for the tree nodes.  The "item" binding provides you 
+ * access to the current tree node as it iterates over the tree.
+ * 
+ * If your node objects are homogenous in type, you can define parentKeyPath
+ * and childrenKeyPath.  If your node objects are heterogenous, you can instead
+ * define a delegate, as defined in the AjaxTreeModel.Delegate interface.
+ *  
+ * @binding root the root node of the tree
+ * @binding item the current tree node (equivalent to "item" on WORepetition)
+ * @binding rootExpanded if true, the tree will require the root node to be open; ignored if showRoot = false
+ * @binding allExpanded if true, the tree defaults to have all its nodes expanded
+ * @binding parentKeyPath the keypath to call on a node to get its parent node (ignored if delegate is set)
+ * @binding childrenKeyPath the keypath to call on a node to get its children NSArray (ignored if delegate is set)
+ * @binding isLeafKeyPath the keypath to call on a node to determine if it is a leaf node (ignored if delegate, and defaults to return childrenKeyPath.count() == 0 if not set)
+ * @binding id the html id of the tree
+ * @binding class the html class of the tree
+ * @binding treeModel the treeModel to use (one will be created by default)
+ * @binding collapsedImage the icon to use for a collapsed node
+ * @binding collapsedImageFramework the framework to load the collapsed icon from 
+ * @binding expandedImage the icon to use for an expanded node
+ * @binding expandedImageFramework the framework to load the expanded icon from 
+ * @binding leafImage the icon to use for a leaf node
+ * @binding leafImageFramework the framework to load the leaf icon from
+ * @binding delegate the delegate to use instead of keypaths (see AjaxTreeModel.Delegate)
+ * @binding showRoot if false, the root node will be skipped and the tree will begin with its children 
+ * 
+ * @author mschrag
+ */
 public class AjaxTree extends WOComponent {
 	private AjaxTreeModel _treeModel;
 
 	private NSArray _nodes;
-	private int _nodeIndex;
 	private int _level;
 	private int _closeCount;
 	private Object _lastParent;
@@ -28,51 +59,70 @@ public class AjaxTree extends WOComponent {
 	public NSArray nodes() {
 		if (_nodes == null) {
 			NSMutableArray nodes = new NSMutableArray();
-			_fillInOpenNodes(treeModel().rootTreeNode(), nodes);
+			boolean showRoot = AjaxUtils.booleanValueForBinding("showRoot", true, _keyAssociations, this);
+			_fillInOpenNodes(treeModel().rootTreeNode(), nodes, showRoot);
 			_nodes = nodes;
 		}
 		return _nodes;
 	}
 
-	public void _setNodeIndex(int nodeIndex) {
-		_nodeIndex = nodeIndex;
-	}
-
-	public int _nodeIndex() {
-		return _nodeIndex;
-	}
-
-	protected void _fillInOpenNodes(Object node, NSMutableArray nodes) {
-		nodes.add(node);
+	protected void _fillInOpenNodes(Object node, NSMutableArray nodes, boolean showNode) {
+		if (showNode) {
+			nodes.add(node);
+		}
 		if (treeModel().isExpanded(node)) {
 			NSArray childrenTreeNodes = treeModel().childrenTreeNodes(node);
 			if (childrenTreeNodes != null) {
 				int childTreeNodeCount = childrenTreeNodes.count();
 				for (int childTreeNodeNum = 0; childTreeNodeNum < childTreeNodeCount; childTreeNodeNum++) {
 					Object childNode = childrenTreeNodes.objectAtIndex(childTreeNodeNum);
-					_fillInOpenNodes(childNode, nodes);
+					_fillInOpenNodes(childNode, nodes, true);
 				}
 			}
 		}
 	}
 
-	public void appendToResponse(WOResponse aResponse, WOContext aContext) {
+	public void reset() {
+		super.reset();
+	}
+	
+	protected void resetTree() {
 		_level = 0;
 		_closeCount = 0;
-
+		_lastParent = null;
+		_item = null;
+	}
+	
+	public void appendToResponse(WOResponse aResponse, WOContext aContext) {
+		resetTree();
 		treeModel().setDelegate(valueForBinding("delegate"));
 		if (hasBinding("allExpanded")) {
-			treeModel().setAllExpanded(((Boolean) valueForBinding("allExpanded")).booleanValue());
+			treeModel().setAllExpanded(AjaxUtils.booleanValueForBinding("allExpanded", false, _keyAssociations, this));
 		}
-		if (hasBinding("rootExpanded")) {
-			treeModel().setRootExpanded(((Boolean) valueForBinding("rootExpanded")).booleanValue());
+		if (hasBinding("rootExpanded") || hasBinding("showRoot")) {
+			treeModel().setRootExpanded(AjaxUtils.booleanValueForBinding("rootExpanded", false, _keyAssociations, this) || !AjaxUtils.booleanValueForBinding("showRoot", true, _keyAssociations, this));
 		}
 		treeModel().setIsLeafKeyPath(stringValueForBinding("isLeafKeyPath", null));
 		treeModel().setParentTreeNodeKeyPath(stringValueForBinding("parentKeyPath", null));
 		treeModel().setChildrenTreeNodesKeyPath(stringValueForBinding("childrenKeyPath", null));
 		treeModel().setRootTreeNode(valueForBinding("root"));
+		setItem(treeModel().rootTreeNode());
 
 		super.appendToResponse(aResponse, aContext);
+		resetTree();
+	}
+	
+	public void takeValuesFromRequest(WORequest aRequest, WOContext aContext) {
+		resetTree();
+		super.takeValuesFromRequest(aRequest, aContext);
+		resetTree();
+	}
+	
+	public WOActionResults invokeAction(WORequest aRequest, WOContext aContext) {
+		resetTree();
+		WOActionResults results = super.invokeAction(aRequest, aContext);
+		resetTree();
+		return results;
 	}
 
 	public void setItem(Object item) {
