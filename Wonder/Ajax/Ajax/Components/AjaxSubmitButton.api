@@ -13,5 +13,6 @@
 		<binding name = "onFailure"/>
 		<binding name = "button"/>
 		<binding name = "formName"/>
+		<binding name = "functionName"/>
 	</wo>
 </wodefinitions>
