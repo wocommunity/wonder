@@ -23,5 +23,6 @@
 		<binding name = "onRefreshComplete"/>
 		<binding name = "disabled"/>
 		<binding name = "editing"/>
+		<binding name = "manualControl"/>
 	</wo>
 </wodefinitions>

@@ -20,14 +20,30 @@ UpdateContainer : AjaxUpdateContainer {
 	onRefreshComplete = ^onRefreshComplete;
 }
 
-ViewClickHandler : AjaxHyperlink {
+ManualControlConditional : WOConditional {
+	condition = ^manualControl;
+}
+
+NotManualControlConditional : WOConditional {
+	condition = ^manualControl;
+	negate = true;
+}
+
+EditFunction : AjaxHyperlink {
 	action = startEditing;
-	elementName = "div";
 	onClick = ^onEditClick;
 	onClickServer = updateFunctionName;
 	onLoading = ^onEditing;
 	evalScripts = true;
 	disabled = ^disabled;
+	functionName = editFunctionName;
+}
+
+EditAction : WOGenericContainer {
+	elementName = "div";
+	href = "javascript:void(0)";
+	onclick = editFunctionCall;
+	class = ^editClass;
 }
 
 SaveLabel : WOString {
@@ -40,15 +56,22 @@ CancelLabel : WOString {
 	valueWhenEmpty = "cancel";
 }
 
-CancelAction : AjaxHyperlink {
+CancelFunction : AjaxHyperlink {
 	action = cancel;
-	class = ^cancelClass;
 	onClick = ^onCancelClick;
 	onClickServer = updateFunctionName;
 	onSuccess = ^onCancelSuccess;
 	onFailure = ^onCancelFailure;
 	onLoading = ^onCancelling;
 	evalScripts = true;
+	functionName = cancelFunctionName;
+}
+
+CancelAction : WOGenericContainer {
+	elementName = "a";
+	href = "javascript:void(0)";
+	onclick = cancelFunctionCall;
+	class = ^cancelClass;
 }
 
 EditForm : WOForm {
@@ -56,10 +79,9 @@ EditForm : WOForm {
 	name = id;
 }
 
-SaveAction : AjaxSubmitButton {
+SaveFunction : AjaxSubmitButton {
 	action = save;
 	button = false;
-	class = ^saveClass;
 	formName = id;
 	onClick = ^onSaveClick;
 	onClickServer = updateFunctionName;
@@ -67,6 +89,14 @@ SaveAction : AjaxSubmitButton {
 	onFailure = ^onSaveFailure;
 	onLoading = ^onSaving;
 	evalScripts = true;
+	functionName = saveFunctionName;
+}
+
+SaveAction : WOGenericContainer {
+	elementName = "a";
+	href = "javascript:void(0)";
+	onclick = saveFunctionCall;
+	class = ^saveClass;
 }
 
 ViewComponent : ERXWOComponentContent {
