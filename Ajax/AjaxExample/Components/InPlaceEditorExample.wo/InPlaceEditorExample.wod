@@ -19,6 +19,45 @@ View : ERXWOTemplate {
 	templateName = "view";
 }
 
+ExampleInPlaceManual : AjaxInPlace {
+	id = "ExampleInPlaceManual";
+	saveAction = valueSaved;
+	cancelAction = valueCancelled;
+	manualControl = true;
+}
+
+ClickToEdit : WOHyperlink {
+	href = "javascript:void(0)";
+	onclick = "ExampleInPlaceManualEdit()";
+}
+
+EditManual : ERXWOTemplate {
+	templateName = "edit";
+}
+
+ViewManual : ERXWOTemplate {
+	templateName = "view";
+}
+
+ManualValue : WOString {
+	value = manualValue;
+
+}
+ManualValueField : WOTextField {
+	value = manualValue;
+	size = "30";
+}
+
+ClickToSave : WOHyperlink {
+	href = "javascript:void(0)";
+	onclick = "ExampleInPlaceManualSave()";
+}
+
+ClickToCancel : WOHyperlink {
+	href = "javascript:void(0)";
+	onclick = "ExampleInPlaceManualCancel()";
+}
+
 HideShowAction : AjaxUpdateLink {
 	updateContainerID = "updateContainerID";
 	action = toggle;
