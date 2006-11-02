@@ -37,6 +37,7 @@ import er.extensions.ERXComponentUtilities;
  * @binding string string to get preprended to the contained elements
  * @binding function a custom function to call that takes a single parameter that is the action url
  * @binding elementName the element name to use (defaults to "a")
+ * @binding functionName if set, the link becomes a javascript function
  */
 public class AjaxUpdateLink extends AjaxDynamicElement {
 
@@ -113,33 +114,41 @@ public class AjaxUpdateLink extends AjaxDynamicElement {
     WOComponent component = context.component();
     boolean disabled = booleanValueForBinding("disabled", false, component);
     Object stringValue = valueForBinding("string", component);
-    String elementName = (String)valueForBinding("elementName", "a", component);
-    boolean isATag = "a".equalsIgnoreCase(elementName);
-    boolean renderTags = (!disabled || !isATag);
-    if (renderTags) {
-      response.appendContentString("<");
-      response.appendContentString(elementName);
-      response.appendContentString(" ");
-      if (isATag) {
-    	  appendTagAttributeToResponse(response, "href", "javascript:void(0);");
-      }
-      appendTagAttributeToResponse(response, "onclick", onClick(context));
-      appendTagAttributeToResponse(response, "title", valueForBinding("title", component));
-      appendTagAttributeToResponse(response, "value", valueForBinding("value", component));
-      appendTagAttributeToResponse(response, "class", valueForBinding("class", component));
-      appendTagAttributeToResponse(response, "style", valueForBinding("style", component));
-      appendTagAttributeToResponse(response, "id", valueForBinding("id", component));
-      // appendTagAttributeToResponse(response, "onclick", onClick(context));
-      response.appendContentString(">");
+    String functionName = (String)valueForBinding("functionName", component);
+    if (functionName == null) {
+	    String elementName = (String)valueForBinding("elementName", "a", component);
+	    boolean isATag = "a".equalsIgnoreCase(elementName);
+	    boolean renderTags = (!disabled || !isATag);
+	    if (renderTags) {
+	      response.appendContentString("<");
+	      response.appendContentString(elementName);
+	      response.appendContentString(" ");
+	      if (isATag) {
+	    	  appendTagAttributeToResponse(response, "href", "javascript:void(0);");
+	      }
+	      appendTagAttributeToResponse(response, "onclick", onClick(context));
+	      appendTagAttributeToResponse(response, "title", valueForBinding("title", component));
+	      appendTagAttributeToResponse(response, "value", valueForBinding("value", component));
+	      appendTagAttributeToResponse(response, "class", valueForBinding("class", component));
+	      appendTagAttributeToResponse(response, "style", valueForBinding("style", component));
+	      appendTagAttributeToResponse(response, "id", valueForBinding("id", component));
+	      // appendTagAttributeToResponse(response, "onclick", onClick(context));
+	      response.appendContentString(">");
+	    }
+	    if (stringValue != null) {
+	      response.appendContentHTMLString(stringValue.toString());
+	    }
+	    appendChildrenToResponse(response, context);
+	    if (renderTags) {
+	      response.appendContentString("</");
+	      response.appendContentString(elementName);
+	      response.appendContentString(">");
+	    }
     }
-    if (stringValue != null) {
-      response.appendContentHTMLString(stringValue.toString());
-    }
-    appendChildrenToResponse(response, context);
-    if (renderTags) {
-      response.appendContentString("</");
-      response.appendContentString(elementName);
-      response.appendContentString(">");
+    else {
+    	AjaxUtils.appendScriptHeader(response);
+    	response.appendContentString(functionName + " = function() { " + onClick(context) + " }\n");
+    	AjaxUtils.appendScriptFooter(response);
     }
     super.appendToResponse(response, context);
   }
