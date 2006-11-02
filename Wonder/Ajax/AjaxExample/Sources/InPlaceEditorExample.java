@@ -4,6 +4,7 @@ import com.webobjects.appserver.*;
 
 public class InPlaceEditorExample extends WOComponent {
   private String _multilineValue;
+  public String _manualValue;
   public String _exampleValue;
   public String _strippedValue;
   public int _numericValue;
@@ -13,6 +14,7 @@ public class InPlaceEditorExample extends WOComponent {
   public InPlaceEditorExample(WOContext context) {
     super(context);
     _value = "ExampleInPlace Value";
+    _manualValue = "ExampleInPlaceManual Value";
     _exampleValue = "Test Value";
     _multilineValue = "Multi\nLine\nValue";
     _strippedValue = "Stripped Value";
