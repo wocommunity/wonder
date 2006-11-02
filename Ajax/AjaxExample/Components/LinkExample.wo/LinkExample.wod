@@ -11,3 +11,32 @@ ReplaceLink : AjaxUpdateLink {
 	action = replaceLinkAction;
 	replaceID = "ExampleReplacementArea";
 }
+
+AjaxHyperlinkFunction : AjaxHyperlink {
+	action = exampleAction;
+	functionName = "testHyperlinkFunction";
+}
+
+AjaxUpdateFunction : AjaxUpdateLink {
+	action = exampleAction;
+	functionName = "testUpdateFunction";
+	updateContainerID = "ExampleUpdateContainer";
+}
+
+ExampleUpdateContainer : AjaxUpdateContainer {
+	id = "ExampleUpdateContainer";
+}
+
+ExampleForm : WOForm {
+	multipleSubmit = true;
+	name = "ExampleForm";
+}
+
+AjaxSubmitFunction : AjaxSubmitButton {
+	action = exampleAction;
+	functionName = "testSubmitFunction";
+}
+
+Now : WOString {
+	value = now;
+}
