@@ -95,12 +95,36 @@ public class AjaxInPlace extends WOComponent {
     return _id;
   }
 
+  public String editFunctionName() {
+	  return id() + "Edit";
+  }
+
+  public String editFunctionCall() {
+	  return editFunctionName() + "()";
+  }
+
+  public String saveFunctionName() {
+	  return id() + "Save";
+  }
+
+  public String saveFunctionCall() {
+	  return saveFunctionName() + "()";
+  }
+
+  public String cancelFunctionName() {
+	  return id() + "Cancel";
+  }
+
+  public String cancelFunctionCall() {
+	  return cancelFunctionName() + "()";
+  }
+  
   public boolean editing() {
 	  if (hasBinding("editing")) {
 		  Boolean editingBoolean = (Boolean)valueForBinding("editing");
 		  _editing = editingBoolean.booleanValue();
 	  }
-	  return _editing;
+	  return !AjaxUtils.booleanValueForBinding("disabled", false, _keyAssociations, this) && _editing;
   }
   
   public void setEditing(boolean editing) {
