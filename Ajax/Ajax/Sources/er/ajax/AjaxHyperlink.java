@@ -25,6 +25,7 @@ import com.webobjects.foundation.NSMutableDictionary;
  * @binding class class of the link
  * @binding style style of the link
  * @binding disabled whether or not this link is disabled
+ * @binding functionName if set, the link becomes a javascript function
  * @author ak
  */
 public class AjaxHyperlink extends AjaxDynamicElement {
@@ -67,8 +68,9 @@ public class AjaxHyperlink extends AjaxDynamicElement {
 
       boolean disabled = booleanValueForBinding("disabled", false, component);
       String elementName = (String)valueForBinding("elementName", "a", component);
+      String functionName = (String)valueForBinding("functionName", null, component);
       boolean isATag = "a".equalsIgnoreCase(elementName);
-      boolean renderTags = (!disabled || !isATag);
+      boolean renderTags = ((!disabled || !isATag) && functionName == null);
       if (renderTags) {
 	      response.appendContentString("<");
 	      response.appendContentString(elementName);
@@ -85,6 +87,11 @@ public class AjaxHyperlink extends AjaxDynamicElement {
 	    	  appendTagAttributeToResponse(response, "onclick", onClick(context));
 	      }
 	      response.appendContentString(">");
+      }
+      if (functionName != null) {
+      	AjaxUtils.appendScriptHeader(response);
+    	response.appendContentString(functionName + " = function() { " + onClick(context) + " }\n");
+    	AjaxUtils.appendScriptFooter(response);
       }
       appendChildrenToResponse(response, context);
       if (renderTags) {

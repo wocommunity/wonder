@@ -30,6 +30,7 @@ import er.extensions.ERXWOForm;
  * @binding evalScripts evaluate scripts on the result
  * @binding button if false, it will display a link
  * @binding formName if button is false, you must specify the name of the form to submit
+ * @binding functionName if set, the link becomes a javascript function instead
  * 
  * @author anjo
  */
@@ -64,8 +65,10 @@ public class AjaxSubmitButton extends AjaxDynamicElement {
   public void appendToResponse(WOResponse response, WOContext context) {
     WOComponent component = context.component();
 
-    boolean showButton = booleanValueForBinding("button", true, component);
+    String functionName = (String)valueForBinding("functionName", null, component);
     String formName = (String)valueForBinding("formName", component);
+    boolean showUI = (functionName == null);
+    boolean showButton = showUI && booleanValueForBinding("button", true, component);
     String formReference;
     if (!showButton) {
       formName = ERXWOForm.formName(context, null);
@@ -79,43 +82,53 @@ public class AjaxSubmitButton extends AjaxDynamicElement {
     else {
       formReference = "document." + formName;
     }
-    if (showButton) {
-      response.appendContentString("<input ");
-      appendTagAttributeToResponse(response, "type", "button");
-      String name = nameInContext(context, component);
-      appendTagAttributeToResponse(response, "name", name);
-      appendTagAttributeToResponse(response, "value", valueForBinding("value", component));
+    if (showUI) {
+	    if (showButton) {
+	      response.appendContentString("<input ");
+	      appendTagAttributeToResponse(response, "type", "button");
+	      String name = nameInContext(context, component);
+	      appendTagAttributeToResponse(response, "name", name);
+	      appendTagAttributeToResponse(response, "value", valueForBinding("value", component));
+	    }
+	    else {
+	      response.appendContentString("<a href = \"javascript:void(0)\" ");
+	    }
+	    appendTagAttributeToResponse(response, "class", valueForBinding("class", component));
+	    appendTagAttributeToResponse(response, "style", valueForBinding("style", component));
+	    appendTagAttributeToResponse(response, "id", valueForBinding("id", component));
+	    if (disabledInComponent(component)) {
+	      appendTagAttributeToResponse(response, "disabled", "disabled");
+	    }
     }
-    else {
-      response.appendContentString("<a href = \"javascript:void(0)\" ");
-    }
-    appendTagAttributeToResponse(response, "class", valueForBinding("class", component));
-    appendTagAttributeToResponse(response, "style", valueForBinding("style", component));
-    appendTagAttributeToResponse(response, "id", valueForBinding("id", component));
-    if (disabledInComponent(component)) {
-      appendTagAttributeToResponse(response, "disabled", "disabled");
-    }
-    StringBuffer sb = new StringBuffer();
-    sb.append("new Ajax.Request(" + formReference + ".action,");
+    StringBuffer onClickBuffer = new StringBuffer();
+    onClickBuffer.append("new Ajax.Request(" + formReference + ".action,");
     NSDictionary options = createAjaxOptions(component, formReference);
-    AjaxOptions.appendToBuffer(options, sb, context);
-    sb.append(")");
+    AjaxOptions.appendToBuffer(options, onClickBuffer, context);
+    onClickBuffer.append(")");
     String onClick = (String) valueForBinding("onClick", component);
     if (onClick != null) {
-      sb.append(";");
-      sb.append(onClick);
+      onClickBuffer.append(";");
+      onClickBuffer.append(onClick);
     }
-    appendTagAttributeToResponse(response, "onclick", sb.toString());
-    if (showButton) {
-      response.appendContentString(" />");
+    if (showUI) {
+	    appendTagAttributeToResponse(response, "onclick", onClickBuffer.toString());
+	    if (showButton) {
+	      response.appendContentString(" />");
+	    }
+	    else {
+	      response.appendContentString(">");
+	      if (hasChildrenElements()) {
+	        appendChildrenToResponse(response, context);
+	      }
+	      response.appendContentString("</a>");
+	    }
     }
-    else {
-      response.appendContentString(">");
-      if (hasChildrenElements()) {
-        appendChildrenToResponse(response, context);
-      }
-      response.appendContentString("</a>");
+    if (!showUI) {
+      	AjaxUtils.appendScriptHeader(response);
+    	response.appendContentString(functionName + " = function() { " + onClickBuffer + " }\n");
+    	AjaxUtils.appendScriptFooter(response);
     }
+
     super.appendToResponse(response, context);
   }
 
