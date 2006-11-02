@@ -12,6 +12,7 @@
 		<binding name = "insertion"/>
 		<binding name = "evalScripts"/>
 		<binding name = "function"/>
+		<binding name = "functionName"/>
 		<binding name = "elementName"/>
 
 		<binding name = "replaceID"/>
