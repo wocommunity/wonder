@@ -14,6 +14,10 @@ public class LinkExample extends WOComponent {
     System.out.println("LinkExample.exampleAction: Action Performed!");
     return null;
   }
+  
+  public String now() {
+	  return String.valueOf(System.currentTimeMillis());
+  }
 
   public WOActionResults replaceLinkAction() {
     WOActionResults results;
