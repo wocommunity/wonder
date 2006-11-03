@@ -59,9 +59,9 @@ public class AjaxTree extends WOComponent {
 	}
 
 	public NSArray nodes() {
-		if (_nodes == null || !AjaxUtils.booleanValueForBinding("cache", true, _keyAssociations, this)) {
+		if (_nodes == null || !AjaxUtils.booleanValueForBinding("cache", true, _keyAssociations, parent())) {
 			NSMutableArray nodes = new NSMutableArray();
-			boolean showRoot = AjaxUtils.booleanValueForBinding("showRoot", true, _keyAssociations, this);
+			boolean showRoot = AjaxUtils.booleanValueForBinding("showRoot", true, _keyAssociations, parent());
 			_fillInOpenNodes(treeModel().rootTreeNode(), nodes, showRoot);
 			_nodes = nodes;
 		}
@@ -99,10 +99,10 @@ public class AjaxTree extends WOComponent {
 		resetTree();
 		treeModel().setDelegate(valueForBinding("delegate"));
 		if (hasBinding("allExpanded")) {
-			treeModel().setAllExpanded(AjaxUtils.booleanValueForBinding("allExpanded", false, _keyAssociations, this));
+			treeModel().setAllExpanded(AjaxUtils.booleanValueForBinding("allExpanded", false, _keyAssociations, parent()));
 		}
 		if (hasBinding("rootExpanded") || hasBinding("showRoot")) {
-			treeModel().setRootExpanded(AjaxUtils.booleanValueForBinding("rootExpanded", false, _keyAssociations, this) || !AjaxUtils.booleanValueForBinding("showRoot", true, _keyAssociations, this));
+			treeModel().setRootExpanded(AjaxUtils.booleanValueForBinding("rootExpanded", false, _keyAssociations, parent()) || !AjaxUtils.booleanValueForBinding("showRoot", true, _keyAssociations, parent()));
 		}
 		treeModel().setIsLeafKeyPath(stringValueForBinding("isLeafKeyPath", null));
 		treeModel().setParentTreeNodeKeyPath(stringValueForBinding("parentKeyPath", null));
