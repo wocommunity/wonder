@@ -123,6 +123,30 @@ public class AjaxInPlace extends WOComponent {
 	  return cancelFunctionName() + "()";
   }
 
+  public boolean manualControl() {
+	  boolean manualControl = false;
+	  if (hasBinding("manualControl")) {
+		  manualControl = ((Boolean)valueForBinding("manualControl")).booleanValue();
+	  }
+	  return manualControl;
+  }
+
+  public boolean manualEditControl() {
+	  boolean manualEditControl = manualControl();
+	  if (!manualEditControl && hasBinding("manualEditControl")) {
+		  manualEditControl = ((Boolean)valueForBinding("manualEditControl")).booleanValue();
+	  }
+	  return manualEditControl;
+  }
+
+  public boolean manualViewControl() {
+	  boolean manualViewControl = manualControl();
+	  if (!manualViewControl && hasBinding("manualViewControl")) {
+		  manualViewControl = ((Boolean)valueForBinding("manualViewControl")).booleanValue();
+	  }
+	  return manualViewControl;
+  }
+
   public boolean disabled() {
 	  boolean disabled = false;
 	  if (hasBinding("disabled")) {
