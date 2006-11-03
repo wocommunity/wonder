@@ -124,7 +124,11 @@ public class AjaxInPlace extends WOComponent {
 		  Boolean editingBoolean = (Boolean)valueForBinding("editing");
 		  _editing = editingBoolean.booleanValue();
 	  }
-	  return !AjaxUtils.booleanValueForBinding("disabled", false, _keyAssociations, this) && _editing;
+	  boolean disabled = false;
+	  if (hasBinding("disabled")) {
+		  disabled = ((Boolean)valueForBinding("disabled")).booleanValue();
+	  }
+	  return !disabled && _editing;
   }
   
   public void setEditing(boolean editing) {
