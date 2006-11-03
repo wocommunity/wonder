@@ -54,11 +54,16 @@ public class AjaxDroppable extends AjaxComponent {
   public String onDrop() {
     StringBuffer onDropBuffer = new StringBuffer();
     onDropBuffer.append("function(element, droppableElement) {");
-    // onComplete:ajaxResponse
     String droppableElementID = (String) valueForBinding("id");
     onDropBuffer.append("if (droppableElement.id == '" + droppableElementID + "') {");
     onDropBuffer.append("var data = '" + _draggableIDKeyName + "=' + element.getAttribute(\'draggableID\');");
-    onDropBuffer.append("var ajaxRequest = new Ajax.Request('" + _actionUrl + "', {method: 'get', parameters: data});");
+    onDropBuffer.append("var ajaxRequest = new Ajax.Request('" + _actionUrl + "', {method: 'get', parameters: data");
+    if(canGetValueForBinding("onComplete")) {
+        onDropBuffer.append(",onComplete:" ); 
+        onDropBuffer.append(valueForBinding("onComplete"));
+    }
+    onDropBuffer.append("});");
+    
     if (canGetValueForBinding("onDrop")) {
       String onDrop = (String) valueForBinding("onDrop");
       onDropBuffer.append(" var parentOnDrop = ");

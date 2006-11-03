@@ -42,6 +42,9 @@ public class AjaxUpdateContainer extends AjaxDynamicElement {
         ajaxOptionsArray.addObject(new AjaxOption("insertion", AjaxOption.SCRIPT));
         ajaxOptionsArray.addObject(new AjaxOption("evalScripts", AjaxOption.BOOLEAN));
         NSMutableDictionary options = AjaxOption.createAjaxOptionsDictionary(ajaxOptionsArray, component, associations());
+        if(options.objectForKey("evalScripts")==null) {
+        	options.setObjectForKey("true", "evalScripts");
+        }
         return options;
     }
 
@@ -72,7 +75,7 @@ public class AjaxUpdateContainer extends AjaxDynamicElement {
           AjaxUtils.appendScriptHeader(response);
 
           if (frequency != null) {
-            response.appendContentString("new Ajax.PeriodicalUpdater('" + id + "', $(" + id + ").getAttribute('updateUrl'), ");
+            response.appendContentString("new Ajax.PeriodicalUpdater('" + id + "', $('" + id + "').getAttribute('updateUrl'), ");
             AjaxOptions.appendToResponse(options, response, context);
             response.appendContentString(");");
           }
@@ -81,7 +84,7 @@ public class AjaxUpdateContainer extends AjaxDynamicElement {
             AjaxObserveField.appendToResponse(response, context, observeFieldID, id, false, null);
           }
 
-          response.appendContentString(id + "Update = function() { new Ajax.Updater('" + id + "', $(" + id + ").getAttribute('updateUrl'), ");
+          response.appendContentString(id + "Update = function() { new Ajax.Updater('" + id + "', $('" + id + "').getAttribute('updateUrl'), ");
           AjaxOptions.appendToResponse(options, response, context);
           response.appendContentString("); }");
 

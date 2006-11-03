@@ -36,6 +36,7 @@ import com.webobjects.foundation.NSMutableArray;
  * @binding leafImageFramework the framework to load the leaf icon from
  * @binding delegate the delegate to use instead of keypaths (see AjaxTreeModel.Delegate)
  * @binding showRoot if false, the root node will be skipped and the tree will begin with its children 
+ * @binding cache whether to cache the nodes or determine them every time from the model (default: true)
  * 
  * @author mschrag
  */
@@ -58,7 +59,7 @@ public class AjaxTree extends WOComponent {
 	}
 
 	public NSArray nodes() {
-		if (_nodes == null) {
+		if (_nodes == null || !AjaxUtils.booleanValueForBinding("cache", true, _keyAssociations, this)) {
 			NSMutableArray nodes = new NSMutableArray();
 			boolean showRoot = AjaxUtils.booleanValueForBinding("showRoot", true, _keyAssociations, this);
 			_fillInOpenNodes(treeModel().rootTreeNode(), nodes, showRoot);
@@ -177,7 +178,15 @@ public class AjaxTree extends WOComponent {
 
 	public AjaxTreeModel treeModel() {
 		if (_treeModel == null) {
-			_treeModel = new AjaxTreeModel();
+			if(canGetValueForBinding("treeModel") && valueForBinding("treeModel") != null) {
+				_treeModel=(AjaxTreeModel) valueForBinding("treeModel");
+			}
+			else {
+				_treeModel = new AjaxTreeModel();
+				if(canSetValueForBinding("treeModel")) {
+					setValueForBinding(_treeModel, "treeModel");
+				}
+			}
 		}
 		return _treeModel;
 	}
