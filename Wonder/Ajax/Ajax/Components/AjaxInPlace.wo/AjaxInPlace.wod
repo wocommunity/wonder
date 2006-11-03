@@ -20,12 +20,17 @@ UpdateContainer : AjaxUpdateContainer {
 	onRefreshComplete = ^onRefreshComplete;
 }
 
-ManualControlConditional : WOConditional {
-	condition = ^manualControl;
+ManualViewControlConditional : WOConditional {
+	condition = manualViewControl;
 }
 
-NotManualControlConditional : WOConditional {
-	condition = ^manualControl;
+NotManualViewControlConditional : WOConditional {
+	condition = manualViewControl;
+	negate = true;
+}
+
+NotManualEditControlConditional : WOConditional {
+	condition = manualEditControl;
 	negate = true;
 }
 
