@@ -160,6 +160,9 @@ public class AjaxInPlaceEditor extends AjaxDynamicElement {
 
     _valueAssociation.setValue(objValue, component);
 
+    // just executing action, ignoring result
+    valueForBinding("action", component);
+
     WOResponse response = AjaxUtils.createResponse(context);
     _appendValueAttributeToResponse(response, context);
 
