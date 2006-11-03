@@ -20,13 +20,11 @@ import er.extensions.ERXWOText;
  * @binding selectAll if true, the text will default to be selected
  */
 public class FocusText extends ERXWOText {
-	protected WOAssociation _id;
 	protected WOAssociation _selectAll;
 
 	public FocusText(String tagname, NSDictionary nsdictionary, WOElement woelement) {
 		super(tagname, nsdictionary, woelement);
 
-		_id = (WOAssociation) _associations.valueForKey("id");
 		if (_id == null) {
 			throw new WODynamicElementCreationException("<" + getClass().getName() + "> id is a required binding.");
 		}
