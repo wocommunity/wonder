@@ -63,6 +63,9 @@ import com.webobjects.appserver.WOResponse;
  * @binding onCancelling the javascript action to fire when cancelling
  * @binding onRefreshComplete the javascript function to execute after refreshing the container
  * @binding disabled whether or not edit mode should be disabled
+ * @binding manualControl if true, it is up to you to provide click-to-edit, save, and cancel controls
+ * @binding manualViewControl if true, it is up to you to provide click-to-edit controls
+ * @binding manualEditControl if true, it is up to you to provide save and cancel controls
  * @author mschrag
  */
 public class AjaxInPlace extends WOComponent {
