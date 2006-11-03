@@ -1,51 +1,52 @@
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <wodefinitions>
-	<wo wocomponentcontent = "true" class="AjaxTreeNode.java">
-		<binding name = "root"/>
-		<binding name = "item"/>
-		<binding name = "rootExpanded"/>
-		<binding name = "allExpanded"/>
-		<binding name = "parentKeyPath"/>
-		<binding name = "childrenKeyPath"/>
-		<binding name = "isLeafKeyPath"/>
-		<binding name = "id"/>
-		<binding name = "class"/>
-		<binding name = "treeModel"/>
-		<binding name = "collapsedImage"/>
-		<binding name = "collapsedImageFramework"/>
-		<binding name = "expandedImage"/>
-		<binding name = "expandedImageFramework"/>
-		<binding name = "leafImage"/>
-		<binding name = "leafImageFramework"/>
-		<binding name = "delegate"/>
-		<binding name = "showRoot"/>
+	<wo class="AjaxTreeNode.java" wocomponentcontent="true">
+		<binding name="root"/>
+		<binding name="item"/>
+		<binding name="rootExpanded"/>
+		<binding name="allExpanded"/>
+		<binding name="parentKeyPath"/>
+		<binding name="childrenKeyPath"/>
+		<binding name="isLeafKeyPath"/>
+		<binding name="id"/>
+		<binding name="class"/>
+		<binding name="treeModel"/>
+		<binding name="collapsedImage"/>
+		<binding name="collapsedImageFramework"/>
+		<binding name="expandedImage"/>
+		<binding name="expandedImageFramework"/>
+		<binding name="leafImage"/>
+		<binding name="leafImageFramework"/>
+		<binding name="delegate"/>
+		<binding name="showRoot"/>
+		<binding defaults="Boolean" name="cache"/>
 
-    <validation message = "&apos;parentKeyPath&apos; and &apos;childrenKeyPath&apos;, or &apos;delegate&apos; must be bound.">
-    	<and>
+	    <validation message="'parentKeyPath' and 'childrenKeyPath', or 'delegate' must be bound.">
+	    	<and>
+		    	<or>
+				    <unbound name="parentKeyPath"/>
+				    <unbound name="childrenKeyPath"/>
+				  </or>
+				  <unbound name="delegate"/>
+				</and>
+	    </validation>
+	
+	    <validation message="If you bind 'delegate', you cannot also bind 'parentKeyPath', 'childrenKeyPath', or 'isLeafKeyPath'.">
+	    	<and>
 	    	<or>
-			    <unbound name = "parentKeyPath"/>
-			    <unbound name = "childrenKeyPath"/>
+			    <bound name="parentKeyPath"/>
+			    <bound name="childrenKeyPath"/>
+			    <bound name="isLeafKeyPath"/>
 			  </or>
-			  <unbound name = "delegate"/>
-			</and>
-    </validation>
-
-    <validation message = "If you bind &apos;delegate&apos;, you cannot also bind &apos;parentKeyPath&apos;, &apos;childrenKeyPath&apos;, or &apos;isLeafKeyPath&apos;.">
-    	<and>
-    	<or>
-		    <bound name = "parentKeyPath"/>
-		    <bound name = "childrenKeyPath"/>
-		    <bound name = "isLeafKeyPath"/>
-		  </or>
-		  <bound name = "delegate"/>
-		  </and>
-    </validation>
-
-    <validation message = "One of &apos;root&apos; or &apos;treeModel&apos; must be bound.">
-    	<and>
-		    <unbound name = "root"/>
-		    <unbound name = "treeModel"/>
-		  </and>
-    </validation>
-  </wo>
+			  <bound name="delegate"/>
+			  </and>
+	    </validation>
+	
+	    <validation message="One of 'root' or 'treeModel' must be bound.">
+	    	<and>
+			    <unbound name="root"/>
+			    <unbound name="treeModel"/>
+			  </and>
+	    </validation>
+    </wo>
 </wodefinitions>
