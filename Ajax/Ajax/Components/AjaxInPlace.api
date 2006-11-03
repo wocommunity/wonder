@@ -24,5 +24,7 @@
 		<binding name = "disabled"/>
 		<binding name = "editing"/>
 		<binding name = "manualControl"/>
+		<binding name = "manualViewControl"/>
+		<binding name = "manualEditControl"/>
 	</wo>
 </wodefinitions>
