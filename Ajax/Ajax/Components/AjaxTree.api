@@ -31,12 +31,14 @@
     </validation>
 
     <validation message = "If you bind &apos;delegate&apos;, you cannot also bind &apos;parentKeyPath&apos;, &apos;childrenKeyPath&apos;, or &apos;isLeafKeyPath&apos;.">
+    	<and>
     	<or>
 		    <bound name = "parentKeyPath"/>
 		    <bound name = "childrenKeyPath"/>
 		    <bound name = "isLeafKeyPath"/>
 		  </or>
 		  <bound name = "delegate"/>
+		  </and>
     </validation>
 
     <validation message = "One of &apos;root&apos; or &apos;treeModel&apos; must be bound.">
