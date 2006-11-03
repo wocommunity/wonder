@@ -100,7 +100,11 @@ public class AjaxInPlace extends WOComponent {
   }
 
   public String editFunctionCall() {
-	  return editFunctionName() + "()";
+	  String editFunctionCall = null;
+	  if (!disabled()) {
+	  	editFunctionCall = editFunctionName() + "()";
+	  }
+	  return editFunctionCall;
   }
 
   public String saveFunctionName() {
@@ -118,17 +122,21 @@ public class AjaxInPlace extends WOComponent {
   public String cancelFunctionCall() {
 	  return cancelFunctionName() + "()";
   }
+
+  public boolean disabled() {
+	  boolean disabled = false;
+	  if (hasBinding("disabled")) {
+		  disabled = ((Boolean)valueForBinding("disabled")).booleanValue();
+	  }
+	  return disabled;
+  }
   
   public boolean editing() {
 	  if (hasBinding("editing")) {
 		  Boolean editingBoolean = (Boolean)valueForBinding("editing");
 		  _editing = editingBoolean.booleanValue();
 	  }
-	  boolean disabled = false;
-	  if (hasBinding("disabled")) {
-		  disabled = ((Boolean)valueForBinding("disabled")).booleanValue();
-	  }
-	  return !disabled && _editing;
+	  return !disabled() && _editing;
   }
   
   public void setEditing(boolean editing) {
