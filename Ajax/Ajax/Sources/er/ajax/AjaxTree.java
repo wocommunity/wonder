@@ -47,6 +47,7 @@ public class AjaxTree extends WOComponent {
 	private int _closeCount;
 	private Object _lastParent;
 	private Object _item;
+	private String _id=null;
 
 	public AjaxTree(WOContext context) {
 		super(context);
@@ -182,14 +183,15 @@ public class AjaxTree extends WOComponent {
 	}
 
 	public String id() {
-		String id;
-		if (hasBinding("id")) {
-			id = (String) valueForBinding("id");
-		}
-		else {
-			id = AjaxUtils.toSafeElementID(context().elementID());
-		}
-		return id;
+		if (_id==null) {
+			if (hasBinding("id")) {
+				_id = (String) valueForBinding("id");
+			}
+			else {
+				_id = AjaxUtils.toSafeElementID(context().elementID());
+			}
+		}		
+		return _id;
 	}
 
 	protected String stringValueForBinding(String bindingName, String defaultValue) {
