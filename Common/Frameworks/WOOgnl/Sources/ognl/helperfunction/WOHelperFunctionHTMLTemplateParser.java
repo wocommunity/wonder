@@ -99,6 +99,13 @@ public class WOHelperFunctionHTMLTemplateParser extends WOParser implements WOHe
 			else if (!inQuote && ch == '=') {
 				changeBuffers = true;
 			}
+			else if (inQuote && ch == '\\') {
+				index ++;
+				if (index == length) {
+					throw new WOHTMLFormatException("'" + tag + "' has a '\\' as the last character.");
+				}
+				currentBuffer.append(tag.charAt(index));
+			}
 			else {
 				if (changeBuffers) {
 					if (currentBuffer == elementTypeBuffer) {
