@@ -8,10 +8,10 @@ import com.webobjects.appserver.WOResponse;
 import com.webobjects.appserver._private.WODynamicElementCreationException;
 import com.webobjects.foundation.NSDictionary;
 
-import er.extensions.ERXWOTextField;
+import er.extensions.ERXWOText;
 
 /**
- * Focus text field is a convenience version of ERXWOTextField that provides
+ * Focus text is a convenience version of ERXWOText that provides
  * support for grabbing default focus via javascript.
  * 
  * @author mschrag
@@ -19,11 +19,11 @@ import er.extensions.ERXWOTextField;
  * @binding id the id the textfield
  * @binding selectAll if true, the text will default to be selected
  */
-public class FocusTextField extends ERXWOTextField {
+public class FocusText extends ERXWOText {
 	protected WOAssociation _id;
 	protected WOAssociation _selectAll;
 
-	public FocusTextField(String tagname, NSDictionary nsdictionary, WOElement woelement) {
+	public FocusText(String tagname, NSDictionary nsdictionary, WOElement woelement) {
 		super(tagname, nsdictionary, woelement);
 
 		_id = (WOAssociation) _associations.valueForKey("id");
@@ -42,15 +42,5 @@ public class FocusTextField extends ERXWOTextField {
 		String id = (String) _id.valueInComponent(component);
 		boolean selectAll = (_selectAll != null && _selectAll.booleanValueInComponent(component));
 		FocusTextField.appendFocusAndSelectToResponse(response, context, id, selectAll);
-	}
-
-	public static void appendFocusAndSelectToResponse(WOResponse response, WOContext context, String id, boolean selectAll) {
-		WOComponent component = context.component();
-		AjaxUtils.appendScriptHeader(response);
-		response.appendContentString("$('" + id + "').focus();");
-		if (selectAll) {
-			response.appendContentString("$('" + id + "').select();");
-		}
-		AjaxUtils.appendScriptFooter(response);
 	}
 }
