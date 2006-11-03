@@ -106,6 +106,9 @@ public class AjaxUpdateLink extends AjaxDynamicElement {
     NSMutableDictionary options = AjaxOption.createAjaxOptionsDictionary(ajaxOptionsArray, component, associations());
 
     options.setObjectForKey("'get'", "method");
+    if(options.objectForKey("evalScripts")==null) {
+    	options.setObjectForKey("true", "evalScripts");
+    }
 
     return options;
   }
@@ -166,7 +169,7 @@ public class AjaxUpdateLink extends AjaxDynamicElement {
       if (updateContainerID != null) {
         WOResponse response = AjaxUtils.createResponse(context);
         response.setHeader("text/javascript", "content-type");
-        response.setContent("new Ajax.Updater('" + updateContainerID + "', $('" + updateContainerID + "').getAttribute('updateUrl'), {" + " evalScripts: " + valueForBinding("evalScripts", "false", context.component()) + ", " + " insertion: " + valueForBinding("insertion", "Element.update", context.component()) + " " + "})");
+        response.setContent("new Ajax.Updater('" + updateContainerID + "', $('" + updateContainerID + "').getAttribute('updateUrl'), {" + " evalScripts: " + valueForBinding("evalScripts", "true", context.component()) + ", " + " insertion: " + valueForBinding("insertion", "Element.update", context.component()) + " " + "})");
         results = response;
         if (log.isDebugEnabled()) {
           log.debug("Response: " + response.contentString());
