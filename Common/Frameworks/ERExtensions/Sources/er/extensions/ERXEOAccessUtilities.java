@@ -1430,7 +1430,7 @@ public class ERXEOAccessUtilities {
  
         protected abstract int doPerform(EOAdaptorChannel channel);
 
-        public final int perform(EOEditingContext ec, String modelName) {
+        public int perform(EOEditingContext ec, String modelName) {
             boolean wasOpen = true;
             EOAdaptorChannel channel = null;
             int rows = 0;
@@ -1444,11 +1444,11 @@ public class ERXEOAccessUtilities {
                     if(!wasOpen) {
                         channel.openChannel();
                     }
+                    channel.adaptorContext().beginTransaction();
                     try {
-                        channel.adaptorContext().beginTransaction();
                         rows = doPerform(channel);
                         channel.adaptorContext().commitTransaction();
-                    } catch(EOGeneralAdaptorException ex) {
+                    } catch(RuntimeException ex) {
                         channel.adaptorContext().rollbackTransaction();
                         throw ex;
                     } 
