@@ -5,6 +5,7 @@
 // Created by ak on Mon Nov 05 2001
 //
 package er.extensions;
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -1284,6 +1285,44 @@ public class ERXStringUtilities {
       }
     }
     return equals;
+  }
+
+  /**
+   * Generate an MD5 hash from a String.
+   *
+   * @param str the string to hash
+   * @param encoding MD5 operates on byte arrays, so we need to know the encoding to getBytes as
+   * @return the MD5 sum of the bytes
+   * @exception IOException
+   */
+  public static byte[] md5(String str, String encoding) throws IOException {
+	byte[] bytes;
+	if (str == null) {
+		bytes = new byte[0];
+	}
+	else {
+	  	bytes = ERXFileUtilities.md5(new ByteArrayInputStream(str.getBytes(encoding)));
+	}
+	return bytes;
+  }
+
+  /**
+   * Generate an MD5 hash as hex from a String.
+   *
+   * @param str the string to hash
+   * @param encoding MD5 operates on byte arrays, so we need to know the encoding to getBytes as
+   * @return the MD5 sum of the bytes in a hex string
+   * @exception IOException
+   */
+  public static String md5Hex(String str, String encoding) throws IOException {
+	  String hexStr;
+	  if (str == null) {
+		  hexStr = null;
+	  }
+	  else {
+		  hexStr = ERXStringUtilities.byteArrayToHexString(ERXStringUtilities.md5(str, encoding));
+	  }
+	  return hexStr;
   }
 
 	// ##########################################################################################
