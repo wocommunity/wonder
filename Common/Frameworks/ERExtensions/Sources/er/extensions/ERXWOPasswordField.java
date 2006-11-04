@@ -1,5 +1,7 @@
 package er.extensions;
 
+import java.io.IOException;
+
 import com.webobjects.appserver.WOAssociation;
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
@@ -32,6 +34,7 @@ public class ERXWOPasswordField extends WOInput {
   private static final String HIDDEN_STRING = "_@secret@_";
 
   private WOAssociation _hiddenValue;
+  private WOAssociation _hashValue;
 
   public ERXWOPasswordField(String name, NSDictionary associations, WOElement template) {
     super("input", associations, null);
@@ -39,6 +42,7 @@ public class ERXWOPasswordField extends WOInput {
       throw new WODynamicElementCreationException("<ERXWOPasswordField> 'value' attribute not present or is a constant.");
     }
     _hiddenValue = (WOAssociation) _associations.removeObjectForKey("hiddenValue");
+    _hashValue = (WOAssociation) _associations.removeObjectForKey("hashValue");
   }
 
   protected String type() {
@@ -54,7 +58,16 @@ public class ERXWOPasswordField extends WOInput {
         if (value != null) {
           String hiddenValue = hiddenValueInContext(context, component);
           if (!value.equals(hiddenValue)) {
-            _value.setValue(value, component);
+        	  boolean hashValue = (_hashValue != null && _hashValue.booleanValueInComponent(component));
+        	  if (hashValue) {
+        		  try {
+        			  value = ERXStringUtilities.md5Hex(value, "UTF8");
+        		  }
+        		  catch (IOException e) {
+        			  throw new RuntimeException("Failed to hash password value.", e);
+        		  }
+        	  }
+        	  _value.setValue(value, component);
           }
         }
       }
