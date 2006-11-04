@@ -72,7 +72,7 @@ import er.extensions.ERXEOAccessUtilities.ChannelAction;
  * previous version number.
  * <p>
  * Startup migration runs in response to the
- * ApplicationWillFinishLaunchingNotification, so you should not access your
+ * ApplicationDidFinishLaunchingNotification, so you should not access your
  * EO's until after that notification is complete.
  * 
  * @property er.migration.migrateAtStartup if true, migrateToLatest is
