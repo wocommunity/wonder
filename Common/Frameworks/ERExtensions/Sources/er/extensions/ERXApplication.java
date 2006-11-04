@@ -244,9 +244,6 @@ public abstract class ERXApplication extends WOApplication implements ERXGracefu
      *      ready for accepting requests.
      */
     public final void finishInitialization(NSNotification n) {
-    	if (ERXMigrator.shouldMigrateAtStartup()) {
-    		migrator().migrateToLatest();
-    	}
         finishInitialization();
     }
 
@@ -259,6 +256,9 @@ public abstract class ERXApplication extends WOApplication implements ERXGracefu
      *      has finished launching and is ready for accepting requests.
      */    
     public final void didFinishLaunching(NSNotification n) {
+    	if (ERXMigrator.shouldMigrateAtStartup()) {
+    		migrator().migrateToLatest();
+    	}
         didFinishLaunching();
     }
     
