@@ -1,5 +1,0 @@
-EditString: WOTextField {
-        size = length;
-        value = value;
-	maxlength = d2wContext.maxLength;
-}

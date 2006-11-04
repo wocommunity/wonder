@@ -1,8 +1,0 @@
-Sources/er/yui/DivContainer.java:er.yui
-Sources/er/yui/YUIBody.java:er.yui
-Sources/er/yui/YUIFooter.java:er.yui
-Sources/er/yui/YUIHeader.java:er.yui
-Sources/er/yui/YUIPanel.java:er.yui
-Sources/er/yui/YUIShowPanelLink.java:er.yui
-Sources/er/yui/YUITooltip.java:er.yui
-Sources/er/yui/YUIUtils.java:er.yui

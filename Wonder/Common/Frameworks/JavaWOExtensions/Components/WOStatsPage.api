@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<wodefinitions>
-	<wo class="WOStatsPage" wocomponentcontent="false">
-
-		<binding name="password"/>
-		<binding name="username"/>
-	</wo>
-</wodefinitions>
