@@ -36,7 +36,7 @@
 
 @implementation RMModelGroupEditor
 
-+ (void) initialize {
++ (void)initialize {
     [NSValueTransformer setValueTransformer:[[RMEnabledColorTransformer alloc] init] forName:@"RMEnabledColorTransformer"];
 }
 
@@ -48,7 +48,7 @@
     return self;
 }
 
-- (void) dealloc {
+- (void)dealloc {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     [[modelListDrawer contentView] release]; // Top-level object!
     [modelListDrawer release];
@@ -85,7 +85,7 @@
     }
 }
 
-- (void) windowWillClose:(NSNotification *)notification {
+- (void)windowWillClose:(NSNotification *)notification {
     // In case a referenced document is closed without being saved, we need to
     // revert the document to its saved state.
     // When method is invoked, the relationship between model and its windowcontroller(s)
@@ -183,7 +183,12 @@
 }
 
 - (IBAction)addModels:(id)sender {
-    [[NSOpenPanel openPanel] beginSheetForDirectory:nil file:nil types:[NSArray arrayWithObject:@"d2wmodel"] modalForWindow:[self window] modalDelegate:self didEndSelector:@selector(openPanelDidEnd:returnCode: contextInfo:) contextInfo:NULL];
+    NSOpenPanel *openPanel = [NSOpenPanel openPanel];
+    
+    [openPanel setCanSelectHiddenExtension:YES];
+    [openPanel setTreatsFilePackagesAsDirectories:YES];
+    [openPanel setAllowsMultipleSelection:YES];
+    [openPanel beginSheetForDirectory:nil file:nil types:[NSArray arrayWithObject:@"d2wmodel"] modalForWindow:[self window] modalDelegate:self didEndSelector:@selector(openPanelDidEnd:returnCode: contextInfo:) contextInfo:NULL];
 }
 
 - (IBAction)showModel:(id)sender {
@@ -237,7 +242,7 @@
 }
 #endif
 
-- (void) removeDuplicateRulesAtIndexes:(NSIndexSet *)indexes {
+- (void)removeDuplicateRulesAtIndexes:(NSIndexSet *)indexes {
     // Performs search though all models. On results, show matching model 
     // documents to user, to allow him to undo, per model.
     NSMutableArray  *modelRules = [[self rules] mutableCopy];
