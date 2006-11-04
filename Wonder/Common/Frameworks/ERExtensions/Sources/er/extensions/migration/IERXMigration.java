@@ -1,6 +1,7 @@
 package er.extensions.migration;
 
 import com.webobjects.eoaccess.EOAdaptorChannel;
+import com.webobjects.eoaccess.EOModel;
 import com.webobjects.eocontrol.EOEditingContext;
 
 /**
@@ -35,10 +36,12 @@ public interface IERXMigration {
 	 *            the editing context you can perform EO operations with.
 	 * @param channel
 	 *            the channel to perform low level operations with
+	 * @param model
+	 *            the model being upgraded
 	 * @throws Throwable
 	 *             if something fails
 	 */
-	public void upgrade(EOEditingContext editingContext, EOAdaptorChannel channel) throws Throwable;
+	public void upgrade(EOEditingContext editingContext, EOAdaptorChannel channel, EOModel model) throws Throwable;
 
 	/**
 	 * Called when migrating the database from the next version to this version.
@@ -52,8 +55,10 @@ public interface IERXMigration {
 	 *            the editing context you can perform EO operations with.
 	 * @param channel
 	 *            the channel to perform low level operations with
+	 * @param model
+	 *            the model being downgraded
 	 * @throws Throwable
 	 *             if something fails
 	 */
-	public void downgrade(EOEditingContext editingContext, EOAdaptorChannel channel) throws Throwable;
+	public void downgrade(EOEditingContext editingContext, EOAdaptorChannel channel, EOModel model) throws Throwable;
 }
