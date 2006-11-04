@@ -44,6 +44,8 @@ import com.webobjects.foundation.NSSelector;
 import com.webobjects.foundation.NSTimestamp;
 import com.webobjects.jdbcadaptor.JDBCAdaptorException;
 
+import er.extensions.migration.ERXMigrator;
+
 /**
  *  ERXApplication is the abstract superclass of WebObjects applications
  *  built with the ER frameworks.<br/>
@@ -97,7 +99,7 @@ public abstract class ERXApplication extends WOApplication implements ERXGracefu
         ERXFrameworkPrincipal.setUpFrameworkPrincipalClass (ERXExtensions.class);
         WOApplication.main(argv, applicationClass);
     }
-
+    
     /**
      * Installs several bufixes and enhancements to WODynamicElements.
      * Sets the Context class name to "er.extensions.ERXWOContext" if
@@ -242,6 +244,9 @@ public abstract class ERXApplication extends WOApplication implements ERXGracefu
      *      ready for accepting requests.
      */
     public final void finishInitialization(NSNotification n) {
+    	if (ERXMigrator.shouldMigrateAtStartup()) {
+    		migrator().migrateToLatest();
+    	}
         finishInitialization();
     }
 
@@ -967,6 +972,10 @@ public abstract class ERXApplication extends WOApplication implements ERXGracefu
             ? Boolean.TRUE : Boolean.FALSE;
         }
         return _responseCompressionEnabled.booleanValue();
+    }
+    
+    public ERXMigrator migrator() {
+    	return new ERXMigrator(name() + "-" + number());
     }
 }
 
