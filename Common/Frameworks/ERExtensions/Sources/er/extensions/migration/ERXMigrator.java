@@ -198,10 +198,9 @@ public class ERXMigrator {
 		catch (Throwable t) {
 			throw new ERXMigrationFailedException("Failed to create migration lock class '" + migrationLockClassName + "'.", t);
 		}
-		String modelName = model.name();
-		String migrationClassPrefix = ERXProperties.stringForKeyWithDefault(modelName + ".MigrationClassPrefix", modelName);
+		String migrationClassPrefix = ERXProperties.stringForKeyWithDefault(model.name() + ".MigrationClassPrefix", model.name());
 		EOEditingContext editingContext = ERXEC.newEditingContext();
-		ERXMigrationAction migrations = new ERXMigrationAction(editingContext, database, modelName, migrationClassPrefix, targetVersion, _lockOwnerName);
+		ERXMigrationAction migrations = new ERXMigrationAction(editingContext, database, model, migrationClassPrefix, targetVersion, _lockOwnerName);
 		try {
 			migrations.perform(editingContext, model.name());
 		}
@@ -216,15 +215,15 @@ public class ERXMigrator {
 	protected static class ERXMigrationAction extends ChannelAction {
 		private EOEditingContext _editingContext;
 		private IERXMigrationLock _database;
-		private String _modelName;
+		private EOModel _model;
 		private String _migrationClassPrefix;
 		private int _targetVersion;
 		private String _lockOwnerName;
 
-		public ERXMigrationAction(EOEditingContext editingContext, IERXMigrationLock database, String modelName, String migrationClassPrefix, int targetVersion, String lockOwnerName) {
+		public ERXMigrationAction(EOEditingContext editingContext, IERXMigrationLock database, EOModel model, String migrationClassPrefix, int targetVersion, String lockOwnerName) {
 			_editingContext = editingContext;
 			_database = database;
-			_modelName = modelName;
+			_model = model;
 			_migrationClassPrefix = migrationClassPrefix;
 			_targetVersion = targetVersion;
 			_lockOwnerName = lockOwnerName;
@@ -233,7 +232,7 @@ public class ERXMigrator {
 		protected int doPerform(EOAdaptorChannel channel) {
 			boolean locked;
 			do {
-				locked = _database.tryLock(channel, _modelName, _lockOwnerName);
+				locked = _database.tryLock(channel, _model, _lockOwnerName);
 				if (!locked) {
 					try {
 						Thread.sleep(5 * 1000);
@@ -249,9 +248,9 @@ public class ERXMigrator {
 
 			if (locked) {
 				try {
-					int previousVersion = _database.versionNumber(channel, _modelName);
+					int previousVersion = _database.versionNumber(channel, _model);
 					if (ERXMigrator.log.isInfoEnabled()) {
-						ERXMigrator.log.info(_modelName + " is currently version " + previousVersion);
+						ERXMigrator.log.info(_model.name() + " is currently version " + previousVersion);
 					}
 					boolean done = false;
 					int direction = (previousVersion < _targetVersion) ? 1 : -1;
@@ -281,15 +280,15 @@ public class ERXMigrator {
 							try {
 								if (direction == 1) {
 									if (ERXMigrator.log.isInfoEnabled()) {
-										ERXMigrator.log.info("Upgrading " + _modelName + " to version " + nextVersion + " with migration '" + erMigrationClassName + "'");
+										ERXMigrator.log.info("Upgrading " + _model.name() + " to version " + nextVersion + " with migration '" + erMigrationClassName + "'");
 									}
-									migration.upgrade(_editingContext, channel);
+									migration.upgrade(_editingContext, channel, _model);
 								}
 								else if (direction == -1) {
 									if (ERXMigrator.log.isInfoEnabled()) {
-										ERXMigrator.log.info("Dowgrading " + _modelName + " to version " + nextVersion + " with migration '" + erMigrationClassName + "'");
+										ERXMigrator.log.info("Dowgrading " + _model.name() + " to version " + nextVersion + " with migration '" + erMigrationClassName + "'");
 									}
-									migration.downgrade(_editingContext, channel);
+									migration.downgrade(_editingContext,  channel, _model);
 								}
 								else {
 									throw new IllegalStateException("Unknown direction " + direction);
@@ -298,13 +297,13 @@ public class ERXMigrator {
 							catch (Throwable e) {
 								throw new ERXMigrationFailedException("Failed to perform migration of " + migration + ".", e);
 							}
-							_database.setVersionNumber(channel, _modelName, nextVersion);
+							_database.setVersionNumber(channel, _model, nextVersion);
 							_editingContext.saveChanges();
 							channel.adaptorContext().commitTransaction();
 							channel.adaptorContext().beginTransaction();
 							currentVersion = nextVersion;
 							if (ERXMigrator.log.isInfoEnabled()) {
-								ERXMigrator.log.info(_modelName + " is now version " + currentVersion);
+								ERXMigrator.log.info(_model.name() + " is now version " + currentVersion);
 							}
 						}
 						catch (ClassNotFoundException e) {
@@ -323,11 +322,11 @@ public class ERXMigrator {
 					}
 				}
 				finally {
-					_database.unlock(channel, _modelName);
+					_database.unlock(channel, _model);
 				}
 
 				if (ERXMigrator.log.isInfoEnabled()) {
-					ERXMigrator.log.info("Migration of " + _modelName + " is complete.");
+					ERXMigrator.log.info("Migration of " + _model.name() + " is complete.");
 				}
 			}
 			return 0;
