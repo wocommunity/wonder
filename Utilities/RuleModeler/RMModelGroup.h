@@ -13,6 +13,7 @@ extern NSString *RMModelGroupType;
 
 
 @class RMModel;
+@class Rule;
 
 
 @interface RMModelGroup : NSDocument {
@@ -27,5 +28,17 @@ extern NSString *RMModelGroupType;
 - (void)removeModels:(NSArray *)models;
 - (void)removeObjectFromModelContainersAtIndex:(unsigned)index;
 - (void)removeModelWithURL:(NSURL *)url relativePath:(BOOL)relativePath error:(NSError **)outError;
+
+- (NSArray *)rules;
+- (unsigned)countOfRules;
+- (Rule *)objectInRulesAtIndex:(unsigned)theIndex;
+- (void)getRules:(Rule **)objsPtr range:(NSRange)range;
+- (void)insertObject:(Rule *)obj inRulesAtIndex:(unsigned)theIndex;
+- (void)removeObjectFromRulesAtIndex:(unsigned)theIndex;
+- (void)replaceObjectInRulesAtIndex:(unsigned)theIndex withObject:(Rule *)obj;
+
+- (NSArray *) modelContainers;
+- (void) insertObject:(id)obj inModelContainersAtIndex:(unsigned)theIndex;
+- (void) removeObjectFromModelContainersAtIndex:(unsigned)theIndex;
 
 @end

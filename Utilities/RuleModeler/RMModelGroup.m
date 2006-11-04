@@ -61,7 +61,7 @@ NSString *RMModelGroupType = @"Rule Model Group";
 
 @implementation RMModelGroup
 
-- (id) init {
+- (id)init {
     self = [super init];
     if (self != nil) {
         _modelContainers = [[NSMutableArray alloc] init];
@@ -71,11 +71,8 @@ NSString *RMModelGroupType = @"Rule Model Group";
 }
 
 - (void)dealloc {
-    NSEnumerator    *modelEnum = [_modelContainers objectEnumerator];
-    id              eachModelContainer;
-    
-    while (eachModelContainer = [modelEnum nextObject]) {
-        [[eachModelContainer valueForKey:@"model"] removeObserver:self forKeyPath:@"rules"];
+    while([[self modelContainers] count] > 0){
+        [self removeObjectFromModelContainersAtIndex:0]; // Necessary, to ensure controllers will unregister as observers
     }
     [_rules release];
     [_modelContainers release];
@@ -207,12 +204,21 @@ NSString *RMModelGroupType = @"Rule Model Group";
 }
 
 - (void)insertObject:(id)modelContainer inModelContainersAtIndex:(unsigned)index {
-    NSMutableArray  *rules = [self mutableArrayValueForKey:@"rules"]; // We may not modify the _rules directly, else observers won't notice modifications - see Cocoa Bindings / Troubleshooting Cocoa Bindings
-    RMModel         *aModel = [modelContainer valueForKey:@"model"];
+    RMModel     *aModel = [modelContainer valueForKey:@"model"];
+    unsigned    oldRuleCount = [_rules count];
+    unsigned    newRulesCount = [[aModel rules] count];
+    NSIndexSet  *newRulesIndexSet = [[NSIndexSet alloc] initWithIndexesInRange:NSMakeRange(oldRuleCount, newRulesCount)];
     
     [_modelContainers insertObject:modelContainer atIndex:index];
-    [rules addObjectsFromArray:[aModel rules]];
+    // Performance optimization: we no longer modify the mutableArrayValueForKey:@"rules" result,
+    // because it will add objects one-by-one, thus triggering modification observation in all observers
+    // E.g. the tableView will reorder its content after each inserted object!
+    // By performing manual KVO notifications, we can work in batch: observers are notified only once
+    [self willChange:NSKeyValueChangeInsertion valuesAtIndexes:newRulesIndexSet forKey:@"rules"];
+    [_rules addObjectsFromArray:[aModel rules]];
+    [self didChange:NSKeyValueChangeInsertion valuesAtIndexes:newRulesIndexSet forKey:@"rules"];
     [aModel addObserver:self forKeyPath:@"rules" options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) context:NULL];
+    [newRulesIndexSet release];
 }
 
 - (RMModel *)addModelWithURL:(NSURL *)url relativePath:(BOOL)relativePath error:(NSError **)outError {
@@ -251,20 +257,62 @@ NSString *RMModelGroupType = @"Rule Model Group";
     [[self undoManager] setActionName:NSLocalizedString(@"Add Models", @"Undo-redo action name")]; // We can't say for sure how many models we added (due to potential removed duplicates, or unfound models)
 }
 
+- (NSArray *)rules
+{
+    return _rules;
+}
+
+- (unsigned)countOfRules
+{
+    return [_rules count];
+}
+
+- (Rule *)objectInRulesAtIndex:(unsigned)theIndex
+{
+    return [_rules objectAtIndex:theIndex];
+}
+
+- (void)getRules:(Rule **)objsPtr range:(NSRange)range {
+    [_rules getObjects:objsPtr range:range];
+}
+
+- (void)insertObject:(Rule *)obj inRulesAtIndex:(unsigned)theIndex
+{
+    [_rules insertObject:obj atIndex:theIndex];
+}
+
+- (void)removeObjectFromRulesAtIndex:(unsigned)theIndex
+{
+    [_rules removeObjectAtIndex:theIndex];
+}
+
+- (void)replaceObjectInRulesAtIndex:(unsigned)theIndex withObject:(Rule *)obj
+{
+    [_rules replaceObjectAtIndex:theIndex withObject:obj];
+}
+
 - (void)removeObjectFromModelContainersAtIndex:(unsigned)index {
-    NSMutableArray  *rules = [self mutableArrayValueForKey:@"rules"]; // We may not modify the _rules directly, else observers won't notice modifications - see Cocoa Bindings / Troubleshooting Cocoa Bindings
-    id              aModelContainer = [_modelContainers objectAtIndex:index];
-    RMModel         *aModel = [aModelContainer valueForKey:@"model"];
-    NSEnumerator    *ruleEnum = [rules objectEnumerator];
-    Rule            *eachRule;
+    id                  aModelContainer = [_modelContainers objectAtIndex:index];
+    RMModel             *aModel = [aModelContainer valueForKey:@"model"];
+    NSEnumerator        *ruleEnum = [_rules objectEnumerator];
+    Rule                *eachRule;
+    NSMutableIndexSet   *removedRulesIndexSet = [[NSMutableIndexSet alloc] init];
     
     [aModel removeObserver:self forKeyPath:@"rules"];
+    // Performance optimization: we no longer modify the mutableArrayValueForKey:@"rules" result,
+    // because it will remove objects one-by-one, thus triggering modification observation in all observers
+    // E.g. the tableView will reorder its content after each deletion!
+    // By performing manual KVO notifications, we can work in batch: observers are notified only once
     while (eachRule = [ruleEnum nextObject]) {
         if ([eachRule model] == aModel) {
-            [rules removeObjectIdenticalTo:eachRule];
+            [removedRulesIndexSet addIndex:[_rules indexOfObjectIdenticalTo:eachRule]]; // We can't remove them in batch, because there might be duplicate rules in other models; we can't use isEqual:.
         }
     }
+    [self willChange:NSKeyValueChangeRemoval valuesAtIndexes:removedRulesIndexSet forKey:@"rules"];
+    [_rules removeObjectsAtIndexes:removedRulesIndexSet];
+    [self didChange:NSKeyValueChangeRemoval valuesAtIndexes:removedRulesIndexSet forKey:@"rules"];
     [_modelContainers removeObjectAtIndex:index];
+    [removedRulesIndexSet release];
 }
 
 - (void)removeModelWithURL:(NSURL *)url relativePath:(BOOL)relativePath error:(NSError **)outError {
