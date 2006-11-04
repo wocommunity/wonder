@@ -7,6 +7,7 @@ import java.sql.Statement;
 import org.apache.log4j.Logger;
 
 import com.webobjects.eoaccess.EOAdaptorChannel;
+import com.webobjects.eoaccess.EOModel;
 import com.webobjects.jdbcadaptor.JDBCChannel;
 import com.webobjects.jdbcadaptor.JDBCContext;
 
@@ -28,7 +29,7 @@ public class ERXJDBCMigrationLock implements IERXMigrationLock {
 		_dbUpdaterTableName = ERXProperties.stringForKeyWithDefault("er.migration.JDBC.dbUpdaterTableName", "_DBUpdater");
 	}
 
-	public boolean tryLock(EOAdaptorChannel channel, String modelName, String lockOwnerName) {
+	public boolean tryLock(EOAdaptorChannel channel, EOModel model, String lockOwnerName) {
 		try {
 			int count;
 			JDBCChannel jdbcChannel = (JDBCChannel) channel;
@@ -42,17 +43,17 @@ public class ERXJDBCMigrationLock implements IERXMigrationLock {
 				Connection connection = context.connection();
 				Statement statement = connection.createStatement();
 				try {
-					count = statement.executeUpdate("update \"" + _dbUpdaterTableName + "\" set \"UpdateLock\" = 1, \"LockOwner\" = '" + lockOwnerName + "' where \"ModelName\" = '" + modelName + "' and (\"UpdateLock\" = 0 or \"LockOwner\" = '" + lockOwnerName + "')");
+					count = statement.executeUpdate("update \"" + _dbUpdaterTableName + "\" set \"UpdateLock\" = 1, \"LockOwner\" = '" + lockOwnerName + "' where \"ModelName\" = '" + model.name() + "' and (\"UpdateLock\" = 0 or \"LockOwner\" = '" + lockOwnerName + "')");
 					if (count == 0) {
-						ResultSet resultSet = statement.executeQuery("select \"UpdateLock\" from \"" + _dbUpdaterTableName + "\" where \"ModelName\" = '" + modelName + "'");
+						ResultSet resultSet = statement.executeQuery("select \"UpdateLock\" from \"" + _dbUpdaterTableName + "\" where \"ModelName\" = '" + model.name() + "'");
 						try {
-							ensureModelRowExists(modelName, resultSet.next() ? 1 : 0);
+							ensureModelRowExists(model, resultSet.next() ? 1 : 0);
 						}
 						finally {
 							resultSet.close();
 						}
 						if (ERXJDBCMigrationLock.log.isInfoEnabled()) {
-							ERXJDBCMigrationLock.log.info("Waiting on UpdateLock| for model '" + modelName + "' ...");
+							ERXJDBCMigrationLock.log.info("Waiting on UpdateLock| for model '" + model.name() + "' ...");
 						}
 					}
 				}
@@ -89,13 +90,13 @@ public class ERXJDBCMigrationLock implements IERXMigrationLock {
 		return createStatementBuffer.toString();
 	}
 
-	protected void ensureModelRowExists(String modelName, int count) {
+	protected void ensureModelRowExists(EOModel model, int count) {
 		if (count == 0) {
-			throw new ERXMigrationFailedException("Unable to migrate because there is not a row for the model '" + modelName + ".  Please execute:\ninsert into \"" + _dbUpdaterTableName + "\"(\"ModelName\", \"Version\", \"UpdateLock\", \"LockOwner\") values ('" + modelName + "', -1, 0, NULL)");
+			throw new ERXMigrationFailedException("Unable to migrate because there is not a row for the model '" + model.name() + ".  Please execute:\ninsert into \"" + _dbUpdaterTableName + "\"(\"ModelName\", \"Version\", \"UpdateLock\", \"LockOwner\") values ('" + model.name() + "', -1, 0, NULL)");
 		}
 	}
 
-	public void unlock(EOAdaptorChannel channel, String modelName) {
+	public void unlock(EOAdaptorChannel channel, EOModel model) {
 		JDBCChannel jdbcChannel = (JDBCChannel) channel;
 		boolean wasOpen = true;
 		if (!jdbcChannel.isOpen()) {
@@ -107,7 +108,7 @@ public class ERXJDBCMigrationLock implements IERXMigrationLock {
 			Connection connection = context.connection();
 			Statement statement = connection.createStatement();
 			try {
-				statement.executeUpdate("update \"" + _dbUpdaterTableName + "\" set \"UpdateLock\" = 0, \"LockOwner\" = NULL where \"ModelName\" = '" + modelName + "'");
+				statement.executeUpdate("update \"" + _dbUpdaterTableName + "\" set \"UpdateLock\" = 0, \"LockOwner\" = NULL where \"ModelName\" = '" + model.name() + "'");
 			}
 			finally {
 				statement.close();
@@ -126,7 +127,7 @@ public class ERXJDBCMigrationLock implements IERXMigrationLock {
 		}
 	}
 
-	public int versionNumber(EOAdaptorChannel channel, String modelName) {
+	public int versionNumber(EOAdaptorChannel channel, EOModel model) {
 		int version;
 		JDBCChannel jdbcChannel = (JDBCChannel) channel;
 		boolean wasOpen = true;
@@ -139,7 +140,7 @@ public class ERXJDBCMigrationLock implements IERXMigrationLock {
 			Connection connection = context.connection();
 			Statement statement = connection.createStatement();
 			try {
-				ResultSet results = statement.executeQuery("select \"Version\" from \"" + _dbUpdaterTableName + "\" where \"ModelName\" = '" + modelName + "'");
+				ResultSet results = statement.executeQuery("select \"Version\" from \"" + _dbUpdaterTableName + "\" where \"ModelName\" = '" + model.name() + "'");
 				try {
 					if (results.next()) {
 						version = results.getInt(1);
@@ -167,7 +168,7 @@ public class ERXJDBCMigrationLock implements IERXMigrationLock {
 		return version;
 	}
 
-	public void setVersionNumber(EOAdaptorChannel channel, String modelName, int versionNumber) {
+	public void setVersionNumber(EOAdaptorChannel channel, EOModel model, int versionNumber) {
 		JDBCChannel jdbcChannel = (JDBCChannel) channel;
 		boolean wasOpen = true;
 		if (!jdbcChannel.isOpen()) {
@@ -179,8 +180,8 @@ public class ERXJDBCMigrationLock implements IERXMigrationLock {
 			Connection connection = context.connection();
 			Statement statement = connection.createStatement();
 			try {
-				int count = statement.executeUpdate("update \"" + _dbUpdaterTableName + "\" set \"Version\" = " + versionNumber + " where \"ModelName\" = '" + modelName + "'");
-				ensureModelRowExists(modelName, count);
+				int count = statement.executeUpdate("update \"" + _dbUpdaterTableName + "\" set \"Version\" = " + versionNumber + " where \"ModelName\" = '" + model.name() + "'");
+				ensureModelRowExists(model, count);
 			}
 			finally {
 				statement.close();
