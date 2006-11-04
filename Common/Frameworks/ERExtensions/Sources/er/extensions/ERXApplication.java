@@ -974,6 +974,9 @@ public abstract class ERXApplication extends WOApplication implements ERXGracefu
         return _responseCompressionEnabled.booleanValue();
     }
     
+    /**
+     * Returns an ERXMigrator with the lock owner name "appname-instancenumber".
+     */
     public ERXMigrator migrator() {
     	return new ERXMigrator(name() + "-" + number());
     }
