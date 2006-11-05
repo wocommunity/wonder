@@ -1,9 +1,5 @@
 package er.extensions.migration;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.Statement;
-
 import org.apache.log4j.Logger;
 
 import com.webobjects.eoaccess.EOAdaptor;
@@ -13,10 +9,13 @@ import com.webobjects.eoaccess.EOEntity;
 import com.webobjects.eoaccess.EOModel;
 import com.webobjects.eoaccess.EOSQLExpression;
 import com.webobjects.eoaccess.EOSchemaGeneration;
+import com.webobjects.eocontrol.EOFetchSpecification;
+import com.webobjects.eocontrol.EOKeyValueQualifier;
+import com.webobjects.eocontrol.EOQualifier;
 import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSKeyValueCoding;
 import com.webobjects.foundation.NSMutableDictionary;
-import com.webobjects.jdbcadaptor.JDBCChannel;
-import com.webobjects.jdbcadaptor.JDBCContext;
 
 import er.extensions.ERXProperties;
 
@@ -40,41 +39,35 @@ public class ERXJDBCMigrationLock implements IERXMigrationLock {
 	public boolean tryLock(EOAdaptorChannel channel, EOModel model, String lockOwnerName) {
 		try {
 			int count;
-			JDBCChannel jdbcChannel = (JDBCChannel) channel;
 			boolean wasOpen = true;
-			if (!jdbcChannel.isOpen()) {
-				jdbcChannel.openChannel();
+			if (!channel.isOpen()) {
+				channel.openChannel();
 				wasOpen = false;
 			}
 			try {
-				JDBCContext context = (JDBCContext) channel.adaptorContext();
-				Connection connection = context.connection();
-				Statement statement = connection.createStatement();
-				try {
-					count = statement.executeUpdate("update \"" + _dbUpdaterTableName + "\" set \"UpdateLock\" = 1, \"LockOwner\" = '" + lockOwnerName + "' where \"ModelName\" = '" + model.name() + "' and (\"UpdateLock\" = 0 or \"LockOwner\" = '" + lockOwnerName + "')");
-					if (count == 0) {
-						ResultSet resultSet = statement.executeQuery("select \"UpdateLock\" from \"" + _dbUpdaterTableName + "\" where \"ModelName\" = '" + model.name() + "'");
-						try {
-							ensureModelRowExists(resultSet.next(), model);
-						}
-						finally {
-							resultSet.close();
-						}
-						if (ERXJDBCMigrationLock.log.isInfoEnabled()) {
-							ERXJDBCMigrationLock.log.info("Waiting on UpdateLock| for model '" + model.name() + "' ...");
-						}
+				EOModel dbUpdaterModel = dbUpdaterModelWithModel(model);
+				NSMutableDictionary row = new NSMutableDictionary();
+				row.setObjectForKey(new Integer(1), "UpdateLock");
+				row.setObjectForKey(lockOwnerName, "LockOwner");
+				EOEntity dbUpdaterEntity = dbUpdaterModel.entityNamed(_dbUpdaterTableName);
+				count = channel.updateValuesInRowsDescribedByQualifier(row, EOQualifier.qualifierWithQualifierFormat("ModelName = '" + model.name() + "' and (UpdateLock = 0 or LockOwner = '" + lockOwnerName + "')", null), dbUpdaterEntity);
+				channel.cancelFetch();
+				if (count == 0) {
+					EOFetchSpecification fetchSpec = new EOFetchSpecification(_dbUpdaterTableName, new EOKeyValueQualifier("ModelName", EOQualifier.QualifierOperatorEqual, model.name()), null);
+					channel.selectAttributes(new NSArray(dbUpdaterEntity.attributeNamed("UpdateLock")), fetchSpec, false, dbUpdaterEntity);
+					NSDictionary nextRow = channel.fetchRow();
+					ensureModelRowExists(nextRow != null, model);
+					channel.cancelFetch();
+					if (ERXJDBCMigrationLock.log.isInfoEnabled()) {
+						ERXJDBCMigrationLock.log.info("Waiting on UpdateLock| for model '" + model.name() + "' ...");
 					}
 				}
-				finally {
-					statement.close();
-				}
-				if (count > 0 && !connection.getAutoCommit()) {
-					connection.commit();
-				}
+				channel.adaptorContext().commitTransaction();
+				channel.adaptorContext().beginTransaction();
 			}
 			finally {
 				if (!wasOpen) {
-					jdbcChannel.closeChannel();
+					channel.closeChannel();
 				}
 			}
 			return count == 1;
@@ -87,11 +80,93 @@ public class ERXJDBCMigrationLock implements IERXMigrationLock {
 		}
 	}
 
+	public void unlock(EOAdaptorChannel channel, EOModel model) {
+		boolean wasOpen = true;
+		if (!channel.isOpen()) {
+			channel.openChannel();
+			wasOpen = false;
+		}
+		try {
+			EOModel dbUpdaterModel = dbUpdaterModelWithModel(model);
+			NSMutableDictionary row = new NSMutableDictionary();
+			row.setObjectForKey(new Integer(0), "UpdateLock");
+			row.setObjectForKey(NSKeyValueCoding.NullValue, "LockOwner");
+			EOEntity dbUpdaterEntity = dbUpdaterModel.entityNamed(_dbUpdaterTableName);
+			channel.updateValuesInRowsDescribedByQualifier(row, new EOKeyValueQualifier("ModelName", EOQualifier.QualifierOperatorEqual, model.name()), dbUpdaterEntity);
+			channel.cancelFetch();
+			channel.adaptorContext().commitTransaction();
+			channel.adaptorContext().beginTransaction();
+		}
+		catch (Exception e) {
+			throw new ERXMigrationFailedException("Failed to unlock " + _dbUpdaterTableName + " table.", e);
+		}
+		finally {
+			if (!wasOpen) {
+				channel.closeChannel();
+			}
+		}
+	}
+
+	public int versionNumber(EOAdaptorChannel channel, EOModel model) {
+		boolean wasOpen = true;
+		if (!channel.isOpen()) {
+			channel.openChannel();
+			wasOpen = false;
+		}
+		int version;
+		try {
+			EOModel dbUpdaterModel = dbUpdaterModelWithModel(model);
+			EOEntity dbUpdaterEntity = dbUpdaterModel.entityNamed(_dbUpdaterTableName);
+			EOFetchSpecification fetchSpec = new EOFetchSpecification(_dbUpdaterTableName, new EOKeyValueQualifier("ModelName", EOQualifier.QualifierOperatorEqual, model.name()), null);
+			channel.selectAttributes(new NSArray(dbUpdaterEntity.attributeNamed("Version")), fetchSpec, false, dbUpdaterEntity);
+			NSDictionary nextRow = channel.fetchRow();
+			if (nextRow == null) {
+				version = -1;
+			}
+			else {
+				Integer versionInteger = (Integer) nextRow.objectForKey("Version");
+				version = versionInteger.intValue();
+			}
+			channel.cancelFetch();
+		}
+		catch (Exception e) {
+			throw new ERXMigrationFailedException("Failed to get version number from " + _dbUpdaterTableName + " table.", e);
+		}
+		finally {
+			if (!wasOpen) {
+				channel.closeChannel();
+			}
+		}
+		return version;
+	}
+
+	public void setVersionNumber(EOAdaptorChannel channel, EOModel model, int versionNumber) {
+		boolean wasOpen = true;
+		if (!channel.isOpen()) {
+			channel.openChannel();
+			wasOpen = false;
+		}
+		try {
+			EOModel dbUpdaterModel = dbUpdaterModelWithModel(model);
+			NSMutableDictionary row = new NSMutableDictionary();
+			row.setObjectForKey(new Integer(versionNumber), "Version");
+			EOEntity dbUpdaterEntity = dbUpdaterModel.entityNamed(_dbUpdaterTableName);
+			int count = channel.updateValuesInRowsDescribedByQualifier(row, new EOKeyValueQualifier("ModelName", EOQualifier.QualifierOperatorEqual, model.name()), dbUpdaterEntity);
+			channel.cancelFetch();
+			ensureModelRowExists(count != 0, model);
+		}
+		catch (Exception e) {
+			throw new ERXMigrationFailedException("Failed to set version number of " + _dbUpdaterTableName + ".", e);
+		}
+		finally {
+			if (!wasOpen) {
+				channel.closeChannel();
+			}
+		}
+	}
+
 	protected EOModel dbUpdaterModelWithModel(EOModel model) {
 		EOModel dbUpdateModel = new EOModel();
-		dbUpdateModel.setConnectionDictionary(model.connectionDictionary());
-		dbUpdateModel.setAdaptorName(model.adaptorName());
-		EOAdaptor adaptor = EOAdaptor.adaptorWithModel(model);
 
 		EOEntity dbUpdaterEntity = new EOEntity();
 		dbUpdaterEntity.setExternalName(_dbUpdaterTableName);
@@ -104,7 +179,6 @@ public class ERXJDBCMigrationLock implements IERXMigrationLock {
 		modelNameAttribute.setClassName("java.lang.String");
 		modelNameAttribute.setWidth(100);
 		modelNameAttribute.setAllowsNull(false);
-		adaptor.assignExternalTypeForAttribute(modelNameAttribute);
 		dbUpdaterEntity.addAttribute(modelNameAttribute);
 
 		EOAttribute versionAttribute = new EOAttribute();
@@ -112,7 +186,6 @@ public class ERXJDBCMigrationLock implements IERXMigrationLock {
 		versionAttribute.setColumnName("Version");
 		versionAttribute.setClassName("java.lang.Number");
 		versionAttribute.setAllowsNull(false);
-		adaptor.assignExternalTypeForAttribute(versionAttribute);
 		dbUpdaterEntity.addAttribute(versionAttribute);
 
 		EOAttribute updateLockAttribute = new EOAttribute();
@@ -120,7 +193,6 @@ public class ERXJDBCMigrationLock implements IERXMigrationLock {
 		updateLockAttribute.setColumnName("UpdateLock");
 		updateLockAttribute.setClassName("java.lang.Number");
 		updateLockAttribute.setAllowsNull(false);
-		adaptor.assignExternalTypeForAttribute(updateLockAttribute);
 		dbUpdaterEntity.addAttribute(updateLockAttribute);
 
 		EOAttribute lockOwnerAttribute = new EOAttribute();
@@ -129,9 +201,15 @@ public class ERXJDBCMigrationLock implements IERXMigrationLock {
 		lockOwnerAttribute.setClassName("java.lang.String");
 		lockOwnerAttribute.setWidth(100);
 		lockOwnerAttribute.setAllowsNull(true);
-		adaptor.assignExternalTypeForAttribute(lockOwnerAttribute);
 		dbUpdaterEntity.addAttribute(lockOwnerAttribute);
 
+		dbUpdateModel.setConnectionDictionary(model.connectionDictionary());
+		dbUpdateModel.setAdaptorName(model.adaptorName());
+		EOAdaptor adaptor = EOAdaptor.adaptorWithModel(model);
+		adaptor.assignExternalTypeForAttribute(modelNameAttribute);
+		adaptor.assignExternalTypeForAttribute(versionAttribute);
+		adaptor.assignExternalTypeForAttribute(updateLockAttribute);
+		adaptor.assignExternalTypeForAttribute(lockOwnerAttribute);
 		return dbUpdateModel;
 	}
 
@@ -166,110 +244,6 @@ public class ERXJDBCMigrationLock implements IERXMigrationLock {
 	protected void ensureModelRowExists(boolean exists, EOModel model) {
 		if (!exists) {
 			throw new ERXMigrationFailedException("Unable to migrate because there is not a row for the model '" + model.name() + ".  Please execute:\n" + dbUpdaterInsertStatement(model, new Integer(-1), new Integer(0), null));
-		}
-	}
-
-	public void unlock(EOAdaptorChannel channel, EOModel model) {
-		JDBCChannel jdbcChannel = (JDBCChannel) channel;
-		boolean wasOpen = true;
-		if (!jdbcChannel.isOpen()) {
-			jdbcChannel.openChannel();
-			wasOpen = false;
-		}
-		try {
-			JDBCContext context = (JDBCContext) channel.adaptorContext();
-			Connection connection = context.connection();
-			Statement statement = connection.createStatement();
-			try {
-				statement.executeUpdate("update \"" + _dbUpdaterTableName + "\" set \"UpdateLock\" = 0, \"LockOwner\" = NULL where \"ModelName\" = '" + model.name() + "'");
-			}
-			finally {
-				statement.close();
-			}
-			if (!connection.getAutoCommit()) {
-				connection.commit();
-			}
-		}
-		catch (Exception e) {
-			throw new ERXMigrationFailedException("Failed to unlock " + _dbUpdaterTableName + " table.", e);
-		}
-		finally {
-			if (!wasOpen) {
-				jdbcChannel.closeChannel();
-			}
-		}
-	}
-
-	public int versionNumber(EOAdaptorChannel channel, EOModel model) {
-		int version;
-		JDBCChannel jdbcChannel = (JDBCChannel) channel;
-		boolean wasOpen = true;
-		if (!jdbcChannel.isOpen()) {
-			jdbcChannel.openChannel();
-			wasOpen = false;
-		}
-		try {
-			JDBCContext context = (JDBCContext) channel.adaptorContext();
-			Connection connection = context.connection();
-			Statement statement = connection.createStatement();
-			try {
-				ResultSet results = statement.executeQuery("select \"Version\" from \"" + _dbUpdaterTableName + "\" where \"ModelName\" = '" + model.name() + "'");
-				try {
-					if (results.next()) {
-						version = results.getInt(1);
-					}
-					else {
-						version = -1;
-					}
-				}
-				finally {
-					results.close();
-				}
-			}
-			finally {
-				statement.close();
-			}
-		}
-		catch (Exception e) {
-			throw new ERXMigrationFailedException("Failed to get version number from " + _dbUpdaterTableName + " table.", e);
-		}
-		finally {
-			if (!wasOpen) {
-				jdbcChannel.closeChannel();
-			}
-		}
-		return version;
-	}
-
-	public void setVersionNumber(EOAdaptorChannel channel, EOModel model, int versionNumber) {
-		JDBCChannel jdbcChannel = (JDBCChannel) channel;
-		boolean wasOpen = true;
-		if (!jdbcChannel.isOpen()) {
-			jdbcChannel.openChannel();
-			wasOpen = false;
-		}
-		try {
-			JDBCContext context = (JDBCContext) channel.adaptorContext();
-			Connection connection = context.connection();
-			Statement statement = connection.createStatement();
-			try {
-				int count = statement.executeUpdate("update \"" + _dbUpdaterTableName + "\" set \"Version\" = " + versionNumber + " where \"ModelName\" = '" + model.name() + "'");
-				ensureModelRowExists(count != 0, model);
-			}
-			finally {
-				statement.close();
-			}
-			if (!connection.getAutoCommit()) {
-				connection.commit();
-			}
-		}
-		catch (Exception e) {
-			throw new ERXMigrationFailedException("Failed to set version number of " + _dbUpdaterTableName + ".", e);
-		}
-		finally {
-			if (!wasOpen) {
-				jdbcChannel.closeChannel();
-			}
 		}
 	}
 }
