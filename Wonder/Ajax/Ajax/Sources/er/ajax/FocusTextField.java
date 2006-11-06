@@ -18,10 +18,12 @@ import er.extensions.ERXWOTextField;
  * 
  * @binding id the id the textfield
  * @binding selectAll if true, the text will default to be selected
+ * @binding focus if false, focus will not be grabbed
  */
 public class FocusTextField extends ERXWOTextField {
 	protected WOAssociation _id;
 	protected WOAssociation _selectAll;
+	protected WOAssociation _focus;
 
 	public FocusTextField(String tagname, NSDictionary nsdictionary, WOElement woelement) {
 		super(tagname, nsdictionary, woelement);
@@ -31,6 +33,7 @@ public class FocusTextField extends ERXWOTextField {
 			throw new WODynamicElementCreationException("<" + getClass().getName() + "> id is a required binding.");
 		}
 		_selectAll = (WOAssociation) _associations.removeObjectForKey("selectAll");
+		_focus = (WOAssociation) _associations.removeObjectForKey("focus");
 	}
 
 	public void appendToResponse(WOResponse response, WOContext context) {
@@ -39,9 +42,12 @@ public class FocusTextField extends ERXWOTextField {
 		super.appendToResponse(response, context);
 
 		WOComponent component = context.component();
-		String id = (String) _id.valueInComponent(component);
-		boolean selectAll = (_selectAll != null && _selectAll.booleanValueInComponent(component));
-		FocusTextField.appendFocusAndSelectToResponse(response, context, id, selectAll);
+		boolean focus = (_focus == null || _focus.booleanValueInComponent(component));
+		if (focus) {
+			String id = (String) _id.valueInComponent(component);
+			boolean selectAll = (_selectAll != null && _selectAll.booleanValueInComponent(component));
+			FocusTextField.appendFocusAndSelectToResponse(response, context, id, selectAll);
+		}
 	}
 
 	public static void appendFocusAndSelectToResponse(WOResponse response, WOContext context, String id, boolean selectAll) {
