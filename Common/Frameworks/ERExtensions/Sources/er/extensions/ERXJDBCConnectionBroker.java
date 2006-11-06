@@ -22,6 +22,8 @@ import com.webobjects.eocontrol.EOObjectStore;
 import com.webobjects.eocontrol.EOObjectStoreCoordinator;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSForwardException;
+import com.webobjects.jdbcadaptor.JDBCAdaptor;
+import com.webobjects.jdbcadaptor.JDBCPlugIn;
 
 /**
  * Creates and manages a pool of JDBC connections. Useful for SQL statements without
@@ -154,6 +156,13 @@ public class ERXJDBCConnectionBroker {
         dbServer = (String) dict.objectForKey("URL");
         dbLogin = (String) dict.objectForKey("username");
         dbPassword = (String) dict.objectForKey("password");
+        
+        if (dbDriver == null || dbDriver.length() == 0) {
+        	JDBCAdaptor jdbcAdaptor = new JDBCAdaptor("JDBC");
+        	jdbcAdaptor.setConnectionDictionary(dict);
+        	JDBCPlugIn plugIn = jdbcAdaptor.plugIn();
+        	dbDriver = plugIn.defaultDriverName();
+        }
         
         minimumConnections = ERXValueUtilities.intValueWithDefault(
                 (String) dict.objectForKey("minConnections"), 1);
@@ -387,11 +396,11 @@ public class ERXJDBCConnectionBroker {
     private Connection createConnection() throws SQLException {
         try {
             Class.forName(dbDriver);
-            return DriverManager.getConnection(dbServer, dbLogin, dbPassword);
+            Connection conn = DriverManager.getConnection(dbServer, dbLogin, dbPassword);
+            return conn;
         } catch (ClassNotFoundException e2) {
-            NSForwardException._runtimeExceptionForThrowable(e2);
+            throw NSForwardException._runtimeExceptionForThrowable(e2);
         }
-        return null;
     }
 
     private synchronized void createWrapper() throws SQLException {
