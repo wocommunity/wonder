@@ -6,6 +6,7 @@
 		<binding name = "value"/>
 		<binding name = "disabled"/>
 		<binding name = "selectAll"/>
+		<binding name = "focus"/>
 
     <validation message = "&apos;id&apos; is a required binding.">
 	    <unbound name = "id"/>
