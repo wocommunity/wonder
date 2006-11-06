@@ -11,8 +11,10 @@ Value : WOString {
 	value = value;
 }
 
-ValueField : WOTextField {
+ValueField : FocusTextField {
 	value = value;
+	id = "valueField";
+	selectAll = true;
 }
 
 View : ERXWOTemplate {
