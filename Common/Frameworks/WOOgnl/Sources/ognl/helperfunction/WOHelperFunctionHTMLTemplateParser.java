@@ -143,7 +143,11 @@ public class WOHelperFunctionHTMLTemplateParser extends WOParser implements WOHe
 		if (shortcutType != null) {
 			elementType = shortcutType;
 		}
-		String elementName = "_" + elementType + "_" + _inlineBindingCount;
+		String elementName;
+		synchronized (this) {
+			elementName = "_" + elementType + "_" + _inlineBindingCount;
+			_inlineBindingCount ++;
+		}
 		WODeclaration declaration = new WODeclaration(elementName, elementType, associations);
 		_declarations.setObjectForKey(declaration, elementName);
 		processDeclaration(declaration);
