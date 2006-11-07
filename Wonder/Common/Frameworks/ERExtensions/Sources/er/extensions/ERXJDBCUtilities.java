@@ -17,6 +17,7 @@ import java.util.Enumeration;
 
 import org.apache.log4j.Logger;
 
+import com.webobjects.eoaccess.EOAdaptorChannel;
 import com.webobjects.eoaccess.EOAttribute;
 import com.webobjects.eoaccess.EOEntity;
 import com.webobjects.eoaccess.EOModel;
@@ -28,6 +29,7 @@ import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation.NSMutableSet;
 import com.webobjects.foundation.NSTimestamp;
 import com.webobjects.foundation.NSTimestampFormatter;
+import com.webobjects.jdbcadaptor.JDBCContext;
 
 public class ERXJDBCUtilities {
 
@@ -341,5 +343,37 @@ public class ERXJDBCUtilities {
             log.error("could not commit destCon", e);
         }
     }
-    
+
+    /**
+     * Shortcut to java.sql.Statement.executeUpdate(..) that operates on an EOAdaptorChannel.
+     * 
+     * @param channel the JDBCChannel to work with
+     * @param sql the sql to execute
+     * @return the number of rows updated
+     * @throws SQLException if there is a problem
+     */
+    public static int executeUpdate(EOAdaptorChannel channel, String sql) throws SQLException {
+		int rowsUpdated;
+		boolean wasOpen = channel.isOpen();
+		if (!wasOpen) {
+			channel.openChannel();
+		}
+		Connection conn = ((JDBCContext) channel.adaptorContext()).connection();
+		try {
+			Statement stmt = conn.createStatement();
+			try {
+				rowsUpdated = stmt.executeUpdate(sql);
+			}
+			finally {
+				stmt.close();
+			}
+		}
+		finally {
+			if (!wasOpen) {
+				channel.closeChannel();
+			}
+		}
+		return rowsUpdated;
+	}
+
 }
