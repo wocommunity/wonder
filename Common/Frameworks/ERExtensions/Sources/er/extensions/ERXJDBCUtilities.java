@@ -1,5 +1,6 @@
 package er.extensions;
 
+import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -376,4 +377,106 @@ public class ERXJDBCUtilities {
 		return rowsUpdated;
 	}
 
+    /**
+     * Splits the given sqlscript and executes each of the statements in a single transaction
+     * 
+     * @param channel the JDBCChannel to work with
+     * @param sqlScript the sql script to execute
+     * @return the number of rows updated
+     * @throws SQLException if there is a problem
+     */
+    public static int executeUpdateScript(EOAdaptorChannel channel, String sqlScript) throws SQLException {
+		int rowsUpdated = 0;
+		boolean wasOpen = channel.isOpen();
+		if (!wasOpen) {
+			channel.openChannel();
+		}
+		Connection conn = ((JDBCContext) channel.adaptorContext()).connection();
+		try {
+			Statement stmt = conn.createStatement();
+			try {
+				NSArray sqlStatements = ERXJDBCUtilities.splitSQLStatements(sqlScript);
+				Enumeration sqlStatementsEnum = sqlStatements.objectEnumerator();
+				while (sqlStatementsEnum.hasMoreElements()) {
+					String sql = (String)sqlStatementsEnum.nextElement();
+					rowsUpdated += stmt.executeUpdate(sql);
+				}
+			}
+			finally {
+				stmt.close();
+			}
+		}
+		finally {
+			if (!wasOpen) {
+				channel.closeChannel();
+			}
+		}
+		return rowsUpdated;
+	}
+
+    /**
+     * Splits semicolon-separate sql statements into an array of strings
+     * 
+     * @param sql a multi-line sql statement
+     * @return an array of sql statements
+     */
+    public static NSArray splitSQLStatements(String sql) {
+    	NSMutableArray statements = new NSMutableArray();
+    	if (sql != null) {
+	    	StringBuffer statementBuffer = new StringBuffer();
+	    	int length = sql.length();
+	    	boolean inQuotes = false;
+	    	for (int i = 0; i < length; i ++) {
+	    		char ch = sql.charAt(i);
+	    		if (ch == '\r' || ch == '\n') {
+	    			// ignore
+	    		}
+	    		else if (!inQuotes && ch == ';') {
+	    			String statement = statementBuffer.toString().trim();
+	    			if (statement.length() > 0) {
+	    				statements.addObject(statement);
+	    			}
+	    			statementBuffer.setLength(0);
+	    		}
+	    		else {
+	    			if (ch == '\'') {
+	    				inQuotes = !inQuotes;
+	    			}
+	    			statementBuffer.append(ch);
+	    		}
+	    	}
+	    	String statement = statementBuffer.toString().trim();
+	    	if (statement.length() > 0) {
+	    		statements.addObject(statement);
+	    	}
+    	}
+    	return statements;
+    }
+    
+    /**
+     * Splits the SQL statements from the given input stream
+     * @param is the input stream to read from
+     * @return an array of SQL statements
+     * @throws IOException if there is a problem reading the stream
+     */
+    public static NSArray splitSQLStatementsFromInputStream(InputStream is) throws IOException {
+    	return ERXJDBCUtilities.splitSQLStatements(ERXStringUtilities.stringFromInputStream(is));
+    }
+    
+    /**
+     * Splits the SQL statements from the given file.
+     * @param f the file to read from
+     * @return an array of SQL statements
+     * @throws IOException if there is a problem reading the stream
+     */
+    public static NSArray splitSQLStatementsFromFile(File f) throws IOException {
+    	FileInputStream fis = new FileInputStream(f);
+    	try {
+    		BufferedInputStream bis = new BufferedInputStream(fis);
+    		return ERXJDBCUtilities.splitSQLStatementsFromInputStream(bis);
+    	}
+    	finally {
+    		fis.close();
+    	}
+    }
 }
