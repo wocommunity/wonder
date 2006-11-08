@@ -17,12 +17,13 @@ import ognl.OgnlException;
 import ognl.OgnlRuntime;
 import ognl.helperfunction.WOHelperFunctionHTMLTemplateParser;
 
+import org.apache.log4j.Logger;
+
 import com.webobjects.appserver.WOApplication;
 import com.webobjects.appserver.WOAssociation;
 import com.webobjects.appserver._private.WOParser;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
-import com.webobjects.foundation.NSLog;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation.NSNotification;
@@ -31,6 +32,7 @@ import com.webobjects.foundation.NSSelector;
 import com.webobjects.foundation.NSSet;
 
 public class WOOgnl {
+	public static Logger log = Logger.getLogger(WOOgnl.class);
 
     public static final String DefaultWOOgnlBindingFlag = "~";
 
@@ -45,7 +47,7 @@ public class WOOgnl {
                                                              WOApplication.ApplicationWillFinishLaunchingNotification,
                                                              null);
         } catch (Exception e) {
-            NSLog.err.appendln("Exception: " + e.getMessage());
+        	WOOgnl.log.error("Failed to configure WOOgnl.", e);
         }
     }
 
@@ -59,8 +61,9 @@ public class WOOgnl {
 
     protected static WOOgnl _factory;
     public static WOOgnl factory() {
-        if (_factory == null)
+        if (_factory == null) {
             _factory = new WOOgnl();
+        }
         return _factory;
     }
     public static void setFactory(WOOgnl factory) { _factory = factory; }
@@ -71,8 +74,9 @@ public class WOOgnl {
 
     public Hashtable newDefaultContext() {
         Hashtable h = new Hashtable();
-        if (classResolver() != null)
+        if (classResolver() != null) {
             h.put("classResolver", classResolver());
+        }
         return h;
     }
     
@@ -115,11 +119,12 @@ public class WOOgnl {
                         //if (log.isDebugEnabled())
                         //    log.debug("Constructing Ognl association for binding key(s): "
                         //              + (keys.count() == 1 ? keys.lastObject() : keys) + " expression: " + ognlExpression);
-                        if (keys.count() == 1)
+                        if (keys.count() == 1) {
                             associations.setObjectForKey(ognlAssociation, keys.lastObject());
-                        else {
-                            for (Enumeration ee = keys.objectEnumerator(); ee.hasMoreElements();)
-                                associations.setObjectForKey(ognlAssociation, e.nextElement());                                
+                        }else {
+                            for (Enumeration ee = keys.objectEnumerator(); ee.hasMoreElements();) {
+                                associations.setObjectForKey(ognlAssociation, e.nextElement());    
+                            }
                         }
                     }
                 }
@@ -132,7 +137,7 @@ public class WOOgnl {
         try {
             value = Ognl.getValue(expression, newDefaultContext(), obj);
         } catch (OgnlException ex) {
-            throw new IllegalStateException(ex.getMessage());
+            throw new IllegalStateException("Failed to get value '" + expression + "' on " + obj, ex);
         }
         return value;
     } 
@@ -141,7 +146,7 @@ public class WOOgnl {
         try {
             Ognl.setValue(expression, newDefaultContext(), obj, value);
         } catch (OgnlException ex) {
-            throw new IllegalStateException(ex.getMessage());
+            throw new IllegalStateException("Failed to set value '" + expression + "' on " + obj, ex);
         }
     } 
     
