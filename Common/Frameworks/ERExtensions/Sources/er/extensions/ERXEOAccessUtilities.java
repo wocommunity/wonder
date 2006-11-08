@@ -588,21 +588,13 @@ public class ERXEOAccessUtilities {
      * @return a <code>String</code> containing SQL statements to create
      *         tables
      */
-    public static String createSchemaSQLForEntitiesInModelWithNameAndOptions(NSArray entities, String modelName,
-            NSDictionary optionsCreate) {
-        // get the JDBCAdaptor
+    public static String createSchemaSQLForEntitiesInModelWithNameAndOptions(NSArray entities, String modelName, NSDictionary optionsCreate) {
         EODatabaseContext dc = EOUtilities.databaseContextForModelNamed(ERXEC.newEditingContext(), modelName);
-        EOAdaptorContext ac = dc.adaptorContext();
-        // ak: stupid trick to get around having to link to JDBCAdaptor
-        EOSynchronizationFactory sf = (EOSynchronizationFactory) NSKeyValueCodingAdditions.Utility.valueForKeyPath(ac,
-                "adaptor.plugIn.createSynchronizationFactory");
-        EOModel m = modelGroup(null).modelNamed(modelName);
-        Enumeration e = m.entities().objectEnumerator();
-        entities = entities == null ? new NSMutableArray() : entities;
-
         if (entities == null) {
-            NSMutableArray ar = new NSMutableArray();
-            while (e.hasMoreElements()) {
+        	EOModel m = modelGroup(null).modelNamed(modelName);
+        	Enumeration e = m.entities().objectEnumerator();
+        	NSMutableArray ar = new NSMutableArray();
+        	while (e.hasMoreElements()) {
                 EOEntity currentEntity = (EOEntity) e.nextElement();
                 if ((currentEntity.name().startsWith("EO") && currentEntity.name().endsWith("Prototypes"))) {
                     // we do not want to add EOXXXPrototypes entities
@@ -615,9 +607,25 @@ public class ERXEOAccessUtilities {
             }
             entities = ar;
         }
+        return ERXEOAccessUtilities.createSchemaSQLForEntitiesWithOptions(entities, dc, optionsCreate);
+    }
+    
+    /**
+     * Creates the schema sql for a set of entities.
+     * 
+     * @param entities the entities to create sql for
+     * @param databaseContext the database context to use
+     * @param optionsCreate the options (@see createSchemaSQLForEntitiesInModelWithNameAndOptions)
+     * @return a sql script
+     */
+    public static String createSchemaSQLForEntitiesWithOptions(NSArray entities, EODatabaseContext databaseContext, NSDictionary optionsCreate) {
+        // get the JDBCAdaptor
+        EOAdaptorContext ac = databaseContext.adaptorContext();
+        // ak: stupid trick to get around having to link to JDBCAdaptor
+        EOSynchronizationFactory sf = (EOSynchronizationFactory) NSKeyValueCodingAdditions.Utility.valueForKeyPath(ac, "adaptor.plugIn.createSynchronizationFactory");
         return sf.schemaCreationScriptForEntities(entities, optionsCreate);
     }
-
+    
     /**
      * creates SQL to create tables for the specified Entities. This can be used
      * with EOUtilities rawRowsForSQL method to create the tables.
@@ -656,6 +664,48 @@ public class ERXEOAccessUtilities {
         optionsCreate.setObjectForKey("NO", EOSchemaGeneration.CreateDatabaseKey);
         optionsCreate.setObjectForKey("NO", EOSchemaGeneration.DropDatabaseKey);
         return createSchemaSQLForEntitiesInModelWithNameAndOptions(entities, modelName, optionsCreate);
+    }
+
+    /**
+     * creates SQL to create tables for the specified Entities. This can be used
+     * with EOUtilities rawRowsForSQL method to create the tables.
+     * 
+     * @param entities
+     *            a NSArray containing the entities for which create table
+     *            statements should be generated or null if all entitites in the
+     *            model should be used.
+     * @param databaseContext
+     *            the databaseContext
+     *            
+     *            <br/><br/>This method uses the
+     *            following defaults options:
+     *            <ul>
+     *            <li>EOSchemaGeneration.DropTablesKey=NO</li>
+     *            <li>EOSchemaGeneration.DropPrimaryKeySupportKey=NO</li>
+     *            <li>EOSchemaGeneration.CreateTablesKey=YES</li>
+     *            <li>EOSchemaGeneration.CreatePrimaryKeySupportKey=YES</li>
+     *            <li>EOSchemaGeneration.PrimaryKeyConstraintsKey=YES</li>
+     *            <li>EOSchemaGeneration.ForeignKeyConstraintsKey=YES</li>
+     *            <li>EOSchemaGeneration.CreateDatabaseKey=NO</li>
+     *            <li>EOSchemaGeneration.DropDatabaseKey=NO</li>
+     *            </ul>
+     *            <br/><br>
+     *            Possible values are <code>YES</code> and <code>NO</code>
+     * 
+     * @return a <code>String</code> containing SQL statements to create
+     *         tables
+     */
+    public static String createSchemaSQLForEntitiesInDatabaseContext(NSArray entities, EODatabaseContext databaseContext) {
+        NSMutableDictionary optionsCreate = new NSMutableDictionary();
+        optionsCreate.setObjectForKey("NO", EOSchemaGeneration.DropTablesKey);
+        optionsCreate.setObjectForKey("NO", EOSchemaGeneration.DropPrimaryKeySupportKey);
+        optionsCreate.setObjectForKey("YES", EOSchemaGeneration.CreateTablesKey);
+        optionsCreate.setObjectForKey("YES", EOSchemaGeneration.CreatePrimaryKeySupportKey);
+        optionsCreate.setObjectForKey("YES", EOSchemaGeneration.PrimaryKeyConstraintsKey);
+        optionsCreate.setObjectForKey("YES", EOSchemaGeneration.ForeignKeyConstraintsKey);
+        optionsCreate.setObjectForKey("NO", EOSchemaGeneration.CreateDatabaseKey);
+        optionsCreate.setObjectForKey("NO", EOSchemaGeneration.DropDatabaseKey);
+        return createSchemaSQLForEntitiesWithOptions(entities, databaseContext, optionsCreate);
     }
 
     public static String createIndexSQLForEntitiesForOracle(NSArray entities) {
