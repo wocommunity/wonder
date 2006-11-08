@@ -17,6 +17,7 @@ import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSKeyValueCoding;
 import com.webobjects.foundation.NSMutableDictionary;
 
+import er.extensions.ERXJDBCUtilities;
 import er.extensions.ERXProperties;
 
 /**
@@ -24,7 +25,13 @@ import er.extensions.ERXProperties;
  * 
  * @property er.migration.JDBC.dbUpdaterTableName the name of the db update
  *           version table (defaults to _DBUpdater)
- * 
+ * @property er.migration.createTablesIfNecessary if true, the tables and model
+ *           rows will be created automatically. *ONLY SET THIS IF YOU ARE
+ *           RUNNING IN DEVELOPMENT MODE OR WITH A SINGLE INSTANCE*. If you are
+ *           running multiple instances, the instances will not be able to
+ *           acquire locks properly and you may end up with multiple instances
+ *           attempting to create lock tables and/or failing to startup
+ *           properly.
  * @author mschrag
  */
 public class ERXJDBCMigrationLock implements IERXMigrationLock {
@@ -36,7 +43,15 @@ public class ERXJDBCMigrationLock implements IERXMigrationLock {
 		_dbUpdaterTableName = ERXProperties.stringForKeyWithDefault("er.migration.JDBC.dbUpdaterTableName", "_DBUpdater");
 	}
 
+	protected boolean createIfMissing() {
+		return ERXProperties.booleanForKeyWithDefault("er.migration.createTablesIfNecessary", false);
+	}
+
 	public boolean tryLock(EOAdaptorChannel channel, EOModel model, String lockOwnerName) {
+		return _tryLock(channel, model, lockOwnerName, createIfMissing());
+	}
+
+	public boolean _tryLock(EOAdaptorChannel channel, EOModel model, String lockOwnerName, boolean createTableIfMissing) {
 		try {
 			int count;
 			boolean wasOpen = true;
@@ -55,9 +70,23 @@ public class ERXJDBCMigrationLock implements IERXMigrationLock {
 				if (count == 0) {
 					EOFetchSpecification fetchSpec = new EOFetchSpecification(_dbUpdaterTableName, new EOKeyValueQualifier("ModelName", EOQualifier.QualifierOperatorEqual, model.name()), null);
 					channel.selectAttributes(new NSArray(dbUpdaterEntity.attributeNamed("UpdateLock")), fetchSpec, false, dbUpdaterEntity);
-					NSDictionary nextRow = channel.fetchRow();
-					ensureModelRowExists(nextRow != null, model);
-					channel.cancelFetch();
+					NSDictionary nextRow;
+					try {
+						nextRow = channel.fetchRow();
+					}
+					finally {
+						channel.cancelFetch();
+					}
+					if (nextRow == null) {
+						if (createIfMissing()) {
+							String modelStatement = dbUpdaterInsertStatement(model, new Integer(-1), new Integer(1), lockOwnerName);
+							ERXJDBCUtilities.executeUpdateScript(channel, modelStatement);
+						}
+						else {
+							String modelStatement = dbUpdaterInsertStatement(model, new Integer(-1), new Integer(0), null);
+							throw new ERXMigrationFailedException("Unable to migrate because there is not a row for the model '" + model.name() + ".  Please execute:\n" + modelStatement);
+						}
+					}
 					if (ERXJDBCMigrationLock.log.isInfoEnabled()) {
 						ERXJDBCMigrationLock.log.info("Waiting on UpdateLock| for model '" + model.name() + "' ...");
 					}
@@ -76,7 +105,19 @@ public class ERXJDBCMigrationLock implements IERXMigrationLock {
 			throw e;
 		}
 		catch (Exception e) {
-			throw new ERXMigrationFailedException("Failed to lock " + _dbUpdaterTableName + " table.  It might be missing? Try executing:\n" + dbUpdaterCreateStatement(model) + ".", e);
+			String createTableStatement = dbUpdaterCreateStatement(model);
+			if (createTableIfMissing) {
+				try {
+					log.warn("Failed to lock.  Attempting to create the table and lock again.");
+					ERXJDBCUtilities.executeUpdateScript(channel, createTableStatement);
+					return _tryLock(channel, model, lockOwnerName, false);
+				}
+				catch (Throwable t) {
+					log.warn("The original reason tryLock failed was: ", e);
+					throw new ERXMigrationFailedException("Failed to create lock table. Try executing:\n" + createTableStatement + ".", t);
+				}
+			}
+			throw new ERXMigrationFailedException("Failed to lock " + _dbUpdaterTableName + " table.  It might be missing? Try executing:\n" + createTableStatement + ".", e);
 		}
 	}
 
@@ -153,7 +194,10 @@ public class ERXJDBCMigrationLock implements IERXMigrationLock {
 			EOEntity dbUpdaterEntity = dbUpdaterModel.entityNamed(_dbUpdaterTableName);
 			int count = channel.updateValuesInRowsDescribedByQualifier(row, new EOKeyValueQualifier("ModelName", EOQualifier.QualifierOperatorEqual, model.name()), dbUpdaterEntity);
 			channel.cancelFetch();
-			ensureModelRowExists(count != 0, model);
+			if (count == 0) {
+				String modelStatement = dbUpdaterInsertStatement(model, new Integer(-1), new Integer(0), null);
+				throw new ERXMigrationFailedException("Unable to migrate because there is not a row for the model '" + model.name() + ".  Please execute:\n" + modelStatement);
+			}
 		}
 		catch (Exception e) {
 			throw new ERXMigrationFailedException("Failed to set version number of " + _dbUpdaterTableName + ".", e);
@@ -239,11 +283,5 @@ public class ERXJDBCMigrationLock implements IERXMigrationLock {
 		}
 		EOSQLExpression insertExpression = EOAdaptor.adaptorWithModel(dbUpdaterModel).expressionFactory().insertStatementForRow(row, dbUpdaterModel.entityNamed(_dbUpdaterTableName));
 		return insertExpression.statement();
-	}
-
-	protected void ensureModelRowExists(boolean exists, EOModel model) {
-		if (!exists) {
-			throw new ERXMigrationFailedException("Unable to migrate because there is not a row for the model '" + model.name() + ".  Please execute:\n" + dbUpdaterInsertStatement(model, new Integer(-1), new Integer(0), null));
-		}
 	}
 }
