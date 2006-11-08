@@ -676,33 +676,20 @@ public class ERXEOAccessUtilities {
      *            model should be used.
      * @param databaseContext
      *            the databaseContext
-     *            
-     *            <br/><br/>This method uses the
-     *            following defaults options:
-     *            <ul>
-     *            <li>EOSchemaGeneration.DropTablesKey=NO</li>
-     *            <li>EOSchemaGeneration.DropPrimaryKeySupportKey=NO</li>
-     *            <li>EOSchemaGeneration.CreateTablesKey=YES</li>
-     *            <li>EOSchemaGeneration.CreatePrimaryKeySupportKey=YES</li>
-     *            <li>EOSchemaGeneration.PrimaryKeyConstraintsKey=YES</li>
-     *            <li>EOSchemaGeneration.ForeignKeyConstraintsKey=YES</li>
-     *            <li>EOSchemaGeneration.CreateDatabaseKey=NO</li>
-     *            <li>EOSchemaGeneration.DropDatabaseKey=NO</li>
-     *            </ul>
-     *            <br/><br>
-     *            Possible values are <code>YES</code> and <code>NO</code>
-     * 
+     *
+     * @param create if true, tables and keys are created
+     * @param drop if true, tables and keys are dropped
      * @return a <code>String</code> containing SQL statements to create
      *         tables
      */
-    public static String createSchemaSQLForEntitiesInDatabaseContext(NSArray entities, EODatabaseContext databaseContext) {
+    public static String createSchemaSQLForEntitiesInDatabaseContext(NSArray entities, EODatabaseContext databaseContext, boolean create, boolean drop) {
         NSMutableDictionary optionsCreate = new NSMutableDictionary();
-        optionsCreate.setObjectForKey("NO", EOSchemaGeneration.DropTablesKey);
-        optionsCreate.setObjectForKey("NO", EOSchemaGeneration.DropPrimaryKeySupportKey);
-        optionsCreate.setObjectForKey("YES", EOSchemaGeneration.CreateTablesKey);
-        optionsCreate.setObjectForKey("YES", EOSchemaGeneration.CreatePrimaryKeySupportKey);
-        optionsCreate.setObjectForKey("YES", EOSchemaGeneration.PrimaryKeyConstraintsKey);
-        optionsCreate.setObjectForKey("YES", EOSchemaGeneration.ForeignKeyConstraintsKey);
+        optionsCreate.setObjectForKey((drop) ? "YES" : "NO", EOSchemaGeneration.DropTablesKey);
+        optionsCreate.setObjectForKey((drop) ? "YES" : "NO", EOSchemaGeneration.DropPrimaryKeySupportKey);
+        optionsCreate.setObjectForKey((create) ? "YES" : "NO", EOSchemaGeneration.CreateTablesKey);
+        optionsCreate.setObjectForKey((create) ? "YES" : "NO", EOSchemaGeneration.CreatePrimaryKeySupportKey);
+        optionsCreate.setObjectForKey((create) ? "YES" : "NO", EOSchemaGeneration.PrimaryKeyConstraintsKey);
+        optionsCreate.setObjectForKey((create) ? "YES" : "NO", EOSchemaGeneration.ForeignKeyConstraintsKey);
         optionsCreate.setObjectForKey("NO", EOSchemaGeneration.CreateDatabaseKey);
         optionsCreate.setObjectForKey("NO", EOSchemaGeneration.DropDatabaseKey);
         return createSchemaSQLForEntitiesWithOptions(entities, databaseContext, optionsCreate);
