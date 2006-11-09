@@ -38,6 +38,8 @@ public class ERXJDBCMigrationLock implements IERXMigrationLock {
 	public static final Logger log = Logger.getLogger(ERXJDBCMigrationLock.class);
 
 	private String _dbUpdaterTableName;
+	private EOModel _lastUpdatedModel;
+	private EOModel _dbUpdaterModelCache;
 
 	public ERXJDBCMigrationLock() {
 		_dbUpdaterTableName = ERXProperties.stringForKeyWithDefault("er.migration.JDBC.dbUpdaterTableName", "_DBUpdater");
@@ -210,51 +212,60 @@ public class ERXJDBCMigrationLock implements IERXMigrationLock {
 	}
 
 	protected EOModel dbUpdaterModelWithModel(EOModel model) {
-		EOModel dbUpdateModel = new EOModel();
+		EOModel dbUpdaterModel;
+		if (_lastUpdatedModel == model) {
+			dbUpdaterModel = _dbUpdaterModelCache;
+		}
+		else {
+			dbUpdaterModel = new EOModel();
 
-		EOEntity dbUpdaterEntity = new EOEntity();
-		dbUpdaterEntity.setExternalName(_dbUpdaterTableName);
-		dbUpdaterEntity.setName(_dbUpdaterTableName);
-		dbUpdateModel.addEntity(dbUpdaterEntity);
+			EOEntity dbUpdaterEntity = new EOEntity();
+			dbUpdaterEntity.setExternalName(_dbUpdaterTableName);
+			dbUpdaterEntity.setName(_dbUpdaterTableName);
+			dbUpdaterModel.addEntity(dbUpdaterEntity);
 
-		EOAttribute modelNameAttribute = new EOAttribute();
-		modelNameAttribute.setName("ModelName");
-		modelNameAttribute.setColumnName("ModelName");
-		modelNameAttribute.setClassName("java.lang.String");
-		modelNameAttribute.setWidth(100);
-		modelNameAttribute.setAllowsNull(false);
-		dbUpdaterEntity.addAttribute(modelNameAttribute);
+			EOAttribute modelNameAttribute = new EOAttribute();
+			modelNameAttribute.setName("ModelName");
+			modelNameAttribute.setColumnName("ModelName");
+			modelNameAttribute.setClassName("java.lang.String");
+			modelNameAttribute.setWidth(100);
+			modelNameAttribute.setAllowsNull(false);
+			dbUpdaterEntity.addAttribute(modelNameAttribute);
 
-		EOAttribute versionAttribute = new EOAttribute();
-		versionAttribute.setName("Version");
-		versionAttribute.setColumnName("Version");
-		versionAttribute.setClassName("java.lang.Number");
-		versionAttribute.setAllowsNull(false);
-		dbUpdaterEntity.addAttribute(versionAttribute);
+			EOAttribute versionAttribute = new EOAttribute();
+			versionAttribute.setName("Version");
+			versionAttribute.setColumnName("Version");
+			versionAttribute.setClassName("java.lang.Number");
+			versionAttribute.setAllowsNull(false);
+			dbUpdaterEntity.addAttribute(versionAttribute);
 
-		EOAttribute updateLockAttribute = new EOAttribute();
-		updateLockAttribute.setName("UpdateLock");
-		updateLockAttribute.setColumnName("UpdateLock");
-		updateLockAttribute.setClassName("java.lang.Number");
-		updateLockAttribute.setAllowsNull(false);
-		dbUpdaterEntity.addAttribute(updateLockAttribute);
+			EOAttribute updateLockAttribute = new EOAttribute();
+			updateLockAttribute.setName("UpdateLock");
+			updateLockAttribute.setColumnName("UpdateLock");
+			updateLockAttribute.setClassName("java.lang.Number");
+			updateLockAttribute.setAllowsNull(false);
+			dbUpdaterEntity.addAttribute(updateLockAttribute);
 
-		EOAttribute lockOwnerAttribute = new EOAttribute();
-		lockOwnerAttribute.setName("LockOwner");
-		lockOwnerAttribute.setColumnName("LockOwner");
-		lockOwnerAttribute.setClassName("java.lang.String");
-		lockOwnerAttribute.setWidth(100);
-		lockOwnerAttribute.setAllowsNull(true);
-		dbUpdaterEntity.addAttribute(lockOwnerAttribute);
+			EOAttribute lockOwnerAttribute = new EOAttribute();
+			lockOwnerAttribute.setName("LockOwner");
+			lockOwnerAttribute.setColumnName("LockOwner");
+			lockOwnerAttribute.setClassName("java.lang.String");
+			lockOwnerAttribute.setWidth(100);
+			lockOwnerAttribute.setAllowsNull(true);
+			dbUpdaterEntity.addAttribute(lockOwnerAttribute);
 
-		dbUpdateModel.setConnectionDictionary(model.connectionDictionary());
-		dbUpdateModel.setAdaptorName(model.adaptorName());
-		EOAdaptor adaptor = EOAdaptor.adaptorWithModel(model);
-		adaptor.assignExternalTypeForAttribute(modelNameAttribute);
-		adaptor.assignExternalTypeForAttribute(versionAttribute);
-		adaptor.assignExternalTypeForAttribute(updateLockAttribute);
-		adaptor.assignExternalTypeForAttribute(lockOwnerAttribute);
-		return dbUpdateModel;
+			dbUpdaterModel.setConnectionDictionary(model.connectionDictionary());
+			dbUpdaterModel.setAdaptorName(model.adaptorName());
+			EOAdaptor adaptor = EOAdaptor.adaptorWithModel(model);
+			adaptor.assignExternalTypeForAttribute(modelNameAttribute);
+			adaptor.assignExternalTypeForAttribute(versionAttribute);
+			adaptor.assignExternalTypeForAttribute(updateLockAttribute);
+			adaptor.assignExternalTypeForAttribute(lockOwnerAttribute);
+			
+			_lastUpdatedModel = model;
+			_dbUpdaterModelCache = dbUpdaterModel;
+		}
+		return dbUpdaterModel;
 	}
 
 	protected String dbUpdaterCreateStatement(EOModel model) {
