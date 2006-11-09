@@ -23,6 +23,7 @@ import er.extensions.ERXWOForm;
  * @binding class the HTML class of this submit button
  * @binding style the HTML style of this submit button
  * @binding onClick arbitrary Javascript to execute when the client clicks the button
+ * @binding onClickBefore if the given function returns true, the onClick is executed.  This is to support confirm(..) dialogs. 
  * @binding onServerClick if the action defined in the action binding returns null, the value of this binding will be returned as javascript from the server
  * @binding onSuccess javascript to execute in response to the Ajax onSuccess event
  * @binding onFailure javascript to execute in response to the Ajax onFailure event
@@ -101,6 +102,13 @@ public class AjaxSubmitButton extends AjaxDynamicElement {
 	    }
     }
     StringBuffer onClickBuffer = new StringBuffer();
+
+	String onClickBefore = (String)valueForBinding("onClickBefore", component);
+	if (onClickBefore != null) {
+		onClickBuffer.append("if (");
+		onClickBuffer.append(onClickBefore);
+		onClickBuffer.append(") {");
+	}
     onClickBuffer.append("new Ajax.Request(" + formReference + ".action,");
     NSDictionary options = createAjaxOptions(component, formReference);
     AjaxOptions.appendToBuffer(options, onClickBuffer, context);
@@ -109,6 +117,9 @@ public class AjaxSubmitButton extends AjaxDynamicElement {
     if (onClick != null) {
       onClickBuffer.append(";");
       onClickBuffer.append(onClick);
+    }
+    if (onClickBefore != null) {
+    	onClickBuffer.append("}");
     }
     if (showUI) {
 	    appendTagAttributeToResponse(response, "onclick", onClickBuffer.toString());
