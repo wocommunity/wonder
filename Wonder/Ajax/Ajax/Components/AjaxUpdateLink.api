@@ -15,6 +15,9 @@
 		<binding name = "functionName"/>
 		<binding name = "elementName"/>
 
+		<binding name = "onClickBefore"/>
+		<binding name = "onClick"/>
+		
 		<binding name = "replaceID"/>
 		<binding name = "ignoreActionResponse"/>
     
