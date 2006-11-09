@@ -17,7 +17,8 @@ import com.webobjects.foundation.NSMutableDictionary;
  * @binding onFailure JS function, called on a non-200 response on the client
  * @binding onComplete JS function, called on completion
  * @binding onLoading the js function to call when loading
- * @binding evalScripts whether or not to eval scripts on the result 
+ * @binding evalScripts whether or not to eval scripts on the result
+ * @binding onClickBefore if the given function returns true, the onClick is executed.  This is to support confirm(..) dialogs. 
  * @binding onClick JS function, called after the click on the client
  * @binding action method to call
  * @binding title title of the link
@@ -35,20 +36,30 @@ public class AjaxHyperlink extends AjaxDynamicElement {
   }
 
   public String onClick(WOContext context) {
-    NSDictionary options = createAjaxOptions(context.component());
-    String actionUrl = context.componentActionURL();
-    StringBuffer sb = new StringBuffer();
-    sb.append("new Ajax.Request('");
-    sb.append(actionUrl);
-    sb.append("', ");
-    AjaxOptions.appendToBuffer(options, sb, context);
-    sb.append(")");
-    String onClick = (String)valueForBinding("onClick", context.component());
-    if(onClick != null) {
-        sb.append(";");
-        sb.append(onClick);
-    }
-    return sb.toString();
+	StringBuffer sb = new StringBuffer();
+
+	String onClickBefore = (String)valueForBinding("onClickBefore", context.component());
+	if (onClickBefore != null) {
+		sb.append("if (");
+		sb.append(onClickBefore);
+		sb.append(") {");
+	}
+	NSDictionary options = createAjaxOptions(context.component());
+	String actionUrl = context.componentActionURL();
+	sb.append("new Ajax.Request('");
+	sb.append(actionUrl);
+	sb.append("', ");
+	AjaxOptions.appendToBuffer(options, sb, context);
+	sb.append(")");
+	String onClick = (String)valueForBinding("onClick", context.component());
+	if (onClick != null) {
+		  sb.append(";");
+		  sb.append(onClick);
+	}
+	if (onClickBefore != null) {
+		sb.append("}");
+	}
+	return sb.toString();
   }
 
   protected NSDictionary createAjaxOptions(WOComponent component) {

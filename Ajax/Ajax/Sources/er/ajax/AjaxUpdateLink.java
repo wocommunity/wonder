@@ -27,6 +27,8 @@ import er.extensions.ERXComponentUtilities;
  * @binding insertion JavaScript function to evaluate when the update takes place.
  * @binding ignoreActionResponse boolean defining if the action's response should be thrown away 
  *                  (useful when the same action has both Ajax and plain links)
+ * @binding onClickBefore if the given function returns true, the onClick is executed.  This is to support confirm(..) dialogs. 
+ * @binding onClick JS function, called after the click on the client
  * @binding updateContainerID the id of the AjaxUpdateContainer to update after performing this action 
  * @binding replaceID the ID of the div (or other html element) whose contents will be replaced with the results of this action
  * @binding title title of the link
@@ -49,7 +51,14 @@ public class AjaxUpdateLink extends AjaxDynamicElement {
 	  WOComponent component = context.component();
     NSDictionary options = createAjaxOptions(component);
     StringBuffer onClickBuffer = new StringBuffer();
-    WOAssociation directActionNameAssociation = (WOAssociation) associations().valueForKey("directActionName");
+	String onClickBefore = (String)valueForBinding("onClickBefore", context.component());
+	if (onClickBefore != null) {
+		onClickBuffer.append("if (");
+		onClickBuffer.append(onClickBefore);
+		onClickBuffer.append(") {");
+	}
+
+	WOAssociation directActionNameAssociation = (WOAssociation) associations().valueForKey("directActionName");
     
     String actionUrl = null;
     if (directActionNameAssociation != null) {
@@ -92,7 +101,11 @@ public class AjaxUpdateLink extends AjaxDynamicElement {
       onClickBuffer.append(";");
       onClickBuffer.append(onClick);
     }
-    
+
+	if (onClickBefore != null) {
+		onClickBuffer.append("}");
+	}
+
     return onClickBuffer.toString();
   }
 

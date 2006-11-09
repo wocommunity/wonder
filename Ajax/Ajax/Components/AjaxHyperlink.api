@@ -11,6 +11,7 @@
 		<binding name = "disabled"/>
 		<binding name = "functionName"/>
 		
+		<binding name = "onClickBefore"/>
 		<binding name = "onClick"/>
 		<binding name = "onComplete"/>
 		<binding name = "onSuccess"/>

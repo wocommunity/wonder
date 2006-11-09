@@ -8,6 +8,7 @@
 		<binding name = "class"/>
 		<binding name = "style"/>
 		<binding name = "onClick"/>
+		<binding name = "onClickBefore"/>
 		<binding name = "onClickServer"/>
 		<binding name = "onSuccess"/>
 		<binding name = "onFailure"/>
