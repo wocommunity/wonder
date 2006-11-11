@@ -19,6 +19,7 @@ import org.apache.log4j.Logger;
 import com.webobjects.appserver.WOApplication;
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
+import com.webobjects.appserver.WOMessage;
 import com.webobjects.appserver.WORequest;
 import com.webobjects.appserver.WOResponse;
 import com.webobjects.appserver.WOSession;
@@ -725,6 +726,13 @@ public class ERXSession extends WOSession implements Serializable {
   }
 
   /**
+   * Checks if the page should not be stored in the cache 
+   */
+  protected boolean shouldNotStorePage(WOMessage message) {
+	  return (message != null && (message.headerForKey(ERXSession.DONT_STORE_PAGE) != null || (message.userInfo() != null && message.userInfo().objectForKey(ERXSession.DONT_STORE_PAGE) != null)));
+  }
+	  
+  /**
    * Overridden so that Ajax requests are not saved in the page cache.  Checks both the 
    * response userInfo and the response headers if the DONT_STORE_PAGE key is present. The value doesn't matter.
    * <p>
@@ -760,13 +768,21 @@ public class ERXSession extends WOSession implements Serializable {
    */
   public void savePage(WOComponent page) {
     WOContext context = context();
+    WORequest request = context.request();
     WOResponse response = context.response();
-    if (response != null && (response.headerForKey(ERXSession.DONT_STORE_PAGE) != null || (response.userInfo() != null && response.userInfo().objectForKey(ERXSession.DONT_STORE_PAGE) != null))) {
-      String pageCacheKey = response.headerForKey(ERXSession.PAGE_REPLACEMENT_CACHE_LOOKUP_KEY);
+    // MS: The "AJAX_SUBMIT_BUTTON_NAME" check is a total hack, but if your page structure changes such that the form that
+    // is being submitted to is hidden, it ends up not notifying the system not to cache the page.
+    if (shouldNotStorePage(response) || shouldNotStorePage(request) || request.formValueForKey("AJAX_SUBMIT_BUTTON_NAME") != null) {
+      String pageCacheKey = null;
+      if (response != null) {
+    	  pageCacheKey = response.headerForKey(ERXSession.PAGE_REPLACEMENT_CACHE_LOOKUP_KEY);
+      }
+      if (pageCacheKey == null && request != null) {
+    	  pageCacheKey = request.headerForKey(ERXSession.PAGE_REPLACEMENT_CACHE_LOOKUP_KEY);
+      }
       if (pageCacheKey != null) {
         String originalContextID = context.request().headerForKey(ERXSession.ORIGINAL_CONTEXT_ID_KEY);
         pageCacheKey = originalContextID + "_" + pageCacheKey;
-        // System.out.println("ERXSession.savePage: " + pageCacheKey + " starting (contextid = " + context.contextID() + ")");
         LinkedHashMap pageReplacementCache = (LinkedHashMap) objectForKey(ERXSession.PAGE_REPLACEMENT_CACHE_KEY);
         if (pageReplacementCache == null) {
           pageReplacementCache = new LinkedHashMap();
@@ -791,6 +807,7 @@ public class ERXSession extends WOSession implements Serializable {
       }
     }
     else {
+    	System.out.println("ERXSession.savePage: regular save page");
       super.savePage(page);
     }
   }
@@ -811,7 +828,7 @@ public class ERXSession extends WOSession implements Serializable {
   protected boolean cleanPageReplacementCacheIfNecessary(String _cacheKeyToAge) {
     boolean removedCacheEntry = false;
     LinkedHashMap pageReplacementCache = (LinkedHashMap) objectForKey(ERXSession.PAGE_REPLACEMENT_CACHE_KEY);
-    // System.out.println("ERXSession.cleanPageReplacementCacheIfNecessary: " + pageReplacementCache);
+    //System.out.println("ERXSession.cleanPageReplacementCacheIfNecessary: " + pageReplacementCache);
     if (pageReplacementCache != null) {
       Iterator transactionRecordsEnum = pageReplacementCache.entrySet().iterator();
       while (transactionRecordsEnum.hasNext()) {
@@ -819,7 +836,7 @@ public class ERXSession extends WOSession implements Serializable {
         TransactionRecord tempPageRecord = (TransactionRecord) pageRecordEntry.getValue();
         // If the page has been GC'd, toss the transaction record ...
         if (tempPageRecord.isExpired()) {
-          // System.out.println("ERXSession.cleanPageReplacementCache:   deleting expired page record " + tempPageRecord);
+          //System.out.println("ERXSession.cleanPageReplacementCache:   deleting expired page record " + tempPageRecord);
           transactionRecordsEnum.remove();
           removedCacheEntry = true;
         }
@@ -828,13 +845,13 @@ public class ERXSession extends WOSession implements Serializable {
           if (_cacheKeyToAge.equals(transactionRecordKey)) {
             // If this is the "old page", then delete the entry ...
             if (tempPageRecord.isOldPage()) {
-              // System.out.println("ERXSession.cleanPageReplacementCache: " + _cacheKeyToAge + " removing old page " + tempPageRecord);
+              //System.out.println("ERXSession.cleanPageReplacementCache: " + _cacheKeyToAge + " removing old page " + tempPageRecord);
               transactionRecordsEnum.remove();
               removedCacheEntry = true;
             }
             // Otherwise, flag this entry as the old page ...
             else {
-              // System.out.println("ERXSession.cleanPageReplacementCache:   " + _cacheKeyToAge + " marking old page");
+              //System.out.println("ERXSession.cleanPageReplacementCache:   " + _cacheKeyToAge + " marking old page");
               tempPageRecord.setOldPage(true);
             }
           }
@@ -846,7 +863,7 @@ public class ERXSession extends WOSession implements Serializable {
       // to exist.
       if (_cacheKeyToAge == null && pageReplacementCache.isEmpty()) {
         removeObjectForKey(ERXSession.PAGE_REPLACEMENT_CACHE_KEY);
-        // System.out.println("ERXSession.cleanPageReplacementCache: Removing empty page cache");
+        //System.out.println("ERXSession.cleanPageReplacementCache: Removing empty page cache");
       }
     }
     return removedCacheEntry;

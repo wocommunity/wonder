@@ -31,7 +31,7 @@ public class AjaxDroppable extends AjaxComponent {
   }
 
   public void appendToResponse(WOResponse response, WOContext context) {
-    _actionUrl = context().componentActionURL();
+    _actionUrl = AjaxUtils.ajaxComponentActionUrl(context());
     super.appendToResponse(response, context);
   }
 
