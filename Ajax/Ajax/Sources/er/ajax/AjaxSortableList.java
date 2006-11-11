@@ -79,7 +79,7 @@ public class AjaxSortableList extends AjaxComponent {
   }
 
   public void appendToResponse(WOResponse response, WOContext context) {
-    _actionUrl = context.componentActionURL();
+    _actionUrl = AjaxUtils.ajaxComponentActionUrl(context);
     if (hasBinding("id")) {
       _id = (String) valueForBinding("id");
     }

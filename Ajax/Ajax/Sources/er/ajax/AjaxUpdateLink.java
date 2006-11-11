@@ -65,7 +65,7 @@ public class AjaxUpdateLink extends AjaxDynamicElement {
     	actionUrl = context.directActionURLForActionNamed((String)directActionNameAssociation.valueInComponent(component), ERXComponentUtilities.queryParametersInComponent(associations(), component)).replaceAll("&amp;", "&");
     }
     else if (associations().valueForKey("action") != null) {
-        actionUrl = context.componentActionURL();
+        actionUrl = AjaxUtils.ajaxComponentActionUrl(context);
     }
     else {
       String updateContainerID = (String) valueForBinding("updateContainerID", context.component());

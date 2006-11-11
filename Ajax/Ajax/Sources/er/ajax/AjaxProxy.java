@@ -163,7 +163,7 @@ public class AjaxProxy extends AjaxComponent {
             // response
             userInfo.setObjectForKey(bridge, key);
             AjaxUtils.addScriptCodeInHead(res, "var " + name + " = new JSONRpcClient(\""
-                    + context().componentActionURL() + "\");");
+                    + AjaxUtils.ajaxComponentActionUrl(context()) + "\");");
         } else {
             // ok, the javascript variable 'name' is already in the response,
             // was it referencing the same JSONRPCBridge object ?

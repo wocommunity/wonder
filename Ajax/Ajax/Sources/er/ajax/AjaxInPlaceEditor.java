@@ -86,7 +86,7 @@ public class AjaxInPlaceEditor extends AjaxDynamicElement {
       id = (String) _idAssociation.valueInComponent(component);
     }
     String elementName = (String) _elementNameAssociation.valueInComponent(component);
-    String actionUrl = context.componentActionURL();
+    String actionUrl = AjaxUtils.ajaxComponentActionUrl(context);
     super.appendToResponse(response, context);
     response.appendContentString("<");
     response.appendContentString(elementName);

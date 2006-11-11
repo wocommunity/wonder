@@ -55,8 +55,8 @@ public class AjaxUpdateContainer extends AjaxDynamicElement {
         response.appendContentString("<" + elementName + " ");
         appendTagAttributeToResponse(response, "id", id);
         appendTagAttributeToResponse(response, "class", valueForBinding("class", component));
-        appendTagAttributeToResponse(response, "updateUrl", context.componentActionURL());
-        appendTagAttributeToResponse(response, "woElementID", context.elementID());
+        appendTagAttributeToResponse(response, "updateUrl", AjaxUtils.ajaxComponentActionUrl(context));
+        //appendTagAttributeToResponse(response, "woElementID", context.elementID());
         response.appendContentString(">");
         if(hasChildrenElements()) {
             appendChildrenToResponse(response, context);
@@ -94,6 +94,7 @@ public class AjaxUpdateContainer extends AjaxDynamicElement {
 
     protected WOActionResults handleRequest(WORequest request, WOContext context) {
         WOComponent component = context.component();
+        String id = containerID(context);
         WOResponse response = AjaxUtils.createResponse(context);
         AjaxUtils.setPageReplacementCacheKey(context, containerID(context));
         if(hasChildrenElements()) {

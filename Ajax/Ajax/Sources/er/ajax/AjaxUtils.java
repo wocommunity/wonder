@@ -42,16 +42,6 @@ public class AjaxUtils {
   }
 
   /**
-   * Checks if the message is an Ajax message by looking for the AJAX_REQUEST_KEY 
-   * in the header and in the userInfo.
-   * @param message
-   * @return
-   */
-  public static boolean isAjaxMessage(WOMessage message) {
-    return (message.headerForKey(AjaxUtils.DONT_STORE_PAGE) != null || (message.userInfo() != null && message.userInfo().objectForKey(AjaxUtils.DONT_STORE_PAGE) != null));
-  }
-
-  /**
    * Creates a response for the given context (which can be null), sets
    * the charset to UTF-8, the connection to keep-alive and flags it as
    * a Ajax request by adding an AJAX_REQUEST_KEY header. You can check this
@@ -202,7 +192,11 @@ public class AjaxUtils {
   }
 
   public static void updateMutableUserInfoWithAjaxInfo(WOContext context) {
-    NSMutableDictionary dict = AjaxUtils.mutableUserInfo(context.response());
+	  AjaxUtils.updateMutableUserInfoWithAjaxInfo(context.response());
+  }
+
+  public static void updateMutableUserInfoWithAjaxInfo(WOMessage message) {
+    NSMutableDictionary dict = AjaxUtils.mutableUserInfo(message);
     dict.takeValueForKey(AjaxUtils.DONT_STORE_PAGE, AjaxUtils.DONT_STORE_PAGE);
   }
 
@@ -251,5 +245,21 @@ public class AjaxUtils {
     if (association != null) {
       association.setValue(value, component);
     }
+  }
+  
+  /**
+   * Returns an Ajax component action url.  Using an ajax component action
+   * urls guarantees that caching during your ajax request will be 
+   * handled appropriately.
+   * 
+   * @param context the context of the request
+   * @return an ajax request url.
+   */
+  public static String ajaxComponentActionUrl(WOContext context) {
+	  String actionUrl = context.componentActionURL();
+	  if (AjaxRequestHandler.useAjaxRequestHandler()) {
+		  actionUrl = actionUrl.replaceFirst("/" + WOApplication.application().componentRequestHandlerKey() + "/", "/" + AjaxRequestHandler.AjaxRequestHandlerKey + "/");
+	  }
+	  return actionUrl;
   }
 }

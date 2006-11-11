@@ -45,7 +45,7 @@ public class AjaxHyperlink extends AjaxDynamicElement {
 		sb.append(") {");
 	}
 	NSDictionary options = createAjaxOptions(context.component());
-	String actionUrl = context.componentActionURL();
+	String actionUrl = AjaxUtils.ajaxComponentActionUrl(context);
 	sb.append("new Ajax.Request('");
 	sb.append(actionUrl);
 	sb.append("', ");
