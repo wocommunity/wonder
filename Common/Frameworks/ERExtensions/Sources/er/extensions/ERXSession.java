@@ -807,7 +807,6 @@ public class ERXSession extends WOSession implements Serializable {
       }
     }
     else {
-    	System.out.println("ERXSession.savePage: regular save page");
       super.savePage(page);
     }
   }
