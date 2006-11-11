@@ -36,13 +36,17 @@ import er.extensions.ERXWOForm;
  * @author anjo
  */
 public class AjaxSubmitButton extends AjaxDynamicElement {
-
+	// MS: If you change this value, make sure to change it in ERXSession.saveSession
   private static final String KEY_AJAX_SUBMIT_BUTTON_NAME = "AJAX_SUBMIT_BUTTON_NAME";
 
   public AjaxSubmitButton(String name, NSDictionary associations, WOElement children) {
     super(name, associations, children);
   }
 
+  public static boolean isAjaxSubmit(WORequest request) {
+	  return request.valueForKey(KEY_AJAX_SUBMIT_BUTTON_NAME) != null;
+  }
+  
   public boolean disabledInComponent(WOComponent component) {
     return booleanValueForBinding("disabled", false, component);
   }
@@ -165,7 +169,6 @@ public class AjaxSubmitButton extends AjaxDynamicElement {
       result = handleRequest(worequest, wocontext);
       AjaxUtils.updateMutableUserInfoWithAjaxInfo(wocontext);
     }
-
     return result;
   }
 
@@ -173,14 +176,14 @@ public class AjaxSubmitButton extends AjaxDynamicElement {
     WOResponse result = AjaxUtils.createResponse(wocontext);
     WOComponent wocomponent = wocontext.component();
     Object obj = valueForBinding("action", wocomponent);
-    if (obj == null)
+    if (obj == null) {
       obj = wocontext.page();
+    }
     String onClickServer = (String) valueForBinding("onClickServer", wocomponent);
     if (onClickServer != null) {
       result.setHeader("text/javascript", "content-type");
       result.setContent(onClickServer);
     }
-
     return result;
   }
 

@@ -152,7 +152,7 @@ public class AjaxAutoComplete extends AjaxComponent {
 			str.append(");\n// ]]>\n</script>\n");
 			res.appendContentString(String.valueOf(str));
 		} else {
-			String actionUrl = ctx.componentActionURL();
+			String actionUrl = AjaxUtils.ajaxComponentActionUrl(ctx);
       AjaxUtils.appendScriptHeader(res);
 			res.appendContentString("new Ajax.Autocompleter('"+fieldName+"', '"+divName+"', '"+actionUrl+"', ");
 			AjaxOptions.appendToResponse(createAjaxOptions(), res, ctx);

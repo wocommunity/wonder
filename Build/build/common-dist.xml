@@ -245,6 +245,21 @@
             <param name="project.dir" value="Ajax/Ajax" />
         </antcall>
     </target>
+            
+    <!-- YUI -->
+    <target name="YUIExample.all">
+        <antcall target="copy.application" >
+            <param name="project" value="YUIExample" />
+            <param name="project.dir" value="Ajax/YUIExample" />
+        </antcall>
+    </target>
+        
+    <target name="YUI.all">
+        <antcall target="copy.framework" >
+            <param name="project" value="YUI" />
+            <param name="project.dir" value="Ajax/YUI" />
+        </antcall>
+    </target>
 
     <target name="ExcelGenerator.all">
         <antcall target="copy.framework" >
@@ -314,7 +329,7 @@
 
 	
     <target name="core.all" depends="ERJars.all, JavaWOExtensions.all, ERExtensions.all, ERDirectToWeb.all" />
-    <target name="frameworks.all" depends="core.all, ERCalendar.all, ERNeutralLook.all, WOOgnl.all, ERJavaMail.all, ERCoreBusinessLogic.all, ERChangeNotificationJMS.all, ERPlot.all, ERExcelLook.all, ERPrototypes.all, ERWorkerChannel.all, Ajax.all, ExcelGenerator.all, PostgresqlPlugIn.all, EROraclePlugIn.all, WOPayPal.all" />
+    <target name="frameworks.all" depends="core.all, ERCalendar.all, ERNeutralLook.all, WOOgnl.all, ERJavaMail.all, ERCoreBusinessLogic.all, ERChangeNotificationJMS.all, ERPlot.all, ERExcelLook.all, ERPrototypes.all, ERWorkerChannel.all, Ajax.all, YUI.all, ExcelGenerator.all, PostgresqlPlugIn.all, EROraclePlugIn.all, WOPayPal.all" />
 
     <target name="validity.all" depends="Validity.all, ValidityModeler.all, ValidityExample.all" />
     <target name="bugtracker.all" depends="frameworks.all, BTBusinessLogic.all, BugTracker.all" />
@@ -322,7 +337,7 @@
 
     <target name="wrox.all" depends="frameworks.all, ERMiniUglyLook.all, NetStruxrCaseStudy.all" />
     <target name="stepwise.all" depends="D2WListExample.all, D2WInspectExample.all" />
-    <target name="examples.all" depends="frameworks.all, wrox.all, stepwise.all, AjaxExample.all" />
+    <target name="examples.all" depends="frameworks.all, wrox.all, stepwise.all, AjaxExample.all, YUIExample.all" />
 
     <target name="dist.prebuilt" depends="frameworks.all, applications.all, examples.all" />
 
