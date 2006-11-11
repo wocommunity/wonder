@@ -28,7 +28,7 @@ public class AjaxDragResizeContainer extends AjaxComponent {
     public void appendToResponse(WOResponse response, WOContext context) {
 	_dragResizeContainerID = (String) valueForBinding("id", AjaxUtils.toSafeElementID(context().elementID())
 		+ "_DragResizeContainer");
-	_actionUrl = context.componentActionURL();
+	_actionUrl = AjaxUtils.ajaxComponentActionUrl(context);
 	super.appendToResponse(response, context);
     }
 

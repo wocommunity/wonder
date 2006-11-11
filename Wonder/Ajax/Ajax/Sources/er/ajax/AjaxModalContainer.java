@@ -38,7 +38,7 @@ public class AjaxModalContainer extends AjaxDynamicElement {
         String href = (String) valueForBinding("href", component);
         if(href == null) {
             if(associations().containsKey("action")) {
-                href = context.componentActionURL();
+                href = AjaxUtils.ajaxComponentActionUrl(context);
             }
             if(href == null) {
                 href = "#" + divID;

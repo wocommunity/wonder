@@ -55,7 +55,7 @@ public class AjaxSlider extends AjaxComponent {
 
         if(hasBinding("onChangeServer")) {
         	String parent = (String) valueForBinding("onChange");
-        	options.setObjectForKey("function(v) {new Ajax.Request('"+context().componentActionURL()
+        	options.setObjectForKey("function(v) {new Ajax.Request('"+ AjaxUtils.ajaxComponentActionUrl(context())
         			+"', {parameters: '"+context().elementID()+"=' + v + '&ajaxSlideTrigger=onChange'})"
         			+(parent != null ? "; var parentFunction = " + parent + "; parentFunction(v);" : "")
         			+"}", "onChange");
@@ -64,7 +64,7 @@ public class AjaxSlider extends AjaxComponent {
         }
         if(hasBinding("onSlideServer")) {
         	String parent = (String) valueForBinding("onSlide");
-        	options.setObjectForKey("function(v) {new Ajax.Request('"+context().componentActionURL()
+        	options.setObjectForKey("function(v) {new Ajax.Request('"+ AjaxUtils.ajaxComponentActionUrl(context())
         			+"', {parameters: '"+context().elementID()+"=' + v + '&ajaxSlideTrigger=onSlide'})"
         			+(parent != null ? "; var parentFunction = " + parent + "; parentFunction(v);" : "")
         			+"}", "onSlide");
