@@ -36,7 +36,7 @@ SaveButton: AjaxSubmitButton {
 	action = save;
 	value = "Save";
 	onClick = "$('editor').hide();";
-	onClickServer = "tableBodyUpdate();";
+	updateContainerID = "tableBody";
 }
 
 SelectObject : AjaxUpdateLink {
@@ -67,34 +67,36 @@ Slider :  AjaxSlider {
 
 PrevBatch : AjaxUpdateLink {
 	action = previousBatch;
-	//updateContainerID = "tableBody";
-	onComplete = "tableBodyUpdate";
+	updateContainerID = "tableBody";
 	evalScripts = true;
+	onComplete = "function(request) { Effect.Shake('tableRows') }";
 }
 
 NextBatch : AjaxUpdateLink {
 	action = nextBatch;
-	onComplete = "tableBodyUpdate";
+	updateContainerID = "tableBody";
 	evalScripts = true;
+	onComplete = "function(request) { Effect.Shake('tableRows') }";
 }
 
 SortByName : AjaxUpdateLink {
 	action = sortByName;
-	onComplete = "tableBodyUpdate";
+	updateContainerID = "tableBody";
 	evalScripts = true;
+	onComplete = "function(request) { Effect.Shake('tableRows') }";
 }
 
 SortByValue : AjaxUpdateLink {
 	action = sortByValue;
-	onComplete = "tableBodyUpdate";
+	updateContainerID = "tableBody";
 	evalScripts = true;
+	onComplete = "function(request) { Effect.Shake('tableRows') }";
 }
 
 TableBody : AjaxUpdateContainer {
 	id = "tableBody";
 	elementName = "div";
 	class = "tableBody";
-	insertion = "function(receiver, response) { Effect.Fade('tableRows', { to: 0.001, afterFinish: function() { Element.update(receiver, response); $('tableRows').setOpacity(0.001); Effect.Fade('tableRows', { to: 1.0 }); } }); }";
 }
 
 EditValue: WOTextField {

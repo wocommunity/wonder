@@ -103,8 +103,8 @@ public class AjaxDragResizeContainer extends AjaxComponent {
 	addScriptResourceInHead(response, "dragresize.js");
     }
 
-    protected WOActionResults handleRequest(WORequest request, WOContext context) {
-	WOResponse result = AjaxUtils.createResponse(context);
+    public WOActionResults handleRequest(WORequest request, WOContext context) {
+	WOResponse result = AjaxUtils.createResponse(request, context);
 	result.setHeader("text/javascript", "content-type");
 
 	if (canSetValueForBinding("report")) {

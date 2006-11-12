@@ -114,8 +114,8 @@ public class AjaxSlider extends AjaxComponent {
 		super.takeValuesFromRequest(worequest, wocontext);
 	}
 
-    protected WOActionResults handleRequest(WORequest worequest, WOContext wocontext) {
-    	WOResponse result = AjaxUtils.createResponse(wocontext);
+    public WOActionResults handleRequest(WORequest worequest, WOContext wocontext) {
+    	WOResponse result = AjaxUtils.createResponse(worequest, wocontext);
     	String mode = worequest.stringFormValueForKey("ajaxSlideTrigger");
     	if(mode != null) {
     		result.setHeader("text/javascript", "content-type");

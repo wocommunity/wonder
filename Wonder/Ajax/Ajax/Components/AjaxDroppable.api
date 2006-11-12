@@ -14,6 +14,7 @@
 		<binding name="onHover"/>
 		<binding name="onDrop"/>
 		<binding name="onComplete"/>
+		<binding name="updateContainerID"/>
 	    <validation message="'id' is a required binding">
 			<unbound name="id"/>
 	    </validation>

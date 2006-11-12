@@ -13,6 +13,8 @@
 		
 		<binding name = "onClickBefore"/>
 		<binding name = "onClick"/>
+		<binding name = "onClickServer"/>
+		<binding name = "onLoading"/>
 		<binding name = "onComplete"/>
 		<binding name = "onSuccess"/>
 		<binding name = "onFailure"/>

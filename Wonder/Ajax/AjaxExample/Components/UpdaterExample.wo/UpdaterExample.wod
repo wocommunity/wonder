@@ -43,6 +43,7 @@ String1: WOString {
 UpdateLink : AjaxUpdateLink {
 	updateContainerID = "exampleArea";
 	evalScripts = true;
+	onClickBefore = "confirm('Are you sure?')";
 }
 
 UpdateShortcutLink: WOHyperlink {

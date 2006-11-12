@@ -25,13 +25,16 @@ import er.extensions.ERXWOForm;
  * @binding onClick arbitrary Javascript to execute when the client clicks the button
  * @binding onClickBefore if the given function returns true, the onClick is executed.  This is to support confirm(..) dialogs. 
  * @binding onServerClick if the action defined in the action binding returns null, the value of this binding will be returned as javascript from the server
+ * @binding onComplete JavaScript function to evaluate when the request has finished.
  * @binding onSuccess javascript to execute in response to the Ajax onSuccess event
  * @binding onFailure javascript to execute in response to the Ajax onFailure event
  * @binding onLoading javascript to execute when loading
+ * @binding insertion JavaScript function to evaluate when the update takes place.
  * @binding evalScripts evaluate scripts on the result
  * @binding button if false, it will display a link
  * @binding formName if button is false, you must specify the name of the form to submit
  * @binding functionName if set, the link becomes a javascript function instead
+ * @binding updateContainerID the id of the AjaxUpdateContainer to update after performing this action
  * 
  * @author anjo
  */
@@ -58,12 +61,23 @@ public class AjaxSubmitButton extends AjaxDynamicElement {
   public NSDictionary createAjaxOptions(WOComponent component, String formReference) {
     String name = nameInContext(component.context(), component);
     NSMutableArray ajaxOptionsArray = new NSMutableArray();
+    ajaxOptionsArray.addObject(new AjaxOption("onComplete", AjaxOption.SCRIPT));
     ajaxOptionsArray.addObject(new AjaxOption("onSuccess", AjaxOption.SCRIPT));
     ajaxOptionsArray.addObject(new AjaxOption("onFailure", AjaxOption.SCRIPT));
     ajaxOptionsArray.addObject(new AjaxOption("onLoading", AjaxOption.SCRIPT));
     ajaxOptionsArray.addObject(new AjaxOption("evalScripts", AjaxOption.BOOLEAN));
+	ajaxOptionsArray.addObject(new AjaxOption("insertion", AjaxOption.SCRIPT));
     NSMutableDictionary options = AjaxOption.createAjaxOptionsDictionary(ajaxOptionsArray, component, associations());
-    options.setObjectForKey("Form.serialize(" + formReference + ") + \"&" + KEY_AJAX_SUBMIT_BUTTON_NAME + "=" + name + "\"", "parameters");
+    StringBuffer parametersBuffer = new StringBuffer();
+    parametersBuffer.append("Form.serialize(" + formReference + ")");
+    parametersBuffer.append(" + '");
+    parametersBuffer.append("&" + AjaxSubmitButton.KEY_AJAX_SUBMIT_BUTTON_NAME + "=" + name);
+	String updateContainerID = (String)valueForBinding("updateContainerID", component);
+	if (updateContainerID != null) {
+		parametersBuffer.append("&" + AjaxUpdateContainer.UPDATE_CONTAINER_ID_KEY + "=" + updateContainerID);
+	}
+    parametersBuffer.append("'");
+    options.setObjectForKey(parametersBuffer.toString(), "parameters");
     return options;
   }
 
@@ -113,7 +127,14 @@ public class AjaxSubmitButton extends AjaxDynamicElement {
 		onClickBuffer.append(onClickBefore);
 		onClickBuffer.append(") {");
 	}
-    onClickBuffer.append("new Ajax.Request(" + formReference + ".action,");
+	String updateContainerID = (String)valueForBinding("updateContainerID", component);
+	if (updateContainerID != null) {
+		onClickBuffer.append("new Ajax.Updater('" + updateContainerID + "',");
+	}
+	else {
+		onClickBuffer.append("new Ajax.Request(");
+	}
+	onClickBuffer.append(formReference + ".action,");
     NSDictionary options = createAjaxOptions(component, formReference);
     AjaxOptions.appendToBuffer(options, onClickBuffer, context);
     onClickBuffer.append(")");
@@ -172,19 +193,17 @@ public class AjaxSubmitButton extends AjaxDynamicElement {
     return result;
   }
 
-  protected WOActionResults handleRequest(WORequest worequest, WOContext wocontext) {
-    WOResponse result = AjaxUtils.createResponse(wocontext);
+  public WOActionResults handleRequest(WORequest worequest, WOContext wocontext) {
+    WOResponse response = AjaxUtils.createResponse(worequest, wocontext);
     WOComponent wocomponent = wocontext.component();
     Object obj = valueForBinding("action", wocomponent);
-    if (obj == null) {
-      obj = wocontext.page();
-    }
     String onClickServer = (String) valueForBinding("onClickServer", wocomponent);
     if (onClickServer != null) {
-      result.setHeader("text/javascript", "content-type");
-      result.setContent(onClickServer);
+		AjaxUtils.appendScriptHeader(response);
+		response.appendContentString(onClickServer);
+		AjaxUtils.appendScriptFooter(response);
     }
-    return result;
+    return response;
   }
 
 }
