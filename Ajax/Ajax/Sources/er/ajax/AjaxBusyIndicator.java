@@ -33,7 +33,7 @@ public class AjaxBusyIndicator extends AjaxComponent {
     return (String) valueForBinding("divID", "busy");
   }
 
-  protected WOActionResults handleRequest(WORequest request, WOContext context) {
+  public WOActionResults handleRequest(WORequest request, WOContext context) {
     return null;
   }
 

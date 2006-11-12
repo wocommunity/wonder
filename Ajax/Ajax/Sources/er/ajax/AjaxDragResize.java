@@ -87,7 +87,7 @@ public class AjaxDragResize extends AjaxComponent {
     addStylesheetResourceInHead(response, "dragresize.css");
   }
 
-  protected WOActionResults handleRequest(WORequest request, WOContext context) {
+  public WOActionResults handleRequest(WORequest request, WOContext context) {
     return null;
   }
 
