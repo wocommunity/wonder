@@ -43,7 +43,7 @@ public class AjaxRoundEffect extends AjaxDynamicElement {
     addScriptResourceInHead(context, response, "rico.js");
   }
 
-  protected WOActionResults handleRequest(WORequest request, WOContext context) {
+  public WOActionResults handleRequest(WORequest request, WOContext context) {
     return null;
   }
 

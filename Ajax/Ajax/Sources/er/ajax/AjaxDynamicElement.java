@@ -11,7 +11,7 @@ import com.webobjects.appserver.WOResponse;
 import com.webobjects.appserver._private.WODynamicGroup;
 import com.webobjects.foundation.NSDictionary;
 
-public abstract class AjaxDynamicElement extends WODynamicGroup {
+public abstract class AjaxDynamicElement extends WODynamicGroup implements IAjaxElement {
   protected Logger log = Logger.getLogger(getClass());
   private WOElement _children;
   private NSDictionary _associations;
@@ -65,10 +65,23 @@ public abstract class AjaxDynamicElement extends WODynamicGroup {
    */
   public WOActionResults invokeAction(WORequest request, WOContext context) {
     Object result = null;
-    if (AjaxUtils.shouldHandleRequest(request, context)) {
-      result = handleRequest(request, context);
+    if (AjaxUtils.shouldHandleRequest(request, context, _containerID(context))) {
+      Object childrenResult = null;
+      if (_invokeChildrenBeforeHandleRequest()) {
+        childrenResult = super.invokeAction(request, context);
+      }
+      AjaxResponse response = AjaxUtils.createResponse(request, context);
+      if (_isDelayedElement()) {
+    	  response.addDelayedElement(this, context.component(), context.elementID());
+      }
+      else {
+    	  result = handleRequest(request, context);
+      }
+      if (_invokeChildrenAfterHandleRequest()) {
+        childrenResult = super.invokeAction(request, context);
+      }
       if (result == null) {
-        result = context.response();
+        result = childrenResult;
       }
       AjaxUtils.updateMutableUserInfoWithAjaxInfo(context);
     }
@@ -77,7 +90,23 @@ public abstract class AjaxDynamicElement extends WODynamicGroup {
     }
     return (WOActionResults) result;
   }
+  
+  protected boolean _isDelayedElement() {
+	  return false;
+  }
 
+  protected boolean _invokeChildrenBeforeHandleRequest() {
+    return false;
+  }
+
+  protected boolean _invokeChildrenAfterHandleRequest() {
+    return false;
+  }
+  
+  protected String _containerID(WOContext context) {
+	  return null;
+  }
+  
   /**
    * Overridden to call {@see #addRequiredWebResources(WOResponse)}.
    */
@@ -107,6 +136,6 @@ public abstract class AjaxDynamicElement extends WODynamicGroup {
    * @param context
    * @return
    */
-  protected abstract WOActionResults handleRequest(WORequest request, WOContext context);
+  public abstract WOActionResults handleRequest(WORequest request, WOContext context);
 
 }

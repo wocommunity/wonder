@@ -67,7 +67,7 @@ public class AjaxModalContainer extends AjaxDynamicElement {
         addStylesheetResourceInHead(context, response, "ibox.css");
     }
 
-    protected WOActionResults handleRequest(WORequest request, WOContext context) {
+    public WOActionResults handleRequest(WORequest request, WOContext context) {
         return null;
     }
 }

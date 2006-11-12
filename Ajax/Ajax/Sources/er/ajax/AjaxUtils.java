@@ -49,9 +49,24 @@ public class AjaxUtils {
    * @param context
    * @return
    */
-  public static WOResponse createResponse(WOContext context) {
+  public static AjaxResponse createResponse(WORequest request, WOContext context) {
     WOApplication app = WOApplication.application();
-    WOResponse response = app.createResponseInContext(context);
+    AjaxResponse response = null;
+    if (context != null) {
+    	WOResponse existingResponse = context.response();
+    	if (existingResponse instanceof AjaxResponse) {
+    		response = (AjaxResponse)existingResponse;
+    	}
+    	else {
+        	response = new AjaxResponse(request, context);
+        	response.setHeaders(existingResponse.headers());
+        	response.setUserInfo(existingResponse.userInfo());
+        	response.appendContentString(existingResponse.contentString());
+    	}
+    }
+    if (response == null) {
+    	response = new AjaxResponse(request, context);
+    }
     if (context != null) {
       context._setResponse(response);
     }
@@ -180,14 +195,14 @@ public class AjaxUtils {
     return "wo_" + elementID.replace('.', '_');
   }
 
-  public static boolean shouldHandleRequest(WORequest request, WOContext context) {
+  public static boolean shouldHandleRequest(WORequest request, WOContext context, String containerID) {
     String elementID = context.elementID();
     String senderID = context.senderID();
-    String invokeWOElementID = request.stringFormValueForKey("invokeWOElementID");
-    // WOComponent wocomponent = context.component();
-    // System.out.println(wocomponent.name() + " e:" + elementID + " - s: " + senderID + " - in " + invokeWOElementID);
-    boolean shouldHandleRequest = elementID != null && (elementID.equals(senderID) || (invokeWOElementID != null && invokeWOElementID.equals(elementID)));
-    // System.out.println("el: "+elementID+", sender: "+senderID+", invoke: "+invokeWOElementID+ ", shouldHandleRequest: "+shouldHandleRequest);
+    String updateContainerID = null;
+    if (containerID != null) {
+    	updateContainerID = AjaxUpdateContainer.updateContainerID(request);
+    }
+    boolean shouldHandleRequest = elementID != null && (elementID.equals(senderID) || (containerID != null && containerID.equals(updateContainerID)));
     return shouldHandleRequest;
   }
 

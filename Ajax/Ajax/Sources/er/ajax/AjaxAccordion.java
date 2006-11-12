@@ -59,7 +59,7 @@ public class AjaxAccordion extends AjaxComponent {
     addScriptResourceInHead(response, "rico.js");
   }
 
-  protected WOActionResults handleRequest(WORequest request, WOContext context) {
+  public WOActionResults handleRequest(WORequest request, WOContext context) {
     return null;
   }
 }

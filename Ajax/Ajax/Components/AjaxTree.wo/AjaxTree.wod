@@ -1,3 +1,7 @@
+ContainerID : WOString {
+	value = ^id;
+}
+
 ToggleFunctionName : WOString {
 	value = toggleFunctionName;
 }

@@ -97,7 +97,7 @@ public class AjaxObserveField extends AjaxDynamicElement {
     response.appendContentString(") });");
   }
 
-  protected WOActionResults handleRequest(WORequest request, WOContext context) {
+  public WOActionResults handleRequest(WORequest request, WOContext context) {
     return null;
   }
 }

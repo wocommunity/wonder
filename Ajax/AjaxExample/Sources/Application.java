@@ -2,20 +2,13 @@
 
 import org.apache.log4j.Logger;
 
-import com.webobjects.appserver.WOComponent;
-import com.webobjects.appserver.WOContext;
-
-import er.extensions.*;
+import er.extensions.ERXApplication;
 
 public class Application extends ERXApplication {
     Logger log = Logger.getLogger(Application.class);
     public static void main(String argv[]) {
         ERXApplication.main(argv, Application.class);
     }
-
-    public WOComponent pageWithName(String s, WOContext wocontext) {
-		return super.pageWithName(s, wocontext);
-	}
 
 	public Application() {
         super();

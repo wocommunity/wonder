@@ -4,16 +4,20 @@ AjaxExampleComponent : AjaxExampleComponent {
 
 LeftDropBlock : AjaxDroppable {
 	id = "leftDropBlock";
-	onDrop = "function(element, droppableElement) { element.hide(); bothListsUpdate(); }";
+	//onDrop = "function(element, droppableElement) { element.hide(); bothListsUpdate(); }";
+	updateContainerID = "bothLists";
 	action = droppedOnLeft;
 	droppedObject = droppedObject;
+	onComplete = "function(request) { new Effect.Highlight('leftDropBlock'); new Effect.Highlight('rightDropBlock'); }";
 }
 
 RightDropBlock : AjaxDroppable {
 	id = "rightDropBlock";
-	onDrop = "function(element, droppableElement) { element.hide(); bothListsUpdate(); }";
+	//onDrop = "function(element, droppableElement) { element.hide(); bothListsUpdate(); }";
+	updateContainerID = "bothLists";
 	action = droppedOnRight;
 	droppedObject = droppedObject;
+	onComplete = "function(request) { new Effect.Highlight('leftDropBlock'); new Effect.Highlight('rightDropBlock'); }";
 }
 
 DragItem : AjaxDraggable {
@@ -39,10 +43,4 @@ RightItemRepetition : WORepetition {
 BothLists : AjaxUpdateContainer {
 	id = "bothLists";
 	evalScripts = true;
-	onComplete = "function(request) { new Effect.Highlight('leftDropBlock'); new Effect.Highlight('rightDropBlock'); }";
-}
-
-Busy : AjaxBusyIndicator {
-	busyImage = "busyBigSpinner.gif";
-	busyImageFramework = "Ajax";
 }
