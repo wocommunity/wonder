@@ -724,14 +724,7 @@ public class ERXSession extends WOSession implements Serializable {
       return "[TransactionRecord: page = " + _page + "; context = " + _context.contextID() + "; key = " + _key + "; oldPage? " + _oldPage + "]";
     }
   }
-
-  /**
-   * Checks if the page should not be stored in the cache 
-   */
-  protected boolean shouldNotStorePage(WOMessage message) {
-	  return (message != null && (message.headerForKey(ERXSession.DONT_STORE_PAGE) != null || (message.userInfo() != null && message.userInfo().objectForKey(ERXSession.DONT_STORE_PAGE) != null)));
-  }
-	  
+  
   /**
    * Overridden so that Ajax requests are not saved in the page cache.  Checks both the 
    * response userInfo and the response headers if the DONT_STORE_PAGE key is present. The value doesn't matter.
@@ -767,12 +760,10 @@ public class ERXSession extends WOSession implements Serializable {
    * is requesting in its own thread and generating their own non-overlapping context ids.
    */
   public void savePage(WOComponent page) {
-    WOContext context = context();
-    WORequest request = context.request();
-    WOResponse response = context.response();
-    // MS: The "AJAX_SUBMIT_BUTTON_NAME" check is a total hack, but if your page structure changes such that the form that
-    // is being submitted to is hidden, it ends up not notifying the system not to cache the page.
-    if (shouldNotStorePage(response) || shouldNotStorePage(request) || request.formValueForKey("AJAX_SUBMIT_BUTTON_NAME") != null) {
+	WOContext context = context();
+    if (ERXApplication.shouldNotStorePage(context)) {
+      WORequest request = context.request();
+      WOResponse response = context.response();
       String pageCacheKey = null;
       if (response != null) {
     	  pageCacheKey = response.headerForKey(ERXSession.PAGE_REPLACEMENT_CACHE_LOOKUP_KEY);
