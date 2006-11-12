@@ -34,14 +34,15 @@ NotManualEditControlConditional : WOConditional {
 	negate = true;
 }
 
-EditFunction : AjaxHyperlink {
+EditFunction : AjaxUpdateLink {
 	action = startEditing;
 	onClick = ^onEditClick;
-	onClickServer = updateFunctionName;
+	//onClickServer = updateFunctionName;
 	onLoading = ^onEditing;
 	evalScripts = true;
 	disabled = ^disabled;
 	functionName = editFunctionName;
+	updateContainerID = id;
 }
 
 EditAction : WOGenericContainer {
@@ -61,15 +62,16 @@ CancelLabel : WOString {
 	valueWhenEmpty = "cancel";
 }
 
-CancelFunction : AjaxHyperlink {
+CancelFunction : AjaxUpdateLink {
 	action = cancel;
 	onClick = ^onCancelClick;
-	onClickServer = updateFunctionName;
+	//onClickServer = updateFunctionName;
 	onSuccess = ^onCancelSuccess;
 	onFailure = ^onCancelFailure;
 	onLoading = ^onCancelling;
 	evalScripts = true;
 	functionName = cancelFunctionName;
+	updateContainerID = id;
 }
 
 CancelAction : WOGenericContainer {
@@ -89,12 +91,13 @@ SaveFunction : AjaxSubmitButton {
 	button = false;
 	formName = id;
 	onClick = ^onSaveClick;
-	onClickServer = updateFunctionName;
+	//onClickServer = updateFunctionName;
 	onSuccess = ^onSaveSuccess;
 	onFailure = ^onSaveFailure;
 	onLoading = ^onSaving;
 	evalScripts = true;
 	functionName = saveFunctionName;
+	updateContainerID = id;
 }
 
 SaveAction : WOGenericContainer {

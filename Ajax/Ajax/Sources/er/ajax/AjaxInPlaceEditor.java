@@ -128,7 +128,7 @@ public class AjaxInPlaceEditor extends AjaxDynamicElement {
   }
 
   // Formatting/Parsing method "inspired by" WOTextField
-  protected WOActionResults handleRequest(WORequest request, WOContext context) {
+  public WOActionResults handleRequest(WORequest request, WOContext context) {
     WOComponent component = context.component();
     String strValue = request.stringFormValueForKey("value");
     Object objValue = strValue;
@@ -163,7 +163,7 @@ public class AjaxInPlaceEditor extends AjaxDynamicElement {
     // just executing action, ignoring result
     valueForBinding("action", component);
 
-    WOResponse response = AjaxUtils.createResponse(context);
+    WOResponse response = AjaxUtils.createResponse(request, context);
     _appendValueAttributeToResponse(response, context);
 
     return response;

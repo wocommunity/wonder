@@ -133,7 +133,7 @@ public class AjaxSortableList extends AjaxComponent {
     return onUpdateBuffer.toString();
   }
 
-  protected WOActionResults handleRequest(WORequest request, WOContext context) {
+  public WOActionResults handleRequest(WORequest request, WOContext context) {
     if (!canGetValueForBinding("list")) {
       throw new IllegalArgumentException("You must specify a readable 'list'.");
     }

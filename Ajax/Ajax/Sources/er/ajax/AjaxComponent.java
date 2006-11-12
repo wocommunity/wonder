@@ -17,7 +17,7 @@ import com.webobjects.appserver.WOResponse;
  *          Tous droits réservés.
  */
 
-public abstract class AjaxComponent extends WOComponent {
+public abstract class AjaxComponent extends WOComponent implements IAjaxElement {
     /** logging */
     protected Logger log = Logger.getLogger(getClass());
 
@@ -63,16 +63,35 @@ public abstract class AjaxComponent extends WOComponent {
      */
     public WOActionResults invokeAction(WORequest request, WOContext context) {
         Object result;
-        if (AjaxUtils.shouldHandleRequest(request, context)) {
+        if (AjaxUtils.shouldHandleRequest(request, context, _containerID(context))) {
+        	Object childrenResult = null;
+            if (_invokeChildrenBeforeHandleRequest()) {
+                childrenResult = super.invokeAction(request, context);
+            }
             result = handleRequest(request, context);
+            if (_invokeChildrenAfterHandleRequest()) {
+                childrenResult = super.invokeAction(request, context);
+            }
             if (result == null) {
-              result = context.response();
+                result = childrenResult;
             }
             AjaxUtils.updateMutableUserInfoWithAjaxInfo(context());
         } else {
             result = super.invokeAction(request, context);
         }
         return (WOActionResults) result;
+    }
+
+    protected boolean _invokeChildrenBeforeHandleRequest() {
+      return false;
+    }
+
+    protected boolean _invokeChildrenAfterHandleRequest() {
+      return false;
+    }
+
+    protected String _containerID(WOContext context) {
+    	return null;
     }
     
     public String safeElementID() {
@@ -99,6 +118,6 @@ public abstract class AjaxComponent extends WOComponent {
      * @param context
      * @return
      */
-    protected abstract WOActionResults handleRequest(WORequest request, WOContext context);
+    public abstract WOActionResults handleRequest(WORequest request, WOContext context);
 
 }

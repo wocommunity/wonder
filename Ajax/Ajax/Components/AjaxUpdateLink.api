@@ -17,6 +17,7 @@
 
 		<binding name = "onClickBefore"/>
 		<binding name = "onClick"/>
+		<binding name = "onClickServer"/>
 		
 		<binding name = "replaceID"/>
 		<binding name = "ignoreActionResponse"/>

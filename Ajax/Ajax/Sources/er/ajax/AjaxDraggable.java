@@ -123,7 +123,7 @@ public class AjaxDraggable extends AjaxComponent {
     addScriptResourceInHead(res, "controls.js");
   }
 
-  protected WOActionResults handleRequest(WORequest request, WOContext context) {
+  public WOActionResults handleRequest(WORequest request, WOContext context) {
     return null;
   }
 

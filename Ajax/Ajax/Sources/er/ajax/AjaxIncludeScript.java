@@ -35,7 +35,7 @@ public class AjaxIncludeScript extends AjaxDynamicElement {
     addScriptResourceInHead(context, res, name);
   }
 
-  protected WOActionResults handleRequest(WORequest request, WOContext context) {
+  public WOActionResults handleRequest(WORequest request, WOContext context) {
       return null;
   }
 }

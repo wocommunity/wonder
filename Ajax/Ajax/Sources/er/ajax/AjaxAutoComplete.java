@@ -178,14 +178,14 @@ public class AjaxAutoComplete extends AjaxComponent {
      * pushes it up to the parent and pulls the "list" binding. The parent is
      * responsible for returning a list with some items that match the current value.
      */
-     protected WOActionResults handleRequest(WORequest request, WOContext context) {
+     public WOActionResults handleRequest(WORequest request, WOContext context) {
         // String inputString = request.contentString();
         String fieldValue = context.request().stringFormValueForKey(fieldName);
         setValueForBinding(fieldValue, "value");
         NSArray values = (NSArray) valueForBinding("list");
         WOElement child = _childTemplate();
         boolean hasItem = hasBinding("item");
-        WOResponse response = AjaxUtils.createResponse(context);
+        WOResponse response = AjaxUtils.createResponse(request, context);
         response.appendContentString("<ul>");
         for(Enumeration e = values.objectEnumerator(); e.hasMoreElements();) {
             response.appendContentString("<li>");
