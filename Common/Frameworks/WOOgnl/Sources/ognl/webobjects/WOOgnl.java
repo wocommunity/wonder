@@ -137,7 +137,7 @@ public class WOOgnl {
         try {
             value = Ognl.getValue(expression, newDefaultContext(), obj);
         } catch (OgnlException ex) {
-            throw new IllegalStateException("Failed to get value '" + expression + "' on " + obj, ex);
+            throw new RuntimeException("Failed to get value '" + expression + "' on " + obj, ex);
         }
         return value;
     } 
@@ -146,7 +146,7 @@ public class WOOgnl {
         try {
             Ognl.setValue(expression, newDefaultContext(), obj, value);
         } catch (OgnlException ex) {
-            throw new IllegalStateException("Failed to set value '" + expression + "' on " + obj, ex);
+            throw new RuntimeException("Failed to set value '" + expression + "' on " + obj, ex);
         }
     } 
     
