@@ -22,6 +22,10 @@ import com.webobjects.appserver.WOSession;
  * using other parts of Project Wonder (i.e. ERXSession or ERXApplication),
  * you should steal all of the code in ERXAjaxSession and ERXAjaxApplication.
  * 
+ * You should also steal ERXWOForm (or at least the force form submit stuff)
+ * if you want partial form submits to work properly (i.e. the dependent lists
+ * example).
+ * 
  * @author mschrag
  */
 public class ERXAjaxSession extends WOSession {
