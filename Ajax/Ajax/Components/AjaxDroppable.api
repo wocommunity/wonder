@@ -15,6 +15,7 @@
 		<binding name="onDrop"/>
 		<binding name="onComplete"/>
 		<binding name="updateContainerID"/>
+		<binding name="evalScripts"/>
 	    <validation message="'id' is a required binding">
 			<unbound name="id"/>
 	    </validation>
