@@ -187,7 +187,7 @@ public class AjaxUtils {
    * @param script
    */
   public static void addScriptCodeInHead(WOResponse response, String script) {
-    String js = "<script type=\"text/javascript\"><!--\n" + script + "\n//--></script>";
+    String js = "<script type=\"text/javascript\">\n" + script + "\n</script>";
     AjaxUtils.insertInResponseBeforeTag(response, js, AjaxUtils.htmlCloseHead());
   }
 
@@ -216,11 +216,11 @@ public class AjaxUtils {
   }
 
   public static void appendScriptHeader(WOResponse response) {
-    response.appendContentString("<script type = \"text/javascript\" language = \"javascript\"><!--\n");
+    response.appendContentString("<script type = \"text/javascript\" language = \"javascript\">\n");
   }
 
   public static void appendScriptFooter(WOResponse response) {
-    response.appendContentString("//--></script>");
+    response.appendContentString("\n</script>");
   }
 
   public static Object valueForBinding(String name, Object defaultValue, NSDictionary associations, WOComponent component) {
