@@ -78,6 +78,9 @@ public class AjaxSubmitButton extends AjaxDynamicElement {
 	}
     parametersBuffer.append("'");
     options.setObjectForKey(parametersBuffer.toString(), "parameters");
+	if (options.objectForKey("evalScripts") == null) {
+		options.setObjectForKey("true", "evalScripts");
+	}
     return options;
   }
 
