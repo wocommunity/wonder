@@ -87,3 +87,37 @@ Submit2Action : AjaxSubmitButton {
 	value = "Submit #2";
 	action = submit2;
 }
+
+ExampleArea5 : AjaxUpdateContainer {
+	elementName = "div";
+	id = "ExampleArea5";
+	evalScripts = true;
+}
+
+ExampleArea6 : AjaxUpdateContainer {
+	elementName = "div";
+	id = "ExampleArea6";
+	evalScripts = true;
+}
+
+UpdateExampleArea5Then6 : AjaxSubmitButton {
+	updateContainerID = "ExampleArea5";
+	button = false;
+	onSuccess = "function(e) { ExampleArea6Update() }";
+}
+
+UpdateExampleArea6Then5 : AjaxSubmitButton {
+	updateContainerID = "ExampleArea6";
+	button = false;
+	onSuccess = "function(e) { ExampleArea5Update() }";
+}
+
+ExampleForm5 : WOForm {
+	multipleSubmit = true;
+	name = "ExampleForm5";
+}
+
+ExampleForm6 : WOForm {
+	multipleSubmit = true;
+	name = "ExampleForm6";
+}
