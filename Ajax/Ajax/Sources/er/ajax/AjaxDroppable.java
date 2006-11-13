@@ -46,6 +46,9 @@ public class AjaxDroppable extends AjaxComponent {
     ajaxOptionsArray.addObject(new AjaxOption("onHover", AjaxOption.SCRIPT));
     ajaxOptionsArray.addObject(new AjaxOption("evalScripts", AjaxOption.BOOLEAN));
     NSMutableDictionary options = AjaxOption.createAjaxOptionsDictionary(ajaxOptionsArray, this);
+	if (options.objectForKey("evalScripts") == null) {
+		options.setObjectForKey("true", "evalScripts");
+	}
     return options;
   }
 
