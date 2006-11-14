@@ -157,11 +157,8 @@ public class ERXInlineTemplate extends ERXNonSynchronizingComponent {
 	    if (cacheKey != null) { // should cache
 		CacheEntry cacheEntry = (CacheEntry) _cache.valueForKey(cacheKey);
 		Object requestedVersion = valueForBinding(CACHE_VERSION_BINDING);
-		if (cacheEntry != null && (requestedVersion == null || requestedVersion.equals(cacheEntry.version()))) { // requestedVersion
-                                                                                                                                // matches
-                                                                                                                                // or
-                                                                                                                                // is
-                                                                                                                                // null
+		if (cacheEntry != null && (requestedVersion == null || requestedVersion.equals(cacheEntry.version()))) { 
+			// requestedVersion matches or is null
 		    if (log.isDebugEnabled())
 			log.debug("using cache: " + cacheKey + " / " + cacheEntry.version());
 		    element = cacheEntry.element();
