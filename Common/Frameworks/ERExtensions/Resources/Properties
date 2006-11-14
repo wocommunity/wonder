@@ -287,6 +287,10 @@ er.extensions.ERXComponentActionRedirector.enabled=false
 # time in seconds in which to kill the app after starting to refuse new sessions
 # ERTimeToKill=1800
 
+## Handling of low memory conditions. Reserve X KB to keep as last-ditch reserve
+## and post a notification to release cache memory. Default is 0, meaning no reserve.
+# er.extensions.ERXApplication.lowMemBufferSize=1024
+
 #########################################################################
 # ERXJDBCConnectionBroker 
 #########################################################################
