@@ -1,5 +1,5 @@
 ContainerID : WOString {
-	value = ^id;
+	value = id;
 }
 
 ToggleFunctionName : WOString {
