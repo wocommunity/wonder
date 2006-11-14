@@ -94,19 +94,32 @@ public class PostgresqlPlugIn extends JDBCPlugIn {
         		}
         		return results;
         	} catch(JDBCAdaptorException ex) {
-        		expression.setStatement( "select count(*) from pg_class where relname = '"+ sequenceName.toLowerCase() +"' and relkind = 'S'" );
+				//timc 2006-11-06 Check if sequence name contains schema name
+				int dotIndex = sequenceName.indexOf(".");
+				if ( dotIndex == -1 ) {
+					expression.setStatement( "select count(*) from pg_class where relname = '"+ sequenceName.toLowerCase() +"' and relkind = 'S'" );
+				} else {
+					String schemaName = sequenceName.substring(0, dotIndex);
+					String sequenceNameOnly = sequenceName.toLowerCase().substring(dotIndex + 1);
+					expression.setStatement("select count(c.*) from pg_catalog.pg_class c, pg_catalog.pg_namespace n where c.relnamespace=n.oid AND c.relkind = 'S' AND c.relname='"+sequenceNameOnly+"' AND n.nspname='"+schemaName+"'");
+				}
         		channel.evaluateExpression( expression );
         		NSDictionary row = channel.fetchRow();
         		channel.cancelFetch();
-        		if( new Long( 0 ).equals( row.objectForKey( "COUNT" ) ) ) {
+				// timc 2006-11-06 row.objectForKey("COUNT") returns BigDecimal not Long
+        		//if( new Long( 0 ).equals( row.objectForKey( "COUNT" ) ) ) {
+				Number numCount = (Number) row.objectForKey("COUNT");
+        		if( numCount != null && numCount.longValue() == 0L ) {
         			EOSynchronizationFactory f = createSynchronizationFactory();
         			NSArray statements = f.primaryKeySupportStatementsForEntityGroup( new NSArray( entity ) );
         			int stmCount = statements.count();
         			for( int i = 0; i < stmCount; i++ ) {
         				channel.evaluateExpression( (EOSQLExpression) statements.objectAtIndex(i) );
         			}            
-        		} else {
-        			throw new IllegalStateException("Caught exception, but sequence did already exist: " + ex);
+        		} else if ( numCount == null ) {
+					throw new IllegalStateException("Couldn't call sequence " + sequenceName + " and couldn't get sequence information from pg_class: " + ex);
+				} else {
+					throw new IllegalStateException("Caught exception, but sequence did already exist: " + ex);
         		}
         	}
         }
@@ -121,7 +134,12 @@ public class PostgresqlPlugIn extends JDBCPlugIn {
      * @return  the name of the sequence
      */
     protected static String sequenceNameForEntity(EOEntity entity) {
-        return entity.primaryKeyRootName() + "_SEQ";
+        /* timc 2006-11-06 
+         * This used to say ... + "_SEQ";
+         * _SEQ would get converted to _seq because postgresql converts all unquoted identifiers to lower case.
+		 * In the future we may use enableIdentifierQuoting for sequence names so we need to set the correct case here in the first place
+         */
+        return entity.primaryKeyRootName() + "_seq";
     }
     
     /**
