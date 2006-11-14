@@ -4,6 +4,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.InvocationTargetException;
+import java.sql.SQLException;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -11,6 +13,7 @@ import org.apache.log4j.Logger;
 
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSForwardException;
+import com.webobjects.jdbcadaptor.JDBCAdaptorException;
 
 public class ERXRuntimeUtilities {
 
@@ -18,6 +21,42 @@ public class ERXRuntimeUtilities {
     public static Logger log = Logger
             .getLogger(ERXRuntimeUtilities.class);
 
+    /**
+     * Retrieves the actual cause of an error by unwrapping them as far as possible, 
+     * i.e. NSForwardException.originalThrowable(), InvocationTargetException.getTargetException() 
+     * or Exception.getCause() are regarded as actual causes.
+     */
+
+    public static Throwable originalThrowable(Throwable t) {
+    	Throwable throwable = null;
+    	if (t instanceof InvocationTargetException) {
+    		return originalThrowable(((InvocationTargetException)t).getTargetException());
+    	} 
+    	if (t instanceof NSForwardException) {
+    		return originalThrowable(((NSForwardException)t).originalException());
+    	}
+       	if (t instanceof JDBCAdaptorException) {
+       		JDBCAdaptorException ex = (JDBCAdaptorException)t; 
+    		if(ex.sqlException() != null) {
+    			return originalThrowable(ex.sqlException());
+    		}
+    	} 
+       	if (t instanceof SQLException) {
+    		SQLException ex = (SQLException)t; 
+    		if(ex.getNextException() != null) {
+    			return originalThrowable(ex.getNextException());
+    		}
+    	} 
+    	if (t instanceof Exception) {
+    		Exception ex = (Exception)t; 
+    		if(ex.getCause() != null) {
+    			return originalThrowable(ex.getCause());
+    		}
+    	}
+    	return t;
+    }
+
+    
     /**
      * Excecutes the specified command line commands. If envp is not null the
      * environment variables are set before executing the command.
@@ -64,9 +103,11 @@ public class ERXRuntimeUtilities {
      *            would be as String arrays<br>
      * 
      * <pre>
-     * new String[] { new String[] { &quot;ls&quot;, &quot;-la&quot; },
-     *      new String[] { &quot;cp&quot;, &quot;/tmp/file1&quot;, &quot;/tmp/file2&quot; },
-     *      new String[] { &quot;open&quot;, &quot;/Applications/*.app&quot; } }
+     *     new String[] { 
+     *      	new String[] { &quot;ls&quot;, &quot;-la&quot; },
+     *      	new String[] { &quot;cp&quot;, &quot;/tmp/file1&quot;, &quot;/tmp/file2&quot; },
+     *      	new String[] { &quot;open&quot;, &quot;/Applications/*.app&quot; } 
+     *     }
      * </pre>
      * 
      * @param envp
