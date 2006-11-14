@@ -66,6 +66,26 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
     private static boolean _wasERXApplicationMainInvoked = false;
 
     /** 
+     * Notification to get posted when we can an OutOfMemoryError. You
+     * should register your caching classes for this notification so you
+     * can release memory. Registration should happen at launch time.
+     */
+    public static String LowMemoryNotification = "LowMemoryNotification";
+
+    /**
+     * Buffer we reserve lowMemBufSize KB to release when we get an OutOfMemoryError, so we can 
+     * post our notification and do other stuff 
+     */
+    private static byte lowMemBuffer[];
+    
+    /**
+     * Size of the memory in KB to reserve for low-mem situations, pulled form the system property
+     * <code>er.extensions.ERXApplication.lowMemBufferSize</code>. Default is 0, indicating no reserve.
+     */
+    private static int lowMemBufferSize = 0;
+    
+    
+    /** 
      * Called when the application starts up and saves the command line 
      * arguments for {@link ERXConfigurationManager}. 
      * 
@@ -155,8 +175,10 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
             _displayMainMethodWarning();
         }        
         installPatches();
-
-
+        lowMemBufferSize = ERXProperties.intForKeyWithDefault("er.extensions.ERXApplication.lowMemBufferSize", 0);
+        if(lowMemBufferSize > 0) {
+        	lowMemBuffer = new byte[lowMemBufferSize];
+        }
         registerRequestHandler(new ERXDirectActionRequestHandler(), directActionRequestHandlerKey());
         if (isDirectConnectEnabled()) {
         	registerRequestHandler(new ERXStaticResourceRequestHandler(), "_wr_");
@@ -649,14 +671,36 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
             throwable = ((NSForwardException)exception).originalException();
         }
         if (throwable instanceof Error) {
-            boolean shouldQuit = true;
-            if (throwable instanceof OutOfMemoryError) {
-                // We first log just in case the log4j call puts us in a bad state.
-                NSLog.err.appendln("Ran out of memory, killing this instance");
-                log.error("Ran out of memory, killing this instance");
-            } else if (throwable instanceof NoClassDefFoundError ||
-                    throwable instanceof AbstractMethodError || 
-                    throwable instanceof InstantiationError ||
+        	boolean shouldQuit = true;
+        	if (throwable instanceof OutOfMemoryError) {
+        		// AK: I'm not sure this actually works, in particular when the
+        		// buffer is in the long-running generational mem, but it's worth a try.
+        		// what we do is set up a last-resort buffer during startup
+        		if(lowMemBuffer != null) {
+        			Runtime.getRuntime().freeMemory();
+        			try {
+            			lowMemBuffer = null;
+            			System.gc();
+            			log.error("Ran out of memory, sending notification to clear caches");
+            			NSNotificationCenter.defaultCenter().postNotification(new NSNotification(LowMemoryNotification, this));
+            			shouldQuit = false;
+            			// try to reclaim our twice of our buffer
+            			// if this worked maybe we can continue running
+        				lowMemBuffer = new byte[lowMemBufferSize*2];
+        				// shrink buffer to normal size
+        				lowMemBuffer = new byte[lowMemBufferSize];
+        			} catch(Throwable ex) {
+        				shouldQuit = true;
+        			}
+        		}
+        		// We first log just in case the log4j call puts us in a bad state.
+        		if(shouldQuit) {
+        			NSLog.err.appendln("Ran out of memory, killing this instance");
+        			log.error("Ran out of memory, killing this instance");
+        		}
+        	} else if (throwable instanceof NoClassDefFoundError ||
+        			throwable instanceof AbstractMethodError || 
+        			throwable instanceof InstantiationError ||
                     throwable instanceof NoSuchFieldError || 
                     throwable instanceof NoSuchMethodError) {
                 shouldQuit = false;
