@@ -108,7 +108,11 @@ public class PostgresqlSynchronizationFactory extends EOSynchronizationFactory i
         count = entityGroup.count();
         for ( i = 0 ; i < count ; i++ ) {
             entity = (EOEntity)entityGroup.objectAtIndex(i);
-            results.addObject( createExpression( entity, "DROP TABLE " + entity.externalName() ) );
+			//timc 2006-11-06 create result here so we can check for enableIdentifierQuoting while building the statement
+			PostgresqlExpression result = new PostgresqlExpression(entity);
+			String tableName = result.sqlStringForSchemaObjectName(entity.externalName());
+			result.setStatement("DROP TABLE " + tableName);
+			results.addObject(result);
         }
         return results;
     }
@@ -137,12 +141,16 @@ public class PostgresqlSynchronizationFactory extends EOSynchronizationFactory i
             s = replaceStringByStringInString(") INITIALLY DEFERRED", ") DEFERRABLE INITIALLY DEFERRED", s);
             expression.setStatement(s);
             results.addObject( expression );
-            String tableName = expression.entity().externalName();
-            NSArray columNames = ( (NSArray) relationship.sourceAttributes().valueForKey( "columnName" ) );
-            String indexName = relationship.entity().externalName() + "_" +
-                ( (NSArray) relationship.sourceAttributes().valueForKey( "columnName" ) ).componentsJoinedByString( "_" ) +"_IDX";
+			//timc 2006-11-06 check for enableIdentifierQuoting
+            String tableName = expression.sqlStringForSchemaObjectName(expression.entity().externalName());
+            NSArray columnNames = ( (NSArray) relationship.sourceAttributes().valueForKey( "columnName" ) );
+			StringBuffer sbColumnNames = new StringBuffer();
+			for(int j = 0; j < columnNames.count(); j++) {
+				sbColumnNames.append(( j == 0 ? "" : ", ") + expression.sqlStringForSchemaObjectName((String)columnNames.objectAtIndex(j)));									
+			}
+            String indexName = relationship.entity().externalName() + "_" + columnNames.componentsJoinedByString( "_" ) +"_idx";
             results.addObject( createExpression( expression.entity(), "CREATE INDEX "+ indexName +" ON "+
-                                                 tableName +"( "+ columNames.componentsJoinedByString( ", " ) +" )" ) );
+                                                 tableName +"( "+ sbColumnNames.toString() +" )" ) );
         }
         return results;
     }
@@ -169,23 +177,30 @@ public class PostgresqlSynchronizationFactory extends EOSynchronizationFactory i
         for ( i = 0 ; i < count ; i++ ) {
             entity = (EOEntity)entityGroup.objectAtIndex(i);
             if (!entityUsesSeparateTable(entity)) continue;
+			//timc 2006-11-06 create result here so we can check for enableIdentifierQuoting while building the statement
+			PostgresqlExpression result = new PostgresqlExpression(entity);
+			String constraintName = result.sqlStringForSchemaObjectName(entity.externalName() + "_pk");
+			String tableName = result.sqlStringForSchemaObjectName(entity.externalName());
+
             StringBuffer statement = new StringBuffer("ALTER TABLE ");
-            statement.append(entity.externalName());
+            statement.append(tableName);
             statement.append(" ADD CONSTRAINT ");
-            statement.append(entity.externalName());
-            statement.append("_PK PRIMARY KEY (");
+            statement.append(constraintName);
+            statement.append(" PRIMARY KEY (");
             priKeyAttributes = entity.primaryKeyAttributes();
             priKeyAttributeCount = priKeyAttributes.count();
             for ( j = 0 ; j < priKeyAttributeCount ; j++ ) {
                 priKeyAttribute = (EOAttribute)priKeyAttributes.objectAtIndex(j);
-                statement.append(priKeyAttribute.columnName());
+				String attributeName = result.sqlStringForAttribute(priKeyAttribute);
+                statement.append(attributeName);
                 if ( j < priKeyAttributeCount - 1 ) {
                     statement.append(", ");
                 } else {
                     statement.append(")");
                 }
             }
-            results.addObject(createExpression(entity, statement.toString()));
+			result.setStatement(statement.toString());
+            results.addObject(result);
         }
         return results;
     }
@@ -215,18 +230,23 @@ public class PostgresqlSynchronizationFactory extends EOSynchronizationFactory i
                 String sql;
 
                 sequenceName = PostgresqlPlugIn.sequenceNameForEntity(entity);
+				//timc 2006-11-06 create result here so we can check for enableIdentifierQuoting while building the statement
+				PostgresqlExpression result = new PostgresqlExpression(entity);
+				String attributeName = result.sqlStringForAttribute(priKeyAttribute);
+				String tableName = result.sqlStringForSchemaObjectName(entity.externalName());
+				
                 sql = "CREATE SEQUENCE " + sequenceName;
                 results.addObject(createExpression(entity, sql));
 
                 sql = "CREATE TEMP TABLE EOF_TMP_TABLE AS SELECT SETVAL('" + sequenceName
-                + "', (SELECT MAX(" + priKeyAttribute.columnName() + ") FROM "
-                + entity.externalName() + "))";
+                + "', (SELECT MAX(" + attributeName + ") FROM "
+                + tableName + "))";
                 results.addObject(createExpression(entity, sql));
 
                 sql = "DROP TABLE EOF_TMP_TABLE";
                 results.addObject(createExpression(entity, sql));
                 
-                sql =  "ALTER TABLE "+ entity.externalName() +" ALTER COLUMN "+ priKeyAttribute.columnName() +" SET DEFAULT nextval( '"+ sequenceName+ "' )" ;
+                sql =  "ALTER TABLE "+ tableName +" ALTER COLUMN "+ attributeName +" SET DEFAULT nextval( '"+ sequenceName+ "' )" ;
                 results.addObject(createExpression(entity, sql));
             }
         }
