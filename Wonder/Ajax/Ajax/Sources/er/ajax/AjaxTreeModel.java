@@ -4,6 +4,7 @@ import java.util.Enumeration;
 
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSKeyValueCodingAdditions;
+import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableSet;
 import com.webobjects.foundation._NSDelegate;
 
@@ -23,11 +24,11 @@ public class AjaxTreeModel {
 		_collapsedTreeNodes = new NSMutableSet();
 		_delegate = new _NSDelegate(AjaxTreeModel.Delegate.class);
 	}
-	
+
 	public void setDelegate(Object delegate) {
 		_delegate.setDelegate(delegate);
 	}
-	
+
 	public Object delegate() {
 		return _delegate.delegate();
 	}
@@ -190,7 +191,7 @@ public class AjaxTreeModel {
 	public NSArray childrenTreeNodes(Object node) {
 		NSArray childrenTreeNodes;
 		if (_delegate.respondsTo("childrenTreeNodes")) {
-			childrenTreeNodes = (NSArray)_delegate.perform("childrenTreeNodes", node);
+			childrenTreeNodes = (NSArray) _delegate.perform("childrenTreeNodes", node);
 		}
 		else {
 			childrenTreeNodes = (NSArray) NSKeyValueCodingAdditions.Utility.valueForKeyPath(node, _childrenTreeNodesKeyPath);
@@ -247,6 +248,97 @@ public class AjaxTreeModel {
 				_rootNode = null;
 			}
 			return retval;
+		}
+	}
+
+	/**
+	 * WrapperNode is useful if your objects form a 
+	 * graph instead of a tree and you want to maintain the unique
+	 * branching to a particular node as the user navigates through
+	 * the tree.  isLeaf has a default implementation that you may
+	 * want to overried if you can provide a "smarter" 
+	 * implementation.
+	 * 
+	 * @author mschrag
+	 */
+	public abstract static class WrapperNode {
+		private WrapperNode _parent;
+		private Object _userObject;
+
+		public WrapperNode(WrapperNode parent, Object userObject) {
+			_parent = parent;
+			_userObject = userObject;
+		}
+		
+		public Object userObject() {
+			return _userObject;
+		}
+
+		protected abstract WrapperNode _createChildNode(Object userObject);
+		
+		protected abstract NSArray _childrenTreeNodes();
+		
+		public NSArray childrenTreeNodes() {
+			NSArray childrenTreeNodes = _childrenTreeNodes();
+			if (childrenTreeNodes != null && childrenTreeNodes.count() > 0) {
+				NSMutableArray wrappedTreeNodes = new NSMutableArray();
+				Enumeration childrenTreeNodesEnum = childrenTreeNodes.objectEnumerator();
+				while (childrenTreeNodesEnum.hasMoreElements()) {
+					Object obj = childrenTreeNodesEnum.nextElement();
+					wrappedTreeNodes.addObject(_createChildNode(obj));
+				}
+				childrenTreeNodes = wrappedTreeNodes;
+			}
+			return childrenTreeNodes;
+		}
+
+		public boolean isLeaf() {
+			NSArray childrenTreeNodes = _childrenTreeNodes();
+			boolean isLeaf = childrenTreeNodes == null || childrenTreeNodes.count() == 0;
+			return isLeaf;
+		}
+
+		public WrapperNode parentTreeNode() {
+			return _parent;
+		}
+
+		public int hashCode() {
+			int hashCode;
+			if (_userObject == null) {
+				hashCode = super.hashCode();
+			}
+			else {
+				hashCode = _userObject.hashCode();
+			}
+			if (_parent != null) {
+				hashCode *= _parent.hashCode();
+			}
+			return hashCode;
+		}
+
+		public boolean equals(Object obj) {
+			boolean equals;
+			if (obj instanceof WrapperNode) {
+				WrapperNode wrapperNode = (WrapperNode)obj;
+				if (_userObject == null) {
+					equals = (wrapperNode._userObject == null);
+				}
+				else {
+					equals = _userObject.equals(wrapperNode._userObject);
+				}
+				if (equals) {
+					if (_parent == null) {
+						equals = (wrapperNode._parent == null);
+					}
+					else {
+						equals = _parent.equals(wrapperNode._parent);
+					}
+				}
+			}
+			else {
+				equals = false;
+			}
+			return equals;
 		}
 	}
 }
