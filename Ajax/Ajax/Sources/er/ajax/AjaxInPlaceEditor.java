@@ -96,7 +96,7 @@ public class AjaxInPlaceEditor extends AjaxDynamicElement {
     if (_classAssociation != null) {
       String className = (String) _classAssociation.valueInComponent(component);
       response.appendContentString(" class = \"");
-      response.appendContentString(id);
+      response.appendContentString(className);
       response.appendContentString("\"");
     }
     response.appendContentString(">");
