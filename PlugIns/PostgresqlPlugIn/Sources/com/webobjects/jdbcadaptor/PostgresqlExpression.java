@@ -1,5 +1,8 @@
 package com.webobjects.jdbcadaptor;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.math.BigDecimal;
 import java.sql.Timestamp;
 
 import com.webobjects.eoaccess.EOAttribute;
@@ -11,6 +14,7 @@ import com.webobjects.eocontrol.EOQualifier;
 import com.webobjects.eocontrol.EOSortOrdering;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSData;
+import com.webobjects.foundation.NSForwardException;
 import com.webobjects.foundation.NSKeyValueCoding;
 import com.webobjects.foundation.NSLog;
 import com.webobjects.foundation.NSMutableArray;
@@ -69,6 +73,11 @@ public class PostgresqlExpression extends JDBCExpression {
      * formatter to use when handling timestamps
      */
     private static final NSTimestampFormatter TIMESTAMP_FORMATTER = new NSTimestampFormatter("%Y-%m-%d %H:%M:%S.%F");
+
+    /**
+     * Method to get the string value from a BigDecimals from.
+     */
+    private static Method _bigDecimalToString = null;
 
     /**
      * If true, don't use typecasting, ie: 'some text'::varcchar(255)
@@ -406,7 +415,11 @@ public class PostgresqlExpression extends JDBCExpression {
         } else if(obj instanceof String) {
             value = formatStringValue((String)obj);
         } else if(obj instanceof Number) {
-            value = (String) eoattribute.adaptorValueByConvertingAttributeValue(obj).toString();
+            if(obj instanceof BigDecimal) {
+                value = fixBigDecimal((BigDecimal) obj, eoattribute);
+            } else {
+                value = (String) eoattribute.adaptorValueByConvertingAttributeValue(obj).toString();
+            }
         } else if(obj instanceof Boolean) {
         	// GN: when booleans are stored as strings in the db, we need the values quoted
         	if (enableBooleanQuoting()) {
@@ -437,6 +450,39 @@ public class PostgresqlExpression extends JDBCExpression {
         	}
         }
         return value;
+    }
+
+    /**
+     * Fixes an incompatibility with JDK 1.5 and using toString() instead of toPlainString() for BigDecimals.
+     * From what I understand, you will only need this if you disable bind variables.
+     * @param value
+     * @param eoattribute
+     * @return
+     * @author ak
+     */
+    private String fixBigDecimal(BigDecimal value, EOAttribute eoattribute) {
+        String result;
+        if(System.getProperty("java.version").compareTo("1.5") >= 0) {
+            try {
+                if(_bigDecimalToString == null) {
+                    _bigDecimalToString = BigDecimal.class.getMethod("toPlainString", null);
+                }
+                result = (String) _bigDecimalToString.invoke(value, null);
+            } catch (IllegalArgumentException e) {
+                throw NSForwardException._runtimeExceptionForThrowable(e);
+            } catch (IllegalAccessException e) {
+                throw NSForwardException._runtimeExceptionForThrowable(e);
+            } catch (InvocationTargetException e) {
+                throw NSForwardException._runtimeExceptionForThrowable(e);
+            } catch (SecurityException e) {
+                throw NSForwardException._runtimeExceptionForThrowable(e);
+            } catch (NoSuchMethodException e) {
+                throw NSForwardException._runtimeExceptionForThrowable(e);
+            }
+        } else {
+            result = value.toString();
+        }
+        return result;
     }
 
     /**
