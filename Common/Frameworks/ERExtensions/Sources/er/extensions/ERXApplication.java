@@ -7,7 +7,6 @@
 package er.extensions;
 
 import java.io.File;
-import java.lang.reflect.InvocationTargetException;
 import java.util.Hashtable;
 import java.util.Random;
 
@@ -664,15 +663,10 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
      * @param exception to check if it is a fatal exception.
      */
     public void handlePotentiallyFatalException(Exception exception) {
-        Throwable throwable = null;
-        if (exception instanceof InvocationTargetException) {
-            throwable = ((InvocationTargetException)exception).getTargetException();
-        } else if (exception instanceof NSForwardException ) {
-            throwable = ((NSForwardException)exception).originalException();
-        }
-        if (throwable instanceof Error) {
-        	boolean shouldQuit = true;
-        	if (throwable instanceof OutOfMemoryError) {
+    	Throwable throwable = ERXRuntimeUtilities.originalThrowable(exception);
+    	if (throwable instanceof Error) {
+    		boolean shouldQuit = true;
+    		if (throwable instanceof OutOfMemoryError) {
         		// AK: I'm not sure this actually works, in particular when the
         		// buffer is in the long-running generational mem, but it's worth a try.
         		// what we do is set up a last-resort buffer during startup
