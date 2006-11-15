@@ -17,7 +17,7 @@ Conditional3: WOConditional {
 	condition = d2wComponentNameDebuggingEnabled;
 }
 
-Form1: WOForm {
+Form1: ERXOptionalForm {
 }
 
 Hyperlink1: WOHyperlink {
