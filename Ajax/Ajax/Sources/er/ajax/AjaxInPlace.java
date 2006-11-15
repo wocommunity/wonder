@@ -79,23 +79,25 @@ public class AjaxInPlace extends WOComponent {
   public boolean synchronizesVariablesWithBindings() {
     return false;
   }
+  
+  public String id() {
+    if (_id == null) {
+      if (hasBinding("id")) {
+        _id = (String) valueForBinding("id");
+      }
+      else {
+        _id = AjaxUtils.toSafeElementID(context().elementID());
+      }
+    }
+    return _id;
+  }
 
   public void appendToResponse(WOResponse aResponse, WOContext aContext) {
-    if (canGetValueForBinding("id")) {
-      _id = (String)valueForBinding("id");
-    }
-    else {
-      _id = AjaxUtils.toSafeElementID(aContext.elementID());
-    }
     super.appendToResponse(aResponse, aContext);
   }
 
   public String updateFunctionName() {
-    return _id + "Update();";
-  }
-
-  public String id() {
-    return _id;
+    return id() + "Update();";
   }
 
   public String editFunctionName() {
