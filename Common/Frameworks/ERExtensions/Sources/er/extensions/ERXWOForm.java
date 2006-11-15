@@ -120,10 +120,11 @@ public class ERXWOForm extends com.webobjects.appserver._private.WOHTMLDynamicEl
     public WOActionResults invokeAction(WORequest worequest, WOContext context) {
     	boolean wasFormSubmitted = context._wasFormSubmitted();
 		boolean wasInForm = _enterFormInContext(context);
+		boolean wasMultipleSubmitForm = context._isMultipleSubmitForm();
     	context._setActionInvoked(false);
-    	context._setIsMultipleSubmitForm(_multipleSubmit == null ? false : _multipleSubmit.booleanValueInComponent(context.component()));
+		context._setIsMultipleSubmitForm(_multipleSubmit == null ? false : _multipleSubmit.booleanValueInComponent(context.component()));
     	WOActionResults result = super.invokeAction(worequest, context);
-    	if(!context._wasActionInvoked() && context._wasFormSubmitted()) {
+    	if(!wasInForm && !context._wasActionInvoked() && context._wasFormSubmitted()) {
     		if(_action != null) {
     			result = (WOActionResults)_action.valueInComponent(context.component());
     		}
@@ -131,7 +132,7 @@ public class ERXWOForm extends com.webobjects.appserver._private.WOHTMLDynamicEl
     			result = context.page();
     		}
     	}
-    	context._setIsMultipleSubmitForm(false);
+		context._setIsMultipleSubmitForm(wasMultipleSubmitForm);
     	_exitFormInContext(context, wasInForm, wasFormSubmitted);
     	return result;
     }
