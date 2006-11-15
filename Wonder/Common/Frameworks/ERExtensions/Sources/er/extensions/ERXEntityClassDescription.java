@@ -239,6 +239,7 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
         public void reset() {
             _registeredModelNames = new NSMutableArray();
             _entitiesForClass = new NSMutableDictionary();
+            _classDescriptionForEntity = new NSMutableDictionary();
         }
 
         /**
@@ -381,13 +382,25 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
          * @return new class description for the given entity
          */
         public ERXEntityClassDescription newClassDescriptionForEntity(EOEntity entity) {
-            return new ERXEntityClassDescription(entity);
+        	String key = entity.name();
+        	EOModel model = entity.model();
+        	if (model != null) {
+        		key = model.name() + " " + key;
+        	}
+        	ERXEntityClassDescription classDescription = (ERXEntityClassDescription)_classDescriptionForEntity.objectForKey(key);
+        	if (classDescription == null) {
+        		classDescription = new ERXEntityClassDescription(entity);
+        		_classDescriptionForEntity.setObjectForKey(classDescription, key);
+        	}
+        	return classDescription;
         }
 
         /** holds a reference to all of the registered model names */
         private NSMutableArray _registeredModelNames = new NSMutableArray();
         /** holds a mapping of class to entities */
         private NSMutableDictionary _entitiesForClass = new NSMutableDictionary();
+        /** holds a mapping of entity to class descrpitions */
+        private NSMutableDictionary _classDescriptionForEntity = new NSMutableDictionary();
 
         /**
          * Allows for entities to be altered
