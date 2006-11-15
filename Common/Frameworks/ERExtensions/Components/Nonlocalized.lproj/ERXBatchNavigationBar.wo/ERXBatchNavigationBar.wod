@@ -1,5 +1,4 @@
 BatchForm: WOForm {
-	disabled = context.isInForm;
 }
 
 BatchNumber: WOTextField {
@@ -9,7 +8,6 @@ BatchNumber: WOTextField {
 }
 
 BatchNumberForm: WOForm {
-	disabled = context.isInForm;
 }
 
 Conditional1: WOConditional {
@@ -52,7 +50,6 @@ ItemsPerBatch: WOTextField {
 }
 
 KeyForm: WOForm {
-	disabled = context.isInForm;
 }
 
 LeftArrow: WOImage {
