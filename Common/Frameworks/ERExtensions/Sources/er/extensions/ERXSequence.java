@@ -160,13 +160,14 @@ public class ERXSequence {
 	        throw new IllegalStateException("Couldn't get sequence: " + name());
 		}
 
-		private boolean isCreationError(SQLException ex) {
+		protected boolean isCreationError(SQLException ex) {
 			String s = ex.getMessage().toLowerCase();
     		boolean creationError = false;
     		creationError |= (s.indexOf("error code 116") != -1); // frontbase?
 			creationError |= (s.indexOf("erx_sequence_table") != -1 && s.indexOf("does not exist") != -1); // postgres ?
 			creationError |= s.indexOf("ora-00942") != -1; // oracle
 			creationError |= s.indexOf("doesn't exist") != -1; // mysql
+			creationError |= (s.indexOf("erx_sequence_table") != -1 && s.indexOf("not found.") != -1); // sybase
 			return creationError;
 		}
 	}
