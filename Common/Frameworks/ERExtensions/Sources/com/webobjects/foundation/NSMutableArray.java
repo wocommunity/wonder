@@ -1,5 +1,6 @@
 package com.webobjects.foundation;
 
+import java.lang.reflect.Array;
 import java.util.Collection;
 import java.util.ConcurrentModificationException;
 import java.util.Iterator;
@@ -385,6 +386,25 @@ public class NSMutableArray extends NSArray {
                 }
             }
         }
+    }
+
+    /**
+     * Bugfix for the broken implementation in NSArray.
+     */
+    public Object[] toArray(Object array[]) {
+    	int i = size();
+    	if (array.length < i) {
+    		array = (Object[]) (Object[]) Array.newInstance(((Object) (array)).getClass().getComponentType(), i);
+    	}
+    	Object result[] = array;
+    	for (int j = 0; j < i; j++) {
+    		result[j] = objectAtIndex(j);
+    	}
+
+    	if (array.length > i) {
+    		array[i] = null;
+    	}
+    	return array;
     }
 
     //AK: from here on only java.util.List stuff
