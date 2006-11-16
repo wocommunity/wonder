@@ -37,6 +37,8 @@ NotManualEditControlConditional : WOConditional {
 EditFunction : AjaxUpdateLink {
 	action = startEditing;
 	onClick = ^onEditClick;
+	onSuccess = ^onEditSuccess;
+	onFailure = ^onEditFailure;
 	//onClickServer = updateFunctionName;
 	onLoading = ^onEditing;
 	evalScripts = true;
