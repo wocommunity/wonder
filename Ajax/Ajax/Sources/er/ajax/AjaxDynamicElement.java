@@ -67,12 +67,14 @@ public abstract class AjaxDynamicElement extends WODynamicGroup implements IAjax
     Object result = null;
     if (AjaxUtils.shouldHandleRequest(request, context, _containerID(context))) {
       Object childrenResult = null;
+      WOComponent component = context.component();
+      String elementID = context.elementID();
       if (_invokeChildrenBeforeHandleRequest()) {
         childrenResult = super.invokeAction(request, context);
       }
       AjaxResponse response = AjaxUtils.createResponse(request, context);
       if (_isDelayedElement()) {
-    	  response.addDelayedElement(this, context.component(), context.elementID());
+    	  response.addDelayedElement(this, component, elementID);
       }
       else {
     	  result = handleRequest(request, context);
