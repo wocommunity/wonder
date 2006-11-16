@@ -394,7 +394,7 @@ public class NSMutableArray extends NSArray {
     public Object[] toArray(Object array[]) {
     	int i = size();
     	if (array.length < i) {
-    		array = (Object[]) (Object[]) Array.newInstance(((Object) (array)).getClass().getComponentType(), i);
+    		array = (Object[]) Array.newInstance(((Object) (array)).getClass().getComponentType(), i);
     	}
     	Object result[] = array;
     	for (int j = 0; j < i; j++) {
