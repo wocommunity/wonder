@@ -589,36 +589,42 @@ public class ERXModelGroup extends
             url = "jdbc:postgresql://" + h + "/" + serverName;
         }
 
-        NSMutableDictionary newConnectionDictionary = new NSMutableDictionary(model.connectionDictionary());
-        if (url != null)
-            newConnectionDictionary.setObjectForKey(url, "URL");
-        if (userName != null)
-            newConnectionDictionary.setObjectForKey(userName, "username");
-        if (passwd != null)
-            newConnectionDictionary.setObjectForKey(passwd, "password");
-        if (driver != null)
-            newConnectionDictionary.setObjectForKey(driver, "driver");
-        if (jdbcInfoDictionary != null) {
-            newConnectionDictionary.setObjectForKey(jdbcInfoDictionary, "jdbc2Info");
-        } else if (jdbcInfo != null) {
-            NSDictionary d = (NSDictionary) NSPropertyListSerialization.propertyListFromString(jdbcInfo);
-            if (d != null)
-                newConnectionDictionary.setObjectForKey(d, "jdbc2Info");
-            else
-                newConnectionDictionary.removeObjectForKey("jdbc2Info");
+        NSDictionary connectionDictionary = model.connectionDictionary();
+        if (connectionDictionary == null) {
+        	ERXModelGroup.log.warn("The EOModel '" + model.name() + " does not have a connection dictionary.");
         }
-        if (plugin != null)
-            newConnectionDictionary.setObjectForKey(plugin, "plugin");
-
-        // set the information for ERXJDBCConnectionBroker
-        newConnectionDictionary.addEntriesFromDictionary(poolingDictionary);
-        
-        String removeJdbc2Info = getProperty(aModelName + ".removeJdbc2Info", "dbRemoveJdbc2InfoGLOBAL", "false");
-        if (ERXValueUtilities.booleanValue(removeJdbc2Info)) {
-            newConnectionDictionary.removeObjectForKey("jdbc2Info");
+        else {
+	        NSMutableDictionary newConnectionDictionary = new NSMutableDictionary(connectionDictionary);
+	        if (url != null)
+	            newConnectionDictionary.setObjectForKey(url, "URL");
+	        if (userName != null)
+	            newConnectionDictionary.setObjectForKey(userName, "username");
+	        if (passwd != null)
+	            newConnectionDictionary.setObjectForKey(passwd, "password");
+	        if (driver != null)
+	            newConnectionDictionary.setObjectForKey(driver, "driver");
+	        if (jdbcInfoDictionary != null) {
+	            newConnectionDictionary.setObjectForKey(jdbcInfoDictionary, "jdbc2Info");
+	        } else if (jdbcInfo != null) {
+	            NSDictionary d = (NSDictionary) NSPropertyListSerialization.propertyListFromString(jdbcInfo);
+	            if (d != null)
+	                newConnectionDictionary.setObjectForKey(d, "jdbc2Info");
+	            else
+	                newConnectionDictionary.removeObjectForKey("jdbc2Info");
+	        }
+	        if (plugin != null)
+	            newConnectionDictionary.setObjectForKey(plugin, "plugin");
+	
+	        // set the information for ERXJDBCConnectionBroker
+	        newConnectionDictionary.addEntriesFromDictionary(poolingDictionary);
+	        
+	        String removeJdbc2Info = getProperty(aModelName + ".removeJdbc2Info", "dbRemoveJdbc2InfoGLOBAL", "false");
+	        if (ERXValueUtilities.booleanValue(removeJdbc2Info)) {
+	            newConnectionDictionary.removeObjectForKey("jdbc2Info");
+	        }
+	
+	        model.setConnectionDictionary(newConnectionDictionary);
         }
-
-        model.setConnectionDictionary(newConnectionDictionary);
     }
     
     /**
