@@ -19,6 +19,8 @@
 		<binding name = "onCancelFailure"/>
 		<binding name = "onCancelling"/>
 		<binding name = "onEditClick"/>
+		<binding name = "onEditSuccess"/>
+		<binding name = "onEditFailure"/>
 		<binding name = "onEditing"/>
 		<binding name = "onRefreshComplete"/>
 		<binding name = "disabled"/>

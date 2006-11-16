@@ -59,6 +59,8 @@ import com.webobjects.appserver.WOResponse;
  * @binding onCancelSuccess the javascript function to execute after a successful cancel
  * @binding onCancelFailure the javascript function to execute after a failed cancel
  * @binding onEditClick the action to fire when edit mode is triggered
+ * @binding onEditSuccess the javascript function to execute after a successful edit
+ * @binding onEditFailure the javascript function to execute after a failed edit
  * @binding onEditing the javascript action to fire when editing mode is loading
  * @binding onCancelling the javascript action to fire when cancelling
  * @binding onRefreshComplete the javascript function to execute after refreshing the container
