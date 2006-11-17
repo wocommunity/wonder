@@ -36,6 +36,7 @@ public class InstantMessengerAdaptor extends WOAdaptor implements IMessageListen
 	public static final String WATCHER_IM_FACTORY_KEY = "IMWatcherFactory";
 	public static final String WATCHER_SCREEN_NAME_KEY = "IMWatcherScreenName";
 	public static final String WATCHER_PASSWORD_KEY = "IMWatcherPassword";
+	public static final String CENTRALIZE_SCREEN_NAME_KEY = "IMCentralizeScreenName";
 
 	public static final String IS_IM_KEY = "IsIM";
 	public static final String CONVERSATION_KEY = "IMConversation";
@@ -54,6 +55,7 @@ public class InstantMessengerAdaptor extends WOAdaptor implements IMessageListen
 	private boolean _autoLogin;
 	private String _conversationActionName;
 
+	private String _centralizeScreenName;
 	private String _watcherScreenName;
 	private String _watcherPassword;
 	private IInstantMessengerFactory _watcherFactory;
@@ -62,7 +64,6 @@ public class InstantMessengerAdaptor extends WOAdaptor implements IMessageListen
 	private IMConnectionTester _watcherTester;
 	private Thread _watchedThread;
 	private IMConnectionTester _watchedTester;
-
 	private InstantMessageQueue _messageQueue;
 
 	public InstantMessengerAdaptor(String name, NSDictionary parameters) {
@@ -70,12 +71,13 @@ public class InstantMessengerAdaptor extends WOAdaptor implements IMessageListen
 
 		_messageQueue = new InstantMessageQueue();
 		_messageQueue.start();
-
+		
 		_conversations = new HashMap();
 		_application = WOApplication.application();
 
-		_screenName = getScreenName(InstantMessengerAdaptor.SCREEN_NAME_KEY, parameters);
-		_password = getScreenName(InstantMessengerAdaptor.PASSWORD_KEY, parameters);
+		_centralizeScreenName = propertyNamed(InstantMessengerAdaptor.CENTRALIZE_SCREEN_NAME_KEY, parameters, false);
+		_screenName = propertyNamed(InstantMessengerAdaptor.SCREEN_NAME_KEY, parameters, true);
+		_password = propertyNamed(InstantMessengerAdaptor.PASSWORD_KEY, parameters, true);
 		_factory = getFactory(InstantMessengerAdaptor.IM_FACTORY_KEY, parameters);
 
 		_conversationTimeout = 1000 * 60 * 5;
@@ -109,8 +111,8 @@ public class InstantMessengerAdaptor extends WOAdaptor implements IMessageListen
 			watcherEnabledStr = System.getProperty(InstantMessengerAdaptor.WATCHER_ENABLED_KEY);
 		}
 		if (watcherEnabledStr != null && Boolean.valueOf(watcherEnabledStr).booleanValue()) {
-			_watcherScreenName = getScreenName(InstantMessengerAdaptor.WATCHER_SCREEN_NAME_KEY, parameters);
-			_watcherPassword = getScreenName(InstantMessengerAdaptor.WATCHER_PASSWORD_KEY, parameters);
+			_watcherScreenName = propertyNamed(InstantMessengerAdaptor.WATCHER_SCREEN_NAME_KEY, parameters, true);
+			_watcherPassword = propertyNamed(InstantMessengerAdaptor.WATCHER_PASSWORD_KEY, parameters, true);
 			_watcherFactory = getFactory(InstantMessengerAdaptor.WATCHER_IM_FACTORY_KEY, parameters);
 		}
 	}
@@ -132,33 +134,19 @@ public class InstantMessengerAdaptor extends WOAdaptor implements IMessageListen
 		return _instantMessenger;
 	}
 
-	protected String getScreenName(String key, NSDictionary parameters) {
-		String screenName = (String) parameters.objectForKey(key);
-		if (screenName == null) {
-			screenName = System.getProperty(key);
+	protected String propertyNamed(String key, NSDictionary parameters, boolean required) {
+		String value = (String) parameters.objectForKey(key);
+		if (value == null) {
+			value = System.getProperty(key);
 		}
-		if (screenName == null) {
+		if (required && value == null) {
 			throw new RuntimeException("Missing required property " + key + ".");
 		}
-		return screenName;
-	}
-
-	protected String getPassword(String key, NSDictionary parameters) {
-		String password = (String) parameters.objectForKey(key);
-		if (password == null) {
-			password = System.getProperty(key);
-		}
-		if (password == null) {
-			throw new RuntimeException("Missing required property " + key + ".");
-		}
-		return password;
+		return value;
 	}
 
 	protected IInstantMessengerFactory getFactory(String key, NSDictionary parameters) {
-		String factoryClass = (String) parameters.objectForKey(key);
-		if (factoryClass == null) {
-			factoryClass = System.getProperty(key);
-		}
+		String factoryClass = propertyNamed(key, parameters, false);
 		try {
 			IInstantMessengerFactory factory;
 			if (factoryClass == null) {
@@ -347,6 +335,10 @@ public class InstantMessengerAdaptor extends WOAdaptor implements IMessageListen
 	}
 
 	public void sendMessage(String buddyName, String message, boolean block) throws MessageException {
+		if (_centralizeScreenName != null) {
+			log.warn("IM's are centralized; replacing '" + buddyName + "' with '" + _centralizeScreenName + "'");
+			buddyName = _centralizeScreenName;
+		}
 		if (block) {
 			instantMessenger().sendMessage(buddyName, message, true);
 		}
