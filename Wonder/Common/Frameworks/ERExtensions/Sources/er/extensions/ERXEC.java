@@ -354,15 +354,17 @@ public class ERXEC extends EOEditingContext {
                     	openLockTraces.addObject(openLockTrace);
                         //NSLog.err.appendln("+++ Lock number (" + _stackTraces.count() + ") in " + nameOfCurrentThread);
                     } else {
-                    	log.error(System.identityHashCode(this) + " Attempting to lock editing context from " + nameOfCurrentThread + " that was previously locked in " + nameOfLockingThread);
-                       log.error(System.identityHashCode(this) + " Current stack trace: ", openLockTrace);
-                       log.error(System.identityHashCode(this) + " Lock count: " + openLockTraces.count());
-                       Enumeration openLockTracesEnum = openLockTraces.objectEnumerator();
-                       while (openLockTracesEnum.hasMoreElements()) {
-                    	   Exception existingOpenLockTrace = (Exception)openLockTracesEnum.nextElement();
-                    	   log.error(System.identityHashCode(this) + " Existing lock: ", existingOpenLockTrace);
-                       }
-                       log.error(System.identityHashCode(this) + " Created: ", creationTrace);
+                    	StringBuffer buf = new StringBuffer(1024);
+                    	buf.append(System.identityHashCode(this) + " Attempting to lock editing context from " + nameOfCurrentThread + " that was previously locked in " + nameOfLockingThread + "\n");
+                    	buf.append(" Current stack trace: " + ERXUtilities.stackTrace(openLockTrace) + "\n");
+                    	buf.append(" Lock count: " + openLockTraces.count() + "\n");
+                    	Enumeration openLockTracesEnum = openLockTraces.objectEnumerator();
+                    	while (openLockTracesEnum.hasMoreElements()) {
+                    		Exception existingOpenLockTrace = (Exception)openLockTracesEnum.nextElement();
+                    		buf.append(" Existing lock: " + ERXUtilities.stackTrace(existingOpenLockTrace));
+                    	}
+                    	buf.append(" Created: " + ERXUtilities.stackTrace( creationTrace));
+                    	log.error(buf);
                     }
                 }
         	}
