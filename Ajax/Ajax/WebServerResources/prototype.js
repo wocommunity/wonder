@@ -8,10 +8,13 @@
 
 var Prototype = {
   Version: '1.5.0_rc1',
-  ScriptFragment: '(?:<script.*?>)((\n|\r|.)*?)(?:<\/script>)',
+  BrowserFeatures: {
+    XPath: !!document.evaluate
+  },
 
+  ScriptFragment: '(?:<script.*?>)((\n|\r|.)*?)(?:<\/script>)',
   emptyFunction: function() {},
-  K: function(x) {return x}
+  K: function(x) { return x }
 }
 
 var Class = {
@@ -34,8 +37,8 @@ Object.extend = function(destination, source) {
 Object.extend(Object, {
   inspect: function(object) {
     try {
-      if (object == undefined) return 'undefined';
-      if (object == null) return 'null';
+      if (object === undefined) return 'undefined';
+      if (object === null) return 'null';
       return object.inspect ? object.inspect() : object.toString();
     } catch (e) {
       if (e instanceof RangeError) return '...';
@@ -219,7 +222,9 @@ Object.extend(String.prototype, {
   },
 
   toQueryParams: function() {
-    var pairs = this.match(/^\??(.*)$/)[1].split('&');
+    var match = this.strip().match(/[^?]*$/)[0];
+    if (!match) return {};
+    var pairs = match.split('&');
     return pairs.inject({}, function(params, pairString) {
       var pair  = pairString.split('=');
       var value = pair[1] ? decodeURIComponent(pair[1]) : undefined;
@@ -240,7 +245,7 @@ Object.extend(String.prototype, {
       ? oStringList[0].charAt(0).toUpperCase() + oStringList[0].substring(1)
       : oStringList[0];
 
-    for (var i = 1, len = oStringList.length; i < len; i++) {
+    for (var i = 1, length = oStringList.length; i < length; i++) {
       var s = oStringList[i];
       camelizedString += s.charAt(0).toUpperCase() + s.substring(1);
     }
@@ -299,6 +304,14 @@ var Enumerable = {
     } catch (e) {
       if (e != $break) throw e;
     }
+    return this;
+  },
+
+  eachSlice: function(number, iterator) {
+    var index = -number, slices = [], array = this.toArray();
+    while ((index += number) < array.length)
+      slices.push(array.slice(index, index+number));
+    return slices.collect(iterator || Prototype.K);
   },
 
   all: function(iterator) {
@@ -327,7 +340,7 @@ var Enumerable = {
     return results;
   },
 
-  detect: function (iterator) {
+  detect: function(iterator) {
     var result;
     this.each(function(value, index) {
       if (iterator(value, index)) {
@@ -366,6 +379,15 @@ var Enumerable = {
       }
     });
     return found;
+  },
+
+  inGroupsOf: function(number, fillWith) {
+    fillWith = fillWith || null;
+    var results = this.eachSlice(number);
+    if (results.length > 0) (number - results.last().length).times(function() {
+      results.last().push(fillWith)
+    });
+    return results;
   },
 
   inject: function(memo, iterator) {
@@ -470,7 +492,7 @@ var $A = Array.from = function(iterable) {
     return iterable.toArray();
   } else {
     var results = [];
-    for (var i = 0; i < iterable.length; i++)
+    for (var i = 0, length = iterable.length; i < length; i++)
       results.push(iterable[i]);
     return results;
   }
@@ -483,7 +505,7 @@ if (!Array.prototype._reverse)
 
 Object.extend(Array.prototype, {
   _each: function(iterator) {
-    for (var i = 0; i < this.length; i++)
+    for (var i = 0, length = this.length; i < length; i++)
       iterator(this[i]);
   },
 
@@ -521,7 +543,7 @@ Object.extend(Array.prototype, {
   },
 
   indexOf: function(object) {
-    for (var i = 0; i < this.length; i++)
+    for (var i = 0, length = this.length; i < length; i++)
       if (this[i] == object) return i;
     return -1;
   },
@@ -540,10 +562,16 @@ Object.extend(Array.prototype, {
     });
   },
 
+  clone: function() {
+    return [].concat(this);
+  },
+
   inspect: function() {
     return '[' + this.map(Object.inspect).join(', ') + ']';
   }
 });
+
+Array.prototype.toArray = Array.prototype.clone;
 var Hash = {
   _each: function(iterator) {
     for (var key in this) {
@@ -566,7 +594,7 @@ var Hash = {
   },
 
   merge: function(hash) {
-    return $H(hash).inject($H(this), function(mergedHash, pair) {
+    return $H(hash).inject(this, function(mergedHash, pair) {
       mergedHash[pair.key] = pair.value;
       return mergedHash;
     });
@@ -574,6 +602,8 @@ var Hash = {
 
   toQueryString: function() {
     return this.map(function(pair) {
+      if (!pair.value && pair.value !== 0) pair[1] = '';
+      if (!pair.key) return;
       return pair.map(encodeURIComponent).join('=');
     }).join('&');
   },
@@ -640,18 +670,18 @@ Ajax.Responders = {
     this.responders._each(iterator);
   },
 
-  register: function(responderToAdd) {
-    if (!this.include(responderToAdd))
-      this.responders.push(responderToAdd);
+  register: function(responder) {
+    if (!this.include(responder))
+      this.responders.push(responder);
   },
 
-  unregister: function(responderToRemove) {
-    this.responders = this.responders.without(responderToRemove);
+  unregister: function(responder) {
+    this.responders = this.responders.without(responder);
   },
 
   dispatch: function(callback, request, transport, json) {
     this.each(function(responder) {
-      if (responder[callback] && typeof responder[callback] == 'function') {
+      if (typeof responder[callback] == 'function') {
         try {
           responder[callback].apply(responder, [request, transport, json]);
         } catch (e) {}
@@ -666,7 +696,6 @@ Ajax.Responders.register({
   onCreate: function() {
     Ajax.activeRequestCount++;
   },
-
   onComplete: function() {
     Ajax.activeRequestCount--;
   }
@@ -679,19 +708,14 @@ Ajax.Base.prototype = {
       method:       'post',
       asynchronous: true,
       contentType:  'application/x-www-form-urlencoded',
+      encoding:     'UTF-8',
       parameters:   ''
     }
     Object.extend(this.options, options || {});
-  },
 
-  responseIsSuccess: function() {
-    return this.transport.status == undefined
-        || this.transport.status == 0
-        || (this.transport.status >= 200 && this.transport.status < 300);
-  },
-
-  responseIsFailure: function() {
-    return !this.responseIsSuccess();
+    this.options.method = this.options.method.toLowerCase();
+    this.options.parameters = $H(typeof this.options.parameters == 'string' ?
+      this.options.parameters.toQueryParams() : this.options.parameters);
   }
 }
 
@@ -707,24 +731,28 @@ Ajax.Request.prototype = Object.extend(new Ajax.Base(), {
   },
 
   request: function(url) {
-    var parameters = this.options.parameters || '';
-    if (parameters.length > 0) parameters += '&_=';
+    var params = this.options.parameters;
+    if (params.any()) params['_'] = '';
 
-    /* Simulate other verbs over post */
-    if (this.options.method != 'get' && this.options.method != 'post') {
-      parameters += (parameters.length > 0 ? '&' : '') + '_method=' + this.options.method;
+    if (!['get', 'post'].include(this.options.method)) {
+      // simulate other verbs over post
+      params['_method'] = this.options.method;
       this.options.method = 'post';
     }
 
-    try {
-      this.url = url;
-      if (this.options.method == 'get' && parameters.length > 0)
-        this.url += (this.url.match(/\?/) ? '&' : '?') + parameters;
+    this.url = url;
 
+    // when GET, append parameters to URL
+    if (this.options.method == 'get' && params.any())
+      this.url += (this.url.indexOf('?') >= 0 ? '&' : '?') +
+        params.toQueryString();
+
+    try {
       Ajax.Responders.dispatch('onCreate', this, this.transport);
 
-      this.transport.open(this.options.method, this.url,
-        this.options.asynchronous);
+      this.transport.open(this.options.method.toUpperCase(), this.url,
+        this.options.asynchronous, this.options.username,
+        this.options.password);
 
       if (this.options.asynchronous)
         setTimeout(function() { this.respondToReadyState(1) }.bind(this), 10);
@@ -732,58 +760,108 @@ Ajax.Request.prototype = Object.extend(new Ajax.Base(), {
       this.transport.onreadystatechange = this.onStateChange.bind(this);
       this.setRequestHeaders();
 
-      var body = this.options.postBody ? this.options.postBody : parameters;
-      this.transport.send(this.options.method == 'post' ? body : null);
+      var body = this.options.method == 'post' ?
+        (this.options.postBody || params.toQueryString()) : null;
+
+      this.transport.send(body);
 
       /* Force Firefox to handle ready state 4 for synchronous requests */
       if (!this.options.asynchronous && this.transport.overrideMimeType)
         this.onStateChange();
-
-    } catch (e) {
+    }
+    catch (e) {
       this.dispatchException(e);
     }
   },
 
-  setRequestHeaders: function() {
-    var requestHeaders =
-      ['X-Requested-With', 'XMLHttpRequest',
-       'X-Prototype-Version', Prototype.Version,
-       'Accept', 'text/javascript, text/html, application/xml, text/xml, */*'];
-
-    if (this.options.method == 'post') {
-      requestHeaders.push('Content-type', this.options.contentType);
-
-      /* Force "Connection: close" for Mozilla browsers to work around
-       * a bug where XMLHttpReqeuest sends an incorrect Content-length
-       * header. See Mozilla Bugzilla #246651.
-       */
-      if (this.transport.overrideMimeType)
-        requestHeaders.push('Connection', 'close');
-    }
-
-    if (this.options.requestHeaders)
-      requestHeaders.push.apply(requestHeaders, this.options.requestHeaders);
-
-    for (var i = 0; i < requestHeaders.length; i += 2)
-      this.transport.setRequestHeader(requestHeaders[i], requestHeaders[i+1]);
-  },
-
   onStateChange: function() {
     var readyState = this.transport.readyState;
-    if (readyState != 1)
+    if (readyState > 1)
       this.respondToReadyState(this.transport.readyState);
   },
 
-  header: function(name) {
+  setRequestHeaders: function() {
+    var headers = {
+      'X-Requested-With': 'XMLHttpRequest',
+      'X-Prototype-Version': Prototype.Version,
+      'Accept': 'text/javascript, text/html, application/xml, text/xml, */*'
+    };
+
+    if (this.options.method == 'post') {
+      headers['Content-type'] = this.options.contentType +
+        (this.options.encoding ? '; charset=' + this.options.encoding : '');
+
+      /* Force "Connection: close" for older Mozilla browsers to work
+       * around a bug where XMLHttpRequest sends an incorrect
+       * Content-length header. See Mozilla Bugzilla #246651.
+       */
+      if (this.transport.overrideMimeType &&
+          (navigator.userAgent.match(/Gecko\/(\d{4})/) || [0,2005])[1] < 2005)
+            headers['Connection'] = 'close';
+    }
+
+    // user-defined headers
+    if (typeof this.options.requestHeaders == 'object') {
+      var extras = this.options.requestHeaders;
+
+      if (typeof extras.push == 'function')
+        for (var i = 0; i < extras.length; i += 2)
+          headers[extras[i]] = extras[i+1];
+      else
+        $H(extras).each(function(pair) { headers[pair.key] = pair.value });
+    }
+
+    for (var name in headers)
+      this.transport.setRequestHeader(name, headers[name]);
+  },
+
+  success: function() {
+    return !this.transport.status
+        || (this.transport.status >= 200 && this.transport.status < 300);
+  },
+
+  respondToReadyState: function(readyState) {
+    var state = Ajax.Request.Events[readyState];
+    var transport = this.transport, json = this.evalJSON();
+
+    if (state == 'Complete') {
+      try {
+        (this.options['on' + this.transport.status]
+         || this.options['on' + (this.success() ? 'Success' : 'Failure')]
+         || Prototype.emptyFunction)(transport, json);
+      } catch (e) {
+        this.dispatchException(e);
+      }
+    }
+
+    try {
+      (this.options['on' + state] || Prototype.emptyFunction)(transport, json);
+      Ajax.Responders.dispatch('on' + state, this, transport, json);
+    } catch (e) {
+      this.dispatchException(e);
+    }
+
+    if (state == 'Complete') {
+      if ((this.getHeader('Content-type') || '').strip().
+        match(/^(text|application)\/(x-)?(java|ecma)script(;.*)?$/i))
+          this.evalResponse();
+
+      // avoid memory leak in MSIE: clean up
+      this.transport.onreadystatechange = Prototype.emptyFunction;
+    }
+  },
+
+  getHeader: function(name) {
     try {
       return this.transport.getResponseHeader(name);
-    } catch (e) {}
+    } catch (e) { return null }
   },
 
   evalJSON: function() {
     try {
-      return eval('(' + this.header('X-JSON') + ')');
-    } catch (e) {}
+      var json = this.getHeader('X-JSON');
+      return json ? eval('(' + json + ')') : null;
+    } catch (e) { return null }
   },
 
   evalResponse: function() {
@@ -792,35 +870,6 @@ Ajax.Request.prototype = Object.extend(new Ajax.Base(), {
     } catch (e) {
       this.dispatchException(e);
     }
-  },
-
-  respondToReadyState: function(readyState) {
-    var event = Ajax.Request.Events[readyState];
-    var transport = this.transport, json = this.evalJSON();
-
-    if (event == 'Complete') {
-      try {
-        (this.options['on' + this.transport.status]
-         || this.options['on' + (this.responseIsSuccess() ? 'Success' : 'Failure')]
-         || Prototype.emptyFunction)(transport, json);
-      } catch (e) {
-        this.dispatchException(e);
-      }
-
-      if ((this.header('Content-type') || '').match(/^text\/javascript/i))
-        this.evalResponse();
-    }
-
-    try {
-      (this.options['on' + event] || Prototype.emptyFunction)(transport, json);
-      Ajax.Responders.dispatch('on' + event, this, transport, json);
-    } catch (e) {
-      this.dispatchException(e);
-    }
-
-    /* Avoid memory leak in MSIE: clean up the oncomplete event handler */
-    if (event == 'Complete')
-      this.transport.onreadystatechange = Prototype.emptyFunction;
   },
 
   dispatchException: function(exception) {
@@ -833,41 +882,37 @@ Ajax.Updater = Class.create();
 
 Object.extend(Object.extend(Ajax.Updater.prototype, Ajax.Request.prototype), {
   initialize: function(container, url, options) {
-    this.containers = {
-      success: container.success ? $(container.success) : $(container),
-      failure: container.failure ? $(container.failure) :
-        (container.success ? null : $(container))
+    this.container = {
+      success: (container.success || container),
+      failure: (container.failure || (container.success ? null : container))
     }
 
     this.transport = Ajax.getTransport();
     this.setOptions(options);
 
     var onComplete = this.options.onComplete || Prototype.emptyFunction;
-    this.options.onComplete = (function(transport, object) {
+    this.options.onComplete = (function(transport, param) {
       this.updateContent();
-      onComplete(transport, object);
+      onComplete(transport, param);
     }).bind(this);
 
     this.request(url);
   },
 
   updateContent: function() {
-    var receiver = this.responseIsSuccess() ?
-      this.containers.success : this.containers.failure;
+    var receiver = this.container[this.success() ? 'success' : 'failure'];
     var response = this.transport.responseText;
 
-    if (!this.options.evalScripts)
-      response = response.stripScripts();
+    if (!this.options.evalScripts) response = response.stripScripts();
 
-    if (receiver) {
-      if (this.options.insertion) {
+    if (receiver = $(receiver)) {
+      if (this.options.insertion)
         new this.options.insertion(receiver, response);
-      } else {
-        Element.update(receiver, response);
-      }
+      else
+        receiver.update(response);
     }
 
-    if (this.responseIsSuccess()) {
+    if (this.success()) {
       if (this.onComplete)
         setTimeout(this.onComplete.bind(this), 10);
     }
@@ -916,24 +961,42 @@ Ajax.PeriodicalUpdater.prototype = Object.extend(new Ajax.Base(), {
     this.updater = new Ajax.Updater(this.container, this.url, this.options);
   }
 });
-function $() {
-  var results = [], element;
-  for (var i = 0; i < arguments.length; i++) {
-    element = arguments[i];
-    if (typeof element == 'string')
-      element = document.getElementById(element);
-    results.push(Element.extend(element));
+function $(element) {
+  if (arguments.length > 1) {
+    for (var i = 0, elements = [], length = arguments.length; i < length; i++)
+      elements.push($(arguments[i]));
+    return elements;
   }
-  return results.reduce();
+  if (typeof element == 'string')
+    element = document.getElementById(element);
+  return Element.extend(element);
+}
+
+if (Prototype.BrowserFeatures.XPath) {
+  document._getElementsByXPath = function(expression, parentElement) {
+    var results = [];
+    var query = document.evaluate(expression, $(parentElement) || document,
+      null, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null);
+    for (var i = 0, len = query.snapshotLength; i < len; i++)
+      results.push(query.snapshotItem(i));
+    return results;
+  }
 }
 
 document.getElementsByClassName = function(className, parentElement) {
-  var children = ($(parentElement) || document.body).getElementsByTagName('*');
-  return $A(children).inject([], function(elements, child) {
-    if (child.className.match(new RegExp("(^|\\s)" + className + "(\\s|$)")))
-      elements.push(Element.extend(child));
+  if (Prototype.BrowserFeatures.XPath) {
+    var q = ".//*[contains(concat(' ', @class, ' '), ' " + className + " ')]";
+    return document._getElementsByXPath(q, parentElement);
+  } else {
+    var children = ($(parentElement) || document.body).getElementsByTagName('*');
+    var elements = [], child;
+    for (var i = 0, length = children.length; i < length; i++) {
+      child = children[i];
+      if (Element.hasClassName(child, className))
+        elements.push(Element.extend(child));
+    }
     return elements;
-  });
+  }
 }
 
 /*--------------------------------------------------------------------------*/
@@ -956,6 +1019,13 @@ Element.extend = function(element) {
     for (var property in methods) {
       var value = methods[property];
       if (typeof value == 'function')
+        element[property] = cache.findOrStore(value);
+    }
+
+    var methods = Object.clone(Element.Methods.Simulated), cache = Element.extend.cache;
+    for (var property in methods) {
+      var value = methods[property];
+      if ('function' == typeof value && !(property in element))
         element[property] = cache.findOrStore(value);
     }
   }
@@ -1000,6 +1070,7 @@ Element.Methods = {
   },
 
   update: function(element, html) {
+    html = typeof html == 'undefined' ? '' : html.toString();
     $(element).innerHTML = html.stripScripts();
     setTimeout(function() {html.evalScripts()}, 10);
     return element;
@@ -1105,7 +1176,12 @@ Element.Methods = {
 
   hasClassName: function(element, className) {
     if (!(element = $(element))) return;
-    return Element.classNames(element).include(className);
+    var elementClassName = element.className;
+    if (elementClassName.length == 0) return false;
+    if (elementClassName == className ||
+        elementClassName.match(new RegExp("(^|\\s)" + className + "(\\s|$)")))
+      return true;
+    return false;
   },
 
   addClassName: function(element, className) {
@@ -1239,7 +1315,7 @@ Element.Methods = {
 
   makeClipping: function(element) {
     element = $(element);
-    if (element._overflow) return;
+    if (element._overflow) return element;
     element._overflow = element.style.overflow || 'auto';
     if ((Element.getStyle(element, 'overflow') || 'visible') != 'hidden')
       element.style.overflow = 'hidden';
@@ -1248,10 +1324,16 @@ Element.Methods = {
 
   undoClipping: function(element) {
     element = $(element);
-    if (!element._overflow) return;
+    if (!element._overflow) return element;
     element.style.overflow = element._overflow == 'auto' ? '' : element._overflow;
     element._overflow = null;
     return element;
+  }
+}
+
+Element.Methods.Simulated = {
+  hasAttribute: function(element, attribute) {
+    return $(element).getAttributeNode(attribute).specified;
   }
 }
 
@@ -1259,6 +1341,7 @@ Element.Methods = {
 if(document.all){
   Element.Methods.update = function(element, html) {
     element = $(element);
+    html = typeof html == 'undefined' ? '' : html.toString();
     var tagName = element.tagName.toUpperCase();
     if (['THEAD','TBODY','TR','TD'].indexOf(tagName) > -1) {
       var div = document.createElement('div');
@@ -1295,28 +1378,30 @@ Object.extend(Element, Element.Methods);
 
 var _nativeExtensions = false;
 
-if (!window.HTMLElement && /Konqueror|Safari|KHTML/.test(navigator.userAgent)) {
-  /* Emulate HTMLElement, HTMLFormElement, HTMLInputElement, HTMLTextAreaElement,
-     and HTMLSelectElement in Safari */
+if(/Konqueror|Safari|KHTML/.test(navigator.userAgent))
   ['', 'Form', 'Input', 'TextArea', 'Select'].each(function(tag) {
-    var klass = window['HTML' + tag + 'Element'] = {};
+    var className = 'HTML' + tag + 'Element';
+    if(window[className]) return;
+    var klass = window[className] = {};
     klass.prototype = document.createElement(tag ? tag.toLowerCase() : 'div').__proto__;
   });
-}
 
 Element.addMethods = function(methods) {
   Object.extend(Element.Methods, methods || {});
 
-  function copy(methods, destination) {
+  function copy(methods, destination, onlyIfAbsent) {
+    onlyIfAbsent = onlyIfAbsent || false;
     var cache = Element.extend.cache;
     for (var property in methods) {
       var value = methods[property];
-      destination[property] = cache.findOrStore(value);
+      if (!onlyIfAbsent || !(property in destination))
+        destination[property] = cache.findOrStore(value);
     }
   }
 
   if (typeof HTMLElement != 'undefined') {
     copy(Element.Methods, HTMLElement.prototype);
+    copy(Element.Methods.Simulated, HTMLElement.prototype, true);
     copy(Form.Methods, HTMLFormElement.prototype);
     [HTMLInputElement, HTMLTextAreaElement, HTMLSelectElement].each(function(klass) {
       copy(Form.Element.Methods, klass.prototype);
@@ -1443,18 +1528,16 @@ Element.ClassNames.prototype = {
 
   add: function(classNameToAdd) {
     if (this.include(classNameToAdd)) return;
-    this.set(this.toArray().concat(classNameToAdd).join(' '));
+    this.set($A(this).concat(classNameToAdd).join(' '));
   },
 
   remove: function(classNameToRemove) {
     if (!this.include(classNameToRemove)) return;
-    this.set(this.select(function(className) {
-      return className != classNameToRemove;
-    }).join(' '));
+    this.set($A(this).without(classNameToRemove).join(' '));
   },
 
   toString: function() {
-    return this.toArray().join(' ');
+    return $A(this).join(' ');
   }
 }
 
@@ -1549,7 +1632,7 @@ Selector.prototype = {
     scope = (scope || document).getElementsByTagName(this.params.tagName || '*');
 
     var results = [];
-    for (var i = 0; i < scope.length; i++)
+    for (var i = 0, length = scope.length; i < length; i++)
       if (this.match(element = scope[i]))
         results.push(Element.extend(element));
 
@@ -1564,7 +1647,7 @@ Selector.prototype = {
 Object.extend(Selector, {
   matchElements: function(elements, expression) {
     var selector = new Selector(expression);
-    return elements.select(selector.match.bind(selector));
+    return elements.select(selector.match.bind(selector)).collect(Element.extend);
   },
 
   findElement: function(elements, expression, index) {
@@ -1591,33 +1674,30 @@ var Form = {
   reset: function(form) {
     $(form).reset();
     return form;
+  },
+
+  serializeElements: function(elements) {
+    return elements.inject([], function(queryComponents, element) {
+      var queryComponent = Form.Element.serialize(element);
+      if (queryComponent) queryComponents.push(queryComponent);
+      return queryComponents;
+    }).join('&');
   }
 };
 
 Form.Methods = {
   serialize: function(form) {
-    var elements = Form.getElements($(form));
-    var queryComponents = new Array();
-
-    for (var i = 0; i < elements.length; i++) {
-      var queryComponent = Form.Element.serialize(elements[i]);
-      if (queryComponent)
-        queryComponents.push(queryComponent);
-    }
-
-    return queryComponents.join('&');
+    return Form.serializeElements($(form).getElements());
   },
 
   getElements: function(form) {
-    form = $(form);
-    var elements = new Array();
-
-    for (var tagName in Form.Element.Serializers) {
-      var tagElements = form.getElementsByTagName(tagName);
-      for (var j = 0; j < tagElements.length; j++)
-        elements.push(tagElements[j]);
-    }
-    return elements;
+    return $A($(form).getElementsByTagName('*')).inject([],
+      function(elements, child) {
+        if (Form.Element.Serializers[child.tagName.toLowerCase()])
+          elements.push(Element.extend(child));
+        return elements;
+      }
+    );
   },
 
   getInputs: function(form, typeName, name) {
@@ -1628,12 +1708,12 @@ Form.Methods = {
       return inputs;
 
     var matchingInputs = new Array();
-    for (var i = 0; i < inputs.length; i++) {
+    for (var i = 0, length = inputs.length; i < length; i++) {
       var input = inputs[i];
       if ((typeName && input.type != typeName) ||
           (name && input.name != name))
         continue;
-      matchingInputs.push(input);
+      matchingInputs.push(Element.extend(input));
     }
 
     return matchingInputs;
@@ -1641,27 +1721,23 @@ Form.Methods = {
 
   disable: function(form) {
     form = $(form);
-    var elements = Form.getElements(form);
-    for (var i = 0; i < elements.length; i++) {
-      var element = elements[i];
+    form.getElements().each(function(element) {
       element.blur();
       element.disabled = 'true';
-    }
+    });
     return form;
   },
 
   enable: function(form) {
     form = $(form);
-    var elements = Form.getElements(form);
-    for (var i = 0; i < elements.length; i++) {
-      var element = elements[i];
+    form.getElements().each(function(element) {
       element.disabled = '';
-    }
+    });
     return form;
   },
 
   findFirstElement: function(form) {
-    return Form.getElements(form).find(function(element) {
+    return $(form).getElements().find(function(element) {
       return element.type != 'hidden' && !element.disabled &&
         ['input', 'select', 'textarea'].include(element.tagName.toLowerCase());
     });
@@ -1669,7 +1745,7 @@ Form.Methods = {
 
   focusFirstElement: function(form) {
     form = $(form);
-    Field.activate(Form.findFirstElement(form));
+    form.findFirstElement().activate();
     return form;
   }
 }
@@ -1693,6 +1769,7 @@ Form.Element = {
 Form.Element.Methods = {
   serialize: function(element) {
     element = $(element);
+    if (element.disabled) return '';
     var method = element.tagName.toLowerCase();
     var parameter = Form.Element.Serializers[method](element);
 
@@ -1737,14 +1814,14 @@ Form.Element.Methods = {
 
   disable: function(element) {
     element = $(element);
-    element.disabled = '';
+    element.disabled = true;
     return element;
   },
 
   enable: function(element) {
     element = $(element);
     element.blur();
-    element.disabled = 'true';
+    element.disabled = false;
     return element;
   }
 }
@@ -1783,8 +1860,9 @@ Form.Element.Serializers = {
   selectOne: function(element) {
     var value = '', opt, index = element.selectedIndex;
     if (index >= 0) {
-      opt = element.options[index];
-      value = opt.value || opt.text;
+      opt = Element.extend(element.options[index]);
+      // Uses the new potential extension if hasAttribute isn't native.
+      value = opt.hasAttribute('value') ? opt.value : opt.text;
     }
     return [element.name, value];
   },
@@ -1792,9 +1870,10 @@ Form.Element.Serializers = {
   selectMany: function(element) {
     var value = [];
     for (var i = 0; i < element.length; i++) {
-      var opt = element.options[i];
+      var opt = Element.extend(element.options[i]);
       if (opt.selected)
-        value.push(opt.value || opt.text);
+        // Uses the new potential extension if hasAttribute isn't native.
+        value.push(opt.hasAttribute('value') ? opt.value : opt.text);
     }
     return [element.name, value];
   }
@@ -1868,9 +1947,7 @@ Abstract.EventObserver.prototype = {
   },
 
   registerFormCallbacks: function() {
-    var elements = Form.getElements(this.element);
-    for (var i = 0; i < elements.length; i++)
-      this.registerCallback(elements[i]);
+    Form.getElements(this.element).each(this.registerCallback.bind(this));
   },
 
   registerCallback: function(element) {
@@ -1974,7 +2051,7 @@ Object.extend(Event, {
 
   unloadCache: function() {
     if (!Event.observers) return;
-    for (var i = 0; i < Event.observers.length; i++) {
+    for (var i = 0, length = Event.observers.length; i < length; i++) {
       Event.stopObserving.apply(this, Event.observers[i]);
       Event.observers[i][0] = null;
     }
@@ -2061,7 +2138,8 @@ var Position = {
       valueL += element.offsetLeft || 0;
       element = element.offsetParent;
       if (element) {
-        p = Element.getStyle(element, 'position');
+        if(element.tagName=='BODY') break;
+        var p = Element.getStyle(element, 'position');
         if (p == 'relative' || p == 'absolute') break;
       }
     } while (element);
