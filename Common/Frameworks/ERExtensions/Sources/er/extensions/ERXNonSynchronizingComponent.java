@@ -171,5 +171,13 @@ public abstract class ERXNonSynchronizingComponent extends WOComponent {
         }
         return _dynamicBindings;
     }
+    
+    public void reset() {
+    	super.reset();
+    	if(_dynamicBindings != null) {
+    		_dynamicBindings.removeAllObjects();
+    	}
+    }
+    
 }
 
