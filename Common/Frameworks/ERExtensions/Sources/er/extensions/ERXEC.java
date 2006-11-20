@@ -406,6 +406,10 @@ public class ERXEC extends EOEditingContext {
 		if (traceOpenEditingContextLocks) {
 			synchronized (this) {
 				if (openLockTraces != null) {
+	        		// FIXME AK: as long as we only remove the last object, 
+					// this whole procedure is pretty bogus. What we'd need to do is
+					// at least find the best-matching stack trace suffix and remove 
+					// that entry
 					if (openLockTraces.count() > 0) {
 						openLockTraces.removeLastObject();
 					}
