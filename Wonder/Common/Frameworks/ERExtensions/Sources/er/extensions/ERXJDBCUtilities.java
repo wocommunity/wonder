@@ -23,6 +23,8 @@ import com.webobjects.eoaccess.EOAttribute;
 import com.webobjects.eoaccess.EOEntity;
 import com.webobjects.eoaccess.EOModel;
 import com.webobjects.eoaccess.EOModelGroup;
+import com.webobjects.eoaccess.EOSchemaGeneration;
+import com.webobjects.eoaccess.EOSynchronizationFactory;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableArray;
@@ -395,6 +397,56 @@ public class ERXJDBCUtilities {
 	 *             if there is a problem
 	 */
 	public static int executeUpdateScript(EOAdaptorChannel channel, String sqlScript) throws SQLException {
+		return executeUpdateScript(channel, sqlScript, null);
+	}
+
+	/**
+	 * Splits the given sqlscript and executes each of the statements in a single transaction
+	 * 
+	 * @param channel
+	 *            the JDBCChannel to work with
+	 * @param sqlScript
+	 *            the sql script to execute
+	 * @param filter
+	 *            the sql filter to use to filter out unwanted statements
+	 * @return the number of rows updated
+	 * @throws SQLException
+	 *             if there is a problem
+	 */
+	public static int executeUpdateScript(EOAdaptorChannel channel, String sqlScript, IERXSQLFilter filter) throws SQLException {
+		NSArray sqlStatements = ERXJDBCUtilities.splitSQLStatements(sqlScript);
+		return ERXJDBCUtilities.executeUpdateScript(channel, sqlStatements, filter);
+	}
+
+	/**
+	 * Splits the given sqlscript and executes each of the statements in a single transaction
+	 * 
+	 * @param channel
+	 *            the JDBCChannel to work with
+	 * @param sqlScript
+	 *            the array of sql scripts to execute
+	 * @return the number of rows updated
+	 * @throws SQLException
+	 *             if there is a problem
+	 */
+	public static int executeUpdateScript(EOAdaptorChannel channel, NSArray sqlStatements) throws SQLException {
+		return executeUpdateScript(channel, sqlStatements, null);
+	}
+
+	/**
+	 * Splits the given sqlscript and executes each of the statements in a single transaction
+	 * 
+	 * @param channel
+	 *            the JDBCChannel to work with
+	 * @param sqlScript
+	 *            the array of sql scripts to execute
+	 * @param filter
+	 *            the sql filter to use to filter out unwanted statements
+	 * @return the number of rows updated
+	 * @throws SQLException
+	 *             if there is a problem
+	 */
+	public static int executeUpdateScript(EOAdaptorChannel channel, NSArray sqlStatements, IERXSQLFilter filter) throws SQLException {
 		int rowsUpdated = 0;
 		boolean wasOpen = channel.isOpen();
 		if (!wasOpen) {
@@ -404,11 +456,20 @@ public class ERXJDBCUtilities {
 		try {
 			Statement stmt = conn.createStatement();
 			try {
-				NSArray sqlStatements = ERXJDBCUtilities.splitSQLStatements(sqlScript);
 				Enumeration sqlStatementsEnum = sqlStatements.objectEnumerator();
 				while (sqlStatementsEnum.hasMoreElements()) {
 					String sql = (String) sqlStatementsEnum.nextElement();
-					rowsUpdated += stmt.executeUpdate(sql);
+					if (filter == null || filter.shouldExecute(channel, sql)) {
+						if (ERXJDBCUtilities.log.isInfoEnabled()) {
+							ERXJDBCUtilities.log.info("Executing " + sql);
+						}
+						rowsUpdated += stmt.executeUpdate(sql);
+					}
+					else {
+						if (ERXJDBCUtilities.log.isInfoEnabled()) {
+							ERXJDBCUtilities.log.info("Skipping " + sql);
+						}
+					}
 				}
 			}
 			finally {
@@ -494,5 +555,42 @@ public class ERXJDBCUtilities {
 		finally {
 			fis.close();
 		}
+	}
+
+	/**
+	 * Creates tables, primary keys, and foreign keys for the tables in the given model.  This is
+	 * useful in your Migration #0 class.
+	 * 
+	 * @param channel the channel to use for execution
+	 * @param model the model to create tables for
+	 * @param filter the sql filter to apply
+	 * @throws SQLException if something fails
+	 */
+	public static void createTablesForModel(EOAdaptorChannel channel, EOModel model, IERXSQLFilter filter) throws SQLException {
+		ERXJDBCUtilities.createTablesForEntities(channel, model.entities(), filter);
+	}
+
+	/**
+	 * Creates tables, primary keys, and foreign keys for the given list of entities.  This is
+	 * useful in your Migration #0 class.
+	 * 
+	 * @param channel the channel to use for execution
+	 * @param entities the entities to create tables for
+	 * @param filter the sql filter to apply
+	 * @throws SQLException if something fails
+	 */
+	public static void createTablesForEntities(EOAdaptorChannel channel, NSArray entities, IERXSQLFilter filter) throws SQLException {
+		NSMutableDictionary options = new NSMutableDictionary();
+		options.setObjectForKey("NO", EOSchemaGeneration.DropTablesKey);
+		options.setObjectForKey("NO", EOSchemaGeneration.DropPrimaryKeySupportKey);
+		options.setObjectForKey("YES", EOSchemaGeneration.CreateTablesKey);
+		options.setObjectForKey("YES", EOSchemaGeneration.CreatePrimaryKeySupportKey);
+		options.setObjectForKey("YES", EOSchemaGeneration.PrimaryKeyConstraintsKey);
+		options.setObjectForKey("YES", EOSchemaGeneration.ForeignKeyConstraintsKey);
+		options.setObjectForKey("NO", EOSchemaGeneration.CreateDatabaseKey);
+		options.setObjectForKey("NO", EOSchemaGeneration.DropDatabaseKey);
+		EOSynchronizationFactory syncFactory = (EOSynchronizationFactory) channel.adaptorContext().adaptor().synchronizationFactory();
+		String sqlScript = syncFactory.schemaCreationScriptForEntities(entities, options);
+		ERXJDBCUtilities.executeUpdateScript(channel, sqlScript);
 	}
 }
