@@ -46,10 +46,6 @@ InPlaceEditorLink : WOHyperlink {
 	pageName = "InPlaceEditorExample";
 }
 
-RoundBoxes : AjaxRoundEffect {
-	class = "rounded";
-}
-
 DependentListsExample : WOHyperlink {
 	pageName = "DependentListsExample";
 }
