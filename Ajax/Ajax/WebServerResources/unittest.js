@@ -1,27 +1,40 @@
-// script.aculo.us unittest.js v1.6.5, Wed Nov 08 14:17:49 CET 2006
+// script.aculo.us unittest.js v1.6.4, Wed Sep 06 11:30:58 CEST 2006
 
-// Copyright (c) 2005, 2006 Thomas Fuchs (http://script.aculo.us, http://mir.aculo.us)
-//           (c) 2005, 2006 Jon Tirsen (http://www.tirsen.com)
-//           (c) 2005, 2006 Michael Schuerig (http://www.schuerig.de/michael/)
+// Copyright (c) 2005 Thomas Fuchs (http://script.aculo.us, http://mir.aculo.us)
+//           (c) 2005 Jon Tirsen (http://www.tirsen.com)
+//           (c) 2005 Michael Schuerig (http://www.schuerig.de/michael/)
 //
-// script.aculo.us is freely distributable under the terms of an MIT-style license.
-// For details, see the script.aculo.us web site: http://script.aculo.us/
+// Permission is hereby granted, free of charge, to any person obtaining
+// a copy of this software and associated documentation files (the
+// "Software"), to deal in the Software without restriction, including
+// without limitation the rights to use, copy, modify, merge, publish,
+// distribute, sublicense, and/or sell copies of the Software, and to
+// permit persons to whom the Software is furnished to do so, subject to
+// the following conditions:
+// 
+// The above copyright notice and this permission notice shall be
+// included in all copies or substantial portions of the Software.
+// 
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+// EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+// MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+// NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
+// LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+// OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
+// WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
 
 // experimental, Firefox-only
 Event.simulateMouse = function(element, eventName) {
   var options = Object.extend({
     pointerX: 0,
     pointerY: 0,
-    buttons:  0,
-    ctrlKey:  false,
-    altKey:   false,
-    shiftKey: false,
-    metaKey:  false
+    buttons: 0
   }, arguments[2] || {});
   var oEvent = document.createEvent("MouseEvents");
   oEvent.initMouseEvent(eventName, true, true, document.defaultView, 
     options.buttons, options.pointerX, options.pointerY, options.pointerX, options.pointerY, 
-    options.ctrlKey, options.altKey, options.shiftKey, options.metaKey, 0, $(element));
+    false, false, false, false, 0, $(element));
   
   if(this.mark) Element.remove(this.mark);
   this.mark = document.createElement('div');
@@ -87,7 +100,6 @@ Test.Unit.Logger.prototype = {
     this.lastLogLine = document.createElement('tr');
     this.statusCell = document.createElement('td');
     this.nameCell = document.createElement('td');
-    this.nameCell.className = "nameCell";
     this.nameCell.appendChild(document.createTextNode(testName));
     this.messageCell = document.createElement('td');
     this.lastLogLine.appendChild(this.statusCell);
@@ -100,7 +112,6 @@ Test.Unit.Logger.prototype = {
     this.lastLogLine.className = status;
     this.statusCell.innerHTML = status;
     this.messageCell.innerHTML = this._toHTML(summary);
-    this.addLinksToResults();
   },
   message: function(message) {
     if (!this.log) return;
@@ -122,16 +133,6 @@ Test.Unit.Logger.prototype = {
   },
   _toHTML: function(txt) {
     return txt.escapeHTML().replace(/\n/g,"<br/>");
-  },
-  addLinksToResults: function(){ 
-    $$("tr.failed .nameCell").each( function(td){ // todo: limit to children of this.log
-      td.title = "Run only this test"
-      Event.observe(td, 'click', function(){ window.location.search = "?tests=" + td.innerHTML;});
-    });
-    $$("tr.passed .nameCell").each( function(td){ // todo: limit to children of this.log
-      td.title = "Run all tests"
-      Event.observe(td, 'click', function(){ window.location.search = "";});
-    });
   }
 }
 
@@ -142,7 +143,6 @@ Test.Unit.Runner.prototype = {
       testLog: 'testlog'
     }, arguments[1] || {});
     this.options.resultsURL = this.parseResultsURLQueryParameter();
-    this.options.tests      = this.parseTestsQueryParameter();
     if (this.options.testLog) {
       this.options.testLog = $(this.options.testLog) || null;
     }
@@ -175,11 +175,6 @@ Test.Unit.Runner.prototype = {
   },
   parseResultsURLQueryParameter: function() {
     return window.location.search.parseQuery()["resultsURL"];
-  },
-  parseTestsQueryParameter: function(){
-    if (window.location.search.parseQuery()["tests"]){
-        return window.location.search.parseQuery()["tests"].split(',');
-    };
   },
   // Returns:
   //  "ERROR" if there was an error,
