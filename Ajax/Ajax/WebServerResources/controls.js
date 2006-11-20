@@ -1,15 +1,14 @@
-// script.aculo.us controls.js v1.6.5, Wed Nov 08 14:17:49 CET 2006
+// script.aculo.us controls.js v1.6.4, Wed Sep 06 11:30:58 CEST 2006
 
-// Copyright (c) 2005, 2006 Thomas Fuchs (http://script.aculo.us, http://mir.aculo.us)
-//           (c) 2005, 2006 Ivan Krstic (http://blogs.law.harvard.edu/ivan)
-//           (c) 2005, 2006 Jon Tirsen (http://www.tirsen.com)
+// Copyright (c) 2005 Thomas Fuchs (http://script.aculo.us, http://mir.aculo.us)
+//           (c) 2005 Ivan Krstic (http://blogs.law.harvard.edu/ivan)
+//           (c) 2005 Jon Tirsen (http://www.tirsen.com)
 // Contributors:
 //  Richard Livsey
 //  Rahul Bhargava
 //  Rob Wills
 // 
-// script.aculo.us is freely distributable under the terms of an MIT-style license.
-// For details, see the script.aculo.us web site: http://script.aculo.us/
+// See scriptaculous.js for full license.
 
 // Autocompleter.Base handles all the autocompletion functionality 
 // that's independent of the data source for autocompletion. This
@@ -265,11 +264,11 @@ Autocompleter.Base.prototype = {
     if(!this.changed && this.hasFocus) {
       this.update.innerHTML = choices;
       Element.cleanWhitespace(this.update);
-      Element.cleanWhitespace(this.update.down());
+      Element.cleanWhitespace(this.update.firstChild);
 
-      if(this.update.firstChild && this.update.down().childNodes) {
+      if(this.update.firstChild && this.update.firstChild.childNodes) {
         this.entryCount = 
-          this.update.down().childNodes.length;
+          this.update.firstChild.childNodes.length;
         for (var i = 0; i < this.entryCount; i++) {
           var entry = this.getEntry(i);
           entry.autocompleteIndex = i;
