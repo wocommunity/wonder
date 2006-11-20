@@ -114,10 +114,6 @@ public class AjaxUpdateContainer extends AjaxDynamicElement {
 		return null;
 	}
 
-	protected boolean _isDelayedElement() {
-		return true;
-	}
-
 	protected boolean _invokeChildrenBeforeHandleRequest() {
 		return true;
 	}
