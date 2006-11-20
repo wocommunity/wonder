@@ -10,6 +10,7 @@ import com.webobjects.appserver.WOContext;
 import com.webobjects.eocontrol.EOEnterpriseObject;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSMutableArray;
+import com.webobjects.foundation.NSValidation;
 
 import er.extensions.ERXEOControlUtilities;
 import er.extensions.ERXStringUtilities;
@@ -91,7 +92,21 @@ public class ERDEditToManyRelationship extends ERDCustomEditComponent {
     public void deleteObject(EOEnterpriseObject objectToRemove) {
         removeObject(objectToRemove);
         if(objectToRemove.editingContext() != null) {
-            objectToRemove.editingContext().deleteObject(objectToRemove);
+            // AK: this is a bit tricky... when we delete and a delete can fail,
+            // WOApp tries to validate the delete at the and
+            // of the current RR loop and this triggers an exception
+            // that can't be caught in the page itself
+            // so what we do here is delete the object, try to validate and
+            // is that fails, restore the EC. This isn't sufficient either -
+            // as reverting deletes doesn't really work well -
+            // but preferable to simply showing up and exception page.
+            try {
+                objectToRemove.editingContext().deleteObject(objectToRemove);
+                objectToRemove.validateForDelete();
+            } catch (NSValidation.ValidationException ex) {
+                validationFailedWithException(ex, objectToRemove, key());
+                object().editingContext().revert();
+             }
         }
     }
 
