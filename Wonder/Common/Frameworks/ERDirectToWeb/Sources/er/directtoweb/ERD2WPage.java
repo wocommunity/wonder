@@ -318,7 +318,11 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
                     errorMessages.setObjectForKey(erv.getMessage(), d2wContext().displayNameForProperty());
                     //DT: the propertyKey from the validationException is important because keyPath might only be saveChangesExceptionKey
                     //which is not enough
-                    keyPathsWithValidationExceptions.addObject(erv.propertyKey());
+                    String key = erv.propertyKey();
+                    if(key == null) {
+                        key = d2wContext().propertyKey();
+                    }
+                    keyPathsWithValidationExceptions.addObject(key);
                     if (erv.eoObject() != null && erv.propertyKey() != null && shouldSetFailedValidationValue()) {
                         try {
                             erv.eoObject().takeValueForKeyPath(value, erv.propertyKey());
