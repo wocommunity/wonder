@@ -203,7 +203,10 @@ public class AjaxUtils {
 		String senderID = context.senderID();
 		String updateContainerID = null;
 		if (containerID != null) {
-			updateContainerID = AjaxUpdateContainer.updateContainerID(request);
+			NSDictionary userInfo = request.userInfo();
+			if (userInfo != null && userInfo.valueForKey(AjaxResponse.AJAX_UPDATE_PASS) != null) {
+				updateContainerID = AjaxUpdateContainer.updateContainerID(request);
+			}
 		}
 		boolean shouldHandleRequest = elementID != null && (elementID.equals(senderID) || (containerID != null && containerID.equals(updateContainerID)));
 		return shouldHandleRequest;

@@ -76,6 +76,9 @@ public abstract class AjaxComponent extends WOComponent implements IAjaxElement 
                 result = childrenResult;
             }
             AjaxUtils.updateMutableUserInfoWithAjaxInfo(context());
+			if (result == null) {
+				result = AjaxUtils.createResponse(request, context);
+			}
         } else {
             result = super.invokeAction(request, context);
         }
