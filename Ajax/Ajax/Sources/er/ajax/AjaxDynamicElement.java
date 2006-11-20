@@ -57,7 +57,7 @@ public abstract class AjaxDynamicElement extends WODynamicGroup implements IAjax
 	protected void addStylesheetResourceInHead(WOContext context, WOResponse response, String framework, String fileName) {
 		AjaxUtils.addStylesheetResourceInHead(context, response, framework, fileName);
 	}
-
+  
 	/**
 	 * Execute the request, if it's comming from our action, then invoke the ajax handler and put the key
 	 * <code>AJAX_REQUEST_KEY</code> in the request userInfo dictionary (<code>request.userInfo()</code>).
@@ -72,12 +72,8 @@ public abstract class AjaxDynamicElement extends WODynamicGroup implements IAjax
 				childrenResult = super.invokeAction(request, context);
 			}
 			AjaxResponse response = AjaxUtils.createResponse(request, context);
-			if (_isDelayedElement()) {
-				response.addDelayedElement(this, component, elementID);
-			}
-			else {
-				result = handleRequest(request, context);
-			}
+			NSDictionary userInfo = request.userInfo();
+			result = handleRequest(request, context);
 			if (_invokeChildrenAfterHandleRequest()) {
 				childrenResult = super.invokeAction(request, context);
 			}
@@ -85,15 +81,14 @@ public abstract class AjaxDynamicElement extends WODynamicGroup implements IAjax
 				result = childrenResult;
 			}
 			AjaxUtils.updateMutableUserInfoWithAjaxInfo(context);
+			if (result == null) {
+				result = AjaxUtils.createResponse(request, context);
+			}
 		}
 		else if (hasChildrenElements()) {
 			result = super.invokeAction(request, context);
 		}
 		return (WOActionResults) result;
-	}
-
-	protected boolean _isDelayedElement() {
-		return false;
 	}
 
 	protected boolean _invokeChildrenBeforeHandleRequest() {
