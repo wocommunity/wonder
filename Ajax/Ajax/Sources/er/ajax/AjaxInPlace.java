@@ -68,6 +68,7 @@ import com.webobjects.appserver.WOResponse;
  * @binding manualControl if true, it is up to you to provide click-to-edit, save, and cancel controls
  * @binding manualViewControl if true, it is up to you to provide click-to-edit controls
  * @binding manualEditControl if true, it is up to you to provide save and cancel controls
+ * @binding submitOnSave if true, the save button is an AjaxSubmitButton; if false, it's an AjaxUpdateLink
  * @author mschrag
  */
 public class AjaxInPlace extends WOComponent {
@@ -98,6 +99,14 @@ public class AjaxInPlace extends WOComponent {
     super.appendToResponse(aResponse, aContext);
   }
 
+  public boolean submitOnSave() {
+    return AjaxUtils.booleanValueForBinding("submitOnSave", true, _keyAssociations, parent());
+  }
+  
+  public boolean linkOnSave() {
+    return !submitOnSave();
+  }
+  
   public String updateFunctionName() {
     return id() + "Update();";
   }

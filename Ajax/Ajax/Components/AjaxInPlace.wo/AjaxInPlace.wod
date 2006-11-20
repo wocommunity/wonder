@@ -86,11 +86,33 @@ CancelAction : WOGenericContainer {
 EditForm : WOForm {
 	multipleSubmit = true;
 	name = id;
+	disabled = linkOnSave;
 }
 
-SaveFunction : AjaxSubmitButton {
+LinkOnSaveConditional : WOConditional {
+	condition = linkOnSave;
+}
+
+SubmitOnSaveConditional : WOConditional {
+	condition = submitOnSave;
+}
+
+SaveSubmitFunction : AjaxSubmitButton {
 	action = save;
 	button = false;
+	formName = id;
+	onClick = ^onSaveClick;
+	//onClickServer = updateFunctionName;
+	onSuccess = ^onSaveSuccess;
+	onFailure = ^onSaveFailure;
+	onLoading = ^onSaving;
+	evalScripts = true;
+	functionName = saveFunctionName;
+	updateContainerID = id;
+}
+
+SaveLinkFunction : AjaxUpdateLink {
+	action = save;
 	formName = id;
 	onClick = ^onSaveClick;
 	//onClickServer = updateFunctionName;
