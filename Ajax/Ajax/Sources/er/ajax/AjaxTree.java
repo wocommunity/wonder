@@ -48,6 +48,7 @@ public class AjaxTree extends WOComponent {
 	private Object _lastParent;
 	private Object _item;
 	private String _id = null;
+	private Object _lastRootNode;
 
 	public AjaxTree(WOContext context) {
 		super(context);
@@ -58,11 +59,13 @@ public class AjaxTree extends WOComponent {
 	}
 
 	public NSArray nodes() {
-		if (_nodes == null || !AjaxUtils.booleanValueForBinding("cache", true, _keyAssociations, parent())) {
+		Object rootNode = treeModel().rootTreeNode();
+		if (_nodes == null || rootNode == null || !rootNode.equals(_lastParent) || !AjaxUtils.booleanValueForBinding("cache", true, _keyAssociations, parent())) {
 			NSMutableArray nodes = new NSMutableArray();
 			boolean showRoot = AjaxUtils.booleanValueForBinding("showRoot", true, _keyAssociations, parent());
 			_fillInOpenNodes(treeModel().rootTreeNode(), nodes, showRoot);
 			_nodes = nodes;
+			_lastRootNode = rootNode;
 		}
 		return _nodes;
 	}
