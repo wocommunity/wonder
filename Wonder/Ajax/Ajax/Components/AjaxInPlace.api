@@ -28,5 +28,6 @@
 		<binding name = "manualControl"/>
 		<binding name = "manualViewControl"/>
 		<binding name = "manualEditControl"/>
+		<binding name = "submitOnSave"/>
 	</wo>
 </wodefinitions>
