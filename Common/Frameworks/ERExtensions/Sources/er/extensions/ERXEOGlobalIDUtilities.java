@@ -6,6 +6,8 @@
  */
 package er.extensions;
 
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.Enumeration;
 
 import org.apache.log4j.Logger;
@@ -22,9 +24,12 @@ import com.webobjects.eocontrol.EOKeyGlobalID;
 import com.webobjects.eocontrol.EOObjectStoreCoordinator;
 import com.webobjects.eocontrol.EOOrQualifier;
 import com.webobjects.eocontrol.EOQualifier;
+import com.webobjects.eocontrol.EOTemporaryGlobalID;
 import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSData;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableArray;
+import com.webobjects.foundation.NSTimestamp;
 
 /**
  * Utilities that help with batch loading sets of global IDs. 
@@ -32,8 +37,111 @@ import com.webobjects.foundation.NSMutableArray;
  * @author ak
  */
 public class ERXEOGlobalIDUtilities {
+	
     /** logging support */
     public static final Logger log = Logger.getLogger(ERXEOGlobalIDUtilities.class);
+    
+    /**
+     * Unencrypts the byte array of NSData PKs so you get the process number or port, 
+     * host and timestamp.
+     *
+     * @author ak
+     */
+    public static class Info {
+
+    	private byte _data[];
+    	
+    	private static final int _HostIdentificationStartIndex = 0;
+
+    	private static final int _ProcessIdentificationStartIndex = 6;
+
+    	private static final int _CounterStartIndex = 10;
+
+    	private static final int _TimestampStartIndex = 12;
+
+    	private static final int _RandomStartIndex = 20;
+
+
+    	public Info(EOGlobalID gid) {
+    		if(gid instanceof EOTemporaryGlobalID) {
+    			_data = ((EOTemporaryGlobalID)gid)._rawBytes();
+    		} else if (gid instanceof EOKeyGlobalID) {
+    			EOKeyGlobalID keyGid = (EOKeyGlobalID)gid;
+    			Object value = keyGid.keyValues()[0];
+    			if(value instanceof NSData) {
+    				_data = ((NSData)value)._bytesNoCopy();
+    			}
+    			// this will throw a CCE
+    			
+    		} 
+    		
+    		if(_data == null) {
+    			throw new IllegalArgumentException("This class only works with EOTemporaryGlobalID or EOKeyGlobalID with a single 24-byte data PK");
+    		}
+    	}
+
+    	private byte extractByte(int offset) {
+    		return _data[offset + 0];
+    	}
+
+    	private short extractShort(int offset) {
+    		short result = 0;
+    		result |= ((int)extractByte(offset + 0)) & 255;
+    		result <<= 8;
+    		result |= ((int)extractByte(offset + 1)) & 255;
+    		return result;
+    	}
+
+    	private int extractInt(int offset) {
+    		int result = 0;
+    		result |= extractShort(offset + 0) & 65535;
+    		result <<= 16;
+    		result |= extractShort(offset + 2) & 65535;
+    		return result;
+    	}
+
+    	private long extractLong(int offset) {
+    		long result = 0;
+    		result |= extractInt(offset + 0) & 4294967295L;
+    		result <<= 32;
+    		result |= extractInt(offset + 4) & 4294967295L;
+    		return result;
+    	}
+
+    	public NSTimestamp timestamp() {
+    		return new NSTimestamp(milliseconds());
+    	}
+    	
+    	public long milliseconds() {
+     		return extractLong(_TimestampStartIndex);
+    	}
+    	
+    	public InetAddress host() {
+    		try {
+    			byte data[] = new byte[4];
+    			System.arraycopy(_data, _HostIdentificationStartIndex + 2, data, 0, 4);
+				return InetAddress.getByAddress(data);
+			} catch (UnknownHostException e) {
+				return null;
+			}
+    	}
+     	
+    	public long port() {
+			return extractInt(_ProcessIdentificationStartIndex);
+    	}
+    	
+    	public short counter() {
+    		return extractShort(_CounterStartIndex);
+    	}
+    	
+    	public long random() {
+    		return extractLong(_RandomStartIndex);
+    	}
+    	
+    	public String toString() {
+    		return host().getHostAddress() + ":" + port() + " " + counter() + "@" + timestamp();
+    	}
+    }
     
     /**
      * Groups an array of global IDs by their entity name.
@@ -129,9 +237,9 @@ public class ERXEOGlobalIDUtilities {
      */
     public static NSArray fireFaultsForGlobalIDs(EOEditingContext ec, 
     		NSArray globalIDs, NSArray prefetchingKeypaths) {
-    	NSMutableArray result = new NSMutableArray();
+    	NSMutableArray result = new NSMutableArray(globalIDs.count());
     	if(globalIDs.count() > 0) {
-    		NSMutableArray faults = new NSMutableArray();
+    		NSMutableArray faults = new NSMutableArray(globalIDs.count());
     		for (Enumeration ids = globalIDs.objectEnumerator(); ids.hasMoreElements();) {
     			EOGlobalID gid = (EOGlobalID) ids.nextElement();
     			EOEnterpriseObject eo = ec.faultForGlobalID(gid, ec);
@@ -143,7 +251,6 @@ public class ERXEOGlobalIDUtilities {
     		}
     		NSArray loadedObjects = fetchObjectsWithGlobalIDs(ec, faults);
     		result.addObjectsFromArray(loadedObjects);
-    		
     		if(prefetchingKeypaths != null && prefetchingKeypaths.count() > 0) {
     			NSDictionary objectsByEntity = ERXArrayUtilities.arrayGroupedByKeyPath(result, "entityName");
     			for(Enumeration e = objectsByEntity.keyEnumerator(); e.hasMoreElements();) {
