@@ -591,6 +591,6 @@ public class ERXJDBCUtilities {
 		options.setObjectForKey("NO", EOSchemaGeneration.DropDatabaseKey);
 		EOSynchronizationFactory syncFactory = (EOSynchronizationFactory) channel.adaptorContext().adaptor().synchronizationFactory();
 		String sqlScript = syncFactory.schemaCreationScriptForEntities(entities, options);
-		ERXJDBCUtilities.executeUpdateScript(channel, sqlScript);
+		ERXJDBCUtilities.executeUpdateScript(channel, sqlScript, filter);
 	}
 }
