@@ -364,7 +364,7 @@ public class ERXEC extends EOEditingContext {
                     		buf.append(" Existing lock: " + ERXUtilities.stackTrace(existingOpenLockTrace));
                     	}
                     	buf.append(" Created: " + ERXUtilities.stackTrace( creationTrace));
-                    	log.error(buf);
+                		log.warn(buf);
                     }
                 }
         	}
