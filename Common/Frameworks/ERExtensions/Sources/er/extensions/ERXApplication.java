@@ -28,6 +28,7 @@ import com.webobjects.eoaccess.EOAdaptorChannel;
 import com.webobjects.eoaccess.EODatabaseContext;
 import com.webobjects.eoaccess.EOGeneralAdaptorException;
 import com.webobjects.eocontrol.EOEditingContext;
+import com.webobjects.eocontrol.EOTemporaryGlobalID;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSData;
 import com.webobjects.foundation.NSDictionary;
@@ -213,7 +214,10 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
         // Signal handling support
         if (ERXGracefulShutdown.isEnabled()) {
             ERXGracefulShutdown.installHandler();
-        }        
+        }
+        // AK: this makes it possible to retrieve the creating instance from an NSData PK. 
+        // it should still be unique, as one host can only have one running instance to a port
+        EOTemporaryGlobalID._setProcessIdentificationBytesFromInt(port().intValue());
     }
 
     /**
