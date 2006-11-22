@@ -1,6 +1,5 @@
 package er.extensions;
 
-import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -397,25 +396,8 @@ public class ERXJDBCUtilities {
 	 *             if there is a problem
 	 */
 	public static int executeUpdateScript(EOAdaptorChannel channel, String sqlScript) throws SQLException {
-		return executeUpdateScript(channel, sqlScript, null);
-	}
-
-	/**
-	 * Splits the given sqlscript and executes each of the statements in a single transaction
-	 * 
-	 * @param channel
-	 *            the JDBCChannel to work with
-	 * @param sqlScript
-	 *            the sql script to execute
-	 * @param filter
-	 *            the sql filter to use to filter out unwanted statements
-	 * @return the number of rows updated
-	 * @throws SQLException
-	 *             if there is a problem
-	 */
-	public static int executeUpdateScript(EOAdaptorChannel channel, String sqlScript, IERXSQLFilter filter) throws SQLException {
-		NSArray sqlStatements = ERXJDBCUtilities.splitSQLStatements(sqlScript);
-		return ERXJDBCUtilities.executeUpdateScript(channel, sqlStatements, filter);
+		NSArray sqlStatements = ERXSQLHelper.newSQLHelper(channel).splitSQLStatements(sqlScript);
+		return ERXJDBCUtilities.executeUpdateScript(channel, sqlStatements);
 	}
 
 	/**
@@ -425,28 +407,14 @@ public class ERXJDBCUtilities {
 	 *            the JDBCChannel to work with
 	 * @param sqlScript
 	 *            the array of sql scripts to execute
+	 * @param filter
+	 *            the sql filter to use to filter out unwanted statements
 	 * @return the number of rows updated
 	 * @throws SQLException
 	 *             if there is a problem
 	 */
 	public static int executeUpdateScript(EOAdaptorChannel channel, NSArray sqlStatements) throws SQLException {
-		return executeUpdateScript(channel, sqlStatements, null);
-	}
-
-	/**
-	 * Splits the given sqlscript and executes each of the statements in a single transaction
-	 * 
-	 * @param channel
-	 *            the JDBCChannel to work with
-	 * @param sqlScript
-	 *            the array of sql scripts to execute
-	 * @param filter
-	 *            the sql filter to use to filter out unwanted statements
-	 * @return the number of rows updated
-	 * @throws SQLException
-	 *             if there is a problem
-	 */
-	public static int executeUpdateScript(EOAdaptorChannel channel, NSArray sqlStatements, IERXSQLFilter filter) throws SQLException {
+		ERXSQLHelper sqlHelper = ERXSQLHelper.newSQLHelper(channel);
 		int rowsUpdated = 0;
 		boolean wasOpen = channel.isOpen();
 		if (!wasOpen) {
@@ -459,7 +427,7 @@ public class ERXJDBCUtilities {
 				Enumeration sqlStatementsEnum = sqlStatements.objectEnumerator();
 				while (sqlStatementsEnum.hasMoreElements()) {
 					String sql = (String) sqlStatementsEnum.nextElement();
-					if (filter == null || filter.shouldExecute(channel, sql)) {
+					if (sqlHelper.shouldExecute(sql)) {
 						if (ERXJDBCUtilities.log.isInfoEnabled()) {
 							ERXJDBCUtilities.log.info("Executing " + sql);
 						}
@@ -485,89 +453,15 @@ public class ERXJDBCUtilities {
 	}
 
 	/**
-	 * Splits semicolon-separate sql statements into an array of strings
-	 * 
-	 * @param sql
-	 *            a multi-line sql statement
-	 * @return an array of sql statements
-	 */
-	public static NSArray splitSQLStatements(String sql) {
-		NSMutableArray statements = new NSMutableArray();
-		if (sql != null) {
-			StringBuffer statementBuffer = new StringBuffer();
-			int length = sql.length();
-			boolean inQuotes = false;
-			for (int i = 0; i < length; i++) {
-				char ch = sql.charAt(i);
-				if (ch == '\r' || ch == '\n') {
-					// ignore
-				}
-				else if (!inQuotes && ch == ';') {
-					String statement = statementBuffer.toString().trim();
-					if (statement.length() > 0) {
-						statements.addObject(statement);
-					}
-					statementBuffer.setLength(0);
-				}
-				else {
-					if (ch == '\'') {
-						inQuotes = !inQuotes;
-					}
-					statementBuffer.append(ch);
-				}
-			}
-			String statement = statementBuffer.toString().trim();
-			if (statement.length() > 0) {
-				statements.addObject(statement);
-			}
-		}
-		return statements;
-	}
-
-	/**
-	 * Splits the SQL statements from the given input stream
-	 * 
-	 * @param is
-	 *            the input stream to read from
-	 * @return an array of SQL statements
-	 * @throws IOException
-	 *             if there is a problem reading the stream
-	 */
-	public static NSArray splitSQLStatementsFromInputStream(InputStream is) throws IOException {
-		return ERXJDBCUtilities.splitSQLStatements(ERXStringUtilities.stringFromInputStream(is));
-	}
-
-	/**
-	 * Splits the SQL statements from the given file.
-	 * 
-	 * @param f
-	 *            the file to read from
-	 * @return an array of SQL statements
-	 * @throws IOException
-	 *             if there is a problem reading the stream
-	 */
-	public static NSArray splitSQLStatementsFromFile(File f) throws IOException {
-		FileInputStream fis = new FileInputStream(f);
-		try {
-			BufferedInputStream bis = new BufferedInputStream(fis);
-			return ERXJDBCUtilities.splitSQLStatementsFromInputStream(bis);
-		}
-		finally {
-			fis.close();
-		}
-	}
-
-	/**
 	 * Creates tables, primary keys, and foreign keys for the tables in the given model.  This is
 	 * useful in your Migration #0 class.
 	 * 
 	 * @param channel the channel to use for execution
 	 * @param model the model to create tables for
-	 * @param filter the sql filter to apply
 	 * @throws SQLException if something fails
 	 */
-	public static void createTablesForModel(EOAdaptorChannel channel, EOModel model, IERXSQLFilter filter) throws SQLException {
-		ERXJDBCUtilities.createTablesForEntities(channel, model.entities(), filter);
+	public static void createTablesForModel(EOAdaptorChannel channel, EOModel model) throws SQLException {
+		ERXJDBCUtilities.createTablesForEntities(channel, model.entities());
 	}
 
 	/**
@@ -576,10 +470,9 @@ public class ERXJDBCUtilities {
 	 * 
 	 * @param channel the channel to use for execution
 	 * @param entities the entities to create tables for
-	 * @param filter the sql filter to apply
 	 * @throws SQLException if something fails
 	 */
-	public static void createTablesForEntities(EOAdaptorChannel channel, NSArray entities, IERXSQLFilter filter) throws SQLException {
+	public static void createTablesForEntities(EOAdaptorChannel channel, NSArray entities) throws SQLException {
 		NSMutableDictionary options = new NSMutableDictionary();
 		options.setObjectForKey("NO", EOSchemaGeneration.DropTablesKey);
 		options.setObjectForKey("NO", EOSchemaGeneration.DropPrimaryKeySupportKey);
@@ -591,6 +484,6 @@ public class ERXJDBCUtilities {
 		options.setObjectForKey("NO", EOSchemaGeneration.DropDatabaseKey);
 		EOSynchronizationFactory syncFactory = (EOSynchronizationFactory) channel.adaptorContext().adaptor().synchronizationFactory();
 		String sqlScript = syncFactory.schemaCreationScriptForEntities(entities, options);
-		ERXJDBCUtilities.executeUpdateScript(channel, sqlScript, filter);
+		ERXJDBCUtilities.executeUpdateScript(channel, sqlScript);
 	}
 }
