@@ -10,13 +10,10 @@ import java.util.Collections;
 import java.util.Enumeration;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.regex.Pattern;
 
 import org.apache.log4j.Logger;
 
-import com.webobjects.eoaccess.EOAdaptor;
 import com.webobjects.eoaccess.EOAdaptorChannel;
-import com.webobjects.eoaccess.EOAdaptorContext;
 import com.webobjects.eoaccess.EOAdaptorOperation;
 import com.webobjects.eoaccess.EOAttribute;
 import com.webobjects.eoaccess.EODatabaseChannel;
@@ -29,12 +26,9 @@ import com.webobjects.eoaccess.EOJoin;
 import com.webobjects.eoaccess.EOModel;
 import com.webobjects.eoaccess.EOModelGroup;
 import com.webobjects.eoaccess.EOObjectNotAvailableException;
-import com.webobjects.eoaccess.EOQualifierSQLGeneration;
 import com.webobjects.eoaccess.EORelationship;
 import com.webobjects.eoaccess.EOSQLExpression;
 import com.webobjects.eoaccess.EOSQLExpressionFactory;
-import com.webobjects.eoaccess.EOSchemaGeneration;
-import com.webobjects.eoaccess.EOSynchronizationFactory;
 import com.webobjects.eoaccess.EOUtilities;
 import com.webobjects.eocontrol.EOAndQualifier;
 import com.webobjects.eocontrol.EOClassDescription;
@@ -50,11 +44,9 @@ import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSData;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSKeyValueCoding;
-import com.webobjects.foundation.NSKeyValueCodingAdditions;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation.NSMutableSet;
-import com.webobjects.foundation.NSTimestamp;
 import com.webobjects.jdbcadaptor.JDBCPlugIn;
 
 /**
@@ -134,18 +126,14 @@ public class ERXEOAccessUtilities {
      * @param sequenceName
      *            name of the sequence
      * @return next value in the sequence
+     * @deprecated
      */
     // ENHANCEME: Need a non-oracle specific way of doing this. Should poke
     // around at
     //		the adaptor level and see if we can't find something better.
     public static Number getNextValFromSequenceNamed(EOEditingContext ec, String modelName, String sequenceName) {
-        String sqlString = "select " + sequenceName + ".nextVal from dual";
-        NSArray array = EOUtilities.rawRowsForSQL(ec, modelName, sqlString, null);
-        if (array.count() == 0) { throw new RuntimeException("Unable to generate value from sequence named: " + sequenceName
-                + " in model: " + modelName); }
-        NSDictionary dictionary = (NSDictionary) array.objectAtIndex(0);
-        NSArray valuesArray = dictionary.allValues();
-        return (Number) valuesArray.objectAtIndex(0);
+    	EODatabaseContext dbContext = EOUtilities.databaseContextForModelNamed(ec, modelName);
+    	return ERXSQLHelper.newSQLHelper(dbContext).getNextValFromSequenceNamed(ec, modelName, sequenceName);
     }
 
     /**
@@ -263,105 +251,15 @@ public class ERXEOAccessUtilities {
      *            start of rows to fetch
      * @param end
      *            end of rows to fetch (-1 if not used)
+     * @deprecated
      * 
      * @return the EOSQLExpression which the EOFetchSpecification would use
      */
     public static EOSQLExpression sqlExpressionForFetchSpecification(EOEditingContext ec, EOFetchSpecification spec, long start, long end) {
         EOEntity entity = ERXEOAccessUtilities.entityNamed(ec, spec.entityName());
         EOModel model = entity.model();
-        EODatabaseContext dbc = EOUtilities.databaseContextForModelNamed(ec, model.name());
-        EOAdaptor adaptor = dbc.adaptorContext().adaptor();
-        EOSQLExpressionFactory sqlFactory = adaptor.expressionFactory();
-        spec = (EOFetchSpecification) spec.clone();
-        NSArray attributes =  entity.attributesToFetch();
-        if(spec.fetchesRawRows()) {
-            NSMutableArray arr = new NSMutableArray();
-            for(Enumeration e = spec.rawRowKeyPaths().objectEnumerator(); e.hasMoreElements(); ) {
-                String keyPath = (String)e.nextElement();
-                arr.addObject(entity.anyAttributeNamed(keyPath));
-            }
-            attributes = arr.immutableClone();
-        }
-        
-        EOQualifier qualifier = spec.qualifier();
-        if(qualifier != null) {
-            qualifier = EOQualifierSQLGeneration.Support._schemaBasedQualifierWithRootEntity(qualifier, entity);
-        }
-        if(qualifier != spec.qualifier()) {
-             spec.setQualifier(qualifier);
-        }
-        if(spec.fetchLimit() > 0) {
-            spec.setFetchLimit(0);
-            spec.setPromptsAfterFetchLimit(false);
-        }
-        spec = localizeFetchSpecification(ec, spec);
-        String url = (String) model.connectionDictionary().objectForKey("URL");
-        String lowerCaseURL = (url != null ? url.toLowerCase() : "");
-        EOSQLExpression sqlExpr = sqlFactory.selectStatementForAttributes(attributes, false, spec, entity);
-        String sql = sqlExpr.statement();
-        if (end >= 0) {
-        	// NOTE: this is all very hackish and might not work if you had columns that contain some keywords
-        	// the correct way would be to wrap all the plugins
-        	// and extend them
-        	lowerCaseURL= url.toLowerCase();
-        	if (lowerCaseURL.indexOf("frontbase") != -1) {
-        		//add TOP(start, (end - start)) after the SELECT word
-        		int index = sql.indexOf("select");
-        		if (index == -1) {
-        			index = sql.indexOf("SELECT");
-        		}
-        		index += 6;
-        		sql = sql.substring(0, index) 
-        		+ " TOP(" + start + ", " + (end-start) + ")" 
-        		+ sql.substring(index + 1, sql.length());
-        	} else if (lowerCaseURL.indexOf("openbase") != -1) {
-        		// Openbase support for limiting result set
-        		sql += " return results " + start + " to " + end;
-        	} else if (lowerCaseURL.indexOf("oracle") != -1) {
-        		/* Oracle can make you puke... 
-        		 * These are grabbed from tips all over the net
-        		 * and I can't test them as it doesn't even install on OSX.
-        		 * Pick your poison.
-        		 */
-        		int debug = ERXProperties.intForKeyWithDefault("OracleBatchMode", 3);
-        		if(debug == 1) {
-        			// this only works for the first page
-        			sql = "select * from (" 
-        				+ sql
-        				+ ") where rownum between " + (start + 1) + " and " + (end + 1);
-        		} else if(debug == 2) {
-        			// this doesn't work at all when have have *no* order by
-        			sql = "select * from (" 
-        				+ "select " + sqlExpr.listString() + ", row_number() over (" + sqlExpr.orderByString() + ") as eo_rownum from (" 
-        				+ sql
-        				+ ")) where eo_rownum between " + (start + 1) + " and " + (end + 1);
-        		} else if(debug == 3) {
-           			// this works, but breaks with horizontal inheritance
-        			sql = "select * from (" 
-        				+ "select " + sqlExpr.listString().replaceAll("[Tt]\\d\\.", "") + ", rownum eo_rownum from (" 
-        				+ sql
-        				+ ")) where eo_rownum between " + (start + 1) + " and " + (end + 1);
-         		} else {
-        			// this might work, too, but only if we have an ORDER BY
-        			sql = "select * from (" 
-        				+ "select " + (spec.usesDistinct() ? " distinct " : "") 
-        				+ sqlExpr.listString() + ", row_number() over (" + sqlExpr.orderByString() + ") eo_rownum"
-        				+ " from " + sqlExpr.joinClauseString()
-        				+ " where " + sqlExpr.whereClauseString()
-        				+ ") where eo_rownum between " + (start + 1) + " and " + (end + 1);
-        		}
-        	} else if (lowerCaseURL.indexOf("mysql") != -1 ) {
-        		sql += " LIMIT " + start + ", " + (end - start);
-        	} else if (lowerCaseURL.indexOf("postgresql") != -1 ) {
-        		sql += " LIMIT " + (end - start) + " OFFSET " + start;
-        	} else {
-        		// we should probably throw here
-        		log.error("No page-fetching support for JDBC url: " + url);
-        	}
-        	sqlExpr.setStatement(sql);
-        }
-
-        return sqlExpr;
+        ERXSQLHelper sqlHelper = ERXSQLHelper.newSQLHelper(ec, model.name());
+        return sqlHelper.sqlExpressionForFetchSpecification(ec, spec, start, end);
     }
 
     /**
@@ -373,45 +271,12 @@ public class ERXEOAccessUtilities {
      * @param spec
      *            the EOFetchSpecification in question
      * @return the number of rows
+     * @deprecated
      */
     public static int rowCountForFetchSpecification(EOEditingContext ec, EOFetchSpecification spec) {
-        int rowCount = -1;
-        EOEntity entity = ERXEOAccessUtilities.entityNamed(ec, spec.entityName());
-        EOModel model = entity.model();
-        if(spec.fetchLimit() > 0 || spec.sortOrderings() != null) {
-            spec = new EOFetchSpecification(spec.entityName(), spec.qualifier(), null);
-        }
-        
-        EOSQLExpression sql = ERXEOAccessUtilities.sqlExpressionForFetchSpecification(ec, spec, 0, -1);
-        String statement = sql.statement();
-        int index = statement.toLowerCase().indexOf(" from ");
-        statement = "select count(*) " + statement.substring(index, statement.length());
-        sql.setStatement(statement);
-        NSArray result = ERXEOAccessUtilities.rawRowsForSQLExpression(ec, model.name(), sql);
-
-        if (result.count() > 0) {
-            NSDictionary dict = (NSDictionary) result.objectAtIndex(0);
-            NSArray values = dict.allValues();
-            if (values.count() > 0) {
-                Object value = values.objectAtIndex(0);
-                if (value instanceof Number) {
-                    return ((Number) value).intValue();
-                } else {
-                    try {
-                        int c = Integer.parseInt(value.toString());
-                        rowCount = c;
-                    } catch (NumberFormatException e) {
-                        throw new IllegalStateException("sql " + sql + " returned a wrong result, could not convert " + value
-                                + " into an int!");
-                    }
-                }
-            } else {
-                throw new IllegalStateException("sql " + sql + " returned no result!");
-            }
-        } else {
-            throw new IllegalStateException("sql " + sql + " returned no result!");
-        }
-        return rowCount;
+    	EOEntity entity = ERXEOAccessUtilities.entityNamed(ec, spec.entityName());
+    	EOModel model = entity.model();
+    	return ERXSQLHelper.newSQLHelper(ec, model.name()).rowCountForFetchSpecification(ec, spec);
     }
 
     /**
@@ -507,56 +372,9 @@ public class ERXEOAccessUtilities {
      * 
      * @see createSchemaSQLForEntitiesInModelWithNameAndOptions
      */
-    public static String createSchemaSQLForEntitiesInModelWithNameAndOptionsForOracle9(NSArray entities, String modelName,
-            NSDictionary optionsCreate) {
-        String oldConstraintName = null;
-        int i = 0;
-        String s = createSchemaSQLForEntitiesInModelWithNameAndOptions(entities, modelName, optionsCreate);
-        NSArray a = NSArray.componentsSeparatedByString(s, "/");
-        StringBuffer buf = new StringBuffer(s.length());
-        Pattern pattern = Pattern.compile(".*ALTER TABLE .* ADD CONSTRAINT (.*) FOREIGN KEY .* REFERENCES .* \\(.*\\) DEFERRABLE INITIALLY DEFERRED.*");
-        Pattern pattern2 = Pattern.compile("(.*ALTER TABLE .* ADD CONSTRAINT ).*( FOREIGN KEY .* REFERENCES .* \\(.*\\) DEFERRABLE INITIALLY DEFERRED.*)");
-        String lineSeparator = System.getProperty("line.separator");
-
-        for (Enumeration e = a.objectEnumerator(); e.hasMoreElements();) {
-            String statementLine = (String)e.nextElement();
-            NSArray b = NSArray.componentsSeparatedByString(statementLine, lineSeparator);
-            for (Enumeration e1 = b.objectEnumerator(); e1.hasMoreElements();) {
-                String statement = (String)e1.nextElement();
-                if (!pattern.matcher(statement).matches()) {
-                    buf.append(statement);
-                    buf.append(lineSeparator);
-                    continue;
-                }
-                
-                String constraintName = pattern.matcher(statement).replaceAll("$1");
-                if (constraintName.length() <= 30) {
-                    buf.append(statement);
-                    buf.append(lineSeparator);
-                    continue;
-                }
-                
-                constraintName = "fk" + System.currentTimeMillis() + new NSTimestamp().getNanos();
-                String newConstraintName = i == 0 ? constraintName : constraintName + "_" + i; 
-
-                if (oldConstraintName == null) {
-                    oldConstraintName = constraintName;
-                } else if (oldConstraintName.equals(newConstraintName)) {
-                    constraintName += "_" + ++i;
-                } else {
-                    i = 0;
-                }
-                oldConstraintName = constraintName;
-                
-                String newConstraint = pattern2.matcher(statement).replaceAll("$1"+constraintName+"$2");
-                buf.append(newConstraint);
-                buf.append(lineSeparator);
-            }
-            if (e.hasMoreElements())
-                buf.append("/");
-        }
-        System.out.println("finished!");
-        return buf.toString();
+    public static String createSchemaSQLForEntitiesInModelWithNameAndOptionsForOracle9(NSArray entities, String modelName, NSDictionary optionsCreate) {
+        EODatabaseContext dc = EOUtilities.databaseContextForModelNamed(ERXEC.newEditingContext(), modelName);
+        return ERXSQLHelper.newSQLHelper(dc).createSchemaSQLForEntitiesInModelWithNameAndOptions(entities, modelName, optionsCreate);
     }
     
     /**
@@ -587,27 +405,11 @@ public class ERXEOAccessUtilities {
      * 
      * @return a <code>String</code> containing SQL statements to create
      *         tables
+     * @deprecated
      */
     public static String createSchemaSQLForEntitiesInModelWithNameAndOptions(NSArray entities, String modelName, NSDictionary optionsCreate) {
         EODatabaseContext dc = EOUtilities.databaseContextForModelNamed(ERXEC.newEditingContext(), modelName);
-        if (entities == null) {
-        	EOModel m = modelGroup(null).modelNamed(modelName);
-        	Enumeration e = m.entities().objectEnumerator();
-        	NSMutableArray ar = new NSMutableArray();
-        	while (e.hasMoreElements()) {
-                EOEntity currentEntity = (EOEntity) e.nextElement();
-                if ((currentEntity.name().startsWith("EO") && currentEntity.name().endsWith("Prototypes"))) {
-                    // we do not want to add EOXXXPrototypes entities
-                    continue;
-                }
-                if (!entityUsesSeparateTable(currentEntity)) {
-                    continue;
-                }
-                ar.addObject(currentEntity);
-            }
-            entities = ar;
-        }
-        return ERXEOAccessUtilities.createSchemaSQLForEntitiesWithOptions(entities, dc, optionsCreate);
+        return ERXSQLHelper.newSQLHelper(dc).createSchemaSQLForEntitiesInModelWithNameAndOptions(entities, modelName, optionsCreate);
     }
     
     /**
@@ -617,13 +419,10 @@ public class ERXEOAccessUtilities {
      * @param databaseContext the database context to use
      * @param optionsCreate the options (@see createSchemaSQLForEntitiesInModelWithNameAndOptions)
      * @return a sql script
+     * @deprecated
      */
     public static String createSchemaSQLForEntitiesWithOptions(NSArray entities, EODatabaseContext databaseContext, NSDictionary optionsCreate) {
-        // get the JDBCAdaptor
-        EOAdaptorContext ac = databaseContext.adaptorContext();
-        // ak: stupid trick to get around having to link to JDBCAdaptor
-        EOSynchronizationFactory sf = (EOSynchronizationFactory) NSKeyValueCodingAdditions.Utility.valueForKeyPath(ac, "adaptor.plugIn.createSynchronizationFactory");
-        return sf.schemaCreationScriptForEntities(entities, optionsCreate);
+    	return ERXSQLHelper.newSQLHelper(databaseContext).createSchemaSQLForEntitiesWithOptions(entities, databaseContext, optionsCreate);
     }
     
     /**
@@ -652,18 +451,11 @@ public class ERXEOAccessUtilities {
      * 
      * @return a <code>String</code> containing SQL statements to create
      *         tables
+     * @deprecated
      */
     public static String createSchemaSQLForEntitiesInModelWithName(NSArray entities, String modelName) {
-        NSMutableDictionary optionsCreate = new NSMutableDictionary();
-        optionsCreate.setObjectForKey("YES", EOSchemaGeneration.DropTablesKey);
-        optionsCreate.setObjectForKey("YES", EOSchemaGeneration.DropPrimaryKeySupportKey);
-        optionsCreate.setObjectForKey("YES", EOSchemaGeneration.CreateTablesKey);
-        optionsCreate.setObjectForKey("YES", EOSchemaGeneration.CreatePrimaryKeySupportKey);
-        optionsCreate.setObjectForKey("YES", EOSchemaGeneration.PrimaryKeyConstraintsKey);
-        optionsCreate.setObjectForKey("YES", EOSchemaGeneration.ForeignKeyConstraintsKey);
-        optionsCreate.setObjectForKey("NO", EOSchemaGeneration.CreateDatabaseKey);
-        optionsCreate.setObjectForKey("NO", EOSchemaGeneration.DropDatabaseKey);
-        return createSchemaSQLForEntitiesInModelWithNameAndOptions(entities, modelName, optionsCreate);
+    	EODatabaseContext databaseContext = EOUtilities.databaseContextForModelNamed(ERXEC.newEditingContext(), modelName);
+    	return ERXSQLHelper.newSQLHelper(databaseContext).createSchemaSQLForEntitiesInModelWithName(entities, modelName);
     }
 
     /**
@@ -681,20 +473,15 @@ public class ERXEOAccessUtilities {
      * @param drop if true, tables and keys are dropped
      * @return a <code>String</code> containing SQL statements to create
      *         tables
+     * @deprecated
      */
     public static String createSchemaSQLForEntitiesInDatabaseContext(NSArray entities, EODatabaseContext databaseContext, boolean create, boolean drop) {
-        NSMutableDictionary optionsCreate = new NSMutableDictionary();
-        optionsCreate.setObjectForKey((drop) ? "YES" : "NO", EOSchemaGeneration.DropTablesKey);
-        optionsCreate.setObjectForKey((drop) ? "YES" : "NO", EOSchemaGeneration.DropPrimaryKeySupportKey);
-        optionsCreate.setObjectForKey((create) ? "YES" : "NO", EOSchemaGeneration.CreateTablesKey);
-        optionsCreate.setObjectForKey((create) ? "YES" : "NO", EOSchemaGeneration.CreatePrimaryKeySupportKey);
-        optionsCreate.setObjectForKey((create) ? "YES" : "NO", EOSchemaGeneration.PrimaryKeyConstraintsKey);
-        optionsCreate.setObjectForKey((create) ? "YES" : "NO", EOSchemaGeneration.ForeignKeyConstraintsKey);
-        optionsCreate.setObjectForKey("NO", EOSchemaGeneration.CreateDatabaseKey);
-        optionsCreate.setObjectForKey("NO", EOSchemaGeneration.DropDatabaseKey);
-        return createSchemaSQLForEntitiesWithOptions(entities, databaseContext, optionsCreate);
+    	return ERXSQLHelper.newSQLHelper(databaseContext).createSchemaSQLForEntitiesInDatabaseContext(entities, databaseContext, create, drop);
     }
 
+    /**
+     * @deprecated
+     */
     public static String createIndexSQLForEntitiesForOracle(NSArray entities) {
         NSMutableArray a = new NSMutableArray();
         a.addObject("BLOB");
@@ -702,142 +489,20 @@ public class ERXEOAccessUtilities {
         return createIndexSQLForEntities(entities, a);
     }
 
+    /**
+     * @deprecated
+     */
     public static String createIndexSQLForEntities(NSArray entities) {
         return createIndexSQLForEntities(entities, null);
     }
+    
+    /**
+     * @deprecated
+     */
     public static String createIndexSQLForEntities(NSArray entities, NSArray externalTypesToIgnore) {
-        if (externalTypesToIgnore == null) externalTypesToIgnore = NSArray.EmptyArray;
-        if (entities == null || entities.count() == 0) return "";
-        int i = 0;
-        String oldIndexName = null;
-        String lineSeparator = System.getProperty("line.separator");
-        StringBuffer buf = new StringBuffer();
-
         EOEntity ent = (EOEntity)entities.objectAtIndex(0);
-        String commandSeparator = null;
         String modelName = ent.model().name();
-        String plugin= ERXSystem.getProperty(modelName + ".DBPlugin");
-        plugin= plugin ==null ? ERXSystem.getProperty("dbConnectPluginGLOBAL") : plugin;
-        if ("Oracle".equals(plugin) || "EROracle".equals(plugin)) {
-            commandSeparator = lineSeparator + "/" + lineSeparator; 
-        } else {
-            commandSeparator = ";" + lineSeparator;
-        }
-        for (Enumeration entitiesEnum = entities.objectEnumerator(); entitiesEnum.hasMoreElements();) {
-            EOEntity entity = (EOEntity) entitiesEnum.nextElement();
-            // only use this entity if it has its own table
-            if (!entityUsesSeparateTable(entity)) continue;
-            
-            NSDictionary d = entity.userInfo();
-            NSMutableArray usedColumns = new NSMutableArray();
-            for (Enumeration keys = d.keyEnumerator(); keys.hasMoreElements();) {
-                String key = (String) keys.nextElement();
-                if (key.startsWith("index")) {
-                    String numbers = key.substring("index".length());
-                    if (ERXStringUtilities.isDigitsOnly(numbers)) {
-                        String attributeNames = (String) d.objectForKey(key);
-                        if (ERXStringUtilities.stringIsNullOrEmpty(attributeNames)) continue;
-                        String indexName = "c" + System.currentTimeMillis() + new NSTimestamp().getNanos();
-                        String newIndexName = i == 0 ? indexName : indexName + "_" + i; 
-                        if (oldIndexName == null) {
-                            oldIndexName = indexName;
-                        } else if (oldIndexName.equals(newIndexName)) {
-                            indexName += "_" + ++i;
-                        } else {
-                            i = 0;
-                        }
-                        oldIndexName = indexName;
-                        StringBuffer localBuf = new StringBuffer();
-                        StringBuffer columnBuf = new StringBuffer();
-                        boolean validIndex = false;
-                        localBuf.append("create index " + indexName + " on " + entity.externalName() + "(");
-                        for (Enumeration attributes = NSArray.componentsSeparatedByString(attributeNames, ",")
-                                .objectEnumerator(); attributes.hasMoreElements();) {
-                            String attributeName = (String) attributes.nextElement();
-                            attributeName = attributeName.trim();
-                            EOAttribute attribute = entity.attributeNamed(attributeName);
-                            if (attribute == null) {
-                                attribute = attributeWithColumnNameFromEntity(attributeName, entity);
-                            }
-                            if (attribute != null && externalTypesToIgnore.indexOfObject(attribute.externalType()) != NSArray.NotFound) {
-                                continue;
-                            }
-                            validIndex = true;
-                            String columnName = attribute == null ? attributeName : attribute.columnName();
-                            columnBuf.append(columnName);
-                            if (attributes.hasMoreElements()) {
-                                columnBuf.append(", ");
-                            }
-                        }
-                        if (validIndex) {
-                            String l = columnBuf.toString();
-                            if (l.endsWith(", ")) l = l.substring(0, l.length() - 2);
-                            if (usedColumns.indexOfObject(l) == NSArray.NotFound) {
-                                buf.append(localBuf).append(l);
-                                usedColumns.addObject(l);
-                                buf.append(")").append(commandSeparator).append(lineSeparator);
-                            }
-                        }
-                    }
-                } else if (key.equals("additionalIndexes")) {
-                    // this is a space separated list of column or attribute
-                    // names
-                    String value = (String) d.objectForKey(key);
-                    for (Enumeration indexes = NSArray.componentsSeparatedByString(value, " ").objectEnumerator(); indexes
-                            .hasMoreElements();) {
-                        String indexValues = (String) indexes.nextElement();
-                        if (ERXStringUtilities.stringIsNullOrEmpty(indexValues)) continue;
-
-                        // this might be a comma separate list
-                        String indexName = "c"+System.currentTimeMillis()+new NSTimestamp().getNanos();
-                        String newIndexName = i == 0 ? indexName : indexName + "_" + i; 
-                        if (oldIndexName == null) {
-                            oldIndexName = indexName;
-                        } else if (oldIndexName.equals(newIndexName)) {
-                            indexName += "_" + ++i;
-                        } else {
-                            i = 0;
-                        }
-                        oldIndexName = indexName;
-                        
-                        StringBuffer localBuf = new StringBuffer();
-                        StringBuffer columnBuf = new StringBuffer();
-                        boolean validIndex = false;
-                        localBuf.append("create index "+indexName+" on "+entity.externalName()+"(");
-                        for (Enumeration e = NSArray.componentsSeparatedByString(indexValues, ",").objectEnumerator(); e.hasMoreElements();) {
-                            String attributeName = (String)e.nextElement();
-                            attributeName = attributeName.trim();
-                            EOAttribute attribute = entity.attributeNamed(attributeName);
-
-                            if (attribute == null) {
-                                attribute = attributeWithColumnNameFromEntity(attributeName, entity);
-                            }
-                            if (attribute != null && externalTypesToIgnore.indexOfObject(attribute.externalType()) != NSArray.NotFound) {
-                                continue;
-                            }
-                            validIndex = true;
-                            
-                            
-                            String columnName = attribute == null ? attributeName : attribute.columnName();
-                            columnBuf.append(columnName);
-                            if (e.hasMoreElements()) {
-                                columnBuf.append(", ");
-                            }
-                        }
-                        if (validIndex) {
-                            String l = columnBuf.toString();
-                            if (l.endsWith(", ")) l = l.substring(0, l.length() - 2);
-                            if (usedColumns.indexOfObject(l) == NSArray.NotFound) {
-                                buf.append(localBuf).append(l);
-                                usedColumns.addObject(l);
-                                buf.append(")").append(commandSeparator).append(lineSeparator);
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        return buf.toString();
+        return ERXSQLHelper.newSQLHelper(ERXEC.newEditingContext(), modelName).createIndexSQLForEntities(entities, externalTypesToIgnore);
     }
 
     public static boolean entityUsesSeparateTable(EOEntity entity) {
@@ -1021,36 +686,10 @@ public class ERXEOAccessUtilities {
 
     /**
      * Creates a where clause string " someKey IN ( someValue1,...)". Can migrate keyPaths.
+     * @deprecated
      */
     public static String sqlWhereClauseStringForKey(EOSQLExpression e, String key, NSArray valueArray) {
-        if(valueArray.count() == 0) {
-            return "0=1";
-        }
-        StringBuffer sb = new StringBuffer();
-        
-        NSArray attributePath = attributePathForKeyPath(e.entity(), key);
-        EOAttribute attribute = (EOAttribute) attributePath.lastObject();
-        if(attributePath.count() > 1) {
-            sb.append(e.sqlStringForAttributePath(attributePath));
-        } else {
-            sb.append(e.sqlStringForAttribute(attribute));
-        }
-        sb.append(" IN ");
-        sb.append("(");
-        for (int i = 0; i < valueArray.count(); i++) {
-            if (i > 0) {
-                sb.append(", ");
-            }
-            Object value = valueArray.objectAtIndex(i);
-            // The Postgres Expression has a problem using bind variables so we have to get the formatted
-            // SQL string for a value instead.  All Apple provided plugins must use the bind variables
-            // however.  Frontbase can go either way
-            boolean isPostgres = e.getClass().getName().equals("com.webobjects.jdbcadaptor.PostgresqlExpression");
-            value = isPostgres ? e.formatValueForAttribute(value, attribute) : e.sqlStringForValue(value, key);
-            sb.append(value);
-        }
-        sb.append(")");
-        return sb.toString();
+    	return ERXSQLHelper.newSQLHelper(e).sqlWhereClauseStringForKey(e, key, valueArray);
     }
 
     /**
@@ -1547,7 +1186,8 @@ public class ERXEOAccessUtilities {
      * Tries to get the plugin name for a JDBC based model.
      * @param model
      * @return
-     */public static String guessPluginName(EOModel model) {
+     */
+    public static String guessPluginName(EOModel model) {
         String pluginName = null;
         // If you don't explicitly set a prototype name, and you don't
         // declare a preferred databaseConfig,
@@ -1556,26 +1196,37 @@ public class ERXEOAccessUtilities {
         if ("JDBC".equals(model.adaptorName())) {
             NSDictionary connectionDictionary = model.connectionDictionary();
             if (connectionDictionary != null) {
-                String jdbcUrl = (String) connectionDictionary.objectForKey("URL");
-                if (jdbcUrl != null) {
-                    pluginName = (String) connectionDictionary.objectForKey("plugin");
-                    if (pluginName == null || pluginName.trim().length() == 0) {
-                        pluginName = JDBCPlugIn.plugInNameForURL(jdbcUrl);
-                        if (pluginName == null) {
-                        	// AK: this is a hack that is totally bogus....
-                            int firstColon = jdbcUrl.indexOf(':');
-                            int secondColon = jdbcUrl.indexOf(':', firstColon + 1);
-                            if (firstColon != -1 && secondColon != -1) {
-                                pluginName = jdbcUrl.substring(firstColon + 1, secondColon);
-                            }
-                        } else {
-                            pluginName = ERXStringUtilities.lastPropertyKeyInKeyPath(pluginName);
-                            pluginName = pluginName.replaceFirst("PlugIn", "");
-                        }
-                    }
-                }
+            	pluginName = guessPluginNameForConnectionDictionary(connectionDictionary);
             }
         }
+        return pluginName;
+    }
+    
+    /**
+     * Tries to get the plugin name for a connection dictionary.
+     * @param connectionDictionary the connectionDictionary to guess a plugin name for
+     * @return the plugin name
+     */
+    public static String guessPluginNameForConnectionDictionary(NSDictionary connectionDictionary) {
+    	String pluginName = null;
+	    String jdbcUrl = (String) connectionDictionary.objectForKey("URL");
+	    if (jdbcUrl != null) {
+	        pluginName = (String) connectionDictionary.objectForKey("plugin");
+	        if (pluginName == null || pluginName.trim().length() == 0) {
+	            pluginName = JDBCPlugIn.plugInNameForURL(jdbcUrl);
+	            if (pluginName == null) {
+	            	// AK: this is a hack that is totally bogus....
+	                int firstColon = jdbcUrl.indexOf(':');
+	                int secondColon = jdbcUrl.indexOf(':', firstColon + 1);
+	                if (firstColon != -1 && secondColon != -1) {
+	                    pluginName = jdbcUrl.substring(firstColon + 1, secondColon);
+	                }
+	            } else {
+	                pluginName = ERXStringUtilities.lastPropertyKeyInKeyPath(pluginName);
+	                pluginName = pluginName.replaceFirst("PlugIn", "");
+	            }
+	        }
+	    }
         if (pluginName != null && pluginName.trim().length() == 0) {
           pluginName = null;
         }
