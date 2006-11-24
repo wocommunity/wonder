@@ -26,9 +26,12 @@ public class ERXComparisonSupport {
 
     private static final int MAGIC = -42;
 
+    private static boolean fixAnyway;
+    
     public static void initialize() {
         EOSortOrdering.ComparisonSupport.setSupportForClass(new StringSortSupport(), String.class);
         EOQualifier.ComparisonSupport.setSupportForClass(new StringQualifierSupport(), String.class);
+        fixAnyway = ERXProperties.booleanForKeyWithDefault("er.extensions.ERXComparisonSupport.fixAnyway", true);
     }
 
     /**
@@ -64,19 +67,24 @@ public class ERXComparisonSupport {
                 return -1;
             }
             if (object2 == null || object2 == NSKeyValueCoding.NullValue)
-                return 1;
+            	return 1;
             return MAGIC;
         }
 
         protected int _genericCompareTo(Object object1, Object object2) {
-            int i = _handleNulls(object1, object2);
-            if (i != MAGIC)
-                return i;
-            Class clazz = object1.getClass();
-            if (clazz == stringClass) {
-                return collator().compare(object1.toString(),object2.toString());
-            }
-            return super._genericCompareTo(object1, object2);
+        	// AK: unfortunately, the is no combination that allows us to keep
+        	// sorting by case, but disregard the Umlaut characters. So
+        	// we just use the default, unless we come up with a better idea...
+        	if(fixAnyway) {
+        		int i = _handleNulls(object1, object2);
+        		if (i != MAGIC)
+        			return i;
+        		Class clazz = object1.getClass();
+        		if (clazz == stringClass) {
+        			return collator().compare(object1.toString(),object2.toString());
+        		}
+        	}
+        	return super._genericCompareTo(object1, object2);
         }
 
         protected int _genericCaseInsensitiveCompareTo(Object object1, Object object2) {
