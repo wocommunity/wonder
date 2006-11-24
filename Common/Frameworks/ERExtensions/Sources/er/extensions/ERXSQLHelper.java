@@ -107,7 +107,7 @@ public class ERXSQLHelper {
 			}
 			entities = ar;
 		}
-		return ERXEOAccessUtilities.createSchemaSQLForEntitiesWithOptions(entities, dc, optionsCreate);
+		return createSchemaSQLForEntitiesWithOptions(entities, dc, optionsCreate);
 	}
 
 	/**
@@ -398,7 +398,17 @@ public class ERXSQLHelper {
 	}
 
 	protected String limitExpressionForSQL(EOSQLExpression expression, EOFetchSpecification fetchSpecification, String sql, long start, long end) {
-		throw new RuntimeException("There is no database-specific implementation for generating limit expressions.");
+		throw new UnsupportedOperationException("There is no database-specific implementation for generating limit expressions.");
+	}
+	
+	/**
+	 * Returns the SQL expression for a regular expression query.
+	 * @param key
+	 * @param value
+	 * @return
+	 */
+	public String sqlForRegularExpressionQuery(String key, String value) {
+		throw new UnsupportedOperationException("There is no database-specific implementation for generating regex expressions.");
 	}
 
 	/**
@@ -418,7 +428,7 @@ public class ERXSQLHelper {
 			spec = new EOFetchSpecification(spec.entityName(), spec.qualifier(), null);
 		}
 
-		EOSQLExpression sql = ERXEOAccessUtilities.sqlExpressionForFetchSpecification(ec, spec, 0, -1);
+		EOSQLExpression sql = sqlExpressionForFetchSpecification(ec, spec, 0, -1);
 		String statement = sql.statement();
 		int index = statement.toLowerCase().indexOf(" from ");
 		statement = "select count(*) " + statement.substring(index, statement.length());
@@ -774,6 +784,10 @@ public class ERXSQLHelper {
 			return super.createIndexSQLForEntities(entities, oracleExternalTypesToIgnore);
 
 		}
+		
+		public String sqlForRegularExpressionQuery(String key, String value) {
+			return "REGEXP_LIKE(" + key + ", " + value + ")";
+		}
 	}
 
 	public static class OpenBaseSQLHelper extends ERXSQLHelper {
@@ -804,7 +818,12 @@ public class ERXSQLHelper {
 		protected String limitExpressionForSQL(EOSQLExpression expression, EOFetchSpecification fetchSpecification, String sql, long start, long end) {
 			return sql + " LIMIT " + start + ", " + (end - start);
 		}
+		
+		public String sqlForRegularExpressionQuery(String key, String value) {
+			return key + " REGEXP " + value + "";
+		}
 	}
+
 
 	public static class PostgresqlSQLHelper extends ERXSQLHelper {
 		protected String formatValueForAttribute(EOSQLExpression expression, Object value, EOAttribute attribute, String key) {
@@ -818,6 +837,10 @@ public class ERXSQLHelper {
 
 		protected String limitExpressionForSQL(EOSQLExpression expression, EOFetchSpecification fetchSpecification, String sql, long start, long end) {
 			return sql + " LIMIT " + (end - start) + " OFFSET " + start;
+		}
+		
+		public String sqlForRegularExpressionQuery(String key, String value) {
+			return key + " ~* " + value + "";
 		}
 	}
 }
