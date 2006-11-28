@@ -221,10 +221,25 @@ public class AjaxUtils {
 		dict.takeValueForKey(AjaxUtils.DONT_STORE_PAGE, AjaxUtils.DONT_STORE_PAGE);
 	}
 
+	public static void appendScriptHeaderIfNecessary(WORequest request, WOResponse response) {
+		if (AjaxUpdateContainer.hasUpdateContainerID(request)) {
+			AjaxUtils.appendScriptHeader(response);
+		}
+		else {
+			response.setHeader("text/javascript", "Content-Type");
+		}
+	}
+
 	public static void appendScriptHeader(WOResponse response) {
 		response.appendContentString("<script type = \"text/javascript\" language = \"javascript\">\n");
 	}
 
+	public static void appendScriptFooterIfNecessary(WORequest request, WOResponse response) {
+		if (AjaxUpdateContainer.hasUpdateContainerID(request)) {
+			AjaxUtils.appendScriptFooter(response);
+		}
+	}
+	
 	public static void appendScriptFooter(WOResponse response) {
 		response.appendContentString("\n</script>");
 	}
