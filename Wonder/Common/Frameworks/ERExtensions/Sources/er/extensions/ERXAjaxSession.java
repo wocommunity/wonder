@@ -192,6 +192,8 @@ public class ERXAjaxSession extends WOSession {
         pageReplacementCache.put(context.contextID(), pageRecord);
         //System.out.println("ERXSession.savePage: " + pageCacheKey + " new context = " + context.contextID());
         //System.out.println("ERXSession.savePage: " + pageCacheKey + " = " + pageReplacementCache);
+
+        ERXAjaxApplication.cleanUpHeaders(response);
       }
     }
     else {
