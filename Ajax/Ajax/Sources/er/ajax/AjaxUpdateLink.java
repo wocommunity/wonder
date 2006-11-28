@@ -188,9 +188,9 @@ public class AjaxUpdateLink extends AjaxDynamicElement {
 			String script = (String) valueForBinding("onClickServer", component);
 			if (script != null) {
 				WOResponse response = AjaxUtils.createResponse(request, context);
-				AjaxUtils.appendScriptHeader(response);
+				AjaxUtils.appendScriptHeaderIfNecessary(request, response);
 				response.appendContentString(script);
-				AjaxUtils.appendScriptFooter(response);
+				AjaxUtils.appendScriptFooterIfNecessary(request, response);
 				results = response;
 			}
 		}
