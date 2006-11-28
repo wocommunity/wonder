@@ -24,7 +24,7 @@ public class AjaxResponse extends WOResponse {
 	}
 
 	public WOResponse generateResponse() {
-		if (_request.stringFormValueForKey(AjaxUpdateContainer.UPDATE_CONTAINER_ID_KEY) != null) {
+		if (AjaxUpdateContainer.hasUpdateContainerID(_request)) {
 			String originalSenderID = _context.senderID();
 			_context._setSenderID("");
 			try {
