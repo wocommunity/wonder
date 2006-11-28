@@ -19,85 +19,126 @@ import com.webobjects.foundation.NSMutableDictionary;
  * @binding updateContainerID the ID of the container to update
  */
 public class AjaxObserveField extends AjaxDynamicElement {
-  public AjaxObserveField(String name, NSDictionary associations, WOElement children) {
-    super(name, associations, children);
-  }
+	public AjaxObserveField(String name, NSDictionary associations, WOElement children) {
+		super(name, associations, children);
+	}
 
-  /**
-   * Adds all required resources.
-   */
-  protected void addRequiredWebResources(WOResponse response, WOContext context) {
-    addScriptResourceInHead(context, response, "prototype.js");
-    addScriptResourceInHead(context, response, "scriptaculous.js");
-  }
+	/**
+	 * Adds all required resources.
+	 */
+	protected void addRequiredWebResources(WOResponse response, WOContext context) {
+		addScriptResourceInHead(context, response, "prototype.js");
+		addScriptResourceInHead(context, response, "scriptaculous.js");
+	}
 
-  public NSDictionary createAjaxOptions(WOComponent component) {
-    NSMutableArray ajaxOptionsArray = new NSMutableArray();
-    ajaxOptionsArray.addObject(new AjaxOption("frequency", AjaxOption.NUMBER));
-    ajaxOptionsArray.addObject(new AjaxOption("decay", AjaxOption.NUMBER));
-    ajaxOptionsArray.addObject(new AjaxOption("onLoading", AjaxOption.SCRIPT));
-    ajaxOptionsArray.addObject(new AjaxOption("onComplete", AjaxOption.SCRIPT));
-    ajaxOptionsArray.addObject(new AjaxOption("onSuccess", AjaxOption.SCRIPT));
-    ajaxOptionsArray.addObject(new AjaxOption("onFailure", AjaxOption.SCRIPT));
-    ajaxOptionsArray.addObject(new AjaxOption("onException", AjaxOption.SCRIPT));
-    ajaxOptionsArray.addObject(new AjaxOption("insertion", AjaxOption.SCRIPT));
-    ajaxOptionsArray.addObject(new AjaxOption("evalScripts", AjaxOption.BOOLEAN));
-    NSMutableDictionary options = AjaxOption.createAjaxOptionsDictionary(ajaxOptionsArray, component, associations());
-    return options;
-  }
+	public NSDictionary createAjaxOptions(WOComponent component) {
+		NSMutableArray ajaxOptionsArray = new NSMutableArray();
+		ajaxOptionsArray.addObject(new AjaxOption("frequency", AjaxOption.NUMBER));
+		ajaxOptionsArray.addObject(new AjaxOption("decay", AjaxOption.NUMBER));
+		ajaxOptionsArray.addObject(new AjaxOption("onLoading", AjaxOption.SCRIPT));
+		ajaxOptionsArray.addObject(new AjaxOption("onComplete", AjaxOption.SCRIPT));
+		ajaxOptionsArray.addObject(new AjaxOption("onSuccess", AjaxOption.SCRIPT));
+		ajaxOptionsArray.addObject(new AjaxOption("onFailure", AjaxOption.SCRIPT));
+		ajaxOptionsArray.addObject(new AjaxOption("onException", AjaxOption.SCRIPT));
+		ajaxOptionsArray.addObject(new AjaxOption("insertion", AjaxOption.SCRIPT));
+		ajaxOptionsArray.addObject(new AjaxOption("evalScripts", AjaxOption.BOOLEAN));
+		NSMutableDictionary options = AjaxOption.createAjaxOptionsDictionary(ajaxOptionsArray, component, associations());
+		if (options.objectForKey("evalScripts") == null) {
+			options.setObjectForKey("true", "evalScripts");
+		}
+		return options;
+	}
 
-  public void appendToResponse(WOResponse response, WOContext context) {
-    WOComponent component = context.component();
-    String observeFieldID = (String) valueForBinding("observeFieldID", component);
-    String updateContainerID = (String) valueForBinding("updateContainerID", component);
-    if (observeFieldID != null && updateContainerID != null) {
-      AjaxUtils.appendScriptHeader(response);
-      NSDictionary options = createAjaxOptions(component);
-      Boolean fullSubmitBoolean = (Boolean) valueForBinding("fullSubmit", component);
-      boolean fullSubmit = (fullSubmitBoolean != null && fullSubmitBoolean.booleanValue());
-      AjaxObserveField.appendToResponse(response, context, observeFieldID, updateContainerID, fullSubmit, options);
-      AjaxUtils.appendScriptFooter(response);
-    }
-  }
+	public void appendToResponse(WOResponse response, WOContext context) {
+		WOComponent component = context.component();
+		String observeFieldID = (String) valueForBinding("observeFieldID", component);
+		String updateContainerID = (String) valueForBinding("updateContainerID", component);
+		if (observeFieldID != null && updateContainerID != null) {
+			AjaxUtils.appendScriptHeader(response);
+			NSDictionary options = createAjaxOptions(component);
+			Boolean fullSubmitBoolean = (Boolean) valueForBinding("fullSubmit", component);
+			boolean fullSubmit = (fullSubmitBoolean != null && fullSubmitBoolean.booleanValue());
+			AjaxObserveField.appendToResponse(response, context, this, observeFieldID, updateContainerID, fullSubmit, options);
+			AjaxUtils.appendScriptFooter(response);
+		}
+	}
 
-  public static void appendToResponse(WOResponse response, WOContext context, String observeFieldID, String updateContainerID, boolean fullSubmit, NSDictionary options) {
-    response.appendContentString("new Form.Element.Observer($('" + observeFieldID + "'), 1, function(element, value) {");
-    NSMutableDictionary observerOptions = new NSMutableDictionary();
-    if (options != null) {
-      observerOptions.addEntriesFromDictionary(options);
-    }
-    observerOptions.setObjectForKey("true", "asynchronous");
+	public static void appendToResponse(WOResponse response, WOContext context, AjaxDynamicElement element, String observeFieldID, String updateContainerID, boolean fullSubmit, NSDictionary options) {
+	    WOComponent component = context.component();
 
-    if (!fullSubmit) {
-      // We need to cheat and make the WOForm that contains the form action appear to have been
-      // submitted.  So we grab the action url, pull off the element ID from its action URL
-      // and pass that in as FORCE_FORM_SUBMITTED_KEY, which is processed by ERXWOForm just like
-      // senderID is on the real WOForm.  Unfortunately we can't hook into the real WOForm to do
-      // this :(
-      response.appendContentString("var formAction = $('" + observeFieldID + "').form.action;\n");
-      response.appendContentString("var senderID = formAction.substring(formAction.indexOf('.', formAction.lastIndexOf('/')) + 1);\n");
-      StringBuffer parameters = new StringBuffer();
-      parameters.append("escape($('" + observeFieldID + "').name) + '=' + escape($('" + observeFieldID + "').value) + '");
-      parameters.append("&");
-      parameters.append(AjaxUtils.FORCE_FORM_SUBMITTED_KEY + "=' + senderID + '");
-      parameters.append("'");
-      observerOptions.setObjectForKey(parameters.toString(), "parameters");
-    }
-    else {
-      NSMutableDictionary formOptions = new NSMutableDictionary();
-      formOptions.setObjectForKey("Form.serialize($('" + observeFieldID + "').form)", "parameters");
-      response.appendContentString("new Ajax.Request($('" + observeFieldID + "').form.action, ");
-      AjaxOptions.appendToResponse(formOptions, response, context);
-      response.appendContentString(");");
-      response.appendContentString("\n");
-    }
+		response.appendContentString("new Form.Element.Observer($('" + observeFieldID + "'), 0, function(element, value) { ");
+		NSMutableDictionary observerOptions = new NSMutableDictionary();
+		if (options != null) {
+			observerOptions.addEntriesFromDictionary(options);
+		}
+		observerOptions.setObjectForKey("true", "asynchronous");
+		observerOptions.setObjectForKey("'post'", "method");
 
-    response.appendContentString("new Ajax.Updater('" + updateContainerID + "', $('" + updateContainerID + "').getAttribute('updateUrl'), ");
-    AjaxOptions.appendToResponse(observerOptions, response, context);
-    response.appendContentString(") });");
-  }
+		if (!fullSubmit) {
+			// We need to cheat and make the WOForm that contains the form action appear to have been
+			// submitted. So we grab the action url, pull off the element ID from its action URL
+			// and pass that in as FORCE_FORM_SUBMITTED_KEY, which is processed by ERXWOForm just like
+			// senderID is on the real WOForm. Unfortunately we can't hook into the real WOForm to do
+			// this :(
+			response.appendContentString("var observedFieldForm = $('" + observeFieldID + "').form;\n");
+			response.appendContentString("var observedFieldFormAction = observedFieldForm.action;\n");
+			response.appendContentString("var senderID = observedFieldFormAction.substring(observedFieldFormAction.indexOf('.', observedFieldFormAction.lastIndexOf('/')) + 1);\n");
+			StringBuffer parameters = new StringBuffer();
+			parameters.append("escape($('" + observeFieldID + "').name) + '=' + escape($F('" + observeFieldID + "')) + '");
+			parameters.append("&");
+			parameters.append(AjaxSubmitButton.KEY_AJAX_SUBMIT_BUTTON_NAME + "=" + nameInContext(context, component, element));
+			parameters.append("&");
+			parameters.append(AjaxUtils.FORCE_FORM_SUBMITTED_KEY + "=' + senderID");
+			observerOptions.setObjectForKey(parameters.toString(), "parameters");
+			response.appendContentString("new Ajax.Updater('" + updateContainerID + "', $('" + updateContainerID + "').getAttribute('updateUrl'), ");
+			AjaxOptions.appendToResponse(observerOptions, response, context);
+			response.appendContentString(");");
+		}
+		else {
+			StringBuffer parameters = new StringBuffer();
+			parameters.append("Form.serialize($('" + observeFieldID + "').form)");
+			if (updateContainerID != null) {
+				parameters.append(" + '&" + AjaxUpdateContainer.UPDATE_CONTAINER_ID_KEY + "=" + updateContainerID + "'");
+			}
+			parameters.append(" + '&" + AjaxSubmitButton.KEY_AJAX_SUBMIT_BUTTON_NAME + "=" + nameInContext(context, component, element) + "'");
 
-  public WOActionResults handleRequest(WORequest request, WOContext context) {
-    return null;
-  }
+			observerOptions.setObjectForKey(parameters.toString(), "parameters");
+			String actionUrl = "$('" + observeFieldID + "').form.action";
+			if (updateContainerID != null) {
+				response.appendContentString("new Ajax.Updater('" + updateContainerID + "', " + actionUrl + ", ");
+				AjaxOptions.appendToResponse(observerOptions, response, context);
+				response.appendContentString(");");
+			}
+			else {
+				response.appendContentString("new Ajax.Request(" + actionUrl + ", ");
+				AjaxOptions.appendToResponse(observerOptions, response, context);
+				response.appendContentString(");");
+			}
+			response.appendContentString("\n");
+		}
+		response.appendContentString(" });");
+	}
+
+	public static String nameInContext(WOContext context, WOComponent component, AjaxDynamicElement element) {
+		return (String) element.valueForBinding("name", context.elementID(), component);
+	}
+
+	public WOActionResults invokeAction(WORequest worequest, WOContext wocontext) {
+		WOActionResults result = null;
+		WOComponent wocomponent = wocontext.component();
+
+		String nameInContext = nameInContext(wocontext, wocomponent, this);
+		boolean shouldHandleRequest = wocontext._wasFormSubmitted() && nameInContext.equals(worequest.formValueForKey(AjaxSubmitButton.KEY_AJAX_SUBMIT_BUTTON_NAME));
+		if (shouldHandleRequest) {
+			wocontext._setActionInvoked(true);
+			result = handleRequest(worequest, wocontext);
+			AjaxUtils.updateMutableUserInfoWithAjaxInfo(wocontext);
+		}
+		return result;
+	}
+
+	public WOActionResults handleRequest(WORequest request, WOContext context) {
+	    WOResponse response = AjaxUtils.createResponse(request, context);
+		return response;
+	}
 }
