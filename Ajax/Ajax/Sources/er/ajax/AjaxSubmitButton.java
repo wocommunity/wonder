@@ -40,7 +40,7 @@ import er.extensions.ERXWOForm;
  */
 public class AjaxSubmitButton extends AjaxDynamicElement {
 	// MS: If you change this value, make sure to change it in ERXSession.saveSession
-  private static final String KEY_AJAX_SUBMIT_BUTTON_NAME = "AJAX_SUBMIT_BUTTON_NAME";
+  public static final String KEY_AJAX_SUBMIT_BUTTON_NAME = "AJAX_SUBMIT_BUTTON_NAME";
 
   public AjaxSubmitButton(String name, NSDictionary associations, WOElement children) {
     super(name, associations, children);
@@ -185,9 +185,6 @@ public class AjaxSubmitButton extends AjaxDynamicElement {
 
     String nameInContext = nameInContext(wocontext, wocomponent);
     boolean shouldHandleRequest = (!disabledInComponent(wocomponent) && wocontext._wasFormSubmitted()) && ((wocontext._isMultipleSubmitForm() && nameInContext.equals(worequest.formValueForKey(KEY_AJAX_SUBMIT_BUTTON_NAME))) || !wocontext._isMultipleSubmitForm());
-
-    //System.out.println("shouldHandleRequest("+nameInContext+")="+shouldHandleRequest);
-
     if (shouldHandleRequest) {
       wocontext._setActionInvoked(true);
       result = handleRequest(worequest, wocontext);
