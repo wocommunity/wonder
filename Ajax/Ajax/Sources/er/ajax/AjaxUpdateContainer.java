@@ -54,7 +54,7 @@ public class AjaxUpdateContainer extends AjaxDynamicElement {
 
 	public void appendToResponse(WOResponse response, WOContext context) {
 		WOComponent component = context.component();
-		String elementName = (String) valueForBinding("elementName", "span", component);
+		String elementName = (String) valueForBinding("elementName", "div", component);
 		String id = _containerID(context);
 		response.appendContentString("<" + elementName + " ");
 		appendTagAttributeToResponse(response, "id", id);
@@ -85,7 +85,7 @@ public class AjaxUpdateContainer extends AjaxDynamicElement {
 			}
 
 			if (observeFieldID != null) {
-				AjaxObserveField.appendToResponse(response, context, observeFieldID, id, false, null);
+				AjaxObserveField.appendToResponse(response, context, this, observeFieldID, id, false, null);
 			}
 
 			response.appendContentString(id + "Update = function() { new Ajax.Updater('" + id + "', $('" + id + "').getAttribute('updateUrl'), ");
