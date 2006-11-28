@@ -28,6 +28,17 @@ public abstract class ERXAjaxApplication extends WOApplication {
     }
 
     /**
+     * Removes Ajax response headers that are no longer necessary.
+     * @param response the response to clean up
+     */
+    public static void cleanUpHeaders(WOResponse response) {
+    	if (response != null) {
+	    	response.removeHeadersForKey(ERXAjaxSession.DONT_STORE_PAGE);
+	    	response.removeHeadersForKey(ERXAjaxSession.PAGE_REPLACEMENT_CACHE_LOOKUP_KEY);
+    	}
+    }
+    
+    /**
      * Checks if the page should not be stored in the cache 
      */
     public static boolean shouldNotStorePage(WOContext context) {
@@ -47,7 +58,9 @@ public abstract class ERXAjaxApplication extends WOApplication {
         WOActionResults results = super.invokeAction(request, context);
         // MS: This is to support AjaxUpdateContainer.
         if (results == null && ERXAjaxApplication.shouldNotStorePage(context)) {
-        	results = context.response();
+        	WOResponse response = context.response();
+        	ERXAjaxApplication.cleanUpHeaders(response);
+        	results = response;
         }
         return results;
     }
