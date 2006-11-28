@@ -66,6 +66,10 @@ TreeLink : WOHyperlink {
 	pageName = "AjaxTreeExample";
 }
 
+ToggleLink : WOHyperlink {
+	pageName = "ToggleExample";
+}
+
 Contents : WOComponentContent {
 }
 
