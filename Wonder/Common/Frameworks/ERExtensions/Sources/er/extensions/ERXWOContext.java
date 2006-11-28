@@ -23,6 +23,7 @@ import com.webobjects.foundation.NSNotificationCenter;
  */
 public class ERXWOContext extends WOContext implements ERXMutableUserInfoHolderInterface {
     private static Observer observer;
+    private boolean _generateCompleteURLs;
     
     public static class Observer {
     	public void applicationDidHandleRequest(NSNotification n) {
@@ -57,6 +58,20 @@ public class ERXWOContext extends WOContext implements ERXMutableUserInfoHolderI
 
     public ERXWOContext(WORequest worequest) {
         super(worequest);
+    }
+    
+    public void _generateCompleteURLs() {
+    	super._generateCompleteURLs();
+    	_generateCompleteURLs = true;
+    }
+    
+    public void _generateRelativeURLs() {
+    	super._generateRelativeURLs();
+    	_generateCompleteURLs = false;
+    }
+    
+    public boolean _generatingCompleteURLs() {
+    	return _generateCompleteURLs;
     }
 
     public static WOContext newContext(){
