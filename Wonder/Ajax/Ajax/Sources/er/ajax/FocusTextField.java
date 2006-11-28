@@ -19,11 +19,14 @@ import er.extensions.ERXWOTextField;
  * @binding id the id the textfield
  * @binding selectAll if true, the text will default to be selected
  * @binding focus if false, focus will not be grabbed
+ * @binding onEnter javascript to execute when the enter key is pressed
  */
 public class FocusTextField extends ERXWOTextField {
 	protected WOAssociation _id;
 	protected WOAssociation _selectAll;
 	protected WOAssociation _focus;
+	protected WOAssociation _onEnter;
+	protected WOAssociation _onKeyPress;
 
 	public FocusTextField(String tagname, NSDictionary nsdictionary, WOElement woelement) {
 		super(tagname, nsdictionary, woelement);
@@ -32,8 +35,11 @@ public class FocusTextField extends ERXWOTextField {
 		if (_id == null) {
 			throw new WODynamicElementCreationException("<" + getClass().getName() + "> id is a required binding.");
 		}
+		//_associations.setObjectForKey(_id, ")
 		_selectAll = (WOAssociation) _associations.removeObjectForKey("selectAll");
 		_focus = (WOAssociation) _associations.removeObjectForKey("focus");
+		_onEnter = (WOAssociation) _associations.removeObjectForKey("onEnter");
+		_onKeyPress = (WOAssociation) _associations.removeObjectForKey("onkeypress");
 	}
 
 	public void appendToResponse(WOResponse response, WOContext context) {
@@ -43,19 +49,51 @@ public class FocusTextField extends ERXWOTextField {
 
 		WOComponent component = context.component();
 		boolean focus = (_focus == null || _focus.booleanValueInComponent(component));
-		if (focus) {
-			String id = (String) _id.valueInComponent(component);
-			boolean selectAll = (_selectAll != null && _selectAll.booleanValueInComponent(component));
-			FocusTextField.appendFocusAndSelectToResponse(response, context, id, selectAll);
-		}
+		boolean selectAll = (_selectAll != null && _selectAll.booleanValueInComponent(component));
+		String id = (String) _id.valueInComponent(component);
+		String onEnterScript = (_onEnter != null) ? (String)_onEnter.valueInComponent(component) : null;
+		FocusTextField.appendJavascriptToResponse(response, context, id, focus, selectAll, onEnterScript);
 	}
 
-	public static void appendFocusAndSelectToResponse(WOResponse response, WOContext context, String id, boolean selectAll) {
+	protected void _appendAttributesFromAssociationsToResponse(WOResponse response, WOContext wocontext, NSDictionary nsdictionary) {
+		super._appendAttributesFromAssociationsToResponse(response, wocontext, nsdictionary);
+		WOComponent component = wocontext.component();
+		String onKeyPress = (_onKeyPress != null) ? (String) _onKeyPress.valueInComponent(component) : null;
+		String onEnterScript = (_onEnter != null) ? (String) _onEnter.valueInComponent(component) : null;
+		String id = (String) _id.valueInComponent(component);
+		FocusTextField._appendAttributesFromAssociationsToResponse(response, wocontext, id, onKeyPress, onEnterScript);
+	}
+
+	public static void _appendAttributesFromAssociationsToResponse(WOResponse response, WOContext wocontext, String id, String onKeyPress, String onEnterScript) {
+		WOComponent component = wocontext.component();
+		if (onKeyPress != null || onEnterScript != null) {
+			response.appendContentString(" onkeypress = \"");
+			if (onKeyPress != null) {
+				response.appendContentString(onKeyPress);
+			}
+			if (onEnterScript != null) {
+				if (onKeyPress != null) {
+					response.appendContentString("; ");
+				}
+				response.appendContentString(id + "SubmitOnEnter(event);");
+			}
+			response.appendContentString("\"");
+		}
+	}
+	
+	public static void appendJavascriptToResponse(WOResponse response, WOContext context, String id, boolean focus, boolean selectAll, String onEnterScript) {
 		WOComponent component = context.component();
 		AjaxUtils.appendScriptHeader(response);
-		response.appendContentString("$('" + id + "').focus();");
+		if (focus) {
+			response.appendContentString("Field.focus('" + id + "');");
+		}
 		if (selectAll) {
-			response.appendContentString("$('" + id + "').select();");
+			response.appendContentString("Field.select('" + id + "');");
+		}
+		if (onEnterScript != null) {
+			response.appendContentString(id + "SubmitOnEnter = function(e) { if (e.which == 13 || e.which == 3) { ");
+			response.appendContentString(onEnterScript);
+			response.appendContentString("; Event.stop(e); } }");
 		}
 		AjaxUtils.appendScriptFooter(response);
 	}
