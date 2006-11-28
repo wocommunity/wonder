@@ -15,6 +15,7 @@ ValueField : FocusTextField {
 	value = value;
 	id = "valueField";
 	selectAll = true;
+	onEnter = "alert('You hit enter and I am showing you an onEnter handler now.')";
 }
 
 View : ERXWOTemplate {
