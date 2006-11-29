@@ -206,10 +206,14 @@ public class AjaxInPlace extends WOComponent {
   
   public WOActionResults save() {
 	  // check to see if we can save before firing the action (for permissions)
-	if (canSave()) {
-	    WOActionResults results = (WOActionResults) valueForBinding("saveAction");
+	  boolean canSave = canSave();
+	if (canSave) {
+		if (hasBinding("saveAction")) {
+			WOActionResults results = (WOActionResults) valueForBinding("saveAction");
+			canSave = canSave();
+		}
 		  // check to see if we can save after firing the action (in case validation failed or something)
-	    if (canSave()) {
+	    if (canSave) {
 		    _editing = false;
 		    setValueForBinding(Boolean.FALSE, "editing");
 	    }
