@@ -162,7 +162,7 @@ public class AjaxTreeModel {
 		boolean isLeaf;
 		if (_isLeafKeyPath == null) {
 			NSArray childrenTreeNodes = childrenTreeNodes(node);
-			isLeaf = childrenTreeNodes == null || childrenTreeNodes.size() == 0;
+			isLeaf = childrenTreeNodes == null || childrenTreeNodes.count() == 0;
 		}
 		else if (_delegate.respondsTo("isLeaf")) {
 			isLeaf = _delegate.booleanPerform("isLeaf", node);
