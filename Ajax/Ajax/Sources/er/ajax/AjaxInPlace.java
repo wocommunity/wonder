@@ -69,6 +69,9 @@ import com.webobjects.appserver.WOResponse;
  * @binding manualViewControl if true, it is up to you to provide click-to-edit controls
  * @binding manualEditControl if true, it is up to you to provide save and cancel controls
  * @binding submitOnSave if true, the save button is an AjaxSubmitButton; if false, it's an AjaxUpdateLink
+ * @binding canEdit if true, edit mode is entered; if false, view mode remains active
+ * @binding canSave if true, the results are saved; if false, the user is not allowed to leave edit mode
+ * 
  * @author mschrag
  */
 public class AjaxInPlace extends WOComponent {
@@ -179,22 +182,38 @@ public class AjaxInPlace extends WOComponent {
 	  return !disabled() && _editing;
   }
   
+  public boolean canEdit() {
+	  return (!hasBinding("canEdit") || ((Boolean)valueForBinding("canEdit")).booleanValue());
+  }
+  
+  public boolean canSave() {
+	  return (!hasBinding("canSave") || ((Boolean)valueForBinding("canSave")).booleanValue());
+  }
+  
   public void setEditing(boolean editing) {
 	_editing = editing;
   }
   
   public WOActionResults startEditing() {
-    _editing = true;
-    setValueForBinding(Boolean.TRUE, "editing");
-    WOActionResults results = (WOActionResults) valueForBinding("editAction");
+	  if (canEdit()) {
+	    _editing = true;
+	    setValueForBinding(Boolean.TRUE, "editing");
+	    WOActionResults results = (WOActionResults) valueForBinding("editAction");
+	  }
     // ignore results
     return null;
   }
   
   public WOActionResults save() {
-    WOActionResults results = (WOActionResults) valueForBinding("saveAction");
-    _editing = false;
-    setValueForBinding(Boolean.FALSE, "editing");
+	  // check to see if we can save before firing the action (for permissions)
+	if (canSave()) {
+	    WOActionResults results = (WOActionResults) valueForBinding("saveAction");
+		  // check to see if we can save after firing the action (in case validation failed or something)
+	    if (canSave()) {
+		    _editing = false;
+		    setValueForBinding(Boolean.FALSE, "editing");
+	    }
+	}
     // ignore results
     return null;
   }
