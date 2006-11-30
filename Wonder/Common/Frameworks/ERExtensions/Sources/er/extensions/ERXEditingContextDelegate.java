@@ -25,13 +25,6 @@ public class ERXEditingContextDelegate extends Object implements java.io.Seriali
     public static final Logger log = Logger
             .getLogger(ERXEditingContextDelegate.class);
 
-
-    /** 
-     * caches the boolean value of the property key:
-     *  <b>er.extensions.ERXRaiseOnMissingEditingContextDelegate</b>
-     */
-    static boolean _raiseOnMissingEditingContextDelegate =  ERXProperties.booleanForKeyWithDefault("er.extensions.ERXRaiseOnMissingEditingContextDelegate", true);
-
     /**
      * No arg constructor for Serializable.
      */
@@ -54,7 +47,7 @@ public class ERXEditingContextDelegate extends Object implements java.io.Seriali
             return true;
         }
         Object delegate=editingContext.delegate();
-        
+        boolean _raiseOnMissingEditingContextDelegate = ERXProperties.booleanForKeyWithDefault("er.extensions.ERXRaiseOnMissingEditingContextDelegate", true);
         if (delegate==null) {
             EOObjectStore parent = editingContext.parentObjectStore();
             if(!_raiseOnMissingEditingContextDelegate && parent != null && parent instanceof EOEditingContext) {
