@@ -3,6 +3,7 @@
     
 		<binding name="elementName"/>
 		<binding name="observeFieldID"/>
+		<binding name="fullSubmit"/>
 		<binding name="skipFunction"/>
 		
 		<binding name="frequency"/>
