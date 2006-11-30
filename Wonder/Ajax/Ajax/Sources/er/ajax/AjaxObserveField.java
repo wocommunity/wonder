@@ -43,9 +43,6 @@ public class AjaxObserveField extends AjaxDynamicElement {
 		ajaxOptionsArray.addObject(new AjaxOption("insertion", AjaxOption.SCRIPT));
 		ajaxOptionsArray.addObject(new AjaxOption("evalScripts", AjaxOption.BOOLEAN));
 		NSMutableDictionary options = AjaxOption.createAjaxOptionsDictionary(ajaxOptionsArray, component, associations());
-		if (options.objectForKey("evalScripts") == null) {
-			options.setObjectForKey("true", "evalScripts");
-		}
 		return options;
 	}
 
@@ -73,6 +70,9 @@ public class AjaxObserveField extends AjaxDynamicElement {
 		}
 		observerOptions.setObjectForKey("true", "asynchronous");
 		observerOptions.setObjectForKey("'post'", "method");
+		if (observerOptions.objectForKey("evalScripts") == null) {
+			observerOptions.setObjectForKey("true", "evalScripts");
+		}
 
 		if (!fullSubmit) {
 			// We need to cheat and make the WOForm that contains the form action appear to have been
@@ -126,9 +126,8 @@ public class AjaxObserveField extends AjaxDynamicElement {
 	public WOActionResults invokeAction(WORequest worequest, WOContext wocontext) {
 		WOActionResults result = null;
 		WOComponent wocomponent = wocontext.component();
-
 		String nameInContext = nameInContext(wocontext, wocomponent, this);
-		boolean shouldHandleRequest = wocontext._wasFormSubmitted() && nameInContext.equals(worequest.formValueForKey(AjaxSubmitButton.KEY_AJAX_SUBMIT_BUTTON_NAME));
+		boolean shouldHandleRequest = !wocontext._wasActionInvoked() && wocontext._wasFormSubmitted() && nameInContext.equals(worequest.formValueForKey(AjaxSubmitButton.KEY_AJAX_SUBMIT_BUTTON_NAME));
 		if (shouldHandleRequest) {
 			wocontext._setActionInvoked(true);
 			result = handleRequest(worequest, wocontext);
