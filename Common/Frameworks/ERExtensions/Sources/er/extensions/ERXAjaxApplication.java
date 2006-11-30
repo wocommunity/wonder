@@ -46,8 +46,15 @@ public abstract class ERXAjaxApplication extends WOApplication {
       WOResponse response = context.response();
       // MS: The "AJAX_SUBMIT_BUTTON_NAME" check is a total hack, but if your page structure changes such that the form that
       // is being submitted to is hidden, it ends up not notifying the system not to cache the page.
-      boolean shouldNotStorePage = (shouldNotStorePage(response) || shouldNotStorePage(request) || request.formValueForKey("AJAX_SUBMIT_BUTTON_NAME") != null);
+      boolean shouldNotStorePage = (shouldNotStorePage(response) || shouldNotStorePage(request) || isAjaxSubmit(request));
       return shouldNotStorePage;
+    }
+    
+    /**
+     * Returns true if this is an ajax submit.
+     */
+    public static boolean isAjaxSubmit(WORequest request) {
+        return (request.formValueForKey("AJAX_SUBMIT_BUTTON_NAME") != null);
     }
 
     /**

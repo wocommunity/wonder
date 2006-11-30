@@ -128,7 +128,7 @@ public class ERXWOForm extends com.webobjects.appserver._private.WOHTMLDynamicEl
     		if(_action != null) {
     			result = (WOActionResults)_action.valueInComponent(context.component());
     		}
-    		if(result == null) {
+    		if (result == null && !ERXAjaxApplication.isAjaxSubmit(worequest)) {
     			result = context.page();
     		}
     	}
