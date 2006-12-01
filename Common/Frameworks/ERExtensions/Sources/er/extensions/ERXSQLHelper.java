@@ -799,7 +799,14 @@ public class ERXSQLHelper {
 
 	public static class FrontBaseSQLHelper extends ERXSQLHelper {
 		public boolean shouldExecute(String sql) {
-			return !sql.startsWith("SET TRANSACTION ISOLATION LEVEL");
+      boolean shouldExecute = true;
+      if (sql.startsWith("SET TRANSACTION ISOLATION LEVEL")) {
+        shouldExecute = false;
+      }
+      else if (sql.startsWith("COMMIT")) {
+        shouldExecute = false;
+      }
+      return shouldExecute;
 		}
 
 		protected String limitExpressionForSQL(EOSQLExpression expression, EOFetchSpecification fetchSpecification, String sql, long start, long end) {
