@@ -270,6 +270,9 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
      */
     public final void finishInitialization(NSNotification n) {
         finishInitialization();
+        if (ERXMigrator.shouldMigrateAtStartup()) {
+          migrator().migrateToLatest();
+        }
     }
 
     /**
@@ -281,9 +284,6 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
      *      has finished launching and is ready for accepting requests.
      */    
     public final void didFinishLaunching(NSNotification n) {
-    	if (ERXMigrator.shouldMigrateAtStartup()) {
-    		migrator().migrateToLatest();
-    	}
         didFinishLaunching();
     }
     
