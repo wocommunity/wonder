@@ -2,16 +2,19 @@ package er.extensions;
 
 import java.util.Enumeration;
 
+import org.apache.log4j.Logger;
+
 import com.webobjects.eoaccess.EODatabaseContext;
 import com.webobjects.eoaccess.EOEntity;
 import com.webobjects.eoaccess.EORelationship;
 import com.webobjects.eoaccess.EOUtilities;
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.eocontrol.EOEnterpriseObject;
+import com.webobjects.eocontrol.EOFaultHandler;
+import com.webobjects.eocontrol.EOFaulting;
 import com.webobjects.eocontrol.EOObjectStoreCoordinator;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
-import com.webobjects.foundation.NSLog;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 
@@ -21,6 +24,42 @@ import com.webobjects.foundation.NSMutableDictionary;
  *  
  */
 public class ERXRecursiveBatchFetching {
+	private static Logger log = Logger.getLogger(ERXRecursiveBatchFetching.class);
+
+	/**
+	 * Defaults skipFaultedSourceObjects to false for backwards compatibility
+	 * @see batchFetch(NSArray, NSArray, boolean)
+	 * 
+     * @param sourceObjects the array of source object to fault keypaths on.
+     * @param keypaths the array of keypaths to fault
+	 */
+    public static void batchFetch(NSArray sourceObjects, NSArray keypaths) {
+    	ERXRecursiveBatchFetching.batchFetch(sourceObjects, keypaths, false);
+    }
+
+	/**
+	 * Shortcut for batch fetching a single source object
+	 * @see batchFetch(NSArray, NSArray, boolean)
+	 * 
+     * @param sourceObject source object to fault keypaths on.
+     * @param keypaths the array of keypaths to fault
+     * @param skipFaultedSourceObjects if true, all source objects that already have their relationships faulted will be skipped
+	 */
+    public static void batchFetch(EOEnterpriseObject sourceObject, NSArray keypaths, boolean skipFaultedSourceObjects) {
+    	ERXRecursiveBatchFetching.batchFetch(new NSArray(sourceObject), keypaths, skipFaultedSourceObjects);
+    }
+
+	/**
+	 * Defaults skipFaultedSourceObjects to false for backwards compatibility
+	 * @see batchFetch(NSArray, NSArray, boolean)
+	 * 
+     * @param sourceObjects the array of source object to fault keypaths on.
+     * @param keypath the keypath to fault
+     * @param skipFaultedSourceObjects if true, all source objects that already have their relationships faulted will be skipped
+	 */
+    public static void batchFetch(NSArray sourceObjects, String keypath, boolean skipFaultedSourceObjects) {
+    	ERXRecursiveBatchFetching.batchFetch(sourceObjects, new NSArray(keypath), skipFaultedSourceObjects);
+    }
 
     /**
      * Batch fetch relationships specified by <i>keypaths </i> for
@@ -29,16 +68,17 @@ public class ERXRecursiveBatchFetching {
      * This method will use EODatabaseContext.batchFetchRelationship to
      * efficiently fetch like relationships for many objects in as few as one
      * database round trip per relationship.
-     * 
+     * <p>
      * For example, if fetching from Movie entities, you might specify paths of
      * the form: ("directors","roles.talent", "plotSummary"). This works much
      * like prefetching with fetch specifications, however this implementation
      * is able to work around inheritance where prefetching fails.
      * 
-     * @param sourceObjects
-     * @param keypaths
+     * @param sourceObjects the array of source objects to fault keypaths on.
+     * @param keypaths the array of keypaths to fault
+     * @param skipFaultedSourceObjects if true, all source objects that already have their relationships faulted will be skipped
      */
-    public static void batchFetch(NSArray sourceObjects, NSArray keypaths) {
+    public static void batchFetch(NSArray sourceObjects, NSArray keypaths, boolean skipFaultedSourceObjects) {
         if (sourceObjects.count() == 0) return;
         EOEnterpriseObject sample = (EOEnterpriseObject) sourceObjects.objectAtIndex(0);
 
@@ -54,7 +94,7 @@ public class ERXRecursiveBatchFetching {
             Enumeration keyPathObjectsEnum = rootKeyPathObjects.objectEnumerator();
             while (keyPathObjectsEnum.hasMoreElements()) {
                 KeyPath kp = (KeyPath) keyPathObjectsEnum.nextElement();
-                kp.traverseForObjects(sourceObjects);
+                kp.traverseForObjects(sourceObjects, skipFaultedSourceObjects);
             }
 
         } finally {
@@ -92,14 +132,14 @@ public class ERXRecursiveBatchFetching {
          * 
          * @param sourceObjects
          */
-        public void traverseForObjects(NSArray sourceObjects) {
+        public void traverseForObjects(NSArray sourceObjects, boolean skipFaultedSourceObjects) {
             if (sourceObjects == null || sourceObjects.count() < 1) return;
 
             NSDictionary objectsByEntity = splitObjectsByEntity(sourceObjects);
             Enumeration e = objectsByEntity.allValues().objectEnumerator();
             while (e.hasMoreElements()) {
                 NSArray homogeniousObjects = (NSArray) e.nextElement();
-                traverseForHomogeniousObjects(homogeniousObjects);
+                traverseForHomogeniousObjects(homogeniousObjects, skipFaultedSourceObjects);
             }
         }
 
@@ -157,7 +197,7 @@ public class ERXRecursiveBatchFetching {
             return keyPathObjects;
         }
 
-        private void traverseForHomogeniousObjects(NSArray sourceObjects) {
+        private void traverseForHomogeniousObjects(NSArray sourceObjects, boolean skipFaultedSourceObjects) {
             if (sourceObjects == null || sourceObjects.count() < 1) return;
 
             EOEnterpriseObject eo = (EOEnterpriseObject) sourceObjects.objectAtIndex(0);
@@ -168,7 +208,7 @@ public class ERXRecursiveBatchFetching {
 
             if (relationship == null) return;
 
-            batchFetchRelationshipOnSourceObjects(relationship, sourceObjects);
+            batchFetchRelationshipOnSourceObjects(relationship, sourceObjects, skipFaultedSourceObjects);
 
             Enumeration subPathsEnum = subPaths.objectEnumerator();
             while (subPathsEnum.hasMoreElements()) {
@@ -176,7 +216,7 @@ public class ERXRecursiveBatchFetching {
 
                 NSArray destinationObjects = destinationObjectsForRelationship(relationship, sourceObjects);
 
-                subPath.traverseForObjects(destinationObjects);
+                subPath.traverseForObjects(destinationObjects, skipFaultedSourceObjects);
             }
         }
 
@@ -224,17 +264,18 @@ public class ERXRecursiveBatchFetching {
             return destinationObjects;
         }
 
-        private void batchFetchRelationshipOnSourceObjects(EORelationship relationship, NSArray sourceObjects) {
+        private void batchFetchRelationshipOnSourceObjects(EORelationship relationship, NSArray sourceObjects, boolean skipFaultedSourceObjects) {
 
             EOEnterpriseObject eo = (EOEnterpriseObject) sourceObjects.objectAtIndex(0);
             EOEditingContext ec = eo.editingContext();
 
-            NSLog.debug.appendln("batch fetching " + path + " on " + eo.entityName());
+            if (log.isDebugEnabled()) {
+            	log.debug("Batch fetching '" + path + "' relationship on " + sourceObjects);
+            }
 
             EODatabaseContext dbContext = dbContextForEnterpriseObject(eo);
-
-            dbContext.batchFetchRelationship(relationship, sourceObjects, ec);
-
+            
+            ERXEOAccessUtilities.batchFetchRelationship(dbContext, relationship, sourceObjects, ec, skipFaultedSourceObjects);
         }
 
         private EODatabaseContext dbContextForEnterpriseObject(EOEnterpriseObject eo) {
