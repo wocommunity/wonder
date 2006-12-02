@@ -16,6 +16,7 @@ import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
 
 import com.webobjects.foundation.NSLog;
+import com.webobjects.foundation.NSNotificationCenter;
 
 /**
  * Custom subclass of Logger. The main reason for this class
@@ -148,7 +149,6 @@ public class ERXLogger extends org.apache.log4j.Logger {
      * @param  properties with the logging configuration 
      */
     public static synchronized void configureLogging(Properties properties) {
-        
         LogManager.resetConfiguration();
         BasicConfigurator.configure();
         Logger.getRootLogger().setLevel(Level.INFO);     
@@ -179,6 +179,8 @@ public class ERXLogger extends org.apache.log4j.Logger {
         if(factory != null) {
             factory.loggingConfigurationDidChange();
         }
+        
+        NSNotificationCenter.defaultCenter().postNotification(ERXConfigurationManager.ConfigurationDidChangeNotification, null);
     }
 
     /**
