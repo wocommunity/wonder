@@ -804,7 +804,7 @@ public class ERXSQLHelper {
         shouldExecute = false;
       }
       else if (sql.startsWith("COMMIT")) {
-        shouldExecute = false;
+        //shouldExecute = false;
       }
       return shouldExecute;
 		}
