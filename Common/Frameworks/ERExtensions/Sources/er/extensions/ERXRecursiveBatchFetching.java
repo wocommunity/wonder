@@ -10,8 +10,6 @@ import com.webobjects.eoaccess.EORelationship;
 import com.webobjects.eoaccess.EOUtilities;
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.eocontrol.EOEnterpriseObject;
-import com.webobjects.eocontrol.EOFaultHandler;
-import com.webobjects.eocontrol.EOFaulting;
 import com.webobjects.eocontrol.EOObjectStoreCoordinator;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
@@ -273,19 +271,8 @@ public class ERXRecursiveBatchFetching {
             	log.debug("Batch fetching '" + path + "' relationship on " + sourceObjects);
             }
 
-            EODatabaseContext dbContext = dbContextForEnterpriseObject(eo);
-            
+            EODatabaseContext dbContext = ERXEOAccessUtilities.databaseContextForObject(eo);
             ERXEOAccessUtilities.batchFetchRelationship(dbContext, relationship, sourceObjects, ec, skipFaultedSourceObjects);
-        }
-
-        private EODatabaseContext dbContextForEnterpriseObject(EOEnterpriseObject eo) {
-            EOEditingContext ec = eo.editingContext();
-
-            EOObjectStoreCoordinator osc = (EOObjectStoreCoordinator) ec.rootObjectStore();
-
-            EODatabaseContext dbContext = (EODatabaseContext) osc.objectStoreForObject(eo);
-
-            return dbContext;
         }
 
         private NSDictionary splitObjectsByEntity(NSArray objects) {

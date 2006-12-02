@@ -694,6 +694,19 @@ public class ERXEOAccessUtilities {
     }
 
     /**
+     * Returns the database context for an EO.
+     * 
+     * @param eo the EO to get a database context for
+     * @return the eo's database context
+     */
+    public static EODatabaseContext databaseContextForObject(EOEnterpriseObject eo) {
+        EOEditingContext editingContext = eo.editingContext();
+        EOObjectStoreCoordinator osc = (EOObjectStoreCoordinator) editingContext.rootObjectStore();
+        EODatabaseContext databaseContext = (EODatabaseContext) osc.objectStoreForObject(eo);
+        return databaseContext;
+    }
+    
+    /**
      * Returns the database context for the given entity in the given
      * EOObjectStoreCoordinator
      * 
