@@ -82,7 +82,7 @@ public class ERXJDBCMigrationLock implements IERXMigrationLock {
 					if (nextRow == null) {
 						if (createIfMissing()) {
 							String modelStatement = dbUpdaterInsertStatement(model, new Integer(-1), new Integer(1), lockOwnerName);
-							ERXJDBCUtilities.executeUpdateScript(channel, modelStatement);
+							count = ERXJDBCUtilities.executeUpdateScript(channel, modelStatement);
 						}
 						else {
 							String modelStatement = dbUpdaterInsertStatement(model, new Integer(-1), new Integer(0), null);
@@ -90,7 +90,7 @@ public class ERXJDBCMigrationLock implements IERXMigrationLock {
 						}
 					}
 					if (ERXJDBCMigrationLock.log.isInfoEnabled()) {
-						ERXJDBCMigrationLock.log.info("Waiting on UpdateLock| for model '" + model.name() + "' ...");
+						ERXJDBCMigrationLock.log.info("Waiting on UpdateLock for model '" + model.name() + "' ...");
 					}
 				}
 				channel.adaptorContext().commitTransaction();
