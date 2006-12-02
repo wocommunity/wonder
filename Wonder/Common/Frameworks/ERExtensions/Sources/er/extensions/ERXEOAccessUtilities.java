@@ -1276,6 +1276,31 @@ public class ERXEOAccessUtilities {
          return fetchSpecification;
      }
      
+     /**
+      * Batch fetch a relationship, optionally skipping any relationship that has already faulted in its to-many relationship.
+      * 
+      * @param databaseContext the database context to fetch in
+      * @param entityName the name of the entity to fetch on
+      * @param relationshipName the name of the relationship in that entity to fetch
+      * @param objects the objects to fetch the relationship on
+      * @param editingContext the editingContext to fetch in
+      * @param skipFaultedRelationships if true, skip any object whose relationship has already been faulted
+      */
+     public static void batchFetchRelationship(EODatabaseContext databaseContext, String entityName, String relationshipName, NSArray objects, EOEditingContext editingContext, boolean skipFaultedRelationships) {
+    	 EOEntity entity = EOModelGroup.defaultGroup().entityNamed(entityName);
+    	 EORelationship relationship = entity.relationshipNamed(relationshipName);
+    	 ERXEOAccessUtilities.batchFetchRelationship(databaseContext, relationship, objects, editingContext, skipFaultedRelationships);
+     }
+     
+     /**
+      * Batch fetch a relationship, optionally skipping any relationship that has already faulted in its to-many relationship.
+      * 
+      * @param databaseContext the database context to fetch in
+      * @param relationship the relationship to fetch
+      * @param objects the objects to fetch the relationship on
+      * @param editingContext the editingContext to fetch in
+      * @param skipFaultedRelationships if true, skip any object whose relationship has already been faulted
+      */
      public static void batchFetchRelationship(EODatabaseContext databaseContext, EORelationship relationship, NSArray objects, EOEditingContext editingContext, boolean skipFaultedRelationships) {
     	 if (skipFaultedRelationships && relationship.isToMany()) {
 	         String relationshipName = relationship.name();
