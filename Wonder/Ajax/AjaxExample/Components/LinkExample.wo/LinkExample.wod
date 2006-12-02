@@ -40,3 +40,25 @@ AjaxSubmitFunction : AjaxSubmitButton {
 Now : WOString {
 	value = now;
 }
+
+Word : WOString {
+	value = repetitionWord;
+}
+
+WordAction : AjaxUpdateLink {
+	action = wordSelected;
+	updateContainerID = "wordUpdater";
+}
+
+WordList : WORepetition {
+	list = words;
+	item = repetitionWord;
+}
+
+WordUpdater : AjaxUpdateContainer {
+	id = "wordUpdater";
+}
+
+SelectedWord : WOString {
+	value = selectedWord;
+}
