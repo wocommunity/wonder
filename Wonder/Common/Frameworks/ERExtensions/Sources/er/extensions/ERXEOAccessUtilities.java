@@ -34,6 +34,7 @@ import com.webobjects.eocontrol.EOAndQualifier;
 import com.webobjects.eocontrol.EOClassDescription;
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.eocontrol.EOEnterpriseObject;
+import com.webobjects.eocontrol.EOFaultHandler;
 import com.webobjects.eocontrol.EOFetchSpecification;
 import com.webobjects.eocontrol.EOGlobalID;
 import com.webobjects.eocontrol.EOKeyValueQualifier;
@@ -1273,5 +1274,24 @@ public class ERXEOAccessUtilities {
              fetchSpecification.setSortOrderings(sortOrderings);
          }
          return fetchSpecification;
+     }
+     
+     public static void batchFetchRelationship(EODatabaseContext databaseContext, EORelationship relationship, NSArray objects, EOEditingContext editingContext, boolean skipFaultedRelationships) {
+    	 if (skipFaultedRelationships && relationship.isToMany()) {
+	         String relationshipName = relationship.name();
+	         NSMutableArray objectsWithUnfaultedRelationships = new NSMutableArray();
+	         Enumeration objectsEnum = objects.objectEnumerator();
+	         while (objectsEnum.hasMoreElements()) {
+	         	EOEnterpriseObject object = (EOEnterpriseObject)objectsEnum.nextElement();
+	         	Object relationshipValue = object.storedValueForKey(relationshipName);
+	         	if (EOFaultHandler.isFault(relationshipValue)) {
+	         		objectsWithUnfaultedRelationships.addObject(object);
+	         	}
+	         }
+	         databaseContext.batchFetchRelationship(relationship, objectsWithUnfaultedRelationships, editingContext);
+    	 }
+    	 else {
+	         databaseContext.batchFetchRelationship(relationship, objects, editingContext);
+    	 }
      }
 }
