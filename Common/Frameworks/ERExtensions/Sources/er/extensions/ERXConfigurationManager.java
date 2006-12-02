@@ -19,7 +19,6 @@ import com.webobjects.foundation.NSBundle;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSNotification;
-import com.webobjects.foundation.NSNotificationCenter;
 import com.webobjects.foundation.NSSelector;
 
 /** 
@@ -308,8 +307,6 @@ public class ERXConfigurationManager {
             _reinsertCommandLineArgumentsToSystemProperties(_commandLineArguments);
         
         ERXLogger.configureLoggingWithSystemProperties();
-        
-        NSNotificationCenter.defaultCenter().postNotification(ConfigurationDidChangeNotification, null);
     }
     
     public synchronized void updateAllSystemProperties(NSNotification notification) {
