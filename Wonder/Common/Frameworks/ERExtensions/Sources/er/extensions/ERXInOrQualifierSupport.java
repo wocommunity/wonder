@@ -14,15 +14,13 @@ import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSMutableArray;
 
 /**
- * ERXInOrQualifierSupport replaces the stock _OrQualifierSupport and turns
- * qualifying EOOrQualifiers into IN-set SQL statements instead of enormous
- * strings of OR's.
+ * ERXInOrQualifierSupport replaces the stock _OrQualifierSupport and turns qualifying EOOrQualifiers into IN-set SQL
+ * statements instead of enormous strings of OR's.
  * <p>
- * To register this as the generation support for EOOrQualifiers, register
- * with:
+ * To register this as the generation support for EOOrQualifiers, register with:
  * <p>
  * EOQualifierSQLGeneration.Support.setSupportForClass(new ERXInOrQualifierSupport(), EOOrQualifier._CLASS);
- *         
+ * 
  * @author mschrag
  */
 public class ERXInOrQualifierSupport extends _OrQualifierSupport {
@@ -50,10 +48,8 @@ public class ERXInOrQualifierSupport extends _OrQualifierSupport {
 		private boolean _canBeRepresentedAsInSet;
 		private String _key;
 		private NSMutableArray _values;
-		private boolean _firstVisit;
 
 		public OrIsInVisitor() {
-			_firstVisit = true;
 			_canBeRepresentedAsInSet = true;
 			_values = new NSMutableArray();
 		}
@@ -71,19 +67,20 @@ public class ERXInOrQualifierSupport extends _OrQualifierSupport {
 		}
 
 		public void visitKeyValueQualifier(EOKeyValueQualifier qualifier) {
-			if (qualifier.selector() == EOQualifier.QualifierOperatorEqual) {
-				_firstVisit = false;
-				String key = qualifier.key();
-				if (_key != null && !_key.equals(key)) {
-					_canBeRepresentedAsInSet = false;
+			if (_canBeRepresentedAsInSet) {
+				if (qualifier.selector() == EOQualifier.QualifierOperatorEqual) {
+					String key = qualifier.key();
+					if (_key != null && !_key.equals(key)) {
+						_canBeRepresentedAsInSet = false;
+					}
+					else {
+						_key = key;
+						_values.addObject(qualifier.value());
+					}
 				}
 				else {
-					_key = key;
-					_values.addObject(qualifier.value());
+					_canBeRepresentedAsInSet = false;
 				}
-			}
-			else {
-				_canBeRepresentedAsInSet = false;
 			}
 		}
 
@@ -100,12 +97,9 @@ public class ERXInOrQualifierSupport extends _OrQualifierSupport {
 		}
 
 		public void visitOrQualifier(EOOrQualifier qualifier) {
-			if (_firstVisit) {
-				_firstVisit = false;
-			}
-			else {
-				_canBeRepresentedAsInSet = false;
-			}
+			// MS: nested or statements are ok as long as it meets all
+			// the same criteria, so:
+			// (a = 5 or (a = 6 or a = 7) or a = 8) is a in (5,6,7,8)
 		}
 
 		public void visitUnknownQualifier(EOQualifier qualifier) {
