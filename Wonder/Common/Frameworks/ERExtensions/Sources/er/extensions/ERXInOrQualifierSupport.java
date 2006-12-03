@@ -17,7 +17,12 @@ import com.webobjects.foundation.NSMutableArray;
  * ERXInOrQualifierSupport replaces the stock _OrQualifierSupport and turns
  * qualifying EOOrQualifiers into IN-set SQL statements instead of enormous
  * strings of OR's.
- * 
+ * <p>
+ * To register this as the generation support for EOOrQualifiers, register
+ * with:
+ * <p>
+ * EOQualifierSQLGeneration.Support.setSupportForClass(new ERXInOrQualifierSupport(), EOOrQualifier._CLASS);
+ *         
  * @author mschrag
  */
 public class ERXInOrQualifierSupport extends _OrQualifierSupport {
@@ -66,7 +71,7 @@ public class ERXInOrQualifierSupport extends _OrQualifierSupport {
 		}
 
 		public void visitKeyValueQualifier(EOKeyValueQualifier qualifier) {
-			if (qualifier.selector() == EOKeyValueQualifier.QualifierOperatorEqual) {
+			if (qualifier.selector() == EOQualifier.QualifierOperatorEqual) {
 				_firstVisit = false;
 				String key = qualifier.key();
 				if (_key != null && !_key.equals(key)) {
