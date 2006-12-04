@@ -50,6 +50,7 @@ import com.webobjects.appserver.WOResponse;
  * @binding saveAction the action to invoke on save
  * @binding cancelAction the action to invoke on cancel
  * @binding saveClass the class of the save button
+ * @binding editClass the class of the div that you click on to trigger edit mode (yes this name sucks)
  * @binding onSaveClick the action to fire when save is clicked
  * @binding onSaveSuccess the javascript function to execute after a successful save
  * @binding onSaveFailure the javascript function to execute after a failed save
