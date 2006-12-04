@@ -121,8 +121,11 @@ public class ERJavaMail extends ERXFrameworkPrincipal {
     		this.setAdminEmail (adminEmail);
     		log.debug ("er.javamail.adminEmail: " + _adminEmail);
     	} else  if (centralize) {
-    		throw new IllegalArgumentException("You must specify a valid er.javamail.adminEmail value when er.javamail.centralize is enabled.");
-    	}
+    		throw new IllegalArgumentException("When 'er.javamail.centralize' is true (default),"
+    				+ " all outgoing mails will get sent to 'er.javamail.adminEmail'"
+       				+ " instead of the normal TO addresses, but you did not provide a valid email for that property."
+    				);
+		}
 
     	// JavaMail Debug Enabled ?
     	boolean debug = ERXProperties.booleanForKey ("er.javamail.debugEnabled");
