@@ -111,16 +111,7 @@ public class AjaxUpdateContainer extends AjaxDynamicElement {
 			response.appendContentString(onRefreshComplete);
 			AjaxUtils.appendScriptFooter(response);
 		}
-		// return response;
 		return null;
-	}
-
-	protected boolean _invokeChildrenBeforeHandleRequest() {
-		return true;
-	}
-
-	protected boolean _invokeChildrenAfterHandleRequest() {
-		return false;
 	}
 
 	protected String _containerID(WOContext context) {
