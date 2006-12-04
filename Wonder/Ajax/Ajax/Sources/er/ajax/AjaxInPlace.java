@@ -8,39 +8,40 @@ import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WOResponse;
 
 /**
- * AjaxInPlace is a generalization of the AjaxInPlaceEditor.  To use this component, you
- * must wrap an ERXWOTemplate named "view" and an ERXWOTemplate named "edit".
- * <br />
+ * AjaxInPlace is a generalization of the AjaxInPlaceEditor. To use this component, you must wrap an ERXWOTemplate named
+ * "view" and an ERXWOTemplate named "edit". <br />
  * For instance:<br />
  * <br />
  * HTML:
+ * 
  * <pre>
- * &lt;webobject name = "ExampleInPlace"&gt;
- *    &lt;webobject name = "View">View: &lt;webobject name = "Value"/&gt;&lt;/webobject&gt;
- *    &lt;webobject name = "Edit">Edit: &lt;webobject name = "ValueField"/&gt;&lt;/webobject&gt;
- * &lt;/webobject&gt;
+ *  &lt;webobject name = &quot;ExampleInPlace&quot;&gt;
+ *     &lt;webobject name = &quot;View&quot;&gt;View: &lt;webobject name = &quot;Value&quot;/&gt;&lt;/webobject&gt;
+ *     &lt;webobject name = &quot;Edit&quot;&gt;Edit: &lt;webobject name = &quot;ValueField&quot;/&gt;&lt;/webobject&gt;
+ *  &lt;/webobject&gt;
  * </pre>
  * 
  * WOD:
+ * 
  * <pre>
- * ExampleInPlace : AjaxInPlace {
- * }
- * 
- * View : ERXWOTemplate {
- *    templateName = "view";
- * }
- * 
- * Value : WOString {
- *    value = value;
- * }
- * 
- * Edit : ERXWOTemplate {
- *    templateName = "edit";
- * }
- * 
- * ValueField : WOTextField {
- *    value = value;
- * }
+ *  ExampleInPlace : AjaxInPlace {
+ *  }
+ *  
+ *  View : ERXWOTemplate {
+ *     templateName = &quot;view&quot;;
+ *  }
+ *  
+ *  Value : WOString {
+ *     value = value;
+ *  }
+ *  
+ *  Edit : ERXWOTemplate {
+ *     templateName = &quot;edit&quot;;
+ *  }
+ *  
+ *  ValueField : WOTextField {
+ *     value = value;
+ *  }
  * </pre>
  * 
  * @binding class the class used on the top container
@@ -76,159 +77,159 @@ import com.webobjects.appserver.WOResponse;
  * @author mschrag
  */
 public class AjaxInPlace extends WOComponent {
-  private boolean _editing;
-  private String _id;
+	private boolean _editing;
+	private String _id;
 
-  public AjaxInPlace(WOContext context) {
-    super(context);
-  }
-
-  public boolean synchronizesVariablesWithBindings() {
-    return false;
-  }
-  
-  public String id() {
-    if (_id == null) {
-      if (hasBinding("id")) {
-        _id = (String) valueForBinding("id");
-      }
-      else {
-        _id = AjaxUtils.toSafeElementID(context().elementID());
-      }
-    }
-    return _id;
-  }
-
-  public void appendToResponse(WOResponse aResponse, WOContext aContext) {
-    super.appendToResponse(aResponse, aContext);
-  }
-
-  public boolean submitOnSave() {
-    return AjaxUtils.booleanValueForBinding("submitOnSave", true, _keyAssociations, parent());
-  }
-  
-  public boolean linkOnSave() {
-    return !submitOnSave();
-  }
-  
-  public String updateFunctionName() {
-    return id() + "Update();";
-  }
-
-  public String editFunctionName() {
-	  return id() + "Edit";
-  }
-
-  public String editFunctionCall() {
-	  String editFunctionCall = null;
-	  if (!disabled()) {
-	  	editFunctionCall = editFunctionName() + "()";
-	  }
-	  return editFunctionCall;
-  }
-
-  public String saveFunctionName() {
-	  return id() + "Save";
-  }
-
-  public String saveFunctionCall() {
-	  return saveFunctionName() + "()";
-  }
-
-  public String cancelFunctionName() {
-	  return id() + "Cancel";
-  }
-
-  public String cancelFunctionCall() {
-	  return cancelFunctionName() + "()";
-  }
-
-  public boolean manualControl() {
-	  boolean manualControl = false;
-	  if (hasBinding("manualControl")) {
-		  manualControl = ((Boolean)valueForBinding("manualControl")).booleanValue();
-	  }
-	  return manualControl;
-  }
-
-  public boolean manualEditControl() {
-	  boolean manualEditControl = manualControl();
-	  if (!manualEditControl && hasBinding("manualEditControl")) {
-		  manualEditControl = ((Boolean)valueForBinding("manualEditControl")).booleanValue();
-	  }
-	  return manualEditControl;
-  }
-
-  public boolean manualViewControl() {
-	  boolean manualViewControl = manualControl();
-	  if (!manualViewControl && hasBinding("manualViewControl")) {
-		  manualViewControl = ((Boolean)valueForBinding("manualViewControl")).booleanValue();
-	  }
-	  return manualViewControl;
-  }
-
-  public boolean disabled() {
-	  boolean disabled = false;
-	  if (hasBinding("disabled")) {
-		  disabled = ((Boolean)valueForBinding("disabled")).booleanValue();
-	  }
-	  return disabled;
-  }
-  
-  public boolean editing() {
-	  if (hasBinding("editing")) {
-		  Boolean editingBoolean = (Boolean)valueForBinding("editing");
-		  _editing = editingBoolean.booleanValue();
-	  }
-	  return !disabled() && _editing;
-  }
-  
-  public boolean canEdit() {
-	  return (!hasBinding("canEdit") || ((Boolean)valueForBinding("canEdit")).booleanValue());
-  }
-  
-  public boolean canSave() {
-	  return (!hasBinding("canSave") || ((Boolean)valueForBinding("canSave")).booleanValue());
-  }
-  
-  public void setEditing(boolean editing) {
-	_editing = editing;
-  }
-  
-  public WOActionResults startEditing() {
-	  if (canEdit()) {
-	    _editing = true;
-	    setValueForBinding(Boolean.TRUE, "editing");
-	    WOActionResults results = (WOActionResults) valueForBinding("editAction");
-	  }
-    // ignore results
-    return null;
-  }
-  
-  public WOActionResults save() {
-	  // check to see if we can save before firing the action (for permissions)
-	  boolean canSave = canSave();
-	if (canSave) {
-		if (hasBinding("saveAction")) {
-			WOActionResults results = (WOActionResults) valueForBinding("saveAction");
-			canSave = canSave();
-		}
-		  // check to see if we can save after firing the action (in case validation failed or something)
-	    if (canSave) {
-		    _editing = false;
-		    setValueForBinding(Boolean.FALSE, "editing");
-	    }
+	public AjaxInPlace(WOContext context) {
+		super(context);
 	}
-    // ignore results
-    return null;
-  }
 
-  public WOActionResults cancel() {
-    WOActionResults results = (WOActionResults) valueForBinding("cancelAction");
-    _editing = false;
-    setValueForBinding(Boolean.FALSE, "editing");
-    // ignore results
-    return null;
-  }
+	public boolean synchronizesVariablesWithBindings() {
+		return false;
+	}
+
+	public String id() {
+		if (_id == null) {
+			if (hasBinding("id")) {
+				_id = (String) valueForBinding("id");
+			}
+			else {
+				_id = AjaxUtils.toSafeElementID(context().elementID());
+			}
+		}
+		return _id;
+	}
+
+	public void appendToResponse(WOResponse aResponse, WOContext aContext) {
+		super.appendToResponse(aResponse, aContext);
+	}
+
+	public boolean submitOnSave() {
+		return AjaxUtils.booleanValueForBinding("submitOnSave", true, _keyAssociations, parent());
+	}
+
+	public boolean linkOnSave() {
+		return !submitOnSave();
+	}
+
+	public String updateFunctionName() {
+		return id() + "Update();";
+	}
+
+	public String editFunctionName() {
+		return id() + "Edit";
+	}
+
+	public String editFunctionCall() {
+		String editFunctionCall = null;
+		if (!disabled()) {
+			editFunctionCall = editFunctionName() + "()";
+		}
+		return editFunctionCall;
+	}
+
+	public String saveFunctionName() {
+		return id() + "Save";
+	}
+
+	public String saveFunctionCall() {
+		return saveFunctionName() + "()";
+	}
+
+	public String cancelFunctionName() {
+		return id() + "Cancel";
+	}
+
+	public String cancelFunctionCall() {
+		return cancelFunctionName() + "()";
+	}
+
+	public boolean manualControl() {
+		boolean manualControl = false;
+		if (hasBinding("manualControl")) {
+			manualControl = ((Boolean) valueForBinding("manualControl")).booleanValue();
+		}
+		return manualControl;
+	}
+
+	public boolean manualEditControl() {
+		boolean manualEditControl = manualControl();
+		if (!manualEditControl && hasBinding("manualEditControl")) {
+			manualEditControl = ((Boolean) valueForBinding("manualEditControl")).booleanValue();
+		}
+		return manualEditControl;
+	}
+
+	public boolean manualViewControl() {
+		boolean manualViewControl = manualControl();
+		if (!manualViewControl && hasBinding("manualViewControl")) {
+			manualViewControl = ((Boolean) valueForBinding("manualViewControl")).booleanValue();
+		}
+		return manualViewControl;
+	}
+
+	public boolean disabled() {
+		boolean disabled = false;
+		if (hasBinding("disabled")) {
+			disabled = ((Boolean) valueForBinding("disabled")).booleanValue();
+		}
+		return disabled;
+	}
+
+	public boolean editing() {
+		if (hasBinding("editing")) {
+			Boolean editingBoolean = (Boolean) valueForBinding("editing");
+			_editing = editingBoolean.booleanValue();
+		}
+		return !disabled() && _editing;
+	}
+
+	public boolean canEdit() {
+		return (!hasBinding("canEdit") || ((Boolean) valueForBinding("canEdit")).booleanValue());
+	}
+
+	public boolean canSave() {
+		return (!hasBinding("canSave") || ((Boolean) valueForBinding("canSave")).booleanValue());
+	}
+
+	public void setEditing(boolean editing) {
+		_editing = editing;
+	}
+
+	public WOActionResults startEditing() {
+		if (canEdit()) {
+			_editing = true;
+			setValueForBinding(Boolean.TRUE, "editing");
+			WOActionResults results = (WOActionResults) valueForBinding("editAction");
+		}
+		// ignore results
+		return null;
+	}
+
+	public WOActionResults save() {
+		// check to see if we can save before firing the action (for permissions)
+		boolean canSave = canSave();
+		if (canSave) {
+			if (hasBinding("saveAction")) {
+				WOActionResults results = (WOActionResults) valueForBinding("saveAction");
+				canSave = canSave();
+			}
+			// check to see if we can save after firing the action (in case validation failed or something)
+			if (canSave) {
+				_editing = false;
+				setValueForBinding(Boolean.FALSE, "editing");
+			}
+		}
+		// ignore results
+		return null;
+	}
+
+	public WOActionResults cancel() {
+		WOActionResults results = (WOActionResults) valueForBinding("cancelAction");
+		_editing = false;
+		setValueForBinding(Boolean.FALSE, "editing");
+		// ignore results
+		return null;
+	}
 
 }
