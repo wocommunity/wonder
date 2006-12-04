@@ -64,17 +64,7 @@ public abstract class AjaxComponent extends WOComponent implements IAjaxElement 
     public WOActionResults invokeAction(WORequest request, WOContext context) {
         Object result;
         if (AjaxUtils.shouldHandleRequest(request, context, _containerID(context))) {
-        	Object childrenResult = null;
-            if (_invokeChildrenBeforeHandleRequest()) {
-                childrenResult = super.invokeAction(request, context);
-            }
             result = handleRequest(request, context);
-            if (_invokeChildrenAfterHandleRequest()) {
-                childrenResult = super.invokeAction(request, context);
-            }
-            if (result == null) {
-                result = childrenResult;
-            }
             AjaxUtils.updateMutableUserInfoWithAjaxInfo(context());
 			if (result == null) {
 				result = AjaxUtils.createResponse(request, context);
@@ -83,14 +73,6 @@ public abstract class AjaxComponent extends WOComponent implements IAjaxElement 
             result = super.invokeAction(request, context);
         }
         return (WOActionResults) result;
-    }
-
-    protected boolean _invokeChildrenBeforeHandleRequest() {
-      return false;
-    }
-
-    protected boolean _invokeChildrenAfterHandleRequest() {
-      return false;
     }
 
     protected String _containerID(WOContext context) {
