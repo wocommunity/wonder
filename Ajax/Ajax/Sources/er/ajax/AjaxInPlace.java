@@ -15,33 +15,33 @@ import com.webobjects.appserver.WOResponse;
  * HTML:
  * 
  * <pre>
- *  &lt;webobject name = &quot;ExampleInPlace&quot;&gt;
- *     &lt;webobject name = &quot;View&quot;&gt;View: &lt;webobject name = &quot;Value&quot;/&gt;&lt;/webobject&gt;
- *     &lt;webobject name = &quot;Edit&quot;&gt;Edit: &lt;webobject name = &quot;ValueField&quot;/&gt;&lt;/webobject&gt;
- *  &lt;/webobject&gt;
+ *   &lt;webobject name = &quot;ExampleInPlace&quot;&gt;
+ *      &lt;webobject name = &quot;View&quot;&gt;View: &lt;webobject name = &quot;Value&quot;/&gt;&lt;/webobject&gt;
+ *      &lt;webobject name = &quot;Edit&quot;&gt;Edit: &lt;webobject name = &quot;ValueField&quot;/&gt;&lt;/webobject&gt;
+ *   &lt;/webobject&gt;
  * </pre>
  * 
  * WOD:
  * 
  * <pre>
- *  ExampleInPlace : AjaxInPlace {
- *  }
- *  
- *  View : ERXWOTemplate {
- *     templateName = &quot;view&quot;;
- *  }
- *  
- *  Value : WOString {
- *     value = value;
- *  }
- *  
- *  Edit : ERXWOTemplate {
- *     templateName = &quot;edit&quot;;
- *  }
- *  
- *  ValueField : WOTextField {
- *     value = value;
- *  }
+ *   ExampleInPlace : AjaxInPlace {
+ *   }
+ *   
+ *   View : ERXWOTemplate {
+ *      templateName = &quot;view&quot;;
+ *   }
+ *   
+ *   Value : WOString {
+ *      value = value;
+ *   }
+ *   
+ *   Edit : ERXWOTemplate {
+ *      templateName = &quot;edit&quot;;
+ *   }
+ *   
+ *   ValueField : WOTextField {
+ *      value = value;
+ *   }
  * </pre>
  * 
  * @binding class the class used on the top container
@@ -193,13 +193,15 @@ public class AjaxInPlace extends WOComponent {
 	}
 
 	public void setEditing(boolean editing) {
+		if (canSetValueForBinding("editing")) {
+			setValueForBinding(Boolean.valueOf(editing), "editing");
+		}
 		_editing = editing;
 	}
 
 	public WOActionResults startEditing() {
 		if (canEdit()) {
-			_editing = true;
-			setValueForBinding(Boolean.TRUE, "editing");
+			setEditing(true);
 			WOActionResults results = (WOActionResults) valueForBinding("editAction");
 		}
 		// ignore results
@@ -216,8 +218,7 @@ public class AjaxInPlace extends WOComponent {
 			}
 			// check to see if we can save after firing the action (in case validation failed or something)
 			if (canSave) {
-				_editing = false;
-				setValueForBinding(Boolean.FALSE, "editing");
+				setEditing(false);
 			}
 		}
 		// ignore results
@@ -226,8 +227,7 @@ public class AjaxInPlace extends WOComponent {
 
 	public WOActionResults cancel() {
 		WOActionResults results = (WOActionResults) valueForBinding("cancelAction");
-		_editing = false;
-		setValueForBinding(Boolean.FALSE, "editing");
+		setEditing(false);
 		// ignore results
 		return null;
 	}
