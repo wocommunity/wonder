@@ -5,6 +5,7 @@
 		<binding name = "class"/>
 		<binding name = "saveLabel"/>
 		<binding name = "cancelLabel"/>
+		<binding name = "editClass"/>
 		<binding name = "editAction"/>
 		<binding name = "saveAction"/>
 		<binding name = "cancelAction"/>
