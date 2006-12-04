@@ -59,8 +59,21 @@ public class ERJavaMail extends ERXFrameworkPrincipal {
      * <code>EMAIL_VALIDATION_PATTERN</code> is a regexp pattern that
      * is used to validate emails.
      */
-    protected static final String EMAIL_VALIDATION_PATTERN =
-        "^[A-Za-z0-9_\\-]+([.][A-Za-z0-9_\\-]+)*[@][A-Za-z0-9_\\-]+([.][A-Za-z0-9_\\-]+)+$";
+//  RFC 2822 token definitions for valid email - only used together to form a java Pattern object:
+    private static final String sp = "!#$%&'*+-/=?^_`{|}~";
+    private static final String atext = "[a-zA-Z0-9" + sp + "]";
+    private static final String atom = atext + "+"; //one or more atext chars
+    private static final String dotAtom = "\\." + atom;
+    private static final String localPart = atom + "(" + dotAtom + ")*"; //one atom followed by 0 or more dotAtoms.
+//     RFC 1035 tokens for domain names:
+    private static final String letter = "[a-zA-Z]";
+    private static final String letDig = "[a-zA-Z0-9]";
+    private static final String letDigHyp = "[a-zA-Z0-9-]";
+    private static final String rfcLabel = letDig + letDigHyp + "{0,61}" + letDig;
+    private static final String domain = rfcLabel + "((\\." + rfcLabel + ")*\\." + letter + "{2,6}){0,1}";
+//     Combined together, these form the allowed email regexp allowed by RFC 2822:
+    private static final String EMAIL_VALIDATION_PATTERN = "^" + localPart + "(@" + domain + "){0,1}$";
+     
 
     /**
      * The Jakarta ORO regexp matcher.
@@ -97,25 +110,22 @@ public class ERJavaMail extends ERXFrameworkPrincipal {
      * observer will call this method whenever appropriate.
      */
     public void initializeFrameworkFromSystemProperties () {
-      // Centralize mails ?
-      boolean centralize = ERXProperties.booleanForKey ("er.javamail.centralize");
-      this.setCentralize (centralize);
-      log.debug ("er.javamail.centralize: " + centralize);
+    	// Centralize mails ?
+    	boolean centralize = ERXProperties.booleanForKey ("er.javamail.centralize");
+    	this.setCentralize (centralize);
+    	log.debug ("er.javamail.centralize: " + centralize);
 
-      if (centralize) {
-        try {
-          // Admin Email
-          String adminEmail = System.getProperty ("er.javamail.adminEmail");
-          this.setAdminEmail (adminEmail);
-          log.debug ("er.javamail.adminEmail: " + _adminEmail);
-        }
-        catch (IllegalArgumentException e) {
-          throw new RuntimeException("You must specify a valid er.javamail.adminEmail value when er.javamail.centralize is enabled.", e);
-        }
-      }
 
-        // JavaMail Debug Enabled ?
-        boolean debug = ERXProperties.booleanForKey ("er.javamail.debugEnabled");
+    	String adminEmail = System.getProperty ("er.javamail.adminEmail");
+    	if(isValidEmail(adminEmail)) {
+    		this.setAdminEmail (adminEmail);
+    		log.debug ("er.javamail.adminEmail: " + _adminEmail);
+    	} else  if (centralize) {
+    		throw new IllegalArgumentException("You must specify a valid er.javamail.adminEmail value when er.javamail.centralize is enabled.");
+    	}
+
+    	// JavaMail Debug Enabled ?
+    	boolean debug = ERXProperties.booleanForKey ("er.javamail.debugEnabled");
         this.setDebugEnabled (debug);
         log.debug ("er.javamail.debugEnabled: " + debug);
 
@@ -418,7 +428,7 @@ public class ERJavaMail extends ERXFrameworkPrincipal {
      * @return a <code>boolean</code> value
      */
     public boolean isValidEmail (String email) {
-        if (email != null)
+       if (email != null)
             return _matcher.matches (email, _pattern);
         return false;
     }
