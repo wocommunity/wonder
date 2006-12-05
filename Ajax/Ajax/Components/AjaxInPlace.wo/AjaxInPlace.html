@@ -1,5 +1,9 @@
 <webobject name = "UpdateContainer">
 	<webobject name = "IsNotEditingConditional">
+		<script>
+		if (typeof <webobject name = "SaveFunctionName"></webobject> != 'undefined') { delete <webobject name = "SaveFunctionName"></webobject>; }
+		if (typeof <webobject name = "CancelFunctionName"></webobject> != 'undefined') { delete <webobject name = "CancelFunctionName"></webobject>; }
+		</script>
 		<webobject name = "EditFunction"></webobject>
 		<webobject name = "ManualViewControlConditional">
 			<webobject name = "ViewComponent"/>
@@ -10,6 +14,7 @@
 	</webobject>
 	<webobject name = "IsEditingConditional"><webobject name = "EditForm">
 			<webobject name = "EditComponent"/>
+			<script>if (typeof <webobject name = "EditFunctionName"></webobject> != 'undefined') { delete <webobject name = "EditFunctionName"></webobject>; }</script>
 			<webobject name = "SubmitOnSaveConditional"><webobject name = "SaveSubmitFunction"></webobject></webobject>
 			<webobject name = "LinkOnSaveConditional"><webobject name = "SaveLinkFunction"></webobject></webobject>
 			<webobject name = "CancelFunction"></webobject>
