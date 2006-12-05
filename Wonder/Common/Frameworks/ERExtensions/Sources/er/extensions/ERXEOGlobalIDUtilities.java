@@ -68,11 +68,9 @@ public class ERXEOGlobalIDUtilities {
     		} else if (gid instanceof EOKeyGlobalID) {
     			EOKeyGlobalID keyGid = (EOKeyGlobalID)gid;
     			Object value = keyGid.keyValues()[0];
-    			if(value instanceof NSData) {
+    			if(value instanceof NSData && keyGid.keyValues().length == 1) {
     				_data = ((NSData)value)._bytesNoCopy();
     			}
-    			// this will throw a CCE
-    			
     		} 
     		
     		if(_data == null) {
