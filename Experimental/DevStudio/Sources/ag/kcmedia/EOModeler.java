@@ -41,7 +41,7 @@ public class EOModeler extends WOComponent {
             if(modelPath == null) {
                 modelPath = "/Volumes/Home/Roots/AHLogic.framework/Resources/armehaut.eomodeld";
             }
-            setModelPath(modelPath);
+            //setModelPath(modelPath);
             log.info(modelPath);
         }
         return modelPath;
