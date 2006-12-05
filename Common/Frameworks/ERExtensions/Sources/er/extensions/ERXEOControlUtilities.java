@@ -350,16 +350,21 @@ public class ERXEOControlUtilities {
         EODatabase database = dbc.database();
         database.recordSnapshotForSourceGlobalID(null, gid, relationshipName);
         Object o = eo.storedValueForKey(relationshipName);
+        boolean needRefresh = false;
         if(o instanceof EOFaulting) {
         	EOFaulting toManyArray = (EOFaulting)o;
             if (!toManyArray.isFault()) {
             	EOFaulting tmpToManyArray = (EOFaulting)((EOObjectStoreCoordinator)ec.rootObjectStore()).arrayFaultWithSourceGlobalID(gid, relationshipName, ec);
             	toManyArray.turnIntoFault(tmpToManyArray.faultHandler());
+            	needRefresh = true;
             }
         } else {
-        	log.warn("Wrong class: " + o.getClass());
         	EOFaulting tmpToManyArray = (EOFaulting)((EOObjectStoreCoordinator)ec.rootObjectStore()).arrayFaultWithSourceGlobalID(gid, relationshipName, ec);
         	eo.takeStoredValueForKey(tmpToManyArray, relationshipName);
+        	needRefresh = true;
+        }
+        if(needRefresh && (eo instanceof ERXEnterpriseObject)) {
+        	((ERXEnterpriseObject)eo).flushCaches();
         }
     }
 
