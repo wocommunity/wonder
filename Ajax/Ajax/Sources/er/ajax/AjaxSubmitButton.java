@@ -69,7 +69,7 @@ public class AjaxSubmitButton extends AjaxDynamicElement {
 	ajaxOptionsArray.addObject(new AjaxOption("insertion", AjaxOption.SCRIPT));
     NSMutableDictionary options = AjaxOption.createAjaxOptionsDictionary(ajaxOptionsArray, component, associations());
     StringBuffer parametersBuffer = new StringBuffer();
-    parametersBuffer.append("Form.serialize(" + formReference + ")");
+    parametersBuffer.append("Form.serializeWithoutSubmits(" + formReference + ")");
     parametersBuffer.append(" + '");
     parametersBuffer.append("&" + AjaxSubmitButton.KEY_AJAX_SUBMIT_BUTTON_NAME + "=" + name);
 	String updateContainerID = (String)valueForBinding("updateContainerID", component);
@@ -177,6 +177,7 @@ public class AjaxSubmitButton extends AjaxDynamicElement {
     addScriptResourceInHead(context, res, "effects.js");
     addScriptResourceInHead(context, res, "builder.js");
     addScriptResourceInHead(context, res, "controls.js");
+    addScriptResourceInHead(context, res, "wonder.js");
   }
 
   public WOActionResults invokeAction(WORequest worequest, WOContext wocontext) {
