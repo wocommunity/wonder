@@ -1,7 +1,0 @@
-Hyperlink1: WOHyperlink {
-	href = "http://www.gammastream.com";
-}
-
-Hyperlink2: WOHyperlink {
-	href = "mailto:info@gammastream.com";
-}

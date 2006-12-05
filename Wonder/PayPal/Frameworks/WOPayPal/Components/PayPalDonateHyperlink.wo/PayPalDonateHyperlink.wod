@@ -1,8 +1,0 @@
-ComponentContent1: WOComponentContent {
-}
-
-DonateHyperlink: WOHyperlink {
-	string = ^string;
-	target = ^target;
-	href = payPalPurchaseHref;
-}

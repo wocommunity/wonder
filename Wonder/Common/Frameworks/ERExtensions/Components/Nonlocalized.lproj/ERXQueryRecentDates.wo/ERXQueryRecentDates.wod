@@ -1,6 +1,0 @@
-DatePopup: WOPopUpButton {
-    list=indexes;
-    item=dateItem;
-    displayString=displayString;
-    selection=date;
-}

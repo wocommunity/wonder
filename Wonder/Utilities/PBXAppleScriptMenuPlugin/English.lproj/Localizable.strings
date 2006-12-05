@@ -1,2 +1,0 @@
-LookupPrefix = "Lookup: ";
-LookupUrl = "http://www.google.de/search\?hl=de&meta=&q=site:developer.apple.com+%@";

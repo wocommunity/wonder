@@ -1,5 +1,0 @@
-
-CFBundleName = "SAPDBPlugIn";
-CFBundleShortVersionString = "SAPDBPlugIn version 0.2";
-CFBundleGetInfoString = "SAPDBPlugIn version 0.2, Copyright 2002, Power Media Sp. z o.o.";
-NSHumanReadableCopyright = "Copyright 2002, Power Media Sp. z o.o.";

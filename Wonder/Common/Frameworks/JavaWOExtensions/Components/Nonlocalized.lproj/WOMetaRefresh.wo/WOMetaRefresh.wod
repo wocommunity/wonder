@@ -1,7 +1,0 @@
-
-MetaRefresh: WOGenericElement {
-	content = contentString;
-	elementName = "meta";
-	"http-equiv" = "refresh";
-	invokeAction = invokeAction;
-}
