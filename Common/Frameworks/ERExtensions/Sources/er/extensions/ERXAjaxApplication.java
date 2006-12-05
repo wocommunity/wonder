@@ -6,6 +6,7 @@ import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WOMessage;
 import com.webobjects.appserver.WORequest;
 import com.webobjects.appserver.WOResponse;
+import com.webobjects.foundation.NSLog;
 
 /**
  * The ERXAjaxApplication is the part of ERXApplication that is modified to
@@ -65,10 +66,17 @@ public abstract class ERXAjaxApplication extends WOApplication {
     public WOActionResults invokeAction(WORequest request, WOContext context) {
         WOActionResults results = super.invokeAction(request, context);
         // MS: This is to support AjaxUpdateContainer.
-        if (results == null && ERXAjaxApplication.shouldNotStorePage(context)) {
-        	WOResponse response = context.response();
-        	ERXAjaxApplication.cleanUpHeaders(response);
-        	results = response;
+        // MS: Note that if results == context.page() something probably went wrong
+        if (ERXAjaxApplication.shouldNotStorePage(context)) {
+        	if (results == context.page()) {
+        		NSLog.out.appendln("ERXAjaxApplication.invokeAction: An Ajax response return context.page(), which is almost certainly an error.");
+            	results = null;
+        	}
+        	if (results == null) {
+            	WOResponse response = context.response();
+            	ERXAjaxApplication.cleanUpHeaders(response);
+            	results = response;
+        	}
         }
         return results;
     }
