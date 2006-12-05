@@ -29,6 +29,7 @@ public class AjaxObserveField extends AjaxDynamicElement {
 	protected void addRequiredWebResources(WOResponse response, WOContext context) {
 		addScriptResourceInHead(context, response, "prototype.js");
 		addScriptResourceInHead(context, response, "scriptaculous.js");
+		addScriptResourceInHead(context, response, "wonder.js");
 	}
 
 	public NSDictionary createAjaxOptions(WOComponent component) {
@@ -96,7 +97,7 @@ public class AjaxObserveField extends AjaxDynamicElement {
 		}
 		else {
 			StringBuffer parameters = new StringBuffer();
-			parameters.append("Form.serialize($('" + observeFieldID + "').form)");
+			parameters.append("Form.serializeWithoutSubmits($('" + observeFieldID + "').form)");
 			if (updateContainerID != null) {
 				parameters.append(" + '&" + AjaxUpdateContainer.UPDATE_CONTAINER_ID_KEY + "=" + updateContainerID + "'");
 			}
