@@ -71,6 +71,10 @@ public abstract class AjaxDynamicElement extends WODynamicGroup implements IAjax
 			NSDictionary userInfo = request.userInfo();
 			result = handleRequest(request, context);
 			AjaxUtils.updateMutableUserInfoWithAjaxInfo(context);
+        	if (result == context.page()) {
+        		log.warn("An Ajax request attempted to return the page, which is almost certainly an error.");
+        		result = null;
+        	}
 			if (result == null) {
 				result = AjaxUtils.createResponse(request, context);
 			}
