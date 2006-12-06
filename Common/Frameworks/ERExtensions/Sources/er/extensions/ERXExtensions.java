@@ -26,10 +26,12 @@ import com.webobjects.eoaccess.EORelationship;
 import com.webobjects.eoaccess.EOSQLExpression;
 import com.webobjects.eoaccess.EOUtilities;
 import com.webobjects.eoaccess.EOQualifierSQLGeneration.Support;
+import com.webobjects.eoaccess.EOQualifierSQLGeneration._OrQualifierSupport;
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.eocontrol.EOEnterpriseObject;
 import com.webobjects.eocontrol.EOFetchSpecification;
 import com.webobjects.eocontrol.EOKeyValueQualifier;
+import com.webobjects.eocontrol.EOOrQualifier;
 import com.webobjects.eocontrol.EOQualifier;
 import com.webobjects.eocontrol.EOSharedEditingContext;
 import com.webobjects.foundation.NSArray;
@@ -181,6 +183,7 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
                 EOQualifierSQLGeneration.Support.supportForClass(ERXPrimaryKeyListQualifier.class));
         registerSQLSupportForSelector(new NSSelector(ERXRegExQualifier.MatchesSelectorName), 
                 EOQualifierSQLGeneration.Support.supportForClass(ERXRegExQualifier.class));
+        EOQualifierSQLGeneration.Support.setSupportForClass(new ERXInOrQualifierSupport(), EOOrQualifier._CLASS);
     }
     
     private static Map _qualifierKeys;
