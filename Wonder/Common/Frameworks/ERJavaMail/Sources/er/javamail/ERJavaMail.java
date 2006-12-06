@@ -170,10 +170,13 @@ public class ERJavaMail extends ERXFrameworkPrincipal {
      */
     protected void setupSmtpHostSafely () {
         // Smtp host
+        String smtpProtocol = System.getProperty("er.javamail.smtpProtocol", "smtp");
+        setSMTPProtocol(smtpProtocol);
+        
         String smtpHost = System.getProperty ("er.javamail.smtpHost");
         if ((smtpHost == null) || (smtpHost.length () == 0)) {
             // Try to fail back to default java config
-            smtpHost = System.getProperty ("mail.smtp.host");
+            smtpHost = System.getProperty ("mail." + smtpProtocol + ".host");
     
             if ((smtpHost == null) || (smtpHost.length () == 0)) {
                 // use the standard WO host
@@ -181,28 +184,33 @@ public class ERJavaMail extends ERXFrameworkPrincipal {
                 if ((smtpHost == null) || (smtpHost.length () == 0)) {
                     throw new RuntimeException ("ERJavaMail: You must specify a SMTP host for outgoing mail with the property 'er.javamail.smtpHost'");
                 }
-            } else
+            } else {
                 System.setProperty ("er.javamail.smtpHost", smtpHost);
-        } else
-            System.setProperty ("mail.smtp.host", smtpHost);
+            }
+        } else {
+            System.setProperty ("mail." + smtpProtocol + ".host", smtpHost);
+        }
         log.debug ("er.javamail.smtpHost: " + smtpHost);
 
         boolean smtpAuth = ERXProperties.booleanForKey("er.javamail.smtpAuth");
         log.debug("ERJavaMail will use authenticated SMTP connections.");
         if (smtpAuth) {
-          System.setProperty("mail.smtp.auth", String.valueOf(smtpAuth));
+          System.setProperty("mail." + smtpProtocol + ".auth", String.valueOf(smtpAuth));
           String user = ERXProperties.stringForKey("er.javamail.smtpUser");
           if (user == null || user.length() == 0) {
             throw new RuntimeException("You specified er.javamail.smtpAuth=true, but you didn't specify an er.javamail.smtpUser to use as the login name.");
           }
-          System.setProperty("mail.smtp.user", user);
+          System.setProperty("mail." + smtpProtocol + ".user", user);
           String password = ERXProperties.stringForKey("er.javamail.smtpPassword");
           if (password == null || password.length() == 0) {
             log.warn("You specified er.javamail.smtpAuth=true, but you didn't set er.javamail.smtpPassword for the " + user + " mail user.");
           }
           if (password != null) {
-            System.setProperty("mail.smtp.password", password);
+            System.setProperty("mail." + smtpProtocol + ".password", password);
           }
+        }
+        if ("smtps".equals(smtpProtocol)) {
+            System.setProperty("mail.smtps.socketFactory.fallback", "false");
         }
     }
 
@@ -257,7 +265,7 @@ public class ERJavaMail extends ERXFrameworkPrincipal {
      * @return a <code>javax.mail.Session</code> value
      */
     public javax.mail.Session newSession () {
-        return javax.mail.Session.getInstance (System.getProperties ());
+        return newSession (System.getProperties ());
     }
 
 
@@ -339,6 +347,7 @@ public class ERJavaMail extends ERXFrameworkPrincipal {
         _defaultXMailerHeader = header;
     }
 
+    protected String _smtpProtocol;
 
     /** Used to send mail to adminEmail only.  Useful for debugging issues */
     protected boolean _centralize = true;
@@ -363,6 +372,21 @@ public class ERJavaMail extends ERXFrameworkPrincipal {
      */
     public void setCentralize (boolean centralize) {
         _centralize = centralize;
+    }
+    
+    /**
+     * Returns the SMTP protocol to use for connections.
+     */
+    public String smtpProtocol() {
+    	return _smtpProtocol;
+    }
+
+    /**
+     * Sets the SMTP protocol to use for connections (smtp or smtps)
+     * @param smtpProtocol the SMTP protocol name
+     */
+    public void setSMTPProtocol(String smtpProtocol) {
+    	_smtpProtocol = smtpProtocol;
     }
 
     /** 
