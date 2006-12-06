@@ -120,7 +120,7 @@ public class ERMailSender extends Thread {
     public void sendMessageNow (ERMessage message) {
       Transport transport = null;
       try {
-        transport = this._connectedTransportForSession(ERJavaMail.sharedInstance().defaultSession(), false);
+        transport = this._connectedTransportForSession(ERJavaMail.sharedInstance().defaultSession(), ERJavaMail.sharedInstance().smtpProtocol(), false);
         this._sendMessageNow(message, transport);
       }
       catch (MessagingException e) {
@@ -220,15 +220,15 @@ public class ERMailSender extends Thread {
 
     /** Utility method that gets the SMTP Transport method for a session and
         connects the Transport before returning it. */
-    protected Transport _connectedTransportForSession(javax.mail.Session session, boolean _throwExceptionIfConnectionFails) throws MessagingException {
+    protected Transport _connectedTransportForSession(javax.mail.Session session, String smtpProtocol, boolean _throwExceptionIfConnectionFails) throws MessagingException {
       Transport transport = null;
       try {
-        transport = session.getTransport("smtp");
+        transport = session.getTransport(smtpProtocol);
         if (!transport.isConnected()) {
-          String userName = session.getProperty("mail.smtp.user");
-          String password = session.getProperty("mail.smtp.password");
+          String userName = session.getProperty("mail." + smtpProtocol + ".user");
+          String password = session.getProperty("mail." + smtpProtocol + ".password");
           if (userName != null && password != null) {
-            transport.connect(session.getProperty("mail.smtp.host"), userName, password);
+            transport.connect(session.getProperty("mail." + smtpProtocol + ".host"), userName, password);
           }
           else {
             transport.connect();
@@ -267,8 +267,9 @@ public class ERMailSender extends Thread {
                 Session session     = null;
                 Transport transport = null;
                 session   = ERJavaMail.sharedInstance ().newSession ();
+                String smtpProtocol = ERJavaMail.sharedInstance().smtpProtocol();
                 try {
-                  transport = this._connectedTransportForSession(session, true);
+                  transport = this._connectedTransportForSession(session, smtpProtocol, true);
                 }
                 catch (MessagingException e) {
                   if (log.isDebugEnabled()) {
