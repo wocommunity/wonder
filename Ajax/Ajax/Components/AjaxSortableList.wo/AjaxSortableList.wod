@@ -1,0 +1,26 @@
+Content : WOComponentContent {
+}
+
+ListContainer : WOGenericContainer {
+	elementName = listElementName;
+	id = id;
+}
+
+ListItemContainer : WOGenericContainer {
+	elementName = listItemElementName;
+	id = listItemID;
+}
+
+ListRepetition : WORepetition {
+	list = ^list;
+	item = ^item;
+}
+
+ContainerID : WOString {
+	value = id;
+}
+
+AjaxOptions : AjaxOptions {
+	options = createAjaxOptions;
+	onUpdate = onUpdate;
+}

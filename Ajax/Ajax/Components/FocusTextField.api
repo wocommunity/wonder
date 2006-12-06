@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<wodefinitions>
+	<wo wocomponentcontent = "false" class = "FocusTextField">
+		<binding name = "id"/>
+		<binding name = "class"/>
+		<binding name = "value"/>
+		<binding name = "disabled"/>
+		<binding name = "selectAll"/>
+		<binding name = "focus"/>
+		<binding name = "onkeypress"/>
+		<binding name = "onEnter"/>
+
+    <validation message = "&apos;id&apos; is a required binding.">
+	    <unbound name = "id"/>
+    </validation>
+  </wo>
+</wodefinitions>

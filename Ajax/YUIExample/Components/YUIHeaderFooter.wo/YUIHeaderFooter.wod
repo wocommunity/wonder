@@ -1,0 +1,14 @@
+Content : WOComponentContent {
+}
+
+Title : WOString {
+	value = ^title;
+}
+
+PanelExampleAction : WOHyperlink {
+	pageName = "PanelExample";
+}
+
+TooltipExampleAction : WOHyperlink {
+	pageName = "TooltipExample";
+}
