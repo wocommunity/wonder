@@ -1,3 +1,14 @@
+Object.extend(String.prototype, {
+	addQueryParameters: function(additionalParameters) {
+		if (additionalParameters) {
+			return this + (this.match(/\?/) ? '&' : '?') + additionalParameters;
+		}
+		else {
+			return this;
+		}
+	}
+});
+
 Object.extend(Form, {
   serializeWithoutSubmits: function(form) {
     var elements = Form.getElements($(form));
