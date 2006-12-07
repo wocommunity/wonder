@@ -44,10 +44,16 @@ public class ERXObjectStoreCoordinatorPool {
     private Object _lock = new Object();
     protected static ERXObjectStoreCoordinatorPool _pool;
 
-    static {
-        initialize();
+    /**
+     * Calls initialize() if the required system properties exist.
+     *
+     */
+    public static void initializeIfNecessary() {
+    	if (ERXProperties.stringForKey("er.extensions.ERXObjectStoreCoordinatorPool.maxCoordinators") != null) {
+    		ERXObjectStoreCoordinatorPool.initialize();
+    	}
     }
-   
+    
     /**
      * Creates the singleton and registers the multi factory.
      */
