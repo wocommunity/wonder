@@ -59,6 +59,16 @@ UpdateWithActionLink : AjaxUpdateLink {
 	insertion = "function(receiver, response) {Effect.Fade(receiver, {to: 0.001, afterFinish: function() {Element.update(receiver, response); Effect.Appear(receiver)}})}";
 }
 
+UpdateWithActionFunction : AjaxUpdateLink {
+	updateContainerID = "exampleArea";
+	action = anotherAction;
+	functionName = "updateWithActionFunction";
+}
+
+UpdateFunctionCall : AjaxFunctionLink {
+	onclick = "updateWithActionFunction('name=Mike')";
+}
+
 UpdateLink4 : AjaxUpdateLink {
 	updateContainerID = "exampleArea4";
 	evalScripts = true;

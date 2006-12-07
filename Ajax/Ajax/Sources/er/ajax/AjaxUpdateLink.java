@@ -72,28 +72,35 @@ public class AjaxUpdateLink extends AjaxDynamicElement {
 			String updateContainerID = (String) valueForBinding("updateContainerID", context.component());
 			actionUrl = AjaxUpdateContainer.updateContainerUrl(AjaxUtils.ajaxComponentActionUrl(context), updateContainerID);
 		}
+		
+		onClickBuffer.append("var actionUrl = '" + actionUrl + "'");
+		String functionName = (String) valueForBinding("functionName", component);
+		if (functionName != null) {
+			onClickBuffer.append(".addQueryParameters(additionalParams)");
+		}
+		onClickBuffer.append(";");
 
 		if (associations().valueForKey("function") != null) {
 			String function = (String) valueForBinding("function", context.component());
-			onClickBuffer.append("return " + function + "('" + actionUrl + "')");
+			onClickBuffer.append("return " + function + "(actionUrl)");
 		}
 		else {
 			String replaceID = (String) valueForBinding("replaceID", context.component());
 			if (replaceID == null) {
 				String updateContainerID = (String) valueForBinding("updateContainerID", context.component());
 				if (updateContainerID == null) {
-					onClickBuffer.append("new Ajax.Request('" + actionUrl + "', ");
+					onClickBuffer.append("new Ajax.Request(actionUrl, ");
 					AjaxOptions.appendToBuffer(options, onClickBuffer, context);
 					onClickBuffer.append(")");
 				}
 				else {
-					onClickBuffer.append("new Ajax.Updater('" + updateContainerID + "', '" + actionUrl + "', ");
+					onClickBuffer.append("new Ajax.Updater('" + updateContainerID + "', actionUrl, ");
 					AjaxOptions.appendToBuffer(options, onClickBuffer, context);
 					onClickBuffer.append(")");
 				}
 			}
 			else {
-				onClickBuffer.append("new Ajax.Updater('" + replaceID + "', '" + actionUrl + "', ");
+				onClickBuffer.append("new Ajax.Updater('" + replaceID + "', actionUrl, ");
 				AjaxOptions.appendToBuffer(options, onClickBuffer, context);
 				onClickBuffer.append(")");
 			}
@@ -170,7 +177,7 @@ public class AjaxUpdateLink extends AjaxDynamicElement {
 		}
 		else {
 			AjaxUtils.appendScriptHeader(response);
-			response.appendContentString(functionName + " = function() { " + onClick(context) + " }\n");
+			response.appendContentString(functionName + " = function(additionalParams) { " + onClick(context) + " }\n");
 			AjaxUtils.appendScriptFooter(response);
 		}
 		super.appendToResponse(response, context);
@@ -179,6 +186,7 @@ public class AjaxUpdateLink extends AjaxDynamicElement {
 	protected void addRequiredWebResources(WOResponse res, WOContext context) {
 		addScriptResourceInHead(context, res, "prototype.js");
 		addScriptResourceInHead(context, res, "scriptaculous.js");
+		addScriptResourceInHead(context, res, "wonder.js");
 	}
 
 	public WOActionResults handleRequest(WORequest request, WOContext context) {
