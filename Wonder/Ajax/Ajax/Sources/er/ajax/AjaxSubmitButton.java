@@ -137,7 +137,13 @@ public class AjaxSubmitButton extends AjaxDynamicElement {
 	else {
 		onClickBuffer.append("new Ajax.Request(");
 	}
-	onClickBuffer.append(formReference + ".action,");
+	if (valueForBinding("functionName", component) != null) {
+		onClickBuffer.append(formReference + ".action.appendQueryString(additionalParams)");
+	}
+	else {
+		onClickBuffer.append(formReference + ".action");
+	}
+	onClickBuffer.append(",");
     NSDictionary options = createAjaxOptions(component, formReference);
     AjaxOptions.appendToBuffer(options, onClickBuffer, context);
     onClickBuffer.append(")");
@@ -164,7 +170,7 @@ public class AjaxSubmitButton extends AjaxDynamicElement {
     }
     if (!showUI) {
       	AjaxUtils.appendScriptHeader(response);
-    	response.appendContentString(functionName + " = function() { " + onClickBuffer + " }\n");
+    	response.appendContentString(functionName + " = function(additionalParams) { " + onClickBuffer + " }\n");
     	AjaxUtils.appendScriptFooter(response);
     }
 
