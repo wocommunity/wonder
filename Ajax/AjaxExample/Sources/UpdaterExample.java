@@ -20,7 +20,7 @@ public class UpdaterExample extends WOComponent {
   }
 
   public WOActionResults anotherAction() {
-    System.out.println("UpdaterExample.anotherAction: Fired requested action (return value is ignored right now)");
+    System.out.println("UpdaterExample.anotherAction: Fired requested action (return value is ignored right now) (" + context().request().formValues() + ")");
     return null;
   }
   
