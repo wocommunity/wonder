@@ -253,6 +253,48 @@ er.extensions.ERXComponentActionRedirector.enabled=false
 # er.extensions.ERXEC.defaultAutomaticLockUnlock = true
 
 #########################################################################
+# ERX Multicast Synchronizer
+#########################################################################
+## To use multicast synchronization, you must turn on the 
+## ERXObjectStoreCoordinatorPool.  Just setting it to 1 is enough to
+## allow things to work.
+#er.extensions.ERXObjectStoreCoordinatorPool.maxCoordinators=1
+
+## Each instance you run should set a difference instance number.  This
+## number is passed in the multicast packet and is required so that the 
+## multicast sender can filter out its own sent packets.
+#er.extensions.multicastSynchronizer.instance=1
+
+## (Optional) This address defines the multicast group address that all the instances
+## will join.  The default value is 230.0.0.1 if you do not set this.
+#er.extensions.multicastSynchronizer.group=230.0.0.1
+
+## (Optional) The port number is the port that will be used to send multicast messages
+## over.  The default value is 9753.
+#er.extensions.multicastSynchronizer.port=9753
+
+## (Optional) The local bind address defines the network interface that will be used
+## to transmit multicast messages.  The default value is 0.0.0.0, which 
+## java translates into the wildcard address, and the kernel will select
+## an interface.
+#er.extensions.multicastSynchronizer.localBindAddress=0.0.0.0
+
+## (Optional) A comma separated list of entities to multicast synchronize.  The
+## default is to not set this, which translates into "include all entities".
+#er.extensions.multicastSynchronizer.includeEntities=
+
+## (Optional) A comma separated list of entities to NOT multicast synchronize.  The
+## default is to not set this, which translates into "exclude no entities".
+#er.extensions.multicastSynchronizer.excludeEntities=
+
+## (Optional) A comma separated list of host names that are allowed to multicast 
+## change notifications.  The default is to not set this, which translates into 
+## "allow all hosts."  If your network is not secure, not setting this list
+## leaves you vulnerable to an DoS-style attack where anyone could notify your
+## multicast group of EOGlobalID changes. 
+#er.extensions.multicastSynchronizer.whitelist=
+
+#########################################################################
 # ERXApplication 
 #########################################################################
 ## decides if locked editing contexts should be unlocked after the RR-loop.
