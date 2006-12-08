@@ -138,7 +138,7 @@ public class AjaxSubmitButton extends AjaxDynamicElement {
 		onClickBuffer.append("new Ajax.Request(");
 	}
 	if (valueForBinding("functionName", component) != null) {
-		onClickBuffer.append(formReference + ".action.appendQueryString(additionalParams)");
+		onClickBuffer.append(formReference + ".action.addQueryParameters(additionalParams)");
 	}
 	else {
 		onClickBuffer.append(formReference + ".action");
