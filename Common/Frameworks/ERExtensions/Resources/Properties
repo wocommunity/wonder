@@ -294,6 +294,10 @@ er.extensions.ERXComponentActionRedirector.enabled=false
 ## multicast group of EOGlobalID changes. 
 #er.extensions.multicastSynchronizer.whitelist=
 
+## (Optional) The maximum size of a datagram packet that we can send.  Defaults
+## to 1024. 
+#er.extensions.multicastSynchronizer.maxPacketSize=1024
+
 #########################################################################
 # ERXApplication 
 #########################################################################
