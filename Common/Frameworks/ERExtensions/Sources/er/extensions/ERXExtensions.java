@@ -107,13 +107,11 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
     protected void initialize() {
     	NSNotificationCenter.defaultCenter().addObserver(this,
     			new NSSelector("bundleDidLoad", ERXConstant.NotificationClassArray),
-    			NSBundle.BundleDidLoadNotification,
+    			ERXApplication.AllBundlesLoadedNotification,
     			null);
     }
 
     public void bundleDidLoad(NSNotification n) {
-    	NSBundle bundle = (NSBundle) n.object();
-    	if(!"JavaFoundation".equals(bundle.name())) return;
     	if(_initialized) return;
     	_initialized = true;
     	
