@@ -7,8 +7,10 @@
 package er.extensions;
 
 import java.io.File;
+import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Random;
+import java.util.Set;
 
 import org.apache.log4j.Logger;
 
@@ -30,6 +32,7 @@ import com.webobjects.eoaccess.EOGeneralAdaptorException;
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.eocontrol.EOTemporaryGlobalID;
 import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSBundle;
 import com.webobjects.foundation.NSData;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSForwardException;
@@ -84,7 +87,26 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
      */
     private static int lowMemBufferSize = 0;
     
+    /** Holds the framework names during startup */
+    private static Set allFrameworks;
     
+    /** Notifcation to post when all bundles were loaded but before their principal was called */
+    public static final String AllBundlesLoadedNotification = "NSBundleAllBundlesLoaded";
+    
+    /**
+     * Will be called after each bundle load. We use it to knwo when the last bundle laoded so we can
+     * post a notification for it.
+     * @param n
+     */
+    public static void bundleDidLoad(NSNotification n) {
+    	NSBundle bundle = (NSBundle) n.object();
+    	// System.out.println(bundle.name() + ": " + allFrameworks);
+    	allFrameworks.remove(bundle.name());
+    	if(allFrameworks.size() == 0) {
+    		NSNotificationCenter.defaultCenter().postNotification(new NSNotification(AllBundlesLoadedNotification, NSKeyValueCoding.NullValue));
+    	}
+    }
+
     /** 
      * Called when the application starts up and saves the command line 
      * arguments for {@link ERXConfigurationManager}. 
@@ -92,40 +114,51 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
      * @see WOApplication#main(String[], Class)
      */
     public static void main(String argv[], Class applicationClass) {
-        _wasERXApplicationMainInvoked = true;
-        if(false) {
-            String cp = System.getProperty("java.class.path");
-            String parts[] = cp.split(":");
-            String normalLibs = "";
-            String systemLibs = "";
-            for (int i = 0; i < parts.length; i++) {
-                String jar = parts[i];
-                if(jar.matches("Library.Frameworks.Java")) {
-                    systemLibs += jar + ":";
-                } else {
-                    normalLibs += jar + ":";
-                }
-            }
-            if(systemLibs.length() > 1) {
-                systemLibs = systemLibs.substring(0, systemLibs.length() - 1);
-            }
-            if(normalLibs.length() > 1) {
-                normalLibs = normalLibs.substring(0, normalLibs.length() - 1);
-            }
-            cp = normalLibs + ":" + systemLibs;
-            System.setProperty("java.class.path", cp);
-        }
-        ERXConfigurationManager.defaultManager().setCommandLineArguments(argv);
-        ERXFrameworkPrincipal.setUpFrameworkPrincipalClass (ERXExtensions.class);
-        WOApplication.main(argv, applicationClass);
-    }
-    
+    	_wasERXApplicationMainInvoked = true;
+    	String cp = System.getProperty("java.class.path");
+    	String parts[] = cp.split(":");
+    	String normalLibs = "";
+    	String systemLibs = "";
+    	allFrameworks = new HashSet();
+    	for (int i = 0; i < parts.length; i++) {
+    		String jar = parts[i];
+    		// all patched frameworks here
+    		if(jar.matches(".*?Library[/\\\\]Frameworks[/\\\\]Java(Foundation|EOControl|EOAccess|WebObjects).*")) {
+    			systemLibs += jar + ":";
+			}
+			else {
+				normalLibs += jar + ":";
+			}
+			String bundle = jar.replaceAll(".*?[/\\\\](\\w+)\\.framework.*", "$1");
+			if (bundle.matches("^\\w+$") && !"JavaVM".equals(bundle)) {
+				allFrameworks.add(bundle);
+			}
+		}
+		if (systemLibs.length() > 1) {
+			systemLibs = systemLibs.substring(0, systemLibs.length() - 1);
+		}
+		if (normalLibs.length() > 1) {
+			normalLibs = normalLibs.substring(0, normalLibs.length() - 1);
+		}
+		cp = normalLibs + ":" + systemLibs;
+		// AK: this is not enough to actually change the clas path, we'd need a
+		// custom classloader for this
+		if (false) {
+			System.setProperty("java.class.path", cp);
+		}
+		NSNotificationCenter.defaultCenter().addObserver(ERXApplication.class, 
+				new NSSelector("bundleDidLoad", new Class[] { NSNotification.class }), "NSBundleDidLoadNotification", null);
+		ERXConfigurationManager.defaultManager().setCommandLineArguments(argv);
+		ERXFrameworkPrincipal.setUpFrameworkPrincipalClass(ERXExtensions.class);
+		WOApplication.main(argv, applicationClass);
+	}
+
     /**
-     * Installs several bufixes and enhancements to WODynamicElements.
-     * Sets the Context class name to "er.extensions.ERXWOContext" if
-     * it is "WOContext". Patches ERXWOForm, ERXWOFileUpload, ERXWOText
-     * to be used instead of WOForm, WOFileUpload, WOText.
-     */
+	 * Installs several bufixes and enhancements to WODynamicElements. Sets the
+	 * Context class name to "er.extensions.ERXWOContext" if it is "WOContext".
+	 * Patches ERXWOForm, ERXWOFileUpload, ERXWOText to be used instead of
+	 * WOForm, WOFileUpload, WOText.
+	 */
     public void installPatches() {
         ERXPatcher.installPatches();
         if(contextClassName().equals("WOContext"))
@@ -998,8 +1031,8 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
     }
     
     protected static final ERXFormatterFactory _formatterFactory = new ERXFormatterFactory();
-    
-    /** Getting formatters into KVC: bind to <code>application.formatterFactory.(60/#,##0.00)</code>*/
+
+	/** Getting formatters into KVC: bind to <code>application.formatterFactory.(60/#,##0.00)</code>*/
     public ERXFormatterFactory formatterFactory() {
         return _formatterFactory;
     }
