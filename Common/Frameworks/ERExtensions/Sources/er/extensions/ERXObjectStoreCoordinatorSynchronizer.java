@@ -322,6 +322,7 @@ public class ERXObjectStoreCoordinatorSynchronizer {
 								_multicastSynchronizer.writeChanges(localChanges);
 							}
 							catch (Throwable t) {
+								t.printStackTrace();
 								ERXObjectStoreCoordinatorSynchronizer.log.error("Failed to send multicast notification.", t);
 							}
 						}
@@ -456,8 +457,6 @@ public class ERXObjectStoreCoordinatorSynchronizer {
 	}
 
 	protected class MulticastSynchronizer {
-		private static final int MAX_PACKET_SIZE = 4096;
-
 		private static final int JOIN = 1;
 		private static final int LEAVE = 2;
 		private static final int INSERT = 3;
@@ -478,6 +477,8 @@ public class ERXObjectStoreCoordinatorSynchronizer {
 		private NSArray _includeEntityNames;
 		private NSArray _excludeEntityNames;
 		private NSArray _whitelist;
+		private int _maxPacketSize;
+
 
 		public MulticastSynchronizer(short instance, String localBindAddress, String multicastGroup, int multicastPort) throws IOException {
 			_instance = instance;
@@ -501,6 +502,7 @@ public class ERXObjectStoreCoordinatorSynchronizer {
 			if (whitelist != null) {
 				_whitelist = NSArray.componentsSeparatedByString(whitelist, ",");
 			}
+			_maxPacketSize = ERXProperties.intForKeyWithDefault("er.extensions.multicastSynchronizer.maxPacketSize", 1024);
 		}
 
 		public void join() throws IOException {
@@ -535,7 +537,7 @@ public class ERXObjectStoreCoordinatorSynchronizer {
 
 		protected void _listen() {
 			_listening = true;
-			byte[] buffer = new byte[MulticastSynchronizer.MAX_PACKET_SIZE];
+			byte[] buffer = new byte[_maxPacketSize];
 			while (_listening) {
 				DatagramPacket receivePacket = new DatagramPacket(buffer, 0, buffer.length);
 				try {
@@ -608,7 +610,7 @@ public class ERXObjectStoreCoordinatorSynchronizer {
 		}
 
 		protected void writeGIDs(int messageType, NSArray gids) throws IOException {
-			int maxPacketSize = MulticastSynchronizer.MAX_PACKET_SIZE - 64;
+			int maxPacketSize = _maxPacketSize - 64; // MS: Give ourselves a little leg room so we don't overrun ... it should be smarter about this
 			int count = 0;
 			RefByteArrayOutputStream baos = new RefByteArrayOutputStream();
 			DataOutputStream dos = new DataOutputStream(baos);
@@ -622,29 +624,34 @@ public class ERXObjectStoreCoordinatorSynchronizer {
 				Enumeration entityGidsEnum = entityGids.objectEnumerator();
 				while (entityGidsEnum.hasMoreElements()) {
 					EOKeyGlobalID gid = (EOKeyGlobalID) entityGidsEnum.nextElement();
-					if (count > 0) {
-						dos.flush();
-						_multicastSocket.send(baos.createDatagramPacket());
-						baos.reset();
-						count = 0;
-						packetHeaderWritten = false;
-					}
-					if (!packetHeaderWritten) {
-						dos.writeShort(_instance);
-						dos.writeByte(messageType);
-						dos.writeUTF(entityName);
-						packetHeaderWritten = true;
-						firstPacket = false;
-					}
-					Object[] values = gid._keyValuesNoCopy();
-					dos.writeByte(values.length);
-					for (int keyNum = 0; keyNum < values.length; keyNum++) {
-						int bytesWritten = writeKey(dos, values[keyNum], MulticastSynchronizer.MAX_PACKET_SIZE - count);
-						if (bytesWritten == 0) {
+					boolean gidInPacket = false;
+					while (!gidInPacket) {
+						if (count > 0) {
+							dos.flush();
+							_multicastSocket.send(baos.createDatagramPacket());
+							baos.reset();
+							count = 0;
 							packetHeaderWritten = false;
 						}
-						else {
-							count += bytesWritten;
+						if (!packetHeaderWritten) {
+							dos.writeShort(_instance);
+							dos.writeByte(messageType);
+							dos.writeUTF(entityName);
+							packetHeaderWritten = true;
+							firstPacket = false;
+						}
+						Object[] values = gid._keyValuesNoCopy();
+						dos.writeByte(values.length);
+						gidInPacket = true;
+						for (int keyNum = 0; keyNum < values.length; keyNum++) {
+							int bytesWritten = writeKey(dos, values[keyNum], maxPacketSize - count);
+							if (bytesWritten == 0) {
+								packetHeaderWritten = false;
+								gidInPacket = false;
+							}
+							else {
+								count += bytesWritten;
+							}
 						}
 					}
 				}
