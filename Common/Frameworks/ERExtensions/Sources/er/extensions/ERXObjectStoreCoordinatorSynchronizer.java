@@ -83,7 +83,7 @@ public class ERXObjectStoreCoordinatorSynchronizer {
 				String multicastGroup = ERXProperties.stringForKeyWithDefault("er.extensions.multicastSynchronizer.group", "230.0.0.1");
 				String multicastLocalBindAddress = ERXProperties.stringForKey("er.extensions.multicastSynchronizer.localBindAddress");
 				int multicastPort = ERXProperties.intForKeyWithDefault("er.extensions.multicastSynchronizer.port", 9753);
-				_multicastSynchronizer = new MulticastSynchronizer(multicastInstance, multicastLocalBindAddress, multicastGroup, multicastPort);
+				_multicastSynchronizer = new MulticastSynchronizer(multicastInstance, multicastLocalBindAddress, multicastGroup, multicastPort, _queueThread);
 				_multicastSynchronizer.join();
 				_multicastSynchronizer.listen();
 			}
@@ -138,7 +138,7 @@ public class ERXObjectStoreCoordinatorSynchronizer {
 	/**
 	 * Thread and locking safe implementation to propagate the changes from one EOF stack to another.
 	 */
-	private class ProcessChangesQueue implements Runnable {
+	private class ProcessChangesQueue implements Runnable, IChangeListener {
 		private abstract class SnapshotProcessor {
 			public abstract void processSnapshots(EODatabase database, NSDictionary snapshots);
 		}
@@ -215,7 +215,7 @@ public class ERXObjectStoreCoordinatorSynchronizer {
 			Thread.currentThread().setName("ProcessChangesQueue");
 		}
 
-		private void addChange(Change changes) {
+		public void addChange(Change changes) {
 			synchronized (_elements) {
 				_elements.add(changes);
 				_elements.notify();
@@ -338,16 +338,12 @@ public class ERXObjectStoreCoordinatorSynchronizer {
 		}
 	}
 
-	protected static class Change {
-
-	}
-
-	protected static class RemoteChange extends Change {
+	public static class Change {
 		private NSArray _deletedGIDs;
 		private NSArray _updatedGIDs;
 		private NSArray _insertedGIDs;
 
-		public RemoteChange(NSArray deletedGIDs, NSArray updatedGIDs, NSArray insertedGIDs) {
+		public Change(NSArray deletedGIDs, NSArray updatedGIDs, NSArray insertedGIDs) {
 			_deletedGIDs = deletedGIDs;
 			_updatedGIDs = updatedGIDs;
 			_insertedGIDs = insertedGIDs;
@@ -366,26 +362,27 @@ public class ERXObjectStoreCoordinatorSynchronizer {
 		}
 	}
 
+	public static class RemoteChange extends Change {
+		public RemoteChange(NSArray deletedGIDs, NSArray updatedGIDs, NSArray insertedGIDs) {
+			super(deletedGIDs, updatedGIDs, insertedGIDs);
+		}
+	}
+
 	/**
 	 * Holds a change notification (one transaction).
 	 */
-	protected static class LocalChange extends Change {
+	public static class LocalChange extends Change {
 		private EOObjectStoreCoordinator _coordinator;
 		private NSDictionary _inserted;
 		private NSDictionary _updated;
 		private NSDictionary _deleted;
-		private NSArray _deletedGIDs;
-		private NSArray _updatedGIDs;
-		private NSArray _insertedGIDs;
 
 		public LocalChange(EOObjectStoreCoordinator osc, NSDictionary userInfo) {
+			super((NSArray) userInfo.objectForKey(EOObjectStore.DeletedKey), (NSArray) userInfo.objectForKey(EOObjectStore.UpdatedKey), (NSArray) userInfo.objectForKey(EOObjectStore.InsertedKey));
 			_coordinator = osc;
-			_deletedGIDs = (NSArray) userInfo.objectForKey(EOObjectStore.DeletedKey);
-			_updatedGIDs = (NSArray) userInfo.objectForKey(EOObjectStore.UpdatedKey);
-			_insertedGIDs = (NSArray) userInfo.objectForKey(EOObjectStore.InsertedKey);
-			_deleted = snapshotsGroupedByEntity(_deletedGIDs, _coordinator);
-			_updated = snapshotsGroupedByEntity(_updatedGIDs, _coordinator);
-			_inserted = snapshotsGroupedByEntity(_insertedGIDs, _coordinator);
+			_deleted = snapshotsGroupedByEntity(deletedGIDs(), _coordinator);
+			_updated = snapshotsGroupedByEntity(updatedGIDs(), _coordinator);
+			_inserted = snapshotsGroupedByEntity(insertedGIDs(), _coordinator);
 		}
 
 		/**
@@ -439,24 +436,16 @@ public class ERXObjectStoreCoordinatorSynchronizer {
 			return _inserted;
 		}
 
-		public NSArray deletedGIDs() {
-			return _deletedGIDs;
-		}
-
-		public NSArray updatedGIDs() {
-			return _updatedGIDs;
-		}
-
-		public NSArray insertedGIDs() {
-			return _insertedGIDs;
-		}
-
 		public EOObjectStoreCoordinator coordinator() {
 			return _coordinator;
 		}
 	}
 
-	protected class MulticastSynchronizer {
+	public static interface IChangeListener {
+		public void addChange(Change changes);
+	}
+
+	public static class MulticastSynchronizer {
 		private static final int JOIN = 1;
 		private static final int LEAVE = 2;
 		private static final int INSERT = 3;
@@ -469,6 +458,7 @@ public class ERXObjectStoreCoordinatorSynchronizer {
 		private static final int LONG_TYPE = 4;
 		private static final int DATA_TYPE = 5;
 
+		private IChangeListener _listener;
 		private short _instance;
 		private InetAddress _multicastGroup;
 		private int _multicastPort;
@@ -479,8 +469,8 @@ public class ERXObjectStoreCoordinatorSynchronizer {
 		private NSArray _whitelist;
 		private int _maxPacketSize;
 
-
-		public MulticastSynchronizer(short instance, String localBindAddress, String multicastGroup, int multicastPort) throws IOException {
+		public MulticastSynchronizer(short instance, String localBindAddress, String multicastGroup, int multicastPort, IChangeListener listener) throws IOException {
+			_listener = listener;
 			_instance = instance;
 			_multicastGroup = InetAddress.getByName(multicastGroup);
 			_multicastPort = multicastPort;
@@ -569,7 +559,7 @@ public class ERXObjectStoreCoordinatorSynchronizer {
 								log.info("Multicast instance #" + instance + " (" + receivePacket.getAddress() + ") inserted " + gids);
 							}
 							RemoteChange changes = new RemoteChange(NSArray.EmptyArray, NSArray.EmptyArray, gids);
-							_queueThread.addChange(changes);
+							_listener.addChange(changes);
 						}
 						else if (messageType == MulticastSynchronizer.UPDATE) {
 							NSArray gids = readGIDs(receivePacket, dis);
@@ -577,7 +567,7 @@ public class ERXObjectStoreCoordinatorSynchronizer {
 								log.info("Multicast instance #" + instance + " (" + receivePacket.getAddress() + ") updated " + gids);
 							}
 							RemoteChange changes = new RemoteChange(NSArray.EmptyArray, gids, NSArray.EmptyArray);
-							_queueThread.addChange(changes);
+							_listener.addChange(changes);
 						}
 						else if (messageType == MulticastSynchronizer.DELETE) {
 							NSArray gids = readGIDs(receivePacket, dis);
@@ -585,7 +575,7 @@ public class ERXObjectStoreCoordinatorSynchronizer {
 								log.info("Multicast instance #" + instance + " (" + receivePacket.getAddress() + ") deleted " + gids);
 							}
 							RemoteChange changes = new RemoteChange(gids, NSArray.EmptyArray, NSArray.EmptyArray);
-							_queueThread.addChange(changes);
+							_listener.addChange(changes);
 						}
 						else {
 							throw new IllegalArgumentException("Unknown multicast message type #" + messageType + ".");
