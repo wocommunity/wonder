@@ -83,7 +83,23 @@ public class ERXObjectStoreCoordinatorSynchronizer {
 				String multicastGroup = ERXProperties.stringForKeyWithDefault("er.extensions.multicastSynchronizer.group", "230.0.0.1");
 				String multicastLocalBindAddress = ERXProperties.stringForKey("er.extensions.multicastSynchronizer.localBindAddress");
 				int multicastPort = ERXProperties.intForKeyWithDefault("er.extensions.multicastSynchronizer.port", 9753);
-				_multicastSynchronizer = new MulticastSynchronizer(multicastInstance, multicastLocalBindAddress, multicastGroup, multicastPort, _queueThread);
+				String includeEntityNames = ERXProperties.stringForKey("er.extensions.multicastSynchronizer.includeEntities");
+				NSArray includeEntityNamesArray = null;
+				if (includeEntityNames != null) {
+					includeEntityNamesArray = NSArray.componentsSeparatedByString(includeEntityNames, ",");
+				}
+				NSArray excludeEntityNamesArray = null;
+				String excludeEntityNames = ERXProperties.stringForKey("er.extensions.multicastSynchronizer.excludeEntities");
+				if (excludeEntityNames != null) {
+					excludeEntityNamesArray = NSArray.componentsSeparatedByString(excludeEntityNames, ",");
+				}
+				NSArray whitelistArray = null;
+				String whitelist = ERXProperties.stringForKey("er.extensions.multicastSynchronizer.whitelist");
+				if (whitelist != null) {
+					whitelistArray = NSArray.componentsSeparatedByString(whitelist, ",");
+				}
+				int maxPacketSize = ERXProperties.intForKeyWithDefault("er.extensions.multicastSynchronizer.maxPacketSize", 1024);
+				_multicastSynchronizer = new MulticastSynchronizer(multicastInstance, multicastLocalBindAddress, multicastGroup, multicastPort, includeEntityNamesArray, excludeEntityNamesArray, whitelistArray, maxPacketSize, _queueThread);
 				_multicastSynchronizer.join();
 				_multicastSynchronizer.listen();
 			}
@@ -469,7 +485,7 @@ public class ERXObjectStoreCoordinatorSynchronizer {
 		private NSArray _whitelist;
 		private int _maxPacketSize;
 
-		public MulticastSynchronizer(short instance, String localBindAddress, String multicastGroup, int multicastPort, IChangeListener listener) throws IOException {
+		public MulticastSynchronizer(short instance, String localBindAddress, String multicastGroup, int multicastPort, NSArray includeEntityNames, NSArray excludeEntityNames, NSArray whitelist, int maxPacketSize, IChangeListener listener) throws IOException {
 			_listener = listener;
 			_instance = instance;
 			_multicastGroup = InetAddress.getByName(multicastGroup);
@@ -480,19 +496,10 @@ public class ERXObjectStoreCoordinatorSynchronizer {
 			else {
 				_multicastSocket = new MulticastSocket(new InetSocketAddress(InetAddress.getByName(localBindAddress), _multicastPort));
 			}
-			String includeEntityNames = ERXProperties.stringForKey("er.extensions.multicastSynchronizer.includeEntities");
-			if (includeEntityNames != null) {
-				_includeEntityNames = NSArray.componentsSeparatedByString(includeEntityNames, ",");
-			}
-			String excludeEntityNames = ERXProperties.stringForKey("er.extensions.multicastSynchronizer.excludeEntities");
-			if (excludeEntityNames != null) {
-				_excludeEntityNames = NSArray.componentsSeparatedByString(excludeEntityNames, ",");
-			}
-			String whitelist = ERXProperties.stringForKey("er.extensions.multicastSynchronizer.whitelist");
-			if (whitelist != null) {
-				_whitelist = NSArray.componentsSeparatedByString(whitelist, ",");
-			}
-			_maxPacketSize = ERXProperties.intForKeyWithDefault("er.extensions.multicastSynchronizer.maxPacketSize", 1024);
+			_includeEntityNames = includeEntityNames;
+			_excludeEntityNames = excludeEntityNames;
+			_whitelist = whitelist;
+			_maxPacketSize = maxPacketSize;
 		}
 
 		public void join() throws IOException {
