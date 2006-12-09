@@ -7,8 +7,13 @@
 package er.extensions;
 
 import java.io.File;
+import java.io.IOException;
+import java.net.MalformedURLException;
 import java.util.HashSet;
 import java.util.Hashtable;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Properties;
 import java.util.Random;
 import java.util.Set;
 
@@ -42,6 +47,7 @@ import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation.NSNotification;
 import com.webobjects.foundation.NSNotificationCenter;
+import com.webobjects.foundation.NSProperties;
 import com.webobjects.foundation.NSPropertyListSerialization;
 import com.webobjects.foundation.NSSelector;
 import com.webobjects.foundation.NSTimestamp;
@@ -92,18 +98,82 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
     
     /** Notifcation to post when all bundles were loaded but before their principal was called */
     public static final String AllBundlesLoadedNotification = "NSBundleAllBundlesLoaded";
+
+    private static void transferPropertiesFromSourceToDest(Properties sourceProps, Properties destProps) {
+    	if(sourceProps != null) {
+    		for (Iterator iter = sourceProps.entrySet().iterator(); iter.hasNext();) {
+    			Map.Entry entry = (Map.Entry) iter.next();
+    			if(destProps.containsKey(entry.getKey())) {
+    				destProps.setProperty((String)entry.getKey(), (String)entry.getValue());
+    			}
+    		}
+    	}
+    }
     
+    private static Properties allBundleProps;
+    private static Properties readProperties(File file) {
+    	Properties result = new Properties();
+    	if(file.exists()) {
+			try {
+				result.load(file.toURL().openStream());
+			} catch (MalformedURLException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+    	return result;
+    }
     /**
-     * Will be called after each bundle load. We use it to knwo when the last bundle laoded so we can
-     * post a notification for it.
+     * Will be called after each bundle load. We use it to know when the last bundle laoded so we can
+     * post a notification for it. Note that the bundles will get loaded in the order of the classpath
+     * but the main bundle will get loaded last. So in order to set the properties correctly,
+     * we first add all the props that are not already set, then we add the main bundle and the WebObjects.properties
+     * and finally the command line props.
      * @param n
      */
     public static void bundleDidLoad(NSNotification n) {
     	NSBundle bundle = (NSBundle) n.object();
     	// System.out.println(bundle.name() + ": " + allFrameworks);
     	allFrameworks.remove(bundle.name());
+    	if(allBundleProps == null) {
+    		allBundleProps = new Properties();
+    	}
+    	Properties bundleProps = bundle.properties();
+    	if(bundleProps != null) {
+    		for (Iterator iter = bundleProps.entrySet().iterator(); iter.hasNext();) {
+    			Map.Entry entry = (Map.Entry) iter.next();
+    			if(allBundleProps.containsKey(entry.getKey())) {
+    				allBundleProps.setProperty((String)entry.getKey(), (String)entry.getValue());
+    			}
+    		}
+    	}
+
     	if(allFrameworks.size() == 0) {
-    		NSNotificationCenter.defaultCenter().postNotification(new NSNotification(AllBundlesLoadedNotification, NSKeyValueCoding.NullValue));
+    		Properties mainProps = null;
+    		if(NSBundle.mainBundle() != null) {
+    			mainProps = NSBundle.mainBundle().properties();
+    		} 
+    		if(mainProps == null) {
+    			String woUserDir = NSProperties.getProperty("webobjects.user.dir");
+    			if(woUserDir == null) {
+    				woUserDir = System.getProperty("user.dir");
+    			}
+    			mainProps = readProperties(new File(woUserDir, "Contents" + File.separator + "Resources" + File.separator + "Properties"));
+    		}
+    		allBundleProps.putAll(mainProps);
+    		
+    		String userhome = System.getProperty("user.home");
+    		Properties userProps = new Properties();
+    		if(userhome != null && userhome.length() > 0) {
+    			userProps = readProperties(new File(userhome, "WebObjects.properties"));
+    		}
+    		allBundleProps.putAll(userProps);
+    		
+			Properties props = NSProperties._getProperties();
+			props.putAll(allBundleProps);
+			NSProperties._setProperties(props);
+			NSNotificationCenter.defaultCenter().postNotification(new NSNotification(AllBundlesLoadedNotification, NSKeyValueCoding.NullValue));
     	}
     }
 
