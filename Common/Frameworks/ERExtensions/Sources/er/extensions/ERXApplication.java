@@ -128,7 +128,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
     	return result;
     }
     /**
-     * Will be called after each bundle load. We use it to know when the last bundle laoded so we can
+     * Will be called after each bundle load. We use it to know when the last bundle loaded so we can
      * post a notification for it. Note that the bundles will get loaded in the order of the classpath
      * but the main bundle will get loaded last. So in order to set the properties correctly,
      * we first add all the props that are not already set, then we add the main bundle and the WebObjects.properties
@@ -146,7 +146,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
     	if(bundleProps != null) {
     		for (Iterator iter = bundleProps.entrySet().iterator(); iter.hasNext();) {
     			Map.Entry entry = (Map.Entry) iter.next();
-    			if(allBundleProps.containsKey(entry.getKey())) {
+    			if(!allBundleProps.containsKey(entry.getKey())) {
     				allBundleProps.setProperty((String)entry.getKey(), (String)entry.getValue());
     			}
     		}
