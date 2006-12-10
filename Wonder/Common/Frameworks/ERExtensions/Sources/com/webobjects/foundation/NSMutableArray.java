@@ -24,11 +24,15 @@ import java.util.Vector;
  * @author ak
  */
 public class NSMutableArray extends NSArray {
-
+static {
+	System.out.println("Wonder");
+}
     public static final Class _CLASS = _NSUtilitiesExtra._classWithFullySpecifiedNamePrime("com.webobjects.foundation.NSMutableArray");
     
     static final long serialVersionUID = -3909373569895711876L;
 
+    public static final Object ERX_MARKER = "Wonder";
+    
     public NSMutableArray() {
     }
 

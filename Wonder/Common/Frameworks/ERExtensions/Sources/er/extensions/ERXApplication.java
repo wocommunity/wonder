@@ -8,7 +8,10 @@ package er.extensions;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLClassLoader;
 import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Iterator;
@@ -176,6 +179,48 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 			NSNotificationCenter.defaultCenter().postNotification(new NSNotification(AllBundlesLoadedNotification, NSKeyValueCoding.NullValue));
     	}
     }
+   
+    static class AppClassLoader extends URLClassLoader {
+
+    	public static ClassLoader getAppClassLoader() {
+    		String classPath = System.getProperty("java.class.path");
+    		String files[] = classPath.split(":");
+    		URL urls[] = new URL[files.length];
+    		for (int i = 0; i < files.length; i++) {
+				String string = files[i];
+				try {
+					urls[i] = new File(string).toURL();
+				}
+				catch (MalformedURLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+    		return new AppClassLoader(urls, ClassLoader.getSystemClassLoader());
+    	}
+
+    	public synchronized Class loadClass(String s, boolean flag) throws ClassNotFoundException {
+    		SecurityManager securitymanager = System.getSecurityManager();
+    		if(securitymanager != null) {
+    			String s1 = s.replace('/', '.');
+    			if(s1.startsWith("[")) {
+    				int i = s1.lastIndexOf('[') + 2;
+    				if(i > 1 && i < s1.length()) {
+    					s1 = s1.substring(i);
+    				}
+    			}
+    			int j = s1.lastIndexOf('.');
+    			if(j != -1) {
+    				securitymanager.checkPackageAccess(s1.substring(0, j));
+    			}
+    		}
+    		return super.loadClass(s, flag);
+    	}
+
+    	AppClassLoader(URL aurl[], ClassLoader classloader) {
+    		super(aurl, classloader);
+    	}
+    }
 
     /** 
      * Called when the application starts up and saves the command line 
@@ -211,10 +256,25 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 			normalLibs = normalLibs.substring(0, normalLibs.length() - 1);
 		}
 		cp = normalLibs + ":" + systemLibs;
-		// AK: this is not enough to actually change the clas path, we'd need a
-		// custom classloader for this
-		if (false) {
+		// AK: this is pretty experimental for now. The classpath reordering
+		// should actually be done in a WOLips bootstrap because as this time all
+		// the static inits of WO app have already happened (which include NSMutableArray and _NSThreadSaveSet)
+		
+		if (true) {
 			System.setProperty("java.class.path", cp);
+			ClassLoader loader = AppClassLoader.getAppClassLoader();
+			Thread.currentThread().setContextClassLoader(loader);
+		}
+		Class arrayClass = NSMutableArray.class;
+		try {
+			Field f = arrayClass.getField("ERX_MARKER");
+		}
+		catch (NoSuchFieldException e) {
+			System.err.println("No ERX_MARKER field in NSMutableArray found. \nThis means your class path is incorrect. Adjust it so that ERExtensions come before JavaFoundation.");
+			System.exit(1);
+		}
+		catch (Exception e) {
+			e.printStackTrace();
 		}
 		NSNotificationCenter.defaultCenter().addObserver(ERXApplication.class, 
 				new NSSelector("bundleDidLoad", new Class[] { NSNotification.class }), "NSBundleDidLoadNotification", null);
