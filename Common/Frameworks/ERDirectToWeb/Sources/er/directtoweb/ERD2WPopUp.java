@@ -14,31 +14,37 @@ import com.webobjects.foundation.NSMutableArray;
 import er.extensions.ERXConstant;
 
 /**
- * Popup used for picking a number.<br />
+ * Popup used for picking a number or some other value by 
+ * using the key restrictedChoiceKey.<br />
+ * You should use ERD2WEditToOneRelationship, though.
  * 
  */
 
 public class ERD2WPopUp extends D2WStatelessComponent {
 
-    public ERD2WPopUp(WOContext context) { super(context); }
-    
-    protected Number choice;
+	public ERD2WPopUp(WOContext context) { super(context); }
 
-    // FIXME: Should be more dynamic here.
-    public NSArray list(){
-        NSMutableArray result = new NSMutableArray(ERXConstant.OneInteger);
-        result.addObject(ERXConstant.TwoInteger);
-        result.addObject(ERXConstant.integerForInt(3));
-        result.addObject(ERXConstant.integerForInt(4));
-        result.addObject(ERXConstant.integerForInt(5));
-        return (NSArray)result;
-    }
-                         
-    public Number choice() {
-        return (Number)object().valueForKey(propertyKey());
+	public NSArray list(){
+		NSArray result = null;
+		String restrictedChoiceKey=(String)d2wContext().valueForKey("restrictedChoiceKey");
+		if( restrictedChoiceKey!=null &&  restrictedChoiceKey.length()>0 ) {
+			result = (NSArray) valueForKeyPath(restrictedChoiceKey);
+		} else {
+			NSMutableArray arr = new NSMutableArray(ERXConstant.OneInteger);
+			arr.addObject(ERXConstant.TwoInteger);
+			arr.addObject(ERXConstant.integerForInt(3));
+			arr.addObject(ERXConstant.integerForInt(4));
+			arr.addObject(ERXConstant.integerForInt(5));
+			result = arr;
+		}
+		return (NSArray)result;
+	}
+
+	public Object choice() {
+		return object().valueForKey(propertyKey());
     }
 
-    public void setChoice(Number newChoice) {
+    public void setChoice(Object newChoice) {
         object().validateTakeValueForKeyPath(newChoice, propertyKey());
     }
 }
