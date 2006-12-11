@@ -669,10 +669,10 @@ public class ERXEC extends EOEditingContext {
     }
     
     /** Overriden to support autoLocking. */ 
-    public void deleteObject(EOEnterpriseObject eoenterpriseobject) {
+    public void deleteObject(EOEnterpriseObject eo) {
         boolean wasAutoLocked = autoLock("deleteObject");
         try {
-            super.deleteObject(eoenterpriseobject);
+            super.deleteObject(eo);
         } finally {
             autoUnlock(wasAutoLocked);
         }
