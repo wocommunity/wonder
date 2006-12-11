@@ -17,6 +17,8 @@ import com.webobjects.foundation.NSData;
 public class ERDDisplayImageIfExists extends ERDCustomEditComponent {
 
     public ERDDisplayImageIfExists(WOContext context) { super(context); }
-
+    public boolean synchronizesVariablesWithBindings() {
+    	return false;
+    }
     public NSData imageContent() { return (NSData)objectKeyPathValue(); }
 }
