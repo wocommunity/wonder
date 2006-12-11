@@ -1,0 +1,6 @@
+{
+  "rules" = (
+    {"class" = "com.webobjects.directtoweb.Rule"; "rhs" = {"class" = "com.webobjects.directtoweb.Assignment"; "keyPath" = "componentName"; "value" = "D2WString"; }; "author" = "0"; }, 
+    {"class" = "com.webobjects.directtoweb.Rule"; "rhs" = {"class" = "com.webobjects.directtoweb.Assignment"; "keyPath" = "look"; "value" = "Neutral"; }; "author" = "100"; }
+  ); 
+}
