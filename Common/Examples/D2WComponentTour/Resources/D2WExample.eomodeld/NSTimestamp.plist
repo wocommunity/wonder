@@ -1,0 +1,13 @@
+{
+    attributes = (
+        {columnName = value; name = id; valueClassName = NSNumber; valueType = c; }, 
+        {columnName = value; name = value; valueClassName = NSCalendarDate; }
+    ); 
+    attributesUsedForLocking = (value, id); 
+    className = EOGenericRecord; 
+    classProperties = (value); 
+    externalName = NSTimestamp; 
+    fetchSpecificationDictionary = {}; 
+    name = NSTimestamp; 
+    primaryKeyAttributes = (id); 
+}
