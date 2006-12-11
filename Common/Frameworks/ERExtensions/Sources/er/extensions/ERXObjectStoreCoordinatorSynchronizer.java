@@ -81,58 +81,58 @@ public class ERXObjectStoreCoordinatorSynchronizer {
 		NSNotificationCenter.defaultCenter().addObserver(this, new NSSelector("objectStoreWasAdded", new Class[] { NSNotification.class }), EOObjectStoreCoordinator.CooperatingObjectStoreWasAddedNotification, null);
 		NSNotificationCenter.defaultCenter().addObserver(this, new NSSelector("objectStoreWasRemoved", new Class[] { NSNotification.class }), EOObjectStoreCoordinator.CooperatingObjectStoreWasRemovedNotification, null);
 
-    boolean multicastEnabled = ERXProperties.booleanForKeyWithDefault("er.extensions.multicastSynchronizer.enabled", false);
-    if (multicastEnabled) {
-      try {
-        String localBindAddressStr = ERXProperties.stringForKey("er.extensions.multicastSynchronizer.localBindAddress");
-        InetAddress localBindAddress;
-        if (localBindAddressStr == null) {
-          localBindAddress = WOApplication.application().hostAddress();
-        }
-        else {
-          localBindAddress = InetAddress.getByName(localBindAddressStr);
-        }
+		boolean multicastEnabled = ERXProperties.booleanForKeyWithDefault("er.extensions.multicastSynchronizer.enabled", false);
+		if (multicastEnabled) {
+			try {
+				String localBindAddressStr = ERXProperties.stringForKey("er.extensions.multicastSynchronizer.localBindAddress");
+				InetAddress localBindAddress;
+				if (localBindAddressStr == null) {
+					localBindAddress = WOApplication.application().hostAddress();
+				}
+				else {
+					localBindAddress = InetAddress.getByName(localBindAddressStr);
+				}
 
-        byte[] multicastIdentifier;
-        String multicastIdentifierStr = ERXProperties.stringForKey("er.extensions.multicastSynchronizer.identifier");
-        if (multicastIdentifierStr == null) {
-          multicastIdentifier = new byte[MulticastSynchronizer.IDENTIFIER_LENGTH];
-          byte[] hostAddressBytes = localBindAddress.getAddress();
-          System.arraycopy(hostAddressBytes, 0, multicastIdentifier, 0, hostAddressBytes.length);
-          int multicastInstance = WOApplication.application().port().shortValue();
-          multicastIdentifier[4] = (byte) (multicastInstance & 0xff);
-          multicastIdentifier[5] = (byte) ((multicastInstance >>> 8) & 0xff);
-        }
-        else {
-          multicastIdentifier = ERXStringUtilities.hexStringToByteArray(multicastIdentifierStr);
-        }
-  
-        String multicastGroup = ERXProperties.stringForKeyWithDefault("er.extensions.multicastSynchronizer.group", "230.0.0.1");
-  			int multicastPort = ERXProperties.intForKeyWithDefault("er.extensions.multicastSynchronizer.port", 9753);
-  			String includeEntityNames = ERXProperties.stringForKey("er.extensions.multicastSynchronizer.includeEntities");
-  			NSArray includeEntityNamesArray = null;
-  			if (includeEntityNames != null) {
-  				includeEntityNamesArray = NSArray.componentsSeparatedByString(includeEntityNames, ",");
-  			}
-  			NSArray excludeEntityNamesArray = null;
-  			String excludeEntityNames = ERXProperties.stringForKey("er.extensions.multicastSynchronizer.excludeEntities");
-  			if (excludeEntityNames != null) {
-  				excludeEntityNamesArray = NSArray.componentsSeparatedByString(excludeEntityNames, ",");
-  			}
-  			NSArray whitelistArray = null;
-  			String whitelist = ERXProperties.stringForKey("er.extensions.multicastSynchronizer.whitelist");
-  			if (whitelist != null) {
-  				whitelistArray = NSArray.componentsSeparatedByString(whitelist, ",");
-  			}
-  			int maxPacketSize = ERXProperties.intForKeyWithDefault("er.extensions.multicastSynchronizer.maxPacketSize", 1024);
-  			_multicastSynchronizer = new MulticastSynchronizer(multicastIdentifier, localBindAddress, multicastGroup, multicastPort, includeEntityNamesArray, excludeEntityNamesArray, whitelistArray, maxPacketSize, _queueThread);
-  			_multicastSynchronizer.join();
-  			_multicastSynchronizer.listen();
-  		}
-  		catch (Exception e) {
-  			throw new RuntimeException("Failed to configure multicast synchronizer.", e);
-  		}
-    }
+				byte[] multicastIdentifier;
+				String multicastIdentifierStr = ERXProperties.stringForKey("er.extensions.multicastSynchronizer.identifier");
+				if (multicastIdentifierStr == null) {
+					multicastIdentifier = new byte[MulticastSynchronizer.IDENTIFIER_LENGTH];
+					byte[] hostAddressBytes = localBindAddress.getAddress();
+					System.arraycopy(hostAddressBytes, 0, multicastIdentifier, 0, hostAddressBytes.length);
+					int multicastInstance = WOApplication.application().port().shortValue();
+					multicastIdentifier[4] = (byte) (multicastInstance & 0xff);
+					multicastIdentifier[5] = (byte) ((multicastInstance >>> 8) & 0xff);
+				}
+				else {
+					multicastIdentifier = ERXStringUtilities.hexStringToByteArray(multicastIdentifierStr);
+				}
+
+				String multicastGroup = ERXProperties.stringForKeyWithDefault("er.extensions.multicastSynchronizer.group", "230.0.0.1");
+				int multicastPort = ERXProperties.intForKeyWithDefault("er.extensions.multicastSynchronizer.port", 9753);
+				String includeEntityNames = ERXProperties.stringForKey("er.extensions.multicastSynchronizer.includeEntities");
+				NSArray includeEntityNamesArray = null;
+				if (includeEntityNames != null) {
+					includeEntityNamesArray = NSArray.componentsSeparatedByString(includeEntityNames, ",");
+				}
+				NSArray excludeEntityNamesArray = null;
+				String excludeEntityNames = ERXProperties.stringForKey("er.extensions.multicastSynchronizer.excludeEntities");
+				if (excludeEntityNames != null) {
+					excludeEntityNamesArray = NSArray.componentsSeparatedByString(excludeEntityNames, ",");
+				}
+				NSArray whitelistArray = null;
+				String whitelist = ERXProperties.stringForKey("er.extensions.multicastSynchronizer.whitelist");
+				if (whitelist != null) {
+					whitelistArray = NSArray.componentsSeparatedByString(whitelist, ",");
+				}
+				int maxPacketSize = ERXProperties.intForKeyWithDefault("er.extensions.multicastSynchronizer.maxPacketSize", 1024);
+				_multicastSynchronizer = new MulticastSynchronizer(multicastIdentifier, localBindAddress, multicastGroup, multicastPort, includeEntityNamesArray, excludeEntityNamesArray, whitelistArray, maxPacketSize, _queueThread);
+				_multicastSynchronizer.join();
+				_multicastSynchronizer.listen();
+			}
+			catch (Exception e) {
+				throw new RuntimeException("Failed to configure multicast synchronizer.", e);
+			}
+		}
 	}
 
 	public void objectStoreWasRemoved(NSNotification n) {
@@ -490,9 +490,9 @@ public class ERXObjectStoreCoordinatorSynchronizer {
 	}
 
 	public static class MulticastSynchronizer {
-   public static final int IDENTIFIER_LENGTH = 6;
-   
-   private static final int JOIN = 1;
+		public static final int IDENTIFIER_LENGTH = 6;
+
+		private static final int JOIN = 1;
 		private static final int LEAVE = 2;
 		private static final int INSERT = 3;
 		private static final int UPDATE = 4;
@@ -506,8 +506,8 @@ public class ERXObjectStoreCoordinatorSynchronizer {
 
 		private IChangeListener _listener;
 		private byte[] _identifier;
-    private InetAddress _localBindAddress;
-    private NetworkInterface _localNetworkInterface;
+		private InetAddress _localBindAddress;
+		private NetworkInterface _localNetworkInterface;
 		private InetSocketAddress _multicastGroup;
 		private int _multicastPort;
 		private MulticastSocket _multicastSocket;
@@ -518,31 +518,31 @@ public class ERXObjectStoreCoordinatorSynchronizer {
 		private int _maxPacketSize;
 
 		public MulticastSynchronizer(byte[] identifier, InetAddress localBindAddress, String multicastGroup, int multicastPort, NSArray includeEntityNames, NSArray excludeEntityNames, NSArray whitelist, int maxPacketSize, IChangeListener listener) throws IOException {
-      if (identifier.length != MulticastSynchronizer.IDENTIFIER_LENGTH) {
-        throw new IllegalArgumentException("Multicast identifier must be only " + MulticastSynchronizer.IDENTIFIER_LENGTH + " bytes long.");
-      }
+			if (identifier.length != MulticastSynchronizer.IDENTIFIER_LENGTH) {
+				throw new IllegalArgumentException("Multicast identifier must be only " + MulticastSynchronizer.IDENTIFIER_LENGTH + " bytes long.");
+			}
 			_identifier = identifier;
-      _listener = listener;
-      _multicastPort = multicastPort;
-      _localBindAddress = localBindAddress;
-      _includeEntityNames = includeEntityNames;
-      _excludeEntityNames = excludeEntityNames;
-      _whitelist = whitelist;
-      _maxPacketSize = maxPacketSize;
+			_listener = listener;
+			_multicastPort = multicastPort;
+			_localBindAddress = localBindAddress;
+			_includeEntityNames = includeEntityNames;
+			_excludeEntityNames = excludeEntityNames;
+			_whitelist = whitelist;
+			_maxPacketSize = maxPacketSize;
 
-      _localNetworkInterface = NetworkInterface.getByInetAddress(_localBindAddress);
-      _multicastGroup = new InetSocketAddress(InetAddress.getByName(multicastGroup), _multicastPort);
+			_localNetworkInterface = NetworkInterface.getByInetAddress(_localBindAddress);
+			_multicastGroup = new InetSocketAddress(InetAddress.getByName(multicastGroup), _multicastPort);
 			_multicastSocket = new MulticastSocket(null);
-      _multicastSocket.setInterface(localBindAddress);
-      _multicastSocket.setTimeToLive(4);
-      _multicastSocket.setReuseAddress(true);
-      _multicastSocket.bind(new InetSocketAddress(multicastPort));
+			_multicastSocket.setInterface(localBindAddress);
+			_multicastSocket.setTimeToLive(4);
+			_multicastSocket.setReuseAddress(true);
+			_multicastSocket.bind(new InetSocketAddress(multicastPort));
 		}
 
 		public void join() throws IOException {
-      if (log.isInfoEnabled()) {
-        log.info("Multicast instance " + ERXStringUtilities.byteArrayToHexString(_identifier) + " joining.");
-      }
+			if (log.isInfoEnabled()) {
+				log.info("Multicast instance " + ERXStringUtilities.byteArrayToHexString(_identifier) + " joining.");
+			}
 			_multicastSocket.joinGroup(_multicastGroup, _localNetworkInterface);
 			RefByteArrayOutputStream baos = new RefByteArrayOutputStream();
 			DataOutputStream dos = new DataOutputStream(baos);
@@ -553,16 +553,16 @@ public class ERXObjectStoreCoordinatorSynchronizer {
 		}
 
 		public void leave() throws IOException {
-      if (log.isInfoEnabled()) {
-        log.info("Multicast instance " + ERXStringUtilities.byteArrayToHexString(_identifier) + " leaving.");
-      }
+			if (log.isInfoEnabled()) {
+				log.info("Multicast instance " + ERXStringUtilities.byteArrayToHexString(_identifier) + " leaving.");
+			}
 			RefByteArrayOutputStream baos = new RefByteArrayOutputStream();
 			DataOutputStream dos = new DataOutputStream(baos);
 			dos.write(_identifier);
 			dos.writeByte(MulticastSynchronizer.LEAVE);
 			dos.flush();
 			_multicastSocket.send(baos.createDatagramPacket());
-      _multicastSocket.leaveGroup(_multicastGroup, _localNetworkInterface);
+			_multicastSocket.leaveGroup(_multicastGroup, _localNetworkInterface);
 			_listening = false;
 		}
 
@@ -576,9 +576,9 @@ public class ERXObjectStoreCoordinatorSynchronizer {
 		}
 
 		protected void _listen() {
-      if (log.isInfoEnabled()) {
-        log.info("Multicast instance " + ERXStringUtilities.byteArrayToHexString(_identifier) + " listening.");
-      }
+			if (log.isInfoEnabled()) {
+				log.info("Multicast instance " + ERXStringUtilities.byteArrayToHexString(_identifier) + " listening.");
+			}
 			_listening = true;
 			byte[] buffer = new byte[_maxPacketSize];
 			while (_listening) {
@@ -593,7 +593,7 @@ public class ERXObjectStoreCoordinatorSynchronizer {
 						String remoteHostAddress = remoteAddress.getHostAddress();
 						processPacket = _whitelist.containsObject(remoteHostAddress);
 					}
-          byte[] identifier = new byte[MulticastSynchronizer.IDENTIFIER_LENGTH];
+					byte[] identifier = new byte[MulticastSynchronizer.IDENTIFIER_LENGTH];
 					dis.readFully(identifier);
 					if (processPacket && !Arrays.equals(identifier, _identifier)) {
 						int messageType = dis.readByte();
@@ -654,7 +654,8 @@ public class ERXObjectStoreCoordinatorSynchronizer {
 		}
 
 		protected void writeGIDs(int messageType, NSArray gids) throws IOException {
-			int maxPacketSize = _maxPacketSize - 64; // MS: Give ourselves a little leg room so we don't overrun ... it should be smarter about this
+			int maxPacketSize = _maxPacketSize - 64; // MS: Give ourselves a little leg room so we don't overrun ...
+														// it should be smarter about this
 			int count = 0;
 			RefByteArrayOutputStream baos = new RefByteArrayOutputStream();
 			DataOutputStream dos = new DataOutputStream(baos);
