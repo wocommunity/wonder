@@ -333,6 +333,9 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
      */
     public ERXApplication() {
     	super();
+    	if ("JavaFoundation".equals(NSBundle.mainBundle().name())) {
+    		throw new RuntimeException("Your main bundle is \"JavaFoundation\".  You are not launching this WO application properly.  If you are using Eclipse, most likely you launched your WOA as a \"Java Application\" instead of a \"WO Application\".");
+    	}
     	if (! ERXConfigurationManager.defaultManager().isDeployedAsServlet()  &&  
             ! _wasERXApplicationMainInvoked) {
             _displayMainMethodWarning();
