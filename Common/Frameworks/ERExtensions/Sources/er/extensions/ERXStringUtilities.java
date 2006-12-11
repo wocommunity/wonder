@@ -1438,4 +1438,49 @@ public class ERXStringUtilities {
     	}
     }
 
+    /**
+     * "Borrowed" from 1.5's Class.getSimpleBinaryName
+     */
+	private static String getSimpleBinaryName(Class clazz) {
+		Class declaringClass = clazz.getDeclaringClass();
+		if (declaringClass == null) {
+			return null;
+		}
+		try {
+			return clazz.getName().substring(declaringClass.getName().length());
+		}
+		catch (IndexOutOfBoundsException e) {
+			throw new InternalError("Malformed class name");
+		}
+	}
+
+    /**
+     * "Borrowed" from 1.5's Class.isAsciiDigit
+     */
+    private static boolean isAsciiDigit(char c) {
+    	return '0' <= c && c <= '9';
+    }
+
+
+    /**
+     * "Borrowed" from 1.5's Class.getSimpleClassName
+     */
+	public static String getSimpleClassName(Class clazz) {
+		if (clazz.isArray()) {
+			return ERXStringUtilities.getSimpleClassName(clazz.getComponentType()) + "[]";
+		}
+		String declaringClassName = ERXStringUtilities.getSimpleBinaryName(clazz);
+		if (declaringClassName == null) {
+			declaringClassName = clazz.getName();
+			return declaringClassName.substring(declaringClassName.lastIndexOf(".") + 1);
+		}
+		int i = declaringClassName.length();
+		if (i < 1 || declaringClassName.charAt(0) != '$') {
+			throw new InternalError("Malformed class name");
+		}
+		int j;
+		for (j = 1; j < i && ERXStringUtilities.isAsciiDigit(declaringClassName.charAt(j)); j++) {
+		}
+		return declaringClassName.substring(j);
+	}
 }
