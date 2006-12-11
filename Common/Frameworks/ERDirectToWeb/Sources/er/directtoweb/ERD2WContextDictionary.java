@@ -48,6 +48,42 @@ import er.extensions.ERXDictionaryUtilities;
 public class ERD2WContextDictionary {
     private static final Logger log = Logger.getLogger(ERD2WContextDictionary.class);
 
+    public static class Configuration {
+   		
+    	private NSMutableDictionary components = new NSMutableDictionary();
+   		
+    	private NSMutableDictionary editors = new NSMutableDictionary();
+
+    	public Configuration() {
+    		NSMutableArray bundles = NSBundle.frameworkBundles().mutableClone();
+    		bundles.addObject(NSBundle.mainBundle());
+    		for(Enumeration e = bundles.objectEnumerator(); e.hasMoreElements(); ) {
+    			NSBundle bundle = (NSBundle)e.nextElement();
+    			NSDictionary dict;
+    			String path = bundle.resourcePathForLocalizedResourceNamed("d2wclientConfiguration.plist", null);
+    			if(path != null) {
+    				dict = ERXDictionaryUtilities.dictionaryFromPropertyList("d2wclientConfiguration", bundle);
+    				if(dict != null) {
+    					if(dict.objectForKey("components") != null) {
+    						components.addEntriesFromDictionary((NSDictionary)dict.objectForKey("components"));
+    					}
+    					if(dict.objectForKey("editors") != null) {
+    						editors.addEntriesFromDictionary((NSDictionary)dict.objectForKey("editors"));
+    					}
+    				}
+    			}
+    		}
+    	}
+    	
+    	public NSMutableDictionary components() {
+    		return components;
+    	}
+    	
+    	public NSMutableDictionary editors() {
+    		return editors;
+    	}
+    }
+    
     protected D2WContext _context;
     protected String _pageConfiguration;
     protected NSMutableArray _pageLevelKeys;
@@ -88,29 +124,9 @@ public class ERD2WContextDictionary {
             _componentLevelKeys.addObject("sortKeyForList");
         }
         _allKeys = new NSMutableDictionary();
-        
-        NSMutableDictionary components = new NSMutableDictionary();
-        NSMutableDictionary editors = new NSMutableDictionary();
-        NSMutableArray bundles = NSBundle.frameworkBundles().mutableClone();
-        bundles.addObject(NSBundle.mainBundle());
-        for(Enumeration e = bundles.objectEnumerator(); e.hasMoreElements(); ) {
-            NSBundle bundle = (NSBundle)e.nextElement();
-            NSDictionary dict;
-            String path = bundle.resourcePathForLocalizedResourceNamed("d2wclientConfiguration.plist", null);
-            if(path != null) {
-                dict = ERXDictionaryUtilities.dictionaryFromPropertyList("d2wclientConfiguration", bundle);
-                if(dict != null) {
-                    if(dict.objectForKey("components") != null) {
-                        components.addEntriesFromDictionary((NSDictionary)dict.objectForKey("components"));
-                    }
-                    if(dict.objectForKey("editors") != null) {
-                        editors.addEntriesFromDictionary((NSDictionary)dict.objectForKey("editors"));
-                    }
-                }
-            }
-        }
-        _allKeys.setObjectForKey(components, "components");
-        _allKeys.setObjectForKey(editors, "editors");
+        Configuration config = new Configuration();
+        _allKeys.setObjectForKey(config.components(), "components");
+        _allKeys.setObjectForKey(config.editors(), "editors");
     }
     
     public ERD2WContextDictionary(String pageConfiguration, NSDictionary dictionary) {
