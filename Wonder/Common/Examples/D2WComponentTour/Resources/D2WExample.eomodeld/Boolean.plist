@@ -1,12 +1,38 @@
+
 {
-    attributes = (
-        {columnName = value; name = value; valueClassName = NSNumber; valueType = c; }, 
-        {columnName = value; name = id; valueClassName = NSNumber; valueType = c; }
-    ); 
-    attributesUsedForLocking = (value, id); 
-    classProperties = (value); 
-    externalName = Boolean; 
-    fetchSpecificationDictionary = {}; 
-    name = Boolean; 
-    primaryKeyAttributes = (id); 
+    attributes = 
+    (
+       
+       {
+           columnName = value;
+           name = id;
+           valueClassName = NSNumber;
+           valueType = c;
+       }, 
+       
+       {
+           columnName = value;
+           name = value;
+           valueClassName = NSNumber;
+           valueType = c;
+       }
+    );
+    attributesUsedForLocking = 
+    (
+       id, 
+       value
+    );
+    className = Record;
+    classProperties = 
+    (
+       value
+    );
+    externalName = Boolean;
+    internalInfo = 
+    {};
+    name = Boolean;
+    primaryKeyAttributes = 
+    (
+       id
+    );
 }
