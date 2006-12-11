@@ -1,0 +1,19 @@
+{
+    attributes = (
+        {columnName = value; name = id; valueClassName = NSNumber; valueType = c; }, 
+        {
+            columnName = value; 
+            name = value; 
+            precision = 9; 
+            scale = 4; 
+            valueClassName = NSDecimalNumber; 
+        }
+    ); 
+    attributesUsedForLocking = (value, id); 
+    classProperties = (value); 
+    externalName = Decimal; 
+    fetchSpecificationDictionary = {}; 
+    internalInfo = {"_nameInObjectStore" = Double; }; 
+    name = Decimal; 
+    primaryKeyAttributes = (id); 
+}
