@@ -151,6 +151,14 @@ public class ERD2WModel extends D2WModel {
         sortRules();
     }
     
+    public NSArray availableTasks() {
+    	return new NSArray(taskVector().toArray());
+    }
+    
+    public NSArray availablePageConfigurations() {
+    	return new NSArray(dynamicPages().toArray());
+    }
+    
     protected void sortRules() {
         // This allows other non-d2wmodel file based rules to be loaded.
         // but we only post for the main model
@@ -539,8 +547,7 @@ public class ERD2WModel extends D2WModel {
         if(modelURL != null) {
 
             File modelFile = new File(modelURL.getFile());
-            if (log.isDebugEnabled()) log.debug("Merging rule file \"" + modelFile.getPath()
-                                                + "\"");
+            log.debug("Merging rule file \"" + modelFile.getPath() + "\"");
             setCurrentFile(modelFile);
             NSDictionary dic = dictionaryFromFile(modelFile);
             if(dic != null) {
