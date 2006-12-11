@@ -868,6 +868,18 @@ There are many ways to use this script:
          </antcall>
     </target>
 
+    <target name="D2WComponentTour.all">
+        <antcall target="global.application" >
+            <param name="project.type" value="application" />
+            <param name="project.principal.class" value="Application" />
+            <param name="project.name" value="D2WComponentTour" />
+            <param name="project.dir" value="Common/Examples/D2WComponentTour" />
+
+            <param name="use.webobjects.d2w" value="true" />
+            <param name="use.wonder.d2w" value="true" />
+         </antcall>
+    </target>
+
     <target name="NetStruxrCaseStudy.all">
         <antcall target="global.application" >
             <param name="project.type" value="application" />
@@ -1181,7 +1193,7 @@ There are many ways to use this script:
     <target name="common.applications.all" depends="common.frameworks.all, bugtracker.all, ERMailer.all" />
     <target name="wrox.all" depends="common.frameworks.all,ERMiniUglyLook.all, NetStruxrCaseStudy.all" />
     <target name="stepwise.all" depends="D2WListExample.all, D2WInspectExample.all" />
-    <target name="common.examples.all" depends="common.frameworks.all, wrox.all, stepwise.all, ERMovies.all, ajaxexample.all, yuiexample.all" />
+    <target name="common.examples.all" depends="common.frameworks.all, wrox.all, stepwise.all, ERMovies.all, D2WComponentTour.all, ajaxexample.all, yuiexample.all" />
     <target name="common.all" depends="common.frameworks.all, common.applications.all, examples.all" />
     <target name="dynareporting.base" depends="core.all, WOOgnl.all, DynaReporting.base" />
     <target name="dynareporting.all" depends="core.all, WOOgnl.all, dynareporting.base" />
@@ -1213,7 +1225,7 @@ There are many ways to use this script:
 
     <target name="frameworks.all" depends="common.frameworks.all, BTBusinessLogic.all, ERMiniUglyLook.all, ExcelGenerator.all,  Ajax.framework.all, YUI.framework.all, ERIMAdaptor.framework.all, Validity.framework.all, SVGObjects.framework.all, PostgresqlPlugIn.all, WOPayPal.all, DRGrouping.all, WRReporting.all"/>
     <target name="applications.all" depends="DevStudio.all, BugTracker.all, ERMailer.all, Validity.application.all"/>
-    <target name="examples.all" depends="NetStruxrCaseStudy.all, ERMovies.all, D2WListExample.all, D2WInspectExample.all, EGSampleApp.all, Validity.example.all, DocsByExample.all, DynaReporter.all, DRGroupingTest.all, SVGObjects.example.all, AjaxExample.all, YUIExample.all "/>
+    <target name="examples.all" depends="NetStruxrCaseStudy.all, ERMovies.all, D2WComponentTour.all, D2WListExample.all, D2WInspectExample.all, EGSampleApp.all, Validity.example.all, DocsByExample.all, DynaReporter.all, DRGroupingTest.all, SVGObjects.example.all, AjaxExample.all, YUIExample.all "/>
 
     <target name="all.compile" depends="common.all, subprojects.all, experimental.all" />
 
@@ -1290,6 +1302,9 @@ There are many ways to use this script:
         </antcall>
         <antcall target="global.clean.application" >
             <param name="project.name" value="D2WListExample" />
+        </antcall>
+        <antcall target="global.clean.application" >
+            <param name="project.name" value="D2WComponentTour" />
         </antcall>
         <antcall target="global.clean.application" >
             <param name="project.name" value="ERMovies" />
@@ -1457,6 +1472,9 @@ There are many ways to use this script:
             <param name="project.name" value="D2WListExample" />
         </antcall>
         <antcall target="global.web.application" >
+            <param name="project.name" value="D2WComponentTour" />
+        </antcall>
+        <antcall target="global.web.application" >
             <param name="project.name" value="ERMovies" />
         </antcall>
         <antcall target="global.web.application" >
@@ -1589,6 +1607,9 @@ There are many ways to use this script:
         </antcall>
         <antcall target="global.install.application" >
             <param name="project.name" value="D2WListExample" />
+        </antcall>
+        <antcall target="global.install.application" >
+            <param name="project.name" value="D2WComponentTour" />
         </antcall>
         <antcall target="global.install.application" >
             <param name="project.name" value="ERMovies" />
