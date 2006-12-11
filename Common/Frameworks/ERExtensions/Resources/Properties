@@ -260,24 +260,35 @@ er.extensions.ERXComponentActionRedirector.enabled=false
 ## allow things to work.
 #er.extensions.ERXObjectStoreCoordinatorPool.maxCoordinators=1
 
-## Each instance you run should set a difference instance number.  This
-## number is passed in the multicast packet and is required so that the 
-## multicast sender can filter out its own sent packets.
-#er.extensions.multicastSynchronizer.instance=1
+## Enables multicast synchronization (required in addition to ERXObjectStoreCoordinatorPool).
+#er.extensions.multicastSynchronizer.enabled=true
+
+## (Optional) The local bind address defines the network interface that will be used
+## to transmit and receive multicast messages.  If not set, multicast synchronizer
+## will use WOApplication.application().hostAddress().  If you want to run outside
+## of a WOApplication, you should set this value explicitly. 
+#er.extensions.multicastSynchronizer.localBindAddress=
+
+## (Optional) If you want to set a specific identifier for this member of this
+## multicast group, you can set a six byte hex string here.  If you do not set
+## this value, it will be automatically assigned based on the bind address and
+## the WOApplication.application().port() value.  If you want to run outside
+## of a WOApplication, you should set this value explicitly.
+#er.extensions.multicastSynchronizer.identifier=0a6400f113f9
 
 ## (Optional) This address defines the multicast group address that all the instances
-## will join.  The default value is 230.0.0.1 if you do not set this.
+## will join.  The default value is 230.0.0.1 if you do not set this.  The multicast
+## group is similar to defining a "chat room".  Any application that joins this 
+## group will send and receive messages to eachother.  Generally, each application 
+## that you deploy should set its own multicast synchronizer group.  If you do not
+## explicitly set this value, all of your applications will talk to eachother, even
+## if they do not share a common set of EOModels, which will lead to exceptions, and
+## possibly global thermonuclear war.
 #er.extensions.multicastSynchronizer.group=230.0.0.1
 
 ## (Optional) The port number is the port that will be used to send multicast messages
 ## over.  The default value is 9753.
 #er.extensions.multicastSynchronizer.port=9753
-
-## (Optional) The local bind address defines the network interface that will be used
-## to transmit multicast messages.  The default value is 0.0.0.0, which 
-## java translates into the wildcard address, and the kernel will select
-## an interface.
-#er.extensions.multicastSynchronizer.localBindAddress=0.0.0.0
 
 ## (Optional) A comma separated list of entities to multicast synchronize.  The
 ## default is to not set this, which translates into "include all entities".
