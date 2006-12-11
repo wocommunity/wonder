@@ -1,0 +1,12 @@
+{
+    attributes = (
+        {columnName = value; name = id; valueClassName = NSNumber; valueType = c; }, 
+        {columnName = value; name = value; valueClassName = NSNumber; valueType = i; }
+    ); 
+    attributesUsedForLocking = (value, id); 
+    classProperties = (value); 
+    externalName = Integer; 
+    fetchSpecificationDictionary = {}; 
+    name = Integer; 
+    primaryKeyAttributes = (id); 
+}

@@ -1,0 +1,26 @@
+{
+    attributes = (
+        {columnName = value; name = id; valueClassName = NSNumber; valueType = c; }, 
+        {
+            columnName = value; 
+            name = related; 
+            valueClassName = NSNumber; 
+            valueType = c; 
+        }
+    ); 
+    attributesUsedForLocking = (id, related); 
+    classProperties = (value); 
+    externalName = ToManyRelation; 
+    fetchSpecificationDictionary = {}; 
+    name = ToManyRelation; 
+    primaryKeyAttributes = (id); 
+    relationships = (
+        {
+            destination = ToOneRelation; 
+            isToMany = Y; 
+            joinSemantic = EOInnerJoin; 
+            joins = ({destinationAttribute = id; sourceAttribute = related; }); 
+            name = value; 
+        }
+    ); 
+}
