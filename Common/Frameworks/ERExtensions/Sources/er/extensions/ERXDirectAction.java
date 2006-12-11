@@ -9,8 +9,6 @@ package er.extensions;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.Enumeration;
-import java.util.Iterator;
-import java.util.List;
 
 import org.apache.log4j.Logger;
 
