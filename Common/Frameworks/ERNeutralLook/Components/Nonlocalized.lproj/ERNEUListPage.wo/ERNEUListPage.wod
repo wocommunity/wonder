@@ -87,6 +87,11 @@ EntityRepetition: WORepetition {
 	list = displayGroup.displayedObjects;
 }
 
+ExcelExportButton: ERExcelExportButton {
+	d2wContext = d2wContext;
+	displayGroup = displayGroup;
+}
+
 ExclamationImage: WOImage {
 	alt = "!";
 	border = "0";

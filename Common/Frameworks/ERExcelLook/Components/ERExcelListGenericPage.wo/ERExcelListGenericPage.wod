@@ -1,0 +1,111 @@
+AttributeCell: WOGenericContainer {
+	class = d2wContext.excelClassForProperty;
+	elementName = "td";
+	cellType = d2wContext.excelCellTypeForProperty;
+    width = d2wContext.excelCellWidth;
+    height = d2wContext.excelCellHeight;
+	alignment = d2wContext.excelCellAlignment;
+	wrapText = d2wContext.excelCellWrapText;
+	verticalAlignment= d2wContext.verticalAlignment;
+	hidden = d2wContext.excelCellHidden;
+	locked = d2wContext.excelCellLocked;
+	wrapText = d2wContext.excelCellWrapText;
+	leftBorderColor = d2wContext.excelCellLeftBorderColor;
+	rightBorderColor = d2wContext.excelCellRightBorderColor;
+	topBorderColor = d2wContext.excelCellTopBorderColor;
+	bottomBorderColor = d2wContext.excelCellBottomBorderColor;
+	fillBackgroundColor = d2wContext.excelCellFillBackgroundColor;
+	indention = d2wContext.excelCellIndention;
+	rotation = d2wContext.excelCellRotation;    		
+	borderLeft = d2wContext.excelCellBorderLeft;
+	borderRight = d2wContext.excelCellBorderRight;
+	borderTop = d2wContext.excelCellBorderTop;
+	borderBottom = d2wContext.excelCellBorderBottom;    		
+	fillPattern = d2wContext.excelCellFillPattern;
+	alignment = d2wContext.excelCellAlignment;
+	verticalAlignment = d2wContext.excelCellVerticalAlignment;    		
+}
+
+AttributeDisplay: WOSwitchComponent {
+	WOComponentName = switchedComponentName;
+	localContext = localContext;
+	object = object;
+}
+
+AttributeLabelCell: WOGenericContainer {
+	class = d2wContext.excelClassForPropertyName;
+	elementName = "td";
+	cellType = d2wContext.excelCellTypeForPropertyName;
+    width = d2wContext.excelCellWidth;
+    height = d2wContext.excelCellHeight;
+}
+
+AttributeRepetition: WORepetition {
+	item = d2wContext.propertyKey;
+	list = currentSection.keys;
+}
+
+BatchRepetition:  WORepetition {
+	count = batchCount;
+	index = index;
+}
+
+ColumnLabelRepetition: WORepetition {
+	item = d2wContext.propertyKey;
+	list = currentSection.keys;
+}
+
+CustomComponentForSheet: WOSwitchComponent {
+	WOComponentName = d2wContext.componentNameForSheet;
+	d2wContext = d2wContext;
+	objects = currentBatch;
+}
+
+ERExcelEscapeForXMLWrapper1: ERExcelEscapeForXMLWrapper {
+}
+
+HasCustomSheetComponent: WOConditional {
+	condition = d2wContext.componentNameForSheet;
+}
+
+
+ListTable: WOGenericContainer {
+    name = d2wContext.excelSheetName;
+	elementName = "table";
+	cellFormat = d2wContext.excelCellFormatForSheet;
+	class = d2wContext.excelClassForSheet;
+	cellType = d2wContext.excelCellTypeForSheet;
+    defaultColumnWidth = d2wContext.excelDefaultColumnWidthForSheet;
+}
+
+NoCustomSheetComponent: WOConditional {
+	condition = d2wContext.componentNameForSheet;
+	negate = true;
+}
+
+ObjectRepetition: WORepetition {
+	item = object;
+	list = currentBatch;
+}
+
+PageWrapper: WOSwitchComponent {
+	WOComponentName = d2wContext.excelPageWrapperName;
+	enabled = "true";
+	styles = styles.Styles;
+	fonts = styles.Fonts;
+	fileName = d2wContext.excelFileName;
+}
+
+PropertyNameComponent: WOSwitchComponent {
+	WOComponentName = d2wContext.propertyNameComponentName;
+	localContext = d2wContext;
+}
+
+Repetition1: WORepetition {
+	item = currentSection;
+	list = sectionsContents;
+}
+
+ShouldShowProperty: WOConditional {
+	condition = shouldShowProperty;
+}

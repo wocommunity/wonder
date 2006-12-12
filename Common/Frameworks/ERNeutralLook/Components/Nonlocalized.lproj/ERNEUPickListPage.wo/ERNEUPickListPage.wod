@@ -54,6 +54,11 @@ Conditional2: WOConditional {
 	condition = shouldShowSelectAll;
 }
 
+ERExcelExportButton: ERExcelExportButton {
+	displayGroup = displayGroup;
+	d2wContext = d2wContext;
+}
+
 ERXNonNullConditional1: WOConditional {
 	condition = hasBranchChoices;
 	negate = true;
