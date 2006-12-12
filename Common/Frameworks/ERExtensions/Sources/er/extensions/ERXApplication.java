@@ -260,7 +260,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 		// should actually be done in a WOLips bootstrap because as this time all
 		// the static inits of WO app have already happened (which include NSMutableArray and _NSThreadSaveSet)
 		
-		if (true) {
+		if (false) {
 			System.setProperty("java.class.path", cp);
 			ClassLoader loader = AppClassLoader.getAppClassLoader();
 			Thread.currentThread().setContextClassLoader(loader);
@@ -333,7 +333,11 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
      */
     public ERXApplication() {
     	super();
-    	if ("JavaFoundation".equals(NSBundle.mainBundle().name())) {
+       	if (allFrameworks.size() > 0) {
+    		throw new RuntimeException("ERXExtensions have not been initialized. Please report the classpath and the rest of the bundles to the Wonder mailing list: " +
+    				"\nRemaining" + allFrameworks  + "\n" + System.getProperty("java.class.path"));
+    	}
+       	if ("JavaFoundation".equals(NSBundle.mainBundle().name())) {
     		throw new RuntimeException("Your main bundle is \"JavaFoundation\".  You are not launching this WO application properly.  If you are using Eclipse, most likely you launched your WOA as a \"Java Application\" instead of a \"WO Application\".");
     	}
     	if (! ERXConfigurationManager.defaultManager().isDeployedAsServlet()  &&  
