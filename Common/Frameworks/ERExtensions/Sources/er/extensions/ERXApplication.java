@@ -196,7 +196,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 					e.printStackTrace();
 				}
 			}
-    		return new AppClassLoader(urls, ClassLoader.getSystemClassLoader());
+    		return new AppClassLoader(urls, Thread.currentThread().getContextClassLoader());
     	}
 
     	public synchronized Class loadClass(String s, boolean flag) throws ClassNotFoundException {
@@ -260,7 +260,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 		// should actually be done in a WOLips bootstrap because as this time all
 		// the static inits of WO app have already happened (which include NSMutableArray and _NSThreadSaveSet)
 		
-		if (false) {
+		if (true) {
 			System.setProperty("java.class.path", cp);
 			ClassLoader loader = AppClassLoader.getAppClassLoader();
 			Thread.currentThread().setContextClassLoader(loader);
