@@ -53,6 +53,13 @@ public class AjaxUpdateContainer extends AjaxDynamicElement {
 		return options;
 	}
 
+	public NSMutableDictionary createObserveFieldOptions(WOComponent component) {
+		NSMutableArray ajaxOptionsArray = new NSMutableArray();
+		ajaxOptionsArray.addObject(new AjaxOption("observeFieldFrequency", AjaxOption.NUMBER));
+		NSMutableDictionary options = AjaxOption.createAjaxOptionsDictionary(ajaxOptionsArray, component, associations());
+		return options;
+	}
+	
 	public void appendToResponse(WOResponse response, WOContext context) {
 		WOComponent component = context.component();
 		String elementName = (String) valueForBinding("elementName", "div", component);
@@ -87,7 +94,7 @@ public class AjaxUpdateContainer extends AjaxDynamicElement {
 
 			if (observeFieldID != null) {
 				boolean fullSubmit = booleanValueForBinding("fullSubmit", false, component);
-				AjaxObserveField.appendToResponse(response, context, this, observeFieldID, id, fullSubmit, null);
+				AjaxObserveField.appendToResponse(response, context, this, observeFieldID, id, fullSubmit, createObserveFieldOptions(component));
 			}
 
 			response.appendContentString(id + "Update = function() { new Ajax.Updater('" + id + "', $('" + id + "').getAttribute('updateUrl'), ");

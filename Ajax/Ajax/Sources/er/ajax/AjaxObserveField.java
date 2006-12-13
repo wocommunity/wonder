@@ -32,9 +32,9 @@ public class AjaxObserveField extends AjaxDynamicElement {
 		addScriptResourceInHead(context, response, "wonder.js");
 	}
 
-	public NSDictionary createAjaxOptions(WOComponent component) {
+	public NSMutableDictionary createAjaxOptions(WOComponent component) {
 		NSMutableArray ajaxOptionsArray = new NSMutableArray();
-		ajaxOptionsArray.addObject(new AjaxOption("frequency", AjaxOption.NUMBER));
+		ajaxOptionsArray.addObject(new AjaxOption("observeFieldFrequency", AjaxOption.NUMBER));
 		ajaxOptionsArray.addObject(new AjaxOption("decay", AjaxOption.NUMBER));
 		ajaxOptionsArray.addObject(new AjaxOption("onLoading", AjaxOption.SCRIPT));
 		ajaxOptionsArray.addObject(new AjaxOption("onComplete", AjaxOption.SCRIPT));
@@ -53,7 +53,7 @@ public class AjaxObserveField extends AjaxDynamicElement {
 		String updateContainerID = (String) valueForBinding("updateContainerID", component);
 		if (observeFieldID != null && updateContainerID != null) {
 			AjaxUtils.appendScriptHeader(response);
-			NSDictionary options = createAjaxOptions(component);
+			NSMutableDictionary options = createAjaxOptions(component);
 			Boolean fullSubmitBoolean = (Boolean) valueForBinding("fullSubmit", component);
 			boolean fullSubmit = (fullSubmitBoolean != null && fullSubmitBoolean.booleanValue());
 			AjaxObserveField.appendToResponse(response, context, this, observeFieldID, updateContainerID, fullSubmit, options);
@@ -61,10 +61,16 @@ public class AjaxObserveField extends AjaxDynamicElement {
 		}
 	}
 
-	public static void appendToResponse(WOResponse response, WOContext context, AjaxDynamicElement element, String observeFieldID, String updateContainerID, boolean fullSubmit, NSDictionary options) {
+	public static void appendToResponse(WOResponse response, WOContext context, AjaxDynamicElement element, String observeFieldID, String updateContainerID, boolean fullSubmit, NSMutableDictionary options) {
 	    WOComponent component = context.component();
 
-		response.appendContentString("new Form.Element.EventObserver($('" + observeFieldID + "'), function(element, value) { ");
+	    Object observeFieldFrequency = options.removeObjectForKey("observeFieldFrequency");
+	    if (observeFieldFrequency == null) {
+	    	response.appendContentString("new Form.Element.EventObserver($('" + observeFieldID + "'), function(element, value) { ");
+	    }
+	    else {
+	    	response.appendContentString("new Form.Element.Observer($('" + observeFieldID + "'), " + observeFieldFrequency + ", function(element, value) { ");
+	    }
 		NSMutableDictionary observerOptions = new NSMutableDictionary();
 		if (options != null) {
 			observerOptions.addEntriesFromDictionary(options);
