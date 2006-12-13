@@ -102,6 +102,9 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
     /** Notifcation to post when all bundles were loaded but before their principal was called */
     public static final String AllBundlesLoadedNotification = "NSBundleAllBundlesLoaded";
 
+    /** Notifcation to post when all bundles were loaded but before their principal was called */
+    public static final String ApplicationDidCreateNotification = "NSApplicationDidCreateNotification";
+
     private static void transferPropertiesFromSourceToDest(Properties sourceProps, Properties destProps) {
     	if(sourceProps != null) {
     		for (Iterator iter = sourceProps.entrySet().iterator(); iter.hasNext();) {
@@ -344,6 +347,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
             ! _wasERXApplicationMainInvoked) {
             _displayMainMethodWarning();
         }        
+		NSNotificationCenter.defaultCenter().postNotification(new NSNotification(ApplicationDidCreateNotification, this));
         installPatches();
         lowMemBufferSize = ERXProperties.intForKeyWithDefault("er.extensions.ERXApplication.lowMemBufferSize", 0);
         if(lowMemBufferSize > 0) {
