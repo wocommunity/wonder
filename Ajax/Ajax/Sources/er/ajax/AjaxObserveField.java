@@ -64,7 +64,7 @@ public class AjaxObserveField extends AjaxDynamicElement {
 	public static void appendToResponse(WOResponse response, WOContext context, AjaxDynamicElement element, String observeFieldID, String updateContainerID, boolean fullSubmit, NSDictionary options) {
 	    WOComponent component = context.component();
 
-		response.appendContentString("new Form.Element.Observer($('" + observeFieldID + "'), 0, function(element, value) { ");
+		response.appendContentString("new Form.Element.EventObserver($('" + observeFieldID + "'), function(element, value) { ");
 		NSMutableDictionary observerOptions = new NSMutableDictionary();
 		if (options != null) {
 			observerOptions.addEntriesFromDictionary(options);
