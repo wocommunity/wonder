@@ -21,6 +21,8 @@ public interface ERXEnterpriseObject {
     public static final Logger logMod = Logger.getLogger("er.transaction.delegate.EREditingContextDelegate.modifedObjects");
 
     public final static boolean updateInverseRelationships = ERXProperties.booleanForKey("er.extensions.ERXEnterpriseObject.updateInverseRelationships");
+
+    public final static boolean applyRestrictingQualifierOnInsert = ERXProperties.booleanForKey("er.extensions.ERXEnterpriseObject.applyRestrictingQualifierOnInsert");
     
 
     /**

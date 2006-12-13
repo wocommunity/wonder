@@ -28,7 +28,9 @@ import com.webobjects.eocontrol.EOFaultHandler;
 import com.webobjects.eocontrol.EOFaulting;
 import com.webobjects.eocontrol.EOFetchSpecification;
 import com.webobjects.eocontrol.EOGlobalID;
+import com.webobjects.eocontrol.EOKeyComparisonQualifier;
 import com.webobjects.eocontrol.EOKeyGlobalID;
+import com.webobjects.eocontrol.EOKeyValueCoding;
 import com.webobjects.eocontrol.EOKeyValueQualifier;
 import com.webobjects.eocontrol.EONotQualifier;
 import com.webobjects.eocontrol.EOObjectStore;
@@ -41,6 +43,7 @@ import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSForwardException;
 import com.webobjects.foundation.NSKeyValueCoding;
+import com.webobjects.foundation.NSKeyValueCodingAdditions;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation.NSPropertyListSerialization;
@@ -1465,5 +1468,45 @@ public class ERXEOControlUtilities {
 		  qualifiers.addObject(qualifier);
 	   }
 	   return new EOOrQualifier(qualifiers);
+   }
+   
+   /**
+    * Given a qualifier of EOAndQualifiers and EOKVQualifiers, make then evaluate to
+    * true on the given object. 
+    * 
+    * @param qualifier the qualifier to apply to the object
+    * @param obj the object to make qualifier evaluate to true for
+    */
+   public static void makeQualifierTrue(EOQualifier qualifier, Object obj) {
+	   if (qualifier instanceof EOAndQualifier) {
+		   Enumeration qualifiersEnum = ((EOAndQualifier)qualifier).qualifiers().objectEnumerator();
+		   while (qualifiersEnum.hasMoreElements()) {
+			   EOQualifier nestedQualifier = (EOQualifier)qualifiersEnum.nextElement();
+			   makeQualifierTrue(nestedQualifier, obj);
+		   }
+	   }
+	   else if (qualifier instanceof EOKeyValueQualifier) {
+		   EOKeyValueQualifier kvQualifier = (EOKeyValueQualifier)qualifier;
+		   String keypath = kvQualifier.key();
+		   Object value = kvQualifier.value();
+		   NSKeyValueCoding.Utility.takeValueForKey(obj, value, keypath);
+	   }
+	   else if (qualifier instanceof EOKeyComparisonQualifier) {
+		   EOKeyComparisonQualifier comparisonQualifier = (EOKeyComparisonQualifier)qualifier;
+		   String leftKey = comparisonQualifier.leftKey();
+		   String rightKey = comparisonQualifier.rightKey();
+		   if ("true".equalsIgnoreCase(rightKey) || "yes".equalsIgnoreCase(rightKey)) {
+			   NSKeyValueCodingAdditions.Utility.takeValueForKeyPath(obj, Boolean.TRUE, leftKey);
+		   }
+		   else if ("false".equalsIgnoreCase(rightKey) || "no".equalsIgnoreCase(rightKey)) {
+			   NSKeyValueCodingAdditions.Utility.takeValueForKeyPath(obj, Boolean.FALSE, leftKey);
+		   }
+		   else {
+			   throw new IllegalArgumentException("Unable to make " + qualifier + " true for " + obj + " in a consistent way.");
+		   }
+	   }
+	   else {
+		   throw new IllegalArgumentException("Unable to make " + qualifier + " true for " + obj + " in a consistent way.");
+	   }
    }
 }

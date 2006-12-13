@@ -11,7 +11,6 @@ import java.util.Enumeration;
 import org.apache.log4j.Logger;
 
 import com.webobjects.eoaccess.EOEntity;
-import com.webobjects.eoaccess.EOEntityClassDescription;
 import com.webobjects.eoaccess.EOUtilities;
 import com.webobjects.eocontrol.EOClassDescription;
 import com.webobjects.eocontrol.EOEditingContext;
@@ -367,6 +366,13 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
     		EOGlobalID gid = editingContext.globalIDForObject(this);
     		if (gid.isTemporary()) {
     			init(editingContext);
+    			if (ERXEnterpriseObject.applyRestrictingQualifierOnInsert) {
+	    			EOEntity entity = ERXEOAccessUtilities.entityNamed(editingContext, entityName());
+	    			EOQualifier restrictingQualifier = entity.restrictingQualifier();
+	    			if (restrictingQualifier != null) {
+	    				ERXEOControlUtilities.makeQualifierTrue(restrictingQualifier, this);
+	    			}
+    			}
     		}
     	} finally {
     		updateInverseRelationships(old);
