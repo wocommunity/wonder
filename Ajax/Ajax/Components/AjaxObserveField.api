@@ -4,8 +4,8 @@
 		<binding name="observeFieldID"/>
 		<binding name="updateContainerID"/>
 		<binding name="fullSubmit"/>
+		<binding name="observeFieldFrequency"/>
 		
-		<binding name="frequency"/>
 		<binding name="decay"/>
 		<binding name="evalScripts"/>
 		<binding name="insertion"/>
