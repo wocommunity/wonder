@@ -6,7 +6,6 @@
 		<binding name="fullSubmit"/>
 		<binding name="observeFieldFrequency"/>
 		
-		<binding name="decay"/>
 		<binding name="evalScripts"/>
 		<binding name="insertion"/>
 		<binding name="onLoading"/>
