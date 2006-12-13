@@ -87,9 +87,10 @@ EntityRepetition: WORepetition {
 	list = displayGroup.displayedObjects;
 }
 
-ExcelExportButton: ERExcelExportButton {
-	d2wContext = d2wContext;
+ExcelExportButton: WOSwitchComponent {
+	WOComponentName = d2wContext.excelExportButtonCompomentName;
 	displayGroup = displayGroup;
+	d2wContext = d2wContext;
 }
 
 ExclamationImage: WOImage {
@@ -158,6 +159,10 @@ IsListing2: WOConditional {
 	_unroll = true;
 	condition = isSelecting;
 	negate = true;
+}
+
+IsGenericExportButtonKnown: WOConditional {
+	condition = d2wContext.excelExportButtonCompomentName;
 }
 
 IsPropertySortable: WOConditional {
@@ -294,4 +299,3 @@ Trash: ERDTrashcan {
 	dataSource = dataSource;
 	object = object;
 }
-

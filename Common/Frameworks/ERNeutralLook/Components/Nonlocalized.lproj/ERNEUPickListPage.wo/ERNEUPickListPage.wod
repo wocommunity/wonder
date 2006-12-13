@@ -54,7 +54,8 @@ Conditional2: WOConditional {
 	condition = shouldShowSelectAll;
 }
 
-ERExcelExportButton: ERExcelExportButton {
+ExcelExportButton: WOSwitchComponent {
+	WOComponentName = d2wContext.excelExportButtonCompomentName;
 	displayGroup = displayGroup;
 	d2wContext = d2wContext;
 }
@@ -131,6 +132,10 @@ IsEntityNotWritable: WOConditional {
 IsEntityNotWritable2: WOConditional {
 	_unroll = true;
 	condition = isEntityEditable;
+}
+
+IsGenericExportButtonKnown: WOConditional {
+	condition = d2wContext.xcelExportButtonCompomentName;
 }
 
 IsPropertySortable: WOConditional {
@@ -241,4 +246,3 @@ SwitchComponent1: WOSwitchComponent {
 	WOComponentName = d2wContext.propertyNameComponentName;
 	localContext = d2wContext;
 }
-
