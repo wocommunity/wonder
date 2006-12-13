@@ -123,7 +123,8 @@ public abstract class ERXFrameworkPrincipal {
                 NSNotificationCenter center = NSNotificationCenter.defaultCenter();
                 center.addObserver(observer,
                         new NSSelector("finishInitialization",  ERXConstant.NotificationClassArray),
-                        WOApplication.ApplicationWillFinishLaunchingNotification,
+                        // WOApplication.ApplicationWillFinishLaunchingNotification,
+                        ERXApplication.ApplicationDidCreateNotification,
                         null);
                
             }
