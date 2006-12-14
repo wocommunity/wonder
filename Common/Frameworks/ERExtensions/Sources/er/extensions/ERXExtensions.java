@@ -17,6 +17,7 @@ import java.util.Random;
 import org.apache.log4j.Logger;
 
 import com.webobjects.appserver.WOSession;
+import com.webobjects.appserver._private.WOEncodingDetector;
 import com.webobjects.eoaccess.EOAttribute;
 import com.webobjects.eoaccess.EODatabaseContext;
 import com.webobjects.eoaccess.EOEntity;
@@ -124,8 +125,9 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
     		// the constructor.
         	EOModelGroup.setClassDelegate(this);
     		ERXSystem.updateProperties();
-
-    		ERXLogger.configureLoggingWithSystemProperties();
+    		// AK: enable this when we're ready
+        	// WOEncodingDetector.sharedInstance().setFallbackEncoding("UTF-8");
+        	ERXLogger.configureLoggingWithSystemProperties();
             ERXArrayUtilities.initialize();
 
     		// False by default
