@@ -72,7 +72,7 @@ public class AjaxTree extends WOComponent {
 
 	protected void _fillInOpenNodes(Object node, NSMutableArray nodes, boolean showNode) {
 		if (showNode) {
-			nodes.add(node);
+			nodes.addObject(node);
 		}
 		if (treeModel().isExpanded(node)) {
 			NSArray childrenTreeNodes = treeModel().childrenTreeNodes(node);
