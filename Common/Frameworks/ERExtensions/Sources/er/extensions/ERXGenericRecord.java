@@ -366,7 +366,7 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
     		EOGlobalID gid = editingContext.globalIDForObject(this);
     		if (gid.isTemporary()) {
     			init(editingContext);
-    			if (ERXEnterpriseObject.applyRestrictingQualifierOnInsert) {
+    			if (applyRestrictingQualifierOnInsert()) {
 	    			EOEntity entity = ERXEOAccessUtilities.entityNamed(editingContext, entityName());
 	    			EOQualifier restrictingQualifier = entity.restrictingQualifier();
 	    			if (restrictingQualifier != null) {
@@ -377,6 +377,10 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
     	} finally {
     		updateInverseRelationships(old);
     	}
+    }
+    
+    protected boolean applyRestrictingQualifierOnInsert() {
+    	return ERXEnterpriseObject.applyRestrictingQualifierOnInsert;
     }
 
     public void clearProperties() {
