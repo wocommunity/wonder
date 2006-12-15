@@ -17,6 +17,7 @@ import java.util.Enumeration;
 
 import org.apache.log4j.Logger;
 
+import com.webobjects.appserver.WOApplication;
 import com.webobjects.eoaccess.EOAdaptorChannel;
 import com.webobjects.eoaccess.EOAttribute;
 import com.webobjects.eoaccess.EOEntity;
@@ -452,6 +453,28 @@ public class ERXJDBCUtilities {
 		return rowsUpdated;
 	}
 
+	/**
+	 * Executes a SQL script that is stored as a resource.
+	 * 
+	 * @param channel the channel to execute the scripts within
+	 * @param resourceName the name of the SQL script resource
+	 * @param frameworkName the name of the framework that contains the resource
+	 * @return the number of rows updated
+	 * @throws SQLException if a SQL error occurs
+	 * @throws IOException if an error occurs reading the script
+	 */
+	public static int executeUpdateScriptFromResourceNamed(EOAdaptorChannel channel, String resourceName, String frameworkName) throws SQLException, IOException {
+	    InputStream sqlScript = WOApplication.application().resourceManager().inputStreamForResourceNamed(resourceName, frameworkName, NSArray.EmptyArray);
+	    NSArray sqlStatements;
+	    try {
+	    	sqlStatements = ERXSQLHelper.newSQLHelper(channel).splitSQLStatementsFromInputStream(sqlScript);
+	    }
+	    finally {
+	    	sqlScript.close();
+	    }
+	    return ERXJDBCUtilities.executeUpdateScript(channel, sqlStatements);
+	}
+	
 	/**
 	 * Creates tables, primary keys, and foreign keys for the tables in the given model.  This is
 	 * useful in your Migration #0 class.
