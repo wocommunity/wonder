@@ -70,7 +70,13 @@ public class ERXInOrQualifierSupport extends _OrQualifierSupport {
 			if (_canBeRepresentedAsInSet) {
 				if (qualifier.selector() == EOQualifier.QualifierOperatorEqual) {
 					String key = qualifier.key();
-					if (_key != null && !_key.equals(key)) {
+					Object value = qualifier.value();
+					// ak: this ends up in value.toString() (we should really use bind vars for the IN qualifier)
+					// so we need to exclude the obvious cases where the value produces garbage
+					if ((_key != null && !_key.equals(key)) || (value != null && (
+							(value instanceof ERXConstant.NumberConstant) ||
+							(value instanceof Number && !value.getClass().getName().startsWith("java."))
+							))) {
 						_canBeRepresentedAsInSet = false;
 					}
 					else {
