@@ -183,11 +183,7 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
                 EOQualifierSQLGeneration.Support.supportForClass(ERXPrimaryKeyListQualifier.class));
         registerSQLSupportForSelector(new NSSelector(ERXRegExQualifier.MatchesSelectorName), 
                 EOQualifierSQLGeneration.Support.supportForClass(ERXRegExQualifier.class));
-        // AK: this break when you have custom subclasses of Number which have a non-number toString()
-        // so I'm disabling it for now until I can think a solution that works. You need
-        // to set this explicitely in your app as before (I didn't want to create a property that might go away
-        // in short notice)
-        // EOQualifierSQLGeneration.Support.setSupportForClass(new ERXInOrQualifierSupport(), EOOrQualifier._CLASS);
+        EOQualifierSQLGeneration.Support.setSupportForClass(new ERXInOrQualifierSupport(), EOOrQualifier._CLASS);
 		
 		// ERXObjectStoreCoordinatorPool has a static initializer, so just load the class if
 		// the configuration setting exists
