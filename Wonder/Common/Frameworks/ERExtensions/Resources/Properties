@@ -122,6 +122,15 @@ er.extensions.ERXRaiseOnMissingEditingContextDelegate = true
 ## Specifies if inverse relationships are automagically updated
 # er.extensions.ERXEnterpriseObject.updateInverseRelationships=true
 
+## Specifies that you want restricting qualifiers "applied" to your newly
+## inserted objects.  For instance, if you have an entity that is part of
+## single table inheritance and your restricting qualifier only uses 
+## EOAndQualifiers and EOKeyValueQualifiers, ERX can interpret the qualifier
+## and make your EO's automatically match the restricting qualifier.  This
+## allows you to skip the awakeFromInsertion step where you have to remember
+## to make your EO match the restricting qualifier you chose in your model. 
+# er.extensions.ERXEnterpriseObject.applyRestrictingQualifierOnInsert=true
+
 ## Specifies if the string attributes are trimmed before sending to the DB
 # er.extensions.ERXGenericRecord.shouldTrimSpaces = true
 # er.extensions.ERXCustomObject.shouldTrimSpaces = true
