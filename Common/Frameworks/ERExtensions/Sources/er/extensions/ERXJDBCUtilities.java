@@ -447,6 +447,9 @@ public class ERXJDBCUtilities {
 		}
 		finally {
 			if (!wasOpen) {
+				if (!conn.getAutoCommit()) {
+					conn.commit();
+				}
 				channel.closeChannel();
 			}
 		}
