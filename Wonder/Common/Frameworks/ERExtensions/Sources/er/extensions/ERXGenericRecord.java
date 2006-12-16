@@ -202,6 +202,9 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
      * @see er.extensions.ERXEnterpriseObject#willUpdate()
      */
     public void willUpdate() {
+        if (canUpdate() == false) {
+            throw ERXValidationFactory.defaultFactory().createException(this, null, null, "ObjectCannotBeUpdatedException");            
+        }
         /* Disabling this check by default -- it's causing problems for objects created and deleted
         in the same transaction */
          if (tranLogWillUpdate.isDebugEnabled()) {
