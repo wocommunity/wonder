@@ -19,6 +19,7 @@ import com.webobjects.eoaccess.EODatabaseContext;
 import com.webobjects.eoaccess.EODatabaseOperation;
 import com.webobjects.eoaccess.EOEntity;
 import com.webobjects.eoaccess.EOGeneralAdaptorException;
+import com.webobjects.eoaccess.EOModel;
 import com.webobjects.eoaccess.EOObjectNotAvailableException;
 import com.webobjects.eoaccess.EOSQLExpression;
 import com.webobjects.eocontrol.EOEditingContext;
@@ -100,11 +101,18 @@ public class ERXDatabaseContextDelegate {
      */
     public boolean databaseContextShouldHandleDatabaseException(EODatabaseContext databaseContext, Throwable throwable) {
     	if(exLog.isDebugEnabled()) {
-       		exLog.debug("JDBC Exception occured: " + throwable, throwable);
+    		exLog.debug("JDBC Exception occured: " + throwable, throwable);
     	} else if(exLog.isInfoEnabled()) {
-       		exLog.info("JDBC Exception occured: " + throwable);
+    		exLog.info("JDBC Exception occured: " + throwable);
     	}
-        // AK FIXME: find a way to log the connection dict that failed...
+    	if(throwable.getMessage().indexOf("_obtainOpenChannel") > 0) {
+    		NSArray models = databaseContext.database().models();
+    		for(Enumeration e = models.objectEnumerator(); e.hasMoreElements(); ) {
+    			EOModel model = (EOModel)e.nextElement();
+    			NSDictionary dict = model.connectionDictionary();
+    			log.info(model.name() + ": " + (dict == null ? "No connectionddict!" : dict.toString()));
+    		}
+    	}
     	//EOEditingContext ec = ERXEC.newEditingContext();
     	//log.info(NSPropertyListSerialization.stringFromPropertyList(EOUtilities.modelGroup(ec).models().valueForKey("connectionDictionary")));
     	return true;
