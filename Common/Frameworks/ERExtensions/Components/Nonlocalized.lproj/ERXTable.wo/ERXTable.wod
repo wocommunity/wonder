@@ -1,21 +1,25 @@
-TableContainer: WOGenericContainer {
-    elementName = "table";
-    bgcolor = ^tableBackgroundColor;
-    border = ^border;
-    cellpadding = ^cellpadding;
-    cellspacing = ^cellspacing;
-	width = ^tableWidth;
-	otherTagString = ^otherTagString;
+CellContainer:  WOGenericContainer {
+    elementName = "td";
+    bgcolor = ^cellBackgroundColor;
+    align = ^cellAlign;
+    valign = ^cellVAlign;
+	width = ^cellWidth;
+}
+
+ColRepetition: WORepetition {
+    count = colCount;
+    index = currentCol;
+}
+
+Conditional1: WOConditional {
+	condition = showIndex;
+}
+
+Content: WOComponentContent {
 }
 
 HasHeaders: WOConditional {
     condition=hasHeaders;
-}
-
-TableHeaderRow: WOGenericContainer {
-    elementName = "tr";
-    bgcolor = ^headerRowBackgroundColor;
-
 }
 
 HeaderRepetition: WORepetition {
@@ -32,29 +36,25 @@ RowRepetition: WORepetition {
     index = currentRow;
 }
 
+TableContainer: WOGenericContainer {
+    elementName = "table";
+    bgcolor = ^tableBackgroundColor;
+    border = ^border;
+    cellpadding = ^cellpadding;
+    cellspacing = ^cellspacing;
+	width = ^tableWidth;
+	otherTagString = ^otherTagString;
+}
+
+TableHeaderRow: WOGenericContainer {
+    elementName = "tr";
+    bgcolor = ^headerRowBackgroundColor;
+
+}
+
 TableRow: WOGenericContainer {
     elementName = "tr";
     bgcolor = ^rowBackgroundColor;
-}
-
-ColRepetition: WORepetition {
-    count = colCount;
-    index = currentCol;
-}
-
-CellContainer:  WOGenericContainer {
-    elementName = "td";
-    bgcolor = ^cellBackgroundColor;
-    align = ^cellAlign;
-    valign = ^cellVAlign;
-	width = ^cellWidth;
-}
-
-Content: WOComponentContent {
-}
-
-Conditional1: WOConditional {
-	condition = showIndex;
 }
 
 index: WOString {
