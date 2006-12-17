@@ -115,7 +115,7 @@ public class ERXLayoutTable extends WOComponent {
     	   			index = index + 1;
     			}
     			if(total > maxColumns * colCounts.count()) {
-    				colCounts.addObject(new Integer(maxColumns));
+    				colCounts.addObject(new Integer(total - maxColumns * colCounts.count()));
     			}
     			//log.info("Result: " + colCounts);
     			_colCounts = colCounts;
@@ -159,7 +159,7 @@ public class ERXLayoutTable extends WOComponent {
 
     public void setCurrentCol(int newValue){
     	currentCol=newValue;
-    	log.debug("Index: " + newValue);
+    	//log.debug("Index: " + newValue);
     	if(colCount() != newValue) {
     		pushItem();
     	}
