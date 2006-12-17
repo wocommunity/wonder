@@ -11,15 +11,24 @@
 die print("usage: $0 <destination directory> <prefix> <postfix> <package>\n") if($#ARGV != 3);
 
 # you may need to adjust this path
+# ERNeutralLook has "standard" pages
 $pathToERDirectToWeb = "~/Roots/ERNeutralLook.framework/Resources/";
+$pattern = 'ERNEU(.*?)Page';
+$Nonlocalized = "";
+$Suffix = "Page.wo";
+
+# ERD2W has more experimental but advanced pages
+$pathToERDirectToWeb = "~/Roots/ERDirectToWeb.framework/Resources/";
+$pattern = 'ERD2W(.*?)PageTemplate';
+$Nonlocalized = "";
+$Suffix = "Template.wo";
 
 ($dest, $prefix, $postfix, $package) = @ARGV;
 #$dest = "tmp";
-$pattern = 'ERNEU(.*?)Page';
 $packageDir = $package;
 $packageDir =~ s|\.|/|g;
 
-$cmd = "find $pathToERDirectToWeb -name \\*Page.wo -type d |grep -v CVS";
+$cmd = "find $pathToERDirectToWeb -name \\*$Suffix -type d |grep -v CVS";
 #warn $cmd;
 @files = `$cmd`;
 
@@ -42,10 +51,10 @@ foreach $file (@files) {
             print OUT "\t\tsuper(wocontext);\n";
             print OUT "\t\}\n\n}\n";
             close OUT;
-            system "mkdir $dest/Components/Nonlocalized.lproj" if(!-e "$dest/Components/Nonlocalized.lproj");
+            system "mkdir -p $dest/Components/Nonlocalized.lproj" if(!-e "$dest/Components/Nonlocalized.lproj");
             system "rm -rf $dest/Components/Nonlocalized.lproj/$newClass.wo" if(-e "$dest/Components/Nonlocalized.lproj/$newClass.wo");
-            system "cp -r $source/$class.wo $dest/Components/Nonlocalized.lproj/$newClass.wo";
-            system "cp -r $source/../$class.api $dest/Components/$newClass.api";
+            system "cp -r $source/$Nonlocalized$class.wo $dest/Components/Nonlocalized.lproj/$newClass.wo";
+            system "cp -r $source/$class.api $dest/Components/$newClass.api";
             system "rm -rf $dest/Components/Nonlocalized.lproj/$newClass.wo/CVS";
             
             # print "~/Roots/PBXTool $dest/IDE/*.pbproj/project.pbxproj $newClass $newClass.java $newClass.api $newClass.wo\n";
@@ -60,7 +69,7 @@ foreach $file (@files) {
     class = com.webobjects.directtoweb.Rule; 
     rhs = {
         class = com.webobjects.directtoweb.Assignment; 
-        keyPath = templateNameFor$typeName; 
+        keyPath = templateNameFor$typeName" . "Page; 
         value = $newClass; 
     }; 
 },";            
@@ -68,6 +77,8 @@ foreach $file (@files) {
     }
 }
 chop($rules);
+system "mkdir -p $dest/Resources/";
+
             # print "~/Roots/PBXTool $dest/*.pbproj/project.pbxproj 'Components' $classes\n";
 open D2W, ">$dest/Resources/d2w.d2wmodel" || die("Can't open $dest/Resources/d2w.d2wmodel");
 print D2W "{ rules = ( $rules );}";
