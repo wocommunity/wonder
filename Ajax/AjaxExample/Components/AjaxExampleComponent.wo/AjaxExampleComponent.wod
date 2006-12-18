@@ -70,6 +70,10 @@ ToggleLink : WOHyperlink {
 	pageName = "ToggleExample";
 }
 
+GoogleMapsLink : WOHyperlink {
+	pageName = "AjaxGMapExample";
+}
+
 Contents : WOComponentContent {
 }
 
