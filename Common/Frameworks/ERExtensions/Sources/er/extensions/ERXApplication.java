@@ -187,7 +187,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 
     	public static ClassLoader getAppClassLoader() {
     		String classPath = System.getProperty("java.class.path");
-    		String files[] = classPath.split(":");
+    		String files[] = classPath.split(File.pathSeparator);
     		URL urls[] = new URL[files.length];
     		for (int i = 0; i < files.length; i++) {
 				String string = files[i];
@@ -234,7 +234,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
     public static void main(String argv[], Class applicationClass) {
     	_wasERXApplicationMainInvoked = true;
     	String cp = System.getProperty("java.class.path");
-    	String parts[] = cp.split(":");
+    	String parts[] = cp.split(File.pathSeparator);
     	String normalLibs = "";
     	String systemLibs = "";
     	allFrameworks = new HashSet();
@@ -242,10 +242,10 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
     		String jar = parts[i];
     		// all patched frameworks here
     		if(jar.matches(".*?Library[/\\\\]Frameworks[/\\\\]Java(Foundation|EOControl|EOAccess|WebObjects).*")) {
-    			systemLibs += jar + ":";
+    			systemLibs += jar + File.pathSeparator;
 			}
 			else {
-				normalLibs += jar + ":";
+				normalLibs += jar + File.pathSeparator;
 			}
 			String bundle = jar.replaceAll(".*?[/\\\\](\\w+)\\.framework.*", "$1");
 			if (bundle.matches("^\\w+$") && !"JavaVM".equals(bundle)) {
@@ -258,12 +258,12 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 		if (normalLibs.length() > 1) {
 			normalLibs = normalLibs.substring(0, normalLibs.length() - 1);
 		}
-		cp = normalLibs + ":" + systemLibs;
+		cp = normalLibs + File.pathSeparator + systemLibs;
 		// AK: this is pretty experimental for now. The classpath reordering
 		// should actually be done in a WOLips bootstrap because as this time all
 		// the static inits of WO app have already happened (which include NSMutableArray and _NSThreadSaveSet)
 		
-		if (true) {
+		if (System.getProperty("_DisableClasspathReorder") == null) {
 			System.setProperty("java.class.path", cp);
 			ClassLoader loader = AppClassLoader.getAppClassLoader();
 			Thread.currentThread().setContextClassLoader(loader);
