@@ -11,7 +11,7 @@ import er.extensions.ERXProperties;
  * 
  * @author eric robinson
  * @binding id the id of the div that the map is rendered into. If none is given, a unique id will be generated. This is also the name of the map javascript object, which can be accessed after the map has been instantiated.
- * @binding address The address that the map will be centered on at load. An info window with the address will open up at this location.
+ * @binding address The address that the map will be centered on at load. 
  * @binding lng longitude for map center (must be paired with lat, cannot coexist with address)
  * @binding lat latitude for map center (must be paired with lng, cannot coexist with address)
  * @binding width the width of the map (does not have to be specified here, but must be specified somewhere [ie. css])
