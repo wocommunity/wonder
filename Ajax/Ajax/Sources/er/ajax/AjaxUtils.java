@@ -176,8 +176,14 @@ public class AjaxUtils {
 		NSMutableDictionary userInfo = AjaxUtils.mutableUserInfo(context.response());
 		if (userInfo.objectForKey(fileName) == null) {
 			userInfo.setObjectForKey(fileName, fileName);
-			WOResourceManager rm = WOApplication.application().resourceManager();
-			String url = rm.urlForResourceNamed(fileName, framework, context.session().languages(), context.request());
+			String url;
+			if (fileName.indexOf("://") != -1) {
+				url = fileName;
+			}
+			else {
+				WOResourceManager rm = WOApplication.application().resourceManager();
+				url = rm.urlForResourceNamed(fileName, framework, context.session().languages(), context.request());
+			}
 			String html = startTag + url + endTag + "\n";
 			AjaxUtils.insertInResponseBeforeTag(response, html, AjaxUtils.htmlCloseHead());
 		}
