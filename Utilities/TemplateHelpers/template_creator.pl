@@ -7,23 +7,39 @@
 #   ERD2WInspectPage -> CMSInspectPagePlain
 # it will also create a d2wmodel that contains rules like
 #   *true* -> templateNameForInspectPage = "CMSInspectPagePlain" (20)
+use Getopt::Long;
 
-die print("usage: $0 <destination directory> <prefix> <postfix> <package>\n") if($#ARGV != 3);
+my %options;
+my ($dest, $prefix, $postfix, $package, $neutral);
 
-# you may need to adjust this path
-# ERNeutralLook has "standard" pages
-$pathToERDirectToWeb = "~/Roots/ERNeutralLook.framework/Resources/";
-$pattern = 'ERNEU(.*?)Page';
-$Nonlocalized = "";
-$Suffix = "Page.wo";
+$ok = GetOptions(\%options, "package=s", "prefix=s", "postfix=s",  "output=s", "neutral", "repetitions!");
+($dest, $prefix, $postfix, $package, $neutral) = ($options{'output'}, $options{'prefix'}, $options{'postfix'}, $options{'package'}, $options{'neutral'});
+$ok = $ok && defined($dest) && defined($dest) && defined($prefix) && defined($postfix) && defined($package);  
+if(!$ok) {
+    die(q(Usage: template_creator.pl
+        -package com.foo   package name for the templates
+        -prefix  BAS       prefix for the templates
+        -postfix AdminPage postfix for the templates
+        -output  BASLook   destination directory
+        -neutral           use ERNeutralLook instead of ERD2W
+    ));
+}
 
-# ERD2W has more experimental but advanced pages
-$pathToERDirectToWeb = "~/Roots/ERDirectToWeb.framework/Resources/";
-$pattern = 'ERD2W(.*?)PageTemplate';
-$Nonlocalized = "";
-$Suffix = "Template.wo";
+if($neutral) {
+    # you may need to adjust this path
+    # ERNeutralLook has "standard" pages
+    $pathToERDirectToWeb = "~/Roots/ERNeutralLook.framework/Resources/";
+    $pattern = 'ERNEU(.*?)Page';
+    $Nonlocalized = "";
+    $Suffix = "Page.wo";
+} else {
+    # ERD2W has more experimental but advanced pages
+    $pathToERDirectToWeb = "~/Roots/ERDirectToWeb.framework/Resources/";
+    $pattern = 'ERD2W(.*?)PageTemplate';
+    $Nonlocalized = "";
+    $Suffix = "Template.wo";
+}
 
-($dest, $prefix, $postfix, $package) = @ARGV;
 #$dest = "tmp";
 $packageDir = $package;
 $packageDir =~ s|\.|/|g;
