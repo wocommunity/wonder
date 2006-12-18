@@ -60,7 +60,7 @@ public class ERD2WRule extends Rule {
                 ruleString = rule.toString();
                 
             } finally {
-                ERD2WModel.log.error("Problems with this rule: \n" +  t.getMessage() + "\n" + ruleString);
+                ERD2WModel.log.error("Problems with this rule: \n" +  t + "\n" + ruleString);
             }
         }
         return rule;
