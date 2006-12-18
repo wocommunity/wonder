@@ -667,7 +667,7 @@ There are many ways to use this script:
         <taskdef name="woframework" classname="org.objectstyle.woproject.ant.WOFramework">
             <classpath refid="ant.classpath"/>
         </taskdef>
-        <woframework name="ERJars" destDir="${build.root}" principalClass="" jarName="ERJars">
+        <woframework name="ERJars" destDir="${build.root}" principalClass="" jarName="ERJars" hasComponents="false">
             <lib dir="${project.dir}/Libraries">
                 <include name="**/*.jar" />
             </lib>
