@@ -6,8 +6,6 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.directtoweb;
 
-import java.util.Enumeration;
-
 import org.apache.log4j.Logger;
 
 import com.webobjects.appserver.WOActionResults;
@@ -382,9 +380,13 @@ public class ERD2WListPage extends ERD2WPage implements ERDListPageInterface, Se
         		log.debug("Initializing display group");
         		String fetchspecName = (String)d2wContext().valueForKey("restrictingFetchSpecification");
         		if(fetchspecName != null) {
-        			if(ds instanceof EODatabaseDataSource) {
-        				((EODatabaseDataSource)ds).setFetchSpecificationByName(fetchspecName);
-        			}
+        		    if(ds instanceof EODatabaseDataSource) {
+        		        EOFetchSpecification fs = ((EODatabaseDataSource)ds).entity().fetchSpecificationNamed(fetchspecName);
+        		        if(fs != null) {
+        		            fs = (EOFetchSpecification) fs.clone();
+        		        }
+        		        ((EODatabaseDataSource)ds).setFetchSpecification(fs);
+        		    }
         		}
          		if(sortOrderings == null) {
         			sortOrderings = sortOrderings();
