@@ -7,13 +7,6 @@ function showAddress(map, address, zoom) {
         alert(address + " not found");
       } else {
         map.setCenter(point, zoom);
-        var mapMarker = new GMarker(point);
-        map.addOverlay(mapMarker);
-        mapMarker.openInfoWindowHtml(address);
-       	GEvent.addListener(mapMarker, "click", function() {
-					map.closeInfoWindow();
-			    mapMarker.openInfoWindowHtml(address);
-			  });
       }
     }
   );
