@@ -144,10 +144,10 @@ public class ERXDummyRecord extends EOCustomObject {
 			EOModelGroup.defaultGroup().addModel(pojoModel);
 		}
 		EOEntity entity = EOModelGroup.defaultGroup().entityNamed(entityName);
-		if (entity != null) {
+		/*if (entity != null) {
 			pojoModel.removeEntity(entity);
 			entity = null;
-		}
+		}*/
 		if (entity == null) {
 			entity = new EOEntity();
 			entity.setName(entityName);
