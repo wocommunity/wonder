@@ -352,6 +352,7 @@
     250 : ((targetOutput = 'xml') and (smartAttribute.userInfo.erPrototype = 'Boolean') and (pageConfiguration like '*')) => componentName = ERD2WCustomDisplayBoolean [com.webobjects.directtoweb.Assignment], 
     250 : (((relationship.isToMany = 1) or (smartRelationship.isToMany = 1)) and (targetOutput = 'xml') and (pageConfiguration like '*')) => componentName = ERD2WXMLDisplayToMany [com.webobjects.directtoweb.Assignment], 
     500 : (subTask like 'group*') => propertyIsSortable = false [com.webobjects.directtoweb.BooleanAssignment], 
+    500 : (massChangeEntityDisplay = 1) => propertyIsSortable = false [com.webobjects.directtoweb.BooleanAssignment], 
     600 : (targetOutput = 'xml') => batchSize = 0 [com.webobjects.directtoweb.Assignment], 
     600 : (targetOutput = 'xml') => defaultBatchSize = 0 [com.webobjects.directtoweb.Assignment], 
     600 : ((targetOutput = 'xml') and (frame <> 1)) => pageWrapperName = ERDXMLPageWrapper [com.webobjects.directtoweb.Assignment], 
