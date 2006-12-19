@@ -7,7 +7,9 @@ import org.apache.log4j.Logger;
 
 import com.webobjects.appserver.WOApplication;
 import com.webobjects.appserver.WOComponent;
+import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSForwardException;
+import com.webobjects.foundation.NSMutableArray;
 
 /**
  * Long response task interface and default implementation should take away the need to tie your
@@ -34,7 +36,53 @@ public interface ERXLongResponseTask extends Runnable {
 	/** @return next page according to inner status. */
 	public WOComponent nextPage();
 	
+	/**
+	 * Special worker thread that holds the reference to the task so we can 
+	 * get a list of them.
+	 *
+	 * @author ak
+	 */
+	public static class WorkerThread extends Thread {
+		
+		protected ERXLongResponseTask _task;
+		
+		public WorkerThread(ERXLongResponseTask task) {
+			super(task);
+			_task = task;
+		}
+		
+		public ERXLongResponseTask task() {
+			return _task;
+		}
+
+		public void run() {
+			try {
+				super.run();
+			} finally {
+				_task = null;
+			}
+		}
+		
+		public static NSArray tasks() {
+			NSMutableArray tasks = new NSMutableArray();
+			Thread threads[] = new Thread[Thread.activeCount()];
+			Thread.enumerate(threads);
+			
+			for (int i = 0; i < threads.length; i++) {
+				Thread thread = threads[i];
+				if(thread instanceof WorkerThread) {
+					ERXLongResponseTask task = ((WorkerThread)thread).task();
+					if(task != null) {
+						tasks.addObject(task);
+					}
+				}
+			}
+			return tasks.immutableClone();
+		}
+	}
+
 	public abstract class DefaultImplementation implements Runnable, ERXLongResponseTask {
+		
 		
 		/** logging support */
 		public Logger log = Logger.getLogger(ERXUtilities.class);
@@ -217,15 +265,17 @@ public interface ERXLongResponseTask extends Runnable {
 		public void start() {
 			try {
 				if(_thread == null) {
-					_thread = new Thread(this);
+					_thread = new WorkerThread(this);
                     _thread.setName(this.toString());
 				}
-                _thread.start();
+				if(!_thread.isAlive()) {
+					_thread.start();
+				}
 			} catch (Exception localException) {
 				throw new NSForwardException(localException, "<ERXLongResponse> Exception occurred while creating long response thread: "+localException.toString());
 			}
 		}
-
+		
 		/**
 		 * Override this to return an exception page suitable for the 
 		 * given exception. This implementation just re-throws the exception.
