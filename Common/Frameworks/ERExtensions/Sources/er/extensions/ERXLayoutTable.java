@@ -149,7 +149,7 @@ public class ERXLayoutTable extends WOComponent {
         NSArray aList = list();
         int index = currentItemIndex;
         Object item = index < aList.count() ? aList.objectAtIndex(index) : null;
-        log.debug("Index: " + currentItemIndex + ": " + item + " -> " + currentRow + "/" + currentCol);
+        // log.debug("Index: " + currentItemIndex + ": " + item + " -> " + currentRow + "/" + currentCol);
         setValueForBinding(item, "item");
         setValueForBinding(ERXConstant.integerForInt(currentRow), "row");
         setValueForBinding(ERXConstant.integerForInt(currentCol), "col");
@@ -159,9 +159,11 @@ public class ERXLayoutTable extends WOComponent {
 
     public void setCurrentCol(int newValue){
     	currentCol=newValue;
-    	//log.debug("Index: " + newValue);
+    	// log.debug("Index: " + newValue);
     	if(colCount() != newValue) {
     		pushItem();
+    	} else {
+    		setValueForBinding(null, "item");
     	}
     }
 
