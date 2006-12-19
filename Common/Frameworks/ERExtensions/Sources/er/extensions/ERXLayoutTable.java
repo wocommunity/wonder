@@ -177,9 +177,10 @@ public class ERXLayoutTable extends WOComponent {
     public void takeValuesFromRequest(WORequest aRequest, WOContext aContext)  {
         _resetInternalCaches();
         super.takeValuesFromRequest(aRequest, aContext);
-    }
+     }
 
     public void reset() {
         _resetInternalCaches();
-    }
+        setValueForBinding(null, "item");
+   }
 }
