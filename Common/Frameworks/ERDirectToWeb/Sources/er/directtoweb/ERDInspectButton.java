@@ -15,6 +15,7 @@ import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.eocontrol.EOEnterpriseObject;
 
 import er.extensions.ERXEC;
+import er.extensions.ERXEOControlUtilities;
 
 public class ERDInspectButton extends ERDActionButton {
 
@@ -23,11 +24,11 @@ public class ERDInspectButton extends ERDActionButton {
     }
     
     public WOComponent inspectObjectAction() {
-    	EOEditingContext context = ERXEC.newEditingContext();
-    	//CHECKME ak: I don't remember why we would use a local instance when we just want to inspect...
+//    	CHECKME ak: I don't remember why we would use a local instance when we just want to inspect...
+    	EOEditingContext context = (ERXEOControlUtilities.isNewObject(object()) ? object().editingContext() : ERXEC.newEditingContext());
     	context.lock();
     	try {
-    		EOEnterpriseObject localObject = EOUtilities.localInstanceOfObject(context, object());
+    		EOEnterpriseObject localObject = ERXEOControlUtilities.localInstanceOfObject(context, object());
     		String configuration = (String)valueForBinding("inspectConfigurationName");
     		InspectPageInterface epi = (InspectPageInterface)D2W.factory().pageForConfigurationNamed(configuration, session());
     		epi.setObject(localObject);
