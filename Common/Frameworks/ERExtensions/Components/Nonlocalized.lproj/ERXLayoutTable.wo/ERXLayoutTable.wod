@@ -16,6 +16,10 @@ ColRepetition: WORepetition {
 Content: WOComponentContent {
 }
 
+HasItem : WOConditional {
+	condition = ^item;
+}
+
 RowRepetition: WORepetition {
     count = rowCount;
     index = currentRow;
