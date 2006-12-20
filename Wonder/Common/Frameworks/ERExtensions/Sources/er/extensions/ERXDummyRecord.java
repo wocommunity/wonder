@@ -118,9 +118,9 @@ public class ERXDummyRecord extends EOCustomObject {
 		}
 	}
 
-	public static class LocalizedBinding extends NSKeyValueCoding._KeyBinding {
+	public static class ProxyBinding extends NSKeyValueCoding._KeyBinding {
 
-		public LocalizedBinding(String key) {
+		public ProxyBinding(String key) {
 			super(null, key);
 		}
 
@@ -136,7 +136,7 @@ public class ERXDummyRecord extends EOCustomObject {
 	}
 
 	public NSKeyValueCoding._KeyBinding _otherStorageBinding(String key) {
-		NSKeyValueCoding._KeyBinding result = new LocalizedBinding(key);
+		NSKeyValueCoding._KeyBinding result = new ProxyBinding(key);
 		return result;
 	}
 
