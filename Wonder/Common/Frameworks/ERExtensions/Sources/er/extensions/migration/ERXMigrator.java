@@ -1,9 +1,10 @@
 package er.extensions.migration;
 
 import java.util.Enumeration;
-import java.util.HashSet;
-import java.util.LinkedHashSet;
-import java.util.Set;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 import org.apache.log4j.Logger;
 
@@ -20,77 +21,61 @@ import er.extensions.ERXProperties;
 import er.extensions.ERXEOAccessUtilities.ChannelAction;
 
 /**
- * ERXMigrator provides a simple mechanism for performing database migrations
- * (both upgrading and downgrading).
+ * ERXMigrator provides a simple mechanism for performing database migrations (both upgrading and downgrading).
  * <p>
- * To have ERXMigrator run at the start of your application, set
- * er.migration.migrateAtStartup = true. This will perform a migration of your
- * EOModels using a series of provided migration classes. By default, models are
- * migrated in the order they appear in the EOModelGroup (that is, effectively
- * random). If you want more control over the order at startup, you can set the
- * er.migration.modelNames property to a comma-separate list of model names. The
- * migrator will migrate them in this order.
+ * To have ERXMigrator run at the start of your application, set er.migration.migrateAtStartup = true. This will perform
+ * a migration of your EOModels using a series of provided migration classes. By default, models are migrated in the
+ * order they appear in the EOModelGroup (that is, effectively random). If you want more control over the order at
+ * startup, you can set the er.migration.modelNames property to a comma-separate list of model names. The migrator will
+ * migrate them in this order.
  * <p>
- * For each EOModel, the migrator will lookup [modelName].MigrationClassPrefix
- * and then append version numbers to that name. For instance, if your model
- * named "AuthModel" is being migrated, and you set
- * AuthModel.MigrationClassPrefix=com.mdimension.migration.AuthModel, it will
- * then look for classes named like com.mdimension.migration.AuthModel0,
- * com.mdimension.migration.AuthModel1, etc where the number corresponds to a
+ * For each EOModel, the migrator will lookup [modelName].MigrationClassPrefix and then append version numbers to that
+ * name. For instance, if your model named "AuthModel" is being migrated, and you set
+ * AuthModel.MigrationClassPrefix=com.mdimension.migration.AuthModel, it will then look for classes named like
+ * com.mdimension.migration.AuthModel0, com.mdimension.migration.AuthModel1, etc where the number corresponds to a
  * zero-offset migration version.
  * <p>
- * The com.mdimension.migration.AuthModelX classes should implement the
- * IERXMigration interface, and should at least provide an implementation of the
- * upgrade method. If you do not provide a downgrade method, you should throw
- * ERXMigrationFailedException when that method is called to notify the system
- * that the requested migration cannot be performed.  As an example, 
- * AuthModel1.upgrade(..) will be called to move from version 1 to version 2,
- * and AuthModel2.downgrade(..) will be called to move from version 2 back to
- * version 1.  Your lowest version number migration should throw an
- * ERXMigrationFailedException when its downgrade method is called.
+ * The com.mdimension.migration.AuthModelX classes should implement the IERXMigration interface, and should at least
+ * provide an implementation of the upgrade method. If you do not provide a downgrade method, you should throw
+ * ERXMigrationFailedException when that method is called to notify the system that the requested migration cannot be
+ * performed. As an example, AuthModel1.upgrade(..) will be called to move from version 1 to version 2, and
+ * AuthModel2.downgrade(..) will be called to move from version 2 back to version 1. Your lowest version number
+ * migration should throw an ERXMigrationFailedException when its downgrade method is called.
  * <p>
- * Because of complications with database locking, the system will not
- * autocreate tables and per-model rows for you, so if you are using JDBC
- * migration, you should create a table named _DBUpdater with the following
- * (approximately) create statement:
+ * Because of complications with database locking, the system will not autocreate tables and per-model rows for you, so
+ * if you are using JDBC migration, you should create a table named _DBUpdater with the following (approximately) create
+ * statement:
  * 
  * <pre>
- *     create table &quot;_DBUpdater&quot; (
- *       &quot;ModelName&quot; varchar(100) not null,
- *       &quot;Version&quot; integer not null,
- *       &quot;UpdateLock&quot; integer not null,
- *       &quot;LockOwner&quot; varchar(100)
- *     )
+ *              create table &quot;_DBUpdater&quot; (
+ *                &quot;ModelName&quot; varchar(100) not null,
+ *                &quot;Version&quot; integer not null,
+ *                &quot;UpdateLock&quot; integer not null,
+ *                &quot;LockOwner&quot; varchar(100)
+ *              )
  * </pre>
  * 
  * and for each model you want to be able to migrate, you should:
  * 
  * <pre>
- *     insert into &quot;_DBUpdater&quot;(&quot;ModelName&quot;, &quot;Version&quot;, &quot;UpdateLock&quot;, &quot;LockOwner&quot;) values ('YourModelName', -1, 0, NULL)
+ *              insert into &quot;_DBUpdater&quot;(&quot;ModelName&quot;, &quot;Version&quot;, &quot;UpdateLock&quot;, &quot;LockOwner&quot;) values ('YourModelName', -1, 0, NULL)
  * </pre>
  * 
- * Be aware that not all databases are able to perform DDL operations in a
- * transaction. The result of this is that if a DDL operation fails, your
- * database may be left in an unknown state because the subsequent rollback will
- * fail. Version numbers only increase when each migration completes
- * sucessfully, so in this case, your migration version would be left at the
- * previous version number.
+ * Be aware that not all databases are able to perform DDL operations in a transaction. The result of this is that if a
+ * DDL operation fails, your database may be left in an unknown state because the subsequent rollback will fail. Version
+ * numbers only increase when each migration completes sucessfully, so in this case, your migration version would be
+ * left at the previous version number.
  * <p>
- * Startup migration runs in response to the
- * ApplicationDidFinishLaunchingNotification, so you should not access your
+ * Startup migration runs in response to the ApplicationDidFinishLaunchingNotification, so you should not access your
  * EO's until after that notification is complete.
  * 
- * @property er.migration.migrateAtStartup if true, migrateToLatest is
- *           automatically called at startup
- * @property er.migration.[adaptorName].lockClassName the name of the
- *           IERXMigrationLock class to use (defaults to
+ * @property er.migration.migrateAtStartup if true, migrateToLatest is automatically called at startup
+ * @property er.migration.[adaptorName].lockClassName the name of the IERXMigrationLock class to use (defaults to
  *           er.extensions.migration.ERX[adaptorName]MigrationLock)
- * @property er.migration.modelNames a comma-separated list of model names to be
- *           migrated in a particular order. If missing, it will default to
- *           modelgroup.models() order.
- * @property [modelName].MigrationClassPrefix the prefix of the class name to
- *           use to upgrade the model named [modelName]. Defaults to
- *           [modelName].
+ * @property er.migration.modelNames a comma-separated list of model names to be migrated in a particular order. If
+ *           missing, it will default to modelgroup.models() order.
+ * @property [modelName].MigrationClassPrefix the prefix of the class name to use to upgrade the model named
+ *           [modelName]. Defaults to [modelName].
  * 
  * @author mschrag
  */
@@ -105,8 +90,8 @@ public class ERXMigrator {
 	private String _lockOwnerName;
 
 	/**
-	 * Costructs an ERXMigrator with the given lock owner. For an application,
-	 * the lock owner name defaults to appname-instancenumber.
+	 * Costructs an ERXMigrator with the given lock owner. For an application, the lock owner name defaults to
+	 * appname-instancenumber.
 	 * 
 	 * @param lockOwnerName
 	 *            the name of the lock owner
@@ -116,16 +101,17 @@ public class ERXMigrator {
 	}
 
 	/**
-	 * Returns whether or not migration should run at startup. Defaults to
-	 * false.
+	 * Returns whether or not migration should run at startup. Defaults to false.
 	 */
 	public static boolean shouldMigrateAtStartup() {
 		return ERXProperties.booleanForKeyWithDefault("er.migration.migrateAtStartup", false);
 	}
 
 	/**
-	 * Migrates all models specified in the default model group to the latest
-	 * versions.
+	 * Migrates all models specified in the default model group to the latest versions.
+	 * 
+	 * @throws IllegalAccessException
+	 * @throws InstantiationException
 	 */
 	public void migrateToLatest() {
 		EOModelGroup modelGroup = EOModelGroup.defaultGroup();
@@ -138,56 +124,123 @@ public class ERXMigrator {
 		else {
 			modelNames = NSArray.componentsSeparatedByString(modelNamesStr, ",");
 		}
-		migrateToLatestWithModelsNamed(modelGroup, modelNames, new HashSet());
+		Map migrations = _buildDependenciesForModelsNamed(modelNames);
+
+		Iterator migrationsIter = migrations.keySet().iterator();
+		while (migrationsIter.hasNext()) {
+			IERXMigration migration = (IERXMigration) migrationsIter.next();
+			ModelVersion modelVersion = (ModelVersion) migrations.get(migration);
+			EOModel model = modelVersion.model();
+			String adaptorName = model.adaptorName();
+			String migrationLockClassName = ERXProperties.stringForKeyWithDefault("er.migration." + adaptorName + ".lockClassName", "er.extensions.migration.ERX" + adaptorName + "MigrationLock");
+			IERXMigrationLock database;
+			try {
+				Class migrationLockClass = Class.forName(migrationLockClassName);
+				database = (IERXMigrationLock) migrationLockClass.newInstance();
+			}
+			catch (Throwable t) {
+				throw new ERXMigrationFailedException("Failed to create migration lock class '" + migrationLockClassName + "'.", t);
+			}
+			String migrationClassPrefix = ERXProperties.stringForKeyWithDefault(model.name() + ".MigrationClassPrefix", model.name());
+			EOEditingContext editingContext = ERXEC.newEditingContext();
+			ERXMigrationAction migrationAction = new ERXMigrationAction(editingContext, migration, modelVersion, database, _lockOwnerName);
+			try {
+				migrationAction.perform(editingContext, model.name());
+			}
+			catch (ERXMigrationFailedException e) {
+				throw e;
+			}
+			catch (Throwable t) {
+				throw new ERXMigrationFailedException("Failed to migrate model '" + model.name() + "'.", t);
+			}
+		}
 	}
 
-	/**
-	 * Migrates all the models specified in the modelNames array within the given
-	 * model group to the latest version.
-	 * 
-	 * @param modelGroup the model group to work within
-	 * @param modelNames the names of models to migrate
-	 */
-	public void migrateToLatestWithModelsNamed(EOModelGroup modelGroup, NSArray modelNames, Set migratedModelNames) {
-		Set dependencyModelNames = new LinkedHashSet();
-		Enumeration modelNamesEnum = modelNames.objectEnumerator();
-		while (modelNamesEnum.hasMoreElements()) {
-			String modelName = (String) modelNamesEnum.nextElement();
-			if (!migratedModelNames.contains(modelName)) {
+	protected Map _buildDependenciesForModelsNamed(NSArray modelNames) {
+		Map migrations = new LinkedHashMap();
+		try {
+			Map versions = new HashMap();
+
+			EOModelGroup modelGroup = EOModelGroup.defaultGroup();
+			Enumeration modelNamesEnum = modelNames.objectEnumerator();
+			while (modelNamesEnum.hasMoreElements()) {
+				String modelName = (String) modelNamesEnum.nextElement();
 				EOModel model = modelGroup.modelNamed(modelName);
-				new ModelVersion(model, ERXMigrator.LATEST_VERSION).migrate(_lockOwnerName, dependencyModelNames);
-				migratedModelNames.add(modelName);
+				_buildDependenciesForModel(model, ERXMigrator.LATEST_VERSION, versions, migrations);
 			}
-		}
-		
-		// MS: Event if no migrations were executed for the top level model, we want to then 
-		// look for dependent models and make sure they get upgraded to their latest versions, but
-		// this has to happen AFTER the first pass of model migrations so that we don't execute 
-		// migrations out of order
-		modelNamesEnum = modelNames.objectEnumerator();
-		while (modelNamesEnum.hasMoreElements()) {
-			String modelName = (String) modelNamesEnum.nextElement();
-			EOModel model = modelGroup.modelNamed(modelName);
-			Enumeration entitiesEnum = model.entities().objectEnumerator();
-			while (entitiesEnum.hasMoreElements()) {
-				EOEntity entity = (EOEntity)entitiesEnum.nextElement();
-				EOEntity parentEntity = entity.parentEntity();
-				if (parentEntity != null && !parentEntity.model().equals(model) && !migratedModelNames.contains(parentEntity.model().name())) {
-					dependencyModelNames.add(parentEntity.model().name());
-				}
-				Enumeration relationshipsEnum = entity.relationships().objectEnumerator();
-				while (relationshipsEnum.hasMoreElements()) {
-					EORelationship relationship = (EORelationship)relationshipsEnum.nextElement();
-					EOEntity destinationEntity = relationship.destinationEntity();
-					if (destinationEntity != null && !destinationEntity.model().equals(model) && !migratedModelNames.contains(destinationEntity.model().name())) {
-						dependencyModelNames.add(destinationEntity.model().name());
+
+			Iterator modelNamesIter = versions.keySet().iterator();
+			while (modelNamesIter.hasNext()) {
+				String modelName = (String) modelNamesIter.next();
+				EOModel model = modelGroup.modelNamed(modelName);
+				Enumeration entitiesEnum = model.entities().objectEnumerator();
+				while (entitiesEnum.hasMoreElements()) {
+					EOEntity entity = (EOEntity) entitiesEnum.nextElement();
+					EOEntity parentEntity = entity.parentEntity();
+					if (parentEntity != null && !parentEntity.model().equals(model)) {
+						_buildDependenciesForModel(parentEntity.model(), LATEST_VERSION, versions, migrations);
+					}
+					Enumeration relationshipsEnum = entity.relationships().objectEnumerator();
+					while (relationshipsEnum.hasMoreElements()) {
+						EORelationship relationship = (EORelationship) relationshipsEnum.nextElement();
+						EOEntity destinationEntity = relationship.destinationEntity();
+						if (destinationEntity != null && !destinationEntity.model().equals(model)) {
+							_buildDependenciesForModel(destinationEntity.model(), LATEST_VERSION, versions, migrations);
+						}
 					}
 				}
+				_buildDependenciesForModel(model, LATEST_VERSION, versions, migrations);
 			}
 		}
-		
-		if (!dependencyModelNames.isEmpty()) {
-			migrateToLatestWithModelsNamed(modelGroup, new NSArray(dependencyModelNames.toArray()), migratedModelNames);
+		catch (InstantiationException e) {
+			throw new RuntimeException("Migration failed.", e);
+		}
+		catch (IllegalAccessException e) {
+			throw new RuntimeException("Migration failed.", e);
+		}
+		return migrations;
+	}
+
+	protected void _buildDependenciesForModel(EOModel model, int migrateToVersion, Map versions, Map migrations) throws InstantiationException, IllegalAccessException {
+		String modelName = model.name();
+
+		Integer migratorVersion = (Integer) versions.get(modelName);
+		if (migratorVersion == null) {
+			migratorVersion = new Integer(-1);
+		}
+
+		if (migratorVersion.intValue() != ERXMigrator.LATEST_VERSION) {
+			boolean done = false;
+			for (int versionNum = migratorVersion.intValue() + 1; !done && versionNum <= migrateToVersion; versionNum++) {
+				String migrationClassPrefix = ERXProperties.stringForKeyWithDefault(modelName + ".MigrationClassPrefix", modelName);
+				String erMigrationClassName = migrationClassPrefix + versionNum;
+				if (ERXMigrator.log.isInfoEnabled()) {
+					ERXMigrator.log.info("Looking for migration '" + erMigrationClassName + "' ...");
+				}
+				try {
+					Class erMigrationClass = Class.forName(erMigrationClassName);
+					IERXMigration migration = (IERXMigration) erMigrationClass.newInstance();
+					versions.put(modelName, new Integer(versionNum));
+					NSArray migrationDependencies = migration.modelDependencies();
+					if (migrationDependencies != null) {
+						Enumeration migrationDependenciesEnum = migrationDependencies.objectEnumerator();
+						while (migrationDependenciesEnum.hasMoreElements()) {
+							ModelVersion modelVersion = (ModelVersion) migrationDependenciesEnum.nextElement();
+							EOModel dependsOnModel = modelVersion.model();
+							int dependsOnVersion = modelVersion.version();
+							_buildDependenciesForModel(dependsOnModel, dependsOnVersion, versions, migrations);
+						}
+					}
+					migrations.put(migration, new ModelVersion(model, versionNum));
+				}
+				catch (ClassNotFoundException e) {
+					done = true;
+					if (ERXMigrator.log.isInfoEnabled()) {
+						ERXMigrator.log.info("  Migration " + erMigrationClassName + " does not exist.");
+					}
+					versions.put(modelName, new Integer(ERXMigrator.LATEST_VERSION));
+				}
+			}
 		}
 	}
 
@@ -201,93 +254,66 @@ public class ERXMigrator {
 		private int _version;
 
 		/**
-		 * @param model a model
-		 * @param version the version of that model
+		 * @param model
+		 *            a model
+		 * @param version
+		 *            the version of that model
 		 */
 		public ModelVersion(EOModel model, int version) {
 			_model = model;
 			_version = version;
 		}
-		
+
 		/**
-		 * @param modelName the name of a model
-		 * @param version the version of that model
+		 * @param modelName
+		 *            the name of a model
+		 * @param version
+		 *            the version of that model
 		 */
 		public ModelVersion(String modelName, int version) {
 			this(EOModelGroup.defaultGroup().modelNamed(modelName), version);
 		}
-		
+
 		/**
 		 * Returns the model for this version.
+		 * 
 		 * @return the model for this version
 		 */
 		public EOModel model() {
 			return _model;
 		}
-		
-		/**
-		 * Migrates the given model to the specified target version. 
-		 * 
-		 * @param lockOwnerName the name of the lock owner
-		 */
-		public void migrate(String lockOwnerName, Set dependencyModelNames) {
-			if (ERXMigrator.log.isInfoEnabled()) {
-				if (_version == ERXMigrator.LATEST_VERSION) {
-					ERXMigrator.log.info("Migrating " + _model.name() + " to latest version.");
-				}
-				else {
-					ERXMigrator.log.info("Migrating " + _model.name() + " to version " + _version + ".");
-				}
-			}
-			String adaptorName = _model.adaptorName();
-			String migrationLockClassName = ERXProperties.stringForKeyWithDefault("er.migration." + adaptorName + ".lockClassName", "er.extensions.migration.ERX" + adaptorName + "MigrationLock");
-			IERXMigrationLock database;
-			try {
-				Class migrationLockClass = Class.forName(migrationLockClassName);
-				database = (IERXMigrationLock) migrationLockClass.newInstance();
-			}
-			catch (Throwable t) {
-				throw new ERXMigrationFailedException("Failed to create migration lock class '" + migrationLockClassName + "'.", t);
-			}
-			String migrationClassPrefix = ERXProperties.stringForKeyWithDefault(_model.name() + ".MigrationClassPrefix", _model.name());
-			EOEditingContext editingContext = ERXEC.newEditingContext();
-			ERXMigrationAction migrations = new ERXMigrationAction(editingContext, database, _model, migrationClassPrefix, _version, lockOwnerName, dependencyModelNames);
-			try {
-				migrations.perform(editingContext, _model.name());
-			}
-			catch (ERXMigrationFailedException e) {
-				throw e;
-			}
-			catch (Throwable t) {
-				throw new ERXMigrationFailedException("Failed to migrate model '" + _model.name() + "'.", t);
-			}
-		}
 
+		/**
+		 * Returns the version dependency for this model.
+		 * 
+		 * @return the version dependency for this model
+		 */
+		public int version() {
+			return _version;
+		}
 	}
 
 	protected static class ERXMigrationAction extends ChannelAction {
 		private EOEditingContext _editingContext;
 		private IERXMigrationLock _database;
-		private EOModel _model;
-		private String _migrationClassPrefix;
-		private int _targetVersion;
+		private IERXMigration _migration;
+		private ModelVersion _modelVersion;
+		private Map _migrations;
 		private String _lockOwnerName;
-		private Set _dependencyModelNames;
 
-		public ERXMigrationAction(EOEditingContext editingContext, IERXMigrationLock database, EOModel model, String migrationClassPrefix, int targetVersion, String lockOwnerName, Set dependencyModelNames) {
+		public ERXMigrationAction(EOEditingContext editingContext, IERXMigration migration, ModelVersion modelVersion, IERXMigrationLock database, String lockOwnerName) {
 			_editingContext = editingContext;
+			_modelVersion = modelVersion;
+			_migration = migration;
 			_database = database;
-			_model = model;
-			_migrationClassPrefix = migrationClassPrefix;
-			_targetVersion = targetVersion;
 			_lockOwnerName = lockOwnerName;
-			_dependencyModelNames = dependencyModelNames;
 		}
 
 		protected int doPerform(EOAdaptorChannel channel) {
+			EOModel model = _modelVersion.model();
 			boolean locked;
 			do {
-				locked = _database.tryLock(channel, _model, _lockOwnerName);
+				locked = _database.tryLock(channel, model, _lockOwnerName);
 				if (!locked) {
 					try {
 						Thread.sleep(5 * 1000);
@@ -303,105 +329,33 @@ public class ERXMigrator {
 
 			if (locked) {
 				try {
-					int previousVersion = _database.versionNumber(channel, _model);
-					if (ERXMigrator.log.isInfoEnabled()) {
-						ERXMigrator.log.info(_model.name() + " is currently version " + previousVersion);
-					}
-					boolean done = false;
-					int direction = (previousVersion < _targetVersion) ? 1 : -1;
-					int currentVersion = previousVersion;
-					int nextVersion = -1;
-					while (!done && currentVersion != _targetVersion) {
-						nextVersion = currentVersion + direction;
-
-						int migratorVersion;
-						if (direction == 1) {
-							migratorVersion = currentVersion + 1;
-						}
-						else if (direction == -1) {
-							migratorVersion = currentVersion;
-						}
-						else {
-							throw new IllegalStateException("Unknown direction " + direction);
-						}
-
-						String erMigrationClassName = _migrationClassPrefix + migratorVersion;
+					int currentVersion = _database.versionNumber(channel, model);
+					int nextVersion = _modelVersion.version();
+					if (currentVersion < nextVersion) {
 						if (ERXMigrator.log.isInfoEnabled()) {
-							ERXMigrator.log.info("Looking for migration '" + erMigrationClassName + "' ...");
+							ERXMigrator.log.info("Upgrading " + model.name() + " to version " + nextVersion + " with migration '" + _migration + "'");
 						}
-						try {
-							Class erMigrationClass = Class.forName(erMigrationClassName);
-							IERXMigration migration = (IERXMigration) erMigrationClass.newInstance();
-							try {
-								if (direction == 1) {
-									NSArray dependencies = migration.modelDependencies();
-									if (dependencies != null) {
-										Enumeration dependenciesEnum = dependencies.objectEnumerator();
-										while (dependenciesEnum.hasMoreElements()) {
-											ModelVersion dependency = (ModelVersion)dependenciesEnum.nextElement();
-											_dependencyModelNames.add(dependency.model().name());
-											dependency.migrate(_lockOwnerName, _dependencyModelNames);
-										}
-									}
-									if (ERXMigrator.log.isInfoEnabled()) {
-										ERXMigrator.log.info("Upgrading " + _model.name() + " to version " + nextVersion + " with migration '" + erMigrationClassName + "'");
-									}
-									migration.upgrade(_editingContext, channel, _model);
-								}
-								else if (direction == -1) {
-									if (ERXMigrator.log.isInfoEnabled()) {
-										ERXMigrator.log.info("Dowgrading " + _model.name() + " to version " + nextVersion + " with migration '" + erMigrationClassName + "'");
-									}
-									migration.downgrade(_editingContext,  channel, _model);
-									NSArray dependencies = migration.modelDependencies();
-									if (dependencies != null) {
-										Enumeration dependenciesEnum = dependencies.reverseObjectEnumerator();
-										while (dependenciesEnum.hasMoreElements()) {
-											ModelVersion dependency = (ModelVersion)dependenciesEnum.nextElement();
-											_dependencyModelNames.add(dependency.model().name());
-											dependency.migrate(_lockOwnerName, _dependencyModelNames);
-										}
-									}
-								}
-								else {
-									throw new IllegalStateException("Unknown direction " + direction);
-								}
-							}
-							catch (Throwable e) {
-								throw new ERXMigrationFailedException("Failed to perform migration of " + migration + ".", e);
-							}
-							_database.setVersionNumber(channel, _model, nextVersion);
-							_editingContext.saveChanges();
-							channel.adaptorContext().commitTransaction();
-							channel.adaptorContext().beginTransaction();
-							currentVersion = nextVersion;
-							if (ERXMigrator.log.isInfoEnabled()) {
-								ERXMigrator.log.info(_model.name() + " is now version " + currentVersion);
-							}
-						}
-						catch (ClassNotFoundException e) {
-							done = true;
-						}
-						catch (InstantiationException e) {
-							throw new ERXMigrationFailedException("Failed to instantiate migration " + erMigrationClassName, e);
-						}
-						catch (IllegalAccessException e) {
-							throw new ERXMigrationFailedException("Failed to instantiate migration " + erMigrationClassName, e);
+						_migration.upgrade(_editingContext, channel, model);
+						_database.setVersionNumber(channel, model, nextVersion);
+						_editingContext.saveChanges();
+						channel.adaptorContext().commitTransaction();
+						channel.adaptorContext().beginTransaction();
+						if (ERXMigrator.log.isInfoEnabled()) {
+							ERXMigrator.log.info(model.name() + " is now version " + currentVersion);
 						}
 					}
-
-					if (_targetVersion != ERXMigrator.LATEST_VERSION && currentVersion != _targetVersion) {
-						throw new ERXMigrationFailedException("You asked to migrate from version " + previousVersion + " to version " + _targetVersion + ", but there was no migration available for version " + nextVersion + ".");
+					else {
+						ERXMigrator.log.info("Already upgraded " + model.name() + " to " + nextVersion + ", skipping");
 					}
+				}
+				catch (Throwable t) {
+					throw new ERXMigrationFailedException("Migration failed.", t);
 				}
 				finally {
-					_database.unlock(channel, _model);
-				}
-
-				if (ERXMigrator.log.isInfoEnabled()) {
-					ERXMigrator.log.info("Migration of " + _model.name() + " is complete.");
+					_database.unlock(channel, model);
 				}
 			}
+
 			return 0;
 		}
 	}
