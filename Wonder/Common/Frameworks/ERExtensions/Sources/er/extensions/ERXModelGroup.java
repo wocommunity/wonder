@@ -599,9 +599,10 @@ public class ERXModelGroup extends EOModelGroup {
 				else
 					newConnectionDictionary.removeObjectForKey("jdbc2Info");
 			}
-			if (plugin != null)
+			if (plugin != null) {
 				newConnectionDictionary.setObjectForKey(plugin, "plugin");
-
+			}
+			
 			// set the information for ERXJDBCConnectionBroker
 			newConnectionDictionary.addEntriesFromDictionary(poolingDictionary);
 
@@ -610,7 +611,37 @@ public class ERXModelGroup extends EOModelGroup {
 				newConnectionDictionary.removeObjectForKey("jdbc2Info");
 			}
 
+			// We want to clean up our connection dictionaries so all our models match.  When EOF
+			// compares connection dictionaries, undefined plugin is not the same as plugin = ""
+			// even though it semantically is the same.  So we are normalizing our connection
+			// dictionaries here by removing blank keys that we know about.
+			String pluginCheck = (String)newConnectionDictionary.objectForKey("plugin");
+			if (pluginCheck != null && pluginCheck.length() == 0){
+				newConnectionDictionary.removeObjectForKey("plugin");
+			}
+			String driverCheck = (String)newConnectionDictionary.objectForKey("driver");
+			if (driverCheck != null && driverCheck.length() == 0){
+				newConnectionDictionary.removeObjectForKey("driver");
+			}
+
 			model.setConnectionDictionary(newConnectionDictionary);
+			
+			Enumeration modelsEnum = model.modelGroup().models().objectEnumerator();
+			while (modelsEnum.hasMoreElements()) {
+				EOModel otherModel = (EOModel)modelsEnum.nextElement();
+				if (otherModel != model) {
+					NSDictionary otherConnectionDictionary = otherModel.connectionDictionary();
+					if (otherConnectionDictionary != null) {
+						String thisURL = (String)newConnectionDictionary.objectForKey("URL");
+						String otherURL = (String)otherConnectionDictionary.objectForKey("URL");
+						String thisUsername = (String)newConnectionDictionary.objectForKey("username");
+						String otherUsername = (String)otherConnectionDictionary.objectForKey("username");
+						if (ERXStringUtilities.stringEqualsString(thisURL, otherURL) && ERXStringUtilities.stringEqualsString(thisUsername, otherUsername) && !newConnectionDictionary.equals(otherConnectionDictionary)) {
+							throw new IllegalArgumentException("The connection dictionaries for " + model.name() + " and " + otherModel.name() + " are the same URL and user but their connection dictionaries do not match: " + model.name() + "=" + newConnectionDictionary + "; and " + otherModel.name() + "=" + otherConnectionDictionary);
+						}
+					}
+				}
+			}
 		}
 	}
 
