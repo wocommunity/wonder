@@ -1,30 +1,37 @@
 package er.extensions;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+import java.util.Enumeration;
 
 import com.webobjects.eoaccess.EOAttribute;
 import com.webobjects.eoaccess.EOEntity;
 import com.webobjects.eoaccess.EOEntityClassDescription;
 import com.webobjects.eoaccess.EOModel;
 import com.webobjects.eoaccess.EOModelGroup;
+import com.webobjects.eocontrol.EOArrayDataSource;
 import com.webobjects.eocontrol.EOClassDescription;
 import com.webobjects.eocontrol.EOCustomObject;
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.eocontrol.EOEnterpriseObject;
 import com.webobjects.eocontrol.EOGlobalID;
+import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSKeyValueCoding;
 import com.webobjects.foundation.NSMutableArray;
-import com.webobjects.foundation.NSMutableDictionary;
-
-import er.extensions.ERXStringUtilities;
 
 /**
  * Put POJOs into EOF (sort of). This class is mainly usefull when used with
  * D2W, when you don't want to create components for non-persistent objects.
- * Should be regarded as experimental :) Here's a usage example, showing how to
+ * Should be regarded as experimental :) 
+ * Thing to watch out for: <ul>
+ * <li> you can't create new objects
+ * <li> reverting the EC doesn't revert the objects
+ * <li> you should use a new EC with these objects
+ * <li> auto-discovery of attributes is very lame
+ * </ul>
+ * Here's a usage example, showing how to
  * call up an edit page for a single "object" and a list page for an array. Note 
  * that the list-inspect-edit workflow and sorting, batching etc work out of the box.
- * 
  * <pre><code>
  * public class Main extends WOComponent {
  * 
@@ -46,6 +53,7 @@ import er.extensions.ERXStringUtilities;
  * 
  * 	public Main(WOContext context) {
  * 		super(context);
+ * 		ERXDummyRecord.registerDescriptionForClass(Test.class, null);
  * 		NSMutableArray l = new NSMutableArray();
  * 		for (int i = 0; i &gt; 5; i++) {
  * 			Test o = new Test("Foo "+ i, new Integer(i^i % (i+1)), i % 2 == 0? Boolean.TRUE : Boolean.FALSE);
@@ -55,8 +63,8 @@ import er.extensions.ERXStringUtilities;
  * 		list = l.immutableClone();
  * 	}
  * 
- * 	public WOComponent edit() {
- * 		EOEnterpriseObject eo = new ERXDummyRecord(object);
+ * 	public WOComponent editObject() {
+ * 		EOEnterpriseObject eo = ERXDummyRecord.recordForObject(session().defaultEditingContext(), object);
  * 		WOComponent result = D2W.factory().pageForTaskAndEntityNamed("edit", eo.entityName(), session());
  * 		result.takeValueForKey(eo, "object");
  * 		result.takeValueForKey(context().page(), "nextPage");
@@ -64,21 +72,9 @@ import er.extensions.ERXStringUtilities;
  * 	}
  * 
  * 	public WOComponent showList() {
- * 		EOEditingContext ec = null;
- * 		EOClassDescription cd = null;
- * 		NSMutableArray objects = new NSMutableArray();
- * 		for (Enumeration iter = list.objectEnumerator(); iter.hasMoreElements();) {
- * 			Test o = (Test) iter.nextElement();
- * 
- * 			EOEnterpriseObject eo = new ERXDummyRecord(o, ec);
- * 			ec = eo.editingContext();
- * 			cd = eo.classDescription();
- * 			objects.addObject(eo);
- * 		}
- * 
- * 		WOComponent result = D2W.factory().pageForTaskAndEntityNamed("list", cd.entityName(), session());
- * 		EOArrayDataSource ds = new EOArrayDataSource(cd, ec);
+ * 		EOArrayDataSource ds = ERXDummyRecord.dataSourceForObjects(session().defaultEditingContext(), list);
  * 		ds.setArray(objects);
+ * 		WOComponent result = D2W.factory().pageForTaskAndEntityNamed("list", ds.classDescriptionForObjects().entityName(), session());
  * 		result.takeValueForKey(ds, "dataSource");
  * 		result.takeValueForKey(context().page(), "nextPage");
  * 		return result;
@@ -89,6 +85,18 @@ import er.extensions.ERXStringUtilities;
 
 public class ERXDummyRecord extends EOCustomObject {
 
+	private Object object;
+
+	protected ERXDummyRecord(Object o) {
+		object = o;
+		EOClassDescription classDescription = classDescriptionForObject(object);
+		__setClassDescription(classDescription);
+	}
+
+	public Object object() {
+		return object;
+	}
+	
 	public static class GlobalID extends EOGlobalID {
 
 		private Object object;
@@ -110,34 +118,87 @@ public class ERXDummyRecord extends EOCustomObject {
 		}
 	}
 
-	public static class EditingContext extends EOEditingContext {
-		private NSMutableDictionary objects = new NSMutableDictionary();
+	public static class LocalizedBinding extends NSKeyValueCoding._KeyBinding {
 
-		private NSMutableDictionary gids = new NSMutableDictionary();
-
-		public void recordObject(EOEnterpriseObject eo, EOGlobalID gid) {
-			objects.setObjectForKey(eo, gid);
-			gids.setObjectForKey(gid, eo);
-			super.recordObject(eo, gid);
+		public LocalizedBinding(String key) {
+			super(null, key);
 		}
 
-		public EOGlobalID globalIDForObject(EOEnterpriseObject eo) {
-			return (EOGlobalID) gids.objectForKey(eo);
+		public Object valueInObject(Object object) {
+			ERXDummyRecord eo = (ERXDummyRecord) object;
+			return NSKeyValueCoding.Utility.valueForKey(eo.object(), _key);
 		}
+
+		public void setValueInObject(Object value, Object object) {
+			ERXDummyRecord eo = (ERXDummyRecord) object;
+			NSKeyValueCoding.Utility.takeValueForKey(eo.object(), value, _key);
+		}
+	}
+
+	public NSKeyValueCoding._KeyBinding _otherStorageBinding(String key) {
+		NSKeyValueCoding._KeyBinding result = new LocalizedBinding(key);
+		return result;
 	}
 
 	private static EOModel pojoModel;
 
-	private Object object;
+	public static EOClassDescription classDescriptionForObject(Object object) {
+		return EOClassDescription.classDescriptionForClass(object.getClass());
+	}
+	
+	private static NSArray fieldNamesFromClass(Class clazz) {
+		NSMutableArray fieldNames = new NSMutableArray();
+		Field f[] = clazz.getDeclaredFields();
+		for (int i = 0; i < f.length; i++) {
+			Field field = f[i];
+			fieldNames.addObject(field.getName().replaceFirst("^_", ""));
+		}
+		return fieldNames;
+	}
 
-	private EOClassDescription classDescription;
+	private static Field _fieldForName(Class clazz, String name) {
+		try {
+			return clazz.getDeclaredField(name);
+		}
+		catch (SecurityException e) {
+		}
+		catch (NoSuchFieldException e) {
+		}
+		return null;
+	}
 
-	private EOEditingContext editingContext;
+	private static Field fieldForName(Class clazz, String name) {
+		Field result = _fieldForName(clazz, name);
+		if(result == null) {
+			result = _fieldForName(clazz, "_" + name);
+		}
+		return result;
+	}
 
-	public ERXDummyRecord(Object o, EOEditingContext ec) {
-		editingContext = ec == null ? new EditingContext() : ec;
-		object = o;
-		String entityName = "Pojo" + ERXStringUtilities.lastPropertyKeyInKeyPath(object.getClass().getName().replaceAll("\\$", ""));
+	private static Method _methodForName(Class clazz, String name) {
+		try {
+			return clazz.getDeclaredMethod(name, null);
+		}
+		catch (SecurityException e) {
+		}
+		catch (NoSuchMethodException e) {
+		}
+		return null;
+	}
+
+	private static Method methodForName(Class clazz, String name) {
+		Method result = _methodForName(clazz, "get" + ERXStringUtilities.capitalize(name));
+		if(result == null) {
+			result = _methodForName(clazz, name);
+		}
+		if(result == null) {
+			result = _methodForName(clazz, "_" + name);
+		}
+		return result;
+	}
+
+	public static synchronized void registerDescriptionForClass(Class clazz, NSArray keys) {
+		String entityName = "Pojo" + ERXStringUtilities.lastPropertyKeyInKeyPath(clazz.getName().replaceAll("\\$", ""));
 		if (pojoModel == null) {
 			pojoModel = new EOModel();
 			pojoModel.setName("PojoModel");
@@ -148,48 +209,70 @@ public class ERXDummyRecord extends EOCustomObject {
 			pojoModel.removeEntity(entity);
 			entity = null;
 		}*/
+		EOClassDescription classDescription;
 		if (entity == null) {
 			entity = new EOEntity();
 			entity.setName(entityName);
-			NSMutableArray fields = new NSMutableArray();
-			Field f[] = object.getClass().getDeclaredFields();
-			for (int i = 0; i < f.length; i++) {
-				Field field = f[i];
-				fields.addObject(field.getName());
+			keys = (keys == null ? fieldNamesFromClass(clazz) : keys);
+			for (Enumeration iter = keys.objectEnumerator(); iter.hasMoreElements();) {
+				String name = (String) iter.nextElement();
 				EOAttribute attribute = new EOAttribute();
-				attribute.setName(field.getName());
-				attribute.setClassName(field.getType().getName());
+				attribute.setName(name);
+				Method m = methodForName(clazz, name);
+				if(m != null) {
+					attribute.setClassName(m.getReturnType().getName());
+				} else {
+					Field f = fieldForName(clazz, name);
+					if(f != null) {
+						String type = f.getType().getName();
+						if("boolean".equals(type)) {
+							type = "java.lang.Boolean";
+						} else if("int".equals(type)) {
+							type = "java.lang.Number";
+						} else if("long".equals(type)) {
+							type = "java.lang.Number";
+						} else if("short".equals(type)) {
+							type = "java.lang.Number";
+						}
+
+						attribute.setClassName(type);
+					}
+				}
 				entity.addAttribute(attribute);
 			}
 			classDescription = new EOEntityClassDescription(entity);
 			NSKeyValueCoding.Utility.takeValueForKey(entity, classDescription, "classDescription");
+			EOClassDescription.registerClassDescription(classDescription, clazz);
 			pojoModel.addEntity(entity);
-			EOClassDescription.registerClassDescription(classDescription, object.getClass());
 		} else {
-			classDescription = entity.classDescriptionForInstances();
+			// classDescription = entity.classDescriptionForInstances();
 		}
+	}
+
+	public static EOArrayDataSource dataSourceForObjects(EOEditingContext ec, NSArray list) {
+		EOClassDescription cd = null;
+		NSMutableArray objects = new NSMutableArray();
+		for (Enumeration iter = list.objectEnumerator(); iter.hasMoreElements();) {
+			Object o = (Object) iter.nextElement();
+
+			EOEnterpriseObject eo = recordForObject(ec, o);
+			ec = eo.editingContext();
+			cd = eo.classDescription();
+			objects.addObject(eo);
+		}
+		EOArrayDataSource ds = new EOArrayDataSource(cd, ec);
+		ds.setArray(objects);
+		return ds;
+	}
+
+	public static EOEnterpriseObject recordForObject(EOEditingContext ec, Object o) {
 		EOGlobalID gid = new GlobalID(o);
-		editingContext.recordObject(this, gid);
-	}
 
-	public ERXDummyRecord(Object o) {
-		this(o, new EditingContext());
+		EOEnterpriseObject eo = ec.objectForGlobalID(gid);
+		if(eo == null) {
+			eo = new ERXDummyRecord(o);
+			ec.recordObject(eo, gid);
+		}
+		return eo;
 	}
-
-	public EOClassDescription classDescription() {
-		return classDescription;
-	}
-
-	public EOEditingContext editingContext() {
-		return editingContext;
-	}
-
-	public Object handleQueryWithUnboundKey(String key) {
-		return NSKeyValueCoding.Utility.valueForKey(object, key);
-	}
-
-	public void handleTakeValueForUnboundKey(Object value, String key) {
-		NSKeyValueCoding.Utility.takeValueForKey(object, value, key);
-	}
-
 }
