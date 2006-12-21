@@ -11,10 +11,10 @@ import javax.mail.util.ByteArrayDataSource;
 import com.webobjects.foundation.NSData;
 
 /**
- * Attaches a byte array or NSData to a mail. The mime type is pulled form the file name,
- * so be sure to provide a reasonable one.
+ * Attaches a byte array or NSData to a mail. The mime type is pulled form the file name, so be sure to provide a
+ * reasonable one.
  * 
- *
+ * 
  * @author ak
  */
 public class ERMailDataAttachment extends ERMailAttachment {
@@ -58,7 +58,7 @@ public class ERMailDataAttachment extends ERMailAttachment {
 
 	protected BodyPart getBodyPart() throws MessagingException {
 		MimeBodyPart bp = new MimeBodyPart();
-		DataSource ds = new ByteArrayDataSource((byte[])content(), _mimeType);
+		DataSource ds = new ByteArrayDataSource((byte[]) content(), _mimeType);
 		bp.setDataHandler(new DataHandler(ds));
 
 		if (this.contentID() != null)
