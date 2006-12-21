@@ -365,6 +365,20 @@ public class ERXModelGroup extends EOModelGroup {
 	public static boolean patchModelsOnLoad() {
 		return patchModelsOnLoad;
 	}
+	
+	/**
+	 * Returns whether or not the given entity is a prototype.
+	 */
+	public static boolean isPrototypeEntity(EOEntity entity) {
+		return ERXModelGroup.isPrototypeEntityName(entity.name());
+	}
+	
+	/**
+	 * Returns whether or not the given entity name is a prototype entity
+	 */
+	public static boolean isPrototypeEntityName(String entityName) {
+		return (entityName.startsWith("EO") && entityName.endsWith("Prototypes"));
+	}
 
 	/**
 	 * Called when a model is loaded. This will reset the connection dictionary and insert the correct EOPrototypes if
