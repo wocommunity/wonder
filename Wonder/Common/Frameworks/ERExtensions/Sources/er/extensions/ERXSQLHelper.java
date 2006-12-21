@@ -96,7 +96,7 @@ public class ERXSQLHelper {
 			NSMutableArray ar = new NSMutableArray();
 			while (e.hasMoreElements()) {
 				EOEntity currentEntity = (EOEntity) e.nextElement();
-				if ((currentEntity.name().startsWith("EO") && currentEntity.name().endsWith("Prototypes"))) {
+				if (ERXModelGroup.isPrototypeEntity(currentEntity)) {
 					// we do not want to add EOXXXPrototypes entities
 					continue;
 				}
