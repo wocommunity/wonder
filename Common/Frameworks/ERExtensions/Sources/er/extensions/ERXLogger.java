@@ -7,14 +7,19 @@
 package er.extensions;
 
 
+import java.util.Enumeration;
 import java.util.Properties;
 
+import org.apache.log4j.Appender;
 import org.apache.log4j.BasicConfigurator;
+import org.apache.log4j.ConsoleAppender;
+import org.apache.log4j.Layout;
 import org.apache.log4j.Level;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
 
+import com.sun.rsasign.ap;
 import com.webobjects.foundation.NSLog;
 import com.webobjects.foundation.NSNotificationCenter;
 
@@ -150,9 +155,8 @@ public class ERXLogger extends org.apache.log4j.Logger {
      */
     public static synchronized void configureLogging(Properties properties) {
         LogManager.resetConfiguration();
-        BasicConfigurator.configure();
+        BasicConfigurator.configure();        
         Logger.getRootLogger().setLevel(Level.INFO);     
-        
         boolean is522OrHigher = ERXProperties.webObjectsVersionIs522OrHigher();
         if (is522OrHigher) {
             int allowedLevel = NSLog.debug.allowedDebugLevel();
@@ -164,7 +168,14 @@ public class ERXLogger extends org.apache.log4j.Logger {
            NSLog.debug.setAllowedDebugLevel(allowedLevel);
         }
         PropertyConfigurator.configure(properties);
-
+        // ak: if the root logger has no appenders, something is really broken
+        // most likely the properties didn't read correctly.
+        if(!Logger.getRootLogger().getAllAppenders().hasMoreElements()) {
+            Appender appender = new ConsoleAppender(new ERXPatternLayout("%-5p %d{HH:mm:ss} (%-20c:%L):  %m%n"), "System.out");
+			Logger.getRootLogger().addAppender(appender);
+            Logger.getRootLogger().setLevel(Level.DEBUG);
+            Logger.getRootLogger().error("Logging prefs couldn't get read from properties, using defaults");
+        }
         if (log == null) {
             log = Logger.getLogger(Logger.class.getName(), factory);
         }
