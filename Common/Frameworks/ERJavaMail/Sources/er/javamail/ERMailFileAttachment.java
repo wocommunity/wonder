@@ -2,8 +2,7 @@
  $Id$
 
  ERMailFileAttachment.java - Camille Troillard - tuscland@mac.com
-*/
-
+ */
 
 package er.javamail;
 
@@ -18,45 +17,46 @@ import javax.mail.internet.MimeBodyPart;
 
 public class ERMailFileAttachment extends ERMailAttachment {
 
-    protected String _fileName;
-    protected String _contentID;
+	protected String _fileName;
+	protected String _contentID;
 
-    protected ERMailFileAttachment (Object content) {
-        super (content);
-    }
-	
-    public ERMailFileAttachment (String fileName, String id, File content) {
-        super (content);
-        this.setFileName (fileName);
-        this.setContentID (id);
-    }
+	protected ERMailFileAttachment(Object content) {
+		super(content);
+	}
 
-    public String fileName () {
-	if (_fileName == null)
-	    _fileName = "attachement.txt";
-	return _fileName;
-    }
+	public ERMailFileAttachment(String fileName, String id, File content) {
+		super(content);
+		this.setFileName(fileName);
+		this.setContentID(id);
+	}
 
-    public void setFileName (String name) {
-        _fileName = name;
-    }
+	public String fileName() {
+		if (_fileName == null)
+			_fileName = "attachement.txt";
+		return _fileName;
+	}
 
-    public String contentID () {
-	return _contentID;
-    }
+	public void setFileName(String name) {
+		_fileName = name;
+	}
 
-    public void setContentID (String id) {
-        _contentID = id;
-    }
+	public String contentID() {
+		return _contentID;
+	}
 
-    protected BodyPart getBodyPart () throws MessagingException {
-        MimeBodyPart bp = new MimeBodyPart ();
-        DataSource ds = new FileDataSource ((File)this.content ());
-        bp.setDataHandler (new DataHandler (ds));
+	public void setContentID(String id) {
+		_contentID = id;
+	}
 
-        if (this.contentID () != null)	bp.setHeader ("Content-ID", this.contentID ());
-        bp.setFileName (this.fileName ());
+	protected BodyPart getBodyPart() throws MessagingException {
+		MimeBodyPart bp = new MimeBodyPart();
+		DataSource ds = new FileDataSource((File) this.content());
+		bp.setDataHandler(new DataHandler(ds));
 
-        return bp;
-    }
+		if (this.contentID() != null)
+			bp.setHeader("Content-ID", this.contentID());
+		bp.setFileName(this.fileName());
+
+		return bp;
+	}
 }
