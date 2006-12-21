@@ -602,7 +602,10 @@ public class ERXSQLHelper {
 	public static synchronized ERXSQLHelper newSQLHelper(EOSQLExpression expression) {
 		// This is REALLY hacky.
 		String className = expression.getClass().getName();
-		int dotIndex = className.lastIndexOf('.');
+		int dotIndex = className.lastIndexOf('$');
+		if(dotIndex == -1) {
+			dotIndex = className.lastIndexOf('.');
+		}
 		int expressionIndex = className.lastIndexOf("Expression");
 		if (expressionIndex == -1) {
 			throw new RuntimeException("Failed to create sql helper for expression " + expression + ".");
