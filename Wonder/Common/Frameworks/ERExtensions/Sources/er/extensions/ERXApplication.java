@@ -9,6 +9,8 @@ package er.extensions;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
@@ -157,7 +159,30 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 
     	if(allFrameworks.size() == 0) {
     		Properties mainProps = null;
-    		if(NSBundle.mainBundle() != null) {
+    		NSBundle mainBundle = null;
+    		String mainBundleName = NSProperties._mainBundleName();
+            if(mainBundleName != null) {
+            	mainBundle = NSBundle.bundleForName(mainBundleName);
+            } 
+            if(mainBundle == null) {
+            	mainBundle = NSBundle.mainBundle();
+            }
+            if(mainBundle == null) {
+            	// AK: when we get here, the main bundle wasn't inited yet
+            	// so we do it ourself...
+            	try {
+					Method init = NSBundle.class.getDeclaredMethod("InitMainBundle", null);
+	            	init.setAccessible(true);
+	            	init.invoke(NSBundle.class, null);
+				}
+				catch (Exception e) {
+					System.err.println(e);
+					e.printStackTrace();
+					System.exit(1);
+				}
+            	mainBundle = NSBundle.mainBundle();
+            }
+            if(mainBundle != null) {
     			mainProps = NSBundle.mainBundle().properties();
     		} 
     		if(mainProps == null) {
