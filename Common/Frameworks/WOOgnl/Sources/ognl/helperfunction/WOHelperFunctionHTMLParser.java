@@ -69,7 +69,13 @@ public class WOHelperFunctionHTMLParser {
           }
           else if ((tagIndex = tagLowerCase.indexOf(WOHelperFunctionHTMLParser.WEBOBJECT_START_TAG)) > 1 || (tagIndex = tagLowerCase.indexOf(WOHelperFunctionHTMLParser.WO_START_TAG)) > 1) {
             _contentText.append(token.substring(0, token.lastIndexOf("<")));
-            startOfWebObjectTag(token.substring(tagIndex, token.length()));
+            if (token.endsWith("/")) {
+              startOfWebObjectTag(token.substring(tagIndex, token.length() - 1));
+              endOfWebObjectTag("/");
+            }
+            else {
+              startOfWebObjectTag(token.substring(tagIndex, token.length()));
+            }
           }
           else if (tagLowerCase.startsWith(WOHelperFunctionHTMLParser.WEBOBJECT_END_TAG) || tagLowerCase.startsWith(WOHelperFunctionHTMLParser.WO_END_TAG)) {
             endOfWebObjectTag(token);
