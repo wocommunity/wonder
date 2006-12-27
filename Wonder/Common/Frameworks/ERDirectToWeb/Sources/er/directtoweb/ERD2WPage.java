@@ -178,7 +178,7 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
      * @return url for the current page
      */
     public String urlForCurrentState() {
-        return context().directActionURLForActionNamed(d2wContext().dynamicPage(), null);
+        return context().directActionURLForActionNamed(d2wContext().dynamicPage(), null).replaceAll("&amp;", "&");
     }
 
     /** {@link EOEditingContext} for the current object */
