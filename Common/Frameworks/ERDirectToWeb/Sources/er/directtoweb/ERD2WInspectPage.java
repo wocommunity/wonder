@@ -55,7 +55,7 @@ public class ERD2WInspectPage extends ERD2WPage implements InspectPageInterface,
         if(primaryKeyString != null) {
             dict = new NSDictionary(primaryKeyString, "__key");
         }
-        return context().directActionURLForActionNamed(actionName, dict);
+        return context().directActionURLForActionNamed(actionName, dict).replaceAll("&amp;", "&");
     }
 
     
