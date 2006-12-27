@@ -7,19 +7,16 @@
 package er.extensions;
 
 
-import java.util.Enumeration;
 import java.util.Properties;
 
 import org.apache.log4j.Appender;
 import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.ConsoleAppender;
-import org.apache.log4j.Layout;
 import org.apache.log4j.Level;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
 
-import com.sun.rsasign.ap;
 import com.webobjects.foundation.NSLog;
 import com.webobjects.foundation.NSNotificationCenter;
 
