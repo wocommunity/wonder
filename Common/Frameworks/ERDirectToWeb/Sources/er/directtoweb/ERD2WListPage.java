@@ -211,7 +211,7 @@ public class ERD2WListPage extends ERD2WPage implements ERDListPageInterface, Se
     /*** end of reimplementation */
 
     public String urlForCurrentState() {
-        return context().directActionURLForActionNamed(d2wContext().dynamicPage(), null);
+        return context().directActionURLForActionNamed(d2wContext().dynamicPage(), null).replaceAll("&amp;", "&");
     }
 
     protected void setSortOrderingsOnDisplayGroup(NSArray sortOrderings, WODisplayGroup dg) {
