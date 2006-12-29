@@ -30,7 +30,6 @@ import com.webobjects.eocontrol.EOFetchSpecification;
 import com.webobjects.eocontrol.EOGlobalID;
 import com.webobjects.eocontrol.EOKeyComparisonQualifier;
 import com.webobjects.eocontrol.EOKeyGlobalID;
-import com.webobjects.eocontrol.EOKeyValueCoding;
 import com.webobjects.eocontrol.EOKeyValueQualifier;
 import com.webobjects.eocontrol.EONotQualifier;
 import com.webobjects.eocontrol.EOObjectStore;
@@ -582,7 +581,7 @@ public class ERXEOControlUtilities {
                                                                      bindings);
         return aggregateFunctionWithQualifier(ec, entityName, attributeName, function, fs.qualifier());
     }
-    
+
     /**
      * Computes an aggregate function for a given attribute
      * restricted by a given qualifier. For instance
@@ -596,6 +595,34 @@ public class ERXEOControlUtilities {
      * @return aggregate result of the fuction call
      */
     public static Number aggregateFunctionWithQualifier(EOEditingContext ec,
+            String entityName,
+            String attributeName,
+            String function,
+            EOQualifier qualifier) {
+    	return (Number)_aggregateFunctionWithQualifier(ec, entityName, attributeName, function, qualifier);
+    }
+
+    /**
+     * Computes an aggregate function for a given attribute
+     * restricted by a given qualifier. For instance
+     * select MAX(AGE) from User where name like 'M*'
+     * 
+     * @param ec editing context used for the fetch
+     * @param entityName name of the entity
+     * @param attributeName attribute for the function to be performed on
+     * @param function name, ie MAX, MIN, AVG, etc.
+     * @param qualifier to restrict data set
+     * @return aggregate result of the fuction call
+     */
+    public static NSTimestamp aggregateTimestampWithQualifier(EOEditingContext ec,
+            String entityName,
+            String attributeName,
+            String function,
+            EOQualifier qualifier) {
+    	return (NSTimestamp)_aggregateFunctionWithQualifier(ec, entityName, attributeName, function, qualifier);
+    }
+    
+    public static Object _aggregateFunctionWithQualifier(EOEditingContext ec,
                                                         String entityName,
                                                         String attributeName,
                                                         String function,
@@ -625,7 +652,7 @@ public class ERXEOControlUtilities {
         }
         if ((results != null) && (results.count() == 1)) {
             NSDictionary row = (NSDictionary) results.lastObject();
-            return (Number)row.objectForKey(attribute.name());
+            return row.objectForKey(attribute.name());
         }
         return null;        
     }
