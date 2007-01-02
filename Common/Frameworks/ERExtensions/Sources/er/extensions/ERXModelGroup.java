@@ -10,6 +10,7 @@ import java.net.URL;
 import java.util.Enumeration;
 import java.util.Hashtable;
 
+import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
 import com.webobjects.eoaccess.EOAdaptor;
@@ -729,7 +730,7 @@ public class ERXModelGroup extends EOModelGroup {
 
 	protected String prototypeEntityNameForModel(EOModel model) {
 		String modelName = model.name();
-		String prototypeEntityName = ERXSystem.getProperty(modelName + ".EOPrototypesEntity");
+		String prototypeEntityName = getProperty(modelName + ".EOPrototypesEntity", "dbEOPrototypesEntityGLOBAL");
 		NSDictionary databaseConfig = databaseConfigForModel(model);
 		if (prototypeEntityName == null && databaseConfig != null) {
 			prototypeEntityName = (String) databaseConfig.objectForKey("prototypeEntityName");
@@ -819,11 +820,15 @@ public class ERXModelGroup extends EOModelGroup {
 		if (!ERXModelGroup.flattenPrototypes) {
 			return;
 		}
-
+		log.setLevel(Level.DEBUG);
 		String prototypesFixedKey = "_EOPrototypesFixed";
 		NSMutableDictionary prototypeReplacement = new NSMutableDictionary();
 		for (Enumeration modelsEnum = models().objectEnumerator(); modelsEnum.hasMoreElements();) {
 			EOModel model = (EOModel) modelsEnum.nextElement();
+			if(model.name().equals("erprototypes")) {
+				log.info("Skipping erprototype model");
+				continue;
+			}
 			NSDictionary userInfo = model.userInfo();
 			Boolean prototypesFixedBoolean = (Boolean) userInfo.objectForKey(prototypesFixedKey);
 			if (prototypesFixedBoolean == null || !prototypesFixedBoolean.booleanValue()) {
@@ -860,22 +865,10 @@ public class ERXModelGroup extends EOModelGroup {
 										}
 									}
 									else {
+										flattenPrototypeAttribute(prototypeAttribute, attribute);
 										if (log.isDebugEnabled()) {
 											log.debug("Flattening " + model.name() + "/" + entity.name() + "/" + attribute.name() + " with the prototype attribute " + prototypeAttribute.entity().model().name() + "/" + prototypeAttribute.entity().name() + "/" + prototypeAttribute.name());
 										}
-										NSArray prototypeKeys = EOAttribute._prototypeKeys();
-										NSMutableArray overriddenKeys = new NSMutableArray();
-										Enumeration prototypeKeysEnum = prototypeKeys.objectEnumerator();
-										while (prototypeKeysEnum.hasMoreElements()) {
-											String prototypeKey = (String) prototypeKeysEnum.nextElement();
-											if (attribute._isKeyEnumOverriden(EOAttribute._enumForKey(prototypeKey))) {
-												overriddenKeys.addObject(prototypeKey);
-											}
-										}
-										attribute.setPrototype(null);
-										NSArray keysToReplace = _NSArrayUtilities.arrayExcludingObjectsFromArray(prototypeKeys, overriddenKeys);
-										NSDictionary valuesToReplace = EOKeyValueCodingAdditions.Utility.valuesForKeys(prototypeAttribute, keysToReplace);
-										EOKeyValueCodingAdditions.Utility.takeValuesFromDictionary(attribute, valuesToReplace);
 									}
 								}
 							}
@@ -888,6 +881,45 @@ public class ERXModelGroup extends EOModelGroup {
 					mutableUserInfo.setObjectForKey(Boolean.TRUE, prototypesFixedKey);
 					model.setUserInfo(mutableUserInfo);
 				}
+			}
+		}
+	}
+
+	/**
+	 * Flattens a single attribute with the respective prototype.
+	 * @param prototypeAttribute
+	 * @param attribute
+	 */
+	private void flattenPrototypeAttribute(EOAttribute prototypeAttribute, EOAttribute attribute) {
+		NSArray prototypeKeys = EOAttribute._prototypeKeys();
+		NSMutableArray overriddenKeys = new NSMutableArray();
+		Enumeration prototypeKeysEnum = prototypeKeys.objectEnumerator();
+		while (prototypeKeysEnum.hasMoreElements()) {
+			String prototypeKey = (String) prototypeKeysEnum.nextElement();
+			if (attribute._isKeyEnumOverriden(EOAttribute._enumForKey(prototypeKey))) {
+				overriddenKeys.addObject(prototypeKey);
+			}
+		}
+		// AK: for whatever reason, when we have a custom value type of type string, it gets reset to NSData.
+		// Presumably, this is because EOM outputs other keys than WO and the logic to get at the actual
+		// value type is pretty broken.
+		// Adding factoryMethodArgumentType to the overridden key solves this. Of course,  this breaks
+		// when you *do* have a different factoryMethodArgumentType in the attribute but this shouldn't ever be the case.
+		boolean hasCustomClass = false;
+		if(overriddenKeys.containsObject("valueFactoryMethodName")) {
+			overriddenKeys.addObject("factoryMethodArgumentType");
+			hasCustomClass = true;
+		}
+
+		NSArray keysToReplace = _NSArrayUtilities.arrayExcludingObjectsFromArray(prototypeKeys, overriddenKeys);
+		NSDictionary valuesToReplace = EOKeyValueCodingAdditions.Utility.valuesForKeys(prototypeAttribute, keysToReplace);
+		attribute.setPrototype(null);
+		EOKeyValueCodingAdditions.Utility.takeValuesFromDictionary(attribute, valuesToReplace);
+		if(hasCustomClass) {
+			Class clazz = ERXPatcher.classForName(attribute.className());
+			if(ERXConstant.StringConstant.class.isAssignableFrom(clazz)) {
+				attribute.setFactoryMethodArgumentType(EOAttribute.FactoryMethodArgumentIsString);
+				attribute.setClassName(attribute.className());
 			}
 		}
 	}

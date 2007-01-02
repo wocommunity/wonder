@@ -6,8 +6,11 @@ import java.sql.SQLException;
 import org.apache.log4j.Logger;
 
 import com.webobjects.eoaccess.EOAttribute;
+import com.webobjects.foundation.NSForwardException;
 
 import er.extensions.ERXConstant;
+import er.extensions.ERXPatcher;
+import er.extensions.ERXJDBCAdaptor.Channel;
 
 /**
  * Adds numerical constant support to EOF. See ERXConstant for more info. 
@@ -23,6 +26,26 @@ public class ERXJDBCColumn extends JDBCColumn {
 
 	public ERXJDBCColumn(EOAttribute attribute, JDBCChannel channel, int column, ResultSet rs) {
 		super(attribute, channel, column, rs);
+	}
+
+	public ERXJDBCColumn(Channel aChannel) {
+		super(aChannel);
+	}
+
+	public void takeInputValue(Object arg0, int arg1, boolean arg2) {
+		try {
+			super.takeInputValue(arg0, arg1, arg2);
+		} catch(NSForwardException ex) {
+			if (ex.originalException() instanceof NoSuchMethodException) {
+				Class clazz = ERXPatcher.classForName(_attribute.className());
+				if(ERXConstant.Constant.class.isAssignableFrom(clazz)) {
+					Object value = ERXConstant.constantForClassNamed(arg0, _attribute.className());
+					super.takeInputValue(value, arg1, arg2);
+					return;
+				}
+			}
+			throw ex;
+		}
 	}
 
 	Object _fetchValue(boolean flag) {
@@ -48,6 +71,11 @@ public class ERXJDBCColumn extends JDBCColumn {
 				}
 			}
 		}
-		return super._fetchValue(flag);
+		try {
+			return super._fetchValue(flag);
+		} catch(NSForwardException ex) {
+			log.error("There's an error with this attribute: " + _attribute);
+			throw ex;
+		}
 	}
 }
