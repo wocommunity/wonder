@@ -13,9 +13,12 @@ import com.webobjects.foundation.*;
 
 import er.extensions.ERXApplication;
 import er.extensions.ERXEC;
+import er.extensions.ERXEOAccessUtilities;
 import er.extensions.ERXExtensions;
+import er.extensions.ERXJDBCUtilities;
 import er.extensions.ERXLogger;
 import er.extensions.ERXProperties;
+import er.extensions.ERXSQLHelper;
 import er.extensions.ERXUtilities;
 
 import er.corebusinesslogic.ERCMailDelivery;
@@ -77,14 +80,21 @@ public class Application extends ERXApplication {
         log.info("Sending test mail");
         try {
             EOEditingContext ec = ERXEC.newEditingContext();
-            
+            if(false) {
+                EODatabaseContext databaseContext = EOUtilities.databaseContextForModelNamed(ERXEC.newEditingContext(), "ERMail");
+                ERXSQLHelper helper = ERXSQLHelper.newSQLHelper(databaseContext);
+                String sql = helper.createSchemaSQLForEntitiesInModelWithName(null,"ERMail");
+                NSArray sqls = helper.splitSQLStatements(sql);
+                EOAdaptorChannel channel = databaseContext.availableChannel().adaptorChannel();
+                ERXJDBCUtilities.executeUpdateScript(channel, sql);
+            }
             ERCMailMessage message = ERCMailDelivery.sharedInstance().composeEmail(ERJavaMail.sharedInstance().adminEmail(),
-                                                          new NSArray(ERJavaMail.sharedInstance().adminEmail()),
-                                                          new NSArray(ERJavaMail.sharedInstance().adminEmail()),
-                                                          null,
-                                                          "This is a test",
-                                                          "This is the body",
-                                                          ec);
+                    new NSArray(ERJavaMail.sharedInstance().adminEmail()),
+                    new NSArray(ERJavaMail.sharedInstance().adminEmail()),
+                    null,
+                    "This is a test",
+                    "This is the body",
+                    ec);
             ec.saveChanges();
         } catch (Exception e) {
             log.error("Caught exception: " + e.getMessage() + " stack: " + ERXUtilities.stackTrace(e));
