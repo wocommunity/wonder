@@ -404,7 +404,7 @@ public class ERD2WListPage extends ERD2WPage implements ERDListPageInterface, Se
         	// rules to prevent that.
         	if((sortOrderings != null) && (ds instanceof EODatabaseDataSource)) {
         		EOFetchSpecification fs = ((EODatabaseDataSource)ds).fetchSpecification();
-        		if(!fs.sortOrderings().equals(sortOrderings)) {
+        		if(!fs.sortOrderings().equals(sortOrderings) && fs.fetchLimit() != 0) {
         			fs.setSortOrderings(sortOrderings);
         			_hasToUpdate = _hasToUpdate ? true : alwaysRefetchList();
         		}
