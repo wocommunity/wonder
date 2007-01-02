@@ -5,7 +5,6 @@ import com.webobjects.appserver.WOApplication;
 import er.extensions.ERXFrameworkPrincipal;
 
 public class Ajax extends ERXFrameworkPrincipal {
-	
 	public static Class[] REQUIRES = new Class[0];
 
     static {
