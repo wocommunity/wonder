@@ -1,5 +1,7 @@
 package er.extensions;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.sql.Connection;
 
 import org.apache.log4j.Logger;
@@ -12,6 +14,7 @@ import com.webobjects.eoaccess.EOEntity;
 import com.webobjects.eoaccess.EOGeneralAdaptorException;
 import com.webobjects.eocontrol.EOFetchSpecification;
 import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSBundle;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.jdbcadaptor.ERXJDBCColumn;
 import com.webobjects.jdbcadaptor.JDBCAdaptor;
@@ -79,6 +82,16 @@ public class ERXJDBCAdaptor extends JDBCAdaptor {
 
         public Channel(JDBCContext jdbccontext) {
             super(jdbccontext);
+            try {
+				Field field = JDBCChannel.class.getDeclaredField("_inputColumn");
+				field.setAccessible(true);
+				field.set(this, new ERXJDBCColumn(this));
+			}
+			catch (Exception e) {
+				System.err.println(e);
+				e.printStackTrace();
+				System.exit(1);
+			}
         }
         
         public void setAttributesToFetch(NSArray attributes) {
