@@ -136,7 +136,7 @@ import com.webobjects.jdbcadaptor.ERXJDBCColumn;
  */
 public abstract class ERXConstant {
 	
-	private static final Logger log = Logger.getLogger(ERXJDBCColumn.class);
+	private static final Logger log = Logger.getLogger(ERXConstant.class);
 
 	/**
 	 * Holds the value store, grouped by class name.
