@@ -23,6 +23,7 @@ import er.extensions.ERXUtilities;
 
 import er.corebusinesslogic.ERCMailDelivery;
 import er.corebusinesslogic.ERCMailMessage;
+import er.corebusinesslogic.ERCoreBusinessLogic;
 
 import er.javamail.ERJavaMail;
 
@@ -78,15 +79,11 @@ public class Application extends ERXApplication {
 
     public void testSendingMail() {
         log.info("Sending test mail");
+        EOEditingContext ec = ERXEC.newEditingContext();
+        ec.lock();
         try {
-            EOEditingContext ec = ERXEC.newEditingContext();
-            if(false) {
-                EODatabaseContext databaseContext = EOUtilities.databaseContextForModelNamed(ERXEC.newEditingContext(), "ERMail");
-                ERXSQLHelper helper = ERXSQLHelper.newSQLHelper(databaseContext);
-                String sql = helper.createSchemaSQLForEntitiesInModelWithName(null,"ERMail");
-                NSArray sqls = helper.splitSQLStatements(sql);
-                EOAdaptorChannel channel = databaseContext.availableChannel().adaptorChannel();
-                ERXJDBCUtilities.executeUpdateScript(channel, sql);
+            if(true) {
+                ERCoreBusinessLogic.sharedInstance().createTables(ec);
             }
             ERCMailMessage message = ERCMailDelivery.sharedInstance().composeEmail(ERJavaMail.sharedInstance().adminEmail(),
                     new NSArray(ERJavaMail.sharedInstance().adminEmail()),
@@ -98,6 +95,9 @@ public class Application extends ERXApplication {
             ec.saveChanges();
         } catch (Exception e) {
             log.error("Caught exception: " + e.getMessage() + " stack: " + ERXUtilities.stackTrace(e));
+            System.exit(1);
+        } finally {
+            ec.unlock();
         }
         log.info("Done.");
     }    
