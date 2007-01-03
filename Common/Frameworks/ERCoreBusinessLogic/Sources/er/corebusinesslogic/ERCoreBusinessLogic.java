@@ -7,17 +7,21 @@
 package er.corebusinesslogic;
 
 import java.lang.reflect.InvocationTargetException;
+import java.sql.SQLException;
 import java.util.Enumeration;
 
 import org.apache.log4j.Logger;
 
 import com.webobjects.appserver.WOApplication;
+import com.webobjects.eoaccess.EOAdaptorChannel;
+import com.webobjects.eoaccess.EODatabaseContext;
 import com.webobjects.eoaccess.EOEntity;
 import com.webobjects.eoaccess.EOEntityClassDescription;
 import com.webobjects.eoaccess.EOGeneralAdaptorException;
 import com.webobjects.eoaccess.EOJoin;
 import com.webobjects.eoaccess.EOModelGroup;
 import com.webobjects.eoaccess.EORelationship;
+import com.webobjects.eoaccess.EOUtilities;
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.eocontrol.EOEnterpriseObject;
 import com.webobjects.foundation.NSArray;
@@ -26,13 +30,16 @@ import com.webobjects.foundation.NSForwardException;
 import com.webobjects.foundation.NSLog;
 
 import er.directtoweb.ERDirectToWeb;
+import er.directtoweb.ERD2WControllerFactory.ERCCore;
 import er.extensions.ERXApplication;
 import er.extensions.ERXConfigurationManager;
 import er.extensions.ERXEC;
 import er.extensions.ERXEOControlUtilities;
 import er.extensions.ERXExtensions;
 import er.extensions.ERXFrameworkPrincipal;
+import er.extensions.ERXJDBCUtilities;
 import er.extensions.ERXProperties;
+import er.extensions.ERXSQLHelper;
 import er.extensions.ERXStringUtilities;
 import er.extensions.ERXThreadStorage;
 import er.extensions.ERXUtilities;
@@ -190,6 +197,7 @@ public class ERCoreBusinessLogic extends ERXFrameworkPrincipal {
      * initialization of the framework.
      */
     public void finishInitialization() {
+        ERCStampedEnterpriseObject.initialize();
         // Initialized shared data
         initializeSharedData();
         // Register handlers for user preferences.
@@ -375,5 +383,21 @@ public class ERCoreBusinessLogic extends ERXFrameworkPrincipal {
                 log.error(s.toString());
             } catch (Throwable u2) {} // WE DON'T WANT ANYTHING TO GO WRONG IN HERE as it would cause the app to instantly exit
         }
+    }
+
+    public void createTables(EOEditingContext ec, String modelName) throws SQLException {
+        // AK: FIXME we should try with the DROP options enabled and re-try with the options disabled
+        // so we catch the case when we 
+        EODatabaseContext databaseContext = EOUtilities.databaseContextForModelNamed(ec, modelName);
+        ERXSQLHelper helper = ERXSQLHelper.newSQLHelper(databaseContext);
+        String sql = helper.createSchemaSQLForEntitiesInModelWithName(null, modelName);
+        NSArray sqls = helper.splitSQLStatements(sql);
+        EOAdaptorChannel channel = databaseContext.availableChannel().adaptorChannel();
+        ERXJDBCUtilities.executeUpdateScript(channel, sql);
+    }
+
+    public void createTables(EOEditingContext ec) throws SQLException {
+        createTables(ec, "ERMail");
+        createTables(ec, "ERCoreBusinessLogic");
     }
 }
