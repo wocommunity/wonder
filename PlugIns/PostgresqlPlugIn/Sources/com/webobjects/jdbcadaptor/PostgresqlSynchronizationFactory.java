@@ -77,17 +77,17 @@ public class PostgresqlSynchronizationFactory extends EOSynchronizationFactory i
      * @return  the array of SQL statements
      */
     public NSArray dropPrimaryKeySupportStatementsForEntityGroup(NSArray entityGroup) {
-        EOEntity entity;
-        int count;
-        int i;
-        NSMutableArray results;
-
-        results = new NSMutableArray();
-        count = entityGroup.count();
-        for ( i = 0 ; i < count ; i++ ) {
-            entity = (EOEntity)entityGroup.objectAtIndex(i);
-            String sql = "DROP SEQUENCE " + PostgresqlPlugIn.sequenceNameForEntity(entity);
-            results.addObject(createExpression(entity, sql));
+        NSMutableSet sequenceNames = new NSMutableSet();
+        NSMutableArray results = new NSMutableArray();
+        int count = entityGroup.count();
+        for (int i = 0 ; i < count ; i++ ) {
+            EOEntity entity = (EOEntity)entityGroup.objectAtIndex(i);
+            String sequenceName = PostgresqlPlugIn.sequenceNameForEntity(entity);
+            if (!sequenceNames.containsObject(sequenceName)) {
+              sequenceNames.addObject(sequenceName);
+              String sql = "DROP SEQUENCE " + sequenceName;
+              results.addObject(createExpression(entity, sql));
+            }
         }
         return results;
     }
@@ -99,15 +99,10 @@ public class PostgresqlSynchronizationFactory extends EOSynchronizationFactory i
      * @return  the array of SQL statements
      */    
     public NSArray dropTableStatementsForEntityGroup(NSArray entityGroup) {
-        EOEntity entity;
-        int count;
-        int i;
-        NSMutableArray results;
-
-        results = new NSMutableArray();
-        count = entityGroup.count();
-        for ( i = 0 ; i < count ; i++ ) {
-            entity = (EOEntity)entityGroup.objectAtIndex(i);
+        NSMutableArray results = new NSMutableArray();
+        int count = entityGroup.count();
+        for (int i = 0 ; i < count ; i++ ) {
+            EOEntity entity = (EOEntity)entityGroup.objectAtIndex(i);
 			//timc 2006-11-06 create result here so we can check for enableIdentifierQuoting while building the statement
 			PostgresqlExpression result = new PostgresqlExpression(entity);
 			String tableName = result.sqlStringForSchemaObjectName(entity.externalName());
@@ -220,6 +215,7 @@ public class PostgresqlSynchronizationFactory extends EOSynchronizationFactory i
         EOAttribute priKeyAttribute;
         String sequenceName;
 
+        NSMutableSet sequenceNames = new NSMutableSet();
         results = new NSMutableArray();
         count = entityGroup.count();
         for ( i = 0 ; i < count ; i++ ) {
@@ -230,24 +226,27 @@ public class PostgresqlSynchronizationFactory extends EOSynchronizationFactory i
                 String sql;
 
                 sequenceName = PostgresqlPlugIn.sequenceNameForEntity(entity);
-				//timc 2006-11-06 create result here so we can check for enableIdentifierQuoting while building the statement
-				PostgresqlExpression result = new PostgresqlExpression(entity);
-				String attributeName = result.sqlStringForAttribute(priKeyAttribute);
-				String tableName = result.sqlStringForSchemaObjectName(entity.externalName());
-				
-                sql = "CREATE SEQUENCE " + sequenceName;
-                results.addObject(createExpression(entity, sql));
-
-                sql = "CREATE TEMP TABLE EOF_TMP_TABLE AS SELECT SETVAL('" + sequenceName
-                + "', (SELECT MAX(" + attributeName + ") FROM "
-                + tableName + "))";
-                results.addObject(createExpression(entity, sql));
-
-                sql = "DROP TABLE EOF_TMP_TABLE";
-                results.addObject(createExpression(entity, sql));
-                
-                sql =  "ALTER TABLE "+ tableName +" ALTER COLUMN "+ attributeName +" SET DEFAULT nextval( '"+ sequenceName+ "' )" ;
-                results.addObject(createExpression(entity, sql));
+                if (!sequenceNames.containsObject(sequenceName)) {
+                  sequenceNames.addObject(sequenceName);
+                  //timc 2006-11-06 create result here so we can check for enableIdentifierQuoting while building the statement
+                  PostgresqlExpression result = new PostgresqlExpression(entity);
+                  String attributeName = result.sqlStringForAttribute(priKeyAttribute);
+                  String tableName = result.sqlStringForSchemaObjectName(entity.externalName());
+                  
+                  sql = "CREATE SEQUENCE " + sequenceName;
+                  results.addObject(createExpression(entity, sql));
+                  
+                  sql = "CREATE TEMP TABLE EOF_TMP_TABLE AS SELECT SETVAL('" + sequenceName
+                  + "', (SELECT MAX(" + attributeName + ") FROM "
+                  + tableName + "))";
+                  results.addObject(createExpression(entity, sql));
+                  
+                  sql = "DROP TABLE EOF_TMP_TABLE";
+                  results.addObject(createExpression(entity, sql));
+                  
+                  sql =  "ALTER TABLE "+ tableName +" ALTER COLUMN "+ attributeName +" SET DEFAULT nextval( '"+ sequenceName+ "' )" ;
+                  results.addObject(createExpression(entity, sql));
+                }
             }
         }
         return results;
