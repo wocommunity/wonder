@@ -17,9 +17,11 @@ import com.webobjects.foundation.NSSelector;
 import com.webobjects.foundation.NSTimestamp;
 
 import er.extensions.ERXConstant;
+import er.extensions.ERXEC;
 import er.extensions.ERXExtensions;
 import er.extensions.ERXGenericRecord;
 import er.extensions.ERXRetainer;
+import er.extensions.ERXSelectorUtilities;
 
 /**
  * EO subclass that has a timestamp with its creation date, the most recent modification, 
@@ -33,26 +35,26 @@ public abstract class ERCStampedEnterpriseObject extends ERXGenericRecord {
     public static String [] TimestampAttributeKeys = new String[] { "created", "lastModified"};
     
     private static NSMutableDictionary _datesPerEcID=new NSMutableDictionary();
+
     public static class Observer {
         public void updateTimestampForEditingContext(NSNotification n) {
             NSTimestamp now=new NSTimestamp();
             if (log.isDebugEnabled())  log.debug("Timestamp for "+n.object()+": "+now);
             synchronized (_datesPerEcID) {
-            	int num = System.identityHashCode(n.object());
-            	_datesPerEcID.setObjectForKey(now, new Integer(num));
-			}
+                int num = System.identityHashCode(n.object());
+                _datesPerEcID.setObjectForKey(now, new Integer(num));
+            }
         }
     }
-    
-    static {
+
+
+    protected static void initialize() {
         NSNotificationCenter center = NSNotificationCenter.defaultCenter();
+        NSSelector sel = ERXSelectorUtilities.notificationSelector("updateTimestampForEditingContext");
         Observer observer = new Observer();
         ERXRetainer.retain(observer);
-        center.addObserver(observer,
-                new NSSelector("updateTimestampForEditingContext", ERXConstant.NotificationClassArray),
-                ERXExtensions.objectsWillChangeInEditingContext,
-                null);
-    }        
+        center.addObserver(observer, sel, ERXExtensions.objectsWillChangeInEditingContext, null);
+    }
 
 
     public EOEnterpriseObject insertionLogEntry=null;
@@ -123,6 +125,7 @@ public abstract class ERCStampedEnterpriseObject extends ERXGenericRecord {
 		}
         if (date==null) {
             log.error("Null modification date found in touch() call - EC delegate is probably missing");
+            date = new NSTimestamp();
         }
         setLastModified(date);
     }
