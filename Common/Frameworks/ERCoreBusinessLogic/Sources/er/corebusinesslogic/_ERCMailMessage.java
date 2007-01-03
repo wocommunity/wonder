@@ -3,12 +3,14 @@
 // Created by eogenerator
 // DO NOT EDIT.  Make changes to ERCMailMessage.java instead.
 package er.corebusinesslogic;
-import com.webobjects.foundation.NSArray;
-import com.webobjects.foundation.NSTimestamp;
+import com.webobjects.foundation.*;
+import com.webobjects.eocontrol.*;
+import com.webobjects.eoaccess.*;
+import er.extensions.*;
+import java.util.*;
+import java.math.BigDecimal;
 
-import er.extensions.ERXGenericRecord;
-
-public abstract class _ERCMailMessage extends ERXGenericRecord {
+public abstract class _ERCMailMessage extends ERCStampedEnterpriseObject {
 
     public interface Key  {
         public static final String X_MAILER = "xMailer";
