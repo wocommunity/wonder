@@ -650,11 +650,28 @@ public class ERXSQLHelper {
 			try {
 				String sqlHelperClassName = ERXProperties.stringForKey(databaseProductName + ".SQLHelper");
 				if (sqlHelperClassName == null) {
-					try {
-						sqlHelper = (ERXSQLHelper) Class.forName(ERXSQLHelper.class.getName() + "$" + databaseProductName + "SQLHelper").newInstance();
+					if (databaseProductName.equalsIgnoreCase("frontbase")) {
+						sqlHelper = new FrontBaseSQLHelper();
 					}
-					catch (ClassNotFoundException e) {
-						sqlHelper = new ERXSQLHelper();
+					else if (databaseProductName.equalsIgnoreCase("mysql")) {
+						sqlHelper = new MySQLSQLHelper();
+					}
+					else if (databaseProductName.equalsIgnoreCase("oracle")) {
+						sqlHelper = new OracleSQLHelper();
+					}
+					else if (databaseProductName.equalsIgnoreCase("postgresql")) {
+						sqlHelper = new PostgresqlSQLHelper();
+					}
+					else if (databaseProductName.equalsIgnoreCase("openbase")) {
+						sqlHelper = new OpenBaseSQLHelper();
+					}
+					else {
+						try {
+							sqlHelper = (ERXSQLHelper) Class.forName(ERXSQLHelper.class.getName() + "$" + databaseProductName + "SQLHelper").newInstance();
+						}
+						catch (ClassNotFoundException e) {
+							sqlHelper = new ERXSQLHelper();
+						}
 					}
 				}
 				else {
