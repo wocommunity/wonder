@@ -171,12 +171,24 @@ public class ERXDatabaseContextDelegate {
      * the database. The object that is returned is a cleared fault.
      * We raise here to restore the functionality that existed prior to WebObjects 4.5.
      * Whenever a fault fails for a globalID (i.e. the object is NOT found in the database), we raise
-     * an {@link com.webobjects.eoaccess.EOObjectNotAvailableException EOObjectNotAvailableException}.
+     * an {@link com.webobjects.eoaccess.EOObjectNotAvailableException EOObjectNotAvailableException}. <br>
+     * If you have entities you don't really care about, you can set the system property
+     * <code>er.extensions.ERXDatabaseContextDelegate.tolerantEntityPattern</code> to a regular expression
+     * that will be tested against the GID entity name. If it matches, then only an error will be logged
+     * but no exception will be thrown.
+     * 
      * @param context database context
      * @param object object that is firing the fault for a given to-one relationship
      * @param gid global id that wasn't found in the database.
      */
     public boolean databaseContextFailedToFetchObject(EODatabaseContext context, Object object, EOGlobalID gid) {
+    	String tolerantEntityPattern = ERXProperties.stringForKey("er.extensions.ERXDatabaseContextDelegate.tolerantEntityPattern");
+    	boolean raiseException = true;
+    	if(tolerantEntityPattern != null && (gid instanceof EOKeyGlobalID)) {
+    		if(((EOKeyGlobalID)gid).entityName().matches(tolerantEntityPattern)) {
+    			raiseException = false;
+    		}
+    	}
         if (object!=null) {
             EOEditingContext ec = ((EOEnterpriseObject)object).editingContext();
 
@@ -185,7 +197,7 @@ public class ERXDatabaseContextDelegate {
             // same global id fires.  NOTE: refaulting in a sharedEditingContext is illegal,
             // so we specifically check for that special case.
 
-            if (!(ec instanceof EOSharedEditingContext)) {
+            if (!(ec instanceof EOSharedEditingContext) && raiseException) {
                 context.refaultObject((EOEnterpriseObject)object, gid, ec);
             }
         }
@@ -215,7 +227,12 @@ public class ERXDatabaseContextDelegate {
             gidString = gid.toString();
         }
         NSNotificationCenter.defaultCenter().postNotification(DatabaseContextFailedToFetchObject, object);
-        throw new ObjectNotAvailableException("No " + (object!=null ? object.getClass().getName() : "N/A") + " found with globalID: " + gidString, gid);            
+        if(raiseException) {
+        	throw new ObjectNotAvailableException("No " + (object!=null ? object.getClass().getName() : "N/A") + " found with globalID: " + gidString, gid); 
+        } else {
+        	log.error("No " + (object!=null ? object.getClass().getName() : "N/A") + " found with globalID: " + gidString + "\n" + ERXUtilities.stackTrace()); 
+        }
+        return false;
     }
     
     /**
