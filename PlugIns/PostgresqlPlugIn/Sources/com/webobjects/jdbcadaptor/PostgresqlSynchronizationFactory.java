@@ -81,7 +81,7 @@ public class PostgresqlSynchronizationFactory extends EOSynchronizationFactory i
       String sequenceName = PostgresqlPlugIn.sequenceNameForEntity(entity);
       if (!sequenceNames.containsObject(sequenceName)) {
         sequenceNames.addObject(sequenceName);
-        String sql = "DROP SEQUENCE " + sequenceName;
+        String sql = "DROP SEQUENCE " + sequenceName + " CASCADE";
         results.addObject(createExpression(entity, sql));
       }
     }
@@ -102,7 +102,7 @@ public class PostgresqlSynchronizationFactory extends EOSynchronizationFactory i
       //timc 2006-11-06 create result here so we can check for enableIdentifierQuoting while building the statement
       PostgresqlExpression result = new PostgresqlExpression(entity);
       String tableName = result.sqlStringForSchemaObjectName(entity.externalName());
-      result.setStatement("DROP TABLE " + tableName);
+      result.setStatement("DROP TABLE " + tableName + " CASCADE");
       results.addObject(result);
     }
     return results;
