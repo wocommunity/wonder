@@ -919,7 +919,10 @@ public class ERXModelGroup extends EOModelGroup {
 			Class clazz = ERXPatcher.classForName(attribute.className());
 			if(ERXConstant.StringConstant.class.isAssignableFrom(clazz)) {
 				attribute.setFactoryMethodArgumentType(EOAttribute.FactoryMethodArgumentIsString);
+				// AK: the following two calls are needed to clear the cached values from the attribute
 				attribute.setClassName(attribute.className());
+				attribute.setValueFactoryMethodName(attribute.valueFactoryMethodName());
+				log.info("Attribute : " + attribute + " changed " + attribute.adaptorValueType() + " " + attribute.factoryMethodArgumentType());
 			}
 		}
 	}
