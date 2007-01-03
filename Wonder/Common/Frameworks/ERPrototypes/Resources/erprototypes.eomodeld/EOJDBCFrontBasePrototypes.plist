@@ -108,13 +108,11 @@
        }, 
        
        {
-           adaptorValueConversionMethodName = toString;
            columnName = "";
            externalType = INTEGER;
            factoryMethodArgumentType = EOFactoryMethodArgumentIsNSString;
            name = intBoolean;
            valueClassName = NSNumber;
-           valueFactoryMethodName = valueOf;
            valueType = c;
        }, 
        
