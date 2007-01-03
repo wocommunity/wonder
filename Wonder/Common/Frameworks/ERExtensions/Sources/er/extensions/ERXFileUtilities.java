@@ -36,8 +36,10 @@ import java.util.zip.ZipOutputStream;
 import org.apache.log4j.Logger;
 
 import com.webobjects.appserver.WOApplication;
+import com.webobjects.appserver._private.WOEncodingDetector;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSBundle;
+import com.webobjects.foundation.NSData;
 import com.webobjects.foundation.NSForwardException;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSPropertyListSerialization;
@@ -466,7 +468,7 @@ public class ERXFileUtilities {
                                                              NSArray languageList) {
         Object plist = null;
         try {
-            plist = readPropertyListFromFileInFramework( fileName, aFrameWorkName, languageList, System.getProperty("file.encoding") ); 
+            plist = readPropertyListFromFileInFramework( fileName, aFrameWorkName, languageList, System.getProperty("file.encoding")); 
         } catch (IllegalArgumentException e) {
             try {
                 // BUGFIX: we didnt use an encoding before, so java tried to guess the encoding. Now some Localizable.strings plists
@@ -499,10 +501,22 @@ public class ERXFileUtilities {
             String encoding) {
         Object result = null;
         try {
-            InputStream stream = inputStreamForResourceNamed(fileName, aFrameWorkName, languageList);
-            if(stream != null) {
-                String stringFromFile = stringFromInputStream(stream, encoding);
-                result = NSPropertyListSerialization.propertyListFromString(stringFromFile);
+        	InputStream stream = inputStreamForResourceNamed(fileName, aFrameWorkName, languageList);
+        	if(stream != null) {
+        		String stringFromFile;
+        		if(true) {
+        			stringFromFile = stringFromInputStream(stream, encoding);
+        		} else {
+        			byte bytes[] = bytesFromInputStream(stream);
+            		String guessed = WOEncodingDetector.sharedInstance().guessEncodingForData(new NSData(bytes));
+            		if(!guessed.equals(encoding) && !"ASCII".equals(guessed)) {
+        				stringFromFile = new String(bytes, guessed);
+        				log.info("Encoding differs, guessed: " + guessed + " wanted: " + encoding + " fileName:"  + aFrameWorkName + "/" + fileName +  languageList);
+        			} else {
+        				stringFromFile = new String(bytes, encoding);
+        			}
+        		}
+        		result = NSPropertyListSerialization.propertyListFromString(stringFromFile);
             }
         } catch (IOException ioe) {
             log.error("ConfigurationManager: Error reading file <"+fileName+"> from framework " + aFrameWorkName);
