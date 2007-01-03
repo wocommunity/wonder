@@ -18,7 +18,7 @@ import com.webobjects.foundation.NSValidation;
 public interface ERXEnterpriseObject {
     
     /** logging support for modified objects */
-    public static final Logger logMod = Logger.getLogger("er.transaction.delegate.EREditingContextDelegate.modifedObjects");
+    public static final Logger logMod = Logger.getLogger("er.transaction.delegate.EREditingContextDelegate.modifiedObjects");
 
     public final static boolean updateInverseRelationships = ERXProperties.booleanForKey("er.extensions.ERXEnterpriseObject.updateInverseRelationships");
 
