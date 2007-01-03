@@ -82,7 +82,9 @@ public class Application extends ERXApplication {
         EOEditingContext ec = ERXEC.newEditingContext();
         ec.lock();
         try {
-            if(true) {
+            if(false) {
+                // ak: you may need to tweak with ERXSQLHelper.createSchemaSQLForEntitiesInModelWithName() options for this to work
+                // if the tables weren't already present
                 ERCoreBusinessLogic.sharedInstance().createTables(ec);
             }
             ERCMailMessage message = ERCMailDelivery.sharedInstance().composeEmail(ERJavaMail.sharedInstance().adminEmail(),
