@@ -85,18 +85,12 @@ public class ERCMailMessage extends _ERCMailMessage {
     public void awakeFromInsertion(EOEditingContext anEditingContext) {
         super.awakeFromInsertion(anEditingContext);
         setState(ERCMailState.READY_TO_BE_SENT_STATE);
-        if (ERXProperties.booleanForKeyWithDefault("er.corebusinesslogic.ERCMailMessage.ShouldArchive",
-                                                   false)) {
-            setShouldArchiveSentMail(true);
-        } else {
-            setShouldArchiveSentMail(false);            
-        }
-        if (ERXProperties.booleanForKeyWithDefault("er.corebusinesslogic.ERCMailMessage.ShouldGzipContent",
-                                                   true)) {
-            setContentGzipped(true);
-        } else {
-            setShouldArchiveSentMail(false);            
-        }
+        
+        boolean shouldArchive = ERXProperties.booleanForKeyWithDefault("er.corebusinesslogic.ERCMailMessage.ShouldArchive", false);
+        setShouldArchiveSentMail(shouldArchive);
+        
+        boolean shouldZip = ERXProperties.booleanForKeyWithDefault("er.corebusinesslogic.ERCMailMessage.ShouldGzipContent", true);
+        setContentGzipped(shouldZip);            
     }
         
     // State Methods
