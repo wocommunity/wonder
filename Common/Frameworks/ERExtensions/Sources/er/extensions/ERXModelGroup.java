@@ -592,7 +592,7 @@ public class ERXModelGroup extends EOModelGroup {
 
 		NSDictionary connectionDictionary = model.connectionDictionary();
 		if (connectionDictionary == null) {
-			ERXModelGroup.log.warn("The EOModel '" + model.name() + " does not have a connection dictionary.");
+			ERXModelGroup.log.warn("The EOModel '" + model.name() + "' does not have a connection dictionary.");
 		}
 		else {
 			NSMutableDictionary newConnectionDictionary = new NSMutableDictionary(connectionDictionary);
@@ -717,7 +717,7 @@ public class ERXModelGroup extends EOModelGroup {
 			fixJDBCDictionary(model);
 		}
 
-		if (log.isDebugEnabled() && !old.equals(model.connectionDictionary())) {
+		if (log.isDebugEnabled() && !old.equals(model.connectionDictionary()) && model.connectionDictionary() != null) {
 			NSMutableDictionary dict = model.connectionDictionary().mutableClone();
 			if (dict.objectForKey("password") != null) {
 				dict.setObjectForKey("<deleted for log>", "password");
