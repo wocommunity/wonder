@@ -32,6 +32,8 @@ import er.extensions.ERXProperties;
  *           acquire locks properly and you may end up with multiple instances
  *           attempting to create lock tables and/or failing to startup
  *           properly.
+ * @property <ModelName>.InitialMigrationVersion the starting version number
+ *           (in case you are retrofitting a project with migrations)
  * @author mschrag
  */
 public class ERXJDBCMigrationLock implements IERXMigrationLock {
@@ -81,11 +83,11 @@ public class ERXJDBCMigrationLock implements IERXMigrationLock {
 					}
 					if (nextRow == null) {
 						if (createIfMissing()) {
-							String modelStatement = dbUpdaterInsertStatement(model, new Integer(-1), new Integer(1), lockOwnerName);
+							String modelStatement = dbUpdaterInsertStatement(model, new Integer(initialVersionForModel(model)), new Integer(1), lockOwnerName);
 							count = ERXJDBCUtilities.executeUpdateScript(channel, modelStatement);
 						}
 						else {
-							String modelStatement = dbUpdaterInsertStatement(model, new Integer(-1), new Integer(0), null);
+							String modelStatement = dbUpdaterInsertStatement(model, new Integer(initialVersionForModel(model)), new Integer(0), null);
 							throw new ERXMigrationFailedException("Unable to migrate because there is not a row for the model '" + model.name() + ".  Please execute:\n" + modelStatement);
 						}
 					}
@@ -164,11 +166,11 @@ public class ERXJDBCMigrationLock implements IERXMigrationLock {
 			channel.selectAttributes(new NSArray(dbUpdaterEntity.attributeNamed("Version")), fetchSpec, false, dbUpdaterEntity);
 			NSDictionary nextRow = channel.fetchRow();
 			if (nextRow == null) {
-				version = -1;
+				version = initialVersionForModel(model);
 			}
 			else {
 				Integer versionInteger = (Integer) nextRow.objectForKey("Version");
-				version = versionInteger.intValue();
+				version = Math.max(versionInteger.intValue(), initialVersionForModel(model));
 			}
 			channel.cancelFetch();
 		}
@@ -197,7 +199,7 @@ public class ERXJDBCMigrationLock implements IERXMigrationLock {
 			int count = channel.updateValuesInRowsDescribedByQualifier(row, new EOKeyValueQualifier("ModelName", EOQualifier.QualifierOperatorEqual, model.name()), dbUpdaterEntity);
 			channel.cancelFetch();
 			if (count == 0) {
-				String modelStatement = dbUpdaterInsertStatement(model, new Integer(-1), new Integer(0), null);
+				String modelStatement = dbUpdaterInsertStatement(model, new Integer(initialVersionForModel(model)), new Integer(0), null);
 				throw new ERXMigrationFailedException("Unable to migrate because there is not a row for the model '" + model.name() + ".  Please execute:\n" + modelStatement);
 			}
 		}
@@ -211,6 +213,12 @@ public class ERXJDBCMigrationLock implements IERXMigrationLock {
 		}
 	}
 
+	protected int initialVersionForModel(EOModel model) {
+		String modelName = model.name();
+		int initialVersion = ERXProperties.intForKeyWithDefault(modelName + ".InitialMigrationVersion", -1);
+		return initialVersion;
+	}
+	
 	protected EOModel dbUpdaterModelWithModel(EOModel model) {
 		EOModel dbUpdaterModel;
 		if (_lastUpdatedModel == model) {
