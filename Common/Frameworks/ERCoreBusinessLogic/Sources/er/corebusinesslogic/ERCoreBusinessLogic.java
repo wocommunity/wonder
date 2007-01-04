@@ -30,7 +30,6 @@ import com.webobjects.foundation.NSForwardException;
 import com.webobjects.foundation.NSLog;
 
 import er.directtoweb.ERDirectToWeb;
-import er.directtoweb.ERD2WControllerFactory.ERCCore;
 import er.extensions.ERXApplication;
 import er.extensions.ERXConfigurationManager;
 import er.extensions.ERXEC;
