@@ -13,6 +13,9 @@ import java.util.WeakHashMap;
 
 import org.apache.log4j.Logger;
 
+import sun.misc.Signal;
+import sun.misc.SignalHandler;
+
 import com.webobjects.eoaccess.EOGeneralAdaptorException;
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.eocontrol.EOEnterpriseObject;
@@ -1422,5 +1425,66 @@ public class ERXEC extends EOEditingContext {
      */
     public static EOEditingContext newEditingContext(EOObjectStore objectStore) {
     	return factory()._newEditingContext(objectStore);
+    }
+
+	/**
+	 * Register the OpenEditingContextLockSignalHandler signal handle on the HUP signal. 
+	 */
+	public static void registerOpenEditingContextLockSignalHandler() {
+		ERXEC.registerOpenEditingContextLockSignalHandler("HUP");
+	}
+
+	/**
+	 * Register the OpenEditingContextLockSignalHandler signal handle on the named signal.
+	 * 
+	 * @param signalName the name of the signal to handle
+	 */
+	public static void registerOpenEditingContextLockSignalHandler(String signalName) {
+		Signal.handle(new Signal(signalName), new ERXEC.OpenEditingContextLockSignalHandler());
+	}
+
+    /**
+     * OpenEditingContextLockSignalHandler provides a signal handler that
+     * prints out open editing context locks.  By default, the handler attaches
+     * to SIGHUP.
+     * <p>
+     * Call ERXEC.registerOpenEditingContextLockSignalHandler() to attach it.
+     */
+    public static class OpenEditingContextLockSignalHandler implements SignalHandler {
+    	public void handle(Signal signal) {
+    		ERXEC.Factory ecFactory = ERXEC.factory();
+    		if (ecFactory instanceof ERXEC.DefaultFactory) {
+    			NSArray lockedEditingContexts = ((ERXEC.DefaultFactory) ecFactory).lockedEditingContexts();
+    			if (lockedEditingContexts.count() != 0) {
+    				log.info(lockedEditingContexts.count() + " open EC locks:");
+    			}
+    			else {
+    				log.info("No open editing contexts.");
+    			}
+    			Enumeration lockedEditingContextEnum = lockedEditingContexts.objectEnumerator();
+    			while (lockedEditingContextEnum.hasMoreElements()) {
+    				EOEditingContext lockedEditingContext = (EOEditingContext) lockedEditingContextEnum.nextElement();
+    				log.info("   Editing Context " + lockedEditingContext);
+    				Exception openCreationTrace = ((ERXEC) lockedEditingContext).creationTrace();
+    				if (openCreationTrace != null) {
+    					log.info("  Created:");
+    					log.info("", openCreationTrace);
+    				}
+    				NSArray openLockTracesArray = ((ERXEC) lockedEditingContext).openLockTraces();
+    				if (openLockTracesArray != null) {
+    					log.info("  Locks:");
+    					Enumeration openLockTracesEnum = openLockTracesArray.objectEnumerator();
+    					while (openLockTracesEnum.hasMoreElements()) {
+    						Exception ecOpenLockTrace = (Exception) openLockTracesEnum.nextElement();
+    						log.info("", ecOpenLockTrace);
+    						log.info("");
+    					}
+    				}
+    			}
+    		}
+    		else {
+    			log.info("OpenEditingContextLockSignalHandler is only available for ERXEC.DefaultFactory.");
+    		}
+    	}
     }
 }
