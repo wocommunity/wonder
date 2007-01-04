@@ -109,15 +109,6 @@ public class ERCMailMessage extends _ERCMailMessage {
 	public boolean isReceivedState() {
 		return state() == ERCMailState.RECEIVED_STATE;
 	}
-	
-	//AK: why are these not generated?
-	public ERCMailState state() {
-		return (ERCMailState) storedValueForKey("state");
-	}
-	
-	public void setState(ERCMailState value) {
-		takeStoredValueForKey(value, "state");
-	}
 
     // IMPLEMENTME: MarkReadInterface
     public void markReadBy(EOEnterpriseObject by) {
