@@ -17,7 +17,6 @@ import com.webobjects.foundation.NSSelector;
 import com.webobjects.foundation.NSTimestamp;
 
 import er.extensions.ERXConstant;
-import er.extensions.ERXEC;
 import er.extensions.ERXExtensions;
 import er.extensions.ERXGenericRecord;
 import er.extensions.ERXRetainer;
@@ -29,6 +28,11 @@ import er.extensions.ERXSelectorUtilities;
  */
 public abstract class ERCStampedEnterpriseObject extends ERXGenericRecord {
 
+    public interface Key {
+        public static final String CREATED = "created";
+        public static final String LAST_MODIFIED = "lastModified";
+     }
+    
     /** logging support */
     public static Logger log = Logger.getLogger(ERCStampedEnterpriseObject.class);
 
