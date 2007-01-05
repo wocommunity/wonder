@@ -181,7 +181,7 @@ public class ERXLoremIpsumGenerator {
 		int start = _random.nextInt(para.length() - 20);
 		start = para.indexOf(' ', start);
 
-		return para.substring(start, para.indexOf(' ', start + 1)).replaceAll("[.,\\s]*$", "").toLowerCase().trim();
+		return para.substring(start, para.indexOf(' ', start + 1)).replaceAll("[.,;\\s]*$", "").toLowerCase().trim();
 	}
 
 	/**
