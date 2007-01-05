@@ -206,6 +206,29 @@ public class ERXLoremIpsumGenerator {
 	 *            the minimum number of words
 	 * @param max
 	 *            the maximum nunmber of words
+	 * @param maxLength
+	 * 			  the string will be truncated to this length, if longer
+	 * @return a string of space-delimited, randomly choosen words where length() <= maxLength
+	 */
+	public static String words(int min, int max, int maxLength) {
+		if (min < 0) {
+			min = 1;
+		}
+		if (max < min) {
+			max = min + 1;
+		}
+		String foo = words(_random.nextInt(min) + max - min + 1);
+		int cutAt = foo.length() > maxLength ? maxLength : foo.length();
+		return foo.substring(0, cutAt);
+	}
+	
+	/**
+	 * Returns a number of random, lowercase, space-delimited words between <b>min</b> and <b>max</b>.
+	 * 
+	 * @param min
+	 *            the minimum number of words
+	 * @param max
+	 *            the maximum nunmber of words
 	 * @return a string of space-delimited, randomly choosen words
 	 */
 	public static String words(int min, int max) {
@@ -217,6 +240,7 @@ public class ERXLoremIpsumGenerator {
 		}
 		return words(_random.nextInt(min) + max - min + 1);
 	}
+
 
 	/**
 	 * Generates lorem ipsum text using an enumerated type.
