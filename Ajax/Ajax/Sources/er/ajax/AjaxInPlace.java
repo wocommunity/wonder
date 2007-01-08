@@ -199,6 +199,12 @@ public class AjaxInPlace extends WOComponent {
 		_editing = editing;
 	}
 
+	public String cleanupFunction() {
+		//<script>AjaxInPlace.cleanupEdit('sheetSetHeaderWrapperSave', 'sheetSetHeaderWrapperCancel');</script>
+		//<script>AjaxInPlace.cleanupEdit('sheetSetHeaderWrapper');</script>
+		
+		return null;
+	}
 	public WOActionResults startEditing() {
 		if (canEdit()) {
 			setEditing(true);

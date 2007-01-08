@@ -135,14 +135,6 @@ ViewComponent : ERXWOComponentContent {
 	templateName = "view";
 }
 
-CancelFunctionName : WOString {
-	value = cancelFunctionName;
-}
-
-SaveFunctionName : WOString {
-	value = saveFunctionName;
-}
-
-EditFunctionName : WOString {
-	value = editFunctionName;
+ID : WOString {
+	value = id;
 }

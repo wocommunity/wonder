@@ -1,9 +1,6 @@
 <webobject name = "UpdateContainer">
 	<webobject name = "IsNotEditingConditional">
-		<script>
-		if (typeof <webobject name = "SaveFunctionName"></webobject> != 'undefined') { <webobject name = "SaveFunctionName"></webobject> = null; }
-		if (typeof <webobject name = "CancelFunctionName"></webobject> != 'undefined') { <webobject name = "CancelFunctionName"></webobject> = null; }
-		</script>
+		<script>AjaxInPlace.cleanupEdit('<webobject name = "ID"></webobject>');</script>
 		<webobject name = "EditFunction"></webobject>
 		<webobject name = "ManualViewControlConditional">
 			<webobject name = "ViewComponent"/>
@@ -14,7 +11,7 @@
 	</webobject>
 	<webobject name = "IsEditingConditional"><webobject name = "EditForm">
 			<webobject name = "EditComponent"/>
-			<script>if (typeof <webobject name = "EditFunctionName"></webobject> != 'undefined') { <webobject name = "EditFunctionName"></webobject> = null; }</script>
+			<script>AjaxInPlace.cleanupView('<webobject name = "ID"></webobject>');</script>
 			<webobject name = "SubmitOnSaveConditional"><webobject name = "SaveSubmitFunction"></webobject></webobject>
 			<webobject name = "LinkOnSaveConditional"><webobject name = "SaveLinkFunction"></webobject></webobject>
 			<webobject name = "CancelFunction"></webobject>
