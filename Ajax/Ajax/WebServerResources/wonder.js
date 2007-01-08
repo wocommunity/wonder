@@ -27,7 +27,6 @@ Object.extend(Form, {
   }
 });
 
-// If the 
 var AjaxInPlace = {
 	saveFunctionName : function(id) {
 		return "window." + id + "Save";
