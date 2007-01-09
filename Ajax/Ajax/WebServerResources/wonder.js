@@ -9,6 +9,19 @@ Object.extend(String.prototype, {
 	}
 });
 
+Object.extend(Event, {
+	keyValue: function(event) {
+		var keynum;
+		if (window.event) {
+			keynum = event.keyCode;
+		}
+		else if (event.which) {
+			keynum = event.which;
+		}
+		return keynum;
+	}
+});
+
 Object.extend(Form, {
   serializeWithoutSubmits: function(form) {
     var elements = Form.getElements($(form));
