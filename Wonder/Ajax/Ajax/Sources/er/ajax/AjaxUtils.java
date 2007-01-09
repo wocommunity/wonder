@@ -237,7 +237,7 @@ public class AjaxUtils {
 	}
 
 	public static void appendScriptHeader(WOResponse response) {
-		response.appendContentString("<script type = \"text/javascript\" language = \"javascript\">\n");
+		response.appendContentString("<script>");
 	}
 
 	public static void appendScriptFooterIfNecessary(WORequest request, WOResponse response) {
@@ -247,7 +247,7 @@ public class AjaxUtils {
 	}
 	
 	public static void appendScriptFooter(WOResponse response) {
-		response.appendContentString("\n</script>");
+		response.appendContentString("</script>");
 	}
 
 	public static Object valueForBinding(String name, Object defaultValue, NSDictionary associations, WOComponent component) {
