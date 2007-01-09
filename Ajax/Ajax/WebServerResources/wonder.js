@@ -18,6 +18,9 @@ Object.extend(Event, {
 		else if (event.which) {
 			keynum = event.which;
 		}
+		else {
+			keynum = event.keyCode;
+		}
 		return keynum;
 	}
 });
