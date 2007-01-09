@@ -31,6 +31,7 @@ import com.webobjects.eoaccess.EODatabaseContext;
 import com.webobjects.eoaccess.EOEntity;
 import com.webobjects.eoaccess.EOEntityClassDescription;
 import com.webobjects.eoaccess.EOModelGroup;
+import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.eocontrol.EOGlobalID;
 import com.webobjects.eocontrol.EOKeyGlobalID;
 import com.webobjects.eocontrol.EOObjectStore;
@@ -230,8 +231,24 @@ public class ERXObjectStoreCoordinatorSynchronizer {
 
 		private class UpdateSnapshotGIDProcessor extends SnapshotGIDProcessor {
 			public void processSnapshots(EODatabase database, NSArray gids) {
-				database.forgetSnapshotsForGlobalIDs(gids);
-				// database.recordSnapshots(snapshots);
+				NSMutableArray existingGIDs = new NSMutableArray();
+				Enumeration gidsEnum = gids.objectEnumerator();
+				while (gidsEnum.hasMoreElements()) {
+					EOGlobalID gid = (EOGlobalID)gidsEnum.nextElement();
+					NSDictionary snapshot = database.snapshotForGlobalID(gid);
+					if (snapshot != null) {
+						existingGIDs.addObject(gid);
+					}
+				}
+				EOEditingContext editingContext = ERXEC.newEditingContext();
+				editingContext.lock();
+				try {
+					ERXEOGlobalIDUtilities.fetchObjectsWithGlobalIDs(editingContext, existingGIDs, true);
+				}
+				finally {
+					editingContext.unlock();
+				}
+				//database.forgetSnapshotsForGlobalIDs(gids);
 				if (log.isDebugEnabled()) {
 					log.debug("update gids: " + gids);
 				}

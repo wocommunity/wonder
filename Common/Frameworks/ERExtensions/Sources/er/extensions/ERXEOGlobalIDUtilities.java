@@ -194,14 +194,18 @@ public class ERXEOGlobalIDUtilities {
         }
         return result;
     }
-    
+
+    public static NSArray fetchObjectsWithGlobalIDs(EOEditingContext ec, NSArray globalIDs) {
+    	return ERXEOGlobalIDUtilities.fetchObjectsWithGlobalIDs(ec, globalIDs, false);
+    }
+
     /**
      * Fetches an array of objects defined by the globalIDs in a single fetch per entity.
      * @param ec
      * @param globalIDs
      * @return
      */
-    public static NSArray fetchObjectsWithGlobalIDs(EOEditingContext ec, NSArray globalIDs) {
+    public static NSArray fetchObjectsWithGlobalIDs(EOEditingContext ec, NSArray globalIDs, boolean refreshesRefetchedObjects) {
     	NSDictionary gidsByEntity = globalIDsGroupedByEntityName(globalIDs);
     	NSMutableArray result = new NSMutableArray();
     	for(Enumeration e = gidsByEntity.keyEnumerator(); e.hasMoreElements();) {
@@ -217,6 +221,7 @@ public class ERXEOGlobalIDUtilities {
     		}
     		EOQualifier qualifier = new EOOrQualifier(qualifiers);
     		EOFetchSpecification fetchSpec = new EOFetchSpecification(entityName, qualifier, null);
+    		fetchSpec.setRefreshesRefetchedObjects(refreshesRefetchedObjects);
     		NSArray details = ec.objectsWithFetchSpecification(fetchSpec);
     		result.addObjectsFromArray(details);
     	}
