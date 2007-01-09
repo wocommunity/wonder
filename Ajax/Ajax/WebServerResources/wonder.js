@@ -52,3 +52,39 @@ var AjaxInPlace = {
 		if (typeof eval(editFunctionName) != 'undefined') { eval(editFunctionName + " = null"); }
 	}
 };
+
+var AjaxOptions = {
+	options : function(additionalOptions) {
+		var options = { method: 'get', asynchronous: true, evalScripts: true };
+		Object.extend(options, additionalOptions || {});
+		return options;
+	}
+}
+
+var AjaxUpdateContainer = {
+	register : function(id, options) {
+		if (!options) {
+			options = "{}";
+		}
+		eval(id + "Update = function() { AjaxUpdateContainer.update('" + id + "', " + options + ") }");
+	},
+	
+	update : function(id, options) {
+		new Ajax.Updater(id, $(id).getAttribute('updateUrl'), AjaxOptions.options(options));
+	}
+};
+
+var AjaxUpdateLink = {
+	updateFunc : function(id, options, elementID) {
+		var updateFunction = function(queryParams) {
+			AjaxUpdateLink.update(id, options, elementID, queryParams);
+		};
+		return updateFunction;
+	},
+	
+	update : function(id, options, elementID, queryParams) {
+		var actionUrl = $(id).getAttribute('updateUrl').sub('[^/]+$', elementID) + '?__updateID=' + id;
+		actionUrl = actionUrl.addQueryParameters(queryParams);
+		new Ajax.Updater(id, actionUrl, AjaxOptions.options(options));
+	}
+};

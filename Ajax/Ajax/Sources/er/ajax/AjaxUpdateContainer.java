@@ -52,6 +52,20 @@ public class AjaxUpdateContainer extends AjaxDynamicElement {
 		}
 		return options;
 	}
+	
+	public static NSDictionary removeDefaultOptions(NSDictionary options) {
+		NSMutableDictionary mutableOptions = options.mutableClone();
+		if ("'get'".equals(mutableOptions.objectForKey("method"))) {
+			mutableOptions.removeObjectForKey("method");
+		}
+		if ("true".equals(mutableOptions.objectForKey("evalScripts"))) {
+			mutableOptions.removeObjectForKey("evalScripts");
+		}
+		if ("true".equals(mutableOptions.objectForKey("asynchronous"))) {
+			mutableOptions.removeObjectForKey("asynchronous");
+		}
+		return mutableOptions;
+	}
 
 	public NSMutableDictionary createObserveFieldOptions(WOComponent component) {
 		NSMutableArray ajaxOptionsArray = new NSMutableArray();
@@ -97,9 +111,16 @@ public class AjaxUpdateContainer extends AjaxDynamicElement {
 				AjaxObserveField.appendToResponse(response, context, this, observeFieldID, id, fullSubmit, createObserveFieldOptions(component));
 			}
 
-			response.appendContentString(id + "Update = function() { new Ajax.Updater('" + id + "', $('" + id + "').getAttribute('updateUrl'), ");
-			AjaxOptions.appendToResponse(options, response, context);
-			response.appendContentString("); }");
+//			response.appendContentString(id + "Update = function() { new Ajax.Updater('" + id + "', $('" + id + "').getAttribute('updateUrl'), ");
+//			AjaxOptions.appendToResponse(AjaxUpdateContainer.removeDefaultOptions(options), response, context);
+//			response.appendContentString("); }");
+			response.appendContentString("AjaxUpdateContainer.register('" + id + "'");
+			NSDictionary nonDefaultOptions = AjaxUpdateContainer.removeDefaultOptions(options);
+			if (!nonDefaultOptions.isEmpty()) {
+				response.appendContentString(", ");
+				AjaxOptions.appendToResponse(nonDefaultOptions, response, context);
+			}
+			response.appendContentString(");");
 
 			AjaxUtils.appendScriptFooter(response);
 		}

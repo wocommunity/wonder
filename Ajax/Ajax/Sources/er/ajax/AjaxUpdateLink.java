@@ -51,71 +51,100 @@ public class AjaxUpdateLink extends AjaxDynamicElement {
 		super(name, associations, children);
 	}
 
-	public String onClick(WOContext context) {
+	public String onClick(WOContext context, boolean generateFunctionWrapper) {
 		WOComponent component = context.component();
 		NSDictionary options = createAjaxOptions(component);
 		StringBuffer onClickBuffer = new StringBuffer();
-		String onClickBefore = (String) valueForBinding("onClickBefore", context.component());
-		if (onClickBefore != null) {
-			onClickBuffer.append("if (");
-			onClickBuffer.append(onClickBefore);
-			onClickBuffer.append(") {");
-		}
-
-		WOAssociation directActionNameAssociation = (WOAssociation) associations().valueForKey("directActionName");
-
-		String actionUrl = null;
-		if (directActionNameAssociation != null) {
-			actionUrl = context.directActionURLForActionNamed((String) directActionNameAssociation.valueInComponent(component), ERXComponentUtilities.queryParametersInComponent(associations(), component)).replaceAll("&amp;", "&");
-		}
-		else {
-			String updateContainerID = (String) valueForBinding("updateContainerID", context.component());
-			actionUrl = AjaxUpdateContainer.updateContainerUrl(AjaxUtils.ajaxComponentActionUrl(context), updateContainerID);
-		}
-		
-		onClickBuffer.append("var actionUrl = '" + actionUrl + "'");
-		String functionName = (String) valueForBinding("functionName", component);
-		if (functionName != null) {
-			onClickBuffer.append(".addQueryParameters(additionalParams)");
-		}
-		onClickBuffer.append(";");
-
-		if (associations().valueForKey("function") != null) {
-			String function = (String) valueForBinding("function", context.component());
-			onClickBuffer.append("return " + function + "(actionUrl)");
-		}
-		else {
-			String replaceID = (String) valueForBinding("replaceID", context.component());
-			if (replaceID == null) {
-				String updateContainerID = (String) valueForBinding("updateContainerID", context.component());
-				if (updateContainerID == null) {
-					onClickBuffer.append("new Ajax.Request(actionUrl, ");
-					AjaxOptions.appendToBuffer(options, onClickBuffer, context);
-					onClickBuffer.append(")");
-				}
-				else {
-					onClickBuffer.append("new Ajax.Updater('" + updateContainerID + "', actionUrl, ");
-					AjaxOptions.appendToBuffer(options, onClickBuffer, context);
-					onClickBuffer.append(")");
-				}
-			}
-			else {
-				onClickBuffer.append("new Ajax.Updater('" + replaceID + "', actionUrl, ");
-				AjaxOptions.appendToBuffer(options, onClickBuffer, context);
-				onClickBuffer.append(")");
-			}
-		}
 
 		String onClick = (String) valueForBinding("onClick", context.component());
-		if (onClick != null) {
+		String onClickBefore = (String) valueForBinding("onClickBefore", context.component());
+		String updateContainerID = (String) valueForBinding("updateContainerID", context.component());
+		String functionName = (String) valueForBinding("functionName", component);
+		String function = (String) valueForBinding("function", context.component());
+		String replaceID = (String) valueForBinding("replaceID", context.component());
+		WOAssociation directActionNameAssociation = (WOAssociation) associations().valueForKey("directActionName");
+		if (updateContainerID != null && directActionNameAssociation == null && replaceID == null && functionName != null && function == null && onClick == null && onClickBefore == null) {
+			NSDictionary nonDefaultOptions = AjaxUpdateContainer.removeDefaultOptions(options);
+			if (generateFunctionWrapper) {
+				onClickBuffer.append("AjaxUpdateLink.updateFunc('");
+			}
+			else {
+				onClickBuffer.append("AjaxUpdateLink.update('");
+			}
+			onClickBuffer.append(updateContainerID);
+			onClickBuffer.append("', ");
+			AjaxOptions.appendToBuffer(nonDefaultOptions, onClickBuffer, context);
+			onClickBuffer.append(", '");
+			onClickBuffer.append(context.contextID());
+			onClickBuffer.append('.');
+			onClickBuffer.append(context.elementID());
+			onClickBuffer.append("'");
+			if (!generateFunctionWrapper) {
+				onClickBuffer.append(", additionalParams");
+			}
+			onClickBuffer.append(");");
+		}
+		else {
+			if (generateFunctionWrapper) {
+				onClickBuffer.append("function(additionalParams) {");
+			}
+			if (onClickBefore != null) {
+				onClickBuffer.append("if (");
+				onClickBuffer.append(onClickBefore);
+				onClickBuffer.append(") {");
+			}
+	
+			String actionUrl = null;
+			if (directActionNameAssociation != null) {
+				actionUrl = context.directActionURLForActionNamed((String) directActionNameAssociation.valueInComponent(component), ERXComponentUtilities.queryParametersInComponent(associations(), component)).replaceAll("&amp;", "&");
+			}
+			else {
+				actionUrl = AjaxUpdateContainer.updateContainerUrl(AjaxUtils.ajaxComponentActionUrl(context), updateContainerID);
+			}
+			
+			onClickBuffer.append("var actionUrl = '" + actionUrl + "'");
+			if (functionName != null) {
+				onClickBuffer.append(".addQueryParameters(additionalParams)");
+			}
 			onClickBuffer.append(";");
-			onClickBuffer.append(onClick);
-		}
+	
+			if (function != null) {
+				onClickBuffer.append("return " + function + "(actionUrl)");
+			}
+			else {
+				if (replaceID == null) {
+					if (updateContainerID == null) {
+						onClickBuffer.append("new Ajax.Request(actionUrl, ");
+						AjaxOptions.appendToBuffer(options, onClickBuffer, context);
+						onClickBuffer.append(")");
+					}
+					else {
+						onClickBuffer.append("new Ajax.Updater('" + updateContainerID + "', actionUrl, ");
+						AjaxOptions.appendToBuffer(options, onClickBuffer, context);
+						onClickBuffer.append(")");
+					}
+				}
+				else {
+					onClickBuffer.append("new Ajax.Updater('" + replaceID + "', actionUrl, ");
+					AjaxOptions.appendToBuffer(options, onClickBuffer, context);
+					onClickBuffer.append(")");
+				}
+			}
+	
+			if (onClick != null) {
+				onClickBuffer.append(";");
+				onClickBuffer.append(onClick);
+			}
+	
+			if (onClickBefore != null) {
+				onClickBuffer.append("}");
+			}
 
-		if (onClickBefore != null) {
-			onClickBuffer.append("}");
+			if (generateFunctionWrapper) {
+				onClickBuffer.append("}");
+			}
 		}
-
+		
 		return onClickBuffer.toString();
 	}
 
@@ -155,7 +184,7 @@ public class AjaxUpdateLink extends AjaxDynamicElement {
 				if (isATag) {
 					appendTagAttributeToResponse(response, "href", "javascript:void(0);");
 				}
-				appendTagAttributeToResponse(response, "onclick", onClick(context));
+				appendTagAttributeToResponse(response, "onclick", onClick(context, false));
 				appendTagAttributeToResponse(response, "title", valueForBinding("title", component));
 				appendTagAttributeToResponse(response, "value", valueForBinding("value", component));
 				appendTagAttributeToResponse(response, "class", valueForBinding("class", component));
@@ -177,7 +206,9 @@ public class AjaxUpdateLink extends AjaxDynamicElement {
 		}
 		else {
 			AjaxUtils.appendScriptHeader(response);
-			response.appendContentString(functionName + " = function(additionalParams) { " + onClick(context) + " }\n");
+			response.appendContentString(functionName);
+			response.appendContentString(" = ");
+			response.appendContentString(onClick(context, true));
 			AjaxUtils.appendScriptFooter(response);
 		}
 		super.appendToResponse(response, context);
