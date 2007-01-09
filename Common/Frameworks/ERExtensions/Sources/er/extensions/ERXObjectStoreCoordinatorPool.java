@@ -184,7 +184,8 @@ public class ERXObjectStoreCoordinatorPool {
             EOEditingContext ec = _newEditingContext(os, validationEnabled);
             ec.lock();
             try {
-                ec.setSharedEditingContext(_pool.sharedEditingContextForObjectStore(os));
+            	EOSharedEditingContext sec = (useSharedEditingContext()) ? _pool.sharedEditingContextForObjectStore(os) : null;
+            	ec.setSharedEditingContext(sec);
             } finally {
                 ec.unlock();
             }
