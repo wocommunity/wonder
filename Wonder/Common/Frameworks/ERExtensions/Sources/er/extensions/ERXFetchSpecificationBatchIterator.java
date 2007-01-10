@@ -6,6 +6,9 @@
 //
 package er.extensions;
 
+import java.util.Enumeration;
+import java.util.Iterator;
+
 import org.apache.log4j.Logger;
 
 import com.webobjects.eoaccess.EOAttribute;
@@ -17,19 +20,21 @@ import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSRange;
 
 /**
- * The goal of the fetch specification batch iterator is
- * to have the ability to iterate through a fetch specification
- * that might fetch one million enterprise objects. Fetching all
- * of the objects into a singel editing context is prohibitive
- * in the amount of memory needed and in the time taken to
- * process all of the rows. The iterator allows one to iterate
- * through the fetched objects only hydrating those objects need
- * in small bite size pieces. The iterator also allows you to
- * swap out editing contexts between calls to <b>nextBatch</b>,
- * which will allow the garbage collector to collect the old
- * editing context and the previous batch of enterprise objects.
+ * The goal of the fetch specification batch iterator is to have the ability to
+ * iterate through a fetch specification that might fetch one million enterprise
+ * objects. Fetching all of the objects into a single editing context is
+ * prohibitive in the amount of memory needed and in the time taken to process
+ * all of the rows. <br>
+ * The iterator allows one to iterate through the fetched objects only hydrating
+ * those objects need in small bite size pieces. The iterator also allows you to
+ * swap out editing contexts between calls to <b>nextBatch()</b>, which will
+ * allow the garbage collector to collect the old editing context and the
+ * previous batch of enterprise objects.<br>
+ * For your convenience, this class also implements Iterator and Enumeration, so
+ * you can use it as such.<br>
+ * Be aware that setting the batch size when a fetch has started may lead to unexpected results.
  */
-public class ERXFetchSpecificationBatchIterator {
+public class ERXFetchSpecificationBatchIterator implements Iterator, Enumeration {
 
     /** holds the default batch size, any bigger than this an Oracle has a fit */
     public static final int DefaultBatchSize = 250;
@@ -46,11 +51,16 @@ public class ERXFetchSpecificationBatchIterator {
 
     /** holds an array of primary key values to iterate through */
     protected NSArray primaryKeys;
+    
+    /** holds the current batch */
+    protected NSArray currentBatch;
     /** holds the current batch index */
     protected int currentBatchIndex;
     /** holds the number of objects fetched */
     protected int currentObjectFetchCount;
-    
+    /** holds the current index */
+    protected int currentIndex;
+ 
     /**
      * Constructs a fetch specification iterator for a given fetch
      * specification with the default batch size. Note you will have to
@@ -100,7 +110,7 @@ public class ERXFetchSpecificationBatchIterator {
      */
     public ERXFetchSpecificationBatchIterator(EOFetchSpecification fetchSpecification, NSArray pkeys, EOEditingContext ec, int batchSize) {
         super();
-        this.fetchSpecification = fetchSpecification;
+        this.fetchSpecification = (EOFetchSpecification) fetchSpecification.clone();
         this.primaryKeys = pkeys;
         setEditingContext(ec);
         setBatchSize(batchSize);
@@ -128,9 +138,7 @@ public class ERXFetchSpecificationBatchIterator {
      * @return number of objects / batch size rounded up
      */
     public int batchCount() {
-        if (!hasFetchedPrimaryKeys())
-            fetchPrimaryKeys();
-        return (int)Math.ceil((primaryKeys.count() * 1.0) / (batchSize() * 1.0));
+         return (int)Math.ceil((primaryKeys().count() * 1.0) / (batchSize() * 1.0));
     }
     
     /**
@@ -178,9 +186,7 @@ public class ERXFetchSpecificationBatchIterator {
      * @return if calling <b>nextBatch</b> will have any effect
      */
     public boolean hasNextBatch() {
-        if (!hasFetchedPrimaryKeys())
-            fetchPrimaryKeys();
-        return currentObjectFetchCount < primaryKeys.count();
+        return primaryKeys().count() >= currentObjectFetchCount;
     }
 
     /**
@@ -202,14 +208,12 @@ public class ERXFetchSpecificationBatchIterator {
         String primaryKeyAttributeName = ((EOAttribute)entity.primaryKeyAttributes().lastObject()).name();
 
         NSArray nextBatch = null;
-        if (!hasFetchedPrimaryKeys())
-            fetchPrimaryKeys();
         if (hasNextBatch()) {
-            int length = primaryKeys.count() - currentObjectFetchCount > batchSize() ? batchSize() : primaryKeys.count() - currentObjectFetchCount;
+            int length = primaryKeys().count() - currentObjectFetchCount > batchSize() ? batchSize() : primaryKeys().count() - currentObjectFetchCount;
             NSRange range = new NSRange(currentObjectFetchCount, length);
-            NSArray primaryKeysToFetch = primaryKeys.subarrayWithRange(range);
+            NSArray primaryKeysToFetch = primaryKeys().subarrayWithRange(range);
 
-            log.debug("Of primaryKey count: " + primaryKeys.count() + " fetching range: " + range + " which is: " + primaryKeysToFetch.count());
+            log.debug("Of primaryKey count: " + primaryKeys().count() + " fetching range: " + range + " which is: " + primaryKeysToFetch.count());
 
             ERXInQualifier qual = new ERXInQualifier(primaryKeyAttributeName, primaryKeysToFetch);
             EOFetchSpecification fetchSpec = new EOFetchSpecification(fetchSpecification.entityName(), qual, fetchSpecification.sortOrderings());
@@ -221,17 +225,9 @@ public class ERXFetchSpecificationBatchIterator {
             
             currentObjectFetchCount += length;
             currentBatchIndex++;
-        }
-        return nextBatch != null ? nextBatch : NSArray.EmptyArray;
-    }
-
-    /**
-     * Determines if the primary keys have been fetched
-     * yet for the given fetch specification.
-     * @return if the primary keys array has been populated
-     */
-    protected boolean hasFetchedPrimaryKeys() {
-        return primaryKeys != null;
+         }
+        currentBatch = nextBatch != null ? nextBatch : NSArray.EmptyArray;
+        return currentBatch;
     }
 
     /**
@@ -239,8 +235,8 @@ public class ERXFetchSpecificationBatchIterator {
      * for the given fetch specification. Note the sort
      * orderings for the fetch specification are respected.
      */
-    protected void fetchPrimaryKeys() {
-        if (!hasFetchedPrimaryKeys()) {
+    protected NSArray primaryKeys() {
+        if (primaryKeys == null) {
             if (editingContext() == null)
                 throw new RuntimeException("Attempting to fetch the primary keys for a null editingContext");
 
@@ -254,18 +250,67 @@ public class ERXFetchSpecificationBatchIterator {
                                                                                                       fetchSpecification.qualifier(),
                                                                                                       fetchSpecification.sortOrderings(),
                                                                                                       null);
+            pkFetchSpec.setFetchLimit(fetchSpecification.fetchLimit());
             log.debug("Fetching primary keys.");
             NSArray primaryKeyDictionaries = editingContext().objectsWithFetchSpecification(pkFetchSpec);
             
             String pkAttributeName = ((EOAttribute)entity.primaryKeyAttributes().lastObject()).name();
             primaryKeys = (NSArray)primaryKeyDictionaries.valueForKey(pkAttributeName);
-        }
+            currentIndex = 0;
+            currentBatch = null;
+       }
+        return primaryKeys;
     }
-
+    
     /**
      * Resets the batch iterator so it will refetch it's primary keys again.
      */
     public void reset() {
         primaryKeys = null;
+        currentIndex = 0;
     }
+    
+	/**
+	 * Implementation of the Iterator interface
+	 */
+    public boolean hasNext() {
+ 		return currentIndex < primaryKeys().count();
+	}
+
+	/**
+	 * Implementation of the Iterator interface
+	 */
+	public Object next() {
+		if(currentIndex % batchSize() == 0) {
+			if(hasNextBatch()) {
+				nextBatch();
+			} else {
+				throw new IllegalStateException("Iterator is exhausted");
+			}
+		}
+		Object nextObject = currentBatch.objectAtIndex(currentIndex % batchSize);
+		currentIndex++;
+		return nextObject;
+	}
+
+	/**
+	 * Implementation of the Iterator interface
+	 */
+	public void remove() {
+		throw new UnsupportedOperationException("Can't remove, not implemented");
+	}
+
+	/**
+	 * Implementation of the Enumeration interface
+	 */
+	public boolean hasMoreElements() {
+		return hasNext();
+	}
+
+	/**
+	 * Implementation of the Enumeration interface
+	 */
+	public Object nextElement() {
+		return next();
+	}
 }
