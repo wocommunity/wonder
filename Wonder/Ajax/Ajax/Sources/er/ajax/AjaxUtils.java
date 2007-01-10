@@ -40,7 +40,7 @@ public class AjaxUtils {
 	 * @param request the request the check
 	 */
 	public static boolean isAjaxRequest(WORequest request) {
-		String requestedWith = request.headerForKey("HTTP_X_REQUESTED_WITH");
+		String requestedWith = request.headerForKey("x-requested-with");
 		return "XMLHttpRequest".equals(requestedWith);
 	}
 	
