@@ -35,6 +35,15 @@ public class AjaxUtils {
 	 */
 	public static final String FORCE_FORM_SUBMITTED_KEY = "_forceFormSubmitted";
 
+	/**
+	 * Return whether or not the given request is an Ajax request.
+	 * @param request the request the check
+	 */
+	public static boolean isAjaxRequest(WORequest request) {
+		String requestedWith = request.headerForKey("HTTP_X_REQUESTED_WITH");
+		return "XMLHttpRequest".equals(requestedWith);
+	}
+	
 	public static void setPageReplacementCacheKey(WOContext _context, String _key) {
 		_context.response().setHeader(_key, AjaxUtils.PAGE_REPLACEMENT_CACHE_LOOKUP_KEY);
 	}
