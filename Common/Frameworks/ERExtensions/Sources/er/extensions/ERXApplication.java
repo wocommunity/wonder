@@ -1114,6 +1114,19 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
         return _useSessionStoreDeadlockDetection.booleanValue();
     }
 
+    /**
+     * Returns whether or not this application is running in development-mode.  If you 
+     * are using Xcode, you should add a WOIDE=Xcode setting to your launch parameters.
+     */
+    public boolean isDevelopmentMode() {
+    	boolean developmentMode = false;
+    	String ide = ERXProperties.stringForKey("WOIDE");
+    	if ("WOLips".equals(ide) || "Xcode".equals(ide)) {
+    		developmentMode = true;
+    	}
+    	return developmentMode;
+    }
+    
     /** holds the info on checked-out sessions */
     private Hashtable _sessions = new Hashtable();
 
