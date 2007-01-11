@@ -348,4 +348,15 @@ public class ERXDirectAction extends WODirectAction {
 		return r;
     }
     
+    /**
+     * Opens the localizer edit page if the app is in dvelopment mode.
+     */
+    public WOActionResults editLocalizedFilesAction() {
+    	WOResponse r = null;
+    	if (!ERXApplication.erxApplication().isDevelopmentMode()) {
+    		return pageWithName("ERXLocalizationEditor");
+    	}
+		return r;
+    }
+    
 }
