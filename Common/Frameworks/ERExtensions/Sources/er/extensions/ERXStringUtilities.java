@@ -1483,4 +1483,30 @@ public class ERXStringUtilities {
 		}
 		return declaringClassName.substring(j);
 	}
+
+	/**
+	 * Same as NSPropertySerialization except it sorts on keys first.
+	 * @param dict
+	 * @return
+	 */
+	public static String stringFromDictionary(NSDictionary dict) {
+		NSArray orderedKeys = dict.allKeys();
+		orderedKeys = ERXArrayUtilities.sortedArraySortedWithKey(orderedKeys, "toString.toLowerCase");
+		StringBuffer result = new StringBuffer();
+		for (Enumeration keys = orderedKeys.objectEnumerator(); keys.hasMoreElements();) {
+			Object key = (Object) keys.nextElement();
+			Object value = dict.objectForKey(key);
+			String stringValue = NSPropertyListSerialization.stringFromPropertyList(value);
+			String stringKey = NSPropertyListSerialization.stringFromPropertyList(key);
+			if(!(value instanceof String)) {
+				stringValue = stringValue.replaceAll("\n", "\n\t");
+			}
+			result.append("\t");
+			result.append(stringKey);
+			result.append(" = ");
+			result.append(stringValue);
+			result.append(";\n");
+		}
+		return "{\n" + result + "}\n";
+	}
 }
