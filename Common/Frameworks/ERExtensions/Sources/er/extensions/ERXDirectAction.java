@@ -46,7 +46,7 @@ public class ERXDirectAction extends WODirectAction {
      * @return
      */
     private boolean canPerformActionWithPasswordKey(String passwordKey) {
-    	if(!ERXApplication.erxApplication().isDevelopmentMode()) {
+    	if(ERXApplication.erxApplication().isDevelopmentMode()) {
     		return true;
     	}
     	String password = System.getProperty(passwordKey);
