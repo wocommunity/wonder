@@ -353,7 +353,7 @@ public class ERXDirectAction extends WODirectAction {
      */
     public WOActionResults editLocalizedFilesAction() {
     	WOResponse r = null;
-    	if (!ERXApplication.erxApplication().isDevelopmentMode()) {
+    	if (ERXApplication.erxApplication().isDevelopmentMode()) {
     		return pageWithName("ERXLocalizationEditor");
     	}
 		return r;
