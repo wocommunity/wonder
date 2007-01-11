@@ -16,13 +16,13 @@
 
 	<dependencies>
 		<dependency>
-			<groupId>javax.activation</groupId>
+			<groupId>javax</groupId>
 			<artifactId>activation</artifactId>
 			<version>1.0.2</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
-			<groupId>javax.mail</groupId>
+			<groupId>javax</groupId>
 			<artifactId>mail</artifactId>
 			<version>1.3</version>
 			<scope>provided</scope>
