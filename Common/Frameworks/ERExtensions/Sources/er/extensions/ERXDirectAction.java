@@ -13,7 +13,6 @@ import java.util.Enumeration;
 import org.apache.log4j.Logger;
 
 import com.webobjects.appserver.WOActionResults;
-import com.webobjects.appserver.WOApplication;
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WODirectAction;
 import com.webobjects.appserver.WORedirect;
@@ -47,7 +46,7 @@ public class ERXDirectAction extends WODirectAction {
      * @return
      */
     private boolean canPerformActionWithPasswordKey(String passwordKey) {
-    	if(!WOApplication.application().isCachingEnabled()) {
+    	if(!ERXApplication.erxApplication().isDevelopmentMode()) {
     		return true;
     	}
     	String password = System.getProperty(passwordKey);
