@@ -85,10 +85,10 @@ public class ERXWOString extends WODynamicElement {
                     }
                 }
                 if (format != null) {
-                    if (format instanceof NSTimestampFormatter && valueInComponent == null) {
-                        //do nothing
-                    } else {
-                        try {
+                	if (valueInComponent == null) {
+                		// do nothing;
+                	} else {
+                		try {
                             valueInComponent = format.format(valueInComponent);
                         } catch (IllegalArgumentException ex) {
                             log.info("Exception while formatting", ex);
