@@ -3,8 +3,8 @@ EditFramework : WOHyperlink {
 }
 
 Entries : WORepetition {
-	list = data.allKeys.@sortAsc.toString.toLowerCase;
-	item = currentKey;
+	list = data.@sortAsc.key.toLowerCase;
+	item = currentEntry;
 }
 
 Save : WOSubmitButton {
@@ -70,7 +70,7 @@ ValueCell : WOGenericContainer {
 }
 
 Key: WOString {
-	value = currentKey;
+	value = currentEntry.key;
 }
 
 KeyCell : WOGenericContainer {

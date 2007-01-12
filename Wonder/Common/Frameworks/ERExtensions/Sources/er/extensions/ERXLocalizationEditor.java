@@ -10,6 +10,7 @@ import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation.NSMutableSet;
 import com.webobjects.foundation.NSPropertyListSerialization;
@@ -26,11 +27,10 @@ public class ERXLocalizationEditor extends WOComponent {
 	public String currentLanguage;
 	public String currentFilename;
 	public String currentFramework;
-	public NSMutableDictionary data;
-	public NSMutableDictionary entry;
+	public NSMutableArray data;
+	public NSMutableDictionary currentEntry;
 	public String selectedFramework;
 	public String selectedFilename;
-	public String currentKey;
 	public String UNSET = new String("***UNSET***");
 	
     public ERXLocalizationEditor(WOContext context) {
@@ -58,7 +58,8 @@ public class ERXLocalizationEditor extends WOComponent {
     }
     
     public void editFramework() {
-    	data = new NSMutableDictionary();
+    	data = new NSMutableArray();
+    	NSMutableDictionary dataDictionary = new NSMutableDictionary();
        	selectedFilename = currentFilename;
        	selectedFramework = currentFramework;
     	NSMutableSet allKeys = new NSMutableSet();
@@ -71,10 +72,12 @@ public class ERXLocalizationEditor extends WOComponent {
 				allKeys.addObjectsFromArray(dict.allKeys());
 				for (Enumeration keys = dict.allKeys().objectEnumerator(); keys.hasMoreElements();) {
 					String key = (String) keys.nextElement();
-					NSMutableDictionary entry = (NSMutableDictionary) data.objectForKey(key);
+					NSMutableDictionary entry = (NSMutableDictionary) dataDictionary.objectForKey(key);
 					if(entry == null) {
 						entry = new NSMutableDictionary();
-						data.setObjectForKey(entry, key);
+						entry.setObjectForKey(key, "key");
+						dataDictionary.setObjectForKey(entry, key);
+						data.addObject(entry);
 					}
 					entry.setObjectForKey(dict.objectForKey(key), language);
 				}
@@ -82,7 +85,7 @@ public class ERXLocalizationEditor extends WOComponent {
 		}
     	for (Enumeration keys = allKeys.objectEnumerator(); keys.hasMoreElements();) {
 			String key = (String) keys.nextElement();
-			NSMutableDictionary entry = (NSMutableDictionary) data.objectForKey(key);
+			NSMutableDictionary entry = (NSMutableDictionary) dataDictionary.objectForKey(key);
 			for (Enumeration languages = availableLanguages().objectEnumerator(); languages.hasMoreElements();) {
 				String language = (String) languages.nextElement();
 				if(entry.objectForKey(language) == null) {
@@ -110,9 +113,9 @@ public class ERXLocalizationEditor extends WOComponent {
 			NSArray languageArray = new NSArray(language);
 			URL url = ERXFileUtilities.pathURLForResourceNamed(selectedFilename, selectedFramework, languageArray);
 			NSMutableDictionary dict = new NSMutableDictionary();
-     		for (Enumeration keys = data.keyEnumerator(); keys.hasMoreElements();) {
-     			String key = (String) keys.nextElement();
-				NSDictionary entry = (NSDictionary) data.objectForKey(key);
+     		for (Enumeration entries = data.objectEnumerator(); entries.hasMoreElements();) {
+     			NSDictionary entry = (NSDictionary) entries.nextElement();
+     			String key = (String) entry.objectForKey("key");
 				Object value = entry.objectForKey(language);
 				if(value != null && !value.equals(UNSET)) {
 					dict.setObjectForKey(value, key);
@@ -129,10 +132,9 @@ public class ERXLocalizationEditor extends WOComponent {
     }
     
     private Object currentValueObject() {
-    	NSDictionary entry = (NSDictionary) data.objectForKey(currentKey);
     	Object result = null;
-    	if(entry != null) {
-    		result = entry.objectForKey(currentLanguage);
+    	if(currentEntry != null) {
+    		result = currentEntry.objectForKey(currentLanguage);
      	}
     	return result;
     }
@@ -142,10 +144,9 @@ public class ERXLocalizationEditor extends WOComponent {
     }
     
     public String currentValue() {
-    	NSMutableDictionary entry = (NSMutableDictionary) data.objectForKey(currentKey);
     	String result = null;
-    	if(entry != null) {
-    		Object item = entry.objectForKey(currentLanguage);
+    	if(currentEntry != null) {
+    		Object item = currentEntry.objectForKey(currentLanguage);
     		if (item instanceof String) {
 				result = (String)item;
 			} else {
@@ -156,9 +157,8 @@ public class ERXLocalizationEditor extends WOComponent {
     }
 	
     public void setCurrentValue(String value) {
-    	NSMutableDictionary entry = (NSMutableDictionary) data.objectForKey(currentKey);
-    	if(entry != null) {
-    		Object item = entry.objectForKey(currentLanguage);
+    	if(currentEntry != null) {
+    		Object item = currentEntry.objectForKey(currentLanguage);
     		Object newValue;
     		if (item instanceof String) {
     			newValue = (String)value;
@@ -168,7 +168,7 @@ public class ERXLocalizationEditor extends WOComponent {
     		if(newValue ==null) {
     			newValue = UNSET;
     		}
-    		entry.setObjectForKey(newValue, currentLanguage);
+    		currentEntry.setObjectForKey(newValue, currentLanguage);
      	}
     }
 }
