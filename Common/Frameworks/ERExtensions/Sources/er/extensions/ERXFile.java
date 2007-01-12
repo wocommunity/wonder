@@ -64,21 +64,13 @@ public class ERXFile extends File {
      * @see java.io.File#getAbsolutePath()
      */
     public String getAbsolutePath() {
-        String oriPath = super.getAbsolutePath(); 
-        if (Normalizer.quickCheck(oriPath, Normalizer.NFD) == Normalizer.YES) {
-            oriPath = Normalizer.normalize(oriPath, Normalizer.NFC);
-        }
-        return oriPath;
+        return normalizedPath(super.getAbsolutePath());
     }
     /* (non-Javadoc)
      * @see java.io.File#getName()
      */
     public String getName() {
-        String oriName = super.getName(); 
-        if (Normalizer.quickCheck(oriName, Normalizer.NFD) == Normalizer.YES) {
-            oriName = Normalizer.normalize(oriName, Normalizer.NFC);
-        }
-        return oriName;
+        return normalizedPath(super.getName());
     }
     
     
@@ -86,14 +78,12 @@ public class ERXFile extends File {
      * @see java.io.File#list()
      */
     public String[] list() {
-        String[] names = super.list();
-        if (names == null) return null;
-        for (int i = 0; i < names.length; i++) {
-            if (Normalizer.quickCheck(names[i], Normalizer.NFD) == Normalizer.YES) {
-                names[i]= Normalizer.normalize(names[i], Normalizer.NFC);
-            }
-        }
-        return names;
+    	String[] names = super.list();
+    	if (names == null) return null;
+    	for (int i = 0; i < names.length; i++) {
+    		names[i] = normalizedPath(names[i]);
+    	}
+    	return names;
     }
     /* (non-Javadoc)
      * @see java.io.File#list(java.io.FilenameFilter)
@@ -102,9 +92,7 @@ public class ERXFile extends File {
         String[] names = super.list(arg0);
         if (names == null) return null;
         for (int i = 0; i < names.length; i++) {
-            if (Normalizer.quickCheck(names[i], Normalizer.NFD) == Normalizer.YES) {
-                names[i]= Normalizer.normalize(names[i], Normalizer.NFC);
-            }
+        	names[i] = normalizedPath(names[i]);
         }
         return names;
     }
@@ -170,5 +158,12 @@ public class ERXFile extends File {
      */
     public String toString() {
         return super.toString();
+    }
+    
+    public static String normalizedPath(String name) {
+    	 if (Normalizer.quickCheck(name, Normalizer.NFD) == Normalizer.YES) {
+             return Normalizer.normalize(name, Normalizer.NFC);
+         }
+    	 return name;
     }
 }
