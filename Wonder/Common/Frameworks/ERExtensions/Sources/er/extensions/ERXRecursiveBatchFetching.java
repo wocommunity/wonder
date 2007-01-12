@@ -48,15 +48,28 @@ public class ERXRecursiveBatchFetching {
     }
 
 	/**
-	 * Defaults skipFaultedSourceObjects to false for backwards compatibility
+	 * Shortcut for batch fetching a single keypath and returns returns the fetched values. 
+	 * Defaults skipFaultedSourceObjects to true
+	 * @see batchFetch(NSArray, NSArray, boolean)
+	 * 
+     * @param sourceObjects the array of source object to fault keypaths on.
+     * @param keypath the keypath to fault
+	 */
+    public static NSArray batchFetch(NSArray sourceObjects, String keypath) {
+    	return ERXRecursiveBatchFetching.batchFetch(sourceObjects, keypath, true);
+    }
+
+	/**
+	 * Shortcut for batch fetching a single keypath and returns returns the fetched values. 
 	 * @see batchFetch(NSArray, NSArray, boolean)
 	 * 
      * @param sourceObjects the array of source object to fault keypaths on.
      * @param keypath the keypath to fault
      * @param skipFaultedSourceObjects if true, all source objects that already have their relationships faulted will be skipped
 	 */
-    public static void batchFetch(NSArray sourceObjects, String keypath, boolean skipFaultedSourceObjects) {
+    public static NSArray batchFetch(NSArray sourceObjects, String keypath, boolean skipFaultedSourceObjects) {
     	ERXRecursiveBatchFetching.batchFetch(sourceObjects, new NSArray(keypath), skipFaultedSourceObjects);
+		return (NSArray) sourceObjects.valueForKeyPath(keypath);
     }
 
     /**
