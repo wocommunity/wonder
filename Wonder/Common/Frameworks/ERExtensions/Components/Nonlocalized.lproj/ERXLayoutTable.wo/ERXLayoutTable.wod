@@ -33,6 +33,7 @@ TableContainer: WOGenericContainer {
     cellspacing = ^cellspacing;
 	width = ^tableWidth;
 	otherTagString = ^otherTagString;
+	class = ^tableClass;
 }
 
 TableRow: WOGenericContainer {
