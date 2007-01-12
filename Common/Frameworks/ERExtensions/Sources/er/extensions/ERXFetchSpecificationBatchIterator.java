@@ -216,9 +216,12 @@ public class ERXFetchSpecificationBatchIterator implements Iterator, Enumeration
             log.debug("Of primaryKey count: " + primaryKeys().count() + " fetching range: " + range + " which is: " + primaryKeysToFetch.count());
 
             ERXInQualifier qual = new ERXInQualifier(primaryKeyAttributeName, primaryKeysToFetch);
-            EOFetchSpecification fetchSpec = new EOFetchSpecification(fetchSpecification.entityName(), qual, fetchSpecification.sortOrderings());
-            if (fetchSpecification.prefetchingRelationshipKeyPaths() != null)
-                fetchSpec.setPrefetchingRelationshipKeyPaths(fetchSpecification.prefetchingRelationshipKeyPaths());
+            EOFetchSpecification fetchSpec = (EOFetchSpecification) fetchSpecification.clone();
+            fetchSpec.setQualifier(qual);
+            fetchSpec.setRequiresAllQualifierBindingVariables(false);
+            fetchSpec.setLocksObjects(false);
+            fetchSpec.setPromptsAfterFetchLimit(false);
+            
             nextBatch = editingContext().objectsWithFetchSpecification(fetchSpec);
 
             log.debug("Actually fetched: " + nextBatch.count() + " with fetch speciifcation: " + fetchSpec);
