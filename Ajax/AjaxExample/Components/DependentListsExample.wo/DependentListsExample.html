@@ -9,13 +9,25 @@ This can be used to create dependent PopUpButtons like in the following example:
 <p>
 <webobject name = "DependentListForm">
 	<webobject name = "StateField"></webobject>
+	<webobject name = "StateObserveField"></webobject>
 	<p>
 	<webobject name = "CountyUpdateComponent">
 		<webobject name = "CountyField"></webobject>
+		<webobject name = "CountyObserveField"></webobject>
+		<p>
+		<webobject name = "StreetUpdateComponent">
+			<webobject name = "StreetField"></webobject>
+			<webobject name = "StreetObserveField"></webobject>
+			<p>
+			Currently Selected Street: <webobject name = "SelectedStreetName"></webobject>
+		</webobject>
 	</webobject>
 </webobject>
 
-<p>
+<pre>
+
+</pre>
+
 In the example below, you can see the use of the standalone AjaxObserveField tag to perform a similar task. But in this case,
 the "fullSubmit" binding is set to "true", which causes the entire form to be submitted rather than just the partial form 
 submission.  Notice that the "Address" is passed through in addition to the selection of the state.
