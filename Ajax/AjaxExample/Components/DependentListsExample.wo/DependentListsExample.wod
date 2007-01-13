@@ -15,15 +15,52 @@ StateField : WOPopUpButton {
 	noSelectionString = "No State Selected";
 }
 
-CountyUpdateComponent : AjaxUpdateContainer {
+StateObserveField : AjaxObserveField {
 	observeFieldID = "StateFieldID";
+	updateContainerID = "CountyDiv1";
+	fullSubmit = true;
+}
+
+CountyUpdateComponent : AjaxUpdateContainer {
+	id = "CountyDiv1";
 }
 
 CountyField : WOPopUpButton {
+	id = "CountyFieldID";
 	list = selectedState.counties;
 	item = repetitionCounty;
 	selection = selectedCounty;
 	displayString = repetitionCounty.name;
+	noSelectionString = "No County Selected";
+}
+
+CountyObserveField : AjaxObserveField {
+	observeFieldID = "CountyFieldID";
+	updateContainerID = "StreetDiv1";
+	fullSubmit = true;
+}
+
+StreetField : WOPopUpButton {
+	id = "StreetFieldID";
+	list = selectedCounty.streets;
+	item = repetitionStreet;
+	selection = selectedStreet;
+	displayString = repetitionStreet.name;
+	noSelectionString = "No Street Selected";
+}
+
+StreetObserveField : AjaxObserveField {
+	observeFieldID = "StreetFieldID";
+	updateContainerID = "StreetDiv1";
+	fullSubmit = true;
+}
+
+SelectedStreetName : WOString {
+	value = selectedStreet.name;
+}
+
+StreetUpdateComponent : AjaxUpdateContainer {
+	id = "StreetDiv1";
 }
 
 Address : WOString {
