@@ -36,7 +36,7 @@ import com.webobjects.foundation.NSRange;
  */
 public class ERXFetchSpecificationBatchIterator implements Iterator, Enumeration {
 
-    /** holds the default batch size, any bigger than this an Oracle has a fit */
+	/** holds the default batch size, any bigger than this an Oracle has a fit */
     public static final int DefaultBatchSize = 250;
 
     /** logging support */
@@ -139,6 +139,14 @@ public class ERXFetchSpecificationBatchIterator implements Iterator, Enumeration
      */
     public int batchCount() {
          return (int)Math.ceil((primaryKeys().count() * 1.0) / (batchSize() * 1.0));
+    }
+
+    /**
+     * Gets the number of objects.
+     * @return number of objects
+     */
+    public int count() {
+         return primaryKeys().count();
     }
     
     /**
