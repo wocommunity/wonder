@@ -62,3 +62,8 @@ WordUpdater : AjaxUpdateContainer {
 SelectedWord : WOString {
 	value = selectedWord;
 }
+
+OnClickServerLink : AjaxUpdateLink {
+	action = onClickServerAction;
+	onClickServer = "alert('onClickServer alerted');";
+}
