@@ -89,10 +89,40 @@ public class ERXSQLHelper {
 	 * @return a <code>String</code> containing SQL statements to create tables
 	 */
 	public String createSchemaSQLForEntitiesInModelWithNameAndOptions(NSArray entities, String modelName, NSDictionary optionsCreate) {
-		EODatabaseContext dc = EOUtilities.databaseContextForModelNamed(ERXEC.newEditingContext(), modelName);
+		EOModel m = ERXEOAccessUtilities.modelGroup(null).modelNamed(modelName);
+		return createSchemaSQLForEntitiesInModelAndOptions(entities, m, optionsCreate);
+	}
+	
+	/**
+	 * creates SQL to create tables for the specified Entities. This can be used with EOUtilities rawRowsForSQL method
+	 * to create the tables.
+	 * 
+	 * @param entities
+	 *            a NSArray containing the entities for which create table statements should be generated or null if all
+	 *            entitites in the model should be used.
+	 * @param model
+	 *            the EOModel
+	 * @param optionsCreate
+	 *            a NSDictionary containing the different options. Possible keys are
+	 *            <ul>
+	 *            <li>EOSchemaGeneration.DropTablesKey</li>
+	 *            <li>EOSchemaGeneration.DropPrimaryKeySupportKey</li>
+	 *            <li>EOSchemaGeneration.CreateTablesKey</li>
+	 *            <li>EOSchemaGeneration.CreatePrimaryKeySupportKey</li>
+	 *            <li>EOSchemaGeneration.PrimaryKeyConstraintsKey</li>
+	 *            <li>EOSchemaGeneration.ForeignKeyConstraintsKey</li>
+	 *            <li>EOSchemaGeneration.CreateDatabaseKey</li>
+	 *            </ul>
+	 *            <li>EOSchemaGeneration.DropDatabaseKey</li>
+	 *            <br/><br>
+	 *            Possible values are <code>YES</code> and <code>NO</code>
+	 * 
+	 * @return a <code>String</code> containing SQL statements to create tables
+	 */
+	public String createSchemaSQLForEntitiesInModelAndOptions(NSArray entities, EOModel model, NSDictionary optionsCreate) {
+		EODatabaseContext databaseContext = EODatabaseContext.registeredDatabaseContextForModel(model, ERXEC.newEditingContext());
 		if (entities == null) {
-			EOModel m = ERXEOAccessUtilities.modelGroup(null).modelNamed(modelName);
-			Enumeration e = m.entities().objectEnumerator();
+			Enumeration e = model.entities().objectEnumerator();
 			NSMutableArray ar = new NSMutableArray();
 			while (e.hasMoreElements()) {
 				EOEntity currentEntity = (EOEntity) e.nextElement();
@@ -107,7 +137,7 @@ public class ERXSQLHelper {
 			}
 			entities = ar;
 		}
-		return createSchemaSQLForEntitiesWithOptions(entities, dc, optionsCreate);
+		return createSchemaSQLForEntitiesWithOptions(entities, databaseContext, optionsCreate);
 	}
 
 	/**
@@ -153,6 +183,35 @@ public class ERXSQLHelper {
 	 * @return a <code>String</code> containing SQL statements to create tables
 	 */
 	public String createSchemaSQLForEntitiesInModelWithName(NSArray entities, String modelName) {
+		EOModel model = ERXEOAccessUtilities.modelGroup(null).modelNamed(modelName);
+		return createSchemaSQLForEntitiesInModel(entities, model);
+	}
+
+	/**
+	 * creates SQL to create tables for the specified Entities. This can be used with EOUtilities rawRowsForSQL method
+	 * to create the tables.
+	 * 
+	 * @param entities
+	 *            a NSArray containing the entities for which create table statements should be generated or null if all
+	 *            entitites in the model should be used.
+	 * @param model
+	 *            the EOModel <br/><br/>This method uses the following defaults options:
+	 *            <ul>
+	 *            <li>EOSchemaGeneration.DropTablesKey=YES</li>
+	 *            <li>EOSchemaGeneration.DropPrimaryKeySupportKey=YES</li>
+	 *            <li>EOSchemaGeneration.CreateTablesKey=YES</li>
+	 *            <li>EOSchemaGeneration.CreatePrimaryKeySupportKey=YES</li>
+	 *            <li>EOSchemaGeneration.PrimaryKeyConstraintsKey=YES</li>
+	 *            <li>EOSchemaGeneration.ForeignKeyConstraintsKey=YES</li>
+	 *            <li>EOSchemaGeneration.CreateDatabaseKey=NO</li>
+	 *            <li>EOSchemaGeneration.DropDatabaseKey=NO</li>
+	 *            </ul>
+	 *            <br/><br>
+	 *            Possible values are <code>YES</code> and <code>NO</code>
+	 * 
+	 * @return a <code>String</code> containing SQL statements to create tables
+	 */
+	public String createSchemaSQLForEntitiesInModel(NSArray entities, EOModel model) {
 		NSMutableDictionary optionsCreate = new NSMutableDictionary();
 		optionsCreate.setObjectForKey("YES", EOSchemaGeneration.DropTablesKey);
 		optionsCreate.setObjectForKey("YES", EOSchemaGeneration.DropPrimaryKeySupportKey);
@@ -162,7 +221,7 @@ public class ERXSQLHelper {
 		optionsCreate.setObjectForKey("YES", EOSchemaGeneration.ForeignKeyConstraintsKey);
 		optionsCreate.setObjectForKey("NO", EOSchemaGeneration.CreateDatabaseKey);
 		optionsCreate.setObjectForKey("NO", EOSchemaGeneration.DropDatabaseKey);
-		return createSchemaSQLForEntitiesInModelWithNameAndOptions(entities, modelName, optionsCreate);
+		return createSchemaSQLForEntitiesInModelAndOptions(entities, model, optionsCreate);
 	}
 
 	/**
