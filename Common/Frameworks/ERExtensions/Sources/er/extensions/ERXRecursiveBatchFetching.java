@@ -79,7 +79,7 @@ public class ERXRecursiveBatchFetching {
      * @param sourceObjects the array of source object to fault keypaths on.
      * @param keypath the keypath to fault
 	 */
-    public static NSArray batchFetchAndReturn(NSArray sourceObjects, String keypath) {
+    public static NSArray batchFetchAndRetrieve(NSArray sourceObjects, String keypath) {
 		return ERXRecursiveBatchFetching.batchFetchAndRetrieve(sourceObjects, keypath, true);
     }
 
