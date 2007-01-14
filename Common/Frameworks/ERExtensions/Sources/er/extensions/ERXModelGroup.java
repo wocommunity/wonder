@@ -621,7 +621,7 @@ public class ERXModelGroup extends EOModelGroup {
 			// set the information for ERXJDBCConnectionBroker
 			newConnectionDictionary.addEntriesFromDictionary(poolingDictionary);
 
-			String removeJdbc2Info = getProperty(aModelName + ".removeJdbc2Info", "dbRemoveJdbc2InfoGLOBAL", "false");
+			String removeJdbc2Info = getProperty(aModelName + ".removeJdbc2Info", "dbRemoveJdbc2InfoGLOBAL", "true");
 			if (ERXValueUtilities.booleanValue(removeJdbc2Info)) {
 				newConnectionDictionary.removeObjectForKey("jdbc2Info");
 			}
