@@ -539,12 +539,17 @@ public class ERXJDBCUtilities {
 	 */
 	public static int executeUpdateScriptFromResourceNamed(EOAdaptorChannel channel, String resourceName, String frameworkName) throws SQLException, IOException {
 	    InputStream sqlScript = WOApplication.application().resourceManager().inputStreamForResourceNamed(resourceName, frameworkName, NSArray.EmptyArray);
+	    if (sqlScript == null) {
+	    	throw new IllegalArgumentException("There is no resource named '" + resourceName + "'.");
+	    }
 	    NSArray sqlStatements;
 	    try {
 	    	sqlStatements = ERXSQLHelper.newSQLHelper(channel).splitSQLStatementsFromInputStream(sqlScript);
 	    }
 	    finally {
-	    	sqlScript.close();
+	    	if (sqlScript != null) {
+	    		sqlScript.close();
+	    	}
 	    }
 	    return ERXJDBCUtilities.executeUpdateScript(channel, sqlStatements);
 	}
