@@ -238,6 +238,10 @@ public interface ERXEnterpriseObject {
     public static final Logger tranLogDidRevert = Logger
             .getLogger("er.transaction.eo.did.revert.ERXGenericRecord");
 
+    /** logging support. Called before an object is deleted */
+    public static final Logger tranLogMightDelete = Logger
+            .getLogger("er.transaction.eo.might.delete.ERXGenericRecord");
+
     /** logging support. Called before an object is inserted */
     public static final Logger tranLogWillInsert = Logger
             .getLogger("er.transaction.eo.will.insert.ERXGenericRecord");
@@ -287,6 +291,15 @@ public interface ERXEnterpriseObject {
      * self is usefull for directtoweb purposes
      */
     public abstract ERXEnterpriseObject self();
+
+    /**
+     * Called as part of the augmented transaction process.
+     * This method is called when deleteObject() is called on
+     * the editing context. The benefit over willDelete() is that in this 
+     * method, the relationships are still intact. Mostly, at least,
+     * as it's also called when the deletes cascade.
+     */
+    public abstract void mightDelete();
 
     /**
      * Called as part of the augmented transaction process.
