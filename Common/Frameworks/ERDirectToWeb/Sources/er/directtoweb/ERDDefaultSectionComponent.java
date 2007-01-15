@@ -10,6 +10,7 @@ import com.webobjects.appserver.WOContext;
 import com.webobjects.directtoweb.D2WContext;
 import com.webobjects.foundation.NSKeyValueCodingAdditions;
 
+import er.extensions.ERXLocalizer;
 import er.extensions.ERXStatelessComponent;
 
 /**
@@ -35,6 +36,10 @@ public class ERDDefaultSectionComponent extends ERXStatelessComponent {
                 String k=(String)c.valueForKey("keyWhenGrouping");
                 if (k!=null) {
                     result=NSKeyValueCodingAdditions.Utility.valueForKeyPath(result,k);
+                }
+                String templateString=(String)c.valueForKey("templateString");
+                if (templateString!=null) {
+                    result=ERXLocalizer.currentLocalizer().localizedTemplateStringForKeyWithObjectOtherObject(templateString, object(), c);
                 }
             }
         }
