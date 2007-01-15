@@ -23,7 +23,7 @@ public class ERD2WGroupingListPage extends ERD2WListPage {
     
     protected NSArray sublist;
     protected Object sublistSection;
-    
+
     // the sorting will come only from the rules
     public boolean userPreferencesCanSpecifySorting() { 
         return false;
@@ -34,11 +34,14 @@ public class ERD2WGroupingListPage extends ERD2WListPage {
     public String groupingComponentName() { 
         return (String)d2wContext().valueForKey("groupingComponentName"); 
     }
+    public String groupingItemKey() {
+        return (String)d2wContext().valueForKey("groupingItemKey");
+    }
     public int colspanForNavBar() { 
         return 2*displayPropertyKeys().count()+2; 
     }
     public Object section() { 
-        return (Object)object().valueForKeyPath(groupingKey()); 
+        return object().valueForKeyPath(groupingItemKey()); 
     }
     public Object sumForSublist() { 
         return sublist.valueForKey("@sum."+propertyKey()); 
