@@ -65,6 +65,7 @@ IsTotallingKey: ERXListContainsItemConditional {
 ListTable: WOGenericContainer {
 	_unroll = true;
 	elementName = "table";
+	width = "100%";
 }
 
 ListTableRow: WOGenericContainer {
