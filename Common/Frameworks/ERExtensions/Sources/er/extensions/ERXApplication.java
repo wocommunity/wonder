@@ -24,7 +24,7 @@ import java.io.*;
  *  and more context information when handling exceptions.
  */
 
-public abstract class ERXApplication extends WOApplication implements ERXGracefulShutdown.GracefulApplication {
+public abstract class ERXApplication extends ERXAjaxApplication implements ERXGracefulShutdown.GracefulApplication {
 
     /** logging support */
     public static final ERXLogger log = ERXLogger.getERXLogger(ERXApplication.class);

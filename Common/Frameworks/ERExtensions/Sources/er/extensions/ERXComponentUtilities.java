@@ -105,15 +105,4 @@ public class ERXComponentUtilities {
 		return queryParameterAssociations;
 	}
 
-	/**
-	 * Returns the boolean value of a binding.
-	 * 
-	 * @param component the component
-	 * @param bindingName the name of the boolean binding
-	 * @return a boolean
-	 */
-	public static boolean booleanValueForBinding(WOComponent component, String bindingName) {
-		Boolean value = (Boolean)component.valueForBinding(bindingName);
-		return value != null && value.booleanValue();
-	}
 }

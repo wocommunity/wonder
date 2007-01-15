@@ -79,4 +79,22 @@ public class ERXWOForm extends com.webobjects.appserver._private.WOForm {
             ui.removeObjectForKey("enctype");
         }
     }
+    
+    
+    /**
+        * Retrieves the current FORM's name in the supplied context. If none is set 
+     * (either the FORM is not a ERXWOForm or the context is not ERXMutableUserInfo) the supplied default
+     * value is used. 
+     * @param context current context
+     * @param defaultName default name to use
+     * @return form name in context or default value
+     */
+    public static String formName(WOContext context, String defaultName) {
+        String formName = (String) ERXWOContext.contextDictionary().objectForKey("formName");
+        if(formName == null) {
+            formName = defaultName;
+        }
+        return formName;
+    }
+    
 }

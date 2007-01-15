@@ -24,7 +24,7 @@ import java.io.*;
  * if javascript has been enabled, and enhanced localization
  * support has been added.
  */
-public class ERXSession extends WOSession implements Serializable {
+public class ERXSession extends ERXAjaxSession implements Serializable {
 
     /** logging support */
     public static ERXLogger log = ERXLogger.getERXLogger(ERXSession.class);
