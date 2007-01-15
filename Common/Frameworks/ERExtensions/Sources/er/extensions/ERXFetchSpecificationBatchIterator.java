@@ -194,7 +194,7 @@ public class ERXFetchSpecificationBatchIterator implements Iterator, Enumeration
      * @return if calling <b>nextBatch</b> will have any effect
      */
     public boolean hasNextBatch() {
-        return primaryKeys().count() >= currentObjectFetchCount;
+        return primaryKeys().count() > currentObjectFetchCount;
     }
 
     /**
