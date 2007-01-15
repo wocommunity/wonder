@@ -39,18 +39,19 @@ import er.extensions.ERXSelectorUtilities;
 
 /**
  * Document = {
+ *     index = com.foo.SomeIndexClass;
  *     store = "file://tmp/Document";
  *     type = "filed|db";
  *     buffered = false|true;
  *     properties = {
  *         foo = {
  *             store = "NO|YES|...";
- *             index = "NO|YES|...";
+ *             index = "NO|TOKENIZE|...";
  *             termVector = "NO|YES|...";
- *             analyzer = com.foo.SomeClass;
+ *             analyzer = com.foo.SomeAnalyzerClass;
  *             numberformat = 0;
  *             dateformat = 0;
- *             format = com.foo.SomeClass;
+ *             format = com.foo.SomeFormatClass;
  *         };
  *         bar = {};
  *         baz.name = {};
@@ -76,9 +77,7 @@ public class ERIndex {
 	public ERIndex(ERIndexModel model, NSDictionary indexDef) {
 		File indexDirectory = new File((String) indexDef.objectForKey("store"));
 		_indexDirectory = indexDirectory;
-		NSNotificationCenter.defaultCenter().addObserver(this, 
-				ERXSelectorUtilities.notificationSelector("_editingContextDidSaveChanges"), 
-				EOEditingContext.EditingContextDidSaveChangesNotification, null);
+		registerNotifications();
 		_queue = new ERXAsyncQueue() {
 
 			public void process(Object object) {
@@ -87,6 +86,11 @@ public class ERIndex {
 		};
 		_queue.setName(KEY);
 		_queue.start();
+		_analyzer = createAnalyzer(indexDef);
+		_model = model;
+	}
+
+	protected Analyzer createAnalyzer(NSDictionary indexDef) {
 		PerFieldAnalyzerWrapper wrapper = new PerFieldAnalyzerWrapper(new StandardAnalyzer());
 		NSMutableDictionary attributes = new NSMutableDictionary();
 		NSDictionary properties = (NSDictionary) indexDef.objectForKey("properties");
@@ -98,8 +102,13 @@ public class ERIndex {
 			attributes.setObjectForKey(attribute, propertyName);
 		}
 		_attributes = attributes.immutableClone();
-		_analyzer = wrapper;
-		_model = model;
+		return wrapper;
+	}
+
+	protected void registerNotifications() {
+		NSNotificationCenter.defaultCenter().addObserver(this, 
+				ERXSelectorUtilities.notificationSelector("_editingContextDidSaveChanges"), 
+				EOEditingContext.EditingContextDidSaveChangesNotification, null);
 	}
 
 	public ERIndexModel model() {
@@ -151,14 +160,20 @@ public class ERIndex {
 		return _attributes.allValues();
 	}
 
+	public NSArray attributeNames() {
+		return _attributes.allKeys();
+	}
+	
 	protected NSArray addedDocumentsForObjects(NSArray objects) {
 		NSMutableArray documents = new NSMutableArray();
 
 		for(Enumeration e = objects.objectEnumerator(); e.hasMoreElements(); ) {
 			EOEnterpriseObject eo = (EOEnterpriseObject) e.nextElement();
-			Document doc = createDocument(eo);
-			if(doc != null) {
-				documents.addObject(doc);
+			if(handlesObject(eo)) {
+				Document doc = createDocument(eo);
+				if(doc != null) {
+					documents.addObject(doc);
+				}
 			}
 		}
 		return documents;
@@ -188,12 +203,18 @@ public class ERIndex {
 		Term term;
 		for(Enumeration e = objects.objectEnumerator(); e.hasMoreElements(); ) {
 			EOEnterpriseObject eo = (EOEnterpriseObject) e.nextElement();
-			term = createTerm(eo);
-			if(term != null) {
-				terms.addObject(term);
+			if(handlesObject(eo)) {
+				term = createTerm(eo);
+				if(term != null) {
+					terms.addObject(term);
+				}
 			}
 		}
 		return terms;
+	}
+
+	protected boolean handlesObject(EOEnterpriseObject eo) {
+		return true;
 	}
 
 	protected Term createTerm(EOEnterpriseObject eo) {

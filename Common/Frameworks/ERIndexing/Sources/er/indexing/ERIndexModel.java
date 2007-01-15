@@ -16,9 +16,11 @@ import com.webobjects.foundation.NSBundle;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation.NSPropertyListSerialization;
+import com.webobjects.foundation._NSUtilities;
 
 import er.extensions.ERXEC;
 import er.extensions.ERXMutableDictionary;
+import er.extensions.ERXPatcher;
 
 public class ERIndexModel {
 	
@@ -35,6 +37,7 @@ public class ERIndexModel {
 				}
 			}
 		}
+		// _sharedInstance.loadIndexDefinitions();
 		return _sharedInstance;
 	}
 
@@ -58,7 +61,14 @@ public class ERIndexModel {
 	}
 
 	private void addIndex(String key, NSDictionary indexDef) {
-		ERIndex index = new ERIndex(this, indexDef);
+		String className = (String) indexDef.objectForKey("index");
+		if(className == null) {
+			className = ERIndex.class.getName();
+		}
+		Class c = ERXPatcher.classForName(className);
+		ERIndex index = (ERIndex) _NSUtilities.instantiateObject(c, 
+				new Class[]{ERIndexModel.class, NSDictionary.class}, 
+				new Object[]{this, indexDef}, true, false);
 		indices.setObjectForKey(index, key);
 	}
 
