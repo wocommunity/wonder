@@ -67,7 +67,7 @@ class ERIndexAttribute {
 
 	private Object classValue(NSDictionary dict, String key, Class c, String defaultValue) {
 		Object result;
-		String code = (String) dict.objectForKey("store");
+		String code = (String) dict.objectForKey(key);
 		if(code == null) {
 			code = defaultValue;
 		}
