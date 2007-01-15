@@ -62,6 +62,10 @@ public class ERXLocalizationEditor extends WOComponent {
     	return ERXFileUtilities.pathURLForResourceNamed(currentFilename, currentFramework, new NSArray(currentLanguage));
     }
     
+    public URL urlForSelectedFile() {
+    	return ERXFileUtilities.pathURLForResourceNamed(selectedFilename, selectedFramework, new NSArray(currentLanguage));
+    }
+    
     public boolean fileExistsInLanguage() {
     	return urlForCurrentFile() != null;
     }
