@@ -102,3 +102,6 @@ Languages : WORepetition {
 	item = currentLanguage;
 }
 
+Url: WOString {
+	value = urlForSelectedFile;
+}
