@@ -64,6 +64,7 @@
 	"ERDInspect.objectUnsetMessage" = "No @@displayNameForDestinationEntity@@ set.";
 	"ERDInspect.select" = "Select...";
 	"ERDList.create" = "Add";
+	"ERDQueryAnyKey.matches" = "matches";
 	"ERDQueryDateRangeJavaScript.and" = "and";
 	"ERDQueryDateRangeJavaScript.between" = "between";
 	"ERDQueryTwoLevelRelationship.all" = "- all -";
