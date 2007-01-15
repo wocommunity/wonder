@@ -8,6 +8,9 @@ import java.util.Enumeration;
 
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
+import com.webobjects.appserver.WODisplayGroup;
+import com.webobjects.eocontrol.EOQualifier;
+import com.webobjects.eocontrol.EOSortOrdering;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableArray;
@@ -32,9 +35,15 @@ public class ERXLocalizationEditor extends WOComponent {
 	public String selectedFramework;
 	public String selectedFilename;
 	public String UNSET = new String("***UNSET***");
+	public WODisplayGroup displayGroup;
 	
     public ERXLocalizationEditor(WOContext context) {
         super(context);
+        displayGroup = new WODisplayGroup();
+        displayGroup.setSortOrderings(new NSArray(new EOSortOrdering("key", EOSortOrdering.CompareCaseInsensitiveAscending)));
+        displayGroup.setNumberOfObjectsPerBatch(20);
+        displayGroup.setDefaultStringMatchFormat("*%@*");
+        displayGroup.setDefaultStringMatchOperator(EOQualifier.QualifierOperatorCaseInsensitiveLike.name());
     }
 
     public NSArray availableLanguages() {
@@ -93,6 +102,7 @@ public class ERXLocalizationEditor extends WOComponent {
 				}
 			}
 		}
+    	displayGroup.setObjectArray(data);
     }
 
     public boolean isLargeEntry() {
