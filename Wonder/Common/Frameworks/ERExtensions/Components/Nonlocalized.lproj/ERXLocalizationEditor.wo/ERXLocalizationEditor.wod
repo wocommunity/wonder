@@ -3,8 +3,21 @@ EditFramework : WOHyperlink {
 }
 
 Entries : WORepetition {
-	list = data.@sortAsc.key.toLowerCase;
+	list = displayGroup.displayedObjects;
 	item = currentEntry;
+}
+
+BatchNavigationBar : ERXBatchNavigationBar {
+	displayGroup = displayGroup;
+}
+
+KeyMatch :WOTextField {
+	value = displayGroup.queryMatch.key;
+}
+
+Find : WOSubmitButton {
+	action = displayGroup.qualifyDisplayGroup;
+	value = "Find";
 }
 
 Save : WOSubmitButton {
@@ -13,7 +26,7 @@ Save : WOSubmitButton {
 }
 
 Form : WOForm {
-	action = saveFramework;
+	multipleSubmit = true;
 }
 
 Entry : WOSwitchComponent {
