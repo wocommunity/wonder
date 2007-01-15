@@ -125,6 +125,14 @@ public class ERXCustomObject extends EOCustomObject implements ERXGuardedObjectI
     }
 
     /* (non-Javadoc)
+     * @see er.extensions.ERXEnterpriseObject#mightDelete()
+     */
+    public void mightDelete() {
+        if (tranLogMightDelete.isDebugEnabled())
+        	tranLogMightDelete.debug("Object:" + description());
+    }
+
+    /* (non-Javadoc)
      * @see er.extensions.ERXEnterpriseObject#willDelete()
      */
     public void willDelete() throws NSValidation.ValidationException {
