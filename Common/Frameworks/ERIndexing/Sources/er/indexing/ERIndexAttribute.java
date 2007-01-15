@@ -33,7 +33,7 @@ class ERIndexAttribute {
 	ERIndexAttribute(ERIndex index, String name, NSDictionary dict) {
 		_name = name;
 		_termVector = (TermVector) classValue(dict, "termVector", TermVector.class, "YES");
-		_store = (Store) classValue(dict, "store", Store.class, "YES");
+		_store = (Store) classValue(dict, "store", Store.class, "NO");
 		_index = (Index) classValue(dict, "index", Index.class, "TOKENIZED");
 		_analyzer = (Analyzer) create((String) dict.objectForKey("analyzer"));
 		if(_analyzer == null && name.matches("\\w+_(\\w+)")) {
