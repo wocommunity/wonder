@@ -913,6 +913,20 @@ public class ERXEOControlUtilities {
         }
     }
     
+
+    /**
+     * Returns the decoded global id for an propertylist encoded string representation
+     * of the primary key for a given object.
+     */
+
+    public static EOGlobalID globalIDForString(EOEditingContext ec, String entityName, String string) {
+    	NSDictionary values = primaryKeyDictionaryForString(ec, entityName, string);
+    	EOEntity entity = ERXEOAccessUtilities.entityNamed(ec, entityName);
+        NSArray pks = entity.primaryKeyAttributeNames();
+        EOGlobalID gid = EOKeyGlobalID.globalIDWithEntityName(entityName, values.objectsForKeys(pks, null).objects());
+    	return gid;
+    }
+    
     /**
      * Returns either the single object the PK consist of or the NSArray of its values if the key is compound.
      * @param eo object to get the primary key for.
