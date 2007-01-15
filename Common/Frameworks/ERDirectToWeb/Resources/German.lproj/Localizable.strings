@@ -64,6 +64,7 @@
 	"ERDInspect.objectUnsetMessage" = "Kein @@displayNameForDestinationEntity@@ gesetzt.";
 	"ERDInspect.select" = "W\U00e4hlen...";
 	"ERDList.create" = "Anlegen";
+	"ERDQueryAnyKey.matches" = "enth\U00e4lt";
 	"ERDQueryDateRangeJavaScript.and" = "und";
 	"ERDQueryDateRangeJavaScript.between" = "zwischen";
 	"ERDQueryTwoLevelRelationship.all" = "- alle -";

@@ -25,6 +25,7 @@ import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSKeyValueCoding;
 import com.webobjects.foundation.NSMutableDictionary;
 
+import er.extensions.ERXDisplayGroup;
 import er.extensions.ERXValueUtilities;
 
 /**
@@ -51,7 +52,7 @@ public class ERD2WQueryPage extends ERD2WPage implements QueryPageInterface {
     }
 
     protected void createDisplayGroup() {
-        displayGroup = new WODisplayGroup();
+        displayGroup = new ERXDisplayGroup();
     }
 
     protected void pullQueryBindingsForName(String name) {
