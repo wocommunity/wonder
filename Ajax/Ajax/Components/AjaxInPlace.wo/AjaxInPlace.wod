@@ -49,7 +49,6 @@ EditFunction : AjaxUpdateLink {
 
 EditAction : WOGenericContainer {
 	elementName = "div";
-	href = "javascript:void(0)";
 	onclick = editFunctionCall;
 	class = ^editClass;
 }
