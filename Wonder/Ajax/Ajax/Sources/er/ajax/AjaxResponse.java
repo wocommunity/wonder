@@ -73,4 +73,8 @@ public class AjaxResponse extends WOResponse {
 		}
 		return this;
 	}
+	
+	public static boolean isAjaxUpdatePass(WORequest request) {
+		return request.userInfo() != null && request.userInfo().valueForKey(AjaxResponse.AJAX_UPDATE_PASS) != null;
+	}
 }

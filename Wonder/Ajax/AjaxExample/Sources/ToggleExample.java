@@ -9,4 +9,9 @@ public class ToggleExample extends WOComponent {
 		super(context);
 		_toggleAreaVisible = false;
 	}
+	
+	public WOActionResults toggled() {
+		System.out.println("ToggleExample.toggled: toggled value to " + _toggleAreaVisible);
+		return null;
+	}
 }
