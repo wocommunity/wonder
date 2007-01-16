@@ -19,6 +19,7 @@ import com.webobjects.eocontrol.EOFaultHandler;
 import com.webobjects.eocontrol.EOFetchSpecification;
 import com.webobjects.eocontrol.EOGenericRecord;
 import com.webobjects.eocontrol.EOGlobalID;
+import com.webobjects.eocontrol.EOKeyGlobalID;
 import com.webobjects.eocontrol.EOObjectStoreCoordinator;
 import com.webobjects.eocontrol.EOQualifier;
 import com.webobjects.eocontrol.EORelationshipManipulation;
