@@ -9,7 +9,6 @@ package er.extensions;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -54,6 +53,7 @@ import com.webobjects.foundation.NSNotification;
 import com.webobjects.foundation.NSNotificationCenter;
 import com.webobjects.foundation.NSProperties;
 import com.webobjects.foundation.NSPropertyListSerialization;
+import com.webobjects.foundation.NSRange;
 import com.webobjects.foundation.NSSelector;
 import com.webobjects.foundation.NSTimestamp;
 import com.webobjects.jdbcadaptor.JDBCAdaptorException;
@@ -1016,31 +1016,25 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 		if (requestHandlingLog.isDebugEnabled()) {
 			requestHandlingLog.debug("Returning, encoding: " + response.contentEncoding() + " response: " + response);
 		}
-
+		
 		if (responseCompressionEnabled()) {
-			String ct = response.headerForKey("content-type");
-
-			if ((ct != null) && (ct.startsWith("text/") || ct.equals("application/x-javascript"))) {
-				String accept = request.headerForKey("accept-encoding");
-
-				if ((accept != null) && (accept.toLowerCase().indexOf("gzip") != -1)) {
-					NSData ori = response.content();
-					byte[] input = ori.bytes();
-
+			String contentType = response.headerForKey("content-type");
+			if ((contentType != null) && (contentType.startsWith("text/") || contentType.equals("application/x-javascript"))) {
+				String acceptEncoding = request.headerForKey("accept-encoding");
+				if ((acceptEncoding != null) && (acceptEncoding.toLowerCase().indexOf("gzip") != -1)) {
+					NSData input = response.content();
+					byte[] inputBytes = input._bytesNoCopy();
 					long start = System.currentTimeMillis();
-
-					byte[] compressedData = ERXCompressionUtilities.gzipByteArray(input);
+					byte[] compressedData = ERXCompressionUtilities.gzipByteArray(inputBytes);
 					if (compressedData == null) {
 						// something went wrong
 					}
 					else {
-						response.setContent(new NSData(compressedData));
-
-						response.setHeader("" + compressedData.length, "content-length");
-
+						response.setContent(new NSData(compressedData, new NSRange(0, compressedData.length), true));
+						response.setHeader(String.valueOf(compressedData.length), "content-length");
 						response.setHeader("gzip", "content-encoding");
 						if (log.isDebugEnabled()) {
-							log.debug("before: " + input.length + ", after " + compressedData.length + ", time: " + (System.currentTimeMillis() - start));
+							log.debug("before: " + inputBytes.length + ", after " + compressedData.length + ", time: " + (System.currentTimeMillis() - start));
 						}
 					}
 				}
