@@ -274,6 +274,7 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
 
         //We're goung to blow the primaryKey cache:
         _primaryKey = null;
+        _permanentGlobalID = null;
     }
 
     /**
@@ -598,7 +599,56 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
         }
         return _primaryKeyDictionary;
     }
-    
+
+    private EOKeyGlobalID _permanentGlobalID;
+
+    /**
+     * This method allows you to compute what the permanent EOGlobalID will be for an object before it has been
+     * saved to the database.  It functions by calling into <code>primaryKeyDictionary()</code> to allocate the primary
+     * key if necessary.  Then we build an EOKeyGlobalID from it.  If the object already has a permanent global ID, we use that.
+     *
+     * If you pass false for <code>generateIfMissing</code> and this object has a temporary global ID, null will be returned.
+     */
+    public EOKeyGlobalID permanentGlobalID(boolean generateIfMissing) {
+        if ( _permanentGlobalID == null ) {
+            final EOEditingContext ec = editingContext();
+
+            if ( ec != null ) {
+                final EOGlobalID gid = ec.globalIDForObject(this);
+
+                if ( ! gid.isTemporary() ) {
+                    _permanentGlobalID = (EOKeyGlobalID)gid;
+                }
+                else if ( generateIfMissing ) {
+                    final NSDictionary primaryKeyDictionary = primaryKeyDictionary(false);
+                    final Object[] values;
+
+                    if ( primaryKeyDictionary.count() == 1 ) {
+                        values = primaryKeyDictionary.allValues().objects();
+                    }
+                    else {
+                        final NSArray sortedKeys = ERXDictionaryUtilities.stringKeysSortedAscending(primaryKeyDictionary);
+
+                        values = primaryKeyDictionary.objectsForKeys(sortedKeys, null).objects();
+                    }
+
+                    _permanentGlobalID = EOKeyGlobalID.globalIDWithEntityName(entityName(), values);
+                }
+            }
+        }
+
+        return _permanentGlobalID;
+    }
+
+    /**
+     * Calls permanentGlobalID(boolean) passing true for generateIfMissing.
+     *
+     * @see #permanentGlobalID(boolean)
+     */
+    public EOKeyGlobalID permanentGlobalID() {
+        return permanentGlobalID(true);
+    }
+
     /**
      * Determines what the value of the given key is in the committed
      * snapshot

@@ -1442,5 +1442,28 @@ public class ERXArrayUtilities extends Object {
         return result != null ? result : NSArray.EmptyArray;
     }
 
+    /**
+     * Just like the method on NSArray, except it catches the NSComparator.ComparisonException and, if thrown,
+     * it wraps it in a runtime exception.  Returns null when passed null for array.
+     */
+    public static NSArray sortedArrayUsingComparator(final NSArray array, final NSComparator comparator) {
+        NSArray result = array;
 
+        if ( array != null ) {
+            if ( array.count() < 2 ) {
+                result = array;
+            }
+            else {
+                try {
+                    result = array.sortedArrayUsingComparator(comparator);
+                }
+                catch ( NSComparator.ComparisonException e ) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }
+
+        return result;
+    }
+    
 }
