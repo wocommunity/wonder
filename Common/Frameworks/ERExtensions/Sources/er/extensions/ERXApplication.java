@@ -1006,7 +1006,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
         	if (responseCompressionEnabled()) {
 	        String ct = response.headerForKey("content-type");
 	
-	        if ((ct != null) && (ct.indexOf("text/") != -1)) {
+	        if ((ct != null) && (ct.startsWith("text/") || ct.equals("application/x-javascript"))) {
 	            String accept = request.headerForKey("accept-encoding");
 	
 	            if ((accept != null) && (accept.toLowerCase().indexOf("gzip") != -1)) {
