@@ -35,6 +35,7 @@ import er.extensions.ERXWOForm;
  * @binding formName if button is false, you must specify the name of the form to submit
  * @binding functionName if set, the link becomes a javascript function instead
  * @binding updateContainerID the id of the AjaxUpdateContainer to update after performing this action
+ * @binding showUI if functionName is set, the UI defaults to hidden; showUI re-enables it
  * 
  * @author anjo
  */
@@ -89,13 +90,13 @@ public class AjaxSubmitButton extends AjaxDynamicElement {
 
     String functionName = (String)valueForBinding("functionName", null, component);
     String formName = (String)valueForBinding("formName", component);
-    boolean showUI = (functionName == null);
+    boolean showUI = (functionName == null || booleanValueForBinding("showUI", false, component));
     boolean showButton = showUI && booleanValueForBinding("button", true, component);
     String formReference;
-    if (!showButton) {
+    if (!showButton || functionName != null) {
       formName = ERXWOForm.formName(context, null);
       if (formName == null) {
-        throw new WODynamicElementCreationException("If button = false, the containing form must have an explicit name.");
+        throw new WODynamicElementCreationException("If button = false or functionName is not null, the containing form must have an explicit name.");
       }
     }
     if (formName == null) {
@@ -104,24 +105,7 @@ public class AjaxSubmitButton extends AjaxDynamicElement {
     else {
       formReference = "document." + formName;
     }
-    if (showUI) {
-	    if (showButton) {
-	      response.appendContentString("<input ");
-	      appendTagAttributeToResponse(response, "type", "button");
-	      String name = nameInContext(context, component);
-	      appendTagAttributeToResponse(response, "name", name);
-	      appendTagAttributeToResponse(response, "value", valueForBinding("value", component));
-	    }
-	    else {
-	      response.appendContentString("<a href = \"javascript:void(0)\" ");
-	    }
-	    appendTagAttributeToResponse(response, "class", valueForBinding("class", component));
-	    appendTagAttributeToResponse(response, "style", valueForBinding("style", component));
-	    appendTagAttributeToResponse(response, "id", valueForBinding("id", component));
-	    if (disabledInComponent(component)) {
-	      appendTagAttributeToResponse(response, "disabled", "disabled");
-	    }
-    }
+    
     StringBuffer onClickBuffer = new StringBuffer();
 
 	String onClickBefore = (String)valueForBinding("onClickBefore", component);
@@ -155,8 +139,36 @@ public class AjaxSubmitButton extends AjaxDynamicElement {
     if (onClickBefore != null) {
     	onClickBuffer.append("}");
     }
+
+    
+    if (functionName != null) {
+      	AjaxUtils.appendScriptHeader(response);
+    	response.appendContentString(functionName + " = function(additionalParams) { " + onClickBuffer + " }\n");
+    	AjaxUtils.appendScriptFooter(response);
+    }
     if (showUI) {
-	    appendTagAttributeToResponse(response, "onclick", onClickBuffer.toString());
+	    if (showButton) {
+	      response.appendContentString("<input ");
+	      appendTagAttributeToResponse(response, "type", "button");
+	      String name = nameInContext(context, component);
+	      appendTagAttributeToResponse(response, "name", name);
+	      appendTagAttributeToResponse(response, "value", valueForBinding("value", component));
+	    }
+	    else {
+	      response.appendContentString("<a href = \"javascript:void(0)\" ");
+	    }
+	    appendTagAttributeToResponse(response, "class", valueForBinding("class", component));
+	    appendTagAttributeToResponse(response, "style", valueForBinding("style", component));
+	    appendTagAttributeToResponse(response, "id", valueForBinding("id", component));
+	    if (disabledInComponent(component)) {
+	      appendTagAttributeToResponse(response, "disabled", "disabled");
+	    }
+    	if (functionName == null) {
+    		appendTagAttributeToResponse(response, "onclick", onClickBuffer.toString());
+    	}
+    	else {
+    		appendTagAttributeToResponse(response, "onclick", functionName + "()");
+    	}
 	    if (showButton) {
 	      response.appendContentString(" />");
 	    }
@@ -168,12 +180,6 @@ public class AjaxSubmitButton extends AjaxDynamicElement {
 	      response.appendContentString("</a>");
 	    }
     }
-    if (!showUI) {
-      	AjaxUtils.appendScriptHeader(response);
-    	response.appendContentString(functionName + " = function(additionalParams) { " + onClickBuffer + " }\n");
-    	AjaxUtils.appendScriptFooter(response);
-    }
-
     super.appendToResponse(response, context);
   }
 
