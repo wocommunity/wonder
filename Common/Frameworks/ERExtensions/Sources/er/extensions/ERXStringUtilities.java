@@ -10,6 +10,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
+import java.net.URL;
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
 import java.nio.charset.CharacterCodingException;
@@ -1148,7 +1149,42 @@ public class ERXStringUtilities {
         return false;
     }
 
-        /**
+    /**
+     * Returns a string from the contents of the given URL.
+     * 
+     * @param url the URL to read from
+     * @return the string that was read
+     * @throws IOException if the connection fails
+     */
+    public static String stringFromURL(URL url) throws IOException {
+    	InputStream is = url.openStream();
+    	try {
+    		return ERXStringUtilities.stringFromInputStream(is);
+    	}
+    	finally {
+    		is.close();
+    	}
+    }
+
+    /**
+     * Returns a string from the contents of the given URL.
+     * 
+     * @param url the URL to read from
+     * @param the string encoding to read with
+     * @return the string that was read
+     * @throws IOException if the connection fails
+     */
+    public static String stringFromURL(URL url, String encoding) throws IOException {
+    	InputStream is = url.openStream();
+    	try {
+    		return ERXStringUtilities.stringFromInputStream(is, encoding);
+    	}
+    	finally {
+    		is.close();
+    	}
+    }
+
+    /**
          * Returns a string from the input stream using the default
           * encoding.
           * @param in stream to read
