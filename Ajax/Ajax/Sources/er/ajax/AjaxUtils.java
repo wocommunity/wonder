@@ -218,8 +218,7 @@ public class AjaxUtils {
 		String senderID = context.senderID();
 		String updateContainerID = null;
 		if (containerID != null) {
-			NSDictionary userInfo = request.userInfo();
-			if (userInfo != null && userInfo.valueForKey(AjaxResponse.AJAX_UPDATE_PASS) != null) {
+			if (AjaxResponse.isAjaxUpdatePass(request)) {
 				updateContainerID = AjaxUpdateContainer.updateContainerID(request);
 			}
 		}

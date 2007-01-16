@@ -17,6 +17,7 @@ import com.webobjects.foundation.NSMutableDictionary;
  * 
  * @binding observeFieldID the ID of the field to observe
  * @binding updateContainerID the ID of the container to update
+ * @binding action the action to call when the observer fires (only works for fullSubmit = true)
  */
 public class AjaxObserveField extends AjaxDynamicElement {
 	public AjaxObserveField(String name, NSDictionary associations, WOElement children) {
@@ -136,7 +137,10 @@ public class AjaxObserveField extends AjaxDynamicElement {
 		boolean shouldHandleRequest = !wocontext._wasActionInvoked() && wocontext._wasFormSubmitted() && nameInContext.equals(worequest.formValueForKey(AjaxSubmitButton.KEY_AJAX_SUBMIT_BUTTON_NAME));
 		if (shouldHandleRequest) {
 			wocontext._setActionInvoked(true);
-			result = handleRequest(worequest, wocontext);
+			result = (WOActionResults)valueForBinding("action", wocomponent);
+			if (result == null) {
+				result = handleRequest(worequest, wocontext);
+			}
 			AjaxUtils.updateMutableUserInfoWithAjaxInfo(wocontext);
 		}
 		return result;
