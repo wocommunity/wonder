@@ -37,6 +37,7 @@ import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation.NSMutableSet;
 import com.webobjects.foundation.NSTimestamp;
 import com.webobjects.foundation.NSTimestampFormatter;
+import com.webobjects.jdbcadaptor.JDBCAdaptor;
 import com.webobjects.jdbcadaptor.JDBCContext;
 
 public class ERXJDBCUtilities {
@@ -587,5 +588,16 @@ public class ERXJDBCUtilities {
 		EOSynchronizationFactory syncFactory = (EOSynchronizationFactory) channel.adaptorContext().adaptor().synchronizationFactory();
 		String sqlScript = syncFactory.schemaCreationScriptForEntities(entities, options);
 		ERXJDBCUtilities.executeUpdateScript(channel, sqlScript);
+	}
+	
+	/**
+	 * Returns the name of the database product for the given channel (handy when
+	 * loading database-vendor-specific sql scripts in migrations).
+	 * 
+	 * @param channel the channel
+	 * @return the database the database product name ("FrontBase", "PostgreSQL")
+	 */
+	public static String databaseProductName(EOAdaptorChannel channel) {
+	    return ((JDBCAdaptor) channel.adaptorContext().adaptor()).plugIn().databaseProductName();
 	}
 }
