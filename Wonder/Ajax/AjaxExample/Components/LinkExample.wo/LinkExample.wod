@@ -37,6 +37,14 @@ AjaxSubmitFunction : AjaxSubmitButton {
 	functionName = "testSubmitFunction";
 }
 
+AjaxSubmitFunction2 : AjaxSubmitButton {
+	action = exampleAction;
+	functionName = "testSubmitFunction2";
+	showUI = true;
+	value = "AjaxSubmitFunction2 (showUI = true)";
+	button = true;
+}
+
 Now : WOString {
 	value = now;
 }
