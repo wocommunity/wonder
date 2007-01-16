@@ -4,6 +4,7 @@
         <binding name="html"/>
         <binding name="wod"/>
         <binding name="errorTemplate"/>
+        <binding name="proxyParent"/>
         <validation message="&amp;apos;html&amp;apos; is a required binding">
         	<unbound name="html"/>
         </validation>
