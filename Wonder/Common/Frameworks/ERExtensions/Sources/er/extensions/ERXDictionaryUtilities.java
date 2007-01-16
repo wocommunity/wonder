@@ -127,4 +127,18 @@ public class ERXDictionaryUtilities extends Object {
         }
         return result.immutableClone();
     }
+
+    // if you're keys are not all strings, this method will throw.
+    public static NSArray stringKeysSortedAscending(final NSDictionary d) {
+        NSArray result = null;
+
+        if ( d != null && d.count() > 0 ) {
+            final NSArray keys = d.allKeys();
+
+            result = ERXArrayUtilities.sortedArrayUsingComparator(keys, NSComparator.AscendingStringComparator);
+        }
+
+        return result != null ? result : NSArray.EmptyArray;
+    }
+
 }
