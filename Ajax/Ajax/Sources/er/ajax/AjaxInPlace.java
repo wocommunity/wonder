@@ -102,8 +102,13 @@ public class AjaxInPlace extends WOComponent {
 
 	public void appendToResponse(WOResponse aResponse, WOContext aContext) {
 		super.appendToResponse(aResponse, aContext);
+		// MS: id was being cached, but if the structure of the page changes,
+		// it can cache too aggressively.  We really only care that the id
+		// is cached for the duration of a single R-R loop.  When we're done,
+		// toss the value so it can be recalculated properly the next time.
+		_id = null;
 	}
-
+	
 	public boolean submitOnSave() {
 		return AjaxUtils.booleanValueForBinding("submitOnSave", true, _keyAssociations, parent());
 	}
