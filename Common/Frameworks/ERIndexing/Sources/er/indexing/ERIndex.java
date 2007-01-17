@@ -14,6 +14,7 @@ import org.apache.lucene.document.Field;
 import org.apache.lucene.index.IndexModifier;
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.Term;
+import org.apache.lucene.index.TermEnum;
 import org.apache.lucene.queryParser.ParseException;
 import org.apache.lucene.queryParser.QueryParser;
 import org.apache.lucene.search.Hit;
@@ -30,33 +31,59 @@ import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSForwardException;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
+import com.webobjects.foundation.NSMutableSet;
 import com.webobjects.foundation.NSNotification;
 import com.webobjects.foundation.NSNotificationCenter;
+import com.webobjects.foundation.NSSet;
 
 import er.extensions.ERXAsyncQueue;
 import er.extensions.ERXEOControlUtilities;
 import er.extensions.ERXSelectorUtilities;
+import er.indexing.ERIndexJob.Command;
 
 /**
- * Document = {
+ * 
+ * <pre>{
+ *   Document = {
+ *     // index class to use, default is er.indexing.ERIndex
  *     index = com.foo.SomeIndexClass;
+ *     // url for the index files
  *     store = "file://tmp/Document";
+ *     // type of the index (currently unused)
  *     type = "filed|db";
+ *     // if the index should be double-buffered (currently unused)
  *     buffered = false|true;
+ *     // entities in this index
+ *     entities = (Asset, File, Media);
+ *     // properties to index, these are key paths off the objects
+ *     // and are also used for the names of the index fields.
+ *     // these don't need to be attributes or relationships
+ *     // but can also be simple methods. In fact, if you have mutliple
+ *     // entities in your index, you will need to support a common set of 
+ *     // these properties
  *     properties = {
- *         foo = {
- *             store = "NO|YES|...";
- *             index = "NO|TOKENIZE|...";
- *             termVector = "NO|YES|...";
+ *         someAttribute = {
+ *             // if the index should be stored
+ *             store = "NO|YES|COMPRESS";
+ *             // if the index is tokenized
+ *             index = "NO|TOKENIZED|UN_TOKENIZED|NO_NORMS";
+ *             // no idea what this does. consult the lucene docs
+ *             termVector = "NO|YES|WITH_POSITIONS|WITH_OFFSETS|WITH_POSITIONS_OFFSETS";
+ *             // which analyzer class to use. For german stuff, you'll
+ *             // use the org.apache.lucene.analysis.de.GermanAnalyzer.
  *             analyzer = com.foo.SomeAnalyzerClass;
- *             numberformat = 0;
- *             dateformat = 0;
+ *             // optional formater for the value
  *             format = com.foo.SomeFormatClass;
+ *             // optional number format for the value
+ *             numberformat = "0";
+ *             // optional date format for the value
+ *             dateformat = "yyyy.mm.dd";
  *         };
- *         bar = {};
- *         baz.name = {};
+ *         someRelatedObject.name = {...};
+ *         someRelationship.name = {...};
  *     };
- * }
+ *   }
+ * }</pre>
  * 
  * @author ak
  *
@@ -68,28 +95,40 @@ public class ERIndex {
 	private static final String GID = "EOGlobalID";
 	private static final String KEY = "ERIndexing";
 
-	private ERXAsyncQueue _queue;
+	private static ERXAsyncQueue _queue;
 	private File _indexDirectory;
 	private Analyzer _analyzer;
 	private NSDictionary _attributes;
 	private ERIndexModel _model;
+	private NSSet _entities;
 	
 	public ERIndex(ERIndexModel model, NSDictionary indexDef) {
-		File indexDirectory = new File((String) indexDef.objectForKey("store"));
-		_indexDirectory = indexDirectory;
-		registerNotifications();
-		_queue = new ERXAsyncQueue() {
+		synchronized (ERIndex.class) {
+			if(_queue == null) {
+				_queue = new ERXAsyncQueue() {
 
-			public void process(Object object) {
-				index((ERIndexJob)object);
+					public void process(Object object) {
+						ERIndexJob job = (ERIndexJob)object;
+						job.index().index(job);
+					}
+				};
+				_queue.setName(KEY);
+				_queue.start();
 			}
-		};
-		_queue.setName(KEY);
-		_queue.start();
-		_analyzer = createAnalyzer(indexDef);
+		}
+		initFromDictionary(indexDef);
+		registerNotifications();
 		_model = model;
 	}
 
+	protected void initFromDictionary(NSDictionary indexDef) {
+		File indexDirectory = new File((String) indexDef.objectForKey("store"));
+		_indexDirectory = indexDirectory;
+		_analyzer = createAnalyzer(indexDef);
+		NSArray entities = (NSArray) indexDef.objectForKey("entities");
+		_entities = new NSMutableSet(entities);
+	}
+	
 	protected Analyzer createAnalyzer(NSDictionary indexDef) {
 		PerFieldAnalyzerWrapper wrapper = new PerFieldAnalyzerWrapper(new StandardAnalyzer());
 		NSMutableDictionary attributes = new NSMutableDictionary();
@@ -110,7 +149,7 @@ public class ERIndex {
 				ERXSelectorUtilities.notificationSelector("_editingContextDidSaveChanges"), 
 				EOEditingContext.EditingContextDidSaveChangesNotification, null);
 	}
-
+	
 	public ERIndexModel model() {
 		return _model;
 	}
@@ -119,21 +158,32 @@ public class ERIndex {
 		return _analyzer;
 	}
 
-	private File indexDirectory() {
+	protected File indexDirectory() {
 		return _indexDirectory;
+	}
+	
+	protected NSSet entities() {
+		return _entities;
 	}
 
 	private void index(ERIndexJob job) {
 		try {
 			synchronized (indexDirectory()) {
-				IndexModifier modifier = new IndexModifier(indexDirectory(), analyzer(), true);
-				for (Enumeration iter = job.deleted().objectEnumerator(); iter.hasMoreElements();) {
-					Term term = (Term) iter.nextElement();
-					modifier.deleteDocuments(term);
-				}
-				for (Enumeration iter = job.added().objectEnumerator(); iter.hasMoreElements();) {
-					Document document = (Document) iter.nextElement();
-					modifier.addDocument(document, analyzer());
+				log.info("Indexing: "  + job.command() + ": " + job.objects().count());
+				boolean create = job.command() == Command.CLEAR;
+				IndexModifier modifier = new IndexModifier(indexDirectory(), analyzer(), create);
+				if(job.command() == Command.DELETE) {
+					for (Enumeration iter = job.objects().objectEnumerator(); iter.hasMoreElements();) {
+						Term term = (Term) iter.nextElement();
+						modifier.deleteDocuments(term);
+					}
+				} else if(job.command() == Command.ADD) {
+					for (Enumeration iter = job.objects().objectEnumerator(); iter.hasMoreElements();) {
+						Document document = (Document) iter.nextElement();
+						modifier.addDocument(document, analyzer());
+					}
+				} else if(job.command() == Command.CLEAR) {
+					// nothing, we already cleared the index
 				}
 				modifier.flush();
 				modifier.close();
@@ -150,12 +200,22 @@ public class ERIndex {
 			NSArray updated = (NSArray) n.userInfo().objectForKey("updated");
 			NSArray deleted = (NSArray) n.userInfo().objectForKey("deleted");
 
-			deleteObjectsFromIndex(deleted);
-			updateObjectsInIndex(updated);
-			addObjectsToIndex(inserted);
+			deleteObjectsFromIndex(indexableObjectsForObjects(deleted));
+			updateObjectsInIndex(indexableObjectsForObjects(updated));
+			addObjectsToIndex(indexableObjectsForObjects(inserted));
 		}
 	}
 
+	/**
+	 * Override this to respond to the editingContextDidSaveChanges notification.
+	 * You would want to re-index documents for which a related tag name changed, for example.
+	 * @param objects
+	 * @return
+	 */
+	protected NSArray indexableObjectsForObjects(NSArray objects) {
+		return objects;
+	}
+	
 	private NSArray attributes() {
 		return _attributes.allValues();
 	}
@@ -163,7 +223,15 @@ public class ERIndex {
 	public NSArray attributeNames() {
 		return _attributes.allKeys();
 	}
+
+	public void clear() {
+		_queue.enqueue(new ERIndexJob(this, Command.CLEAR, NSArray.EmptyArray));
+	}
 	
+	private ERIndexAttribute attributeNamed(String fieldName) {
+		return (ERIndexAttribute) _attributes.objectForKey(fieldName);
+	}
+
 	protected NSArray addedDocumentsForObjects(NSArray objects) {
 		NSMutableArray documents = new NSMutableArray();
 
@@ -186,6 +254,7 @@ public class ERIndex {
 			ERIndexAttribute info = (ERIndexAttribute) iter.nextElement();
 			String key = info.name();
 			Object value = eo.valueForKeyPath(key);
+			// log.debug(value);
 			String stringValue = info.formatValue(value);
 			if(stringValue != null) {
 				Field field = new Field(key, stringValue, 
@@ -214,7 +283,7 @@ public class ERIndex {
 	}
 
 	protected boolean handlesObject(EOEnterpriseObject eo) {
-		return true;
+		return handlesEntity(eo.entityName());
 	}
 
 	protected Term createTerm(EOEnterpriseObject eo) {
@@ -252,27 +321,34 @@ public class ERIndex {
 	}
 
 	protected void addJob(NSArray added, NSArray deleted) {
-		_queue.enqueue(new ERIndexJob(added, deleted));
+		if(deleted.count() > 0) {
+			_queue.enqueue(new ERIndexJob(this, Command.DELETE, deleted));
+		}
+		if(added.count() > 0) {
+			_queue.enqueue(new ERIndexJob(this, Command.ADD, added));
+		}
 	}
 
-	public NSArray find(EOEditingContext ec, String field, String queryString) {
+	public NSArray find(EOEditingContext ec, String fieldName, String queryString) {
 		NSMutableArray result = new NSMutableArray();
 		try {
 			synchronized (indexDirectory()) {
+				long start = System.currentTimeMillis();
 				IndexReader reader = IndexReader.open(indexDirectory());
 				Searcher searcher = new IndexSearcher(reader);
-				Analyzer analyzer = analyzer();
+				Analyzer analyzer = attributeNamed(fieldName).analyzer();
 
-				QueryParser parser = new QueryParser(field, analyzer);
+				QueryParser parser = new QueryParser(fieldName, analyzer);
 				Query query = parser.parse(queryString);
 				Hits hits = searcher.search(query);
-				log.info("Searched for: " + query.toString(field));
+				log.info("Searched for: " + query.toString(fieldName) + " in  " + (System.currentTimeMillis() - start) + " ms");
 				for (Iterator iter = hits.iterator(); iter.hasNext();) {
 					Hit hit = (Hit) iter.next();
 					String gidString = hit.getDocument().getField(GID).stringValue();
 					EOEnterpriseObject eo = objectForGidString(ec, gidString);
 					result.addObject(eo);
 				}
+				log.info("Returning " + result.count() + " after " + (System.currentTimeMillis() - start) + " ms");
 			}
 		} catch (IOException e) {
 			throw NSForwardException._runtimeExceptionForThrowable(e);
@@ -282,4 +358,40 @@ public class ERIndex {
 		return result;
 	}
 
+	public boolean handlesEntity(String name) {
+		return _entities.containsObject(name);
+	}
+
+	public NSArray terms(String fieldName) {
+		NSMutableSet result = new NSMutableSet();
+		synchronized (indexDirectory()) {
+			TermEnum terms = null;
+			try {
+				long start = System.currentTimeMillis();
+				IndexReader reader = IndexReader.open(indexDirectory());
+				terms = reader.terms(new Term(fieldName, ""));
+				while (fieldName.equals(terms.term().field()))
+				{
+					result.addObject(terms.term().text());
+					if (!terms.next())
+						break;
+				}
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			finally {
+				if(terms != null) {
+					try {
+						terms.close();
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+			}
+		}
+
+		return result.allObjects();
+	}
 }
