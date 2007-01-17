@@ -7,6 +7,7 @@ import java.text.Format;
 import java.util.Date;
 
 import org.apache.lucene.analysis.Analyzer;
+import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.DateTools;
 import org.apache.lucene.document.NumberTools;
 import org.apache.lucene.document.DateTools.Resolution;
@@ -14,6 +15,7 @@ import org.apache.lucene.document.Field.Index;
 import org.apache.lucene.document.Field.Store;
 import org.apache.lucene.document.Field.TermVector;
 
+import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSForwardException;
 import com.webobjects.foundation.NSNumberFormatter;
@@ -35,7 +37,11 @@ class ERIndexAttribute {
 		_termVector = (TermVector) classValue(dict, "termVector", TermVector.class, "YES");
 		_store = (Store) classValue(dict, "store", Store.class, "NO");
 		_index = (Index) classValue(dict, "index", Index.class, "TOKENIZED");
-		_analyzer = (Analyzer) create((String) dict.objectForKey("analyzer"));
+		String analyzerClass = (String) dict.objectForKey("analyzer");
+		if(analyzerClass == null) {
+			analyzerClass = StandardAnalyzer.class.getName();;
+		}
+		_analyzer = (Analyzer) create(analyzerClass);
 		if(_analyzer == null && name.matches("\\w+_(\\w+)")) {
 			String locale = name.substring(name.lastIndexOf('_') + 1);
 		}
@@ -74,6 +80,7 @@ class ERIndexAttribute {
 		result = ERXKeyValueCodingUtilities.classValueForKey(c, code);
 		return result;
 	}
+	
 	public TermVector termVector() {
 		return _termVector;
 	}
@@ -103,6 +110,9 @@ class ERIndexAttribute {
 		}
 		if(value instanceof Date) {
 			return DateTools.dateToString((Date)value, Resolution.MILLISECOND);
+		}
+		if(value instanceof NSArray) {
+			return ((NSArray)value).componentsJoinedByString(" ");
 		}
 		return (value != null ? value.toString() : null);
 	}
