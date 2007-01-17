@@ -76,8 +76,8 @@ public class ERXInOrQualifierSupport extends _OrQualifierSupport {
 					// so we need to exclude the obvious cases where the value produces garbage
 					if ((_key != null && !_key.equals(key)) || (value != null && (
 							(value instanceof ERXConstant.NumberConstant) ||
-							(value instanceof Number && !value.getClass().getName().startsWith("java.") ||
-							(value != NSKeyValueCoding.NullValue))
+							(value instanceof Number && !value.getClass().getName().startsWith("java.")) ||
+							(value == NSKeyValueCoding.NullValue)
 							))) {
 						_canBeRepresentedAsInSet = false;
 					}
