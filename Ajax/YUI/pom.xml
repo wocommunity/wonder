@@ -2,27 +2,23 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<parent>
-		<groupId>wonder.common</groupId>
-		<artifactId>frameworks</artifactId>
+		<groupId>wonder.ajax</groupId>
+		<artifactId>ajax-all</artifactId>
 		<version>3.0.1-SNAPSHOT</version>
 	</parent>
 
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>wonder.common</groupId>
-	<artifactId>ERExtensions</artifactId>
+	<groupId>wonder.ajax</groupId>
+	<artifactId>YUI</artifactId>
 	<version>3.0.1-SNAPSHOT</version>
-	<name>ERExtensions</name>
+	<name>YUI</name>
 	<packaging>woframework</packaging>
 
 	<dependencies>
 		<dependency>
-			<groupId>wonder.common</groupId>
-			<artifactId>JavaWOExtensions</artifactId>
+			<groupId>wonder.ajax</groupId>
+			<artifactId>Ajax</artifactId>
 			<version>3.0.1-SNAPSHOT</version>
-		</dependency>
-		<dependency>
-			<groupId>icu4j</groupId>
-			<artifactId>icu4j</artifactId>
 		</dependency>
 	</dependencies>
 	<build>
