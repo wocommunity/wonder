@@ -1,5 +1,7 @@
 package er.extensions.migration;
 
+import java.sql.Types;
+
 import org.apache.log4j.Logger;
 
 import com.webobjects.eoaccess.EOAdaptor;
@@ -8,6 +10,7 @@ import com.webobjects.eoaccess.EOAttribute;
 import com.webobjects.eoaccess.EOEntity;
 import com.webobjects.eoaccess.EOModel;
 import com.webobjects.eoaccess.EOSQLExpression;
+import com.webobjects.eoaccess.EOSQLExpressionFactory;
 import com.webobjects.eoaccess.EOSchemaGeneration;
 import com.webobjects.eocontrol.EOFetchSpecification;
 import com.webobjects.eocontrol.EOKeyValueQualifier;
@@ -16,6 +19,7 @@ import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSKeyValueCoding;
 import com.webobjects.foundation.NSMutableDictionary;
+import com.webobjects.jdbcadaptor.JDBCAdaptor;
 
 import er.extensions.ERXJDBCUtilities;
 import er.extensions.ERXProperties;
@@ -109,6 +113,7 @@ public class ERXJDBCMigrationLock implements IERXMigrationLock {
 			throw e;
 		}
 		catch (Exception e) {
+      channel.adaptorContext().rollbackTransaction();
 			String createTableStatement = dbUpdaterCreateStatement(model);
 			if (createTableIfMissing) {
 				try {
@@ -137,6 +142,7 @@ public class ERXJDBCMigrationLock implements IERXMigrationLock {
 			row.setObjectForKey(new Integer(0), "UpdateLock");
 			row.setObjectForKey(NSKeyValueCoding.NullValue, "LockOwner");
 			EOEntity dbUpdaterEntity = dbUpdaterModel.entityNamed(_dbUpdaterTableName);
+			channel.adaptorContext().commitTransaction();
 			channel.updateValuesInRowsDescribedByQualifier(row, new EOKeyValueQualifier("ModelName", EOQualifier.QualifierOperatorEqual, model.name()), dbUpdaterEntity);
 			channel.cancelFetch();
 			channel.adaptorContext().commitTransaction();
@@ -226,6 +232,9 @@ public class ERXJDBCMigrationLock implements IERXMigrationLock {
 		}
 		else {
 			dbUpdaterModel = new EOModel();
+      dbUpdaterModel.setConnectionDictionary(model.connectionDictionary());
+      dbUpdaterModel.setAdaptorName(model.adaptorName());
+      JDBCAdaptor adaptor = (JDBCAdaptor)EOAdaptor.adaptorWithModel(model);
 
 			EOEntity dbUpdaterEntity = new EOEntity();
 			dbUpdaterEntity.setExternalName(_dbUpdaterTableName);
@@ -238,13 +247,16 @@ public class ERXJDBCMigrationLock implements IERXMigrationLock {
 			modelNameAttribute.setClassName("java.lang.String");
 			modelNameAttribute.setWidth(100);
 			modelNameAttribute.setAllowsNull(false);
+      modelNameAttribute.setExternalType(adaptor.externalTypeForJDBCType(Types.VARCHAR));
 			dbUpdaterEntity.addAttribute(modelNameAttribute);
 
 			EOAttribute versionAttribute = new EOAttribute();
 			versionAttribute.setName("Version");
 			versionAttribute.setColumnName("Version");
 			versionAttribute.setClassName("java.lang.Number");
+      versionAttribute.setExternalType(adaptor.externalTypeForJDBCType(Types.INTEGER));
 			versionAttribute.setAllowsNull(false);
+      
 			dbUpdaterEntity.addAttribute(versionAttribute);
 
 			EOAttribute updateLockAttribute = new EOAttribute();
@@ -252,6 +264,7 @@ public class ERXJDBCMigrationLock implements IERXMigrationLock {
 			updateLockAttribute.setColumnName("UpdateLock");
 			updateLockAttribute.setClassName("java.lang.Number");
 			updateLockAttribute.setAllowsNull(false);
+      updateLockAttribute.setExternalType(adaptor.externalTypeForJDBCType(Types.INTEGER));
 			dbUpdaterEntity.addAttribute(updateLockAttribute);
 
 			EOAttribute lockOwnerAttribute = new EOAttribute();
@@ -260,15 +273,8 @@ public class ERXJDBCMigrationLock implements IERXMigrationLock {
 			lockOwnerAttribute.setClassName("java.lang.String");
 			lockOwnerAttribute.setWidth(100);
 			lockOwnerAttribute.setAllowsNull(true);
+      lockOwnerAttribute.setExternalType(adaptor.externalTypeForJDBCType(Types.VARCHAR));
 			dbUpdaterEntity.addAttribute(lockOwnerAttribute);
-
-			dbUpdaterModel.setConnectionDictionary(model.connectionDictionary());
-			dbUpdaterModel.setAdaptorName(model.adaptorName());
-			EOAdaptor adaptor = EOAdaptor.adaptorWithModel(model);
-			adaptor.assignExternalTypeForAttribute(modelNameAttribute);
-			adaptor.assignExternalTypeForAttribute(versionAttribute);
-			adaptor.assignExternalTypeForAttribute(updateLockAttribute);
-			adaptor.assignExternalTypeForAttribute(lockOwnerAttribute);
 			
 			_lastUpdatedModel = model;
 			_dbUpdaterModelCache = dbUpdaterModel;
@@ -300,7 +306,11 @@ public class ERXJDBCMigrationLock implements IERXMigrationLock {
 		if (lockOwnerName != null) {
 			row.setObjectForKey(lockOwnerName, "LockOwner");
 		}
-		EOSQLExpression insertExpression = EOAdaptor.adaptorWithModel(dbUpdaterModel).expressionFactory().insertStatementForRow(row, dbUpdaterModel.entityNamed(_dbUpdaterTableName));
+		EOSQLExpressionFactory sqlExpressionFactory = EOAdaptor.adaptorWithModel(dbUpdaterModel).expressionFactory();
+		EOSQLExpression insertExpression = sqlExpressionFactory.expressionForEntity(dbUpdaterModel.entityNamed(_dbUpdaterTableName));
+		insertExpression.setUseAliases(false);
+		insertExpression.setUseBindVariables(false);
+		insertExpression.prepareInsertExpressionWithRow(row);
 		return insertExpression.statement();
 	}
 }
