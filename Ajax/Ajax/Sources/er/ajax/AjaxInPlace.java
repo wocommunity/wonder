@@ -5,6 +5,7 @@ package er.ajax;
 import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
+import com.webobjects.appserver.WORequest;
 import com.webobjects.appserver.WOResponse;
 
 /**
@@ -98,6 +99,19 @@ public class AjaxInPlace extends WOComponent {
 			}
 		}
 		return _id;
+	}
+	
+	public WOActionResults invokeAction(WORequest aRequest, WOContext aContext) {
+		WOActionResults results = super.invokeAction(aRequest, aContext);
+		// MS: see appendToResponse
+		_id = null;
+		return results;
+	}
+	
+	public void takeValuesFromRequest(WORequest aRequest, WOContext aContext) {
+		super.takeValuesFromRequest(aRequest, aContext);
+		// MS: see appendToResponse
+		_id = null;
 	}
 
 	public void appendToResponse(WOResponse aResponse, WOContext aContext) {
