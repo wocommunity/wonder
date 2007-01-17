@@ -11,6 +11,7 @@ import com.webobjects.eocontrol.EOOrQualifier;
 import com.webobjects.eocontrol.EOQualifier;
 import com.webobjects.eocontrol.EOQualifierVisitor;
 import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSKeyValueCoding;
 import com.webobjects.foundation.NSMutableArray;
 
 /**
@@ -75,7 +76,8 @@ public class ERXInOrQualifierSupport extends _OrQualifierSupport {
 					// so we need to exclude the obvious cases where the value produces garbage
 					if ((_key != null && !_key.equals(key)) || (value != null && (
 							(value instanceof ERXConstant.NumberConstant) ||
-							(value instanceof Number && !value.getClass().getName().startsWith("java."))
+							(value instanceof Number && !value.getClass().getName().startsWith("java.") ||
+							(value != NSKeyValueCoding.NullValue))
 							))) {
 						_canBeRepresentedAsInSet = false;
 					}
