@@ -1,28 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
 <project xmlns="http://maven.apache.org/POM/4.0.0"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
 	<parent>
 		<groupId>wonder.common</groupId>
-		<artifactId>frameworks</artifactId>
+		<artifactId>common</artifactId>
 		<version>3.0.1-SNAPSHOT</version>
 	</parent>
 
 	<modelVersion>4.0.0</modelVersion>
+
 	<groupId>wonder.common</groupId>
-	<artifactId>ERWorkerChannel</artifactId>
+	<artifactId>examples</artifactId>
 	<version>3.0.1-SNAPSHOT</version>
-	<name>ERWorkerChannel</name>
-	<packaging>woframework</packaging>
+	<packaging>pom</packaging>
+	<name>Examples</name>
 
-	<dependencies>
-		<dependency>
-			<groupId>wonder.common</groupId>
-			<artifactId>ERExtensions</artifactId>
-			<version>3.0.1-SNAPSHOT</version>
-		</dependency>
-	</dependencies>
-	<build>
-		<sourceDirectory>Sources</sourceDirectory>
-	</build>
-
+	<modules>
+		<module>D2WComponentTour</module>
+		<module>ERMovies</module>
+		<module>stepwise</module>
+		<module>wrox</module>
+	</modules>
 </project>
+

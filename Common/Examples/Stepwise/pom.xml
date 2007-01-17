@@ -3,26 +3,19 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<parent>
 		<groupId>wonder.common</groupId>
-		<artifactId>frameworks</artifactId>
+		<artifactId>examples</artifactId>
 		<version>3.0.1-SNAPSHOT</version>
 	</parent>
 
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>wonder.common</groupId>
-	<artifactId>ERWorkerChannel</artifactId>
+	<artifactId>stepwise</artifactId>
 	<version>3.0.1-SNAPSHOT</version>
-	<name>ERWorkerChannel</name>
-	<packaging>woframework</packaging>
+	<name>Stepwise</name>
+	<packaging>pom</packaging>
 
-	<dependencies>
-		<dependency>
-			<groupId>wonder.common</groupId>
-			<artifactId>ERExtensions</artifactId>
-			<version>3.0.1-SNAPSHOT</version>
-		</dependency>
-	</dependencies>
-	<build>
-		<sourceDirectory>Sources</sourceDirectory>
-	</build>
-
+	<modules>
+		<module>D2WInspectExample</module>
+		<module>D2WListExample</module>
+	</modules>
 </project>

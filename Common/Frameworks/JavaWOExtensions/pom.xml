@@ -4,13 +4,13 @@
 	<parent>
 		<groupId>wonder.common</groupId>
 		<artifactId>frameworks</artifactId>
-		<version>3.0.1</version>
+		<version>3.0.1-SNAPSHOT</version>
 	</parent>
 
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>wonder.common</groupId>
 	<artifactId>JavaWOExtensions</artifactId>
-	<version>3.0.1</version>
+	<version>3.0.1-SNAPSHOT</version>
 	<name>JavaWOExtensions</name>
 	<packaging>woframework</packaging>
 
@@ -58,14 +58,6 @@
 	</dependencies>
 	<build>
 		<sourceDirectory>Sources</sourceDirectory>
-		<plugins>
-			<plugin>
-				<groupId>org.objectstyle.woproject.maven2</groupId>
-				<artifactId>maven-wolifecycle-plugin</artifactId>
-				<version>2.0-SNAPSHOT</version>
-				<extensions>true</extensions>
-			</plugin>
-		</plugins>
 	</build>
 
 </project>
