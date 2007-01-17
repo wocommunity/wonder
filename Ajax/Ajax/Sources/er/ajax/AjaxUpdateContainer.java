@@ -117,7 +117,7 @@ public class AjaxUpdateContainer extends AjaxDynamicElement {
 //			response.appendContentString("); }");
 			response.appendContentString("AjaxUpdateContainer.register('" + id + "'");
 			NSDictionary nonDefaultOptions = AjaxUpdateContainer.removeDefaultOptions(options);
-			if (!nonDefaultOptions.isEmpty()) {
+			if (nonDefaultOptions.count()>0) {
 				response.appendContentString(", ");
 				AjaxOptions.appendToResponse(nonDefaultOptions, response, context);
 			}
