@@ -7,35 +7,22 @@
 	<parent>
 		<groupId>wonder</groupId>
 		<artifactId>wonder</artifactId>
-		<version>3.0.1</version>
+		<version>3.0.1-SNAPSHOT</version>
 	</parent>
 
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>wonder.ajax</groupId>
 	<artifactId>ajax-all</artifactId>
-	<version>3.0.1</version>
+	<version>3.0.1-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<name>AjaxAll</name>
 
 	<modules>
 		<module>Ajax</module>
 		<module>AjaxExample</module>
+		<module>YUI</module>
+		<module>YUIExample</module>
 	</modules>
-	<dependencyManagement>
-		<dependencies>
-			<dependency>
-				<groupId>wonder.common</groupId>
-				<artifactId>ERExtensions</artifactId>
-				<version>3.0.1</version>
-			</dependency>
-			<dependency>
-				<groupId>metaparadigm</groupId>
-				<artifactId>jsonrpc</artifactId>
-				<version>1.0</version>
-				<scope>provided</scope>
-			</dependency>
-		</dependencies>
-	</dependencyManagement>
 </project>
 

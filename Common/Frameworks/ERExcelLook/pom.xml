@@ -4,13 +4,13 @@
 	<parent>
 		<groupId>wonder.common</groupId>
 		<artifactId>frameworks</artifactId>
-		<version>3.0.1</version>
+		<version>3.0.1-SNAPSHOT</version>
 	</parent>
 
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>wonder.common</groupId>
 	<artifactId>ERExcelLook</artifactId>
-	<version>3.0.1</version>
+	<version>3.0.1-SNAPSHOT</version>
 	<name>ERExcelLook</name>
 	<packaging>woframework</packaging>
 
@@ -18,10 +18,10 @@
 		<dependency>
 			<groupId>wonder.common</groupId>
 			<artifactId>ERDirectToWeb</artifactId>
-			<version>[3.0,]</version>
+			<version>3.0.1-SNAPSHOT</version>
 		</dependency>
 	</dependencies>
-	
+
 	<build>
 		<sourceDirectory>Sources</sourceDirectory>
 	</build>
