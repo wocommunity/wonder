@@ -3,27 +3,40 @@
  */
 package er.indexing;
 
+import java.io.File;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Enumeration;
+
+import org.apache.log4j.Logger;
 
 import com.webobjects.eoaccess.EOEntity;
 import com.webobjects.eoaccess.EOModel;
 import com.webobjects.eoaccess.EOModelGroup;
-import com.webobjects.eoaccess.EOUtilities;
 import com.webobjects.eocontrol.EOEditingContext;
+import com.webobjects.eocontrol.EOFetchSpecification;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSBundle;
 import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
+import com.webobjects.foundation.NSNotification;
 import com.webobjects.foundation.NSPropertyListSerialization;
+import com.webobjects.foundation.NSSelector;
 import com.webobjects.foundation._NSUtilities;
 
+import er.extensions.ERXApplication;
 import er.extensions.ERXEC;
+import er.extensions.ERXFetchSpecificationBatchIterator;
+import er.extensions.ERXFileNotificationCenter;
 import er.extensions.ERXMutableDictionary;
 import er.extensions.ERXPatcher;
+import er.extensions.ERXSelectorUtilities;
 
 public class ERIndexModel {
 	
+	private Logger log = Logger.getLogger(ERIndexModel.class);
+
 	NSMutableDictionary indices = (NSMutableDictionary) ERXMutableDictionary.synchronizedDictionary();
 	
 	private static ERIndexModel _sharedInstance;
@@ -42,13 +55,22 @@ public class ERIndexModel {
 	}
 
 	public void loadIndexDefinitions() {
-		for (Enumeration bundles = NSBundle.frameworkBundles().objectEnumerator(); bundles.hasMoreElements();) {
+		for (Enumeration bundles = NSBundle._allBundlesReally().objectEnumerator(); bundles.hasMoreElements();) {
 			NSBundle bundle = (NSBundle) bundles.nextElement();
 			URL url = bundle.pathURLForResourcePath("ERIndex.indexModel");
 			if(url != null) {
+				if(ERXApplication.erxApplication().isDevelopmentMode()) {
+					NSSelector selector = ERXSelectorUtilities.notificationSelector("fileDidChange");
+					ERXFileNotificationCenter.defaultCenter().addObserver(this, selector, url.getFile());
+				}
 				loadModel(url);
 			}
 		}
+	}
+
+	public void fileDidChange(NSNotification n) throws MalformedURLException {
+		File file = (File) n.object();
+		loadModel(file.toURL());
 	}
 
 	public void loadModel(URL url) {
@@ -67,26 +89,58 @@ public class ERIndexModel {
 		}
 		Class c = ERXPatcher.classForName(className);
 		ERIndex index = (ERIndex) _NSUtilities.instantiateObject(c, 
-				new Class[]{ERIndexModel.class, NSDictionary.class}, 
-				new Object[]{this, indexDef}, true, false);
+				new Class[] {ERIndexModel.class, NSDictionary.class}, 
+				new Object[] {this, indexDef}, true, false);
 		indices.setObjectForKey(index, key);
 	}
 
 	public ERIndex indexNamed(String key) {
 		return (ERIndex) indices.objectForKey(key);
 	}
+	
+
+	public void clear() {
+		for(Enumeration i = indices.objectEnumerator(); i.hasMoreElements(); ) {
+			ERIndex index = (ERIndex) i.nextElement();
+			index.clear();
+		}
+	}
+
+	public NSArray indicesForEntity(String entityName) {
+		NSMutableArray result = new NSMutableArray();
+		for(Enumeration i = indices.objectEnumerator(); i.hasMoreElements(); ) {
+			ERIndex index = (ERIndex) i.nextElement();
+			if(index.handlesEntity(entityName)) {
+				result.addObject(index);
+			}
+		}
+		return result;
+	} 
 
 	public void indexAllObjects(EOEntity entity) {
-		ERIndex index = indexNamed(entity.name());
-		if(index != null) {
+		if(indicesForEntity(entity.name()).count() > 0) {
+			long start = System.currentTimeMillis();
+			int treshhold = 10;
 			EOEditingContext ec = ERXEC.newEditingContext();
 			ec.lock();
 			try {
-				NSArray objects = EOUtilities.objectsForEntityNamed(ec, entity.name());
-				indexObjects(entity, objects);
+				ERXFetchSpecificationBatchIterator iterator = new ERXFetchSpecificationBatchIterator(new EOFetchSpecification(entity.name(), null, null));
+				iterator.setEditingContext(ec);
+				while(iterator.hasNextBatch()) {
+					NSArray objects = iterator.nextBatch();
+					if(iterator.currentBatchIndex() % treshhold == 0) {
+						ec.unlock();
+						// ec.dispose();
+						ec = ERXEC.newEditingContext();
+						ec.lock();
+						iterator.setEditingContext(ec);
+					}
+					indexObjects(entity, objects);
+				}
 			} finally {
 				ec.unlock();
 			}
+			log.info("Indexing " + entity.name() + " took: " + (System.currentTimeMillis() - start) + " ms");
 		}
 	}
 
@@ -105,10 +159,11 @@ public class ERIndexModel {
 	}
 
 	public void indexObjects(EOEntity entity, NSArray objects) {
-		ERIndex index = indexNamed(entity.name());
-		if(index != null) {
-			NSArray added = index.addedDocumentsForObjects(objects);
-			index.addJob(added, NSArray.EmptyArray);
+		for(Enumeration i = indicesForEntity(entity.name()).objectEnumerator(); i.hasMoreElements(); ) {
+			ERIndex index = (ERIndex) i.nextElement();
+			if(index.handlesEntity(entity.name())) {
+				index.addObjectsToIndex(objects);
+			}
 		}
 	}
 
