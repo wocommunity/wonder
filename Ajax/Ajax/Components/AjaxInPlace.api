@@ -3,6 +3,7 @@
 	<wo wocomponentcontent = "true" class = "AjaxInPlace">
 		<binding name = "id"/>
 		<binding name = "class"/>
+		<binding name = "style"/>
 		<binding name = "saveLabel"/>
 		<binding name = "cancelLabel"/>
 		<binding name = "editClass"/>
