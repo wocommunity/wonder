@@ -74,6 +74,7 @@ import com.webobjects.appserver.WOResponse;
  * @binding submitOnSave if true, the save button is an AjaxSubmitButton; if false, it's an AjaxUpdateLink
  * @binding canEdit if true, edit mode is entered; if false, view mode remains active
  * @binding canSave if true, the results are saved; if false, the user is not allowed to leave edit mode
+ * @binding style the style of the top level container
  * 
  * @author mschrag
  */
