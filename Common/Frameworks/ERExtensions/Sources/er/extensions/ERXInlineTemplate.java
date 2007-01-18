@@ -244,21 +244,22 @@ public class ERXInlineTemplate extends ERXNonSynchronizingComponent {
 	}
 
 	public static class Error {
-		private Throwable t;
+		private Throwable _t;
 
-		private String method;
+		private String _method;
 
 		public Error(String method, Throwable t) {
-			this.t = t;
-			this.method = method;
+			ERXInlineTemplate.log.error(t);
+			_t = t;
+			_method = method;
 		}
 
 		public String message() {
-			if (t.getMessage() == null && t instanceof NSForwardException) {
-				NSForwardException e = (NSForwardException) t;
-				t = e.originalException();
+			if (_t.getMessage() == null && _t instanceof NSForwardException) {
+				NSForwardException e = (NSForwardException) _t;
+				_t = e.originalException();
 			}
-			String s = t.getMessage();
+			String s = _t.getMessage();
 			if (s != null) {
 				s = s.replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll("\n", "<br />");
 			}
@@ -266,7 +267,7 @@ public class ERXInlineTemplate extends ERXNonSynchronizingComponent {
 		}
 
 		public String method() {
-			return method;
+			return _method;
 		}
 
 		public String formatWithTemplate(String template) {
