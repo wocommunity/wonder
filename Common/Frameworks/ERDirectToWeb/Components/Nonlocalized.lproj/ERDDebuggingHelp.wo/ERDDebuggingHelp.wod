@@ -66,6 +66,11 @@ String6: WOString {
 	valueWhenEmpty = "No value set or empty";
 }
 
+SubmitButton1: WOSubmitButton {
+	action = _unroll;
+	value = "Eval";
+}
+
 TextField1: WOTextField {
 	value = key;
 	size = 10;
