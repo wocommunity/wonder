@@ -54,12 +54,6 @@ Conditional2: WOConditional {
 	condition = shouldShowSelectAll;
 }
 
-ExcelExportButton: WOSwitchComponent {
-	WOComponentName = d2wContext.excelExportButtonCompomentName;
-	displayGroup = displayGroup;
-	d2wContext = d2wContext;
-}
-
 ERXNonNullConditional1: WOConditional {
 	condition = hasBranchChoices;
 	negate = true;
@@ -77,6 +71,12 @@ EmptyMessageComponent: WOSwitchComponent {
 EntityRepetition: WORepetition {
 	item = object;
 	list = displayGroup.displayedObjects;
+}
+
+ExcelExportButton: WOSwitchComponent {
+	WOComponentName = d2wContext.excelExportButtonCompomentName;
+	displayGroup = displayGroup;
+	d2wContext = d2wContext;
 }
 
 FilterDisplayGroupButton: ERDFilterDisplayGroupButton {
@@ -135,7 +135,7 @@ IsEntityNotWritable2: WOConditional {
 }
 
 IsGenericExportButtonKnown: WOConditional {
-	condition = d2wContext.xcelExportButtonCompomentName;
+	condition = d2wContext.excelExportButtonCompomentName;
 }
 
 IsPropertySortable: WOConditional {
