@@ -36,9 +36,18 @@ AccordionForm : WOForm {
 	multipleSubmit = true;
 }
 
+AccordionForm2 : WOForm {
+	multipleSubmit = true;
+}
+
+AccordionFormSubmit2 : WOSubmitButton {
+	action = save;
+	value = "Save #2";
+}
+
 AccordionFormSubmit : WOSubmitButton {
 	action = save;
-	value = "Save";
+	value = "Save #1";
 }
 
 NameField1 : WOTextField {
