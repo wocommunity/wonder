@@ -20,3 +20,41 @@ Tab3 : AjaxAccordionTab {
 Tab4 : AjaxAccordionTab {
 	title = "Accordion Tab #4";
 }
+
+Accordion2 : AjaxAccordion {
+}
+
+Accordion2Tab1 : AjaxAccordionTab {
+	title = "Accordion Form Tab #1";
+}
+
+Accordion2Tab2 : AjaxAccordionTab {
+	title = "Accordion Form Tab #2";
+}
+
+AccordionForm : WOForm {
+	multipleSubmit = true;
+}
+
+AccordionFormSubmit : WOSubmitButton {
+	action = save;
+	value = "Save";
+}
+
+NameField1 : WOTextField {
+	value = name1;
+}
+
+NameField2 : WOTextField {
+	value = name2;
+}
+
+LinkTest1 : WOHyperlink {
+	pageName = "AccordionExample";
+	string = "Reload this Page Link";
+}
+
+LinkTest2 : WOHyperlink {
+	pageName = "AccordionExample";
+	string = "Reload this Page Link";
+}
