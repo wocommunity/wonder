@@ -786,6 +786,13 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
                 }
             }
         }
+
+        /** Properties.<userName> -- per-Application-per-User properties */
+        String applicationUserPropertiesPath = ERXProperties.applicationUserProperties();
+        if (applicationUserPropertiesPath != null) {
+           projectsInfo.addObject("Application " + mainBundleName + "/Application-User Properties: " + aPropertiesPath);
+           propertiesPaths.addObject(applicationUserPropertiesPath);
+        }
         
         /* *** Report the result *** */ 
         if (reportLoggingEnabled  &&  projectsInfo.count() > 0) {
@@ -848,6 +855,21 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
             }
         }
         return path;
+    }
+    
+    /**
+     * Returns the application-specific user properties.
+     */
+    public static String applicationUserProperties() {
+    	String applicationUserPropertiesPath = null;
+        String userName = ERXSystem.getProperty("user.name");
+        if (userName != null  &&  userName.length() > 0) { 
+        	String resourceApplicationUserPropertiesPath = ERXFileUtilities.pathForResourceNamed("Properties." + userName, "app", null);
+            if (resourceApplicationUserPropertiesPath != null) {
+            	applicationUserPropertiesPath = getActualPath(resourceApplicationUserPropertiesPath);
+            }
+        }
+        return applicationUserPropertiesPath;
     }
 
     /**
