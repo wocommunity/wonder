@@ -162,6 +162,7 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
      */
     public void finishInitialization() {
     	ERXJDBCAdaptor.registerJDBCAdaptor();
+        ERXConfigurationManager.defaultManager().loadOptionalConfigurationFiles();
         ERXProperties.populateSystemProperties();
         
         ERXConfigurationManager.defaultManager().configureRapidTurnAround();
