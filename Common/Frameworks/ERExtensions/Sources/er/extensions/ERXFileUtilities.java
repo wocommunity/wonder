@@ -299,10 +299,13 @@ public class ERXFileUtilities {
         if(bundle != null && bundle.isJar()) {
             log.warn("Can't get path when run as jar: " + frameworkName + " - " + fileName);
         } else {
-            URL url = WOApplication.application().resourceManager().pathURLForResourceNamed(fileName, frameworkName, languages);
-            if(url != null) {
-                path = url.getFile();
-            }
+        	WOApplication application = WOApplication.application();
+        	if (application != null) {
+	            URL url = application.resourceManager().pathURLForResourceNamed(fileName, frameworkName, languages);
+	            if(url != null) {
+	                path = url.getFile();
+	            }
+        	}
         }
         return path;
     }
