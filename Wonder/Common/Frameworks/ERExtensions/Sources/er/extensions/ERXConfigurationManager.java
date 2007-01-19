@@ -261,10 +261,20 @@ public class ERXConfigurationManager {
      * re-load the command line args.
      */
     public void loadOptionalConfigurationFiles() {
-        if (ERXProperties.optionalConfigurationFiles() != null
-            && ERXProperties.optionalConfigurationFiles().count() > 0) {
+    	NSMutableArray additionalConfigurationFiles = new NSMutableArray();
+    	NSArray optionalConfigurationFiles = ERXProperties.optionalConfigurationFiles();
+    	if (optionalConfigurationFiles != null) {
+    		additionalConfigurationFiles.addObjectsFromArray(optionalConfigurationFiles);
+    	}
+
+    	String applicationUserPropertiesPath = ERXProperties.applicationUserProperties();
+    	if (applicationUserPropertiesPath != null) {
+    		additionalConfigurationFiles.addObject(applicationUserPropertiesPath);
+    	}
+
+        if (additionalConfigurationFiles.count() > 0) {
             Properties systemProperties = System.getProperties();
-            for (Enumeration configEnumerator = ERXProperties.optionalConfigurationFiles().objectEnumerator();
+            for (Enumeration configEnumerator = additionalConfigurationFiles.objectEnumerator();
                  configEnumerator.hasMoreElements();) {
                 String configFile = (String)configEnumerator.nextElement();
                 File file = new File(configFile);
