@@ -38,7 +38,7 @@ import er.extensions.ERXMutableDictionary.ThreadSafeDictionary;
  * @binding WOD WOD-part of the component (optional)
  * @binding cacheKey Key under which to cache the WOElement (optional)
  * @binding cacheVersion Hint to determine if the cached object is up-to-date (optional)
- * @errorTemplate Template to use for displaying error messages. Uses {@link ERXSimpleTemplateParser} for display.
+ * @binding errorTemplate Template to use for displaying error messages. Uses {@link ERXSimpleTemplateParser} for display.
  *                Method name and HTML-escaped message are provided by the "method" and "message" keys. (optional)
  * 
  * @author th
