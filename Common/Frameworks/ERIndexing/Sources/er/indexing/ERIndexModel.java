@@ -31,6 +31,7 @@ import er.extensions.ERXFetchSpecificationBatchIterator;
 import er.extensions.ERXFileNotificationCenter;
 import er.extensions.ERXMutableDictionary;
 import er.extensions.ERXPatcher;
+import er.extensions.ERXProperties;
 import er.extensions.ERXSelectorUtilities;
 
 public class ERIndexModel {
@@ -40,6 +41,16 @@ public class ERIndexModel {
 	NSMutableDictionary indices = (NSMutableDictionary) ERXMutableDictionary.synchronizedDictionary();
 	
 	private static ERIndexModel _sharedInstance;
+	
+	private File _indexRoot;
+	
+	public File indexRoot() {
+		if(_indexRoot == null) {
+			String name = ERXProperties.stringForKeyWithDefault("er.indexing.ERIndexModel.rootDirectory", "/tmp");
+			_indexRoot = new File(name);
+		}
+		return _indexRoot;
+	}
 	
 	public static ERIndexModel indexModel() {
 		if(_sharedInstance == null) {
@@ -87,10 +98,12 @@ public class ERIndexModel {
 		if(className == null) {
 			className = ERIndex.class.getName();
 		}
+		NSMutableDictionary dict = indexDef.mutableClone();
+		dict.setObjectForKey(new File(indexRoot(), key).getAbsolutePath(), "store");
 		Class c = ERXPatcher.classForName(className);
 		ERIndex index = (ERIndex) _NSUtilities.instantiateObject(c, 
 				new Class[] {ERIndexModel.class, NSDictionary.class}, 
-				new Object[] {this, indexDef}, true, false);
+				new Object[] {this, dict}, true, false);
 		indices.setObjectForKey(index, key);
 	}
 
@@ -124,7 +137,8 @@ public class ERIndexModel {
 			EOEditingContext ec = ERXEC.newEditingContext();
 			ec.lock();
 			try {
-				ERXFetchSpecificationBatchIterator iterator = new ERXFetchSpecificationBatchIterator(new EOFetchSpecification(entity.name(), null, null));
+				EOFetchSpecification fs = new EOFetchSpecification(entity.name(), null, null);
+				ERXFetchSpecificationBatchIterator iterator = new ERXFetchSpecificationBatchIterator(fs);
 				iterator.setEditingContext(ec);
 				while(iterator.hasNextBatch()) {
 					NSArray objects = iterator.nextBatch();

@@ -25,6 +25,7 @@ import org.apache.lucene.search.Searcher;
 
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.eocontrol.EOEnterpriseObject;
+import com.webobjects.eocontrol.EOFetchSpecification;
 import com.webobjects.eocontrol.EOGlobalID;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
@@ -37,7 +38,9 @@ import com.webobjects.foundation.NSNotificationCenter;
 import com.webobjects.foundation.NSSet;
 
 import er.extensions.ERXAsyncQueue;
+import er.extensions.ERXEC;
 import er.extensions.ERXEOControlUtilities;
+import er.extensions.ERXFetchSpecificationBatchIterator;
 import er.extensions.ERXSelectorUtilities;
 import er.indexing.ERIndexJob.Command;
 
@@ -47,7 +50,7 @@ import er.indexing.ERIndexJob.Command;
  *   Document = {
  *     // index class to use, default is er.indexing.ERIndex
  *     index = com.foo.SomeIndexClass;
- *     // url for the index files
+ *     // url for the index files (currently unused)
  *     store = "file://tmp/Document";
  *     // type of the index (currently unused)
  *     type = "filed|db";
@@ -116,11 +119,41 @@ public class ERIndex {
 				_queue.start();
 			}
 		}
+		_model = model;
 		initFromDictionary(indexDef);
 		registerNotifications();
-		_model = model;
 	}
 
+	public void indexAllObjects() {
+		clear();
+		for (Enumeration names = entities().objectEnumerator(); names.hasMoreElements();) {
+			String entityName = (String) names.nextElement();
+			long start = System.currentTimeMillis();
+			int treshhold = 10;
+			EOEditingContext ec = ERXEC.newEditingContext();
+			ec.lock();
+			try {
+				EOFetchSpecification fs = new EOFetchSpecification(entityName, null, null);
+				ERXFetchSpecificationBatchIterator iterator = new ERXFetchSpecificationBatchIterator(fs);
+				iterator.setEditingContext(ec);
+				while(iterator.hasNextBatch()) {
+					NSArray objects = iterator.nextBatch();
+					if(iterator.currentBatchIndex() % treshhold == 0) {
+						ec.unlock();
+						// ec.dispose();
+						ec = ERXEC.newEditingContext();
+						ec.lock();
+						iterator.setEditingContext(ec);
+					}
+					addObjectsToIndex(objects);
+				}
+			} finally {
+				ec.unlock();
+			}
+			log.info("Indexing " + entityName + " took: " + (System.currentTimeMillis() - start) + " ms");
+		}
+	}
+	
 	protected void initFromDictionary(NSDictionary indexDef) {
 		File indexDirectory = new File((String) indexDef.objectForKey("store"));
 		_indexDirectory = indexDirectory;
@@ -367,26 +400,22 @@ public class ERIndex {
 		synchronized (indexDirectory()) {
 			TermEnum terms = null;
 			try {
-				long start = System.currentTimeMillis();
 				IndexReader reader = IndexReader.open(indexDirectory());
 				terms = reader.terms(new Term(fieldName, ""));
-				while (fieldName.equals(terms.term().field()))
-				{
+				while (fieldName.equals(terms.term().field())) {
 					result.addObject(terms.term().text());
-					if (!terms.next())
+					if (!terms.next()) {
 						break;
+					}
 				}
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			finally {
+				throw NSForwardException._runtimeExceptionForThrowable(e);
+			} finally {
 				if(terms != null) {
 					try {
 						terms.close();
 					} catch (IOException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
+						throw NSForwardException._runtimeExceptionForThrowable(e);
 					}
 				}
 			}
