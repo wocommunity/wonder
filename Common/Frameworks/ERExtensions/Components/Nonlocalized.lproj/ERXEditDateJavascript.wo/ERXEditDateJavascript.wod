@@ -1,5 +1,5 @@
 Hyperlink1: WOHyperlink {
-	href = "#";
+	href = "javascript:void(0)";
 	onmouseout = "window.status='';return true;";
 	onmouseover = "window.status='Date Picker';return true;";
 	onclick = href;
@@ -11,7 +11,9 @@ Image1: WOImage {
 	framework = "ERExtensions";
 	key = "calendar.gif";
 }
-
+Once : ERXOncePerRequestConditional {
+	keyName = "datepicker-js";
+}
 JavaScript2: WOJavaScript {
 	scriptSource = datePickerJavaScriptUrl;
 }
