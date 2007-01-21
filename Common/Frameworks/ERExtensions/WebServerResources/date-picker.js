@@ -390,7 +390,7 @@ Calendar.prototype.cal_data = function() {
 	for (j=vFirstDay; j<7; j++) {
 		vCode = vCode + "<TD WIDTH='14%'" + this.write_weekend_string(j) + "><FONT SIZE='2' FACE='" + fontface + "'>" + 
 			"<A HREF='#' " + 
-				"onClick=\"alert('" + gReturnItem + "');self.opener.document." + gReturnItem + ".value='" + 
+				"onClick=\"self.opener.document." + gReturnItem + ".value='" + 
 				this.format_data(vDay) + 
 				"';window.close();\">" + 
 				this.format_day(vDay) + 
