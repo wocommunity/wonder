@@ -15,7 +15,7 @@ import com.webobjects.foundation.NSNotification;
 import com.webobjects.foundation.NSNotificationCenter;
 import com.webobjects.foundation.NSValidation;
 
-public interface ERXEnterpriseObject {
+public interface ERXEnterpriseObject extends EOEnterpriseObject {
     
     /** logging support for modified objects */
     public static final Logger logMod = Logger.getLogger("er.transaction.delegate.EREditingContextDelegate.modifiedObjects");
