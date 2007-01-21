@@ -11,9 +11,12 @@ import com.webobjects.appserver.WOResponse;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableDictionary;
 
+import er.extensions.ERXProperties;
+
 public class AjaxUtils {
 	private static String HTML_CLOSE_HEAD = System.getProperty("er.ajax.AJComponent.htmlCloseHead");
-
+	private static final String SECURE_RESOURCES_KEY = "er.ajax.secureResources";
+	
 	/**
 	 * Key that tells the session not to store the current page. Checks both the response userInfo and the response
 	 * headers if this key is present. The value doesn't matter, but you need to update the corresponding value in
@@ -192,6 +195,13 @@ public class AjaxUtils {
 			else {
 				WOResourceManager rm = WOApplication.application().resourceManager();
 				url = rm.urlForResourceNamed(fileName, framework, context.session().languages(), context.request());
+				
+				if (ERXProperties.stringForKey(AjaxUtils.SECURE_RESOURCES_KEY) != null) {
+					StringBuffer urlBuffer = new StringBuffer();
+			    	context.request()._completeURLPrefix(urlBuffer, ERXProperties.booleanForKey(AjaxUtils.SECURE_RESOURCES_KEY), 0);
+			    	urlBuffer.append(url);
+			    	url = urlBuffer.toString();
+				}
 			}
 			String html = startTag + url + endTag + "\n";
 			AjaxUtils.insertInResponseBeforeTag(response, html, AjaxUtils.htmlCloseHead());
