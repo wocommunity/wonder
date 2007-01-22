@@ -50,7 +50,9 @@ import com.webobjects.appserver.WOResponse;
  * @binding saveLabel the label to show on the save button
  * @binding cancelLabel the label to show on the cancel button
  * @binding saveAction the action to invoke on save
+ * @binding saveUpdateContainerID by default save updates the container specified in "id", but you can override that with this binding  
  * @binding cancelAction the action to invoke on cancel
+ * @binding cancelUpdateContainerID by default cancel updates the container specified in "id", but you can override that with this binding  
  * @binding saveClass the class of the save button
  * @binding editClass the class of the div that you click on to trigger edit mode (yes this name sucks)
  * @binding onSaveClick the action to fire when save is clicked
@@ -122,6 +124,28 @@ public class AjaxInPlace extends WOComponent {
 		// is cached for the duration of a single R-R loop.  When we're done,
 		// toss the value so it can be recalculated properly the next time.
 		_id = null;
+	}
+	
+	public String saveUpdateContainerID() {
+		String saveUpdateContainerID;
+		if (hasBinding("saveUpdateContainerID")) {
+			saveUpdateContainerID = (String)valueForBinding("saveUpdateContainerID");
+		}
+		else {
+			saveUpdateContainerID = id();
+		}
+		return saveUpdateContainerID;
+	}
+	
+	public String cancelUpdateContainerID() {
+		String cancelUpdateContainerID;
+		if (hasBinding("cancelUpdateContainerID")) {
+			cancelUpdateContainerID = (String)valueForBinding("cancelUpdateContainerID");
+		}
+		else {
+			cancelUpdateContainerID = id();
+		}
+		return cancelUpdateContainerID;
 	}
 	
 	public boolean submitOnSave() {
