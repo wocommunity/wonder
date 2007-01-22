@@ -73,7 +73,7 @@ CancelFunction : AjaxUpdateLink {
 	onLoading = ^onCancelling;
 	evalScripts = true;
 	functionName = cancelFunctionName;
-	updateContainerID = id;
+	updateContainerID = cancelUpdateContainerID;
 }
 
 CancelAction : WOGenericContainer {
@@ -108,7 +108,7 @@ SaveSubmitFunction : AjaxSubmitButton {
 	onLoading = ^onSaving;
 	evalScripts = true;
 	functionName = saveFunctionName;
-	updateContainerID = id;
+	updateContainerID = saveUpdateContainerID;
 }
 
 SaveLinkFunction : AjaxUpdateLink {
@@ -121,7 +121,7 @@ SaveLinkFunction : AjaxUpdateLink {
 	onLoading = ^onSaving;
 	evalScripts = true;
 	functionName = saveFunctionName;
-	updateContainerID = id;
+	updateContainerID = saveUpdateContainerID;
 }
 
 SaveAction : WOGenericContainer {
