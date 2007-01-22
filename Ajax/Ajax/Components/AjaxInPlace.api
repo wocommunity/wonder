@@ -9,7 +9,9 @@
 		<binding name = "editClass"/>
 		<binding name = "editAction"/>
 		<binding name = "saveAction"/>
+		<binding name = "saveUpdateContainerID"/>
 		<binding name = "cancelAction"/>
+		<binding name = "cancelUpdateContainerID"/>
 		<binding name = "saveClass"/>
 		<binding name = "onSaveClick"/>
 		<binding name = "onSaveSuccess"/>
