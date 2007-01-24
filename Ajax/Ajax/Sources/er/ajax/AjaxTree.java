@@ -49,7 +49,7 @@ public class AjaxTree extends WOComponent {
 	private Object _item;
 	private String _id = null;
 	private Object _lastRootNode;
-
+	
 	public AjaxTree(WOContext context) {
 		super(context);
 	}
@@ -236,6 +236,11 @@ public class AjaxTree extends WOComponent {
 	public String leafImageFramework() {
 		return stringValueForBinding("leafImageFramework", "Ajax");
 	}
+	
+	public String imageLinkClass() {
+		return stringValueForBinding("imageLinkClass", "");
+	}
+	
 
 	public String _toggleFunctionName() {
 		return id() + "Toggle";
