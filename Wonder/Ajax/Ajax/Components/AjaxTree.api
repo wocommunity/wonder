@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<wodefinitions>
+<?xml version="1.0" encoding="UTF-8"?><wodefinitions>
 	<wo class="AjaxTreeNode.java" wocomponentcontent="true">
 		<binding name="root"/>
 		<binding name="item"/>
@@ -48,5 +47,5 @@
 			    <unbound name="treeModel"/>
 			  </and>
 	    </validation>
-    </wo>
+    <binding name="imageLinkClass"/></wo>
 </wodefinitions>
