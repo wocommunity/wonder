@@ -55,12 +55,14 @@ CollapseAction : AjaxUpdateLink {
 	action = collapse;
 	updateContainerID = id;
 	function = toggleFunctionName;
+	class = imageLinkClass;
 }
 
 ExpandAction : AjaxUpdateLink {
 	action = expand;
 	updateContainerID = ^id;
 	function = toggleFunctionName;
+	class = imageLinkClass;	
 }
 
 TreeNodeRenderer : WOComponentContent {
