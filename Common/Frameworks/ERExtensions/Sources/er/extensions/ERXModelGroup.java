@@ -105,6 +105,9 @@ public class ERXModelGroup extends EOModelGroup {
 		}
 		// correcting an EOF Inheritance bug
 		checkInheritanceRelationships();
+		
+		adjustLocalizedAttributes();
+
 		NSNotificationCenter.defaultCenter().postNotification(ModelGroupAddedNotification, this);
 		if (!patchModelsOnLoad) {
 			NSNotificationCenter.defaultCenter().addObserver(this, new NSSelector("modelAddedHandler", ERXConstant.NotificationClassArray), EOModelGroup.ModelAddedNotification, null);
@@ -147,7 +150,7 @@ public class ERXModelGroup extends EOModelGroup {
 		}
 		_modelsByName.setObjectForKey(eomodel, eomodel.name());
 		resetConnectionDictionaryInModel(eomodel);
-		NSNotificationCenter.defaultCenter().postNotification("EOModelAddedNotification", eomodel);
+		NSNotificationCenter.defaultCenter().postNotification(EOModelGroup.ModelAddedNotification, eomodel);
 	}
 
 	/**
@@ -390,10 +393,6 @@ public class ERXModelGroup extends EOModelGroup {
 	 */
 	public void modelAddedHandler(NSNotification n) {
 		EOModel model = (EOModel) n.object();
-		for (Enumeration enumerator = model.entities().objectEnumerator(); enumerator.hasMoreElements();) {
-			EOEntity entity = (EOEntity) enumerator.nextElement();
-			adjustLocalizedAttributes(entity);
-		}
 		resetConnectionDictionaryInModel(model);
 	}
 
