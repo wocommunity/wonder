@@ -35,6 +35,7 @@ import com.webobjects.foundation.NSSelector;
 public class ERXObjectStoreCoordinatorPool {
     private static Logger log = Logger.getLogger(ERXObjectStoreCoordinatorPool.class);
     
+    private static final String THREAD_OSC_KEY = "er.extensions.ERXObjectStoreCoordinatorPool.threadOSC";
     private Hashtable _oscForSession;
     private int _maxOS;
     private int _currentObjectStoreIndex;
@@ -137,7 +138,13 @@ public class ERXObjectStoreCoordinatorPool {
                 _oscForSession.put(sessionID, os);
             }
         } else {
-            os = nextObjectStore();
+        	os = (EOObjectStore) ERXThreadStorage.valueForKey(ERXObjectStoreCoordinatorPool.THREAD_OSC_KEY);
+        	if (os == null) {
+        		os = nextObjectStore();
+        		if (os != null) {
+        			ERXThreadStorage.takeValueForKey(os, ERXObjectStoreCoordinatorPool.THREAD_OSC_KEY);
+        		}
+        	}
         }
         return os;
     }
@@ -155,7 +162,8 @@ public class ERXObjectStoreCoordinatorPool {
             if (_currentObjectStoreIndex == _maxOS) {
                 _currentObjectStoreIndex = 0;
             }
-            return (EOObjectStore) _objectStores.get(_currentObjectStoreIndex++);
+            EOObjectStore os = (EOObjectStore) _objectStores.get(_currentObjectStoreIndex++);
+        	return os;
         }
     }
     
@@ -180,7 +188,7 @@ public class ERXObjectStoreCoordinatorPool {
         }
         
         public EOEditingContext _newEditingContext(boolean validationEnabled) {
-            EOObjectStore os = (EOObjectStore)_pool.currentRootObjectStore();
+            EOObjectStore os = _pool.currentRootObjectStore();
             EOEditingContext ec = _newEditingContext(os, validationEnabled);
             ec.lock();
             try {
