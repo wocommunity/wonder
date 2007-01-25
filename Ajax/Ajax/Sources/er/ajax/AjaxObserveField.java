@@ -8,6 +8,7 @@ import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WOElement;
 import com.webobjects.appserver.WORequest;
 import com.webobjects.appserver.WOResponse;
+import com.webobjects.appserver._private.WODynamicElementCreationException;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
@@ -56,6 +57,9 @@ public class AjaxObserveField extends AjaxDynamicElement {
 			NSMutableDictionary options = createAjaxOptions(component);
 			Boolean fullSubmitBoolean = (Boolean) valueForBinding("fullSubmit", component);
 			boolean fullSubmit = (fullSubmitBoolean != null && fullSubmitBoolean.booleanValue());
+			if (associations().objectForKey("action") != null && !fullSubmit) {
+				throw new WODynamicElementCreationException("If the action binding is set on AjaxObserveField, fullSubmit must be true.");
+			}
 			AjaxObserveField.appendToResponse(response, context, this, observeFieldID, updateContainerID, fullSubmit, options);
 			AjaxUtils.appendScriptFooter(response);
 		}
