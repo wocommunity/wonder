@@ -8,6 +8,7 @@ import com.webobjects.appserver.WOMessage;
 import com.webobjects.appserver.WORequest;
 import com.webobjects.appserver.WOResourceManager;
 import com.webobjects.appserver.WOResponse;
+import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableDictionary;
 
@@ -194,8 +195,11 @@ public class AjaxUtils {
 			}
 			else {
 				WOResourceManager rm = WOApplication.application().resourceManager();
-				url = rm.urlForResourceNamed(fileName, framework, context.session().languages(), context.request());
-				
+				NSArray languages = null;
+				if (context.hasSession()) {
+					languages = context.session().languages();
+				}
+				url = rm.urlForResourceNamed(fileName, framework, languages, context.request());
 				if (ERXProperties.stringForKey(AjaxUtils.SECURE_RESOURCES_KEY) != null) {
 					StringBuffer urlBuffer = new StringBuffer();
 			    	context.request()._completeURLPrefix(urlBuffer, ERXProperties.booleanForKey(AjaxUtils.SECURE_RESOURCES_KEY), 0);
