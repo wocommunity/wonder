@@ -11,6 +11,11 @@ import er.extensions.ERXEOControlUtilities;
 import er.extensions.ERXObjectStoreCoordinatorPool;
 import er.extensions.ERXRandomGUID;
 
+/**
+ * Run this with ERXMainRunner.
+ * 
+ * @author mschrag
+ */
 public class ERXObjectStoreCoordinatorSynchronizerTestCase extends TestCase {
   public void testInsertEO() {
     // Create Company in OSC1
