@@ -45,6 +45,10 @@ public class ERXObjectStoreCoordinatorPool {
     private Object _lock = new Object();
     protected static ERXObjectStoreCoordinatorPool _pool;
 
+    public static ERXObjectStoreCoordinatorPool _pool() {
+    	return _pool;
+    }
+    
     /**
      * Calls initialize() if the required system properties exist.
      *
