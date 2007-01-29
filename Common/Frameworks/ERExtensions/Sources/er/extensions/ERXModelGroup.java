@@ -716,7 +716,7 @@ public class ERXModelGroup extends EOModelGroup {
 			fixJDBCDictionary(model);
 		}
 
-		if (log.isDebugEnabled() && !old.equals(model.connectionDictionary()) && model.connectionDictionary() != null) {
+		if (log.isDebugEnabled() && old != null && !old.equals(model.connectionDictionary()) && model.connectionDictionary() != null) {
 			NSMutableDictionary dict = model.connectionDictionary().mutableClone();
 			if (dict.objectForKey("password") != null) {
 				dict.setObjectForKey("<deleted for log>", "password");
