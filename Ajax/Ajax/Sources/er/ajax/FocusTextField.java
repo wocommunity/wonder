@@ -91,7 +91,7 @@ public class FocusTextField extends ERXWOTextField {
 			response.appendContentString("Field.select('" + id + "');");
 		}
 		if (onEnterScript != null) {
-			response.appendContentString(id + "SubmitOnEnter = function(e) { if (e.which == 13 || e.which == 3) { ");
+			response.appendContentString(id + "SubmitOnEnter = function(e) { var keynum = Event.keyValue(e); if (keynum == 13 || keynum == 3) { ");
 			response.appendContentString(onEnterScript);
 			response.appendContentString("; Event.stop(e); } }");
 		}
