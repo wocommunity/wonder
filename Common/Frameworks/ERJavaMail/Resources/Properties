@@ -29,6 +29,9 @@ er.javamail.debugEnabled = false
 # * SMTP outbound host
 #er.javamail.smtpHost = smtp.domain.com
 
+# Valid ERJavaMail email pattern. If null, then the internal default will be used
+#er.javamail.emailPattern = ^.*?@.*$
+
 # * Number of messages that the sender queue can hold at a time
 er.javamail.senderQueue.size = 50
 
