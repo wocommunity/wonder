@@ -1,5 +1,6 @@
 package er.yui;
 
+import com.webobjects.appserver.WOApplication;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WOResponse;
 import com.webobjects.foundation.NSDictionary;
@@ -7,9 +8,28 @@ import com.webobjects.foundation.NSDictionary;
 import er.ajax.AjaxUtils;
 
 public class YUIUtils {
-  public static void addScriptResourceInHead(WOContext context, WOResponse response, String fileName) {
-    AjaxUtils.addScriptResourceInHead(context, response, "YUI", fileName);
-  }
+    
+    public static boolean isRunningWOLips() {
+        boolean wolips = false;
+        String ide = System.getProperty("WOIDE");
+        if ("WOLips".equals(ide)) {
+            wolips = true;
+        }
+        return wolips;
+    }
+
+    public static void addScriptResourceInHead(WOContext context, WOResponse response, String fileName) {
+        // auto-discover and switch debug and min versions and adapt for WOLips build path
+        if(!isRunningWOLips()) {
+            fileName = fileName.replaceFirst("^(\\w+)\\.js$", "$1/$1.js");
+        }
+        if(WOApplication.application().isCachingEnabled()) {
+            fileName = fileName.replaceFirst("\\.js$", "-min.js");
+        } else {
+            fileName = fileName.replaceFirst("\\.js", "-debug.js");
+        }
+        AjaxUtils.addScriptResourceInHead(context, response, "YUI", fileName);
+    }
 
   public static void addStylesheetResourceInHead(WOContext context, WOResponse response, String fileName) {
     AjaxUtils.addStylesheetResourceInHead(context, response, "YUI", fileName);
