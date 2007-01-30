@@ -90,12 +90,12 @@ public class YUIPanel extends DivContainer {
   }
 
   public void appendToResponse(WOResponse response, WOContext context) {
-    YUIUtils.addScriptResourceInHead(context, response, "yahoo-min.js");
-    YUIUtils.addScriptResourceInHead(context, response, "dom-min.js");
-    YUIUtils.addScriptResourceInHead(context, response, "event-min.js");
-    YUIUtils.addScriptResourceInHead(context, response, "animation-min.js");
-    YUIUtils.addScriptResourceInHead(context, response, "dragdrop-min.js");
-    YUIUtils.addScriptResourceInHead(context, response, "container-min.js");
+    YUIUtils.addScriptResourceInHead(context, response, "yahoo.js");
+    YUIUtils.addScriptResourceInHead(context, response, "dom.js");
+    YUIUtils.addScriptResourceInHead(context, response, "event.js");
+    YUIUtils.addScriptResourceInHead(context, response, "animation.js");
+    YUIUtils.addScriptResourceInHead(context, response, "dragdrop.js");
+    YUIUtils.addScriptResourceInHead(context, response, "container.js");
     YUIUtils.addStylesheetResourceInHead(context, response, "container.css");
 
     super.appendToResponse(response, context);
