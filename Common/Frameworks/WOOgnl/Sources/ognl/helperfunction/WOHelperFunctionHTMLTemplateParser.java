@@ -276,9 +276,9 @@ public class WOHelperFunctionHTMLTemplateParser extends WOParser implements WOHe
 				}
 				StringBuffer ognlKeyPath = new StringBuffer();
 				ognlKeyPath.append("~");
-				ognlKeyPath.append("@" + WOHelperFunctionRegistry.class.getName() + "@registry()._helperInstanceForFrameworkNamed(");
+				ognlKeyPath.append("@" + WOHelperFunctionRegistry.class.getName() + "@registry()._helperInstanceForFrameworkNamed(#this, \"");
 				ognlKeyPath.append(targetKeyPath);
-				ognlKeyPath.append(", \"");
+				ognlKeyPath.append("\", \"");
 				ognlKeyPath.append(frameworkName);
 				ognlKeyPath.append("\").");
 				ognlKeyPath.append(helperFunctionName);

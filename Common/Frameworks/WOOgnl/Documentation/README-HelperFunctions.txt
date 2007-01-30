@@ -137,8 +137,5 @@ make a MyProjectStringHelper extends StringHelper and register MyProjectStringHe
 
 
 === Gotchas ===
-Because the registry depends on the type of the object to find the appropriate helper instance, if the 
-value is null, it will not be able to find a helper instance.
-
 If you use WOLips, you should go to Windows=>Preferences=>WOLips=>WOD Editor and add pipe, open 
 paren, and close paren to the list of valid wod binding characters.
