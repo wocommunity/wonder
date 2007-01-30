@@ -126,6 +126,7 @@ public class ERXMigrator {
 		}
 		Map migrations = _buildDependenciesForModelsNamed(modelNames);
 
+		Map postMigrations = new HashMap();
 		Iterator migrationsIter = migrations.keySet().iterator();
 		while (migrationsIter.hasNext()) {
 			IERXMigration migration = (IERXMigration) migrationsIter.next();
@@ -141,9 +142,8 @@ public class ERXMigrator {
 			catch (Throwable t) {
 				throw new ERXMigrationFailedException("Failed to create migration lock class '" + migrationLockClassName + "'.", t);
 			}
-			String migrationClassPrefix = ERXProperties.stringForKeyWithDefault(model.name() + ".MigrationClassPrefix", model.name());
 			EOEditingContext editingContext = ERXEC.newEditingContext();
-			ERXMigrationAction migrationAction = new ERXMigrationAction(editingContext, migration, modelVersion, database, _lockOwnerName);
+			ERXMigrationAction migrationAction = new ERXMigrationAction(editingContext, migration, modelVersion, database, _lockOwnerName, postMigrations);
 			try {
 				migrationAction.perform(editingContext, model.name());
 			}
@@ -152,6 +152,20 @@ public class ERXMigrator {
 			}
 			catch (Throwable t) {
 				throw new ERXMigrationFailedException("Failed to migrate model '" + model.name() + "'.", t);
+			}
+		}
+		
+		Iterator postMigrationsIter = postMigrations.keySet().iterator();
+		while (postMigrationsIter.hasNext()) {
+			IERXPostMigration postMigration = (IERXPostMigration) postMigrationsIter.next();
+			ModelVersion modelVersion = (ModelVersion) postMigrations.get(postMigration);
+			EOEditingContext editingContext = ERXEC.newEditingContext();
+			try {
+				postMigration.postUpgrade(editingContext, modelVersion.model());
+				editingContext.saveChanges();
+			}
+			catch (Throwable t) {
+				throw new ERXMigrationFailedException("Failed on post migrations for model '" + modelVersion.model().name() + "'.", t);
 			}
 		}
 	}
@@ -300,13 +314,15 @@ public class ERXMigrator {
 		private ModelVersion _modelVersion;
 		private Map _migrations;
 		private String _lockOwnerName;
+		private Map _postMigrations;
 
-		public ERXMigrationAction(EOEditingContext editingContext, IERXMigration migration, ModelVersion modelVersion, IERXMigrationLock database, String lockOwnerName) {
+		public ERXMigrationAction(EOEditingContext editingContext, IERXMigration migration, ModelVersion modelVersion, IERXMigrationLock database, String lockOwnerName, Map postMigrations) {
 			_editingContext = editingContext;
 			_modelVersion = modelVersion;
 			_migration = migration;
 			_database = database;
 			_lockOwnerName = lockOwnerName;
+			_postMigrations = postMigrations;
 		}
 
 		protected int doPerform(EOAdaptorChannel channel) {
@@ -342,6 +358,9 @@ public class ERXMigrator {
 						channel.adaptorContext().beginTransaction();
 						if (ERXMigrator.log.isInfoEnabled()) {
 							ERXMigrator.log.info(model.name() + " is now version " + currentVersion);
+						}
+						if (_migration instanceof IERXPostMigration) {
+							_postMigrations.put(_migration, _modelVersion);
 						}
 					}
 					else {
