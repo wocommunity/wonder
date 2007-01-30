@@ -6,6 +6,7 @@ import org.apache.log4j.Logger;
 import sun.misc.BASE64Encoder;
 
 import com.webobjects.appserver.WOApplication;
+import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WORequest;
 import com.webobjects.appserver._private.WOProperties;
 import com.webobjects.foundation.NSArray;
@@ -30,6 +31,10 @@ public  class ERXRequest extends WORequest {
             isBrowserFormValueEncodingOverrideEnabled = ERXProperties.booleanForKeyWithDefault("er.extensions.ERXRequest.BrowserFormValueEncodingOverrideEnabled", false) ? Boolean.TRUE : Boolean.FALSE;
         }
         return isBrowserFormValueEncodingOverrideEnabled.booleanValue();
+    }
+    
+    public WOContext context() {
+    	return _context();
     }
     
     /** Simply call superclass constructor */
