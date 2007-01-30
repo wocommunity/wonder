@@ -21,7 +21,6 @@ import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Vector;
 
 import org.apache.log4j.Logger;
 
@@ -74,14 +73,14 @@ public class ERXObjectStoreCoordinatorSynchronizer {
 		return _synchronizer;
 	}
 
-	private Vector _coordinators;
+	private NSMutableArray _coordinators;
 	private ProcessChangesQueue _queueThread;
 	private MulticastSynchronizer _multicastSynchronizer;
 
 	private ERXObjectStoreCoordinatorSynchronizer() {
-		_coordinators = new Vector();
+		_coordinators = new NSMutableArray();
 		_queueThread = new ProcessChangesQueue();
-		
+
 		new Thread(_queueThread).start();
 		NSNotificationCenter.defaultCenter().addObserver(this, new NSSelector("objectStoreWasAdded", new Class[] { NSNotification.class }), EOObjectStoreCoordinator.CooperatingObjectStoreWasAddedNotification, null);
 		NSNotificationCenter.defaultCenter().addObserver(this, new NSSelector("objectStoreWasRemoved", new Class[] { NSNotification.class }), EOObjectStoreCoordinator.CooperatingObjectStoreWasRemovedNotification, null);
@@ -176,7 +175,6 @@ public class ERXObjectStoreCoordinatorSynchronizer {
 	public void publishChange(NSNotification n) {
 		if (_coordinators.size() >= 2 || _multicastSynchronizer != null) {
 			NSDictionary userInfo = n.userInfo();
-			System.out.println("ERXObjectStoreCoordinatorSynchronizer.publishChange: " + n.object() + ", " + n);
 			if (userInfo == null || userInfo.valueForKey(ERXObjectStoreCoordinatorSynchronizer.SYNCHRONIZER_KEY) == null) {
 				LocalChange changes = new LocalChange((EOObjectStoreCoordinator) n.object(), userInfo);
 				_queueThread.addChange(changes);
@@ -185,7 +183,11 @@ public class ERXObjectStoreCoordinatorSynchronizer {
 	}
 
 	private Enumeration coordinators() {
-		return _coordinators.elements();
+		return _coordinators.objectEnumerator();
+	}
+
+	private NSArray _coordinators() {
+		return _coordinators.immutableClone();
 	}
 
 	/**
@@ -209,9 +211,9 @@ public class ERXObjectStoreCoordinatorSynchronizer {
 		private class UpdateSnapshotProcessor extends SnapshotProcessor {
 			public void processSnapshots(EODatabaseContext dbc, EODatabase database, NSDictionary snapshots) {
 				NSArray gids = snapshots.allKeys();
-				//database.forgetSnapshotsForGlobalIDs(gids);
+				// database.forgetSnapshotsForGlobalIDs(gids);
 				database.recordSnapshots(snapshots);
-				
+
 				NSMutableDictionary userInfo = new NSMutableDictionary(gids, EODatabaseContext.UpdatedKey);
 				userInfo.setObjectForKey(Boolean.TRUE, ERXObjectStoreCoordinatorSynchronizer.SYNCHRONIZER_KEY);
 				NSNotificationCenter.defaultCenter().postNotification(EODatabaseContext.ObjectsChangedInStoreNotification, dbc, userInfo);
@@ -226,15 +228,15 @@ public class ERXObjectStoreCoordinatorSynchronizer {
 			public void processSnapshots(EODatabaseContext dbc, EODatabase database, NSDictionary snapshots) {
 				NSArray gids = snapshots.allKeys();
 				database.recordSnapshots(snapshots);
-				
+
 				Enumeration gidsEnum = gids.objectEnumerator();
 				while (gidsEnum.hasMoreElements()) {
-					EOKeyGlobalID gid = (EOKeyGlobalID)gidsEnum.nextElement();
+					EOKeyGlobalID gid = (EOKeyGlobalID) gidsEnum.nextElement();
 					EOEntity entity = database.entityNamed(gid.entityName());
-					NSDictionary snapshot = (NSDictionary)snapshots.objectForKey(gid);
+					NSDictionary snapshot = (NSDictionary) snapshots.objectForKey(gid);
 					Enumeration relationshipsEnum = entity.relationships().objectEnumerator();
 					while (relationshipsEnum.hasMoreElements()) {
-						EORelationship relationship = (EORelationship)relationshipsEnum.nextElement();
+						EORelationship relationship = (EORelationship) relationshipsEnum.nextElement();
 						if (!relationship.isToMany()) {
 							EORelationship inverseRelationship = relationship.inverseRelationship();
 							if (inverseRelationship != null && inverseRelationship.isToMany()) {
@@ -245,9 +247,6 @@ public class ERXObjectStoreCoordinatorSynchronizer {
 									String inverseRelationshipName = inverseRelationship.name();
 									NSArray inverseRelationshipGIDs = database.snapshotForSourceGlobalID(destGID, inverseRelationshipName);
 									if (inverseRelationshipGIDs != null) {
-										if (log.isDebugEnabled()) {
-											
-										}
 										database.recordSnapshotForSourceGlobalID(inverseRelationshipGIDs.arrayByAddingObject(gid), destGID, inverseRelationshipName);
 									}
 								}
@@ -255,7 +254,7 @@ public class ERXObjectStoreCoordinatorSynchronizer {
 						}
 					}
 				}
-				
+
 				NSMutableDictionary userInfo = new NSMutableDictionary(gids, EODatabaseContext.InsertedKey);
 				userInfo.setObjectForKey(Boolean.TRUE, ERXObjectStoreCoordinatorSynchronizer.SYNCHRONIZER_KEY);
 				NSNotificationCenter.defaultCenter().postNotification(EODatabaseContext.ObjectsChangedInStoreNotification, dbc, userInfo);
@@ -268,7 +267,7 @@ public class ERXObjectStoreCoordinatorSynchronizer {
 
 		private class InvalidateSnapshotProcessor extends SnapshotProcessor {
 			public void processSnapshots(EODatabaseContext dbc, EODatabase database, NSDictionary snapshots) {
-				//System.out.println("InvalidateSnapshotProcessor.processSnapshots" + snapshots);
+				// System.out.println("InvalidateSnapshotProcessor.processSnapshots" + snapshots);
 				// database.forgetSnapshotsForGlobalIDs(snapshots.allKeys());
 				// database.recordSnapshots(snapshots);
 				if (log.isDebugEnabled()) {
@@ -295,7 +294,7 @@ public class ERXObjectStoreCoordinatorSynchronizer {
 				NSMutableArray existingGIDs = new NSMutableArray();
 				Enumeration gidsEnum = gids.objectEnumerator();
 				while (gidsEnum.hasMoreElements()) {
-					EOGlobalID gid = (EOGlobalID)gidsEnum.nextElement();
+					EOGlobalID gid = (EOGlobalID) gidsEnum.nextElement();
 					NSDictionary snapshot = database.snapshotForGlobalID(gid);
 					if (snapshot != null) {
 						existingGIDs.addObject(gid);
@@ -309,7 +308,7 @@ public class ERXObjectStoreCoordinatorSynchronizer {
 				finally {
 					editingContext.unlock();
 				}
-				//database.forgetSnapshotsForGlobalIDs(gids);
+				// database.forgetSnapshotsForGlobalIDs(gids);
 				if (log.isDebugEnabled()) {
 					log.debug("update gids: " + gids);
 				}
@@ -320,6 +319,46 @@ public class ERXObjectStoreCoordinatorSynchronizer {
 			public void processSnapshots(EODatabaseContext dbc, EODatabase database, NSArray gids) {
 				System.out.println("InsertSnapshotGIDProcessor.processSnapshots: " + gids);
 				// database.recordSnapshots(snapshots);
+
+				// NSArray gids = snapshots.allKeys();
+				// database.recordSnapshots(snapshots);
+				//				
+				// Enumeration gidsEnum = gids.objectEnumerator();
+				// while (gidsEnum.hasMoreElements()) {
+				// EOKeyGlobalID gid = (EOKeyGlobalID)gidsEnum.nextElement();
+				// EOEntity entity = database.entityNamed(gid.entityName());
+				// NSDictionary snapshot = (NSDictionary)snapshots.objectForKey(gid);
+				// Enumeration relationshipsEnum = entity.relationships().objectEnumerator();
+				// while (relationshipsEnum.hasMoreElements()) {
+				// EORelationship relationship = (EORelationship)relationshipsEnum.nextElement();
+				// if (!relationship.isToMany()) {
+				// EORelationship inverseRelationship = relationship.inverseRelationship();
+				// if (inverseRelationship != null && inverseRelationship.isToMany()) {
+				// EOEntity destEntity = inverseRelationship.entity();
+				// NSDictionary destPK = relationship._foreignKeyForSourceRow(snapshot);
+				// EOGlobalID destGID = destEntity.globalIDForRow(destPK);
+				// if (destGID != null) {
+				// String inverseRelationshipName = inverseRelationship.name();
+				// NSArray inverseRelationshipGIDs = database.snapshotForSourceGlobalID(destGID,
+				// inverseRelationshipName);
+				// if (inverseRelationshipGIDs != null) {
+				// if (log.isDebugEnabled()) {
+				//											
+				// }
+				// database.recordSnapshotForSourceGlobalID(inverseRelationshipGIDs.arrayByAddingObject(gid), destGID,
+				// inverseRelationshipName);
+				// }
+				// }
+				// }
+				// }
+				// }
+				// }
+				//				
+				// NSMutableDictionary userInfo = new NSMutableDictionary(gids, EODatabaseContext.InsertedKey);
+				// userInfo.setObjectForKey(Boolean.TRUE, ERXObjectStoreCoordinatorSynchronizer.SYNCHRONIZER_KEY);
+				// NSNotificationCenter.defaultCenter().postNotification(EODatabaseContext.ObjectsChangedInStoreNotification,
+				// dbc, userInfo);
+
 				if (log.isDebugEnabled()) {
 					log.debug("insert: " + gids);
 				}
@@ -452,7 +491,7 @@ public class ERXObjectStoreCoordinatorSynchronizer {
 						process(sender, _insertProcessor, localChanges.inserted(), EODatabaseContext.InsertedKey);
 						process(sender, _updateProcessor, localChanges.updated(), EODatabaseContext.UpdatedKey);
 						process(sender, _invalidateProcessor, localChanges.invalidated(), EODatabaseContext.InvalidatedKey);
-						
+
 						if (_multicastSynchronizer != null) {
 							try {
 								_multicastSynchronizer.writeChanges(localChanges);
