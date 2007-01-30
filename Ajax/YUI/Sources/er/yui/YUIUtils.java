@@ -8,32 +8,21 @@ import com.webobjects.foundation.NSDictionary;
 import er.ajax.AjaxUtils;
 
 public class YUIUtils {
-    
-    public static boolean isRunningWOLips() {
-        boolean wolips = false;
-        String ide = System.getProperty("WOIDE");
-        if ("WOLips".equals(ide)) {
-            wolips = true;
-        }
-        return wolips;
-    }
-
+ 
     public static void addScriptResourceInHead(WOContext context, WOResponse response, String fileName) {
-        // auto-discover and switch debug and min versions and adapt for WOLips build path
-        if(!isRunningWOLips()) {
-            fileName = fileName.replaceFirst("^([a-z]+)(.*?)\\.js$", "$1/$1$2.js");
-        }
+        // auto-discover and switch debug and min versions 
+        fileName = fileName.replaceFirst("^([a-z]+)(.*?)\\.js$", "$1/$1$2.js");
         if(WOApplication.application().isCachingEnabled()) {
             fileName = fileName.replaceFirst("\\.js$", "-min.js");
         } else {
-           // debug version is not working in WOLips, probably due to the differences in build
-           // fileName = fileName.replaceFirst("\\.js", "-debug.js");
+            // debug version is not working in WOLips, probably due to the differences in build
+            // fileName = fileName.replaceFirst("\\.js", "-debug.js");
         }
         AjaxUtils.addScriptResourceInHead(context, response, "YUI", fileName);
     }
 
-  public static void addStylesheetResourceInHead(WOContext context, WOResponse response, String fileName) {
-    AjaxUtils.addStylesheetResourceInHead(context, response, "YUI", fileName);
+    public static void addStylesheetResourceInHead(WOContext context, WOResponse response, String fileName) {
+        AjaxUtils.addStylesheetResourceInHead(context, response, "YUI", fileName);
   }
 
   public static String id(String idBindingName, NSDictionary associations, WOContext context) {
