@@ -87,11 +87,15 @@ public class ERJavaMail extends ERXFrameworkPrincipal {
 	 * Specialized implementation of the method from ERXPrincipalClass.
 	 */
 	public void finishInitialization() {
+		String patternString = ERXProperties.stringForKey("er.javamail.emailPattern");
+		if(patternString == null || patternString.trim().length() == 0) {
+			patternString = EMAIL_VALIDATION_PATTERN;
+		}
 		Perl5Compiler compiler = new Perl5Compiler();
 		_matcher = new Perl5Matcher();
 
 		try {
-			_pattern = compiler.compile(EMAIL_VALIDATION_PATTERN);
+			_pattern = compiler.compile(patternString);
 		}
 		catch (MalformedPatternException e) {
 			throw new RuntimeException("The compilation of the ORO Regexp pattern failed in ERJavaMail!");
@@ -342,7 +346,7 @@ public class ERJavaMail extends ERXFrameworkPrincipal {
 	 * @return a <code>boolean</code> value
 	 */
 	public boolean centralize() {
-		return _centralize;
+		return false;
 	}
 
 	/**
@@ -439,7 +443,7 @@ public class ERJavaMail extends ERXFrameworkPrincipal {
 	 *            the email String value to validate
 	 * @return a <code>boolean</code> value
 	 */
-	public boolean isValidEmail(String email) {
+	public synchronized boolean isValidEmail(String email) {
 		if (email != null)
 			return _matcher.matches(email, _pattern);
 		return false;
