@@ -30,7 +30,6 @@ public class ERXResourceManager extends WOResourceManager {
 	
 	protected ERXResourceManager() {
 		TheAppProjectBundle = _initAppBundle();
-		int i = 0;
 		try {
 			Field field = WOResourceManager.class.getDeclaredField("_urlValuedElementsData");
 			field.setAccessible(true);
@@ -63,71 +62,72 @@ public class ERXResourceManager extends WOResourceManager {
 		return ((WODeployedBundle) (obj));
 	}
 
-	private String _cachedURLForResource(String s, String s1, NSArray nsarray) {
-		String s2 = null;
-		if(s1 != null) {
-			WODeployedBundle wodeployedbundle = _cachedBundleForFrameworkNamed(s1);
+	private String _cachedURLForResource(String name, String bundleName, NSArray languages) {
+		String result = null;
+		if(bundleName != null) {
+			WODeployedBundle wodeployedbundle = _cachedBundleForFrameworkNamed(bundleName);
 			if(wodeployedbundle != null) {
-				s2 = wodeployedbundle.urlForResource(s, nsarray);
+				result = wodeployedbundle.urlForResource(name, languages);
 			}
-			if(s2 == null) {
-				s2 = "/ERROR/NOT_FOUND/framework=" + s1 + "/filename=" + (s == null ? "*null*" : s);
+			if(result == null) {
+				result = "/ERROR/NOT_FOUND/framework=" + bundleName + "/filename=" + (name == null ? "*null*" : name);
 			}
 		} else {
-			s2 = TheAppProjectBundle.urlForResource(s, nsarray);
-			if(s2 == null) {
-				String s3 = WOApplication.application().name();
-				s2 = "/ERROR/NOT_FOUND/app=" + s3 + "/filename=" + (s == null ? "*null*" : s);
+			result = TheAppProjectBundle.urlForResource(name, languages);
+			if(result == null) {
+				String appName = WOApplication.application().name();
+				result = "/ERROR/NOT_FOUND/app=" + appName + "/filename=" + (name == null ? "*null*" : name);
 			}
 		}
-		return s2;
+		return result;
 	}
 
-	public String urlForResourceNamed(String s, String s1, NSArray nsarray, WORequest worequest) {
-		String s2 = null;
-		if(worequest == null || worequest != null && worequest.isUsingWebServer() && !WOApplication.application()._rapidTurnaroundActiveForAnyProject()) {
-			s2 = _cachedURLForResource(s, s1, nsarray);
+	public String urlForResourceNamed(String name, String bundleName, NSArray languages, WORequest request) {
+		String completeURL = null;
+		if(request == null || request != null && request.isUsingWebServer() && !WOApplication.application()._rapidTurnaroundActiveForAnyProject()) {
+			completeURL = _cachedURLForResource(name, bundleName, languages);
 		} else {
-			URL url = pathURLForResourceNamed(s, s1, nsarray);
-			String s3 = null;
+			URL url = pathURLForResourceNamed(name, bundleName, languages);
+			String fileURL = null;
 			if(url == null) {
-				s3 = "ERROR_NOT_FOUND_framework_" + (s1 == null ? "*null*" : s1) + "_filename_" + (s == null ? "*null*" : s);
+				fileURL = "ERROR_NOT_FOUND_framework_" + (bundleName == null ? "*null*" : bundleName) + "_filename_" + (name == null ? "*null*" : name);
 			} else {
-				s3 = url.toString();
-				if(null == cachedDataForKey(s3)) {
-					String s4 = contentTypeForResourceNamed(s3);
-					WOURLValuedElementData wourlvaluedelementdata = new WOURLValuedElementData(null, s4, s3);
-					urlValuedElementsData.setObjectForKey(wourlvaluedelementdata, s3);
+				fileURL = url.toString();
+				if(null == cachedDataForKey(fileURL)) {
+					String s4 = contentTypeForResourceNamed(fileURL);
+					WOURLValuedElementData wourlvaluedelementdata = new WOURLValuedElementData(null, s4, fileURL);
+					urlValuedElementsData.setObjectForKey(wourlvaluedelementdata, fileURL);
 				}
 			}
-			String s5 = _NSStringUtilities.concat("wodata", "=", WOURLEncoder.encode(s3));
-			WOContext wocontext = null;
-			String s6 = WOApplication.application().resourceRequestHandlerKey();
-			if(worequest != null) {
-				wocontext = (WOContext) ((ERXRequest)worequest).context();
+			String encoded = WOURLEncoder.encode(fileURL);
+			String wodata = _NSStringUtilities.concat("wodata", "=", encoded);
+			WOContext context = null;
+			String key = WOApplication.application().resourceRequestHandlerKey();
+			if(request != null) {
+				context = (WOContext) ((ERXRequest)request).context();
 			}
-			if(wocontext != null) {
-				s2 = wocontext.urlWithRequestHandlerKey(s6, null, s5);
+			if(context != null) {
+				completeURL = context.urlWithRequestHandlerKey(key, null, wodata);
 			} else {
-				StringBuffer stringbuffer = new StringBuffer(worequest.applicationURLPrefix());
+				StringBuffer stringbuffer = new StringBuffer(request.applicationURLPrefix());
 				stringbuffer.append('/');
-				stringbuffer.append(s6);
+				stringbuffer.append(key);
 				stringbuffer.append('?');
-				stringbuffer.append(s5);
-				s2 = stringbuffer.toString();
+				stringbuffer.append(wodata);
+				completeURL = stringbuffer.toString();
 			}
 		}
-		return s2;
+		return completeURL;
 	}
 
-    private WOURLValuedElementData cachedDataForKey(String s) {
-        return (WOURLValuedElementData)urlValuedElementsData.objectForKey(s);
+    private WOURLValuedElementData cachedDataForKey(String key) {
+        return (WOURLValuedElementData)urlValuedElementsData.objectForKey(key);
     }
     
-	public WOURLValuedElementData _cachedDataForKey(String s) {
+	public WOURLValuedElementData _cachedDataForKey(String key) {
 		WOURLValuedElementData wourlvaluedelementdata = null;
-		if(s != null) {
-			wourlvaluedelementdata = cachedDataForKey(s);
+		if(key != null) {
+			wourlvaluedelementdata = cachedDataForKey(key);
 		}
 		return wourlvaluedelementdata;
 	}
