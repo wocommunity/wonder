@@ -21,12 +21,13 @@ public class YUIUtils {
     public static void addScriptResourceInHead(WOContext context, WOResponse response, String fileName) {
         // auto-discover and switch debug and min versions and adapt for WOLips build path
         if(!isRunningWOLips()) {
-            fileName = fileName.replaceFirst("^(\\w+)\\.js$", "$1/$1.js");
+            fileName = fileName.replaceFirst("^([a-z]+)(.*?)\\.js$", "$1/$1$2.js");
         }
         if(WOApplication.application().isCachingEnabled()) {
             fileName = fileName.replaceFirst("\\.js$", "-min.js");
         } else {
-            fileName = fileName.replaceFirst("\\.js", "-debug.js");
+           // debug version is not working in WOLips, probably due to the differences in build
+           // fileName = fileName.replaceFirst("\\.js", "-debug.js");
         }
         AjaxUtils.addScriptResourceInHead(context, response, "YUI", fileName);
     }
