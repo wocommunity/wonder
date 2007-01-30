@@ -18,7 +18,7 @@ import com.webobjects.foundation.NSArray;
  * database in sync with this latest model version, so the transitional model that existed when version 3 was valid may
  * no longer exist. In general, you should only do low level channel operations during migration. Though, the editing
  * context is provided here as a convenience for use under controlled circumstances if you know it will not be a
- * problem.
+ * problem.  You can use the IERXPostMigration interface if you need to execute (in a restricted way) EO operations.
  * 
  * @author mschrag
  */
