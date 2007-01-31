@@ -8,7 +8,7 @@ er.extensions.ERXEC.useSharedEditingContext=false
 er.extensions.ERXEC.defaultCoalesceAutoLocks=false
 er.migration.migrateAtStartup=true
 er.migration.createTablesIfNecessary=true
-er.migration.modelNames=ERXObjectStoreCoordinatorSynchronizerTest
+er.migration.modelNames=ERXTest
 er.extensions.ERXEnterpriseObject.applyRestrictingQualifierOnInsert=true
 
 er.extensions.ERXObjectStoreCoordinatorPool.maxCoordinators=2
