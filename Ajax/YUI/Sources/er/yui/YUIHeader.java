@@ -14,7 +14,7 @@ import er.ajax.AjaxUtils;
  * 
  * @author mschrag
  */
-public class YUIHeader extends DivContainer {
+public class YUIHeader extends YUIDivContainer {
   public YUIHeader(String aName, NSDictionary associations, WOElement template) {
     super(aName, associations, template);
   }

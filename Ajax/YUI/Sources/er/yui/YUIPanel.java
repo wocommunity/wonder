@@ -41,7 +41,7 @@ import er.ajax.AjaxUtils;
  * 
  * @author mschrag
  */
-public class YUIPanel extends DivContainer {
+public class YUIPanel extends YUIDivContainer {
   public YUIPanel(String name, NSDictionary associations, WOElement template) {
     super(name, associations, template);
   }
@@ -90,13 +90,13 @@ public class YUIPanel extends DivContainer {
   }
 
   public void appendToResponse(WOResponse response, WOContext context) {
-    YUIUtils.addScriptResourceInHead(context, response, "yahoo.js");
-    YUIUtils.addScriptResourceInHead(context, response, "dom.js");
-    YUIUtils.addScriptResourceInHead(context, response, "event.js");
-    YUIUtils.addScriptResourceInHead(context, response, "animation.js");
-    YUIUtils.addScriptResourceInHead(context, response, "dragdrop.js");
-    YUIUtils.addScriptResourceInHead(context, response, "container.js");
-    YUIUtils.addStylesheetResourceInHead(context, response, "container.css");
+    YUIUtils.addScriptResourceInHead(context, response, "yahoo/yahoo.js");
+    YUIUtils.addScriptResourceInHead(context, response, "dom/dom.js");
+    YUIUtils.addScriptResourceInHead(context, response, "event/event.js");
+    YUIUtils.addScriptResourceInHead(context, response, "animation/animation.js");
+    YUIUtils.addScriptResourceInHead(context, response, "dragdrop/dragdrop.js");
+    YUIUtils.addScriptResourceInHead(context, response, "container/container.js");
+    YUIUtils.addStylesheetResourceInHead(context, response, "container/assets/container.css");
 
     super.appendToResponse(response, context);
 
