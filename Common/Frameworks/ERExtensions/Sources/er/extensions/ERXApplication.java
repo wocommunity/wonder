@@ -32,6 +32,7 @@ import com.webobjects.appserver.WOMessage;
 import com.webobjects.appserver.WORedirect;
 import com.webobjects.appserver.WORequest;
 import com.webobjects.appserver.WORequestHandler;
+import com.webobjects.appserver.WOResourceManager;
 import com.webobjects.appserver.WOResponse;
 import com.webobjects.appserver.WOSession;
 import com.webobjects.appserver.WOTimer;
@@ -352,6 +353,10 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 		// ERXPatcher.setClassForName(ERXWOFileUpload.class, "WOFileUpload");
 	}
 
+    public WOResourceManager createResourceManager() {
+        return new ERXResourceManager();
+    }
+    
 	/**
 	 * The ERXApplication contructor.
 	 */

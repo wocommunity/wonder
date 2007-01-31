@@ -100,12 +100,12 @@ public class ERXResourceManager extends WOResourceManager {
 				}
 			}
 			String encoded = WOURLEncoder.encode(fileURL);
-			String wodata = _NSStringUtilities.concat("wodata", "=", encoded);
 			WOContext context = null;
 			String key = WOApplication.application().resourceRequestHandlerKey();
 			if(request != null) {
 				context = (WOContext) ((ERXRequest)request).context();
 			}
+			String wodata = _NSStringUtilities.concat("wodata", "=", encoded);
 			if(context != null) {
 				completeURL = context.urlWithRequestHandlerKey(key, null, wodata);
 			} else {
@@ -116,6 +116,9 @@ public class ERXResourceManager extends WOResourceManager {
 				stringbuffer.append(wodata);
 				completeURL = stringbuffer.toString();
 			}
+			completeURL = completeURL.replaceAll("\\?", "/");
+			completeURL = completeURL.replaceAll("file%3A", "");
+			completeURL = completeURL.replaceAll("%2F", "/");
 		}
 		return completeURL;
 	}
