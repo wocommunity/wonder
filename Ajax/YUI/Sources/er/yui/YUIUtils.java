@@ -10,8 +10,7 @@ import er.ajax.AjaxUtils;
 public class YUIUtils {
  
     public static void addScriptResourceInHead(WOContext context, WOResponse response, String fileName) {
-        // auto-discover and switch debug and min versions 
-        fileName = fileName.replaceFirst("^([a-z]+)(.*?)\\.js$", "$1/$1$2.js");
+        // auto-discover and switch plain and min versions 
         if(WOApplication.application().isCachingEnabled()) {
             fileName = fileName.replaceFirst("\\.js$", "-min.js");
         } else {

@@ -14,7 +14,7 @@ import er.ajax.AjaxUtils;
  * 
  * @author mschrag
  */
-public class YUIFooter extends DivContainer {
+public class YUIFooter extends YUIDivContainer {
   public YUIFooter(String aName, NSDictionary associations, WOElement template) {
     super(aName, associations, template);
   }
