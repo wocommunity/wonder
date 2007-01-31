@@ -89,11 +89,11 @@ public class YUITooltip extends WODynamicGroup {
   }
 
   public void appendToResponse(WOResponse response, WOContext context) {
-    YUIUtils.addScriptResourceInHead(context, response, "yahoo.js");
-    YUIUtils.addScriptResourceInHead(context, response, "dom.js");
-    YUIUtils.addScriptResourceInHead(context, response, "event.js");
-    YUIUtils.addScriptResourceInHead(context, response, "container.js");
-    YUIUtils.addStylesheetResourceInHead(context, response, "container.css");
+    YUIUtils.addScriptResourceInHead(context, response, "yahoo/yahoo.js");
+    YUIUtils.addScriptResourceInHead(context, response, "dom/dom.js");
+    YUIUtils.addScriptResourceInHead(context, response, "event/event.js");
+    YUIUtils.addScriptResourceInHead(context, response, "container/container.js");
+    YUIUtils.addStylesheetResourceInHead(context, response, "container/assets/container.css");
 
     AjaxUtils.appendScriptHeader(response);
     String id = YUIUtils.id("id", _associations, context);
