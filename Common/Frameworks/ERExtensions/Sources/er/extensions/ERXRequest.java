@@ -87,6 +87,7 @@ public  class ERXRequest extends WORequest {
     		String rhKey =  WOApplication.application().resourceRequestHandlerKey();
     		if(rhKey.equals(requestHandlerKey())) {
     			result = uri().replaceAll(".*?" + rhKey + "/wodata=/", "file:/");
+    			result = result.replace('+', ' ');
     		}
     	}
 
