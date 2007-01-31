@@ -1,5 +1,6 @@
 package er.extensions;
 import java.net.InetAddress;
+import java.net.URL;
 
 import org.apache.log4j.Logger;
 
@@ -78,8 +79,21 @@ public  class ERXRequest extends WORequest {
         }
         return _browserLanguages;
     }
+    
+    
+    public String stringFormValueForKey(String key) {
+    	String result = super.stringFormValueForKey(key);
+    	if(result == null && "wodata".equals(key)) {
+    		String rhKey =  WOApplication.application().resourceRequestHandlerKey();
+    		if(rhKey.equals(requestHandlerKey())) {
+    			result = uri().replaceAll(".*?" + rhKey + "/wodata=/", "file:/");
+    		}
+    	}
 
-    /**
+		return result;
+	}
+
+	/**
      * Gets the ERXBrowser associated with the user-agent of
      * the request.
      * @return browser object for the request
