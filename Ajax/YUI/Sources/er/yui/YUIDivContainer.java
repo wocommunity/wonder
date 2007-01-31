@@ -7,10 +7,10 @@ import com.webobjects.appserver.WOResponse;
 import com.webobjects.appserver._private.WODynamicGroup;
 import com.webobjects.foundation.NSDictionary;
 
-public abstract class DivContainer extends WODynamicGroup {
+public abstract class YUIDivContainer extends WODynamicGroup {
   private NSDictionary _associations;
   
-  public DivContainer(String aName, NSDictionary associations, WOElement template) {
+  public YUIDivContainer(String aName, NSDictionary associations, WOElement template) {
     super(aName, associations, template);
     _associations = associations;
   }

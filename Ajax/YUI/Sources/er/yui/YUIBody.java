@@ -14,7 +14,7 @@ import er.ajax.AjaxUtils;
  * 
  * @author mschrag
  */
-public class YUIBody extends DivContainer {
+public class YUIBody extends YUIDivContainer {
   public YUIBody(String aName, NSDictionary associations, WOElement template) {
     super(aName, associations, template);
   }
