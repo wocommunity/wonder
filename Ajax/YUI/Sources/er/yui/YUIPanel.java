@@ -57,7 +57,7 @@ public class YUIPanel extends YUIDivContainer {
   protected String divStyle(WOContext context) {
     String style = AjaxUtils.stringValueForBinding("style", associations(), context.component());
     StringBuffer styleBuffer = new StringBuffer();
-    styleBuffer.append("visibility: hidden;");
+    styleBuffer.append("visibility: hidden; ");
     if (style != null) {
       styleBuffer.append(style);
     }
@@ -107,7 +107,7 @@ public class YUIPanel extends YUIDivContainer {
     AjaxOptions.appendToResponse(createYUIOptions(context), response, context);
     response.appendContentString(");");
     response.appendContentString("\n");
-    response.appendContentString(varName + ".render();");
+    // response.appendContentString(varName + ".render();");
     response.appendContentString("\n");
     AjaxUtils.appendScriptFooter(response);
   }
