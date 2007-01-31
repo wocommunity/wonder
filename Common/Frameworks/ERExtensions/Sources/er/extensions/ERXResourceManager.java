@@ -116,9 +116,14 @@ public class ERXResourceManager extends WOResourceManager {
 				stringbuffer.append(wodata);
 				completeURL = stringbuffer.toString();
 			}
-			completeURL = completeURL.replaceAll("\\?", "/");
-			completeURL = completeURL.replaceAll("file%3A", "");
-			completeURL = completeURL.replaceAll("%2F", "/");
+			// AK: TODO get rid of regex
+			int offset = completeURL.indexOf("?wodata=file%3A");
+			if(offset >= 0) {
+				completeURL = completeURL.replaceFirst("\\?wodata=file%3A", "/wodata=");
+				if(completeURL.indexOf("/wodata=") > 0) {
+					completeURL = completeURL.replaceAll("%2F", "/");
+				}
+			}
 		}
 		return completeURL;
 	}
