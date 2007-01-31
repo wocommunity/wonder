@@ -93,11 +93,7 @@ public class ERXResourceManager extends WOResourceManager {
 				fileURL = "ERROR_NOT_FOUND_framework_" + (bundleName == null ? "*null*" : bundleName) + "_filename_" + (name == null ? "*null*" : name);
 			} else {
 				fileURL = url.toString();
-				if(null == cachedDataForKey(fileURL)) {
-					String s4 = contentTypeForResourceNamed(fileURL);
-					WOURLValuedElementData wourlvaluedelementdata = new WOURLValuedElementData(null, s4, fileURL);
-					urlValuedElementsData.setObjectForKey(wourlvaluedelementdata, fileURL);
-				}
+				cacheDataIfNotInCache(fileURL);
 			}
 			String encoded = WOURLEncoder.encode(fileURL);
 			WOContext context = null;
@@ -129,7 +125,22 @@ public class ERXResourceManager extends WOResourceManager {
 	}
 
     private WOURLValuedElementData cachedDataForKey(String key) {
-        return (WOURLValuedElementData)urlValuedElementsData.objectForKey(key);
+    	WOURLValuedElementData data = (WOURLValuedElementData)urlValuedElementsData.objectForKey(key);
+    	if (data == null && key != null && key.startsWith("file:") && ERXApplication.erxApplication().isDevelopmentMode()) {
+    		cacheDataIfNotInCache(key);
+    	}
+    	return data;
+    }
+    
+    protected void cacheDataIfNotInCache(String key) {
+    	WOURLValuedElementData data = (WOURLValuedElementData)urlValuedElementsData.objectForKey(key);
+    	if (data == null) {
+			String contentType = contentTypeForResourceNamed(key);
+			data = new WOURLValuedElementData(null, contentType, key);
+			if (data != null) {
+				urlValuedElementsData.setObjectForKey(data, key);
+			}
+    	}
     }
     
 	public WOURLValuedElementData _cachedDataForKey(String key) {
