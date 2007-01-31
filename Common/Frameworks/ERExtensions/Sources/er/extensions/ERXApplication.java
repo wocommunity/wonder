@@ -1122,9 +1122,14 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 	 */
 	public boolean isDevelopmentMode() {
 		boolean developmentMode = false;
-		String ide = ERXProperties.stringForKey("WOIDE");
-		if ("WOLips".equals(ide) || "Xcode".equals(ide)) {
-			developmentMode = true;
+		if (ERXProperties.stringForKey("er.extensions.ERXApplication.developmentMode") != null) {
+			developmentMode = ERXProperties.booleanForKey("er.extensions.ERXApplication.developmentMode");
+		}
+		else {
+			String ide = ERXProperties.stringForKey("WOIDE");
+			if ("WOLips".equals(ide) || "Xcode".equals(ide)) {
+				developmentMode = true;
+			}
 		}
 		return developmentMode;
 	}
