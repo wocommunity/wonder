@@ -127,12 +127,12 @@ public class ERXResourceManager extends WOResourceManager {
     private WOURLValuedElementData cachedDataForKey(String key) {
     	WOURLValuedElementData data = (WOURLValuedElementData)urlValuedElementsData.objectForKey(key);
     	if (data == null && key != null && key.startsWith("file:") && ERXApplication.erxApplication().isDevelopmentMode()) {
-    		cacheDataIfNotInCache(key);
+    		data = cacheDataIfNotInCache(key);
     	}
     	return data;
     }
     
-    protected void cacheDataIfNotInCache(String key) {
+    protected WOURLValuedElementData cacheDataIfNotInCache(String key) {
     	WOURLValuedElementData data = (WOURLValuedElementData)urlValuedElementsData.objectForKey(key);
     	if (data == null) {
 			String contentType = contentTypeForResourceNamed(key);
@@ -141,6 +141,7 @@ public class ERXResourceManager extends WOResourceManager {
 				urlValuedElementsData.setObjectForKey(data, key);
 			}
     	}
+    	return data;
     }
     
 	public WOURLValuedElementData _cachedDataForKey(String key) {
