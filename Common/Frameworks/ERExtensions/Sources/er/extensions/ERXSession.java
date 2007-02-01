@@ -26,6 +26,7 @@ import com.webobjects.foundation.NSNotification;
 import com.webobjects.foundation.NSNotificationCenter;
 import com.webobjects.foundation.NSPathUtilities;
 import com.webobjects.foundation.NSSelector;
+import com.webobjects.foundation.NSTimestamp;
 
 /**
  * The ERXSession aguments the regular WOSession object
@@ -626,6 +627,10 @@ public class ERXSession extends ERXAjaxSession implements Serializable {
       log.debug("Session has been deserialized: " + toString());
   }
 
+  public NSTimestamp _birthDate() {
+	  return super._birthDate();
+  }
+  
   public String toString() {
     String superString = super.toString();
     String thisString = " localizer=" + (_localizer == null ? "null" : _localizer.toString()) + " messageEncoding=" + (_messageEncoding == null ? "null" : _messageEncoding.toString()) + " browser=" + (_browser == null ? "null" : _browser.toString());
