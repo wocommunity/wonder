@@ -5,7 +5,7 @@ import org.apache.log4j.Logger;
 import er.extensions.ERXApplication;
 
 public class Application extends ERXApplication {
-    Logger log = Logger.getLogger(Application.class);
+    static Logger log = Logger.getLogger(Application.class);
     public static void main(String argv[]) {
         ERXApplication.main(argv, Application.class);
     }
@@ -13,7 +13,6 @@ public class Application extends ERXApplication {
 	public Application() {
         super();
         log.info("Welcome to " + this.name() + " !");
-        log.info("Welcome to " + System.getProperty("java.class.path").replace(':', '\n') + " !");
         /* ** put your initialization code in here ** */
         setAllowsConcurrentRequestHandling(true);
         setDefaultRequestHandler(requestHandlerForKey(directActionRequestHandlerKey()));
