@@ -6,7 +6,7 @@ import com.webobjects.foundation.NSArray;
 import er.extensions.ERXJDBCUtilities;
 import er.extensions.migration.IERXMigration;
 
-public class ERXObjectStoreCoordinatorSynchronizerTest0 implements IERXMigration {
+public class ERXTest0 implements IERXMigration {
   public void downgrade(EOEditingContext editingContext, EOAdaptorChannel channel, EOModel model) throws Throwable {
   }
 
