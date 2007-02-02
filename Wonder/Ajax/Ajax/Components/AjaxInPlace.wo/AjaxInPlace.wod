@@ -46,6 +46,7 @@ EditFunction : AjaxUpdateLink {
 	disabled = ^disabled;
 	functionName = editFunctionName;
 	updateContainerID = id;
+	insertion = ^editInsertion;
 }
 
 EditAction : WOGenericContainer {
@@ -74,6 +75,7 @@ CancelFunction : AjaxUpdateLink {
 	evalScripts = true;
 	functionName = cancelFunctionName;
 	updateContainerID = cancelUpdateContainerID;
+	insertion = ^cancelInsertion;
 }
 
 CancelAction : WOGenericContainer {
@@ -109,6 +111,7 @@ SaveSubmitFunction : AjaxSubmitButton {
 	evalScripts = true;
 	functionName = saveFunctionName;
 	updateContainerID = saveUpdateContainerID;
+	insertion = ^saveInsertion;
 }
 
 SaveLinkFunction : AjaxUpdateLink {
@@ -122,6 +125,7 @@ SaveLinkFunction : AjaxUpdateLink {
 	evalScripts = true;
 	functionName = saveFunctionName;
 	updateContainerID = saveUpdateContainerID;
+	insertion = ^saveInsertion;
 }
 
 SaveAction : WOGenericContainer {

@@ -35,5 +35,8 @@
 		<binding name = "submitOnSave"/>
 		<binding name = "canSave"/>
 		<binding name = "canEdit"/>
+		<binding name = "editInsertion"/>
+		<binding name = "saveInsertion"/>
+		<binding name = "cancelInsertion"/>
 	</wo>
 </wodefinitions>
