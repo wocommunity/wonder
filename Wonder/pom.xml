@@ -93,6 +93,69 @@
 			</plugin>
 		</plugins>
 	</build>
+
+	<repositories>
+		<repository>
+			<id>webobjects.mdimension.com</id>
+			<name>mdimension maven 2 releases repo</name>
+			<url>http://webobjects.mdimension.com/maven2/releases</url>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+		</repository>
+		<repository>
+			<id>webobjects.mdimension.com</id>
+			<name>mdimension maven 2 snapshots repo</name>
+			<url>http://webobjects.mdimension.com/maven2/releases</url>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+			<releases>
+				<enabled>false</enabled>
+			</releases>
+		</repository>
+	</repositories>
+
+	<pluginRepositories>
+		<pluginRepository>
+			<id>webobjects.mdimension.com</id>
+			<name>mdimension maven 2 releases repo</name>
+			<url>http://webobjects.mdimension.com/maven2/releases</url>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+		</pluginRepository>
+		<pluginRepository>
+			<id>webobjects.mdimension.com</id>
+			<name>mdimension maven 2 snapshot repo</name>
+			<url>http://webobjects.mdimension.com/maven2/releases</url>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+			<releases>
+				<enabled>false</enabled>
+			</releases>
+		</pluginRepository>
+	</pluginRepositories>
+
+	<distributionManagement>
+		<repository>
+			<id>webobjects.mdimension.com</id>
+			<name>mdimension Maven2 Release Repository</name>
+			<url>scp://webobjects.mdimension.com/Library/WebServer/BuildServer/maven2/releases</url>
+		</repository>
+		<snapshotRepository>
+			<id>webobjects.mdimension.com</id>
+			<name>mdimension Maven2 Snapshot Repository</name>
+			<url>scp://webobjects.mdimension.com/Library/WebServer/BuildServer/maven2/snapshots</url>
+		</snapshotRepository>
+	</distributionManagement>
 	
 </project>
 
