@@ -101,31 +101,30 @@ public class AjaxUpdateLink extends AjaxDynamicElement {
 			else {
 				actionUrl = AjaxUpdateContainer.updateContainerUrl(AjaxUtils.ajaxComponentActionUrl(context), updateContainerID);
 			}
-			
-			onClickBuffer.append("var actionUrl = '" + actionUrl + "'");
+
+			actionUrl = "'" + actionUrl + "'";
 			if (functionName != null) {
-				onClickBuffer.append(".addQueryParameters(additionalParams)");
+				actionUrl = actionUrl + ".addQueryParameters(additionalParams)";
 			}
-			onClickBuffer.append(";");
 	
 			if (function != null) {
-				onClickBuffer.append("return " + function + "(actionUrl)");
+				onClickBuffer.append("return " + function + "(" + actionUrl + ")");
 			}
 			else {
 				if (replaceID == null) {
 					if (updateContainerID == null) {
-						onClickBuffer.append("new Ajax.Request(actionUrl, ");
+						onClickBuffer.append("new Ajax.Request(" + actionUrl + ", ");
 						AjaxOptions.appendToBuffer(options, onClickBuffer, context);
 						onClickBuffer.append(")");
 					}
 					else {
-						onClickBuffer.append("new Ajax.Updater('" + updateContainerID + "', actionUrl, ");
+						onClickBuffer.append("new Ajax.Updater('" + updateContainerID + "', " + actionUrl + ", ");
 						AjaxOptions.appendToBuffer(options, onClickBuffer, context);
 						onClickBuffer.append(")");
 					}
 				}
 				else {
-					onClickBuffer.append("new Ajax.Updater('" + replaceID + "', actionUrl, ");
+					onClickBuffer.append("new Ajax.Updater('" + replaceID + "', " + actionUrl + ", ");
 					AjaxOptions.appendToBuffer(options, onClickBuffer, context);
 					onClickBuffer.append(")");
 				}
