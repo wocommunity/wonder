@@ -275,61 +275,48 @@ public class ERMailSender extends Thread {
 
 			// If there are still messages pending ...
 			if (!messages.empty()) {
-				Session session = null;
-				Transport transport = null;
-				session = ERJavaMail.sharedInstance().newSession();
-				String smtpProtocol = ERJavaMail.sharedInstance().smtpProtocol();
 				try {
-					transport = this._connectedTransportForSession(session, smtpProtocol, true);
-				}
-				catch (MessagingException e) {
-					if (log.isDebugEnabled()) {
-						log.debug("Caught exception when sending mail in a non-blocking manner.", e);
-					}
-					throw new NSForwardException(e);
-				}
-
-				try {
+					Session session = ERJavaMail.sharedInstance().newSession();
+					String smtpProtocol = ERJavaMail.sharedInstance().smtpProtocol();
+					Transport transport = this._connectedTransportForSession(session, smtpProtocol, true);
 					if (!transport.isConnected()) {
 						transport.connect();
 					}
-				}
-				catch (MessagingException e) {
-					// Notify error in logs
-					log.error("Unable to connect transport.", e);
 
-					// Exit run loop
-					throw new RuntimeException("Unable to connect transport.");
-				}
-
-				while (!messages.empty()) {
-					ERMessage message = (ERMessage) messages.pop();
-					try {
-						this._sendMessageNow(message, transport);
-						// if (useSenderDelay) {
-						// this.wait (senderDelayMillis);
-						// }
-					}
-					catch (MessagingException e) {
-						// Here we get all the exceptions that are
-						// not 'SendFailedException's.
-						// All we can do is warn the admin.
-						log.error("Fatal Messaging Exception. Can't send the mail.", e);
-					}/*
+					while (!messages.empty()) {
+						ERMessage message = (ERMessage) messages.pop();
+						try {
+							this._sendMessageNow(message, transport);
+							// if (useSenderDelay) {
+							// this.wait (senderDelayMillis);
+							// }
+						}
+						catch (MessagingException e) {
+							// Here we get all the exceptions that are
+							// not 'SendFailedException's.
+							// All we can do is warn the admin.
+							log.error("Fatal Messaging Exception. Can't send the mail.", e);
+						}
+						/*
 						 * catch (InterruptedException e) { log.warn ("ERMailSender thread has been interrupted.");
 						 * threadSuspended = true; return; }
 						 */
-				}
+					}
 
-				try {
-					if (transport != null)
-						transport.close();
+					try {
+						if (transport != null) {
+							transport.close();
+						}
+					}
+					catch (MessagingException e) /* once again ... */{
+						log.warn("Unable to close transport.  Perhaps it has already been closed?", e);
+					}
 				}
-				catch (MessagingException e) /* once again ... */{
-					log.warn("Unable to close transport.  Perhaps it has already been closed?", e);
+				catch (MessagingException e) {
+					log.error("Failed to send messages.", e);
+					//throw new NSForwardException(e);
 				}
 			}
-
 			threadSuspended = true;
 		}
 	}
