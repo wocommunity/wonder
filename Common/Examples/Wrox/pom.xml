@@ -5,6 +5,7 @@
 		<groupId>wonder.common</groupId>
 		<artifactId>examples</artifactId>
 		<version>3.0.1-SNAPSHOT</version>
+		<relativePath>..</relativePath>
 	</parent>
 
 	<modelVersion>4.0.0</modelVersion>
