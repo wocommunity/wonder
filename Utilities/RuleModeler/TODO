@@ -1,0 +1,44 @@
+TODO
+====
+
+Known bugs:
+FIXME If you edit a rule which is also visible in filtered model group table, and after edition the rule should no longer be displayed, it is still displayed, though: filter is not re-applied after rule change --- Hard to fix
+FIXME Jan 24 10:08:25 Shabaa /Applications/RuleModeler.app/Contents/MacOS/RuleModeler: CMSCreateDataProviderOrGetInfo : Invalid colorspace type [maybe due to (un)focus.gif]
+FIXME On Quit event (from menu, or from system shutdown) - see NSApp delegate method -applicationShouldTerminate: and window closing, end edition manually
+
+For 1.4:
+FIXME When lhs/rhs.value fields are not editable, use grey color instead of black (bug in AppKit)
+FIXME Save search even if user didn't press return button.
+- In lhs field, display scrollers when necessary -> textView refusing tabs, returns.
+- Modifying a filtered rule list should not reset the filter, but display filtered rules + new rules, and filter pattern could be italicized
+- In preferences, user can enter a list of rhs.keyPaths that always appear in the combobox; that list could, for example, display all keypaths used in Apple/Wonder D2W, plus custom ones. We could also do the same for the assignment classes.
+- In model group view, use one color per model? -> assign color to each model, manually.
+- Use RBSplitView to allow programmatically collapsing splitviews (http://www.brockerhoff.net/src/rbs.html)
+- In rhs value textView, display 'Null Value' or 'Multiple Values' when necessary, as AppKit doesn't do it automatically.
+- In assigment class combobox, use same display name as in tableview
+- Add support for special characters \n, \r, etc. in lhs
+- Add action to show rules identical to selected one; for model and model groups
+- (ask ak) Allow associating comment to model, model group and rules
+- Add contextual menu for tableview to act on clicked rule, not on selection, unlike the menu actions.
+- If runtime allows it, save new key-value pair in Rule plist archive to uniquely identify the rule (unique ID); that would ease merge. And we would save rules with an order related to the ID. If runtime doesn't permit it, we could add that metadata in a comment out of the plist entry, like Xcode does. That would work only for single-line rule output, though.
+
+Later:
+- Would it be possible to create smart groups, user-defined, which would filter rules according to some qualifiers? User would type a qualifier (e.g. "task='edit'"), an action (colorize, show, hide row?), and existing rules would be applied that filter. Multiple smart group could be ANDed or ORed.
+- Smart groups: view like Spotlight results view: blue separator contains title + selection info + search field (active)
+- Colorize result parts according to filter qualifier, i.e. if user typed 'color' then colorize the 'color' occurences in lhs/rhs, plus a color indication whether lhs or rhs matches
+- Maybe a nonsense idea: There are the keys you can edit in the d2wClient file. Eg. "refreshRefetchedObjects" for a query page. You could fetch these and put them into a tooltip as a reminder? Problem is that I don't know where you would take that information from: the d2wclient file doesn't contain such information; what it has is a list of editors for some page, but the editor name is not a D2W keypath (e.g. see backgroundColorForTable). We'd need to extend the d2wclient file to contain that information.
+- List of d2wclient.plist files: display in red when file not available
+- A graphical editor for the qualifiers, like RuleEditor or Xcode. [Anjo] I prefer RuleEditor's over Xcode's, because it needs less space; but it needs to allow reordering, operator changing.
+- Auto-normalizing of qualifiers: always task, entity, pageConfiguration, propertyKey in that order (or some other)
+- In model group, allow user to show/hide a model in the group
+- Automatic save (there is an API in Cocoa to do that, though I haven't used it yet)
+- Allow displaying rules in more than one window
+- Syntax-highlighting of qualifier, i.e. use specific colors for numbers, strings, operators, keys, etc.
+- Save search options in defaults
+- Change focus image
+- Change rule model group icon
+- On Leopard, compile it also, with GC on and 64bits; currently, does not even compile with Xcode 3
+- Open a group; touch all models of group, and go back to RM -> displays as many alert panels as touched models. Could it be possible to display only one alert? Could it be possible to avoid the second 'revert' alert?
+
+Abandoned:
+[King] EOControl's mainly used for the EOQualifier classes and EOKeyValueArchiving. The archiving code is pretty simple, so it shouldn't be too hard to write our own (or borrow from GNUStep?). We could then introduce some translation code to go between archived EOQualifiers and NSPredicate objects. That way, we could simply use NSPredicateEditor for graphical rule editing. [Anjo] Well, the selectors used by the NSPredicates are much different from the EOQualifiers, aren't they? And they are opaque in the first place, I had to create strings to get the join conditions correct.
