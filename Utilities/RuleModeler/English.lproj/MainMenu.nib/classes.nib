@@ -4,7 +4,10 @@
             ACTIONS = {
                 add = id; 
                 duplicate = id; 
+                focus = id; 
                 focusFilter = id; 
+                invertSelection = id; 
+                myAction = id; 
                 remove = id; 
                 removeDuplicateRules = id; 
                 selectNext = id; 
@@ -13,6 +16,7 @@
                 showRuleModel = id; 
                 showSelectedRule = id; 
                 toggleSourceDrawer = id; 
+                unfocus = id; 
             }; 
             CLASS = FirstResponder; 
             LANGUAGE = ObjC; 
