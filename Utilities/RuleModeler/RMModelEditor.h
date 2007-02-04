@@ -16,7 +16,19 @@
 
 #import <AppKit/AppKit.h>
 
+
 @class RMModel;
+@class RMFilteringArrayController;
+
+
+typedef enum {
+    RMWindowPriorityPart,
+    RMWindowLHSPart,
+    RMWindowRHSClassPart,
+    RMWindowRHSKeyPathPart,
+    RMWindowRHSValuePart
+} RMWindowPart;
+
 
 @interface RMModelEditor : NSWindowController {
     
@@ -34,7 +46,8 @@
     
     IBOutlet NSDrawer		*sourceDrawer;
     
-    IBOutlet NSArrayController  *rulesController;
+    IBOutlet RMFilteringArrayController  *rulesController;
+    IBOutlet NSTextField    *lhsValueTextField;
     IBOutlet NSTextView     *rhsValueTextView;
     IBOutlet NSTextField    *rhsValueHelpField;
     
@@ -42,11 +55,14 @@
     NSMutableArray		*_rhsKeyNames;
     
     NSMutableDictionary		*toolbarItems;
+    IBOutlet NSView         *cornerView;
 }
 
 - (void)prepareToolbar;
 
 - (RMModel *)model;
+
+- (BOOL)observesRules;
 
 - (IBAction)showSelectedRule:(id)sender;
 
@@ -56,13 +72,19 @@
 - (IBAction)remove:(id)sender;
 
 - (IBAction)removeDuplicateRules:(id)sender;
+- (IBAction)showDuplicateRules:(id)sender;
 - (void) removeDuplicateRulesAtIndexes:(NSIndexSet *)indexes;
 
 - (NSString *)toolbarIdentifier;
 - (void)addToolbarItems;
 
-- (NSArrayController *) rulesController;
+- (RMFilteringArrayController *) rulesController;
 - (NSArray *)rules;
 - (BOOL)validateAction:(SEL)action;
+
+- (IBAction) focus:(id)sender;
+- (IBAction) unfocus:(id)sender;
+
+- (void) setFirstResponderInPart:(RMWindowPart)part;
 
 @end
