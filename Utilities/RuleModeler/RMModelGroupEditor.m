@@ -79,6 +79,7 @@
         [rulesTableView setDoubleAction:@selector(showRuleModel:)];
         [rulesTableView setTarget:self];
 #endif        
+        [rulesTableView setEnabled:NO];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(windowWillClose:) name:NSWindowWillCloseNotification object:nil];
         [super awakeFromNib]; // Must be called after loading second nib, else toolbar not initialized correctly
         // TODO Use RBSplitView to allow programmatically collapsing splitviews (http://www.brockerhoff.net/src/rbs.html)
@@ -98,6 +99,7 @@
         if (![[eachModel windowControllers] count] && [eachModel isDocumentEdited]) {
             NSError *outError;
             
+            // FIXME When terminating, we could avoid reverting
             if (![eachModel revertToContentsOfURL:[eachModel fileURL] ofType:[eachModel fileType] error:&outError]) {
                 // TODO Maybe offer user to remove or change reference to model - currently we silently remove our reference to it
                 [[NSAlert alertWithError:outError] beginSheetModalForWindow:[self window] modalDelegate:nil didEndSelector:NULL contextInfo:NULL];
@@ -111,32 +113,36 @@
 #ifdef EDITABLE_MODELS
     [super addToolbarItems];
 #else
-    addToolbarItem(toolbarItems, @"Filter", 
-                   NSLocalizedString(@"Filter", @"Toolbar item label"),
-                   NSLocalizedString(@"Filter Rules", @"Toolbar item palette label"), 
-                   NSLocalizedString(@"Enter a term or EOQualifier format", @"Toolbar item tooltip"), 
-                   rulesController, @selector(setView:), filterView, @selector(search:), nil);
+    NSToolbarItem   *anItem;
+    
+    anItem = addToolbarItem(toolbarItems, @"Filter", 
+                            NSLocalizedString(@"Filter", @"Toolbar item label"),
+                            NSLocalizedString(@"Filter Rules", @"Toolbar item palette label"), 
+                            NSLocalizedString(@"Enter a term or EOQualifier format", @"Toolbar item tooltip"), 
+                            rulesController, @selector(setView:), filterView, @selector(search:), nil);
+    [anItem setMaxSize:NSMakeSize(1000., [anItem maxSize].height)];
+    [anItem setVisibilityPriority:NSToolbarItemVisibilityPriorityHigh];
     addToolbarItem(toolbarItems, @"PreviousRule", 
                    NSLocalizedString(@"Previous", @"Toolbar item label"), 
                    NSLocalizedString(@"Previous Rule", @"Toolbar item palette label"), 
                    NSLocalizedString(@"Select previous rule", @"Toolbar item tooltip"), 
-                   rulesController, @selector(setImage:), [NSImage imageNamed:@"previous.tif"], @selector(selectPrevious:), nil);
+                   rulesController, @selector(setImage:), [NSImage imageNamed:@"previous"], @selector(selectPrevious:), nil);
     addToolbarItem(toolbarItems, @"NextRule", 
                    NSLocalizedString(@"Next", @"Toolbar item label"), 
                    NSLocalizedString(@"Next Rule", @"Toolbar item palette label"), 
                    NSLocalizedString(@"Select next rule", @"Toolbar item tooltip"), 
-                   rulesController, @selector(setImage:), [NSImage imageNamed:@"next.tif"], @selector(selectNext:), nil);
+                   rulesController, @selector(setImage:), [NSImage imageNamed:@"next"], @selector(selectNext:), nil);
     addToolbarItem(toolbarItems, @"PreviewRule", 
                    NSLocalizedString(@"Preview", @"Toolbar item label"), 
                    NSLocalizedString(@"Preview Rule", @"Toolbar item palette label"), 
                    NSLocalizedString(@"Toggle the source preview drawer", @"Toolbar item tooltip"), 
-                   sourceDrawer, @selector(setImage:), [NSImage imageNamed:@"preview.tif"], @selector(toggle:), nil);
+                   sourceDrawer, @selector(setImage:), [NSImage imageNamed:@"preview"], @selector(toggle:), nil);
 #endif
     addToolbarItem(toolbarItems, @"ToggleModels", 
                    NSLocalizedString(@"Models", @"Toolbar item label"), 
                    NSLocalizedString(@"Toggle Models", @"Toolbar item palette label"), 
                    NSLocalizedString(@"Toggle the model list drawer", @"Toolbar item tooltip"), 
-                   modelListDrawer, @selector(setImage:), [NSImage imageNamed:@"models.tiff"], @selector(toggle:), nil);
+                   modelListDrawer, @selector(setImage:), [NSImage imageNamed:@"models"], @selector(toggle:), nil);
 }
 
 - (NSString *)toolbarIdentifier {
@@ -206,19 +212,47 @@
     NSArray         *models = [selectedRules valueForKeyPath:@"@distinctUnionOfObjects.model"];
     NSEnumerator    *modelEnum = [models objectEnumerator];
     RMModel         *eachModel;
+    RMWindowPart    aPart = -1;
+    
+    // In case of double-click action, we get a clicked row/col, and only one row is selected.
+    // We set focus in rule model window, according to which column was clicked.
+    if ([rulesTableView clickedRow] != -1) {
+        int clickedColumn = [rulesTableView clickedColumn];
+        
+        if(clickedColumn != -1){
+            NSTableColumn   *aCol = [[rulesTableView tableColumns] objectAtIndex:clickedColumn];
+            NSString        *anIdentifier = [aCol identifier];
+            
+            if([anIdentifier isEqualToString:@"priority"])
+                aPart = RMWindowPriorityPart;
+            else if([anIdentifier isEqualToString:@"lhs"])
+                aPart = RMWindowLHSPart;
+            else if([anIdentifier isEqualToString:@"rhs.keyPath"])
+                aPart = RMWindowRHSKeyPathPart;
+            else if([anIdentifier isEqualToString:@"rhs.value"])
+                aPart = RMWindowRHSValuePart;
+            else if([anIdentifier isEqualToString:@"assignment"])
+                aPart = RMWindowRHSClassPart;
+        }
+    }
     
     while (eachModel = [modelEnum nextObject]) {
         NSEnumerator    *ruleEnum = [selectedRules objectEnumerator];
         Rule            *eachRule;
         NSMutableArray  *rules = [NSMutableArray arrayWithCapacity:[selectedRules count]];
+        RMModelEditor   *editor;
         
         while (eachRule = [ruleEnum nextObject]) {
             if([eachRule model] == eachModel)
                 [rules addObject:eachRule];
         }
         [eachModel showWindows];
-        [[[[eachModel windowControllers] lastObject] rulesController] setValue:nil forKey:@"filterPredicate"];
-        [[[[eachModel windowControllers] lastObject] rulesController] setValue:rules forKey:@"selectedObjects"];
+        editor = [[eachModel windowControllers] lastObject]; // Call that AFTER having called showWindows
+        [[editor rulesController] setValue:nil forKey:@"filterPredicate"];
+        [[editor rulesController] setValue:rules forKey:@"selectedObjects"];
+        [editor unfocus:sender];
+        if(aPart != -1)
+            [editor setFirstResponderInPart:aPart];
     }
 }
 
@@ -236,46 +270,23 @@
 - (BOOL)validateAction:(SEL)action {
     if (action == @selector(cut:) || action == @selector(paste:) || action == @selector(duplicate:) || action == @selector(add:) || action == @selector(remove:)) {
         return NO;
+    } else if (action == @selector(showRuleModel:)) {
+            return [rulesTableView numberOfSelectedRows] > 0;
     } else {
         return [super validateAction:action];
     }
 }
 #endif
 
-- (void)removeDuplicateRulesAtIndexes:(NSIndexSet *)indexes {
-    // Performs search though all models. On results, show matching model 
-    // documents to user, to allow him to undo, per model.
-    NSMutableArray  *modelRules = [[self rules] mutableCopy];
-    NSArray         *removedRules = [modelRules objectsAtIndexes:indexes];
-    NSArray         *targetModels = [removedRules valueForKeyPath:@"@distinctUnionOfObjects.model"];
-    NSEnumerator    *modelEnum = [targetModels objectEnumerator];
-    RMModel         *eachModel;
-    
-    while (eachModel = [modelEnum nextObject]) {
-        NSEnumerator        *ruleEnum = [removedRules objectEnumerator];
-        Rule                *eachRule;
-        NSMutableIndexSet   *ruleIndexes = [NSMutableIndexSet indexSet];
-        RMModelEditor       *anEditor;
-        
-        while (eachRule = [ruleEnum nextObject]) {
-            if ([eachRule model] == eachModel) {
-                unsigned    anIndex = [[eachModel rules] indexOfObjectIdenticalTo:eachRule];
-                
-                [ruleIndexes addIndex:anIndex];
-            }
-        }
-        [eachModel showWindows];        
-        anEditor = [[eachModel windowControllers] lastObject];
-        [anEditor removeDuplicateRulesAtIndexes:ruleIndexes];
-    }
-    [modelRules release];
-}
-
 - (NSSize)drawerWillResizeContents:(NSDrawer *)sender toSize:(NSSize)contentSize {
     if (sender == modelListDrawer)
         [[NSUserDefaults standardUserDefaults] setFloat:contentSize.width forKey:@"modelListDrawerWidth"];
     
     return contentSize;
+}
+
+- (BOOL)observesRules {
+    return NO;
 }
 
 @end
