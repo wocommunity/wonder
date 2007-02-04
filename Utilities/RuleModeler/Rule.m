@@ -15,12 +15,12 @@
 @implementation Rule
 
 + (void)initialize {
-    [super initialize];
-    
+    // Do not call super - see +initialize documentation
     [self setKeys:[NSArray arrayWithObjects:@"author", @"lhs", @"rhs", nil] triggerChangeNotificationsForDependentKey:@"extendedDescription"];
     [self setKeys:[NSArray arrayWithObject:@"author"] triggerChangeNotificationsForDependentKey:@"priority"];
     [self setKeys:[NSArray arrayWithObject:@"lhs"] triggerChangeNotificationsForDependentKey:@"lhsDescription"];
     [self setKeys:[NSArray arrayWithObject:@"rhs"] triggerChangeNotificationsForDependentKey:@"rhsDescription"];
+    [EOQualifier registerValueClass:[NSDecimalNumber class] forTypeName:@"java.math.BigDecimal"];
 }
 
 - (id)init {
@@ -104,10 +104,10 @@
 	if ([_lhs isKindOfClass:[EOAndQualifier class]]) {
             NSMutableArray *innerQuals = [[(EOAndQualifier *)_lhs qualifiers] mutableCopy];
             
-            if ([innerQuals count] == 2) {
+            if ([innerQuals count] == 2 || [innerQuals count] == 1) {
                 EOQualifier *qual = [innerQuals objectAtIndex:0];
                 
-                if (![qual isKindOfClass:[EOKeyValueQualifier class]]) {
+                if (![qual isKindOfClass:[EOKeyValueQualifier class]] && [innerQuals count] > 1) {
                     qual = [innerQuals objectAtIndex:1];
                     
                     if (![qual isKindOfClass:[EOKeyValueQualifier class]]) {
@@ -122,7 +122,10 @@
                         [innerQuals removeObject:qual];
                         [_lhs autorelease];
                         
-                        _lhs = [[innerQuals objectAtIndex:0] retain];
+                        if([innerQuals count] > 0)
+                            _lhs = [[innerQuals objectAtIndex:0] retain];
+                        else
+                            _lhs = nil;
                     }
                 }
 	    }
@@ -137,12 +140,13 @@
     EOQualifier *lhs = _lhs;
     if (_enabled == NO) {
         EOKeyValueQualifier *kvq = [[EOKeyValueQualifier alloc] initWithKey:@"RuleIsDisabled" operatorSelector:@selector(isEqual:) value:@"YES"];
-        lhs = [[EOAndQualifier alloc] initWithQualifierArray: [[[NSArray alloc] initWithObjects:_lhs, kvq, nil] autorelease]];
+        lhs = [[EOAndQualifier alloc] initWithQualifierArray: [[[NSArray alloc] initWithObjects:kvq, _lhs, nil] autorelease]]; // _lhs might be nil
         [kvq release];
     }
     
     [archiver encodeInt:_author forKey:@"author"];
-    [archiver encodeObject:lhs forKey:@"lhs"];
+    if(lhs != nil) // RuleEditor does it like this
+        [archiver encodeObject:lhs forKey:@"lhs"];
     [archiver encodeObject:_rhs forKey:@"rhs"];
     [archiver encodeObject:@"com.webobjects.directtoweb.Rule" forKey:@"class"];
     if (lhs != _lhs) {
@@ -207,15 +211,16 @@
 
 - (NSString *)lhsDescription {
     if(_lhsDescription == nil) {
-        _lhsDescription = [(_lhs != nil ? [_lhs description] : @"*true*") retain];
+        _lhsDescription = [(_lhs != nil ? [_lhs description] : nil) retain];
     }
     return _lhsDescription;
 }
-
+/*
 -(BOOL)isNewRule {
-    return ([[self rhs] keyPath] == nil); // || ([[self rhs] value] == nil);
+    // http://www.cocoabuilder.com/archive/message/cocoa/2004/5/10/106763
+    return ([[self rhs] keyPath] == nil && ([[self rhs] value] == nil) && ([self lhs] == nil));
 }
-
+*/
 -(BOOL)validateLhsDescription:(id *)ioValue error:(NSError **)outError {
     if (*ioValue == nil) {
         return YES;
@@ -276,10 +281,6 @@
     return _enabled;
 }
 
-- (int)sortOrder {
-    return [self priority] * 1000 + [[self description] length];
-}
-
 - (void)setEnabled:(BOOL)flag {
 	if(_enabled != flag){
 		[[[self undoManager] prepareWithInvocationTarget:self] setEnabled:_enabled];
@@ -313,30 +314,59 @@
 }
 
 - (NSString *)description {
-    NSMutableString *rhsValue = [[[[[self rhs] value] description] mutableCopy] autorelease]; 
+    NSMutableString *rhsValue = nil;    
+	id              rhsValueObject = [[self rhs] value];
+    
+    if ([rhsValueObject isKindOfClass:[NSDictionary class]]) {
+        rhsValue = [NSMutableString stringWithCapacity:1024];
+        [NSPropertyListSerialization _appendDictionary:rhsValueObject toMutableString:rhsValue level:0 maxLevel:0 escapeNonASCII:YES];
+    }
+    else {
+        rhsValue = [[[rhsValueObject description] mutableCopy] autorelease];
+    }
+	
     [rhsValue replaceOccurrencesOfString:@"\n    " withString:@"" options:0 range:NSMakeRange(0,[rhsValue length])];
     return [NSString stringWithFormat:@"%d : %@ => %@ = %@ [%@]", 
-        [self priority], [self lhsDescription], [[self rhs] keyPath], rhsValue, [[self rhs] assignmentClass]];
+        [self priority], [self lhsDescription] ? [self lhsDescription]:@"*true*", [[self rhs] keyPath], rhsValue, [[self rhs] assignmentClass]];
 }
 
 
 - (id)copyWithZone:(NSZone *)zone {
     EOKeyValueArchiver *archiver = [[[EOKeyValueArchiver allocWithZone:zone] init] autorelease];
     
-    [archiver encodeObject:self forKey:@"raw"];
+    [archiver encodeObject:[NSArray arrayWithObject:self] forKey:@"rules"];
     
     NSDictionary *dict = [archiver dictionary];
-    
-    EOKeyValueUnarchiver *unarchiver = [[[EOKeyValueUnarchiver allocWithZone:zone] initWithDictionary:dict] autorelease];
-    return [[unarchiver decodeObjectForKey:@"raw"] retain];
+
+    return [[[Rule rulesFromMutablePropertyList:dict] lastObject] retain];
 }
 
-- (BOOL)isEqual:(id)anObject {
-    if ([anObject isKindOfClass:[Rule class]]) {
-        return ([self author] == [anObject author] && ((![self lhs] && ![anObject lhs]) || ([[self lhs] isEqual:[anObject lhs]])) && [[self rhs] isEqual:[anObject rhs]] && ![self enabled] == ![anObject enabled]);
-    } else {
-        return NO;
+// We don't implement -isEqual:, because some controller methods rely on -isEqual:,
+// and we would need to reimplement -hash
+- (BOOL)isEqualToRule:(Rule *)rule {
+    NSParameterAssert([rule isKindOfClass:[Rule class]]);
+    BOOL    isEqual = ([self author] == [rule author]
+                       && ((![self lhs] && ![rule lhs]) || ([[self lhs] isEqual:[rule lhs]])) 
+                       && [[self rhs] isEqualToAssignment:[rule rhs]] 
+                       && ![self enabled] == ![rule enabled]);
+    
+    return isEqual;
+}
+
+// Following method provides 'l', 'rk' and 'rv' keys to get lhsDescription, 
+// rhs.keyPath and rhs.valueDescription results.
+// Useful when user types search criteria: he can now type "l like '*task*'" 
+// instead of "lhsDescription like '*task*'"
+- (id)valueForKey:(NSString *)key {
+    if ([key isEqualToString:@"l"])
+        key = @"lhsDescription";
+    else if ([key isEqualToString:@"rk"]) {
+        return [self valueForKeyPath:@"rhs.keyPath"];
     }
+    else if ([key isEqualToString:@"rv"]) {
+        return [self valueForKeyPath:@"rhs.valueDescription"];
+    }
+    return [super valueForKey:key];
 }
 
 @end

@@ -23,6 +23,7 @@
     Assignment	    *_rhs;
     BOOL	    _enabled;
 	RMModel		*_model; // Back-pointer - not retained
+    BOOL        isNewRule; // FIXME Dependency on RMFilteringArrayController
 }
 
 + (NSArray *)rulesFromMutablePropertyList:(id)plist;
@@ -52,5 +53,7 @@
 // Undo management
 - (NSUndoManager *)undoManager;
 - (void)_setActionName:(NSString *)format old:(id)oldValue new:(id)newValue;
+
+- (BOOL)isEqualToRule:(Rule *)rule;
 
 @end
