@@ -142,7 +142,7 @@ public abstract class ERXFrameworkPrincipal {
                     // NSLog.debug.appendln("No requirements: " + c.getName());
                 } catch (IllegalAccessException e) {
                     NSLog.err.appendln("Can't read field REQUIRES from " + c.getName() + ", check if it is 'public static Class[] REQUIRES= new Class[] {...}' in this class");
-                    NSForwardException._runtimeExceptionForThrowable(e);
+                    throw NSForwardException._runtimeExceptionForThrowable(e);
                 }
                 ERXFrameworkPrincipal principal = (ERXFrameworkPrincipal)c.newInstance();
                 initializedFrameworks.setObjectForKey(principal,c.getName());
