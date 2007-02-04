@@ -2,15 +2,22 @@
     IBClasses = (
         {CLASS = Assignment; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
         {
-            ACTIONS = {"" = id; }; 
+            ACTIONS = {unfocus = id; }; 
             CLASS = FirstResponder; 
             LANGUAGE = ObjC; 
             SUPERCLASS = NSObject; 
         }, 
         {
-            ACTIONS = {search = id; }; 
+            ACTIONS = {
+                changeCaseSensitivityOption = id; 
+                changeWordMatchingOption = id; 
+                focus = id; 
+                search = id; 
+                unfocus = id; 
+            }; 
             CLASS = RMFilteringArrayController; 
             LANGUAGE = ObjC; 
+            OUTLETS = {searchField = NSSearchField; }; 
             SUPERCLASS = NSArrayController; 
         }, 
         {
@@ -21,38 +28,51 @@
             SUPERCLASS = NSDocument; 
         }, 
         {
-            ACTIONS = {remove = id; rhsComboBoxAction = id; showSelectedRule = id; }; 
+            ACTIONS = {
+                focus = id; 
+                remove = id; 
+                removeDuplicateRules = id; 
+                rhsComboBoxAction = id; 
+                showSelectedRule = id; 
+                unfocus = id; 
+            }; 
             CLASS = RMModelEditor; 
             LANGUAGE = ObjC; 
             OUTLETS = {
                 assignmentClassNamesComboBox = NSComboBox; 
+                cornerView = NSView; 
                 detailSplitView = NSSplitView; 
                 filterField = NSSearchField; 
                 filterView = NSView; 
                 lhsSplitView = NSSplitView; 
+                lhsValueTextField = NSTextField; 
                 masterSplitView = NSSplitView; 
                 rhsKeyNamesComboBox = NSComboBox; 
                 rhsValueHelpField = NSTextField; 
                 rhsValueTextView = NSTextView; 
-                rulesController = NSArrayController; 
+                rulesController = RMFilteringArrayController; 
                 rulesTableView = NSTableView; 
                 sourceDrawer = NSDrawer; 
             }; 
             SUPERCLASS = NSWindowController; 
         }, 
         {
-            ACTIONS = {addModel = id; removeModel = id; showModel = id; showRule = id; }; 
+            ACTIONS = {addModels = id; removeModels = id; showModel = id; showRuleModel = id; }; 
             CLASS = RMModelGroupEditor; 
             LANGUAGE = ObjC; 
             OUTLETS = {
-                buttonMatrix = NSMatrix; 
                 modelController = NSArrayController; 
                 modelListDrawer = NSDrawer; 
                 modelTableView = NSTableView; 
             }; 
             SUPERCLASS = RMModelEditor; 
         }, 
-        {CLASS = RMTableView; LANGUAGE = ObjC; SUPERCLASS = NSTableView; }, 
+        {
+            ACTIONS = {invertSelection = id; }; 
+            CLASS = RMTableView; 
+            LANGUAGE = ObjC; 
+            SUPERCLASS = NSTableView; 
+        }, 
         {CLASS = Rule; LANGUAGE = ObjC; SUPERCLASS = NSObject; }
     ); 
     IBVersion = 1; 
