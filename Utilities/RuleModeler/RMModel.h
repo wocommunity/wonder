@@ -22,4 +22,9 @@
 - (NSArray *)rules;
 - (void)setRules:(NSArray *)rules;
 
+- (void)insertRules:(NSArray *)rules atIndexes:(NSIndexSet *)indexes;
+- (void)removeRulesAtIndexes:(NSIndexSet *)indexes;
+
++ (NSArray *) sortDescriptors;
+
 @end
