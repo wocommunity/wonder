@@ -9,14 +9,9 @@
 #import "RMAppDelegate.h"
 
 #import "RMPreferencesWindow.h"
-#import "EOKeyValueArchiverFix.h"
 #import "RMModelGroup.h"
 
 @implementation RMAppDelegate
-
-+ (void)initialize {
-    [EOKeyValueArchiverFix poseAsClass:[EOKeyValueArchiver class]];
-}
 
 - (id)init {
     self = [super init];
