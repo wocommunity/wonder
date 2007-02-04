@@ -45,4 +45,6 @@
 - (NSUndoManager *)undoManager;
 - (void)_setActionName:(NSString *)format old:(id)oldValue new:(id)newValue;
 
+- (BOOL)isEqualToAssignment:(Assignment *)assignment;
+
 @end
