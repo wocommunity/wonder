@@ -10,7 +10,7 @@
 #include "DMToolbarUtils.h"
 
 // addToolbarItem from "ToolbarSample - Controller.m" in ADC Sample Code - Cocoa
-static void addToolbarItem(NSMutableDictionary *theDict, NSString *identifier, NSString *label, NSString *paletteLabel, NSString *toolTip, id target, SEL settingSelector, id itemContent, SEL action, NSMenu *menu) {
+static NSToolbarItem *addToolbarItem(NSMutableDictionary *theDict, NSString *identifier, NSString *label, NSString *paletteLabel, NSString *toolTip, id target, SEL settingSelector, id itemContent, SEL action, NSMenu *menu) {
     NSMenuItem *mItem;
     
     // here we create the NSToolbarItem and setup its attributes in line with the parameters
@@ -48,4 +48,6 @@ static void addToolbarItem(NSMutableDictionary *theDict, NSString *identifier, N
     // The dictionary retains the toolbar item for us, which is why we could autorelease it when we created
     // it (above).
     [theDict setObject:item forKey:identifier];
+    
+    return item;
 }
