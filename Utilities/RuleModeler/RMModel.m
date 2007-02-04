@@ -38,16 +38,55 @@ static NSString *ruleModelType = @"Apple D2WModel File";
     [editor release];
 }
 
+static NSArray * _sortDescriptors = nil;
+
++ (NSArray *) sortDescriptors {
+	if (_sortDescriptors == nil) {
+        // We need to define criteria which always returns the rules in the same order
+        // We choose to base our order on priority, then description length, etc.
+        if (![[NSUserDefaults standardUserDefaults] boolForKey:@"useRuleEditorRuleOrdering"]) {
+            NSSortDescriptor    *descriptor;
+            NSMutableArray      *sortDescriptors = [[NSMutableArray alloc] initWithCapacity:5];
+            
+            descriptor = [[NSSortDescriptor alloc] initWithKey:@"author" ascending:YES];
+            [sortDescriptors addObject:descriptor];
+            [descriptor release];
+            descriptor = [[NSSortDescriptor alloc] initWithKey:@"description.length" ascending:YES];
+            [sortDescriptors addObject:descriptor];
+            [descriptor release];
+            descriptor = [[NSSortDescriptor alloc] initWithKey:@"lhsDescription.length" ascending:YES];
+            [sortDescriptors addObject:descriptor];
+            [descriptor release];
+            descriptor = [[NSSortDescriptor alloc] initWithKey:@"lhsDescription" ascending:YES];
+            [sortDescriptors addObject:descriptor];
+            [descriptor release];
+            descriptor = [[NSSortDescriptor alloc] initWithKey:@"rhs.keyPath" ascending:YES];
+            [sortDescriptors addObject:descriptor];
+            [descriptor release];
+            _sortDescriptors = sortDescriptors;
+        }
+        else{
+            // dscheck: Change the sorting to match what was in the old RuleEditor.
+            NSSortDescriptor *rhsKeyPathDescriptor = [[[NSSortDescriptor alloc] initWithKey:@"rhs.keyPath" ascending:YES] autorelease];
+            NSSortDescriptor *authorDescriptor = [[[NSSortDescriptor alloc] initWithKey:@"author" ascending:NO] autorelease];
+            NSSortDescriptor *lhsDescriptionDescriptor = [[[NSSortDescriptor alloc] initWithKey:@"lhsDescription" ascending:YES] autorelease];
+            
+            _sortDescriptors = [[NSArray arrayWithObjects:rhsKeyPathDescriptor, authorDescriptor, lhsDescriptionDescriptor, nil] retain];
+        }
+	}
+    
+	return _sortDescriptors;
+}
+
 - (NSData *)dataOfType:(NSString *)typeName error:(NSError **)outError {
     if ([typeName isEqualToString:ruleModelType]) {
         
         EOKeyValueArchiver *archiver = [[EOKeyValueArchiver alloc] init];
         NSMutableArray *rules = [[self rules] mutableCopy];
         
-        NSSortDescriptor *descriptor=[[NSSortDescriptor alloc] initWithKey:@"sortOrder" ascending:YES];
-        NSArray *sortDescriptors=[NSArray arrayWithObject:descriptor];
-        [rules sortUsingDescriptors:sortDescriptors];
-        
+		// dscheck: call the sortDescriptor method
+        [rules sortUsingDescriptors:[RMModel sortDescriptors]];                  
+            
         [archiver encodeObject:rules forKey:@"rules"];
         
         NSDictionary *plist = [archiver dictionary];
@@ -62,7 +101,6 @@ static NSString *ruleModelType = @"Apple D2WModel File";
         
         [archiver release];
         [rules release];
-        [descriptor release];
         
         return data;
     }
@@ -77,9 +115,7 @@ static NSString *ruleModelType = @"Apple D2WModel File";
     if(result) {
         NSMutableArray *rules = [[[self rules] mutableCopy] autorelease];
         
-        NSSortDescriptor *descriptor=[[[NSSortDescriptor alloc] initWithKey:@"sortOrder" ascending:YES] autorelease];
-        NSArray *sortDescriptors=[NSArray arrayWithObject:descriptor];
-        [rules sortUsingDescriptors:sortDescriptors];
+        [rules sortUsingDescriptors:[RMModel sortDescriptors]];
         NSError *errorDesc = nil;
         NSString *description = [rules description];
         NSURL *url = absoluteURL;
@@ -132,16 +168,66 @@ static NSString *ruleModelType = @"Apple D2WModel File";
     return NO;
 }
 
+- (IBAction)saveDocument:(id)sender {
+    // Fixes bug where if you edit a field and choose to save file, your modification is not taken in account,
+    // if you didn't leave the field.
+    if ([[NSApp mainWindow] makeFirstResponder:[NSApp mainWindow]]) {
+        /* All fields are now valid; it's safe to use fieldEditor:forObject:
+        to claim the field editor. */
+        [super saveDocument:sender];
+    }
+    // FIXME Do the same to handle a Quit event (from menu, or from system shutdown) - see NSApp delegate method -applicationShouldTerminate:
+}
+
 - (NSArray *)rules {
     return _rules;
 }
 
 - (void)setRules:(NSArray *)newRules {
+    [self willChangeValueForKey:@"rules"];
 	[_rules makeObjectsPerformSelector:@selector(setModel:) withObject:nil];
 	[_rules autorelease];
 	
 	_rules = [newRules mutableCopy];
 	[_rules makeObjectsPerformSelector:@selector(setModel:) withObject:self];
+    [self didChangeValueForKey:@"rules"];
+}
+
+- (unsigned)countOfRules {
+    return [_rules count];
+}
+
+- (id)objectInRulesAtIndex:(unsigned)theIndex {
+    return [_rules objectAtIndex:theIndex];
+}
+
+- (void)getRules:(id *)objsPtr range:(NSRange)range {
+    [_rules getObjects:objsPtr range:range];
+}
+
+- (void)insertObject:(id)obj inRulesAtIndex:(unsigned)theIndex {
+    [_rules insertObject:obj atIndex:theIndex];
+	[obj setModel:self];
+}
+
+- (void)removeObjectFromRulesAtIndex:(unsigned)theIndex {
+    [_rules removeObjectAtIndex:theIndex];
+}
+
+- (void)replaceObjectInRulesAtIndex:(unsigned)theIndex withObject:(id)obj {
+    [_rules replaceObjectAtIndex:theIndex withObject:obj];
+	[obj setModel:self];
+}
+
+- (void)insertRules:(NSArray *)rules atIndexes:(NSIndexSet *)indexes {
+    // This is a KVC-compliant method
+    [_rules insertObjects:rules atIndexes:indexes];
+	[_rules makeObjectsPerformSelector:@selector(setModel:) withObject:self];
+}
+
+- (void)removeRulesAtIndexes:(NSIndexSet *)indexes { 
+    // This is a KVC-compliant method
+    [_rules removeObjectsAtIndexes:indexes];
 }
 
 - (NSString *)description {
@@ -149,7 +235,7 @@ static NSString *ruleModelType = @"Apple D2WModel File";
 }
 
 + (void)initialize {
-    [super initialize];
+    // Do not call super - see +initialize documentation
     [self setKeys:[NSArray arrayWithObject:@"fileURL"] triggerChangeNotificationsForDependentKey:@"displayName"];
 }
 
