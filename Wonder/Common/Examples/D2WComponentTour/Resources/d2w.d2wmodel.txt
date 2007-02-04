@@ -1,4 +1,0 @@
-(
-    0 : *true* => componentName = D2WString [com.webobjects.directtoweb.Assignment], 
-    100 : *true* => look = Neutral [com.webobjects.directtoweb.Assignment]
-)

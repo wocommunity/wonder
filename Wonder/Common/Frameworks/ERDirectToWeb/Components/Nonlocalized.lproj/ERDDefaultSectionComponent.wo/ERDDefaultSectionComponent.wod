@@ -1,9 +1,0 @@
-Items: ERXPluralString {
-	count = ^sublist.count;
-	value = "Item";
-}
-
-Section: WOString { 
-	value=sectionTitle;
-	escapeHTML = false;
-}
