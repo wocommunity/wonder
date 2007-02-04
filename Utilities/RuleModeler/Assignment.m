@@ -19,8 +19,7 @@
 @implementation Assignment
 
 + (void)initialize {
-    [super initialize];
-    
+    // Do not call super - see +initialize documentation
     [self setKeys:[NSArray arrayWithObject:@"value"] triggerChangeNotificationsForDependentKey:@"valueAsString"];
     [self setKeys:[NSArray arrayWithObject:@"value"] triggerChangeNotificationsForDependentKey:@"valueDescription"];
     [self setKeys:[NSArray arrayWithObject:@"value"] triggerChangeNotificationsForDependentKey:@"toolTip"];
@@ -61,8 +60,12 @@
 }
 
 - (void)encodeWithKeyValueArchiver:(EOKeyValueArchiver *)archiver {
-    [archiver encodeObject:_keyPath forKey:@"keyPath"];
-    [archiver encodeObject:_value forKey:@"value"];
+    if(_keyPath == nil)
+        [archiver encodeObject:@"" forKey:@"keyPath"]; // RuleEditor does it like this; if there is no keyPath, D2W runtime will throw an exception
+    else
+        [archiver encodeObject:_keyPath forKey:@"keyPath"];
+    if(_value != nil) // RuleEditor does it like this
+        [archiver encodeObject:_value forKey:@"value"];
     [archiver encodeObject:(_assignmentClass ? _assignmentClass : @"") forKey:@"class"]; // Let's always provide an empty class name as we cannot remove the class key from the archive, else user would see 'Assignment' instead of nothing in the preview and the (string) copy
 }
 
@@ -102,7 +105,7 @@ static NSMutableCharacterSet  *fullyQualifiedClassNameCharSet = nil;
         if (![aScanner scanUpToString:@"(" intoString:&aClassName] || [aScanner isAtEnd]) {
             [aScanner setScanLocation:0];
             if ([aScanner scanCharactersFromSet:fullyQualifiedClassNameCharSet intoString:&aClassName]) {
-                int lastDotIndex = [aClassName rangeOfString:@"." options:NSBackwardsSearch].location;
+                unsigned    lastDotIndex = [aClassName rangeOfString:@"." options:NSBackwardsSearch].location;
                 
                 if (lastDotIndex != NSNotFound) {
                     if (lastDotIndex != 0 && lastDotIndex != ([aClassName length] - 1)) {
@@ -173,6 +176,7 @@ static NSMutableCharacterSet  *fullyQualifiedClassNameCharSet = nil;
 }
 
 - (void)setKeyPath:(NSString *)keyPath {
+    // TODO If empty string, consider as nil -> validateKeyPath
     if(![_keyPath isEqualToString:keyPath]) {
         [[[self undoManager] prepareWithInvocationTarget:self] setKeyPath:_keyPath];
         [self _setActionName:NSLocalizedString(@"Set RHS Key to %@", @"Undo-redo action name") old:_keyPath new:keyPath];
@@ -229,7 +233,7 @@ static NSMutableCharacterSet  *fullyQualifiedClassNameCharSet = nil;
             *outError = [NSError errorWithDomain:@"RuleModeler" code:0 userInfo:[NSDictionary dictionaryWithObject:NSLocalizedString(@"This is not a valid right value (property list).", @"Validation error description") forKey:NSLocalizedDescriptionKey]];
         }
     } NS_HANDLER {
-        NSLog(@"Error coding: %@: %@", [*ioValue className], *ioValue);
+        NSLog(@"%s: Error coding: %@: %@", __PRETTY_FUNCTION__, [*ioValue className], *ioValue);
         isValid = NO;
         *outError = [NSError errorWithDomain:@"RuleModeler" code:0 userInfo:[NSDictionary dictionaryWithObject:NSLocalizedString(@"This is not a valid right value (property list).", @"Validation error description") forKey:NSLocalizedDescriptionKey]];
     } NS_ENDHANDLER;    
@@ -352,14 +356,11 @@ static NSMutableCharacterSet  *fullyQualifiedClassNameCharSet = nil;
         return nil;
 }
 
-- (BOOL)isEqual:(id)anObject {
-    if ([anObject isKindOfClass:[Assignment class]]) {
-        return (((![self keyPath] && ![anObject keyPath]) || [[self keyPath] isEqualToString:[anObject keyPath]]) && 
-                ((![self value] && ![anObject value]) || [[self value] isEqual:[anObject value]]) && 
-                ((![self assignmentClass] && ![anObject assignmentClass]) || [[self assignmentClass] isEqualToString:[anObject assignmentClass]]));
-    } else {
-        return NO;
-    }
+- (BOOL)isEqualToAssignment:(Assignment *)assignment {
+    NSParameterAssert ([assignment isKindOfClass:[Assignment class]]);
+    return (((![self keyPath] && ![assignment keyPath]) || [[self keyPath] isEqualToString:[assignment keyPath]])
+            && ((![self value] && ![assignment value]) || [[self value] isEqual:[assignment value]])
+            && ((![self assignmentClass] && ![assignment assignmentClass]) || [[self assignmentClass] isEqualToString:[assignment assignmentClass]]));
 }
 
 @end
