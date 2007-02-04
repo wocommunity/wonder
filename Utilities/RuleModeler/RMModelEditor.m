@@ -20,18 +20,13 @@
 #import "Rule.h"
 #import "Assignment.h"
 #import "DMToolbarUtils.m"
-
-@interface RMModelEditor (Private)
-
-- (void) removeDuplicateRulesAtIndexes:(NSIndexSet *)indexes;
-
-@end
+#import "RMFilteringArrayController.h"
+#import "EOControl.h"
 
 @implementation RMModelEditor
 
 - (id)init {
     if (self = [self initWithWindowNibName:@"RMModelEditor"]) {
-	
     }
     
     return self;
@@ -40,8 +35,10 @@
 - (void)setDocument:(NSDocument *)document {
     // We need to do that in order to avoid a KVO warning when document closes
     // Only that binding is problematic
-    if(document == nil)
+    if(document == nil){
+        [[self document] removeObserver:self forKeyPath:@"rules"];	// FIXME model is probably already nil!
         [rulesController unbind:@"contentArray"];
+    }
     [super setDocument:document];
 }
 
@@ -92,8 +89,46 @@
     [[rhsValueHelpField superview] setNeedsDisplayInRect:invalidRect];
 }
 
+- (NSString *)actionNameWhenInserting:(BOOL)inserting ruleCount:(int)ruleCount {
+    NSUndoManager   *um = [[self model] undoManager];
+    NSString        *anActionNameFormat;
+    
+    if ((inserting && ![um isUndoing]) || (!inserting && [um isUndoing])) {
+        if(ruleCount > 1)
+            anActionNameFormat = NSLocalizedString(@"Insert %i Rules", @"Undo-redo action name");
+        else
+            anActionNameFormat = NSLocalizedString(@"Insert %i Rule", @"Undo-redo action name");
+    }
+    else{
+        if(ruleCount > 1)
+            anActionNameFormat = NSLocalizedString(@"Remove %i Rules", @"Undo-redo action name");
+        else
+            anActionNameFormat = NSLocalizedString(@"Remove %i Rule", @"Undo-redo action name");
+    }
+    
+    return [NSString stringWithFormat:anActionNameFormat, ruleCount];
+}
+
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
-    [self updateHelpViewSize];
+    if ([keyPath isEqualToString:@"selection.rhs.toolTip"])
+        [self updateHelpViewSize];
+    else if ([keyPath isEqualToString:@"rules"]) {
+        int aChangeKind = [[change objectForKey:NSKeyValueChangeKindKey] intValue];
+        
+        if (aChangeKind == NSKeyValueChangeInsertion) {
+            NSIndexSet  *indexes = [change objectForKey:NSKeyValueChangeIndexesKey];
+
+            [[[[self model] undoManager] prepareWithInvocationTarget:/*[object mutableArrayValueForKeyPath:keyPath]*/[self document]] removeRulesAtIndexes:indexes];
+            [[[self model] undoManager] setActionName:[self actionNameWhenInserting:YES ruleCount:[indexes count]]];
+        }
+        else if(aChangeKind == NSKeyValueChangeRemoval){
+            NSArray     *removedRules = [change objectForKey:NSKeyValueChangeOldKey];
+            NSIndexSet  *indexes = [change objectForKey:NSKeyValueChangeIndexesKey];
+            
+            [[[[self model] undoManager] prepareWithInvocationTarget:[self document]] insertRules:removedRules atIndexes:indexes];
+            [[[self model] undoManager] setActionName:[self actionNameWhenInserting:NO ruleCount:[removedRules count]]];
+        }
+    }
 }
 
 - (void)helpViewFrameDidChange:(NSNotification *)notif {
@@ -128,41 +163,49 @@
 }
 
 - (void)addToolbarItems {
+    NSToolbarItem   *anItem;
+    
     addToolbarItem(toolbarItems, @"NewRule", 
                    NSLocalizedString(@"New", @"Toolbar item label"), 
                    NSLocalizedString(@"New Rule", @"Toolbar item palette label"), 
                    NSLocalizedString(@"Add a new rule", @"Toolbar item tooltip"), 
-                   rulesController, @selector(setImage:), [NSImage imageNamed:@"new.tif"], @selector(add:), nil);
+                   self, @selector(setImage:), [NSImage imageNamed:@"new"], @selector(add:), nil);
     addToolbarItem(toolbarItems, @"DuplicateRule", 
                    NSLocalizedString(@"Duplicate", @"Toolbar item label"), 
                    NSLocalizedString(@"Duplicate Rule", @"Toolbar item palette label"), 
                    NSLocalizedString(@"Duplicate rules", @"Toolbar item tooltip"), 
-                   self, @selector(setImage:), [NSImage imageNamed:@"duplicate.tif"], @selector(duplicate:), nil);
+                   self, @selector(setImage:), [NSImage imageNamed:@"duplicate"], @selector(duplicate:), nil);
     addToolbarItem(toolbarItems, @"RemoveRule", 
                    NSLocalizedString(@"Remove", @"Toolbar item label"), 
                    NSLocalizedString(@"Remove Rule", @"Toolbar item palette label"), 
                    NSLocalizedString(@"Remove rules", @"Toolbar item tooltip"), 
-                   self, @selector(setImage:), [NSImage imageNamed:@"remove.tif"], @selector(remove:), nil);
-    addToolbarItem(toolbarItems, @"Filter", 
-                   NSLocalizedString(@"Filter", @"Toolbar item label"), 
-                   NSLocalizedString(@"Filter Rules", @"Toolbar item palette label"), 
-                   NSLocalizedString(@"Enter a term or EOQualifier format", @"Toolbar item tooltip"), 
-                   rulesController, @selector(setView:), filterView, @selector(search:), nil);
+                   self, @selector(setImage:), [NSImage imageNamed:@"remove"], @selector(remove:), nil);
+    anItem = addToolbarItem(toolbarItems, @"Filter", 
+                            NSLocalizedString(@"Filter", @"Toolbar item label"), 
+                            NSLocalizedString(@"Filter Rules", @"Toolbar item palette label"), 
+                            NSLocalizedString(@"Enter a term or EOQualifier format", @"Toolbar item tooltip"), 
+                            rulesController, @selector(setView:), filterView, @selector(search:), nil);
+    [anItem setMaxSize:NSMakeSize(1000., [anItem maxSize].height)];
+    [anItem setVisibilityPriority:NSToolbarItemVisibilityPriorityHigh];
     addToolbarItem(toolbarItems, @"PreviousRule", 
                    NSLocalizedString(@"Previous", @"Toolbar item label"), 
                    NSLocalizedString(@"Previous Rule", @"Toolbar item palette label"), 
                    NSLocalizedString(@"Select previous rule", @"Toolbar item tooltip"), 
-                   rulesController, @selector(setImage:), [NSImage imageNamed:@"previous.tif"], @selector(selectPrevious:), nil);
+                   rulesController, @selector(setImage:), [NSImage imageNamed:@"previous"], @selector(selectPrevious:), nil);
     addToolbarItem(toolbarItems, @"NextRule", 
                    NSLocalizedString(@"Next", @"Toolbar item label"), 
                    NSLocalizedString(@"Next Rule", @"Toolbar item palette label"), 
                    NSLocalizedString(@"Select next rule", @"Toolbar item tooltip"), 
-                   rulesController, @selector(setImage:), [NSImage imageNamed:@"next.tif"], @selector(selectNext:), nil);
+                   rulesController, @selector(setImage:), [NSImage imageNamed:@"next"], @selector(selectNext:), nil);
     addToolbarItem(toolbarItems, @"PreviewRule", 
                    NSLocalizedString(@"Preview", @"Toolbar item label"), 
                    NSLocalizedString(@"Preview Rule", @"Toolbar item palette label"), 
                    NSLocalizedString(@"Toggle the source preview drawer", @"Toolbar item tooltip"), 
-                   sourceDrawer, @selector(setImage:), [NSImage imageNamed:@"preview.tif"], @selector(toggle:), nil);
+                   sourceDrawer, @selector(setImage:), [NSImage imageNamed:@"preview"], @selector(toggle:), nil);
+}
+
+- (BOOL)observesRules {
+    return YES;
 }
 
 - (void)awakeFromNib {
@@ -183,6 +226,9 @@
     [rulesController addObserver:self forKeyPath:@"selection.rhs.toolTip" options:0 context:NULL];
     [rulesController setSortDescriptors:[NSArray arrayWithObjects:[[[NSSortDescriptor alloc] initWithKey:@"author" ascending:YES] autorelease], [[[NSSortDescriptor alloc] initWithKey:@"lhsDescription" ascending:YES] autorelease], [[[NSSortDescriptor alloc] initWithKey:@"rhs.keyPath" ascending:YES] autorelease], nil]];
     [rulesController rearrangeObjects];
+    if ([self observesRules])
+        [[self document] addObserver:self forKeyPath:@"rules" options:NSKeyValueObservingOptionOld context:NULL];
+    [rulesTableView setCornerView:cornerView];
     [rulesTableView setAutosaveTableColumns:YES];
     
     toolbarItems = [[NSMutableDictionary dictionary] retain];
@@ -193,6 +239,27 @@
 
 - (NSString *)toolbarIdentifier {
     return @"DMWindowToolbar";
+}
+
+- (void) setFirstResponderInPart:(RMWindowPart)part {
+    switch (part) {
+        case RMWindowPriorityPart:
+            [rulesTableView editColumn:[rulesTableView columnWithIdentifier:@"priority"] row:[rulesTableView selectedRow] withEvent:nil select:YES];
+            break;
+        case RMWindowLHSPart:
+            [[self window] makeFirstResponder:lhsValueTextField];
+            break;
+        case RMWindowRHSClassPart:
+            [[self window] makeFirstResponder:assignmentClassNamesComboBox];
+            break;
+        case RMWindowRHSKeyPathPart:
+            [[self window] makeFirstResponder:rhsKeyNamesComboBox];
+            break;
+        case RMWindowRHSValuePart:
+            [[self window] makeFirstResponder:rhsValueTextView];
+            [rhsValueTextView selectAll:nil];
+            break;            
+    }
 }
 
 #pragma mark NSToolbar Methods
@@ -219,8 +286,8 @@
     if ([item view] != NULL) {
         [newItem setView:[item view]];
         
-        [newItem setMinSize:[[item view] bounds].size];
-        [newItem setMaxSize:[[item view] bounds].size];
+        [newItem setMinSize:[item minSize]];
+        [newItem setMaxSize:[item maxSize]];
     } else {
         [newItem setImage:[item image]];
     }
@@ -229,6 +296,7 @@
     [newItem setTarget:[item target]];
     [newItem setAction:[item action]];
     [newItem setMenuFormRepresentation:[item menuFormRepresentation]];
+    [newItem setVisibilityPriority:[item visibilityPriority]];
     
     return newItem;
 }
@@ -309,9 +377,9 @@
 			
 			NSPasteboard *pb = [NSPasteboard generalPasteboard];
 			
-			[pb declareTypes:[NSArray arrayWithObjects:@"D2WRules", NSStringPboardType, nil] owner:self];
-			[pb setPropertyList:plist forType:@"D2WRules"];
-			[pb setString:[plist description] forType:NSStringPboardType];
+			[pb declareTypes:[NSArray arrayWithObjects:@"D2WRules", NSStringPboardType, nil] owner:nil];
+			NSAssert1([pb setPropertyList:plist forType:@"D2WRules"], @"Unable to set plist for D2WRules pboard type:\n%@", plist);
+			NSAssert1([pb setString:[plist description] forType:NSStringPboardType], @"Unable to set string for NSStringPboardType pboard type:\n%@", [plist description]);
             [archiver release];
 		}
     }
@@ -345,7 +413,7 @@
 	NSIndexSet *rowIdx = [rulesTableView selectedRowIndexes];
 	NSMutableArray *rows = [NSMutableArray arrayWithCapacity:[rulesTableView numberOfSelectedRows]];
 	
-	NSArray *rules = [self rules];
+    NSArray *rules = [rulesController arrangedObjects];
 	Rule *rule;
 	
 	unsigned int idx = [rowIdx firstIndex];
@@ -363,6 +431,9 @@
 
 - (IBAction)add:(id)sender {
     [rulesController add:sender];
+    // We need to delay the call to change the first responder, else it doesn't 
+    // work when user uses menu or toolbar to create new rule
+    [[lhsValueTextField window] performSelector:@selector(makeFirstResponder:) withObject:lhsValueTextField afterDelay:0];
 }
 
 - (IBAction)remove:(id)sender {
@@ -398,11 +469,15 @@
 //    } else if (action == @selector(duplicate:) && ([[self window] firstResponder] != rulesTableView || [rulesTableView numberOfSelectedRows] == 0)) {
 //	return NO;
     } else if (action == @selector(remove:)) {
-	return [rulesController canRemove];
+        return [rulesController canRemove];
     } else if (action == @selector(selectNext:)) {
 	return [rulesController canSelectNext];
     } else if (action == @selector(selectPrevious:)) {
 	return [rulesController canSelectPrevious];
+    } else if (action == @selector(focus:)) {
+        return [rulesController canFocus];
+    } else if (action == @selector(unfocus:)) {
+        return [rulesController canUnfocus];
     }
     
     return YES;
@@ -429,7 +504,7 @@
     return contentSize;
 }
 
-- (void) restoreRules:(NSArray *)rules atIndexes:(NSIndexSet *)indexes {
+- (void)restoreRules:(NSArray *)rules atIndexes:(NSIndexSet *)indexes {
     NSMutableArray  *modelRules = [[self rules] mutableCopy];
     NSUndoManager   *um = [[self document] undoManager];
     
@@ -440,7 +515,7 @@
     [modelRules release];
 }
 
-- (void) removeDuplicateRulesAtIndexes:(NSIndexSet *)indexes {    
+- (void)removeDuplicateRulesAtIndexes:(NSIndexSet *)indexes {    
     NSMutableArray  *modelRules = [[self rules] mutableCopy];
     NSArray         *removedRules = [modelRules objectsAtIndexes:indexes];
     NSUndoManager   *um = [[self document] undoManager];
@@ -464,7 +539,7 @@
             for (j = i + 1; j < count; j++) {
                 Rule    *anotherRule = [allRules objectAtIndex:j];
                 
-                if ([eachRule isEqual:anotherRule]) {
+                if ([eachRule isEqualToRule:anotherRule]) {
                     [duplicateRuleIndexes addIndex:j];
                 }
             }
@@ -483,8 +558,31 @@
     }
 }
 
-- (NSArrayController *) rulesController {
+- (IBAction)showDuplicateRules:(id)sender {
+    NSIndexSet   *duplicateRuleIndexes = [self duplicateRulesIndexes];
+    
+    if ([duplicateRuleIndexes count] > 0) {
+        // Test is necessary, else the arrayController would always add an entry to the undo stack, even when doing nothing!
+        // We want to be sure user sees all duplicate entries, thus we reset the filtering and the focus
+        [rulesController setFilterPredicate:nil];
+        [rulesController unfocus:nil];
+        [rulesController setSelectedObjects:[[self rules] objectsAtIndexes:duplicateRuleIndexes]]; // Uses -isEqual:!
+        [rulesController focus:nil];
+    }
+    else
+        NSBeep();
+}
+
+- (RMFilteringArrayController *) rulesController {
     return rulesController;
+}
+
+- (IBAction)focus:(id)sender {
+    [rulesController focus:sender];
+}
+
+- (IBAction)unfocus:(id)sender {
+    [rulesController unfocus:sender];
 }
 
 #pragma mark Splitview Delegate Methods
