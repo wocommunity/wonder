@@ -11,7 +11,7 @@
 @implementation NSDictionary (NSPlistDescriptions)
 
 - (NSString *)descriptionNoWrap {
-    NSArray *keys = [self allKeys];
+    NSArray *keys = [[self allKeys] sortedArrayUsingSelector:@selector(compare:)];
     NSString *key;
     NSString *value;
     NSObject *object;
