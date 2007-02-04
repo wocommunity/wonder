@@ -14,9 +14,6 @@
     IBOutlet NSUserDefaultsController   *userDefaultsController;
     
     IBOutlet NSView                     *generalPane;
-    IBOutlet NSView			*importingPane;
-    IBOutlet NSView                     *sharingPane;
-    IBOutlet NSView			*coresPane;
     
     NSMutableDictionary                 *toolbarItems;
     NSMutableDictionary			*preferencePanes;

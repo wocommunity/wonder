@@ -123,6 +123,7 @@
     
     [window setFrame:newFrame display:YES animate:YES];
     [[window contentView] addSubview:prefPane];
+    [[window contentView] setAutoresizesSubviews:YES]; // For some reason, it is not the case in the nib
     
     currentPref = prefPane;
     
@@ -139,6 +140,7 @@
     [d2wclientConfigurationPathTableView reloadData];
     [d2wclientConfigurationPathTableView selectRow:aRow byExtendingSelection:NO];
     [d2wclientConfigurationPathTableView editColumn:0 row:aRow withEvent:nil select:YES];
+    [[NSUserDefaults standardUserDefaults] setObject:d2wclientConfigurationPaths forKey:@"d2wclientConfigurationPaths"];
 }
 
 - (IBAction)removePath:(id)sender {
@@ -146,6 +148,7 @@
     
     [d2wclientConfigurationPaths removeObjectAtIndex:aRow];
     [d2wclientConfigurationPathTableView reloadData];
+    [[NSUserDefaults standardUserDefaults] setObject:d2wclientConfigurationPaths forKey:@"d2wclientConfigurationPaths"];
 }
 
 #pragma mark NSTableView DataSource and Delegate Methods
