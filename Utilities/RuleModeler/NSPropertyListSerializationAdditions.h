@@ -15,4 +15,6 @@
 + (NSData *)openStepFormatDataFromPropertyList:(id)plist prettyPrint:(BOOL)flag escapeNonASCII:(BOOL)escapeNonASCII errorDescription:(NSString **)errorString;
 + (NSString *)openStepFormatStringFromPropertyList:(id)plist level:(int)maxLevel escapeNonASCII:(BOOL)escapeNonASCII errorDescription:(NSString **)errorString;
 
++ (void)_appendDictionary:(NSDictionary *)plist toMutableString:(NSMutableString *)str level:(int)level maxLevel:(int)maxLevel escapeNonASCII:(BOOL)escapeNonASCII;
+
 @end

@@ -15,7 +15,6 @@
 + (void)_appendObject:(id)plist toMutableString:(NSMutableString *)str level:(int)level maxLevel:(int)maxLevel escapeNonASCII:(BOOL)escapeNonASCII canCreateNewLine:(BOOL)canCreateNewLine;
 + (void)_appendString:(NSString *)plist toMutableString:(NSMutableString *)str level:(int)level maxLevel:(int)maxLevel escapeNonASCII:(BOOL)escapeNonASCII;
 + (void)_appendArray:(NSArray *)plist toMutableString:(NSMutableString *)str level:(int)level maxLevel:(int)maxLevel escapeNonASCII:(BOOL)escapeNonASCII;
-+ (void)_appendDictionary:(NSDictionary *)plist toMutableString:(NSMutableString *)str level:(int)level maxLevel:(int)maxLevel escapeNonASCII:(BOOL)escapeNonASCII;
 @end
 
 @implementation NSPropertyListSerialization (NSPropertyListSerializationAdditions)
@@ -106,7 +105,7 @@
 + (void)_appendDictionary:(NSDictionary *)plist toMutableString:(NSMutableString *)str level:(int)level maxLevel:(int)maxLevel escapeNonASCII:(BOOL)escapeNonASCII {
     [str appendString:@"{"];
     
-    NSArray *keys = [plist allKeys];
+    NSArray *keys = [[plist allKeys] sortedArrayUsingSelector:@selector(compare:)];
     int i, count = [keys count];
     id key, value;
     
