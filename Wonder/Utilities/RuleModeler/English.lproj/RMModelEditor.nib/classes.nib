@@ -2,15 +2,23 @@
     IBClasses = (
         {CLASS = Assignment; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
         {
-            ACTIONS = {"" = id; }; 
+            ACTIONS = {"" = id; unfocus = id; }; 
             CLASS = FirstResponder; 
             LANGUAGE = ObjC; 
             SUPERCLASS = NSObject; 
         }, 
         {
-            ACTIONS = {search = id; }; 
+            ACTIONS = {
+                changeCaseSensitivityOption = id; 
+                changeWordMatchingOption = id; 
+                focus = id; 
+                search = id; 
+                toggleSearchOption = id; 
+                unfocus = id; 
+            }; 
             CLASS = RMFilteringArrayController; 
             LANGUAGE = ObjC; 
+            OUTLETS = {searchField = NSSearchField; }; 
             SUPERCLASS = NSArrayController; 
         }, 
         {
@@ -21,20 +29,30 @@
             SUPERCLASS = NSDocument; 
         }, 
         {
-            ACTIONS = {remove = id; rhsComboBoxAction = id; showSelectedRule = id; }; 
+            ACTIONS = {
+                focus = id; 
+                remove = id; 
+                removeDuplicateRules = id; 
+                rhsComboBoxAction = id; 
+                showDuplicateRules = id; 
+                showSelectedRule = id; 
+                unfocus = id; 
+            }; 
             CLASS = RMModelEditor; 
             LANGUAGE = ObjC; 
             OUTLETS = {
                 assignmentClassNamesComboBox = NSComboBox; 
+                cornerView = NSView; 
                 detailSplitView = NSSplitView; 
                 filterField = NSSearchField; 
                 filterView = NSView; 
                 lhsSplitView = NSSplitView; 
+                lhsValueTextField = NSTextField; 
                 masterSplitView = NSSplitView; 
                 rhsKeyNamesComboBox = NSComboBox; 
                 rhsValueHelpField = NSTextField; 
                 rhsValueTextView = NSTextView; 
-                rulesController = NSArrayController; 
+                rulesController = RMFilteringArrayController; 
                 rulesTableView = NSTableView; 
                 sourceDrawer = NSDrawer; 
             }; 
