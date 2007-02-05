@@ -115,7 +115,7 @@ public class ERXLongPrimaryKeyFactory {
 			//get the code, we assume that the pkDict contains only one pk value!
 			NSArray values = pkDict.allValues();
 			if (values.count() > 1) throw new IllegalArgumentException("subEntityForEntity in its default implementation"+
-			" works only with single pk long values ");
+			" works only with single pk long values " + entity.name()+  " has " +  pkDict);
 			long pkValueWithCode;
 			try {
 				Number n = (Number) values.objectAtIndex(0);
