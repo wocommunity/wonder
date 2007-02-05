@@ -32,15 +32,21 @@ public class ERXLogger extends org.apache.log4j.Logger {
     public static Logger log;
     public static Factory factory = null;
     static {
-        String factoryClassName = System.getProperty("log4j.loggerFactory");
-        if(factoryClassName == null) {
-            factoryClassName = ERXLogger.Factory.class.getName();
-        }
-        try {
-            factory = (Factory)Class.forName(factoryClassName).newInstance();
-        } catch(Exception ex) {
-            System.err.println("Exception while creating logger factory of class " + factoryClassName + ": " + ex);
-        }
+    	String factoryClassName = System.getProperty("log4j.loggerFactory");
+    	if(factoryClassName == null) {
+    		factoryClassName = ERXLogger.Factory.class.getName();
+    	}
+    	if(factoryClassName.equals(ERXLogger.Factory.class.getName())) {
+    		System.getProperties().remove("log4j.loggerFactory");
+    		factoryClassName = null;
+    	}
+    	if(factoryClassName != null) {
+    		try {
+    			factory = (Factory)Class.forName(factoryClassName).newInstance();
+    		} catch(Exception ex) {
+    			System.err.println("Exception while creating logger factory of class " + factoryClassName + ": " + ex);
+    		}
+    	}
     }
 
     /**
@@ -167,14 +173,14 @@ public class ERXLogger extends org.apache.log4j.Logger {
         PropertyConfigurator.configure(properties);
         // ak: if the root logger has no appenders, something is really broken
         // most likely the properties didn't read correctly.
-        if(!Logger.getRootLogger().getAllAppenders().hasMoreElements()) {
+        if(false && !Logger.getRootLogger().getAllAppenders().hasMoreElements()) {
             Appender appender = new ConsoleAppender(new ERXPatternLayout("%-5p %d{HH:mm:ss} (%-20c:%L):  %m%n"), "System.out");
 			Logger.getRootLogger().addAppender(appender);
             Logger.getRootLogger().setLevel(Level.DEBUG);
             Logger.getRootLogger().error("Logging prefs couldn't get read from properties, using defaults");
         }
         if (log == null) {
-            log = Logger.getLogger(Logger.class.getName(), factory);
+            log = Logger.getLogger(Logger.class.getName());
         }
         log.info("Updated the logging configuration with the current system properties.");
         if(log.isDebugEnabled()) {
