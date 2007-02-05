@@ -266,7 +266,10 @@ public class ERXUtilities {
     }
     
     public static EOEnterpriseObject relationshipObjectWithObjectAndKeyPath(EOEnterpriseObject object, String keyPath) {
-        EOEnterpriseObject lastEO=object;
+        if(object == null) {
+        	return null;
+        }
+    	EOEnterpriseObject lastEO=object;
         if (keyPath.indexOf(".")!=-1) {
             String partialKeyPath=ERXStringUtilities.keyPathWithoutLastProperty(keyPath);
             Object rawLastEO=object.valueForKeyPath(partialKeyPath);
