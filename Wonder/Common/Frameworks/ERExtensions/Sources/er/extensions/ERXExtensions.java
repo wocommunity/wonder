@@ -173,7 +173,7 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
         // log4j.appender.SQL.File=@@loggingBasePath@@/@@port@@.sql
         // loggingBasePath=/var/log/@@name@@
         // name and port are resolved via WOApplication.application()
-        ERXLogger.configureLoggingWithSystemProperties();
+        // ERXLogger.configureLoggingWithSystemProperties();
         
         _log = Logger.getLogger(ERXExtensions.class);
 
