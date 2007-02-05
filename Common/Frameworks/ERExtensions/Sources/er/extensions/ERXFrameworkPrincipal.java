@@ -27,7 +27,7 @@ import com.webobjects.foundation.NSSelector;
  * The <code>initialize()</code> method will be called directly after your principal
  * is instantiated.<br />
  * The <code>finishInitialization()</code> method will be called when the app finishes 
- * startup but before it wilol begin to process requests.<br />
+ * startup but before it will begin to process requests.<br />
  * 
  * If you define <pre><code>public static Class[] REQUIRES = Class[] {...}</code></pre>
  * all the classes (which must be assignable from this class) will get 
