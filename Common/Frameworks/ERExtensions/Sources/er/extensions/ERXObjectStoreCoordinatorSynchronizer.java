@@ -584,23 +584,26 @@ public class ERXObjectStoreCoordinatorSynchronizer {
 			NSMutableDictionary dbcs = new NSMutableDictionary();
 
 			for (Enumeration gids = objects.objectEnumerator(); gids.hasMoreElements();) {
-				EOKeyGlobalID globalID = (EOKeyGlobalID) gids.nextElement();
-				String entityName = globalID.entityName();
-				String key = entityName + "/" + System.identityHashCode(osc);
-				EODatabaseContext dbc = (EODatabaseContext) dbcs.objectForKey(key);
-				if (dbc == null) {
-					dbc = ERXEOAccessUtilities.databaseContextForEntityNamed(osc, entityName);
-					dbcs.setObjectForKey(dbc, key);
-				}
-				NSMutableArray snapshotsForEntity = (NSMutableArray) result.objectForKey(entityName);
-				if (snapshotsForEntity == null) {
-					snapshotsForEntity = new NSMutableArray();
-					result.setObjectForKey(snapshotsForEntity, entityName);
-				}
-				synchronized (snapshotsForEntity) {
-					Object o = dbc.snapshotForGlobalID(globalID);
-					if (o != null) {
-						snapshotsForEntity.addObject(o);
+				EOGlobalID gid = (EOGlobalID)gids.nextElement();
+				if(gid instanceof EOKeyGlobalID) {
+					EOKeyGlobalID globalID = (EOKeyGlobalID)gid;
+					String entityName = globalID.entityName();
+					String key = entityName + "/" + System.identityHashCode(osc);
+					EODatabaseContext dbc = (EODatabaseContext) dbcs.objectForKey(key);
+					if (dbc == null) {
+						dbc = ERXEOAccessUtilities.databaseContextForEntityNamed(osc, entityName);
+						dbcs.setObjectForKey(dbc, key);
+					}
+					NSMutableArray snapshotsForEntity = (NSMutableArray) result.objectForKey(entityName);
+					if (snapshotsForEntity == null) {
+						snapshotsForEntity = new NSMutableArray();
+						result.setObjectForKey(snapshotsForEntity, entityName);
+					}
+					synchronized (snapshotsForEntity) {
+						Object o = dbc.snapshotForGlobalID(globalID);
+						if (o != null) {
+							snapshotsForEntity.addObject(o);
+						}
 					}
 				}
 			}
