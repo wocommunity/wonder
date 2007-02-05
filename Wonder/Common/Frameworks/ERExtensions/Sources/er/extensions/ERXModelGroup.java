@@ -875,11 +875,9 @@ public class ERXModelGroup extends EOModelGroup {
 						prototypesFixed = true;
 					}
 				}
-				if (prototypesFixed) {
-					NSMutableDictionary mutableUserInfo = userInfo.mutableClone();
-					mutableUserInfo.setObjectForKey(Boolean.TRUE, prototypesFixedKey);
-					model.setUserInfo(mutableUserInfo);
-				}
+				NSMutableDictionary mutableUserInfo = userInfo.mutableClone();
+				mutableUserInfo.setObjectForKey(Boolean.TRUE, prototypesFixedKey);
+				model.setUserInfo(mutableUserInfo);
 			}
 		}
 	}
