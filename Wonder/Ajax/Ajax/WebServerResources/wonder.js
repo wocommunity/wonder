@@ -80,7 +80,7 @@ var AjaxOptions = {
 var AjaxUpdateContainer = {
 	register : function(id, options) {
 		if (!options) {
-			options = "{}";
+			options = {};
 		}
 		eval(id + "Update = function() { AjaxUpdateContainer.update(id, options) }");
 	},
