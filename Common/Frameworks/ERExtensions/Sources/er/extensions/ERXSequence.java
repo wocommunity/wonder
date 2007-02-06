@@ -82,11 +82,17 @@ public class ERXSequence {
 	 *
 	 */
 	public static class DatabaseSequence extends ERXSequence {
+
 		private ERXJDBCConnectionBroker _broker;
-		public DatabaseSequence(EOEditingContext ec, String modelName, String name) {
-			super(name);
+
+		public DatabaseSequence(EOEditingContext ec, String modelName, String name, long initialValue) {
+			super(name, initialValue);
 			EOModel model = ERXEOAccessUtilities.modelGroup(ec).modelNamed(modelName);
 			_broker = ERXJDBCConnectionBroker.connectionBrokerForModel(model);
+		}
+
+		public DatabaseSequence(EOEditingContext ec, String modelName, String name) {
+			this(ec, modelName, name, ERXProperties.longForKeyWithDefault(name + ".InitalValue", 100000L));
 		}
 
 		protected ERXJDBCConnectionBroker broker() {
