@@ -18,6 +18,7 @@ import com.webobjects.foundation.NSMutableArray;
  * 
  * @binding root the root node of the tree
  * @binding item the current tree node (equivalent to "item" on WORepetition)
+ * @binding itemClass the class of the current item
  * @binding rootExpanded if true, the tree will require the root node to be open; ignored if showRoot = false
  * @binding allExpanded if true, the tree defaults to have all its nodes expanded
  * @binding parentKeyPath the keypath to call on a node to get its parent node (ignored if delegate is set)
@@ -49,7 +50,7 @@ public class AjaxTree extends WOComponent {
 	private Object _item;
 	private String _id = null;
 	private Object _lastRootNode;
-	
+
 	public AjaxTree(WOContext context) {
 		super(context);
 	}
@@ -95,19 +96,19 @@ public class AjaxTree extends WOComponent {
 		_closeCount = 0;
 		_lastParent = null;
 		_item = null;
-    
-    treeModel().setDelegate(valueForBinding("delegate"));
-    if (hasBinding("allExpanded")) {
-      treeModel().setAllExpanded(AjaxUtils.booleanValueForBinding("allExpanded", false, _keyAssociations, parent()));
-    }
-    if (hasBinding("rootExpanded") || hasBinding("showRoot")) {
-      treeModel().setRootExpanded(AjaxUtils.booleanValueForBinding("rootExpanded", false, _keyAssociations, parent()) || !AjaxUtils.booleanValueForBinding("showRoot", true, _keyAssociations, parent()));
-    }
-    treeModel().setIsLeafKeyPath(stringValueForBinding("isLeafKeyPath", null));
-    treeModel().setParentTreeNodeKeyPath(stringValueForBinding("parentKeyPath", null));
-    treeModel().setChildrenTreeNodesKeyPath(stringValueForBinding("childrenKeyPath", null));
-    treeModel().setRootTreeNode(valueForBinding("root"));
-    setItem(treeModel().rootTreeNode());
+
+		treeModel().setDelegate(valueForBinding("delegate"));
+		if (hasBinding("allExpanded")) {
+			treeModel().setAllExpanded(AjaxUtils.booleanValueForBinding("allExpanded", false, _keyAssociations, parent()));
+		}
+		if (hasBinding("rootExpanded") || hasBinding("showRoot")) {
+			treeModel().setRootExpanded(AjaxUtils.booleanValueForBinding("rootExpanded", false, _keyAssociations, parent()) || !AjaxUtils.booleanValueForBinding("showRoot", true, _keyAssociations, parent()));
+		}
+		treeModel().setIsLeafKeyPath(stringValueForBinding("isLeafKeyPath", null));
+		treeModel().setParentTreeNodeKeyPath(stringValueForBinding("parentKeyPath", null));
+		treeModel().setChildrenTreeNodesKeyPath(stringValueForBinding("childrenKeyPath", null));
+		treeModel().setRootTreeNode(valueForBinding("root"));
+		setItem(treeModel().rootTreeNode());
 	}
 
 	public void appendToResponse(WOResponse aResponse, WOContext aContext) {
@@ -236,12 +237,26 @@ public class AjaxTree extends WOComponent {
 	public String leafImageFramework() {
 		return stringValueForBinding("leafImageFramework", "Ajax");
 	}
-	
+
 	public String imageLinkClass() {
 		return stringValueForBinding("imageLinkClass", "");
 	}
-	
 
+	public String nodeItem() {
+		StringBuffer nodeItem = new StringBuffer();
+		nodeItem.append("<li");
+		if (hasBinding("itemClass")) {
+			String itemClass = (String)valueForBinding("itemClass");
+			if (itemClass != null) {
+				nodeItem.append(" class = \"");
+				nodeItem.append(itemClass);
+				nodeItem.append("\"");
+			}
+		}
+		nodeItem.append(">");
+		return nodeItem.toString();
+	}
+	
 	public String _toggleFunctionName() {
 		return id() + "Toggle";
 	}
