@@ -2,6 +2,7 @@
 	<wo class="AjaxTreeNode.java" wocomponentcontent="true">
 		<binding name="root"/>
 		<binding name="item"/>
+		<binding name="itemClass"/>
 		<binding name="rootExpanded"/>
 		<binding name="allExpanded"/>
 		<binding name="parentKeyPath"/>
