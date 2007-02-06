@@ -82,7 +82,7 @@ var AjaxUpdateContainer = {
 		if (!options) {
 			options = "{}";
 		}
-		eval(id + "Update = function() { AjaxUpdateContainer.update('" + id + "', " + options + ") }");
+		eval(id + "Update = function() { AjaxUpdateContainer.update(id, options) }");
 	},
 	
 	update : function(id, options) {
