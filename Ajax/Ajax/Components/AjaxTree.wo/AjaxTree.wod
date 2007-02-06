@@ -1,3 +1,8 @@
+NodeItem : WOString {
+	value = nodeItem;
+	escapeHTML = false;
+}
+
 ContainerID : WOString {
 	value = id;
 }
@@ -72,5 +77,5 @@ TreeNodeUpdater : AjaxUpdateContainer {
 	id = ^id;
 	class = ^class;
 	elementName = "ul";
-	skipFunction = true;
+	skipFunction = false;
 }
