@@ -8,8 +8,6 @@ package er.corebusinesslogic;
 
 import com.webobjects.foundation.*;
 import com.webobjects.eocontrol.*;
-import com.webobjects.eoaccess.*;
-import com.webobjects.appserver.*;
 import er.extensions.*;
 import java.util.Enumeration;
 
@@ -145,7 +143,6 @@ public class ERCoreUserPreferences implements NSKeyValueCoding {
     }
 
     public void takeValueForKey(Object value, String key) {
-        Object result=null;
         // we first make sure there is no cruft left
         // !! locking is turned off on the value attribute of UserPreference
         // so that if a user opens two sessions they don't get locking failures
@@ -191,6 +188,15 @@ public class ERCoreUserPreferences implements NSKeyValueCoding {
         }
         NSNotificationCenter.defaultCenter().postNotification(PreferenceDidChangeNotification,
                                                               new NSDictionary(value, key));
+    }
+
+    public boolean booleanValueForKey(String key) {
+        return booleanValueForKeyWithDefault(key, false);
+    }
+
+    public boolean booleanValueForKeyWithDefault(String key, boolean def) {
+        Object value = ERCoreUserPreferences.userPreferences().valueForKey(key);
+        return ERXValueUtilities.booleanValueWithDefault(value, def);
     }
 
     public static class _UserPreferenceHandler {
