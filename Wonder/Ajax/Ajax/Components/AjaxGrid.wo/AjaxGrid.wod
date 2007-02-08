@@ -1,10 +1,10 @@
 ColumnRepetition: WORepetition {
-	list = configurationData.columns;
+	list = configurationData.columns; // VALID
 	item = currentColumn;
 }
 
 ColumnTitle: WOString {
-	value = currentColumn.title;
+	value = currentColumn.title; // VALID
 }
 
 ColumnValue: WOSwitchComponent {
@@ -13,7 +13,7 @@ ColumnValue: WOSwitchComponent {
 }
 
 GridUpdater: AjaxUpdateContainer {
-	id = configurationData.updateContainerID;
+	id = configurationData.updateContainerID; // VALID
 }
 
 InitScript: WOString {
@@ -48,7 +48,7 @@ IsRowSelected: WOConditional {
 
 RemoveSorting: AjaxUpdateLink {
 	action = removeSorting;
-	updateContainerID = configurationData.updateContainerID;
+	updateContainerID = configurationData.updateContainerID; // VALID
 	onComplete = columnOrderUpdateOnComplete;
 }
 
@@ -60,7 +60,7 @@ RowRepetition: WORepetition {
 
 SortColumn: AjaxUpdateLink {
 	action = sortOrderUpdated;
-	updateContainerID = configurationData.updateContainerID;
+	updateContainerID = configurationData.updateContainerID; // VALID
 	onComplete = columnOrderUpdateOnComplete;
 }
 
@@ -71,14 +71,14 @@ SortIndex: WOString {
 Table: WOGenericContainer {
 	elementName = "table";
 	id = tableID;
-	class = configurationData.cssClass;
-	style = configurationData.cssStyle;
+	class = configurationData.cssClass; // VALID
+	style = configurationData.cssStyle; // VALID
 }
 
 TableData: WOGenericContainer {
 	elementName = "td";
-	class = currentColumn.cssClass;
-	style = currentColumn.cssStyle;
+	class = currentColumn.cssClass; // VALID
+	style = currentColumn.cssStyle; // VALID
 }
 
 TableRow: WOGenericContainer {
@@ -89,7 +89,7 @@ TableRow: WOGenericContainer {
 
 ToggleRowSelection: AjaxUpdateLink {
 	action = toggleRowSelection;
-	updateContainerID = configurationData.updateContainerID;
+	updateContainerID = configurationData.updateContainerID; // VALID
 	onComplete = columnOrderUpdateOnComplete;
 }
 
@@ -97,6 +97,6 @@ ToggleRowSelection: AjaxUpdateLink {
 UpdateColumnOrder: AjaxUpdateLink {
 	action = columnOrderUpdated;
 	functionName = "updateServerColumnOrder";
-	updateContainerID = configurationData.updateContainerID;
+	updateContainerID = configurationData.updateContainerID; // VALID
 	onComplete = columnOrderUpdateOnComplete;
 }
