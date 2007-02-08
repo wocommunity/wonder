@@ -1,0 +1,49 @@
+<webobject name = "AjaxExampleComponent">
+  <style>
+    table.ajaxGridTable { border-spacing: 0px; border-collapse:collapse; font-family: Helvetica; font-size: 9pt; }
+    table.ajaxGridTable td { border: 1px solid rgb(200, 200, 200); padding:2px 5px; text-align:center; cursor:pointer}
+    table.ajaxGridTable th { border: 1px solid rgb(200, 200, 200); padding:2px 5px; text-align:center; cursor:pointer}
+    table.ajaxGridTable th a { text-decoration: none; }
+    .exampleAjaxGridTitle { font-family: Helvetica; font-weight: bold; text-align: center;  }
+    .exampleAjaxGridNavigation { text-align: center;  }
+    .exampleAjaxGridNavigation a { text-decoration: none; }
+    .evenRow {background:lightyellow}
+    .ajaxGridHover {background:lightblue}
+    .ajaxGridSelected {background:lightgreen}
+    .ajaxGridRemoveSorting a {color: red; text-decoration: none;}
+    .ajaxGridSortAscending {font-size: x-small; vertical-align: super;}
+    .ajaxGridSortDescending {font-size: x-small; vertical-align: sub;}
+    span.ajaxGridSortAscending span span {display: none}
+    span.ajaxGridSortDescending span span {display: none}
+    .ajaxGridSelectRow a {text-decoration: none;}
+    .redText {color: red; }
+  </style>
+  
+  <div class="exampleAjaxGridTitle">All The Pretty Columns</div>
+  <div class="exampleAjaxGridNavigation">
+    <webobject name="NavUpdater">
+    	<webobject name="PrevBatch">&lt;&lt;</webobject>
+    	&nbsp;&nbsp;
+    	<webobject name="CurrentBatchIndex"/> / <webobject name="BatchCount"/>
+    	&nbsp;&nbsp;
+    	<webobject name="NextBatch">&gt;&gt;</webobject>
+	    <span style = "float: left">Batch Size: <webobject name="BatchSize"/></span>
+    </webobject name="NavUpdater">
+  </div>
+  
+	<webobject name="Grid"/>
+	
+	<h3>Notes</h3>
+	<ul>
+		<li>Click the batch size to edit with AjaxInPlaceEditor</li>
+		<li>Click the red X in the upper left hand corner to remove all sorting</li>
+		<li>Click a column title to add it to the sort order.  Click it again to change sort direction.</li>
+		<li>The small number next to a sorted column indicates its importance in sorting (1 is most important.</li>
+		<li>The small number next to a sorted column indicates sort direction, subscript is descending, superscript is ascending</li>
+		<li>Click and drag anywhere in a column (except the column title) to re-order the columns.</li>
+		<li>The left column is fixed and can't be moved.</li>
+		<li>Click in the cell to left of a row to select that row.  Selection is maintained across batches.</li>
+		<li>Indications of selection, sorting, etc. are all fully stylable and can be replaced with images</li>
+    <li>See the documentation for full usage details and a To Do list.
+	</ul>
+</webobject>
