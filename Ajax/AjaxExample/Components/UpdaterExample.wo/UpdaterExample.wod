@@ -1,3 +1,12 @@
+ExampleArea7 : AjaxUpdateContainer {
+	id = "exampleArea7";
+	onComplete = "onCompleteTest";
+}
+
+ExampleArea7Updater : AjaxFunctionLink {
+	onclick = "exampleArea7Update()";
+}
+
 EffectScript : AjaxIncludeScript {
 	name = "effect.js";
 }
