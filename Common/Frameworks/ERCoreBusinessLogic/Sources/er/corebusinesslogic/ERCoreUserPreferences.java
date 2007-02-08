@@ -29,6 +29,7 @@ import er.extensions.ERXEOControlUtilities;
 import er.extensions.ERXExtensions;
 import er.extensions.ERXRetainer;
 import er.extensions.ERXSortOrder;
+import er.extensions.ERXValueUtilities;
 
 public class ERCoreUserPreferences implements NSKeyValueCoding {
 
@@ -199,6 +200,14 @@ public class ERCoreUserPreferences implements NSKeyValueCoding {
         ec.dispose();
         NSNotificationCenter.defaultCenter().postNotification(PreferenceDidChangeNotification,
                                                               new NSDictionary(value, key));
+    }
+
+    public boolean booleanValueForKey(String key) {
+        return booleanValueForKeyWithDefault(key, false);
+    }
+
+    public boolean booleanValueForKeyWithDefault(String key, boolean def) {
+        return ERXValueUtilities.booleanValueWithDefault(valueForKey(key), def);
     }
 
     public static class _UserPreferenceHandler {
