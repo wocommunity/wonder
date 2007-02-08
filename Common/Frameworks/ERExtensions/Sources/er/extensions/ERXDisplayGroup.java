@@ -94,4 +94,35 @@ public class ERXDisplayGroup extends WODisplayGroup {
 		}
 		return result;
 	}
+
+	public NSArray selectedObjects() {
+		if(log.isDebugEnabled()) {
+			log.debug("selectedObjects@" + hashCode() +  ":" + super.selectedObjects().count());
+		}
+		return super.selectedObjects();
+	}
+
+	public void setSelectedObjects(NSArray nsarray) {
+		if(log.isDebugEnabled()) {
+			log.debug("setSelectedObjects@" + hashCode()  + ":" + nsarray.count());
+		}
+		super.setSelectedObjects(nsarray);
+	}
+
+	public boolean setSelectionIndexes(NSArray nsarray) {
+		if(log.isDebugEnabled()) {
+			log.debug("setSelectionIndexes@" + hashCode()  + ":" + nsarray.count(), new RuntimeException());
+		}
+		return super.setSelectionIndexes(nsarray);
+	}
+
+	/**
+	 * Overriden to re-set the selection. Why is this cleared in the super class?
+	 */
+	public void setNumberOfObjectsPerBatch(int i) {
+		NSArray oldSelection = selectedObjects();
+		super.setNumberOfObjectsPerBatch(i);
+		setSelectedObjects(oldSelection);
+	}
+
 }
