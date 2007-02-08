@@ -116,7 +116,11 @@ public class ERXJDBCConnectionBroker {
     }
 
     private static synchronized ERXJDBCConnectionBroker connectionBrokerForConnectionDictionary(NSDictionary d) {
-        String key = d.objectForKey("URL") + "\0" + d.objectForKey("username");
+        String key = "";
+        String keys [] = new String[] {"URL", "username", "password", "driver", "plugin"};
+        for (int i = 0; i < keys.length; i++) {
+			key += d.objectForKey(keys[i]) + "\0";
+		}
         ERXJDBCConnectionBroker broker = (ERXJDBCConnectionBroker) brokers.get(key);
         if (broker == null) {
             broker = newConnectionBrokerWithConnectionDictionary(d);
@@ -617,6 +621,9 @@ public class ERXJDBCConnectionBroker {
                     c.isClosed();
                     c.setReadOnly(false);
                     ResultSet rs = c.createStatement().executeQuery(pingStatement);
+                    if(rs == null) {
+                    	// nothing
+                    }
                 } catch (SQLException e) {
                     log.error("Could not ping connection " + c + ", reason: " + e.getMessage(), e);
                 } finally {
