@@ -16,9 +16,10 @@ import com.webobjects.foundation.NSMutableDictionary;
  * d2w has hard coded the return type of WOComponent.
  * Sometimes you need to return a WOResponse instead
  * of a component. This interface solves this problem.
+ * Alternately, you could return a ERXResponseComponent.
  */
-// ENHANCEME: Might want this interface to extend NextPageDelegate, so that casting wise things would be fine.
-public interface ERDNextPageDelegate {
+
+public interface ERDNextPageDelegate extends NextPageDelegate {
     public WOActionResults erNextPage(WOComponent sender);
 }
 
