@@ -195,8 +195,7 @@ public class ERCoreUserPreferences implements NSKeyValueCoding {
     }
 
     public boolean booleanValueForKeyWithDefault(String key, boolean def) {
-        Object value = ERCoreUserPreferences.userPreferences().valueForKey(key);
-        return ERXValueUtilities.booleanValueWithDefault(value, def);
+        return ERXValueUtilities.booleanValueWithDefault(valueForKey(key), def);
     }
 
     public static class _UserPreferenceHandler {
