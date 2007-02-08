@@ -775,7 +775,7 @@ public class ERXObjectStoreCoordinatorSynchronizer {
 			_multicastSocket.setInterface(localBindAddress);
 			_multicastSocket.setTimeToLive(4);
 			_multicastSocket.setReuseAddress(true);
-			_multicastSocket.bind(new InetSocketAddress(multicastPort));
+			_multicastSocket.bind(_multicastGroup);
 		}
 
 		public void join() throws IOException {
