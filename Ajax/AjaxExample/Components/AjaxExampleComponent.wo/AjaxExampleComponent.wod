@@ -74,6 +74,10 @@ GoogleMapsLink : WOHyperlink {
 	pageName = "AjaxGMapExample";
 }
 
+AjaxGridLink: WOHyperlink {
+	pageName = "AjaxGridExample";
+}
+
 Contents : WOComponentContent {
 }
 
