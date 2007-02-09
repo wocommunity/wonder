@@ -1,0 +1,19 @@
+package ognl.helperfunction;
+
+import com.webobjects.appserver._private.WOConstantValueAssociation;
+import com.webobjects.appserver._private.WODeclaration;
+import com.webobjects.foundation.NSMutableDictionary;
+
+/**
+ * "not" tag processor.  This is a shortcut for a WOConditional with negate = 'true'.  All you
+ * set is "condition".
+ * 
+ * @author mschrag
+ */
+public class NotTagProcessor extends WOTagProcessor {
+	public WODeclaration createDeclaration(String elementName, String elementType, NSMutableDictionary associations) {
+		String newElementName = "WOConditional";
+		associations.setObjectForKey(new WOConstantValueAssociation(Boolean.TRUE), "negate");
+		return super.createDeclaration(elementName, elementType, associations);
+	}
+}
