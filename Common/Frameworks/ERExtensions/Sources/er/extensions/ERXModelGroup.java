@@ -10,7 +10,6 @@ import java.net.URL;
 import java.util.Enumeration;
 import java.util.Hashtable;
 
-import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
 import com.webobjects.eoaccess.EOAdaptor;
@@ -725,6 +724,7 @@ public class ERXModelGroup extends EOModelGroup {
 		}
 
 		fixPrototypesForModel(model);
+		preloadERXConstantClassesForModel(model);
 	}
 
 	protected String prototypeEntityNameForModel(EOModel model) {
@@ -807,6 +807,53 @@ public class ERXModelGroup extends EOModelGroup {
 	}
 
 	/**
+	 * The classes referenced in the ERXConstantClassName field of an attribute's userInfo needs to be
+	 * class-loaded before the attribute is used.  This method enumerates all the attributes of all
+	 * the entities in a model looking for those class names, and class loads them.  Because the constant
+	 * class name could be an inner class, it tries the raw value first, then replaces the last dot of 
+	 * the class name with a dollar sign and tries again.
+	 *   
+	 * @param model the model to load constants for
+	 * @throw IllegalArgumentException if the ERXConstantClassName cannot be resolved. 
+	 */
+	protected void preloadERXConstantClassesForModel(EOModel model) {
+		for (Enumeration entitiesEnum = model.entities().objectEnumerator(); entitiesEnum.hasMoreElements();) {
+			EOEntity entity = (EOEntity) entitiesEnum.nextElement();
+			for (Enumeration attributesEnum = entity.attributes().objectEnumerator(); attributesEnum.hasMoreElements();) {
+				EOAttribute attribute = (EOAttribute) attributesEnum.nextElement();
+				NSDictionary attributeUserInfo = attribute.userInfo();
+				if (attributeUserInfo != null) {
+					String constantClassName = (String)attributeUserInfo.objectForKey("ERXConstantClassName");
+					if (constantClassName != null) {
+						boolean constantClassFound = true;
+						try {
+							Class.forName(constantClassName);
+						}
+						catch (ClassNotFoundException e) {
+							int lastDotIndex = constantClassName.lastIndexOf('.');
+							if (lastDotIndex != -1) {
+								String innerClassName = constantClassName.substring(0, lastDotIndex) + "$" + constantClassName.substring(lastDotIndex + 1);
+								try {
+									Class.forName(innerClassName);
+								}
+								catch (ClassNotFoundException e2) {
+									constantClassFound = false;
+								}
+							}
+							else {
+								constantClassFound = false;
+							}
+						}
+						if (!constantClassFound) {
+							throw new IllegalArgumentException(attribute.name() + " specified an ERXConstantClass of '" + constantClassName + "', which could not be found.");
+						}
+					}
+				}
+			}
+		}
+	}
+	
+	/**
 	 * If a prototypeEntityName is specified for a given model, go through and flatten the specified prototype down into
 	 * all of the attributes of the model. This allows support for multiple databases in a single EOModelGroup, each
 	 * using the correct database-specified variant of the prototype. Without flattening, you could not use ERPrototypes
@@ -819,7 +866,6 @@ public class ERXModelGroup extends EOModelGroup {
 		if (!ERXModelGroup.flattenPrototypes) {
 			return;
 		}
-		log.setLevel(Level.DEBUG);
 		String prototypesFixedKey = "_EOPrototypesFixed";
 		NSMutableDictionary prototypeReplacement = new NSMutableDictionary();
 		for (Enumeration modelsEnum = models().objectEnumerator(); modelsEnum.hasMoreElements();) {
@@ -875,6 +921,7 @@ public class ERXModelGroup extends EOModelGroup {
 						prototypesFixed = true;
 					}
 				}
+				
 				NSMutableDictionary mutableUserInfo = userInfo.mutableClone();
 				mutableUserInfo.setObjectForKey(Boolean.TRUE, prototypesFixedKey);
 				model.setUserInfo(mutableUserInfo);
