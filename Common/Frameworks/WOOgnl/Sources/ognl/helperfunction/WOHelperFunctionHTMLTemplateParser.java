@@ -60,6 +60,8 @@ public class WOHelperFunctionHTMLTemplateParser extends WOParser implements WOHe
 	    WOHelperFunctionHTMLTemplateParser.registerTagShortcut("WOText", "text");
 	    WOHelperFunctionHTMLTemplateParser.registerTagShortcut("WOForm", "form");
 	    WOHelperFunctionHTMLTemplateParser.registerTagShortcut("WOSubmitButton", "submit");
+
+	    WOHelperFunctionHTMLTemplateParser.registerTagProcessorForElementType(new NotTagProcessor(), "not");
 	}
 
 	private WOHTMLWebObjectTag _currentWebObjectTag;
