@@ -91,7 +91,7 @@
 				<extensions>true</extensions>
 				<version>2.0.4-SNAPSHOT</version>
         			<configuration>
-           				<includeAppleProvidedFrameworks>false</includeAppleProvidedFrameworks>
+           				<!-- skipAppleProvidedFrameworks>true</skipAppleProvidedFrameworks -->
 				</configuration>
 			</plugin>
 		</plugins>
