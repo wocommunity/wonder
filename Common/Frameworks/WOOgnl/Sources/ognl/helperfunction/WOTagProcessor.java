@@ -1,7 +1,7 @@
 package ognl.helperfunction;
 
 import com.webobjects.appserver._private.WODeclaration;
-import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSMutableDictionary;
 
 /**
  * WOTagProcessor allows you to munge the associations for a tag declaration.  For 
@@ -15,7 +15,7 @@ public abstract class WOTagProcessor {
 	public WOTagProcessor() {
 	}
 
-	public WODeclaration createDeclaration(String elementName, String elementType, NSDictionary associations) {
+	public WODeclaration createDeclaration(String elementName, String elementType, NSMutableDictionary associations) {
 		return new WODeclaration(elementName, elementType, associations);
 	}
 }
