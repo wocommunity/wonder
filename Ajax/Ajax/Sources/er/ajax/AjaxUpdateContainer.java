@@ -132,8 +132,10 @@ public class AjaxUpdateContainer extends AjaxDynamicElement {
 		WOComponent component = context.component();
 		String id = _containerID(context);
     
-  	WOActionResults results = (WOActionResults) valueForBinding("action", component);
-    // ignore results
+		if (associations().containsKey("action")) {
+			WOActionResults results = (WOActionResults) valueForBinding("action", component);
+			// ignore results
+		}
 
 		WOResponse response = AjaxUtils.createResponse(request, context);
 		AjaxUtils.setPageReplacementCacheKey(context, id);
