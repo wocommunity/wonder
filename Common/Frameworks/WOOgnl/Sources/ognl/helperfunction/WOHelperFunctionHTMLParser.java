@@ -3,6 +3,7 @@ package ognl.helperfunction;
 import java.util.NoSuchElementException;
 import java.util.StringTokenizer;
 
+import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
 import com.webobjects.appserver._private.WODeclarationFormatException;
@@ -23,6 +24,10 @@ public class WOHelperFunctionHTMLParser {
   private static final String WO_START_TAG = "<wo";
   private static final String WEBOBJECT_END_TAG = "</webobject";
   private static final String WEBOBJECT_START_TAG = "<webobject";
+
+  static {
+	WOHelperFunctionHTMLParser.log.setLevel(Level.WARN);
+  }
 
   public WOHelperFunctionHTMLParser(WOHelperFunctionHTMLParserDelegate parserDelegate, String unparsedTemplate) {
     _parserDelegate = parserDelegate;
