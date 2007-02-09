@@ -473,7 +473,7 @@ public class AjaxGrid extends WOComponent
                         formattersByKeypath.setObjectForKey(formatter, column.valueForKey(KEY_PATH));
                     }
                     catch (Exception e) {
-                        throw new NSForwardException(e);
+                    	throw NSForwardException._runtimeExceptionForThrowable(e);
                     }
                   }
             }
