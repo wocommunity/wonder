@@ -90,6 +90,10 @@
 				<groupId>org.objectstyle.woproject.maven2</groupId>
 				<artifactId>maven-wolifecycle-plugin</artifactId>
 				<extensions>true</extensions>
+				<version>2.0.4-SNAPSHOT</version>
+        			<configuration>
+           				<includeAppleProvidedFrameworks>false</includeAppleProvidedFrameworks>
+				</configuration>
 			</plugin>
 		</plugins>
 	</build>
@@ -156,6 +160,16 @@
 			<url>scp://webobjects.mdimension.com/Library/WebServer/BuildServer/maven2/snapshots</url>
 		</snapshotRepository>
 	</distributionManagement>
+	
+	<scm>
+		<connection>
+			    scm:cvs:pserver:anonymous@cvs.wonder.sourceforge.net:/cvsroot/wonder:wonder
+       </connection>
+		<developerConnection>
+		    scm:cvs:ext:@cvs.wonder.sourceforge.net:/cvsroot/wonder:wonder
+        </developerConnection>
+		<url>http://assense.com</url>
+	</scm>
 	
 </project>
 
