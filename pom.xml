@@ -138,7 +138,7 @@
 		<pluginRepository>
 			<id>webobjects.mdimension.com</id>
 			<name>mdimension maven 2 snapshot repo</name>
-			<url>http://webobjects.mdimension.com/maven2/releases</url>
+			<url>http://webobjects.mdimension.com/maven2/snapshots</url>
 			<snapshots>
 				<enabled>true</enabled>
 			</snapshots>
