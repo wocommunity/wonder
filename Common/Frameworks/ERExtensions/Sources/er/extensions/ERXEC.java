@@ -6,9 +6,11 @@
 //
 package er.extensions;
 
+import java.util.Collections;
 import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Vector;
 import java.util.WeakHashMap;
 
@@ -1286,7 +1288,7 @@ public class ERXEC extends EOEditingContext {
 		 */
 		protected Boolean useSharedEditingContext = null;
 
-		protected WeakHashMap activeEditingContexts = new WeakHashMap();
+		protected Map activeEditingContexts = Collections.synchronizedMap(new WeakHashMap());
 
 		public DefaultFactory() {
 			// Initing defaultEditingContext delegates
@@ -1420,7 +1422,9 @@ public class ERXEC extends EOEditingContext {
 				ec.setSharedEditingContext(null);
 				ec.unlock();
 			}
-			activeEditingContexts.put(ec, Thread.currentThread().getName());
+			if (traceOpenEditingContextLocks) {
+				activeEditingContexts.put(ec, Thread.currentThread().getName());
+			}
 			NSNotificationCenter.defaultCenter().postNotification(EditingContextDidCreateNotification, ec);
 			return ec;
 		}
