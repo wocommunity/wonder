@@ -36,7 +36,6 @@
 			<groupId>jms</groupId>
 			<artifactId>jms</artifactId>
 			<version>1.0.2</version>
-			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>openjms</groupId>
@@ -47,7 +46,6 @@
 			<groupId>jndi</groupId>
 			<artifactId>jndi</artifactId>
 			<version>1.2.1</version>
-			<scope>provided</scope>
 		</dependency>
 	</dependencies>
 	<build>
