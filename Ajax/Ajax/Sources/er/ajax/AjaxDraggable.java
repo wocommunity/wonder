@@ -86,6 +86,7 @@ public class AjaxDraggable extends AjaxComponent {
     ajaxOptionsArray.addObject(new AjaxOption("ghosting", AjaxOption.BOOLEAN));
     ajaxOptionsArray.addObject(new AjaxOption("handle", AjaxOption.DEFAULT));
     ajaxOptionsArray.addObject(new AjaxOption("change", AjaxOption.SCRIPT));
+    ajaxOptionsArray.addObject(new AjaxOption("keyPress", AjaxOption.SCRIPT));
     NSMutableDictionary options = AjaxOption.createAjaxOptionsDictionary(ajaxOptionsArray, this);
     return options;
   }
