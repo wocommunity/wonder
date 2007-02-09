@@ -16,6 +16,7 @@ import com.webobjects.foundation.NSMutableDictionary;
  * observeFieldID requires ERExtensions, specifically ERXWOForm
  * 
  * @binding onRefreshComplete the script to execute at the end of refreshing the container
+ * @binding action the action to call when this updateContainer refreshes
  */
 public class AjaxUpdateContainer extends AjaxDynamicElement {
 	// If you change this value, make sure to also change it in ERXApplication.invokeAction
@@ -130,6 +131,10 @@ public class AjaxUpdateContainer extends AjaxDynamicElement {
 	public WOActionResults handleRequest(WORequest request, WOContext context) {
 		WOComponent component = context.component();
 		String id = _containerID(context);
+    
+  	WOActionResults results = (WOActionResults) valueForBinding("action", component);
+    // ignore results
+
 		WOResponse response = AjaxUtils.createResponse(request, context);
 		AjaxUtils.setPageReplacementCacheKey(context, id);
 		if (hasChildrenElements()) {
