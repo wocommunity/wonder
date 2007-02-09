@@ -100,7 +100,7 @@
 
 	<repositories>
 		<repository>
-			<id>webobjects.mdimension.com</id>
+			<id>webobjects.mdimension.com/releases</id>
 			<name>mdimension maven 2 releases repo</name>
 			<url>http://webobjects.mdimension.com/maven2/releases</url>
 			<snapshots>
@@ -111,7 +111,7 @@
 			</releases>
 		</repository>
 		<repository>
-			<id>webobjects.mdimension.com</id>
+			<id>webobjects.mdimension.com/snapshots</id>
 			<name>mdimension maven 2 snapshots repo</name>
 			<url>http://webobjects.mdimension.com/maven2/snapshots</url>
 			<snapshots>
@@ -125,7 +125,7 @@
 
 	<pluginRepositories>
 		<pluginRepository>
-			<id>webobjects.mdimension.com</id>
+			<id>webobjects.mdimension.com/plugin/releases</id>
 			<name>mdimension maven 2 releases repo</name>
 			<url>http://webobjects.mdimension.com/maven2/releases</url>
 			<snapshots>
@@ -136,7 +136,7 @@
 			</releases>
 		</pluginRepository>
 		<pluginRepository>
-			<id>webobjects.mdimension.com</id>
+			<id>webobjects.mdimension.com/plugin/snapshots</id>
 			<name>mdimension maven 2 snapshot repo</name>
 			<url>http://webobjects.mdimension.com/maven2/snapshots</url>
 			<snapshots>
@@ -150,12 +150,12 @@
 
 	<distributionManagement>
 		<repository>
-			<id>webobjects.mdimension.com</id>
+			<id>webobjects.mdimension.com/dist/releases</id>
 			<name>mdimension Maven2 Release Repository</name>
 			<url>scp://webobjects.mdimension.com/Library/WebServer/BuildServer/maven2/releases</url>
 		</repository>
 		<snapshotRepository>
-			<id>webobjects.mdimension.com</id>
+			<id>webobjects.mdimension.com/dist/snapshots</id>
 			<name>mdimension Maven2 Snapshot Repository</name>
 			<url>scp://webobjects.mdimension.com/Library/WebServer/BuildServer/maven2/snapshots</url>
 		</snapshotRepository>
