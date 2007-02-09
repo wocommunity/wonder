@@ -33,4 +33,9 @@ public class UpdaterExample extends WOComponent {
     System.out.println("UpdaterExample.submit2: Submit #2");
     return null;
   }
+  
+  public WOActionResults exampleAreaUpdated() {
+	  System.out.println("UpdaterExample.exampleAreaUpdated: Yep");
+	  return null;
+  }
 }

@@ -24,6 +24,7 @@ AjaxUpdateContainer1 : AjaxUpdateContainer {
 	id = "exampleArea";
 	elementName = "div";
 	class = "exampleArea";
+	action = exampleAreaUpdated;
 }
 
 AjaxUpdateContainer2 : AjaxUpdateContainer {
