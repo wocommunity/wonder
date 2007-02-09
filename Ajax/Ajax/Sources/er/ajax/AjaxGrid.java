@@ -1,12 +1,19 @@
 package er.ajax;
 
-import java.text.*;
+import java.text.Format;
 
-import com.webobjects.appserver.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.foundation.*;
-
-import er.extensions.*;
+import com.webobjects.appserver.WOComponent;
+import com.webobjects.appserver.WOContext;
+import com.webobjects.appserver.WODisplayGroup;
+import com.webobjects.appserver.WOResponse;
+import com.webobjects.eocontrol.EOSortOrdering;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSForwardException;
+import com.webobjects.foundation.NSKeyValueCoding;
+import com.webobjects.foundation.NSKeyValueCodingAdditions;
+import com.webobjects.foundation.NSMutableArray;
+import com.webobjects.foundation.NSMutableDictionary;
 
 
 /**
@@ -466,7 +473,7 @@ public class AjaxGrid extends WOComponent
                         formattersByKeypath.setObjectForKey(formatter, column.valueForKey(KEY_PATH));
                     }
                     catch (Exception e) {
-                        throw new ERXExceptionConverter(e);
+                        throw new NSForwardException(e);
                     }
                   }
             }
