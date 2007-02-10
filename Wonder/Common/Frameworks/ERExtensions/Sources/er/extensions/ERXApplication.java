@@ -6,8 +6,10 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.extensions;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.net.MalformedURLException;
@@ -20,6 +22,8 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.Random;
 import java.util.Set;
+import java.util.jar.JarEntry;
+import java.util.jar.JarFile;
 
 import org.apache.log4j.Logger;
 
@@ -172,9 +176,15 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 				// AK: when we get here, the main bundle wasn't inited yet
 				// so we do it ourself...
 				try {
-					Method init = NSBundle.class.getDeclaredMethod("InitMainBundle", null);
-					init.setAccessible(true);
-					init.invoke(NSBundle.class, null);
+					Field ClassPath = NSBundle.class.getDeclaredField("ClassPath");
+					ClassPath.setAccessible(true);
+					if(ClassPath.get(NSBundle.class) == null) {
+						System.err.println("CAUTION: main bundle can't be inited, check your properties if they are what you expect");
+					} else {
+						Method init = NSBundle.class.getDeclaredMethod("InitMainBundle", null);
+						init.setAccessible(true);
+						init.invoke(NSBundle.class, null);
+					}
 				}
 				catch (Exception e) {
 					System.err.println(e);
@@ -213,6 +223,9 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 
 		public static ClassLoader getAppClassLoader() {
 			String classPath = System.getProperty("java.class.path");
+			if(System.getProperty("com.webobjects.classpath") != null) {
+				classPath += File.pathSeparator + System.getProperty("com.webobjects.classpath");
+			}
 			String files[] = classPath.split(File.pathSeparator);
 			URL urls[] = new URL[files.length];
 			for (int i = 0; i < files.length; i++) {
@@ -251,6 +264,30 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 		}
 	}
 
+	private static String stringFromJar(String jar, String path) {
+		JarFile f;
+		try {
+			f = new JarFile(jar);
+			JarEntry e = (JarEntry) f.getEntry(path);
+			if(e != null) {
+				InputStream is =  f.getInputStream(e);
+				ByteArrayOutputStream bout = new ByteArrayOutputStream();
+				int read = -1;
+				byte[] buf = new byte[1024 * 50];
+				while ((read = is.read(buf)) != -1) {
+					bout.write(buf, 0, read);
+				}
+
+				String content = new String(bout.toByteArray(), "UTF-8");
+				return content;
+			}
+			return null;
+		}
+		catch (IOException e1) {
+			throw NSForwardException._runtimeExceptionForThrowable(e1);
+		}
+	}
+	
 	/**
 	 * Called when the application starts up and saves the command line arguments for {@link ERXConfigurationManager}.
 	 * 
@@ -258,38 +295,56 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 	 */
 	public static void main(String argv[], Class applicationClass) {
 		_wasERXApplicationMainInvoked = true;
-		String cp = System.getProperty("java.class.path");
-		String parts[] = cp.split(File.pathSeparator);
-		String normalLibs = "";
-		String systemLibs = "";
+		String cps[] = new String[] {"java.class.path", "com.webobjects.classpath"};
 		allFrameworks = new HashSet();
-		for (int i = 0; i < parts.length; i++) {
-			String jar = parts[i];
-			// all patched frameworks here
-			if (jar.matches(".*?Library[/\\\\]Frameworks[/\\\\]Java(Foundation|EOControl|EOAccess|WebObjects).*")) {
-				systemLibs += jar + File.pathSeparator;
-			}
-			else {
-				normalLibs += jar + File.pathSeparator;
-			}
-			String bundle = jar.replaceAll(".*?[/\\\\](\\w+)\\.framework.*", "$1");
-			if (bundle.matches("^\\w+$") && !"JavaVM".equals(bundle)) {
-				allFrameworks.add(bundle);
-			}
-		}
-		if (systemLibs.length() > 1) {
-			systemLibs = systemLibs.substring(0, systemLibs.length() - 1);
-		}
-		if (normalLibs.length() > 1) {
-			normalLibs = normalLibs.substring(0, normalLibs.length() - 1);
-		}
-		cp = normalLibs + File.pathSeparator + systemLibs;
-		// AK: this is pretty experimental for now. The classpath reordering
-		// should actually be done in a WOLips bootstrap because as this time all
-		// the static inits of WO app have already happened (which include NSMutableArray and _NSThreadSaveSet)
+		for (int var = 0; var < cps.length; var++) {
+			String cpName = cps[var];
+			String cp = System.getProperty(cpName);
+			if(cp != null) {
+				String parts[] = cp.split(File.pathSeparator);
+				String normalLibs = "";
+				String systemLibs = "";
+				for (int i = 0; i < parts.length; i++) {
+					String jar = parts[i];
+//					System.out.println("Checking: " + jar);
+					// all patched frameworks here
+					if (jar.matches(".*?Library[/\\\\]Frameworks[/\\\\]Java(Foundation|EOControl|EOAccess|WebObjects).*")) {
+						systemLibs += jar + File.pathSeparator;
+					}
+					else {
+						normalLibs += jar + File.pathSeparator;
+					}
+					String bundle = jar.replaceAll(".*?[/\\\\](\\w+)\\.framework.*", "$1");
+					if (bundle.matches("^\\w+$") && !"JavaVM".equals(bundle)) {
+						allFrameworks.add(bundle);
+					} else if(jar.endsWith(".jar")) {
+						String info = stringFromJar(jar, "Resources/Info.plist");
+						if(info != null) {
+							NSDictionary dict = (NSDictionary) NSPropertyListSerialization.propertyListFromString(info);
+							bundle = (String) dict.objectForKey("CFBundleExecutable");
+							allFrameworks.add(bundle);
+							// System.out.println("Jar bundle: " + bundle);
+						}
+					}
+				}
 
+				if (systemLibs.length() > 1) {
+					systemLibs = systemLibs.substring(0, systemLibs.length() - 1);
+				}
+				if (normalLibs.length() > 1) {
+					normalLibs = normalLibs.substring(0, normalLibs.length() - 1);
+				}
+				cp = normalLibs + File.pathSeparator + systemLibs;
+				// AK: this is pretty experimental for now. The classpath reordering
+				// should actually be done in a WOLips bootstrap because as this time all
+				// the static inits of WO app have already happened (which include NSMutableArray and _NSThreadSaveSet)
+
+				if (System.getProperty("_DisableClasspathReorder") == null) {
+					System.setProperty(cpName, cp);
+				}
+			}
+		}
 		if (System.getProperty("_DisableClasspathReorder") == null) {
-			System.setProperty("java.class.path", cp);
 			ClassLoader loader = AppClassLoader.getAppClassLoader();
 			Thread.currentThread().setContextClassLoader(loader);
 		}
