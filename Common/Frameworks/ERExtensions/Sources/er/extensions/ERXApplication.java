@@ -122,8 +122,9 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 	private static Properties allBundleProps;
 
 	private static Properties readProperties(File file) {
-		Properties result = new Properties();
+		Properties result = null;
 		if (file.exists()) {
+			result = new Properties();
 			try {
 				result.load(file.toURL().openStream());
 			}
@@ -178,9 +179,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 				try {
 					Field ClassPath = NSBundle.class.getDeclaredField("ClassPath");
 					ClassPath.setAccessible(true);
-					if(ClassPath.get(NSBundle.class) == null) {
-						System.err.println("CAUTION: main bundle can't be inited, check your properties if they are what you expect");
-					} else {
+					if(ClassPath.get(NSBundle.class) != null) {
 						Method init = NSBundle.class.getDeclaredMethod("InitMainBundle", null);
 						init.setAccessible(true);
 						init.invoke(NSBundle.class, null);
@@ -203,15 +202,20 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 				}
 				mainProps = readProperties(new File(woUserDir, "Contents" + File.separator + "Resources" + File.separator + "Properties"));
 			}
+			
+			if(mainProps == null) {
+				throw new IllegalStateException("Main bundle 'Properties' file can't be read.\nPlease post your deployment configuration in the Wonder mailing list.");
+			}
 			allBundleProps.putAll(mainProps);
 
 			String userhome = System.getProperty("user.home");
-			Properties userProps = new Properties();
 			if (userhome != null && userhome.length() > 0) {
-				userProps = readProperties(new File(userhome, "WebObjects.properties"));
+				Properties userProps = readProperties(new File(userhome, "WebObjects.properties"));
+				if(userProps != null) {
+					allBundleProps.putAll(userProps);
+				}
 			}
-			allBundleProps.putAll(userProps);
-
+			
 			Properties props = NSProperties._getProperties();
 			props.putAll(allBundleProps);
 			NSProperties._setProperties(props);
@@ -264,6 +268,22 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 		}
 	}
 
+	private static boolean isSystemJar(String jar) {
+		// check maven path
+		if (jar.indexOf("webobjects" + File.separator + "apple") > 0) {
+			return true;
+		}
+		// check mac path
+		if (jar.indexOf("System" + File.separator + "Library") > 0) {
+			return true;
+		}
+		// check win path
+		if (jar.indexOf("Apple" + File.separator + "Library") > 0) {
+			return true;
+		}
+		return false;
+	}
+	
 	private static String stringFromJar(String jar, String path) {
 		JarFile f;
 		try {
@@ -308,7 +328,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 					String jar = parts[i];
 //					System.out.println("Checking: " + jar);
 					// all patched frameworks here
-					if (jar.matches(".*?Library[/\\\\]Frameworks[/\\\\]Java(Foundation|EOControl|EOAccess|WebObjects).*")) {
+					if(isSystemJar(jar)) {
 						systemLibs += jar + File.pathSeparator;
 					}
 					else {
