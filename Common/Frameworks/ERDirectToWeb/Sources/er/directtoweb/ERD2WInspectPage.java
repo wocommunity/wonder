@@ -49,13 +49,15 @@ public class ERD2WInspectPage extends ERD2WPage implements InspectPageInterface,
     public static final Logger validationCat = Logger.getLogger(ERD2WInspectPage.class+".validation");
 
     public String urlForCurrentState() {
-        NSDictionary dict = null;
-        String actionName = d2wContext().dynamicPage();
-        String primaryKeyString = ERXEOControlUtilities.primaryKeyStringForObject(object());
-        if(primaryKeyString != null) {
-            dict = new NSDictionary(primaryKeyString, "__key");
-        }
-        return context().directActionURLForActionNamed(actionName, dict).replaceAll("&amp;", "&");
+    	NSDictionary dict = null;
+    	String actionName = d2wContext().dynamicPage();
+    	if(object() != null) {
+    		String primaryKeyString = ERXEOControlUtilities.primaryKeyStringForObject(object());
+    		if(primaryKeyString != null) {
+    			dict = new NSDictionary(primaryKeyString, "__key");
+    		}
+    	}
+    	return context().directActionURLForActionNamed(actionName, dict).replaceAll("&amp;", "&");
     }
 
     
@@ -180,34 +182,37 @@ public class ERD2WInspectPage extends ERD2WPage implements InspectPageInterface,
     public boolean shouldRecoverFromOptimisticLockingFailure() { return ERXValueUtilities.booleanValueWithDefault(d2wContext().valueForKey("shouldRecoverFromOptimisticLockingFailure"), false); }
 
     public boolean tryToSaveChanges(boolean validateObject) { // throws Throwable {
-        validationLog.debug("tryToSaveChanges calling validateForSave");
-        boolean saved = false;
-        EOEditingContext ec = object().editingContext();
-        try {
-            if (object()!=null && validateObject && shouldValidateBeforeSave()) {
-                if (ec.insertedObjects().containsObject(object()))
-                    object().validateForInsert();
-                else
-                    object().validateForUpdate();
-            }
-            if (object()!=null && shouldSaveChanges() && ec.hasChanges()) {
-                ec.saveChanges();
-            }
-            saved = true;
-        } catch (NSValidation.ValidationException ex) {
-            setErrorMessage(ERXLocalizer.currentLocalizer().localizedTemplateStringForKeyWithObject("CouldNotSave", ex));
-            validationFailedWithException(ex, ex.object(), "saveChangesExceptionKey");
-        } catch(EOGeneralAdaptorException ex) {
-            if(ERXEOAccessUtilities.isOptimisticLockingFailure(ex) && shouldRecoverFromOptimisticLockingFailure()) {
-                EOEnterpriseObject eo = ERXEOAccessUtilities.refetchFailedObject(ec, ex);
-                setErrorMessage(ERXLocalizer.currentLocalizer().localizedTemplateStringForKeyWithObject("CouldNotSavePleaseReapply", d2wContext()));
-                validationFailedWithException(ex, eo, "CouldNotSavePleaseReapply");
-            } else {
-                throw ex;
-            }
-        }
-
-        return saved;
+    	validationLog.debug("tryToSaveChanges calling validateForSave");
+    	boolean saved = false;
+    	if(object()!=null) {
+    		EOEditingContext ec = object().editingContext();
+    		try {
+    			if (object()!=null && validateObject && shouldValidateBeforeSave()) {
+    				if (ec.insertedObjects().containsObject(object()))
+    					object().validateForInsert();
+    				else
+    					object().validateForUpdate();
+    			}
+    			if (object()!=null && shouldSaveChanges() && ec.hasChanges()) {
+    				ec.saveChanges();
+    			}
+    			saved = true;
+    		} catch (NSValidation.ValidationException ex) {
+    			setErrorMessage(ERXLocalizer.currentLocalizer().localizedTemplateStringForKeyWithObject("CouldNotSave", ex));
+    			validationFailedWithException(ex, ex.object(), "saveChangesExceptionKey");
+    		} catch(EOGeneralAdaptorException ex) {
+    			if(ERXEOAccessUtilities.isOptimisticLockingFailure(ex) && shouldRecoverFromOptimisticLockingFailure()) {
+    				EOEnterpriseObject eo = ERXEOAccessUtilities.refetchFailedObject(ec, ex);
+    				setErrorMessage(ERXLocalizer.currentLocalizer().localizedTemplateStringForKeyWithObject("CouldNotSavePleaseReapply", d2wContext()));
+    				validationFailedWithException(ex, eo, "CouldNotSavePleaseReapply");
+    			} else {
+    				throw ex;
+    			}
+    		}
+    	} else {
+    		saved = true;
+    	}
+    	return saved;
     }
     
     public WOComponent submitAction() throws Throwable {
