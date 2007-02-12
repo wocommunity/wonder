@@ -206,6 +206,7 @@
     10 : *true* => confirmDeleteConfigurationName = <ERDDefaultConfigurationNameAssignment> [er.directtoweb.ERDDefaultConfigurationNameAssignment], 
     10 : (pageConfiguration like '*') => displayNameForEntity = <ERDDefaultDisplayNameAssignment> [er.directtoweb.ERDDefaultDisplayNameAssignment], 
     10 : *true* => inspectEmbeddedConfigurationName = <ERDDefaultConfigurationNameAssignment> [er.directtoweb.ERDDefaultConfigurationNameAssignment], 
+    10 : ((pageConfiguration like 'Progress*') or (pageConfiguration like 'Processing*')) => task = progress [com.webobjects.directtoweb.Assignment], 
     10 : *true* => editRelationshipConfigurationName = <ERDDefaultConfigurationNameAssignment> [er.directtoweb.ERDDefaultConfigurationNameAssignment], 
     10 : ((subTask = 'group') and (task = 'list')) => repetitionComponentName = ERDGroupingListPageRepetition [com.webobjects.directtoweb.Assignment], 
     10 : ((pageConfiguration like 'SelectGroup*') or (pageConfiguration like 'ListGroup*')) => subTask = group [com.webobjects.directtoweb.Assignment], 
