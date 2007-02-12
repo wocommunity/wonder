@@ -8,3 +8,7 @@ SubmitButton3: WOSubmitButton {
 	action = performAction;
 	value = branchButtonLabel;
 }
+
+HasChoices: WOConditional {
+	condition = hasBranchChoices;
+}
