@@ -97,7 +97,7 @@
     5 : (smartAttribute.className = 'java.lang.String') => rows = smartDefaultRows [er.directtoweb.ERDKeyValueAssignment], 
     5 : (smartAttribute.className = 'java.lang.String') => length = smartDefaultAttributeWidth [er.directtoweb.ERDKeyValueAssignment], 
     5 : (smartAttribute.className = 'com.webobjects.foundation.NSTimestamp') => displayValueForNull = None [com.webobjects.directtoweb.Assignment], 
-    5 : ((not (targetOutput = 'xml')) and (not (targetOutput = 'rtf')) and (not (targetOutput <> 'csv'))) => valueWhenEmpty = &nbsp; [com.webobjects.directtoweb.Assignment], 
+    5 : ((not (targetOutput = 'xml')) and (not (targetOutput = 'rtf')) and (not (targetOutput = 'csv'))) => valueWhenEmpty = &nbsp; [com.webobjects.directtoweb.Assignment], 
     5 : ((task = 'edit') and ((smartAttribute.className = 'java.lang.Number') or (smartAttribute.className = 'java.math.BigDecimal'))) => componentName = ERD2WEditNumber [com.webobjects.directtoweb.Assignment], 
     10 : *true* => browserSize = 5 [com.webobjects.directtoweb.Assignment], 
     10 : *true* => confirmRows = 4 [com.webobjects.directtoweb.Assignment], 
