@@ -179,7 +179,7 @@ public class ERD2WListPage extends ERD2WPage implements ERDListPageInterface, Se
 
     /** The currently selected objects.*/
     public NSArray selectedObjects() {
-        return (NSArray)displayGroup().selectedObjects();
+        return displayGroup().selectedObjects();
     }
 
     /** Sets currently selected objects. Pushes the values to the display group, clearing the selection if needed. */
@@ -189,7 +189,7 @@ public class ERD2WListPage extends ERD2WPage implements ERDListPageInterface, Se
         else
             displayGroup().clearSelection();
     }
-    
+
     /** Action method to select an object. */
     public WOComponent selectObjectAction() {
         setSelectedObject(object());
