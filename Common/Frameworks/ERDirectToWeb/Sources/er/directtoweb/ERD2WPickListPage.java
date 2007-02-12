@@ -38,9 +38,6 @@ public class ERD2WPickListPage extends ERD2WListPage implements ERDPickPageInter
     /** logging support */
     public static final Logger log = Logger.getLogger(ERD2WPickListPage.class);
 
-    /** holds the selected objects */
-    protected NSMutableArray selectedObjects = new NSMutableArray();
-
     /**
      * IE sometimes won't submit the form if it only has checkboxes, we bind
      * this to a WOHiddenField.
@@ -74,22 +71,27 @@ public class ERD2WPickListPage extends ERD2WListPage implements ERDPickPageInter
     }
 
     public boolean checked() {
-        return selectedObjects.containsObject(object());
+        return selectedObjects().containsObject(object());
     }
 
     public void setChecked(boolean newChecked) {
+        NSMutableArray selectedObjects = selectedObjects().mutableClone();
         if (newChecked) {
-            if (!selectedObjects.containsObject(object())) selectedObjects.addObject(object());
-        } else
+            if (!selectedObjects.containsObject(object())) {
+                selectedObjects.addObject(object());
+            }
+        } else {
             selectedObjects.removeObject(object());
+        }
+        setSelectedObjects(selectedObjects);
     }
 
     public NSArray selectedObjects() {
-        return selectedObjects;
+        return super.selectedObjects();
     }
 
     public void setSelectedObjects(NSArray selectedObjects) {
-        this.selectedObjects = selectedObjects.mutableClone();
+        super.setSelectedObjects(selectedObjects);
     }
 
     // FIXME: Not using cancel page at the moment. Only matters if not using a
@@ -109,7 +111,7 @@ public class ERD2WPickListPage extends ERD2WListPage implements ERDPickPageInter
             EOEditingContext ec = _masterObject.editingContext();
             ec.lock();
             try {
-                _masterObject.takeValueForKey(singleSelection() ? selectedObjects.lastObject() : selectedObjects, _relationshipKey);
+                _masterObject.takeValueForKey(singleSelection() ? selectedObjects().lastObject() : selectedObjects(), _relationshipKey);
                 ec.saveChanges();
             } finally {
                 ec.unlock();
@@ -161,26 +163,29 @@ public class ERD2WPickListPage extends ERD2WListPage implements ERDPickPageInter
     }
     
     public WOComponent selectAll() {
-        selectedObjects.removeAllObjects();
+        NSMutableArray selectedObjects = new NSMutableArray();
         NSArray list = filteredObjects();
         for (Enumeration e = list.objectEnumerator(); e.hasMoreElements();) {
             selectedObjects.addObject(e.nextElement());
         }
-        return null;
+        setSelectedObjects(selectedObjects);
+        return context().page();
     }
     
     public WOComponent selectAllOnPage() {
-        selectedObjects.removeAllObjects();
+        NSMutableArray selectedObjects = new NSMutableArray();
         NSArray list = displayGroup().displayedObjects();
         for (Enumeration e = list.objectEnumerator(); e.hasMoreElements();) {
             selectedObjects.addObject(e.nextElement());
         }
-        return null;
+        setSelectedObjects(selectedObjects);
+        return context().page();
     }
 
     public WOComponent unselectAll() {
-        selectedObjects.removeAllObjects();
-        return null;
+        NSMutableArray selectedObjects = new NSMutableArray();
+        setSelectedObjects(selectedObjects);
+        return context().page();
     }
 
     public boolean singleSelection() {
