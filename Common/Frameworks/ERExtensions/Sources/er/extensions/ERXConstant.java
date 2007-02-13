@@ -27,7 +27,8 @@ import com.webobjects.jdbcadaptor.ERXJDBCColumn;
  * If you use objects of this class, you might be able to completely remove the EOSharedEditingContext
  * (the google search term for "why does my app lock up").<br />
  * To use the Number constants, you need to add an entry <code>ERXConstantClassName=Test.Status</code> to the attribute's userInfo 
- * in question and your EO's class description needs to be a {@link er.extensions.ERXEntityClassDescription}.<br />
+ * in question and your EO's class description needs to be a {@link er.extensions.ERXEntityClassDescription}, also
+ * you must enable the {@ er.extension.ERXJDBCAdaptor}.<br />
  * The String and Byte based constants can be used with a custom class type:<pre><code>
  * 
  * ERCMailMessage.plist:
