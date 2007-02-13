@@ -1,7 +1,6 @@
 package er.extensions;
 
 import java.lang.reflect.Field;
-import java.lang.reflect.Method;
 import java.sql.Connection;
 
 import org.apache.log4j.Logger;
@@ -14,7 +13,6 @@ import com.webobjects.eoaccess.EOEntity;
 import com.webobjects.eoaccess.EOGeneralAdaptorException;
 import com.webobjects.eocontrol.EOFetchSpecification;
 import com.webobjects.foundation.NSArray;
-import com.webobjects.foundation.NSBundle;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.jdbcadaptor.ERXJDBCColumn;
 import com.webobjects.jdbcadaptor.JDBCAdaptor;
