@@ -26,9 +26,11 @@ import com.webobjects.jdbcadaptor.ERXJDBCColumn;
  * bytes or strings in the DB like what you get with the factory classes. <br />
  * If you use objects of this class, you might be able to completely remove the EOSharedEditingContext
  * (the google search term for "why does my app lock up").<br />
+ * <br>
  * To use the Number constants, you need to add an entry <code>ERXConstantClassName=Test.Status</code> to the attribute's userInfo 
  * in question and your EO's class description needs to be a {@link er.extensions.ERXEntityClassDescription}, also
  * you must enable the {@ er.extension.ERXJDBCAdaptor}.<br />
+ * <br>
  * The String and Byte based constants can be used with a custom class type:<pre><code>
  * 
  * ERCMailMessage.plist:
@@ -75,15 +77,12 @@ import com.webobjects.jdbcadaptor.ERXJDBCColumn;
  * }
  * </code></pre>
  * <br />
- * <b>NOTE:</b> your constants must be loaded for this to work, so you may need to add a 
- * <code>Class c = SomeStatus.class</code> in your App constructor.
- * <br />
- * Note that upon class initialization 2500 Integers will be created and cached, from 0 - 2499.
  * An example would be:
  * <pre><code>
  * public class Test extends EOGenericRecord {
  * 	// your "status" attribute need a userInfo entry 
  * 	// "ERXConstantClassName" = "Test.Status";
+ *  // Normally, the class name would be "Test$Status", this form is used to help you use EOGenerator
  * 	public static class Status extends ERXConstant.NumberConstant {
  * 		protected Status(int value, String name) {
  * 			super(value, name);
@@ -134,6 +133,7 @@ import com.webobjects.jdbcadaptor.ERXJDBCColumn;
  * // you can compare by equality
  * test.getStatus() == Test.Status.ON
  * </pre></code>
+ * Note that upon class initialization 2500 Integers will be created and cached, from 0 - 2499.
  */
 public abstract class ERXConstant {
 	
