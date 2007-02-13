@@ -19,7 +19,6 @@ import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSKeyValueCoding;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSPropertyListSerialization;
-import com.webobjects.jdbcadaptor.ERXJDBCColumn;
 
 /**
  * General purpose constant class, useful when you want reference object that are not
