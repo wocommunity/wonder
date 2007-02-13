@@ -599,7 +599,12 @@ public class ERXEOControlUtilities {
             String attributeName,
             String function,
             EOQualifier qualifier) {
-    	return (Number)_aggregateFunctionWithQualifier(ec, entityName, attributeName, function, qualifier);
+    	Number number = null;
+    	Object obj = _aggregateFunctionWithQualifier(ec, entityName, attributeName, function, Number.class, "i", qualifier);
+    	if (obj instanceof Number) {
+    		number = (Number)obj;
+    	}
+    	return number;
     }
 
     /**
@@ -619,13 +624,20 @@ public class ERXEOControlUtilities {
             String attributeName,
             String function,
             EOQualifier qualifier) {
-    	return (NSTimestamp)_aggregateFunctionWithQualifier(ec, entityName, attributeName, function, qualifier);
+    	NSTimestamp timestamp = null;
+    	Object obj = _aggregateFunctionWithQualifier(ec, entityName, attributeName, function, NSTimestamp.class, null, qualifier);
+    	if (obj instanceof NSTimestamp) {
+    		timestamp = (NSTimestamp)obj;
+    	}
+    	return timestamp;
     }
     
     public static Object _aggregateFunctionWithQualifier(EOEditingContext ec,
                                                         String entityName,
                                                         String attributeName,
                                                         String function,
+                                                        Class valueClass,
+                                                        String valueType,
                                                         EOQualifier qualifier) {
         EOEntity entity = EOUtilities.entityNamed(ec, entityName);
 
@@ -634,7 +646,7 @@ public class ERXEOControlUtilities {
         EOAttribute attribute = ERXEOAccessUtilities.createAggregateAttribute(ec,
                                                                               function,
                                                                               attributeName,
-                                                                              entityName);
+                                                                              entityName, valueClass, valueType);
 
         EOQualifier schemaBasedQualifier = entity.schemaBasedQualifier(qualifier);
         EOFetchSpecification fs = new EOFetchSpecification(entityName, schemaBasedQualifier, null);
@@ -1360,9 +1372,7 @@ public class ERXEOControlUtilities {
             if (sortOrderings != null) {
                 return EOSortOrdering.sortedArrayUsingKeyOrderArray(ERXEOControlUtilities.objectsForFaults(ec, possibleFaults), sortOrderings);
             }
-            else {
-                return ERXEOControlUtilities.objectsForFaults(ec, possibleFaults);
-            }
+            return ERXEOControlUtilities.objectsForFaults(ec, possibleFaults);
     }
 
     /**
