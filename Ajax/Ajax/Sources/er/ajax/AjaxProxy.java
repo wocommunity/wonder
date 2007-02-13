@@ -6,8 +6,13 @@ import java.util.NoSuchElementException;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import com.metaparadigm.jsonrpc.BigDecimalSerializer;
+import com.metaparadigm.jsonrpc.EOEnterpriseObjectSerializer;
 import com.metaparadigm.jsonrpc.JSONRPCBridge;
 import com.metaparadigm.jsonrpc.JSONRPCResult;
+import com.metaparadigm.jsonrpc.NSArraySerializer;
+import com.metaparadigm.jsonrpc.NSDictionarySerializer;
+import com.metaparadigm.jsonrpc.NSTimestampSerializer;
 import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WORequest;
@@ -69,51 +74,20 @@ import com.webobjects.foundation.NSMutableDictionary;
  * <p>
  * Remember that is no proxy object is given, it will use the parent component, which is the component in which this component is embeded.
  * </p>
- * <h3>Warning</h3>
- * Heavy usage of this component can fill your session's page cache with ajax request.  There is a chance you see the � page backtrack too far � exception.
- * <br>
- * To avoid running into this problem, you shouldn't cache ajax request comming from this component. <br>
- * To do so, in your WOSession subclass (commonly Session.java), add the following logic :
- * 
- * <pre>
- * public void savePage(WOComponent page) {
- *     NSDictionary ui = context().request().userInfo();
- *     if (ui == null
- *             || ui.objectForKey(er.ajax.JSONRPCProxy.AJAX_REQUEST_KEY) == null) {
- *         super.savePage(page);
- *     }
- * }
- * </pre>
- * 
- * <h2>Synopsis</h2>
- * 
- * JSProxyRPC { proxyName=<em>a_String</em>; name=<em>a_String</em>;
- * [proxy=<em>a_Java_Object</em>;] [AjaxBridge=<em>a_JSONRPCBridge_Object</em>;] }
- * 
- * <h2>Bindings</h2>
- * 
- * <blockquote>
- * <dl>
- * <dt>proxy</dt>
- * <dd>Server side object (Java) that will be visible for rpc communication (Javascript).  
- * If no object is bound, the parent() object is assigned by default.</dd>
- * <dt>proxyName</dt>
- * <dd>Client side name (Javascript) used to identify the proxy (Java) from the bridge object.</dd>
- * <dt>name</dt>
- * <dd>Client side name (Javascript) of the bridge object.</dd>
- * <dt>JSONRPCBridge</dt>
- * <dd>Server side object (Java) used to handle the request.  Of no value are bound, a new 
- * object is created for every ajax request.  If a binding is there but null value, a new 
- * object will be created and pushed to the binding so that this new object can be shared 
- * for multiple proxy. </dd>
- * </dl>
- * </blockquote>
- * 
  * <h2>Todo</h2>
  * <ul>
  * <li> Complete the JSON-RPC integration to be able to leverage all possibilities of that library (foreign references,
  * etc.).
  * </ul>
+ * 
+ * @binding proxy Server side object (Java) that will be visible for rpc communication (Javascript).  
+ * If no object is bound, the parent() object is assigned by default.
+ * @binding proxyName Client side name (Javascript) used to identify the proxy (Java) from the bridge object.
+ * @binding name Client side name (Javascript) of the bridge object.
+ * @binding JSONRPCBridge Server side object (Java) used to handle the request.  Of no value are bound, a new 
+ * object is created for every ajax request.  If a binding is there but null value, a new 
+ * object will be created and pushed to the binding so that this new object can be shared 
+ * for multiple proxy.
  * 
  * @author Jean-Fran�ois Veillette <jfveillette@os.ca>
  * @version $Revision $, $Date $ <br>
@@ -122,132 +96,143 @@ import com.webobjects.foundation.NSMutableDictionary;
  */
 public class AjaxProxy extends AjaxComponent {
 
-    public AjaxProxy(WOContext context) {
-        super(context);
-    }
+	public AjaxProxy(WOContext context) {
+		super(context);
+	}
 
-    /**
-     * Overridden because the component is stateless
-     */
-    public boolean isStateless() {
-        return true;
-    }
+	/**
+	 * Overridden because the component is stateless
+	 */
+	public boolean isStateless() {
+		return true;
+	}
 
-    /**
-     * Overridden because the component does not synch with the bindings.
-     */
-    public boolean synchronizesVariablesWithBindings() {
-        return false;
-    }
+	/**
+	 * Overridden because the component does not synch with the bindings.
+	 */
+	public boolean synchronizesVariablesWithBindings() {
+		return false;
+	}
 
-    /**
-     * Adds the jsonrpc.js script to the head in the response if not already
-     * present and also adds a javascript proxy for the supplied bridge under
-     * the name "JSONRPC_<variableName>".
-     * 
-     * @param res
-     */
-    protected void addRequiredWebResources(WOResponse res) {
-        addScriptResourceInHead(res, "jsonrpc.js");
+	/**
+	 * Adds the jsonrpc.js script to the head in the response if not already
+	 * present and also adds a javascript proxy for the supplied bridge under
+	 * the name "JSONRPC_<variableName>".
+	 * 
+	 * @param res
+	 */
+	protected void addRequiredWebResources(WOResponse res) {
+		addScriptResourceInHead(res, "jsonrpc.js");
 
-        NSMutableDictionary userInfo = AjaxUtils.mutableUserInfo(context().response());
-        String name = (String) valueForBinding("name");
-        String key = "JSONRPC_" + name;
-        Object oldValue = userInfo.objectForKey(key);
-        Object bridge = valueForBinding("JSONRPCBridge");
-        if (bridge == null) {
-            bridge = NSKeyValueCoding.NullValue;
-        }
-        if (oldValue == null) {
-            // add the javascript variable 'name' only if not already in the
-            // response
-            userInfo.setObjectForKey(bridge, key);
-            AjaxUtils.addScriptCodeInHead(res, "var " + name + " = new JSONRpcClient(\""
-                    + AjaxUtils.ajaxComponentActionUrl(context()) + "\");");
-        } else {
-            // ok, the javascript variable 'name' is already in the response,
-            // was it referencing the same JSONRPCBridge object ?
-            if (bridge != oldValue) {
-                // well, it wasn't ... there is high chance of unexpected
-                // problem. just warn the user (programmer), that it might cause
-                // problem.
-                log
-                        .warn("JSONRPCProxy detected a conflict.  You defined the javascript variable '"
-                                + name
-                                + "'  multiple times, and linked to differents proxy objects: <"
-                                + bridge + "> and <" + oldValue + ">");
-            }
-        }
-    }
+		NSMutableDictionary userInfo = AjaxUtils.mutableUserInfo(context().response());
+		String name = (String) valueForBinding("name");
+		String key = "JSONRPC_" + name;
+		Object oldValue = userInfo.objectForKey(key);
+		Object bridge = valueForBinding("JSONRPCBridge");
+		if (bridge == null) {
+			bridge = NSKeyValueCoding.NullValue;
+		}
+		if (oldValue == null) {
+			// add the javascript variable 'name' only if not already in the
+			// response
+			userInfo.setObjectForKey(bridge, key);
+			AjaxUtils.addScriptCodeInHead(res, "var " + name + " = new JSONRpcClient(\"" + AjaxUtils.ajaxComponentActionUrl(context()) + "\");");
+		}
+		else {
+			// ok, the javascript variable 'name' is already in the response,
+			// was it referencing the same JSONRPCBridge object ?
+			if (bridge != oldValue) {
+				// well, it wasn't ... there is high chance of unexpected
+				// problem. just warn the user (programmer), that it might cause
+				// problem.
+				log.warn("JSONRPCProxy detected a conflict.  You defined the javascript variable '" + name + "'  multiple times, and linked to differents proxy objects: <" + bridge + "> and <" + oldValue + ">");
+			}
+		}
+	}
 
-    /** Ask the an JSONRPCBridge object to handle the json request. */
-    public WOActionResults handleRequest(WORequest request, WOContext context) {
-        WOResponse response = AjaxUtils.createResponse(request, context);
+	/** Ask the an JSONRPCBridge object to handle the json request. */
+	public WOActionResults handleRequest(WORequest request, WOContext context) {
+		WOResponse response = AjaxUtils.createResponse(request, context);
 
-        String inputString = request.contentString();
-        log.debug("Input: " + inputString);
+		String inputString = request.contentString();
+		log.debug("Input: " + inputString);
 
-        // Process the request
-        JSONObject input = null;
-        Object output = null;
-        try {
-            input = new JSONObject(inputString);
+		// Process the request
+		JSONObject input = null;
+		Object output = null;
+		try {
+			input = new JSONObject(inputString);
 
-            // Get method name and arguments
-            String methodName = null;
-            JSONArray arguments = null;
+			// Get method name and arguments
+			String methodName = null;
+			JSONArray arguments = null;
 
-            try {
-                methodName = input.getString("method");
-            } catch (NoSuchElementException ne) {
-                // nothing
-            }
+			try {
+				methodName = input.getString("method");
+			}
+			catch (NoSuchElementException ne) {
+				// nothing
+			}
 
-            // Back compatibility for <= 0.7 clients
-            if (methodName != null) {
-                arguments = input.getJSONArray("params");
-            }
-            // Is this a CallableReference it will have a non-zero objectID
-            int reference = input.optInt("objectID");
+			// Back compatibility for <= 0.7 clients
+			if (methodName != null) {
+				arguments = input.getJSONArray("params");
+			}
+			// Is this a CallableReference it will have a non-zero objectID
+			int reference = input.optInt("objectID");
 
-            if (reference != 0) {
-                log.debug("Call objectID=" + reference + " " + methodName + "(" + arguments + ")");
-            } else {
-                log.debug("Call " + methodName + "(" + arguments + ")");
-            }
+			if (reference != 0) {
+				log.debug("Call objectID=" + reference + " " + methodName + "(" + arguments + ")");
+			}
+			else {
+				log.debug("Call " + methodName + "(" + arguments + ")");
+			}
 
-            Object proxy;
-            if (canGetValueForBinding("proxy")) {
-                proxy = valueForBinding("proxy");
-            } else {
-                proxy = parent();
-            }
-            String proxyName = (String) valueForBinding("proxyName");
+			Object proxy;
+			if (canGetValueForBinding("proxy")) {
+				proxy = valueForBinding("proxy");
+			}
+			else {
+				proxy = parent();
+			}
+			String proxyName = (String) valueForBinding("proxyName");
 
-            JSONRPCBridge bridge = null;
-            if (canGetValueForBinding("AjaxBridge")) {
-                bridge = (JSONRPCBridge) valueForBinding("AjaxBridge");
-            } else {
-                bridge = new JSONRPCBridge();
-                if (canSetValueForBinding("AjaxBridge")) {
-                    setValueForBinding(bridge, "AjaxBridge");
-                }
-            }
+			JSONRPCBridge bridge = null;
+			if (canGetValueForBinding("AjaxBridge")) {
+				bridge = (JSONRPCBridge) valueForBinding("AjaxBridge");
+			}
+			else {
+				bridge = new JSONRPCBridge();
+				bridge.getSerializer().registerSerializer(new EOEnterpriseObjectSerializer());
+				bridge.getSerializer().registerSerializer(new NSArraySerializer());
+				bridge.getSerializer().registerSerializer(new NSDictionarySerializer());
+				bridge.getSerializer().registerSerializer(new NSTimestampSerializer());
+				bridge.getSerializer().registerSerializer(new BigDecimalSerializer());
+				if (canSetValueForBinding("AjaxBridge")) {
+					setValueForBinding(bridge, "AjaxBridge");
+				}
+			}
 
-            bridge.setDebug(log.isDebugEnabled());
-            bridge.registerObject(proxyName, proxy);
-            output = bridge.call(new Object[] { proxy }, input);
-        } catch (ParseException e) {
-            log.error("Can't parse call: " + inputString);
-            output = JSONRPCResult.MSG_ERR_PARSE;
-        } catch (NoSuchElementException e) {
-            log.error("No method in request");
-            output = JSONRPCResult.MSG_ERR_NOMETHOD;
-        }
+			bridge.setDebug(log.isDebugEnabled());
+			bridge.registerObject(proxyName, proxy);
+			output = bridge.call(new Object[] { proxy }, input);
+		}
+		catch (ParseException e) {
+			log.error("Can't parse call: " + inputString);
+			output = JSONRPCResult.MSG_ERR_PARSE;
+		}
+		catch (NoSuchElementException e) {
+			log.error("No method in request");
+			output = JSONRPCResult.MSG_ERR_NOMETHOD;
+		}
+		catch (Exception e) {
+			log.error("Exception", e);
+			output = JSONRPCResult.MSG_ERR_NOMETHOD;
+		}
 
-        // Write the response
-        log.debug("JSONRPCServlet.service send: " + output.toString());
-        response.appendContentString(output.toString());
-        return response;
-    }
+		// Write the response
+		log.debug("JSONRPCServlet.service send: " + output.toString());
+		response.appendContentString(output.toString());
+		return response;
+	}
 }
