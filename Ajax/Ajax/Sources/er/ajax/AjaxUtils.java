@@ -6,13 +6,11 @@ import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WOMessage;
 import com.webobjects.appserver.WORequest;
-import com.webobjects.appserver.WOResourceManager;
 import com.webobjects.appserver.WOResponse;
-import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableDictionary;
 
-import er.extensions.ERXProperties;
+import er.extensions.ERXWOContext;
 
 public class AjaxUtils {
 	private static String HTML_CLOSE_HEAD = System.getProperty("er.ajax.AJComponent.htmlCloseHead");
@@ -61,7 +59,6 @@ public class AjaxUtils {
 	 * @return
 	 */
 	public static AjaxResponse createResponse(WORequest request, WOContext context) {
-		WOApplication app = WOApplication.application();
 		AjaxResponse response = null;
 		if (context != null) {
 			WOResponse existingResponse = context.response();
@@ -100,27 +97,11 @@ public class AjaxUtils {
 	 * @return
 	 */
 	public static NSMutableDictionary mutableUserInfo(WOMessage message) {
-		NSDictionary dict = message.userInfo();
-		NSMutableDictionary result = null;
-		if (dict == null) {
-			result = new NSMutableDictionary();
-			message.setUserInfo(result);
-		}
-		else {
-			if (dict instanceof NSMutableDictionary) {
-				result = (NSMutableDictionary) dict;
-			}
-			else {
-				result = dict.mutableClone();
-				message.setUserInfo(result);
-			}
-		}
-		return result;
+		return ERXWOContext.contextDictionary();
 	}
 
 	public static String htmlCloseHead() {
-		String head = AjaxUtils.HTML_CLOSE_HEAD;
-		return (head == null ? "</head>" : head);
+		return ERXWOContext.htmlCloseHead(AjaxUtils.HTML_CLOSE_HEAD);
 	}
 
 	/**
@@ -131,16 +112,7 @@ public class AjaxUtils {
 	 * @param tag
 	 */
 	public static void insertInResponseBeforeTag(WOResponse response, String content, String tag) {
-		String stream = response.contentString();
-		int idx = stream.indexOf(tag);
-		if (idx < 0) {
-			idx = stream.toLowerCase().indexOf(tag.toLowerCase());
-		}
-		if (idx >= 0) {
-			String pre = stream.substring(0, idx);
-			String post = stream.substring(idx, stream.length());
-			response.setContent(pre + content + post);
-		}
+		ERXWOContext.insertInResponseBeforeTag(response, content, tag);
 	}
 
 	/**
@@ -186,30 +158,7 @@ public class AjaxUtils {
 	 * @param endTag
 	 */
 	public static void addResourceInHead(WOContext context, WOResponse response, String framework, String fileName, String startTag, String endTag) {
-		NSMutableDictionary userInfo = AjaxUtils.mutableUserInfo(context.response());
-		if (userInfo.objectForKey(fileName) == null) {
-			userInfo.setObjectForKey(fileName, fileName);
-			String url;
-			if (fileName.indexOf("://") != -1) {
-				url = fileName;
-			}
-			else {
-				WOResourceManager rm = WOApplication.application().resourceManager();
-				NSArray languages = null;
-				if (context.hasSession()) {
-					languages = context.session().languages();
-				}
-				url = rm.urlForResourceNamed(fileName, framework, languages, context.request());
-				if (ERXProperties.stringForKey(AjaxUtils.SECURE_RESOURCES_KEY) != null) {
-					StringBuffer urlBuffer = new StringBuffer();
-			    	context.request()._completeURLPrefix(urlBuffer, ERXProperties.booleanForKey(AjaxUtils.SECURE_RESOURCES_KEY), 0);
-			    	urlBuffer.append(url);
-			    	url = urlBuffer.toString();
-				}
-			}
-			String html = startTag + url + endTag + "\n";
-			AjaxUtils.insertInResponseBeforeTag(response, html, AjaxUtils.htmlCloseHead());
-		}
+		ERXWOContext.addResourceInHead(context, response, framework, fileName, startTag, endTag);
 	}
 
 	/**
