@@ -9,6 +9,8 @@ import com.webobjects.eoaccess.EOEntity;
 import com.webobjects.eoaccess.EORelationship;
 import com.webobjects.eoaccess.EOUtilities;
 import com.webobjects.eocontrol.EOEnterpriseObject;
+import com.webobjects.eocontrol.EOGlobalID;
+import com.webobjects.eocontrol.EOKeyGlobalID;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation.NSMutableSet;
@@ -80,6 +82,12 @@ public class EOEnterpriseObjectSerializer extends AbstractSerializer {
                destination.put(attributeName, ser.marshall(state, source.storedValueForKey(attributeName)));
            }
        }
+       EOEntity entity = EOUtilities.entityForObject(source.editingContext(), source);
+       EOGlobalID gid = source.editingContext().globalIDForObject(source);
+       if (gid instanceof EOKeyGlobalID) {
+    	   EOKeyGlobalID key = (EOKeyGlobalID) gid;
+    	   destination.put("id", ser.marshall(state, key.keyValues()[0]));
+       }
    }
 
    /**
@@ -90,29 +98,30 @@ public class EOEnterpriseObjectSerializer extends AbstractSerializer {
      * @return an array of attribute names from the EOEntity of source that are used in forming relationships.
      **/
    public static NSArray exposedKeyAttributeNames(EOEnterpriseObject source) {
-       // These are cached on EOEntity name as an optimization.
-       if (exposedKeyAttributeDictionary == null) {
-           exposedKeyAttributeDictionary = new NSMutableDictionary();
-       }
+	   // These are cached on EOEntity name as an optimization.
+	   // exposedKeyAttributeDictionary = null;
+	   if (exposedKeyAttributeDictionary == null) {
+		   exposedKeyAttributeDictionary = new NSMutableDictionary();
+	   }
 
-       EOEntity entity = EOUtilities.entityForObject(source.editingContext(), source);
-       NSArray exposedKeyAttributeNames = (NSArray) exposedKeyAttributeDictionary.objectForKey(entity.name());
+	   EOEntity entity = EOUtilities.entityForObject(source.editingContext(), source);
+	   NSArray exposedKeyAttributeNames = (NSArray) exposedKeyAttributeDictionary.objectForKey(entity.name());
 
-       if (exposedKeyAttributeNames == null) {
-           NSMutableSet keyNames = new NSMutableSet();
-           keyNames.addObjectsFromArray(entity.primaryKeyAttributeNames());
+	   if (exposedKeyAttributeNames == null) {
+		   NSMutableSet keyNames = new NSMutableSet();
+		   keyNames.addObjectsFromArray(entity.primaryKeyAttributeNames());
 
-           Enumeration relationshipEnumerator = entity.relationships().objectEnumerator();
-           while (relationshipEnumerator.hasMoreElements()) {
-               EORelationship relationship = (EORelationship)relationshipEnumerator.nextElement();
-               keyNames.addObjectsFromArray((NSArray)relationship.sourceAttributes().valueForKey("name"));
-           }
+		   Enumeration relationshipEnumerator = entity.relationships().objectEnumerator();
+		   while (relationshipEnumerator.hasMoreElements()) {
+			   EORelationship relationship = (EORelationship)relationshipEnumerator.nextElement();
+			   keyNames.addObjectsFromArray((NSArray)relationship.sourceAttributes().valueForKey("name"));
+		   }
 
-           NSSet publicAttributeNames = new NSSet(source.attributeKeys());
-           exposedKeyAttributeNames = publicAttributeNames.setByIntersectingSet(keyNames).allObjects();
-           exposedKeyAttributeDictionary.setObjectForKey(exposedKeyAttributeNames, entity.name());
-       }
+		   NSSet publicAttributeNames = new NSSet(source.attributeKeys());
+		   exposedKeyAttributeNames = publicAttributeNames.setByIntersectingSet(keyNames).allObjects();
+		   exposedKeyAttributeDictionary.setObjectForKey(exposedKeyAttributeNames, entity.name());
+	   }
 
-       return exposedKeyAttributeNames;
+	   return exposedKeyAttributeNames;
    }
 }
