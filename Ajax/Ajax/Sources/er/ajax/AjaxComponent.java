@@ -78,9 +78,13 @@ public abstract class AjaxComponent extends WOComponent implements IAjaxElement 
     protected String _containerID(WOContext context) {
     	return null;
     }
-    
+
     public String safeElementID() {
-      return AjaxUtils.toSafeElementID(context().elementID());
+    	String id = (String)valueForBinding("id");
+    	if(id == null) {
+    		return AjaxUtils.toSafeElementID(context().elementID());
+    	}
+    	return id;
     }
 
     /**
