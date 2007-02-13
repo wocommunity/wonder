@@ -1,0 +1,54 @@
+<webobject name="Wrapper">
+<webobject name="Styles"><webobject name="PropertiesPlain">
+#<webobject name="PageName"></webobject>Grid .ygrid-col-<webobject name="PropertyIndex"></webobject> {
+}
+</webobject></webobject>
+<div id="<webobject name="PageName"></webobject>Grid"></div>
+<div id="paging" class="pagination"></div>
+
+<webobject name="MoviesProxy"></webobject>
+
+<script>
+
+var columnModel = new WONDER.grid.DefaultColumnModel([
+	<webobject name="Properties"> {
+		header:   "<webobject name="DisplayNameForProperty"></webobject>",
+		tooltip:  "Click to sort by <webobject name="DisplayNameForProperty"></webobject>", 
+		editor:   eval(WONDER.grid.Editors['<webobject name="PropertyClass"></webobject>']), 
+		renderer: WONDER.grid.Renderers['<webobject name="PropertyClass"></webobject>']
+	}</webobject>
+]);
+
+var dataModel = new WONDER.grid.EODataModel({
+   root: 'nsarray',
+   id: 'id',
+   fields: [<webobject name="Properties">{
+   	  name: "<webobject name="PropertyKey"></webobject>", 
+   	  preprocessor: WONDER.grid.Preprocessors['<webobject name="PropertyClass"></webobject>'],
+  	  postprocessor: WONDER.grid.Postprocessors['<webobject name="PropertyClass"></webobject>']
+   }</webobject>]
+});
+
+var selectionModel = new YAHOO.ext.grid.EditorAndSelectionModel();
+
+//var selectionModel = new YAHOO.ext.grid.SingleSelectionModel();
+// selectionModel.addListener('selectionchange', EnableDelete);
+
+var grid = new WONDER.grid.Grid('<webobject name="PageName"></webobject>Grid', dataModel, columnModel, selectionModel);
+grid.render();
+grid.getDataModel().loadData(json.movies.fetchObjects());
+
+// grid.addListener('dragdrop',EndDrag);
+// the grid is ready, load page 1 of topics 
+// grid.getDataModel().addListener('beforeload', onBeginUpdate);
+// grid.getDataModel().addListener('load', onEndUpdate);
+// grid.getDataModel().loadPage(1);
+
+function test() {
+	var objects = json.movies.fetchObjects();
+	grid.dataModel().loadData(objects);
+	return objects;
+}
+</script>
+<a href="javascript: test(); void(0);" >test</a>
+</webobject>
