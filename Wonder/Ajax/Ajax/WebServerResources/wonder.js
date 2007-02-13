@@ -104,3 +104,27 @@ var AjaxUpdateLink = {
 		new Ajax.Updater(id, actionUrl, AjaxOptions.options(options));
 	}
 };
+// our own extensions 
+var Wonder = {};
+Wonder.Autocompleter = Class.create();
+Object.extend(Object.extend(Wonder.Autocompleter.prototype, Ajax.Autocompleter.prototype), {
+   initialize: function(element, update, url, options) {
+     Ajax.Autocompleter.prototype.initialize(element, update, url, options);
+     this.defaultValue = options.defaultValue;
+     if(this.defaultValue) {
+     	Event.observe(this.element, "focus", this.onDefaultValueFocus.bindAsEventListener(this));
+     	Event.observe(this.element, "blur", this.onDefaultValueBlur.bindAsEventListener(this));
+	    $(element).value = defaultValue;
+     }
+   },
+   onDefaultValueFocus: function(e) {
+   	 if(this.element.value == this.defaultValue) {
+	   	 this.element = "";
+	 }
+   },
+   onDefaultValueBlur: function(e) {
+   	 if(this.element.value == "") {
+	   	 this.element = this.defaultValue;
+	 }
+   }
+});
