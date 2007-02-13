@@ -107,6 +107,7 @@ public class AjaxAutoComplete extends AjaxComponent {
       ajaxOptionsArray.addObject(new AjaxOption("afterUpdateElement", AjaxOption.SCRIPT));
 	  ajaxOptionsArray.addObject(new AjaxOption("fullSearch", AjaxOption.BOOLEAN));
 	  ajaxOptionsArray.addObject(new AjaxOption("partialSearch", AjaxOption.BOOLEAN));
+	  ajaxOptionsArray.addObject(new AjaxOption("defaultValue", AjaxOption.STRING));
       NSMutableDictionary options = AjaxOption.createAjaxOptionsDictionary(ajaxOptionsArray, this);
       return options;
     }
@@ -171,6 +172,7 @@ public class AjaxAutoComplete extends AjaxComponent {
         addScriptResourceInHead(res, "builder.js");
         addScriptResourceInHead(res, "dragdrop.js");
         addScriptResourceInHead(res, "controls.js");
+        addScriptResourceInHead(res, "wonder.js");
     }
 
     /**
@@ -187,7 +189,9 @@ public class AjaxAutoComplete extends AjaxComponent {
         boolean hasItem = hasBinding("item");
         WOResponse response = AjaxUtils.createResponse(request, context);
         response.appendContentString("<ul>");
-        for(Enumeration e = values.objectEnumerator(); e.hasMoreElements();) {
+        int maxItems = ((Integer) valueForBinding("maxItems", new Integer(50))).intValue();
+        int itemsCount = 0;
+        for(Enumeration e = values.objectEnumerator(); e.hasMoreElements() && itemsCount++ < maxItems;) {
             response.appendContentString("<li>");
             Object value = e.nextElement();
             if(hasItem && child != null) {
