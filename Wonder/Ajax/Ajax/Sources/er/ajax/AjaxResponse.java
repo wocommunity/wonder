@@ -7,6 +7,7 @@ import com.webobjects.appserver.WOApplication;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WORequest;
 import com.webobjects.appserver.WOResponse;
+import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 
@@ -75,6 +76,7 @@ public class AjaxResponse extends WOResponse {
 	}
 	
 	public static boolean isAjaxUpdatePass(WORequest request) {
-		return request.userInfo() != null && request.userInfo().valueForKey(AjaxResponse.AJAX_UPDATE_PASS) != null;
+		NSDictionary userInfo = AjaxUtils.mutableUserInfo(request);
+		return userInfo != null && userInfo.valueForKey(AjaxResponse.AJAX_UPDATE_PASS) != null;
 	}
 }

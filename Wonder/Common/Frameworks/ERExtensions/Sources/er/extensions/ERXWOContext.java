@@ -11,6 +11,8 @@ import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WODirectAction;
 import com.webobjects.appserver.WORequest;
+import com.webobjects.appserver.WOResourceManager;
+import com.webobjects.appserver.WOResponse;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableArray;
@@ -24,7 +26,9 @@ import com.webobjects.foundation.NSNotificationCenter;
 public class ERXWOContext extends WOContext implements ERXMutableUserInfoHolderInterface {
     private static Observer observer;
     private boolean _generateCompleteURLs;
-    
+
+	private static final String SECURE_RESOURCES_KEY = "er.ajax.secureResources";
+
     public static class Observer {
     	public void applicationDidHandleRequest(NSNotification n) {
     		ERXThreadStorage.removeValueForKey("ERXWOContext.dict");
@@ -180,4 +184,69 @@ public class ERXWOContext extends WOContext implements ERXMutableUserInfoHolderI
     		component = component.parent();
     	}
     	return result;
-    }}
+    }
+
+
+	public static String htmlCloseHead(String head) {
+		return (head == null ? "</head>" : head);
+	}
+
+	/**
+	 * Utility to add the given text before the given tag. Used to add stuff in the HEAD.
+	 * 
+	 * @param response
+	 * @param content
+	 * @param tag
+	 */
+	public static void insertInResponseBeforeTag(WOResponse response, String content, String tag) {
+		String stream = response.contentString();
+		int idx = stream.indexOf(tag);
+		if (idx < 0) {
+			idx = stream.toLowerCase().indexOf(tag.toLowerCase());
+		}
+		if (idx >= 0) {
+			String pre = stream.substring(0, idx);
+			String post = stream.substring(idx, stream.length());
+			response.setContent(pre + content + post);
+		}
+	}
+
+
+	/**
+	 * Adds a reference to an arbitrary file with a correct resource url wrapped between startTag and endTag in the html
+	 * head tag if it isn't already present in the response.
+	 * 
+	 * @param response
+	 * @param fileName
+	 * @param startTag
+	 * @param endTag
+	 */
+	public static void addResourceInHead(WOContext context, WOResponse response, String framework, String fileName, String startTag, String endTag) {
+		NSMutableDictionary userInfo = contextDictionary();
+		if (userInfo.objectForKey(fileName) == null) {
+			userInfo.setObjectForKey(fileName, fileName);
+			String url;
+			if (fileName.indexOf("://") != -1) {
+				url = fileName;
+			}
+			else {
+				WOResourceManager rm = WOApplication.application().resourceManager();
+				NSArray languages = null;
+				if (context.hasSession()) {
+					languages = context.session().languages();
+				}
+				url = rm.urlForResourceNamed(fileName, framework, languages, context.request());
+				if (ERXProperties.stringForKey(SECURE_RESOURCES_KEY) != null) {
+					StringBuffer urlBuffer = new StringBuffer();
+			    	context.request()._completeURLPrefix(urlBuffer, ERXProperties.booleanForKey(SECURE_RESOURCES_KEY), 0);
+			    	urlBuffer.append(url);
+			    	url = urlBuffer.toString();
+				}
+			}
+			String html = startTag + url + endTag + "\n";
+			insertInResponseBeforeTag(response, html, htmlCloseHead(System.getProperty("er.ajax.AJComponent.htmlCloseHead")));
+		}
+	}
+
+
+}

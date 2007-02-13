@@ -6,6 +6,7 @@ import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WOMessage;
 import com.webobjects.appserver.WORequest;
 import com.webobjects.appserver.WOResponse;
+import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSLog;
 
 /**
@@ -24,9 +25,15 @@ public abstract class ERXAjaxApplication extends WOApplication {
     /**
      * Checks if the page should not be stored in the cache 
      */
-    public static boolean shouldNotStorePage(WOMessage message) {
-  	  return (message != null && (message.headerForKey(ERXAjaxSession.DONT_STORE_PAGE) != null || (message.userInfo() != null && message.userInfo().objectForKey(ERXAjaxSession.DONT_STORE_PAGE) != null)));
-    }
+	public static boolean shouldNotStorePage(WOMessage message) {
+		NSDictionary userInfo = NSDictionary.EmptyDictionary;
+		if(message != null) {
+			userInfo = ERXWOContext.contextDictionary();
+		}
+		return (message != null &&	
+				(message.headerForKey(ERXAjaxSession.DONT_STORE_PAGE) != null 
+						|| (userInfo.objectForKey(ERXAjaxSession.DONT_STORE_PAGE) != null)));
+	}
 
     /**
      * Removes Ajax response headers that are no longer necessary.
