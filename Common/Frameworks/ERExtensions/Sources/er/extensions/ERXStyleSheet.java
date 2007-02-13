@@ -131,24 +131,25 @@ public class ERXStyleSheet extends ERXStatelessComponent {
      * Appends the &ltlink&gt; tag, either by using the style sheet name and framework or
      * by using the component content and then generating a link to it.
      */
-	public void appendToResponse(WOResponse woresponse, WOContext wocontext) {
-		String href = styleSheetUrl();
-		woresponse._appendContentAsciiString("<link ");
-		woresponse._appendTagAttributeAndValue("rel", "stylesheet", false);
-		woresponse._appendTagAttributeAndValue("type", "text/css", false);
-		if(href == null) {
-			String key = styleSheetKey();
-			ERXExpiringCache cache = cache(session());
-			if(cache.isStale(key) || ((ERXApplication)application()).isDevelopmentMode()) {
-				WOResponse newresponse = new WOResponse();
-				super.appendToResponse(newresponse, wocontext);
-				newresponse.setHeader("text/css", "content-type");
-				cache.setObjectForKey(newresponse, key);
-			}
-			href = wocontext.directActionURLForActionNamed(Sheet.class.getName() + "/" + key, null);
-		}
-		woresponse._appendTagAttributeAndValue("href", href, false);
-		woresponse._appendContentAsciiString("></link>");
-	}
-
+    public void appendToResponse(WOResponse r, WOContext wocontext) {
+    	String href = styleSheetUrl();
+    	WOResponse woresponse = new WOResponse();
+    	woresponse._appendContentAsciiString("<link ");
+    	woresponse._appendTagAttributeAndValue("rel", "stylesheet", false);
+    	woresponse._appendTagAttributeAndValue("type", "text/css", false);
+    	if(href == null) {
+    		String key = styleSheetKey();
+    		ERXExpiringCache cache = cache(session());
+    		if(cache.isStale(key) || ((ERXApplication)application()).isDevelopmentMode()) {
+    			WOResponse newresponse = new WOResponse();
+    			super.appendToResponse(newresponse, wocontext);
+    			newresponse.setHeader("text/css", "content-type");
+    			cache.setObjectForKey(newresponse, key);
+    		}
+    		href = wocontext.directActionURLForActionNamed(Sheet.class.getName() + "/" + key, null);
+    	}
+    	woresponse._appendTagAttributeAndValue("href", href, false);
+    	woresponse._appendContentAsciiString("></link>");
+    	ERXWOContext.insertInResponseBeforeTag(r, woresponse.contentString(), "</head>");
+    }
 }
