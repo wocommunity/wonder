@@ -9,11 +9,11 @@ function ERXJSFlyOverCustomComponent_show(link,obj) {
     }
     var style=obj.style; 
     style.left=link.style.left;
-    style.top=link.style.bottom;
+    // style.top=link.style.bottom;
     style.visibility='visible';
     var linkPos = ERXJSFlyOverCustomComponent_getPos(link);
     var objPos = ERXJSFlyOverCustomComponent_getPos(obj);
-    obj.style.top = (linkPos.height);
+    obj.style.top = 0;
     <webobject name="OnClickConditional">obj.style.left = (50);</webobject>
     currentERXFlyOver = obj;
 }
