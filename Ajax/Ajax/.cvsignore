@@ -5,3 +5,5 @@ PB.project
 *.pxbproj
 target
 build
+CPFileList.txt
+*.xcodeproj
