@@ -17,6 +17,7 @@ import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.foundation.NSArray;
 
 import er.extensions.ERXEC;
+import er.extensions.ERXJDBCUtilities;
 import er.extensions.ERXProperties;
 import er.extensions.ERXEOAccessUtilities.ChannelAction;
 
@@ -228,11 +229,22 @@ public class ERXMigrator {
 			for (int versionNum = migratorVersion.intValue() + 1; !done && versionNum <= migrateToVersion; versionNum++) {
 				String migrationClassPrefix = ERXProperties.stringForKeyWithDefault(modelName + ".MigrationClassPrefix", modelName);
 				String erMigrationClassName = migrationClassPrefix + versionNum;
-				if (ERXMigrator.log.isInfoEnabled()) {
-					ERXMigrator.log.info("Looking for migration '" + erMigrationClassName + "' ...");
-				}
+				String vendorMigrationClassName = migrationClassPrefix + ERXJDBCUtilities.databaseProductName(model) + versionNum;
 				try {
-					Class erMigrationClass = Class.forName(erMigrationClassName);
+					Class erMigrationClass;    
+					try {
+           if (ERXMigrator.log.isInfoEnabled()) {
+             ERXMigrator.log.info("Looking for migration '" + erMigrationClassName + "' ...");
+           }
+						erMigrationClass = Class.forName(erMigrationClassName);
+         }
+         catch (ClassNotFoundException e) {
+           if (ERXMigrator.log.isInfoEnabled()) {
+             ERXMigrator.log.info("Looking for vendor-specific migration '" + vendorMigrationClassName + "-' ...");
+           }
+           erMigrationClass = Class.forName(vendorMigrationClassName);
+         }
+          
 					IERXMigration migration = (IERXMigration) erMigrationClass.newInstance();
 					versions.put(modelName, new Integer(versionNum));
 					NSArray migrationDependencies = migration.modelDependencies();
@@ -245,12 +257,13 @@ public class ERXMigrator {
 							_buildDependenciesForModel(dependsOnModel, dependsOnVersion, versions, migrations);
 						}
 					}
+          
 					migrations.put(migration, new ModelVersion(model, versionNum));
 				}
 				catch (ClassNotFoundException e) {
 					done = true;
 					if (ERXMigrator.log.isInfoEnabled()) {
-						ERXMigrator.log.info("  Migration " + erMigrationClassName + " does not exist.");
+						ERXMigrator.log.info("  Migration " + erMigrationClassName + " and/or " + vendorMigrationClassName + " do not exist.");
 					}
 					versions.put(modelName, new Integer(ERXMigrator.LATEST_VERSION));
 				}
