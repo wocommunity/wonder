@@ -77,8 +77,8 @@ public class ERXJDBCUtilities {
 			destDictionary = aDestConnectionDict;
 			source = connectionWithDictionary(aSourceConnectionDict);
 			dest = connectionWithDictionary(aDestConnectionDict);
-			_quoteSource = Boolean.valueOf((String)aSourceConnectionDict.objectForKey("quote")).booleanValue();
-			_quoteDestination = Boolean.valueOf((String)aDestConnectionDict.objectForKey("quote")).booleanValue();
+			_quoteSource = Boolean.valueOf((String) aSourceConnectionDict.objectForKey("quote")).booleanValue();
+			_quoteDestination = Boolean.valueOf((String) aDestConnectionDict.objectForKey("quote")).booleanValue();
 		}
 
 		public void connect(String sourcePrefix, String destPrefix) throws SQLException {
@@ -141,10 +141,10 @@ public class ERXJDBCUtilities {
 			Boolean autoCommit;
 			Object autoCommitObj = dict.objectForKey("autoCommit");
 			if (autoCommitObj instanceof String) {
-				autoCommit = Boolean.valueOf((String)autoCommitObj);
+				autoCommit = Boolean.valueOf((String) autoCommitObj);
 			}
 			else {
-				autoCommit = (Boolean)autoCommitObj;
+				autoCommit = (Boolean) autoCommitObj;
 			}
 			boolean ac = autoCommit == null ? true : autoCommit.booleanValue();
 			// Boolean readOnly = (Boolean) dict.objectForKey("readOnly");
@@ -220,7 +220,7 @@ public class ERXJDBCUtilities {
 			String tableName = entity.externalName();
 			String[] columnNames = columnsFromAttributes(attributes, true);
 			String[] columnNamesWithoutQuotes = columnsFromAttributes(attributes, false);
-		
+
 			// build the select statement, this selects -all- rows
 			StringBuffer selectBuf = new StringBuffer();
 			selectBuf.append("select ");
@@ -233,8 +233,8 @@ public class ERXJDBCUtilities {
 			}
 			EOQualifier qualifier = entity.restrictingQualifier();
 			if (qualifier != null) {
-			    EOAdaptor adaptor = EOAdaptor.adaptorWithName("JDBC");
-			    adaptor.setConnectionDictionary(sourceDictionary);
+				EOAdaptor adaptor = EOAdaptor.adaptorWithName("JDBC");
+				adaptor.setConnectionDictionary(sourceDictionary);
 				EOSQLExpressionFactory factory = adaptor.expressionFactory();
 				EOSQLExpression sqlExpression = factory.createExpression(entity);
 				String sqlString = EOQualifierSQLGeneration.Support._sqlStringForSQLExpression(qualifier, sqlExpression);
@@ -341,11 +341,11 @@ public class ERXJDBCUtilities {
 						f.delete();
 				}
 
-				//if (rows.getRow() % 1000 == 0) {
-					//log.info("committing at count=" + rowsCount);
-					//dest.commit();
-					//log.info("committing done");
-				//}
+				// if (rows.getRow() % 1000 == 0) {
+				// log.info("committing at count=" + rowsCount);
+				// dest.commit();
+				// log.info("committing done");
+				// }
 
 			}
 			log.info("table " + tableName + ", inserted " + rowsCount + " rows");
@@ -361,29 +361,30 @@ public class ERXJDBCUtilities {
 
 	/**
 	 * Copies all rows from one database to another database. The tables must exist before calling this method.
-	 *
+	 * 
 	 * Example:
+	 * 
 	 * <pre>
-	 *     NSMutableDictionary sourceDict = new NSMutableDictionary();
-	 *     sourceDict.setObjectForKey("YourPassword", "password");
-	 *     sourceDict.setObjectForKey("YourUserName", "username");
-	 *     sourceDict.setObjectForKey("jdbc:FrontBase://127.0.0.1/YourSourceDatabase", "URL");
-	 *     sourceDict.setObjectForKey("com.frontbase.jdbc.FBJDriver", "driver");
-	 *     sourceDict.setObjectForKey(Boolean.FALSE.toString(), "autoCommit");
-	 *     sourceDict.setObjectForKey(Boolean.TRUE.toString(), "readOnly");
-	 *     sourceDict.setObjectForKey(Boolean.TRUE.toString(), "quote");
-	 *     
-	 *     NSMutableDictionary destDict = sourceDict.mutableClone();
-	 *     destDict.setObjectForKey("jdbc:postgresql://localhost/YourDestinationDatabase", "URL");
-	 *     destDict.setObjectForKey("YourPassword", "password");
-	 *     destDict.setObjectForKey("YourUserName", "username");
-	 *     destDict.setObjectForKey("org.postgresql.Driver", "driver");
-	 *     destDict.setObjectForKey(Boolean.FALSE.toString(), "autoCommit");
-	 *     destDict.setObjectForKey(Boolean.FALSE.toString(), "readOnly");
-	 *     destDict.setObjectForKey(Boolean.FALSE.toString(), "quote");
-	 *     
-	 *     EOModel model = EOModelGroup.defaultGroup().modelNamed("YourModelName");
-	 *     ERXJDBCUtilities._copyDatabaseDefinedByEOModelAndConnectionDictionaryToDatabaseWithConnectionDictionary(model, sourceDict, destDict);
+	 * NSMutableDictionary sourceDict = new NSMutableDictionary();
+	 * sourceDict.setObjectForKey(&quot;YourPassword&quot;, &quot;password&quot;);
+	 * sourceDict.setObjectForKey(&quot;YourUserName&quot;, &quot;username&quot;);
+	 * sourceDict.setObjectForKey(&quot;jdbc:FrontBase://127.0.0.1/YourSourceDatabase&quot;, &quot;URL&quot;);
+	 * sourceDict.setObjectForKey(&quot;com.frontbase.jdbc.FBJDriver&quot;, &quot;driver&quot;);
+	 * sourceDict.setObjectForKey(Boolean.FALSE.toString(), &quot;autoCommit&quot;);
+	 * sourceDict.setObjectForKey(Boolean.TRUE.toString(), &quot;readOnly&quot;);
+	 * sourceDict.setObjectForKey(Boolean.TRUE.toString(), &quot;quote&quot;);
+	 * 
+	 * NSMutableDictionary destDict = sourceDict.mutableClone();
+	 * destDict.setObjectForKey(&quot;jdbc:postgresql://localhost/YourDestinationDatabase&quot;, &quot;URL&quot;);
+	 * destDict.setObjectForKey(&quot;YourPassword&quot;, &quot;password&quot;);
+	 * destDict.setObjectForKey(&quot;YourUserName&quot;, &quot;username&quot;);
+	 * destDict.setObjectForKey(&quot;org.postgresql.Driver&quot;, &quot;driver&quot;);
+	 * destDict.setObjectForKey(Boolean.FALSE.toString(), &quot;autoCommit&quot;);
+	 * destDict.setObjectForKey(Boolean.FALSE.toString(), &quot;readOnly&quot;);
+	 * destDict.setObjectForKey(Boolean.FALSE.toString(), &quot;quote&quot;);
+	 * 
+	 * EOModel model = EOModelGroup.defaultGroup().modelNamed(&quot;YourModelName&quot;);
+	 * ERXJDBCUtilities._copyDatabaseDefinedByEOModelAndConnectionDictionaryToDatabaseWithConnectionDictionary(model, sourceDict, destDict);
 	 * </pre>
 	 * 
 	 * @param entity
@@ -400,8 +401,8 @@ public class ERXJDBCUtilities {
 	 *            <code>com.frontbase.jdbc.FBJDriver</code> , for PostgreSQL its <code>org.postgresql.Driver</code>
 	 *            <li>autoCommit, a Boolean defining if autoCommit should be on or off, default is true
 	 *            <li>readOnly, a Boolean defining if the Connection is readOnly or not, default is false. Its a good
-	 *            <li>quote, a Boolean defining if the table and field names should be "quoted"
-	 *            idea to make the sourceDict readOnly, because one does not write.
+	 *            <li>quote, a Boolean defining if the table and field names should be "quoted" idea to make the
+	 *            sourceDict readOnly, because one does not write.
 	 *            </ol>
 	 * @param destDict
 	 *            same as sourceDict just used for the destination database.
@@ -532,49 +533,60 @@ public class ERXJDBCUtilities {
 	/**
 	 * Executes a SQL script that is stored as a resource.
 	 * 
-	 * @param channel the channel to execute the scripts within
-	 * @param resourceName the name of the SQL script resource
-	 * @param frameworkName the name of the framework that contains the resource
+	 * @param channel
+	 *            the channel to execute the scripts within
+	 * @param resourceName
+	 *            the name of the SQL script resource
+	 * @param frameworkName
+	 *            the name of the framework that contains the resource
 	 * @return the number of rows updated
-	 * @throws SQLException if a SQL error occurs
-	 * @throws IOException if an error occurs reading the script
+	 * @throws SQLException
+	 *             if a SQL error occurs
+	 * @throws IOException
+	 *             if an error occurs reading the script
 	 */
 	public static int executeUpdateScriptFromResourceNamed(EOAdaptorChannel channel, String resourceName, String frameworkName) throws SQLException, IOException {
-	    InputStream sqlScript = WOApplication.application().resourceManager().inputStreamForResourceNamed(resourceName, frameworkName, NSArray.EmptyArray);
-	    if (sqlScript == null) {
-	    	throw new IllegalArgumentException("There is no resource named '" + resourceName + "'.");
-	    }
-	    NSArray sqlStatements;
-	    try {
-	    	sqlStatements = ERXSQLHelper.newSQLHelper(channel).splitSQLStatementsFromInputStream(sqlScript);
-	    }
-	    finally {
-	    	if (sqlScript != null) {
-	    		sqlScript.close();
-	    	}
-	    }
-	    return ERXJDBCUtilities.executeUpdateScript(channel, sqlStatements);
+		InputStream sqlScript = WOApplication.application().resourceManager().inputStreamForResourceNamed(resourceName, frameworkName, NSArray.EmptyArray);
+		if (sqlScript == null) {
+			throw new IllegalArgumentException("There is no resource named '" + resourceName + "'.");
+		}
+		NSArray sqlStatements;
+		try {
+			sqlStatements = ERXSQLHelper.newSQLHelper(channel).splitSQLStatementsFromInputStream(sqlScript);
+		}
+		finally {
+			if (sqlScript != null) {
+				sqlScript.close();
+			}
+		}
+		return ERXJDBCUtilities.executeUpdateScript(channel, sqlStatements);
 	}
-	
+
 	/**
-	 * Creates tables, primary keys, and foreign keys for the tables in the given model.  This is
-	 * useful in your Migration #0 class.
+	 * Creates tables, primary keys, and foreign keys for the tables in the given model. This is useful in your
+	 * Migration #0 class.
 	 * 
-	 * @param channel the channel to use for execution
-	 * @param model the model to create tables for
-	 * @throws SQLException if something fails
+	 * @param channel
+	 *            the channel to use for execution
+	 * @param model
+	 *            the model to create tables for
+	 * @throws SQLException
+	 *             if something fails
 	 */
 	public static void createTablesForModel(EOAdaptorChannel channel, EOModel model) throws SQLException {
 		ERXJDBCUtilities.createTablesForEntities(channel, model.entities());
 	}
 
 	/**
-	 * Creates tables, primary keys, and foreign keys for the given list of entities.  This is
-	 * useful in your Migration #0 class.
+	 * Creates tables, primary keys, and foreign keys for the given list of entities. This is useful in your Migration
+	 * #0 class.
 	 * 
-	 * @param channel the channel to use for execution
-	 * @param entities the entities to create tables for
-	 * @throws SQLException if something fails
+	 * @param channel
+	 *            the channel to use for execution
+	 * @param entities
+	 *            the entities to create tables for
+	 * @throws SQLException
+	 *             if something fails
 	 */
 	public static void createTablesForEntities(EOAdaptorChannel channel, NSArray entities) throws SQLException {
 		NSMutableDictionary options = new NSMutableDictionary();
@@ -590,28 +602,30 @@ public class ERXJDBCUtilities {
 		String sqlScript = syncFactory.schemaCreationScriptForEntities(entities, options);
 		ERXJDBCUtilities.executeUpdateScript(channel, sqlScript);
 	}
-	
+
 	/**
-	 * Returns the name of the database product for the given channel (handy when
-	 * loading database-vendor-specific sql scripts in migrations).
+	 * Returns the name of the database product for the given channel (handy when loading database-vendor-specific sql
+	 * scripts in migrations).
 	 * 
-	 * @param channel the channel
+	 * @param channel
+	 *            the channel
 	 * @return the database the database product name ("FrontBase", "PostgreSQL")
 	 */
 	public static String databaseProductName(EOAdaptorChannel channel) {
-	    return ((JDBCAdaptor) channel.adaptorContext().adaptor()).plugIn().databaseProductName();
+		return ((JDBCAdaptor) channel.adaptorContext().adaptor()).plugIn().databaseProductName();
 	}
 
 	/**
-	 * Returns the name of the database product for the given an eomodel (handy when
-	 * loading database-vendor-specific sql scripts in migrations).
+	 * Returns the name of the database product for the given an eomodel (handy when loading database-vendor-specific
+	 * sql scripts in migrations).
 	 * 
-	 * @param model the EOModel
+	 * @param model
+	 *            the EOModel
 	 * @return the database the database product name ("FrontBase", "PostgreSQL")
 	 */
 	public static String databaseProductName(EOModel model) {
 		EODatabaseContext databaseContext = EODatabaseContext.registeredDatabaseContextForModel(model, ERXEC.newEditingContext());
 		JDBCAdaptor adaptor = (JDBCAdaptor) databaseContext.database().adaptor();
-	    return adaptor.plugIn().databaseProductName();
+		return adaptor.plugIn().databaseProductName();
 	}
 }
