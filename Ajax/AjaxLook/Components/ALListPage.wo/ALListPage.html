@@ -6,15 +6,24 @@
 <div id="<webobject name="PageName"></webobject>Grid"></div>
 <div id="paging" class="pagination"></div>
 
+<select id="Rating">
+	<option name="R">R</option>
+	<option name="PG">PG</option>
+	<option name="R">R</option>
+</select>
+
 <webobject name="MoviesProxy"></webobject>
 
 <script>
 
+WONDER.grid.registerEditor("rated", new WONDER.grid.SelectEditor('Rating'));
+
 var columnModel = new WONDER.grid.DefaultColumnModel([
 	<webobject name="Properties"> {
+		id:       "<webobject name="PropertyKey"></webobject>",
 		header:   "<webobject name="DisplayNameForProperty"></webobject>",
 		tooltip:  "Click to sort by <webobject name="DisplayNameForProperty"></webobject>", 
-		editor:   eval(WONDER.grid.Editors['<webobject name="PropertyClass"></webobject>']), 
+		editor:   WONDER.grid.Editors['<webobject name="PropertyClass"></webobject>'], 
 		renderer: WONDER.grid.Renderers['<webobject name="PropertyClass"></webobject>']
 	}</webobject>
 ]);
@@ -34,21 +43,24 @@ var selectionModel = new YAHOO.ext.grid.EditorAndSelectionModel();
 //var selectionModel = new YAHOO.ext.grid.SingleSelectionModel();
 // selectionModel.addListener('selectionchange', EnableDelete);
 
-var grid = new WONDER.grid.Grid('<webobject name="PageName"></webobject>Grid', dataModel, columnModel, selectionModel);
-grid.render();
-grid.getDataModel().loadData(json.movies.fetchObjects());
+var <webobject name="PageName"></webobject>Grid = new WONDER.grid.Grid('<webobject name="PageName"></webobject>Grid', dataModel, columnModel, selectionModel);
+<webobject name="PageName"></webobject>Grid.render();
+<webobject name="PageName"></webobject>Grid.getDataModel().loadData(json.movies.fetchObjects());
 
-// grid.addListener('dragdrop',EndDrag);
+// <webobject name="PageName"></webobject>Grid.addListener('dragdrop',EndDrag);
 // the grid is ready, load page 1 of topics 
-// grid.getDataModel().addListener('beforeload', onBeginUpdate);
-// grid.getDataModel().addListener('load', onEndUpdate);
-// grid.getDataModel().loadPage(1);
+// <webobject name="PageName"></webobject>Grid.getDataModel().addListener('beforeload', onBeginUpdate);
+// <webobject name="PageName"></webobject>Grid.getDataModel().addListener('load', onEndUpdate);
+// <webobject name="PageName"></webobject>Grid.getDataModel().loadPage(1);
 
 function test() {
+	alert("hi");
 	var objects = json.movies.fetchObjects();
-	grid.dataModel().loadData(objects);
+	<webobject name="PageName"></webobject>Grid.getDataModel().loadData(objects);
 	return objects;
 }
+// document.body.onload = function() { test();};
 </script>
+
 <a href="javascript: test(); void(0);" >test</a>
 </webobject>

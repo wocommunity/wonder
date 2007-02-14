@@ -5,6 +5,7 @@ import com.webobjects.foundation.NSLog;
 import er.extensions.ERXApplication;
 
 public class Application extends ERXApplication {
+    
     public static void main(String argv[]) {
         ERXApplication.main(argv, Application.class);
     }
