@@ -99,7 +99,7 @@ public class ERXResourceManager extends WOResourceManager {
 			WOContext context = null;
 			String key = WOApplication.application().resourceRequestHandlerKey();
 			if(request != null) {
-				context = (WOContext) ((ERXRequest)request).context();
+				context = (WOContext) ((WORequest)request).valueForKey("context");
 			}
 			String wodata = _NSStringUtilities.concat("wodata", "=", encoded);
 			if(context != null) {
