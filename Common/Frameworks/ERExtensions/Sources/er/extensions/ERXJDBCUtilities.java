@@ -21,6 +21,7 @@ import com.webobjects.appserver.WOApplication;
 import com.webobjects.eoaccess.EOAdaptor;
 import com.webobjects.eoaccess.EOAdaptorChannel;
 import com.webobjects.eoaccess.EOAttribute;
+import com.webobjects.eoaccess.EODatabaseContext;
 import com.webobjects.eoaccess.EOEntity;
 import com.webobjects.eoaccess.EOModel;
 import com.webobjects.eoaccess.EOModelGroup;
@@ -599,5 +600,18 @@ public class ERXJDBCUtilities {
 	 */
 	public static String databaseProductName(EOAdaptorChannel channel) {
 	    return ((JDBCAdaptor) channel.adaptorContext().adaptor()).plugIn().databaseProductName();
+	}
+
+	/**
+	 * Returns the name of the database product for the given an eomodel (handy when
+	 * loading database-vendor-specific sql scripts in migrations).
+	 * 
+	 * @param model the EOModel
+	 * @return the database the database product name ("FrontBase", "PostgreSQL")
+	 */
+	public static String databaseProductName(EOModel model) {
+		EODatabaseContext databaseContext = EODatabaseContext.registeredDatabaseContextForModel(model, ERXEC.newEditingContext());
+		JDBCAdaptor adaptor = (JDBCAdaptor) databaseContext.database().adaptor();
+	    return adaptor.plugIn().databaseProductName();
 	}
 }
