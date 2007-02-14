@@ -48,18 +48,18 @@ import er.extensions.ERXEOAccessUtilities.ChannelAction;
  * statement:
  * 
  * <pre>
- *              create table &quot;_DBUpdater&quot; (
- *                &quot;ModelName&quot; varchar(100) not null,
- *                &quot;Version&quot; integer not null,
- *                &quot;UpdateLock&quot; integer not null,
- *                &quot;LockOwner&quot; varchar(100)
- *              )
+ *               create table &quot;_DBUpdater&quot; (
+ *                 &quot;ModelName&quot; varchar(100) not null,
+ *                 &quot;Version&quot; integer not null,
+ *                 &quot;UpdateLock&quot; integer not null,
+ *                 &quot;LockOwner&quot; varchar(100)
+ *               )
  * </pre>
  * 
  * and for each model you want to be able to migrate, you should:
  * 
  * <pre>
- *              insert into &quot;_DBUpdater&quot;(&quot;ModelName&quot;, &quot;Version&quot;, &quot;UpdateLock&quot;, &quot;LockOwner&quot;) values ('YourModelName', -1, 0, NULL)
+ *               insert into &quot;_DBUpdater&quot;(&quot;ModelName&quot;, &quot;Version&quot;, &quot;UpdateLock&quot;, &quot;LockOwner&quot;) values ('YourModelName', -1, 0, NULL)
  * </pre>
  * 
  * Be aware that not all databases are able to perform DDL operations in a transaction. The result of this is that if a
@@ -155,7 +155,7 @@ public class ERXMigrator {
 				throw new ERXMigrationFailedException("Failed to migrate model '" + model.name() + "'.", t);
 			}
 		}
-		
+
 		Iterator postMigrationsIter = postMigrations.keySet().iterator();
 		while (postMigrationsIter.hasNext()) {
 			IERXPostMigration postMigration = (IERXPostMigration) postMigrationsIter.next();
@@ -231,20 +231,20 @@ public class ERXMigrator {
 				String erMigrationClassName = migrationClassPrefix + versionNum;
 				String vendorMigrationClassName = migrationClassPrefix + ERXJDBCUtilities.databaseProductName(model) + versionNum;
 				try {
-					Class erMigrationClass;    
+					Class erMigrationClass;
 					try {
-           if (ERXMigrator.log.isInfoEnabled()) {
-             ERXMigrator.log.info("Looking for migration '" + erMigrationClassName + "' ...");
-           }
+						if (ERXMigrator.log.isInfoEnabled()) {
+							ERXMigrator.log.info("Looking for migration '" + erMigrationClassName + "' ...");
+						}
 						erMigrationClass = Class.forName(erMigrationClassName);
-         }
-         catch (ClassNotFoundException e) {
-           if (ERXMigrator.log.isInfoEnabled()) {
-             ERXMigrator.log.info("Looking for vendor-specific migration '" + vendorMigrationClassName + "-' ...");
-           }
-           erMigrationClass = Class.forName(vendorMigrationClassName);
-         }
-          
+					}
+					catch (ClassNotFoundException e) {
+						if (ERXMigrator.log.isInfoEnabled()) {
+							ERXMigrator.log.info("Looking for vendor-specific migration '" + vendorMigrationClassName + "-' ...");
+						}
+						erMigrationClass = Class.forName(vendorMigrationClassName);
+					}
+
 					IERXMigration migration = (IERXMigration) erMigrationClass.newInstance();
 					versions.put(modelName, new Integer(versionNum));
 					NSArray migrationDependencies = migration.modelDependencies();
@@ -257,7 +257,7 @@ public class ERXMigrator {
 							_buildDependenciesForModel(dependsOnModel, dependsOnVersion, versions, migrations);
 						}
 					}
-          
+
 					migrations.put(migration, new ModelVersion(model, versionNum));
 				}
 				catch (ClassNotFoundException e) {
