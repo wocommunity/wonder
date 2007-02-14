@@ -78,6 +78,7 @@
            "WebServerResources/event/event-debug.js", 
            "WebServerResources/event/event-min.js", 
            WebServerResources/event/event.js, 
+           WebServerResources/ext, 
            "WebServerResources/fonts/fonts-min.css", 
            WebServerResources/fonts/fonts.css, 
            "WebServerResources/grids/grids-min.css", 
@@ -120,6 +121,7 @@
            "WebServerResources/treeview/treeview-debug.js", 
            "WebServerResources/treeview/treeview-min.js", 
            WebServerResources/treeview/treeview.js, 
+           WebServerResources/wonder.js, 
            "WebServerResources/yahoo/yahoo-debug.js", 
            "WebServerResources/yahoo/yahoo-min.js", 
            WebServerResources/yahoo/yahoo.js

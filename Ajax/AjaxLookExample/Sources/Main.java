@@ -10,14 +10,14 @@ import com.webobjects.eocontrol.EOFetchSpecification;
 public class Main extends WOComponent {
 
     public Main(WOContext context) {
-        super(context);
+        super(context); 
     }
 
     public WOComponent showList() {
         ListPageInterface nextPage = (ListPageInterface) D2W.factory().pageForConfigurationNamed("ListAjaxMovie", session());
         EODatabaseDataSource ds = new EODatabaseDataSource(session().defaultEditingContext(), "Movie");
         ds.setFetchSpecification(new EOFetchSpecification("Movie", null, null));
-        ds.fetchSpecification().setFetchLimit(3);
+        ds.fetchSpecification().setFetchLimit(5);
         nextPage.setDataSource(ds);
         return (WOComponent) nextPage;
     }

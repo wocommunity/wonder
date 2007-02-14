@@ -46,6 +46,10 @@ WONDER.grid.Renderers = {
 	"com.webobjects.foundation.NSTimestamp" : function(v) {
 		if(!v) return undefined;
 		return "<span style='color: red;'>" + v.toLocaleString() + "</span>";
+	}, 
+	"java.math.BigDecimal" : function(v) {
+		if(!v) return undefined;
+		return "<span style='color: green; width: 100px; display: block; text-align: right;'>" + v.toLocaleString() + "</span>";
 	}
 };
 
@@ -54,7 +58,7 @@ WONDER.grid.registerRenderer = function(name, val) {
 }
 
 WONDER.grid.Editors = {
-	"com.webobjects.foundation.NSTimestamp" :  "new YAHOO.ext.grid.DateEditor()",
+	"com.webobjects.foundation.NSTimestamp" :  "new WONDER.grid.DateEditor()",
 	"java.lang.Boolean" :  "new YAHOO.ext.grid.CheckboxEditor()",
 	"java.math.BigDecimal" :  "new YAHOO.ext.grid.NumberEditor({})",
 	"java.lang.String" : "new YAHOO.ext.grid.TextEditor({})"
@@ -137,6 +141,18 @@ YAHOO.extendX(WONDER.grid.EODataModel, YAHOO.ext.grid.JSONDataModel, {
 });
 
 WONDER.grid.DefaultColumnModel = function(schema){
+    for(var i = 0; i < schema.length; i++) {
+    	var item = schema[i];
+   		if(item) {
+   			if(item.id && WONDER.grid.Editors[item.id]) {
+   				item.editor = WONDER.grid.Editors[item.id];
+   			}
+   			if(item.editor) {
+   				// editors are string until here
+	   			item.editor = eval(item.editor);
+	   		}
+	   	}
+    }
     WONDER.grid.DefaultColumnModel.superclass.constructor.call(this, schema);
     for(var i = 0; i < schema.length; i++) {
     	var item = schema[i];
@@ -156,5 +172,21 @@ WONDER.grid.Grid = function(element, columnModel, dataModel, selectionModel) {
 };
 
 YAHOO.extendX(WONDER.grid.Grid, YAHOO.ext.grid.Grid, {
+});
+
+
+WONDER.grid.DateEditor = function() {
+    WONDER.grid.DateEditor.superclass.constructor.call(this);
+    this.format = "Y-m-d";
+};
+
+YAHOO.extendX(WONDER.grid.DateEditor, YAHOO.ext.grid.DateEditor, {
+});
+
+WONDER.grid.SelectEditor = function(element) {
+    WONDER.grid.SelectEditor.superclass.constructor.call(this, element);
+};
+
+YAHOO.extendX(WONDER.grid.SelectEditor, YAHOO.ext.grid.SelectEditor, {
 });
 
