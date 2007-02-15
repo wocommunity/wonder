@@ -42,6 +42,7 @@ public class InstantMessengerAdaptor extends WOAdaptor implements IMessageListen
 	public static final String CONVERSATION_KEY = "IMConversation";
 	public static final String BUDDY_NAME_KEY = "BuddyName";
 	public static final String MESSAGE_KEY = "Message";
+	public static final String RAW_MESSAGE_KEY = "RawMessage";
 
 	private WOApplication _application;
 	private String _screenName;
@@ -71,7 +72,7 @@ public class InstantMessengerAdaptor extends WOAdaptor implements IMessageListen
 
 		_messageQueue = new InstantMessageQueue();
 		_messageQueue.start();
-		
+
 		_conversations = new HashMap();
 		_application = WOApplication.application();
 
@@ -150,7 +151,7 @@ public class InstantMessengerAdaptor extends WOAdaptor implements IMessageListen
 		try {
 			IInstantMessengerFactory factory;
 			if (factoryClass == null) {
-				factory = new AimBotInstantMessenger.Factory();
+				factory = new JOscarInstantMessenger.Factory();
 			}
 			else {
 				factory = (IInstantMessengerFactory) Class.forName(factoryClass).newInstance();
@@ -173,6 +174,10 @@ public class InstantMessengerAdaptor extends WOAdaptor implements IMessageListen
 
 	public static String message(WORequest request) {
 		return (String) request.userInfo().objectForKey(InstantMessengerAdaptor.MESSAGE_KEY);
+	}
+
+	public static String rawMessage(WORequest request) {
+		return (String) request.userInfo().objectForKey(InstantMessengerAdaptor.RAW_MESSAGE_KEY);
 	}
 
 	public static String buddyName(WORequest request) {
@@ -256,9 +261,14 @@ public class InstantMessengerAdaptor extends WOAdaptor implements IMessageListen
 		}
 	}
 
-	public synchronized void messageReceived(IInstantMessenger instantMessenger, String buddyName, String message) {
+	public synchronized void messageReceived(IInstantMessenger instantMessenger, String buddyName, String rawMessage) {
 		if (log.isInfoEnabled()) {
-			log.info("Received message from '" + buddyName + "': " + message);
+			log.info("Received message from '" + buddyName + "': " + rawMessage);
+		}
+		String message = rawMessage;
+		if (message != null) {
+			message = message.replaceAll("<[^>]+>", "");
+			message = message.trim();
 		}
 		Conversation conversation;
 		synchronized (_conversations) {
@@ -274,12 +284,24 @@ public class InstantMessengerAdaptor extends WOAdaptor implements IMessageListen
 		}
 
 		StringBuffer uri = new StringBuffer();
-		String requestUrl = conversation.get_requestUrl();
+		String requestUrl = conversation.requestUrl();
 		if (requestUrl == null) {
 			String webserverConnectUrl = _application.webserverConnectURL();
+			String cgiAdaptorURL = _application.cgiAdaptorURL();
 			WODynamicURL imConversationUrl = new WODynamicURL();
+
+			int j = cgiAdaptorURL.indexOf("//");
+			int i = 0;
+			if (j > 0 && cgiAdaptorURL.length() - j > 2) {
+				i = cgiAdaptorURL.indexOf('/', j + 2);
+			}
+			if (i > 0) {
+				imConversationUrl.setPrefix(cgiAdaptorURL.substring(i));
+			}
+			else {
+				imConversationUrl.setPrefix(_application.applicationBaseURL());
+			}
 			imConversationUrl.setRequestHandlerKey(_application.directActionRequestHandlerKey());
-			imConversationUrl.setPrefix(_application.applicationBaseURL());
 			imConversationUrl.setApplicationName(_application.name());
 			imConversationUrl.setApplicationNumber(_application.number());
 			imConversationUrl.setRequestHandlerPath(_conversationActionName);
@@ -296,7 +318,11 @@ public class InstantMessengerAdaptor extends WOAdaptor implements IMessageListen
 		uri.append(InstantMessengerAdaptor.MESSAGE_KEY);
 		uri.append("=");
 		uri.append(WOURLEncoder.encode(message));
-		String sessionID = conversation.get_sessionID();
+		uri.append("&");
+		uri.append(InstantMessengerAdaptor.RAW_MESSAGE_KEY);
+		uri.append("=");
+		uri.append(WOURLEncoder.encode(rawMessage));
+		String sessionID = conversation.sessionID();
 		if (sessionID != null) {
 			uri.append("&wosid=" + sessionID);
 		}
@@ -307,6 +333,7 @@ public class InstantMessengerAdaptor extends WOAdaptor implements IMessageListen
 		userInfo.setObjectForKey(Boolean.TRUE, InstantMessengerAdaptor.IS_IM_KEY);
 		userInfo.setObjectForKey(buddyName, InstantMessengerAdaptor.BUDDY_NAME_KEY);
 		userInfo.setObjectForKey(message, InstantMessengerAdaptor.MESSAGE_KEY);
+		userInfo.setObjectForKey(rawMessage, InstantMessengerAdaptor.RAW_MESSAGE_KEY);
 		userInfo.setObjectForKey(conversation, InstantMessengerAdaptor.CONVERSATION_KEY);
 
 		WORequest request = _application.createRequest("GET", uri.toString(), "HTTP/1.0", headers, null, userInfo);
@@ -315,10 +342,10 @@ public class InstantMessengerAdaptor extends WOAdaptor implements IMessageListen
 			response = _application.dispatchRequest(request);
 			String newSessionID = request.sessionID();
 			if (newSessionID != null) {
-				conversation.set_sessionID(newSessionID);
+				conversation.setSessionID(newSessionID);
 			}
 			String nextRequestUrl = response.headerForKey(InstantMessengerAdaptor.IM_ACTION_URL_KEY);
-			conversation.set_requestUrl(nextRequestUrl);
+			conversation.setRequestUrl(nextRequestUrl);
 			String responseMessage = response.contentString();
 			if (responseMessage != null) {
 				responseMessage = responseMessage.trim();

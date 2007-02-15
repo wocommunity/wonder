@@ -26,9 +26,9 @@ no normal HTTP headers in the WORequest.
 * The implementation is TEMPORARILY single threaded for all conversations.  This will change soon, I just haven't had
 time to test it.
 
-Currently there are implementions of the IInstantMessengerFactory for AIM using the jaimbot and daim libraries.  Jaimbot
+Currently there are implementions of the IInstantMessengerFactory for AIM using the jaimbot, daim, and joscar libraries.  Jaimbot
 is available from jaimbot.sourceforge.net and daim is available from daim.dev.java.net if you're interested in getting
-more information on either library.
+more information on either library.  JOscar, which seems to be the most capable of the three, is available at http://joust.kano.net/.
 
 How to use it
 **************************************
