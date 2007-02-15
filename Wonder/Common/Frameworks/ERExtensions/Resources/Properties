@@ -430,4 +430,8 @@ dbMinConnectionsGLOBAL=1
 ## Define if child threads inherit the variables of the parent or not
 # er.extensions.ERXThreadStorage.useInheritableThreadLocal = false
 
-
+#########################################################################
+# ERXModelGroup 
+#########################################################################
+## Name of the prototypes entity to use. Case insensitive. 
+# er.extensions.ERXModelGroup.prototypeModelName=erprototypes
