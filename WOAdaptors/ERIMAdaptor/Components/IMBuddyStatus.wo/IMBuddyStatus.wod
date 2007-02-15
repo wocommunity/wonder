@@ -1,21 +1,21 @@
 AwayImage : WOImage {
-	width = 12;
-	height = 12;
-	filename = "BuddyAway.gif";
+	width = 16;
+	height = 16;
+	filename = "BuddyAway.png";
 	framework = "ERIMAdaptor";
 }
 
 HereImage : WOImage {
-	width = 12;
-	height = 12;
-	filename = "BuddyOnline.gif";
+	width = 16;
+	height = 16;
+	filename = "BuddyAvailable.png";
 	framework = "ERIMAdaptor";
 }
 
 OfflineImage : WOImage {
-	width = 12;
-	height = 12;
-	filename = "BuddyOffline.gif";
+	width = 16;
+	height = 16;
+	filename = "BuddyOffline.png";
 	framework = "ERIMAdaptor";
 }
 
