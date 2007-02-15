@@ -1,5 +1,6 @@
 package er.imadaptor;
 
+import java.util.List;
 import java.util.Set;
 
 import net.kano.joustsim.Screenname;
@@ -21,6 +22,9 @@ import net.kano.joustsim.oscar.oscar.service.icbm.IcbmService;
 import net.kano.joustsim.oscar.oscar.service.icbm.Message;
 import net.kano.joustsim.oscar.oscar.service.icbm.MessageInfo;
 import net.kano.joustsim.oscar.oscar.service.icbm.SimpleMessage;
+import net.kano.joustsim.oscar.oscar.service.ssi.MutableBuddyList;
+import net.kano.joustsim.oscar.oscar.service.ssi.MutableGroup;
+import net.kano.joustsim.oscar.oscar.service.ssi.SsiService;
 
 public class JOscarInstantMessenger extends AbstractInstantMessenger {
 	private AimSession _aimSession;
@@ -71,62 +75,77 @@ public class JOscarInstantMessenger extends AbstractInstantMessenger {
 
 	public synchronized boolean isBuddyOnline(String buddyName) {
 		boolean buddyOnline = false;
-		if (_connected && _conn != null) {
-			BuddyInfoManager buddyInfoManager = _conn.getBuddyInfoManager();
-			if (buddyInfoManager != null) {
-				BuddyInfo buddyInfo = buddyInfoManager.getBuddyInfo(new Screenname(buddyName));
-				if (buddyInfo != null) {
-					buddyOnline = buddyInfo.isOnline();
-				}
-			}
+		BuddyInfo buddyInfo = _addBuddyIfNecessary(buddyName);
+		if (buddyInfo != null) {
+			buddyOnline = buddyInfo.isOnline();
 		}
 		return buddyOnline;
 	}
 
 	public synchronized boolean isBuddyAway(String buddyName) {
 		boolean buddyAway = false;
-		if (_connected && _conn != null) {
-			BuddyInfoManager buddyInfoManager = _conn.getBuddyInfoManager();
-			if (buddyInfoManager != null) {
-				BuddyInfo buddyInfo = buddyInfoManager.getBuddyInfo(new Screenname(buddyName));
-				if (buddyInfo != null) {
-					buddyAway = buddyInfo.isAway();
-				}
-			}
+		BuddyInfo buddyInfo = _addBuddyIfNecessary(buddyName);
+		if (buddyInfo != null) {
+			buddyAway = buddyInfo.isAway();
 		}
 		return buddyAway;
 	}
-	
+
 	public synchronized String getStatusMessage(String buddyName) {
 		String statusMessage = null;
-		if (_connected && _conn != null) {
-			BuddyInfoManager buddyInfoManager = _conn.getBuddyInfoManager();
-			if (buddyInfoManager != null) {
-				BuddyInfo buddyInfo = buddyInfoManager.getBuddyInfo(new Screenname(buddyName));
-				if (buddyInfo != null) {
-					statusMessage = buddyInfo.getStatusMessage();
-				}
-			}
+		BuddyInfo buddyInfo = _addBuddyIfNecessary(buddyName);
+		if (buddyInfo != null) {
+			statusMessage = buddyInfo.getStatusMessage();
 		}
 		return statusMessage;
 	}
-	
+
 	public synchronized String getAwayMessage(String buddyName) {
 		String awayMessage = null;
-		if (_connected && _conn != null) {
-			BuddyInfoManager buddyInfoManager = _conn.getBuddyInfoManager();
-			if (buddyInfoManager != null) {
-				BuddyInfo buddyInfo = buddyInfoManager.getBuddyInfo(new Screenname(buddyName));
-				if (buddyInfo != null) {
-					awayMessage = buddyInfo.getAwayMessage();
-				}
-			}
+		BuddyInfo buddyInfo = _addBuddyIfNecessary(buddyName);
+		if (buddyInfo != null) {
+			awayMessage = buddyInfo.getAwayMessage();
 		}
 		return awayMessage;
 	}
 
 	public void addBuddy(String buddyName) {
-		// ignore
+		_addBuddyIfNecessary(buddyName);
+	}
+
+	public BuddyInfo _addBuddyIfNecessary(String buddyName) {
+		BuddyInfo buddyInfo = null;
+		if (_connected && _conn != null) {
+			Screenname buddy = new Screenname(buddyName);
+			BuddyInfoManager buddyInfoManager = _conn.getBuddyInfoManager();
+			buddyInfo = buddyInfoManager.getBuddyInfo(buddy);
+			boolean isOnBuddyList = false;
+			if (buddyInfo != null) {
+				isOnBuddyList = buddyInfo.isOnBuddyList();
+			}
+			if (!isOnBuddyList) {
+				SsiService ssiService = _conn.getSsiService();
+				MutableBuddyList buddyList = ssiService.getBuddyList();
+				List groups = buddyList.getGroups();
+				if (groups.size() == 0) {
+					buddyList.addGroup("Buddies");
+					groups = buddyList.getGroups();
+				}
+				MutableGroup group = (MutableGroup) groups.get(0);
+				group.addBuddy(buddyName);
+
+				for (int attempt = 0; attempt < 10 && !buddyInfo.isOnBuddyList(); attempt++) {
+					try {
+						Thread.sleep(100);
+					}
+					catch (Throwable t) {
+						// ignore
+					}
+					buddyInfo = buddyInfoManager.getBuddyInfo(buddy);
+				}
+			}
+		}
+		return buddyInfo;
 	}
 
 	public synchronized void connect() throws IMConnectionException {
@@ -165,14 +184,18 @@ public class JOscarInstantMessenger extends AbstractInstantMessenger {
 	}
 
 	public synchronized void sendMessage(String buddyName, String message, boolean ignoreIfOffline) throws MessageException {
-		if (_connected && _conn != null) {
-			if (!isBuddyOnline(buddyName)) {
+		BuddyInfo buddyInfo = _addBuddyIfNecessary(buddyName);
+		if (buddyInfo != null) {
+			if (!buddyInfo.isOnline()) {
 				if (!ignoreIfOffline) {
 					throw new BuddyOfflineException("The buddy '" + buddyName + "' is not online.");
 				}
 			}
 			else {
-				Conversation conv = _conn.getIcbmService().getImConversation(new Screenname(buddyName));
+				if (message.length() > 2048) {
+					message = message.substring(0, 2048);
+				}
+				Conversation conv = _conn.getIcbmService().getImConversation(buddyInfo.getScreenname());
 				conv.open();
 				conv.sendMessage(new SimpleMessage(message));
 			}
