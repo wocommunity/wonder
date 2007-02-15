@@ -48,6 +48,8 @@ public class ERXModelGroup extends EOModelGroup {
 
 	protected static boolean patchModelsOnLoad = ERXProperties.booleanForKeyWithDefault("er.extensions.ERXModelGroup.patchModelsOnLoad", false);
 	protected static boolean flattenPrototypes = ERXProperties.booleanForKeyWithDefault("er.extensions.ERXModelGroup.flattenPrototypes", true);
+	protected String prototypeModelName = ERXProperties.stringForKeyWithDefault("er.extensions.ERXModelGroup.prototypeModelName", "erprototypes");
+	
 	public static final String ModelGroupAddedNotification = "ERXModelGroupAddedNotification";
 
 	/**
@@ -85,8 +87,8 @@ public class ERXModelGroup extends EOModelGroup {
 				EOModel eomodel = modelNamed(modelName);
 				if (eomodel == null) {
 					URL url = nsbundle.pathURLForResourcePath(path);
-					// ak: temp hack to move prototypes in front
-					if (path.toLowerCase().indexOf("erprototypes") >= 0) {
+					// hack to move prototypes in front
+					if (path.toLowerCase().indexOf(prototypeModelName.toLowerCase()+".eomodeld") > 0) {
 						models.insertObjectAtIndex(url, 0);
 					}
 					else {
@@ -872,8 +874,8 @@ public class ERXModelGroup extends EOModelGroup {
 		NSMutableDictionary prototypeReplacement = new NSMutableDictionary();
 		for (Enumeration modelsEnum = models().objectEnumerator(); modelsEnum.hasMoreElements();) {
 			EOModel model = (EOModel) modelsEnum.nextElement();
-			if(model.name().equals("erprototypes")) {
-				log.info("Skipping erprototype model");
+			if(model.name().equalsIgnoreCase(prototypeModelName)) {
+				log.info("Skipping prototype model "+model.name());
 				continue;
 			}
 			NSDictionary userInfo = model.userInfo();
