@@ -39,9 +39,9 @@ Styles : ERXStyleSheet {
 	key = d2wContext.dynamicPage;
 }
 
-MoviesProxy : AjaxProxy {
+Proxy : AjaxProxy {
 	proxy = dataSource;
 	name = "json";
-	proxyName = "movies";
+	proxyName = d2wContext.pageConfiguration;
 }
 
