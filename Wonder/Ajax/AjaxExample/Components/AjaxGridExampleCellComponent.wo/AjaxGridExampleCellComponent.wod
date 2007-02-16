@@ -1,0 +1,12 @@
+// Example of action in a cell that updates the container
+Delete: AjaxUpdateLink {
+	action = deleteRow;
+	updateContainerID = grid.configurationData.updateContainerID;  // VALID
+}
+
+// Example of action in a cell that returns a different page, can also return context().page()
+// to do a full page refresh
+OtherPage: WOHyperlink {
+	pageName = "AccordionExample";
+	string = "example";
+}

@@ -10,10 +10,15 @@ ColumnTitle: WOString {
 ColumnValue: WOSwitchComponent {
 	WOComponentName = columnComponentName;
 	value = columnValue;
+	grid = thisComponent;
 }
 
 GridUpdater: AjaxUpdateContainer {
 	id = configurationData.updateContainerID; // VALID
+	onRefreshComplete = afterUpdate;
+	evalScripts = true;
+	action = containerUpdated;
+	frequency = configurationData.updateFrequency;  // VALID
 }
 
 InitScript: WOString {
@@ -49,7 +54,6 @@ IsRowSelected: WOConditional {
 RemoveSorting: AjaxUpdateLink {
 	action = removeSorting;
 	updateContainerID = configurationData.updateContainerID; // VALID
-	onComplete = columnOrderUpdateOnComplete;
 }
 
 RowRepetition: WORepetition {
@@ -61,7 +65,6 @@ RowRepetition: WORepetition {
 SortColumn: AjaxUpdateLink {
 	action = sortOrderUpdated;
 	updateContainerID = configurationData.updateContainerID; // VALID
-	onComplete = columnOrderUpdateOnComplete;
 }
 
 SortIndex: WOString {
@@ -90,7 +93,6 @@ TableRow: WOGenericContainer {
 ToggleRowSelection: AjaxUpdateLink {
 	action = toggleRowSelection;
 	updateContainerID = configurationData.updateContainerID; // VALID
-	onComplete = columnOrderUpdateOnComplete;
 }
 
 
@@ -98,5 +100,4 @@ UpdateColumnOrder: AjaxUpdateLink {
 	action = columnOrderUpdated;
 	functionName = "updateServerColumnOrder";
 	updateContainerID = configurationData.updateContainerID; // VALID
-	onComplete = columnOrderUpdateOnComplete;
 }
