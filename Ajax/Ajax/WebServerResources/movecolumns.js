@@ -48,7 +48,7 @@ function drag(obj){
 		if (!ev) ev=window.event
 	    if (ev.target) target = ev.target
 	    else if (ev.srcElement) target=ev.srcElement
-	    if (target.nodeName.toLowerCase() != 'a') {
+	    if ( ! isIgnoredElement(target))
 		    columnAtual = cellIndex(this)
 			for (x=0; x<tableRows.length; x++) {
 				tableRows[x].cells[columnAtual].className ="ajaxGridSelected";
@@ -60,6 +60,21 @@ function drag(obj){
 	}
 }
 
+
+/**
+ * Returns true if the passed element is one that mouse click should be ignored for.  This
+ * allows the element to be accessed and prevents clicks on it from being used to re-order rows.
+ */
+function isIgnoredElement(element) {
+	nodeName = element.nodeName.toLowerCase();
+	return nodeName == 'a' ||
+	       nodeName == 'input' ||
+	       nodeName == 'button' ||
+	       nodeName == 'select' ||
+	       nodeName == 'textarea';
+	       nodeName == 'input' ||
+	       nodeName == 'input' ||
+}
 
 
 /*
