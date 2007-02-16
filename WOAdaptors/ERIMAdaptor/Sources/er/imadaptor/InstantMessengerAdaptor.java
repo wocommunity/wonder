@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
+import net.kano.joscar.logging.LoggingSystem;
+
 import org.apache.log4j.Logger;
 
 import com.webobjects.appserver.WOAdaptor;
@@ -22,6 +24,9 @@ import com.webobjects.foundation.NSMutableDictionary;
 import er.extensions.ERXAsyncQueue;
 
 public class InstantMessengerAdaptor extends WOAdaptor implements IMessageListener {
+	static {
+		LoggingSystem.setLogManager(new JOscarLogManager());
+	}
 	private static Logger log = Logger.getLogger(InstantMessengerAdaptor.class);
 
 	public static final String IM_FACTORY_KEY = "IMFactory";
