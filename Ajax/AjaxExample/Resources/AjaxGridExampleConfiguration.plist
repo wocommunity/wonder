@@ -3,11 +3,14 @@
     updateContainerID = "ajaxGridContainer";
     sortable = true;
     canReorder = true;   
-    batchSize = 3;
+    batchSize = 4;
     cssClass = "ajaxGridTable";	 
     cssStyle = "border: thin solid #000000;";  
 	evenRowCSSClass = "evenRow";
-	oddRowCSSStyle = "background:lightgrey";
+	oddRowCSSStyle = "background:lightgrey;";
+	selectedRowCSSStyle = "font-weight: bold;";   
+	selectedRowCSSClass = "ajaxGridSelectedRow"; 
+	 	
     columns = (
 		{
 			title = "Column 1";		
@@ -33,10 +36,12 @@
 		 	keyPath = "col5";
 		},		
 		{
-			title = "Date";
+			title = "Birth Day";
 		 	keyPath = "date";
 		 	formatterClass = "com.webobjects.foundation.NSTimestampFormatter";
+		 	formatPattern = "%b %d";
 		 	cssStyle = "text-align:right;";
+		 	cssStyle = "width: 50px;";
 		},		
 		{
 			title = "Employee Number";
@@ -46,9 +51,14 @@
 		 	cssStyle = "text-align:right;";
 		},
 		{
+			title = "Level";
+			keyPath = "level";
+			component = "AjaxGridExampleFormInputCellComponent";
+		},
+		{
 			title = "Custom Component";
 		 	keyPath = "col8";
-			component = "GridCellComponent";
+			component = "AjaxGridExampleCellComponent";
 			cssStyle = "width: 20px;";
 		}
 	);

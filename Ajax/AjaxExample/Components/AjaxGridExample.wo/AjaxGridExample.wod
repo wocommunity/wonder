@@ -1,44 +1,17 @@
 Grid: AjaxGrid {
 	configurationData = configData;
 	displayGroup = displayGroup;
+	afterUpdate = "ajaxGridExampleNavBarUpdate();";
 }
-
+ 
 AjaxExampleComponent : AjaxExampleComponent {
 	title = "Ajax Grid";
 }
 
-CurrentBatchIndex : WOString {
-	value = displayGroup.currentBatchIndex;
+
+NavBar: AjaxGridExampleNavBar {
+	containerID = "ajaxGridExampleNavBar";
+    displayGroup = displayGroup;
+    configurationData = configData;
 }
 
-
-NavUpdater: AjaxUpdateContainer {
-	id = "NavBar";
-}
-
-BatchCount: WOString {
-	value = displayGroup.batchCount;
-}
-
-PrevBatch : AjaxUpdateLink {
-	action = previousBatch;
-	updateContainerID = "ajaxGridContainer";
-	onComplete = "function(request) { NavBarUpdate(); ajaxGrid_init($(\"exampleAjaxGrid\")); }";
-}
-
-NextBatch : AjaxUpdateLink {
-	action = nextBatch;
-	updateContainerID = "ajaxGridContainer";
-	onComplete = "function(request) { NavBarUpdate(); ajaxGrid_init($(\"exampleAjaxGrid\")); }";
-}
-
-
-BatchSize : AjaxInPlaceEditor {
-	value = displayGroup.numberOfObjectsPerBatch;
-	submitOnBlur = true;
-	okButton = false;
-	cancelLink = false;
-	numberformat = "#";
-	elementName = "span";
-	onComplete = "function(request) { ajaxGridContainerUpdate(); NavBarUpdate(); ajaxGrid_init($(\"exampleAjaxGrid\")); }";
-}
