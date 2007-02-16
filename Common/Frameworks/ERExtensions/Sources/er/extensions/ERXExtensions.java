@@ -1127,37 +1127,52 @@ public class ERXExtensions {
             refreshSharedObjectsWithName((String)e.nextElement());
     }
 
+    private static NSSelector _sharedEntityDataWasRefreshedSelector = new NSSelector("sharedEntityDataWasRefreshed");
+
     /**
-     * Useful method to refresh all of the shared enterprise objects
-     * for a given shared entity. The current implementation depends
-     * on the shared entity to have a fetch specification named 'FetchAll'
-     * which will be created for you if you check the box that says
-     * 'share all objects'.
+     * Refreshes all of the shared enterprise objects for a given shared entity,
+     * then notifies the entity's class by calling the static method
+     * sharedEntityDataWasRefreshed() if it implements it.
+     *
      * @param entityName name of the shared entity
      */
-    // FIXME: Only works with shared objects that share all of their objects, i.e. has a FetchAll fetch spec
-    //		also only works with the global model group.
-    // CHECKME: Should check that this still works under WO 5
+    // FIXME: Uses default model group, and default shared editing context.
     // MOVEME: ERXEOFUtilities
     public static void refreshSharedObjectsWithName(String entityName) {
-        EOEditingContext peer = ERXExtensions.newEditingContext();
-        peer.lock();
+        if (entityName == null) {
+            throw new IllegalStateException("Entity name argument is null for method: refreshSharedObjectsWithName");
+        }
+        EOSharedEditingContext sharedEC = EOSharedEditingContext.defaultSharedEditingContext();
+        sharedEC.lock();
         try {
-            peer.setSharedEditingContext(null);
-            EOFetchSpecification fetchAll = ERXEOAccessUtilities.entityNamed(peer, entityName).fetchSpecificationNamed("FetchAll");
-            if (fetchAll != null) {
-                // Need to refault all the shared EOs first.
-            for (Enumeration e = EOUtilities.objectsForEntityNamed(peer, entityName).objectEnumerator(); e.hasMoreElements();) {
-                EOEnterpriseObject eo = (EOEnterpriseObject)e.nextElement();
-                peer.rootObjectStore().refaultObject(eo, peer.globalIDForObject(eo), peer);
-            }
-                fetchAll.setRefreshesRefetchedObjects(true);
-                peer.objectsWithFetchSpecification(fetchAll);
+            EOEntity entity = ERXEOAccessUtilities.entityNamed(sharedEC, entityName);
+            NSArray fetchSpecNames = entity.sharedObjectFetchSpecificationNames();
+            int count =  (fetchSpecNames != null) ? fetchSpecNames.count() : 0;
+
+            if ( count > 0 ) { //same check as ERXEOAccessUtilities.entityWithNamedIsShared(), but avoids duplicate work
+                for (int index = 0 ; index < count ; ++index) {
+                    String oneFetchSpecName = (String)fetchSpecNames.objectAtIndex(index);
+                    EOFetchSpecification fs = entity.fetchSpecificationNamed(oneFetchSpecName);
+                    if (fs != null) {
+                        fs.setRefreshesRefetchedObjects(true);
+                        sharedEC.bindObjectsWithFetchSpecification(fs, oneFetchSpecName);
+                    }
+                }
+
+                //notify the entity class, if it wants to know
+                String className = entity.className();
+                Class entityClass = Class.forName(className);
+
+                if (_sharedEntityDataWasRefreshedSelector.implementedByClass(entityClass)) {
+                    _sharedEntityDataWasRefreshedSelector.invoke(entityClass);
+                }
             } else {
                 log().warn("Attempting to refresh a non-shared EO: " + entityName);
             }
+        } catch (Exception e) {
+            throw new NSForwardException(e, "Exception while refreshing shared objects for entity named " + entityName);
         } finally {
-            peer.unlock();
+            sharedEC.unlock();
         }
     }
 
