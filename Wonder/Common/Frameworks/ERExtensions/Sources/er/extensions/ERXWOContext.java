@@ -208,6 +208,9 @@ public class ERXWOContext extends WOContext implements ERXMutableUserInfoHolderI
 			String pre = stream.substring(0, idx);
 			String post = stream.substring(idx, stream.length());
 			response.setContent(pre + content + post);
+		} else {
+			//ak: not found, we append anyway as we may be in the tag itself
+			response._appendContentAsciiString(content);
 		}
 	}
 
