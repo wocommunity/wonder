@@ -678,7 +678,7 @@ public class AjaxGrid extends WOComponent {
 				value = formatter.parseObject((String) value);
 			}
 			catch (ParseException e) {
-				throw new ERXExceptionConverter(e);
+				throw new NSForwardException(e);
 			}
 		}
 		row().takeValueForKey(value, currentKeyPath());
