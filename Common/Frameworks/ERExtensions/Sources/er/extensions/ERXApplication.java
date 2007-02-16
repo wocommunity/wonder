@@ -281,6 +281,10 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 		if (jar.indexOf("Apple" + File.separator + "Library") > 0) {
 			return true;
 		}
+		// if embedded, check explicit names
+		if (jar.matches("Frameworks[/\\\\]Java(Foundation|EOControl|EOAccess|WebObjects).*")) {
+			return true;
+		}
 		return false;
 	}
 	
