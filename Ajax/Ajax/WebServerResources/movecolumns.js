@@ -48,7 +48,7 @@ function drag(obj){
 		if (!ev) ev=window.event
 	    if (ev.target) target = ev.target
 	    else if (ev.srcElement) target=ev.srcElement
-	    if ( ! isIgnoredElement(target))
+	    if ( ! isIgnoredElement(target)){
 		    columnAtual = cellIndex(this)
 			for (x=0; x<tableRows.length; x++) {
 				tableRows[x].cells[columnAtual].className ="ajaxGridSelected";
@@ -72,8 +72,6 @@ function isIgnoredElement(element) {
 	       nodeName == 'button' ||
 	       nodeName == 'select' ||
 	       nodeName == 'textarea';
-	       nodeName == 'input' ||
-	       nodeName == 'input' ||
 }
 
 
