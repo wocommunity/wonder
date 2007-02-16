@@ -233,14 +233,14 @@ public class ERXMigrator {
 				try {
 					Class erMigrationClass;
 					try {
-						if (ERXMigrator.log.isInfoEnabled()) {
-							ERXMigrator.log.info("Looking for migration '" + erMigrationClassName + "' ...");
+						if (ERXMigrator.log.isDebugEnabled()) {
+							ERXMigrator.log.debug("Looking for migration '" + erMigrationClassName + "' ...");
 						}
 						erMigrationClass = Class.forName(erMigrationClassName);
 					}
 					catch (ClassNotFoundException e) {
-						if (ERXMigrator.log.isInfoEnabled()) {
-							ERXMigrator.log.info("Looking for vendor-specific migration '" + vendorMigrationClassName + "-' ...");
+						if (ERXMigrator.log.isDebugEnabled()) {
+							ERXMigrator.log.debug("Looking for vendor-specific migration '" + vendorMigrationClassName + "-' ...");
 						}
 						erMigrationClass = Class.forName(vendorMigrationClassName);
 					}
@@ -262,8 +262,8 @@ public class ERXMigrator {
 				}
 				catch (ClassNotFoundException e) {
 					done = true;
-					if (ERXMigrator.log.isInfoEnabled()) {
-						ERXMigrator.log.info("  Migration " + erMigrationClassName + " and/or " + vendorMigrationClassName + " do not exist.");
+					if (ERXMigrator.log.isDebugEnabled()) {
+						ERXMigrator.log.debug("  Migration " + erMigrationClassName + " and/or " + vendorMigrationClassName + " do not exist.");
 					}
 					versions.put(modelName, new Integer(ERXMigrator.LATEST_VERSION));
 				}
@@ -377,7 +377,7 @@ public class ERXMigrator {
 						}
 					}
 					else {
-						ERXMigrator.log.info("Already upgraded " + model.name() + " to " + nextVersion + ", skipping");
+						ERXMigrator.log.debug("Already upgraded " + model.name() + " to " + nextVersion + ", skipping");
 					}
 				}
 				catch (Throwable t) {
