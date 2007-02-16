@@ -6,13 +6,7 @@
 <div id="<webobject name="PageName"></webobject>Grid"></div>
 <div id="paging" class="pagination"></div>
 
-<select id="Rating">
-	<option name="R">R</option>
-	<option name="PG">PG</option>
-	<option name="R">R</option>
-</select>
-
-<webobject name="MoviesProxy"></webobject>
+<webobject name="Proxy"></webobject>
 
 <script>
 
@@ -45,9 +39,13 @@ var selectionModel = new YAHOO.ext.grid.EditorAndSelectionModel();
 
 var <webobject name="PageName"></webobject>Grid = new WONDER.grid.Grid('<webobject name="PageName"></webobject>Grid', dataModel, columnModel, selectionModel);
 <webobject name="PageName"></webobject>Grid.render();
-<webobject name="PageName"></webobject>Grid.getDataModel().loadData(json.movies.fetchObjects());
+<webobject name="PageName"></webobject>Grid.getDataModel().loadData(json.<webobject name="PageName"></webobject>.fetchObjects());
 
-// <webobject name="PageName"></webobject>Grid.addListener('dragdrop',EndDrag);
+function endDrag(e) {
+	alert(e);
+}
+
+<webobject name="PageName"></webobject>Grid.addListener('dragdrop',endDrag);
 // the grid is ready, load page 1 of topics 
 // <webobject name="PageName"></webobject>Grid.getDataModel().addListener('beforeload', onBeginUpdate);
 // <webobject name="PageName"></webobject>Grid.getDataModel().addListener('load', onEndUpdate);
@@ -55,12 +53,10 @@ var <webobject name="PageName"></webobject>Grid = new WONDER.grid.Grid('<webobje
 
 function test() {
 	alert("hi");
-	var objects = json.movies.fetchObjects();
+	var objects = json.<webobject name="PageName"></webobject>.fetchObjects();
 	<webobject name="PageName"></webobject>Grid.getDataModel().loadData(objects);
 	return objects;
 }
 // document.body.onload = function() { test();};
 </script>
-
-<a href="javascript: test(); void(0);" >test</a>
 </webobject>
