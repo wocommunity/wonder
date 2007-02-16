@@ -7,6 +7,11 @@ ExampleArea7Updater : AjaxFunctionLink {
 	onclick = "exampleArea7Update()";
 }
 
+UpdateFromWindowLink : WOHyperlink {
+	pageName = "UpdateWindow";
+	target = "_blank";
+}
+
 EffectScript : AjaxIncludeScript {
 	name = "effect.js";
 }
