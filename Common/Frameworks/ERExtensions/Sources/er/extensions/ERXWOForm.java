@@ -204,19 +204,10 @@ public class ERXWOForm extends com.webobjects.appserver._private.WOHTMLDynamicEl
     	}
     	if(_href != null) {
     		hrefObject = _href.valueInComponent(wocomponent);
-    	}
-    	if(_directActionName != null || _actionClass != null) {
+    	} else if(_directActionName != null || _actionClass != null) {
     		hrefObject = cgiAction(response, context);
     	} else {
-    		if(hrefObject != null) {
-    			response._appendTagAttributeAndValue("action", hrefObject.toString(), false);
-    		} else {
-    			if(_href == null) {
-    				hrefObject = context.componentActionURL();
-    			} else {
-    				NSLog.err.appendln("<WOForm> : action attribute evaluates to null");
-    			}
-    		}
+    		hrefObject = context.componentActionURL();
     	}
     	if(hrefObject != null) {
     		String href = hrefObject.toString();
@@ -225,10 +216,12 @@ public class ERXWOForm extends com.webobjects.appserver._private.WOHTMLDynamicEl
     			href = href.replaceFirst("http://", "https://");
             }
             if(fragmentIdentifier != null) {
-            	href = "#" + fragmentIdentifier;
+            	href = href + "#" + fragmentIdentifier;
             }
             response._appendTagAttributeAndValue("action", href, false);
-    	}
+    	} else {
+			NSLog.err.appendln("<WOForm> : action attribute evaluates to null");
+		}
     	if(secure) {
 //    		FIXME: (ak) we assume that relative URL creation is on by default, so we may restore the wrong type 
             context._generateRelativeURLs();
