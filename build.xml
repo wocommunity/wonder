@@ -1,41 +1,66 @@
-<project name="Wonder" default="all">
+<project name="Wonder" default="usage">
+    
     <!-- 
      this file is just a tiny wrapper around the core file Build/build/generic.xml
      more info about the builds can be found there
     -->
     <target name="clean">
-        <ant antFile="Build/build/generic.xml" target="all.clean" />
+        <ant antFile="Build/build/generic.xml" target="frameworks.all">
+            <property name="build.action" value="clean" />
+        </ant>
+        <ant antFile="Build/build/generic.xml" target="applications.all">
+            <property name="build.action" value="clean" />
+        </ant>
+        <ant antFile="Build/build/generic.xml" target="examples.all">
+            <property name="build.action" value="clean" />
+        </ant>
     </target>
 
     <target name="frameworks">
-        <ant antFile="Build/build/generic.xml" target="frameworks.all" />
+        <ant antFile="Build/build/generic.xml" target="frameworks.all">
+            <property name="build.action" value="build" />
+        </ant>
     </target>
     <target name="frameworks.install">
-        <ant antFile="Build/build/generic.xml" target="frameworks.all.install" />
-        <ant antFile="Build/build/generic.xml" target="frameworks.web" />
+        <ant antFile="Build/build/generic.xml" target="frameworks.all">
+            <property name="build.action" value="install" />
+        </ant>
+        <ant antFile="Build/build/generic.xml" target="frameworks.all">
+            <property name="build.action" value="web" />
+        </ant>
     </target>
 
     <target name="applications">
         <ant antFile="Build/build/generic.xml" target="applications.all">
+            <property name="build.action" value="build" />
             <property name="wonder.development" value="false" />
         </ant>
     </target>
     <target name="applications.install">
-        <ant antFile="Build/build/generic.xml" target="applications.all.install" />
-        <ant antFile="Build/build/generic.xml" target="applications.web" />
+        <ant antFile="Build/build/generic.xml" target="applications.all">
+            <property name="build.action" value="install" />
+        </ant>
+        <ant antFile="Build/build/generic.xml" target="applications.all">
+            <property name="build.action" value="web" />
+        </ant>
     </target>
     
     <target name="examples">
         <ant antFile="Build/build/generic.xml" target="examples.all">
+            <property name="build.action" value="build" />
             <property name="wonder.development" value="false" />
         </ant>
     </target>
     <target name="examples.install">
-        <ant antFile="Build/build/generic.xml" target="examples.all.install" />
-        <ant antFile="Build/build/generic.xml" target="examples.web" />
+        <ant antFile="Build/build/generic.xml" target="examples.all">
+            <property name="build.action" value="install" />
+        </ant>
+        <ant antFile="Build/build/generic.xml" target="examples.all">
+            <property name="build.action" value="web" />
+        </ant>
     </target>
     
-    <target name="all">
+    <target name="usage">
         <echo message="please use the sequence:" />
         <echo message="  ant frameworks" />
         <echo message="  sudo ant frameworks.install" />
@@ -43,21 +68,25 @@
         <echo message="  sudo ant applications.install" />
         <echo message="  ant examples" />
         <echo message="  sudo ant examples.install" />
+        <echo message="or, if you can write into your install directory:" />
+        <echo message="  ant all" />
     </target>
     
-    <!-- these are just for convenience -->
-    <target name="install">
-        <ant antFile="Build/build/generic.xml" target="all.install" />
-        <ant antFile="Build/build/generic.xml" target="all.web" />
+    <target name="docs">
+        <ant antFile="Build/build/build-doc.xml" target="api">
+            <property name="dist.base" value="dist" />
+            <property name="project.version" value="3.0" />
+        </ant>
     </target>
+    
     <target name="dist">
-        <ant antFile="Build/build/common-dist.xml" target="all" />
-        <ant antFile="Build/build/subprojects-dist.xml" target="all" />
+        <ant antFile="Build/build/build.xml" target="dist">
+            <property name="dist.base" value="dist" />
+            <property name="project.version" value="3.0" />
+        </ant>
     </target>
-    <target name="reporting">
-        <ant antFile="Build/build/generic.xml" target="DynaReporting.all" />
-    </target>
-    <target name="excel">
-        <ant antFile="Build/build/generic.xml" target="excelgeneration.all" />
+
+    <target name="all">
+        <ant antFile="Build/build/generic.xml" target="all" />
     </target>
 </project>

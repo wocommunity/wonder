@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 
-<project name="generic" default="all" basedir="../..">
+<project name="Wonder" default="all" basedir="../..">
     <target name="usage" depends="global.properties">
 	<echo>
 
@@ -77,7 +77,7 @@ There are many ways to use this script:
 
     <target name="SomeNewProject.all">
          <!-- project.type, either "global.application" or "global.framework" -->
-         <antcall target="global.application" >
+         <antcall target="global.application.${build.action}" >
 
             <!-- princical class if the framework or Application class -->
             <param name="project.principal.class" value="com.company.Application" />
@@ -143,35 +143,8 @@ There are many ways to use this script:
     </target>
     <!-- /When you add another sub-project, use this as a template -->
 
-    <!-- Generic task. Use this from a custom build style in Project Builder according to the example in the "usage" task -->
     <target name="generic">
         <antcall target="generic.all" />
-    </target>
-    <target name="generic."><!-- the "." is intentional to facilitate running from PBX buttons -->
-        <antcall target="generic.all" >
-            <param name="project.name" value="${project.name}" />
-            <param name="project.dir" value="${project.dir}" />
-            <param name="project.type" value="${project.type}" />
-        </antcall>
-    </target>
-    <target name="known."><!-- the "." is intentional to facilitate running from PBX buttons -->
-        <antcall target="${project.name}.all" >
-        </antcall>
-    </target>
-    <target name="known.clean">
-         <antcall target="global.clean.${project.type}" >
-            <param name="project.name" value="${project.name}" />
-        </antcall>
-    </target>
-    <target name="known.install">
-         <antcall target="global.install.${project.type}" >
-            <param name="project.name" value="${project.name}" />
-        </antcall>
-    </target>
-    <target name="known.web">
-         <antcall target="global.web.${project.type}" >
-            <param name="project.name" value="${project.name}" />
-        </antcall>
     </target>
     <target name="generic.all">
         <antcall target="global.${project.type}" >
@@ -195,6 +168,7 @@ There are many ways to use this script:
             <param name="project.name" value="${project.name}" />
         </antcall>
     </target>
+    
    <target name="global.environment">
         <property name="wonder.root" value="${basedir}" />
         <property file="${wonder.root}/Build/build/build.properties" />
@@ -208,6 +182,7 @@ There are many ways to use this script:
         <property name="wo.woroot" value="/System" />
         <property name="wo.localroot" value="/" />
         <property name="wo.frameworks" value="${wo.woroot}/Library/Frameworks" />
+        <property name="wo.local.frameworks" value="${wo.wolocalroot}/Library/Frameworks" />
         <property name="build.root" value="${user.home}/Roots" />
         <property name="build.classes" value="${build.root}/classes/${project.name}" />
         <property name="wonder.development" value="true" />
@@ -243,7 +218,67 @@ There are many ways to use this script:
         <mkdir dir="${build.classes}" />
     </target>
 
-    <target name="global.compile" depends="global.prepare">
+    <target name="dist.properties" depends="global.environment">
+        <property name="project.source.dir" value="${wonder.root}/${project.dir}" />
+    </target>
+
+    <target name="global.framework.dist" depends="dist.properties">
+        <property name="framework.name" value="${project.name}.framework" />
+
+        <copy todir="${dist.dir}/Frameworks/${framework.name}">
+            <fileset dir="${build.root}/${framework.name}" />
+        </copy>
+
+        <mkdir dir="${build.root}/${framework.name}/WebServerResources" />
+        <copy todir="${dist.dir}/WebServerResources/Frameworks/${framework.name}" includeEmptyDirs="false">
+            <fileset dir="${build.root}/${framework.name}/WebServerResources" />
+        </copy>
+
+        <mkdir dir="${project.source.dir}/Documentation" />
+        <copy todir="${dist.dir}/Documentation/Frameworks/${framework.name}" includeEmptyDirs="false">
+            <fileset dir="${project.source.dir}/Documentation">
+                <exclude name="**/CVS/*" />
+            </fileset>
+        </copy>
+
+        <mkdir dir="${project.source.dir}/Support" />
+        <copy todir="${dist.dir}/Documentation/Frameworks/${framework.name}/Support" includeEmptyDirs="false">
+            <fileset dir="${project.source.dir}/Support">
+                <exclude name="**/CVS/*" />
+            </fileset>
+        </copy>
+    </target>
+
+    <target name="global.application.dist" depends="dist.properties">
+        <property name="application.name" value="${project.name}.woa" />
+
+        <copy todir="${dist.dir}/Applications/${application.name}">
+            <fileset dir="${build.root}/${application.name}" />
+        </copy>
+        
+        <chmod file="${dist.dir}/Applications/${application.name}/${project.name}" perm="ugo+rx"/>
+
+        <mkdir dir="${build.root}/${application.name}/Contents/WebServerResources" />
+        <copy todir="${dist.dir}/WebServerResources/${application.name}/Contents/WebServerResources" includeEmptyDirs="false">
+            <fileset dir="${build.root}/${application.name}/Contents/WebServerResources" />
+        </copy>
+
+        <mkdir dir="${project.source.dir}/Documentation" />
+        <copy todir="${dist.dir}/Documentation/Applications/${project}" includeEmptyDirs="false">
+            <fileset dir="${project.source.dir}/Documentation">
+                <exclude name="**/CVS/*" />
+            </fileset>
+        </copy>
+
+        <mkdir dir="${project.source.dir}/Support" />
+        <copy todir="${dist.dir}/Documentation/Applications/${project}/Support" includeEmptyDirs="false">
+            <fileset dir="${project.source.dir}/Support">
+                <exclude name="**/CVS/*" />
+            </fileset>
+        </copy>
+    </target>
+
+    <target name="global.compile" depends="global.environment,global.prepare">
          <taskdef name="wocompile" classname="org.objectstyle.woproject.ant.WOCompile">
             <classpath refid="ant.classpath"/>
         </taskdef>
@@ -254,6 +289,10 @@ There are many ways to use this script:
                     <include name="**/*.jar" />
                 </fileset>
             </classpath>
+           <frameworks dir="${wonder.lib.root}" if="wonder.lib.root.bundles" bundles="${wonder.lib.root.bundles}">
+           </frameworks>
+           <frameworks dir="${wo.frameworks}" if="wo.frameworks.bundles" bundles="${wo.frameworks.bundles}">
+           </frameworks>
             <!-- this should be an exact copy of the frameworks in the woapplication task --> 
             <frameworks dir="${wonder.lib.root}" if="use.wonder.jars"> 
                 <include name="ERJars.framework" />
@@ -378,7 +417,7 @@ There are many ways to use this script:
         </wocompile>
     </target>
 
-    <target name="global.framework" depends="global.properties,global.compile">
+    <target name="global.framework.build" depends="global.properties,global.compile">
         <mkdir dir="${build.framework.dir}" />
         <taskdef name="woframework" classname="org.objectstyle.woproject.ant.WOFramework">
             <classpath refid="ant.classpath"/>
@@ -399,44 +438,20 @@ There are many ways to use this script:
                 <include name="**/*.wo/**" />
             </resources>
             <resources dir="${project.dir}/Resources">
-                <include name="*.eomodeld/**" />
-                <include name="**/*.plist" />
-                <include name="**/*.d2wmodel" />
-                <include name="**/Properties" />
-                <include name="**/*.strings" />
-                <include name="**/*.sh" />
-                <include name="**/*.dat" />
-                <include name="**/mime.types" /> 
-                <include name="**/*.*" /> 
                 <include name="**/*" /> 
-                <include name="**/GSVUtilityParser.jj" /> <!-- Validity specific --> 
                 <exclude name="*.*~/" />
             </resources>
-            <resources dir="${project.dir}/WebServerResources">
-                <include name="**/*.xsl" />
-            </resources>
             <wsresources dir="${project.dir}/WebServerResources">
-                <include name="**/*.gif" />
-                <include name="**/*.jpeg" />
-                <include name="**/*.jpg" />
-                <include name="**/*.js" />
-                <include name="**/*.css" />
-                <include name="**/*.*" />
                 <include name="**/*" />
             </wsresources>
         </woframework>
-        <exec dir="${project.dir}" executable="/bin/sh" os="Mac OS X">
-            <arg line="${build.root}/ERJars.framework/Resources/CPCreateFileList.sh" />
-        </exec>
  
         <echo message="-------------------------------------" />
         <echo message="${project.name}.framework done" />
         <echo message="-------------------------------------" />
     </target>
 
-    <target name="global.application" depends="global.properties,global.compile" >
-	<!-- we delete left-overs from the Compiler Proxy here -->
-        <delete dir="${build.root}/${project.name}.woa/Contents/Resources/Java" quiet="true" />
+    <target name="global.application.build" depends="global.properties,global.compile" >
 
         <taskdef name="woapplication" classname="org.objectstyle.woproject.ant.WOApplication">
             <classpath refid="ant.classpath"/>
@@ -454,30 +469,18 @@ There are many ways to use this script:
                 <include name="**/*.wo/**" />
             </resources>
             <resources dir="${project.dir}/Resources">
-                <include name="*.eomodeld/**" />
-                <include name="**/*.plist" />
-                <include name="**/*.dat" />
-                <include name="**/*.d2wmodel" />
-                <include name="**/Properties" />
-                <include name="**/*.strings" />
-                <include name="**/*.djava" />
-                <include name="**/*.*" /> 
-                <include name="**/*.sh" />
-                <include name="**/*.defaults" /> <!-- SVGObjects specific --> 
-            </resources>
-            <resources dir="${project.dir}/WebServerResources">
-                <include name="**/*.xsl" />
+                <include name="**/*" /> 
             </resources>
             <wsresources dir="${project.dir}/WebServerResources">
-                <include name="**/*.gif" />
-                <include name="**/*.jpeg" />
-                <include name="**/*.jpg" />
-                <include name="**/*.js" />
-                <include name="**/*.css" />
-                <include name="**/*.*" />
+                <include name="**/*" />
             </wsresources>
+            
             <!-- this should be an exact copy of the frameworks in the woapplication task --> 
-            <frameworks dir="${wonder.lib.root}" if="use.wonder.jars"> 
+           <frameworks dir="${wonder.lib.root}" if="wonder.lib.root.bundles" bundles="${wonder.lib.root.bundles}">
+           </frameworks>
+           <frameworks dir="${wo.frameworks}" if="wo.frameworks.bundles" bundles="${wo.frameworks.bundles}">
+           </frameworks>
+           <frameworks dir="${wonder.lib.root}" if="use.wonder.jars"> 
                 <include name="ERJars.framework" />
             </frameworks>
             <frameworks dir="${wonder.lib.root}" if="use.wonder.core"> 
@@ -597,18 +600,11 @@ There are many ways to use this script:
                 <include name="JavaDTWGeneration.framework" />
             </frameworks>
         </woapplication>
-        <!--copy file="${wonder.lib.root}/ERJars.framework/Resources/appstart.sh" tofile="${build.root}/${project.name}.woa/${project.name}" overwrite="yes" />
-        <copy file="${wonder.lib.root}/ERJars.framework/Resources/appstart.mac" tofile="${build.root}/${project.name}.woa/Contents/MacOS/${project.name}" overwrite="yes" />
-        <copy file="${wonder.lib.root}/ERJars.framework/Resources/appstart.cmd" tofile="${build.root}/${project.name}.woa/${project.name}.cmd" overwrite="yes" />
-        <copy file="${wonder.lib.root}/ERJars.framework/Resources/Java/wostart.jar" tofile="${build.root}/${project.name}.woa/wostart.jar" overwrite="yes" /-->
         <exec dir="${build.root}/${project.name}.woa" executable="/bin/chmod" os="Mac OS X">
             <arg line="a+x ${project.name}" />
         </exec>
         <exec dir="${build.root}/${project.name}.woa/Contents/MacOS" executable="/bin/chmod" os="Mac OS X">
             <arg line="a+x ${project.name}" />
-        </exec>
-        <exec dir="${project.dir}" executable="/bin/sh" os="Mac OS X">
-            <arg line="${wonder.lib.root}/ERJars.framework/Resources/CPCreateFileList.sh" />
         </exec>
 
         <echo message="-------------------------------------" />
@@ -616,13 +612,13 @@ There are many ways to use this script:
         <echo message="-------------------------------------" />
     </target>
 
-    <target name="global.install.framework" depends="global.properties">
+    <target name="global.framework.install" depends="global.properties">
         <copy todir="${wo.localroot}/Library/Frameworks/${project.name}.framework">
             <fileset dir="${build.root}/${project.name}.framework" />
         </copy>
     </target>
 
-    <target name="global.install.application" depends="global.properties">
+    <target name="global.application.install" depends="global.properties">
          <mkdir dir="${wo.localroot}/Library/WebObjects/JavaApplications" />
          <copy todir="${wo.localroot}/Library/WebObjects/JavaApplications/${project.name}.woa">
             <fileset dir="${build.root}/${project.name}.woa" />
@@ -632,14 +628,14 @@ There are many ways to use this script:
         </exec>
     </target>
 
-    <target name="global.web.framework" depends="global.properties">
+    <target name="global.framework.web" depends="global.properties">
         <mkdir dir="${wo.server.root}/Frameworks/${project.name}.framework" />
         <copy todir="${wo.server.root}/Frameworks/${project.name}.framework/WebServerResources">
             <fileset dir="${build.root}/${project.name}.framework/WebServerResources" />
         </copy>
     </target>
 	
-    <target name="global.web.application" depends="global.properties">
+    <target name="global.application.web" depends="global.properties">
         <mkdir dir="${wo.server.root}/${project.name}.woa" />
         <mkdir dir="${wo.server.root}/${project.name}.woa/Contents" />
         <copy todir="${wo.server.root}/${project.name}.woa/Contents/WebServerResources">
@@ -647,49 +643,28 @@ There are many ways to use this script:
         </copy>
     </target>
 	
-    <target name="global.clean.framework" depends="global.properties">
-        <echo message="-------------------------------------" />
-        <echo message="Cleaning ${project.name}" />
-        <echo message="-------------------------------------" />
+    <target name="global.framework.clean" depends="global.properties">
         <delete dir="${build.classes}" />
         <delete dir="${build.root}/${project.name}.framework" />
     </target>
 	
-    <target name="global.clean.application" depends="global.properties">
-        <echo message="-------------------------------------" />
-        <echo message="Cleaning ${project.name}" />
-        <echo message="${build.root}/${project.name}.woa" />
-        <echo message="-------------------------------------" />
+    <target name="global.application.clean" depends="global.properties">
         <delete dir="${build.classes}" />
         <delete dir="${build.root}/${project.name}.woa" />
     </target>
-    
+
+
     <!-- (ak) ERJars is handled separately because it needs to copy the compiler proxy files first -->
     <target name="ERJars.all">
-	<path id="ant.classpath">
-	    <fileset dir="Build/">
-		  <include name="lib/*.jar"/>
-	    </fileset>
-	</path>
-        <property name="build.root" value="${user.home}/Roots" />
-        <property name="project.dir" value="Common/Frameworks/ERJars" />
-        <taskdef name="woframework" classname="org.objectstyle.woproject.ant.WOFramework">
-            <classpath refid="ant.classpath"/>
-        </taskdef>
-        <woframework name="ERJars" destDir="${build.root}" principalClass="" jarName="ERJars" hasComponents="false">
-            <lib dir="${project.dir}/Libraries">
-                <include name="**/*.jar" />
-            </lib>
-            <resources dir="${project.dir}/Resources">
-                <include name="**/*.sh" />
-                <include name="**/*.mac" />
-                <include name="**/*.cmd" />
-            </resources>
-        </woframework>
+        <antcall target="global.framework.${build.action}" >
+            <param name="project.principal.class" value="" />
+            <param name="project.name" value="ERJars" />
+            <param name="project.dir" value="Common/Frameworks/ERJars" />
+        </antcall>
     </target>
    
     <target name="JavaWOExtensions.all">
-        <antcall target="global.framework" >
+        <antcall target="global.framework.${build.action}" >
             <param name="project.principal.class" value="" />
             <param name="project.name" value="JavaWOExtensions" />
             <param name="project.dir" value="Common/Frameworks/JavaWOExtensions" />
@@ -697,7 +672,7 @@ There are many ways to use this script:
     </target>
 
     <target name="ERExtensions.all">
-        <antcall target="global.framework" >
+        <antcall target="global.framework.${build.action}" >
             <param name="project.principal.class" value="er.extensions.ERXExtensions" />
             <param name="project.name" value="ERExtensions" />
             <param name="project.dir" value="Common/Frameworks/ERExtensions" />
@@ -707,7 +682,7 @@ There are many ways to use this script:
     </target>
     
     <target name="ERDirectToWeb.all">
-        <antcall target="global.framework" >
+        <antcall target="global.framework.${build.action}" >
             <param name="project.principal.class" value="er.directtoweb.ERDirectToWeb" />
             <param name="project.name" value="ERDirectToWeb" />
             <param name="project.dir" value="Common/Frameworks/ERDirectToWeb" />
@@ -719,7 +694,7 @@ There are many ways to use this script:
     </target>
     
     <target name="ERPrototypes.all">
-        <antcall target="global.framework" >
+        <antcall target="global.framework.${build.action}" >
             <param name="project.principal.class" value="er.prototypes.ERPrototypes" />
             <param name="project.name" value="ERPrototypes" />
             <param name="project.dir" value="Common/Frameworks/ERPrototypes" />
@@ -729,7 +704,7 @@ There are many ways to use this script:
     </target>
 
     <target name="ERJavaMail.all">
-        <antcall target="global.framework" >
+        <antcall target="global.framework.${build.action}" >
             <param name="project.principal.class" value="er.javamail.ERJavaMail" />
             <param name="project.name" value="ERJavaMail" />
             <param name="project.dir" value="Common/Frameworks/ERJavaMail" />
@@ -738,7 +713,7 @@ There are many ways to use this script:
     </target>
 
     <target name="ERIndexing.all">
-        <antcall target="global.framework" >
+        <antcall target="global.framework.${build.action}" >
             <param name="project.principal.class" value="" />
             <param name="project.name" value="ERIndexing" />
             <param name="project.dir" value="Common/Frameworks/ERIndexing" />
@@ -747,7 +722,7 @@ There are many ways to use this script:
     </target>
     
     <target name="ERPlot.all">
-        <antcall target="global.framework" >
+        <antcall target="global.framework.${build.action}" >
             <param name="project.principal.class" value="er.plot.ERPlot" />
             <param name="project.name" value="ERPlot" />
             <param name="project.dir" value="Common/Frameworks/ERPlot" />
@@ -756,7 +731,7 @@ There are many ways to use this script:
     </target>
     
     <target name="ERExcelLook.all">
-        <antcall target="global.framework" >
+        <antcall target="global.framework.${build.action}" >
             <param name="project.principal.class" value="er.directtoweb.excel.ERExcelLook" />
             <param name="project.name" value="ERExcelLook" />
             <param name="project.dir" value="Common/Frameworks/ERExcelLook" />
@@ -766,7 +741,7 @@ There are many ways to use this script:
     </target>
     
     <target name="ERCoreBusinessLogic.all">
-        <antcall target="global.framework" >
+        <antcall target="global.framework.${build.action}" >
             <param name="project.principal.class" value="er.corebusinesslogic.ERCoreBusinessLogic" />
             <param name="project.name" value="ERCoreBusinessLogic" />
             <param name="project.dir" value="Common/Frameworks/ERCoreBusinessLogic" />
@@ -778,7 +753,7 @@ There are many ways to use this script:
     </target>
     
     <target name="ERChangeNotificationJMS.all">
-        <antcall target="global.framework" >
+        <antcall target="global.framework.${build.action}" >
             <param name="project.principal.class" value="er.changenotification.ERCNNotificationCoordinator" />
             <param name="project.name" value="ERChangeNotificationJMS" />
             <param name="project.dir" value="Common/Frameworks/ERChangeNotificationJMS" />
@@ -787,7 +762,7 @@ There are many ways to use this script:
     </target>
 
     <target name="ERNeutralLook.all">
-        <antcall target="global.framework" >
+        <antcall target="global.framework.${build.action}" >
             <param name="project.principal.class" value="" />
             <param name="project.name" value="ERNeutralLook" />
             <param name="project.dir" value="Common/Frameworks/ERNeutralLook" />
@@ -799,7 +774,7 @@ There are many ways to use this script:
     </target>
     
     <target name="WOOgnl.all">
-        <antcall target="global.framework" >
+        <antcall target="global.framework.${build.action}" >
             <param name="project.principal.class" value="ognl.webobjects.WOOgnl" />
             <param name="project.name" value="WOOgnl" />
             <param name="project.dir" value="Common/Frameworks/WOOgnl" />
@@ -810,7 +785,7 @@ There are many ways to use this script:
     </target>
 
     <target name="BTBusinessLogic.all">
-        <antcall target="global.framework" >
+        <antcall target="global.framework.${build.action}" >
             <param name="project.principal.class" value="er.bugtracker.BTBusinessLogic" />
             <param name="project.name" value="BTBusinessLogic" />
             <param name="project.dir" value="Common/Applications/BugTracker/Frameworks/BTBusinessLogic" />
@@ -822,7 +797,7 @@ There are many ways to use this script:
     </target>
 
     <target name="BugTracker.all">
-        <antcall target="global.application" >
+        <antcall target="global.application.${build.action}" >
             <param name="project.type" value="application" />
             <param name="project.principal.class" value="er.bugtracker.Application" />
             <param name="project.name" value="BugTracker" />
@@ -839,7 +814,7 @@ There are many ways to use this script:
     </target>
 
     <target name="ERMailer.all">
-        <antcall target="global.application" >
+        <antcall target="global.application.${build.action}" >
             <param name="project.type" value="application" />
             <param name="project.principal.class" value="er.javamail.mailer.Application" />
             <param name="project.name" value="ERMailer" />
@@ -852,7 +827,7 @@ There are many ways to use this script:
     </target>
 
     <target name="D2WInspectExample.all">
-        <antcall target="global.application" >
+        <antcall target="global.application.${build.action}" >
             <param name="project.type" value="application" />
             <param name="project.principal.class" value="Application" />
             <param name="project.name" value="D2WInspectExample" />
@@ -863,7 +838,7 @@ There are many ways to use this script:
     </target>
 
     <target name="ERMovies.all">
-        <antcall target="global.application" >
+        <antcall target="global.application.${build.action}" >
             <param name="project.type" value="application" />
             <param name="project.principal.class" value="er.examples.movies.Application" />
             <param name="project.name" value="ERMovies" />
@@ -876,18 +851,17 @@ There are many ways to use this script:
     </target>
 
     <target name="D2WListExample.all">
-        <antcall target="global.application" >
+        <antcall target="global.application.${build.action}" >
             <param name="project.type" value="application" />
             <param name="project.principal.class" value="Application" />
             <param name="project.name" value="D2WListExample" />
             <param name="project.dir" value="Common/Examples/Stepwise/D2WListExample" />
-
             <param name="use.webobjects.d2w" value="true" />
          </antcall>
     </target>
 
     <target name="D2WComponentTour.all">
-        <antcall target="global.application" >
+        <antcall target="global.application.${build.action}" >
             <param name="project.type" value="application" />
             <param name="project.principal.class" value="Application" />
             <param name="project.name" value="D2WComponentTour" />
@@ -899,7 +873,7 @@ There are many ways to use this script:
     </target>
 
     <target name="NetStruxrCaseStudy.all">
-        <antcall target="global.application" >
+        <antcall target="global.application.${build.action}" >
             <param name="project.type" value="application" />
             <param name="project.principal.class" value="Application" />
             <param name="project.name" value="NetStruxrCaseStudy" />
@@ -912,7 +886,7 @@ There are many ways to use this script:
     </target>
     
     <target name="ERMiniUglyLook.all">
-        <antcall target="global.framework" >
+        <antcall target="global.framework.${build.action}" >
             <param name="project.principal.class" value="" />
             <param name="project.name" value="ERMiniUglyLook" />
             <param name="project.dir" value="Common/Examples/Wrox/ERMiniUglyLook" />
@@ -923,7 +897,7 @@ There are many ways to use this script:
     </target>
     
     <target name="WOPayPal.all">
-        <antcall target="global.framework" >
+        <antcall target="global.framework.${build.action}" >
             <param name="project.principal.class" value="er.wopaypal.WOPayPal" />
             <param name="project.name" value="WOPayPal" />
             <param name="project.dir" value="PayPal/Frameworks/WOPayPal" />
@@ -931,7 +905,7 @@ There are many ways to use this script:
     </target>
 
     <target name="DRGrouping.all">
-        <antcall target="global.framework" >
+        <antcall target="global.framework.${build.action}" >
             <param name="project.principal.class" value="" />
             <param name="project.name" value="DRGrouping" />
             <param name="project.dir" value="DynaReporting/Frameworks/DRGrouping" />
@@ -941,7 +915,7 @@ There are many ways to use this script:
     </target>
 
     <target name="WRReporting.all">
-        <antcall target="global.framework" >
+        <antcall target="global.framework.${build.action}" >
             <param name="project.principal.class" value="" />
             <param name="project.name" value="WRReporting" />
             <param name="project.dir" value="DynaReporting/Frameworks/WRReporting" />
@@ -952,7 +926,7 @@ There are many ways to use this script:
     </target>
 
     <target name="DocsByExample.all">
-        <antcall target="global.application" >
+        <antcall target="global.application.${build.action}" >
             <param name="project.type" value="application" />
             <param name="project.principal.class" value="er.reporting.examples.Application" />
             <param name="project.name" value="DocsByExample" />
@@ -967,7 +941,7 @@ There are many ways to use this script:
     </target>
 
     <target name="DynaReporter.all">
-        <antcall target="global.application" >
+        <antcall target="global.application.${build.action}" >
             <param name="project.type" value="application" />
             <param name="project.principal.class" value="er.reporting.examples.Application" />
             <param name="project.name" value="DynaReporter" />
@@ -982,7 +956,7 @@ There are many ways to use this script:
     </target>
 
     <target name="DRGroupingTest.all">
-        <antcall target="global.application" >
+        <antcall target="global.application.${build.action}" >
             <param name="project.type" value="application" />
             <param name="project.principal.class" value="er.grouping.examples.Application" />
             <param name="project.name" value="DRGroupingTest" />
@@ -996,8 +970,8 @@ There are many ways to use this script:
         </antcall>
     </target>
 
-    <target name="Validity.framework.all">
-        <antcall target="global.framework" >
+    <target name="Validity.all">
+        <antcall target="global.framework.${build.action}" >
             <param name="project.principal.class" value="" />
             <param name="project.name" value="Validity" />
             <param name="project.dir" value="Validity/Frameworks/Validity" />
@@ -1005,14 +979,14 @@ There are many ways to use this script:
     </target>
     
     <target name="specific.validity.application" depends="global.properties">
-        <antcall target="global.application" />
-        <move todir="${build.root}/${project.name}.woa/Contents/WebServerResources" flatten="true" includeEmptyDirs="no">
+        <!--antcall target="global.application.${build.action}" />
+            <move todir="${build.root}/${project.name}.woa/Contents/WebServerResources" flatten="true" includeEmptyDirs="no">
             <fileset dir="${build.root}/${project.name}.woa/Contents/WebServerResources" />
-        </move>
+        </move-->
     </target>
 
-    <target name="Validity.application.all">
-        <antcall target="specific.validity.application" >
+    <target name="ValidityModeler.all">
+        <antcall target="global.application.${build.action}" >
             <param name="project.type" value="application" />
             <param name="project.principal.class" value="" />
             <param name="project.name" value="ValidityModeler" />
@@ -1022,8 +996,8 @@ There are many ways to use this script:
         </antcall>
     </target>
 
-    <target name="Validity.example.all">
-        <antcall target="global.application" >
+    <target name="ValidityExample.all">
+        <antcall target="global.application.${build.action}" >
             <param name="project.type" value="application" />
             <param name="project.principal.class" value="" />
             <param name="project.name" value="ValidityExample" />
@@ -1033,8 +1007,8 @@ There are many ways to use this script:
         </antcall>
     </target>
 	
-    <target name="SVGObjects.framework.all">
-        <antcall target="global.framework" >
+    <target name="SVGObjects.all">
+        <antcall target="global.framework.${build.action}" >
             <param name="project.principal.class" value="" />
             <param name="project.name" value="SVGObjects" />
             <param name="project.dir" value="SVGObjects/Frameworks/SVGObjects" />
@@ -1042,7 +1016,7 @@ There are many ways to use this script:
     </target>
 
     <target name="SVGObjects.ComponentTour.all">
-        <antcall target="global.application" >
+        <antcall target="global.application.${build.action}" >
             <param name="project.type" value="application" />
             <param name="project.principal.class" value="org.svgobjects.examples.componenttour.Application" />
             <param name="project.name" value="SVGObjectsComponentTour" />
@@ -1053,7 +1027,7 @@ There are many ways to use this script:
     </target>
 	
     <target name="SVGObjects.eCards.all">
-        <antcall target="global.application" >
+        <antcall target="global.application.${build.action}" >
             <param name="project.type" value="application" />
             <param name="project.principal.class" value="org.svgobjects.examples.ecard.Application" />
             <param name="project.name" value="SVGObjectsECards" />
@@ -1064,7 +1038,7 @@ There are many ways to use this script:
     </target>
 	
     <target name="SVGObjects.EZForms.all">
-        <antcall target="global.application" >
+        <antcall target="global.application.${build.action}" >
             <param name="project.type" value="application" />
             <param name="project.principal.class" value="org.svgobjects.examples.ezforms.Application" />
             <param name="project.name" value="SVGObjectsEZForms" />
@@ -1075,7 +1049,7 @@ There are many ways to use this script:
     </target>
 	
     <target name="SVGObjects.Hello.all">
-        <antcall target="global.application" >
+        <antcall target="global.application.${build.action}" >
             <param name="project.type" value="application" />
             <param name="project.principal.class" value="org.svgobjects.examples.hello.Application" />
             <param name="project.name" value="SVGObjectsHello" />
@@ -1086,7 +1060,7 @@ There are many ways to use this script:
     </target>
 	
     <target name="SVGObjects.PopIdol.all">
-        <antcall target="global.application" >
+        <antcall target="global.application.${build.action}" >
             <param name="project.type" value="application" />
             <param name="project.principal.class" value="org.svgobjects.examples.popidol.Application" />
             <param name="project.name" value="SVGObjectsPopIdol" />
@@ -1097,7 +1071,7 @@ There are many ways to use this script:
     </target>
 	
     <target name="DevStudio.all">
-        <antcall target="global.application" >
+        <antcall target="global.application.${build.action}" >
             <param name="project.type" value="application" />
             <param name="project.principal.class" value="ag.kcmedia.Application" />
             <param name="project.name" value="DevStudio" />
@@ -1109,7 +1083,7 @@ There are many ways to use this script:
     </target>
 
     <target name="ERCalendar.all">
-        <antcall target="global.framework" >
+        <antcall target="global.framework.${build.action}" >
             <param name="project.principal.class" value="" />
             <param name="project.name" value="ERCalendar" />
             <param name="project.dir" value="Common/Frameworks/ERCalendar" />
@@ -1117,7 +1091,7 @@ There are many ways to use this script:
     </target>
 
     <target name="EGSampleApp.all">
-        <antcall target="global.application" >
+        <antcall target="global.application.${build.action}" >
             <param name="project.type" value="application" />
             <param name="project.principal.class" value="er.excel.Application" />
             <param name="project.name" value="EGSampleApp" />
@@ -1127,7 +1101,7 @@ There are many ways to use this script:
         </antcall>
     </target>
     <target name="ExcelGenerator.all">
-        <antcall target="global.framework" >
+        <antcall target="global.framework.${build.action}" >
             <param name="project.principal.class" value="" />
             <param name="project.name" value="ExcelGenerator" />
             <param name="project.dir" value="ExcelGeneration/Frameworks/ExcelGenerator" />
@@ -1136,18 +1110,18 @@ There are many ways to use this script:
         </antcall>
     </target>
     <target name="AjaxExample.all">
-        <antcall target="global.application" >
+        <antcall target="global.application.${build.action}" >
             <param name="project.type" value="application" />
             <param name="project.principal.class" value="Application" />
             <param name="project.name" value="AjaxExample" />
             <param name="project.dir" value="Ajax/AjaxExample" />
-	    			<param name="use.additional.framework.1" value="Ajax.framework" />
+	        <param name="use.additional.framework.1" value="Ajax.framework" />
             <param name="use.wonder.core" value="true" />
             <param name="use.wonder.ajax" value="true" />
         </antcall>
     </target>
-    <target name="Ajax.framework.all">
-        <antcall target="global.framework" >
+    <target name="Ajax.all">
+        <antcall target="global.framework.${build.action}" >
             <param name="project.principal.class" value="er.ajax.Ajax" />
             <param name="project.name" value="Ajax" />
             <param name="project.dir" value="Ajax/Ajax" />
@@ -1156,30 +1130,61 @@ There are many ways to use this script:
         </antcall>
     </target>
     <target name="YUIExample.all">
-        <antcall target="global.application" >
+        <antcall target="global.application.${build.action}" >
             <param name="project.type" value="application" />
             <param name="project.principal.class" value="Application" />
             <param name="project.name" value="YUIExample" />
             <param name="project.dir" value="Ajax/YUIExample" />
-      			<param name="use.additional.framework.1" value="Ajax.framework" />
-      			<param name="use.additional.framework.2" value="YUI.framework" />
+      		<param name="use.additional.framework.1" value="Ajax.framework" />
+      		<param name="use.additional.framework.2" value="YUI.framework" />
             <param name="use.wonder.core" value="true" />
             <param name="use.wonder.ajax" value="true" />
             <param name="use.wonder.yui" value="true" />
         </antcall>
     </target>
-    <target name="YUI.framework.all">
-        <antcall target="global.framework" >
+    <target name="YUI.all">
+        <antcall target="global.framework.${build.action}" >
             <param name="project.principal.class" value="" />
             <param name="project.name" value="YUI" />
             <param name="project.dir" value="Ajax/YUI" />
-      			<param name="use.additional.framework.1" value="Ajax.framework" />
+            <param name="use.additional.framework.1" value="Ajax.framework" />
             <param name="use.wonder.core" value="true" />
             <param name="use.wonder.ajax" value="true" />
         </antcall>
     </target>
-    <target name="ERIMAdaptor.framework.all">
-        <antcall target="global.framework" >
+    
+    <target name="AjaxLookExample.all">
+        <antcall target="global.application.${build.action}" >
+            <param name="project.type" value="application" />
+            <param name="project.principal.class" value="Application" />
+            <param name="project.name" value="AjaxLookExample" />
+            <param name="project.dir" value="Ajax/AjaxLookExample" />
+      		<param name="use.additional.framework.1" value="Ajax.framework" />
+      		<param name="use.additional.framework.2" value="YUI.framework" />
+      		<param name="use.additional.framework.3" value="AjaxLook.framework" />
+            <param name="use.wonder.core" value="true" />
+            <param name="use.webobjects.d2w" value="true" />
+            <param name="use.wonder.d2w" value="true" />
+            <param name="use.wonder.ajax" value="true" />
+            <param name="use.wonder.yui" value="true" />
+        </antcall>
+    </target>
+    <target name="AjaxLook.all">
+        <antcall target="global.framework.${build.action}" >
+            <param name="project.principal.class" value="" />
+            <param name="project.name" value="AjaxLook" />
+            <param name="project.dir" value="Ajax/AjaxLook" />
+      		<param name="use.additional.framework.1" value="Ajax.framework" />
+      		<param name="use.additional.framework.2" value="YUI.framework" />
+            <param name="use.wonder.core" value="true" />
+            <param name="use.wonder.d2w" value="true" />
+            <param name="use.webobjects.d2w" value="true" />
+            <param name="use.wonder.ajax" value="true" />
+        </antcall>
+    </target>
+
+    <target name="ERIMAdaptor.all">
+        <antcall target="global.framework.${build.action}" >
             <param name="project.principal.class" value="" />
             <param name="project.name" value="ERIMAdaptor" />
             <param name="project.dir" value="WOAdaptors/ERIMAdaptor" />
@@ -1190,7 +1195,7 @@ There are many ways to use this script:
         </antcall>
     </target>
     <target name="ERWorkerChannel.all">
-        <antcall target="global.framework" >
+        <antcall target="global.framework.${build.action}" >
             <param name="project.principal.class" value="" />
             <param name="project.name" value="ERWorkerChannel" />
             <param name="project.dir" value="Common/Frameworks/ERWorkerChannel" />
@@ -1199,7 +1204,7 @@ There are many ways to use this script:
         </antcall>
     </target>
     <target name="PostgresqlPlugIn.all">
-        <antcall target="global.framework" >
+        <antcall target="global.framework.${build.action}" >
             <param name="project.principal.class" value="com.webobjects.jdbcadaptor.PostgresqlPlugIn" />
             <param name="project.name" value="PostgresqlPlugIn" />
             <param name="project.dir" value="PlugIns/PostgresqlPlugIn" />
@@ -1207,501 +1212,98 @@ There are many ways to use this script:
     </target>
     
 
-    <target name="core.all" depends="ERJars.all, JavaWOExtensions.all, ERExtensions.all, ERDirectToWeb.all" />
-    <target name="common.frameworks.all" depends="core.all, ERNeutralLook.all, WOOgnl.all, ERPrototypes.all, ERPlot.all, ERIndexing.all, ERJavaMail.all, ERCoreBusinessLogic.all, ERChangeNotificationJMS.all, ERCalendar.all, ERExcelLook.all, ERWorkerChannel.all" />
-    <target name="bugtracker.all" depends="common.frameworks.all, BTBusinessLogic.all, BugTracker.all" />
-    <target name="common.applications.all" depends="common.frameworks.all, bugtracker.all, ERMailer.all" />
-    <target name="wrox.all" depends="common.frameworks.all,ERMiniUglyLook.all, NetStruxrCaseStudy.all" />
-    <target name="stepwise.all" depends="D2WListExample.all, D2WInspectExample.all" />
-    <target name="common.examples.all" depends="common.frameworks.all, wrox.all, stepwise.all, ERMovies.all, D2WComponentTour.all, ajaxexample.all, yuiexample.all" />
-    <target name="common.all" depends="common.frameworks.all, common.applications.all, examples.all" />
-    <target name="dynareporting.base" depends="core.all, WOOgnl.all, DynaReporting.base" />
-    <target name="dynareporting.all" depends="core.all, WOOgnl.all, dynareporting.base" />
-    <target name="excelgeneration.all" depends="core.all, ExcelGenerator.all, EGSampleApp.all" />
-    <target name="ajaxexample.all" depends="core.all, Ajax.all, AjaxExample.all" />
-    <target name="yuiexample.all" depends="core.all, YUI.all, YUIExample.all" />
-
-    <target name="Validity.base" depends="Validity.framework.all, Validity.application.all" />
-    <target name="Validity.all" depends="Validity.base, Validity.example.all" />
-
-    <target name="DynaReporting.base" depends="DRGrouping.all, WRReporting.all" />
-    <target name="DynaReporting.apps" depends="DocsByExample.all, DynaReporter.all, DRGroupingTest.all" />
-    <target name="DynaReporting.all" depends="DynaReporting.base, DynaReporting.apps" />
+    <target name="common.frameworks.all" depends="ERJars.all, JavaWOExtensions.all, ERExtensions.all, ERDirectToWeb.all, ERNeutralLook.all, WOOgnl.all, ERPrototypes.all, ERPlot.all, ERIndexing.all, ERJavaMail.all, ERCoreBusinessLogic.all, ERChangeNotificationJMS.all, ERCalendar.all, ERExcelLook.all, ERWorkerChannel.all, BTBusinessLogic.all, ERMiniUglyLook.all" />
     
-    <target name="ExcelGeneration.all" depends="ExcelGenerator.all, EGSampleApp.all" />
+    <target name="common.applications.all" depends="BugTracker.all, ERMailer.all" />
 
-    <target name="Ajax.all" depends=" Ajax.framework.all, AjaxExample.all" />
-    <target name="YUI.all" depends=" YUI.framework.all, YUIExample.all" />
+    <target name="common.examples.all" depends="ERMiniUglyLook.all, NetStruxrCaseStudy.all, D2WListExample.all, D2WInspectExample.all, ERMovies.all, D2WComponentTour.all, AjaxExample.all, YUIExample.all" />
+    
+    <target name="dynareporting.frameworks.all" depends="DRGrouping.all, WRReporting.all" />
+    <target name="dynareporting.examples.all" depends="DocsByExample.all, DynaReporter.all, DRGroupingTest.all" />
+    
+    <target name="excelgeneration.frameworks.all" depends="ExcelGenerator.all" />
+    <target name="excelgeneration.examples.all" depends="EGSampleApp.all" />
+    
+    <target name="ajax.frameworks.all" depends="Ajax.all, YUI.all, AjaxLook.all" />
+    <target name="ajax.examples.all" depends="AjaxExample.all, YUIExample.all, AjaxLookExample.all" />
+    
+    <target name="plugins.all" depends="PostgresqlPlugIn.all" />
 
-    <target name="WOAdaptors.all" depends=" ERIMAdaptor.framework.all" />
+    <target name="validity.frameworks.all" depends="Validity.all" />
+    <target name="validity.applications.all" depends="ValidityModeler.all" />
+    <target name="validity.examples.all" depends="ValidityExample.all" />
 
-    <target name="SVGObjects.example.all" depends="SVGObjects.ComponentTour.all, SVGObjects.eCards.all, SVGObjects.EZForms.all, SVGObjects.Hello.all, SVGObjects.PopIdol.all" />
-    <target name="SVGObjects.all" depends="SVGObjects.framework.all , SVGObjects.example.all" />
+    <target name="svgobjects.frameworks.all" depends="SVGObjects.all" />
+    <target name="svgobjects.examples.all" depends="SVGObjects.ComponentTour.all, SVGObjects.eCards.all, SVGObjects.EZForms.all, SVGObjects.Hello.all, SVGObjects.PopIdol.all" />
 
-    <target name="PlugIns.all" depends="PostgresqlPlugIn.all" />
-    <target name="subprojects.all" depends="WOPayPal.all, Validity.all, SVGObjects.all, DynaReporting.all, ExcelGeneration.all, PlugIns.all" />
-
+    <target name="paypal.frameworks.all" depends="WOPayPal.all" />
+    <target name="woadaptors.all" depends="ERIMAdaptor.all" />
     <target name="experimental.all" depends="DevStudio.all" />
+    
+    <target name="frameworks.all" depends="common.frameworks.all, excelgeneration.frameworks.all, ajax.frameworks.all, woadaptors.all, validity.frameworks.all, svgobjects.frameworks.all, plugins.all, paypal.frameworks.all, dynareporting.frameworks.all, woadaptors.all"/>
+    <target name="applications.all" depends="DevStudio.all, common.applications.all, validity.applications.all"/>
+    <target name="examples.all" depends="common.examples.all, excelgeneration.examples.all, validity.examples.all, dynareporting.examples.all, ajax.examples.all, experimental.all"/>
 
-    <target name="frameworks.all" depends="common.frameworks.all, BTBusinessLogic.all, ERMiniUglyLook.all, ExcelGenerator.all,  Ajax.framework.all, YUI.framework.all, ERIMAdaptor.framework.all, Validity.framework.all, SVGObjects.framework.all, PostgresqlPlugIn.all, WOPayPal.all, DRGrouping.all, WRReporting.all"/>
-    <target name="applications.all" depends="DevStudio.all, BugTracker.all, ERMailer.all, Validity.application.all"/>
-    <target name="examples.all" depends="NetStruxrCaseStudy.all, ERMovies.all, D2WComponentTour.all, D2WListExample.all, D2WInspectExample.all, EGSampleApp.all, Validity.example.all, DocsByExample.all, DynaReporter.all, DRGroupingTest.all, SVGObjects.example.all, AjaxExample.all, YUIExample.all "/>
 
-    <target name="all.compile" depends="common.all, subprojects.all, experimental.all" />
-
-    <target name="all.clean">
-        <antcall target="global.clean.framework" >
-            <param name="project.name" value="ERJars" />
-        </antcall>
-        <antcall target="global.clean.framework" >
-            <param name="project.name" value="Ajax" />
-        </antcall>
-        <antcall target="global.clean.framework" >
-            <param name="project.name" value="YUI" />
-        </antcall>
-        <antcall target="global.clean.framework" >
-            <param name="project.name" value="ERIMAdaptor" />
-        </antcall>
-        <antcall target="global.clean.framework" >
-            <param name="project.name" value="ERExtensions" />
-        </antcall>
-        <antcall target="global.clean.framework" >
-            <param name="project.name" value="ERDirectToWeb" />
-        </antcall>
-        <antcall target="global.clean.framework" >
-            <param name="project.name" value="ERPrototypes" />
-        </antcall>
-        <antcall target="global.clean.framework" >
-            <param name="project.name" value="ERCoreBusinessLogic" />
-        </antcall>
-        <antcall target="global.clean.framework" >
-            <param name="project.name" value="ERIndexing" />
-        </antcall>
-        <antcall target="global.clean.framework" >
-            <param name="project.name" value="ERJavaMail" />
-        </antcall>
-        <antcall target="global.clean.framework" >
-            <param name="project.name" value="ERPlot" />
-        </antcall>
-        <antcall target="global.clean.framework" >
-            <param name="project.name" value="ERExcelLook" />
-        </antcall>
-        <antcall target="global.clean.framework" >
-            <param name="project.name" value="ERChangeNotificationJMS" />
-        </antcall>
-        <antcall target="global.clean.framework" >
-            <param name="project.name" value="ERNeutralLook" />
-        </antcall>
-        <antcall target="global.clean.framework" >
-            <param name="project.name" value="JavaWOExtensions" />
-        </antcall>
-        <antcall target="global.clean.framework" >
-            <param name="project.name" value="SVGObjects" />
-        </antcall>
-        <antcall target="global.clean.framework" >
-            <param name="project.name" value="Validity" />
-        </antcall>
-        <antcall target="global.clean.framework" >
-            <param name="project.name" value="WOOgnl" />
-        </antcall>
-        <antcall target="global.clean.framework" >
-            <param name="project.name" value="WOPayPal" />
-        </antcall>
-        <antcall target="global.clean.framework" >
-            <param name="project.name" value="ERMiniUglyLook" />
-        </antcall>
-        <antcall target="global.clean.framework" >
-            <param name="project.name" value="BTBusinessLogic" />
-        </antcall>
-        <antcall target="global.clean.framework" >
-            <param name="project.name" value="ERCalendar" />
-        </antcall>
-
-        <antcall target="global.clean.application" >
-            <param name="project.name" value="BugTracker" />
-        </antcall>
-        <antcall target="global.clean.application" >
-            <param name="project.name" value="D2WInspectExample" />
-        </antcall>
-        <antcall target="global.clean.application" >
-            <param name="project.name" value="D2WListExample" />
-        </antcall>
-        <antcall target="global.clean.application" >
-            <param name="project.name" value="D2WComponentTour" />
-        </antcall>
-        <antcall target="global.clean.application" >
-            <param name="project.name" value="ERMovies" />
-        </antcall>
-        <antcall target="global.clean.application" >
-            <param name="project.name" value="ValidityModeler" />
-        </antcall>
-        <antcall target="global.clean.application" >
-            <param name="project.name" value="ValidityExample" />
-        </antcall>
-        <antcall target="global.clean.application" >
-            <param name="project.name" value="SVGObjectsComponentTour" />
-        </antcall>
-        <antcall target="global.clean.application" >
-            <param name="project.name" value="SVGObjectsECards" />
-        </antcall>
-        <antcall target="global.clean.application" >
-            <param name="project.name" value="SVGObjectsEZForms" />
-        </antcall>
-        <antcall target="global.clean.application" >
-            <param name="project.name" value="SVGObjectsHello" />
-        </antcall>
-        <antcall target="global.clean.application" >
-            <param name="project.name" value="SVGObjectsPopIdol" />
-        </antcall>
-        <antcall target="global.clean.application" >
-            <param name="project.name" value="DevStudio" />
-        </antcall>
-        <antcall target="global.clean.application" >
-            <param name="project.name" value="ERMailer" />
-        </antcall>
-        <antcall target="global.clean.application" >
-            <param name="project.name" value="NetStruxrCaseStudy" />
-        </antcall>
-        <antcall target="global.clean.application" >
-            <param name="project.name" value="DevStudio" />
-        </antcall>
-        <antcall target="global.clean.application" >
-            <param name="project.name" value="DocsByExample" />
-        </antcall>
-        <antcall target="global.clean.application" >
-            <param name="project.name" value="DynaReporter" />
-        </antcall>
-        <antcall target="global.clean.application" >
-            <param name="project.name" value="DRGroupingTest" />
-        </antcall>
-        <antcall target="global.clean.framework" >
-            <param name="project.name" value="DRGrouping" />
-        </antcall>
-        <antcall target="global.clean.framework" >
-            <param name="project.name" value="WRReporting" />
-        </antcall>
-        <antcall target="global.clean.framework" >
-            <param name="project.name" value="ExcelGenerator" />
-        </antcall>
-        <antcall target="global.clean.application" >
-            <param name="project.name" value="EGSampleApp" />
-        </antcall>
-        <antcall target="global.clean.framework" >
-            <param name="project.name" value="PostgresqlPlugIn" />
-        </antcall>
-        <antcall target="global.clean.framework" >
-            <param name="project.name" value="ERWorkerChannel" />
-        </antcall>
-        <antcall target="global.clean.framework" >
-            <param name="project.name" value="AjaxExample" />
-        </antcall>
-        <antcall target="global.clean.framework" >
-            <param name="project.name" value="YUIExample" />
-        </antcall>
-     </target>
-
-    <target name="frameworks.web">
-        <!--ERJars does not have WebServerResources -->
-        <!--antcall target="global.web.framework" >
-            <param name="project.name" value="ERJars" />
-        </antcall-->
-
-        <antcall target="global.web.framework" >
-            <param name="project.name" value="ERExtensions" />
-        </antcall>
-        <antcall target="global.web.framework" >
-            <param name="project.name" value="Ajax" />
-        </antcall>
-        <antcall target="global.web.framework" >
-            <param name="project.name" value="YUI" />
-        </antcall>
-        <antcall target="global.web.framework" >
-            <param name="project.name" value="ERIMAdaptor" />
-        </antcall>
-        <antcall target="global.web.framework" >
-            <param name="project.name" value="ERDirectToWeb" />
-        </antcall>
-        <antcall target="global.web.framework" >
-            <param name="project.name" value="ERPrototypes" />
-        </antcall>
-        <antcall target="global.web.framework" >
-            <param name="project.name" value="ERCoreBusinessLogic" />
-        </antcall>
-        <antcall target="global.web.framework" >
-            <param name="project.name" value="ERJavaMail" />
-        </antcall>
-        <antcall target="global.web.framework" >
-            <param name="project.name" value="ERPlot" />
-        </antcall>
-        <antcall target="global.web.framework" >
-            <param name="project.name" value="ERExcelLook" />
-        </antcall>
-        <antcall target="global.web.framework" >
-            <param name="project.name" value="ERChangeNotificationJMS" />
-        </antcall>
-        <antcall target="global.web.framework" >
-            <param name="project.name" value="ERNeutralLook" />
-        </antcall>
-        <antcall target="global.web.framework" >
-            <param name="project.name" value="JavaWOExtensions" />
-        </antcall>
-        <antcall target="global.web.framework" >
-            <param name="project.name" value="Validity" />
-        </antcall>
-        <antcall target="global.web.framework" >
-            <param name="project.name" value="SVGObjects" />
-        </antcall>
-        <antcall target="global.web.framework" >
-            <param name="project.name" value="WOOgnl" />
-        </antcall>
-        <antcall target="global.web.framework" >
-            <param name="project.name" value="WOPayPal" />
-        </antcall>
-        <antcall target="global.web.framework" >
-            <param name="project.name" value="ERMiniUglyLook" />
-        </antcall>
-        <antcall target="global.web.framework" >
-            <param name="project.name" value="BTBusinessLogic" />
-        </antcall>
-        <antcall target="global.web.framework" >
-            <param name="project.name" value="ERCalendar" />
-        </antcall>
-        <antcall target="global.web.framework" >
-            <param name="project.name" value="DRGrouping" />
-        </antcall>
-        <antcall target="global.web.framework" >
-            <param name="project.name" value="WRReporting" />
-        </antcall>
-        <antcall target="global.web.framework" >
-            <param name="project.name" value="ExcelGenerator" />
+    <target name="all.run" depends="frameworks.all, applications.all, examples.all"/>
+    
+    <target name="build">
+        <antcall target="all.run" >
+            <param name="build.action" value="build" />
         </antcall>
     </target>
-    <target name="applications.web">
-        <antcall target="global.web.application" >
-            <param name="project.name" value="BugTracker" />
+
+    <target name="dist">
+    
+        <antcall target="all.run" >
+            <param name="dist.base" value="${dist.base}" />
+            <param name="project.version" value="${project.version}" />
+            <param name="dist.dir" value="${dist.base}/Wonder-${project.version}"/>
+            <param name="build.action" value="dist" />
         </antcall>
-        <antcall target="global.web.application" >
-            <param name="project.name" value="DevStudio" />
-        </antcall>
-        <antcall target="global.web.application" >
-            <param name="project.name" value="ERMailer" />
-        </antcall>
+
+        <copy todir="${dist.base}/Wonder-src-${project.version}" 
+                includeEmptyDirs="false" preservelastmodified="true">
+            <fileset dir=".">
+                <exclude name="**/CVS/*" />
+             	<exclude name="**/dist/**"/>
+             	<exclude name="**/bin/**"/>
+             	<exclude name="**/build/**"/>
+             	<exclude name="**/target/**"/>
+            </fileset>
+        </copy>
+        
+        <tar tarfile="${dist.base}/Wonder-src-${project.version}.tar" longfile="gnu">
+            <tarfileset dir="${dist.base}/Wonder-src-${project.version}">
+            </tarfileset>
+        </tar>
+
+        <gzip src="${dist.base}/Wonder-src-${project.version}.tar" 
+            zipfile="${dist.base}/Wonder-src-${project.version}.tgz"/>
+
+        <delete file="${dist.base}/Wonder-src-${project.version}.tar"/>
+        <zip destfile="${dist.base}/Wonder-${project.version}.zip" 
+            basedir="${dist.base}/Wonder-${project.version}"
+            excludes="**/CVS/*, **/dist/**" />
     </target>
-    <target name="examples.web">
-        <antcall target="global.web.application" >
-            <param name="project.name" value="D2WInspectExample" />
-        </antcall>
-        <antcall target="global.web.application" >
-            <param name="project.name" value="D2WListExample" />
-        </antcall>
-        <antcall target="global.web.application" >
-            <param name="project.name" value="D2WComponentTour" />
-        </antcall>
-        <antcall target="global.web.application" >
-            <param name="project.name" value="ERMovies" />
-        </antcall>
-        <antcall target="global.web.application" >
-            <param name="project.name" value="ValidityExample" />
-        </antcall>
-        <antcall target="global.web.application" >
-            <param name="project.name" value="SVGObjectsComponentTour" />
-        </antcall>
-        <antcall target="global.web.application" >
-            <param name="project.name" value="SVGObjectsECards" />
-        </antcall>
-        <antcall target="global.web.application" >
-            <param name="project.name" value="SVGObjectsEZForms" />
-        </antcall>
-        <antcall target="global.web.application" >
-            <param name="project.name" value="SVGObjectsHello" />
-        </antcall>
-        <antcall target="global.web.application" >
-            <param name="project.name" value="SVGObjectsPopIdol" />
-        </antcall>
-        <antcall target="global.web.application" >
-            <param name="project.name" value="NetStruxrCaseStudy" />
-        </antcall>
-        <antcall target="global.web.application" >
-            <param name="project.name" value="DocsByExample" />
-        </antcall>
-        <antcall target="global.web.application" >
-            <param name="project.name" value="DynaReporter" />
-        </antcall>
-        <antcall target="global.web.application" >
-            <param name="project.name" value="DRGroupingTest" />
-        </antcall>
-        <antcall target="global.web.application" >
-            <param name="project.name" value="EGSampleApp" />
-        </antcall>
-        <antcall target="global.web.application" >
-            <param name="project.name" value="AjaxExample" />
-        </antcall>
-        <antcall target="global.web.application" >
-            <param name="project.name" value="YUIExample" />
+
+    <target name="install">
+        <antcall target="all.run" >
+            <param name="build.action" value="install" />
         </antcall>
     </target>
     
-    <target name="all.web" depends="frameworks.web, applications.web, examples.web" />
-
-    <target name="frameworks.all.install">
-        <antcall target="global.install.framework" >
-            <param name="project.name" value="ERJars" />
-        </antcall>
-        <antcall target="global.install.framework" >
-            <param name="project.name" value="ERExtensions" />
-        </antcall>
-        <antcall target="global.install.framework" >
-            <param name="project.name" value="ERDirectToWeb" />
-        </antcall>
-        <antcall target="global.install.framework" >
-            <param name="project.name" value="ERPrototypes" />
-        </antcall>
-        <antcall target="global.install.framework" >
-            <param name="project.name" value="ERPlot" />
-        </antcall>
-        <antcall target="global.install.framework" >
-            <param name="project.name" value="ERExcelLook" />
-        </antcall>
-        <antcall target="global.install.framework" >
-            <param name="project.name" value="ERCoreBusinessLogic" />
-        </antcall>
-        <antcall target="global.install.framework" >
-            <param name="project.name" value="ERJavaMail" />
-        </antcall>
-        <antcall target="global.install.framework" >
-            <param name="project.name" value="ERIndexing" />
-        </antcall>
-        <antcall target="global.install.framework" >
-            <param name="project.name" value="ERChangeNotificationJMS" />
-        </antcall>
-        <antcall target="global.install.framework" >
-            <param name="project.name" value="ERNeutralLook" />
-        </antcall>
-        <antcall target="global.install.framework" >
-            <param name="project.name" value="JavaWOExtensions" />
-        </antcall>
-        <antcall target="global.install.framework" >
-            <param name="project.name" value="Validity" />
-        </antcall>
-        <antcall target="global.install.framework" >
-            <param name="project.name" value="SVGObjects" />
-        </antcall>
-        <antcall target="global.install.framework" >
-            <param name="project.name" value="WOOgnl" />
-        </antcall>
-        <antcall target="global.install.framework" >
-            <param name="project.name" value="WOPayPal" />
-        </antcall>
-        <antcall target="global.install.framework" >
-            <param name="project.name" value="ERMiniUglyLook" />
-        </antcall>
-        <antcall target="global.install.framework" >
-            <param name="project.name" value="BTBusinessLogic" />
-        </antcall>
-        <antcall target="global.install.framework" >
-            <param name="project.name" value="ERCalendar" />
-        </antcall>
-       <antcall target="global.install.framework" >
-            <param name="project.name" value="DRGrouping" />
-        </antcall>
-        <antcall target="global.install.framework" >
-            <param name="project.name" value="WRReporting" />
-        </antcall>
-        <antcall target="global.install.framework" >
-            <param name="project.name" value="ExcelGenerator" />
-        </antcall>
-        <antcall target="global.install.framework" >
-            <param name="project.name" value="Ajax" />
-        </antcall>
-        <antcall target="global.install.framework" >
-            <param name="project.name" value="YUI" />
-        </antcall>
-        <antcall target="global.install.framework" >
-            <param name="project.name" value="ERIMAdaptor" />
-        </antcall>
-        <antcall target="global.install.framework" >
-            <param name="project.name" value="PostgresqlPlugIn" />
-        </antcall>
-        <antcall target="global.install.framework" >
-            <param name="project.name" value="ERWorkerChannel" />
+    <target name="web">
+        <antcall target="all.run" >
+            <param name="build.action" value="web" />
         </antcall>
     </target>
-
-    <target name="examples.all.install">
-        <antcall target="global.install.application" >
-            <param name="project.name" value="D2WInspectExample" />
-        </antcall>
-        <antcall target="global.install.application" >
-            <param name="project.name" value="D2WListExample" />
-        </antcall>
-        <antcall target="global.install.application" >
-            <param name="project.name" value="D2WComponentTour" />
-        </antcall>
-        <antcall target="global.install.application" >
-            <param name="project.name" value="ERMovies" />
-        </antcall>
-        <antcall target="global.install.application" >
-            <param name="project.name" value="ValidityExample" />
-        </antcall>
-        <antcall target="global.install.application" >
-            <param name="project.name" value="SVGObjectsComponentTour" />
-        </antcall>
-        <antcall target="global.install.application" >
-            <param name="project.name" value="SVGObjectsECards" />
-        </antcall>
-        <antcall target="global.install.application" >
-            <param name="project.name" value="SVGObjectsEZForms" />
-        </antcall>
-        <antcall target="global.install.application" >
-            <param name="project.name" value="SVGObjectsHello" />
-        </antcall>
-        <antcall target="global.install.application" >
-            <param name="project.name" value="SVGObjectsPopIdol" />
-        </antcall>
-        <antcall target="global.install.application" >
-            <param name="project.name" value="NetStruxrCaseStudy" />
-        </antcall>
-        <antcall target="global.install.application" >
-            <param name="project.name" value="DocsByExample" />
-        </antcall>
-        <antcall target="global.install.application" >
-            <param name="project.name" value="DynaReporter" />
-        </antcall>
-        <antcall target="global.install.application" >
-            <param name="project.name" value="DRGroupingTest" />
-        </antcall>
-        <antcall target="global.install.application" >
-            <param name="project.name" value="EGSampleApp" />
-        </antcall>
-        <antcall target="global.install.application" >
-            <param name="project.name" value="AjaxExample" />
-        </antcall>
-        <antcall target="global.install.application" >
-            <param name="project.name" value="YUIExample" />
+    
+    <target name="clean">
+        <antcall target="all.run" >
+            <param name="build.action" value="clean" />
         </antcall>
     </target>
-
-
-    <target name="applications.all.install">
-        <antcall target="global.install.application" >
-            <param name="project.name" value="DevStudio" />
-        </antcall>
-        <antcall target="global.install.application" >
-            <param name="project.name" value="BugTracker" />
-        </antcall>
-        <antcall target="global.install.application" >
-            <param name="project.name" value="ValidityModeler" />
-        </antcall>
-        <antcall target="global.install.application" >
-            <param name="project.name" value="ERMailer" />
-        </antcall>
-    </target>
-
-    <target name="all.install" depends="frameworks.all.install, applications.all.install, examples.all.install" />
-
-    <target name="all" depends="all.compile" />
-    <target name="install" depends="all.install" />
-    <target name="web" depends="all.web" />
-    <target name="clean" depends="all.clean" />
-
+    
+    <target name="all" depends="build, install, web" />
 </project>
