@@ -793,10 +793,12 @@ static NSString *_parseKey(id _ctx, const char *_buf, unsigned _bufLen,
     while (pos < _bufLen) {
       c = _buf[pos];
       if (isQuotedKey && c == '"')
-	break;
+        break;
       else if
-	((c == ' ') || (c == '<') || (c == '>') || (c == '=') || (c == '!') ||
-         c == ')' || c == '(')
+	  ((c == '<') || (c == '>') || (c == '=') || (c == '!') ||
+           c == ')' || c == '(')
+          break;
+      else if (_countWhiteSpaces(_buf + pos, _bufLen - pos) != 0)
         break;
       pos++;    
     }
