@@ -411,6 +411,14 @@ public class NSMutableArray extends NSArray {
 
     //AK: from here on only java.util.List stuff
 
+    public Object set(int index, Object element) {
+    	Object old = objectAtIndex(index);
+    	if(element != old) {
+    		replaceObjectAtIndex(element, index);
+    	}
+    	return old;
+    }
+
     public void add(int index, Object element) {
         insertObjectAtIndex(element, index);
     }
@@ -692,6 +700,7 @@ class SubList extends NSMutableArray {
     public Iterator iterator() {
         return listIterator();
     }
+
 
     public ListIterator listIterator(final int index) {
         checkForComodification();
