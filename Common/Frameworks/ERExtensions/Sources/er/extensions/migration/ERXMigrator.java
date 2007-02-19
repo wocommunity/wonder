@@ -370,7 +370,7 @@ public class ERXMigrator {
 						channel.adaptorContext().commitTransaction();
 						channel.adaptorContext().beginTransaction();
 						if (ERXMigrator.log.isInfoEnabled()) {
-							ERXMigrator.log.info(model.name() + " is now version " + currentVersion);
+							ERXMigrator.log.info(model.name() + " is now version " + nextVersion);
 						}
 						if (_migration instanceof IERXPostMigration) {
 							_postMigrations.put(_migration, _modelVersion);
