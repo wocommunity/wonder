@@ -14,6 +14,20 @@
                modificationDate = "2002-07-21 21:47:27 +0200";
            };
            valueClassName = NSNumber;
+           valueType = d;
+       }, 
+       
+       {
+           columnName = "";
+           externalType = DECIMAL;
+           name = currencyAmount;
+           precision = 38;
+           scale = 4;
+           userInfo = 
+           {
+               modificationDate = "2002-07-21 21:47:27 +0200";
+           };
+           valueClassName = NSNumber;
            valueType = B;
        }, 
        
@@ -46,6 +60,17 @@
            valueClassName = NSString;
            valueType = c;
            width = 1;
+       }, 
+              
+       {
+           adaptorValueConversionMethodName = toCryptoString;
+           columnName = "";
+           externalType = VARCHAR;
+           factoryMethodArgumentType = EOFactoryMethodArgumentIsNSString;
+           name = cryptoString;
+           valueClassName = er.extensions.ERXCryptoString;
+           valueFactoryMethodName = createInstanceFromCryptoString;
+           width = 100;
        }, 
        
        {
@@ -305,6 +330,7 @@
        blob, 
        boolean, 
        charFlag, 
+       cryptoString,
        date, 
        dateTime, 
        doubleNumber, 
@@ -333,6 +359,7 @@
            blob, 
            boolean, 
            charFlag, 
+           cryptoString,
            date, 
            dateTime, 
            doubleNumber, 
