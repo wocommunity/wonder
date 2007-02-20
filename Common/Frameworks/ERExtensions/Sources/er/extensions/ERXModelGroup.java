@@ -643,23 +643,25 @@ public class ERXModelGroup extends EOModelGroup {
 
 		model.setConnectionDictionary(newConnectionDictionary);
 
+		String[] comparisonKeys = { "URL", "username", "password", "driver", "plugin" };
 		Enumeration modelsEnum = model.modelGroup().models().objectEnumerator();
 		while (modelsEnum.hasMoreElements()) {
 			EOModel otherModel = (EOModel)modelsEnum.nextElement();
 			if (otherModel != model) {
 				NSDictionary otherConnectionDictionary = otherModel.connectionDictionary();
 				if (otherConnectionDictionary != null) {
-					String thisURL = (String)newConnectionDictionary.objectForKey("URL");
-					String otherURL = (String)otherConnectionDictionary.objectForKey("URL");
-					String thisUsername = (String)newConnectionDictionary.objectForKey("username");
-					String otherUsername = (String)otherConnectionDictionary.objectForKey("username");
-					if (ERXStringUtilities.stringEqualsString(thisURL, otherURL) && ERXStringUtilities.stringEqualsString(thisUsername, otherUsername) && !newConnectionDictionary.equals(otherConnectionDictionary)) {
-						throw new IllegalArgumentException("The connection dictionaries for " + model.name() + " and " + otherModel.name() + " are the same URL and user but their connection dictionaries do not match: " + model.name() + "=" + newConnectionDictionary + "; and " + otherModel.name() + "=" + otherConnectionDictionary);
+					boolean keysMatch = true;
+					for (int comparisonKeyNum = 0; keysMatch && comparisonKeyNum < comparisonKeys.length; comparisonKeyNum ++) {
+						String thisValue = (String)newConnectionDictionary.objectForKey(comparisonKeys[comparisonKeyNum]);
+						String otherValue = (String)otherConnectionDictionary.objectForKey(comparisonKeys[comparisonKeyNum]);
+						keysMatch = ERXStringUtilities.stringEqualsString(thisValue, otherValue);
+					}
+					if (keysMatch && !newConnectionDictionary.equals(otherConnectionDictionary)) {
+						throw new IllegalArgumentException("The connection dictionaries for " + model.name() + " and " + otherModel.name() + " have the same URL, username, password, driver, and plugin, but the connection dictionaries are not equal.  This is often caused by jdbc2Info not matching between the two.  One fix for this is to set " + model.name() + ".removeJdbc2Info=true and " + otherModel.name() + ".removeJdbc2Info=true in your Properties file. (" + model.name() + "=" + newConnectionDictionary + "; and " + otherModel.name() + "=" + otherConnectionDictionary + ").");
 					}
 				}
 			}
 		}
-
 	}
 
 	/**
