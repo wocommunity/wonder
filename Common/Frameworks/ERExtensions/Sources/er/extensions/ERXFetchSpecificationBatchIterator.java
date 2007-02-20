@@ -218,12 +218,13 @@ public class ERXFetchSpecificationBatchIterator {
             log.debug("Of primaryKey count: " + primaryKeys.count() + " fetching range: " + range + " which is: " + primaryKeysToFetch.count());
 
             ERXInQualifier qual = new ERXInQualifier(primaryKeyAttributeName, primaryKeysToFetch);
-            EOFetchSpecification fetchSpec = new EOFetchSpecification(fetchSpecification.entityName(), qual, fetchSpecification.sortOrderings());
+            EOFetchSpecification batchFS = new EOFetchSpecification(fetchSpecification.entityName(), qual, fetchSpecification.sortOrderings());
             if (fetchSpecification.prefetchingRelationshipKeyPaths() != null)
-                fetchSpec.setPrefetchingRelationshipKeyPaths(fetchSpecification.prefetchingRelationshipKeyPaths());
-            nextBatch = editingContext().objectsWithFetchSpecification(fetchSpec);
+                batchFS.setPrefetchingRelationshipKeyPaths(fetchSpecification.prefetchingRelationshipKeyPaths());
+            batchFS.setRawRowKeyPaths(fetchSpecification.rawRowKeyPaths());
+            nextBatch = editingContext().objectsWithFetchSpecification(batchFS);
 
-            log.debug("Actually fetched: " + nextBatch.count() + " with fetch speciifcation: " + fetchSpec);
+            log.debug("Actually fetched: " + nextBatch.count() + " with fetch speciifcation: " + batchFS);
             
             currentObjectFetchCount += length;
             currentBatchIndex++;
