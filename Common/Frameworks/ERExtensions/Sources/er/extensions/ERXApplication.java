@@ -40,6 +40,7 @@ import com.webobjects.appserver.WOResourceManager;
 import com.webobjects.appserver.WOResponse;
 import com.webobjects.appserver.WOSession;
 import com.webobjects.appserver.WOTimer;
+import com.webobjects.appserver._private.WOProperties;
 import com.webobjects.eoaccess.EOAdaptorChannel;
 import com.webobjects.eoaccess.EODatabaseContext;
 import com.webobjects.eoaccess.EOGeneralAdaptorException;
@@ -108,18 +109,9 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 	/** Notifcation to post when all bundles were loaded but before their principal was called */
 	public static final String ApplicationDidCreateNotification = "NSApplicationDidCreateNotification";
 
-	private static void transferPropertiesFromSourceToDest(Properties sourceProps, Properties destProps) {
-		if (sourceProps != null) {
-			for (Iterator iter = sourceProps.entrySet().iterator(); iter.hasNext();) {
-				Map.Entry entry = (Map.Entry) iter.next();
-				if (destProps.containsKey(entry.getKey())) {
-					destProps.setProperty((String) entry.getKey(), (String) entry.getValue());
-				}
-			}
-		}
-	}
-
 	private static Properties allBundleProps;
+	
+    private static NSDictionary propertiesFromArgv; 
 
 	private static Properties readProperties(File file) {
 		Properties result = null;
@@ -137,12 +129,28 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 		}
 		return result;
 	}
+    
+	/**
+	 * Copies the props from the command line to the static dict propertiesFromArgv.
+	 *
+	 */
+    private static void insertCommandLineArguments() {
+		NSArray keys = propertiesFromArgv.allKeys();
+		int count = keys.count();
+		for (int i = 0; i < count; i++) {
+			Object key = keys.objectAtIndex(i);
+			Object value = propertiesFromArgv.objectForKey(key);
+			NSProperties._setProperty((String) key, (String) value);
+		}
+	}
 
 	/**
-	 * Will be called after each bundle load. We use it to know when the last bundle loaded so we can post a
-	 * notification for it. Note that the bundles will get loaded in the order of the classpath but the main bundle will
-	 * get loaded last. So in order to set the properties correctly, we first add all the props that are not already
-	 * set, then we add the main bundle and the WebObjects.properties and finally the command line props.
+	 * Will be called after each bundle load. We use it to know when the last
+	 * bundle loaded so we can post a notification for it. Note that the bundles
+	 * will get loaded in the order of the classpath but the main bundle will
+	 * get loaded last. So in order to set the properties correctly, we first
+	 * add all the props that are not already set, then we add the main bundle
+	 * and the WebObjects.properties and finally the command line props.
 	 * 
 	 * @param n
 	 */
@@ -219,6 +227,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 			Properties props = NSProperties._getProperties();
 			props.putAll(allBundleProps);
 			NSProperties._setProperties(props);
+			insertCommandLineArguments();
 			NSNotificationCenter.defaultCenter().postNotification(new NSNotification(AllBundlesLoadedNotification, NSKeyValueCoding.NullValue));
 		}
 	}
@@ -320,7 +329,8 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 	public static void main(String argv[], Class applicationClass) {
 		_wasERXApplicationMainInvoked = true;
 		String cps[] = new String[] {"java.class.path", "com.webobjects.classpath"};
-		allFrameworks = new HashSet();
+        propertiesFromArgv = NSProperties.valuesFromArgv(argv);
+        allFrameworks = new HashSet();
 		for (int var = 0; var < cps.length; var++) {
 			String cpName = cps[var];
 			String cp = System.getProperty(cpName);
