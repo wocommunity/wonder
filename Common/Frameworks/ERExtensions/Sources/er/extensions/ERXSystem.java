@@ -12,6 +12,7 @@ import java.util.Properties;
 import com.webobjects.appserver.WOApplication;
 import com.webobjects.foundation.NSKeyValueCoding;
 import com.webobjects.foundation.NSKeyValueCodingAdditions;
+import com.webobjects.foundation.NSProperties;
 
 
 /**
@@ -50,7 +51,7 @@ public class ERXSystem implements NSKeyValueCoding, NSKeyValueCodingAdditions {
      * @see com.webobjects.foundation.NSKeyValueCoding#valueForKey(java.lang.String)
      */
     public Object valueForKey(String key) {
-        return System.getProperty(key);
+        return NSProperties.getProperty(key);
     }
 
     /* (non-Javadoc)
@@ -64,7 +65,7 @@ public class ERXSystem implements NSKeyValueCoding, NSKeyValueCodingAdditions {
      * @see com.webobjects.foundation.NSKeyValueCodingAdditions#valueForKeyPath(java.lang.String)
      */
     public Object valueForKeyPath(String key) {
-        return System.getProperty(key);
+        return NSProperties.getProperty(key);
     }
 
     /* (non-Javadoc)
@@ -78,26 +79,26 @@ public class ERXSystem implements NSKeyValueCoding, NSKeyValueCodingAdditions {
      * @return
      */
     public static Properties getProperties() {
-        Properties ori = System.getProperties();
+        Properties ori = NSProperties._getProperties();
         Properties converted = new Properties();
         for (Enumeration e = ori.propertyNames(); e.hasMoreElements();) {
-            String key = (String) e.nextElement();
-            if(key != null && key.length() > 0) {
-                String value = getProperty(key);
-                converted.put(key, value);
-            }
+        	String key = (String) e.nextElement();
+        	if(key != null && key.length() > 0) {
+        		String value = getProperty(key);
+        		converted.put(key, value);
+        	}
         }
         return converted;
     }
 
     public static void updateProperties() {
-        Properties ori = System.getProperties();
-        for (Enumeration e = ori.propertyNames(); e.hasMoreElements();) {
-            String key = (String) e.nextElement();
-            if(key != null && key.length() > 0) {
-                    String value = getProperty(key);
-                ori.put(key, value);
-            }
-        }
+    	Properties ori = NSProperties._getProperties();
+    	for (Enumeration e = ori.propertyNames(); e.hasMoreElements();) {
+    		String key = (String) e.nextElement();
+    		if(key != null && key.length() > 0) {
+    			String value = getProperty(key);
+    			ori.put(key, value);
+    		}
+    	}
     }
 }
