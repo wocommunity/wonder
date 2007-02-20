@@ -109,7 +109,7 @@ IsEntityWritable: WOConditional {
 
 IsEntityWritable2: WOConditional {
 	_unroll = true;
-	condition = d2wContext.isEntityEditable;
+	condition = isEntityEditable;
 	negate = true;
 }
 
