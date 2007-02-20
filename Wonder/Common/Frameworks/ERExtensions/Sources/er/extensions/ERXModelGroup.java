@@ -643,20 +643,20 @@ public class ERXModelGroup extends EOModelGroup {
 
 		model.setConnectionDictionary(newConnectionDictionary);
 
-		String[] comparisonKeys = { "URL", "username", "password", "driver", "plugin" };
+		String[] keysThatMatter = { "URL", "username", "password", "driver", "plugin" };
 		Enumeration modelsEnum = model.modelGroup().models().objectEnumerator();
 		while (modelsEnum.hasMoreElements()) {
 			EOModel otherModel = (EOModel)modelsEnum.nextElement();
 			if (otherModel != model) {
 				NSDictionary otherConnectionDictionary = otherModel.connectionDictionary();
 				if (otherConnectionDictionary != null) {
-					boolean keysMatch = true;
-					for (int comparisonKeyNum = 0; keysMatch && comparisonKeyNum < comparisonKeys.length; comparisonKeyNum ++) {
-						String thisValue = (String)newConnectionDictionary.objectForKey(comparisonKeys[comparisonKeyNum]);
-						String otherValue = (String)otherConnectionDictionary.objectForKey(comparisonKeys[comparisonKeyNum]);
-						keysMatch = ERXStringUtilities.stringEqualsString(thisValue, otherValue);
+					boolean valuesThatMatterMatch = true;
+					for (int keyNum = 0; valuesThatMatterMatch && keyNum < keysThatMatter.length; keyNum ++) {
+						String thisValue = (String)newConnectionDictionary.objectForKey(keysThatMatter[keyNum]);
+						String otherValue = (String)otherConnectionDictionary.objectForKey(keysThatMatter[keyNum]);
+						valuesThatMatterMatch = ERXStringUtilities.stringEqualsString(thisValue, otherValue);
 					}
-					if (keysMatch && !newConnectionDictionary.equals(otherConnectionDictionary)) {
+					if (valuesThatMatterMatch && !newConnectionDictionary.equals(otherConnectionDictionary)) {
 						throw new IllegalArgumentException("The connection dictionaries for " + model.name() + " and " + otherModel.name() + " have the same URL, username, password, driver, and plugin, but the connection dictionaries are not equal.  This is often caused by jdbc2Info not matching between the two.  One fix for this is to set " + model.name() + ".removeJdbc2Info=true and " + otherModel.name() + ".removeJdbc2Info=true in your Properties file. (" + model.name() + "=" + newConnectionDictionary + "; and " + otherModel.name() + "=" + otherConnectionDictionary + ").");
 					}
 				}
