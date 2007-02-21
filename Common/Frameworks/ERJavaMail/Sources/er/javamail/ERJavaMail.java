@@ -346,7 +346,7 @@ public class ERJavaMail extends ERXFrameworkPrincipal {
 	 * @return a <code>boolean</code> value
 	 */
 	public boolean centralize() {
-		return false;
+		return _centralize;
 	}
 
 	/**
