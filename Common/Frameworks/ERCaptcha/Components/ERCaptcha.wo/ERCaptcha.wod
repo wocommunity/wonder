@@ -8,7 +8,11 @@ CaptchaResponse : WOTextField {
 	value = response;
 }
 
+HasResetTextConditional : WOConditional {
+	condition = ^resetText;
+}
+
 ResetCaptcha : WOSubmitButton {
 	action = resetCaptcha;
-	value = "I Don't Know";
+	value = ^resetText;
 }
