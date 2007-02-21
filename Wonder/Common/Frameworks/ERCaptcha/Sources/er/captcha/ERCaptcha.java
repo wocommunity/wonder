@@ -17,6 +17,15 @@ import com.webobjects.appserver.WORequest;
 import com.webobjects.appserver.WOResponse;
 import com.webobjects.foundation.NSData;
 
+/**
+ * ERCaptcha presents a captcha image to the use along with a text field
+ * for the user to identify the image.
+ * 
+ * @binding validated returns whether or not the user properly validated the image
+ * @binding resetText if set, a submit button will be added with this text that resets the image
+ *  
+ * @author mschrag
+ */
 public class ERCaptcha extends WOComponent {
 	private static final Logger log = Logger.getLogger(ERCaptcha.class);
 	private static ImageCaptchaService _captchaService = new DefaultManageableImageCaptchaService();
