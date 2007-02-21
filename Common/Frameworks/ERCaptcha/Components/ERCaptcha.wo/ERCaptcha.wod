@@ -1,0 +1,14 @@
+CaptchaImage : WOImage {
+	data = captcha;
+	mimeType = mimeType;
+	class = "captcha";
+}
+
+CaptchaResponse : WOTextField {
+	value = response;
+}
+
+ResetCaptcha : WOSubmitButton {
+	action = resetCaptcha;
+	value = "I Don't Know";
+}
