@@ -1,61 +1,61 @@
 <project name="Wonder" default="usage">
     
     <!-- 
-     this file is just a tiny wrapper around the core file Build/build/generic.xml
+     this file is just a tiny wrapper around the core file Build/build/build.xml
      more info about the builds can be found there
     -->
     <target name="clean">
-        <ant antFile="Build/build/generic.xml" target="frameworks.all">
+        <ant antFile="Build/build/build.xml" target="frameworks.all">
             <property name="build.action" value="clean" />
         </ant>
-        <ant antFile="Build/build/generic.xml" target="applications.all">
+        <ant antFile="Build/build/build.xml" target="applications.all">
             <property name="build.action" value="clean" />
         </ant>
-        <ant antFile="Build/build/generic.xml" target="examples.all">
+        <ant antFile="Build/build/build.xml" target="examples.all">
             <property name="build.action" value="clean" />
         </ant>
     </target>
 
     <target name="frameworks">
-        <ant antFile="Build/build/generic.xml" target="frameworks.all">
+        <ant antFile="Build/build/build.xml" target="frameworks.all">
             <property name="build.action" value="build" />
         </ant>
     </target>
     <target name="frameworks.install">
-        <ant antFile="Build/build/generic.xml" target="frameworks.all">
+        <ant antFile="Build/build/build.xml" target="frameworks.all">
             <property name="build.action" value="install" />
         </ant>
-        <ant antFile="Build/build/generic.xml" target="frameworks.all">
+        <ant antFile="Build/build/build.xml" target="frameworks.all">
             <property name="build.action" value="web" />
         </ant>
     </target>
 
     <target name="applications">
-        <ant antFile="Build/build/generic.xml" target="applications.all">
+        <ant antFile="Build/build/build.xml" target="applications.all">
             <property name="build.action" value="build" />
             <property name="wonder.development" value="false" />
         </ant>
     </target>
     <target name="applications.install">
-        <ant antFile="Build/build/generic.xml" target="applications.all">
+        <ant antFile="Build/build/build.xml" target="applications.all">
             <property name="build.action" value="install" />
         </ant>
-        <ant antFile="Build/build/generic.xml" target="applications.all">
+        <ant antFile="Build/build/build.xml" target="applications.all">
             <property name="build.action" value="web" />
         </ant>
     </target>
     
     <target name="examples">
-        <ant antFile="Build/build/generic.xml" target="examples.all">
+        <ant antFile="Build/build/build.xml" target="examples.all">
             <property name="build.action" value="build" />
             <property name="wonder.development" value="false" />
         </ant>
     </target>
     <target name="examples.install">
-        <ant antFile="Build/build/generic.xml" target="examples.all">
+        <ant antFile="Build/build/build.xml" target="examples.all">
             <property name="build.action" value="install" />
         </ant>
-        <ant antFile="Build/build/generic.xml" target="examples.all">
+        <ant antFile="Build/build/build.xml" target="examples.all">
             <property name="build.action" value="web" />
         </ant>
     </target>
@@ -87,6 +87,6 @@
     </target>
 
     <target name="all">
-        <ant antFile="Build/build/generic.xml" target="all" />
+        <ant antFile="Build/build/build.xml" target="all" />
     </target>
 </project>
