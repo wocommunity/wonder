@@ -2,5 +2,6 @@
 <wodefinitions>
 	<wo wocomponentcontent="false" class="ERCaptcha.java">
 		<binding name = "validated"/>
+		<binding name = "resetText"/>
 	</wo>
 </wodefinitions>
