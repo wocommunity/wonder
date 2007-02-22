@@ -6,8 +6,6 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.extensions;
 
-import java.util.Enumeration;
-
 import org.apache.log4j.Logger;
 
 import com.webobjects.eoaccess.EOEntity;
@@ -18,7 +16,6 @@ import com.webobjects.eocontrol.EOEnterpriseObject;
 import com.webobjects.eocontrol.EOKeyValueQualifier;
 import com.webobjects.eocontrol.EOQualifier;
 import com.webobjects.foundation.NSArray;
-import com.webobjects.foundation.NSMutableArray;
 
 /**
  * The primary key list qualifier is used to generate
@@ -61,27 +58,18 @@ public class ERXPrimaryKeyListQualifier extends ERXInQualifier {
             EOQualifier result = null;
             EOKeyValueQualifier qualifier = (EOKeyValueQualifier)eoqualifier;
             String key = qualifier.key();
-            
             if(key.indexOf('.') < 0) {
                 // ak: this code is only for binding values in display groups and
-                // to support the twolevelrelationship, it probably should go away...
+                // to support the twolevelrelationship and the ERD2WQuery*Relationship, it probably should go away...
                 Object value = qualifier.value();
                 if(!(value instanceof NSArray)) {
                     value = new NSArray(value);
                 }
-                if(((NSArray)value).lastObject() instanceof EOEnterpriseObject) {
-                    NSMutableArray pks = new NSMutableArray();
-                    for (Enumeration enumerator = pks.objectEnumerator(); enumerator.hasMoreElements();) {
-                        EOEnterpriseObject eo = (EOEnterpriseObject) enumerator.nextElement();
-                        Object pk = ERXEOControlUtilities.primaryKeyObjectForObject(eo);
-                        pks.addObject(pk);
-                    }
-                    value = pks;
+                NSArray objects = ((NSArray)value);
+                if(objects.lastObject() instanceof EOEnterpriseObject) {
+                	objects = ERXEOAccessUtilities.primaryKeysForObjects(objects);
+                    value = objects;
                 }
-                /*EORelationship rel = eoentity.relationshipNamed(key);
-                if(rel != null) {
-                	key = ((EOAttribute) ERXEOsccessUtilities.attributePathForKeyPath(eoentity, key).lastObject()).name();
-                }*/
             }
             EOQualifierSQLGeneration.Support support = EOQualifierSQLGeneration.Support.supportForClass(ERXInQualifier.class);
             result = support.schemaBasedQualifierWithRootEntity(qualifier, eoentity);
