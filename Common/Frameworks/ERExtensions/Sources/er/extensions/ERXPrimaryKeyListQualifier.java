@@ -10,11 +10,9 @@ import java.util.Enumeration;
 
 import org.apache.log4j.Logger;
 
-import com.webobjects.eoaccess.EOAttribute;
 import com.webobjects.eoaccess.EOEntity;
 import com.webobjects.eoaccess.EOEntityClassDescription;
 import com.webobjects.eoaccess.EOQualifierSQLGeneration;
-import com.webobjects.eoaccess.EORelationship;
 import com.webobjects.eoaccess.EOSQLExpression;
 import com.webobjects.eocontrol.EOEnterpriseObject;
 import com.webobjects.eocontrol.EOKeyValueQualifier;
@@ -80,11 +78,10 @@ public class ERXPrimaryKeyListQualifier extends ERXInQualifier {
                     }
                     value = pks;
                 }
-                EORelationship rel = eoentity.relationshipNamed(key);
+                /*EORelationship rel = eoentity.relationshipNamed(key);
                 if(rel != null) {
-                    // ak: the actual query path should be an attribute, not a relationship
-                    key = ((EOAttribute) rel.sourceAttributes().lastObject()).name();
-                }
+                	key = ((EOAttribute) ERXEOsccessUtilities.attributePathForKeyPath(eoentity, key).lastObject()).name();
+                }*/
             }
             EOQualifierSQLGeneration.Support support = EOQualifierSQLGeneration.Support.supportForClass(ERXInQualifier.class);
             result = support.schemaBasedQualifierWithRootEntity(qualifier, eoentity);
