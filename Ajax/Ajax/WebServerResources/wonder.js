@@ -105,6 +105,9 @@ var AjaxUpdateLink = {
 	}
 };
 // our own extensions 
+// MS: This doesn't appear to be used and it causes a failure 
+// in IE6.
+/*
 var Wonder = {};
 Wonder.Autocompleter = Class.create();
 Object.extend(Object.extend(Wonder.Autocompleter.prototype, Ajax.Autocompleter.prototype), {
@@ -128,3 +131,4 @@ Object.extend(Object.extend(Wonder.Autocompleter.prototype, Ajax.Autocompleter.p
 	 }
    }
 });
+*/
