@@ -179,6 +179,9 @@ public class ERXInQualifier extends EOKeyValueQualifier implements Cloneable {
             String key = eokeyvaluequalifier.key();
             EORelationship eorelationship = eoentity._relationshipForPath(key);
             if(eorelationship == null) {
+            	if(!(eokeyvaluequalifier instanceof ERXInQualifier)) {
+            		eokeyvaluequalifier = new ERXInQualifier(key, (NSArray) eokeyvaluequalifier.value());
+            	}
                 return eokeyvaluequalifier;
             }
             if(eorelationship.isFlattened()) {
