@@ -19,11 +19,13 @@ import com.webobjects.foundation.NSArray;
 
 import er.extensions.ERXEC;
 import er.extensions.ERXPrimaryKeyListQualifier;
+import er.extensions.ERXToManyQualifier;
 import er.extensions.ERXValueUtilities;
 
 /**
  * Enhanced relationship query component to to-one relationships.
- * @d2wKey multiple when true, the user can choose multiple items and they get selected as <code>OR</code>
+ * @d2wKey multiple when true, the user can choose multiple items
+ * @d2wKey matchesAllValues when true matching values need all selected values, when false only one value of the selection is enough
  * @d2wKey restrictedChoiceKey keypath off the component that returns the list of objects to display
  * @d2wKey restrictingFetchSpecification name of the fetchSpec to use for the list of objects.
  */
@@ -46,6 +48,10 @@ public class ERD2WQueryToOneRelationship extends D2WQueryToOneRelationship {
     public WOComponent self() {
         return this;
     }
+    
+    public boolean matchesAllValues() {
+        return ERXValueUtilities.booleanValue(d2wContext().valueForKey("matchesAllValues"));
+    }
 
     public void setValue(Object newValue) {
         if(hasMultipleSelection()) {
@@ -55,7 +61,11 @@ public class ERD2WQueryToOneRelationship extends D2WQueryToOneRelationship {
                     newValue = null;
                 }
             }
-            displayGroup().queryOperator().takeValueForKey(ERXPrimaryKeyListQualifier.IsContainedInArraySelectorName, propertyKey());
+            String operator = ERXPrimaryKeyListQualifier.IsContainedInArraySelectorName;
+            if(matchesAllValues()) {
+                operator = ERXToManyQualifier.MatchesAllInArraySelectorName;
+            }
+            displayGroup().queryOperator().takeValueForKey(operator, propertyKey());
         }
         super.setValue(newValue);
     }
