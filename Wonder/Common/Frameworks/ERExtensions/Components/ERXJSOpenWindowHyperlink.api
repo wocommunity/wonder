@@ -13,5 +13,12 @@
 	<binding name="toolbar" defaults="Boolean"/>
 	<binding name="titlebar" defaults="Boolean"/>
 	<binding name="resizable" defaults="Boolean"/>
+	<binding name="linkClass"/>
+	<binding name="id"/>
+	<binding name="fragment"/>
+	<binding name="disabled"/>
 </wo>
 </wodefinitions>
+
+
+

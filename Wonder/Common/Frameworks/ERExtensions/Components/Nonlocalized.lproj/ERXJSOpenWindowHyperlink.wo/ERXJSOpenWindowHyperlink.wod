@@ -17,6 +17,7 @@ Link: WOHyperlink {
 	target = ^target;
         fragmentIdentifier = ^fragment;
 	disabled = ^disabled;
+	id = ^id;
 }
 
 Link2: WOHyperlink {
@@ -28,4 +29,5 @@ Link2: WOHyperlink {
 	directActionName = ^directActionName;
         ?wosid=false;
 	disabled = ^disabled;
+	id = ^id;
 }
