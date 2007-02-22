@@ -80,26 +80,28 @@ public class WOToManyRelationship extends ERXArrayChooser {
     	NSArray current = selections();
     	return current == null ? NSArray.EmptyArray : current;
     }
-    
-  public NSArray selections() {
-    if (_selections == null) {
-      NSArray oldValues = (NSArray) NSKeyValueCodingAdditions.Utility.valueForKeyPath(sourceObject(), relationshipKey());
-      if(oldValues.lastObject() instanceof EOEnterpriseObject) {
-        oldValues = ERXEOControlUtilities.localInstancesOfObjects(editingContext(), oldValues);
-      }
-      setSelections(oldValues);
-      // deal with isMandatory
-      if ((_selections == null) && isMandatory()) {
-        if (theList().count() > 0) {
-          Object anObject = theList().objectAtIndex(0);
-          setSelections(new NSArray(anObject));
-        }
-      }
-    }
-    return _selections;
-  }
 
-  protected boolean isSingleSelection() {
+    public NSArray selections() {
+    	if (_selections == null) {
+    		NSArray oldValues = (NSArray) NSKeyValueCodingAdditions.Utility.valueForKeyPath(sourceObject(), relationshipKey());
+    		if(oldValues != null) {
+    			if(oldValues.lastObject() instanceof EOEnterpriseObject) {
+    				oldValues = ERXEOControlUtilities.localInstancesOfObjects(editingContext(), oldValues);
+    			}
+    		}
+    		setSelections(oldValues);
+    		// deal with isMandatory
+    		if ((_selections == null) && isMandatory()) {
+    			if (theList().count() > 0) {
+    				Object anObject = theList().objectAtIndex(0);
+    				setSelections(new NSArray(anObject));
+    			}
+    		}
+    	}
+    	return _selections;
+    }
+
+    protected boolean isSingleSelection() {
     return false;
   }
 }
