@@ -1,11 +1,12 @@
-ToOneRelationship: ERXToOneRelationship {
+Relationship : WOSwitchComponent {
+	WOComponentName = componentName;
 	destinationDisplayKey = d2wContext.keyWhenRelationship;
     possibleChoices = restrictedChoiceList;
 	maxColumns = d2wContext.numCols;
-	relationshipKey = d2wContext.propertyKey;
+	relationshipKey = "value";
 	size = d2wContext.size;
 	sourceEntityName = d2wContext.entity.name;
-	sourceObject = displayGroup.queryMatch;
+	sourceObject = self;
 	displayGroup = displayGroup;
 	uiStyle = d2wContext.toOneUIStyle;
 	localizeDisplayKeys = d2wContext.localizeDisplayKeys;
