@@ -568,7 +568,13 @@ public class ERXSQLHelper {
 				sb.append(", ");
 			}
 			Object value = valueArray.objectAtIndex(i);
-			value = formatValueForAttribute(e, value, attribute, key);
+			// AK : crude hack for queries with number constants. 
+			// Apparently EOAttribute.adaptorValueByConvertingAttributeValue() doesn't actually return a suitable value
+			if(value instanceof ERXConstant.NumberConstant) {
+				value = new Long(((Number)value).longValue());
+			} else {
+				value = formatValueForAttribute(e, value, attribute, key);
+			}
 			sb.append(value);
 		}
 		sb.append(")");
