@@ -698,7 +698,9 @@ public class ERXEOAccessUtilities {
                 throw new IllegalArgumentException("Last element is not an attribute nor a relationship: " + keyPath);
             }
             if (relationship.isFlattened()) {
-                //FIXME!
+            	NSArray path = attributePathForKeyPath(entity, relationship.definition());
+            	result.addObjectsFromArray(path);
+            	return result;
             } else {
                 attribute = ((EOJoin) relationship.joins().lastObject()).sourceAttribute();
             }
@@ -894,6 +896,73 @@ public class ERXEOAccessUtilities {
      * @param expression
      * @param startTime
      */
+    
+    public static class LogEntry {
+    	
+    	private long count;
+    	private long min;
+    	private long max;
+    	private long sum;
+    	private String statement;
+    	
+    	private Set traces = Collections.synchronizedSet(new HashSet());
+    	
+    	public LogEntry(String statement) {
+    		this.statement = statement.replaceAll(" IN \\(.*", " IN (");
+    		
+    	}
+    	
+    	public long count() {
+    		return count;
+    	}
+    	
+    	public long min() {
+    		return min;
+    	}
+    	
+    	public long max() {
+    		return max;
+    	}
+    	
+    	public long sum() {
+    		return sum;
+    	}
+    	
+    	public void add(long time) {
+    		if(time < min) {
+    			min = time;
+    		}
+    		if(time > max) {
+    			max = time;
+    		}
+    		count++;
+    		sum += time;
+    		if(false) {
+    			Throwable t = new RuntimeException();
+    			t.fillInStackTrace();
+    			traces.add(t);
+    		}
+    	}
+    	
+    	public float avg() {
+    		return count == 0 ? 0 : (sum/((float)count));
+    	}
+    	
+    	public String statement() {
+    		return statement;
+    	}
+    	
+    	public String toString() {
+    		return  count() + ": " + min() + "/" + max() + "/" + avg() + "->" + statement;
+    	}
+    }
+    
+    public static NSMutableDictionary statistics;
+
+    public static synchronized void initStatistics() {
+    	statistics = (NSMutableDictionary) new NSMutableDictionary();
+    }
+    
     public static void logExpression(EOAdaptorChannel channel, EOSQLExpression expression, long startTime) {
         if (sqlLoggingLogger == null) {
             sqlLoggingLogger = Logger.getLogger("er.extensions.ERXAdaptorChannelDelegate.sqlLogging");
@@ -926,6 +995,17 @@ public class ERXEOAccessUtilities {
                 if (sqlLoggingLogger.isDebugEnabled()) {
                     needsLog = true;
                 }
+            }
+            if(statistics != null) {
+            	synchronized (statistics) {
+            		String statement = expression.statement();
+            		LogEntry entry = (LogEntry) statistics.objectForKey(statement);
+            		if(entry == null) {
+            			entry = new LogEntry(statement);
+            			statistics.setObjectForKey(entry, entry.statement());
+            		}
+            		entry.add(millisecondsNeeded);
+            	}
             }
             if (needsLog) {
                 String description = "\"" + entityName + "\"@" + channel.adaptorContext().hashCode() + " expression took "
