@@ -166,7 +166,7 @@ public class ERXInQualifier extends EOKeyValueQualifier implements Cloneable {
             String result;
             if (inqualifier.value() instanceof NSArray) {
                 String key = inqualifier.key();
-                result = ERXEOAccessUtilities.sqlWhereClauseStringForKey(e, key,  (NSArray)inqualifier.value());
+                result = ERXSQLHelper.newSQLHelper(e).sqlWhereClauseStringForKey(e, key, (NSArray) inqualifier.value());
             } else {
                 throw new RuntimeException("Unsupported value type: " + inqualifier.value().getClass().getName());
             }
