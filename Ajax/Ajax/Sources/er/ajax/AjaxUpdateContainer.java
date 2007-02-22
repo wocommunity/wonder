@@ -132,7 +132,7 @@ public class AjaxUpdateContainer extends AjaxDynamicElement {
 		WOComponent component = context.component();
 		String id = _containerID(context);
     
-		if (associations().containsKey("action")) {
+		if (associations().objectForKey("action") != null) {
 			WOActionResults results = (WOActionResults) valueForBinding("action", component);
 			// ignore results
 		}
