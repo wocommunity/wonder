@@ -15,6 +15,7 @@ import com.webobjects.eoaccess.EOQualifierSQLGeneration;
 import com.webobjects.eoaccess.EORelationship;
 import com.webobjects.eoaccess.EOSQLExpression;
 import com.webobjects.eocontrol.EOClassDescription;
+import com.webobjects.eocontrol.EOKeyValueQualifier;
 import com.webobjects.eocontrol.EOQualifier;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
@@ -41,11 +42,13 @@ import com.webobjects.foundation.NSMutableSet;
  * <code> ERXToManyQualifier q = new ERXToManyQualifier("toEmployees", employees, 1);</code>
  */
 
-public class ERXToManyQualifier extends EOQualifier implements Cloneable {
+public class ERXToManyQualifier extends EOKeyValueQualifier implements Cloneable {
     /** register SQL generation support for the qualifier */
     static {
         EOQualifierSQLGeneration.Support.setSupportForClass(new ToManyQualifierSQLGenerationSupport(), ERXToManyQualifier.class);
     }
+    
+    public static String MatchesAllInArraySelectorName = "matchesAllInArray";
 
     /** logging support */
     public static final Logger log = Logger.getLogger(ERXToManyQualifier.class);
@@ -62,6 +65,7 @@ public class ERXToManyQualifier extends EOQualifier implements Cloneable {
     }
 
     public ERXToManyQualifier(String toManyKey, NSArray elements, int minCount) {
+    	super(toManyKey, EOQualifier.QualifierOperatorEqual, elements);
         _toManyKey=toManyKey;
         _elements=elements;
         _minCount = minCount;
@@ -212,6 +216,16 @@ public class ERXToManyQualifier extends EOQualifier implements Cloneable {
         
         // ENHANCEME: This should support restrictive qualifiers on the root entity
         public EOQualifier schemaBasedQualifierWithRootEntity(EOQualifier eoqualifier, EOEntity eoentity) {
+            EOQualifier result = null;
+            EOKeyValueQualifier qualifier = (EOKeyValueQualifier)eoqualifier;
+            String key = qualifier.key();
+             if(qualifier.selector().name().equals(MatchesAllInArraySelectorName)) {
+            	EOQualifierSQLGeneration.Support support = EOQualifierSQLGeneration.Support.supportForClass(ERXToManyQualifier.class);
+            	NSArray array = (NSArray) qualifier.value();
+            	ERXToManyQualifier q = new ERXToManyQualifier(key, array, array.count() );
+            	result = support.schemaBasedQualifierWithRootEntity(q, eoentity);
+                return result;
+            }
             return (EOQualifier)eoqualifier.clone();
         }
 
