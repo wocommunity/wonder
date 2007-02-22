@@ -74,8 +74,6 @@ function isIgnoredElement(element) {
 	       nodeName == 'button' ||
 	       nodeName == 'select' ||
 	       nodeName == 'textarea';
-	       nodeName == 'input' ||
-	       nodeName == 'input';
 }
 
 
