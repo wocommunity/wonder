@@ -27,17 +27,13 @@ import er.extensions.ERXProperties;
 /**
  * JDBC implementation of the migration lock.
  * 
- * @property er.migration.JDBC.dbUpdaterTableName the name of the db update
- *           version table (defaults to _DBUpdater)
- * @property er.migration.createTablesIfNecessary if true, the tables and model
- *           rows will be created automatically. *ONLY SET THIS IF YOU ARE
- *           RUNNING IN DEVELOPMENT MODE OR WITH A SINGLE INSTANCE*. If you are
- *           running multiple instances, the instances will not be able to
- *           acquire locks properly and you may end up with multiple instances
- *           attempting to create lock tables and/or failing to startup
- *           properly.
- * @property <ModelName>.InitialMigrationVersion the starting version number
- *           (in case you are retrofitting a project with migrations)
+ * @property er.migration.JDBC.dbUpdaterTableName the name of the db update version table (defaults to _DBUpdater)
+ * @property er.migration.createTablesIfNecessary if true, the tables and model rows will be created automatically.
+ *           *ONLY SET THIS IF YOU ARE RUNNING IN DEVELOPMENT MODE OR WITH A SINGLE INSTANCE*. If you are running
+ *           multiple instances, the instances will not be able to acquire locks properly and you may end up with
+ *           multiple instances attempting to create lock tables and/or failing to startup properly.
+ * @property <ModelName>.InitialMigrationVersion the starting version number (in case you are retrofitting a project
+ *           with migrations)
  * @author mschrag
  */
 public class ERXJDBCMigrationLock implements IERXMigrationLock {
@@ -113,7 +109,7 @@ public class ERXJDBCMigrationLock implements IERXMigrationLock {
 			throw e;
 		}
 		catch (Exception e) {
-      channel.adaptorContext().rollbackTransaction();
+			channel.adaptorContext().rollbackTransaction();
 			String createTableStatement = dbUpdaterCreateStatement(model);
 			if (createTableIfMissing) {
 				try {
@@ -224,7 +220,7 @@ public class ERXJDBCMigrationLock implements IERXMigrationLock {
 		int initialVersion = ERXProperties.intForKeyWithDefault(modelName + ".InitialMigrationVersion", -1);
 		return initialVersion;
 	}
-	
+
 	protected EOModel dbUpdaterModelWithModel(EOModel model) {
 		EOModel dbUpdaterModel;
 		if (_lastUpdatedModel == model) {
@@ -232,9 +228,9 @@ public class ERXJDBCMigrationLock implements IERXMigrationLock {
 		}
 		else {
 			dbUpdaterModel = new EOModel();
-      dbUpdaterModel.setConnectionDictionary(model.connectionDictionary());
-      dbUpdaterModel.setAdaptorName(model.adaptorName());
-      JDBCAdaptor adaptor = (JDBCAdaptor)EOAdaptor.adaptorWithModel(model);
+			dbUpdaterModel.setConnectionDictionary(model.connectionDictionary());
+			dbUpdaterModel.setAdaptorName(model.adaptorName());
+			JDBCAdaptor adaptor = (JDBCAdaptor) EOAdaptor.adaptorWithModel(model);
 
 			EOEntity dbUpdaterEntity = new EOEntity();
 			dbUpdaterEntity.setExternalName(_dbUpdaterTableName);
@@ -247,16 +243,16 @@ public class ERXJDBCMigrationLock implements IERXMigrationLock {
 			modelNameAttribute.setClassName("java.lang.String");
 			modelNameAttribute.setWidth(100);
 			modelNameAttribute.setAllowsNull(false);
-      modelNameAttribute.setExternalType(adaptor.externalTypeForJDBCType(Types.VARCHAR));
+			modelNameAttribute.setExternalType(adaptor.externalTypeForJDBCType(Types.VARCHAR));
 			dbUpdaterEntity.addAttribute(modelNameAttribute);
 
 			EOAttribute versionAttribute = new EOAttribute();
 			versionAttribute.setName("Version");
 			versionAttribute.setColumnName("Version");
 			versionAttribute.setClassName("java.lang.Number");
-      versionAttribute.setExternalType(adaptor.externalTypeForJDBCType(Types.INTEGER));
+			versionAttribute.setExternalType(adaptor.externalTypeForJDBCType(Types.INTEGER));
 			versionAttribute.setAllowsNull(false);
-      
+
 			dbUpdaterEntity.addAttribute(versionAttribute);
 
 			EOAttribute updateLockAttribute = new EOAttribute();
@@ -264,7 +260,7 @@ public class ERXJDBCMigrationLock implements IERXMigrationLock {
 			updateLockAttribute.setColumnName("UpdateLock");
 			updateLockAttribute.setClassName("java.lang.Number");
 			updateLockAttribute.setAllowsNull(false);
-      updateLockAttribute.setExternalType(adaptor.externalTypeForJDBCType(Types.INTEGER));
+			updateLockAttribute.setExternalType(adaptor.externalTypeForJDBCType(Types.INTEGER));
 			dbUpdaterEntity.addAttribute(updateLockAttribute);
 
 			EOAttribute lockOwnerAttribute = new EOAttribute();
@@ -273,9 +269,9 @@ public class ERXJDBCMigrationLock implements IERXMigrationLock {
 			lockOwnerAttribute.setClassName("java.lang.String");
 			lockOwnerAttribute.setWidth(100);
 			lockOwnerAttribute.setAllowsNull(true);
-      lockOwnerAttribute.setExternalType(adaptor.externalTypeForJDBCType(Types.VARCHAR));
+			lockOwnerAttribute.setExternalType(adaptor.externalTypeForJDBCType(Types.VARCHAR));
 			dbUpdaterEntity.addAttribute(lockOwnerAttribute);
-			
+
 			_lastUpdatedModel = model;
 			_dbUpdaterModelCache = dbUpdaterModel;
 		}
