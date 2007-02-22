@@ -225,13 +225,49 @@ public class ERXJDBCAdaptor extends JDBCAdaptor {
     public ERXJDBCAdaptor(String s) {
         super(s);
     }
-
-    public Context createJDBCContext() {
-        return new Context(this);
+    
+    protected JDBCContext _cachedAdaptorContext() {
+    	 if(_cachedContext == null) {
+    		 _cachedContext = createJDBCContext();
+    	 }
+    	return _cachedContext;
     }
-
+    
+    protected NSDictionary jdbcInfo() {
+    	boolean closeCachedContext = (_cachedContext == null && _jdbcInfo == null);
+    	NSDictionary jdbcInfo = super.jdbcInfo();
+    	if (closeCachedContext && _cachedContext != null) {
+    		_cachedContext.disconnect();
+    		_cachedContext = null;
+    	}
+    	return jdbcInfo;
+    }
+    
+    protected NSDictionary typeInfo() {
+    	boolean closeCachedContext = (_cachedContext == null && _jdbcInfo == null);
+    	NSDictionary typeInfo = super.typeInfo();
+    	if (closeCachedContext && _cachedContext != null) {
+    		_cachedContext.disconnect();
+    		_cachedContext = null;
+    	}
+    	return typeInfo;
+    }
+    
+    public Context createJDBCContext() {
+        Context context = new Context(this);
+        return context;
+    }
+    
     public EOAdaptorContext createAdaptorContext() {
-        return createJDBCContext();
+        EOAdaptorContext context; 
+    	if (_cachedContext != null) {
+    		context = _cachedContext;
+    		_cachedContext = null;
+    	}
+    	else {
+        	context = createJDBCContext();
+        }
+        return context;
     }
 
     protected Connection checkoutConnection() {
