@@ -107,6 +107,10 @@ public class ERXModelGroup extends EOModelGroup {
 		// correcting an EOF Inheritance bug
 		checkInheritanceRelationships();
 		
+		if (!patchModelsOnLoad) {
+			flattenPrototypes();
+		}
+
 		adjustLocalizedAttributes();
 
 		NSNotificationCenter.defaultCenter().postNotification(ModelGroupAddedNotification, this);
@@ -731,6 +735,7 @@ public class ERXModelGroup extends EOModelGroup {
 
 		fixPrototypesForModel(model);
 		preloadERXConstantClassesForModel(model);
+		System.out.println("ERXModelGroup.resetConnectionDictionaryInModel: loaded " + model.name());
 	}
 
 	protected String prototypeEntityNameForModel(EOModel model) {
@@ -809,7 +814,9 @@ public class ERXModelGroup extends EOModelGroup {
 			}
 		}
 
-		flattenPrototypes();
+		if (patchModelsOnLoad) {
+			flattenPrototypes();
+		}
 	}
 
 	/**
@@ -877,7 +884,7 @@ public class ERXModelGroup extends EOModelGroup {
 		for (Enumeration modelsEnum = models().objectEnumerator(); modelsEnum.hasMoreElements();) {
 			EOModel model = (EOModel) modelsEnum.nextElement();
 			if(model.name().equalsIgnoreCase(prototypeModelName)) {
-				log.info("Skipping prototype model "+model.name());
+				log.debug("Skipping prototype model " + model.name());
 				continue;
 			}
 			NSDictionary userInfo = model.userInfo();
@@ -895,32 +902,37 @@ public class ERXModelGroup extends EOModelGroup {
 					}
 					else {
 						if (log.isInfoEnabled()) {
-							log.info("Flattening " + model.name() + " using the prototype " + prototypeEntity.name());
+							log.debug("Flattening " + model.name() + " using the prototype " + prototypeEntity.name());
 						}
 						for (Enumeration entitiesEnum = model.entities().objectEnumerator(); entitiesEnum.hasMoreElements();) {
 							EOEntity entity = (EOEntity) entitiesEnum.nextElement();
 							for (Enumeration attributesEnum = entity.attributes().objectEnumerator(); attributesEnum.hasMoreElements();) {
 								EOAttribute attribute = (EOAttribute) attributesEnum.nextElement();
-								String prototypeAttributeName = attribute.prototypeName();
-								if (prototypeAttributeName == null) {
-									log.warn(model.name() + "/" + entity.name() + "/" + attribute.name() + " does not have a prototype attribute name.  This can occur if the model cannot resolve ANY prototypes when loaded.  There must be a stub prototype for the model to load with that can then be replaced with the appropriate database-specific model.");
-								}
-								else {
-									EOAttribute prototypeAttribute = prototypeEntity.attributeNamed(prototypeAttributeName);
-									if (prototypeAttribute == null) {
-										log.warn(model.name() + "/" + entity.name() + "/" + attribute.name() + " references a prototype attribute named " + prototypeAttributeName + " that does not exist in " + prototypeEntity.name() + ".");
-									}
-									else if (attribute.prototype().entity() == prototypeEntity) {
-										if (log.isDebugEnabled()) {
-											log.debug("Skipping " + model.name() + "/" + entity.name() + "/" + attribute.name() + " because it is already prototyped by the correct entity.");
-										}
+								if (!attribute.isDerived() && !attribute.isFlattened()) {
+									String prototypeAttributeName = attribute.prototypeName();
+									if (prototypeAttributeName == null) {
+										log.warn(model.name() + "/" + entity.name() + "/" + attribute.name() + " does not have a prototype attribute name.  This can occur if the model cannot resolve ANY prototypes when loaded.  There must be a stub prototype for the model to load with that can then be replaced with the appropriate database-specific model.");
 									}
 									else {
-										flattenPrototypeAttribute(prototypeAttribute, attribute);
-										if (log.isDebugEnabled()) {
-											log.debug("Flattening " + model.name() + "/" + entity.name() + "/" + attribute.name() + " with the prototype attribute " + prototypeAttribute.entity().model().name() + "/" + prototypeAttribute.entity().name() + "/" + prototypeAttribute.name());
+										EOAttribute prototypeAttribute = prototypeEntity.attributeNamed(prototypeAttributeName);
+										if (prototypeAttribute == null) {
+											log.warn(model.name() + "/" + entity.name() + "/" + attribute.name() + " references a prototype attribute named " + prototypeAttributeName + " that does not exist in " + prototypeEntity.name() + ".");
+										}
+										else if (attribute.prototype().entity() == prototypeEntity) {
+											if (log.isDebugEnabled()) {
+												log.debug("Skipping " + model.name() + "/" + entity.name() + "/" + attribute.name() + " because it is already prototyped by the correct entity.");
+											}
+										}
+										else {
+											flattenPrototypeAttribute(prototypeAttribute, attribute);
+											if (log.isDebugEnabled()) {
+												log.debug("Flattening " + model.name() + "/" + entity.name() + "/" + attribute.name() + " with the prototype attribute " + prototypeAttribute.entity().model().name() + "/" + prototypeAttribute.entity().name() + "/" + prototypeAttribute.name());
+											}
 										}
 									}
+								}
+								else {
+									log.debug("Skipping " + model.name() + "/" + entity.name() + "/" + attribute.name() + " because it's derived or flattened.");
 								}
 							}
 						}
@@ -929,7 +941,7 @@ public class ERXModelGroup extends EOModelGroup {
 				}
 				
 				NSMutableDictionary mutableUserInfo = userInfo.mutableClone();
-				mutableUserInfo.setObjectForKey(Boolean.TRUE, prototypesFixedKey);
+				mutableUserInfo.setObjectForKey(Boolean.valueOf(prototypesFixed), prototypesFixedKey);
 				model.setUserInfo(mutableUserInfo);
 			}
 		}
