@@ -62,7 +62,7 @@ public class ERXResourceManager extends WOResourceManager {
 		return ((WODeployedBundle) (obj));
 	}
 
-	private String _cachedURLForResource(String name, String bundleName, NSArray languages) {
+	private String _cachedURLForResource(String name, String bundleName, NSArray languages, WORequest request) {
 		String result = null;
 		if(bundleName != null) {
 			WODeployedBundle wodeployedbundle = _cachedBundleForFrameworkNamed(bundleName);
@@ -79,13 +79,25 @@ public class ERXResourceManager extends WOResourceManager {
 				result = "/ERROR/NOT_FOUND/app=" + appName + "/filename=" + (name == null ? "*null*" : name);
 			}
 		}
+	
+		String resourceUrlPrefix = null;
+		if (ERXRequest.isRequestSecure(request)) {
+			resourceUrlPrefix = ERXProperties.stringForKey("er.extensions.ERXResourceManager.secureResourceUrlPrefix");
+		}
+		else {
+			resourceUrlPrefix = ERXProperties.stringForKey("er.extensions.ERXResourceManager.resourceUrlPrefix");
+		}
+		if (resourceUrlPrefix != null && resourceUrlPrefix.length() > 0) {
+			result = resourceUrlPrefix + result;
+		}
+		
 		return result;
 	}
 
 	public String urlForResourceNamed(String name, String bundleName, NSArray languages, WORequest request) {
 		String completeURL = null;
 		if(request == null || request != null && request.isUsingWebServer() && !WOApplication.application()._rapidTurnaroundActiveForAnyProject()) {
-			completeURL = _cachedURLForResource(name, bundleName, languages);
+			completeURL = _cachedURLForResource(name, bundleName, languages, request);
 		} else {
 			URL url = pathURLForResourceNamed(name, bundleName, languages);
 			String fileURL = null;
@@ -99,7 +111,7 @@ public class ERXResourceManager extends WOResourceManager {
 			WOContext context = null;
 			String key = WOApplication.application().resourceRequestHandlerKey();
 			if(request != null) {
-				context = (WOContext) ((WORequest)request).valueForKey("context");
+				context = (WOContext) request.valueForKey("context");
 			}
 			String wodata = _NSStringUtilities.concat("wodata", "=", encoded);
 			if(context != null) {
