@@ -1,6 +1,5 @@
 package er.extensions;
 import java.net.InetAddress;
-import java.net.URL;
 
 import org.apache.log4j.Logger;
 
@@ -117,6 +116,45 @@ public  class ERXRequest extends WORequest {
         super.finalize();
     }
     
+    /**
+     * Returns whether or not this request is secure.
+     * 
+     * @return whether or not this request is secure
+     */
+    public boolean isSecure() {
+    	return ERXRequest.isRequestSecure(this);
+    }
+    
+    /**
+     * Returns whether or not the given request is secure.
+     * MS: I found this somewhere else a while ago, but I have no idea where or
+     * I'd give attribution.
+     * 
+     * @param request the request to check
+     * @return whether or not the given request is secure.
+     */
+    public static boolean isRequestSecure(WORequest request) {
+        boolean isRequestSecure = false;
+
+        // Depending on the adaptor the incoming port can be found in one of two
+        // places.
+        if (request != null) {
+	        String serverPort = request.headerForKey("SERVER_PORT");
+	        if (serverPort == null) {
+	          serverPort = request.headerForKey("x-webobjects-server-port");
+	        }
+	
+	        // Apache and some other web servers use this to indicate HTTPS mode.
+	        String httpsMode = request.headerForKey("https");
+	
+	        // If either the https header is 'on' or the server port is 443 then we
+	        // consider this to be an HTTP request.
+	        isRequestSecure = ((httpsMode != null && httpsMode.equalsIgnoreCase("on")) || (serverPort != null && "443".equals(serverPort)));
+        }
+
+        return isRequestSecure;
+    }
+
     private static class _LanguageComparator extends NSComparator {
         
         private static float quality(String languageString) {
