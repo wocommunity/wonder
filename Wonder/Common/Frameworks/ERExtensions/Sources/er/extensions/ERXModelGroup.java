@@ -735,7 +735,6 @@ public class ERXModelGroup extends EOModelGroup {
 
 		fixPrototypesForModel(model);
 		preloadERXConstantClassesForModel(model);
-		System.out.println("ERXModelGroup.resetConnectionDictionaryInModel: loaded " + model.name());
 	}
 
 	protected String prototypeEntityNameForModel(EOModel model) {
