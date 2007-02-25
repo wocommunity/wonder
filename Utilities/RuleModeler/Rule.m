@@ -1,16 +1,37 @@
-//
-//  Rule.m
-//  RuleModeler
-//
-//  Created by King Chung Huang on Thu Jan 29 2004.
-//  Copyright (c) 2004 King Chung Huang. All rights reserved.
-//
+/*
+ Rule.m
+ RuleModeler
+
+ Created by King Chung Huang on 1/29/04.
+
+
+ Copyright (c) 2004 King Chung Huang
+
+ Permission is hereby granted, free of charge, to any person obtaining a copy of
+ this software and associated documentation files (the "Software"), to deal in
+ the Software without restriction, including without limitation the rights to
+ use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
+ of the Software, and to permit persons to whom the Software is furnished to do
+ so, subject to the following conditions:
+
+ The above copyright notice and this permission notice shall be included in all
+ copies or substantial portions of the Software.
+
+ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, 
+ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ SOFTWARE.
+*/
 
 #import "Rule.h"
 
 #import "Assignment.h"
 #import "RMModel.h"
 #import "EOControl.h"
+#import "EOQualifier+RuleModeler.h"
 
 @implementation Rule
 
@@ -19,13 +40,23 @@
     [self setKeys:[NSArray arrayWithObjects:@"author", @"lhs", @"rhs", nil] triggerChangeNotificationsForDependentKey:@"extendedDescription"];
     [self setKeys:[NSArray arrayWithObject:@"author"] triggerChangeNotificationsForDependentKey:@"priority"];
     [self setKeys:[NSArray arrayWithObject:@"lhs"] triggerChangeNotificationsForDependentKey:@"lhsDescription"];
+    [self setKeys:[NSArray arrayWithObject:@"lhs"] triggerChangeNotificationsForDependentKey:@"lhsFormattedDescription"];
     [self setKeys:[NSArray arrayWithObject:@"rhs"] triggerChangeNotificationsForDependentKey:@"rhsDescription"];
     [EOQualifier registerValueClass:[NSDecimalNumber class] forTypeName:@"java.math.BigDecimal"];
 }
 
+static int defaultRulePriority = 0;
++ (void)setDefaultRulePriority:(int)priority {
+    defaultRulePriority = (priority < 0 ? 0:priority);
+}
+
++ (int)defaultRulePriority {
+    return defaultRulePriority;
+}
+
 - (id)init {
     if (self = [super init]) {
-        _author = 0;
+        _author = [[self class] defaultRulePriority];
         [[self undoManager] disableUndoRegistration];
         
         [self setLhs:nil];
@@ -79,6 +110,7 @@
 
 - (void) dealloc {
     [_lhsDescription release];
+    [_lhsFormattedDescription release];
     [_rhs removeObserver:self forKeyPath:@"value"];
     [_rhs removeObserver:self forKeyPath:@"keyPath"];
     [_rhs removeObserver:self forKeyPath:@"assignmentClass"];
@@ -204,8 +236,7 @@
 	if(_lhs != lhs){
 		[_lhs release];		
 		_lhs = [lhs retain];
-        [_lhsDescription release];
-        _lhsDescription = nil;
+        [self resetDescriptionCaches];
 	}
 }
 
@@ -214,6 +245,13 @@
         _lhsDescription = [(_lhs != nil ? [_lhs description] : nil) retain];
     }
     return _lhsDescription;
+}
+
+- (NSString *)lhsFormattedDescription {
+    if(_lhsFormattedDescription == nil) {
+        _lhsFormattedDescription = [(_lhs != nil ? [_lhs formattedDescription] : nil) retain];
+    }
+    return _lhsFormattedDescription;
 }
 /*
 -(BOOL)isNewRule {
@@ -238,6 +276,25 @@
     } NS_ENDHANDLER;
     return YES;
 }
+
+-(BOOL)validateLhsFormattedDescription:(id *)ioValue error:(NSError **)outError {
+    if (*ioValue == nil) {
+        return YES;
+    }
+    NS_DURING {
+        NSString    *description = (NSString *)*ioValue;
+        if ([description length] > 0 && ![description isEqualToString:@"*true*"]) {
+            EOQualifier *newQualifier = [EOQualifier qualifierWithQualifierFormat:description];
+            *ioValue = [newQualifier formattedDescription]; // Necessary for automatic update of edited qualifier
+        }
+    } NS_HANDLER {
+        NSDictionary *dict = [NSDictionary dictionaryWithObject:[NSString stringWithFormat:NSLocalizedString(@"This is not a valid qualifier:\n\n%@", @"Validation error description"), localException] forKey:NSLocalizedDescriptionKey];
+        *outError = [NSError errorWithDomain:@"EOQualifier" code:0 userInfo:dict];
+        return NO;
+    } NS_ENDHANDLER;
+    return YES;
+}
+
 - (void)setLhsDescription:(NSString *)description {
     NS_DURING {
         if ([description length] > 0) {
@@ -251,6 +308,28 @@
             }
         } else {
             [[[self undoManager] prepareWithInvocationTarget:self] setLhsDescription:[_lhs description]];
+            [[self undoManager] setActionName:NSLocalizedString(@"Set Left-Hand Side", @"Undo-redo action name")];
+            
+            [self setLhs:nil];
+        }        
+    } NS_HANDLER {
+        NSBeep();
+    } NS_ENDHANDLER;
+}
+
+- (void)setLhsFormattedDescription:(NSString *)description {
+    NS_DURING {
+        if ([description length] > 0) {
+            EOQualifier *qual = [EOQualifier qualifierWithQualifierFormat:description];
+            
+            if (qual) {
+                [[[self undoManager] prepareWithInvocationTarget:self] setLhsFormattedDescription:[_lhs formattedDescription]];
+                [[self undoManager] setActionName:NSLocalizedString(@"Set Left-Hand Side", @"Undo-redo action name")];
+                
+                [self setLhs:qual];
+            }
+        } else {
+            [[[self undoManager] prepareWithInvocationTarget:self] setLhsFormattedDescription:[_lhs formattedDescription]];
             [[self undoManager] setActionName:NSLocalizedString(@"Set Left-Hand Side", @"Undo-redo action name")];
             
             [self setLhs:nil];
@@ -367,6 +446,17 @@
         return [self valueForKeyPath:@"rhs.valueDescription"];
     }
     return [super valueForKey:key];
+}
+
+- (void)resetDescriptionCaches {
+    [self willChangeValueForKey:@"lhsDescription"];
+    [_lhsDescription release];
+    _lhsDescription = nil;
+    [self didChangeValueForKey:@"lhsDescription"];
+    [self willChangeValueForKey:@"lhsFormattedDescription"];
+    [_lhsFormattedDescription release];
+    _lhsFormattedDescription = nil;
+    [self didChangeValueForKey:@"lhsFormattedDescription"];
 }
 
 @end
