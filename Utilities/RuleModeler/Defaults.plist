@@ -10,4 +10,7 @@
     focusResetsSearch = NO;
     focusKeepsSelection = YES;
     useRuleEditorRuleOrdering = NO;
+    formattedQualifier = NO;
+    useParenthesesForComparisonQualifier = NO;
+    defaultRulePriority = 100;
 }
