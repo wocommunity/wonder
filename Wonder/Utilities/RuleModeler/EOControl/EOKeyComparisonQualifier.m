@@ -269,13 +269,18 @@ static EONull *null = nil;
 
 - (NSString *)description {
   NSMutableString *s;
+  BOOL  parenthesized = [[self class] useParenthesesForComparisonQualifier];
   
   s = [NSMutableString stringWithCapacity:64];
+  if (parenthesized)
+    [s appendString:@"("];
   [s appendString:self->leftKey];
   [s appendString:@" "];
   [s appendString:[EOQualifier stringForOperatorSelector:self->operator]];
   [s appendString:@" "];
   [s appendString:self->rightKey];
+  if (parenthesized)
+    [s appendString:@")"];
   return s;
 }
 

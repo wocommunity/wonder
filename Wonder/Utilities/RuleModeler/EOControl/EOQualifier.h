@@ -55,7 +55,7 @@
 - (BOOL)evaluateWithObject:(id)_object;
 @end
 
-@interface EOQualifier : NSObject < NSCopying, EOKeyValueArchiving >
+@interface EOQualifier : NSObject < NSCopying, EOKeyValueArchiving, EOQualifierEvaluation >
 
 + (EOQualifier *)qualifierToMatchAnyValue:(NSDictionary *)_values;
 + (EOQualifier *)qualifierToMatchAllValues:(NSDictionary *)_values;
@@ -63,7 +63,10 @@
 + (SEL)operatorSelectorForString:(NSString *)_str;
 + (NSString *)stringForOperatorSelector:(SEL)_sel;
 
-/* bindings */
++ (void)setUseParenthesesForComparisonQualifier:(BOOL)flag;
++ (BOOL)useParenthesesForComparisonQualifier;
+
+    /* bindings */
 
 - (EOQualifier *)qualifierWithBindings:(NSDictionary *)_bindings
   requiresAllVariables:(BOOL)_reqAll;

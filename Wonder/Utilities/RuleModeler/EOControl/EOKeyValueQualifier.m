@@ -315,9 +315,12 @@ static EONull *null = nil;
 - (NSString *)description {
   NSMutableString *s;
   NSString *tmp;
+  BOOL  parenthesized = [[self class] useParenthesesForComparisonQualifier];
   
   s = [NSMutableString stringWithCapacity:64];
   
+  if (parenthesized)
+      [s appendString:@"("];
   if (self->key != nil)
     [s appendString:self->key];
   else
@@ -342,6 +345,8 @@ static EONull *null = nil;
 #else
     [s appendString:@"nil"];
 #endif
+    if (parenthesized)
+        [s appendString:@")"];
   return s;
 }
 
