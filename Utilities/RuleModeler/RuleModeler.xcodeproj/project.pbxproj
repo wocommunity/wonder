@@ -41,6 +41,9 @@
 		3CEF25C605CB7168007BD7AF /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8D15AC360486D014006FF6A4 /* Info.plist */; };
 		41E834450A755BC0009A23B9 /* appIcon.icns in Resources */ = {isa = PBXBuildFile; fileRef = 41E834440A755BC0009A23B9 /* appIcon.icns */; };
 		41E9B3810A644C2D006CF8CE /* EOControl.h in Headers */ = {isa = PBXBuildFile; fileRef = 41E9B3800A644C2D006CF8CE /* EOControl.h */; };
+		5514F80C0B919BA1002AD3F9 /* EOQualifier+RuleModeler.h in Headers */ = {isa = PBXBuildFile; fileRef = 5514F80A0B919BA1002AD3F9 /* EOQualifier+RuleModeler.h */; };
+		5514F80D0B919BA1002AD3F9 /* EOQualifier+RuleModeler.m in Sources */ = {isa = PBXBuildFile; fileRef = 5514F80B0B919BA1002AD3F9 /* EOQualifier+RuleModeler.m */; };
+		5514F80E0B919BA1002AD3F9 /* EOQualifier+RuleModeler.m in Sources */ = {isa = PBXBuildFile; fileRef = 5514F80B0B919BA1002AD3F9 /* EOQualifier+RuleModeler.m */; };
 		5521940C0B6378D900479854 /* EOQualifierTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 5521940B0B6378D900479854 /* EOQualifierTest.m */; };
 		552194120B637AB600479854 /* EOQualifierTest.plist in Resources */ = {isa = PBXBuildFile; fileRef = 552194110B637AB600479854 /* EOQualifierTest.plist */; };
 		552195960B63BC9600479854 /* EOCustomClassWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = 552195950B63BC9600479854 /* EOCustomClassWrapper.m */; };
@@ -153,6 +156,8 @@
 		3CEF24F605CB4FA4007BD7AF /* NSPlistDescriptions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSPlistDescriptions.m; sourceTree = "<group>"; };
 		41E834440A755BC0009A23B9 /* appIcon.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = appIcon.icns; sourceTree = "<group>"; };
 		41E9B3800A644C2D006CF8CE /* EOControl.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = EOControl.h; sourceTree = "<group>"; };
+		5514F80A0B919BA1002AD3F9 /* EOQualifier+RuleModeler.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = "EOQualifier+RuleModeler.h"; sourceTree = "<group>"; };
+		5514F80B0B919BA1002AD3F9 /* EOQualifier+RuleModeler.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = "EOQualifier+RuleModeler.m"; sourceTree = "<group>"; };
 		552193D90B62863300479854 /* TODO */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = TODO; sourceTree = "<group>"; };
 		5521940A0B6378D900479854 /* EOQualifierTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EOQualifierTest.h; path = EOControl/EOQualifierTest.h; sourceTree = "<group>"; };
 		5521940B0B6378D900479854 /* EOQualifierTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EOQualifierTest.m; path = EOControl/EOQualifierTest.m; sourceTree = "<group>"; };
@@ -267,6 +272,7 @@
 		2A37F4ABFDCFA73011CA2CEA /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				41E9B3800A644C2D006CF8CE /* EOControl.h */,
 				556B41CF0B2333C0006933C5 /* EOControl */,
 				3CEF24B005CB4C45007BD7AF /* DMToolbarUtils.h */,
 				3CEF24B105CB4C45007BD7AF /* DMToolbarUtils.m */,
@@ -365,15 +371,16 @@
 		3CD87DFB05CB0F1500847A8F /* Categories */ = {
 			isa = PBXGroup;
 			children = (
-				3C29C2E307393F44007AF595 /* NSPropertyListSerializationAdditions.h */,
-				3C29C2E407393F44007AF595 /* NSPropertyListSerializationAdditions.m */,
-				41E9B3800A644C2D006CF8CE /* EOControl.h */,
-				3CEF24F505CB4FA4007BD7AF /* NSPlistDescriptions.h */,
-				3CEF24F605CB4FA4007BD7AF /* NSPlistDescriptions.m */,
-				55ED38B90A93B2ED004875CD /* NSStringAdditions.h */,
-				55ED38BA0A93B2ED004875CD /* NSStringAdditions.m */,
+				5514F80A0B919BA1002AD3F9 /* EOQualifier+RuleModeler.h */,
+				5514F80B0B919BA1002AD3F9 /* EOQualifier+RuleModeler.m */,
 				55FF9DEF0AFE21DA00D4F89F /* NSIndexSetAdditions.h */,
 				55FF9DF00AFE21DA00D4F89F /* NSIndexSetAdditions.m */,
+				3CEF24F505CB4FA4007BD7AF /* NSPlistDescriptions.h */,
+				3CEF24F605CB4FA4007BD7AF /* NSPlistDescriptions.m */,
+				3C29C2E307393F44007AF595 /* NSPropertyListSerializationAdditions.h */,
+				3C29C2E407393F44007AF595 /* NSPropertyListSerializationAdditions.m */,
+				55ED38B90A93B2ED004875CD /* NSStringAdditions.h */,
+				55ED38BA0A93B2ED004875CD /* NSStringAdditions.m */,
 			);
 			name = Categories;
 			sourceTree = "<group>";
@@ -461,6 +468,7 @@
 				556B41EC0B2334AC006933C5 /* EONull.h in Headers */,
 				552195970B63BC9600479854 /* EOCustomClassWrapper.h in Headers */,
 				554B1C3D0B751079003869C4 /* common.h in Headers */,
+				5514F80C0B919BA1002AD3F9 /* EOQualifier+RuleModeler.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -603,6 +611,7 @@
 				5579D7BE0B5969AF00B41627 /* NSStringAdditions.m in Sources */,
 				5521940C0B6378D900479854 /* EOQualifierTest.m in Sources */,
 				552195960B63BC9600479854 /* EOCustomClassWrapper.m in Sources */,
+				5514F80E0B919BA1002AD3F9 /* EOQualifier+RuleModeler.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -642,6 +651,7 @@
 				556B41ED0B2334AC006933C5 /* EONull.m in Sources */,
 				556B42310B2337D5006933C5 /* EOKeyComparisonQualifier.m in Sources */,
 				552195980B63BC9600479854 /* EOCustomClassWrapper.m in Sources */,
+				5514F80D0B919BA1002AD3F9 /* EOQualifier+RuleModeler.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
