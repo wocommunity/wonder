@@ -1,18 +1,30 @@
-//  Copyright (c) 2004 King Chung Huang
-//
-//  Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+/*
+ RMModelEditor.m
+ RuleModeler
 
-//  The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+ Created by King Chung Huang on 1/29/04.
 
-//  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-//
-//  RMModelEditor.m
-//  RuleModeler
-//
-//  Created by King Chung Huang on Thu Jan 29 2004.
-//  Copyright (c) 2004 King Chung Huang. All rights reserved.
-//
+ Copyright (c) 2004 King Chung Huang
+
+ Permission is hereby granted, free of charge, to any person obtaining a copy of
+ this software and associated documentation files (the "Software"), to deal in
+ the Software without restriction, including without limitation the rights to
+ use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
+ of the Software, and to permit persons to whom the Software is furnished to do
+ so, subject to the following conditions:
+
+ The above copyright notice and this permission notice shall be included in all
+ copies or substantial portions of the Software.
+
+ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, 
+ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ SOFTWARE.
+*/
 
 #import "RMModelEditor.h"
 
@@ -23,13 +35,52 @@
 #import "RMFilteringArrayController.h"
 #import "EOControl.h"
 
+@interface RMEnabledColorTransformer : NSValueTransformer {
+}
+@end
+
+@implementation RMEnabledColorTransformer
+
++ (BOOL)allowsReverseTransformation {
+    return NO;
+}
+
+- (id)transformedValue:(id)value {
+    if ([value boolValue]) {
+        return [NSColor textColor];
+    } else {
+        return [NSColor disabledControlTextColor];
+    }    
+}
+
+@end
+
+@interface RMModelEditor(Private)
+- (void)updateLHSFormatting:(BOOL)formatted;
+@end
+
 @implementation RMModelEditor
+
++ (void)initialize {
+    [NSValueTransformer setValueTransformer:[[RMEnabledColorTransformer alloc] init] forName:@"RMEnabledColorTransformer"];
+}
 
 - (id)init {
     if (self = [self initWithWindowNibName:@"RMModelEditor"]) {
     }
     
     return self;
+}
+
+- (void)windowWillLoad {
+    [super windowWillLoad];
+    [[NSUserDefaultsController sharedUserDefaultsController] addObserver:self forKeyPath:@"values.useParenthesesForComparisonQualifier" options:0 context:NULL];
+}
+
+- (void)windowDidLoad {
+    [super windowDidLoad];
+    [[lhsFormatCheckbox cell] addObserver:self forKeyPath:@"state" options:0 context:NULL];
+    [[lhsFormatCheckbox cell] setState:[[NSUserDefaults standardUserDefaults] boolForKey:@"formattedQualifier"] ? NSOnState:NSOffState];
 }
 
 - (void)setDocument:(NSDocument *)document {
@@ -47,7 +98,10 @@
 	[_assignmentClassNames autorelease];
 	[_rhsKeyNames autorelease];
 	[toolbarItems autorelease];
-    [rulesController removeObserver:self forKeyPath:@"selection.rhs.toolTip"];	
+    [rulesController removeObserver:self forKeyPath:@"selection.rhs.toolTip"];
+    [rulesController removeObserver:self forKeyPath:@"selection.rhs.valueAsString"];
+    [[NSUserDefaultsController sharedUserDefaultsController] removeObserver:self forKeyPath:@"values.useParenthesesForComparisonQualifier"];
+    [[lhsFormatCheckbox cell] removeObserver:self forKeyPath:@"state"];
 	[super dealloc]; // Will release all nib top-level objects
 }
 
@@ -109,9 +163,25 @@
     return [NSString stringWithFormat:anActionNameFormat, ruleCount];
 }
 
+- (void) updateLHSFormatting:(BOOL)formatted {
+    NSDictionary    *bindingInfo = [[lhsValueTextField infoForBinding:@"value"] retain];
+    NSString        *aKeyPath = formatted ? @"selection.lhsFormattedDescription":@"selection.lhsDescription";
+    
+    [lhsValueTextField unbind:@"value"];
+    [lhsValueTextField bind:@"value" toObject:[bindingInfo objectForKey:NSObservedObjectKey] withKeyPath:aKeyPath options:[bindingInfo objectForKey:NSOptionsKey]];
+    [bindingInfo release];
+}
+
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
-    if ([keyPath isEqualToString:@"selection.rhs.toolTip"])
+    if (object == [lhsFormatCheckbox cell]) {
+        [self updateLHSFormatting:[[lhsFormatCheckbox cell] state] == NSOnState];
+    }
+    else if ([keyPath isEqualToString:@"selection.rhs.toolTip"])
         [self updateHelpViewSize];
+    else if ([keyPath isEqualToString:@"selection.rhs.valueAsString"]){
+        [self willChangeValueForKey:@"rhsValueIsNotMarker"];
+        [self didChangeValueForKey:@"rhsValueIsNotMarker"];
+    }
     else if ([keyPath isEqualToString:@"rules"]) {
         int aChangeKind = [[change objectForKey:NSKeyValueChangeKindKey] intValue];
         
@@ -128,6 +198,9 @@
             [[[[self model] undoManager] prepareWithInvocationTarget:[self document]] insertRules:removedRules atIndexes:indexes];
             [[[self model] undoManager] setActionName:[self actionNameWhenInserting:NO ruleCount:[removedRules count]]];
         }
+    }
+    else if ([keyPath isEqualToString:@"values.useParenthesesForComparisonQualifier"]) {
+        [[self rules] makeObjectsPerformSelector:@selector(resetDescriptionCaches)];
     }
 }
 
@@ -221,9 +294,11 @@
     [rhsValueTextView setFieldEditor:YES];
     [rhsValueTextView setFocusRingType:NSFocusRingTypeExterior];
     [[rhsValueTextView enclosingScrollView] setFocusRingType:NSFocusRingTypeExterior];
+    [rhsValueTextView setFont:[NSFont systemFontOfSize:[NSFont smallSystemFontSize]]];
     [self updateHelpViewSize];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(helpViewFrameDidChange:) name:NSViewFrameDidChangeNotification object:rhsValueHelpField];
     [rulesController addObserver:self forKeyPath:@"selection.rhs.toolTip" options:0 context:NULL];
+    [rulesController addObserver:self forKeyPath:@"selection.rhs.valueAsString" options:0 context:NULL];
     [rulesController setSortDescriptors:[NSArray arrayWithObjects:[[[NSSortDescriptor alloc] initWithKey:@"author" ascending:YES] autorelease], [[[NSSortDescriptor alloc] initWithKey:@"lhsDescription" ascending:YES] autorelease], [[[NSSortDescriptor alloc] initWithKey:@"rhs.keyPath" ascending:YES] autorelease], nil]];
     [rulesController rearrangeObjects];
     if ([self observesRules])
@@ -573,6 +648,13 @@
         NSBeep();
 }
 
+- (void) showRules:(NSArray *)rules {
+    [rulesController setFilterPredicate:nil];
+    [rulesController unfocus:nil];
+    [rulesController setSelectedObjects:rules]; // Uses -isEqual:!
+    [rulesController focus:nil];
+}
+
 - (RMFilteringArrayController *) rulesController {
     return rulesController;
 }
@@ -583,6 +665,10 @@
 
 - (IBAction)unfocus:(id)sender {
     [rulesController unfocus:sender];
+}
+
+- (NSNumber *) rhsValueIsNotMarker {
+    return [NSNumber numberWithBool:!NSIsControllerMarker([rulesController valueForKeyPath:@"selection.rhs.valueAsString"])];
 }
 
 #pragma mark Splitview Delegate Methods
