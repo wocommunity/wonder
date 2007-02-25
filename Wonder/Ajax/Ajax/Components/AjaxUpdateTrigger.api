@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<wodefinitions>
-	<wo class = "AjaxUpdateTrigger" wocomponentcontent = "false">
-		<binding name = "evalScripts"/>
-		<binding name = "updateContainerIDs"/>
-		<binding name = "resetAfterUpdate"/>
-	</wo>
-</wodefinitions>

@@ -1,8 +1,0 @@
-Conditional1: WOConditional {
-	condition = isNonZero;
-	negate = ^negate;
-}
-
-contents: WOComponentContent {
-}
-

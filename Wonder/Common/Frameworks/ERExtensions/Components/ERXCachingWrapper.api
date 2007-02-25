@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<wodefinitions>
-        <wo wocomponentcontent="true" class="ERXCachingWrapper">
-
-        <binding name="keys"/><binding name="entryName"/><validation message="&amp;apos;entryName&amp;apos; is a required binding"><unbound name="entryName"/></validation><binding name="duration"/></wo>
-</wodefinitions>

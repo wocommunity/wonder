@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<wodefinitions>
-	<wo class="DMTable" wocomponentcontent="false">
-
-		<binding name="group"/>
-	</wo>
-</wodefinitions>

@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<classpath>
-	<classpathentry kind="src" path="Sources"/>
-	<classpathentry kind="con" path="org.objectstyle.wolips.WO_CLASSPATH/JavaEOAccess/JavaEOControl/JavaFoundation/JavaJDBCAdaptor"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="output" path="bin"/>
-</classpath>

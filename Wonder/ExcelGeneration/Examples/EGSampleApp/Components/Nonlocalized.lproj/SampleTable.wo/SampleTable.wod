@@ -1,5 +1,0 @@
-EGWrapper: EGWrapper {
-	enabled = enabled;
-	styles = application.data.Styles;
-	fonts = application.data.Fonts;
-}
