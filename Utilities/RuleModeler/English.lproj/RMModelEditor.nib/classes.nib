@@ -10,10 +10,10 @@
         {
             ACTIONS = {
                 changeCaseSensitivityOption = id; 
+                changeQualifierMatchingOption = id; 
                 changeWordMatchingOption = id; 
                 focus = id; 
                 search = id; 
-                toggleSearchOption = id; 
                 unfocus = id; 
             }; 
             CLASS = RMFilteringArrayController; 
@@ -46,6 +46,7 @@
                 detailSplitView = NSSplitView; 
                 filterField = NSSearchField; 
                 filterView = NSView; 
+                lhsFormatCheckbox = NSButton; 
                 lhsSplitView = NSSplitView; 
                 lhsValueTextField = NSTextField; 
                 masterSplitView = NSSplitView; 
