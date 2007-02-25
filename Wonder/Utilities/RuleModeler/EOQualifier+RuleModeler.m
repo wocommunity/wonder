@@ -59,14 +59,13 @@
 
 - (NSString *)formattedDescriptionWithIndentLevel:(unsigned)indentLevel {
     NSMutableString *ms;
-    NSArray  *sd;
     unsigned i, len;
     NSString *indentString;
     
     if ((len = [self->qualifiers count]) == 0)
         return nil;
     if (len == 1)
-        return [[sd objectAtIndex:0] formattedDescription];
+        return [[self->qualifiers objectAtIndex:0] formattedDescription];
 
     indentString = [NSString stringWithFormat:@"%*s", indentLevel, ""];
     ms = [NSMutableString stringWithCapacity:(len * 16)];
@@ -85,14 +84,13 @@
 
 - (NSString *)formattedDescriptionWithIndentLevel:(unsigned)indentLevel {
     NSMutableString *ms;
-    NSArray  *sd;
     unsigned i, len;
     NSString *indentString;
     
     if ((len = [self->qualifiers count]) == 0)
         return nil;
     if (len == 1)
-        return [[sd objectAtIndex:0] formattedDescription];
+        return [[self->qualifiers objectAtIndex:0] formattedDescription];
 
     indentString = [NSString stringWithFormat:@"%*s", indentLevel, ""];
     ms = [NSMutableString stringWithCapacity:(len * 16)];
