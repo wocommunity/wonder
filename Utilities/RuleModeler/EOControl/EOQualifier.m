@@ -161,6 +161,15 @@ static EONull     *null = nil;
   return s;
 }
 
+static BOOL useParenthesesForComparisonQualifier = NO;
++ (void)setUseParenthesesForComparisonQualifier:(BOOL)flag {
+    useParenthesesForComparisonQualifier = flag;
+}
+
++ (BOOL)useParenthesesForComparisonQualifier {
+    return useParenthesesForComparisonQualifier;
+}
+
 - (NSString *)qualifierDescription {
     return [self description];
 }
@@ -197,6 +206,10 @@ static EONull     *null = nil;
 }
 
 /* Comparing */
+
+- (unsigned)hash {
+    return [[self description] hash];
+}
 
 - (BOOL)isEqual:(id)_obj {
   if ([_obj isKindOfClass:[self class]])
@@ -254,8 +267,13 @@ static EONull     *null = nil;
 
 /* QuickEval */
 
+- (BOOL)evaluateWithObject:(id)_object {
+    [self doesNotRecognizeSelector:_cmd];
+    return NO;
+}
+
 - (BOOL)evaluateWithObject:(id)_object inEvalContext:(id)_ctx {
-  return [(id<EOQualifierEvaluation>)self evaluateWithObject:_object];
+  return [self evaluateWithObject:_object];
 }
 
 /* key/value archiving */
