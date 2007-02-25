@@ -2,7 +2,7 @@
     IBClasses = (
         {CLASS = Assignment; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
         {
-            ACTIONS = {unfocus = id; }; 
+            ACTIONS = {"" = id; unfocus = id; }; 
             CLASS = FirstResponder; 
             LANGUAGE = ObjC; 
             SUPERCLASS = NSObject; 
@@ -10,6 +10,7 @@
         {
             ACTIONS = {
                 changeCaseSensitivityOption = id; 
+                changeQualifierMatchingOption = id; 
                 changeWordMatchingOption = id; 
                 focus = id; 
                 search = id; 
@@ -33,6 +34,7 @@
                 remove = id; 
                 removeDuplicateRules = id; 
                 rhsComboBoxAction = id; 
+                showDuplicateRules = id; 
                 showSelectedRule = id; 
                 unfocus = id; 
             }; 
@@ -44,6 +46,7 @@
                 detailSplitView = NSSplitView; 
                 filterField = NSSearchField; 
                 filterView = NSView; 
+                lhsFormatCheckbox = NSButton; 
                 lhsSplitView = NSSplitView; 
                 lhsValueTextField = NSTextField; 
                 masterSplitView = NSSplitView; 
