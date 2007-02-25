@@ -2,25 +2,41 @@ TODO
 ====
 
 Known bugs:
-FIXME If you edit a rule which is also visible in filtered model group table, and after edition the rule should no longer be displayed, it is still displayed, though: filter is not re-applied after rule change --- Hard to fix
 FIXME Jan 24 10:08:25 Shabaa /Applications/RuleModeler.app/Contents/MacOS/RuleModeler: CMSCreateDataProviderOrGetInfo : Invalid colorspace type [maybe due to (un)focus.gif]
 FIXME On Quit event (from menu, or from system shutdown) - see NSApp delegate method -applicationShouldTerminate: and window closing, end edition manually
+FIXME Set focus to search field; in search field popup: toggle case-sensitive on, press return - look at popup: case-sensitivity is OFF, though active! Same for other options.
+FIXME No window position is saved!
+FIXME Edit rhs.value with lots of values: first, appears rather collapsed; edit and tab out -> appears very expanded, and much nicer!
+FIXME Save search even if user didn't press return button, but left the search field.
+FIXME With multiple selection marker (or null value) in textview, displayed value is not a placeholder, unlike in textfields
+FIXME Paste multiple lines in searchField -> garbage on refresh of searchField (bug in AppKit?). -> remove line returns from pasted string
+FIXME Wrong window cascading when opening model after group has been opened
+FIXME In rhs textview: when 'no selection' placeholder, don't allow selection; idem for multiple, when not editable. Idem for textfield, as currently clicking on field lets placeholder disappear
 
 For 1.4:
-FIXME When lhs/rhs.value fields are not editable, use grey color instead of black (bug in AppKit)
-FIXME Save search even if user didn't press return button.
+- When lhs/rhs.value fields are _not_editable_, use grey color instead of black
+- For the missing placeholder of NSTextView: when we need the placeholder, switch NSTextView to NSTextField? Problem: click on multiple -> editable -> textview again
+- Double-clicking a parenthesis in lhs/rhs fields should select whole parenthesized content + parentheses
+- Restore previously opened documents (option)
 - In lhs field, display scrollers when necessary -> textView refusing tabs, returns.
-- Modifying a filtered rule list should not reset the filter, but display filtered rules + new rules, and filter pattern could be italicized
+- In rhs value textView, display 'Null Value' or 'Multiple Values' when necessary. Null Value is black (should be grey). Problem is that these are not placeholder values: when you click on field, value is still displayed.
 - In preferences, user can enter a list of rhs.keyPaths that always appear in the combobox; that list could, for example, display all keypaths used in Apple/Wonder D2W, plus custom ones. We could also do the same for the assignment classes.
-- In model group view, use one color per model? -> assign color to each model, manually.
-- Use RBSplitView to allow programmatically collapsing splitviews (http://www.brockerhoff.net/src/rbs.html)
-- In rhs value textView, display 'Null Value' or 'Multiple Values' when necessary, as AppKit doesn't do it automatically.
-- In assigment class combobox, use same display name as in tableview
-- Add support for special characters \n, \r, etc. in lhs
-- Add action to show rules identical to selected one; for model and model groups
-- (ask ak) Allow associating comment to model, model group and rules
+- [ak] Spell-checking in the qualifiers and components! I just had the umpteenth time a displayPopertyKey or a propertyName or whatever. These things are a bitch to track down...
+- In model group view, user can assign one color per model, manually. [ak] What would be ok is to define some "system" frameworks (ER, D2W) and shade those in lighter grey. Or use the Finder color for the model file...
+- In assignment class combobox, use same display name as in tableview (optional)
+- Add action to show rules identical to selected one; for model and model groups. What does define 'identical' rules? Same lhs/rhs.keyPath?
+- Additional searching for duplicates, without comparing the rhs.value: if value is different, or priority is different, we should warn user.
 - Add contextual menu for tableview to act on clicked rule, not on selection, unlike the menu actions.
+- Allow associating comment to model, model group and rules
 - If runtime allows it, save new key-value pair in Rule plist archive to uniquely identify the rule (unique ID); that would ease merge. And we would save rules with an order related to the ID. If runtime doesn't permit it, we could add that metadata in a comment out of the plist entry, like Xcode does. That would work only for single-line rule output, though.
+- [ak] Refactoring features: 
+  - split ORs into single rules
+  - join RHSs to one rule
+  - re-order qualifier keys
+  - make all qualifiers w/o "*" "equals" instead of "like"
+  - [ds] Find and replace, textual -> find=focus, with selection on first rule, with matching text selected in editor -> user can next/previous/replace&find
+- Add support for special characters \n, \r, etc. in lhs {use value transformer}
+- Add qualifier matching search: option in popup - when set, disable 'search as you type': user types rule qualifier, and we returns all rules containing that qualifier, e.g. task = 'edit'
 
 Later:
 - Would it be possible to create smart groups, user-defined, which would filter rules according to some qualifiers? User would type a qualifier (e.g. "task='edit'"), an action (colorize, show, hide row?), and existing rules would be applied that filter. Multiple smart group could be ANDed or ORed.
@@ -28,8 +44,8 @@ Later:
 - Colorize result parts according to filter qualifier, i.e. if user typed 'color' then colorize the 'color' occurences in lhs/rhs, plus a color indication whether lhs or rhs matches
 - Maybe a nonsense idea: There are the keys you can edit in the d2wClient file. Eg. "refreshRefetchedObjects" for a query page. You could fetch these and put them into a tooltip as a reminder? Problem is that I don't know where you would take that information from: the d2wclient file doesn't contain such information; what it has is a list of editors for some page, but the editor name is not a D2W keypath (e.g. see backgroundColorForTable). We'd need to extend the d2wclient file to contain that information.
 - List of d2wclient.plist files: display in red when file not available
-- A graphical editor for the qualifiers, like RuleEditor or Xcode. [Anjo] I prefer RuleEditor's over Xcode's, because it needs less space; but it needs to allow reordering, operator changing.
-- Auto-normalizing of qualifiers: always task, entity, pageConfiguration, propertyKey in that order (or some other)
+- A graphical editor for the qualifiers, like RuleEditor or Xcode. [ak] I prefer RuleEditor's over Xcode's, because it needs less space; but it needs to allow reordering, operator changing.
+- Auto-normalizing of qualifiers: always task, entity, pageConfiguration, propertyKey in that order (or some other). Order should be user-configurable, and not applied automatically (only from a user action)
 - In model group, allow user to show/hide a model in the group
 - Automatic save (there is an API in Cocoa to do that, though I haven't used it yet)
 - Allow displaying rules in more than one window
@@ -39,6 +55,9 @@ Later:
 - Change rule model group icon
 - On Leopard, compile it also, with GC on and 64bits; currently, does not even compile with Xcode 3
 - Open a group; touch all models of group, and go back to RM -> displays as many alert panels as touched models. Could it be possible to display only one alert? Could it be possible to avoid the second 'revert' alert?
+- [ak] Make the RuleModeler hook into the app (highlight touched rules, of get PC, task and entity from page). Synchronized with the running D2W app, like the D2W assistant.
+- Use RBSplitView to allow programmatically collapsing splitviews (http://www.brockerhoff.net/src/rbs.html)
+
 
 Abandoned:
 [King] EOControl's mainly used for the EOQualifier classes and EOKeyValueArchiving. The archiving code is pretty simple, so it shouldn't be too hard to write our own (or borrow from GNUStep?). We could then introduce some translation code to go between archived EOQualifiers and NSPredicate objects. That way, we could simply use NSPredicateEditor for graphical rule editing. [Anjo] Well, the selectors used by the NSPredicates are much different from the EOQualifiers, aren't they? And they are opaque in the first place, I had to create strings to get the join conditions correct.
