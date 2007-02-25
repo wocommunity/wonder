@@ -163,7 +163,10 @@
   qd = [self->qualifier qualifierDescription];
   
 #ifdef WO_JAVA_COMPATIBILITY
-  return [[@"not (" stringByAppendingString:qd] stringByAppendingString:@")"];
+  if (([self->qualifier isKindOfClass:[EOKeyValueQualifier class]] || [self->qualifier isKindOfClass:[EOKeyComparisonQualifier class]]) && ![[self class] useParenthesesForComparisonQualifier])
+    return [[@"not (" stringByAppendingString:qd] stringByAppendingString:@")"];
+  else
+    return [@"not " stringByAppendingString:qd];
 #else
   return [[@"NOT (" stringByAppendingString:qd] stringByAppendingString:@")"];
 #endif
