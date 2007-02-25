@@ -24,7 +24,6 @@
     [self setKeys:[NSArray arrayWithObject:@"value"] triggerChangeNotificationsForDependentKey:@"valueDescription"];
     [self setKeys:[NSArray arrayWithObject:@"value"] triggerChangeNotificationsForDependentKey:@"toolTip"];
     [self setKeys:[NSArray arrayWithObject:@"assignmentClass"] triggerChangeNotificationsForDependentKey:@"assignmentClassDescription"];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(defaultsDidChange:) name:NSUserDefaultsDidChangeNotification object:[NSUserDefaults standardUserDefaults]];
 }
 
 - (id)init {
@@ -317,8 +316,18 @@ static NSMutableCharacterSet  *fullyQualifiedClassNameCharSet = nil;
 	_rule = rule; // Back-pointer - not retained
 }
 
+static NSArray *d2wclientConfigurationPaths = nil;
++ (void)setD2wclientConfigurationPaths:(NSArray *)paths {
+    [d2wclientConfigurationPaths autorelease];
+    d2wclientConfigurationPaths = [paths copy];
+}
+
++ (NSArray *)d2wclientConfigurationPaths {
+    return d2wclientConfigurationPaths;
+}
+
 + (void)refreshToolTipDictionary {
-    NSArray         *paths = [[NSUserDefaults standardUserDefaults] arrayForKey:@"d2wclientConfigurationPaths"];
+    NSArray         *paths = [self d2wclientConfigurationPaths];
     NSEnumerator    *anEnum = [paths objectEnumerator];
     NSString        *aPath;
     
@@ -343,10 +352,6 @@ static NSMutableCharacterSet  *fullyQualifiedClassNameCharSet = nil;
     }
     
     return aDict;
-}
-
-+ (void)defaultsDidChange:(NSNotification *)notif {
-    [self refreshToolTipDictionary];
 }
 
 - (NSString *)toolTip {
