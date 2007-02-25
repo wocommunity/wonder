@@ -47,4 +47,8 @@
 
 - (BOOL)isEqualToAssignment:(Assignment *)assignment;
 
++ (void)setD2wclientConfigurationPaths:(NSArray *)paths;
++ (NSArray *)d2wclientConfigurationPaths;
++ (void)refreshToolTipDictionary;
+
 @end
