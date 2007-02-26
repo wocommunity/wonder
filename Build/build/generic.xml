@@ -420,7 +420,7 @@ There are many ways to use this script:
             <classpath refid="ant.classpath"/>
         </taskdef>
 
-        <woframework name="${project.name}" destDir="${build.root}" principalClass="${project.principal.class}" jarName="${project.name}">
+        <woframework name="${project.name}" destDir="${build.root}" principalClass="${project.principal.class}" jarName="${project.name}" version="${project.version}">
             <lib dir="${project.dir}/Libraries">
                 <include name="**/*.jar" />
             </lib>
@@ -454,7 +454,7 @@ There are many ways to use this script:
             <classpath refid="ant.classpath"/>
         </taskdef>
 
-        <woapplication name="${project.name}" destDir="${build.root}" principalClass="${project.principal.class}" jarName="${project.name}" stdFrameworks="false">
+        <woapplication name="${project.name}" destDir="${build.root}" principalClass="${project.principal.class}" jarName="${project.name}" stdFrameworks="false" version="${project.version}">
             <classes dir="${build.classes}">
                 <include name="**/*.class" />
             </classes>
