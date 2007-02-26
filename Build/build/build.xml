@@ -573,6 +573,13 @@
             <param name="project.dir" value="PlugIns/PostgresqlPlugIn" />
         </antcall>
     </target>
+    <target name="FrontBasePlugIn.all">
+        <antcall target="global.framework.${build.action}" >
+            <param name="project.principal.class" value="com.webobjects.jdbcadaptor.FrontBasePlugIn" />
+            <param name="project.name" value="FrontBasePlugIn" />
+            <param name="project.dir" value="PlugIns/FrontBasePlugIn" />
+        </antcall>
+    </target>
     
     <!-- 
         The targets here correspond to a top-level directory, split into frameworks, apps and examples
@@ -593,7 +600,7 @@
     <target name="ajax.frameworks.all" depends="Ajax.all, YUI.all, AjaxLook.all" />
     <target name="ajax.examples.all" depends="AjaxExample.all, YUIExample.all, AjaxLookExample.all" />
     
-    <target name="plugins.all" depends="PostgresqlPlugIn.all" />
+    <target name="plugins.all" depends="PostgresqlPlugIn.all,FrontBasePlugIn.all" />
 
     <target name="validity.frameworks.all" depends="Validity.all" />
     <target name="validity.applications.all" depends="ValidityModeler.all" />
