@@ -871,6 +871,16 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 			if (context.hasSession() && context.session().statistics() != null) {
 				extraInfo.setObjectForKey(context.session().statistics(), "PreviousPageList");
 			}
+			NSMutableDictionary bundleVersions = new NSMutableDictionary();
+			for (Enumeration bundles = NSBundle._allBundlesReally().objectEnumerator(); bundles.hasMoreElements();) {
+				NSBundle bundle = (NSBundle) bundles.nextElement();
+				String version = ERXProperties.versionStringForFrameworkNamed(bundle.name());
+				if(version == null) {
+					version = "No version provided";
+				}
+				bundleVersions.setObjectForKey(version, bundle.name());
+			}
+			extraInfo.setObjectForKey(bundleVersions, "Bundles");
 		}
 		return extraInfo;
 	}
