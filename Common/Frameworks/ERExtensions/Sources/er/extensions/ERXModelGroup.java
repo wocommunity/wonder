@@ -109,6 +109,11 @@ public class ERXModelGroup extends EOModelGroup {
 		
 		if (!patchModelsOnLoad) {
 			flattenPrototypes();
+			Enumeration modelsEnum = EOModelGroup.defaultGroup().models().objectEnumerator();
+			while (modelsEnum.hasMoreElements()) {
+				EOModel model = (EOModel)modelsEnum.nextElement();
+				preloadERXConstantClassesForModel(model);
+			}
 		}
 
 		adjustLocalizedAttributes();
@@ -734,7 +739,6 @@ public class ERXModelGroup extends EOModelGroup {
 		}
 
 		fixPrototypesForModel(model);
-		preloadERXConstantClassesForModel(model);
 	}
 
 	protected String prototypeEntityNameForModel(EOModel model) {
@@ -815,6 +819,7 @@ public class ERXModelGroup extends EOModelGroup {
 
 		if (patchModelsOnLoad) {
 			flattenPrototypes();
+			preloadERXConstantClassesForModel(model);
 		}
 	}
 
