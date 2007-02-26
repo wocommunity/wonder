@@ -48,7 +48,8 @@ public class ERXModelGroup extends EOModelGroup {
 
 	protected static boolean patchModelsOnLoad = ERXProperties.booleanForKeyWithDefault("er.extensions.ERXModelGroup.patchModelsOnLoad", false);
 	protected static boolean flattenPrototypes = ERXProperties.booleanForKeyWithDefault("er.extensions.ERXModelGroup.flattenPrototypes", true);
-	protected String prototypeModelName = ERXProperties.stringForKeyWithDefault("er.extensions.ERXModelGroup.prototypeModelName", "erprototypes");
+	protected NSArray _prototypeModelNames = ERXProperties.componentsSeparatedByStringWithDefault("er.extensions.ERXModelGroup.prototypeModelNames", ",", new NSArray(ERXProperties.stringForKeyWithDefault("er.extensions.ERXModelGroup.prototypeModelName", "erprototypes")));
+	protected NSArray _modelLoadOrder = ERXProperties.componentsSeparatedByStringWithDefault("er.extensions.ERXModelGroup.modelLoadOrder", ",", NSArray.EmptyArray);
 	
 	public static final String ModelGroupAddedNotification = "ERXModelGroupAddedNotification";
 
@@ -70,40 +71,63 @@ public class ERXModelGroup extends EOModelGroup {
 		NSArray nsarray = NSBundle.frameworkBundles();
 		int bundleCount = nsarray.count() + 1;
 
-		if (log.isDebugEnabled())
+		if (log.isDebugEnabled()) {
 			log.debug("Loading bundles" + nsarray.valueForKey("name"));
-
+		}
+		
+		NSMutableDictionary modelNameURLDictionary = new NSMutableDictionary();
 		NSMutableArray bundles = new NSMutableArray(bundleCount);
 		bundles.addObject(NSBundle.mainBundle());
 		bundles.addObjectsFromArray(nsarray);
-		NSMutableArray models = new NSMutableArray();
 		for (int currentBundle = 0; currentBundle < bundleCount; currentBundle++) {
 			NSBundle nsbundle = (NSBundle) bundles.objectAtIndex(currentBundle);
 			NSArray paths = nsbundle.resourcePathsForResources("eomodeld", null);
 			int pathCount = paths.count();
 			for (int currentPath = 0; currentPath < pathCount; currentPath++) {
-				String path = (String) paths.objectAtIndex(currentPath);
-				String modelName = (NSPathUtilities.stringByDeletingPathExtension(NSPathUtilities.lastPathComponent(path)));
+				String indexPath = (String) paths.objectAtIndex(currentPath);
+				String modelPath = NSPathUtilities.stringByDeletingLastPathComponent(indexPath);
+				String modelName = (NSPathUtilities.stringByDeletingPathExtension(NSPathUtilities.lastPathComponent(modelPath)));
 				EOModel eomodel = modelNamed(modelName);
 				if (eomodel == null) {
-					URL url = nsbundle.pathURLForResourcePath(path);
-					// hack to move prototypes in front
-					if (path.toLowerCase().indexOf(prototypeModelName.toLowerCase()+".eomodeld") > 0) {
-						models.insertObjectAtIndex(url, 0);
-					}
-					else {
-						models.addObject(url);
-					}
+					URL url = nsbundle.pathURLForResourcePath(modelPath);
+					modelNameURLDictionary.setObjectForKey(url, modelName);
 				}
 				else if (NSLog.debugLoggingAllowedForLevelAndGroups(1, 32768L)) {
-					NSLog.debug.appendln("Ignoring model at path \"" + path + "\" because the model group " + this + " already contains the model from the path \"" + eomodel.pathURL() + "\"");
+					NSLog.debug.appendln("Ignoring model at path \"" + modelPath + "\" because the model group " + this + " already contains the model from the path \"" + eomodel.pathURL() + "\"");
 				}
 			}
 		}
-		for (int i = 0; i < models.count(); i++) {
-			URL url = (URL) models.objectAtIndex(i);
+
+		NSMutableArray modelURLs = new NSMutableArray();
+		
+		// if you explicitly declare a model load order, use that ...
+		if (_modelLoadOrder.count() > 0) {
+			Enumeration modelLoadOrderEnum = _modelLoadOrder.objectEnumerator();
+			while (modelLoadOrderEnum.hasMoreElements()) {
+				String modelName = (String) modelLoadOrderEnum.nextElement();
+				URL modelURL = (URL) modelNameURLDictionary.removeObjectForKey(modelName);
+				modelURLs.addObject(modelURL);
+			}
+		}
+		else {
+			// ... otherwise, just move prototypes up front
+			Enumeration prototypeModelNamesEnum = _prototypeModelNames.objectEnumerator();
+			while (prototypeModelNamesEnum.hasMoreElements()) {
+				String prototypeModelName = (String) prototypeModelNamesEnum.nextElement();
+				URL prototypeModelURL = (URL) modelNameURLDictionary.removeObjectForKey(prototypeModelName);
+				modelURLs.addObject(prototypeModelURL);
+			}
+		}
+		
+		// ... then add all the rest
+		modelURLs.addObjectsFromArray(modelNameURLDictionary.allValues());
+
+		Enumeration modelURLEnum = modelURLs.objectEnumerator();
+		while (modelURLEnum.hasMoreElements()) {
+			URL url = (URL) modelURLEnum.nextElement();
 			addModelWithPathURL(url);
 		}
+		
 		// correcting an EOF Inheritance bug
 		checkInheritanceRelationships();
 		
@@ -887,7 +911,7 @@ public class ERXModelGroup extends EOModelGroup {
 		NSMutableDictionary prototypeReplacement = new NSMutableDictionary();
 		for (Enumeration modelsEnum = models().objectEnumerator(); modelsEnum.hasMoreElements();) {
 			EOModel model = (EOModel) modelsEnum.nextElement();
-			if(model.name().equalsIgnoreCase(prototypeModelName)) {
+			if(_prototypeModelNames.containsObject(model.name())) {
 				log.debug("Skipping prototype model " + model.name());
 				continue;
 			}
