@@ -532,6 +532,37 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
     }
 
     /**
+     * Returns an array of strings separated with the given separator string.
+     * 
+     * @param key the key to lookup
+     * @param separator the separator (",")
+     * @return the array of strings or NSArray.EmptyArray if not found
+     */
+    public static NSArray componentsSeparatedByString(String key, String separator) {
+    	return ERXProperties.componentsSeparatedByStringWithDefault(key, separator, NSArray.EmptyArray);
+    }
+
+    /**
+     * Returns an array of strings separated with the given separator string.
+     * 
+     * @param key the key to lookup
+     * @param separator the separator (",")
+     * @param defaultValue the default array to return if there is no value
+     * @return the array of strings
+     */
+    public static NSArray componentsSeparatedByStringWithDefault(String key, String separator, NSArray defaultValue) {
+    	NSArray array;
+    	String str = stringForKeyWithDefault(key, null);
+    	if (str == null) {
+    		array = defaultValue;
+    	}
+    	else {
+    		array = NSArray.componentsSeparatedByString(str, separator);
+    	}
+    	return array;
+    }
+    
+    /**
      * Sets an array in the System properties for
      * a particular key.
      * @param array to be set in the System properties
