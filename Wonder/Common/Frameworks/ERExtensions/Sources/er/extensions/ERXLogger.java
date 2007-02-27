@@ -186,7 +186,9 @@ public class ERXLogger extends org.apache.log4j.Logger {
         if(log.isDebugEnabled()) {
             log.debug("log4j.loggerFactory: " + System.getProperty("log4j.loggerFactory"));
             log.debug("Factory: " + factory);
-            log.debug("", new RuntimeException("This is not a real exception. It is just to show you where logging was initialized."));
+            // MS: This just trips everyone up, and it really seems to only be used by
+            // PW developers, so I say we just turn it on when we need it.
+            //log.debug("", new RuntimeException("This is not a real exception. It is just to show you where logging was initialized."));
         }
         //PropertyPrinter printer = new PropertyPrinter(new PrintWriter(System.out));
         //printer.print(new PrintWriter(System.out));
