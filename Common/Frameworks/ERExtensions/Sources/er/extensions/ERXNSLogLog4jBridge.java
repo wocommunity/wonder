@@ -16,9 +16,8 @@ import com.webobjects.foundation.NSLog;
 //          as PrintStreamLogger when WOOutputPath is specified.) 
 //          Note that ERXNSLogLog4jBridge simply ignores the parameter 
 //          of setPrintStream(PrintStream stream) method. 
-
+// @property er.extensions.ERXNSLogLog4jBridge.ignoreNSLogSettings if true, NSLog's settings will not affect log4j and the log4j.logger.NSLog setting will be used instead.
 public class ERXNSLogLog4jBridge extends /* NSLog.Logger */ NSLog.PrintStreamLogger {
-
     public static final Logger log = Logger.getLogger("NSLog");
     public static final int OUT = 1;
     public static final int ERR = 2;
@@ -53,7 +52,7 @@ public class ERXNSLogLog4jBridge extends /* NSLog.Logger */ NSLog.PrintStreamLog
     
     public void setIsEnabled(boolean enabled) {
         super.setIsEnabled(enabled);
-        if (type == DEBUG) {
+        if (type == DEBUG && !ERXProperties.booleanForKeyWithDefault("er.extensions.ERXNSLogLog4jBridge.ignoreNSLogSettings", false)) {
             log.setLevel(enabled ? Level.DEBUG : Level.INFO);
         }
     }
@@ -61,7 +60,7 @@ public class ERXNSLogLog4jBridge extends /* NSLog.Logger */ NSLog.PrintStreamLog
     public void setAllowedDebugLevel(int debugLevel) {
         super.setAllowedDebugLevel(debugLevel);
 
-        if (type == DEBUG) {
+        if (type == DEBUG && !ERXProperties.booleanForKeyWithDefault("er.extensions.ERXNSLogLog4jBridge.ignoreNSLogSettings", false)) {
             log.setLevel(debugLevel != NSLog.DebugLevelOff ? Level.DEBUG : Level.INFO);
         }
     }
