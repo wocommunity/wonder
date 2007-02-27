@@ -106,6 +106,9 @@ public class ERXModelGroup extends EOModelGroup {
 			while (modelLoadOrderEnum.hasMoreElements()) {
 				String modelName = (String) modelLoadOrderEnum.nextElement();
 				URL modelURL = (URL) modelNameURLDictionary.removeObjectForKey(modelName);
+				if (modelURL == null) {
+					throw new IllegalArgumentException("You specified the model '" + modelName + "' in your modelLoadOrder array, but it can not be found.");
+				}
 				modelURLs.addObject(modelURL);
 			}
 		}
@@ -115,7 +118,16 @@ public class ERXModelGroup extends EOModelGroup {
 			while (prototypeModelNamesEnum.hasMoreElements()) {
 				String prototypeModelName = (String) prototypeModelNamesEnum.nextElement();
 				URL prototypeModelURL = (URL) modelNameURLDictionary.removeObjectForKey(prototypeModelName);
-				modelURLs.addObject(prototypeModelURL);
+				if (prototypeModelURL == null) {
+					// MS: This is only a warning because we force "erprototypes" into the list for convenience
+					// earlier on, but it's possible that you don't have that framework loaded.  If we
+					// threw an exception, it would blow up for people that don't use erprototypes.  You'll just
+					// have to suffer through the warning though :)
+					log.warn("You specified the prototype model '" + prototypeModelName + "' in your prototypeModelNames array, but it can not be found.");
+				}
+				else {
+					modelURLs.addObject(prototypeModelURL);
+				}
 			}
 		}
 		
