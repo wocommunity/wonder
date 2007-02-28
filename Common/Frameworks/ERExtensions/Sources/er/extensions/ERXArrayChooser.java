@@ -27,6 +27,7 @@ import com.webobjects.foundation.NSValidation;
  * you have custom subclasses of WOToOne/WOToMany you need to take this into account.
  * Also adds the values that are not included in the restricted-choice list. These items are marked by [name of item]. 
  * This should ensure they end up at the bottom of the list.
+ * You can also specify the editingContext the component uses to fetch the related objects into.
  * NOTE: currently "includeUnmatchedValues" is set to false
  * @author ak (but most stuff is pulled over from the pre-existing WOToOne/WOToMany)
  */
@@ -151,9 +152,12 @@ public abstract class ERXArrayChooser extends ERXStatelessComponent {
     protected EOEditingContext editingContext() {
         EOEditingContext ec = null;
         if(sourceObject() instanceof EOEnterpriseObject) {
-            ec = ((EOEnterpriseObject)sourceObject()).editingContext();
+        	ec = ((EOEnterpriseObject)sourceObject()).editingContext();
         } else {
-            ec = session().defaultEditingContext();
+        	ec = (EOEditingContext) valueForBinding("editingContext");
+        	if(ec == null) {
+        		ec = session().defaultEditingContext();
+        	}
         }
         return ec;
     }
