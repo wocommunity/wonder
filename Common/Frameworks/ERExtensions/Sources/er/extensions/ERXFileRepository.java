@@ -23,7 +23,7 @@ public class ERXFileRepository {
 	 * Private constructor, as we use the factory methods to create instances.
 	 * @param root
 	 */
-	private ERXFileRepository(File root) {
+	protected ERXFileRepository(File root) {
 		_root = root;
 	}
 	
@@ -97,8 +97,17 @@ public class ERXFileRepository {
 	 * @return
 	 */
 	public static ERXFileRepository addRepository(String name, File root) {
-		ERXFileRepository result = new ERXFileRepository(root);
-		_repositories.setObjectForKey(root, "name");
-		return result;
+		return addRepository(name, new ERXFileRepository(root));
+	}
+
+	/**
+	 * Adds a repository under the given name and the given root directory.
+	 * @param name
+	 * @param root
+	 * @return
+	 */
+	public static ERXFileRepository addRepository(String name, ERXFileRepository repository) {
+		_repositories.setObjectForKey(repository, "name");
+		return repository;
 	}
 }
