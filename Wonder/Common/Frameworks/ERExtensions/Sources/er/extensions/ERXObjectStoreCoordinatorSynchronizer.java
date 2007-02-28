@@ -82,9 +82,12 @@ public class ERXObjectStoreCoordinatorSynchronizer {
 		_queueThread = new ProcessChangesQueue();
 
 		new Thread(_queueThread).start();
-		NSNotificationCenter.defaultCenter().addObserver(this, new NSSelector("objectStoreWasAdded", new Class[] { NSNotification.class }), EOObjectStoreCoordinator.CooperatingObjectStoreWasAddedNotification, null);
-		NSNotificationCenter.defaultCenter().addObserver(this, new NSSelector("objectStoreWasRemoved", new Class[] { NSNotification.class }), EOObjectStoreCoordinator.CooperatingObjectStoreWasRemovedNotification, null);
+		NSNotificationCenter.defaultCenter().addObserver(this, new NSSelector("objectStoreWasAdded", ERXConstant.NotificationClassArray), EOObjectStoreCoordinator.CooperatingObjectStoreWasAddedNotification, null);
+		NSNotificationCenter.defaultCenter().addObserver(this, new NSSelector("objectStoreWasRemoved", ERXConstant.NotificationClassArray), EOObjectStoreCoordinator.CooperatingObjectStoreWasRemovedNotification, null);
+		NSNotificationCenter.defaultCenter().addObserver(this, new NSSelector("startMulticastListener", ERXConstant.NotificationClassArray), WOApplication.ApplicationDidFinishLaunchingNotification, null);
+	}
 
+	public void initializeMulticast() {
 		boolean multicastEnabled = ERXProperties.booleanForKeyWithDefault("er.extensions.multicastSynchronizer.enabled", false);
 		if (multicastEnabled) {
 			try {
@@ -138,7 +141,11 @@ public class ERXObjectStoreCoordinatorSynchronizer {
 			}
 		}
 	}
-
+	
+	public void startMulticastListener(NSNotification n) {
+		initializeMulticast();
+	}
+	
 	public void objectStoreWasRemoved(NSNotification n) {
 		removeObjectStore((EOObjectStoreCoordinator) n.object());
 	}
