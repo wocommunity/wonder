@@ -47,7 +47,7 @@ import com.webobjects.foundation.NSSelector;
 /**
  * Principal class of the ERExtensions framework. This class
  * will be loaded at runtime when the ERExtensions bundle is
- * loaded (even before the Application construcor is called)
+ * loaded (even before the Application constructor is called)
  * This class has a boat-load of stuff in it that will hopefully
  * be finding better homes in the future. This class serves as
  * the initilization point of this framework, look in the static
@@ -202,7 +202,8 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
     }
     
     /**
-     * Support class that listens for EOKeyValueQualifiers that have an a selector that was registered and uses theri support instead.
+     * Support class that listens for EOKeyValueQualifiers that have a selector
+     * that was registered and uses their support instead.
      * You'll use this mainly to bind queryOperators in display groups.
      * @author ak
      */
@@ -301,7 +302,8 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
     // FIXME: This shouldn't be enabled when the application is in production.
     // FIXME: Now that all of the logging has been centralized, we should just be able
     //		to do something like this, but much more generic, i.e. have a mapping
-    //		between logger names and NSLog groups, for example com.webobjects.logging.DebugGroupSQLGeneration we should
+    //		between logger names and NSLog groups, for example
+    //		com.webobjects.logging.DebugGroupSQLGeneration we should
     //		be able to get the last part of the logger name and look up that log group and turn 
     public static void configureAdaptorContextRapidTurnAround(Object anObserver) {
         if (!_isConfigureAdaptorContextRapidTurnAround) {
@@ -369,7 +371,7 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
     /**
      * Retaining the editing contexts explicitly until the session that was active
      * when they were created goes away
-     * this hopefully will go some way towards avoiding the 'attempted to send
+     * this hopefully will go some way towards avoiding the 'attempted to send'
      * message to EO whose EditingContext is gone. Only used in pre-5.2 systems.
      */
     private static NSMutableDictionary _editingContextsPerSession;
@@ -430,12 +432,12 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
 
     /**
      * Removes all of the HTML tags from a given string.
-     * Note: that this is a very simplistic implementation
+     * Note: this is a very simplistic implementation
      * and will most likely not work with complex HTML.
      * Note: for actual conversion of HTML tags into regular
      * strings have a look at {@link ERXSimpleHTMLFormatter}
      * @param s html string
-     * @return string with all of it's html tags removed
+     * @return string with all of its html tags removed
      */
     // FIXME: this is so simplistic it will break if you sneeze
     // MOVEME: ERXStringUtilities 
@@ -501,7 +503,7 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
     /**
      * Capitalizes the given string.
      * @param s string to capitalize
-     * @return capitalized sting if the first char is a
+     * @return capitalized string if the first char is a
      *		lowercase character.
      */
     // MOVEME: ERXStringUtilities
@@ -516,9 +518,9 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
     }
 
     /**
-     * Plurifies a given string for a given language.
+     * Pluralizes a given string for a given language.
      * See {@link ERXLocalizer} for more information.
-     * @param s string to plurify
+     * @param s string to pluralize
      * @param howMany number of its
      * @param language target language
      * @return plurified string
@@ -678,8 +680,7 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
      * @param fileName name of the file
      * @param frameworkName name of the framework, null or "app"
      *		for the application bundle
-     * @return the <code>lastModified</code> method off of the
-     *		file object
+     * @return the <code>lastModified</code> method of the file object
      */
     // MOVEME: ERXFileUtilities
     // ENHANCEME: Should be able to specify the language to check
@@ -688,8 +689,7 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
     }
 
     /**
-     * Reads a file in from the file system and then parses
-     * it as if it were a property list.
+     * Reads a file in from the file system and parses it as if it were a property list.
      * @param fileName name of the file
      * @param aFrameWorkName name of the framework, null or
      *		'app' for the application bundle.
@@ -704,8 +704,7 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
 
     /**
      * Reads a file in from the file system for the given set
-     * of languages and then parses the file as if it were a
-     * property list.
+     * of languages and parses the file as if it were a property list.
      * @param fileName name of the file
      * @param aFrameWorkName name of the framework, null or
      *		'app' for the application bundle.
@@ -781,7 +780,8 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
     /**
      * Resolves a given user info unit string for a given object.
      * User info values are stored in an EOAttibute or EORelationship's
-     * userInfo dictionary. See the method <code>userInfoUnit</code> for
+     * userInfo dictionary.
+     *  See the method {@link #userInfoUnit(EOEnterpriseObject, String) userInfoUnit} for
      * a better description of getting values out of the userInfo
      * dictionary. This method deals with resolving dynamic userInfo
      * keys. These keys need to start with the '@@' symbol. For instance
@@ -789,7 +789,7 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
      * entity Movie, then you can either pass in a Movie object or a
      * different object with a prefix key path to a movie object.<br/>
      * @param userInfoUnitString string to be resolved, needs to start with
-     *		'@@' this keypath will be evaluated against either the object
+     *		'@@'. This keypath will be evaluated against either the object
      *		if no prefixKeyPath is specified or the object returned by
      *		the prefixKeyPath being evaluated against the object passed in.
      * @param object to resolve either the user info unit or the prefixKeyPath.
@@ -799,7 +799,7 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
     public static String resolveUnit(String userInfoUnitString,
                                      EOEnterpriseObject object,
                                      String prefixKeyPath) {
-        // some of our units (stored in the user info take the form of @project.unit
+        // some of our units (stored in the user info) take the form of @project.unit
         // this method resolves the @keyPath..
         if(userInfoUnitString!=null && userInfoUnitString.indexOf("@")>-1){
             String keyPath = userInfoUnitString.substring(1);
@@ -831,7 +831,7 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
     /**
      * Refreshes all of the shared enterprise objects for a given shared entity,
      * then notifies the entity's class by calling the static method
-     * sharedEntityDataWasRefreshed() if it implements it.
+     * sharedEntityDataWasRefreshed() if the shared entity implements it.
      *
      * @param entityName name of the shared entity
      */
@@ -918,7 +918,7 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
 	}
     }
     /**
-     * Adds the wosid for a given session to a given url. 
+     * Adds the session ID (wosid) for a given session to a given url. 
      * @param url to add wosid form value to.
      * @return url with the addition of wosid form value
      */
@@ -934,12 +934,12 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
     }
 
     /**
-     * Removes any occurances of any strings in the array passed
-     * in from the string passed in. Used in conjunction with
+     * Given an initial string and an array of substrings, 
+     * Removes any occurances of any of the substrings
+     * from the initial string. Used in conjunction with
      * fuzzy matching.
-     * @param newString string to have other strings removed from it
-     * @param toBeCleaneds array of strings to check to see if the other
-     *		string contains
+     * @param newString initial string from which to remove other strings
+     * @param toBeCleaneds array of substrings to be removed from the initial string.
      * @return cleaned string.
      */
     // MOVEME: Either ERXStringUtilities or fuzzy matching stuff
@@ -958,13 +958,13 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
     }
 
     /**
-     * Uses the <code>setObjectForKey</code> off of the {@link WOSession}
+     * Uses the <code>setObjectForKey</code> method of the {@link WOSession}
      * class to push a Boolean object onto the session for a given key.
      * Note this is not using key value coding, meaning you don't need
      * to have a boolean instance variable corresponding to the given
      * key on your session object. This flag can be retrieved using
      * the method <code>booleanFlagOnSessionForKeyWithDefault</code>.
-     * @param s session object to have the boolean flag set on
+     * @param s session object on which to set the boolean flag 
      * @param key to be used in the session's dictionary
      * @param newValue boolean value to be set on the session
      */
@@ -976,8 +976,8 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
 
     /**
      * Retrieves a value from the session's dictionary and evaulates
-     * that object using the method <code>booleanValue</code> off of
-     * {@link ERXUtilities}. If there is not an object corresponding
+     * that object using the <code>booleanValue</code> method of
+     * {@link ERXUtilities}. If there is no object corresponding
      * to the key passed in, then the default value is returned. The
      * usual way in which boolean values are set on the session object
      * is by using the method <code>setBooleanFlagOnSessionForKey</code>
@@ -1013,10 +1013,10 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
     }
 
     /**
-     * method used by the preferences mechanism from ERDirectToWeb
-     * needs to be in here because shared by ERDirectToWeb and ERCoreBusinessLogic
-     * The basic idea of this method is to construct a unique key based on
-     * a context.
+     * Constructs a unique key based on a context.
+     * A method used by the preferences mechanism from ERDirectToWeb which
+     * needs to be here because it is shared by ERDirectToWeb and ERCoreBusinessLogic.
+     * 
      * @param key preference key
      * @param context most likely a d2wContext object
      * @return a unique preference key for storing and retriving preferences
@@ -1041,8 +1041,8 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
     }
 
     /**
-     * Frees all of a resources associated with a given
-     * process and then destroys it.
+     * Frees all of the resources associated with a given
+     * process and then destroys the process.
      * @param p process to destroy
      */
     public static void freeProcessResources(Process p) {
@@ -1059,6 +1059,9 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
     /**
      * Determines if a given object implements a method given
      * the name and the array of input parameters.
+     * Note that this doesn't quite check the method signature
+     * since the method return type is not checked.
+     *
      * @param object to determine if it implements a method
      * @param methodName name of the method
      * @param parameters array of parameters
