@@ -13,7 +13,7 @@ Ant should be found in /Developer/Java/Ant/bin
 2. Invoke ant -projecthelp, but normally you would do:
 
   ant frameworks; sudo ant frameworks.install
-  ant application; sudo ant application.install
+  ant applications; sudo ant applications.install
   ant examples; sudo ant examples.install
 
 If you have write priviliges in /Library/Frameworks and /Library/WebObjects/JavaApplications, you may do without the "sudo"
