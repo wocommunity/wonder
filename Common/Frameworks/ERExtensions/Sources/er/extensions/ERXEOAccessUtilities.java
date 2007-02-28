@@ -16,6 +16,7 @@ import org.apache.log4j.Logger;
 import com.webobjects.eoaccess.EOAdaptorChannel;
 import com.webobjects.eoaccess.EOAdaptorOperation;
 import com.webobjects.eoaccess.EOAttribute;
+import com.webobjects.eoaccess.EODatabase;
 import com.webobjects.eoaccess.EODatabaseChannel;
 import com.webobjects.eoaccess.EODatabaseContext;
 import com.webobjects.eoaccess.EODatabaseOperation;
@@ -37,6 +38,7 @@ import com.webobjects.eocontrol.EOEnterpriseObject;
 import com.webobjects.eocontrol.EOFaultHandler;
 import com.webobjects.eocontrol.EOFetchSpecification;
 import com.webobjects.eocontrol.EOGlobalID;
+import com.webobjects.eocontrol.EOKeyGlobalID;
 import com.webobjects.eocontrol.EOKeyValueQualifier;
 import com.webobjects.eocontrol.EOObjectStoreCoordinator;
 import com.webobjects.eocontrol.EOQualifier;
@@ -48,6 +50,7 @@ import com.webobjects.foundation.NSKeyValueCoding;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation.NSMutableSet;
+import com.webobjects.foundation.NSSet;
 import com.webobjects.jdbcadaptor.JDBCPlugIn;
 
 /**
@@ -1434,4 +1437,95 @@ public class ERXEOAccessUtilities {
 	         databaseContext.batchFetchRelationship(relationship, objects, editingContext);
     	 }
      }
+ 	
+ 	/**
+ 	 * In a multi-OSC or multi-instance scenario, when there are bugs, it is possible for the snapshots
+ 	 * to become out of sync with the database.  It is useful to have some way to determine when exactly
+ 	 * this condition occurs for writing test cases.
+ 	 *  
+ 	 * @return a set of strings that describe the mismatches that occurred
+ 	 */
+ 	public static NSSet verifyAllSnapshots() {
+ 		NSMutableSet mismatches = new NSMutableSet();
+ 		NSMutableSet verifiedDatabases = new NSMutableSet();
+ 		EOEditingContext editingContext = ERXEC.newEditingContext();
+ 		EOModelGroup modelGroup = EOModelGroup.defaultGroup();
+ 		Enumeration modelsEnum = modelGroup.models().objectEnumerator();
+ 		while (modelsEnum.hasMoreElements()) {
+ 			EOModel model = (EOModel)modelsEnum.nextElement();
+ 			EODatabaseContext databaseContext = null;
+ 			try {
+ 				databaseContext = EODatabaseContext.registeredDatabaseContextForModel(model, editingContext);
+ 			}
+ 			catch (IllegalStateException e) {
+ 				log.warn("Model " + model.name() + " failed: " + e.getMessage());
+ 			}
+ 			if (databaseContext != null) {
+ 				databaseContext.lock();
+ 					try {
+ 					EODatabase database = databaseContext.database();
+ 					if (!verifiedDatabases.containsObject(database)) {
+ 						Enumeration gidEnum = database.snapshots().keyEnumerator();
+ 						while (gidEnum.hasMoreElements()) {
+ 							EOGlobalID gid = (EOGlobalID)gidEnum.nextElement();
+ 							if (gid instanceof EOKeyGlobalID) {
+ 								EOEnterpriseObject eo = null;
+ 								EOKeyGlobalID keyGID = (EOKeyGlobalID)gid;
+ 								String entityName = keyGID.entityName();
+ 								EOEntity entity = modelGroup.entityNamed(entityName);
+ 								NSDictionary snapshot = database.snapshotForGlobalID(gid);
+ 								if (snapshot != null) {
+ 									NSDictionary snapshotClone = snapshot.immutableClone();
+ 					    			EOQualifier gidQualifier = entity.qualifierForPrimaryKey(entity.primaryKeyForGlobalID(gid));
+ 						    		EOFetchSpecification gidFetchSpec = new EOFetchSpecification(entityName, gidQualifier, null);
+ 						    		gidFetchSpec.setRefreshesRefetchedObjects(true);
+ 						    		NSArray databaseEOs = editingContext.objectsWithFetchSpecification(gidFetchSpec);
+ 						    		if (databaseEOs.count() == 0) {
+ 						    			mismatches.addObject(gid + " was deleted in the database, but the snapshot still exists: " + snapshotClone);
+ 						    		}
+ 						    		else {
+ 						    			NSDictionary refreshedSnapshot = database.snapshotForGlobalID(gid);
+ 						    			if (!refreshedSnapshot.equals(snapshotClone)) {
+ 							    			mismatches.addObject(gid + " doesn't match the database: original = " + snapshotClone + "; database = " + refreshedSnapshot);
+ 						    			}
+ 						    			eo = (EOEnterpriseObject)databaseEOs.objectAtIndex(0);
+ 						    		}
+ 					    		}
+ 								
+ 								if (eo != null) {
+ 									Enumeration relationshipsEnum = entity.relationships().objectEnumerator();
+ 									while (relationshipsEnum.hasMoreElements()) {
+ 										EORelationship relationship = (EORelationship)relationshipsEnum.nextElement();
+ 										String relationshipName = relationship.name();
+ 										NSArray destinationGIDs = database.snapshotForSourceGlobalID(keyGID, relationshipName);
+ 										if (destinationGIDs != null) {
+ 											NSArray destinationGIDsClone = destinationGIDs.immutableClone();
+ 											ERXEOControlUtilities.clearSnapshotForRelationshipNamed(eo, relationshipName);
+ 											
+ 											((NSArray)eo.valueForKey(relationshipName)).count();
+ 											
+ 											NSArray databaseGIDs = database.snapshotForSourceGlobalID(keyGID, relationshipName);
+ 											NSArray objectsNotInDatabase = ERXArrayUtilities.arrayMinusArray(destinationGIDsClone, databaseGIDs);
+ 											if (objectsNotInDatabase.count() > 0) {
+ 												mismatches.addObject(gid + "." + relationshipName + " has entries not in the database: " + objectsNotInDatabase);
+ 											}
+ 											NSArray objectsNotInMemory = ERXArrayUtilities.arrayMinusArray(databaseGIDs, destinationGIDsClone);
+ 											if (objectsNotInMemory.count() > 0) {
+ 												mismatches.addObject(gid + "." + relationshipName + " is missing entries in the database: " + objectsNotInMemory);
+ 											}
+ 										}
+ 									}
+ 								}
+ 							}
+ 						}
+ 						verifiedDatabases.addObject(database);
+ 					}
+ 				}
+ 				finally {
+ 					databaseContext.unlock();
+ 				}
+ 			}
+ 		}
+ 		return mismatches;
+ 	}
 }
