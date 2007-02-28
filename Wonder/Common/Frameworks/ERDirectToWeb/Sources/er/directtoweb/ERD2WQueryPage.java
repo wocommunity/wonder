@@ -38,7 +38,7 @@ import er.extensions.ERXValueUtilities;
 
 public class ERD2WQueryPage extends ERD2WPage implements QueryPageInterface {
 
-    public WODisplayGroup displayGroup;
+    protected WODisplayGroup displayGroup;
 
     protected boolean didLoadQueryBindings;
 
@@ -275,5 +275,34 @@ public class ERD2WQueryPage extends ERD2WPage implements QueryPageInterface {
 
     public void setQueryDataSource(EODataSource datasource) {
         setDataSource(datasource);
+    }
+
+    /**
+     * Returns the display group
+     * @return
+     */
+    public WODisplayGroup displayGroup() {
+        return displayGroup;
+    }
+    
+    /**
+     * Set a search value for the display group query match. When the value is null is gets removed from the 
+     * dict, when the operator is null and the value isn't, "=" is chosen.
+     * @param value
+     * @param operator
+     * @param key
+     */
+    public void setQueryMatchForKey(Object value, String operator, String key) {
+        if(value != null) {
+            displayGroup().queryMatch().setObjectForKey(value, key);
+            if(operator != null) {
+                displayGroup().queryOperator().setObjectForKey(operator, key);
+            } else {
+                displayGroup().queryOperator().removeObjectForKey(key);
+            }
+        } else {
+            displayGroup().queryMatch().removeObjectForKey(key);
+            displayGroup().queryOperator().removeObjectForKey(key);
+        }
     }
 }
