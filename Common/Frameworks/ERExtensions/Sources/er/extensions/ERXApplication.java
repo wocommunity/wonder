@@ -985,8 +985,9 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 	public void handlePotentiallyFatalException(Exception exception) {
 		Throwable throwable = ERXRuntimeUtilities.originalThrowable(exception);
 		if (throwable instanceof Error) {
-			boolean shouldQuit = true;
+			boolean shouldQuit = false;
 			if (throwable instanceof OutOfMemoryError) {
+				shouldQuit = true;
 				// AK: I'm not sure this actually works, in particular when the
 				// buffer is in the long-running generational mem, but it's worth a try.
 				// what we do is set up a last-resort buffer during startup
@@ -1013,23 +1014,6 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 					NSLog.err.appendln("Ran out of memory, killing this instance");
 					log.error("Ran out of memory, killing this instance");
 				}
-			}
-			else if (throwable instanceof NoClassDefFoundError || throwable instanceof AbstractMethodError || throwable instanceof InstantiationError || throwable instanceof NoSuchFieldError || throwable instanceof NoSuchMethodError) {
-				shouldQuit = false;
-			}
-			else if (throwable instanceof StackOverflowError) {
-				// hm. could we do something reasonable here?
-				shouldQuit = false;
-			}
-			else if (throwable instanceof com.webobjects.eocontrol._private.TokenMgrError) {
-				// this means something went wrong while parsing an EOQualifier string
-				// no reason to quit
-				shouldQuit = false;
-			}
-			else if (throwable.toString().indexOf("Unresolved compilation problem:") > -1) {
-				// this means eclipse did errors with code swapping, no reason to quit
-				// just try it again
-				shouldQuit = false;
 			}
 			else {
 				// We first log just in case the log4j call puts us in a bad state.
