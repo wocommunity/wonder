@@ -92,18 +92,19 @@ public class ERXModelGroup extends EOModelGroup {
 	public void loadModelsFromLoadedBundles() {
 		EOModelGroup.setDefaultGroup(this);
 		NSArray nsarray = NSBundle.frameworkBundles();
-		int bundleCount = nsarray.count() + 1;
 
 		if (log.isDebugEnabled()) {
 			log.debug("Loading bundles" + nsarray.valueForKey("name"));
 		}
 		
 		NSMutableDictionary modelNameURLDictionary = new NSMutableDictionary();
-		NSMutableArray bundles = new NSMutableArray(bundleCount);
+		NSMutableArray modelNames = new NSMutableArray();
+		NSMutableArray bundles = new NSMutableArray();
 		bundles.addObject(NSBundle.mainBundle());
 		bundles.addObjectsFromArray(nsarray);
-		for (int currentBundle = 0; currentBundle < bundleCount; currentBundle++) {
-			NSBundle nsbundle = (NSBundle) bundles.objectAtIndex(currentBundle);
+
+		for (Enumeration e = bundles.objectEnumerator(); e.hasMoreElements(); ) {
+			NSBundle nsbundle = (NSBundle) e.nextElement();
 			NSArray paths = nsbundle.resourcePathsForResources("eomodeld", null);
 			int pathCount = paths.count();
 			for (int currentPath = 0; currentPath < pathCount; currentPath++) {
@@ -121,6 +122,7 @@ public class ERXModelGroup extends EOModelGroup {
 				if (eomodel == null) {
 					URL url = nsbundle.pathURLForResourcePath(modelPath);
 					modelNameURLDictionary.setObjectForKey(url, modelName);
+					modelNames.addObject(modelName);
 				}
 				else if (NSLog.debugLoggingAllowedForLevelAndGroups(1, 32768L)) {
 					NSLog.debug.appendln("Ignoring model at path \"" + modelPath + "\" because the model group " + this + " already contains the model from the path \"" + eomodel.pathURL() + "\"");
@@ -129,40 +131,36 @@ public class ERXModelGroup extends EOModelGroup {
 		}
 
 		NSMutableArray modelURLs = new NSMutableArray();
-		
-		// if you explicitly declare a model load order, use that ...
-		if (_modelLoadOrder.count() > 0) {
-			Enumeration modelLoadOrderEnum = _modelLoadOrder.objectEnumerator();
-			while (modelLoadOrderEnum.hasMoreElements()) {
-				String modelName = (String) modelLoadOrderEnum.nextElement();
-				URL modelURL = (URL) modelNameURLDictionary.removeObjectForKey(modelName);
-				if (modelURL == null) {
-					throw new IllegalArgumentException("You specified the model '" + modelName + "' in your modelLoadOrder array, but it can not be found.");
-				}
-				modelURLs.addObject(modelURL);
-			}
-		}
-		else {
-			// ... otherwise, just move prototypes up front
-			Enumeration prototypeModelNamesEnum = _prototypeModelNames.objectEnumerator();
-			while (prototypeModelNamesEnum.hasMoreElements()) {
-				String prototypeModelName = (String) prototypeModelNamesEnum.nextElement();
-				URL prototypeModelURL = (URL) modelNameURLDictionary.removeObjectForKey(prototypeModelName);
-				if (prototypeModelURL == null) {
-					// MS: This is only a warning because we force "erprototypes" into the list for convenience
-					// earlier on, but it's possible that you don't have that framework loaded.  If we
-					// threw an exception, it would blow up for people that don't use erprototypes.  You'll just
-					// have to suffer through the warning though :)
-					log.warn("You specified the prototype model '" + prototypeModelName + "' in your prototypeModelNames array, but it can not be found.");
-				}
-				else {
-					modelURLs.addObject(prototypeModelURL);
+		// First, add prototyes if specified
+		for(Enumeration prototypeModelNamesEnum = _prototypeModelNames.objectEnumerator(); prototypeModelNamesEnum.hasMoreElements(); ) {
+			String prototypeModelName = (String) prototypeModelNamesEnum.nextElement();
+			URL prototypeModelURL = (URL) modelNameURLDictionary.removeObjectForKey(prototypeModelName);
+			modelNames.removeObject(prototypeModelName);
+			if (prototypeModelURL == null) {
+				// AK: we throw for everything except erprototypes, as it is set by default
+				if(!"erprototypes".equals(prototypeModelName)) {
+					throw new IllegalArgumentException("You specified the prototype model '" + prototypeModelName + "' in your prototypeModelNames array, but it can not be found.");
 				}
 			}
+			else {
+				modelURLs.addObject(prototypeModelURL);
+			}
 		}
-		
-		// ... then add all the rest
-		modelURLs.addObjectsFromArray(modelNameURLDictionary.allValues());
+		// Next, add all models that are stated explicitely
+		for(Enumeration modelLoadOrderEnum = _modelLoadOrder.objectEnumerator(); modelLoadOrderEnum.hasMoreElements(); ) {
+			String modelName = (String) modelLoadOrderEnum.nextElement();
+			URL modelURL = (URL) modelNameURLDictionary.removeObjectForKey(modelName);
+			modelNames.removeObject(modelName);
+			if (modelURL == null) {
+				throw new IllegalArgumentException("You specified the model '" + modelName + "' in your modelLoadOrder array, but it can not be found.");
+			}
+			modelURLs.addObject(modelURL);
+		}
+		// Finally add all the rest
+		for (Enumeration e = modelNames.objectEnumerator(); e.hasMoreElements();) {
+			String name = (String) e.nextElement();
+			modelURLs.addObject(modelNameURLDictionary.objectForKey(name));
+		}
 
 		Enumeration modelURLEnum = modelURLs.objectEnumerator();
 		while (modelURLEnum.hasMoreElements()) {
