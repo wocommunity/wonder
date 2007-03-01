@@ -6,6 +6,7 @@ import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WORequest;
 import com.webobjects.eocontrol.EOEnterpriseObject;
 import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSValidation;
 
 import er.extensions.ERXValidationFactory;
 import er.extensions.ERXWOContext;
@@ -107,7 +108,11 @@ public class ERDEditPasswordConfirmation extends ERDCustomEditComponent {
             if(!password.equals(passwordConfirm)) {
                 fail("PasswordsDontMatchException");
             } else {
-                object().validateTakeValueForKeyPath(password, passwordPropertyKey);
+                try {
+                    object().validateTakeValueForKeyPath(password, passwordPropertyKey);
+                } catch(NSValidation.ValidationException ex) {
+                    validationFailedWithException(ex, password, passwordPropertyKey);
+                }
             }
         }
     }
