@@ -35,22 +35,45 @@ import com.webobjects.foundation._NSArrayUtilities;
 import com.webobjects.jdbcadaptor.JDBCAdaptor;
 
 /**
- * The reason that this model group is needed is because the regular EOModelGroup will fail to load a model if it has an
- * entity name conflict. While normally this could be considered a 'good thing' in the case of EOPrototypes multiple
- * EOModels might all need there own prototype entities (in fact EOM requires it). This model group subclass will only
- * print warning messages when duplicate entity names are found.
+ * Enhanced model group that supports connection dict switching, definable and predictable model orderings and stackable prototypes.
+ * It also fixes some errors when loading prototypes and EOModeler backup files (Foo.emodeld~). The class is the meant to be the default model
+ * group abd works in conjunction with ERXExtensions to set itself up on load. <br>
+ * You <b>must</b> use EOModelGroup.defaultGroup() and not EOModelGroup.globalModelGroup() because only the former will result in this class getting 
+ * created.
  */
 public class ERXModelGroup extends EOModelGroup {
 
 	/** logging support */
 	public static Logger log = Logger.getLogger(ERXModelGroup.class);
+	
 	private Hashtable cache;
 
+	/**
+	 * <code>er.extensions.ERXModelGroup.patchModelsOnLoad</code> is a boolean that defines is the created should be a {@link Model} not a EOModel. 
+	 * Default is false.
+	 */
 	protected static boolean patchModelsOnLoad = ERXProperties.booleanForKeyWithDefault("er.extensions.ERXModelGroup.patchModelsOnLoad", false);
+	
+	/**
+	 * <code>er.extensions.ERXModelGroup.flattenPrototypes</code> defines if the prototypes should get flattened. Default is true.
+	 */
 	protected static boolean flattenPrototypes = ERXProperties.booleanForKeyWithDefault("er.extensions.ERXModelGroup.flattenPrototypes", true);
-	protected NSArray _prototypeModelNames = ERXProperties.componentsSeparatedByStringWithDefault("er.extensions.ERXModelGroup.prototypeModelNames", ",", new NSArray(ERXProperties.stringForKeyWithDefault("er.extensions.ERXModelGroup.prototypeModelName", "erprototypes")));
+	
+	/**
+	 * <code>er.extensions.ERXModelGroup.prototypeModelNames</code> defines the names of the models that are prototypes. They
+	 * get put in front of the model load order. The default is <code>erprototypes</code>
+	 */
+	protected NSArray _prototypeModelNames = ERXProperties.componentsSeparatedByStringWithDefault("er.extensions.ERXModelGroup.prototypeModelNames", "," ,new NSArray(ERXProperties.stringForKeyWithDefault("er.extensions.ERXModelGroup.prototypeModelName", "erprototypes")));
+
+	/**
+	 * <code>er.extensions.ERXModelGroup.modelLoadOrder</code> defines the load order of the models. When you use this property
+	 * the bundle loading will be disregarded. There is no default value.
+	 */
 	protected NSArray _modelLoadOrder = ERXProperties.componentsSeparatedByStringWithDefault("er.extensions.ERXModelGroup.modelLoadOrder", ",", NSArray.EmptyArray);
 	
+	/**
+	 * Nofitication that is sent when the model group was created form the bundle loading.
+	 */
 	public static final String ModelGroupAddedNotification = "ERXModelGroupAddedNotification";
 
 	/**
@@ -85,6 +108,13 @@ public class ERXModelGroup extends EOModelGroup {
 			int pathCount = paths.count();
 			for (int currentPath = 0; currentPath < pathCount; currentPath++) {
 				String indexPath = (String) paths.objectAtIndex(currentPath);
+				if(indexPath.endsWith(".eomodeld~/index.eomodeld")) {
+					// AK: we don't want to use temp files. This is actually an error in the 
+					// builds or it happens when you open and change models from installed frameworks
+					// but I'm getting so annoyed by this that we just skip the models here
+					log.info("Not adding model, it's only a temp file: " + indexPath);
+					continue;
+				}
 				String modelPath = NSPathUtilities.stringByDeletingLastPathComponent(indexPath);
 				String modelName = (NSPathUtilities.stringByDeletingPathExtension(NSPathUtilities.lastPathComponent(modelPath)));
 				EOModel eomodel = modelNamed(modelName);
@@ -442,6 +472,13 @@ public class ERXModelGroup extends EOModelGroup {
 		resetConnectionDictionaryInModel(model);
 	}
 
+	/**
+	 * Copies an attribute to a new name.
+	 * @param entity
+	 * @param attribute
+	 * @param newName
+	 * @return
+	 */
 	protected EOAttribute cloneAttribute(EOEntity entity, EOAttribute attribute, String newName) {
 		// NOTE: order is important here. To add the prototype,
 		// we need it in the entity and we need a name to add it there
