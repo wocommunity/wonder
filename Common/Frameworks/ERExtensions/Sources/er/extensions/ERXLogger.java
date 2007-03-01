@@ -158,7 +158,11 @@ public class ERXLogger extends org.apache.log4j.Logger {
      */
     public static synchronized void configureLogging(Properties properties) {
         LogManager.resetConfiguration();
-        BasicConfigurator.configure();        
+        BasicConfigurator.configure(); 
+        // AK: we re-configure the logging a few lines later from the properties, but in case
+        // no config is set, we set the root level to info, install the brigde
+        // which sets it's own logging level to DEBUG
+        // and the output should be pretty much the same as with plain WO
         Logger.getRootLogger().setLevel(Level.INFO);     
         boolean is522OrHigher = ERXProperties.webObjectsVersionIs522OrHigher();
         if (is522OrHigher) {
@@ -171,9 +175,9 @@ public class ERXLogger extends org.apache.log4j.Logger {
            NSLog.debug.setAllowedDebugLevel(allowedLevel);
         }
         PropertyConfigurator.configure(properties);
-        // ak: if the root logger has no appenders, something is really broken
+        // AK: if the root logger has no appenders, something is really broken
         // most likely the properties didn't read correctly.
-        if(false && !Logger.getRootLogger().getAllAppenders().hasMoreElements()) {
+        if(!Logger.getRootLogger().getAllAppenders().hasMoreElements()) {
             Appender appender = new ConsoleAppender(new ERXPatternLayout("%-5p %d{HH:mm:ss} (%-20c:%L):  %m%n"), "System.out");
 			Logger.getRootLogger().addAppender(appender);
             Logger.getRootLogger().setLevel(Level.DEBUG);
