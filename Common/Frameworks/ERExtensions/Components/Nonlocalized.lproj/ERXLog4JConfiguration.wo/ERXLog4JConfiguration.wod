@@ -23,6 +23,11 @@ B5: WOGenericContainer {
 	omitTags = loggerIsNotFatal;
 }
 
+B6: WOGenericContainer {
+	elementName = "B";
+	omitTags = loggerIsNotOff;
+}
+
 Form1: WOForm {
 	action = filter;
 	multipleSubmit = true;
@@ -80,6 +85,12 @@ RadioButtonFatalLevel: WORadioButton {
 	name = logger.name;
 	selection = loggerLevelValue;
 	value = fatalLevel;
+}
+
+RadioButtonOffLevel: WORadioButton {
+	name = logger.name;
+	selection = loggerLevelValue;
+	value = offLevel;
 }
 
 RadioButtonInfoLevel: WORadioButton {
