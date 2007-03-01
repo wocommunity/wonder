@@ -878,11 +878,11 @@ public class ERXArrayUtilities extends Object {
      * <br/>
      * This allows for key value paths like:<br/>
      * <br/>
-     * <code>myArray.valueForKey("@subarrayWithRange.3-20");</code><br/>
+     * <code>myArray.valueForKeyPath("@subarrayWithRange.3-20.name");</code><br/>
      * <br/>
      *
      */
-    public static class SubarrayWithRangeOperator implements NSArray.Operator {
+    public static class SubarrayWithRangeOperator extends BaseOperator {
         /** public empty constructor */
         public SubarrayWithRangeOperator() {}
 
@@ -894,12 +894,21 @@ public class ERXArrayUtilities extends Object {
         public Object compute(NSArray array, String keypath) {
             int i1 = keypath.indexOf(".");
             int i2 = keypath.indexOf("-");
+            String rest = null;
             if ( i1 == -1 || i2 == -1 ) {
                 throw new IllegalArgumentException("subarrayWithRange must be used like @subarrayWithRange.start-length");
             }
-            int start = Integer.parseInt(keypath.substring(i1, i2));
-            int length = Integer.parseInt(keypath.substring(i2, keypath.length()));
-            return array.subarrayWithRange(new NSRange(start, length));
+            String str = keypath.substring(i1, i2);
+            int start = str.length() == 0 ? 0 : Integer.parseInt(str);
+            str = keypath.substring(i2);
+            int dot = str.indexOf(".");
+            if(dot >= 0) {
+            	rest = str.substring(dot);
+            	str = str.substring(0, dot);
+            }
+            int length = str.length() == 0 ? array.count() : Integer.parseInt(str);
+            NSArray objects = array.subarrayWithRange(new NSRange(start, length));
+            return contents(objects, rest);
         }
     }
 
