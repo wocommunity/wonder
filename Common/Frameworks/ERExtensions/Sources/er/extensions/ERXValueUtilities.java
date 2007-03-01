@@ -246,7 +246,7 @@ public class ERXValueUtilities {
 
     /**
      * Basic utility method for reading <code>NSArray</code> values
-     * which also works with serialzed NSArrays. The default value is used if
+     * which also works with serialzed NSArrays and comma seperated items. The default value is used if
      * the object is null.
      * @param obj object to be evaluated
      * @param def default value if object is null
@@ -258,7 +258,11 @@ public class ERXValueUtilities {
             if (obj instanceof NSArray) {
                 value =(NSArray)obj;
             } else if(obj instanceof String) {
-                value = (NSArray)NSPropertyListSerialization.propertyListFromString((String)obj);
+            	String s = (String)obj;
+            	if(s.length() > 0 && s.charAt(0) != '(') {
+            		s = "(" + s + ")";
+            	}
+                value = (NSArray)NSPropertyListSerialization.propertyListFromString(s);
             } else {
                 throw new RuntimeException("Not a String or NSArray " + obj);
             }
