@@ -229,6 +229,7 @@ public class ERXBatchingDisplayGroup extends ERXDisplayGroup {
      * */
    protected class FakeArray extends NSMutableArray {
         public FakeArray(int count) {
+        	super(count);
         	Object fakeObject = new NSKeyValueCoding.ErrorHandling() {
                 public Object handleQueryWithUnboundKey(String anS) {
                     return null;
