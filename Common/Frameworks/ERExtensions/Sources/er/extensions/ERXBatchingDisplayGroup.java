@@ -45,7 +45,7 @@ public class ERXBatchingDisplayGroup extends ERXDisplayGroup {
      *
      * @return true if dataSource is an instance of EODatabaseDataSource
      */
-    private boolean isBatching() {
+    protected boolean isBatching() {
         return _isBatching == null ? false : _isBatching.booleanValue();
     }
     
@@ -120,6 +120,15 @@ public class ERXBatchingDisplayGroup extends ERXDisplayGroup {
     }
 
     /**
+     * Overridden to preserve the selected objects.
+     */
+    public void setSortOrderings(NSArray nsarray) {
+		NSArray selectedObjects = selectedObjects();
+		super.setSortOrderings(nsarray);
+		setSelectedObjects(selectedObjects);
+	}
+
+	/**
      * Utility that does the actual fetching, if a qualifier() is set, it adds it
      * to the dataSource() fetch qualifier. 
      */
@@ -153,7 +162,9 @@ public class ERXBatchingDisplayGroup extends ERXDisplayGroup {
             end = rowCount;
         }
         
+        NSArray selectedObjects = selectedObjects();
         setObjectArray(new FakeArray(rowCount));
+        setSelectedObjects(selectedObjects);
         
         if(numberOfObjectsPerBatch() == 0) {
             _batchCount = 0;
@@ -162,7 +173,6 @@ public class ERXBatchingDisplayGroup extends ERXDisplayGroup {
         } else {
             _batchCount = (rowCount - 1) / numberOfObjectsPerBatch() + 1;
         }
-        
         
         // fetch the primary keys, turn them into faults, then batch-fetch all the non-resident objects
         NSArray primKeys = ERXEOControlUtilities.primaryKeyValuesInRange(ec, spec, start, end);
@@ -182,6 +192,12 @@ public class ERXBatchingDisplayGroup extends ERXDisplayGroup {
             }
             NSNotificationCenter.defaultCenter().postNotification("WODisplayGroupWillFetch", this);
             refetch();
+    		if(delegate() != null) { 
+    			_NSDelegate delegate = new _NSDelegate(WODisplayGroup.Delegate.class, delegate());
+    			if(delegate != null && delegate.respondsTo("displayGroupDidFetchObjects")) {
+    				delegate.perform("displayGroupDidFetchObjects", this, _displayedObjects);
+    			}
+    		}
             return null;
         }
         return super.fetch();
@@ -192,12 +208,15 @@ public class ERXBatchingDisplayGroup extends ERXDisplayGroup {
     		//refetch();
     		NSMutableArray selectedObjects = (NSMutableArray)selectedObjects();
     		NSArray obj = allObjects();
-    		_NSDelegate delegate = (_NSDelegate)delegate();
-    		if(delegate != null && delegate.respondsTo("displayGroupDisplayArrayForObjects")) {
-    			obj = (NSArray) delegate.perform("displayGroupDisplayArrayForObjects", this, obj);
+    		if(delegate() != null) { 
+    			_NSDelegate delegate = new _NSDelegate(WODisplayGroup.Delegate.class, delegate());
+    			if(delegate != null && delegate.respondsTo("displayGroupDisplayArrayForObjects")) {
+    				delegate.perform("displayGroupDisplayArrayForObjects", this, obj);
+    			}
     		}
     		//_displayedObjects = new NSMutableArray(obj);
-    		selectObjectsIdenticalToSelectFirstOnNoMatch(selectedObjects, false);
+    		setSelectedObjects(selectedObjects);
+    		//selectObjectsIdenticalToSelectFirstOnNoMatch(selectedObjects, false);
     		redisplay();
     	} else {
     		super.updateDisplayedObjects();
@@ -208,21 +227,22 @@ public class ERXBatchingDisplayGroup extends ERXDisplayGroup {
      * Dummy array class that is used to provide a certain number of entries. 
      * We just fake that we an array with the number of objects the display group should display. 
      * */
-    protected class FakeArray extends NSMutableArray {
+   protected class FakeArray extends NSMutableArray {
         public FakeArray(int count) {
+        	Object fakeObject = new NSKeyValueCoding.ErrorHandling() {
+                public Object handleQueryWithUnboundKey(String anS) {
+                    return null;
+                }
+                
+                public void handleTakeValueForUnboundKey(Object anObj, String anS) {
+                }
+                
+                public void unableToSetNullForKey(String anS) {
+                }};
             for(int i = 0; i < count; i++) {
                 // GROSS HACK: (ak) WO wants to sort the given array via KVC so we just 
                 // let it sort "nothing" objects
-                insertObjectAtIndex(new NSKeyValueCoding.ErrorHandling() {
-                    public Object handleQueryWithUnboundKey(String anS) {
-                        return null;
-                    }
-                    
-                    public void handleTakeValueForUnboundKey(Object anObj, String anS) {
-                    }
-                    
-                    public void unableToSetNullForKey(String anS) {
-                    }}, i);
+                insertObjectAtIndex(fakeObject, i);
             }
         }
     }
