@@ -70,6 +70,14 @@ public class ERXGlobalLock implements NSLocking {
         }
     }
     
+    /**
+     * Call this on startup.
+     * @return
+     */
+    public boolean cleanup() {
+    	return _lockfile.delete();
+    }
+    
     public static NSLocking lockForName(String name) {
         return new ERXGlobalLock(name);
     }
