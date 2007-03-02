@@ -14,6 +14,7 @@ import java.util.Set;
 import org.apache.log4j.Logger;
 
 import com.webobjects.eoaccess.EOAdaptorChannel;
+import com.webobjects.eoaccess.EOAdaptorContext;
 import com.webobjects.eoaccess.EOAdaptorOperation;
 import com.webobjects.eoaccess.EOAttribute;
 import com.webobjects.eoaccess.EODatabase;
@@ -1420,9 +1421,10 @@ public class ERXEOAccessUtilities {
       * @param skipFaultedRelationships if true, skip any object whose relationship has already been faulted
       */
      public static void batchFetchRelationship(EODatabaseContext databaseContext, EORelationship relationship, NSArray objects, EOEditingContext editingContext, boolean skipFaultedRelationships) {
+    	 NSArray objectsToBatchFetch;
     	 if (skipFaultedRelationships && relationship.isToMany()) {
-	         String relationshipName = relationship.name();
 	         NSMutableArray objectsWithUnfaultedRelationships = new NSMutableArray();
+	         String relationshipName = relationship.name();
 	         Enumeration objectsEnum = objects.objectEnumerator();
 	         while (objectsEnum.hasMoreElements()) {
 	         	EOEnterpriseObject object = (EOEnterpriseObject)objectsEnum.nextElement();
@@ -1431,10 +1433,13 @@ public class ERXEOAccessUtilities {
 	         		objectsWithUnfaultedRelationships.addObject(object);
 	         	}
 	         }
-	         databaseContext.batchFetchRelationship(relationship, objectsWithUnfaultedRelationships, editingContext);
+	         objectsToBatchFetch = objectsWithUnfaultedRelationships;
     	 }
     	 else {
-	         databaseContext.batchFetchRelationship(relationship, objects, editingContext);
+    		 objectsToBatchFetch = objects;
+    	 }
+    	 if (objects.count() > 0) {
+			 databaseContext.batchFetchRelationship(relationship, objectsToBatchFetch, editingContext);
     	 }
      }
  	
@@ -1475,20 +1480,34 @@ public class ERXEOAccessUtilities {
  								EOEntity entity = modelGroup.entityNamed(entityName);
  								NSDictionary snapshot = database.snapshotForGlobalID(gid);
  								if (snapshot != null) {
- 									NSDictionary snapshotClone = snapshot.immutableClone();
  					    			EOQualifier gidQualifier = entity.qualifierForPrimaryKey(entity.primaryKeyForGlobalID(gid));
  						    		EOFetchSpecification gidFetchSpec = new EOFetchSpecification(entityName, gidQualifier, null);
- 						    		gidFetchSpec.setRefreshesRefetchedObjects(true);
- 						    		NSArray databaseEOs = editingContext.objectsWithFetchSpecification(gidFetchSpec);
- 						    		if (databaseEOs.count() == 0) {
- 						    			mismatches.addObject(gid + " was deleted in the database, but the snapshot still exists: " + snapshotClone);
+
+ 						    		NSMutableDictionary databaseSnapshotClone;
+ 									NSMutableDictionary memorySnapshotClone = snapshot.mutableClone();
+ 									EOAdaptorContext context;
+ 						    		EOAdaptorChannel channel = databaseContext.availableChannel().adaptorChannel();
+ 						    		channel.openChannel();
+ 									channel.selectAttributes(entity.attributesToFetch(), gidFetchSpec, false, entity);
+ 									NSDictionary nextRow;
+ 									try {
+ 										databaseSnapshotClone = channel.fetchRow().mutableClone();
+ 									}
+ 									finally {
+ 										channel.cancelFetch();
+ 									}
+ 						    		//gidFetchSpec.setRefreshesRefetchedObjects(true);
+ 						    		//NSArray databaseEOs = editingContext.objectsWithFetchSpecification(gidFetchSpec);
+ 						    		if (databaseSnapshotClone == null) {
+ 						    			mismatches.addObject(gid + " was deleted in the database, but the snapshot still exists: " + memorySnapshotClone);
  						    		}
  						    		else {
- 						    			NSDictionary refreshedSnapshot = database.snapshotForGlobalID(gid);
- 						    			if (!refreshedSnapshot.equals(snapshotClone)) {
- 							    			mismatches.addObject(gid + " doesn't match the database: original = " + snapshotClone + "; database = " + refreshedSnapshot);
+ 						    			//NSMutableDictionary refreshedSnapshotClone = database.snapshotForGlobalID(gid).mutableClone();
+ 						    			ERXDictionaryUtilities.removeMatchingEntries(memorySnapshotClone, databaseSnapshotClone);
+ 						    			if (databaseSnapshotClone.count() > 0 || memorySnapshotClone.count() > 0) {
+ 							    			mismatches.addObject(gid + " doesn't match the database: original = " + memorySnapshotClone + "; database = " + databaseSnapshotClone);
  						    			}
- 						    			eo = (EOEnterpriseObject)databaseEOs.objectAtIndex(0);
+ 						    			eo = (EOEnterpriseObject)editingContext.objectsWithFetchSpecification(gidFetchSpec).objectAtIndex(0);
  						    		}
  					    		}
  								
@@ -1500,7 +1519,7 @@ public class ERXEOAccessUtilities {
  										NSArray destinationGIDs = database.snapshotForSourceGlobalID(keyGID, relationshipName);
  										if (destinationGIDs != null) {
  											NSArray destinationGIDsClone = destinationGIDs.immutableClone();
- 											ERXEOControlUtilities.clearSnapshotForRelationshipNamed(eo, relationshipName);
+ 											ERXEOControlUtilities.clearSnapshotForRelationshipNamedInDatabase(eo, relationshipName, database);
  											
  											((NSArray)eo.valueForKey(relationshipName)).count();
  											
