@@ -81,10 +81,17 @@ public class ERXBatchingDisplayGroup extends ERXDisplayGroup {
      * Overriden to clear out our array of fetched objects.
      */
     public void setNumberOfObjectsPerBatch(int count) {
-        if(isBatching() && numberOfObjectsPerBatch() != count) {
-            _displayedObjects = null;
-        }
-        super.setNumberOfObjectsPerBatch(count);
+    	boolean didFetch = _displayedObjects != null;
+    	if(isBatching() && numberOfObjectsPerBatch() != count) {
+    		_displayedObjects = null;
+    	}
+    	NSArray selectedObjects = selectedObjects();
+    	super.setNumberOfObjectsPerBatch(count);
+    	setSelectedObjects(selectedObjects);
+    	// we have already fetched, so we need to adapt the batch count
+    	if(didFetch) {
+    		updateBatchCount();
+    	}
     }
     
     /**
@@ -166,14 +173,6 @@ public class ERXBatchingDisplayGroup extends ERXDisplayGroup {
         setObjectArray(new FakeArray(rowCount));
         setSelectedObjects(selectedObjects);
         
-        if(numberOfObjectsPerBatch() == 0) {
-            _batchCount = 0;
-        } else if(rowCount == 0) {
-            _batchCount = 1;
-        } else {
-            _batchCount = (rowCount - 1) / numberOfObjectsPerBatch() + 1;
-        }
-        
         // fetch the primary keys, turn them into faults, then batch-fetch all the non-resident objects
         NSArray primKeys = ERXEOControlUtilities.primaryKeyValuesInRange(ec, spec, start, end);
         NSArray faults = ERXEOControlUtilities.faultsForRawRowsFromEntity(ec, primKeys, spec.entityName());
@@ -181,6 +180,21 @@ public class ERXBatchingDisplayGroup extends ERXDisplayGroup {
         _displayedObjects = objects;
     }
     
+    protected void updateBatchCount() {
+    	if(numberOfObjectsPerBatch() == 0) {
+    		_batchCount = 0;
+    	} else if(allObjects().count() == 0) {
+    		_batchCount = 1;
+    	} else {
+    		_batchCount = (allObjects().count() - 1) / numberOfObjectsPerBatch() + 1;
+    	}
+    }
+    
+    public void setObjectArray(NSArray objects) {
+    	super.setObjectArray(objects);
+    	updateBatchCount();
+    }
+
     /**
      * Overridden to fetch only within displayed limits. 
      */
@@ -239,7 +253,8 @@ public class ERXBatchingDisplayGroup extends ERXDisplayGroup {
                 }
                 
                 public void unableToSetNullForKey(String anS) {
-                }};
+                }
+        	};
             for(int i = 0; i < count; i++) {
                 // GROSS HACK: (ak) WO wants to sort the given array via KVC so we just 
                 // let it sort "nothing" objects

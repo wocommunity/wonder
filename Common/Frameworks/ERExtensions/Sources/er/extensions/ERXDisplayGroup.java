@@ -23,6 +23,10 @@ public class ERXDisplayGroup extends WODisplayGroup {
 	/** Logging support */
 	private static final Logger log = Logger.getLogger(ERXDisplayGroup.class);
 
+	public ERXDisplayGroup() {
+		super();
+	}
+
 	/**
 	 * Holds the extra qualifiers.
 	 */
@@ -80,7 +84,7 @@ public class ERXDisplayGroup extends WODisplayGroup {
 	}
 
 	/**
-	 * Returns all objects, filtered by the qualfier().
+	 * Returns all objects, filtered by the qualifier().
 	 * @return
 	 */
 	public NSArray filteredObjects() {
@@ -95,6 +99,9 @@ public class ERXDisplayGroup extends WODisplayGroup {
 		return result;
 	}
 
+	/**
+	 * Overridden to track selection changes.
+	 */
 	public NSArray selectedObjects() {
 		if(log.isDebugEnabled()) {
 			log.debug("selectedObjects@" + hashCode() +  ":" + super.selectedObjects().count());
@@ -102,6 +109,9 @@ public class ERXDisplayGroup extends WODisplayGroup {
 		return super.selectedObjects();
 	}
 
+	/**
+	 * Overridden to track selection changes.
+	 */
 	public void setSelectedObjects(NSArray nsarray) {
 		if(log.isDebugEnabled()) {
 			log.debug("setSelectedObjects@" + hashCode()  + ":" + nsarray.count());
@@ -109,9 +119,12 @@ public class ERXDisplayGroup extends WODisplayGroup {
 		super.setSelectedObjects(nsarray);
 	}
 
+	/**
+	 * Overridden to track selection changes.
+	 */
 	public boolean setSelectionIndexes(NSArray nsarray) {
 		if(log.isDebugEnabled()) {
-			log.debug("setSelectionIndexes@" + hashCode()  + ":" + nsarray.count(), new RuntimeException());
+			log.debug("setSelectionIndexes@" + hashCode()  + ":" + nsarray.count(), new RuntimeException("Dummy for Stacktrace"));
 		}
 		return super.setSelectionIndexes(nsarray);
 	}
@@ -125,4 +138,23 @@ public class ERXDisplayGroup extends WODisplayGroup {
 		setSelectedObjects(oldSelection);
 	}
 
+	/**
+	 * Overriden to re-set the selection. Why is this cleared in the super class?
+	 */
+	public Object displayNextBatch() {
+		NSArray oldSelection = selectedObjects();
+		Object result = super.displayNextBatch();
+		setSelectedObjects(oldSelection);
+		return result;
+	}
+
+	/**
+	 * Overriden to re-set the selection. Why is this cleared in the super class?
+	 */
+	public Object displayPreviousBatch() {
+		NSArray oldSelection = selectedObjects();
+		Object result = super.displayPreviousBatch();
+		setSelectedObjects(oldSelection);
+		return result;
+	}
 }
