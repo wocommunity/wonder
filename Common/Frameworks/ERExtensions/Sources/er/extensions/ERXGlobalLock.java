@@ -31,7 +31,7 @@ public class ERXGlobalLock implements NSLocking {
     private Thread _owner;
     
     public ERXGlobalLock(String name) {
-        _lockfile = new File(System.getProperty("java.io.tempdir") + File.separator + "ERXGlobalLock_" + name);
+        _lockfile = new File(System.getProperty("java.io.tmpdir") + File.separator + "ERXGlobalLock_" + name);
         _lockcnt = 0;
     }
 
