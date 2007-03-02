@@ -8,6 +8,7 @@ package er.extensions;
 
 import java.util.Enumeration;
 
+import com.webobjects.eocontrol.EOKeyValueCoding;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSBundle;
 import com.webobjects.foundation.NSComparator;
@@ -141,5 +142,39 @@ public class ERXDictionaryUtilities extends Object {
 
         return result != null ? result : NSArray.EmptyArray;
     }
+
+ 	/**
+ 	 * Removes entries from both dictionaries that match, leaving you with two dictionaries containing
+ 	 * only values that did NOT match.  Note that this comparison considers null == EO/NSKeyValueCoding.NullValue.
+ 	 * 
+ 	 * @param dict1 the first dictionary
+ 	 * @param dict2 the second dictionary
+ 	 */
+ 	public static void removeMatchingEntries(NSMutableDictionary dict1, NSMutableDictionary dict2) {
+ 		ERXDictionaryUtilities._removeMatchingEntries(dict1, dict2, true);
+ 	}
+ 	
+ 	public static void _removeMatchingEntries(NSMutableDictionary snapshot1, NSMutableDictionary snapshot2, boolean removeInverse) {
+ 		Enumeration keys1Enum = snapshot1.allKeys().immutableClone().objectEnumerator();
+ 		while (keys1Enum.hasMoreElements()) {
+ 			String key = (String)keys1Enum.nextElement();
+ 			Object value1 = snapshot1.objectForKey(key);
+ 			Object value2 = snapshot2.objectForKey(key);
+ 			boolean value1IsNull = (value1 == null || value1 == EOKeyValueCoding.NullValue || value1 == NSKeyValueCoding.NullValue);
+ 			boolean value2IsNull = (value2 == null || value2 == EOKeyValueCoding.NullValue || value2 == NSKeyValueCoding.NullValue);
+ 			if (value1IsNull && value2IsNull) {
+ 				snapshot1.removeObjectForKey(key);
+ 				snapshot2.removeObjectForKey(key);
+ 			}
+ 			else if (value1 != null && value1.equals(value2)) {
+ 				snapshot1.removeObjectForKey(key);
+ 				snapshot2.removeObjectForKey(key);
+ 			}
+ 		}
+ 		// flip around the comparison and remove again
+ 		if (removeInverse) {
+ 			_removeMatchingEntries(snapshot2, snapshot1, false);
+ 		}
+ 	}
 
 }
