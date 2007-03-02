@@ -350,6 +350,17 @@ public class ERXEOControlUtilities {
         EOGlobalID gid = ec.globalIDForObject(eo);
         EODatabaseContext dbc = EODatabaseContext.registeredDatabaseContextForModel(model, ec);
         EODatabase database = dbc.database();
+        ERXEOControlUtilities.clearSnapshotForRelationshipNamedInDatabase(eo, relationshipName, database);
+    }
+
+    /**
+     * Clears snapshot the relaationship of a given enterprise so it will be read again when next accessed.
+     * @param eo enterprise object
+     * @param relationshipName relationship name
+     */
+    public static void clearSnapshotForRelationshipNamedInDatabase(EOEnterpriseObject eo, String relationshipName, EODatabase database) {
+        EOEditingContext ec = eo.editingContext();
+        EOGlobalID gid = ec.globalIDForObject(eo);
         database.recordSnapshotForSourceGlobalID(null, gid, relationshipName);
         Object o = eo.storedValueForKey(relationshipName);
         boolean needRefresh = false;
