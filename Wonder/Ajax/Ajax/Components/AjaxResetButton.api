@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<wodefinitions>
+	<wo wocomponentcontent="false" class="ResetForm.java">
+		<binding name="formId"/>
+		    	
+	 	<validation message="&amp;apos;formId&amp;apos; is a required binding">
+	 		<unbound name="formId"/>
+	 	</validation>
+   	</wo>
+</wodefinitions>
