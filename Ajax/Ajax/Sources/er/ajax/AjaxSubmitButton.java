@@ -36,6 +36,7 @@ import er.extensions.ERXWOForm;
  * @binding functionName if set, the link becomes a javascript function instead
  * @binding updateContainerID the id of the AjaxUpdateContainer to update after performing this action
  * @binding showUI if functionName is set, the UI defaults to hidden; showUI re-enables it
+ * @binding formSerializer the name of the javascript function to call to serialize the form
  * 
  * @author anjo
  */
@@ -70,7 +71,9 @@ public class AjaxSubmitButton extends AjaxDynamicElement {
 	ajaxOptionsArray.addObject(new AjaxOption("insertion", AjaxOption.SCRIPT));
     NSMutableDictionary options = AjaxOption.createAjaxOptionsDictionary(ajaxOptionsArray, component, associations());
     StringBuffer parametersBuffer = new StringBuffer();
-    parametersBuffer.append("Form.serializeWithoutSubmits(" + formReference + ")");
+    String formSerializer = (String) valueForBinding("formSerializer", "Form.serializeWithoutSubmits", component);
+    parametersBuffer.append(formSerializer);
+    parametersBuffer.append("(" + formReference + ")");
     parametersBuffer.append(" + '");
     parametersBuffer.append("&" + AjaxSubmitButton.KEY_AJAX_SUBMIT_BUTTON_NAME + "=" + name);
 	String updateContainerID = (String)valueForBinding("updateContainerID", component);
