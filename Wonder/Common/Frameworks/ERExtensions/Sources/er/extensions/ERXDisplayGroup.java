@@ -157,4 +157,13 @@ public class ERXDisplayGroup extends WODisplayGroup {
 		setSelectedObjects(oldSelection);
 		return result;
 	}
+	
+	/**
+	 * Selects the visible objects.
+	 *
+	 */
+	public Object selectFilteredObjects() {
+		setSelectedObjects(filteredObjects());
+		return null;
+	}
 }
