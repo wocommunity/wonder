@@ -8,6 +8,7 @@
 		<binding name = "cancelLabel"/>
 		<binding name = "editClass"/>
 		<binding name = "editAction"/>
+		<binding name = "formSerializer"/>
 		<binding name = "saveAction"/>
 		<binding name = "saveUpdateContainerID"/>
 		<binding name = "cancelAction"/>

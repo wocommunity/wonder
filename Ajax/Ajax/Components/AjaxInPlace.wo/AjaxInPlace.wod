@@ -112,6 +112,7 @@ SaveSubmitFunction : AjaxSubmitButton {
 	functionName = saveFunctionName;
 	updateContainerID = saveUpdateContainerID;
 	insertion = ^saveInsertion;
+	formSerializer = ^formSerializer;
 }
 
 SaveLinkFunction : AjaxUpdateLink {
