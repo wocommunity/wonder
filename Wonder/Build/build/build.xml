@@ -144,7 +144,6 @@
             <param name="project.dir" value="Common/Frameworks/WOOgnl" />
 
             <param name="use.wonder.jars" value="true" />
-            <param name="use.webobjects.d2w" value="true" />
         </antcall>
     </target>
 
