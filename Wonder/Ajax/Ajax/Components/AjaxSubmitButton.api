@@ -16,6 +16,7 @@
 		<binding name = "onFailure"/>
 		<binding name = "button"/>
 		<binding name = "formName"/>
+		<binding name = "formSerializer"/>
 		<binding name = "functionName"/>
 		<binding name = "updateContainerID"/>
 		<binding name = "showUI"/>
