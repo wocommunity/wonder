@@ -10,6 +10,7 @@ import com.webobjects.foundation.NSDictionary;
 /**
  * Adds a script tag with a Behaviour.register() with the content as the method argument.
  * Mostly useful because it spares you the hassle of including the script.
+ * @binding includeScriptTag boolean also write out script tag
  * @author ak
  */
 public class AjaxBehaviour extends AjaxDynamicElement {
@@ -24,9 +25,16 @@ public class AjaxBehaviour extends AjaxDynamicElement {
 	
 	public void appendToResponse(WOResponse response, WOContext context) {
 		super.appendToResponse(response, context);
-		response.appendContentString("<script>\nBehaviour.register(");
+		boolean includeScriptTag = booleanValueForBinding("includeScriptTag", true, context.component());
+		if(includeScriptTag) {
+			response.appendContentString("<script>\n");
+		}
+		response.appendContentString("Behaviour.register(");
 		appendChildrenToResponse(response, context);
-		response.appendContentString(");</script>");
+		response.appendContentString(");");
+		if(includeScriptTag) {
+			response.appendContentString("</script>");
+		}
 	}
 
 	public WOActionResults handleRequest(WORequest request, WOContext context) {
