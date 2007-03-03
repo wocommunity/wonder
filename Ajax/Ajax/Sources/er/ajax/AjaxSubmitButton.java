@@ -11,6 +11,7 @@ import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 
+import er.extensions.ERXProperties;
 import er.extensions.ERXWOForm;
 
 /**
@@ -37,6 +38,7 @@ import er.extensions.ERXWOForm;
  * @binding updateContainerID the id of the AjaxUpdateContainer to update after performing this action
  * @binding showUI if functionName is set, the UI defaults to hidden; showUI re-enables it
  * @binding formSerializer the name of the javascript function to call to serialize the form
+ * @property er.ajax.formSerializer the default form serializer to use for all ajax submits
  * 
  * @author anjo
  */
@@ -71,7 +73,7 @@ public class AjaxSubmitButton extends AjaxDynamicElement {
 	ajaxOptionsArray.addObject(new AjaxOption("insertion", AjaxOption.SCRIPT));
     NSMutableDictionary options = AjaxOption.createAjaxOptionsDictionary(ajaxOptionsArray, component, associations());
     StringBuffer parametersBuffer = new StringBuffer();
-    String formSerializer = (String) valueForBinding("formSerializer", "Form.serializeWithoutSubmits", component);
+    String formSerializer = (String) valueForBinding("formSerializer", ERXProperties.stringForKeyWithDefault("er.ajax.formSerializer", "Form.serializeWithoutSubmits"), component);
     parametersBuffer.append(formSerializer);
     parametersBuffer.append("(" + formReference + ")");
     parametersBuffer.append(" + '");
