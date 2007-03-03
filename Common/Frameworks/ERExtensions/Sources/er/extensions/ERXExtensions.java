@@ -24,7 +24,6 @@ import com.webobjects.eoaccess.EOModelGroup;
 import com.webobjects.eoaccess.EOQualifierSQLGeneration;
 import com.webobjects.eoaccess.EORelationship;
 import com.webobjects.eoaccess.EOSQLExpression;
-import com.webobjects.eoaccess.EOUtilities;
 import com.webobjects.eoaccess.EOQualifierSQLGeneration.Support;
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.eocontrol.EOEnterpriseObject;
@@ -121,11 +120,16 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
     		// its constructor so we need to modify it before calling
     		// the constructor.
         	EOModelGroup.setClassDelegate(this);
-    		ERXSystem.updateProperties();
+        	ERXSystem.updateProperties();
+
     		// AK: enable this when we're ready
         	// WOEncodingDetector.sharedInstance().setFallbackEncoding("UTF-8");
         	ERXLogger.configureLoggingWithSystemProperties();
             ERXArrayUtilities.initialize();
+            
+            if (ERXObjectStoreCoordinatorSynchronizer.multicastSynchronizationEnabled()) {
+            	EODatabaseContext.setContextClassToRegister(ERXDatabaseContext.class);
+            }
 
     		// False by default
     		if (ERXValueUtilities.booleanValue(System.getProperty(ERXSharedEOLoader.PatchSharedEOLoadingPropertyKey))) {
