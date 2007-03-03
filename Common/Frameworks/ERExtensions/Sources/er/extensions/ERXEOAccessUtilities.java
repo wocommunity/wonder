@@ -1444,10 +1444,10 @@ public class ERXEOAccessUtilities {
      }
  	
  	/**
- 	 * In a multi-OSC or multi-instance scenario, when there are bugs, it is possible for the snapshots
- 	 * to become out of sync with the database.  It is useful to have some way to determine when exactly
- 	 * this condition occurs for writing test cases.
- 	 *  
+ 	 * In a multi-OSC or multi-instance scenario, when there are bugs, it is possible for the snapshots to become out of
+ 	 * sync with the database. It is useful to have some way to determine when exactly this condition occurs for writing
+ 	 * test cases.
+ 	 * 
  	 * @return a set of strings that describe the mismatches that occurred
  	 */
  	public static NSSet verifyAllSnapshots() {
@@ -1457,7 +1457,7 @@ public class ERXEOAccessUtilities {
  		EOModelGroup modelGroup = EOModelGroup.defaultGroup();
  		Enumeration modelsEnum = modelGroup.models().objectEnumerator();
  		while (modelsEnum.hasMoreElements()) {
- 			EOModel model = (EOModel)modelsEnum.nextElement();
+ 			EOModel model = (EOModel) modelsEnum.nextElement();
  			EODatabaseContext databaseContext = null;
  			try {
  				databaseContext = EODatabaseContext.registeredDatabaseContextForModel(model, editingContext);
@@ -1467,27 +1467,27 @@ public class ERXEOAccessUtilities {
  			}
  			if (databaseContext != null) {
  				databaseContext.lock();
- 					try {
+ 				try {
  					EODatabase database = databaseContext.database();
  					if (!verifiedDatabases.containsObject(database)) {
  						Enumeration gidEnum = database.snapshots().keyEnumerator();
  						while (gidEnum.hasMoreElements()) {
- 							EOGlobalID gid = (EOGlobalID)gidEnum.nextElement();
+ 							EOGlobalID gid = (EOGlobalID) gidEnum.nextElement();
  							if (gid instanceof EOKeyGlobalID) {
  								EOEnterpriseObject eo = null;
- 								EOKeyGlobalID keyGID = (EOKeyGlobalID)gid;
+ 								EOKeyGlobalID keyGID = (EOKeyGlobalID) gid;
  								String entityName = keyGID.entityName();
  								EOEntity entity = modelGroup.entityNamed(entityName);
  								NSDictionary snapshot = database.snapshotForGlobalID(gid);
  								if (snapshot != null) {
- 					    			EOQualifier gidQualifier = entity.qualifierForPrimaryKey(entity.primaryKeyForGlobalID(gid));
- 						    		EOFetchSpecification gidFetchSpec = new EOFetchSpecification(entityName, gidQualifier, null);
+ 									EOQualifier gidQualifier = entity.qualifierForPrimaryKey(entity.primaryKeyForGlobalID(gid));
+ 									EOFetchSpecification gidFetchSpec = new EOFetchSpecification(entityName, gidQualifier, null);
 
- 						    		NSMutableDictionary databaseSnapshotClone;
+ 									NSMutableDictionary databaseSnapshotClone;
  									NSMutableDictionary memorySnapshotClone = snapshot.mutableClone();
  									EOAdaptorContext context;
- 						    		EOAdaptorChannel channel = databaseContext.availableChannel().adaptorChannel();
- 						    		channel.openChannel();
+ 									EOAdaptorChannel channel = databaseContext.availableChannel().adaptorChannel();
+ 									channel.openChannel();
  									channel.selectAttributes(entity.attributesToFetch(), gidFetchSpec, false, entity);
  									NSDictionary nextRow;
  									try {
@@ -1496,39 +1496,59 @@ public class ERXEOAccessUtilities {
  									finally {
  										channel.cancelFetch();
  									}
- 						    		//gidFetchSpec.setRefreshesRefetchedObjects(true);
- 						    		//NSArray databaseEOs = editingContext.objectsWithFetchSpecification(gidFetchSpec);
- 						    		if (databaseSnapshotClone == null) {
- 						    			mismatches.addObject(gid + " was deleted in the database, but the snapshot still exists: " + memorySnapshotClone);
- 						    		}
- 						    		else {
- 						    			//NSMutableDictionary refreshedSnapshotClone = database.snapshotForGlobalID(gid).mutableClone();
- 						    			ERXDictionaryUtilities.removeMatchingEntries(memorySnapshotClone, databaseSnapshotClone);
- 						    			if (databaseSnapshotClone.count() > 0 || memorySnapshotClone.count() > 0) {
- 							    			mismatches.addObject(gid + " doesn't match the database: original = " + memorySnapshotClone + "; database = " + databaseSnapshotClone);
- 						    			}
- 						    			eo = (EOEnterpriseObject)editingContext.objectsWithFetchSpecification(gidFetchSpec).objectAtIndex(0);
- 						    		}
- 					    		}
- 								
+ 									// gidFetchSpec.setRefreshesRefetchedObjects(true);
+ 									// NSArray databaseEOs = editingContext.objectsWithFetchSpecification(gidFetchSpec);
+ 									if (databaseSnapshotClone == null) {
+ 										mismatches.addObject(gid + " was deleted in the database, but the snapshot still exists: " + memorySnapshotClone);
+ 									}
+ 									else {
+ 										// NSMutableDictionary refreshedSnapshotClone =
+ 										// database.snapshotForGlobalID(gid).mutableClone();
+ 										ERXDictionaryUtilities.removeMatchingEntries(memorySnapshotClone, databaseSnapshotClone);
+ 										if (databaseSnapshotClone.count() > 0 || memorySnapshotClone.count() > 0) {
+ 											mismatches.addObject(gid + " doesn't match the database: original = " + memorySnapshotClone + "; database = " + databaseSnapshotClone);
+ 										}
+ 										eo = (EOEnterpriseObject) editingContext.objectsWithFetchSpecification(gidFetchSpec).objectAtIndex(0);
+ 									}
+ 								}
+
  								if (eo != null) {
  									Enumeration relationshipsEnum = entity.relationships().objectEnumerator();
  									while (relationshipsEnum.hasMoreElements()) {
- 										EORelationship relationship = (EORelationship)relationshipsEnum.nextElement();
+ 										EORelationship relationship = (EORelationship) relationshipsEnum.nextElement();
  										String relationshipName = relationship.name();
- 										NSArray destinationGIDs = database.snapshotForSourceGlobalID(keyGID, relationshipName);
- 										if (destinationGIDs != null) {
- 											NSArray destinationGIDsClone = destinationGIDs.immutableClone();
- 											ERXEOControlUtilities.clearSnapshotForRelationshipNamedInDatabase(eo, relationshipName, database);
- 											
- 											((NSArray)eo.valueForKey(relationshipName)).count();
- 											
- 											NSArray databaseGIDs = database.snapshotForSourceGlobalID(keyGID, relationshipName);
- 											NSArray objectsNotInDatabase = ERXArrayUtilities.arrayMinusArray(destinationGIDsClone, databaseGIDs);
+ 										NSArray originalDestinationGIDs = database.snapshotForSourceGlobalID(keyGID, relationshipName);
+ 										if (originalDestinationGIDs != null) {
+ 											NSMutableArray newDestinationGIDs = new NSMutableArray();
+ 											EOQualifier qualifier = relationship.qualifierWithSourceRow(database.snapshotForGlobalID(keyGID));
+ 											EOFetchSpecification relationshipFetchSpec = new EOFetchSpecification(entityName, qualifier, null);
+ 											EOAdaptorChannel channel = databaseContext.availableChannel().adaptorChannel();
+ 											channel.openChannel();
+ 											try {
+ 												channel.selectAttributes(relationship.destinationEntity().attributesToFetch(), relationshipFetchSpec, false, relationship.destinationEntity());
+ 												NSDictionary nextRow;
+ 												NSDictionary destinationSnapshot = null;
+ 												do {
+ 													destinationSnapshot = channel.fetchRow();
+ 													if (destinationSnapshot != null) {
+ 														EOGlobalID destinationGID = relationship.destinationEntity().globalIDForRow(destinationSnapshot);
+ 														newDestinationGIDs.addObject(destinationGID);
+ 													}
+ 													else {
+ 														destinationSnapshot = null;
+ 													}
+ 												}
+ 												while (destinationSnapshot != null);
+ 											}
+ 											finally {
+ 												channel.cancelFetch();
+ 											}
+
+ 											NSArray objectsNotInDatabase = ERXArrayUtilities.arrayMinusArray(originalDestinationGIDs, newDestinationGIDs);
  											if (objectsNotInDatabase.count() > 0) {
  												mismatches.addObject(gid + "." + relationshipName + " has entries not in the database: " + objectsNotInDatabase);
  											}
- 											NSArray objectsNotInMemory = ERXArrayUtilities.arrayMinusArray(databaseGIDs, destinationGIDsClone);
+ 											NSArray objectsNotInMemory = ERXArrayUtilities.arrayMinusArray(newDestinationGIDs, originalDestinationGIDs);
  											if (objectsNotInMemory.count() > 0) {
  												mismatches.addObject(gid + "." + relationshipName + " is missing entries in the database: " + objectsNotInMemory);
  											}
