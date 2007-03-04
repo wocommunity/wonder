@@ -67,8 +67,10 @@
     }
 	else if ((key == NSCarriageReturnCharacter) && flags == 0) { 
         if ([self isEnabled] && [tableContentController canAdd]) {
-//          [tableContentController add:nil];
-            [NSApp sendAction:@selector(add:) to:nil from:nil]; // We send that action to the first responder, because in our case we do special things after add, and things are done only in firstResponder, not controller
+            if ([[self delegate] respondsToSelector:@selector(addToTableView:)])
+                [[self delegate] addToTableView:self];
+            else
+                [tableContentController add:nil];
         }
         else
             NSBeep();
