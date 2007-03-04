@@ -41,6 +41,8 @@
     self = [super init];
     if (self != nil) {
         [[NSUserDefaults standardUserDefaults] registerDefaults:[NSDictionary dictionaryWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"Defaults" ofType:@"plist"]]];
+        [[NSUserDefaults standardUserDefaults] registerDefaults:[NSDictionary dictionaryWithObject:[NSArchiver archivedDataWithRootObject:[NSColor colorWithCalibratedRed:212/255. green:212/255. blue:255/255. alpha:1.]] forKey:@"searchFilterHighlightColor"]];
+        [[NSUserDefaults standardUserDefaults] registerDefaults:[NSDictionary dictionaryWithObject:[NSNumber numberWithBool:YES] forKey:@"highlightSearchFilterOccurences"]];
         
         [[NSUserDefaultsController sharedUserDefaultsController] addObserver:self forKeyPath:@"values.d2wclientConfigurationPaths" options:0 context:NULL];
         [[NSUserDefaultsController sharedUserDefaultsController] addObserver:self forKeyPath:@"values.useParenthesesForComparisonQualifier" options:0 context:NULL];
