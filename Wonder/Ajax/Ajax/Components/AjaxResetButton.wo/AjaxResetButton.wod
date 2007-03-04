@@ -1,8 +1,0 @@
-Reset: WOSubmitButton {
-    value = value;
-	onClick = resetFormJavaScript;
-	class = ^class;
-	style = ^style;
-	id = ^id;
-	action = dummy;
-}

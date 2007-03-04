@@ -1,5 +1,0 @@
-TabImage: WOImage {
-  src=^tabImageName;
-  alt=^displayNameForTabKey;
-  border=0;
-}

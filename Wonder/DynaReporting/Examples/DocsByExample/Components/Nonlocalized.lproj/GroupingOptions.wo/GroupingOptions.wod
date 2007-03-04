@@ -1,2 +1,0 @@
-Custom1: WRReportEditor { attributeList = session.attribArray3; attributeUpdateAction = "doNothing"; masterCriteriaList = session.critArray3; masterCriteriaUpdateAction = "doNothing"; showAttributeEditor = "NO"; }
-Form1: WOForm { }

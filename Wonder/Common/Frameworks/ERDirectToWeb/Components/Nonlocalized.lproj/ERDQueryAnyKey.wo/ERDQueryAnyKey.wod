@@ -1,8 +1,0 @@
-Matches: ERXLocalizedString {
-	value = "ERDQueryAnyKey.matches";
-}
-
-Query: WOTextField {
-	value = value;
-	size = ^length;
-}
