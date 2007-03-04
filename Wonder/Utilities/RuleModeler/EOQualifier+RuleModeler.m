@@ -53,6 +53,14 @@
     return [self description];
 }
 
+- (NSSet *)allKeyPaths {
+    return [NSSet set];
+}
+
+- (NSSet *)allStringValues {
+    return [NSSet set];
+}
+
 @end
 
 @implementation EOAndQualifier(RuleModeler)
@@ -76,6 +84,30 @@
     }
     [ms appendFormat:@"\n%@)", indentString];
     return ms;
+}
+
+- (NSSet *)allKeyPaths {
+    NSArray         *subQualifiersKeyPaths = [self->qualifiers valueForKey:@"allKeyPaths"]; // Array of sets
+    NSMutableSet    *allKeyPaths = [NSMutableSet set];
+    NSEnumerator    *anEnum = [subQualifiersKeyPaths objectEnumerator];
+    NSSet           *eachSet;
+    
+    while(eachSet = [anEnum nextObject])
+        [allKeyPaths unionSet:eachSet];
+    
+    return allKeyPaths;
+}
+
+- (NSSet *)allStringValues {
+    NSArray         *subQualifiersStringValues = [self->qualifiers valueForKey:@"allStringValues"]; // Array of sets
+    NSMutableSet    *allStringValues = [NSMutableSet set];
+    NSEnumerator    *anEnum = [subQualifiersStringValues objectEnumerator];
+    NSSet           *eachSet;
+    
+    while(eachSet = [anEnum nextObject])
+        [allStringValues unionSet:eachSet];
+    
+    return allStringValues;
 }
 
 @end
@@ -103,6 +135,30 @@
     return ms;
 }
 
+- (NSSet *)allKeyPaths {
+    NSArray         *subQualifiersKeyPaths = [self->qualifiers valueForKey:@"allKeyPaths"]; // Array of sets
+    NSMutableSet    *allKeyPaths = [NSMutableSet set];
+    NSEnumerator    *anEnum = [subQualifiersKeyPaths objectEnumerator];
+    NSSet           *eachSet;
+    
+    while(eachSet = [anEnum nextObject])
+        [allKeyPaths unionSet:eachSet];
+    
+    return allKeyPaths;
+}
+
+- (NSSet *)allStringValues {
+    NSArray         *subQualifiersStringValues = [self->qualifiers valueForKey:@"allStringValues"]; // Array of sets
+    NSMutableSet    *allStringValues = [NSMutableSet set];
+    NSEnumerator    *anEnum = [subQualifiersStringValues objectEnumerator];
+    NSSet           *eachSet;
+    
+    while(eachSet = [anEnum nextObject])
+        [allStringValues unionSet:eachSet];
+    
+    return allStringValues;
+}
+
 @end
 
 @implementation EONotQualifier(RuleModeler)
@@ -118,4 +174,42 @@
         return [@"not " stringByAppendingString:qd];
 }
 
+- (NSSet *)allKeyPaths {
+    return [self->qualifier allKeyPaths];
+}
+
+- (NSSet *)allStringValues {
+    return [self->qualifier allStringValues];
+}
+
 @end
+
+@implementation EOKeyValueQualifier(RuleModeler)
+
+- (NSSet *)allKeyPaths {
+    if (self->key)
+        return [NSSet setWithObject:self->key];
+    else
+        return [NSSet set];
+}
+
+- (NSSet *)allStringValues {
+    if ([self->value isKindOfClass:[NSString class]])
+        return [NSSet setWithObject:self->value];
+    else
+        return [NSSet set];
+}
+
+@end
+
+@implementation EOKeyComparisonQualifier(RuleModeler)
+
+- (NSSet *)allKeyPaths {
+    if (self->leftKey)
+        return [NSSet setWithObjects:self->leftKey, self->rightKey, nil];
+    else
+        return [NSSet setWithObjects:self->rightKey, nil];
+}
+
+@end
+
