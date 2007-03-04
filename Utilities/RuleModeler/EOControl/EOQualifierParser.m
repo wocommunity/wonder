@@ -351,7 +351,7 @@ static NSString *_parseOp(const char *_buf, unsigned _bufLen,
 
 + (EOQualifier *)qualifierWithQualifierFormat:(NSString *)_qualifierFormat,... {
   va_list     va;
-  EOQualifier *qualifier;
+  EOQualifier *qualifier = nil;
   unsigned    length = 0;
   const char  *buf;
   unsigned    bufLen;
