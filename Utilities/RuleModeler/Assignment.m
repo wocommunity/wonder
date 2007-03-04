@@ -1,10 +1,30 @@
-//
-//  Assignment.m
-//  RuleModeler
-//
-//  Created by King Chung Huang on Thu Jan 29 2004.
-//  Copyright (c) 2004 King Chung Huang. All rights reserved.
-//
+/*
+ Assignment.m
+ RuleModeler
+
+ Created by King Chung Huang on 1/29/04.
+
+
+ Copyright (c) 2004 King Chung Huang
+
+ Permission is hereby granted, free of charge, to any person obtaining a copy of
+ this software and associated documentation files (the "Software"), to deal in
+ the Software without restriction, including without limitation the rights to
+ use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
+ of the Software, and to permit persons to whom the Software is furnished to do
+ so, subject to the following conditions:
+
+ The above copyright notice and this permission notice shall be included in all
+ copies or substantial portions of the Software.
+
+ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, 
+ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ SOFTWARE.
+*/
 
 #import "Assignment.h"
 #import "Rule.h"
@@ -14,6 +34,18 @@
 
 @interface Assignment (Private)
 + (NSMutableDictionary *)toolTipDictionary;
+@end
+
+@interface NSDictionary(AssignmentAdditions)
+- (NSSet *)rmAllStringValues;
+@end
+
+@interface NSArray(AssignmentAdditions)
+- (NSSet *)rmAllStringValues;
+@end
+
+@interface NSString(AssignmentAdditions)
+- (NSSet *)rmAllStringValues;
 @end
 
 @implementation Assignment
@@ -366,6 +398,48 @@ static NSArray *d2wclientConfigurationPaths = nil;
     return (((![self keyPath] && ![assignment keyPath]) || [[self keyPath] isEqualToString:[assignment keyPath]])
             && ((![self value] && ![assignment value]) || [[self value] isEqual:[assignment value]])
             && ((![self assignmentClass] && ![assignment assignmentClass]) || [[self assignmentClass] isEqualToString:[assignment assignmentClass]]));
+}
+
+- (NSSet *)allStringValues {
+    if(_value == nil)
+        return [NSSet set];
+    else
+        return [_value rmAllStringValues];
+}
+
+@end
+
+@implementation NSDictionary(AssignmentAdditions)
+
+- (NSSet *)rmAllStringValues {
+    NSMutableSet   *allStringValues = [NSMutableSet setWithSet:[[self allKeys] rmAllStringValues]];
+    
+    [allStringValues unionSet:[[self allValues] rmAllStringValues]];
+    
+    return allStringValues;
+}
+
+@end
+
+@implementation NSArray(AssignmentAdditions)
+
+- (NSSet *)rmAllStringValues {
+    NSMutableSet    *rmAllStringValues = [NSMutableSet set];
+    NSEnumerator    *anEnum = [self objectEnumerator];
+    id              anObject;
+    
+    while(anObject = [anEnum nextObject])
+        [rmAllStringValues unionSet:[anObject rmAllStringValues]];
+    
+    return rmAllStringValues;
+}
+
+@end
+
+@implementation NSString(AssignmentAdditions)
+
+- (NSSet *)rmAllStringValues {
+    return [NSSet setWithObject:self];
 }
 
 @end
