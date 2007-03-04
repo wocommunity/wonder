@@ -11,6 +11,7 @@
             CLASS = RMPreferencesWindow; 
             LANGUAGE = ObjC; 
             OUTLETS = {
+                colorPane = NSView; 
                 d2wclientConfigurationPathTableView = NSTableView; 
                 generalPane = NSView; 
                 removePathButtonCell = NSButtonCell; 
