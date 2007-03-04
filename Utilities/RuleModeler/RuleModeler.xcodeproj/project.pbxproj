@@ -41,9 +41,13 @@
 		3CEF25C605CB7168007BD7AF /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8D15AC360486D014006FF6A4 /* Info.plist */; };
 		41E834450A755BC0009A23B9 /* appIcon.icns in Resources */ = {isa = PBXBuildFile; fileRef = 41E834440A755BC0009A23B9 /* appIcon.icns */; };
 		41E9B3810A644C2D006CF8CE /* EOControl.h in Headers */ = {isa = PBXBuildFile; fileRef = 41E9B3800A644C2D006CF8CE /* EOControl.h */; };
-		5514F80C0B919BA1002AD3F9 /* EOQualifier+RuleModeler.h in Headers */ = {isa = PBXBuildFile; fileRef = 5514F80A0B919BA1002AD3F9 /* EOQualifier+RuleModeler.h */; };
-		5514F80D0B919BA1002AD3F9 /* EOQualifier+RuleModeler.m in Sources */ = {isa = PBXBuildFile; fileRef = 5514F80B0B919BA1002AD3F9 /* EOQualifier+RuleModeler.m */; };
-		5514F80E0B919BA1002AD3F9 /* EOQualifier+RuleModeler.m in Sources */ = {isa = PBXBuildFile; fileRef = 5514F80B0B919BA1002AD3F9 /* EOQualifier+RuleModeler.m */; };
+		5514F58F0B8E3591002AD3F9 /* RMCompletionManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 5514F58D0B8E3590002AD3F9 /* RMCompletionManager.h */; };
+		5514F5900B8E3591002AD3F9 /* RMCompletionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 5514F58E0B8E3591002AD3F9 /* RMCompletionManager.m */; };
+		5514F5AA0B8E4031002AD3F9 /* RMCompletionManager-lhsStringValues.plist in Resources */ = {isa = PBXBuildFile; fileRef = 5514F5A90B8E4031002AD3F9 /* RMCompletionManager-lhsStringValues.plist */; };
+		5514F5AE0B8E4047002AD3F9 /* RMCompletionManager-lhsKeyPaths.plist in Resources */ = {isa = PBXBuildFile; fileRef = 5514F5AD0B8E4047002AD3F9 /* RMCompletionManager-lhsKeyPaths.plist */; };
+		5514F5CA0B8E47B8002AD3F9 /* RMCompletionManager-rhsKeys.plist in Resources */ = {isa = PBXBuildFile; fileRef = 5514F5C90B8E47B8002AD3F9 /* RMCompletionManager-rhsKeys.plist */; };
+		5514F5CE0B8E47CA002AD3F9 /* RMCompletionManager-assignmentClassNames.plist in Resources */ = {isa = PBXBuildFile; fileRef = 5514F5CD0B8E47C9002AD3F9 /* RMCompletionManager-assignmentClassNames.plist */; };
+		5514F65F0B8E50D2002AD3F9 /* RMCompletionManager-rhsStringValues.plist in Resources */ = {isa = PBXBuildFile; fileRef = 5514F65E0B8E50D2002AD3F9 /* RMCompletionManager-rhsStringValues.plist */; };
 		5521940C0B6378D900479854 /* EOQualifierTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 5521940B0B6378D900479854 /* EOQualifierTest.m */; };
 		552194120B637AB600479854 /* EOQualifierTest.plist in Resources */ = {isa = PBXBuildFile; fileRef = 552194110B637AB600479854 /* EOQualifierTest.plist */; };
 		552195960B63BC9600479854 /* EOCustomClassWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = 552195950B63BC9600479854 /* EOCustomClassWrapper.m */; };
@@ -51,6 +55,8 @@
 		552195980B63BC9600479854 /* EOCustomClassWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = 552195950B63BC9600479854 /* EOCustomClassWrapper.m */; };
 		552B55C50A796A03009CEE98 /* Defaults.plist in Resources */ = {isa = PBXBuildFile; fileRef = 552B55C40A796A03009CEE98 /* Defaults.plist */; };
 		554B1C3D0B751079003869C4 /* common.h in Headers */ = {isa = PBXBuildFile; fileRef = 554B1C3C0B751079003869C4 /* common.h */; };
+		554B1EBE0B7D382D003869C4 /* EOQualifier+RuleModeler.h in Headers */ = {isa = PBXBuildFile; fileRef = 554B1EBC0B7D382D003869C4 /* EOQualifier+RuleModeler.h */; };
+		554B1EBF0B7D382D003869C4 /* EOQualifier+RuleModeler.m in Sources */ = {isa = PBXBuildFile; fileRef = 554B1EBD0B7D382D003869C4 /* EOQualifier+RuleModeler.m */; };
 		556B41DB0B2333E5006933C5 /* EOAndQualifier.m in Sources */ = {isa = PBXBuildFile; fileRef = 556B41D00B2333E5006933C5 /* EOAndQualifier.m */; };
 		556B41DC0B2333E5006933C5 /* EOKeyValueQualifier.m in Sources */ = {isa = PBXBuildFile; fileRef = 556B41D10B2333E5006933C5 /* EOKeyValueQualifier.m */; };
 		556B41DD0B2333E5006933C5 /* EONotQualifier.m in Sources */ = {isa = PBXBuildFile; fileRef = 556B41D20B2333E5006933C5 /* EONotQualifier.m */; };
@@ -89,8 +95,17 @@
 		5579D7BD0B5969AF00B41627 /* NSPropertyListSerializationAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C29C2E407393F44007AF595 /* NSPropertyListSerializationAdditions.m */; };
 		5579D7BE0B5969AF00B41627 /* NSStringAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 55ED38BA0A93B2ED004875CD /* NSStringAdditions.m */; };
 		559D5AE30AF52857002E4E8D /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 559D5AE20AF52857002E4E8D /* Localizable.strings */; };
+		55A0E2390B93519F0086057D /* ColorPane.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 55A0E2380B93519F0086057D /* ColorPane.tiff */; };
 		55A9B0E80B6B6BBF00A157F4 /* empty.gif in Resources */ = {isa = PBXBuildFile; fileRef = 55A9B0E60B6B6BBF00A157F4 /* empty.gif */; };
 		55A9B0E90B6B6BBF00A157F4 /* focus.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 55A9B0E70B6B6BBF00A157F4 /* focus.tiff */; };
+		55DF91D10B9AD90400FE82CE /* RMTextView.h in Headers */ = {isa = PBXBuildFile; fileRef = 55DF91CF0B9AD90400FE82CE /* RMTextView.h */; };
+		55DF91D20B9AD90400FE82CE /* RMTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 55DF91D00B9AD90400FE82CE /* RMTextView.m */; };
+		55DF91D50B9AD91500FE82CE /* RMTextField.h in Headers */ = {isa = PBXBuildFile; fileRef = 55DF91D30B9AD91500FE82CE /* RMTextField.h */; };
+		55DF91D60B9AD91500FE82CE /* RMTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = 55DF91D40B9AD91500FE82CE /* RMTextField.m */; };
+		55DF91D90B9AD92900FE82CE /* RMComboBox.h in Headers */ = {isa = PBXBuildFile; fileRef = 55DF91D70B9AD92900FE82CE /* RMComboBox.h */; };
+		55DF91DA0B9AD92900FE82CE /* RMComboBox.m in Sources */ = {isa = PBXBuildFile; fileRef = 55DF91D80B9AD92900FE82CE /* RMComboBox.m */; };
+		55E634620B91E299001B7F65 /* RMTextFieldCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 55E634600B91E299001B7F65 /* RMTextFieldCell.h */; };
+		55E634630B91E299001B7F65 /* RMTextFieldCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 55E634610B91E299001B7F65 /* RMTextFieldCell.m */; };
 		55ED36430A9108F4004875CD /* RMModelGroup.h in Headers */ = {isa = PBXBuildFile; fileRef = 55ED36410A9108F4004875CD /* RMModelGroup.h */; };
 		55ED36440A9108F4004875CD /* RMModelGroup.m in Sources */ = {isa = PBXBuildFile; fileRef = 55ED36420A9108F4004875CD /* RMModelGroup.m */; };
 		55ED36560A910B32004875CD /* RMModelGroupEditor.h in Headers */ = {isa = PBXBuildFile; fileRef = 55ED36540A910B32004875CD /* RMModelGroupEditor.h */; };
@@ -156,8 +171,13 @@
 		3CEF24F605CB4FA4007BD7AF /* NSPlistDescriptions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSPlistDescriptions.m; sourceTree = "<group>"; };
 		41E834440A755BC0009A23B9 /* appIcon.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = appIcon.icns; sourceTree = "<group>"; };
 		41E9B3800A644C2D006CF8CE /* EOControl.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = EOControl.h; sourceTree = "<group>"; };
-		5514F80A0B919BA1002AD3F9 /* EOQualifier+RuleModeler.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = "EOQualifier+RuleModeler.h"; sourceTree = "<group>"; };
-		5514F80B0B919BA1002AD3F9 /* EOQualifier+RuleModeler.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = "EOQualifier+RuleModeler.m"; sourceTree = "<group>"; };
+		5514F58D0B8E3590002AD3F9 /* RMCompletionManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RMCompletionManager.h; sourceTree = "<group>"; };
+		5514F58E0B8E3591002AD3F9 /* RMCompletionManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RMCompletionManager.m; sourceTree = "<group>"; };
+		5514F5A90B8E4031002AD3F9 /* RMCompletionManager-lhsStringValues.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist; path = "RMCompletionManager-lhsStringValues.plist"; sourceTree = "<group>"; };
+		5514F5AD0B8E4047002AD3F9 /* RMCompletionManager-lhsKeyPaths.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist; path = "RMCompletionManager-lhsKeyPaths.plist"; sourceTree = "<group>"; };
+		5514F5C90B8E47B8002AD3F9 /* RMCompletionManager-rhsKeys.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist; path = "RMCompletionManager-rhsKeys.plist"; sourceTree = "<group>"; };
+		5514F5CD0B8E47C9002AD3F9 /* RMCompletionManager-assignmentClassNames.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist; path = "RMCompletionManager-assignmentClassNames.plist"; sourceTree = "<group>"; };
+		5514F65E0B8E50D2002AD3F9 /* RMCompletionManager-rhsStringValues.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist; path = "RMCompletionManager-rhsStringValues.plist"; sourceTree = "<group>"; };
 		552193D90B62863300479854 /* TODO */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = TODO; sourceTree = "<group>"; };
 		5521940A0B6378D900479854 /* EOQualifierTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EOQualifierTest.h; path = EOControl/EOQualifierTest.h; sourceTree = "<group>"; };
 		5521940B0B6378D900479854 /* EOQualifierTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EOQualifierTest.m; path = EOControl/EOQualifierTest.m; sourceTree = "<group>"; };
@@ -166,6 +186,8 @@
 		552195950B63BC9600479854 /* EOCustomClassWrapper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EOCustomClassWrapper.m; path = EOControl/EOCustomClassWrapper.m; sourceTree = "<group>"; };
 		552B55C40A796A03009CEE98 /* Defaults.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist; path = Defaults.plist; sourceTree = "<group>"; };
 		554B1C3C0B751079003869C4 /* common.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = common.h; path = EOControl/common.h; sourceTree = "<group>"; };
+		554B1EBC0B7D382D003869C4 /* EOQualifier+RuleModeler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "EOQualifier+RuleModeler.h"; sourceTree = "<group>"; };
+		554B1EBD0B7D382D003869C4 /* EOQualifier+RuleModeler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "EOQualifier+RuleModeler.m"; sourceTree = "<group>"; };
 		556B41D00B2333E5006933C5 /* EOAndQualifier.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; name = EOAndQualifier.m; path = EOControl/EOAndQualifier.m; sourceTree = "<group>"; };
 		556B41D10B2333E5006933C5 /* EOKeyValueQualifier.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; name = EOKeyValueQualifier.m; path = EOControl/EOKeyValueQualifier.m; sourceTree = "<group>"; };
 		556B41D20B2333E5006933C5 /* EONotQualifier.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; name = EONotQualifier.m; path = EOControl/EONotQualifier.m; sourceTree = "<group>"; };
@@ -187,8 +209,17 @@
 		5579D79D0B59691C00B41627 /* Tests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Tests.octest; sourceTree = BUILT_PRODUCTS_DIR; };
 		5579D79E0B59691C00B41627 /* Tests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = "Tests-Info.plist"; sourceTree = "<group>"; };
 		559D5AE00AF5284E002E4E8D /* English */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/Localizable.strings; sourceTree = "<group>"; };
+		55A0E2380B93519F0086057D /* ColorPane.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = ColorPane.tiff; sourceTree = "<group>"; };
 		55A9B0E60B6B6BBF00A157F4 /* empty.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = empty.gif; sourceTree = "<group>"; };
 		55A9B0E70B6B6BBF00A157F4 /* focus.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = focus.tiff; sourceTree = "<group>"; };
+		55DF91CF0B9AD90400FE82CE /* RMTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RMTextView.h; sourceTree = "<group>"; };
+		55DF91D00B9AD90400FE82CE /* RMTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RMTextView.m; sourceTree = "<group>"; };
+		55DF91D30B9AD91500FE82CE /* RMTextField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RMTextField.h; sourceTree = "<group>"; };
+		55DF91D40B9AD91500FE82CE /* RMTextField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RMTextField.m; sourceTree = "<group>"; };
+		55DF91D70B9AD92900FE82CE /* RMComboBox.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RMComboBox.h; sourceTree = "<group>"; };
+		55DF91D80B9AD92900FE82CE /* RMComboBox.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RMComboBox.m; sourceTree = "<group>"; };
+		55E634600B91E299001B7F65 /* RMTextFieldCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RMTextFieldCell.h; sourceTree = "<group>"; };
+		55E634610B91E299001B7F65 /* RMTextFieldCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RMTextFieldCell.m; sourceTree = "<group>"; };
 		55ED36410A9108F4004875CD /* RMModelGroup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RMModelGroup.h; sourceTree = "<group>"; };
 		55ED36420A9108F4004875CD /* RMModelGroup.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RMModelGroup.m; sourceTree = "<group>"; };
 		55ED36540A910B32004875CD /* RMModelGroupEditor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RMModelGroupEditor.h; sourceTree = "<group>"; };
@@ -272,6 +303,7 @@
 		2A37F4ABFDCFA73011CA2CEA /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				55DF91CE0B9AD8C800FE82CE /* Views */,
 				41E9B3800A644C2D006CF8CE /* EOControl.h */,
 				556B41CF0B2333C0006933C5 /* EOControl */,
 				3CEF24B005CB4C45007BD7AF /* DMToolbarUtils.h */,
@@ -287,8 +319,8 @@
 				3CEF24A705CB4B2C007BD7AF /* RMAppDelegate.m */,
 				55ED3D300A98A515004875CD /* RMDocumentController.h */,
 				55ED3D310A98A516004875CD /* RMDocumentController.m */,
-				55FF9CEC0AFE004300D4F89F /* RMTableView.h */,
-				55FF9CED0AFE004300D4F89F /* RMTableView.m */,
+				5514F58D0B8E3590002AD3F9 /* RMCompletionManager.h */,
+				5514F58E0B8E3591002AD3F9 /* RMCompletionManager.m */,
 			);
 			name = Classes;
 			sourceTree = "<group>";
@@ -305,6 +337,12 @@
 		2A37F4B8FDCFA73011CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				55A0E2380B93519F0086057D /* ColorPane.tiff */,
+				5514F5CD0B8E47C9002AD3F9 /* RMCompletionManager-assignmentClassNames.plist */,
+				5514F5AD0B8E4047002AD3F9 /* RMCompletionManager-lhsKeyPaths.plist */,
+				5514F5A90B8E4031002AD3F9 /* RMCompletionManager-lhsStringValues.plist */,
+				5514F5C90B8E47B8002AD3F9 /* RMCompletionManager-rhsKeys.plist */,
+				5514F65E0B8E50D2002AD3F9 /* RMCompletionManager-rhsStringValues.plist */,
 				55A9B0E60B6B6BBF00A157F4 /* empty.gif */,
 				55A9B0E70B6B6BBF00A157F4 /* focus.tiff */,
 				559D5AE20AF52857002E4E8D /* Localizable.strings */,
@@ -371,8 +409,6 @@
 		3CD87DFB05CB0F1500847A8F /* Categories */ = {
 			isa = PBXGroup;
 			children = (
-				5514F80A0B919BA1002AD3F9 /* EOQualifier+RuleModeler.h */,
-				5514F80B0B919BA1002AD3F9 /* EOQualifier+RuleModeler.m */,
 				55FF9DEF0AFE21DA00D4F89F /* NSIndexSetAdditions.h */,
 				55FF9DF00AFE21DA00D4F89F /* NSIndexSetAdditions.m */,
 				3CEF24F505CB4FA4007BD7AF /* NSPlistDescriptions.h */,
@@ -381,6 +417,10 @@
 				3C29C2E407393F44007AF595 /* NSPropertyListSerializationAdditions.m */,
 				55ED38B90A93B2ED004875CD /* NSStringAdditions.h */,
 				55ED38BA0A93B2ED004875CD /* NSStringAdditions.m */,
+				55FF9DEF0AFE21DA00D4F89F /* NSIndexSetAdditions.h */,
+				55FF9DF00AFE21DA00D4F89F /* NSIndexSetAdditions.m */,
+				554B1EBC0B7D382D003869C4 /* EOQualifier+RuleModeler.h */,
+				554B1EBD0B7D382D003869C4 /* EOQualifier+RuleModeler.m */,
 			);
 			name = Categories;
 			sourceTree = "<group>";
@@ -426,6 +466,23 @@
 			name = EOControl;
 			sourceTree = "<group>";
 		};
+		55DF91CE0B9AD8C800FE82CE /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				55FF9CEC0AFE004300D4F89F /* RMTableView.h */,
+				55FF9CED0AFE004300D4F89F /* RMTableView.m */,
+				55E634600B91E299001B7F65 /* RMTextFieldCell.h */,
+				55E634610B91E299001B7F65 /* RMTextFieldCell.m */,
+				55DF91CF0B9AD90400FE82CE /* RMTextView.h */,
+				55DF91D00B9AD90400FE82CE /* RMTextView.m */,
+				55DF91D30B9AD91500FE82CE /* RMTextField.h */,
+				55DF91D40B9AD91500FE82CE /* RMTextField.m */,
+				55DF91D70B9AD92900FE82CE /* RMComboBox.h */,
+				55DF91D80B9AD92900FE82CE /* RMComboBox.m */,
+			);
+			name = Views;
+			sourceTree = "<group>";
+		};
 		55ED36530A910B17004875CD /* RMModelGroupEditor */ = {
 			isa = PBXGroup;
 			children = (
@@ -468,7 +525,12 @@
 				556B41EC0B2334AC006933C5 /* EONull.h in Headers */,
 				552195970B63BC9600479854 /* EOCustomClassWrapper.h in Headers */,
 				554B1C3D0B751079003869C4 /* common.h in Headers */,
-				5514F80C0B919BA1002AD3F9 /* EOQualifier+RuleModeler.h in Headers */,
+				554B1EBE0B7D382D003869C4 /* EOQualifier+RuleModeler.h in Headers */,
+				5514F58F0B8E3591002AD3F9 /* RMCompletionManager.h in Headers */,
+				55E634620B91E299001B7F65 /* RMTextFieldCell.h in Headers */,
+				55DF91D10B9AD90400FE82CE /* RMTextView.h in Headers */,
+				55DF91D50B9AD91500FE82CE /* RMTextField.h in Headers */,
+				55DF91D90B9AD92900FE82CE /* RMComboBox.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -562,6 +624,12 @@
 				559D5AE30AF52857002E4E8D /* Localizable.strings in Resources */,
 				55A9B0E80B6B6BBF00A157F4 /* empty.gif in Resources */,
 				55A9B0E90B6B6BBF00A157F4 /* focus.tiff in Resources */,
+				5514F5AA0B8E4031002AD3F9 /* RMCompletionManager-lhsStringValues.plist in Resources */,
+				5514F5AE0B8E4047002AD3F9 /* RMCompletionManager-lhsKeyPaths.plist in Resources */,
+				5514F5CA0B8E47B8002AD3F9 /* RMCompletionManager-rhsKeys.plist in Resources */,
+				5514F5CE0B8E47CA002AD3F9 /* RMCompletionManager-assignmentClassNames.plist in Resources */,
+				5514F65F0B8E50D2002AD3F9 /* RMCompletionManager-rhsStringValues.plist in Resources */,
+				55A0E2390B93519F0086057D /* ColorPane.tiff in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -611,7 +679,6 @@
 				5579D7BE0B5969AF00B41627 /* NSStringAdditions.m in Sources */,
 				5521940C0B6378D900479854 /* EOQualifierTest.m in Sources */,
 				552195960B63BC9600479854 /* EOCustomClassWrapper.m in Sources */,
-				5514F80E0B919BA1002AD3F9 /* EOQualifier+RuleModeler.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -651,7 +718,12 @@
 				556B41ED0B2334AC006933C5 /* EONull.m in Sources */,
 				556B42310B2337D5006933C5 /* EOKeyComparisonQualifier.m in Sources */,
 				552195980B63BC9600479854 /* EOCustomClassWrapper.m in Sources */,
-				5514F80D0B919BA1002AD3F9 /* EOQualifier+RuleModeler.m in Sources */,
+				554B1EBF0B7D382D003869C4 /* EOQualifier+RuleModeler.m in Sources */,
+				5514F5900B8E3591002AD3F9 /* RMCompletionManager.m in Sources */,
+				55E634630B91E299001B7F65 /* RMTextFieldCell.m in Sources */,
+				55DF91D20B9AD90400FE82CE /* RMTextView.m in Sources */,
+				55DF91D60B9AD91500FE82CE /* RMTextField.m in Sources */,
+				55DF91DA0B9AD92900FE82CE /* RMComboBox.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -735,6 +807,7 @@
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = RuleModeler_Prefix.pch;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_FOUR_CHARACTER_CONSTANTS = YES;
 				GCC_WARN_UNKNOWN_PRAGMAS = YES;
 				INFOPLIST_FILE = Info.plist;
@@ -749,12 +822,13 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				COPY_PHASE_STRIP = YES;
-				FRAMEWORK_SEARCH_PATHS = "\"$(SYSTEM_LIBRARY_DIR)/PrivateFrameworks\"";
 				GCC_ENABLE_FIX_AND_CONTINUE = NO;
 				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = RuleModeler_Prefix.pch;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_FOUR_CHARACTER_CONSTANTS = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNKNOWN_PRAGMAS = YES;
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "$(HOME)/Applications";
@@ -774,6 +848,7 @@
 		3CA4EB960A63F86100F9197D /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ARCHS = "$(NATIVE_ARCH)";
 				PREBINDING = NO;
 			};
 			name = Release;
