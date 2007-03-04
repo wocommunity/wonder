@@ -1,19 +1,49 @@
-//
-//  RMFilteringArrayController.m
-//  RuleModeler
-//
-//  Created by King Chung Huang on Fri Jan 30 2004.
-//  Copyright (c) 2004 King Chung Huang. All rights reserved.
-//
+/*
+ RMFilteringArrayController.m
+ RuleModeler
+
+ Created by King Chung Huang on 1/30/04.
+
+
+ Copyright (c) 2004 King Chung Huang
+
+ Permission is hereby granted, free of charge, to any person obtaining a copy of
+ this software and associated documentation files (the "Software"), to deal in
+ the Software without restriction, including without limitation the rights to
+ use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
+ of the Software, and to permit persons to whom the Software is furnished to do
+ so, subject to the following conditions:
+
+ The above copyright notice and this permission notice shall be included in all
+ copies or substantial portions of the Software.
+
+ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, 
+ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ SOFTWARE.
+*/
 
 #import "RMFilteringArrayController.h"
+#import "EOControl.h"
 
 @implementation RMFilteringArrayController
 
 // It is not possible to bind the searchField's value to some custom attribute,
 // because the searchField resigns firstResponder after each key press.
 
+- (void)doSetSearchWords:(NSArray *)newSearchWords {
+    if(searchWords != newSearchWords){
+        [searchWords release];
+        searchWords = [newSearchWords copy];
+    }
+}
+
 - (IBAction)search:(id)sender {
+    [self willChangeValueForKey:@"searchWords"];
+    
     NSString    *value = [sender stringValue];
     NSPredicate *predicate = nil;
     BOOL        performTextualSearch = NO;
@@ -48,11 +78,13 @@
         if (performTextualSearch) {
             NSString        *caseSensitivityOption = (searchIsCaseSensitive ? @"":@"[c]");
             NSString        *operator = (searchMatchesAnyWord ? @"or":@"and");
-            NSArray         *strings = [value componentsSeparatedByString:@" "];
+            NSMutableArray  *strings = [[value componentsSeparatedByString:@" "] mutableCopy];
             NSMutableArray  *predicates = [[NSMutableArray alloc] initWithCapacity:[strings count]];
             NSMutableArray  *arguments = [[NSMutableArray alloc] initWithCapacity:[strings count]];
             int             i;
             
+            [strings removeObject:@""];
+            [self doSetSearchWords:strings];
             for(i = 0; i < [strings count]; i++) {
                 NSString *string = [strings objectAtIndex:i];
                 NSRange range = [string rangeOfString:@"*"];
@@ -70,6 +102,9 @@
             predicate = [NSPredicate predicateWithFormat:format argumentArray:arguments];
             [predicates release];
             [arguments release];
+            [strings release];
+        } else {
+            [self doSetSearchWords:[NSArray array]];
         }
     }
     
@@ -81,6 +116,7 @@
         NSBeep();
     } NS_ENDHANDLER;
     [self rearrangeObjects];
+    [self didChangeValueForKey:@"searchWords"];
 }
 
 - (id)newObject {
@@ -195,13 +231,12 @@
         [searchField setStringValue:@""];
 }
 
-- (NSSearchField *) searchField
+- (NSSearchField *)searchField
 {
     return searchField;
 }
 
-- (void) setSearchField:(NSSearchField *)value
-{
+- (void)setSearchField:(NSSearchField *)value {
     if (searchField != value) {
         NSSearchField *  oldValue = searchField;
         
@@ -214,7 +249,9 @@
 // Binding the 'value' of a menu item does not sync model when menu state is changed. Bug in AppKit?
 
 - (IBAction)changeCaseSensitivityOption:(id)sender {
+    [self willChangeValueForKey:@"searchIsCaseSensitive"];
     searchIsCaseSensitive = ([sender state] != NSOnState); // Invert option
+    [self didChangeValueForKey:@"searchIsCaseSensitive"];
     [sender setState:(searchIsCaseSensitive ? NSOnState:NSOffState)];
     [self search:searchField];
 }
@@ -223,6 +260,14 @@
     searchMatchesAnyWord = ([sender state] != NSOnState); // Invert option
     [sender setState:(searchMatchesAnyWord ? NSOnState:NSOffState)];
     [self search:searchField];
+}
+
+- (BOOL)searchIsCaseSensitive {
+    return searchIsCaseSensitive;
+}
+
+- (NSArray *)searchWords {
+    return searchWords;
 }
 
 @end
