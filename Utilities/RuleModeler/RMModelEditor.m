@@ -34,6 +34,11 @@
 #import "DMToolbarUtils.m"
 #import "RMFilteringArrayController.h"
 #import "EOControl.h"
+#import "RMCompletionManager.h"
+#import "RMTextFieldCell.h"
+#import "RMTextField.h"
+#import "RMTextView.h"
+#import "RMComboBox.h"
 
 @interface RMEnabledColorTransformer : NSValueTransformer {
 }
@@ -57,6 +62,12 @@
 
 @interface RMModelEditor(Private)
 - (void)updateLHSFormatting:(BOOL)formatted;
+- (void)refreshAssignmentClassNamesComboBoxContents;
+- (void)refreshRhsKeyNamesComboBoxContents;
+- (void)refreshLhsKeyPathCompletionList;
+- (void)refreshLhsStringValuesCompletionList;
+- (void)refreshRhsStringValuesCompletionList;
+- (NSNumber *)rhsValueIsNotMarker;
 @end
 
 @implementation RMModelEditor
@@ -75,6 +86,8 @@
 - (void)windowWillLoad {
     [super windowWillLoad];
     [[NSUserDefaultsController sharedUserDefaultsController] addObserver:self forKeyPath:@"values.useParenthesesForComparisonQualifier" options:0 context:NULL];
+    [[NSUserDefaultsController sharedUserDefaultsController] addObserver:self forKeyPath:@"values.assignmentClassNames" options:0 context:NULL];
+    [[NSUserDefaultsController sharedUserDefaultsController] addObserver:self forKeyPath:@"values.rhsKeyPaths" options:0 context:NULL];
 }
 
 - (void)windowDidLoad {
@@ -87,7 +100,7 @@
     // We need to do that in order to avoid a KVO warning when document closes
     // Only that binding is problematic
     if(document == nil){
-        [[self document] removeObserver:self forKeyPath:@"rules"];	// FIXME model is probably already nil!
+        [[self document] removeObserver:self forKeyPath:@"rules"];
         [rulesController unbind:@"contentArray"];
     }
     [super setDocument:document];
@@ -95,13 +108,19 @@
 
 - (void)dealloc {
     [[NSNotificationCenter defaultCenter] removeObserver:self name:NSViewFrameDidChangeNotification object:rhsValueHelpField];
-	[_assignmentClassNames autorelease];
-	[_rhsKeyNames autorelease];
 	[toolbarItems autorelease];
     [rulesController removeObserver:self forKeyPath:@"selection.rhs.toolTip"];
     [rulesController removeObserver:self forKeyPath:@"selection.rhs.valueAsString"];
     [[NSUserDefaultsController sharedUserDefaultsController] removeObserver:self forKeyPath:@"values.useParenthesesForComparisonQualifier"];
+    [[NSUserDefaultsController sharedUserDefaultsController] removeObserver:self forKeyPath:@"values.assignmentClassNames"];
+    [[NSUserDefaultsController sharedUserDefaultsController] removeObserver:self forKeyPath:@"values.rhsKeyPaths"];
+
+    // The following two lines shouldn't be necessary, I think, but actually we need them, else an exception is raised
+    [rhsValueTextView unbind:@"caseSensitivity"];
+    [rhsValueTextView unbind:@"highlightedWords"];
+    
     [[lhsFormatCheckbox cell] removeObserver:self forKeyPath:@"state"];
+
 	[super dealloc]; // Will release all nib top-level objects
 }
 
@@ -188,7 +207,7 @@
         if (aChangeKind == NSKeyValueChangeInsertion) {
             NSIndexSet  *indexes = [change objectForKey:NSKeyValueChangeIndexesKey];
 
-            [[[[self model] undoManager] prepareWithInvocationTarget:/*[object mutableArrayValueForKeyPath:keyPath]*/[self document]] removeRulesAtIndexes:indexes];
+            [[[[self model] undoManager] prepareWithInvocationTarget:[self document]] removeRulesAtIndexes:indexes];
             [[[self model] undoManager] setActionName:[self actionNameWhenInserting:YES ruleCount:[indexes count]]];
         }
         else if(aChangeKind == NSKeyValueChangeRemoval){
@@ -202,6 +221,10 @@
     else if ([keyPath isEqualToString:@"values.useParenthesesForComparisonQualifier"]) {
         [[self rules] makeObjectsPerformSelector:@selector(resetDescriptionCaches)];
     }
+    else if ([keyPath isEqualToString:@"values.assignmentClassNames"])
+        [self refreshAssignmentClassNamesComboBoxContents];
+    else if ([keyPath isEqualToString:@"values.rhsKeyPaths"])
+        [self refreshRhsKeyNamesComboBoxContents];
 }
 
 - (void)helpViewFrameDidChange:(NSNotification *)notif {
@@ -212,27 +235,19 @@
     return [rulesController content];
 }
 
-- (void)refreshAssignmentClassNamesComboBoxContents {
-    NSArray         *assignmentClassNames = [[self rules] valueForKeyPath:@"rhs.assignmentClass"];
-    NSMutableSet    *assignmentClassNamesSet = [NSMutableSet setWithArray:assignmentClassNames];
+- (void)refreshCompletionListNamed:(NSString *)completionListName fromRules:(NSArray *)rules keyPath:(NSString *)ruleKeyPath comboBox:(NSComboBox *)comboBox {
+    NSMutableSet    *assignmentClassNamesSet = [NSMutableSet setWithArray:[rules valueForKeyPath:ruleKeyPath]];
     
-    [assignmentClassNamesSet addObjectsFromArray:[NSArray arrayWithObjects:@"com.webobjects.directtoweb.Assignment", @"com.webobjects.directtoweb.KeyValueAssignment", @"com.webobjects.directtoweb.BooleanAssignment", @"com.webobjects.directtoweb.DefaultAssignment", nil]];
-    [_assignmentClassNames autorelease];
-    _assignmentClassNames = [[assignmentClassNamesSet allObjects] mutableCopy];
-    [_assignmentClassNames removeObject:[NSNull null]];
-    [_assignmentClassNames sortUsingSelector:@selector(caseInsensitiveCompare:)];
-    [assignmentClassNamesComboBox reloadData];
+    [[RMCompletionManager sharedManager] addWords:assignmentClassNamesSet toCompletionListNamed:completionListName];
+    [comboBox reloadData];
+}
+
+- (void)refreshAssignmentClassNamesComboBoxContents {
+    [self refreshCompletionListNamed:@"assignmentClassNames" fromRules:[self rules] keyPath:@"rhs.assignmentClass" comboBox:assignmentClassNamesComboBox];
 }
 
 - (void)refreshRhsKeyNamesComboBoxContents {
-    NSArray *rhsKeys = [[self rules] valueForKeyPath:@"rhs.keyPath"];
-    NSSet   *rhsKeysSet = [NSSet setWithArray:rhsKeys];
-    
-    [_rhsKeyNames autorelease];
-    _rhsKeyNames = [[rhsKeysSet allObjects] mutableCopy];
-    [_rhsKeyNames removeObject:[NSNull null]];
-    [_rhsKeyNames sortUsingSelector:@selector(caseInsensitiveCompare:)];
-    [rhsKeyNamesComboBox reloadData];
+    [self refreshCompletionListNamed:@"rhsKeys" fromRules:[self rules] keyPath:@"rhs.keyPath" comboBox:rhsKeyNamesComboBox];
 }
 
 - (void)addToolbarItems {
@@ -284,17 +299,14 @@
 - (void)awakeFromNib {
     [[self window] useOptimizedDrawing:YES];
     
-    [self refreshAssignmentClassNamesComboBoxContents];
-    [self refreshRhsKeyNamesComboBoxContents];
-    
     NSSize  aSize = NSMakeSize(0, 120);
     aSize.height = [[NSUserDefaults standardUserDefaults] floatForKey:@"sourceDrawerHeight"];
     [sourceDrawer setContentSize:aSize];
     
-    [rhsValueTextView setFieldEditor:YES];
-    [rhsValueTextView setFocusRingType:NSFocusRingTypeExterior];
-    [[rhsValueTextView enclosingScrollView] setFocusRingType:NSFocusRingTypeExterior];
-    [rhsValueTextView setFont:[NSFont systemFontOfSize:[NSFont smallSystemFontSize]]];
+    [rhsValueTextView setFieldEditor:YES]; // Thus, tab and return will end edition
+    [rhsValueTextView setFocusRingType:NSFocusRingTypeExterior]; // FIXME No effect
+    [[rhsValueTextView enclosingScrollView] setFocusRingType:NSFocusRingTypeExterior]; // FIXME No effect
+    [rhsValueTextView setFont:[NSFont systemFontOfSize:[NSFont smallSystemFontSize]]]; // Fixes error in nib
     [self updateHelpViewSize];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(helpViewFrameDidChange:) name:NSViewFrameDidChangeNotification object:rhsValueHelpField];
     [rulesController addObserver:self forKeyPath:@"selection.rhs.toolTip" options:0 context:NULL];
@@ -307,9 +319,40 @@
     [rulesTableView setAutosaveTableColumns:YES];
     
     toolbarItems = [[NSMutableDictionary dictionary] retain];
-    [self addToolbarItems];
-    
+    [self addToolbarItems];    
     [self prepareToolbar];
+    
+    [self refreshAssignmentClassNamesComboBoxContents];
+    [self refreshRhsKeyNamesComboBoxContents];
+    [self refreshLhsKeyPathCompletionList];
+    [self refreshLhsStringValuesCompletionList];
+    [self refreshRhsStringValuesCompletionList];
+    
+    [lhsValueTextField bind:@"highlightsMatchingWords" toObject:[NSUserDefaultsController sharedUserDefaultsController] withKeyPath:@"values.highlightSearchFilterOccurences" options:nil];
+    [lhsValueTextField bind:@"caseSensitivity" toObject:rulesController withKeyPath:@"searchIsCaseSensitive" options:nil];
+    [lhsValueTextField bind:@"highlightColor" toObject:[NSUserDefaultsController sharedUserDefaultsController] withKeyPath:@"values.searchFilterHighlightColor" options:[NSDictionary dictionaryWithObject:@"NSUnarchiveFromData" forKey:NSValueTransformerNameBindingOption]];
+    [lhsValueTextField bind:@"highlightedWords" toObject:rulesController withKeyPath:@"searchWords" options:nil];
+
+    NSEnumerator    *anEnum = [[rulesTableView tableColumns] objectEnumerator];
+    NSTableColumn   *aCol;
+    
+    while(aCol = [anEnum nextObject]){
+        if([[aCol dataCell] isKindOfClass:[RMTextFieldCell class]]){
+            [[aCol dataCell] bind:@"highlightsMatchingWords" toObject:[NSUserDefaultsController sharedUserDefaultsController] withKeyPath:@"values.highlightSearchFilterOccurences" options:nil];
+            [[aCol dataCell] bind:@"caseSensitivity" toObject:rulesController withKeyPath:@"searchIsCaseSensitive" options:nil];
+            [[aCol dataCell] bind:@"highlightColor" toObject:[NSUserDefaultsController sharedUserDefaultsController] withKeyPath:@"values.searchFilterHighlightColor" options:[NSDictionary dictionaryWithObject:@"NSUnarchiveFromData" forKey:NSValueTransformerNameBindingOption]];
+            [[aCol dataCell] bind:@"highlightedWords" toObject:rulesController withKeyPath:@"searchWords" options:nil];
+        }
+    }
+    
+    [rhsKeyNamesComboBox bind:@"highlightsMatchingWords" toObject:[NSUserDefaultsController sharedUserDefaultsController] withKeyPath:@"values.highlightSearchFilterOccurences" options:nil];
+    [rhsKeyNamesComboBox bind:@"caseSensitivity" toObject:rulesController withKeyPath:@"searchIsCaseSensitive" options:nil];
+    [rhsKeyNamesComboBox bind:@"highlightColor" toObject:[NSUserDefaultsController sharedUserDefaultsController] withKeyPath:@"values.searchFilterHighlightColor" options:[NSDictionary dictionaryWithObject:@"NSUnarchiveFromData" forKey:NSValueTransformerNameBindingOption]];
+    [rhsKeyNamesComboBox bind:@"highlightedWords" toObject:rulesController withKeyPath:@"searchWords" options:nil];
+    [rhsValueTextView bind:@"highlightsMatchingWords" toObject:[NSUserDefaultsController sharedUserDefaultsController] withKeyPath:@"values.highlightSearchFilterOccurences" options:nil];
+    [rhsValueTextView bind:@"caseSensitivity" toObject:rulesController withKeyPath:@"searchIsCaseSensitive" options:nil];
+    [rhsValueTextView bind:@"highlightColor" toObject:[NSUserDefaultsController sharedUserDefaultsController] withKeyPath:@"values.searchFilterHighlightColor" options:[NSDictionary dictionaryWithObject:@"NSUnarchiveFromData" forKey:NSValueTransformerNameBindingOption]];
+    [rhsValueTextView bind:@"highlightedWords" toObject:rulesController withKeyPath:@"searchWords" options:nil];
 }
 
 - (NSString *)toolbarIdentifier {
@@ -402,26 +445,15 @@
     return [self document];
 }
 
-- (NSArray *)assignmentClassNames {
-    return _assignmentClassNames;
-}
-
 - (IBAction)rhsComboBoxAction:(id)sender {
     NSString *name = [sender stringValue];
-    NSMutableArray *values;
     
     if (sender == assignmentClassNamesComboBox) {
-	values = _assignmentClassNames;
+        [[RMCompletionManager sharedManager] addWord:name toCompletionListNamed:@"assignmentClassNames"];
+        [sender reloadData];
     } else if (sender == rhsKeyNamesComboBox) {
-	values = _rhsKeyNames;
-    } else {
-	return;
-    }
-    
-    if (![values containsObject:name]) {
-	[values addObject:name];
-	
-	[sender reloadData];
+        [[RMCompletionManager sharedManager] addWord:name toCompletionListNamed:@"rhsKeys"];
+        [sender reloadData];
     }
 }
 
@@ -639,10 +671,7 @@
     if ([duplicateRuleIndexes count] > 0) {
         // Test is necessary, else the arrayController would always add an entry to the undo stack, even when doing nothing!
         // We want to be sure user sees all duplicate entries, thus we reset the filtering and the focus
-        [rulesController setFilterPredicate:nil];
-        [rulesController unfocus:nil];
-        [rulesController setSelectedObjects:[[self rules] objectsAtIndexes:duplicateRuleIndexes]]; // Uses -isEqual:!
-        [rulesController focus:nil];
+        [self showRules:[[self rules] objectsAtIndexes:duplicateRuleIndexes]];
     }
     else
         NSBeep();
@@ -653,6 +682,10 @@
     [rulesController unfocus:nil];
     [rulesController setSelectedObjects:rules]; // Uses -isEqual:!
     [rulesController focus:nil];
+}
+
+- (void)addToTableView:(NSTableView *)tableView {
+    [self add:tableView];
 }
 
 - (RMFilteringArrayController *) rulesController {
@@ -667,8 +700,117 @@
     [rulesController unfocus:sender];
 }
 
-- (NSNumber *) rhsValueIsNotMarker {
+- (NSNumber *)rhsValueIsNotMarker {
     return [NSNumber numberWithBool:!NSIsControllerMarker([rulesController valueForKeyPath:@"selection.rhs.valueAsString"])];
+}
+
+#pragma mark Completion for textView/textField
+- (NSString *)completionListNameForObject:(id)control forStringValues:(BOOL)forStringValues {
+    NSString    *completionListName = nil;    
+    
+    if(control == assignmentClassNamesComboBox)
+        completionListName = @"assignmentClassNames";
+    else if(control == rhsKeyNamesComboBox)
+        completionListName = @"rhsKeys";
+    else if(control == lhsValueTextField)
+        completionListName = (forStringValues ? @"lhsStringValues":@"lhsKeyPaths");
+    else if(control == rhsValueTextView)
+        completionListName = @"rhsStringValues";
+    else if(control == rulesTableView){
+        NSString    *editedColumnIdentifier = [[[rulesTableView tableColumns] objectAtIndex:[rulesTableView editedColumn]] identifier];
+        
+        if ([editedColumnIdentifier isEqualToString:@"lhs"])
+            completionListName = (forStringValues ? @"lhsStringValues":@"lhsKeyPaths");
+        else if ([editedColumnIdentifier isEqualToString:@"rhs.value"])
+            completionListName = @"rhsStringValues";
+        else if ([editedColumnIdentifier isEqualToString:@"rhs.keyPath"])
+            completionListName = @"rhsKeys";
+//        else if ([editedColumnIdentifier isEqualToString:@"assignment"]) // Disabled, because we display class names with package in ()
+//            completionListName = @"assignmentClassNames";
+    }
+    
+    return completionListName;
+}
+
+// Also, invoke 'complete:' automatically (timer)? Option.
+- (NSArray *)control:(NSControl *)control textView:(NSTextView *)textView completions:(NSArray *)words forPartialWordRange:(NSRange)charRange indexOfSelectedItem:(int *)index {
+    BOOL        isQuoted = charRange.location > 0 && [[textView string] characterAtIndex:charRange.location - 1] == '\'';
+    NSString    *completionListName = [self completionListNameForObject:control forStringValues:isQuoted];
+    
+    if(completionListName != nil)
+        return [[RMCompletionManager sharedManager] textView:textView completionsForPartialWordRange:charRange indexOfSelectedItem:index fromCompletionListNamed:completionListName];
+    else
+        return words;
+}
+
+- (NSArray *)textView:(NSTextView *)textView completions:(NSArray *)words forPartialWordRange:(NSRange)charRange indexOfSelectedItem:(int *)index {
+    BOOL        isQuoted = charRange.location > 0 && [[textView string] characterAtIndex:charRange.location - 1] == '"';
+    NSString    *completionListName = [self completionListNameForObject:textView forStringValues:isQuoted];
+    
+    if(completionListName != nil)
+        return [[RMCompletionManager sharedManager] textView:textView completionsForPartialWordRange:charRange indexOfSelectedItem:index fromCompletionListNamed:completionListName];
+    else
+        return words;
+}
+
+- (void)refreshCompletionListNamed:(NSString *)completionListName fromRules:(NSArray *)rules keyPath:(NSString *)ruleKeyPath {
+    NSArray         *keyPaths = [rules valueForKeyPath:ruleKeyPath]; // Array of sets (+ NSNulls)
+    NSMutableSet    *keyPathsSet = [NSMutableSet set];
+    NSEnumerator    *anEnum = [keyPaths objectEnumerator];
+    NSSet           *eachSet;
+    
+    while (eachSet = [anEnum nextObject]) {
+        if (eachSet != (id)[NSNull null])
+            [keyPathsSet unionSet:eachSet];
+    }
+    [[RMCompletionManager sharedManager] addWords:keyPathsSet toCompletionListNamed:completionListName];
+}
+
+- (void)refreshLhsKeyPathCompletionListFromRules:(NSArray *)rules {
+    [self refreshCompletionListNamed:@"lhsKeyPaths" fromRules:rules keyPath:@"lhs.allKeyPaths"];
+}
+
+- (void)refreshLhsKeyPathCompletionList {
+    [self refreshLhsKeyPathCompletionListFromRules:[self rules]];
+}
+
+- (void)refreshLhsStringValuesCompletionListFromRules:(NSArray *)rules {
+    [self refreshCompletionListNamed:@"lhsStringValues" fromRules:rules keyPath:@"lhs.allStringValues"];
+}
+
+- (void)refreshLhsStringValuesCompletionList {
+    [self refreshLhsStringValuesCompletionListFromRules:[self rules]];
+}
+
+// TODO Should be updated when lhs/rhs is modified!
+- (void)refreshRhsStringValuesCompletionListFromRules:(NSArray *)rules {
+    [self refreshCompletionListNamed:@"rhsStringValues" fromRules:rules keyPath:@"rhs.allStringValues"];
+}
+
+- (void)refreshRhsStringValuesCompletionList {
+    [self refreshRhsStringValuesCompletionListFromRules:[self rules]];
+}
+
+- (void)controlTextDidEndEditing:(NSNotification *)aNotification {
+    NSArray *editedRules = [[self rulesController] selectedObjects];
+
+    if ([aNotification object] == lhsValueTextField) {
+        [self refreshLhsKeyPathCompletionListFromRules:editedRules];
+        [self refreshLhsStringValuesCompletionListFromRules:editedRules];
+    }
+    else if ([aNotification object] == rulesTableView) {
+        [self refreshLhsKeyPathCompletionListFromRules:editedRules];
+        [self refreshLhsStringValuesCompletionListFromRules:editedRules];
+        [self refreshRhsStringValuesCompletionListFromRules:editedRules];
+        [self refreshCompletionListNamed:@"assignmentClassNames" fromRules:editedRules keyPath:@"rhs.assignmentClass" comboBox:assignmentClassNamesComboBox];
+        [self refreshCompletionListNamed:@"rhsKeys" fromRules:editedRules keyPath:@"rhs.keyPath" comboBox:rhsKeyNamesComboBox];
+    }
+}
+
+- (void)textDidEndEditing:(NSNotification *)aNotification {
+    if ([aNotification object] == rhsValueTextView) {
+        [self refreshRhsStringValuesCompletionListFromRules:[[self rulesController] selectedObjects]];
+    }
 }
 
 #pragma mark Splitview Delegate Methods
@@ -706,62 +848,39 @@
 #pragma mark Combobox datasource methods
 
 - (int)numberOfItemsInComboBox:(NSComboBox *)combobox {
-    if (combobox == assignmentClassNamesComboBox) {
-	return [_assignmentClassNames count];
-    } else if (combobox == rhsKeyNamesComboBox) {
-	return [_rhsKeyNames count];
-    }
+    NSString    *completionListName = [self completionListNameForObject:combobox forStringValues:NO];
     
-    return 0;
+    if(completionListName)
+        return [[[RMCompletionManager sharedManager] completionsInCompletionListNamed:completionListName] count];
+    else
+        return 0;
 }
 
 - (id)comboBox:(NSComboBox *)combobox objectValueForItemAtIndex:(int)index {
-    if (combobox == assignmentClassNamesComboBox) {
-	return [_assignmentClassNames objectAtIndex:index];
-    } else if (combobox == rhsKeyNamesComboBox) {
-	return [_rhsKeyNames objectAtIndex:index];
-    }
+    NSString    *completionListName = [self completionListNameForObject:combobox forStringValues:NO];
     
-    return nil;
+    if(completionListName)
+        return [[[RMCompletionManager sharedManager] completionsInCompletionListNamed:completionListName] objectAtIndex:index];
+    else
+        return nil;
 }
 
 - (NSString *)comboBox:(NSComboBox *)combobox completedString:(NSString *)string {
-    NSArray *data;
+    NSString    *completionListName = [self completionListNameForObject:combobox forStringValues:NO];
     
-    if (combobox == assignmentClassNamesComboBox) {
-	data = _assignmentClassNames;
-    } else if (combobox == rhsKeyNamesComboBox) {
-	data = _rhsKeyNames;
-    } else {
-	return string;
-    }
-    
-    int i, count = [data count];
-    NSString *complete;
-    
-    for (i = 0; i < count; i++) {
-	complete = [data objectAtIndex:i];
-	
-	if ([complete hasPrefix:string]) {
-	    return complete;
-	}
-    }
-    
-    return string;
+    if(completionListName)
+        return [[RMCompletionManager sharedManager] completedString:string fromCompletionListNamed:completionListName];
+    else
+        return string;
 }
 
 - (unsigned int)comboBox:(NSComboBox *)combobox indexOfItemWithStringValue:(NSString *)string {
-    NSArray *data;
+    NSString    *completionListName = [self completionListNameForObject:combobox forStringValues:NO];
     
-    if (combobox == assignmentClassNamesComboBox) {
-	data = _assignmentClassNames;
-    } else if (combobox == rhsKeyNamesComboBox) {
-	data = _rhsKeyNames;
-    } else {
-	return NSNotFound;
-    }
-    
-    return [data indexOfObject:string];
+    if(completionListName)
+        return [[[RMCompletionManager sharedManager] completionsInCompletionListNamed:completionListName] indexOfObject:string];
+    else
+        return NSNotFound;
 }
 
 @end

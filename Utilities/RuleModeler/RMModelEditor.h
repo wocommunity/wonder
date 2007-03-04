@@ -64,9 +64,6 @@ typedef enum {
     IBOutlet NSTextView     *rhsValueTextView;
     IBOutlet NSTextField    *rhsValueHelpField;
     
-    NSMutableArray		*_assignmentClassNames;
-    NSMutableArray		*_rhsKeyNames;
-    
     NSMutableDictionary		*toolbarItems;
     IBOutlet NSView         *cornerView;
 }
@@ -79,7 +76,6 @@ typedef enum {
 
 - (IBAction)showSelectedRule:(id)sender;
 
-- (NSArray *)assignmentClassNames;
 - (IBAction)rhsComboBoxAction:(id)sender;
 
 - (IBAction)remove:(id)sender;
