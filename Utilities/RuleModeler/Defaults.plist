@@ -13,4 +13,6 @@
     formattedQualifier = NO;
     useParenthesesForComparisonQualifier = NO;
     defaultRulePriority = 100;
+//    highlightSearchFilterOccurences = YES;
+//    searchFilterHighlightColor = <NSColor as NSData>;
 }
