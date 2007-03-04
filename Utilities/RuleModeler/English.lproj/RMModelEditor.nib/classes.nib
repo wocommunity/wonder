@@ -7,6 +7,8 @@
             LANGUAGE = ObjC; 
             SUPERCLASS = NSObject; 
         }, 
+        {CLASS = NSObject; LANGUAGE = ObjC; }, 
+        {CLASS = RMComboBox; LANGUAGE = ObjC; SUPERCLASS = NSComboBox; }, 
         {
             ACTIONS = {
                 changeCaseSensitivityOption = id; 
@@ -60,6 +62,9 @@
             SUPERCLASS = NSWindowController; 
         }, 
         {CLASS = RMTableView; LANGUAGE = ObjC; SUPERCLASS = NSTableView; }, 
+        {CLASS = RMTextField; LANGUAGE = ObjC; SUPERCLASS = NSTextField; }, 
+        {CLASS = RMTextFieldCell; LANGUAGE = ObjC; SUPERCLASS = NSTextFieldCell; }, 
+        {CLASS = RMTextView; LANGUAGE = ObjC; SUPERCLASS = NSTextView; }, 
         {CLASS = Rule; LANGUAGE = ObjC; SUPERCLASS = NSObject; }
     ); 
     IBVersion = 1; 
