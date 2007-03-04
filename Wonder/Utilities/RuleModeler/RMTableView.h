@@ -43,3 +43,7 @@
 - (IBAction) invertSelection:(id)sender;
 
 @end
+
+@interface NSObject(RMTableViewDelegateAddition)
+- (void)addToTableView:(NSTableView *)tableView;
+@end
