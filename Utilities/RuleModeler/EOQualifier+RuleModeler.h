@@ -43,6 +43,8 @@
 @interface EOQualifier(RuleModeler)
 - (NSString *)formattedDescription;
 - (NSString *)formattedDescriptionWithIndentLevel:(unsigned)indentLevel;
+- (NSSet *)allKeyPaths;
+- (NSSet *)allStringValues;
 @end
 
     
