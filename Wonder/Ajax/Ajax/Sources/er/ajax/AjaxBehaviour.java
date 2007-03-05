@@ -27,13 +27,13 @@ public class AjaxBehaviour extends AjaxDynamicElement {
 		super.appendToResponse(response, context);
 		boolean includeScriptTag = booleanValueForBinding("includeScriptTag", true, context.component());
 		if(includeScriptTag) {
-			response.appendContentString("<script>\n");
+			AjaxUtils.appendScriptHeader(response);
 		}
 		response.appendContentString("Behaviour.register(");
 		appendChildrenToResponse(response, context);
 		response.appendContentString(");");
 		if(includeScriptTag) {
-			response.appendContentString("</script>");
+			AjaxUtils.appendScriptFooter(response);
 		}
 	}
 
