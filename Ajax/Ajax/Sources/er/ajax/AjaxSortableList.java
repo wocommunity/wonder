@@ -25,6 +25,10 @@ import com.webobjects.foundation.NSRange;
  * @binding listElementName the HTML element name of the list (defaults to 'ul')
  * @binding listItemElementName the HTML element name of the list item (defaults to 'li')
  * @binding listItemIDKeyPath the key path of the id of each item (required)
+ * @binding listClass the CSS class of the list 
+ * @binding listStyle the CSS style attribute of the list
+ * @binding listItemClass the CSS class of the current list item
+ * @binding listItemStyle the CSS style attribute of the current list item
  * @binding startIndex the start index of the list
  * @binding action the action to fire when the list is reordered
  * 
