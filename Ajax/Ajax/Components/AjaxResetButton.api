@@ -1,8 +1,12 @@
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<wodefinitions>
-	<wo wocomponentcontent="false" class="ResetForm.java">
+<?xml version="1.0" encoding="UTF-8"?><wodefinitions>
+	<wo class="ResetForm.java" wocomponentcontent="false">
 		<binding name="formId"/>
-		    	
+		<binding defaults="Boolean" name="clear"/>		    	
+		<binding name="id"/>		    	
+		<binding name="class"/>		    	
+		<binding name="style"/>		    	
+		<binding name="value"/>		    	
+
 	 	<validation message="&amp;apos;formId&amp;apos; is a required binding">
 	 		<unbound name="formId"/>
 	 	</validation>
