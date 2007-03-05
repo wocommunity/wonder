@@ -4,11 +4,15 @@ Content : WOComponentContent {
 ListContainer : WOGenericContainer {
 	elementName = listElementName;
 	id = id;
+	class = ^listClass;
+	style = ^listStyle;
 }
 
 ListItemContainer : WOGenericContainer {
 	elementName = listItemElementName;
 	id = listItemID;
+	class = ^listItemClass;
+	style = ^listItemStyle;
 }
 
 ListRepetition : WORepetition {
