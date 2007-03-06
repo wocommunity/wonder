@@ -25,16 +25,16 @@ public class WOHelperFunctionHTMLTemplateParser extends WOParser implements WOHe
 	public static Logger log = Logger.getLogger(WOHelperFunctionHTMLTemplateParser.class);
 
 	private static NSMutableDictionary _tagShortcutMap = new NSMutableDictionary();
-  private static NSMutableDictionary _tagProcessorMap = new NSMutableDictionary();
+	private static NSMutableDictionary _tagProcessorMap = new NSMutableDictionary();
 	private static boolean _allowInlineBindings = false;
 
 	public static void registerTagShortcut(String fullElementType, String shortcutElementType) {
 		_tagShortcutMap.setObjectForKey(fullElementType, shortcutElementType);
 	}
 
-  public static void registerTagProcessorForElementType(WOTagProcessor tagProcessor, String elementType) {
-    _tagProcessorMap.setObjectForKey(tagProcessor, elementType);
-  }
+	public static void registerTagProcessorForElementType(WOTagProcessor tagProcessor, String elementType) {
+		_tagProcessorMap.setObjectForKey(tagProcessor, elementType);
+	}
 
 	public static void setAllowInlineBindings(boolean allowInlineBindings) {
 		_allowInlineBindings = allowInlineBindings;
@@ -42,26 +42,26 @@ public class WOHelperFunctionHTMLTemplateParser extends WOParser implements WOHe
 
 	static {
 		WOHelperFunctionHTMLTemplateParser.log.setLevel(Level.WARN);
-    
+
 		WOHelperFunctionHTMLTemplateParser.registerTagShortcut("WOString", "string");
 		WOHelperFunctionHTMLTemplateParser.registerTagShortcut("WOString", "str");
 		WOHelperFunctionHTMLTemplateParser.registerTagShortcut("WOConditional", "if");
 		WOHelperFunctionHTMLTemplateParser.registerTagShortcut("WOConditional", "condition");
 		WOHelperFunctionHTMLTemplateParser.registerTagShortcut("WOConditional", "conditional");
-	    WOHelperFunctionHTMLTemplateParser.registerTagShortcut("WOHyperlink", "link");
-	    WOHelperFunctionHTMLTemplateParser.registerTagShortcut("WORepetition", "loop");
-	    WOHelperFunctionHTMLTemplateParser.registerTagShortcut("WOTextField", "textfield");
-	    WOHelperFunctionHTMLTemplateParser.registerTagShortcut("WOCheckBox", "checkbox");
-	    WOHelperFunctionHTMLTemplateParser.registerTagShortcut("WOHiddenField", "hidden");
-	    WOHelperFunctionHTMLTemplateParser.registerTagShortcut("WOPopUpButton", "select");
-	    WOHelperFunctionHTMLTemplateParser.registerTagShortcut("WORadioButton", "radio");
-	    WOHelperFunctionHTMLTemplateParser.registerTagShortcut("WOPasswordField", "password");
-	    WOHelperFunctionHTMLTemplateParser.registerTagShortcut("WOFileUpload", "upload");
-	    WOHelperFunctionHTMLTemplateParser.registerTagShortcut("WOText", "text");
-	    WOHelperFunctionHTMLTemplateParser.registerTagShortcut("WOForm", "form");
-	    WOHelperFunctionHTMLTemplateParser.registerTagShortcut("WOSubmitButton", "submit");
+		WOHelperFunctionHTMLTemplateParser.registerTagShortcut("WOHyperlink", "link");
+		WOHelperFunctionHTMLTemplateParser.registerTagShortcut("WORepetition", "loop");
+		WOHelperFunctionHTMLTemplateParser.registerTagShortcut("WOTextField", "textfield");
+		WOHelperFunctionHTMLTemplateParser.registerTagShortcut("WOCheckBox", "checkbox");
+		WOHelperFunctionHTMLTemplateParser.registerTagShortcut("WOHiddenField", "hidden");
+		WOHelperFunctionHTMLTemplateParser.registerTagShortcut("WOPopUpButton", "select");
+		WOHelperFunctionHTMLTemplateParser.registerTagShortcut("WORadioButton", "radio");
+		WOHelperFunctionHTMLTemplateParser.registerTagShortcut("WOPasswordField", "password");
+		WOHelperFunctionHTMLTemplateParser.registerTagShortcut("WOFileUpload", "upload");
+		WOHelperFunctionHTMLTemplateParser.registerTagShortcut("WOText", "text");
+		WOHelperFunctionHTMLTemplateParser.registerTagShortcut("WOForm", "form");
+		WOHelperFunctionHTMLTemplateParser.registerTagShortcut("WOSubmitButton", "submit");
 
-	    WOHelperFunctionHTMLTemplateParser.registerTagProcessorForElementType(new NotTagProcessor(), "not");
+		WOHelperFunctionHTMLTemplateParser.registerTagProcessorForElementType(new NotTagProcessor(), "not");
 	}
 
 	private WOHTMLWebObjectTag _currentWebObjectTag;
@@ -91,7 +91,7 @@ public class WOHelperFunctionHTMLTemplateParser extends WOParser implements WOHe
 				quotedStrings = new NSDictionary();
 			}
 			else {
-				value = value.replaceAll("\\$", "$");
+				value = value.replaceAll("\\\\\\$", "\\$");
 				value = value.replaceAll("\\\"", "\"");
 				quotedStrings = new NSDictionary(value, "_WODP_0");
 				value = "_WODP_0";
@@ -122,11 +122,16 @@ public class WOHelperFunctionHTMLTemplateParser extends WOParser implements WOHe
 				changeBuffers = true;
 			}
 			else if (inQuote && ch == '\\') {
-				index ++;
+				index++;
 				if (index == length) {
 					throw new WOHTMLFormatException("'" + tag + "' has a '\\' as the last character.");
 				}
-				currentBuffer.append(tag.charAt(index));
+				if (tag.charAt(index) == '$') {
+					currentBuffer.append("\\$");
+				}
+				else {
+					currentBuffer.append(tag.charAt(index));
+				}
 			}
 			else {
 				if (changeBuffers) {
@@ -168,16 +173,16 @@ public class WOHelperFunctionHTMLTemplateParser extends WOParser implements WOHe
 		String elementName;
 		synchronized (this) {
 			elementName = "_" + elementType + "_" + _inlineBindingCount;
-			_inlineBindingCount ++;
+			_inlineBindingCount++;
 		}
-    WOTagProcessor tagProcessor = (WOTagProcessor)_tagProcessorMap.objectForKey(elementType);
-    WODeclaration declaration;
-    if (tagProcessor == null) {
-			 declaration = new WODeclaration(elementName, elementType, associations);
-    }
-    else {
-      declaration = tagProcessor.createDeclaration(elementName, elementType, associations);
-    }
+		WOTagProcessor tagProcessor = (WOTagProcessor) _tagProcessorMap.objectForKey(elementType);
+		WODeclaration declaration;
+		if (tagProcessor == null) {
+			declaration = new WODeclaration(elementName, elementType, associations);
+		}
+		else {
+			declaration = tagProcessor.createDeclaration(elementName, elementType, associations);
+		}
 		_declarations.setObjectForKey(declaration, elementName);
 		processDeclaration(declaration);
 		return declaration;
