@@ -94,11 +94,6 @@ public class AjaxSlider extends AjaxComponent {
     protected void addRequiredWebResources(WOResponse res) {
         addScriptResourceInHead(res, "prototype.js");
         addScriptResourceInHead(res, "scriptaculous.js");
-        addScriptResourceInHead(res, "effects.js");
-        addScriptResourceInHead(res, "builder.js");
-        addScriptResourceInHead(res, "dragdrop.js");
-        addScriptResourceInHead(res, "controls.js");
-        addScriptResourceInHead(res, "slider.js");
     }
 
     public void takeValuesFromRequest(WORequest worequest, WOContext wocontext) {

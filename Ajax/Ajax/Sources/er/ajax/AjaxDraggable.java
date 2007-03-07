@@ -118,10 +118,6 @@ public class AjaxDraggable extends AjaxComponent {
   protected void addRequiredWebResources(WOResponse res) {
     addScriptResourceInHead(res, "prototype.js");
     addScriptResourceInHead(res, "scriptaculous.js");
-    addScriptResourceInHead(res, "effects.js");
-    addScriptResourceInHead(res, "builder.js");
-    addScriptResourceInHead(res, "dragdrop.js");
-    addScriptResourceInHead(res, "controls.js");
   }
 
   public WOActionResults handleRequest(WORequest request, WOContext context) {

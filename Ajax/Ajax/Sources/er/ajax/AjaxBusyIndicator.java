@@ -1,6 +1,9 @@
 package er.ajax;
 
-import com.webobjects.appserver.*;
+import com.webobjects.appserver.WOActionResults;
+import com.webobjects.appserver.WOContext;
+import com.webobjects.appserver.WORequest;
+import com.webobjects.appserver.WOResponse;
 
 public class AjaxBusyIndicator extends AjaxComponent {
   public AjaxBusyIndicator(WOContext context) {
@@ -18,7 +21,6 @@ public class AjaxBusyIndicator extends AjaxComponent {
   protected void addRequiredWebResources(WOResponse res) {
     addScriptResourceInHead(res, "prototype.js");
     addScriptResourceInHead(res, "scriptaculous.js");
-    addScriptResourceInHead(res, "effects.js");
   }
 
   public String busyImage() {
