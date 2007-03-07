@@ -121,10 +121,6 @@ public class AjaxInPlaceEditor extends AjaxDynamicElement {
   protected void addRequiredWebResources(WOResponse response, WOContext context) {
     AjaxUtils.addScriptResourceInHead(context, response, "prototype.js");
     AjaxUtils.addScriptResourceInHead(context, response, "scriptaculous.js");
-    AjaxUtils.addScriptResourceInHead(context, response, "effects.js");
-    AjaxUtils.addScriptResourceInHead(context, response, "builder.js");
-    AjaxUtils.addScriptResourceInHead(context, response, "dragdrop.js");
-    AjaxUtils.addScriptResourceInHead(context, response, "controls.js");
   }
 
   // Formatting/Parsing method "inspired by" WOTextField
