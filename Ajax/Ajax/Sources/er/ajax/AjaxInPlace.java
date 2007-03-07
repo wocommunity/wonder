@@ -8,6 +8,8 @@ import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WORequest;
 import com.webobjects.appserver.WOResponse;
 
+import er.extensions.ERXComponentUtilities;
+
 /**
  * AjaxInPlace is a generalization of the AjaxInPlaceEditor. To use this component, you must wrap an ERXWOTemplate named
  * "view" and an ERXWOTemplate named "edit". <br />
@@ -195,7 +197,7 @@ public class AjaxInPlace extends WOComponent {
 	public boolean manualControl() {
 		boolean manualControl = false;
 		if (hasBinding("manualControl")) {
-			manualControl = ((Boolean) valueForBinding("manualControl")).booleanValue();
+			manualControl = ERXComponentUtilities.booleanValueForBinding(this, "manualControl");
 		}
 		return manualControl;
 	}
@@ -203,7 +205,7 @@ public class AjaxInPlace extends WOComponent {
 	public boolean manualEditControl() {
 		boolean manualEditControl = manualControl();
 		if (!manualEditControl && hasBinding("manualEditControl")) {
-			manualEditControl = ((Boolean) valueForBinding("manualEditControl")).booleanValue();
+			manualEditControl = ERXComponentUtilities.booleanValueForBinding(this, "manualEditControl");
 		}
 		return manualEditControl;
 	}
@@ -211,7 +213,7 @@ public class AjaxInPlace extends WOComponent {
 	public boolean manualViewControl() {
 		boolean manualViewControl = manualControl();
 		if (!manualViewControl && hasBinding("manualViewControl")) {
-			manualViewControl = ((Boolean) valueForBinding("manualViewControl")).booleanValue();
+			manualViewControl = ERXComponentUtilities.booleanValueForBinding(this, "manualViewControl");
 		}
 		return manualViewControl;
 	}
@@ -219,25 +221,24 @@ public class AjaxInPlace extends WOComponent {
 	public boolean disabled() {
 		boolean disabled = false;
 		if (hasBinding("disabled")) {
-			disabled = ((Boolean) valueForBinding("disabled")).booleanValue();
+			disabled = ERXComponentUtilities.booleanValueForBinding(this, "disabled");
 		}
 		return disabled;
 	}
 
 	public boolean editing() {
 		if (hasBinding("editing")) {
-			Boolean editingBoolean = (Boolean) valueForBinding("editing");
-			_editing = editingBoolean.booleanValue();
+			_editing = ERXComponentUtilities.booleanValueForBinding(this, "editing");
 		}
 		return !disabled() && _editing;
 	}
 
 	public boolean canEdit() {
-		return (!hasBinding("canEdit") || ((Boolean) valueForBinding("canEdit")).booleanValue());
+		return (!hasBinding("canEdit") || ERXComponentUtilities.booleanValueForBinding(this, "canEdit"));
 	}
 
 	public boolean canSave() {
-		return (!hasBinding("canSave") || ((Boolean) valueForBinding("canSave")).booleanValue());
+		return (!hasBinding("canSave") || ERXComponentUtilities.booleanValueForBinding(this, "canSave"));
 	}
 
 	public void setEditing(boolean editing) {
