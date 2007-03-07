@@ -3,14 +3,16 @@ import org.apache.log4j.Logger;
 
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WOElement;
+import com.webobjects.appserver.WORequest;
 import com.webobjects.appserver.WOResponse;
 import com.webobjects.foundation.NSDictionary;
 
 /**
- * Provides better error checking.
- * When it is embedded in a WOForm that does not have enctype=multipart/form-data,
- * it throws an IllegalArgumentException. 
- *
+ * Enhanced WOFileUpload.
+ * <ul>
+ *  <li> throws an IllegalArgumentException when it is embedded in a WOForm that does not have enctype=multipart/form-data
+ *  <li> catches "ran out of data" IllegalStateException in superclass when the user backtracked.
+ *</ul>
  * @created ak on Wed Oct 09 2002
  * @project ERExtensions
  */
@@ -34,7 +36,23 @@ public class ERXWOFileUpload extends com.webobjects.appserver._private.WOFileUpl
     		throw new IllegalArgumentException("This form is missing a 'enctype=multipart/form-data' attribute. It is required for WOFileUpload to work.");
     	}
     }
-
+    
+    public void takeValuesFromRequest(WORequest worequest, WOContext wocontext) {
+    	try {
+    		super.takeValuesFromRequest(worequest, wocontext);
+    	} catch(IllegalStateException ex) {
+    		// AK: Safari has the habit of posting only a part of the request when you backtrack and
+    		// this in turn triggers an IllegalStateException in our superclass
+    		// so we only rethrow when we didn't backtrack
+    		boolean doThrow = !wocontext.hasSession() || !(wocontext.session() instanceof ERXSession) || !((ERXSession)wocontext.session()).didBacktrack();
+    		if(doThrow) {
+    			throw ex;
+    		} else {
+    			log.info("Ignoring a problem when reading the form values as the user backtracked: " + ex);
+    		}
+    	}
+    }
+    
     public void appendToResponse(WOResponse response, WOContext context) {
         checkEnctype(context);
         super.appendToResponse(response, context);
