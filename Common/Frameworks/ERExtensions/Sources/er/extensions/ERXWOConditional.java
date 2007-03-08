@@ -60,7 +60,7 @@ public class ERXWOConditional extends WODynamicGroup {
 		}
 
 		if (flag && !flag1 || !flag && flag1) {
-			takeValuesFromRequest(worequest, wocontext);
+			super.takeValuesFromRequest(worequest, wocontext);
 		}
 	}
 
@@ -81,7 +81,7 @@ public class ERXWOConditional extends WODynamicGroup {
 		}
 
 		if (flag && !flag1 || !flag && flag1) {
-			return invokeAction(worequest, wocontext);
+			return super.invokeAction(worequest, wocontext);
 		}
 		else {
 			return null;
