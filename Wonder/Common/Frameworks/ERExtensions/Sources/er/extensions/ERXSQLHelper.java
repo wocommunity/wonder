@@ -54,7 +54,7 @@ public class ERXSQLHelper {
 	/** logging support */
 	public static final Logger log = Logger.getLogger(ERXSQLHelper.class);
 
-	private static Map _sqhHelperMap = new HashMap();
+	private static Map _sqlHelperMap = new HashMap();
 
 	private JDBCPlugIn _plugin;
 
@@ -664,7 +664,7 @@ public class ERXSQLHelper {
 		return ";" + lineSeparator;
 	}
 
-	public static synchronized ERXSQLHelper newSQLHelper(EOSQLExpression expression) {
+	public static ERXSQLHelper newSQLHelper(EOSQLExpression expression) {
 		// This is REALLY hacky.
 		String className = expression.getClass().getName();
 		int dotIndex = className.lastIndexOf('$');
@@ -679,76 +679,84 @@ public class ERXSQLHelper {
 		return ERXSQLHelper.newSQLHelper(databaseProductName);
 	}
 
-	public static synchronized ERXSQLHelper newSQLHelper(EOEditingContext ec, String modelName) {
-		EODatabaseContext databaseContext = EOUtilities.databaseContextForModelNamed(ec, modelName);
-		return ERXSQLHelper.newSQLHelper(databaseContext);
+	public static ERXSQLHelper newSQLHelper(EOEditingContext ec, String modelName) {
+		ec.lock();
+		try {
+			EODatabaseContext databaseContext = EOUtilities.databaseContextForModelNamed(ec, modelName);
+			return ERXSQLHelper.newSQLHelper(databaseContext);
+		}
+		finally {
+			ec.unlock();
+		}
 	}
 
-	public static synchronized ERXSQLHelper newSQLHelper(EODatabaseContext databaseContext) {
+	public static ERXSQLHelper newSQLHelper(EODatabaseContext databaseContext) {
 		JDBCAdaptor adaptor = (JDBCAdaptor) databaseContext.database().adaptor();
 		return ERXSQLHelper.newSQLHelper(adaptor);
 	}
 
-	public static synchronized ERXSQLHelper newSQLHelper(EODatabaseChannel databaseChannel) {
+	public static ERXSQLHelper newSQLHelper(EODatabaseChannel databaseChannel) {
 		JDBCAdaptor adaptor = (JDBCAdaptor) databaseChannel.adaptorChannel().adaptorContext().adaptor();
 		return ERXSQLHelper.newSQLHelper(adaptor);
 	}
 
-	public static synchronized ERXSQLHelper newSQLHelper(EOAdaptorChannel adaptorChannel) {
+	public static ERXSQLHelper newSQLHelper(EOAdaptorChannel adaptorChannel) {
 		JDBCAdaptor adaptor = (JDBCAdaptor) adaptorChannel.adaptorContext().adaptor();
 		return ERXSQLHelper.newSQLHelper(adaptor);
 	}
 
-	public static synchronized ERXSQLHelper newSQLHelper(JDBCAdaptor adaptor) {
+	public static ERXSQLHelper newSQLHelper(JDBCAdaptor adaptor) {
 		JDBCPlugIn plugin = adaptor.plugIn();
 		return ERXSQLHelper.newSQLHelper(plugin);
 	}
 
-	public static synchronized ERXSQLHelper newSQLHelper(JDBCPlugIn plugin) {
+	public static ERXSQLHelper newSQLHelper(JDBCPlugIn plugin) {
 		String databaseProductName = plugin.databaseProductName();
 		return ERXSQLHelper.newSQLHelper(databaseProductName);
 	}
 
-	public static synchronized ERXSQLHelper newSQLHelper(String databaseProductName) {
-		ERXSQLHelper sqlHelper = (ERXSQLHelper) _sqhHelperMap.get(databaseProductName);
-		if (sqlHelper == null) {
-			try {
-				String sqlHelperClassName = ERXProperties.stringForKey(databaseProductName + ".SQLHelper");
-				if (sqlHelperClassName == null) {
-					if (databaseProductName.equalsIgnoreCase("frontbase")) {
-						sqlHelper = new FrontBaseSQLHelper();
-					}
-					else if (databaseProductName.equalsIgnoreCase("mysql")) {
-						sqlHelper = new MySQLSQLHelper();
-					}
-					else if (databaseProductName.equalsIgnoreCase("oracle")) {
-						sqlHelper = new OracleSQLHelper();
-					}
-					else if (databaseProductName.equalsIgnoreCase("postgresql")) {
-						sqlHelper = new PostgresqlSQLHelper();
-					}
-					else if (databaseProductName.equalsIgnoreCase("openbase")) {
-						sqlHelper = new OpenBaseSQLHelper();
+	public static ERXSQLHelper newSQLHelper(String databaseProductName) {
+		synchronized (_sqlHelperMap) {
+			ERXSQLHelper sqlHelper = (ERXSQLHelper) _sqlHelperMap.get(databaseProductName);
+			if (sqlHelper == null) {
+				try {
+					String sqlHelperClassName = ERXProperties.stringForKey(databaseProductName + ".SQLHelper");
+					if (sqlHelperClassName == null) {
+						if (databaseProductName.equalsIgnoreCase("frontbase")) {
+							sqlHelper = new FrontBaseSQLHelper();
+						}
+						else if (databaseProductName.equalsIgnoreCase("mysql")) {
+							sqlHelper = new MySQLSQLHelper();
+						}
+						else if (databaseProductName.equalsIgnoreCase("oracle")) {
+							sqlHelper = new OracleSQLHelper();
+						}
+						else if (databaseProductName.equalsIgnoreCase("postgresql")) {
+							sqlHelper = new PostgresqlSQLHelper();
+						}
+						else if (databaseProductName.equalsIgnoreCase("openbase")) {
+							sqlHelper = new OpenBaseSQLHelper();
+						}
+						else {
+							try {
+								sqlHelper = (ERXSQLHelper) Class.forName(ERXSQLHelper.class.getName() + "$" + databaseProductName + "SQLHelper").newInstance();
+							}
+							catch (ClassNotFoundException e) {
+								sqlHelper = new ERXSQLHelper();
+							}
+						}
 					}
 					else {
-						try {
-							sqlHelper = (ERXSQLHelper) Class.forName(ERXSQLHelper.class.getName() + "$" + databaseProductName + "SQLHelper").newInstance();
-						}
-						catch (ClassNotFoundException e) {
-							sqlHelper = new ERXSQLHelper();
-						}
+						sqlHelper = (ERXSQLHelper) Class.forName(sqlHelperClassName).newInstance();
 					}
+					_sqlHelperMap.put(databaseProductName, sqlHelper);
 				}
-				else {
-					sqlHelper = (ERXSQLHelper) Class.forName(sqlHelperClassName).newInstance();
+				catch (Exception e) {
+					throw new NSForwardException(e, "Failed to create sql helper for '" + databaseProductName + "'.");
 				}
-				_sqhHelperMap.put(databaseProductName, sqlHelper);
 			}
-			catch (Exception e) {
-				throw new NSForwardException(e, "Failed to create sql helper for '" + databaseProductName + "'.");
-			}
+			return sqlHelper;
 		}
-		return sqlHelper;
 	}
 
 	public static class EROracleSQLHelper extends ERXSQLHelper.OracleSQLHelper {
