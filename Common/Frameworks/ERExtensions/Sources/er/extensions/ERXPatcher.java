@@ -100,6 +100,7 @@ public class ERXPatcher {
 		ERXPatcher.setClassForName(WOToOneRelationship.class, "WOToOneRelationship");
 
 		ERXPatcher.setClassForName(ERXHyperlink.class, "WOHyperlink");
+		ERXPatcher.setClassForName(ERXWOConditional.class, "WOConditional");
 	}
 
 	/**
