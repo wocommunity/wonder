@@ -19,10 +19,11 @@ import com.webobjects.appserver.*;
  * @author Chuck Hill
  */
 public class AjaxResetButton extends WOComponent {
+    
     public static final String FORM_ID_BINDING = "formId";
     public static final String VALUE_BINDING = "value";
     public static final String CLEAR_BINDING = "clear";
-
+    
     public AjaxResetButton(WOContext context) {
         super(context);
     }
@@ -40,29 +41,21 @@ public class AjaxResetButton extends WOComponent {
     public void appendToResponse(WOResponse response, WOContext context) {
         super.appendToResponse(response, context);
         AjaxUtils.addScriptResourceInHead(context, response, "prototype.js");
+        AjaxUtils.addScriptResourceInHead(context, response, "wonder.js");
     }
     
     /**
      * @return JavaScript to reset form
      */
     public String resetFormJavaScript() {
-    	return clear() ?
-    			"inputs=Form.getInputs('" + formId() + "'); " +
-    			"for (inputIdx=0; inputIdx < inputs.length; inputIdx++) {" +
-    			"  anInput = inputs[inputIdx];" +
-    			"  if (anInput.type.toLowerCase() != 'submit') anInput.value = '';" +
-    			"} " +
-    			"return false;"
-    			:
-    			"Form.reset('" + formId() + "'); return false;";
+    	return clear() ? "Form.clear('" + formId() + "'); return false;" : "Form.reset('" + formId() + "'); return false;";
     }
     
     /**
      * @return value of formId binding
      */
     public String formId() {
-        if ( ! hasBinding(FORM_ID_BINDING))
-        {
+        if ( ! hasBinding(FORM_ID_BINDING)) {
             throw new IllegalArgumentException(FORM_ID_BINDING + " is a required binding");
         }
 
@@ -83,8 +76,14 @@ public class AjaxResetButton extends WOComponent {
         return hasBinding(CLEAR_BINDING) ? ((Boolean)valueForBinding(CLEAR_BINDING)).booleanValue() : false;
     }
     
-    public WOComponent dummy()
-    {
-    	throw new RuntimeException("dummy action called");
+    /**
+     * This should never be called.  If it gets called, something went wrong with the onClick event on 
+     * the button.
+     * 
+     * @return current page
+     */
+    public WOComponent dummy() {
+    	throw new RuntimeException("Action called.  This can happen if your formId binding is not correct");
     }
+    
 }
