@@ -9,6 +9,7 @@ import com.webobjects.appserver.WOApplication;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WORequest;
 import com.webobjects.appserver._private.WOProperties;
+import com.webobjects.appserver._private.WOShared;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSComparator;
 import com.webobjects.foundation.NSData;
@@ -123,6 +124,26 @@ public  class ERXRequest extends WORequest {
      */
     public boolean isSecure() {
     	return ERXRequest.isRequestSecure(this);
+    }
+    
+    public void _completeURLPrefix(StringBuffer stringbuffer, boolean secure, int port) {
+    	String serverName = _serverName();
+        String portStr;
+        if (port == 0) {
+        	portStr = secure ? "443" : _serverPort();
+        } else {
+        	portStr = WOShared.unsignedIntString(port);
+        }
+        if (secure) {
+        	stringbuffer.append("https://");
+        } else {
+        	stringbuffer.append("http://");
+        }
+   		stringbuffer.append(serverName);
+   		if(portStr != null && ((secure && !"443".equals(portStr)) || (!secure && !"80".equals(portStr)))) {
+   			stringbuffer.append(':');
+   			stringbuffer = stringbuffer.append(portStr);
+        }
     }
     
     /**
