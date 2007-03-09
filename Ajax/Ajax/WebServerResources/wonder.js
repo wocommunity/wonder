@@ -43,6 +43,25 @@ Object.extend(Form, {
   }
 });
 
+Object.extend(Form, {
+  clear: function(form) {  // Clears data rather than reset to original values
+      	inputs=Form.getInputs(form);
+    	for (inputIdx=0; inputIdx < inputs.length; inputIdx++) {
+    		anInput = inputs[inputIdx];
+    		if (anInput.type.toLowerCase() == 'text') anInput.value = '';
+    		if (anInput.type.toLowerCase() == 'radio') anInput.checked = anInput.defaultChecked;
+    		if (anInput.type.toLowerCase() == 'checkbox') anInput.checked = false;
+    		if (anInput.type.toLowerCase() == 'file') anInput.value = '';
+    		if (anInput.type.toLowerCase() == 'password') anInput.value = '';
+    	}
+    	
+    	selects = $(form).getElementsByTagName('select');
+    	for (selectIdx=0; selectIdx < selects.length; selectIdx++) {
+    		selects[selectIdx].selectedIndex = -1;
+    	}
+    }
+});  
+
 var AjaxInPlace = {
 	saveFunctionName : function(id) {
 		return "window." + id + "Save";
