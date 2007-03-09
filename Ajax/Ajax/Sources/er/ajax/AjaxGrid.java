@@ -2,6 +2,8 @@ package er.ajax;
 
 import java.text.*;
 
+import org.apache.log4j.*;
+
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WODisplayGroup;
@@ -9,7 +11,6 @@ import com.webobjects.appserver.WOResponse;
 import com.webobjects.eocontrol.EOSortOrdering;
 import com.webobjects.foundation.*;
 
-import er.extensions.*;
 
 /**
  * Ajax powered grid based on HTML Table that provides drag and drop column
@@ -163,7 +164,7 @@ import er.extensions.*;
  *   }
  * </pre>
  * 
- * <h3>CSS Classed Used by AjaxGrid</h3>
+ * <h3>CSS Classes Used by AjaxGrid</h3>
  * In addition to the classes defined in the grid configuration, AjaxGrid uses
  * some set class names: <table>
  * <tr>
@@ -218,6 +219,11 @@ import er.extensions.*;
  * 
  * You can also use <code>content</code> to replace the span content with text
  * if your browser (not IE) supports it.
+ * 
+ * <h3>Updating the Configuration</h3>
+ * If you update the configuration after the grid has been displayed, some items will not update as the information is cached.  Add a value
+ * under the key AjaxGrid.CONFIGURATION_UPDATED to notify the grid to discard the cached information.  The grid will remove the value under
+ * this key after it has cleared the cache.
  * <h3>To Do</h3>
  * <ul>
  * <li>wrap JavaScript in function literal for namespace protection</li>
@@ -279,14 +285,15 @@ public class AjaxGrid extends WOComponent {
 	public static final String UNSELECTED_ROW_CSS_CLASS = "unselectedRowCSSClass";
 	public static final String SELECTED_ROW_CSS_STYLE = "selectedRowCSSStyle";
 	public static final String UNSELECTED_ROW_CSS_STYLE = "unselectedRowCSSStyle";
-
+	public static final String CONFIGURATION_UPDATED = "configurationUpdated";
+	public static final String COMPONENT_NAME = "component";
+	
 	public static final String DISPLAY_GROUP_BINDING = "displayGroup";
 	public static final String CONFIGURATION_DATA_BINDING = "configurationData";
 	public static final String SELECTED_OBJECTS_BINDING = "selectedObjects";
 	public static final String WILL_UPDATE_BINDING = "willUpdate";
 	public static final String AFTER_UPDATE_BINDING = "afterUpdate";
 
-	public static final String COMPONENT_NAME = "component";
 
 	public AjaxGrid(WOContext context) {
 		super(context);
@@ -405,14 +412,21 @@ public class AjaxGrid extends WOComponent {
 	 * @return ajaxGrid_init(TABLE);
 	 */
 	public String enableDragAndDrop() {
-		return canReorder() ? "ajaxGrid_init($('" + tableID() + "')); downloadLogNavBarUpdate()" : "";
+		return canReorder() ? "ajaxGrid_init($('" + tableID() + "'));" : "";
 	}
 
 	/**
 	 * @return the configurationData
 	 */
 	public NSMutableDictionary configurationData() {
-		return (NSMutableDictionary) valueForBinding(CONFIGURATION_DATA_BINDING);
+		NSMutableDictionary configurationData = (NSMutableDictionary) valueForBinding(CONFIGURATION_DATA_BINDING);
+		if (configurationData.objectForKey(CONFIGURATION_UPDATED) != null)
+		{
+			clearCachedConfiguration();
+			configurationData.removeObjectForKey(CONFIGURATION_UPDATED);
+		}
+
+		return configurationData;
 	}
 
 	/**
@@ -657,7 +671,8 @@ public class AjaxGrid extends WOComponent {
 
 		Object rawValue = row().valueForKeyPath(currentKeyPath());
 		Format formatter = columnFormatter();
-		return formatter != null ? formatter.format(rawValue) : rawValue;
+
+		return (formatter != null && rawValue != null) ? formatter.format(rawValue) : rawValue;
 	}
 
 	/**
