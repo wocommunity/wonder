@@ -98,7 +98,7 @@ public class AjaxSubmitButton extends AjaxDynamicElement {
     boolean showUI = (functionName == null || booleanValueForBinding("showUI", false, component));
     boolean showButton = showUI && booleanValueForBinding("button", true, component);
     String formReference;
-    if (!showButton || functionName != null) {
+    if ((!showButton || functionName != null) && formName == null) {
       formName = ERXWOForm.formName(context, null);
       if (formName == null) {
         throw new WODynamicElementCreationException("If button = false or functionName is not null, the containing form must have an explicit name.");
