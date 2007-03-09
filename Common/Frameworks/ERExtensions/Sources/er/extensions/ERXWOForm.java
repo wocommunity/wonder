@@ -123,6 +123,7 @@ public class ERXWOForm extends com.webobjects.appserver._private.WOHTMLDynamicEl
 		boolean wasMultipleSubmitForm = context._isMultipleSubmitForm();
     	context._setActionInvoked(false);
 		context._setIsMultipleSubmitForm(_multipleSubmit == null ? false : _multipleSubmit.booleanValueInComponent(context.component()));
+		_setFormName(context);
     	WOActionResults result = super.invokeAction(worequest, context);
     	if(!wasInForm && !context._wasActionInvoked() && context._wasFormSubmitted()) {
     		if(_action != null) {
@@ -134,6 +135,7 @@ public class ERXWOForm extends com.webobjects.appserver._private.WOHTMLDynamicEl
     	}
 		context._setIsMultipleSubmitForm(wasMultipleSubmitForm);
     	_exitFormInContext(context, wasInForm, wasFormSubmitted);
+		_clearFormName(context);
     	return result;
     }
 
@@ -172,19 +174,34 @@ public class ERXWOForm extends com.webobjects.appserver._private.WOHTMLDynamicEl
     	if (forceFormSubmitted) {
     		context._setFormSubmitted(true);
     	}
+		_setFormName(context);
     	super.takeValuesFromRequest(request, context);
     	if (forceFormSubmitted) {
     		context._setFormSubmitted(false);
     	}
     	//log.info(context.elementID() + "->" + context.senderID() + "->" + context._wasFormSubmitted());
     	_exitFormInContext(context, wasInForm, wasFormSubmitted);
+		_clearFormName(context);
     }
-    
-    public void appendAttributesToResponse(WOResponse response, WOContext context) {
+
+    protected void _setFormName(WOContext context) {
     	if(_formName != null) {
     		String formName = (String)_formName.valueInComponent(context.component());
     		if(formName != null) {
     			ERXWOContext.contextDictionary().setObjectForKey(formName, "formName");
+    		}
+    	}
+    }
+
+    protected void _clearFormName(WOContext context) {
+        ERXWOContext.contextDictionary().removeObjectForKey("formName");
+    }
+    
+    public void appendAttributesToResponse(WOResponse response, WOContext context) {
+    	_setFormName(context);
+    	if(_formName != null) {
+    		String formName = (String)_formName.valueInComponent(context.component());
+    		if(formName != null) {
     			response._appendTagAttributeAndValue("name", formName, false);
     		}
     	}
@@ -246,7 +263,7 @@ public class ERXWOForm extends com.webobjects.appserver._private.WOHTMLDynamicEl
         	}
         	appendChildrenToResponse(response, context);
             _appendCloseTagToResponse(response, context);
-            ERXWOContext.contextDictionary().removeObjectForKey("formName");
+            _clearFormName(context);
             ERXWOContext.contextDictionary().removeObjectForKey("enctype");
         } else {
         	if(!disable) {
