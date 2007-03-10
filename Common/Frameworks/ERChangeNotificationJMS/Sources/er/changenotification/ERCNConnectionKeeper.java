@@ -209,7 +209,7 @@ class ERCNConnectionKeeper implements ExceptionListener {
     }
 
     synchronized void terminate() {
-        ;
+        // do nothing
     }
 
 }

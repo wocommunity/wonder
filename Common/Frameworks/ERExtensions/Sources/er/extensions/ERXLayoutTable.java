@@ -78,38 +78,38 @@ public class ERXLayoutTable extends WOComponent {
     		if(_colCounts == null) {
     			NSMutableArray colCounts = new NSMutableArray();
     			int maxColumns = maxColumns();
-    			int currentRow = 0;
-    			int currentCol = 0;
+    			int row = 0;
+    			int col = 0;
     			int index = 0;
     			int total = 0;
     			for (Enumeration iter = list().objectEnumerator(); iter.hasMoreElements();) {
-    				Object item = (Object) iter.nextElement();
+    				Object item = iter.nextElement();
     				setValueForBinding(item, "item");
-    				setValueForBinding(ERXConstant.integerForInt(currentRow), "row");
-    				setValueForBinding(ERXConstant.integerForInt(currentCol), "col");
+    				setValueForBinding(ERXConstant.integerForInt(row), "row");
+    				setValueForBinding(ERXConstant.integerForInt(col), "col");
     				setValueForBinding(ERXConstant.integerForInt(index), "index");
     				int rowSpan = cellRowSpan();
     				int colSpan = cellColSpan();
     				// fill up rows until enough are present
     				// this currently doesn't work when a col has eaten all
-    				for(int i = colCounts.count(); i < rowSpan + currentRow; i++) {
+    				for(int i = colCounts.count(); i < rowSpan + row; i++) {
     					colCounts.addObject(new Integer(maxColumns));
     					//log.info("Added: " + item + " " + colCounts);
     				}
     				//log.info("Start: " + item + "  " + currentRow + "/" + rowSpan + " " + currentCol + "/" + colSpan + " " + colCounts);
-    				for(int i = currentRow; i < currentRow + rowSpan; i++) {
+    				for(int i = row; i < row + rowSpan; i++) {
     					int currentMaxColumns = ((Integer) colCounts.objectAtIndex(i)).intValue();
-    					currentMaxColumns = currentMaxColumns - (colSpan - (i == currentRow ? 1 : 0));
+    					currentMaxColumns = currentMaxColumns - (colSpan - (i == row ? 1 : 0));
     					colCounts.replaceObjectAtIndex(new Integer(currentMaxColumns), i);
     					//log.info("Curr: " + item + "  " + i + "/" + rowSpan + " " + currentMaxColumns + "/" + colSpan + " " + colCounts);
     				}
     				//log.info("Intern: " + item + "  " + currentRow + "/" + rowSpan + " " + currentCol + "/" + colSpan + " " + colCounts);
-    				int currentRowMaxColums = ((Integer) colCounts.objectAtIndex(currentRow)).intValue();
+    				int currentRowMaxColums = ((Integer) colCounts.objectAtIndex(row)).intValue();
     				total += rowSpan * colSpan;
-    				currentCol += colSpan;
-    				if(currentCol >= currentRowMaxColums) {
-    					currentRow++;
-    					currentCol = 0;
+    				col += colSpan;
+    				if(col >= currentRowMaxColums) {
+    					row++;
+    					col = 0;
     					//log.info("Bumping row: " + item + " " + currentRow + " " + colCounts);
     				}
     	   			index = index + 1;

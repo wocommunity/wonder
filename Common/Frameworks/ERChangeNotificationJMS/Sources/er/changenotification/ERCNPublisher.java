@@ -88,7 +88,7 @@ class ERCNPublisher {
     }
 
     synchronized void terminate() {
-        ;
+        // do nothing
     }
 
 }
