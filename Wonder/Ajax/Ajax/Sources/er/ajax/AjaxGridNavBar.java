@@ -1,11 +1,12 @@
 package er.ajax;
 
-import java.math.*;
+import java.math.BigDecimal;
 
-import org.apache.log4j.*;
-
-import com.webobjects.appserver.*;
-import com.webobjects.foundation.*;
+import com.webobjects.appserver.WOComponent;
+import com.webobjects.appserver.WOContext;
+import com.webobjects.appserver.WODisplayGroup;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSMutableDictionary;
 
 /**
  * Abstract super class for a navigation bar that can be used with AjaxGrid. Use

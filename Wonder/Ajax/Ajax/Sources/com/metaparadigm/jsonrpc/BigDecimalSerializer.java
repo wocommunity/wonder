@@ -40,13 +40,9 @@ public class BigDecimalSerializer extends AbstractSerializer {
 			if (jso instanceof String) {
 				return new BigDecimal((String) jso);
 			}
-			else {
-				return new BigDecimal(((Number) jso).intValue());
-			}
+			return new BigDecimal(((Number) jso).intValue());
 		}
-		else {
-			return null;
-		}
+		return null;
 	}
 
 	public Object unmarshall(SerializerState state, Class clazz, Object jso) throws UnmarshallException {
@@ -54,9 +50,7 @@ public class BigDecimalSerializer extends AbstractSerializer {
 			if (jso == null || "".equals(jso)) {
 				return null;
 			}
-			else {
-				return toNumber(clazz, jso);
-			}
+			return toNumber(clazz, jso);
 		}
 		catch (NumberFormatException nfe) {
 			throw new UnmarshallException("cannot convert object " + jso + " to type " + clazz.getName());
