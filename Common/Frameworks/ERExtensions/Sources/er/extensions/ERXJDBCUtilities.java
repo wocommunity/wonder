@@ -95,7 +95,9 @@ public class ERXJDBCUtilities {
 		protected void addEntitiesFromModelGroup(EOModelGroup group) {
 			for (Enumeration enumeration = group.models().objectEnumerator(); enumeration.hasMoreElements();) {
 				EOModel model = (EOModel) enumeration.nextElement();
-				addEntitiesFromModel(model);
+				if ("JDBC".equalsIgnoreCase(model.adaptorName())) {
+					addEntitiesFromModel(model);
+				}
 			}
 		}
 
@@ -413,6 +415,27 @@ public class ERXJDBCUtilities {
 	public static void _copyDatabaseDefinedByEOModelAndConnectionDictionaryToDatabaseWithConnectionDictionary(EOModel m, NSDictionary sourceDict, NSDictionary destDict) {
 		try {
 			CopyTask task = new CopyTask(m);
+			task.connect(sourceDict, destDict);
+			task.run(false);
+			log.info("committing...");
+			task.commit();
+			log.info("committing... done");
+		}
+		catch (SQLException e) {
+			log.error("could not commit destCon", e);
+		}
+	}
+
+	/**
+	 * @see _copyDatabaseDefinedByEOModelAndConnectionDictionaryToDatabaseWithConnectionDictionary(EOModel, NSDictionary, NSDictionary)
+	 * @param modelGroup the model group to copy
+	 * @param sourceDict the source connection dictionary
+	 * @param destDict the destination connection dictionary
+	 * @return
+	 */
+	public static void _copyDatabaseDefinedByEOModelAndConnectionDictionaryToDatabaseWithConnectionDictionary(EOModelGroup modelGroup, NSDictionary sourceDict, NSDictionary destDict) {
+		try {
+			CopyTask task = new CopyTask(modelGroup);
 			task.connect(sourceDict, destDict);
 			task.run(false);
 			log.info("committing...");
