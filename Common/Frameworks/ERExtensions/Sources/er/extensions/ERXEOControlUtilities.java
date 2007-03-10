@@ -45,8 +45,10 @@ import com.webobjects.foundation.NSKeyValueCoding;
 import com.webobjects.foundation.NSKeyValueCodingAdditions;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
+import com.webobjects.foundation.NSMutableSet;
 import com.webobjects.foundation.NSPropertyListSerialization;
 import com.webobjects.foundation.NSSelector;
+import com.webobjects.foundation.NSSet;
 import com.webobjects.foundation.NSTimestamp;
 import com.webobjects.foundation.NSTimestampFormatter;
 
@@ -1570,5 +1572,127 @@ public class ERXEOControlUtilities {
 	   else {
 		   throw new IllegalArgumentException("Unable to make " + qualifier + " true for " + obj + " in a consistent way.");
 	   }
+   }
+   
+   /**
+    * Given a dictionary, array, set, EO, etc, this will recursively turn
+    * EO's into GID's.  You should lock the editingContext before calling
+    * this.
+    * 
+    * @param obj the object to recursively turn EO's into GID's for
+    * @return the GIDful object
+    */
+   public static Object convertEOtoGID(Object obj) {
+	   Object result;
+	   if (obj instanceof EOEnterpriseObject) {
+		   EOEnterpriseObject eoful = (EOEnterpriseObject)obj;
+		   EOGlobalID gidful = eoful.editingContext().globalIDForObject(eoful);
+		   result = gidful;
+	   }
+	   else if (obj instanceof NSArray) {
+		   NSArray eoful = (NSArray)obj;
+		   NSMutableArray gidful = new NSMutableArray();
+		   Enumeration objEnum = eoful.objectEnumerator();
+		   while (objEnum.hasMoreElements()) {
+			   gidful.addObject(ERXEOControlUtilities.convertEOtoGID(objEnum.nextElement()));
+		   }
+		   result = gidful;
+	   }
+	   else if (obj instanceof NSSet) {
+		   NSSet eoful = (NSSet)obj;
+		   NSMutableSet gidful = new NSMutableSet();
+		   Enumeration objEnum = eoful.objectEnumerator();
+		   while (objEnum.hasMoreElements()) {
+			   gidful.addObject(ERXEOControlUtilities.convertEOtoGID(objEnum.nextElement()));
+		   }
+		   result = gidful;
+	   }
+	   else if (obj instanceof NSDictionary) {
+		   NSDictionary eoful = (NSDictionary)obj;
+		   NSMutableDictionary gidful = new NSMutableDictionary();
+		   Enumeration keyEnum = eoful.keyEnumerator();
+		   while (keyEnum.hasMoreElements()) {
+			   Object eofulKey = keyEnum.nextElement();
+			   Object gidfulKey = ERXEOControlUtilities.convertEOtoGID(eofulKey);
+			   Object gidfulValue = ERXEOControlUtilities.convertEOtoGID(eoful.objectForKey(eofulKey));
+			   gidful.setObjectForKey(gidfulValue, gidfulKey);
+		   }
+		   result = gidful;
+	   }
+	   else {
+		   result = obj;
+	   }
+	   return result;
+   }
+   
+   /**
+    * Given a dictionary, array, set, EO, etc, this will recursively turn
+    * GID's into EO's.  You should lock the editingContext before calling
+    * this.
+    *  
+    * @param obj the object to recursively turn GID's into EO's for
+    * @return the EOful object
+    */
+   public static Object convertGIDtoEO(EOEditingContext editingContext, Object obj) {
+	   Object result;
+	   if (obj instanceof EOGlobalID) {
+		   EOGlobalID gidful = (EOGlobalID)obj;
+		   EOEnterpriseObject eoful = ERXEOGlobalIDUtilities.fetchObjectWithGlobalID(editingContext, gidful);
+		   result = eoful;
+	   }
+	   else if (obj instanceof NSArray) {
+		   NSArray gidful = (NSArray)obj;
+		   boolean allGIDs = true;
+		   Enumeration objEnum = gidful.objectEnumerator();
+		   while (allGIDs && objEnum.hasMoreElements()) {
+			   allGIDs = (objEnum.nextElement() instanceof EOGlobalID);
+		   }
+		   if (allGIDs) {
+			   result = ERXEOGlobalIDUtilities.fetchObjectsWithGlobalIDs(editingContext, gidful);
+		   }
+		   else {
+			   NSMutableArray eoful = new NSMutableArray();
+			   objEnum = gidful.objectEnumerator();
+			   while (objEnum.hasMoreElements()) {
+				   eoful.addObject(ERXEOControlUtilities.convertGIDtoEO(editingContext, objEnum.nextElement()));
+			   }
+			   result = eoful;
+		   }
+	   }
+	   else if (obj instanceof NSSet) {
+		   NSSet gidful = (NSSet)obj;
+		   boolean allGIDs = true;
+		   Enumeration objEnum = gidful.objectEnumerator();
+		   while (allGIDs && objEnum.hasMoreElements()) {
+			   allGIDs = (objEnum.nextElement() instanceof EOGlobalID);
+		   }
+		   if (allGIDs) {
+			   result = new NSSet(ERXEOGlobalIDUtilities.fetchObjectsWithGlobalIDs(editingContext, gidful.allObjects()));
+		   }
+		   else {
+			   NSMutableSet eoful = new NSMutableSet();
+			   objEnum = gidful.objectEnumerator();
+			   while (objEnum.hasMoreElements()) {
+				   eoful.addObject(ERXEOControlUtilities.convertGIDtoEO(editingContext, objEnum.nextElement()));
+			   }
+			   result = eoful;
+		   }
+	   }
+	   else if (obj instanceof NSDictionary) {
+		   NSDictionary gidful = (NSDictionary)obj;
+		   NSMutableDictionary eoful = new NSMutableDictionary();
+		   Enumeration keyEnum = gidful.keyEnumerator();
+		   while (keyEnum.hasMoreElements()) {
+			   Object gidfulKey = keyEnum.nextElement();
+			   Object eofulKey = ERXEOControlUtilities.convertGIDtoEO(editingContext, gidfulKey);
+			   Object eofulValue = ERXEOControlUtilities.convertGIDtoEO(editingContext, gidful.objectForKey(gidfulKey));
+			   eoful.setObjectForKey(eofulValue, eofulKey);
+		   }
+		   result = eoful;
+	   }
+	   else {
+		   result = obj;
+	   }
+	   return result;
    }
 }
