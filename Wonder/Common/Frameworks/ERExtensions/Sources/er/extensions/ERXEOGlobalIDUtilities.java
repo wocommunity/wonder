@@ -187,7 +187,7 @@ public class ERXEOGlobalIDUtilities {
         NSMutableArray result = new NSMutableArray();
         if(values.count() > 0) {
             for (Enumeration pks = values.objectEnumerator(); pks.hasMoreElements();) {
-                Object value = (Object) pks.nextElement();
+                Object value = pks.nextElement();
                 EOKeyGlobalID gid = EOKeyGlobalID.globalIDWithEntityName(entityName, new Object[] {value});
                 result.addObject(gid);
             }
@@ -195,36 +195,84 @@ public class ERXEOGlobalIDUtilities {
         return result;
     }
 
+    /**
+     * Fetches an object defined by gid without refreshing refetched objects.
+     * 
+     * @param ec the editing context to fetch within
+     * @param gid the global id to fetch
+     * @return the fetched EO
+     */
+    public static EOEnterpriseObject fetchObjectWithGlobalID(EOEditingContext ec, EOGlobalID gid) {
+    	NSArray results = ERXEOGlobalIDUtilities.fetchObjectsWithGlobalIDs(ec, new NSArray(gid));
+    	EOEnterpriseObject eo;
+    	if (results.count() > 0) {
+    		eo = (EOEnterpriseObject) results.objectAtIndex(0);
+    	}
+    	else {
+    		eo = null;
+    	}
+    	return eo;
+    }
+    
+    /**
+     * Fetches an array of objects defined by the globalIDs in a single fetch per entity without
+     * refreshing refetched objects.
+     * 
+     * @param ec the editing context to fetch within
+     * @param globalIDs the global ids to fetch
+     * @return the fetched EO's
+     */
     public static NSArray fetchObjectsWithGlobalIDs(EOEditingContext ec, NSArray globalIDs) {
     	return ERXEOGlobalIDUtilities.fetchObjectsWithGlobalIDs(ec, globalIDs, false);
     }
 
     /**
      * Fetches an array of objects defined by the globalIDs in a single fetch per entity.
-     * @param ec
-     * @param globalIDs
-     * @return
+     * 
+     * @param ec the editing context to fetch within
+     * @param globalIDs the global ids to fetch
+     * @param refreshesRefetchedObjects whether or not to refresh refetched objects
+     * @return the fetched EO's
      */
     public static NSArray fetchObjectsWithGlobalIDs(EOEditingContext ec, NSArray globalIDs, boolean refreshesRefetchedObjects) {
-    	NSDictionary gidsByEntity = globalIDsGroupedByEntityName(globalIDs);
     	NSMutableArray result = new NSMutableArray();
-    	for(Enumeration e = gidsByEntity.keyEnumerator(); e.hasMoreElements();) {
-    		String entityName = (String) e.nextElement();
-    		NSArray gidsForEntity = (NSArray) gidsByEntity.objectForKey(entityName);
-    		
-    		NSMutableArray qualifiers = new NSMutableArray();
-        	EOEntity entity = ERXEOAccessUtilities.entityNamed(ec, entityName);
-    		for (Enumeration gids = gidsForEntity.objectEnumerator(); gids.hasMoreElements();) {
-    			EOGlobalID g = (EOGlobalID) gids.nextElement();
-    			EOQualifier qualifier = entity.qualifierForPrimaryKey(entity.primaryKeyForGlobalID(g));
-    			qualifiers.addObject(qualifier);
-    		}
-    		EOQualifier qualifier = new EOOrQualifier(qualifiers);
-    		EOFetchSpecification fetchSpec = new EOFetchSpecification(entityName, qualifier, null);
-    		fetchSpec.setRefreshesRefetchedObjects(refreshesRefetchedObjects);
-    		NSArray details = ec.objectsWithFetchSpecification(fetchSpec);
-    		result.addObjectsFromArray(details);
-    	}
+		ec.lock();
+		try {
+	    	NSDictionary gidsByEntity = globalIDsGroupedByEntityName(globalIDs);
+	    	for(Enumeration e = gidsByEntity.keyEnumerator(); e.hasMoreElements();) {
+	    		String entityName = (String) e.nextElement();
+	    		NSArray gidsForEntity = (NSArray) gidsByEntity.objectForKey(entityName);
+	    		
+	    		NSMutableArray qualifiers = new NSMutableArray();
+	        	EOEntity entity = ERXEOAccessUtilities.entityNamed(ec, entityName);
+	    		for (Enumeration gids = gidsForEntity.objectEnumerator(); gids.hasMoreElements();) {
+	    			EOGlobalID g = (EOGlobalID) gids.nextElement();
+	    			boolean fetch = refreshesRefetchedObjects;
+	    			if (!fetch) {
+	    				EOEnterpriseObject eo;
+						eo = ec.objectForGlobalID(g);
+	    				if (eo != null && !EOFaultHandler.isFault(eo)) {
+	    					result.addObject(ec);
+	    				}
+	    				else {
+	    					fetch = true;
+	    				}
+	    			}
+	    			if (fetch) {
+	    				EOQualifier qualifier = entity.qualifierForPrimaryKey(entity.primaryKeyForGlobalID(g));
+	    				qualifiers.addObject(qualifier);
+	    			}
+	    		}
+	    		EOQualifier qualifier = new EOOrQualifier(qualifiers);
+	    		EOFetchSpecification fetchSpec = new EOFetchSpecification(entityName, qualifier, null);
+	    		fetchSpec.setRefreshesRefetchedObjects(refreshesRefetchedObjects);
+	    		NSArray details = ec.objectsWithFetchSpecification(fetchSpec);
+	    		result.addObjectsFromArray(details);
+	    	}
+		}
+		finally {
+			ec.unlock();
+		}
     	return result;
     }
 
