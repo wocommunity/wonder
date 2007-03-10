@@ -30,7 +30,7 @@ public class WOHelperFunctionDeclarationParser {
 	static {
 		WOHelperFunctionDeclarationParser.log.setLevel(Level.WARN);
 	}
-	
+
 	public WOHelperFunctionDeclarationParser() {
 		_quotedStrings = new NSMutableDictionary();
 	}
