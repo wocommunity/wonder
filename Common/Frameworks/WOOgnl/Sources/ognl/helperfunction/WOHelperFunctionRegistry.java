@@ -10,9 +10,8 @@ import com.webobjects.foundation._NSUtilities;
 import com.webobjects.foundation.NSKeyValueCoding._KeyBinding;
 
 /**
- * HelperFunctionRegistry provides a central point for registering and resolving 
- * helper functions. 
- *   
+ * HelperFunctionRegistry provides a central point for registering and resolving helper functions.
+ * 
  * @author mschrag
  */
 public class WOHelperFunctionRegistry {
@@ -35,9 +34,12 @@ public class WOHelperFunctionRegistry {
 	/**
 	 * Sets the helper object to use for the given class.
 	 * 
-	 * @param helperInstance an instance of the helper class (i.e. PersonHelper)
-	 * @param targetObjectClass the class that maps to this helper instance (i.e. Person.class)
-	 * @param frameworkName the scoping of the helper instance (null, or "app" = global)
+	 * @param helperInstance
+	 *            an instance of the helper class (i.e. PersonHelper)
+	 * @param targetObjectClass
+	 *            the class that maps to this helper instance (i.e. Person.class)
+	 * @param frameworkName
+	 *            the scoping of the helper instance (null, or "app" = global)
 	 */
 	public synchronized void setHelperInstanceForClassInFrameworkNamed(Object helperInstance, Class targetObjectClass, String frameworkName) {
 		if (frameworkName == null) {
@@ -64,16 +66,16 @@ public class WOHelperFunctionRegistry {
 		if (frameworkName == null) {
 			frameworkName = WOHelperFunctionRegistry.APP_FRAMEWORK_NAME;
 		}
-		
+
 		if (targetObject == null) {
 			throw new IllegalArgumentException("The target of a helper keypath must not be null.");
 		}
 		if (keyPath == null) {
 			throw new NullPointerException("You must specify a keypath to use helper functions.");
 		}
-		
+
 		Object helpedObject = NSKeyValueCodingAdditions.Utility.valueForKeyPath(targetObject, keyPath);
-        Class helpedClass;
+		Class helpedClass;
 		if (helpedObject != null) {
 			helpedClass = helpedObject.getClass();
 		}
@@ -90,10 +92,10 @@ public class WOHelperFunctionRegistry {
 				ultimateKey = keyPath.substring(lastKeyPathDotIndex + 1);
 				penultimateObject = NSKeyValueCodingAdditions.Utility.valueForKeyPath(targetObject, penultimateKeyPath);
 			}
-	        _KeyBinding binding = NSKeyValueCoding.DefaultImplementation._keyGetBindingForKey(penultimateObject, ultimateKey);
-	        helpedClass = binding.valueType();
+			_KeyBinding binding = NSKeyValueCoding.DefaultImplementation._keyGetBindingForKey(penultimateObject, ultimateKey);
+			helpedClass = binding.valueType();
 		}
-		
+
 		Object helperInstance = null;
 		helperInstance = _cachedHelperInstanceForFrameworkNamed(helpedClass, frameworkName);
 		if (helperInstance == null && !WOHelperFunctionRegistry.APP_FRAMEWORK_NAME.equals(frameworkName)) {
@@ -113,7 +115,7 @@ public class WOHelperFunctionRegistry {
 			helperInstance = targetHelperClass.newInstance();
 			setHelperInstanceForClassInFrameworkNamed(helperInstance, helpedClass, frameworkName);
 		}
-		
+
 		return helperInstance;
 	}
 }
