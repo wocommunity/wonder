@@ -6,12 +6,18 @@
 //
 package er.changenotification;
 
-import com.webobjects.foundation.*;
-import com.webobjects.appserver.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.eoaccess.*;
-import java.util.Enumeration;
 import java.io.Serializable;
+import java.util.Enumeration;
+
+import com.webobjects.appserver.WOApplication;
+import com.webobjects.eoaccess.EODatabaseContext;
+import com.webobjects.eocontrol.EOEditingContext;
+import com.webobjects.eocontrol.EOKeyGlobalID;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSMutableArray;
+import com.webobjects.foundation.NSMutableDictionary;
+import com.webobjects.foundation.NSNotification;
 
 /** 
  * ERCNSnapshot encapsulates changes in enterprise objects for single 
@@ -45,7 +51,7 @@ public class ERCNSnapshot implements Serializable {
         _senderPort = app.port(); // Don't forget to apply Max's change
         _senderAppName = app.name();
 
-        NSDictionary userInfo = (NSDictionary)notification.userInfo();
+        NSDictionary userInfo = notification.userInfo();
 
         ERCNConfiguration configuration = ERCNNotificationCoordinator.coordinator().configuration();
         if (configuration.changeTypesToPublish().containsObject(INSERTED))
