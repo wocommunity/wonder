@@ -12,7 +12,6 @@ import com.webobjects.appserver.WOElement;
 import com.webobjects.appserver.WOResponse;
 import com.webobjects.appserver._private.WODynamicElementCreationException;
 import com.webobjects.foundation.NSDictionary;
-import com.webobjects.foundation.NSTimestampFormatter;
 
 /**
  * Reimplementation of WOString that can resolve localized format strings. This

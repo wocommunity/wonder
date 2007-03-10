@@ -39,7 +39,7 @@ class ERIndexAttribute {
 		_index = (Index) classValue(dict, "index", Index.class, "TOKENIZED");
 		String analyzerClass = (String) dict.objectForKey("analyzer");
 		if(analyzerClass == null) {
-			analyzerClass = StandardAnalyzer.class.getName();;
+			analyzerClass = StandardAnalyzer.class.getName();
 		}
 		_analyzer = (Analyzer) create(analyzerClass);
 		if(_analyzer == null && name.matches("\\w+_(\\w+)")) {

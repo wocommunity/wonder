@@ -89,7 +89,7 @@ public class ERXCachingWrapper extends ERXStatelessComponent {
 
     protected NSArray keys;
     protected String entryName;
-    protected Long duration;
+    protected Long cacheDuration;
     protected Entry entry;
     protected NSDictionary values;
     
@@ -105,7 +105,7 @@ public class ERXCachingWrapper extends ERXStatelessComponent {
     	super.awake();
     	keys = null;
     	entryName = null;
-    	duration = null;
+    	cacheDuration = null;
     	values = null;
      	entry = (Entry) cache.get(values());
     }
@@ -167,15 +167,15 @@ public class ERXCachingWrapper extends ERXStatelessComponent {
     }
     
     protected long cacheDuration() {
-        if(duration == null) {
+        if(cacheDuration == null) {
             Number value = (Number)valueForBinding("duration");
             if(value == null) {
-                duration = new Long(60L*1000L);
+                cacheDuration = new Long(60L*1000L);
             } else {
-                duration = new Long(value.longValue());
+                cacheDuration = new Long(value.longValue());
             }
         }
-        return duration.longValue();
+        return cacheDuration.longValue();
     }
     
     protected NSDictionary values() {

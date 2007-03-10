@@ -1,7 +1,6 @@
 package com.webobjects.appserver._private;
 
 import java.io.BufferedInputStream;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -26,7 +25,6 @@ import com.webobjects.foundation.NSMutableRange;
 import com.webobjects.foundation.NSRange;
 import com.webobjects.foundation._NSStringUtilities;
 
-import er.extensions.ERXFileUtilities;
 import er.extensions.ERXProperties;
 
 /**
