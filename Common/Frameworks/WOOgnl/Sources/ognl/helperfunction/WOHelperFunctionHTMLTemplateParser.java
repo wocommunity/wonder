@@ -45,6 +45,7 @@ public class WOHelperFunctionHTMLTemplateParser extends WOParser implements WOHe
 
 		WOHelperFunctionHTMLTemplateParser.registerTagShortcut("WOString", "string");
 		WOHelperFunctionHTMLTemplateParser.registerTagShortcut("WOString", "str");
+		WOHelperFunctionHTMLTemplateParser.registerTagShortcut("ERXElse", "else");
 		WOHelperFunctionHTMLTemplateParser.registerTagShortcut("WOConditional", "if");
 		WOHelperFunctionHTMLTemplateParser.registerTagShortcut("WOConditional", "condition");
 		WOHelperFunctionHTMLTemplateParser.registerTagShortcut("WOConditional", "conditional");
