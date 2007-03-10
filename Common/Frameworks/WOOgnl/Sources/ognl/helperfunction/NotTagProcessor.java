@@ -5,8 +5,7 @@ import com.webobjects.appserver._private.WODeclaration;
 import com.webobjects.foundation.NSMutableDictionary;
 
 /**
- * "not" tag processor.  This is a shortcut for a WOConditional with negate = 'true'.  All you
- * set is "condition".
+ * "not" tag processor. This is a shortcut for a WOConditional with negate = 'true'. All you set is "condition".
  * 
  * @author mschrag
  */
