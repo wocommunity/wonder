@@ -142,7 +142,23 @@ public class ERXDictionaryUtilities extends Object {
 
         return result != null ? result : NSArray.EmptyArray;
     }
+    
+    /**
+     * @param d dictionary to sort keys from
+     * @return keys from d sorted by ascending value they are mapped to
+     */
+    public static NSArray keysSortedByValueAscending(final NSDictionary d) {
+        NSArray result = null;
 
+        if ( d != null && d.count() > 0 ) {
+            final NSArray keys = d.allKeys();
+
+            result = ERXArrayUtilities.sortedArrayUsingComparator(keys, new NSDictionaryKeyValueComparator(d));
+        }
+
+        return result != null ? result : NSArray.EmptyArray;
+    }
+    
  	/**
  	 * Removes entries from both dictionaries that match, leaving you with two dictionaries containing
  	 * only values that did NOT match.  Note that this comparison considers null == EO/NSKeyValueCoding.NullValue.
@@ -175,6 +191,30 @@ public class ERXDictionaryUtilities extends Object {
  		if (removeInverse) {
  			_removeMatchingEntries(snapshot2, snapshot1, false);
  		}
+ 	}
+ 	
+ 	
+ 	/**
+ 	 * Compares dictionary keys based on the value they are associated with.  Useful for getting a list
+ 	 * of keys in alphabetical order of their values.
+	 */
+ 	public static class NSDictionaryKeyValueComparator extends NSComparator {
+ 		private NSDictionary dictionary;
+ 		
+ 		public NSDictionaryKeyValueComparator(NSDictionary aDictionary) {
+ 			super();
+ 			dictionary = aDictionary;
+ 		}
+
+		public int compare(Object key1, Object key2) throws ComparisonException {
+			Object value1 = dictionary.objectForKey(key1);
+			Object value2 = dictionary.objectForKey(key2);
+			if ( ! (value1 instanceof Comparable && value2 instanceof Comparable)) {
+				throw new ComparisonException("dictionary values are not comparable");
+			}		
+
+			return ((Comparable)value1).compareTo(value2);
+		}
  	}
 
 }
