@@ -525,7 +525,7 @@ public class ERXEOControlUtilities {
      * @param qualifier to find the matching objects
      * @return number of matching objects
      */
-    public static Number objectCountWithQualifier(EOEditingContext ec, String entityName, EOQualifier qualifier) {
+    public static Integer objectCountWithQualifier(EOEditingContext ec, String entityName, EOQualifier qualifier) {
         EOAttribute attribute = EOEnterpriseObjectClazz.objectCountAttribute();
         return _objectCountWithQualifierAndAttribute(ec,entityName,qualifier,attribute);
     }
@@ -542,14 +542,14 @@ public class ERXEOControlUtilities {
      * @return number of matching objects
      * @attributeName name of attribute in same entity to consider in order to determine uniqueness
      */
-    public static Number objectCountUniqueWithQualifierAndAttribute(EOEditingContext ec, String entityName, EOQualifier qualifier, String attributeName) {
+    public static Integer objectCountUniqueWithQualifierAndAttribute(EOEditingContext ec, String entityName, EOQualifier qualifier, String attributeName) {
         EOEntity entity = EOUtilities.entityNamed(ec, entityName);
         EOAttribute attribute = entity.attributeNamed(attributeName);
         EOAttribute att2 = EOEnterpriseObjectClazz.objectCountUniqueAttribute(attribute);
         return _objectCountWithQualifierAndAttribute(ec,entityName,qualifier,att2);
     }
 
-    private static Number _objectCountWithQualifierAndAttribute(EOEditingContext ec, String entityName, EOQualifier qualifier, EOAttribute attribute) {
+    private static Integer _objectCountWithQualifierAndAttribute(EOEditingContext ec, String entityName, EOQualifier qualifier, EOAttribute attribute) {
         NSArray results = null;
         EOEntity entity = EOUtilities.entityNamed(ec, entityName);
         EOQualifier schemaBasedQualifier = entity.schemaBasedQualifier(qualifier);
@@ -566,7 +566,7 @@ public class ERXEOControlUtilities {
         }
         if ((results != null) && (results.count() == 1)) {
             NSDictionary row = (NSDictionary) results.lastObject();
-            return (Number)row.objectForKey(attribute.name());
+            return (Integer)row.objectForKey(attribute.name());
         }
         return null;
     }
