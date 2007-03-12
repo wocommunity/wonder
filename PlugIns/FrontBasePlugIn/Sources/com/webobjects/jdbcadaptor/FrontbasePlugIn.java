@@ -234,8 +234,8 @@ public class FrontbasePlugIn extends JDBCPlugIn {
 				Method writeBLOBBytes = con.getClass().getMethod("writeBLOB", new Class[] { byte[].class });
 				return (String) writeBLOBBytes.invoke(con, new Object[] { ((NSData) value).bytes() });
 			case FB_CLOB:
-				Method writeBLOBString = con.getClass().getMethod("writeBLOB", new Class[] { String.class });
-				return (String) writeBLOBString.invoke(con, new Object[] { (String) value });
+				Method writeCLOBString = con.getClass().getMethod("writeCLOB", new Class[] { String.class });
+				return (String) writeCLOBString.invoke(con, new Object[] { (String) value });
 			default:
 				return "NULL";
 			}
@@ -711,7 +711,13 @@ public class FrontbasePlugIn extends JDBCPlugIn {
 				throw new JDBCAdaptorException("Unable to find type information for external type '" + s + "' in attribute '" + eoattribute.name() + "' of entity '" + ((EOEntity) eoattribute.parent()).name() + "'.  Check spelling and capitalization.", null);
 			int i;
 			try {
-				i = Integer.parseInt((String) nsdictionary1.objectForKey("createParams"));
+				Object createParamsObj = nsdictionary.objectForKey("createParams");
+				if (createParamsObj instanceof Integer) {
+					i = ((Integer)createParamsObj).intValue();
+				}
+				else {
+					i = Integer.parseInt((String) createParamsObj);
+				}
 			}
 			catch (NumberFormatException numberformatexception) {
 				i = 0;
