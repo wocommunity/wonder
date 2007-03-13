@@ -1,21 +1,25 @@
-Conditional1: WOConditional {
-	condition = application.isCachingEnabled;
-	negate = true;
+Show: WOConditional {
+	condition = application.isDevelopmentMode;
 }
 
-Hyperlink1: WOHyperlink {
+Log4J: WOHyperlink {
 	actionClass = "er.extensions.ERXDirectAction";
 	class = ^linkClass;
 	directActionName = "log4j";
 	target = "log4J";
 }
 
-Hyperlink2: WOHyperlink {
+D2W: WOHyperlink {
 	action = toggleD2WInfo;
 	class = ^linkClass;
 }
 
-Hyperlink3: WOHyperlink {
+SQL: WOHyperlink {
+	action = toggleAdaptorLogging;
+	class = ^linkClass;
+}
+
+Clear: WOHyperlink {
 	action = clearD2WRuleCache;
 	class = ^linkClass;
 }
