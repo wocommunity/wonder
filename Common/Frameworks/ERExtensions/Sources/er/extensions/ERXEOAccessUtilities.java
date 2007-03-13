@@ -978,11 +978,11 @@ public class ERXEOAccessUtilities {
         String entityName = (expression.entity() != null ? expression.entity().name() : "Unknown");
         if (entityName.matches(entityMatchPattern)) {
             long debugMilliseconds = ERXProperties.longForKeyWithDefault(
-                    "er.extensions.ERXAdaptorChannelDelegate.trace.milliSeconds.debug", 5);
+                    "er.extensions.ERXAdaptorChannelDelegate.trace.milliSeconds.debug", 0);
             long infoMilliseconds = ERXProperties.longForKeyWithDefault("er.extensions.ERXAdaptorChannelDelegate.trace.milliSeconds.info",
                     100);
             long warnMilliseconds = ERXProperties.longForKeyWithDefault("er.extensions.ERXAdaptorChannelDelegate.trace.milliSeconds.warn",
-                    500);
+                    1000);
             long errorMilliseconds = ERXProperties.longForKeyWithDefault(
                     "er.extensions.ERXAdaptorChannelDelegate.trace.milliSeconds.error", 5000);
             int maxLength = ERXProperties.intForKeyWithDefault("er.extensions.ERXAdaptorChannelDelegate.trace.maxLength", 3000);
