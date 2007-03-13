@@ -348,7 +348,15 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
         	setAdaptorLogging(targetState.booleanValue());
         }
     }
-    
+
+    /**
+     * Returns the current state of EOAdaptor logging.
+     * @return
+     */
+	public static boolean adaptorLogging() {
+		return NSLog.debugLoggingAllowedForGroups(NSLog.DebugGroupSQLGeneration|NSLog.DebugGroupDatabaseAccess);
+	}
+
     /**
      * Turn EOAdaptor logging on and off.
      * @param onOff
@@ -358,10 +366,8 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
     	if (NSLog.debugLoggingAllowedForGroups(NSLog.DebugGroupSQLGeneration|NSLog.DebugGroupDatabaseAccess) != targetState.booleanValue()) {
     		if (targetState.booleanValue()) {
     			NSLog.allowDebugLoggingForGroups(NSLog.DebugGroupSQLGeneration|NSLog.DebugGroupDatabaseAccess);
-    			NSLog.setAllowedDebugLevel(NSLog.DebugLevelInformational);
     		} else {
     			NSLog.refuseDebugLoggingForGroups(NSLog.DebugGroupSQLGeneration|NSLog.DebugGroupDatabaseAccess);
-    			NSLog.setAllowedDebugLevel(NSLog.DebugLevelCritical);
     		}
     	}
     	if (targetState.booleanValue()) {
@@ -1082,5 +1088,4 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
         }
         return implementsMethod;
     }
-
 }
