@@ -99,12 +99,20 @@ public class ERD2WListPage extends ERD2WPage implements ERDListPageInterface, Se
      * Creates the display group and sets the _displayGroup instance variable
      */
     protected void createDisplayGroup() {
-        boolean useBatchingDisplayGroup = ERXValueUtilities.booleanValue(d2wContext().valueForKey("useBatchingDisplayGroup"));
+        boolean useBatchingDisplayGroup = useBatchingDisplayGroup();
         if(useBatchingDisplayGroup) {
             _displayGroup = new ERXBatchingDisplayGroup();
         } else {
             _displayGroup = new ERXDisplayGroup();
         }
+    }
+
+    /**
+     * Checks the d2wContext for useBatchingDisplayGroup and returns it.
+     * @return
+     */
+    public boolean useBatchingDisplayGroup() {
+        return ERXValueUtilities.booleanValue(d2wContext().valueForKey("useBatchingDisplayGroup"));
     }
 
     /** Called when an {@link EOditingContext} has changed. Sets {@link #_hasToUpdate} which in turn 
@@ -402,9 +410,11 @@ public class ERD2WListPage extends ERD2WPage implements ERDListPageInterface, Se
         	// because if we have a fetch limit then the displayed matches on the first page come from the
         	// results, not from the real order in the DB. Set "alwaysRefetchList" to false in your 
         	// rules to prevent that.
+            // In addition, we need to refetch if we use a batching display group, as the sort ordering is 
+            // always applied from the DB.
         	if((sortOrderings != null) && (ds instanceof EODatabaseDataSource)) {
         		EOFetchSpecification fs = ((EODatabaseDataSource)ds).fetchSpecification();
-        		if(!fs.sortOrderings().equals(sortOrderings) && fs.fetchLimit() != 0) {
+        		if(!fs.sortOrderings().equals(sortOrderings) && (fs.fetchLimit() != 0 || useBatchingDisplayGroup())) {
         			fs.setSortOrderings(sortOrderings);
         			_hasToUpdate = _hasToUpdate ? true : alwaysRefetchList();
         		}
