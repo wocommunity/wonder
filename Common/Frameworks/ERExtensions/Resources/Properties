@@ -241,7 +241,7 @@ er.extensions.ERXComponentActionRedirector.enabled=false
 
 ## How long a statement must run to cause a log message. Messages with longer than
 ## error also emit a stack-trace
-# er.extensions.ERXAdaptorChannelDelegate.trace.milliSeconds.debug=10
+# er.extensions.ERXAdaptorChannelDelegate.trace.milliSeconds.debug=0
 # er.extensions.ERXAdaptorChannelDelegate.trace.milliSeconds.info=100
 # er.extensions.ERXAdaptorChannelDelegate.trace.milliSeconds.warn=1000
 # er.extensions.ERXAdaptorChannelDelegate.trace.milliSeconds.error=5000
