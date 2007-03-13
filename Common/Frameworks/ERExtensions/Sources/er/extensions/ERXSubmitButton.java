@@ -54,7 +54,7 @@ public class ERXSubmitButton extends WOInput {
     protected WOAssociation _action;
     protected WOAssociation _actionClass;
     protected WOAssociation _directActionName;
-    protected boolean useButton;
+    protected boolean _useButton;
     
     public ERXSubmitButton(String arg0, NSDictionary nsdictionary, WOElement arg2) {
         super("button", nsdictionary, arg2);
@@ -95,7 +95,7 @@ public class ERXSubmitButton extends WOInput {
     }
     
     protected void _appendOpenTagToResponse(WOResponse woresponse, WOContext wocontext) {
-    	if(useButton) {
+    	if(useButton(wocontext)) {
     		woresponse.appendContentCharacter('<');
     		woresponse._appendContentAsciiString(elementName(wocontext));   	
         	appendAttributesToResponse(woresponse, wocontext);
@@ -115,7 +115,7 @@ public class ERXSubmitButton extends WOInput {
     		woresponse.appendContentCharacter(' ');
     		woresponse._appendContentAsciiString("disabled=\"disabled\"");
     	}
-    	if(useButton) {
+    	if(useButton(wocontext)) {
     		_appendValueAttributeToResponse(woresponse, wocontext);
     		_appendNameAttributeToResponse(woresponse, wocontext);
     	} else {
@@ -129,11 +129,10 @@ public class ERXSubmitButton extends WOInput {
     }
 
     protected void _appendCloseTagToResponse(WOResponse woresponse, WOContext wocontext) {
-    	if(useButton) {
+    	if(useButton(wocontext)) {
        		woresponse._appendContentAsciiString("</");
        		woresponse._appendContentAsciiString(elementName(wocontext));
        		woresponse.appendContentCharacter('>');
-       		
      	} else {
        		woresponse._appendContentAsciiString("</a></span>");  
     	}
@@ -190,8 +189,6 @@ public class ERXSubmitButton extends WOInput {
     	if(wocontext == null || woresponse == null) {
     		return;
     	}
-    	String userAgent = wocontext.request().headerForKey("user-agent");
-    	useButton = userAgent != null && userAgent.indexOf("MSIE") < 0;
     	//System.out.println(useButton + ": " + userAgent);
     	// useButton = !useButton;
     	String s = elementName();
@@ -208,4 +205,9 @@ public class ERXSubmitButton extends WOInput {
     		woresponse.appendContentString(" />");
     	}
     }
+
+	private boolean useButton(WOContext wocontext) {
+		String userAgent = wocontext.request().headerForKey("user-agent");
+    	return userAgent != null && userAgent.indexOf("MSIE") < 0;
+	}
 }
