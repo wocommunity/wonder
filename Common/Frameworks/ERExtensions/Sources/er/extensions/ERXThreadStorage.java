@@ -116,7 +116,14 @@ public class ERXThreadStorage {
         if(result != null) {
             if (result instanceof EOEnterpriseObject) {
                 EOEnterpriseObject eo = (EOEnterpriseObject) result;
-                result = ERXEOControlUtilities.localInstanceOfObject(ec, eo);
+                if(eo.editingContext() != null && eo.editingContext() != ec) {
+                	eo.editingContext().lock();
+                	try {
+                		result = ERXEOControlUtilities.localInstanceOfObject(ec, eo);
+                	} finally {
+                		eo.editingContext().unlock();
+                	}
+                }
             } else {
                throw new ClassCastException("Expected EO, got : " + result.getClass().getName() + ", " + result);
             }
