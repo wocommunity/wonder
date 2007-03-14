@@ -124,7 +124,7 @@ public class ERCoreBusinessLogic extends ERXFrameworkPrincipal {
             			((ERCoreUserInterface)localActor).setPreferences(prefs);
             		}
                 } catch(RuntimeException ex) {
-                	log.error("Error while setting getting actor's preferences: " + ex);
+                	log.error("Error while setting getting actor's preferences: " + ex, ex);
             	}
         		actor = localActor;
             } finally {
