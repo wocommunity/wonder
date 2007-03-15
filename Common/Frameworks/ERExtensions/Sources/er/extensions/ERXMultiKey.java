@@ -85,10 +85,17 @@ public class ERXMultiKey {
      *		of keys.
      */
     public final int hashCode() {
-        int result=0;
-        for (int i=0; i<_keyCount; i++)
-            if (_keys[i]!=null)
-                result+=_keys[i].hashCode()<<i;
+        int result = 0;
+
+        for (int i=0; i<_keyCount; i++) {
+		    final Object theKey = _keys[i];
+
+            if ( theKey != null ) {
+                result ^= theKey.hashCode();
+                result = ( result << 1 ) | ( result >> 31 );
+            }
+        }
+
         return result;
     }
 
