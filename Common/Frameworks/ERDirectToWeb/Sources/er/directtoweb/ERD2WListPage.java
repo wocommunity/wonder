@@ -363,6 +363,7 @@ public class ERD2WListPage extends ERD2WPage implements ERDListPageInterface, Se
     	if(ds != null) {
     		newDataSourceState = ds.fetchSpecification().toString().replaceAll("\\n", "") + ":" + ds.fetchSpecificationForFetch().toString().replaceAll("\\n", "") + " fetchLimit: " + ds.fetchSpecification().fetchLimit() + ", " + ds.fetchSpecificationForFetch().fetchLimit();
     	}
+    	EODataSource old = displayGroup().dataSource();
     	super.setDataSource(eodatasource);
     	displayGroup().setDataSource(eodatasource);
     	if(ds == null || (dataSourceState == null) 
@@ -370,9 +371,18 @@ public class ERD2WListPage extends ERD2WPage implements ERDListPageInterface, Se
     		log.debug("updating:\n" + dataSourceState + " vs\n" + newDataSourceState);
     		dataSourceState = newDataSourceState;
     		_hasToUpdate = true;
+
+    		// AK: when you use the page in a embedded component and have a few of them in a tab
+    		// page, WO reuses the component for a new dataSource. If this DS doesn't have the 
+    		// sort order keys required it leads to a KVC error later on. We fix this here to re-init
+    		// the sort ordering from the rules.
+    		if(old != null && eodatasource != null 
+    				&& !eodatasource.classDescriptionForObjects().equals(old.classDescriptionForObjects())) {
+    			setSortOrderingsOnDisplayGroup(sortOrderings(), displayGroup());
+    		}
     	}
     }
-    
+
     protected void willUpdate() {
     }
 
