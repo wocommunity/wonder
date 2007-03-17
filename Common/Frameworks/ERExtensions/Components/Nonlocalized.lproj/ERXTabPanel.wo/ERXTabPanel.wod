@@ -158,6 +158,10 @@ td1: WOGenericContainer {
    class = "tabBorder";
 }
 
+Wrapper: ERXUniquingWrapper {
+	id = selectedTabName.hashCode;
+}
+
 td2: WOGenericContainer {
    elementName="TD";
    rowspan=6;
