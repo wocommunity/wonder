@@ -5,6 +5,7 @@ import org.apache.log4j.Logger;
 import com.webobjects.appserver.WODisplayGroup;
 import com.webobjects.eoaccess.EODatabaseDataSource;
 import com.webobjects.eocontrol.EOAndQualifier;
+import com.webobjects.eocontrol.EODataSource;
 import com.webobjects.eocontrol.EOFetchSpecification;
 import com.webobjects.eocontrol.EOQualifier;
 import com.webobjects.foundation.NSArray;
@@ -15,6 +16,7 @@ import com.webobjects.foundation.NSMutableDictionary;
  * <ul>
  * <li>provide access to the filtered objects</li>
  * <li>allows you to add qualifiers to the final query qualifier (as opposed to just min/equals/max with the keys)</li>
+ * <li>clears out the sort ordering when the datasource changes. This is a cure fix to prevent errors when using switch components.
  * </ul>
  * @author ak
  */
@@ -139,6 +141,17 @@ public class ERXDisplayGroup extends WODisplayGroup {
 	}
 
 	/**
+	 * Overridden to clear out the sort ordering if it is no longer applicable.
+	 */
+	public void setDataSource(EODataSource eodatasource) {
+		EODataSource old = dataSource();
+		super.setDataSource(eodatasource);
+		if(old != null && eodatasource != null && !old.classDescriptionForObjects().equals(eodatasource.classDescriptionForObjects())) {
+			setSortOrderings(NSArray.EmptyArray);
+		}
+	}
+
+	/**
 	 * Overriden to re-set the selection. Why is this cleared in the super class?
 	 */
 	public Object displayNextBatch() {
@@ -165,5 +178,17 @@ public class ERXDisplayGroup extends WODisplayGroup {
 	public Object selectFilteredObjects() {
 		setSelectedObjects(filteredObjects());
 		return null;
+	}
+
+	/**
+	 * Overridden to log a message when more than one sort order exists. Useful to track down errors.
+	 */
+	public void setSortOrderings(NSArray nsarray) {
+		super.setSortOrderings(nsarray);
+		if(nsarray != null && nsarray.count() > 1) {
+			if(log.isDebugEnabled()) {
+				log.debug("More than one sort order: " + nsarray);
+			}
+		}
 	}
 }
