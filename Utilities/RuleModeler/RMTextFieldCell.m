@@ -55,9 +55,16 @@
     // because when cell is in tableView, textColor is not correct when table selection changes.
 //    NSMutableAttributedString   *attributedString = [[self attributedStringValue] mutableCopy];
     NSMutableAttributedString   *attributedString = [[NSMutableAttributedString alloc] initWithString:stringValue];
+    NSMutableParagraphStyle     *paragraphStyle = [[NSParagraphStyle defaultParagraphStyle] mutableCopy];
   
 //    [attributedString removeAttribute:NSBackgroundColorAttributeName range:searchRange];
     [attributedString setAttributes:[NSDictionary dictionaryWithObject:[NSFont systemFontOfSize:[NSFont smallSystemFontSize]] forKey:NSFontAttributeName] range:searchRange];
+
+    // Change paragraph style to clip long lines, instead of showing only full words
+    [paragraphStyle setLineBreakMode:NSLineBreakByClipping];
+    [attributedString addAttribute:NSParagraphStyleAttributeName value:paragraphStyle range:searchRange];
+    [paragraphStyle release];
+
     if ([self highlightsMatchingWords] && [[self highlightedWords] count] > 0) {
         NSEnumerator    *wordEnum = [[self highlightedWords] objectEnumerator];
         NSString        *eachWord;
