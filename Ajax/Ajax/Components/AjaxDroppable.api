@@ -7,6 +7,7 @@
 		<binding name="droppedDraggableID"/>
 		<binding name="action"/>
 		<binding name="droppedObject"/>
+		<binding name="style"/>
 		<binding name="accept"/>
 		<binding name="containment"/>
 		<binding name="hoverclass"/>
