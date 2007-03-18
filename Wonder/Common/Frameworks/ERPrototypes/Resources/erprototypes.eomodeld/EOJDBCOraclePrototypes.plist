@@ -5,7 +5,7 @@
        
        {
            columnName = "";
-           externalType = DOUBLE;
+           externalType = NUMBER;
            name = amount;
            userInfo = 
            {
@@ -17,7 +17,7 @@
        
        {
            columnName = "";
-           externalType = DOUBLE;
+           externalType = NUMBER;
            name = currencyAmount;
            precision = 38;
            scale = 4;
@@ -40,7 +40,7 @@
        {
            adaptorValueConversionMethodName = toString;
            columnName = "";
-           externalType = VARCHAR;
+           externalType = VARCHAR2;
            factoryMethodArgumentType = EOFactoryMethodArgumentIsNSString;
            name = boolean;
            valueClassName = java.lang.Boolean;
@@ -64,7 +64,7 @@
        {
            adaptorValueConversionMethodName = toCryptoString;
            columnName = "";
-           externalType = VARCHAR;
+           externalType = VARCHAR2;
            factoryMethodArgumentType = EOFactoryMethodArgumentIsNSString;
            name = cryptoString;
            valueClassName = er.extensions.ERXCryptoString;
@@ -96,7 +96,7 @@
        
        {
            columnName = "";
-           externalType = LONG;
+           externalType = NUMBER;
            name = doubleNumber;
            userInfo = 
            {
