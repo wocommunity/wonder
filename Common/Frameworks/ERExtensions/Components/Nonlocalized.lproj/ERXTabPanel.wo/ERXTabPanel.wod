@@ -159,7 +159,7 @@ td1: WOGenericContainer {
 }
 
 Wrapper: ERXUniquingWrapper {
-	id = selectedTabName.hashCode;
+	id = selectedTabIdentifier;
 }
 
 td2: WOGenericContainer {
