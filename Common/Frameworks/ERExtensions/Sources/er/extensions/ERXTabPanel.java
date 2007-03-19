@@ -48,6 +48,11 @@ public class ERXTabPanel extends WOTabPanel  {
     String _rightTabImage;
     Boolean _useLinkForTabSwitch;
 
+    public Object selectedTabIdentifier() {
+    	int id = selectedTabName().hashCode();
+    	return new Integer(id < 0 ? -id : id);
+    }
+    
     public void switchSubmitTab() {
         Object result = null;
 
