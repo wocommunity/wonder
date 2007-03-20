@@ -193,6 +193,10 @@ There are many ways to use this script:
             </and>
         </condition>
         <property name="wonder.lib.root" value="${build.root}" />
+        <property name="wonder.framework.install.root" value="${wo.localroot}/Library/Frameworks" />
+        <property name="web.framework.install.root" value="${wo.server.root}/Frameworks" />
+        <property name="wonder.application.install.root" value="${wo.localroot}/Library/WebObjects/JavaApplications" />
+        <property name="web.application.install.root" value="${wo.server.root}" />
     </target>
 
     <target name="global.properties" depends="global.environment">
@@ -606,17 +610,17 @@ There are many ways to use this script:
     </target>
 
     <target name="global.framework.install" depends="global.properties">
-        <copy todir="${wo.localroot}/Library/Frameworks/${project.name}.framework">
+        <copy todir="${wonder.framework.install.root}/${project.name}.framework">
             <fileset dir="${build.root}/${project.name}.framework" />
         </copy>
     </target>
 
     <target name="global.application.install" depends="global.properties">
-         <mkdir dir="${wo.localroot}/Library/WebObjects/JavaApplications" />
-         <copy todir="${wo.localroot}/Library/WebObjects/JavaApplications/${project.name}.woa">
+         <mkdir dir="${wonder.application.install.root}" />
+         <copy todir="${wonder.application.install.root}/${project.name}.woa">
             <fileset dir="${build.root}/${project.name}.woa" />
         </copy>
-        <exec dir="${wo.localroot}/Library/WebObjects/JavaApplications/${project.name}.woa" executable="/bin/chmod" os="Mac OS X">
+        <exec dir="${wonder.application.install.root}/${project.name}.woa" executable="/bin/chmod" os="Mac OS X">
             <arg line="a+x ${project.name}" />
         </exec>
     </target>
@@ -629,16 +633,16 @@ There are many ways to use this script:
     <!-- /compatibility -->
     
     <target name="global.framework.web" depends="global.properties">
-        <mkdir dir="${wo.server.root}/Frameworks/${project.name}.framework" />
-        <copy todir="${wo.server.root}/Frameworks/${project.name}.framework/WebServerResources">
+        <mkdir dir="${web.framework.install.root}/${project.name}.framework" />
+        <copy todir="${web.framework.install.root}/${project.name}.framework/WebServerResources">
             <fileset dir="${build.root}/${project.name}.framework/WebServerResources" />
         </copy>
     </target>
 	
     <target name="global.application.web" depends="global.properties">
-        <mkdir dir="${wo.server.root}/${project.name}.woa" />
-        <mkdir dir="${wo.server.root}/${project.name}.woa/Contents" />
-        <copy todir="${wo.server.root}/${project.name}.woa/Contents/WebServerResources">
+        <mkdir dir="${web.application.install.root}/${project.name}.woa" />
+        <mkdir dir="${web.application.install.root}/${project.name}.woa/Contents" />
+        <copy todir="${web.application.install.root}/${project.name}.woa/Contents/WebServerResources">
             <fileset dir="${build.root}/${project.name}.woa/Contents/WebServerResources" />
         </copy>
     </target>
