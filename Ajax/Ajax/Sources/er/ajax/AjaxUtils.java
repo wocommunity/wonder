@@ -275,4 +275,17 @@ public class AjaxUtils {
 		}
 		return actionUrl;
 	}
+
+	public static void appendTagAttributeAndValue(WOResponse response, WOContext context, WOComponent component, NSDictionary associations, String name) {
+		AjaxUtils.appendTagAttributeAndValue(response, context, component, (WOAssociation)associations.objectForKey(name));
+	}
+
+	public static void appendTagAttributeAndValue(WOResponse response, WOContext context, WOComponent component, WOAssociation association) {
+		if (association != null) {
+			String name = association._bindingName();
+			String value = (String) association.valueInComponent(component);
+			response._appendTagAttributeAndValue(name, value, true);
+		}
+	}
+
 }
