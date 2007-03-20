@@ -34,7 +34,7 @@ LoadModule WebObjects_module		modules/mod_WebObjects.so
 
 See the sample configuration file for some appropriate settings.
 
-Apache 2.2.x is more restrictive in its default permissions.  You'll need to specifically allow access to the virtual location used by WebObjects.  The following directive is url dependent, so you may need another solution if you also use mod_rewrite to mask WebObjects from the url.
+Apache 2.2.x is more restrictive in its default permissions.  You'll need to specifically allow access to the virtual location used by WebObjects.  It may also be necessary to change the name of the WebObjectsAlias setting from /cgi-bin/WebObjects to <foo>/WebObjects or comment out the ScriptAlias definition for the /cgi-bin/ directory.  The following directive is url dependent, so you may need another solution if you also use mod_rewrite to mask WebObjects from the url.
 
 <LocationMatch /Apps/WebObjects/.*>
     Order allow,deny
