@@ -1138,10 +1138,30 @@ public class FrontbasePlugIn extends JDBCPlugIn {
 				}
 				case FB_Numeric:
 				case FB_Decimal: {
-					if (obj instanceof BigDecimal)
+					if (obj instanceof BigDecimal) {
 						return ((BigDecimal) obj).setScale(eoattribute.scale(), BigDecimal.ROUND_HALF_UP).toString();
-					else if (obj instanceof String)
+					}
+					else if (obj instanceof Number) {
+						String valueType = eoattribute.valueType();
+						if (valueType == null || "i".equals(valueType)) {
+							return String.valueOf(((Number)obj).intValue());  
+						}
+						else if ("l".equals(valueType)) {
+							return String.valueOf(((Number)obj).longValue());  
+						}
+						else if ("f".equals(valueType)) {
+							return String.valueOf(((Number)obj).floatValue());  
+						}
+						else if ("d".equals(valueType)) {
+							return String.valueOf(((Number)obj).doubleValue());  
+						}
+						else if ("i".equals(valueType)) {
+							return String.valueOf(((Number)obj).shortValue());  
+						}
+					}
+					else if (obj instanceof String) {
 						return obj.toString();
+					}
 				}
 				default:
 					return obj.toString();

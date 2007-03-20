@@ -418,7 +418,31 @@ public class PostgresqlExpression extends JDBCExpression {
             if(obj instanceof BigDecimal) {
                 value = fixBigDecimal((BigDecimal) obj, eoattribute);
             } else {
-                value = (String) eoattribute.adaptorValueByConvertingAttributeValue(obj).toString();
+              Object convertedObj = eoattribute.adaptorValueByConvertingAttributeValue(obj);
+              if (convertedObj instanceof Number) {
+                String valueType = eoattribute.valueType();
+                if (valueType == null || "i".equals(valueType)) {
+                  value = String.valueOf(((Number)convertedObj).intValue());  
+                }
+                else if ("l".equals(valueType)) {
+                  value = String.valueOf(((Number)convertedObj).longValue());  
+                }
+                else if ("f".equals(valueType)) {
+                  value = String.valueOf(((Number)convertedObj).floatValue());  
+                }
+                else if ("d".equals(valueType)) {
+                  value = String.valueOf(((Number)convertedObj).doubleValue());  
+                }
+                else if ("i".equals(valueType)) {
+                  value = String.valueOf(((Number)convertedObj).shortValue());  
+                }
+                else {
+                  value = convertedObj.toString();
+                }
+              }
+              else {
+                value = convertedObj.toString();
+              }
             }
         } else if(obj instanceof Boolean) {
         	// GN: when booleans are stored as strings in the db, we need the values quoted
