@@ -16,7 +16,6 @@ import javax.mail.internet.MimeMessage;
 
 import org.apache.log4j.Logger;
 
-import com.webobjects.appserver.WOApplication;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSForwardException;
 import com.webobjects.foundation.NSNotification;
@@ -34,7 +33,7 @@ import er.extensions.ERXUnitAwareDecimalFormat;
  * @author Tatsuya Kawano <tatsuyak@mac.com>
  * @author Max Muller <maxmuller@mac.com>
  */
-public class ERMailSender extends Thread {
+public class ERMailSender implements Runnable {
 
 	public static final String InvalidEmailNotification = "InvalidEmailNotification";
 
@@ -48,8 +47,10 @@ public class ERMailSender extends Thread {
 	// er.javamail.senderQueue.size property
 	private ERQueue messages;
 	// For thread management
-	private boolean threadSuspended = false;
-	private int milliSecondsWaitRunLoop = 5000;
+
+	private int milliSecondsWaitRunLoop = 30000;
+	
+	private Thread _senderThread;
 
 	/**
 	 * Exception class for alerting about a stack overflow
@@ -61,22 +62,19 @@ public class ERMailSender extends Thread {
 	}
 
 	private ERMailSender() {
-		super("ERMailSender");
-		this.setPriority(Thread.MIN_PRIORITY);
 		stats = new Stats();
 		messages = new ERQueue(ERJavaMail.sharedInstance().senderQueueSize());
 
-		if (WOApplication.application().isDebuggingEnabled())
-			milliSecondsWaitRunLoop = 2000;
-
-		if (log.isDebugEnabled())
+		if (log.isDebugEnabled()) {
 			log.debug("ERMailSender initialized (JVM heap size: " + stats.formattedUsedMemory() + ")");
+		}
 	}
 
 	/** @return the shared instance of the singleton ERMailSender object */
-	public static ERMailSender sharedMailSender() {
-		if (_sharedMailSender == null)
+	public static synchronized ERMailSender sharedMailSender() {
+		if (_sharedMailSender == null) {
 			_sharedMailSender = new ERMailSender();
+		}
 		return _sharedMailSender;
 	}
 
@@ -112,12 +110,16 @@ public class ERMailSender extends Thread {
 			throw new ERMailSender.SizeOverflowException();
 		}
 
-		threadSuspended = false;
-
-		// If we have not started to send mails, start the thread
-		if (!this.isAlive()) {
-			this.start();
-			return;
+		synchronized (this) {
+			// If we have not started to send mails, start the thread
+			if (_senderThread == null) {
+				_senderThread = new Thread(this, "ERMailSender");
+				_senderThread.setPriority(Thread.MIN_PRIORITY);
+				_senderThread.start();
+			}
+			else {
+				notifyAll();
+			}
 		}
 	}
 
@@ -260,64 +262,70 @@ public class ERMailSender extends Thread {
 	public void run() {
 		while (true) {
 			try {
-				if (threadSuspended) {
+				if (messages.empty()) {
 					synchronized (this) {
-						while (threadSuspended)
-							this.wait(milliSecondsWaitRunLoop);
+						while (messages.empty()) {
+							System.out.println("ERMailSender.run: sleeping ...");
+							wait(milliSecondsWaitRunLoop);
+						}
 					}
 				}
 			}
 			catch (InterruptedException e) {
 				log.warn("ERMailSender thread has been interrupted.");
-				threadSuspended = true;
-				return;
+				//return;
 			}
-
+			
 			// If there are still messages pending ...
-			if (!messages.empty()) {
-				try {
-					Session session = ERJavaMail.sharedInstance().newSession();
-					String smtpProtocol = ERJavaMail.sharedInstance().smtpProtocol();
-					Transport transport = this._connectedTransportForSession(session, smtpProtocol, true);
-					if (!transport.isConnected()) {
-						transport.connect();
-					}
-
-					while (!messages.empty()) {
-						ERMessage message = (ERMessage) messages.pop();
-						try {
-							this._sendMessageNow(message, transport);
-							// if (useSenderDelay) {
-							// this.wait (senderDelayMillis);
-							// }
-						}
-						catch (MessagingException e) {
-							// Here we get all the exceptions that are
-							// not 'SendFailedException's.
-							// All we can do is warn the admin.
-							log.error("Fatal Messaging Exception. Can't send the mail.", e);
-						}
-						/*
-						 * catch (InterruptedException e) { log.warn ("ERMailSender thread has been interrupted.");
-						 * threadSuspended = true; return; }
-						 */
-					}
-
+			try {
+				if (!messages.empty()) {
 					try {
-						if (transport != null) {
-							transport.close();
+						Session session = ERJavaMail.sharedInstance().newSession();
+						String smtpProtocol = ERJavaMail.sharedInstance().smtpProtocol();
+						Transport transport = this._connectedTransportForSession(session, smtpProtocol, true);
+						if (!transport.isConnected()) {
+							transport.connect();
+						}
+	
+						while (!messages.empty()) {
+							ERMessage message = (ERMessage) messages.pop();
+							try {
+								this._sendMessageNow(message, transport);
+								// if (useSenderDelay) {
+								// this.wait (senderDelayMillis);
+								// }
+							}
+							catch (Throwable e) {
+								// Here we get all the exceptions that are
+								// not 'SendFailedException's.
+								// All we can do is warn the admin.
+								log.error("Fatal Messaging Exception. Can't send the mail.", e);
+							}
+							/*
+							 * catch (InterruptedException e) { log.warn ("ERMailSender thread has been interrupted.");
+							 * threadSuspended = true; return; }
+							 */
+						}
+	
+						try {
+							if (transport != null) {
+								transport.close();
+							}
+						}
+						catch (Throwable e) /* once again ... */{
+							log.warn("Unable to close transport.  Perhaps it has already been closed?", e);
 						}
 					}
-					catch (MessagingException e) /* once again ... */{
-						log.warn("Unable to close transport.  Perhaps it has already been closed?", e);
+					catch (Throwable e) {
+						log.error("Failed to send messages.", e);
+						//throw new NSForwardException(e);
 					}
-				}
-				catch (MessagingException e) {
-					log.error("Failed to send messages.", e);
-					//throw new NSForwardException(e);
 				}
 			}
-			threadSuspended = true;
+			catch (Throwable t) {
+				t.printStackTrace();
+				log.error("Failed to send messages.", t);
+			}
 		}
 	}
 
