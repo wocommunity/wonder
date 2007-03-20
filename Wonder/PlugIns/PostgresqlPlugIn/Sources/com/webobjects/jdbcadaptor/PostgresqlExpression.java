@@ -433,7 +433,7 @@ public class PostgresqlExpression extends JDBCExpression {
                 else if ("d".equals(valueType)) {
                   value = String.valueOf(((Number)convertedObj).doubleValue());  
                 }
-                else if ("i".equals(valueType)) {
+                else if ("s".equals(valueType)) {
                   value = String.valueOf(((Number)convertedObj).shortValue());  
                 }
                 else {
