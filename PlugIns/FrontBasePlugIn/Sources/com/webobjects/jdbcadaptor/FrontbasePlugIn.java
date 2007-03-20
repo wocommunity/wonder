@@ -1155,7 +1155,7 @@ public class FrontbasePlugIn extends JDBCPlugIn {
 						else if ("d".equals(valueType)) {
 							return String.valueOf(((Number)obj).doubleValue());  
 						}
-						else if ("i".equals(valueType)) {
+						else if ("s".equals(valueType)) {
 							return String.valueOf(((Number)obj).shortValue());  
 						}
 					}
