@@ -265,7 +265,6 @@ public class ERMailSender implements Runnable {
 				if (messages.empty()) {
 					synchronized (this) {
 						while (messages.empty()) {
-							System.out.println("ERMailSender.run: sleeping ...");
 							wait(milliSecondsWaitRunLoop);
 						}
 					}
