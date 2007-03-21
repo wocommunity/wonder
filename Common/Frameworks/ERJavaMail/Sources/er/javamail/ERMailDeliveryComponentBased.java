@@ -19,6 +19,7 @@ import com.webobjects.foundation.NSDictionary;
 public abstract class ERMailDeliveryComponentBased extends ERMailDelivery {
 	/** WOComponent used to render the HTML message. */
 	protected WOComponent _component;
+	protected WOComponent _alternativeComponent;
 
 	/**
 	 * Variable that stores the state of the session. In the case the component was instanciated with
@@ -43,6 +44,17 @@ public abstract class ERMailDeliveryComponentBased extends ERMailDelivery {
 	public WOComponent component() {
 		return _component;
 	}
+	
+	/**
+	 * Sets the alternative view component for rendering a different mime type (text/plain, etc)
+	 */
+	public void setAlternativeComponent(WOComponent alternativeComponent) {
+		_alternativeComponent = alternativeComponent;
+	}
+	
+	public WOComponent alternativeComponent() {
+		return _alternativeComponent;
+	}
 
 	/** Accessor for the sessionDictionary property */
 	public NSDictionary sessionDictionary() {
@@ -56,14 +68,28 @@ public abstract class ERMailDeliveryComponentBased extends ERMailDelivery {
 
 	/** Generates the output string used in messages */
 	protected String componentContentString() {
-		WOContext context = this.component().context();
+		return _componentContentString(component());
+	}
 
-		// CHECKME: It's probably not a good idea to do this here
-		// since the context could also have been generating relative URLs
-		// unless the context is created from scratch
-		context._generateCompleteURLs();
-		WOMessage response = this.component().generateResponse();
-		return response.contentString();
+	/** Generates the output string used in messages */
+	protected String alternativeComponentContentString() {
+		return _componentContentString(alternativeComponent());
+	}
+
+	/** Generates the output string used in messages */
+	protected String _componentContentString(WOComponent component) {
+		String contentString = null;
+		if (component != null) {
+			WOContext context = component.context();
+
+			// CHECKME: It's probably not a good idea to do this here
+			// since the context could also have been generating relative URLs
+			// unless the context is created from scratch
+			context._generateCompleteURLs();
+			WOMessage response = component.generateResponse();
+			contentString = response.contentString();
+		}
+		return contentString;
 	}
 
 }
