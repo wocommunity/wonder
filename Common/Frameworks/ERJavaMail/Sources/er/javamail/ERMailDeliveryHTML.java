@@ -30,10 +30,7 @@ public class ERMailDeliveryHTML extends ERMailDeliveryComponentBased {
 	 * Plain text preamble set in top of HTML source so that non-HTML compliant mail readers can at least display this
 	 * message.
 	 */
-	private String _hiddenPlainTextContent = "";
-
-	/** True if this the current message has a plain text preamble. */
-	private boolean _hasHiddenPlainTextContent = false;
+	private String _hiddenPlainTextContent;
 
 	/**
 	 * Gets the current factory. If the factory is unset, sets it to the default factory.
@@ -66,8 +63,7 @@ public class ERMailDeliveryHTML extends ERMailDeliveryComponentBased {
 	 * can at least display this message.
 	 */
 	public void setHiddenPlainTextContent(String content) {
-		_hiddenPlainTextContent = content + "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n";
-		_hasHiddenPlainTextContent = true;
+		_hiddenPlainTextContent = content;
 	}
 
 	/**
@@ -84,17 +80,18 @@ public class ERMailDeliveryHTML extends ERMailDeliveryComponentBased {
 	/** Creates a new mail instance within ERMailDelivery. Sets hasHiddenPlainTextContent to false. */
 	public void newMail() {
 		super.newMail();
-		_hasHiddenPlainTextContent = false;
+		_hiddenPlainTextContent = null;
 		setHTMLContent(null);
 	}
 
 	protected String htmlContent() {
 		String htmlContent = null;
-		if (this.component() != null)
+		if (this.component() != null) {
 			htmlContent = this.componentContentString();
-		else
+		}
+		else {
 			htmlContent = _htmlContent;
-
+		}
 		return htmlContent;
 	}
 
@@ -112,9 +109,17 @@ public class ERMailDeliveryHTML extends ERMailDeliveryComponentBased {
 		multipart = new MimeMultipart("alternative");
 
 		// set the plain text part
-		if (_hasHiddenPlainTextContent) {
+		String textContent;
+		if (_hiddenPlainTextContent != null) {
+			textContent = _hiddenPlainTextContent;
+		}
+		else {
+			textContent = alternativeComponentContentString();
+		}
+		
+		if (textContent != null) {
 			textPart = new MimeBodyPart();
-			textPart.setText(_hiddenPlainTextContent, charset());
+			textPart.setText(textContent + "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", charset());
 			multipart.addBodyPart(textPart);
 		}
 
