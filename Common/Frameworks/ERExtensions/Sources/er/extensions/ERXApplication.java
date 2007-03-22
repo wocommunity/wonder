@@ -1109,8 +1109,9 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 			}
 		}
 		finally {
-			// We always want to get rid of the wocontext key.
-			ERXThreadStorage.removeValueForKey("wocontext");
+			// We always want to clean up the thread storage variables, so they don't end up on
+			// someone else's thread by accident
+			ERXThreadStorage.reset();
 			// We *always* want to unlock left over ECs.
 			ERXEC.unlockAllContextsForCurrentThread();
 		}
