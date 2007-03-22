@@ -277,12 +277,11 @@ public class AjaxUtils {
 	}
 
 	public static void appendTagAttributeAndValue(WOResponse response, WOContext context, WOComponent component, NSDictionary associations, String name) {
-		AjaxUtils.appendTagAttributeAndValue(response, context, component, (WOAssociation)associations.objectForKey(name));
+		AjaxUtils.appendTagAttributeAndValue(response, context, component, name, (WOAssociation)associations.objectForKey(name));
 	}
 
-	public static void appendTagAttributeAndValue(WOResponse response, WOContext context, WOComponent component, WOAssociation association) {
+	public static void appendTagAttributeAndValue(WOResponse response, WOContext context, WOComponent component, String name, WOAssociation association) {
 		if (association != null) {
-			String name = association._bindingName();
 			String value = (String) association.valueInComponent(component);
 			response._appendTagAttributeAndValue(name, value, true);
 		}
