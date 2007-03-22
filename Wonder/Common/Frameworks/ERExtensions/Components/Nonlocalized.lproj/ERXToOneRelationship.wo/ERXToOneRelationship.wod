@@ -25,8 +25,9 @@ PopupList: WOPopUpButton {
 	item = theCurrentItem;
 	list = theList;
 	selection = selection;
-        name=^popupName;
+    name=^popupName;
 	onChange = ^onChange;
+	onBlur = ^onBlur;
 	escapeHTML = false;
 }
 
@@ -36,7 +37,7 @@ RadioButtonMatrix: ERXRadioButtonMatrix {
 	maxColumns = ^maxColumns;
 	selection = selection;
 	uniqueID = ^uniqueID;
-        goingVertically = ^goingVertically;
+    goingVertically = ^goingVertically;
 }
 
 String: WOString {
