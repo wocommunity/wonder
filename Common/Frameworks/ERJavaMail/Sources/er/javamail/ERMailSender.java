@@ -184,6 +184,7 @@ public class ERMailSender implements Runnable {
 					}
 				}
 				transport.sendMessage(aMessage, aMessage.getAllRecipients());
+				message._deliverySucceeded();
 				if (debug)
 					log.debug("Done.");
 				stats.updateMemoryUsage();
@@ -206,6 +207,7 @@ public class ERMailSender implements Runnable {
 
 				NSArray invalidEmails = ERMailUtils.convertInternetAddressesToNSArray(e.getInvalidAddresses());
 				this.notifyInvalidEmails(invalidEmails);
+				message._invalidRecipients(invalidEmails);
 
 				exception = e;
 			}
@@ -215,12 +217,15 @@ public class ERMailSender implements Runnable {
 			catch (Throwable t) {
 				log.error("An unexpected error occured while sending message: " + message + " mime message: " + aMessage + " sending to: " + aMessage.getAllRecipients() + " transport: " + transport, t);
 				// Need to let someone know that something very, very bad happened
+				message._deliveryFailed(t);
 				throw NSForwardException._runtimeExceptionForThrowable(t);
 			}
 			finally {
 				stats.incrementMailCount();
-				if (exception != null)
+				if (exception != null) {
+					message._deliveryFailed(exception);
 					throw exception;
+				}
 			}
 		}
 		else if (log.isDebugEnabled()) {
