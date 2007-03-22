@@ -12,33 +12,73 @@ import javax.mail.MessagingException;
 import javax.mail.internet.AddressException;
 import javax.mail.internet.MimeMessage;
 
-public class ERMessage extends Object {
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSDictionary;
 
-	private MimeMessage message;
-	private Object anObject;
+/**
+ * ERMessage represents an email message.
+ */
+public class ERMessage extends Object {
+	/**
+	 * Defines a delegate interface for receiving notifications
+	 * about email messages.
+	 * 
+	 * @author mschrag
+	 */
+	public static interface Delegate {
+		/**
+		 * Called when a message is successfully delivered.
+		 * 
+		 * @param message the message that was delivered
+		 */
+		public void deliverySucceeded(ERMessage message);
+		
+		/**
+		 * Called when a message fails with invalid recipients.  You will get
+		 * a call to invalidRecipients AND a call to deliveryFailed.
+		 * 
+		 * @param message the message that was not delivered
+		 * @param invalidRecipientAddresses the array of invalid email addresses
+		 */
+		public void invalidRecipients(ERMessage message, NSArray invalidRecipientAddresses);
+		
+		/**
+		 * Called when a message fails to deliver.
+		 * 
+		 * @param message the message that failed
+		 * @param failure the exception of the failure
+		 */
+		public void deliveryFailed(ERMessage message, Throwable failure);
+	}
+
+	private ERMessage.Delegate _delegate;
+	private MimeMessage _message;
+	private NSDictionary _userInfo;
+
+	public void setDelegate(ERMessage.Delegate delegate) {
+		_delegate = delegate;
+	}
+	
+	public void setUserInfo(NSDictionary userInfo) {
+		_userInfo = userInfo;
+	}
+	
+	public NSDictionary userInfo() {
+		return _userInfo;
+	}
 
 	public void setMimeMessage(MimeMessage m) {
-		message = m;
+		_message = m;
 	}
 
 	public MimeMessage mimeMessage() {
-		return message;
-	}
-
-	/** @deprecated */
-	public void setCallbackObject(Object obj) {
-		anObject = obj;
-	}
-
-	/** @deprecated */
-	public Object callbackObject() {
-		return anObject;
+		return _message;
 	}
 
 	public boolean shouldSendMessage() {
 		Address to[] = null;
 		try {
-			to = message.getRecipients(Message.RecipientType.TO);
+			to = _message.getRecipients(Message.RecipientType.TO);
 		}
 		catch (MessagingException m) {
 		}
@@ -51,7 +91,7 @@ public class ERMessage extends Object {
 	 *            <code>Message.RecipientType.BCC</code>
 	 */
 	public Address[] recipients(Message.RecipientType recipientType) throws MessagingException {
-		return message == null ? null : message.getRecipients(recipientType);
+		return _message == null ? null : _message.getRecipients(recipientType);
 	}
 
 	public String recipientsAsString(Message.RecipientType recipientType) throws MessagingException, AddressException {
@@ -112,7 +152,7 @@ public class ERMessage extends Object {
 	public String toString() {
 		StringBuffer sbuf = new StringBuffer();
 		sbuf.append("<").append(getClass().getName()).append(" ");
-		if (message == null) {
+		if (_message == null) {
 			sbuf.append("No mime message is set.");
 		}
 		else {
@@ -126,5 +166,31 @@ public class ERMessage extends Object {
 		sbuf.append(">");
 		return sbuf.toString();
 	}
-
+	
+	/**
+	 * Called by ERMailSender
+	 */
+	public void _deliverySucceeded() {
+		if (_delegate != null) {
+			_delegate.deliverySucceeded(this);
+		}
+	}
+	
+	/**
+	 * Called by ERMailSender
+	 */
+	public void _invalidRecipients(NSArray invalidRecipientAddresses) {
+		if (_delegate != null) {
+			_delegate.invalidRecipients(this, invalidRecipientAddresses);
+		}
+	}
+	
+	/**
+	 * Called by ERMailSender
+	 */
+	public void _deliveryFailed(Throwable failure) {
+		if (_delegate != null) {
+			_delegate.deliveryFailed(this, failure);
+		}
+	}
 }

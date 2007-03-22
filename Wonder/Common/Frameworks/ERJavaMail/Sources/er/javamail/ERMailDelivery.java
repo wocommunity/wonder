@@ -23,6 +23,7 @@ import javax.mail.internet.MimeMultipart;
 import org.apache.log4j.Logger;
 
 import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSForwardException;
 import com.webobjects.foundation.NSMutableArray;
 
@@ -53,7 +54,6 @@ import com.webobjects.foundation.NSMutableArray;
  * @author ak fixes
  */
 public abstract class ERMailDelivery {
-
 	private static Logger log = Logger.getLogger(ERMailDelivery.class);
 
 	/** JavaMail session */
@@ -71,9 +71,58 @@ public abstract class ERMailDelivery {
 	/** NSArray of ERMailAttachment that must be binded to the message as INLINE. */
 	protected NSMutableArray _inlineAttachments;
 
+	private ERMessage.Delegate _delegate;
+	private NSDictionary _userInfo;
+	
 	public static String DefaultCharset = System.getProperty("er.javamail.defaultEncoding");
 	public String _charset = DefaultCharset;
 
+	/** Designated constructor */
+	public ERMailDelivery(javax.mail.Session session) {
+		super();
+		this.setSession(session);
+		this.setMimeMessage(new MimeMessage(this.session()));
+	}
+
+	/** Default constructor */
+	public ERMailDelivery() {
+		this(ERJavaMail.sharedInstance().defaultSession());
+	}
+
+	/**
+	 * Sets the given delegate to listen to any messages that 
+	 * are created from this ERMailDelivery.  This will 
+	 * automatically call ERMessage.setDelegate(delegate) for
+	 * any ERMessage that is generated.
+	 * 
+	 * @param delegate the delegate to use for notifications
+	 */
+	public void setDelegate(ERMessage.Delegate delegate) {
+		_delegate = delegate;
+	}
+	
+	/**
+	 * Sets the userInfo dictionary for this ERMailDelivery.  This
+	 * userInfo is passed through to any ERMessage that is
+	 * created by this ERMailDelivery, which can be used by
+	 * delegates to get additional information about the
+	 * message.
+	 * 
+	 * @param userInfo the userInfo dictionary
+	 */
+	public void setUserInfo(NSDictionary userInfo) {
+		_userInfo = userInfo;
+	}
+	
+	/**
+	 * Returns the userInfo dictionary for this ERMailDelivery.
+	 * 
+	 * @return the userInfo dictionary
+	 */
+	public NSDictionary userInfo() {
+		return _userInfo;
+	}
+	
 	public String charset() {
 		return _charset;
 	}
@@ -88,18 +137,6 @@ public abstract class ERMailDelivery {
 
 	protected void setSession(javax.mail.Session aSession) {
 		_session = aSession;
-	}
-
-	/** Designated constructor */
-	public ERMailDelivery(javax.mail.Session session) {
-		super();
-		this.setSession(session);
-		this.setMimeMessage(new MimeMessage(this.session()));
-	}
-
-	/** Default constructor */
-	public ERMailDelivery() {
-		this(ERJavaMail.sharedInstance().defaultSession());
 	}
 
 	/** Creates a new mail instance within ERMailDelivery */
@@ -256,6 +293,8 @@ public abstract class ERMailDelivery {
 	 */
 	protected ERMessage buildMessage() {
 		ERMessage message = new ERMessage();
+		message.setDelegate(_delegate);
+		message.setUserInfo(_userInfo);
 		message.setMimeMessage(this.mimeMessage());
 		return message;
 	}
@@ -414,44 +453,4 @@ public abstract class ERMailDelivery {
 	 * @return the multipart used to put in the mail.
 	 */
 	protected abstract DataHandler prepareMail() throws MessagingException;
-
-	/**
-	 * Callback class name. Used to have ERMail call a method on a class after a message has been sent
-	 * 
-	 * @deprecated
-	 */
-	public static String callBackClassName = null;
-	/** @deprecated */
-	public static String callBackMethodName = null;
-	/**
-	 * callbackObject to refer to in the calling program
-	 * 
-	 * @deprecated
-	 */
-	public Object _callbackObject = null;
-
-	/**
-	 * Sets the callback class and method name
-	 * 
-	 * @deprecated
-	 */
-	public static void setCallBackClassWithMethod(String className, String methodName) {
-		callBackClassName = className;
-		callBackMethodName = methodName;
-	}
-
-	/**
-	 * Sets the object for the message. This is the identifying object from the calling program.
-	 * 
-	 * @deprecated
-	 */
-	public void setCallbackObject(Object obj) {
-		_callbackObject = obj;
-	}
-
-	/** @deprecated */
-	public Object callbackObject() {
-		return _callbackObject;
-	}
-
 }
