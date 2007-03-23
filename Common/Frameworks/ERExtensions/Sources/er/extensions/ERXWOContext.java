@@ -157,6 +157,10 @@ public class ERXWOContext extends WOContext implements ERXMutableUserInfoHolderI
         return url;
     }
 
+    /*
+     * MS: Kieran demonstrated what seems like a more common case that
+     * this breaks than the case that we're fixing.  So we'll let this fix live
+     * in commented-out land for a while.
     public String elementID() {
       String elementID = super.elementID();
       // MS: If you make an element the very first item on a page (i.e. no
@@ -170,6 +174,7 @@ public class ERXWOContext extends WOContext implements ERXMutableUserInfoHolderI
       }
       return elementID;
     }
+    */
 
     /**
      * Debugging help, returns the path to current component.
