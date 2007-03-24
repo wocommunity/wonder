@@ -41,10 +41,10 @@ import com.webobjects.jdbcadaptor.JDBCPlugIn;
 /**
  * ERXSQLHelper provides support for additional database-vender-specific operations that JDBCPlugIn does not cover.
  * 
- * By default this will try to load the class er.extensions.ERXSQLHelper$DatabaseVendorSQLHelper.  For instance,
- * er.extensions.ERXSQLHelper$FrontBaseSQLHelper.  If you want to change the helper that is used for a particular 
- * database vendor, then override FrontBase.SQLHelper, Oracle.SQLHelper, etc.  Case is important (because the vendor
- * name is prepended to the class name), and should match what your JDBCPlugIn.databaseProductName() returns.
+ * By default this will try to load the class er.extensions.ERXSQLHelper$DatabaseVendorSQLHelper. For instance,
+ * er.extensions.ERXSQLHelper$FrontBaseSQLHelper. If you want to change the helper that is used for a particular
+ * database vendor, then override FrontBase.SQLHelper, Oracle.SQLHelper, etc. Case is important (because the vendor name
+ * is prepended to the class name), and should match what your JDBCPlugIn.databaseProductName() returns.
  * 
  * @property databaseProductName.SQLHelper the class name of the SQLHelper for the database product name
  * 
@@ -92,7 +92,7 @@ public class ERXSQLHelper {
 		EOModel m = ERXEOAccessUtilities.modelGroup(null).modelNamed(modelName);
 		return createSchemaSQLForEntitiesInModelAndOptions(entities, m, optionsCreate);
 	}
-	
+
 	/**
 	 * creates SQL to create tables for the specified Entities. This can be used with EOUtilities rawRowsForSQL method
 	 * to create the tables.
@@ -459,9 +459,10 @@ public class ERXSQLHelper {
 	protected String limitExpressionForSQL(EOSQLExpression expression, EOFetchSpecification fetchSpecification, String sql, long start, long end) {
 		throw new UnsupportedOperationException("There is no database-specific implementation for generating limit expressions.");
 	}
-	
+
 	/**
 	 * Returns the SQL expression for a regular expression query.
+	 * 
 	 * @param key
 	 * @param value
 	 * @return
@@ -568,11 +569,12 @@ public class ERXSQLHelper {
 				sb.append(", ");
 			}
 			Object value = valueArray.objectAtIndex(i);
-			// AK : crude hack for queries with number constants. 
+			// AK : crude hack for queries with number constants.
 			// Apparently EOAttribute.adaptorValueByConvertingAttributeValue() doesn't actually return a suitable value
-			if(value instanceof ERXConstant.NumberConstant) {
-				value = new Long(((Number)value).longValue());
-			} else {
+			if (value instanceof ERXConstant.NumberConstant) {
+				value = new Long(((Number) value).longValue());
+			}
+			else {
 				value = formatValueForAttribute(e, value, attribute, key);
 			}
 			sb.append(value);
@@ -668,7 +670,7 @@ public class ERXSQLHelper {
 		// This is REALLY hacky.
 		String className = expression.getClass().getName();
 		int dotIndex = className.lastIndexOf('$');
-		if(dotIndex == -1) {
+		if (dotIndex == -1) {
 			dotIndex = className.lastIndexOf('.');
 		}
 		int expressionIndex = className.lastIndexOf("Expression");
@@ -877,7 +879,7 @@ public class ERXSQLHelper {
 			return super.createIndexSQLForEntities(entities, oracleExternalTypesToIgnore);
 
 		}
-		
+
 		public String sqlForRegularExpressionQuery(String key, String value) {
 			return "REGEXP_LIKE(" + key + ", " + value + ")";
 		}
@@ -892,14 +894,14 @@ public class ERXSQLHelper {
 
 	public static class FrontBaseSQLHelper extends ERXSQLHelper {
 		public boolean shouldExecute(String sql) {
-      boolean shouldExecute = true;
-      if (sql.startsWith("SET TRANSACTION ISOLATION LEVEL")) {
-        shouldExecute = false;
-      }
-      else if (sql.startsWith("COMMIT")) {
-        //shouldExecute = false;
-      }
-      return shouldExecute;
+			boolean shouldExecute = true;
+			if (sql.startsWith("SET TRANSACTION ISOLATION LEVEL")) {
+				shouldExecute = false;
+			}
+			else if (sql.startsWith("COMMIT")) {
+				// shouldExecute = false;
+			}
+			return shouldExecute;
 		}
 
 		protected String limitExpressionForSQL(EOSQLExpression expression, EOFetchSpecification fetchSpecification, String sql, long start, long end) {
@@ -918,12 +920,11 @@ public class ERXSQLHelper {
 		protected String limitExpressionForSQL(EOSQLExpression expression, EOFetchSpecification fetchSpecification, String sql, long start, long end) {
 			return sql + " LIMIT " + start + ", " + (end - start);
 		}
-		
+
 		public String sqlForRegularExpressionQuery(String key, String value) {
 			return key + " REGEXP " + value + "";
 		}
 	}
-
 
 	public static class PostgresqlSQLHelper extends ERXSQLHelper {
 		protected String formatValueForAttribute(EOSQLExpression expression, Object value, EOAttribute attribute, String key) {
@@ -938,7 +939,7 @@ public class ERXSQLHelper {
 		protected String limitExpressionForSQL(EOSQLExpression expression, EOFetchSpecification fetchSpecification, String sql, long start, long end) {
 			return sql + " LIMIT " + (end - start) + " OFFSET " + start;
 		}
-		
+
 		public String sqlForRegularExpressionQuery(String key, String value) {
 			return key + " ~* " + value + "";
 		}
