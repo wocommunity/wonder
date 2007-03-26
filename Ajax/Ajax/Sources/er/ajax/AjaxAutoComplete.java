@@ -108,7 +108,7 @@ public class AjaxAutoComplete extends AjaxComponent {
 	  ajaxOptionsArray.addObject(new AjaxOption("fullSearch", AjaxOption.BOOLEAN));
 	  ajaxOptionsArray.addObject(new AjaxOption("partialSearch", AjaxOption.BOOLEAN));
 	  ajaxOptionsArray.addObject(new AjaxOption("defaultValue", AjaxOption.STRING));
-    ajaxOptionsArray.addObject(new AjaxOption("autoSelect", AjaxOption.BOOLEAN));
+	  ajaxOptionsArray.addObject(new AjaxOption("autoSelect", AjaxOption.BOOLEAN));
       NSMutableDictionary options = AjaxOption.createAjaxOptionsDictionary(ajaxOptionsArray, this);
       return options;
     }
@@ -118,58 +118,88 @@ public class AjaxAutoComplete extends AjaxComponent {
      */
     public void appendToResponse(WOResponse res, WOContext ctx) {
         super.appendToResponse(res, ctx);
-		boolean isLocal = hasBinding("isLocal") && ((Boolean) valueForBinding("isLocal")).booleanValue();
-		if (isLocal) {
-			StringBuffer str = new StringBuffer();
-			str.append("<script type=\"text/javascript\">\n// <![CDATA[\n");
-			str.append("new Autocompleter.Local('");
-			str.append(fieldName);
-			str.append("','");
-			str.append(divName);
-			str.append("',");
-			str.append("new Array(");
-			NSArray list = (NSArray) valueForBinding("list");
-			int max = list.count();
-			String cnt = "";
-			boolean hasItem = hasBinding("item");
-			for (int i = 0; i < max; i++) {
-				Object ds = list.objectAtIndex(i);
-				if (i > 0) {
-					str.append(",");
+		boolean isDisabled = hasBinding("disabled") && ((Boolean) valueForBinding("disabled")).booleanValue();
+		if ( !isDisabled ) {
+			boolean isLocal = hasBinding("isLocal") && ((Boolean) valueForBinding("isLocal")).booleanValue();
+			if (isLocal) {
+				StringBuffer str = new StringBuffer();
+				boolean isLocalSharedList = hasBinding("isLocalSharedList") && ((Boolean) valueForBinding("isLocalSharedList")).booleanValue();
+				String listJS = null;
+				if (isLocalSharedList) {
+					String varName = (String) valueForBinding("localSharedVarName");
+					NSMutableDictionary userInfo = AjaxUtils.mutableUserInfo(res);
+					if (userInfo.objectForKey(varName) == null) {
+						String ljs = listeJS();
+						AjaxUtils.addScriptCodeInHead(res, "var " + varName + " = " + ljs + ";");
+						userInfo.setObjectForKey(ljs, varName);
+					}
+					listJS = varName;
+				} else {
+					listJS = listeJS();
 				}
-				str.append("\n\"");
-				if (hasItem) {
-                    setValueForBinding(ds, "item");
-             	}
-            	Object displayValue = valueForBinding("displayString", valueForBinding("item", ds));
-				str.append(displayValue.toString());
-				// TODO: We should escape the javascript string delimiter (") to keep the javascript interpreter happy.
-				//str.append(displayValue.toString().replaceAll("\"", "\\\\\\\\\"")); // doesn't work
-
-				str.append(cnt);
-				str.append("\"");
+				str.append("<script type=\"text/javascript\">\n// <![CDATA[\n");
+				str.append("new Autocompleter.Local('");
+				str.append(fieldName);
+				str.append("','");
+				str.append(divName);
+				str.append("',");
+				str.append(listJS);
+				str.append(",");
+				AjaxOptions.appendToBuffer(createAjaxOptions(), str, ctx);
+				str.append(");\n// ]]>\n</script>\n");
+				res.appendContentString(String.valueOf(str));
+			} else {
+				String actionUrl = AjaxUtils.ajaxComponentActionUrl(ctx);
+				AjaxUtils.appendScriptHeader(res);
+				res.appendContentString("new Ajax.Autocompleter('"+fieldName+"', '"+divName+"', '"+actionUrl+"', ");
+				AjaxOptions.appendToResponse(createAjaxOptions(), res, ctx);
+				res.appendContentString(");");
+				AjaxUtils.appendScriptFooter(res);
 			}
-			str.append("),");
-			AjaxOptions.appendToBuffer(createAjaxOptions(), str, ctx);
-			str.append(");\n// ]]>\n</script>\n");
-			res.appendContentString(String.valueOf(str));
-		} else {
-			String actionUrl = AjaxUtils.ajaxComponentActionUrl(ctx);
-      AjaxUtils.appendScriptHeader(res);
-			res.appendContentString("new Ajax.Autocompleter('"+fieldName+"', '"+divName+"', '"+actionUrl+"', ");
-			AjaxOptions.appendToResponse(createAjaxOptions(), res, ctx);
-			res.appendContentString(");");
-      AjaxUtils.appendScriptFooter(res);
 		}
     }
+
+	String listeJS() {
+		StringBuffer str = new StringBuffer();
+		str.append("new Array(");
+		NSArray list = (NSArray) valueForBinding("list");
+		int max = list.count();
+		String cnt = "";
+		boolean hasItem = hasBinding("item");
+		for (int i = 0; i < max; i++) {
+			Object ds = list.objectAtIndex(i);
+			if (i > 0) {
+				str.append(",");
+			}
+			str.append("\n\"");
+			if (hasItem) {
+				setValueForBinding(ds, "item");
+			}
+			Object displayValue = valueForBinding("displayString", valueForBinding("item", ds));
+			str.append(displayValue.toString());
+			// TODO: We should escape the javascript string delimiter (") to keep the javascript interpreter happy.
+			//str.append(displayValue.toString().replaceAll("\"", "\\\\\\\\\"")); // doesn't work
+			str.append(cnt);
+			str.append("\"");
+		}
+		str.append(")");
+		return String.valueOf(str);
+	}		
 
     /**
      * Adds all required resources.
      */
     protected void addRequiredWebResources(WOResponse res) {
-        addScriptResourceInHead(res, "prototype.js");
-        addScriptResourceInHead(res, "scriptaculous.js");
-        addScriptResourceInHead(res, "wonder.js");
+		boolean isDisabled = hasBinding("disabled") && ((Boolean) valueForBinding("disabled")).booleanValue();
+		if ( !isDisabled ) {
+			addScriptResourceInHead(res, "prototype.js");
+			addScriptResourceInHead(res, "scriptaculous.js");
+			addScriptResourceInHead(res, "effects.js");
+			addScriptResourceInHead(res, "builder.js");
+			addScriptResourceInHead(res, "dragdrop.js");
+			addScriptResourceInHead(res, "controls.js");
+			addScriptResourceInHead(res, "wonder.js");
+		}
     }
 
     /**
