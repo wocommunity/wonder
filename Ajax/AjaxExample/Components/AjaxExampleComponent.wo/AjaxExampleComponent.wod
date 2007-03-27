@@ -78,6 +78,10 @@ AjaxGridLink: WOHyperlink {
 	pageName = "AjaxGridExample";
 }
 
+AjaxTabbedPanelLink: WOHyperlink {
+	pageName = "AjaxTabbedPanelDemo";
+}
+
 Contents : WOComponentContent {
 }
 
