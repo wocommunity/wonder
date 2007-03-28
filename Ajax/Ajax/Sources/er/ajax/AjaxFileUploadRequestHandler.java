@@ -16,9 +16,14 @@ import com.webobjects.appserver.WOSession;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableDictionary;
 
+import er.extensions.ERXProperties;
+
 /**
  * Provides the backend for Ajax uploads. This has to be implemented differently than a normal file upload because we
  * can't block the session while uploading.
+ * 
+ * @property er.ajax.AjaxFileRequestHandler.tempFileFolder the location of the temp file 
+ * 	folder.  If not specified, this will go to Java's default temporary folder (/tmp on Mac OS X)
  * 
  * @author mschrag
  */
@@ -30,7 +35,11 @@ public class AjaxFileUploadRequestHandler extends WORequestHandler {
 	private File _tempFileFolder;
 
 	public AjaxFileUploadRequestHandler() {
-		this(null);
+		this(ERXProperties.stringForKey("er.ajax.AjaxFileRequestHandler.tempFileFolder"));
+	}
+
+	protected AjaxFileUploadRequestHandler(String tempFilePath) {
+		this(tempFilePath == null ? null : new File(tempFilePath));
 	}
 
 	public AjaxFileUploadRequestHandler(File tempFileFolder) {
