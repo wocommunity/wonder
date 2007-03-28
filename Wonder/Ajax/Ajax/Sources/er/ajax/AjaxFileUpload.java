@@ -247,21 +247,20 @@ public class AjaxFileUpload extends WOComponent {
 	protected void uploadSucceeded() throws MalformedURLException, IOException {
 		AjaxFileUploadRequestHandler.UploadStatus status = uploadStatus();
 		try {
-			boolean deleteFile = false;
+			boolean deleteFile = true;
 			if (hasBinding("data")) {
 				NSData data = new NSData(status.tempFile().toURL());
 				setValueForBinding(data, "data");
-				deleteFile = true;
 			}
 			if (hasBinding("inputStream")) {
 				setValueForBinding(new FileInputStream(status.tempFile()), "inputStream");
+				deleteFile = false;
 			}
 			if (hasBinding("outputStream")) {
 				OutputStream outputStream = (OutputStream) valueForBinding("outputStream");
 				if (outputStream != null) {
 					ERXFileUtilities.writeInputStreamToOutputStream(new FileInputStream(status.tempFile()), outputStream);
 				}
-				deleteFile = true;
 			}
 			if (hasBinding("streamToFilePath")) {
 				File streamToFile = new File((String) valueForBinding("streamToFilePath"));
@@ -290,6 +289,7 @@ public class AjaxFileUpload extends WOComponent {
 					}
 					setValueForBinding(finalFilePath, "finalFilePath");
 				}
+				deleteFile = false;
 			}
 			if (hasBinding("filePath")) {
 				setValueForBinding(status.fileName(), "filePath");
