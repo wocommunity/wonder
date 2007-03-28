@@ -15,6 +15,7 @@ import com.webobjects.foundation.NSComparator;
 import com.webobjects.foundation.NSData;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableArray;
+import com.webobjects.foundation.NSMutableDictionary;
 
 /** Subclass of WORequest that fixes several Bugs.
  * The ID's are #2924761 and #2961017. It can also be extended to handle
@@ -342,4 +343,21 @@ public  class ERXRequest extends WORequest {
         }
         return "UNKNOWN";
     }
+
+	public NSMutableDictionary mutableUserInfo() {
+		NSDictionary userInfo = userInfo();
+		NSMutableDictionary mutableUserInfo;
+		if (userInfo == null) {
+			mutableUserInfo = new NSMutableDictionary();
+			setUserInfo(mutableUserInfo);
+		}
+		else if (userInfo instanceof NSMutableDictionary) {
+			mutableUserInfo = (NSMutableDictionary) userInfo;
+		}
+		else {
+			mutableUserInfo = userInfo.mutableClone();
+			setUserInfo(mutableUserInfo);
+		}
+		return mutableUserInfo;
+	}
 }
