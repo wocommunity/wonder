@@ -195,6 +195,10 @@ public class AjaxFileUpload extends WOComponent {
 		return resetText;
 	}
 
+	public String onChange() {
+		return id() + "ajaxFileUpload.start(form)";
+	}
+	
 	public WOActionResults fileUploading() throws MalformedURLException, IOException {
 		if (ERXThreadStorage.valueForKey("resetting") == null) {
 			_fileUploading = true;

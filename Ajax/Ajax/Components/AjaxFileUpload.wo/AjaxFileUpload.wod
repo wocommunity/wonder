@@ -118,3 +118,10 @@ CancelText : WOString {
 ResetText : WOString {
 	value = resetText;
 }
+
+UploadField : WOGenericElement {
+	elementName = "input";
+	type = "file";
+	name = "uploadedFile";
+	onchange = onChange;
+}
