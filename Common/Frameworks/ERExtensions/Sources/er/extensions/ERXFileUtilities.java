@@ -157,15 +157,23 @@ public class ERXFileUtilities {
     }
     
     public static void writeInputStreamToOutputStream(InputStream in, OutputStream out) throws IOException {
-        BufferedInputStream bis = new BufferedInputStream(in);
-        byte buf[] = new byte[1024 * 50]; //64 KBytes buffer
-        int read = -1;
-        while ((read = bis.read(buf)) != -1) {
-            out.write(buf, 0, read);
-        }
-        bis.close();
-        out.flush();
-        out.close();
+    	try {
+	        BufferedInputStream bis = new BufferedInputStream(in);
+	        try {
+		        byte buf[] = new byte[1024 * 50]; //64 KBytes buffer
+		        int read = -1;
+		        while ((read = bis.read(buf)) != -1) {
+		            out.write(buf, 0, read);
+		        }
+	        }
+	        finally {
+	        	bis.close();
+	        }
+    	}
+    	finally {
+	        out.flush();
+	        out.close();
+    	}
     }
 
     /**
