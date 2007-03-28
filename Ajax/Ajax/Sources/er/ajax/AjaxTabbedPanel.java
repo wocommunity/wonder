@@ -81,6 +81,8 @@ public class AjaxTabbedPanel extends AjaxDynamicElement {
      * @param template the graph of elements passed to the constructor.
      */
     private void findTabs(WODynamicGroup template)  {
+    	if (template == null) return;
+    	
         NSArray children = template.childrenElements();
         for (int i = 0; i < children.count(); i++) {
             WOElement child = (WOElement)children.objectAtIndex(i);
@@ -133,18 +135,18 @@ public class AjaxTabbedPanel extends AjaxDynamicElement {
             response.appendContentString("<a href=\"javascript:void(0)\" onclick=\"");
 
             if ( ! isSelectedTab) {
-                response.appendContentString("loadPanel('");
+                response.appendContentString("AjaxTabbedPanel.loadPanel('");
                 response.appendContentString(paneID);
                 response.appendContentString("', '");
                 response.appendContentString((busyDiv != null) ? (String)busyDiv.valueInComponent(component) : "");
                 response.appendContentString("'); ");
             }
             
-            response.appendContentString("selectTab('");
+            response.appendContentString("AjaxTabbedPanel.selectTab('");
             response.appendContentString(idString);
             response.appendContentString("', '");
             response.appendContentString(tabID);
-            response.appendContentString("'); selectPanel('");
+            response.appendContentString("'); AjaxTabbedPanel.selectPanel('");
             response.appendContentString(paneControlID);
             response.appendContentString("', '");
             response.appendContentString(paneID);
@@ -161,7 +163,10 @@ public class AjaxTabbedPanel extends AjaxDynamicElement {
         appendTagAttributeToResponse(response, "id", paneControlID);
         response.appendContentString(">\n");
         // The tabs render themself as pane
-        content.appendToResponse(response, context);
+        if (content !=  null)
+        {
+        	content.appendToResponse(response, context);
+        }
         response.appendContentString("</ul>\n");
         super.appendToResponse(response, context);
     }

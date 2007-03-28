@@ -36,6 +36,11 @@ public class AjaxTabbedPanelTab extends AjaxDynamicElement {
         name = (WOAssociation) associations.objectForKey("name");
         id = (WOAssociation) associations.objectForKey("id");
         isSelected = (WOAssociation) associations.objectForKey("isSelected");
+        
+        if (name == null)
+        {
+        	throw new RuntimeException("name binding is required");
+        }
     }
     
       
@@ -54,7 +59,7 @@ public class AjaxTabbedPanelTab extends AjaxDynamicElement {
         
         // The selected pane needs to have its content rendered when the page is first renderd.  After that
         // it is controlled by the user clicking tabs
-        if (isSelected(aContext.component()))
+        if (isSelected(aContext.component()) && content != null)
         {
         	content.appendToResponse(aResponse, aContext);
         }
@@ -84,7 +89,10 @@ public class AjaxTabbedPanelTab extends AjaxDynamicElement {
 	 */
 	public WOActionResults handleRequest(WORequest request, WOContext context) {
 		WOResponse response = AjaxUtils.createResponse(request, context);
-		content.appendToResponse(response, context);
+		if (content != null)
+		{
+			content.appendToResponse(response, context);
+		}
 		return response;
 	}
 
