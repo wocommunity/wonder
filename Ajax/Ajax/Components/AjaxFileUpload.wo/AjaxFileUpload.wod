@@ -1,0 +1,120 @@
+HiddenFrame : WOIFrame {
+	name = "uploadFrame";
+	src = "about:blank";
+	width = "0";
+	height = "0";
+}
+
+UploadForm : WOForm {
+	multipleSubmit = false;
+	enctype = "multipart/form-data";
+	target = "uploadFrame";
+	href = uploadUrl;
+}
+
+UploadUpdateContainer : AjaxUpdateContainer {
+	id = id;
+	action = fileUploading;
+}
+
+ID : WOString {
+	value = id;
+}
+
+UploadingConditional : WOConditional {
+	condition = uploading;
+}
+
+NotUploadingConditional : WOConditional {
+	condition = uploading;
+	negate = true;
+}
+
+HiddenID : WOGenericElement {
+	elementName = "input";
+	type = "hidden";
+	name = "id";
+	value = id;
+}
+
+HiddenWOSID : WOGenericElement {
+	elementName = "input";
+	type = "hidden";
+	name = "wosid";
+	value = session.sessionID;
+}
+
+NotDoneConditional : WOConditional {
+	condition = uploadStatus.done;
+	negate = true;
+}
+
+DoneConditional : WOConditional {
+	condition = uploadStatus.done;
+}
+
+CancelledConditional : WOConditional {
+	condition = uploadStatus.cancelled;
+}
+
+CancelAction : AjaxUpdateLink {
+	updateContainerID = id;
+	action = cancel;
+	class = "cancelAction";
+}
+
+ResetAction : AjaxUpdateLink {
+	updateContainerID = id;
+	action = resetUpload;
+	class = "resetAction";
+}
+
+Finished : WOGenericContainer {
+	elementName = "td";
+	width = percentage;
+	class = finishedClass;
+}
+
+Unfinished : WOGenericContainer {
+	elementName = "td";
+	class = "percentageUnfinished";
+}
+
+SucceededConditional : WOConditional {
+	condition = uploadStatus.succeeded;
+}
+
+FailedConditional : WOConditional {
+	condition = uploadStatus.failed;
+}
+
+BytesReadSize : WOString {
+	value = bytesReadSize;
+}
+
+StreamLengthSize : WOString {
+	value = streamLengthSize;
+}
+
+CancelledText : WOString {
+	value = cancelledText;
+	escapeHTML = false;
+}
+
+FailedText : WOString {
+	value = failedText;
+	escapeHTML = false;
+}
+
+SucceededText : WOString {
+	value = succeededText;
+	escapeHTML = false;
+}
+
+CancelText : WOString {
+	value = cancelText;
+}
+
+ResetText : WOString {
+	value = resetText;
+}
