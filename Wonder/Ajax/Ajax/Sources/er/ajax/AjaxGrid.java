@@ -389,7 +389,7 @@ public class AjaxGrid extends WOComponent {
 	 * @return JavaScript to initialize drag and drop on the grid
 	 */
 	public String initScript() {
-		return canReorder() ? "<script type=\"text/javascript\">ajaxGrid_init($(\"" + tableID() + "\"));</script>" : null;
+		return canReorder() ? "<script type=\"text/javascript\">AjaxGrid.ajaxGrid_init($(\"" + tableID() + "\"));</script>" : null;
 	}
 
 	/**
@@ -412,7 +412,7 @@ public class AjaxGrid extends WOComponent {
 	 * @return ajaxGrid_init(TABLE);
 	 */
 	public String enableDragAndDrop() {
-		return canReorder() ? "ajaxGrid_init($('" + tableID() + "'));" : "";
+		return canReorder() ? "AjaxGrid.ajaxGrid_init($('" + tableID() + "'));" : "";
 	}
 
 	/**
