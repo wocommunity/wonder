@@ -55,7 +55,9 @@ public class AjaxFileUpload extends WOComponent {
 		super(context);
 		synchronized (AjaxFileUpload.class) {
 			if (!_requestHandlerRegistered) {
-				WOApplication.application().registerRequestHandler(new AjaxFileUploadRequestHandler(), AjaxFileUploadRequestHandler.REQUEST_HANDLER_KEY);
+				if (WOApplication.application().requestHandlerForKey(AjaxFileUploadRequestHandler.REQUEST_HANDLER_KEY) == null) {
+					WOApplication.application().registerRequestHandler(new AjaxFileUploadRequestHandler(), AjaxFileUploadRequestHandler.REQUEST_HANDLER_KEY);
+				}
 				_requestHandlerRegistered = true;
 			}
 		}
