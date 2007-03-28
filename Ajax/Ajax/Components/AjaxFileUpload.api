@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<wodefinitions>
+	<wo wocomponentcontent="false" class="AjaxFileUpload.java">
+		<bindind name = "cancelledText"/>
+		<bindind name = "succeededText"/>
+		<bindind name = "failedText"/>
+		<bindind name = "cancelText"/>
+		<bindind name = "resetText"/>
+		<bindind name = "finishedAction"/>
+		<bindind name = "cancelledAction"/>
+		<bindind name = "succeededAction"/>
+		<bindind name = "failedAction"/>
+		<bindind name = "data"/>
+		<bindind name = "inputStream"/>
+		<bindind name = "outputStream"/>
+		<bindind name = "streamToFilePath"/>
+		<bindind name = "finalFilePath"/>
+		<bindind name = "filePath"/>
+	</wo>
+</wodefinitions>
