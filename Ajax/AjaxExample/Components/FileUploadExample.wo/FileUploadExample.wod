@@ -1,0 +1,8 @@
+AjaxExampleComponent : AjaxExampleComponent {
+	title = "Ajax File Upload";
+}
+
+AjaxFileUplaod : AjaxFileUpload {
+	finishedAction = uploadFinished;
+	data = data;
+}
