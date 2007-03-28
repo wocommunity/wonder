@@ -123,6 +123,26 @@ var AjaxUpdateLink = {
 		new Ajax.Updater(id, actionUrl, AjaxOptions.options(options));
 	}
 };
+
+var AjaxFileUpload = Class.create();
+AjaxFileUpload.prototype = {
+	initialize : function(id) {
+		this.id = id;
+	},
+	
+	start : function(form) {
+		form.submit();
+		this.updater = new Ajax.PeriodicalUpdater(this.id, $(this.id).getAttribute('updateUrl'), { evalScripts: true, frequency: 2.0 });
+	},
+
+	stop : function() {
+		if (this.updater) {
+			this.updater.stop();
+			this.updater = null;
+		}
+	}
+};
+
 // our own extensions 
 // MS: This doesn't appear to be used and it causes a failure 
 // in IE6.
