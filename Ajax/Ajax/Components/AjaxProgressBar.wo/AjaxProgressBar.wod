@@ -1,0 +1,100 @@
+ProgressUpdateContainer : AjaxUpdateContainer {
+	id = id;
+	action = refreshing;
+}
+
+ID : WOString {
+	value = id;
+}
+
+ProgressBarVisible : WOConditional {
+	condition = progressBarVisible;
+}
+
+AllowCancelConditional : WOConditional {
+	condition = ^allowCancel;
+}
+
+StartedConditional : WOConditional {
+	condition = started;
+}
+
+NotDoneConditional : WOConditional {
+	condition = done;
+	negate = true;
+}
+
+DoneConditional : WOConditional {
+	condition = done;
+}
+
+CancelAction : AjaxUpdateLink {
+	updateContainerID = id;
+	action = cancel;
+	class = "cancelAction";
+	disabled = done;
+}
+
+Finished : WOGenericContainer {
+	elementName = "td";
+	width = percentage;
+	class = finishedClass;
+}
+
+Unfinished : WOGenericContainer {
+	elementName = "td";
+	class = "percentageUnfinished";
+}
+
+Value : WOString {
+	value = displayValue;
+}
+
+Maximum : WOString {
+	value = displayMaximum;
+}
+
+CancelText : WOString {
+	value = cancelText;
+}
+
+FinishedFunction : WOString {
+	value = ^finishedFunction;
+}
+
+CanceledConditional : WOConditional {
+	condition = progress.canceled;
+}
+
+FailedConditional : WOConditional {
+	condition = progress.failed;
+}
+
+SucceededConditional : WOConditional {
+	condition = progress.succeeded;
+}
+
+CanceledFunction : WOString {
+	value = ^canceledFunction;
+}
+
+FailedFunction : WOString {
+	value = ^failedFunction;
+}
+
+SucceededFunction : WOString {
+	value = ^succeededFunction;
+}
+
+ProgressStartedConditional : WOConditional {
+	condition = progress.started;
+}
+
+ProgressNotDoneConditional : WOConditional {
+	condition = progress.done;
+	negate = true;
+}
+
+FireJavascriptEventsConditional : WOConditional {
+	condition = fireJavascriptEvents;
+}

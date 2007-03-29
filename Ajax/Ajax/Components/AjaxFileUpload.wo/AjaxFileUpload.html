@@ -1,43 +1,8 @@
 <webobject name = "HiddenFrame"/>
-<script>
-var <webobject name = "ID"/>ajaxFileUpload = new AjaxFileUpload('<webobject name = "ID"/>');
-</script>
 <webobject name = "UploadUpdateContainer">
-	<webobject name = "UploadingConditional">
-		<webobject name = "DoneConditional">
-			<script>
-			<webobject name = "ID"/>ajaxFileUpload.stop();
-			</script>
-			<div class = "fileUploadFinished">
-				<span class = "fileUploadStatus">
-					<webobject name = "CancelledConditional">
-						<webobject name = "CancelledText"/>
-					</webobject>
-					<webobject name = "FailedConditional">
-						<webobject name = "FailedText"/>
-					</webobject>
-					<webobject name = "SucceededConditional">
-						<webobject name = "SucceededText"/>
-					</webobject>
-				</span>
-				<webobject name = "ResetAction"><webobject name = "ResetText"/></webobject>
-			</div>
-		</webobject>
-		<webobject name = "NotDoneConditional">
-			<table class = "fileUploadProgress">
-				<tr>
-					<td class = "bytesFinished"><webobject name = "BytesReadSize" /></td>
-					<td width = "100%"><table class = "fileUploadProgressBar" width = "100%" cellspacing = "0">
-								<webobject name = "Finished">&nbsp;</webobject>
-								<webobject name = "Unfinished">&nbsp;</webobject>
-							</table></td>
-					<td class = "bytesUnfinished"><webobject name = "StreamLengthSize" /></td>
-					<td><webobject name = "CancelAction"><webobject name = "CancelText"/></webobject></td>
-				</tr>
-			</table>
-		</webobject>
-	</webobject>
-	<webobject name = "NotUploadingConditional">
+	<webobject name = "StartUploadAction"/>
+	<webobject name = "UploadProgressBar"/>
+	<webobject name = "NotStartedConditional">
 		<webobject name = "UploadForm">
 			<webobject name = "HiddenWOSID"/>
 			<webobject name = "HiddenID"/>

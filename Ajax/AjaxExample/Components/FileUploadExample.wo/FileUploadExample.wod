@@ -2,7 +2,27 @@ AjaxExampleComponent : AjaxExampleComponent {
 	title = "Ajax File Upload";
 }
 
-AjaxFileUplaod : AjaxFileUpload {
+UploadUpdateContainer : AjaxUpdateContainer {
+	id = "UploadContainer";
+}
+
+UploadDoneConditional : WOConditional {
+	condition = uploadProgress.done;
+}
+
+AjaxFileUpload : AjaxFileUpload {
+	allowCancel = true;
+	uploadProgress = uploadProgress;
 	finishedAction = uploadFinished;
 	data = data;
+	finishedFunction = "UploadContainerUpdate()";
+}
+
+AjaxProgress : AjaxProgressBar {
+	progress = progress;
+}
+
+ResetUploadAction : AjaxUpdateLink {
+	updateContainerID = "UploadContainer";
+	action = resetUpload;
 }
