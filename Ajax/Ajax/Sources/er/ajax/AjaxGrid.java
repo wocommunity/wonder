@@ -1,15 +1,20 @@
 package er.ajax;
 
-import java.text.*;
-
-import org.apache.log4j.*;
+import java.text.Format;
+import java.text.ParseException;
 
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WODisplayGroup;
 import com.webobjects.appserver.WOResponse;
 import com.webobjects.eocontrol.EOSortOrdering;
-import com.webobjects.foundation.*;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSForwardException;
+import com.webobjects.foundation.NSKeyValueCoding;
+import com.webobjects.foundation.NSKeyValueCodingAdditions;
+import com.webobjects.foundation.NSMutableArray;
+import com.webobjects.foundation.NSMutableDictionary;
 
 
 /**
