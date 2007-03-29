@@ -1,20 +1,23 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <wodefinitions>
 	<wo wocomponentcontent="false" class="AjaxFileUpload.java">
-		<bindind name = "cancelledText"/>
-		<bindind name = "succeededText"/>
-		<bindind name = "failedText"/>
-		<bindind name = "cancelText"/>
-		<bindind name = "resetText"/>
-		<bindind name = "finishedAction"/>
-		<bindind name = "cancelledAction"/>
-		<bindind name = "succeededAction"/>
-		<bindind name = "failedAction"/>
-		<bindind name = "data"/>
-		<bindind name = "inputStream"/>
-		<bindind name = "outputStream"/>
-		<bindind name = "streamToFilePath"/>
-		<bindind name = "finalFilePath"/>
-		<bindind name = "filePath"/>
+		<binding name = "cancelText"/>
+		<binding name = "canceledFunction"/>
+		<binding name = "succeededFunction"/>
+		<binding name = "failedFunction"/>
+		<binding name = "finishedAction"/>
+		<binding name = "canceledAction"/>
+		<binding name = "succeededAction"/>
+		<binding name = "failedAction"/>
+		<binding name = "finishedFunction"/>
+		<binding name = "data"/>
+		<binding name = "inputStream"/>
+		<binding name = "outputStream"/>
+		<binding name = "streamToFilePath"/>
+		<binding name = "finalFilePath"/>
+		<binding name = "filePath"/>
+		<binding name = "allowCancel"/>
+		<binding name = "progressBarBeforeStart"/>
+		<binding name = "progressBarAfterDone"/>
 	</wo>
 </wodefinitions>
