@@ -72,7 +72,7 @@ public class AjaxProgressBar extends WOComponent {
 				visible = ERXComponentUtilities.booleanValueForBinding(this, "visibleBeforeStart");
 			}
 		}
-		else if (done()) {
+		else if (done() && !_fireJavascriptEvents) {
 			if (hasBinding("visibleAfterDone")) {
 				visible = ERXComponentUtilities.booleanValueForBinding(this, "visibleAfterDone");
 			}
