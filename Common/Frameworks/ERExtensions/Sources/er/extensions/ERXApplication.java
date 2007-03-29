@@ -1347,4 +1347,13 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 	public ERXMigrator migrator() {
 		return new ERXMigrator(name() + "-" + number());
 	}
+	
+	/**
+	 * This method is called by ERXWOContext and provides the application a hook to rewrite generated URLs.
+	 * @param url the URL to rewrite
+	 * @return the rewritten URL
+	 */
+	public String _rewriteURL(String url) {
+		return url;
+	}
 }
