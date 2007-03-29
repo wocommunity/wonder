@@ -1,46 +1,58 @@
 <webobject name = "AjaxExampleComponent">
 <style>
-div.fileUploadFinished {
-	font-family: Helvetica;
-}
-
-table.fileUploadProgress {
+table.progressBarContainer {
 	width: 100%;
 	border-spacing: 0px;
 }
 
-table.fileUploadProgress td {
+table.progressBarContainer td {
 	font-family: Helvetica;
 	font-size: 8pt;
 	padding: 2px;
 	color: rgb(100, 100, 100);
 }
 
-table.fileUploadProgress td.bytesFinished {
+table.progressBarContainer td.progressValue {
 	white-space: nowrap;
 }
 
-table.fileUploadProgressBar {
+table.progressBar {
 	border: 1px solid black;
 }
 
-table.fileUploadProgressBar td.percentageFinished {
+table.progressBar td.percentageFinished {
 	background-color: red;
 }
 
-table.fileUploadProgressBar td.percentageUnfinished {
+table.progressBar td.percentageUnfinished {
 	background-color: gray;
 }
 
-table.fileUploadProgress td.bytesUnfinished {
+table.progressBarContainer td.progressMaximum {
 	white-space: nowrap;
 }
 </style>
 <p>
 <b>AjaxFileUpload</b>
 </p>
-<webobject name = "AjaxFileUplaod"/>
+This AjaxFileUpload binds into an NSData, so you WILL run out of memory if you keep trying it out.
+<p>
+<webobject name = "UploadUpdateContainer">
+	<webobject name = "AjaxFileUpload"/>
+	<webobject name = "UploadDoneConditional">
+		Your upload has finished (but I'm too lazy to check whether it was cancelled or completed normally).
+		<p>
+		<webobject name = "ResetUploadAction">click to reset</webobject>
+		</p>
+	</webobject>
+</webobject>
+</p>
 <p>
 Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
 </p>
+<p>
+Here's a progress bar attached to a thread that is just incrementing the progress value.
+<webobject name = "AjaxProgress"/>
+</p>
+
 </webobject>

@@ -1,5 +1,5 @@
 HiddenFrame : WOIFrame {
-	name = "uploadFrame";
+	name = uploadFrameName;
 	src = "about:blank";
 	width = "0";
 	height = "0";
@@ -8,25 +8,26 @@ HiddenFrame : WOIFrame {
 UploadForm : WOForm {
 	multipleSubmit = false;
 	enctype = "multipart/form-data";
-	target = "uploadFrame";
+	target = uploadFrameName;
 	href = uploadUrl;
+}
+
+StartUploadAction : AjaxUpdateLink {
+	functionName = startUploadName;
+	action = startUpload;
+	updateContainerID = id;
 }
 
 UploadUpdateContainer : AjaxUpdateContainer {
 	id = id;
-	action = fileUploading;
 }
 
-ID : WOString {
-	value = id;
+StartedConditional : WOConditional {
+	condition = uploadStarted;
 }
 
-UploadingConditional : WOConditional {
-	condition = uploading;
-}
-
-NotUploadingConditional : WOConditional {
-	condition = uploading;
+NotStartedConditional : WOConditional {
+	condition = uploadStarted;
 	negate = true;
 }
 
@@ -44,84 +45,27 @@ HiddenWOSID : WOGenericElement {
 	value = session.sessionID;
 }
 
-NotDoneConditional : WOConditional {
-	condition = uploadStatus.done;
-	negate = true;
-}
-
-DoneConditional : WOConditional {
-	condition = uploadStatus.done;
-}
-
-CancelledConditional : WOConditional {
-	condition = uploadStatus.cancelled;
-}
-
-CancelAction : AjaxUpdateLink {
-	updateContainerID = id;
-	action = cancel;
-	class = "cancelAction";
-}
-
-ResetAction : AjaxUpdateLink {
-	updateContainerID = id;
-	action = resetUpload;
-	class = "resetAction";
-}
-
-Finished : WOGenericContainer {
-	elementName = "td";
-	width = percentage;
-	class = finishedClass;
-}
-
-Unfinished : WOGenericContainer {
-	elementName = "td";
-	class = "percentageUnfinished";
-}
-
-SucceededConditional : WOConditional {
-	condition = uploadStatus.succeeded;
-}
-
-FailedConditional : WOConditional {
-	condition = uploadStatus.failed;
-}
-
-BytesReadSize : WOString {
-	value = bytesReadSize;
-}
-
-StreamLengthSize : WOString {
-	value = streamLengthSize;
-}
-
-CancelledText : WOString {
-	value = cancelledText;
-	escapeHTML = false;
-}
-
-FailedText : WOString {
-	value = failedText;
-	escapeHTML = false;
-}
-
-SucceededText : WOString {
-	value = succeededText;
-	escapeHTML = false;
-}
-
-CancelText : WOString {
-	value = cancelText;
-}
-
-ResetText : WOString {
-	value = resetText;
-}
-
 UploadField : WOGenericElement {
 	elementName = "input";
 	type = "file";
 	name = "uploadedFile";
-	onchange = onChange;
+	onchange = startUploadFunctionCall;
+}
+
+UploadProgressBar : AjaxProgressBar {
+	progressID = id;
+	progress = uploadProgress;
+	started = uploadStarted;
+	succeededAction = uploadSucceeded;
+	finishedFunction = ^finishedFunction;
+	succeededFunction = ^succeededFunction;
+	failedAction = uploadFailed;
+	failedFunction = ^failedFunction;
+	canceledAction = uploadCanceled;
+	canceledFunction = ^canceledFunction;
+	displayValue = bytesReadSize;
+	displayMaximum = streamLengthSize;
+	allowCancel = ^allowCancel;
+	visibleBeforeStart = progressBarBeforeStart;
+	visibleAfterDone = progressBarAfterDone;
 }
