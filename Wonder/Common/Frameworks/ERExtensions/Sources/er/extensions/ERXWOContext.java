@@ -93,7 +93,13 @@ public class ERXWOContext extends WOContext implements ERXMutableUserInfoHolderI
     public NSDictionary userInfo() {
         return mutableUserInfo();
     }
-    
+
+    public String _urlWithRequestHandlerKey(String requestHandlerKey, String requestHandlerPath, String queryString, boolean secure) {
+        String url = super._urlWithRequestHandlerKey(requestHandlerKey, requestHandlerPath, queryString, secure);
+        url = ERXApplication.erxApplication()._rewriteURL(url);
+        return url;
+    }
+
     /**
      * Returns a complete URL for the specified action. 
      * Works like {@link WOContext#directActionURLForActionNamed} 
