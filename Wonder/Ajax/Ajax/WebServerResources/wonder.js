@@ -124,14 +124,13 @@ var AjaxUpdateLink = {
 	}
 };
 
-var AjaxFileUpload = Class.create();
-AjaxFileUpload.prototype = {
+var AjaxPeriodicUpdater = Class.create();
+AjaxPeriodicUpdater.prototype = {
 	initialize : function(id) {
 		this.id = id;
 	},
 	
-	start : function(form) {
-		form.submit();
+	start : function() {
 		this.updater = new Ajax.PeriodicalUpdater(this.id, $(this.id).getAttribute('updateUrl'), { evalScripts: true, frequency: 2.0 });
 	},
 
