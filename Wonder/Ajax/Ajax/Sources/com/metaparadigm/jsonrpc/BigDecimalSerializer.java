@@ -57,7 +57,7 @@ public class BigDecimalSerializer extends AbstractSerializer {
 		}
 	}
 
-	public Object marshall(SerializerState state, Object o) throws MarshallException {
+	public Object marshall(SerializerState state, Object o) {
 		return o;
 	}
 
