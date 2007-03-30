@@ -20,8 +20,9 @@ public class FileUploadExample extends WOComponent {
 			public void run() {
 				for (int i = 0; i < _progress.maximum(); i++) {
 					_progress.setValue(i);
+					_progress.setStatus("Performing operation #" + i + " ...");
 					try {
-						Thread.sleep(200);
+						Thread.sleep(100);
 					}
 					catch (Throwable t) {
 					}
@@ -34,18 +35,6 @@ public class FileUploadExample extends WOComponent {
 
 	public long now() {
 		return System.currentTimeMillis();
-	}
-	
-	public String test() {
-		return null;
-	}
-
-	public WOActionResults resetUpload() {
-		if (_uploadProgress != null) {
-			_uploadProgress.reset();
-			_uploadProgress = null;
-		}
-		return null;
 	}
 	
 	public WOActionResults uploadFinished() {
