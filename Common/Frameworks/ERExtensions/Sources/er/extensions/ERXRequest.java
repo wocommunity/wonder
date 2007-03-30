@@ -1,6 +1,5 @@
 package er.extensions;
 import java.net.InetAddress;
-import java.util.regex.Pattern;
 
 import org.apache.log4j.Logger;
 
