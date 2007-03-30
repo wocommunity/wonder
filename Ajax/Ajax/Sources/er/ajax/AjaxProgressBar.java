@@ -15,12 +15,16 @@ import er.extensions.ERXComponentUtilities;
 /**
  * @binding id the id of the update container
  * @binding progressID the id of the AjaxProgress
- * @binding progress the progress object for this progress bar (can bind a new progress back out if one is in the registry)
+ * @binding progress the progress object for this progress bar (can bind a new progress back out if one is in the
+ *          registry)
  * @binding canceledFunction the javascript function to execute when the progress is canceled
  * @binding succeededFunction the javascript function to execute when the progress succeeds
  * @binding failedFunction the javascript function to execute when the progress fails
- * @binding finishedFunction the javascript function to execute when the progress finishes (succeeded, failed, or canceled)
+ * @binding finishedFunction the javascript function to execute when the progress finishes (succeeded, failed, or
+ *          canceled)
  * @binding cancelText the text to display for the cancel link
+ * @binding cancelingText the text to display when the progress is being canceled
+ * @binding startingText the text to display when the progress is starting
  * @binding finishedAction the action to fire when the progress finishes (cancel, failed, or succeeded)
  * @binding canceledAction the action to fire when the progress is canceled
  * @binding succeededAction the action to fire when the progress succeeded
@@ -63,7 +67,7 @@ public class AjaxProgressBar extends WOComponent {
 		}
 		return fireJavascriptEvents;
 	}
-	
+
 	public boolean progressBarVisible() {
 		boolean visible = true;
 		AjaxProgress progress = progress();
@@ -80,6 +84,22 @@ public class AjaxProgressBar extends WOComponent {
 		return visible;
 	}
 
+	public String startingText() {
+		String startingText = (String) valueForBinding("startingText");
+		if (startingText == null) {
+			startingText = "Starting ...";
+		}
+		return startingText;
+	}
+
+	public String cancelingText() {
+		String cancelingText = (String) valueForBinding("cancelingText");
+		if (cancelingText == null) {
+			cancelingText = "Canceling ...";
+		}
+		return cancelingText;
+	}
+
 	public AjaxProgress progress() {
 		if (_progress != null && _progress.shouldReset()) {
 			_progress = null;
@@ -94,6 +114,10 @@ public class AjaxProgressBar extends WOComponent {
 			if (_progress == null) {
 				_progress = AjaxProgressBar.progress(session(), progressID());
 				if (_progress != null) {
+					if (_progress.shouldReset()) {
+						AjaxProgressBar.unregisterProgress(session(), _progress);
+						_progress = null;
+					}
 					setValueForBinding(_progress, "progress");
 				}
 			}
@@ -128,7 +152,13 @@ public class AjaxProgressBar extends WOComponent {
 			finishedClass = "percentageUnfinished";
 		}
 		else {
-			finishedClass = "percentageFinished";
+			AjaxProgress progress = progress();
+			if (progress != null && progress.isDone()) {
+				finishedClass = "percentageFinished done";
+			}
+			else {
+				finishedClass = "percentageFinished";
+			}
 		}
 		return finishedClass;
 	}
@@ -208,13 +238,13 @@ public class AjaxProgressBar extends WOComponent {
 			if (progress.isDone()) {
 				if (!progress.completionEventsFired()) {
 					if (progress.isCanceled()) {
-						uploadCanceled();
+						progressCanceled();
 					}
 					else if (progress.isFailed()) {
-						uploadFailed();
+						progressFailed();
 					}
 					else if (progress.isSucceeded()) {
-						uploadSucceeded();
+						progressSucceeded();
 					}
 					progress.setCompletionEventsFired(true);
 					_fireJavascriptEvents = true;
@@ -254,18 +284,18 @@ public class AjaxProgressBar extends WOComponent {
 		valueForBinding("finishedAction");
 	}
 
-	protected void uploadCanceled() {
+	protected void progressCanceled() {
 		finished();
 		valueForBinding("canceledAction");
 	}
 
-	protected void uploadSucceeded() {
+	protected void progressSucceeded() {
 		AjaxProgress progress = progress();
 		finished();
 		valueForBinding("succeededAction");
 	}
 
-	protected void uploadFailed() {
+	protected void progressFailed() {
 		finished();
 		valueForBinding("failedAction");
 	}
@@ -273,8 +303,10 @@ public class AjaxProgressBar extends WOComponent {
 	/**
 	 * Register a progress object in the registry.
 	 * 
-	 * @param session the session
-	 * @param progress the progress object to register
+	 * @param session
+	 *            the session
+	 * @param progress
+	 *            the progress object to register
 	 */
 	public static void registerProgress(WOSession session, AjaxProgress progress) {
 		NSMutableDictionary progresses = (NSMutableDictionary) session.objectForKey(AjaxProgressBar.AJAX_PROGRESSES_KEY);
@@ -288,8 +320,10 @@ public class AjaxProgressBar extends WOComponent {
 	/**
 	 * Unregister a progress object from the registry.
 	 * 
-	 * @param session the session
-	 * @param progress the progress object to unregister
+	 * @param session
+	 *            the session
+	 * @param progress
+	 *            the progress object to unregister
 	 */
 	public static void unregisterProgress(WOSession session, AjaxProgress progress) {
 		NSMutableDictionary progresses = (NSMutableDictionary) session.objectForKey(AjaxProgressBar.AJAX_PROGRESSES_KEY);
@@ -301,9 +335,11 @@ public class AjaxProgressBar extends WOComponent {
 	/**
 	 * Returns the progress object with the given id (or null if one does not exist).
 	 * 
-	 * @param session the session
-	 * @param id the id of the progress to retrieve
-	 * @return the matching progess object (or null) 
+	 * @param session
+	 *            the session
+	 * @param id
+	 *            the id of the progress to retrieve
+	 * @return the matching progess object (or null)
 	 */
 	public static AjaxProgress progress(WOSession session, String id) {
 		AjaxProgress progress = null;

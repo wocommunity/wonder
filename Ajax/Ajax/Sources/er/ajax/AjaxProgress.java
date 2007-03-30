@@ -20,6 +20,7 @@ public class AjaxProgress {
 	private boolean _canceled;
 	private boolean _completionEventsFired;
 	private boolean _reset;
+	private String _status;
 
 	/**
 	 * Construct an AjaxProgress
@@ -193,7 +194,7 @@ public class AjaxProgress {
 	 * @return true if this procedure is done, not canceled, and not failed
 	 */
 	public boolean isSucceeded() {
-		return _done && !_canceled && _failure == null;
+		return _done && !_reset && !_canceled && _failure == null;
 	}
 
 	/**
@@ -237,6 +238,24 @@ public class AjaxProgress {
 	}
 	
 	/**
+	 * Sets the current status message for this process.
+	 * 
+	 * @param status the current status message for this process
+	 */
+	public void setStatus(String status) {
+		_status = status;
+	}
+	
+	/**
+	 * Returns the current status message for this process.
+	 * 
+	 * @return the current status message for this process
+	 */
+	public String status() {
+		return _status;
+	}
+	
+	/**
 	 * Convenience method for copying a stream and tracking it with this progress model.
 	 * 
 	 * @param inputStream the inputstream to copy from
@@ -257,8 +276,8 @@ public class AjaxProgress {
 					outputStream.write(buffer, 0, bytesRead);
 				}
 			}
-			while (!done && !isCanceled());
-			if (isCanceled()) {
+			while (!done && !isCanceled() && !shouldReset());
+			if (isCanceled() || shouldReset()) {
 				dispose();
 			}
 		}
@@ -271,9 +290,6 @@ public class AjaxProgress {
 			dispose();
 			setFailure(e);
 			throw e;
-		}
-		finally {
-			setDone(true);
 		}
 	}
 }

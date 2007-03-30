@@ -3,6 +3,14 @@ ProgressUpdateContainer : AjaxUpdateContainer {
 	action = refreshing;
 }
 
+HasStatusConditional : WOConditional {
+	condition = progress.status;
+}
+
+Status : WOString {
+	value = progress.status;
+}
+
 ID : WOString {
 	value = id;
 }
@@ -15,7 +23,7 @@ AllowCancelConditional : WOConditional {
 	condition = ^allowCancel;
 }
 
-StartedConditional : WOConditional {
+ProcedureStartedConditional : WOConditional {
 	condition = started;
 }
 
@@ -66,6 +74,15 @@ CanceledConditional : WOConditional {
 	condition = progress.canceled;
 }
 
+CancelingText : WOString {
+	value = cancelingText;
+}
+
+NotCanceledConditional : WOConditional {
+	condition = progress.canceled;
+	negate = true;
+}
+
 FailedConditional : WOConditional {
 	condition = progress.failed;
 }
@@ -84,6 +101,15 @@ FailedFunction : WOString {
 
 SucceededFunction : WOString {
 	value = ^succeededFunction;
+}
+
+ProgressNotStartedConditional : WOConditional {
+	condition = progress.started;
+	negate = true;
+}
+
+StartingText : WOString {
+	value = startingText;
 }
 
 ProgressStartedConditional : WOConditional {

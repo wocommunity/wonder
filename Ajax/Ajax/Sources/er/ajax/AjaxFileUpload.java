@@ -26,10 +26,13 @@ import er.extensions.ERXUnitAwareDecimalFormat;
  * away during the upload, no completion/failure/etc notifications will occur.
  * 
  * @binding cancelText the text to display for the cancel link
+ * @binding cancelingText the text to display when the progress is being canceled
+ * @binding startingText the text to display when the progress is starting
  * @binding canceledFunction the javascript function to execute when the upload is canceled
  * @binding succeededFunction the javascript function to execute when the upload succeeds
  * @binding failedFunction the javascript function to execute when the upload fails
- * @binding finishedFunction the javascript function to execute when the upload finishes (succeeded, failed, or canceled)
+ * @binding finishedFunction the javascript function to execute when the upload finishes (succeeded, failed, or
+ *          canceled)
  * @binding finishedAction the action to fire when the upload finishes (cancel, failed, or succeeded)
  * @binding canceledAction the action to fire when the upload is canceled
  * @binding succeededAction the action to fire when the upload succeeded
@@ -52,19 +55,32 @@ public class AjaxFileUpload extends WOComponent {
 	private String _id;
 	private boolean _uploadStarted;
 	private AjaxUploadProgress _progress;
+	private boolean _triggerUploadStart;
+	private String _requestHandlerKey;
 
 	public AjaxFileUpload(WOContext context) {
 		super(context);
-		synchronized (AjaxFileUpload.class) {
-			if (!_requestHandlerRegistered) {
-				if (WOApplication.application().requestHandlerForKey(AjaxFileUploadRequestHandler.REQUEST_HANDLER_KEY) == null) {
-					WOApplication.application().registerRequestHandler(new AjaxFileUploadRequestHandler(), AjaxFileUploadRequestHandler.REQUEST_HANDLER_KEY);
+		_requestHandlerKey = AjaxFileUploadRequestHandler.REQUEST_HANDLER_KEY;
+		if (!_requestHandlerRegistered) {
+			synchronized (AjaxFileUpload.class) {
+				if (!_requestHandlerRegistered) {
+					if (WOApplication.application().requestHandlerForKey(AjaxFileUploadRequestHandler.REQUEST_HANDLER_KEY) == null) {
+						WOApplication.application().registerRequestHandler(new AjaxFileUploadRequestHandler(), AjaxFileUploadRequestHandler.REQUEST_HANDLER_KEY);
+					}
+					_requestHandlerRegistered = true;
 				}
-				_requestHandlerRegistered = true;
 			}
 		}
 	}
 
+	public void setRequestHandlerKey(String requestHandlerKey) {
+		_requestHandlerKey = requestHandlerKey;
+	}
+	
+	public String requestHandlerKey() {
+		return _requestHandlerKey;
+	}
+	
 	public void appendToResponse(WOResponse aResponse, WOContext aContext) {
 		super.appendToResponse(aResponse, aContext);
 		AjaxUtils.addScriptResourceInHead(aContext, aResponse, "prototype.js");
@@ -75,7 +91,7 @@ public class AjaxFileUpload extends WOComponent {
 	public boolean synchronizesVariablesWithBindings() {
 		return false;
 	}
-	
+
 	public boolean progressBarBeforeStart() {
 		boolean progressBarBeforeStart = false;
 		if (hasBinding("progressBarBeforeStart")) {
@@ -83,7 +99,7 @@ public class AjaxFileUpload extends WOComponent {
 		}
 		return progressBarBeforeStart;
 	}
-	
+
 	public boolean progressBarAfterDone() {
 		boolean progressBarAfterDone = false;
 		if (hasBinding("progressBarAfterDone")) {
@@ -117,7 +133,7 @@ public class AjaxFileUpload extends WOComponent {
 	}
 
 	public String uploadUrl() {
-		String uploadUrl = context().urlWithRequestHandlerKey(AjaxFileUploadRequestHandler.REQUEST_HANDLER_KEY, "", null);
+		String uploadUrl = context().urlWithRequestHandlerKey(_requestHandlerKey, "", null);
 		return uploadUrl;
 	}
 
@@ -146,7 +162,7 @@ public class AjaxFileUpload extends WOComponent {
 	public String uploadFrameName() {
 		return id() + "UploadFrame";
 	}
-	
+
 	public String startUploadName() {
 		return id() + "StartUpload";
 	}
@@ -154,11 +170,55 @@ public class AjaxFileUpload extends WOComponent {
 	public String startUploadFunctionCall() {
 		return "form.submit(true); " + startUploadName() + "();";
 	}
-	
+
+	public boolean triggerStartUpload() {
+		boolean triggerUploadStart = _triggerUploadStart;
+		if (triggerUploadStart) {
+			_triggerUploadStart = false;
+		}
+		return triggerUploadStart;
+	}
+
+	public String uploadFormID() {
+		return id() + "Form";
+	}
+
+	public String progressBarID() {
+		return id() + "ProgressBar";
+	}
+
+	public String startingText() {
+		String startingText = (String) valueForBinding("startingText");
+		if (startingText == null) {
+			startingText = "Upload Starting ...";
+		}
+		return startingText;
+	}
+
+	public String cancelingText() {
+		String cancelingText = (String) valueForBinding("cancelingText");
+		if (cancelingText == null) {
+			cancelingText = "Canceling Upload ...";
+		}
+		return cancelingText;
+	}
+
 	public WOActionResults startUpload() {
+		_triggerUploadStart = true;
+		if (_progress != null) {
+			_progress.reset();
+		}
+		_progress = null;
+		setValueForBinding(null, "uploadProgress");
+
 		_uploadStarted = true;
 		setValueForBinding(Boolean.TRUE, "uploadStarted");
-		return null;
+		
+		AjaxResponse response = AjaxUtils.createResponse(context().request(), context());
+		AjaxUtils.appendScriptHeaderIfNecessary(context().request(), response);
+		response.appendContentString("document." + uploadFormID() + ".submit();");
+		AjaxUtils.appendScriptFooterIfNecessary(context().request(), response);
+		return response;
 	}
 
 	public boolean isUploadStarted() {
@@ -170,6 +230,7 @@ public class AjaxFileUpload extends WOComponent {
 			AjaxUploadProgress progress = uploadProgress();
 			if (progress != null && progress.shouldReset()) {
 				_uploadStarted = false;
+				setValueForBinding(Boolean.FALSE, "uploadStarted");
 			}
 			uploadStarted = _uploadStarted;
 		}
@@ -182,7 +243,8 @@ public class AjaxFileUpload extends WOComponent {
 
 	public WOActionResults uploadCanceled() {
 		uploadFinished();
-		return (WOActionResults) valueForBinding("canceledAction");
+		WOActionResults results = (WOActionResults) valueForBinding("canceledAction");
+		return results;
 	}
 
 	public WOActionResults uploadSucceeded() throws MalformedURLException, IOException {
@@ -192,24 +254,24 @@ public class AjaxFileUpload extends WOComponent {
 			if (hasBinding("filePath")) {
 				setValueForBinding(progress.fileName(), "filePath");
 			}
-			
+
 			if (hasBinding("data")) {
 				NSData data = new NSData(progress.tempFile().toURL());
 				setValueForBinding(data, "data");
 			}
-			
+
 			if (hasBinding("inputStream")) {
 				setValueForBinding(new FileInputStream(progress.tempFile()), "inputStream");
 				deleteFile = false;
 			}
-			
+
 			if (hasBinding("outputStream")) {
 				OutputStream outputStream = (OutputStream) valueForBinding("outputStream");
 				if (outputStream != null) {
 					ERXFileUtilities.writeInputStreamToOutputStream(new FileInputStream(progress.tempFile()), outputStream);
 				}
 			}
-			
+
 			if (hasBinding("streamToFilePath")) {
 				File streamToFile = new File((String) valueForBinding("streamToFilePath"));
 				boolean renamedFile;
@@ -247,11 +309,13 @@ public class AjaxFileUpload extends WOComponent {
 		finally {
 			uploadFinished();
 		}
-		return (WOActionResults) valueForBinding("succeededAction");
+		WOActionResults results = (WOActionResults) valueForBinding("succeededAction");
+		return results;
 	}
 
 	public WOActionResults uploadFailed() {
 		uploadFinished();
-		return (WOActionResults) valueForBinding("failedAction");
+		WOActionResults results = (WOActionResults) valueForBinding("failedAction");
+		return results;
 	}
 }
