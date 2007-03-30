@@ -6,10 +6,13 @@ import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WOMessage;
 import com.webobjects.appserver.WORequest;
+import com.webobjects.appserver.WOResourceManager;
 import com.webobjects.appserver.WOResponse;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableDictionary;
 
+import er.extensions.ERXApplication;
+import er.extensions.ERXResourceManager;
 import er.extensions.ERXWOContext;
 
 public class AjaxUtils {
@@ -159,6 +162,24 @@ public class AjaxUtils {
 	 */
 	public static void addResourceInHead(WOContext context, WOResponse response, String framework, String fileName, String startTag, String endTag) {
 		ERXWOContext.addResourceInHead(context, response, framework, fileName, startTag, endTag);
+		
+		// MS: OK ... Sheesh.  If you're not using Wonder's ERXResourceManager #1, you're a bad person, but #2 in development mode
+		// you have a lame resource URL that does not act like a path (wr/wodata=/path/to/your/resource), rather it acts like a query string
+		// (wr?wodata=/path/to/your/resource).  This means that relative resource references won't work and also only previously cached resources
+		// will load (i.e. ones coming from something that made an explicit WOResourceURL, etc, reference).  This explodes when scriptaculous tries 
+		// to load its required resources dynamically (like builder.js, effects.js, etc).
+		//
+		// So we have to check for this condition -- you asked to load scriptaculous.js from Ajax framework and you don't have ERXResourceManager
+		// and you're in development mode (as far as your lame WOResourceManager is concerned), so we need to do Scriptaculous' job and manually
+		// load the dependent js files on its behalf.  You really should just suck it up and use ERXResourceManager because it really is just
+		// better.  But if you're holding out and scared like a child, then we'll do this for you. 
+		if (!(WOApplication.application().resourceManager() instanceof ERXResourceManager) && "Ajax".equals(framework) && "scriptaculous.js".equals(fileName) && !(context.request() == null || context.request() != null && context.request().isUsingWebServer() && !WOApplication.application()._rapidTurnaroundActiveForAnyProject())) {
+			ERXWOContext.addResourceInHead(context, response, framework, "builder.js", startTag, endTag);
+			ERXWOContext.addResourceInHead(context, response, framework, "effects.js", startTag, endTag);
+			ERXWOContext.addResourceInHead(context, response, framework, "dragdrop.js", startTag, endTag);
+			ERXWOContext.addResourceInHead(context, response, framework, "controls.js", startTag, endTag);
+			ERXWOContext.addResourceInHead(context, response, framework, "slider.js", startTag, endTag);
+		}
 	}
 
 	/**
