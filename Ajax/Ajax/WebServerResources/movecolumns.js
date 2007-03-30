@@ -52,7 +52,7 @@ var AjaxGrid = {
 		    {
 			    columnAtual = AjaxGrid.cellIndex(this)
 				for (x=0; x<tableRows.length; x++) {
-					tableRows[x].cells[columnAtual].className ="ajaxGridSelected";
+					Element.addClassName(tableRows[x].cells[columnAtual], "ajaxGridSelected");
 				}
 				AjaxGrid.isDragging = true
 				AjaxGrid.recordColumn(this);
@@ -94,7 +94,7 @@ var AjaxGrid = {
 		// Error and no-op handling
 		// A destinationIndex of -1 means not a table cell and 0 means the left most column which is not dropable
 		if (destinationIndex < 1 || columnIndex == destinationIndex) return
-		updateServerColumnOrder('sourceColumn=' + columnIndex + '&destinationColumn=' + destinationIndex);
+	  updateServerColumnOrder('sourceColumn=' + columnIndex + '&destinationColumn=' + destinationIndex);
 	
 		for (x=0; x<tableRows.length; x++) {
 			tds = tableRows[x].cells
@@ -122,7 +122,7 @@ var AjaxGrid = {
 		
 		for(x=0; x<tableRows.length; x++) {
 			for (y=1; y<tableRows[x].cells.length; y++) {
-			tableRows[x].cells[y].className=tableRows[x].cells[y].originalClassName;
+			  Element.removeClassName(tableRows[x].cells[y], "ajaxGridSelected");
 			}
 		}
 	},
@@ -137,8 +137,8 @@ var AjaxGrid = {
 		if (ev == "mouseover") {
 			if (AjaxGrid.isDragging) {
 				for (x=0; x<tableRows.length; x++) {
-					if (this.className !="ajaxGridSelected") {
-						tableRows[x].cells[AjaxGrid.cellIndex(this)].className="ajaxGridHover"
+					if (!Element.hasClassName(this, "ajaxGridSelected")) {
+						Element.addClassName(tableRows[x].cells[AjaxGrid.cellIndex(this)], "ajaxGridHover");
 					}
 				}
 			}
@@ -146,8 +146,8 @@ var AjaxGrid = {
 		
 		else if (ev == "mouseout") {
 			for (x=0; x<tableRows.length; x++) {
-				if (this.className !="ajaxGridSelected") {
-					tableRows[x].cells[AjaxGrid.cellIndex(this)].className=tableRows[x].cells[AjaxGrid.cellIndex(this)].originalClassName
+				if (!Element.hasClassName(this, "ajaxGridSelected") && tableRows[x].cells[AjaxGrid.cellIndex(this)]) {
+					Element.removeClassName(tableRows[x].cells[AjaxGrid.cellIndex(this)], "ajaxGridHover");
 				}
 			}
 		}
@@ -163,7 +163,7 @@ var AjaxGrid = {
 	    td = el;
 	    if (el.nodeName.toLowerCase() !='td' && el.nodeName.toLowerCase() !='th') {
 	    	td = AjaxGrid.ascendDOM(el, 'th');
-	    	if (td == null) td = ascendDOM(el, 'td');
+	    	if (td == null) td = AjaxGrid.ascendDOM(el, 'td');
 	    }
 	    parent_row = AjaxGrid.ascendDOM(td, 'tr');
 	    for (var i = 0; i < parent_row.cells.length; i++) {
