@@ -21,11 +21,18 @@ table.progressBar {
 }
 
 table.progressBar td.percentageFinished {
-	background-color: red;
+	background-image: url(<webobject name = "FinishedImage"/>);
+	background-repeat: repeat-x;
+}
+
+table.progressBar td.percentageFinished.done {
+	background-image: url(<webobject name = "UnfinishedImage"/>);
+	background-repeat: repeat-x;
 }
 
 table.progressBar td.percentageUnfinished {
-	background-color: gray;
+	background-image: url(<webobject name = "UnfinishedImage"/>);
+	background-repeat: repeat-x;
 }
 
 table.progressBarContainer td.progressMaximum {
@@ -40,15 +47,19 @@ This AjaxFileUpload binds into an NSData, so you WILL run out of memory if you k
 <webobject name = "UploadUpdateContainer">
 	<webobject name = "AjaxFileUpload"/>
 	<webobject name = "UploadDoneConditional">
-		Your upload has finished (but I'm too lazy to check whether it was cancelled or completed normally).
 		<p>
-		<webobject name = "ResetUploadAction">click to reset</webobject>
+			<webobject name = "SucceededConditional">
+				<i>Your upload succeeded.</i>
+			</webobject>
+			<webobject name = "CanceledConditional">
+				<i>Your upload was canceled.</i>
+			</webobject>
+			<webobject name = "FailedConditional">
+				<i>Your upload failed.</i>
+			</webobject>
 		</p>
 	</webobject>
 </webobject>
-</p>
-<p>
-Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
 </p>
 <p>
 Here's a progress bar attached to a thread that is just incrementing the progress value.
