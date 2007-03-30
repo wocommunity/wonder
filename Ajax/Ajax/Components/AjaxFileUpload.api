@@ -2,6 +2,8 @@
 <wodefinitions>
 	<wo wocomponentcontent="false" class="AjaxFileUpload.java">
 		<binding name = "cancelText"/>
+		<binding name = "cancelingText"/>
+		<binding name = "startingText"/>
 		<binding name = "canceledFunction"/>
 		<binding name = "succeededFunction"/>
 		<binding name = "failedFunction"/>

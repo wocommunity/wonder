@@ -26,6 +26,7 @@ import er.extensions.ERXProperties;
  * @author mschrag
  */
 public class AjaxFileUploadRequestHandler extends WORequestHandler {
+	public static final String UPLOAD_FINISHED_KEY = "ajaxFileUploadFinished";
 	public static final String REQUEST_HANDLER_KEY = "upload";
 	public static final Logger log = Logger.getLogger(AjaxFileUploadRequestHandler.class);
 
@@ -96,13 +97,21 @@ public class AjaxFileUploadRequestHandler extends WORequestHandler {
 						}
 					}
 
-					FileOutputStream fos = new FileOutputStream(progress.tempFile());
 					try {
-						progress.copyAndTrack(uploadInputStream, fos);
+						FileOutputStream fos = new FileOutputStream(progress.tempFile());
+						try {
+							progress.copyAndTrack(uploadInputStream, fos);
+						}
+						finally {
+							fos.flush();
+							fos.close();
+						}
+						if (!progress.isCanceled() && !progress.shouldReset()) {
+							downloadFinished(progress);
+						}
 					}
 					finally {
-						fos.flush();
-						fos.close();
+						progress.setDone(true);
 					}
 				}
 			}
@@ -115,6 +124,9 @@ public class AjaxFileUploadRequestHandler extends WORequestHandler {
 		finally {
 			application.sleep();
 		}
+	}
+	
+	protected void downloadFinished(AjaxUploadProgress progress) {
 	}
 
 	/**

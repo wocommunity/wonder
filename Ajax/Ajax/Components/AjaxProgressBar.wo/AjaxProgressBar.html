@@ -2,8 +2,7 @@
 	<webobject name = "ProgressBarVisible">
 		<table class = "progressBarContainer">
 			<tr>
-				<td class = "progressValue"><webobject name = "Value" /></td>
-				<td width = "100%"><table class = "progressBar" width = "100%" cellspacing = "0">
+				<td><table class = "progressBar" width = "100%" cellspacing = "0">
 							<webobject name = "ProgressStartedConditional">
 								<webobject name = "Finished">&nbsp;</webobject>
 							</webobject>
@@ -11,18 +10,27 @@
 								<webobject name = "Unfinished">&nbsp;</webobject>
 							</webobject>
 						</table></td>
-				<td class = "progressMaximum"><webobject name = "Maximum" /></td>
-				<td>
-					<webobject name = "StartedConditional">
-						<webobject name = "AllowCancelConditional">
-							<webobject name = "CancelAction"><webobject name = "CancelText"/></webobject>
+			</tr>
+			
+			<tr>
+				<td class = "progressSummary">
+					<webobject name = "ProcedureStartedConditional">
+						<webobject name = "ProgressNotStartedConditional"><webobject name = "StartingText"/></webobject>
+						<webobject name = "CanceledConditional"><webobject name = "CancelingText"/></webobject>
+					</webobject>
+					<webobject name = "ProgressStartedConditional">
+						<webobject name = "NotCanceledConditional">
+							<webobject name = "Value" /> of <webobject name = "Maximum" /><webobject name = "HasStatusConditional">, <webobject name = "Status"/></webobject>
+							<webobject name = "AllowCancelConditional">
+								( <webobject name = "CancelAction"><webobject name = "CancelText"/></webobject> )
+							</webobject>
 						</webobject>
 					</webobject>
 				</td>
 			</tr>
 		</table>
 	</webobject>
-	<webobject name = "StartedConditional">
+	<webobject name = "ProcedureStartedConditional">
 		<webobject name = "DoneConditional">
 			<webobject name = "FireJavascriptEventsConditional">
 				<script>
