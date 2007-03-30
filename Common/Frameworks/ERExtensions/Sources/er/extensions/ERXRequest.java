@@ -1,5 +1,6 @@
 package er.extensions;
 import java.net.InetAddress;
+import java.util.regex.Pattern;
 
 import org.apache.log4j.Logger;
 
@@ -8,6 +9,7 @@ import sun.misc.BASE64Encoder;
 import com.webobjects.appserver.WOApplication;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WORequest;
+import com.webobjects.appserver._private.WODynamicURL;
 import com.webobjects.appserver._private.WOProperties;
 import com.webobjects.appserver._private.WOShared;
 import com.webobjects.foundation.NSArray;
@@ -81,14 +83,13 @@ public  class ERXRequest extends WORequest {
         return _browserLanguages;
     }
     
-    
     public String stringFormValueForKey(String key) {
     	String result = super.stringFormValueForKey(key);
-    	if(result == null && "wodata".equals(key)) {
-    		String rhKey =  WOApplication.application().resourceRequestHandlerKey();
-    		if(rhKey.equals(requestHandlerKey())) {
-    			result = uri().replaceAll(".*?" + rhKey + "/wodata=/", "file:/");
-    			result = result.replace('+', ' ');
+    	if (result == null && "wodata".equals(key)) {
+    		WODynamicURL url = _uriDecomposed();
+    		if (WOApplication.application().resourceRequestHandlerKey().equals(url.requestHandlerKey())) {
+    			String requestHandlerPath = "file:/" + url.requestHandlerPath().substring("wodata=/".length());
+    			result = requestHandlerPath.replace('+', ' ');
     		}
     	}
 
