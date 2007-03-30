@@ -4,6 +4,7 @@
     <binding name = "updateContainerID"/>
     <binding name = "action"/>
     <binding name = "directActionName"/>
+    <binding name = "disabled"/>
 		
 		<binding name = "onComplete"/>
 		<binding name = "onSuccess"/>
@@ -14,6 +15,7 @@
 		<binding name = "function"/>
 		<binding name = "functionName"/>
 		<binding name = "elementName"/>
+		<binding name = "button"/>
 
 		<binding name = "onClickBefore"/>
 		<binding name = "onClick"/>

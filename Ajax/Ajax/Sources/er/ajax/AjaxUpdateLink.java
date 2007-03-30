@@ -44,6 +44,7 @@ import er.extensions.ERXComponentUtilities;
  * @binding function a custom function to call that takes a single parameter that is the action url
  * @binding elementName the element name to use (defaults to "a")
  * @binding functionName if set, the link becomes a javascript function
+ * @binding button if true, this is rendered as a javascript button
  */
 public class AjaxUpdateLink extends AjaxDynamicElement {
 
@@ -173,13 +174,23 @@ public class AjaxUpdateLink extends AjaxDynamicElement {
 		Object stringValue = valueForBinding("string", component);
 		String functionName = (String) valueForBinding("functionName", component);
 		if (functionName == null) {
-			String elementName = (String) valueForBinding("elementName", "a", component);
+			String elementName;
+			boolean button = booleanValueForBinding("button", false, component);
+			if (button) {
+				elementName = "input";
+			}
+			else {
+				elementName = (String) valueForBinding("elementName", "a", component);
+			}
 			boolean isATag = "a".equalsIgnoreCase(elementName);
 			boolean renderTags = (!disabled || !isATag);
 			if (renderTags) {
 				response.appendContentString("<");
 				response.appendContentString(elementName);
 				response.appendContentString(" ");
+				if (button) {
+					appendTagAttributeToResponse(response, "type", "button");
+				}
 				if (isATag) {
 					appendTagAttributeToResponse(response, "href", "javascript:void(0);");
 				}
@@ -189,11 +200,19 @@ public class AjaxUpdateLink extends AjaxDynamicElement {
 				appendTagAttributeToResponse(response, "class", valueForBinding("class", component));
 				appendTagAttributeToResponse(response, "style", valueForBinding("style", component));
 				appendTagAttributeToResponse(response, "id", valueForBinding("id", component));
+				if (button) {
+					if (stringValue != null) {
+						appendTagAttributeToResponse(response, "value", stringValue);
+					}
+					if (disabled) {
+						response.appendContentString(" disabled");
+					}
+				}
 				// appendTagAttributeToResponse(response, "onclick",
 				// onClick(context));
 				response.appendContentString(">");
 			}
-			if (stringValue != null) {
+			if (stringValue != null && !button) {
 				response.appendContentHTMLString(stringValue.toString());
 			}
 			appendChildrenToResponse(response, context);
