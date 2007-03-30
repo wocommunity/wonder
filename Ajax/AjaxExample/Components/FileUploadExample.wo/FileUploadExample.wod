@@ -2,8 +2,28 @@ AjaxExampleComponent : AjaxExampleComponent {
 	title = "Ajax File Upload";
 }
 
+FinishedImage : WOResourceURL {
+	filename = "progress-bar.gif";
+}
+
+UnfinishedImage : WOResourceURL {
+	filename = "progress-remainder.gif";
+}
+
 UploadUpdateContainer : AjaxUpdateContainer {
 	id = "UploadContainer";
+}
+
+CanceledConditional : WOConditional {
+	condition = uploadProgress.canceled;
+}
+
+FailedConditional : WOConditional {
+	condition = uploadProgress.failed;
+}
+
+SucceededConditional : WOConditional {
+	condition = uploadProgress.succeeded;
 }
 
 UploadDoneConditional : WOConditional {
@@ -20,9 +40,5 @@ AjaxFileUpload : AjaxFileUpload {
 
 AjaxProgress : AjaxProgressBar {
 	progress = progress;
-}
-
-ResetUploadAction : AjaxUpdateLink {
-	updateContainerID = "UploadContainer";
-	action = resetUpload;
+	finishedFunction = "alert('Done!')";
 }
