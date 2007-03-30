@@ -3,6 +3,8 @@ HiddenFrame : WOIFrame {
 	src = "about:blank";
 	width = "0";
 	height = "0";
+	style = "border: none;";
+	border = "0";
 }
 
 UploadForm : WOForm {
@@ -10,25 +12,11 @@ UploadForm : WOForm {
 	enctype = "multipart/form-data";
 	target = uploadFrameName;
 	href = uploadUrl;
-}
-
-StartUploadAction : AjaxUpdateLink {
-	functionName = startUploadName;
-	action = startUpload;
-	updateContainerID = id;
+	name = uploadFormID;
 }
 
 UploadUpdateContainer : AjaxUpdateContainer {
 	id = id;
-}
-
-StartedConditional : WOConditional {
-	condition = uploadStarted;
-}
-
-NotStartedConditional : WOConditional {
-	condition = uploadStarted;
-	negate = true;
 }
 
 HiddenID : WOGenericElement {
@@ -49,10 +37,18 @@ UploadField : WOGenericElement {
 	elementName = "input";
 	type = "file";
 	name = "uploadedFile";
-	onchange = startUploadFunctionCall;
+}
+
+UploadAction : AjaxUpdateLink {
+	updateContainerID = progressBarID;
+	action = startUpload;
+	button = true;
+	value = "Upload";
+	disabled = false;
 }
 
 UploadProgressBar : AjaxProgressBar {
+	id = progressBarID;
 	progressID = id;
 	progress = uploadProgress;
 	started = uploadStarted;
@@ -68,4 +64,6 @@ UploadProgressBar : AjaxProgressBar {
 	allowCancel = ^allowCancel;
 	visibleBeforeStart = progressBarBeforeStart;
 	visibleAfterDone = progressBarAfterDone;
+	cancelingText = cancelingText;
+	startingText = startingText;
 }
