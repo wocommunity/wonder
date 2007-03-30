@@ -184,6 +184,6 @@ var AjaxGrid = {
 	           e.nodeName.toLowerCase() !='html')
 	        e=e.parentNode;
 	    return (e.nodeName.toLowerCase() == 'html')? null : e;
-	},
+	}
 
 }
