@@ -8,6 +8,10 @@ import java.io.File;
  * @author mschrag
  */
 public class AjaxUploadProgress extends AjaxProgress {
+	public static interface Delegate {
+		public void uploadFinished(AjaxUploadProgress progress);
+	}
+	
 	private File _tempFile;
 	private String _fileName;
 
