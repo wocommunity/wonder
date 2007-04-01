@@ -108,9 +108,6 @@ public class AjaxObserveField extends AjaxDynamicElement {
 		else {
 			StringBuffer parameters = new StringBuffer();
 			parameters.append("Form.serializeWithoutSubmits($('" + observeFieldID + "').form)");
-			if (updateContainerID != null) {
-				parameters.append(" + '&" + AjaxUpdateContainer.UPDATE_CONTAINER_ID_KEY + "=" + updateContainerID + "'");
-			}
 			parameters.append(" + '&" + AjaxSubmitButton.KEY_AJAX_SUBMIT_BUTTON_NAME + "=" + nameInContext(context, component, element) + "'");
 
 			observerOptions.setObjectForKey(parameters.toString(), "parameters");
@@ -140,6 +137,7 @@ public class AjaxObserveField extends AjaxDynamicElement {
 		String nameInContext = nameInContext(wocontext, wocomponent, this);
 		boolean shouldHandleRequest = !wocontext._wasActionInvoked() && wocontext._wasFormSubmitted() && nameInContext.equals(worequest.formValueForKey(AjaxSubmitButton.KEY_AJAX_SUBMIT_BUTTON_NAME));
 		if (shouldHandleRequest) {
+			AjaxUpdateContainer.setUpdateContainerID(worequest, (String) valueForBinding("updateContainerID", wocomponent));
 			wocontext._setActionInvoked(true);
 			result = (WOActionResults)valueForBinding("action", wocomponent);
 			if (result == null) {

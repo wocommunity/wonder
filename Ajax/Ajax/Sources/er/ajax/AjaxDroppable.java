@@ -31,8 +31,7 @@ public class AjaxDroppable extends AjaxComponent {
   }
 
   public void appendToResponse(WOResponse response, WOContext context) {
-	String updateContainerID = (String) valueForBinding("updateContainerID");
-    _actionUrl = AjaxUpdateContainer.updateContainerUrl(AjaxUtils.ajaxComponentActionUrl(context()), updateContainerID);
+    _actionUrl = AjaxUtils.ajaxComponentActionUrl(context());
     super.appendToResponse(response, context);
   }
 
@@ -93,6 +92,7 @@ public class AjaxDroppable extends AjaxComponent {
   }
 
   public WOActionResults handleRequest(WORequest request, WOContext context) {
+	AjaxUpdateContainer.setUpdateContainerID(request, (String) valueForBinding("updateContainerID"));
     String droppedDraggableID = request.stringFormValueForKey(_draggableIDKeyName);
     if (canSetValueForBinding("droppedDraggableID")) {
       setValueForBinding(droppedDraggableID, "droppedDraggableID");

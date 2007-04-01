@@ -19,9 +19,8 @@ import com.webobjects.foundation.NSMutableDictionary;
  * @binding action the action to call when this updateContainer refreshes
  */
 public class AjaxUpdateContainer extends AjaxDynamicElement {
-	// If you change this value, make sure to also change it in ERXApplication.invokeAction
-	public static final String UPDATE_CONTAINER_ID_KEY = "__updateID";
-
+	private static final String UPDATE_CONTAINER_ID_KEY = "__updateID";
+	
 	public AjaxUpdateContainer(String name, NSDictionary associations, WOElement children) {
 		super(name, associations, children);
 	}
@@ -33,6 +32,10 @@ public class AjaxUpdateContainer extends AjaxDynamicElement {
 		addScriptResourceInHead(context, response, "prototype.js");
 		addScriptResourceInHead(context, response, "scriptaculous.js");
 		addScriptResourceInHead(context, response, "wonder.js");
+	}
+	
+	public void takeValuesFromRequest(WORequest request, WOContext context) {
+		super.takeValuesFromRequest(request, context);
 	}
 
 	public NSDictionary createAjaxOptions(WOComponent component) {
@@ -117,7 +120,7 @@ public class AjaxUpdateContainer extends AjaxDynamicElement {
 //			response.appendContentString(id + "Update = function() { new Ajax.Updater('" + id + "', $('" + id + "').getAttribute('updateUrl'), ");
 //			AjaxOptions.appendToResponse(AjaxUpdateContainer.removeDefaultOptions(options), response, context);
 //			response.appendContentString("); }");
-			response.appendContentString("AjaxUpdateContainer.register('" + id + "'");
+			response.appendContentString("AUC.register('" + id + "'");
 			NSDictionary nonDefaultOptions = AjaxUpdateContainer.removeDefaultOptions(options);
 			if (nonDefaultOptions.count()>0) {
 				response.appendContentString(", ");
@@ -160,27 +163,18 @@ public class AjaxUpdateContainer extends AjaxDynamicElement {
 		return id;
 	}
 
-	public static String updateContainerUrl(String actionUrl, String updateContainerID) {
-		String updateContainerUrl = actionUrl;
-		if (updateContainerID != null) {
-			StringBuffer updateContainerUrlBuffer = new StringBuffer();
-			updateContainerUrlBuffer.append(actionUrl);
-			if (actionUrl.indexOf('?') == -1) {
-				updateContainerUrlBuffer.append("?");
-			}
-			else {
-				updateContainerUrlBuffer.append("&");
-			}
-			updateContainerUrlBuffer.append(AjaxUpdateContainer.UPDATE_CONTAINER_ID_KEY + "=" + updateContainerID);
-			updateContainerUrl = updateContainerUrlBuffer.toString();
-		}
-		return updateContainerUrl;
-	}
-
 	public static String updateContainerID(WORequest request) {
-		return request.stringFormValueForKey(AjaxUpdateContainer.UPDATE_CONTAINER_ID_KEY);
+		NSDictionary userInfo = AjaxUtils.mutableUserInfo(request);
+		String updateContainerID = (String)userInfo.objectForKey(AjaxUpdateContainer.UPDATE_CONTAINER_ID_KEY);
+		return updateContainerID;
 	}
 
+	public static void setUpdateContainerID(WORequest request, String updateContainerID) {
+		if (updateContainerID != null) {
+			AjaxUtils.mutableUserInfo(request).setObjectForKey(updateContainerID, AjaxUpdateContainer.UPDATE_CONTAINER_ID_KEY);
+		}
+	}
+	
 	public static boolean hasUpdateContainerID(WORequest request) {
 		return AjaxUpdateContainer.updateContainerID(request) != null;
 	}

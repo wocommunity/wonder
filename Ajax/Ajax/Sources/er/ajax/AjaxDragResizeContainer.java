@@ -121,7 +121,7 @@ public class AjaxDragResizeContainer extends AjaxComponent {
 	if (canGetValueForBinding("action")) {
 	    WOActionResults results = (WOActionResults) valueForBinding("action");
 	    if (results != null) {
-		System.out.println("AjaxDragResize.handleRequest: Not quite sure what to do with non-null results yet ...");
+	    	System.out.println("AjaxDragResize.handleRequest: Not quite sure what to do with non-null results yet ...");
 	    }
 	}
 	return result;
