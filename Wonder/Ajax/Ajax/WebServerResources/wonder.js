@@ -87,6 +87,7 @@ var AjaxInPlace = {
 		if (typeof eval(editFunctionName) != 'undefined') { eval(editFunctionName + " = null"); }
 	}
 };
+var AIP = AjaxInPlace;
 
 var AjaxOptions = {
 	options : function(additionalOptions) {
@@ -108,6 +109,7 @@ var AjaxUpdateContainer = {
 		new Ajax.Updater(id, $(id).getAttribute('updateUrl'), AjaxOptions.options(options));
 	}
 };
+var AUC = AjaxUpdateContainer;
 
 var AjaxUpdateLink = {
 	updateFunc : function(id, options, elementID) {
@@ -118,11 +120,12 @@ var AjaxUpdateLink = {
 	},
 	
 	update : function(id, options, elementID, queryParams) {
-		var actionUrl = $(id).getAttribute('updateUrl').sub('[^/]+$', elementID) + '?__updateID=' + id;
+		var actionUrl = $(id).getAttribute('updateUrl').sub('[^/]+$', elementID);
 		actionUrl = actionUrl.addQueryParameters(queryParams);
 		new Ajax.Updater(id, actionUrl, AjaxOptions.options(options));
 	}
 };
+var AUL = AjaxUpdateLink;
 
 var AjaxPeriodicUpdater = Class.create();
 AjaxPeriodicUpdater.prototype = {
