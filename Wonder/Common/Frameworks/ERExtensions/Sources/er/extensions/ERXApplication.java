@@ -1163,6 +1163,11 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 		return context;
 	}
 
+	public WOResponse createResponseInContext(WOContext context) {
+		WOResponse response = new ERXResponse();
+		return response;
+	}
+
 	/**
 	 * Override to perform any last minute cleanup before the application terminates. See
 	 * {@class er.extensions.ERXGracefulShutdown ERXGracefulShutdown} for where this is called if signal handling is
