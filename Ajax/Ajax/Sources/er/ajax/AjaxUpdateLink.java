@@ -67,10 +67,10 @@ public class AjaxUpdateLink extends AjaxDynamicElement {
 		if (updateContainerID != null && directActionNameAssociation == null && replaceID == null && functionName != null && function == null && onClick == null && onClickBefore == null) {
 			NSDictionary nonDefaultOptions = AjaxUpdateContainer.removeDefaultOptions(options);
 			if (generateFunctionWrapper) {
-				onClickBuffer.append("AjaxUpdateLink.updateFunc('");
+				onClickBuffer.append("AUL.updateFunc('");
 			}
 			else {
-				onClickBuffer.append("AjaxUpdateLink.update('");
+				onClickBuffer.append("AUL.update('");
 			}
 			onClickBuffer.append(updateContainerID);
 			onClickBuffer.append("', ");
@@ -100,7 +100,7 @@ public class AjaxUpdateLink extends AjaxDynamicElement {
 				actionUrl = context.directActionURLForActionNamed((String) directActionNameAssociation.valueInComponent(component), ERXComponentUtilities.queryParametersInComponent(associations(), component)).replaceAll("&amp;", "&");
 			}
 			else {
-				actionUrl = AjaxUpdateContainer.updateContainerUrl(AjaxUtils.ajaxComponentActionUrl(context), updateContainerID);
+				actionUrl = AjaxUtils.ajaxComponentActionUrl(context);
 			}
 
 			actionUrl = "'" + actionUrl + "'";
@@ -240,6 +240,7 @@ public class AjaxUpdateLink extends AjaxDynamicElement {
 
 	public WOActionResults handleRequest(WORequest request, WOContext context) {
 		WOComponent component = context.component();
+	    AjaxUpdateContainer.setUpdateContainerID(request, (String) valueForBinding("updateContainerID", component));
 		WOActionResults results = (WOActionResults) valueForBinding("action", component);
 		if (results == null || booleanValueForBinding("ignoreActionResponse", false, component)) {
 			String script = (String) valueForBinding("onClickServer", component);

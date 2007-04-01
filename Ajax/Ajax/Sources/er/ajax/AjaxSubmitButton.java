@@ -78,10 +78,6 @@ public class AjaxSubmitButton extends AjaxDynamicElement {
     parametersBuffer.append("(" + formReference + ")");
     parametersBuffer.append(" + '");
     parametersBuffer.append("&" + AjaxSubmitButton.KEY_AJAX_SUBMIT_BUTTON_NAME + "=" + name);
-	String updateContainerID = (String)valueForBinding("updateContainerID", component);
-	if (updateContainerID != null) {
-		parametersBuffer.append("&" + AjaxUpdateContainer.UPDATE_CONTAINER_ID_KEY + "=" + updateContainerID);
-	}
     parametersBuffer.append("'");
     options.setObjectForKey(parametersBuffer.toString(), "parameters");
 	if (options.objectForKey("evalScripts") == null) {
@@ -201,10 +197,12 @@ public class AjaxSubmitButton extends AjaxDynamicElement {
     String nameInContext = nameInContext(wocontext, wocomponent);
     boolean shouldHandleRequest = (!disabledInComponent(wocomponent) && wocontext._wasFormSubmitted()) && ((wocontext._isMultipleSubmitForm() && nameInContext.equals(worequest.formValueForKey(KEY_AJAX_SUBMIT_BUTTON_NAME))) || !wocontext._isMultipleSubmitForm());
     if (shouldHandleRequest) {
+      AjaxUpdateContainer.setUpdateContainerID(worequest, (String) valueForBinding("updateContainerID", wocomponent));
       wocontext._setActionInvoked(true);
       result = handleRequest(worequest, wocontext);
       AjaxUtils.updateMutableUserInfoWithAjaxInfo(wocontext);
     }
+    
     return result;
   }
 
