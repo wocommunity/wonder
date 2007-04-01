@@ -11,13 +11,15 @@ import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 
+import er.extensions.ERXResponse;
+
 /**
  * AjaxResponse provides support for performing an AjaxUpdate in the same response
  * as an ajax action.
  * 
  * @author mschrag
  */
-public class AjaxResponse extends WOResponse {
+public class AjaxResponse extends ERXResponse {
 	public static final String AJAX_UPDATE_PASS = "_ajaxUpdatePass";
 	private static NSMutableArray _responseAppenders; 
 	

@@ -6,12 +6,10 @@ import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WOMessage;
 import com.webobjects.appserver.WORequest;
-import com.webobjects.appserver.WOResourceManager;
 import com.webobjects.appserver.WOResponse;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableDictionary;
 
-import er.extensions.ERXApplication;
 import er.extensions.ERXResourceManager;
 import er.extensions.ERXWOContext;
 
@@ -304,7 +302,9 @@ public class AjaxUtils {
 	public static void appendTagAttributeAndValue(WOResponse response, WOContext context, WOComponent component, String name, WOAssociation association) {
 		if (association != null) {
 			String value = (String) association.valueInComponent(component);
-			response._appendTagAttributeAndValue(name, value, true);
+			if (value != null) {
+				response._appendTagAttributeAndValue(name, value, true);
+			}
 		}
 	}
 
