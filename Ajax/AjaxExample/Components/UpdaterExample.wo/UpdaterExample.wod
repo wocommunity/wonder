@@ -106,11 +106,13 @@ UpdateForm : WOForm {
 Submit1Action : AjaxSubmitButton {
 	value = "Submit #1";
 	action = submit1;
+	updateContainerID = "exampleArea4";
 }
 
 Submit2Action : AjaxSubmitButton {
 	value = "Submit #2";
 	action = submit2;
+	updateContainerID = "exampleArea4";
 }
 
 ExampleArea5 : AjaxUpdateContainer {
