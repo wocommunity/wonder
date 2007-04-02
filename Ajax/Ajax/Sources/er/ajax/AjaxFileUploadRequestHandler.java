@@ -105,6 +105,7 @@ public class AjaxFileUploadRequestHandler extends WORequestHandler {
 						if (_maxUploadSize >= 0 && streamLength > _maxUploadSize) {
 							IOException e = new IOException("You attempted to upload a file larger than the maximum allowed size of " + new ERXUnitAwareDecimalFormat(ERXUnitAwareDecimalFormat.BYTE).format(_maxUploadSize) + ".");
 							progress.setFailure(e);
+							progress.dispose();
 							throw e;
 						}
 						FileOutputStream fos = new FileOutputStream(progress.tempFile());
