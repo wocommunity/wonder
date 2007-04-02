@@ -46,7 +46,6 @@ import com.webobjects.eocontrol.EOQualifier;
 import com.webobjects.eocontrol.EOQualifierEvaluation;
 import com.webobjects.eocontrol.EOSortOrdering;
 import com.webobjects.foundation.NSArray;
-import com.webobjects.foundation.NSBundle;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSForwardException;
 import com.webobjects.foundation.NSLog;
@@ -513,12 +512,12 @@ public class ERD2WModel extends D2WModel {
     protected void setCurrentFile(File currentFile) { _currentFile = currentFile; }
     protected File currentFile() { return _currentFile; }
 
-    protected static NSDictionary dictionaryFromFile(File file) {
+    protected static NSDictionary dictionaryFromPathUrl(URL url) {
         NSDictionary model = null;
         try {
-            log.debug("Loading file: " + file);
-            if(file != null && !file.isDirectory() && file.exists()) {
-                model = Services.dictionaryFromFile(file);
+            log.debug("Loading url: " + url);
+            if(url != null) {
+                model = Services.dictionaryFromPathURL(url);
                 NSArray rules = (NSArray)model.objectForKey("rules");
                 Enumeration e = rules.objectEnumerator();
                 boolean patchRules = ERXProperties.booleanForKeyWithDefault("er.directtoweb.ERXD2WModel.patchRules", true);
@@ -533,7 +532,7 @@ public class ERD2WModel extends D2WModel {
             }
         } catch (Throwable throwable) {
             NSLog.err.appendln("****** DirectToWeb: Problem reading file "
-                               + file + " reason:" + throwable);
+                               + url + " reason:" + throwable);
             if (NSLog.debugLoggingAllowedForLevelAndGroups(1, 40L)) {
                 NSLog.err.appendln("STACKTRACE:");
                 NSLog.err.appendln(throwable);
@@ -549,7 +548,7 @@ public class ERD2WModel extends D2WModel {
             File modelFile = new File(modelURL.getFile());
             log.debug("Merging rule file \"" + modelFile.getPath() + "\"");
             setCurrentFile(modelFile);
-            NSDictionary dic = dictionaryFromFile(modelFile);
+            NSDictionary dic = dictionaryFromPathUrl(modelURL);
             if(dic != null) {
                 if (ruleDecodeLog.isDebugEnabled()) {
                     ruleDecodeLog.debug("Got dictionary for file: " + modelFile + "\n\n");
