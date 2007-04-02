@@ -15,10 +15,6 @@ UploadForm : WOForm {
 	name = uploadFormID;
 }
 
-UploadUpdateContainer : AjaxUpdateContainer {
-	id = id;
-}
-
 HiddenID : WOGenericElement {
 	elementName = "input";
 	type = "hidden";
@@ -53,6 +49,7 @@ UploadProgressBar : AjaxProgressBar {
 	progress = uploadProgress;
 	started = uploadStarted;
 	succeededAction = uploadSucceeded;
+	startedFunction = ^startedFunction;
 	finishedFunction = ^finishedFunction;
 	succeededFunction = ^succeededFunction;
 	failedAction = uploadFailed;
@@ -66,4 +63,8 @@ UploadProgressBar : AjaxProgressBar {
 	visibleAfterDone = progressBarAfterDone;
 	cancelingText = cancelingText;
 	startingText = startingText;
+	refreshTime = ^refreshTime;
+}
+
+Contents : WOComponentContent {
 }

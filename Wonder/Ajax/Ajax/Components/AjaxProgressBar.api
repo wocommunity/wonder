@@ -4,6 +4,7 @@
 		<binding name = "id"/>
 		<binding name = "progressID"/>
 		<binding name = "progress"/>
+		<binding name = "startedFunction"/>
 		<binding name = "canceledFunction"/>
 		<binding name = "succeededFunction"/>
 		<binding name = "failedFunction"/>
@@ -19,5 +20,6 @@
 		<binding name = "allowCancel"/>
 		<binding name = "visibleBeforeStart"/>
 		<binding name = "visibleAfterDone"/>
+		<binding name = "refreshTime"/>
 	</wo>
 </wodefinitions>
