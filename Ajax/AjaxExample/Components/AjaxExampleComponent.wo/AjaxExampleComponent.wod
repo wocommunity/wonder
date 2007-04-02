@@ -86,6 +86,10 @@ AjaxFileUpload : WOHyperlink {
 	pageName = "FileUploadExample";
 }
 
+HighlightExample : WOHyperlink {
+	pageName = "HighlightExample";
+}
+
 Contents : WOComponentContent {
 }
 

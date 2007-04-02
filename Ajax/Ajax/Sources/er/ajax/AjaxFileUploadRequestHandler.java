@@ -2,6 +2,7 @@ package er.ajax;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 
 import org.apache.log4j.Logger;
@@ -15,6 +16,7 @@ import com.webobjects.appserver.WOResponse;
 import com.webobjects.appserver.WOSession;
 
 import er.extensions.ERXProperties;
+import er.extensions.ERXUnitAwareDecimalFormat;
 
 /**
  * Provides the backend for Ajax uploads. This has to be implemented differently than a normal file upload because we
@@ -22,7 +24,7 @@ import er.extensions.ERXProperties;
  * 
  * @property er.ajax.AjaxFileRequestHandler.tempFileFolder the location of the temp file folder. If not specified, this
  *           will go to Java's default temporary folder (/tmp on Mac OS X)
- * 
+ * @property er.ajax.AjaxFileRequestHandler.maxUploadSize the maximum size in bytes of the file 
  * @author mschrag
  */
 public class AjaxFileUploadRequestHandler extends WORequestHandler {
@@ -31,17 +33,19 @@ public class AjaxFileUploadRequestHandler extends WORequestHandler {
 	public static final Logger log = Logger.getLogger(AjaxFileUploadRequestHandler.class);
 
 	private File _tempFileFolder;
+	private long _maxUploadSize;
 
 	public AjaxFileUploadRequestHandler() {
-		this(ERXProperties.stringForKey("er.ajax.AjaxFileRequestHandler.tempFileFolder"));
+		this(ERXProperties.stringForKey("er.ajax.AjaxFileRequestHandler.tempFileFolder"), ERXProperties.longForKeyWithDefault("er.ajax.AjaxFileRequestHandler.maxUploadSize", -1));
 	}
 
-	protected AjaxFileUploadRequestHandler(String tempFilePath) {
-		this(tempFilePath == null ? null : new File(tempFilePath));
+	protected AjaxFileUploadRequestHandler(String tempFilePath, long maxUploadSize) {
+		this(tempFilePath == null ? null : new File(tempFilePath), maxUploadSize);
 	}
 
-	public AjaxFileUploadRequestHandler(File tempFileFolder) {
+	public AjaxFileUploadRequestHandler(File tempFileFolder, long maxUploadSize) {
 		_tempFileFolder = tempFileFolder;
+		_maxUploadSize = maxUploadSize;
 	}
 
 	public WOResponse handleRequest(WORequest request) {
@@ -98,6 +102,11 @@ public class AjaxFileUploadRequestHandler extends WORequestHandler {
 					}
 
 					try {
+						if (_maxUploadSize >= 0 && streamLength > _maxUploadSize) {
+							IOException e = new IOException("You attempted to upload a file larger than the maximum allowed size of " + new ERXUnitAwareDecimalFormat(ERXUnitAwareDecimalFormat.BYTE).format(_maxUploadSize) + ".");
+							progress.setFailure(e);
+							throw e;
+						}
 						FileOutputStream fos = new FileOutputStream(progress.tempFile());
 						try {
 							progress.copyAndTrack(uploadInputStream, fos);

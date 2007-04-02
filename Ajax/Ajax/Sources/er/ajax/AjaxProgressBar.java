@@ -17,6 +17,7 @@ import er.extensions.ERXComponentUtilities;
  * @binding progressID the id of the AjaxProgress
  * @binding progress the progress object for this progress bar (can bind a new progress back out if one is in the
  *          registry)
+ * @binding startedFunction the javascript function to execute when the progress is started
  * @binding canceledFunction the javascript function to execute when the progress is canceled
  * @binding succeededFunction the javascript function to execute when the progress succeeds
  * @binding failedFunction the javascript function to execute when the progress fails
@@ -33,6 +34,7 @@ import er.extensions.ERXComponentUtilities;
  * @binding allowCancel if true, the cancel link is visible
  * @binding visibleBeforeStart if true, the progress bar is visible before the activity is started
  * @binding visibleAfterDone if true, the progress bar is visible after the activity is done
+ * @binding refreshTime the number of milliseconds to wait between refreshes
  * 
  * @author mschrag
  */
@@ -43,7 +45,8 @@ public class AjaxProgressBar extends WOComponent {
 	private boolean _running;
 	private AjaxProgress _progress;
 	private boolean _completionEventsFired;
-	private boolean _fireJavascriptEvents;
+	private boolean _fireFinishedJavascriptEvents;
+	private boolean _fireStartedJavascriptEvent;
 
 	public AjaxProgressBar(WOContext context) {
 		super(context);
@@ -60,12 +63,20 @@ public class AjaxProgressBar extends WOComponent {
 		return false;
 	}
 
-	public boolean fireJavascriptEvents() {
-		boolean fireJavascriptEvents = _fireJavascriptEvents;
-		if (fireJavascriptEvents) {
-			_fireJavascriptEvents = false;
+	public boolean fireStartedJavascriptEvent() {
+		boolean fireStartedJavascriptEvent = _fireStartedJavascriptEvent;
+		if (fireStartedJavascriptEvent) {
+			_fireStartedJavascriptEvent = false;
 		}
-		return fireJavascriptEvents;
+		return fireStartedJavascriptEvent;
+	}
+	
+	public boolean fireFinishedJavascriptEvents() {
+		boolean fireFinishedJavascriptEvents = _fireFinishedJavascriptEvents;
+		if (fireFinishedJavascriptEvents) {
+			_fireFinishedJavascriptEvents = false;
+		}
+		return fireFinishedJavascriptEvents;
 	}
 
 	public boolean progressBarVisible() {
@@ -76,7 +87,7 @@ public class AjaxProgressBar extends WOComponent {
 				visible = ERXComponentUtilities.booleanValueForBinding(this, "visibleBeforeStart");
 			}
 		}
-		else if (done() && !_fireJavascriptEvents) {
+		else if (done() && !_fireFinishedJavascriptEvents) {
 			if (hasBinding("visibleAfterDone")) {
 				visible = ERXComponentUtilities.booleanValueForBinding(this, "visibleAfterDone");
 			}
@@ -247,7 +258,7 @@ public class AjaxProgressBar extends WOComponent {
 						progressSucceeded();
 					}
 					progress.setCompletionEventsFired(true);
-					_fireJavascriptEvents = true;
+					_fireFinishedJavascriptEvents = true;
 				}
 			}
 		}
@@ -262,7 +273,22 @@ public class AjaxProgressBar extends WOComponent {
 		return done;
 	}
 
+	public String refreshTime() {
+		String refreshTimeStr;
+		Object refreshTime = valueForBinding("refreshTime");
+		if (refreshTime == null) {
+			refreshTimeStr = "1000";
+		}
+		else {
+			refreshTimeStr = refreshTime.toString();
+		}
+		return refreshTimeStr;
+	}
+	
 	public WOActionResults refreshing() {
+		if (!_running) {
+			_fireStartedJavascriptEvent = true;
+		}
 		_running = true;
 		_checkForCompletion();
 		return null;
@@ -281,6 +307,7 @@ public class AjaxProgressBar extends WOComponent {
 			AjaxProgressBar.unregisterProgress(session(), _progress);
 		}
 		_running = false;
+		System.out.println("AjaxProgressBar.finished: finished");
 		valueForBinding("finishedAction");
 	}
 

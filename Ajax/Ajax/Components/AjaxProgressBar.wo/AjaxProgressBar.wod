@@ -66,6 +66,10 @@ CancelText : WOString {
 	value = cancelText;
 }
 
+StartedFunction : WOString {
+	value = ^startedFunction;
+}
+
 FinishedFunction : WOString {
 	value = ^finishedFunction;
 }
@@ -121,6 +125,17 @@ ProgressNotDoneConditional : WOConditional {
 	negate = true;
 }
 
-FireJavascriptEventsConditional : WOConditional {
-	condition = fireJavascriptEvents;
+FireStartedJavascriptEventsConditional : WOConditional {
+	condition = fireStartedJavascriptEvent;
+}
+
+FireFinishedJavascriptEventsConditional : WOConditional {
+	condition = fireFinishedJavascriptEvents;
+}
+
+Contents : WOComponentContent {
+}
+
+RefreshTime : WOString {
+	value = refreshTime;
 }
