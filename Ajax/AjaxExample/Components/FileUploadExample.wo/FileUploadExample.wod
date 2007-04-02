@@ -1,5 +1,9 @@
+Now : WOString {
+	value = now;
+}
+
 AjaxExampleComponent : AjaxExampleComponent {
-	title = "Ajax File Upload";
+	title = "Ajax Progress / File Upload";
 }
 
 FinishedImage : WOResourceURL {
@@ -34,11 +38,13 @@ AjaxFileUpload : AjaxFileUpload {
 	allowCancel = true;
 	uploadProgress = uploadProgress;
 	finishedAction = uploadFinished;
-	data = data;
-	finishedFunction = "UploadContainerUpdate()";
 }
 
 AjaxProgress : AjaxProgressBar {
 	progress = progress;
 	finishedFunction = "alert('Done!')";
+}
+
+FailureMessage : WOString {
+	value = uploadProgress.failure.message;
 }

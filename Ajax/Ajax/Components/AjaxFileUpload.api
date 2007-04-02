@@ -4,6 +4,7 @@
 		<binding name = "cancelText"/>
 		<binding name = "cancelingText"/>
 		<binding name = "startingText"/>
+		<binding name = "startedFunction"/>
 		<binding name = "canceledFunction"/>
 		<binding name = "succeededFunction"/>
 		<binding name = "failedFunction"/>
@@ -21,5 +22,6 @@
 		<binding name = "allowCancel"/>
 		<binding name = "progressBarBeforeStart"/>
 		<binding name = "progressBarAfterDone"/>
+		<binding name = "refreshTime"/>
 	</wo>
 </wodefinitions>

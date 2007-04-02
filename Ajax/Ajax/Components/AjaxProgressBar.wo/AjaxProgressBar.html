@@ -1,4 +1,9 @@
 <webobject name = "ProgressUpdateContainer">
+	<webobject name = "FireStartedJavascriptEventsConditional">
+		<script>
+		<webobject name = "StartedFunction"/>
+		</script>
+	</webobject>
 	<webobject name = "ProgressBarVisible">
 		<table class = "progressBarContainer">
 			<tr>
@@ -34,25 +39,21 @@
 	</webobject>
 	<webobject name = "ProcedureStartedConditional">
 		<webobject name = "DoneConditional">
-			<webobject name = "FireJavascriptEventsConditional">
+			<webobject name = "FireFinishedJavascriptEventsConditional">
 				<script>
-				<webobject name = "FinishedFunction"/>
-				<webobject name = "CanceledConditional">
-					<webobject name = "CanceledFunction"/>
-				</webobject>
-				<webobject name = "FailedConditional">
-					<webobject name = "FailedFunction"/>
-				</webobject>
-				<webobject name = "SucceededConditional">
-					<webobject name = "SucceededFunction"/>
-				</webobject>
+					<webobject name = "FinishedFunction"/>
+					<webobject name = "CanceledConditional"><webobject name = "CanceledFunction"/></webobject>
+					<webobject name = "FailedConditional"><webobject name = "FailedFunction"/></webobject>
+					<webobject name = "SucceededConditional"><webobject name = "SucceededFunction"/></webobject>
+					<webobject name = "ID"/>Update();
 				</script>
 			</webobject>
 		</webobject>
 		<webobject name = "NotDoneConditional">
 			<script>
-			setTimeout("<webobject name = "ID"/>Update()", 1000);
+			setTimeout("<webobject name = "ID"/>Update()", <webobject name = "RefreshTime"/>);
 			</script>
 		</webobject>
 	</webobject>
+	<webobject name = "Contents"/>
 </webobject>
