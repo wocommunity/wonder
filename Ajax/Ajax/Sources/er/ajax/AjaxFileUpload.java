@@ -28,6 +28,7 @@ import er.extensions.ERXUnitAwareDecimalFormat;
  * @binding cancelText the text to display for the cancel link
  * @binding cancelingText the text to display when the progress is being canceled
  * @binding startingText the text to display when the progress is starting
+ * @binding startedFunction the javascript function to execute when the progress is started
  * @binding canceledFunction the javascript function to execute when the upload is canceled
  * @binding succeededFunction the javascript function to execute when the upload succeeds
  * @binding failedFunction the javascript function to execute when the upload fails
@@ -46,6 +47,7 @@ import er.extensions.ERXUnitAwareDecimalFormat;
  * @binding allowCancel if true, the cancel link is visible
  * @binding progressBarBeforeStart if true, the progress bar is visible before the upload is started
  * @binding progressBarAfterDone if true, the progress bar is visible after the upload is done
+ * @binding refreshTime the number of milliseconds to wait between refreshes
  * 
  * @author mschrag
  */

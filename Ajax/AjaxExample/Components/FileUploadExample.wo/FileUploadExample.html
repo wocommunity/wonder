@@ -42,10 +42,10 @@ table.progressBarContainer td.progressMaximum {
 <p>
 <b>AjaxFileUpload</b>
 </p>
-This AjaxFileUpload binds into an NSData, so you WILL run out of memory if you keep trying it out.
+This AjaxFileUpload does not bind to anything, so its file is just immediately deleted.  It allows all of the same binding options 
+as WOFileUpload.  This demo has a maximum file upload size of 2M (change this in Properties if you want to try a local file upload).
 <p>
-<webobject name = "UploadUpdateContainer">
-	<webobject name = "AjaxFileUpload"/>
+<webobject name = "AjaxFileUpload">
 	<webobject name = "UploadDoneConditional">
 		<p>
 			<webobject name = "SucceededConditional">
@@ -55,7 +55,7 @@ This AjaxFileUpload binds into an NSData, so you WILL run out of memory if you k
 				<i>Your upload was canceled.</i>
 			</webobject>
 			<webobject name = "FailedConditional">
-				<i>Your upload failed.</i>
+				<i>Your upload failed: <webobject name = "FailureMessage"/></i>
 			</webobject>
 		</p>
 	</webobject>
