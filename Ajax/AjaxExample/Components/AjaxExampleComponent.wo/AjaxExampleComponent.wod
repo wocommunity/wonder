@@ -90,6 +90,10 @@ HighlightExample : WOHyperlink {
 	pageName = "HighlightExample";
 }
 
+LivePreview : WOHyperlink {
+	pageName = "LivePreview";
+}
+
 Contents : WOComponentContent {
 }
 
