@@ -12,10 +12,12 @@ import com.webobjects.foundation.NSDictionary;
  * Hints input and textarea fields with ghosted text that serves as an explainatation for the user what to enter.
  * The style "ajax-hinted-text-with-default" defines the color for this.
  * 
+ * The default value for the field comes from setting default = "something"; on the input element.  For instance,
+ * to set the default value on a text field, you would do <wo:WOTextField value = "$value" default = "Fill this in"/>.
+ * 
  * @binding form ID of the form to apply the hints to
  * @author ak
  */
-
 public class AjaxTextHinter extends AjaxDynamicElement {
 
 	public AjaxTextHinter(String name, NSDictionary associations, WOElement children) {
