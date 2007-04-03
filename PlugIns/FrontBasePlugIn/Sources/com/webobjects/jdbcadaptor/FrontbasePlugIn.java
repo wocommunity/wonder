@@ -703,43 +703,50 @@ public class FrontbasePlugIn extends JDBCPlugIn {
 		}
 
 		public String columnTypeStringForAttribute(EOAttribute eoattribute) {
-			String s = eoattribute.externalType();
-			NSDictionary nsdictionary = JDBCAdaptor.typeInfoForModel(((EOEntity) eoattribute.parent()).model());
-			NSDictionary nsdictionary1 = (NSDictionary) nsdictionary.objectForKey(s);
+			String externalTypeName = eoattribute.externalType();
+			NSDictionary modelTypeInfo = JDBCAdaptor.typeInfoForModel(((EOEntity) eoattribute.parent()).model());
+			NSDictionary typeInfo = (NSDictionary) modelTypeInfo.objectForKey(externalTypeName);
 
-			if (nsdictionary1 == null)
-				throw new JDBCAdaptorException("Unable to find type information for external type '" + s + "' in attribute '" + eoattribute.name() + "' of entity '" + ((EOEntity) eoattribute.parent()).name() + "'.  Check spelling and capitalization.", null);
-			int i;
+			if (typeInfo == null) {
+				throw new JDBCAdaptorException("Unable to find type information for external type '" + externalTypeName + "' in attribute '" + eoattribute.name() + "' of entity '" + ((EOEntity) eoattribute.parent()).name() + "'.  Check spelling and capitalization.", null);
+			}
+			int createParams;
 			try {
-				Object createParamsObj = nsdictionary.objectForKey("createParams");
+				Object createParamsObj = typeInfo.objectForKey("createParams");
 				if (createParamsObj instanceof Integer) {
-					i = ((Integer)createParamsObj).intValue();
+					createParams = ((Integer)createParamsObj).intValue();
 				}
 				else {
-					i = Integer.parseInt((String) createParamsObj);
+					createParams = Integer.parseInt((String) createParamsObj);
 				}
 			}
 			catch (NumberFormatException numberformatexception) {
-				i = 0;
+				createParams = 0;
 			}
-			switch (i) {
-			case 2:
-				int j = eoattribute.precision();
-				if (j == 0)
-					return eoattribute.externalType();
-				int k = eoattribute.scale();
-				if (k == 0)
-					return eoattribute.externalType() + "(" + j + ")";
-				else
-					return eoattribute.externalType() + "(" + j + "," + k + ")";
-			case 1:
-				int l = eoattribute.width();
-				if (l == 0)
-					l = eoattribute.precision();
-				if (l == 0)
-					return eoattribute.externalType();
-				else
-					return eoattribute.externalType() + "(" + l + ")";
+			switch (createParams) {
+				case 2:
+					int precision = eoattribute.precision();
+					if (precision == 0) {
+						return eoattribute.externalType();
+					}
+					int scale = eoattribute.scale();
+					if (scale == 0) {
+						return eoattribute.externalType() + "(" + precision + ")";
+					}
+					else {
+						return eoattribute.externalType() + "(" + precision + "," + scale + ")";
+					}
+				case 1:
+					int length = eoattribute.width();
+					if (length == 0) {
+						length = eoattribute.precision();
+					}
+					if (length == 0) {
+						return eoattribute.externalType();
+					}
+					else {
+						return eoattribute.externalType() + "(" + length + ")";
+					}
 			}
 			return eoattribute.externalType();
 		}
