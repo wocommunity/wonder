@@ -309,7 +309,13 @@ public class ERXRecursiveBatchFetching {
             }
 
             EODatabaseContext dbContext = ERXEOAccessUtilities.databaseContextForObject(eo);
-            ERXEOAccessUtilities.batchFetchRelationship(dbContext, relationship, sourceObjects, ec, skipFaultedSourceObjects);
+            dbContext.lock();
+            try {
+            	ERXEOAccessUtilities.batchFetchRelationship(dbContext, relationship, sourceObjects, ec, skipFaultedSourceObjects);
+            }
+            finally {
+            	dbContext.unlock();
+            }
         }
 
         private NSDictionary splitObjectsByEntity(NSArray objects) {
