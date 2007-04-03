@@ -145,6 +145,62 @@ AjaxPeriodicUpdater.prototype = {
 	}
 };
 
+var AjaxHintedText = {
+    register : function(name) {
+        name = name ? "form#" + name : "form";
+        var e = new Object();
+        e[name + " input"] = AjaxHintedText.textBehaviour;
+        e[name + " textarea"] = AjaxHintedText.textBehaviour;
+        e[name + ""] = AjaxHintedText.formBehaviour;
+        Behaviour.register(e);
+    },
+    textBehaviour : function(e) {
+        if(!e.getAttribute('default')) {
+            return;
+        }
+        e.setAttribute('default', unescape(e.getAttribute('default')));
+        e.showDefaultValue = function() {
+            if(e.value == "") {
+                e.className = "ajax-hinted-text-with-default";
+                e.value = e.getAttribute('default');
+            } else {
+                e.className = "";
+            }
+        }
+        e.showTextValue = function() {
+            e.className = "";
+            if(e.value.replace(/[\r\n]/g, "") == e.getAttribute('default').replace(/[\r\n]/g, "")) {
+                e.value = "";
+            }
+        }
+        e.showDefaultValue();
+        var oldFocus = e.onfocus;
+        e.onfocus = function() {
+            e.showTextValue();
+            return oldFocus ? oldFocus() : true;
+        }
+        var oldBlur = e.onblur;
+        e.onblur = function() {
+            e.showDefaultValue();
+            return oldBlur ? oldBlur() : true;
+        }
+        e.onsubmit = e.showTextValue;
+    },
+    formBehaviour :  function(e) {
+        var old = e.onsubmit;
+        e.onsubmit = function() {
+            for(var i = 0; i < e.elements.length; i++) {
+                var el = e.elements[i];
+                if(el.onsubmit) {
+                    el.onsubmit();
+                }
+            }
+            return old ? old() : true;
+        }
+    }
+};
+
+
 // our own extensions 
 // MS: This doesn't appear to be used and it causes a failure 
 // in IE6.
