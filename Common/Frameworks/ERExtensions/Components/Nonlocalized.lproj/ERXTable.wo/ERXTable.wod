@@ -4,6 +4,7 @@ CellContainer:  WOGenericContainer {
     align = ^cellAlign;
     valign = ^cellVAlign;
 	width = ^cellWidth;
+    class = ^cellClass;
 }
 
 ColRepetition: WORepetition {
@@ -50,12 +51,14 @@ TableContainer: WOGenericContainer {
 TableHeaderRow: WOGenericContainer {
     elementName = "tr";
     bgcolor = ^headerRowBackgroundColor;
+    class = ^headerRowClass;
 
 }
 
 TableRow: WOGenericContainer {
     elementName = "tr";
     bgcolor = ^rowBackgroundColor;
+    class = ^rowClass;
 }
 
 index: WOString {

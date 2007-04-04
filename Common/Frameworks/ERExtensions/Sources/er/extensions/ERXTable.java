@@ -33,20 +33,24 @@ import com.webobjects.foundation.NSArray;
  *		the current index
  * @binding list of objects to construct the table for
  * @binding maxColumns maximum number of columns
+ * @binding fillColumns when true, loops until the last row is filled even when no more elements are left in the list
  * @binding row pushed to the parent with the current
  *		row number
  * @binding item pushed to the parent with the
  *		current object from the list
+ * @binding tableClass CSS class for the table
  * @binding tableBackgroundColor background color for table
  * @binding border table border
  * @binding cellpadding cell padding
  * @binding cellspacing cell spacing
  * @binding rowBackgroundColor background color to be
  *		used for the rows of the table
+ * @binding rowClass CSS class for the row
  * @binding cellBackgroundColor background color for the cell
  * @binding cellAlign cell's alignment
  * @binding cellVAlign cell's vertical alignment
  * @binding cellWidth cell's width
+ * @binding cellClass CSS class for the cell
  * @binding tableWidth table width
  * @binding goingVertically boolean if the list should be
  *		layed out horizontally or vertically.
@@ -57,16 +61,16 @@ import com.webobjects.foundation.NSArray;
  */
 public class ERXTable extends WOTable {
 
-    /** used in the repetition for header images */
-    protected String header;
-    /** caches the value from the binding goingVertical */
-    protected Boolean _goingVertically;
-	 protected Boolean _showIndex;
-	 protected int index = 0;
-	 
-    /**
-     * Public constructor
-     * @param context the context
+	/** used in the repetition for header images */
+	protected String header;
+	/** caches the value from the binding goingVertical */
+	protected Boolean _goingVertically;
+	protected Boolean _showIndex;
+	protected int index = 0;
+
+	/**
+	 * Public constructor
+	 * @param context the context
      */
     public ERXTable(WOContext context) {
         super(context);
@@ -76,6 +80,17 @@ public class ERXTable extends WOTable {
       return header;
     }
 
+    public int colCount() {
+    	if(_colCount == -1) {
+    		if(ERXValueUtilities.booleanValue(valueForBinding("fillColumns"))) {
+                _colCount = maxColumns();
+    		} else {
+    			_colCount = super.colCount();
+    		}
+    	}
+    	return _colCount;
+    }
+    
     /**
      * Component is stateless.
      * @return true
