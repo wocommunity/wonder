@@ -57,7 +57,10 @@ public class ERXExpiringCache extends NSMutableDictionary {
 
 	public synchronized Object objectForKey(Object key) {
 		Entry entry = (Entry) super.objectForKey(key);
-		return entry.object();
+		if(entry != null) {
+			return entry.object();
+		}
+		return null;
 	}
 
 	public synchronized boolean isStale(Object key) {
