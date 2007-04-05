@@ -13,18 +13,5 @@
     <binding name="otherTagString" passthrough="NO"/>
     <binding name="disabled" passthrough="NO" defaults="YES/NO"/>
     <binding name="onclick" passthrough="YES"/>
-
-    <validation message="either one of 'action', 'href', or 'pageName' may be bound, or either or both of 'actionClass' and 'directActionName' may be bound">
-      <count test="!=1">
-        <bound name="action"/>
-        <bound name="href"/>
-        <bound name="pageName"/>
-        <bound name="onclick"/>
-        <or>
-          <bound name="actionClass"/>
-          <bound name="directActionName"/>
-        </or>
-      </count>
-    </validation>
   </wo>
 </wodefinitions>
