@@ -7,7 +7,7 @@ CollapseContainer: D2WCollapsibleComponentContent {
 
 EditToManyRelationship: ERXToManyRelationship {
 	destinationDisplayKey = keyWhenRelationship;
-	isMandatory = d2wContext.relationship.isMandatory;
+	// isMandatory = d2wContext.relationship.isMandatory;
 	maxColumns = d2wContext.numCols;
 	relationshipKey = d2wContext.propertyKey;
 	size = d2wContext.size;
