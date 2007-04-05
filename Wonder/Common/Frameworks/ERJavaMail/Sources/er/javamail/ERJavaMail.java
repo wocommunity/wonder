@@ -59,7 +59,7 @@ public class ERJavaMail extends ERXFrameworkPrincipal {
 	 * <code>EMAIL_VALIDATION_PATTERN</code> is a regexp pattern that is used to validate emails.
 	 */
 	// RFC 2822 token definitions for valid email - only used together to form a java Pattern object:
-	private static final String sp = "!#$%&'*+-/=?^_`{|}~";
+	private static final String sp = "!#$%&'*+\\-/=?^_`{|}~";
 	private static final String atext = "[a-zA-Z0-9" + sp + "]";
 	private static final String atom = atext + "+"; // one or more atext chars
 	private static final String dotAtom = "\\." + atom;
@@ -67,11 +67,11 @@ public class ERJavaMail extends ERXFrameworkPrincipal {
 	// RFC 1035 tokens for domain names:
 	private static final String letter = "[a-zA-Z]";
 	private static final String letDig = "[a-zA-Z0-9]";
-	private static final String letDigHyp = "[a-zA-Z0-9-]";
+	private static final String letDigHyp = "[a-zA-Z0-9\\-]";
 	private static final String rfcLabel = letDig + letDigHyp + "{0,61}" + letDig;
 	private static final String domain = rfcLabel + "((\\." + rfcLabel + ")*\\." + letter + "{2,6}){0,1}";
 	// Combined together, these form the allowed email regexp allowed by RFC 2822:
-	private static final String EMAIL_VALIDATION_PATTERN = "^" + localPart + "(@" + domain + "){0,1}$";
+	private static final String EMAIL_VALIDATION_PATTERN = "^" + localPart + "@" + domain + "$";
 
 	/**
 	 * The Jakarta ORO regexp matcher.
@@ -284,7 +284,7 @@ public class ERJavaMail extends ERXFrameworkPrincipal {
 	 *            a <code>String</code> value
 	 */
 	public void setAdminEmail(String adminEmail) {
-		if (!isValidEmail(adminEmail)) {
+		if (!(isValidEmail(adminEmail) || (adminEmail != null && adminEmail.trim().length() > 0))) {
 			throw new IllegalArgumentException("You specified an invalid admin email address '" + adminEmail + "'.");
 		}
 		_adminEmail = adminEmail;
