@@ -10,6 +10,7 @@ import java.util.Date;
 import java.util.Enumeration;
 
 import javax.activation.DataHandler;
+import javax.mail.Address;
 import javax.mail.BodyPart;
 import javax.mail.Message;
 import javax.mail.MessagingException;
@@ -19,6 +20,7 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
+import javax.mail.internet.MimeMessage.RecipientType;
 
 import org.apache.log4j.Logger;
 
@@ -73,7 +75,7 @@ public abstract class ERMailDelivery {
 
 	private ERMessage.Delegate _delegate;
 	private NSDictionary _userInfo;
-	
+
 	public static String DefaultCharset = System.getProperty("er.javamail.defaultEncoding");
 	public String _charset = DefaultCharset;
 
@@ -90,30 +92,27 @@ public abstract class ERMailDelivery {
 	}
 
 	/**
-	 * Sets the given delegate to listen to any messages that 
-	 * are created from this ERMailDelivery.  This will 
-	 * automatically call ERMessage.setDelegate(delegate) for
-	 * any ERMessage that is generated.
+	 * Sets the given delegate to listen to any messages that are created from this ERMailDelivery. This will
+	 * automatically call ERMessage.setDelegate(delegate) for any ERMessage that is generated.
 	 * 
-	 * @param delegate the delegate to use for notifications
+	 * @param delegate
+	 *            the delegate to use for notifications
 	 */
 	public void setDelegate(ERMessage.Delegate delegate) {
 		_delegate = delegate;
 	}
-	
+
 	/**
-	 * Sets the userInfo dictionary for this ERMailDelivery.  This
-	 * userInfo is passed through to any ERMessage that is
-	 * created by this ERMailDelivery, which can be used by
-	 * delegates to get additional information about the
-	 * message.
+	 * Sets the userInfo dictionary for this ERMailDelivery. This userInfo is passed through to any ERMessage that is
+	 * created by this ERMailDelivery, which can be used by delegates to get additional information about the message.
 	 * 
-	 * @param userInfo the userInfo dictionary
+	 * @param userInfo
+	 *            the userInfo dictionary
 	 */
 	public void setUserInfo(NSDictionary userInfo) {
 		_userInfo = userInfo;
 	}
-	
+
 	/**
 	 * Returns the userInfo dictionary for this ERMailDelivery.
 	 * 
@@ -122,7 +121,7 @@ public abstract class ERMailDelivery {
 	public NSDictionary userInfo() {
 		return _userInfo;
 	}
-	
+
 	public String charset() {
 		return _charset;
 	}
@@ -295,7 +294,20 @@ public abstract class ERMailDelivery {
 		ERMessage message = new ERMessage();
 		message.setDelegate(_delegate);
 		message.setUserInfo(_userInfo);
-		message.setMimeMessage(this.mimeMessage());
+		MimeMessage mimeMessage = this.mimeMessage();
+		try {
+			Address[] bccRecipients = mimeMessage.getRecipients(RecipientType.BCC);
+			if (bccRecipients != null && bccRecipients.length > 0) {
+				Address[] toRecipients = mimeMessage.getRecipients(RecipientType.TO);
+				if (toRecipients == null || toRecipients.length == 0) {
+					mimeMessage.addRecipient(RecipientType.TO, internetAddressWithEmailAndPersonal("Undisclosed recipients:;", null));
+				}
+			}
+		}
+		catch (MessagingException e) {
+			throw new RuntimeException("Failed to set 'undisclosed recipients' recipient for your bulk mail.", e);
+		}
+		message.setMimeMessage(mimeMessage);
 		return message;
 	}
 
@@ -327,8 +339,8 @@ public abstract class ERMailDelivery {
 				}
 				InternetAddress[] addresses = new InternetAddress[] { new InternetAddress(ERJavaMail.sharedInstance().adminEmail()) };
 				mimeMessage().setRecipients(Message.RecipientType.TO, addresses);
-				mimeMessage().setRecipients(Message.RecipientType.CC, new InternetAddress[] {});
-				mimeMessage().setRecipients(Message.RecipientType.BCC, new InternetAddress[] {});
+				mimeMessage().setRecipients(Message.RecipientType.CC, new InternetAddress[0]);
+				mimeMessage().setRecipients(Message.RecipientType.BCC, new InternetAddress[0]);
 			}
 			if (mimeMessage().getAllRecipients().length == 0) {
 				return;
