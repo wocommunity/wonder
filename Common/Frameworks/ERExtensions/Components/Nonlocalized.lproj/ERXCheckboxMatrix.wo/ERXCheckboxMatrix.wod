@@ -53,6 +53,7 @@ GenericContainer1: WOGenericContainer {
 	elementName = "TD";
 	otherTagString = ^contentCellOtherTagString;
 	valign = "TOP";
+	class = "ERXMatrixTableCell";
 }
 
 GenericElement1: WOGenericElement {
