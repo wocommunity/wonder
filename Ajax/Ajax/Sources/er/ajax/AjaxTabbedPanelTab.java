@@ -16,8 +16,8 @@ import com.webobjects.foundation.*;
  *          to select the tab
  * @binding isSelected optional, boolean true if this tab is initially selected
  *          when the page is first rendered, defaults to false
- * @binding id optional, String the id attribute of the LI element representing
- *          this panel
+ * @binding id optional, String the id attribute of the A element selecting
+ *          this panel, [id]_panel is the id of LI element implementing this tab
  * 
  * @author Chuck Hill
  */
@@ -50,7 +50,7 @@ public class AjaxTabbedPanelTab extends AjaxDynamicElement {
     public void appendToResponse(WOResponse aResponse, WOContext aContext)
     {
         aResponse.appendContentString("<li id=\"");
-        aResponse.appendContentString((String)id.valueInComponent(aContext.component()));
+        aResponse.appendContentString((String)id.valueInComponent(aContext.component()) + "_panel");
         aResponse.appendContentString("\" updateUrl=\"");
         aResponse.appendContentString(AjaxUtils.ajaxComponentActionUrl(aContext));
 		aResponse.appendContentString("\" class=\"");
