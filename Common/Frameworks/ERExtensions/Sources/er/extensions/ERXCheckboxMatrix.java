@@ -67,7 +67,7 @@ public class ERXCheckboxMatrix extends ERXNonSynchronizingComponent {
     }
 
     public String onClick(boolean onOff) {
-        return "checkAll(this.form, '" + wrapperElementID + "'," + (onOff ? "true" : "false") + ")";
+        return "ERXCheckboxMatrix.checkAll(this.form, '" + wrapperElementID + "'," + (onOff ? "true" : "false") + ")";
     }
 
     public String selectOnClick() {
