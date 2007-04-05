@@ -126,17 +126,20 @@ public class AjaxTabbedPanel extends AjaxDynamicElement {
             String tabID = idString + "_tab_" + index;
             AjaxTabbedPanelTab tab = (AjaxTabbedPanelTab)tabs.objectAtIndex(i);
             boolean isSelectedTab = tab.isSelected(context.component());
-            String paneID = (String) tab.id().valueInComponent(component);
+            String panelTabID = (String) tab.id().valueInComponent(component);
+            String panelID = panelTabID + "_panel";
             response.appendContentString("  <li class=\"ajaxTabbedPanelTab-");
             response.appendContentString(isSelectedTab ? "selected" : "unselected");
             response.appendContentString("\" ");
             appendTagAttributeToResponse(response, "id", tabID);
             response.appendContentString(">\n");
-            response.appendContentString("<a href=\"javascript:void(0)\" onclick=\"");
-
+            response.appendContentString("<a ");
+            appendTagAttributeToResponse(response, "id", panelTabID);
+            response.appendContentString(" href=\"javascript:void(0)\" onclick=\"");
+            
             if ( ! isSelectedTab) {
                 response.appendContentString("AjaxTabbedPanel.loadPanel('");
-                response.appendContentString(paneID);
+                response.appendContentString(panelID);
                 response.appendContentString("', '");
                 response.appendContentString((busyDiv != null) ? (String)busyDiv.valueInComponent(component) : "");
                 response.appendContentString("'); ");
@@ -149,7 +152,7 @@ public class AjaxTabbedPanel extends AjaxDynamicElement {
             response.appendContentString("'); AjaxTabbedPanel.selectPanel('");
             response.appendContentString(paneControlID);
             response.appendContentString("', '");
-            response.appendContentString(paneID);
+            response.appendContentString(panelID);
             response.appendContentString("');\">");
             response.appendContentString((String) tab.name().valueInComponent(component));
             response.appendContentString("</a>\n");
