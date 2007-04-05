@@ -65,6 +65,9 @@ er.extensions.ERXLocalizer.availableLanguages = (English,German,Japanese)
 ## formatters. 
 # er.extensions.ERXLocalizer.useLocalizedFormatters = true
 
+## Which characters to ignore when formatting
+# er.extensions.ERXNumberFormatter.ignoredChars=$%
+
 ## Allows you to override the locale for a language
 # er.extensions.ERXLocalizer.German.locale = de
 
