@@ -132,8 +132,9 @@
             <classpath refid="classpath"/>
             <sourcepath>
                     <dirset dir="${wonder.root}">
-                         <include name="PlugIns/**/Sources/" />
-                         <include name="**/Frameworks/**/Sources/" /> 
+                         <include name="**/Sources/" /> 
+                         <exclude name="**/*Example*/**" /> 
+                         <exclude name="**/Applications/**" /> 
                     </dirset>
                 <!--pathelement path="${wonder.root}">
                 </pathelement-->
