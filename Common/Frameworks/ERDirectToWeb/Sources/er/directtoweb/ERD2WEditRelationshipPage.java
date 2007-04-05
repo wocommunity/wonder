@@ -32,7 +32,27 @@ public class ERD2WEditRelationshipPage extends D2WEditRelationshipPage {
         super(c);
     }
 
-
+    /**
+     * Overridden because the action bound should not return null.
+     */
+    public WOComponent queryAction() {
+        WOComponent nextPage = super.queryAction();
+        if(nextPage == null) {
+            nextPage = context().page();
+        }
+        return nextPage;
+    }
+    
+    /**
+     * Overridden because the action bound should not return null.
+     */
+    public WOComponent selectAction() {
+        WOComponent nextPage = super.selectAction();
+        if(nextPage == null) {
+            nextPage = context().page();
+        }
+        return nextPage;
+    }
     
     public WOComponent editObjectInRelationship(){
         WOComponent result = null;
