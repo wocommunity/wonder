@@ -22,6 +22,66 @@ Object.extend(Event, {
 			keynum = event.keyCode;
 		}
 		return keynum;
+	},
+	
+	pressingAltKey : function(event) {
+	  if (document.all) {
+	  	return window.event.altKey;
+	  }
+	  else if (document.getElementById) {
+	  	return event.altKey;
+	  }
+	  else if (document.layers) {
+	  	return event.modifiers & Event.ALT_MASK;
+	  }
+	  else {
+	  	return false;
+	  }
+	},
+	
+	pressingShiftKey : function(event) {
+	  if (document.all) {
+	  	return window.event.shiftKey;
+	  }
+	  else if (document.getElementById) {
+	  	return event.shiftKey;
+	  }
+	  else if (document.layers) {
+	  	return event.modifiers & Event.SHIFT_MASK;
+	  }
+	  else {
+	  	return false;
+	  }
+	},
+	
+	pressingControlKey : function(event) {
+	  if (document.all) {
+	  	return window.event.ctrlKey;
+	  }
+	  else if (document.getElementById) {
+	  	return event.ctrlKey;
+	  }
+	  else if (document.layers) {
+	  	return event.modifiers & Event.CONTROL_MASK;
+	  }
+	  else {
+	  	return false;
+	  }
+	},
+	
+	pressingMetaKey : function(event) {
+	  if (document.all) {
+	  	return window.event.metaKey;
+	  }
+	  else if (document.getElementById) {
+	  	return event.metaKey;
+	  }
+	  else if (document.layers) {
+	  	return event.modifiers & Event.META_MASK;
+	  }
+	  else {
+	  	return false;
+	  }
 	}
 });
 
