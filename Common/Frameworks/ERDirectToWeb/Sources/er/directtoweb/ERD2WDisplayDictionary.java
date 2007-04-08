@@ -9,11 +9,14 @@ package er.directtoweb;
 
 import com.webobjects.appserver.WOContext;
 import com.webobjects.directtoweb.D2WDisplayString;
-import com.webobjects.foundation.*;
+import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSPropertyListSerialization;
 
 /**
  * Displays a dictionary by serializing it as property list.  The dictionary is assumed
  * to only contain objects that are valid for an old-style (i.e., non-XML) plist.
+ *
+ * @deprecated Use {@link ERD2WDisplayPreformattedString} instead.
  */
 public class ERD2WDisplayDictionary extends D2WDisplayString {
 
