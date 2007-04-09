@@ -28,8 +28,6 @@ import com.webobjects.appserver.*;
 import com.webobjects.eoaccess.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.foundation.*;
-import er.extensions.ERXUtilities;
-import er.extensions.ERXLocalizer;
 import java.util.Enumeration;
 
 /**
@@ -262,10 +260,10 @@ public class WOToOneRelationship extends WOComponent {
     }
 
     protected EODataSource _localDataSource() {
-
-        if (null==dataSource()) {
-            setDataSource((EODatabaseDataSource)valueForBinding("dataSource"));
-            if (null==dataSource()) {
+        EODataSource dataSource = dataSource();
+        if (dataSource == null) {
+            dataSource = (EODatabaseDataSource)valueForBinding("dataSource");
+            if (dataSource == null) {
                 String anEntityName = _localSourceEntityName();
                 Object _source = _localSourceObject();
                 EOEditingContext anEditingContext = null;
@@ -275,17 +273,29 @@ public class WOToOneRelationship extends WOComponent {
                 if (anEditingContext == null) {
                     anEditingContext = session().defaultEditingContext() ;
                 }
+
                 EOEntity anEntity = ERXEOAccessUtilities.entityNamed(anEditingContext, anEntityName);
                 if (anEntity == null) {
                     throw new IllegalStateException("<" + getClass().getName() + " could not find entity named " + anEntityName + ">");
                 }
+
                 EOEntity destinationEntity = entityWithEntityAndKeyPath(anEntity, _localRelationshipKey());
-                EODatabaseDataSource aDatabaseDataSource = new EODatabaseDataSource(anEditingContext, destinationEntity.name());
-                setDataSource(aDatabaseDataSource);
+                String destinationEntityName = destinationEntity.name();
+
+                if( ERXEOAccessUtilities.entityWithNamedIsShared(anEditingContext, destinationEntityName) ) {
+                    EOArrayDataSource arrayDataSource = new EOArrayDataSource(destinationEntity.classDescriptionForInstances(), anEditingContext);
+                    NSArray sharedEOs = (NSArray)anEditingContext.sharedEditingContext().objectsByEntityName().objectForKey(destinationEntityName);
+
+                    arrayDataSource.setArray(sharedEOs);
+                    dataSource = arrayDataSource;
+                } else {
+                    dataSource = new EODatabaseDataSource(anEditingContext, destinationEntity.name());
+                }
             }
+            setDataSource(dataSource);
         }
 
-        return dataSource();
+        return dataSource;
     }
 
     protected Object _localUiStyle() {
