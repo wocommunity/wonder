@@ -418,6 +418,22 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
     public String branchName() { return (String)branch().valueForKey("branchName"); }
 
     /**
+     * Returns the page's {@link NextPageDelegate NextPageDelegate},
+     * if any, checking for a "nextPageDelegate" binding if no delegate
+     * has been explicitly set.
+     * @return The page's next page delegate.
+     */
+    public NextPageDelegate nextPageDelegate() {
+        NextPageDelegate nextPageDelegate = super.nextPageDelegate();
+
+        if( nextPageDelegate == null ) {
+            nextPageDelegate = (NextPageDelegate)d2wContext().valueForKey("nextPageDelegate");
+        }
+
+        return nextPageDelegate;
+    }
+
+    /**
      * Calculates the branch choices for the current
      * page. This method is just a cover for calling
      * the method <code>branchChoicesForContext</code>
