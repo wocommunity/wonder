@@ -273,15 +273,27 @@ er.extensions.ERXComponentActionRedirector.enabled=false
 # er.extensions.ERXEC.defaultAutomaticLockUnlock = true
 
 #########################################################################
-# ERX Multicast Synchronizer
+# ERX Remote Synchronizer
 #########################################################################
-## To use multicast synchronization, you must turn on the 
+## To use remote EOF synchronization, you must turn on the 
 ## ERXObjectStoreCoordinatorPool.  Just setting it to 1 is enough to
 ## allow things to work.
 #er.extensions.ERXObjectStoreCoordinatorPool.maxCoordinators=1
 
-## Enables multicast synchronization (required in addition to ERXObjectStoreCoordinatorPool).
-#er.extensions.multicastSynchronizer.enabled=true
+## Enables remote synchronization (required in addition to ERXObjectStoreCoordinatorPool).
+#er.extensions.remoteSynchronizer.enabled=true
+
+## (Optional) the implementation to use for synchronization.  See below for the
+## two available implementations, or you can provide your own here.
+#er.extensions.remoteSynchronizer=er.extensions.remoteSynchronizer.ERXSimpleMulticastSynchronizer
+
+#########################################################################
+# ERXSimpleMulticastSynchronizer
+# There are multiple implementations of the remote synchronizer.  By
+# default the "simple multicast" one is used.  This works, but is not 
+# very robust should be swapped out in favor of ERJGroupsSynchronizer.
+#########################################################################
+#er.extensions.remoteSynchronizer=er.extensions.remoteSynchronizer.ERXSimpleMulticastSynchronizer
 
 ## (Optional) The local bind address defines the network interface that will be used
 ## to transmit and receive multicast messages.  If not set, multicast synchronizer
@@ -328,6 +340,35 @@ er.extensions.ERXComponentActionRedirector.enabled=false
 ## (Optional) The maximum size of a datagram packet that we can send.  Defaults
 ## to 1024. 
 #er.extensions.multicastSynchronizer.maxPacketSize=1024
+
+#########################################################################
+# ERJGroupsSynchronizer
+# This synchronizer is based on the JGroups clustering framework, which
+# is the clustering framework used inside of JBoss (among many other
+# applications).  You must include the ERJGroupsSynchronizer framework
+# in your application for this to work properly.
+#########################################################################
+#er.extensions.remoteSynchronizer=er.jgroups.ERJGroupsSynchronizer
+
+## (Optional) an XML JGroups configuration file (defaults to jgroups-default.xml in the ERJGroupsSynchronizer framework)
+#er.extensions.jgroupsSynchronizer.properties=apropertyfile.xml
+
+## (Optional) the multicast address to use (defaults to 230.0.0.1, and only necessary if you are using multicast)
+#er.extensions.jgroupsSynchronizer.multicastAddress=230.0.0.1
+
+## (Optional) the multicast port to use (defaults to 9753, and only necessary if you are using multicast)
+#er.extensions.jgroupsSynchronizer.multicastPort=9753
+
+## (Optional) the JGroups group name to use (defaults to WOApplication.application.name)
+#er.extensions.jgroupsSynchronizer.groupName=MyGroupName
+
+## (Optional) A comma separated list of entities to multicast synchronize.  The
+## default is to not set this, which translates into "include all entities".
+#er.extensions.multicastSynchronizer.includeEntities=
+
+## (Optional) A comma separated list of entities to NOT multicast synchronize.  The
+## default is to not set this, which translates into "exclude no entities".
+#er.extensions.multicastSynchronizer.excludeEntities=
 
 #########################################################################
 # ERXApplication 
