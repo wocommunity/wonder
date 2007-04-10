@@ -240,7 +240,7 @@ public class ERXWOContext extends WOContext implements ERXMutableUserInfoHolderI
 		if (userInfo.objectForKey(fileName) == null) {
 			userInfo.setObjectForKey(fileName, fileName);
 			String url;
-			if (fileName.indexOf("://") != -1) {
+			if (fileName.indexOf("://") != -1 || fileName.startsWith("/")) {
 				url = fileName;
 			}
 			else {
