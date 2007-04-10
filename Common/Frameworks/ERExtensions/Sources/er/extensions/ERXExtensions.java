@@ -43,6 +43,8 @@ import com.webobjects.foundation.NSNotification;
 import com.webobjects.foundation.NSNotificationCenter;
 import com.webobjects.foundation.NSSelector;
 
+import er.extensions.remoteSynchronizer.ERXRemoteSynchronizer;
+
 /**
  * Principal class of the ERExtensions framework. This class
  * will be loaded at runtime when the ERExtensions bundle is
@@ -127,10 +129,6 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
         	ERXLogger.configureLoggingWithSystemProperties();
             ERXArrayUtilities.initialize();
             
-            if (ERXObjectStoreCoordinatorSynchronizer.multicastSynchronizationEnabled()) {
-            	EODatabaseContext.setContextClassToRegister(ERXDatabaseContext.class);
-            }
-
     		// False by default
     		if (ERXValueUtilities.booleanValue(System.getProperty(ERXSharedEOLoader.PatchSharedEOLoadingPropertyKey))) {
     			ERXSharedEOLoader.patchSharedEOLoading();
@@ -191,6 +189,9 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
 		
 		// ERXObjectStoreCoordinatorPool has a static initializer, so just load the class if
 		// the configuration setting exists
+        if (ERXRemoteSynchronizer.remoteSynchronizerEnabled()) {
+        	EODatabaseContext.setContextClassToRegister(ERXDatabaseContext.class);
+        }
 		ERXObjectStoreCoordinatorPool.initializeIfNecessary();
     }
     
