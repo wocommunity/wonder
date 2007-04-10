@@ -67,7 +67,6 @@ public class ERJGroupsSynchronizer extends ERXRemoteSynchronizer {
 
   public void listen() {
     _channel.setReceiver(new ExtendedReceiverAdapter() {
-      @Override
       public void receive(Message message) {
         try {
           byte[] buffer = message.getBuffer();
