@@ -57,33 +57,35 @@ public class AjaxUpdateLink extends AjaxDynamicElement {
 		NSDictionary options = createAjaxOptions(component);
 		StringBuffer onClickBuffer = new StringBuffer();
 
-		String onClick = (String) valueForBinding("onClick", context.component());
-		String onClickBefore = (String) valueForBinding("onClickBefore", context.component());
-		String updateContainerID = (String) valueForBinding("updateContainerID", context.component());
+		String onClick = (String) valueForBinding("onClick", component);
+		String onClickBefore = (String) valueForBinding("onClickBefore", component);
+		String updateContainerID = (String) valueForBinding("updateContainerID", component);
 		String functionName = (String) valueForBinding("functionName", component);
-		String function = (String) valueForBinding("function", context.component());
-		String replaceID = (String) valueForBinding("replaceID", context.component());
+		String function = (String) valueForBinding("function", component);
+		String replaceID = (String) valueForBinding("replaceID", component);
 		WOAssociation directActionNameAssociation = (WOAssociation) associations().valueForKey("directActionName");
-		if (updateContainerID != null && directActionNameAssociation == null && replaceID == null && functionName != null && function == null && onClick == null && onClickBefore == null) {
+		if (updateContainerID != null && directActionNameAssociation == null && replaceID == null && function == null && onClick == null && onClickBefore == null) {
 			NSDictionary nonDefaultOptions = AjaxUpdateContainer.removeDefaultOptions(options);
+			onClickBuffer.append("AUL.");
 			if (generateFunctionWrapper) {
-				onClickBuffer.append("AUL.updateFunc('");
+				onClickBuffer.append("updateFunc");
 			}
 			else {
-				onClickBuffer.append("AUL.update('");
+				onClickBuffer.append("update");
 			}
+			onClickBuffer.append("('");
 			onClickBuffer.append(updateContainerID);
-			onClickBuffer.append("', ");
-			AjaxOptions.appendToBuffer(nonDefaultOptions, onClickBuffer, context);
-			onClickBuffer.append(", '");
+			onClickBuffer.append("', '");
 			onClickBuffer.append(context.contextID());
 			onClickBuffer.append('.');
 			onClickBuffer.append(context.elementID());
-			onClickBuffer.append("'");
-			if (!generateFunctionWrapper) {
-				onClickBuffer.append(", additionalParams");
-			}
-			onClickBuffer.append(");");
+			onClickBuffer.append("', ");
+			AjaxOptions.appendToBuffer(nonDefaultOptions, onClickBuffer, context);
+			// if (generateFunctionWrapper) {
+			// onClickBuffer.append(", additionalParams");
+			// }
+			onClickBuffer.append(")");
+			onClickBuffer.append(";");
 		}
 		else {
 			if (generateFunctionWrapper) {
@@ -94,7 +96,7 @@ public class AjaxUpdateLink extends AjaxDynamicElement {
 				onClickBuffer.append(onClickBefore);
 				onClickBuffer.append(") {");
 			}
-	
+
 			String actionUrl = null;
 			if (directActionNameAssociation != null) {
 				actionUrl = context.directActionURLForActionNamed((String) directActionNameAssociation.valueInComponent(component), ERXComponentUtilities.queryParametersInComponent(associations(), component)).replaceAll("&amp;", "&");
@@ -107,7 +109,7 @@ public class AjaxUpdateLink extends AjaxDynamicElement {
 			if (functionName != null) {
 				actionUrl = actionUrl + ".addQueryParameters(additionalParams)";
 			}
-	
+
 			if (function != null) {
 				onClickBuffer.append("return " + function + "(" + actionUrl + ")");
 			}
@@ -130,12 +132,12 @@ public class AjaxUpdateLink extends AjaxDynamicElement {
 					onClickBuffer.append(")");
 				}
 			}
-	
+
 			if (onClick != null) {
 				onClickBuffer.append(";");
 				onClickBuffer.append(onClick);
 			}
-	
+
 			if (onClickBefore != null) {
 				onClickBuffer.append("}");
 			}
@@ -144,7 +146,7 @@ public class AjaxUpdateLink extends AjaxDynamicElement {
 				onClickBuffer.append("}");
 			}
 		}
-		
+
 		return onClickBuffer.toString();
 	}
 
@@ -240,7 +242,7 @@ public class AjaxUpdateLink extends AjaxDynamicElement {
 
 	public WOActionResults handleRequest(WORequest request, WOContext context) {
 		WOComponent component = context.component();
-	    AjaxUpdateContainer.setUpdateContainerID(request, (String) valueForBinding("updateContainerID", component));
+		AjaxUpdateContainer.setUpdateContainerID(request, (String) valueForBinding("updateContainerID", component));
 		WOActionResults results = (WOActionResults) valueForBinding("action", component);
 		if (results == null || booleanValueForBinding("ignoreActionResponse", false, component)) {
 			String script = (String) valueForBinding("onClickServer", component);
