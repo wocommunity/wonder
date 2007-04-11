@@ -15,6 +15,7 @@ import com.webobjects.appserver._private.WODynamicElementCreationException;
 import com.webobjects.appserver._private.WODynamicGroup;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSKeyValueCodingAdditions;
 
 /**
  * Replacement for WORepetition. Is installed via ERXPatcher.setClassForName(ERXWORepetition.class, "WORepetition") into
@@ -44,6 +45,21 @@ import com.webobjects.foundation.NSDictionary;
  * Note that this implementation adds a small amount of overhead due to the creation of the Context for each RR phase,
  * but this is preferable to having to give so many parameters.
  * 
+ * As an alternative to the default use of System.identityHashCode to unique your items, you can set the binding "uniqueKey" 
+ * to be a string keypath on your items that can return a unique key for the item.  For instance, if you are using 
+ * ERXGenericRecord, you can set uniqueKey = "rawPrimaryKey"; if your EO has an integer primary key, and this will make
+ * the uniquing value be the primary key instead of the hash code.  While this reveals the primary keys of your items,
+ * the set of possible valid matches is still restricted to only those that were in the list to begin with, so no 
+ * additional capabilities are available to users.
+ * 
+ * @binding list the array or list of items to iterate over
+ * @binding item the current item in the iteration
+ * @binding count the total number of items to iterate over
+ * @binding index the current index in the iteration
+ * @binding uniqueKey a String keypath on item (relative to item, not relative to the component)
+ * @binding checkHashCodes if true, checks the validity of repetition references during the RR loop
+ * @binding raiseOnUnmatchedObject if true, an exception is thrown when the repetition does not find a matching object
+ * 
  * @author ak
  */
 
@@ -55,6 +71,7 @@ public class ERXWORepetition extends WODynamicGroup {
 	protected WOAssociation _item;
 	protected WOAssociation _count;
 	protected WOAssociation _index;
+	protected WOAssociation _uniqueKey;
 	protected WOAssociation _checkHashCodes;
 	protected WOAssociation _raiseOnUnmatchedObject;
 
@@ -130,6 +147,7 @@ public class ERXWORepetition extends WODynamicGroup {
 		_item = (WOAssociation) associations.objectForKey("item");
 		_count = (WOAssociation) associations.objectForKey("count");
 		_index = (WOAssociation) associations.objectForKey("index");
+		_uniqueKey = (WOAssociation) associations.objectForKey("uniqueKey");
 		_checkHashCodes = (WOAssociation) associations.objectForKey("checkHashCodes");
 		_raiseOnUnmatchedObject = (WOAssociation) associations.objectForKey("raiseOnUnmatchedObject");
 
@@ -145,6 +163,9 @@ public class ERXWORepetition extends WODynamicGroup {
 			_failCreation("Illegal read-only 'item' attribute.");
 		if (_index != null && !_index.isValueSettable())
 			_failCreation("Illegal read-only 'index' attribute.");
+		if (_uniqueKey != null && _checkHashCodes == null) {
+			_failCreation("If uniqueKey is specified, then checkHashCodes must be true.");
+		}
 	}
 
 	/** Utility to throw an exception if the bindings are incomplete. */
@@ -157,8 +178,28 @@ public class ERXWORepetition extends WODynamicGroup {
 		return ("<" + this.getClass().getName() + " list: " + (_list != null ? _list.toString() : "null") + " item: " + (_item != null ? _item.toString() : "null") + " count: " + (_count != null ? _count.toString() : "null") + " index: " + (_index != null ? _index.toString() : "null") + ">");
 	}
 
-	private int hashCodeForObject(Object object) {
-		return (object == null ? 0 : Math.abs(System.identityHashCode(object)));
+	private int hashCodeForObject(WOComponent component, Object object) {
+		int hashCode;
+		if (object == null) {
+			hashCode = 0;
+		}
+		else if (_uniqueKey != null) {
+			String uniqueKeyPath = (String)_uniqueKey.valueInComponent(component);
+			Object uniqueKey = NSKeyValueCodingAdditions.Utility.valueForKeyPath(object, uniqueKeyPath);
+			if (uniqueKey instanceof Number) {
+				hashCode = Math.abs(((Number)uniqueKey).intValue());
+			}
+			else if (uniqueKey instanceof String) {
+				hashCode = Math.abs(Integer.parseInt((String)uniqueKey));
+			}
+			else {
+				throw new IllegalArgumentException("Unable to convert " + uniqueKey + " into a number.");
+			}
+		}
+		else {
+			hashCode = Math.abs(System.identityHashCode(object));
+		}
+		return hashCode;
 		// return (object == null ? 0 : Math.abs(object.hashCode()));
 	}
 
@@ -180,12 +221,12 @@ public class ERXWORepetition extends WODynamicGroup {
 		boolean didAppend = false;
 		if (checkHashCodes) {
 			if (object != null) {
-				int hashCode = hashCodeForObject(object);
+				int hashCode = hashCodeForObject(wocomponent, object);
 				if (hashCode != 0) {
 					if (index != 0) {
 						wocontext.deleteLastElementIDComponent();
 					}
-					String elementID = "" + hashCode;
+					String elementID = String.valueOf(hashCode);
 					if (log.isDebugEnabled()) {
 						log.debug("prepare " + elementID + "->" + object);
 					}
@@ -308,7 +349,7 @@ public class ERXWORepetition extends WODynamicGroup {
 					int otherHashCode = 0;
 					for (int i = 0; i < context.count() && !found; i++) {
 						Object o = context.objectAtIndex(i);
-						otherHashCode = hashCodeForObject(o);
+						otherHashCode = hashCodeForObject(wocomponent, o);
 						if (otherHashCode == hashCode) {
 							object = o;
 							index = i;
