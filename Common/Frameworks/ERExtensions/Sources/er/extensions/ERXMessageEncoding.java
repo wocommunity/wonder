@@ -68,11 +68,14 @@ public class ERXMessageEncoding implements Serializable {
     private static NSDictionary _encodings() { 
         if (_encodings == null) {
             _encodings = ERXDictionaryUtilities.dictionaryWithObjectsAndKeys(
-                new Object [] { "iso-8859-1",  "ISO8859_1", 
+                new Object [] { "iso-8859-1",  "ISO8859_1",
+                                "iso-8859-1",  "iso-8859-1",
                                 "Shift_JIS",   "SJIS", 
                                 "Shift_JIS",   "Shift_JIS", 
                                 "EUC-JP",      "EUC_JP", 	//Note: dash and underscore
+                                "EUC-JP",      "EUC-JP",
                                 "iso-2022-jp", "ISO2022JP", 
+                                "iso-2022-jp", "iso-2022-jp", 
                                 "UTF-8",       "UTF8",
                                 "UTF-8",       "UTF-8" });
         }
