@@ -75,12 +75,13 @@ public class AjaxUpdateLink extends AjaxDynamicElement {
 			}
 			onClickBuffer.append("('");
 			onClickBuffer.append(updateContainerID);
-			onClickBuffer.append("', '");
+			onClickBuffer.append("', ");
+			AjaxOptions.appendToBuffer(nonDefaultOptions, onClickBuffer, context);
+			onClickBuffer.append(", '");
 			onClickBuffer.append(context.contextID());
 			onClickBuffer.append('.');
 			onClickBuffer.append(context.elementID());
-			onClickBuffer.append("', ");
-			AjaxOptions.appendToBuffer(nonDefaultOptions, onClickBuffer, context);
+			onClickBuffer.append("'");
 			// if (generateFunctionWrapper) {
 			// onClickBuffer.append(", additionalParams");
 			// }
