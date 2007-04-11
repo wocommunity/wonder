@@ -73,7 +73,8 @@ public class ERXMessageEncoding implements Serializable {
                                 "Shift_JIS",   "Shift_JIS", 
                                 "EUC-JP",      "EUC_JP", 	//Note: dash and underscore
                                 "iso-2022-jp", "ISO2022JP", 
-                                "UTF-8",       "UTF8"        });
+                                "UTF-8",       "UTF8",
+                                "UTF-8",       "UTF-8" });
         }
         return _encodings;
     }
