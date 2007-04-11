@@ -205,9 +205,9 @@ public class ERD2WPickListPage extends ERD2WListPage implements ERDPickPageInter
         _masterObject = EOUtilities.localInstanceOfObject(ec, eo);
         _relationshipKey = relationshipName;
         setObject(_masterObject);
-        
-        _singleSelection = _masterObject.classDescription().toManyRelationshipKeys().containsObject(_relationshipKey) ? Boolean.FALSE : Boolean.TRUE; 
-        
+        _singleSelection = _masterObject.classDescription().toManyRelationshipKeys().containsObject(_relationshipKey) ? Boolean.FALSE : Boolean.TRUE;
+        d2wContext().takeValueForKey(_singleSelection, "singleSelection");
+         
         EODataSource ds;
         String restrictedChoiceKey = (String)d2wContext().valueForKeyPath("restrictedChoiceKey");
         if(restrictedChoiceKey != null && restrictedChoiceKey.length() > 0) {
