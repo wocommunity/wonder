@@ -163,9 +163,6 @@ public class ERXWORepetition extends WODynamicGroup {
 			_failCreation("Illegal read-only 'item' attribute.");
 		if (_index != null && !_index.isValueSettable())
 			_failCreation("Illegal read-only 'index' attribute.");
-		if (_uniqueKey != null && _checkHashCodes == null) {
-			_failCreation("If uniqueKey is specified, then checkHashCodes must be true.");
-		}
 	}
 
 	/** Utility to throw an exception if the bindings are incomplete. */
