@@ -327,6 +327,9 @@ public class ERXWORepetition extends WODynamicGroup {
 					}
 				}
 				else {
+					if (index >= context.count()) {
+						return null;
+					}
 					object = context.objectAtIndex(index);
 				}
 				_item._setValueNoValidation(object, wocomponent);
