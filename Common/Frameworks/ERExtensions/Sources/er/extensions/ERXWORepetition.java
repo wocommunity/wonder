@@ -316,14 +316,16 @@ public class ERXWORepetition extends WODynamicGroup {
 						}
 					}
 					if (!found) {
+						log.warn("Wrong object: " + otherHashCode + " vs " + hashCode + " (array = " + context.nsarray + ")");
 						if (raiseOnUnmatchedObject(wocomponent, wocontext)) {
 							throw new UnmatchedObjectException();
 						}
-						log.warn("Wrong object: " + otherHashCode + " vs " + hashCode);
 						return wocontext.page();
 					}
 					else {
-						log.debug("Found object: " + otherHashCode + " vs " + hashCode);
+						if (log.isDebugEnabled()) {
+							log.debug("Found object: " + otherHashCode + " vs " + hashCode);
+						}
 					}
 				}
 				else {
