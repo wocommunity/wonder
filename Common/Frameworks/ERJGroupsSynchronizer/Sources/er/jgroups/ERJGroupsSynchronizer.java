@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.Enumeration;
 
+import org.jgroups.Channel;
 import org.jgroups.ChannelClosedException;
 import org.jgroups.ChannelException;
 import org.jgroups.ChannelNotConnectedException;
@@ -55,6 +56,7 @@ public class ERJGroupsSynchronizer extends ERXRemoteSynchronizer {
     _groupName = ERXProperties.stringForKeyWithDefault("er.extensions.jgroupsSynchronizer.groupName", WOApplication.application().name());
     URL propertiesUrl = WOApplication.application().resourceManager().pathURLForResourceNamed(jgroupsPropertiesFile, jgroupsPropertiesFramework, null);
     _channel = new JChannel(propertiesUrl);
+    _channel.setOpt(Channel.LOCAL, Boolean.FALSE);
   }
 
   public void join() throws ChannelException {

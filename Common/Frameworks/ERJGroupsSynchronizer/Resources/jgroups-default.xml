@@ -1,127 +1,63 @@
-<!-- ************ JGroups Protocol Stack Configuration ************** -->
 <config>
-    <!--
-    UDP Configuration
-    - mcast_send_buf_size :
-    - mcast_recv_buf_size :
-    - ucast_send_buf_size :
-    - ucast_recv_buf_size : Network buffer sizes for receiver DatagramSockets and sender MulticastSockets. The bigger the better, because we can avoid packets dropped due to network buffer overflow.
-    - mcast_port : multicast port number
-    - mcast_addr : multicast address
-    - receive_on_all_interfaces : enable receiving multicasts on all interfaces or
-    - receive_interfaces : list of interfaces for receiving multicasts
-    - send_on_all_interfaces : enable sending multicasts on all interfaces or
-    - send_interfaces : list of interfaces for sending multicasts
-    - loopback :  Place outgoing packets into the incoming queue (loopback)
-    - use_incoming_packet_handler : use a separate thread to process incoming messages
-    - use_outgoing_packet_handler : use a separate thread to process outgoing messages
-    - ip_ttl :  Time-to-live for IP Multicast packets.
-    - enable_bundling : enable bundling
-    - max_bundle_size : if 'enable_bundling' is true, specifies the amount of bytes to accumulating
-    - max_bundle_timeout : if 'enable_bundling' is true, specifies the amount of time to waiting
-    - diagnostics_addr : multicast addr used for diagnostic messages. By default : 224.0.0.75
-    - diagnostics_port : multicast port used for diagnostic messages. By default : 7500
-    - enable_diagnostics : false for disabling the diagnostics
-    -->
-    <UDP mcast_send_buf_size="150000"
-        mcast_port="${er.extensions.jgroupsSynchronizer.multicastPort:9753}"
-        mcast_addr="${er.extensions.jgroupsSynchronizer.multicastAddress:230.0.0.1}"
-        ucast_recv_buf_size="64000"
-        receive_on_all_interfaces="true"
-        send_on_all_interfaces="true"
-        loopback="true"
-        mcast_recv_buf_size="80000"
-        max_bundle_size="60000"
-        max_bundle_timeout="30"
-        use_incoming_packet_handler="false"
-        use_outgoing_packet_handler="false"
-        ucast_send_buf_size="32000"
-        ip_ttl="32"
-        enable_bundling="false"/>
-    <!--
-    PING Discovery Protocol
-    - timeout : The time interval, in milliseconds, to wait for initial membership replies. If the parameter is unspecified, the default value is 3000 milliseconds.
-    - num_initial_members : Wait for at most 2 initial membership replies, but not longer than "timeout" milliseconds. If the parameter is unspecified, the default value is 2.
-    -->
-    <PING timeout="2000"
-        num_initial_members="3"/>
-    <!--
-    MERGE2 Merging Protocol
-    - max_interval : max nb of seconds to send out a MERGE msg
-    - min_interval : min nb of seconds to send out a MERGE msg
-    Interval is a random number between min and max secs.
-    -->
-    <MERGE2 max_interval="10000"
-        min_interval="5000"/>
-    <!--
-    FD Failure Detection Protocol
-    - timeout : nb of sec to wait for the responses to the are-you-alive msg
-    - max_tries : nb of missed are-you-alive msg from a node before the node is suspected
-    - shun : true whether a failed node will be shunned
-    -->
-    <FD timeout="2000"
-        max_tries="3"
-        shun="true"/>
-    <!--
-    VERIFY_SUSPECT
-    Verifies that a suspected member is really dead by pinging that member once again.
-    - timeout : timout
-    -->
-    <VERIFY_SUSPECT timeout="1500"/>
-    <!--
-    NAKACK
-    Lossless and FIFO delivery of multicast messages, using negative acks.
-    - max_xmit_size : max size of a retransmission
-    - use_mcast_xmit : specifies whether the sender should send the retransmission to the entire cluster
-    - gc_lag :  nb of msg to keep in the retransmit buffer.
-    - retransmit_timeout : retransmission time out
-    -->
-    <pbcast.NAKACK max_xmit_size="8192"
-        use_mcast_xmit="false"
-        gc_lag="50"
-        retransmit_timeout="300,600,1200,2400,4800"/>
-    <!--
-    UNICAST Unicast Message
-    - timeout : retransmission time out
-    -->
-    <UNICAST timeout="600,1200,2400,3600"/>
+    <UDP
+         mcast_addr="${er.extensions.jgroupsSynchronizer.multicastAddress:230.0.0.1}"
+         mcast_port="${er.extensions.jgroupsSynchronizer.multicastPort:9753}"
+         tos="0"
+         ucast_recv_buf_size="20000000"
+         ucast_send_buf_size="640000"
+         mcast_recv_buf_size="25000000"
+         mcast_send_buf_size="640000"
+         loopback="false"
+         discard_incompatible_packets="true"
+         max_bundle_size="64000"
+         max_bundle_timeout="30"
+         use_incoming_packet_handler="true"
+         ip_ttl="${er.extensions.jgroupsSynchronizer.multicastTTL:2}"
+         enable_bundling="true"
+         enable_diagnostics="false"
+         thread_naming_pattern="cl"
 
-    <!--
-    pbcast.STABLE Distributed garbage collection
-    - desired_avg_gossip: periodically sends STABLE messages around. 0 disables this
-    - max_bytes: max number of bytes received from anyone until a STABLE message is sent. Use either this or
-                 desired_avg_gossip, but not both ! 0 disables it.
-    - stability_delay: range (number of milliseconds) that we wait until sending a STABILITY message.
-      This prevents STABILITY multicast storms. If max_bytes is used, this should be set to a low value (> 0 though !).
-    -->
-    <pbcast.STABLE stability_delay="1000"
-        desired_avg_gossip="20000"
-        max_bytes="0"/>
-    <!--
-    FRAG fragments messages
-    - frag_size : max frag size in bytes. Messages larger than that are fragmented
-    - down_thread :
-    - up_thread :
-    -->
-    <FRAG frag_size="8192"
-        down_thread="false"
-        up_thread="false"/>
-    <!--
-    VIEW_SYNC view reconciliation
-    - avg_send_interval : period to broadcast the view
-    - down_thread :
-    - up_thread :
-    -->
-    <VIEW_SYNC avg_send_interval="60000" down_thread="false" up_thread="false" />
-    <!--
-    pbcast.GMS Group Member Ship
-    - print_local_addr : print the node address to the output
-    - join_timeout : max nb of ms to wait for a new node JOIN request to succeed
-    - join_retry_timeout : max nb of ms to wait after a failed node joint to re-submit it
-    - shun : true whether a node should shun itself if it receives a cluster view that it is not a member node
-    -->
-    <pbcast.GMS print_local_addr="true"
-        join_timeout="3000"
-        join_retry_timeout="2000"
-        shun="true"/>
+         use_concurrent_stack="true"
+
+         thread_pool.enabled="true"
+         thread_pool.min_threads="1"
+         thread_pool.max_threads="25"
+         thread_pool.keep_alive_time="30000"
+         thread_pool.queue_enabled="true"
+         thread_pool.queue_max_size="10"
+         thread_pool.rejection_policy="Run"
+
+         oob_thread_pool.enabled="true"
+         oob_thread_pool.min_threads="1"
+         oob_thread_pool.max_threads="4"
+         oob_thread_pool.keep_alive_time="10000"
+         oob_thread_pool.queue_enabled="true"
+         oob_thread_pool.queue_max_size="10"
+         oob_thread_pool.rejection_policy="Run"/>
+
+    <PING timeout="2000"
+            num_initial_members="3"/>
+    <MERGE2 max_interval="30000"
+            min_interval="10000"/>
+    <FD_SOCK/>
+    <FD timeout="10000" max_tries="5"   shun="true"/>
+    <VERIFY_SUSPECT timeout="1500"  />
+    <BARRIER />
+    <pbcast.NAKACK max_xmit_size="60000"
+                   use_mcast_xmit="false" gc_lag="0"
+                   retransmit_timeout="300,600,1200,2400,4800"
+                   discard_delivered_msgs="true"/>
+    <UNICAST timeout="300,600,1200,2400,3600"/>
+    <pbcast.STABLE stability_delay="1000" desired_avg_gossip="50000"
+                   max_bytes="400000"/>
+    <VIEW_SYNC avg_send_interval="60000"   />
+    <pbcast.GMS print_local_addr="true" join_timeout="3000"
+                join_retry_timeout="2000" shun="false"
+                view_bundling="true"/>
+    <FC max_credits="20000000"
+                    min_threshold="0.10"/>
+    <FRAG2 frag_size="60000"  />
+    <!--pbcast.STREAMING_STATE_TRANSFER use_reading_thread="true"/-->
+    <pbcast.STATE_TRANSFER  />
+    <!-- pbcast.FLUSH  /-->
 </config>
