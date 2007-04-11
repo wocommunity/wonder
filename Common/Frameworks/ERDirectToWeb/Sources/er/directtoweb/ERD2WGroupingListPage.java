@@ -21,8 +21,8 @@ public class ERD2WGroupingListPage extends ERD2WListPage {
      */
     public ERD2WGroupingListPage(WOContext context) { super(context); }
     
-    protected NSArray sublist;
-    protected Object sublistSection;
+    public NSArray sublist;
+    public Object sublistSection;
 
     // the sorting will come only from the rules
     public boolean userPreferencesCanSpecifySorting() { 
