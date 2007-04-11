@@ -12,7 +12,7 @@
     <property file="${user.home}/build.properties" />
     <property file="${basedir}/Build/build/default.properties" />
 
-    <property name="wo.system.root" value="/System/Library/Frameworks" />
+    <property name="wo.frameworks" value="${wo.woroot}/Library/Frameworks" />
     <property name="build.root" value="${user.home}/Roots" />
     <property name="wonder.root" value="${basedir}" />
 
@@ -32,7 +32,7 @@
             <include name="cayenne.jar"/>
             <include name="jdom*.jar"/>
         </fileset>
-            <fileset dir="${wo.system.root}">
+            <fileset dir="${wo.frameworks}">
                 <include name="Java**/Resources/Java/*.jar" />
                 <exclude name="JavaWOExtensions.framework"/>
                 <exclude name="Java*Cocoa.framework"/>
@@ -126,6 +126,7 @@
                    author="true"
                    version="true"
                    use="true"
+                   source="1.4"
                    verbose="false"
                    windowtitle="Project Wonder Reference Documentation">
 
