@@ -89,6 +89,8 @@ import er.extensions.ERXComponentUtilities;
 public class AjaxInPlace extends WOComponent {
 	private boolean _editing;
 	private String _id;
+	private boolean _changingToEdit;
+	private boolean _changingToView;
 
 	public AjaxInPlace(WOContext context) {
 		super(context);
@@ -130,6 +132,8 @@ public class AjaxInPlace extends WOComponent {
 		// is cached for the duration of a single R-R loop.  When we're done,
 		// toss the value so it can be recalculated properly the next time.
 		_id = null;
+		_changingToEdit = false;
+		_changingToView = false;
 	}
 	
 	public String saveUpdateContainerID() {
@@ -240,12 +244,28 @@ public class AjaxInPlace extends WOComponent {
 	public boolean canSave() {
 		return (!hasBinding("canSave") || ERXComponentUtilities.booleanValueForBinding(this, "canSave"));
 	}
+	
+	public boolean changingToEdit() {
+		return _changingToEdit;
+	}
+	
+	public boolean changingToView() {
+		return _changingToView;
+	}
 
 	public void setEditing(boolean editing) {
 		if (canSetValueForBinding("editing")) {
 			setValueForBinding(Boolean.valueOf(editing), "editing");
 		}
-		_editing = editing;
+		if (_editing != editing) {
+			_editing = editing;
+			if (_editing) {
+				_changingToEdit = true;
+			}
+			else {
+				_changingToView = true;
+			}
+		}
 	}
 
 	public String cleanupFunction() {
