@@ -2,6 +2,14 @@ EditComponent : ERXWOComponentContent {
 	templateName = "edit";
 }
 
+IsChangingToEditConditional : WOConditional {
+	condition = changingToEdit;
+}
+
+IsChangingToViewConditional : WOConditional {
+	condition = changingToView;
+}
+
 IsEditingConditional : WOConditional {
 	condition = editing;
 }
