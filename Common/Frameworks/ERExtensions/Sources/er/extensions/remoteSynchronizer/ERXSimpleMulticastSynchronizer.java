@@ -68,16 +68,15 @@ public class ERXSimpleMulticastSynchronizer extends ERXRemoteSynchronizer {
 		super(listener);
 		_incomingCacheChanges = new NSMutableDictionary();
 		String localBindAddressStr = ERXProperties.stringForKey("er.extensions.multicastSynchronizer.localBindAddress");
-		InetAddress localBindAddress;
 		if (localBindAddressStr == null) {
-			localBindAddress = WOApplication.application().hostAddress();
+			_localBindAddress = WOApplication.application().hostAddress();
 		}
 		else {
-			localBindAddress = InetAddress.getByName(localBindAddressStr);
+			_localBindAddress = InetAddress.getByName(localBindAddressStr);
 		}
 
 		String multicastGroup = ERXProperties.stringForKeyWithDefault("er.extensions.multicastSynchronizer.group", "230.0.0.1");
-		int multicastPort = ERXProperties.intForKeyWithDefault("er.extensions.multicastSynchronizer.port", 9753);
+		_multicastPort = ERXProperties.intForKeyWithDefault("er.extensions.multicastSynchronizer.port", 9753);
 		String whitelist = ERXProperties.stringForKey("er.extensions.multicastSynchronizer.whitelist");
 		if (whitelist != null) {
 			_whitelist = NSArray.componentsSeparatedByString(whitelist, ",");
@@ -86,27 +85,26 @@ public class ERXSimpleMulticastSynchronizer extends ERXRemoteSynchronizer {
 		_maxSendPacketSize = maxPacketSize;
 		_maxReceivePacketSize = 2 * maxPacketSize;
 
-		byte[] multicastIdentifier;
 		String multicastIdentifierStr = ERXProperties.stringForKey("er.extensions.multicastSynchronizer.identifier");
 		if (multicastIdentifierStr == null) {
-			multicastIdentifier = new byte[ERXSimpleMulticastSynchronizer.IDENTIFIER_LENGTH];
-			byte[] hostAddressBytes = localBindAddress.getAddress();
-			System.arraycopy(hostAddressBytes, 0, multicastIdentifier, 0, hostAddressBytes.length);
+			_identifier = new byte[ERXSimpleMulticastSynchronizer.IDENTIFIER_LENGTH];
+			byte[] hostAddressBytes = _localBindAddress.getAddress();
+			System.arraycopy(hostAddressBytes, 0, _identifier, 0, hostAddressBytes.length);
 			int multicastInstance = WOApplication.application().port().shortValue();
-			multicastIdentifier[4] = (byte) (multicastInstance & 0xff);
-			multicastIdentifier[5] = (byte) ((multicastInstance >>> 8) & 0xff);
+			_identifier[4] = (byte) (multicastInstance & 0xff);
+			_identifier[5] = (byte) ((multicastInstance >>> 8) & 0xff);
 		}
 		else {
-			multicastIdentifier = ERXStringUtilities.hexStringToByteArray(multicastIdentifierStr);
+			_identifier = ERXStringUtilities.hexStringToByteArray(multicastIdentifierStr);
 		}
 
 		_localNetworkInterface = NetworkInterface.getByInetAddress(_localBindAddress);
 		_multicastGroup = new InetSocketAddress(InetAddress.getByName(multicastGroup), _multicastPort);
 		_multicastSocket = new MulticastSocket(null);
-		_multicastSocket.setInterface(localBindAddress);
+		_multicastSocket.setInterface(_localBindAddress);
 		_multicastSocket.setTimeToLive(4);
 		_multicastSocket.setReuseAddress(true);
-		_multicastSocket.bind(new InetSocketAddress(multicastPort));
+		_multicastSocket.bind(new InetSocketAddress(_multicastPort));
 	}
 
 	public void join() throws IOException {
