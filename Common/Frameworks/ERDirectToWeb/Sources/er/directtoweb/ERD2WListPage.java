@@ -48,6 +48,7 @@ import er.extensions.ERXConstant;
 import er.extensions.ERXDisplayGroup;
 import er.extensions.ERXEOAccessUtilities;
 import er.extensions.ERXEOControlUtilities;
+import er.extensions.ERXExtensions;
 import er.extensions.ERXLocalizer;
 import er.extensions.ERXValueUtilities;
 /**
@@ -377,7 +378,7 @@ public class ERD2WListPage extends ERD2WPage implements ERDListPageInterface, Se
     		// sort order keys required it leads to a KVC error later on. We fix this here to re-init
     		// the sort ordering from the rules.
     		if(old != null && eodatasource != null 
-    				&& !eodatasource.classDescriptionForObjects().equals(old.classDescriptionForObjects())) {
+    				&& ERXExtensions.safeDifferent(eodatasource.classDescriptionForObjects(), old.classDescriptionForObjects())) {
     			setSortOrderingsOnDisplayGroup(sortOrderings(), displayGroup());
     		}
     	}
