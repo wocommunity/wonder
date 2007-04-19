@@ -146,7 +146,7 @@ public class ERXDisplayGroup extends WODisplayGroup {
 	public void setDataSource(EODataSource eodatasource) {
 		EODataSource old = dataSource();
 		super.setDataSource(eodatasource);
-		if(old != null && eodatasource != null && !old.classDescriptionForObjects().equals(eodatasource.classDescriptionForObjects())) {
+		if(old != null && eodatasource != null && ERXExtensions.safeDifferent(old.classDescriptionForObjects(), eodatasource.classDescriptionForObjects())) {
 			setSortOrderings(NSArray.EmptyArray);
 		}
 	}
