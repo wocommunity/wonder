@@ -146,10 +146,12 @@ public class ERXInlineTemplate extends ERXNonSynchronizingComponent {
 					}
 					value = NSKeyValueCodingAdditions.Utility.valueForKeyPath(o, remainingKeyPath);
 				}
-				if (log.isDebugEnabled()) {
-					log.debug("get binding value " + firstKey);
+				else {
+					if (log.isDebugEnabled()) {
+						log.debug("get binding value " + firstKey);
+					}
+					value = o;
 				}
-				value = o;
 			}
 			else if (proxyParent()) {
 				if (log.isDebugEnabled()) { 
