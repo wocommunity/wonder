@@ -324,11 +324,11 @@ er.extensions.ERXComponentActionRedirector.enabled=false
 
 ## (Optional) A comma separated list of entities to multicast synchronize.  The
 ## default is to not set this, which translates into "include all entities".
-#er.extensions.multicastSynchronizer.includeEntities=
+#er.extensions.remoteSynchronizer.includeEntities=
 
 ## (Optional) A comma separated list of entities to NOT multicast synchronize.  The
 ## default is to not set this, which translates into "exclude no entities".
-#er.extensions.multicastSynchronizer.excludeEntities=
+#er.extensions.remoteSynchronizer.excludeEntities=
 
 ## (Optional) A comma separated list of host names that are allowed to multicast 
 ## change notifications.  The default is to not set this, which translates into 
@@ -364,11 +364,11 @@ er.extensions.ERXComponentActionRedirector.enabled=false
 
 ## (Optional) A comma separated list of entities to multicast synchronize.  The
 ## default is to not set this, which translates into "include all entities".
-#er.extensions.multicastSynchronizer.includeEntities=
+#er.extensions.remoteSynchronizer.includeEntities=
 
 ## (Optional) A comma separated list of entities to NOT multicast synchronize.  The
 ## default is to not set this, which translates into "exclude no entities".
-#er.extensions.multicastSynchronizer.excludeEntities=
+#er.extensions.remoteSynchronizer.excludeEntities=
 
 #########################################################################
 # ERXApplication 
