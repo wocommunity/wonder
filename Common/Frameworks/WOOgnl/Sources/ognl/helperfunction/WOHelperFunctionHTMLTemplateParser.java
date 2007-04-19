@@ -61,7 +61,8 @@ public class WOHelperFunctionHTMLTemplateParser extends WOParser implements WOHe
 		WOHelperFunctionHTMLTemplateParser.registerTagShortcut("WOText", "text");
 		WOHelperFunctionHTMLTemplateParser.registerTagShortcut("WOForm", "form");
 		WOHelperFunctionHTMLTemplateParser.registerTagShortcut("WOSubmitButton", "submit");
-
+		WOHelperFunctionHTMLTemplateParser.registerTagShortcut("ERXLocalizedString", "localized");
+		
 		WOHelperFunctionHTMLTemplateParser.registerTagProcessorForElementType(new NotTagProcessor(), "not");
 	}
 
@@ -76,8 +77,8 @@ public class WOHelperFunctionHTMLTemplateParser extends WOParser implements WOHe
 	}
 
 	protected void parseInlineAssociation(StringBuffer keyBuffer, StringBuffer valueBuffer, NSMutableDictionary bindings) throws WOHTMLFormatException {
-		String key = keyBuffer.toString();
-		String value = valueBuffer.toString();
+		String key = keyBuffer.toString().trim();
+		String value = valueBuffer.toString().trim();
 		NSDictionary quotedStrings;
 		if (value.startsWith("\"")) {
 			value = value.substring(1);
@@ -116,7 +117,7 @@ public class WOHelperFunctionHTMLTemplateParser extends WOParser implements WOHe
 		int length = tag.length();
 		for (int index = colonIndex + 1; index < length; index++) {
 			char ch = tag.charAt(index);
-			if (!inQuote && ch == ' ' || ch == '\t') {
+			if (!inQuote && (ch == ' ' || ch == '\t' || ch == '\n' || ch == '\r')) {
 				changeBuffers = true;
 			}
 			else if (!inQuote && ch == '=') {
