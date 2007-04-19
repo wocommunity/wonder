@@ -6,7 +6,7 @@ import org.apache.log4j.Logger;
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.directtoweb.D2W;
-import com.webobjects.directtoweb.EditPageInterface;
+import com.webobjects.directtoweb.InspectPageInterface;
 import com.webobjects.eocontrol.EOEnterpriseObject;
 
 import er.extensions.ERXEOControlUtilities;
@@ -41,7 +41,7 @@ public class ERDLinkToEditObject extends ERDCustomEditComponent {
 
     public WOComponent view() {
     	String pageConfigurationName = (String)valueForBinding("editConfigurationName");
-    	EditPageInterface ipi = (EditPageInterface)D2W.factory().pageForConfigurationNamed(pageConfigurationName, session());
+    	InspectPageInterface ipi = (InspectPageInterface)D2W.factory().pageForConfigurationNamed(pageConfigurationName, session());
     	EOEnterpriseObject eo = object();
     	eo = ERXEOControlUtilities.editableInstanceOfObject(eo, booleanValueForBinding("useNestedEditingContext"));
     	ipi.setNextPage(context().page());
