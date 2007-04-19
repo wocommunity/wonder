@@ -556,30 +556,40 @@ public class ERXSQLHelper {
 		StringBuffer sb = new StringBuffer();
 		NSArray attributePath = ERXEOAccessUtilities.attributePathForKeyPath(e.entity(), key);
 		EOAttribute attribute = (EOAttribute) attributePath.lastObject();
+		String sqlName;
 		if (attributePath.count() > 1) {
-			sb.append(e.sqlStringForAttributePath(attributePath));
+			sqlName = e.sqlStringForAttributePath(attributePath);
 		}
 		else {
-			sb.append(e.sqlStringForAttribute(attribute));
+			sqlName = e.sqlStringForAttribute(attribute);
 		}
-		sb.append(" IN ");
-		sb.append("(");
-		for (int i = 0; i < valueArray.count(); i++) {
-			if (i > 0) {
-				sb.append(", ");
+		
+		int maxPerQuery = 256;
+		for(int j = 0; j < valueArray.count(); j+= maxPerQuery) { 
+			int currentSize = (j + (maxPerQuery-1) < valueArray.count() ? maxPerQuery : ((valueArray.count() % maxPerQuery)));
+			sb.append(sqlName);
+			sb.append(" IN ");
+			sb.append("(");
+			for (int i = j; i < j+currentSize; i++) {
+				if (i > j) {
+					sb.append(", ");
+				}
+				Object value = valueArray.objectAtIndex(i);
+				// AK : crude hack for queries with number constants.
+				// Apparently EOAttribute.adaptorValueByConvertingAttributeValue() doesn't actually return a suitable value
+				if (value instanceof ERXConstant.NumberConstant) {
+					value = new Long(((Number) value).longValue());
+				}
+				else {
+					value = formatValueForAttribute(e, value, attribute, key);
+				}
+				sb.append(value);
 			}
-			Object value = valueArray.objectAtIndex(i);
-			// AK : crude hack for queries with number constants.
-			// Apparently EOAttribute.adaptorValueByConvertingAttributeValue() doesn't actually return a suitable value
-			if (value instanceof ERXConstant.NumberConstant) {
-				value = new Long(((Number) value).longValue());
+			sb.append(")");
+			if(j < valueArray.count() - maxPerQuery) {
+				sb.append(" OR ");
 			}
-			else {
-				value = formatValueForAttribute(e, value, attribute, key);
-			}
-			sb.append(value);
 		}
-		sb.append(")");
 		return sb.toString();
 	}
 
