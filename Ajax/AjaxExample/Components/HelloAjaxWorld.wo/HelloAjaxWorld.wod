@@ -1,0 +1,26 @@
+AjaxExampleComponent : AjaxExampleComponent {
+	title = "Hello Ajax World";
+}
+
+AjaxUpdateLink : AjaxUpdateLink {
+	updateContainerID = "content";
+	action = updateHelloWorld;
+}
+
+HelloWorld : WOString {
+	value = helloWorld;
+	escapeHTML = false;
+}
+
+Timestamp : WOString {
+	value = timestamp;
+	dateformat = "%m/%d/%Y %H:%M:%S.%F";
+}
+
+UpdateArea : AjaxUpdateContainer {
+	id = "content";
+}
+
+UpdateLink : WOHyperlink {
+	action = updateHelloWorld;
+}
