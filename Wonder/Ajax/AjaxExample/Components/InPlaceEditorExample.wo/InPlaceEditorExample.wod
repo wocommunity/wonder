@@ -1,77 +1,3 @@
-ExampleInPlace : AjaxInPlace {
-	saveAction = valueSaved;
-	cancelAction = valueCancelled;
-}
-
-Edit : ERXWOTemplate {
-	templateName = "edit";
-}
-
-Value : WOString {
-	value = value;
-}
-
-ValueField : FocusTextField {
-	value = value;
-	id = "valueField";
-	selectAll = true;
-	onEnter = "alert('You hit enter and I am showing you an onEnter handler now.')";
-}
-
-View : ERXWOTemplate {
-	templateName = "view";
-}
-
-ExampleInPlaceManual : AjaxInPlace {
-	id = "ExampleInPlaceManual";
-	saveAction = valueSaved;
-	cancelAction = valueCancelled;
-	manualControl = true;
-}
-
-ClickToEdit : WOHyperlink {
-	href = "javascript:void(0)";
-	onclick = "ExampleInPlaceManualEdit()";
-}
-
-EditManual : ERXWOTemplate {
-	templateName = "edit";
-}
-
-ViewManual : ERXWOTemplate {
-	templateName = "view";
-}
-
-ManualValue : WOString {
-	value = manualValue;
-
-}
-ManualValueField : WOTextField {
-	value = manualValue;
-	size = "30";
-}
-
-ClickToSave : WOHyperlink {
-	href = "javascript:void(0)";
-	onclick = "ExampleInPlaceManualSave()";
-}
-
-ClickToCancel : WOHyperlink {
-	href = "javascript:void(0)";
-	onclick = "ExampleInPlaceManualCancel()";
-}
-
-HideShowAction : AjaxUpdateLink {
-	updateContainerID = "updateContainerID";
-	action = toggle;
-	onComplete = "function(request) { new Effect.Highlight('updateContainerID'); }";
-	evalScripts = true;
-}
-
-ShowConditional : WOConditional {
-	condition = visible;
-}
-
 InLineEditorUpdater : AjaxUpdateContainer {
 	id = "updateContainerID";
 	evalScripts = true;
@@ -101,5 +27,5 @@ InPlaceEditorNumeric : AjaxInPlaceEditor {
 }
 
 AjaxExampleComponent : AjaxExampleComponent {
-	title = "In-Place Editor";
+	title = "AjaxInPlaceEditor";
 }
