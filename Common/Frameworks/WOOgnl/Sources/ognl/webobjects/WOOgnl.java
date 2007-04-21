@@ -15,6 +15,7 @@ import ognl.ClassResolver;
 import ognl.Ognl;
 import ognl.OgnlException;
 import ognl.OgnlRuntime;
+import ognl.helperfunction.WOHelperFunctionHTMLParser;
 import ognl.helperfunction.WOHelperFunctionHTMLTemplateParser;
 
 import org.apache.log4j.Logger;
@@ -97,6 +98,9 @@ public class WOOgnl {
         	    WOParser.setWOHTMLTemplateParserClassName("ognl.helperfunction.WOHelperFunctionHTMLTemplateParser");
         	    if ("true".equalsIgnoreCase(System.getProperty("ognl.inlineBindings"))) {
         	    	WOHelperFunctionHTMLTemplateParser.setAllowInlineBindings(true);
+        	    }
+        	    if ("true".equalsIgnoreCase(System.getProperty("ognl.parseStandardTags"))) {
+        	    	WOHelperFunctionHTMLParser.setParseStandardTags(true);
         	    }
         	}
         	else {

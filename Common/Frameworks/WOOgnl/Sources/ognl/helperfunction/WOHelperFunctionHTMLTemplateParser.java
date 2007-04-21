@@ -27,7 +27,9 @@ public class WOHelperFunctionHTMLTemplateParser extends WOParser implements WOHe
 	private static NSMutableDictionary _tagShortcutMap = new NSMutableDictionary();
 	private static NSMutableDictionary _tagProcessorMap = new NSMutableDictionary();
 	private static boolean _allowInlineBindings = false;
-
+	
+	private static String WO_REPLACEMENT_MARKER = "__REPL__";
+	
 	public static void registerTagShortcut(String fullElementType, String shortcutElementType) {
 		_tagShortcutMap.setObjectForKey(fullElementType, shortcutElementType);
 	}
@@ -39,7 +41,7 @@ public class WOHelperFunctionHTMLTemplateParser extends WOParser implements WOHe
 	public static void setAllowInlineBindings(boolean allowInlineBindings) {
 		_allowInlineBindings = allowInlineBindings;
 	}
-
+	
 	static {
 		WOHelperFunctionHTMLTemplateParser.log.setLevel(Level.WARN);
 
@@ -171,6 +173,14 @@ public class WOHelperFunctionHTMLTemplateParser extends WOParser implements WOHe
 		String shortcutType = (String) _tagShortcutMap.objectForKey(elementType);
 		if (shortcutType != null) {
 			elementType = shortcutType;
+		}
+		else if (elementType.startsWith(WO_REPLACEMENT_MARKER)) {
+			// Acts only on tags, where we have "dynamified" inside the tag parser
+			// this takes the value found after the "wo:" part in the element and generates a WOGenericContainer with that value
+			// as the elementName binding
+			elementType = elementType.replace(WO_REPLACEMENT_MARKER, "");
+			associations.setObjectForKey(WOAssociation.associationWithValue(elementType), "elementName");
+			elementType = "WOGenericContainer";
 		}
 		String elementName;
 		synchronized (this) {
