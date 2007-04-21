@@ -14,7 +14,7 @@ public class HelloAjaxWorld extends WOComponent {
 	
 	public HelloAjaxWorld(WOContext context) {
 		super(context);
-		_helloWorld = "Hello World";
+		_helloWorld = "Hello WOrld";
 	}
 
 	public void appendToResponse(WOResponse woresponse, WOContext wocontext) {

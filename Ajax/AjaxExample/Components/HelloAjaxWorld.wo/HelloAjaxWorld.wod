@@ -1,5 +1,5 @@
 AjaxExampleComponent : AjaxExampleComponent {
-	title = "Hello Ajax World";
+	title = "Hello Ajax WOrld";
 }
 
 AjaxUpdateLink : AjaxUpdateLink {
