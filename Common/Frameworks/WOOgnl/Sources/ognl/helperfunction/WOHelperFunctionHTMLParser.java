@@ -1,6 +1,7 @@
 package ognl.helperfunction;
 
 import java.util.NoSuchElementException;
+import java.util.Stack;
 import java.util.StringTokenizer;
 
 import org.apache.log4j.Level;
@@ -8,6 +9,7 @@ import org.apache.log4j.Logger;
 
 import com.webobjects.appserver._private.WODeclarationFormatException;
 import com.webobjects.appserver._private.WOHTMLFormatException;
+import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation._NSStringUtilities;
 
 public class WOHelperFunctionHTMLParser {
@@ -24,6 +26,10 @@ public class WOHelperFunctionHTMLParser {
 	private static final String WO_START_TAG = "<wo";
 	private static final String WEBOBJECT_END_TAG = "</webobject";
 	private static final String WEBOBJECT_START_TAG = "<webobject";
+	private static final String WO_REPLACEMENT_MARKER = "__REPL__";
+	
+	private static boolean _parseStandardTags = false;
+	private NSMutableDictionary _stackDict;
 
 	static {
 		WOHelperFunctionHTMLParser.log.setLevel(Level.WARN);
@@ -34,9 +40,14 @@ public class WOHelperFunctionHTMLParser {
 		_unparsedTemplate = unparsedTemplate;
 		_contentText = new StringBuffer(128);
 	}
+	
+	public static void setParseStandardTags (boolean flag) {
+		_parseStandardTags = flag;
+	}
 
 	public void parseHTML() throws WOHTMLFormatException, WODeclarationFormatException, ClassNotFoundException {
 		Object obj = null;
+		_stackDict = new NSMutableDictionary();
 		StringTokenizer templateTokenizer = new StringTokenizer(_unparsedTemplate, "<");
 		boolean flag = true;
 		int parserState = STATE_OUTSIDE;
@@ -62,6 +73,12 @@ public class WOHelperFunctionHTMLParser {
 					}
 					token = templateTokenizer.nextToken(">");
 					int tagIndex;
+
+					// parses non wo: tags for dynamic bindings
+					if (_parseStandardTags) {
+						token = checkToken(token);
+					}
+
 					String tagLowerCase = token.toLowerCase();
 					if (tagLowerCase.startsWith(WOHelperFunctionHTMLParser.WEBOBJECT_START_TAG) || tagLowerCase.startsWith(WOHelperFunctionHTMLParser.WO_START_TAG)) {
 						if (token.endsWith("/")) {
@@ -146,8 +163,68 @@ public class WOHelperFunctionHTMLParser {
 			_contentText.append(token);
 		}
 		didParseText();
+		_stackDict = null;
 	}
 
+	/**
+	 * Checks the current token for dynamic inline bindings
+	 * 
+	 * @param token
+	 * @return a rewritten token if it has an inline binding or a closing tag, if it belongs to a rewritten token
+	 */
+	private String checkToken (String token) {
+		if (token == null || token.toLowerCase().startsWith(WOHelperFunctionHTMLParser.WEBOBJECT_START_TAG) 
+				|| token.toLowerCase().startsWith(WOHelperFunctionHTMLParser.WO_START_TAG)) {
+			// we return immediately, if it is a webobject token
+			return token;
+		}
+		
+		String[] tokenParts = token.split(" ");
+		String tokenPart = tokenParts[0].substring(1);
+		
+		if (token.contains("\"$") && token.startsWith("<")) {
+			// we assume a dynamic tag
+			token = token.replace(tokenParts[0], "<wo:" + WO_REPLACEMENT_MARKER + tokenPart);
+			if (log.isDebugEnabled()) log.debug("Rewritten <" + tokenPart + " ...> tag to <wo:" + tokenPart + " ...>");
+			
+			if (!token.endsWith("/")) {
+				// no need to keep information for self closing tags
+				Stack stack = (Stack) _stackDict.objectForKey(tokenPart);
+				if (stack == null) {
+					// create one and push a marker
+					stack = new Stack();
+					stack.push(WO_REPLACEMENT_MARKER);
+					_stackDict.setObjectForKey(stack, tokenPart);
+				}
+				else {
+					// just push a marker
+					stack.push(WO_REPLACEMENT_MARKER);
+					_stackDict.setObjectForKey(stack, tokenPart);
+				}
+			}
+		}
+		else if (!token.startsWith("</") && this._stackDict.containsKey(tokenPart)) {
+			// standard opening tag
+			Stack stack = (Stack) this._stackDict.objectForKey(tokenPart);
+			if (this._stackDict != null && stack != null) {
+				stack.push(tokenPart);
+				this._stackDict.setObjectForKey(stack, tokenPart);
+			}
+		}
+		else {
+			// closing tag
+			Stack stack = (Stack) this._stackDict.objectForKey(tokenParts[0].substring(2));
+			if (stack != null && !stack.empty()) {
+				String stackContent = (String) stack.pop();
+				if (stackContent.equals(WO_REPLACEMENT_MARKER)) {
+					if (log.isDebugEnabled()) log.debug("Replaced end tag for '" + tokenParts[0].substring(2) + "' with 'wo' endtag");
+					token = "</wo";
+				}
+			}
+		}
+		return token;	
+	}
+	
 	private void startOfWebObjectTag(String token) throws WOHTMLFormatException {
 		didParseText();
 		_contentText.append(token);
