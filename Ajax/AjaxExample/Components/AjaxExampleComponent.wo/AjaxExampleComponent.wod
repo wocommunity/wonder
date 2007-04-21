@@ -50,6 +50,10 @@ InPlaceEditorLink : WOHyperlink {
 	pageName = "InPlaceEditorExample";
 }
 
+InPlaceLink : WOHyperlink {
+	pageName = "InPlaceExample";
+}
+
 DependentListsExample : WOHyperlink {
 	pageName = "DependentListsExample";
 }
