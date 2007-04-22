@@ -1,0 +1,4 @@
+RedirectionForm : EROpenIDRedirectionForm {
+	formName = "openidRedirectionForm";
+	redirectionUrl = redirectionUrl;
+}
