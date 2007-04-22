@@ -339,6 +339,9 @@ There are many ways to use this script:
                 <include name="WRReporting.framework" />
                 <include name="WOOgnl.framework" />
             </frameworks>
+            <frameworks dir="${wonder.lib.root}" if="use.wonder.openid"> 
+                <include name="EROpenID.framework" />
+            </frameworks>
             <frameworks dir="${wonder.lib.root}" if="use.wonder.ajax"> 
                 <include name="Ajax.framework" />
             </frameworks>
