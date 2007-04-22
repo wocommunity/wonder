@@ -9,7 +9,10 @@ Please review the Properties.sample file in this directory for an overview of th
 configuration Properties.
 
 To provide further customization to the OpenID process, you will want to set a custom EROpenIDManager.Delegate onto
-EROpenIDManager.  A DefaultDelegate implementation is provided that you can extend as a starting point.
+EROpenIDManager in your Application constructor.  A DefaultDelegate implementation is provided that you can 
+extend as a starting point.  To do this, just call:
+
+  EROpenIDManager.manager().setDelegate(new MyDelegate());
 
 Finally, you should review the EROpenIDExample application in Project Wonder's Common/Examples folder to see an 
 open id application in action.
