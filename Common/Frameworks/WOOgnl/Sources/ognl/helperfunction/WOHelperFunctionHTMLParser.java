@@ -173,54 +173,62 @@ public class WOHelperFunctionHTMLParser {
 	 * @return a rewritten token if it has an inline binding or a closing tag, if it belongs to a rewritten token
 	 */
 	private String checkToken (String token) {
-		if (token == null || token.toLowerCase().startsWith(WOHelperFunctionHTMLParser.WEBOBJECT_START_TAG) 
-				|| token.toLowerCase().startsWith(WOHelperFunctionHTMLParser.WO_START_TAG)) {
-			// we return immediately, if it is a webobject token
-			return token;
-		}
-		
-		String[] tokenParts = token.split(" ");
-		String tokenPart = tokenParts[0].substring(1);
-		
-		if (token.contains("\"$") && token.startsWith("<")) {
-			// we assume a dynamic tag
-			token = token.replace(tokenParts[0], "<wo:" + WO_REPLACEMENT_MARKER + tokenPart);
-			if (log.isDebugEnabled()) log.debug("Rewritten <" + tokenPart + " ...> tag to <wo:" + tokenPart + " ...>");
+		String original = new String(token);
+		try {
+			if (token == null || token.toLowerCase().startsWith(WOHelperFunctionHTMLParser.WEBOBJECT_START_TAG) 
+					|| token.toLowerCase().startsWith(WOHelperFunctionHTMLParser.WO_START_TAG)) {
+				// we return immediately, if it is a webobject token
+				return token;
+			}
 			
-			if (!token.endsWith("/")) {
-				// no need to keep information for self closing tags
-				Stack stack = (Stack) _stackDict.objectForKey(tokenPart);
-				if (stack == null) {
-					// create one and push a marker
-					stack = new Stack();
-					stack.push(WO_REPLACEMENT_MARKER);
-					_stackDict.setObjectForKey(stack, tokenPart);
+			String[] tokenParts = token.split(" ");
+			String tokenPart = tokenParts[0].substring(1);
+			
+			if (token.contains("\"$") && token.startsWith("<")) {
+				// we assume a dynamic tag
+				token = token.replace(tokenParts[0], "<wo:" + WO_REPLACEMENT_MARKER + tokenPart);
+				if (log.isDebugEnabled()) log.debug("Rewritten <" + tokenPart + " ...> tag to <wo:" + tokenPart + " ...>");
+				
+				if (!token.endsWith("/")) {
+					// no need to keep information for self closing tags
+					Stack stack = (Stack) _stackDict.objectForKey(tokenPart);
+					if (stack == null) {
+						// create one and push a marker
+						stack = new Stack();
+						stack.push(WO_REPLACEMENT_MARKER);
+						_stackDict.setObjectForKey(stack, tokenPart);
+					}
+					else {
+						// just push a marker
+						stack.push(WO_REPLACEMENT_MARKER);
+						_stackDict.setObjectForKey(stack, tokenPart);
+					}
 				}
-				else {
-					// just push a marker
-					stack.push(WO_REPLACEMENT_MARKER);
-					_stackDict.setObjectForKey(stack, tokenPart);
+			}
+			else if (!token.startsWith("</") && this._stackDict.containsKey(tokenPart)) {
+				// standard opening tag
+				Stack stack = (Stack) this._stackDict.objectForKey(tokenPart);
+				if (this._stackDict != null && stack != null) {
+					stack.push(tokenPart);
+					this._stackDict.setObjectForKey(stack, tokenPart);
+				}
+			}
+			else if (token.startsWith("</")) {
+				// closing tag
+				Stack stack = (Stack) this._stackDict.objectForKey(tokenParts[0].substring(2));
+				if (stack != null && !stack.empty()) {
+					String stackContent = (String) stack.pop();
+					if (stackContent.equals(WO_REPLACEMENT_MARKER)) {
+						if (log.isDebugEnabled()) log.debug("Replaced end tag for '" + tokenParts[0].substring(2) + "' with 'wo' endtag");
+						token = "</wo";
+					}
 				}
 			}
 		}
-		else if (!token.startsWith("</") && this._stackDict.containsKey(tokenPart)) {
-			// standard opening tag
-			Stack stack = (Stack) this._stackDict.objectForKey(tokenPart);
-			if (this._stackDict != null && stack != null) {
-				stack.push(tokenPart);
-				this._stackDict.setObjectForKey(stack, tokenPart);
-			}
-		}
-		else {
-			// closing tag
-			Stack stack = (Stack) this._stackDict.objectForKey(tokenParts[0].substring(2));
-			if (stack != null && !stack.empty()) {
-				String stackContent = (String) stack.pop();
-				if (stackContent.equals(WO_REPLACEMENT_MARKER)) {
-					if (log.isDebugEnabled()) log.debug("Replaced end tag for '" + tokenParts[0].substring(2) + "' with 'wo' endtag");
-					token = "</wo";
-				}
-			}
+		catch (Exception e) {
+			// we print the exception and return the token unchanged
+			e.printStackTrace();
+			return original;
 		}
 		return token;	
 	}
