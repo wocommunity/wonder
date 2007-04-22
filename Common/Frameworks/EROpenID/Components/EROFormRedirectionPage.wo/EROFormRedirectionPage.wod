@@ -1,4 +1,4 @@
-RedirectionForm : EROpenIDRedirectionForm {
+RedirectionForm : ERORedirectionForm {
 	formName = "openidRedirectionForm";
 	redirectionUrl = redirectionUrl;
 }

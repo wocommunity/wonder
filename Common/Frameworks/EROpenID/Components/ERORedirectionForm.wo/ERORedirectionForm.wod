@@ -1,7 +1,7 @@
 RedirectionForm : WOGenericContainer {
 	elementName = "form";
 	name = ^formName;
-	method = "post"
+	method = "post";
 	action = ^redirectionUrl;
 	accept-charset = "utf-8";
 }
