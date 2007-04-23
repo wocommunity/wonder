@@ -178,7 +178,7 @@ public class WOHelperFunctionHTMLTemplateParser extends WOParser implements WOHe
 			// Acts only on tags, where we have "dynamified" inside the tag parser
 			// this takes the value found after the "wo:" part in the element and generates a WOGenericContainer with that value
 			// as the elementName binding
-			elementType = elementType.replace(WO_REPLACEMENT_MARKER, "");
+			elementType = elementType.replaceAll(WO_REPLACEMENT_MARKER, "");
 			associations.setObjectForKey(WOAssociation.associationWithValue(elementType), "elementName");
 			elementType = "WOGenericContainer";
 		}
