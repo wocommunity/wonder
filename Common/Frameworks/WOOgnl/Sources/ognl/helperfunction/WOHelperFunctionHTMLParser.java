@@ -184,9 +184,9 @@ public class WOHelperFunctionHTMLParser {
 			String[] tokenParts = token.split(" ");
 			String tokenPart = tokenParts[0].substring(1);
 			
-			if (token.contains("\"$") && token.startsWith("<")) {
+			if (token.indexOf("\"$") != -1 && token.startsWith("<")) {
 				// we assume a dynamic tag
-				token = token.replace(tokenParts[0], "<wo:" + WO_REPLACEMENT_MARKER + tokenPart);
+				token = token.replaceAll(tokenParts[0], "<wo:" + WO_REPLACEMENT_MARKER + tokenPart);
 				if (log.isDebugEnabled()) log.debug("Rewritten <" + tokenPart + " ...> tag to <wo:" + tokenPart + " ...>");
 				
 				if (!token.endsWith("/")) {
