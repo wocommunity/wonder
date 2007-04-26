@@ -13,6 +13,7 @@ import com.webobjects.eoaccess.*;
 import com.webobjects.foundation.*;
 import er.extensions.*;
 import java.util.*;
+import com.webobjects.directtoweb.ConfirmPageInterface;
 
 // FIXME: Need a formal protocol for cancel vs. selection.
 public class ERD2WPickListPage extends ERD2WListPage implements ERDPickPageInterface {
@@ -118,9 +119,48 @@ public class ERD2WPickListPage extends ERD2WListPage implements ERDPickPageInter
     public NSArray filteredObjects() {
         return displayGroup().qualifier() == null ? displayGroup().allObjects() : EOQualifier.filteredArrayWithQualifier(displayGroup().allObjects(), displayGroup().qualifier());
     }
+   
+    public WOComponent  selectAll() {
+	return _doActionWithPossibleConfirmation(filteredObjects().count(), "_finishSelectAll");
+    }
+ 
+    protected WOComponent _doActionWithPossibleConfirmation(int selectAllCount, String actionName) {
+	int selectAllWarnThreshold=ERXValueUtilities.intValue(d2wContext().valueForKey("confirmSelectAllThreshold"));
+
+        if (selectAllWarnThreshold>0 && selectAllCount>selectAllWarnThreshold) {
+            ConfirmPageInterface confirmPage = (ConfirmPageInterface)D2W.factory().pageForConfigurationNamed("ConfirmSelectAll", session());
+
+            // delegate
+            ConfirmApprovalDelegate delegate = new ConfirmApprovalDelegate();
+            delegate.nextPage = context().page();
+            delegate.pickPage = this;
+            delegate.actionName = actionName;
+ 
+            confirmPage.setConfirmDelegate(delegate);
+            confirmPage.setCancelDelegate(new ERDPageDelegate(context().page()));
+            confirmPage.setMessage("Are you sure you want to select all "+selectAllCount+" records");
+
+            return (WOComponent) confirmPage;
+        }
+
+        return (WOComponent) valueForKey(actionName);
+    }
+
+    public static class ConfirmApprovalDelegate implements NextPageDelegate {
+        public WOComponent nextPage;
+        ERD2WPickListPage pickPage;
+        public String actionName;
+
+        public WOComponent nextPage(WOComponent sender){
+            pickPage.valueForKey(actionName);
     
-    public WOComponent selectAll() {
+            return nextPage;
+        }
+    }
+
+    public WOComponent _finishSelectAll() {
         selectedObjects.removeAllObjects();
+
         NSArray list = filteredObjects();
         for (Enumeration e = list.objectEnumerator(); e.hasMoreElements();) {
             selectedObjects.addObject(e.nextElement());
@@ -129,6 +169,10 @@ public class ERD2WPickListPage extends ERD2WListPage implements ERDPickPageInter
     }
     
     public WOComponent selectAllOnPage() {
+        return _doActionWithPossibleConfirmation(displayGroup().displayedObjects().count(), "_finishSelectAllOnPage");
+    }
+
+    public WOComponent _finishSelectAllOnPage() {
         selectedObjects.removeAllObjects();
         NSArray list = displayGroup().displayedObjects();
         for (Enumeration e = list.objectEnumerator(); e.hasMoreElements();) {
