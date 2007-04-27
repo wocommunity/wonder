@@ -1,12 +1,17 @@
 package com.webobjects.appserver._private;
 
-
-import com.webobjects.appserver.*;
-import com.webobjects.foundation.*;
+import com.webobjects.appserver.WOAssociation;
+import com.webobjects.appserver.WOComponent;
+import com.webobjects.appserver.WOContext;
+import com.webobjects.appserver.WOElement;
+import com.webobjects.appserver.WOResponse;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSMutableArray;
 
 
 /**
- * Quick hack at extending WOPopUpButton to use HTML 4 optgroups.  It adds two bindings:
+ * Quick hack at extending WOBrowser to use HTML 4 optgroups.  It adds two bindings:
  * group and label.  group is required.  When this value changes, a new optgroup is created.
  * label is optional.  This is used as the label for an option group.  If label is not
  * bound, an empty string is used as the option group label. 
@@ -14,15 +19,15 @@ import com.webobjects.foundation.*;
  * @binding group Object, required - keyPath to value that changes when the group of options changes
  * @binding label String, optional - String used as label for an option group
  */
-public class ERXOptGroupPopupButton extends WOPopUpButton
-{
-    
+public class ERXOptGroupBrowser extends WOBrowser {
+
+	
     protected WOAssociation group;
     protected WOAssociation label;
     
-    public ERXOptGroupPopupButton(String name, NSDictionary associations, WOElement template)
-    {
-        super(name, associations, template);
+    
+	public ERXOptGroupBrowser(String arg0, NSDictionary arg1, WOElement arg2) {
+		super(arg0, arg1, arg2);
         group = (WOAssociation)_associations.removeObjectForKey("group");
         label = (WOAssociation)_associations.removeObjectForKey("label");
         
@@ -30,36 +35,38 @@ public class ERXOptGroupPopupButton extends WOPopUpButton
         {
             throw new RuntimeException("Group is a required binding");
         }
-    }
-    
+	}
+	
+	
+
 
     public void appendChildrenToResponse(WOResponse response, WOContext context)
     {
          WOComponent parent = context.component();
          
-         if (_noSelectionString != null)
-         {
-             Object noSelectionString = _noSelectionString.valueInComponent(parent);
-             if (noSelectionString != null)
-             {
-                 response.appendContentString("\n<option value=\"WONoSelectionString\">");
-                 response.appendContentHTMLString(noSelectionString.toString());
-                 response._appendContentAsciiString("</option>");
-             } 
-         }
-
-         
-        Object selectionValue = null;
-        Object selectedValue = null;
-        if (_selection != null)
+        Object selections = null;
+        if (_selections != null)
         {
-            selectionValue = _selection.valueInComponent(parent);
+        	selections = _selections.valueInComponent(parent);
         }
-        else if (_selectedValue != null)
+        else if (_selectedValues != null)
         {
-            selectedValue = _selectedValue.valueInComponent(parent);
+        	selections = _selectedValues.valueInComponent(parent);
         }
         
+        NSMutableArray selectedObjects = null;
+        if (selections != null) {
+            if ( ! (selections instanceof NSArray)) {
+            	selectedObjects = new NSMutableArray(selections);	
+            }                
+           else if ( !(selections instanceof NSMutableArray)) {
+               selectedObjects = new NSMutableArray((NSArray)selections);   
+           }
+           else {
+        	   selectedObjects = (NSMutableArray)selections;
+           }
+        }
+        	
         NSArray list = (NSArray) _list.valueInComponent(parent);
         
         Object previousGroup = null;
@@ -102,12 +109,12 @@ public class ERXOptGroupPopupButton extends WOPopUpButton
              
              String valueAsString = null;
              String displayStringAsString = null;
-             if (_string != null || _value != null)
+             if (_displayString != null || _value != null)
              {
 
-                if (_string != null)
+                if (_displayString != null)
                 {
-                    Object displayString = _string.valueInComponent(parent);
+                    Object displayString = _displayString.valueInComponent(parent);
                     if (displayString != null)
                     {
                         displayStringAsString = displayString.toString();
@@ -142,22 +149,22 @@ public class ERXOptGroupPopupButton extends WOPopUpButton
            }
             
             boolean isSelectedItem = false;
-            if (_selection != null)
+            if (_selections != null)
             {
-                isSelectedItem = selectionValue == null ? false : selectionValue.equals(listItem);
+                isSelectedItem = selectedObjects == null ? false : selectedObjects.containsObject(listItem);
             }
-            else if (_selectedValue != null)
+            else if (_selectedValues != null)
             {
                 if (_value != null)
                 {
-                    isSelectedItem = selectedValue == null ? false : selectedValue.equals(valueAsString);
+                    isSelectedItem = selectedObjects == null ? false : selectedObjects.containsObject(valueAsString);
                 }
             }
              
             if (isSelectedItem)
             {
                 response.appendContentCharacter(' ');
-                 response._appendContentAsciiString("selected");
+                response._appendContentAsciiString("selected");
             }
              
             if (_value != null)
@@ -189,4 +196,6 @@ public class ERXOptGroupPopupButton extends WOPopUpButton
              response._appendContentAsciiString("\n</optgroup>");
          }
     }
+    
+
 }
