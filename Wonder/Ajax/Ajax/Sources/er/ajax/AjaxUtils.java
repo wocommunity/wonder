@@ -10,6 +10,7 @@ import com.webobjects.appserver.WOResponse;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableDictionary;
 
+import er.extensions.ERXAjaxSession;
 import er.extensions.ERXResourceManager;
 import er.extensions.ERXWOContext;
 
@@ -17,21 +18,6 @@ public class AjaxUtils {
 	private static String HTML_CLOSE_HEAD = System.getProperty("er.ajax.AJComponent.htmlCloseHead");
 	private static final String SECURE_RESOURCES_KEY = "er.ajax.secureResources";
 	
-	/**
-	 * Key that tells the session not to store the current page. Checks both the response userInfo and the response
-	 * headers if this key is present. The value doesn't matter, but you need to update the corresponding value in
-	 * ERXSession. This is to keep the dependencies between the two frameworks independent.
-	 */
-	public static final String DONT_STORE_PAGE = "ERXSession.DontStorePage";
-
-	/*
-	 * Key that is used to specify that a page should go in the replacement cache instead of the backtrack cache. This
-	 * is used for Ajax components that actually generate component actions in their output. The value doesn't matter,
-	 * but you need to update the corresponding value in ERXSession. This is to keep the dependencies between the two
-	 * frameworks independent.
-	 */
-	public static final String PAGE_REPLACEMENT_CACHE_LOOKUP_KEY = "pageCacheKey";
-
 	/*
 	 * Key that is used during an Ajax form posting so that WOContext gets _wasFormSubmitted set to true. If this value
 	 * is changed, you must also change ERXWOForm.
@@ -48,7 +34,7 @@ public class AjaxUtils {
 	}
 	
 	public static void setPageReplacementCacheKey(WOContext _context, String _key) {
-		_context.response().setHeader(_key, AjaxUtils.PAGE_REPLACEMENT_CACHE_LOOKUP_KEY);
+		_context.response().setHeader(_key, ERXAjaxSession.PAGE_REPLACEMENT_CACHE_LOOKUP_KEY);
 	}
 
 	/**
@@ -86,7 +72,7 @@ public class AjaxUtils {
 		// charset set in the response
 		response.setHeader("text/plain; charset=utf-8", "content-type");
 		response.setHeader("Connection", "keep-alive");
-		response.setHeader(AjaxUtils.DONT_STORE_PAGE, AjaxUtils.DONT_STORE_PAGE);
+		response.setHeader(ERXAjaxSession.DONT_STORE_PAGE, ERXAjaxSession.DONT_STORE_PAGE);
 		return response;
 	}
 
@@ -214,7 +200,7 @@ public class AjaxUtils {
 
 	public static void updateMutableUserInfoWithAjaxInfo(WOMessage message) {
 		NSMutableDictionary dict = AjaxUtils.mutableUserInfo(message);
-		dict.takeValueForKey(AjaxUtils.DONT_STORE_PAGE, AjaxUtils.DONT_STORE_PAGE);
+		dict.takeValueForKey(ERXAjaxSession.DONT_STORE_PAGE, ERXAjaxSession.DONT_STORE_PAGE);
 	}
 
 	public static void appendScriptHeaderIfNecessary(WORequest request, WOResponse response) {
