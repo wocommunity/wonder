@@ -1,28 +1,26 @@
 <webobject name = "HeaderFooter">
-    <style>
-      div#map1Wrapper { 
-        width: 450px;
-        height: 485px;
-        border: 10px solid #CCC;
-        background-color: #F0F0F0;
-        padding: 10px;
-      }
-      
-      div#map2Wrapper {
-        width: 450px;
-        height: 475px;
-        border: 10px solid #CCC;
-        background-color: #F0F0F0;
-        padding: 10px;
-      }
-      
-      div#map2 {
-        width: 100%;
-        height: 90%;
-      }
-    
-    </style>
-  </head>
+<style>
+  div#map1Wrapper { 
+    width: 450px;
+    height: 485px;
+    border: 10px solid #CCC;
+    background-color: #F0F0F0;
+    padding: 10px;
+  }
+  
+  div#map2Wrapper {
+    width: 450px;
+    height: 475px;
+    border: 10px solid #CCC;
+    background-color: #F0F0F0;
+    padding: 10px;
+  }
+  
+  div#map2 {
+    width: 100%;
+    height: 90%;
+  }
+</style>
   <body onunload = "GUnload();">
     See the javadoc for info on setting up your Google Maps api key. This will fail when running on a local instance without configuring your api key.<hr/>
     <div id = "map1Wrapper">
@@ -43,4 +41,5 @@
 			<webobject name = "Marker2"/><p/>
 		  This map demonstrates using the AjaxGMarker component to place marker overlays on the map. The size for this map is set using CSS.			
 		</div>
+	</body>
 </webobject>

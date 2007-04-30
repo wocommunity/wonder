@@ -1,3 +1,18 @@
+CloseULLI : WOString {
+	value = "</ul></li>";
+	escapeHTML = false;
+}
+
+CloseLI : WOString {
+	value = "</li>";
+	escapeHTML = false;
+}
+
+OpenUL : WOString {
+	value = "<ul>";
+	escapeHTML = false;
+}
+
 NodeItem : WOString {
 	value = nodeItem;
 	escapeHTML = false;
