@@ -23,12 +23,12 @@ JSONRPCDict: AjaxProxy {
 	proxy = dict;
 }
 
-URLDict_CSS: WOResourceURL {
+URLDict_CSS: ERXStyleSheet {
 	filename = "dict.css";
 }
 
-URLDict_JS: WOResourceURL {
-	filename = "dict.js";
+URLDict_JS: ERXJavaScript {
+	scriptSource = "dict.js";
 }
 
 URLSite_CSS: WOResourceURL {

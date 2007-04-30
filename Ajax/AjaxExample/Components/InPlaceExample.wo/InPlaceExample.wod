@@ -61,23 +61,6 @@ ClickToCancel : WOHyperlink {
 	onclick = "ExampleInPlaceManualCancel()";
 }
 
-HideShowAction : AjaxUpdateLink {
-	updateContainerID = "updateContainerID";
-	action = toggle;
-	onComplete = "function(request) { new Effect.Highlight('updateContainerID'); }";
-	evalScripts = true;
-}
-
-InLineEditorUpdater : AjaxUpdateContainer {
-	id = "updateContainerID";
-	evalScripts = true;
-	elementName = "div";
-}
-
-InPlaceEditorSimple : AjaxInPlaceEditor {
-	value = exampleValue;
-}
-
 AjaxExampleComponent : AjaxExampleComponent {
 	title = "AjaxInPlace";
 }

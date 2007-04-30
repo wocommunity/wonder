@@ -2,9 +2,9 @@
     <head>
         <meta name="generator" content="WOLips Templateengine Plug-in">
         <title>JSON RPC Example with WO</title>
-        <link type="text/css" href="<webobject name=URLSite_CSS></webobject>" />
-        <link type="text/css" href="<webobject name=URLDict_CSS></webobject>" />
-        <script type="text/javascript" src="<webobject name=URLDict_JS></webobject>"></script>
+        <webobject name = "URLSite_CSS"></webobject>
+        <webobject name = "URLDict_CSS"></webobject>
+        <webobject name = "URLDict_JS"/>
         <script type="text/javascript"> 
 function add() { 
 	var add_field = document.getElementById("add_field"); 
@@ -27,19 +27,21 @@ function addMore(combien) {
                 <tr>
                     <td>simple synchronous call</td>
                     <td><code>var add_field = document.getElementById(&quot;add_field&quot;);
-                            <br>
-                            add_field.value = jason.wopage.add();</code></td><td onmouseover="add();">add on 'mouseover'</code></td>
+                            <br/>
+                            add_field.value = jason.wopage.add();</code>
+                    </td>
+                    <td onmouseover="add();"><code>add on 'mouseover'</code></td>
                 </tr>
                 <tr>
                     <td>synchrone call, with simple argument (an_integer)</td>
                     <td><code>var add_field = document.getElementById(&quot;add_field&quot;);
-                            <br>
+                            <br/>
                             add_field.value = jason.wopage.addMore(5);</code></td><td><webobject name="Hyperlink1">addMore(5)</webobject></td>
                 </tr>
                 <tr>
                     <td>asynchrone call, imply a callback method</td>
                     <td><code>jsonrpc.dict.matchs(gotMatches, database, strategy, word);
-                            <br>
+                            <br/>
                         </code></td>
                     <td>see the dictionary demo</td>
                 </tr>
@@ -69,8 +71,8 @@ function addMore(combien) {
                     <td id="definitions"><div></div></td>
                 </tr>
             </table>
-            <br>
-            <hr>
+            <br/>
+            <hr/>
             <table cellspacing="0" border="0" width="100%" cellpadding="0">
                 <tr>
                     <td><code>$Id$</code></td>
