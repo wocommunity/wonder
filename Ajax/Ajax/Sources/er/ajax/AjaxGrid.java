@@ -292,7 +292,8 @@ public class AjaxGrid extends WOComponent {
 	public static final String UNSELECTED_ROW_CSS_STYLE = "unselectedRowCSSStyle";
 	public static final String CONFIGURATION_UPDATED = "configurationUpdated";
 	public static final String COMPONENT_NAME = "component";
-	
+	public static final String UPDATE_FREQUENCY = "updateFrequency";
+
 	public static final String DISPLAY_GROUP_BINDING = "displayGroup";
 	public static final String CONFIGURATION_DATA_BINDING = "configurationData";
 	public static final String SELECTED_OBJECTS_BINDING = "selectedObjects";

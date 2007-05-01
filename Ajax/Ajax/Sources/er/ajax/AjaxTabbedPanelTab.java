@@ -50,7 +50,7 @@ public class AjaxTabbedPanelTab extends AjaxDynamicElement {
     public void appendToResponse(WOResponse aResponse, WOContext aContext)
     {
         aResponse.appendContentString("<li id=\"");
-        aResponse.appendContentString((String)id.valueInComponent(aContext.component()) + "_panel");
+        aResponse.appendContentString((String)id().valueInComponent(aContext.component()) + "_panel");
         aResponse.appendContentString("\" updateUrl=\"");
         aResponse.appendContentString(AjaxUtils.ajaxComponentActionUrl(aContext));
 		aResponse.appendContentString("\" class=\"");
@@ -89,6 +89,8 @@ public class AjaxTabbedPanelTab extends AjaxDynamicElement {
 	 */
 	public WOActionResults handleRequest(WORequest request, WOContext context) {
 		WOResponse response = AjaxUtils.createResponse(request, context);
+		AjaxUtils.setPageReplacementCacheKey(context, _containerID(context));
+		
 		if (content != null)
 		{
 			content.appendToResponse(response, context);
@@ -97,6 +99,15 @@ public class AjaxTabbedPanelTab extends AjaxDynamicElement {
 	}
 
     
+	/**
+	 * @param context WOContext response is being returned in
+	 * @return ID to cache this Ajax response under
+	 */
+	protected String _containerID(WOContext context) {
+		return (String)id().valueInComponent(context.component()) + "_panel";
+	}
+	
+	
     /**
      * @return association for HTML id attribute
      */
