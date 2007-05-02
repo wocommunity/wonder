@@ -3,7 +3,7 @@ AjaxExampleComponent : AjaxExampleComponent {
 }
 
 AjaxUpdateLink : AjaxUpdateLink {
-	updateContainerID = "content";
+	updateContainerID = "ajaxContent";
 	action = updateHelloWorld;
 }
 
@@ -18,7 +18,7 @@ Timestamp : WOString {
 }
 
 UpdateArea : AjaxUpdateContainer {
-	id = "content";
+	id = "ajaxContent";
 }
 
 UpdateLink : WOHyperlink {
