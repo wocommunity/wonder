@@ -103,7 +103,8 @@ public class ERDControllerButton extends ERDActionButton implements ERDBranchInt
         if (branchDelegate() != null) {
             branchChoices = branchDelegate().branchChoicesForContext(d2wContext());
         } else {
-            log.error("Attempting to call branchChoices on a page with a delegate: " + branchDelegate() + " that doesn't support the ERDBranchDelegateInterface!");
+        	String pageName = (d2wContext() != null ?  d2wContext().dynamicPage() : "NO PAGE");
+        	log.error("Attempting to call branchChoices on a page (" + pageName +") with a delegate: " + branchDelegate() + " that doesn't support the ERDBranchDelegateInterface!");
         }
         return branchChoices;
     }
