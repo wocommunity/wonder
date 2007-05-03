@@ -16,22 +16,15 @@ try {
 }
 
 if(erxKeepAlive) {
-    erxKeepAlive.onreadystatechange = function() {
+	erxKeepAlive.onreadystatechange = function() {
+	
     	if(erxKeepAlive.readyState==4) {
     		// do something?
     	}
+    	
     };
-
-    erxKeepAlive.poll = new function() {
-    	var date = new Date();
-    	var myUrl = erxKeepAliveUrl;
-    	myUrl = myUrl + "&r=" + (new Date()).getTime();
-    	erxKeepAlive.open("GET", myUrl, false);
-    	erxKeepAlive.send(null);
-    };
-    
+ 
     window.setInterval( function() {
-    	var date = new Date();
     	var myUrl = erxKeepAliveUrl;
     	myUrl = myUrl + "&r=" + (new Date()).getTime();
     	erxKeepAlive.open("GET", myUrl, false);
