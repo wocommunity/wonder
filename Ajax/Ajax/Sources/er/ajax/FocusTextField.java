@@ -84,11 +84,17 @@ public class FocusTextField extends ERXWOTextField {
 	public static void appendJavascriptToResponse(WOResponse response, WOContext context, String id, boolean focus, boolean selectAll, String onEnterScript) {
 		WOComponent component = context.component();
 		AjaxUtils.appendScriptHeader(response);
+		if (focus || selectAll) {
+			response.appendContentString("setTimeout(function() { ");
+		}
 		if (focus) {
 			response.appendContentString("Field.focus('" + id + "');");
 		}
 		if (selectAll) {
 			response.appendContentString("Field.select('" + id + "');");
+		}
+		if (focus || selectAll) {
+			response.appendContentString(" }, 10);");
 		}
 		if (onEnterScript != null) {
 			response.appendContentString(id + "SubmitOnEnter = function(e) { var keynum = Event.keyValue(e); if (keynum == 13 || keynum == 3) { ");
