@@ -51,8 +51,20 @@ public class ERD2WSwitchComponent extends D2WSwitchComponent  {
         log.debug("currentPageConfiguration="+ currentPageConfiguration + ", _pageConfiguration="+ _pageConfiguration);
         if (_pageConfiguration!=null &&
             currentPageConfiguration!=null &&
-            !_pageConfiguration.equals(currentPageConfiguration))
+            !_pageConfiguration.equals(currentPageConfiguration)) {
             resetCaches();
+
+            //the better thing to do would be to null out the cached subContext in this case and let it be re-created,
+            //but it's a private ivar in the parent and there's no setter, so this will have to suffice
+            //the reason all this is necessary is that D2WSwitchComponent caches the subContext, and WOSwitchComponent
+            //caches the component instances it creates (caching by component name), so in D2W tab pages with custom
+            //components you end up with what appears to be the page configuration getting "stuck". resetting it when it
+            //should change prevents that.
+            D2WContext subContext = subContext();
+            if( subContext != null ) {
+                subContext.setDynamicPage(currentPageConfiguration);
+            }
+        }
         if (currentPageConfiguration!=null) _pageConfiguration=currentPageConfiguration;
     }
 
