@@ -209,7 +209,7 @@ public class ERXWOContext extends WOContext implements ERXMutableUserInfoHolderI
 	 * @param content
 	 * @param tag
 	 */
-	public static void insertInResponseBeforeTag(WOResponse response, String content, String tag, boolean ignoreIfTagMissing) {
+	public static void insertInResponseBeforeTag(WOResponse response, String content, String tag, boolean skipIfTagMissing) {
 		String stream = response.contentString();
 		int idx = stream.indexOf(tag);
 		if (idx < 0) {
@@ -219,10 +219,14 @@ public class ERXWOContext extends WOContext implements ERXMutableUserInfoHolderI
 			String pre = stream.substring(0, idx);
 			String post = stream.substring(idx, stream.length());
 			response.setContent(pre + content + post);
-		} else if (!ignoreIfTagMissing) {
+		} else if (!skipIfTagMissing) {
 			//ak: not found, we append anyway as we may be in the tag itself
 			response._appendContentAsciiString(content);
 		}
+	}
+
+	public static void addResourceInHead(WOContext context, WOResponse response, String framework, String fileName, String startTag, String endTag) {
+		ERXWOContext.addResourceInHead(context, response, framework, fileName, startTag, endTag, false);
 	}
 
 
@@ -235,7 +239,7 @@ public class ERXWOContext extends WOContext implements ERXMutableUserInfoHolderI
 	 * @param startTag
 	 * @param endTag
 	 */
-	public static void addResourceInHead(WOContext context, WOResponse response, String framework, String fileName, String startTag, String endTag, boolean ignoreIfTagMissing) {
+	public static void addResourceInHead(WOContext context, WOResponse response, String framework, String fileName, String startTag, String endTag, boolean skipIfTagMissing) {
 		NSMutableDictionary userInfo = contextDictionary();
 		if (userInfo.objectForKey(fileName) == null) {
 			userInfo.setObjectForKey(fileName, fileName);
@@ -258,7 +262,7 @@ public class ERXWOContext extends WOContext implements ERXMutableUserInfoHolderI
 				}
 			}
 			String html = startTag + url + endTag + "\n";
-			insertInResponseBeforeTag(response, html, htmlCloseHead(System.getProperty("er.ajax.AJComponent.htmlCloseHead")), ignoreIfTagMissing);
+			insertInResponseBeforeTag(response, html, htmlCloseHead(System.getProperty("er.ajax.AJComponent.htmlCloseHead")), skipIfTagMissing);
 		}
 	}
 
