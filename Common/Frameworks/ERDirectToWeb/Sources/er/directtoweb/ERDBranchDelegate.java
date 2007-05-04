@@ -48,17 +48,19 @@ public abstract class ERDBranchDelegate implements ERDBranchDelegateInterface {
         WOComponent nextPage = null;
         if (sender instanceof ERDBranchInterface) {
             String branchName = ((ERDBranchInterface)sender).branchName();
-            if (log.isDebugEnabled())
-                log.debug("Branching to branch: " + branchName);
-            try {
-                Method m = getClass().getMethod(branchName, WOComponentClassArray);
-                nextPage = (WOComponent)m.invoke(this, new WOComponent[] { sender });
-            } catch (InvocationTargetException ite) {
-                log.error("Invocation exception occurred in ERBranchDelegate: " + ite.getTargetException() + " for branch name: " + branchName, ite.getTargetException());
-                throw new NSForwardException(ite.getTargetException());
-            } catch (Exception e) {
-                log.error("Exception occurred in ERBranchDelegate: " + e.toString() + " for branch name: " + branchName);
-                throw new NSForwardException(e);
+            if( branchName != null ) {
+                if (log.isDebugEnabled())
+                    log.debug("Branching to branch: " + branchName);
+                try {
+                    Method m = getClass().getMethod(branchName, WOComponentClassArray);
+                    nextPage = (WOComponent)m.invoke(this, new WOComponent[] { sender });
+                } catch (InvocationTargetException ite) {
+                    log.error("Invocation exception occurred in ERBranchDelegate: " + ite.getTargetException() + " for branch name: " + branchName, ite.getTargetException());
+                    throw new NSForwardException(ite.getTargetException());
+                } catch (Exception e) {
+                    log.error("Exception occurred in ERBranchDelegate: " + e.toString() + " for branch name: " + branchName);
+                    throw new NSForwardException(e);
+                }
             }
         } else {
             log.warn("Branch delegate being used with a component that does not implement the ERBranchInterface");
