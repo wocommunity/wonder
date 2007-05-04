@@ -415,7 +415,14 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
      * @return user selected branch name.
      */
     // ENHANCEME: Should be localized
-    public String branchName() { return (String)branch().valueForKey("branchName"); }
+    public String branchName() {
+        String branchName = null;
+        NSDictionary branch = branch();
+        if( branch != null ) {
+            branchName = (String)branch.valueForKey("branchName");
+        }
+        return branchName;
+    }
 
     /**
      * Returns the page's {@link NextPageDelegate NextPageDelegate},
