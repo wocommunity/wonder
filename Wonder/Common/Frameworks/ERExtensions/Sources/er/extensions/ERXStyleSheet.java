@@ -150,6 +150,6 @@ public class ERXStyleSheet extends ERXStatelessComponent {
     	}
     	woresponse._appendTagAttributeAndValue("href", href, false);
     	woresponse._appendContentAsciiString("></link>");
-    	ERXWOContext.insertInResponseBeforeTag(r, woresponse.contentString(), "</head>");
+    	ERXWOContext.insertInResponseBeforeTag(r, woresponse.contentString(), "</head>", false);
     }
 }
