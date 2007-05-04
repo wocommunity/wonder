@@ -6,14 +6,9 @@
 //
 package er.extensions;
 
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
 import java.util.Properties;
 import org.apache.log4j.*;
-import org.apache.log4j.config.PropertyGetter;
-import org.apache.log4j.config.PropertyPrinter;
-import org.apache.log4j.spi.*;
-import com.webobjects.foundation.*;
+import com.webobjects.foundation.NSLog;
 
 
 /**
