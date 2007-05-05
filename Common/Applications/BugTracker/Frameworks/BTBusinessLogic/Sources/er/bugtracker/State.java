@@ -1,13 +1,17 @@
 // State.java
 // 
 package er.bugtracker;
-import com.webobjects.foundation.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.eoaccess.*;
-import er.extensions.*;
+import org.apache.log4j.Logger;
+
+import com.webobjects.eoaccess.EOModel;
+import com.webobjects.eoaccess.EOModelGroup;
+import com.webobjects.eocontrol.EOEditingContext;
+import com.webobjects.eocontrol.EOSharedEditingContext;
+
+import er.extensions.EOEnterpriseObjectClazz;
 
 public class State extends _State {
-    static final ERXLogger log = ERXLogger.getERXLogger(State.class);
+    static final Logger log = Logger.getLogger(State.class);
 
     public static State ANALYZE;
     public static State BUILD;
@@ -40,5 +44,5 @@ public class State extends _State {
         }
     }
 
-    public static final StateClazz clazz = (StateClazz)EOEnterpriseObjectClazz.clazzForEntityNamed("State");
+    public static final StateClazz clazz = new StateClazz();
 }
