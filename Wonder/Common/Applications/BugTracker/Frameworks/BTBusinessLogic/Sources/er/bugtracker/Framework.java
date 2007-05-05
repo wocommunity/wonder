@@ -1,13 +1,12 @@
 // Framework.java
 // 
 package er.bugtracker;
-import com.webobjects.foundation.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.eoaccess.*;
-import er.extensions.*;
+import org.apache.log4j.Logger;
+
+import com.webobjects.eocontrol.EOEditingContext;
 
 public class Framework extends _Framework {
-    static final ERXLogger log = ERXLogger.getERXLogger(Framework.class);
+    static final Logger log = Logger.getLogger(Framework.class);
 
     public Framework() {
         super();
@@ -24,5 +23,5 @@ public class Framework extends _Framework {
         
     }
 
-    public static FrameworkClazz clazz = (FrameworkClazz)EOEnterpriseObjectClazz.clazzForEntityNamed("Framework");
+    public static FrameworkClazz clazz = new FrameworkClazz();
 }

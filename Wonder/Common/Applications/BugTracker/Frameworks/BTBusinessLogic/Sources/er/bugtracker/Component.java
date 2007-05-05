@@ -6,11 +6,18 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.bugtracker;
 
-import com.webobjects.foundation.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.eoaccess.*;
 import java.util.Enumeration;
-import er.extensions.*;
+
+import com.webobjects.eoaccess.EOUtilities;
+import com.webobjects.eocontrol.EOEditingContext;
+import com.webobjects.eocontrol.EOEnterpriseObject;
+import com.webobjects.eocontrol.EOSortOrdering;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSKeyValueCoding;
+import com.webobjects.foundation.NSMutableArray;
+import com.webobjects.foundation.NSValidation;
+
+import er.extensions.ERXEC;
 
 public class Component extends _Component {
 

@@ -1,13 +1,14 @@
 // RequirementSubType.java
 // 
 package er.bugtracker;
-import com.webobjects.foundation.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.eoaccess.*;
-import er.extensions.*;
+import org.apache.log4j.Logger;
+
+import com.webobjects.eocontrol.EOEditingContext;
+
+import er.extensions.EOEnterpriseObjectClazz;
 
 public class RequirementSubType extends _RequirementSubType {
-    static final ERXLogger log = ERXLogger.getERXLogger(RequirementSubType.class);
+    static final Logger log = Logger.getLogger(RequirementSubType.class);
 
     public RequirementSubType() {
         super();
@@ -24,5 +25,5 @@ public class RequirementSubType extends _RequirementSubType {
         
     }
 
-    public static final RequirementSubTypeClazz clazz = (RequirementSubTypeClazz)EOEnterpriseObjectClazz.clazzForEntityNamed("RequirementSubType");
+    public static final RequirementSubTypeClazz clazz = new RequirementSubTypeClazz();
 }
