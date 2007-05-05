@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="Sources"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/ERJars"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/ERExtensions"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/ERPrototypes"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/JavaWOExtensions"/>
+	<classpathentry kind="con" path="org.objectstyle.wolips.WO_CLASSPATH/JavaDirectToWeb/JavaDTWGeneration/JavaEOAccess/JavaEOControl/JavaFoundation/JavaJDBCAdaptor/JavaWebObjects/JavaXML"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/ERCoreBusinessLogic"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/BTBusinessLogic"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/ERJavaMail"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/PostgresqlPlugIn"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/ERDirectToWeb"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
