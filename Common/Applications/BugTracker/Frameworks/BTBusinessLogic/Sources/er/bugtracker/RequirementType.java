@@ -1,13 +1,14 @@
 // RequirementType.java
 // 
 package er.bugtracker;
-import com.webobjects.foundation.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.eoaccess.*;
-import er.extensions.*;
+import org.apache.log4j.Logger;
+
+import com.webobjects.eocontrol.EOEditingContext;
+
+import er.extensions.EOEnterpriseObjectClazz;
 
 public class RequirementType extends _RequirementType {
-    static final ERXLogger log = ERXLogger.getERXLogger(RequirementType.class);
+    static final Logger log = Logger.getLogger(RequirementType.class);
 
     public RequirementType() {
         super();
@@ -24,5 +25,5 @@ public class RequirementType extends _RequirementType {
         
     }
 
-    public static final RequirementTypeClazz clazz = (RequirementTypeClazz)EOEnterpriseObjectClazz.clazzForEntityNamed("RequirementType");
+    public static final RequirementTypeClazz clazz = new RequirementTypeClazz();
 }

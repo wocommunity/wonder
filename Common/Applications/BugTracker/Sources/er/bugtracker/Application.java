@@ -18,7 +18,7 @@ public class Application extends ERXApplication {
     public String databaseName;
 
     public static void main(String argv[]) {
-        WOApplication.main(argv, Application.class);
+        ERXApplication.main(argv, Application.class);
     }
 
     private String _userDefaultName;

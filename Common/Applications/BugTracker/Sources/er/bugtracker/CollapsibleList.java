@@ -1,10 +1,12 @@
 package er. bugtracker;
 
-import com.webobjects.foundation.*;
-import com.webobjects.appserver.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.directtoweb.*;
-import er.extensions.*;
+import org.apache.log4j.Logger;
+
+import com.webobjects.appserver.WOComponent;
+import com.webobjects.appserver.WOContext;
+import com.webobjects.foundation.NSArray;
+
+import er.extensions.ERXLocalizer;
 
 /**
  * Holds a D2W list in a collapsible component.
@@ -24,7 +26,7 @@ import er.extensions.*;
 public class CollapsibleList extends WOComponent {
 
     /** logging support */
-    private static final ERXLogger log = ERXLogger.getERXLogger(CollapsibleList.class.getClass().getName() + ".components");
+    static final Logger log = Logger.getLogger(CollapsibleList.class.getClass().getName() + ".components");
     protected String openedLabelString;
     protected String closedLabelString;
 	
