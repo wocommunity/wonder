@@ -29,7 +29,7 @@ Td: WOGenericContainer {
     valign="middle";
     elementName = "TD";
     width = navigationItem.width;
-    bgcolor=tdColor;
+    //bgcolor=tdColor;
     id=navigationItem.uniqueID;
     otherTagString="NOWRAP";
 }
