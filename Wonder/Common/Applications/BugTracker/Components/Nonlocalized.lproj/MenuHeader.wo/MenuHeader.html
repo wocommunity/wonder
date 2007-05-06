@@ -1,74 +1,31 @@
-
-<table border=0 cellpadding=4 cellspacing=0>
-	<tr>
-		<td valign=middle align=center></td>
-	</tr>
-	<webObject name=HasValidSession>
-		<tr>
-			<td valign=middle align=center><b><webObject name=String3></webObject></b></td>
-		</tr>
-		<tr>
-			<td valign=middle align=center><webObject name=DbName></webObject>
-				<hr>
-			</td>
-		</tr>
-		<TR>
-				<TD ALIGN=CENTER>Bug#
-			<WEBOBJECT name=BugForm>
-					<WEBOBJECT NAME=TextField1></WEBOBJECT><BR>
-					<WEBOBJECT NAME=Hyperlink5>Free Query</WEBOBJECT>
-					<HR>
-			</webObject>
-				</TD>
-		</TR>
-		<WEBOBJECT name=EntitiesForm>
-			<tr valign=middle align=center>
-				<td VALIGN=middle ALIGN=CENTER>
-					<WEBOBJECT name=EntitiesPopup></WEBOBJECT>
-				</td>
-			</tr>
-			<tr valign=middle align=center>
-				<td valign=middle align=center>
-					<WEBOBJECT name=FindButton></WEBOBJECT>
-				</td>
-			</tr>
-			<tr valign=middle align=center>
-				<td valign=middle align=center>
-					<WEBOBJECT name=NewButton></WEBOBJECT>
-					<HR>
-				</td>
-			</tr>
-		</WEBOBJECT>
-		<tr valign=middle align=center>
-			<td align=center valign=middle>
-				<WEBOBJECT NAME=HomeLink><WEBOBJECT name=HomeButton></WEBOBJECT></WEBOBJECT></td>
-		</tr>
-		<tr>
-			<td align=center valign=middle><WEBOBJECT NAME=LoginLink><WEBOBJECT name=LoginButton></WEBOBJECT></WEBOBJECT></td>
-		</tr>
-		<webObject name=LAEnabledConditional></webObject>
-		<tr>
-			<td ALIGN=CENTER>
-				<WEBOBJECT NAME=Hyperlink2>Edit My Info</WEBOBJECT><BR>
-				<FONT SIZE=2>This is
-				<WEBOBJECT NAME=Hyperlink7>not</WEBOBJECT>&nbsp;me</FONT> </td>
-		</tr>
-		<tr>
-			<td ALIGN=CENTER>
-				<hr width=70>
-				<WEBOBJECT NAME=Conditional2><WEBOBJECT NAME=Hyperlink8>Hats</WEBOBJECT><BR>
-					<HR WIDTH=70>
-				</WEBOBJECT>
-			</td>
-		</tr>
-		<tr>
-			<td ALIGN=CENTER> &nbsp;<WEBOBJECT NAME=Hyperlink3>Bugs&nbsp;Filed&nbsp;Recently</WEBOBJECT><BR>
-				<WEBOBJECT NAME=Hyperlink1>Track&nbsp;Release</WEBOBJECT><BR>
-				<WEBOBJECT NAME=Hyperlink9>Track&nbsp;My&nbsp;Release</WEBOBJECT><BR>
-				<WEBOBJECT NAME=Conditional1><WEBOBJECT NAME=Hyperlink4>Push&nbsp;Release</WEBOBJECT><BR>
-					<WEBOBJECT NAME=Hyperlink6>Component&nbsp;Report</WEBOBJECT></WEBOBJECT>
-			</td>
-		</tr>
-	</webObject>
-	<webObject name=NoValidSession></webObject>
+<table  width="100%">
+    <webobject name=HasValidSession>
+        <tr>
+            <td align=left colspan="2">Hi <webobject name=user></webobject>, welcome to
+                <webobject name="databaseName"></webobject> | <webobject name=editMyInfo>Edit My Info</webobject> (<font size=-2>This is <webobject name=Main>not me</webobject></font>)</td>
+            <td align=right>
+                <webobject name=findBugByNumber>
+                   Bug# <webobject name=bugNumber></webobject> <webobject name=freeQuery>Free Query</webobject>
+                </webobject>
+            </td> 
+        </tr>
+        <tr>
+            <td align=left valign=top><table><tr><webobject name="MainItems"><td><webobject name="Item"></webobject></td></webobject></table></td>
+			<td align=right colspan="2"><webobject name="Menu"></webobject></td>
+        </tr>
+        <tr>
+            <td align=CENTER colspan=3>
+            	<webobject name=isEngineering>
+            		<webobject name=OnlineHatSystem>Hats</webobject>
+            	|</webobject>  <webobject name=bugsFiledRecently>Bugs Filed Recently</webobject> | 
+                <webobject name=trackRelease>Track Release</webobject> | 
+                <webobject name=trackMyRelease>Track My Release</webobject> | 
+                <webobject name=isAdmin>
+                	<webobject name=pushRelease>Push Release</webobject> | 
+                    <webobject name=ComponentReport>Component Report</webobject>
+                </webobject>
+            </td>
+        </tr>
+    </webobject>
+    <webobject name=NoValidSession></webobject>
 </table>
