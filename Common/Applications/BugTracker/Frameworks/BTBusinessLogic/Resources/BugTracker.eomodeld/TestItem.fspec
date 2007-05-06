@@ -1,29 +1,40 @@
+
 {
-    unclosedTestItems = {
-        class = EOFetchSpecification; 
-        entityName = TestItem; 
-        fetchLimit = 0; 
-        isDeep = YES; 
-        qualifier = {
-            class = EOAndQualifier; 
-            qualifiers = (
-                {
-                    class = EOKeyValueQualifier; 
-                    key = owner; 
-                    selectorName = "isEqualTo:"; 
-                    value = {"_key" = user; class = EOQualifierVariable; }; 
-                }, 
-                {
-                    class = EONotQualifier; 
-                    qualifier = {
-                        class = EOKeyValueQualifier; 
-                        key = "state.oid"; 
-                        selectorName = "isNotEqualTo:"; 
-                        value = clsd; 
-                    }; 
-                }
-            ); 
-        }; 
-        refreshesRefetchedObjects = YES; 
-    }; 
+    unclosedTestItems = 
+    {
+        class = EOFetchSpecification;
+        entityName = TestItem;
+        fetchLimit = 0;
+        isDeep = YES;
+        qualifier = 
+        {
+            class = EOAndQualifier;
+            qualifiers = 
+            (
+               
+               {
+                   class = EOKeyValueQualifier;
+                   key = owner;
+                   selectorName = isEqualTo:;
+                   value = 
+                   {
+                       _key = user;
+                       class = EOQualifierVariable;
+                   };
+               }, 
+               
+               {
+                   class = EONotQualifier;
+                   qualifier = 
+                   {
+                       class = EOKeyValueQualifier;
+                       key = state.oid;
+                       selectorName = isNotEqualTo:;
+                       value = clsd;
+                   };
+               }
+            );
+        };
+        refreshesRefetchedObjects = YES;
+    };
 }

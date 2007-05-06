@@ -1,76 +1,165 @@
+
 {
-    attributes = (
-        {
-            columnName = ID; 
-            name = "comp_id"; 
-            prototypeName = id; 
-            userInfo = {modificationDate = "2002-05-06 07:27:08 +0200"; }; 
-        }, 
-        {
-            allowsNull = Y; 
-            columnName = "PARENT_ID"; 
-            name = parentID; 
-            prototypeName = id; 
-            userInfo = {modificationDate = "2002-05-06 07:27:18 +0200"; }; 
-        }, 
-        {
-            columnName = "PEOPLE_ID"; 
-            name = "people_id"; 
-            prototypeName = id; 
-            userInfo = {modificationDate = "2002-05-06 07:27:28 +0200"; }; 
-        }, 
-        {
-            columnName = DESCRIPTION; 
-            name = textDescription; 
-            prototypeName = longText; 
-            userInfo = {modificationDate = "2002-05-06 07:27:37 +0200"; }; 
-        }
-    ); 
-    attributesUsedForLocking = ("comp_id", textDescription, "people_id", parentID); 
-    className = "er.bugtracker.Component"; 
-    classProperties = (textDescription, bugs, owner, parent, children); 
-    externalName = COMPONENT; 
-    fetchSpecificationDictionary = {}; 
-    internalInfo = {
-        "_clientClassPropertyNames" = (textDescription, bugs, owner, parent, children); 
-    }; 
-    name = Component; 
-    primaryKeyAttributes = ("comp_id"); 
-    relationships = (
-        {
-            deleteRule = EODeleteRuleDeny; 
-            destination = Bug; 
-            isToMany = Y; 
-            joinSemantic = EOInnerJoin; 
-            joins = ({destinationAttribute = "comp_id"; sourceAttribute = "comp_id"; }); 
-            name = bugs; 
-            userInfo = {modificationDate = "2002-05-04 13:06:03 +0200"; }; 
-        }, 
-        {
-            destination = Component; 
-            isToMany = Y; 
-            joinSemantic = EOInnerJoin; 
-            joins = ({destinationAttribute = parentID; sourceAttribute = "comp_id"; }); 
-            name = children; 
-            userInfo = {modificationDate = "2002-05-04 13:06:03 +0200"; }; 
-        }, 
-        {
-            destination = People; 
-            isMandatory = Y; 
-            isToMany = N; 
-            joinSemantic = EOInnerJoin; 
-            joins = ({destinationAttribute = id; sourceAttribute = "people_id"; }); 
-            name = owner; 
-            userInfo = {modificationDate = "2002-05-04 13:06:03 +0200"; }; 
-        }, 
-        {
-            destination = Component; 
-            isToMany = N; 
-            joinSemantic = EOInnerJoin; 
-            joins = ({destinationAttribute = "comp_id"; sourceAttribute = parentID; }); 
-            name = parent; 
-            userInfo = {modificationDate = "2002-05-04 13:06:03 +0200"; }; 
-        }
-    ); 
-    userInfo = {modificationDate = "2002-05-04 13:06:03 +0200"; }; 
+    attributes = 
+    (
+       
+       {
+           columnName = ID;
+           name = id;
+           prototypeName = id;
+           userInfo = 
+           {
+               modificationDate = "2002-05-06 07:27:08 +0200";
+           };
+       }, 
+       
+       {
+           columnName = PEOPLE_ID;
+           name = ownerID;
+           prototypeName = id;
+           userInfo = 
+           {
+               modificationDate = "2002-05-06 07:27:28 +0200";
+           };
+       }, 
+       
+       {
+           allowsNull = Y;
+           columnName = PARENT_ID;
+           name = parentID;
+           prototypeName = id;
+           userInfo = 
+           {
+               modificationDate = "2002-05-06 07:27:18 +0200";
+           };
+       }, 
+       
+       {
+           columnName = DESCRIPTION;
+           name = textDescription;
+           prototypeName = longText;
+           userInfo = 
+           {
+               modificationDate = "2002-05-06 07:27:37 +0200";
+           };
+       }
+    );
+    attributesUsedForLocking = 
+    (
+       id, 
+       ownerID, 
+       parentID, 
+       textDescription
+    );
+    className = er.bugtracker.Component;
+    classProperties = 
+    (
+       bugs, 
+       children, 
+       owner, 
+       parent, 
+       textDescription
+    );
+    externalName = COMPONENT;
+    internalInfo = 
+    {
+        _clientClassPropertyNames = 
+        (
+           bugs, 
+           children, 
+           owner, 
+           parent, 
+           textDescription
+        );
+    };
+    name = Component;
+    primaryKeyAttributes = 
+    (
+       id
+    );
+    relationships = 
+    (
+       
+       {
+           deleteRule = EODeleteRuleDeny;
+           destination = Bug;
+           isToMany = Y;
+           joinSemantic = EOInnerJoin;
+           joins = 
+           (
+              
+              {
+                  destinationAttribute = componentID;
+                  sourceAttribute = id;
+              }
+           );
+           name = bugs;
+           userInfo = 
+           {
+               modificationDate = "2002-05-04 13:06:03 +0200";
+           };
+       }, 
+       
+       {
+           destination = Component;
+           isToMany = Y;
+           joinSemantic = EOInnerJoin;
+           joins = 
+           (
+              
+              {
+                  destinationAttribute = parentID;
+                  sourceAttribute = id;
+              }
+           );
+           name = children;
+           userInfo = 
+           {
+               modificationDate = "2002-05-04 13:06:03 +0200";
+           };
+       }, 
+       
+       {
+           destination = People;
+           isMandatory = Y;
+           isToMany = N;
+           joinSemantic = EOInnerJoin;
+           joins = 
+           (
+              
+              {
+                  destinationAttribute = id;
+                  sourceAttribute = ownerID;
+              }
+           );
+           name = owner;
+           userInfo = 
+           {
+               modificationDate = "2002-05-04 13:06:03 +0200";
+           };
+       }, 
+       
+       {
+           destination = Component;
+           isToMany = N;
+           joinSemantic = EOInnerJoin;
+           joins = 
+           (
+              
+              {
+                  destinationAttribute = id;
+                  sourceAttribute = parentID;
+              }
+           );
+           name = parent;
+           userInfo = 
+           {
+               modificationDate = "2002-05-04 13:06:03 +0200";
+           };
+       }
+    );
+    userInfo = 
+    {
+        modificationDate = "2002-05-04 13:06:03 +0200";
+    };
 }

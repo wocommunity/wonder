@@ -6,11 +6,12 @@
  * included with this distribution in the LICENSE.NPL file.  */
 
 package er.bugtracker;
-import com.webobjects.foundation.*;
-import com.webobjects.appserver.*;
-import com.webobjects.eocontrol.*;
+import com.webobjects.appserver.WOContext;
+import com.webobjects.eocontrol.EOEnterpriseObject;
 
-public class PriorityComponent extends WOComponent {
+import er.directtoweb.ERDCustomComponent;
+
+public class PriorityComponent extends ERDCustomComponent {
 
     public PriorityComponent(WOContext aContext) {
         super(aContext);

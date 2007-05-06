@@ -1,26 +1,54 @@
+
 {
-    attributes = (
-        {
-            columnName = DESCRIPTION; 
-            name = difficultyDescription; 
-            prototypeName = varchar50; 
-            userInfo = {modificationDate = "2002-05-06 07:26:49 +0200"; }; 
-        }, 
-        {
-            columnName = ID; 
-            name = oid; 
-            prototypeName = id; 
-            userInfo = {modificationDate = "2002-05-06 07:26:59 +0200"; }; 
-        }
-    ); 
-    attributesUsedForLocking = (oid, difficultyDescription); 
-    cachesObjects = Y; 
-    className = "er.bugtracker.Difficulty"; 
-    classProperties = (difficultyDescription); 
-    externalName = DIFFICULTY; 
-    isReadOnly = Y; 
-    name = Difficulty; 
-    primaryKeyAttributes = (oid); 
-    sharedObjectFetchSpecificationNames = (FetchAll); 
-    userInfo = {modificationDate = "2002-05-04 13:06:03 +0200"; }; 
+    attributes = 
+    (
+       
+       {
+           columnName = DESCRIPTION;
+           name = difficultyDescription;
+           prototypeName = varchar50;
+           userInfo = 
+           {
+               modificationDate = "2002-05-06 07:26:49 +0200";
+           };
+       }, 
+       
+       {
+           columnName = ID;
+           name = id;
+           prototypeName = id;
+           userInfo = 
+           {
+               modificationDate = "2002-05-06 07:26:59 +0200";
+           };
+       }
+    );
+    attributesUsedForLocking = 
+    (
+       difficultyDescription, 
+       id
+    );
+    cachesObjects = Y;
+    className = er.bugtracker.Difficulty;
+    classProperties = 
+    (
+       difficultyDescription
+    );
+    externalName = DIFFICULTY;
+    internalInfo = 
+    {};
+    isReadOnly = Y;
+    name = Difficulty;
+    primaryKeyAttributes = 
+    (
+       id
+    );
+    sharedObjectFetchSpecificationNames = 
+    (
+       FetchAll
+    );
+    userInfo = 
+    {
+        modificationDate = "2002-05-04 13:06:03 +0200";
+    };
 }

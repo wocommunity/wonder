@@ -36,7 +36,7 @@ public class LinkToBookmarkBug extends ERDCustomEditComponent {
     }
 
     public String href() {
-        String url=context().directActionURLForActionNamed("bug", new NSDictionary(bug().valueForKey("bugid"), "number"));
+        String url=context().directActionURLForActionNamed("bug", new NSDictionary(bug().bugid(), "number"));
         return url;
     }
 }
