@@ -48,7 +48,7 @@ public class ERXNavigationManager {
     }
 
     public String navigationStateSessionKey() {
-        return "NavigationSate";
+        return "NavigationState";
     }
 
     public String navigationMenuFileName() {
