@@ -7,30 +7,30 @@ Owner: ERXFixedLengthString {
 	value = currentBug.owner.name;
 }
 
-Repetition1: WORepetition {
+Bugs: WORepetition {
 	item = currentBug;
 	list = bugsInBuild;
 }
 
-Repetition2: WORepetition {
+Releases: WORepetition {
 	item = theRelease;
 	list = targetReleases;
 }
 
-String1: WOString {
+BugId: WOString {
 	value = currentBug.bugid;
 }
 
-String2: ERXFixedLengthString {
+Subject: ERXFixedLengthString {
 	value = currentBug.subject;
 	length = 50;
 }
 
-String3: WOString {
+ReleaseName: WOString {
 	value = theRelease.name;
 }
 
-String4: WOString {
+BugCount: WOString {
 	value = bugsInBuild.count;
 }
 
