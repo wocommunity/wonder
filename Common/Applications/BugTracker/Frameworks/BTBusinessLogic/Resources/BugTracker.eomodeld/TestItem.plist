@@ -1,156 +1,273 @@
+
 {
-    attributes = (
-        {
-            allowsNull = Y; 
-            columnName = COMMENTS; 
-            name = comments; 
-            prototypeName = longText; 
-            userInfo = {modificationDate = "2002-05-06 07:19:07 +0200"; }; 
-        }, 
-        {
-            columnName = "MODULE_ID"; 
-            name = componentID; 
-            prototypeName = id; 
-            userInfo = {modificationDate = "2002-05-06 07:19:15 +0200"; }; 
-        }, 
-        {
-            columnName = CONTROLLED; 
-            name = controlled; 
-            prototypeName = varchar50; 
-            userInfo = {modificationDate = "2002-05-06 07:19:34 +0200"; }; 
-        }, 
-        {
-            columnName = "DATE_CREATED"; 
-            name = dateCreated; 
-            prototypeName = dateTime; 
-            userInfo = {modificationDate = "2002-05-06 07:19:40 +0200"; }; 
-        }, 
-        {
-            columnName = ID; 
-            name = id; 
-            prototypeName = id; 
-            userInfo = {modificationDate = "2002-05-06 07:19:46 +0200"; }; 
-        }, 
-        {
-            columnName = "STATE_ID"; 
-            name = stateID; 
-            prototypeName = osType; 
-            userInfo = {modificationDate = "2002-05-06 07:41:56 +0200"; }; 
-        }, 
-        {
-            allowsNull = Y; 
-            columnName = "TESTED_BY_ID"; 
-            name = testedByID; 
-            prototypeName = id; 
-            userInfo = {modificationDate = "2002-05-06 07:19:57 +0200"; }; 
-        }, 
-        {
-            allowsNull = Y; 
-            columnName = DESCRIPTION; 
-            name = textDescription; 
-            prototypeName = longText; 
-            userInfo = {modificationDate = "2002-05-06 07:20:04 +0200"; }; 
-        }, 
-        {
-            columnName = TITLE; 
-            name = title; 
-            prototypeName = varchar100; 
-            userInfo = {modificationDate = "2002-05-06 07:20:13 +0200"; }; 
-        }
-    ); 
-    attributesUsedForLocking = (id, controlled, testedByID, stateID, componentID, title); 
-    className = "er.bugtracker.TestItem"; 
-    classProperties = (
-        controlled, 
-        textDescription, 
-        dateCreated, 
-        owner, 
-        comments, 
-        state, 
-        component, 
-        title, 
-        id, 
-        requirements, 
-        bugs
-    ); 
-    externalName = "TEST_ITEM"; 
-    internalInfo = {
-        "_clientClassPropertyNames" = (
-            controlled, 
-            textDescription, 
-            dateCreated, 
-            owner, 
-            comments, 
-            state, 
-            component, 
-            title, 
-            id, 
-            requirements, 
-            bugs
-        ); 
-    }; 
-    name = TestItem; 
-    primaryKeyAttributes = (id); 
-    relationships = (
-        {
-            deleteRule = EODeleteRuleCascade; 
-            destination = XBugTestItem; 
-            isToMany = Y; 
-            joinSemantic = EOInnerJoin; 
-            joins = ({destinationAttribute = id; sourceAttribute = id; }); 
-            name = bugTestItems; 
-            propagatesPrimaryKey = Y; 
-            userInfo = {modificationDate = "2002-05-04 13:06:03 +0200"; }; 
-        }, 
-        {
-            definition = "bugTestItems.bug"; 
-            joinSemantic = EOInnerJoin; 
-            name = bugs; 
-            userInfo = {modificationDate = "2002-05-04 13:06:03 +0200"; }; 
-        }, 
-        {
-            destination = Component; 
-            isMandatory = Y; 
-            isToMany = N; 
-            joinSemantic = EOInnerJoin; 
-            joins = ({destinationAttribute = "comp_id"; sourceAttribute = componentID; }); 
-            name = component; 
-            userInfo = {modificationDate = "2002-05-04 13:06:03 +0200"; }; 
-        }, 
-        {
-            destination = People; 
-            isMandatory = Y; 
-            isToMany = N; 
-            joinSemantic = EOInnerJoin; 
-            joins = ({destinationAttribute = id; sourceAttribute = testedByID; }); 
-            name = owner; 
-            userInfo = {modificationDate = "2002-05-04 13:06:03 +0200"; }; 
-        }, 
-        {
-            deleteRule = EODeleteRuleCascade; 
-            destination = XRequirementTestItem; 
-            isToMany = Y; 
-            joinSemantic = EOInnerJoin; 
-            joins = ({destinationAttribute = id; sourceAttribute = id; }); 
-            name = requirementTestItems; 
-            propagatesPrimaryKey = Y; 
-            userInfo = {modificationDate = "2002-05-04 13:06:03 +0200"; }; 
-        }, 
-        {
-            definition = "requirementTestItems.requirement"; 
-            joinSemantic = EOInnerJoin; 
-            name = requirements; 
-            userInfo = {modificationDate = "2002-05-04 13:06:03 +0200"; }; 
-        }, 
-        {
-            destination = TestItemState; 
-            isMandatory = Y; 
-            isToMany = N; 
-            joinSemantic = EOInnerJoin; 
-            joins = ({destinationAttribute = oid; sourceAttribute = stateID; }); 
-            name = state; 
-            userInfo = {modificationDate = "2002-05-04 13:06:03 +0200"; }; 
-        }
-    ); 
-    userInfo = {modificationDate = "2002-05-06 07:19:06 +0200"; }; 
+    attributes = 
+    (
+       
+       {
+           allowsNull = Y;
+           columnName = COMMENTS;
+           name = comments;
+           prototypeName = longText;
+           userInfo = 
+           {
+               modificationDate = "2002-05-06 07:19:07 +0200";
+           };
+       }, 
+       
+       {
+           columnName = MODULE_ID;
+           name = componentID;
+           prototypeName = id;
+           userInfo = 
+           {
+               modificationDate = "2002-05-06 07:19:15 +0200";
+           };
+       }, 
+       
+       {
+           columnName = CONTROLLED;
+           name = controlled;
+           prototypeName = varchar50;
+           userInfo = 
+           {
+               modificationDate = "2002-05-06 07:19:34 +0200";
+           };
+       }, 
+       
+       {
+           columnName = DATE_CREATED;
+           name = dateCreated;
+           prototypeName = dateTime;
+           userInfo = 
+           {
+               modificationDate = "2002-05-06 07:19:40 +0200";
+           };
+       }, 
+       
+       {
+           columnName = ID;
+           name = id;
+           prototypeName = id;
+           userInfo = 
+           {
+               modificationDate = "2002-05-06 07:19:46 +0200";
+           };
+       }, 
+       
+       {
+           columnName = STATE_ID;
+           name = stateID;
+           prototypeName = osType;
+           userInfo = 
+           {
+               modificationDate = "2002-05-06 07:41:56 +0200";
+           };
+       }, 
+       
+       {
+           allowsNull = Y;
+           columnName = TESTED_BY_ID;
+           name = testedByID;
+           prototypeName = id;
+           userInfo = 
+           {
+               modificationDate = "2002-05-06 07:19:57 +0200";
+           };
+       }, 
+       
+       {
+           allowsNull = Y;
+           columnName = DESCRIPTION;
+           name = textDescription;
+           prototypeName = longText;
+           userInfo = 
+           {
+               modificationDate = "2002-05-06 07:20:04 +0200";
+           };
+       }, 
+       
+       {
+           columnName = TITLE;
+           name = title;
+           prototypeName = varchar100;
+           userInfo = 
+           {
+               modificationDate = "2002-05-06 07:20:13 +0200";
+           };
+       }
+    );
+    attributesUsedForLocking = 
+    (
+       componentID, 
+       controlled, 
+       id, 
+       stateID, 
+       testedByID, 
+       title
+    );
+    className = er.bugtracker.TestItem;
+    classProperties = 
+    (
+       bugs, 
+       comments, 
+       component, 
+       controlled, 
+       dateCreated, 
+       id, 
+       owner, 
+       requirements, 
+       state, 
+       textDescription, 
+       title
+    );
+    externalName = TEST_ITEM;
+    internalInfo = 
+    {
+        _clientClassPropertyNames = 
+        (
+           bugs, 
+           comments, 
+           component, 
+           controlled, 
+           dateCreated, 
+           id, 
+           owner, 
+           requirements, 
+           state, 
+           textDescription, 
+           title
+        );
+    };
+    name = TestItem;
+    primaryKeyAttributes = 
+    (
+       id
+    );
+    relationships = 
+    (
+       
+       {
+           deleteRule = EODeleteRuleCascade;
+           destination = XBugTestItem;
+           isToMany = Y;
+           joinSemantic = EOInnerJoin;
+           joins = 
+           (
+              
+              {
+                  destinationAttribute = testItemID;
+                  sourceAttribute = id;
+              }
+           );
+           name = bugTestItems;
+           propagatesPrimaryKey = Y;
+           userInfo = 
+           {
+               modificationDate = "2002-05-04 13:06:03 +0200";
+           };
+       }, 
+       
+       {
+           definition = bugTestItems.bug;
+           name = bugs;
+           userInfo = 
+           {
+               modificationDate = "2002-05-04 13:06:03 +0200";
+           };
+       }, 
+       
+       {
+           destination = Component;
+           isMandatory = Y;
+           isToMany = N;
+           joinSemantic = EOInnerJoin;
+           joins = 
+           (
+              
+              {
+                  destinationAttribute = id;
+                  sourceAttribute = componentID;
+              }
+           );
+           name = component;
+           userInfo = 
+           {
+               modificationDate = "2002-05-04 13:06:03 +0200";
+           };
+       }, 
+       
+       {
+           destination = People;
+           isMandatory = N;
+           isToMany = N;
+           joinSemantic = EOInnerJoin;
+           joins = 
+           (
+              
+              {
+                  destinationAttribute = id;
+                  sourceAttribute = testedByID;
+              }
+           );
+           name = owner;
+           userInfo = 
+           {
+               modificationDate = "2002-05-04 13:06:03 +0200";
+           };
+       }, 
+       
+       {
+           deleteRule = EODeleteRuleCascade;
+           destination = XRequirementTestItem;
+           isToMany = Y;
+           joinSemantic = EOInnerJoin;
+           joins = 
+           (
+              
+              {
+                  destinationAttribute = testID;
+                  sourceAttribute = id;
+              }
+           );
+           name = requirementTestItems;
+           propagatesPrimaryKey = Y;
+           userInfo = 
+           {
+               modificationDate = "2002-05-04 13:06:03 +0200";
+           };
+       }, 
+       
+       {
+           definition = requirementTestItems.requirement;
+           name = requirements;
+           userInfo = 
+           {
+               modificationDate = "2002-05-04 13:06:03 +0200";
+           };
+       }, 
+       
+       {
+           destination = TestItemState;
+           isMandatory = Y;
+           isToMany = N;
+           joinSemantic = EOInnerJoin;
+           joins = 
+           (
+              
+              {
+                  destinationAttribute = oid;
+                  sourceAttribute = stateID;
+              }
+           );
+           name = state;
+           userInfo = 
+           {
+               modificationDate = "2002-05-04 13:06:03 +0200";
+           };
+       }
+    );
+    userInfo = 
+    {
+        modificationDate = "2002-05-06 07:19:06 +0200";
+    };
 }

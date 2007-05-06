@@ -1,3 +1,9 @@
+
 {
-    FetchAll = {class = EOFetchSpecification; entityName = Priority; fetchLimit = 0; }; 
+    FetchAll = 
+    {
+        class = EOFetchSpecification;
+        entityName = Priority;
+        fetchLimit = 0;
+    };
 }

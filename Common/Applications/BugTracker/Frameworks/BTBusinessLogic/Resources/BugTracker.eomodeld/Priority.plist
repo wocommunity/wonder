@@ -1,32 +1,66 @@
+
 {
-    attributes = (
-        {
-            columnName = ID; 
-            name = oid; 
-            prototypeName = osType; 
-            userInfo = {modificationDate = "2002-05-06 07:39:37 +0200"; }; 
-        }, 
-        {
-            columnName = "SORT_ORDER"; 
-            name = sortOrder; 
-            prototypeName = intNumber; 
-            userInfo = {modificationDate = "2002-05-06 07:24:23 +0200"; }; 
-        }, 
-        {
-            columnName = DESCRIPTION; 
-            name = textDescription; 
-            prototypeName = varchar50; 
-            userInfo = {modificationDate = "2002-05-06 07:24:31 +0200"; }; 
-        }
-    ); 
-    attributesUsedForLocking = (oid, textDescription, sortOrder); 
-    cachesObjects = Y; 
-    className = "er.bugtracker.Priority"; 
-    classProperties = (textDescription, sortOrder); 
-    externalName = PRIORITY; 
-    isReadOnly = Y; 
-    name = Priority; 
-    primaryKeyAttributes = (oid); 
-    sharedObjectFetchSpecificationNames = (FetchAll); 
-    userInfo = {modificationDate = "2002-05-04 13:06:03 +0200"; }; 
+    attributes = 
+    (
+       
+       {
+           columnName = ID;
+           name = id;
+           prototypeName = osType;
+           userInfo = 
+           {
+               modificationDate = "2002-05-06 07:39:37 +0200";
+           };
+       }, 
+       
+       {
+           columnName = SORT_ORDER;
+           name = sortOrder;
+           prototypeName = intNumber;
+           userInfo = 
+           {
+               modificationDate = "2002-05-06 07:24:23 +0200";
+           };
+       }, 
+       
+       {
+           columnName = DESCRIPTION;
+           name = textDescription;
+           prototypeName = varchar50;
+           userInfo = 
+           {
+               modificationDate = "2002-05-06 07:24:31 +0200";
+           };
+       }
+    );
+    attributesUsedForLocking = 
+    (
+       id, 
+       sortOrder, 
+       textDescription
+    );
+    cachesObjects = Y;
+    className = er.bugtracker.Priority;
+    classProperties = 
+    (
+       sortOrder, 
+       textDescription
+    );
+    externalName = PRIORITY;
+    internalInfo = 
+    {};
+    isReadOnly = Y;
+    name = Priority;
+    primaryKeyAttributes = 
+    (
+       id
+    );
+    sharedObjectFetchSpecificationNames = 
+    (
+       FetchAll
+    );
+    userInfo = 
+    {
+        modificationDate = "2002-05-04 13:06:03 +0200";
+    };
 }

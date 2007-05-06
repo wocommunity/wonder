@@ -1,33 +1,93 @@
+
 {
-    EOModelVersion = "2.1"; 
-    adaptorName = JDBC; 
-    connectionDictionary = {}; 
-    entities = (
-        {className = "er.bugtracker.Bug"; name = Bug; }, 
-        {className = "er.bugtracker.Component"; name = Component; }, 
-        {className = "er.bugtracker.Difficulty"; name = Difficulty; }, 
-        {className = "er.bugtracker.Framework"; name = Framework; }, 
-        {className = "er.bugtracker.People"; name = People; }, 
-        {className = "er.bugtracker.Priority"; name = Priority; }, 
-        {className = "er.bugtracker.Release"; name = Release; }, 
-        {className = "er.bugtracker.Requirement"; name = Requirement; parent = Bug; }, 
-        {className = "er.bugtracker.RequirementSubType"; name = RequirementSubType; }, 
-        {className = "er.bugtracker.RequirementType"; name = RequirementType; }, 
-        {className = "er.bugtracker.State"; name = State; }, 
-        {className = "er.bugtracker.TestItem"; name = TestItem; }, 
-        {className = "er.bugtracker.TestItemState"; name = TestItemState; }, 
-        {className = EOGenericRecord; name = XBugTestItem; }, 
-        {className = EOGenericRecord; name = XRequirementTestItem; }
-    ); 
-    entitiesWithSharedObjects = (
-        Difficulty, 
-        Priority, 
-        Release, 
-        RequirementSubType, 
-        RequirementType, 
-        State, 
-        TestItemState
-    ); 
-    internalInfo = {}; 
-    userInfo = {}; 
+    EOModelVersion = 2.1;
+    adaptorName = JDBC;
+    entities = 
+    (
+       
+       {
+           className = er.bugtracker.Bug;
+           name = Bug;
+       }, 
+       
+       {
+           className = er.bugtracker.Component;
+           name = Component;
+       }, 
+       
+       {
+           className = er.bugtracker.Difficulty;
+           name = Difficulty;
+       }, 
+       
+       {
+           className = er.bugtracker.Framework;
+           name = Framework;
+       }, 
+       
+       {
+           className = er.bugtracker.People;
+           name = People;
+       }, 
+       
+       {
+           className = er.bugtracker.Priority;
+           name = Priority;
+       }, 
+       
+       {
+           className = er.bugtracker.Release;
+           name = Release;
+       }, 
+       
+       {
+           className = er.bugtracker.Requirement;
+           name = Requirement;
+           parent = Bug;
+       }, 
+       
+       {
+           className = er.bugtracker.RequirementSubType;
+           name = RequirementSubType;
+       }, 
+       
+       {
+           className = er.bugtracker.RequirementType;
+           name = RequirementType;
+       }, 
+       
+       {
+           className = er.bugtracker.State;
+           name = State;
+       }, 
+       
+       {
+           className = er.bugtracker.TestItem;
+           name = TestItem;
+       }, 
+       
+       {
+           className = er.bugtracker.TestItemState;
+           name = TestItemState;
+       }, 
+       
+       {
+           className = EOGenericRecord;
+           name = XBugTestItem;
+       }, 
+       
+       {
+           className = EOGenericRecord;
+           name = XRequirementTestItem;
+       }
+    );
+    entitiesWithSharedObjects = 
+    (
+       Difficulty, 
+       Priority, 
+       RequirementSubType, 
+       RequirementType, 
+       State, 
+       TestItemState
+    );
 }
