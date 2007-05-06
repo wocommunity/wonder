@@ -933,6 +933,22 @@ public class ERXStringUtilities {
     }
 
     /**
+     * Uncapitalizes a given string.
+     * @param value to be uncapitalized
+     * @return capitalized string
+     */
+    public static String uncapitalize(String value) {
+        String capital = null;
+        if (value != null && value.length() > 0) {
+            StringBuffer buffer = new StringBuffer(value);
+
+            buffer.setCharAt(0, Character.toLowerCase(value.charAt(0)));
+            capital = buffer.toString();            
+        }
+        return capital != null ? capital : value;
+    }
+
+    /**
      * Capitalizes all the strings in a given string.
      * @param value to be capitalized
      * @return capitalized string
