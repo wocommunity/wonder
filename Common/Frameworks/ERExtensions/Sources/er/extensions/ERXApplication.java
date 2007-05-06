@@ -322,13 +322,22 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 			throw NSForwardException._runtimeExceptionForThrowable(e1);
 		}
 	}
-	
+
 	/**
 	 * Called when the application starts up and saves the command line arguments for {@link ERXConfigurationManager}.
 	 * 
 	 * @see WOApplication#main(String[], Class)
 	 */
 	public static void main(String argv[], Class applicationClass) {
+		setup(argv);
+		WOApplication.main(argv, applicationClass);
+	}
+
+	/**
+	 * Called prior to actually initing the app. Defines framework load order, 
+	 * class path order, checks patches etc.
+	 */
+	public static void setup(String[] argv) {
 		_wasERXApplicationMainInvoked = true;
 		String cps[] = new String[] {"java.class.path", "com.webobjects.classpath"};
         propertiesFromArgv = NSProperties.valuesFromArgv(argv);
@@ -398,7 +407,13 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 		NSNotificationCenter.defaultCenter().addObserver(ERXApplication.class, new NSSelector("bundleDidLoad", new Class[] { NSNotification.class }), "NSBundleDidLoadNotification", null);
 		ERXConfigurationManager.defaultManager().setCommandLineArguments(argv);
 		ERXFrameworkPrincipal.setUpFrameworkPrincipalClass(ERXExtensions.class);
-		WOApplication.main(argv, applicationClass);
+	}
+
+	public void installDefaultEncoding(String encoding) {
+		WOMessage.setDefaultEncoding(encoding);
+		WOMessage.setDefaultURLEncoding(encoding);
+		ERXMessageEncoding.setDefaultEncoding(encoding);
+		ERXMessageEncoding.setDefaultEncodingForAllLanguages(encoding);
 	}
 
 	/**
