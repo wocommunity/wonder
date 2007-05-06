@@ -113,37 +113,39 @@ public class EOEnterpriseObjectClazz extends Object {
 	
 	protected void discoverEntityName() {
 		// AK: If your class is enclosed by a EO subclass the constructor 
-    	// will auto-discover the corresponding entity name. Not sure we need this, though.
-    	String className = getClass().getName();
-    	int index = className.indexOf('$');
-    	if(index > 0) {
-    		className = className.substring(0, index);
-    		Class c = ERXPatcher.classForName(className);
-    		if(c != null) {
-    			// we should use the class description, but it's too early for that when we 
-    			// do this as a result of a static variable init.
-				NSArray entities = (NSArray) EOModelGroup.defaultGroup().models().valueForKeyPath("entities.@flatten");
-				EOQualifier q = new EOKeyValueQualifier("className", EOQualifier.QualifierOperatorEqual, className);
-				NSArray candidates = EOQualifier.filteredArrayWithQualifier(entities, q);
-				if(candidates.count() > 1) {
-					log.warn("More than one entity found: " + candidates);
-				}
-				EOEntity entity = (EOEntity) candidates.lastObject();
-				if(entity != null) {
-					String entityName = entity.name();
-					// HACK AK: this relies on you having set up your classes correctly,
-					// meaning that you have exactly one final class var per EO class, with the correct
-					// superclasses set up (so EOBase gets loaded before EOSubclass)
-					if(allClazzes.containsKey(entityName)) {
-						_entityName = entityName;
-					} else {
-						setEntityName(entityName);
+		// will auto-discover the corresponding entity name. Not sure we need this, though.
+		if(_entityName == null) {
+			String className = getClass().getName();
+			int index = className.indexOf('$');
+			if(index > 0) {
+				className = className.substring(0, index);
+				Class c = ERXPatcher.classForName(className);
+				if(c != null) {
+					// we should use the class description, but it's too early for that when we 
+					// do this as a result of a static variable init.
+					NSArray entities = (NSArray) EOModelGroup.defaultGroup().models().valueForKeyPath("entities.@flatten");
+					EOQualifier q = new EOKeyValueQualifier("className", EOQualifier.QualifierOperatorEqual, className);
+					NSArray candidates = EOQualifier.filteredArrayWithQualifier(entities, q);
+					if(candidates.count() > 1) {
+						log.warn("More than one entity found: " + candidates);
+					}
+					EOEntity entity = (EOEntity) candidates.lastObject();
+					if(entity != null) {
+						String entityName = entity.name();
+						// HACK AK: this relies on you having set up your classes correctly,
+						// meaning that you have exactly one final class var per EO class, with the correct
+						// superclasses set up (so EOBase gets loaded before EOSubclass)
+						if(allClazzes.containsKey(entityName)) {
+							_entityName = entityName;
+						} else {
+							setEntityName(entityName);
+						}
 					}
 				}
-    		}
-    	}
+			}
+		}
 	}
-    
+
     /**
      * Constructor that also supplies an entity name.
      * @param entityName
@@ -322,7 +324,10 @@ public class EOEnterpriseObjectClazz extends Object {
      * Gets the entity name of the clazz.
      * @return entity name of the clazz.
      */
-    public String entityName() { return _entityName; }
+	public String entityName() {
+		discoverEntityName();
+		return _entityName;
+	}
 
     /**
      * Gets the entity corresponding to the entity
