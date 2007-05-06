@@ -61,8 +61,4 @@ public class BugsPerUser extends WOComponent {
         return (WOComponent)lpi;
     }
 
-    public WOComponent otherRelease() {
-        return MenuHeader.trackAnyRelease(this);
-    }
-
 }

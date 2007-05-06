@@ -1,0 +1,142 @@
+(
+        {
+                name = "Root";
+                directActionClass = "DirectAction";
+                directActionName = "home";
+                children = ("Bugs", "Components", "Requirements", "TestItems", "Releases", "Peoples", "Frameworks");
+        },
+        { 
+                name = "MainMenu";
+                children = ("Home", "EditMyUser", "LogOut");
+        },
+        { 
+                name = "Home";
+                directActionClass = "DirectAction";
+                directActionName = "home";
+        },
+        {
+                name = "EditMyUser";
+                directActionClass = "DirectAction";
+                directActionName = "myData";
+        },
+        {
+                name = "LogOut";
+                directActionClass = "DirectAction";
+                directActionName = "logout";
+        },
+        {
+                name = "Bugs";
+                action = "session.handlers.bugs.CreateBug";
+                children = ("CreateBug", "QueryBugs", "ListRecentBugs", "ListMyBugs");
+        },
+        {
+                name = "CreateBug";
+                action = session.handlers.bugs.CreateBug;
+        },
+        {
+                name = "QueryBugs";
+                action = session.handlers.bugs.QueryBugs;
+        },
+        {
+                name = "ListRecentBugs";
+                action = session.handlers.bugs.ListRecentBugs;
+        },
+        {
+                name = "ListMyBugs";
+                action = session.handlers.bugs.ListMyBugs;
+        },
+        {
+                name = "Components";
+                action = "session.handlers.components.CreateComponent";
+                children = ("CreateComponent", "ListComponents");
+        },
+        {
+                name = "CreateComponent";
+                action = session.handlers.components.CreateComponent;
+        },
+        {
+                name = "ListComponents";
+                action = session.handlers.components.ListComponents;
+        },
+        {
+                name = "Requirements";
+                action = "session.handlers.requirements.CreateRequirement";
+                children = ("CreateRequirement", "ListMyRequirements", "QueryRequirements");
+        },
+        {
+                name = "CreateRequirement";
+                action = session.handlers.requirements.CreateRequirement;
+        },
+        {
+                name = "ListMyRequirements";
+                action = session.handlers.requirements.ListMyRequirements;
+        },
+        {
+                name = "QueryRequirements";
+                action = session.handlers.requirements.QueryRequirements;
+        },
+        {
+                name = "TestItems";
+                action = "session.handlers.testItems.CreateTestItem";
+                children = ("CreateTestItem", "ListMyTestItems", "QueryTestItems");
+        },
+        {
+                name = "CreateTestItem";
+                action = session.handlers.testItems.CreateTestItem;
+        },
+        {
+                name = "ListMyTestItems";
+                action = session.handlers.testItems.ListMyTestItems;
+        },
+        {
+                name = "QueryTestItems";
+                action = session.handlers.testItems.QueryTestItems;
+        },
+        {
+                name = "Peoples";
+                action = "session.handlers.peoples.ListPeoples";
+                children = ("CreatePeople", "ListPeoples");
+        },
+        {
+                name = "CreatePeople";
+                action = session.handlers.peoples.CreatePeople;
+        },
+        {
+                name = "ListPeoples";
+                action = session.handlers.peoples.ListPeoples;
+        },
+        {
+                name = "Frameworks";
+                action = "session.handlers.frameworks.CreateFramework";
+                children = ("CreateFramework", "ListFrameworks");
+        },
+        {
+                name = "CreateFramework";
+                action = session.handlers.frameworks.CreateFramework;
+        },
+        {
+                name = "ListFrameworks";
+                action = session.handlers.frameworks.ListFrameworks;
+        },
+        {
+                name = "Releases";
+                action = session.handlers.releases.TrackMyRelease;
+                children = ("CreateRelease", "TrackRelease", "TrackMyRelease", "PushRelease");
+        },
+        {
+                name = "CreateRelease";
+                action = session.handlers.releases.CreateRelease;
+        },
+        {
+                name = "TrackMyRelease";
+                action = session.handlers.releases.TrackMyRelease;
+        },
+        {
+                name = "TrackRelease";
+                action = session.handlers.releases.TrackRelease;
+        },
+        {
+                name = "PushRelease";
+                action = session.handlers.releases.PushRelease;
+        },
+)
