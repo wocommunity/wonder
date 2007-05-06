@@ -1,229 +1,387 @@
+
 {
-    attributes = (
-        {
-            columnName = ID; 
-            name = bugid; 
-            prototypeName = id; 
-            userInfo = {modificationDate = "2002-05-06 07:14:34 +0200"; }; 
-        }, 
-        {
-            columnName = "COMP_ID"; 
-            name = "comp_id"; 
-            prototypeName = id; 
-            userInfo = {modificationDate = "2002-05-06 07:14:50 +0200"; }; 
-        }, 
-        {
-            allowsNull = Y; 
-            columnName = "DATE_MODIFIED"; 
-            name = dateModified; 
-            prototypeName = dateTime; 
-            userInfo = {modificationDate = "2002-05-06 07:15:02 +0200"; }; 
-        }, 
-        {
-            allowsNull = Y; 
-            columnName = "DATE_SUBMITTED"; 
-            name = dateSubmitted; 
-            prototypeName = dateTime; 
-            userInfo = {modificationDate = "2002-05-06 07:15:09 +0200"; }; 
-        }, 
-        {
-            columnName = "FEATURE_REQUEST"; 
-            name = featureRequest; 
-            prototypeName = intNumber; 
-            userInfo = {modificationDate = "2002-05-06 07:35:29 +0200"; }; 
-        }, 
-        {
-            columnName = "ORIGINATOR_ID"; 
-            name = "originator_id"; 
-            prototypeName = id; 
-            userInfo = {modificationDate = "2002-05-06 07:28:05 +0200"; }; 
-        }, 
-        {
-            columnName = "PEOPLE_ID"; 
-            name = "people_id"; 
-            prototypeName = id; 
-            userInfo = {modificationDate = "2002-05-06 07:28:11 +0200"; }; 
-        }, 
-        {
-            columnName = "PR_ID"; 
-            name = "pr_id"; 
-            prototypeName = osType; 
-            userInfo = {modificationDate = "2002-05-06 07:30:09 +0200"; }; 
-        }, 
-        {
-            allowsNull = Y; 
-            columnName = "PREVIOUS_OWNER_ID"; 
-            name = previousOwnerID; 
-            prototypeName = id; 
-            userInfo = {modificationDate = "2002-05-06 07:28:44 +0200"; }; 
-        }, 
-        {
-            allowsNull = Y; 
-            columnName = "READ_"; 
-            name = read; 
-            prototypeName = charFlag; 
-            userInfo = {modificationDate = "2002-05-06 07:28:53 +0200"; }; 
-        }, 
-        {
-            columnName = "RELEASE_ID"; 
-            name = releaseID; 
-            prototypeName = id; 
-            userInfo = {modificationDate = "2002-05-06 07:30:25 +0200"; }; 
-        }, 
-        {
-            columnName = "STATE_ID"; 
-            name = "state_id"; 
-            prototypeName = osType; 
-            userInfo = {modificationDate = "2002-05-06 07:42:12 +0200"; }; 
-        }, 
-        {
-            columnName = SUBJECT; 
-            name = subject; 
-            prototypeName = varchar50; 
-            userInfo = {modificationDate = "2002-05-06 07:30:48 +0200"; }; 
-        }, 
-        {
-            allowsNull = Y; 
-            columnName = DESCRIPTION; 
-            name = textDescription; 
-            prototypeName = longText; 
-            userInfo = {modificationDate = "2002-05-06 07:30:56 +0200"; }; 
-        }
-    ); 
-    attributesUsedForLocking = (
-        bugid, 
-        subject, 
-        "people_id", 
-        "state_id", 
-        "comp_id", 
-        "pr_id", 
-        read, 
-        "originator_id", 
-        featureRequest, 
-        releaseID, 
-        previousOwnerID, 
-        textDescription
-    ); 
-    className = "er.bugtracker.Bug"; 
-    classProperties = (
-        subject, 
-        priority, 
-        component, 
-        owner, 
-        state, 
-        read, 
-        dateSubmitted, 
-        dateModified, 
-        originator, 
-        featureRequest, 
-        testItems, 
-        targetRelease, 
-        textDescription, 
-        previousOwner, 
-        bugid
-    ); 
-    externalName = BUG; 
-    internalInfo = {
-        "_clientClassPropertyNames" = (
-            subject, 
-            priority, 
-            component, 
-            owner, 
-            state, 
-            read, 
-            dateSubmitted, 
-            dateModified, 
-            originator, 
-            bugid, 
-            featureRequest, 
-            testItems, 
-            targetRelease, 
-            textDescription, 
-            tickets, 
-            bugTickets
-        ); 
-    }; 
-    name = Bug; 
-    primaryKeyAttributes = (bugid); 
-    relationships = (
-        {
-            deleteRule = EODeleteRuleCascade; 
-            destination = XBugTestItem; 
-            isToMany = Y; 
-            joinSemantic = EOInnerJoin; 
-            joins = ({destinationAttribute = bugid; sourceAttribute = bugid; }); 
-            name = bugTestItems; 
-            propagatesPrimaryKey = Y; 
-            userInfo = {modificationDate = "2002-05-04 13:06:03 +0200"; }; 
-        }, 
-        {
-            destination = Component; 
-            isMandatory = Y; 
-            isToMany = N; 
-            joinSemantic = EOInnerJoin; 
-            joins = ({destinationAttribute = "comp_id"; sourceAttribute = "comp_id"; }); 
-            name = component; 
-            userInfo = {modificationDate = "2002-05-04 13:06:03 +0200"; }; 
-        }, 
-        {
-            destination = People; 
-            isMandatory = Y; 
-            isToMany = N; 
-            joinSemantic = EOInnerJoin; 
-            joins = ({destinationAttribute = id; sourceAttribute = "originator_id"; }); 
-            name = originator; 
-            userInfo = {modificationDate = "2002-05-04 13:06:03 +0200"; }; 
-        }, 
-        {
-            destination = People; 
-            isMandatory = Y; 
-            isToMany = N; 
-            joinSemantic = EOInnerJoin; 
-            joins = ({destinationAttribute = id; sourceAttribute = "people_id"; }); 
-            name = owner; 
-            userInfo = {modificationDate = "2002-05-04 13:06:03 +0200"; }; 
-        }, 
-        {
-            destination = People; 
-            isToMany = N; 
-            joinSemantic = EOInnerJoin; 
-            joins = ({destinationAttribute = id; sourceAttribute = previousOwnerID; }); 
-            name = previousOwner; 
-            userInfo = {modificationDate = "2002-05-04 13:06:03 +0200"; }; 
-        }, 
-        {
-            destination = Priority; 
-            isMandatory = Y; 
-            isToMany = N; 
-            joinSemantic = EOInnerJoin; 
-            joins = ({destinationAttribute = oid; sourceAttribute = "pr_id"; }); 
-            name = priority; 
-            userInfo = {modificationDate = "2002-05-04 13:06:03 +0200"; }; 
-        }, 
-        {
-            destination = State; 
-            isMandatory = Y; 
-            isToMany = N; 
-            joinSemantic = EOInnerJoin; 
-            joins = ({destinationAttribute = oid; sourceAttribute = "state_id"; }); 
-            name = state; 
-            userInfo = {modificationDate = "2002-05-04 13:06:03 +0200"; }; 
-        }, 
-        {
-            destination = Release; 
-            isMandatory = Y; 
-            isToMany = N; 
-            joinSemantic = EOInnerJoin; 
-            joins = ({destinationAttribute = id; sourceAttribute = releaseID; }); 
-            name = targetRelease; 
-            userInfo = {modificationDate = "2002-05-04 13:06:03 +0200"; }; 
-        }, 
-        {
-            definition = "bugTestItems.testItem"; 
-            joinSemantic = EOInnerJoin; 
-            name = testItems; 
-            userInfo = {modificationDate = "2002-05-04 13:06:03 +0200"; }; 
-        }
-    ); 
-    userInfo = {modificationDate = "2002-05-07 22:38:33 +0200"; }; 
+    attributes = 
+    (
+       
+       {
+           columnName = COMP_ID;
+           name = componentID;
+           prototypeName = id;
+           userInfo = 
+           {
+               modificationDate = "2002-05-06 07:14:50 +0200";
+           };
+       }, 
+       
+       {
+           allowsNull = Y;
+           columnName = DATE_MODIFIED;
+           name = dateModified;
+           prototypeName = dateTime;
+           userInfo = 
+           {
+               modificationDate = "2002-05-06 07:15:02 +0200";
+           };
+       }, 
+       
+       {
+           allowsNull = Y;
+           columnName = DATE_SUBMITTED;
+           name = dateSubmitted;
+           prototypeName = dateTime;
+           userInfo = 
+           {
+               modificationDate = "2002-05-06 07:15:09 +0200";
+           };
+       }, 
+       
+       {
+           columnName = FEATURE_REQUEST;
+           name = featureRequest;
+           prototypeName = intNumber;
+           userInfo = 
+           {
+               modificationDate = "2002-05-06 07:35:29 +0200";
+           };
+       }, 
+       
+       {
+           columnName = ID;
+           name = id;
+           prototypeName = id;
+           userInfo = 
+           {
+               modificationDate = "2002-05-06 07:14:34 +0200";
+           };
+       }, 
+       
+       {
+           columnName = ORIGINATOR_ID;
+           name = originatorID;
+           prototypeName = id;
+           userInfo = 
+           {
+               modificationDate = "2002-05-06 07:28:05 +0200";
+           };
+       }, 
+       
+       {
+           columnName = PEOPLE_ID;
+           name = ownerID;
+           prototypeName = id;
+           userInfo = 
+           {
+               modificationDate = "2002-05-06 07:28:11 +0200";
+           };
+       }, 
+       
+       {
+           allowsNull = Y;
+           columnName = PREVIOUS_OWNER_ID;
+           name = previousOwnerID;
+           prototypeName = id;
+           userInfo = 
+           {
+               modificationDate = "2002-05-06 07:28:44 +0200";
+           };
+       }, 
+       
+       {
+           columnName = PR_ID;
+           name = priorityID;
+           prototypeName = osType;
+           userInfo = 
+           {
+               modificationDate = "2002-05-06 07:30:09 +0200";
+           };
+       }, 
+       
+       {
+           allowsNull = Y;
+           columnName = READ_;
+           name = read;
+           prototypeName = charFlag;
+           userInfo = 
+           {
+               modificationDate = "2002-05-06 07:28:53 +0200";
+           };
+       }, 
+       
+       {
+           columnName = RELEASE_ID;
+           name = releaseID;
+           prototypeName = id;
+           userInfo = 
+           {
+               modificationDate = "2002-05-06 07:30:25 +0200";
+           };
+       }, 
+       
+       {
+           columnName = STATE_ID;
+           name = stateID;
+           prototypeName = osType;
+           userInfo = 
+           {
+               modificationDate = "2002-05-06 07:42:12 +0200";
+           };
+       }, 
+       
+       {
+           columnName = SUBJECT;
+           name = subject;
+           prototypeName = varchar50;
+           userInfo = 
+           {
+               modificationDate = "2002-05-06 07:30:48 +0200";
+           };
+       }, 
+       
+       {
+           allowsNull = Y;
+           columnName = DESCRIPTION;
+           name = textDescription;
+           prototypeName = longText;
+           userInfo = 
+           {
+               modificationDate = "2002-05-06 07:30:56 +0200";
+           };
+       }
+    );
+    attributesUsedForLocking = 
+    (
+       componentID, 
+       featureRequest, 
+       id, 
+       originatorID, 
+       ownerID, 
+       previousOwnerID, 
+       priorityID, 
+       read, 
+       releaseID, 
+       stateID, 
+       subject, 
+       textDescription
+    );
+    className = er.bugtracker.Bug;
+    classProperties = 
+    (
+       component, 
+       dateModified, 
+       dateSubmitted, 
+       featureRequest, 
+       id, 
+       originator, 
+       owner, 
+       previousOwner, 
+       priority, 
+       read, 
+       state, 
+       subject, 
+       targetRelease, 
+       testItems, 
+       textDescription
+    );
+    externalName = BUG;
+    internalInfo = 
+    {
+        _clientClassPropertyNames = 
+        (
+           component, 
+           dateModified, 
+           dateSubmitted, 
+           featureRequest, 
+           id, 
+           originator, 
+           owner, 
+           priority, 
+           read, 
+           state, 
+           subject, 
+           targetRelease, 
+           testItems, 
+           textDescription
+        );
+    };
+    name = Bug;
+    primaryKeyAttributes = 
+    (
+       id
+    );
+    relationships = 
+    (
+       
+       {
+           deleteRule = EODeleteRuleCascade;
+           destination = XBugTestItem;
+           isToMany = Y;
+           joinSemantic = EOInnerJoin;
+           joins = 
+           (
+              
+              {
+                  destinationAttribute = bugID;
+                  sourceAttribute = id;
+              }
+           );
+           name = bugTestItems;
+           propagatesPrimaryKey = Y;
+           userInfo = 
+           {
+               modificationDate = "2002-05-04 13:06:03 +0200";
+           };
+       }, 
+       
+       {
+           destination = Component;
+           isMandatory = Y;
+           isToMany = N;
+           joinSemantic = EOInnerJoin;
+           joins = 
+           (
+              
+              {
+                  destinationAttribute = id;
+                  sourceAttribute = componentID;
+              }
+           );
+           name = component;
+           userInfo = 
+           {
+               modificationDate = "2002-05-04 13:06:03 +0200";
+           };
+       }, 
+       
+       {
+           destination = People;
+           isMandatory = Y;
+           isToMany = N;
+           joinSemantic = EOInnerJoin;
+           joins = 
+           (
+              
+              {
+                  destinationAttribute = id;
+                  sourceAttribute = originatorID;
+              }
+           );
+           name = originator;
+           userInfo = 
+           {
+               modificationDate = "2002-05-04 13:06:03 +0200";
+           };
+       }, 
+       
+       {
+           destination = People;
+           isMandatory = Y;
+           isToMany = N;
+           joinSemantic = EOInnerJoin;
+           joins = 
+           (
+              
+              {
+                  destinationAttribute = id;
+                  sourceAttribute = ownerID;
+              }
+           );
+           name = owner;
+           userInfo = 
+           {
+               modificationDate = "2002-05-04 13:06:03 +0200";
+           };
+       }, 
+       
+       {
+           destination = People;
+           isToMany = N;
+           joinSemantic = EOInnerJoin;
+           joins = 
+           (
+              
+              {
+                  destinationAttribute = id;
+                  sourceAttribute = previousOwnerID;
+              }
+           );
+           name = previousOwner;
+           userInfo = 
+           {
+               modificationDate = "2002-05-04 13:06:03 +0200";
+           };
+       }, 
+       
+       {
+           destination = Priority;
+           isMandatory = Y;
+           isToMany = N;
+           joinSemantic = EOInnerJoin;
+           joins = 
+           (
+              
+              {
+                  destinationAttribute = id;
+                  sourceAttribute = priorityID;
+              }
+           );
+           name = priority;
+           userInfo = 
+           {
+               modificationDate = "2002-05-04 13:06:03 +0200";
+           };
+       }, 
+       
+       {
+           destination = State;
+           isMandatory = Y;
+           isToMany = N;
+           joinSemantic = EOInnerJoin;
+           joins = 
+           (
+              
+              {
+                  destinationAttribute = id;
+                  sourceAttribute = stateID;
+              }
+           );
+           name = state;
+           userInfo = 
+           {
+               modificationDate = "2002-05-04 13:06:03 +0200";
+           };
+       }, 
+       
+       {
+           destination = Release;
+           isMandatory = Y;
+           isToMany = N;
+           joinSemantic = EOInnerJoin;
+           joins = 
+           (
+              
+              {
+                  destinationAttribute = id;
+                  sourceAttribute = releaseID;
+              }
+           );
+           name = targetRelease;
+           userInfo = 
+           {
+               modificationDate = "2002-05-04 13:06:03 +0200";
+           };
+       }, 
+       
+       {
+           definition = bugTestItems.testItem;
+           name = testItems;
+           userInfo = 
+           {
+               modificationDate = "2002-05-04 13:06:03 +0200";
+           };
+       }
+    );
+    userInfo = 
+    {
+        modificationDate = "2002-05-07 22:38:33 +0200";
+    };
 }

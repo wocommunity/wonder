@@ -1,32 +1,66 @@
+
 {
-    attributes = (
-        {
-            columnName = NAME; 
-            name = name; 
-            prototypeName = varchar50; 
-            userInfo = {modificationDate = "2002-05-06 07:18:15 +0200"; }; 
-        }, 
-        {
-            columnName = ID; 
-            name = oid; 
-            prototypeName = osType; 
-            userInfo = {modificationDate = "2002-05-06 07:41:33 +0200"; }; 
-        }, 
-        {
-            columnName = "SORT_ORDER"; 
-            name = sortOrder; 
-            prototypeName = intNumber; 
-            userInfo = {modificationDate = "2002-05-06 07:18:00 +0200"; }; 
-        }
-    ); 
-    attributesUsedForLocking = (oid, name, sortOrder); 
-    cachesObjects = Y; 
-    className = "er.bugtracker.TestItemState"; 
-    classProperties = (name, sortOrder); 
-    externalName = "TEST_ITEM_STATE"; 
-    isReadOnly = Y; 
-    name = TestItemState; 
-    primaryKeyAttributes = (oid); 
-    sharedObjectFetchSpecificationNames = (FetchAll); 
-    userInfo = {modificationDate = "2002-05-04 13:06:03 +0200"; }; 
+    attributes = 
+    (
+       
+       {
+           columnName = NAME;
+           name = name;
+           prototypeName = varchar50;
+           userInfo = 
+           {
+               modificationDate = "2002-05-06 07:18:15 +0200";
+           };
+       }, 
+       
+       {
+           columnName = ID;
+           name = oid;
+           prototypeName = osType;
+           userInfo = 
+           {
+               modificationDate = "2002-05-06 07:41:33 +0200";
+           };
+       }, 
+       
+       {
+           columnName = SORT_ORDER;
+           name = sortOrder;
+           prototypeName = intNumber;
+           userInfo = 
+           {
+               modificationDate = "2002-05-06 07:18:00 +0200";
+           };
+       }
+    );
+    attributesUsedForLocking = 
+    (
+       name, 
+       oid, 
+       sortOrder
+    );
+    cachesObjects = Y;
+    className = er.bugtracker.TestItemState;
+    classProperties = 
+    (
+       name, 
+       sortOrder
+    );
+    externalName = TEST_ITEM_STATE;
+    internalInfo = 
+    {};
+    isReadOnly = Y;
+    name = TestItemState;
+    primaryKeyAttributes = 
+    (
+       oid
+    );
+    sharedObjectFetchSpecificationNames = 
+    (
+       FetchAll
+    );
+    userInfo = 
+    {
+        modificationDate = "2002-05-04 13:06:03 +0200";
+    };
 }

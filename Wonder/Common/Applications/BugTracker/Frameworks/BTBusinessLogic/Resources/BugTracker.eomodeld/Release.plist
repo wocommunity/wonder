@@ -1,30 +1,95 @@
+
 {
-    attributes = (
-        {
-            columnName = ID; 
-            name = id; 
-            prototypeName = id; 
-            userInfo = {modificationDate = "2002-05-06 07:22:33 +0200"; }; 
-        }, 
-        {
-            columnName = "IS_OPEN"; 
-            name = isOpen; 
-            prototypeName = flag; 
-            userInfo = {modificationDate = "2002-05-06 07:24:15 +0200"; }; 
-        }, 
-        {
-            columnName = NAME; 
-            name = name; 
-            prototypeName = varchar50; 
-            userInfo = {modificationDate = "2002-05-06 07:22:44 +0200"; }; 
-        }
-    ); 
-    attributesUsedForLocking = (id, name, isOpen); 
-    className = "er.bugtracker.Release"; 
-    classProperties = (name, isOpen); 
-    externalName = RELEASE; 
-    name = Release; 
-    primaryKeyAttributes = (id); 
-    sharedObjectFetchSpecificationNames = (FetchAll); 
-    userInfo = {modificationDate = "2002-05-07 23:06:05 +0200"; }; 
+    attributes = 
+    (
+       
+       {
+           columnName = ID;
+           name = id;
+           prototypeName = id;
+           userInfo = 
+           {
+               modificationDate = "2002-05-06 07:22:33 +0200";
+           };
+       }, 
+       
+       {
+           columnName = IS_OPEN;
+           name = isOpen;
+           prototypeName = flag;
+           userInfo = 
+           {
+               modificationDate = "2002-05-06 07:24:15 +0200";
+           };
+       }, 
+       
+       {
+           columnName = NAME;
+           name = name;
+           prototypeName = varchar50;
+           userInfo = 
+           {
+               modificationDate = "2002-05-06 07:22:44 +0200";
+           };
+       }
+    );
+    attributesUsedForLocking = 
+    (
+       id, 
+       isOpen, 
+       name
+    );
+    className = er.bugtracker.Release;
+    classProperties = 
+    (
+       bugs, 
+       isOpen, 
+       name, 
+       requirements
+    );
+    externalName = RELEASE;
+    internalInfo = 
+    {};
+    name = Release;
+    primaryKeyAttributes = 
+    (
+       id
+    );
+    relationships = 
+    (
+       
+       {
+           destination = Bug;
+           isToMany = Y;
+           joinSemantic = EOInnerJoin;
+           joins = 
+           (
+              
+              {
+                  destinationAttribute = releaseID;
+                  sourceAttribute = id;
+              }
+           );
+           name = bugs;
+       }, 
+       
+       {
+           destination = Requirement;
+           isToMany = Y;
+           joinSemantic = EOInnerJoin;
+           joins = 
+           (
+              
+              {
+                  destinationAttribute = releaseID;
+                  sourceAttribute = id;
+              }
+           );
+           name = requirements;
+       }
+    );
+    userInfo = 
+    {
+        modificationDate = "2002-05-07 23:06:05 +0200";
+    };
 }

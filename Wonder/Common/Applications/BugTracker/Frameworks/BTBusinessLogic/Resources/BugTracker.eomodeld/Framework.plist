@@ -1,53 +1,107 @@
+
 {
-    attributes = (
-        {
-            columnName = ID; 
-            name = id; 
-            prototypeName = id; 
-            userInfo = {modificationDate = "2002-05-07 23:00:52 +0200"; }; 
-        }, 
-        {
-            columnName = NAME; 
-            name = name; 
-            prototypeName = varchar50; 
-            userInfo = {modificationDate = "2002-05-07 23:00:52 +0200"; }; 
-        }, 
-        {
-            columnName = ORDERING; 
-            name = ordering; 
-            prototypeName = intNumber; 
-            userInfo = {modificationDate = "2002-05-07 23:00:52 +0200"; }; 
-        }, 
-        {
-            allowsNull = Y; 
-            columnName = "OWNED_SINCE"; 
-            name = ownedSince; 
-            prototypeName = dateTime; 
-            userInfo = {modificationDate = "2002-05-07 23:00:52 +0200"; }; 
-        }, 
-        {
-            allowsNull = Y; 
-            columnName = "USER_ID"; 
-            name = userId; 
-            prototypeName = id; 
-            userInfo = {modificationDate = "2002-05-07 23:00:52 +0200"; }; 
-        }
-    ); 
-    attributesUsedForLocking = (id, name, userId, ordering); 
-    className = "er.bugtracker.Framework"; 
-    classProperties = (name, ordering, ownedSince, owner); 
-    externalName = FRAMEW; 
-    name = Framework; 
-    primaryKeyAttributes = (id); 
-    relationships = (
-        {
-            destination = People; 
-            isToMany = N; 
-            joinSemantic = EOInnerJoin; 
-            joins = ({destinationAttribute = id; sourceAttribute = userId; }); 
-            name = owner; 
-            userInfo = {modificationDate = "2002-05-07 23:00:52 +0200"; }; 
-        }
-    ); 
-    userInfo = {modificationDate = "2002-05-07 23:00:52 +0200"; }; 
+    attributes = 
+    (
+       
+       {
+           columnName = ID;
+           name = id;
+           prototypeName = id;
+           userInfo = 
+           {
+               modificationDate = "2002-05-07 23:00:52 +0200";
+           };
+       }, 
+       
+       {
+           columnName = NAME;
+           name = name;
+           prototypeName = varchar50;
+           userInfo = 
+           {
+               modificationDate = "2002-05-07 23:00:52 +0200";
+           };
+       }, 
+       
+       {
+           columnName = ORDERING;
+           name = ordering;
+           prototypeName = intNumber;
+           userInfo = 
+           {
+               modificationDate = "2002-05-07 23:00:52 +0200";
+           };
+       }, 
+       
+       {
+           allowsNull = Y;
+           columnName = OWNED_SINCE;
+           name = ownedSince;
+           prototypeName = dateTime;
+           userInfo = 
+           {
+               modificationDate = "2002-05-07 23:00:52 +0200";
+           };
+       }, 
+       
+       {
+           allowsNull = Y;
+           columnName = USER_ID;
+           name = ownerID;
+           prototypeName = id;
+           userInfo = 
+           {
+               modificationDate = "2002-05-07 23:00:52 +0200";
+           };
+       }
+    );
+    attributesUsedForLocking = 
+    (
+       id, 
+       name, 
+       ordering, 
+       ownerID
+    );
+    className = er.bugtracker.Framework;
+    classProperties = 
+    (
+       name, 
+       ordering, 
+       ownedSince, 
+       owner
+    );
+    externalName = FRAMEW;
+    internalInfo = 
+    {};
+    name = Framework;
+    primaryKeyAttributes = 
+    (
+       id
+    );
+    relationships = 
+    (
+       
+       {
+           destination = People;
+           isToMany = N;
+           joinSemantic = EOInnerJoin;
+           joins = 
+           (
+              
+              {
+                  destinationAttribute = id;
+                  sourceAttribute = ownerID;
+              }
+           );
+           name = owner;
+           userInfo = 
+           {
+               modificationDate = "2002-05-07 23:00:52 +0200";
+           };
+       }
+    );
+    userInfo = 
+    {
+        modificationDate = "2002-05-07 23:00:52 +0200";
+    };
 }

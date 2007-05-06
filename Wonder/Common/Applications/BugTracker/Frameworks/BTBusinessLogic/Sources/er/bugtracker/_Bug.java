@@ -93,10 +93,10 @@ public abstract class _Bug extends ERXGenericRecord {
     }
 
     public Number bugid() {
-        return (Number)storedValueForKey("bugid");
+        return (Number)storedValueForKey("id");
     }
     public void setBugid(Number aValue) {
-        takeStoredValueForKey(aValue, "bugid");
+        takeStoredValueForKey(aValue, "id");
     }
 
     public Priority priority() {

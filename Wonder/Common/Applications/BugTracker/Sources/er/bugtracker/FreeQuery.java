@@ -28,7 +28,7 @@ public class FreeQuery extends WOComponent {
             String s=(String)e.nextElement();
             try {
                 Integer i=new Integer(s);
-                quals.addObject(new EOKeyValueQualifier("bugid", EOQualifier.QualifierOperatorEqual, i));
+                quals.addObject(new EOKeyValueQualifier("id", EOQualifier.QualifierOperatorEqual, i));
                 
             } catch (NumberFormatException ex) {}
         }

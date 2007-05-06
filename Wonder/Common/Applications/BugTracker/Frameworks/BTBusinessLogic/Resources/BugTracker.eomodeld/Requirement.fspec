@@ -1,172 +1,244 @@
+
 {
-    myRequirements = {
-        class = EOFetchSpecification; 
-        entityName = Requirement; 
-        fetchLimit = 0; 
-        qualifier = {
-            class = EOAndQualifier; 
-            qualifiers = (
-                {
-                    class = EOOrQualifier; 
-                    qualifiers = (
-                        {
-                            class = EOKeyValueQualifier; 
-                            key = originator; 
-                            selectorName = "isEqualTo:"; 
-                            value = {"_key" = user; class = EOQualifierVariable; }; 
-                        }, 
-                        {
-                            class = EOKeyValueQualifier; 
-                            key = owner; 
-                            selectorName = "isEqualTo:"; 
-                            value = {"_key" = user; class = EOQualifierVariable; }; 
-                        }
-                    ); 
-                }, 
-                {
-                    class = EOKeyValueQualifier; 
-                    key = read; 
-                    selectorName = "isNotEqualTo:"; 
-                    value = Y; 
-                }, 
-                {
-                    class = EOOrQualifier; 
-                    qualifiers = (
-                        {
-                            class = EOKeyValueQualifier; 
-                            key = "state.oid"; 
-                            selectorName = "isEqualTo:"; 
-                            value = vrfy; 
-                        }, 
-                        {
-                            class = EOKeyValueQualifier; 
-                            key = "state.oid"; 
-                            selectorName = "isEqualTo:"; 
-                            value = anlz; 
-                        }
-                    ); 
-                }
-            ); 
-        }; 
-    }; 
-    myTotalRequirements = {
-        class = EOFetchSpecification; 
-        entityName = Requirement; 
-        fetchLimit = 0; 
-        qualifier = {
-            class = EOAndQualifier; 
-            qualifiers = (
-                {
-                    class = EOOrQualifier; 
-                    qualifiers = (
-                        {
-                            class = EOKeyValueQualifier; 
-                            key = originator; 
-                            selectorName = "isEqualTo:"; 
-                            value = {"_key" = user; class = EOQualifierVariable; }; 
-                        }, 
-                        {
-                            class = EOKeyValueQualifier; 
-                            key = owner; 
-                            selectorName = "isEqualTo:"; 
-                            value = {"_key" = user; class = EOQualifierVariable; }; 
-                        }
-                    ); 
-                }, 
-                {
-                    class = EONotQualifier; 
-                    qualifier = {
-                        class = EOKeyValueQualifier; 
-                        key = "state.oid"; 
-                        selectorName = "isEqualTo:"; 
-                        value = buld; 
-                    }; 
-                }
-            ); 
-        }; 
-    }; 
-    myTotalRequirementsEngineering = {
-        class = EOFetchSpecification; 
-        entityName = Requirement; 
-        fetchLimit = 0; 
-        qualifier = {
-            class = EOAndQualifier; 
-            qualifiers = (
-                {
-                    class = EOKeyValueQualifier; 
-                    key = owner; 
-                    selectorName = "isEqualTo:"; 
-                    value = {"_key" = user; class = EOQualifierVariable; }; 
-                }, 
-                {
-                    class = EOKeyValueQualifier; 
-                    key = "state.oid"; 
-                    selectorName = "isEqualTo:"; 
-                    value = buld; 
-                }
-            ); 
-        }; 
-    }; 
-    requirementsFiledRecently = {
-        class = EOFetchSpecification; 
-        entityName = Requirement; 
-        fetchLimit = 0; 
-        isDeep = YES; 
-        qualifier = {
-            class = EOAndQualifier; 
-            qualifiers = (
-                {
-                    class = EOKeyValueQualifier; 
-                    key = dateSubmitted; 
-                    selectorName = "isGreaterThan:"; 
-                    value = {"_key" = date; class = EOQualifierVariable; }; 
-                }, 
-                {
-                    class = EOKeyValueQualifier; 
-                    key = originator; 
-                    selectorName = "isEqualTo:"; 
-                    value = {"_key" = user; class = EOQualifierVariable; }; 
-                }
-            ); 
-        }; 
-    }; 
-    requirementsInBuild = {
-        class = EOFetchSpecification; 
-        entityName = Requirement; 
-        fetchLimit = 0; 
-        qualifier = {
-            class = EOKeyValueQualifier; 
-            key = "state.oid"; 
-            selectorName = "isEqualTo:"; 
-            value = buld; 
-        }; 
-    }; 
-    requirementsInBuildEngineering = {
-        class = EOFetchSpecification; 
-        entityName = Requirement; 
-        fetchLimit = 0; 
-        qualifier = {
-            class = EOAndQualifier; 
-            qualifiers = (
-                {
-                    class = EOKeyValueQualifier; 
-                    key = owner; 
-                    selectorName = "isEqualTo:"; 
-                    value = {"_key" = user; class = EOQualifierVariable; }; 
-                }, 
-                {
-                    class = EOKeyValueQualifier; 
-                    key = read; 
-                    selectorName = "isNotEqualTo:"; 
-                    value = Y; 
-                }, 
-                {
-                    class = EOKeyValueQualifier; 
-                    key = "state.oid"; 
-                    selectorName = "isEqualTo:"; 
-                    value = buld; 
-                }
-            ); 
-        }; 
-    }; 
+    myRequirements = 
+    {
+        class = EOFetchSpecification;
+        entityName = Requirement;
+        fetchLimit = 0;
+        qualifier = 
+        {
+            class = EOAndQualifier;
+            qualifiers = 
+            (
+               
+               {
+                   class = EOOrQualifier;
+                   qualifiers = 
+                   (
+                      
+                      {
+                          class = EOKeyValueQualifier;
+                          key = originator;
+                          selectorName = isEqualTo:;
+                          value = 
+                          {
+                              _key = user;
+                              class = EOQualifierVariable;
+                          };
+                      }, 
+                      
+                      {
+                          class = EOKeyValueQualifier;
+                          key = owner;
+                          selectorName = isEqualTo:;
+                          value = 
+                          {
+                              _key = user;
+                              class = EOQualifierVariable;
+                          };
+                      }
+                   );
+               }, 
+               
+               {
+                   class = EOKeyValueQualifier;
+                   key = read;
+                   selectorName = isNotEqualTo:;
+                   value = Y;
+               }, 
+               
+               {
+                   class = EOOrQualifier;
+                   qualifiers = 
+                   (
+                      
+                      {
+                          class = EOKeyValueQualifier;
+                          key = state.id;
+                          selectorName = isEqualTo:;
+                          value = vrfy;
+                      }, 
+                      
+                      {
+                          class = EOKeyValueQualifier;
+                          key = state.id;
+                          selectorName = isEqualTo:;
+                          value = anlz;
+                      }
+                   );
+               }
+            );
+        };
+    };
+    myTotalRequirements = 
+    {
+        class = EOFetchSpecification;
+        entityName = Requirement;
+        fetchLimit = 0;
+        qualifier = 
+        {
+            class = EOAndQualifier;
+            qualifiers = 
+            (
+               
+               {
+                   class = EOOrQualifier;
+                   qualifiers = 
+                   (
+                      
+                      {
+                          class = EOKeyValueQualifier;
+                          key = originator;
+                          selectorName = isEqualTo:;
+                          value = 
+                          {
+                              _key = user;
+                              class = EOQualifierVariable;
+                          };
+                      }, 
+                      
+                      {
+                          class = EOKeyValueQualifier;
+                          key = owner;
+                          selectorName = isEqualTo:;
+                          value = 
+                          {
+                              _key = user;
+                              class = EOQualifierVariable;
+                          };
+                      }
+                   );
+               }, 
+               
+               {
+                   class = EONotQualifier;
+                   qualifier = 
+                   {
+                       class = EOKeyValueQualifier;
+                       key = state.id;
+                       selectorName = isEqualTo:;
+                       value = buld;
+                   };
+               }
+            );
+        };
+    };
+    myTotalRequirementsEngineering = 
+    {
+        class = EOFetchSpecification;
+        entityName = Requirement;
+        fetchLimit = 0;
+        qualifier = 
+        {
+            class = EOAndQualifier;
+            qualifiers = 
+            (
+               
+               {
+                   class = EOKeyValueQualifier;
+                   key = owner;
+                   selectorName = isEqualTo:;
+                   value = 
+                   {
+                       _key = user;
+                       class = EOQualifierVariable;
+                   };
+               }, 
+               
+               {
+                   class = EOKeyValueQualifier;
+                   key = state.id;
+                   selectorName = isEqualTo:;
+                   value = buld;
+               }
+            );
+        };
+    };
+    requirementsFiledRecently = 
+    {
+        class = EOFetchSpecification;
+        entityName = Requirement;
+        fetchLimit = 0;
+        isDeep = YES;
+        qualifier = 
+        {
+            class = EOAndQualifier;
+            qualifiers = 
+            (
+               
+               {
+                   class = EOKeyValueQualifier;
+                   key = dateSubmitted;
+                   selectorName = isGreaterThan:;
+                   value = 
+                   {
+                       _key = date;
+                       class = EOQualifierVariable;
+                   };
+               }, 
+               
+               {
+                   class = EOKeyValueQualifier;
+                   key = originator;
+                   selectorName = isEqualTo:;
+                   value = 
+                   {
+                       _key = user;
+                       class = EOQualifierVariable;
+                   };
+               }
+            );
+        };
+    };
+    requirementsInBuild = 
+    {
+        class = EOFetchSpecification;
+        entityName = Requirement;
+        fetchLimit = 0;
+        qualifier = 
+        {
+            class = EOKeyValueQualifier;
+            key = state.id;
+            selectorName = isEqualTo:;
+            value = buld;
+        };
+    };
+    requirementsInBuildEngineering = 
+    {
+        class = EOFetchSpecification;
+        entityName = Requirement;
+        fetchLimit = 0;
+        qualifier = 
+        {
+            class = EOAndQualifier;
+            qualifiers = 
+            (
+               
+               {
+                   class = EOKeyValueQualifier;
+                   key = owner;
+                   selectorName = isEqualTo:;
+                   value = 
+                   {
+                       _key = user;
+                       class = EOQualifierVariable;
+                   };
+               }, 
+               
+               {
+                   class = EOKeyValueQualifier;
+                   key = read;
+                   selectorName = isNotEqualTo:;
+                   value = Y;
+               }, 
+               
+               {
+                   class = EOKeyValueQualifier;
+                   key = state.id;
+                   selectorName = isEqualTo:;
+                   value = buld;
+               }
+            );
+        };
+    };
 }
