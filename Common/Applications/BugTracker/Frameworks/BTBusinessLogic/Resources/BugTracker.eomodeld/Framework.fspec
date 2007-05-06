@@ -1,9 +1,19 @@
+
 {
-    orderedFrameworks = {
-        class = EOFetchSpecification; 
-        entityName = Framework; 
-        fetchLimit = 0; 
-        isDeep = YES; 
-        sortOrderings = ({class = EOSortOrdering; key = name; selectorName = "compareAscending:"; }); 
-    }; 
+    orderedFrameworks = 
+    {
+        class = EOFetchSpecification;
+        entityName = Framework;
+        fetchLimit = 0;
+        isDeep = YES;
+        sortOrderings = 
+        (
+           
+           {
+               class = EOSortOrdering;
+               key = name;
+               selectorName = compareAscending:;
+           }
+        );
+    };
 }

@@ -1,42 +1,93 @@
+
 {
-    attributes = (
-        {
-            columnName = "BUG_ID"; 
-            name = bugid; 
-            prototypeName = id; 
-            userInfo = {modificationDate = "2002-05-06 07:18:44 +0200"; }; 
-        }, 
-        {
-            columnName = ID; 
-            name = id; 
-            prototypeName = id; 
-            userInfo = {modificationDate = "2002-05-06 07:18:49 +0200"; }; 
-        }
-    ); 
-    attributesUsedForLocking = (bugid, id); 
-    className = EOGenericRecord; 
-    externalName = "REQ_TEST_ITEM"; 
-    fetchSpecificationDictionary = {}; 
-    internalInfo = {"_clientClassPropertyNames" = (bugid); }; 
-    name = XRequirementTestItem; 
-    primaryKeyAttributes = (bugid, id); 
-    relationships = (
-        {
-            destination = Requirement; 
-            isToMany = N; 
-            joinSemantic = EOInnerJoin; 
-            joins = ({destinationAttribute = bugid; sourceAttribute = bugid; }); 
-            name = requirement; 
-            userInfo = {modificationDate = "2002-05-04 13:06:03 +0200"; }; 
-        }, 
-        {
-            destination = TestItem; 
-            isToMany = N; 
-            joinSemantic = EOInnerJoin; 
-            joins = ({destinationAttribute = id; sourceAttribute = id; }); 
-            name = testItem; 
-            userInfo = {modificationDate = "2002-05-04 13:06:03 +0200"; }; 
-        }
-    ); 
-    userInfo = {modificationDate = "2002-05-04 14:16:25 +0200"; }; 
+    attributes = 
+    (
+       
+       {
+           columnName = BUG_ID;
+           name = requirementID;
+           prototypeName = id;
+           userInfo = 
+           {
+               modificationDate = "2002-05-06 07:18:44 +0200";
+           };
+       }, 
+       
+       {
+           columnName = ID;
+           name = testID;
+           prototypeName = id;
+           userInfo = 
+           {
+               modificationDate = "2002-05-06 07:18:49 +0200";
+           };
+       }
+    );
+    attributesUsedForLocking = 
+    (
+       requirementID, 
+       testID
+    );
+    className = EOGenericRecord;
+    externalName = REQ_TEST_ITEM;
+    internalInfo = 
+    {
+        _clientClassPropertyNames = 
+        (
+           requirementID
+        );
+    };
+    name = XRequirementTestItem;
+    primaryKeyAttributes = 
+    (
+       requirementID, 
+       testID
+    );
+    relationships = 
+    (
+       
+       {
+           destination = Requirement;
+           isMandatory = Y;
+           isToMany = N;
+           joinSemantic = EOInnerJoin;
+           joins = 
+           (
+              
+              {
+                  destinationAttribute = id;
+                  sourceAttribute = requirementID;
+              }
+           );
+           name = requirement;
+           userInfo = 
+           {
+               modificationDate = "2002-05-04 13:06:03 +0200";
+           };
+       }, 
+       
+       {
+           destination = TestItem;
+           isMandatory = Y;
+           isToMany = N;
+           joinSemantic = EOInnerJoin;
+           joins = 
+           (
+              
+              {
+                  destinationAttribute = id;
+                  sourceAttribute = testID;
+              }
+           );
+           name = testItem;
+           userInfo = 
+           {
+               modificationDate = "2002-05-04 13:06:03 +0200";
+           };
+       }
+    );
+    userInfo = 
+    {
+        modificationDate = "2002-05-04 14:16:25 +0200";
+    };
 }

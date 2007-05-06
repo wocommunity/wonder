@@ -84,7 +84,7 @@ public class DirectAction extends ERD2WDirectAction {
                 ec.lock();
                 try {
                     Integer bugId = new Integer(numberFromRequest);
-                    NSArray bugs = EOUtilities.objectsMatchingKeyAndValue(ec, "Bug", "bugid", bugId);
+                    NSArray bugs = EOUtilities.objectsMatchingKeyAndValue(ec, "Bug", "id", bugId);
                     EOEnterpriseObject bug = bugs.count() > 0 ? (EOEnterpriseObject) bugs.objectAtIndex(0) : null;
                     if (bug == null) {
                         result = errorPage("Bug not found", session);

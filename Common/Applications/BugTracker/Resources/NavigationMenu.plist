@@ -120,7 +120,7 @@
         },
         {
                 name = "Releases";
-                action = session.handlers.releases.TrackMyRelease;
+                action = session.handlers.releases.PushRelease;
                 children = ("CreateRelease", "TrackRelease", "TrackMyRelease", "PushRelease");
         },
         {
@@ -137,6 +137,6 @@
         },
         {
                 name = "PushRelease";
-                action = session.handlers.releases.PushRelease;
+                pageName = PushRelease;
         },
 )

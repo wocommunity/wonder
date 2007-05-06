@@ -6,12 +6,12 @@
  * included with this distribution in the LICENSE.NPL file.  */
 
 package er.bugtracker;
-import com.webobjects.foundation.*;
-import com.webobjects.appserver.*;
-import com.webobjects.eocontrol.*;
-import er.bugtracker.Bug;
+import com.webobjects.appserver.WOContext;
+import com.webobjects.eocontrol.EOEnterpriseObject;
 
-public class StatusComponent extends WOComponent {
+import er.directtoweb.ERDCustomComponent;
+
+public class StatusComponent extends ERDCustomComponent {
 
     public StatusComponent(WOContext aContext) {
         super(aContext);

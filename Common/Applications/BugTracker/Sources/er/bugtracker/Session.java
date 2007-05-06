@@ -194,7 +194,7 @@ public class Session extends ERXSession {
             QueryPageInterface qpi = (QueryPageInterface) D2W.factory().pageForConfigurationNamed("TrackRelease", Session.this);
             WODisplayGroup dg = (WODisplayGroup) ((WOComponent) qpi).valueForKey("displayGroup");
             /* dg.queryMatch().setObjectForKey(Bug.DEFAULT_RELEASE,"targetRelease"); */
-            dg.setQualifier(new EOKeyValueQualifier("state", EOQualifier.QualifierOperatorEqual, State.BUILD)); // picked
+            dg.setQualifier(new EOKeyValueQualifier("bugs.state", EOQualifier.QualifierOperatorEqual, State.BUILD)); // picked
             // up in ERQueryPage
             qpi.setNextPageDelegate(new NextPageDelegate() {
                 public WOComponent nextPage(WOComponent sender2) {

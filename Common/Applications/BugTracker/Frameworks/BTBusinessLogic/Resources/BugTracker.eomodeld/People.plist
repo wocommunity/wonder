@@ -1,98 +1,156 @@
+
 {
-    attributes = (
-        {
-            allowsNull = Y; 
-            columnName = EMAIL; 
-            name = email; 
-            prototypeName = varchar50; 
-            userInfo = {modificationDate = "2002-05-06 07:24:51 +0200"; }; 
-        }, 
-        {
-            columnName = ID; 
-            name = id; 
-            prototypeName = id; 
-            userInfo = {modificationDate = "2002-05-06 07:24:57 +0200"; }; 
-        }, 
-        {
-            columnName = "IS_ACTIVE"; 
-            name = isActive; 
-            prototypeName = flag; 
-            userInfo = {modificationDate = "2002-05-06 07:44:21 +0200"; }; 
-        }, 
-        {
-            columnName = "IS_ADMIN"; 
-            name = isAdmin; 
-            prototypeName = flag; 
-            userInfo = {modificationDate = "2002-05-06 07:44:33 +0200"; }; 
-        }, 
-        {
-            columnName = "IS_CUSTOMER_SERVICE"; 
-            name = isCustomerService; 
-            prototypeName = flag; 
-            userInfo = {modificationDate = "2002-05-06 07:44:51 +0200"; }; 
-        }, 
-        {
-            columnName = "IS_ENGINEERING"; 
-            name = isEngineering; 
-            prototypeName = flag; 
-            userInfo = {modificationDate = "2002-05-06 07:44:46 +0200"; }; 
-        }, 
-        {
-            columnName = LOGIN; 
-            name = login; 
-            prototypeName = varchar16; 
-            userInfo = {modificationDate = "2002-05-06 07:25:23 +0200"; }; 
-        }, 
-        {
-            allowsNull = Y; 
-            columnName = NAME; 
-            name = name; 
-            prototypeName = varchar50; 
-            userInfo = {modificationDate = "2002-05-06 07:25:41 +0200"; }; 
-        }, 
-        {
-            columnName = PASSWORD; 
-            name = password; 
-            prototypeName = varchar16; 
-            userInfo = {modificationDate = "2002-05-06 07:25:49 +0200"; }; 
-        }, 
-        {
-            allowsNull = Y; 
-            columnName = TEAM; 
-            name = team; 
-            prototypeName = varchar16; 
-            userInfo = {modificationDate = "2002-05-06 07:25:56 +0200"; }; 
-        }
-    ); 
-    attributesUsedForLocking = (
-        login, 
-        name, 
-        password, 
-        isAdmin, 
-        team, 
-        email, 
-        isEngineering, 
-        isCustomerService, 
-        isActive, 
-        id
-    ); 
-    className = "er.bugtracker.People"; 
-    classProperties = (
-        login, 
-        name, 
-        password, 
-        isAdmin, 
-        email, 
-        isEngineering, 
-        isCustomerService, 
-        isActive
-    ); 
-    externalName = PEOPLE; 
-    internalInfo = {"_clientClassPropertyNames" = (login, name, password, isAdmin, email); }; 
-    name = People; 
-    primaryKeyAttributes = (id); 
-    userInfo = {
-        interfaces = ERCoreUserInterface; 
-        modificationDate = "2002-05-06 07:51:08 +0200"; 
-    }; 
+    attributes = 
+    (
+       
+       {
+           allowsNull = Y;
+           columnName = EMAIL;
+           name = email;
+           prototypeName = varchar50;
+           userInfo = 
+           {
+               modificationDate = "2002-05-06 07:24:51 +0200";
+           };
+       }, 
+       
+       {
+           columnName = ID;
+           name = id;
+           prototypeName = id;
+           userInfo = 
+           {
+               modificationDate = "2002-05-06 07:24:57 +0200";
+           };
+       }, 
+       
+       {
+           columnName = IS_ACTIVE;
+           name = isActive;
+           prototypeName = flag;
+           userInfo = 
+           {
+               modificationDate = "2002-05-06 07:44:21 +0200";
+           };
+       }, 
+       
+       {
+           columnName = IS_ADMIN;
+           name = isAdmin;
+           prototypeName = flag;
+           userInfo = 
+           {
+               modificationDate = "2002-05-06 07:44:33 +0200";
+           };
+       }, 
+       
+       {
+           columnName = IS_CUSTOMER_SERVICE;
+           name = isCustomerService;
+           prototypeName = flag;
+           userInfo = 
+           {
+               modificationDate = "2002-05-06 07:44:51 +0200";
+           };
+       }, 
+       
+       {
+           columnName = IS_ENGINEERING;
+           name = isEngineering;
+           prototypeName = flag;
+           userInfo = 
+           {
+               modificationDate = "2002-05-06 07:44:46 +0200";
+           };
+       }, 
+       
+       {
+           columnName = LOGIN;
+           name = login;
+           prototypeName = varchar16;
+           userInfo = 
+           {
+               modificationDate = "2002-05-06 07:25:23 +0200";
+           };
+       }, 
+       
+       {
+           allowsNull = Y;
+           columnName = NAME;
+           name = name;
+           prototypeName = varchar50;
+           userInfo = 
+           {
+               modificationDate = "2002-05-06 07:25:41 +0200";
+           };
+       }, 
+       
+       {
+           columnName = PASSWORD;
+           name = password;
+           prototypeName = varchar16;
+           userInfo = 
+           {
+               modificationDate = "2002-05-06 07:25:49 +0200";
+           };
+       }, 
+       
+       {
+           allowsNull = Y;
+           columnName = TEAM;
+           name = team;
+           prototypeName = varchar16;
+           userInfo = 
+           {
+               modificationDate = "2002-05-06 07:25:56 +0200";
+           };
+       }
+    );
+    attributesUsedForLocking = 
+    (
+       email, 
+       id, 
+       isActive, 
+       isAdmin, 
+       isCustomerService, 
+       isEngineering, 
+       login, 
+       name, 
+       password, 
+       team
+    );
+    className = er.bugtracker.People;
+    classProperties = 
+    (
+       email, 
+       isActive, 
+       isAdmin, 
+       isCustomerService, 
+       isEngineering, 
+       login, 
+       name, 
+       password
+    );
+    externalName = PEOPLE;
+    internalInfo = 
+    {
+        _clientClassPropertyNames = 
+        (
+           email, 
+           isAdmin, 
+           login, 
+           name, 
+           password
+        );
+    };
+    name = People;
+    primaryKeyAttributes = 
+    (
+       id
+    );
+    userInfo = 
+    {
+        interfaces = ERCoreUserInterface;
+        modificationDate = "2002-05-06 07:51:08 +0200";
+    };
 }

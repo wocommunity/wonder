@@ -1,96 +1,138 @@
+
 {
-    bugsFiledRecently = {
-        class = EOFetchSpecification; 
-        entityName = Bug; 
-        fetchLimit = 0; 
-        qualifier = {
-            class = EOAndQualifier; 
-            qualifiers = (
-                {
-                    class = EOKeyValueQualifier; 
-                    key = dateSubmitted; 
-                    selectorName = "isGreaterThan:"; 
-                    value = {"_key" = date; class = EOQualifierVariable; }; 
-                }, 
-                {
-                    class = EOKeyValueQualifier; 
-                    key = originator; 
-                    selectorName = "isEqualTo:"; 
-                    value = {"_key" = user; class = EOQualifierVariable; }; 
-                }
-            ); 
-        }; 
-    }; 
-    bugsInBuild = {
-        class = EOFetchSpecification; 
-        entityName = Bug; 
-        fetchLimit = 0; 
-        qualifier = {
-            class = EOAndQualifier; 
-            qualifiers = (
-                {
-                    class = EOKeyValueQualifier; 
-                    key = "state.oid"; 
-                    selectorName = "isEqualTo:"; 
-                    value = buld; 
-                }, 
-                {
-                    class = EOKeyValueQualifier; 
-                    key = targetRelease; 
-                    selectorName = "isEqualTo:"; 
-                    value = {"_key" = targetRelease; class = EOQualifierVariable; }; 
-                }
-            ); 
-        }; 
-    }; 
-    bugsOwned = {
-        class = EOFetchSpecification; 
-        entityName = Bug; 
-        fetchLimit = 0; 
-        qualifier = {
-            class = EOAndQualifier; 
-            qualifiers = (
-                {
-                    class = EOKeyValueQualifier; 
-                    key = owner; 
-                    selectorName = "isEqualTo:"; 
-                    value = {"_key" = user; class = EOQualifierVariable; }; 
-                }, 
-                {
-                    class = EOKeyValueQualifier; 
-                    key = "state.oid"; 
-                    selectorName = "isNotEqualTo:"; 
-                    value = clsd; 
-                }
-            ); 
-        }; 
-    }; 
-    unreadBugs = {
-        class = EOFetchSpecification; 
-        entityName = Bug; 
-        fetchLimit = 0; 
-        qualifier = {
-            class = EOAndQualifier; 
-            qualifiers = (
-                {
-                    class = EOKeyValueQualifier; 
-                    key = read; 
-                    selectorName = "isNotEqualTo:"; 
-                    value = Y; 
-                }, 
-                {
-                    class = EOKeyValueQualifier; 
-                    key = owner; 
-                    selectorName = "isEqualTo:"; 
-                    value = {"_key" = user; class = EOQualifierVariable; }; 
-                }, 
-                {
-                    class = EOKeyValueQualifier; 
-                    key = "state.oid"; 
-                    selectorName = "isNotEqualTo:"; 
-                    value = buld; 
-                }
-            ); 
-        }; 
-    }; 
+    bugsFiledRecently = 
+    {
+        class = EOFetchSpecification;
+        entityName = Bug;
+        fetchLimit = 0;
+        qualifier = 
+        {
+            class = EOAndQualifier;
+            qualifiers = 
+            (
+               
+               {
+                   class = EOKeyValueQualifier;
+                   key = dateSubmitted;
+                   selectorName = isGreaterThan:;
+                   value = 
+                   {
+                       _key = date;
+                       class = EOQualifierVariable;
+                   };
+               }, 
+               
+               {
+                   class = EOKeyValueQualifier;
+                   key = originator;
+                   selectorName = isEqualTo:;
+                   value = 
+                   {
+                       _key = user;
+                       class = EOQualifierVariable;
+                   };
+               }
+            );
+        };
+    };
+    bugsInBuild = 
+    {
+        class = EOFetchSpecification;
+        entityName = Bug;
+        fetchLimit = 0;
+        qualifier = 
+        {
+            class = EOAndQualifier;
+            qualifiers = 
+            (
+               
+               {
+                   class = EOKeyValueQualifier;
+                   key = state.id;
+                   selectorName = isEqualTo:;
+                   value = buld;
+               }, 
+               
+               {
+                   class = EOKeyValueQualifier;
+                   key = targetRelease;
+                   selectorName = isEqualTo:;
+                   value = 
+                   {
+                       _key = targetRelease;
+                       class = EOQualifierVariable;
+                   };
+               }
+            );
+        };
+    };
+    bugsOwned = 
+    {
+        class = EOFetchSpecification;
+        entityName = Bug;
+        fetchLimit = 0;
+        qualifier = 
+        {
+            class = EOAndQualifier;
+            qualifiers = 
+            (
+               
+               {
+                   class = EOKeyValueQualifier;
+                   key = owner;
+                   selectorName = isEqualTo:;
+                   value = 
+                   {
+                       _key = user;
+                       class = EOQualifierVariable;
+                   };
+               }, 
+               
+               {
+                   class = EOKeyValueQualifier;
+                   key = state.id;
+                   selectorName = isNotEqualTo:;
+                   value = clsd;
+               }
+            );
+        };
+    };
+    unreadBugs = 
+    {
+        class = EOFetchSpecification;
+        entityName = Bug;
+        fetchLimit = 0;
+        qualifier = 
+        {
+            class = EOAndQualifier;
+            qualifiers = 
+            (
+               
+               {
+                   class = EOKeyValueQualifier;
+                   key = read;
+                   selectorName = isNotEqualTo:;
+                   value = Y;
+               }, 
+               
+               {
+                   class = EOKeyValueQualifier;
+                   key = owner;
+                   selectorName = isEqualTo:;
+                   value = 
+                   {
+                       _key = user;
+                       class = EOQualifierVariable;
+                   };
+               }, 
+               
+               {
+                   class = EOKeyValueQualifier;
+                   key = state.id;
+                   selectorName = isNotEqualTo:;
+                   value = buld;
+               }
+            );
+        };
+    };
 }

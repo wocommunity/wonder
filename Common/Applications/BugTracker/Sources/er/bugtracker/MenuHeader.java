@@ -15,6 +15,8 @@ import com.webobjects.directtoweb.EditPageInterface;
 import com.webobjects.directtoweb.InspectPageInterface;
 import com.webobjects.directtoweb.ListPageInterface;
 import com.webobjects.eoaccess.EODatabaseDataSource;
+import com.webobjects.eoaccess.EOEntity;
+import com.webobjects.eoaccess.EOUtilities;
 import com.webobjects.eocontrol.EOEnterpriseObject;
 import com.webobjects.eocontrol.EOFetchSpecification;
 import com.webobjects.eocontrol.EOKeyValueQualifier;
@@ -75,7 +77,8 @@ public class MenuHeader extends WOComponent {
     protected Integer bugNumber;
 
     public WOComponent findBugByNumber() {
-        EOQualifier q = new EOKeyValueQualifier("bugid", EOQualifier.QualifierOperatorEqual, bugNumber);
+        EOEntity entity = EOUtilities.entityNamed(session().defaultEditingContext(), "Bug");
+        EOQualifier q = new EOKeyValueQualifier((String) entity.primaryKeyAttributeNames().lastObject(), EOQualifier.QualifierOperatorEqual, bugNumber);
         WOComponent result = null;
         EODatabaseDataSource ds = new EODatabaseDataSource(session().defaultEditingContext(), "Bug");
         EOFetchSpecification fs = new EOFetchSpecification("Bug", q, null);
