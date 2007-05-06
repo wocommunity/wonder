@@ -2,25 +2,25 @@ AssistantActiveConditional: WOConditional {
     condition= isWebAssistantEnabled;
 }
 
-BugForm: WOForm {
+findBugByNumber: WOForm {
   action= findBugByNumber;
 }
 
-Conditional1: WOConditional {
+isAdmin: WOConditional {
 	condition = session.user.isAdmin;
 }
 
-Conditional2: WOConditional {
+isEngineering: WOConditional {
 	condition = session.user.isEngineering;
 }
+
+databaseName: WOString { value=application.databaseName; }
 /*
 CustomizeLink: WOHyperlink {
     actionClass="D2WActions";
     directActionName="openServerSideLiveAssistant";
 }
 */
-DbName: WOString { value=application.databaseName; }
-
 EntitiesForm: WOForm {}
 
 EntitiesPopup: WOPopUpButton {
@@ -29,103 +29,67 @@ EntitiesPopup: WOPopUpButton {
     selection=manipulatedEntityName;
 }
 
-FindButton: WOImageButton {
-    filename = "search-btn.gif";
-    height = "27";
-    width = "100";
-    border = "0";
-    alt = "Builds a Query Component for the selected Entity";
-    framework = "JavaDirectToWeb";
-    action = findEntityAction;
-}
-
 HasValidSession: WOConditional {
     condition=context.hasSession;
 }
 
-HasValidSession2: WOConditional {
-    condition=context.hasSession;
-}
-
-HomeButton: WOImage {
-    filename = "home-btn.gif";
-    border = "0";
-    height = "27";
-    width = "100";
-    alt = "Exit to Top/Home";
-    name = "Exit to Top/Home";
-    framework = "JavaDirectToWeb";
-}
-
-HomeLink: WOHyperlink {
+homeAction: WOHyperlink {
     action = homeAction;
 }
 
-Hyperlink1: WOHyperlink {
+trackRelease: WOHyperlink {
 	action = trackRelease;
 }
 
-Hyperlink2: WOHyperlink {
+editMyInfo: WOHyperlink {
 	action = editMyInfo;
 }
 
-Hyperlink3: WOHyperlink {
+bugsFiledRecently: WOHyperlink {
 	action = bugsFiledRecently;
 }
 
-Hyperlink4: WOHyperlink {
+pushRelease: WOHyperlink {
 	action = pushRelease;
 }
 
-Hyperlink5: WOHyperlink {
+freeQuery: WOHyperlink {
 	action = freeQuery;
 }
 
-Hyperlink6: WOHyperlink {
+ComponentReport: WOHyperlink {
 	pageName = "ComponentReport";
 }
 
-Hyperlink7: WOHyperlink {
+Main: WOHyperlink {
 	pageName = "Main";
 }
 
-Hyperlink8: WOHyperlink {
+OnlineHatSystem: WOHyperlink {
 	pageName = "OnlineHatSystem";
 }
 
-Hyperlink9: WOHyperlink {
+trackMyRelease: WOHyperlink {
 	action = trackMyRelease;
 }
 
-LAEnabledConditional: WOConditional {
-    condition=isWebAssistantEnabled;
+MainItems : WORepetition {
+	list = mainMenuItems;
+	item = item;
 }
 
-
-LoginButton: WOImage {
-    filename = "logout-btn.gif";
-    alt = "Logout";
-    name = "Logout";
-    framework = "JavaDirectToWeb";
-    height = "27";
-    width = "100";
-    border = "0";
+Menu : ERXNavigationMenu {
+	navigationContext = navigationContext;
 }
 
-LoginLink: WOHyperlink {
-    // href = application.homeHref;
-    target="_top";
-	directActionName = "logout";
+Item : ERXNavigationMenuItem {
+	action = context.page;
+	navigationItemName = item;
 }
 
-NewButton: WOImageButton {
-    filename = "new-btn.gif";
-    height = "27";
-    width = "100";
-    border = "0";
-    alt = "Creates a new Object of the selected Entity";
-    framework = "JavaDirectToWeb";
-    action = newObjectAction;
+RootItems : WORepetition {
+	list = rootMenuItems;
+	item = item;
 }
 
 NoValidSession: WOConditional {
@@ -133,16 +97,11 @@ NoValidSession: WOConditional {
     negate=true;
 }
 
-String3: WOString {
-	value = session.getUser.name;
+user: WOString {
+	value = session.user.name;
 }
 
-SubmitButton3: WOSubmitButton {
-	action = findBugByNumber;
-	value = "Find";
-}
-
-TextField1: WOTextField {
+bugNumber: WOTextField {
 	size = 6;
 	value = bugNumber;
 	numberformat = "#";
