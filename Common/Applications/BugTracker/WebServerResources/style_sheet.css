@@ -23,10 +23,6 @@ p {
 	margin-top: 0px;
 	text-indent: 3em;
 	}
-a {
-	color: #003366;
-	text-decoration: underline;
-	}
 b, th, .bold {
 	font-weight: bold;
 	}
@@ -41,7 +37,7 @@ u, .u {
 .nu, .nuw {
 	text-decoration: none;
 	}
-.black, .nu, body, td {
+.black, .nu, body {
 	color: #000000;
 	}
 .white, .nuw {
@@ -60,9 +56,9 @@ u, .u {
 	color: #FF6600;
 	}
 
-small, .small, {
+small, .small {
 	font-size:10px;
-	}
+}
 .tiny {
 	font-size:8px;
 	}
@@ -219,10 +215,10 @@ big, h3, .big {
 }
 
 .Month {
-         font-size:14px;
-         font-weight:bold;
-   	 color:ffffff;
-      }
+    font-size:14px;
+    font-weight:bold;
+	color:#ffffff;
+}
 
 .DateLink {
 	color: #003366;
@@ -231,5 +227,5 @@ big, h3, .big {
 .DateLink:hover {
 	text-decoration: none;
 	color: #ffffff;
-        background-color:#003366
+    background-color:#003366
 }

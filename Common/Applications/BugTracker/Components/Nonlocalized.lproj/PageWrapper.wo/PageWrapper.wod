@@ -7,11 +7,12 @@ BodyContainer: WOBody {
 	framework = "JavaDirectToWeb";
 }
 
-ERStyleSheet1: ERXStyleSheet { 
+ERXStyleSheet: ERXStyleSheet { 
     styleSheetName="style_sheet.css";
 }
 
-Head: D2WHead {
+Head: ERD2WHead {
+
 }
 
 Header: MenuHeader {

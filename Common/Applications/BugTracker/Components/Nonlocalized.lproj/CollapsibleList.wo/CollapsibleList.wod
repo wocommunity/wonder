@@ -1,4 +1,4 @@
-List1: D2WList {
+List1: ERXD2WList {
 	list = array;
 	entityName = entityName;
 	pageConfiguration = ^pageConfiguration;
