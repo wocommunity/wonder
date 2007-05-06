@@ -14,7 +14,9 @@ import com.webobjects.foundation.NSArray;
 
 import er.corebusinesslogic.ERCPreference;
 import er.corebusinesslogic.ERCoreUserInterface;
+import er.extensions.ERXProperties;
 import er.extensions.ERXUtilities;
+import er.extensions.ERXValueUtilities;
 
 public class People extends _People implements ERCoreUserInterface {
     static final Logger log = Logger.getLogger(People.class);
@@ -27,10 +29,9 @@ public class People extends _People implements ERCoreUserInterface {
         super.awakeFromInsertion(ec);
     }
 
-
     public TestItem createTestItemFromRequestWithDescription(Bug bug, Component component, String description) {
-        bug = (Bug)localInstanceOf(bug);
-        component = (Component)localInstanceOf(component);
+        bug = (Bug) localInstanceOf(bug);
+        component = (Component) localInstanceOf(component);
 
         TestItem testItem = new TestItem();
         editingContext().insertObject(testItem);
@@ -40,23 +41,26 @@ public class People extends _People implements ERCoreUserInterface {
 
         return testItem;
     }
-    
+
     // Class methods go here
 
     public static class PeopleClazz extends _PeopleClazz {
         public People anyUser(EOEditingContext ec) {
-            return (People)allObjects(ec).lastObject();
+            return (People) allObjects(ec).lastObject();
         }
+
         public People defaultDocumenter(EOEditingContext ec) {
             return anyUser(ec);
         }
+
         public People defaultVerifier(EOEditingContext ec) {
             return anyUser(ec);
         }
+
         public People userWithUsernamePassword(EOEditingContext ec, Object user, Object password) {
-            NSArray users = loginWithUsernamePassword(ec,user,password);
-            if(users.count() == 1)
-                return (People)users.lastObject();
+            NSArray users = loginWithUsernamePassword(ec, user, password);
+            if (users.count() == 1)
+                return (People) users.lastObject();
             return null;
         }
     }
@@ -64,21 +68,34 @@ public class People extends _People implements ERCoreUserInterface {
     public static final PeopleClazz clazz = new PeopleClazz();
 
     public void newPreference(EOEnterpriseObject pref) {
-        addToPreferences((ERCPreference)pref);
+        addToPreferences((ERCPreference) pref);
     }
-    
-    //FIXME ak: this is only here so that I don't have to change the generated source in _People.java
-    // but actually the templates are broken because they take an NSMutableArray and make all sorts of strange
+
+    // FIXME ak: this is only here so that I don't have to change the generated
+    // source in _People.java
+    // but actually the templates are broken because they take an NSMutableArray
+    // and make all sorts of strange
     // assumptions
     public void setPreferences(NSArray array) {
         super.setPreferences(array.mutableClone());
     }
 
     // make ERD2WPropertyName happy
-    public boolean isDemoUser() { return false; }
-    public boolean isEngineeringAsBoolean() { return ERXUtilities.booleanValue(isEngineering()); }
-    public boolean isActiveAsBoolean() { return ERXUtilities.booleanValue(isActive()); }
-    public boolean isAdminAsBoolean() { return ERXUtilities.booleanValue(isAdmin()); }
+    public boolean isDemoUser() {
+        return false;
+    }
+
+    public boolean isEngineeringAsBoolean() {
+        return ERXValueUtilities.booleanValue(isEngineering());
+    }
+
+    public boolean isActiveAsBoolean() {
+        return ERXValueUtilities.booleanValue(isActive());
+    }
+
+    public boolean isAdminAsBoolean() {
+        return ERXValueUtilities.booleanValue(isAdmin());
+    }
 
     public NSArray openBugs() {
         return Bug.clazz.bugsOwnedWithUser(editingContext(), this);
@@ -93,15 +110,15 @@ public class People extends _People implements ERCoreUserInterface {
     }
 
     public NSArray allRequirements() {
-        if(isEngineeringAsBoolean()) {
+        if (isEngineeringAsBoolean()) {
             return Requirement.clazz.myTotalRequirementsEngineeringWithUser(editingContext(), this);
         } else {
             return Requirement.clazz.myTotalRequirementsWithUser(editingContext(), this);
         }
     }
-    
+
     public NSArray openRequirements() {
-        if(isEngineeringAsBoolean()) {
+        if (isEngineeringAsBoolean()) {
             return Requirement.clazz.requirementsInBuildEngineeringWithUser(editingContext(), this);
         } else {
             return Requirement.clazz.myRequirementsWithUser(editingContext(), this);
