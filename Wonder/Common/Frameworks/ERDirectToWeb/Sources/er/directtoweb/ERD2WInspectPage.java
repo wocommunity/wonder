@@ -89,10 +89,6 @@ public class ERD2WInspectPage extends ERD2WPage implements InspectPageInterface,
     	}
         return result;
     }
-
-    public boolean isEntityReadOnly() {
-        return !ERXValueUtilities.booleanValueWithDefault(d2wContext().valueForKey("isEntityEditable"), !super.isEntityReadOnly());
-    }
     
     public WOComponent editAction() {
         WOComponent returnPage = null;
