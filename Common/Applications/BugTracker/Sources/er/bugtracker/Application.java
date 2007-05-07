@@ -10,6 +10,7 @@ import java.util.Enumeration;
 
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOMailDelivery;
+import com.webobjects.eoaccess.EOEntity;
 import com.webobjects.eoaccess.EOModel;
 import com.webobjects.eoaccess.EOModelGroup;
 import com.webobjects.eocontrol.EOEditingContext;
@@ -66,8 +67,12 @@ public class Application extends ERXApplication {
     }
 
     public void adjustConnectionDictionary(EOModel model) {
-        try {
+        try { 
             databaseName = (String) model.connectionDictionary().objectForKey("databaseName");
+            EOEntity release = model.entityNamed("Release");
+            if(model.connectionDictionary().toString().toLowerCase().contains("mysql")) {
+            	release.setExternalName("`RELEASE`");
+            }
         } catch (Exception ex) {
             NSLog.err.appendln("Original exception : " + ex);
         }
