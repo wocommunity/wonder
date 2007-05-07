@@ -7,225 +7,77 @@
 
 /* Basic overall typography for the site. */
 body, li, td, p, br, form, input, text, select, option, textarea, th, ol, ul, table, blockquote {  
-	font-size: 13px;
-	font-family: Verdana, Helvetica, Arial, sans-serif;
-	}
+	padding: 0px;
+}
+
+.ContentTable {
+	width: 100%;
+}
+
+table {
+	border-collapse: collapse;
+}
+
 body {
 	padding: 0px;
-	}
-i, .i {
-	font-style: italic;
-	}
-p {
-	text-indent: 0em;
-	}
-.para {
-	margin-top: 0px;
-	text-indent: 3em;
-	}
-b, th, .bold {
-	font-weight: bold;
-	}
-u, .u {
-	text-decoration: underline;
-	}
-
-/* These are a series of styles that can be applied to customize a tag when needed. */
-.arial {
-	font-family: Arial, sans-serif;
-	}
-.nu, .nuw {
-	text-decoration: none;
-	}
-.black, .nu, body {
-	color: #000000;
-	}
-.white, .nuw {
-	color: #FFFFFF;
-	}
-.grey {
-	color: #CCCCCC;
-	}
-.darkGrey {
-	color: #666666;
-	}
-.blue {
-	color: #003366;
-	}
-.orange {
-	color: #FF6600;
-	}
-
-small, .small {
-	font-size:10px;
-}
-.tiny {
-	font-size:8px;
-	}
-big, h3, .big {
-	font-size:13px;
-	}
-.huge, h2 {
-	font-size:15px;
-	}
-
-.Padded {
-    padding-top:1px;
-    padding-bottom:1px;
+	margin: 0px;
 }
 
-.LargePadding {
-    margin-left:15px;
-    margin-right:10px;
+.Greeting {
+	width: 100%;
 }
 
-.LinkInTable {
-	color: #003366;
-	text-decoration: none;
-}
-.LinkInTable:hover {
-	text-decoration: none;
-	color: #ff6600;
+.TopRow td {
+	padding: 10px;
 }
 
-.LinkOnBlue {
-	text-decoration: none;
-	color: #cccccc;
-}
-.LinkOnBlue:hover {
-	text-decoration: none;
-	color: #ff6600;
+.MenuRow td {
+	padding-bottom: 5px;
 }
 
-.BigLink {
-        font-size:12px;
-	font-weight: bold;
-	color: #ffffff;
+.Nav1, .Nav1Selected {
+	padding: 5px 10px;
+	width: 80%;
+	height: 20px;
+	display: block;
+	vertical-align: middle;
 }
-.BigLink:link {
-	text-decoration: none;
+.Nav1Selected {
+	background-color: orange;
 }
-.BigLink:hover {
-	text-decoration: none;
-	color: #ff6600;
-}
-
-
-.CompanyName {
-	color: #ffffff;
-        font-size:18px;
-	font-weight: bold;
+	
+.HeaderRow {
+	background-color: blue;
+	color: white;
+	border-bottom: 5px solid green;
 }
 
-.PropertyName {
-	font-weight:bold;
-	font-size:10px;
+.MainItems {
+	background-color: yellow;
+	color: white;
 }
 
-.BannerText {
-	color: #ff6600;
-        font-size: 16px;
-	font-weight:bold;
+.HeaderRow A {
+	color: white;
 }
 
-.Alert {
-	color: #ff6600;
-        font-size: 16px;
-	font-weight:bold;
+.HeaderRow A:visited {
+	color: yellow;
+	
 }
-.Headline {
-	color: #ff6600;
-        font-size: 40px;
-	font-weight:bold;
+.HeaderRow A:active {
+	color: white;
 }
 
-.SmallAlert {
-	color: #ff6600;
-	font-weight:bold;
+.InspectTable {
+	width: 100%;
 }
 
-
-.WhiteHeader {
-	color: #ffffff;
-        font-size: 14px;
-	font-weight:bold;
+.ListTable {
+	width: 100%;
 }
 
-.ListHeader {
-	color: #000000;
-        font-size: 12px;
-	font-weight:bold;
+.ListRepetition {
+	width: 100%;
 }
 
-.HelpLink { cursor: help; }
-
-.Help {
-/*	font-style: italic; */
-}
-
-.smallNumber {
-    font-size: 9px;
-}
-
-.Indented {
-    margin-left: 20px;
-}
-
-.GroupCell {
-	background-color: #ffffee;
-        padding: 2px;
-}
-
-.Date {
-    font-family : verdana;
-    font-size:14px;
-    font-weight:bold;
-}
-.Date:hover {
-	text-decoration: underline;
-    background-color: #FF6600;
-	color: #000000;
-}
-
-.Today {
-    font-family : verdana;
-    font-size:14px;
-    font-weight:bold;
-    background-color: #FF6600;
-    color:#ffffff;
-   text-decoration: none;
-}
-.Today:hover {
-    background-color: #ffffff;
-	color: #006699;
-}
-
-
-.DateEntry{
-    text-decoration: none;
-    font-family : verdana;
-    font-size: 8px;
-    color : white;
-}
-
-.HeaderCell {
-    border:0pt;
-    padding:3pt;
-    background-color:#ffffff;
-}
-
-.Month {
-    font-size:14px;
-    font-weight:bold;
-	color:#ffffff;
-}
-
-.DateLink {
-	color: #003366;
-	text-decoration: none;
-}
-.DateLink:hover {
-	text-decoration: none;
-	color: #ffffff;
-    background-color:#003366
-}
