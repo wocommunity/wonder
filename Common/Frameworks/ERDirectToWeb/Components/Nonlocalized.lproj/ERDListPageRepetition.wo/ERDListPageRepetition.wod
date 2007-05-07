@@ -1,3 +1,9 @@
+AttributeRow : WOGenericContainer {
+	_unroll = true;
+	elementName = "tr";
+	rowClass = rowClass;
+} 
+
 AttributeCell: WOGenericContainer {
 	_unroll = true;
 	align = d2wContext.justification;
@@ -71,12 +77,8 @@ LeftActions: WORepetition {
 }
 
 ListTable: WOGenericContainer {
-	_unroll = true;
-	bgcolor = d2wContext.backgroundColorForTable;
-	border = 0;
-	cellpadding = 1;
-	cellspacing = 0;
 	elementName = "table";
+	class = "ListTable";
 }
 
 ListTableHeaderRow: WOGenericContainer {

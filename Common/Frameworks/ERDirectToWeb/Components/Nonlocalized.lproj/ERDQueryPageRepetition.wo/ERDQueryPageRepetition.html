@@ -1,72 +1,66 @@
-<table cellspacing="0" border="0" cellpadding="0">
-	<webobject name="Sections">
-		<webobject name="HasSectionName">
-			<tr>
-				<td class="Section" bgcolor="#FFFFFF" valign="middle" colspan="3" height="26">
-					<webobject name="SwitchComponent3">
-					</webobject>
-				</td>
-			</tr>
-		</webobject>
-		<tr height="6">
-			<td colspan="3">
-				&nbsp; 
-			</td>
-		</tr>
-		<webobject name="AttributeRepetition">
-			<webobject name="HasPropertyName">
-				<tr>
-					<td align="LEFT" nowrap valign="TOP">
-						<webobject name="SwitchComponent1">
-						</webobject>
-					</td>
-					<td>
-						&nbsp; 
-					</td>
-					<td align="left" width="100%" valign="top">
-						<webobject name="AttributeValue2">
-						</webobject>
-					</td>
-				</tr>
-			</webobject>
-			<webobject name="HasntPropertyName">
-				<tr>
-					<td align="left" width="100%" valign="top" colspan="3">
-						<webobject name="AttributeValue2">
-						</webobject>
-					</td>
-				</tr>
-			</webobject>
-		</webobject>
-		<tr>
-			<td align="left" colspan="3">
-				<webobject name="NotUsingMatrixLayout">
-				</webobject>
-				<webobject name="Conditional4">
-					<webobject name="ERTable1">
-						<table cellspacing="0" border="0" cellpadding="0">
-							<tr>
-								<td align="LEFT" valign="TOP">
-									<webobject name="SwitchComponent2">
-									</webobject>
-								</td>
-								<td>
-									&nbsp; 
-								</td>
-								<td valign="TOP">
-									<webobject name="AttributeValue1">
-									</webobject>
-								</td>
-							</tr>
-						</table>
-					</webobject>
-				</webobject>
-			</td>
-		</tr>
-		<tr height="6">
-			<td colspan="3">
-				&nbsp; 
-			</td>
-		</tr>
-	</webobject>
+<table class="QueryTable">
+    <webobject name=Sections><webobject name=HasSectionName>
+            <tr>
+                <td class=Section><webobject name="Section"></webobject></td>
+            </tr>
+        </webobject>
+        <tr height=6>
+            <td colspan=3>&nbsp;</td>
+        </tr>
+        <webobject name=NotUsingMatrixLayout><webobject name=NotUsingTableLayout>
+            <webobject name=AttributeRepetition><webobject name=HasPropertyName>
+                    <tr>
+                        <td align=LEFT nowrap valign=TOP><webobject name="PropertyName"></webobject></td>
+                        <td>&nbsp;</td>
+                        <td align=left width="100%" valign=top><webobject name="SafeWrapper"><webobject name=AttributeValue></webobject></webobject></td>
+                    </tr>
+                </webobject><webobject name=HasntPropertyName>
+                    <tr>
+                        <td align=left width="100%" valign=top colspan=3><webobject name="SafeWrapper"><webobject name=AttributeValue></webobject></webobject></td>
+                    </tr>
+                </webobject>
+            </webobject>
+        </webobject></webobject><webobject name="UseMatrixLayout">
+            <tr>
+                <td align=left colspan=3><webobject name=ERXTable>
+                        <webobject name="UseHorizontalLayoutTables"><table cellspacing=0 border=0 cellpadding=0 class="PropertyTable">
+                            <tr>
+                                <td align=LEFT valign=TOP><webobject name=PropertyName></webobject></td>
+                                <td>&nbsp;</td>
+                                <td valign=TOP><webobject name=AttributeValue></webobject></td>
+                            </tr>
+                        </table></webobject><webobject name="UseVerticalLayoutTables"><table cellspacing=0 border=0 cellpadding=0 class="PropertyTable">
+                            <tr>
+                                <td align=LEFT valign=TOP><webobject name=PropertyName></webobject></td>
+                            </tr>
+                            <tr>
+                                <td valign=TOP><webobject name=AttributeValue></webobject></td>
+                            </tr>
+                        </table></webobject>
+                    </webobject></td>
+            </tr>
+        </webobject><webobject name="UseTableLayout">
+            <tr>
+                <td align=left colspan=3><webobject name=ERXLayoutTable>
+                        <webobject name="UseHorizontalLayoutTables"><table cellspacing=0 border=0 cellpadding=0 class="PropertyTable">
+                            <tr>
+                                <td align=LEFT valign=TOP><webobject name=PropertyName></webobject></td>
+                                <td>&nbsp;</td>
+                                <td valign=TOP><webobject name=AttributeValue></webobject></td>
+                            </tr>
+                        </table></webobject><webobject name="UseVerticalLayoutTables"><table cellspacing=0 border=0 cellpadding=0 class="PropertyTable">
+                            <tr>
+                                <td align=LEFT valign=TOP><webobject name=PropertyName></webobject></td>
+                            </tr>
+                            <tr>
+                                <td valign=TOP><webobject name=AttributeValue></webobject></td>
+                            </tr>
+                        </table></webobject>
+                    </webobject></td>
+            </tr>
+        </webobject>
+        <tr height=6>
+            <td colspan=3>&nbsp;</td>
+        </tr>
+    </webobject>
 </table>

@@ -1,28 +1,29 @@
 <webobject name=PageWrapper>
 	<webobject name=Help></webobject>
-	<table border=0 align=center>
+	<table class="ListTable">
 		<tr>
-			<td colspan=2><webobject name=ERDBannerComponent2></webobject><webobject name=Header></webobject></td>
+			<td class="Header"><webobject name=ERDBannerComponent2></webobject><webobject name=Header></webobject></td>
 		</tr>
 		<webobject name=ListNotEmpty>
 			<tr>
-				<td align=CENTER><webobject name=NavBar1></webobject></td>
-				<td><webobject name=Conditional1><webobject name=ERPrinterButton></webobject></webobject></td>
+				<td class="NavigationBar"><webobject name=NavigationBar></webobject></td>
 			</tr>
 			<tr>
-				<td align=CENTER colspan=2><webobject name=ListPageRepetition2></webobject></td>
+				<td class="Repetition"><webobject name=ListPageRepetition></webobject></td>
 			</tr>
 		</webobject>
 		<webobject name=ListEmpty>
 			<tr>
-				<td colspan=2><webobject name=EmptyMessageComponent></webobject></td>
+				<td><webobject name=EmptyMessageComponent></webobject></td>
 			</tr>
 		</webobject>
-		<webobject name=HideReturnOnSelect1>
-			<webobject name=ShowCancel>
-				<tr>
-					<td ALIGN=CENTER COLSPAN=2><webobject name=BackLink><webobject name=ReturnButton></webobject></webobject></td>
-				</tr>
-			</webobject></webobject>
+		<tr>
+			<td class="Actions">
+				<webobject name=ShowCancel><webobject name=BackLink><webobject name=ReturnButton></webobject></webobject></webobject>
+				<webobject name=ShowPrint><webobject name=ERPrinterButton></webobject></webobject>
+			</td>
+		</tr>
+		<webobject name=HideReturnOnSelect>
+		</webobject>
 	</table>
 </webobject>

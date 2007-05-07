@@ -2,7 +2,7 @@ BackLink: WOHyperlink {
 	action = backAction;
 }
 
-Conditional1: WOConditional {
+ShowPrint: WOConditional {
 	condition = d2wContext.hasPrinterFriendlyVersion;
 }
 
@@ -33,9 +33,10 @@ Help: ERDDebuggingHelp {
 	d2wContext = d2wContext;
 }
 
-HideReturnOnSelect1: WOConditional {
+HideReturnOnSelect: WOConditional {
 	_unroll = true;
 	condition = isSelectingNotTopLevel;
+	negate = true;
 }
 
 ListEmpty: WOConditional {
@@ -47,21 +48,19 @@ ListNotEmpty: WOConditional {
 	negate = true;
 }
 
-ListPageRepetition2: WOSwitchComponent {
+ListPageRepetition: WOSwitchComponent {
 	WOComponentName = d2wContext.repetitionComponentName;
 	d2wContext = localContext;
 	displayGroup = displayGroup;
 }
 
-NavBar1: WOSwitchComponent {   
-//	bgcolor = "#ff0000"; // backgroundColorForTable;
+NavigationBar: WOSwitchComponent {   
+	WOComponentName = d2wContext.batchNavigationBarComponentName;
 	displayGroup = displayGroup;
 	objectName = d2wContext.displayNameForEntity;
-//	textColor = d2wContext.textColor;
-	width = 550;
-        d2wContext = d2wContext;
+	width = "100%";
+    d2wContext = d2wContext;
 	bgcolor = d2wContext.backgroundColorForTable;
-	WOComponentName = d2wContext.batchNavigationBarComponentName;
 }
 
 PageWrapper: WOSwitchComponent {
@@ -70,12 +69,10 @@ PageWrapper: WOSwitchComponent {
 	_unroll = true;
 }
 
-ReturnButton: WOImage {
+ReturnButton: ERXSubmitButton {
 	alt = "Returns to the previous page";
-	border = "0";
-	filename = "ReturnMetalBtn.gif";
-	framework = "JavaDirectToWeb";
-	name = "Returns to the previous page";
+	value = "Return";
+	action = backAction;
 }
 
 ShowCancel: WOConditional {

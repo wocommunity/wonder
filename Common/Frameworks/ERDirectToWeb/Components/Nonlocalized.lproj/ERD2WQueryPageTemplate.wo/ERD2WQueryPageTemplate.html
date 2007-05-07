@@ -1,76 +1,37 @@
 <webobject name="PageWrapper">
-	<webobject name="Help">
-	</webobject>
+	<webobject name="Help"></webobject>
 	<webobject name="QueryForm">
-		<webobject name="QueryTable">
-			<webobject name="BannerConditional">
-				<tr>
-					<td align="center">
-						<table border="0">
-							<tr>
-								<td>
-									<webobject name="Banner">
-									</webobject>
-								</td>
-							</tr>
-							<webobject name="QueryTableHeaderRow">
-								<td align="left">
-									<b>
-										<webobject name="FontContainer">
-											<webobject name="Conditional3">
-												<webobject name="Header">
-												</webobject>
-											</webobject>
-											<webobject name="Conditional4">
-												<webobject name="Header2">
-												</webobject>
-											</webobject>
-										</webobject>
-									</b>
-								</td>
-							</webobject>
-						</table>
-					</td>
-				</tr>
-				<tr>
-					<td>
-						&nbsp; 
-					</td>
-				</tr>
-			</webobject>
+		<table class="QueryTable">
 			<tr>
-				<td align="left" valign="top">
-					<webobject name="QueryPageRepetition">
-					</webobject>
+				<td class="Header">
+					<webobject name="ERDBannerComponent"></webobject><webobject name=Header></webobject>
 				</td>
 			</tr>
 			<tr>
-				<td align="CENTER">
+				<td class="HeaderTemplate">
+					<webobject name="HeaderTemplate"></webobject>
+				</td>
+			</tr>
+			<tr>
+				<td class="Repetition">
+					<webobject name="QueryPageRepetition"></webobject>
+				</td>
+			</tr>
+			<tr>
+				<td class= "Actions">
 					<webobject name="ShowCancel">
-						<webobject name="BackLink">
-							<webobject name="ReturnButton">
-							</webobject>
-						</webobject>
+						<webobject name="ReturnButton"></webobject>
 					</webobject>
-					<webobject name="QuerySubmitButton">
-					</webobject>
-					&nbsp; 
+					<webobject name="ClearButton"></webobject>
+					<webobject name="QueryButton"></webobject>
 				</td>
 			</tr>
-			<tr valign="top">
-				<td align="right" valign="top">
-				</td>
-			</tr>
-			<tr>
-				<td align="center">
-				</td>
-			</tr>
-		</webobject>
+		</table>
 	</webobject>
-	<webobject name="Conditional1">
-		<webobject name="Conditional2">
-			<webobject name="ListPage">
-			</webobject>
+	<webobject name="ShowList">
+		<webobject name="ShowResults">
+			<webobject name="ListPage"></webobject>
 		</webobject>
 	</webobject>
 </webobject>
+	
