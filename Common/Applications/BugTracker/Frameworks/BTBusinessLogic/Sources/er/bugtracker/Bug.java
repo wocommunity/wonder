@@ -10,9 +10,11 @@ import com.webobjects.foundation.NSTimestamp;
 import com.webobjects.foundation.NSValidation;
 
 import er.corebusinesslogic.ERCoreBusinessLogic;
+import er.extensions.ERXEC;
+import er.extensions.ERXEOControlUtilities;
 import er.extensions.ERXUtilities;
 
-public class Bug extends _Bug {
+public class Bug extends _Bug implements Markable {
     static final Logger log = Logger.getLogger(Bug.class);
 
     public boolean _componentChanged;
@@ -26,10 +28,25 @@ public class Bug extends _Bug {
         setReadAsBoolean(true);
         setDateSubmitted(new NSTimestamp());
         setDateModified(new NSTimestamp());
-        setFeatureRequest(new Integer(0));
+        setFeatureRequest(Boolean.FALSE);
     }
 
-    public void markReadBy(People reader) {
+	public void markAsRead() {
+		EOEditingContext ec = ERXEC.newEditingContext();
+		ec.lock();
+		try {
+			People people = (People) ERCoreBusinessLogic.actor(ec);
+			Bug copy = (Bug) ERXEOControlUtilities.localInstanceOfObject(ec, this);
+			if(copy != null && !copy.isReadAsBoolean() && copy.owner().equals(people)) {
+				copy.setReadAsBoolean(true);
+				ec.saveChanges();
+			}
+		} finally {
+			ec.unlock();
+		}
+	}
+
+	public void markReadBy(People reader) {
         if (owner() != null && owner().equals(localInstanceOf(reader)) && !isReadAsBoolean()) {
             setReadAsBoolean(true);
             editingContext().saveChanges();
