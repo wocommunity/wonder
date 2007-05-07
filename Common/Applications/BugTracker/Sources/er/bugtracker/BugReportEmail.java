@@ -6,10 +6,9 @@
  * included with this distribution in the LICENSE.NPL file.  */
 
 package er.bugtracker;
-import com.webobjects.foundation.*;
-import com.webobjects.appserver.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.eoaccess.*;
+import com.webobjects.appserver.WOComponent;
+import com.webobjects.appserver.WOContext;
+import com.webobjects.foundation.NSArray;
 
 public class BugReportEmail extends WOComponent {
 
@@ -18,7 +17,7 @@ public class BugReportEmail extends WOComponent {
     }
 
     /** @TypeInfo er.bugtracker.Bug */
-    protected NSArray unreadBugs;
-    protected People owner;
-    protected Bug bug;   
+    public NSArray unreadBugs;
+    public People owner;
+    public Bug bug;   
 }
