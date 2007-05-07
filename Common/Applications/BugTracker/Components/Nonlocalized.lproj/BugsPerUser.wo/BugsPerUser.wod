@@ -28,9 +28,6 @@ Repetition1: WORepetition {
 	list = targetReleases;
 }
 
-Repetition2: WORepetition {
-}
-
 Self: ViewUser {
 	user = user;
 }
