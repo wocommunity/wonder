@@ -47,11 +47,12 @@
        {
            columnName = FEATURE_REQUEST;
            name = featureRequest;
-           prototypeName = intNumber;
+           prototypeName = flag;
            userInfo = 
            {
                modificationDate = "2002-05-06 07:35:41 +0200";
            };
+           valueType = c;
        }, 
        
        {
@@ -154,7 +155,7 @@
            prototypeName = osType;
            userInfo = 
            {
-               modificationDate = "2002-05-06 07:42:33 +0200";
+               modificationDate = "2002-05-06 07:42:12 +0200";
            };
        }, 
        

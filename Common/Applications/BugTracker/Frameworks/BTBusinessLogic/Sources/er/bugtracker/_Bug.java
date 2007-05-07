@@ -78,10 +78,10 @@ public abstract class _Bug extends ERXGenericRecord {
         takeStoredValueForKey(aValue, "dateModified");
     }
 
-    public Number featureRequest() {
-        return (Number)storedValueForKey("featureRequest");
+    public Boolean featureRequest() {
+        return (Boolean)storedValueForKey("featureRequest");
     }
-    public void setFeatureRequest(Number aValue) {
+    public void setFeatureRequest(Boolean aValue) {
         takeStoredValueForKey(aValue, "featureRequest");
     }
 
