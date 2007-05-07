@@ -61,6 +61,9 @@ public class ERXPatternLayout extends PatternLayout {
      */
     private static ERXPatternLayout _instance;
     public static ERXPatternLayout instance() {
+    	if(_instance == null) {
+    		_instance = new ERXPatternLayout();
+    	}
         return _instance;
     }
 
