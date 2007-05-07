@@ -24,25 +24,22 @@ body {
 }
 
 .Greeting {
-	width: 100%;
+	position: absolute;
 }
 
-.TopRow td {
-	padding: 10px;
+.MenuRow {
+	background-color: grey;
 }
 
-.MenuRow td {
-	padding-bottom: 5px;
-}
-
-.Nav1, .Nav1Selected {
-	padding: 5px 10px;
-	width: 80%;
-	height: 20px;
-	display: block;
-	vertical-align: middle;
-}
 .Nav1Selected {
+	background-color: orange;
+}
+	
+.Nav2Selected {
+	background-color: orange;
+}
+	
+.Nav3Selected {
 	background-color: orange;
 }
 	
@@ -53,7 +50,6 @@ body {
 }
 
 .MainItems {
-	background-color: yellow;
 	color: white;
 }
 
@@ -81,3 +77,18 @@ body {
 	width: 100%;
 }
 
+.ERXNavigationMenu .Level1ItemTable, 
+.ERXNavigationMenu .Level2ItemTable, 
+.ERXNavigationMenu .Level3ItemTable {
+	float: right;
+}
+
+.MainItems .Level1ItemTable td,
+.ERXNavigationMenu .Level1ItemTable td,
+.ERXNavigationMenu .Level2ItemTable td,
+.ERXNavigationMenu .Level3ItemTable td {
+	vertical-align: middle;
+	text-align: center;
+	height: 16px;
+	padding: 5px;
+}

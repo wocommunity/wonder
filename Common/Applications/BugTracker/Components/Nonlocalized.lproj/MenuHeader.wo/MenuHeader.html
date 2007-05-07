@@ -1,6 +1,6 @@
 <table class="MenuHeader">
     <webobject name=HasValidSession>
-     	<tr><td width="33%"></td><td width="33%"></td><td width="33%"></td></tr>
+     	<tr><td width="33%"></td><td width="33%"></td><td></td> </tr>
         <tr class="TopRow">
         	
             <td align=left colspan="2" class="Greeting">Hi <webobject name=user></webobject>, welcome to
@@ -23,7 +23,11 @@
             </td> 
         </tr>
         <tr class="MenuRow">
-            <td align=left class="MainItems"><table><tr><webobject name="MainItems"><td><webobject name="Item"></webobject></td></webobject></tr></table></td>
+            <td align=left class="MainItems" valign="Top">
+            	<table class="Level1ItemTable">
+            		<tr class="Level1ItemRow"><webobject name="MainItems"><webobject name="Item"></webobject></webobject></tr>
+            	</table>
+            </td>
 			<td align=right colspan="2" class="MenuItems"><webobject name="Menu"></webobject></td>
         </tr>
     </webobject>
