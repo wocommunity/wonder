@@ -1,22 +1,25 @@
-CancelButton: WOImage {
-	alt = "Reverts your changes";
-	border = "0";
-	filename = "CancelMetalBtn.gif";
-	framework = "JavaDirectToWeb";
-	name = "Reverts your changes";
-}
-
-CancelLink: WOHyperlink {
+CancelButton: ERXSubmitButton {
 	action = cancelAction;
+	alt = "Reverts your changes";
+	value = "Cancel";
+	class = "CancelButton";
 }
 
-Conditional1: WOConditional {
-	condition = showBanner;
+ERDBannerComponent: ERDBannerComponent {
+	bannerFileName = d2wContext.bannerFileName;
+	d2wContext = d2wContext;
+	showBanner = d2wContext.showBanner;
+	framework = "JavaDirectToWeb";
+}
+
+Header: WOSwitchComponent {
+	WOComponentName = d2wContext.headerComponentName;
+	d2wContext = d2wContext;
 }
 
 EditForm: WOForm {
 	name = "EditForm";
-        enctype=d2wContext.formEncoding;
+    enctype=d2wContext.formEncoding;
 	multipleSubmit = true;
 }
 
@@ -25,10 +28,6 @@ Errors: ERXErrorDictionaryPanel {
 	extraErrorMessage = errorMessage;
 	shouldShowNewLineAbove = true;
 	shouldShowNewLineBelow = true;
-}
-
-HasSectionHelp2: ERXNonNullConditional {
-	condition = d2wContext.sectionHelp;
 }
 
 Help: ERDDebuggingHelp {
@@ -42,30 +41,11 @@ InspectPageRepetition: WOSwitchComponent {
 	displayPropertyKeys = currentTab.keys;
 }
 
-InspectTableHeaderRow: WOGenericContainer {
-	_unroll = true;
-	height = "24";
-	elementName = "tr";
-}
-
-LeftArrow: WOImageButton {
-    filename = "PreviousMetalBtn.gif";
-//    filename="previous.gif";
-    border = "0";
-//    height = "11";
-//    width = "16";
-    framework = "ERExtensions";
+PreviousButton: ERXSubmitButton {
     action = previousStep;
-    alt = "previous step";
-}
-
-MainTable: WOGenericContainer {
-	_unroll = true;
-	border = 0;
-	cellpadding = 5;
-	cellspacing = 5;
-	elementName = "Table";
-//	height = d2wContext.mainTableHeight;
+    alt = "Previous step";
+    value = "Previous";
+    class = "PreviousButton";
 }
 
 PageWrapper: WOSwitchComponent {
@@ -74,15 +54,11 @@ PageWrapper: WOSwitchComponent {
 	WOComponentName = d2wContext.pageWrapperName;
 }
 
-RightArrow: WOImageButton {
-    filename = "NextMetalBtn.gif";
-//    filename="next.gif";
-    border = "0";
-//    height = "11";
-//    width = "16";
-    framework = "ERExtensions";
+NextButton: ERXSubmitButton {
     action = nextStep;
-    alt = "next step";    
+    alt = "Next step";
+    value = "Next";
+    class = "NextButton";
 }
 
 ShowCancel: WOConditional {
@@ -111,12 +87,10 @@ Steps: ERXLocalizedString {
 	templateString = "ERD2WWizardCreationPage.stepsMessage";
 }
 
-SubmitChanges: WOImageButton {
+SaveButton: ERXSubmitButton {
 	action = submitAction;
 	alt = "Saves your changes";
-	border = "0";
-	filename = "SaveMetalBtn.gif";
-	framework = "JavaDirectToWeb";
-	name = "Saves your changes";
+	value = "Save";
+	class = "SaveButton";
 }
 

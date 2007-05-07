@@ -1,39 +1,26 @@
 <webobject name=PageWrapper><webobject name=Help></webobject>
-	<table cellspacing=0 border=0 cellpadding=0>
+	<table class="InspectTable">
 		<tr>
-			<td colspan=2><webobject name=ERDBannerComponent2></webobject><webobject name=Header></webobject></td>
+			<td class="Header"><webobject name=ERDBannerComponent></webobject><webobject name=Header></webobject></td>
 		</tr>
-		<webobject name=InspectTableHeaderRow>
-			<td align=left><webobject name=FontContainer><b><webobject name=EntityName></webobject></b></webobject></td>
-			<td align=RIGHT><webobject name=Conditional1>&nbsp;&nbsp;<webobject name=Image1></webobject></webobject><webobject name=Conditional2><webobject name=ERPrinterButton></webobject></webobject></td>
-		</webobject>
+		<tr>
+			<td class="Buttons"><webobject name=HasChanges><webobject name=Floppy></webobject></webobject><webobject name=ShowPrint><webobject name=ERDPrinterButton></webobject></webobject></td>
+		</tr>
 		<webobject name=EditingForm>
 			<tr>
-				<td align=CENTER valign=top colspan=2><webobject name=Errors></webobject></td>
+				<td class="Errors"><webobject name=Errors></webobject></td>
 			</tr>
 			<tr>
-				<td valign=top align=center valign=top colspan=2>
-					<webobject name=InspectPageRepetition></webobject></td>
+				<td class="Repetition"<webobject name=InspectPageRepetition></webobject></td>
 			</tr>
 			<tr>
-				<td colspan=2>
-					<table cellspacing=0 align=CENTER cellpadding=0 border=0>
-						<tr>
-							<td align=center><webobject name=IsEditingConditional>
-									<webobject name=CancelLink><webobject name=CancelButton></webobject></webobject>
-								</webobject><webobject name=IsNotEditingConditional>
-									<webobject name=ShowCancel><webobject name=ReturnLink><webobject name=ReturnButton></webobject></webobject></webobject>
-								</webobject></td>
-							<webobject name=IsEntityWritable>
-								<td align=right></td>
-							</webobject>
-							<td align=left><webobject name=IsEntityWritable2><webobject name=IsNotEditingConditional2>
-										<webobject name=EditLink><webobject name=EditImage></webobject></webobject>
-									</webobject></webobject><webobject name=IsEditingConditional2>
-									<webobject name=SubmitChanges></webobject>
-								</webobject></td>
-						</tr>
-					</table>
+				<td class="Actions">
+					<webobject name=IsEditingConditional>
+						<webobject name=CancelButton></webobject> <webobject name=SubmitChanges></webobject>
+					</webobject>
+					<webobject name=IsNotEditingConditional>
+						<webobject name=ShowCancel><webobject name=ReturnButton></webobject></webobject> <webobject name=IsObjectEditable><webobject name=EditButton></webobject></webobject>
+					</webobject>
 				</td>
 			</tr>
 		</webobject>
