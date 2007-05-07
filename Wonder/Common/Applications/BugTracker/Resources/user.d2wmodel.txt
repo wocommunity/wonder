@@ -1,0 +1,34 @@
+(
+    0 : (pageConfiguration = 'EditMyPeople') => displayPropertyKeys = (login, name, email, password) [com.webobjects.directtoweb.Assignment], 
+    20 : (task = 'query') => maxColumns = 4 [com.webobjects.directtoweb.Assignment], 
+    20 : *true* => headerComponentName = PageHeader [com.webobjects.directtoweb.Assignment], 
+    20 : (task = 'query') => useMatrixLayout = true [com.webobjects.directtoweb.BooleanAssignment], 
+    20 : (task = 'query') => showListInSamePage = true [com.webobjects.directtoweb.BooleanAssignment], 
+    50 : (entity.name = 'Bug') => navigationState = Bugs [com.webobjects.directtoweb.Assignment], 
+    50 : (pageConfiguration like 'Track*') => task = query [com.webobjects.directtoweb.Assignment], 
+    50 : (pageConfiguration like 'Track*') => task = query [com.webobjects.directtoweb.Assignment], 
+    50 : (pageConfiguration like '*Bug*') => navigationState = Bugs [com.webobjects.directtoweb.Assignment], 
+    50 : (pageConfiguration like '*People*') => navigationState = Peoples [com.webobjects.directtoweb.Assignment], 
+    50 : (pageConfiguration like '*Release*') => navigationState = Releases [com.webobjects.directtoweb.Assignment], 
+    50 : (pageConfiguration like '*TestItem*') => navigationState = TestItems [com.webobjects.directtoweb.Assignment], 
+    50 : (pageConfiguration like '*Component*') => navigationState = Components [com.webobjects.directtoweb.Assignment], 
+    50 : (pageConfiguration like '*Framework*') => navigationState = Frameworks [com.webobjects.directtoweb.Assignment], 
+    50 : (pageConfiguration like '*Requirement*') => navigationState = Requirements [com.webobjects.directtoweb.Assignment], 
+    50 : (pageConfiguration = 'QueryRecentlyFiledBugs') => displayPropertyKeys = (originator, dateSubmitted) [com.webobjects.directtoweb.Assignment], 
+    50 : ((task = 'edit') and (smartRelationship.isToMany = 0)) => componentName = ERD2WEditToOneRelationship [com.webobjects.directtoweb.Assignment], 
+    50 : ((task = 'edit') and (smartRelationship.isToMany = 1)) => componentName = ERD2WEditToManyRelationship [com.webobjects.directtoweb.Assignment], 
+    50 : (((task = 'list') or (task = 'inspect') or (task = 'select') or (task = 'pick')) and (propertyKey = 'state')) => componentName = StatusComponent [com.webobjects.directtoweb.Assignment], 
+    50 : (((task = 'list') or (task = 'inspect') or (task = 'select') or (task = 'pick')) and (propertyKey = 'priority')) => componentName = PriorityComponent [com.webobjects.directtoweb.Assignment], 
+    50 : (pageConfiguration = 'CreateBug') => displayPropertyKeys = ("[Main]", dateModified, dateSubmitted, state, featureRequest, read, subject, "[Description]", subject, textDescription
+) [com.webobjects.directtoweb.Assignment], 
+    50 : ((task = 'edit') and (entity.name = 'Bug')) => displayPropertyKeys = ("( )", dateModified, dateSubmitted, state, featureRequest, read, subject, textDescription, "(description)", subject
+) [com.webobjects.directtoweb.Assignment], 
+    50 : (((task = 'list') or (task = 'select') or (task = 'pick')) and (entity.name = 'Bug')) => displayPropertyKeys = ("( )", dateModified, dateSubmitted, state, featureRequest, read, subject, textDescription, "(description)", subject
+) [com.webobjects.directtoweb.Assignment], 
+    70 : (propertyKey = 'component') => restrictedChoiceKey = session.indentedComponents [com.webobjects.directtoweb.Assignment], 
+    70 : (smartRelationship.destinationEntity.name = 'People') => keyWhenRelationship = name [com.webobjects.directtoweb.Assignment], 
+    70 : ((entity.name = 'Bug') and (task = 'query')) => listConfigurationName = ListEmbeddedBug [com.webobjects.directtoweb.Assignment], 
+    70 : (smartRelationship.destinationEntity.name = 'State') => keyWhenRelationship = textDescription [com.webobjects.directtoweb.Assignment], 
+    70 : (smartRelationship.destinationEntity.name = 'Component') => keyWhenRelationship = indentedDescription [com.webobjects.directtoweb.Assignment], 
+    100 : *true* => showBanner = false [com.webobjects.directtoweb.BooleanAssignment]
+)

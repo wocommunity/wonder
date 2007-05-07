@@ -3,21 +3,20 @@
                 name = "Root";
                 directActionClass = "DirectAction";
                 directActionName = "home";
-                children = ("Bugs", "Components", "Requirements", "TestItems", "Releases", "Peoples", "Frameworks");
+                children = session.navigationRootChoice;
+                childrenChoices = {
+                	"admin" = ("Bugs", "Components", "Requirements", "TestItems", "Releases", "Peoples", "Frameworks");
+                	"engineer" = ("Bugs", "Requirements", "TestItems");
+                	"none" = ();
+                };
         },
         { 
                 name = "MainMenu";
-                children = ("Home", "EditMyUser", "LogOut");
+                children = ("Home", "LogOut");
         },
         { 
                 name = "Home";
-                directActionClass = "DirectAction";
-                directActionName = "home";
-        },
-        {
-                name = "EditMyUser";
-                directActionClass = "DirectAction";
-                directActionName = "myData";
+                pageName = "HomePage";
         },
         {
                 name = "LogOut";
@@ -26,7 +25,7 @@
         },
         {
                 name = "Bugs";
-                action = "session.handlers.bugs.CreateBug";
+                action = "session.handlers.bugs.ListRecentBugs";
                 children = ("CreateBug", "QueryBugs", "ListRecentBugs", "ListMyBugs");
         },
         {
