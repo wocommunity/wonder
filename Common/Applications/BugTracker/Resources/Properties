@@ -1,2 +1,4 @@
 er.extensions.ERXLocalizer.availableLanguages=(English,German)
 er.extensions.ERXLocalizer.frameworkSearchPath=("app", "BTBusinessLogic", "ERExtras", "ERDirectToWeb", "ERExtensions")
+er.extensions.ERXApplication.useEditingContextUnlocker=true
+er.extensions.ERXEC.defaultAutomaticLockUnlock=false
