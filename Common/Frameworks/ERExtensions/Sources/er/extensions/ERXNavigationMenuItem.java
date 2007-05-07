@@ -40,6 +40,20 @@ public class ERXNavigationMenuItem extends ERXStatelessComponent {
         super(context);
     }
 
+    public String navigationItemWidth() {
+    	if(navigationItem().width() > 0) {
+    		return "" + navigationItem().width();
+    	}
+    	return null;
+    }
+
+    public String navigationItemID() {
+    	if(navigationItem().uniqueID() != null) {
+    		return navigationItem().uniqueID();
+    	}
+    	return null;
+    }
+    
     public void reset() {
         _navigationItem = null;
         _navigationState = null;

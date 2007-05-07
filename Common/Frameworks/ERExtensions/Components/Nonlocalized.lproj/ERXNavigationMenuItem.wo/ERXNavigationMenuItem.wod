@@ -1,35 +1,32 @@
-Conditional1: WOConditional {
+hasActivityAndIsEnabled: WOConditional {
 	condition = hasActivityAndIsEnabled;
 }
 
-Conditional2: WOConditional {
+hasNoActivityAndIsEnabled: WOConditional {
 	condition = hasActivityAndIsEnabled;
 	negate = true;
 }
 
-Hyperlink: WOGenericContainer { 
-	elementName = "A";
+contextComponentActionURL: WOGenericContainer { 
+	elementName = "a";
 	href = contextComponentActionURL;
 	invokeAction = menuItemSelected;
-    class = linkClass;
 }
 
-Image2: WOImage {
+NewMarker: WOImage {
 	filename = "NewMarker.gif";
 	framework = "ERExtensions";
 }
 
-String1: WOString {
+displayName: WOString {
 	value = displayName;
     escapeHTML=false;
 }
 
 Td: WOGenericContainer { 
-    align="center";
-    valign="middle";
-    elementName = "TD";
-    width = navigationItem.width;
-    //bgcolor=tdColor;
-    id=navigationItem.uniqueID;
-    otherTagString="NOWRAP";
+    elementName = "td";
+    width = navigationItemWidth;
+    class = linkClass;
+    id = navigationItemID;
+    nowrap="nowrap";
 }
