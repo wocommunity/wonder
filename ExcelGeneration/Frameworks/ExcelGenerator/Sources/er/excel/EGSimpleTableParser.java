@@ -11,12 +11,9 @@ import java.text.*;
 
 import javax.xml.parsers.*;
 
-import org.apache.log4j.Logger;
+import org.apache.log4j.*;
 import org.apache.poi.hssf.usermodel.*;
 import org.w3c.dom.*;
-import org.xml.sax.EntityResolver;
-import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
 
 import com.webobjects.foundation.*;
 

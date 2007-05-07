@@ -46,7 +46,6 @@ public class WOHelperFunctionHTMLParser {
 	}
 
 	public void parseHTML() throws WOHTMLFormatException, WODeclarationFormatException, ClassNotFoundException {
-		Object obj = null;
 		_stackDict = new NSMutableDictionary();
 		StringTokenizer templateTokenizer = new StringTokenizer(_unparsedTemplate, "<");
 		boolean flag = true;
