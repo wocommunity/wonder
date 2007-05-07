@@ -66,6 +66,15 @@ public class ERD2WQueryPage extends ERD2WPage implements QueryPageInterface {
         }
     }
     
+    public WOComponent clearAction() {
+    	displayGroup().queryBindings().removeAllObjects();
+    	displayGroup().queryMin().removeAllObjects();
+    	displayGroup().queryMax().removeAllObjects();
+    	displayGroup().queryOperator().removeAllObjects();
+    	displayGroup().queryMatch().removeAllObjects();
+    	return context().page();
+    }
+    
     public EOFetchSpecification fetchSpecification() {
         if(fetchSpecification == null) {
             String name = fetchSpecificationName();
@@ -285,6 +294,10 @@ public class ERD2WQueryPage extends ERD2WPage implements QueryPageInterface {
         return displayGroup;
     }
     
+    public String headerTemplate() {
+    	return fetchLimit() != 0 ? "ERD2WQueryPage.restrictedMessage" : "ERD2WQueryPage.plainMessage";
+    }
+
     /**
      * Set a search value for the display group query match. When the value is null is gets removed from the 
      * dict, when the operator is null and the value isn't, "=" is chosen.
