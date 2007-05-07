@@ -9,8 +9,11 @@ package er.bugtracker;
 
 import com.webobjects.appserver.WOApplication;
 import com.webobjects.appserver.WOComponent;
+import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WODisplayGroup;
+import com.webobjects.appserver.WOResponse;
 import com.webobjects.directtoweb.D2W;
+import com.webobjects.directtoweb.EditPageInterface;
 import com.webobjects.directtoweb.InspectPageInterface;
 import com.webobjects.directtoweb.ListPageInterface;
 import com.webobjects.directtoweb.NextPageDelegate;
@@ -29,7 +32,6 @@ import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSKeyValueCoding;
 import com.webobjects.foundation.NSMutableDictionary;
-import com.webobjects.foundation.NSTimestamp;
 
 import er.corebusinesslogic.ERCoreBusinessLogic;
 import er.directtoweb.ERD2WFactory;
@@ -44,7 +46,9 @@ public class Session extends ERXSession {
     public class Handler implements NSKeyValueCoding {
 
         protected InspectPageInterface createPageNamed(String name) {
-            return ERD2WFactory.erFactory().editPageForNewObjectWithConfigurationNamed(name, Session.this);
+            EditPageInterface epi = ERD2WFactory.erFactory().editPageForNewObjectWithConfigurationNamed(name, Session.this);
+            epi.setNextPage(pageWithName("HomePage"));
+            return epi;
         }
         
         protected WOComponent pageWithName(String name) {
@@ -60,11 +64,13 @@ public class Session extends ERXSession {
         protected ListPageInterface listPageNamed(String name, EODataSource ds) {
             ListPageInterface lpi = (ListPageInterface) pageForConfigurationNamed(name);
             lpi.setDataSource(ds);
-            return lpi;
+             return lpi;
         }
         
         protected WOComponent pageForConfigurationNamed(String name) {
-            return D2W.factory().pageForConfigurationNamed(name, Session.this);
+            WOComponent page = D2W.factory().pageForConfigurationNamed(name, Session.this);
+            page.takeValueForKey(pageWithName("HomePage"), "nextPage");
+            return page;
         }
 
         public void takeValueForKey(Object value, String key) {
@@ -151,7 +157,7 @@ public class Session extends ERXSession {
 
         public WOComponent listMyTestItems() {
             EODatabaseDataSource ds = new EODatabaseDataSource(ERXEC.newEditingContext(), "TestItem");
-            return (WOComponent) listPageNamed("ListTestItem", ds);
+            return (WOComponent) listPageNamed("ListMyTestItem", ds);
         }
 
         public WOComponent queryTestItems() {
@@ -220,8 +226,8 @@ public class Session extends ERXSession {
 
         public WOComponent listRecentBugs() {
             EODatabaseDataSource ds = new EODatabaseDataSource(ERXEC.newEditingContext(), "Bug");
-            EOQualifier q = new EOKeyValueQualifier("owner", EOQualifier.QualifierOperatorEqual, getUser());
-            return (WOComponent) listPageNamed("ListBug", ds);
+            WOComponent page = (WOComponent) listPageNamed("ListRecentBug", ds);
+            return page;
         }
  
         public WOComponent listMyBugs() {
@@ -233,7 +239,7 @@ public class Session extends ERXSession {
                 EOEntity bugEntity = EOUtilities.entityNamed(ec, "Bug");
                 EOFetchSpecification fs = bugEntity.fetchSpecificationNamed("bugsOwned").fetchSpecificationWithQualifierBindings(bindings);
 
-                return (WOComponent) listPageNamed("ListBug", ds);
+                return (WOComponent) listPageNamed("ListMyBug", ds);
 
             } finally {
                 ec.unlock();
@@ -262,6 +268,10 @@ public class Session extends ERXSession {
         super.setDefaultEditingContext(newEc);
     }
 
+    public NSArray indentedComponents() {
+    	return Component.orderedComponents(defaultEditingContext());
+    }
+ 
     protected String _lastname;
 
     protected String _firstname;
@@ -275,17 +285,28 @@ public class Session extends ERXSession {
         return _activeUsers;
     }
 
-    protected EOEnterpriseObject _user;
+    protected People _user;
 
-    public EOEnterpriseObject getUser() {
+    public People getUser() {
         return _user;
     }
 
-    public void setUser(EOEnterpriseObject user) {
+    public void setUser(People user) {
         _user = user;
         ERCoreBusinessLogic.setActor(getUser());
     }
-
+    
+    public void appendToResponse(WOResponse aResponse, WOContext aContext) {
+    	if(context().page() instanceof ERD2WInspectPage) {
+    		EOEnterpriseObject eo = ((ERD2WInspectPage)context().page()).object();
+    		if (eo instanceof Markable) {
+				Markable markable = (Markable) eo;
+				markable.markAsRead();
+			}
+    	}
+    	super.appendToResponse(aResponse, aContext);
+    }
+    
     public void awake() {
         super.awake();
         if (getUser() != null)
@@ -297,4 +318,18 @@ public class Session extends ERXSession {
         super.sleep();
     }
 
+    public String navigationRootChoice() {
+    	
+    	People user = (People) getUser();
+    	
+    	if(user != null && user.isActiveAsBoolean()) {
+    		if(user.isAdminAsBoolean()) {
+    			return "admin";
+    		}
+    		if(user.isEngineeringAsBoolean()) {
+    			return "engineer";
+    		}
+    	}
+    	return "none";
+    }
 }
