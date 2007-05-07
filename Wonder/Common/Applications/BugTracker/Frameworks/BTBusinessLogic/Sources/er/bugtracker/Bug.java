@@ -138,7 +138,9 @@ public class Bug extends _Bug implements Markable {
         _componentChanged=false;
         _ownerChanged=false;
         super.validateForUpdate();
-        touch();
+        if(changesFromCommittedSnapshot().count() > 1 && !changesFromCommittedSnapshot().allKeys().containsObject("isRead")) {
+            touch();
+        }
 
     }
 
