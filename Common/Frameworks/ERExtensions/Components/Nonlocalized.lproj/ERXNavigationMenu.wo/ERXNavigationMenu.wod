@@ -1,67 +1,58 @@
-Conditional1: WOConditional {
-	condition = showLevel3; 
-}
 
-Conditional2: WOConditional {
+showLevel2: WOConditional {
 	condition = showLevel2;
 }
 
-DynamicNavTable: WOGenericContainer {
-	border = 0;
-	cellpadding = 0;
-	cellspacing = 0;
-	elementName = "TABLE"; 
-	width="100%";
+showLevel3: WOConditional {
+	condition = showLevel3; 
 }
 
-
-Image1: WOImage {
-	border = 0;
+level1SpacerWidth: WOImage {
 	height = 18;
+	width = level1SpacerWidth;
 	filename = "s.gif";
 	framework = "ERExtensions";
-	width = level3SpacerWidth;
 }
 
-Image2: WOImage {
-	border = 0;
+level2SpacerWidth: WOImage {
 	height = 18;
 	width = level2SpacerWidth;
 	filename = "s.gif";
 	framework = "ERExtensions";
 }
 
-
-NonZeroConditional1: ERXNonZeroConditional {
-	condition = level2SpacerWidth;
+level3SpacerWidth: WOImage {
+	height = 18;
+	width = level3SpacerWidth;
+	filename = "s.gif";
+	framework = "ERExtensions";
 }
 
-NonZeroConditional2: ERXNonZeroConditional {
-	condition = level3SpacerWidth;
-}
-
-NonZeroConditional3: ERXNonZeroConditional {
+HasLevel1SpacerWidth: ERXNonZeroConditional {
 	condition = level1SpacerWidth;
 }
 
-Padder: WOGenericContainer {
-     elementName="td";
-    otherTagString=paddingWidth;
+HasLevel2SpacerWidth: ERXNonZeroConditional {
+	condition = level2SpacerWidth;
 }
 
-Repetition1: WORepetition {
+HasLevel3SpacerWidth: ERXNonZeroConditional {
+	condition = level3SpacerWidth;
+}
+
+level1Items: WORepetition {
+	item = aNavigationItem;
+	list = level1Items;
+}
+
+level2Items: WORepetition {
 	item = aNavigationItem;
 	list = level2Items;
 }
 
-Repetition2: WORepetition {
+level3Items: WORepetition {
 	item = aNavigationItem;
 	list = level3Items;
-}
-
-Repetition3: WORepetition {
-	item = aNavigationItem;
-	list = level1Items;
 }
 
 l1NavObject: ERXNavigationMenuItem {
