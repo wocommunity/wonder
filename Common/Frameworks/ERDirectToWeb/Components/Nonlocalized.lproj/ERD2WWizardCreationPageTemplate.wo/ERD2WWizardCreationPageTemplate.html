@@ -1,43 +1,31 @@
-<webobject name=PageWrapper><webobject name=Help></webobject><webobject name=EditForm><webobject name=MainTable>
-			<tr>
-				<td colspan=2><webobject name=Conditional1>
-						<table cellspacing=0 cellpadding=3 border=0 width="100%">
-							<webobject name=InspectTableHeaderRow>
-								<td align=LEFT valign=middle class=BannerText><webobject name=StepName></webobject></td>
-								<td align=RIGHT class=BannerStepNumbersText valign=middle><webobject name=Steps></webobject></td>
-							</webobject>
-						</table>
-					</webobject></td>
-			</tr>
-			<tr>
-				<td colspan=2><webobject name=Errors></webobject></td>
-			</tr>
-			<tr valign=top>
-				<td align=right valign=top colspan=2><webobject name=InspectPageRepetition></webobject></td>
-			</tr>
-			<tr bgcolor="#999999">
-				<td align=center>
-					<table cellspacing=1 border=0 cellpadding=0>
-						<tr>
-							<td align=CENTER class=requiredMarker>*</td>
-							<td><font color="#ffffff" size=-1>: Required Field</font></td>
-						</tr>
-					</table>
-				</td>
-				<td align=center>
-					<table border=0 cellpadding=0 cellspacing=0>
-						<tr>
-							<webobject name=ShowCancel>
-								<td><webobject name=CancelLink><webobject name=CancelButton></webobject></webobject></td>
-							</webobject><webobject name=ShowPrevious>
-								<td><webobject name=LeftArrow></webobject></td>
-							</webobject><webobject name=ShowNext>
-								<td><webobject name=RightArrow></webobject></td>
-							</webobject><webobject name=ShowSave>
-								<td><webobject name=SubmitChanges></webobject></td>
-							</webobject>
-						</tr>
-					</table>
-				</td>
-			</tr>
-		</webobject></webobject></webobject>
+<webobject name=PageWrapper>
+<webobject name=Help></webobject>
+<webobject name=EditForm>
+<table class="CreateTable">
+	<tr>
+		<td class="Header">
+			<webobject name=ERDBannerComponent></webobject><webobject name=Header></webobject>
+		</td>
+	</tr>
+	<tr>
+		<td class="Banner">
+			<span class=BannerText><webobject name=StepName></webobject></span>
+			<span class=BannerStepNumbersText><webobject name=Steps></webobject></span>
+		</td>
+	</tr>
+	<tr>
+		<td class="Errors"><webobject name=Errors></webobject></td>
+	</tr>
+	<tr>
+		<td class="Repetition"><webobject name=InspectPageRepetition></webobject></td>
+	</tr>
+	<tr>
+		<td class="Actions">
+			<webobject name=ShowCancel><webobject name=CancelButton></webobject></webobject>
+			<webobject name=ShowPrevious><webobject name=PreviousButton></webobject></webobject>
+			<webobject name=ShowNext><webobject name=NextButton></webobject></webobject>
+			<webobject name=ShowSave><webobject name=SaveButton></webobject></webobject>
+		</td>
+	</tr>
+</table>
+</webobject></webobject>

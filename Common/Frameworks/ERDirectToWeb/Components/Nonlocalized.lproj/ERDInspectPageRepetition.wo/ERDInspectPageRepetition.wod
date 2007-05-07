@@ -57,7 +57,7 @@ PropertyName: WOSwitchComponent {
 	localContext = d2wContext;
 }
 
-SafeWrapper : ERXTolerantWrapper {
+SafeWrapper : D2WEmptyWrapper {
 	
 }
 

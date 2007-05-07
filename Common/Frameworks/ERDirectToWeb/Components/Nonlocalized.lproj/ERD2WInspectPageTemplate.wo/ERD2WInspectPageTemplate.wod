@@ -1,45 +1,33 @@
-CancelButton: WOImage {
+CancelButton: ERXSubmitButton {
 	alt = "Reverts your changes";
-	border = "0";
-	filename = "CancelMetalBtn.gif";
-	framework = "JavaDirectToWeb";
-	name = "Reverts your changes";
-}
-
-CancelLink: WOHyperlink {
+	value = "Cancel";
 	action = cancelAction;
 }
 
-Conditional1: WOConditional {
+HasChanges: WOConditional {
 	condition = object.editingContext.hasChanges;
 }
 
-Conditional2: WOConditional {
+ShowPrint: WOConditional {
 	condition = d2wContext.hasPrinterFriendlyVersion;
 }
 
-ERDBannerComponent2: ERDBannerComponent {
+ERDBannerComponent: ERDBannerComponent {
 	bannerFileName = d2wContext.bannerFileName;
 	d2wContext = d2wContext;
 	showBanner = d2wContext.showBanner;
 	framework = "JavaDirectToWeb";
 }
 
-ERPrinterButton: ERDPrinterButton {
+ERDPrinterButton: ERDPrinterButton {
 	d2wContext = d2wContext;
 	task = "inspect";
 }
 
-EditImage: WOImage {
-	alt = "Edits this object";
-	border = "0";
-	filename = "EditMetalBtn.gif";
-	framework = "JavaDirectToWeb";
-	name = "Edits this object";
-}
-
-EditLink: WOHyperlink {
+EditButton: ERXSubmitButton {
 	action = editAction;
+	alt = "Edits this object";
+	value = "Edit";
 }
 
 EditingForm: ERXOptionalForm {
@@ -49,21 +37,11 @@ EditingForm: ERXOptionalForm {
 	name = "EditForm";
 }
 
-EntityName: WOString {
-	_unroll = true;
-	value = d2wContext.displayNameForEntity;
-}
-
 Errors: ERXErrorDictionaryPanel {
 	errorMessages = errorMessages;
 	extraErrorMessage = errorMessage;
 	shouldShowNewLineAbove = true;
 	shouldShowNewLineBelow = true;
-}
-
-FontContainer: WOGenericContainer {
-	color = d2wContext.textColor;
-	elementName = "font";
 }
 
 Header: WOSwitchComponent {
@@ -75,7 +53,7 @@ Help: ERDDebuggingHelp {
 	d2wContext = d2wContext;
 }
 
-Image1: WOImage {
+Floppy: WOImage {
 	filename = "floppy.gif";
 	framework = "ERExtensions";
 }
@@ -85,32 +63,9 @@ InspectPageRepetition: ERDInspectPageRepetition {
 	object = object;
 }
 
-InspectTableHeaderRow: WOGenericContainer {
-	_unroll = true;
-	bgcolor = backgroundColorForTable;
-	elementName = "tr";
-}
-
 IsEditingConditional: WOConditional {
 	_unroll = true;
 	condition = isEditing;
-}
-
-IsEditingConditional2: WOConditional {
-	_unroll = true;
-	condition = isEditing;
-}
-
-IsEntityWritable: WOConditional {
-	_unroll = true;
-	condition = isEntityReadOnly;
-	negate = true;
-}
-
-IsEntityWritable2: WOConditional {
-	_unroll = true;
-	condition = isEntityEditable;
-	negate = true;
 }
 
 IsNotEditingConditional: WOConditional {
@@ -119,10 +74,8 @@ IsNotEditingConditional: WOConditional {
 	negate = true;
 }
 
-IsNotEditingConditional2: WOConditional {
-	_unroll = true;
-	condition = isEditing;
-	negate = true;
+IsObjectEditable: WOConditional {
+	condition = isObjectEditable;
 }
 
 PageWrapper: WOSwitchComponent {
@@ -131,28 +84,19 @@ PageWrapper: WOSwitchComponent {
 	_unroll = true;
 }
 
-ReturnButton: WOImage {
+ReturnButton: ERXSubmitButton {
 	alt = "Returns to the previous page";
-	border = "0";
-	filename = "ReturnMetalBtn.gif";
-	framework = "JavaDirectToWeb";
-	name = "Returns to the previous page";
-}
-
-ReturnLink: WOHyperlink {
 	action = nextPage;
+	value = "Return";
 }
 
 ShowCancel: WOConditional {
 	condition = showCancel;
 }
 
-SubmitChanges: WOImageButton {
+SubmitChanges: ERXSubmitButton {
 	action = submitAction;
 	alt = "Saves your changes";
-	border = "0";
-	filename = saveButtonFileName;
-	framework = "JavaDirectToWeb";
-	name = "Saves your changes";
+	value = "Save";
 }
 

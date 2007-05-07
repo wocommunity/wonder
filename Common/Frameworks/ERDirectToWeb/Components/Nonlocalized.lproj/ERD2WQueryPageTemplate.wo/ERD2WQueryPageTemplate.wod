@@ -2,64 +2,40 @@ BackLink: WOHyperlink {
 	action = returnAction;
 }
 
-Banner: WOImage {
-	alt = "Search";
-	border = "0";
-	filename = "SearchMetalBan.gif";
+Header: WOSwitchComponent {
+	WOComponentName = d2wContext.headerComponentName;
+	d2wContext = d2wContext;
+}
+
+ERDBannerComponent: ERDBannerComponent {
+	bannerFileName = d2wContext.bannerFileName;
+	d2wContext = d2wContext;
+	showBanner = d2wContext.showBanner;
 	framework = "JavaDirectToWeb";
-	height = "32";
-	name = "Search";
-	width = "550";
 }
 
-BannerConditional: WOConditional {
-	_unroll = true;
-	condition = showBanner;
-}
-
-Conditional1: WOConditional {
+ShowList: WOConditional {
 	condition = d2wContext.showListInSamePage;
 }
 
-Conditional2: WOConditional {
+ShowResults: WOConditional {
 	condition = showResults;
 }
 
-Conditional3: WOConditional {
-	condition = fetchLimit;
-	negate = true;
-}
-
-Conditional4: WOConditional {
-	condition = fetchLimit;
-}
-
-FontContainer: WOGenericContainer {
-	color = d2wContext.textColor;
-	elementName = "font";
-}
-
-Header: ERXLocalizedString {
+HeaderTemplate: ERXLocalizedString {
 	object = self;
 	otherObject = d2wContext;
-	templateString = "ERD2WQueryPage.restrictedMessage";
-}
-
-Header2: ERXLocalizedString {
-	object = self;
-	otherObject = d2wContext;
-	templateString = "ERD2WQueryPage.plainMessage";
+	templateString = headerTemplate;
 }
 
 Help: ERDDebuggingHelp {
 	d2wContext = d2wContext;
 }
 
-ListPage: D2WList {
+ListPage: ERXD2WList {
 	dataSource = queryDataSource;
 	entityName = entity;
 	pageConfiguration = d2wContext.listConfigurationName;
-	d2wContext = d2wContext;
 }
 
 PageWrapper: WOSwitchComponent {
@@ -71,6 +47,7 @@ PageWrapper: WOSwitchComponent {
 QueryForm: WOForm {
 	action = queryAction;
 	name = "QueryForm";
+	multipleSubmit = true;
 }
 
 QueryPageRepetition: ERDQueryPageRepetition {
@@ -78,43 +55,25 @@ QueryPageRepetition: ERDQueryPageRepetition {
 	displayGroup = displayGroup;
 }
 
-QueryResetButton: WOResetButton {
-	title = "Clear Form";
+ClearButton: ERXSubmitButton {
+	alt = "Clear Form";
 	value = "Clear";
+	action = clearAction;
+	class = "ClearButton";
 }
 
-QuerySubmitButton: WOActiveImage {
+QueryButton: ERXSubmitButton {
 	action = queryAction;
 	alt = "Find objects matching the query";
-	filename = "SearchDBMetalBtn.gif";
-	framework = "JavaDirectToWeb";
-	height = "31";
-	name = "Find objects matching the query";
-	width = "88";
+	value = "Find";
+	class = "QueryButton";
 }
 
-QueryTable: WOGenericContainer {
-	_unroll = true;
-	border = "0";
-	cellpadding = "0";
-	cellspacing = "5";
-	elementName = "table";
-}
-
-QueryTableHeaderRow: WOGenericContainer {
-	_unroll = true;
-	bgcolor = backgroundColorForTable;
-	elementName = "tr";
-}
-
-ReturnButton: WOImage {
+ReturnButton: ERXSubmitButton {
+	action = returnAction;
 	alt = "Returns to the previous page";
-	border = "0";
-	filename = "ReturnMetalBtn.gif";
-	framework = "JavaDirectToWeb";
-	height = "31";
-	name = "Returns to the previous page";
-	width = "88";
+	value = "Return";
+	class = "CancelButton";
 }
 
 ShowCancel: WOConditional {
