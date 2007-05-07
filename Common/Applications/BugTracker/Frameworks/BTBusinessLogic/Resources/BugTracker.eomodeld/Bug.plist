@@ -38,11 +38,12 @@
        {
            columnName = FEATURE_REQUEST;
            name = featureRequest;
-           prototypeName = intNumber;
+           prototypeName = flag;
            userInfo = 
            {
                modificationDate = "2002-05-06 07:35:29 +0200";
            };
+           valueType = c;
        }, 
        
        {
