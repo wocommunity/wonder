@@ -5,6 +5,7 @@ import org.apache.log4j.Logger;
 
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.eocontrol.EOSharedEditingContext;
+import com.webobjects.foundation.NSArray;
 
 public class Priority extends _Priority {
     static final Logger log = Logger.getLogger(Priority.class);
@@ -26,6 +27,11 @@ public class Priority extends _Priority {
     // Class methods go here
     
     public static class PriorityClazz extends _PriorityClazz {
+
+    	public NSArray allObjects(EOEditingContext ec) {
+    		return new NSArray(new Object[] {CRITICAL, HIGH, MEDIUM, LOW});
+    	}
+    	
         public Priority sharedStateForKey(String key) {
             return (Priority)objectWithPrimaryKeyValue(EOSharedEditingContext.defaultSharedEditingContext(), key);
         }
