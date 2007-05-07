@@ -1,40 +1,37 @@
 <table class="ERXNavigationMenu">
-    <tr>
+    <tr class="Level1ItemRow">
         <td>
-            <webobject name=DynamicNavTable>
-                <tr class="NavBackground">
-                    <webobject name="Padder">&nbsp;</webobject>
-                    <td>
-                        <webobject name=NonZeroConditional3>
-                            <!--WEBOBJECT NAME=Image3></WEBOBJECT-->
-                        </webobject></td>
-                    <td align=right>
-                        <table>
-                            <tr>
-                                <webobject name=Repetition3>
-                                    <webobject name=l1NavObject></webobject>
-                                </webobject>
-                            </tr>
-                        </table></td>
+            <table class="Level1ItemTable">
+                <tr>
+			        <webobject name=HasLevel1SpacerWidth><td><WEBOBJECT NAME=level1SpacerWidth></WEBOBJECT></td></webobject>
+                    <webobject name=level1Items>
+                        <webobject name=l1NavObject></webobject>
+                    </webobject>
                 </tr>
-                <webobject name=Conditional2>
-                    <tr>
-                        <td colspan=4 align=right>
-                            <table>
-                                <tr>
-                                    <webobject name=Repetition1><webobject name=l2NavObject></webobject></webobject><webobject name=NonZeroConditional1>
-                                        <td><webobject name=Image2></webobject></td>
-                                    </webobject>
-                                </tr></table><webobject name=Conditional1><table height=19 border=0 cellspacing=0 cellpadding=1>
-                                    <tr>
-                                        <webobject name=Repetition2><webobject name=l3navObject></webobject></webobject><webobject name=NonZeroConditional2><webobject name=Image1></webobject></webobject>
-                                    </tr>
-                                </table></webobject>
-                        </td>
-                    </tr>
-                </webobject>
-            </webobject>
-            <!-- End dynamic nav area table -->
-        </td>
+            </table></td>
     </tr>
+    <webobject name=showLevel2>
+        <tr class="Level2ItemRow">
+            <td>
+                <table class="Level2ItemTable">
+                    <tr>
+                        <webobject name=HasLevel2SpacerWidth><td><webobject name=level2SpacerWidth></webobject></td></webobject>
+                        <webobject name=level2Items><webobject name=l2NavObject></webobject></webobject>
+                    </tr>
+                </table>
+            </td>
+         </tr>
+        <webobject name=showLevel3>
+        	<tr class="Level3ItemRow">
+        		<td>
+		        	<table class="Level3ItemTable">
+		                <tr>
+		                    <webobject name=HasLevel3SpacerWidth><webobject name=level3SpacerWidth></webobject></webobject>
+		                    <webobject name=level3Items><webobject name=l3navObject></webobject></webobject>
+		                </tr>
+		            </table>
+				</td>
+			</tr>
+        </webobject>
+    </webobject>
 </table>
