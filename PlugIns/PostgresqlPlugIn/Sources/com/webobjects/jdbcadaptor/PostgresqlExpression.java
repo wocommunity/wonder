@@ -489,9 +489,9 @@ public class PostgresqlExpression extends JDBCExpression {
         if(System.getProperty("java.version").compareTo("1.5") >= 0) {
             try {
                 if(_bigDecimalToString == null) {
-                    _bigDecimalToString = BigDecimal.class.getMethod("toPlainString", null);
+                    _bigDecimalToString = BigDecimal.class.getMethod("toPlainString", (Class[])null);
                 }
-                result = (String) _bigDecimalToString.invoke(value, null);
+                result = (String) _bigDecimalToString.invoke(value, (Object[])null);
             } catch (IllegalArgumentException e) {
                 throw NSForwardException._runtimeExceptionForThrowable(e);
             } catch (IllegalAccessException e) {
