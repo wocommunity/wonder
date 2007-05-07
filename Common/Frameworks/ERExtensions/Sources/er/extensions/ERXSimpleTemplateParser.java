@@ -233,12 +233,8 @@ public class ERXSimpleTemplateParser {
                             if(!isLoggingDisabled && log.isDebugEnabled()) {
                                 log.debug("calling valueForKeyPath("+o+", "+element+")");
                             }
-                            if(o instanceof NSKeyValueCodingAdditions) {
-                                result = ((NSKeyValueCodingAdditions)o).valueForKeyPath(element);
-                            } else {
-                                result = NSKeyValueCodingAdditions.Utility.valueForKeyPath(o, element);
-                            }
-                            // For just in case the above doesn't throw an exception when the 
+                            result = doGetValue(element, o);
+                             // For just in case the above doesn't throw an exception when the 
                             // key is not defined. (NSDictionary doesn't seem to throw the exception.)
                             if(result == null) {
                                 result = _undefinedKeyLabel;
@@ -273,5 +269,15 @@ public class ERXSimpleTemplateParser {
             }
         }
         return buffer.toString();
+    }
+    
+    protected Object doGetValue(String aKeyPath, Object anObject) {
+    	Object result;
+        if(anObject instanceof NSKeyValueCodingAdditions) {
+            result = ((NSKeyValueCodingAdditions)anObject).valueForKeyPath(aKeyPath);
+        } else {
+            result = NSKeyValueCodingAdditions.Utility.valueForKeyPath(anObject, aKeyPath);
+        }   	
+        return result;
     }
 }
