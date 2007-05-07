@@ -4,14 +4,17 @@ AllowsNull: WOConditional {
 
 ERXLocalizedString1: ERXLocalizedString {
 	value = trueValue.name;
+	escapeHTML = false;
 }
 
 ERXLocalizedString2: ERXLocalizedString {
 	value = falseValue.name;
+	escapeHTML = false;
 }
 
 ERXLocalizedString3: ERXLocalizedString {
 	value = nullValue.name;
+	escapeHTML = false;
 }
 
 RadioButton1: WORadioButton {
@@ -32,4 +35,16 @@ RadioButton3: WORadioButton {
 	name = radioBoxGroupName;
 }
 
+UseRadio : WOConditional {
+	condition = useCheckbox;
+	negate = true;
+}
 
+UseCheckBox : WOConditional {
+	condition = useCheckbox;
+}
+
+Checkbox :WOCheckBox {
+	value = trueValue;
+	selection = yesNoBoolean;
+}
