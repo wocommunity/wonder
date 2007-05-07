@@ -14,8 +14,6 @@ import com.webobjects.foundation.NSArray;
 
 import er.corebusinesslogic.ERCPreference;
 import er.corebusinesslogic.ERCoreUserInterface;
-import er.extensions.ERXProperties;
-import er.extensions.ERXUtilities;
 import er.extensions.ERXValueUtilities;
 
 public class People extends _People implements ERCoreUserInterface {
@@ -99,10 +97,6 @@ public class People extends _People implements ERCoreUserInterface {
 
     public NSArray openBugs() {
         return Bug.clazz.bugsOwnedWithUser(editingContext(), this);
-    }
-
-    public NSArray bugs() {
-        return openBugs();
     }
 
     public NSArray unreadBugs() {
