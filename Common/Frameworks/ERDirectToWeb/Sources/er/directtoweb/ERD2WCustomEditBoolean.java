@@ -105,6 +105,10 @@ public class ERD2WCustomEditBoolean extends D2WEditBoolean {
         return _choicesNames;
     }
 
+    public boolean useCheckbox() {
+    	return choicesNames().count() == 1;
+    }
+    
     public void validationFailedWithException(Throwable theException,Object object, String theKeyPath) {
     	if(object instanceof BooleanProxy) {
     		BooleanProxy proxy = (BooleanProxy)object;
@@ -114,6 +118,9 @@ public class ERD2WCustomEditBoolean extends D2WEditBoolean {
     }
 
     public Object validateTakeValueForKeyPath(Object object, String string) {
+    	if(useCheckbox() && object == null) {
+    		object = Boolean.FALSE;
+    	}
     	if(object instanceof BooleanProxy) {
     		BooleanProxy proxy = (BooleanProxy)object;
     		object = proxy.value();
