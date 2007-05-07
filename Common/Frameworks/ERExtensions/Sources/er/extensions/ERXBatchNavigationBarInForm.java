@@ -33,6 +33,6 @@ public class ERXBatchNavigationBarInForm extends ERXBatchNavigationBar {
     }
 
     public String formTarget() {
-        return ERXWOForm.formName(context(), "EditForm") + ".target=_self;";
+        return ERXWOForm.formName(context(), "EditForm") + ".target='_self';";
     }
 }
