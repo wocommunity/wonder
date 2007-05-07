@@ -60,4 +60,8 @@ public class ERDListPageRepetition extends ERDAttributeRepetition {
     public boolean isListEmpty() {
         return displayGroup().allObjects().count() == 0;
     }
+    
+    public String rowClass() {
+    	return "AttributeRow" + (rowIndex % 2);
+    }
 }
