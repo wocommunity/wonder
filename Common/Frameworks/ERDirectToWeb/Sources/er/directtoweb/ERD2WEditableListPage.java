@@ -116,7 +116,7 @@ public class ERD2WEditableListPage extends ERD2WListPage implements ERXException
     public String dummy;
 
     public boolean showCancel() {
-        return nextPage()!=null;
+        return _nextPage!=null;
     }
 
     public boolean isEntityInspectable() {
@@ -125,7 +125,6 @@ public class ERD2WEditableListPage extends ERD2WListPage implements ERXException
 
     public void setObject(EOEnterpriseObject eo) {
         super.setObject(eo);
-        d2wContext().takeValueForKey(eo,"object");
     }
 
     public WOComponent backAction() {
