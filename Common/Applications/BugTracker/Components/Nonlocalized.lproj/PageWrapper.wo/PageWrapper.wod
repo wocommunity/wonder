@@ -1,10 +1,17 @@
-Body: WOComponentContent {
-	_unroll = YES;
+
+ERD2WDebugFlags : ERD2WDebugFlags {
+	context = d2wContext;
 }
 
-BodyContainer: WOBody {
-    filename="fuzzyGreyStripe.gif";
-	framework = "JavaDirectToWeb";
+IsDebug :WOConditional {
+	condition = application.isDevelopmentMode;
+}
+
+Content : WOComponentContent {	
+}
+
+Body: WOBody {
+    id=pageName;
 }
 
 ERXStyleSheet: ERXStyleSheet { 

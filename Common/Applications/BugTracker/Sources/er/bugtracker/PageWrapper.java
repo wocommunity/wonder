@@ -10,6 +10,7 @@ import org.apache.log4j.Logger;
 
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
+import com.webobjects.directtoweb.D2WContext;
 import com.webobjects.directtoweb.D2WPage;
 import com.webobjects.foundation.NSKeyValueCoding;
 import com.webobjects.foundation.NSMutableDictionary;
@@ -24,6 +25,25 @@ public class PageWrapper extends WOComponent {
         super(aContext);
     }
 
+    public String pageName() {
+    	String pageName = (String) valueForBinding("pageName");
+    	if(pageName == null && d2wContext() != null) {
+    		pageName = d2wContext().dynamicPage();
+    	}
+    	if(pageName == null) {
+    		pageName = context().page().name();
+    	}
+    	return pageName;
+    }
+    
+    public D2WContext d2wContext() {
+    	if (context().page() instanceof D2WPage) {
+			D2WPage d2wPage = (D2WPage) context().page();
+			return d2wPage.d2wContext();
+		}
+    	return null;
+    }
+    
     public ERXNavigationState navigationState() {
         return ERXNavigationManager.manager().navigationStateForSession(session());
     }

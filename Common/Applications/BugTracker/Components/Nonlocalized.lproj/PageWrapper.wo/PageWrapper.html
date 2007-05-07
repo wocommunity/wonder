@@ -3,18 +3,17 @@
         <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
         <webobject name=ERXStyleSheet></webobject>
     </webobject>
-    <body>
-        <table width="100%">
+    <webobject name = "Body">
+        <table class="ContentTable">
             <tr>
-                <td><webobject name=Header></webobject></td>
+                <td class="HeaderRow"><webobject name=Header></webobject></td>
             </tr>
             <tr>
-                <td align=center valign=top>
-                    <center>
-                        <webobject name=Body></webobject>
-                    </center>
+                <td class="ContentRow">
+                    <webobject name=Content></webobject>
+					<webobject name = "IsDebug"><webobject name="ERD2WDebugFlags"></webobject></webobject>
                 </td>
             </tr>
         </table>
-    </body>
+    </webobject>
 </html>

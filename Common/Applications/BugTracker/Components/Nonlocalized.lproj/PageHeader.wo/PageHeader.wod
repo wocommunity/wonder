@@ -1,0 +1,3 @@
+Title : WOString {
+	value = d2wContext.displayNameForPageConfiguration;
+}
