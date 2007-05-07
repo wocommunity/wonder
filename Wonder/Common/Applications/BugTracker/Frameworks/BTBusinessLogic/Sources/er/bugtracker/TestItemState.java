@@ -5,6 +5,7 @@ import org.apache.log4j.Logger;
 
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.eocontrol.EOSharedEditingContext;
+import com.webobjects.foundation.NSArray;
 
 public class TestItemState extends _TestItemState {
     static final Logger log = Logger.getLogger(TestItemState.class);
@@ -27,7 +28,12 @@ public class TestItemState extends _TestItemState {
     // Class methods go here
     
     public static class TestItemStateClazz extends _TestItemStateClazz {
-        public TestItemState sharedStateForKey(String key) {
+
+    	public NSArray allObjects(EOEditingContext ec) {
+    		return new NSArray(new Object[] {OPEN, BUG, CLOSED, REQ});
+    	}
+
+    	public TestItemState sharedStateForKey(String key) {
             return (TestItemState)objectWithPrimaryKeyValue(EOSharedEditingContext.defaultSharedEditingContext(), key);
         }
 
