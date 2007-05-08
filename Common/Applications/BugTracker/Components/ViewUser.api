@@ -1,11 +1,9 @@
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <wodefinitions>
-	<wo class="ViewUser" wocomponentcontent="NO">
-
-		<binding name="user"/>
-
-		<validation message="&apos;user&apos; is a required binding">
-			<unbound name="user"/>
-		</validation>
-	</wo>
+    <wo class="ViewUser" wocomponentcontent="NO">
+        <binding name="user"/>
+        <validation message="'user' is a required binding">
+            <unbound name="user"/>
+        </validation>
+    </wo>
 </wodefinitions>
