@@ -3,6 +3,7 @@ package er.directtoweb;
 
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
+import com.webobjects.appserver.WOResponse;
 import com.webobjects.directtoweb.D2W;
 import com.webobjects.directtoweb.ListPageInterface;
 import com.webobjects.eoaccess.EODatabaseDataSource;
@@ -21,15 +22,20 @@ import er.extensions.ERXEOControlUtilities;
  */
 public class ERDQuickSearch extends ERDCustomComponent {
 
-    public ERDQuickSearch(WOContext context) {
-        super(context);
-    }
-    
-    public boolean synchronizesVariablesWithBindings() {
+	public ERDQuickSearch(WOContext context) {
+		super(context);
+	}
+
+	public boolean synchronizesVariablesWithBindings() {
         return false;
     }
 
     public String searchValue;
+    
+    public void appendToResponse(WOResponse r, WOContext c) {
+    	searchValue = defaultValue();
+    	super.appendToResponse(r, c);
+    }
 
     public WOComponent searchAction() {
         ListPageInterface lpi = null;
@@ -65,6 +71,10 @@ public class ERDQuickSearch extends ERDCustomComponent {
         return ds;
     }
 
+    public boolean disabled() {
+    	return valueForBinding("entityName") == null;
+    }
+    
     public String defaultValue() {
         return (String) valueForBinding("defaultValue");
     }
