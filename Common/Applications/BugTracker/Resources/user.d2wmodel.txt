@@ -15,9 +15,11 @@
     50 : pageConfiguration like '*TestItem*' => navigationState = TestItems [com.webobjects.directtoweb.Assignment], 
     50 : pageConfiguration like '*Component*' => navigationState = Components [com.webobjects.directtoweb.Assignment], 
     50 : pageConfiguration like '*Framework*' => navigationState = Frameworks [com.webobjects.directtoweb.Assignment], 
+    50 : propertyKey = 'controllerAction' => componentName = ERDControllerButton [com.webobjects.directtoweb.Assignment], 
     50 : pageConfiguration like '*Requirement*' => navigationState = Requirements [com.webobjects.directtoweb.Assignment], 
     50 : (task = 'edit' and smartRelationship.isToMany = 0) => toOneUIStyle = popup [com.webobjects.directtoweb.Assignment], 
     50 : (task = 'edit' and smartRelationship.isToMany = 1) => toOneUIStyle = browser [com.webobjects.directtoweb.Assignment], 
+    50 : entity.name = 'Bug' => pageController = er.bugtracker.delegates.BugDelegate [er.directtoweb.ERDDelayedObjectCreationAssignment], 
     50 : (task = 'edit' and smartRelationship.isToMany = 0) => componentName = ERD2WEditToOneRelationship [com.webobjects.directtoweb.Assignment], 
     50 : pageConfiguration = 'QueryRecentlyFiledBugs' => displayPropertyKeys = (originator, dateSubmitted) [com.webobjects.directtoweb.Assignment], 
     50 : (task = 'edit' and smartRelationship.isToMany = 1) => componentName = ERD2WEditToManyRelationship [com.webobjects.directtoweb.Assignment], 
@@ -54,6 +56,8 @@
     70 : ((task = 'list' or task = 'inspect') and (entity.name = 'Bug' or entity.name = 'Requirement') and propertyKey = 'featureRequest') => componentName = D2WDisplayBoolean [com.webobjects.directtoweb.Assignment], 
     70 : ((task = 'edit' and subTask = 'wizard') and (entity.name = 'Bug' or entity.name = 'Requirement') and (propertyKey = 'textDescription' or propertyKey = 'newText')) => componentName = ERD2WEditLargeString [com.webobjects.directtoweb.Assignment], 
     80 : (entity.name = 'TestItem' and propertyKey = 'state') => keyWhenRelationship = name [com.webobjects.directtoweb.Assignment], 
+    90 : entity.name = 'Bug' => actions = {"left" = ("controllerAction"); 
+} [com.webobjects.directtoweb.Assignment], 
     100 : *true* => showBanner = false [com.webobjects.directtoweb.BooleanAssignment], 
     100 : entity.name = 'Bug' => templateString = ListBugDescription [com.webobjects.directtoweb.Assignment], 
     100 : entity.name = 'Bug' => extraListComponentName = ERDDisplayTemplateString [com.webobjects.directtoweb.Assignment]

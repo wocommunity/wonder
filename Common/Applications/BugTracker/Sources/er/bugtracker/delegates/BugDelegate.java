@@ -1,7 +1,11 @@
 package er.bugtracker.delegates;
 
-import er.directtoweb.ERDBranchDelegate;
+import com.webobjects.appserver.WOComponent;
 
-public class BugDelegate extends ERDBranchDelegate {
+public class BugDelegate extends BranchDelegate {
+    
+    public WOComponent resolve(WOComponent sender) {
+        return sender.context().page();
+    }
 
 }

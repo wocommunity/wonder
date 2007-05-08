@@ -95,9 +95,9 @@ public class Session extends ERXSession {
     	return Component.clazz.orderedComponents(defaultEditingContext());
     }
  
-    protected String _lastname;
+    private String _lastname;
 
-    protected String _firstname;
+    private String _firstname;
 
     private NSArray _activeUsers;
 

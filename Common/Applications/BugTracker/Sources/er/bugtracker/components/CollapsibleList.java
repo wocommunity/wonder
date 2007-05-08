@@ -28,8 +28,8 @@ public class CollapsibleList extends WOComponent {
 
     /** logging support */
     static final Logger log = Logger.getLogger(CollapsibleList.class.getClass().getName() + ".components");
-    protected String openedLabelString;
-    protected String closedLabelString;
+    public String openedLabelString;
+    public String closedLabelString;
 	
     /**
      * Public constructor
@@ -50,10 +50,10 @@ public class CollapsibleList extends WOComponent {
         return localizer().plurifiedStringWithTemplateForKey(template, localizedEntityName, arr.count(), session());
     }
     
-    protected NSArray array() {
+    public NSArray array() {
         return (NSArray)valueForBinding("items");
     }
-    protected String entityName() {
+    public String entityName() {
         return (String)valueForBinding("entityName");
     }
     public String openedLabelString() {
