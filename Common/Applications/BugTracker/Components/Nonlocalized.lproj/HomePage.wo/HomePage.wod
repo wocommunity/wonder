@@ -1,10 +1,6 @@
 PageWrapper: PageWrapper {
 }
 
-String3: WOString {
-	value = createdKeys;
-//	value = session.getUser.name;
-}
 
 myBugList: CollapsibleList {
 	items = session.user.openBugs;
