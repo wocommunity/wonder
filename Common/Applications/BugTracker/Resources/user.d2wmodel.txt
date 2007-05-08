@@ -22,12 +22,10 @@
     50 : pageConfiguration = 'QueryRecentlyFiledBugs' => displayPropertyKeys = (originator, dateSubmitted) [com.webobjects.directtoweb.Assignment], 
     50 : (task = 'edit' and smartRelationship.isToMany = 1) => componentName = ERD2WEditToManyRelationship [com.webobjects.directtoweb.Assignment], 
     50 : ((task = 'list' or task = 'inspect' or task = 'select' or task = 'pick') and propertyKey = 'priority') => componentName = PriorityComponent [com.webobjects.directtoweb.Assignment], 
-    50 : pageConfiguration = 'CreateBug' => displayPropertyKeys = ("[Main]", component, featureRequest, subject, textDescription, "[TestItems]", subject, testItems
-) [com.webobjects.directtoweb.Assignment], 
     50 : ((task = 'list' or task = 'inspect' or task = 'select' or task = 'pick') and propertyKey = 'state' and (entity.name = 'Requirement' or entity.name = 'Bug')) => componentName = StatusComponent [com.webobjects.directtoweb.Assignment], 
     50 : ((task = 'list' or task = 'select' or task = 'pick') and (entity.name = 'Bug' or entity.name = 'Requirement')) => displayPropertyKeys = (state, featureRequest, read, bugid, entityName, owner, subject, dateModified, dateSubmitted
 ) [com.webobjects.directtoweb.Assignment], 
-    50 : (task = 'edit' and (entity.name = 'Bug' or entity.name = 'Requirement')) => displayPropertyKeys = ("( )", dateModified, dateSubmitted, state, featureRequest, read, "(description)", subject, textDescription, "(TestItems)", testItems, "(Comment)", comments, newText
+    50 : (task = 'edit' and (entity.name = 'Bug' or entity.name = 'Requirement')) => displayPropertyKeys = ("( )", dateModified, dateSubmitted, state, featureRequest, component, read, "(description)", subject, textDescription, "(TestItems)", testItems, "(Comment)", comments, newText
 ) [com.webobjects.directtoweb.Assignment], 
     60 : (task = 'query' and smartRelationship.destinationEntity.name = 'People') => size = 5 [com.webobjects.directtoweb.Assignment], 
     60 : (task = 'query' and smartRelationship.destinationEntity.name = 'People') => multiple = true [com.webobjects.directtoweb.BooleanAssignment], 
@@ -42,6 +40,8 @@
     60 : (task = 'edit' and smartRelationship.destinationEntity.name = 'TestItem') => inspectConfigurationName = EditEmbeddedTestItem [com.webobjects.directtoweb.Assignment], 
     60 : (task = 'edit' and smartRelationship.destinationEntity.name = 'Comment') => inspectConfigurationName = InspectEmbeddedComment [com.webobjects.directtoweb.Assignment], 
     60 : ((task = 'inspect' or task = 'edit') and smartRelationship.destinationEntity.name = 'Comment') => componentName = ERDEditToManyRelationship [com.webobjects.directtoweb.Assignment], 
+    60 : (pageConfiguration = 'CreateBug' or pageConfiguration = 'CreateRequirement') => displayPropertyKeys = ("[Main]", component, featureRequest, subject, textDescription, "[TestItems]", subject, testItems
+) [com.webobjects.directtoweb.Assignment], 
     70 : propertyKey = 'component' => sortKey = sortOrder [com.webobjects.directtoweb.Assignment], 
     70 : propertyKey = 'component' => restrictedChoiceKey = session.indentedComponents [com.webobjects.directtoweb.Assignment], 
     70 : smartRelationship.destinationEntity.name = 'People' => keyWhenRelationship = name [com.webobjects.directtoweb.Assignment], 
