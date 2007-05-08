@@ -45,14 +45,6 @@ ItemsPerBatch: WOTextField {
 	onChange = formTarget;
 }
 
-LeftArrow: WOImageButton {
-    action = displayPreviousBatch;
-    border = "0";
-    filename = leftArrowImage;
-    framework = imageFramework;
-	onClick = formTarget;
-}
-
 NavigationTable : WOGenericContainer {
     elementName="Table";
     width=^width;
@@ -61,6 +53,15 @@ NavigationTable : WOGenericContainer {
     bgcolor=^bgcolor;
     border=^border;
     class=^tableClass;
+}
+
+
+LeftArrow: WOImageButton {
+    action = displayPreviousBatch;
+    border = "0";
+    filename = leftArrowImage;
+    framework = imageFramework;
+	onClick = formTarget;
 }
 
 RightArrow: WOImageButton {
@@ -80,10 +81,27 @@ SortKeyListConditional: WOConditional {
     condition=hasSortKeyList;
 }
 
-String1: WOString {
-	value = filteredObjectsCount;
-}
-
 TotalBatches: WOString {
     value = displayGroup.batchCount;
+}
+
+items_per_page: ERXLocalizedString {
+	value = "ERXBatchNavigationBar.items_per_page"; 
+}
+
+of: ERXLocalizedString {
+	value = "ERXBatchNavigationBar.of"; 
+}
+
+page: ERXLocalizedString {
+	value = "ERXBatchNavigationBar.page"; 
+}
+
+show: ERXLocalizedString {
+	value = "ERXBatchNavigationBar.show";
+}
+
+
+filteredObjectsCount: WOString {
+	value = filteredObjectsCount;
 }
