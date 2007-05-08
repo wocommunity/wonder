@@ -63,7 +63,11 @@ public class MenuHeader extends WOComponent {
     }
     
     public boolean quickSearchDisabled() {
-    	return parent().valueForKeyPath("d2wContext.entity.name") == null;
+    	return entityName() == null;
+    }
+
+    public String entityName() {
+        return (String) parent().valueForKeyPath("d2wContext.entity.name");
     }
  
     public WOComponent editMyInfo() {
