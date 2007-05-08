@@ -12,7 +12,7 @@ import com.webobjects.foundation.NSValidation;
 import er.corebusinesslogic.ERCoreBusinessLogic;
 import er.extensions.ERXEC;
 import er.extensions.ERXEOControlUtilities;
-import er.extensions.ERXUtilities;
+import er.extensions.ERXValueUtilities;
 
 public class Bug extends _Bug implements Markable {
     static final Logger log = Logger.getLogger(Bug.class);
@@ -20,8 +20,8 @@ public class Bug extends _Bug implements Markable {
     public boolean _componentChanged;
     public boolean _ownerChanged;
 
-    public void awakeFromInsertion(EOEditingContext ec) {
-        super.awakeFromInsertion(ec);
+    public void init(EOEditingContext ec) {
+        super.init(ec);
         setPriority(Priority.MEDIUM);
         setState(State.ANALYZE);
         addToBothSidesOfTargetRelease(Release.clazz.defaultRelease(ec));
@@ -37,7 +37,7 @@ public class Bug extends _Bug implements Markable {
 		try {
 			People people = (People) ERCoreBusinessLogic.actor(ec);
 			Bug copy = (Bug) ERXEOControlUtilities.localInstanceOfObject(ec, this);
-			if(copy != null && !copy.isReadAsBoolean() && copy.owner().equals(people)) {
+			if(copy != null && !copy.isRead() && copy.owner().equals(people)) {
 				copy.setReadAsBoolean(true);
 				ec.saveChanges();
 			}
@@ -47,7 +47,7 @@ public class Bug extends _Bug implements Markable {
 	}
 
 	public void markReadBy(People reader) {
-        if (owner() != null && owner().equals(localInstanceOf(reader)) && !isReadAsBoolean()) {
+        if (owner() != null && owner().equals(localInstanceOf(reader)) && !isRead()) {
             setReadAsBoolean(true);
             editingContext().saveChanges();
         }
@@ -65,7 +65,7 @@ public class Bug extends _Bug implements Markable {
     public void setReadAsBoolean(boolean read) {
         setRead(read ? "Y":"N");
     }
-    public boolean isReadAsBoolean() {
+    public boolean isRead() {
         return "Y".equals(read());
     }
 
@@ -96,9 +96,11 @@ public class Bug extends _Bug implements Markable {
         }
     }
 
-    public boolean isFeatureRequest() { return ERXUtilities.booleanValue(featureRequest()); }
+    public boolean isFeatureRequest() {
+		return ERXValueUtilities.booleanValue(featureRequest());
+	}
 
-    public void setState(State newState) {
+	public void setState(State newState) {
         willChange();
         State oldState = state();
         if (newState==State.CLOSED && isFeatureRequest() && oldState==State.VERIFY)
@@ -138,7 +140,7 @@ public class Bug extends _Bug implements Markable {
         _componentChanged=false;
         _ownerChanged=false;
         super.validateForUpdate();
-        if(changesFromCommittedSnapshot().count() > 1 && !changesFromCommittedSnapshot().allKeys().containsObject("isRead")) {
+        if(!(changesFromCommittedSnapshot().count() == 1 && changesFromCommittedSnapshot().allKeys().containsObject("read"))) {
             touch();
         }
 

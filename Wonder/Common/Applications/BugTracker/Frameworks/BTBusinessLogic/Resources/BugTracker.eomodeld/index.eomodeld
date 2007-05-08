@@ -11,6 +11,11 @@
        }, 
        
        {
+           className = er.bugtracker.Comment;
+           name = Comment;
+       }, 
+       
+       {
            className = er.bugtracker.Component;
            name = Component;
        }, 
@@ -83,11 +88,17 @@
     );
     entitiesWithSharedObjects = 
     (
-       Difficulty, 
        Priority, 
        RequirementSubType, 
        RequirementType, 
        State, 
        TestItemState
     );
+    internalInfo = 
+    {
+        _deletedEntityNamesInObjectStore = 
+        (
+
+        );
+    };
 }

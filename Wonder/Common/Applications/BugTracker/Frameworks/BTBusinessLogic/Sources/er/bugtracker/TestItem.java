@@ -13,8 +13,8 @@ public class TestItem extends _TestItem {
         super();
     }
 
-    public void awakeFromInsertion(EOEditingContext ec) {
-        super.awakeFromInsertion(ec);
+    public void init(EOEditingContext ec) {
+        super.init(ec);
         setState(TestItemState.OPEN);
         setDateCreated(new NSTimestamp());
     }
