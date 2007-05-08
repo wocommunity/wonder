@@ -6,15 +6,12 @@
  * included with this distribution in the LICENSE.NPL file.  */
 
 package er.bugtracker;
-import com.webobjects.foundation.*;
-import com.webobjects.appserver.*;
+import com.webobjects.appserver.WOComponent;
+import com.webobjects.appserver.WOContext;
+
 public class HomePage extends WOComponent {
 
     public HomePage(WOContext aContext) {
         super(aContext);
-    }
-
-    public NSDictionary createdKeys() {
-        return ((Session)session()).localizer().createdKeys();
     }
 }
