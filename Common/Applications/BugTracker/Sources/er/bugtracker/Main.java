@@ -6,14 +6,16 @@
  * included with this distribution in the LICENSE.NPL file.  */
 
 package er.bugtracker;
-import com.webobjects.appserver.*;
-import com.webobjects.directtoweb.*;
-import com.webobjects.foundation.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.eoaccess.*;
-import java.util.*;
-import er.extensions.*;
-import er.bugtracker.People;
+import com.webobjects.appserver.WOComponent;
+import com.webobjects.appserver.WOContext;
+import com.webobjects.appserver.WOCookie;
+import com.webobjects.directtoweb.D2W;
+import com.webobjects.eocontrol.EOEditingContext;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSTimestamp;
+
+import er.extensions.ERXCrypto;
+import er.extensions.ERXUtilities;
 
 public class Main extends WOComponent {
 
@@ -21,8 +23,8 @@ public class Main extends WOComponent {
         super(aContext);
     }
 
-    public String username =  "admin";
-    public String password =  "admin";
+    public String username;
+    public String password;
     public boolean rememberPassword;
     protected String errorMessage;
 
@@ -46,8 +48,7 @@ public class Main extends WOComponent {
 
     public WOComponent defaultPage() {
         EOEditingContext editingContext;
-        NSArray potentialUsers;
-
+        
         Session session = (Session)session();
         editingContext = session.defaultEditingContext();
 
@@ -57,7 +58,6 @@ public class Main extends WOComponent {
         }
         
         People  userObject = People.clazz.userWithUsernamePassword(editingContext, username, password);
-        //People  userObject = People.peopleClazz().anyUser(editingContext);
         if(userObject == null) {
             errorMessage="Sorry login incorrect!";
             return null;

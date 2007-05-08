@@ -269,7 +269,7 @@ public class Session extends ERXSession {
     }
 
     public NSArray indentedComponents() {
-    	return Component.orderedComponents(defaultEditingContext());
+    	return Component.clazz.orderedComponents(defaultEditingContext());
     }
  
     protected String _lastname;

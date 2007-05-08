@@ -6,37 +6,41 @@
  * included with this distribution in the LICENSE.NPL file.  */
 
 package er.bugtracker;
-import com.webobjects.foundation.*;
-import com.webobjects.appserver.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.eoaccess.*;
-import er.directtoweb.*;
-import er.extensions.*;
-import er.bugtracker.Bug;
+
+import com.webobjects.appserver.WOContext;
+import com.webobjects.foundation.NSDictionary;
+
+import er.directtoweb.ERDCustomEditComponent;
 
 public class LinkToBookmarkBug extends ERDCustomEditComponent {
 
-    public LinkToBookmarkBug(WOContext c) {
-        super(c);
-    }
+	public LinkToBookmarkBug(WOContext c) {
+		super(c);
+	}
 
-    public boolean isStateless() { return true; }
-    public boolean synchronizesVariablesWithBindings() { return false; }
+	public boolean isStateless() {
+		return true;
+	}
 
-    public void reset() {
-        super.reset();
-        _bug = null;
-    }
-    
-    protected Bug _bug;
-    public Bug bug() {
-        if (_bug == null)
-            _bug = (Bug)(object() instanceof Bug ? object() : objectKeyPathValue());
-        return _bug;
-    }
+	public boolean synchronizesVariablesWithBindings() {
+		return false;
+	}
 
-    public String href() {
-        String url=context().directActionURLForActionNamed("bug", new NSDictionary(bug().bugid(), "number"));
-        return url;
-    }
+	public void reset() {
+		super.reset();
+		_bug = null;
+	}
+
+	protected Bug _bug;
+
+	public Bug bug() {
+		if (_bug == null)
+			_bug = (Bug) (object() instanceof Bug ? object() : objectKeyPathValue());
+		return _bug;
+	}
+
+	public String href() {
+		String url = context().directActionURLForActionNamed("bug", new NSDictionary(bug().bugid(), "number"));
+		return url;
+	}
 }
