@@ -3,8 +3,8 @@ AssistantActiveConditional: WOConditional {
 }
 
 QuickSearch : ERDQuickSearch {
-	entityName = parent.d2wContext.entity.name;
-	defaultValue = parent.d2wContext.entity.name;
+	entityName = entityName;
+	defaultValue = entityName;
 	searchButtonLabel = "Find";
 	disabled = quickSearchDisabled;
 }
@@ -92,11 +92,6 @@ Menu : ERXNavigationMenu {
 Item : ERXNavigationMenuItem {
 	action = context.page;
 	navigationItemName = item;
-}
-
-RootItems : WORepetition {
-	list = rootMenuItems;
-	item = item;
 }
 
 NoValidSession: WOConditional {
