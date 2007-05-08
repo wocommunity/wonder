@@ -68,7 +68,7 @@ public class Application extends ERXApplication {
 
     public void adjustConnectionDictionary(EOModel model) {
         try { 
-            databaseName = (String) model.connectionDictionary().objectForKey("databaseName");
+            databaseName = (String) model.name();
             EOEntity release = model.entityNamed("Release");
             if(model.connectionDictionary().toString().toLowerCase().contains("mysql")) {
             	release.setExternalName("`RELEASE`");
