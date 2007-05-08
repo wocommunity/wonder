@@ -1,0 +1,12 @@
+SearchButton : ERXSubmitButton {
+	action = searchAction;
+}
+
+SearchForm : WOForm {
+	
+}
+
+SearchField :WOTextField {
+	value = searchValue;
+	defaultValue = defaultValue;
+}
