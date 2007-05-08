@@ -1,19 +1,21 @@
-BackLink: WOHyperlink {
-	action = backAction;
-}
-
 EmptyMessageComponent: WOSwitchComponent {
 	WOComponentName = d2wContext.emptyListComponentName;
 	d2wContext = d2wContext;
 }
 
-Help: ERDDebuggingHelp {
-	d2wContext = d2wContext;
+Errors: ERXErrorDictionaryPanel {
+	errorMessages = errorMessages;
+	extraErrorMessage = errorMessage;
+	shouldShowNewLineAbove = true;
+	shouldShowNewLineBelow = true;
 }
 
-HideReturnOnSelect1: WOConditional {
-	_unroll = true;
-	condition = isSelectingNotTopLevel;
+HasErrors: WOConditional {
+    condition = errorMessages.allKeys.count;
+}
+
+Help: ERDDebuggingHelp {
+	d2wContext = d2wContext;
 }
 
 ListEmpty: WOConditional {
@@ -30,15 +32,15 @@ ListPageRepetition2: WOSwitchComponent {
 	displayGroup = displayGroup;
 }
 
-ReturnButton: WOImage {
-	alt = "Returns to the previous page";
-	border = "0";
-	filename = "ReturnMetalBtn.gif";
-	framework = "JavaDirectToWeb";
-	name = "Returns to the previous page";
+NavBar1: WOSwitchComponent {   
+	displayGroup = displayGroup;
+	objectName = d2wContext.displayNameForEntity;
+    d2wContext = d2wContext;
+	WOComponentName = d2wContext.batchNavigationBarComponentName;
+	width = "100%";
+	id = "innerListHead";
 }
 
-ShowCancel: WOConditional {
-	condition = showCancel;
+UseNavigation: WOConditional {
+	condition = showBatchNavigation;
 }
-
