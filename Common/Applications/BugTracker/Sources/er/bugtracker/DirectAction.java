@@ -18,6 +18,7 @@ import com.webobjects.eoaccess.EOModelGroup;
 import com.webobjects.eoaccess.EOUtilities;
 import com.webobjects.eocontrol.EOEditingContext;
 
+import er.bugtracker.pages.Main;
 import er.directtoweb.ERD2WDirectAction;
 import er.extensions.ERXCrypto;
 import er.extensions.ERXEC;

@@ -5,7 +5,7 @@
  * Public Software License version 0.5, a copy of which has been
  * included with this distribution in the LICENSE.NPL file.  */
 
-package er.bugtracker;
+package er.bugtracker.pages;
 
 import java.util.Enumeration;
 
@@ -13,6 +13,10 @@ import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSMutableArray;
+
+import er.bugtracker.Bug;
+import er.bugtracker.Release;
+import er.bugtracker.State;
 
 public class PushRelease extends WOComponent {
 

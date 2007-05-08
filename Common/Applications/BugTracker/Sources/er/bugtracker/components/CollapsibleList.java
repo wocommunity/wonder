@@ -1,4 +1,4 @@
-package er. bugtracker;
+package er.bugtracker.components;
 
 import org.apache.log4j.Logger;
 
@@ -6,6 +6,7 @@ import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.foundation.NSArray;
 
+import er.bugtracker.Session;
 import er.extensions.ERXLocalizer;
 
 /**
