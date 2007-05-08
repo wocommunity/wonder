@@ -48,18 +48,18 @@ import er.extensions.ERXEOAccessUtilities.ChannelAction;
  * statement:
  * 
  * <pre>
- *               create table &quot;_DBUpdater&quot; (
- *                 &quot;ModelName&quot; varchar(100) not null,
- *                 &quot;Version&quot; integer not null,
- *                 &quot;UpdateLock&quot; integer not null,
- *                 &quot;LockOwner&quot; varchar(100)
+ *               create table _dbupdater (
+ *                 modelname varchar(100) not null,
+ *                 version integer not null,
+ *                 updatelock integer not null,
+ *                 lockowner varchar(100)
  *               )
  * </pre>
  * 
  * and for each model you want to be able to migrate, you should:
  * 
  * <pre>
- *               insert into &quot;_DBUpdater&quot;(&quot;ModelName&quot;, &quot;Version&quot;, &quot;UpdateLock&quot;, &quot;LockOwner&quot;) values ('YourModelName', -1, 0, NULL)
+ *               insert into _dbupdater(modelname, version, updatelock, lockowner) values ('YourModelName', -1, 0, NULL)
  * </pre>
  * 
  * Be aware that not all databases are able to perform DDL operations in a transaction. The result of this is that if a
