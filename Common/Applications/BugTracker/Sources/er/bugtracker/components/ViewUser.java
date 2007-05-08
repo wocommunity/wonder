@@ -23,7 +23,7 @@ public class ViewUser extends WOComponent {
         return true;
     }
 
-    protected People _user;
+    public People _user;
 
     public People user() {
         if (_user == null)

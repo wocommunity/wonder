@@ -83,7 +83,7 @@ public class MenuHeader extends WOComponent {
         return pageWithName("FreeQuery");
     }
 
-    protected Integer bugNumber;
+    public Integer bugNumber;
 
     public WOComponent findBugByNumber() {
         EOEntity entity = EOUtilities.entityNamed(session().defaultEditingContext(), "Bug");
