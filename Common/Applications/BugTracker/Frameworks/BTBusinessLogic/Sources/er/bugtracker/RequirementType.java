@@ -5,8 +5,6 @@ import org.apache.log4j.Logger;
 
 import com.webobjects.eocontrol.EOEditingContext;
 
-import er.extensions.EOEnterpriseObjectClazz;
-
 public class RequirementType extends _RequirementType {
     static final Logger log = Logger.getLogger(RequirementType.class);
 
@@ -14,8 +12,8 @@ public class RequirementType extends _RequirementType {
         super();
     }
 
-    public void awakeFromInsertion(EOEditingContext ec) {
-        super.awakeFromInsertion(ec);
+    public void init(EOEditingContext ec) {
+        super.init(ec);
     }
     
     

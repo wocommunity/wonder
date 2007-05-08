@@ -13,6 +13,7 @@ import com.webobjects.eocontrol.EOEnterpriseObject;
 import com.webobjects.foundation.NSArray;
 
 import er.corebusinesslogic.ERCPreference;
+import er.corebusinesslogic.ERCoreBusinessLogic;
 import er.corebusinesslogic.ERCoreUserInterface;
 import er.extensions.ERXValueUtilities;
 
@@ -61,6 +62,10 @@ public class People extends _People implements ERCoreUserInterface {
                 return (People) users.lastObject();
             return null;
         }
+
+		public People currentUser(EOEditingContext ec) {
+			return (People) ERCoreBusinessLogic.actor(ec);
+		}
     }
 
     public static final PeopleClazz clazz = new PeopleClazz();
