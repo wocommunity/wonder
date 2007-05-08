@@ -49,6 +49,10 @@ public class ERDListPageRepetition extends ERDAttributeRepetition {
         return (NSArray)actions().objectForKey("left");
     }
 
+    public NSArray centerActions() {
+        return (NSArray)actions().objectForKey("left");
+    }
+
     public NSArray rightActions() {
         return (NSArray)actions().objectForKey("right");
     }
