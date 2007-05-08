@@ -56,8 +56,8 @@ public class ERMailSender implements Runnable {
 	 * Exception class for alerting about a stack overflow
 	 */
 	public static class SizeOverflowException extends Exception {
-		public SizeOverflowException() {
-			super();
+		public SizeOverflowException(Exception e) {
+			super(e);
 		}
 	}
 
@@ -107,10 +107,10 @@ public class ERMailSender implements Runnable {
 				log.debug("(" + stats.formattedUsedMemory() + ") Added the message in the queue: " + allRecipientsString);
 		}
 		catch (ERQueue.SizeOverflowException e) {
-			throw new ERMailSender.SizeOverflowException();
+			throw new ERMailSender.SizeOverflowException(e);
 		}
 
-		synchronized (this) {
+		synchronized (messages) {
 			// If we have not started to send mails, start the thread
 			if (_senderThread == null) {
 				_senderThread = new Thread(this, "ERMailSender");
@@ -118,7 +118,7 @@ public class ERMailSender implements Runnable {
 				_senderThread.start();
 			}
 			else {
-				notifyAll();
+				messages.notifyAll();
 			}
 		}
 	}
@@ -137,7 +137,7 @@ public class ERMailSender implements Runnable {
 			if (log.isDebugEnabled()) {
 				log.debug("Caught exception when sending mail in a non-blocking manner.", e);
 			}
-			throw new NSForwardException(e);
+			throw NSForwardException._runtimeExceptionForThrowable(e);
 		}
 		finally {
 			// CHECKME (camille):
@@ -151,7 +151,7 @@ public class ERMailSender implements Runnable {
 				catch (MessagingException e) {
 					// Fatal exception ... we must at least notify the use
 					log.error("Caught exception when closing transport.", e);
-					throw new RuntimeException("Unable to open nor close the messaging transport channel.");
+					throw NSForwardException._runtimeExceptionForThrowable(e);
 				}
 			}
 		}
@@ -265,72 +265,55 @@ public class ERMailSender implements Runnable {
 	 * Don't call this method, this is the thread run loop and is automatically called.
 	 */
 	public void run() {
-		while (true) {
-			try {
-				if (messages.empty()) {
-					synchronized (this) {
-						while (messages.empty()) {
-							wait(milliSecondsWaitRunLoop);
-						}
+		try {
+			while (true) {
+				synchronized (messages) {
+					while (messages.empty()) {
+						messages.wait(milliSecondsWaitRunLoop);
 					}
 				}
-			}
-			catch (InterruptedException e) {
-				log.warn("ERMailSender thread has been interrupted.");
-				//return;
-			}
-			
-			// If there are still messages pending ...
-			try {
+
+				// If there are still messages pending ...
 				if (!messages.empty()) {
+					Session session = ERJavaMail.sharedInstance().newSession();
+					String smtpProtocol = ERJavaMail.sharedInstance().smtpProtocol();
 					try {
-						Session session = ERJavaMail.sharedInstance().newSession();
-						String smtpProtocol = ERJavaMail.sharedInstance().smtpProtocol();
 						Transport transport = this._connectedTransportForSession(session, smtpProtocol, true);
 						if (!transport.isConnected()) {
 							transport.connect();
 						}
-	
+
 						while (!messages.empty()) {
 							ERMessage message = (ERMessage) messages.pop();
 							try {
 								this._sendMessageNow(message, transport);
-								// if (useSenderDelay) {
-								// this.wait (senderDelayMillis);
-								// }
+							} catch(SendFailedException ex) {
+								log.error("Can't send message: " + message + ": " + ex, ex);
 							}
-							catch (Throwable e) {
-								// Here we get all the exceptions that are
-								// not 'SendFailedException's.
-								// All we can do is warn the admin.
-								log.error("Fatal Messaging Exception. Can't send the mail.", e);
-							}
-							/*
-							 * catch (InterruptedException e) { log.warn ("ERMailSender thread has been interrupted.");
-							 * threadSuspended = true; return; }
-							 */
+							// if (useSenderDelay) {
+							// this.wait (senderDelayMillis);
+							// }
+							// Here we get all the exceptions that are
+							// not 'SendFailedException's.
+							// All we can do is warn the admin.
 						}
-	
-						try {
-							if (transport != null) {
-								transport.close();
-							}
+
+						if (transport != null) {
+							transport.close();
 						}
-						catch (Throwable e) /* once again ... */{
-							log.warn("Unable to close transport.  Perhaps it has already been closed?", e);
-						}
+					} catch (MessagingException e) {
+						log.error("General mail error: " + e, e);
 					}
-					catch (Throwable e) {
-						log.error("Failed to send messages.", e);
-						//throw new NSForwardException(e);
-					}
+
 				}
 			}
-			catch (Throwable t) {
-				t.printStackTrace();
-				log.error("Failed to send messages.", t);
-			}
 		}
+		catch (InterruptedException e) {
+			log.warn("ERMailSender thread has been interrupted.");
+			//return;
+		}
+		// assures the thread will get restarted next time around.
+		_senderThread = null;
 	}
 
 	/**
