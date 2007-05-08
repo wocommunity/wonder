@@ -1,9 +1,0 @@
-Repetition1: WORepetition {
-	item = entry;
-	list = formattedEntries;
-}
-
-String1: WOString {
-	escapeHTML = true;
-	value = entry;
-}
