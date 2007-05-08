@@ -6,22 +6,26 @@
  * included with this distribution in the LICENSE.NPL file.  */
 
 package er.bugtracker;
+
 import com.webobjects.appserver.*;
 import com.webobjects.directtoweb.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.eoaccess.*;
 
+/**
+ * Edits the owner in an more process oriented way, by offering the option to
+ * assign if to self, originator or previous owner. This is an example of a composed D2WComponent.
+ */
 public class EditOwner extends D2WComponent {
 
-    public EditOwner(WOContext c) {
-        super(c);
-    }
-    
-    /** @TypeInfo People */
-    public EOEnterpriseObject localOriginator() {
-        if(object() != null && ((Bug)object()).originator() != null)
-            return EOUtilities.localInstanceOfObject(session().defaultEditingContext(),
-                                                 ((Bug)object()).originator());
-        return null;
-    }
+	public EditOwner(WOContext c) {
+		super(c);
+	}
+
+	/** @TypeInfo People */
+	public EOEnterpriseObject localOriginator() {
+		if (object() != null && ((Bug) object()).originator() != null)
+			return EOUtilities.localInstanceOfObject(session().defaultEditingContext(), ((Bug) object()).originator());
+		return null;
+	}
 }

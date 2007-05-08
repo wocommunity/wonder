@@ -11,6 +11,6 @@ OwnsBug: ERXEqualConditional {
 OwnsBug2: ERXEqualConditional {
 	value1 = session.user;
 	value2 = object.owner;
-	negated = YES;
+	negate = true;
 }
 

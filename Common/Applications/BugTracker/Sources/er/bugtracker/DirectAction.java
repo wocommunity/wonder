@@ -7,14 +7,26 @@
 
 package er.bugtracker;
 
-import com.webobjects.foundation.*;
-import com.webobjects.appserver.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.eoaccess.*;
-import com.webobjects.directtoweb.*;
-import er.directtoweb.*;
-import java.util.*;
-import er.extensions.*;
+import java.util.Enumeration;
+
+import com.webobjects.appserver.WOActionResults;
+import com.webobjects.appserver.WOApplication;
+import com.webobjects.appserver.WOComponent;
+import com.webobjects.appserver.WORedirect;
+import com.webobjects.appserver.WORequest;
+import com.webobjects.directtoweb.D2W;
+import com.webobjects.directtoweb.EditPageInterface;
+import com.webobjects.directtoweb.ErrorPageInterface;
+import com.webobjects.eoaccess.EOUtilities;
+import com.webobjects.eocontrol.EOEditingContext;
+import com.webobjects.eocontrol.EOEnterpriseObject;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSDictionary;
+
+import er.directtoweb.ERD2WDirectAction;
+import er.extensions.ERXCrypto;
+import er.extensions.ERXEC;
+import er.extensions.ERXUtilities;
 
 public class DirectAction extends ERD2WDirectAction {
 
@@ -89,10 +101,10 @@ public class DirectAction extends ERD2WDirectAction {
                     if (bug == null) {
                         result = errorPage("Bug not found", session);
                     } else {
-                        EditBug eb = (EditBug) Application.application().pageWithName("EditBug", session.context());
+                        EditPageInterface eb = (EditPageInterface) D2W.factory().pageForConfigurationNamed("EditBug", session);
                         eb.setObject(bug);
                         eb.setNextPage(Application.application().pageWithName("HomePage", session.context()));
-                        result = eb;
+                        result = (WOComponent)eb;
                     }
                 } catch (NumberFormatException nfe) {
                     result = errorPage("Invalid Request", session);

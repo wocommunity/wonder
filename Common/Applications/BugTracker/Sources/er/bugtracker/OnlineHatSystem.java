@@ -6,11 +6,15 @@
  * included with this distribution in the LICENSE.NPL file.  */
 
 package er.bugtracker;
-import com.webobjects.foundation.*;
-import com.webobjects.appserver.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.eoaccess.*;
-import er.extensions.*;
+import com.webobjects.appserver.WOComponent;
+import com.webobjects.appserver.WOContext;
+import com.webobjects.eoaccess.EOUtilities;
+import com.webobjects.eocontrol.EOEditingContext;
+import com.webobjects.eocontrol.EOEnterpriseObject;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSTimestamp;
+
+import er.extensions.ERXEC;
 
 public class OnlineHatSystem extends WOComponent {
 
@@ -19,12 +23,15 @@ public class OnlineHatSystem extends WOComponent {
     }
 
     private EOEditingContext ec = ERXEC.newEditingContext();
+    
     public void awake() {
         ec.lock();
     }
+    
     public void sleep() {
         ec.unlock();
     }
+    
     protected NSArray _directtowebfiles;
     public NSArray directtowebfiles(){
         if(_directtowebfiles == null){
@@ -53,6 +60,7 @@ public class OnlineHatSystem extends WOComponent {
         ec.revert();
         EOEnterpriseObject localUser=EOUtilities.localInstanceOfObject(ec, ((Session)session()).getUser());
         directtowebfile.removeObjectFromBothSidesOfRelationshipWithKey(localUser,"owner");
+        directtowebfile.takeValueForKey(null, "ownedSince");
         ec.saveChanges();
         return null;
     }

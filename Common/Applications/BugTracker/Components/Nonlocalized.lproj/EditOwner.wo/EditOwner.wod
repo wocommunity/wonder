@@ -3,11 +3,11 @@ BackToOriginator: ERXJSPopupSelector {
 	popupName = "owner";
 	selectsItem = localOriginator;
 	string = "Originator";
-	doNotAddOneToComputedIndex = d2wContext.isMandatory;
+	// doNotAddOneToComputedIndex = d2wContext.isMandatory;
 }
 
 BackToOriginator2: ERXJSPopupSelector {
-        doNotAddOneToComputedIndex = d2wContext.isMandatory;
+    //doNotAddOneToComputedIndex = d2wContext.isMandatory;
 	list = session.activeUsers;
 	popupName = "owner";
 	selectsItem = session.user;
@@ -19,7 +19,7 @@ BackToOriginator3: ERXJSPopupSelector {
 	popupName = "owner";
 	selectsItem = object.previousOwner;
 	string = "Previous Owner";
-	doNotAddOneToComputedIndex = d2wContext.isMandatory;
+	// doNotAddOneToComputedIndex = d2wContext.isMandatory;
 }
 
 EditRel: ERD2WEditToOneRelationship {

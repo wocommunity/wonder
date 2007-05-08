@@ -1,6 +1,4 @@
 BodyContainer: WOBody {
-    filename="fuzzyGreyStripe.gif";
-    framework="JavaDirectToWeb";
 	onload = "window.document.forms[0].username.focus();";
 }
 
@@ -8,7 +6,6 @@ LoginForm: WOForm {
     action = defaultPage;
 	multipleSubmit = YES;
 }
-DbName: WOString { value=application.databaseName; }
 
 Conditional1: WOConditional {
 	condition = errorMessage.length;
@@ -33,12 +30,8 @@ CheckBox1: WOCheckBox {
 	checked = rememberPassword;
 }
 
-LoginButton: WOActiveImage {
+LoginButton: ERXSubmitButton {
     action = defaultPage;
-    alt = "Login";
-    filename = "login-btn.gif";
-//    height = "27";
-//    width = "100";
-    border = "0";
-    framework = "JavaDirectToWeb";
+    alt = "Login to BugTracker";
+    value = "Login";
 }
