@@ -61,6 +61,10 @@ public class MenuHeader extends WOComponent {
     public WOComponent homeAction() {
         return pageWithName("HomePage");
     }
+    
+    public boolean quickSearchDisabled() {
+    	return parent().valueForKeyPath("d2wContext.entity.name") == null;
+    }
  
     public WOComponent editMyInfo() {
         EOEnterpriseObject user = ((Session) session()).getUser();

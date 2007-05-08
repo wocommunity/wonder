@@ -6,9 +6,8 @@
  * included with this distribution in the LICENSE.NPL file.  */
 
 package er.bugtracker;
-import com.webobjects.foundation.*;
-import com.webobjects.appserver.*;
-import er.bugtracker.People;
+import com.webobjects.appserver.WOComponent;
+import com.webobjects.appserver.WOContext;
 
 public class ViewUser extends WOComponent {
 
