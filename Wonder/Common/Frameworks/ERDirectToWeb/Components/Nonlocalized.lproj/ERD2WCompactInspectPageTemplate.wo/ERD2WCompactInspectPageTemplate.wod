@@ -1,12 +1,5 @@
-ERDDebuggingHelp1: ERDDebuggingHelp {
+Debug: ERDDebuggingHelp {
 	d2wContext = d2wContext;
-}
-
-EditForm: ERXOptionalForm {
-	enctype = d2wContext.formEncoding;
-	multipleSubmit = true;
-	hasForm = d2wContext.hasForm;
-	name = "EditForm";
 }
 
 Errors: ERXErrorDictionaryPanel {
@@ -21,18 +14,3 @@ InspectPageRepetition: WOSwitchComponent {
 	d2wContext = d2wContext;
 	object = object;
 }
-
-IsEditingConditional: WOConditional {
-	_unroll = true;
-	condition = isEditing;
-}
-
-SubmitChanges: WOImageButton {
-	action = submitAction;
-	alt = "Saves your changes";
-	border = "0";
-	filename = saveButtonFileName;
-	framework = "JavaDirectToWeb";
-	name = "Saves your changes";
-}
-
