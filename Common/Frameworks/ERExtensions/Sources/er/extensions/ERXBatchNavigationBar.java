@@ -53,9 +53,16 @@ public class ERXBatchNavigationBar extends ERXStatelessComponent {
     /** Contains a string that names the notification posted when the batch size changes */
     public final static String BatchSizeChanged = "BatchSizeChanged";
 
+    public boolean wasInForm;
+    
     /** Public constructor */
     public ERXBatchNavigationBar(WOContext aContext) {
         super(aContext);
+    }
+    
+    public void awake() {
+    	super.awake();
+    	wasInForm = context().isInForm();
     }
 
     public void reset() {
@@ -227,5 +234,12 @@ public class ERXBatchNavigationBar extends ERXStatelessComponent {
        		clearSelection(selection);
     	}
     	return context().page();
+    }
+
+    public String formTarget() {
+    	if(wasInForm) {
+    		return ERXWOForm.formName(context(), "EditForm") + ".target='_self';";
+    	}
+    	return null;
     }
 }
