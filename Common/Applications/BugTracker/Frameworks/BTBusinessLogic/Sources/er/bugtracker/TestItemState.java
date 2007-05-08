@@ -20,8 +20,8 @@ public class TestItemState extends _TestItemState {
         super();
     }
 
-    public void awakeFromInsertion(EOEditingContext ec) {
-        super.awakeFromInsertion(ec);
+    public void init(EOEditingContext ec) {
+        super.init(ec);
     }
     
     

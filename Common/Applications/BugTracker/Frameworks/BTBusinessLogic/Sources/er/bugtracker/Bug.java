@@ -6,10 +6,12 @@ import org.apache.log4j.Logger;
 import com.webobjects.eoaccess.EOUtilities;
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.eocontrol.EOEnterpriseObject;
+import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSTimestamp;
 import com.webobjects.foundation.NSValidation;
 
 import er.corebusinesslogic.ERCoreBusinessLogic;
+import er.extensions.ERXArrayUtilities;
 import er.extensions.ERXEC;
 import er.extensions.ERXEOControlUtilities;
 import er.extensions.ERXValueUtilities;
@@ -152,20 +154,40 @@ public class Bug extends _Bug implements Markable {
 
     // this key is used during mass updates by both the template EO and the real bugs
     private String _newText;
-    public String newText() { return _newText; }
-    public void setNewText(String newValue) {
-        _newText=newValue;
-        if (newValue!=null && newValue.length()>0) {
-            String oldText = textDescription();
 
-            if(oldText!=null)
-                oldText = oldText+"\n\n";
-            else
-                oldText = "";
-            String newText=oldText+newValue;
-            setTextDescription(newText);
-            touch();
-        }
+	public String newText() {
+		return _newText;
+	}
+
+	public void setNewText(String newValue) {
+		_newText = newValue;
+		if (newValue != null && newValue.length() > 0) {
+			Comment comment = (Comment) Comment.clazz.createAndInsertObject(editingContext());
+			comment.setBug(this);
+			addToBothSidesOfComments(comment);
+			
+			String oldText = textDescription();
+
+			if (oldText != null)
+				oldText = oldText + "\n\n";
+			else
+				oldText = "";
+			String newText = oldText + newValue;
+			comment.setTextDescription(newText);
+			touch();
+		}
+	}
+	
+	public NSArray sortedComments() {
+		return ERXArrayUtilities.sortedArraySortedWithKey(comments(), Comment.Key.DATE_SUBMITTED);
+	}
+	
+	public NSArray comments() {
+		return (NSArray)storedValueForKey("comments");
+	}
+	
+    public void addToBothSidesOfComments(Comment object) {
+        addObjectToBothSidesOfRelationshipWithKey(object, "comments");
     }
 
     public void didUpdate() {
