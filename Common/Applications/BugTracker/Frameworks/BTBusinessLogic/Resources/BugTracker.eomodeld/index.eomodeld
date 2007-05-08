@@ -2,6 +2,12 @@
 {
     EOModelVersion = 2.1;
     adaptorName = JDBC;
+    connectionDictionary = 
+    {
+        password = "";
+        URL = jdbc:mysql://localhost/bug;
+        username = root;
+    };
     entities = 
     (
        
@@ -98,7 +104,28 @@
     {
         _deletedEntityNamesInObjectStore = 
         (
-
+           Bug
         );
+    };
+    userInfo = 
+    {
+        _EntityModeler = 
+        {
+            activeDatabaseConfigName = MySQL;
+            databaseConfigs = 
+            {
+                MySQL = 
+                {
+                    adaptorName = JDBC;
+                    connectionDictionary = 
+                    {
+                        password = "";
+                        URL = jdbc:mysql://localhost/bug;
+                        username = root;
+                    };
+                    prototypeEntityName = EOJDBCMySQLPrototypes;
+                };
+            };
+        };
     };
 }

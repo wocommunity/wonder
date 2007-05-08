@@ -14,6 +14,19 @@ body, li, td, p, br, form, input, text, select, option, textarea, th, ol, ul, ta
 	width: 100%;
 }
 
+form#ERDQuickSearch {
+	display: block;
+	width: 450px;
+	vertical-align: baseline;
+}
+
+#ERDQuickSearchButton {
+	width: 450px;
+	position: relative;
+	top: 5px;
+	width: 30px;
+}
+
 table {
 	border-collapse: collapse;
 }
