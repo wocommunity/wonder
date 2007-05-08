@@ -1,1 +1,15 @@
 <webobject name = "SearchForm">Search: <webobject name = "SearchField"></webobject> <webobject name = "SearchButton"></webobject></webobject>
+<script>
+var ERDQuickSearch = document.getElementById("ERDQuickSearchField");
+
+ERDQuickSearch.onfocus = function() {
+	if(this.value == this.getAttribute('defaultValue')) {
+		this.value= ""; 
+	}
+}
+ERDQuickSearch.onblur = function() {
+	if(this.value == "") {
+		this.value = this.getAttribute('defaultValue'); 
+	}
+}
+</script>

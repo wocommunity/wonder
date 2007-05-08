@@ -1,12 +1,18 @@
 SearchButton : ERXSubmitButton {
 	action = searchAction;
+	disabled = disabled;
+	value = ^searchButtonLabel;
+	id = "ERDQuickSearchButton";
 }
 
 SearchForm : WOForm {
-	
+	id = "ERDQuickSearch";
 }
 
 SearchField :WOTextField {
+ 	size = 20;
 	value = searchValue;
+	id = "ERDQuickSearchField";
 	defaultValue = defaultValue;
+	disabled = disabled;
 }
