@@ -9,12 +9,13 @@
 				<spacer/>
 			</td>
 		</tr>
-	</webobject><webobject name=ListTableHeaderRow>
+	</webobject>
+	<webobject name=ListTableHeaderRow>
 		<td>
 			<spacer/>
 		</td>
 		<webobject name=SectionRepetition><webobject name=ColumnLabelRepetition>
-				<th nowrap valign=bottom>
+				<th nowrap valign=bottom class="HeaderCell">
 					<table align="center">
 						<tr>
 							<th><webobject name=PropertyName></webobject></th><webobject name=IsPropertySortable><th>&nbsp;<webobject name=AttributeSorter2></webobject></th></webobject>
@@ -25,52 +26,39 @@
 		<td>
 			<spacer/>
 		</td>
-	</webobject><webobject name=EntityRepetition>
-		<tr bgcolor=white height=2>
-			<td>
-				<spacer/>
-			</td>
-			<webobject name=DividingCells></webobject>
-			<td>
-				<spacer/>
-			</td>
-		</tr>
-		<webobject name=ListTableRow>
-			<td rowspan=2>
-				<table border=0>
-					<tr>
-						<webobject name=LeftActions>
-							<td><webobject name=LeftAction></webobject></td>
-						</webobject>
-					</tr>
-				</table>
-			</td>
-			<webobject name=DividingCells><webobject name=ComponentContent1></webobject>
-				<spacer/>
-			</webobject>
-			<td rowspan=2>
-				<table border=0>
-					<tr>
-						<webobject name=RightActions>
-							<td><webobject name=RightAction></webobject></td>
-						</webobject>
-					</tr>
-				</table>
-			</td>
-		</webobject>
-		<webobject name = "AttributeRow">
-			<webobject name=SectionRepetition><webobject name=AttributeRepetition>
-					<webobject name=AttributeCell><webobject name=AttributeDisplay></webobject></webobject>
-				</webobject></webobject>
-		</webobject>
 	</webobject>
-	<tr bgcolor=white height=2>
-		<td>
-			<spacer/>
+	<webobject name=ListTableRow>
+		<td rowspan=4>
+			<table border=0>
+				<tr>
+					<webobject name=LeftActions>
+						<td><webobject name=LeftAction></webobject></td>
+					</webobject>
+				</tr>
+			</table>
 		</td>
-		<webobject name=DividingCells></webobject>
-		<td>
+		<webobject name=DividingCells><webobject name=ComponentContent1></webobject>
 			<spacer/>
+		</webobject>
+		<td rowspan=4>
+			<table border=0>
+				<tr>
+					<webobject name=RightActions>
+						<td><webobject name=RightAction></webobject></td>
+					</webobject>
+				</tr>
+			</table>
 		</td>
-	</tr>
+	</webobject>
+	<webobject name = "AttributeRow">
+		<webobject name=SectionRepetition><webobject name=AttributeRepetition>
+				<webobject name=AttributeCell><webobject name=AttributeDisplay></webobject></webobject>
+			</webobject></webobject>
+	</webobject>
+	<webobject name = "ExtraRow">
+		<webobject name=ExtraCell><webobject name = "HasExtraListComponent">has<webobject name = "ExtraListComponent"></webobject></webobject></webobject>
+	</webobject>
+	<webobject name = "ActionRow">
+		<webobject name=ActionCell><webobject name=CenterActions><webobject name=CenterAction></webobject></webobject></webobject>
+	</webobject>
 </webobject>

@@ -1,0 +1,7 @@
+String : ERXLocalizedString {
+	templateString = templateString;
+	object = d2wContext.object;
+}
+PlainString : WOString {
+	value = templateString;
+}

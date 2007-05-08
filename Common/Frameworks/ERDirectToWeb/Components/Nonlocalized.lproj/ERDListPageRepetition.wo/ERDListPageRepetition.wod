@@ -1,9 +1,44 @@
+
+CenterActions: WORepetition {
+	item = propertyKey;
+	list = centerActions;
+}
+
+CenterAction: WOSwitchComponent { 
+	WOComponentName = d2wContext.componentName;
+	localContext = d2wContext;
+	object = d2wContext.object;
+	displayGroup = displayGroup;
+}
+
+
 AttributeRow : WOGenericContainer {
 	_unroll = true;
 	elementName = "tr";
 	rowClass = rowClass;
 } 
 
+ActionRow : WOGenericContainer {
+	_unroll = true;
+	elementName = "tr";
+	rowClass = rowClass;
+} 
+
+ExtraRow : WOGenericContainer {
+	_unroll = true;
+	elementName = "tr";
+	rowClass = rowClass;
+} 
+
+ExtraListComponent : WOSwitchComponent {
+	WOComponentName = d2wContext.extraListComponentName;
+	object = d2wContext.object;
+	d2wContext = localContext;
+}
+
+HasExtraListComponent :WOConditional {
+	condition = d2wContext.extraListComponentName;
+}
 AttributeCell: WOGenericContainer {
 	_unroll = true;
 	align = d2wContext.justification;
@@ -29,7 +64,7 @@ AttributeSorter2: ERXSortOrder {
 	displayGroup = ^displayGroup;
 	displayKey = d2wContext.displayNameForProperty;
 	key = d2wContext.sortKeyForList;
-        d2wContext = d2wContext;
+    d2wContext = d2wContext;
 	caseInsensitive = d2wContext.sortCaseInsensitive;
 }
 
@@ -45,8 +80,18 @@ ComponentContent1: WOComponentContent {
 DividingCells: WOGenericContainer {
 	colspan = d2wContext.displayPropertyKeys.count;
 	elementName = "td";
-	bgcolor = "#ffffff";
-	align = "CENTER";
+}
+
+ActionCell: WOGenericContainer {
+	colspan = d2wContext.displayPropertyKeys.count;
+	elementName = "td";
+	class="ActionCell";
+}
+
+ExtraCell: WOGenericContainer {
+	colspan = d2wContext.displayPropertyKeys.count;
+	elementName = "td";
+	class="ExtraCell";
 }
 
 EntityRepetition: WORepetition {
@@ -102,6 +147,10 @@ RightAction: WOSwitchComponent {
 	displayGroup = displayGroup;
 }
 
+ActionBar: ERDActionBar { 
+	d2wContext = localContext;
+}
+
 RightActions: WORepetition {
 	item = propertyKey;
 	list = rightActions;
@@ -110,6 +159,7 @@ RightActions: WORepetition {
 SectionCell: WOGenericContainer {
 	elementName = "th";
 	colspan = currentSectionKeysColspan;
+	class="SectionCell";
 }
 
 SectionRepetition: WORepetition {
