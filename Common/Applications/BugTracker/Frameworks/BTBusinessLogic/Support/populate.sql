@@ -17,6 +17,11 @@ insert into TEST_ITEM_STATE (ID,  SORT_ORDER, NAME) values ('bug ', 2, 'Bug');
 insert into TEST_ITEM_STATE (ID,  SORT_ORDER, NAME) values ('clsd', 3, 'Closed');
 insert into TEST_ITEM_STATE (ID,  SORT_ORDER, NAME) values ('rqmt', 4, 'Requirement');
 
+DELETE FROM DIFFICULTY;
+insert into DIFFICULTY (ID,  DESCRIPTION) values (1, 'Hard');
+insert into DIFFICULTY (ID,  DESCRIPTION) values (2, 'Medium');
+insert into DIFFICULTY (ID,  DESCRIPTION) values (3, 'Easy');
+
 DELETE FROM PEOPLE;
 insert into PEOPLE (ID, EMAIL, IS_ACTIVE, IS_ENGINEERING, IS_ADMIN, IS_CUSTOMER_SERVICE, LOGIN, NAME, PASSWORD, TEAM) values
            (1, 'admin@mydomain.com', 1, 1, 1, 0, 'admin', 'Administrator','admin', 'Core team');
