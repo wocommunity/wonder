@@ -31,7 +31,7 @@ public class FileBugFromTestItem extends WOComponent {
         peer.lock();
         try {
             TestItem testItem = (TestItem)EOUtilities.localInstanceOfObject(peer,object);
-            People user = (People)EOUtilities.localInstanceOfObject(peer,((Session)session()).getUser());
+            People user = (People)EOUtilities.localInstanceOfObject(peer,((Session)session()).user());
             Component component = (Component)valueForKey("component");
 
             Bug bug = new Bug();

@@ -17,4 +17,6 @@
 
     "CreateTestItemFromReq.templateString" = "[From Requirement #@@primaryKey@@]";
     "CreateTestItem.templateString" = "[From Requirement #@@primaryKey@@]";
+
+	"ListBugDescription" = "-Bug #@@bugid@@";
 }

@@ -6,6 +6,7 @@
  * included with this distribution in the LICENSE.NPL file.  */
 
 package er.bugtracker;
+
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 
@@ -15,23 +16,28 @@ public class ViewUser extends WOComponent {
         super(aContext);
     }
 
-    public boolean isStateless() { return true; }
+    public boolean isStateless() {
+        return true;
+    }
 
     protected People _user;
+
     public People user() {
-        if (_user==null)
-            _user=(People)valueForBinding("user");
+        if (_user == null)
+            _user = (People) valueForBinding("user");
         return _user;
     }
+
     public void reset() {
         super.reset();
-        _user=null;
+        _user = null;
     }
 
     public boolean userIsNotEngineering() {
-        return user()!=null && !user().isEngineeringAsBoolean();
+        return user() != null && !user().isEngineeringAsBoolean();
     }
+
     public boolean userIsNotSelf() {
-        return user()!=null && user()!=((Session)session()).getUser();
-    }    
+        return user() != null && user() != ((Session) session()).user();
+    }
 }

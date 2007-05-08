@@ -71,7 +71,7 @@ public class MenuHeader extends WOComponent {
     }
  
     public WOComponent editMyInfo() {
-        EOEnterpriseObject user = ((Session) session()).getUser();
+        EOEnterpriseObject user = ((Session) session()).user();
         EditPageInterface epi = (EditPageInterface) D2W.factory().pageForConfigurationNamed("EditMyPeople", session());
         epi.setObject(user);
         epi.setNextPage(context().page());

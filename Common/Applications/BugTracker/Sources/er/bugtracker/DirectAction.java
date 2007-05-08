@@ -7,21 +7,16 @@
 
 package er.bugtracker;
 
-import java.util.Enumeration;
-
 import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WOApplication;
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WORedirect;
 import com.webobjects.appserver.WORequest;
 import com.webobjects.directtoweb.D2W;
-import com.webobjects.directtoweb.EditPageInterface;
 import com.webobjects.directtoweb.ErrorPageInterface;
+import com.webobjects.eoaccess.EOModelGroup;
 import com.webobjects.eoaccess.EOUtilities;
 import com.webobjects.eocontrol.EOEditingContext;
-import com.webobjects.eocontrol.EOEnterpriseObject;
-import com.webobjects.foundation.NSArray;
-import com.webobjects.foundation.NSDictionary;
 
 import er.directtoweb.ERD2WDirectAction;
 import er.extensions.ERXCrypto;
@@ -39,9 +34,10 @@ public class DirectAction extends ERD2WDirectAction {
         EOEditingContext ec = ERXEC.newEditingContext();
         ec.lock();
         try {
-            EOUtilities.rawRowsForSQL(ec, "bug", "select count(*) from PRIORITY", null);
+            EOUtilities.rawRowsForSQL(ec, (String) EOModelGroup.defaultGroup().modelNames().lastObject(), "select count(*) from PRIORITY", null);
             result = pageWithName("ERXSuccess");
         } catch (Exception e) {
+            
         } finally {
             ec.unlock();
         }
@@ -59,8 +55,7 @@ public class DirectAction extends ERD2WDirectAction {
                 ec.lock();
                 try {
                     Integer clearPrimaryKeyInt = new Integer(clearPrimaryKey);
-                    NSDictionary dictionary = new NSDictionary(clearPrimaryKeyInt, new String("id"));
-                    user = (People) EOUtilities.objectWithPrimaryKey(ec, "People", dictionary);
+                    user = (People) People.clazz.objectWithPrimaryKeyValue(ec, clearPrimaryKeyInt);
                 } catch (NumberFormatException NFe) {
                     // WOApplication.application().logString(NFe.toString());
                 } finally {
@@ -79,6 +74,7 @@ public class DirectAction extends ERD2WDirectAction {
     }
 
     public static class BugActionCallback implements ERXUtilities.Callback {
+        
         public String numberFromRequest;
 
         public BugActionCallback(String numFromReq) {
@@ -89,33 +85,22 @@ public class DirectAction extends ERD2WDirectAction {
         public Object invoke(Object ctx) {
             Session session = (Session) ctx;
             WOComponent result = null;
-            if ((numberFromRequest == null) || (numberFromRequest.equals(""))) {
-                result = errorPage("Invalid Request", session);
-            } else {
-                EOEditingContext ec = session.defaultEditingContext();
-                ec.lock();
-                try {
-                    Integer bugId = new Integer(numberFromRequest);
-                    NSArray bugs = EOUtilities.objectsMatchingKeyAndValue(ec, "Bug", "id", bugId);
-                    EOEnterpriseObject bug = bugs.count() > 0 ? (EOEnterpriseObject) bugs.objectAtIndex(0) : null;
-                    if (bug == null) {
-                        result = errorPage("Bug not found", session);
-                    } else {
-                        EditPageInterface eb = (EditPageInterface) D2W.factory().pageForConfigurationNamed("EditBug", session);
-                        eb.setObject(bug);
-                        eb.setNextPage(Application.application().pageWithName("HomePage", session.context()));
-                        result = (WOComponent)eb;
-                    }
-                } catch (NumberFormatException nfe) {
-                    result = errorPage("Invalid Request", session);
-                } catch (Exception e) {
-                    result = errorPage("Bug Not Found", session);
-                } finally {
-                    ec.unlock();
+            EOEditingContext ec = ERXEC.newEditingContext();
+            ec.lock();
+            try {
+                Integer bugId = new Integer(numberFromRequest);
+                Bug bug =  (Bug)Bug.clazz.objectWithPrimaryKeyValue(ec, bugId);
+                if (bug == null) {
+                    result = errorPage("Bug not found", session);
+                } else {
+                    result = Factory.bugTracker().editBug(bug);
                 }
-            }
-            if (result == null) {
-                result = errorPage("An Error Occured", session);
+            } catch (NumberFormatException nfe) {
+                result = errorPage("Invalid Request", session);
+            } catch (Exception e) {
+                result = errorPage("Bug Not Found", session);
+            } finally {
+                ec.unlock();
             }
             return result;
         }
@@ -172,25 +157,5 @@ public class DirectAction extends ERD2WDirectAction {
         if (existingSession() != null)
             existingSession().terminate();
         return redirectPage;
-    }
-
-    // CHECKME: this doesn't make sense? Where is "BugsToTransfert" and what is
-    // it?
-    public WOComponent transfertDescriptionAction() {
-        EOEditingContext ec = ERXEC.newEditingContext();
-        ec.lock();
-        try {
-            NSArray bugs = EOUtilities.objectsWithFetchSpecificationAndBindings(ec, "Bug", "BugsToTransfert", null);
-            for (Enumeration e = bugs.objectEnumerator(); e.hasMoreElements();) {
-                Bug bug = (Bug) e.nextElement();
-                System.out.println("bug = " + bug.valueForKey("subject"));
-                String description = (String) bug.valueForKey("textDescription");
-                bug.takeValueForKey(description, "textDescription");
-                ec.saveChanges();
-            }
-        } finally {
-            ec.unlock();
-        }
-        return null;
     }
 }
