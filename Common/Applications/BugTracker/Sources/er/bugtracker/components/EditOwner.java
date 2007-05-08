@@ -5,12 +5,14 @@
  * Public Software License version 0.5, a copy of which has been
  * included with this distribution in the LICENSE.NPL file.  */
 
-package er.bugtracker;
+package er.bugtracker.components;
 
-import com.webobjects.appserver.*;
-import com.webobjects.directtoweb.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.eoaccess.*;
+import com.webobjects.appserver.WOContext;
+import com.webobjects.directtoweb.D2WComponent;
+import com.webobjects.eoaccess.EOUtilities;
+import com.webobjects.eocontrol.EOEnterpriseObject;
+
+import er.bugtracker.Bug;
 
 /**
  * Edits the owner in an more process oriented way, by offering the option to

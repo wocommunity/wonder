@@ -5,7 +5,7 @@
  * Public Software License version 0.5, a copy of which has been
  * included with this distribution in the LICENSE.NPL file.  */
 
-package er.bugtracker;
+package er.bugtracker.components;
 import org.apache.log4j.Logger;
 
 import com.webobjects.appserver.WOComponent;
