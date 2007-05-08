@@ -30,7 +30,7 @@ public class CreateTestItemFromReq extends WOComponent {
         EditPageInterface epi = null;
         peer.lock();
         try {
-            People user = (People)EOUtilities.localInstanceOfObject(peer,((Session)session()).getUser());
+            People user = (People)EOUtilities.localInstanceOfObject(peer,((Session)session()).user());
 
             String description = localizer.localizedTemplateStringForKeyWithObject("CreateTestItemFromReq.templateString", bug);
             TestItem testItem = user.createTestItemFromRequestWithDescription(bug, (Component)valueForKey("component"), description);

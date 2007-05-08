@@ -43,7 +43,7 @@ public class OnlineHatSystem extends WOComponent {
     protected EOEnterpriseObject _localUser;
     protected EOEnterpriseObject localUser() {
         if (_localUser==null) {
-            _localUser=EOUtilities.localInstanceOfObject(ec, ((Session)session()).getUser());
+            _localUser=EOUtilities.localInstanceOfObject(ec, ((Session)session()).user());
         }
         return _localUser;
     }
@@ -58,7 +58,7 @@ public class OnlineHatSystem extends WOComponent {
 
     public WOComponent returnHat() {
         ec.revert();
-        EOEnterpriseObject localUser=EOUtilities.localInstanceOfObject(ec, ((Session)session()).getUser());
+        EOEnterpriseObject localUser=EOUtilities.localInstanceOfObject(ec, ((Session)session()).user());
         directtowebfile.removeObjectFromBothSidesOfRelationshipWithKey(localUser,"owner");
         directtowebfile.takeValueForKey(null, "ownedSince");
         ec.saveChanges();
