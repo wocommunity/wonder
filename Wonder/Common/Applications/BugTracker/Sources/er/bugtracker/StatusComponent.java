@@ -7,7 +7,6 @@
 
 package er.bugtracker;
 import com.webobjects.appserver.WOContext;
-import com.webobjects.eocontrol.EOEnterpriseObject;
 
 import er.directtoweb.ERDCustomComponent;
 
@@ -17,7 +16,7 @@ public class StatusComponent extends ERDCustomComponent {
         super(aContext);
     }
 
-    public EOEnterpriseObject object;
+    public Bug object;
     public String key;
 
     public String[] bugIcons=new String[] { "spider.gif", "closed.gif", "check.gif", "molette.gif", "document.gif" };
@@ -26,7 +25,7 @@ public class StatusComponent extends ERDCustomComponent {
     public String filename() {
         String result="closed.gif";
         if (object!=null) {
-            Number pkNum=((Number)object.valueForKeyPath("state.sortOrder"));
+            Number pkNum=object.state().sortOrder();
             if (pkNum!=null) {
                 int pk=pkNum.intValue();
                 if (object instanceof Bug) result=bugIcons[pk-1];

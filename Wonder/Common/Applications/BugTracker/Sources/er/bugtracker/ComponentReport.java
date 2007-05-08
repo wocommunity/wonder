@@ -6,21 +6,20 @@
  * included with this distribution in the LICENSE.NPL file.  */
 
 package er.bugtracker;
-import com.webobjects.foundation.*;
-import com.webobjects.appserver.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.eoaccess.*;
-import er.bugtracker.Component;
+
+import com.webobjects.appserver.WOComponent;
+import com.webobjects.appserver.WOContext;
+import com.webobjects.foundation.NSArray;
 
 public class ComponentReport extends WOComponent {
 
-    public ComponentReport(WOContext c) {
-        super(c);
-    }
-    
-    public Component component;
-    
-    public NSArray componentList() {
-        return Component.orderedComponents(session().defaultEditingContext());        
-    }    
+	public ComponentReport(WOContext c) {
+		super(c);
+	}
+
+	public Component component;
+
+	public NSArray componentList() {
+		return Component.clazz.orderedComponents(session().defaultEditingContext());
+	}
 }

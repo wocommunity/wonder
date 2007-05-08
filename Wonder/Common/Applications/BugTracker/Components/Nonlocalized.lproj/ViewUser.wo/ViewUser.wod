@@ -1,4 +1,4 @@
-GenericContainer1: WOGenericContainer {
+userIsNotEngineering: WOGenericContainer {
 	elementName = "B";
 	omitTags = userIsNotEngineering;
 }
@@ -9,7 +9,7 @@ Self: WOGenericContainer {
 	omitTags = userIsNotSelf;
 }
 
-String1: WOString {
+userName: WOString {
 	value = user.name;
 }
 

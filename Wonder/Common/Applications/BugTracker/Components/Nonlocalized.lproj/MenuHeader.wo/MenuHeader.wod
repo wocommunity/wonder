@@ -2,6 +2,13 @@ AssistantActiveConditional: WOConditional {
     condition= isWebAssistantEnabled;
 }
 
+QuickSearch : ERDQuickSearch {
+	entityName = parent.d2wContext.entity.name;
+	defaultValue = parent.d2wContext.entity.name;
+	searchButtonLabel = "Find";
+	disabled = quickSearchDisabled;
+}
+
 findBugByNumber: WOForm {
   action= findBugByNumber;
 }
