@@ -1,3 +1,9 @@
 Title : WOString {
-	value = d2wContext.displayNameForPageConfiguration;
+	value = header;
+}
+
+Explaination : ERXLocalizedString {
+	value = explaination;
+	valueWhenEmpty = "";
+	omitWhenEmpty = true;
 }

@@ -10,6 +10,7 @@ import java.util.Enumeration;
 
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOMailDelivery;
+import com.webobjects.directtoweb.D2W;
 import com.webobjects.eoaccess.EOEntity;
 import com.webobjects.eoaccess.EOModel;
 import com.webobjects.eoaccess.EOModelGroup;
@@ -50,6 +51,7 @@ public class Application extends ERXApplication {
         // http://myhost:aPort/cgi-bin/WebObjects/MyApp.woa/wa/WOEventSetup
         setDefaultRequestHandler(requestHandlerForKey(directActionRequestHandlerKey()));
         setTimeOut(8 * 60 * 60); // set the timeout to 8 hours.
+        D2W.setFactory(new Factory());
     }
 
     public void finishInitialization() {

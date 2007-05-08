@@ -5,10 +5,23 @@ import com.webobjects.appserver.WOContext;
 
 import er.directtoweb.ERDCustomComponent;
 
+/**
+ * Simple display of some info on the top of the page.
+ * @author ak
+ *
+ */
 public class PageHeader extends ERDCustomComponent {
 
     public PageHeader(WOContext context) {
         super(context);
+    }
+    
+    public String explaination() {
+        return valueForBinding("pageConfiguration") + ".explaination";
+    }
+    
+    public String header() {
+        return (String) valueForBinding("displayNameForPageConfiguration");
     }
     
     public boolean synchronizesVariablesWithBindings() {
