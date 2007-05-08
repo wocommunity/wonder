@@ -27,9 +27,9 @@ public class Main extends WOComponent {
     public String username;
     public String password;
     public boolean rememberPassword;
-    protected String errorMessage;
+    public String errorMessage;
 
-    protected WOComponent _nextPage;
+    private WOComponent _nextPage;
     public WOComponent nextPage() {
         if ((_nextPage == null) && (_nextPageCallback != null)) {
             _nextPage = (WOComponent)_nextPageCallback.invoke(session());
@@ -37,7 +37,7 @@ public class Main extends WOComponent {
         return _nextPage;
     }
 
-    protected ERXUtilities.Callback _nextPageCallback;
+    private ERXUtilities.Callback _nextPageCallback;
     public ERXUtilities.Callback nextPageCallback() { return _nextPageCallback; }
     public void setNextPageCallback(ERXUtilities.Callback value) {
         // delay the next page creation as long as possible because Main's constructor calls refresh which

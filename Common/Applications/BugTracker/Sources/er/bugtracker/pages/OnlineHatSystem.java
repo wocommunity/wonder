@@ -34,16 +34,16 @@ public class OnlineHatSystem extends WOComponent {
         ec.unlock();
     }
     
-    protected NSArray _directtowebfiles;
+    private NSArray _directtowebfiles;
     public NSArray directtowebfiles(){
         if(_directtowebfiles == null){
             _directtowebfiles = Framework.clazz.orderedFrameworks(ec);
         }
         return _directtowebfiles;
     }
-    protected EOEnterpriseObject directtowebfile;
-    protected EOEnterpriseObject _localUser;
-    protected EOEnterpriseObject localUser() {
+    public EOEnterpriseObject directtowebfile;
+    private EOEnterpriseObject _localUser;
+    public EOEnterpriseObject localUser() {
         if (_localUser==null) {
             _localUser=EOUtilities.localInstanceOfObject(ec, ((Session)session()).user());
         }

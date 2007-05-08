@@ -30,18 +30,18 @@ public class BugsPerUser extends WOComponent {
         super(aContext);
     }
 
-    protected EODatabaseDataSource bugsDataSource;
+    public EODatabaseDataSource bugsDataSource;
 
-    protected NSArray bugs;
-    protected Bug currentBug;
-    protected EOEnterpriseObject theRelease;
+    public NSArray bugs;
+    public Bug currentBug;
+    public EOEnterpriseObject theRelease;
 
     /** @TypeInfo Bug */
-    protected NSArray bugsPerOwner;
-    protected People user;
+    public NSArray bugsPerOwner;
+    public People user;
 
     /** @TypeInfo Release */
-    protected NSArray targetReleases() {
+    public NSArray targetReleases() {
         NSMutableArray result=new NSMutableArray();
         if (bugs!=null && bugs.count()>0) {
             for (Enumeration e=bugs.objectEnumerator(); e.hasMoreElements();) {
@@ -54,7 +54,7 @@ public class BugsPerUser extends WOComponent {
     }
 
     private static final NSArray LAST_NAME_ORDERING = new NSArray(EOSortOrdering.sortOrderingWithKey("owner.name",                                                                                                     EOSortOrdering.CompareCaseInsensitiveAscending));
-    protected EOEnterpriseObject release;
+    public EOEnterpriseObject release;
     public void appendToResponse(WOResponse r, WOContext c) {
         // we refresh the bug list
         bugs=EOSortOrdering.sortedArrayUsingKeyOrderArray(bugsDataSource.fetchObjects(),
