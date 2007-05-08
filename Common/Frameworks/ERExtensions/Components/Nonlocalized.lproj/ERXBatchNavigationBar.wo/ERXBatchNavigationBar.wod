@@ -1,16 +1,19 @@
-BatchForm: WOForm {
+BatchForm: ERXOptionalForm {
+
 }
 
 BatchNumber: WOTextField {
 	numberformat = "0";
 	size = 3;
 	value = currentBatchIndex;
+	onChange = formTarget;
 }
 
-BatchNumberForm: WOForm {
+BatchNumberForm: ERXOptionalForm {
+
 }
 
-Conditional1: WOConditional {
+hasMultipleBatches: WOConditional {
 	condition = ^displayGroup.hasMultipleBatches;
 }
 
@@ -30,6 +33,15 @@ EntityNameConditional: WOConditional {
 	condition = hasObjectName;
 }
 
+IsInForm : WOConditional {
+	condition = context.isInForm;
+}
+
+IsNotInForm : WOConditional {
+	condition = context.isInForm;
+	negate = true;
+}
+
 DoNotUseStylesConditional : WOConditional {
 	condition = ^tableClass;
 	negate = true;
@@ -47,15 +59,32 @@ ItemsPerBatch: WOTextField {
 	numberformat = "0";
 	size = 3;
 	value = numberOfObjectsPerBatch;
+	onChange = formTarget;
 }
 
-KeyForm: WOForm {
+KeyForm: ERXOptionalForm {
 }
 
-LeftArrow: WOImage {
+LeftArrowImage: WOImage {
 	border = "0";
 	filename = leftArrowImage;
 	framework = imageFramework;
+}
+
+LeftArrow: WOImageButton {
+    action = displayPreviousBatch;
+    border = "0";
+    filename = leftArrowImage;
+    framework = imageFramework;
+	onClick = formTarget;
+}
+
+RightArrow: WOImageButton {
+    action = displayNextBatch;
+    border = "0";
+    filename = rightArrowImage;
+    framework = imageFramework;
+    onClick = formTarget;
 }
 
 NavigationTable: WOGenericContainer {
@@ -77,7 +106,7 @@ PreviousBatchLink: WOHyperlink {
 	action = ^displayGroup.displayPreviousBatch;
 }
 
-RightArrow: WOImage {
+RightArrowImage: WOImage {
 	border = "0";
 	filename = rightArrowImage;
 	framework = imageFramework;
