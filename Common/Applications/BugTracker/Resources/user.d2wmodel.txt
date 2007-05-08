@@ -14,6 +14,8 @@
     50 : (pageConfiguration like '*Component*') => navigationState = Components [com.webobjects.directtoweb.Assignment], 
     50 : (pageConfiguration like '*Framework*') => navigationState = Frameworks [com.webobjects.directtoweb.Assignment], 
     50 : (pageConfiguration like '*Requirement*') => navigationState = Requirements [com.webobjects.directtoweb.Assignment], 
+    50 : ((task = 'edit') and (smartRelationship.isToMany = 0)) => toOneUIStyle = popup [com.webobjects.directtoweb.Assignment], 
+    50 : ((task = 'edit') and (smartRelationship.isToMany = 1)) => toOneUIStyle = browser [com.webobjects.directtoweb.Assignment], 
     50 : (pageConfiguration = 'QueryRecentlyFiledBugs') => displayPropertyKeys = (originator, dateSubmitted) [com.webobjects.directtoweb.Assignment], 
     50 : ((task = 'edit') and (smartRelationship.isToMany = 0)) => componentName = ERD2WEditToOneRelationship [com.webobjects.directtoweb.Assignment], 
     50 : ((task = 'edit') and (smartRelationship.isToMany = 1)) => componentName = ERD2WEditToManyRelationship [com.webobjects.directtoweb.Assignment], 
@@ -25,10 +27,17 @@
 ) [com.webobjects.directtoweb.Assignment], 
     50 : (((task = 'list') or (task = 'select') or (task = 'pick')) and (entity.name = 'Bug')) => displayPropertyKeys = ("( )", dateModified, dateSubmitted, state, featureRequest, read, subject, textDescription, "(description)", subject
 ) [com.webobjects.directtoweb.Assignment], 
+    60 : ((task <> 'query') and ((propertyKey = 'isRead') or (propertyKey = 'read'))) => componentName = ReadMarker [com.webobjects.directtoweb.Assignment], 
+    60 : ((task = 'edit') and ((propertyKey = 'previousOwner') or (propertyKey = 'originator'))) => disabled = 1 [com.webobjects.directtoweb.BooleanAssignment], 
+    60 : ((task = 'edit') and ((propertyKey = 'previousOwner') or (propertyKey = 'originator'))) => componentName = D2WDisplayToOne [com.webobjects.directtoweb.Assignment], 
+    60 : ((task = 'list') and (entity.name = 'Requirement')) => displayPropertyKeys = (dateModified, dateSubmitted, featureRequest, isRead, subject, textDescription) [com.webobjects.directtoweb.Assignment], 
+    70 : (propertyKey = 'component') => sortKey = sortOrder [com.webobjects.directtoweb.Assignment], 
     70 : (propertyKey = 'component') => restrictedChoiceKey = session.indentedComponents [com.webobjects.directtoweb.Assignment], 
     70 : (smartRelationship.destinationEntity.name = 'People') => keyWhenRelationship = name [com.webobjects.directtoweb.Assignment], 
     70 : ((entity.name = 'Bug') and (task = 'query')) => listConfigurationName = ListEmbeddedBug [com.webobjects.directtoweb.Assignment], 
+    70 : (smartRelationship.destinationEntity.name = 'TestItemState') => keyWhenRelationship = name [com.webobjects.directtoweb.Assignment], 
     70 : (smartRelationship.destinationEntity.name = 'State') => keyWhenRelationship = textDescription [com.webobjects.directtoweb.Assignment], 
     70 : (smartRelationship.destinationEntity.name = 'Component') => keyWhenRelationship = indentedDescription [com.webobjects.directtoweb.Assignment], 
+    70 : ((task = 'edit') and ((entity.name = 'Bug') or (entity.name = 'Requirement')) and (propertyKey = 'owner')) => componentName = EditOwner [com.webobjects.directtoweb.Assignment], 
     100 : *true* => showBanner = false [com.webobjects.directtoweb.BooleanAssignment]
 )
