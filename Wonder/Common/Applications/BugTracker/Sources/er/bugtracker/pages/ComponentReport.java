@@ -5,19 +5,23 @@
  * Public Software License version 0.5, a copy of which has been
  * included with this distribution in the LICENSE.NPL file.  */
 
-package er.bugtracker;
+package er.bugtracker.pages;
+
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.foundation.NSArray;
 
-public class BugReportEmail extends WOComponent {
+import er.bugtracker.Component;
 
-    public BugReportEmail(WOContext aContext) {
-        super(aContext);
-    }
+public class ComponentReport extends WOComponent {
 
-    /** @TypeInfo er.bugtracker.Bug */
-    public NSArray unreadBugs;
-    public People owner;
-    public Bug bug;   
+	public ComponentReport(WOContext c) {
+		super(c);
+	}
+
+	public Component component;
+
+	public NSArray componentList() {
+		return Component.clazz.orderedComponents(session().defaultEditingContext());
+	}
 }

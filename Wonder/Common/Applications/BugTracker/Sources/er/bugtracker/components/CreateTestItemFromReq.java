@@ -5,7 +5,7 @@
  * Public Software License version 0.5, a copy of which has been
  * included with this distribution in the LICENSE.NPL file.  */
 
-package er.bugtracker;
+package er.bugtracker.components;
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.directtoweb.D2W;
@@ -13,6 +13,11 @@ import com.webobjects.directtoweb.EditPageInterface;
 import com.webobjects.eoaccess.EOUtilities;
 import com.webobjects.eocontrol.EOEditingContext;
 
+import er.bugtracker.Bug;
+import er.bugtracker.Component;
+import er.bugtracker.People;
+import er.bugtracker.Session;
+import er.bugtracker.TestItem;
 import er.extensions.ERXEC;
 import er.extensions.ERXLocalizer;
 

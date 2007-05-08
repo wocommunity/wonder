@@ -5,7 +5,7 @@
  * Public Software License version 0.5, a copy of which has been
  * included with this distribution in the LICENSE.NPL file.  */
 
-package er.bugtracker;
+package er.bugtracker.components;
 
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
@@ -25,6 +25,7 @@ import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSKeyValueCoding;
 import com.webobjects.foundation.NSMutableDictionary;
 
+import er.bugtracker.Session;
 import er.extensions.ERXNavigationManager;
 import er.extensions.ERXNavigationState;
 
