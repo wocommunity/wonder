@@ -8,6 +8,7 @@ package er.extensions;
 
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
+import com.webobjects.eocontrol.EOEnterpriseObject;
 
 /**
  * Conditional component that compares two objects using the <code>equals</code> method.<br/>
@@ -43,6 +44,9 @@ public class ERXEqualConditional extends WOComponent {
     public boolean areEqual() {
         Object v1=valueForBinding("value1");
         Object v2=valueForBinding("value2");
+        if((v1 instanceof EOEnterpriseObject) && (v1 instanceof EOEnterpriseObject)) {
+        	return ERXEOControlUtilities.eoEquals((EOEnterpriseObject)v1, (EOEnterpriseObject)v2);
+        }
         return v1==v2 || (v1!=null && v2!=null && v1.equals(v2));
     }
 }
