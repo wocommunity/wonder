@@ -201,6 +201,7 @@
     className = er.bugtracker.Requirement;
     classProperties = 
     (
+       comments, 
        component, 
        dateModified, 
        dateSubmitted, 
@@ -271,6 +272,22 @@
            {
                modificationDate = "2002-05-04 13:06:03 +0200";
            };
+       }, 
+       
+       {
+           destination = Comment;
+           isMandatory = N;
+           isToMany = Y;
+           joinSemantic = EOInnerJoin;
+           joins = 
+           (
+              
+              {
+                  destinationAttribute = bugID;
+                  sourceAttribute = id;
+              }
+           );
+           name = comments;
        }, 
        
        {
