@@ -5,15 +5,16 @@
  * Public Software License version 0.5, a copy of which has been
  * included with this distribution in the LICENSE.NPL file.  */
 
-package er.bugtracker;
+package er.bugtracker.pages;
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WOCookie;
 import com.webobjects.directtoweb.D2W;
 import com.webobjects.eocontrol.EOEditingContext;
-import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSTimestamp;
 
+import er.bugtracker.People;
+import er.bugtracker.Session;
 import er.extensions.ERXCrypto;
 import er.extensions.ERXUtilities;
 

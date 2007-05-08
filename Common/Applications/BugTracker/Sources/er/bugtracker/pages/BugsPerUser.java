@@ -5,13 +5,24 @@
  * Public Software License version 0.5, a copy of which has been
  * included with this distribution in the LICENSE.NPL file.  */
 
-package er.bugtracker;
-import com.webobjects.foundation.*;
-import com.webobjects.appserver.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.eoaccess.*;
-import com.webobjects.directtoweb.*;
-import java.util.*;
+package er.bugtracker.pages;
+import java.util.Enumeration;
+
+import com.webobjects.appserver.WOComponent;
+import com.webobjects.appserver.WOContext;
+import com.webobjects.appserver.WOResponse;
+import com.webobjects.directtoweb.D2W;
+import com.webobjects.directtoweb.ListPageInterface;
+import com.webobjects.eoaccess.EODatabaseDataSource;
+import com.webobjects.eocontrol.EOArrayDataSource;
+import com.webobjects.eocontrol.EOClassDescription;
+import com.webobjects.eocontrol.EOEnterpriseObject;
+import com.webobjects.eocontrol.EOSortOrdering;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSMutableArray;
+
+import er.bugtracker.Bug;
+import er.bugtracker.People;
 
 public class BugsPerUser extends WOComponent {
 
