@@ -26,7 +26,7 @@ public class FreeQuery extends WOComponent {
         super(aContext);
     }
 
-    protected String string;
+    public String string;
 
     public WOComponent find() {
         NSArray a=NSArray.componentsSeparatedByString(string," ");

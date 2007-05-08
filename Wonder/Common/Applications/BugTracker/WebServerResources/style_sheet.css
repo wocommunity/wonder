@@ -11,7 +11,7 @@ body, li, td, p, br, form, input, text, select, option, textarea, th, ol, ul, ta
 }
 
 table td {
-	border: 1px solid red;
+	bord-er: 1px solid red;
 }
 
 .ContentTable {

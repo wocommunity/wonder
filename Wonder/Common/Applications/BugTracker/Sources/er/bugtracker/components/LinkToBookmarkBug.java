@@ -32,7 +32,7 @@ public class LinkToBookmarkBug extends ERDCustomEditComponent {
 		_bug = null;
 	}
 
-	protected Bug _bug;
+    public Bug _bug;
 
 	public Bug bug() {
 		if (_bug == null)
