@@ -27,6 +27,7 @@
 			<spacer/>
 		</td>
 	</webobject>
+	<webobject name=Objects>
 	<webobject name=ListTableRow>
 		<td rowspan=4>
 			<table border=0>
@@ -49,16 +50,17 @@
 				</tr>
 			</table>
 		</td>
+		<webobject name = "AttributeRow">
+			<webobject name=SectionRepetition><webobject name=AttributeRepetition>
+					<webobject name=AttributeCell><webobject name=AttributeDisplay></webobject></webobject>
+				</webobject></webobject>
+		</webobject>
+		<webobject name = "ExtraRow">
+			<webobject name=ExtraCell><webobject name = "HasExtraListComponent"><webobject name = "ExtraListComponent"></webobject></webobject></webobject>
+		</webobject>
+		<webobject name = "ActionRow">
+			<webobject name=ActionCell><webobject name=CenterActions><webobject name=CenterAction></webobject></webobject></webobject>
+		</webobject>
 	</webobject>
-	<webobject name = "AttributeRow">
-		<webobject name=SectionRepetition><webobject name=AttributeRepetition>
-				<webobject name=AttributeCell><webobject name=AttributeDisplay></webobject></webobject>
-			</webobject></webobject>
-	</webobject>
-	<webobject name = "ExtraRow">
-		<webobject name=ExtraCell><webobject name = "HasExtraListComponent">has<webobject name = "ExtraListComponent"></webobject></webobject></webobject>
-	</webobject>
-	<webobject name = "ActionRow">
-		<webobject name=ActionCell><webobject name=CenterActions><webobject name=CenterAction></webobject></webobject></webobject>
 	</webobject>
 </webobject>
