@@ -8,5 +8,6 @@ OperatorPopUp: WOPopUpButton {
 	selection = selectedElement;
 	item = currentElement;
 	displayString = currentElement.value;
+	class = "ERD2WQueryOperatorPopup";
 }
 
