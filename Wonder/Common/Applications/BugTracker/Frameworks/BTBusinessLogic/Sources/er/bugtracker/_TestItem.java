@@ -49,13 +49,6 @@ public abstract class _TestItem extends ERXGenericRecord {
         takeStoredValueForKey(aValue, "dateCreated");
     }
 
-    public NSTimestamp dateModified() {
-        return (NSTimestamp)storedValueForKey("dateModified");
-    }
-    public void setDateModified(NSTimestamp aValue) {
-        takeStoredValueForKey(aValue, "dateModified");
-    }
-
     public String comments() {
         return (String)storedValueForKey("comments");
     }
