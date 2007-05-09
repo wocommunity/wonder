@@ -10,10 +10,6 @@ body, li, td, p, br, form, input, text, select, option, textarea, th, ol, ul, ta
 	padding: 0px;
 }
 
-table td {
-	bord-er: 1px solid red;
-}
-
 .ContentTable {
 	width: 100%;
 }
@@ -87,7 +83,6 @@ body {
 }
 
 .ListTable {
-	// width: 100%;
 }
 
 .ListTable th {
@@ -95,7 +90,6 @@ body {
 }
 
 .ListRepetition {
-	// width: 100%;
 }
 
 
@@ -103,6 +97,11 @@ body {
 	float: left;
 	border-right: 5px solid grey;
 	margin-right: 25px;
+}
+
+.LayoutTable {
+	border-right: 0px;
+	margin-right: 0px;
 }
 
 .ERXNavigationMenu .Level1ItemTable, 
