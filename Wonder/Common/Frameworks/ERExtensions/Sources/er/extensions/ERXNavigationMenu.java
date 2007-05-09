@@ -281,7 +281,7 @@ public class ERXNavigationMenu extends ERXStatelessComponent {
 
     public int navItemsTableWidth() {
         int level1Width=level1Width();
-        return level1Width < 600 ? 600 : level1Width;
+        return level1Width < 200 ? 200 : level1Width;
     }
 
     public String paddingWidth() { return ((ERXSession)session()).browser().isNetscape() ? "width=\"100%\"" : ""; }
