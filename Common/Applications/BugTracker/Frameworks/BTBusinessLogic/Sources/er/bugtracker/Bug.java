@@ -108,18 +108,23 @@ public class Bug extends _Bug implements Markable {
         if (newState==State.CLOSED && isFeatureRequest() && oldState==State.VERIFY)
             newState=State.DOCUMENT;
         super.setState(newState);
-        People documenter = People.clazz.defaultDocumenter(editingContext());
-        if (documenter!=null && newState==State.DOCUMENT && !_ownerChanged) {
-            setOwner((People)EOUtilities.localInstanceOfObject(editingContext(), documenter));
-            setReadAsBoolean(false);
+        if (newState==State.DOCUMENT && !_ownerChanged) {
+            People documenter = People.clazz.defaultDocumenter(editingContext());
+            if(documenter!=null) {
+                addToBothSidesOfOwner(documenter);
+                setReadAsBoolean(false);
+            }
         }
-        People verifier = People.clazz.defaultVerifier(editingContext());
-        if (verifier!=null && newState==State.VERIFY && !_ownerChanged) {
-            // setOwner((EOEnterpriseObject)valueForKey("originator")); // we send the bug back to its originator
-            setOwner((People)EOUtilities.localInstanceOfObject(editingContext(),verifier));
-            touch();
+        if (newState==State.VERIFY && !_ownerChanged) {
+            People verifier = People.clazz.defaultVerifier(editingContext());
+            if(verifier!=null) {
+                addToBothSidesOfOwner(verifier);
+            } else {
+                addToBothSidesOfOwner(originator());
+                touch();
+            }
         }
-    }
+	}
 
     public Object validateTargetReleaseForNewBugs() throws NSValidation.ValidationException {
         Release release = Release.clazz.targetRelease(editingContext());

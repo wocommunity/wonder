@@ -63,6 +63,8 @@
     70 : ((task = 'list' or task = 'inspect') and (entity.name = 'Bug' or entity.name = 'Requirement') and propertyKey = 'featureRequest') => componentName = D2WDisplayBoolean [com.webobjects.directtoweb.Assignment], 
     70 : ((task = 'edit' and subTask = 'wizard') and (entity.name = 'Bug' or entity.name = 'Requirement') and (propertyKey = 'textDescription' or propertyKey = 'newText')) => componentName = ERD2WEditLargeString [com.webobjects.directtoweb.Assignment], 
     80 : (entity.name = 'TestItem' and propertyKey = 'state') => keyWhenRelationship = name [com.webobjects.directtoweb.Assignment], 
+    80 : (entity.name = 'TestItem' and propertyKey = 'state') => keyWhenRelationship = name [com.webobjects.directtoweb.Assignment], 
+    80 : ((entity.name = 'Bug' or entity.name = 'Requirement') and propertyKey = 'state') => keyWhenRelationship = textDescription [com.webobjects.directtoweb.Assignment], 
     90 : entity.name = 'Bug' => actions = {"center" = ("controllerAction"); "left" = ("inspectAction"); 
 } [com.webobjects.directtoweb.Assignment], 
     100 : *true* => showBanner = false [com.webobjects.directtoweb.BooleanAssignment], 
