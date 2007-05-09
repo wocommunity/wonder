@@ -98,6 +98,13 @@ body {
 	// width: 100%;
 }
 
+
+.QueryTable {
+	float: left;
+	border-right: 5px solid grey;
+	margin-right: 25px;
+}
+
 .ERXNavigationMenu .Level1ItemTable, 
 .ERXNavigationMenu .Level2ItemTable, 
 .ERXNavigationMenu .Level3ItemTable {
@@ -112,4 +119,13 @@ body {
 	text-align: center;
 	height: 16px;
 	padding: 5px;
+}
+
+select {
+	width: 300px;
+	height: 5em;
+}
+
+.ERD2WQueryOperatorPopup {
+	width: 180px;
 }
