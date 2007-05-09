@@ -94,7 +94,7 @@ ExtraCell: WOGenericContainer {
 	class="ExtraCell";
 }
 
-EntityRepetition: WORepetition {
+Objects: WORepetition {
 	item = d2wContext.object;
 	list = ^displayGroup.displayedObjects;
 	index = rowIndex;
