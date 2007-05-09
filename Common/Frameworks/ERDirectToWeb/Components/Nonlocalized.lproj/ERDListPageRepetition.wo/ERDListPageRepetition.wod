@@ -121,11 +121,6 @@ LeftActions: WORepetition {
 	list = leftActions;
 }
 
-ListTable: WOGenericContainer {
-	elementName = "table";
-	class = "ListTable";
-}
-
 ListTableHeaderRow: WOGenericContainer {
 	_unroll = true;
 	elementName = "tr";
