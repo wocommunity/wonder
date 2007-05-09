@@ -58,6 +58,9 @@ public class Application extends ERXApplication {
         NSLog.debug.appendln("finishInitialization called.");
         try {
             adjustConnectionDictionary(EOModelGroup.defaultGroup().modelNamed("BugTracker"));
+            if(ERXProperties.booleanForKey("BTCreateDummyData")) {
+                new BTBusinessLogic.DataCreator().create();
+            }
             boolean runBatchReport = ERXProperties.booleanForKey("BTRunBatchReport");
             if (runBatchReport) {
                 runBatchReport();

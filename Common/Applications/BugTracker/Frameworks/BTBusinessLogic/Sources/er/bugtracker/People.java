@@ -44,16 +44,21 @@ public class People extends _People implements ERCoreUserInterface {
     // Class methods go here
 
     public static class PeopleClazz extends _PeopleClazz {
+        
+        private People verifier ;
+        private People documenter;
+        
+        
         public People anyUser(EOEditingContext ec) {
             return (People) allObjects(ec).lastObject();
         }
 
         public People defaultDocumenter(EOEditingContext ec) {
-            return anyUser(ec);
+            return null;
         }
 
         public People defaultVerifier(EOEditingContext ec) {
-            return anyUser(ec);
+            return null;
         }
 
         public People userWithUsernamePassword(EOEditingContext ec, Object user, Object password) {
@@ -66,6 +71,10 @@ public class People extends _People implements ERCoreUserInterface {
 		public People currentUser(EOEditingContext ec) {
 			return (People) ERCoreBusinessLogic.actor(ec);
 		}
+
+        public void setCurrentUser(People people) {
+            ERCoreBusinessLogic.setActor(people);
+        }
     }
 
     public static final PeopleClazz clazz = new PeopleClazz();

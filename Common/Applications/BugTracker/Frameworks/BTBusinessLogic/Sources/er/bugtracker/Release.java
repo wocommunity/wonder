@@ -16,6 +16,7 @@ public class Release extends _Release {
 
     public void awakeFromInsertion(EOEditingContext ec) {
         super.awakeFromInsertion(ec);
+        setIsOpenAsBoolean(true);
     }
     
 
@@ -29,13 +30,15 @@ public class Release extends _Release {
     // Class methods go here
     
     public static class ReleaseClazz extends _ReleaseClazz {
+        private Release defaultRelease;
+        private Release targetRelease;
         // FIXME: (ak) these are just stubs
         // I don't have the slightest idea what a "release" in the NS context is!
         public Release defaultRelease(EOEditingContext ec) {
-            return (Release)(allObjects(ec).lastObject());
+            return defaultRelease;
         }
         public Release targetRelease(EOEditingContext ec) {
-            return (Release)(allObjects(ec).lastObject());
+            return targetRelease;
         }
     }
 
