@@ -14,8 +14,10 @@ import java.util.Enumeration;
 import org.apache.log4j.Logger;
 
 import com.webobjects.appserver.WOComponent;
+import com.webobjects.directtoweb.D2WComponent;
 import com.webobjects.directtoweb.D2WContext;
 import com.webobjects.directtoweb.NextPageDelegate;
+import com.webobjects.eocontrol.EOEnterpriseObject;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSForwardException;
@@ -137,4 +139,55 @@ public abstract class ERDBranchDelegate implements ERDBranchDelegateInterface {
         }
         return choices;
     }
+ 
+    /**
+     * Gets the D2W context from the innermost enclosing D2W component of the sender.
+     * @param sender
+     * @return
+     */
+    protected D2WContext d2wContext(WOComponent sender) {
+        if(sender instanceof D2WComponent) {
+            return ((D2WComponent)sender).d2wContext();
+        }
+        if(sender instanceof ERDCustomComponent) {
+            return ((ERDCustomComponent)sender).d2wContext();
+        }
+        throw new IllegalStateException("Can't figure out d2wContext from: " + sender);
+    }
+    
+    /**
+     * return the innermost object which might be of interest
+     * @param sender
+     * @return
+     */
+    protected EOEnterpriseObject object(WOComponent sender) {
+        return object(d2wContext(sender));
+    }
+    
+    /**
+     * Returns the current object form the d2w context
+     * @param context
+     * @return
+     */
+    protected EOEnterpriseObject object(D2WContext context) {
+        return (EOEnterpriseObject) context.valueForKey(ERD2WPage.Keys.object);
+    }
+
+    /**
+     * Utility to remove entries based on an array of keys
+     * @param keys
+     * @param choices
+     * @return
+     */
+    protected NSArray choiceByRemovingKeys(NSArray keys, NSArray choices) {
+        NSMutableArray result = new NSMutableArray(choices.count());
+        for (Enumeration e = choices.objectEnumerator(); e.hasMoreElements();) {
+            NSDictionary choice = (NSDictionary) e.nextElement();
+            if(!keys.containsObject(choice.objectForKey(BRANCH_NAME))) {
+                result.addObject(choice);
+            }
+        }
+        return result;
+    }
+
 }
