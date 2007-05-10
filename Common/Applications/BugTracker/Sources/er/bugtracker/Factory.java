@@ -14,6 +14,7 @@ import com.webobjects.eoaccess.EODatabaseDataSource;
 import com.webobjects.eoaccess.EOEntity;
 import com.webobjects.eoaccess.EOUtilities;
 import com.webobjects.eocontrol.EOAndQualifier;
+import com.webobjects.eocontrol.EOArrayDataSource;
 import com.webobjects.eocontrol.EODataSource;
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.eocontrol.EOEnterpriseObject;
@@ -248,6 +249,7 @@ public class Factory extends ERD2WFactory implements NSKeyValueCoding {
 
     public WOComponent listRecentBugs() {
         EODatabaseDataSource ds = new EODatabaseDataSource(ERXEC.newEditingContext(), "Bug");
+        ds.fetchSpecification().setIsDeep(false);
         WOComponent page = (WOComponent) listPageNamed("ListRecentBug", ds);
         return page;
     }
@@ -256,12 +258,12 @@ public class Factory extends ERD2WFactory implements NSKeyValueCoding {
         EOEditingContext ec = ERXEC.newEditingContext();
         ec.lock();
         try {
-            EODatabaseDataSource ds  = new EODatabaseDataSource(ec, "Bug");
-            NSDictionary bindings = new NSDictionary(new Object[] { currentUser(ec) }, new Object[] { "user" });
-            EOEntity bugEntity = EOUtilities.entityNamed(ec, "Bug");
-            EOFetchSpecification fs = bugEntity.fetchSpecificationNamed("bugsOwned").fetchSpecificationWithQualifierBindings(bindings);
+        	EODatabaseDataSource ds  = Bug.clazz.newDatabaseDataSource(ec);
+        	NSDictionary bindings = new NSDictionary(new Object[] { currentUser(ec) }, new Object[] { "user" });
+        	EOFetchSpecification fs = Bug.clazz.fetchSpecificationNamed(ec, "bugsOwned").fetchSpecificationWithQualifierBindings(bindings);
+        	ds.fetchSpecification().setIsDeep(false);
 
-            return (WOComponent) listPageNamed("ListMyBug", ds);
+        	return (WOComponent) listPageNamed("ListMyBug", ds);
 
         } finally {
             ec.unlock();
