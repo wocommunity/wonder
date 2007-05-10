@@ -578,6 +578,13 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
     }
 
     /* (non-Javadoc)
+     * @see er.extensions.ERXEnterpriseObject#localInstanceIn(com.webobjects.eocontrol.EOEnterpriseObject)
+     */
+    public EOEnterpriseObject localInstanceIn(EOEditingContext ec) {
+        return ERXEOControlUtilities.localInstanceOfObject(ec, this);
+    }
+
+    /* (non-Javadoc)
      * @see er.extensions.ERXEnterpriseObject#localInstancesOf(com.webobjects.foundation.NSArray)
      */
     public NSArray localInstancesOf(NSArray eos) {
