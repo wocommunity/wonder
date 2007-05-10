@@ -3,7 +3,6 @@
 package er.bugtracker;
 import org.apache.log4j.Logger;
 
-import com.webobjects.eoaccess.EOUtilities;
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.eocontrol.EOEnterpriseObject;
 import com.webobjects.foundation.NSArray;
@@ -19,8 +18,8 @@ import er.extensions.ERXValueUtilities;
 public class Bug extends _Bug implements Markable {
     static final Logger log = Logger.getLogger(Bug.class);
 
-    public boolean _componentChanged;
-    public boolean _ownerChanged;
+    protected boolean _componentChanged;
+    protected boolean _ownerChanged;
 
     public void init(EOEditingContext ec) {
         super.init(ec);
@@ -208,6 +207,10 @@ public class Bug extends _Bug implements Markable {
     }
 
     public static final BugClazz clazz = new BugClazz();
+
+    public void close() {
+        setState(State.CLOSED);
+    }
 }
 
 
