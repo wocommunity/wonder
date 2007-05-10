@@ -10,6 +10,7 @@ import com.webobjects.appserver.WOContext;
 
 import er.bugtracker.Bug;
 import er.directtoweb.ERDCustomComponent;
+import er.extensions.ERXLocalizer;
 
 public class StatusComponent extends ERDCustomComponent {
 
@@ -22,6 +23,10 @@ public class StatusComponent extends ERDCustomComponent {
 
     public String[] bugIcons=new String[] { "spider.gif", "closed.gif", "check.gif", "molette.gif", "document.gif" };
     public String[] requirementsIcons=new String[] { "spider.gif", "molette.gif", "check.gif", "closed.gif" };
+    
+    public String name() {
+        return ERXLocalizer.currentLocalizer().localizedStringForKeyWithDefault(object.state().textDescription());
+    }
     
     public String filename() {
         String result="closed.gif";

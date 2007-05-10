@@ -5,3 +5,8 @@ Image: WOImage {
     border=0;
     filename=filename;
 }
+
+
+Name:WOString {
+	value=name;
+}
