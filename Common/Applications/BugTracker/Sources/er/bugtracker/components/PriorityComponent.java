@@ -7,9 +7,10 @@
 
 package er.bugtracker.components;
 import com.webobjects.appserver.WOContext;
-import com.webobjects.eocontrol.EOEnterpriseObject;
 
+import er.bugtracker.Bug;
 import er.directtoweb.ERDCustomComponent;
+import er.extensions.ERXLocalizer;
 
 public class PriorityComponent extends ERDCustomComponent {
 
@@ -17,11 +18,15 @@ public class PriorityComponent extends ERDCustomComponent {
         super(aContext);
     }
 
-    public EOEnterpriseObject object;
+    public Bug object;
     public String key;
+    
+    public String name() {
+        return ERXLocalizer.currentLocalizer().localizedStringForKeyWithDefault(object.state().description());
+    }
 
     public String filename() {
-        Number priority=(Number)object.valueForKeyPath("priority.sortOrder");
+        Number priority=(Number)object.priority().sortOrder();
         String result=null;
         if (priority!=null) {
             int c=priority.intValue();

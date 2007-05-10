@@ -11,10 +11,7 @@ import com.webobjects.directtoweb.ListPageInterface;
 import com.webobjects.directtoweb.NextPageDelegate;
 import com.webobjects.directtoweb.QueryPageInterface;
 import com.webobjects.eoaccess.EODatabaseDataSource;
-import com.webobjects.eoaccess.EOEntity;
-import com.webobjects.eoaccess.EOUtilities;
 import com.webobjects.eocontrol.EOAndQualifier;
-import com.webobjects.eocontrol.EOArrayDataSource;
 import com.webobjects.eocontrol.EODataSource;
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.eocontrol.EOEnterpriseObject;
@@ -55,7 +52,19 @@ public class Factory extends ERD2WFactory implements NSKeyValueCoding {
         WOComponent nextPage = super.pageForConfigurationNamed(name, s);
         return nextPage;
     }
-    
+
+    public EditPageInterface editPageNamed(String pageConfiguration, EOEnterpriseObject eo) {
+        EditPageInterface epi = (EditPageInterface) inspectPageNamed(pageConfiguration, eo);
+        epi.setObject(eo);
+        return epi;
+    }
+
+    public InspectPageInterface inspectPageNamed(String pageConfiguration, EOEnterpriseObject eo) {
+        InspectPageInterface epi = (InspectPageInterface) pageForConfigurationNamed(pageConfiguration, session());
+        epi.setObject(eo);
+        return epi;
+    }
+
     protected InspectPageInterface createPageNamed(String name) {
         EditPageInterface epi = editPageForNewObjectWithConfigurationNamed(name, session());
         epi.setNextPage(homePage());
@@ -241,8 +250,7 @@ public class Factory extends ERD2WFactory implements NSKeyValueCoding {
 
 
     public WOComponent editBug(Bug bug) {
-        EditPageInterface epi = (EditPageInterface) editPageForEntityNamed("Bug", session());
-        epi.setObject(bug);
+        EditPageInterface epi = editPageNamed("EditBug", bug);
         epi.setNextPage(homePage());
         return (WOComponent)epi;
     }
@@ -261,7 +269,8 @@ public class Factory extends ERD2WFactory implements NSKeyValueCoding {
         	EODatabaseDataSource ds  = Bug.clazz.newDatabaseDataSource(ec);
         	NSDictionary bindings = new NSDictionary(new Object[] { currentUser(ec) }, new Object[] { "user" });
         	EOFetchSpecification fs = Bug.clazz.fetchSpecificationNamed(ec, "bugsOwned").fetchSpecificationWithQualifierBindings(bindings);
-        	ds.fetchSpecification().setIsDeep(false);
+            ds.setFetchSpecification(fs);
+       		ds.fetchSpecification().setIsDeep(false);
 
         	return (WOComponent) listPageNamed("ListMyBug", ds);
 
