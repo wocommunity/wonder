@@ -1,9 +1,9 @@
 IsFlyOver : WOConditional {
-	condition = true;
+	condition = isFlyOver;
 }
 
 IsNotFlyOver : WOConditional {
-	condition = true;
+	condition = isFlyOver;
 	negate = true;
 }
 
