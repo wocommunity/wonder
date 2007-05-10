@@ -41,6 +41,10 @@ public abstract class ERDBranchDelegate implements ERDBranchDelegateInterface {
     // MOVEME: Should belong in a WO constants class
     public final static Class[] WOComponentClassArray = new Class[] { WOComponent.class };
     
+    public static final String BRANCH_CHOICES = "branchChoices";
+    public static final String BRANCH_NAME = "branchName";
+    public static final String BRANCH_LABEL = "branchButtonLabel";
+    
     /**
      * Implementation of the {@link NextPageDelegate NextPageDelegate}
      * interface. This method provides the dynamic dispatch based on
@@ -59,7 +63,7 @@ public abstract class ERDBranchDelegate implements ERDBranchDelegateInterface {
                     log.debug("Branching to branch: " + branchName);
                 try {
                     Method m = getClass().getMethod(branchName, WOComponentClassArray);
-                    nextPage = (WOComponent)m.invoke(this, new WOComponent[] { sender });
+                    nextPage = (WOComponent)m.invoke(this, new Object[] { sender });
                 } catch (InvocationTargetException ite) {
                     log.error("Invocation exception occurred in ERBranchDelegate: " + ite.getTargetException() + " for branch name: " + branchName, ite.getTargetException());
                     throw new NSForwardException(ite.getTargetException());
@@ -84,7 +88,7 @@ public abstract class ERDBranchDelegate implements ERDBranchDelegateInterface {
     	if(label == null) {
     		label = ERXStringUtilities.displayNameForKey(method);
     	}
-    	return ERXDictionaryUtilities.dictionaryWithObjectsAndKeys(new Object [] { method, "branchName", label, "branchButtonLabel"});
+    	return ERXDictionaryUtilities.dictionaryWithObjectsAndKeys(new Object [] { method, BRANCH_NAME, label, BRANCH_LABEL});
     }
     
     /**
@@ -95,7 +99,7 @@ public abstract class ERDBranchDelegate implements ERDBranchDelegateInterface {
      * @return array of branch names.
      */
     public NSArray branchChoicesForContext(D2WContext context) {
-        NSArray choices = (NSArray)context.valueForKey("branchChoices");
+        NSArray choices = (NSArray)context.valueForKey(BRANCH_CHOICES);
         if (choices == null || choices.count() == 0) {
             choices = defaultBranchChoices(context);
         }
@@ -126,7 +130,7 @@ public abstract class ERDBranchDelegate implements ERDBranchDelegateInterface {
                     methodChoices.addObject(branch);        
                 }
             }
-            choices = ERXArrayUtilities.sortedArraySortedWithKey(methodChoices, "branchButtonLabel");
+            choices = ERXArrayUtilities.sortedArraySortedWithKey(methodChoices, BRANCH_LABEL);
         } catch (SecurityException e) {
             log.error("Caught security exception while calculating the branch choices for delegate: " 
                     + this + " exception: " + e.getMessage());
