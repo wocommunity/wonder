@@ -335,6 +335,23 @@
                 goingVertically, 
                 sortKey, 
                 localizeDisplayKeys, 
+                multiple,
+                size
+            ); 
+            inspectionInformation = "Same as the first except that it supports validation propogation and uses ERToOneRelationship."; 
+        }; 
+        ERD2WQueryToManyRelationship = {
+            editors = (
+                restrictedChoiceKey, 
+                restrictingFetchSpecification, 
+                keyWhenRelationship, 
+                numCols, 
+                itemWidth, 
+                toManyUIStyle, 
+                goingVertically, 
+                sortKey, 
+                localizeDisplayKeys, 
+                multiple,
                 size
             ); 
             inspectionInformation = "Same as the first except that it supports validation propogation and uses ERToOneRelationship."; 
