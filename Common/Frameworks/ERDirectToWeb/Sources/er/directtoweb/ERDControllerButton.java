@@ -22,6 +22,10 @@ public class ERDControllerButton extends ERDActionButton implements ERDBranchInt
         super(context);
     }
 
+    public boolean isFlyOver() {
+        return !"link".equals(valueForBinding("uiMode"));
+    }
+    
     /** find the next non-null NextPageDelegate in the component tree, break if there is a D2WPage found beforehand */
     public ERDBranchDelegateInterface branchDelegate() {
         if(branchDelegate == null) {
@@ -82,14 +86,14 @@ public class ERDControllerButton extends ERDActionButton implements ERDBranchInt
      * Gets the user selected branch name.
      * @return user selected branch name.
      */
-    public String branchName() { return (String)branch().valueForKey("branchName"); }
+    public String branchName() { return (String)branch().valueForKey(ERDBranchDelegate.BRANCH_NAME); }
 
     /**
      * Implementation of the {@link ERDBranchDelegate ERDBranchDelegate}.
      * Gets the user selected branch name.
      * @return user selected branch name.
      */
-    public String branchButtonLabel() { return (String)branch().valueForKey("branchButtonLabel"); }
+    public String branchButtonLabel() { return (String)branch().valueForKey(ERDBranchDelegate.BRANCH_LABEL); }
 
     /**
      * Calculates the branch choices for the current
