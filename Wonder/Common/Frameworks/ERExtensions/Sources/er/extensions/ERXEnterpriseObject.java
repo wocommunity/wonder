@@ -498,6 +498,12 @@ public interface ERXEnterpriseObject extends EOEnterpriseObject {
     public abstract EOEnterpriseObject localInstanceOf(EOEnterpriseObject eo);
 
     /**
+     * Returns this EO in the supplied editing context.
+     * @return this EO in the supplied editing context.
+     */
+    public abstract EOEnterpriseObject localInstanceIn(EOEditingContext ec);
+
+    /**
      * Returns an array of EOs in the same editing context as the caller.
      * @return  array of EOs in the same editing context as the caller.
      */
