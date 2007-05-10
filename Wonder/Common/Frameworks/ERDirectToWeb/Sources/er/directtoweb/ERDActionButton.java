@@ -126,7 +126,7 @@ public  class ERDActionButton extends ERDCustomComponent {
     }
 
     /** Utility to return the enclosing D2W page, if there is one. */
-    protected D2WPage parentD2WPage() {
+    public D2WPage parentD2WPage() {
         return (D2WPage)enclosingPageOfClass(D2WPage.class);
     }
     
