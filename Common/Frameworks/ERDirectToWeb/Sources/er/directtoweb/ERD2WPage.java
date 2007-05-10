@@ -221,6 +221,13 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
         d2wContext().takeValueForKey(eo, Keys.object);
         super.setObject(eo);
     }
+    
+    /**
+     * Return the object from the d2wContext.
+     */
+    public EOEnterpriseObject object() {
+        return (EOEnterpriseObject) d2wContext().valueForKey(Keys.object);
+    }
 
     public void setDataSource(EODataSource eodatasource) {
         setEditingContext(eodatasource != null ? eodatasource.editingContext() : null);
