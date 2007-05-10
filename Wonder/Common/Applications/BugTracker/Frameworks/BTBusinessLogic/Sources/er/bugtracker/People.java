@@ -45,19 +45,24 @@ public class People extends _People implements ERCoreUserInterface {
 
     public static class PeopleClazz extends _PeopleClazz {
         
-        private People verifier ;
+        private People verifier;
         private People documenter;
-        
-        
+
         public People anyUser(EOEditingContext ec) {
             return (People) allObjects(ec).lastObject();
         }
 
         public People defaultDocumenter(EOEditingContext ec) {
+            if(documenter != null) {
+                return (People) documenter.localInstanceIn(ec);
+            }
             return null;
         }
 
         public People defaultVerifier(EOEditingContext ec) {
+            if(verifier != null) {
+                return (People) verifier.localInstanceIn(ec);
+            }
             return null;
         }
 
