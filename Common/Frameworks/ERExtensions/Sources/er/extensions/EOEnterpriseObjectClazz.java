@@ -12,9 +12,12 @@ import org.apache.log4j.Logger;
 
 import com.webobjects.eoaccess.EOAttribute;
 import com.webobjects.eoaccess.EODatabaseContext;
+import com.webobjects.eoaccess.EODatabaseDataSource;
 import com.webobjects.eoaccess.EOEntity;
 import com.webobjects.eoaccess.EOModelGroup;
 import com.webobjects.eoaccess.EOUtilities;
+import com.webobjects.eocontrol.EOArrayDataSource;
+import com.webobjects.eocontrol.EOClassDescription;
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.eocontrol.EOEnterpriseObject;
 import com.webobjects.eocontrol.EOFetchSpecification;
@@ -168,6 +171,33 @@ public class EOEnterpriseObjectClazz extends Object {
     	setEntityName(entityName);
 		return this;
     }
+
+    /**
+     * Returns the class description for the entity.
+     */
+    
+    public EOClassDescription classDescription() {
+    	return entity().classDescriptionForInstances();
+    }
+
+    /**
+     * Utility to return a new array datasource
+     * @param ec
+     * @return
+     */
+    public EOArrayDataSource newArrayDataSource(EOEditingContext ec) {
+    	return new EOArrayDataSource(classDescription(), ec);
+    }
+    
+    /**
+     * Utility to return a new database datasource
+     * @param ec
+     * @return
+     */
+     public EODatabaseDataSource newDatabaseDataSource(EOEditingContext ec) {
+    	return new EODatabaseDataSource(ec, entityName());
+    }
+    
 
     /**
      * Resets the clazz cache.
