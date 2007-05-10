@@ -12,6 +12,7 @@ import com.webobjects.foundation.NSDictionary;
 
 import er.bugtracker.Bug;
 import er.directtoweb.ERDCustomEditComponent;
+import er.extensions.ERXWOContext;
 
 public class LinkToBookmarkBug extends ERDCustomEditComponent {
 
@@ -42,6 +43,7 @@ public class LinkToBookmarkBug extends ERDCustomEditComponent {
 
 	public String href() {
 		String url = context().directActionURLForActionNamed("bug", new NSDictionary(bug().bugid(), "number"));
+        url = ERXWOContext.stripSessionIDFromURL(url);
 		return url;
 	}
 }
