@@ -8,6 +8,13 @@
 	"ERD2WEditToManyRelationship.noChoiceAvailable" = "No @@displayNameForEntity@@ available at this time";
 	"ERD2WInspect.alreadyAborted" = "<b>You already aborted this operation</b>. Please hit cancel and try again from the first step";
 	"ERD2WList.confirmDeletionMessage" = "<b>Are you sure you want to delete the following @@displayNameForEntity@@?</b><br />@@object.userPresentableDescription@@";
+	"ERD2WCreateWizard.cancel" = "Cancel";
+	"ERD2WCreateWizard.nextStep" = "Next Step";
+	"ERD2WCreateWizard.previousStep" = "Previous Step";
+	"ERD2WCreateWizard.save" = "Save";
+	"ERD2WInspectPage.cancel" = "Cancel";
+	"ERD2WInspectPage.return" = "Return";
+	"ERD2WInspectPage.saveChanges" = "Save";
 	"ERD2WQueryDateRange.format" = "Format";
 	"ERD2WQueryDateRange.from" = "from";
 	"ERD2WQueryDateRange.to" = "to";
