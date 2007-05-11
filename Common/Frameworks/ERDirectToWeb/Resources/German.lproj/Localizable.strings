@@ -8,6 +8,13 @@
 	"ERD2WEditToManyRelationship.noChoiceAvailable" = "Kein @@displayNameForEntity@@ verf\U00fcgbar";
 	"ERD2WInspect.alreadyAborted" = "<b>Sie haben diese Aktion bereits beendet.</b> Bitte dr\U00fccken Sie <b>Abbrechen</b> und gebinnen Sie noch mal von vorne.";
 	"ERD2WList.confirmDeletionMessage" = "<b>@@displayNameForEntity@@ wirklich l\U00f6schen?</b><br />@@object.userPresentableDescription@@";
+	"ERD2WCreateWizard.cancel" = "Abbrechen";
+	"ERD2WCreateWizard.nextStep" = "N\U00e4chster Schritt";
+	"ERD2WCreateWizard.previousStep" = "Vorheriger Schritt";
+	"ERD2WCreateWizard.save" = "Speichern";
+	"ERD2WInspectPage.cancel" = "Abbrechen";
+	"ERD2WInspectPage.return" = "Zur\U00fcck";
+	"ERD2WInspectPage.saveChanges" = "Speichern";
 	"ERD2WQueryDateRange.format" = "Format";
 	"ERD2WQueryDateRange.from" = "von";
 	"ERD2WQueryDateRange.to" = "bis";
