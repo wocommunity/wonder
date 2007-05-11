@@ -1,37 +1,151 @@
-<html>
-    <head><title>Edit localized files</title></head>
-    <body>
-        <ul>
-            <webobject name="Filenames"><li><webobject name="Filename"></webobject>
-                    <webobject name="Frameworks">
-                        (<webobject name="EditFramework"><webobject name="Framework"></webobject></webobject>) </webobject></li></webobject>
-        </ul>
-        <webobject name="HasData">
-        <hr>Editing: <webobject name="Languages"> <br><webobject name="Url"></webobject></webobject>
-        <hr>
-        <webobject name="BatchNavigationBar"></webobject>
-        
-        <webobject name="Form">
-        	<table>
-        		<tr><td>Key</td><td> <webobject name="KeyMatch"></webobject></td>
-        			<td><webobject name="Find"></webobject></td>
-        		</tr>
-        	</table>
-        </webobject>
-        <webobject name="Form"><webobject name="Save"></webobject>
-        <table>
-            <tr><webobject name="Languages"><td><webobject name="Language"></webobject></td></webobject></tr>
-            <webobject name="Entries">
-                <tr><webobject name="KeyCell"><webobject name="Key"></webobject></webobject></tr>
-             	<tr><webobject name="Languages">
-               <webobject name="ValueCell">
-               	<webobject name="Entry"></webobject>
-               </webobject>
-            </webobject></tr>
-            </webobject>
-        </table>
-        <webobject name="Save"></webobject>
-        </webobject>
-        </webobject>
-    </body>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="de">
+<head>
+	<meta http-equiv="content-type" content="text/html; charset=utf-8">
+	<title>Edit localized files</title>
+	<style>
+		body {
+			background-color: #ddd; 
+			font-size: 12px;
+			font-family: Arial, Helvetica, Sans-Serif;
+		}
+		
+		#content {
+			margin: 8px; 
+			background-color: white; 
+			border: 1px solid #aaa;
+			padding: 8px;
+		}
+		
+		.box {
+			border: 1px solid #aaa; 
+		}
+		
+		.editingBox {
+			margin: 8px 4px; 
+			padding: 8px 0px; 
+			border-top: 1px solid #aaa;
+		}
+		
+		th {
+			border-bottom: 1px solid #aaa; 
+			text-align: left;
+		}
+		
+		.borderBottomCell {
+			border-bottom: 1px solid #aaa;
+			padding: 4px 2px;
+		}
+		
+		.borderTopCell {
+			border-top: 1px solid #aaa;
+			padding: 4px 2px;
+		}
+		
+		.langHeader { 
+			background-color: #ccc; 
+			padding: 4px 2px;
+		}
+		
+		.keyCell {
+			padding: 4px 2px 4px 2px; 
+			font-style: italic; 
+			background-color: #ddd;
+		}
+		
+		.valueCell {
+			padding: 4px 2px;
+		}
+		
+		.inputfield {
+			font: 1.1em "Courier", Courier, mono; 
+			width: 98%;
+		}
+		
+		.red {
+			font: 1.1em "Courier", Courier, mono; 
+			width: 98%;
+			border: 2px solid red;
+		}
+		
+		.search {
+			border: 1px solid #aaa; 
+			margin: 8px 0px; 
+			padding: 8px;
+		}
+		
+	</style>
+</head>
+<body>
+<div id="content">
+	<h2><webobject name="EditLocalizedFilesString"></webobject></h2>
+	<div class="box">
+		<table width="100%" cellpadding="4" cellspacing="0">
+			<tr>
+				<th><webobject name="FileNameString"></webobject></th>
+				<webobject name="TableHeaderForFileList"><webobject name="FileAvailableInString"></webobject></webobject>
+			</tr>
+			<webobject name="Filenames"><tr>
+				<td><webobject name="Filename"></webobject></td>
+				<webobject name="Frameworks"><td><webobject name="EditFramework"><webobject name="Framework"></webobject></webobject></td>
+				</webobject>
+			</tr></webobject>
+		</table>
+		<webobject name="HasData">
+			<div class="editingBox">
+				<strong><webobject name="CurrentlyEditingString"></webobject></strong><br>
+				<webobject name="Languages"><br>
+					<webobject name="Url"></webobject>
+				</webobject>
+			</div>
+		</webobject>
+	</div>
+	<webobject name="HasData">
+		<div class="search">
+			<table width="100%"><tr>
+				<td align="left">
+					<webobject name="SearchForm">
+						<webobject name="SearchForKeyString"></webobject>: <webobject name="KeyMatch"></webobject>&nbsp;<webobject name="Find"></webobject>
+					</webobject>
+				</td>
+				<td align="right">
+					<webobject name="AddForm">
+						<webobject name="AddKeyString"></webobject>: <webobject name="AddKeyTextField"></webobject>&nbsp;<webobject name="AddButton"></webobject>
+					</webobject>
+				</td>
+			</tr></table>
+		</div>
+		<webobject name="Form">
+			<table width="100%" cellpadding="0" cellspacing="0">
+				<tr>
+					<td class="borderBottomCell" valign="middle"><webobject name="Save"></webobject></td>
+					<webobject name="BatchNavigationCellTop"><webobject name="BatchNavigationBar"></webobject></webobject>
+				</tr>
+				<tr>
+					<webobject name="Languages">
+						<th class="langHeader">
+							<webobject name="Language"></webobject> 
+						</th>
+					</webobject>
+				</tr>
+				<webobject name="Entries">
+					<tr>
+						<webobject name="KeyCell"><strong><webobject name="KeyString"></webobject>: </strong><webobject name="Key"></webobject> [<webobject name="DeleteLink"><webobject name="DeleteString"></webobject></webobject>]</webobject>
+					</tr>
+					<tr>
+						<webobject name="Languages">
+							<webobject name="ValueCell"><webobject name="Entry"></webobject></webobject>
+						</webobject>
+					</tr>
+				</webobject>
+				<tr>
+					<td class="borderTopCell" valign="middle"><webobject name="Save"></webobject></td>
+					<webobject name="BatchNavigationCell"><webobject name="BatchNavigationBar"></webobject></webobject>
+				</tr>
+			</table>
+		</webobject>
+	</webobject>
+</div>
+</body>
 </html>
