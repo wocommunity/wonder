@@ -27,14 +27,18 @@ Save : WOSubmitButton {
 
 Form : WOForm {
 	multipleSubmit = true;
+	style = "border: 1px solid #aaa;";
+}
+
+SearchForm : WOForm {
+	multipleSubmit = true;
 }
 
 Entry : WOSwitchComponent {
 	value = currentValue;
 	WOComponentName = valueComponentName;
 	rows = 5;
-	cols = 25;
-	size = 25;
+	class = highlightClass;
 }
 
 Filename : WOString {
@@ -59,27 +63,10 @@ HasData: WOConditional {
 	condition = data.allKeys.count; // VALID
 }
 
-IsLargeEntry : WOConditional {
-	condition = isLargeEntry;
-}
-
-IsNotLargeEntry : WOConditional {
-	condition = isLargeEntry;
-	negate = true;
-}
-
-HasLanguage : WOConditional {
-	condition = fileExistsInLanguage;
-}
-
-HasNoValue : WOConditional {
-	condition = hasCurrentValue;
-	negate = true;
-}
-
 ValueCell : WOGenericContainer {
 	elementName = "td";
-	bgcolor=cellColor;
+	width = valueCellWidth;
+	class = "valueCell";
 }
 
 Key: WOString {
@@ -87,14 +74,16 @@ Key: WOString {
 }
 
 KeyCell : WOGenericContainer {
-	elementName = "th";
+	elementName = "td";
 	colspan = availableLanguages.count;
 	align = "left";
-	bgcolor = "lightgrey";
+	bgcolor = "#eee";
+	class = "keyCell";
 }
 
-Language : WOString {
-	value = currentLanguage;
+Language : WOHyperlink {
+	action = sortEntries;
+	string = currentLanguage;
 }
 
 Languages : WORepetition {
@@ -104,4 +93,71 @@ Languages : WORepetition {
 
 Url: WOString {
 	value = urlForSelectedFile;
+}
+
+TableHeaderForFileList : WOGenericContainer {
+	elementName = "th";
+	colspan = frameworkSearchPath.count;
+}
+
+EditLocalizedFilesString : ERXLocalizedString {
+	value = "Edit Localized Files";
+}
+
+FileNameString : ERXLocalizedString {
+	value = "Filename";
+}
+
+FileAvailableInString : ERXLocalizedString {
+	value = "Files available in:";
+}
+
+CurrentlyEditingString : ERXLocalizedString {
+	value = "Currently Editing:";
+}
+
+SearchForKeyString : ERXLocalizedString {
+	value = "Search for Key";
+}
+
+KeyString : ERXLocalizedString {
+	value = "Key";
+}
+
+BatchNavigationCellTop : WOGenericContainer {
+	elementName = "td";
+	colspan = colspanForBatchNavigation;
+	align = "right";
+	class="borderBottomCell";
+}
+
+BatchNavigationCell : WOGenericContainer {
+	elementName = "td";
+	class="borderTopCell";
+	colspan = colspanForBatchNavigation;
+	align = "right";
+}
+
+AddForm : WOForm {
+}
+
+AddKeyTextField : WOTextField {
+	value = keyToAdd;
+}
+
+AddButton : WOSubmitButton {
+	action = addEntry;
+	value = "Add";
+}
+
+AddKeyString : ERXLocalizedString {
+	value = "Add Key";
+}
+
+DeleteLink : WOHyperlink {
+	action = removeEntry;
+}
+
+DeleteString : ERXLocalizedString {
+	value = "Remove entry";
 }
