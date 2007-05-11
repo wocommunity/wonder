@@ -3,7 +3,7 @@ AddButton: WOSubmitButton {
 	value = session.localizer.ERDEditToManyRelationship.add;
 }
 
-Conditional1: WOConditional {
+HasObjects: WOConditional {
 	condition = objects.count;
 }
 
