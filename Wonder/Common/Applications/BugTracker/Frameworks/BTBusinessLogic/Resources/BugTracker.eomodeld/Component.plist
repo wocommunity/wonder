@@ -58,6 +58,8 @@
        children, 
        owner, 
        parent, 
+       requirements, 
+       testItems, 
        textDescription
     );
     externalName = COMPONENT;
@@ -69,6 +71,8 @@
            children, 
            owner, 
            parent, 
+           requirements, 
+           testItems, 
            textDescription
         );
     };
@@ -152,6 +156,46 @@
               }
            );
            name = parent;
+           userInfo = 
+           {
+               modificationDate = "2002-05-04 13:06:03 +0200";
+           };
+       }, 
+       
+       {
+           deleteRule = EODeleteRuleDeny;
+           destination = Requirement;
+           isToMany = Y;
+           joinSemantic = EOInnerJoin;
+           joins = 
+           (
+              
+              {
+                  destinationAttribute = componentID;
+                  sourceAttribute = id;
+              }
+           );
+           name = requirements;
+           userInfo = 
+           {
+               modificationDate = "2002-05-04 13:06:03 +0200";
+           };
+       }, 
+       
+       {
+           deleteRule = EODeleteRuleDeny;
+           destination = TestItem;
+           isToMany = Y;
+           joinSemantic = EOInnerJoin;
+           joins = 
+           (
+              
+              {
+                  destinationAttribute = componentID;
+                  sourceAttribute = id;
+              }
+           );
+           name = testItems;
            userInfo = 
            {
                modificationDate = "2002-05-04 13:06:03 +0200";
