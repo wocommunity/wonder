@@ -1,149 +1,64 @@
-CancelButton: WOImage {
-	alt = "Reverts your changes";
-	border = 0;
-	name = "Reverts your changes";
-	filename = "CancelMetalBtn.gif";
-	framework = "JavaDirectToWeb";
-}
-
-CancelLink: WOHyperlink {
+Cancel: ERXSubmitButton {
 	action = cancelAction;
-}
-
-CancelLink2: WOHyperlink {
-	action = nextPage;
-}
-
-Conditional10: WOConditional {
-	condition = currentTabIsLastTab;
-	negate = true;
-}
-
-Conditional11: WOConditional {
-	condition = currentTabIsFirstTab;
-	negate = true;
-}
-
-Conditional12: WOConditional {
-	condition = shouldShowNextPreviousButtons;
-}
-
-Conditional13: WOConditional {
-	condition = d2wContext.shouldShowReturnButton;
-}
-
-Conditional14: WOConditional {
-	condition = d2wContext.shouldShowReturnButton;
-	negate = true;
-}
-
-Conditional2: WOConditional {
-	condition = d2wContext.shouldShowSubmitButton;
-}
-
-Conditional3: WOConditional {
-	condition = d2wContext.hasPrinterFriendlyVersion;
+	disabled = disableCancel;
+	value = session.localizer.ERD2WCreateWizard.cancel;
 }
 
 Conditional5: WOConditional {
 	condition = d2wContext.useFocus;
 }
 
-Conditional6: WOConditional {
-	condition = shouldShowNextPreviousButtons;
+ERPrinterButton: ERDPrinterButton {
+	d2wContext = d2wContext;
+	task = "inspect";
 }
 
-Conditional7: WOConditional {
-	condition = currentTabIsLastTab;
-	negate = true;
-}
-
-Conditional8: WOConditional {
-	condition = currentTabIsFirstTab;
-	negate = true;
-}
-
-Conditional9: WOConditional {
-	condition = showCancel;
-}
-
-EditForm: ERXOptionalForm {
+EditingForm: ERXOptionalForm {
 	enctype = d2wContext.formEncoding;
-	showForm = d2wContext.hasForm;
+	hasForm = d2wContext.hasForm;
+	multipleSubmit = true;
 	name = "EditForm";
 }
 
-EditImage: WOImage {
-	alt = "Edits this object";
-	border = "0";
-	filename = "EditMetalBtn.gif";
-	framework = "JavaDirectToWeb";
-	height = "31";
-	name = "Edits this object";
-	width = "88";
+EntityName: WOString {
+	_unroll = true;
+	value = d2wContext.displayNameForPageConfiguration;
+	escapeHTML = true;
 }
 
-EditImage2: WOImage {
-	alt = "Saves this object";
-	border = 0;
-	name = "Saves this object";
-	filename = "SaveMetalBtn.gif";
-	framework = "JavaDirectToWeb";
-}
-
-EditImage3: WOImage {
-	alt = "Previous Tab";
-	border = 0;
-	name = "Previous Tab";
-	filename = "LeftArrow.gif";
-	framework = "JavaDirectToWeb";
-}
-
-EditImage4: WOImage {
-	alt = "Next Tab";
-	border = 0;
-	name = "Next Tab";
-	filename = "RightArrow.gif";
-	framework = "JavaDirectToWeb";
-}
-
-EditLink: WOHyperlink {
-	action = editAction;
-}
-
-EditLink2: WOHyperlink {
-	action = submitAction;
-}
-
-EditLink3: WOHyperlink {
-	action = previousTabAction;
-}
-
-EditLink4: WOHyperlink {
-	action = nextTabAction;
-}
-
-Errors: ERXErrorDictionaryPanel {
+Errors2: ERXErrorDictionaryPanel {
 	errorMessages = errorMessages;
 	extraErrorMessage = errorMessage;
-	shouldShowNewLineAbove = true;
-	shouldShowNewLineBelow = true;
+}
+
+HasChanges: WOConditional {
+	condition = object.editingContext.hasChanges;
+}
+
+HasChangesImage: WOImage {
+	filename = "floppy.gif";
+	framework = "ERExtensions";
+}
+
+HasErrors: WOConditional {
+	condition = errorMessages.allKeys.count;
+}
+
+HasPrinterFriendlyVersion: WOConditional {
+	condition = d2wContext.hasPrinterFriendlyVersion;
+}
+
+Header: WOSwitchComponent {
+	WOComponentName = d2wContext.headerComponentName;
+	d2wContext = d2wContext;
 }
 
 Help: ERDDebuggingHelp {
 	d2wContext = d2wContext;
 }
 
-ImageSpacer: WOImage {
-	alt = "";
-	border = 0;
-	filename = "s.gif";
-	framework = "ERExtensions";
-	height = 20;
-	width = 1;
-}
-
-InspectPageRepetition: ERDInspectPageRepetition {
+InspectPageRepetition: WOSwitchComponent {
+	WOComponentName = d2wContext.repetitionComponentName;
 	d2wContext = localContext;
 	object = object;
 	displayPropertyKeys = currentTab.keys;
@@ -154,49 +69,10 @@ IsEditing: WOKeyValueConditional {
 	value = "edit";
 }
 
-IsEditingConditional: WOConditional {
-	_unroll = true;
-	condition = isEditing;
-}
-
-IsEditingConditional2: WOConditional {
-	_unroll = true;
-	condition = isEditing;
-}
-
-IsEntityWritable2: WOConditional {
-	_unroll = true;
-	condition = d2wContext.isEntityEditable;
-	negate = false;
-}
-
-IsNotEditingConditional: WOConditional {
-	_unroll = true;
-	condition = isEditing;
-
-
-	negate = true;
-}
-
-IsNotEditingConditional2: WOConditional {
-	_unroll = true;
-	condition = isEditing;
-	negate = true;
-}
-
-IsTaskEdit: ERXEqualConditional {
-	value1 = d2wContext.task;
-	value2 = "edit";
-}
-
-NonNullConditional1: ERXNonNullConditional {
-	condition = previousPage;
-	negate = false;
-}
-
-NonNullConditional2: ERXNonNullConditional {
-	condition = previousPage;
-	negate = true;
+Next: ERXSubmitButton {
+	value = session.localizer.ERD2WCreateWizard.nextStep;
+	action = nextTabAction;
+	disabled = disableNext;
 }
 
 PageWrapper: WOSwitchComponent {
@@ -205,75 +81,21 @@ PageWrapper: WOSwitchComponent {
 	_unroll = true;
 }
 
-PrintButton: WOImage {
-	alt = "Gives you ";
-	border = 0;
-	name = "Reverts your changes";
-	src = "/nsi/buttonPrint.gif";
+Previous: ERXSubmitButton {
+	action = previousTabAction;
+	value = session.localizer.ERD2WCreateWizard.previousStep;
+	disabled = disablePrevious;
 }
 
-PrinterFriendlyLink: ERXJSOpenWindowHyperlink {
-	action = printerFriendlyVersion;
-	scrollbars = true;
-	target = "PrinterFriendly";
-}
-
-ReturnButton: WOImage {
-	alt = "Returns to the previous page";
-	border = "0";
-	name = "Returns to the previous page";
-	filename = "ReturnMetalBtn.gif";
-	framework = "JavaDirectToWeb";
-}
-
-ReturnButton2: WOImage {
-	alt = "Reverts your changes";
-	border = 0;
-	name = "Reverts your changes";
-	filename = "ReturnMetalBtn.gif";
-	framework = "JavaDirectToWeb";
-}
-
-ReturnLink: WOHyperlink {
-	action = nextPage;
+Save: ERXSubmitButton {
+	value = session.localizer.ERD2WCreateWizard.save;
+	action = submitAction;
+	disabled = disableSave;
 }
 
 Script: WOJavaScript {
 	scriptString = tabScriptString;
 	hideInComment = true;
-}
-
-ShowCancel2: WOConditional {
-	condition = showCancel;
-}
-
-SubmitChanges: WOImageButton {
-	action = submitAction;
-	alt = "Saves your changes";
-	border = "0";
-	filename = "SaveMetalBtn.gif";
-	framework = "JavaDirectToWeb";
-	height = "31";
-	name = "Saves your changes";
-	width = "88";
-}
-
-SubmitChanges4: WOImageButton {
-	action = nextTabAction;
-	alt = "Next Tab";
-	border = 0;
-	name = "Next Tab";
-	filename = "RightArrow.gif";
-	framework = "JavaDirectToWeb";
-}
-
-SubmitChanges5: WOImageButton {
-	action = previousTabAction;
-	alt = "Previous Tab";
-	border = 0;
-	name = "Previous Tab";
-	filename = "LeftArrow.gif";
-	framework = "JavaDirectToWeb";
 }
 
 SwitchComponent3: WOSwitchComponent {
