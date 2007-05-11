@@ -6,15 +6,19 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.directtoweb;
 
+import java.util.Iterator;
+
 import org.apache.log4j.Logger;
 
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WOResponse;
 import com.webobjects.directtoweb.EditPageInterface;
+import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSNotificationCenter;
 import com.webobjects.foundation.NSValidation;
 
+import er.extensions.ERXValidationException;
 import er.extensions.ERXValueUtilities;
 import er.extensions.ERXWOForm;
 
@@ -167,5 +171,18 @@ public class ERD2WTabInspectPage extends ERD2WInspectPage implements ERDTabEditP
 
     public String tabComponentName() {
     	return (String)d2wContext().valueForKey("tabComponentName");
+    }
+    
+    public boolean disablePrevious() {
+        return currentTabIsFirstTab();
+    }
+    public boolean disableNext() {
+        return currentTabIsLastTab();
+    }
+    public boolean disableCancel() {
+        return !showCancel();
+    }
+    public boolean disableSave() {
+        return false;
     }
 }
