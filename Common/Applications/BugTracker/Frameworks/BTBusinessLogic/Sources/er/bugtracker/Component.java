@@ -41,7 +41,7 @@ public class Component extends _Component {
 			sb.append("***");
 		else
 			for (int i = 0; i < level(); i++)
-				sb.append("&nbsp;&nbsp;&nbsp;&nbsp;");
+				sb.append("-");
 		sb.append(valueForKey("textDescription"));
 		return sb.toString();
 	}
