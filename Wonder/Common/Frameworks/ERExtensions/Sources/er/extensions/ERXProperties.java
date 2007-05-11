@@ -240,7 +240,7 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
     }
 
     /**
-     * Converts the standard propertyName into one with a .<AppName> on the end, iff the property is defined with
+     * Converts the standard propertyName into one with a .&lt;AppName> on the end, iff the property is defined with
      * that suffix.  If not, then this caches the standard propertyName.  A cache is maintained to avoid concatenating
      * strings frequently, but may be overkill since most usage of this system doesn't involve frequent access.
      * @param propertyName
@@ -972,7 +972,7 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
 
     /**
      * Overriding the default getProperty method to first check:
-     * key.<ApplicationName> before checking for key. If nothing
+     * key.&lt;ApplicationName> before checking for key. If nothing
      * is found then key.Default is checked.
      * @param key to check
      * @return property value
