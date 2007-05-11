@@ -35,7 +35,7 @@ import com.webobjects.foundation.NSMutableDictionary;
  * For example constructing this qualifer:<br>
  * <code>ERXInQualifier q = new ERXInQualifier("userId", arrayOfNumbers);</code>
  * Then this qualifier would generate SQL of the form:
- * USER_ID IN (<array of numbers or data>)
+ * USER_ID IN (&lt;array of numbers or data>)
  */
 // ENHANCEME: Should support restrictive qualifiers, don't need to subclass KeyValueQualifier
 public class ERXInQualifier extends EOKeyValueQualifier implements Cloneable {
