@@ -124,11 +124,13 @@ LeftActions: WORepetition {
 ListTableHeaderRow: WOGenericContainer {
 	_unroll = true;
 	elementName = "tr";
+	class = "ListRepetitionHeaderRow";
 }
 
 ListTableRow: WOGenericContainer {
 	_unroll = true;
 	elementName = "tr";
+	class = "ListRepetitionRow";
 }
 
 PropertyName: ERD2WPropertyName {
