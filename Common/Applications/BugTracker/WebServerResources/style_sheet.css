@@ -8,6 +8,18 @@
 /* Basic overall typography for the site. */
 body, li, td, p, br, form, input, text, select, option, textarea, th, ol, ul, table, blockquote {  
 	padding: 0px;
+	font-family: Arial, Geneva, sans-serif;
+}
+
+a {
+	text-decoration: none;
+	font-weight: bold;
+	color: #0f0f0f;
+	padding: 5px 0px;
+}
+
+a:hover {
+	text-decoration: underline;
 }
 
 .ContentTable {
@@ -167,4 +179,94 @@ td.Section {
 
 .PropertyNameCell .required {
     color: white;
+}
+
+
+H1 
+{
+    font-weight: bold;
+    font-size: 24px;
+    font-family: Arial, Sans-Serif;
+    margin-bottom: 0px;
+}
+
+H2 
+{
+    font-weight: bold;
+    font-size: 18px;
+    font-family: Arial, Sans-Serif;
+    margin-top: 10px;
+    margin-bottom: 0px;
+}
+
+H3 
+{
+    font-weight: bold;
+    font-size: 16px;
+    font-family: Arial, Sans-Serif;
+    margin-top: 10px;
+    margin-bottom: 0px;
+}
+
+H4 
+{
+    font-weight: bold;
+    font-size: 12px;
+    font-family: Arial, Sans-Serif;
+    margin-top: 10px;
+    margin-bottom: 0px;
+}
+
+H5 
+{
+    font-weight: bold;
+    font-size: 11px;
+    font-family: Arial, Sans-serif;
+    margin-bottom: 0px;
+}
+
+H6 
+{
+    font-weight: bold;
+    font-size: 10px;
+    font-family: Arial, Sans-Serif;
+    margin-bottom: 0px;
+}
+
+.NavigationBar table td {
+	background-color: none ! important;
+}
+
+
+.NavigationBar table {
+	background-color: #E7E7E7;
+	border-bottom: 1px solid black;
+	border-top: 1px solid black;
+	margin-bottom: 5px;
+	padding-bottom: 15px;
+}
+
+.ActionCell {
+	background-color: #E7E7E7;
+	margin-bottom: 5px;
+	padding-bottom: 0px;
+	vertical-align: middle;
+}
+
+
+.ActionCell ul {
+	height: 15px;
+}
+.ActionCell li {
+	padding-left: 5px;
+}
+
+.ListRepetitionHeaderRow td {
+	background-color: none ! important;
+}
+
+
+.ListRepetitionHeaderRow {
+	background-color: #efefef;
+	height: 40px;
 }

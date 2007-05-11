@@ -1,14 +1,12 @@
-Title : WOString {
-	value = header;
+Title : ERCDisplayHelpText {
+	context = localContext;
+	key = "title";
+	defaultValue = title;
+	prefix = ^pageConfiguration;
 }
 
 CMS : ERCDisplayHelpText {
 	context = localContext;
-	key = explaination;
-}
-
-Explaination : ERXLocalizedString {
-	value = explaination;
-	valueWhenEmpty = "";
-	omitWhenEmpty = true;
+	key = "explaination";
+	prefix = ^pageConfiguration;
 }

@@ -3,6 +3,7 @@
     10 : *true* => rows = 10 [com.webobjects.directtoweb.Assignment], 
     10 : *true* => length = 50 [com.webobjects.directtoweb.Assignment], 
     10 : *true* => justification = left [com.webobjects.directtoweb.Assignment], 
+    10 : *true* => allowsFiltering = true [com.webobjects.directtoweb.BooleanAssignment], 
     10 : propertyKey like '*.*' => displayNameForProperty = displayNameForKeyPath [er.directtoweb.ERDKeyValueAssignment], 
     20 : task = 'query' => size = 3 [com.webobjects.directtoweb.Assignment], 
     20 : task = 'query' => length = 10 [com.webobjects.directtoweb.Assignment], 
@@ -10,6 +11,7 @@
     20 : *true* => headerComponentName = PageHeader [com.webobjects.directtoweb.Assignment], 
     20 : task = 'query' => useMatrixLayout = true [com.webobjects.directtoweb.BooleanAssignment], 
     20 : task = 'query' => showListInSamePage = true [com.webobjects.directtoweb.BooleanAssignment], 
+    20 : ((smartAttribute.prototypeName = 'charFlag' or smartAttribute.prototypeName = 'flag') or propertyKey = 'read' or propertyKey = 'featureRequest') => justification = center [com.webobjects.directtoweb.Assignment], 
     50 : entity.name = 'Bug' => navigationState = Bugs [com.webobjects.directtoweb.Assignment], 
     50 : pageConfiguration like 'Track*' => task = query [com.webobjects.directtoweb.Assignment], 
     50 : pageConfiguration like 'Track*' => task = query [com.webobjects.directtoweb.Assignment], 
@@ -40,7 +42,7 @@
     50 : ((task = 'edit' or task = 'inspect') and entity.name = 'Comment' and propertyKey = 'textDescription') => displayNameForProperty =  [com.webobjects.directtoweb.Assignment], 
     50 : ((task = 'edit' or task = 'inspect') and (entity.name = 'Bug' or entity.name = 'Requirement') and propertyKey = 'sortedComments') => displayNameForProperty =  [com.webobjects.directtoweb.Assignment], 
     50 : ((task = 'list' or task = 'inspect' or task = 'select' or task = 'pick') and propertyKey = 'state' and (entity.name = 'Requirement' or entity.name = 'Bug')) => componentName = StatusComponent [com.webobjects.directtoweb.Assignment], 
-    50 : ((task = 'list' or task = 'select' or task = 'pick') and (entity.name = 'Bug' or entity.name = 'Requirement')) => displayPropertyKeys = (state, priority, featureRequest, read, bugid, entityName, owner, subject, dateModified, dateSubmitted
+    50 : ((task = 'list' or task = 'select' or task = 'pick') and (entity.name = 'Bug' or entity.name = 'Requirement')) => displayPropertyKeys = (bugid, state, priority, featureRequest, read, entityName, owner, subject, dateModified, dateSubmitted
 ) [com.webobjects.directtoweb.Assignment], 
     50 : (task = 'inspect' and (entity.name = 'Bug' or entity.name = 'Requirement')) => displayPropertyKeys = ("( )", dateModified, dateSubmitted, state, priority, featureRequest, component, read, subject, "(description)", textDescription, "(TestItems)", testItems, "(Comments)", sortedComments, newText
 ) [com.webobjects.directtoweb.Assignment], 
@@ -85,12 +87,22 @@
 } [com.webobjects.directtoweb.Assignment], 
     100 : *true* => showBanner = false [com.webobjects.directtoweb.BooleanAssignment], 
     100 : *true* => usesDistinct = true [com.webobjects.directtoweb.BooleanAssignment], 
+    100 : parentPageConfiguration != null => actions = {
+} [com.webobjects.directtoweb.Assignment], 
     100 : entity.name = 'Bug' => templateString = ListBugDescription [com.webobjects.directtoweb.Assignment], 
     100 : entity.name = 'Bug' => extraListComponentName = ERDDisplayTemplateString [com.webobjects.directtoweb.Assignment], 
+    100 : parentPageConfiguration != null => headerComponentName = ERXEmptyComponent [com.webobjects.directtoweb.Assignment], 
+    100 : entity.name = 'Bug' => massModificationPageConfiguration = EditMassModifyBug [com.webobjects.directtoweb.Assignment], 
     100 : pageConfiguration = 'ListMyTestItem' => displayPropertyKeys = (state, dateCreated, title) [com.webobjects.directtoweb.Assignment], 
+    100 : pageConfiguration = 'EditMassModifyBug' => displayPropertyKeys = (owner, state, priority, newText) [com.webobjects.directtoweb.Assignment], 
+    100 : (task = 'list' and entity.name = 'TestItem') => displayPropertyKeys = (state, owner, dateCreated, title, controlled) [com.webobjects.directtoweb.Assignment], 
     100 : pageConfiguration = 'ListComponent' => displayPropertyKeys = (textDescription, owner, "bugs.count", "requirements.count", "testItems.count") [com.webobjects.directtoweb.Assignment], 
-    100 : pageConfiguration = 'ListMyBug' => displayPropertyKeys = (state, priority, featureRequest, read, dateModified, dateSubmitted, bugid, subject
+    100 : pageConfiguration = 'ListMyBug' => displayPropertyKeys = (bugid, state, priority, featureRequest, read, dateModified, dateSubmitted, subject
 ) [com.webobjects.directtoweb.Assignment], 
+    100 : (task = 'inspect' and entity.name = 'Component' and (propertyKey = 'bugs' or propertyKey = 'requirements' or propertyKey = 'testItems')) => componentName = ERDList [com.webobjects.directtoweb.Assignment], 
+    100 : (task = 'inspect' and entity.name = 'Component' and (propertyKey = 'bugs' or propertyKey = 'requirements' or propertyKey = 'testItems')) => displayNameForProperty =  [com.webobjects.directtoweb.Assignment], 
     100 : (task = 'query' and entity.name = 'Bug') => displayPropertyKeys = ("(Common)", anyText, dateModified, dateSubmitted, featureRequest, priority, state, "(People)", owner, originator
+) [com.webobjects.directtoweb.Assignment], 
+    100 : (task = 'inspect' and entity.name = 'Component') => displayPropertyKeys = ("[Main]", "( )", parent, owner, "(bugs)", bugs, "(requirements)", requirements, "(testItems)", testItems
 ) [com.webobjects.directtoweb.Assignment]
 )

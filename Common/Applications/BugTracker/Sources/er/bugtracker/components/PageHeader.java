@@ -16,11 +16,15 @@ public class PageHeader extends ERDCustomComponent {
         super(context);
     }
     
-    public String explaination() {
+    public String explainationKey() {
         return valueForBinding("pageConfiguration") + ".explaination";
     }
     
-    public String header() {
+    public String titleKey() {
+        return valueForBinding("pageConfiguration") + ".title";
+    }
+    
+    public String title() {
         return (String) valueForBinding("displayNameForPageConfiguration");
     }
     
