@@ -168,22 +168,22 @@
                
                {
                    class = EOKeyValueQualifier;
-                   key = dateSubmitted;
-                   selectorName = isGreaterThan:;
+                   key = originator;
+                   selectorName = isEqualTo:;
                    value = 
                    {
-                       _key = date;
+                       _key = user;
                        class = EOQualifierVariable;
                    };
                }, 
                
                {
                    class = EOKeyValueQualifier;
-                   key = originator;
-                   selectorName = isEqualTo:;
+                   key = dateSubmitted;
+                   selectorName = isGreaterThan:;
                    value = 
                    {
-                       _key = user;
+                       _key = date;
                        class = EOQualifierVariable;
                    };
                }

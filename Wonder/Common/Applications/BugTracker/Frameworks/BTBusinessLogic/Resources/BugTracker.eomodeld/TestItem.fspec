@@ -29,7 +29,7 @@
                    {
                        class = EOKeyValueQualifier;
                        key = state.oid;
-                       selectorName = isNotEqualTo:;
+                       selectorName = isEqualTo:;
                        value = clsd;
                    };
                }
