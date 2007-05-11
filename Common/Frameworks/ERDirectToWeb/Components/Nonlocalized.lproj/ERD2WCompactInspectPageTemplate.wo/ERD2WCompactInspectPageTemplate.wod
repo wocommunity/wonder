@@ -11,6 +11,6 @@ Errors: ERXErrorDictionaryPanel {
 
 InspectPageRepetition: WOSwitchComponent {
 	WOComponentName = d2wContext.repetitionComponentName;
-	d2wContext = d2wContext;
+	d2wContext = localContext;
 	object = object;
 }
