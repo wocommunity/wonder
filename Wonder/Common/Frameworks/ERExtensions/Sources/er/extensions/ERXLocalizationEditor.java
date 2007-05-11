@@ -36,6 +36,7 @@ public class ERXLocalizationEditor extends WOComponent {
 	public String selectedFilename;
 	public String UNSET = new String("***UNSET***");
 	public WODisplayGroup displayGroup;
+	public String keyToAdd;
 	
     public ERXLocalizationEditor(WOContext context) {
         super(context);
@@ -44,6 +45,14 @@ public class ERXLocalizationEditor extends WOComponent {
         displayGroup.setNumberOfObjectsPerBatch(20);
         displayGroup.setDefaultStringMatchFormat("*%@*");
         displayGroup.setDefaultStringMatchOperator(EOQualifier.QualifierOperatorCaseInsensitiveLike.name());
+    }
+    
+    public void awake () {
+    	super.awake();
+    	this.keyToAdd = null;
+    	if (this.displayGroup != null) {
+    		this.displayGroup.setSelectedObject(null);
+    	}
     }
 
     public NSArray availableLanguages() {
@@ -110,11 +119,40 @@ public class ERXLocalizationEditor extends WOComponent {
     }
 
     public boolean isLargeEntry() {
-    	return currentValue().length() > 25 || currentValue().indexOf('\n') >= 0;
+    	String language = (String) availableLanguages().objectAtIndex(0);
+    	if (currentEntry.objectForKey(language) != null && (currentEntry.objectForKey(language).toString().length() > 25
+    			|| currentEntry.objectForKey(language).toString().indexOf('\n') >= 0)) {
+    		
+    		return true;
+    	}
+    	return false;
     }
     
-    public String cellColor() {
-    	return !hasCurrentValue() ?  "red" : null;
+    /**
+     * Returns a colored border style for unset values
+     * @return
+     */
+    public String highlightClass () {
+    	if (!hasCurrentValue()) {
+    		return "red";
+    	}
+    	else return "inputfield";
+    }
+    
+    /**
+     * Returns a width for the current columns
+     * @return
+     */
+    public String valueCellWidth () {
+    	int width = 100 / availableLanguages().count();
+    	return "" + width + "%";
+    }
+    
+    public int colspanForBatchNavigation () {
+    	if (availableLanguages() != null && availableLanguages().count() > 1) {
+    		return availableLanguages().count() - 1;
+    	}
+    	else return 1;
     }
     
     public String valueComponentName() {
@@ -184,5 +222,56 @@ public class ERXLocalizationEditor extends WOComponent {
     		}
     		currentEntry.setObjectForKey(newValue, currentLanguage);
      	}
+    }
+    
+    /**
+     * Sorts the entries ascending with the selected language, brings empty entries to the first batches
+     * 
+     * @return
+     */
+    public WOComponent sortEntries () {
+    	EOSortOrdering sortOrdering = EOSortOrdering.sortOrderingWithKey(this.currentLanguage, EOSortOrdering.CompareAscending);
+    	this.displayGroup.setSortOrderings(new NSArray(sortOrdering));
+    	this.displayGroup.qualifyDisplayGroup();
+    	
+    	return this.context().page();
+    }
+    
+    /**
+     * Add an entry to the array of objects
+     * 
+     * @return
+     */
+    public WOComponent addEntry () {
+    	if (this.keyToAdd != null && this.data != null && this.displayGroup != null) {
+	    	NSMutableDictionary entry = new NSMutableDictionary();
+	    	
+	    	entry.setObjectForKey(keyToAdd, "key");
+	    	
+	    	for (int i = 0; i < this.availableLanguages().count(); i++) {
+	    		entry.setObjectForKey(UNSET, this.availableLanguages().objectAtIndex(i));
+	    	}
+	    	
+	    	this.data.addObject(entry);
+	    	this.displayGroup.setObjectArray(data);
+	    	this.displayGroup.qualifyDataSource();
+	    	this.displayGroup.setSelectedObject(entry);
+	    	this.displayGroup.displayBatchContainingSelectedObject();
+    	}
+    	return this.context().page();
+    }
+    
+    /**
+     * Removes the current entry from all languages
+     * 
+     * @return
+     */
+    public WOComponent removeEntry () {
+    	if (this.currentEntry != null) {
+    		this.data.removeObject(currentEntry);
+    		this.displayGroup.setObjectArray(data);
+    		this.displayGroup.qualifyDisplayGroup();
+    	}
+    	return this.context().page();
     }
 }
