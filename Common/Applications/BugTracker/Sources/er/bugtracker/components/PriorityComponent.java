@@ -22,7 +22,7 @@ public class PriorityComponent extends ERDCustomComponent {
     public String key;
     
     public String name() {
-        return ERXLocalizer.currentLocalizer().localizedStringForKeyWithDefault(object.state().description());
+        return ERXLocalizer.currentLocalizer().localizedStringForKeyWithDefault(object.priority().textDescription());
     }
 
     public String filename() {

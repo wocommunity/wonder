@@ -1,9 +1,11 @@
-
-
-
 Image: WOImage {
     width=16;
     height=16;
     border=0;
     filename=filename;
+}
+
+
+Name:WOString {
+	value=name;
 }
