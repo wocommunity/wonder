@@ -22,12 +22,6 @@ ShowResults: WOConditional {
 	condition = showResults;
 }
 
-HeaderTemplate: ERXLocalizedString {
-	object = self;
-	otherObject = d2wContext;
-	templateString = headerTemplate;
-}
-
 Help: ERDDebuggingHelp {
 	d2wContext = d2wContext;
 }

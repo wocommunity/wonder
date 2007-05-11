@@ -1,8 +1,14 @@
 <webobject name=PageWrapper>
 	<webobject name=Help></webobject>
 	<table class="ListTable">
+			<tr>
+				<td class="Header"><webobject name=Header></webobject></td>
+			</tr>
 		<tr>
-			<td class="Header"><webobject name=ERDBannerComponent2></webobject><webobject name=Header></webobject></td>
+			<td class="TopActions">
+				<webobject name=ShowCancel><webobject name=BackLink><webobject name=ReturnButton></webobject></webobject></webobject>
+				<webobject name=ShowPrint><webobject name=ERPrinterButton></webobject></webobject><webobject name = "MassMofidy"></webobject><webobject name = "Filter"></webobject>
+			</td>
 		</tr>
 		<webobject name=ListNotEmpty>
 			<tr>

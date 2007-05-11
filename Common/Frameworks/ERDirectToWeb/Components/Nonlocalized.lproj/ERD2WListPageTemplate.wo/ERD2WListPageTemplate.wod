@@ -43,6 +43,16 @@ ListEmpty: WOConditional {
 	condition = isListEmpty;
 }
 
+
+MassMofidy : ERDMassModifyButton {
+	d2wContext = localContext;
+	list = displayGroup.displayedObjects;
+}
+Filter : ERDFilterDisplayGroupButton {
+	displayGroup = displayGroup;
+	entityName=d2wContext.entity.name;
+	allowsFiltering = d2wContext.allowsFiltering;
+}
 ListNotEmpty: WOConditional {
 	condition = isListEmpty;
 	negate = true;
@@ -61,6 +71,7 @@ NavigationBar: WOSwitchComponent {
 	width = "100%";
     d2wContext = d2wContext;
 	bgcolor = d2wContext.backgroundColorForTable;
+	tableClass = "NavigationBar";
 }
 
 PageWrapper: WOSwitchComponent {
