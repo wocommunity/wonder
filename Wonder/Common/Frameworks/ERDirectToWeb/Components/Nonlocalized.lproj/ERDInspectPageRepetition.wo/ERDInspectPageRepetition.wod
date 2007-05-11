@@ -34,7 +34,7 @@ HasPropertyName: WOConditional {
 }
 
 HasSectionName: ERXNonZeroConditional {
-	condition = currentSection.name.length;
+	condition = currentSection.name.trim.length;
 }
 
 HasntPropertyName: WOConditional {
