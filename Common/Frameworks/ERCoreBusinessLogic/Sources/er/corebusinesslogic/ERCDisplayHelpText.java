@@ -21,24 +21,33 @@ public class ERCDisplayHelpText extends ERXStatelessComponent {
     }
 
     public boolean showCreate() {
-    	return showActions() && helpText() == null;
+    	return showActions() && helpText() == null && true;
     }
 
     public boolean showEdit() {
-    	return showActions() && helpText() != null;
+    	return showActions() && helpText() != null && true;
     }
     
     public boolean showActions() {
     	return true;
     }
     
+	private String prefix() {
+		return (String) valueForBinding("prefix");
+	}
+    
 	private String key() {
+		String prefix = prefix();
+		if(prefix() != null) {
+			return prefix() + "." + valueForBinding("key");
+		}
 		return (String) valueForBinding("key");
 	}
 	
 	public WOComponent createHelpText() {
 		EditPageInterface page = D2W.factory().editPageForNewObjectWithEntityNamed(ERCHelpText.ENTITY, session());
 		((WOComponent) page).takeValueForKeyPath(key(), "object." + ERCHelpText.Key.KEY);
+		((WOComponent) page).takeValueForKeyPath(defaultValue(), "object." + ERCHelpText.Key.VALUE);
 		page.setNextPage(context().page());
 		return (WOComponent) page;
 	}
@@ -49,5 +58,13 @@ public class ERCDisplayHelpText extends ERXStatelessComponent {
 		page.setObject(eo);
 		page.setNextPage(context().page());
 		return (WOComponent) page;
+	}
+	
+	public String defaultValue() {
+		String value = (String) valueForBinding("defaultValue");
+		if(value == null) {
+			value = "";
+		}
+		return value;
 	}
 }

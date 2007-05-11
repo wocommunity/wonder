@@ -1,7 +1,6 @@
 HelpText : ERXLocalizedString {
 	value = helpText.value;
-	// key = "value";
-	valueWhenEmpty = "";
+	valueWhenEmpty = defaultValue;
 }
 
 ShowCreate : WOConditional {
