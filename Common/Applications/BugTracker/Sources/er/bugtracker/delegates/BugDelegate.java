@@ -16,7 +16,7 @@ public class BugDelegate extends BranchDelegate {
 
     protected NSArray defaultBranchChoices(D2WContext context) {
         NSArray result = super.defaultBranchChoices(context);
-        log.info("in: " + result);
+        log.debug("in: " + result);
          Bug bug = (Bug)object(context);
         // AK: this is just an illustration
         if(!bug.state().equals(State.ANALYZE)) {
@@ -31,7 +31,7 @@ public class BugDelegate extends BranchDelegate {
         if(!bug.state().equals(State.VERIFY)) {
             result = choiceByRemovingKeys(new NSArray("reject"), result);
         }
-        log.info("out: " + result + " -> " + bug.state().textDescription());
+        log.debug("out: " + result + " -> " + bug.state().textDescription());
         return result;
     }
 

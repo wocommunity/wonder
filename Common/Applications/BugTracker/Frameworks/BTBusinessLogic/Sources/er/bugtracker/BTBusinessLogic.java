@@ -194,7 +194,7 @@ delete from TEST_ITEM;
                     bug.setTextDescription(randomText(3));
                     bug.setPriority(randomPriority());
                     bug.setState(randomState());
-                    bug.setFeatureRequest(i % 4 == 0);
+                    bug.setFeatureRequest(new Boolean(i % 4 == 0));
                     bug.setTargetRelease(randomRelease());
 
                     addComments(bug);
@@ -215,7 +215,7 @@ delete from TEST_ITEM;
                     bug.setTextDescription(randomText(3));
                     bug.setPriority(randomPriority());
                     bug.setState(randomState());
-                    bug.setFeatureRequest(i % 4 == 0);
+                    bug.setFeatureRequest(new Boolean(i % 4 == 0));
                     bug.setTargetRelease(randomRelease());
                     
                     bug.setRequirementType(randomRequirementType());
