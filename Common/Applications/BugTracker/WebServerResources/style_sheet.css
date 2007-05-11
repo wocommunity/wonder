@@ -89,9 +89,19 @@ body {
 	text-align: center;
 }
 
-.ListRepetition {
+.ListRepetitionRow td {
+	background-color: #efefef;
 }
 
+.ListRepetitionRow {
+	
+	border-bottom: 1px solid black;
+}
+
+.ListRepetitionRow tr {
+	
+	border-bottom: 0px solid black;
+}
 
 .QueryTable {
 	float: left;
@@ -126,4 +136,35 @@ select {
 
 .ERD2WQueryOperatorPopup {
 	width: 180px;
+}
+
+.ERDControllerButtonLinkList li {
+	display: inline;
+}
+
+td.Section {
+    background-color: #cccccc;
+    padding: 5px 10px 5px 5px;
+    border-bottom : 1px solid Black;
+    border-top : 1px solid Black;
+}
+
+.QueryTable .PropertyTable {
+    width: 100%;
+    background-color: #E7E7E7;
+	padding: 5px 10px 5px 5px;
+}
+
+.QueryTable .PropertyTable {
+    margin-top: 5px;
+}
+
+.PropertyNameCell {
+    background-color: #E7E7E7;
+    padding: 0px 10px 0px 5px;
+    width:180px;
+}
+
+.PropertyNameCell .required {
+    color: white;
 }
