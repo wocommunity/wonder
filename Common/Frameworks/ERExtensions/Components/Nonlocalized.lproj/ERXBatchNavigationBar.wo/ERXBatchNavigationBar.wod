@@ -1,13 +1,8 @@
-BatchForm: WOForm {
-}
-
 BatchNumber: WOTextField {
 	numberformat = "0";
 	size = 3;
 	value = currentBatchIndex;
-}
-
-BatchNumberForm: WOForm {
+	onChange = simulateHiddenButtonClick;
 }
 
 Conditional1: WOConditional {
@@ -19,6 +14,10 @@ Content: WOComponentContent {
 
 DGHasQualifier: ERXNonNullConditional {
 	condition = displayGroup.qualifier;
+}
+
+ERXOptionalForm1: ERXOptionalForm {
+	multipleSubmit = true;
 }
 
 EntityName3: ERXPluralString {
@@ -55,6 +54,16 @@ FontContainer5: WOGenericContainer {
 	elementName = "FONT";
 }
 
+HiddenUpdateButton: WOImageButton {
+	border = 0;
+	filename = "lft-OSarw.gif";
+	framework = "JavaWOExtensions";
+	height = 1;
+	width = 1;
+	ID = hiddenImageButtonId;
+	action = refresh;
+}
+
 Image1: WOImage {
 	filename = "s.gif";
 	framework = "ERExtensions";
@@ -76,9 +85,7 @@ ItemsPerBatch: WOTextField {
 	numberformat = "0";
 	size = 3;
 	value = numberOfObjectsPerBatch;
-}
-
-KeyForm: WOForm {
+	onChange = simulateHiddenButtonClick;
 }
 
 LeftArrow: WOImage {

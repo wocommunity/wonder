@@ -10,6 +10,12 @@ package er.extensions;
 // 1) User typing null for either number of objects per batch or the page number
 // 2) When resetting the number of items per batch the page first page displayed would be the last page.
 
+// dscheck: 5/10/2007
+// I changed the component to use the ERXOptionalForm component allowig ERXBatchNavigationBar to also work within an existing form.
+// This seems to be a better approach than always having to change the rule to use ERXBatchNavigationBarInForm when a form already exists.
+// The component uses a hidden WOImageButton and javascript onChange to simulate clicking the button when the either textfield value is changed.
+// This ensures that the default action for an existing form is not invoked when the user changes the value and hits enter.
+ 
 import com.webobjects.foundation.*;
 import com.webobjects.appserver.*;
 import com.webobjects.eocontrol.*;
@@ -26,7 +32,8 @@ import com.webobjects.eoaccess.*;
  * @binding bgcolor
  * @binding textColor
  * @binding sortKeyList
- */
+ * @binding showForm
+*/
 
 public class ERXBatchNavigationBar extends WOComponent {
 
@@ -35,6 +42,7 @@ public class ERXBatchNavigationBar extends WOComponent {
 
     /** Contains a string that names the notification posted when the batch size changes */
     public final static String BatchSizeChanged = "BatchSizeChanged";
+    private String _buttonId=null;
 
     /** Public constructor */
     public ERXBatchNavigationBar(WOContext aContext) {
@@ -49,6 +57,7 @@ public class ERXBatchNavigationBar extends WOComponent {
     public void reset() {
         super.reset();
         _displayGroup = null;
+        _buttonId = null;
     }
     
     public void appendToResponse(WOResponse response, WOContext context) {
@@ -125,4 +134,20 @@ public class ERXBatchNavigationBar extends WOComponent {
             return displayGroup().allObjects().count();
         }
     }
+
+    public WOComponent refresh() {
+        return null;
+    }
+
+    public String hiddenImageButtonId() {
+        if (_buttonId == null)
+            _buttonId = context().elementID()+".hiddenBatchNavButton";
+
+        return _buttonId;
+    }
+
+    public String simulateHiddenButtonClick() {
+        return "return document.getElementById('"+hiddenImageButtonId()+"').click();";
+    }
+
 }
