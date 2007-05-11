@@ -4,8 +4,8 @@
     adaptorName = JDBC;
     connectionDictionary = 
     {
-        password = "";
         URL = jdbc:mysql://localhost/bug;
+        password = "";
         username = root;
     };
     entities = 
@@ -100,13 +100,6 @@
        State, 
        TestItemState
     );
-    internalInfo = 
-    {
-        _deletedEntityNamesInObjectStore = 
-        (
-           Bug
-        );
-    };
     userInfo = 
     {
         _EntityModeler = 
