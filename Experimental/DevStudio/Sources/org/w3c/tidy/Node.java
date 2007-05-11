@@ -15,7 +15,7 @@ package org.w3c.tidy;
  * HTML Tidy Release 4 Aug 2000</a>
  *
  * @author  Dave Raggett <dsr@w3.org>
- * @author  Andy Quick <ac.quick@sympatico.ca> (translation to Java)
+ * @author  Andy Quick &lt;ac.quick@sympatico.ca> (translation to Java)
  * @version 1.0, 1999/05/22
  * @version 1.0.1, 1999/05/29
  * @version 1.1, 1999/06/18 Java Bean
