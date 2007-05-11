@@ -38,7 +38,7 @@ public class ERDListOrganizer extends ERDCustomEditComponent {
     protected NSMutableArray selectedObjects;   
     public NSMutableArray selectedChosenObjects;
     public NSArray chosenObjects;
-    public Object chosenObject;    
+    public ERXKeyValuePair chosenObject;    
     protected String chosenKeyPaths;
     public String entityForReportName;
 
