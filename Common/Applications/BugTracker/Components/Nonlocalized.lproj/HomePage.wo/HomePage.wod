@@ -9,7 +9,7 @@ myBugList: CollapsibleList {
 	noItemsString = "HomePage.noOpenBug";
 	bgcolor = "#ffffff";
 	entityName = "Bug";
-	pageConfiguration = "ListMyBugs";
+	pageConfiguration = "ListMyBug";
 }
 
 openRequirements: CollapsibleList {
@@ -19,6 +19,7 @@ openRequirements: CollapsibleList {
 	noItemsString = "HomePage.noRequirement";
 	bgcolor = "#ffffff";
 	entityName = "Requirement";
+	pageConfiguration = "ListOpenRequirement";
 }
 
 testItemList: CollapsibleList {
@@ -28,6 +29,7 @@ testItemList: CollapsibleList {
 	noItemsString = "HomePage.noTestItem";
 	bgcolor = "#ffffff";
 	entityName = "TestItem";
+	pageConfiguration = "ListMyTestItem";
 }
 
 unreadBugList: CollapsibleList {
@@ -37,5 +39,5 @@ unreadBugList: CollapsibleList {
 	noItemsString = "HomePage.noUnreadBug";
 	bgcolor = "#ffffff";
 	entityName = "Bug";
-	pageConfiguration = "ListMyBugs";
+	pageConfiguration = "ListMyBug";
 }
