@@ -38,6 +38,8 @@ public class ERCDisplayHelpText extends ERXStatelessComponent {
 	
 	public WOComponent createHelpText() {
 		EditPageInterface page = D2W.factory().editPageForNewObjectWithEntityNamed(ERCHelpText.ENTITY, session());
+		((WOComponent) page).takeValueForKeyPath(key(), "object." + ERCHelpText.Key.KEY);
+		page.setNextPage(context().page());
 		return (WOComponent) page;
 	}
 	
@@ -45,6 +47,7 @@ public class ERCDisplayHelpText extends ERXStatelessComponent {
 		EditPageInterface page = D2W.factory().editPageForEntityNamed(ERCHelpText.ENTITY, session());
 		EOEnterpriseObject eo = ERXEOControlUtilities.editableInstanceOfObject(helpText(), false);
 		page.setObject(eo);
+		page.setNextPage(context().page());
 		return (WOComponent) page;
 	}
 }

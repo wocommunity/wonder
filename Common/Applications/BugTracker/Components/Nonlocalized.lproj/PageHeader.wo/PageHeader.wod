@@ -2,6 +2,11 @@ Title : WOString {
 	value = header;
 }
 
+CMS : ERCDisplayHelpText {
+	context = localContext;
+	key = explaination;
+}
+
 Explaination : ERXLocalizedString {
 	value = explaination;
 	valueWhenEmpty = "";
