@@ -169,3 +169,16 @@ td2: WOGenericContainer {
    width=1;
    class = "tabBorder";
 }
+
+HasTabs: WOConditional {
+	condition=tabs.count;
+}
+
+HasNoTabs: WOConditional {
+	condition=tabs.count;
+	negate = true;
+}
+
+Debug : WOString {
+	value = tabs.count;
+}
