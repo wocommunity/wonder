@@ -10,8 +10,10 @@ import com.webobjects.directtoweb.InspectPageInterface;
 import com.webobjects.directtoweb.ListPageInterface;
 import com.webobjects.directtoweb.NextPageDelegate;
 import com.webobjects.directtoweb.QueryPageInterface;
+import com.webobjects.eoaccess.EOAttribute;
 import com.webobjects.eoaccess.EODatabaseDataSource;
 import com.webobjects.eocontrol.EOAndQualifier;
+import com.webobjects.eocontrol.EOArrayDataSource;
 import com.webobjects.eocontrol.EODataSource;
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.eocontrol.EOEnterpriseObject;
@@ -24,6 +26,7 @@ import com.webobjects.foundation.NSKeyValueCoding;
 
 import er.directtoweb.ERD2WFactory;
 import er.directtoweb.ERD2WInspectPage;
+import er.directtoweb.ERD2WQueryPage;
 import er.extensions.ERXEC;
 import er.extensions.ERXExtensions;
 import er.extensions.ERXStringUtilities;
@@ -164,8 +167,16 @@ public class Factory extends ERD2WFactory implements NSKeyValueCoding {
      }
 
     public WOComponent listMyRequirements() {
-        EODatabaseDataSource ds = new EODatabaseDataSource(ERXEC.newEditingContext(), "Requirement");
-        return (WOComponent) listPageNamed("ListRequirement", ds);
+    	EOEditingContext ec = ERXEC.newEditingContext();
+		ec.lock();
+		try {
+	        NSArray array = Requirement.clazz.myRequirementsWithUser(ec, People.clazz.currentUser(ec));
+	        EOArrayDataSource ds = Requirement.clazz.newArrayDataSource(ec);
+	        ds.setArray(array);
+	        return (WOComponent) listPageNamed("ListMyRequirement", ds);
+		} finally {
+			ec.unlock();
+		}
     }
 
     public WOComponent queryRequirements() {
@@ -182,8 +193,16 @@ public class Factory extends ERD2WFactory implements NSKeyValueCoding {
     }
 
     public WOComponent listMyTestItems() {
-        EODatabaseDataSource ds = new EODatabaseDataSource(ERXEC.newEditingContext(), "TestItem");
-        return (WOComponent) listPageNamed("ListMyTestItem", ds);
+    	EOEditingContext ec = ERXEC.newEditingContext();
+		ec.lock();
+		try {
+	        NSArray array = TestItem.clazz.unclosedTestItemsWithUser(ec, People.clazz.currentUser(ec));
+	        EOArrayDataSource ds = TestItem.clazz.newArrayDataSource(ec);
+	        ds.setArray(array);
+	        return (WOComponent) listPageNamed("ListMyTestItem", ds);
+		} finally {
+			ec.unlock();
+		}
     }
 
     public WOComponent queryTestItems() {
@@ -275,12 +294,16 @@ public class Factory extends ERD2WFactory implements NSKeyValueCoding {
         	return (WOComponent) listPageNamed("ListMyBug", ds);
 
         } finally {
-            ec.unlock();
+        	ec.unlock();
         }
     }
 
     public WOComponent queryBugs() {
-        return (WOComponent) pageForConfigurationNamed("QueryBug");
+    	ERD2WQueryPage page = (ERD2WQueryPage) pageForConfigurationNamed("QueryBug");
+    	page.setQueryMatchForKey(new NSArray(Priority.CRITICAL), EOQualifier.QualifierOperatorEqual.name(), "priority");
+    	page.setQueryMatchForKey(new NSArray(People.clazz.currentUser(session().defaultEditingContext())), EOQualifier.QualifierOperatorEqual.name(), "originator");
+    	page.setShowResults(true);
+    	return page;
     }
 
 }

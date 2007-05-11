@@ -211,6 +211,16 @@ public class Bug extends _Bug implements Markable {
     public void close() {
         setState(State.CLOSED);
     }
+
+	public void reopen() {
+		setState(State.ANALYZE);
+		setOwner(previousOwner());
+	}
+
+	public void rejectVerification() {
+		setState(State.ANALYZE);
+		setOwner(previousOwner());
+	}
 }
 
 
