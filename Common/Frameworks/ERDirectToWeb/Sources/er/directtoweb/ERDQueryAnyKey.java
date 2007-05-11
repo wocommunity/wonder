@@ -8,6 +8,7 @@ import com.webobjects.eocontrol.EOQualifier;
 import com.webobjects.foundation.NSArray;
 
 import er.extensions.ERXDisplayGroup;
+import er.extensions.ERXEOAccessUtilities;
 import er.extensions.ERXEOControlUtilities;
 import er.extensions.ERXRegExQualifier;
 
@@ -37,7 +38,11 @@ public class ERDQueryAnyKey extends ERDCustomQueryComponent {
     }
     
     public NSArray queryAttributes() {
-        return (NSArray)valueForBinding("queryAttributes");
+    	NSArray result = (NSArray)valueForBinding("queryAttributes");
+    	if(result == null) {
+    		result = ERXEOControlUtilities.stringAttributeListForEntityNamed(session().defaultEditingContext(), (String) valueForBinding("entityName"));
+    	}
+        return result;
     }
     
     public void setValue(Object newValue) {
