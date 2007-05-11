@@ -808,6 +808,12 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
                 tabSectionsContents = ERDirectToWeb.convertedPropertyKeyArray(tabSectionContentsFromRule, '[', ']');
                 for (Enumeration e = tabSectionsContents.objectEnumerator(); e.hasMoreElements();) {
                     ERD2WContainer tab = (ERD2WContainer) e.nextElement();
+                    if(tab.displayName == null) {
+                    	tab.displayName = "Main";
+                    }
+                    if(tab.name.length() == 0) {
+                    	tab.name = "Main";
+                    }
                     tab.keys = ERDirectToWeb.convertedPropertyKeyArray(tab.keys, '(', ')');
                 }
             }
