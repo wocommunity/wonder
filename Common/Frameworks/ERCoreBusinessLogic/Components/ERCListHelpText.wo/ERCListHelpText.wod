@@ -1,0 +1,17 @@
+List : WORepetition {
+	list = keys;
+	item = key;
+}
+
+Edit : WOHyperlink {
+	action = edit;
+}
+
+Key : WOString {
+	value = key;
+}
+
+Mark : WOGenericContainer {
+	elementName = "i";
+	omitTags = text.value.length;
+}
