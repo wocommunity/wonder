@@ -60,6 +60,12 @@
         </ant>
     </target>
     
+		<target name="plugins">
+			<ant antFile="Build/build/build.xml" target="plugins.all">
+				<property name="build.action" value="build" />
+			</ant>
+		</target>
+			
     <target name="usage">
         <echo message="please use the sequence:" />
         <echo message="  ant frameworks" />
