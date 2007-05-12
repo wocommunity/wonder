@@ -337,7 +337,7 @@ WOInstanceHandle ac_findInstance(WOApp *app, char *number)
 int ac_authorizeAppListing(WOURLComponents *wc) {
     int result = 0;
 
-    if ((wc->applicationName.start != NULL) && (strncmp(wc->applicationName.start, "WOAdaptorInfo", wc->applicationName.length) == 0)) {
+    if ((wc->applicationName.start != NULL) && (strcmp(wc->applicationName.start, "WOAdaptorInfo") == 0)) {
         if (WOAdaptorInfo_username != NULL && strcmp(WOAdaptorInfo_username, "public") == 0) {
            /* if user is "public", return success */
            result = 1;
