@@ -75,7 +75,7 @@ public class Application extends ERXApplication {
         try { 
             databaseName = (String) model.name();
             EOEntity release = model.entityNamed("Release");
-            if(model.connectionDictionary().toString().toLowerCase().contains("mysql")) {
+            if(model.connectionDictionary().toString().toLowerCase().indexOf("mysql") >= 0) {
             	release.setExternalName("`RELEASE`");
             }
         } catch (Exception ex) {
