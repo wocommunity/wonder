@@ -6,9 +6,11 @@ import com.webobjects.appserver.WOContext;
 import com.webobjects.directtoweb.D2W;
 import com.webobjects.directtoweb.EditPageInterface;
 import com.webobjects.eocontrol.EOEnterpriseObject;
+import com.webobjects.foundation.NSMutableArray;
 
 import er.extensions.ERXEOControlUtilities;
 import er.extensions.ERXStatelessComponent;
+import er.extensions.ERXThreadStorage;
 
 public class ERCDisplayHelpText extends ERXStatelessComponent {
 
@@ -17,19 +19,23 @@ public class ERCDisplayHelpText extends ERXStatelessComponent {
     }
 
     public ERCHelpText helpText() {
-    	return ERCHelpText.clazz.helpTextForKey(session().defaultEditingContext(), key());
+    	ERCHelpText text = ERCHelpText.clazz.helpTextForKey(session().defaultEditingContext(), key());
+    	if(!textsOnPage().containsObject(key())) {
+    		textsOnPage().addObject(key());
+    	}
+    	return text;
     }
 
     public boolean showCreate() {
-    	return showActions() && helpText() == null && true;
+    	return showActions() && helpText() == null;
     }
 
     public boolean showEdit() {
-    	return showActions() && helpText() != null && true;
+    	return showActions() && helpText() != null;
     }
     
     public boolean showActions() {
-    	return true;
+    	return false;
     }
     
 	private String prefix() {
@@ -66,5 +72,15 @@ public class ERCDisplayHelpText extends ERXStatelessComponent {
 			value = "";
 		}
 		return value;
+	}
+
+	public static NSMutableArray textsOnPage() {
+		String key = "ERCDisplayHelpText.textsOnPage";
+		NSMutableArray textsOnPage = (NSMutableArray) ERXThreadStorage.valueForKey(key);
+		if(textsOnPage == null) {
+			textsOnPage = new NSMutableArray();
+			ERXThreadStorage.takeValueForKey(textsOnPage, key);
+		}
+		return textsOnPage;
 	}
 }
