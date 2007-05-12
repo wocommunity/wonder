@@ -3,6 +3,10 @@ ERD2WDebugFlags : ERD2WDebugFlags {
 	context = d2wContext;
 }
 
+HelpTexts : ERCListHelpText {
+	
+}
+
 IsDebug :WOConditional {
 	condition = application.isDevelopmentMode;
 }
