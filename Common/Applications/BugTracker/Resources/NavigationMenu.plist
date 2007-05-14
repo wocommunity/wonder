@@ -5,9 +5,9 @@
                 directActionName = "home";
                 children = session.navigationRootChoice;
                 childrenChoices = {
-                	"admin" = ("Bugs", "Components", "Requirements", "TestItems", "Releases", "Peoples", "Frameworks");
-                	"engineer" = ("Bugs", "Requirements", "TestItems");
-                	"none" = ();
+                	"admin" = ("Home", "LogOut", "MyInfo", "Bugs", "Components", "Requirements", "TestItems", "Releases", "Peoples", "Frameworks");
+                	"engineer" = ("Home", "LogOut", "MyInfo", "Bugs", "Requirements", "TestItems");
+                	"none" = ("Home", "LogOut", "MyInfo", "Bugs");
                 };
         },
         { 
@@ -18,6 +18,10 @@
                 name = "Home";
                 pageName = "HomePage";
         },
+        { 
+                name = "MyInfo";
+                action = "session.editMyInfo";
+        },
         {
                 name = "LogOut";
                 directActionClass = "DirectAction";
@@ -27,6 +31,7 @@
                 name = "Bugs";
                 action = "session.handlers.bugs.ListRecentBugs";
                 children = ("CreateBug", "QueryBugs", "ListRecentBugs", "ListMyBugs");
+                conditions = ();
         },
         {
                 name = "CreateBug";

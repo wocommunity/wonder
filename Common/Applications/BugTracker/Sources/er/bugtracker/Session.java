@@ -7,8 +7,11 @@
 
 package er.bugtracker;
 
+import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WOResponse;
+import com.webobjects.directtoweb.D2W;
+import com.webobjects.directtoweb.EditPageInterface;
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.eocontrol.EOEnterpriseObject;
 import com.webobjects.foundation.NSArray;
@@ -90,6 +93,16 @@ public class Session extends ERXSession {
     public void setDefaultEditingContext(EOEditingContext newEc) {
         super.setDefaultEditingContext(newEc);
     }
+    
+    
+    public WOComponent editMyInfo() {
+        EOEnterpriseObject user = user();
+        EditPageInterface epi = (EditPageInterface) D2W.factory().pageForConfigurationNamed("EditMyPeople", this);
+        epi.setObject(user);
+        epi.setNextPage(context().page());
+        return (WOComponent) epi;
+    }
+
 
     public NSArray indentedComponents() {
     	return Component.clazz.orderedComponents(defaultEditingContext());
