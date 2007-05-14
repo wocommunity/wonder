@@ -125,4 +125,13 @@ public interface IERXRestDelegate {
 	 * @throws ERXRestException if there is a general failure
 	 */
 	public void preprocess(EOEntity entity, NSArray objects, ERXRestContext context) throws ERXRestException;
+	
+	/**
+	 * Returns the per-entity rest delegate.
+	 * 
+	 * @param entity the entity
+	 * @return the per-entity rest delegate
+	 */
+	public IERXRestEntityDelegate entityDelegate(EOEntity entity);
+	
 }

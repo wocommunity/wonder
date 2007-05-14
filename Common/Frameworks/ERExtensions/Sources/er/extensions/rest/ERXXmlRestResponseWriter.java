@@ -1,5 +1,6 @@
 package er.extensions.rest;
 
+import java.text.ParseException;
 import java.util.Enumeration;
 
 import com.webobjects.appserver.WOResponse;
@@ -14,29 +15,8 @@ import com.webobjects.foundation.NSMutableSet;
 import er.extensions.ERXLocalizer;
 import er.extensions.ERXStringUtilities;
 
-public class ERXRestWriter {
-	public void appendToResponse(ERXRestContext context, WOResponse response, EOEntity entity, Object value, String type) throws ERXRestException, ERXRestSecurityException, ERXRestNotFoundException {
-		if ("txt".equalsIgnoreCase(type)) {
-			appendTextToResponse(context, response, entity, value);
-		}
-		else if ("xml".equalsIgnoreCase(type)) {
-			appendXmlToResponse(context, response, entity, value);
-		}
-		else {
-			appendUnhandledToResponse(context, response, entity, value, type);
-		}
-	}
-
-	public void appendUnhandledToResponse(ERXRestContext context, WOResponse response, EOEntity entity, Object value, String type) {
-		appendTextToResponse(context, response, entity, value);
-	}
-
-	public void appendTextToResponse(ERXRestContext restContext, WOResponse response, EOEntity entity, Object value) {
-		response.setHeader("text/plain", "Content-Type");
-		response.appendContentString(String.valueOf(value));
-	}
-
-	public void appendXmlToResponse(ERXRestContext context, WOResponse response, EOEntity entity, Object value) throws ERXRestException, ERXRestSecurityException, ERXRestNotFoundException {
+public class ERXXmlRestResponseWriter implements IERXRestResponseWriter {
+	public void appendToResponse(ERXRestContext context, WOResponse response, EOEntity entity, Object value) throws ERXRestException, ERXRestSecurityException, ERXRestNotFoundException, ParseException {
 		response.setHeader("text/xml", "Content-Type");
 		StringBuffer xmlBuffer = new StringBuffer();
 		if (value instanceof NSArray) {
@@ -55,7 +35,7 @@ public class ERXRestWriter {
 		}
 	}
 
-	protected void appendXmlToResponse(ERXRestContext context, WOResponse response, EOEntity entity, String arrayName, NSArray values, int indent, NSMutableSet visitedObjects) throws ERXRestException, ERXRestSecurityException, ERXRestNotFoundException {
+	protected void appendXmlToResponse(ERXRestContext context, WOResponse response, EOEntity entity, String arrayName, NSArray values, int indent, NSMutableSet visitedObjects) throws ERXRestException, ERXRestSecurityException, ERXRestNotFoundException, ParseException {
 		indent(response, indent);
 		response.appendContentString("<");
 		response.appendContentString(arrayName);
@@ -83,7 +63,7 @@ public class ERXRestWriter {
 		response.appendContentString("\n");
 	}
 
-	protected void appendXmlToResponse(ERXRestContext context, WOResponse response, EOEntity entity, String objectName, EOEnterpriseObject value, int indent, NSMutableSet visitedObjects) throws ERXRestException, ERXRestSecurityException, ERXRestNotFoundException {
+	protected void appendXmlToResponse(ERXRestContext context, WOResponse response, EOEntity entity, String objectName, EOEnterpriseObject value, int indent, NSMutableSet visitedObjects) throws ERXRestException, ERXRestSecurityException, ERXRestNotFoundException, ParseException {
 		indent(response, indent);
 		response.appendContentString("<");
 		response.appendContentString(objectName);
@@ -127,7 +107,8 @@ public class ERXRestWriter {
 						response.appendContentString(propertyName);
 						response.appendContentString(">");
 
-						String attributeValueStr = ERXStringUtilities.escapeNonXMLChars(propertyValue.toString());
+						String formattedPropertyValue = context.delegate().entityDelegate(entity).formatAttributeValue(entity, value, propertyName, propertyValue);
+						String attributeValueStr = ERXStringUtilities.escapeNonXMLChars(formattedPropertyValue);
 						response.appendContentString(attributeValueStr);
 
 						response.appendContentString("</");
