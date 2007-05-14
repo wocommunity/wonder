@@ -35,7 +35,7 @@ public class ERCDisplayHelpText extends ERXStatelessComponent {
     }
     
     public boolean showActions() {
-    	return false;
+    	return booleanValueForBinding("showActions", true);
     }
     
 	private String prefix() {
