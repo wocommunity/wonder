@@ -41,6 +41,7 @@ public class ERXRestRequestHandler extends WORequestHandler {
 		_authenticationDelegate = authenticationDelegate;
 		_delegate = delegate;
 		_entityResponseWriter = new NSMutableDictionary();
+		_defaultResponseWriter = defaultResponseWriter;
 		if (!ERXApplication.erxApplication().isDevelopmentMode()) {
 			throw new RuntimeException("You don't want to use this unless you're in development mode.");
 		}
