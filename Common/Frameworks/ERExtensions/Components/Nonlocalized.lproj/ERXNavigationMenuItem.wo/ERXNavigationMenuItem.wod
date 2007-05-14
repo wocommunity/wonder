@@ -30,3 +30,26 @@ Td: WOGenericContainer {
     id = navigationItemID;
     nowrap="nowrap";
 }
+
+li: WOGenericContainer { 
+    elementName = "li";
+    width = navigationItemWidth;
+    class = linkClass;
+    id = navigationItemID;
+    nowrap="nowrap";
+}
+
+
+MeetsDisplayConditions:WOConditional {
+condition=meetsDisplayConditions;
+}
+
+
+UsingTablesConditional:WOConditional {
+	condition=false;
+}
+
+
+NotUsingTablesConditional:WOConditional {
+condition=true;
+}

@@ -69,3 +69,12 @@ l3navObject: ERXNavigationMenuItem {
 	navigationItem = aNavigationItem;
     level=3;
 }
+
+UsingTablesConditional:WOConditional {
+	condition=false;
+}
+
+
+NotUsingTablesConditional:WOConditional {
+condition=true;
+}
