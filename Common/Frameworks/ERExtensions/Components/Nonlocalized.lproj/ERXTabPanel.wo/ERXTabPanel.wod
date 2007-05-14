@@ -1,4 +1,4 @@
-ComponentContent1: WOComponentContent {
+ComponentContent: WOComponentContent {
 }
 
 DoNotUseLinkForTabSwitch: WOConditional {
@@ -15,54 +15,15 @@ HasSubmitAction: WOConditional {
 	condition = ^useFormSubmit;
 }
 
-Hyperlink1: WOHyperlink {
-//WOElementName="a";
+switchSubmitTabLink: WOHyperlink {
 	class = cellTabClass;
-	 // "javascript:document.EditForm.submit();";
 	elementName = "A";
 	onClick = submitString;
     action = switchSubmitTab;
 }
 
-Image1: WOImage {
-	height = 2;
-	framework = "ERExtensions";
-	filename = "s.gif";
-}
-
-Image2: WOImage {
-	height = 1;
-	framework = "ERExtensions";
-	filename = "s.gif";
-	width = 1;
-}
-
-Image3: WOImage {
-	framework = "ERExtensions";
-	filename = "s.gif";
-}
-
-Image4: WOImage {
-	framework = "ERExtensions";
-	filename = "s.gif";
-}
-
-LeftTabImage: WOImage {
-	align = "baseline";
-	border = "0";
-	filename = leftTabImage;
-	framework = tabImageFramework;
-}
-
 NotSelectedTabConditional: WOConditional {
 	condition = isCellShaded;
-}
-
-RightTabImage: WOImage {
-	align = "baseline";
-	border = "0";
-	filename = rightTabImage;
-	framework = tabImageFramework;
 }
 
 SelectedTabConditional: WOConditional {
@@ -70,7 +31,7 @@ SelectedTabConditional: WOConditional {
 	negate = true;
 }
 
-SubmitButton1: WOSubmitButton {
+switchSubmitTab: WOSubmitButton {
 	action = switchSubmitTab;
 	name = currentTabNameWithoutSpaces;
 	style = "position:absolute; left:-1000px;";
@@ -78,41 +39,8 @@ SubmitButton1: WOSubmitButton {
 }
 
 TabContainer: WOGenericContainer { 
-	align = "center";
-	bgcolor = tabBgColor;
-	elementName = "td";
-	valign = "top";
-    otherTagString="NOWRAP";
+	elementName = "li";
     class = cellTabClass;
-}
-
-TabImage: WOActiveImage {
-	action = switchSubmitTab;
-	align = "absmiddle";
-	alt = "switch to this tab";
-	border = "0";
-	filename = "scrollDown.gif";
-	framework = "JavaWOExtensions";
-	height = "15";
-	width = "13";
-	name = currentTabNameWithoutSpaces;
-}
-
-TabImageContainer: WOGenericContainer 
-{
-	align = "baseline";
-	bgcolor = tabBgColor;
-	elementName = "td";
-	class = cellTabImageContainerClass;
-	valign = "top";
-}
-
-TabImageContainer2: WOGenericContainer {
-	align = "baseline";
-	bgcolor = tabBgColor;
-	elementName = "TD";
-	class = cellTabImageContainerClass;
-	valign = "top";
 }
 
 TabLink: WOHyperlink {
@@ -123,51 +51,20 @@ TabName: WOString {
 	value = currentTabName;
 }
 
-TabName3: WOString {
-	value = currentTabName;
-}
-
-TabName4: WOString {
-	value = currentTabName;
-}
-
-TabRepetition: WORepetition {
+Tabs: WORepetition {
 	item = currentTab;
 	list = tabs;
 }
 
-Table: WOGenericContainer {
-	border = 0;
-	cellpadding = 0;
-	cellspacing = 0;
-	elementName = "TABLE";
-	width = ^width;
+TabWrapper: WOGenericContainer {
+   elementName = "ul";
+   width = ^width;
    bgcolor=^bgcolor;
-   class = "tabTable";
-}
-
-UseLinkForTabSwitch: WOConditional {
-    condition=useLinkForTabSwitch;
-}
-
-td1: WOGenericContainer {
-   elementName="TD";
-   colspan=4;
-   bgcolor=^borderColor;
-   height=1;
-   class = "tabBorder";
+   class = "TabItems";
 }
 
 Wrapper: ERXUniquingWrapper {
 	id = selectedTabIdentifier;
-}
-
-td2: WOGenericContainer {
-   elementName="TD";
-   rowspan=6;
-   bgcolor=^borderColor;
-   width=1;
-   class = "tabBorder";
 }
 
 HasTabs: WOConditional {
@@ -179,6 +76,3 @@ HasNoTabs: WOConditional {
 	negate = true;
 }
 
-Debug : WOString {
-	value = tabs.count;
-}
