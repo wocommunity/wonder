@@ -1,10 +1,32 @@
 package er.extensions.rest;
 
+import java.text.ParseException;
+
 import com.webobjects.eoaccess.EOEntity;
 import com.webobjects.eocontrol.EOEnterpriseObject;
 import com.webobjects.foundation.NSArray;
 
-public class ERXDenyRestEntityDelegate extends ERXAbstractRestEntityDelegate {
+public class ERXDenyRestEntityDelegate implements IERXRestEntityDelegate {
+	public String formatAttributeValue(EOEntity entity, Object object, String attributeName, Object attributeValue) throws ParseException, ERXRestException {
+		return null;
+	}
+
+	public Object parseAttributeValue(EOEntity entity, Object object, String attributeName, String attributeValue) throws ParseException, ERXRestException {
+		return null;
+	}
+
+	public void takeValueForKey(EOEntity entity, Object obj, String propertyName, String value, ERXRestContext context) throws ParseException, ERXRestException {
+		// DO NOTHING
+	}
+
+	public Object valueForKey(EOEntity entity, Object obj, String propertyName, ERXRestContext context) {
+		return null;
+	}
+
+	public void delete(EOEntity entity, EOEnterpriseObject eo, ERXRestContext context) throws ERXRestException {
+		// DO NOTHING
+	}
+
 	public void updated(EOEntity entity, EOEnterpriseObject eo, ERXRestContext context) throws ERXRestException {
 		// DO NOTHING
 	}
@@ -14,6 +36,10 @@ public class ERXDenyRestEntityDelegate extends ERXAbstractRestEntityDelegate {
 	}
 
 	public boolean canUpdateProperty(EOEntity entity, EOEnterpriseObject eo, String propertyName, ERXRestContext context) {
+		return false;
+	}
+
+	public boolean displayPropertyDetails(EOEntity entity, EOEnterpriseObject eo, String propertyName) {
 		return false;
 	}
 
@@ -53,11 +79,7 @@ public class ERXDenyRestEntityDelegate extends ERXAbstractRestEntityDelegate {
 		return NSArray.EmptyArray;
 	}
 
-	public boolean isNextKeyVisible(EOEntity entity, Object value, String nextKey, ERXRestContext context) {
-		return false;
-	}
-
-	public ERXRestResult nextNonModelResult(EOEntity entity, Object value, String nextKey, String nextPath, boolean includeContent, ERXRestContext context) {
+	public ERXRestResult nextNonModelResult(ERXRestResult currentResult, boolean includeContent, ERXRestContext context) {
 		return null;
 	}
 }

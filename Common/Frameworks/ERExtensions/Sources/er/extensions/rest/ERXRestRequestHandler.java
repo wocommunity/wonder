@@ -13,7 +13,9 @@ import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WORequest;
 import com.webobjects.appserver.WORequestHandler;
 import com.webobjects.appserver.WOResponse;
+import com.webobjects.eoaccess.EOEntity;
 import com.webobjects.eocontrol.EOEditingContext;
+import com.webobjects.foundation.NSMutableDictionary;
 
 import er.extensions.ERXApplication;
 import er.extensions.ERXEC;
@@ -28,18 +30,36 @@ public class ERXRestRequestHandler extends WORequestHandler {
 
 	private IERXRestAuthenticationDelegate _authenticationDelegate;
 	private IERXRestDelegate _delegate;
+	private IERXRestResponseWriter _defaultResponseWriter;
+	private NSMutableDictionary _entityResponseWriter;
 
 	public ERXRestRequestHandler(IERXRestAuthenticationDelegate authenticationDelegate, IERXRestDelegate delegate) {
+		this(authenticationDelegate, delegate, new ERXXmlRestResponseWriter());
+	}
+
+	public ERXRestRequestHandler(IERXRestAuthenticationDelegate authenticationDelegate, IERXRestDelegate delegate, IERXRestResponseWriter defaultResponseWriter) {
 		_authenticationDelegate = authenticationDelegate;
 		_delegate = delegate;
+		_entityResponseWriter = new NSMutableDictionary();
 		if (!ERXApplication.erxApplication().isDevelopmentMode()) {
 			throw new RuntimeException("You don't want to use this unless you're in development mode.");
 		}
 	}
 
-	protected IERXRestResponseWriter responseWriter(String type) {
-		IERXRestResponseWriter restResponseWriter = new ERXXmlRestResponseWriter();
-		return restResponseWriter;
+	public void setResponseWriterForEntity(IERXRestResponseWriter responseWriter, EOEntity entity) {
+		_entityResponseWriter.setObjectForKey(responseWriter, entity);
+	}
+
+	public void removeResponseWriterForEntity(EOEntity entity) {
+		_entityResponseWriter.removeObjectForKey(entity);
+	}
+
+	protected IERXRestResponseWriter responseWriterForEntity(EOEntity entity) {
+		IERXRestResponseWriter responseWriter = (IERXRestResponseWriter) _entityResponseWriter.objectForKey(entity);
+		if (responseWriter == null) {
+			responseWriter = _defaultResponseWriter;
+		}
+		return responseWriter;
 	}
 
 	public WOResponse handleRequest(WORequest request) {
@@ -79,8 +99,8 @@ public class ERXRestRequestHandler extends WORequestHandler {
 				if ("GET".equalsIgnoreCase(method)) {
 					ERXRestResult restResult = initialResult.lastResult(restContext);
 
-					IERXRestResponseWriter restResponseWriter = responseWriter(type);
-					restResponseWriter.appendToResponse(restContext, response, restResult.entity(), restResult.value());
+					IERXRestResponseWriter restResponseWriter = responseWriterForEntity(restResult.entity());
+					restResponseWriter.appendToResponse(restContext, response, restResult);
 					editingContext.saveChanges();
 				}
 				else if ("DELETE".equalsIgnoreCase(method)) {
@@ -107,8 +127,8 @@ public class ERXRestRequestHandler extends WORequestHandler {
 					ERXRestResult insertedResult = _delegate.insert(nextToLastResult, insertDocument, restContext);
 					editingContext.saveChanges();
 
-					IERXRestResponseWriter restResponseWriter = responseWriter(type);
-					restResponseWriter.appendToResponse(restContext, response, insertedResult.entity(), insertedResult.value());
+					IERXRestResponseWriter restResponseWriter = responseWriterForEntity(restResult.entity());
+					restResponseWriter.appendToResponse(restContext, response, insertedResult);
 					response.setStatus(201);
 				}
 			}

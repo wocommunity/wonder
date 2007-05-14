@@ -21,12 +21,15 @@ import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 
-import er.extensions.ERXGuardedObjectInterface;
 import er.extensions.ERXLocalizer;
 
 public class ERXDefaultRestDelegate implements IERXRestDelegate {
 	private NSMutableDictionary _entityDelegates;
 	private IERXRestEntityDelegate _defaultDelegate;
+
+	public ERXDefaultRestDelegate() {
+		this(new ERXDenyRestEntityDelegate());
+	}
 
 	public ERXDefaultRestDelegate(IERXRestEntityDelegate defaultDelegate) {
 		_entityDelegates = new NSMutableDictionary();
@@ -93,7 +96,7 @@ public class ERXDefaultRestDelegate implements IERXRestDelegate {
 		String nodeName = insertDocumentElement.getNodeName();
 		if (entityName.equals(nodeName)) {
 			EOEnterpriseObject eo = insert(entity, insertDocumentElement, parentEntity, parentObject, parentKey, context);
-			insertResult = new ERXRestResult(entity, eo, null);
+			insertResult = new ERXRestResult(null, entity, eo, null);
 		}
 		else if (pluralEntityName.equals(nodeName)) {
 			NSMutableArray eos = new NSMutableArray();
@@ -103,7 +106,7 @@ public class ERXDefaultRestDelegate implements IERXRestDelegate {
 				EOEnterpriseObject eo = insert(entity, insertElement, parentEntity, parentObject, parentKey, context);
 				eos.addObject(eo);
 			}
-			insertResult = new ERXRestResult(entity, eos, null);
+			insertResult = new ERXRestResult(null, entity, eos, null);
 		}
 		else {
 			throw new ERXRestException("You attempted to put a " + nodeName + " into a " + entity.name() + ".");
@@ -284,15 +287,19 @@ public class ERXDefaultRestDelegate implements IERXRestDelegate {
 		}
 	}
 
-	public ERXRestResult nextResult(EOEntity entity, Object value, String nextKey, String nextPath, boolean includeContent, ERXRestContext context) throws ERXRestException, ERXRestSecurityException, ERXRestNotFoundException {
+	public ERXRestResult nextResult(ERXRestResult currentResult, boolean includeContent, ERXRestContext context) throws ERXRestException, ERXRestSecurityException, ERXRestNotFoundException {
+		EOEntity entity = currentResult.entity();
+		Object value = currentResult.value();
+		String nextKey = currentResult.nextKey();
 		ERXRestResult nextResult = null;
-		if (!entityDelegate(entity).isNextKeyVisible(entity, value, nextKey, context)) {
+		if (!entityDelegate(entity).canViewProperty(entity, value, nextKey, context)) {
 			throw new ERXRestSecurityException("You are not allowed to see the key '" + nextKey + "'..");
 		}
 		else {
+			String nextPath = currentResult.nextPath();
 			EORelationship relationship = entity.relationshipNamed(nextKey);
 			if (relationship == null) {
-				nextResult = entityDelegate(entity).nextNonModelResult(entity, value, nextKey, nextPath, includeContent, context);
+				nextResult = entityDelegate(entity).nextNonModelResult(currentResult, includeContent, context);
 			}
 			else {
 				if (!entityDelegate(entity).canViewProperty(entity, value, nextKey, context)) {
@@ -301,19 +308,22 @@ public class ERXDefaultRestDelegate implements IERXRestDelegate {
 
 				EOEntity nextEntity = relationship.destinationEntity();
 				if (includeContent) {
-					Object nextObj = entityDelegate(nextEntity).valueForKey(nextEntity, value, nextKey, context);
-					if (nextObj instanceof EOEnterpriseObject) {
-						if (entityDelegate(nextEntity).canViewObject(nextEntity, (EOEnterpriseObject) nextObj, context)) {
-							nextResult = new ERXRestResult(nextEntity, nextObj, nextPath);
-						}
+					Object nextObj = entityDelegate(entity).valueForKey(entity, value, nextKey, context);
+					if (nextObj == null) {
+						nextResult = new ERXRestResult(currentResult, nextEntity, nextObj, nextPath);
 					}
 					else if (nextObj instanceof NSArray) {
 						NSArray visibleObjects = entityDelegate(entity).visibleObjects(entity, value, nextKey, nextEntity, (NSArray) nextObj, context);
-						nextResult = new ERXRestResult(nextEntity, visibleObjects, nextPath);
+						nextResult = new ERXRestResult(currentResult, nextEntity, visibleObjects, nextPath);
+					}
+					else if (nextObj instanceof EOEnterpriseObject) {
+						if (entityDelegate(nextEntity).canViewObject(nextEntity, (EOEnterpriseObject) nextObj, context)) {
+							nextResult = new ERXRestResult(currentResult, nextEntity, nextObj, nextPath);
+						}
 					}
 				}
 				else {
-					nextResult = new ERXRestResult(nextEntity, null, nextPath);
+					nextResult = new ERXRestResult(currentResult, nextEntity, null, nextPath);
 				}
 			}
 		}
@@ -337,37 +347,21 @@ public class ERXDefaultRestDelegate implements IERXRestDelegate {
 			Enumeration valuesEnum = values.objectEnumerator();
 			while (valuesEnum.hasMoreElements()) {
 				EOEnterpriseObject eo = (EOEnterpriseObject) valuesEnum.nextElement();
-				boolean deleted = _delete(entity, eo, context);
-				if (!deleted) {
-					throw new ERXRestException("Failed to delete one of the request objects.");
-				}
+				delete(entity, eo, context);
 			}
 		}
 		else {
-			boolean deleted = _delete(entity, (EOEnterpriseObject) obj, context);
-			if (!deleted) {
-				throw new ERXRestException("Failed to delete the request object.");
-			}
+			delete(entity, (EOEnterpriseObject) obj, context);
 		}
 	}
 
-	protected boolean _delete(EOEntity entity, EOEnterpriseObject obj, ERXRestContext context) throws ERXRestException, ERXRestSecurityException {
-		boolean deleted = false;
-		if (!entityDelegate(entity).canDeleteObject(entity, obj, context)) {
+	protected void _delete(EOEntity entity, EOEnterpriseObject eo, ERXRestContext context) throws ERXRestException, ERXRestSecurityException {
+		if (!entityDelegate(entity).canDeleteObject(entity, eo, context)) {
 			throw new ERXRestSecurityException("You are not allowed to delete the given obj.");
 		}
 		else {
-			if (obj instanceof ERXGuardedObjectInterface) {
-				((ERXGuardedObjectInterface) obj).delete();
-				deleted = true;
-			}
-			else if (obj instanceof EOEnterpriseObject) {
-				EOEnterpriseObject eo = (EOEnterpriseObject) obj;
-				eo.editingContext().deleteObject(eo);
-				deleted = true;
-			}
+			entityDelegate(entity).delete(entity, eo, context);
 		}
-		return deleted;
 	}
 
 	public void addEntityDelegate(EOEntity entity, IERXRestEntityDelegate entityDelegate) {
@@ -376,10 +370,6 @@ public class ERXDefaultRestDelegate implements IERXRestDelegate {
 
 	public void removeEntityDelegate(EOEntity entity) {
 		_entityDelegates.removeObjectForKey(entity);
-	}
-
-	public NSArray displayPropertyNames(EOEntity entity, EOEnterpriseObject obj, ERXRestContext context) throws ERXRestException {
-		return entityDelegate(entity).displayPropertyNames(entity, obj, context);
 	}
 
 	public IERXRestEntityDelegate entityDelegate(EOEntity entity) {

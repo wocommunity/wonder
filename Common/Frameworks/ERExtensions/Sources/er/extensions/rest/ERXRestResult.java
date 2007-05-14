@@ -8,17 +8,20 @@ import com.webobjects.foundation.NSArray;
 import er.extensions.ERXStringUtilities;
 
 public class ERXRestResult {
+	private ERXRestResult _previousResult;
 	private EOEntity _entity;
 	private Object _value;
 	private String _nextKey;
 	private String _nextPath;
 	private boolean _nextKeyIsAll;
+	private ERXRestResult _nextResult;
 
 	public ERXRestResult(String keypath) {
-		this(null, null, keypath);
+		this(null, null, null, keypath);
 	}
 
-	public ERXRestResult(EOEntity entity, Object value, String keypath) {
+	public ERXRestResult(ERXRestResult previousResult, EOEntity entity, Object value, String keypath) {
+		_previousResult = previousResult;
 		_entity = entity;
 		_value = value;
 		initializePaths(keypath);
@@ -30,7 +33,46 @@ public class ERXRestResult {
 			}
 		}
 	}
-	
+
+	public ERXRestResult cloneResult() {
+		ERXRestResult previousCloneResult = null;
+		if (_previousResult != null) {
+			previousCloneResult = _previousResult.cloneResult();
+		}
+		ERXRestResult cloneResult = new ERXRestResult(previousCloneResult, _entity, _value, null);
+		cloneResult._nextKey = _nextKey;
+		cloneResult._nextPath = _nextPath;
+		cloneResult._nextKeyIsAll = _nextKeyIsAll;
+		if (previousCloneResult != null) {
+			previousCloneResult._nextResult = cloneResult;
+		}
+		return cloneResult;
+	}
+
+	public ERXRestResult extendResult(String keypath) {
+		ERXRestResult previousResult = null;
+		if (_previousResult != null) {
+			previousResult = _previousResult.cloneResult();
+			if (previousResult._nextPath == null) {
+				if (previousResult._nextKey == null) {
+					previousResult._nextKey = keypath;
+				}
+				else {
+					previousResult._nextPath = keypath;
+				}
+			}
+			else {
+				previousResult._nextPath += "/" + keypath;
+			}
+		}
+		ERXRestResult extendedResult = new ERXRestResult(previousResult, _entity, _value, keypath);
+		return extendedResult;
+	}
+
+	public ERXRestResult previousResult() {
+		return _previousResult;
+	}
+
 	public boolean isNextKeyIsAll() {
 		return _nextKeyIsAll;
 	}
@@ -54,6 +96,35 @@ public class ERXRestResult {
 			_nextKey = null;
 			_nextPath = null;
 		}
+	}
+
+	public String keypath(boolean skipGID, ERXRestContext context) throws ERXRestException, ERXRestNotFoundException, ERXRestSecurityException {
+		StringBuffer sb = new StringBuffer();
+		sb.append(_entity.name());
+		appendKey(sb, skipGID, context);
+		return sb.toString();
+	}
+
+	protected void appendKey(StringBuffer sb, boolean skipGID, ERXRestContext context) throws ERXRestException, ERXRestNotFoundException, ERXRestSecurityException {
+		if (_nextKey != null) {
+			boolean showKey = !skipGID || !isKeyGID();
+			if (showKey) {
+				sb.append("/");
+				sb.append(_nextKey);
+			}
+			nextResult(context, _nextPath != null).appendKey(sb, skipGID, context);
+		}
+	}
+
+	public ERXRestResult firstResult() {
+		ERXRestResult firstResult;
+		if (_previousResult == null) {
+			firstResult = this;
+		}
+		else {
+			firstResult = _previousResult.firstResult();
+		}
+		return firstResult;
 	}
 
 	public EOEntity entity() {
@@ -110,7 +181,7 @@ public class ERXRestResult {
 		return lastResult;
 	}
 
- 	public Object lastValue(ERXRestContext context) throws ERXRestException, ERXRestNotFoundException, ERXRestSecurityException {
+	public Object lastValue(ERXRestContext context) throws ERXRestException, ERXRestNotFoundException, ERXRestSecurityException {
 		ERXRestResult lastResult = lastResult(context);
 		return lastResult.value();
 	}
@@ -118,15 +189,18 @@ public class ERXRestResult {
 	public ERXRestResult nextResult(ERXRestContext context) throws ERXRestException, ERXRestNotFoundException, ERXRestSecurityException {
 		return nextResult(context, true);
 	}
-	
+
 	public ERXRestResult nextResult(ERXRestContext context, boolean includeContent) throws ERXRestException, ERXRestNotFoundException, ERXRestSecurityException {
 		ERXRestResult nextResult;
-		if (_nextKeyIsAll) {
+		if (_nextResult != null) {
+			nextResult = _nextResult;
+		}
+		else if (_nextKeyIsAll) {
 			NSArray objs = NSArray.EmptyArray;
 			if (includeContent) {
 				objs = context.delegate().objectsForEntity(_entity, context);
 			}
-			nextResult = new ERXRestResult(_entity, objs, _nextPath);
+			nextResult = new ERXRestResult(this, _entity, objs, _nextPath);
 		}
 		else if (isKeyGID()) {
 			EOEnterpriseObject nextEO = null;
@@ -142,14 +216,14 @@ public class ERXRestResult {
 					throw new ERXRestException("Unable to evaluate the id '" + _nextKey + "' on an object.");
 				}
 			}
-			nextResult = new ERXRestResult(_entity, nextEO, _nextPath);
+			nextResult = new ERXRestResult(this, _entity, nextEO, _nextPath);
 		}
 		else if (_value == null) {
-			throw new ERXRestException("Unable to evalute the key '" + _nextKey + "' without an object.");
+			throw new ERXRestException("Unable to evalute the key '" + _nextKey + "' on a " + _entity.name() + " without an object.");
 		}
 		else {
 			if (_nextKey != null) {
-				nextResult = context.delegate().nextResult(_entity, _value, _nextKey, _nextPath, includeContent, context);
+				nextResult = context.delegate().nextResult(this, includeContent, context);
 				if (nextResult == null) {
 					throw new ERXRestNotFoundException("You are not allowed to view the relationship '" + _nextKey + "' on '" + _entity.name() + "' for this path.");
 				}
@@ -157,6 +231,10 @@ public class ERXRestResult {
 			else {
 				throw new ERXRestException("Missing next key for entity '" + _entity.name() + "'.");
 			}
+		}
+
+		if (includeContent && _nextResult == null) {
+			_nextResult = nextResult;
 		}
 
 		return nextResult;
