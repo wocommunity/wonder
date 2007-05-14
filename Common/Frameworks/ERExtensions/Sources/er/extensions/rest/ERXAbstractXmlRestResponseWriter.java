@@ -41,7 +41,7 @@ public abstract class ERXAbstractXmlRestResponseWriter implements IERXRestRespon
 			arrayName = previousResult.nextKey();
 		}
 		NSArray values = (NSArray) result.value();
-		if (!arrayName.equals(entity.name())) {
+		if (arrayName.equals(entity.name())) {
 			arrayName = ERXLocalizer.currentLocalizer().plurifiedString(arrayName, 2);
 		}
 		response.appendContentString(arrayName);
