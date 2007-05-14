@@ -1,47 +1,14 @@
-
-<WEBOBJECT NAME="HasTabs"><webobject name=Table>
-	<tr valign=bottom>
-		<td width=1 bgcolor=#ffffff><webobject name=Image2></webobject></td>
-		<td align=left valign="top" bgcolor=#ffffff>
-			<table width=100% border=0 cellpadding=0 cellspacing=0>
-				<tr>
-					<webobject name=TabRepetition><webobject name="TabImageContainer"><webobject name=LeftTabImage></webobject></webobject><webobject name=TabContainer><webobject name=SelectedTabConditional><webobject name=TabName></webobject></webobject><webobject name=NotSelectedTabConditional><webobject name=HasSubmitAction>
-									<table cellpadding=0 cellspacing=0 border=0>
-										<tr>
-											<td nowrap><webobject name=UseLinkForTabSwitch><WEBOBJECT NAME=SubmitButton1></WEBOBJECT><webobject name=Hyperlink1><webobject name=TabName4></webobject></webobject></webobject><webobject name=DoNotUseLinkForTabSwitch><webobject name=TabImage></webobject>&nbsp;<webobject name=TabName4></webobject></webobject></td>
-										</tr>
-										<tr>
-											<td><webobject name=Image1></webobject></td>
-										</tr>
-									</table>
-								</webobject><webobject name=HasNoSubmitAction><webobject name=TabLink><webobject name=TabName3></webobject></webobject></webobject></webobject></webobject><webobject name=TabImageContainer2><webobject name=RightTabImage></webobject></webobject></webobject>
-					<td valign=bottom width=100% bgcolor=#ffffff>
-						<table height=1 width=100% border=0 cellpadding=0 cellspacing=0>
-							<tr>
-								<td class = "tabTopBorder"><webobject name=Image2></webobject></td>
-							</tr>
-						</table>
-					</td>
-				</tr>
-			</table>
-		</td>
-		<td bgcolor=#ffffff>
-			<table height=1 width=100% border=0 cellpadding=0 cellspacing=0>
-				<tr>
-					<td class = "tabTopBorder"><webobject name=Image2></webobject></td>
-				</tr>
-			</table>
-		</td>
-		<td width=1 bgcolor=#ffffff><webobject name=Image2></webobject></td>
-	</tr>
-	<tr>
-		<webobject name=td2>
-			<webobject name=Image3></webobject></webobject>
-		<td colspan=2><webobject name=Wrapper><webobject name=ComponentContent1></webobject></webobject></td>
-		<webobject name=td2>
-			<webobject name=Image4></webobject></webobject>
-	</tr>
-	<tr>
-		<webobject name=td1><webobject name=Image2></webobject></webobject>
-	</tr>
-</webobject></webobject><webobject name = "HasNoTabs"><webobject name=ComponentContent1></webobject></webobject><webobject name = "Debug"></webobject>
+<div class="ERXTabPanel"><webobject name="HasTabs"><div class="Tabs"><webobject name=TabWrapper><webobject name=Tabs>
+<webobject name=TabContainer>
+<webobject name=SelectedTabConditional><div><webobject name=TabName></webobject></div></webobject>
+<webobject name=NotSelectedTabConditional>
+	<webobject name=HasSubmitAction>
+		<webobject name=switchSubmitTab></webobject><webobject name=switchSubmitTabLink><div><webobject name=TabName></webobject></div></webobject>
+	</webobject>
+	<webobject name=HasNoSubmitAction><webobject name=TabLink><div><webobject name=TabName></webobject></div></webobject></webobject>
+</webobject>
+</webobject>
+</webobject></webobject></div>
+	<div class="TabContent"><webobject name=Wrapper><webobject name=ComponentContent></webobject></webobject></div>
+</webobject>
+<webobject name = "HasNoTabs"><div class="TabContent"><webobject name=ComponentContent></webobject></div></webobject></div>
