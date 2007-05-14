@@ -4,22 +4,66 @@
  *	that surrounds the desired portion; where '.element' is the
  *	style you wish to apply. Note how the '.' is removed.
  */
+#EditSimpleBug .PropertyTable {
+	
+}
+#EditSimpleBug .PropertyTable .PropertyNameCell {
+	height: 20px;
+	vertical-align: bottom;
+}
+
+#EditSimpleBug .PropertyTable .PropertyCell {
+	height: 30px;
+	vertical-align: top;
+}
+
+#EditSimpleBug .ListTable {
+	width: 100%;
+}
+
+#EditSimpleBug .ListRepetitionTable {
+	width: 100%;
+}
 
 /* Basic overall typography for the site. */
 body, li, td, p, br, form, input, text, select, option, textarea, th, ol, ul, table, blockquote {  
 	padding: 0px;
 	font-family: Arial, Geneva, sans-serif;
+	font-size: 11px;
 }
 
 a {
 	text-decoration: none;
 	font-weight: bold;
 	color: #0f0f0f;
-	padding: 5px 0px;
+}
+
+.CollapsibleList {
+	border-top: 1px solid #240203;
+}
+
+.CollapsibleList .ListTable {
+	width: 100%;
+}
+
+.CollapsibleList .ListRepetitionTable {
+	width: 100%;
 }
 
 a:hover {
 	text-decoration: underline;
+}
+
+.Greeting {
+	position: absolute;
+	left: 10px;
+	top: 30px;
+}
+
+.FindBug {
+	position: absolute;
+	left: 10px;
+	top: 5px;
 }
 
 .ContentTable {
@@ -27,7 +71,7 @@ a:hover {
 }
 
 form#ERDQuickSearch {
-	display: block;
+	display: none;
 	width: 450px;
 	vertical-align: baseline;
 }
@@ -48,12 +92,17 @@ body {
 	margin: 0px;
 }
 
-.Greeting {
-	position: absolute;
+.MenuHeader {
 }
 
 .MenuRow {
-	background-color: grey;
+	height: 24px;
+	background-color: #240203;
+}
+
+.TopRow {
+	height: 22px;
+	border-bottom: 1px solid #240203;
 }
 
 .Nav1Selected {
@@ -69,9 +118,11 @@ body {
 }
 	
 .HeaderRow {
-	background-color: blue;
+	background-color: #c80f07;
+	background-image: url(http://www.abstracto.de/cms/templates/abstracto/images/background_red.jpg);
 	color: white;
-	border-bottom: 5px solid green;
+	border-top: 5px solid #240203;
+	border-bottom: 4px solid orange;
 }
 
 .MainItems {
@@ -80,6 +131,8 @@ body {
 
 .HeaderRow A {
 	color: white;
+	text-transform: uppercase;
+	font-size: 10px;
 }
 
 .HeaderRow A:visited {
@@ -102,22 +155,18 @@ body {
 }
 
 .ListRepetitionRow td {
-	background-color: #efefef;
 }
 
 .ListRepetitionRow {
-	
-	border-bottom: 1px solid black;
+	border-top: 1px solid #240203;
 }
 
 .ListRepetitionRow tr {
-	
-	border-bottom: 0px solid black;
 }
 
 .QueryTable {
 	float: left;
-	border-right: 5px solid grey;
+	border-right: 5px solid #240203;
 	margin-right: 25px;
 }
 
@@ -125,7 +174,7 @@ body {
 	border-right: 0px;
 	margin-right: 0px;
 }
-
+/*
 .ERXNavigationMenu .Level1ItemTable, 
 .ERXNavigationMenu .Level2ItemTable, 
 .ERXNavigationMenu .Level3ItemTable {
@@ -141,6 +190,43 @@ body {
 	height: 16px;
 	padding: 5px;
 }
+*/
+.ERXNavigationMenu {
+	position: absolute;
+	top: 3px;
+	right: 0px;
+	text-align: right;
+}
+
+.ERXNavigationMenu ul {
+	display: block;
+	right: 0px;
+	padding: 5px 5px;
+	margin: 0px;
+}
+
+.ERXNavigationMenu ul li {
+	display: inline;
+	border-left: 1px solid #240203;
+	margin: 0px;
+	padding: 0px;
+	padding: 5px 5px;
+	border-bottom: 1px solid #240203;
+	border-top: 1px solid #240203;
+}
+
+.ERXNavigationMenu ul.Level2Items li {
+	border-top: 0px solid #240203;
+}
+
+.ERXNavigationMenu ul li:hover {
+	background-color: orange;
+}
+
+.ERXNavigationMenu ul li a {
+	display: inline;
+	padding: 0px;
+}
 
 select {
 	width: 300px;
@@ -150,15 +236,22 @@ select {
 	width: 180px;
 }
 
-.ERDControllerButtonLinkList li {
-	display: inline;
-}
-
 td.Section {
     background-color: #cccccc;
     padding: 5px 10px 5px 5px;
     border-bottom : 1px solid Black;
     border-top : 1px solid Black;
+}
+
+td.Banner {
+    background-color: #cccccc;
+    padding: 5px 10px 5px 5px;
+    border-bottom : 1px solid Black;
+    border-top : 1px solid Black;
+}
+
+.InspectTable .Section {
+    width: 600px;
 }
 
 .QueryTable .PropertyTable {
@@ -174,35 +267,38 @@ td.Section {
 .PropertyNameCell {
     background-color: #E7E7E7;
     padding: 0px 10px 0px 5px;
-    width:180px;
+    width:180px ! important;
+   	height: 2em;
 }
 
 .PropertyNameCell .required {
     color: white;
+    vertical-align: top;
+}
+
+.PropertyCell input {
+    vertical-align: top;
 }
 
 
-H1 
-{
+H1 {
     font-weight: bold;
-    font-size: 24px;
+    font-size: 18px;
     font-family: Arial, Sans-Serif;
     margin-bottom: 0px;
 }
 
-H2 
-{
+H2 {
     font-weight: bold;
-    font-size: 18px;
+    font-size: 16px;
     font-family: Arial, Sans-Serif;
     margin-top: 10px;
     margin-bottom: 0px;
 }
 
-H3 
-{
+H3 {
     font-weight: bold;
-    font-size: 16px;
+    font-size: 14px;
     font-family: Arial, Sans-Serif;
     margin-top: 10px;
     margin-bottom: 0px;
@@ -233,12 +329,8 @@ H6
     margin-bottom: 0px;
 }
 
-.NavigationBar table td {
-	background-color: none ! important;
-}
 
-
-.NavigationBar table {
+.NavigationBar {
 	background-color: #E7E7E7;
 	border-bottom: 1px solid black;
 	border-top: 1px solid black;
@@ -246,13 +338,23 @@ H6
 	padding-bottom: 15px;
 }
 
+.NavigationBar td {
+	padding: 5px;
+	padding-top: 10px;
+	background-color: none ! important;
+	vertical-align: top;
+}
+
+.NavigationBar td input {
+	position: relative;
+	top: -4px;
+}
 .ActionCell {
 	background-color: #E7E7E7;
 	margin-bottom: 5px;
 	padding-bottom: 0px;
 	vertical-align: middle;
 }
-
 
 .ActionCell ul {
 	height: 15px;
@@ -261,12 +363,130 @@ H6
 	padding-left: 5px;
 }
 
-.ListRepetitionHeaderRow td {
+.ListRepetitionHeaderRow th {
 	background-color: none ! important;
+	padding-bottom: 5px;
 }
-
 
 .ListRepetitionHeaderRow {
 	background-color: #efefef;
 	height: 40px;
+}
+
+.QueryRepetitionTable .requiredMarker {
+	display: none;
+}
+
+.QueryRepetitionTable .PropertyTable td {
+	padding: 0px 4px;
+}
+
+.PropertyName {
+	white-space: normal ! important;
+	text-align: center;
+}
+
+.HeaderCell td, .HeaderCell th {
+	ve-rtical-align: bottom;
+}
+
+.HeaderCell table {
+	padding-bottom: 4px;
+}
+.formcontainer td hr {
+	display: none;
+}
+
+.ERXTabPanel .Tabs {
+	margin-top: 16px;
+	margin-bottom: 6px;
+}
+
+.ERXTabPanel .TabItems {
+	display: inline;
+	background-color: #E7E7E7;
+	border-left: 1px solid black;
+	padding: 6px 0px;
+	margin-left: 6px;
+}
+
+.ERXTabPanel .TabItems li {
+	display: inline;
+	background-color: #E7E7E7;
+	border-right: 1px solid black;
+	border-top: 1px solid black;
+	padding: 6px 5px;
+	margin: 0px;
+	text-transform: uppercase;
+}
+
+.ERXTabPanel .TabItems li div {
+	border: 0px solid black;
+	display: inline;
+}
+
+.ERXTabPanel .TabContent {
+}
+
+.ERXTabPanel li.tab {
+	background-color: orange;
+}
+
+.ERDControllerButtonLinkList {
+	display: inline;
+	margin: 0px;
+	padding: 0px;
+}
+
+.ERDControllerButtonLinkList li {
+	display: inline;
+	margin: 0px;
+	padding: 0px;
+}
+
+.ERDControllerButtonLinkList li a {
+	padding: 0px 5px;
+}
+
+.AttributeRow0 {
+	background-color: none;
+}
+
+.AttributeRow1 {
+	background-color: blue;
+}
+
+button {
+	background-color: #4b0000;
+	color: white;
+	width: 80px;
+	text-align: center;
+}
+
+.Actions {
+	text-align: right;
+}
+
+.ERXSubmitButton a {
+	color: buttontext;
+	cursor: default;
+	background-color: #4b0000;
+	border-style: outset;
+	border-width: 2px;
+	border-top-color: buttonface;
+	border-left-color: buttonface;
+	border-right-color: buttonshadow;
+	border-bottom-color: buttonshadow;
+	padding: 0px 6px;
+	margin: 5px;
+	font-size: small;
+	font-family: sans-serif;
+	line-height: normal !important;
+}
+
+.ERXSubmitButton a:active {
+	border-top-color: buttonshadow;
+	border-left-color: buttonshadow;
+	border-right-color: buttonface;
+	border-bottom-color: buttonface;
 }
