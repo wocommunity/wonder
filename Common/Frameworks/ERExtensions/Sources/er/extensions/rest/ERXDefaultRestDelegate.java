@@ -313,7 +313,7 @@ public class ERXDefaultRestDelegate implements IERXRestDelegate {
 						nextResult = new ERXRestResult(currentResult, nextEntity, nextObj, nextPath);
 					}
 					else if (nextObj instanceof NSArray) {
-						NSArray visibleObjects = entityDelegate(entity).visibleObjects(entity, value, nextKey, nextEntity, (NSArray) nextObj, context);
+						NSArray visibleObjects = entityDelegate(nextEntity).visibleObjects(entity, value, nextKey, nextEntity, (NSArray) nextObj, context);
 						nextResult = new ERXRestResult(currentResult, nextEntity, visibleObjects, nextPath);
 					}
 					else if (nextObj instanceof EOEnterpriseObject) {
