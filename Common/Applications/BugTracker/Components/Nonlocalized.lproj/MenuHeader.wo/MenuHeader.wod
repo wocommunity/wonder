@@ -11,6 +11,7 @@ QuickSearch : ERDQuickSearch {
 
 findBugByNumber: WOForm {
   action= findBugByNumber;
+  style = "display: inline";
 }
 
 isAdmin: WOConditional {

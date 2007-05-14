@@ -7,6 +7,10 @@ HelpTexts : ERCListHelpText {
 	
 }
 
+Behaviours : AjaxBehaviour {
+		
+}
+
 IsDebug :WOConditional {
 	condition = application.isDevelopmentMode;
 }
