@@ -54,8 +54,7 @@ public class ERDAttributeRepetition extends ERDCustomComponent {
     }
     
     public boolean hasPropertyName() {
-        String displayNameForProperty=(String)d2wContext().valueForKey("displayNameForProperty");
-        return displayNameForProperty!=null && displayNameForProperty.length()>0;
+        return booleanValueForBinding("hidePropertyName");
     }
 
     public NSArray displayPropertyKeys() {
