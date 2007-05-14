@@ -11,8 +11,6 @@ import org.apache.log4j.Logger;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WORequest;
 import com.webobjects.directtoweb.D2WStatelessComponent;
-import com.webobjects.eoaccess.EOAttribute;
-import com.webobjects.eoaccess.EORelationship;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
 
@@ -101,31 +99,16 @@ public class ERD2WPropertyName extends D2WStatelessComponent {
     public String width() { return hasPropertyName() ? "148" : null; }
 
     public boolean hasPropertyName() {
-        String displayNameForProperty=displayNameForProperty();
-        return displayNameForProperty!=null && displayNameForProperty.length()>0;
+        return !ERXValueUtilities.booleanValue(d2wContext().valueForKey("hidePropertyName"));
     }
 
     public boolean displayRequiredMarker() {
-        boolean displayRequiredMarker = false;
-        // avoiding attribute() and relationship() because of lame-ass caching scheme on D2WContext
-        String task = (String)d2wContext().valueForKey("task");
-        if (task==null || task.equals("edit")) {
-            if (!ERXValueUtilities.booleanValue(d2wContext().valueForKey("isMandatory"))) {
-                EOAttribute a=(EOAttribute)d2wContext().valueForKey("smartAttribute");
-                if (a!=null)
-                    displayRequiredMarker = !a.allowsNull();
-                else {
-                    EORelationship r=(EORelationship)d2wContext().valueForKey("smartRelationship");
-                    if (r!=null) displayRequiredMarker = r.isMandatory();
-                }                
-            } else
-                displayRequiredMarker = true;
-        }
-        return displayRequiredMarker;
+    	boolean displayRequiredMarker = ERXValueUtilities.booleanValue(d2wContext().valueForKey("displayRequiredMarker"));
+    	return displayRequiredMarker;
     }
 
     public void takeValuesFromRequest(WORequest r, WOContext c) {
-        // no form values in here!
+    	// no form values in here!
     }
 
     public boolean validationExceptionOccurredForPropertyKey() {
