@@ -37,6 +37,11 @@ public class ERXRestRequestHandler extends WORequestHandler {
 		}
 	}
 
+	protected IERXRestResponseWriter responseWriter(String type) {
+		IERXRestResponseWriter restResponseWriter = new ERXXmlRestResponseWriter();
+		return restResponseWriter;
+	}
+
 	public WOResponse handleRequest(WORequest request) {
 		WOApplication application = WOApplication.application();
 		WOContext woContext = application.createContextForRequest(request);
@@ -74,8 +79,8 @@ public class ERXRestRequestHandler extends WORequestHandler {
 				if ("GET".equalsIgnoreCase(method)) {
 					ERXRestResult restResult = initialResult.lastResult(restContext);
 
-					ERXRestWriter restHandler = new ERXRestWriter();
-					restHandler.appendToResponse(restContext, response, restResult.entity(), restResult.value(), type);
+					IERXRestResponseWriter restResponseWriter = responseWriter(type);
+					restResponseWriter.appendToResponse(restContext, response, restResult.entity(), restResult.value());
 					editingContext.saveChanges();
 				}
 				else if ("DELETE".equalsIgnoreCase(method)) {
@@ -102,8 +107,9 @@ public class ERXRestRequestHandler extends WORequestHandler {
 					ERXRestResult insertedResult = _delegate.insert(nextToLastResult, insertDocument, restContext);
 					editingContext.saveChanges();
 
-					ERXRestWriter restHandler = new ERXRestWriter();
-					restHandler.appendToResponse(restContext, response, insertedResult.entity(), insertedResult.value(), type);
+					IERXRestResponseWriter restResponseWriter = responseWriter(type);
+					restResponseWriter.appendToResponse(restContext, response, insertedResult.entity(), insertedResult.value());
+					response.setStatus(201);
 				}
 			}
 			finally {
@@ -112,17 +118,17 @@ public class ERXRestRequestHandler extends WORequestHandler {
 		}
 		catch (ERXRestNotFoundException e) {
 			response.setStatus(404);
-			response.setContent(e.getMessage());
+			response.setContent(e.getMessage() + "\n");
 			ERXRestRequestHandler.log.error("Request failed.", e);
 		}
 		catch (ERXRestSecurityException e) {
 			response.setStatus(403);
-			response.setContent(e.getMessage());
+			response.setContent(e.getMessage() + "\n");
 			ERXRestRequestHandler.log.error("Request failed.", e);
 		}
 		catch (Exception e) {
 			response.setStatus(500);
-			response.setContent(e.getMessage());
+			response.setContent(e.getMessage() + "\n");
 			ERXRestRequestHandler.log.error("Request failed.", e);
 		}
 		finally {
