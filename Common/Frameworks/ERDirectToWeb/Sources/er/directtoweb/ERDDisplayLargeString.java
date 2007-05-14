@@ -9,4 +9,11 @@ public class ERDDisplayLargeString extends ERDCustomEditComponent {
         super(context);
     }
 
+    public boolean synchronizesVariablesWithBindings() {
+     	return false;
+    }
+
+    public boolean isStateless() {
+     	return true;
+    }
 }
