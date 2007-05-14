@@ -10,7 +10,7 @@ import com.webobjects.eocontrol.EOFetchSpecification;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSMutableArray;
 
-public class ERXUnsafeRestEntityDelegate implements IERXRestEntityDelegate {
+public class ERXUnsafeRestEntityDelegate extends ERXAbstractRestEntityDelegate {
 	public void updated(EOEntity entity, EOEnterpriseObject eo, ERXRestContext context) throws ERXRestException {
 		// DO NOTHING
 	}
@@ -19,11 +19,11 @@ public class ERXUnsafeRestEntityDelegate implements IERXRestEntityDelegate {
 		// DO NOTHING
 	}
 
-	public boolean canUpdateProperty(EOEntity entity, EOEnterpriseObject obj, String propertyName, ERXRestContext context) {
-		return displayPropertyNames(entity, obj, context).containsObject(propertyName);
+	public boolean canUpdateProperty(EOEntity entity, EOEnterpriseObject eo, String propertyName, ERXRestContext context) {
+		return displayPropertyNames(entity, eo, context).containsObject(propertyName);
 	}
 
-	public NSArray displayPropertyNames(EOEntity entity, EOEnterpriseObject obj, ERXRestContext context) {
+	public NSArray displayPropertyNames(EOEntity entity, EOEnterpriseObject eo, ERXRestContext context) {
 		NSMutableArray displayPropertyNames = new NSMutableArray();
 		NSArray classProperties = entity.classProperties();
 		Enumeration attributesEnum = entity.attributes().objectEnumerator();
@@ -59,15 +59,15 @@ public class ERXUnsafeRestEntityDelegate implements IERXRestEntityDelegate {
 		return true;
 	}
 
-	public boolean canDeleteObject(EOEntity entity, EOEnterpriseObject obj, ERXRestContext context) {
+	public boolean canDeleteObject(EOEntity entity, EOEnterpriseObject eo, ERXRestContext context) {
 		return true;
 	}
 
-	public boolean canUpdateObject(EOEntity entity, EOEnterpriseObject obj, ERXRestContext context) {
+	public boolean canUpdateObject(EOEntity entity, EOEnterpriseObject eo, ERXRestContext context) {
 		return true;
 	}
 
-	public boolean canViewObject(EOEntity entity, EOEnterpriseObject obj, ERXRestContext context) {
+	public boolean canViewObject(EOEntity entity, EOEnterpriseObject eo, ERXRestContext context) {
 		return true;
 	}
 
