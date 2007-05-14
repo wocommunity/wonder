@@ -91,10 +91,7 @@ public interface IERXRestDelegate {
 	 * Returns the next ERXRestResult for the given key on the given object.  This method is very similar to 
 	 * NSKeyValueCoding.Utility.valueForKey(..) except that ERXRestResult encapsulates more metadata.
 	 * 
-	 * @param entity the entity of the current value
-	 * @param value the current value (NSArray of EOEnterpriseObject)
-	 * @param nextKey the next key in the path
-	 * @param nextPath the rest of the keypath after nextKey
+	 * @param currentResult the current rest result to key off of
 	 * @param includeContent if false, don't actually perform the fetch for the next value
 	 * @param context the rest context
 	 * @return the next ERXRestResult
@@ -102,19 +99,7 @@ public interface IERXRestDelegate {
 	 * @throws ERXRestSecurityException if the user attempts to view objects that he/she is not permitted to view
 	 * @throws ERXRestNotFoundException if the next path does not exist
 	 */
-	public ERXRestResult nextResult(EOEntity entity, Object value, String nextKey, String nextPath, boolean includeContent, ERXRestContext context) throws ERXRestException, ERXRestSecurityException, ERXRestNotFoundException;
-
-	/**
-	 * Returns the list of property names that should be displayed for the given object.
-	 * 
-	 * @param entity the entity of the object
-	 * @param obj the current EO
-	 * @param context the rest context
-	 * @return the array of property names to display
-	 * @throws ERXRestException if there is a general failure
-	 * @throws ERXRestSecurityException if the user attempts to view objects that he/she is not permitted to view
-	 */
-	public NSArray displayPropertyNames(EOEntity entity, EOEnterpriseObject obj, ERXRestContext context) throws ERXRestException;
+	public ERXRestResult nextResult(ERXRestResult currentResult, boolean includeContent, ERXRestContext context) throws ERXRestException, ERXRestSecurityException, ERXRestNotFoundException;
 
 	/**
 	 * Called before enumerating the given array of objects for display.  This provides an
