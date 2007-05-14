@@ -20,14 +20,10 @@ public class ERXUnsafeRestEntityDelegate extends ERXAbstractRestEntityDelegate {
 	}
 
 	public boolean canUpdateProperty(EOEntity entity, EOEnterpriseObject eo, String propertyName, ERXRestContext context) {
-		return displayPropertyNames(entity, eo, context).containsObject(propertyName);
-	}
-
-	public boolean displayPropertyDetails(EOEntity entity, EOEnterpriseObject eo, String propertyName) {
-		return true;
+		return allPropertyNames(entity, eo, context).containsObject(propertyName);
 	}
 	
-	public NSArray displayPropertyNames(EOEntity entity, EOEnterpriseObject eo, ERXRestContext context) {
+	public NSArray allPropertyNames(EOEntity entity, EOEnterpriseObject eo, ERXRestContext context) {
 		NSMutableArray displayPropertyNames = new NSMutableArray();
 		NSArray classProperties = entity.classProperties();
 		Enumeration attributesEnum = entity.attributes().objectEnumerator();
