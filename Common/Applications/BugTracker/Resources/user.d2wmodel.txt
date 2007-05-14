@@ -125,5 +125,7 @@
     110 : pageConfiguration = 'EditSimpleBug' => pageName = NEUInspectPage [com.webobjects.directtoweb.Assignment], 
     110 : (pageConfiguration = 'EditSimpleBug' and propertyKey = 'comments') => componentName = D2WDisplayToMany [com.webobjects.directtoweb.Assignment], 
     110 : pageConfiguration = 'EditSimpleBug' => displayPropertyKeys = (dateSubmitted, dateModified, state, priority, owner, originator, previousOwner, subject, textDescription, comments
-) [com.webobjects.directtoweb.Assignment]
+) [com.webobjects.directtoweb.Assignment], 
+    120 : (task = 'list' and (propertyKey = 'subject' or propertyKey = 'textDescription')) => length = 50 [com.webobjects.directtoweb.Assignment], 
+    120 : (task = 'list' and (propertyKey = 'subject' or propertyKey = 'textDescription')) => componentName = ERDDisplayLargeString [com.webobjects.directtoweb.Assignment]
 )
