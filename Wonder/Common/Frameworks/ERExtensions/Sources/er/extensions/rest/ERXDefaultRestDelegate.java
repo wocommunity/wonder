@@ -1,6 +1,5 @@
 package er.extensions.rest;
 
-import java.math.BigDecimal;
 import java.text.ParseException;
 import java.util.Enumeration;
 
@@ -10,22 +9,17 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.w3c.dom.Text;
 
-import com.webobjects.eoaccess.EOAttribute;
 import com.webobjects.eoaccess.EOEntity;
 import com.webobjects.eoaccess.EORelationship;
 import com.webobjects.eoaccess.EOUtilities;
 import com.webobjects.eocontrol.EOEnterpriseObject;
 import com.webobjects.eocontrol.EOFetchSpecification;
 import com.webobjects.eocontrol.EOKeyGlobalID;
-import com.webobjects.eocontrol.EOKeyValueCoding;
 import com.webobjects.eocontrol.EOKeyValueQualifier;
 import com.webobjects.eocontrol.EOQualifier;
 import com.webobjects.foundation.NSArray;
-import com.webobjects.foundation.NSKeyValueCoding;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
-import com.webobjects.foundation.NSTimestamp;
-import com.webobjects.foundation.NSTimestampFormatter;
 
 import er.extensions.ERXGuardedObjectInterface;
 import er.extensions.ERXLocalizer;
@@ -45,7 +39,7 @@ public class ERXDefaultRestDelegate implements IERXRestDelegate {
 		EOFetchSpecification singleFetchSpec = new EOFetchSpecification(entity.name(), pkQualifier, null);
 		NSArray objs = context.editingContext().objectsWithFetchSpecification(singleFetchSpec);
 		if (objs.count() == 0) {
-			throw new ERXRestNotFoundException("There is no " + entity.name() + " with the id " + gid + ".");
+			throw new ERXRestNotFoundException("There is no " + entity.name() + " with the id '" + key + "'.");
 		}
 		EOEnterpriseObject obj = (EOEnterpriseObject) objs.objectAtIndex(0);
 		if (!entityDelegate(entity).canViewObject(entity, obj, context)) {
@@ -59,7 +53,7 @@ public class ERXDefaultRestDelegate implements IERXRestDelegate {
 		EOQualifier pkQualifier = new EOKeyValueQualifier("primaryKey", EOQualifier.QualifierOperatorEqual, key);
 		NSArray filteredObjs = EOQualifier.filteredArrayWithQualifier(objs, pkQualifier);
 		if (filteredObjs.count() == 0) {
-			throw new ERXRestNotFoundException("There is no " + entity.name() + " in this relationship with the id " + key + ".");
+			throw new ERXRestNotFoundException("There is no " + entity.name() + " in this relationship with the id '" + key + "'.");
 		}
 		EOEnterpriseObject obj = (EOEnterpriseObject) objs.objectAtIndex(0);
 		if (!entityDelegate(entity).canViewObject(entity, obj, context)) {
@@ -206,7 +200,7 @@ public class ERXDefaultRestDelegate implements IERXRestDelegate {
 			if (relationship != null) {
 				EOEntity destinationEntity = relationship.destinationEntity();
 				if (!relationship.isToMany()) {
-					EOEnterpriseObject originalObject = (EOEnterpriseObject) eo.valueForKey(attributeName);
+					EOEnterpriseObject originalObject = (EOEnterpriseObject) entityDelegate(entity).valueForKey(entity, eo, attributeName, context);
 					Node idNode = attributeNode.getAttributes().getNamedItem("id");
 					if (idNode == null) {
 						eo.removeObjectFromBothSidesOfRelationshipWithKey(originalObject, attributeName);
@@ -226,7 +220,7 @@ public class ERXDefaultRestDelegate implements IERXRestDelegate {
 					}
 				}
 				else {
-					NSArray currentObjects = (NSArray) eo.valueForKey(attributeName);
+					NSArray currentObjects = (NSArray) entityDelegate(entity).valueForKey(entity, eo, attributeName, context);
 					NodeList toManyNodes = attributeNode.getChildNodes();
 					updateArray(eo, attributeName, destinationEntity, currentObjects, toManyNodes, context);
 				}
@@ -241,69 +235,13 @@ public class ERXDefaultRestDelegate implements IERXRestDelegate {
 					attributeValue = attributeChildNodes.item(0).getNodeValue();
 				}
 				try {
-					Object parsedAttributeValue = parseAttributeValue(entity, eo, attributeName, attributeValue);
-					EOKeyValueCoding.Utility.takeStoredValueForKey(eo, parsedAttributeValue, attributeName);
+					entityDelegate(entity).takeValueForKey(entity, eo, attributeName, attributeValue, context);
 				}
 				catch (ParseException e) {
 					throw new ERXRestException("Failed to parse attribute value '" + attributeValue + "'.", e);
 				}
 			}
 		}
-	}
-
-	protected Object parseAttributeValue(EOEntity entity, Object object, String attributeName, String attributeValue) throws ParseException, ERXRestException {
-		NSKeyValueCoding._KeyBinding binding = NSKeyValueCoding.DefaultImplementation._keyGetBindingForKey(object, attributeName);
-		Class valueType = binding.valueType();
-
-		Object parsedValue;
-		if (attributeValue == null || attributeValue.length() == 0) {
-			EOAttribute attribute = entity.attributeNamed(attributeName);
-			if (attribute != null && !attribute.allowsNull() && String.class.isAssignableFrom(valueType)) {
-				parsedValue = "";
-			}
-			else {
-				parsedValue = EOKeyValueCoding.NullValue;
-			}
-		}
-		else {
-			if (String.class.isAssignableFrom(valueType)) {
-				parsedValue = attributeValue;
-			}
-			else if (Boolean.class.isAssignableFrom(valueType)) {
-				parsedValue = Boolean.valueOf(attributeValue);
-			}
-			else if (Character.class.isAssignableFrom(valueType)) {
-				parsedValue = new Character(attributeValue.charAt(0));
-			}
-			else if (Byte.class.isAssignableFrom(valueType)) {
-				parsedValue = Byte.valueOf(attributeValue);
-			}
-			else if (BigDecimal.class.isAssignableFrom(valueType)) {
-				parsedValue = new BigDecimal(attributeValue);
-			}
-			else if (Integer.class.isAssignableFrom(valueType)) {
-				parsedValue = Integer.valueOf(attributeValue);
-			}
-			else if (Short.class.isAssignableFrom(valueType)) {
-				parsedValue = Short.valueOf(attributeValue);
-			}
-			else if (Long.class.isAssignableFrom(valueType)) {
-				parsedValue = Long.valueOf(attributeValue);
-			}
-			else if (Float.class.isAssignableFrom(valueType)) {
-				parsedValue = Float.valueOf(attributeValue);
-			}
-			else if (Double.class.isAssignableFrom(valueType)) {
-				parsedValue = Double.valueOf(attributeValue);
-			}
-			else if (NSTimestamp.class.isAssignableFrom(valueType)) {
-				parsedValue = new NSTimestampFormatter().parseObject(attributeValue);
-			}
-			else {
-				throw new ERXRestException("Unable to parse the value '" + attributeValue + "' into a " + valueType.getName() + ".");
-			}
-		}
-		return parsedValue;
 	}
 
 	protected void updateArray(EOEnterpriseObject eo, String attributeName, EOEntity entity, NSArray currentObjects, NodeList toManyNodes, ERXRestContext context) throws ERXRestException, ERXRestNotFoundException, ERXRestSecurityException {
@@ -363,7 +301,7 @@ public class ERXDefaultRestDelegate implements IERXRestDelegate {
 
 				EOEntity nextEntity = relationship.destinationEntity();
 				if (includeContent) {
-					Object nextObj = NSKeyValueCoding.Utility.valueForKey(value, nextKey);
+					Object nextObj = entityDelegate(nextEntity).valueForKey(nextEntity, value, nextKey, context);
 					if (nextObj instanceof EOEnterpriseObject) {
 						if (entityDelegate(nextEntity).canViewObject(nextEntity, (EOEnterpriseObject) nextObj, context)) {
 							nextResult = new ERXRestResult(nextEntity, nextObj, nextPath);
@@ -444,7 +382,7 @@ public class ERXDefaultRestDelegate implements IERXRestDelegate {
 		return entityDelegate(entity).displayPropertyNames(entity, obj, context);
 	}
 
-	protected IERXRestEntityDelegate entityDelegate(EOEntity entity) {
+	public IERXRestEntityDelegate entityDelegate(EOEntity entity) {
 		IERXRestEntityDelegate entityDelegate = (IERXRestEntityDelegate) _entityDelegates.objectForKey(entity);
 		if (entityDelegate == null) {
 			entityDelegate = _defaultDelegate;
