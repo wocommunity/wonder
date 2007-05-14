@@ -10,19 +10,26 @@ import java.util.Enumeration;
 
 import com.webobjects.eoaccess.EOUtilities;
 import com.webobjects.eocontrol.EOEditingContext;
-import com.webobjects.eocontrol.EOEnterpriseObject;
+import com.webobjects.eocontrol.EOGlobalID;
 import com.webobjects.eocontrol.EOSortOrdering;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSKeyValueCoding;
 import com.webobjects.foundation.NSMutableArray;
+import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation.NSValidation;
-
-import er.extensions.ERXEC;
 
 public class Component extends _Component {
 
-	public int sortOrder;
+	public String sortOrder;
 	
+	public void awakeFromFetch(EOEditingContext editingContext) {
+		// AK: this trickery is needed because we create the component tree in memory and
+		// most of the edit components will do a localInstance.
+		super.awakeFromFetch(editingContext);
+		if(clazz._cachedComponentsByGlobalID != null) {
+			sortOrder = (String) clazz._cachedComponentsByGlobalID.objectForKey(permanentGlobalID());
+		}
+	}
 	public int level() {
 		return level(0);
 	}
@@ -30,7 +37,7 @@ public class Component extends _Component {
 	public int level(int safe) {
 		if (safe > 10)
 			return -1;
-		Component parent = (Component) valueForKey("parent");
+		Component parent = (Component) parent();
 		return parent == null ? 0 : 1 + parent.level(safe + 1);
 	}
 
@@ -62,23 +69,34 @@ public class Component extends _Component {
 	}
 
 	public static class ComponentClazz extends _ComponentClazz {
-		// FIXME not MT-safe until synchronized
-		private EOEditingContext _editingContext;
 
+		private NSMutableDictionary _cachedComponentsByGlobalID;
 		private NSMutableArray _cachedComponents;
 
-		public NSArray orderedComponents(EOEditingContext ec) {
+		public synchronized NSArray orderedComponents(EOEditingContext ec) {
 			NSMutableArray result = new NSMutableArray();
-			if (_cachedComponents == null) {
-				_editingContext = ERXEC.newEditingContext();
+			if (_cachedComponentsByGlobalID == null) {
+				addChildrenOfComponentToArray(null, result, ec);
+				_cachedComponentsByGlobalID = new NSMutableDictionary();
 				_cachedComponents = new NSMutableArray();
-				addChildrenOfComponentToArray(null, _cachedComponents, _editingContext);
+				int level = 0;
+				for (Enumeration e = result.objectEnumerator(); e.hasMoreElements();) {
+					Component component = (Component) e.nextElement();
+					String sortOrder = (level < 10 ? "0" : "") + (level);
+					_cachedComponentsByGlobalID.setObjectForKey(sortOrder, component.permanentGlobalID());
+					_cachedComponents.addObject(component.permanentGlobalID());
+					level++;
+				}
 			}
-			int level = 0;
+			result.removeAllObjects();
 			for (Enumeration e = _cachedComponents.objectEnumerator(); e.hasMoreElements();) {
-				Component component = (Component) EOUtilities.localInstanceOfObject(ec, (EOEnterpriseObject) e.nextElement());
-				component.sortOrder = level++;
-				result.addObject(component);
+				EOGlobalID gid = (EOGlobalID) e.nextElement();
+				Component component = (Component) ec.faultForGlobalID(gid, ec);
+				if(component != null) {
+					result.addObject(component);
+				} else {
+					log.error("No object: " + gid);
+				}
 			}
 			return result;
 		}
