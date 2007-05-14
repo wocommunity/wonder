@@ -15,8 +15,14 @@ import com.webobjects.appserver.WORequestHandler;
 import com.webobjects.appserver.WOResponse;
 import com.webobjects.eocontrol.EOEditingContext;
 
+import er.extensions.ERXApplication;
 import er.extensions.ERXEC;
 
+/**
+ * Don't use this yet.
+ * 
+ * @author mschrag
+ */
 public class ERXRestRequestHandler extends WORequestHandler {
 	public static final Logger log = Logger.getLogger(ERXRestRequestHandler.class);
 
@@ -26,6 +32,9 @@ public class ERXRestRequestHandler extends WORequestHandler {
 	public ERXRestRequestHandler(IERXRestAuthenticationDelegate authenticationDelegate, IERXRestDelegate delegate) {
 		_authenticationDelegate = authenticationDelegate;
 		_delegate = delegate;
+		if (!ERXApplication.erxApplication().isDevelopmentMode()) {
+			throw new RuntimeException("You don't want to use this unless you're in development mode.");
+		}
 	}
 
 	public WOResponse handleRequest(WORequest request) {
