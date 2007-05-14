@@ -1,38 +1,20 @@
-<table class="MenuHeader">
     <webobject name=HasValidSession>
-     	<tr><td width="33%"></td><td width="33%"></td><td></td> </tr>
-        <tr class="TopRow">
-        	
-            <td align=left colspan="2" class="Greeting">Hi <webobject name=user></webobject>, welcome to
-                <webobject name="databaseName"></webobject> | <webobject name=editMyInfo>Edit My Info</webobject> (<font size=-2>This is <webobject name=Main>not me</webobject></font>)</td>
-            <td align=right class="FindBug">
-                <webobject name=findBugByNumber>
-                   Bug# <webobject name=bugNumber></webobject> <webobject name=freeQuery>Free Query</webobject>
-                </webobject>
-                
-                   <!-- br>
-                   <webobject name=isEngineering>
-            		<webobject name=OnlineHatSystem>Hats</webobject>
-            	|</webobject><webobject name=bugsFiledRecently>Bugs Filed Recently</webobject> | 
-                <webobject name=trackRelease>Track Release</webobject> | 
-                <webobject name=trackMyRelease>Track My Release</webobject> | 
-                <webobject name=isAdmin>
-                	<webobject name=pushRelease>Push Release</webobject> | 
-                    <webobject name=ComponentReport>Component Report</webobject>
-                </webobject-->
-            </td> 
-        </tr>
-        <tr class="MenuRow">
-            <td align=left class="MainItems" valign="Top">
-            	<table class="Level1ItemTable">
-            		<tr class="Level1ItemRow"><webobject name="MainItems"><webobject name="Item"></webobject></webobject></tr>
-            	</table>
-            	<table class="QuickSearch">
-            		<tr><td><webobject name = "QuickSearch"></webobject></td></tr>
-            	</table>
-            </td>
-			<td align=right colspan="2" class="MenuItems"><webobject name="Menu"></webobject></td>
-        </tr>
+<div class="MenuHeader">
+     	<div class="TopRow">
+        </div>
+        <div class="MenuRow">
+        </div>
+ </div>
+           <div class="Greeting">Hi <webobject name=user></webobject>, welcome to
+                <webobject name="databaseName"></webobject> (<font size=-2>This is <webobject name=Main>not me</webobject></font>)
+            </div>
+	<webobject name="Menu"></webobject>
+            <div class="FindBug">
+            <webobject name=findBugByNumber>Bug# <webobject name=bugNumber></webobject> <webobject name=freeQuery>Free Query</webobject></webobject>
+            </div>
+            	<div class="QuickSearch">
+            	<webobject name = "QuickSearch"></webobject>
+            	</div>
     </webobject>
     <webobject name=NoValidSession></webobject>
-</table>
+    
