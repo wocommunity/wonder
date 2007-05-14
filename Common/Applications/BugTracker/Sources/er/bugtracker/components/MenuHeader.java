@@ -70,14 +70,6 @@ public class MenuHeader extends WOComponent {
     public String entityName() {
         return (String) parent().valueForKeyPath("d2wContext.entity.name");
     }
- 
-    public WOComponent editMyInfo() {
-        EOEnterpriseObject user = ((Session) session()).user();
-        EditPageInterface epi = (EditPageInterface) D2W.factory().pageForConfigurationNamed("EditMyPeople", session());
-        epi.setObject(user);
-        epi.setNextPage(context().page());
-        return (WOComponent) epi;
-    }
 
     public WOComponent freeQuery() {
         return pageWithName("FreeQuery");
