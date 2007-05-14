@@ -12,5 +12,6 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/ERJavaMail"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/PostgresqlPlugIn"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/ERDirectToWeb"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/Ajax"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
