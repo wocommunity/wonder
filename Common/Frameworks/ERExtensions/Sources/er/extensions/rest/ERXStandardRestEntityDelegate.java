@@ -2,16 +2,13 @@ package er.extensions.rest;
 
 import com.webobjects.eoaccess.EOEntity;
 import com.webobjects.eocontrol.EOEnterpriseObject;
-import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSMutableSet;
 
 public abstract class ERXStandardRestEntityDelegate extends ERXAbstractRestEntityDelegate {
-	private NSMutableSet _displayPropertyNames;
 	private NSMutableSet _viewPropertyNames;
 	private NSMutableSet _updatePropertyNames;
 
 	public ERXStandardRestEntityDelegate() {
-		_displayPropertyNames = new NSMutableSet();
 		_viewPropertyNames = new NSMutableSet();
 		_updatePropertyNames = new NSMutableSet();
 	}
@@ -22,15 +19,6 @@ public abstract class ERXStandardRestEntityDelegate extends ERXAbstractRestEntit
 
 	public void addUpdatePropertyName(String visiblePropertyName) {
 		_updatePropertyNames.addObject(visiblePropertyName);
-	}
-
-	public void addDisplayPropertyName(String visiblePropertyName) {
-		_displayPropertyNames.addObject(visiblePropertyName);
-		addViewPropertyName(visiblePropertyName);
-	}
-
-	public NSArray displayPropertyNames(EOEntity entity, EOEnterpriseObject eo, ERXRestContext context) throws ERXRestException {
-		return _displayPropertyNames.allObjects();
 	}
 
 	public boolean canUpdateProperty(EOEntity entity, EOEnterpriseObject eo, String propertyName, ERXRestContext context) {
