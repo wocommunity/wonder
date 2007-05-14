@@ -17,8 +17,9 @@ public abstract class ERXStandardRestEntityDelegate extends ERXAbstractRestEntit
 		_viewPropertyNames.addObject(visiblePropertyName);
 	}
 
-	public void addUpdatePropertyName(String visiblePropertyName) {
-		_updatePropertyNames.addObject(visiblePropertyName);
+	public void addUpdatePropertyName(String updatePropertyName) {
+		addViewPropertyName(updatePropertyName);
+		_updatePropertyNames.addObject(updatePropertyName);
 	}
 
 	public boolean canUpdateProperty(EOEntity entity, EOEnterpriseObject eo, String propertyName, ERXRestContext context) {
