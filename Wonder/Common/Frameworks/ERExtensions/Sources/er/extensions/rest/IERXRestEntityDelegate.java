@@ -21,8 +21,6 @@ public interface IERXRestEntityDelegate {
 
 	public String formatAttributeValue(EOEntity entity, Object object, String attributeName, Object attributeValue) throws ParseException, ERXRestException;
 
-	public NSArray displayPropertyNames(EOEntity entity, EOEnterpriseObject eo, ERXRestContext context) throws ERXRestException;
-
 	public NSArray objectsForEntity(EOEntity entity, ERXRestContext context) throws ERXRestException, ERXRestSecurityException;
 
 	public boolean canInsertObject(EOEntity entity, ERXRestContext context);

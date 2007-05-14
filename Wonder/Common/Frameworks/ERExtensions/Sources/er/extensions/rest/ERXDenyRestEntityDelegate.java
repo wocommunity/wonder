@@ -39,14 +39,6 @@ public class ERXDenyRestEntityDelegate implements IERXRestEntityDelegate {
 		return false;
 	}
 
-	public boolean displayPropertyDetails(EOEntity entity, EOEnterpriseObject eo, String propertyName) {
-		return false;
-	}
-
-	public NSArray displayPropertyNames(EOEntity entity, EOEnterpriseObject eo, ERXRestContext context) {
-		return NSArray.EmptyArray;
-	}
-
 	public NSArray objectsForEntity(EOEntity entity, ERXRestContext context) {
 		return NSArray.EmptyArray;
 	}
