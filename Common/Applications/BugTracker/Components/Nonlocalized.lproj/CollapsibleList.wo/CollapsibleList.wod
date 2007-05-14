@@ -24,6 +24,6 @@ opener: WOCollapsibleComponentContent {
 
 table: WOGenericContainer {
 	bgcolor = ^backgroundColor;
-	border = 1;
+	width="100%";
 	elementName = "TABLE";
 }
