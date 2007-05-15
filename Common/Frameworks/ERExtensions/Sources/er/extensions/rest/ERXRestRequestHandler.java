@@ -16,14 +16,8 @@ import com.webobjects.appserver.WOResponse;
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.foundation.NSMutableDictionary;
 
-import er.extensions.ERXApplication;
 import er.extensions.ERXEC;
 
-/**
- * Don't use this yet.
- * 
- * @author mschrag
- */
 public class ERXRestRequestHandler extends WORequestHandler {
 	public static final Logger log = Logger.getLogger(ERXRestRequestHandler.class);
 
@@ -41,9 +35,6 @@ public class ERXRestRequestHandler extends WORequestHandler {
 		_delegate = delegate;
 		_entityResponseWriter = new NSMutableDictionary();
 		_defaultResponseWriter = defaultResponseWriter;
-		if (!ERXApplication.erxApplication().isDevelopmentMode()) {
-			throw new RuntimeException("You don't want to use this unless you're in development mode.");
-		}
 	}
 
 	public void setResponseWriterForEntityNamed(IERXRestResponseWriter responseWriter, String entityName) {
