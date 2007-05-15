@@ -9,7 +9,6 @@ import com.webobjects.eoaccess.EORelationship;
 import com.webobjects.eocontrol.EOEnterpriseObject;
 import com.webobjects.eocontrol.EOKeyGlobalID;
 import com.webobjects.foundation.NSArray;
-import com.webobjects.foundation.NSKeyValueCoding;
 import com.webobjects.foundation.NSMutableSet;
 
 import er.extensions.ERXEnterpriseObject;
@@ -17,7 +16,7 @@ import er.extensions.ERXLocalizer;
 import er.extensions.ERXStringUtilities;
 
 public abstract class ERXAbstractXmlRestResponseWriter implements IERXRestResponseWriter {
-	public void appendToResponse(ERXRestContext context, WOResponse response, ERXRestResult result) throws ERXRestException, ERXRestSecurityException, ERXRestNotFoundException, ParseException {
+	public void appendToResponse(ERXRestContext context, WOResponse response, ERXRestKey result) throws ERXRestException, ERXRestSecurityException, ERXRestNotFoundException, ParseException {
 		response.setHeader("text/xml", "Content-Type");
 		StringBuffer xmlBuffer = new StringBuffer();
 		appendXmlToResponse(context, response, result, 0, new NSMutableSet());
@@ -29,17 +28,16 @@ public abstract class ERXAbstractXmlRestResponseWriter implements IERXRestRespon
 		}
 	}
 
-	protected void appendArrayXmlToResponse(ERXRestContext context, WOResponse response, ERXRestResult result, int indent, NSMutableSet visitedObjects) throws ERXRestException, ERXRestSecurityException, ERXRestNotFoundException, ParseException {
+	protected void appendArrayXmlToResponse(ERXRestContext context, WOResponse response, ERXRestKey result, int indent, NSMutableSet visitedObjects) throws ERXRestException, ERXRestSecurityException, ERXRestNotFoundException, ParseException {
 		indent(response, indent);
 		response.appendContentString("<");
 		String arrayName;
-		EOEntity entity = result.entity();
-		ERXRestResult previousResult = result.previousResult();
-		if (previousResult == null || previousResult.nextKey() == null) {
+		EOEntity entity = result.nextEntity();
+		if (result.key() == null) {
 			arrayName = entity.name();
 		}
 		else {
-			arrayName = previousResult.nextKey();
+			arrayName = result.key();
 		}
 		NSArray values = (NSArray) result.value();
 		if (arrayName.equals(entity.name())) {
@@ -58,13 +56,8 @@ public abstract class ERXAbstractXmlRestResponseWriter implements IERXRestRespon
 		Enumeration valuesEnum = values.objectEnumerator();
 		while (valuesEnum.hasMoreElements()) {
 			ERXEnterpriseObject eo = (ERXEnterpriseObject) valuesEnum.nextElement();
-			ERXRestResult fakePreviousResult = result.extendResult(eo.primaryKey());
-
-			ERXRestResult fakeNextResult = new ERXRestResult(fakePreviousResult, entity, eo, null);
-			fakePreviousResult._setCachedNextResult(fakeNextResult);
-
-			ERXRestResult firstResult = fakeNextResult.firstResult();
-			appendXmlToResponse(context, response, fakeNextResult, indent + 1, visitedObjects);
+			ERXRestKey eoKey = result.extend(eo.primaryKey(), eo, true);
+			appendXmlToResponse(context, response, eoKey, indent + 1, visitedObjects);
 		}
 
 		indent(response, indent);
@@ -74,11 +67,11 @@ public abstract class ERXAbstractXmlRestResponseWriter implements IERXRestRespon
 		response.appendContentString("\n");
 	}
 
-	protected abstract boolean displayDetails(ERXRestContext context, ERXRestResult result) throws ERXRestException, ERXRestNotFoundException, ERXRestSecurityException;
+	protected abstract boolean displayDetails(ERXRestContext context, ERXRestKey result) throws ERXRestException, ERXRestNotFoundException, ERXRestSecurityException;
 
-	protected abstract String[] displayProperties(ERXRestContext context, ERXRestResult result) throws ERXRestException, ERXRestNotFoundException, ERXRestSecurityException;
+	protected abstract String[] displayProperties(ERXRestContext context, ERXRestKey result) throws ERXRestException, ERXRestNotFoundException, ERXRestSecurityException;
 
-	protected void appendXmlToResponse(ERXRestContext context, WOResponse response, ERXRestResult result, int indent, NSMutableSet visitedObjects) throws ERXRestException, ERXRestSecurityException, ERXRestNotFoundException, ParseException {
+	protected void appendXmlToResponse(ERXRestContext context, WOResponse response, ERXRestKey result, int indent, NSMutableSet visitedObjects) throws ERXRestException, ERXRestSecurityException, ERXRestNotFoundException, ParseException {
 		Object value = result.value();
 		if (value == null) {
 			// DO NOTHING
@@ -90,12 +83,11 @@ public abstract class ERXAbstractXmlRestResponseWriter implements IERXRestRespon
 			indent(response, indent);
 			response.appendContentString("<");
 			String objectName;
-			ERXRestResult previousResult = result.previousResult();
-			if (previousResult == null || previousResult.isKeyGID() || previousResult.nextKey() == null) {
+			if (result.previousKey() == null || result.isKeyGID()) {
 				objectName = result.entity().name();
 			}
 			else {
-				objectName = previousResult.nextKey();
+				objectName = result.key();
 			}
 			response.appendContentString(objectName);
 
@@ -125,16 +117,14 @@ public abstract class ERXAbstractXmlRestResponseWriter implements IERXRestRespon
 					IERXRestEntityDelegate entityDelegate = context.delegate().entityDelegate(entity);
 					for (int displayPropertyNum = 0; displayPropertyNum < displayPropertyNames.length; displayPropertyNum++) {
 						String propertyName = displayPropertyNames[displayPropertyNum];
-						if (entityDelegate.canViewProperty(entity, eo, propertyName, context)) {
+						if (context.delegate().entityDelegate(entity).canViewProperty(entity, eo, propertyName, context)) {
+							ERXRestKey nextKey = result.extend(propertyName, true);
 							EORelationship relationship = entity.relationshipNamed(propertyName);
-							if (relationship != null) {
-								ERXRestResult nextResult = result.extendResult(propertyName).nextResult(context);
-								if (relationship != null) {
-									appendXmlToResponse(context, response, nextResult, indent + 1, visitedObjects);
-								}
+							Object propertyValue = nextKey.value();
+							if (propertyValue instanceof NSArray) {
+								appendXmlToResponse(context, response, nextKey, indent + 1, visitedObjects);
 							}
 							else {
-								Object propertyValue = NSKeyValueCoding.Utility.valueForKey(eo, propertyName);
 								String formattedPropertyValue = context.delegate().entityDelegate(entity).formatAttributeValue(entity, eo, propertyName, propertyValue);
 								if (formattedPropertyValue != null) {
 									indent(response, indent + 1);

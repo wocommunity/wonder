@@ -61,7 +61,7 @@ public interface IERXRestDelegate {
 	 * @throws ERXRestSecurityException if the user attempts to insert objects that he/she is not permitted to insert
 	 * @throws ERXRestNotFoundException if one of the requested objects does not exist
 	 */
-	public ERXRestResult insert(ERXRestResult nextToLastResult, Document insertDocument, ERXRestContext context) throws ERXRestException, ERXRestSecurityException, ERXRestNotFoundException;
+	public ERXRestKey insert(ERXRestKey lastKey, Document insertDocument, ERXRestContext context) throws ERXRestException, ERXRestSecurityException, ERXRestNotFoundException;
 
 	/**
 	 * Updates the objects defined by the XML document (which can contain partial updates or array updates).
@@ -73,7 +73,7 @@ public interface IERXRestDelegate {
 	 * @throws ERXRestSecurityException if the user attempts to update objects that he/she is not permitted to update
 	 * @throws ERXRestNotFoundException if one of the requested objects does not exist
 	 */
-	public void update(ERXRestResult nextToLastResult, Document updateDocument, ERXRestContext context) throws ERXRestException, ERXRestSecurityException, ERXRestNotFoundException;
+	public void update(ERXRestKey lastKey, Document updateDocument, ERXRestContext context) throws ERXRestException, ERXRestSecurityException, ERXRestNotFoundException;
 
 	/**
 	 * Deletes the given object (NSArray of EOEnterpriseObject).
@@ -86,20 +86,6 @@ public interface IERXRestDelegate {
 	 * @throws ERXRestNotFoundException if one of the requested objects does not exist
 	 */
 	public void delete(EOEntity entity, Object obj, ERXRestContext context) throws ERXRestException, ERXRestSecurityException, ERXRestNotFoundException;
-
-	/**
-	 * Returns the next ERXRestResult for the given key on the given object.  This method is very similar to 
-	 * NSKeyValueCoding.Utility.valueForKey(..) except that ERXRestResult encapsulates more metadata.
-	 * 
-	 * @param currentResult the current rest result to key off of
-	 * @param includeContent if false, don't actually perform the fetch for the next value
-	 * @param context the rest context
-	 * @return the next ERXRestResult
-	 * @throws ERXRestException if there is a general failure
-	 * @throws ERXRestSecurityException if the user attempts to view objects that he/she is not permitted to view
-	 * @throws ERXRestNotFoundException if the next path does not exist
-	 */
-	public ERXRestResult nextResult(ERXRestResult currentResult, boolean includeContent, ERXRestContext context) throws ERXRestException, ERXRestSecurityException, ERXRestNotFoundException;
 
 	/**
 	 * Called before enumerating the given array of objects for display.  This provides an

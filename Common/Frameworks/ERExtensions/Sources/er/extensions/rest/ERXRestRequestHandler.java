@@ -68,12 +68,12 @@ public class ERXRestRequestHandler extends WORequestHandler {
 		WOContext woContext = application.createContextForRequest(request);
 		WOResponse response = application.createResponseInContext(woContext);
 
-		String uri = request._uriDecomposed().requestHandlerPath();
-		int dotIndex = uri.lastIndexOf('.');
+		String path = request._uriDecomposed().requestHandlerPath();
+		int dotIndex = path.lastIndexOf('.');
 		String type = "xml";
 		if (dotIndex >= 0) {
-			type = uri.substring(dotIndex + 1);
-			uri = uri.substring(0, dotIndex);
+			type = path.substring(dotIndex + 1);
+			path = path.substring(0, dotIndex);
 		}
 
 		String wosid = null;
@@ -95,18 +95,18 @@ public class ERXRestRequestHandler extends WORequestHandler {
 					throw new ERXRestSecurityException("Authenticated failed.");
 				}
 
-				ERXRestResult initialResult = new ERXRestResult(uri);
+				ERXRestKey requestKey = ERXRestKey.parse(restContext, path);
 				String method = request.method();
 				if ("GET".equalsIgnoreCase(method)) {
-					ERXRestResult restResult = initialResult.lastResult(restContext);
-
-					IERXRestResponseWriter restResponseWriter = responseWriterForEntity(restResult.entity());
-					restResponseWriter.appendToResponse(restContext, response, restResult);
+					IERXRestResponseWriter restResponseWriter = responseWriterForEntity(requestKey.entity());
+					restResponseWriter.appendToResponse(restContext, response, requestKey);
 					editingContext.saveChanges();
 				}
 				else if ("DELETE".equalsIgnoreCase(method)) {
-					ERXRestResult restResult = initialResult.lastResult(restContext);
-					_delegate.delete(restResult.entity(), restResult.value(), restContext);
+					if (requestKey.isKeyAll()) {
+						throw new ERXRestException("You are not allowed to delete all the objects for any entity.");
+					}
+					_delegate.delete(requestKey.entity(), requestKey.value(), restContext);
 					editingContext.saveChanges();
 				}
 				else if ("PUT".equalsIgnoreCase(method)) {
@@ -114,22 +114,19 @@ public class ERXRestRequestHandler extends WORequestHandler {
 					Document updateDocument = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(new InputSource(new StringReader(contentStr)));
 					updateDocument.normalize();
 
-					ERXRestResult nextToLastResult = initialResult.nextToLastResult(restContext);
-					_delegate.update(nextToLastResult, updateDocument, restContext);
+					_delegate.update(requestKey, updateDocument, restContext);
 					editingContext.saveChanges();
 				}
 				else if ("POST".equalsIgnoreCase(method)) {
 					String contentStr = request.contentString();
 					Document insertDocument = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(new InputSource(new StringReader(contentStr)));
 					insertDocument.normalize();
-					ERXRestResult restResult = initialResult.nextToLastResult(restContext);
 
-					ERXRestResult nextToLastResult = initialResult.nextToLastResult(restContext);
-					ERXRestResult insertedResult = _delegate.insert(nextToLastResult, insertDocument, restContext);
+					ERXRestKey responseKey = _delegate.insert(requestKey, insertDocument, restContext);
 					editingContext.saveChanges();
 
-					IERXRestResponseWriter restResponseWriter = responseWriterForEntity(restResult.entity());
-					restResponseWriter.appendToResponse(restContext, response, insertedResult);
+					IERXRestResponseWriter restResponseWriter = responseWriterForEntity(responseKey.entity());
+					restResponseWriter.appendToResponse(restContext, response, responseKey);
 					response.setStatus(201);
 				}
 			}
