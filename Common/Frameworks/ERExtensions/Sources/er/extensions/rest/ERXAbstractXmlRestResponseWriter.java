@@ -12,6 +12,7 @@ import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSKeyValueCoding;
 import com.webobjects.foundation.NSMutableSet;
 
+import er.extensions.ERXEnterpriseObject;
 import er.extensions.ERXLocalizer;
 import er.extensions.ERXStringUtilities;
 
@@ -56,9 +57,14 @@ public abstract class ERXAbstractXmlRestResponseWriter implements IERXRestRespon
 		context.delegate().preprocess(entity, values, context);
 		Enumeration valuesEnum = values.objectEnumerator();
 		while (valuesEnum.hasMoreElements()) {
-			Object value = valuesEnum.nextElement();
-			ERXRestResult nextResult = new ERXRestResult(result.extendResult(null), entity, value, null);
-			appendXmlToResponse(context, response, nextResult, indent + 1, visitedObjects);
+			ERXEnterpriseObject eo = (ERXEnterpriseObject) valuesEnum.nextElement();
+			ERXRestResult fakePreviousResult = result.extendResult(eo.primaryKey());
+
+			ERXRestResult fakeNextResult = new ERXRestResult(fakePreviousResult, entity, eo, null);
+			fakePreviousResult._setCachedNextResult(fakeNextResult);
+
+			ERXRestResult firstResult = fakeNextResult.firstResult();
+			appendXmlToResponse(context, response, fakeNextResult, indent + 1, visitedObjects);
 		}
 
 		indent(response, indent);
