@@ -327,16 +327,16 @@ public class ERXDefaultRestDelegate implements IERXRestDelegate {
 		}
 	}
 
-	public void addEntityDelegate(EOEntity entity, IERXRestEntityDelegate entityDelegate) {
-		_entityDelegates.setObjectForKey(entityDelegate, entity);
+	public void addDelegateForEntityNamed(IERXRestEntityDelegate entityDelegate, String entityName) {
+		_entityDelegates.setObjectForKey(entityDelegate, entityName);
 	}
 
-	public void removeEntityDelegate(EOEntity entity) {
-		_entityDelegates.removeObjectForKey(entity);
+	public void removeDelegateForEntityNamed(String entityName) {
+		_entityDelegates.removeObjectForKey(entityName);
 	}
 
 	public IERXRestEntityDelegate entityDelegate(EOEntity entity) {
-		IERXRestEntityDelegate entityDelegate = (IERXRestEntityDelegate) _entityDelegates.objectForKey(entity);
+		IERXRestEntityDelegate entityDelegate = (IERXRestEntityDelegate) _entityDelegates.objectForKey(entity.name());
 		if (entityDelegate == null) {
 			entityDelegate = _defaultDelegate;
 		}

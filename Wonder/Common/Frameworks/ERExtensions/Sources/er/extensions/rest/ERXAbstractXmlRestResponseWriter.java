@@ -5,7 +5,6 @@ import java.util.Enumeration;
 
 import com.webobjects.appserver.WOResponse;
 import com.webobjects.eoaccess.EOEntity;
-import com.webobjects.eoaccess.EORelationship;
 import com.webobjects.eocontrol.EOEnterpriseObject;
 import com.webobjects.eocontrol.EOKeyGlobalID;
 import com.webobjects.foundation.NSArray;
@@ -84,14 +83,14 @@ public abstract class ERXAbstractXmlRestResponseWriter implements IERXRestRespon
 			response.appendContentString("<");
 			String objectName;
 			if (result.previousKey() == null || result.isKeyGID()) {
-				objectName = result.entity().name();
+				objectName = result.nextEntity().name();
 			}
 			else {
 				objectName = result.key();
 			}
 			response.appendContentString(objectName);
 
-			EOEntity entity = result.entity();
+			EOEntity entity = result.nextEntity();
 			EOEnterpriseObject eo = (EOEnterpriseObject) value;
 			if (!objectName.equals(entity.name())) {
 				response.appendContentString(" type = \"");
@@ -118,10 +117,16 @@ public abstract class ERXAbstractXmlRestResponseWriter implements IERXRestRespon
 					for (int displayPropertyNum = 0; displayPropertyNum < displayPropertyNames.length; displayPropertyNum++) {
 						String propertyName = displayPropertyNames[displayPropertyNum];
 						if (context.delegate().entityDelegate(entity).canViewProperty(entity, eo, propertyName, context)) {
+							// EORelationship relationship = entity.relationshipNamed(propertyName);
+							// if (relationship != null && !relationship.isToMany()) {
+							//								
+							// }
 							ERXRestKey nextKey = result.extend(propertyName, true);
-							EORelationship relationship = entity.relationshipNamed(propertyName);
 							Object propertyValue = nextKey.value();
 							if (propertyValue instanceof NSArray) {
+								appendXmlToResponse(context, response, nextKey, indent + 1, visitedObjects);
+							}
+							else if (propertyValue instanceof EOEnterpriseObject) {
 								appendXmlToResponse(context, response, nextKey, indent + 1, visitedObjects);
 							}
 							else {

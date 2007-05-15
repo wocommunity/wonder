@@ -210,7 +210,9 @@ public class ERXRestKey {
 					}
 					else if (value instanceof EOEnterpriseObject) {
 						if (!_context.delegate().entityDelegate(nextEntity).canViewObject(nextEntity, (EOEnterpriseObject) value, _context)) {
-							throw new ERXRestSecurityException("You are not allowed to view the object for the key '" + _key + "' on the entity '" + _entity.name() + "'.");
+							// MS: This maybe SHOULD be a security error, but it would cause normal to-one traversals to a non-visible object to fail
+							//throw new ERXRestSecurityException("You are not allowed to view the object for the key '" + _key + "' on the entity '" + _entity.name() + "'.");
+							value = null;
 						}
 					}
 				}
