@@ -6,11 +6,9 @@ import java.util.Enumeration;
 import com.webobjects.appserver.WOResponse;
 import com.webobjects.eoaccess.EOEntity;
 import com.webobjects.eocontrol.EOEnterpriseObject;
-import com.webobjects.eocontrol.EOKeyGlobalID;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSMutableSet;
 
-import er.extensions.ERXEnterpriseObject;
 import er.extensions.ERXLocalizer;
 import er.extensions.ERXStringUtilities;
 
@@ -54,8 +52,8 @@ public abstract class ERXAbstractXmlRestResponseWriter implements IERXRestRespon
 		context.delegate().preprocess(entity, values, context);
 		Enumeration valuesEnum = values.objectEnumerator();
 		while (valuesEnum.hasMoreElements()) {
-			ERXEnterpriseObject eo = (ERXEnterpriseObject) valuesEnum.nextElement();
-			ERXRestKey eoKey = result.extend(eo.primaryKey(), eo, true);
+			EOEnterpriseObject eo = (EOEnterpriseObject) valuesEnum.nextElement();
+			ERXRestKey eoKey = result.extend(ERXRestUtils.idForEO(eo), eo, true);
 			appendXmlToResponse(context, response, eoKey, indent + 1, visitedObjects);
 		}
 
@@ -99,9 +97,7 @@ public abstract class ERXAbstractXmlRestResponseWriter implements IERXRestRespon
 			}
 
 			response.appendContentString(" id = \"");
-			EOKeyGlobalID gid = (EOKeyGlobalID) eo.editingContext().globalIDForObject(eo);
-			Object id = gid.keyValues()[0];
-			response.appendContentString(id.toString());
+			response.appendContentString(ERXRestUtils.idForEO(eo));
 			response.appendContentString("\"");
 
 			boolean displayDetails = displayDetails(context, result);
