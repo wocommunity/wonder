@@ -252,7 +252,7 @@ public class ERXEOGlobalIDUtilities {
 	    				EOEnterpriseObject eo;
 						eo = ec.objectForGlobalID(g);
 	    				if (eo != null && !EOFaultHandler.isFault(eo)) {
-	    					result.addObject(ec);
+	    					result.addObject(eo);
 	    				}
 	    				else {
 	    					fetch = true;
