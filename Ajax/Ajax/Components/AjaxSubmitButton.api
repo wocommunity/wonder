@@ -20,5 +20,16 @@
 		<binding name = "functionName"/>
 		<binding name = "updateContainerID"/>
 		<binding name = "showUI"/>
+		<binding name = "effect"/>
+    
+    <validation message="&apos;effect&apos; and &apos;onSuccess&apos; cannot both be bound.">
+	    <bound name = "effect"/>
+	    <bound name = "onSuccess"/>
+    </validation>
+    
+    <validation message="If &apos;effect&apos; is bound, then &apos;updateContainerID&apos; must also be bound.">
+	    <bound name = "effect"/>
+	    <unbound name = "updateContainerID"/>
+    </validation>
 	</wo>
 </wodefinitions>

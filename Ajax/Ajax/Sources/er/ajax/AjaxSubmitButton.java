@@ -38,6 +38,7 @@ import er.extensions.ERXWOForm;
  * @binding updateContainerID the id of the AjaxUpdateContainer to update after performing this action
  * @binding showUI if functionName is set, the UI defaults to hidden; showUI re-enables it
  * @binding formSerializer the name of the javascript function to call to serialize the form
+ * @binding effect the Scriptaculous effect to apply onSuccess ("highlight", "slideIn", "blindDown", etc);
  * @property er.ajax.formSerializer the default form serializer to use for all ajax submits
  * 
  * @author anjo
@@ -62,7 +63,7 @@ public class AjaxSubmitButton extends AjaxDynamicElement {
     return (String) valueForBinding("name", context.elementID(), component);
   }
 
-  public NSDictionary createAjaxOptions(WOComponent component, String formReference) {
+  public NSMutableDictionary createAjaxOptions(WOComponent component, String formReference) {
     String name = nameInContext(component.context(), component);
     NSMutableArray ajaxOptionsArray = new NSMutableArray();
     ajaxOptionsArray.addObject(new AjaxOption("onComplete", AjaxOption.SCRIPT));
@@ -129,7 +130,10 @@ public class AjaxSubmitButton extends AjaxDynamicElement {
 		onClickBuffer.append(formReference + ".action");
 	}
 	onClickBuffer.append(",");
-    NSDictionary options = createAjaxOptions(component, formReference);
+	
+    NSMutableDictionary options = createAjaxOptions(component, formReference);
+	AjaxUpdateLink.addEffect(options, (String) valueForBinding("effect", component), updateContainerID);
+	
     AjaxOptions.appendToBuffer(options, onClickBuffer, context);
     onClickBuffer.append(")");
     String onClick = (String) valueForBinding("onClick", component);
