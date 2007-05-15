@@ -22,7 +22,7 @@ public class ERXUnsafeRestEntityDelegate extends ERXAbstractRestEntityDelegate {
 	public boolean canUpdateProperty(EOEntity entity, EOEnterpriseObject eo, String propertyName, ERXRestContext context) {
 		return allPropertyNames(entity, eo, context).containsObject(propertyName);
 	}
-	
+
 	public NSArray allPropertyNames(EOEntity entity, EOEnterpriseObject eo, ERXRestContext context) {
 		NSMutableArray displayPropertyNames = new NSMutableArray();
 		NSArray classProperties = entity.classProperties();
@@ -77,10 +77,6 @@ public class ERXUnsafeRestEntityDelegate extends ERXAbstractRestEntityDelegate {
 
 	public NSArray visibleObjects(EOEntity parentEntity, Object parent, String key, EOEntity entity, NSArray objects, ERXRestContext context) {
 		return objects;
-	}
-
-	public ERXRestResult nextNonModelResult(ERXRestResult currentResult, boolean includeContent, ERXRestContext context) {
-		return null;
 	}
 
 	public EOEntity nextEntity(EOEntity entity, String key) {
