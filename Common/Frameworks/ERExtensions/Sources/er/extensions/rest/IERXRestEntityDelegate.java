@@ -11,11 +11,11 @@ public interface IERXRestEntityDelegate {
 
 	public void takeValueForKey(EOEntity entity, Object obj, String propertyName, String value, ERXRestContext context) throws ParseException, ERXRestException;
 
-	public void delete(EOEntity entity, EOEnterpriseObject eo, ERXRestContext context) throws ERXRestException;
+	public void delete(EOEntity entity, EOEnterpriseObject eo, ERXRestContext context) throws ERXRestException, ERXRestSecurityException;
 
-	public void updated(EOEntity entity, EOEnterpriseObject eo, ERXRestContext context) throws ERXRestException;
+	public void updated(EOEntity entity, EOEnterpriseObject eo, ERXRestContext context) throws ERXRestException, ERXRestSecurityException;
 
-	public void inserted(EOEntity entity, EOEnterpriseObject eo, ERXRestContext context) throws ERXRestException;
+	public void inserted(EOEntity entity, EOEnterpriseObject eo, ERXRestContext context) throws ERXRestException, ERXRestSecurityException;
 
 	public Object parseAttributeValue(EOEntity entity, Object object, String attributeName, String attributeValue) throws ParseException, ERXRestException;
 
