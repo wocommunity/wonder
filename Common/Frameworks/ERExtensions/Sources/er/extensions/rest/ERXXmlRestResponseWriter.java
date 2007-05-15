@@ -3,6 +3,10 @@ package er.extensions.rest;
 import er.extensions.ERXProperties;
 
 public class ERXXmlRestResponseWriter extends ERXAbstractXmlRestResponseWriter {
+	public static final String REST_PREFIX = "ERXRest.";
+	public static final String DETAILS_PREFIX = ".details";
+	public static final String PROPERTIES_PREFIX = ".properties";
+	
 	protected String cascadingValue(ERXRestContext context, ERXRestKey result, String propertyPrefix, String propertySuffix, String defaultValue) throws ERXRestException, ERXRestNotFoundException, ERXRestSecurityException {
 		ERXRestKey cascadingKey = result.firstKey();
 		String cascadingValue = defaultValue;
@@ -26,13 +30,13 @@ public class ERXXmlRestResponseWriter extends ERXAbstractXmlRestResponseWriter {
 	}
 
 	protected boolean displayDetails(ERXRestContext context, ERXRestKey result) throws ERXRestException, ERXRestNotFoundException, ERXRestSecurityException {
-		boolean displayDetails = Boolean.valueOf(cascadingValue(context, result, "ERXRest.", ".details", "false")).booleanValue();
+		boolean displayDetails = Boolean.valueOf(cascadingValue(context, result, ERXXmlRestResponseWriter.REST_PREFIX, ERXXmlRestResponseWriter.DETAILS_PREFIX, "false")).booleanValue();
 		return displayDetails;
 	}
 
 	protected String[] displayProperties(ERXRestContext context, ERXRestKey result) throws ERXRestException, ERXRestNotFoundException, ERXRestSecurityException {
 		String[] displayPropertyNames;
-		String displayPropertyNamesStr = cascadingValue(context, result, "ERXRest.", ".properties", null);
+		String displayPropertyNamesStr = cascadingValue(context, result, ERXXmlRestResponseWriter.REST_PREFIX, ERXXmlRestResponseWriter.PROPERTIES_PREFIX, null);
 		if (displayPropertyNamesStr == null) {
 			displayPropertyNames = null;
 		}
