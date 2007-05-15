@@ -14,7 +14,7 @@ public class ERXRestResult {
 	private String _nextKey;
 	private String _nextPath;
 	private boolean _nextKeyIsAll;
-	private ERXRestResult _nextResult;
+	private ERXRestResult _cachedNextResult;
 
 	public ERXRestResult(String keypath) {
 		this(null, null, null, keypath);
@@ -35,16 +35,34 @@ public class ERXRestResult {
 	}
 
 	public ERXRestResult cloneResult() {
+		return _cloneResult(null);
+	}
+
+	protected ERXRestResult _cloneResult(String keypath) {
 		ERXRestResult previousCloneResult = null;
 		if (_previousResult != null) {
-			previousCloneResult = _previousResult.cloneResult();
+			previousCloneResult = _previousResult._cloneResult(keypath);
 		}
 		ERXRestResult cloneResult = new ERXRestResult(previousCloneResult, _entity, _value, null);
 		cloneResult._nextKey = _nextKey;
 		cloneResult._nextPath = _nextPath;
 		cloneResult._nextKeyIsAll = _nextKeyIsAll;
 		if (previousCloneResult != null) {
-			previousCloneResult._nextResult = cloneResult;
+			previousCloneResult._cachedNextResult = cloneResult;
+		}
+		if (keypath != null) {
+			if (cloneResult._nextPath == null) {
+				if (cloneResult._nextKey == null) {
+					cloneResult._nextKey = keypath;
+				}
+				else {
+					cloneResult._nextPath = keypath;
+				}
+			}
+			else {
+				cloneResult._nextPath += "/" + keypath;
+			}
+			cloneResult._nextKeyIsAll = false;
 		}
 		return cloneResult;
 	}
@@ -52,18 +70,7 @@ public class ERXRestResult {
 	public ERXRestResult extendResult(String keypath) {
 		ERXRestResult previousResult = null;
 		if (_previousResult != null) {
-			previousResult = _previousResult.cloneResult();
-			if (previousResult._nextPath == null) {
-				if (previousResult._nextKey == null) {
-					previousResult._nextKey = keypath;
-				}
-				else {
-					previousResult._nextPath = keypath;
-				}
-			}
-			else {
-				previousResult._nextPath += "/" + keypath;
-			}
+			previousResult = _previousResult._cloneResult(keypath);
 		}
 		ERXRestResult extendedResult = new ERXRestResult(previousResult, _entity, _value, keypath);
 		return extendedResult;
@@ -160,14 +167,14 @@ public class ERXRestResult {
 	}
 
 	public ERXRestResult nextToLastResult(ERXRestContext context) throws ERXRestException, ERXRestNotFoundException, ERXRestSecurityException {
-		ERXRestResult eRXRestResult;
+		ERXRestResult nextToLastResult;
 		if (isLastResult() || isNextToLastResult()) {
-			eRXRestResult = this;
+			nextToLastResult = this;
 		}
 		else {
-			eRXRestResult = nextResult(context).nextToLastResult(context);
+			nextToLastResult = nextResult(context).nextToLastResult(context);
 		}
-		return eRXRestResult;
+		return nextToLastResult;
 	}
 
 	public ERXRestResult lastResult(ERXRestContext context) throws ERXRestException, ERXRestNotFoundException, ERXRestSecurityException {
@@ -186,14 +193,18 @@ public class ERXRestResult {
 		return lastResult.value();
 	}
 
+	public void _setCachedNextResult(ERXRestResult cachedNextResult) {
+		_cachedNextResult = cachedNextResult;
+	}
+
 	public ERXRestResult nextResult(ERXRestContext context) throws ERXRestException, ERXRestNotFoundException, ERXRestSecurityException {
 		return nextResult(context, true);
 	}
 
 	public ERXRestResult nextResult(ERXRestContext context, boolean includeContent) throws ERXRestException, ERXRestNotFoundException, ERXRestSecurityException {
 		ERXRestResult nextResult;
-		if (_nextResult != null) {
-			nextResult = _nextResult;
+		if (_cachedNextResult != null) {
+			nextResult = _cachedNextResult;
 		}
 		else if (_nextKeyIsAll) {
 			NSArray objs = NSArray.EmptyArray;
@@ -233,8 +244,8 @@ public class ERXRestResult {
 			}
 		}
 
-		if (includeContent && _nextResult == null) {
-			_nextResult = nextResult;
+		if (includeContent && _cachedNextResult == null) {
+			_cachedNextResult = nextResult;
 		}
 
 		return nextResult;
