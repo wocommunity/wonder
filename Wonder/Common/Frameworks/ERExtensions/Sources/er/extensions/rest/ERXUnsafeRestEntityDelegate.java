@@ -82,4 +82,8 @@ public class ERXUnsafeRestEntityDelegate extends ERXAbstractRestEntityDelegate {
 	public ERXRestResult nextNonModelResult(ERXRestResult currentResult, boolean includeContent, ERXRestContext context) {
 		return null;
 	}
+
+	public EOEntity nextEntity(EOEntity entity, String key) {
+		return null;
+	}
 }
