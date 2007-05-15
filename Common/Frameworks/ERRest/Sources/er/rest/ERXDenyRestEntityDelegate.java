@@ -2,16 +2,33 @@ package er.rest;
 
 import java.text.ParseException;
 
+import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
+
 import com.webobjects.eoaccess.EOEntity;
 import com.webobjects.eocontrol.EOEnterpriseObject;
 import com.webobjects.foundation.NSArray;
 
 public class ERXDenyRestEntityDelegate implements IERXRestEntityDelegate {
-	public String formatAttributeValue(EOEntity entity, Object object, String attributeName, Object attributeValue) throws ParseException, ERXRestException {
+	public EOEnterpriseObject objectWithKey(EOEntity entity, String key, ERXRestContext context) throws ERXRestException, ERXRestNotFoundException, ERXRestSecurityException {
+		throw new ERXRestSecurityException("You are not allowed to access the " + entity.name() + " with the id '" + key + "'.");
+	}
+
+	public EOEnterpriseObject objectWithKey(EOEntity entity, String key, NSArray objs, ERXRestContext context) throws ERXRestException, ERXRestSecurityException, ERXRestNotFoundException {
+		throw new ERXRestSecurityException("You are not allowed to access the " + entity.name() + " with the id '" + key + "'.");
+	}
+
+	public EOEnterpriseObject insertObjectFromDocument(EOEntity entity, Element insertElement, EOEnterpriseObject parentObject, String parentKey, ERXRestContext context) throws ERXRestSecurityException, ERXRestException, ERXRestNotFoundException {
 		return null;
 	}
 
-	public Object parseAttributeValue(EOEntity entity, Object object, String attributeName, String attributeValue) throws ParseException, ERXRestException {
+	public void updateArrayFromDocument(EOEntity parentEntity, EOEnterpriseObject parentObject, String attributeName, EOEntity entity, NSArray currentObjects, NodeList toManyNodes, ERXRestContext context) throws ERXRestException, ERXRestNotFoundException, ERXRestSecurityException {
+	}
+
+	public void updateObjectFromDocument(EOEntity entity, EOEnterpriseObject eo, Element eoElement, ERXRestContext context) throws ERXRestSecurityException, ERXRestException, ERXRestNotFoundException {
+	}
+
+	public String formatAttributeValue(EOEntity entity, Object object, String attributeName, Object attributeValue) throws ParseException, ERXRestException {
 		return null;
 	}
 
@@ -69,6 +86,10 @@ public class ERXDenyRestEntityDelegate implements IERXRestEntityDelegate {
 
 	public NSArray visibleObjects(EOEntity parentEntity, Object parent, String key, EOEntity entity, NSArray objects, ERXRestContext context) {
 		return NSArray.EmptyArray;
+	}
+
+	public void preprocess(EOEntity entity, NSArray objects, ERXRestContext context) throws ERXRestException {
+		// DO NOTHING
 	}
 
 	public EOEntity nextEntity(EOEntity entity, String key) {
