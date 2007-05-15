@@ -7,11 +7,13 @@ import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WOElement;
 import com.webobjects.appserver.WORequest;
 import com.webobjects.appserver.WOResponse;
+import com.webobjects.appserver._private.WODynamicElementCreationException;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 
 import er.extensions.ERXComponentUtilities;
+import er.extensions.ERXStringUtilities;
 
 /**
  * Updates a region on the screen by creating a request to an action, then returning a script that in turn creates an
@@ -45,6 +47,7 @@ import er.extensions.ERXComponentUtilities;
  * @binding elementName the element name to use (defaults to "a")
  * @binding functionName if set, the link becomes a javascript function
  * @binding button if true, this is rendered as a javascript button
+ * @binding effect the Scriptaculous effect to apply onSuccess ("highlight", "slideIn", "blindDown", etc);
  */
 public class AjaxUpdateLink extends AjaxDynamicElement {
 
@@ -54,7 +57,7 @@ public class AjaxUpdateLink extends AjaxDynamicElement {
 
 	public String onClick(WOContext context, boolean generateFunctionWrapper) {
 		WOComponent component = context.component();
-		NSDictionary options = createAjaxOptions(component);
+		NSMutableDictionary options = createAjaxOptions(component);
 		StringBuffer onClickBuffer = new StringBuffer();
 
 		String onClick = (String) valueForBinding("onClick", component);
@@ -63,6 +66,8 @@ public class AjaxUpdateLink extends AjaxDynamicElement {
 		String functionName = (String) valueForBinding("functionName", component);
 		String function = (String) valueForBinding("function", component);
 		String replaceID = (String) valueForBinding("replaceID", component);
+		AjaxUpdateLink.addEffect(options, (String) valueForBinding("effect", component), updateContainerID);
+		
 		WOAssociation directActionNameAssociation = (WOAssociation) associations().valueForKey("directActionName");
 		if (updateContainerID != null && directActionNameAssociation == null && replaceID == null && function == null && onClick == null && onClickBefore == null) {
 			NSDictionary nonDefaultOptions = AjaxUpdateContainer.removeDefaultOptions(options);
@@ -151,7 +156,29 @@ public class AjaxUpdateLink extends AjaxDynamicElement {
 		return onClickBuffer.toString();
 	}
 
-	protected NSDictionary createAjaxOptions(WOComponent component) {
+	public static void addEffect(NSMutableDictionary options, String effect, String updateContainerID) {
+		if (effect != null) {
+			if (options.objectForKey("onSuccess") != null) {
+				throw new WODynamicElementCreationException("You cannot specify both an effect and a custom onSuccess function.");
+			}
+			
+			if (updateContainerID == null) {
+				throw new WODynamicElementCreationException("You cannot specify an effect without an updateContainerID.");
+			}
+			
+			String effectName;
+			if (effect.indexOf('.') == -1) {
+				effectName = "Effect." + ERXStringUtilities.capitalize(effect);
+			}
+			else {
+				effectName = effect;
+			}
+			
+			options.setObjectForKey("function() { new " + effectName + "('" + updateContainerID + "', { queue:'end'}) }", "onSuccess");
+		}
+	}
+	
+	protected NSMutableDictionary createAjaxOptions(WOComponent component) {
 		NSMutableArray ajaxOptionsArray = new NSMutableArray();
 		ajaxOptionsArray.addObject(new AjaxOption("onLoading", AjaxOption.SCRIPT));
 		ajaxOptionsArray.addObject(new AjaxOption("onComplete", AjaxOption.SCRIPT));

@@ -16,6 +16,7 @@
 		<binding name = "functionName"/>
 		<binding name = "elementName"/>
 		<binding name = "button"/>
+		<binding name = "effect"/>
 
 		<binding name = "onClickBefore"/>
 		<binding name = "onClick"/>
@@ -27,6 +28,16 @@
     <validation message="&apos;action&apos; and &apos;directActionName&apos; cannot both be bound.">
 	    <bound name = "action"/>
 	    <bound name = "directActionName"/>
+    </validation>
+    
+    <validation message="&apos;effect&apos; and &apos;onSuccess&apos; cannot both be bound.">
+	    <bound name = "effect"/>
+	    <bound name = "onSuccess"/>
+    </validation>
+    
+    <validation message="If &apos;effect&apos; is bound, then &apos;updateContainerID&apos; must also be bound.">
+	    <bound name = "effect"/>
+	    <unbound name = "updateContainerID"/>
     </validation>
     
     <validation message="If &apos;directActionName&apos; is bound, then &apos;replaceID&apos; must also be bound.">
