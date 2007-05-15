@@ -53,6 +53,10 @@ public class ERXRestRequestHandler extends WORequestHandler {
 		return responseWriter;
 	}
 
+	protected EOEditingContext newEditingContext() {
+		return ERXEC.newEditingContext();
+	}
+
 	public WOResponse handleRequest(WORequest request) {
 		WOApplication application = WOApplication.application();
 		WOContext woContext = application.createContextForRequest(request);
@@ -76,7 +80,7 @@ public class ERXRestRequestHandler extends WORequestHandler {
 			WOApplication.application().restoreSessionWithID(wosid, woContext);
 		}
 		try {
-			EOEditingContext editingContext = ERXEC.newEditingContext();
+			EOEditingContext editingContext = newEditingContext();
 			ERXRestContext restContext = new ERXRestContext(woContext, editingContext);
 			restContext.setDelegate(_delegate);
 			editingContext.lock();

@@ -36,13 +36,18 @@ public class ERXRestKey {
 		_value = value;
 		_valueFetched = true;
 	}
-	
+
 	public ERXRestKey trimPrevious() throws ERXRestException, ERXRestSecurityException, ERXRestNotFoundException {
-		// make sure the value is fetched
-		value();
+		// Make sure the value is fetched, but we might accidentally trip a security violation doing this. So
+		// we want to ignore the error for now long enough to get the primary key of the object on the other
+		// side of the relationship, then queue that up for later.
+		Object value = value(false);
 		ERXRestKey trimmedKey = cloneKey(false);
-		if (trimmedKey._value instanceof NSArray) {
-			trimmedKey._entity = nextEntity();
+		trimmedKey._entity = nextEntity();
+		if (value instanceof EOEnterpriseObject) {
+			trimmedKey._key = ERXRestUtils.idForEO((EOEnterpriseObject) value);
+		}
+		else {
 			trimmedKey._key = null;
 		}
 		return trimmedKey;
@@ -171,8 +176,13 @@ public class ERXRestKey {
 	}
 
 	public Object value() throws ERXRestException, ERXRestSecurityException, ERXRestNotFoundException {
+		return value(true);
+	}
+
+	public Object value(boolean _checkToOnePermissions) throws ERXRestException, ERXRestSecurityException, ERXRestNotFoundException {
 		Object value = _value;
 		if (!_valueFetched) {
+			boolean cacheValue = true;
 			if (isKeyAll()) {
 				value = _context.delegate().objectsForEntity(_entity, _context);
 			}
@@ -210,9 +220,15 @@ public class ERXRestKey {
 					}
 					else if (value instanceof EOEnterpriseObject) {
 						if (!_context.delegate().entityDelegate(nextEntity).canViewObject(nextEntity, (EOEnterpriseObject) value, _context)) {
-							// MS: This maybe SHOULD be a security error, but it would cause normal to-one traversals to a non-visible object to fail
-							//throw new ERXRestSecurityException("You are not allowed to view the object for the key '" + _key + "' on the entity '" + _entity.name() + "'.");
-							value = null;
+							if (_checkToOnePermissions) {
+								if (_previousKey == null) {
+									throw new ERXRestSecurityException("You are not allowed to view the " + nextEntity.name() + " with the id '" + _key + "'.");
+								}
+								else {
+									value = null;
+								}
+							}
+							cacheValue = false;
 						}
 					}
 				}
@@ -222,8 +238,10 @@ public class ERXRestKey {
 				((NSArray) value).count();
 			}
 
-			_value = value;
-			_valueFetched = true;
+			if (cacheValue) {
+				_value = value;
+				_valueFetched = true;
+			}
 		}
 		return value;
 	}

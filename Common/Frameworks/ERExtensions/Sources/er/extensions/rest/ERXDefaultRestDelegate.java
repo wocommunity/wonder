@@ -13,14 +13,12 @@ import com.webobjects.eoaccess.EOEntity;
 import com.webobjects.eoaccess.EORelationship;
 import com.webobjects.eoaccess.EOUtilities;
 import com.webobjects.eocontrol.EOEnterpriseObject;
-import com.webobjects.eocontrol.EOFetchSpecification;
 import com.webobjects.eocontrol.EOKeyGlobalID;
-import com.webobjects.eocontrol.EOKeyValueQualifier;
-import com.webobjects.eocontrol.EOQualifier;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 
+import er.extensions.ERXEOGlobalIDUtilities;
 import er.extensions.ERXLocalizer;
 
 public class ERXDefaultRestDelegate implements IERXRestDelegate {
@@ -38,13 +36,10 @@ public class ERXDefaultRestDelegate implements IERXRestDelegate {
 
 	public EOEnterpriseObject objectWithKey(EOEntity entity, String key, ERXRestContext context) throws ERXRestException, ERXRestNotFoundException, ERXRestSecurityException {
 		EOKeyGlobalID gid = EOKeyGlobalID.globalIDWithEntityName(entity.name(), new Object[] { Integer.valueOf(key) });
-		EOQualifier pkQualifier = entity.qualifierForPrimaryKey(entity.primaryKeyForGlobalID(gid));
-		EOFetchSpecification singleFetchSpec = new EOFetchSpecification(entity.name(), pkQualifier, null);
-		NSArray objs = context.editingContext().objectsWithFetchSpecification(singleFetchSpec);
-		if (objs.count() == 0) {
+		EOEnterpriseObject obj = ERXEOGlobalIDUtilities.fetchObjectWithGlobalID(context.editingContext(), gid);
+		if (obj == null) {
 			throw new ERXRestNotFoundException("There is no " + entity.name() + " with the id '" + key + "'.");
 		}
-		EOEnterpriseObject obj = (EOEnterpriseObject) objs.objectAtIndex(0);
 		if (!entityDelegate(entity).canViewObject(entity, obj, context)) {
 			throw new ERXRestSecurityException("You are not allowed to view the " + entity.name() + " with the id '" + key + "'.");
 		}
@@ -52,9 +47,14 @@ public class ERXDefaultRestDelegate implements IERXRestDelegate {
 	}
 
 	public EOEnterpriseObject objectWithKey(EOEntity entity, String key, NSArray objs, ERXRestContext context) throws ERXRestException, ERXRestSecurityException, ERXRestNotFoundException {
-		// MS: "primaryKey" = Project Wonder only
-		EOQualifier pkQualifier = new EOKeyValueQualifier("primaryKey", EOQualifier.QualifierOperatorEqual, key);
-		NSArray filteredObjs = EOQualifier.filteredArrayWithQualifier(objs, pkQualifier);
+		NSMutableArray filteredObjs = new NSMutableArray();
+		Enumeration objsEnum = objs.objectEnumerator();
+		while (objsEnum.hasMoreElements()) {
+			EOEnterpriseObject eo = (EOEnterpriseObject) objsEnum.nextElement();
+			if (ERXRestUtils.idForEO(eo).equals(key)) {
+				filteredObjs.addObject(eo);
+			}
+		}
 		if (filteredObjs.count() == 0) {
 			throw new ERXRestNotFoundException("There is no " + entity.name() + " in this relationship with the id '" + key + "'.");
 		}
