@@ -19,7 +19,7 @@ public abstract class ERXAbstractXmlRestResponseWriter implements IERXRestRespon
 	public void appendToResponse(ERXRestContext context, WOResponse response, ERXRestKey result) throws ERXRestException, ERXRestSecurityException, ERXRestNotFoundException, ParseException {
 		response.setHeader("text/xml", "Content-Type");
 		StringBuffer xmlBuffer = new StringBuffer();
-		appendXmlToResponse(context, response, result, 0, new NSMutableSet());
+		appendXmlToResponse(context, response, result.trimPrevious(), 0, new NSMutableSet());
 	}
 
 	protected void indent(WOResponse response, int indent) {
