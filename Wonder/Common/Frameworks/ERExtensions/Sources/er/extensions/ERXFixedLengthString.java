@@ -65,8 +65,9 @@ public class ERXFixedLengthString extends ERXStatelessComponent {
      * @return int value of the binding: <b>length</b>
      */
     public int length() {
-        Integer l=(Integer)valueForBinding("length");
-        return l!=null ? l.intValue() : 0;
+    	Object value = valueForBinding("length");
+    	int result = ERXValueUtilities.intValue(value);
+        return result;
     }
 
     /**
