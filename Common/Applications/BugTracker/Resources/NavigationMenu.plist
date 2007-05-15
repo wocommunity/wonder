@@ -30,6 +30,7 @@
         {
                 name = "Bugs";
                 action = "session.handlers.bugs.ListRecentBugs";
+                hasActivity = "^session.user.unreadBugs.count";
                 children = ("CreateBug", "QueryBugs", "ListRecentBugs", "ListMyBugs");
                 conditions = ();
         },
