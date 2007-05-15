@@ -23,7 +23,7 @@ public abstract class ERXAbstractRestEntityDelegate implements IERXRestEntityDel
 		EOKeyValueCoding.Utility.takeStoredValueForKey(obj, parsedAttributeValue, propertyName);
 	}
 
-	public void delete(EOEntity entity, EOEnterpriseObject eo, ERXRestContext context) throws ERXRestException {
+	public void delete(EOEntity entity, EOEnterpriseObject eo, ERXRestContext context) throws ERXRestException, ERXRestSecurityException {
 		if (eo instanceof ERXGuardedObjectInterface) {
 			((ERXGuardedObjectInterface) eo).delete();
 		}

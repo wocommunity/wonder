@@ -13,7 +13,6 @@ import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WORequest;
 import com.webobjects.appserver.WORequestHandler;
 import com.webobjects.appserver.WOResponse;
-import com.webobjects.eoaccess.EOEntity;
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.foundation.NSMutableDictionary;
 
@@ -47,16 +46,16 @@ public class ERXRestRequestHandler extends WORequestHandler {
 		}
 	}
 
-	public void setResponseWriterForEntity(IERXRestResponseWriter responseWriter, EOEntity entity) {
-		_entityResponseWriter.setObjectForKey(responseWriter, entity);
+	public void setResponseWriterForEntityNamed(IERXRestResponseWriter responseWriter, String entityName) {
+		_entityResponseWriter.setObjectForKey(responseWriter, entityName);
 	}
 
-	public void removeResponseWriterForEntity(EOEntity entity) {
-		_entityResponseWriter.removeObjectForKey(entity);
+	public void removeResponseWriterForEntityNamed(String entityName) {
+		_entityResponseWriter.removeObjectForKey(entityName);
 	}
 
-	protected IERXRestResponseWriter responseWriterForEntity(EOEntity entity) {
-		IERXRestResponseWriter responseWriter = (IERXRestResponseWriter) _entityResponseWriter.objectForKey(entity);
+	protected IERXRestResponseWriter responseWriterForEntityNamed(String entityName) {
+		IERXRestResponseWriter responseWriter = (IERXRestResponseWriter) _entityResponseWriter.objectForKey(entityName);
 		if (responseWriter == null) {
 			responseWriter = _defaultResponseWriter;
 		}
@@ -98,7 +97,7 @@ public class ERXRestRequestHandler extends WORequestHandler {
 				ERXRestKey requestKey = ERXRestKey.parse(restContext, path);
 				String method = request.method();
 				if ("GET".equalsIgnoreCase(method)) {
-					IERXRestResponseWriter restResponseWriter = responseWriterForEntity(requestKey.entity());
+					IERXRestResponseWriter restResponseWriter = responseWriterForEntityNamed(requestKey.entity().name());
 					restResponseWriter.appendToResponse(restContext, response, requestKey);
 					editingContext.saveChanges();
 				}
@@ -125,7 +124,7 @@ public class ERXRestRequestHandler extends WORequestHandler {
 					ERXRestKey responseKey = _delegate.insert(requestKey, insertDocument, restContext);
 					editingContext.saveChanges();
 
-					IERXRestResponseWriter restResponseWriter = responseWriterForEntity(responseKey.entity());
+					IERXRestResponseWriter restResponseWriter = responseWriterForEntityNamed(responseKey.entity().name());
 					restResponseWriter.appendToResponse(restContext, response, responseKey);
 					response.setStatus(201);
 				}
