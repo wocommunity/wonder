@@ -29,8 +29,7 @@ ERXTable: ERXTable {
 }
 
 HasPropertyName: WOConditional {
-	condition = d2wContext.hidePropertyName;
-	negate = true;
+	condition = hasPropertyName;
 }
 
 HasSectionName: ERXNonZeroConditional {
@@ -38,8 +37,8 @@ HasSectionName: ERXNonZeroConditional {
 }
 
 HasntPropertyName: WOConditional {
-	condition = d2wContext.hidePropertyName;
-	negate = false;
+	condition = hasPropertyName;
+	negate = true;
 }
 
 NotUsingMatrixLayout: WOConditional {
