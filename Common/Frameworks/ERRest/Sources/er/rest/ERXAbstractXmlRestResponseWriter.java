@@ -49,7 +49,7 @@ public abstract class ERXAbstractXmlRestResponseWriter implements IERXRestRespon
 		response.appendContentString(">");
 		response.appendContentString("\n");
 
-		context.delegate().preprocess(entity, values, context);
+		context.delegate().entityDelegate(entity).preprocess(entity, values, context);
 		Enumeration valuesEnum = values.objectEnumerator();
 		while (valuesEnum.hasMoreElements()) {
 			EOEnterpriseObject eo = (EOEnterpriseObject) valuesEnum.nextElement();

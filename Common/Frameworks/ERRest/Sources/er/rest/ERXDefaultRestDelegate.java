@@ -1,24 +1,17 @@
 package er.rest;
 
-import java.text.ParseException;
 import java.util.Enumeration;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import org.w3c.dom.Text;
 
 import com.webobjects.eoaccess.EOEntity;
-import com.webobjects.eoaccess.EORelationship;
-import com.webobjects.eoaccess.EOUtilities;
 import com.webobjects.eocontrol.EOEnterpriseObject;
-import com.webobjects.eocontrol.EOKeyGlobalID;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 
-import er.extensions.ERXEOGlobalIDUtilities;
 import er.extensions.ERXLocalizer;
 
 public class ERXDefaultRestDelegate implements IERXRestDelegate {
@@ -32,37 +25,6 @@ public class ERXDefaultRestDelegate implements IERXRestDelegate {
 	public ERXDefaultRestDelegate(IERXRestEntityDelegate defaultDelegate) {
 		_entityDelegates = new NSMutableDictionary();
 		_defaultDelegate = defaultDelegate;
-	}
-
-	public EOEnterpriseObject objectWithKey(EOEntity entity, String key, ERXRestContext context) throws ERXRestException, ERXRestNotFoundException, ERXRestSecurityException {
-		EOKeyGlobalID gid = EOKeyGlobalID.globalIDWithEntityName(entity.name(), new Object[] { Integer.valueOf(key) });
-		EOEnterpriseObject obj = ERXEOGlobalIDUtilities.fetchObjectWithGlobalID(context.editingContext(), gid);
-		if (obj == null) {
-			throw new ERXRestNotFoundException("There is no " + entity.name() + " with the id '" + key + "'.");
-		}
-		if (!entityDelegate(entity).canViewObject(entity, obj, context)) {
-			throw new ERXRestSecurityException("You are not allowed to view the " + entity.name() + " with the id '" + key + "'.");
-		}
-		return obj;
-	}
-
-	public EOEnterpriseObject objectWithKey(EOEntity entity, String key, NSArray objs, ERXRestContext context) throws ERXRestException, ERXRestSecurityException, ERXRestNotFoundException {
-		NSMutableArray filteredObjs = new NSMutableArray();
-		Enumeration objsEnum = objs.objectEnumerator();
-		while (objsEnum.hasMoreElements()) {
-			EOEnterpriseObject eo = (EOEnterpriseObject) objsEnum.nextElement();
-			if (ERXRestUtils.idForEO(eo).equals(key)) {
-				filteredObjs.addObject(eo);
-			}
-		}
-		if (filteredObjs.count() == 0) {
-			throw new ERXRestNotFoundException("There is no " + entity.name() + " in this relationship with the id '" + key + "'.");
-		}
-		EOEnterpriseObject obj = (EOEnterpriseObject) objs.objectAtIndex(0);
-		if (!entityDelegate(entity).canViewObject(entity, obj, context)) {
-			throw new ERXRestSecurityException("You are not allowed to view the " + entity.name() + " with the id '" + key + "'.");
-		}
-		return obj;
 	}
 
 	public ERXRestKey insert(ERXRestKey lastKey, Document insertDocument, ERXRestContext context) throws ERXRestException, ERXRestSecurityException, ERXRestNotFoundException {
@@ -128,13 +90,8 @@ public class ERXDefaultRestDelegate implements IERXRestDelegate {
 		if (!canInsert) {
 			throw new ERXRestSecurityException("You are not allowed to insert this object.");
 		}
-		EOEnterpriseObject eo = EOUtilities.createAndInsertInstance(context.editingContext(), entity.name());
-		updateObjectFromElement(entity, eo, insertElement, context);
-		if (parentObject != null) {
-			parentObject.addObjectToBothSidesOfRelationshipWithKey(eo, parentKey);
-		}
-		entityDelegate(entity).updated(entity, eo, context);
 
+		EOEnterpriseObject eo = entityDelegate(entity).insertObjectFromDocument(entity, insertElement, parentObject, parentKey, context);
 		return eo;
 	}
 
@@ -153,8 +110,7 @@ public class ERXDefaultRestDelegate implements IERXRestDelegate {
 			}
 
 			Element updateElement = updateDocument.getDocumentElement();
-			updateObjectFromElement(lastEntity, eo, updateElement, context);
-			entityDelegate(lastEntity).updated(lastEntity, eo, context);
+			context.delegate().entityDelegate(lastEntity).updateObjectFromDocument(lastEntity, eo, updateElement, context);
 		}
 		else if (lastValue instanceof NSArray) {
 			ERXRestKey nextToLastKey = lastKey.previousKey();
@@ -175,9 +131,7 @@ public class ERXDefaultRestDelegate implements IERXRestDelegate {
 				}
 
 				NodeList toManyNodes = arrayElement.getChildNodes();
-				updateArray(eo, nextToLastKey.key(), lastEntity, currentObjects, toManyNodes, context);
-
-				entityDelegate(lastEntity).updated(lastEntity, eo, context);
+				context.delegate().entityDelegate(lastEntity).updateArrayFromDocument(previousEntity, eo, nextToLastKey.key(), lastEntity, currentObjects, toManyNodes, context);
 			}
 			else {
 				throw new ERXRestException("You attempted to put an array into something other than a relationship of a single object.");
@@ -186,122 +140,6 @@ public class ERXDefaultRestDelegate implements IERXRestDelegate {
 		else {
 			throw new ERXRestException("You attempted to update something that could not be processed.");
 		}
-	}
-
-	protected void updateObjectFromElement(EOEntity entity, EOEnterpriseObject eo, Element eoElement, ERXRestContext context) throws ERXRestSecurityException, ERXRestException, ERXRestNotFoundException {
-		if (!entity.name().equals(eoElement.getNodeName())) {
-			throw new ERXRestException("You attempted to put a " + eoElement.getNodeName() + " into a " + entity.name() + ".");
-		}
-
-		NodeList attributeNodes = eoElement.getChildNodes();
-		for (int attributeNum = 0; attributeNum < attributeNodes.getLength(); attributeNum++) {
-			Node attributeNode = attributeNodes.item(attributeNum);
-			if (attributeNode instanceof Text) {
-				continue;
-			}
-
-			String attributeName = attributeNode.getNodeName();
-			if (!entityDelegate(entity).canUpdateProperty(entity, eo, attributeName, context)) {
-				throw new ERXRestSecurityException("You are not allowed to update '" + attributeName + "' on " + entity.name() + ".");
-			}
-
-			EORelationship relationship = entity.relationshipNamed(attributeName);
-			if (relationship != null) {
-				EOEntity destinationEntity = relationship.destinationEntity();
-				if (!relationship.isToMany()) {
-					EOEnterpriseObject originalObject = (EOEnterpriseObject) entityDelegate(entity).valueForKey(entity, eo, attributeName, context);
-					Node idNode = attributeNode.getAttributes().getNamedItem("id");
-					if (idNode == null) {
-						eo.removeObjectFromBothSidesOfRelationshipWithKey(originalObject, attributeName);
-					}
-					else {
-						String id = idNode.getNodeValue();
-						EOEnterpriseObject newObject = objectWithKey(destinationEntity, id, context);
-						if (originalObject == null && newObject != null) {
-							eo.addObjectToBothSidesOfRelationshipWithKey(newObject, attributeName);
-						}
-						else if (originalObject != null && !originalObject.equals(newObject)) {
-							eo.removeObjectFromBothSidesOfRelationshipWithKey(originalObject, attributeName);
-							if (newObject != null) {
-								eo.addObjectToBothSidesOfRelationshipWithKey(newObject, attributeName);
-							}
-						}
-					}
-				}
-				else {
-					NSArray currentObjects = (NSArray) entityDelegate(entity).valueForKey(entity, eo, attributeName, context);
-					NodeList toManyNodes = attributeNode.getChildNodes();
-					updateArray(eo, attributeName, destinationEntity, currentObjects, toManyNodes, context);
-				}
-			}
-			else {
-				NodeList attributeChildNodes = attributeNode.getChildNodes();
-				String attributeValue;
-				if (attributeChildNodes.getLength() == 0) {
-					attributeValue = null;
-				}
-				else {
-					attributeValue = attributeChildNodes.item(0).getNodeValue();
-				}
-				try {
-					entityDelegate(entity).takeValueForKey(entity, eo, attributeName, attributeValue, context);
-				}
-				catch (ParseException e) {
-					throw new ERXRestException("Failed to parse attribute value '" + attributeValue + "'.", e);
-				}
-			}
-		}
-	}
-
-	protected void updateArray(EOEnterpriseObject eo, String attributeName, EOEntity entity, NSArray currentObjects, NodeList toManyNodes, ERXRestContext context) throws ERXRestException, ERXRestNotFoundException, ERXRestSecurityException {
-		NSMutableArray keepObjects = new NSMutableArray();
-		NSMutableArray addObjects = new NSMutableArray();
-		NSMutableArray removeObjects = new NSMutableArray();
-
-		for (int toManyNum = 0; toManyNum < toManyNodes.getLength(); toManyNum++) {
-			Node toManyNode = toManyNodes.item(toManyNum);
-			String toManyNodeName = toManyNode.getNodeName();
-			if (!entity.name().equals(toManyNodeName)) {
-				throw new ERXRestException("You attempted to put a " + toManyNodeName + " into a " + entity.name() + ".");
-			}
-
-			String id = toManyNode.getAttributes().getNamedItem("id").getNodeValue();
-			Object relatedObject = objectWithKey(entity, id, context);
-			if (currentObjects.containsObject(relatedObject)) {
-				System.out.println("AbstractERXRestDelegate.updateArray: keeping " + relatedObject + " in " + eo + " (" + attributeName + ")");
-				keepObjects.addObject(relatedObject);
-			}
-			else {
-				addObjects.addObject(relatedObject);
-			}
-		}
-
-		Enumeration currentObjectsEnum = currentObjects.immutableClone().objectEnumerator();
-		while (currentObjectsEnum.hasMoreElements()) {
-			EOEnterpriseObject currentObject = (EOEnterpriseObject) currentObjectsEnum.nextElement();
-			if (!keepObjects.containsObject(currentObject)) {
-				System.out.println("AbstractERXRestDelegate.updateArray: removing " + currentObject + " from " + eo + " (" + attributeName + ")");
-				eo.removeObjectFromBothSidesOfRelationshipWithKey(currentObject, attributeName);
-			}
-		}
-
-		Enumeration addObjectsEnum = addObjects.objectEnumerator();
-		while (addObjectsEnum.hasMoreElements()) {
-			EOEnterpriseObject addObject = (EOEnterpriseObject) addObjectsEnum.nextElement();
-			System.out.println("AbstractERXRestDelegate.updateArray: adding " + addObject + " to " + eo + " (" + attributeName + ")");
-			eo.addObjectToBothSidesOfRelationshipWithKey(addObject, attributeName);
-		}
-	}
-
-	public void preprocess(EOEntity entity, NSArray objects, ERXRestContext context) {
-		// Enumeration displayPropertiesEnum = displayProperties(entity).objectEnumerator();
-		// while (displayPropertiesEnum.hasMoreElements()) {
-		// EOProperty displayProperty = (EOProperty) displayPropertiesEnum.nextElement();
-		// if (displayProperty instanceof EORelationship) {
-		// EORelationship displayRelationship = (EORelationship) displayProperty;
-		// ERXRecursiveBatchFetching.batchFetch(objects, displayRelationship.name());
-		// }
-		// }
 	}
 
 	public void delete(EOEntity entity, Object obj, ERXRestContext context) throws ERXRestException, ERXRestSecurityException {
@@ -341,9 +179,5 @@ public class ERXDefaultRestDelegate implements IERXRestDelegate {
 			entityDelegate = _defaultDelegate;
 		}
 		return entityDelegate;
-	}
-
-	public NSArray objectsForEntity(EOEntity entity, ERXRestContext context) throws ERXRestException, ERXRestSecurityException {
-		return entityDelegate(entity).objectsForEntity(entity, context);
 	}
 }

@@ -183,8 +183,9 @@ public class ERXRestKey {
 		Object value = _value;
 		if (!_valueFetched) {
 			boolean cacheValue = true;
+			IERXRestEntityDelegate entityDelegate = _context.delegate().entityDelegate(_entity);
 			if (isKeyAll()) {
-				value = _context.delegate().objectsForEntity(_entity, _context);
+				value = entityDelegate.objectsForEntity(_entity, _context);
 			}
 			else {
 				Object previousValue = null;
@@ -193,11 +194,11 @@ public class ERXRestKey {
 				}
 				if (isKeyGID()) {
 					if (previousValue == null) {
-						value = _context.delegate().objectWithKey(_entity, _key, _context);
+						value = entityDelegate.objectWithKey(_entity, _key, _context);
 					}
 					else if (previousValue instanceof NSArray) {
 						NSArray previousObjects = (NSArray) previousValue;
-						value = _context.delegate().objectWithKey(_entity, _key, previousObjects, _context);
+						value = entityDelegate.objectWithKey(_entity, _key, previousObjects, _context);
 					}
 					else {
 						throw new ERXRestException("Unable to evaluate the id '" + _key + "' on an object of type '" + previousValue.getClass().getName() + "'.");
@@ -210,10 +211,10 @@ public class ERXRestKey {
 					throw new ERXRestException("Unable to evalute the key '" + _key + "' on an array.");
 				}
 				else {
-					if (!_context.delegate().entityDelegate(_entity).canViewProperty(_entity, previousValue, _key, _context)) {
+					if (!entityDelegate.canViewProperty(_entity, previousValue, _key, _context)) {
 						throw new ERXRestSecurityException("You are not allowed to view the key '" + _key + "' on the entity '" + _entity.name() + "'.");
 					}
-					value = _context.delegate().entityDelegate(_entity).valueForKey(_entity, previousValue, _key, _context);
+					value = entityDelegate.valueForKey(_entity, previousValue, _key, _context);
 					EOEntity nextEntity = nextEntity();
 					if (value instanceof NSArray) {
 						value = _context.delegate().entityDelegate(nextEntity).visibleObjects(_entity, previousValue, _key, nextEntity, (NSArray) value, _context);
