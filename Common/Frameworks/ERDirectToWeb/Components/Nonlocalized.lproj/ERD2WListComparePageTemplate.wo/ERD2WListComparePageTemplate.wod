@@ -41,13 +41,14 @@ ERPrinterButton: ERDPrinterButton {
 	task = "list";
 }
 
-ERRepeatingTable1: ERXRepeatingTable {
+ERXRepeatingTable: ERXRepeatingTable {
 	item = object;
 	list = compareList;
 	repetetions = displayPropertyKeys.count;
 	maxColumns = compareList.count;
-        row=d2wPropertyKeyIndex;
-        col=col;
+    row=d2wPropertyKeyIndex;
+    col=col;
+    align = "right";
 }
 
 EmptyMessageComponent: WOSwitchComponent {
