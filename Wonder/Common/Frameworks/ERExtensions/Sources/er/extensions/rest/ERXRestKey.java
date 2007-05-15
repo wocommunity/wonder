@@ -36,16 +36,27 @@ public class ERXRestKey {
 		_value = value;
 		_valueFetched = true;
 	}
+	
+	public ERXRestKey trimPrevious() throws ERXRestException, ERXRestSecurityException, ERXRestNotFoundException {
+		// make sure the value is fetched
+		value();
+		ERXRestKey trimmedKey = cloneKey(false);
+		if (trimmedKey._value instanceof NSArray) {
+			trimmedKey._entity = nextEntity();
+			trimmedKey._key = null;
+		}
+		return trimmedKey;
+	}
 
-	public ERXRestKey cloneKey() throws ERXRestException {
+	protected ERXRestKey cloneKey(boolean clonePrevious) throws ERXRestException {
 		ERXRestKey cloneKey = new ERXRestKey();
 		cloneKey._context = _context;
 		cloneKey._entity = _entity;
 		cloneKey._key = _key;
 		cloneKey._value = _value;
 		cloneKey._valueFetched = _valueFetched;
-		if (_previousKey != null) {
-			cloneKey._previousKey = _previousKey.cloneKey();
+		if (_previousKey != null && clonePrevious) {
+			cloneKey._previousKey = _previousKey.cloneKey(true);
 			cloneKey._previousKey._nextKey = cloneKey;
 		}
 		return cloneKey;
@@ -70,7 +81,7 @@ public class ERXRestKey {
 			}
 		}
 		else if (clone) {
-			ERXRestKey cloneKey = cloneKey();
+			ERXRestKey cloneKey = cloneKey(true);
 			cloneKey._nextKey = nextKey;
 			nextKey._previousKey = cloneKey;
 		}
