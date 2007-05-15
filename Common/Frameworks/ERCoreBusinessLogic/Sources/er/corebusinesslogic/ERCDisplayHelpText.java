@@ -8,19 +8,27 @@ import com.webobjects.directtoweb.EditPageInterface;
 import com.webobjects.eocontrol.EOEnterpriseObject;
 import com.webobjects.foundation.NSMutableArray;
 
+import er.directtoweb.ERDCustomComponent;
 import er.extensions.ERXEOControlUtilities;
-import er.extensions.ERXStatelessComponent;
 import er.extensions.ERXThreadStorage;
 
-public class ERCDisplayHelpText extends ERXStatelessComponent {
+public class ERCDisplayHelpText extends ERDCustomComponent {
 
     public ERCDisplayHelpText(WOContext context) {
         super(context);
     }
 
+    public boolean isStateless() {
+     	return true;
+    }
+    
+    public boolean synchronizesVariablesWithBindings() {
+     	return false;
+    }
+    
     public ERCHelpText helpText() {
     	ERCHelpText text = ERCHelpText.clazz.helpTextForKey(session().defaultEditingContext(), key());
-    	if(!textsOnPage().containsObject(key())) {
+    	if(key() != null && !textsOnPage().containsObject(key())) {
     		textsOnPage().addObject(key());
     	}
     	return text;
@@ -41,13 +49,14 @@ public class ERCDisplayHelpText extends ERXStatelessComponent {
 	private String prefix() {
 		return (String) valueForBinding("prefix");
 	}
-    
-	private String key() {
+
+	public String key() {
 		String prefix = prefix();
-		if(prefix() != null) {
-			return prefix() + "." + valueForBinding("key");
+		String key = super.key();
+		if(prefix != null) {
+			return prefix + "." + key;
 		}
-		return (String) valueForBinding("key");
+		return key;
 	}
 	
 	public WOComponent createHelpText() {
