@@ -26,6 +26,7 @@ import er.extensions.ERXSession;
  * Crazy cool component that allows one to select strings (using arrow buttons), and organize them.<br />
  * 
  */
+// CHECKME: this can't ever have worked? Why Strings?
 
 public class ERDListOrganizer extends ERDCustomEditComponent {
 
@@ -34,12 +35,12 @@ public class ERDListOrganizer extends ERDCustomEditComponent {
     /* logging support */
     public static final Logger log = Logger.getLogger(ERDListOrganizer.class);
 
-    protected String availableObject;
-    protected NSMutableArray selectedObjects;   
+    public ERXKeyValuePair availableObject;
+    public NSMutableArray selectedObjects;   
     public NSMutableArray selectedChosenObjects;
     public NSArray chosenObjects;
     public ERXKeyValuePair chosenObject;    
-    protected String chosenKeyPaths;
+    public String chosenKeyPaths;
     public String entityForReportName;
 
     private final static String DASH="-";

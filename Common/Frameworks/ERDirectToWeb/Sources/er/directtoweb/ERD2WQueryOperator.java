@@ -12,8 +12,8 @@ import er.extensions.ERXLocalizer;
 
 public class ERD2WQueryOperator extends QueryOperatorComponent {
 
-    protected NSArray queryOperators;
-    protected String currentOperator;
+    public NSArray queryOperators;
+    public String currentOperator;
     
     public ERD2WQueryOperator(WOContext context) {
         super(context);

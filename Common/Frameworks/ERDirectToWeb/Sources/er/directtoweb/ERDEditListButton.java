@@ -35,7 +35,7 @@ public class ERDEditListButton extends ERDCustomEditComponent {
 
     public ERDEditListButton(WOContext context) {super(context);}
     
-    protected EOEnterpriseObject item;
+    public EOEnterpriseObject item;
     protected NextPageDelegate _nextPageDelegate;
 
     public boolean synchronizesVariablesWithBindings() { return false; }

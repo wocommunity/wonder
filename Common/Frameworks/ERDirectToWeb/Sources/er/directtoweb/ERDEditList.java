@@ -28,6 +28,7 @@ import er.extensions.ERXEOControlUtilities;
  * Description forthcoming.<br />
  * 
  */
+//DELETEME This looks like a pick page?
 
 public class ERDEditList extends ERDCustomEditComponent {
 
@@ -143,7 +144,7 @@ public class ERDEditList extends ERDCustomEditComponent {
     }
 
     private NSArray _selections;
-    protected NSArray selections() {
+    public NSArray selections() {
         if (_selections==null) {
             _selections=(NSArray) objectKeyPathValue();
         }

@@ -23,6 +23,6 @@ SubmitButton2: WOSubmitButton {
 }
 
 Wrapper: WOSwitchComponent {
-	WOComponentName = session.wrapperPageName;
+	WOComponentName = d2wContext.pageWrapperName;
 }
 
