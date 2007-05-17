@@ -16,10 +16,6 @@ Hyperlink1: WOHyperlink {
 	action = viewBugs;
 }
 
-Hyperlink2: WOHyperlink {
-	action = otherRelease;
-}
-
 PageWrapper: PageWrapper {
 }
 

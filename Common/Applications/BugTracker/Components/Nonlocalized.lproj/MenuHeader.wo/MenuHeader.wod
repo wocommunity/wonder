@@ -1,7 +1,3 @@
-AssistantActiveConditional: WOConditional {
-    condition= isWebAssistantEnabled;
-}
-
 QuickSearch : ERDQuickSearch {
 	entityName = entityName;
 	defaultValue = entityName;
@@ -14,85 +10,22 @@ findBugByNumber: WOForm {
   style = "display: inline";
 }
 
-isAdmin: WOConditional {
-	condition = session.user.isAdmin;
-}
-
-isEngineering: WOConditional {
-	condition = session.user.isEngineering;
-}
-
 databaseName: WOString { value=application.databaseName; }
-/*
-CustomizeLink: WOHyperlink {
-    actionClass="D2WActions";
-    directActionName="openServerSideLiveAssistant";
-}
-*/
-EntitiesForm: WOForm {}
-
-EntitiesPopup: WOPopUpButton {
-    list=visibleEntityNames;
-    item=entityNameInList;
-    selection=manipulatedEntityName;
-}
 
 HasValidSession: WOConditional {
     condition=context.hasSession;
-}
-
-homeAction: WOHyperlink {
-    action = homeAction;
-}
-
-trackRelease: WOHyperlink {
-	action = trackRelease;
-}
-
-editMyInfo: WOHyperlink {
-	action = editMyInfo;
-}
-
-bugsFiledRecently: WOHyperlink {
-	action = bugsFiledRecently;
-}
-
-pushRelease: WOHyperlink {
-	action = pushRelease;
 }
 
 freeQuery: WOHyperlink {
 	action = freeQuery;
 }
 
-ComponentReport: WOHyperlink {
-	pageName = "ComponentReport";
-}
-
 Main: WOHyperlink {
 	pageName = "Main";
 }
 
-OnlineHatSystem: WOHyperlink {
-	pageName = "OnlineHatSystem";
-}
-
-trackMyRelease: WOHyperlink {
-	action = trackMyRelease;
-}
-
-MainItems : WORepetition {
-	list = mainMenuItems;
-	item = item;
-}
-
 Menu : ERXNavigationMenu {
 	navigationContext = navigationContext;
-}
-
-Item : ERXNavigationMenuItem {
-	action = context.page;
-	navigationItemName = item;
 }
 
 NoValidSession: WOConditional {
