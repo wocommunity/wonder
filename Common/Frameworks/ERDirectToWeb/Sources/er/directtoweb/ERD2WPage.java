@@ -197,6 +197,20 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
     public EOEditingContext editingContext() {
         return _context;
     }
+    
+    /**
+     * Returns true if the EC has "real" changes (processRecentChanges was called)
+	 */
+    public boolean hasActualChanges() {
+        EOEditingContext ec = editingContext();
+        boolean hasChanges = ec.hasChanges();
+        if(hasChanges) {
+            hasChanges  = ec.insertedObjects().count() > 0;
+            hasChanges |= ec.updatedObjects().count() > 0 && ((NSArray)ec.updatedObjects().valueForKeyPath("changesFromCommittedSnapshot.allValues.@flatten")).count() > 0;
+            hasChanges |= ec.deletedObjects().count() > 0;
+        }
+        return hasChanges;
+    }
 
     /**
      * Implementation of the {@link ERXComponentActionRedirector$Restorable}
