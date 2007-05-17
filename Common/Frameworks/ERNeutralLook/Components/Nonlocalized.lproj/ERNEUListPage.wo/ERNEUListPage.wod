@@ -251,7 +251,7 @@ SortOrder: ERXSortOrder {
 }
 
 String1: WOString {
-	value = referenceEO.name;
+	value = referenceEO.name; // VALID
 }
 
 SwitchComponent1: WOSwitchComponent {
