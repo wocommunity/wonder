@@ -31,16 +31,16 @@ public class ERXDictionaryUtilities extends Object {
      * @return immutbale dictionary containing the union of the two dictionaries.
      */
     public static NSDictionary dictionaryWithDictionaryAndDictionary(NSDictionary dict1, NSDictionary dict2) {
-        if(dict1 == null || dict1.allKeys().count() == 0) 
+        if(dict1 == null || dict1.allKeys().count() == 0)
             return dict2;
-        if(dict2 == null || dict2.allKeys().count() == 0) 
+        if(dict2 == null || dict2.allKeys().count() == 0)
             return dict1;
-            
+
         NSMutableDictionary result = new NSMutableDictionary(dict2);
         result.addEntriesFromDictionary(dict1);
         return new NSDictionary(result);
     }
-    
+
     /**
      * Creates an NSDictionary from a resource associated with a given bundle
      * that is in property list format.<br/>
@@ -74,7 +74,7 @@ public class ERXDictionaryUtilities extends Object {
         }
         return new NSDictionary(result);
     }
-    
+
     /**
      * Removes an array of keys from a dictionary and
      * returns the result.
@@ -86,7 +86,7 @@ public class ERXDictionaryUtilities extends Object {
         NSMutableDictionary result=new NSMutableDictionary();
         if (d != null && a != null) {
             for (Enumeration e = d.allKeys().objectEnumerator(); e.hasMoreElements();) {
-                String key = (String)e.nextElement();
+                Object key = e.nextElement();
                 if (!a.containsObject(key))
                     result.setObjectForKey(d.objectForKey(key), key);
             }
@@ -108,7 +108,7 @@ public class ERXDictionaryUtilities extends Object {
             }
         }
         return d;
-    }    
+    }
 
     /**
      * Creates a dictionary from an objects and an array of key paths
@@ -142,7 +142,7 @@ public class ERXDictionaryUtilities extends Object {
 
         return result != null ? result : NSArray.EmptyArray;
     }
-    
+
     /**
      * @param d dictionary to sort keys from
      * @return keys from d sorted by ascending value they are mapped to
@@ -158,63 +158,63 @@ public class ERXDictionaryUtilities extends Object {
 
         return result != null ? result : NSArray.EmptyArray;
     }
-    
- 	/**
- 	 * Removes entries from both dictionaries that match, leaving you with two dictionaries containing
- 	 * only values that did NOT match.  Note that this comparison considers null == EO/NSKeyValueCoding.NullValue.
- 	 * 
- 	 * @param dict1 the first dictionary
- 	 * @param dict2 the second dictionary
- 	 */
- 	public static void removeMatchingEntries(NSMutableDictionary dict1, NSMutableDictionary dict2) {
- 		ERXDictionaryUtilities._removeMatchingEntries(dict1, dict2, true);
- 	}
- 	
- 	public static void _removeMatchingEntries(NSMutableDictionary snapshot1, NSMutableDictionary snapshot2, boolean removeInverse) {
- 		Enumeration keys1Enum = snapshot1.allKeys().immutableClone().objectEnumerator();
- 		while (keys1Enum.hasMoreElements()) {
- 			String key = (String)keys1Enum.nextElement();
- 			Object value1 = snapshot1.objectForKey(key);
- 			Object value2 = snapshot2.objectForKey(key);
- 			boolean value1IsNull = (value1 == null || value1 == EOKeyValueCoding.NullValue || value1 == NSKeyValueCoding.NullValue);
- 			boolean value2IsNull = (value2 == null || value2 == EOKeyValueCoding.NullValue || value2 == NSKeyValueCoding.NullValue);
- 			if (value1IsNull && value2IsNull) {
- 				snapshot1.removeObjectForKey(key);
- 				snapshot2.removeObjectForKey(key);
- 			}
- 			else if (value1 != null && value1.equals(value2)) {
- 				snapshot1.removeObjectForKey(key);
- 				snapshot2.removeObjectForKey(key);
- 			}
- 		}
- 		// flip around the comparison and remove again
- 		if (removeInverse) {
- 			_removeMatchingEntries(snapshot2, snapshot1, false);
- 		}
- 	}
- 	
- 	
- 	/**
- 	 * Compares dictionary keys based on the value they are associated with.  Useful for getting a list
- 	 * of keys in alphabetical order of their values.
-	 */
- 	public static class NSDictionaryKeyValueComparator extends NSComparator {
- 		private NSDictionary dictionary;
- 		
- 		public NSDictionaryKeyValueComparator(NSDictionary aDictionary) {
- 			super();
- 			dictionary = aDictionary;
- 		}
 
-		public int compare(Object key1, Object key2) throws ComparisonException {
-			Object value1 = dictionary.objectForKey(key1);
-			Object value2 = dictionary.objectForKey(key2);
-			if ( ! (value1 instanceof Comparable && value2 instanceof Comparable)) {
-				throw new ComparisonException("dictionary values are not comparable");
-			}		
+     /**
+      * Removes entries from both dictionaries that match, leaving you with two dictionaries containing
+      * only values that did NOT match.  Note that this comparison considers null == EO/NSKeyValueCoding.NullValue.
+      *
+      * @param dict1 the first dictionary
+      * @param dict2 the second dictionary
+      */
+     public static void removeMatchingEntries(NSMutableDictionary dict1, NSMutableDictionary dict2) {
+         ERXDictionaryUtilities._removeMatchingEntries(dict1, dict2, true);
+     }
 
-			return ((Comparable)value1).compareTo(value2);
-		}
- 	}
+     public static void _removeMatchingEntries(NSMutableDictionary snapshot1, NSMutableDictionary snapshot2, boolean removeInverse) {
+         Enumeration keys1Enum = snapshot1.allKeys().immutableClone().objectEnumerator();
+         while (keys1Enum.hasMoreElements()) {
+             String key = (String)keys1Enum.nextElement();
+             Object value1 = snapshot1.objectForKey(key);
+             Object value2 = snapshot2.objectForKey(key);
+             boolean value1IsNull = (value1 == null || value1 == EOKeyValueCoding.NullValue || value1 == NSKeyValueCoding.NullValue);
+             boolean value2IsNull = (value2 == null || value2 == EOKeyValueCoding.NullValue || value2 == NSKeyValueCoding.NullValue);
+             if (value1IsNull && value2IsNull) {
+                 snapshot1.removeObjectForKey(key);
+                 snapshot2.removeObjectForKey(key);
+             }
+             else if (value1 != null && value1.equals(value2)) {
+                 snapshot1.removeObjectForKey(key);
+                 snapshot2.removeObjectForKey(key);
+             }
+         }
+         // flip around the comparison and remove again
+         if (removeInverse) {
+             _removeMatchingEntries(snapshot2, snapshot1, false);
+         }
+     }
+
+
+     /**
+      * Compares dictionary keys based on the value they are associated with.  Useful for getting a list
+      * of keys in alphabetical order of their values.
+     */
+     public static class NSDictionaryKeyValueComparator extends NSComparator {
+         private NSDictionary dictionary;
+
+         public NSDictionaryKeyValueComparator(NSDictionary aDictionary) {
+             super();
+             dictionary = aDictionary;
+         }
+
+        public int compare(Object key1, Object key2) throws ComparisonException {
+            Object value1 = dictionary.objectForKey(key1);
+            Object value2 = dictionary.objectForKey(key2);
+            if ( ! (value1 instanceof Comparable && value2 instanceof Comparable)) {
+                throw new ComparisonException("dictionary values are not comparable");
+            }
+
+            return ((Comparable)value1).compareTo(value2);
+        }
+     }
 
 }
