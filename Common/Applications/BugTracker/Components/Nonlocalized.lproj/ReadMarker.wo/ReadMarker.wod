@@ -5,12 +5,12 @@ BugIsRead: D2WDisplayBoolean {
 
 OwnsBug: ERXEqualConditional {
 	value1 = session.user;
-	value2 = object.owner;
+	value2 = object.owner; // VALID
 }
 
 OwnsBug2: ERXEqualConditional {
 	value1 = session.user;
-	value2 = object.owner;
+	value2 = object.owner; // VALID
 	negate = true;
 }
 

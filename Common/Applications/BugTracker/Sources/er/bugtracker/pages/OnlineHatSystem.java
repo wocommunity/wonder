@@ -15,6 +15,7 @@ import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSTimestamp;
 
 import er.bugtracker.Framework;
+import er.bugtracker.People;
 import er.bugtracker.Session;
 import er.extensions.ERXEC;
 
@@ -41,11 +42,11 @@ public class OnlineHatSystem extends WOComponent {
         }
         return _directtowebfiles;
     }
-    public EOEnterpriseObject directtowebfile;
-    private EOEnterpriseObject _localUser;
-    public EOEnterpriseObject localUser() {
+    public Framework directtowebfile;
+    private People _localUser;
+    public People localUser() {
         if (_localUser==null) {
-            _localUser=EOUtilities.localInstanceOfObject(ec, ((Session)session()).user());
+            _localUser=People.clazz.currentUser(ec);
         }
         return _localUser;
     }

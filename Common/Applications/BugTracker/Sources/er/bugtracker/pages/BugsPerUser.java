@@ -23,6 +23,7 @@ import com.webobjects.foundation.NSMutableArray;
 
 import er.bugtracker.Bug;
 import er.bugtracker.People;
+import er.bugtracker.Release;
 
 public class BugsPerUser extends WOComponent {
 
@@ -34,7 +35,7 @@ public class BugsPerUser extends WOComponent {
 
     public NSArray bugs;
     public Bug currentBug;
-    public EOEnterpriseObject theRelease;
+    public Release theRelease;
 
     /** @TypeInfo Bug */
     public NSArray bugsPerOwner;

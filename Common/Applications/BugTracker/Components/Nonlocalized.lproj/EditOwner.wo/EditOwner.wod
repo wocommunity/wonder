@@ -1,5 +1,5 @@
 BackToOriginator: ERXJSPopupSelector {
-	list = session.activeUsers;
+	list = session.activeUsers; // VALID
 	popupName = "owner";
 	selectsItem = localOriginator;
 	string = "Originator";
@@ -17,7 +17,7 @@ BackToOriginator2: ERXJSPopupSelector {
 BackToOriginator3: ERXJSPopupSelector {
 	list = session.activeUsers;
 	popupName = "owner";
-	selectsItem = object.previousOwner;
+	selectsItem = object.previousOwner; // VALID
 	string = "Previous Owner";
 	// doNotAddOneToComputedIndex = d2wContext.isMandatory;
 }
@@ -28,9 +28,9 @@ EditRel: ERD2WEditToOneRelationship {
 }
 
 String1: WOString {
-	value = object.originator.name;
+	value = object.originator.name; // VALID
 }
 
 String2: WOString {
-	value = object.previousOwner.name;
+	value = object.previousOwner.name; // VALID
 }
