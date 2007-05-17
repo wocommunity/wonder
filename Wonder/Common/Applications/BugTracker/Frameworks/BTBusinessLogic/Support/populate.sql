@@ -34,8 +34,8 @@ insert into FRAMEW (ID, NAME, ORDERING, OWNED_SINCE, USER_ID) values
 (4, "BTBusinessLogic", 4, NULL, NULL),
 (5, "BugTracker", 5, NULL, NULL);
 
-DELETE FROM RELEASE;
-INSERT INTO RELEASE VALUES (1,1,'0.5'),(2,1,'1.0'),(3,1,'1.1');
+DELETE FROM `RELEASE`;
+INSERT INTO `RELEASE` VALUES (1,1,'0.5'),(2,1,'1.0'),(3,1,'1.1');
 
 DELETE FROM REQ_SUB_TYPE;
 insert into REQ_SUB_TYPE (REQ_SUB_TYPE_ID, SUB_TYPE_DESC) values (1, "Essential"), (2, "Important"), (3, "Useful"), (4, "Cosmetic");
