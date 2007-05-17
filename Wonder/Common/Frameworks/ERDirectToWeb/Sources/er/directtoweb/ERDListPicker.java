@@ -44,7 +44,7 @@ public class ERDListPicker extends ERDCustomEditComponent {
     }
 
     private WOComponent _listComponent;
-    protected NSArray list;
+    public NSArray list;
     public WOComponent listComponent() {
         if (_listComponent==null) {
             _listComponent=pageWithName(listComponentName());

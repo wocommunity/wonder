@@ -31,7 +31,7 @@ public class ERD2WEditToManyRelationship extends D2WEditToManyRelationship {
     
     public Object restrictedChoiceList() {
         String restrictedChoiceKey=(String)d2wContext().valueForKey("restrictedChoiceKey");
-        if( restrictedChoiceKey!=null &&  restrictedChoiceKey.length()>0 )
+        if( restrictedChoiceKey!=null && restrictedChoiceKey.length()>0 )
             return valueForKeyPath(restrictedChoiceKey);
         String fetchSpecName=(String)d2wContext().valueForKey("restrictingFetchSpecification");
         if(fetchSpecName != null) {

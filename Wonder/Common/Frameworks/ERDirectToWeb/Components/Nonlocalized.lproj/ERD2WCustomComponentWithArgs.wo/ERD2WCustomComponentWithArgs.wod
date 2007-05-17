@@ -1,5 +1,5 @@
 EmbeddedComponent1: WOSwitchComponent {
-    WOComponentName = nonCachingContext.customComponentName;
+    WOComponentName = nonCachingContext.customComponentName; //VALID
     object=object;
     key= nonCachingContext.propertyKey;
     extraBindings=extraBindings;
@@ -7,7 +7,7 @@ EmbeddedComponent1: WOSwitchComponent {
 }
 
 String2: WOString {
-	value = nonCachingContext.customComponentName;
+	value = nonCachingContext.customComponentName; //VALID
 }
 
 showRealKey2: WOConditional {

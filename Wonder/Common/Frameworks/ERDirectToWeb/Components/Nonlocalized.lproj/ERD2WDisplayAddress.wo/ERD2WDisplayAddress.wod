@@ -1,24 +1,24 @@
 Conditional1: ERXNonNullConditional {
-	condition = location.address2;
+	condition = location.address2; // VALID
 }
 
 String1: WOString {
-	value = location.address1;
+	value = location.address1; // VALID
 }
 
 String2: WOString {
-	value = location.address2;
+	value = location.address2; // VALID
 }
 
 String3: WOString {
-	value = location.city;
+	value = location.city; //VALID
 }
 
 String7: WOString {
-	value = location.state.abbreviation;
+	value = location.state.abbreviation;  // VALID
 }
 
 String9: WOString {
-	value = location.zip;
+	value = location.zip; // VALID
 }
 

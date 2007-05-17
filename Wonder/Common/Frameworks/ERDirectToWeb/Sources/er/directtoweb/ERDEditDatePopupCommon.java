@@ -35,7 +35,7 @@ public class ERDEditDatePopupCommon extends ERDCustomEditComponent {
     protected String day;
     protected String month;
     protected String year;
-    protected String currentMonth;
+    public String currentMonth;
     protected NSMutableArray yearList;
     protected static NSArray monthList;
     protected NSArray monthNameList;
