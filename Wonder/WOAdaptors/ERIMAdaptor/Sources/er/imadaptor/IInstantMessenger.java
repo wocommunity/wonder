@@ -76,6 +76,15 @@ public interface IInstantMessenger {
 	public void addBuddy(String buddyName) throws InstantMessengerException;
 
 	/**
+	 * Removes a buddy from the buddy list.
+	 * 
+	 * @param buddyName
+	 *            the name of the buddy to remove
+	 * @throws InstantMessengerException
+	 */
+	public void removeBuddy(String buddyName) throws InstantMessengerException;
+
+	/**
 	 * Sends a message to the specified buddy.
 	 * 
 	 * @param buddyName
