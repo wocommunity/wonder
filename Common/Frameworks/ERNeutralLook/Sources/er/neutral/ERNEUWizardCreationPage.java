@@ -16,6 +16,10 @@ public class ERNEUWizardCreationPage extends ERD2WWizardCreationPage {
     public ERNEUWizardCreationPage(WOContext context) {
         super(context);
     }
+    
+    public String currentSectionImageName() {
+        throw new UnsupportedOperationException("Not implemented");
+    }
 
     public String defaultRowspan() {
 	return ""+(currentSection()!=null && currentSection().keys!=null ? currentSection().keys.count() : 0)+4;
