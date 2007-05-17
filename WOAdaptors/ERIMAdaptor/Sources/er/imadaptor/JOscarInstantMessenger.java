@@ -1,5 +1,6 @@
 package er.imadaptor;
 
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -22,6 +23,7 @@ import net.kano.joustsim.oscar.oscar.service.icbm.IcbmService;
 import net.kano.joustsim.oscar.oscar.service.icbm.Message;
 import net.kano.joustsim.oscar.oscar.service.icbm.MessageInfo;
 import net.kano.joustsim.oscar.oscar.service.icbm.SimpleMessage;
+import net.kano.joustsim.oscar.oscar.service.ssi.Buddy;
 import net.kano.joustsim.oscar.oscar.service.ssi.MutableBuddyList;
 import net.kano.joustsim.oscar.oscar.service.ssi.MutableGroup;
 import net.kano.joustsim.oscar.oscar.service.ssi.SsiService;
@@ -107,6 +109,31 @@ public class JOscarInstantMessenger extends AbstractInstantMessenger {
 			awayMessage = buddyInfo.getAwayMessage();
 		}
 		return awayMessage;
+	}
+
+	public void removeBuddy(String buddyName) {
+		if (_connected && _conn != null) {
+			Screenname buddyScreenName = new Screenname(buddyName);
+			BuddyInfoManager buddyInfoManager = _conn.getBuddyInfoManager();
+			SsiService ssiService = _conn.getSsiService();
+			MutableBuddyList buddyList = ssiService.getBuddyList();
+			List groups = buddyList.getGroups();
+			Iterator groupsIter = groups.iterator();
+			while (groupsIter.hasNext()) {
+				MutableGroup group = (MutableGroup) groupsIter.next();
+				Buddy matchingBuddy = null;
+				Iterator buddiesIter = group.getBuddiesCopy().iterator();
+				while (matchingBuddy == null && buddiesIter.hasNext()) {
+					Buddy buddy = (Buddy) buddiesIter.next();
+					if (buddy.getScreenname().equals(buddyScreenName)) {
+						matchingBuddy = buddy;
+					}
+				}
+				if (matchingBuddy != null) {
+					group.deleteBuddy(matchingBuddy);
+				}
+			}
+		}
 	}
 
 	public void addBuddy(String buddyName) {

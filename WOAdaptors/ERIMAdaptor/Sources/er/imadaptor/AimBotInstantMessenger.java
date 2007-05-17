@@ -42,6 +42,12 @@ public class AimBotInstantMessenger extends AbstractInstantMessenger {
 		}
 	}
 
+	public void removeBuddy(String buddyName) {
+		if (_sender != null) {
+			_sender.removeBuddy(new AIMBuddy(buddyName));
+		}
+	}
+	
 	public synchronized void connect() throws IMConnectionException {
 		if (_connected) {
 			disconnect();
