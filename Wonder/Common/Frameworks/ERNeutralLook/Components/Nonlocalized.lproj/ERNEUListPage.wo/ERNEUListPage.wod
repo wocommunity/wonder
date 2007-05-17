@@ -12,6 +12,12 @@ AttributeCell: WOGenericContainer {
 	valign = "middle";
 }
 
+AttributeDisplay: WOSwitchComponent {
+ 	WOComponentName = d2wContext.componentName;
+ 	localContext = localContext;
+ 	object = object;
+}
+
 AttributeRepetition: WORepetition {
 	item = d2wContext.propertyKey;
 	list = d2wContext.displayPropertyKeys;
