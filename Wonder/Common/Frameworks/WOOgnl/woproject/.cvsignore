@@ -1,0 +1,5 @@
+ant.frameworks.wo.wosystemroot
+ant.classpaths.wo.wolocalroot
+ant.frameworks.user.home
+ant.frameworks.wo.wolocalroot
+ant.classpaths.user.home
