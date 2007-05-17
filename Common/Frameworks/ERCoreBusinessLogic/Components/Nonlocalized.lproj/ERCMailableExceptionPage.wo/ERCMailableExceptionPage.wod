@@ -43,7 +43,7 @@ String1: WOString {
 }
 
 String2: WOString {
-	value = actor.primaryKey;
+	value = actor.primaryKey; //VALID
 }
 
 String3: WOString {
