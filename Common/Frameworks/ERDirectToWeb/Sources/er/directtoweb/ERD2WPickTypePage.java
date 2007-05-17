@@ -37,8 +37,8 @@ public class ERD2WPickTypePage extends ERD2WInspectPage implements ERDPickPageIn
 
     public boolean selectionManditory() { return ERXValueUtilities.booleanValue(d2wContext().valueForKey("selectionManditory")); }
 
-    protected NSMutableArray selections = new NSMutableArray();
-    protected Object item;
+    public NSMutableArray selections = new NSMutableArray();
+    public Object item;
 
     public Object selection() { return selections.count() > 0 ? selections.lastObject() : null; }
     public void setSelection(Object value) {

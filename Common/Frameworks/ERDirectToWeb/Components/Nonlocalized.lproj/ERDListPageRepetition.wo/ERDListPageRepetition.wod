@@ -144,10 +144,6 @@ RightAction: WOSwitchComponent {
 	displayGroup = displayGroup;
 }
 
-ActionBar: ERDActionBar { 
-	d2wContext = localContext;
-}
-
 RightActions: WORepetition {
 	item = propertyKey;
 	list = rightActions;
