@@ -31,6 +31,10 @@ public class DaimInstantMessenger extends AbstractInstantMessenger {
 		}
 	}
 
+	public void removeBuddy(String buddyName) throws InstantMessengerException {
+		throw new InstantMessengerException("I can't do this right now.");
+	}
+
 	public void connect() throws IMConnectionException {
 		if (myConnected) {
 			disconnect();
@@ -124,6 +128,9 @@ public class DaimInstantMessenger extends AbstractInstantMessenger {
 			}
 		}
 
+		public void removeBuddy(String buddyName) {
+			
+		}
 		public void newBuddyList(Buddy[] buddies) {
 			synchronized (myBuddies) {
 				myBuddies.clear();
