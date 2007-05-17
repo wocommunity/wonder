@@ -42,5 +42,5 @@ NavBar1: WOSwitchComponent {
 }
 
 UseNavigation: WOConditional {
-	condition = showBatchNavigation;
+	condition = d2wContext.showBatchNavigation;
 }

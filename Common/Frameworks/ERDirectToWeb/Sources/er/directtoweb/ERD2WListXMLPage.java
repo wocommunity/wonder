@@ -18,7 +18,7 @@ public class ERD2WListXMLPage extends ERD2WListPage {
      */
     public ERD2WListXMLPage(WOContext context) {super(context);}
 
-    protected int indexForOffset;
+    public int indexForOffset;
 
     public Object value() {
         return object().valueForKeyPath((String)d2wContext().valueForKey("propertyKey"));

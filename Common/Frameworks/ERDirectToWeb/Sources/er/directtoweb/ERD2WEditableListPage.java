@@ -252,7 +252,7 @@ public class ERD2WEditableListPage extends ERD2WListPage implements ERXException
 
     public static final String MassChangeEntityDisplayKey = "massChangeEntityDisplay";
     private D2WContext _d2wContextForMassChangeEO;
-    protected D2WContext d2wContextForMassChangeEO() {
+    public D2WContext d2wContextForMassChangeEO() {
         if (_d2wContextForMassChangeEO == null) {
             _d2wContextForMassChangeEO = new D2WContext(d2wContext());
             _d2wContextForMassChangeEO.takeValueForKey(Boolean.TRUE, MassChangeEntityDisplayKey);

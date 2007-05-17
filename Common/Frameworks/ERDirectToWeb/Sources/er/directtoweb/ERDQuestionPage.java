@@ -16,6 +16,8 @@ import com.webobjects.directtoweb.NextPageDelegate;
  * As this functionality is already integrated in ERD2WMessagePage, you should use this instead.
  * @deprecated subclass ERD2WMessagePage instead, also, the name is wrong
  */
+//DELETEME
+
 public class ERDQuestionPage extends ERD2WMessagePage implements ConfirmPageInterface {
 
     public ERDQuestionPage(WOContext context) {

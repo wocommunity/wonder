@@ -14,7 +14,7 @@ import com.webobjects.appserver.WOContext;
  * Correctly handles validation exceptions, plus a bunch of other stuff.<br />
  * 
  */
-
+// FIXME: this is using the wrong superclass? There is no "nonCachingContext"
 public class ERDCustomQueryComponentWithArgs extends ERDCustomQueryComponent {
 
     public ERDCustomQueryComponentWithArgs(WOContext context) {
