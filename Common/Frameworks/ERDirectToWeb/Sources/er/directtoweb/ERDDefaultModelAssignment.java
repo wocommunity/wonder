@@ -20,6 +20,7 @@ import com.webobjects.eocontrol.EOKeyValueUnarchiver;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
 
+import er.extensions.ERXConstant;
 import er.extensions.ERXDictionaryUtilities;
 import er.extensions.ERXEOAccessUtilities;
 
@@ -49,6 +50,7 @@ public class ERDDefaultModelAssignment extends ERDAssignment {
     protected static final NSDictionary keys = ERXDictionaryUtilities.dictionaryWithObjectsAndKeys( new Object [] {
         new NSArray(new Object[] {"propertyKey", "object.entityName"}), "smartAttribute",
         new NSArray(new Object[] {"propertyKey", "object.entityName"}), "smartRelationship",
+        new NSArray(new Object[] {"smartAttribute"}), "attributeConstants",
         new NSArray(new Object[] {"smartAttribute"}), "smartDefaultRows",
         new NSArray(new Object[] {"smartAttribute"}), "smartDefaultAttributeWidth",
         new NSArray(new Object[] {"smartRelationship"}), "destinationEntity",
@@ -262,6 +264,23 @@ public class ERDDefaultModelAssignment extends ERDAssignment {
         return entityForKey(c, "controllerName");
     }
 
+
+
+    /**
+     * Returns the default value for the entity based on the controllerName. 
+     * @param c current D2W context
+     * @return the entity.
+     */
+    public Object attributeConstants(D2WContext c) {
+    	EOAttribute attr = (EOAttribute)c.valueForKey("smartAttribute");
+    	if(attr != null && attr.userInfo() != null) {
+    		String clazzName = (String)attr.userInfo().objectForKey("ERXConstantClassName");
+    		if(clazzName != null) {
+    			return ERXConstant.constantsForClassName(clazzName);
+    		}
+    	}
+        return null;
+    }
 
     /**
      * Returns the default value for the entity based on the pageConfiguration. 
