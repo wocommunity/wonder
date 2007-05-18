@@ -90,7 +90,9 @@ public class ERCMailMessage extends _ERCMailMessage {
         setShouldArchiveSentMail(shouldArchive);
         
         boolean shouldZip = ERXProperties.booleanForKeyWithDefault("er.corebusinesslogic.ERCMailMessage.ShouldGzipContent", true);
-        setContentGzipped(shouldZip);            
+        setContentGzipped(shouldZip);       
+        
+        setIsRead(false);
     }
         
     // State Methods
