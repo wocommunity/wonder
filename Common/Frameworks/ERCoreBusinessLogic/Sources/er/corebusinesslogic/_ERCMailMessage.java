@@ -13,7 +13,6 @@ import java.math.BigDecimal;
 public abstract class _ERCMailMessage extends ERCStampedEnterpriseObject {
 
     public interface Key extends ERCStampedEnterpriseObject.Key {
-        public static final String IS_READ = "isRead";
         public static final String X_MAILER = "xMailer";
         public static final String TO_ADDRESSES = "toAddresses";
         public static final String TITLE = "title";
@@ -25,6 +24,7 @@ public abstract class _ERCMailMessage extends ERCStampedEnterpriseObject {
         public static final String PLAIN_TEXT_COMPRESSED = "plainTextCompressed";
         public static final String PLAIN_TEXT = "plainText";
         public static final String LAST_MODIFIED = "lastModified";
+        public static final String IS_READ = "isRead";
         public static final String FROM_ADDRESS = "fromAddress";
         public static final String EXCEPTION_REASON = "exceptionReason";
         public static final String DATE_SENT = "dateSent";
@@ -107,6 +107,13 @@ public abstract class _ERCMailMessage extends ERCStampedEnterpriseObject {
         takeStoredValueForKey(aValue, Key.FROM_ADDRESS);
     }
 
+    public boolean isRead() {
+        return ((Boolean)storedValueForKey(Key.IS_READ)).booleanValue();
+    }
+    public void setIsRead(boolean aValue) {
+        takeStoredValueForKey((aValue ? Boolean.TRUE : Boolean.FALSE), Key.IS_READ);
+    }
+
     public NSTimestamp lastModified() {
         return (NSTimestamp)storedValueForKey(Key.LAST_MODIFIED);
     }
@@ -182,13 +189,6 @@ public abstract class _ERCMailMessage extends ERCStampedEnterpriseObject {
     }
     public void setXMailer(String aValue) {
         takeStoredValueForKey(aValue, Key.X_MAILER);
-    }
-
-    public boolean isRead() {
-        return ((Boolean)storedValueForKey(Key.IS_READ)).booleanValue();
-    }
-    public void setIsRead(boolean aValue) {
-        takeStoredValueForKey((aValue ? Boolean.TRUE : Boolean.FALSE), Key.IS_READ);
     }
 
     public NSArray attachments() {
