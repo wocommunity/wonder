@@ -5,6 +5,7 @@ CellContainer: WOGenericContainer {
 	elementName = "td";
 	valign = ^cellVAlign;
 	width = ^cellWidth;
+	class = ^cellClass;
 }
 
 ColRepetition: WORepetition {
@@ -27,6 +28,7 @@ TableContainer: WOGenericContainer {
 	cellspacing = ^cellspacing;
 	elementName = "table";
 	width = ^tableWidth;
+	class = ^tableClass;
 }
 
 TableRow: WOGenericContainer {
