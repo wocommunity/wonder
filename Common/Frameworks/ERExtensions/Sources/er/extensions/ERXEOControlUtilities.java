@@ -575,7 +575,7 @@ public class ERXEOControlUtilities {
 		Integer objectCount = null;
 		if (results != null && results.count() == 1) {
 			NSDictionary row = (NSDictionary) results.lastObject();
-			objectCount = (Integer) row.objectForKey(attribute.name());
+			objectCount = new Integer(((Number) row.objectForKey(attribute.name())).intValue());
 		}
 		return objectCount;
     }
