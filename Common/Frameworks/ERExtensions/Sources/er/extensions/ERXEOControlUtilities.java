@@ -9,6 +9,7 @@ import java.util.Enumeration;
 
 import org.apache.log4j.Logger;
 
+import com.webobjects.eoaccess.EOAdaptor;
 import com.webobjects.eoaccess.EOAdaptorChannel;
 import com.webobjects.eoaccess.EOAttribute;
 import com.webobjects.eoaccess.EODatabase;
@@ -16,6 +17,7 @@ import com.webobjects.eoaccess.EODatabaseContext;
 import com.webobjects.eoaccess.EOEntity;
 import com.webobjects.eoaccess.EOModel;
 import com.webobjects.eoaccess.EOSQLExpression;
+import com.webobjects.eoaccess.EOSQLExpressionFactory;
 import com.webobjects.eoaccess.EOUtilities;
 import com.webobjects.eocontrol.EOAndQualifier;
 import com.webobjects.eocontrol.EOArrayDataSource;
@@ -549,26 +551,33 @@ public class ERXEOControlUtilities {
         return _objectCountWithQualifierAndAttribute(ec,entityName,qualifier,att2);
     }
 
-    private static Integer _objectCountWithQualifierAndAttribute(EOEditingContext ec, String entityName, EOQualifier qualifier, EOAttribute attribute) {
-        NSArray results = null;
-        EOEntity entity = EOUtilities.entityNamed(ec, entityName);
-        EOQualifier schemaBasedQualifier = entity.schemaBasedQualifier(qualifier);
-        EOFetchSpecification fs = new EOFetchSpecification(entity.name(), schemaBasedQualifier, null);
-        synchronized (entity) {
-        	entity.addAttribute(attribute);
-        	try {
-        		fs.setFetchesRawRows(true);
-        		fs.setRawRowKeyPaths(new NSArray(attribute.name()));
-        		results = ec.objectsWithFetchSpecification(fs);
-        	} finally {
-        		entity.removeAttribute(attribute);
-        	}
-        }
-        if ((results != null) && (results.count() == 1)) {
-            NSDictionary row = (NSDictionary) results.lastObject();
-            return (Integer)row.objectForKey(attribute.name());
-        }
-        return null;
+    /**
+     * Returns the number of objects in the database with the qualifier and counting attribute.  This implementation
+     * queries the database directly without loading the objects into memory.
+     * 
+     * @param ec the editing context
+     * @param entityName the name of the entity
+     * @param qualifier the qualifier to filter with
+     * @param attribute the attribute that contains the "count(*)" definition
+     * @return the number of objects
+     */
+    public static Integer _objectCountWithQualifierAndAttribute(EOEditingContext ec, String entityName, EOQualifier qualifier, EOAttribute attribute) {
+		EOEntity entity = ERXEOAccessUtilities.entityNamed(ec, entityName);
+		EOModel model = entity.model();
+		EODatabaseContext databaseContext = EODatabaseContext.registeredDatabaseContextForModel(model, ec);
+		EOAdaptor adaptor = databaseContext.adaptorContext().adaptor();
+		EOSQLExpressionFactory sqlFactory = adaptor.expressionFactory();
+		EOQualifier schemaBasedQualifier = entity.schemaBasedQualifier(qualifier);
+		EOFetchSpecification fetchSpec = new EOFetchSpecification(entity.name(), schemaBasedQualifier, null);
+		EOSQLExpression sqlExpr = sqlFactory.selectStatementForAttributes(new NSArray(attribute), false, fetchSpec, entity);
+		String sql = sqlExpr.statement();
+		NSArray results = EOUtilities.rawRowsForSQL(ec, model.name(), sql, new NSArray(attribute.name()));
+		Integer objectCount = null;
+		if (results != null && results.count() == 1) {
+			NSDictionary row = (NSDictionary) results.lastObject();
+			objectCount = (Integer) row.objectForKey(attribute.name());
+		}
+		return objectCount;
     }
 
     /**
