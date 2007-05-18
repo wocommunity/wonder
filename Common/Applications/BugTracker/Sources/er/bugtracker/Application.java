@@ -89,6 +89,7 @@ public class Application extends ERXApplication {
      */
     public void runBatchReport() {
         EOEditingContext ec = ERXEC.newEditingContext();
+        ec.lock();
         try {
             NSArray everybody = People.clazz.allObjects(ec);
             for (Enumeration e = everybody.objectEnumerator(); e.hasMoreElements();) {
