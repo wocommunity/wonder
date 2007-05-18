@@ -23,6 +23,7 @@ import com.webobjects.eocontrol.EOEnterpriseObject;
 import com.webobjects.eocontrol.EOFetchSpecification;
 import com.webobjects.eocontrol.EOKeyValueQualifier;
 import com.webobjects.eocontrol.EOQualifier;
+import com.webobjects.eocontrol.EOSortOrdering;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableArray;
@@ -399,6 +400,35 @@ public class EOEnterpriseObjectClazz extends Object {
         return entity(ec).fetchSpecificationNamed(name);
     }
 
+    /**
+     * Filters an array with a given fetch spec.
+     * @param array
+     * @param spec
+     * @param bindings
+     * @return
+     */
+    public NSArray filteredArray(NSArray array, EOFetchSpecification spec, NSDictionary bindings) {
+    	EOQualifier qualifier;
+
+        if (bindings != null) {
+            spec = spec.fetchSpecificationWithQualifierBindings(bindings);
+        }
+
+        NSArray result = new NSArray(array);
+        
+        qualifier = spec.qualifier();
+        
+        if (qualifier != null) {
+            result = EOQualifier.filteredArrayWithQualifier(result, qualifier);
+        }
+        NSArray sortOrderings = spec.sortOrderings(); 
+        if (sortOrderings != null) {
+            result = EOSortOrdering.sortedArrayUsingKeyOrderArray(result,sortOrderings);
+        }
+
+        return result;
+    }
+    
     /**
      * Returns the number of objects matching the given
      * qualifier for the clazz's entity name. Implementation
