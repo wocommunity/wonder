@@ -1212,7 +1212,7 @@ public class ERXArrayUtilities extends Object {
      * @return array filtered and sorted by the named fetch specification.
      */    
     public static NSArray filteredArrayWithEntityFetchSpecification(NSArray array, String entity, String fetchSpec, NSDictionary bindings) {
-        EOFetchSpecification spec = EOFetchSpecification.fetchSpecificationNamed(fetchSpec, entity);
+        EOFetchSpecification spec = EOFetchSpecification.fetchSpecificationNamed(entity, fetchSpec);
         NSArray sortOrderings, result;
         EOQualifier qualifier;
 
@@ -1249,8 +1249,8 @@ public class ERXArrayUtilities extends Object {
      * to which the fetch specification is associated.
      * @return array filtered and sorted by the named fetch specification.
      */
-    public static NSArray filteredArrayWithEntityFetchSpecification(NSArray array, String fetchSpec, String entity) {
-        return ERXArrayUtilities.filteredArrayWithEntityFetchSpecification(array, entity, fetchSpec, null);
+    public static NSArray filteredArrayWithEntityFetchSpecification(NSArray array, String entity, String fetchSpec) {
+        return ERXArrayUtilities.filteredArrayWithEntityFetchSpecification(array, entity,  fetchSpec, null);
     }
 
     /**
