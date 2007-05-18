@@ -14,20 +14,6 @@
            valueClassName = NSNumber;
            valueType = d;
        }, 
-              
-       {
-           columnName = "";
-           externalType = float;
-           name = currencyAmount;
-           precision = 38;
-           scale = 4;
-           userInfo = 
-           {
-               modificationDate = "2002-07-21 21:47:27 +0200";
-           };
-           valueClassName = NSNumber;
-           valueType = B;
-       }, 
        
        {
            columnName = "";
@@ -60,7 +46,7 @@
            valueType = c;
            width = 1;
        }, 
-                     
+       
        {
            adaptorValueConversionMethodName = toCryptoString;
            columnName = "";
@@ -70,6 +56,20 @@
            valueClassName = er.extensions.ERXCryptoString;
            valueFactoryMethodName = createInstanceFromCryptoString;
            width = 100;
+       }, 
+       
+       {
+           columnName = "";
+           externalType = float;
+           name = currencyAmount;
+           precision = 38;
+           scale = 4;
+           userInfo = 
+           {
+               modificationDate = "2002-07-21 21:47:27 +0200";
+           };
+           valueClassName = NSNumber;
+           valueType = B;
        }, 
        
        {
@@ -329,7 +329,7 @@
        blob, 
        boolean, 
        charFlag, 
-       cryptoString,
+       cryptoString, 
        date, 
        dateTime, 
        doubleNumber, 
@@ -358,7 +358,7 @@
        blob, 
        boolean, 
        charFlag, 
-       cryptoString,
+       cryptoString, 
        date, 
        dateTime, 
        doubleNumber, 
