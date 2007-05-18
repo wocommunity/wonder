@@ -2,8 +2,6 @@
 {
     EOModelVersion = 2.1;
     adaptorName = JDBC;
-    connectionDictionary = 
-    {};
     entities = 
     (
        
@@ -37,11 +35,4 @@
            name = EOJDBCPrototypes;
        }
     );
-    internalInfo = 
-    {
-        _deletedEntityNamesInObjectStore = 
-        (
-           EOJDBCMySQLPrototypes_
-        );
-    };
 }
