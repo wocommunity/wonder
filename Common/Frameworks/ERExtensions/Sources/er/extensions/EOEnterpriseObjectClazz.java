@@ -410,29 +410,7 @@ public class EOEnterpriseObjectClazz extends Object {
      * @return number of matching objects
      */
     public Number objectCountWithQualifier(EOEditingContext ec, EOQualifier qualifier) {
-        String entityName = entityName();
-        
-        NSArray results = null;
-
-        EOAttribute attribute = EOEnterpriseObjectClazz.objectCountAttribute();
-        EOEntity entity = entity(ec);
-        EOQualifier schemaBasedQualifier = entity.schemaBasedQualifier(qualifier);
-        EOFetchSpecification fs = new EOFetchSpecification(entityName, schemaBasedQualifier, null);
-        synchronized (entity) {
-            entity.addAttribute(attribute);
-
-            fs.setFetchesRawRows(true);
-            fs.setRawRowKeyPaths(new NSArray(attribute.name()));
-
-            results = ec.objectsWithFetchSpecification(fs);
-
-            entity.removeAttribute(attribute);
-        }
-        if ((results != null) && (results.count() == 1)) {
-            NSDictionary row = (NSDictionary) results.lastObject();
-            return (Number)row.objectForKey(attribute.name());
-        }
-        return null;
+    	return ERXEOControlUtilities._objectCountWithQualifierAndAttribute(ec, entityName(), qualifier, EOEnterpriseObjectClazz.objectCountAttribute());
     }
 
     /**
