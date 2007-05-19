@@ -440,7 +440,7 @@ public class EOEnterpriseObjectClazz extends Object {
      * @return number of matching objects
      */
     public Number objectCountWithQualifier(EOEditingContext ec, EOQualifier qualifier) {
-    	return ERXEOControlUtilities._objectCountWithQualifierAndAttribute(ec, entityName(), qualifier, EOEnterpriseObjectClazz.objectCountAttribute());
+    	return (Number) ERXEOControlUtilities._aggregateFunctionWithQualifierAndAggregateAttribute(ec, entityName(), qualifier, EOEnterpriseObjectClazz.objectCountAttribute());
     }
 
     /**
