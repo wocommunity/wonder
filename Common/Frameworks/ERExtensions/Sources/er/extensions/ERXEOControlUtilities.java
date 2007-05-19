@@ -9,7 +9,6 @@ import java.util.Enumeration;
 
 import org.apache.log4j.Logger;
 
-import com.webobjects.eoaccess.EOAdaptor;
 import com.webobjects.eoaccess.EOAdaptorChannel;
 import com.webobjects.eoaccess.EOAttribute;
 import com.webobjects.eoaccess.EODatabase;
@@ -529,7 +528,7 @@ public class ERXEOControlUtilities {
      */
     public static Integer objectCountWithQualifier(EOEditingContext ec, String entityName, EOQualifier qualifier) {
         EOAttribute attribute = EOEnterpriseObjectClazz.objectCountAttribute();
-        return _objectCountWithQualifierAndAttribute(ec,entityName,qualifier,attribute);
+        return (Integer)_aggregateFunctionWithQualifierAndAggregateAttribute(ec, entityName, qualifier, attribute);
     }
 
     /**
@@ -547,8 +546,8 @@ public class ERXEOControlUtilities {
     public static Integer objectCountUniqueWithQualifierAndAttribute(EOEditingContext ec, String entityName, EOQualifier qualifier, String attributeName) {
         EOEntity entity = EOUtilities.entityNamed(ec, entityName);
         EOAttribute attribute = entity.attributeNamed(attributeName);
-        EOAttribute att2 = EOEnterpriseObjectClazz.objectCountUniqueAttribute(attribute);
-        return _objectCountWithQualifierAndAttribute(ec,entityName,qualifier,att2);
+        EOAttribute aggregateAttribute = EOEnterpriseObjectClazz.objectCountUniqueAttribute(attribute);
+        return (Integer)_aggregateFunctionWithQualifierAndAggregateAttribute(ec, entityName, qualifier, aggregateAttribute);
     }
 
     /**
@@ -558,26 +557,45 @@ public class ERXEOControlUtilities {
      * @param ec the editing context
      * @param entityName the name of the entity
      * @param qualifier the qualifier to filter with
-     * @param attribute the attribute that contains the "count(*)" definition
+     * @param aggregateAttribute the attribute that contains the "count(*)" definition
      * @return the number of objects
      */
-    public static Integer _objectCountWithQualifierAndAttribute(EOEditingContext ec, String entityName, EOQualifier qualifier, EOAttribute attribute) {
+    public static Object _aggregateFunctionWithQualifierAndAggregateAttribute(EOEditingContext ec, String entityName, EOQualifier qualifier, EOAttribute aggregateAttribute) {
 		EOEntity entity = ERXEOAccessUtilities.entityNamed(ec, entityName);
 		EOModel model = entity.model();
 		EODatabaseContext databaseContext = EODatabaseContext.registeredDatabaseContextForModel(model, ec);
-		EOAdaptor adaptor = databaseContext.adaptorContext().adaptor();
-		EOSQLExpressionFactory sqlFactory = adaptor.expressionFactory();
-		EOQualifier schemaBasedQualifier = entity.schemaBasedQualifier(qualifier);
-		EOFetchSpecification fetchSpec = new EOFetchSpecification(entity.name(), schemaBasedQualifier, null);
-		EOSQLExpression sqlExpr = sqlFactory.selectStatementForAttributes(new NSArray(attribute), false, fetchSpec, entity);
-		String sql = sqlExpr.statement();
-		NSArray results = EOUtilities.rawRowsForSQL(ec, model.name(), sql, new NSArray(attribute.name()));
-		Integer objectCount = null;
-		if (results != null && results.count() == 1) {
-			NSDictionary row = (NSDictionary) results.lastObject();
-			objectCount = new Integer(((Number) row.objectForKey(attribute.name())).intValue());
+		databaseContext.lock();
+		try {
+			EOSQLExpressionFactory sqlFactory = databaseContext.adaptorContext().adaptor().expressionFactory();
+			EOQualifier schemaBasedQualifier = entity.schemaBasedQualifier(qualifier);
+			EOFetchSpecification fetchSpec = new EOFetchSpecification(entity.name(), schemaBasedQualifier, null);
+			fetchSpec.setFetchesRawRows(true);
+	
+			EOSQLExpression sqlExpr = sqlFactory.expressionForEntity(entity);
+			sqlExpr.prepareSelectExpressionWithAttributes(new NSArray(aggregateAttribute), false, fetchSpec);
+	
+			EOAdaptorChannel adaptorChannel = databaseContext.availableChannel().adaptorChannel();
+			if (!adaptorChannel.isOpen()) {
+				adaptorChannel.openChannel();
+			}
+			Object aggregateValue = null; 
+			NSArray attributes = new NSArray(aggregateAttribute);
+			adaptorChannel.evaluateExpression(sqlExpr);
+			try {
+				adaptorChannel.setAttributesToFetch(attributes);
+				NSDictionary row = adaptorChannel.fetchRow();
+				if (row != null) {
+					aggregateValue = row.objectForKey(aggregateAttribute.name());
+				}
+			}
+			finally {
+				adaptorChannel.cancelFetch();
+			}
+		    return aggregateValue;
 		}
-		return objectCount;
+		finally {
+			databaseContext.unlock();
+		}
     }
 
     /**
@@ -661,34 +679,12 @@ public class ERXEOControlUtilities {
                                                         Class valueClass,
                                                         String valueType,
                                                         EOQualifier qualifier) {
-        EOEntity entity = EOUtilities.entityNamed(ec, entityName);
-
-        NSArray results = null;
-
         EOAttribute attribute = ERXEOAccessUtilities.createAggregateAttribute(ec,
                                                                               function,
                                                                               attributeName,
                                                                               entityName, valueClass, valueType);
 
-        EOQualifier schemaBasedQualifier = entity.schemaBasedQualifier(qualifier);
-        EOFetchSpecification fs = new EOFetchSpecification(entityName, schemaBasedQualifier, null);
-        synchronized (entity) {
-        	entity.addAttribute(attribute);
-        	try {
-        		fs.setFetchesRawRows(true);
-        		fs.setRawRowKeyPaths(new NSArray(attribute.name()));
-
-        		results = ec.objectsWithFetchSpecification(fs);
-
-        	} finally {
-        		entity.removeAttribute(attribute);
-            }
-        }
-        if ((results != null) && (results.count() == 1)) {
-            NSDictionary row = (NSDictionary) results.lastObject();
-            return row.objectForKey(attribute.name());
-        }
-        return null;        
+        return ERXEOControlUtilities._aggregateFunctionWithQualifierAndAggregateAttribute(ec, entityName, qualifier, attribute);
     }
 
     /**
