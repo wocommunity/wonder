@@ -118,16 +118,17 @@ public abstract class ERXAbstractXmlRestResponseWriter extends ERXAbstractRestRe
 			else {
 				String formattedPropertyValue = context.delegate().entityDelegate(entity).formatAttributeValue(entity, eo, propertyName, propertyValue);
 				if (formattedPropertyValue != null) {
+					String propertyAlias = displayKey.keyAlias();
 					indent(response, indent + 1);
 					response.appendContentString("<");
-					response.appendContentString(propertyName);
+					response.appendContentString(propertyAlias);
 					response.appendContentString(">");
 
 					String attributeValueStr = ERXStringUtilities.escapeNonXMLChars(formattedPropertyValue);
 					response.appendContentString(attributeValueStr);
 
 					response.appendContentString("</");
-					response.appendContentString(propertyName);
+					response.appendContentString(propertyAlias);
 					response.appendContentString(">");
 					response.appendContentString("\n");
 				}

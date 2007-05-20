@@ -12,6 +12,7 @@ public class ERXRestKey {
 	private ERXRestContext _context;
 	private ERXRestKey _previousKey;
 	private EOEntity _entity;
+	private String _keyAlias;
 	private String _key;
 	private Object _value;
 	private boolean _valueFetched;
@@ -22,17 +23,18 @@ public class ERXRestKey {
 	protected ERXRestKey() {
 	}
 
-	public ERXRestKey(ERXRestContext context, EOEntity entity, String key) throws ERXRestException {
+	public ERXRestKey(ERXRestContext context, EOEntity entity, String keyAlias) throws ERXRestException {
 		if (entity == null) {
 			throw new ERXRestException("Unable to evaluate the key '" + _key + "' without an entity.");
 		}
 		_context = context;
 		_entity = entity;
-		_key = key;
+		_keyAlias = keyAlias;
+		_key = context.delegate().entityDelegate(entity).propertyNameForPropertyAlias(entity, keyAlias);
 	}
 
-	public ERXRestKey(ERXRestContext context, EOEntity entity, String key, Object value) throws ERXRestException {
-		this(context, entity, key);
+	public ERXRestKey(ERXRestContext context, EOEntity entity, String keyAlias, Object value) throws ERXRestException {
+		this(context, entity, keyAlias);
 		_value = value;
 		_valueFetched = true;
 	}
@@ -101,6 +103,10 @@ public class ERXRestKey {
 
 	public EOEntity entity() {
 		return _entity;
+	}
+
+	public String keyAlias() {
+		return _keyAlias;
 	}
 
 	public String key() {

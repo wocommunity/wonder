@@ -11,6 +11,10 @@ import com.webobjects.foundation.NSArray;
 
 public interface IERXRestEntityDelegate {
 	public String entityAliasForEntityNamed(String entityName);
+	
+	public String propertyNameForPropertyAlias(EOEntity entity, String propertyAlias);
+	
+	public String propertyAliasForPropertyNamed(EOEntity entity, String propertyName);
 
 	public EOEnterpriseObject objectWithKey(EOEntity entity, String key, ERXRestContext context) throws ERXRestException, ERXRestNotFoundException, ERXRestSecurityException;
 

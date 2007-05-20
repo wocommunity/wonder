@@ -10,9 +10,17 @@ import com.webobjects.eocontrol.EOEnterpriseObject;
 import com.webobjects.foundation.NSArray;
 
 public class ERXDenyRestEntityDelegate implements IERXRestEntityDelegate {
-  public String entityAliasForEntityNamed(String entityName) {
-    return entityName;
-  }
+	public String entityAliasForEntityNamed(String entityName) {
+		return entityName;
+	}
+
+	public String propertyNameForPropertyAlias(EOEntity entity, String propertyAlias) {
+		return propertyAlias;
+	}
+
+	public String propertyAliasForPropertyNamed(EOEntity entity, String propertyName) {
+		return propertyName;
+	}
 
 	public EOEnterpriseObject objectWithKey(EOEntity entity, String key, ERXRestContext context) throws ERXRestException, ERXRestNotFoundException, ERXRestSecurityException {
 		throw new ERXRestSecurityException("You are not allowed to access the " + entity.name() + " with the id '" + key + "'.");
