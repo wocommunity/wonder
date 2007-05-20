@@ -11,6 +11,11 @@ import com.webobjects.foundation.NSMutableSet;
 
 import er.extensions.ERXStringUtilities;
 
+/**
+ * Provides the common output methods for generating XML responses to a REST request.
+ * 
+ * @author mschrag
+ */
 public abstract class ERXAbstractXmlRestResponseWriter extends ERXAbstractRestResponseWriter {
 	public void appendToResponse(ERXRestContext context, WOResponse response, ERXRestKey result) throws ERXRestException, ERXRestSecurityException, ERXRestNotFoundException, ParseException {
 		response.setHeader("text/xml", "Content-Type");
