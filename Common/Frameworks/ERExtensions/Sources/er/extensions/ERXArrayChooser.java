@@ -308,11 +308,16 @@ public abstract class ERXArrayChooser extends ERXStatelessComponent {
                 }
             }
             if(_list == null) {
-                EODataSource ds = dataSource();
-                _list = ds.fetchObjects();
-                if(ds.editingContext() != editingContext()) {
-                    _list = ERXEOControlUtilities.localInstancesOfObjects(editingContext(), _list);
-                }
+            	EODataSource ds = dataSource();
+            	if(ds.editingContext()!=null) {
+            		_list = ds.fetchObjects();
+            		if(ds.editingContext() != editingContext()) {
+            			_list = ERXEOControlUtilities.localInstancesOfObjects(editingContext(), _list);
+            		}
+            	} else {
+            		log.error("EC of datasource is null, possible resubmit: " + ERXApplication.erxApplication().extraInformationForExceptionInContext(null, context()));
+            		_list = NSArray.EmptyArray;
+            	}
             }
             NSSelector sorting = (sortCaseInsensitive() ? EOSortOrdering.CompareAscending : EOSortOrdering.CompareCaseInsensitiveAscending);
             _list = ERXArrayUtilities.sortedArraySortedWithKeys(_list, destinationSortKeys(), sorting);
