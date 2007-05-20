@@ -11,6 +11,7 @@ import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableDictionary;
 
 import er.extensions.ERXAjaxSession;
+import er.extensions.ERXProperties;
 import er.extensions.ERXResourceManager;
 import er.extensions.ERXWOContext;
 
@@ -109,9 +110,13 @@ public class AjaxUtils {
 	 * @param fileName
 	 */
 	public static void addScriptResourceInHead(WOContext context, WOResponse response, String framework, String fileName) {
+		String processedFileName = fileName;
+		if (ERXProperties.booleanForKey("er.ajax.compressed") && ("prototype.js".equals(fileName) || "scriptaculous.js".equals(fileName))) {
+			processedFileName = "sc-17-proto-15-compressed.js";
+		}
 		String startTag = "<script type=\"text/javascript\" src=\"";
 		String endTag = "\"></script>";
-		addResourceInHead(context, response, framework, fileName, startTag, endTag);
+		addResourceInHead(context, response, framework, processedFileName, startTag, endTag);
 	}
 
 	public static void addScriptResourceInHead(WOContext context, WOResponse response, String fileName) {
