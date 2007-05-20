@@ -1,29 +1,41 @@
-Conditional1: WOConditional {
-	condition = useSubmitButton;
+ButtonAsAction: WOSubmitButton {
+	action = ^action;
+	value = ^value;
+    class = ^class;
+    style = ^style;
 }
 
-Conditional2: WOConditional {
+ButtonAsDirectAction: WOSubmitButton {
+	value = ^value;
+	directActionName = ^directActionName;
+	actionClass = ^actionClass;
+    class = ^class;
+    style = ^style;
+}
+
+ButtonAsInput: WOGenericElement {
+    elementName = "input";
+    type = "submit";
+    value = ^value;
+    invokeAction = ^action;
+    onClick=jsString;
+    name = context.elementID;
+    class = ^class;
+    style = ^style;
+}
+
+DontUseSubmitButton: WOConditional {
 	condition = useSubmitButton;
 	negate = true;
 }
 
-Conditional3: WOConditional {
-	condition = useSubmitButton;
+HasDirectAction: ERXNonNullConditional {
+	condition = ^directActionName;
 }
 
-Conditional4: WOConditional {
-	condition = useSubmitButton;
-	negate = true;
-}
-
-HasNoDirectAction3: ERXNonNullConditional {
+HasNoDirectAction: ERXNonNullConditional {
 	condition = ^directActionName;
 	negate = true;
-}
-
-HasNoDirectAction4: ERXNonNullConditional {
-	condition = ^directActionName;
-	negate = false;
 }
 
 OptionalForm: ERXOptionalForm {
@@ -32,31 +44,6 @@ OptionalForm: ERXOptionalForm {
 	actionClass = ^actionClass;
 }
 
-SubmitButton1: WOGenericElement {
-    elementName = "INPUT";
-    type = "submit";
-    value = ^value;
-    invokeAction = ^action;
-    onClick=jsString;
-    name = context.elementID;
-}
-
-SubmitButton2: WOSubmitButton {
-	action = ^action;
-	value = ^value;
-}
-
-SubmitButton3: WOSubmitButton {
-	value = ^value;
-	directActionName = ^directActionName;
-	actionClass = ^actionClass;
-}
-
-SubmitButton5: WOGenericElement {
-    elementName = "INPUT";
-    type = "submit";
-    value = ^value;
-    invokeAction = ^action;
-    onClick=jsString;
-    name = context.elementID;
+UseSubmitButton: WOConditional {
+	condition = useSubmitButton;
 }
