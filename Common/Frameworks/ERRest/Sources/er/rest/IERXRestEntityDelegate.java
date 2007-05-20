@@ -14,10 +14,10 @@ import com.webobjects.foundation.NSArray;
  * basis. Entity delegates are typically registered on the ERXRestDelegate of ERXRestContext in your Application
  * constructor.
  * 
- * <code>
+ * <pre>
  * ERXDefaultRestDelegate restDelegate = new ERXDefaultRestDelegate();
  * restDelegate.addDelegateForEntityNamed(new OrganizationRestEntityDelegate(), Organization.ENTITY_NAME);
- * </code>
+ * </pre>
  * 
  * @author mschrag
  */

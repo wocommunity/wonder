@@ -30,15 +30,15 @@ import er.extensions.ERXProperties;
  * Entity aliases allow you to remap the name of entity from its actual internal name to some other name that is shown
  * to consumers of your service:
  * 
- * <code>
+ * <pre>
  * ERXRest.[EntityName].alias=SomeOtherName
- * </code>
+ * </pre>
  * 
  * For example:
  * 
- * <code>
+ * <pre>
  * ERXRest.Person.alias=Employee
- * </code>
+ * </pre>
  * 
  * In the above example, our entity is named Person, but we want users of our service to see it named "Employee."
  * </p>
@@ -49,15 +49,15 @@ import er.extensions.ERXProperties;
  * Property aliases provide a mechanism to do this, and ERXStandardRestEntityDelegate allows you to define these
  * mappings in your Application properties file.
  * 
- * <code>
+ * <pre>
  * ERXRest.[EntityName].[propertyName].alias=someOtherName
- * </code>
+ * </pre>
  * 
  * For example:
  * 
- * <code>
+ * <pre>
  * ERXRest.Person.displayName.alias=name
- * </code>
+ * </pre>
  * 
  * In the above example, the we are saying that the "displayName" property of the "Person" entity should be called
  * "name" to users of the service. The entity name in this property should be the actual entity name, not the entity
@@ -105,17 +105,18 @@ import er.extensions.ERXProperties;
  * <p>
  * To define view, insert, and update properties in your Application's Properties file, you can declare:
  * 
- * <code>
+ * <pre>
  * ERXRest.[EntityName].viewProperties=property1,property2,property3,...
  * ERXRest.[EntityName].insertProperties=property1,property2,property3,...
  * ERXRest.[EntityName].updateProperties=property1,property2,property3,...
- * </code>
+ * </pre>
  * 
- * For example: <code>
+ * For example: 
+ * <pre>
  * ERXRest.BlogPost.viewProperties=author,title,submissionDate,contents
  * ERXRest.BlogPost.insertProperties=author,title,contents
  * ERXRest.BlogPost.updateProperties=title,contents
- * </code>
+ * </pre>
  * 
  * In the above example, we allow users to see the author, title, submissionDate and contents properties of a BlogPost.
  * However, when they insert, we want to automatically set "submissionDate", so we do not allow that property.
