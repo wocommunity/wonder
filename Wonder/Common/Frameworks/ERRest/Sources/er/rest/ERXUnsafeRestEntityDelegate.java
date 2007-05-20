@@ -19,6 +19,10 @@ public class ERXUnsafeRestEntityDelegate extends ERXAbstractRestEntityDelegate {
 		// DO NOTHING
 	}
 
+	public boolean canInsertProperty(EOEntity entity, EOEnterpriseObject eo, String propertyName, ERXRestContext context) {
+		return canUpdateProperty(entity, eo, propertyName, context);
+	}
+	
 	public boolean canUpdateProperty(EOEntity entity, EOEnterpriseObject eo, String propertyName, ERXRestContext context) {
 		return allPropertyNames(entity, eo, context).containsObject(propertyName);
 	}
