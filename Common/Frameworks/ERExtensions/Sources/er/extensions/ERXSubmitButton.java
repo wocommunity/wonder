@@ -54,12 +54,13 @@ public class ERXSubmitButton extends WOInput {
     protected WOAssociation _action;
     protected WOAssociation _actionClass;
     protected WOAssociation _directActionName;
-    protected boolean _useButton;
+    protected WOAssociation _shouldSubmitForm;
     
     public ERXSubmitButton(String arg0, NSDictionary nsdictionary, WOElement arg2) {
         super("button", nsdictionary, arg2);
         if(_value == null)
             _value = new WOConstantValueAssociation("Submit");
+        _shouldSubmitForm = (WOAssociation)_associations.removeObjectForKey("shouldSubmitForm");
         _action = (WOAssociation)_associations.removeObjectForKey("action");
         _actionClass = (WOAssociation)_associations.removeObjectForKey("actionClass");
         _directActionName = (WOAssociation)_associations.removeObjectForKey("directActionName");
@@ -111,6 +112,8 @@ public class ERXSubmitButton extends WOInput {
     	appendConstantAttributesToResponse(woresponse, wocontext);
     	appendNonURLAttributesToResponse(woresponse, wocontext);
     	appendURLAttributesToResponse(woresponse, wocontext);
+    	boolean shouldSubmitForm = (_shouldSubmitForm != null ? _shouldSubmitForm.booleanValueInComponent(wocontext.component()) : true);
+
     	if(disabledInComponent(wocontext.component())) {
     		woresponse.appendContentCharacter(' ');
     		woresponse._appendContentAsciiString("disabled=\"disabled\"");
@@ -118,10 +121,19 @@ public class ERXSubmitButton extends WOInput {
     	if(useButton(wocontext)) {
     		_appendValueAttributeToResponse(woresponse, wocontext);
     		_appendNameAttributeToResponse(woresponse, wocontext);
+    		if(!shouldSubmitForm) {
+    			String action = (String) wocontext.componentActionURL();
+    			woresponse._appendTagAttributeAndValue("onclick", "document.location.href='" + action + "'; return false;", false);
+    		}
     	} else {
-    		woresponse._appendContentAsciiString(" style=\"text-decoration: none;\"; href=\"#\" onclick=\"this.firstChild.click(); void(0);\">");
+	   		woresponse._appendContentAsciiString(" style=\"text-decoration: none;\"; href=\"#\" onclick=\"this.firstChild.click(); void(0);\">");
     		woresponse._appendContentAsciiString("<input type=\"submit\" style=\"position: absolute; display:none; visibility: hidden;\"");
 
+    		if(!shouldSubmitForm) {
+    			String action = (String) wocontext.componentActionURL();
+    			woresponse._appendTagAttributeAndValue("onclick", "document.location.href='" + action + "'; return false;", false);
+    		}
+ 
     		_appendValueAttributeToResponse(woresponse, wocontext);
     		_appendNameAttributeToResponse(woresponse, wocontext);
     		woresponse._appendContentAsciiString(" /");   	

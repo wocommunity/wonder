@@ -12,7 +12,8 @@ import com.webobjects.appserver.WOContext;
 // A Submit button that can be used stand alone.
 /**
  * A stand alone submit button to be used as an action button.<br />
- * 
+ * Usefull for cancel buttons which should not submit the page and create all the validation messages.
+ * Can also create its own FORM, so you can drop it anywhere.
  * @binding action
  * @binding value
  * @binding doNotUseForm" defaults="Boolean
