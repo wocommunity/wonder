@@ -47,6 +47,15 @@ public interface IERXRestDelegate {
 	 */
 	public void delete(EOEntity entity, Object obj, ERXRestContext context) throws ERXRestException, ERXRestSecurityException, ERXRestNotFoundException;
 	
+	/**
+	 * Returns the actual name for the entity from its
+	 * aliased name.  The mappings for aliases is acquired
+	 * when entity delegates are registered by calling
+	 * entityAliasForEntityNamed.
+	 * 
+	 * @param entityAlias the entity alias
+	 * @return the actual entity name
+	 */
 	public String entityNameForAlias(String entityAlias);
 	
 	/**

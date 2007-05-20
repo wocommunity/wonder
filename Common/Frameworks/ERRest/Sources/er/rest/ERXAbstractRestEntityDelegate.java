@@ -14,7 +14,7 @@ import com.webobjects.eoaccess.EOEntity;
 import com.webobjects.eoaccess.EORelationship;
 import com.webobjects.eoaccess.EOUtilities;
 import com.webobjects.eocontrol.EOEnterpriseObject;
-import com.webobjects.eocontrol.EOKeyGlobalID;
+import com.webobjects.eocontrol.EOGlobalID;
 import com.webobjects.eocontrol.EOKeyValueCoding;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSKeyValueCoding;
@@ -25,28 +25,57 @@ import com.webobjects.foundation.NSTimestampFormatter;
 import er.extensions.ERXEOGlobalIDUtilities;
 import er.extensions.ERXGuardedObjectInterface;
 
+/**
+ * Provides default implementations of many of the common entity delegate behaviors.
+ * 
+ * @author mschrag
+ */
 public abstract class ERXAbstractRestEntityDelegate implements IERXRestEntityDelegate {
+	/**
+	 * Returns entityName;
+	 * 
+	 * @return entityName
+	 */
 	public String entityAliasForEntityNamed(String entityName) {
 		return entityName;
 	}
 	
+	/**
+	 * Returns propertyAlias.
+	 * 
+	 * @return propertyAlias
+	 */
 	public String propertyNameForPropertyAlias(EOEntity entity, String propertyAlias) {
 		return propertyAlias;
 	}
 
+	/**
+	 * Returns propertyName.
+	 * 
+	 * @return propertyName
+	 */
 	public String propertyAliasForPropertyNamed(EOEntity entity, String propertyName) {
 		return propertyName;
 	}
 
+	/**
+	 * Returns the value for the given property name.
+	 */
 	public Object valueForKey(EOEntity entity, Object obj, String propertyName, ERXRestContext context) {
 		return NSKeyValueCoding.Utility.valueForKey(obj, propertyName);
 	}
 
+	/**
+	 * Parses the attribute with parseAttributeValue and sets it on the object.
+	 */
 	public void takeValueForKey(EOEntity entity, Object obj, String propertyName, String value, ERXRestContext context) throws ParseException, ERXRestException {
 		Object parsedAttributeValue = parseAttributeValue(entity, obj, propertyName, value);
 		EOKeyValueCoding.Utility.takeStoredValueForKey(obj, parsedAttributeValue, propertyName);
 	}
 
+	/**
+	 * Does nothing.
+	 */
 	public void preprocess(EOEntity entity, NSArray objects, ERXRestContext context) throws ERXRestException {
 		// Enumeration displayPropertiesEnum = displayProperties(entity).objectEnumerator();
 		// while (displayPropertiesEnum.hasMoreElements()) {
@@ -59,7 +88,7 @@ public abstract class ERXAbstractRestEntityDelegate implements IERXRestEntityDel
 	}
 
 	public EOEnterpriseObject objectWithKey(EOEntity entity, String key, ERXRestContext context) throws ERXRestException, ERXRestNotFoundException, ERXRestSecurityException {
-		EOKeyGlobalID gid = EOKeyGlobalID.globalIDWithEntityName(entity.name(), new Object[] { Integer.valueOf(key) });
+		EOGlobalID gid = ERXRestUtils.gidForID(entity, key);
 		EOEnterpriseObject obj = ERXEOGlobalIDUtilities.fetchObjectWithGlobalID(context.editingContext(), gid);
 		if (obj == null) {
 			throw new ERXRestNotFoundException("There is no " + entityAliasForEntityNamed(entity.name()) + " with the id '" + key + "'.");
@@ -109,6 +138,17 @@ public abstract class ERXAbstractRestEntityDelegate implements IERXRestEntityDel
 		return formattedValue;
 	}
 
+	/**
+	 * Parses the given String and returns an object.
+	 * 
+	 * @param entity the entity
+	 * @param object the object
+	 * @param attributeName the name of the property
+	 * @param attributeValue the value of the property
+	 * @return a parsed version of the String
+	 * @throws ParseException if a parse failure occurs
+	 * @throws ERXRestException if a general failure occurs
+	 */
 	public Object parseAttributeValue(EOEntity entity, Object object, String attributeName, String attributeValue) throws ParseException, ERXRestException {
 		NSKeyValueCoding._KeyBinding binding = NSKeyValueCoding.DefaultImplementation._keyGetBindingForKey(object, attributeName);
 		Class valueType = binding.valueType();
@@ -290,8 +330,30 @@ public abstract class ERXAbstractRestEntityDelegate implements IERXRestEntityDel
 		updated(entity, parentObject, context);
 	}
 
+	/**
+	 * Called after performing the user's requested updates.  This provides support for subclasses to extend
+	 * and perform "automatic" updates.  For instance, if you wanted to set a last modified date, or a
+	 * modified-by-user field, you could do that here.
+	 *  
+	 * @param entity the entity of the object being updated
+	 * @param eo the updated object
+	 * @param context the rest context
+	 * @throws ERXRestException if a general error occurs
+	 * @throws ERXRestSecurityException if a security error occurs
+	 */
 	public abstract void updated(EOEntity entity, EOEnterpriseObject eo, ERXRestContext context) throws ERXRestException, ERXRestSecurityException;
 
+	/**
+	 * Called after performing the user's requested insert.  This provides support for subclasses to extend
+	 * and set "automatic" attributes.  For instance, if you wanted to set a creation date, or a
+	 * created-by-user field, you could do that here.
+	 *  
+	 * @param entity the entity of the object being inserted
+	 * @param eo the inserted object
+	 * @param context the rest context
+	 * @throws ERXRestException if a general error occurs
+	 * @throws ERXRestSecurityException if a security error occurs
+	 */
 	public abstract void inserted(EOEntity entity, EOEnterpriseObject eo, ERXRestContext context) throws ERXRestException, ERXRestSecurityException;
 
 }
