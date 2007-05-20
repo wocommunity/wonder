@@ -33,17 +33,17 @@ import er.extensions.ERXProperties;
  * 
  * <p>
  * These properties take the form:
- * <code>
+ * <pre>
  * ERXRest.[EntityName].details=true/false
  * ERXRest.[EntityName].detailsProperties=property_1,property_2,property_3,...,property_n
  * ERXRest.[EntityName].property_a.property_a_b.details=true/false
  * ERXRest.[EntityName].property_a.property_a_b.detailsProperties=property_1,property_2,property_3,...,property_n
- * </code>
+ * </pre>
  * </p>
  * 
  * <p>
  * For example:
- * <code>
+ * <pre>
  * ERXRest.Organization.details=true
  * ERXRest.Organization.detailsProperties=name,purchasedPlans
  * ERXRest.Organization.purchasedPlans.details=false
@@ -57,7 +57,7 @@ import er.extensions.ERXProperties;
  * 
  * ERXRest.BlogEntry.details=true
  * ERXRest.BlogEntry.detailsProperties=site,author,submissionDate,title,contents
- * </code>
+ * </pre>
  * </p>
  * 
  * <p>
@@ -77,7 +77,7 @@ import er.extensions.ERXProperties;
  * <p>
  * For a request for http://yoursite/yourapp.woa/rest/Organization/100.xml, the output 
  * will look like:
- * <code>
+ * <pre>
  * &lt;Organization id = "100"&gt;
  *   &lt;name>Organization Name&lt;/name&gt;
  *   &lt;purchasedPlans type = "PurchasedPlan"&gt;
@@ -86,7 +86,7 @@ import er.extensions.ERXProperties;
  *     &lt;PurchasedPlan id = "202"/&gt;
  *   &lt;/purchasedPlans&gt;
  * &lt;/Organization&gt;
- * </code>
+ * </pre>
  * </p>
  * 
  * <p>
