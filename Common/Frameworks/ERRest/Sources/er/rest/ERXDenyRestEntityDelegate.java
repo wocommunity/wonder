@@ -9,6 +9,13 @@ import com.webobjects.eoaccess.EOEntity;
 import com.webobjects.eocontrol.EOEnterpriseObject;
 import com.webobjects.foundation.NSArray;
 
+/**
+ * ERXDenyRestEntityDelegate is the safe default entity delegate (and is used by default
+ * on ERXRestDelegate).  This delegate denies all requests (view, insert, update, etc) and 
+ * throws security exceptions at any attempt to perform an action.
+ * 
+ * @author mschrag
+ */
 public class ERXDenyRestEntityDelegate implements IERXRestEntityDelegate {
 	public String entityAliasForEntityNamed(String entityName) {
 		return entityName;

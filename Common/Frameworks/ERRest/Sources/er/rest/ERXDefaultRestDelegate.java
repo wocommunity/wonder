@@ -14,15 +14,32 @@ import com.webobjects.foundation.NSMutableDictionary;
 
 import er.extensions.ERXLocalizer;
 
+/**
+ * ERXDefaultRestDelegate is the default implementation of the IERXRestDelegate interface. It provides support for
+ * registering custom IERXRestEntityDelegates for specific entities.
+ * 
+ * @author mschrag
+ */
 public class ERXDefaultRestDelegate implements IERXRestDelegate {
 	private NSMutableDictionary _entityAliases;
 	private NSMutableDictionary _entityDelegates;
 	private IERXRestEntityDelegate _defaultDelegate;
 
+	/**
+	 * Constructs an ERXDefaultRestDelegate with an ERXDenyRestEntityDelegate
+	 * as the default entity delegate. 
+	 */
 	public ERXDefaultRestDelegate() {
 		this(new ERXDenyRestEntityDelegate());
 	}
 
+	/**
+	 * Constructs an ERXDefaultRestDelegate with the given default entity delegate.  If no
+	 * entity delegate is specified for a particular entity name, the default delegate
+	 * will be returned.
+	 * 
+	 * @param defaultDelegate the default entity delegate to use
+	 */
 	public ERXDefaultRestDelegate(IERXRestEntityDelegate defaultDelegate) {
 		_entityAliases = new NSMutableDictionary();
 		_entityDelegates = new NSMutableDictionary();
@@ -169,16 +186,11 @@ public class ERXDefaultRestDelegate implements IERXRestDelegate {
 	}
 
 	public String entityNameForAlias(String entityAlias) {
-		return (String) _entityAliases.objectForKey(entityAlias);
-	}
-
-	public void addDelegateForEntityNamed(IERXRestEntityDelegate entityDelegate, String entityName) {
-		_entityDelegates.setObjectForKey(entityDelegate, entityName);
-		_entityAliases.setObjectForKey(entityName, entityDelegate.entityAliasForEntityNamed(entityName));
-	}
-
-	public void removeDelegateForEntityNamed(String entityName) {
-		_entityDelegates.removeObjectForKey(entityName);
+		String entityName = (String) _entityAliases.objectForKey(entityAlias);
+		if (entityName == null) {
+			entityName = entityAlias;
+		}
+		return entityName;
 	}
 
 	public IERXRestEntityDelegate entityDelegate(EOEntity entity) {
@@ -187,5 +199,28 @@ public class ERXDefaultRestDelegate implements IERXRestDelegate {
 			entityDelegate = _defaultDelegate;
 		}
 		return entityDelegate;
+	}
+
+	/**
+	 * Call this method to register an entity-specific delegate for a particular entity name.
+	 * 
+	 * @param entityDelegate
+	 *            the entity delegate
+	 * @param entityName
+	 *            the entity name to associate the delegate with
+	 */
+	public void addDelegateForEntityNamed(IERXRestEntityDelegate entityDelegate, String entityName) {
+		_entityDelegates.setObjectForKey(entityDelegate, entityName);
+		_entityAliases.setObjectForKey(entityName, entityDelegate.entityAliasForEntityNamed(entityName));
+	}
+
+	/**
+	 * Removes the delegate for the given entity name.
+	 * 
+	 * @param entityName
+	 *            the name of the entity
+	 */
+	public void removeDelegateForEntityNamed(String entityName) {
+		_entityDelegates.removeObjectForKey(entityName);
 	}
 }
