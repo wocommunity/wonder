@@ -112,9 +112,6 @@ public class ERXObjectStoreCoordinatorSynchronizer {
 				NSSelector snapshotCacheChanged = new NSSelector("snapshotCacheChanged", new Class[] { NSNotification.class });
 				NSNotificationCenter.defaultCenter().addObserver(this, snapshotCacheChanged, ERXDatabase.SnapshotCacheChanged, null);
 			}
-			else {
-				log.error("Adding same coordinator twice!");
-			}
 		}
 	}
 
