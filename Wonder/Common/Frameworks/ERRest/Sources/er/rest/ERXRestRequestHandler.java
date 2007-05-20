@@ -38,13 +38,13 @@ import er.extensions.ERXEC;
  * To use the unsafe development example delegates, you can add
  * the following code to your application constructor:
  * 
- * <code>
+ * <pre>
  * IERXRestEntityDelegate defaultEntityDelegate = new ERXUnsafeRestEntityDelegate();
  * ERXDefaultRestDelegate restDelegate = new ERXDefaultRestDelegate(defaultEntityDelegate);
  * IERXRestAuthenticationDelegate authenticationDelegate = new ERXUnsafeRestAuthenticationDelegate();
  * IERXRestResponseWriter responseWriter = new ERXXmlRestResponseWriter();
  * registerRequestHandler(new ERXRestRequestHandler(authenticationDelegate, restDelegate, responseWriter), "rest");
- * </code>
+ * </pre>
  * </p>
  * 
  * <h2>Real-world Setup Example</h2>
@@ -52,14 +52,14 @@ import er.extensions.ERXEC;
  * In a real scenario you will not want to use the unsafe variants of the various 
  * delegates.  Instead, you will want to provide custom implementations.
  * 
- * <code>
+ * <pre>
  * ERXDefaultRestDelegate restDelegate = new ERXDefaultRestDelegate();
  * restDelegate.addDelegateForEntityNamed(new CompanyRestEntityDelegate(), Company.ENTITY_NAME);
  * restDelegate.addDelegateForEntityNamed(new PersonRestEntityDelegate(), Person.ENTITY_NAME);
  * IERXRestAuthenticationDelegate authenticationDelegate = new MyCustomRestAuthenticationDelegate();
  * IERXRestResponseWriter responseWriter = new ERXXmlRestResponseWriter();
  * registerRequestHandler(new ERXRestRequestHandler(authenticationDelegate, restDelegate), "rest");
- * </code>
+ * </pre>
  * 
  * <p>
  * Once you have the request handler registered, you can explore the rest interface using
@@ -68,8 +68,8 @@ import er.extensions.ERXEC;
  * </p>
  * 
  * <h2>Get a list of all the Site objects</h2>
- * <code>curl -s http://127.0.0.1/cgi-bin/WebObjects/YourApp.woa/rest/Site.xml?membershipTicket=someAuthToken</code>
- * <code>
+ * <pre>curl -s http://127.0.0.1/cgi-bin/WebObjects/YourApp.woa/rest/Site.xml?membershipTicket=someAuthToken</pre>
+ * <pre>
  * HTTP Status Code: 200
  * &lt;Sites type = "Site"&gt;
  *   &lt;Site id = "100"&gt;
@@ -89,11 +89,11 @@ import er.extensions.ERXEC;
  *     &lt;/bulletins&gt;
  *   &lt;/Site&gt;
  * &lt;/Sites&gt;  
- * </code>
+ * </pre>
  *   
  * <h2>Get a single site from the Site list</h2>
- * <code>curl -s http://127.0.0.1/cgi-bin/WebObjects/YourApp.woa/rest/Site/100.xml?membershipTicket=someAuthToken</code>
- * <code>
+ * <pre>curl -s http://127.0.0.1/cgi-bin/WebObjects/YourApp.woa/rest/Site/100.xml?membershipTicket=someAuthToken</pre>
+ * <pre>
  * HTTP Status Code: 200
  * &lt;Site id = "100"&gt;
  *   &lt;title&gt;Site #1&lt;/title&gt;
@@ -103,25 +103,25 @@ import er.extensions.ERXEC;
  *     &lt;Bulletin id = "202"/&gt;
  *   &lt;/bulletins&gt;
  * &lt;/Site&gt;
- * </code>
+ * </pre>
  *   
  * <h2>Get a single site from the Site list (that doesn't exist)</h2>
- * <code>curl -s http://127.0.0.1/cgi-bin/WebObjects/YourApp.woa/rest/Site/112.xml?membershipTicket=someAuthToken</code>
- * <code>
+ * <pre>curl -s http://127.0.0.1/cgi-bin/WebObjects/YourApp.woa/rest/Site/112.xml?membershipTicket=someAuthToken</pre>
+ * <pre>
  * HTTP Status Code: 404
  * There is no Site with the id '112'.
- * </code>
+ * </pre>
  *   
  * <h2>Get a single site from the Site list (that we can't see)</h2>
- * <code>curl -s http://127.0.0.1/cgi-bin/WebObjects/YourApp.woa/rest/Site/114.xml?membershipTicket=someAuthToken</code>
- * <code>
+ * <pre>curl -s http://127.0.0.1/cgi-bin/WebObjects/YourApp.woa/rest/Site/114.xml?membershipTicket=someAuthToken</pre>
+ * <pre>
  * HTTP Status Code: 403
  * You are not allowed to view the Site with the id '112'.
- * </code>
+ * </pre>
  *   
  * <h2>Get a list of the bulletins for that Site</h2>
- * <code>curl -s http://127.0.0.1/cgi-bin/WebObjects/YourApp.woa/rest/Site/100/bulletins.xml?membershipTicket=someAuthToken</code>
- * <code>
+ * <pre>curl -s http://127.0.0.1/cgi-bin/WebObjects/YourApp.woa/rest/Site/100/bulletins.xml?membershipTicket=someAuthToken</pre>
+ * <pre>
  * HTTP Status Code: 200
  * &lt;Bulletins type = "Bulletin"&gt;
  *   &lt;Bulletin id = "200"&gt;
@@ -140,47 +140,47 @@ import er.extensions.ERXEC;
  *     &lt;contents&gt;Bulletin 3 Contents&lt;/title&gt;
  *   &lt;/Bulletin&gt;
  * &lt;/Bulletins&gt;
- * </code>
+ * </pre>
  *   
  * <h2>Get a single bulletin from the Bulletin list</h2>
- * <code>curl -s http://127.0.0.1/cgi-bin/WebObjects/YourApp.woa/rest/Site/100/bulletins/201.xml?membershipTicket=someAuthToken</code>
- * <code>
+ * <pre>curl -s http://127.0.0.1/cgi-bin/WebObjects/YourApp.woa/rest/Site/100/bulletins/201.xml?membershipTicket=someAuthToken</pre>
+ * <pre>
  * HTTP Status Code: 200
  * &lt;Bulletin id = "201"&gt;
  *   &lt;author type = "Person" id = "600"/&gt;
  *   &lt;title&gt;Bulletin 2&lt;/title&gt;
  *   &lt;contents&gt;Bulletin 2 Contents&lt;/title&gt;
  * &lt;/Bulletin&gt;
- * </code>
+ * </pre>
  *   
  * <h2>Update the title of a bulletin</h2>
- * <code>curl -x PUT -d '<Bulletin><title>Some random Bulletin!</title></Bulletin>' -s http://127.0.0.1/cgi-bin/WebObjects/YourApp.woa/rest/Site/100/bulletins/201.xml?membershipTicket=someAuthToken</code>
- * <code>
+ * <pre>curl -x PUT -d '<Bulletin><title>Some random Bulletin!</title></Bulletin>' -s http://127.0.0.1/cgi-bin/WebObjects/YourApp.woa/rest/Site/100/bulletins/201.xml?membershipTicket=someAuthToken</pre>
+ * <pre>
  * HTTP Status Code: 200
- * </code>
+ * </pre>
  *   
  * <h2>Try to break it -- Update a site with a bulletin document</h2>
- * <code>curl -X PUT -d '<Bulletin><title>Some random Bulletin Again!</title></Bulletin>' -s http://127.0.0.1/cgi-bin/WebObjects/YourApp.woa/rest/Site/100.xml?membershipTicket=someAuthToken</code>
- * <code>
+ * <pre>curl -X PUT -d '<Bulletin><title>Some random Bulletin Again!</title></Bulletin>' -s http://127.0.0.1/cgi-bin/WebObjects/YourApp.woa/rest/Site/100.xml?membershipTicket=someAuthToken</pre>
+ * <pre>
  * HTTP Status Code: 403
  * You tried to put a Bulletin into a Site.
- * </code>
+ * </pre>
  *   
  * <h2>Update the title of a site</h2>
- * <code>curl -X PUT -d '<Site><title>My Personal Site!</title></Site>' -s http://127.0.0.1/cgi-bin/WebObjects/YourApp.woa/rest/Site/100.xml?membershipTicket=someAuthToken</code>
- * <code>
+ * <pre>curl -X PUT -d '<Site><title>My Personal Site!</title></Site>' -s http://127.0.0.1/cgi-bin/WebObjects/YourApp.woa/rest/Site/100.xml?membershipTicket=someAuthToken</pre>
+ * <pre>
  * HTTP Status Code: 200
- * </code>
+ * </pre>
  *   
  * <h2>Post a bulletin</h2>
- * <code>curl -X POST -d '<Bulletin><title>New Bulletin By Me</title><contents>This is the contents of my bulletin</contents></Bulletin>' -s http://127.0.0.1/cgi-bin/WebObjects/YourApp.woa/rest/Site/100/bulletins.xml?membershipTicket=someAuthToken</code>
- * <code>
+ * <pre>curl -X POST -d '<Bulletin><title>New Bulletin By Me</title><contents>This is the contents of my bulletin</contents></Bulletin>' -s http://127.0.0.1/cgi-bin/WebObjects/YourApp.woa/rest/Site/100/bulletins.xml?membershipTicket=someAuthToken</pre>
+ * <pre>
  * HTTP Status Code: 201
  * &lt;Bulletin id = "7324"&gt;
  *   &lt;title&gt;New Bulletin By Me&lt;/title&gt;
  *   &lt;contents&gt;This is the contents of my bulletin&lt;/contents&gt;
  * &lt;/Bulletin&gt;
- * </code>
+ * </pre>
  *  
  * @author mschrag
  */
