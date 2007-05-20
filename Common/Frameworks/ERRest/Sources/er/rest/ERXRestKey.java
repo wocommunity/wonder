@@ -263,7 +263,7 @@ public class ERXRestKey {
 		ERXRestKey key = null;
 		String[] paths = path.split("/");
 		if (paths.length > 0) {
-			EOEntity entity = EOModelGroup.defaultGroup().entityNamed(paths[0]);
+			EOEntity entity = EOModelGroup.defaultGroup().entityNamed(context.delegate().entityNameForAlias(paths[0]));
 			if (entity == null) {
 				throw new ERXRestNotFoundException("There is no entity named '" + paths[0] + "'.");
 			}
