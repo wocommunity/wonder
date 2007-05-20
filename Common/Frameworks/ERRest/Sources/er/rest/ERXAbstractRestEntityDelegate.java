@@ -29,6 +29,14 @@ public abstract class ERXAbstractRestEntityDelegate implements IERXRestEntityDel
 	public String entityAliasForEntityNamed(String entityName) {
 		return entityName;
 	}
+	
+	public String propertyNameForPropertyAlias(EOEntity entity, String propertyAlias) {
+		return propertyAlias;
+	}
+
+	public String propertyAliasForPropertyNamed(EOEntity entity, String propertyName) {
+		return propertyName;
+	}
 
 	public Object valueForKey(EOEntity entity, Object obj, String propertyName, ERXRestContext context) {
 		return NSKeyValueCoding.Utility.valueForKey(obj, propertyName);
