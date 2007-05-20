@@ -47,6 +47,8 @@ public interface IERXRestDelegate {
 	 */
 	public void delete(EOEntity entity, Object obj, ERXRestContext context) throws ERXRestException, ERXRestSecurityException, ERXRestNotFoundException;
 	
+	public String entityNameForAlias(String entityAlias);
+	
 	/**
 	 * Returns the per-entity rest delegate.
 	 * 

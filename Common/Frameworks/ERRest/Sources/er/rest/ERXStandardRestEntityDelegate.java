@@ -9,10 +9,20 @@ import er.extensions.ERXProperties;
 public abstract class ERXStandardRestEntityDelegate extends ERXAbstractRestEntityDelegate {
 	private NSMutableSet _viewPropertyNames;
 	private NSMutableSet _updatePropertyNames;
+	private NSMutableSet _insertPropertyNames;
 
 	public ERXStandardRestEntityDelegate() {
 		_viewPropertyNames = new NSMutableSet();
 		_updatePropertyNames = new NSMutableSet();
+		_insertPropertyNames = new NSMutableSet();
+	}
+
+	public String entityAliasForEntityNamed(String entityName) {
+		String entityAlias = ERXProperties.stringForKey(ERXXmlRestResponseWriter.REST_PREFIX + entityName + ".name");
+		if (entityAlias == null) {
+			entityAlias = super.entityAliasForEntityNamed(entityName);
+		}
+		return entityAlias;
 	}
 
 	protected void addDisplayPropertiesAsViewProperties(String entityName) {
@@ -34,6 +44,16 @@ public abstract class ERXStandardRestEntityDelegate extends ERXAbstractRestEntit
 	public void addUpdatePropertyName(String updatePropertyName) {
 		addViewPropertyName(updatePropertyName);
 		_updatePropertyNames.addObject(updatePropertyName);
+		_insertPropertyNames.addObject(updatePropertyName);
+	}
+
+	public void addInsertPropertyName(String insertPropertyName) {
+		addViewPropertyName(insertPropertyName);
+		_insertPropertyNames.addObject(insertPropertyName);
+	}
+
+	public boolean canInsertProperty(EOEntity entity, EOEnterpriseObject eo, String propertyName, ERXRestContext context) {
+		return _insertPropertyNames.containsObject(propertyName);
 	}
 
 	public boolean canUpdateProperty(EOEntity entity, EOEnterpriseObject eo, String propertyName, ERXRestContext context) {
