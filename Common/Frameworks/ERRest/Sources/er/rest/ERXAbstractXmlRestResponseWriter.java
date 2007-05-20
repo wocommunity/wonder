@@ -9,14 +9,12 @@ import com.webobjects.eocontrol.EOEnterpriseObject;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSMutableSet;
 
-import er.extensions.ERXLocalizer;
 import er.extensions.ERXStringUtilities;
 
-public abstract class ERXAbstractXmlRestResponseWriter implements IERXRestResponseWriter {
+public abstract class ERXAbstractXmlRestResponseWriter extends ERXAbstractRestResponseWriter {
 	public void appendToResponse(ERXRestContext context, WOResponse response, ERXRestKey result) throws ERXRestException, ERXRestSecurityException, ERXRestNotFoundException, ParseException {
 		response.setHeader("text/xml", "Content-Type");
-		StringBuffer xmlBuffer = new StringBuffer();
-		appendXmlToResponse(context, response, result.trimPrevious(), 0, new NSMutableSet());
+		super.appendToResponse(context, response, result);
 	}
 
 	protected void indent(WOResponse response, int indent) {
@@ -25,36 +23,22 @@ public abstract class ERXAbstractXmlRestResponseWriter implements IERXRestRespon
 		}
 	}
 
-	protected void appendArrayXmlToResponse(ERXRestContext context, WOResponse response, ERXRestKey result, int indent, NSMutableSet visitedObjects) throws ERXRestException, ERXRestSecurityException, ERXRestNotFoundException, ParseException {
+	protected void appendArrayToResponse(ERXRestContext context, WOResponse response, ERXRestKey result, String arrayName, String entityName, NSArray valueKeys, int indent, NSMutableSet visitedObjects) throws ERXRestException, ERXRestSecurityException, ERXRestNotFoundException, ParseException {
 		indent(response, indent);
 		response.appendContentString("<");
-		String arrayName;
-		EOEntity entity = result.nextEntity();
-		if (result.key() == null) {
-			arrayName = entity.name();
-		}
-		else {
-			arrayName = result.key();
-		}
-		NSArray values = (NSArray) result.value();
-		if (arrayName.equals(entity.name())) {
-			arrayName = ERXLocalizer.currentLocalizer().plurifiedString(arrayName, 2);
-		}
 		response.appendContentString(arrayName);
 
 		response.appendContentString(" type = \"");
-		response.appendContentString(entity.name());
+		response.appendContentString(entityName);
 		response.appendContentString("\"");
 
 		response.appendContentString(">");
 		response.appendContentString("\n");
 
-		context.delegate().entityDelegate(entity).preprocess(entity, values, context);
-		Enumeration valuesEnum = values.objectEnumerator();
-		while (valuesEnum.hasMoreElements()) {
-			EOEnterpriseObject eo = (EOEnterpriseObject) valuesEnum.nextElement();
-			ERXRestKey eoKey = result.extend(ERXRestUtils.idForEO(eo), eo, true);
-			appendXmlToResponse(context, response, eoKey, indent + 1, visitedObjects);
+		Enumeration valueKeysEnum = valueKeys.objectEnumerator();
+		while (valueKeysEnum.hasMoreElements()) {
+			ERXRestKey eoKey = (ERXRestKey) valueKeysEnum.nextElement();
+			appendToResponse(context, response, eoKey, indent + 1, visitedObjects);
 		}
 
 		indent(response, indent);
@@ -63,98 +47,97 @@ public abstract class ERXAbstractXmlRestResponseWriter implements IERXRestRespon
 		response.appendContentString(">");
 		response.appendContentString("\n");
 	}
+	
+	protected void appendVisitedToResponse(ERXRestContext context, WOResponse response, EOEntity entity, EOEnterpriseObject eo, String objectName, String entityName, String id, int indent) {
+		indent(response, indent);
+		response.appendContentString("<");
+		response.appendContentString(objectName);
 
-	protected abstract boolean displayDetails(ERXRestContext context, ERXRestKey result) throws ERXRestException, ERXRestNotFoundException, ERXRestSecurityException;
-
-	protected abstract String[] displayProperties(ERXRestContext context, ERXRestKey result) throws ERXRestException, ERXRestNotFoundException, ERXRestSecurityException;
-
-	protected void appendXmlToResponse(ERXRestContext context, WOResponse response, ERXRestKey result, int indent, NSMutableSet visitedObjects) throws ERXRestException, ERXRestSecurityException, ERXRestNotFoundException, ParseException {
-		Object value = result.value();
-		if (value == null) {
-			// DO NOTHING
-		}
-		else if (value instanceof NSArray) {
-			appendArrayXmlToResponse(context, response, result, indent, visitedObjects);
-		}
-		else {
-			indent(response, indent);
-			response.appendContentString("<");
-			String objectName;
-			if (result.previousKey() == null || result.isKeyGID()) {
-				objectName = result.nextEntity().name();
-			}
-			else {
-				objectName = result.key();
-			}
-			response.appendContentString(objectName);
-
-			EOEntity entity = result.nextEntity();
-			EOEnterpriseObject eo = (EOEnterpriseObject) value;
-			if (!objectName.equals(entity.name())) {
-				response.appendContentString(" type = \"");
-				response.appendContentString(entity.name());
-				response.appendContentString("\"");
-			}
-
-			response.appendContentString(" id = \"");
-			response.appendContentString(ERXRestUtils.idForEO(eo));
+		if (!objectName.equals(entityName)) {
+			response.appendContentString(" type = \"");
+			response.appendContentString(entityName);
 			response.appendContentString("\"");
+		}
+		
+		response.appendContentString(" id = \"");
+		response.appendContentString(id);
+		response.appendContentString("\"");
+		
+		response.appendContentString("/>");
+		response.appendContentString("\n");
+	}
+	
+	protected void appendNoDetailsToResponse(ERXRestContext context, WOResponse response, EOEntity entity, EOEnterpriseObject eo, String objectName, String entityName, String id, int indent) {
+		indent(response, indent);
+		response.appendContentString("<");
+		response.appendContentString(objectName);
 
-			boolean displayDetails = displayDetails(context, result);
-			if (!visitedObjects.containsObject(eo) && displayDetails) {
-				visitedObjects.addObject(eo);
+		if (!objectName.equals(entityName)) {
+			response.appendContentString(" type = \"");
+			response.appendContentString(entityName);
+			response.appendContentString("\"");
+		}
+		
+		response.appendContentString(" id = \"");
+		response.appendContentString(id);
+		response.appendContentString("\"");
+		
+		response.appendContentString("/>");
+		response.appendContentString("\n");
+	}
 
-				response.appendContentString(">");
-				response.appendContentString("\n");
+	protected void appendDetailsToResponse(ERXRestContext context, WOResponse response, EOEntity entity, EOEnterpriseObject eo, String objectName, String entityName, String id, NSArray displayKeys, int indent, NSMutableSet visitedObjects) throws ERXRestException, ERXRestSecurityException, ERXRestNotFoundException, ParseException {
+		indent(response, indent);
+		response.appendContentString("<");
+		response.appendContentString(objectName);
 
-				String[] displayPropertyNames = displayProperties(context, result);
-				if (displayPropertyNames != null) {
-					IERXRestEntityDelegate entityDelegate = context.delegate().entityDelegate(entity);
-					for (int displayPropertyNum = 0; displayPropertyNum < displayPropertyNames.length; displayPropertyNum++) {
-						String propertyName = displayPropertyNames[displayPropertyNum];
-						if (context.delegate().entityDelegate(entity).canViewProperty(entity, eo, propertyName, context)) {
-							// EORelationship relationship = entity.relationshipNamed(propertyName);
-							// if (relationship != null && !relationship.isToMany()) {
-							//								
-							// }
-							ERXRestKey nextKey = result.extend(propertyName, true);
-							Object propertyValue = nextKey.value();
-							if (propertyValue instanceof NSArray) {
-								appendXmlToResponse(context, response, nextKey, indent + 1, visitedObjects);
-							}
-							else if (propertyValue instanceof EOEnterpriseObject) {
-								appendXmlToResponse(context, response, nextKey, indent + 1, visitedObjects);
-							}
-							else {
-								String formattedPropertyValue = context.delegate().entityDelegate(entity).formatAttributeValue(entity, eo, propertyName, propertyValue);
-								if (formattedPropertyValue != null) {
-									indent(response, indent + 1);
-									response.appendContentString("<");
-									response.appendContentString(propertyName);
-									response.appendContentString(">");
-
-									String attributeValueStr = ERXStringUtilities.escapeNonXMLChars(formattedPropertyValue);
-									response.appendContentString(attributeValueStr);
-
-									response.appendContentString("</");
-									response.appendContentString(propertyName);
-									response.appendContentString(">");
-									response.appendContentString("\n");
-								}
-							}
-						}
-					}
-				}
-
-				indent(response, indent);
-				response.appendContentString("</");
-				response.appendContentString(objectName);
-				response.appendContentString(">");
+		if (!objectName.equals(entityName)) {
+			response.appendContentString(" type = \"");
+			response.appendContentString(entityName);
+			response.appendContentString("\"");
+		}
+		
+		response.appendContentString(" id = \"");
+		response.appendContentString(id);
+		response.appendContentString("\"");
+		
+		response.appendContentString(">");
+		response.appendContentString("\n");
+		
+		Enumeration displayKeysEnum = displayKeys.objectEnumerator();
+		while (displayKeysEnum.hasMoreElements()) {
+			ERXRestKey displayKey = (ERXRestKey)displayKeysEnum.nextElement();
+			String propertyName = displayKey.key();
+			Object propertyValue = displayKey.value();
+			if (propertyValue instanceof NSArray) {
+				appendToResponse(context, response, displayKey, indent + 1, visitedObjects);
+			}
+			else if (propertyValue instanceof EOEnterpriseObject) {
+				appendToResponse(context, response, displayKey, indent + 1, visitedObjects);
 			}
 			else {
-				response.appendContentString("/>");
+				String formattedPropertyValue = context.delegate().entityDelegate(entity).formatAttributeValue(entity, eo, propertyName, propertyValue);
+				if (formattedPropertyValue != null) {
+					indent(response, indent + 1);
+					response.appendContentString("<");
+					response.appendContentString(propertyName);
+					response.appendContentString(">");
+
+					String attributeValueStr = ERXStringUtilities.escapeNonXMLChars(formattedPropertyValue);
+					response.appendContentString(attributeValueStr);
+
+					response.appendContentString("</");
+					response.appendContentString(propertyName);
+					response.appendContentString(">");
+					response.appendContentString("\n");
+				}
 			}
-			response.appendContentString("\n");
 		}
+		
+		indent(response, indent);
+		response.appendContentString("</");
+		response.appendContentString(objectName);
+		response.appendContentString(">");
+		response.appendContentString("\n");
 	}
 }

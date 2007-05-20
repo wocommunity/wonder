@@ -26,6 +26,10 @@ import er.extensions.ERXEOGlobalIDUtilities;
 import er.extensions.ERXGuardedObjectInterface;
 
 public abstract class ERXAbstractRestEntityDelegate implements IERXRestEntityDelegate {
+	public String entityAliasForEntityNamed(String entityName) {
+		return entityName;
+	}
+
 	public Object valueForKey(EOEntity entity, Object obj, String propertyName, ERXRestContext context) {
 		return NSKeyValueCoding.Utility.valueForKey(obj, propertyName);
 	}
@@ -50,10 +54,10 @@ public abstract class ERXAbstractRestEntityDelegate implements IERXRestEntityDel
 		EOKeyGlobalID gid = EOKeyGlobalID.globalIDWithEntityName(entity.name(), new Object[] { Integer.valueOf(key) });
 		EOEnterpriseObject obj = ERXEOGlobalIDUtilities.fetchObjectWithGlobalID(context.editingContext(), gid);
 		if (obj == null) {
-			throw new ERXRestNotFoundException("There is no " + entity.name() + " with the id '" + key + "'.");
+			throw new ERXRestNotFoundException("There is no " + entityAliasForEntityNamed(entity.name()) + " with the id '" + key + "'.");
 		}
 		if (!canViewObject(entity, obj, context)) {
-			throw new ERXRestSecurityException("You are not allowed to view the " + entity.name() + " with the id '" + key + "'.");
+			throw new ERXRestSecurityException("You are not allowed to view the " + entityAliasForEntityNamed(entity.name()) + " with the id '" + key + "'.");
 		}
 		return obj;
 	}
@@ -68,11 +72,11 @@ public abstract class ERXAbstractRestEntityDelegate implements IERXRestEntityDel
 			}
 		}
 		if (filteredObjs.count() == 0) {
-			throw new ERXRestNotFoundException("There is no " + entity.name() + " in this relationship with the id '" + key + "'.");
+			throw new ERXRestNotFoundException("There is no " + entityAliasForEntityNamed(entity.name()) + " in this relationship with the id '" + key + "'.");
 		}
 		EOEnterpriseObject obj = (EOEnterpriseObject) objs.objectAtIndex(0);
 		if (!canViewObject(entity, obj, context)) {
-			throw new ERXRestSecurityException("You are not allowed to view the " + entity.name() + " with the id '" + key + "'.");
+			throw new ERXRestSecurityException("You are not allowed to view the " + entityAliasForEntityNamed(entity.name()) + " with the id '" + key + "'.");
 		}
 		return obj;
 	}
@@ -151,10 +155,10 @@ public abstract class ERXAbstractRestEntityDelegate implements IERXRestEntityDel
 		}
 		return parsedValue;
 	}
-	
+
 	public EOEnterpriseObject insertObjectFromDocument(EOEntity entity, Element insertElement, EOEnterpriseObject parentObject, String parentKey, ERXRestContext context) throws ERXRestSecurityException, ERXRestException, ERXRestNotFoundException {
 		EOEnterpriseObject eo = EOUtilities.createAndInsertInstance(context.editingContext(), entity.name());
-		updateObjectFromDocument(entity, eo, insertElement, context);
+		_updateObjectFromDocument(true, entity, eo, insertElement, context);
 		if (parentObject != null) {
 			parentObject.addObjectToBothSidesOfRelationshipWithKey(eo, parentKey);
 		}
@@ -163,8 +167,12 @@ public abstract class ERXAbstractRestEntityDelegate implements IERXRestEntityDel
 	}
 
 	public void updateObjectFromDocument(EOEntity entity, EOEnterpriseObject eo, Element eoElement, ERXRestContext context) throws ERXRestSecurityException, ERXRestException, ERXRestNotFoundException {
-		if (!entity.name().equals(eoElement.getNodeName())) {
-			throw new ERXRestException("You attempted to put a " + eoElement.getNodeName() + " into a " + entity.name() + ".");
+		_updateObjectFromDocument(false, entity, eo, eoElement, context);
+	}
+
+	public void _updateObjectFromDocument(boolean inserting, EOEntity entity, EOEnterpriseObject eo, Element eoElement, ERXRestContext context) throws ERXRestSecurityException, ERXRestException, ERXRestNotFoundException {
+		if (!entityAliasForEntityNamed(entity.name()).equals(eoElement.getNodeName())) {
+			throw new ERXRestException("You attempted to put a " + eoElement.getNodeName() + " into a " + entityAliasForEntityNamed(entity.name()) + ".");
 		}
 
 		NodeList attributeNodes = eoElement.getChildNodes();
@@ -175,8 +183,11 @@ public abstract class ERXAbstractRestEntityDelegate implements IERXRestEntityDel
 			}
 
 			String attributeName = attributeNode.getNodeName();
-			if (!canUpdateProperty(entity, eo, attributeName, context)) {
-				throw new ERXRestSecurityException("You are not allowed to update '" + attributeName + "' on " + entity.name() + ".");
+			if (inserting && !canInsertProperty(entity, eo, attributeName, context)) {
+				throw new ERXRestSecurityException("You are not allowed to insert the property '" + attributeName + "' on " + entityAliasForEntityNamed(entity.name()) + ".");
+			}
+			else if (!inserting && !canUpdateProperty(entity, eo, attributeName, context)) {
+				throw new ERXRestSecurityException("You are not allowed to update the property '" + attributeName + "' on " + entityAliasForEntityNamed(entity.name()) + ".");
 			}
 
 			EORelationship relationship = entity.relationshipNamed(attributeName);
@@ -225,7 +236,7 @@ public abstract class ERXAbstractRestEntityDelegate implements IERXRestEntityDel
 				}
 			}
 		}
-		
+
 		updated(entity, eo, context);
 	}
 
@@ -237,8 +248,8 @@ public abstract class ERXAbstractRestEntityDelegate implements IERXRestEntityDel
 		for (int toManyNum = 0; toManyNum < toManyNodes.getLength(); toManyNum++) {
 			Node toManyNode = toManyNodes.item(toManyNum);
 			String toManyNodeName = toManyNode.getNodeName();
-			if (!entity.name().equals(toManyNodeName)) {
-				throw new ERXRestException("You attempted to put a " + toManyNodeName + " into a " + entity.name() + ".");
+			if (!entityAliasForEntityNamed(entity.name()).equals(toManyNodeName)) {
+				throw new ERXRestException("You attempted to put a " + toManyNodeName + " into a " + entityAliasForEntityNamed(entity.name()) + ".");
 			}
 
 			String id = toManyNode.getAttributes().getNamedItem("id").getNodeValue();
@@ -267,7 +278,7 @@ public abstract class ERXAbstractRestEntityDelegate implements IERXRestEntityDel
 			System.out.println("AbstractERXRestDelegate.updateArray: adding " + addObject + " to " + parentObject + " (" + attributeName + ")");
 			parentObject.addObjectToBothSidesOfRelationshipWithKey(addObject, attributeName);
 		}
-		
+
 		updated(entity, parentObject, context);
 	}
 
