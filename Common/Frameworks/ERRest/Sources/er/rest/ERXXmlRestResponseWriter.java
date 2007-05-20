@@ -2,10 +2,118 @@ package er.rest;
 
 import er.extensions.ERXProperties;
 
+/**
+ * <p>
+ * ERXXmlRestResponseWriter provides a concrete implementation of a restful
+ * response writer that can generate XML output.  This implementation
+ * provide support for specifying rendering configuration in your 
+ * application properties.
+ * </p>
+ * 
+ * <p>
+ * There are multiple levels of rendering controls that you can adjust.  These
+ * adjustments come in two primary forms -- details and details properties.
+ * </p>
+ * 
+ * <p>
+ * The details setting allows you to specify that for a given keypath, whether or
+ * not a particular relationship should display only the id of the related object
+ * or the id as well as its properties.
+ * </p>
+ * 
+ * <p>
+ * The details properties setting defines the "upper bound" of properties to display to
+ * a user for a particular keypath.  That is to say that for a particular key
+ * path, the user will never be shown any key that is outside of the specified
+ * list.  However, permissions on a particular entity may restrict access such
+ * that the user is not able to see all the keys specified.  This control 
+ * allows you to specify at a rendering level what the user can and cannot see
+ * on an object.
+ * </p>
+ * 
+ * <p>
+ * These properties take the form:
+ * <code>
+ * ERXRest.[EntityName].details=true/false
+ * ERXRest.[EntityName].detailsProperties=property_1,property_2,property_3,...,property_n
+ * ERXRest.[EntityName].property_a.property_a_b.details=true/false
+ * ERXRest.[EntityName].property_a.property_a_b.detailsProperties=property_1,property_2,property_3,...,property_n
+ * </code>
+ * </p>
+ * 
+ * <p>
+ * For example:
+ * <code>
+ * ERXRest.Organization.details=true
+ * ERXRest.Organization.detailsProperties=name,purchasedPlans
+ * ERXRest.Organization.purchasedPlans.details=false
+ * 
+ * ERXRest.Site.details=true
+ * ERXRest.Site.detailsProperties=title,organization,disabledAt,memberships,sheetSets,blogEntries
+ * ERXRest.Site.blogEntries.details=true
+ * ERXRest.Site.blogEntries.detailsProperties=author,submissionDate,title,contents
+ * ERXRest.Site.sheetSets.details=false
+ * ERXRest.Site.memberships.details=false
+ * 
+ * ERXRest.BlogEntry.details=true
+ * ERXRest.BlogEntry.detailsProperties=site,author,submissionDate,title,contents
+ * </code>
+ * </p>
+ * 
+ * <p>
+ * Note that all properties that appear in a details properties definition should be 
+ * "actual" property names, not property aliases.  Similarly, all entity references
+ * should be the actual entity name, not an entity alias.
+ * </p>
+ * 
+ * <p>
+ * In the example above, if someone requests an Organization as the top level entity, the
+ * details will be displayed.  The properties that will be displayed in those details 
+ * includes "name" and "purchasedPlans", which is a to-many relationship.  In the 
+ * example, we have explicitly declared that Organization.purchasedPlans will not show
+ * any details, though this was technically unnecessary because the default is "false".  
+ * </p>
+ * 
+ * <p>
+ * For a request for http://yoursite/yourapp.woa/rest/Organization/100.xml, the output 
+ * will look like:
+ * <code>
+ * &lt;Organization id = "100"&gt;
+ *   &lt;name>Organization Name&lt;/name&gt;
+ *   &lt;purchasedPlans type = "PurchasedPlan"&gt;
+ *     &lt;PurchasedPlan id = "200"/&gt;
+ *     &lt;PurchasedPlan id = "201"/&gt;
+ *     &lt;PurchasedPlan id = "202"/&gt;
+ *   &lt;/purchasedPlans&gt;
+ * &lt;/Organization&gt;
+ * </code>
+ * </p>
+ * 
+ * <p>
+ * In the second and third blocks of the example, you can see two different specifications
+ * for properties to display for a BlogEntry.  If you request Site/100/blogEntries.xml, 
+ * you will see a set of properties that does not include the site relationship of the
+ * blog entry (notice that ERXRest.Site.blogEntries.detailsProperties does not specify "site").
+ * However, if you request BlogEntry/301.xml you will see the site relationship (notice
+ * that ERXRest.BlogEntry.detailsProperties DOES contain "site").  Also note that primary keys
+ * should not be used in the definition of renderer configurations.  Configuration is
+ * assumed to apply to any instance of an object that structurally matches the keypaths
+ * you define.
+ * </p>
+ * 
+ * <p>
+ * The renderer looks for the longest matching keypath specification in the Properties file
+ * to determine whether or not to display properties and which properties to display, so you
+ * can construct arbitrarily deep specifications for which properties to display for any
+ * given keypath.
+ * </p>
+ * 
+ * @author mschrag
+ */
 public class ERXXmlRestResponseWriter extends ERXAbstractXmlRestResponseWriter {
 	public static final String REST_PREFIX = "ERXRest.";
 	public static final String DETAILS_PREFIX = ".details";
-	public static final String PROPERTIES_PREFIX = ".properties";
+	public static final String DETAILS_PROPERTIES_PREFIX = ".detailsProperties";
 	
 	protected String cascadingValue(ERXRestContext context, ERXRestKey result, String propertyPrefix, String propertySuffix, String defaultValue) throws ERXRestException, ERXRestNotFoundException, ERXRestSecurityException {
 		ERXRestKey cascadingKey = result.firstKey();
@@ -36,7 +144,7 @@ public class ERXXmlRestResponseWriter extends ERXAbstractXmlRestResponseWriter {
 
 	protected String[] displayProperties(ERXRestContext context, ERXRestKey result) throws ERXRestException, ERXRestNotFoundException, ERXRestSecurityException {
 		String[] displayPropertyNames;
-		String displayPropertyNamesStr = cascadingValue(context, result, ERXXmlRestResponseWriter.REST_PREFIX, ERXXmlRestResponseWriter.PROPERTIES_PREFIX, null);
+		String displayPropertyNamesStr = cascadingValue(context, result, ERXXmlRestResponseWriter.REST_PREFIX, ERXXmlRestResponseWriter.DETAILS_PROPERTIES_PREFIX, null);
 		if (displayPropertyNamesStr == null) {
 			displayPropertyNames = null;
 		}

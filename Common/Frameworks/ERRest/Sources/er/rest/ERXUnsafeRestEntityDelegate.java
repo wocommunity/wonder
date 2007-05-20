@@ -10,7 +10,24 @@ import com.webobjects.eocontrol.EOFetchSpecification;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSMutableArray;
 
+import er.extensions.ERXApplication;
+
+/**
+ * ERXUnsafeRestEntityDelegate should NEVER be used in production.  This is an entity delegate
+ * implementation designed to allow you to explore the features of ERRest without having to 
+ * actually write custom delegates.  This implementation allows full access to read, insert, update, and 
+ * delegate any object in any model in your system that it is assigned as a delegate for.  It will throw 
+ * an exception on creation if ERXApplication.erxApplication().isDevelopmentMode() is false.
+ * 
+ * @author mschrag
+ */
 public class ERXUnsafeRestEntityDelegate extends ERXAbstractRestEntityDelegate {
+	public ERXUnsafeRestEntityDelegate() {
+		if (!ERXApplication.erxApplication().isDevelopmentMode()) {
+			throw new SecurityException("You are attempting to use ERXUnsafeRestEntityDelegate outside of development mode!.");
+		}
+	}
+	
 	public void updated(EOEntity entity, EOEnterpriseObject eo, ERXRestContext context) throws ERXRestException {
 		// DO NOTHING
 	}
