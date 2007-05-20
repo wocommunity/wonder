@@ -22,11 +22,11 @@ public abstract class ERXAbstractRestResponseWriter implements IERXRestResponseW
 		EOEntity entity = result.nextEntity();
 		IERXRestEntityDelegate entityDelegate = context.delegate().entityDelegate(entity);
 		String entityAlias = entityDelegate.entityAliasForEntityNamed(entity.name());
-		if (result.key() == null) {
+		if (result.keyAlias() == null) {
 			arrayName = entityAlias;
 		}
 		else {
-			arrayName = result.key();
+			arrayName = result.keyAlias();
 		}
 		NSArray values = (NSArray) result.value();
 		if (arrayName.equals(entityAlias)) {
@@ -63,7 +63,7 @@ public abstract class ERXAbstractRestResponseWriter implements IERXRestResponseW
 				objectName = entityAlias;
 			}
 			else {
-				objectName = result.key();
+				objectName = result.keyAlias();
 			}
 
 			EOEnterpriseObject eo = (EOEnterpriseObject) value;
@@ -85,8 +85,8 @@ public abstract class ERXAbstractRestResponseWriter implements IERXRestResponseW
 					if (displayPropertyNames != null && displayPropertyNames.length > 0) {
 						for (int displayPropertyNum = 0; displayPropertyNum < displayPropertyNames.length; displayPropertyNum++) {
 							String propertyName = displayPropertyNames[displayPropertyNum];
-							if (context.delegate().entityDelegate(entity).canViewProperty(entity, eo, propertyName, context)) {
-								ERXRestKey nextKey = result.extend(propertyName, true);
+							if (entityDelegate.canViewProperty(entity, eo, propertyName, context)) {
+								ERXRestKey nextKey = result.extend(entityDelegate.propertyAliasForPropertyNamed(entity, propertyName), true);
 								displayKeys.addObject(nextKey);
 								// EORelationship relationship = entity.relationshipNamed(propertyName);
 								// if (relationship != null && !relationship.isToMany()) {
