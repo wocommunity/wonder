@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<wodefinitions>
-        <wo wocomponentcontent="false" class="ERXLinkButton.java">
-		<binding name="action"/>
-		<binding name="value"/>
-
-        </wo>
-</wodefinitions>
