@@ -161,7 +161,6 @@ public class ERXXmlRestResponseWriter extends ERXAbstractXmlRestResponseWriter {
 		String displayDetailsStr = cascadingValue(context, result, ERXXmlRestResponseWriter.REST_PREFIX, ERXXmlRestResponseWriter.DETAILS_PREFIX, null);
 		if (displayDetailsStr == null) {
 			displayDetails = result.previousKey() == null;
-			System.out.println("ERXXmlRestResponseWriter.displayDetails: " + displayDetails + ", " + result.entity() + "." + result.key());
 		}
 		else {
 			displayDetails = Boolean.valueOf(displayDetailsStr).booleanValue();
