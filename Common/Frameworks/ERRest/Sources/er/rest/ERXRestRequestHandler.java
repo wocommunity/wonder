@@ -42,7 +42,7 @@ import er.extensions.ERXEC;
  * IERXRestEntityDelegate defaultEntityDelegate = new ERXUnsafeRestEntityDelegate();
  * ERXDefaultRestDelegate restDelegate = new ERXDefaultRestDelegate(defaultEntityDelegate);
  * IERXRestAuthenticationDelegate authenticationDelegate = new ERXUnsafeRestAuthenticationDelegate();
- * IERXRestResponseWriter responseWriter = new ERXXmlRestResponseWriter();
+ * IERXRestResponseWriter responseWriter = new ERXXmlRestResponseWriter(true);
  * registerRequestHandler(new ERXRestRequestHandler(authenticationDelegate, restDelegate, responseWriter), "rest");
  * </pre>
  * </p>
