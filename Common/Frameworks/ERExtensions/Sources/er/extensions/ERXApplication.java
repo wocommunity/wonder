@@ -1234,10 +1234,34 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 	}
 
 	/**
+	 * Returns whether or not this application is in development mode.  This one is
+	 * named "Safe" because it does not require you to be running an ERXApplication (and
+	 * because you can't have a static and not-static method of the same name. bah).  If
+	 * you are using ERXApplication, this will call isDevelopmentMode on your application.
+	 * If not, it will call ERXApplication_defaultIsDevelopmentMode() which checks
+	 * for the system properties "er.extensions.ERXApplication.developmentMode"
+	 * and/or "WOIDE".
+	 *  
+	 * @return whether or not the current application is in development mode
+	 */
+	public static boolean isDevelopmentModeSafe() {
+		boolean developmentMode;
+		WOApplication application = WOApplication.application();
+		if (application instanceof ERXApplication) {
+			ERXApplication erxApplication = (ERXApplication)application;
+			developmentMode = erxApplication.isDevelopmentMode();
+		}
+		else {
+			developmentMode = ERXApplication._defaultIsDevelopmentMode();
+		}
+		return developmentMode;
+	}
+
+	/**
 	 * Returns whether or not this application is running in development-mode. If you are using Xcode, you should add a
 	 * WOIDE=Xcode setting to your launch parameters.
 	 */
-	public boolean isDevelopmentMode() {
+	protected static boolean _defaultIsDevelopmentMode() {
 		boolean developmentMode = false;
 		if (ERXProperties.stringForKey("er.extensions.ERXApplication.developmentMode") != null) {
 			developmentMode = ERXProperties.booleanForKey("er.extensions.ERXApplication.developmentMode");
@@ -1249,6 +1273,14 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 			}
 		}
 		return developmentMode;
+	}
+
+	/**
+	 * Returns whether or not this application is running in development-mode. If you are using Xcode, you should add a
+	 * WOIDE=Xcode setting to your launch parameters.
+	 */
+	public boolean isDevelopmentMode() {
+		return ERXApplication._defaultIsDevelopmentMode();
 	}
 
 	/** holds the info on checked-out sessions */
