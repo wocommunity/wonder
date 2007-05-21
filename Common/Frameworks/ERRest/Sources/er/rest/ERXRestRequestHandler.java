@@ -16,6 +16,7 @@ import com.webobjects.appserver.WOResponse;
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.foundation.NSMutableDictionary;
 
+import er.extensions.ERXApplication;
 import er.extensions.ERXEC;
 
 /**
@@ -39,11 +40,7 @@ import er.extensions.ERXEC;
  * the following code to your application constructor:
  * 
  * <pre>
- * IERXRestEntityDelegate defaultEntityDelegate = new ERXUnsafeRestEntityDelegate();
- * ERXDefaultRestDelegate restDelegate = new ERXDefaultRestDelegate(defaultEntityDelegate);
- * IERXRestAuthenticationDelegate authenticationDelegate = new ERXUnsafeRestAuthenticationDelegate();
- * IERXRestResponseWriter responseWriter = new ERXXmlRestResponseWriter(true);
- * registerRequestHandler(new ERXRestRequestHandler(authenticationDelegate, restDelegate, responseWriter), "rest");
+ * registerRequestHandler(ERXRestRequestHandler.createUnsafeRequestHandler(), "rest");
  * </pre>
  * </p>
  * 
@@ -361,5 +358,22 @@ public class ERXRestRequestHandler extends WORequestHandler {
 		}
 
 		return response;
+	}
+	
+	/**
+	 * Creates an unsafe request handler for you to try out in development mode.  THIS SHOULD NOT
+	 * BE DEPLOYED (and in fact it will throw an exception if development mode is false).
+	 * 
+	 * @return an unsafe request handler
+	 */
+	public static final ERXRestRequestHandler createUnsafeRequestHandler() {
+		if (!ERXApplication.erxApplication().isDevelopmentMode()) {
+			throw new RuntimeException("You attempted to create an unsafe request handler when you were not in development mode!");
+		}
+        IERXRestEntityDelegate defaultEntityDelegate = new ERXUnsafeRestEntityDelegate();
+        ERXDefaultRestDelegate restDelegate = new ERXDefaultRestDelegate(defaultEntityDelegate);
+        IERXRestAuthenticationDelegate authenticationDelegate = new ERXUnsafeRestAuthenticationDelegate();
+        IERXRestResponseWriter responseWriter = new ERXXmlRestResponseWriter(true);
+        return new ERXRestRequestHandler(authenticationDelegate, restDelegate, responseWriter);
 	}
 }
