@@ -178,6 +178,12 @@ import er.extensions.ERXEC;
  *   &lt;contents&gt;This is the contents of my bulletin&lt;/contents&gt;
  * &lt;/Bulletin&gt;
  * </pre>
+ *   
+ * <h2>Delete a bulletin</h2>
+ * <pre>curl -X DELETE -s http://127.0.0.1/cgi-bin/WebObjects/YourApp.woa/rest/Site/100/bulletins/7324.xml?membershipTicket=someAuthToken</pre>
+ * <pre>
+ * HTTP Status Code: 200
+ * </pre>
  *  
  * @author mschrag
  */
