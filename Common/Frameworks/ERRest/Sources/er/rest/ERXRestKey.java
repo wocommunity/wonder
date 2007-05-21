@@ -448,7 +448,7 @@ public class ERXRestKey {
 	 * @return whether or not this key requests a primary key
 	 */
 	public boolean isKeyGID() {
-		return ERXRestUtils.isEOID(_key);
+		return ERXRestUtils.isEOID(this);
 	}
 
 	/**
