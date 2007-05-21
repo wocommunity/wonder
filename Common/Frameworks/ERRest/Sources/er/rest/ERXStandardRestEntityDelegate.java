@@ -198,7 +198,7 @@ public abstract class ERXStandardRestEntityDelegate extends ERXAbstractRestEntit
 	 * This looks in the ERXRest.[EntityName].[propertyName].alias property.  If not found, 
 	 * entityName is returned.
 	 * 
-	 * @param entityName the name of the entity
+	 * @param entity the entity
 	 * @param propertyName the name of the property
 	 * @return the property alias
 	 */
@@ -215,7 +215,7 @@ public abstract class ERXStandardRestEntityDelegate extends ERXAbstractRestEntit
 	 * This looks in the ERXRest.[EntityName].[propertyName].alias property.  If not found, 
 	 * entityName is returned.
 	 * 
-	 * @param entityName the name of the entity
+	 * @param entity the entity
 	 * @param propertyAlias the name of the property alias
 	 * @return the property name
 	 */
