@@ -134,7 +134,7 @@ public class ERXLocalizationEditor extends WOComponent {
      */
     public String highlightClass () {
     	if (!hasCurrentValue()) {
-    		return "red";
+    		return "unset";
     	}
     	else return "inputfield";
     }
