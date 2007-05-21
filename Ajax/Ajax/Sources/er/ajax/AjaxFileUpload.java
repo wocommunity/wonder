@@ -1,22 +1,12 @@
 package er.ajax;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.net.MalformedURLException;
-import java.text.NumberFormat;
+import java.io.*;
+import java.text.*;
 
-import com.webobjects.appserver.WOActionResults;
-import com.webobjects.appserver.WOApplication;
-import com.webobjects.appserver.WOComponent;
-import com.webobjects.appserver.WOContext;
-import com.webobjects.appserver.WOResponse;
-import com.webobjects.foundation.NSData;
+import com.webobjects.appserver.*;
+import com.webobjects.foundation.*;
 
-import er.extensions.ERXComponentUtilities;
-import er.extensions.ERXFileUtilities;
-import er.extensions.ERXUnitAwareDecimalFormat;
+import er.extensions.*;
 
 /**
  * AjaxFileUpload provides an Ajax wrapper around the file upload process. This works pretty differently than
