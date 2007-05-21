@@ -249,7 +249,7 @@ public class AjaxFileUpload extends WOComponent {
 		return results;
 	}
 
-	public WOActionResults uploadSucceeded() throws MalformedURLException, IOException {
+	public WOActionResults uploadSucceeded() {
 		AjaxUploadProgress progress = uploadProgress();
 		try {
 			boolean deleteFile = true;
@@ -284,12 +284,14 @@ public class AjaxFileUpload extends WOComponent {
 				else {
 					renameFile = true;
 				}
-				if (renameFile) {
+				if (renameFile && !streamToFile.isDirectory()) {
 					ERXFileUtilities.renameTo(progress.tempFile(), streamToFile);
 					renamedFile = true;
 				}
 				else {
 					renamedFile = false;
+					progress.setFailure(new Exception ("Could not rename file."));
+					return this.uploadFailed();
 				}
 				if (hasBinding("finalFilePath")) {
 					String finalFilePath;
@@ -307,6 +309,10 @@ public class AjaxFileUpload extends WOComponent {
 			if (deleteFile) {
 				progress.dispose();
 			}
+		}
+		catch (Throwable t) {
+			progress.setFailure(t);
+			return this.uploadFailed();
 		}
 		finally {
 			uploadFinished();
