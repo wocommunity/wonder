@@ -14,7 +14,25 @@ import com.webobjects.foundation.NSDictionary;
  * 
  * The default value for the field comes from setting default = "something"; on the input element.  For instance,
  * to set the default value on a text field, you would do <wo:WOTextField value = "$value" default = "Fill this in"/>.
+ * <pre>
+ * HTML:
+ * &lt;webobject name="Form"&gt;
+ *  &lt;webobject name="SomeText" /&gt;
+ * &lt;/webobject&gt;
+ * &lt;webobject name="TextHinter"/ &gt;
  * 
+ * WOD:
+ * TextHinter : AjaxTextHinter {
+ *         form = "EditForm";
+ * }
+ * Form : ERXWOForm {
+ *         id = "EditForm";
+ *         ....
+ * }
+ * SomeText: WOTextField {
+ *         default = "Name oder Titel";
+ *         ....
+ * } </pre>
  * @binding form ID of the form to apply the hints to
  * @author ak
  */
