@@ -41,29 +41,7 @@ public class ERXUnsafeRestEntityDelegate extends ERXAbstractRestEntityDelegate {
 	}
 	
 	public boolean canUpdateProperty(EOEntity entity, EOEnterpriseObject eo, String propertyName, ERXRestContext context) {
-		return allPropertyNames(entity, eo, context).containsObject(propertyName);
-	}
-
-	public NSArray allPropertyNames(EOEntity entity, EOEnterpriseObject eo, ERXRestContext context) {
-		NSMutableArray displayPropertyNames = new NSMutableArray();
-		NSArray classProperties = entity.classProperties();
-		Enumeration attributesEnum = entity.attributes().objectEnumerator();
-		while (attributesEnum.hasMoreElements()) {
-			EOAttribute attribute = (EOAttribute) attributesEnum.nextElement();
-			if (classProperties.containsObject(attribute)) {
-				displayPropertyNames.addObject(attribute.name());
-			}
-		}
-
-		Enumeration relationshipsEnum = entity.relationships().objectEnumerator();
-		while (relationshipsEnum.hasMoreElements()) {
-			EORelationship relationship = (EORelationship) relationshipsEnum.nextElement();
-			if (classProperties.containsObject(relationship) && !relationship.isToMany()) {
-				displayPropertyNames.addObject(relationship.name());
-			}
-		}
-
-		return displayPropertyNames;
+		return ERXUnsafeRestEntityDelegate.allPropertyNames(entity, context).containsObject(propertyName);
 	}
 
 	public NSArray objectsForEntity(EOEntity entity, ERXRestContext context) {
@@ -102,5 +80,27 @@ public class ERXUnsafeRestEntityDelegate extends ERXAbstractRestEntityDelegate {
 
 	public EOEntity nextEntity(EOEntity entity, String key) {
 		return null;
+	}
+	
+	public static NSArray allPropertyNames(EOEntity entity, ERXRestContext context) {
+		NSMutableArray displayPropertyNames = new NSMutableArray();
+		NSArray classProperties = entity.classProperties();
+		Enumeration attributesEnum = entity.attributes().objectEnumerator();
+		while (attributesEnum.hasMoreElements()) {
+			EOAttribute attribute = (EOAttribute) attributesEnum.nextElement();
+			if (classProperties.containsObject(attribute)) {
+				displayPropertyNames.addObject(attribute.name());
+			}
+		}
+
+		Enumeration relationshipsEnum = entity.relationships().objectEnumerator();
+		while (relationshipsEnum.hasMoreElements()) {
+			EORelationship relationship = (EORelationship) relationshipsEnum.nextElement();
+			if (classProperties.containsObject(relationship)) {
+				displayPropertyNames.addObject(relationship.name());
+			}
+		}
+
+		return displayPropertyNames;
 	}
 }
