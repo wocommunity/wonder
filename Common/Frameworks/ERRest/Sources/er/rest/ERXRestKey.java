@@ -236,7 +236,7 @@ public class ERXRestKey {
 	/**
 	 * Returns the first key in this path (can be this).
 	 * 
-	 * @returnthe first key in this path (can be this)
+	 * @return the first key in this path (can be this)
 	 */
 	public ERXRestKey firstKey() {
 		ERXRestKey firstKey = this;
