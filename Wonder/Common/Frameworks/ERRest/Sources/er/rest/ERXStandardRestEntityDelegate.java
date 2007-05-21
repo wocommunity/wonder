@@ -373,7 +373,7 @@ public abstract class ERXStandardRestEntityDelegate extends ERXAbstractRestEntit
 	 * Returns true if propertyName is declared as a view property.
 	 * 
 	 * @param entity the entity
-	 * @param eo the object to check
+	 * @param obj the object to check
 	 * @param propertyName the property name to check
 	 * @param context the rest context
 	 * @return true if propertyName is declared as a view property
