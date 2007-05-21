@@ -12,7 +12,7 @@ import er.extensions.ERXApplication;
  */
 public class ERXUnsafeRestAuthenticationDelegate implements IERXRestAuthenticationDelegate {
 	public boolean authenticate(ERXRestContext context) {
-		boolean developmentMode = ERXApplication.erxApplication().isDevelopmentMode();
+		boolean developmentMode = ERXApplication.isDevelopmentModeSafe();
 		if (!developmentMode) {
 			ERXRestRequestHandler.log.error("You are attempting to use ERXUnsafeRestAuthenticationDelegate outside of development mode!  Denying authentication.");
 		}
