@@ -367,7 +367,7 @@ public class ERXRestRequestHandler extends WORequestHandler {
 	 * @return an unsafe request handler
 	 */
 	public static final ERXRestRequestHandler createUnsafeRequestHandler() {
-		if (!ERXApplication.erxApplication().isDevelopmentMode()) {
+		if (!ERXApplication.isDevelopmentModeSafe()) {
 			throw new RuntimeException("You attempted to create an unsafe request handler when you were not in development mode!");
 		}
         IERXRestEntityDelegate defaultEntityDelegate = new ERXUnsafeRestEntityDelegate();

@@ -23,7 +23,7 @@ import er.extensions.ERXApplication;
  */
 public class ERXUnsafeRestEntityDelegate extends ERXAbstractRestEntityDelegate {
 	public ERXUnsafeRestEntityDelegate() {
-		if (!ERXApplication.erxApplication().isDevelopmentMode()) {
+		if (!ERXApplication.isDevelopmentModeSafe()) {
 			throw new SecurityException("You are attempting to use ERXUnsafeRestEntityDelegate outside of development mode!.");
 		}
 	}
