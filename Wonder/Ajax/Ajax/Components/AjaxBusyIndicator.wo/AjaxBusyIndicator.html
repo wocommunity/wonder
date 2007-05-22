@@ -5,12 +5,18 @@
 </webobject>
 <script type="text/javascript">
 Ajax.Responders.register({
-   onCreate: function() {
+   onCreate: function(request, transport) {
+	   <webobject name = "HasBusyClass">
+	     $(request.container.success).addClassName('<webobject name = "BusyClass"></webobject>');
+	   </webobject>
      if ($('<webobject name = "DivID"></webobject>')) {
        Effect.Appear('<webobject name = "DivID"></webobject>', {duration:0.0, queue:'front'});
      }
    },
-   onComplete: function() {
+   onComplete: function(request, transport) {
+	   <webobject name = "HasBusyClass">
+	     $(request.container.success).removeClassName('<webobject name = "BusyClass"></webobject>');
+	   </webobject>
      if ($('<webobject name = "DivID"></webobject>')) {
        Effect.Fade('<webobject name = "DivID"></webobject>', {duration:0.5, queue:'end'});
      }
