@@ -49,10 +49,12 @@ import er.extensions.ERXStringUtilities;
  * @binding button if true, this is rendered as a javascript button
  * @binding effect synonym of afterEffect except it always applies to updateContainerID
  * @binding beforeEffect the Scriptaculous effect to apply onSuccess ("highlight", "slideIn", "blindDown", etc);
- * @binding beforeEffectID the ID of the container to apply the "before" effect to (blank = try nearest container, then try updateContainerID)
+ * @binding beforeEffectID the ID of the container to apply the "before" effect to (blank = try nearest container, then
+ *          try updateContainerID)
  * @binding beforeEffectDuration the duration of the effect to apply before
  * @binding afterEffect the Scriptaculous effect to apply onSuccess ("highlight", "slideIn", "blindDown", etc);
- * @binding afterEffectID the ID of the container to apply the "after" effect to (blank = try nearest container, then try updateContainerID)
+ * @binding afterEffectID the ID of the container to apply the "after" effect to (blank = try nearest container, then
+ *          try updateContainerID)
  * @binding afterEffectDuration the duration of the effect to apply before
  */
 public class AjaxUpdateLink extends AjaxDynamicElement {
@@ -72,7 +74,7 @@ public class AjaxUpdateLink extends AjaxDynamicElement {
 		String functionName = (String) valueForBinding("functionName", component);
 		String function = (String) valueForBinding("function", component);
 		String replaceID = (String) valueForBinding("replaceID", component);
-		
+
 		AjaxUpdateLink.addEffect(options, (String) valueForBinding("effect", component), updateContainerID);
 		String afterEffectID = (String) valueForBinding("afterEffectID", component);
 		if (afterEffectID == null) {
@@ -82,9 +84,9 @@ public class AjaxUpdateLink extends AjaxDynamicElement {
 			}
 		}
 		AjaxUpdateLink.addEffect(options, (String) valueForBinding("afterEffect", component), afterEffectID);
-		
+
 		String beforeEffect = (String) valueForBinding("beforeEffect", component);
-		
+
 		WOAssociation directActionNameAssociation = (WOAssociation) associations().valueForKey("directActionName");
 		if (beforeEffect == null && updateContainerID != null && directActionNameAssociation == null && replaceID == null && function == null && onClick == null && onClickBefore == null) {
 			NSDictionary nonDefaultOptions = AjaxUpdateContainer.removeDefaultOptions(options);
@@ -124,7 +126,7 @@ public class AjaxUpdateLink extends AjaxDynamicElement {
 				onClickBuffer.append("new ");
 				onClickBuffer.append(AjaxUpdateLink.fullEffectName(beforeEffect));
 				onClickBuffer.append("('");
-				
+
 				String beforeEffectID = (String) valueForBinding("beforeEffectID", component);
 				if (beforeEffectID == null) {
 					beforeEffectID = AjaxUpdateContainer.currentUpdateContainerID();
@@ -133,9 +135,9 @@ public class AjaxUpdateLink extends AjaxDynamicElement {
 					}
 				}
 				onClickBuffer.append(beforeEffectID);
-				
+
 				onClickBuffer.append("', { ");
-				
+
 				String beforeEffectDuration = (String) valueForBinding("beforeEffectDuration", component);
 				if (beforeEffectDuration != null) {
 					onClickBuffer.append("duration: ");
@@ -145,7 +147,7 @@ public class AjaxUpdateLink extends AjaxDynamicElement {
 
 				onClickBuffer.append("queue:'end', afterFinish: function() {");
 			}
-			
+
 			String actionUrl = null;
 			if (directActionNameAssociation != null) {
 				actionUrl = context.directActionURLForActionNamed((String) directActionNameAssociation.valueInComponent(component), ERXComponentUtilities.queryParametersInComponent(associations(), component)).replaceAll("&amp;", "&");
@@ -186,7 +188,7 @@ public class AjaxUpdateLink extends AjaxDynamicElement {
 				onClickBuffer.append(";");
 				onClickBuffer.append(onClick);
 			}
-			
+
 			if (beforeEffect != null) {
 				onClickBuffer.append("}});");
 			}
@@ -208,15 +210,15 @@ public class AjaxUpdateLink extends AjaxDynamicElement {
 			if (options.objectForKey("onSuccess") != null) {
 				throw new WODynamicElementCreationException("You cannot specify both an effect and a custom onSuccess function.");
 			}
-			
+
 			if (updateContainerID == null) {
 				throw new WODynamicElementCreationException("You cannot specify an effect without an updateContainerID.");
 			}
-			
+
 			options.setObjectForKey("function() { new " + AjaxUpdateLink.fullEffectName(effect) + "('" + updateContainerID + "', { queue:'end'}) }", "onSuccess");
 		}
 	}
-	
+
 	public static String fullEffectName(String effectName) {
 		String fullEffectName;
 		if (effectName.indexOf('.') == -1) {
@@ -227,7 +229,7 @@ public class AjaxUpdateLink extends AjaxDynamicElement {
 		}
 		return fullEffectName;
 	}
-	
+
 	protected NSMutableDictionary createAjaxOptions(WOComponent component) {
 		NSMutableArray ajaxOptionsArray = new NSMutableArray();
 		ajaxOptionsArray.addObject(new AjaxOption("onLoading", AjaxOption.SCRIPT));
@@ -245,7 +247,22 @@ public class AjaxUpdateLink extends AjaxDynamicElement {
 			options.setObjectForKey("true", "evalScripts");
 		}
 
+		String expandedInsertion = AjaxUpdateLink.expandInsertion((String) options.objectForKey("insertion"));
+		if (expandedInsertion != null) {
+			options.setObjectForKey(expandedInsertion, "insertion");
+		}
+
 		return options;
+	}
+
+	public static String expandInsertion(String originalInsertion) {
+		String expandedInsertion = originalInsertion;
+		if (originalInsertion != null && originalInsertion.startsWith("Effect.")) {
+			String effectPairName = originalInsertion.substring("Effect.".length());
+			expandedInsertion = "AUL.insertionFunc('" + effectPairName + "')";
+
+		}
+		return expandedInsertion;
 	}
 
 	public void appendToResponse(WOResponse response, WOContext context) {
