@@ -10,8 +10,6 @@ import com.webobjects.appserver._private.WODynamicGroup;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
-import com.webobjects.foundation.NSMutableSet;
-import com.webobjects.foundation.NSSet;
 
 import er.extensions.ERXEOControlUtilities;
 import er.extensions.ERXWOContext;
@@ -32,11 +30,15 @@ import er.extensions.ERXWOContext;
  * @binding id the optional id to highlight (if blank, a container will be generated)
  * @binding elementName the element name of the generated container (if specified, a container will be generated);
  *          defaults to div
- * @binding effect the name of the scriptaculous effect to render (defaults to "Highlight")
+ * @binding effect the name of the scriptaculous effect to render (defaults to "Highlight", "none" = no effect)
+ * @binding newEffect the name of the scriptaculous effect to render (defaults to "Highlight", "none" = no effect) for new objects
+ * @binding updateEffect the name of the scriptaculous effect to render (defaults to "Highlight", "none" = no effect) for updated objects
  * @binding class the CSS class of the generated container
  * @binding style the CSS style of the generated container
  * @binding duration passed through to Effect.Xxx in the options map
  * @binding hidden if true, when the value is highlighted, the element will be display: none
+ * @binding newHidden if true, when the value is highlighted, the element will be display: none for new objects
+ * @binding updateHidden if true, when the value is highlighted, the element will be display: none for updated objects
  * 
  * @author mschrag
  */
@@ -47,7 +49,11 @@ public class AjaxHighlight extends WODynamicGroup {
 	private WOAssociation _id;
 	private WOAssociation _elementName;
 	private WOAssociation _effect;
+	private WOAssociation _newEffect;
+	private WOAssociation _updateEffect;
 	private WOAssociation _hidden;
+	private WOAssociation _newHidden;
+	private WOAssociation _updateHidden;
 
 	public AjaxHighlight(String name, NSDictionary associations, WOElement template) {
 		super(name, associations, template);
@@ -59,7 +65,11 @@ public class AjaxHighlight extends WODynamicGroup {
 		_elementName = (WOAssociation) associations.valueForKey("elementName");
 		_id = (WOAssociation) associations.valueForKey("id");
 		_effect = (WOAssociation) associations.valueForKey("effect");
+		_newEffect = (WOAssociation) associations.valueForKey("newEffect");
+		_updateEffect = (WOAssociation) associations.valueForKey("updateEffect");
 		_hidden = (WOAssociation) associations.valueForKey("hidden");
+		_newHidden = (WOAssociation) associations.valueForKey("newHidden");
+		_updateHidden = (WOAssociation) associations.valueForKey("updateHidden");
 	}
 
 	public void appendToResponse(WOResponse response, WOContext context) {
@@ -82,11 +92,11 @@ public class AjaxHighlight extends WODynamicGroup {
 			id = (String) _id.valueInComponent(component);
 		}
 
-		boolean highlighted = false;
+		HighlightMetadata metadata = null;
 		if (_value != null) {
 			Object value = _value.valueInComponent(component);
 			if (value != null) {
-				highlighted = isHighlighted(value);
+				metadata = highlightMetadataForObject(value);
 			}
 		}
 
@@ -96,8 +106,17 @@ public class AjaxHighlight extends WODynamicGroup {
 			response._appendTagAttributeAndValue("id", id, true);
 			AjaxUtils.appendTagAttributeAndValue(response, context, component, _associations, "class");
 			String displayStyle = null;
-			if (highlighted && _hidden != null) {
-				boolean hidden = _hidden.booleanValueInComponent(component);
+			if (metadata != null) {
+				boolean hidden = false;
+				if (metadata.isNew() && _newHidden != null) {
+					hidden = _newHidden.booleanValueInComponent(component);
+				}
+				else if (!metadata.isNew() && _updateHidden != null) {
+					hidden = _updateHidden.booleanValueInComponent(component);
+				}
+				else if (_hidden != null) {
+					hidden = _hidden.booleanValueInComponent(component);
+				}
 				if (hidden) {
 					displayStyle = "display: none;";
 				}
@@ -105,39 +124,49 @@ public class AjaxHighlight extends WODynamicGroup {
 			AjaxUtils.appendTagAttributeAndValue(response, context, component, _associations, "style", displayStyle);
 			response.appendContentString(">");
 		}
+
 		super.appendToResponse(response, context);
+
 		if (generateContainer) {
 			response.appendContentString("</");
 			response.appendContentString(elementName);
 			response.appendContentString(">");
 		}
 
-		if (highlighted) {
-			AjaxUtils.appendScriptHeader(response);
+		if (metadata != null) {
 			String effect;
-			if (_effect == null) {
-				effect = "Highlight";
+			if (metadata.isNew() && _newEffect != null) {
+				effect = (String) _newEffect.valueInComponent(component);
 			}
-			else {
+			else if (!metadata.isNew() && _updateEffect != null) {
+				effect = (String) _updateEffect.valueInComponent(component);
+			}
+			else if (_effect != null) {
 				effect = (String) _effect.valueInComponent(component);
 			}
-			response.appendContentString("new Effect.");
-			response.appendContentString(effect);
-			response.appendContentString("('");
-			response.appendContentString(id);
-			response.appendContentString("',");
-
-			NSMutableArray ajaxOptionsArray = new NSMutableArray();
-			ajaxOptionsArray.addObject(new AjaxOption("duration", AjaxOption.NUMBER));
-
-			NSMutableDictionary options = AjaxOption.createAjaxOptionsDictionary(ajaxOptionsArray, component, _associations);
-			options.setObjectForKey("'end'", "queue");
-
-			AjaxOptions.appendToResponse(options, response, context);
-
-			response.appendContentString(");");
-
-			AjaxUtils.appendScriptFooter(response);
+			else {
+				effect = "Highlight";
+			}
+			if (!"none".equalsIgnoreCase(effect)) {
+				AjaxUtils.appendScriptHeader(response);
+				response.appendContentString("new Effect.");
+				response.appendContentString(effect);
+				response.appendContentString("('");
+				response.appendContentString(id);
+				response.appendContentString("',");
+	
+				NSMutableArray ajaxOptionsArray = new NSMutableArray();
+				ajaxOptionsArray.addObject(new AjaxOption("duration", AjaxOption.NUMBER));
+	
+				NSMutableDictionary options = AjaxOption.createAjaxOptionsDictionary(ajaxOptionsArray, component, _associations);
+				options.setObjectForKey("'end'", "queue");
+	
+				AjaxOptions.appendToResponse(options, response, context);
+	
+				response.appendContentString(");");
+	
+				AjaxUtils.appendScriptFooter(response);
+			}
 		}
 	}
 
@@ -146,25 +175,49 @@ public class AjaxHighlight extends WODynamicGroup {
 		return highlightedValue;
 	}
 
-	public static boolean isHighlighted(Object obj) {
-		boolean highlighted = false;
+	public static HighlightMetadata highlightMetadataForObject(Object obj) {
+		HighlightMetadata metadata = null;
 		if (obj != null) {
-			NSSet highlightedObjects = (NSSet) ERXWOContext.contextDictionary().valueForKey(AjaxHighlight.HIGHLIGHTED_KEY);
+			NSMutableDictionary highlightedObjects = (NSMutableDictionary) ERXWOContext.contextDictionary().valueForKey(AjaxHighlight.HIGHLIGHTED_KEY);
 			if (highlightedObjects != null) {
-				highlighted = highlightedObjects.containsObject(highlightedValue(obj));
+				metadata = (HighlightMetadata) highlightedObjects.objectForKey(highlightedValue(obj));
 			}
 		}
-		return highlighted;
+		return metadata;
 	}
 
 	public static final void highlight(Object obj) {
+		AjaxHighlight.highlightUpdate(obj);
+	}
+
+	public static final void highlightNew(Object obj) {
+		AjaxHighlight.highlight(obj, true);
+	}
+
+	public static final void highlightUpdate(Object obj) {
+		AjaxHighlight.highlight(obj, false);
+	}
+
+	public static final void highlight(Object obj, boolean isNew) {
 		if (obj != null) {
-			NSMutableSet highlightedObjects = (NSMutableSet) ERXWOContext.contextDictionary().valueForKey(AjaxHighlight.HIGHLIGHTED_KEY);
+			NSMutableDictionary highlightedObjects = (NSMutableDictionary) ERXWOContext.contextDictionary().valueForKey(AjaxHighlight.HIGHLIGHTED_KEY);
 			if (highlightedObjects == null) {
-				highlightedObjects = new NSMutableSet();
+				highlightedObjects = new NSMutableDictionary();
 				ERXWOContext.contextDictionary().takeValueForKey(highlightedObjects, AjaxHighlight.HIGHLIGHTED_KEY);
 			}
-			highlightedObjects.addObject(highlightedValue(obj));
+			highlightedObjects.setObjectForKey(new HighlightMetadata(isNew), highlightedValue(obj));
+		}
+	}
+
+	protected static class HighlightMetadata {
+		private boolean _new;
+
+		public HighlightMetadata(boolean isNew) {
+			_new = isNew;
+		}
+
+		public boolean isNew() {
+			return _new;
 		}
 	}
 }
