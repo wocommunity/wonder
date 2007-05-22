@@ -19,6 +19,11 @@ import er.extensions.ERXWOContext;
  * 
  * @binding onRefreshComplete the script to execute at the end of refreshing the container
  * @binding action the action to call when this updateContainer refreshes
+ * 
+ * @binding insertion JavaScript function to evaluate when the update takes place (or effect shortcuts like "Effect.blind", or "Effect.BlindUp")
+ * @binding insertionDuration the duration of the before and after insertion animation (if using insertion) 
+ * @binding beforeInsertionDuration the duration of the before insertion animation (if using insertion) 
+ * @binding afterInsertionDuration the duration of the after insertion animation (if using insertion) 
  */
 public class AjaxUpdateContainer extends AjaxDynamicElement {
 	private static final String UPDATE_CONTAINER_ID_KEY = "__updateID";
@@ -76,15 +81,38 @@ public class AjaxUpdateContainer extends AjaxDynamicElement {
 			options.setObjectForKey("true", "evalScripts");
 		}
 		
-
-		String expandedInsertion = AjaxUpdateLink.expandInsertion((String) options.objectForKey("insertion"));
-		if (expandedInsertion != null) {
-			options.setObjectForKey(expandedInsertion, "insertion");
-		}
+		AjaxUpdateContainer.expandInsertionFromOptions(options, this, component);
 
 		return options;
 	}
 	
+	public static void expandInsertionFromOptions(NSMutableDictionary options, AjaxDynamicElement element, WOComponent component) {
+		String insertionDuration = (String) element.valueForBinding("insertionDuration", component);
+		String beforeInsertionDuration = (String) element.valueForBinding("beforeInsertionDuration", component);
+		if (beforeInsertionDuration == null) {
+			beforeInsertionDuration = insertionDuration;
+		}
+		String afterInsertionDuration = (String) element.valueForBinding("afterInsertionDuration", component);
+		if (afterInsertionDuration == null) {
+			afterInsertionDuration = insertionDuration;
+		}
+		String insertion = (String) options.objectForKey("insertion");
+		String expandedInsertion = AjaxUpdateContainer.expandInsertion(insertion, beforeInsertionDuration, afterInsertionDuration);
+		if (expandedInsertion != null) {
+			options.setObjectForKey(expandedInsertion, "insertion");
+		}
+	}
+
+	public static String expandInsertion(String originalInsertion, String beforeDuration, String afterDuration) {
+		String expandedInsertion = originalInsertion;
+		if (originalInsertion != null && originalInsertion.startsWith("Effect.")) {
+			String effectPairName = originalInsertion.substring("Effect.".length());
+			expandedInsertion = "AUC.insertionFunc('" + effectPairName + "', " + beforeDuration + "," + afterDuration + ")";
+
+		}
+		return expandedInsertion;
+	}
+
 	public static NSDictionary removeDefaultOptions(NSDictionary options) {
 		NSMutableDictionary mutableOptions = options.mutableClone();
 		if ("'get'".equals(mutableOptions.objectForKey("method"))) {

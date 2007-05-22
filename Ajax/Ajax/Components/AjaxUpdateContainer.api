@@ -11,13 +11,17 @@
 		<binding name="frequency"/>
 		<binding name="decay"/>
 		<binding name="evalScripts"/>
-		<binding name="insertion"/>
 		<binding name="onLoading"/>
 		<binding name="onComplete"/>
 		<binding name="onSuccess"/>
 		<binding name="onFailure"/>
 		<binding name="onException"/>
 		<binding name="onRefreshComplete"/>
+
+		<binding name = "insertion"/>
+		<binding name = "insertionDuration"/>
+		<binding name = "beforeInsertionDuration"/>
+		<binding name = "afterInsertionDuration"/>
 
     
 	<binding name="id"/></wo>

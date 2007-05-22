@@ -36,9 +36,21 @@
 		<binding name = "submitOnSave"/>
 		<binding name = "canSave"/>
 		<binding name = "canEdit"/>
+		
 		<binding name = "editInsertion"/>
+		<binding name = "editInsertionDuration"/>
+		<binding name = "editBeforeInsertionDuration"/>
+		<binding name = "editAfterInsertionDuration"/>
+		
 		<binding name = "saveInsertion"/>
+		<binding name = "saveInsertionDuration"/>
+		<binding name = "saveBeforeInsertionDuration"/>
+		<binding name = "saveAfterInsertionDuration"/>
+		
 		<binding name = "cancelInsertion"/>
+		<binding name = "cancelInsertionDuration"/>
+		<binding name = "cancelBeforeInsertionDuration"/>
+		<binding name = "cancelAfterInsertionDuration"/>
 		<binding name = "elementName"/>
 	</wo>
 </wodefinitions>

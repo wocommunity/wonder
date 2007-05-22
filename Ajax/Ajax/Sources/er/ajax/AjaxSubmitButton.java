@@ -30,7 +30,6 @@ import er.extensions.ERXWOForm;
  * @binding onSuccess javascript to execute in response to the Ajax onSuccess event
  * @binding onFailure javascript to execute in response to the Ajax onFailure event
  * @binding onLoading javascript to execute when loading
- * @binding insertion JavaScript function to evaluate when the update takes place.
  * @binding evalScripts evaluate scripts on the result
  * @binding button if false, it will display a link
  * @binding formName if button is false, you must specify the name of the form to submit
@@ -38,12 +37,19 @@ import er.extensions.ERXWOForm;
  * @binding updateContainerID the id of the AjaxUpdateContainer to update after performing this action
  * @binding showUI if functionName is set, the UI defaults to hidden; showUI re-enables it
  * @binding formSerializer the name of the javascript function to call to serialize the form
+ * 
  * @binding effect synonym of afterEffect except it always applies to updateContainerID
  * @binding beforeEffect the Scriptaculous effect to apply onSuccess ("highlight", "slideIn", "blindDown", etc);
  * @binding beforeEffectID the ID of the container to apply the "before" effect to (blank = try nearest container, then try updateContainerID)
  * @binding beforeEffectDuration the duration of the effect to apply before
  * @binding afterEffect the Scriptaculous effect to apply onSuccess ("highlight", "slideIn", "blindDown", etc);
  * @binding afterEffectID the ID of the container to apply the "after" effect to (blank = try nearest container, then try updateContainerID)
+ * 
+ * @binding insertion JavaScript function to evaluate when the update takes place (or effect shortcuts like "Effect.blind", or "Effect.BlindUp")
+ * @binding insertionDuration the duration of the before and after insertion animation (if using insertion) 
+ * @binding beforeInsertionDuration the duration of the before insertion animation (if using insertion) 
+ * @binding afterInsertionDuration the duration of the after insertion animation (if using insertion)
+ *  
  * @property er.ajax.formSerializer the default form serializer to use for all ajax submits
  * 
  * @author anjo
@@ -90,10 +96,7 @@ public class AjaxSubmitButton extends AjaxDynamicElement {
 		options.setObjectForKey("true", "evalScripts");
 	}
 
-	String expandedInsertion = AjaxUpdateLink.expandInsertion((String) options.objectForKey("insertion"));
-	if (expandedInsertion != null) {
-		options.setObjectForKey(expandedInsertion, "insertion");
-	}
+	AjaxUpdateContainer.expandInsertionFromOptions(options, this, component);
 
     return options;
   }
