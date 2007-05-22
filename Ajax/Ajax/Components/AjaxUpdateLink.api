@@ -16,7 +16,13 @@
 		<binding name = "functionName"/>
 		<binding name = "elementName"/>
 		<binding name = "button"/>
+
 		<binding name = "effect"/>
+		<binding name = "beforeEffect"/>
+		<binding name = "beforeEffectID"/>
+		<binding name = "beforeEffectDuration"/>
+		<binding name = "afterEffect"/>
+		<binding name = "afterEffectID"/>
 
 		<binding name = "onClickBefore"/>
 		<binding name = "onClick"/>

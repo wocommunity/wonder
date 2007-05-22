@@ -149,8 +149,8 @@ public class AjaxHighlight extends WODynamicGroup {
 			}
 			if (!"none".equalsIgnoreCase(effect)) {
 				AjaxUtils.appendScriptHeader(response);
-				response.appendContentString("new Effect.");
-				response.appendContentString(effect);
+				response.appendContentString("new ");
+				response.appendContentString(AjaxUpdateLink.fullEffectName(effect));
 				response.appendContentString("('");
 				response.appendContentString(id);
 				response.appendContentString("',");
