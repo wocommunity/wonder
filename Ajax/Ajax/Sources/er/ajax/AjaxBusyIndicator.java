@@ -23,6 +23,10 @@ public class AjaxBusyIndicator extends AjaxComponent {
     addScriptResourceInHead(res, "scriptaculous.js");
   }
 
+  public String busyClass() {
+    return (String) valueForBinding("busyClass");
+  }
+
   public String busyImage() {
     return (String) valueForBinding("busyImage");
   }

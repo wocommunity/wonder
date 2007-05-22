@@ -4,5 +4,6 @@
 		<binding name = "divID"/>
 		<binding name = "busyImage"/>
 		<binding name = "busyImageFramework"/>
+		<binding name = "busyClass"/>
 	</wo>
 </wodefinitions>
