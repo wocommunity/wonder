@@ -7,8 +7,12 @@
     <binding name = "style"/>
 		<binding name = "elementName"/>
 		<binding name = "effect"/>
+		<binding name = "newEffect"/>
+		<binding name = "updateEffect"/>
 		<binding name = "duration"/>
 		<binding name = "hidden"/>
+		<binding name = "newHidden"/>
+		<binding name = "updateHidden"/>
     
     <validation message="&apos;value&apos; must be bound.">
 	    <unbound name = "value"/>
