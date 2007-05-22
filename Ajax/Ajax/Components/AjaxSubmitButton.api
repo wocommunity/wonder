@@ -20,7 +20,13 @@
 		<binding name = "functionName"/>
 		<binding name = "updateContainerID"/>
 		<binding name = "showUI"/>
+		
 		<binding name = "effect"/>
+    <binding name = "beforeEffect"/>
+		<binding name = "beforeEffectID"/>
+		<binding name = "beforeEffectDuration"/>
+		<binding name = "afterEffect"/>
+		<binding name = "afterEffectID"/>
     
     <validation message="&apos;effect&apos; and &apos;onSuccess&apos; cannot both be bound.">
 	    <bound name = "effect"/>
