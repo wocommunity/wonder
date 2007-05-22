@@ -2,7 +2,7 @@ package er.directtoweb;
 import com.webobjects.eocontrol.EOKeyValueUnarchiver;
 
 /**
- * @deprecated, use {@link ERDDelayedLocalizedAssignment}.
+ * @deprecated  use {@link ERDDelayedLocalizedAssignment}.
  */
 public class ERDLocalizedMessageAssignment extends ERDDelayedLocalizedAssignment {
     public static Object decodeWithKeyValueUnarchiver(EOKeyValueUnarchiver eokeyvalueunarchiver)  {

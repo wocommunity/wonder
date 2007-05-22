@@ -902,7 +902,7 @@ public class ERXModelGroup extends EOModelGroup {
 	 * the class name with a dollar sign and tries again.
 	 *   
 	 * @param model the model to load constants for
-	 * @throw IllegalArgumentException if the ERXConstantClassName cannot be resolved. 
+	 * @throws IllegalArgumentException if the ERXConstantClassName cannot be resolved. 
 	 */
 	protected void preloadERXConstantClassesForModel(EOModel model) {
 		for (Enumeration entitiesEnum = model.entities().objectEnumerator(); entitiesEnum.hasMoreElements();) {

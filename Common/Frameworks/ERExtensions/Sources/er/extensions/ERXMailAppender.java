@@ -38,7 +38,7 @@ import com.webobjects.foundation.NSMutableDictionary;
  *	CcAddresses - comma separated list of email address to cc on the email
  * 	ReplyTo - reply to address
  *	DomainName - When generating a from email address, used for the bit after the
- *		@, ie fo@bar.com, the domain name is 'bar.com'.
+ *		"@", ie foo@bar.com, the domain name is 'bar.com'.
  *	HostName - When generating an email address from, defaults to name of the
  *		localhost.
  *	ExceptionPage - name of the exception page, is unset, 

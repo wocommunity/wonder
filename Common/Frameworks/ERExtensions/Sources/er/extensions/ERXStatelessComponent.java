@@ -42,7 +42,7 @@ public abstract class ERXStatelessComponent extends ERXNonSynchronizingComponent
      * false.
      * @param binding binding to be resolved as a boolean value.
      * @return result of evaluating binding as a boolean.
-     * @depreceated use booleanValueForBinding() instead
+     * @deprecated use booleanValueForBinding() instead
      */
     public boolean valueForBooleanBinding(String binding) {
         return booleanValueForBinding(binding, false);
