@@ -17,28 +17,26 @@ import er.extensions.ERXEOControlUtilities;
 import er.extensions.ERXWOContext;
 
 /**
- * AjaxHighlight provides a convenient way to queue up an object as 
- * highlighted so that it gets a highlight effect when the next 
- * page renders.
+ * AjaxHighlight provides a convenient way to queue up an object as highlighted so that it gets a highlight effect when
+ * the next page renders.
  * 
- * In the action prior to returning the page that will show a highlight,
- * you can call AjaxHighlight.highlight(theObject).  The object you 
- * highlight could be a String, an EO, or whatever object makes sense
+ * In the action prior to returning the page that will show a highlight, you can call
+ * AjaxHighlight.highlight(theObject). The object you highlight could be a String, an EO, or whatever object makes sense
  * in your context.
  * 
- * Then you simply bind value = .. on this component on the following
- * page.  If the value matches an object that was flagged as highlighted,
- * the container you specify will receive the highlight effect.  This
- * component can also generate its own container if you do not specify
- * another container id. 
- *   
+ * Then you simply bind value = .. on this component on the following page. If the value matches an object that was
+ * flagged as highlighted, the container you specify will receive the highlight effect. This component can also generate
+ * its own container if you do not specify another container id.
+ * 
  * @binding value the value to check for highlighting
  * @binding id the optional id to highlight (if blank, a container will be generated)
- * @binding elementName the element name of the generated container (if specified, a container will be generated); defaults to div
+ * @binding elementName the element name of the generated container (if specified, a container will be generated);
+ *          defaults to div
  * @binding effect the name of the scriptaculous effect to render (defaults to "Highlight")
  * @binding class the CSS class of the generated container
  * @binding style the CSS style of the generated container
  * @binding duration passed through to Effect.Xxx in the options map
+ * @binding hidden if true, when the value is highlighted, the element will be display: none
  * 
  * @author mschrag
  */
@@ -49,6 +47,7 @@ public class AjaxHighlight extends WODynamicGroup {
 	private WOAssociation _id;
 	private WOAssociation _elementName;
 	private WOAssociation _effect;
+	private WOAssociation _hidden;
 
 	public AjaxHighlight(String name, NSDictionary associations, WOElement template) {
 		super(name, associations, template);
@@ -60,6 +59,7 @@ public class AjaxHighlight extends WODynamicGroup {
 		_elementName = (WOAssociation) associations.valueForKey("elementName");
 		_id = (WOAssociation) associations.valueForKey("id");
 		_effect = (WOAssociation) associations.valueForKey("effect");
+		_hidden = (WOAssociation) associations.valueForKey("hidden");
 	}
 
 	public void appendToResponse(WOResponse response, WOContext context) {
@@ -81,12 +81,28 @@ public class AjaxHighlight extends WODynamicGroup {
 		else {
 			id = (String) _id.valueInComponent(component);
 		}
+
+		boolean highlighted = false;
+		if (_value != null) {
+			Object value = _value.valueInComponent(component);
+			if (value != null) {
+				highlighted = isHighlighted(value);
+			}
+		}
+
 		if (generateContainer) {
 			response.appendContentString("<");
 			response.appendContentString(elementName);
 			response._appendTagAttributeAndValue("id", id, true);
 			AjaxUtils.appendTagAttributeAndValue(response, context, component, _associations, "class");
-			AjaxUtils.appendTagAttributeAndValue(response, context, component, _associations, "style");
+			String displayStyle = null;
+			if (highlighted && _hidden != null) {
+				boolean hidden = _hidden.booleanValueInComponent(component);
+				if (hidden) {
+					displayStyle = "display: none;";
+				}
+			}
+			AjaxUtils.appendTagAttributeAndValue(response, context, component, _associations, "style", displayStyle);
 			response.appendContentString(">");
 		}
 		super.appendToResponse(response, context);
@@ -96,38 +112,32 @@ public class AjaxHighlight extends WODynamicGroup {
 			response.appendContentString(">");
 		}
 
-		if (_value != null) {
-			Object value = _value.valueInComponent(component);
-			if (value != null) {
-				boolean highlighted = isHighlighted(value);
-				if (highlighted) {
-					AjaxUtils.appendScriptHeader(response);
-					String effect;
-					if (_effect == null) {
-						effect = "Highlight";
-					}
-					else {
-						effect = (String) _effect.valueInComponent(component);
-					}
-					response.appendContentString("new Effect.");
-					response.appendContentString(effect);
-					response.appendContentString("('");
-					response.appendContentString(id);
-					response.appendContentString("',");
-
-					NSMutableArray ajaxOptionsArray = new NSMutableArray();
-					ajaxOptionsArray.addObject(new AjaxOption("duration", AjaxOption.NUMBER));
-
-					NSMutableDictionary options = AjaxOption.createAjaxOptionsDictionary(ajaxOptionsArray, component, _associations);
-					options.setObjectForKey("'end'", "queue");
-
-					AjaxOptions.appendToResponse(options, response, context);
-
-					response.appendContentString(");");
-
-					AjaxUtils.appendScriptFooter(response);
-				}
+		if (highlighted) {
+			AjaxUtils.appendScriptHeader(response);
+			String effect;
+			if (_effect == null) {
+				effect = "Highlight";
 			}
+			else {
+				effect = (String) _effect.valueInComponent(component);
+			}
+			response.appendContentString("new Effect.");
+			response.appendContentString(effect);
+			response.appendContentString("('");
+			response.appendContentString(id);
+			response.appendContentString("',");
+
+			NSMutableArray ajaxOptionsArray = new NSMutableArray();
+			ajaxOptionsArray.addObject(new AjaxOption("duration", AjaxOption.NUMBER));
+
+			NSMutableDictionary options = AjaxOption.createAjaxOptionsDictionary(ajaxOptionsArray, component, _associations);
+			options.setObjectForKey("'end'", "queue");
+
+			AjaxOptions.appendToResponse(options, response, context);
+
+			response.appendContentString(");");
+
+			AjaxUtils.appendScriptFooter(response);
 		}
 	}
 
