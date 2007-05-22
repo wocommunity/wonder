@@ -287,12 +287,32 @@ public class AjaxUtils {
 	}
 
 	public static void appendTagAttributeAndValue(WOResponse response, WOContext context, WOComponent component, NSDictionary associations, String name) {
-		AjaxUtils.appendTagAttributeAndValue(response, context, component, name, (WOAssociation)associations.objectForKey(name));
+		AjaxUtils.appendTagAttributeAndValue(response, context, component, associations, name, null);
+	}
+	
+	public static void appendTagAttributeAndValue(WOResponse response, WOContext context, WOComponent component, NSDictionary associations, String name, String appendValue) {
+		AjaxUtils.appendTagAttributeAndValue(response, context, component, name, (WOAssociation)associations.objectForKey(name), appendValue);
 	}
 
 	public static void appendTagAttributeAndValue(WOResponse response, WOContext context, WOComponent component, String name, WOAssociation association) {
-		if (association != null) {
-			String value = (String) association.valueInComponent(component);
+		AjaxUtils.appendTagAttributeAndValue(response, context, component, name, association, null);
+	}
+	
+	public static void appendTagAttributeAndValue(WOResponse response, WOContext context, WOComponent component, String name, WOAssociation association, String appendValue) {
+		if (association != null || appendValue != null) {
+			String value = null;
+			if (association != null) {
+				value = (String) association.valueInComponent(component);
+			}
+			if (value == null) {
+				value = appendValue;
+			}
+			else {
+				if (!value.endsWith(";")) {
+					value += ";";
+				}
+				value += appendValue;
+			}
 			if (value != null) {
 				response._appendTagAttributeAndValue(name, value, true);
 			}
