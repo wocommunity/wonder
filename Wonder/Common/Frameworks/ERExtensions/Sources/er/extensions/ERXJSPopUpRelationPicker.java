@@ -317,12 +317,12 @@ public class ERXJSPopUpRelationPicker extends ERXStatelessComponent {
     
 	
     /**
-     * @returns the string to create the pop-up with the initial child values something like:
-     <select name="children_select">
-     <option value=4>poodle
-     <option selected value=5>puli
-     <option value=6>greyhound
-     </select>
+     * @return the string to create the pop-up with the initial child values something like:
+     <pre>&lt;select name="children_select"&gt;
+     &lt;option value=4&gt;poodle
+     &lt;option selected value=5&gt;puli
+     &lt;option value=6&gt;greyhound
+     &lt;/select&gt;</pre>
      */
     public String childPopUpString() {
         StringBuffer returnString = selectHeader(childSelectName, pickerName + ".childChanged();");
