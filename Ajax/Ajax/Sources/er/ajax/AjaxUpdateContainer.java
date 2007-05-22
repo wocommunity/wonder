@@ -75,6 +75,13 @@ public class AjaxUpdateContainer extends AjaxDynamicElement {
 		if (options.objectForKey("evalScripts") == null) {
 			options.setObjectForKey("true", "evalScripts");
 		}
+		
+
+		String expandedInsertion = AjaxUpdateLink.expandInsertion((String) options.objectForKey("insertion"));
+		if (expandedInsertion != null) {
+			options.setObjectForKey(expandedInsertion, "insertion");
+		}
+
 		return options;
 	}
 	
