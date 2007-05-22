@@ -8,7 +8,6 @@ import com.webobjects.appserver.WOResponse;
 import com.webobjects.appserver._private.WODynamicElementCreationException;
 import com.webobjects.appserver._private.WODynamicGroup;
 import com.webobjects.foundation.NSDictionary;
-import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 
 import er.extensions.ERXEOControlUtilities;
@@ -49,8 +48,11 @@ public class AjaxHighlight extends WODynamicGroup {
 	private WOAssociation _id;
 	private WOAssociation _elementName;
 	private WOAssociation _effect;
+	private WOAssociation _duration;
 	private WOAssociation _newEffect;
+	private WOAssociation _newDuration;
 	private WOAssociation _updateEffect;
+	private WOAssociation _updateDuration;
 	private WOAssociation _hidden;
 	private WOAssociation _newHidden;
 	private WOAssociation _updateHidden;
@@ -65,8 +67,11 @@ public class AjaxHighlight extends WODynamicGroup {
 		_elementName = (WOAssociation) associations.valueForKey("elementName");
 		_id = (WOAssociation) associations.valueForKey("id");
 		_effect = (WOAssociation) associations.valueForKey("effect");
+		_duration = (WOAssociation) associations.valueForKey("duration");
 		_newEffect = (WOAssociation) associations.valueForKey("newEffect");
+		_newDuration = (WOAssociation) associations.valueForKey("newDuration");
 		_updateEffect = (WOAssociation) associations.valueForKey("updateEffect");
+		_updateDuration = (WOAssociation) associations.valueForKey("updateDuration");
 		_hidden = (WOAssociation) associations.valueForKey("hidden");
 		_newHidden = (WOAssociation) associations.valueForKey("newHidden");
 		_updateHidden = (WOAssociation) associations.valueForKey("updateHidden");
@@ -155,15 +160,23 @@ public class AjaxHighlight extends WODynamicGroup {
 				response.appendContentString(id);
 				response.appendContentString("',");
 	
-				NSMutableArray ajaxOptionsArray = new NSMutableArray();
-				ajaxOptionsArray.addObject(new AjaxOption("duration", AjaxOption.NUMBER));
+				response.appendContentString("{ queue: 'end'");
+				
+				if (metadata.isNew() && _newDuration != null) {
+					response.appendContentString(", duration: ");
+					response.appendContentString((String)_newDuration.valueInComponent(component));
+				}
+				else if (!metadata.isNew() && _updateDuration != null) {
+					response.appendContentString(", duration: ");
+					response.appendContentString((String)_updateDuration.valueInComponent(component));
+				}
+				else if (_duration != null) {
+					response.appendContentString(", duration: ");
+					response.appendContentString((String)_duration.valueInComponent(component));
+					
+				}
 	
-				NSMutableDictionary options = AjaxOption.createAjaxOptionsDictionary(ajaxOptionsArray, component, _associations);
-				options.setObjectForKey("'end'", "queue");
-	
-				AjaxOptions.appendToResponse(options, response, context);
-	
-				response.appendContentString(");");
+				response.appendContentString("});");
 	
 				AjaxUtils.appendScriptFooter(response);
 			}
