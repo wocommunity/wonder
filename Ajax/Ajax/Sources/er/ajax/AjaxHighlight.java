@@ -14,7 +14,7 @@ import com.webobjects.foundation.NSMutableSet;
 import com.webobjects.foundation.NSSet;
 
 import er.extensions.ERXEOControlUtilities;
-import er.extensions.ERXThreadStorage;
+import er.extensions.ERXWOContext;
 
 /**
  * AjaxHighlight provides a convenient way to queue up an object as 
@@ -139,7 +139,7 @@ public class AjaxHighlight extends WODynamicGroup {
 	public static boolean isHighlighted(Object obj) {
 		boolean highlighted = false;
 		if (obj != null) {
-			NSSet highlightedObjects = (NSSet) ERXThreadStorage.valueForKey(AjaxHighlight.HIGHLIGHTED_KEY);
+			NSSet highlightedObjects = (NSSet) ERXWOContext.contextDictionary().valueForKey(AjaxHighlight.HIGHLIGHTED_KEY);
 			if (highlightedObjects != null) {
 				highlighted = highlightedObjects.containsObject(highlightedValue(obj));
 			}
@@ -149,10 +149,10 @@ public class AjaxHighlight extends WODynamicGroup {
 
 	public static final void highlight(Object obj) {
 		if (obj != null) {
-			NSMutableSet highlightedObjects = (NSMutableSet) ERXThreadStorage.valueForKey(AjaxHighlight.HIGHLIGHTED_KEY);
+			NSMutableSet highlightedObjects = (NSMutableSet) ERXWOContext.contextDictionary().valueForKey(AjaxHighlight.HIGHLIGHTED_KEY);
 			if (highlightedObjects == null) {
 				highlightedObjects = new NSMutableSet();
-				ERXThreadStorage.takeValueForKey(highlightedObjects, AjaxHighlight.HIGHLIGHTED_KEY);
+				ERXWOContext.contextDictionary().takeValueForKey(highlightedObjects, AjaxHighlight.HIGHLIGHTED_KEY);
 			}
 			highlightedObjects.addObject(highlightedValue(obj));
 		}
