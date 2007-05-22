@@ -39,5 +39,6 @@
 		<binding name = "editInsertion"/>
 		<binding name = "saveInsertion"/>
 		<binding name = "cancelInsertion"/>
+		<binding name = "elementName"/>
 	</wo>
 </wodefinitions>

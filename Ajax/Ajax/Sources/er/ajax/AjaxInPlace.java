@@ -82,6 +82,7 @@ import er.extensions.ERXComponentUtilities;
  * @binding saveInsertion the insertion function to use on save
  * @binding cancelInsertion the insertion function to use on cancel
  * @binding style the style of the top level container
+ * @binding elementName the name of the container element (defaults to "div")
  * @binding formSerializer the name of the javascript function to call to serialize the form
  * 
  * @author mschrag
@@ -100,6 +101,14 @@ public class AjaxInPlace extends WOComponent {
 		return false;
 	}
 
+	public String elementName() {
+		String elementName = (String) valueForBinding("elementName");
+		if (elementName == null) {
+			elementName = "div";
+		}
+		return elementName;
+	}
+	
 	public String id() {
 		if (_id == null) {
 			if (hasBinding("id")) {
