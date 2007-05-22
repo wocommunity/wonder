@@ -23,7 +23,7 @@ UpdateContainer : AjaxUpdateContainer {
 	id = id;
 	class = ^class;
 	style = ^style;
-	elementName = "div";
+	elementName = elementName;
 	evalScripts = true;
 	onLoading = ^onLoading;
 	onRefreshComplete = ^onRefreshComplete;
