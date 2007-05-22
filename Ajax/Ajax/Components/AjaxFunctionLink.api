@@ -13,5 +13,17 @@
     <binding name="otherTagString" passthrough="NO"/>
     <binding name="disabled" passthrough="NO" defaults="YES/NO"/>
     <binding name="onclick" passthrough="YES"/>
+    <binding name="updateContainerID"/>
+    <binding name="type"/>
+    
+    <validation message = "You cannot bind both 'type' and 'onclick'.">
+    	<bound name = "type"/>
+    	<bound name = "onclick"/>
+    </validation>
+    
+    <validation message = "If 'updateContainerID' is bound, then 'type' must also be bound.">
+    	<bound name = "updateContainerID"/>
+    	<unbound name = "type"/>
+    </validation>
   </wo>
 </wodefinitions>
