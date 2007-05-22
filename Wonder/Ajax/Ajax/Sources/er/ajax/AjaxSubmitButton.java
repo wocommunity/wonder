@@ -38,7 +38,12 @@ import er.extensions.ERXWOForm;
  * @binding updateContainerID the id of the AjaxUpdateContainer to update after performing this action
  * @binding showUI if functionName is set, the UI defaults to hidden; showUI re-enables it
  * @binding formSerializer the name of the javascript function to call to serialize the form
- * @binding effect the Scriptaculous effect to apply onSuccess ("highlight", "slideIn", "blindDown", etc);
+ * @binding effect synonym of afterEffect except it always applies to updateContainerID
+ * @binding beforeEffect the Scriptaculous effect to apply onSuccess ("highlight", "slideIn", "blindDown", etc);
+ * @binding beforeEffectID the ID of the container to apply the "before" effect to (blank = try nearest container, then try updateContainerID)
+ * @binding beforeEffectDuration the duration of the effect to apply before
+ * @binding afterEffect the Scriptaculous effect to apply onSuccess ("highlight", "slideIn", "blindDown", etc);
+ * @binding afterEffectID the ID of the container to apply the "after" effect to (blank = try nearest container, then try updateContainerID)
  * @property er.ajax.formSerializer the default form serializer to use for all ajax submits
  * 
  * @author anjo
@@ -116,7 +121,37 @@ public class AjaxSubmitButton extends AjaxDynamicElement {
 		onClickBuffer.append(onClickBefore);
 		onClickBuffer.append(") {");
 	}
+	
 	String updateContainerID = (String)valueForBinding("updateContainerID", component);
+	
+	String beforeEffect = (String) valueForBinding("beforeEffect", component);
+
+	if (beforeEffect != null) {
+		onClickBuffer.append("new ");
+		onClickBuffer.append(AjaxUpdateLink.fullEffectName(beforeEffect));
+		onClickBuffer.append("('");
+		
+		String beforeEffectID = (String) valueForBinding("beforeEffectID", component);
+		if (beforeEffectID == null) {
+			beforeEffectID = AjaxUpdateContainer.currentUpdateContainerID();
+			if (beforeEffectID == null) {
+				beforeEffectID = updateContainerID;
+			}
+		}
+		onClickBuffer.append(beforeEffectID);
+		
+		onClickBuffer.append("', { ");
+		
+		String beforeEffectDuration = (String) valueForBinding("beforeEffectDuration", component);
+		if (beforeEffectDuration != null) {
+			onClickBuffer.append("duration: ");
+			onClickBuffer.append(beforeEffectDuration);
+			onClickBuffer.append(", ");
+		}
+		
+		onClickBuffer.append("queue:'end', afterFinish: function() {");
+	}
+
 	if (updateContainerID != null) {
 		onClickBuffer.append("new Ajax.Updater('" + updateContainerID + "',");
 	}
@@ -132,7 +167,16 @@ public class AjaxSubmitButton extends AjaxDynamicElement {
 	onClickBuffer.append(",");
 	
     NSMutableDictionary options = createAjaxOptions(component, formReference);
+	
 	AjaxUpdateLink.addEffect(options, (String) valueForBinding("effect", component), updateContainerID);
+	String afterEffectID = (String) valueForBinding("afterEffectID", component);
+	if (afterEffectID == null) {
+		afterEffectID = AjaxUpdateContainer.currentUpdateContainerID();
+		if (afterEffectID == null) {
+			afterEffectID = updateContainerID;
+		}
+	}
+	AjaxUpdateLink.addEffect(options, (String) valueForBinding("afterEffect", component), afterEffectID);
 	
     AjaxOptions.appendToBuffer(options, onClickBuffer, context);
     onClickBuffer.append(")");
@@ -141,6 +185,11 @@ public class AjaxSubmitButton extends AjaxDynamicElement {
       onClickBuffer.append(";");
       onClickBuffer.append(onClick);
     }
+	
+	if (beforeEffect != null) {
+		onClickBuffer.append("}});");
+	}
+
     if (onClickBefore != null) {
     	onClickBuffer.append("}");
     }
