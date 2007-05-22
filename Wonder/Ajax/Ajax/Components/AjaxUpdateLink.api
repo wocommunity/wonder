@@ -10,12 +10,16 @@
 		<binding name = "onSuccess"/>
 		<binding name = "onFailure"/>
 		<binding name = "onException"/>
-		<binding name = "insertion"/>
 		<binding name = "evalScripts"/>
 		<binding name = "function"/>
 		<binding name = "functionName"/>
 		<binding name = "elementName"/>
 		<binding name = "button"/>
+
+		<binding name = "insertion"/>
+		<binding name = "insertionDuration"/>
+		<binding name = "beforeInsertionDuration"/>
+		<binding name = "afterInsertionDuration"/>
 
 		<binding name = "effect"/>
 		<binding name = "beforeEffect"/>

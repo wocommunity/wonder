@@ -55,6 +55,9 @@ EditFunction : AjaxUpdateLink {
 	functionName = editFunctionName;
 	updateContainerID = id;
 	insertion = ^editInsertion;
+	insertionDuration = ^editInsertionDuration;
+	beforeInsertionDuration = ^editBeforeInsertionDuration;
+	afterInsertionDuration = ^editAfterInsertionDuration;
 }
 
 EditAction : WOGenericContainer {
@@ -84,6 +87,9 @@ CancelFunction : AjaxUpdateLink {
 	functionName = cancelFunctionName;
 	updateContainerID = cancelUpdateContainerID;
 	insertion = ^cancelInsertion;
+	insertionDuration = ^cancelInsertionDuration;
+	beforeInsertionDuration = ^cancelBeforeInsertionDuration;
+	afterInsertionDuration = ^cancelAfterInsertionDuration;
 }
 
 CancelAction : WOGenericContainer {
@@ -120,6 +126,9 @@ SaveSubmitFunction : AjaxSubmitButton {
 	functionName = saveFunctionName;
 	updateContainerID = saveUpdateContainerID;
 	insertion = ^saveInsertion;
+	insertionDuration = ^saveInsertionDuration;
+	beforeInsertionDuration = ^saveBeforeInsertionDuration;
+	afterInsertionDuration = ^saveAfterInsertionDuration;
 	formSerializer = ^formSerializer;
 }
 
@@ -135,6 +144,9 @@ SaveLinkFunction : AjaxUpdateLink {
 	functionName = saveFunctionName;
 	updateContainerID = saveUpdateContainerID;
 	insertion = ^saveInsertion;
+	insertionDuration = ^saveInsertionDuration;
+	beforeInsertionDuration = ^saveBeforeInsertionDuration;
+	afterInsertionDuration = ^saveAfterInsertionDuration;
 }
 
 SaveAction : WOGenericContainer {
