@@ -163,6 +163,7 @@ var AjaxUpdateContainer = {
 		
 		for (var existingPairName in Effect.PAIRS) {
 			var pairs = Effect.PAIRS[existingPairName];
+	
 			if (effectPairName == existingPairName) {
 				insertionFunction = function(receiver, response) {
 					Effect[Effect.PAIRS[effectPairName][1]](receiver, { 
@@ -178,8 +179,8 @@ var AjaxUpdateContainer = {
 			}
 			else if (effectPairName == pairs[1]) {
 				insertionFunction = function(receiver, response) {
-					duration: beforeDuration || 0.5,
 					Effect[effectPairName](receiver, { 
+						duration: beforeDuration || 0.5,
 						afterFinish: function() { 
 							receiver.update(response);
 							receiver.show();
