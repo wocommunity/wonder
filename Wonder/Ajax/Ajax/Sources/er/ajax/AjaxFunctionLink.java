@@ -7,10 +7,9 @@ import com.webobjects.appserver.WOElement;
 import com.webobjects.appserver.WOResponse;
 import com.webobjects.appserver._private.WOConstantValueAssociation;
 import com.webobjects.appserver._private.WODynamicElementCreationException;
+import com.webobjects.appserver._private.WOHTMLDynamicElement;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableDictionary;
-
-import er.extensions.ERXHyperlink;
 
 /**
  * AjaxFunctionLink is a convenience for calling javascript functions in response to
@@ -20,42 +19,62 @@ import er.extensions.ERXHyperlink;
  * So for instance, if you are inside of an AjaxInPlace with the id "blogForm" you can do
  * 
  * <pre>
- * &lt:wo:AjaxFunctionLink type = "edit"&gt;
+ * &lt:wo:AjaxFunctionLink action = "edit"&gt;
  * </pre>
  * 
  * to go into edit mode.
  * 
+ * @binding disabled if true, disables the link
  * @binding onclick the javascript to execute when the link is clicked.
- * @binding type the type of event to fire ("update", "save", "edit", "cancel")
+ * @binding action the type of event to fire ("update", "save", "edit", "cancel")
  * @binding updateContainerID the id of the container to fire the event to (optional if inside of the container)
  * 
  * @author mschrag
  */
-public class AjaxFunctionLink extends ERXHyperlink {
-	private WOAssociation _type;
+public class AjaxFunctionLink extends WOHTMLDynamicElement {
+	private WOAssociation _disabled;
+	private WOAssociation _action;
 	private WOAssociation _updateContainerID;
 
 	public AjaxFunctionLink(String aName, NSDictionary associations, WOElement template) {
-		super(aName, AjaxFunctionLink.processAssociations(associations), template);
-		_type = (WOAssociation) _associations.removeObjectForKey("type");
+		super("a", AjaxFunctionLink.processAssociations(associations), template);
+		_action = (WOAssociation) _associations.removeObjectForKey("action");
 		_updateContainerID = (WOAssociation) _associations.removeObjectForKey("updateContainerID");
-		if (_associations.objectForKey("onclick") != null && _type != null) {
-			throw new WODynamicElementCreationException("You cannot bind both 'type' and 'onclick' at the same time.");
+		if (_associations.objectForKey("onclick") != null && _action != null) {
+			throw new WODynamicElementCreationException("You cannot bind both 'action' and 'onclick' at the same time.");
 		}
-		if (_updateContainerID != null && _type == null) {
-			throw new WODynamicElementCreationException("If you bind 'updateContainerID', you must also bind 'type'.");
+		if (_updateContainerID != null && _action == null) {
+			throw new WODynamicElementCreationException("If you bind 'updateContainerID', you must also bind 'action'.");
+		}
+	}
+
+	private boolean isDisabled(WOContext context) {
+		return _disabled != null && _disabled.booleanValueInComponent(context.component());
+	}
+
+	protected void _appendOpenTagToResponse(WOResponse response, WOContext context) {
+		if (!isDisabled(context)) {
+			super._appendOpenTagToResponse(response, context);
+		}
+	}
+
+	protected void _appendCloseTagToResponse(WOResponse response, WOContext context) {
+		if (!isDisabled(context)) {
+			super._appendCloseTagToResponse(response, context);
 		}
 	}
 
 	public void appendAttributesToResponse(WOResponse response, WOContext context) {
 		super.appendAttributesToResponse(response, context);
-		AjaxFunctionLink._appendAttributesToResponse(response, context, _type, _updateContainerID);
+		if (!isDisabled(context)) {
+			AjaxFunctionLink._appendAttributesToResponse(response, context, _action, _updateContainerID);
+		}
 	}
 	
-	public static void _appendAttributesToResponse(WOResponse response, WOContext context, WOAssociation typeAssociation, WOAssociation updateContainerIDAssociation) {
+	public static void _appendAttributesToResponse(WOResponse response, WOContext context, WOAssociation actionAssociation, WOAssociation updateContainerIDAssociation) {
 		WOComponent component = context.component();
-		String type = (String) typeAssociation.valueInComponent(component);
-		if (type != null) {
+		if (actionAssociation != null) {
+			String action = (String) actionAssociation.valueInComponent(component);
 			String updateContainerID;
 			if (updateContainerIDAssociation != null) {
 				updateContainerID = (String) updateContainerIDAssociation.valueInComponent(component);
@@ -70,20 +89,20 @@ public class AjaxFunctionLink extends ERXHyperlink {
 
 			response.appendContentString(" onclick = \"");
 			response.appendContentString(updateContainerID);
-			if ("edit".equalsIgnoreCase(type)) {
+			if ("edit".equalsIgnoreCase(action)) {
 				response.appendContentString("Edit");
 			}
-			else if ("cancel".equalsIgnoreCase(type)) {
+			else if ("cancel".equalsIgnoreCase(action)) {
 				response.appendContentString("Cancel");
 			}
-			else if ("save".equalsIgnoreCase(type)) {
+			else if ("save".equalsIgnoreCase(action)) {
 				response.appendContentString("Save");
 			}
-			else if ("update".equalsIgnoreCase(type)) {
+			else if ("update".equalsIgnoreCase(action)) {
 				response.appendContentString("Update");
 			}
 			else {
-				throw new WODynamicElementCreationException("Unknown AjaxInPlace type '" + type + "'.  Must be one of 'edit', 'cancel', 'save', or 'Update'.");
+				throw new WODynamicElementCreationException("Unknown AjaxInPlace action '" + action + "'.  Must be one of 'edit', 'cancel', 'save', or 'Update'.");
 			}
 			response.appendContentString("()\"");
 		}
