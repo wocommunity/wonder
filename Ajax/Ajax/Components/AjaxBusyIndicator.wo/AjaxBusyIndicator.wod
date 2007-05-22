@@ -1,3 +1,11 @@
+BusyClass : WOString {
+	value = busyClass;
+}
+
+HasBusyClass : WOConditional {
+	condition = busyClass;
+}
+
 BusyImageConditional : WOConditional {
 	condition = busyImage;
 }
