@@ -49,38 +49,53 @@ import er.extensions.ERXComponentUtilities;
  * 
  * @binding class the class used on the top container
  * @binding id the id used on various parts of this component
+ * 
  * @binding saveLabel the label to show on the save button
- * @binding cancelLabel the label to show on the cancel button
  * @binding saveAction the action to invoke on save
  * @binding saveUpdateContainerID by default save updates the container specified in "id", but you can override that with this binding  
- * @binding cancelAction the action to invoke on cancel
- * @binding cancelUpdateContainerID by default cancel updates the container specified in "id", but you can override that with this binding  
  * @binding saveClass the class of the save button
- * @binding editClass the class of the div that you click on to trigger edit mode (yes this name sucks)
+ * @binding canSave if true, the results are saved; if false, the user is not allowed to leave edit mode
  * @binding onSaveClick the action to fire when save is clicked
  * @binding onSaveSuccess the javascript function to execute after a successful save
  * @binding onSaveFailure the javascript function to execute after a failed save
  * @binding onSaving the javascript action to fire when saving
+ * @binding submitOnSave if true, the save button is an AjaxSubmitButton; if false, it's an AjaxUpdateLink
+ * @binding saveInsertion the insertion function to use on save
+ * @binding saveInsertionDuration the duration of the before and after insertion animation (if using insertion) 
+ * @binding saveBeforeInsertionDuration the duration of the before insertion animation (if using insertion) 
+ * @binding saveAfterInsertionDuration the duration of the after insertion animation (if using insertion)
+ * 
+ * @binding cancelLabel the label to show on the cancel button
+ * @binding cancelAction the action to invoke on cancel
+ * @binding cancelUpdateContainerID by default cancel updates the container specified in "id", but you can override that with this binding  
  * @binding cancelClass the class of the cancel button
  * @binding onCancelClick the action to fire when cancel is clicked
  * @binding onCancelSuccess the javascript function to execute after a successful cancel
  * @binding onCancelFailure the javascript function to execute after a failed cancel
+ * @binding onCancelling the javascript action to fire when cancelling
+ * @binding cancelInsertion the insertion function to use on cancel
+ * @binding cancelInsertionDuration the duration of the before and after insertion animation (if using insertion) 
+ * @binding cancelBeforeInsertionDuration the duration of the before insertion animation (if using insertion) 
+ * @binding cancelAfterInsertionDuration the duration of the after insertion animation (if using insertion)
+ * 
+ * @binding editClass the class of the div that you click on to trigger edit mode (yes this name sucks)
+ * @binding canEdit if true, edit mode is entered; if false, view mode remains active
  * @binding onEditClick the action to fire when edit mode is triggered
  * @binding onEditSuccess the javascript function to execute after a successful edit
  * @binding onEditFailure the javascript function to execute after a failed edit
  * @binding onEditing the javascript action to fire when editing mode is loading
- * @binding onCancelling the javascript action to fire when cancelling
+ * @binding editInsertion the insertion function to use on edit
+ * @binding editInsertionDuration the duration of the before and after insertion animation (if using insertion) 
+ * @binding editBeforeInsertionDuration the duration of the before insertion animation (if using insertion) 
+ * @binding editAfterInsertionDuration the duration of the after insertion animation (if using insertion)
+ * 
  * @binding onRefreshComplete the javascript function to execute after refreshing the container
  * @binding disabled whether or not edit mode should be disabled
+ * 
  * @binding manualControl if true, it is up to you to provide click-to-edit, save, and cancel controls
  * @binding manualViewControl if true, it is up to you to provide click-to-edit controls
  * @binding manualEditControl if true, it is up to you to provide save and cancel controls
- * @binding submitOnSave if true, the save button is an AjaxSubmitButton; if false, it's an AjaxUpdateLink
- * @binding canEdit if true, edit mode is entered; if false, view mode remains active
- * @binding canSave if true, the results are saved; if false, the user is not allowed to leave edit mode
- * @binding editInsertion the insertion function to use on edit
- * @binding saveInsertion the insertion function to use on save
- * @binding cancelInsertion the insertion function to use on cancel
+ * 
  * @binding style the style of the top level container
  * @binding elementName the name of the container element (defaults to "div")
  * @binding formSerializer the name of the javascript function to call to serialize the form

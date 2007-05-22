@@ -27,7 +27,6 @@ import er.extensions.ERXStringUtilities;
  * @binding onFailure JavaScript function to evaluate when the request has failed.
  * @binding onException JavaScript function to evaluate when the request had errors.
  * @binding evalScripts boolean defining if the container update is expected to be a script.
- * @binding insertion JavaScript function to evaluate when the update takes place.
  * @binding ignoreActionResponse boolean defining if the action's response should be thrown away (useful when the same
  *          action has both Ajax and plain links)
  * @binding onClickBefore if the given function returns true, the onClick is executed. This is to support confirm(..)
@@ -47,6 +46,7 @@ import er.extensions.ERXStringUtilities;
  * @binding elementName the element name to use (defaults to "a")
  * @binding functionName if set, the link becomes a javascript function
  * @binding button if true, this is rendered as a javascript button
+ * 
  * @binding effect synonym of afterEffect except it always applies to updateContainerID
  * @binding beforeEffect the Scriptaculous effect to apply onSuccess ("highlight", "slideIn", "blindDown", etc);
  * @binding beforeEffectID the ID of the container to apply the "before" effect to (blank = try nearest container, then
@@ -56,6 +56,11 @@ import er.extensions.ERXStringUtilities;
  * @binding afterEffectID the ID of the container to apply the "after" effect to (blank = try nearest container, then
  *          try updateContainerID)
  * @binding afterEffectDuration the duration of the effect to apply before
+ * 
+ * @binding insertion JavaScript function to evaluate when the update takes place (or effect shortcuts like "Effect.blind", or "Effect.BlindUp")
+ * @binding insertionDuration the duration of the before and after insertion animation (if using insertion) 
+ * @binding beforeInsertionDuration the duration of the before insertion animation (if using insertion) 
+ * @binding afterInsertionDuration the duration of the after insertion animation (if using insertion) 
  */
 public class AjaxUpdateLink extends AjaxDynamicElement {
 
@@ -247,26 +252,13 @@ public class AjaxUpdateLink extends AjaxDynamicElement {
 			options.setObjectForKey("true", "evalScripts");
 		}
 
-		String expandedInsertion = AjaxUpdateLink.expandInsertion((String) options.objectForKey("insertion"));
-		if (expandedInsertion != null) {
-			options.setObjectForKey(expandedInsertion, "insertion");
-		}
-
+		AjaxUpdateContainer.expandInsertionFromOptions(options, this, component);
 		return options;
-	}
-
-	public static String expandInsertion(String originalInsertion) {
-		String expandedInsertion = originalInsertion;
-		if (originalInsertion != null && originalInsertion.startsWith("Effect.")) {
-			String effectPairName = originalInsertion.substring("Effect.".length());
-			expandedInsertion = "AUL.insertionFunc('" + effectPairName + "')";
-
-		}
-		return expandedInsertion;
 	}
 
 	public void appendToResponse(WOResponse response, WOContext context) {
 		WOComponent component = context.component();
+		
 		boolean disabled = booleanValueForBinding("disabled", false, component);
 		Object stringValue = valueForBinding("string", component);
 		String functionName = (String) valueForBinding("functionName", component);

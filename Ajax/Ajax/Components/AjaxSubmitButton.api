@@ -7,7 +7,6 @@
 		<binding name = "id"/>
 		<binding name = "class"/>
 		<binding name = "style"/>
-		<binding name = "insertion"/>
 		<binding name = "onClick"/>
 		<binding name = "onClickBefore"/>
 		<binding name = "onClickServer"/>
@@ -20,6 +19,11 @@
 		<binding name = "functionName"/>
 		<binding name = "updateContainerID"/>
 		<binding name = "showUI"/>
+		
+		<binding name = "insertion"/>
+		<binding name = "insertionDuration"/>
+		<binding name = "beforeInsertionDuration"/>
+		<binding name = "afterInsertionDuration"/>
 		
 		<binding name = "effect"/>
     <binding name = "beforeEffect"/>
