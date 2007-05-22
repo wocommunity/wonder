@@ -7,7 +7,10 @@
 Ajax.Responders.register({
    onCreate: function(request, transport) {
 	   <webobject name = "HasBusyClass">
-	     $(request.container.success).addClassName('<webobject name = "BusyClass"></webobject>');
+			 if (request && request.container && request.container.success) {
+			   var updateContainer = $(request.container.success);
+			   if (updateContainer) { updateContainer.addClassName('<webobject name = "BusyClass"></webobject>'); }
+	     }
 	   </webobject>
      if ($('<webobject name = "DivID"></webobject>')) {
        Effect.Appear('<webobject name = "DivID"></webobject>', {duration:0.0, queue:'front'});
@@ -15,7 +18,10 @@ Ajax.Responders.register({
    },
    onComplete: function(request, transport) {
 	   <webobject name = "HasBusyClass">
-	     $(request.container.success).removeClassName('<webobject name = "BusyClass"></webobject>');
+			 if (request && request.container && request.container.success) {
+			   var updateContainer = $(request.container.success);
+			   if (updateContainer) { updateContainer.removeClassName('<webobject name = "BusyClass"></webobject>'); }
+	     }
 	   </webobject>
      if ($('<webobject name = "DivID"></webobject>')) {
        Effect.Fade('<webobject name = "DivID"></webobject>', {duration:0.5, queue:'end'});
