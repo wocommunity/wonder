@@ -15,6 +15,9 @@ public class WRAttributeEditor extends WOComponent implements DRAttributeEditing
         super(c);
     }
 
+    public DRAttribute attribute() {
+    	return _attribute;
+    }
 
     public void moveUp(DRAttribute member, boolean up) {
         int cnt;
