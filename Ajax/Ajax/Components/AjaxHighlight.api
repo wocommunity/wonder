@@ -8,6 +8,7 @@
 		<binding name = "elementName"/>
 		<binding name = "effect"/>
 		<binding name = "duration"/>
+		<binding name = "hidden"/>
     
     <validation message="&apos;value&apos; must be bound.">
 	    <unbound name = "value"/>
