@@ -172,6 +172,43 @@ var AjaxUpdateContainer = {
 var AUC = AjaxUpdateContainer;
 
 var AjaxUpdateLink = {
+	insertionFunc : function(effectPairName) {
+		var insertionFunction;
+		
+		for (var existingPairName in Effect.PAIRS) {
+			var pairs = Effect.PAIRS[existingPairName];
+			if (effectPairName == existingPairName) {
+				insertionFunction = function(receiver, response) {
+					Effect[Effect.PAIRS[effectPairName][1]](receiver, { 
+						afterFinish: function() { 
+							receiver.update(response); 
+							Effect[Effect.PAIRS[effectPairName][0]](receiver);
+						}
+					});
+				};
+			}
+			else if (effectPairName == pairs[1]) {
+				insertionFunction = function(receiver, response) {
+					Effect[effectPairName](receiver, { 
+						afterFinish: function() { 
+							receiver.update(response);
+							receiver.show();
+						}
+					});
+				};
+			}
+			else if (effectPairName == pairs[0]) {
+				insertionFunction = function(receiver, response) {
+					receiver.hide();
+					receiver.update(response); 
+					Effect[effectPairName](receiver);
+				};
+			}
+		}
+		
+		return insertionFunction;
+	},
+	
 	updateFunc : function(id, options, elementID) {
 		var updateFunction = function(queryParams) {
 			AjaxUpdateLink.update(id, options, elementID, queryParams);
