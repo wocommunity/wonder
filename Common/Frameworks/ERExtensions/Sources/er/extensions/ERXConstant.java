@@ -28,7 +28,7 @@ import com.webobjects.foundation.NSPropertyListSerialization;
  * <br>
  * To use the Number constants, you need to add an entry <code>ERXConstantClassName=Test.Status</code> to the attribute's userInfo 
  * in question and your EO's class description needs to be a {@link er.extensions.ERXEntityClassDescription}, also
- * you must enable the {@ er.extension.ERXJDBCAdaptor}.<br />
+ * you must enable the {@link er.extension.ERXJDBCAdaptor}.<br />
  * <br>
  * The String and Byte based constants can be used with a custom class type:<pre><code>
  * 

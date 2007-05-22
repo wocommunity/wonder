@@ -28,7 +28,7 @@ public class ERXCloneableThreadLocal extends InheritableThreadLocal {
      * The parentValue must implement the {@link Cloneable}
      * interface and have a public <code>clone</code> method.
      * @param parentValue local object to the parent thread.
-     * @retrun a cloned value of the parent if not null.
+     * @return a cloned value of the parent if not null.
      */
     protected Object childValue(Object parentValue) {
         Object child = null;

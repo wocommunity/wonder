@@ -23,7 +23,7 @@ import er.extensions.ERXEOControlUtilities;
  * @binding object object to get list from
  * @binding key keypath to get list from object
  * @binding listConfigurationName name of the page configuration to jump to
- * @bindins entityName
+ * @binding entityName
  */
 
 public class ERDLinkToViewList extends ERDCustomEditComponent {
