@@ -92,7 +92,7 @@ public class ERXEOFAppender extends AppenderSkeleton {
 
     /**
      * Gets the buffer size.
-     * @retrun current buffer size
+     * @return current buffer size
      */
     public int getBufferSize() { return bufferSize; }
 

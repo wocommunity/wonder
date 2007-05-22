@@ -80,7 +80,7 @@ public abstract class ERDAssignment extends Assignment implements ERDComputingAs
      * localizer for the given context. This method belongs to 
      * {@link ERDLocalizableInterface}.
      * @param key to be looked up on the context
-     * @parant c current context
+     * @param c current context
      * @return localized version of the given key returning the key 
      * 		as the default if a localized version isn't found.
      */
@@ -98,7 +98,7 @@ public abstract class ERDAssignment extends Assignment implements ERDComputingAs
      * localizer for the given context. This method belongs to 
      * {@link ERDLocaizableInterface}.
      * @param key to be looked up on the context
-     * @parant c current context
+     * @param c current context
      * @return localized version of the given key if localization .
      */
     public Object localizedValueForKeyInContext(String key, D2WContext c) {
