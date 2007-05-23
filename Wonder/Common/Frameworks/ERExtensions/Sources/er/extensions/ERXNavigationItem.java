@@ -152,7 +152,7 @@ public class ERXNavigationItem {
     			meetsDisplayConditions = qualifier().evaluateWithObject(this) ? Boolean.TRUE : Boolean.FALSE;
     		}
     	}
-    	return meetsDisplayConditions;
+    	return meetsDisplayConditions.booleanValue();
     }
 
 	public NSArray children() {
