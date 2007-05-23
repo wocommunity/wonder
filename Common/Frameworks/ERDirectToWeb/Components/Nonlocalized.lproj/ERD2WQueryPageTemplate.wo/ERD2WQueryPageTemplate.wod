@@ -49,21 +49,21 @@ QueryPageRepetition: ERDQueryPageRepetition {
 	displayGroup = displayGroup;
 }
 
-ClearButton: ERXSubmitButton {
+ClearButton: WOSubmitButton {
 	alt = "Clear Form";
 	value = "Clear";
 	action = clearAction;
 	class = "ClearButton";
 }
 
-QueryButton: ERXSubmitButton {
+QueryButton: WOSubmitButton {
 	action = queryAction;
 	alt = "Find objects matching the query";
 	value = "Find";
 	class = "QueryButton";
 }
 
-ReturnButton: ERXSubmitButton {
+ReturnButton: WOSubmitButton {
 	action = returnAction;
 	alt = "Returns to the previous page";
 	value = "Return";

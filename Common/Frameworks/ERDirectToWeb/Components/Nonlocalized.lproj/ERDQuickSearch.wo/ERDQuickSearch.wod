@@ -1,4 +1,4 @@
-SearchButton : ERXSubmitButton {
+SearchButton : WOSubmitButton {
 	action = searchAction;
 	disabled = disabled;
 	value = ^searchButtonLabel;

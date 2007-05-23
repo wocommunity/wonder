@@ -1,4 +1,4 @@
-CancelButton: ERXSubmitButton {
+CancelButton: ERXSingleButton {
 	alt = "Reverts your changes";
 	value = "Cancel";
 	action = cancelAction;
@@ -25,7 +25,7 @@ ERDPrinterButton: ERDPrinterButton {
 	task = "inspect";
 }
 
-EditButton: ERXSubmitButton {
+EditButton: WOSubmitButton {
 	action = editAction;
 	alt = "Edits this object";
 	value = "Edit";
@@ -85,7 +85,7 @@ PageWrapper: WOSwitchComponent {
 	_unroll = true;
 }
 
-ReturnButton: ERXSubmitButton {
+ReturnButton: WOSubmitButton {
 	alt = "Returns to the previous page";
 	action = nextPage;
 	value = "Return";
@@ -95,7 +95,7 @@ ShowCancel: WOConditional {
 	condition = showCancel;
 }
 
-SubmitChanges: ERXSubmitButton {
+SubmitChanges: WOSubmitButton {
 	action = submitAction;
 	alt = "Saves your changes";
 	value = "Save";
