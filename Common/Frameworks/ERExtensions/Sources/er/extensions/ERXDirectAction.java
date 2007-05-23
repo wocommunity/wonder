@@ -46,7 +46,7 @@ public class ERXDirectAction extends WODirectAction {
      * @return
      */
     private boolean canPerformActionWithPasswordKey(String passwordKey) {
-    	if(ERXApplication.erxApplication().isDevelopmentMode()) {
+    	if(ERXApplication.isDevelopmentModeSafe()) {
     		return true;
     	}
     	String password = System.getProperty(passwordKey);
@@ -352,7 +352,7 @@ public class ERXDirectAction extends WODirectAction {
      */
     public WOActionResults editLocalizedFilesAction() {
     	WOResponse r = null;
-    	if (ERXApplication.erxApplication().isDevelopmentMode()) {
+    	if (ERXApplication.isDevelopmentModeSafe()) {
     		return pageWithName("ERXLocalizationEditor");
     	}
 		return r;

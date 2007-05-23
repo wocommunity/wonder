@@ -138,7 +138,7 @@ public class ERXResourceManager extends WOResourceManager {
 
     private WOURLValuedElementData cachedDataForKey(String key) {
     	WOURLValuedElementData data = (WOURLValuedElementData)urlValuedElementsData.objectForKey(key);
-    	if (data == null && key != null && key.startsWith("file:") && ERXApplication.erxApplication().isDevelopmentMode()) {
+    	if (data == null && key != null && key.startsWith("file:") && ERXApplication.isDevelopmentModeSafe()) {
     		data = cacheDataIfNotInCache(key);
     	}
     	return data;
