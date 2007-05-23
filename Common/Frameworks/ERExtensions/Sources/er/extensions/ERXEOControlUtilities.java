@@ -108,6 +108,26 @@ public class ERXEOControlUtilities {
     }
 
     /**
+     * Simple utility method that will convert an array
+     * of enterprise objects into an EOArrayDataSource.<br/>
+     * <br/>
+     * Note that the datasource that is constructed uses the
+     * class description and editing context of the first object
+     * of the array.
+     * @param array collection of objects to be turned into a
+     *		datasource
+     * @return an array datasource corresponding to the array
+     *		of objects passed in.
+     */
+    public static EOArrayDataSource dataSourceForArray(EOEditingContext ec, String entityName, NSArray array) {
+    	EOArrayDataSource dataSource = new EOArrayDataSource(EOClassDescription.classDescriptionForEntityName(entityName), ec);
+    	if (array != null && array.count() > 0) {
+    		dataSource.setArray(array);
+    	}
+    	return dataSource;
+    }
+
+    /**
      * Converts a datasource into an array.
      * @param dataSource data source to be converted
      * @return array of objects that the data source represents
