@@ -126,7 +126,7 @@ public class Bug extends _Bug implements Markable {
 	}
 
     public Object validateTargetReleaseForNewBugs() throws NSValidation.ValidationException {
-        Release release = Release.clazz.targetRelease(editingContext());
+        Release release = targetRelease();
         if (release != null) {
             if (!release.isOpenAsBoolean())
                 throw new NSValidation.ValidationException("Sorry, the release <b>"+release.valueForKey("name")+"</b> is closed. Bugs/Requirements can only be attached to open releases" );
