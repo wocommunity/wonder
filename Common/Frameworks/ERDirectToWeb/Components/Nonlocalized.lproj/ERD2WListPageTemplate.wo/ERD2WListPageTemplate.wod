@@ -80,7 +80,7 @@ PageWrapper: WOSwitchComponent {
 	_unroll = true;
 }
 
-ReturnButton: ERXSubmitButton {
+ReturnButton: WOSubmitButton {
 	alt = "Returns to the previous page";
 	value = "Return";
 	action = backAction;
