@@ -2,6 +2,7 @@ CancelButton: ERXSubmitButton {
 	alt = "Reverts your changes";
 	value = "Cancel";
 	action = cancelAction;
+	dontSubmitForm = true;
 }
 
 HasChanges: WOConditional {
