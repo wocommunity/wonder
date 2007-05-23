@@ -1,4 +1,4 @@
-CancelButton: ERXSubmitButton {
+CancelButton: ERXSingleButton {
 	action = cancelAction;
 	alt = "Reverts your changes";
 	value = "Cancel";
@@ -42,7 +42,7 @@ InspectPageRepetition: WOSwitchComponent {
 	displayPropertyKeys = currentTab.keys;
 }
 
-PreviousButton: ERXSubmitButton {
+PreviousButton: WOSubmitButton {
     action = previousStep;
     alt = "Previous step";
     value = "Previous";
@@ -55,7 +55,7 @@ PageWrapper: WOSwitchComponent {
 	WOComponentName = d2wContext.pageWrapperName;
 }
 
-NextButton: ERXSubmitButton {
+NextButton: WOSubmitButton {
     action = nextStep;
     alt = "Next step";
     value = "Next";
@@ -88,7 +88,7 @@ Steps: ERXLocalizedString {
 	templateString = "ERD2WWizardCreationPage.stepsMessage";
 }
 
-SaveButton: ERXSubmitButton {
+SaveButton: WOSubmitButton {
 	action = submitAction;
 	alt = "Saves your changes";
 	value = "Save";
