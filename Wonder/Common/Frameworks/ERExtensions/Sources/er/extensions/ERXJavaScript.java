@@ -119,7 +119,7 @@ public class ERXJavaScript extends WOHTMLDynamicElement {
 			if(key != null) {
 				ERXExpiringCache cache = cache(wocontext.session());
 				boolean render = cache.isStale(key);
-				render |= ((ERXApplication)wocomponent.application()).isDevelopmentMode();
+				render |= ERXApplication.isDevelopmentModeSafe();
 				if(render) {
 					WOResponse newresponse = new WOResponse();
 					super.appendChildrenToResponse(newresponse, wocontext);
