@@ -70,7 +70,7 @@ public class ERIndexModel {
 			NSBundle bundle = (NSBundle) bundles.nextElement();
 			URL url = bundle.pathURLForResourcePath("ERIndex.indexModel");
 			if(url != null) {
-				if(ERXApplication.erxApplication().isDevelopmentMode()) {
+				if(ERXApplication.isDevelopmentModeSafe()) {
 					NSSelector selector = ERXSelectorUtilities.notificationSelector("fileDidChange");
 					ERXFileNotificationCenter.defaultCenter().addObserver(this, selector, url.getFile());
 				}

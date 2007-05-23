@@ -140,7 +140,7 @@ public class ERXStyleSheet extends ERXStatelessComponent {
     	if(href == null) {
     		String key = styleSheetKey();
     		ERXExpiringCache cache = cache(session());
-    		if(cache.isStale(key) || ((ERXApplication)application()).isDevelopmentMode()) {
+    		if(cache.isStale(key) || ERXApplication.isDevelopmentModeSafe()) {
     			WOResponse newresponse = new WOResponse();
     			super.appendToResponse(newresponse, wocontext);
     			newresponse.setHeader("text/css", "content-type");

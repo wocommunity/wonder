@@ -72,7 +72,7 @@ public class ERXFileNotificationCenter {
      * warning messages if observers are registered with caching enabled.
      */
     public ERXFileNotificationCenter() {
-    	developmentMode = ERXApplication.erxApplication().isDevelopmentMode();
+    	developmentMode = ERXApplication.isDevelopmentModeSafe();
 
         if (developmentMode || checkFilesPeriod() > 0) {
             ERXRetainer.retain(this);
