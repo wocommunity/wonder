@@ -92,12 +92,12 @@ public class ERXNavigationMenuItem extends ERXStatelessComponent {
             return context().componentActionURL();
         }
         if (navigationItem().directActionName() != null) {
-            if(_linkDirectlyToDirectActions) {
-                NSMutableDictionary bindings = navigationItem().queryBindings().mutableClone();
-                bindings.setObjectForKey(context().contextID(), "__cid");
-                return context().directActionURLForActionNamed(navigationItem().directActionName(), bindings);
-            } else {
-                return context().componentActionURL();
+        	if(_linkDirectlyToDirectActions) {
+        		NSMutableDictionary bindings = navigationItem().queryBindings().mutableClone();
+        		bindings.setObjectForKey(context().contextID(), "__cid");
+        		return context().directActionURLForActionNamed(navigationItem().directActionName(), bindings);
+        	} else {
+        		return context().componentActionURL();
             }
         }
 
@@ -131,33 +131,12 @@ public class ERXNavigationMenuItem extends ERXStatelessComponent {
         return anActionResult;
     }
 
-    /**
-     * Decides whether the item gets displayed at all.
-     * This is done by evaluating the boolean value of a "conditions" array in the definition file.
-     * eg: conditions = ("session.user.canEditThisStuff", "session.user.isEditor")
-     * will display the item only if the user can edit this stuff *and* is an editor. 
-     */
     public boolean meetsDisplayConditions() {
-        if (_meetsDisplayConditions == null) {
-            if(navigationItem() != null) {
-                _meetsDisplayConditions = Boolean.TRUE;
-                if (navigationItem().conditions().count() != 0) {
-                    Enumeration enumerator = navigationItem().conditions().objectEnumerator();
-                    while (enumerator.hasMoreElements()) {
-                        String anObject = (String)enumerator.nextElement();
-                        Object value = valueForKeyPath(anObject);
-                        _meetsDisplayConditions = ERXValueUtilities.booleanValue(value) ? Boolean.TRUE : Boolean.FALSE;
-                        if (log.isDebugEnabled()) {
-                            log.debug(navigationItem().name() + " testing display condition: "+ anObject + " --> " + value  + ":" + _meetsDisplayConditions);
-                        }
-                        if (!_meetsDisplayConditions.booleanValue()) break;
-                    }
-                }
-                if(_meetsDisplayConditions.booleanValue() && navigationItem().qualifier() != null) {
-                    _meetsDisplayConditions = navigationItem().qualifier().evaluateWithObject(this) ? Boolean.TRUE : Boolean.FALSE;
-                }
-            } else {
-                _meetsDisplayConditions = Boolean.FALSE;
+    	if (_meetsDisplayConditions == null) {
+    		if(navigationItem() != null) {
+    			_meetsDisplayConditions = navigationItem().meetsDisplayConditionsInComponent(this) ? Boolean.TRUE :  Boolean.FALSE;
+    		} else {
+    			_meetsDisplayConditions = Boolean.FALSE;
             }
         }
         return _meetsDisplayConditions.booleanValue();
