@@ -6,6 +6,8 @@
 //
 package er.extensions;
 
+import java.util.Enumeration;
+
 import com.webobjects.appserver.WOApplication;
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
@@ -17,6 +19,7 @@ import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
+import com.webobjects.foundation.NSMutableSet;
 import com.webobjects.foundation.NSNotification;
 import com.webobjects.foundation.NSNotificationCenter;
 
@@ -27,11 +30,17 @@ public class ERXWOContext extends WOContext implements ERXMutableUserInfoHolderI
     private static Observer observer;
     private boolean _generateCompleteURLs;
 
+    private static final String CONTEXT_DICTIONARY_KEY = "ERXWOContext.dict";
 	private static final String SECURE_RESOURCES_KEY = "er.ajax.secureResources";
 
     public static class Observer {
-    	public void applicationDidHandleRequest(NSNotification n) {
-    		ERXThreadStorage.removeValueForKey("ERXWOContext.dict");
+		public void applicationDidHandleRequest(NSNotification n) {
+    		WOResponse response = (WOResponse)n.object();
+    		NSMutableDictionary contextDictionary = ERXWOContext._contextDictionary();
+    		if (contextDictionary != null) {
+    			ERXWOContext._insertPendingInResponse(response);
+    		}
+    		ERXThreadStorage.removeValueForKey(ERXWOContext.CONTEXT_DICTIONARY_KEY);
     	}
     }
     
@@ -51,14 +60,18 @@ public class ERXWOContext extends WOContext implements ERXMutableUserInfoHolderI
     			}
     		}
     	}
-    	NSMutableDictionary result = (NSMutableDictionary)ERXThreadStorage.valueForKey("ERXWOContext.dict"); 
-    	if(result == null) {
-    		result = new NSMutableDictionary();
-    		ERXThreadStorage.takeValueForKey(result, "ERXWOContext.dict");
+    	NSMutableDictionary contextDictionary = ERXWOContext._contextDictionary(); 
+    	if(contextDictionary == null) {
+    		contextDictionary = new NSMutableDictionary();
+    		ERXThreadStorage.takeValueForKey(contextDictionary, ERXWOContext.CONTEXT_DICTIONARY_KEY);
     	}
-     	return result;
+     	return contextDictionary;
     }
 
+    protected static NSMutableDictionary _contextDictionary() {
+    	NSMutableDictionary contextDictionary = (NSMutableDictionary)ERXThreadStorage.valueForKey(ERXWOContext.CONTEXT_DICTIONARY_KEY); 
+    	return contextDictionary;
+    }
 
     public ERXWOContext(WORequest worequest) {
         super(worequest);
@@ -88,7 +101,7 @@ public class ERXWOContext extends WOContext implements ERXMutableUserInfoHolderI
         return contextDictionary();
     }
     public void setMutableUserInfo(NSMutableDictionary userInfo) {
-        ERXThreadStorage.takeValueForKey(userInfo, "ERXWOContext.dict");
+        ERXThreadStorage.takeValueForKey(userInfo, ERXWOContext.CONTEXT_DICTIONARY_KEY);
     }
     public NSDictionary userInfo() {
         return mutableUserInfo();
@@ -198,8 +211,19 @@ public class ERXWOContext extends WOContext implements ERXMutableUserInfoHolderI
     }
 
 
-	public static String htmlCloseHead(String head) {
-		return (head == null ? "</head>" : head);
+    /**
+     * Returns the tag name that scripts and resources should be inserted above.  Defaults to
+     * &lt;/head&gt;, but this can be overridden by setting the property
+     * er.ajax.AJComponent.htmlCloseHead.
+     * 
+     * @return
+     */
+	public static String _htmlCloseHeadTag() {
+		String closeHeadTag = System.getProperty("er.ajax.AJComponent.htmlCloseHead");
+		if (closeHeadTag == null) {
+			closeHeadTag = "</head>";
+		}
+		return closeHeadTag;
 	}
 
 	/**
@@ -209,26 +233,60 @@ public class ERXWOContext extends WOContext implements ERXMutableUserInfoHolderI
 	 * @param content
 	 * @param tag
 	 */
-	public static void insertInResponseBeforeTag(WOResponse response, String content, String tag, boolean skipIfTagMissing) {
+	public static void insertInResponseBeforeTag(WOResponse response, String content, String tag, boolean appendIfTagMissing, boolean enqueueIfTagMissing) {
+		ERXWOContext._insertInResponseBeforeTag(response, content, tag, appendIfTagMissing, enqueueIfTagMissing);
+	}
+	
+	protected static void _insertPendingInResponse(WOResponse response) {
+		NSMutableDictionary contextDictionary = ERXWOContext.contextDictionary();
+		NSMutableDictionary pendingInserts = (NSMutableDictionary)contextDictionary.objectForKey("ERXWOContext.pendingInserts");
+		if (pendingInserts != null) {
+			Enumeration tagEnum = pendingInserts.keyEnumerator();
+			while (tagEnum.hasMoreElements()) {
+				String tag = (String)tagEnum.nextElement();
+				NSMutableArray contents = (NSMutableArray)pendingInserts.objectForKey(tag);
+				if (contents != null) {
+					Enumeration contentsEnum = contents.objectEnumerator();
+					while (contentsEnum.hasMoreElements()) {
+						String content = (String)contentsEnum.nextElement();
+							ERXWOContext._insertInResponseBeforeTag(response, content, tag, true, false);
+					}
+				}
+			}
+		}
+	}
+	
+	protected static void _insertInResponseBeforeTag(WOResponse response, String content, String tag, boolean appendIfTagMissing, boolean enqueueIfTagMissing) {
 		String stream = response.contentString();
-		int idx = stream.indexOf(tag);
-		if (idx < 0) {
-			idx = stream.toLowerCase().indexOf(tag.toLowerCase());
+		int tagIndex = stream.indexOf(tag);
+		if (tagIndex < 0) {
+			tagIndex = stream.toLowerCase().indexOf(tag.toLowerCase());
 		}
-		if (idx >= 0) {
-			String pre = stream.substring(0, idx);
-			String post = stream.substring(idx, stream.length());
-			response.setContent(pre + content + post);
-		} else if (!skipIfTagMissing) {
-			//ak: not found, we append anyway as we may be in the tag itself
-			response._appendContentAsciiString(content);
+		if (tagIndex >= 0) {
+			StringBuffer sb = new StringBuffer(stream.length() + content.length());
+			sb.append(stream.substring(0, tagIndex));
+			sb.append(content);
+			sb.append(stream.substring(tagIndex));
+			response.setContent(sb.toString());
+		}
+		else if (appendIfTagMissing) {
+			response.appendContentString(content);
+		}
+		else if (enqueueIfTagMissing) {
+			NSMutableDictionary contextDictionary = ERXWOContext.contextDictionary();
+			NSMutableDictionary pendingInserts = (NSMutableDictionary)contextDictionary.objectForKey("ERXWOContext.pendingInserts");
+			if (pendingInserts == null) {
+				pendingInserts = new NSMutableDictionary();
+				contextDictionary.setObjectForKey(pendingInserts, "ERXWOContext.pendingInserts");
+			}
+			NSMutableArray pendingInsertsForTag = (NSMutableArray) pendingInserts.objectForKey(tag);
+			if (pendingInsertsForTag == null) {
+				pendingInsertsForTag = new NSMutableArray();
+				pendingInserts.setObjectForKey(pendingInsertsForTag, tag);
+			}
+			pendingInsertsForTag.addObject(content);
 		}
 	}
-
-	public static void addResourceInHead(WOContext context, WOResponse response, String framework, String fileName, String startTag, String endTag) {
-		ERXWOContext.addResourceInHead(context, response, framework, fileName, startTag, endTag, false);
-	}
-
 
 	/**
 	 * Adds a reference to an arbitrary file with a correct resource url wrapped between startTag and endTag in the html
@@ -239,10 +297,15 @@ public class ERXWOContext extends WOContext implements ERXMutableUserInfoHolderI
 	 * @param startTag
 	 * @param endTag
 	 */
-	public static void addResourceInHead(WOContext context, WOResponse response, String framework, String fileName, String startTag, String endTag, boolean skipIfTagMissing) {
+	public static void addResourceInHead(WOContext context, WOResponse response, String framework, String fileName, String startTag, String endTag, boolean appendIfTagMissing, boolean enqueueIfTagMissing) {
 		NSMutableDictionary userInfo = contextDictionary();
-		if (userInfo.objectForKey(fileName) == null) {
-			userInfo.setObjectForKey(fileName, fileName);
+		NSMutableSet addedResources = (NSMutableSet)userInfo.objectForKey("ERXWOContext.addedResources");
+		boolean insertResource = true;
+		if (addedResources == null) {
+			addedResources = new NSMutableSet();
+			userInfo.setObjectForKey(addedResources, "ERXWOContext.addedResources");
+		}
+		if (!addedResources.containsObject(fileName)) {
 			String url;
 			if (fileName.indexOf("://") != -1 || fileName.startsWith("/")) {
 				url = fileName;
@@ -262,9 +325,8 @@ public class ERXWOContext extends WOContext implements ERXMutableUserInfoHolderI
 				}
 			}
 			String html = startTag + url + endTag + "\n";
-			insertInResponseBeforeTag(response, html, htmlCloseHead(System.getProperty("er.ajax.AJComponent.htmlCloseHead")), skipIfTagMissing);
+			ERXWOContext.insertInResponseBeforeTag(response, html, ERXWOContext._htmlCloseHeadTag(), appendIfTagMissing, enqueueIfTagMissing);
+			addedResources.addObject(fileName);
 		}
 	}
-
-
 }
