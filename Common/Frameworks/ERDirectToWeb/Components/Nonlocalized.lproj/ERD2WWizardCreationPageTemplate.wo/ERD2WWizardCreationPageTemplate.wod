@@ -3,6 +3,7 @@ CancelButton: ERXSubmitButton {
 	alt = "Reverts your changes";
 	value = "Cancel";
 	class = "CancelButton";
+	dontSubmitForm = true;
 }
 
 ERDBannerComponent: ERDBannerComponent {
