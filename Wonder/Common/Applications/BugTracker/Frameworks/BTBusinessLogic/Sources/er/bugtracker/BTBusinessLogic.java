@@ -39,7 +39,7 @@ delete from BUG_TEST_ITEM;
 delete from COMPONENT;
 delete from Comment;
 delete from EO_PK_TABLE;
-delete from RELEASE;
+delete from `RELEASE`;
 delete from REQUIREMENT;
 delete from REQ_TEST_ITEM;
 delete from TEST_ITEM;
@@ -223,7 +223,7 @@ delete from TEST_ITEM;
                     addComments(bug);
                 }
 
-                for(int i = 100; i < 100 + MAX * 3; i++) {
+                for(int i = 100; i < 100 + MAX * 9; i++) {
                     People.clazz.setCurrentUser(randomUser());
                     TestItem testItem = (TestItem) TestItem.clazz.createAndInsertObject(ec);
                     testItems.addObject(testItem);
@@ -232,7 +232,7 @@ delete from TEST_ITEM;
                     Component component = randomComponent();
                     if(state == TestItemState.REQ) {
                         bug = randomRequirement();
-                    } else if (state == TestItemState.REQ) {
+                    } else if (state == TestItemState.BUG) {
                         bug = randomBug();
                     }
                     testItem.setDateCreated(randomTimestamp());
