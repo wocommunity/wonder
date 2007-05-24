@@ -292,7 +292,7 @@ public class AjaxUtils {
 			if (value == null) {
 				value = appendValue;
 			}
-			else {
+			else if (appendValue != null && appendValue.length() > 0) {
 				if (!value.endsWith(";")) {
 					value += ";";
 				}
