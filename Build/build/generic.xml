@@ -290,10 +290,9 @@ There are many ways to use this script:
                     <include name="**/*.jar" />
                 </fileset>
             </classpath>
-           <frameworks dir="${wonder.lib.root}" if="wonder.lib.root.bundles" bundles="${wonder.lib.root.bundles}">
-           </frameworks>
-           <frameworks dir="${wo.frameworks}" if="wo.frameworks.bundles" bundles="${wo.frameworks.bundles}">
-           </frameworks>
+           <frameworks dir="${wonder.lib.root}" if="wonder.lib.root.bundles" bundles="${wonder.lib.root.bundles}" embed="${wonder.lib.root.bundles.embed}"/>
+           <frameworks dir="${wo.frameworks}" if="wo.frameworks.bundles" bundles="${wo.frameworks.bundles}" embed="${wo.frameworks.bundles.embed}" />
+           
             <!-- this should be an exact copy of the frameworks in the woapplication task --> 
             <frameworks dir="${wonder.lib.root}" if="use.wonder.jars"> 
                 <include name="ERJars.framework" />
@@ -460,7 +459,9 @@ There are many ways to use this script:
         <taskdef name="woapplication" classname="org.objectstyle.woproject.ant.WOApplication">
             <classpath refid="ant.classpath"/>
         </taskdef>
-
+        <condition property="use.system.bundles">
+            <not><isset property="wo.frameworks.bundles"/></not>
+        </condition>
         <woapplication name="${project.name}" destDir="${build.root}" principalClass="${project.principal.class}" jarName="${project.name}" stdFrameworks="false" version="${project.version}">
             <classes dir="${build.classes}">
                 <include name="**/*.class" />
@@ -480,10 +481,9 @@ There are many ways to use this script:
             </wsresources>
             
             <!-- this should be an exact copy of the frameworks in the woapplication task --> 
-           <frameworks dir="${wonder.lib.root}" if="wonder.lib.root.bundles" bundles="${wonder.lib.root.bundles}">
-           </frameworks>
-           <frameworks dir="${wo.frameworks}" if="wo.frameworks.bundles" bundles="${wo.frameworks.bundles}">
-           </frameworks>
+           <frameworks dir="${wonder.lib.root}" if="wonder.lib.root.bundles" bundles="${wonder.lib.root.bundles}" embed="${wonder.lib.root.bundles.embed}"/>
+           <frameworks dir="${wo.frameworks}" if="wo.frameworks.bundles" bundles="${wo.frameworks.bundles}" embed="${wo.frameworks.bundles.embed}" />
+           
            <frameworks dir="${wonder.lib.root}" if="use.wonder.jars"> 
                 <include name="ERJars.framework" />
             </frameworks>
@@ -582,7 +582,7 @@ There are many ways to use this script:
            <frameworks dir="${wonder.lib.root}" if="use.additional.framework.15">
                 <include name="${use.additional.framework.15}"/>
            </frameworks>
-           <frameworks dir="${wo.woroot}/Library/Frameworks"> 
+           <frameworks dir="${wo.woroot}/Library/Frameworks" if="false"> 
                 <include name="JavaFoundation.framework" />
                 <include name="JavaEOAccess.framework" />
                 <include name="JavaEOControl.framework" />
@@ -592,7 +592,7 @@ There are many ways to use this script:
                 <include name="JavaJDBCAdaptor.framework" />
                 <include name="JavaXML.framework" />
             </frameworks>
-            <frameworks dir="${wonder.lib.root}"> 
+            <frameworks dir="${wonder.lib.root}" if="use.system.bundles"> 
                 <include name="JavaWOExtensions.framework" />
             </frameworks>
             <frameworks dir="${wo.woroot}/Library/Frameworks" if="use.webobjects.webservices.server"> 
