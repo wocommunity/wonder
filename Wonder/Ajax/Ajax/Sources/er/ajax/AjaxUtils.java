@@ -289,7 +289,7 @@ public class AjaxUtils {
 			if (association != null) {
 				value = (String) association.valueInComponent(component);
 			}
-			if (value == null) {
+			if (value == null || value.length() == 0) {
 				value = appendValue;
 			}
 			else if (appendValue != null && appendValue.length() > 0) {
