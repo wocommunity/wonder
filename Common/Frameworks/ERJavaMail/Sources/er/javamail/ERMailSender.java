@@ -6,6 +6,7 @@
 
 package er.javamail;
 
+import java.net.ConnectException;
 import java.util.Enumeration;
 
 import javax.mail.MessagingException;
@@ -255,6 +256,8 @@ public class ERMailSender implements Runnable {
 			log.error("Unable to connect to SMTP Transport. MessagingException: " + e.getMessage(), e);
 			if (_throwExceptionIfConnectionFails) {
 				throw e;
+			} else {
+				log.error("Unable to connect to SMTP Transport. MessagingException: " + e.getMessage(), e);
 			}
 		}
 
@@ -303,6 +306,10 @@ public class ERMailSender implements Runnable {
 						}
 					} catch (MessagingException e) {
 						log.error("General mail error: " + e, e);
+						if (e.getNextException() instanceof ConnectException) {
+							log.error("Can't connect to mail server, waiting");
+							Thread.sleep(10000);
+						}
 					}
 
 				}
