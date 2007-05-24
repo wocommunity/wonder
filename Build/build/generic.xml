@@ -582,7 +582,7 @@ There are many ways to use this script:
            <frameworks dir="${wonder.lib.root}" if="use.additional.framework.15">
                 <include name="${use.additional.framework.15}"/>
            </frameworks>
-           <frameworks dir="${wo.woroot}/Library/Frameworks" if="false"> 
+           <frameworks dir="${wo.woroot}/Library/Frameworks" if="use.system.bundles"> 
                 <include name="JavaFoundation.framework" />
                 <include name="JavaEOAccess.framework" />
                 <include name="JavaEOControl.framework" />
