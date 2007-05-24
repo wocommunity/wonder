@@ -7,6 +7,7 @@
 package er.javamail;
 
 import java.net.ConnectException;
+import java.net.UnknownHostException;
 import java.util.Enumeration;
 
 import javax.mail.MessagingException;
@@ -305,10 +306,14 @@ public class ERMailSender implements Runnable {
 							transport.close();
 						}
 					} catch (MessagingException e) {
-						log.error("General mail error: " + e, e);
 						if (e.getNextException() instanceof ConnectException) {
 							log.error("Can't connect to mail server, waiting");
 							Thread.sleep(10000);
+						} else if (e.getNextException() instanceof UnknownHostException) {
+							log.error("Can't find to mail server, exiting");
+							return;
+						} else {
+							log.error("General mail error: " + e, e);
 						}
 					}
 
