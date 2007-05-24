@@ -18,6 +18,7 @@ import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation.NSNotification;
 import com.webobjects.foundation.NSSelector;
+import com.webobjects.foundation._NSUtilities;
 
 /** Please read "Documentation/Navigation.html" to fnd out how to use the navigation components.*/
 public class ERXNavigationManager {
@@ -133,12 +134,21 @@ public class ERXNavigationManager {
         }
     }
 
+    public ERXNavigationItem newNavigationItem(NSDictionary dict) {
+    	String className = (String) dict.objectForKey("navigationItemClassName");
+    	if(className != null) {
+    		Class c = ERXPatcher.classForName(className);
+    		return (ERXNavigationItem) _NSUtilities.instantiateObject(c, new Class[] {NSDictionary.class}, new Object[]{dict}, true, true);
+    	}
+    	return new ERXNavigationItem(dict);
+    }
+    
     protected NSArray createNavigationItemsFromDictionaries(NSArray navItems) {
         NSMutableArray navigationItems = null;
         if (navItems != null && navItems.count() > 0) {
             navigationItems = new NSMutableArray();
             for (Enumeration e = navItems.objectEnumerator(); e.hasMoreElements();) {
-                navigationItems.addObject(new ERXNavigationItem((NSDictionary)e.nextElement()));
+                navigationItems.addObject(newNavigationItem((NSDictionary)e.nextElement()));
             }
         }
         return navigationItems != null ? navigationItems : NSArray.EmptyArray;
