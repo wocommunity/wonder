@@ -1408,4 +1408,15 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 	public String _rewriteURL(String url) {
 		return url;
 	}
+
+	/**
+	 * Set the default endocing of the app (message encodings)
+	 * @param encoding
+	 */
+	public void setDefaultEncoding(String encoding) {
+        WOMessage.setDefaultEncoding(encoding);
+        WOMessage.setDefaultURLEncoding(encoding);
+        ERXMessageEncoding.setDefaultEncoding(encoding);
+        ERXMessageEncoding.setDefaultEncodingForAllLanguages(encoding);
+	}
 }
