@@ -151,7 +151,7 @@ public class ERXNavigationMenuItem extends ERXStatelessComponent {
                     _navigationItem = ERXNavigationManager.manager().navigationItemForName(name);
                 } else {
                     log.warn("Navigation unset: " + name);
-                    _navigationItem = new ERXNavigationItem(new NSDictionary(name, "name"));
+                    _navigationItem = ERXNavigationManager.manager().newNavigationItem(new NSDictionary(name, "name"));
                 }
             }
         }
