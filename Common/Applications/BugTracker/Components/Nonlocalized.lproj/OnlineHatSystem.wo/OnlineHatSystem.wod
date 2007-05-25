@@ -4,17 +4,17 @@ GenericContainer1: WOGenericContainer {
 }
 
 HasNoOwner: ERXNonNullConditional {
-	condition = directtowebfile.owner;
+	condition = currentFramework.owner;
 	negate = true;
 }
 
 HasNoOwner2: ERXNonNullConditional {
-	condition = directtowebfile.owner;
+	condition = currentFramework.owner;
 	negate = false;
 }
 
 HasOwner: ERXNonNullConditional {
-	condition = directtowebfile.owner;
+	condition = currentFramework.owner;
 }
 
 Hyperlink1: WOHyperlink {
@@ -27,30 +27,30 @@ Hyperlink2: WOHyperlink {
 
 OwnerIsUser: ERXEqualConditional {
 	negated = true;
-	value1 = directtowebfile.owner;
-	value2 = localUser;
+	value1 = currentFramework.owner;
+	value2 = session.user;
 }
 
 OwnerIsUser2: ERXEqualConditional {
-	value1 = directtowebfile.owner;
-	value2 = localUser;
+	value1 = currentFramework.owner;
+	value2 = session.user;
 }
 
 Repetition2: WORepetition {
-	item = directtowebfile;
-	list = directtowebfiles;
+	item = currentFramework;
+	list = frameworks;
 }
 
 String1: WOString {
-	value = directtowebfile.name;
+	value = currentFramework.name;
 }
 
 String2: WOString {
-	value = directtowebfile.owner.name;
+	value = currentFramework.owner.name;
 }
 
 String3: WOString {
-	value = directtowebfile.ownedSince;
+	value = currentFramework.ownedSince;
 	dateformat = "%m/%d/%y at %I:%M:%S %p";
 }
 

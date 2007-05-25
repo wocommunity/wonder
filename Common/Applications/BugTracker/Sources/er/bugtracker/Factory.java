@@ -1,5 +1,7 @@
 package er.bugtracker;
 
+import java.util.Enumeration;
+
 import com.webobjects.appserver.WOApplication;
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WODisplayGroup;
@@ -10,7 +12,6 @@ import com.webobjects.directtoweb.InspectPageInterface;
 import com.webobjects.directtoweb.ListPageInterface;
 import com.webobjects.directtoweb.NextPageDelegate;
 import com.webobjects.directtoweb.QueryPageInterface;
-import com.webobjects.eoaccess.EOAttribute;
 import com.webobjects.eoaccess.EODatabaseDataSource;
 import com.webobjects.eocontrol.EOAndQualifier;
 import com.webobjects.eocontrol.EOArrayDataSource;
@@ -19,16 +20,19 @@ import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.eocontrol.EOEnterpriseObject;
 import com.webobjects.eocontrol.EOFetchSpecification;
 import com.webobjects.eocontrol.EOKeyValueQualifier;
+import com.webobjects.eocontrol.EOOrQualifier;
 import com.webobjects.eocontrol.EOQualifier;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSKeyValueCoding;
+import com.webobjects.foundation.NSMutableArray;
 
 import er.directtoweb.ERD2WFactory;
 import er.directtoweb.ERD2WInspectPage;
 import er.directtoweb.ERD2WQueryPage;
 import er.extensions.ERXEC;
 import er.extensions.ERXExtensions;
+import er.extensions.ERXLocalizer;
 import er.extensions.ERXStringUtilities;
 
 /**
@@ -94,6 +98,10 @@ public class Factory extends ERD2WFactory implements NSKeyValueCoding {
     
     private Session session() {
         return (Session) ERXExtensions.session();
+    }
+    
+    public WOComponent currentPage() {
+        return session().context().page();
     }
     
     private People currentUser(EOEditingContext ec) {
@@ -188,8 +196,53 @@ public class Factory extends ERD2WFactory implements NSKeyValueCoding {
     public WOComponent createTestItem() {
         ERD2WInspectPage page = (ERD2WInspectPage) createPageNamed("CreateTestItem");
         EOEnterpriseObject eo = (EOEnterpriseObject) page.object();
-        applyCurrentUser(eo, "owner");
+        applyCurrentUser(eo, TestItem.Key.OWNER);
         return (WOComponent) page;
+    }
+    
+    public WOComponent createBugFromTestItem(TestItem testItem) {
+        EOEditingContext peer = ERXEC.newEditingContext(testItem.editingContext().parentObjectStore());
+        EditPageInterface epi = null;
+        peer.lock();
+        try {
+            testItem = (TestItem) testItem.localInstanceIn(peer);
+            People user = People.clazz.currentUser(peer);
+            Component component = testItem.component();
+
+            Bug bug = (Bug) Bug.clazz.createAndInsertObject(peer);
+            testItem.setState(TestItemState.BUG);
+
+            bug.setTextDescription("[From Test #" + testItem.primaryKey()+"]");
+            bug.addTestItem(testItem);
+            bug.updateOriginator(user);
+            bug.updateComponent(component);
+
+            epi=(EditPageInterface)createPageNamed("CreateBug");
+            epi.setObject(bug);
+            epi.setNextPage(session().context().page());
+        } finally {
+            peer.unlock();
+        }
+         return (WOComponent)epi;        
+    }
+
+    public WOComponent createTestItemFromBug(Bug bug) {
+        EOEditingContext peer = ERXEC.newEditingContext(bug.editingContext().parentObjectStore());
+        peer.lock();
+        try {
+            bug = (Bug) bug.localInstanceIn(peer);
+            TestItem testItem = (TestItem) TestItem.clazz.createAndInsertObject(peer);
+            testItem.updateComponent(bug.component());
+            String description = ERXLocalizer.currentLocalizer().localizedTemplateStringForKeyWithObject("CreateTestItemFromReq.templateString", this);
+            testItem.setTextDescription(description);
+            bug.addTestItem(testItem);
+            EditPageInterface epi=(EditPageInterface)createPageNamed("CreateTestItemFrom" + bug.entityName() );
+            epi.setObject(testItem);
+            epi.setNextPage(session().context().page());
+            return (WOComponent)epi;
+        } finally {
+            peer.unlock();
+        }
     }
 
     public WOComponent listMyTestItems() {
@@ -305,5 +358,36 @@ public class Factory extends ERD2WFactory implements NSKeyValueCoding {
     	page.setShowResults(true);
     	return page;
     }
+    
+    public WOComponent findBugs(String string) {
+        NSArray a=NSArray.componentsSeparatedByString(string," ");
+        NSMutableArray quals=new NSMutableArray();
+        for (Enumeration e=a.objectEnumerator(); e.hasMoreElements();) {
+            String s=(String)e.nextElement();
+            try {
+                Integer i=new Integer(s);
+                quals.addObject(new EOKeyValueQualifier("id", EOQualifier.QualifierOperatorEqual, i));
 
+            } catch (NumberFormatException ex) {}
+        }
+        EOOrQualifier or=new EOOrQualifier(quals);
+        EODatabaseDataSource ds=new EODatabaseDataSource(session().defaultEditingContext(), "Bug");
+        EOFetchSpecification fs=new EOFetchSpecification("Bug",or,null);
+        ds.setFetchSpecification(fs);
+        NSArray bugs = ds.fetchObjects();
+        WOComponent result;
+        if (bugs != null && bugs.count() == 1) {
+            InspectPageInterface ipi = D2W.factory().inspectPageForEntityNamed("Bug", session());
+            ipi.setObject((EOEnterpriseObject) bugs.objectAtIndex(0));
+            ipi.setNextPage(currentPage());
+            result = (WOComponent) ipi;
+        } else {
+            ds.setFetchSpecification(fs);
+            ListPageInterface lpi = (ListPageInterface) D2W.factory().listPageForEntityNamed("Bug", session());
+            lpi.setDataSource(ds);
+            lpi.setNextPage(currentPage());
+            result = (WOComponent) lpi;
+        }
+        return result;            
+    }
 }

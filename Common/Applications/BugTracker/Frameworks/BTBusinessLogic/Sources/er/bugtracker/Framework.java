@@ -5,6 +5,7 @@ import org.apache.log4j.Logger;
 
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSTimestamp;
 
 public class Framework extends _Framework {
     static final Logger log = Logger.getLogger(Framework.class);
@@ -13,11 +14,24 @@ public class Framework extends _Framework {
         super();
     }
 
-    public void awakeFromInsertion(EOEditingContext ec) {
-        super.awakeFromInsertion(ec);
+    public void init(EOEditingContext ec) {
+        super.init(ec);
     }
     
+    public void grabHat() {
+        updateOwner(People.clazz.currentUser(editingContext()));
+        setOwnedSince(new NSTimestamp());
+    }
     
+    public void releaseHat() {
+        updateOwner(null);
+        setOwnedSince(null);
+    }
+
+    private void updateOwner(People people) {
+        addObjectToBothSidesOfRelationshipWithKey(people, Key.OWNER);
+    }
+
     // Class methods go here
 
     public static class FrameworkClazz extends _FrameworkClazz {
