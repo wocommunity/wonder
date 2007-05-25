@@ -116,4 +116,8 @@ public class Component extends _Component {
 
 	public static ComponentClazz clazz = new ComponentClazz();
 
+    public void addChild(Component component) {
+        addObjectToBothSidesOfRelationshipWithKey(component, Key.CHILDREN);
+    }
+
 }

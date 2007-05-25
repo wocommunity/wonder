@@ -12,23 +12,25 @@ import java.math.BigDecimal;
 
 public abstract class _Difficulty extends ERXGenericRecord {
 
-    public _Difficulty() {
-        super();
+    public interface Key  {
+        public static final String DIFFICULTY_DESCRIPTION = "difficultyDescription";  
     }
 
-    public static abstract class _DifficultyClazz extends er.extensions.ERXGenericRecord.ERXGenericRecordClazz {
+    public static abstract class _DifficultyClazz extends ERXGenericRecord.ERXGenericRecordClazz {
 
-        public NSArray fetchAll(EOEditingContext ec) {
-            return EOUtilities.objectsWithFetchSpecificationAndBindings(ec, "Difficulty", "FetchAll", null);
+        public NSArray objectsForFetchAll(EOEditingContext context) {
+            EOFetchSpecification spec = EOFetchSpecification.fetchSpecificationNamed("FetchAll", "Difficulty");
+
+            return context.objectsWithFetchSpecification(spec);
         }
 
     }
 
 
     public String difficultyDescription() {
-        return (String)storedValueForKey("difficultyDescription");
+        return (String)storedValueForKey(Key.DIFFICULTY_DESCRIPTION);
     }
     public void setDifficultyDescription(String aValue) {
-        takeStoredValueForKey(aValue, "difficultyDescription");
+        takeStoredValueForKey(aValue, Key.DIFFICULTY_DESCRIPTION);
     }
 }

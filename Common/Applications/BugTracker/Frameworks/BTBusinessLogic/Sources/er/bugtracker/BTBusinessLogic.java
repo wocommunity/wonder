@@ -8,6 +8,8 @@ package er.bugtracker;
 
 import java.util.Random;
 
+import org.apache.log4j.Logger;
+
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSMutableArray;
@@ -23,6 +25,8 @@ import er.extensions.ERXStringUtilities;
 public class BTBusinessLogic extends ERXFrameworkPrincipal {
 
     public final static Class REQUIRES[] = new Class[] {ERXExtensions.class, ERCoreBusinessLogic.class};
+    
+    private static final Logger log = Logger.getLogger(BTBusinessLogic.class);
     
     static {
         setUpFrameworkPrincipalClass(BTBusinessLogic.class);
@@ -141,7 +145,9 @@ delete from TEST_ITEM;
                 testItemStates = TestItemState.clazz.allObjects(ec).mutableClone();
                 requirementTypes = RequirementType.clazz.allObjects(ec).mutableClone();
                 requirementSubTypes = RequirementSubType.clazz.allObjects(ec).mutableClone();
-
+                
+                log.info("Creating users");
+                
                 for(int i = 100; i < 150; i++) {
                     People user = (People)People.clazz.createAndInsertObject(ec);
                     users.addObject(user);
@@ -149,13 +155,14 @@ delete from TEST_ITEM;
                     user.setName(ERXStringUtilities.capitalizeAllWords(randomWords(20)) + " " + i);
                     user.setEmail("dummy@localhost");
                     user.setPassword("user");
-                    user.setIsActive(new Integer(i % 10 == 0 ? 0 :  1));
-                    user.setIsAdmin(new Integer(i % 5 == 0 ? 0 :  1));
-                    user.setIsCustomerService(new Integer(i % 3 == 0 ? 0 :  1));
-                    user.setIsEngineering(new Integer(i % 3 != 0 || user.isAdminAsBoolean() ? 0 :  1));
+                    user.setIsActive(i % 10 != 0);
+                    user.setIsAdmin(i % 5 != 0);
+                    user.setIsCustomerService(i % 3 != 0);
+                    user.setIsEngineering(i % 3 != 0 && !user.isAdmin());
                 }
 
-
+                log.info("Creating releases and components");
+                
                 for(int i = 1; i < 10; i++) {
                     Release release = (Release) Release.clazz.createAndInsertObject(ec);
                     release.setName("Release R" + i/2);
@@ -171,13 +178,15 @@ delete from TEST_ITEM;
                     component.setTextDescription("Component " + i/2);
                     if(i % 2 == 1) {
                         Component parent = (Component) components.lastObject();
-                        parent.addToBothSidesOfChildren(component);
+                        parent.addChild(component);
                         component.setTextDescription("Component " + i/2 + ".1");
                     }
                     components.addObject(component);
                 }
 
                 int MAX = 500;
+
+                log.info("Creating bugs: "+ (MAX-100));
                 
                 for(int i = 100; i < 100 + MAX; i++) {
                     People.clazz.setCurrentUser(randomUser());
@@ -194,11 +203,13 @@ delete from TEST_ITEM;
                     bug.setTextDescription(randomText(3));
                     bug.setPriority(randomPriority());
                     bug.setState(randomState());
-                    bug.setFeatureRequest(new Boolean(i % 4 == 0));
+                    bug.setFeatureRequest(i % 4 == 0);
                     bug.setTargetRelease(randomRelease());
 
                     addComments(bug);
-               }
+                }
+
+                log.info("Creating requirements: "+ (MAX-100));
                 
                 for(int i = 100; i < 100 + MAX; i++) {
                     People.clazz.setCurrentUser(randomUser());
@@ -215,7 +226,7 @@ delete from TEST_ITEM;
                     bug.setTextDescription(randomText(3));
                     bug.setPriority(randomPriority());
                     bug.setState(randomState());
-                    bug.setFeatureRequest(new Boolean(i % 4 == 0));
+                    bug.setFeatureRequest(i % 4 == 0);
                     bug.setTargetRelease(randomRelease());
                     
                     bug.setRequirementType(randomRequirementType());
@@ -223,6 +234,8 @@ delete from TEST_ITEM;
                     addComments(bug);
                 }
 
+                log.info("Creating test items: "+ (MAX * 9-100));
+                
                 for(int i = 100; i < 100 + MAX * 9; i++) {
                     People.clazz.setCurrentUser(randomUser());
                     TestItem testItem = (TestItem) TestItem.clazz.createAndInsertObject(ec);
@@ -242,7 +255,7 @@ delete from TEST_ITEM;
                     testItem.setOwner(randomUser());
                     testItem.setState(state);
                     if(bug != null) {
-                        bug.addToBothSidesOfTestItems(testItem);
+                        bug.addTestItem(testItem);
                         component = bug.component();
                     }
                     testItem.setComponent(component);
@@ -253,12 +266,14 @@ delete from TEST_ITEM;
                 user.setName("Administrator");
                 user.setEmail("dummy@localhost");
                 user.setPassword("admin");
-                user.setIsActive(new Integer(1));
-                user.setIsAdmin(new Integer(1));
-                user.setIsCustomerService(new Integer(0));
-                user.setIsEngineering(new Integer(1));
+                user.setIsActive(true);
+                user.setIsAdmin(true);
+                user.setIsCustomerService(false);
+                user.setIsEngineering(true);
 
+                log.info("Saving...");
                 ec.saveChanges();
+                log.info("Done");
             } finally {
                 ec.unlock();
             }

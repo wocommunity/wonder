@@ -37,7 +37,7 @@ public class ViewUser extends WOComponent {
     }
 
     public boolean userIsNotEngineering() {
-        return user() != null && !user().isEngineeringAsBoolean();
+        return user() != null && !user().isEngineering();
     }
 
     public boolean userIsNotSelf() {

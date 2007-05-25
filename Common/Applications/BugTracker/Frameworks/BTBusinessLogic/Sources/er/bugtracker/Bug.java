@@ -25,14 +25,18 @@ public class Bug extends _Bug implements Markable {
         super.init(ec);
         setPriority(Priority.MEDIUM);
         setState(State.ANALYZE);
-        addToBothSidesOfTargetRelease(Release.clazz.defaultRelease(ec));
+        updateTargetRelease(Release.clazz.defaultRelease(ec));
         setReadAsBoolean(true);
         setDateSubmitted(new NSTimestamp());
         setDateModified(new NSTimestamp());
-        setFeatureRequest(Boolean.FALSE);
+        setFeatureRequest(false);
     }
 
-	public void markAsRead() {
+	private void updateTargetRelease(Release release) {
+       addObjectToBothSidesOfRelationshipWithKey(release, Key.TARGET_RELEASE);
+    }
+
+    public void markAsRead() {
 		EOEditingContext ec = ERXEC.newEditingContext();
 		ec.lock();
 		try {
@@ -77,7 +81,7 @@ public class Bug extends _Bug implements Markable {
         super.setComponent(value);
         if (value!=null) {
             if (owner() == null) {
-                addToBothSidesOfOwner(component().owner());
+                updateOwner(component().owner());
             } else if ((oldComponent==null) || (!(value.equals(oldComponent)))) {
                 _componentChanged = true;
             }
@@ -98,7 +102,7 @@ public class Bug extends _Bug implements Markable {
     }
 
     public boolean isFeatureRequest() {
-		return ERXValueUtilities.booleanValue(featureRequest());
+		return featureRequest();
 	}
 
 	public void setState(State newState) {
@@ -110,25 +114,29 @@ public class Bug extends _Bug implements Markable {
         if (newState==State.DOCUMENT && !_ownerChanged) {
             People documenter = People.clazz.defaultDocumenter(editingContext());
             if(documenter!=null) {
-                addToBothSidesOfOwner(documenter);
+                updateOwner(documenter);
                 setReadAsBoolean(false);
             }
         }
         if (newState==State.VERIFY && !_ownerChanged) {
             People verifier = People.clazz.defaultVerifier(editingContext());
             if(verifier!=null) {
-                addToBothSidesOfOwner(verifier);
+                updateOwner(verifier);
             } else {
-                addToBothSidesOfOwner(originator());
+                updateOwner(originator());
                 touch();
             }
         }
 	}
 
+    private void updateOwner(People people) {
+       addObjectToBothSidesOfRelationshipWithKey(people, Key.OWNER);
+    }
+
     public Object validateTargetReleaseForNewBugs() throws NSValidation.ValidationException {
         Release release = targetRelease();
         if (release != null) {
-            if (!release.isOpenAsBoolean())
+            if (!release.isOpen())
                 throw new NSValidation.ValidationException("Sorry, the release <b>"+release.valueForKey("name")+"</b> is closed. Bugs/Requirements can only be attached to open releases" );
         }
         return null;
@@ -141,7 +149,7 @@ public class Bug extends _Bug implements Markable {
 
     public void validateForUpdate() {
         if (_componentChanged && component()!=null && !_ownerChanged) {
-            addToBothSidesOfOwner(component().owner());
+            updateOwner(component().owner());
         }
         _componentChanged=false;
         _ownerChanged=false;
@@ -203,6 +211,18 @@ public class Bug extends _Bug implements Markable {
     // Class methods go here
     
     public static class BugClazz extends _BugClazz {
+
+        public NSArray bugsOwnedWithUser(EOEditingContext context, People people) {
+            return objectsForBugsOwned(context, people);
+        }
+
+        public NSArray unreadBugsWithUser(EOEditingContext context, People people) {
+            return objectsForUnreadBugs(context, people);
+        }
+
+        public NSArray bugsInBuildWithTargetRelease(EOEditingContext context, Release targetRelease) {
+             return objectsForBugsInBuild(context, targetRelease);
+        }
         
     }
 
@@ -221,6 +241,22 @@ public class Bug extends _Bug implements Markable {
 		setState(State.ANALYZE);
 		setOwner(previousOwner());
 	}
+
+    public void addTestItem(TestItem testItem) {
+        addObjectToBothSidesOfRelationshipWithKey(testItem, Key.TEST_ITEMS);
+    }
+
+    public Number bugid() {
+        return (Number) rawPrimaryKey();
+    }
+
+    public void updateOriginator(People user) {
+        addObjectToBothSidesOfRelationshipWithKey(user, Key.ORIGINATOR);
+    }
+
+    public void updateComponent(Component component) {
+        addObjectToBothSidesOfRelationshipWithKey(component, Key.COMPONENT);
+    }
 }
 
 

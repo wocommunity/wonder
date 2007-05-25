@@ -12,23 +12,25 @@ import java.math.BigDecimal;
 
 public abstract class _RequirementType extends ERXGenericRecord {
 
-    public _RequirementType() {
-        super();
+    public interface Key  {
+        public static final String TYPE_DESCRIPTION = "typeDescription";  
     }
 
-    public static abstract class _RequirementTypeClazz extends er.extensions.ERXGenericRecord.ERXGenericRecordClazz {
+    public static abstract class _RequirementTypeClazz extends ERXGenericRecord.ERXGenericRecordClazz {
 
-        public NSArray fetchAll(EOEditingContext ec) {
-            return EOUtilities.objectsWithFetchSpecificationAndBindings(ec, "RequirementType", "FetchAll", null);
+        public NSArray objectsForFetchAll(EOEditingContext context) {
+            EOFetchSpecification spec = EOFetchSpecification.fetchSpecificationNamed("FetchAll", "RequirementType");
+
+            return context.objectsWithFetchSpecification(spec);
         }
 
     }
 
 
     public String typeDescription() {
-        return (String)storedValueForKey("typeDescription");
+        return (String)storedValueForKey(Key.TYPE_DESCRIPTION);
     }
     public void setTypeDescription(String aValue) {
-        takeStoredValueForKey(aValue, "typeDescription");
+        takeStoredValueForKey(aValue, Key.TYPE_DESCRIPTION);
     }
 }
