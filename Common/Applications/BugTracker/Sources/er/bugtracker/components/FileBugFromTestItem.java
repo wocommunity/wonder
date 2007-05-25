@@ -45,9 +45,9 @@ public class FileBugFromTestItem extends WOComponent {
             testItem.setState(TestItemState.BUG);
 
             bug.setTextDescription("[From Test #" + testItem.primaryKey()+"]");
-            bug.addToBothSidesOfTestItems(testItem);
-            bug.addToBothSidesOfOriginator(user);
-            bug.addToBothSidesOfComponent(component);
+            bug.addTestItem(testItem);
+            bug.updateOriginator(user);
+            bug.updateComponent(component);
 
             epi=(EditPageInterface)D2W.factory().pageForConfigurationNamed("EditNewBug",session());
             epi.setObject(bug);

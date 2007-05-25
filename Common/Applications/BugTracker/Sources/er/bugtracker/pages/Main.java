@@ -64,12 +64,12 @@ public class Main extends WOComponent {
             return null;
         }
 
-        if (!userObject.isActiveAsBoolean()) {
+        if (!userObject.isActive()) {
             errorMessage="Sorry your account is inactive!";
             return null;
         }
         session.setUser(userObject);
-        boolean isAdmin = userObject.isAdminAsBoolean();
+        boolean isAdmin = userObject.isAdmin();
         D2W.factory().setWebAssistantEnabled(isAdmin);
         String encryptedIDPrimaryKey = ERXCrypto.blowfishEncode(userObject.primaryKey());
         WOCookie loginCookie=WOCookie.cookieWithName("BTL", rememberPassword ?  encryptedIDPrimaryKey : "-");

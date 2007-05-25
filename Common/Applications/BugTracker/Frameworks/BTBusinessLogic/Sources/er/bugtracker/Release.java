@@ -16,17 +16,9 @@ public class Release extends _Release {
 
     public void awakeFromInsertion(EOEditingContext ec) {
         super.awakeFromInsertion(ec);
-        setIsOpenAsBoolean(true);
+        setIsOpen(true);
     }
     
-
-    public void setIsOpenAsBoolean(boolean open) {
-        setIsOpen(open ? ERXConstant.OneInteger:ERXConstant.ZeroInteger);
-    }
-    public boolean isOpenAsBoolean() {
-        return ERXConstant.OneInteger.equals(isOpen());
-    }
-
     // Class methods go here
     
     public static class ReleaseClazz extends _ReleaseClazz {

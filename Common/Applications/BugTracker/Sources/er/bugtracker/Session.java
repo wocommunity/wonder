@@ -159,11 +159,11 @@ public class Session extends ERXSession {
     	
     	People user = (People) user();
     	
-    	if(user != null && user.isActiveAsBoolean()) {
-    		if(user.isAdminAsBoolean()) {
+    	if(user != null && user.isActive()) {
+    		if(user.isAdmin()) {
     			return "admin";
     		}
-    		if(user.isEngineeringAsBoolean()) {
+    		if(user.isEngineering()) {
     			return "engineer";
     		}
     	}

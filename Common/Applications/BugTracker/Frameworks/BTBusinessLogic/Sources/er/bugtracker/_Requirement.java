@@ -10,99 +10,124 @@ import er.extensions.*;
 import java.util.*;
 import java.math.BigDecimal;
 
-public abstract class _Requirement extends Bug {
+public abstract class _Requirement extends er.bugtracker.Bug {
 
-    public _Requirement() {
-        super();
+    public interface Key extends er.bugtracker.Bug.Key {
+        public static final String TEXT_DESCRIPTION = "textDescription";
+        public static final String TEST_ITEMS = "testItems";
+        public static final String TARGET_RELEASE = "targetRelease";
+        public static final String SUBJECT = "subject";
+        public static final String STATE = "state";
+        public static final String REQUIREMENT_TYPE = "requirementType";
+        public static final String REQUIREMENT_SUB_TYPE = "requirementSubType";
+        public static final String READ = "read";
+        public static final String PRIORITY = "priority";
+        public static final String PREVIOUS_OWNER = "previousOwner";
+        public static final String OWNER = "owner";
+        public static final String ORIGINATOR = "originator";
+        public static final String ID = "id";
+        public static final String FEATURE_REQUEST = "featureRequest";
+        public static final String DIFFICULTY = "difficulty";
+        public static final String DATE_SUBMITTED = "dateSubmitted";
+        public static final String DATE_MODIFIED = "dateModified";
+        public static final String COMPONENT = "component";
+        public static final String COMMENTS = "comments";  
     }
 
-    public static abstract class _RequirementClazz extends er.extensions.ERXGenericRecord.ERXGenericRecordClazz {
+    public static abstract class _RequirementClazz extends ERXGenericRecord.ERXGenericRecordClazz {
 
-        public NSArray myRequirementsWithUser(EOEditingContext ec, Object user) {
-            NSMutableDictionary _dict = new NSMutableDictionary(6);
-            
-            if(user != null) _dict.setObjectForKey( user, "user");
-            return EOUtilities.objectsWithFetchSpecificationAndBindings(ec, "Requirement", "myRequirements", _dict);
+        public NSArray objectsForMyRequirements(EOEditingContext context, er.bugtracker.People userBinding) {
+            EOFetchSpecification spec = EOFetchSpecification.fetchSpecificationNamed("myRequirements", "Requirement");
+
+            NSMutableDictionary bindings = new NSMutableDictionary();
+
+            if (userBinding != null)
+                bindings.setObjectForKey(userBinding, "user");
+            spec = spec.fetchSpecificationWithQualifierBindings(bindings);
+
+            return context.objectsWithFetchSpecification(spec);
         }
 
-        public NSArray myTotalRequirementsWithUser(EOEditingContext ec, Object user) {
-            NSMutableDictionary _dict = new NSMutableDictionary(6);
-            
-            if(user != null) _dict.setObjectForKey( user, "user");
-            return EOUtilities.objectsWithFetchSpecificationAndBindings(ec, "Requirement", "myTotalRequirements", _dict);
+        public NSArray objectsForMyTotalRequirements(EOEditingContext context, er.bugtracker.People userBinding) {
+            EOFetchSpecification spec = EOFetchSpecification.fetchSpecificationNamed("myTotalRequirements", "Requirement");
+
+            NSMutableDictionary bindings = new NSMutableDictionary();
+
+            if (userBinding != null)
+                bindings.setObjectForKey(userBinding, "user");
+            spec = spec.fetchSpecificationWithQualifierBindings(bindings);
+
+            return context.objectsWithFetchSpecification(spec);
         }
 
-        public NSArray myTotalRequirementsEngineeringWithUser(EOEditingContext ec, Object user) {
-            NSMutableDictionary _dict = new NSMutableDictionary(6);
-            
-            if(user != null) _dict.setObjectForKey( user, "user");
-            return EOUtilities.objectsWithFetchSpecificationAndBindings(ec, "Requirement", "myTotalRequirementsEngineering", _dict);
+        public NSArray objectsForMyTotalRequirementsEngineering(EOEditingContext context, er.bugtracker.People userBinding) {
+            EOFetchSpecification spec = EOFetchSpecification.fetchSpecificationNamed("myTotalRequirementsEngineering", "Requirement");
+
+            NSMutableDictionary bindings = new NSMutableDictionary();
+
+            if (userBinding != null)
+                bindings.setObjectForKey(userBinding, "user");
+            spec = spec.fetchSpecificationWithQualifierBindings(bindings);
+
+            return context.objectsWithFetchSpecification(spec);
         }
 
-        public NSArray requirementsFiledRecentlyWithDateUser(EOEditingContext ec, Object date, Object user) {
-            NSMutableDictionary _dict = new NSMutableDictionary(6);
-            
-            if(date != null) _dict.setObjectForKey( date, "date");
-            if(user != null) _dict.setObjectForKey( user, "user");
-            return EOUtilities.objectsWithFetchSpecificationAndBindings(ec, "Requirement", "requirementsFiledRecently", _dict);
+        public NSArray objectsForRequirementsFiledRecently(EOEditingContext context, NSTimestamp dateBinding, er.bugtracker.People userBinding) {
+            EOFetchSpecification spec = EOFetchSpecification.fetchSpecificationNamed("requirementsFiledRecently", "Requirement");
+
+            NSMutableDictionary bindings = new NSMutableDictionary();
+
+            if (dateBinding != null)
+                bindings.setObjectForKey(dateBinding, "date");
+            if (userBinding != null)
+                bindings.setObjectForKey(userBinding, "user");
+            spec = spec.fetchSpecificationWithQualifierBindings(bindings);
+
+            return context.objectsWithFetchSpecification(spec);
         }
 
-        public NSArray requirementsInBuild(EOEditingContext ec) {
-            return EOUtilities.objectsWithFetchSpecificationAndBindings(ec, "Requirement", "requirementsInBuild", null);
+        public NSArray objectsForRequirementsInBuild(EOEditingContext context) {
+            EOFetchSpecification spec = EOFetchSpecification.fetchSpecificationNamed("requirementsInBuild", "Requirement");
+
+            return context.objectsWithFetchSpecification(spec);
         }
 
-        public NSArray requirementsInBuildEngineeringWithUser(EOEditingContext ec, Object user) {
-            NSMutableDictionary _dict = new NSMutableDictionary(6);
-            
-            if(user != null) _dict.setObjectForKey( user, "user");
-            return EOUtilities.objectsWithFetchSpecificationAndBindings(ec, "Requirement", "requirementsInBuildEngineering", _dict);
+        public NSArray objectsForRequirementsInBuildEngineering(EOEditingContext context, er.bugtracker.People userBinding) {
+            EOFetchSpecification spec = EOFetchSpecification.fetchSpecificationNamed("requirementsInBuildEngineering", "Requirement");
+
+            NSMutableDictionary bindings = new NSMutableDictionary();
+
+            if (userBinding != null)
+                bindings.setObjectForKey(userBinding, "user");
+            spec = spec.fetchSpecificationWithQualifierBindings(bindings);
+
+            return context.objectsWithFetchSpecification(spec);
         }
 
     }
 
 
-    public Difficulty difficulty() {
-        return (Difficulty)storedValueForKey("difficulty");
+    public er.bugtracker.Difficulty difficulty() {
+        return (er.bugtracker.Difficulty)storedValueForKey(Key.DIFFICULTY);
     }
-
-    public void setDifficulty(Difficulty aValue) {
-        takeStoredValueForKey(aValue, "difficulty");
-    }
-    public void addToBothSidesOfDifficulty(Difficulty object) {
-        addObjectToBothSidesOfRelationshipWithKey(object, "difficulty");
-    }
-    public void removeFromBothSidesOfDifficulty(Difficulty object) {
-        removeObjectFromBothSidesOfRelationshipWithKey(object, "difficulty");
+    public void setDifficulty(er.bugtracker.Difficulty object) {
+        takeStoredValueForKey(object, Key.DIFFICULTY);
     }
 
 
-    public RequirementSubType requirementSubType() {
-        return (RequirementSubType)storedValueForKey("requirementSubType");
+    public er.bugtracker.RequirementSubType requirementSubType() {
+        return (er.bugtracker.RequirementSubType)storedValueForKey(Key.REQUIREMENT_SUB_TYPE);
     }
-
-    public void setRequirementSubType(RequirementSubType aValue) {
-        takeStoredValueForKey(aValue, "requirementSubType");
-    }
-    public void addToBothSidesOfRequirementSubType(RequirementSubType object) {
-        addObjectToBothSidesOfRelationshipWithKey(object, "requirementSubType");
-    }
-    public void removeFromBothSidesOfRequirementSubType(RequirementSubType object) {
-        removeObjectFromBothSidesOfRelationshipWithKey(object, "requirementSubType");
+    public void setRequirementSubType(er.bugtracker.RequirementSubType object) {
+        takeStoredValueForKey(object, Key.REQUIREMENT_SUB_TYPE);
     }
 
 
-    public RequirementType requirementType() {
-        return (RequirementType)storedValueForKey("requirementType");
+    public er.bugtracker.RequirementType requirementType() {
+        return (er.bugtracker.RequirementType)storedValueForKey(Key.REQUIREMENT_TYPE);
     }
-
-    public void setRequirementType(RequirementType aValue) {
-        takeStoredValueForKey(aValue, "requirementType");
-    }
-    public void addToBothSidesOfRequirementType(RequirementType object) {
-        addObjectToBothSidesOfRelationshipWithKey(object, "requirementType");
-    }
-    public void removeFromBothSidesOfRequirementType(RequirementType object) {
-        removeObjectFromBothSidesOfRelationshipWithKey(object, "requirementType");
+    public void setRequirementType(er.bugtracker.RequirementType object) {
+        takeStoredValueForKey(object, Key.REQUIREMENT_TYPE);
     }
 
 }
