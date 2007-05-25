@@ -6,6 +6,9 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.extensions;
 
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.IOException;
 import java.net.URL;
 import java.util.Enumeration;
 import java.util.Hashtable;
@@ -21,6 +24,7 @@ import com.webobjects.eocontrol.EOKeyValueCodingAdditions;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSBundle;
 import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSForwardException;
 import com.webobjects.foundation.NSLog;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
@@ -181,7 +185,6 @@ public class ERXModelGroup extends EOModelGroup {
 		}
 
 		adjustLocalizedAttributes();
-
 		NSNotificationCenter.defaultCenter().postNotification(ModelGroupAddedNotification, this);
 		if (!patchModelsOnLoad) {
 			NSNotificationCenter.defaultCenter().addObserver(this, new NSSelector("modelAddedHandler", ERXConstant.NotificationClassArray), EOModelGroup.ModelAddedNotification, null);
@@ -224,7 +227,29 @@ public class ERXModelGroup extends EOModelGroup {
 		}
 		_modelsByName.setObjectForKey(eomodel, eomodel.name());
 		resetConnectionDictionaryInModel(eomodel);
+
 		NSNotificationCenter.defaultCenter().postNotification(EOModelGroup.ModelAddedNotification, eomodel);
+		dumpSchemaSQL(eomodel);
+	}
+
+	private void dumpSchemaSQL(EOModel eomodel) {
+		String dumpDir = ERXSystem.getProperty("er.extensions.ERXModelGroup.sqlDumpDirectory");
+		if(dumpDir != null) {
+			EOAdaptor adaptor = EOAdaptor.adaptorWithModel(eomodel);
+			if (adaptor instanceof JDBCAdaptor) {
+				JDBCAdaptor jdbc = (JDBCAdaptor) adaptor;
+				try {
+					ERXSQLHelper helper = ERXSQLHelper.newSQLHelper(jdbc);
+					String sql = helper.createSchemaSQLForEntitiesInModelAndOptions(eomodel.entities(), eomodel, helper.defaultOptionDictionary(true, true));
+					File file = new File(dumpDir + File.separator + eomodel.name() + ".sql");
+					ERXFileUtilities.writeInputStreamToFile(new ByteArrayInputStream(sql.getBytes()), file);
+					log.info("Wrote Schema SQL to " + file);
+				}
+				catch (IOException e) {
+					throw NSForwardException._runtimeExceptionForThrowable(e);
+				}
+			}
+		}
 	}
 
 	/**
