@@ -196,10 +196,10 @@
             <param name="use.webobjects.d2w" value="true" />
             <param name="use.wonder.d2w" value="true" />
             <param name="use.wonder.logic" value="true" />
+            <param name="use.wonder.mail" value="true" />
             <param name="use.woognl" value="true" />
-            <param name="use.mysql" value="true" />
             <param name="use.additional.framework.1" value="BTBusinessLogic.framework" />
-            <param name="use.additional.framework.2" value="C9Extensions.framework" />
+            <param name="use.additional.framework.2" value="PostgresqlPlugIn.framework" />
         </antcall>
     </target>
 
