@@ -18,6 +18,7 @@ import er.bugtracker.Framework;
 import er.bugtracker.People;
 import er.bugtracker.Session;
 import er.extensions.ERXEC;
+import er.extensions.ERXEOControlUtilities;
 
 public class OnlineHatSystem extends WOComponent {
 
@@ -35,41 +36,32 @@ public class OnlineHatSystem extends WOComponent {
         ec.unlock();
     }
     
-    private NSArray _directtowebfiles;
-    public NSArray directtowebfiles(){
-        if(_directtowebfiles == null){
-            _directtowebfiles = Framework.clazz.orderedFrameworks(ec);
+    private NSArray _frameworks;
+    public NSArray frameworks(){
+        if(_frameworks == null){
+            _frameworks = Framework.clazz.orderedFrameworks(ec);
         }
-        return _directtowebfiles;
+        return _frameworks;
     }
-    public Framework directtowebfile;
-    private People _localUser;
-    public People localUser() {
-        if (_localUser==null) {
-            _localUser=People.clazz.currentUser(ec);
-        }
-        return _localUser;
-    }
-
+    public Framework currentFramework;
+ 
     public WOComponent grabHat() {
         ec.revert();
-        directtowebfile.addObjectToBothSidesOfRelationshipWithKey(localUser(),"owner");
-        directtowebfile.takeValueForKey(new NSTimestamp(), "ownedSince");
+        currentFramework.grabHat();
         ec.saveChanges();
         return null;
     }
 
     public WOComponent returnHat() {
         ec.revert();
-        EOEnterpriseObject localUser=EOUtilities.localInstanceOfObject(ec, ((Session)session()).user());
-        directtowebfile.removeObjectFromBothSidesOfRelationshipWithKey(localUser,"owner");
-        directtowebfile.takeValueForKey(null, "ownedSince");
+        currentFramework.releaseHat();
         ec.saveChanges();
         return null;
     }
     
     public String bgColor() {
-        EOEnterpriseObject owner=(EOEnterpriseObject)directtowebfile.valueForKey("owner");
-        return owner!=null ? ( owner==localUser() ? "#CCFFCC" : "#FFCCCC" ) : "#FFFFFF";
+        People owner = currentFramework.owner();
+        boolean isOwner = ERXEOControlUtilities.eoEquals(owner, People.clazz.currentUser(ec));
+        return owner!=null ? ( isOwner ? "#CCFFCC" : "#FFCCCC" ) : "#FFFFFF";
     }
 }

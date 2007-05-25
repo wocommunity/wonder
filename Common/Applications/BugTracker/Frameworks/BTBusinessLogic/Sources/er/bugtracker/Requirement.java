@@ -20,7 +20,6 @@ public class Requirement extends _Requirement {
 
     public void setState(State newState) {
         willChange();
-        State oldState=state();
         markUnread();
         super.setState(newState);
     }

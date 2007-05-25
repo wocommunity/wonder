@@ -25,6 +25,7 @@ import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSKeyValueCoding;
 import com.webobjects.foundation.NSMutableDictionary;
 
+import er.bugtracker.Factory;
 import er.bugtracker.Session;
 import er.extensions.ERXNavigationManager;
 import er.extensions.ERXNavigationState;
@@ -78,24 +79,9 @@ public class MenuHeader extends WOComponent {
     public Integer bugNumber;
 
     public WOComponent findBugByNumber() {
-        EOEntity entity = EOUtilities.entityNamed(session().defaultEditingContext(), "Bug");
-        EOQualifier q = new EOKeyValueQualifier((String) entity.primaryKeyAttributeNames().lastObject(), EOQualifier.QualifierOperatorEqual, bugNumber);
-        WOComponent result = null;
-        EODatabaseDataSource ds = new EODatabaseDataSource(session().defaultEditingContext(), "Bug");
-        EOFetchSpecification fs = new EOFetchSpecification("Bug", q, null);
-        NSArray bugs = session().defaultEditingContext().objectsWithFetchSpecification(fs);
-        if (bugs != null && bugs.count() == 1) {
-            InspectPageInterface ipi = D2W.factory().inspectPageForEntityNamed("Bug", session());
-            ipi.setObject((EOEnterpriseObject) bugs.objectAtIndex(0));
-            ipi.setNextPage(context().page());
-            result = (WOComponent) ipi;
-        } else {
-            ds.setFetchSpecification(fs);
-            ListPageInterface lpi = (ListPageInterface) D2W.factory().listPageForEntityNamed("Bug", session());
-            lpi.setDataSource(ds);
-            lpi.setNextPage(context().page());
-            result = (WOComponent) lpi;
+        if(bugNumber != null) {
+            return Factory.bugTracker().findBugs(bugNumber.toString());
         }
-        return result;
+        return context().page();
     }
 }

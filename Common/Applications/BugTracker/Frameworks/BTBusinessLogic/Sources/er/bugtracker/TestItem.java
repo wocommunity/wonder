@@ -28,7 +28,6 @@ public class TestItem extends _TestItem {
         public NSArray unclosedTestItemsWithUser(EOEditingContext context, People people) {
             return objectsForUnclosedTestItems(context, people);
         }
-        
     }
 
     public static final TestItemClazz clazz = new TestItemClazz();

@@ -13,7 +13,7 @@ import er.corebusinesslogic.ERCoreBusinessLogic;
 import er.extensions.ERXArrayUtilities;
 import er.extensions.ERXEC;
 import er.extensions.ERXEOControlUtilities;
-import er.extensions.ERXValueUtilities;
+import er.extensions.ERXLocalizer;
 
 public class Bug extends _Bug implements Markable {
     static final Logger log = Logger.getLogger(Bug.class);
@@ -241,6 +241,10 @@ public class Bug extends _Bug implements Markable {
 		setState(State.ANALYZE);
 		setOwner(previousOwner());
 	}
+
+    public void moveToVerification() {
+        setState(State.VERIFY);
+    }
 
     public void addTestItem(TestItem testItem) {
         addObjectToBothSidesOfRelationshipWithKey(testItem, Key.TEST_ITEMS);
