@@ -47,7 +47,7 @@ public class BugsPerUser extends WOComponent {
         if (bugs!=null && bugs.count()>0) {
             for (Enumeration e=bugs.objectEnumerator(); e.hasMoreElements();) {
                 Bug bug=(Bug)e.nextElement();
-                EOEnterpriseObject r=(EOEnterpriseObject)bug.valueForKey("targetRelease");
+                Release r=bug.targetRelease();
                 if (!result.containsObject(r)) result.addObject(r);
             }
         }

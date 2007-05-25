@@ -36,5 +36,13 @@ public class Release extends _Release {
         }
     }
 
+    public NSArray openBugs() {
+        return Bug.clazz.openBugsWithTargetRelease(editingContext(), this);
+    }
+
+    public NSArray openRequirements() {
+        return Requirement.clazz.openBugsWithTargetRelease(editingContext(), this);
+    }
+    
     public static final ReleaseClazz clazz = new ReleaseClazz();
 }
