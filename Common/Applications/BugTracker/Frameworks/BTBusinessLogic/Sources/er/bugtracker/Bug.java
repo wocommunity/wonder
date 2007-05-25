@@ -38,6 +38,7 @@ public class Bug extends _Bug implements Markable {
         setDateSubmitted(new NSTimestamp());
         setDateModified(new NSTimestamp());
         setFeatureRequest(false);
+        setType("b");
     }
 
 	void updateTargetRelease(Release release) {
