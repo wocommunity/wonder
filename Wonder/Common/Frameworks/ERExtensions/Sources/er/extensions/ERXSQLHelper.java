@@ -16,6 +16,7 @@ import com.webobjects.eoaccess.EOAdaptor;
 import com.webobjects.eoaccess.EOAdaptorChannel;
 import com.webobjects.eoaccess.EOAdaptorContext;
 import com.webobjects.eoaccess.EOAttribute;
+import com.webobjects.eoaccess.EODatabase;
 import com.webobjects.eoaccess.EODatabaseChannel;
 import com.webobjects.eoaccess.EODatabaseContext;
 import com.webobjects.eoaccess.EOEntity;
@@ -28,6 +29,7 @@ import com.webobjects.eoaccess.EOSynchronizationFactory;
 import com.webobjects.eoaccess.EOUtilities;
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.eocontrol.EOFetchSpecification;
+import com.webobjects.eocontrol.EOObjectStoreCoordinator;
 import com.webobjects.eocontrol.EOQualifier;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
@@ -35,6 +37,7 @@ import com.webobjects.foundation.NSForwardException;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation.NSTimestamp;
+import com.webobjects.foundation._NSUtilities;
 import com.webobjects.jdbcadaptor.JDBCAdaptor;
 import com.webobjects.jdbcadaptor.JDBCPlugIn;
 
@@ -72,25 +75,41 @@ public class ERXSQLHelper {
 	 * @param modelName
 	 *            the name of the EOModel
 	 * @param optionsCreate
-	 *            a NSDictionary containing the different options. Possible keys are
-	 *            <ul>
-	 *            <li>EOSchemaGeneration.DropTablesKey</li>
-	 *            <li>EOSchemaGeneration.DropPrimaryKeySupportKey</li>
-	 *            <li>EOSchemaGeneration.CreateTablesKey</li>
-	 *            <li>EOSchemaGeneration.CreatePrimaryKeySupportKey</li>
-	 *            <li>EOSchemaGeneration.PrimaryKeyConstraintsKey</li>
-	 *            <li>EOSchemaGeneration.ForeignKeyConstraintsKey</li>
-	 *            <li>EOSchemaGeneration.CreateDatabaseKey</li>
-	 *            </ul>
-	 *            <li>EOSchemaGeneration.DropDatabaseKey</li>
-	 *            <br/><br>
-	 *            Possible values are <code>YES</code> and <code>NO</code>
 	 * 
 	 * @return a <code>String</code> containing SQL statements to create tables
 	 */
 	public String createSchemaSQLForEntitiesInModelWithNameAndOptions(NSArray entities, String modelName, NSDictionary optionsCreate) {
 		EOModel m = ERXEOAccessUtilities.modelGroup(null).modelNamed(modelName);
 		return createSchemaSQLForEntitiesInModelAndOptions(entities, m, optionsCreate);
+	}
+
+	/**
+	 * Reimplementation that does not try to the shared objects. You should exit soon after calling this,
+	 * as it may or may not leave channels open. It is simply to geenrate sql.
+	 * @param model
+	 * @param coordinator
+	 * @return
+	 */
+	private EODatabaseContext databaseContextForModel(EOModel model, EOObjectStoreCoordinator coordinator) {
+		EODatabaseContext dbc = null;
+		NSArray objectStores = coordinator.cooperatingObjectStores();
+		int i = 0;
+		for(int c = objectStores.count(); i < c; i++) {
+			Object objectStore = objectStores.objectAtIndex(i);
+			if((objectStore instanceof EODatabaseContext) && ((EODatabaseContext)objectStore).database().addModelIfCompatible(model)) {
+				dbc = (EODatabaseContext)objectStore;
+			}
+		}
+
+		if(dbc == null) {
+			dbc = (EODatabaseContext)_NSUtilities.instantiateObject(EODatabaseContext.contextClassToRegister(), new Class[] {
+				com.webobjects.eoaccess.EODatabase.class
+			}, new Object[] {
+				new EODatabase(model)
+			}, true, false);
+			coordinator.addCooperatingObjectStore(dbc);
+		}
+		return dbc;
 	}
 
 	/**
@@ -103,41 +122,40 @@ public class ERXSQLHelper {
 	 * @param model
 	 *            the EOModel
 	 * @param optionsCreate
-	 *            a NSDictionary containing the different options. Possible keys are
-	 *            <ul>
-	 *            <li>EOSchemaGeneration.DropTablesKey</li>
-	 *            <li>EOSchemaGeneration.DropPrimaryKeySupportKey</li>
-	 *            <li>EOSchemaGeneration.CreateTablesKey</li>
-	 *            <li>EOSchemaGeneration.CreatePrimaryKeySupportKey</li>
-	 *            <li>EOSchemaGeneration.PrimaryKeyConstraintsKey</li>
-	 *            <li>EOSchemaGeneration.ForeignKeyConstraintsKey</li>
-	 *            <li>EOSchemaGeneration.CreateDatabaseKey</li>
-	 *            </ul>
-	 *            <li>EOSchemaGeneration.DropDatabaseKey</li>
-	 *            <br/><br>
-	 *            Possible values are <code>YES</code> and <code>NO</code>
+	 *            a NSDictionary containing the different options
 	 * 
 	 * @return a <code>String</code> containing SQL statements to create tables
 	 */
 	public String createSchemaSQLForEntitiesInModelAndOptions(NSArray entities, EOModel model, NSDictionary optionsCreate) {
-		EODatabaseContext databaseContext = EODatabaseContext.registeredDatabaseContextForModel(model, ERXEC.newEditingContext());
-		if (entities == null) {
-			Enumeration e = model.entities().objectEnumerator();
-			NSMutableArray ar = new NSMutableArray();
-			while (e.hasMoreElements()) {
-				EOEntity currentEntity = (EOEntity) e.nextElement();
-				if (ERXModelGroup.isPrototypeEntity(currentEntity)) {
-					// we do not want to add EOXXXPrototypes entities
-					continue;
+		EOEditingContext ec = ERXEC.newEditingContext();
+		ec.lock();
+		try {
+			EODatabaseContext databaseContext = databaseContextForModel(model, (EOObjectStoreCoordinator)ec.rootObjectStore());
+			// AK the default implementation loads the shared objects, and when they don't exist, throw an an error
+			// which is not very useful for schema generation
+			// But you would probably want to exit soon after calling this....
+			// EODatabaseContext databaseContext = EODatabaseContext.registeredDatabaseContextForModel(model, ec);
+			if (entities == null) {
+				Enumeration e = model.entities().objectEnumerator();
+				NSMutableArray ar = new NSMutableArray();
+				while (e.hasMoreElements()) {
+					EOEntity currentEntity = (EOEntity) e.nextElement();
+					if (ERXModelGroup.isPrototypeEntity(currentEntity)) {
+						// we do not want to add EOXXXPrototypes entities
+						continue;
+					}
+					if (!ERXEOAccessUtilities.entityUsesSeparateTable(currentEntity)) {
+						continue;
+					}
+					ar.addObject(currentEntity);
 				}
-				if (!ERXEOAccessUtilities.entityUsesSeparateTable(currentEntity)) {
-					continue;
-				}
-				ar.addObject(currentEntity);
+				entities = ar;
 			}
-			entities = ar;
+			String result = createSchemaSQLForEntitiesWithOptions(entities, databaseContext, optionsCreate);
+			return result;
+		} finally {
+			ec.unlock();
 		}
-		return createSchemaSQLForEntitiesWithOptions(entities, databaseContext, optionsCreate);
 	}
 
 	/**
@@ -166,20 +184,7 @@ public class ERXSQLHelper {
 	 *            a NSArray containing the entities for which create table statements should be generated or null if all
 	 *            entitites in the model should be used.
 	 * @param modelName
-	 *            the name of the EOModel <br/><br/>This method uses the following defaults options:
-	 *            <ul>
-	 *            <li>EOSchemaGeneration.DropTablesKey=YES</li>
-	 *            <li>EOSchemaGeneration.DropPrimaryKeySupportKey=YES</li>
-	 *            <li>EOSchemaGeneration.CreateTablesKey=YES</li>
-	 *            <li>EOSchemaGeneration.CreatePrimaryKeySupportKey=YES</li>
-	 *            <li>EOSchemaGeneration.PrimaryKeyConstraintsKey=YES</li>
-	 *            <li>EOSchemaGeneration.ForeignKeyConstraintsKey=YES</li>
-	 *            <li>EOSchemaGeneration.CreateDatabaseKey=NO</li>
-	 *            <li>EOSchemaGeneration.DropDatabaseKey=NO</li>
-	 *            </ul>
-	 *            <br/><br>
-	 *            Possible values are <code>YES</code> and <code>NO</code>
-	 * 
+	 *            the name of the EOModel
 	 * @return a <code>String</code> containing SQL statements to create tables
 	 */
 	public String createSchemaSQLForEntitiesInModelWithName(NSArray entities, String modelName) {
@@ -188,21 +193,34 @@ public class ERXSQLHelper {
 	}
 
 	/**
-	 * creates SQL to create tables for the specified Entities. This can be used with EOUtilities rawRowsForSQL method
+	 * Creates SQL to create tables for the specified Entities. This can be used with EOUtilities rawRowsForSQL method
 	 * to create the tables.
 	 * 
 	 * @param entities
 	 *            a NSArray containing the entities for which create table statements should be generated or null if all
 	 *            entitites in the model should be used.
+	 * @param model the EOModel
+	 * 
+	 * @return a <code>String</code> containing SQL statements to create tables
+	 */
+	public String createSchemaSQLForEntitiesInModel(NSArray entities, EOModel model) {
+		return createSchemaSQLForEntitiesInModelAndOptions(entities, model, defaultOptionDictionary(true, true));
+	}
+
+	/**
+	 * Creates an option dictionary to use with the other methods
+	 * 
+	 * @param create add create statements
+	 * @param drop add drop statements
 	 * @param model
 	 *            the EOModel <br/><br/>This method uses the following defaults options:
 	 *            <ul>
-	 *            <li>EOSchemaGeneration.DropTablesKey=YES</li>
-	 *            <li>EOSchemaGeneration.DropPrimaryKeySupportKey=YES</li>
-	 *            <li>EOSchemaGeneration.CreateTablesKey=YES</li>
-	 *            <li>EOSchemaGeneration.CreatePrimaryKeySupportKey=YES</li>
-	 *            <li>EOSchemaGeneration.PrimaryKeyConstraintsKey=YES</li>
-	 *            <li>EOSchemaGeneration.ForeignKeyConstraintsKey=YES</li>
+	 *            <li>EOSchemaGeneration.DropTablesKey=YES if drop</li>
+	 *            <li>EOSchemaGeneration.DropPrimaryKeySupportKey=YES if drop</li>
+	 *            <li>EOSchemaGeneration.CreateTablesKey=YES if create</li>
+	 *            <li>EOSchemaGeneration.CreatePrimaryKeySupportKey=YES if create</li>
+	 *            <li>EOSchemaGeneration.PrimaryKeyConstraintsKey=YES if create</li>
+	 *            <li>EOSchemaGeneration.ForeignKeyConstraintsKey=YES if create</li>
 	 *            <li>EOSchemaGeneration.CreateDatabaseKey=NO</li>
 	 *            <li>EOSchemaGeneration.DropDatabaseKey=NO</li>
 	 *            </ul>
@@ -211,17 +229,17 @@ public class ERXSQLHelper {
 	 * 
 	 * @return a <code>String</code> containing SQL statements to create tables
 	 */
-	public String createSchemaSQLForEntitiesInModel(NSArray entities, EOModel model) {
+	public NSMutableDictionary defaultOptionDictionary(boolean create, boolean drop) {
 		NSMutableDictionary optionsCreate = new NSMutableDictionary();
-		optionsCreate.setObjectForKey("YES", EOSchemaGeneration.DropTablesKey);
-		optionsCreate.setObjectForKey("YES", EOSchemaGeneration.DropPrimaryKeySupportKey);
-		optionsCreate.setObjectForKey("YES", EOSchemaGeneration.CreateTablesKey);
-		optionsCreate.setObjectForKey("YES", EOSchemaGeneration.CreatePrimaryKeySupportKey);
-		optionsCreate.setObjectForKey("YES", EOSchemaGeneration.PrimaryKeyConstraintsKey);
-		optionsCreate.setObjectForKey("YES", EOSchemaGeneration.ForeignKeyConstraintsKey);
+		optionsCreate.setObjectForKey((drop) ? "YES" : "NO", EOSchemaGeneration.DropTablesKey);
+		optionsCreate.setObjectForKey((drop) ? "YES" : "NO", EOSchemaGeneration.DropPrimaryKeySupportKey);
+		optionsCreate.setObjectForKey((create) ? "YES" : "NO", EOSchemaGeneration.CreateTablesKey);
+		optionsCreate.setObjectForKey((create) ? "YES" : "NO", EOSchemaGeneration.CreatePrimaryKeySupportKey);
+		optionsCreate.setObjectForKey((create) ? "YES" : "NO", EOSchemaGeneration.PrimaryKeyConstraintsKey);
+		optionsCreate.setObjectForKey((create) ? "YES" : "NO", EOSchemaGeneration.ForeignKeyConstraintsKey);
 		optionsCreate.setObjectForKey("NO", EOSchemaGeneration.CreateDatabaseKey);
 		optionsCreate.setObjectForKey("NO", EOSchemaGeneration.DropDatabaseKey);
-		return createSchemaSQLForEntitiesInModelAndOptions(entities, model, optionsCreate);
+		return optionsCreate;
 	}
 
 	/**
@@ -241,16 +259,7 @@ public class ERXSQLHelper {
 	 * @return a <code>String</code> containing SQL statements to create tables
 	 */
 	public String createSchemaSQLForEntitiesInDatabaseContext(NSArray entities, EODatabaseContext databaseContext, boolean create, boolean drop) {
-		NSMutableDictionary optionsCreate = new NSMutableDictionary();
-		optionsCreate.setObjectForKey((drop) ? "YES" : "NO", EOSchemaGeneration.DropTablesKey);
-		optionsCreate.setObjectForKey((drop) ? "YES" : "NO", EOSchemaGeneration.DropPrimaryKeySupportKey);
-		optionsCreate.setObjectForKey((create) ? "YES" : "NO", EOSchemaGeneration.CreateTablesKey);
-		optionsCreate.setObjectForKey((create) ? "YES" : "NO", EOSchemaGeneration.CreatePrimaryKeySupportKey);
-		optionsCreate.setObjectForKey((create) ? "YES" : "NO", EOSchemaGeneration.PrimaryKeyConstraintsKey);
-		optionsCreate.setObjectForKey((create) ? "YES" : "NO", EOSchemaGeneration.ForeignKeyConstraintsKey);
-		optionsCreate.setObjectForKey("NO", EOSchemaGeneration.CreateDatabaseKey);
-		optionsCreate.setObjectForKey("NO", EOSchemaGeneration.DropDatabaseKey);
-		return createSchemaSQLForEntitiesWithOptions(entities, databaseContext, optionsCreate);
+		return createSchemaSQLForEntitiesWithOptions(entities, databaseContext, defaultOptionDictionary(create,drop));
 	}
 
 	public String createIndexSQLForEntities(NSArray entities) {
