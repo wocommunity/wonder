@@ -12,158 +12,122 @@ import java.math.BigDecimal;
 
 public abstract class _TestItem extends ERXGenericRecord {
 
-    public _TestItem() {
-        super();
+    public interface Key  {
+        public static final String TITLE = "title";
+        public static final String TEXT_DESCRIPTION = "textDescription";
+        public static final String STATE = "state";
+        public static final String REQUIREMENTS = "requirements";
+        public static final String OWNER = "owner";
+        public static final String ID = "id";
+        public static final String DATE_CREATED = "dateCreated";
+        public static final String CONTROLLED = "controlled";
+        public static final String COMPONENT = "component";
+        public static final String COMMENTS = "comments";
+        public static final String BUGS = "bugs";  
     }
 
-    public static abstract class _TestItemClazz extends er.extensions.ERXGenericRecord.ERXGenericRecordClazz {
+    public static abstract class _TestItemClazz extends ERXGenericRecord.ERXGenericRecordClazz {
 
-        public NSArray unclosedTestItemsWithUser(EOEditingContext ec, Object user) {
-            NSMutableDictionary _dict = new NSMutableDictionary(1);
-            
-            if(user != null) _dict.setObjectForKey( user, "user");
-            return EOUtilities.objectsWithFetchSpecificationAndBindings(ec, "TestItem", "unclosedTestItems", _dict);
+        public NSArray objectsForUnclosedTestItems(EOEditingContext context, er.bugtracker.People userBinding) {
+            EOFetchSpecification spec = EOFetchSpecification.fetchSpecificationNamed("unclosedTestItems", "TestItem");
+
+            NSMutableDictionary bindings = new NSMutableDictionary();
+
+            if (userBinding != null)
+                bindings.setObjectForKey(userBinding, "user");
+            spec = spec.fetchSpecificationWithQualifierBindings(bindings);
+
+            return context.objectsWithFetchSpecification(spec);
         }
 
     }
 
 
-    public String controlled() {
-        return (String)storedValueForKey("controlled");
+    public String comments() {
+        return (String)storedValueForKey(Key.COMMENTS);
     }
-    public void setControlled(String aValue) {
-        takeStoredValueForKey(aValue, "controlled");
+    public void setComments(String aValue) {
+        takeStoredValueForKey(aValue, Key.COMMENTS);
     }
 
-    public String textDescription() {
-        return (String)storedValueForKey("textDescription");
+    public String controlled() {
+        return (String)storedValueForKey(Key.CONTROLLED);
     }
-    public void setTextDescription(String aValue) {
-        takeStoredValueForKey(aValue, "textDescription");
+    public void setControlled(String aValue) {
+        takeStoredValueForKey(aValue, Key.CONTROLLED);
     }
 
     public NSTimestamp dateCreated() {
-        return (NSTimestamp)storedValueForKey("dateCreated");
+        return (NSTimestamp)storedValueForKey(Key.DATE_CREATED);
     }
     public void setDateCreated(NSTimestamp aValue) {
-        takeStoredValueForKey(aValue, "dateCreated");
-    }
-
-    public String comments() {
-        return (String)storedValueForKey("comments");
-    }
-    public void setComments(String aValue) {
-        takeStoredValueForKey(aValue, "comments");
-    }
-
-    public String title() {
-        return (String)storedValueForKey("title");
-    }
-    public void setTitle(String aValue) {
-        takeStoredValueForKey(aValue, "title");
+        takeStoredValueForKey(aValue, Key.DATE_CREATED);
     }
 
     public Number id() {
-        return (Number)storedValueForKey("id");
+        return (Number)storedValueForKey(Key.ID);
     }
     public void setId(Number aValue) {
-        takeStoredValueForKey(aValue, "id");
+        takeStoredValueForKey(aValue, Key.ID);
     }
 
-    public People owner() {
-        return (People)storedValueForKey("owner");
+    public String textDescription() {
+        return (String)storedValueForKey(Key.TEXT_DESCRIPTION);
+    }
+    public void setTextDescription(String aValue) {
+        takeStoredValueForKey(aValue, Key.TEXT_DESCRIPTION);
     }
 
-    public void setOwner(People aValue) {
-        takeStoredValueForKey(aValue, "owner");
+    public String title() {
+        return (String)storedValueForKey(Key.TITLE);
     }
-    public void addToBothSidesOfOwner(People object) {
-        addObjectToBothSidesOfRelationshipWithKey(object, "owner");
-    }
-    public void removeFromBothSidesOfOwner(People object) {
-        removeObjectFromBothSidesOfRelationshipWithKey(object, "owner");
+    public void setTitle(String aValue) {
+        takeStoredValueForKey(aValue, Key.TITLE);
     }
 
-
-    public TestItemState state() {
-        return (TestItemState)storedValueForKey("state");
+    public er.bugtracker.Component component() {
+        return (er.bugtracker.Component)storedValueForKey(Key.COMPONENT);
     }
-
-    public void setState(TestItemState aValue) {
-        takeStoredValueForKey(aValue, "state");
-    }
-    public void addToBothSidesOfState(TestItemState object) {
-        addObjectToBothSidesOfRelationshipWithKey(object, "state");
-    }
-    public void removeFromBothSidesOfState(TestItemState object) {
-        removeObjectFromBothSidesOfRelationshipWithKey(object, "state");
+    public void setComponent(er.bugtracker.Component object) {
+        takeStoredValueForKey(object, Key.COMPONENT);
     }
 
 
-    public Component component() {
-        return (Component)storedValueForKey("component");
+    public er.bugtracker.People owner() {
+        return (er.bugtracker.People)storedValueForKey(Key.OWNER);
     }
-
-    public void setComponent(Component aValue) {
-        takeStoredValueForKey(aValue, "component");
-    }
-    public void addToBothSidesOfComponent(Component object) {
-        addObjectToBothSidesOfRelationshipWithKey(object, "component");
-    }
-    public void removeFromBothSidesOfComponent(Component object) {
-        removeObjectFromBothSidesOfRelationshipWithKey(object, "component");
+    public void setOwner(er.bugtracker.People object) {
+        takeStoredValueForKey(object, Key.OWNER);
     }
 
 
-    public NSArray requirements() {
-        return (NSArray)storedValueForKey("requirements");
+    public er.bugtracker.TestItemState state() {
+        return (er.bugtracker.TestItemState)storedValueForKey(Key.STATE);
     }
-    public void setRequirements(NSMutableArray aValue) {
-        takeStoredValueForKey(aValue, "requirements");
-    }
-    public void addToRequirements(Requirement object) {
-        NSMutableArray array = (NSMutableArray)requirements();
-
-        willChange();
-        array.addObject(object);
-    }
-    public void removeFromRequirements(Requirement object) {
-        NSMutableArray array = (NSMutableArray)requirements();
-
-        willChange();
-        array.removeObject(object);
-    }
-    public void addToBothSidesOfRequirements(Requirement object) {
-        addObjectToBothSidesOfRelationshipWithKey(object, "requirements");
-    }
-    public void removeFromBothSidesOfRequirements(Requirement object) {
-        removeObjectFromBothSidesOfRelationshipWithKey(object, "requirements");
+    public void setState(er.bugtracker.TestItemState object) {
+        takeStoredValueForKey(object, Key.STATE);
     }
 
 
     public NSArray bugs() {
-        return (NSArray)storedValueForKey("bugs");
+        return (NSArray)storedValueForKey(Key.BUGS);
     }
-    public void setBugs(NSMutableArray aValue) {
-        takeStoredValueForKey(aValue, "bugs");
+    public void addToBugs(er.bugtracker.Bug object) {
+        includeObjectIntoPropertyWithKey(object, Key.BUGS);
     }
-    public void addToBugs(Bug object) {
-        NSMutableArray array = (NSMutableArray)bugs();
+    public void removeFromBugs(er.bugtracker.Bug object) {
+        excludeObjectFromPropertyWithKey(object, Key.BUGS);
+    }
 
-        willChange();
-        array.addObject(object);
-    }
-    public void removeFromBugs(Bug object) {
-        NSMutableArray array = (NSMutableArray)bugs();
 
-        willChange();
-        array.removeObject(object);
+    public NSArray requirements() {
+        return (NSArray)storedValueForKey(Key.REQUIREMENTS);
     }
-    public void addToBothSidesOfBugs(Bug object) {
-        addObjectToBothSidesOfRelationshipWithKey(object, "bugs");
+    public void addToRequirements(er.bugtracker.Requirement object) {
+        includeObjectIntoPropertyWithKey(object, Key.REQUIREMENTS);
     }
-    public void removeFromBothSidesOfBugs(Bug object) {
-        removeObjectFromBothSidesOfRelationshipWithKey(object, "bugs");
+    public void removeFromRequirements(er.bugtracker.Requirement object) {
+        excludeObjectFromPropertyWithKey(object, Key.REQUIREMENTS);
     }
 
 }

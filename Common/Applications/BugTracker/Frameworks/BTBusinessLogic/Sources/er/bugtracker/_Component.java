@@ -12,101 +12,85 @@ import java.math.BigDecimal;
 
 public abstract class _Component extends ERXGenericRecord {
 
-    public _Component() {
-        super();
+    public interface Key  {
+        public static final String TEXT_DESCRIPTION = "textDescription";
+        public static final String TEST_ITEMS = "testItems";
+        public static final String REQUIREMENTS = "requirements";
+        public static final String PARENT = "parent";
+        public static final String OWNER = "owner";
+        public static final String CHILDREN = "children";
+        public static final String BUGS = "bugs";  
     }
 
-    public static abstract class _ComponentClazz extends er.extensions.ERXGenericRecord.ERXGenericRecordClazz {
+    public static abstract class _ComponentClazz extends ERXGenericRecord.ERXGenericRecordClazz {
 
     }
 
 
     public String textDescription() {
-        return (String)storedValueForKey("textDescription");
+        return (String)storedValueForKey(Key.TEXT_DESCRIPTION);
     }
     public void setTextDescription(String aValue) {
-        takeStoredValueForKey(aValue, "textDescription");
+        takeStoredValueForKey(aValue, Key.TEXT_DESCRIPTION);
     }
 
-    public People owner() {
-        return (People)storedValueForKey("owner");
+    public er.bugtracker.People owner() {
+        return (er.bugtracker.People)storedValueForKey(Key.OWNER);
     }
-
-    public void setOwner(People aValue) {
-        takeStoredValueForKey(aValue, "owner");
-    }
-    public void addToBothSidesOfOwner(People object) {
-        addObjectToBothSidesOfRelationshipWithKey(object, "owner");
-    }
-    public void removeFromBothSidesOfOwner(People object) {
-        removeObjectFromBothSidesOfRelationshipWithKey(object, "owner");
+    public void setOwner(er.bugtracker.People object) {
+        takeStoredValueForKey(object, Key.OWNER);
     }
 
 
-    public Component parent() {
-        return (Component)storedValueForKey("parent");
+    public er.bugtracker.Component parent() {
+        return (er.bugtracker.Component)storedValueForKey(Key.PARENT);
     }
-
-    public void setParent(Component aValue) {
-        takeStoredValueForKey(aValue, "parent");
-    }
-    public void addToBothSidesOfParent(Component object) {
-        addObjectToBothSidesOfRelationshipWithKey(object, "parent");
-    }
-    public void removeFromBothSidesOfParent(Component object) {
-        removeObjectFromBothSidesOfRelationshipWithKey(object, "parent");
+    public void setParent(er.bugtracker.Component object) {
+        takeStoredValueForKey(object, Key.PARENT);
     }
 
 
     public NSArray bugs() {
-        return (NSArray)storedValueForKey("bugs");
+        return (NSArray)storedValueForKey(Key.BUGS);
     }
-    public void setBugs(NSMutableArray aValue) {
-        takeStoredValueForKey(aValue, "bugs");
+    public void addToBugs(er.bugtracker.Bug object) {
+        includeObjectIntoPropertyWithKey(object, Key.BUGS);
     }
-    public void addToBugs(Bug object) {
-        NSMutableArray array = (NSMutableArray)bugs();
-
-        willChange();
-        array.addObject(object);
-    }
-    public void removeFromBugs(Bug object) {
-        NSMutableArray array = (NSMutableArray)bugs();
-
-        willChange();
-        array.removeObject(object);
-    }
-    public void addToBothSidesOfBugs(Bug object) {
-        addObjectToBothSidesOfRelationshipWithKey(object, "bugs");
-    }
-    public void removeFromBothSidesOfBugs(Bug object) {
-        removeObjectFromBothSidesOfRelationshipWithKey(object, "bugs");
+    public void removeFromBugs(er.bugtracker.Bug object) {
+        excludeObjectFromPropertyWithKey(object, Key.BUGS);
     }
 
 
     public NSArray children() {
-        return (NSArray)storedValueForKey("children");
+        return (NSArray)storedValueForKey(Key.CHILDREN);
     }
-    public void setChildren(NSMutableArray aValue) {
-        takeStoredValueForKey(aValue, "children");
+    public void addToChildren(er.bugtracker.Component object) {
+        includeObjectIntoPropertyWithKey(object, Key.CHILDREN);
     }
-    public void addToChildren(Component object) {
-        NSMutableArray array = (NSMutableArray)children();
+    public void removeFromChildren(er.bugtracker.Component object) {
+        excludeObjectFromPropertyWithKey(object, Key.CHILDREN);
+    }
 
-        willChange();
-        array.addObject(object);
-    }
-    public void removeFromChildren(Component object) {
-        NSMutableArray array = (NSMutableArray)children();
 
-        willChange();
-        array.removeObject(object);
+    public NSArray requirements() {
+        return (NSArray)storedValueForKey(Key.REQUIREMENTS);
     }
-    public void addToBothSidesOfChildren(Component object) {
-        addObjectToBothSidesOfRelationshipWithKey(object, "children");
+    public void addToRequirements(er.bugtracker.Requirement object) {
+        includeObjectIntoPropertyWithKey(object, Key.REQUIREMENTS);
     }
-    public void removeFromBothSidesOfChildren(Component object) {
-        removeObjectFromBothSidesOfRelationshipWithKey(object, "children");
+    public void removeFromRequirements(er.bugtracker.Requirement object) {
+        excludeObjectFromPropertyWithKey(object, Key.REQUIREMENTS);
+    }
+
+
+    public NSArray testItems() {
+        return (NSArray)storedValueForKey(Key.TEST_ITEMS);
+    }
+    public void addToTestItems(er.bugtracker.TestItem object) {
+        includeObjectIntoPropertyWithKey(object, Key.TEST_ITEMS);
+    }
+    public void removeFromTestItems(er.bugtracker.TestItem object) {
+        excludeObjectFromPropertyWithKey(object, Key.TEST_ITEMS);
     }
 
 }
