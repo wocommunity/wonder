@@ -12,30 +12,33 @@ import java.math.BigDecimal;
 
 public abstract class _State extends ERXGenericRecord {
 
-    public _State() {
-        super();
+    public interface Key  {
+        public static final String TEXT_DESCRIPTION = "textDescription";
+        public static final String SORT_ORDER = "sortOrder";  
     }
 
-    public static abstract class _StateClazz extends er.extensions.ERXGenericRecord.ERXGenericRecordClazz {
+    public static abstract class _StateClazz extends ERXGenericRecord.ERXGenericRecordClazz {
 
-        public NSArray fetchAll(EOEditingContext ec) {
-            return EOUtilities.objectsWithFetchSpecificationAndBindings(ec, "State", "FetchAll", null);
+        public NSArray objectsForFetchAll(EOEditingContext context) {
+            EOFetchSpecification spec = EOFetchSpecification.fetchSpecificationNamed("FetchAll", "State");
+
+            return context.objectsWithFetchSpecification(spec);
         }
 
     }
 
 
-    public String textDescription() {
-        return (String)storedValueForKey("textDescription");
-    }
-    public void setTextDescription(String aValue) {
-        takeStoredValueForKey(aValue, "textDescription");
-    }
-
     public Number sortOrder() {
-        return (Number)storedValueForKey("sortOrder");
+        return (Number)storedValueForKey(Key.SORT_ORDER);
     }
     public void setSortOrder(Number aValue) {
-        takeStoredValueForKey(aValue, "sortOrder");
+        takeStoredValueForKey(aValue, Key.SORT_ORDER);
+    }
+
+    public String textDescription() {
+        return (String)storedValueForKey(Key.TEXT_DESCRIPTION);
+    }
+    public void setTextDescription(String aValue) {
+        takeStoredValueForKey(aValue, Key.TEXT_DESCRIPTION);
     }
 }

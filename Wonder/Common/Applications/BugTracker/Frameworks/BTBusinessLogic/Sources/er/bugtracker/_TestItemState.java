@@ -12,30 +12,33 @@ import java.math.BigDecimal;
 
 public abstract class _TestItemState extends ERXGenericRecord {
 
-    public _TestItemState() {
-        super();
+    public interface Key  {
+        public static final String SORT_ORDER = "sortOrder";
+        public static final String NAME = "name";  
     }
 
-    public static abstract class _TestItemStateClazz extends er.extensions.ERXGenericRecord.ERXGenericRecordClazz {
+    public static abstract class _TestItemStateClazz extends ERXGenericRecord.ERXGenericRecordClazz {
 
-        public NSArray fetchAll(EOEditingContext ec) {
-            return EOUtilities.objectsWithFetchSpecificationAndBindings(ec, "TestItemState", "FetchAll", null);
+        public NSArray objectsForFetchAll(EOEditingContext context) {
+            EOFetchSpecification spec = EOFetchSpecification.fetchSpecificationNamed("FetchAll", "TestItemState");
+
+            return context.objectsWithFetchSpecification(spec);
         }
 
     }
 
 
     public String name() {
-        return (String)storedValueForKey("name");
+        return (String)storedValueForKey(Key.NAME);
     }
     public void setName(String aValue) {
-        takeStoredValueForKey(aValue, "name");
+        takeStoredValueForKey(aValue, Key.NAME);
     }
 
     public Number sortOrder() {
-        return (Number)storedValueForKey("sortOrder");
+        return (Number)storedValueForKey(Key.SORT_ORDER);
     }
     public void setSortOrder(Number aValue) {
-        takeStoredValueForKey(aValue, "sortOrder");
+        takeStoredValueForKey(aValue, Key.SORT_ORDER);
     }
 }

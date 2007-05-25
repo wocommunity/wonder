@@ -12,52 +12,50 @@ import java.math.BigDecimal;
 
 public abstract class _Framework extends ERXGenericRecord {
 
-    public _Framework() {
-        super();
+    public interface Key  {
+        public static final String OWNER = "owner";
+        public static final String OWNED_SINCE = "ownedSince";
+        public static final String ORDERING = "ordering";
+        public static final String NAME = "name";  
     }
 
-    public static abstract class _FrameworkClazz extends er.extensions.ERXGenericRecord.ERXGenericRecordClazz {
+    public static abstract class _FrameworkClazz extends ERXGenericRecord.ERXGenericRecordClazz {
 
-        public NSArray orderedFrameworks(EOEditingContext ec) {
-            return EOUtilities.objectsWithFetchSpecificationAndBindings(ec, "Framework", "orderedFrameworks", null);
+        public NSArray objectsForOrderedFrameworks(EOEditingContext context) {
+            EOFetchSpecification spec = EOFetchSpecification.fetchSpecificationNamed("orderedFrameworks", "Framework");
+
+            return context.objectsWithFetchSpecification(spec);
         }
 
     }
 
 
     public String name() {
-        return (String)storedValueForKey("name");
+        return (String)storedValueForKey(Key.NAME);
     }
     public void setName(String aValue) {
-        takeStoredValueForKey(aValue, "name");
+        takeStoredValueForKey(aValue, Key.NAME);
     }
 
     public Number ordering() {
-        return (Number)storedValueForKey("ordering");
+        return (Number)storedValueForKey(Key.ORDERING);
     }
     public void setOrdering(Number aValue) {
-        takeStoredValueForKey(aValue, "ordering");
+        takeStoredValueForKey(aValue, Key.ORDERING);
     }
 
     public NSTimestamp ownedSince() {
-        return (NSTimestamp)storedValueForKey("ownedSince");
+        return (NSTimestamp)storedValueForKey(Key.OWNED_SINCE);
     }
     public void setOwnedSince(NSTimestamp aValue) {
-        takeStoredValueForKey(aValue, "ownedSince");
+        takeStoredValueForKey(aValue, Key.OWNED_SINCE);
     }
 
-    public People owner() {
-        return (People)storedValueForKey("owner");
+    public er.bugtracker.People owner() {
+        return (er.bugtracker.People)storedValueForKey(Key.OWNER);
     }
-
-    public void setOwner(People aValue) {
-        takeStoredValueForKey(aValue, "owner");
-    }
-    public void addToBothSidesOfOwner(People object) {
-        addObjectToBothSidesOfRelationshipWithKey(object, "owner");
-    }
-    public void removeFromBothSidesOfOwner(People object) {
-        removeObjectFromBothSidesOfRelationshipWithKey(object, "owner");
+    public void setOwner(er.bugtracker.People object) {
+        takeStoredValueForKey(object, Key.OWNER);
     }
 
 }

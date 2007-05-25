@@ -12,221 +12,204 @@ import java.math.BigDecimal;
 
 public abstract class _Bug extends ERXGenericRecord {
 
-    public _Bug() {
-        super();
+    public interface Key  {
+        public static final String TEXT_DESCRIPTION = "textDescription";
+        public static final String TEST_ITEMS = "testItems";
+        public static final String TARGET_RELEASE = "targetRelease";
+        public static final String SUBJECT = "subject";
+        public static final String STATE = "state";
+        public static final String READ = "read";
+        public static final String PRIORITY = "priority";
+        public static final String PREVIOUS_OWNER = "previousOwner";
+        public static final String OWNER = "owner";
+        public static final String ORIGINATOR = "originator";
+        public static final String ID = "id";
+        public static final String FEATURE_REQUEST = "featureRequest";
+        public static final String DATE_SUBMITTED = "dateSubmitted";
+        public static final String DATE_MODIFIED = "dateModified";
+        public static final String COMPONENT = "component";
+        public static final String COMMENTS = "comments";  
     }
 
-    public static abstract class _BugClazz extends er.extensions.ERXGenericRecord.ERXGenericRecordClazz {
+    public static abstract class _BugClazz extends ERXGenericRecord.ERXGenericRecordClazz {
 
-        public NSArray bugsFiledRecentlyWithDateUser(EOEditingContext ec, Object date, Object user) {
-            NSMutableDictionary _dict = new NSMutableDictionary(4);
-            
-            if(date != null) _dict.setObjectForKey( date, "date");
-            if(user != null) _dict.setObjectForKey( user, "user");
-            return EOUtilities.objectsWithFetchSpecificationAndBindings(ec, "Bug", "bugsFiledRecently", _dict);
+        public NSArray objectsForBugsFiledRecently(EOEditingContext context, NSTimestamp dateBinding, er.bugtracker.People userBinding) {
+            EOFetchSpecification spec = EOFetchSpecification.fetchSpecificationNamed("bugsFiledRecently", "Bug");
+
+            NSMutableDictionary bindings = new NSMutableDictionary();
+
+            if (dateBinding != null)
+                bindings.setObjectForKey(dateBinding, "date");
+            if (userBinding != null)
+                bindings.setObjectForKey(userBinding, "user");
+            spec = spec.fetchSpecificationWithQualifierBindings(bindings);
+
+            return context.objectsWithFetchSpecification(spec);
         }
 
-        public NSArray bugsInBuildWithTargetRelease(EOEditingContext ec, Object targetRelease) {
-            NSMutableDictionary _dict = new NSMutableDictionary(4);
-            
-            if(targetRelease != null) _dict.setObjectForKey( targetRelease, "targetRelease");
-            return EOUtilities.objectsWithFetchSpecificationAndBindings(ec, "Bug", "bugsInBuild", _dict);
+        public NSArray objectsForBugsInBuild(EOEditingContext context, er.bugtracker.Release targetReleaseBinding) {
+            EOFetchSpecification spec = EOFetchSpecification.fetchSpecificationNamed("bugsInBuild", "Bug");
+
+            NSMutableDictionary bindings = new NSMutableDictionary();
+
+            if (targetReleaseBinding != null)
+                bindings.setObjectForKey(targetReleaseBinding, "targetRelease");
+            spec = spec.fetchSpecificationWithQualifierBindings(bindings);
+
+            return context.objectsWithFetchSpecification(spec);
         }
 
-        public NSArray bugsOwnedWithUser(EOEditingContext ec, Object user) {
-            NSMutableDictionary _dict = new NSMutableDictionary(4);
-            
-            if(user != null) _dict.setObjectForKey( user, "user");
-            return EOUtilities.objectsWithFetchSpecificationAndBindings(ec, "Bug", "bugsOwned", _dict);
+        public NSArray objectsForBugsOwned(EOEditingContext context, er.bugtracker.People userBinding) {
+            EOFetchSpecification spec = EOFetchSpecification.fetchSpecificationNamed("bugsOwned", "Bug");
+
+            NSMutableDictionary bindings = new NSMutableDictionary();
+
+            if (userBinding != null)
+                bindings.setObjectForKey(userBinding, "user");
+            spec = spec.fetchSpecificationWithQualifierBindings(bindings);
+
+            return context.objectsWithFetchSpecification(spec);
         }
 
-        public NSArray unreadBugsWithUser(EOEditingContext ec, Object user) {
-            NSMutableDictionary _dict = new NSMutableDictionary(4);
-            
-            if(user != null) _dict.setObjectForKey( user, "user");
-            return EOUtilities.objectsWithFetchSpecificationAndBindings(ec, "Bug", "unreadBugs", _dict);
+        public NSArray objectsForUnreadBugs(EOEditingContext context, er.bugtracker.People userBinding) {
+            EOFetchSpecification spec = EOFetchSpecification.fetchSpecificationNamed("unreadBugs", "Bug");
+
+            NSMutableDictionary bindings = new NSMutableDictionary();
+
+            if (userBinding != null)
+                bindings.setObjectForKey(userBinding, "user");
+            spec = spec.fetchSpecificationWithQualifierBindings(bindings);
+
+            return context.objectsWithFetchSpecification(spec);
         }
 
     }
 
 
-    public String subject() {
-        return (String)storedValueForKey("subject");
+    public NSTimestamp dateModified() {
+        return (NSTimestamp)storedValueForKey(Key.DATE_MODIFIED);
     }
-    public void setSubject(String aValue) {
-        takeStoredValueForKey(aValue, "subject");
-    }
-
-    public String read() {
-        return (String)storedValueForKey("read");
-    }
-    public void setRead(String aValue) {
-        takeStoredValueForKey(aValue, "read");
+    public void setDateModified(NSTimestamp aValue) {
+        takeStoredValueForKey(aValue, Key.DATE_MODIFIED);
     }
 
     public NSTimestamp dateSubmitted() {
-        return (NSTimestamp)storedValueForKey("dateSubmitted");
+        return (NSTimestamp)storedValueForKey(Key.DATE_SUBMITTED);
     }
     public void setDateSubmitted(NSTimestamp aValue) {
-        takeStoredValueForKey(aValue, "dateSubmitted");
+        takeStoredValueForKey(aValue, Key.DATE_SUBMITTED);
     }
 
-    public NSTimestamp dateModified() {
-        return (NSTimestamp)storedValueForKey("dateModified");
+    public boolean featureRequest() {
+        return ((Boolean)storedValueForKey(Key.FEATURE_REQUEST)).booleanValue();
     }
-    public void setDateModified(NSTimestamp aValue) {
-        takeStoredValueForKey(aValue, "dateModified");
+    public void setFeatureRequest(boolean aValue) {
+        takeStoredValueForKey((aValue ? Boolean.TRUE : Boolean.FALSE), Key.FEATURE_REQUEST);
     }
 
-    public Boolean featureRequest() {
-        return (Boolean)storedValueForKey("featureRequest");
+    public Number id() {
+        return (Number)storedValueForKey(Key.ID);
     }
-    public void setFeatureRequest(Boolean aValue) {
-        takeStoredValueForKey(aValue, "featureRequest");
+    public void setId(Number aValue) {
+        takeStoredValueForKey(aValue, Key.ID);
+    }
+
+    public String read() {
+        return (String)storedValueForKey(Key.READ);
+    }
+    public void setRead(String aValue) {
+        takeStoredValueForKey(aValue, Key.READ);
+    }
+
+    public String subject() {
+        return (String)storedValueForKey(Key.SUBJECT);
+    }
+    public void setSubject(String aValue) {
+        takeStoredValueForKey(aValue, Key.SUBJECT);
     }
 
     public String textDescription() {
-        return (String)storedValueForKey("textDescription");
+        return (String)storedValueForKey(Key.TEXT_DESCRIPTION);
     }
     public void setTextDescription(String aValue) {
-        takeStoredValueForKey(aValue, "textDescription");
+        takeStoredValueForKey(aValue, Key.TEXT_DESCRIPTION);
     }
 
-    public Number bugid() {
-        return (Number)storedValueForKey("id");
+    public er.bugtracker.Component component() {
+        return (er.bugtracker.Component)storedValueForKey(Key.COMPONENT);
     }
-    public void setBugid(Number aValue) {
-        takeStoredValueForKey(aValue, "id");
-    }
-
-    public Priority priority() {
-        return (Priority)storedValueForKey("priority");
-    }
-
-    public void setPriority(Priority aValue) {
-        takeStoredValueForKey(aValue, "priority");
-    }
-    public void addToBothSidesOfPriority(Priority object) {
-        addObjectToBothSidesOfRelationshipWithKey(object, "priority");
-    }
-    public void removeFromBothSidesOfPriority(Priority object) {
-        removeObjectFromBothSidesOfRelationshipWithKey(object, "priority");
+    public void setComponent(er.bugtracker.Component object) {
+        takeStoredValueForKey(object, Key.COMPONENT);
     }
 
 
-    public Component component() {
-        return (Component)storedValueForKey("component");
+    public er.bugtracker.People originator() {
+        return (er.bugtracker.People)storedValueForKey(Key.ORIGINATOR);
     }
-
-    public void setComponent(Component aValue) {
-        takeStoredValueForKey(aValue, "component");
-    }
-    public void addToBothSidesOfComponent(Component object) {
-        addObjectToBothSidesOfRelationshipWithKey(object, "component");
-    }
-    public void removeFromBothSidesOfComponent(Component object) {
-        removeObjectFromBothSidesOfRelationshipWithKey(object, "component");
+    public void setOriginator(er.bugtracker.People object) {
+        takeStoredValueForKey(object, Key.ORIGINATOR);
     }
 
 
-    public People owner() {
-        return (People)storedValueForKey("owner");
+    public er.bugtracker.People owner() {
+        return (er.bugtracker.People)storedValueForKey(Key.OWNER);
     }
-
-    public void setOwner(People aValue) {
-        takeStoredValueForKey(aValue, "owner");
-    }
-    public void addToBothSidesOfOwner(People object) {
-        addObjectToBothSidesOfRelationshipWithKey(object, "owner");
-    }
-    public void removeFromBothSidesOfOwner(People object) {
-        removeObjectFromBothSidesOfRelationshipWithKey(object, "owner");
+    public void setOwner(er.bugtracker.People object) {
+        takeStoredValueForKey(object, Key.OWNER);
     }
 
 
-    public State state() {
-        return (State)storedValueForKey("state");
+    public er.bugtracker.People previousOwner() {
+        return (er.bugtracker.People)storedValueForKey(Key.PREVIOUS_OWNER);
     }
-
-    public void setState(State aValue) {
-        takeStoredValueForKey(aValue, "state");
-    }
-    public void addToBothSidesOfState(State object) {
-        addObjectToBothSidesOfRelationshipWithKey(object, "state");
-    }
-    public void removeFromBothSidesOfState(State object) {
-        removeObjectFromBothSidesOfRelationshipWithKey(object, "state");
+    public void setPreviousOwner(er.bugtracker.People object) {
+        takeStoredValueForKey(object, Key.PREVIOUS_OWNER);
     }
 
 
-    public People originator() {
-        return (People)storedValueForKey("originator");
+    public er.bugtracker.Priority priority() {
+        return (er.bugtracker.Priority)storedValueForKey(Key.PRIORITY);
     }
-
-    public void setOriginator(People aValue) {
-        takeStoredValueForKey(aValue, "originator");
-    }
-    public void addToBothSidesOfOriginator(People object) {
-        addObjectToBothSidesOfRelationshipWithKey(object, "originator");
-    }
-    public void removeFromBothSidesOfOriginator(People object) {
-        removeObjectFromBothSidesOfRelationshipWithKey(object, "originator");
+    public void setPriority(er.bugtracker.Priority object) {
+        takeStoredValueForKey(object, Key.PRIORITY);
     }
 
 
-    public Release targetRelease() {
-        return (Release)storedValueForKey("targetRelease");
+    public er.bugtracker.State state() {
+        return (er.bugtracker.State)storedValueForKey(Key.STATE);
     }
-
-    public void setTargetRelease(Release aValue) {
-        takeStoredValueForKey(aValue, "targetRelease");
-    }
-    public void addToBothSidesOfTargetRelease(Release object) {
-        addObjectToBothSidesOfRelationshipWithKey(object, "targetRelease");
-    }
-    public void removeFromBothSidesOfTargetRelease(Release object) {
-        removeObjectFromBothSidesOfRelationshipWithKey(object, "targetRelease");
+    public void setState(er.bugtracker.State object) {
+        takeStoredValueForKey(object, Key.STATE);
     }
 
 
-    public People previousOwner() {
-        return (People)storedValueForKey("previousOwner");
+    public er.bugtracker.Release targetRelease() {
+        return (er.bugtracker.Release)storedValueForKey(Key.TARGET_RELEASE);
+    }
+    public void setTargetRelease(er.bugtracker.Release object) {
+        takeStoredValueForKey(object, Key.TARGET_RELEASE);
     }
 
-    public void setPreviousOwner(People aValue) {
-        takeStoredValueForKey(aValue, "previousOwner");
+
+    public NSArray comments() {
+        return (NSArray)storedValueForKey(Key.COMMENTS);
     }
-    public void addToBothSidesOfPreviousOwner(People object) {
-        addObjectToBothSidesOfRelationshipWithKey(object, "previousOwner");
+    public void addToComments(er.bugtracker.Comment object) {
+        includeObjectIntoPropertyWithKey(object, Key.COMMENTS);
     }
-    public void removeFromBothSidesOfPreviousOwner(People object) {
-        removeObjectFromBothSidesOfRelationshipWithKey(object, "previousOwner");
+    public void removeFromComments(er.bugtracker.Comment object) {
+        excludeObjectFromPropertyWithKey(object, Key.COMMENTS);
     }
 
 
     public NSArray testItems() {
-        return (NSArray)storedValueForKey("testItems");
+        return (NSArray)storedValueForKey(Key.TEST_ITEMS);
     }
-    public void setTestItems(NSMutableArray aValue) {
-        takeStoredValueForKey(aValue, "testItems");
+    public void addToTestItems(er.bugtracker.TestItem object) {
+        includeObjectIntoPropertyWithKey(object, Key.TEST_ITEMS);
     }
-    public void addToTestItems(TestItem object) {
-        NSMutableArray array = (NSMutableArray)testItems();
-
-        willChange();
-        array.addObject(object);
-    }
-    public void removeFromTestItems(TestItem object) {
-        NSMutableArray array = (NSMutableArray)testItems();
-
-        willChange();
-        array.removeObject(object);
-    }
-    public void addToBothSidesOfTestItems(TestItem object) {
-        addObjectToBothSidesOfRelationshipWithKey(object, "testItems");
-    }
-    public void removeFromBothSidesOfTestItems(TestItem object) {
-        removeObjectFromBothSidesOfRelationshipWithKey(object, "testItems");
+    public void removeFromTestItems(er.bugtracker.TestItem object) {
+        excludeObjectFromPropertyWithKey(object, Key.TEST_ITEMS);
     }
 
 }
