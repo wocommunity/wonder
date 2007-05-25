@@ -1,5 +1,6 @@
 Hyperlink1: WOHyperlink {
 	href = href;
+	disabled = object.isNewEO;
 }
 
 String1: WOString {

@@ -129,7 +129,7 @@ delete from TEST_ITEM;
                 Comment comment = (Comment)Comment.clazz.createAndInsertObject(ec);
                 int hours = last + randomInt(48);
                 comment.setDateSubmitted(bug.dateSubmitted().timestampByAddingGregorianUnits(0, 0, 0, hours, 0, 0));
-                comment.setOriginator(randomUser());
+                comment.updateOriginator(randomUser());
                 comment.setTextDescription(randomText(5));
                 last = hours;
                 bug.addToBothSidesOfComments(comment);
@@ -197,14 +197,14 @@ delete from TEST_ITEM;
                     bug.setComponent(randomComponent());
                     bug.setSubject(randomWords(50));
                     bug.setTextDescription(randomText(3));
-                    bug.setOriginator(randomUser());
-                    bug.setOwner(randomUser());
-                    bug.setPreviousOwner(randomUser());
+                    bug.updateOriginator(randomUser());
+                    bug.updateOwner(randomUser());
+                    bug.updatePreviousOwner(randomUser());
                     bug.setTextDescription(randomText(3));
                     bug.setPriority(randomPriority());
                     bug.setState(randomState());
                     bug.setFeatureRequest(i % 4 == 0);
-                    bug.setTargetRelease(randomRelease());
+                    bug.updateTargetRelease(randomRelease());
 
                     addComments(bug);
                 }
@@ -217,17 +217,17 @@ delete from TEST_ITEM;
                     requirements.addObject(bug);
                     bug.setDateSubmitted(randomTimestamp());
                     bug.setDateModified(bug.dateSubmitted().timestampByAddingGregorianUnits(0, 0, 0, randomInt(24*100), 0, 0));
-                    bug.setComponent(randomComponent());
+                    bug.updateComponent(randomComponent());
                     bug.setSubject(randomWords(50));
                     bug.setTextDescription(randomText(3));
-                    bug.setOriginator(randomUser());
-                    bug.setOwner(randomUser());
-                    bug.setPreviousOwner(randomUser());
+                    bug.updateOriginator(randomUser());
+                    bug.updateOwner(randomUser());
+                    bug.updatePreviousOwner(randomUser());
                     bug.setTextDescription(randomText(3));
                     bug.setPriority(randomPriority());
                     bug.setState(randomState());
                     bug.setFeatureRequest(i % 4 == 0);
-                    bug.setTargetRelease(randomRelease());
+                    bug.updateTargetRelease(randomRelease());
                     
                     bug.setRequirementType(randomRequirementType());
                     bug.setRequirementSubType(randomRequirementSubType());
@@ -252,13 +252,13 @@ delete from TEST_ITEM;
                     testItem.setTitle(randomWords(50));
                     testItem.setTextDescription(randomText(3));
                     testItem.setControlled(randomWords(50));
-                    testItem.setOwner(randomUser());
+                    testItem.updateOwner(randomUser());
                     testItem.setState(state);
                     if(bug != null) {
                         bug.addTestItem(testItem);
                         component = bug.component();
                     }
-                    testItem.setComponent(component);
+                    testItem.updateComponent(component);
                 }
 
                 People user = (People)People.clazz.createAndInsertObject(ec);
