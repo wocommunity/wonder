@@ -11,7 +11,7 @@ BackgroundColor: WOString {
 	value = d2wContext.backgroundColorForTable;
 }
 
-Conditional1: WOConditional {
+hasPrinterFriendlyVersion: WOConditional {
 	condition = d2wContext.hasPrinterFriendlyVersion;
 }
 
@@ -67,14 +67,15 @@ ListPageRepetition2: WOSwitchComponent {
 	d2wContext = localContext;
 	displayGroup = displayGroup;
 }
-
+Display : WOString {
+	value = d2wContext.sublistSection.name;
+}
 NavBar1: WOSwitchComponent {   
 //	bgcolor = "#ff0000"; // backgroundColorForTable;
 	displayGroup = displayGroup;
 	objectName = d2wContext.displayNameForEntity;
 //	textColor = d2wContext.textColor;
-	width = 550;
-        d2wContext = d2wContext;
+    d2wContext = d2wContext;
 	bgcolor = d2wContext.backgroundColorForTable;
 	WOComponentName = d2wContext.batchNavigationBarComponentName;
 }
