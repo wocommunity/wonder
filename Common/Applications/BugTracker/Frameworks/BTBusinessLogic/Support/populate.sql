@@ -23,22 +23,16 @@ insert into DIFFICULTY (ID,  DESCRIPTION) values (2, 'Medium');
 insert into DIFFICULTY (ID,  DESCRIPTION) values (3, 'Easy');
 
 DELETE FROM PEOPLE;
-insert into PEOPLE (ID, EMAIL, IS_ACTIVE, IS_ENGINEERING, IS_ADMIN, IS_CUSTOMER_SERVICE, LOGIN, NAME, PASSWORD, TEAM) values
-           (1, 'admin@mydomain.com', 1, 1, 1, 0, 'admin', 'Administrator','admin', 'Core team');
-
-DELETE FROM FRAMEW;
-insert into FRAMEW (ID, NAME, ORDERING, OWNED_SINCE, USER_ID) values 
-(1, 'ERExtensions', 1, NULL, NULL),
-(2, 'ERDirectToWeb', 2, NULL, NULL),
-(3, 'ERExtras', 3, NULL, NULL),
-(4, 'BTBusinessLogic', 4, NULL, NULL),
-(5, 'BugTracker', 5, NULL, NULL);
-
-DELETE FROM RELEASE;
-INSERT INTO RELEASE VALUES (1,1,'0.5'),(2,1,'1.0'),(3,1,'1.1');
+-- insert into PEOPLE (ID, EMAIL, IS_ACTIVE, IS_ENGINEERING, IS_ADMIN, IS_CUSTOMER_SERVICE, LOGIN, NAME, PASSWORD, TEAM) values  (1, 'admin@mydomain.com', true, true, true, false, 'admin', 'Administrator','admin', 'Core team');
 
 DELETE FROM REQ_SUB_TYPE;
-insert into REQ_SUB_TYPE (REQ_SUB_TYPE_ID, SUB_TYPE_DESC) values (1, 'Essential'), (2, 'Important'), (3, 'Useful'), (4, 'Cosmetic');
+insert into REQ_SUB_TYPE (REQ_SUB_TYPE_ID, SUB_TYPE_DESC) values (1, 'Essential');
+insert into REQ_SUB_TYPE (REQ_SUB_TYPE_ID, SUB_TYPE_DESC) values (2, 'Important');
+insert into REQ_SUB_TYPE (REQ_SUB_TYPE_ID, SUB_TYPE_DESC) values (3, 'Useful');
+insert into REQ_SUB_TYPE (REQ_SUB_TYPE_ID, SUB_TYPE_DESC) values (4, 'Cosmetic');
 
 DELETE FROM REQ_TYPE;
-insert into REQ_TYPE (REQ_TYPE_ID, TYPE_DESCRIPTION) values (1, 'Interface'), (2, 'Documentation'), (3, 'Backend'), (4, 'Communication');
+insert into REQ_TYPE (REQ_TYPE_ID, TYPE_DESCRIPTION) values (1, 'Interface');
+insert into REQ_TYPE (REQ_TYPE_ID, TYPE_DESCRIPTION) values (2, 'Documentation');
+insert into REQ_TYPE (REQ_TYPE_ID, TYPE_DESCRIPTION) values (3, 'Backend');
+insert into REQ_TYPE (REQ_TYPE_ID, TYPE_DESCRIPTION) values (4, 'Communication');
