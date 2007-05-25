@@ -63,11 +63,6 @@ public class Component extends _Component {
 		return parent == null ? true : okToSetParent(child, (Component) parent.valueForKey("parent"));
 	}
 
-	// called automatically by ERXGenericRecord
-	public void flushCaches() {
-		clazz._cachedComponents = null;
-	}
-
 	public static class ComponentClazz extends _ComponentClazz {
 
 		private NSMutableDictionary _cachedComponentsByGlobalID;
