@@ -181,7 +181,7 @@ public class Bug extends _Bug implements Markable {
 		if (newValue != null && newValue.length() > 0) {
 			Comment comment = (Comment) Comment.clazz.createAndInsertObject(editingContext());
 			comment.setBug(this);
-			addToBothSidesOfComments(comment);
+			addComment(comment);
 			
 			String oldText = textDescription();
 
@@ -199,12 +199,8 @@ public class Bug extends _Bug implements Markable {
 		return ERXArrayUtilities.sortedArraySortedWithKey(comments(), Comment.Key.DATE_SUBMITTED);
 	}
 	
-	public NSArray comments() {
-		return (NSArray)storedValueForKey("comments");
-	}
-	
-    public void addToBothSidesOfComments(Comment object) {
-        addObjectToBothSidesOfRelationshipWithKey(object, "comments");
+    public void addComment(Comment object) {
+        addObjectToBothSidesOfRelationshipWithKey(object, Key.COMMENTS);
     }
 
     public void didUpdate() {
