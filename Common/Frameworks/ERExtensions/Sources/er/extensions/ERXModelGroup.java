@@ -229,7 +229,6 @@ public class ERXModelGroup extends EOModelGroup {
 		resetConnectionDictionaryInModel(eomodel);
 
 		NSNotificationCenter.defaultCenter().postNotification(EOModelGroup.ModelAddedNotification, eomodel);
-		dumpSchemaSQL(eomodel);
 	}
 
 	private void dumpSchemaSQL(EOModel eomodel) {
@@ -1043,6 +1042,8 @@ public class ERXModelGroup extends EOModelGroup {
 				NSMutableDictionary mutableUserInfo = userInfo.mutableClone();
 				mutableUserInfo.setObjectForKey(Boolean.valueOf(prototypesFixed), prototypesFixedKey);
 				model.setUserInfo(mutableUserInfo);
+				dumpSchemaSQL(model);
+
 			}
 		}
 	}
