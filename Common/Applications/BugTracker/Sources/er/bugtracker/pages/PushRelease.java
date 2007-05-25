@@ -16,7 +16,6 @@ import com.webobjects.foundation.NSMutableArray;
 
 import er.bugtracker.Bug;
 import er.bugtracker.Release;
-import er.bugtracker.State;
 
 public class PushRelease extends WOComponent {
 
