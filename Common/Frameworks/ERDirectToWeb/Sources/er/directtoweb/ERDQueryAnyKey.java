@@ -54,7 +54,11 @@ public class ERDQueryAnyKey extends ERDCustomQueryComponent {
             if(newValue != null && newValue.toString().indexOf("*") == 0) {
                 newValue = newValue.toString().substring(1);
             }
-            q = ERXEOControlUtilities.qualifierMatchingAnyKey(queryAttributes(), ERXRegExQualifier.MatchesSelector, newValue);
+            if(true) {
+                q = ERXEOControlUtilities.qualifierMatchingAnyKey(queryAttributes(), EOQualifier.QualifierOperatorCaseInsensitiveLike, "*" +newValue + "*");
+            } else {
+                q = ERXEOControlUtilities.qualifierMatchingAnyKey(queryAttributes(), ERXRegExQualifier.MatchesSelector, newValue);
+            }
         }
         dg.setQualifierForKey(q, key());
     }
