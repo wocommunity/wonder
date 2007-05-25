@@ -4,8 +4,11 @@ package er.bugtracker;
 import org.apache.log4j.Logger;
 
 import com.webobjects.eocontrol.EOEditingContext;
-
-import er.extensions.ERXConstant;
+import com.webobjects.eocontrol.EOFetchSpecification;
+import com.webobjects.eocontrol.EOKeyValueQualifier;
+import com.webobjects.eocontrol.EOQualifier;
+import com.webobjects.eocontrol.EOSortOrdering;
+import com.webobjects.foundation.NSArray;
 
 public class Release extends _Release {
     static final Logger log = Logger.getLogger(Release.class);
@@ -22,15 +25,14 @@ public class Release extends _Release {
     // Class methods go here
     
     public static class ReleaseClazz extends _ReleaseClazz {
-        private Release defaultRelease;
-        private Release targetRelease;
-        // FIXME: (ak) these are just stubs
-        // I don't have the slightest idea what a "release" in the NS context is!
+        
         public Release defaultRelease(EOEditingContext ec) {
-            return defaultRelease;
-        }
-        public Release targetRelease(EOEditingContext ec) {
-            return targetRelease;
+            EOQualifier qualifier = new EOKeyValueQualifier(Key.IS_OPEN, EOQualifier.QualifierOperatorEqual, Boolean.TRUE);
+            NSArray sorting = new NSArray(new Object[]{
+                    EOSortOrdering.sortOrderingWithKey(Key.NAME, EOSortOrdering.CompareDescending)
+            });
+            EOFetchSpecification fs = new EOFetchSpecification(entityName(), qualifier, sorting);
+            return (Release) ec.objectsWithFetchSpecification(fs).lastObject();
         }
     }
 

@@ -8,18 +8,9 @@
 package er.bugtracker.components;
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
-import com.webobjects.directtoweb.D2W;
-import com.webobjects.directtoweb.EditPageInterface;
-import com.webobjects.eoaccess.EOUtilities;
-import com.webobjects.eocontrol.EOEditingContext;
 
 import er.bugtracker.Bug;
-import er.bugtracker.Component;
-import er.bugtracker.People;
-import er.bugtracker.Session;
-import er.bugtracker.TestItem;
-import er.extensions.ERXEC;
-import er.extensions.ERXLocalizer;
+import er.bugtracker.Factory;
 
 public class CreateTestItemFromReq extends WOComponent {
 
@@ -27,25 +18,9 @@ public class CreateTestItemFromReq extends WOComponent {
         super(aContext);
     }
 
-    public Bug bug;
+    public Bug object;
 
     public WOComponent createTestItem() {
-        ERXLocalizer localizer = ((Session)session()).localizer();
-        EOEditingContext peer = ERXEC.newEditingContext(bug.editingContext().parentObjectStore());
-        EditPageInterface epi = null;
-        peer.lock();
-        try {
-            People user = (People)EOUtilities.localInstanceOfObject(peer,((Session)session()).user());
-
-            String description = localizer.localizedTemplateStringForKeyWithObject("CreateTestItemFromReq.templateString", bug);
-            TestItem testItem = user.createTestItemFromRequestWithDescription(bug, (Component)valueForKey("component"), description);
-            epi=(EditPageInterface)D2W.factory().pageForConfigurationNamed("CreateNewTestItemFromReq",session());
-            epi.setObject(testItem);
-            epi.setNextPage(context().page());
-        } finally {
-            peer.unlock();
-        }
-
-        return (WOComponent)epi;
+        return Factory.bugTracker().createTestItemFromBug(object);
     }
 }

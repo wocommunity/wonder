@@ -44,7 +44,7 @@ public class PushRelease extends WOComponent {
     public WOComponent push() {
         for (Enumeration e = bugsInBuild().objectEnumerator(); e.hasMoreElements();) {
             currentBug = (Bug) e.nextElement();
-            currentBug.setState(State.VERIFY);
+            currentBug.moveToVerification();
         }
         session().defaultEditingContext().saveChanges();
         return pageWithName("HomePage");
