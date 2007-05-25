@@ -124,7 +124,6 @@ delete from TEST_ITEM;
         }
         
         private void addComments(Bug bug) {
-            if(true) return;
             int maxComments = randomInt(20);
             int last = 0;
             for(int i = 0; i < maxComments; i++) {
@@ -186,7 +185,7 @@ delete from TEST_ITEM;
                     components.addObject(component);
                 }
 
-                int MAX = 3;
+                int MAX = 500;
 
                 log.info("Creating bugs: "+ MAX);
                 

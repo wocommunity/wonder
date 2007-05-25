@@ -2,7 +2,6 @@
 {
     EOModelVersion = 2.1;
     adaptorName = JDBC;
-    connectionDictionary = {};
     entities = 
     (
        

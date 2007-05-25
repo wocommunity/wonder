@@ -178,6 +178,17 @@
            {
                modificationDate = "2002-05-06 07:37:10 +0200";
            };
+       }, 
+       
+       {
+           allowsNull = Y;
+           columnName = type;
+           name = type;
+           prototypeName = charFlag;
+           userInfo = 
+           {
+               modificationDate = "2002-05-06 07:28:53 +0200";
+           };
        }
     );
     attributesUsedForLocking = 
@@ -196,7 +207,8 @@
        requirementTypeID, 
        stateID, 
        subject, 
-       textDescription
+       textDescription, 
+       type
     );
     className = er.bugtracker.Requirement;
     classProperties = 
@@ -219,9 +231,10 @@
        subject, 
        targetRelease, 
        testItems, 
-       textDescription
+       textDescription, 
+       type
     );
-    externalName = REQUIREMENT;
+    externalName = BUG;
     internalInfo = 
     {
         _clientClassPropertyNames = 
@@ -241,7 +254,8 @@
            state, 
            subject, 
            targetRelease, 
-           textDescription
+           textDescription, 
+           type
         );
     };
     name = Requirement;
@@ -288,6 +302,7 @@
               }
            );
            name = comments;
+           ownsDestination = Y;
        }, 
        
        {
@@ -517,6 +532,7 @@
            };
        }
     );
+    restrictingQualifier = "(type='r')";
     userInfo = 
     {
         modificationDate = "2002-05-07 22:38:33 +0200";
