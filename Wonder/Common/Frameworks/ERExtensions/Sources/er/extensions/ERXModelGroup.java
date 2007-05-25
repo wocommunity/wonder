@@ -976,7 +976,7 @@ public class ERXModelGroup extends EOModelGroup {
 						log.info(model.name() + " references a prototype entity named " + prototypeEntityName + " which is not yet loaded.");
 					}
 					else {
-						if (log.isInfoEnabled()) {
+						if (log.isDebugEnabled()) {
 							log.debug("Flattening " + model.name() + " using the prototype " + prototypeEntity.name());
 						}
 						for (Enumeration entitiesEnum = model.entities().objectEnumerator(); entitiesEnum.hasMoreElements();) {
