@@ -8,16 +8,13 @@ package er.bugtracker;
 
 import org.apache.log4j.Logger;
 
-import com.webobjects.appserver._private._PermanentCacheSingleton;
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.eocontrol.EOEnterpriseObject;
 import com.webobjects.eocontrol.EOGlobalID;
 import com.webobjects.foundation.NSArray;
 
-import er.corebusinesslogic.ERCPreference;
 import er.corebusinesslogic.ERCoreBusinessLogic;
 import er.corebusinesslogic.ERCoreUserInterface;
-import er.extensions.ERXValueUtilities;
 
 public class People extends _People implements ERCoreUserInterface {
     static final Logger log = Logger.getLogger(People.class);
@@ -31,21 +28,8 @@ public class People extends _People implements ERCoreUserInterface {
         super();
     }
 
-    public void awakeFromInsertion(EOEditingContext ec) {
-        super.awakeFromInsertion(ec);
-    }
-
-    public TestItem createTestItemFromRequestWithDescription(Bug bug, Component component, String description) {
-        bug = (Bug) localInstanceOf(bug);
-        component = (Component) localInstanceOf(component);
-
-        TestItem testItem = new TestItem();
-        editingContext().insertObject(testItem);
-        testItem.updateComponent(component);
-        testItem.setTextDescription(description);
-        bug.addTestItem(testItem);
-
-        return testItem;
+    public void init(EOEditingContext ec) {
+        super.init(ec);
     }
 
     // Class methods go here
