@@ -21,10 +21,11 @@ import er.extensions.ERXExtensions;
 import er.extensions.ERXFrameworkPrincipal;
 import er.extensions.ERXLoremIpsumGenerator;
 import er.extensions.ERXStringUtilities;
+import er.prototypes.ERPrototypes;
 
 public class BTBusinessLogic extends ERXFrameworkPrincipal {
 
-    public final static Class REQUIRES[] = new Class[] {ERXExtensions.class, ERCoreBusinessLogic.class};
+    public final static Class REQUIRES[] = new Class[] {ERXExtensions.class, ERPrototypes.class, ERCoreBusinessLogic.class};
     
     private static final Logger log = Logger.getLogger(BTBusinessLogic.class);
     
@@ -123,6 +124,7 @@ delete from TEST_ITEM;
         }
         
         private void addComments(Bug bug) {
+            if(true) return;
             int maxComments = randomInt(20);
             int last = 0;
             for(int i = 0; i < maxComments; i++) {
@@ -132,7 +134,7 @@ delete from TEST_ITEM;
                 comment.updateOriginator(randomUser());
                 comment.setTextDescription(randomText(5));
                 last = hours;
-                bug.addToBothSidesOfComments(comment);
+                bug.addComment(comment);
             }
         }
 
@@ -184,11 +186,11 @@ delete from TEST_ITEM;
                     components.addObject(component);
                 }
 
-                int MAX = 500;
+                int MAX = 3;
 
-                log.info("Creating bugs: "+ (MAX-100));
+                log.info("Creating bugs: "+ MAX);
                 
-                for(int i = 100; i < 100 + MAX; i++) {
+                for(int i = 0; i < MAX; i++) {
                     People.clazz.setCurrentUser(randomUser());
                     Bug bug = (Bug) Bug.clazz.createAndInsertObject(ec);
                     bugs.addObject(bug);
@@ -209,9 +211,9 @@ delete from TEST_ITEM;
                     addComments(bug);
                 }
 
-                log.info("Creating requirements: "+ (MAX-100));
+                log.info("Creating requirements: "+ MAX);
                 
-                for(int i = 100; i < 100 + MAX; i++) {
+                for(int i = 0; i < MAX; i++) {
                     People.clazz.setCurrentUser(randomUser());
                     Requirement bug = (Requirement) Requirement.clazz.createAndInsertObject(ec);
                     requirements.addObject(bug);
@@ -234,9 +236,9 @@ delete from TEST_ITEM;
                     addComments(bug);
                 }
 
-                log.info("Creating test items: "+ (MAX * 9-100));
+                log.info("Creating test items: "+ MAX * 9);
                 
-                for(int i = 100; i < 100 + MAX * 9; i++) {
+                for(int i = 0; i < MAX * 9; i++) {
                     People.clazz.setCurrentUser(randomUser());
                     TestItem testItem = (TestItem) TestItem.clazz.createAndInsertObject(ec);
                     testItems.addObject(testItem);
