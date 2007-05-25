@@ -34,7 +34,7 @@ public abstract class _Requirement extends er.bugtracker.Bug {
         public static final String COMMENTS = "comments";  
     }
 
-    public static abstract class _RequirementClazz extends ERXGenericRecord.ERXGenericRecordClazz {
+    public static abstract class _RequirementClazz extends Bug.BugClazz {
 
         public NSArray objectsForMyRequirements(EOEditingContext context, er.bugtracker.People userBinding) {
             EOFetchSpecification spec = EOFetchSpecification.fetchSpecificationNamed("myRequirements", "Requirement");

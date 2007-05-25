@@ -20,17 +20,17 @@ import com.webobjects.foundation.NSValidation;
 
 public class Component extends _Component {
 
-	public String sortOrder;
-	
-	public void awakeFromFetch(EOEditingContext editingContext) {
-		// AK: this trickery is needed because we create the component tree in memory and
-		// most of the edit components will do a localInstance.
-		super.awakeFromFetch(editingContext);
-		if(clazz._cachedComponentsByGlobalID != null) {
-			sortOrder = (String) clazz._cachedComponentsByGlobalID.objectForKey(permanentGlobalID());
-		}
+	public String sortOrder() {
+        NSMutableArray array = new NSMutableArray();
+        Component p = this;
+        while(p != null) {
+            array.addObject(p.textDescription());
+            p = p.parent();
+        }
+        return array.valueForKeyPath("@reverse.toString").toString();
 	}
-	public int level() {
+
+    public int level() {
 		return level(0);
 	}
 
@@ -76,9 +76,9 @@ public class Component extends _Component {
 		public synchronized NSArray orderedComponents(EOEditingContext ec) {
 			NSMutableArray result = new NSMutableArray();
 			if (_cachedComponentsByGlobalID == null) {
+                _cachedComponents = new NSMutableArray();
+                _cachedComponentsByGlobalID = new NSMutableDictionary();
 				addChildrenOfComponentToArray(null, result, ec);
-				_cachedComponentsByGlobalID = new NSMutableDictionary();
-				_cachedComponents = new NSMutableArray();
 				int level = 0;
 				for (Enumeration e = result.objectEnumerator(); e.hasMoreElements();) {
 					Component component = (Component) e.nextElement();

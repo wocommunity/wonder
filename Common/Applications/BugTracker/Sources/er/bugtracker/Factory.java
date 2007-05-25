@@ -1,7 +1,5 @@
 package er.bugtracker;
 
-import java.util.Enumeration;
-
 import com.webobjects.appserver.WOApplication;
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WODisplayGroup;
@@ -20,16 +18,14 @@ import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.eocontrol.EOEnterpriseObject;
 import com.webobjects.eocontrol.EOFetchSpecification;
 import com.webobjects.eocontrol.EOKeyValueQualifier;
-import com.webobjects.eocontrol.EOOrQualifier;
 import com.webobjects.eocontrol.EOQualifier;
 import com.webobjects.foundation.NSArray;
-import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSKeyValueCoding;
-import com.webobjects.foundation.NSMutableArray;
 
 import er.directtoweb.ERD2WFactory;
 import er.directtoweb.ERD2WInspectPage;
 import er.directtoweb.ERD2WQueryPage;
+import er.extensions.EOEnterpriseObjectClazz;
 import er.extensions.ERXEC;
 import er.extensions.ERXExtensions;
 import er.extensions.ERXLocalizer;
@@ -90,6 +86,17 @@ public class Factory extends ERD2WFactory implements NSKeyValueCoding {
         return lpi;
     }
 
+    protected ListPageInterface listPageNamed(String name, EOEnterpriseObjectClazz clazz) {
+        EOEditingContext ec = ERXEC.newEditingContext();
+        ec.lock();
+        try {
+            EODataSource ds = clazz.newDatabaseDataSource(ec);
+            return listPageNamed(name, ds);
+        } finally {
+            ec.unlock();
+        }
+    }
+
     protected WOComponent pageForConfigurationNamed(String name) {
         WOComponent page = D2W.factory().pageForConfigurationNamed(name, session());
         page.takeValueForKey(pageWithName("HomePage"), "nextPage");
@@ -129,13 +136,13 @@ public class Factory extends ERD2WFactory implements NSKeyValueCoding {
     
     public WOComponent createComponent() {
         ERD2WInspectPage page = (ERD2WInspectPage) createPageNamed("CreateComponent");
-        EOEnterpriseObject eo = (EOEnterpriseObject) page.object();
-        applyCurrentUser(eo, "owner");
+        Component eo = (Component) page.object();
+        applyCurrentUser(eo, Component.Key.OWNER);
         return (WOComponent) page;
     }
 
     public WOComponent listComponents() {
-        return (WOComponent) listPageNamed("ListComponent", new EODatabaseDataSource(ERXEC.newEditingContext(), "Component"));
+        return (WOComponent) listPageNamed("ListComponent", Component.clazz);
     }
 
     ///People stuff 
@@ -148,7 +155,7 @@ public class Factory extends ERD2WFactory implements NSKeyValueCoding {
     }
 
     public WOComponent listPeoples() {
-        return (WOComponent) listPageNamed("ListPeople", new EODatabaseDataSource(ERXEC.newEditingContext(), "People"));
+        return (WOComponent) listPageNamed("ListPeople", People.clazz);
     }
 
     /// Framework stuff 
@@ -156,12 +163,12 @@ public class Factory extends ERD2WFactory implements NSKeyValueCoding {
     public WOComponent createFramework() {
         ERD2WInspectPage page = (ERD2WInspectPage) createPageNamed("CreateFramework");
         EOEnterpriseObject eo = (EOEnterpriseObject) page.object();
-        applyCurrentUser(eo, "owner");
+        applyCurrentUser(eo, Framework.Key.OWNER);
         return (WOComponent) page;
     }
 
     public WOComponent listFrameworks() {
-        return (WOComponent) listPageNamed("ListFramework", new EODatabaseDataSource(ERXEC.newEditingContext(), "Framework"));
+        return (WOComponent) listPageNamed("ListFramework", Framework.clazz);
     }
 
     /// Requirement stuff
@@ -169,8 +176,8 @@ public class Factory extends ERD2WFactory implements NSKeyValueCoding {
     public WOComponent createRequirement() {
         ERD2WInspectPage page = (ERD2WInspectPage) createPageNamed("CreateRequirement");
         EOEnterpriseObject eo = (EOEnterpriseObject) page.object();
-        applyCurrentUser(eo, "originator");
-        applyCurrentUser(eo, "owner");
+        applyCurrentUser(eo, Requirement.Key.ORIGINATOR);
+        applyCurrentUser(eo, Requirement.Key.OWNER);
         return (WOComponent) page;
      }
 
@@ -217,7 +224,7 @@ public class Factory extends ERD2WFactory implements NSKeyValueCoding {
             bug.updateOriginator(user);
             bug.updateComponent(component);
 
-            epi=(EditPageInterface)createPageNamed("CreateBug");
+            epi=(EditPageInterface)createPageNamed("CreateBugFromTestItem");
             epi.setObject(bug);
             epi.setNextPage(session().context().page());
         } finally {
@@ -272,9 +279,9 @@ public class Factory extends ERD2WFactory implements NSKeyValueCoding {
         EODatabaseDataSource ds = new EODatabaseDataSource(ec, "Bug");
         EOFetchSpecification fs = new EOFetchSpecification("Bug", q, null);
         ds.setFetchSpecification(fs);
-        WOComponent bugList = pageWithName("BugsPerUser");
-        bugList.takeValueForKey(ds, "bugsDataSource");
-        return bugList;
+        ListPageInterface lpi = (ListPageInterface) pageForConfigurationNamed("GroupedBugsByUser");
+        lpi.setDataSource(ds);
+        return (WOComponent) lpi;
     }
 
     public WOComponent createRelease() {
@@ -294,16 +301,15 @@ public class Factory extends ERD2WFactory implements NSKeyValueCoding {
     public WOComponent pushRelease() {
         EOEditingContext ec = session().defaultEditingContext();
         EOEnterpriseObject user = currentUser(ec);
-        QueryPageInterface qpi = (QueryPageInterface) D2W.factory().pageForConfigurationNamed("TrackRelease", session());
-        WODisplayGroup dg = (WODisplayGroup) ((WOComponent) qpi).valueForKey("displayGroup");
-        /* dg.queryMatch().setObjectForKey(Bug.DEFAULT_RELEASE,"targetRelease"); */
-        dg.setQualifier(new EOKeyValueQualifier("bugs.state", EOQualifier.QualifierOperatorEqual, State.BUILD)); // picked
-        // up in ERQueryPage
+        ERD2WQueryPage qpi = (ERD2WQueryPage) pageForConfigurationNamed("QueryBugForPush", session());
+        WODisplayGroup dg = qpi.displayGroup();
+        dg.queryMatch().setObjectForKey(Release.clazz.defaultRelease(ec), Bug.Key.TARGET_RELEASE);
+        dg.setQualifier(new EOKeyValueQualifier(Bug.Key.STATE, EOQualifier.QualifierOperatorEqual, State.BUILD)); // picked
         qpi.setNextPageDelegate(new NextPageDelegate() {
             public WOComponent nextPage(WOComponent sender2) {
                 QueryPageInterface qpi2 = (QueryPageInterface) sender2;
                 WOComponent bugList = sender2.pageWithName("PushRelease");
-                bugList.takeValueForKey(qpi2.queryDataSource().fetchObjects(), "bugsInBuild");
+                //bugList.takeValueForKey(qpi2.queryDataSource().fetchObjects(), "bugsInBuild");
                 return bugList;
             }
         });
@@ -315,8 +321,8 @@ public class Factory extends ERD2WFactory implements NSKeyValueCoding {
     public WOComponent createBug() {
         ERD2WInspectPage page = (ERD2WInspectPage) createPageNamed("CreateBug");
         Bug bug = (Bug) page.object();
-        applyCurrentUser(bug, "originator");
-        applyCurrentUser(bug, "owner");
+        applyCurrentUser(bug, Bug.Key.ORIGINATOR);
+        applyCurrentUser(bug, Bug.Key.OWNER);
         return (WOComponent) page;
     }
 
@@ -328,53 +334,43 @@ public class Factory extends ERD2WFactory implements NSKeyValueCoding {
     }
 
     public WOComponent listRecentBugs() {
-        EODatabaseDataSource ds = new EODatabaseDataSource(ERXEC.newEditingContext(), "Bug");
-        ds.fetchSpecification().setIsDeep(false);
-        WOComponent page = (WOComponent) listPageNamed("ListRecentBug", ds);
-        return page;
+        EOEditingContext ec = ERXEC.newEditingContext();
+        ec.lock();
+        try {
+            EODatabaseDataSource ds = Bug.clazz.newDatabaseDataSource(ec);
+            WOComponent page = (WOComponent) listPageNamed("ListRecentBug", ds);
+            return page;
+
+        } finally {
+            ec.unlock();
+        }
     }
 
     public WOComponent listMyBugs() {
         EOEditingContext ec = ERXEC.newEditingContext();
         ec.lock();
         try {
-        	EODatabaseDataSource ds  = Bug.clazz.newDatabaseDataSource(ec);
-        	NSDictionary bindings = new NSDictionary(new Object[] { currentUser(ec) }, new Object[] { "user" });
-        	EOFetchSpecification fs = Bug.clazz.fetchSpecificationNamed(ec, "bugsOwned").fetchSpecificationWithQualifierBindings(bindings);
+            EODatabaseDataSource ds  = Bug.clazz.newDatabaseDataSource(ec);
+            EOFetchSpecification fs = Bug.clazz.fetchSpecificationForOwnedBugs(currentUser(ec));
             ds.setFetchSpecification(fs);
-       		ds.fetchSpecification().setIsDeep(false);
 
-        	return (WOComponent) listPageNamed("ListMyBug", ds);
+            return (WOComponent) listPageNamed("ListMyBug", ds);
 
         } finally {
-        	ec.unlock();
+            ec.unlock();
         }
     }
 
     public WOComponent queryBugs() {
     	ERD2WQueryPage page = (ERD2WQueryPage) pageForConfigurationNamed("QueryBug");
-    	page.setQueryMatchForKey(new NSArray(Priority.CRITICAL), EOQualifier.QualifierOperatorEqual.name(), "priority");
-    	page.setQueryMatchForKey(new NSArray(People.clazz.currentUser(session().defaultEditingContext())), EOQualifier.QualifierOperatorEqual.name(), "originator");
+    	page.setQueryMatchForKey(new NSArray(Priority.CRITICAL), EOQualifier.QualifierOperatorEqual.name(), Bug.Key.PRIORITY);
+    	page.setQueryMatchForKey(new NSArray(People.clazz.currentUser(session().defaultEditingContext())), EOQualifier.QualifierOperatorEqual.name(), Bug.Key.ORIGINATOR);
     	page.setShowResults(true);
     	return page;
     }
     
     public WOComponent findBugs(String string) {
-        NSArray a=NSArray.componentsSeparatedByString(string," ");
-        NSMutableArray quals=new NSMutableArray();
-        for (Enumeration e=a.objectEnumerator(); e.hasMoreElements();) {
-            String s=(String)e.nextElement();
-            try {
-                Integer i=new Integer(s);
-                quals.addObject(new EOKeyValueQualifier("id", EOQualifier.QualifierOperatorEqual, i));
-
-            } catch (NumberFormatException ex) {}
-        }
-        EOOrQualifier or=new EOOrQualifier(quals);
-        EODatabaseDataSource ds=new EODatabaseDataSource(session().defaultEditingContext(), "Bug");
-        EOFetchSpecification fs=new EOFetchSpecification("Bug",or,null);
-        ds.setFetchSpecification(fs);
-        NSArray bugs = ds.fetchObjects();
+        NSArray bugs = Bug.clazz.findBugs(session().defaultEditingContext(), string);
         WOComponent result;
         if (bugs != null && bugs.count() == 1) {
             InspectPageInterface ipi = D2W.factory().inspectPageForEntityNamed("Bug", session());
@@ -382,7 +378,8 @@ public class Factory extends ERD2WFactory implements NSKeyValueCoding {
             ipi.setNextPage(currentPage());
             result = (WOComponent) ipi;
         } else {
-            ds.setFetchSpecification(fs);
+            EOArrayDataSource ds = Bug.clazz.newArrayDataSource(session().defaultEditingContext());
+            ds.setArray(bugs);
             ListPageInterface lpi = (ListPageInterface) D2W.factory().listPageForEntityNamed("Bug", session());
             lpi.setDataSource(ds);
             lpi.setNextPage(currentPage());
