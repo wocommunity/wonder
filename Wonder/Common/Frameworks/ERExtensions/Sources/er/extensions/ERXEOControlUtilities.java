@@ -1529,7 +1529,7 @@ public class ERXEOControlUtilities {
     * @param value
     * @return
     */
-   public static EOQualifier orQualifierForKeyPaths(NSArray keyPaths, NSSelector selector, String value) {
+   public static EOQualifier orQualifierForKeyPaths(NSArray keyPaths, NSSelector selector, Object value) {
 	   NSMutableArray qualifiers = new NSMutableArray(keyPaths.count());
 	   for (Enumeration e=keyPaths.objectEnumerator(); e.hasMoreElements();) {
 		  String key = (String)e.nextElement();
@@ -1552,12 +1552,29 @@ public class ERXEOControlUtilities {
    public static EOQualifier orQualifierForKeyPaths(NSArray keyPaths, NSSelector selector, NSArray values) {
 	   NSMutableArray qualifiers = new NSMutableArray(values.count());
 	   for (Enumeration e=values.objectEnumerator(); e.hasMoreElements();) {
-		  String value = (String)e.nextElement();
+		  Object value = e.nextElement();
 		  EOQualifier qualifier = orQualifierForKeyPaths(keyPaths, selector, value);
 		  qualifiers.addObject(qualifier);
 	   }
 	   return new EOOrQualifier(qualifiers);
    }
+   
+   /**
+    * Joins the given qualifiers with an AND. One or both arguments may be null,
+    * if both are null, null is returned.
+    * @param q1
+    * @param q2
+    * @return
+    */
+   public static EOQualifier andQualifier(EOQualifier q1, EOQualifier q2) {
+	   if(q1 == null) {
+		   return q2;
+	   }
+	   if(q2 == null) {
+		   return q1;
+	   }
+	   return new EOAndQualifier(new NSArray(new Object[]{q1, q2}));
+    }
    
    /**
     * Given a qualifier of EOAndQualifiers and EOKVQualifiers, make then evaluate to
