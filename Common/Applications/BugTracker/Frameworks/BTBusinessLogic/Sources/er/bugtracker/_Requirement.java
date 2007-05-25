@@ -13,6 +13,7 @@ import java.math.BigDecimal;
 public abstract class _Requirement extends er.bugtracker.Bug {
 
     public interface Key extends er.bugtracker.Bug.Key {
+        public static final String TYPE = "type";
         public static final String TEXT_DESCRIPTION = "textDescription";
         public static final String TEST_ITEMS = "testItems";
         public static final String TARGET_RELEASE = "targetRelease";

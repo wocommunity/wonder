@@ -13,6 +13,7 @@ import java.math.BigDecimal;
 public abstract class _Bug extends ERXGenericRecord {
 
     public interface Key  {
+        public static final String TYPE = "type";
         public static final String TEXT_DESCRIPTION = "textDescription";
         public static final String TEST_ITEMS = "testItems";
         public static final String TARGET_RELEASE = "targetRelease";
@@ -107,10 +108,10 @@ public abstract class _Bug extends ERXGenericRecord {
         takeStoredValueForKey((aValue ? Boolean.TRUE : Boolean.FALSE), Key.FEATURE_REQUEST);
     }
 
-    public Number id() {
-        return (Number)storedValueForKey(Key.ID);
+    public NSData id() {
+        return (NSData)storedValueForKey(Key.ID);
     }
-    public void setId(Number aValue) {
+    public void setId(NSData aValue) {
         takeStoredValueForKey(aValue, Key.ID);
     }
 
@@ -133,6 +134,13 @@ public abstract class _Bug extends ERXGenericRecord {
     }
     public void setTextDescription(String aValue) {
         takeStoredValueForKey(aValue, Key.TEXT_DESCRIPTION);
+    }
+
+    public String type() {
+        return (String)storedValueForKey(Key.TYPE);
+    }
+    public void setType(String aValue) {
+        takeStoredValueForKey(aValue, Key.TYPE);
     }
 
     public er.bugtracker.Component component() {
