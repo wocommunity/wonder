@@ -21,32 +21,21 @@ import com.webobjects.eoaccess.*;
 import er.extensions.*;
 import java.util.*;
 import java.math.BigDecimal;
-<$if userInfo.developerCommentString.length > 0 $>
-/** <$userInfo.developerCommentString$>
- * @author Anjo Krank (anjo@mac.com)
- * @modified <$userInfo.modificationDate$>
- */<$endif$><$
-if javaParentClassName == "EOGenericRecord"$><$
+<$if (javaParentClassName == "EOGenericRecord")$><$
     if userInfo.superclass.length > 0$><$
         set parentName = userInfo.superclass$><$
     else$><$
-        if coreSuperClass.length > 0$><$
-            set parentName = coreSuperClass$><$
+        if (coreSuperClass.length > 0)$><$
+    		set parentName = coreSuperClass$><$
+            set clazzName = coreSuperClass$><$
         else$><$
-            set parentName = "EOGenericRecord"$><$
+    		set parentName = javaParentClassName$><$
+            set clazzName = "EOGenericRecord"$><$
         endif$><$
     endif$><$
 else$><$
     set parentName = javaParentClassName$><$
-    set coreClazzName = javaParentClassName$><$
-endif$><$
-if coreClazzName.length > 0 && parentName != "GenericRecord" $><$
     set clazzName = parentEntity.name$><$
-    set clazzNameSuffix = ".Clazz"$><$
-else$><$
-    set clazzName = "ERXGenericRecord"$><$
-    set clazzNameSuffix = ".ERXGenericRecordClazz"
-    $><$
 endif$>
 public abstract class _<$classNameWithoutPackage$> extends <$parentName$> {
 
