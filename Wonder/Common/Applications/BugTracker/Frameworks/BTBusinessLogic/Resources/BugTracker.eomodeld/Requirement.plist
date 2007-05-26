@@ -66,6 +66,17 @@
        }, 
        
        {
+           allowsNull = N;
+           columnName = IS_READ;
+           name = isRead;
+           prototypeName = flag;
+           userInfo = 
+           {
+               modificationDate = "2002-05-06 07:28:53 +0200";
+           };
+       }, 
+       
+       {
            columnName = ORIGINATOR_ID;
            name = originatorID;
            prototypeName = id;
@@ -103,17 +114,6 @@
            userInfo = 
            {
                modificationDate = "2002-05-06 07:36:11 +0200";
-           };
-       }, 
-       
-       {
-           allowsNull = Y;
-           columnName = READ_;
-           name = read;
-           prototypeName = charFlag;
-           userInfo = 
-           {
-               modificationDate = "2002-05-06 07:36:29 +0200";
            };
        }, 
        
@@ -197,11 +197,11 @@
        difficultyID, 
        featureRequest, 
        id, 
+       isRead, 
        originatorID, 
        ownerID, 
        previousOwnerID, 
        priorityID, 
-       read, 
        releaseID, 
        requirementSubTypeID, 
        requirementTypeID, 
@@ -220,11 +220,11 @@
        difficulty, 
        featureRequest, 
        id, 
+       isRead, 
        originator, 
        owner, 
        previousOwner, 
        priority, 
-       read, 
        requirementSubType, 
        requirementType, 
        state, 
@@ -245,10 +245,10 @@
            difficulty, 
            featureRequest, 
            id, 
+           isRead, 
            originator, 
            owner, 
            priority, 
-           read, 
            requirementSubType, 
            requirementType, 
            state, 
