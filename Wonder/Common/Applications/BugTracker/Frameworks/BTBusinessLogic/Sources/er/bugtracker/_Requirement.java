@@ -21,12 +21,11 @@ public abstract class _Requirement extends er.bugtracker.Bug {
         public static final String STATE = "state";
         public static final String REQUIREMENT_TYPE = "requirementType";
         public static final String REQUIREMENT_SUB_TYPE = "requirementSubType";
-        public static final String READ = "read";
         public static final String PRIORITY = "priority";
         public static final String PREVIOUS_OWNER = "previousOwner";
         public static final String OWNER = "owner";
         public static final String ORIGINATOR = "originator";
-        public static final String ID = "id";
+        public static final String IS_READ = "isRead";
         public static final String FEATURE_REQUEST = "featureRequest";
         public static final String DIFFICULTY = "difficulty";
         public static final String DATE_SUBMITTED = "dateSubmitted";
