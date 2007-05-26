@@ -69,13 +69,6 @@ public class Bug extends _Bug implements Markable {
         setDateModified(new NSTimestamp());
     }
 
-    public void setIsRead(boolean read) {
-        setRead(read ? "Y":"N");
-    }
-    public boolean isRead() {
-        return "Y".equals(read());
-    }
-
     // FIXME:(ak) now *what* is this supposed to do???
     public void setComponent(Component value) {
         willChange();
@@ -160,7 +153,7 @@ public class Bug extends _Bug implements Markable {
         _componentChanged=false;
         _ownerChanged=false;
         super.validateForUpdate();
-        if(!(changesFromCommittedSnapshot().count() == 1 && changesFromCommittedSnapshot().allKeys().containsObject("read"))) {
+        if(!(changesFromCommittedSnapshot().count() == 1 && changesFromCommittedSnapshot().allKeys().containsObject(Key.IS_READ))) {
             touch();
         }
 
@@ -242,7 +235,7 @@ public class Bug extends _Bug implements Markable {
         }
 
         protected EOQualifier qualifierForRead(boolean flag) {
-            return new EOKeyValueQualifier(Key.READ, EOQualifier.QualifierOperatorEqual, (flag ? "Y": "N"));
+            return new EOKeyValueQualifier(Key.IS_READ, EOQualifier.QualifierOperatorEqual, new Boolean(flag));
         }
         
         protected EOQualifier qualifierForPerson(People owner) {
