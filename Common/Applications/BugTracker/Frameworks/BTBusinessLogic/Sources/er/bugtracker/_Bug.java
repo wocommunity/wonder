@@ -19,12 +19,11 @@ public abstract class _Bug extends ERXGenericRecord {
         public static final String TARGET_RELEASE = "targetRelease";
         public static final String SUBJECT = "subject";
         public static final String STATE = "state";
-        public static final String READ = "read";
         public static final String PRIORITY = "priority";
         public static final String PREVIOUS_OWNER = "previousOwner";
         public static final String OWNER = "owner";
         public static final String ORIGINATOR = "originator";
-        public static final String ID = "id";
+        public static final String IS_READ = "isRead";
         public static final String FEATURE_REQUEST = "featureRequest";
         public static final String DATE_SUBMITTED = "dateSubmitted";
         public static final String DATE_MODIFIED = "dateModified";
@@ -108,18 +107,11 @@ public abstract class _Bug extends ERXGenericRecord {
         takeStoredValueForKey((aValue ? Boolean.TRUE : Boolean.FALSE), Key.FEATURE_REQUEST);
     }
 
-    public NSData id() {
-        return (NSData)storedValueForKey(Key.ID);
+    public boolean isRead() {
+        return ((Boolean)storedValueForKey(Key.IS_READ)).booleanValue();
     }
-    public void setId(NSData aValue) {
-        takeStoredValueForKey(aValue, Key.ID);
-    }
-
-    public String read() {
-        return (String)storedValueForKey(Key.READ);
-    }
-    public void setRead(String aValue) {
-        takeStoredValueForKey(aValue, Key.READ);
+    public void setIsRead(boolean aValue) {
+        takeStoredValueForKey((aValue ? Boolean.TRUE : Boolean.FALSE), Key.IS_READ);
     }
 
     public String subject() {

@@ -64,10 +64,10 @@ public abstract class _TestItem extends ERXGenericRecord {
         takeStoredValueForKey(aValue, Key.DATE_CREATED);
     }
 
-    public NSData id() {
-        return (NSData)storedValueForKey(Key.ID);
+    public Number id() {
+        return (Number)storedValueForKey(Key.ID);
     }
-    public void setId(NSData aValue) {
+    public void setId(Number aValue) {
         takeStoredValueForKey(aValue, Key.ID);
     }
 
