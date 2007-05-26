@@ -219,7 +219,6 @@
        dateSubmitted, 
        difficulty, 
        featureRequest, 
-       id, 
        isRead, 
        originator, 
        owner, 
