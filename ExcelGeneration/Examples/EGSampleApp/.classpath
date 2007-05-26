@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
+	<classpathentry combineaccessrules="false" kind="src" path="/ExcelGenerator"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/JavaWOExtensions"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/ERExtensions"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/ERJars"/>
 	<classpathentry kind="src" path="Sources"/>
 	<classpathentry sourcepath="JRE_SRC" kind="var" path="JRE_LIB"/>
-	<classpathentry kind="con" path="org.objectstyle.wolips.WO_CLASSPATH/ERExtensions/ERJars/ExcelGenerator/JavaWOExtensions/JavaEOAccess/JavaEOControl/JavaFoundation/JavaWebObjects/JavaWebServicesSupport/JavaXML"/>
+	<classpathentry kind="con" path="org.objectstyle.wolips.WO_CLASSPATH/JavaEOAccess/JavaEOControl/JavaFoundation/JavaWebObjects/JavaWebServicesSupport/JavaXML"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
