@@ -21,6 +21,12 @@ public abstract class _Release extends ERXGenericRecord {
 
     public static abstract class _ReleaseClazz extends ERXGenericRecord.ERXGenericRecordClazz {
 
+        public NSArray objectsForFetchAll(EOEditingContext context) {
+            EOFetchSpecification spec = EOFetchSpecification.fetchSpecificationNamed("FetchAll", "Release");
+
+            return context.objectsWithFetchSpecification(spec);
+        }
+
     }
 
 
