@@ -189,7 +189,7 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
 		
 		// ERXObjectStoreCoordinatorPool has a static initializer, so just load the class if
 		// the configuration setting exists
-        if (ERXRemoteSynchronizer.remoteSynchronizerEnabled()) {
+        if (ERXRemoteSynchronizer.remoteSynchronizerEnabled() || ERXProperties.booleanForKey("er.extensions.ERXDatabaseContext.activate")) {
         	EODatabaseContext.setContextClassToRegister(ERXDatabaseContext.class);
         }
 		ERXObjectStoreCoordinatorPool.initializeIfNecessary();
