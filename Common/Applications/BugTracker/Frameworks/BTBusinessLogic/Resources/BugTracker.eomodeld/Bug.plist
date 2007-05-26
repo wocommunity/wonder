@@ -36,17 +36,6 @@
        }, 
        
        {
-           allowsNull = Y;
-           columnName = DIFFICULTY_ID;
-           name = difficultyID;
-           prototypeName = id;
-           userInfo = 
-           {
-               modificationDate = "2002-05-06 07:37:17 +0200";
-           };
-       }, 
-       
-       {
            columnName = FEATURE_REQUEST;
            name = featureRequest;
            prototypeName = flag;
@@ -130,28 +119,6 @@
        }, 
        
        {
-           allowsNull = Y;
-           columnName = SUB_TYPE_ID;
-           name = requirementSubTypeID;
-           prototypeName = id;
-           userInfo = 
-           {
-               modificationDate = "2002-05-06 07:37:24 +0200";
-           };
-       }, 
-       
-       {
-           allowsNull = Y;
-           columnName = REQ_TYPE_ID;
-           name = requirementTypeID;
-           prototypeName = id;
-           userInfo = 
-           {
-               modificationDate = "2002-05-06 07:37:36 +0200";
-           };
-       }, 
-       
-       {
            columnName = STATE_ID;
            name = stateID;
            prototypeName = osType;
@@ -196,7 +163,6 @@
     attributesUsedForLocking = 
     (
        componentID, 
-       difficultyID, 
        featureRequest, 
        id, 
        isRead, 
@@ -205,8 +171,6 @@
        previousOwnerID, 
        priorityID, 
        releaseID, 
-       requirementSubTypeID, 
-       requirementTypeID, 
        stateID, 
        subject, 
        textDescription, 
@@ -220,7 +184,6 @@
        dateModified, 
        dateSubmitted, 
        featureRequest, 
-       id, 
        isRead, 
        originator, 
        owner, 
