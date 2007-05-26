@@ -36,6 +36,17 @@
        }, 
        
        {
+           allowsNull = Y;
+           columnName = DIFFICULTY_ID;
+           name = difficultyID;
+           prototypeName = id;
+           userInfo = 
+           {
+               modificationDate = "2002-05-06 07:37:17 +0200";
+           };
+       }, 
+       
+       {
            columnName = FEATURE_REQUEST;
            name = featureRequest;
            prototypeName = flag;
@@ -53,6 +64,17 @@
            userInfo = 
            {
                modificationDate = "2002-05-06 07:14:34 +0200";
+           };
+       }, 
+       
+       {
+           allowsNull = N;
+           columnName = IS_READ;
+           name = isRead;
+           prototypeName = flag;
+           userInfo = 
+           {
+               modificationDate = "2002-05-06 07:28:53 +0200";
            };
        }, 
        
@@ -98,23 +120,34 @@
        }, 
        
        {
-           allowsNull = Y;
-           columnName = READ_;
-           name = read;
-           prototypeName = charFlag;
-           userInfo = 
-           {
-               modificationDate = "2002-05-06 07:28:53 +0200";
-           };
-       }, 
-       
-       {
            columnName = RELEASE_ID;
            name = releaseID;
            prototypeName = id;
            userInfo = 
            {
                modificationDate = "2002-05-06 07:30:25 +0200";
+           };
+       }, 
+       
+       {
+           allowsNull = Y;
+           columnName = SUB_TYPE_ID;
+           name = requirementSubTypeID;
+           prototypeName = id;
+           userInfo = 
+           {
+               modificationDate = "2002-05-06 07:37:24 +0200";
+           };
+       }, 
+       
+       {
+           allowsNull = Y;
+           columnName = REQ_TYPE_ID;
+           name = requirementTypeID;
+           prototypeName = id;
+           userInfo = 
+           {
+               modificationDate = "2002-05-06 07:37:36 +0200";
            };
        }, 
        
@@ -163,14 +196,17 @@
     attributesUsedForLocking = 
     (
        componentID, 
+       difficultyID, 
        featureRequest, 
        id, 
+       isRead, 
        originatorID, 
        ownerID, 
        previousOwnerID, 
        priorityID, 
-       read, 
        releaseID, 
+       requirementSubTypeID, 
+       requirementTypeID, 
        stateID, 
        subject, 
        textDescription, 
@@ -185,11 +221,11 @@
        dateSubmitted, 
        featureRequest, 
        id, 
+       isRead, 
        originator, 
        owner, 
        previousOwner, 
        priority, 
-       read, 
        state, 
        subject, 
        targetRelease, 
@@ -207,10 +243,10 @@
            dateSubmitted, 
            featureRequest, 
            id, 
+           isRead, 
            originator, 
            owner, 
            priority, 
-           read, 
            state, 
            subject, 
            targetRelease, 
