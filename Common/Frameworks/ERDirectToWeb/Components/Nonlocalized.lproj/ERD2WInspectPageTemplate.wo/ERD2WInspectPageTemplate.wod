@@ -64,6 +64,25 @@ InspectPageRepetition: ERDInspectPageRepetition {
 	object = object;
 }
 
+HasBranchChoices: WOConditional {
+	condition = hasBranchChoices;
+}
+
+BranchChoices: WORepetition {
+	item = branch;
+	list = branchChoices;
+}
+
+BranchChoice: ERXSubmitButton {
+	action = nextPage;
+	value = branch.branchButtonLabel;
+}
+
+Controller : ERDControllerButton {
+	d2wContext = d2wContext;
+	uiMode = "link";
+}
+
 IsEditingConditional: WOConditional {
 	_unroll = true;
 	condition = isEditing;
