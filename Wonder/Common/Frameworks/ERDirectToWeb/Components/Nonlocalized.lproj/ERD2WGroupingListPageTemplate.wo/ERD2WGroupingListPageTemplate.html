@@ -1,20 +1,33 @@
 <webobject name="PageWrapper"><webobject name="Help"></webobject>
 <table align="center" border="0">
-<tr><td colspan="2"><webobject name="ERDBannerComponent2"></webobject><webobject name="Header"></webobject></td></tr>
+			<tr>
+				<td class="Header"><webobject name=Header></webobject></td>
+			</tr>
 <webobject name="ListNotEmpty">
 	<tr>
-		<td align="CENTER" class="NavigationBar"><webobject name="NavBar1"></webobject></td>
-		<td><webobject name="hasPrinterFriendlyVersion"><webobject name="ERPrinterButton"></webobject></webobject></td>
+		<td class="TopActions">
+			<webobject name=ShowCancel><webobject name=BackLink></webobject></webobject>
+			<webobject name=ShowPrint><webobject name=ERPrinterButton></webobject></webobject><webobject name = "MassMofidy"></webobject><webobject name = "Filter"></webobject>
+	        <div class="BranchChoices"><webobject name=ActionBar></webobject></div>
+		</td>
 	</tr>
 	<tr>
-		<td align="CENTER" colspan="2"><webobject name="ListPageRepetition2"></webobject></td>
+		<td class="NavigationBarCell"><webobject name=NavigationBar></webobject></td>
+	</tr>
+	<tr>
+		<td><webobject name="ListPageRepetition2"></webobject></td>
 	</tr>
 </webobject>
 <webobject name="ListEmpty">
-	<tr><td colspan="2"><webobject name="EmptyMessageComponent"></webobject></td></tr>
+	<tr><td><webobject name="EmptyMessageComponent"></webobject></td></tr>
 </webobject>
-<webobject name="HideReturnOnSelect1"><webobject name="ShowCancel">
-	<tr><td align="CENTER" colspan="2"><webobject name="BackLink"><webobject name="ReturnButton"></webobject></webobject></td></tr>
-</webobject></webobject>
+	<tr>
+			<td class="Actions">
+				<webobject name=ShowCancel><webobject name=BackLink></webobject></webobject>
+				<webobject name=ShowPrint><webobject name=ERPrinterButton></webobject></webobject><webobject name = "MassMofidy"></webobject><webobject name = "Filter"></webobject>
+	        	<div class="BranchChoices"><webobject name=ActionBar></webobject></div>
+			</td>
+	</tr>
+
 </table>
 </webobject>
