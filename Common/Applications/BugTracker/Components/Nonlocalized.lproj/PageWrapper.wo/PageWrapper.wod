@@ -22,6 +22,19 @@ Body: WOBody {
     id=pageName;
 }
 
+HasUser : WOConditional {
+	condition = session.user;
+}
+
+HasNoUser : WOConditional {
+	condition = session.user;
+	negate = true;
+}
+
+LoginPanel : LoginPanel {
+	
+}
+
 ERXStyleSheet: ERXStyleSheet { 
     styleSheetName="style_sheet.css";
 }
