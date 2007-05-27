@@ -1,43 +1,50 @@
 <webobject name=PageWrapper><webobject name=Help></webobject>
-    <table cellspacing=0 border=0 cellpadding=8 width="100%">
+    <table class="InspectTable">
         <tr>
-            <webobject name=EditingForm>
-                <td class=formcontainer>
-                    <table width="100%" cellspacing=0 border=0 cellpadding=0>
-                        <tr>
-                            <td colspan=2><webobject name=Header></webobject></td>
-                        </tr>
-                        <tr>
-                            <td class=headline><webobject name=EntityName></webobject></td>
-                            <td align=RIGHT><webobject name=HasChanges>&nbsp;&nbsp;<webobject name=HasChangesImage></webobject></webobject><webobject name=HasPrinterFriendlyVersion><webobject name=ERPrinterButton></webobject></webobject></td>
-                        </tr>
-                        <tr>
-                            <td colspan=2>
-                                <hr />
-                            </td>
-                        </tr>
-                        <webobject name=HasErrors>
-                            <tr>
-                                <td align=center valign=top colspan=2><webobject name=Errors2></webobject></td>
-                            </tr>
-                        </webobject>
-                        <tr>
-                            <td align=left valign=top colspan=2><webobject name=SwitchComponent3><webobject name=InspectPageRepetition></webobject></webobject></td>
-                        </tr>
-                        <tr>
-                            <td colspan=2>
-                                <hr />
-                            </td>
-                        </tr>
-                        <tr>
-                            <td colspan=2>
-                                <table cellspacing=3 border=0 cellpadding=0><tr><td><webobject name=Cancel></webobject></td><!-- td><webobject name=Previous></webobject></td><td><webobject name=Next></webobject></td--><td><webobject name=Save></webobject></td></tr></table><p></p>
-                            </td>
-                        </tr>
-                    </table>
-                </td>
-            </webobject>
+            <td class="Header"><webobject name=ERDBannerComponent></webobject><webobject name=Header></webobject></td>
         </tr>
+        <tr>
+            <td class="TopActions">
+                <webobject name=HasChanges><webobject name=Floppy></webobject></webobject>
+                <webobject name=IsEditingConditional>
+                    <webobject name=CancelButton></webobject>
+                    <webobject name=SubmitChanges></webobject>
+                </webobject>
+                <webobject name=IsNotEditingConditional>
+                    <webobject name=ShowCancel><webobject name=ReturnButton></webobject></webobject>
+                    <webobject name=IsObjectEditable><webobject name=EditButton></webobject></webobject>
+                </webobject>
+                <webobject name=ShowPrint><webobject name=ERDPrinterButton></webobject></webobject>
+                <div class="BranchChoices">
+                	<webobject name=HasBranchChoices><webobject name=BranchChoices><webobject name=BranchChoice></webobject></webobject></webobject>
+                	<webobject name="Controller"></webobject>
+                </div>
+             </td>
+        </tr>
+        <webobject name=EditingForm>
+            <tr>
+                <td class="Errors"><webobject name=Errors></webobject></td>
+            </tr>
+            <tr>
+                <td class="Repetition"><webobject name=TabPanel><webobject name=InspectPageRepetition></webobject></webobject></td>
+            </tr>
+            <tr>
+                <td class="Actions">
+                    <webobject name=IsEditingConditional>
+                        <webobject name=CancelButton></webobject>
+                        <webobject name=SubmitChanges></webobject>
+                    </webobject>
+                    <webobject name=IsNotEditingConditional>
+                        <webobject name=ShowCancel><webobject name=ReturnButton></webobject></webobject>
+                        <webobject name=IsObjectEditable><webobject name=EditButton></webobject></webobject>
+                    </webobject>
+	                <div class="BranchChoices">
+	                	<webobject name=HasBranchChoices><webobject name=BranchChoices><webobject name=BranchChoice></webobject></webobject></webobject>
+	                	<webobject name="Controller"></webobject>
+	                </div>
+                </td>
+            </tr>
+        </webobject>
     </table>
-    <webobject name=Conditional5><webobject name=IsEditing><webobject name=Script></webobject></webobject></webobject>
+    <webobject name="useFocus"><webobject name="IsEditing"><webobject name="Script"></webobject></webobject></webobject>
 </webobject>

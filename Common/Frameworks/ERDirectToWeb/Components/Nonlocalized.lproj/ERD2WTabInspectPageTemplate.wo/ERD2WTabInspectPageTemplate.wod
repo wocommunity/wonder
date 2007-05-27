@@ -1,16 +1,34 @@
-Cancel: WOSubmitButton {
+CancelButton: ERXSingleButton {
+	alt = "Reverts your changes";
+	value = "Cancel";
 	action = cancelAction;
-	disabled = disableCancel;
-	value = session.localizer.ERD2WCreateWizard.cancel;
+	dontSubmitForm = true;
 }
 
-Conditional5: WOConditional {
-	condition = d2wContext.useFocus;
+HasChanges: WOConditional {
+	condition = object.editingContext.hasChanges;
 }
 
-ERPrinterButton: ERDPrinterButton {
+ShowPrint: WOConditional {
+	condition = d2wContext.hasPrinterFriendlyVersion;
+}
+
+ERDBannerComponent: ERDBannerComponent {
+	bannerFileName = d2wContext.bannerFileName;
+	d2wContext = d2wContext;
+	showBanner = d2wContext.showBanner;
+	framework = "JavaDirectToWeb";
+}
+
+ERDPrinterButton: ERDPrinterButton {
 	d2wContext = d2wContext;
 	task = "inspect";
+}
+
+EditButton: WOSubmitButton {
+	action = editAction;
+	alt = "Edits this object";
+	value = "Edit";
 }
 
 EditingForm: ERXOptionalForm {
@@ -20,32 +38,11 @@ EditingForm: ERXOptionalForm {
 	name = "EditForm";
 }
 
-EntityName: WOString {
-	_unroll = true;
-	value = d2wContext.displayNameForPageConfiguration;
-	escapeHTML = true;
-}
-
-Errors2: ERXErrorDictionaryPanel {
+Errors: ERXErrorDictionaryPanel {
 	errorMessages = errorMessages;
 	extraErrorMessage = errorMessage;
-}
-
-HasChanges: WOConditional {
-	condition = object.editingContext.hasChanges;
-}
-
-HasChangesImage: WOImage {
-	filename = "floppy.gif";
-	framework = "ERExtensions";
-}
-
-HasErrors: WOConditional {
-	condition = errorMessages.allKeys.count;
-}
-
-HasPrinterFriendlyVersion: WOConditional {
-	condition = d2wContext.hasPrinterFriendlyVersion;
+	shouldShowNewLineAbove = true;
+	shouldShowNewLineBelow = true;
 }
 
 Header: WOSwitchComponent {
@@ -57,22 +54,49 @@ Help: ERDDebuggingHelp {
 	d2wContext = d2wContext;
 }
 
-InspectPageRepetition: WOSwitchComponent {
-	WOComponentName = d2wContext.repetitionComponentName;
+Floppy: WOImage {
+	filename = "floppy.gif";
+	framework = "ERExtensions";
+}
+
+InspectPageRepetition: ERDInspectPageRepetition {
+	displayPropertyKeys = currentTab.keys;
 	d2wContext = localContext;
 	object = object;
-	displayPropertyKeys = currentTab.keys;
 }
 
-IsEditing: WOKeyValueConditional {
-	key = "task";
-	value = "edit";
+HasBranchChoices: WOConditional {
+	condition = hasBranchChoices;
 }
 
-Next: WOSubmitButton {
-	value = session.localizer.ERD2WCreateWizard.nextStep;
-	action = nextTabAction;
-	disabled = disableNext;
+BranchChoices: WORepetition {
+	item = branch;
+	list = branchChoices;
+}
+
+BranchChoice: ERXSubmitButton {
+	action = nextPage;
+	value = branch.branchButtonLabel;
+}
+
+Controller : ERDControllerButton {
+	d2wContext = d2wContext;
+	uiMode = "link";
+}
+
+IsEditingConditional: WOConditional {
+	_unroll = true;
+	condition = isEditing;
+}
+
+IsNotEditingConditional: WOConditional {
+	_unroll = true;
+	condition = isEditing;
+	negate = true;
+}
+
+IsObjectEditable: WOConditional {
+	condition = isObjectEditable;
 }
 
 PageWrapper: WOSwitchComponent {
@@ -81,16 +105,28 @@ PageWrapper: WOSwitchComponent {
 	_unroll = true;
 }
 
-Previous: WOSubmitButton {
-	action = previousTabAction;
-	value = session.localizer.ERD2WCreateWizard.previousStep;
-	disabled = disablePrevious;
+ReturnButton: WOSubmitButton {
+	alt = "Returns to the previous page";
+	action = nextPage;
+	value = "Return";
 }
 
-Save: WOSubmitButton {
-	value = session.localizer.ERD2WCreateWizard.save;
+ShowCancel: WOConditional {
+	condition = showCancel;
+}
+
+SubmitChanges: WOSubmitButton {
 	action = submitAction;
-	disabled = disableSave;
+	alt = "Saves your changes";
+	value = "Save";
+}
+useFocus: WOConditional {
+	condition = d2wContext.useFocus;
+}
+
+IsEditing: WOKeyValueConditional {
+	key = "task";
+	value = "edit";
 }
 
 Script: WOJavaScript {
@@ -98,10 +134,9 @@ Script: WOJavaScript {
 	hideInComment = true;
 }
 
-SwitchComponent3: WOSwitchComponent {
+
+TabPanel : WOSwitchComponent {
 	WOComponentName = tabComponentName;
-	bgColor = "#CC00CC";
-	nonSelectedBgColor = d2wContext.nonSelectedTabBgColor;
 	selectedTab = currentTab;
 	submitActionName = switchTabActionName;
 	tabNameKey = "displayName";
