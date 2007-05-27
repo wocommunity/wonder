@@ -10,14 +10,15 @@ import com.webobjects.foundation._NSUtilities;
  * Eclipse run profile for the WOApplication "ERXMainRunner"
  * with the command line parameter:
  * <p>
- * -mainClassName MyMainClass
+ * -mainClass MyMainClass
  * <p>
  * or
  * <p>
- * -mainClassName MyMainClass -mainMethodName main2
+ * -mainClass MyMainClass -mainMethod main2
  * <p>
  * And it will run an application, call the main method you
- * passed in, and then System.exit. 
+ * passed in, and then System.exit. Provide an empty mainClass string if you 
+ * handle everything in your startup.
  *  
  * @author mschrag (inspired by Anjo :) )
  */
@@ -51,9 +52,11 @@ public class ERXMainRunner extends ERXApplication {
 			if (mainClassName == null) {
 				throw new RuntimeException("You must pass in -mainClass <classname>");
 			}
-			Class mainClass = _NSUtilities.classWithName(mainClassName);
-			Method mainMethod = mainClass.getMethod(mainMethodName, new Class[] { String[].class });
-			mainMethod.invoke(null, new Object[] { _args });
+			if(mainClassName.length() != 0) {
+				Class mainClass = _NSUtilities.classWithName(mainClassName);
+				Method mainMethod = mainClass.getMethod(mainMethodName, new Class[] { String[].class });
+				mainMethod.invoke(null, new Object[] { _args });
+			}
 		}
 		catch (Throwable t) {
 			t.printStackTrace();
