@@ -4,7 +4,7 @@ userIsNotEngineering: WOGenericContainer {
 }
 
 Self: WOGenericContainer {
-	color = "FF0000";
+	color = "#FF0000";
 	elementName = "font";
 	omitTags = userIsNotSelf;
 }

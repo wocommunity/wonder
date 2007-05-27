@@ -2,9 +2,10 @@ package er.bugtracker;
 
 import com.webobjects.appserver.WOApplication;
 import com.webobjects.appserver.WOComponent;
-import com.webobjects.appserver.WODisplayGroup;
 import com.webobjects.appserver.WOSession;
 import com.webobjects.directtoweb.D2W;
+import com.webobjects.directtoweb.D2WContext;
+import com.webobjects.directtoweb.D2WPage;
 import com.webobjects.directtoweb.EditPageInterface;
 import com.webobjects.directtoweb.InspectPageInterface;
 import com.webobjects.directtoweb.ListPageInterface;
@@ -25,10 +26,12 @@ import com.webobjects.foundation.NSKeyValueCoding;
 import er.directtoweb.ERD2WFactory;
 import er.directtoweb.ERD2WInspectPage;
 import er.directtoweb.ERD2WQueryPage;
+import er.directtoweb.ERDQueryPageInterface;
 import er.extensions.EOEnterpriseObjectClazz;
 import er.extensions.ERXEC;
 import er.extensions.ERXExtensions;
 import er.extensions.ERXLocalizer;
+import er.extensions.ERXPrimaryKeyListQualifier;
 import er.extensions.ERXStringUtilities;
 
 /**
@@ -53,6 +56,15 @@ public class Factory extends ERD2WFactory implements NSKeyValueCoding {
      */
     public WOComponent pageForConfigurationNamed(String name, WOSession s) {
         WOComponent nextPage = super.pageForConfigurationNamed(name, s);
+        /*if (nextPage instanceof D2WPage) {
+            D2WPage page = (D2WPage) nextPage;
+            D2WContext context = page.d2wContext();
+            log.info(context.dynamicPage());
+            NextPageDelegate delegate = (NextPageDelegate) context.valueForKey("nextPageDelegate");
+            if(delegate != null) {
+                page.setNextPageDelegate(delegate);
+            }
+        }*/
         return nextPage;
     }
 
@@ -273,8 +285,8 @@ public class Factory extends ERD2WFactory implements NSKeyValueCoding {
 
     public WOComponent trackDefaultRelease() {
         EOEditingContext ec = session().defaultEditingContext();
-        EOQualifier q1 = new EOKeyValueQualifier("state", EOQualifier.QualifierOperatorEqual, State.ANALYZE);
-        EOQualifier q2 = new EOKeyValueQualifier("targetRelease", EOQualifier.QualifierOperatorEqual, Release.clazz.defaultRelease(ec));
+        EOQualifier q1 = new EOKeyValueQualifier(Bug.Key.STATE, EOQualifier.QualifierOperatorEqual, State.ANALYZE);
+        EOQualifier q2 = new EOKeyValueQualifier(Bug.Key.TARGET_RELEASE, EOQualifier.QualifierOperatorEqual, Release.clazz.defaultRelease(ec));
         EOQualifier q = new EOAndQualifier(new NSArray(new Object[] { q1, q2 }));
         EODatabaseDataSource ds = new EODatabaseDataSource(ec, "Bug");
         EOFetchSpecification fs = new EOFetchSpecification("Bug", q, null);
@@ -301,14 +313,16 @@ public class Factory extends ERD2WFactory implements NSKeyValueCoding {
     public WOComponent pushRelease() {
         EOEditingContext ec = session().defaultEditingContext();
         EOEnterpriseObject user = currentUser(ec);
-        ERD2WQueryPage qpi = (ERD2WQueryPage) pageForConfigurationNamed("QueryBugForPush", session());
-        WODisplayGroup dg = qpi.displayGroup();
-        dg.queryMatch().setObjectForKey(Release.clazz.defaultRelease(ec), Bug.Key.TARGET_RELEASE);
-        dg.setQualifier(new EOKeyValueQualifier(Bug.Key.STATE, EOQualifier.QualifierOperatorEqual, State.BUILD)); // picked
+        ERDQueryPageInterface qpi = (ERDQueryPageInterface) pageForConfigurationNamed("QueryBugForPush", session());
+        qpi.setQueryMatchForKey(new NSArray(State.BUILD), ERXPrimaryKeyListQualifier.IsContainedInArraySelectorName, Bug.Key.STATE);
+        Release release = Release.clazz.defaultRelease(ec);
+        if(release != null) {
+            qpi.setQueryMatchForKey(new NSArray(release), ERXPrimaryKeyListQualifier.IsContainedInArraySelectorName, Bug.Key.TARGET_RELEASE);
+        }
         qpi.setNextPageDelegate(new NextPageDelegate() {
             public WOComponent nextPage(WOComponent sender2) {
                 QueryPageInterface qpi2 = (QueryPageInterface) sender2;
-                WOComponent bugList = sender2.pageWithName("PushRelease");
+                WOComponent bugList = sender2.pageWithName("GroupedBugsByRelease");
                 //bugList.takeValueForKey(qpi2.queryDataSource().fetchObjects(), "bugsInBuild");
                 return bugList;
             }
