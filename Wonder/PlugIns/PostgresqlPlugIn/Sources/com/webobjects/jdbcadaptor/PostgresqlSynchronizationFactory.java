@@ -111,8 +111,10 @@ public class PostgresqlSynchronizationFactory extends EOSynchronizationFactory i
             // enableIdentifierQuoting while building the statement
             PostgresqlExpression result = new PostgresqlExpression(entity);
             String tableName = result.sqlStringForSchemaObjectName(entity.externalName());
-            result.setStatement("DROP TABLE " + tableName + " CASCADE");
-            results.addObject(result);
+            if(entityUsesSeparateTable(entity)) {
+                result.setStatement("DROP TABLE " + tableName + " CASCADE");
+                results.addObject(result);
+            }
         }
         return results;
     }
