@@ -40,7 +40,6 @@ public class Bug extends _Bug implements Markable {
         setOwner(People.clazz.currentUser(editingContext()));
         setDateSubmitted(new NSTimestamp());
         setDateModified(new NSTimestamp());
-         setType("b");
     }
 
     public void markAsRead() {
@@ -145,8 +144,8 @@ public class Bug extends _Bug implements Markable {
 
     }
 
-    public void validateForDelete () throws NSValidation.ValidationException {
-        throw new NSValidation.ValidationException("Bugs can not be deleted; they can only be closed.");
+    public boolean canForDelete () {
+        return false;
     }
 
     // this key is used during mass updates by both the template EO and the real bugs
@@ -161,16 +160,8 @@ public class Bug extends _Bug implements Markable {
 		if (newValue != null && newValue.length() > 0) {
 			Comment comment = (Comment) Comment.clazz.createAndInsertObject(editingContext());
 			comment.setBug(this);
+            comment.setTextDescription(newValue);
 			addToComments(comment);
-			
-			String oldText = textDescription();
-
-			if (oldText != null)
-				oldText = oldText + "\n\n";
-			else
-				oldText = "";
-			String newText = oldText + newValue;
-			comment.setTextDescription(newText);
 			touch();
 		}
 	}
