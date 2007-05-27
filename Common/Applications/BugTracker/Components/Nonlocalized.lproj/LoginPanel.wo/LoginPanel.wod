@@ -1,9 +1,6 @@
-BodyContainer: WOBody {
-	onload = "window.document.forms[0].username.focus();";
-}
 
 LoginForm: WOForm {
-    action = defaultPage;
+    action = login;
 	multipleSubmit = YES;
 }
 
@@ -30,8 +27,8 @@ CheckBox1: WOCheckBox {
 	checked = rememberPassword;
 }
 
-LoginButton: ERXSubmitButton {
-    action = defaultPage;
+LoginButton: WOSubmitButton {
+    action = login;
     alt = "Login to BugTracker";
     value = "Login";
 }

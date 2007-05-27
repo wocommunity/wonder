@@ -8,15 +8,11 @@
 package er.bugtracker.pages;
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
-import com.webobjects.eoaccess.EOUtilities;
 import com.webobjects.eocontrol.EOEditingContext;
-import com.webobjects.eocontrol.EOEnterpriseObject;
 import com.webobjects.foundation.NSArray;
-import com.webobjects.foundation.NSTimestamp;
 
 import er.bugtracker.Framework;
 import er.bugtracker.People;
-import er.bugtracker.Session;
 import er.extensions.ERXEC;
 import er.extensions.ERXEOControlUtilities;
 
