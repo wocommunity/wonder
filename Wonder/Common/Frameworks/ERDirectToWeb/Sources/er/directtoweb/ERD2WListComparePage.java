@@ -22,7 +22,7 @@ public class ERD2WListComparePage extends ERD2WListPage {
      */
     public ERD2WListComparePage(WOContext context) { super(context); }
 
-    protected int index, d2wPropertyKeyIndex, col;
+    public int index, d2wPropertyKeyIndex, col;
 
     private NSMutableArray _compareList;
     public NSArray compareList() {
