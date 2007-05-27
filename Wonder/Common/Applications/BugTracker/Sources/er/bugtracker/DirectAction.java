@@ -46,7 +46,10 @@ public class DirectAction extends ERD2WDirectAction {
     }
 
     public static People userFromRequest(WORequest r, EOEditingContext ec) {
-        People user = null;
+        People user = People.clazz.currentUser(ec);
+        if(user != null) {
+            return user;
+        }
         // This gets us the encrypted ID stored for the login cookie
         String encryptedPrimaryKey = r.cookieValueForKey("BTL");
         if (encryptedPrimaryKey != null && !encryptedPrimaryKey.equals("") && !encryptedPrimaryKey.equals("-")) {

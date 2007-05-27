@@ -88,6 +88,7 @@ public class Session extends ERXSession {
         handlers.setObjectForKey(new FrameworkHandler(), "frameworks");
         handlers.setObjectForKey(new TestItemHandler(), "testItems");
         handlers.setObjectForKey(new RequirementHandler(), "requirements");
+        setStoresIDsInCookies(true);
     }
 
     public void setDefaultEditingContext(EOEditingContext newEc) {
