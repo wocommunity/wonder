@@ -4,7 +4,14 @@
 			<td class="Header"><webobject name=ERDBannerComponent></webobject><webobject name=Header></webobject></td>
 		</tr>
 		<tr>
-			<td class="Buttons"><webobject name=HasChanges><webobject name=Floppy></webobject></webobject><webobject name=ShowPrint><webobject name=ERDPrinterButton></webobject></webobject></td>
+			<td class="TopActions">
+				<webobject name=HasChanges><webobject name=Floppy></webobject></webobject>
+				<webobject name=ShowPrint><webobject name=ERDPrinterButton></webobject></webobject>
+			<webobject name=HasBranchChoices>
+				<div class="Separator"></div>
+				<webobject name=BranchChoices><webobject name=BranchChoice></webobject></webobject>
+			</webobject><webobject name = "Controller"></webobject>
+			</td>
 		</tr>
 		<webobject name=EditingForm>
 			<tr>
@@ -21,6 +28,10 @@
 					<webobject name=IsNotEditingConditional>
 						<webobject name=ShowCancel><webobject name=ReturnButton></webobject></webobject> <webobject name=IsObjectEditable><webobject name=EditButton></webobject></webobject>
 					</webobject>
+			<webobject name=HasBranchChoices>
+				<div class="Separator"></div>
+				<webobject name=BranchChoices><webobject name=BranchChoice></webobject></webobject>
+			</webobject><webobject name = "Controller"></webobject>
 				</td>
 			</tr>
 		</webobject>
