@@ -18,7 +18,6 @@ import com.webobjects.eoaccess.EOModelGroup;
 import com.webobjects.eoaccess.EOUtilities;
 import com.webobjects.eocontrol.EOEditingContext;
 
-import er.bugtracker.pages.Main;
 import er.directtoweb.ERD2WDirectAction;
 import er.extensions.ERXCrypto;
 import er.extensions.ERXEC;
@@ -118,14 +117,16 @@ public class DirectAction extends ERD2WDirectAction {
     private WOComponent entranceTemplate(ERXUtilities.Callback successComponent) {
         WOComponent result = null;
         People u = userFromRequest(request(), session().defaultEditingContext());
+        /*
         if (u != null) {
             ((Session) session()).setUser(u);
             return (WOComponent) successComponent.invoke(session());
         } else {
-            Main loginPage = (Main) pageWithName("Main");
+            Main loginPage = (Main) pageWithName("HomePage");
             loginPage.setNextPageCallback(successComponent);
             result = loginPage;
-        }
+        }*/
+        result = pageWithName("HomePage");
         return result;
     }
 
