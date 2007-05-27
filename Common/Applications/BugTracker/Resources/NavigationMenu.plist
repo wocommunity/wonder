@@ -121,7 +121,7 @@
         },
         {
                 name = "OnlineHatSystem";
-                pageName = "OnlineHatSystem";
+                action = session.handlers.releases.ListFrameworks;
         },
         {
                 name = "Releases";
