@@ -74,6 +74,10 @@ NavigationBar: WOSwitchComponent {
 	tableClass = "NavigationBar";
 }
 
+ActionBar : ERDActionBar {
+	d2wContext = d2wContext;
+}
+
 PageWrapper: WOSwitchComponent {
 	WOComponentName = d2wContext.pageWrapperName;
 	_componentUnroll = true;
