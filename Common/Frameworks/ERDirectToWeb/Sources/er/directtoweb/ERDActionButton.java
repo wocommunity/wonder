@@ -6,6 +6,7 @@ import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WODisplayGroup;
 import com.webobjects.directtoweb.D2WPage;
+import com.webobjects.directtoweb.ERD2WUtilities;
 import com.webobjects.directtoweb.EditPageInterface;
 import com.webobjects.directtoweb.ListPageInterface;
 import com.webobjects.directtoweb.NextPageDelegate;
@@ -61,43 +62,17 @@ public  class ERDActionButton extends ERDCustomComponent {
 
     /** Utility to return the next page in the enclosing page. */
     public WOComponent nextPageInPage(D2WPage parent) {
-        WOComponent result = context().page();
-        try {
-            context()._setCurrentComponent(parent);
-            if(parent.nextPageDelegate() != null) {
-                NextPageDelegate delegate = parent.nextPageDelegate();
-                result = delegate.nextPage(parent);
-            } else {
-                result = parent.nextPage();
-            }
-        } finally {
-            context()._setCurrentComponent(this);
-        }
-        return result;
+        return ERD2WUtilities.nextPageInPage(parent);
     }
 
     /** Utility to return the first enclosing component that matches the given class, if there is one. */
     protected WOComponent enclosingPageOfClass(Class c) {
-        WOComponent p = parent();
-        while(p != null) {
-            if(c.isAssignableFrom(p.getClass()))
-                return p;
-            p = p.parent();
-        }
-        return null;
+        return ERD2WUtilities.enclosingPageOfClass(this, c);
     }
 
     /** Utility to return the outermost page that is a D2W page. This is needed because this component might be embedded inside a plain page. */
     protected D2WPage topLevelD2WPage() {
-        WOComponent p = parent();
-        WOComponent last = null;
-        while(p != null) {
-            if(p instanceof D2WPage) {
-                last = p;
-            }
-            p = p.parent();
-        }
-        return (D2WPage)last;
+        return ERD2WUtilities.topLevelD2WPage(this);
     }
 
     /** Utility to return the enclosing list page, if there is one. */

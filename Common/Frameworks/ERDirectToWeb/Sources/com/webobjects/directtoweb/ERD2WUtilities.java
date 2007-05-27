@@ -8,8 +8,11 @@ package com.webobjects.directtoweb;
 
 import org.apache.log4j.Logger;
 
+import com.webobjects.appserver.WOComponent;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSKeyValueCoding;
+
+import er.directtoweb.ERDPickPageInterface;
 
 // This is needed because pageFinalized is a protected method.
 public class ERD2WUtilities {
@@ -68,4 +71,77 @@ public class ERD2WUtilities {
         }
         return result;
     }
+    
+    /** Utility to return the next page in the enclosing page. */
+    public static WOComponent nextPageInPage(D2WPage parent) {
+        WOComponent result = parent.context().page();
+        WOComponent old = parent.context().component();
+        try {
+            parent.context()._setCurrentComponent(parent);
+            if(parent.nextPageDelegate() != null) {
+                NextPageDelegate delegate = parent.nextPageDelegate();
+                result = delegate.nextPage(parent);
+            } else {
+                result = parent.nextPage();
+            }
+        } finally {
+            parent.context()._setCurrentComponent(old);
+        }
+        return result;
+    }
+
+    /** Utility to return the first enclosing component that matches the given class, if there is one. */
+    public static WOComponent enclosingPageOfClass(WOComponent sender, Class c) {
+        WOComponent p = sender.parent();
+        while(p != null) {
+            if(c.isAssignableFrom(p.getClass()))
+                return p;
+            p = p.parent();
+        }
+        return null;
+    }
+
+    /** Utility to return the outermost page that is a D2W page. This is needed because this component might be embedded inside a plain page. */
+    public static D2WPage topLevelD2WPage(WOComponent sender) {
+        WOComponent p = sender.parent();
+        WOComponent last = null;
+        while(p != null) {
+            if(p instanceof D2WPage) {
+                last = p;
+            }
+            p = p.parent();
+        }
+        return (D2WPage)last;
+    }
+
+    /** Utility to return the enclosing list page, if there is one. */
+    public static ListPageInterface parentListPage(WOComponent sender) {
+        return (ListPageInterface)enclosingPageOfClass(sender, ListPageInterface.class);
+    }
+    
+    /** Utility to return the enclosing edit page, if there is one. */
+    public static EditPageInterface parentEditPage(WOComponent sender) {
+        return (EditPageInterface)enclosingPageOfClass(sender, EditPageInterface.class);
+    }
+    
+    /** Utility to return the enclosing select page, if there is one. */
+    public static SelectPageInterface parentSelectPage(WOComponent sender) {
+        return (SelectPageInterface)enclosingPageOfClass(sender, SelectPageInterface.class);
+    }
+    
+    /** Utility to return the enclosing query page, if there is one. */
+    public static QueryPageInterface parentQueryPage(WOComponent sender) {
+        return (QueryPageInterface)enclosingPageOfClass(sender, QueryPageInterface.class);
+    }
+
+    /** Utility to return the enclosing pick page, if there is one. */
+    public static ERDPickPageInterface parentPickPage(WOComponent sender) {
+        return (ERDPickPageInterface)enclosingPageOfClass(sender, ERDPickPageInterface.class);
+    }
+
+    /** Utility to return the enclosing D2W page, if there is one. */
+    public D2WPage parentD2WPage(WOComponent sender) {
+        return (D2WPage)enclosingPageOfClass(sender, D2WPage.class);
+    }
+    
 }
