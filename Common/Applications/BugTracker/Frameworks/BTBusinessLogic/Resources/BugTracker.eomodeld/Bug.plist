@@ -36,17 +36,6 @@
        }, 
        
        {
-           columnName = FEATURE_REQUEST;
-           name = featureRequest;
-           prototypeName = flag;
-           userInfo = 
-           {
-               modificationDate = "2002-05-06 07:35:29 +0200";
-           };
-           valueType = c;
-       }, 
-       
-       {
            columnName = ID;
            name = id;
            prototypeName = id;
@@ -54,6 +43,18 @@
            {
                modificationDate = "2002-05-06 07:14:34 +0200";
            };
+       }, 
+       
+       {
+           allowsNull = N;
+           columnName = IS_FEATURE_REQUEST;
+           name = isFeatureRequest;
+           prototypeName = flag;
+           userInfo = 
+           {
+               modificationDate = "2002-05-06 07:35:29 +0200";
+           };
+           valueType = c;
        }, 
        
        {
@@ -124,6 +125,7 @@
            prototypeName = osType;
            userInfo = 
            {
+               "New Key" = "New Value";
                modificationDate = "2002-05-06 07:42:12 +0200";
            };
        }, 
@@ -163,8 +165,8 @@
     attributesUsedForLocking = 
     (
        componentID, 
-       featureRequest, 
        id, 
+       isFeatureRequest, 
        isRead, 
        originatorID, 
        ownerID, 
@@ -183,7 +185,7 @@
        component, 
        dateModified, 
        dateSubmitted, 
-       featureRequest, 
+       isFeatureRequest, 
        isRead, 
        originator, 
        owner, 
@@ -204,8 +206,8 @@
            component, 
            dateModified, 
            dateSubmitted, 
-           featureRequest, 
            id, 
+           isFeatureRequest, 
            isRead, 
            originator, 
            owner, 
