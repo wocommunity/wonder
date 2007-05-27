@@ -20,8 +20,8 @@ public class State extends _State {
         super();
     }
 
-    public void awakeFromInsertion(EOEditingContext ec) {
-        super.awakeFromInsertion(ec);
+    public void init(EOEditingContext ec) {
+        super.init(ec);
     }
 
 

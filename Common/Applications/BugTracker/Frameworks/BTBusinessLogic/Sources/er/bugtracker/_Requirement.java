@@ -26,7 +26,7 @@ public abstract class _Requirement extends er.bugtracker.Bug {
         public static final String OWNER = "owner";
         public static final String ORIGINATOR = "originator";
         public static final String IS_READ = "isRead";
-        public static final String FEATURE_REQUEST = "featureRequest";
+        public static final String IS_FEATURE_REQUEST = "isFeatureRequest";
         public static final String DIFFICULTY = "difficulty";
         public static final String DATE_SUBMITTED = "dateSubmitted";
         public static final String DATE_MODIFIED = "dateModified";

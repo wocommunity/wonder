@@ -18,13 +18,6 @@ public class Requirement extends _Requirement {
         super.init(ec);
         setType("r");
     }
-
-
-    public void setState(State newState) {
-        willChange();
-        markUnread();
-        super.setState(newState);
-    }
     
     // Class methods go here
     

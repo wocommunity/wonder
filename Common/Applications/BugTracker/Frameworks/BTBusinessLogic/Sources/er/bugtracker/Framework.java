@@ -19,19 +19,15 @@ public class Framework extends _Framework {
     }
     
     public void grabHat() {
-        updateOwner(People.clazz.currentUser(editingContext()));
+        setOwner(People.clazz.currentUser(editingContext()));
         setOwnedSince(new NSTimestamp());
     }
     
     public void releaseHat() {
-        updateOwner(null);
+        setOwner(null);
         setOwnedSince(null);
     }
-
-    private void updateOwner(People people) {
-        addObjectToBothSidesOfRelationshipWithKey(people, Key.OWNER);
-    }
-
+    
     // Class methods go here
 
     public static class FrameworkClazz extends _FrameworkClazz {
