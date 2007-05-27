@@ -16,7 +16,6 @@ public class Requirement extends _Requirement {
 
     public void init(EOEditingContext ec) {
         super.init(ec);
-        setType("r");
     }
     
     // Class methods go here
