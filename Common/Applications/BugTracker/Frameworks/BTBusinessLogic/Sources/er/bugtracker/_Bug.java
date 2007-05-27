@@ -24,7 +24,7 @@ public abstract class _Bug extends ERXGenericRecord {
         public static final String OWNER = "owner";
         public static final String ORIGINATOR = "originator";
         public static final String IS_READ = "isRead";
-        public static final String FEATURE_REQUEST = "featureRequest";
+        public static final String IS_FEATURE_REQUEST = "isFeatureRequest";
         public static final String DATE_SUBMITTED = "dateSubmitted";
         public static final String DATE_MODIFIED = "dateModified";
         public static final String COMPONENT = "component";
@@ -100,11 +100,11 @@ public abstract class _Bug extends ERXGenericRecord {
         takeStoredValueForKey(aValue, Key.DATE_SUBMITTED);
     }
 
-    public boolean featureRequest() {
-        return ((Boolean)storedValueForKey(Key.FEATURE_REQUEST)).booleanValue();
+    public boolean isFeatureRequest() {
+        return ((Boolean)storedValueForKey(Key.IS_FEATURE_REQUEST)).booleanValue();
     }
-    public void setFeatureRequest(boolean aValue) {
-        takeStoredValueForKey((aValue ? Boolean.TRUE : Boolean.FALSE), Key.FEATURE_REQUEST);
+    public void setIsFeatureRequest(boolean aValue) {
+        takeStoredValueForKey((aValue ? Boolean.TRUE : Boolean.FALSE), Key.IS_FEATURE_REQUEST);
     }
 
     public boolean isRead() {

@@ -34,12 +34,4 @@ public class TestItem extends _TestItem {
     }
 
     public static final TestItemClazz clazz = new TestItemClazz();
-
-    public void updateComponent(Component component) {
-        addObjectToBothSidesOfRelationshipWithKey(component, Key.COMPONENT);
-    }
-
-    public void updateOwner(People people) {
-        addObjectToBothSidesOfRelationshipWithKey(people, Key.OWNER);
-    }
 }

@@ -220,9 +220,9 @@ public class Factory extends ERD2WFactory implements NSKeyValueCoding {
             testItem.setState(TestItemState.BUG);
 
             bug.setTextDescription("[From Test #" + testItem.primaryKey()+"]");
-            bug.addTestItem(testItem);
-            bug.updateOriginator(user);
-            bug.updateComponent(component);
+            bug.addToTestItems(testItem);
+            bug.setOriginator(user);
+            bug.setComponent(component);
 
             epi=(EditPageInterface)createPageNamed("CreateBugFromTestItem");
             epi.setObject(bug);
@@ -239,10 +239,10 @@ public class Factory extends ERD2WFactory implements NSKeyValueCoding {
         try {
             bug = (Bug) bug.localInstanceIn(peer);
             TestItem testItem = (TestItem) TestItem.clazz.createAndInsertObject(peer);
-            testItem.updateComponent(bug.component());
+            testItem.setComponent(bug.component());
             String description = ERXLocalizer.currentLocalizer().localizedTemplateStringForKeyWithObject("CreateTestItemFromReq.templateString", this);
             testItem.setTextDescription(description);
-            bug.addTestItem(testItem);
+            bug.addToTestItems(testItem);
             EditPageInterface epi=(EditPageInterface)createPageNamed("CreateTestItemFrom" + bug.entityName() );
             epi.setObject(testItem);
             epi.setNextPage(session().context().page());
