@@ -1,21 +1,13 @@
-BackButton: WOHyperlink {
+BackLink: ERXSingleButton {
 	action = backAction;
+	value = "Return";
 }
 
-BackLink: WOHyperlink {
-	action = backAction;
-}
-
-BackgroundColor: WOString {
-	_unroll = true;
-	value = d2wContext.backgroundColorForTable;
-}
-
-hasPrinterFriendlyVersion: WOConditional {
+ShowPrint: WOConditional {
 	condition = d2wContext.hasPrinterFriendlyVersion;
 }
 
-ERDBannerComponent2: ERDBannerComponent {
+ERDBannerComponent: ERDBannerComponent {
 	bannerFileName = d2wContext.bannerFileName;
 	d2wContext = d2wContext;
 	showBanner = d2wContext.showBanner;
@@ -42,15 +34,18 @@ Help: ERDDebuggingHelp {
 	d2wContext = d2wContext;
 }
 
-HideReturnOnSelect1: WOConditional {
-	_unroll = true;
-	condition = isSelectingNotTopLevel;
+ActionBar : ERDActionBar {
+	d2wContext = d2wContext;
 }
 
-HideReturnOnSelect3: WOConditional {
-	_unroll = true;
-	condition = isSelectingNotTopLevel;
-	negate = true;
+MassMofidy : ERDMassModifyButton {
+	d2wContext = localContext;
+	list = displayGroup.displayedObjects;
+}
+Filter : ERDFilterDisplayGroupButton {
+	displayGroup = displayGroup;
+	entityName=d2wContext.entity.name;
+	allowsFiltering = d2wContext.allowsFiltering;
 }
 
 ListEmpty: WOConditional {
@@ -67,14 +62,10 @@ ListPageRepetition2: WOSwitchComponent {
 	d2wContext = localContext;
 	displayGroup = displayGroup;
 }
-Display : WOString {
-	value = d2wContext.sublistSection.name;
-}
-NavBar1: WOSwitchComponent {   
-//	bgcolor = "#ff0000"; // backgroundColorForTable;
+
+NavigationBar: WOSwitchComponent {   
 	displayGroup = displayGroup;
 	objectName = d2wContext.displayNameForEntity;
-//	textColor = d2wContext.textColor;
     d2wContext = d2wContext;
 	bgcolor = d2wContext.backgroundColorForTable;
 	WOComponentName = d2wContext.batchNavigationBarComponentName;
@@ -84,14 +75,6 @@ PageWrapper: WOSwitchComponent {
 	WOComponentName = d2wContext.pageWrapperName;
 	_componentUnroll = true;
 	_unroll = true;
-}
-
-ReturnButton: WOImage {
-	alt = "Returns to the previous page";
-	border = "0";
-	filename = "ReturnMetalBtn.gif";
-	framework = "JavaDirectToWeb";
-	name = "Returns to the previous page";
 }
 
 ShowCancel: WOConditional {
