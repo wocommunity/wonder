@@ -5,3 +5,4 @@ er.extensions.ERXApplication.useEditingContextUnlocker=true
 er.extensions.ERXEC.defaultAutomaticLockUnlock=false
 er.extensions.ERXWOForm.addDefaultSubmitButtonDefault=true
 er.extensions.ERXEnterpriseObject.updateInverseRelationships=true
+er.extensions.ERXEnterpriseObject.applyRestrictingQualifierOnInsert=true
