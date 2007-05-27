@@ -70,7 +70,7 @@
        ownedSince, 
        owner
     );
-    externalName = FRAMEW;
+    externalName = FRAMEWORK;
     internalInfo = 
     {};
     name = Framework;
