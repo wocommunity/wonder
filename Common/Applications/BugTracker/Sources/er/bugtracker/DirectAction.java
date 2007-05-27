@@ -72,7 +72,7 @@ public class DirectAction extends ERD2WDirectAction {
     private static WOComponent errorPage(String message, Session session) {
         ErrorPageInterface error = D2W.factory().errorPage(session);
         error.setMessage(message);
-        error.setNextPage(WOApplication.application().pageWithName("Main", session.context()));
+        error.setNextPage(WOApplication.application().pageWithName("HomePage", session.context()));
         return (WOComponent) error;
     }
 
@@ -126,8 +126,8 @@ public class DirectAction extends ERD2WDirectAction {
             loginPage.setNextPageCallback(successComponent);
             result = loginPage;
         }*/
-        result = pageWithName("HomePage");
-        return result;
+        ((Session) session()).setUser(u);
+        return (WOComponent) successComponent.invoke(session());
     }
 
     public static class EntranceActionCallback implements ERXUtilities.Callback {
