@@ -102,7 +102,7 @@ public abstract class ERDBranchDelegate implements ERDBranchDelegateInterface {
      */
     public NSArray branchChoicesForContext(D2WContext context) {
         NSArray choices = (NSArray)context.valueForKey(BRANCH_CHOICES);
-        if (choices == null || choices.count() == 0) {
+        if (choices == null) {
             choices = defaultBranchChoices(context);
         }
         return choices;
