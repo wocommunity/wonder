@@ -3,6 +3,8 @@ Image: WOImage {
     height=16;
     border=0;
     filename=filename;
+    alt = name;
+   	title = name;
 }
 
 

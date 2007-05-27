@@ -7,13 +7,14 @@
 
 package er.bugtracker.components;
 
-import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 
 import er.bugtracker.People;
 import er.bugtracker.Session;
+import er.directtoweb.ERDCustomEditComponent;
+import er.extensions.ERXEOControlUtilities;
 
-public class ViewUser extends WOComponent {
+public class ViewUser extends ERDCustomEditComponent {
 
     public ViewUser(WOContext aContext) {
         super(aContext);
@@ -23,11 +24,15 @@ public class ViewUser extends WOComponent {
         return true;
     }
 
-    public People _user;
+    public boolean synchronizesVariablesWithBindings() {
+        return false;
+    }
+
+    private People _user;
 
     public People user() {
         if (_user == null)
-            _user = (People) valueForBinding("user");
+            _user = (People)objectPropertyValue();
         return _user;
     }
 
@@ -41,6 +46,6 @@ public class ViewUser extends WOComponent {
     }
 
     public boolean userIsNotSelf() {
-        return user() != null && user() != ((Session) session()).user();
+        return user() != null && !ERXEOControlUtilities.eoEquals(user(), ((Session) session()).user());
     }
 }
