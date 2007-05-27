@@ -227,7 +227,7 @@ delete from TEST_ITEM;
                 user.setIsEngineering(i % 3 != 0 && !user.isAdmin());
             }
 
-            log.info("Creating releases and components");
+            log.info("Creating releases, frameworks and components");
             
             for(int i = 1; i < 10; i++) {
                 Release release = (Release) Release.clazz.createAndInsertObject(ec);
@@ -250,6 +250,14 @@ delete from TEST_ITEM;
                 components.addObject(component);
             }
 
+            String names[] = new String[]{"ERDirectToWeb", "ERCoreBusinessLogic", "BTBusinessLogic", "BugTracker"};
+            for (int i = 0; i < names.length; i++) {
+                String string = names[i];
+                Framework framework = (Framework) Framework.clazz.createAndInsertObject(ec);
+                framework.setName(string);
+                framework.setOrdering(new Integer(i));
+            }
+            
             int MAX = 500;
 
             log.info("Creating bugs: "+ MAX);
