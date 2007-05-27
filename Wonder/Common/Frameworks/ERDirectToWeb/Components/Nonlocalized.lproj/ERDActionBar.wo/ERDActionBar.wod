@@ -4,7 +4,7 @@ Repetition1: WORepetition {
 	checkHashCodes = false;
 }
 
-SubmitButton3: WOSubmitButton {
+SubmitButton3: ERXSingleButton {
 	action = performAction;
 	value = branchButtonLabel;
 }
