@@ -13,6 +13,7 @@ import com.webobjects.appserver.WORequest;
 import com.webobjects.appserver.WOResponse;
 import com.webobjects.directtoweb.D2W;
 import com.webobjects.directtoweb.ListPageInterface;
+import com.webobjects.directtoweb.NextPageDelegate;
 import com.webobjects.directtoweb.QueryPageInterface;
 import com.webobjects.eoaccess.EODatabaseDataSource;
 import com.webobjects.eoaccess.EOEntity;
@@ -36,7 +37,7 @@ import er.extensions.ERXValueUtilities;
  * the WODisplayGroup.
  */
 
-public class ERD2WQueryPage extends ERD2WPage implements QueryPageInterface {
+public class ERD2WQueryPage extends ERD2WPage implements ERDQueryPageInterface {
 
     protected WODisplayGroup displayGroup;
 
@@ -229,7 +230,6 @@ public class ERD2WQueryPage extends ERD2WPage implements QueryPageInterface {
     // returning a null query data source if cancel was clicked
     private boolean _wasCancelled;
     
-    // CHECKME AK: why is this never called??
     public WOComponent cancelAction() {
     	WOComponent result = null;
     	try {
@@ -317,5 +317,10 @@ public class ERD2WQueryPage extends ERD2WPage implements QueryPageInterface {
             displayGroup().queryMatch().removeObjectForKey(key);
             displayGroup().queryOperator().removeObjectForKey(key);
         }
+    }
+
+    public void setCancelDelegate(NextPageDelegate cancelDelegate) {
+        // FIXME not implemented!
+        
     }
 }
