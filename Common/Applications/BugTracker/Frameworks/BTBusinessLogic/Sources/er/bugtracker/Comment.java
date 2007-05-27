@@ -20,10 +20,6 @@ public class Comment extends _Comment {
     public void init(EOEditingContext ec) {
     	super.init(ec);
     	setDateSubmitted(new NSTimestamp());
-        updateOriginator(People.clazz.currentUser(editingContext()));
-    }
-
-    public void updateOriginator(People people) {
-        addObjectToBothSidesOfRelationshipWithKey(people, Key.ORIGINATOR);
+        setOriginator(People.clazz.currentUser(editingContext()));
     }
 }

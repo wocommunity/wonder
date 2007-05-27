@@ -33,16 +33,14 @@ public class Bug extends _Bug implements Markable {
         super.init(ec);
         setPriority(Priority.MEDIUM);
         setState(State.ANALYZE);
-        updateTargetRelease(Release.clazz.defaultRelease(ec));
+        setTargetRelease(Release.clazz.defaultRelease(ec));
         setIsRead(true);
+        setIsFeatureRequest(false);
+        setOriginator(People.clazz.currentUser(editingContext()));
+        setOwner(People.clazz.currentUser(editingContext()));
         setDateSubmitted(new NSTimestamp());
         setDateModified(new NSTimestamp());
-        setFeatureRequest(false);
-        setType("b");
-    }
-
-	void updateTargetRelease(Release release) {
-       addObjectToBothSidesOfRelationshipWithKey(release, Key.TARGET_RELEASE);
+         setType("b");
     }
 
     public void markAsRead() {
@@ -76,7 +74,7 @@ public class Bug extends _Bug implements Markable {
         super.setComponent(value);
         if (value!=null) {
             if (owner() == null) {
-                updateOwner(component().owner());
+                setOwner(component().owner());
             } else if ((oldComponent==null) || (!(value.equals(oldComponent)))) {
                 _componentChanged = true;
             }
@@ -87,18 +85,14 @@ public class Bug extends _Bug implements Markable {
         willChange();
         People oldOwner = owner();
         super.setOwner(value);
-        EOEnterpriseObject localOwner = ERCoreBusinessLogic.actor(editingContext());
-        if ((value!=null) && (value!=localOwner) && (oldOwner==null ||
+        People currentUser = People.clazz.currentUser(editingContext());
+        if ((value!=null) && (value!=currentUser) && (oldOwner==null ||
                                                      (!(value.equals(oldOwner))))) {
             _ownerChanged=true;
             if (oldOwner!=null) setPreviousOwner(oldOwner);
             touch();
         }
     }
-
-    public boolean isFeatureRequest() {
-		return featureRequest();
-	}
 
 	public void setState(State newState) {
         willChange();
@@ -109,28 +103,20 @@ public class Bug extends _Bug implements Markable {
         if (newState==State.DOCUMENT && !_ownerChanged) {
             People documenter = People.clazz.defaultDocumenter(editingContext());
             if(documenter!=null) {
-                updateOwner(documenter);
+                setOwner(documenter);
                 setIsRead(false);
             }
         }
         if (newState==State.VERIFY && !_ownerChanged) {
             People verifier = People.clazz.defaultVerifier(editingContext());
             if(verifier!=null) {
-                updateOwner(verifier);
+                setOwner(verifier);
             } else {
-                updateOwner(originator());
+                setOwner(originator());
                 touch();
             }
         }
 	}
-
-    public void updateOwner(People people) {
-       addObjectToBothSidesOfRelationshipWithKey(people, Key.OWNER);
-    }
-
-    public void updatePreviousOwner(People people) {
-       addObjectToBothSidesOfRelationshipWithKey(people, Key.PREVIOUS_OWNER);
-    }
 
     public Object validateTargetReleaseForNewBugs() throws NSValidation.ValidationException {
         Release release = targetRelease();
@@ -148,7 +134,7 @@ public class Bug extends _Bug implements Markable {
 
     public void validateForUpdate() {
         if (_componentChanged && component()!=null && !_ownerChanged) {
-            updateOwner(component().owner());
+            setOwner(component().owner());
         }
         _componentChanged=false;
         _ownerChanged=false;
@@ -175,7 +161,7 @@ public class Bug extends _Bug implements Markable {
 		if (newValue != null && newValue.length() > 0) {
 			Comment comment = (Comment) Comment.clazz.createAndInsertObject(editingContext());
 			comment.setBug(this);
-			addComment(comment);
+			addToComments(comment);
 			
 			String oldText = textDescription();
 
@@ -192,10 +178,6 @@ public class Bug extends _Bug implements Markable {
 	public NSArray sortedComments() {
 		return ERXArrayUtilities.sortedArraySortedWithKey(comments(), Comment.Key.DATE_SUBMITTED);
 	}
-	
-    public void addComment(Comment object) {
-        addObjectToBothSidesOfRelationshipWithKey(object, Key.COMMENTS);
-    }
 
     public void didUpdate() {
         super.didUpdate();
@@ -344,20 +326,8 @@ public class Bug extends _Bug implements Markable {
         setState(State.VERIFY);
     }
 
-    public void addTestItem(TestItem testItem) {
-        addObjectToBothSidesOfRelationshipWithKey(testItem, Key.TEST_ITEMS);
-    }
-
     public Number bugid() {
         return (Number) rawPrimaryKey();
-    }
-
-    public void updateOriginator(People user) {
-        addObjectToBothSidesOfRelationshipWithKey(user, Key.ORIGINATOR);
-    }
-
-    public void updateComponent(Component component) {
-        addObjectToBothSidesOfRelationshipWithKey(component, Key.COMPONENT);
     }
 }
 
