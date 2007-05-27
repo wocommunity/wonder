@@ -76,11 +76,11 @@ public class MenuHeader extends WOComponent {
         return pageWithName("FreeQuery");
     }
 
-    public Integer bugNumber;
+    public String bugNumber;
 
     public WOComponent findBugByNumber() {
         if(bugNumber != null) {
-            return Factory.bugTracker().findBugs(bugNumber.toString());
+            return Factory.bugTracker().findBugs(bugNumber);
         }
         return context().page();
     }
