@@ -103,7 +103,6 @@
     5 : (task = 'edit' and (smartAttribute.className = 'java.lang.Number' or smartAttribute.className = 'java.math.BigDecimal')) => componentName = ERD2WEditNumber [com.webobjects.directtoweb.Assignment], 
     10 : *true* => browserSize = 5 [com.webobjects.directtoweb.Assignment], 
     10 : *true* => confirmRows = 4 [com.webobjects.directtoweb.Assignment], 
-    10 : *true* => branchChoices = () [com.webobjects.directtoweb.Assignment], 
     10 : *true* => yearRangeTop = 2030 [com.webobjects.directtoweb.Assignment], 
     10 : *true* => nextButtonName = Next [com.webobjects.directtoweb.Assignment], 
     10 : *true* => saveButtonLabel = Save [com.webobjects.directtoweb.Assignment], 
