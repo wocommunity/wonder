@@ -115,7 +115,7 @@ public class ERDActionBar extends ERDCustomEditComponent implements ERDBranchInt
         if (branchDelegate() != null) {
             branchChoices = branchDelegate().branchChoicesForContext(d2wContext());
         } else {
-            log.error("Attempting to call branchChoices on a page with a delegate: " + branchDelegate() + " that doesn't support the ERDBranchDelegateInterface!");
+            branchChoices = NSArray.EmptyArray;
         }
         return branchChoices;
     }
@@ -125,7 +125,7 @@ public class ERDActionBar extends ERDCustomEditComponent implements ERDBranchInt
      * @return if the current delegate supports branch choices.
      */
     public boolean hasBranchChoices() {
-        return branchDelegate() != null;
+        return branchDelegate() != null && branchChoices().count() > 0;
     }
 
     public void validationFailedWithException(Throwable theException,Object theValue, String theKeyPath) {
