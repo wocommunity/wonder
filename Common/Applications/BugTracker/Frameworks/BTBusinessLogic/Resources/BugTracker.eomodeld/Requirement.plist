@@ -45,17 +45,6 @@
        }, 
        
        {
-           columnName = FEATURE_REQUEST;
-           name = featureRequest;
-           prototypeName = flag;
-           userInfo = 
-           {
-               modificationDate = "2002-05-06 07:35:41 +0200";
-           };
-           valueType = c;
-       }, 
-       
-       {
            columnName = ID;
            name = id;
            prototypeName = id;
@@ -63,6 +52,18 @@
            {
                modificationDate = "2002-05-06 07:14:34 +0200";
            };
+       }, 
+       
+       {
+           allowsNull = N;
+           columnName = IS_FEATURE_REQUEST;
+           name = isFeatureRequest;
+           prototypeName = flag;
+           userInfo = 
+           {
+               modificationDate = "2002-05-06 07:35:29 +0200";
+           };
+           valueType = c;
        }, 
        
        {
@@ -195,8 +196,8 @@
     (
        componentID, 
        difficultyID, 
-       featureRequest, 
        id, 
+       isFeatureRequest, 
        isRead, 
        originatorID, 
        ownerID, 
@@ -218,7 +219,7 @@
        dateModified, 
        dateSubmitted, 
        difficulty, 
-       featureRequest, 
+       isFeatureRequest, 
        isRead, 
        originator, 
        owner, 
@@ -242,8 +243,8 @@
            dateModified, 
            dateSubmitted, 
            difficulty, 
-           featureRequest, 
            id, 
+           isFeatureRequest, 
            isRead, 
            originator, 
            owner, 
