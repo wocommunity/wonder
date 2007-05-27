@@ -11,9 +11,6 @@ import java.util.Enumeration;
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOMailDelivery;
 import com.webobjects.directtoweb.D2W;
-import com.webobjects.eoaccess.EOEntity;
-import com.webobjects.eoaccess.EOModel;
-import com.webobjects.eoaccess.EOModelGroup;
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
@@ -27,7 +24,7 @@ import er.extensions.ERXWOContext;
 
 public class Application extends ERXApplication {
 
-    public String databaseName;
+    public String databaseName = "BugTracker";
 
     public static void main(String argv[]) {
         ERXApplication.main(argv, Application.class);
@@ -57,10 +54,6 @@ public class Application extends ERXApplication {
     public void finishInitialization() {
         NSLog.debug.appendln("finishInitialization called.");
         try {
-            adjustConnectionDictionary(EOModelGroup.defaultGroup().modelNamed("BugTracker"));
-            if(ERXProperties.booleanForKey("BTCreateDummyData")) {
-                new BTBusinessLogic.DataCreator().create();
-            }
             boolean runBatchReport = ERXProperties.booleanForKey("BTRunBatchReport");
             if (runBatchReport) {
                 runBatchReport();
@@ -68,18 +61,6 @@ public class Application extends ERXApplication {
             }
         } catch (ExceptionInInitializerError e) {
             NSLog.err.appendln("Original exception " + e.getException());
-        }
-    }
-
-    public void adjustConnectionDictionary(EOModel model) {
-        try { 
-            databaseName = (String) model.name();
-            EOEntity release = model.entityNamed("Release");
-            if(model.connectionDictionary().toString().toLowerCase().indexOf("mysql") >= 0) {
-            	release.setExternalName("`RELEASE`");
-            }
-        } catch (Exception ex) {
-            NSLog.err.appendln("Original exception : " + ex);
         }
     }
 
