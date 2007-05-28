@@ -12,3 +12,6 @@ Image1: WOImage {
 	border = 0;
 }
 
+HasObjects : WOConditional {
+	condition = ^list.count;
+}

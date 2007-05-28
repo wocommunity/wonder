@@ -20,6 +20,7 @@ import com.webobjects.eoaccess.EOUtilities;
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.eocontrol.EOEnterpriseObject;
 import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSValidation;
 
 import er.extensions.ERXEC;
@@ -49,18 +50,27 @@ public class ERDMassModifyButton extends WOComponent {
             WOComponent result=nextPage;
             if (eo.editingContext()!=null) { // save was clicked
                 ConfirmPageInterface confirmPage = (ConfirmPageInterface)D2W.factory().confirmPageForEntityNamed(entityName,
-                                                                                                                 sender.session());
+                        sender.session());
                 _MassModificatorDelegate cb=new _MassModificatorDelegate();
-                cb.eo=eo; cb.displayPropertyKeys=displayPropertyKeys; cb.nextPage=nextPage; cb.list=list;
+                NSMutableArray keys = new NSMutableArray();
+                for (Enumeration e = displayPropertyKeys.objectEnumerator(); e.hasMoreElements();) {
+                    String key = (String) e.nextElement();
+                    if(key.matches("^((\\w+).?)+$")) {
+                        keys.addObject(key);
+                    }
+                }
+                cb.eo=eo; cb.displayPropertyKeys=keys; cb.nextPage=nextPage; cb.list=list;
                 confirmPage.setConfirmDelegate(cb);
                 confirmPage.setCancelDelegate(new ERDPageDelegate(nextPage));
                 StringBuffer message=new StringBuffer("You are about to modify <b>"+list.count()+"</b> "+entityName+"(s) in the following manner:<br><br>");
-                for (Enumeration e= displayPropertyKeys.objectEnumerator(); e.hasMoreElements();) {
+                for (Enumeration e= keys.objectEnumerator(); e.hasMoreElements();) {
                     String key=(String)e.nextElement();
-                    Object value=eo.valueForKey(key);
-                    if (value!=null && (!(value instanceof String) || ((String)value).length()>0)) { // for text areas which return ""
-                        message.append(key);
-                        message.append("<br>");
+                    if(key.matches("((\\w+).?)+")) {
+                        Object value=eo.valueForKey(key);
+                        if (value!=null && (!(value instanceof String) || ((String)value).length()>0)) { // for text areas which return ""
+                            message.append(key);
+                            message.append("<br>");
+                        }
                     }
                 }
                 message.append("<br><br>Are you sure you want to proceed?");                
@@ -132,7 +142,10 @@ public class ERDMassModifyButton extends WOComponent {
         cb.displayPropertyKeys=dpk;
         for (Enumeration e=dpk.objectEnumerator(); e.hasMoreElements();) {
             String key=(String)e.nextElement();
-            newEO.takeValueForKey(null,key); // we don't care much about back relationships..
+            if(key.matches("^((\\w+).?)+$")) {
+                newEO.takeValueForKey(null,key); 
+                // we don't care much about back relationships..
+            }
         }
         return result;
     }
