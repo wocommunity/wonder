@@ -3,21 +3,13 @@ BackLink: ERXSingleButton {
 	value = "Return";
 }
 
-ShowPrint: WOConditional {
-	condition = d2wContext.hasPrinterFriendlyVersion;
-}
-
-ERDBannerComponent: ERDBannerComponent {
-	bannerFileName = d2wContext.bannerFileName;
-	d2wContext = d2wContext;
-	showBanner = d2wContext.showBanner;
-}
-
-ERPrinterButton: ERDPrinterButton {
+PrinterButton: WOSwitchComponent {
+	WOComponentName = d2wContext.printerButtonComponentName;
 	d2wContext = d2wContext;
 	dataSource = dataSource;
 	displayGroup = displayGroup;
 	task = "list";
+	show = displayGroup.displayedObjects.count;
 }
 
 EmptyMessageComponent: WOSwitchComponent {
