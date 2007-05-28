@@ -28,9 +28,13 @@ public class ERDPrinterButton extends ERDActionButton {
 
     public ERDPrinterButton(WOContext context) { super(context); }
     
+    public boolean show() {
+        return booleanValueForBinding("show", true);
+    }
+    
     public WOComponent printerFriendlyVersion() {
         WOComponent result = null;
-        if(object() != null) {
+        if(d2wContext() == null) {
             D2WContext dummyContext = ERD2WContext.newContext();
             dummyContext.takeValueForKey(object(), "object");
             dummyContext.setEntity(EOUtilities.entityNamed(object().editingContext(),object().entityName()));
