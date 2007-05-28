@@ -1,16 +1,12 @@
 package er.bugtracker.delegates;
 
 import com.webobjects.appserver.WOComponent;
-import com.webobjects.directtoweb.D2W;
 import com.webobjects.directtoweb.D2WContext;
-import com.webobjects.directtoweb.EditPageInterface;
-import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.foundation.NSArray;
 
 import er.bugtracker.Bug;
-import er.bugtracker.Session;
+import er.bugtracker.Factory;
 import er.bugtracker.State;
-import er.extensions.ERXEC;
 
 public class BugDelegate extends BranchDelegate {
 
@@ -19,14 +15,15 @@ public class BugDelegate extends BranchDelegate {
         log.debug("in: " + result);
          Bug bug = (Bug)object(context);
         // AK: this is just an illustration
+        result = choiceByRemovingKeys(new NSArray("edit"), result);
         if(!bug.state().equals(State.ANALYZE)) {
             result = choiceByRemovingKeys(new NSArray("delete"), result);
         }
         if(!bug.state().equals(State.CLOSED)) {
-        	result = choiceByRemovingKeys(new NSArray(new Object[] {"reopen", "view"}), result);
+        	result = choiceByRemovingKeys(new NSArray(new Object[] {"reopen"}), result);
         }
         if(bug.state().equals(State.CLOSED)) {
-        	result = choiceByRemovingKeys(new NSArray(new Object[] {"resolve", "edit"}), result);
+        	result = choiceByRemovingKeys(new NSArray(new Object[] {"resolve"}), result);
         }
         if(!bug.state().equals(State.VERIFY)) {
             result = choiceByRemovingKeys(new NSArray("reject"), result);
@@ -37,60 +34,28 @@ public class BugDelegate extends BranchDelegate {
 
     public WOComponent resolve(WOComponent sender) {
         Bug bug = (Bug) object(sender);
-        Session session = session(sender);
-        EOEditingContext peer = ERXEC.newEditingContext(bug.editingContext().parentObjectStore());
-        EditPageInterface epi = null;
-        peer.lock();
-        try {
-            bug = (Bug) bug.localInstanceIn(peer);
-            bug.close();
-            epi=(EditPageInterface)D2W.factory().pageForConfigurationNamed("EditBugToClose",session);
-            epi.setObject(bug);
-            epi.setNextPage(sender.context().page());
-        } finally {
-            peer.unlock();
-        }
+        return (WOComponent)Factory.bugTracker().resolveBug(bug);
+    }
 
-        return (WOComponent)epi;
+    public WOComponent comment(WOComponent sender) {
+        Bug bug = (Bug) object(sender);
+        return (WOComponent)Factory.bugTracker().commentBug(bug);
     }
 
     public WOComponent reopen(WOComponent sender) {
         Bug bug = (Bug) object(sender);
-        Session session = session(sender);
-        EOEditingContext peer = ERXEC.newEditingContext(bug.editingContext().parentObjectStore());
-        EditPageInterface epi = null;
-        peer.lock();
-        try {
-            bug = (Bug) bug.localInstanceIn(peer);
-            bug.reopen();
-            epi=(EditPageInterface)D2W.factory().pageForConfigurationNamed("EditBugToReopen",session);
-            epi.setObject(bug);
-            epi.setNextPage(sender.context().page());
-        } finally {
-            peer.unlock();
-        }
-
-        return (WOComponent)epi;
+        return (WOComponent)Factory.bugTracker().reopenBug(bug);
     }
 
 
     public WOComponent reject(WOComponent sender) {
         Bug bug = (Bug) object(sender);
-        Session session = session(sender);
-        EOEditingContext peer = ERXEC.newEditingContext(bug.editingContext().parentObjectStore());
-        EditPageInterface epi = null;
-        peer.lock();
-        try {
-            bug = (Bug) bug.localInstanceIn(peer);
-            bug.rejectVerification();
-            epi=(EditPageInterface)D2W.factory().pageForConfigurationNamed("EditBugToRejectVerification",session);
-            epi.setObject(bug);
-            epi.setNextPage(sender.context().page());
-        } finally {
-            peer.unlock();
-        }
-
-        return (WOComponent)epi;
+        return (WOComponent)Factory.bugTracker().rejectBug(bug);
     }
 
+
+    public WOComponent createTestItem(WOComponent sender) {
+        Bug bug = (Bug) object(sender);
+        return (WOComponent)Factory.bugTracker().createTestItemFromBug(bug);
+    }
 }

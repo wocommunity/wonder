@@ -40,5 +40,4 @@ user: WOString {
 bugNumber: WOTextField {
 	size = 6;
 	value = bugNumber;
-	numberformat = "#";
 }
