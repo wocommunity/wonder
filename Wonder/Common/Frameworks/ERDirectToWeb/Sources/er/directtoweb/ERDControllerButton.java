@@ -23,7 +23,10 @@ public class ERDControllerButton extends ERDActionButton implements ERDBranchInt
     }
 
     public boolean isFlyOver() {
-        return !"link".equals(valueForBinding("uiMode"));
+        return !("linkList".equals(valueForBinding("uiStyle")) || isButton());
+    }
+    public boolean isButton() {
+        return "buttonList".equals(valueForBinding("uiStyle"));
     }
     
     /** find the next non-null NextPageDelegate in the component tree, break if there is a D2WPage found beforehand */
@@ -107,8 +110,7 @@ public class ERDControllerButton extends ERDActionButton implements ERDBranchInt
         if (branchDelegate() != null) {
             branchChoices = branchDelegate().branchChoicesForContext(d2wContext());
         } else {
-        	String pageName = (d2wContext() != null ?  d2wContext().dynamicPage() : "NO PAGE");
-        	log.error("Attempting to call branchChoices on a page (" + pageName +") with a delegate: " + branchDelegate() + " that doesn't support the ERDBranchDelegateInterface!");
+            branchChoices = NSArray.EmptyArray;
         }
         return branchChoices;
     }
