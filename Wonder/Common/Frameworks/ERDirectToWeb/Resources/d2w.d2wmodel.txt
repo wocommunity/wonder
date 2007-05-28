@@ -50,7 +50,7 @@
     0 : smartAttribute.width > 0 => maxLength = smartAttribute.width [er.directtoweb.ERDKeyValueAssignment], 
     0 : *true* => groupingComponentName = ERDDefaultSectionComponent [com.webobjects.directtoweb.Assignment], 
     0 : *true* => smartRelationship = <ERDDefaultModelAssignment> [er.directtoweb.ERDDefaultModelAssignment], 
-    0 : *true* => templateNameForErrorPage = ERDRecoverableErrorPage [com.webobjects.directtoweb.Assignment], 
+    0 : *true* => templateNameForErrorPage = ERD2WMessagePageTemplate [com.webobjects.directtoweb.Assignment], 
     0 : *true* => templateNameForCSVListPage = ERD2WCSVListPageTemplate [com.webobjects.directtoweb.Assignment], 
     0 : *true* => templateNameForConfirmPage = ERD2WConfirmPageTemplate [com.webobjects.directtoweb.Assignment], 
     0 : *true* => templateNameForInspectPage = ERD2WInspectPageTemplate [com.webobjects.directtoweb.Assignment], 

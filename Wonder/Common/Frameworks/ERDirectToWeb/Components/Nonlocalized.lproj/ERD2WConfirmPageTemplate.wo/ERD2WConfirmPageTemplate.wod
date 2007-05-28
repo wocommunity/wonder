@@ -1,21 +1,13 @@
 BranchButton: WOSubmitButton {
 	action = nextPageAction;
-	value = branch.branchButtonLabel;
+	value = branch.branchButtonLabel; //VALID
 }
 
-Conditional2: ERXNonNullConditional {
-	condition = message;
+DebuggingHelp: ERDDebuggingHelp {
+	d2wContext = d2wContext;
 }
 
-Conditional3: WOConditional {
-	condition = showExplanationComponent;
-}
-
-Conditional4: WOConditional {
-	condition = d2wContext.shouldProvideConfirmMessage;
-}
-
-ERConfirmMessage1: ERDConfirmMessage {
+ERDConfirmMessage: ERDConfirmMessage {
 	confirmMessageManditory = d2wContext.confirmMessageManditory;
 	dataSource = dataSource;
 	object = object;
@@ -26,10 +18,6 @@ ERConfirmMessage1: ERDConfirmMessage {
 	confirmMessageExplanation = d2wContext.confirmMessageExplanation;
 	confirmMessageIsTextfield = d2wContext.confirmMessageIsTextfield;
 	confirmMessageTextfieldMaxlength = d2wContext.confirmMessageTextfieldMaxlength;
-}
-
-ERD2WDebuggingHelp1: ERDDebuggingHelp {
-	d2wContext = d2wContext;
 }
 
 Errors: ERXErrorDictionaryPanel {
@@ -49,12 +37,16 @@ ExclamationImage: WOImage {
 	width = "32";
 }
 
-Form2: WOForm {
+Form: WOForm {
 	multipleSubmit = true;
 }
 
 HasBranchChoices: WOConditional {
 	condition = hasBranchChoices;
+}
+
+HasMessage: ERXNonNullConditional {
+	condition = message;
 }
 
 HasNoBranchChoices: WOConditional {
@@ -87,10 +79,18 @@ SwitchComponent3: WOSwitchComponent {
 	WOComponentName = d2wContext.pageWrapperName;
 }
 
-SwitchComponent4: WOSwitchComponent {
+explanationComponentName: WOSwitchComponent {
 	WOComponentName = d2wContext.explanationComponentName;
 	dataSource = dataSource;
 	object = object;
 	pageConfiguration = d2wContext.explanationConfigurationName;
+	settings = settings;
 }
 
+shouldProvideConfirmMessage: WOConditional {
+	condition = d2wContext.shouldProvideConfirmMessage;
+}
+
+showExplanationComponent: WOConditional {
+	condition = showExplanationComponent;
+}
