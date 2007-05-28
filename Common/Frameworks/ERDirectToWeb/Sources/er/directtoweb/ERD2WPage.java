@@ -645,7 +645,8 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
         } else if (pageController() != null && pageController() instanceof ERDBranchDelegateInterface) {
             branchChoices = pageController().branchChoicesForContext(d2wContext());
         } else {
-            log.error("Attempting to call branchChoices on a page with a delegate: " + nextPageDelegate() + " that doesn't support the ERDBranchDelegateInterface!");
+            branchChoices = NSArray.EmptyArray;
+            //log.error("Attempting to call branchChoices on a page with a delegate: " + nextPageDelegate() + " that doesn't support the ERDBranchDelegateInterface!");
         }
         return branchChoices;
     }
