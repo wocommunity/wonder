@@ -1,26 +1,30 @@
-<webobject name=SwitchComponent3><webobject name=ERD2WDebuggingHelp1></webobject>
-	<table border=0>
-		<tr>
-			<td align=RIGHT rowspan=4 class=Headline width=100 valign=TOP attribute1=Value>&nbsp;<webobject name=ExclamationImage></webobject></td>
-			<td class=Alert><WEBOBJECT NAME=Errors></WEBOBJECT></td>
-		</tr>
-		<webobject name=Conditional2>
-			<tr>
-				<td class=Big><webobject name=Message></webobject>
-					<p></p>
-				</td>
-			</tr>
-		</webobject>
-		<tr>
-			<td><webobject name=Form2><webobject name=Conditional3><WEBOBJECT NAME=SwitchComponent4></WEBOBJECT></webobject><webobject name=Conditional4>
-						<table>
-							<tr>
-								<td align=CENTER><webobject name=ERConfirmMessage1></webobject></td>
-							</tr>
-						</table>
-					</webobject>
-					<WEBOBJECT NAME=HasNoBranchChoices><WEBOBJECT NAME=OKButton2></WEBOBJECT> <WEBOBJECT NAME=OKButton></WEBOBJECT></WEBOBJECT><WEBOBJECT NAME=HasBranchChoices><WEBOBJECT NAME=Repetition1><WEBOBJECT NAME=BranchButton></WEBOBJECT>&nbsp;</WEBOBJECT></WEBOBJECT>
-				</webobject></td>
-		</tr>
-	</table>
+<webobject name=SwitchComponent3><webobject name="DebuggingHelp"></webobject>
+    <table border=0>
+        <tr>
+            <td align=RIGHT rowspan=4 class=Headline width=100 valign=TOP attribute1=Value>&nbsp;<webobject name=ExclamationImage></webobject></td>
+            <td class=Alert><webobject name=Errors></webobject></td>
+        </tr>
+        <webobject name="HasMessage">
+            <tr>
+                <td>
+                    <webobject name=Message></webobject>
+                </td>
+            </tr>
+        </webobject>
+        <tr>
+            <td>
+                <webobject name="Form">
+                    <webobject name="showExplanationComponent"><webobject name="explanationComponentName"></webobject></webobject><webobject name="shouldProvideConfirmMessage">
+                        <table>
+                            <tr>
+                                <td align=CENTER><webobject name="ERDConfirmMessage"></webobject></td>
+                            </tr>
+                        </table>
+                    </webobject>
+                    <webobject name=HasNoBranchChoices><webobject name=OKButton2></webobject>
+                        <webobject name=OKButton></webobject></webobject><webobject name=HasBranchChoices><webobject name=Repetition1><webobject name=BranchButton></webobject>&nbsp;</webobject></webobject>
+                </webobject>
+            </td>
+        </tr>
+    </table>
 </webobject>
