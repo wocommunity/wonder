@@ -48,4 +48,6 @@ PrinterFriendlyLink2: ERXJSOpenWindowHyperlink {
 	menubar = ^menubar;
 }
 
-
+Show : WOConditional {
+  condition = show;
+}
