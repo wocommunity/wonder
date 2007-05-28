@@ -191,4 +191,8 @@ public class ERXDisplayGroup extends WODisplayGroup {
 			}
 		}
 	}
+
+	public void clearExtraQualifiers() {
+		_extraQualifiers.removeAllObjects();
+	}
 }
