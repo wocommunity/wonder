@@ -54,7 +54,7 @@ public class ERDQueryAnyKey extends ERDCustomQueryComponent {
             if(newValue != null && newValue.toString().indexOf("*") == 0) {
                 newValue = newValue.toString().substring(1);
             }
-            if(true) {
+            if(false) {
                 q = ERXEOControlUtilities.qualifierMatchingAnyKey(queryAttributes(), EOQualifier.QualifierOperatorCaseInsensitiveLike, "*" +newValue + "*");
             } else {
                 q = ERXEOControlUtilities.qualifierMatchingAnyKey(queryAttributes(), ERXRegExQualifier.MatchesSelector, newValue);
