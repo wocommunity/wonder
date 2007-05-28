@@ -199,6 +199,22 @@ public class Factory extends ERD2WFactory implements NSKeyValueCoding {
 			ec.unlock();
 		}
     }
+    
+    public WOComponent listRecentRequirements() {
+        EOEditingContext ec = ERXEC.newEditingContext();
+        ec.lock();
+        try {
+            EODatabaseDataSource ds = Requirement.clazz.newDatabaseDataSource(ec);
+            EOFetchSpecification fs = Requirement.clazz.fetchSpecificationForRecentBugs();
+            
+            ds.setFetchSpecification(fs);
+            WOComponent page = (WOComponent) listPageNamed("ListRecentRequirement", ds);
+            return page;
+
+        } finally {
+            ec.unlock();
+        }
+    }
 
     public WOComponent queryRequirements() {
         return (WOComponent) pageForConfigurationNamed("QueryRequirement");
@@ -352,6 +368,9 @@ public class Factory extends ERD2WFactory implements NSKeyValueCoding {
         ec.lock();
         try {
             EODatabaseDataSource ds = Bug.clazz.newDatabaseDataSource(ec);
+            EOFetchSpecification fs = Bug.clazz.fetchSpecificationForRecentBugs();
+            
+            ds.setFetchSpecification(fs);
             WOComponent page = (WOComponent) listPageNamed("ListRecentBug", ds);
             return page;
 

@@ -13,6 +13,7 @@ import com.webobjects.eocontrol.EOKeyValueQualifier;
 import com.webobjects.eocontrol.EONotQualifier;
 import com.webobjects.eocontrol.EOOrQualifier;
 import com.webobjects.eocontrol.EOQualifier;
+import com.webobjects.eocontrol.EOSortOrdering;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSTimestamp;
@@ -294,6 +295,17 @@ public class Bug extends _Bug implements Markable {
             ds.setFetchSpecification(fs);
             NSArray bugs = ds.fetchObjects();
             return bugs;
+        }
+
+        public EOFetchSpecification fetchSpecificationForRecentBugs() {
+            EOFetchSpecification fs = newFetchSpecification(
+                    andQualifier(
+                            new EOKeyValueQualifier(Key.DATE_MODIFIED, EOQualifier.QualifierOperatorGreaterThan, 
+                                    new NSTimestamp().timestampByAddingGregorianUnits(0, -1, 0, 0, 0, 0)), 
+                            negateQualifier(qualifierForState(State.CLOSED))));
+            fs.setSortOrderings(new NSArray(new EOSortOrdering(Key.DATE_MODIFIED, EOSortOrdering.CompareDescending)));
+            fs.setIsDeep(false);
+            return fs;
         }
     }
 
