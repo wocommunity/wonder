@@ -66,7 +66,7 @@
         {
                 name = "Requirements";
                 action = "session.handlers.requirements.ListMyRequirements";
-                children = ("CreateRequirement", "ListMyRequirements", "QueryRequirements");
+                children = ("CreateRequirement", "ListMyRequirements", "ListRecentRequirements", "QueryRequirements");
         },
         {
                 name = "CreateRequirement";
@@ -75,6 +75,10 @@
         {
                 name = "ListMyRequirements";
                 action = session.handlers.requirements.ListMyRequirements;
+        },
+        {
+                name = "ListRecentRequirements";
+                action = session.handlers.requirements.ListRecentRequirements;
         },
         {
                 name = "QueryRequirements";

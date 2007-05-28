@@ -108,6 +108,7 @@
 ) [com.webobjects.directtoweb.Assignment], 
     70 : parentPageConfiguration != null => actions = {
 } [com.webobjects.directtoweb.Assignment], 
+    70 : pageConfiguration = 'QueryBug' => isDeep = false [com.webobjects.directtoweb.BooleanAssignment], 
     70 : pageConfiguration = 'QueryBug' => navigationState = Bugs.QueryBugs [com.webobjects.directtoweb.Assignment], 
     70 : pageConfiguration = 'CreateBug' => navigationState = Bugs.CreateBug [com.webobjects.directtoweb.Assignment], 
     70 : pageConfiguration = 'ListMyBug' => navigationState = Bugs.ListMyBugs [com.webobjects.directtoweb.Assignment], 
@@ -155,6 +156,7 @@
     100 : pageConfiguration = 'EditSimpleBug' => maxColumns = 2 [com.webobjects.directtoweb.Assignment], 
     100 : pageConfiguration like 'Grouped*' => defaultBatchSize = 0 [com.webobjects.directtoweb.Assignment], 
     100 : entity.name = 'Bug' => _templateString = ListBugDescription [com.webobjects.directtoweb.Assignment], 
+    100 : propertyKey = 'password' => componentName = ERDEditPassword [com.webobjects.directtoweb.Assignment], 
     100 : pageConfiguration like 'GroupedBugs*' => entity = Bug [com.webobjects.directtoweb.EntityAssignment], 
     100 : pageConfiguration = 'GroupedBugsByUser' => groupingKey = name [com.webobjects.directtoweb.Assignment], 
     100 : pageConfiguration like 'GroupedBugs*' => keyWhenGrouping = name [com.webobjects.directtoweb.Assignment], 
