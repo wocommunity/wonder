@@ -81,17 +81,8 @@ public class ERD2WSwitchComponent extends D2WSwitchComponent {
     }
 
     public void appendToResponse(WOResponse r, WOContext c) {
-        if(!ERDirectToWeb.shouldRaiseException(false)) {
-            maybeResetCaches();
-            super.appendToResponse(r, c);
-        } else {
-            try {
-                maybeResetCaches();
-                super.appendToResponse(r, c);
-            } catch(Exception ex) {
-                ERDirectToWeb.reportException(ex, subContext());
-            }
-        }
+        maybeResetCaches();
+        super.appendToResponse(r, c);
     }
 
     private D2WContext _context;
