@@ -83,6 +83,10 @@ UseVerticalLayoutTables: WOConditional {
 UseMatrixLayout: WOConditional {
 	condition = d2wContext.useMatrixLayout;
 }
+NotUseMatrixLayout: WOConditional {
+	condition = d2wContext.useMatrixLayout;
+	negate = true;
+}
 UseTableLayout: WOConditional {
 	condition = d2wContext.useTableLayout;
 }
