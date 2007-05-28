@@ -96,7 +96,7 @@ public class DirectAction extends ERD2WDirectAction {
                 if (bug == null) {
                     result = errorPage("Bug not found", session);
                 } else {
-                    result = Factory.bugTracker().editBug(bug);
+                    result = Factory.bugTracker().inspectBug(bug);
                 }
             } catch (NumberFormatException nfe) {
                 result = errorPage("Invalid Request", session);

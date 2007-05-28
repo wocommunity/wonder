@@ -52,7 +52,7 @@
         },
         {
                 name = "Components";
-                action = "session.handlers.components.CreateComponent";
+                action = "session.handlers.components.ListComponents";
                 children = ("CreateComponent", "ListComponents");
         },
         {
@@ -65,7 +65,7 @@
         },
         {
                 name = "Requirements";
-                action = "session.handlers.requirements.CreateRequirement";
+                action = "session.handlers.requirements.ListMyRequirements";
                 children = ("CreateRequirement", "ListMyRequirements", "QueryRequirements");
         },
         {
@@ -82,7 +82,7 @@
         },
         {
                 name = "TestItems";
-                action = "session.handlers.testItems.CreateTestItem";
+                action = "session.handlers.testItems.ListMyTestItems";
                 children = ("CreateTestItem", "ListMyTestItems", "QueryTestItems");
         },
         {
@@ -112,7 +112,7 @@
         },
         {
                 name = "Frameworks";
-                action = "session.handlers.frameworks.CreateFramework";
+                action = "session.handlers.frameworks.OnlineHatSystem";
                 children = ("CreateFramework", "OnlineHatSystem");
         },
         {

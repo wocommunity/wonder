@@ -11,3 +11,8 @@ Image: WOImage {
 Name:WOString {
 	value=name;
 }
+
+
+ShowText : WOConditional {
+  condition = showText;
+}
