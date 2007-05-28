@@ -69,6 +69,26 @@ a:hover {
 .ContentTable {
 	width: 100%;
 }
+.ContentRow {
+	padding-left: 20px;
+	padding-right: 20px;
+}
+
+.InspectRepetitionTable {
+	width: 100%;
+}
+
+.TopActions {
+	text-align: right;
+}
+
+form {
+	display: inline;
+}
+
+.BranchChoices {
+	display: inline;
+}
 
 form#ERDQuickSearch {
 	display: none;
@@ -144,7 +164,7 @@ body {
 }
 
 .InspectTable {
-	width: 100%;
+	w-idth: 100%;
 }
 
 .ListTable {
@@ -236,7 +256,7 @@ select {
 	width: 180px;
 }
 
-td.Section {
+.Section {
     background-color: #cccccc;
     padding: 5px 10px 5px 5px;
     border-bottom : 1px solid Black;

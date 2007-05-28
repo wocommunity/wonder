@@ -4,7 +4,6 @@ import com.webobjects.appserver.WOApplication;
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOSession;
 import com.webobjects.directtoweb.D2W;
-import com.webobjects.directtoweb.D2WContext;
 import com.webobjects.directtoweb.D2WPage;
 import com.webobjects.directtoweb.EditPageInterface;
 import com.webobjects.directtoweb.InspectPageInterface;
@@ -56,15 +55,10 @@ public class Factory extends ERD2WFactory implements NSKeyValueCoding {
      */
     public WOComponent pageForConfigurationNamed(String name, WOSession s) {
         WOComponent nextPage = super.pageForConfigurationNamed(name, s);
-        /*if (nextPage instanceof D2WPage) {
+        if (nextPage instanceof D2WPage) {
             D2WPage page = (D2WPage) nextPage;
-            D2WContext context = page.d2wContext();
-            log.info(context.dynamicPage());
-            NextPageDelegate delegate = (NextPageDelegate) context.valueForKey("nextPageDelegate");
-            if(delegate != null) {
-                page.setNextPageDelegate(delegate);
-            }
-        }*/
+            page.setNextPage(currentPage());
+        }
         return nextPage;
     }
 
@@ -342,7 +336,13 @@ public class Factory extends ERD2WFactory implements NSKeyValueCoding {
 
 
     public WOComponent editBug(Bug bug) {
-        EditPageInterface epi = editPageNamed("EditBug", bug);
+        EditPageInterface epi = editPageNamed("Edit" + bug.entityName(), bug);
+        epi.setNextPage(homePage());
+        return (WOComponent)epi;
+    }
+
+    public WOComponent inspectBug(Bug bug) {
+        InspectPageInterface epi = inspectPageNamed("Inspect" + bug.entityName(), bug);
         epi.setNextPage(homePage());
         return (WOComponent)epi;
     }
@@ -366,8 +366,9 @@ public class Factory extends ERD2WFactory implements NSKeyValueCoding {
         try {
             EODatabaseDataSource ds  = Bug.clazz.newDatabaseDataSource(ec);
             EOFetchSpecification fs = Bug.clazz.fetchSpecificationForOwnedBugs(currentUser(ec));
+            
             ds.setFetchSpecification(fs);
-
+           
             return (WOComponent) listPageNamed("ListMyBug", ds);
 
         } finally {
@@ -401,4 +402,75 @@ public class Factory extends ERD2WFactory implements NSKeyValueCoding {
         }
         return result;            
     }
+    
+
+    public WOComponent resolveBug(Bug bug) {
+        EOEditingContext peer = ERXEC.newEditingContext(bug.editingContext().parentObjectStore());
+        EditPageInterface epi = null;
+        peer.lock();
+        try {
+            bug = (Bug) bug.localInstanceIn(peer);
+            bug.close();
+            epi=(EditPageInterface)editPageNamed("Edit" +bug.entityName()+ "ToClose", bug);
+            epi.setObject(bug);
+            epi.setNextPage(currentPage());
+        } finally {
+            peer.unlock();
+        }
+
+        return (WOComponent)epi;
+    }
+
+    public WOComponent commentBug(Bug bug) {
+        EOEditingContext peer = ERXEC.newEditingContext(bug.editingContext().parentObjectStore());
+        EditPageInterface epi = null;
+        peer.lock();
+        try {
+            bug = (Bug) bug.localInstanceIn(peer);
+            epi=(EditPageInterface)editPageNamed("Edit" +bug.entityName()+ "ToComment", bug);
+            epi.setObject(bug);
+            epi.setNextPage(currentPage());
+        } finally {
+            peer.unlock();
+        }
+
+        return (WOComponent)epi;
+    }
+
+    public WOComponent reopenBug(Bug bug) {
+        EOEditingContext peer = ERXEC.newEditingContext(bug.editingContext().parentObjectStore());
+        EditPageInterface epi = null;
+        peer.lock();
+        try {
+            bug = (Bug) bug.localInstanceIn(peer);
+            bug.reopen();
+            epi=(EditPageInterface)editPageNamed("Edit" +bug.entityName()+ "ToReopen", bug);
+            epi.setObject(bug);
+            epi.setNextPage(currentPage());
+        } finally {
+            peer.unlock();
+        }
+
+        return (WOComponent)epi;
+    }
+
+
+    public WOComponent rejectBug(Bug bug) {
+        EOEditingContext peer = ERXEC.newEditingContext(bug.editingContext().parentObjectStore());
+        EditPageInterface epi = null;
+        peer.lock();
+        try {
+            bug = (Bug) bug.localInstanceIn(peer);
+            bug.rejectVerification();
+            epi=(EditPageInterface)editPageNamed("Edit" +bug.entityName()+ "ToReject", bug);
+            epi.setObject(bug);
+            epi.setNextPage(currentPage());
+        } finally {
+            peer.unlock();
+        }
+
+        return (WOComponent)epi;
+    }
+
+
 }

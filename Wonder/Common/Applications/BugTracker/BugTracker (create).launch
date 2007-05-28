@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <launchConfiguration type="org.objectstyle.wolips.launching.WOLocalJavaApplication">
 <stringAttribute key="WOJavaLocalApplicationLaunchConfigurationDelegate.WebServerConnect" value="false"/>
-<stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="er.bugtracker.Application"/>
-<stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="-NSProjectSearchPath (/Volumes/Home/Wonder/Common/Applications,/Volumes/Home/Wonder/Common/Frameworks)"/>
+<stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="er.extensions.ERXMainRunner"/>
+<stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="-WOPort -1&#13;-dropTables YES&#13;-mainClass BTBusinessLogic$DataCreator"/>
 <listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_TYPES">
 <listEntry value="4"/>
 </listAttribute>

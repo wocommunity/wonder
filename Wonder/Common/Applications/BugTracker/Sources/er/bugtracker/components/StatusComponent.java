@@ -9,33 +9,54 @@ package er.bugtracker.components;
 import com.webobjects.appserver.WOContext;
 
 import er.bugtracker.Bug;
-import er.directtoweb.ERDCustomComponent;
+import er.directtoweb.ERDCustomEditComponent;
 import er.extensions.ERXLocalizer;
 
-public class StatusComponent extends ERDCustomComponent {
+public class StatusComponent extends ERDCustomEditComponent {
 
     public StatusComponent(WOContext aContext) {
         super(aContext);
     }
 
-    public Bug object;
-    public String key;
 
-    public String[] bugIcons=new String[] { "spider.gif", "closed.gif", "check.gif", "molette.gif", "document.gif" };
-    public String[] requirementsIcons=new String[] { "spider.gif", "molette.gif", "check.gif", "closed.gif" };
+    public boolean synchronizesVariablesWithBindings() {
+        return false;
+    }
+
+    public boolean isStateless() {
+        return true;
+    }
+    
+    private Bug bug() {
+        return (Bug)object();
+    }
+/*
+   bug=# select * from state;
+    id  | sort_order | description 
+  ------+------------+-------------
+   anzl |          1 | Analyze
+   buld |          2 | Build
+   vrfy |          3 | Verify
+   dcmt |          4 | Document
+   clsd |          5 | Closed
+ */ 
+
+    public boolean showText() {
+        return !"list".equals(valueForBinding("task"));
+    }
+
+    public String[] bugIcons=new String[] { 
+            "spider.gif", "molette.gif", "check.gif", "document.gif", "closed.gif" };
     
     public String name() {
-        return ERXLocalizer.currentLocalizer().localizedStringForKeyWithDefault(object.state().textDescription());
+        return ERXLocalizer.currentLocalizer().localizedStringForKeyWithDefault(bug().state().textDescription());
     }
     
     public String filename() {
         String result="closed.gif";
-        if (object!=null) {
-            Number pkNum=object.state().sortOrder();
-            if (pkNum!=null) {
-                int pk=pkNum.intValue();
-                if (object instanceof Bug) result=bugIcons[pk-1];
-            }
+        if (bug()!=null) {
+            int img=bug().state().sortOrder().intValue() - 1;
+            result=bugIcons[img];
         }
         return result;
     }

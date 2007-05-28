@@ -19,7 +19,6 @@ import com.webobjects.foundation.NSKeyValueCoding;
 import com.webobjects.foundation.NSMutableDictionary;
 
 import er.corebusinesslogic.ERCoreBusinessLogic;
-import er.directtoweb.ERD2WInspectPage;
 import er.extensions.ERXSession;
 import er.extensions.ERXStringUtilities;
 
@@ -131,17 +130,6 @@ public class Session extends ERXSession {
     public void setUser(People user) {
         _user = user;
         ERCoreBusinessLogic.setActor(user());
-    }
-    
-    public void appendToResponse(WOResponse aResponse, WOContext aContext) {
-    	if(context().page() instanceof ERD2WInspectPage) {
-    		EOEnterpriseObject eo = ((ERD2WInspectPage)context().page()).object();
-    		if (eo instanceof Markable) {
-				Markable markable = (Markable) eo;
-				markable.markAsRead();
-			}
-    	}
-    	super.appendToResponse(aResponse, aContext);
     }
     
     public void awake() {
