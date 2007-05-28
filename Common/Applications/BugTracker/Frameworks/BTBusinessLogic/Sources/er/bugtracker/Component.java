@@ -11,12 +11,15 @@ import java.util.Enumeration;
 import com.webobjects.eoaccess.EOUtilities;
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.eocontrol.EOGlobalID;
+import com.webobjects.eocontrol.EOQualifierEvaluation;
 import com.webobjects.eocontrol.EOSortOrdering;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSKeyValueCoding;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation.NSValidation;
+
+import er.extensions.ERXArrayUtilities;
 
 public class Component extends _Component {
 
@@ -111,8 +114,23 @@ public class Component extends _Component {
 
 	public static ComponentClazz clazz = new ComponentClazz();
 
-    public void addChild(Component component) {
-        addObjectToBothSidesOfRelationshipWithKey(component, Key.CHILDREN);
+    public NSArray openBugs() {
+        return ERXArrayUtilities.filteredArrayWithQualifierEvaluation(bugs(), new EOQualifierEvaluation() {
+            public boolean evaluateWithObject(Object object) {
+                State state = ((Bug)object).state();
+                return !(state.equals(State.CLOSED) || state.equals(State.DOCUMENT));
+            }
+            
+        });
     }
 
+    public NSArray openRequirements() {
+        return ERXArrayUtilities.filteredArrayWithQualifierEvaluation(requirements(), new EOQualifierEvaluation() {
+            public boolean evaluateWithObject(Object object) {
+                State state = ((Bug)object).state();
+                return !(state.equals(State.CLOSED) || state.equals(State.DOCUMENT));
+            }
+            
+        });
+    }
 }
