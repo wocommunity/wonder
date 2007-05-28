@@ -47,6 +47,7 @@
     50 : entity.name = 'Component' => pageController = er.bugtracker.delegates.ComponentDelegate [er.directtoweb.ERDDelayedObjectCreationAssignment], 
     50 : entity.name = 'Framework' => pageController = er.bugtracker.delegates.FrameworkDelegate [er.directtoweb.ERDDelayedObjectCreationAssignment], 
     50 : entity.name = 'Requirement' => pageController = er.bugtracker.delegates.RequirementDelegate [er.directtoweb.ERDDelayedObjectCreationAssignment], 
+    50 : pageConfiguration like 'ConfirmDelete*' => explanationConfigurationName = inspectEmbeddedConfigurationName [er.directtoweb.ERDKeyValueAssignment], 
     50 : entity.name = 'Comment' => displayPropertyKeys = ("( )", dateSubmitted, originator, "(textDescription)", textDescription) [com.webobjects.directtoweb.Assignment], 
     50 : (task = 'query' and propertyType = 'r' and smartRelationship.isToMany = 0) => componentName = ERD2WQueryToManyRelationship [com.webobjects.directtoweb.Assignment], 
     50 : (task = 'query' and propertyType = 'r' and smartRelationship.isToMany = 1) => componentName = ERD2WQueryToManyRelationship [com.webobjects.directtoweb.Assignment], 
@@ -91,6 +92,8 @@
     60 : (task = 'edit' and smartRelationship.destinationEntity.name = 'TestItem') => inspectConfigurationName = EditEmbeddedTestItem [com.webobjects.directtoweb.Assignment], 
     60 : ((task = 'edit' and smartRelationship.destinationEntity.name = 'Comment') or propertyKey = 'sortedComments') => inspectConfigurationName = InspectEmbeddedComment [com.webobjects.directtoweb.Assignment], 
     60 : ((task = 'inspect' or task = 'edit') and (smartRelationship.destinationEntity.name = 'Comment' or propertyKey = 'sortedComments')) => componentName = ERDEditToManyRelationship [com.webobjects.directtoweb.Assignment], 
+    60 : (task = 'query' and propertyKey = 'anyText' and entity.name = 'TestItem') => queryAttributes = (title, textDescription, controlled, "bugs.textDescription", "bugs.comments.textDescription"
+) [com.webobjects.directtoweb.Assignment], 
     60 : (not (pageConfiguration like '*Embedded*' or pageConfiguration like '*MassModify*') and (task = 'edit' or task = 'inspect') and subTask != 'wizard') => pageName = templateNameForTabInspectPage [er.directtoweb.ERDDelayedKeyValueAssignment], 
     60 : (pageConfiguration = 'CreateBug' or pageConfiguration = 'CreateRequirement') => displayPropertyKeys = ("[Main]", component, isFeatureRequest, subject, textDescription, "[TestItems]", subject, testItems
 ) [com.webobjects.directtoweb.Assignment], 
@@ -100,6 +103,8 @@
 ) [com.webobjects.directtoweb.Assignment], 
     60 : ((task = 'inspect' or (task = 'edit' and subTask != 'wizard')) and (entity.name = 'Comment' or entity.name = 'Bug' or entity.name = 'Requirement') and propertyKey = 'textDescription') => componentName = ERD2WDisplayStringWithLineBreaks [com.webobjects.directtoweb.Assignment], 
     60 : pageConfiguration = 'InspectPeople' => displayPropertyKeys = ("[Main]", "(Main)", name, login, email, isActive, isAdmin, isCustomerService, "[bugs]", "(bugs)", openBugs, "[requirements]", "(requirements)", openRequirements, "[testItems]", "(testItems)", openTestItems
+) [com.webobjects.directtoweb.Assignment], 
+    60 : (task = 'inspect' and entity.name = 'Component') => displayPropertyKeys = ("[Main]", "( )", parent, owner, "(openBugs)", openBugs, "(openRequirements)", openRequirements, "[bugs]", "(bugs)", bugs, "(requirements)", requirements, "[testItems]", "(testItems)", testItems
 ) [com.webobjects.directtoweb.Assignment], 
     70 : parentPageConfiguration != null => actions = {
 } [com.webobjects.directtoweb.Assignment], 
@@ -122,6 +127,8 @@
     70 : ((task = 'list' or task = 'inspect' or task = 'select' or task = 'pick') and propertyKey = 'priority') => componentName = PriorityComponent [com.webobjects.directtoweb.Assignment], 
     70 : (task = 'edit' and (entity.name = 'Bug' or entity.name = 'Requirement') and propertyKey = 'isFeatureRequest') => componentName = ERD2WCustomEditBoolean [com.webobjects.directtoweb.Assignment], 
     70 : (task = 'edit' and (entity.name = 'Bug' or entity.name = 'Requirement' or entity.name = 'Component') and propertyKey = 'owner') => componentName = EditOwner [com.webobjects.directtoweb.Assignment], 
+    70 : pageConfiguration = 'InspectEmbeddedComponent' => displayPropertyKeys = (parent, textDescription, owner, "bugs.count", "requirements.count", "testItems.count"
+) [com.webobjects.directtoweb.Assignment], 
     70 : ((task = 'list' or task = 'inspect') and (entity.name = 'Bug' or entity.name = 'Requirement') and propertyKey = 'isFeatureRequest') => componentName = D2WDisplayBoolean [com.webobjects.directtoweb.Assignment], 
     70 : pageConfiguration like 'CreateTestItem*' => displayPropertyKeys = ("(Main)", dateCreated, title, state, owner, controlled, comments, "(textDescription)", textDescription
 ) [com.webobjects.directtoweb.Assignment], 
@@ -131,13 +138,13 @@
     80 : pageConfiguration = 'InspectEmbeddedComment' => useTableLayout = true [com.webobjects.directtoweb.BooleanAssignment], 
     80 : (entity.name = 'TestItem' and propertyKey = 'state') => keyWhenRelationship = name [com.webobjects.directtoweb.Assignment], 
     80 : (entity.name = 'TestItem' and propertyKey = 'state') => keyWhenRelationship = name [com.webobjects.directtoweb.Assignment], 
+    80 : parentPageConfiguration != null => branchChoices = ({branchButtonLabel = View; branchName = view; }) [com.webobjects.directtoweb.Assignment], 
     80 : (entity.name = 'TestItem' and parentPageConfiguration != null) => actions = {"right" = ("controllerAction"); 
 } [com.webobjects.directtoweb.Assignment], 
     80 : ((entity.name = 'Bug' or entity.name = 'Requirement') and not (subTask = 'wizard')) => useTableLayout = true [com.webobjects.directtoweb.BooleanAssignment], 
     80 : (task = 'edit' and entity.name = 'Component' and propertyKey = 'owner') => componentName = ERD2WEditToOneRelationship [com.webobjects.directtoweb.Assignment], 
     80 : (task = 'list' and entity.name = 'Comment' and propertyKey = 'textDescription') => componentName = ERD2WDisplayString [com.webobjects.directtoweb.Assignment], 
     80 : ((entity.name = 'Bug' or entity.name = 'Requirement') and propertyKey = 'state') => keyWhenRelationship = textDescription [com.webobjects.directtoweb.Assignment], 
-    80 : (entity.name = 'TestItem' and parentPageConfiguration != null) => branchChoices = ({branchButtonLabel = View; branchName = view; }) [com.webobjects.directtoweb.Assignment], 
     80 : (task = 'list' and (entity.name = 'Bug' or entity.name = 'Requirement') and (propertyKey = 'subject' or propertyKey = 'textDescription')) => componentName = ERDDisplayLargeString [com.webobjects.directtoweb.Assignment], 
     90 : ((task != 'edit' and task != 'query') and (propertyKey = 'owner' or propertyKey = 'previousOwner' or propertyKey = 'originator')) => componentName = ViewUser [com.webobjects.directtoweb.Assignment], 
     100 : *true* => showBanner = false [com.webobjects.directtoweb.BooleanAssignment], 
@@ -175,8 +182,8 @@
     100 : (task = 'list' and entity.name = 'TestItem') => displayPropertyKeys = (state, owner, dateCreated, title, controlled) [com.webobjects.directtoweb.Assignment], 
     100 : pageConfiguration = 'GroupedBugsByRelease' => nextPageDelegate = er.bugtracker.delegates.PushBugsDelegate [er.directtoweb.ERDDelayedObjectCreationAssignment], 
     100 : (entity.name = 'Component' and propertyKey = 'openRequirements') => listConfigurationName = ListMyEmbeddedRequirement [com.webobjects.directtoweb.Assignment], 
-    100 : ((pageConfiguration = 'EditSimpleBug' and propertyKey = 'subject') or propertyKey = 'textDescription') => length = 120 [com.webobjects.directtoweb.Assignment], 
     100 : pageConfiguration = 'EditMassModifyBug' => displayPropertyKeys = ("(Main)", owner, state, priority, "(newText)", newText) [com.webobjects.directtoweb.Assignment], 
+    100 : (task = 'query' and entity.name = 'TestItem') => displayPropertyKeys = ("(Common)", anyText, dateCreated, component, owner, state) [com.webobjects.directtoweb.Assignment], 
     100 : (pageConfiguration like 'Grouped*' or pageConfiguration like 'EditGrouped*') => repetitionComponentName = ERDGroupingListPageRepetition [com.webobjects.directtoweb.Assignment], 
     100 : pageConfiguration = 'ListMyBug' => displayPropertyKeys = (bugid, state, priority, isFeatureRequest, isRead, dateModified, dateSubmitted, subject
 ) [com.webobjects.directtoweb.Assignment], 
@@ -196,8 +203,6 @@
     100 : pageConfiguration = 'EditSimpleBug' => displayPropertyKeys = ("(Main)", dateSubmitted, dateModified, state, priority, owner, originator, previousOwner, subject, textDescription, "(Comments)", comments
 ) [com.webobjects.directtoweb.Assignment], 
     100 : (task = 'query' and entity.name = 'Requirement') => displayPropertyKeys = ("(Common)", anyText, dateModified, dateSubmitted, isFeatureRequest, priority, state, requirementType, requirementSubType, "(People)", owner, originator
-) [com.webobjects.directtoweb.Assignment], 
-    100 : (task = 'inspect' and entity.name = 'Component') => displayPropertyKeys = ("[Main]", "( )", parent, owner, "(openBugs)", openBugs, "(openRequirements)", openRequirements, "[bugs]", "(bugs)", bugs, "(requirements)", requirements, "[testItems]", "(testItems)", testItems
 ) [com.webobjects.directtoweb.Assignment], 
     110 : (pageConfiguration = 'EditSimpleBug' and propertyKey = 'comments') => componentName = D2WDisplayToMany [com.webobjects.directtoweb.Assignment], 
     110 : pageConfiguration = 'EditSimpleBug' => displayPropertyKeys = (dateSubmitted, dateModified, state, priority, owner, originator, previousOwner, subject, textDescription, comments

@@ -5,6 +5,7 @@ import org.apache.log4j.Logger;
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSDictionary;
 
 import er.bugtracker.Session;
 import er.extensions.ERXLocalizer;
@@ -37,6 +38,10 @@ public class CollapsibleList extends WOComponent {
      */
     public CollapsibleList(WOContext context) {
         super(context);
+    }
+
+    public NSDictionary settings() {
+        return new NSDictionary("HomePage", "parentPageConfiguration");
     }
 
     /** component does not synchronize it's variables */
