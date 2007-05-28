@@ -112,7 +112,7 @@
         },
         {
                 name = "Frameworks";
-                action = "session.handlers.frameworks.OnlineHatSystem";
+                action = "session.handlers.frameworks.ListFrameworks";
                 children = ("CreateFramework", "OnlineHatSystem");
         },
         {
@@ -121,7 +121,7 @@
         },
         {
                 name = "OnlineHatSystem";
-                action = session.handlers.releases.ListFrameworks;
+                action = session.handlers.frameworks.ListFrameworks;
         },
         {
                 name = "Releases";
