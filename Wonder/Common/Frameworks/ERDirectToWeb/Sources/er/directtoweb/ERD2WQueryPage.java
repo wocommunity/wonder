@@ -73,6 +73,10 @@ public class ERD2WQueryPage extends ERD2WPage implements ERDQueryPageInterface {
     	displayGroup().queryMax().removeAllObjects();
     	displayGroup().queryOperator().removeAllObjects();
     	displayGroup().queryMatch().removeAllObjects();
+       if (displayGroup() instanceof ERXDisplayGroup) {
+            ERXDisplayGroup dg = (ERXDisplayGroup) displayGroup();
+            dg.clearExtraQualifiers();
+        }
     	return context().page();
     }
     
