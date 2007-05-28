@@ -2,6 +2,7 @@ List1: ERXD2WList {
 	list = array;
 	entityName = entityName;
 	pageConfiguration = ^pageConfiguration;
+	settings = settings;
 }
 
 hasItems: WOConditional {

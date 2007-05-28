@@ -11,6 +11,7 @@ import er.bugtracker.Session;
 import er.directtoweb.ERD2WMessagePage;
 import er.directtoweb.ERDBranchDelegate;
 import er.directtoweb.ERDDeletionDelegate;
+import er.extensions.ERXLocalizer;
 
 public class BranchDelegate extends ERDBranchDelegate {
 
@@ -53,6 +54,8 @@ public class BranchDelegate extends ERDBranchDelegate {
         String pageName = (String)context.valueForKey("confirmDeleteConfigurationName");
         ERD2WMessagePage epi = (ERD2WMessagePage) Factory.bugTracker().pageForConfigurationNamed(pageName, session(sender));
         epi.setObject(eo);
+        String message = ERXLocalizer.currentLocalizer().localizedTemplateStringForKeyWithObject("ERDTrashcan.confirmDeletionMessage", epi.d2wContext());
+        epi.setMessage(message);
         epi.setCancelPage(sender.context().page());
         epi.setConfirmDelegate(new ERDDeletionDelegate(eo, sender.context().page()));
         return (WOComponent) epi;
