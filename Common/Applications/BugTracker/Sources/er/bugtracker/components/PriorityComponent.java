@@ -9,31 +9,55 @@ package er.bugtracker.components;
 import com.webobjects.appserver.WOContext;
 
 import er.bugtracker.Bug;
-import er.directtoweb.ERDCustomComponent;
+import er.directtoweb.ERDCustomEditComponent;
 import er.extensions.ERXLocalizer;
 
-public class PriorityComponent extends ERDCustomComponent {
+public class PriorityComponent extends ERDCustomEditComponent {
 
     public PriorityComponent(WOContext aContext) {
         super(aContext);
     }
 
-    public Bug object;
-    public String key;
-    
-    public String name() {
-        return ERXLocalizer.currentLocalizer().localizedStringForKeyWithDefault(object.priority().textDescription());
+    public boolean synchronizesVariablesWithBindings() {
+        return false;
     }
 
+    public boolean isStateless() {
+        return true;
+    }
+    
+    private Bug bug() {
+        return (Bug)object();
+    }
+    
+    public String name() {
+        return ERXLocalizer.currentLocalizer().localizedStringForKeyWithDefault(bug().priority().textDescription());
+    }
+
+    public boolean showText() {
+        return !"list".equals(valueForBinding("task"));
+    }
+
+    /*
+bug=# select * from priority;;
+  id  | sort_order | description 
+------+------------+-------------
+ crtl |          1 | Critical
+ high |          2 | High
+ medm |          3 | Medium
+ low  |          4 | Low
+(4 rows)
+
+     */
+    
+    private String img[] = {"fire.gif", "gyrophare.gif", "doctor.gif", "bandaid.gif"};
+    
     public String filename() {
-        Number priority=(Number)object.priority().sortOrder();
+        Number priority=bug().priority().sortOrder();
         String result=null;
         if (priority!=null) {
             int c=priority.intValue();
-            if (c==2) return "gyrophare.gif";
-            else if (c==3) return "doctor.gif";
-            else if (c==4) return "bandaid.gif";
-            else if (c==1) return "fire.gif";
+            return img[c-1];
         }
         return result;
     }
