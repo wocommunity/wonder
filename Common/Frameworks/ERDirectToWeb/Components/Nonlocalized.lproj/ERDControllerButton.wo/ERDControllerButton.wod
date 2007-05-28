@@ -2,6 +2,15 @@ IsFlyOver : WOConditional {
 	condition = isFlyOver;
 }
 
+IsButton : WOConditional {
+	condition = isButton;
+}
+
+IsNotButton : WOConditional {
+	condition = isButton;
+	negate = true;
+}
+
 IsNotFlyOver : WOConditional {
 	condition = isFlyOver;
 	negate = true;
