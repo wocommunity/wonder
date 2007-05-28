@@ -1,0 +1,8 @@
+HasChanges: WOConditional {
+	condition = ^object.editingContext.hasChanges;
+}
+
+Floppy: WOImage {
+	filename = "floppy.gif";
+	framework = "ERExtensions";
+}
