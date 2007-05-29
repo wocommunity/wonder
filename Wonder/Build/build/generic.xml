@@ -313,6 +313,7 @@ There are many ways to use this script:
                 <include name="ERIndexing.framework" />
             </frameworks>
             <frameworks dir="${wonder.lib.root}" if="use.wonder.logic"> 
+                <include name="ERPrototypes.framework" />
                 <include name="ERCoreBusinessLogic.framework" />
             </frameworks>
             <frameworks dir="${wonder.lib.root}" if="use.wonder.changenotification"> 
