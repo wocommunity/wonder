@@ -15,3 +15,7 @@ Mark : WOGenericContainer {
 	elementName = "i";
 	omitTags = text.value.length;
 }
+
+ShowList : WOConditional {
+	condition = showList;
+}
