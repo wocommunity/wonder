@@ -231,8 +231,12 @@ public class ERXModelGroup extends EOModelGroup {
 		NSNotificationCenter.defaultCenter().postNotification(EOModelGroup.ModelAddedNotification, eomodel);
 	}
 
+	public static String sqlDumpDirectory() {
+		return ERXSystem.getProperty("er.extensions.ERXModelGroup.sqlDumpDirectory");
+	}
+	
 	private void dumpSchemaSQL(EOModel eomodel) {
-		String dumpDir = ERXSystem.getProperty("er.extensions.ERXModelGroup.sqlDumpDirectory");
+		String dumpDir = sqlDumpDirectory();
 		if(dumpDir != null) {
 			EOAdaptor adaptor = EOAdaptor.adaptorWithModel(eomodel);
 			if (adaptor instanceof JDBCAdaptor) {
@@ -697,7 +701,7 @@ public class ERXModelGroup extends EOModelGroup {
 		NSDictionary connectionDictionary = model.connectionDictionary();
 		if (connectionDictionary == null) {
 			connectionDictionary = new NSMutableDictionary();
-			ERXModelGroup.log.error("The EOModel '" + model.name() + "' does not have a connection dictionary, providing an empty one");
+			ERXModelGroup.log.warn("The EOModel '" + model.name() + "' does not have a connection dictionary, providing an empty one");
 			model.setConnectionDictionary(connectionDictionary);
 		}
 
@@ -1077,6 +1081,11 @@ public class ERXModelGroup extends EOModelGroup {
 		NSArray keysToReplace = _NSArrayUtilities.arrayExcludingObjectsFromArray(prototypeKeys, overriddenKeys);
 		NSDictionary valuesToReplace = EOKeyValueCodingAdditions.Utility.valuesForKeys(prototypeAttribute, keysToReplace);
 		attribute.setPrototype(null);
+		NSMutableDictionary userInfo = new NSMutableDictionary(prototypeAttribute.name(), "prototypeName");
+		if(attribute.userInfo() != null) {
+			userInfo.addEntriesFromDictionary(attribute.userInfo());
+		}
+		attribute.setUserInfo(userInfo);
 		EOKeyValueCodingAdditions.Utility.takeValuesFromDictionary(attribute, valuesToReplace);
 		if(hasCustomClass) {
 			Class clazz = ERXPatcher.classForName(attribute.className());
