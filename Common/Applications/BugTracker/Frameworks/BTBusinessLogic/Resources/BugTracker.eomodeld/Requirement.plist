@@ -303,8 +303,8 @@
               }
            );
            name = comments;
-           ownsDestination = N;
-           propagatesPrimaryKey = Y;
+           ownsDestination = Y;
+           propagatesPrimaryKey = N;
        }, 
        
        {
