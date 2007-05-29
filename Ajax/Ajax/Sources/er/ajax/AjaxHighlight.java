@@ -127,6 +127,8 @@ public class AjaxHighlight extends WODynamicGroup {
 				}
 			}
 			AjaxUtils.appendTagAttributeAndValue(response, context, component, _associations, "style", displayStyle);
+			AjaxUtils.appendTagAttributeAndValue(response, context, component, _associations, "onMouseOver");
+            AjaxUtils.appendTagAttributeAndValue(response, context, component, _associations, "onMouseOut");
 			response.appendContentString(">");
 		}
 
