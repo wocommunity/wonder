@@ -9,6 +9,7 @@ import com.webobjects.eocontrol.EOEnterpriseObject;
 import com.webobjects.foundation.NSMutableArray;
 
 import er.directtoweb.ERDCustomComponent;
+import er.extensions.ERXApplication;
 import er.extensions.ERXEOControlUtilities;
 import er.extensions.ERXThreadStorage;
 
@@ -43,7 +44,7 @@ public class ERCDisplayHelpText extends ERDCustomComponent {
     }
     
     public boolean showActions() {
-    	return booleanValueForBinding("showActions", true);
+    	return booleanValueForBinding("showActions", ERXApplication.isDevelopmentModeSafe());
     }
     
 	private String prefix() {

@@ -8,21 +8,20 @@ import com.webobjects.directtoweb.EditPageInterface;
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.foundation.NSArray;
 
+import er.extensions.ERXApplication;
 import er.extensions.ERXEC;
+import er.extensions.ERXStatelessComponent;
 
-public class ERCListHelpText extends WOComponent {
+public class ERCListHelpText extends ERXStatelessComponent {
 
 	public String key;
 	
     public ERCListHelpText(WOContext context) {
         super(context);
     }
-    
+
     public boolean showList() {
-    	return true;
-    }
-    
-    public void setShowList(boolean value) {
+        return booleanValueForBinding("showList", ERXApplication.isDevelopmentModeSafe());
     }
     
     public ERCHelpText text() {
