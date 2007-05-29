@@ -193,6 +193,7 @@ There are many ways to use this script:
             </and>
         </condition>
         <property name="wonder.lib.root" value="${build.root}" />
+        <property name="include.source" value="true" />
         <property name="wonder.framework.install.root" value="${wo.localroot}/Library/Frameworks" />
         <property name="web.framework.install.root" value="${wo.server.root}/Frameworks" />
         <property name="wonder.application.install.root" value="${wo.localroot}/Library/WebObjects/JavaApplications" />
@@ -434,7 +435,13 @@ There are many ways to use this script:
             <classes dir="${build.classes}">
                 <include name="**/*.class" />
             </classes>
-            <sources dir="${project.dir}/Sources">
+            <classes dir="${project.dir}/Sources">
+                <include name="**/*" />
+                <exclude name="**/*.class" />
+                <exclude name="**/.svn" />
+                <exclude name="**/CVS" />
+            </classes>
+            <sources dir="${project.dir}/Sources" if="include.source">
                 <include name="**/*.java" />
             </sources>
             <resources dir="${project.dir}/Components">
@@ -466,7 +473,18 @@ There are many ways to use this script:
         <woapplication name="${project.name}" destDir="${build.root}" principalClass="${project.principal.class}" jarName="${project.name}" stdFrameworks="false" version="${project.version}">
             <classes dir="${build.classes}">
                 <include name="**/*.class" />
+                <exclude name=".svn" />
+                <exclude name=".CVS" />
             </classes>
+            <classes dir="${project.dir}/Sources">
+                <include name="**/*" />
+                <exclude name="**/*.class" />
+                <exclude name="**/.svn" />
+                <exclude name="**/CVS" />
+            </classes>
+            <sources dir="${project.dir}/Sources" if="include.source">
+                <include name="**/*.java" />
+            </sources>
             <lib dir="${project.dir}/Libraries">
                 <include name="**/*.jar" />
             </lib>
