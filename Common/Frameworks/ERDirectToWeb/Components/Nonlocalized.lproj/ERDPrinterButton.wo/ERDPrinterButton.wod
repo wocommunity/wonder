@@ -1,9 +1,9 @@
-Conditional1: WOConditional {
+NotUseSubmitbutton: WOConditional {
 	condition = ^useSubmitButton;
 	negate = true;
 }
 
-Conditional2: WOConditional {
+UseSubmitButton: WOConditional {
 	condition = ^useSubmitButton;
 }
 
@@ -39,7 +39,7 @@ PrintButton: ERXSingleButton {
 	value = "Printer Friendly View";
 }
 
-PrinterFriendlyLink2: ERXJSOpenWindowHyperlink {
+PrinterFriendlyLink: ERXJSOpenWindowHyperlink {
 	action = printerFriendlyVersion;
 	scrollbars = ^scrollbars;
 	target = "PrinterFriendly";
