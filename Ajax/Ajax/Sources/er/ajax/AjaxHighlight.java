@@ -34,6 +34,8 @@ import er.extensions.ERXWOContext;
  * @binding updateEffect the name of the scriptaculous effect to render (defaults to "Highlight", "none" = no effect) for updated objects
  * @binding class the CSS class of the generated container
  * @binding style the CSS style of the generated container
+ * @binding onMouseOver string with javascript to execute 
+ * @binding onMouseOut string with javascript to execute
  * @binding duration passed through to Effect.Xxx in the options map
  * @binding hidden if true, when the value is highlighted, the element will be display: none
  * @binding newHidden if true, when the value is highlighted, the element will be display: none for new objects
