@@ -1,7 +1,7 @@
 CancelButton: ERXSingleButton {
 	action = cancelAction;
 	alt = "Reverts your changes";
-	value = "Cancel";
+	value = d2wContext.cancelButtonLabel;
 	class = "CancelButton";
 	dontSubmitForm = true;
 }
@@ -45,7 +45,7 @@ InspectPageRepetition: WOSwitchComponent {
 PreviousButton: WOSubmitButton {
     action = previousStep;
     alt = "Previous step";
-    value = "Previous";
+    value = d2wContext.previousButtonLabel;
     class = "PreviousButton";
 }
 
@@ -58,7 +58,7 @@ PageWrapper: WOSwitchComponent {
 NextButton: WOSubmitButton {
     action = nextStep;
     alt = "Next step";
-    value = "Next";
+    value = d2wContext.nextButtonLabel;
     class = "NextButton";
 }
 
@@ -91,7 +91,7 @@ Steps: ERXLocalizedString {
 SaveButton: WOSubmitButton {
 	action = submitAction;
 	alt = "Saves your changes";
-	value = "Save";
+	value = d2wContext.saveButtonLabel;
 	class = "SaveButton";
 }
 

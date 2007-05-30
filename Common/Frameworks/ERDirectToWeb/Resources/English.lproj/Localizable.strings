@@ -4,7 +4,32 @@
 	"CouldNotSavePleaseReapply" = "Could not save your changes. The @@displayNameForEntity@@ has changed in the database before you could save. Your changes have been lost. Please reapply them.";
 	"ends with" = "ends with";
 	"ERD2W.cancelCreationMessage" = "<b>Are you sure you want to stop creating this @@displayNameForEntity@@?</b><br><br>Clicking confirm will discard all your changes, Clicking Cancel will go back to editing your @@displayNameForEntity@@.";
+	"ERD2W.cancelButtonLabel" = "Cancel";
+	"ERD2W.createButtonLabel" = "Create";
+	"ERD2W.clearButtonLabel" = "Clear";
+	"ERD2W.editButtonLabel" = "Edit";
+	"ERD2W.okButtonLabel" = "OK";
 	"ERD2W.pickButtonLabel" = "Select";
+	"ERD2W.saveButtonLabel" = "Save";
+	"ERD2W.returnButtonLabel" = "Return";
+	"ERD2W.findButtonLabel" = "Find";
+	"ERD2W.previousButtonLabel" = "Previous";
+	"ERD2W.nextButtonLabel" = "Next";
+	"ERD2W.addButtonLabel" = "Add";
+	"ERD2W.yesButtonLabel" = "Yes";
+	"ERD2W.noButtonLabel" = "No";
+	"ERD2W.removeButtonLabel" = "Remove";
+	"ERD2W.deleteButtonLabel" = "Delete";
+	"ERD2W.deleteSelectedButtonLabel" = "Delete Selected";
+
+	"ERD2W.tasks.inspect" = "Inspect @@displayNameForEntity@@";
+	"ERD2W.tasks.edit" = "Edit @@displayNameForEntity@@";
+	"ERD2W.tasks.query" = "Find @@displayNameForEntity@@";
+	"ERD2W.tasks.edit.wizard" = "Create @@displayNameForEntity@@";
+	"ERD2W.tasks.list" = "List @@displayNameForEntity@@";
+	"ERD2W.tasks.select" = "Select @@displayNameForEntity@@";
+	"ERD2W.tasks.confirm" = "Really @@displayNameForEntity@@?";
+
 	"ERD2WEditToManyRelationship.noChoiceAvailable" = "No @@displayNameForEntity@@ available at this time";
 	"ERD2WInspect.alreadyAborted" = "<b>You already aborted this operation</b>. Please hit cancel and try again from the first step";
 	"ERD2WList.confirmDeletionMessage" = "<b>Are you sure you want to delete the following @@displayNameForEntity@@?</b><br />@@object.userPresentableDescription@@";

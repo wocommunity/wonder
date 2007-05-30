@@ -1,6 +1,6 @@
 Clear: WOSubmitButton {
 	action = clearAction;
-	value = session.localizer.ERDInspect.clear;
+	value = ^clearButtonLabel;
 }
 
 Inspect: ERXD2WInspect { 	
@@ -22,17 +22,17 @@ Null: ERXNonNullConditional {
 
 Select: WOSubmitButton {
 	action = editRelationshipAction;
-	value = session.localizer.ERDInspect.select;
+	value = ^selectButtonLabel;
 }
 
 Select2: WOSubmitButton {
 	action = createObjectAction;
-	value = session.localizer.ERDInspect.create;
+	value = ^createButtonLabel;
 }
 
 Select3: WOSubmitButton {
 	action = editRelationshipAction;
-	value = session.localizer.ERDInspect.select;
+	value = ^selectButtonLabel;
 }
 
 ShowActions: WOConditional {

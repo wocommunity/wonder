@@ -18,7 +18,7 @@ List1: ERXD2WList {
 
 Select: WOSubmitButton {
 	action = createObjectAction;
-	value = session.localizer.ERDList.create;
+	value = ^createButtonLabel;
 }
 
 ShowActions: WOConditional {

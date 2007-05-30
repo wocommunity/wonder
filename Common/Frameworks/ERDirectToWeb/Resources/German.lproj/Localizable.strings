@@ -4,7 +4,33 @@
 	"CouldNotSavePleaseReapply" = "Ihre \U00c4nderungen konnten nicht gesichert werden. Der/die @@displayNameForEntity@@ wurde von einem anderen Benutzer ver\U00e4ndert und Ihre \U00c4nderungen wurden verworfen. Bitte versuchen Sie es erneut.";
 	"ends with" = "ends with";
 	"ERD2W.cancelCreationMessage" = "<b>Wollen Sie das Anlegen von @@displayNameForEntity@@ abbrechen?</b><br /><br />Mit <b>OK</b> verwerfen Sie alle \U00c4nderungen, mit <b>Abbrechen</b> k\U00f6nnen Sie weiter bearbeiten.";
+	"ERD2W.cancelButtonLabel" = "Abbrechen";
+	"ERD2W.createButtonLabel" = "Anlegen";
+	"ERD2W.clearButtonLabel" = "L\U00f6schen";
+	"ERD2W.editButtonLabel" = "Edit";
+	"ERD2W.okButtonLabel" = "OK";
+	"ERD2W.pickButtonLabel" = "Ausw\U00e4hlen";
+	"ERD2W.saveButtonLabel" = "Speichern";
+	"ERD2W.returnButtonLabel" = "Zur\U00fcck";
+	"ERD2W.findButtonLabel" = "Finden";
+	"ERD2W.previousButtonLabel" = "Vorheriger Schritt";
+	"ERD2W.nextButtonLabel" = "N\U00e4chster Schritt";
+	"ERD2W.addButtonLabel" = "Anlegen";
+	"ERD2W.yesButtonLabel" = "Ja";
+	"ERD2W.noButtonLabel" = "Nein";
+	"ERD2W.removeButtonLabel" = "Entfernen";
+	"ERD2W.deleteButtonLabel" = "L\U00f6schen";
+	"ERD2W.deleteSelectedButtonLabel" = "Ausgew\U00e4hlte l\U00f6schen";
 	"ERD2W.pickButtonLabel" = "Select";
+
+	"ERD2W.tasks.inspect" = "@@displayNameForEntity@@ ansehen";
+	"ERD2W.tasks.edit" = "@@displayNameForEntity@@ bearbeiten";
+	"ERD2W.tasks.query" = "@@displayNameForEntity@@ finden";
+	"ERD2W.tasks.edit.wizard" = "@@displayNameForEntity@@ anlegen";
+	"ERD2W.tasks.list" = "Liste: @@displayNameForEntity@@";
+	"ERD2W.tasks.select" = "@@displayNameForEntity@@ auswU00e4hlen";
+	"ERD2W.tasks.confirm" = "Wirklich @@displayNameForEntity@@";
+
 	"ERD2WEditToManyRelationship.noChoiceAvailable" = "Kein @@displayNameForEntity@@ verf\U00fcgbar";
 	"ERD2WInspect.alreadyAborted" = "<b>Sie haben diese Aktion bereits beendet.</b> Bitte dr\U00fccken Sie <b>Abbrechen</b> und gebinnen Sie noch mal von vorne.";
 	"ERD2WList.confirmDeletionMessage" = "<b>@@displayNameForEntity@@ wirklich l\U00f6schen?</b><br />@@object.userPresentableDescription@@";

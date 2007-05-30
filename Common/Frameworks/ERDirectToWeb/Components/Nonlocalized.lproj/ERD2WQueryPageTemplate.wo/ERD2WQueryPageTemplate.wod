@@ -7,13 +7,6 @@ Header: WOSwitchComponent {
 	d2wContext = d2wContext;
 }
 
-ERDBannerComponent: ERDBannerComponent {
-	bannerFileName = d2wContext.bannerFileName;
-	d2wContext = d2wContext;
-	showBanner = d2wContext.showBanner;
-	framework = "JavaDirectToWeb";
-}
-
 ShowList: WOConditional {
 	condition = d2wContext.showListInSamePage;
 }
@@ -51,7 +44,7 @@ QueryPageRepetition: ERDQueryPageRepetition {
 
 ClearButton: WOSubmitButton {
 	alt = "Clear Form";
-	value = "Clear";
+	value = d2wContext.clearButtonLabel;
 	action = clearAction;
 	class = "ClearButton";
 }
@@ -59,15 +52,15 @@ ClearButton: WOSubmitButton {
 QueryButton: WOSubmitButton {
 	action = queryAction;
 	alt = "Find objects matching the query";
-	value = "Find";
+	value = d2wContext.findButtonLabel;
 	class = "QueryButton";
 }
 
 ReturnButton: WOSubmitButton {
 	action = returnAction;
 	alt = "Returns to the previous page";
-	value = "Return";
-	class = "CancelButton";
+	value = d2wContext.returnButtonLabel;
+	class = "ReturnButton";
 }
 
 ShowCancel: WOConditional {
