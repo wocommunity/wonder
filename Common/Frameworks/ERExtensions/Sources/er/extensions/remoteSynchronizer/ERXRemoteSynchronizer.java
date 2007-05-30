@@ -64,6 +64,7 @@ public abstract class ERXRemoteSynchronizer {
 	private static final int INT_TYPE = 3;
 	private static final int LONG_TYPE = 4;
 	private static final int DATA_TYPE = 5;
+	private static final int STRING_TYPE = 6;
 
 	private IChangeListener _listener;
 	private NSArray _includeEntityNames;
@@ -211,6 +212,11 @@ public abstract class ERXRemoteSynchronizer {
 			dos.writeByte(data.length());
 			data.writeToStream(dos);
 		}
+		else if (key instanceof String) {
+			String str = (String)key;
+			dos.writeByte(ERXRemoteSynchronizer.STRING_TYPE);
+			dos.writeUTF(str);
+		}
 		else {
 			throw new IllegalArgumentException("RemoteSynchronizer can't handle key '" + key + "'.");
 		}
@@ -268,6 +274,9 @@ public abstract class ERXRemoteSynchronizer {
 			byte[] data = new byte[size];
 			dis.readFully(data);
 			obj = new NSData(data);
+		}
+		else if (keyType == ERXRemoteSynchronizer.STRING_TYPE) {
+			obj = dis.readUTF();
 		}
 		else {
 			throw new IllegalArgumentException("Unknown key type #" + keyType + ".");
