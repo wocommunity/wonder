@@ -1,11 +1,57 @@
-Wrapper : PageWrapper {
+
+EGWrapper1: EGWrapper {
+	enabled = enableExcel;
+	data = reportData;
 }
 
+ERXLocalizedString3: ERXLocalizedString {
+	value = "finalSeparatorOr";
+}
+Enabled: WOConditional {
+	condition = enableExcel;
+}
+
+ExportExcelLink: WOHyperlink {
+	action = exportExcelAction;
+}
+
+ExportExcelString: ERXLocalizedString {
+	value = "Excel Export";
+}
+
+HasReport: WOConditional {
+	condition = selectedReport;
+}
+
+PageWrapper: PageWrapper {
+}
 
 QuickReport: WRQuickReport {
 	reportDictionary = selectedReport;
 	objects = objects;
 	model = model;
 	showTopCriteriaLabel = true;
+	showNavigation = true;
+//	showPresentationControls = true;
 	reportComponentName = reportComponentName;
+}
+ShowAsChartLink: WOHyperlink {
+	action = showAsChartAction;
+}
+ShowAsChartString: ERXLocalizedString {
+	value = "Show as Chart";
+}
+ShowAsTableLink: WOHyperlink {
+	action = showAsTableAction;
+}
+ShowAsTableString: ERXLocalizedString {
+	value = "Show as Table";
+}
+ShowingAsChart: WOConditional {
+	condition= enableChart;
+}
+
+ShowingAsTable: WOConditional {
+	condition= enableChart;
+	negate=true;
 }
