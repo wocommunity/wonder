@@ -1,6 +1,7 @@
 attribLabel: ERXLocalizedString{
 	value= attribLabel;
 	escapeHTML = true;
+	valueWhenEmpty = "";
 }
 
 attribs: WORepetition{
