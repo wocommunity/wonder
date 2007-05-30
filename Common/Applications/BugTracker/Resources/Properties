@@ -6,3 +6,4 @@ er.extensions.ERXEC.defaultAutomaticLockUnlock=false
 er.extensions.ERXWOForm.addDefaultSubmitButtonDefault=true
 er.extensions.ERXEnterpriseObject.updateInverseRelationships=true
 er.extensions.ERXEnterpriseObject.applyRestrictingQualifierOnInsert=true
+java.awt.headless=true
