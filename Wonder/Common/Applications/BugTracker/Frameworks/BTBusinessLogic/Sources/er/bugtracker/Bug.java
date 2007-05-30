@@ -7,7 +7,6 @@ import org.apache.log4j.Logger;
 
 import com.webobjects.eoaccess.EODatabaseDataSource;
 import com.webobjects.eocontrol.EOEditingContext;
-import com.webobjects.eocontrol.EOEnterpriseObject;
 import com.webobjects.eocontrol.EOFetchSpecification;
 import com.webobjects.eocontrol.EOKeyValueQualifier;
 import com.webobjects.eocontrol.EONotQualifier;

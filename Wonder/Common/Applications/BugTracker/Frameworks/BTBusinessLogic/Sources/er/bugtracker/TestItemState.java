@@ -1,5 +1,3 @@
-// TestItemState.java
-// 
 package er.bugtracker;
 import org.apache.log4j.Logger;
 

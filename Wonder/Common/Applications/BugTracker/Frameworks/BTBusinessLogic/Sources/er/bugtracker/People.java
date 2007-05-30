@@ -30,6 +30,7 @@ public class People extends _People implements ERCoreUserInterface {
 
     public void init(EOEditingContext ec) {
         super.init(ec);
+        setIsActive(true);
     }
 
     // Class methods go here
