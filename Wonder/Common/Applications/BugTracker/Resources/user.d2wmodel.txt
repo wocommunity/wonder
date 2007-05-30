@@ -19,6 +19,7 @@
     50 : *true* => uiStyle = buttonList [com.webobjects.directtoweb.Assignment], 
     50 : entity.name = 'Bug' => navigationState = Bugs [com.webobjects.directtoweb.Assignment], 
     50 : pageConfiguration like 'Track*' => task = query [com.webobjects.directtoweb.Assignment], 
+    50 : *true* => shouldSetFailedValidationValue = true [com.webobjects.directtoweb.BooleanAssignment], 
     50 : pageConfiguration like '*Bug*' => navigationState = Bugs [com.webobjects.directtoweb.Assignment], 
     50 : pageConfiguration like 'CreateBug*' => entity = Bug [com.webobjects.directtoweb.EntityAssignment], 
     50 : pageConfiguration like 'Grouped*' => templateString = (null) [com.webobjects.directtoweb.Assignment], 
