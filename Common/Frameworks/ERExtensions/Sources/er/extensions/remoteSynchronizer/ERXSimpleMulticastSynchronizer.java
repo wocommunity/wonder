@@ -193,7 +193,7 @@ public class ERXSimpleMulticastSynchronizer extends ERXRemoteSynchronizer {
 		listenThread.start();
 	}
 
-	public void writeCacheChanges(int transactionID, NSArray cacheChanges) throws IOException {
+	protected void _writeCacheChanges(int transactionID, NSArray cacheChanges) throws IOException {
 		short transactionSize = (short) cacheChanges.count();
 		short transactionNum = 0;
 		for (Enumeration cacheChangesEnum = cacheChanges.objectEnumerator(); cacheChangesEnum.hasMoreElements(); transactionNum++) {
