@@ -156,7 +156,21 @@ public class ERXDefaultRestDelegate implements IERXRestDelegate {
 			}
 		}
 		else {
-			throw new ERXRestException("You attempted to update a keypath that is not editable.");
+			ERXRestKey nextToLastKey = lastKey.previousKey();
+			Object nextToLastValue = nextToLastKey.value();
+			EOEntity nextToLastEntity = nextToLastKey.entity();
+			if (nextToLastValue instanceof EOEnterpriseObject) {
+				ERXRestRequestNode reformedEORequestNode = new ERXRestRequestNode(entityDelegate(nextToLastEntity).entityAliasForEntityNamed(nextToLastEntity.name()));
+				ERXRestRequestNode reformedPrimitiveRequestNode = new ERXRestRequestNode(lastKey.keyAlias());
+				ERXRestRequestNode updateNode = updateRequest.rootNode();
+				reformedPrimitiveRequestNode.setValue(updateNode.value());
+				reformedEORequestNode.addChild(reformedPrimitiveRequestNode);
+				ERXRestRequest primitiveRequest = new ERXRestRequest(nextToLastKey, reformedEORequestNode);
+				update(primitiveRequest, context);
+			}
+			else {
+				throw new ERXRestException("You attempted to update a keypath that is not editable.");
+			}
 		}
 	}
 
