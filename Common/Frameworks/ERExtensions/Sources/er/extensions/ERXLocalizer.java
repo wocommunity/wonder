@@ -185,6 +185,10 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
         }
     }
     
+    protected void addToCreatedKeys(Object value, String key) {
+    	createdKeys.takeValueForKey(value, key);
+    }
+    
     /**
      * Gets the best localizer for a set of languages.
      * @param languages
@@ -492,10 +496,12 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
 
     public void takeValueForKey(Object value, String key) {
         setCacheValueForKey(value, key);
+        addToCreatedKeys(value, key);
     }
     
     public void takeValueForKeyPath(Object value, String key) {
         setCacheValueForKey(value, key);
+        addToCreatedKeys(value, key);
     }
 
     public String language() { return language; }
@@ -507,12 +513,12 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
             return null;
         }
         Object result = localizedValueForKey(key);
-        if(result == null) {
+        if(result == null || result == NOT_FOUND) {
             if(createdKeysLog.isDebugEnabled()) {
                 createdKeysLog.debug("Default key inserted: '"+key+"'/"+language);
             }
             setCacheValueForKey(key, key);
-            createdKeys.setObjectForKey(key, key);
+            addToCreatedKeys(key, key);
             result = key;
         }
         return result;
