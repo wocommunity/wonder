@@ -114,7 +114,7 @@
                modificationDate = "2002-06-04 14:00:54 +0200";
            };
            valueClassName = NSNumber;
-           valueType = i;
+           valueType = c;
        }, 
        
        {
