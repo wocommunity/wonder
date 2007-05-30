@@ -46,7 +46,8 @@ public class Session extends ERXSession {
             WOActionResults result = (WOActionResults) NSKeyValueCoding.DefaultImplementation.valueForKey(this, keyPath);
             if (result instanceof D2WPage) {
                 D2WPage page = (D2WPage) result;
-                page.d2wContext().takeValueForKey(ERXStringUtilities.capitalize(_key) + "." + key, "navigationState");
+                String state = ERXStringUtilities.capitalize(_key) + "." + key;
+                page.d2wContext().takeValueForKey(state, "navigationState");
             }
             return result;
         }
@@ -120,6 +121,19 @@ public class Session extends ERXSession {
 
     }
 
+    public class ReportHandler extends Handler {
+
+        public ReportHandler() {
+            super("reports");
+        }
+        
+        public Object handleQueryWithUnboundKey(String key) {
+            String keyPath = ERXStringUtilities.capitalize(key);
+            return Factory.bugTracker().reportForName("Report" +  keyPath);
+        }
+
+    }
+
     public NSMutableDictionary handlers = new NSMutableDictionary();
 
     public Session() {
@@ -131,6 +145,7 @@ public class Session extends ERXSession {
         new FrameworkHandler();
         new TestItemHandler();
         new RequirementHandler();
+        new ReportHandler();
         setStoresIDsInCookies(true);
     }
 
