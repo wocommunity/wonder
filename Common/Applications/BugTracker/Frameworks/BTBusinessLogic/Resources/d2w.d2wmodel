@@ -1,79 +1,8 @@
 {
-    rules = (
-        {
-            author = 60; 
-            class = com.webobjects.directtoweb.Rule; 
-            lhs = {
-                class = com.webobjects.eocontrol.EOKeyValueQualifier; 
-                key = propertyKey; 
-                selectorName = "isEqualTo"; 
-                value = component; 
-            }; 
-            rhs = {
-                class = com.webobjects.directtoweb.BooleanAssignment; 
-                keyPath = localizeDisplayKeys; 
-                value = true; 
-            }; 
-        }, 
-        {
-            author = 60; 
-            class = com.webobjects.directtoweb.Rule; 
-            lhs = {
-                class = com.webobjects.eocontrol.EOKeyValueQualifier; 
-                key = propertyKey; 
-                selectorName = "isEqualTo"; 
-                value = difficulity; 
-            }; 
-            rhs = {
-                class = com.webobjects.directtoweb.BooleanAssignment; 
-                keyPath = localizeDisplayKeys; 
-                value = true; 
-            }; 
-        }, 
-        {
-            author = 60; 
-            class = com.webobjects.directtoweb.Rule; 
-            lhs = {
-                class = com.webobjects.eocontrol.EOKeyValueQualifier; 
-                key = propertyKey; 
-                selectorName = "isEqualTo"; 
-                value = owner; 
-            }; 
-            rhs = {
-                class = com.webobjects.directtoweb.BooleanAssignment; 
-                keyPath = localizeDisplayKeys; 
-                value = true; 
-            }; 
-        }, 
-        {
-            author = 60; 
-            class = com.webobjects.directtoweb.Rule; 
-            lhs = {
-                class = com.webobjects.eocontrol.EOKeyValueQualifier; 
-                key = propertyKey; 
-                selectorName = "isEqualTo"; 
-                value = priority; 
-            }; 
-            rhs = {
-                class = com.webobjects.directtoweb.BooleanAssignment; 
-                keyPath = localizeDisplayKeys; 
-                value = true; 
-            }; 
-        }, 
-        {
-            author = 60; 
-            class = com.webobjects.directtoweb.Rule; 
-            lhs = {
-                class = com.webobjects.eocontrol.EOKeyValueQualifier; 
-                key = propertyKey; 
-                selectorName = "isEqualTo"; 
-                value = state; 
-            }; 
-            rhs = {
-                class = com.webobjects.directtoweb.BooleanAssignment; 
-                keyPath = localizeDisplayKeys; 
-                value = true; 
-            }; 
-        }
-    ); 
+  "rules" = (
+    {"author" = "60"; "class" = "com.webobjects.directtoweb.Rule"; "lhs" = {"class" = "com.webobjects.eocontrol.EOKeyValueQualifier"; "key" = "propertyKey"; "selectorName" = "isEqualTo"; "value" = "state"; }; "rhs" = {"class" = "com.webobjects.directtoweb.BooleanAssignment"; "keyPath" = "localizeDisplayKeys"; "value" = "true"; }; }, 
+    {"author" = "60"; "class" = "com.webobjects.directtoweb.Rule"; "lhs" = {"class" = "com.webobjects.eocontrol.EOKeyValueQualifier"; "key" = "propertyKey"; "selectorName" = "isEqualTo"; "value" = "priority"; }; "rhs" = {"class" = "com.webobjects.directtoweb.BooleanAssignment"; "keyPath" = "localizeDisplayKeys"; "value" = "true"; }; }, 
+    {"author" = "60"; "class" = "com.webobjects.directtoweb.Rule"; "lhs" = {"class" = "com.webobjects.eocontrol.EOKeyValueQualifier"; "key" = "propertyKey"; "selectorName" = "isEqualTo"; "value" = "component"; }; "rhs" = {"class" = "com.webobjects.directtoweb.BooleanAssignment"; "keyPath" = "localizeDisplayKeys"; "value" = "true"; }; }, 
+    {"author" = "60"; "class" = "com.webobjects.directtoweb.Rule"; "lhs" = {"class" = "com.webobjects.eocontrol.EOKeyValueQualifier"; "key" = "propertyKey"; "selectorName" = "isEqualTo"; "value" = "difficulity"; }; "rhs" = {"class" = "com.webobjects.directtoweb.BooleanAssignment"; "keyPath" = "localizeDisplayKeys"; "value" = "true"; }; }
+  ); 
 }

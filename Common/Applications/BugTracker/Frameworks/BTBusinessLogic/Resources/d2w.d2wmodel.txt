@@ -1,0 +1,6 @@
+(
+    60 : propertyKey = 'state' => localizeDisplayKeys = true [com.webobjects.directtoweb.BooleanAssignment], 
+    60 : propertyKey = 'priority' => localizeDisplayKeys = true [com.webobjects.directtoweb.BooleanAssignment], 
+    60 : propertyKey = 'component' => localizeDisplayKeys = true [com.webobjects.directtoweb.BooleanAssignment], 
+    60 : propertyKey = 'difficulity' => localizeDisplayKeys = true [com.webobjects.directtoweb.BooleanAssignment]
+)
