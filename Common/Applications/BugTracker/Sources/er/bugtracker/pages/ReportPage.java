@@ -38,7 +38,7 @@ public class ReportPage extends ERD2WPage {
         } else if(enableChart) {
             return "ChartReport";
         }
-        return "Report";
+        return "WRReport";
     }
 
     public void postModelChangedNotification(DRReportModel model) {
