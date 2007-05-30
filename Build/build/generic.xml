@@ -329,6 +329,9 @@ There are many ways to use this script:
             <frameworks dir="${wonder.lib.root}" if="use.woognl"> 
                 <include name="WOOgnl.framework" />
             </frameworks>
+            <frameworks dir="${wonder.lib.root}" if="use.plot"> 
+                <include name="ERPlot.framework" />
+            </frameworks>
             <frameworks dir="${wonder.lib.root}" if="use.excel"> 
                 <include name="ExcelGenerator.framework" />
             </frameworks>
@@ -527,6 +530,9 @@ There are many ways to use this script:
             <frameworks dir="${wonder.lib.root}" if="use.wonder.indexing"> 
                 <include name="ERIndexing.framework" />
             </frameworks>
+            <frameworks dir="${wonder.lib.root}" if="use.wonder.ajax"> 
+                <include name="Ajax.framework" />
+            </frameworks>
             <frameworks dir="${wonder.lib.root}" if="use.wonder.changenotification"> 
                 <include name="ERChangeNotificationJMS.framework" />
             </frameworks>
@@ -538,6 +544,12 @@ There are many ways to use this script:
             </frameworks>
             <frameworks dir="${wonder.lib.root}" if="use.woognl"> 
                 <include name="WOOgnl.framework" />
+            </frameworks>
+            <frameworks dir="${wonder.lib.root}" if="use.plot"> 
+                <include name="ERPlot.framework" />
+            </frameworks>
+            <frameworks dir="${wonder.lib.root}" if="use.excel"> 
+                <include name="ExcelGenerator.framework" />
             </frameworks>
             <frameworks dir="${wonder.lib.root}" if="use.grouping"> 
                 <include name="DRGrouping.framework" />
