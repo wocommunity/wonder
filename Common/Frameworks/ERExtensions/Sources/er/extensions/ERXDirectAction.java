@@ -20,6 +20,7 @@ import com.webobjects.appserver.WORequest;
 import com.webobjects.appserver.WOResponse;
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSPropertyListSerialization;
 import com.webobjects.woextensions.WOEventDisplayPage;
 import com.webobjects.woextensions.WOEventSetupPage;
 import com.webobjects.woextensions.WOStatsPage;
@@ -354,6 +355,17 @@ public class ERXDirectAction extends WODirectAction {
     	WOResponse r = null;
     	if (ERXApplication.isDevelopmentModeSafe()) {
     		return pageWithName("ERXLocalizationEditor");
+    	}
+		return r;
+    }
+    
+    
+    public WOActionResults dumpCreatedKeysAction() {
+    	WOResponse r = null;
+    	if (ERXApplication.isDevelopmentModeSafe()) {
+    		session();
+            System.out.println(NSPropertyListSerialization.stringFromPropertyList(ERXLocalizer.currentLocalizer().createdKeys()));
+    		return new WOResponse();
     	}
 		return r;
     }
