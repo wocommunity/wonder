@@ -616,6 +616,24 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
         return plurify(name, count);
     }
     
+    /**
+     * Returns a singularified string
+     * @param value the value to singularify
+     * @return a singularified string
+     */
+    public String singularifiedString(String value) {
+        if(value != null) {
+            NSKeyValueCoding exceptions = (NSKeyValueCoding) valueForKey("localizerExceptions");
+            if(exceptions != null) {
+                String exception = (String) exceptions.valueForKey(value + ".singular");
+                if(exception != null) {
+                    return exception;
+                }
+            }
+        }
+        return singularify(value);
+    }
+    
     public String toString() { return "<" + getClass().getName() + " " + language + ">"; }
 
     /**
