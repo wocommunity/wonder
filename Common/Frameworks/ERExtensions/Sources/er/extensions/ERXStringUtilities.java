@@ -972,6 +972,28 @@ public class ERXStringUtilities {
         return capitalize != null ? capitalize : value;
     }
     
+    /**
+     * Converts this_is_a_test to ThisIsATest
+     * @param underscoreString the string_with_underscores
+     * @param capitalize if true, the first letter is capitalized
+     * @return the StringWithoutUnderscores
+     */
+    public static String underscoreToCamelCase(String underscoreString, boolean capitalize) {
+    	StringBuffer camelCase = new StringBuffer();
+    	String[] underscoreStrings = underscoreString.split("_");
+    	for (int i = 0; i < underscoreStrings.length; i ++) {
+    		String word;
+    		if (i > 0 || capitalize) {
+    			word = ERXStringUtilities.capitalize(underscoreStrings[i]);
+    		}
+    		else {
+    			word = underscoreStrings[i];
+    		}
+			camelCase.append(word);
+    	}
+    	return camelCase.toString();
+    }
+    
     public static boolean stringEqualsString(String s1, String s2) {
         if (s1 == s2) return true;
         if (s1 != null && s2 != null && s1.equals(s2)) return true;
