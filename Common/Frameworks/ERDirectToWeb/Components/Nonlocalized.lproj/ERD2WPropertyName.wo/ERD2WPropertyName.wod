@@ -1,7 +1,9 @@
 DebuggingEnabled: WOConditional {
 	condition = d2wDebuggingEnabled;
 }
-
+DisplayRequiredMarkerCell : WOConditional {
+	condition = d2wContext.displayRequiredMarkerCell;
+}
 DisplayMandatory: WOConditional {
 	condition = displayRequiredMarker;
 }
