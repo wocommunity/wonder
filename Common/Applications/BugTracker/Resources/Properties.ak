@@ -5,5 +5,5 @@ dbConnectURLGLOBAL=jdbc:postgresql://localhost/bug
 dbConnectUserGLOBAL=ak
 dbConnectPluginGLOBAL=Postgresql
 dbConnectDriverGLOBAL=org.postgresql.Driver
-dbEOPrototypesEntityGLOBAL EOJDBCPostgresqlPrototypes
+dbEOPrototypesEntityGLOBAL=EOJDBCPostgresqlPrototypes
 er.javamail.adminEmail=foo@localhost.com
