@@ -2,9 +2,6 @@ package er.rest;
 
 import java.text.ParseException;
 
-import org.w3c.dom.Element;
-import org.w3c.dom.NodeList;
-
 import com.webobjects.eoaccess.EOEntity;
 import com.webobjects.eocontrol.EOEnterpriseObject;
 import com.webobjects.foundation.NSArray;
@@ -166,8 +163,8 @@ public interface IERXRestEntityDelegate {
 	 * 
 	 * @param entity
 	 *            the entity of the object to insert
-	 * @param insertElement
-	 *            the document element that describes the insert
+	 * @param insertNode
+	 *            the node that describes the insert
 	 * @param parentObject
 	 *            the parent object of the insert
 	 * @param parentKey
@@ -182,7 +179,7 @@ public interface IERXRestEntityDelegate {
 	 * @throws ERXRestNotFoundException
 	 *             if a related object cannot be found
 	 */
-	public EOEnterpriseObject insertObjectFromDocument(EOEntity entity, Element insertElement, EOEnterpriseObject parentObject, String parentKey, ERXRestContext context) throws ERXRestSecurityException, ERXRestException, ERXRestNotFoundException;
+	public EOEnterpriseObject insertObjectFromDocument(EOEntity entity, ERXRestRequestNode insertNode, EOEnterpriseObject parentObject, String parentKey, ERXRestContext context) throws ERXRestSecurityException, ERXRestException, ERXRestNotFoundException;
 
 	/**
 	 * Updates an array of objects for a to-many relationship from an XML document. canUpdateObject has already been
@@ -200,7 +197,7 @@ public interface IERXRestEntityDelegate {
 	 * @param currentObjects
 	 *            the existing objects in the to-many relationship
 	 * @param toManyNodes
-	 *            the NodeList containing the XML document nodes that describe the update
+	 *            the array containing the nodes that describe the update
 	 * @param context
 	 *            the rest context
 	 * @throws ERXRestSecurityException
@@ -210,7 +207,7 @@ public interface IERXRestEntityDelegate {
 	 * @throws ERXRestNotFoundException
 	 *             if a related object cannot be found
 	 */
-	public void updateArrayFromDocument(EOEntity parentEntity, EOEnterpriseObject parentObject, String attributeName, EOEntity entity, NSArray currentObjects, NodeList toManyNodes, ERXRestContext context) throws ERXRestException, ERXRestNotFoundException, ERXRestSecurityException;
+	public void updateArrayFromDocument(EOEntity parentEntity, EOEnterpriseObject parentObject, String attributeName, EOEntity entity, NSArray currentObjects, NSArray toManyNodes, ERXRestContext context) throws ERXRestException, ERXRestNotFoundException, ERXRestSecurityException;
 
 	/**
 	 * Updates an existing object from an XML document. canUpdateObject has already been called by this time.
@@ -219,8 +216,8 @@ public interface IERXRestEntityDelegate {
 	 *            the entity of the object to update
 	 * @param eo
 	 *            the object to update
-	 * @param eoElement
-	 *            the document element that describes the update
+	 * @param eoNode
+	 *            the node that describes the update
 	 * @param context
 	 *            the rest context
 	 * @throws ERXRestSecurityException
@@ -230,7 +227,7 @@ public interface IERXRestEntityDelegate {
 	 * @throws ERXRestNotFoundException
 	 *             if a related object cannot be found
 	 */
-	public void updateObjectFromDocument(EOEntity entity, EOEnterpriseObject eo, Element eoElement, ERXRestContext context) throws ERXRestSecurityException, ERXRestException, ERXRestNotFoundException;
+	public void updateObjectFromDocument(EOEntity entity, EOEnterpriseObject eo, ERXRestRequestNode eoNode, ERXRestContext context) throws ERXRestSecurityException, ERXRestException, ERXRestNotFoundException;
 
 	/**
 	 * Coerce the given value into a String for use in the restful response. This may move to the RestResponseWriter at

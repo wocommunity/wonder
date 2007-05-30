@@ -381,6 +381,15 @@ public abstract class ERXStandardRestEntityDelegate extends ERXAbstractRestEntit
 	public boolean canViewProperty(EOEntity entity, Object obj, String propertyName, ERXRestContext context) {
 		return _viewPropertyNames.containsObject(entity.name() + "." + propertyName);
 	}
+	
+	/**
+	 * Returns whether or not there are any view properties.
+	 * 
+	 * @return whether or not there are any view properties
+	 */
+	protected boolean hasViewProperties() {
+		return _viewPropertyNames.count() > 0;
+	}
 
 	/**
 	 * Default empty implementation.  Extend to do custom insertion processing for the object.

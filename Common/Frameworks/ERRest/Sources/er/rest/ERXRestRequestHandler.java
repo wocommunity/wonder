@@ -1,12 +1,6 @@
 package er.rest;
 
-import java.io.StringReader;
-
-import javax.xml.parsers.DocumentBuilderFactory;
-
 import org.apache.log4j.Logger;
-import org.w3c.dom.Document;
-import org.xml.sax.InputSource;
 
 import com.webobjects.appserver.WOApplication;
 import com.webobjects.appserver.WOContext;
@@ -21,33 +15,30 @@ import er.extensions.ERXEC;
 
 /**
  * <p>
- * ERXRestRequestHandler is the entry point for REST requests.  It
- * provides support for registering an authentication delegate, a 
- * processing delegate, and a per-entity response writer.
+ * ERXRestRequestHandler is the entry point for REST requests. It provides support for registering an authentication
+ * delegate, a processing delegate, and a per-entity response writer.
  * </p>
  * 
  * <p>
- * If you just want to play around with REST, you can use the "unsafe" 
- * delegates.  These delegates ARE NOT suitable for deployment (and in
- * fact will not function in deployment).  They are a major security 
- * hole, but exist just to provide wide-open access to developers who 
- * are interested in exploring the features of the ERRest framework.
+ * If you just want to play around with REST, you can use the "unsafe" delegates. These delegates ARE NOT suitable for
+ * deployment (and in fact will not function in deployment). They are a major security hole, but exist just to provide
+ * wide-open access to developers who are interested in exploring the features of the ERRest framework.
  * </p>
  * 
  * <h2>Unsafe Development Setup Example</h2>
  * <p>
- * To use the unsafe development example delegates, you can add
- * the following code to your application constructor:
+ * To use the unsafe development example delegates, you can add the following code to your application constructor:
  * 
  * <pre>
- * registerRequestHandler(ERXRestRequestHandler.createUnsafeRequestHandler(), "rest");
+ * registerRequestHandler(ERXRestRequestHandler.createUnsafeRequestHandler(), &quot;rest&quot;);
  * </pre>
+ * 
  * </p>
  * 
  * <h2>Real-world Setup Example</h2>
  * <p>
- * In a real scenario you will not want to use the unsafe variants of the various 
- * delegates.  Instead, you will want to provide custom implementations.
+ * In a real scenario you will not want to use the unsafe variants of the various delegates. Instead, you will want to
+ * provide custom implementations.
  * 
  * <pre>
  * ERXDefaultRestDelegate restDelegate = new ERXDefaultRestDelegate();
@@ -55,136 +46,168 @@ import er.extensions.ERXEC;
  * restDelegate.addDelegateForEntityNamed(new PersonRestEntityDelegate(), Person.ENTITY_NAME);
  * IERXRestAuthenticationDelegate authenticationDelegate = new MyCustomRestAuthenticationDelegate();
  * IERXRestResponseWriter responseWriter = new ERXXmlRestResponseWriter();
- * registerRequestHandler(new ERXRestRequestHandler(authenticationDelegate, restDelegate), "rest");
+ * registerRequestHandler(new ERXRestRequestHandler(authenticationDelegate, restDelegate), &quot;rest&quot;);
  * </pre>
  * 
  * <p>
- * Once you have the request handler registered, you can explore the rest interface using
- * an HTTP client like 'curl'.  Note that the examples below will not work on your own
- * application unless you provide entities with the same design. 
+ * Once you have the request handler registered, you can explore the rest interface using an HTTP client like 'curl'.
+ * Note that the examples below will not work on your own application unless you provide entities with the same design.
  * </p>
  * 
  * <h2>Get a list of all the Site objects</h2>
- * <pre>curl -s http://127.0.0.1/cgi-bin/WebObjects/YourApp.woa/rest/Site.xml?membershipTicket=someAuthToken</pre>
+ * 
+ * <pre>
+ * curl -s http://127.0.0.1/cgi-bin/WebObjects/YourApp.woa/rest/Site.xml?membershipTicket=someAuthToken
+ * </pre>
  * <pre>
  * HTTP Status Code: 200
- * &lt;Sites type = "Site"&gt;
- *   &lt;Site id = "100"&gt;
+ * &lt;Sites type = &quot;Site&quot;&gt;
+ *   &lt;Site id = &quot;100&quot;&gt;
  *     &lt;title&gt;Site #1&lt;/title&gt;
- *     &lt;bulletins type = "Bulletin"&gt;
- *       &lt;Bulletin id = "200"/&gt;
- *       &lt;Bulletin id = "201"/&gt;
- *       &lt;Bulletin id = "202"/&gt;
+ *     &lt;bulletins type = &quot;Bulletin&quot;&gt;
+ *       &lt;Bulletin id = &quot;200&quot;/&gt;
+ *       &lt;Bulletin id = &quot;201&quot;/&gt;
+ *       &lt;Bulletin id = &quot;202&quot;/&gt;
  *     &lt;/bulletins&gt;
  *   &lt;/Site&gt;
- *   &lt;Site id = "101"&gt;
+ *   &lt;Site id = &quot;101&quot;&gt;
  *     &lt;title&gt;Site #2&lt;/title&gt;
- *     &lt;bulletins type = "Bulletin"&gt;
- *       &lt;Bulletin id = "215"/&gt;
- *       &lt;Bulletin id = "230"/&gt;
- *       &lt;Bulletin id = "243"/&gt;
+ *     &lt;bulletins type = &quot;Bulletin&quot;&gt;
+ *       &lt;Bulletin id = &quot;215&quot;/&gt;
+ *       &lt;Bulletin id = &quot;230&quot;/&gt;
+ *       &lt;Bulletin id = &quot;243&quot;/&gt;
  *     &lt;/bulletins&gt;
  *   &lt;/Site&gt;
  * &lt;/Sites&gt;  
  * </pre>
- *   
+ * 
  * <h2>Get a single site from the Site list</h2>
- * <pre>curl -s http://127.0.0.1/cgi-bin/WebObjects/YourApp.woa/rest/Site/100.xml?membershipTicket=someAuthToken</pre>
+ * 
+ * <pre>
+ * curl -s http://127.0.0.1/cgi-bin/WebObjects/YourApp.woa/rest/Site/100.xml?membershipTicket=someAuthToken
+ * </pre>
  * <pre>
  * HTTP Status Code: 200
- * &lt;Site id = "100"&gt;
+ * &lt;Site id = &quot;100&quot;&gt;
  *   &lt;title&gt;Site #1&lt;/title&gt;
- *   &lt;bulletins type = "Bulletin"&gt;
- *     &lt;Bulletin id = "200"/&gt;
- *     &lt;Bulletin id = "201"/&gt;
- *     &lt;Bulletin id = "202"/&gt;
+ *   &lt;bulletins type = &quot;Bulletin&quot;&gt;
+ *     &lt;Bulletin id = &quot;200&quot;/&gt;
+ *     &lt;Bulletin id = &quot;201&quot;/&gt;
+ *     &lt;Bulletin id = &quot;202&quot;/&gt;
  *   &lt;/bulletins&gt;
  * &lt;/Site&gt;
  * </pre>
- *   
+ * 
  * <h2>Get a single site from the Site list (that doesn't exist)</h2>
- * <pre>curl -s http://127.0.0.1/cgi-bin/WebObjects/YourApp.woa/rest/Site/112.xml?membershipTicket=someAuthToken</pre>
+ * 
+ * <pre>
+ * curl -s http://127.0.0.1/cgi-bin/WebObjects/YourApp.woa/rest/Site/112.xml?membershipTicket=someAuthToken
+ * </pre>
  * <pre>
  * HTTP Status Code: 404
  * There is no Site with the id '112'.
  * </pre>
- *   
+ * 
  * <h2>Get a single site from the Site list (that we can't see)</h2>
- * <pre>curl -s http://127.0.0.1/cgi-bin/WebObjects/YourApp.woa/rest/Site/114.xml?membershipTicket=someAuthToken</pre>
+ * 
+ * <pre>
+ * curl -s http://127.0.0.1/cgi-bin/WebObjects/YourApp.woa/rest/Site/114.xml?membershipTicket=someAuthToken
+ * </pre>
  * <pre>
  * HTTP Status Code: 403
  * You are not allowed to view the Site with the id '112'.
  * </pre>
- *   
+ * 
  * <h2>Get a list of the bulletins for that Site</h2>
- * <pre>curl -s http://127.0.0.1/cgi-bin/WebObjects/YourApp.woa/rest/Site/100/bulletins.xml?membershipTicket=someAuthToken</pre>
+ * 
+ * <pre>
+ * curl -s http://127.0.0.1/cgi-bin/WebObjects/YourApp.woa/rest/Site/100/bulletins.xml?membershipTicket=someAuthToken
+ * </pre>
  * <pre>
  * HTTP Status Code: 200
- * &lt;Bulletins type = "Bulletin"&gt;
- *   &lt;Bulletin id = "200"&gt;
- *     &lt;author type = "Person" id = "500"/&gt;
+ * &lt;Bulletins type = &quot;Bulletin&quot;&gt;
+ *   &lt;Bulletin id = &quot;200&quot;&gt;
+ *     &lt;author type = &quot;Person&quot; id = &quot;500&quot;/&gt;
  *     &lt;title&gt;Bulletin 1&lt;/title&gt;
  *     &lt;contents&gt;Bulletin 1 Contents&lt;/title&gt;
  *   &lt;/Bulletin&gt;
- *   &lt;Bulletin id = "201"&gt;
- *     &lt;author type = "Person" id = "600"/&gt;
+ *   &lt;Bulletin id = &quot;201&quot;&gt;
+ *     &lt;author type = &quot;Person&quot; id = &quot;600&quot;/&gt;
  *     &lt;title&gt;Bulletin 2&lt;/title&gt;
  *     &lt;contents&gt;Bulletin 2 Contents&lt;/title&gt;
  *   &lt;/Bulletin&gt;
- *   &lt;Bulletin id = "202"&gt;
- *     &lt;author type = "Person" id = "700"/&gt;
+ *   &lt;Bulletin id = &quot;202&quot;&gt;
+ *     &lt;author type = &quot;Person&quot; id = &quot;700&quot;/&gt;
  *     &lt;title&gt;Bulletin 3&lt;/title&gt;
  *     &lt;contents&gt;Bulletin 3 Contents&lt;/title&gt;
  *   &lt;/Bulletin&gt;
  * &lt;/Bulletins&gt;
  * </pre>
- *   
+ * 
  * <h2>Get a single bulletin from the Bulletin list</h2>
- * <pre>curl -s http://127.0.0.1/cgi-bin/WebObjects/YourApp.woa/rest/Site/100/bulletins/201.xml?membershipTicket=someAuthToken</pre>
+ * 
+ * <pre>
+ * curl -s http://127.0.0.1/cgi-bin/WebObjects/YourApp.woa/rest/Site/100/bulletins/201.xml?membershipTicket=someAuthToken
+ * </pre>
  * <pre>
  * HTTP Status Code: 200
- * &lt;Bulletin id = "201"&gt;
- *   &lt;author type = "Person" id = "600"/&gt;
+ * &lt;Bulletin id = &quot;201&quot;&gt;
+ *   &lt;author type = &quot;Person&quot; id = &quot;600&quot;/&gt;
  *   &lt;title&gt;Bulletin 2&lt;/title&gt;
  *   &lt;contents&gt;Bulletin 2 Contents&lt;/title&gt;
  * &lt;/Bulletin&gt;
  * </pre>
- *   
+ * 
  * <h2>Update the title of a bulletin</h2>
- * <pre>curl -x PUT -d '<Bulletin><title>Some random Bulletin!</title></Bulletin>' -s http://127.0.0.1/cgi-bin/WebObjects/YourApp.woa/rest/Site/100/bulletins/201.xml?membershipTicket=someAuthToken</pre>
+ * 
+ * <pre>
+ * curl -x PUT -d '&lt;Bulletin&gt;&lt;title&gt;Some random Bulletin!&lt;/title&gt;&lt;/Bulletin&gt;' -s http://127.0.0.1/cgi-bin/WebObjects/YourApp.woa/rest/Site/100/bulletins/201.xml?membershipTicket=someAuthToken
+ * </pre>
  * <pre>
  * HTTP Status Code: 200
  * </pre>
- *   
+ * 
  * <h2>Try to break it -- Update a site with a bulletin document</h2>
- * <pre>curl -X PUT -d '<Bulletin><title>Some random Bulletin Again!</title></Bulletin>' -s http://127.0.0.1/cgi-bin/WebObjects/YourApp.woa/rest/Site/100.xml?membershipTicket=someAuthToken</pre>
+ * 
+ * <pre>
+ * curl -X PUT -d '&lt;Bulletin&gt;&lt;title&gt;Some random Bulletin Again!&lt;/title&gt;&lt;/Bulletin&gt;' -s http://127.0.0.1/cgi-bin/WebObjects/YourApp.woa/rest/Site/100.xml?membershipTicket=someAuthToken
+ * </pre>
  * <pre>
  * HTTP Status Code: 403
  * You tried to put a Bulletin into a Site.
  * </pre>
- *   
+ * 
  * <h2>Update the title of a site</h2>
- * <pre>curl -X PUT -d '<Site><title>My Personal Site!</title></Site>' -s http://127.0.0.1/cgi-bin/WebObjects/YourApp.woa/rest/Site/100.xml?membershipTicket=someAuthToken</pre>
+ * 
+ * <pre>
+ * curl -X PUT -d '&lt;Site&gt;&lt;title&gt;My Personal Site!&lt;/title&gt;&lt;/Site&gt;' -s http://127.0.0.1/cgi-bin/WebObjects/YourApp.woa/rest/Site/100.xml?membershipTicket=someAuthToken
+ * </pre>
  * <pre>
  * HTTP Status Code: 200
  * </pre>
- *   
+ * 
  * <h2>Post a bulletin</h2>
- * <pre>curl -X POST -d '<Bulletin><title>New Bulletin By Me</title><contents>This is the contents of my bulletin</contents></Bulletin>' -s http://127.0.0.1/cgi-bin/WebObjects/YourApp.woa/rest/Site/100/bulletins.xml?membershipTicket=someAuthToken</pre>
+ * 
+ * <pre>
+ * curl -X POST -d '&lt;Bulletin&gt;&lt;title&gt;New Bulletin By Me&lt;/title&gt;&lt;contents&gt;This is the contents of my bulletin&lt;/contents&gt;&lt;/Bulletin&gt;' -s http://127.0.0.1/cgi-bin/WebObjects/YourApp.woa/rest/Site/100/bulletins.xml?membershipTicket=someAuthToken
+ * </pre>
  * <pre>
  * HTTP Status Code: 201
- * &lt;Bulletin id = "7324"&gt;
+ * &lt;Bulletin id = &quot;7324&quot;&gt;
  *   &lt;title&gt;New Bulletin By Me&lt;/title&gt;
  *   &lt;contents&gt;This is the contents of my bulletin&lt;/contents&gt;
  * &lt;/Bulletin&gt;
  * </pre>
- *   
+ * 
  * <h2>Delete a bulletin</h2>
- * <pre>curl -X DELETE -s http://127.0.0.1/cgi-bin/WebObjects/YourApp.woa/rest/Site/100/bulletins/7324.xml?membershipTicket=someAuthToken</pre>
+ * 
+ * <pre>
+ * curl -X DELETE -s http://127.0.0.1/cgi-bin/WebObjects/YourApp.woa/rest/Site/100/bulletins/7324.xml?membershipTicket=someAuthToken
+ * </pre>
  * <pre>
  * HTTP Status Code: 200
  * </pre>
- *  
+ * 
  * @author mschrag
  */
 public class ERXRestRequestHandler extends WORequestHandler {
@@ -193,59 +216,74 @@ public class ERXRestRequestHandler extends WORequestHandler {
 	private IERXRestAuthenticationDelegate _authenticationDelegate;
 	private IERXRestDelegate _delegate;
 	private IERXRestResponseWriter _defaultResponseWriter;
-	private NSMutableDictionary _entityResponseWriter;
+	private IERXRestRequestParser _defaultRequestParser;
+	private NSMutableDictionary _responseWriters;
+	private NSMutableDictionary _requestParsers;
 
 	/**
 	 * Construct an ERXRestRequestHandler with a default response writer of ERXXmlRestResponseWriter.
 	 * 
-	 * @param authenticationDelegate the authentication delegate
-	 * @param delegate the rest delegate
+	 * @param authenticationDelegate
+	 *            the authentication delegate
+	 * @param delegate
+	 *            the rest delegate
 	 */
 	public ERXRestRequestHandler(IERXRestAuthenticationDelegate authenticationDelegate, IERXRestDelegate delegate) {
-		this(authenticationDelegate, delegate, new ERXXmlRestResponseWriter());
+		this(authenticationDelegate, delegate, new ERXXmlRestResponseWriter(), new ERXXmlRestRequestParser());
 	}
 
 	/**
 	 * Construct an ERXRestRequestHandler.
 	 * 
-	 * @param authenticationDelegate the authentication delegate
-	 * @param delegate the rest delegate
-	 * @param defaultResponseWriter the default response writer to use
+	 * @param authenticationDelegate
+	 *            the authentication delegate
+	 * @param delegate
+	 *            the rest delegate
+	 * @param defaultResponseWriter
+	 *            the default response writer to use
+	 * @param defaultRequestParser
+	 *            the default request parser to use
 	 */
-	public ERXRestRequestHandler(IERXRestAuthenticationDelegate authenticationDelegate, IERXRestDelegate delegate, IERXRestResponseWriter defaultResponseWriter) {
+	public ERXRestRequestHandler(IERXRestAuthenticationDelegate authenticationDelegate, IERXRestDelegate delegate, IERXRestResponseWriter defaultResponseWriter, IERXRestRequestParser defaultRequestParser) {
 		_authenticationDelegate = authenticationDelegate;
 		_delegate = delegate;
-		_entityResponseWriter = new NSMutableDictionary();
+		_responseWriters = new NSMutableDictionary();
+		_requestParsers = new NSMutableDictionary();
 		_defaultResponseWriter = defaultResponseWriter;
+		_defaultRequestParser = defaultRequestParser;
 	}
 
 	/**
-	 * Sets the response writer for the given entity.
+	 * Sets the response writer for the request type.
 	 * 
-	 * @param responseWriter the response writer to use
-	 * @param entityName the entity name to associate it with
+	 * @param responseWriter
+	 *            the response writer to use
+	 * @param type
+	 *            the type of request ("xml", "json", etc)
 	 */
-	public void setResponseWriterForEntityNamed(IERXRestResponseWriter responseWriter, String entityName) {
-		_entityResponseWriter.setObjectForKey(responseWriter, entityName);
+	public void setResponseWriterForType(IERXRestResponseWriter responseWriter, String type) {
+		_responseWriters.setObjectForKey(responseWriter, type);
 	}
 
 	/**
 	 * Removes the response writer for the given entity.
 	 * 
-	 * @param entityName the entity name to disassociate
+	 * @param type
+	 *            the type to disassociate
 	 */
-	public void removeResponseWriterForEntityNamed(String entityName) {
-		_entityResponseWriter.removeObjectForKey(entityName);
+	public void removeResponseWriterForType(String type) {
+		_responseWriters.removeObjectForKey(type);
 	}
 
 	/**
 	 * Returns the response writer for the given entity name.
 	 * 
-	 * @param entityName the entity name to lookup
+	 * @param type
+	 *            the type of request ("xml", "json", etc)
 	 * @return the response writer to use
 	 */
-	protected IERXRestResponseWriter responseWriterForEntityNamed(String entityName) {
-		IERXRestResponseWriter responseWriter = (IERXRestResponseWriter) _entityResponseWriter.objectForKey(entityName);
+	protected IERXRestResponseWriter responseWriterForType(String type) {
+		IERXRestResponseWriter responseWriter = (IERXRestResponseWriter) _responseWriters.objectForKey(type);
 		if (responseWriter == null) {
 			responseWriter = _defaultResponseWriter;
 		}
@@ -253,9 +291,45 @@ public class ERXRestRequestHandler extends WORequestHandler {
 	}
 
 	/**
-	 * Returns a new editing context.  If you want to override how 
-	 * an editing context is created, extend ERXRestRequestHandler
-	 * and override this method.
+	 * Sets the request parser for the request type.
+	 * 
+	 * @param requestParser
+	 *            the request parser to use
+	 * @param type
+	 *            the type of request ("xml", "json", etc)
+	 */
+	public void setRequestParserForType(IERXRestRequestParser requestParser, String type) {
+		_requestParsers.setObjectForKey(requestParser, type);
+	}
+
+	/**
+	 * Removes the request parser for the given entity.
+	 * 
+	 * @param type
+	 *            the type to disassociate
+	 */
+	public void removeRequestParserForType(String type) {
+		_requestParsers.removeObjectForKey(type);
+	}
+
+	/**
+	 * Returns the request parser for the given entity name.
+	 * 
+	 * @param type
+	 *            the type of request ("xml", "json", etc)
+	 * @return the request parser to use
+	 */
+	protected IERXRestRequestParser requestParserForType(String type) {
+		IERXRestRequestParser requestParser = (IERXRestRequestParser) _requestParsers.objectForKey(type);
+		if (requestParser == null) {
+			requestParser = _defaultRequestParser;
+		}
+		return requestParser;
+	}
+
+	/**
+	 * Returns a new editing context. If you want to override how an editing context is created, extend
+	 * ERXRestRequestHandler and override this method.
 	 * 
 	 * @return a new editing context
 	 */
@@ -264,14 +338,12 @@ public class ERXRestRequestHandler extends WORequestHandler {
 	}
 
 	/**
-	 * Handle the incoming REST request.  REST requests can have
-	 * session ids associated with them as cookies or wosid 
-	 * query string parameters.  Right now rendering type is not
-	 * supported, but ultimately the file extension of the request
-	 * will determine which renderer is used to render the
-	 * response.
+	 * Handle the incoming REST request. REST requests can have session ids associated with them as cookies or wosid
+	 * query string parameters. Right now rendering type is not supported, but ultimately the file extension of the
+	 * request will determine which renderer is used to render the response.
 	 * 
-	 * @param request the request
+	 * @param request
+	 *            the request
 	 */
 	public WOResponse handleRequest(WORequest request) {
 		WOApplication application = WOApplication.application();
@@ -287,9 +359,9 @@ public class ERXRestRequestHandler extends WORequestHandler {
 		}
 
 		String wosid = null;
-		if (wosid == null) {
-			wosid = request.cookieValueForKey("wosid");
-		}
+		// if (wosid == null) {
+		wosid = request.cookieValueForKey("wosid");
+		// }
 		woContext._setRequestSessionID(wosid);
 
 		if (woContext._requestSessionID() != null) {
@@ -305,37 +377,27 @@ public class ERXRestRequestHandler extends WORequestHandler {
 					throw new ERXRestSecurityException("Authenticated failed.");
 				}
 
-				ERXRestKey requestKey = ERXRestKey.parse(restContext, path);
+				IERXRestRequestParser requestParser = requestParserForType(type);
+				ERXRestRequest restRequest = requestParser.parseRestRequest(restContext, request, path);
 				String method = request.method();
 				if ("GET".equalsIgnoreCase(method)) {
-					IERXRestResponseWriter restResponseWriter = responseWriterForEntityNamed(requestKey.entity().name());
-					restResponseWriter.appendToResponse(restContext, response, requestKey);
+					IERXRestResponseWriter restResponseWriter = responseWriterForType(type);
+					restResponseWriter.appendToResponse(restContext, response, restRequest.key());
 					editingContext.saveChanges();
 				}
 				else if ("DELETE".equalsIgnoreCase(method)) {
-					if (requestKey.isKeyAll()) {
-						throw new ERXRestException("You are not allowed to delete all the objects for any entity.");
-					}
-					_delegate.delete(requestKey.entity(), requestKey.value(), restContext);
+					_delegate.delete(restRequest, restContext);
 					editingContext.saveChanges();
 				}
 				else if ("PUT".equalsIgnoreCase(method)) {
-					String contentStr = request.contentString();
-					Document updateDocument = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(new InputSource(new StringReader(contentStr)));
-					updateDocument.normalize();
-
-					_delegate.update(requestKey, updateDocument, restContext);
+					_delegate.update(restRequest, restContext);
 					editingContext.saveChanges();
 				}
 				else if ("POST".equalsIgnoreCase(method)) {
-					String contentStr = request.contentString();
-					Document insertDocument = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(new InputSource(new StringReader(contentStr)));
-					insertDocument.normalize();
-
-					ERXRestKey responseKey = _delegate.insert(requestKey, insertDocument, restContext);
+					ERXRestKey responseKey = _delegate.insert(restRequest, restContext);
 					editingContext.saveChanges();
 
-					IERXRestResponseWriter restResponseWriter = responseWriterForEntityNamed(responseKey.entity().name());
+					IERXRestResponseWriter restResponseWriter = responseWriterForType(type);
 					restResponseWriter.appendToResponse(restContext, response, responseKey);
 					response.setStatus(201);
 				}
@@ -365,10 +427,10 @@ public class ERXRestRequestHandler extends WORequestHandler {
 
 		return response;
 	}
-	
+
 	/**
-	 * Creates an unsafe request handler for you to try out in development mode.  THIS SHOULD NOT
-	 * BE DEPLOYED (and in fact it will throw an exception if development mode is false).
+	 * Creates an unsafe request handler for you to try out in development mode. THIS SHOULD NOT BE DEPLOYED (and in
+	 * fact it will throw an exception if development mode is false).
 	 * 
 	 * @return an unsafe request handler
 	 */
@@ -376,10 +438,11 @@ public class ERXRestRequestHandler extends WORequestHandler {
 		if (!ERXApplication.isDevelopmentModeSafe()) {
 			throw new RuntimeException("You attempted to create an unsafe request handler when you were not in development mode!");
 		}
-        IERXRestEntityDelegate defaultEntityDelegate = new ERXUnsafeRestEntityDelegate();
-        ERXDefaultRestDelegate restDelegate = new ERXDefaultRestDelegate(defaultEntityDelegate);
-        IERXRestAuthenticationDelegate authenticationDelegate = new ERXUnsafeRestAuthenticationDelegate();
-        IERXRestResponseWriter responseWriter = new ERXXmlRestResponseWriter(true);
-        return new ERXRestRequestHandler(authenticationDelegate, restDelegate, responseWriter);
+		IERXRestEntityDelegate defaultEntityDelegate = new ERXUnsafeRestEntityDelegate();
+		ERXDefaultRestDelegate restDelegate = new ERXDefaultRestDelegate(defaultEntityDelegate);
+		IERXRestAuthenticationDelegate authenticationDelegate = new ERXUnsafeRestAuthenticationDelegate();
+		IERXRestResponseWriter responseWriter = new ERXXmlRestResponseWriter(true);
+		IERXRestRequestParser requestParser = new ERXXmlRestRequestParser();
+		return new ERXRestRequestHandler(authenticationDelegate, restDelegate, responseWriter, requestParser);
 	}
 }
