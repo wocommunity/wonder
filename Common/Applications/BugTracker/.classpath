@@ -15,5 +15,7 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/Ajax"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/DRGrouping"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/WRReporting"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/ExcelGenerator"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/ERPlot"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

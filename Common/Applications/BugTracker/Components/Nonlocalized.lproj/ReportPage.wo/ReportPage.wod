@@ -7,4 +7,5 @@ QuickReport: WRQuickReport {
 	objects = objects;
 	model = model;
 	showTopCriteriaLabel = true;
+	reportComponentName = reportComponentName;
 }
