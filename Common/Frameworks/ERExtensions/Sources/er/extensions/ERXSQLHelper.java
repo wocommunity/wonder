@@ -736,6 +736,16 @@ public class ERXSQLHelper {
 		return ERXSQLHelper.newSQLHelper(databaseProductName);
 	}
 
+	public static ERXSQLHelper newSQLHelper(EOModel model) {
+		ERXSQLHelper helper = null;
+		EOAdaptor adaptor = EOAdaptor.adaptorWithModel(model);
+		if (adaptor instanceof JDBCAdaptor) {
+			JDBCAdaptor jdbc = (JDBCAdaptor) adaptor;
+			helper = ERXSQLHelper.newSQLHelper(jdbc);
+		}
+		return helper;
+	}
+
 	public static ERXSQLHelper newSQLHelper(String databaseProductName) {
 		synchronized (_sqlHelperMap) {
 			ERXSQLHelper sqlHelper = (ERXSQLHelper) _sqlHelperMap.get(databaseProductName);
