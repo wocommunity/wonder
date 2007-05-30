@@ -1,6 +1,6 @@
 BackLink: ERXSingleButton {
 	action = backAction;
-	value = "Return";
+	value = d2wContext.returnButtonLabel;
 }
 
 PrinterButton: WOSwitchComponent {

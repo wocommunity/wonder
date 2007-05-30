@@ -30,12 +30,12 @@ Help: ERDDebuggingHelp {
 
 OKButton: ERXSingleButton {
 	action = nextPageAction;
-	value = "OK";
+	value = d2wContext.okButtonLabel;
 }
 
 OKButton2: ERXSingleButton {
 	action = cancelAction;
-	value = "Cancel";
+	value = d2wContext.cancelButtonLabel;
 }
 
 Repetition1: WORepetition {

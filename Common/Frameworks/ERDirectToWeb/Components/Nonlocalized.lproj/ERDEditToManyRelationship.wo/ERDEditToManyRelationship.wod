@@ -1,6 +1,6 @@
 AddButton: WOSubmitButton {
 	action = addObjectsAction;
-	value = session.localizer.ERDEditToManyRelationship.add;
+	value = ^addButtonLabel;
 }
 
 HasObjects: WOConditional {
@@ -9,7 +9,7 @@ HasObjects: WOConditional {
 
 DeleteButton: WOSubmitButton {
 	action = deleteObjectsAction;
-	value = session.localizer.ERDEditToManyRelationship.delete;
+	value = ^deleteSelectedButtonLabel;
 }
 
 Edit: ERXD2WInspect {
@@ -47,7 +47,7 @@ List: WORepetition {
 
 RemoveButton: WOSubmitButton {
 	action = removeObjectsAction;
-	value = session.localizer.ERDEditToManyRelationship.remove;
+	value = ^removeButtonLabel;
 }
 
 TaskIsEdit: WOConditional {

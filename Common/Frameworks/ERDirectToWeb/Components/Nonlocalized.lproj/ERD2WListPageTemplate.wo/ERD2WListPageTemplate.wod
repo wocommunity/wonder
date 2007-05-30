@@ -1,6 +1,3 @@
-BackLink: WOHyperlink {
-	action = backAction;
-}
 
 PrinterButton: WOSwitchComponent {
 	WOComponentName = d2wContext.printerButtonComponentName;
@@ -69,9 +66,9 @@ PageWrapper: WOSwitchComponent {
 	_unroll = true;
 }
 
-ReturnButton: WOSubmitButton {
+ReturnButton: ERXSingleButton {
 	alt = "Returns to the previous page";
-	value = "Return";
+	value = d2wContext.returnButtonLabel;
 	action = backAction;
 }
 
