@@ -1,0 +1,10 @@
+Wrapper : PageWrapper {
+}
+
+
+QuickReport: WRQuickReport {
+	reportDictionary = selectedReport;
+	objects = objects;
+	model = model;
+	showTopCriteriaLabel = true;
+}
