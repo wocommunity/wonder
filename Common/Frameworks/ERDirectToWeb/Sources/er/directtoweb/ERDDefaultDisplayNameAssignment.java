@@ -80,12 +80,15 @@ public class ERDDefaultDisplayNameAssignment extends ERDAssignment implements ER
 
     /** Helper to get pull the value, pretty-print it and run it through the localizer. */
     protected Object localizedValueForDisplayNameOfKeyPath(String keyPath, D2WContext c) {
-        String result = ERXStringUtilities.displayNameForKey((String)c.valueForKeyPath(keyPath));
-        if(result != null) {
-            result = ERXLocalizer.currentLocalizer().localizedStringForKeyWithDefault(result);
-            return result;
+    	String realName = (String)c.valueForKeyPath(keyPath);
+    	log.info(keyPath + "->" + realName);
+    	String localizerKey = ERXStringUtilities.capitalize(keyPath) +"."+ realName;
+        String result = ERXLocalizer.currentLocalizer().localizedStringForKey(localizerKey);
+        if(result == null) {
+            result = ERXStringUtilities.displayNameForKey(realName);
+            ERXLocalizer.currentLocalizer().takeValueForKey(result, localizerKey);
         }
-        return null;
+        return result;
     }
 
     /** @return a beautified, localized display name for the current <code>propertyKey</code> */
@@ -96,19 +99,24 @@ public class ERDDefaultDisplayNameAssignment extends ERDAssignment implements ER
     /** @return a beautified, localized display name for the key path of the current <code>propertyKey</code> */
     public Object displayNameForKeyPath(D2WContext c) {
         String keyPath = (String)c.valueForKey("propertyKey");
+        String result = null;
         if(keyPath != null) {
-            String result = "";
-            for(Enumeration parts = NSArray.componentsSeparatedByString(keyPath, ".").objectEnumerator(); parts.hasMoreElements(); ) {
-                String key = (String)parts.nextElement();
-                String displayName = ERXStringUtilities.displayNameForKey(key);
-                if(displayName != null)
-                    result += displayName;
-                if(parts.hasMoreElements())
-                    result += " ";
-            }
-            return ERXLocalizer.currentLocalizer().localizedStringForKeyWithDefault(result);
+        	result = ERXLocalizer.currentLocalizer().localizedStringForKey("PropertyKey." + keyPath);
+        	if(result == null) {
+        		result = "";
+        		for(Enumeration parts = NSArray.componentsSeparatedByString(keyPath, ".").objectEnumerator(); parts.hasMoreElements(); ) {
+        			String key = (String)parts.nextElement();
+        			String displayName = ERXStringUtilities.displayNameForKey(key);
+        			if(displayName != null)
+        				result += displayName;
+        			if(parts.hasMoreElements())
+        				result += " ";
+        		}
+        		result = ERXLocalizer.currentLocalizer().localizedStringForKeyWithDefault(result);
+        		ERXLocalizer.currentLocalizer().takeValueForKey(result, "PropertyKey." + keyPath);
+        	}
         }
-        return null;
+        return result;
     }
 
     /** @return a beautified, localized display name for the current <code>entity.name</code> */
@@ -157,11 +165,24 @@ public class ERDDefaultDisplayNameAssignment extends ERDAssignment implements ER
             log.debug(pageConfiguration + ": task=" + taskName +  ", entity=" + entityName);
             pageConfiguration = taskName.substring(0,1).toUpperCase() + taskName.substring(1) + (entityName != null ? entityName : "");
         }
-        String value = pageConfiguration;
-        if(value != null && value.length() > 0) {
-            value = ERXStringUtilities.displayNameForKey(pageConfiguration);
+        String value = (String) ERXLocalizer.currentLocalizer().localizedValueForKeyWithDefault("Pages." + pageConfiguration);
+        if(value != null && value.startsWith("Pages")) {
+        	value = null;
         }
-        return localizedValueForKeyWithDefaultInContext(value, c);
+        if(false) {
+           	String task = c.task();
+           	String subTask = (String) c.valueForKey("subTask");
+           	if("wizard".equals(subTask)) {
+           		task = task + "." + subTask;
+           	}
+           	value = ERXLocalizer.currentLocalizer().localizedTemplateStringForKeyWithObject("ERD2W.tasks." + task, c);
+           	return value;
+        } else {
+           	if(value == null || value.length() == 0) {
+        		value = ERXStringUtilities.displayNameForKey(pageConfiguration);
+        	}
+        }
+        return value;
     }
 
     /** @return a beautified, localized display name for the current <code>editConfigurationName</code> */
