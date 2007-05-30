@@ -1,5 +1,5 @@
 {
-	BugsPerComponent = { 
+	ReportBugsPerComponent = { 
         model = {
             AttributeDef = (
                 {keyPath = "~valueForKeyPath(\"@count\").intValue()"; "total" = "true"; format="#,##0.#;-;#,##0.#"; },
@@ -56,7 +56,7 @@
             title = "Bugs Per Component";
         };
     };
-	BugsPerUser = {
+	ReportBugsPerUser = {
          model = {
             AttributeDef = (
                 {keyPath = "~valueForKeyPath(\"@count\").intValue()"; "total" = "true"; format="#,##0.#;-;#,##0.#"; },

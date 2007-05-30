@@ -26,12 +26,10 @@ public class ReportPage extends ERD2WPage {
     public boolean enableExcel = false;
     public boolean enableChart = false;
     public NSDictionary _selectedReport;
- 
+    public String currentName;
+    
     public ReportPage(WOContext context) {
         super(context);
-        setLocalContext(new D2WContext(session()));
-        d2wContext().setTask("report");
-        d2wContext().setEntity( EOUtilities.entityNamed(session().defaultEditingContext(), "Bug"));
     }
     
     public String reportComponentName() {
@@ -57,12 +55,21 @@ public class ReportPage extends ERD2WPage {
     
     public NSDictionary selectedReport() {
         if(_selectedReport == null) {
-            _selectedReport = (NSDictionary)reports().objectForKey("BugsPerUser");
+            setSelectedReportName("ReportBugsPerUser");
         }
         return _selectedReport;
     }
+    
+    public void setSelectedReportName(String reportName) {
+        _selectedReport = (NSDictionary)reports().objectForKey(reportName);
+        postModelChangedNotification(model);
+    }
 
-    private static NSDictionary reports() {
+    public void selectReport() {
+        setSelectedReportName(currentName);
+    }
+    
+    public NSDictionary reports() {
         return (NSDictionary)ERXFileUtilities.readPropertyListFromFileInFramework("Reports.plist", null);
     }
 
@@ -90,7 +97,7 @@ public class ReportPage extends ERD2WPage {
     
     public NSArray objects() {
         if(objects == null) {
-            objects = EOUtilities.objectsForEntityNamed(session().defaultEditingContext(), "Bug");
+            objects = EOUtilities.objectsForEntityNamed(session().defaultEditingContext(), entityName());
         }
         return objects;
     }
