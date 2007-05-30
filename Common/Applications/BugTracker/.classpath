@@ -13,5 +13,7 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/PostgresqlPlugIn"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/ERDirectToWeb"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/Ajax"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/DRGrouping"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/WRReporting"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
