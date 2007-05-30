@@ -32,6 +32,23 @@ body, li, td, p, br, form, input, text, select, option, textarea, th, ol, ul, ta
 	font-size: 11px;
 }
 
+.LayoutTable td {
+	vertical-align: top;
+}
+
+.LayoutTable td .PropertyNameCell {
+	vertical-align: bottom;
+	height:1.5em;
+	border-bottom: 1px dotted black;
+}
+
+
+
+.LayoutTable img {
+	vertical-align: middle;
+}
+
+
 a {
 	text-decoration: none;
 	font-weight: bold;
@@ -284,16 +301,21 @@ td.Banner {
     margin-top: 5px;
 }
 
-.PropertyNameCell {
+.InspectRepetitionTable .PropertyNameCell {
     background-color: #E7E7E7;
-    padding: 0px 10px 0px 5px;
+    padding: 0px 2px 0px 5px;
     width:180px ! important;
    	height: 2em;
 }
 
+.InspectRepetitionTable .PropertyCell {
+ 	padding: 0px 10px 0px 5px;
+}
+
+
 .PropertyNameCell .required {
     color: white;
-    vertical-align: top;
+    vertical-align: middle;
 }
 
 .PropertyCell input {
