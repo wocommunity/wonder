@@ -59,6 +59,12 @@ public class ERXXmlRestRequestParser implements IERXRestRequestParser {
 
 		String contentStr = request.contentString();
 		if (contentStr != null && contentStr.length() > 0) {
+			// MS: Support direct updating of primitive type keys -- so if you don't want to
+			// wrap your request in XML, this will allow it
+			if (!contentStr.trim().startsWith("<")) {
+				contentStr = "<FakeWrapper>" + contentStr.trim() + "</FakeWrapper>";
+			}
+			
 			Document document;
 			try {
 				document = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(new InputSource(new StringReader(contentStr)));
