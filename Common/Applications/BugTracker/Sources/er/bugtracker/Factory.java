@@ -67,8 +67,10 @@ public class Factory extends ERD2WFactory implements NSKeyValueCoding {
     		D2WPage page = (D2WPage) nextPage;
     		page.setNextPage(currentPage());
     		String newState = (String) page.d2wContext().valueForKey("navigationState");
-    		if(oldState.startsWith(newState)) {
-    			page.d2wContext().takeValueForKey(oldState, "navigationState");
+    		if(oldState != null) {
+    			if(newState == null || oldState.startsWith(newState)) {
+    				page.d2wContext().takeValueForKey(oldState, "navigationState");
+    			}
     		}
     		log.debug("Create page: " + page.d2wContext().dynamicPage() + " old: " + oldState + " news: " + newState);
 
