@@ -7,10 +7,12 @@
 
 package er.bugtracker;
 
+import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WOResponse;
 import com.webobjects.directtoweb.D2W;
+import com.webobjects.directtoweb.D2WPage;
 import com.webobjects.directtoweb.EditPageInterface;
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.eocontrol.EOEnterpriseObject;
@@ -19,6 +21,8 @@ import com.webobjects.foundation.NSKeyValueCoding;
 import com.webobjects.foundation.NSMutableDictionary;
 
 import er.corebusinesslogic.ERCoreBusinessLogic;
+import er.extensions.ERXNavigation;
+import er.extensions.ERXNavigationManager;
 import er.extensions.ERXSession;
 import er.extensions.ERXStringUtilities;
 
@@ -26,13 +30,25 @@ public class Session extends ERXSession {
 
     public class Handler implements NSKeyValueCoding, NSKeyValueCoding.ErrorHandling {
 
+        private String _key;
+        
+        public Handler(String key) {
+            _key = key;
+            handlers.setObjectForKey(this, key);
+        }
+
         public void takeValueForKey(Object value, String key) {
             throw new UnsupportedOperationException("Can't takeValueForKey");
         }
 
         public Object valueForKey(String key) {
-            key = ERXStringUtilities.uncapitalize(key);
-            return NSKeyValueCoding.DefaultImplementation.valueForKey(this, key);
+            String keyPath = ERXStringUtilities.uncapitalize(key);
+            WOActionResults result = (WOActionResults) NSKeyValueCoding.DefaultImplementation.valueForKey(this, keyPath);
+            if (result instanceof D2WPage) {
+                D2WPage page = (D2WPage) result;
+                page.d2wContext().takeValueForKey(ERXStringUtilities.capitalize(_key) + "." + key, "navigationState");
+            }
+            return result;
         }
 
         public Object handleQueryWithUnboundKey(String key) {
@@ -50,29 +66,57 @@ public class Session extends ERXSession {
     }
 
     public class ComponentHandler extends Handler {
+
+        public ComponentHandler() {
+            super("components");
+        }
  
     }
 
     public class PeopleHandler extends Handler {
 
+        public PeopleHandler() {
+            super("peoples");
+        }
+
     }
 
     public class FrameworkHandler extends Handler {
+
+        public FrameworkHandler() {
+            super("frameworks");
+        }
  
     }
 
     public class RequirementHandler extends Handler {
 
+        public RequirementHandler() {
+            super("requirements");
+        }
+
     }
 
     public class TestItemHandler extends Handler {
 
+        public TestItemHandler() {
+            super("testItems");
+        }
+
     }
 
     public class ReleaseHandler extends Handler {
+
+        public ReleaseHandler() {
+            super("releases");
+        }
     }
 
     public class BugHandler extends Handler {
+
+        public BugHandler() {
+            super("bugs");
+        }
 
     }
 
@@ -80,13 +124,13 @@ public class Session extends ERXSession {
 
     public Session() {
         super();
-        handlers.setObjectForKey(new ReleaseHandler(), "releases");
-        handlers.setObjectForKey(new BugHandler(), "bugs");
-        handlers.setObjectForKey(new ComponentHandler(), "components");
-        handlers.setObjectForKey(new PeopleHandler(), "peoples");
-        handlers.setObjectForKey(new FrameworkHandler(), "frameworks");
-        handlers.setObjectForKey(new TestItemHandler(), "testItems");
-        handlers.setObjectForKey(new RequirementHandler(), "requirements");
+        new ReleaseHandler();
+        new BugHandler();
+        new ComponentHandler();
+        new PeopleHandler();
+        new FrameworkHandler();
+        new TestItemHandler();
+        new RequirementHandler();
         setStoresIDsInCookies(true);
     }
 
