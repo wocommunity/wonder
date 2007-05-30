@@ -1,17 +1,23 @@
 package er.bugtracker.delegates;
 
+import java.util.Enumeration;
+
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.directtoweb.D2WContext;
 import com.webobjects.directtoweb.InspectPageInterface;
 import com.webobjects.eocontrol.EOEnterpriseObject;
 import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSMutableDictionary;
 
 import er.bugtracker.Factory;
 import er.bugtracker.Session;
 import er.directtoweb.ERD2WMessagePage;
 import er.directtoweb.ERDBranchDelegate;
 import er.directtoweb.ERDDeletionDelegate;
+import er.extensions.ERXDictionaryUtilities;
 import er.extensions.ERXLocalizer;
+import er.extensions.ERXStringUtilities;
 
 public class BranchDelegate extends ERDBranchDelegate {
 
@@ -19,8 +25,23 @@ public class BranchDelegate extends ERDBranchDelegate {
         return (Session)sender.session();
     }
 
+    protected NSDictionary branchChoiceDictionary(String method, String label) {
+    	if(label == null) {
+    		String localized = ERXLocalizer.currentLocalizer().localizedStringForKey("Button." + method);
+    		if(localized == null) {
+    			label = ERXStringUtilities.displayNameForKey(method);
+    			ERXLocalizer.currentLocalizer().takeValueForKey(label, "Button." + method);
+    		} else {
+    			label = localized;
+    		}
+    	}
+    	return ERXDictionaryUtilities.dictionaryWithObjectsAndKeys(new Object [] { method, BRANCH_NAME, label, BRANCH_LABEL});
+    }
+
     protected NSArray defaultBranchChoices(D2WContext context) {
+    	
         NSArray result = super.defaultBranchChoices(context);
+
         if(true) {
             result = choiceByRemovingKeys(new NSArray("createNew"), result);
         }
