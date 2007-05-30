@@ -10,6 +10,8 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.Vector;
 
+import org.apache.log4j.Logger;
+
 import com.webobjects.eocontrol.EOEnterpriseObject;
 import com.webobjects.eocontrol.EOFetchSpecification;
 import com.webobjects.eocontrol.EOQualifier;
@@ -33,10 +35,13 @@ import com.webobjects.foundation.NSSet;
  * Collection of {@link com.webobjects.foundation.NSArray NSArray} utilities.
  */
 public class ERXArrayUtilities extends Object {
-    /**
-     * Holds the null grouping key for use when grouping objects
-     * based on a key that might return null and nulls are allowed
-     */
+	
+	   private static Logger log = Logger.getLogger(ERXArrayUtilities.class);
+
+	   /**
+	    * Holds the null grouping key for use when grouping objects
+	    * based on a key that might return null and nulls are allowed
+	    */
     public static final String NULL_GROUPING_KEY="**** NULL GROUPING KEY ****";
 
     /** caches if array utilities have been initialized */
@@ -819,7 +824,7 @@ public class ERXArrayUtilities extends Object {
                 return array;
             }
             EOEnterpriseObject eo = (EOEnterpriseObject)array.objectAtIndex(0);
-            return filteredArrayWithEntityFetchSpecification(array, keypath, eo.entityName());
+            return filteredArrayWithEntityFetchSpecification(array, eo.entityName(), keypath);
         }
     }
 
@@ -1212,7 +1217,13 @@ public class ERXArrayUtilities extends Object {
      * @return array filtered and sorted by the named fetch specification.
      */    
     public static NSArray filteredArrayWithEntityFetchSpecification(NSArray array, String entity, String fetchSpec, NSDictionary bindings) {
-        EOFetchSpecification spec = EOFetchSpecification.fetchSpecificationNamed(entity, fetchSpec);
+        EOFetchSpecification spec = EOFetchSpecification.fetchSpecificationNamed(fetchSpec, entity);
+        if(spec == null) {
+        	spec = EOFetchSpecification.fetchSpecificationNamed(entity, fetchSpec);
+        	if(spec != null) {
+        		log.error("filteredArrayWithEntityFetchSpecification Calling conventions have changed from fetchSpec, entity to entity, fetchSpec");
+        	}
+        }
         NSArray sortOrderings, result;
         EOQualifier qualifier;
 
@@ -1241,6 +1252,13 @@ public class ERXArrayUtilities extends Object {
     }
 
     /**
+     * @deprecated
+     */
+    public static NSArray filteredArrayWithFetchSpecificationNamedEntityNamed(NSArray array, String fetchSpec, String entity) {
+        return ERXArrayUtilities.filteredArrayWithEntityFetchSpecification(array, entity, fetchSpec, null);
+    }
+
+    /**
      * Filters a given array with a named fetch specification.
      *
      * @param array array to be filtered.
@@ -1251,13 +1269,6 @@ public class ERXArrayUtilities extends Object {
      */
     public static NSArray filteredArrayWithEntityFetchSpecification(NSArray array, String entity, String fetchSpec) {
         return ERXArrayUtilities.filteredArrayWithEntityFetchSpecification(array, entity,  fetchSpec, null);
-    }
-
-    /**
-     * @deprecated
-     */
-    public static NSArray filteredArrayWithFetchSpecificationNamedEntityNamed(NSArray array, String fetchSpec, String entity) {
-        return ERXArrayUtilities.filteredArrayWithEntityFetchSpecification(array, entity, fetchSpec, null);
     }
     
     /**
