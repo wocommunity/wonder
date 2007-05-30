@@ -198,6 +198,10 @@
             <param name="use.wonder.logic" value="true" />
             <param name="use.wonder.mail" value="true" />
             <param name="use.woognl" value="true" />
+            <param name="use.reporting" value="true" />
+            <param name="use.excel" value="true" />
+            <param name="use.plot" value="true" />
+            <param name="use.wonder.ajax" value="true" />
             <param name="use.additional.framework.1" value="BTBusinessLogic.framework" />
             <param name="use.additional.framework.2" value="PostgresqlPlugIn.framework" />
         </antcall>
