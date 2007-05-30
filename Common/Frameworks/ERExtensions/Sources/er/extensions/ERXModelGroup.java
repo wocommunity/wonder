@@ -554,6 +554,9 @@ public class ERXModelGroup extends EOModelGroup {
 				Object languagesObject = attribute.userInfo() != null ? attribute.userInfo().objectForKey("ERXLanguages") : null;
 				if (languagesObject != null && !(languagesObject instanceof NSArray)) {
 					languagesObject = entity.model().userInfo() != null ? entity.model().userInfo().objectForKey("ERXLanguages") : null;
+					if(languagesObject == null) {
+						languagesObject = ERXProperties.arrayForKey("ERXLanguages");
+					}
 				}
 				NSArray languages = (languagesObject != null ? (NSArray) languagesObject : NSArray.EmptyArray);
 				if (languages.count() > 0) {
