@@ -55,6 +55,6 @@ ResourceRepetition: WORepetition {
 
 SubmitButton1: WOSubmitButton {
 	action = queryAction;
-	value = "Query";
+	value = d2wContext.findButtonLabel;
 }
 
