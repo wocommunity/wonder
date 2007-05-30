@@ -16,11 +16,20 @@
         },
         { 
                 name = "Home";
-                pageName = "ReportPage";
+                pageName = "HomePage";
         },
         { 
                 name = "Reports";
-                pageName = "ReportPage";
+                children = ("BugsPerUser", "BugsPerComponent");
+               	action = session.handlers.reports.BugsPerComponent;
+        },
+        { 
+                name = "BugsPerUser";
+                action = session.handlers.reports.BugsPerUser;
+        },
+        { 
+                name = "BugsPerComponent";
+                action = session.handlers.reports.BugsPerComponent;
         },
         { 
                 name = "MyInfo";

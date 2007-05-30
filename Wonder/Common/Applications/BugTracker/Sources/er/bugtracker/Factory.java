@@ -22,6 +22,7 @@ import com.webobjects.eocontrol.EOQualifier;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSKeyValueCoding;
 
+import er.bugtracker.pages.ReportPage;
 import er.directtoweb.ERD2WFactory;
 import er.directtoweb.ERD2WInspectPage;
 import er.directtoweb.ERD2WQueryPage;
@@ -491,5 +492,10 @@ public class Factory extends ERD2WFactory implements NSKeyValueCoding {
         return (WOComponent)epi;
     }
 
+    public WOComponent reportForName(String name) {
+        ReportPage report = (ReportPage) pageForConfigurationNamed(name);
+        report.setSelectedReportName(name);
+        return report;
+    }
 
 }
