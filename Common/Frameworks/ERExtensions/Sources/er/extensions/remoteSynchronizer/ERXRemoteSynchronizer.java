@@ -320,13 +320,41 @@ public abstract class ERXRemoteSynchronizer {
 		_listener.addChange(remoteChange);
 	}
 
+	protected NSArray filteredCacheChanges(NSArray cacheChanges) {
+		NSArray filteredCacheChanges;
+		if (_includeEntityNames == null && (_excludeEntityNames == null || _excludeEntityNames.count() == 0)) {
+			filteredCacheChanges = cacheChanges;
+		}
+		else {
+			NSMutableArray mutableFilteredCacheChanges = new NSMutableArray();
+			int cacheChangeCount = cacheChanges.count();
+			for (int i = 0; i < cacheChangeCount; i ++) {
+				ERXDatabase.CacheChange cacheChange = (ERXDatabase.CacheChange)cacheChanges.objectAtIndex(i);
+				EOGlobalID gid = cacheChange.gid();
+				if (gid instanceof EOKeyGlobalID) {
+					EOKeyGlobalID keyGID = (EOKeyGlobalID)gid;
+					String entityName = keyGID.entityName();
+					if (shouldSynchronizeEntity(entityName)) {
+						mutableFilteredCacheChanges.addObject(cacheChange);
+					}
+				}
+			}
+			filteredCacheChanges = mutableFilteredCacheChanges;
+		}
+		return filteredCacheChanges;
+	}
+	
 	public abstract void join() throws Throwable;
 
 	public abstract void leave() throws Throwable;
 
 	public abstract void listen() throws Throwable;
 
-	public abstract void writeCacheChanges(int transactionID, NSArray cacheChanges) throws Throwable;
+	public void writeCacheChanges(int transactionID, NSArray cacheChanges) throws Throwable {
+		_writeCacheChanges(transactionID, filteredCacheChanges(cacheChanges));
+	}
+	
+	protected abstract void _writeCacheChanges(int transactionID, NSArray cacheChanges) throws Throwable;
 
 	public static class RefByteArrayOutputStream extends ByteArrayOutputStream {
 		public byte[] buffer() {
