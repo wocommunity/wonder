@@ -5,7 +5,7 @@
                 directActionName = "home";
                 children = session.navigationRootChoice;
                 childrenChoices = {
-                	"admin" = ("Home", "LogOut", "MyInfo", "Bugs", "Components", "Requirements", "TestItems", "Releases", "Peoples", "Frameworks");
+                	"admin" = ("Reports", "Home", "LogOut", "MyInfo", "Bugs", "Components", "Requirements", "TestItems", "Releases", "Peoples", "Frameworks");
                 	"engineer" = ("Home", "LogOut", "MyInfo", "Bugs", "Requirements", "TestItems");
                 	"none" = ("Home", "LogOut", "MyInfo", "Bugs");
                 };
@@ -16,7 +16,11 @@
         },
         { 
                 name = "Home";
-                pageName = "HomePage";
+                pageName = "ReportPage";
+        },
+        { 
+                name = "Reports";
+                pageName = "ReportPage";
         },
         { 
                 name = "MyInfo";

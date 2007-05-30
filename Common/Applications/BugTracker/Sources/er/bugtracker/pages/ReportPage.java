@@ -33,6 +33,15 @@ public class ReportPage extends ERD2WPage {
         d2wContext().setTask("report");
         d2wContext().setEntity( EOUtilities.entityNamed(session().defaultEditingContext(), "Bug"));
     }
+    
+    public String reportComponentName() {
+        if(enableExcel) {
+            return "ExcelReport";
+        } else if(enableChart) {
+            return "ChartReport";
+        }
+        return "Report";
+    }
 
     public void postModelChangedNotification(DRReportModel model) {
         if (model != null) {
