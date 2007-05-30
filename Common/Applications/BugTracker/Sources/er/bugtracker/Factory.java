@@ -2,8 +2,10 @@ package er.bugtracker;
 
 import com.webobjects.appserver.WOApplication;
 import com.webobjects.appserver.WOComponent;
+import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WOSession;
 import com.webobjects.directtoweb.D2W;
+import com.webobjects.directtoweb.D2WContext;
 import com.webobjects.directtoweb.D2WPage;
 import com.webobjects.directtoweb.EditPageInterface;
 import com.webobjects.directtoweb.InspectPageInterface;
@@ -31,6 +33,8 @@ import er.extensions.EOEnterpriseObjectClazz;
 import er.extensions.ERXEC;
 import er.extensions.ERXExtensions;
 import er.extensions.ERXLocalizer;
+import er.extensions.ERXNavigationManager;
+import er.extensions.ERXNavigationState;
 import er.extensions.ERXPrimaryKeyListQualifier;
 import er.extensions.ERXStringUtilities;
 
@@ -52,14 +56,23 @@ public class Factory extends ERD2WFactory implements NSKeyValueCoding {
     }
 
     /**
-     * Bottleneck for most of the page creation.
+     * Bottleneck for the page creation. Applies the current navigation item if 
+     * the actual item starts with the new one. This leads to ListRecentBug stying selected, even when 
+     * the user goes to an edit page.
      */
-    public WOComponent pageForConfigurationNamed(String name, WOSession s) {
-        WOComponent nextPage = super.pageForConfigurationNamed(name, s);
-        if (nextPage instanceof D2WPage) {
-            D2WPage page = (D2WPage) nextPage;
-            page.setNextPage(currentPage());
-        }
+    public WOComponent pageWithContextTaskEntity(D2WContext d2wcontext, String task, String entity, WOContext wocontext) {
+    	WOComponent nextPage = super.pageWithContextTaskEntity(d2wcontext, task, entity, wocontext);
+    	if (nextPage instanceof D2WPage) {
+    		String oldState = ERXNavigationManager.manager().navigationStateForSession(wocontext.session()).stateAsString();
+    		D2WPage page = (D2WPage) nextPage;
+    		page.setNextPage(currentPage());
+    		String newState = (String) page.d2wContext().valueForKey("navigationState");
+    		if(oldState.startsWith(newState)) {
+    			page.d2wContext().takeValueForKey(oldState, "navigationState");
+    		}
+    		log.debug("Create page: " + page.d2wContext().dynamicPage() + " old: " + oldState + " news: " + newState);
+
+    	}
         return nextPage;
     }
 
