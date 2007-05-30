@@ -14,7 +14,7 @@ import er.directtoweb.ERDBranchDelegate;
 import er.directtoweb.ERDListPageInterface;
 import er.extensions.ERXEC;
 
-public class PushBugsDelegate extends ERDBranchDelegate {
+public class PushBugsDelegate extends BranchDelegate {
 
     protected Session session(WOComponent sender) {
         return (Session)sender.session();
