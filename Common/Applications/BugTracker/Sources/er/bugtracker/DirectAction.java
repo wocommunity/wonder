@@ -132,7 +132,7 @@ public class DirectAction extends ERD2WDirectAction {
 
     public static class EntranceActionCallback implements ERXUtilities.Callback {
         public Object invoke(Object ctx) {
-            return WOApplication.application().pageWithName("HomePage", ((Session) ctx).context());
+            return WOApplication.application().pageWithName("ReportPage", ((Session) ctx).context());
         }
     }
 
