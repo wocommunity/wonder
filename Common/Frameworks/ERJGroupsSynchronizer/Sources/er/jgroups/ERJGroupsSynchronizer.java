@@ -59,16 +59,20 @@ public class ERJGroupsSynchronizer extends ERXRemoteSynchronizer {
     _channel.setOpt(Channel.LOCAL, Boolean.FALSE);
   }
 
+  @Override
   public void join() throws ChannelException {
     _channel.connect(_groupName);
   }
 
+  @Override
   public void leave() {
     _channel.disconnect();
   }
 
+  @Override
   public void listen() {
     _channel.setReceiver(new ExtendedReceiverAdapter() {
+      @Override
       public void receive(Message message) {
         try {
           byte[] buffer = message.getBuffer();
@@ -92,13 +96,15 @@ public class ERJGroupsSynchronizer extends ERXRemoteSynchronizer {
         }
       }
 
+      @Override
       public void viewAccepted(View view) {
         // System.out.println(".viewAccepted: " + view);
       }
     });
   }
 
-  public void writeCacheChanges(int transactionID, NSArray cacheChanges) throws ChannelNotConnectedException, ChannelClosedException, IOException {
+  @Override
+  protected void _writeCacheChanges(int transactionID, NSArray cacheChanges) throws ChannelNotConnectedException, ChannelClosedException, IOException {
     RefByteArrayOutputStream baos = new RefByteArrayOutputStream();
     DataOutputStream dos = new DataOutputStream(baos);
     dos.writeInt(cacheChanges.count());
