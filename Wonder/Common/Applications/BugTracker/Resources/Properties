@@ -1,9 +1,11 @@
-#er.extensions.ERXLocalizer.availableLanguages=(English,German)
-er.extensions.ERXLocalizer.availableLanguages=(English)
-er.extensions.ERXLocalizer.frameworkSearchPath=("app", "BTBusinessLogic", "ERExtras", "ERDirectToWeb", "ERExtensions")
 er.extensions.ERXApplication.useEditingContextUnlocker=true
 er.extensions.ERXEC.defaultAutomaticLockUnlock=false
 er.extensions.ERXWOForm.addDefaultSubmitButtonDefault=true
 er.extensions.ERXEnterpriseObject.updateInverseRelationships=true
 er.extensions.ERXEnterpriseObject.applyRestrictingQualifierOnInsert=true
 java.awt.headless=true
+
+ERXLanguages = (en,de)
+er.extensions.ERXLocalizer.availableLanguages=(English,German)
+#er.extensions.ERXLocalizer.availableLanguages=(English)
+er.extensions.ERXLocalizer.frameworkSearchPath=("app", "BTBusinessLogic", "ERExtras", "ERDirectToWeb", "ERExtensions")
