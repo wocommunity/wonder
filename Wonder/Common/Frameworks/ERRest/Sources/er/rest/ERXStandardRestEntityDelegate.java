@@ -409,12 +409,17 @@ public abstract class ERXStandardRestEntityDelegate extends ERXAbstractRestEntit
 	}
 
 	/**
-	 * Default empty implementation.  Extend to provide support for custom non-model properties.
+	 * Looks up the key from the property ERXRest.[EntityName].[key].nextEntity . Extend to provide support for custom non-model properties.
 	 * 
 	 * @param entity the entity of the object
 	 * @param key the key of the entity to return an entity definition for
 	 */
 	public EOEntity nextEntity(EOEntity entity, String key) {
-		return null;
+		EOEntity nextEntity = null;
+		String nextEntityName = ERXProperties.stringForKey(ERXXmlRestResponseWriter.REST_PREFIX + entity.name() + "." + key + ".nextEntity");
+		if (nextEntityName != null) {
+			nextEntity = entity.model().modelGroup().entityNamed(nextEntityName);
+		}
+		return nextEntity;
 	}
 }
