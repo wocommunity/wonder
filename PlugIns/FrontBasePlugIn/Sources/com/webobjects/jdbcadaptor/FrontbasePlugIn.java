@@ -1143,6 +1143,7 @@ public class FrontbasePlugIn extends JDBCPlugIn {
 					else
 						return "TRUE";
 				}
+				case FB_TinyInteger:
 				case FB_Numeric:
 				case FB_Decimal: {
 					if (obj instanceof BigDecimal) {
@@ -1165,6 +1166,13 @@ public class FrontbasePlugIn extends JDBCPlugIn {
 						else if ("s".equals(valueType)) {
 							return String.valueOf(((Number)obj).shortValue());  
 						}
+						else if ("c".equals(valueType)) {
+							return String.valueOf(((Number)obj).intValue());  
+						}
+					}
+					else if (obj instanceof Boolean) {
+						String valueType = eoattribute.valueType();
+						return String.valueOf(((Boolean)obj).booleanValue() ? 1 : 0);  
 					}
 					else if (obj instanceof String) {
 						return obj.toString();
