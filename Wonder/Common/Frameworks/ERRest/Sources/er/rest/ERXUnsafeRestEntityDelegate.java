@@ -21,19 +21,11 @@ import er.extensions.ERXApplication;
  * 
  * @author mschrag
  */
-public class ERXUnsafeRestEntityDelegate extends ERXAbstractRestEntityDelegate {
+public class ERXUnsafeRestEntityDelegate extends ERXStandardRestEntityDelegate {
 	public ERXUnsafeRestEntityDelegate() {
 		if (!ERXApplication.isDevelopmentModeSafe()) {
 			throw new SecurityException("You are attempting to use ERXUnsafeRestEntityDelegate outside of development mode!.");
 		}
-	}
-	
-	public void updated(EOEntity entity, EOEnterpriseObject eo, ERXRestContext context) throws ERXRestException {
-		// DO NOTHING
-	}
-
-	public void inserted(EOEntity entity, EOEnterpriseObject eo, ERXRestContext context) throws ERXRestException {
-		// DO NOTHING
 	}
 
 	public boolean canInsertProperty(EOEntity entity, EOEnterpriseObject eo, String propertyName, ERXRestContext context) {
@@ -76,10 +68,6 @@ public class ERXUnsafeRestEntityDelegate extends ERXAbstractRestEntityDelegate {
 
 	public NSArray visibleObjects(EOEntity parentEntity, Object parent, String key, EOEntity entity, NSArray objects, ERXRestContext context) {
 		return objects;
-	}
-
-	public EOEntity nextEntity(EOEntity entity, String key) {
-		return null;
 	}
 	
 	public static NSArray allPropertyNames(EOEntity entity, ERXRestContext context) {

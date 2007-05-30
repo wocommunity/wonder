@@ -58,7 +58,7 @@ public abstract class ERXAbstractRestResponseWriter implements IERXRestResponseW
 		else if (value instanceof NSArray) {
 			appendArrayToResponse(context, response, result, indent, visitedObjects);
 		}
-		else {
+		else if (value instanceof EOEnterpriseObject) {
 			EOEntity entity = result.nextEntity();
 			IERXRestEntityDelegate entityDelegate = context.delegate().entityDelegate(entity);
 			String entityAlias = entityDelegate.entityAliasForEntityNamed(entity.name());
@@ -109,10 +109,13 @@ public abstract class ERXAbstractRestResponseWriter implements IERXRestResponseW
 				}
 			}
 		}
+		else {
+			appendPrimitiveToResponse(context, response, result, indent, value);
+		}
 	}
 
 	/**
-	 * Writes the given array of objects to the response. Permission have already been checked by the time this method
+	 * Writes the given array of objects to the response. Permissions have already been checked by the time this method
 	 * is called.
 	 * 
 	 * @param context
@@ -178,7 +181,7 @@ public abstract class ERXAbstractRestResponseWriter implements IERXRestResponseW
 
 	/**
 	 * Write an object to the response that has already been visited. Typically this would just write out the type and
-	 * id of the object, to prevent entering an infinite loop in the renderer. Permission have already been checked by
+	 * id of the object, to prevent entering an infinite loop in the renderer. Permissions have already been checked by
 	 * the time this method is called.
 	 * 
 	 * @param context
@@ -203,7 +206,7 @@ public abstract class ERXAbstractRestResponseWriter implements IERXRestResponseW
 	/**
 	 * Write an object to the response without showing its details. This is typically similar to
 	 * appendVisitedToResponse, but is provided as a separate call because it is semantically a different scenario.
-	 * Permission have already been checked by the time this method is called.
+	 * Permissions have already been checked by the time this method is called.
 	 * 
 	 * @param context
 	 *            the rest context
@@ -225,7 +228,7 @@ public abstract class ERXAbstractRestResponseWriter implements IERXRestResponseW
 	protected abstract void appendNoDetailsToResponse(ERXRestContext context, WOResponse response, EOEntity entity, EOEnterpriseObject eo, String objectName, String entityName, String id, int indent);
 
 	/**
-	 * Writes the visible details of an object to the response. Permission have already been checked by the time this
+	 * Writes the visible details of an object to the response. Permissions have already been checked by the time this
 	 * method is called.
 	 * 
 	 * @param context
@@ -258,4 +261,23 @@ public abstract class ERXAbstractRestResponseWriter implements IERXRestResponseW
 	 *             if a parse error occurs
 	 */
 	protected abstract void appendDetailsToResponse(ERXRestContext context, WOResponse response, EOEntity entity, EOEnterpriseObject eo, String objectName, String entityName, String id, NSArray displayKeys, int indent, NSMutableSet visitedObjects) throws ERXRestException, ERXRestSecurityException, ERXRestNotFoundException, ParseException;
+
+	/**
+	 * Writes the bare primitive out to the response. Permissions have already been checked by the time this method is
+	 * called.
+	 * 
+	 * @param context
+	 *            the rest context
+	 * @param response
+	 *            the response
+	 * @param result
+	 *            the current key
+	 * @param indent
+	 *            the indent level
+	 * @param value
+	 *            the value to append
+	 * @throws ERXRestException
+	 *             if a general failure occurs
+	 */
+	protected abstract void appendPrimitiveToResponse(ERXRestContext context, WOResponse response, ERXRestKey result, int indent, Object value) throws ERXRestException;
 }

@@ -4,11 +4,6 @@ import java.math.BigDecimal;
 import java.text.ParseException;
 import java.util.Enumeration;
 
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-import org.w3c.dom.Text;
-
 import com.webobjects.eoaccess.EOAttribute;
 import com.webobjects.eoaccess.EOEntity;
 import com.webobjects.eoaccess.EORelationship;
@@ -204,9 +199,9 @@ public abstract class ERXAbstractRestEntityDelegate implements IERXRestEntityDel
 		return parsedValue;
 	}
 
-	public EOEnterpriseObject insertObjectFromDocument(EOEntity entity, Element insertElement, EOEnterpriseObject parentObject, String parentKey, ERXRestContext context) throws ERXRestSecurityException, ERXRestException, ERXRestNotFoundException {
+	public EOEnterpriseObject insertObjectFromDocument(EOEntity entity, ERXRestRequestNode insertNode, EOEnterpriseObject parentObject, String parentKey, ERXRestContext context) throws ERXRestSecurityException, ERXRestException, ERXRestNotFoundException {
 		EOEnterpriseObject eo = EOUtilities.createAndInsertInstance(context.editingContext(), entity.name());
-		_updateObjectFromDocument(true, entity, eo, insertElement, context);
+		_updateObjectFromDocument(true, entity, eo, insertNode, context);
 		if (parentObject != null) {
 			parentObject.addObjectToBothSidesOfRelationshipWithKey(eo, parentKey);
 		}
@@ -214,23 +209,20 @@ public abstract class ERXAbstractRestEntityDelegate implements IERXRestEntityDel
 		return eo;
 	}
 
-	public void updateObjectFromDocument(EOEntity entity, EOEnterpriseObject eo, Element eoElement, ERXRestContext context) throws ERXRestSecurityException, ERXRestException, ERXRestNotFoundException {
-		_updateObjectFromDocument(false, entity, eo, eoElement, context);
+	public void updateObjectFromDocument(EOEntity entity, EOEnterpriseObject eo, ERXRestRequestNode eoNode, ERXRestContext context) throws ERXRestSecurityException, ERXRestException, ERXRestNotFoundException {
+		_updateObjectFromDocument(false, entity, eo, eoNode, context);
 	}
 
-	public void _updateObjectFromDocument(boolean inserting, EOEntity entity, EOEnterpriseObject eo, Element eoElement, ERXRestContext context) throws ERXRestSecurityException, ERXRestException, ERXRestNotFoundException {
-		if (!entityAliasForEntityNamed(entity.name()).equals(eoElement.getNodeName())) {
-			throw new ERXRestException("You attempted to put a " + eoElement.getNodeName() + " into a " + entityAliasForEntityNamed(entity.name()) + ".");
+	public void _updateObjectFromDocument(boolean inserting, EOEntity entity, EOEnterpriseObject eo, ERXRestRequestNode eoNode, ERXRestContext context) throws ERXRestSecurityException, ERXRestException, ERXRestNotFoundException {
+		if (!entityAliasForEntityNamed(entity.name()).equals(eoNode.name())) {
+			throw new ERXRestException("You attempted to put a " + eoNode.name() + " into a " + entityAliasForEntityNamed(entity.name()) + ".");
 		}
 
-		NodeList attributeNodes = eoElement.getChildNodes();
-		for (int attributeNum = 0; attributeNum < attributeNodes.getLength(); attributeNum++) {
-			Node attributeNode = attributeNodes.item(attributeNum);
-			if (attributeNode instanceof Text) {
-				continue;
-			}
+		Enumeration attributeNodesEnum = eoNode.children().objectEnumerator();
+		while (attributeNodesEnum.hasMoreElements()) {
+			ERXRestRequestNode attributeNode = (ERXRestRequestNode)attributeNodesEnum.nextElement();
 
-			String attributeName = attributeNode.getNodeName();
+			String attributeName = attributeNode.name();
 			if (inserting && !canInsertProperty(entity, eo, attributeName, context)) {
 				throw new ERXRestSecurityException("You are not allowed to insert the property '" + attributeName + "' on " + entityAliasForEntityNamed(entity.name()) + ".");
 			}
@@ -243,12 +235,11 @@ public abstract class ERXAbstractRestEntityDelegate implements IERXRestEntityDel
 				EOEntity destinationEntity = relationship.destinationEntity();
 				if (!relationship.isToMany()) {
 					EOEnterpriseObject originalObject = (EOEnterpriseObject) valueForKey(entity, eo, attributeName, context);
-					Node idNode = attributeNode.getAttributes().getNamedItem("id");
-					if (idNode == null) {
+					String id = attributeNode.attributeForKey("id");
+					if (id == null) {
 						eo.removeObjectFromBothSidesOfRelationshipWithKey(originalObject, attributeName);
 					}
 					else {
-						String id = idNode.getNodeValue();
 						EOEnterpriseObject newObject = context.delegate().entityDelegate(destinationEntity).objectWithKey(destinationEntity, id, context);
 						if (originalObject == null && newObject != null) {
 							eo.addObjectToBothSidesOfRelationshipWithKey(newObject, attributeName);
@@ -263,19 +254,12 @@ public abstract class ERXAbstractRestEntityDelegate implements IERXRestEntityDel
 				}
 				else {
 					NSArray currentObjects = (NSArray) valueForKey(entity, eo, attributeName, context);
-					NodeList toManyNodes = attributeNode.getChildNodes();
+					NSArray toManyNodes = attributeNode.children();
 					updateArrayFromDocument(entity, eo, attributeName, destinationEntity, currentObjects, toManyNodes, context);
 				}
 			}
 			else {
-				NodeList attributeChildNodes = attributeNode.getChildNodes();
-				String attributeValue;
-				if (attributeChildNodes.getLength() == 0) {
-					attributeValue = null;
-				}
-				else {
-					attributeValue = attributeChildNodes.item(0).getNodeValue();
-				}
+				String attributeValue = attributeNode.value();
 				try {
 					takeValueForKey(entity, eo, attributeName, attributeValue, context);
 				}
@@ -288,19 +272,20 @@ public abstract class ERXAbstractRestEntityDelegate implements IERXRestEntityDel
 		updated(entity, eo, context);
 	}
 
-	public void updateArrayFromDocument(EOEntity parentEntity, EOEnterpriseObject parentObject, String attributeName, EOEntity entity, NSArray currentObjects, NodeList toManyNodes, ERXRestContext context) throws ERXRestException, ERXRestNotFoundException, ERXRestSecurityException {
+	public void updateArrayFromDocument(EOEntity parentEntity, EOEnterpriseObject parentObject, String attributeName, EOEntity entity, NSArray currentObjects, NSArray toManyNodes, ERXRestContext context) throws ERXRestException, ERXRestNotFoundException, ERXRestSecurityException {
 		NSMutableArray keepObjects = new NSMutableArray();
 		NSMutableArray addObjects = new NSMutableArray();
 		NSMutableArray removeObjects = new NSMutableArray();
 
-		for (int toManyNum = 0; toManyNum < toManyNodes.getLength(); toManyNum++) {
-			Node toManyNode = toManyNodes.item(toManyNum);
-			String toManyNodeName = toManyNode.getNodeName();
+		Enumeration toManyNodesEnum = toManyNodes.objectEnumerator();
+		while (toManyNodesEnum.hasMoreElements()) {
+			ERXRestRequestNode toManyNode = (ERXRestRequestNode) toManyNodesEnum.nextElement();
+			String toManyNodeName = toManyNode.name();
 			if (!entityAliasForEntityNamed(entity.name()).equals(toManyNodeName)) {
 				throw new ERXRestException("You attempted to put a " + toManyNodeName + " into a " + entityAliasForEntityNamed(entity.name()) + ".");
 			}
 
-			String id = toManyNode.getAttributes().getNamedItem("id").getNodeValue();
+			String id = toManyNode.attributeForKey("id");
 			Object relatedObject = objectWithKey(entity, id, context);
 			if (currentObjects.containsObject(relatedObject)) {
 				System.out.println("AbstractERXRestDelegate.updateArray: keeping " + relatedObject + " in " + parentObject + " (" + attributeName + ")");
