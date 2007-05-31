@@ -384,6 +384,8 @@ public class ERXRestRequestHandler extends WORequestHandler {
 					IERXRestResponseWriter restResponseWriter = responseWriterForType(type);
 					restResponseWriter.appendToResponse(restContext, response, restRequest.key());
 					editingContext.saveChanges();
+					
+					System.out.println("ERXRestRequestHandler.handleRequest: " + response.contentString());
 				}
 				else if ("DELETE".equalsIgnoreCase(method)) {
 					_delegate.delete(restRequest, restContext);
@@ -432,16 +434,17 @@ public class ERXRestRequestHandler extends WORequestHandler {
 	 * Creates an unsafe request handler for you to try out in development mode. THIS SHOULD NOT BE DEPLOYED (and in
 	 * fact it will throw an exception if development mode is false).
 	 * 
+	 * @param displayToMany if true, to-many relationships will display by default
 	 * @return an unsafe request handler
 	 */
-	public static final ERXRestRequestHandler createUnsafeRequestHandler() {
+	public static final ERXRestRequestHandler createUnsafeRequestHandler(boolean displayToMany) {
 		if (!ERXApplication.isDevelopmentModeSafe()) {
 			throw new RuntimeException("You attempted to create an unsafe request handler when you were not in development mode!");
 		}
 		IERXRestEntityDelegate defaultEntityDelegate = new ERXUnsafeRestEntityDelegate();
 		ERXDefaultRestDelegate restDelegate = new ERXDefaultRestDelegate(defaultEntityDelegate);
 		IERXRestAuthenticationDelegate authenticationDelegate = new ERXUnsafeRestAuthenticationDelegate();
-		IERXRestResponseWriter responseWriter = new ERXXmlRestResponseWriter(true);
+		IERXRestResponseWriter responseWriter = new ERXXmlRestResponseWriter(true, displayToMany);
 		IERXRestRequestParser requestParser = new ERXXmlRestRequestParser();
 		return new ERXRestRequestHandler(authenticationDelegate, restDelegate, responseWriter, requestParser);
 	}

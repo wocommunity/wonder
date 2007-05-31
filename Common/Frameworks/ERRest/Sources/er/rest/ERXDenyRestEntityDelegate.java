@@ -14,6 +14,10 @@ import com.webobjects.foundation.NSArray;
  * @author mschrag
  */
 public class ERXDenyRestEntityDelegate implements IERXRestEntityDelegate {
+	public void initializeEntityNamed(String entityName) {
+		// DO NOTHING
+	}
+	
 	public String entityAliasForEntityNamed(String entityName) {
 		return entityName;
 	}

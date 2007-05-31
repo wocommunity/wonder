@@ -114,12 +114,13 @@ public class ERXXmlRestResponseWriter extends ERXAbstractXmlRestResponseWriter {
 
 	private boolean _displayAllProperties;
 	private boolean _displayAllDetails;
+	private boolean _displayAllToMany;
 
 	/**
 	 * Constructs an ERXXmlRestResponseWriter with displayAllProperties = false.
 	 */
 	public ERXXmlRestResponseWriter() {
-		this(false);
+		this(false, false);
 	}
 
 	/**
@@ -129,9 +130,12 @@ public class ERXXmlRestResponseWriter extends ERXAbstractXmlRestResponseWriter {
 	 *            if true, by default all properties are eligible to be displayed (probably should only be true in
 	 *            development, but it won't really hurt anything). Note that entity delegates will still control
 	 *            permissions on the properties, it just defaults to checking all of them.
+	 * @param displayAllToMany
+	 *            if true, all to-many relationships will be displayed
 	 */
-	public ERXXmlRestResponseWriter(boolean displayAllProperties) {
+	public ERXXmlRestResponseWriter(boolean displayAllProperties, boolean displayAllToMany) {
 		_displayAllProperties = displayAllProperties;
+		_displayAllToMany = displayAllToMany;
 	}
 
 	protected String cascadingValue(ERXRestContext context, ERXRestKey result, String propertyPrefix, String propertySuffix, String defaultValue) throws ERXRestException, ERXRestNotFoundException, ERXRestSecurityException {
@@ -173,7 +177,7 @@ public class ERXXmlRestResponseWriter extends ERXAbstractXmlRestResponseWriter {
 		String displayPropertyNamesStr = cascadingValue(context, result, ERXXmlRestResponseWriter.REST_PREFIX, ERXXmlRestResponseWriter.DETAILS_PROPERTIES_PREFIX, null);
 		if (displayPropertyNamesStr == null) {
 			if (_displayAllProperties) {
-				NSArray allPropertyNames = ERXUnsafeRestEntityDelegate.allPropertyNames(result.entity(), context);
+				NSArray allPropertyNames = ERXUnsafeRestEntityDelegate.allPropertyNames(result.entity(), _displayAllToMany);
 				displayPropertyNames = new String[allPropertyNames.count()];
 				for (int propertyNum = 0; propertyNum < displayPropertyNames.length; propertyNum++) {
 					displayPropertyNames[propertyNum] = (String) allPropertyNames.objectAtIndex(propertyNum);

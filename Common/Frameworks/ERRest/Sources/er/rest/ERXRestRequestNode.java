@@ -1,5 +1,7 @@
 package er.rest;
 
+import java.util.Enumeration;
+
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableArray;
@@ -16,7 +18,23 @@ public class ERXRestRequestNode {
 		_attributes = new NSMutableDictionary();
 		_children = new NSMutableArray();
 	}
+	
+	public ERXRestRequestNode childNamed(String name) {
+		ERXRestRequestNode matchingChildNode = null;
+		Enumeration childrenEnum = _children.objectEnumerator();
+		while (matchingChildNode == null && childrenEnum.hasMoreElements()) {
+			ERXRestRequestNode childNode = (ERXRestRequestNode)childrenEnum.nextElement();
+			if (name.equals(childNode.name())) {
+				matchingChildNode = childNode;
+			}
+		}
+		return matchingChildNode;
+	}
 
+	public boolean isNull() {
+		return "true".equals(attributeForKey("nil"));
+	}
+	
 	public String name() {
 		return _name;
 	}

@@ -15,11 +15,19 @@ import org.xml.sax.InputSource;
 
 import com.webobjects.appserver.WORequest;
 
+/**
+ * ERXXmlRestRequestParser is an implementation of the IERXRestRequestParser interface
+ * that supports XML document requests.
+ * 
+ * @author mschrag
+ */
 public class ERXXmlRestRequestParser implements IERXRestRequestParser {
 	protected ERXRestRequestNode createRequestNodeForElement(Element element) {
 		String name = element.getTagName();
-		String value = element.getNodeValue();
 		ERXRestRequestNode requestNode = new ERXRestRequestNode(name);
+		
+		String value = element.getNodeValue();
+		
 		NamedNodeMap attributeNodes = element.getAttributes();
 		for (int attributeNum = 0; attributeNum < attributeNodes.getLength(); attributeNum++) {
 			Node attribute = attributeNodes.item(attributeNum);
@@ -31,7 +39,9 @@ public class ERXXmlRestRequestParser implements IERXRestRequestParser {
 			if (childNode instanceof Element) {
 				Element childElement = (Element) childNode;
 				ERXRestRequestNode childRequestNode = createRequestNodeForElement(childElement);
-				requestNode.addChild(childRequestNode);
+				if (childRequestNode != null) {
+					requestNode.addChild(childRequestNode);
+				}
 			}
 			else if (childNode instanceof Text) {
 				String text = childNode.getNodeValue();
@@ -48,7 +58,9 @@ public class ERXXmlRestRequestParser implements IERXRestRequestParser {
 				}
 			}
 		}
+
 		requestNode.setValue(value);
+		
 		return requestNode;
 	}
 
@@ -58,6 +70,7 @@ public class ERXXmlRestRequestParser implements IERXRestRequestParser {
 		ERXRestRequestNode rootRequestNode = null;
 
 		String contentStr = request.contentString();
+		System.out.println("ERXXmlRestRequestParser.parseRestRequest: " + contentStr);
 		if (contentStr != null && contentStr.length() > 0) {
 			// MS: Support direct updating of primitive type keys -- so if you don't want to
 			// wrap your request in XML, this will allow it
