@@ -36,7 +36,6 @@ public class ERD2WDebugFlags extends WOComponent {
         ERDirectToWeb.setD2wDebuggingEnabled(session(), !currentState);
         return null;
     }
-    
 
     public WOComponent toggleAdaptorLogging() {
         boolean currentState=ERXExtensions.adaptorLogging();
