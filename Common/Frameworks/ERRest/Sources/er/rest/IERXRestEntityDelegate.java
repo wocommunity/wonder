@@ -20,6 +20,14 @@ import com.webobjects.foundation.NSArray;
  */
 public interface IERXRestEntityDelegate {
 	/**
+	 * Called by the rest delegate for each entity that gets requested.  This is called every time,
+	 * so your entity delegate should manage only executing one time if necessary.
+	 *  
+	 * @param entityName the name of the entity to initialize
+	 */
+	public void initializeEntityNamed(String entityName);
+
+	/**
 	 * Returns the alias for the given entity name. It is often the case that the actual name of the entity in your
 	 * model may not be the name that you want to expose to the outside world. From this method, you can return the
 	 * externally visible name. This method should never return null (just return entityName if you don't have an

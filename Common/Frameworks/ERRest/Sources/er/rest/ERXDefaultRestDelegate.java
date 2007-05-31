@@ -217,6 +217,7 @@ public class ERXDefaultRestDelegate implements IERXRestDelegate {
 		if (entityDelegate == null) {
 			entityDelegate = _defaultDelegate;
 		}
+		entityDelegate.initializeEntityNamed(entity.name());
 		return entityDelegate;
 	}
 
