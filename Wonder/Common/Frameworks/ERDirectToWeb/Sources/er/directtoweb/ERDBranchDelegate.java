@@ -10,6 +10,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.Enumeration;
+import java.util.Iterator;
 
 import org.apache.log4j.Logger;
 
@@ -22,9 +23,11 @@ import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSForwardException;
 import com.webobjects.foundation.NSMutableArray;
+import com.webobjects.foundation.NSMutableDictionary;
 
 import er.extensions.ERXArrayUtilities;
 import er.extensions.ERXDictionaryUtilities;
+import er.extensions.ERXLocalizer;
 import er.extensions.ERXStringUtilities;
 
 /**
@@ -104,6 +107,18 @@ public abstract class ERDBranchDelegate implements ERDBranchDelegateInterface {
         NSArray choices = (NSArray)context.valueForKey(BRANCH_CHOICES);
         if (choices == null) {
             choices = defaultBranchChoices(context);
+        } else {
+        	NSMutableArray translatedChoices = new NSMutableArray();
+        	for (Iterator iter = choices.iterator(); iter.hasNext();) {
+				NSMutableDictionary dict = ((NSMutableDictionary) iter.next()).mutableClone();
+				String label = (String) dict.objectForKey(BRANCH_LABEL);
+				if(label != null) {
+					label = ERXLocalizer.currentLocalizer().localizedStringForKeyWithDefault(label);
+					dict.setObjectForKey(label, BRANCH_LABEL);
+				}
+				translatedChoices.addObject(dict);
+			}
+        	choices = translatedChoices;
         }
         return choices;
     }
