@@ -31,6 +31,7 @@ public class ERXWOContext extends WOContext implements ERXMutableUserInfoHolderI
     private boolean _generateCompleteURLs;
 
     private static final String CONTEXT_DICTIONARY_KEY = "ERXWOContext.dict";
+    private static final String CONTEXT_KEY = "ERXWOContext";
 	private static final String SECURE_RESOURCES_KEY = "er.ajax.secureResources";
 
     public static class Observer {
@@ -40,7 +41,7 @@ public class ERXWOContext extends WOContext implements ERXMutableUserInfoHolderI
     		if (contextDictionary != null) {
     			ERXWOContext._insertPendingInResponse(response);
     		}
-    		ERXThreadStorage.removeValueForKey(ERXWOContext.CONTEXT_DICTIONARY_KEY);
+    		ERXWOContext.setCurrentContext(null);
     	}
     }
     
@@ -68,7 +69,15 @@ public class ERXWOContext extends WOContext implements ERXMutableUserInfoHolderI
      	return contextDictionary;
     }
 
-    protected static NSMutableDictionary _contextDictionary() {
+    public static WOContext currentContext() {
+    	return (WOContext) ERXThreadStorage.valueForKey(CONTEXT_KEY);
+    }
+    
+    public static void setCurrentContext(Object object) {
+    	ERXThreadStorage.takeValueForKey(object, CONTEXT_KEY);
+	}
+
+	protected static NSMutableDictionary _contextDictionary() {
     	NSMutableDictionary contextDictionary = (NSMutableDictionary)ERXThreadStorage.valueForKey(ERXWOContext.CONTEXT_DICTIONARY_KEY); 
     	return contextDictionary;
     }
@@ -204,7 +213,7 @@ public class ERXWOContext extends WOContext implements ERXMutableUserInfoHolderI
     	NSMutableArray result = new NSMutableArray();
     	WOComponent component = context.component();
     	while(component != null) {
-    		result.insertObjectAtIndex(component, 0);
+    		result.insertObjectAtIndex(component.name(), 0);
     		component = component.parent();
     	}
     	return result;

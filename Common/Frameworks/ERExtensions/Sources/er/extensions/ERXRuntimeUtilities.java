@@ -6,13 +6,23 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.sql.SQLException;
+import java.util.Enumeration;
 import java.util.Timer;
 import java.util.TimerTask;
 
 import org.apache.log4j.Logger;
 
+import com.webobjects.appserver.WOContext;
+import com.webobjects.eoaccess.EOAdaptorChannel;
+import com.webobjects.eoaccess.EODatabaseContext;
+import com.webobjects.eoaccess.EOGeneralAdaptorException;
 import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSBundle;
+import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSForwardException;
+import com.webobjects.foundation.NSKeyValueCoding;
+import com.webobjects.foundation.NSMutableDictionary;
+import com.webobjects.foundation.NSSelector;
 import com.webobjects.jdbcadaptor.JDBCAdaptorException;
 
 public class ERXRuntimeUtilities {
@@ -20,7 +30,99 @@ public class ERXRuntimeUtilities {
     /** logging support */
     public static Logger log = Logger
             .getLogger(ERXRuntimeUtilities.class);
+    
+    /**
+     * Returns a dictionary with useful stuff.
+     * @param e
+     * @return
+     */
+    public static NSMutableDictionary informationForException(Exception e) {
+		NSMutableDictionary extraInfo = new NSMutableDictionary();
+		if (e instanceof EOGeneralAdaptorException) {
+			// AK NOTE: you might have sensitive info in your failed ops...
+			NSDictionary dict = ((EOGeneralAdaptorException) e).userInfo();
+			if (dict != null) {
+				Object value;
+				// this one is a little bit heavyweight...
+				// value = NSPropertyListSerialization.stringFromPropertyList(dict);
+				value = dict.objectForKey(EODatabaseContext.FailedDatabaseOperationKey);
+				if (value != null) {
+					extraInfo.setObjectForKey(value.toString(), EODatabaseContext.FailedDatabaseOperationKey);
+				}
+				value = dict.objectForKey(EOAdaptorChannel.AdaptorFailureKey);
+				if (value != null) {
+					extraInfo.setObjectForKey(value.toString(), EOAdaptorChannel.AdaptorFailureKey);
+				}
+				value = dict.objectForKey(EOAdaptorChannel.FailedAdaptorOperationKey);
+				if (value != null) {
+					extraInfo.setObjectForKey(value.toString(), EOAdaptorChannel.FailedAdaptorOperationKey);
+				}
+				if (e instanceof JDBCAdaptorException) {
+					value = ((JDBCAdaptorException) e).sqlException();
+					if (value != null) {
+						extraInfo.setObjectForKey(value.toString(), "SQLException");
+					}
+				}
+			}
+		}
+		return extraInfo;
+    }
 
+    public static NSMutableDictionary informationForBundles() {
+    	NSMutableDictionary extraInfo = new NSMutableDictionary();
+    	NSMutableDictionary bundleVersions = new NSMutableDictionary();
+    	for (Enumeration bundles = NSBundle._allBundlesReally().objectEnumerator(); bundles.hasMoreElements();) {
+    		NSBundle bundle = (NSBundle) bundles.nextElement();
+    		String version = ERXProperties.versionStringForFrameworkNamed(bundle.name());
+    		if(version == null) {
+    			version = "No version provided";
+    		}
+    		bundleVersions.setObjectForKey(version, bundle.name());
+    	}
+    	extraInfo.setObjectForKey(bundleVersions, "Bundles");
+    	return extraInfo;
+    }
+
+    public static NSMutableDictionary informationForContext(WOContext context) {
+		NSMutableDictionary extraInfo = new NSMutableDictionary();
+		if (context != null && context.page() != null) {
+			extraInfo.setObjectForKey(context.page().name(), "CurrentPage");
+			if (context.component() != null) {
+				extraInfo.setObjectForKey(context.component().name(), "CurrentComponent");
+				if (context.component().parent() != null) {
+					extraInfo.setObjectForKey(ERXWOContext.componentPath(context), "CurrentComponentHierarchy");
+				}
+			}
+			extraInfo.setObjectForKey(context.request().uri(), "uri");
+			NSSelector d2wSelector = new NSSelector("d2wContext");
+			if (d2wSelector.implementedByObject(context.page())) {
+				try {
+					NSKeyValueCoding c = (NSKeyValueCoding) d2wSelector.invoke(context.page());
+					if (c != null) {
+						String pageConfiguration = (String) c.valueForKey("pageConfiguration");
+						if (pageConfiguration != null) {
+							extraInfo.setObjectForKey(pageConfiguration, "D2W-PageConfiguration");
+						}
+						String propertyKey = (String) c.valueForKey("propertyKey");
+						if (propertyKey != null) {
+							extraInfo.setObjectForKey(propertyKey, "D2W-PropertyKey");
+						}
+						NSArray displayPropertyKeys = (NSArray) c.valueForKey("displayPropertyKeys");
+						if (displayPropertyKeys != null) {
+							extraInfo.setObjectForKey(displayPropertyKeys, "D2W-DisplayPropertyKeys");
+						}
+					}
+				}
+				catch (Exception ex) {
+				}
+			}
+			if (context.hasSession() && context.session().statistics() != null) {
+				extraInfo.setObjectForKey(context.session().statistics(), "PreviousPageList");
+			}
+		}
+		return extraInfo;
+    }
+    
     /**
      * Retrieves the actual cause of an error by unwrapping them as far as possible, 
      * i.e. NSForwardException.originalThrowable(), InvocationTargetException.getTargetException() 
