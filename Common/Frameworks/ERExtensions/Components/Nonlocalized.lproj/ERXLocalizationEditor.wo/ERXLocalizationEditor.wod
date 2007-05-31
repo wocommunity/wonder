@@ -28,6 +28,7 @@ Save : WOSubmitButton {
 Form : WOForm {
 	multipleSubmit = true;
 	style = "border: 1px solid #aaa;";
+	name = "EditForm"; // for batch bar...
 }
 
 SearchForm : WOForm {
