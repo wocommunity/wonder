@@ -138,7 +138,7 @@ public class ERXPatcher {
 					Object value = _value.valueInComponent(context.component());
 					if (value != null) {
 						String stringValue = value.toString();
-						stringValue = ERXLocalizer.currentLocalizer().localizedStringForKeyWithDefault(stringValue);
+						// stringValue = ERXLocalizer.currentLocalizer().localizedStringForKeyWithDefault(stringValue);
 						response._appendTagAttributeAndValue("value", stringValue, true);
 					}
 				}
@@ -188,7 +188,7 @@ public class ERXPatcher {
 					Object object1 = null;
 					if (object != null) {
 						String string = object.toString();
-						string = ERXLocalizer.currentLocalizer().localizedStringForKeyWithDefault(string);
+						// string = ERXLocalizer.currentLocalizer().localizedStringForKeyWithDefault(string);
 						response._appendTagAttributeAndValue("value", string, true);
 					}
 				}
