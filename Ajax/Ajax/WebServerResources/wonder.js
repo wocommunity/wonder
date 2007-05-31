@@ -161,23 +161,26 @@ var AjaxUpdateContainer = {
 	insertionFunc : function(effectPairName, beforeDuration, afterDuration) {
 		var insertionFunction;
 		
+		var showEffect = 0;
+		var hideEffect = 1;
+		
 		for (var existingPairName in Effect.PAIRS) {
 			var pairs = Effect.PAIRS[existingPairName];
 	
 			if (effectPairName == existingPairName) {
 				insertionFunction = function(receiver, response) {
-					Effect[Effect.PAIRS[effectPairName][1]](receiver, { 
+					Effect[Effect.PAIRS[effectPairName][hideEffect]](receiver, { 
 						duration: beforeDuration || 0.5,
 						afterFinish: function() { 
 							receiver.update(response); 
-							Effect[Effect.PAIRS[effectPairName][0]](receiver, {
+							Effect[Effect.PAIRS[effectPairName][showEffect]](receiver, {
 									duration: afterDuration || 0.5
 							});
 						}
 					});
 				};
 			}
-			else if (effectPairName == pairs[1]) {
+			else if (effectPairName == pairs[hideEffect]) {
 				insertionFunction = function(receiver, response) {
 					Effect[effectPairName](receiver, { 
 						duration: beforeDuration || 0.5,
@@ -188,7 +191,7 @@ var AjaxUpdateContainer = {
 					});
 				};
 			}
-			else if (effectPairName == pairs[0]) {
+			else if (effectPairName == pairs[showEffect]) {
 				insertionFunction = function(receiver, response) {
 					receiver.hide();
 					receiver.update(response); 
