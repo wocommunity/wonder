@@ -203,7 +203,6 @@ public abstract class ERXAbstractXmlRestResponseWriter extends ERXAbstractRestRe
 	}
 	
 	protected void appendPrimitiveToResponse(ERXRestContext context, WOResponse response, ERXRestKey result, int indent, Object value) throws ERXRestException {
-		System.out.println("ERXAbstractXmlRestResponseWriter.appendPrimitiveToResponse: write " + value);
 		indent(response, indent);
 		response.appendContentString(String.valueOf(value));
 	}

@@ -1,9 +1,13 @@
 package er.rest;
 
+import java.util.Enumeration;
+
 import com.webobjects.eoaccess.EOEntity;
+import com.webobjects.eoaccess.EOModelGroup;
 import com.webobjects.eocontrol.EOEnterpriseObject;
 import com.webobjects.eocontrol.EOFetchSpecification;
 import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSMutableSet;
 
 /**
  * ERXUnsafeRestEntityDelegate should probably never be used in production.  This is an entity delegate
@@ -13,7 +17,26 @@ import com.webobjects.foundation.NSArray;
  * 
  * @author mschrag
  */
-public class ERXUnsafeReadOnlyRestEntityDelegate extends ERXAbstractRestEntityDelegate {
+public class ERXUnsafeReadOnlyRestEntityDelegate extends ERXStandardRestEntityDelegate {
+	private NSMutableSet _initializedEntityNames;
+
+	public ERXUnsafeReadOnlyRestEntityDelegate() {
+		_initializedEntityNames = new NSMutableSet();
+	}
+	
+	public void initializeEntityNamed(String entityName) {
+		if (!_initializedEntityNames.containsObject(entityName)) {
+			super.initializeEntityNamed(entityName);
+			NSArray allPropertyNames = ERXUnsafeRestEntityDelegate.allPropertyNames(EOModelGroup.defaultGroup().entityNamed(entityName), true);
+			Enumeration allPropertyNamesEnum = allPropertyNames.objectEnumerator();
+			while (allPropertyNamesEnum.hasMoreElements()) {
+				String propertyName = (String) allPropertyNamesEnum.nextElement();
+				updatePropertyAliasForPropertyNamed(entityName, propertyName);
+			}
+			_initializedEntityNames.addObject(entityName);
+		}
+	}
+
 	public void delete(EOEntity entity, EOEnterpriseObject eo, ERXRestContext context) throws ERXRestException, ERXRestSecurityException {
 		throw new ERXRestSecurityException("You are not allowed to delete objects for the entity '" + entity.name() + ".");
 	}
@@ -66,9 +89,5 @@ public class ERXUnsafeReadOnlyRestEntityDelegate extends ERXAbstractRestEntityDe
 
 	public NSArray visibleObjects(EOEntity parentEntity, Object parent, String key, EOEntity entity, NSArray objects, ERXRestContext context) {
 		return objects;
-	}
-
-	public EOEntity nextEntity(EOEntity entity, String key) {
-		return null;
 	}
 }
