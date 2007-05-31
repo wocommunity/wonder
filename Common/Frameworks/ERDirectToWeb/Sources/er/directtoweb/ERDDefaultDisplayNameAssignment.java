@@ -31,7 +31,7 @@ public class ERDDefaultDisplayNameAssignment extends ERDAssignment implements ER
         new NSArray(new Object[] {"sectionKey"}), "displayNameForSectionKey",
         new NSArray(new Object[] {"tabKey"}), "displayNameForTabKey",
         new NSArray(new Object[] {"propertyKey"}), "displayNameForProperty",
-        new NSArray(new Object[] {"propertyKey"}), "displayNameForKeyPath",
+        new NSArray(new Object[] {"propertyKey"}), "displayNameForPropertyKeyPath",
         //new NSArray(new Object[] {"destinationEntityName"}), "displayNameForDestinationEntity",
         new NSArray(new Object[] {"smartRelationship.destinationEntity", "destinationEntityName"}), "displayNameForDestinationEntity",
         new NSArray(new Object[] {"editConfigurationName"}), "displayNameForEditConfiguration",
