@@ -27,18 +27,24 @@
            name = ERCStatic;
        }
     );
-    internalInfo = 
+    userInfo = 
     {
-        _deletedEntityNamesInObjectStore = 
-        (
-           ERCH, 
-           ERCHe, 
-           ERCHel, 
-           ERCHelp, 
-           ERCHelpT, 
-           ERCHelpTe, 
-           ERCHelpTex, 
-           ERCStatic1
-        );
+        _EntityModeler = 
+        {
+            activeDatabaseConfigName = NewDatabaseConfig;
+            databaseConfigs = 
+            {
+                NewDatabaseConfig = 
+                {
+                    adaptorName = JDBC;
+                    connectionDictionary = 
+                    {
+                        URL = jdbc:mysql://localhost/bug;
+                        username = root;
+                    };
+                    prototypeEntityName = EOJDBCMySQLPrototypes;
+                };
+            };
+        };
     };
 }
