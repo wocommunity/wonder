@@ -820,86 +820,9 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 	 * @return dictionary containing extra information for the current context.
 	 */
 	public NSMutableDictionary extraInformationForExceptionInContext(Exception e, WOContext context) {
-		NSMutableDictionary extraInfo = new NSMutableDictionary();
-
-		if (e instanceof EOGeneralAdaptorException) {
-			// AK NOTE: you might have sensitive info in your failed ops...
-			NSDictionary dict = ((EOGeneralAdaptorException) e).userInfo();
-			if (dict != null) {
-				Object value;
-				// this one is a little bit heavyweight...
-				// value = NSPropertyListSerialization.stringFromPropertyList(dict);
-				value = dict.objectForKey(EODatabaseContext.FailedDatabaseOperationKey);
-				if (value != null) {
-					extraInfo.setObjectForKey(value.toString(), EODatabaseContext.FailedDatabaseOperationKey);
-				}
-				value = dict.objectForKey(EOAdaptorChannel.AdaptorFailureKey);
-				if (value != null) {
-					extraInfo.setObjectForKey(value.toString(), EOAdaptorChannel.AdaptorFailureKey);
-				}
-				value = dict.objectForKey(EOAdaptorChannel.FailedAdaptorOperationKey);
-				if (value != null) {
-					extraInfo.setObjectForKey(value.toString(), EOAdaptorChannel.FailedAdaptorOperationKey);
-				}
-				if (e instanceof JDBCAdaptorException) {
-					value = ((JDBCAdaptorException) e).sqlException();
-					if (value != null) {
-						extraInfo.setObjectForKey(value.toString(), "SQLException");
-					}
-				}
-			}
-		}
-		if (context != null && context.page() != null) {
-			extraInfo.setObjectForKey(context.page().name(), "CurrentPage");
-			if (context.component() != null) {
-				extraInfo.setObjectForKey(context.component().name(), "CurrentComponent");
-				if (context.component().parent() != null) {
-					WOComponent component = context.component();
-					NSMutableArray hierarchy = new NSMutableArray(component.name());
-					while (component.parent() != null) {
-						component = component.parent();
-						hierarchy.addObject(component.name());
-					}
-					extraInfo.setObjectForKey(hierarchy, "CurrentComponentHierarchy");
-				}
-			}
-			extraInfo.setObjectForKey(context.request().uri(), "uri");
-			NSSelector d2wSelector = new NSSelector("d2wContext");
-			if (d2wSelector.implementedByObject(context.page())) {
-				try {
-					NSKeyValueCoding c = (NSKeyValueCoding) d2wSelector.invoke(context.page());
-					if (c != null) {
-						String pageConfiguration = (String) c.valueForKey("pageConfiguration");
-						if (pageConfiguration != null) {
-							extraInfo.setObjectForKey(pageConfiguration, "D2W-PageConfiguration");
-						}
-						String propertyKey = (String) c.valueForKey("propertyKey");
-						if (propertyKey != null) {
-							extraInfo.setObjectForKey(propertyKey, "D2W-PropertyKey");
-						}
-						NSArray displayPropertyKeys = (NSArray) c.valueForKey("displayPropertyKeys");
-						if (displayPropertyKeys != null) {
-							extraInfo.setObjectForKey(displayPropertyKeys, "D2W-DisplayPropertyKeys");
-						}
-					}
-				}
-				catch (Exception ex) {
-				}
-			}
-			if (context.hasSession() && context.session().statistics() != null) {
-				extraInfo.setObjectForKey(context.session().statistics(), "PreviousPageList");
-			}
-			NSMutableDictionary bundleVersions = new NSMutableDictionary();
-			for (Enumeration bundles = NSBundle._allBundlesReally().objectEnumerator(); bundles.hasMoreElements();) {
-				NSBundle bundle = (NSBundle) bundles.nextElement();
-				String version = ERXProperties.versionStringForFrameworkNamed(bundle.name());
-				if(version == null) {
-					version = "No version provided";
-				}
-				bundleVersions.setObjectForKey(version, bundle.name());
-			}
-			extraInfo.setObjectForKey(bundleVersions, "Bundles");
-		}
+		NSMutableDictionary extraInfo = ERXRuntimeUtilities.informationForException(e);
+		extraInfo.addEntriesFromDictionary(ERXRuntimeUtilities.informationForContext(context));
+		extraInfo.addEntriesFromDictionary(ERXRuntimeUtilities.informationForBundles());
 		return extraInfo;
 	}
 
@@ -1116,7 +1039,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 			else {
 				response = super.dispatchRequest(request);
 			}
-			WOContext context = (WOContext) ERXThreadStorage.valueForKey("wocontext");
+			WOContext context = ERXWOContext.currentContext();
 			if (context != null && context.request() != null) {
 				if (ERXApplication.requestHandlingLog.isDebugEnabled()) {
 					ERXApplication.requestHandlingLog.debug(context.request());
@@ -1172,8 +1095,8 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 		// We only want to push in the context the first time it is
 		// created, ie we don't want to lose the current context
 		// when we create a context for an error page.
-		if (ERXThreadStorage.valueForKey("wocontext") == null) {
-			ERXThreadStorage.takeValueForKey(context, "wocontext");
+		if (ERXWOContext.currentContext() == null) {
+			ERXWOContext.setCurrentContext(context);
 		}
 		return context;
 	}
