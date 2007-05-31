@@ -31,7 +31,6 @@ import com.webobjects.foundation.NSKeyValueCoding;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation.NSMutableSet;
-import com.webobjects.foundation.NSSet;
 import com.webobjects.foundation.NSTimestamp;
 
 import er.extensions.ERXComponentActionRedirector;
@@ -404,6 +403,10 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
                         }
                     }
                 }
+                if("saveChangesExceptionKey".equals(keyPath) && erv.propertyKey() != null) { 
+                	// AK: this is for combined keys like company,taxIdentifier
+                	keyPathsWithValidationExceptions.addObjectsFromArray(NSArray.componentsSeparatedByString( erv.propertyKey(), ","));
+                }
             } else {
                 _temp.removeAllObjects();
                 ERXValidation.validationFailedWithException(e, value, keyPath, _temp, propertyKey(), ERXLocalizer.currentLocalizer(), d2wContext().entity(),
@@ -561,9 +564,9 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
      * 
      * @return
      */
-    public static NSSet allConfigurationNames() {
+    public static NSArray allConfigurationNames() {
         synchronized (_allConfigurations) {
-            return _allConfigurations.immutableClone();
+            return _allConfigurations.allObjects();
         }
     }
 
@@ -572,12 +575,15 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
      * console for easier debugging.
      */
     public void appendToResponse(WOResponse r, WOContext c) {
-        NDC.push("Page: " + getClass().getName() + (d2wContext() != null ? (" - Configuration: " + d2wContext().valueForKey(Keys.pageConfiguration)) : ""));
+    	String info = "(" + d2wContext().dynamicPage() + ")";
+    	// String info = "(" + getClass().getName() + (d2wContext() != null ? ("/" + d2wContext().valueForKey(Keys.pageConfiguration)) : "") + ")";
+        NDC.push(info);
         if (d2wContext() != null && !WOApplication.application().isCachingEnabled()) {
             synchronized (_allConfigurations) {
                 if (d2wContext().dynamicPage() != null) {
                     _allConfigurations.addObject(d2wContext().dynamicPage());
                 }
+                // log.info("" + NSPropertyListSerialization.stringFromPropertyList(_allConfigurations));
             }
         }
         super.appendToResponse(r, c);
