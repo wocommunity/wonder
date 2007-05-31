@@ -32,8 +32,8 @@
 		<binding name="submitOnBlur"/>
 		<binding name="ajaxOptions"/>
 		<binding defaults="Actions" name="action"/>
-	    <validation message="'value' is a required binding">
+	  <validation message="&apos;value&apos; is a required binding">
 			<unbound name="value"/>
-	    </validation>
+	  </validation>
 	</wo>
 </wodefinitions>
