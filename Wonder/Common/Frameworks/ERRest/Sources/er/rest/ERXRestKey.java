@@ -6,6 +6,9 @@ import com.webobjects.eoaccess.EORelationship;
 import com.webobjects.eocontrol.EOEnterpriseObject;
 import com.webobjects.foundation.NSArray;
 
+import er.extensions.ERXLocalizer;
+import er.extensions.ERXStringUtilities;
+
 /**
  * ERXRestKey represents the keypath that was embodied in the request URL. This differs from a normal keypath in that it
  * can contain object IDs. An ERXRestKey is basically a doubly-linked list of keypath entries.
@@ -87,7 +90,7 @@ public class ERXRestKey {
 		ERXRestKey trimmedKey = cloneKey(false);
 		trimmedKey._entity = nextEntity();
 		if (value instanceof EOEnterpriseObject) {
-			trimmedKey._key = ERXRestUtils.idForEO((EOEnterpriseObject) value);
+			trimmedKey._key = ERXRestUtils.stringIDForEO((EOEnterpriseObject) value);
 		}
 		else {
 			trimmedKey._key = null;
@@ -471,7 +474,13 @@ public class ERXRestKey {
 			String entityName = context.delegate().entityNameForAlias(paths[0]);
 			EOEntity entity = EOModelGroup.defaultGroup().entityNamed(entityName);
 			if (entity == null) {
-				throw new ERXRestNotFoundException("There is no entity named '" + paths[0] + "'.");
+				String railsyEntityName = ERXStringUtilities.capitalize(ERXLocalizer.currentLocalizer().singularifiedString(entityName));
+				if (!railsyEntityName.equals(entityName)) {
+					entity = EOModelGroup.defaultGroup().entityNamed(railsyEntityName);
+				}
+				if (entity == null) {
+					throw new ERXRestNotFoundException("There is no entity named '" + entityName + "' or '" + railsyEntityName + "'.");
+				}
 			}
 			if (paths.length > 1) {
 				key = new ERXRestKey(context, entity, paths[1]);
