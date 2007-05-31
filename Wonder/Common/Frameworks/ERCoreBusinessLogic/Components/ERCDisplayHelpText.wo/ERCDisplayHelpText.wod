@@ -1,4 +1,4 @@
-HelpText : ERXLocalizedString {
+HelpText : WOString {
 	value = helpText.value;
 	valueWhenEmpty = defaultValue;
 }
