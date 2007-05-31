@@ -110,14 +110,30 @@ public abstract class ERDBranchDelegate implements ERDBranchDelegateInterface {
         } else {
         	NSMutableArray translatedChoices = new NSMutableArray();
         	for (Iterator iter = choices.iterator(); iter.hasNext();) {
-				NSMutableDictionary dict = ((NSMutableDictionary) iter.next()).mutableClone();
-				String label = (String) dict.objectForKey(BRANCH_LABEL);
-				if(label != null) {
-					label = ERXLocalizer.currentLocalizer().localizedStringForKeyWithDefault(label);
-					dict.setObjectForKey(label, BRANCH_LABEL);
-				}
-				translatedChoices.addObject(dict);
-			}
+        		Object o = iter.next();
+				String method = null;
+				String label = null;
+	       		NSMutableDictionary entry = new NSMutableDictionary();
+        		if (o instanceof NSDictionary) {
+        			entry.addEntriesFromDictionary((NSDictionary) o);
+        			method = (String) entry.objectForKey(BRANCH_NAME);
+        			label = (String) entry.objectForKey(BRANCH_LABEL);
+        		} else if (o instanceof String) {
+        			method = (String) o;
+        		}
+        		if(label == null) {
+        			String localizerKey = "Button." + method;
+        			label = ERXLocalizer.currentLocalizer().localizedStringForKey(localizerKey);
+        			if(label == null) {
+               			label = ERXStringUtilities.displayNameForKey(method);
+               			ERXLocalizer.currentLocalizer().takeValueForKey(label, localizerKey);
+        			}
+        		} else {
+        			label = ERXLocalizer.currentLocalizer().localizedStringForKeyWithDefault(label);
+        		}
+        		entry.setObjectForKey(label, BRANCH_LABEL);
+        		translatedChoices.addObject(entry);
+        	}
         	choices = translatedChoices;
         }
         return choices;
