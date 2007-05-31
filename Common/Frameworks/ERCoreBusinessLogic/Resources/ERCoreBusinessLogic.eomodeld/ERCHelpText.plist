@@ -22,8 +22,7 @@
            prototypeName = varchar1000;
            userInfo = 
            {
-               ERXLanguages = 
-               ();
+               ERXLanguages = "";
            };
        }
     );
