@@ -3,8 +3,8 @@ Show: WOConditional {
 }
 
 Log4J: WOHyperlink {
-	actionClass = "er.extensions.ERXDirectAction";
 	class = ^linkClass;
+	actionClass = "er.extensions.ERXDirectAction";
 	directActionName = "log4j";
 	target = "log4J";
 }
@@ -21,5 +21,16 @@ SQL: WOHyperlink {
 
 Clear: WOHyperlink {
 	action = clearD2WRuleCache;
+	class = ^linkClass;
+}
+
+Dump: WOHyperlink {
+	actionClass = "er.extensions.ERXDirectAction";
+	directActionName = "dumpCreatedKeys";
+	class = ^linkClass;
+}
+Edit: WOHyperlink {
+	actionClass = "er.extensions.ERXDirectAction";
+	directActionName = "editLocalizedFiles";
 	class = ^linkClass;
 }
