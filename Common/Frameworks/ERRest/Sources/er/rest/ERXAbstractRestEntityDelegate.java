@@ -27,6 +27,13 @@ import er.extensions.ERXGuardedObjectInterface;
  */
 public abstract class ERXAbstractRestEntityDelegate implements IERXRestEntityDelegate {
 	/**
+	 * Do nothing by default
+	 */
+	public void initializeEntityNamed(String entityName) {
+		// DO NOTHING
+	}
+
+	/**
 	 * Returns entityName;
 	 * 
 	 * @return entityName
@@ -99,7 +106,7 @@ public abstract class ERXAbstractRestEntityDelegate implements IERXRestEntityDel
 		Enumeration objsEnum = objs.objectEnumerator();
 		while (objsEnum.hasMoreElements()) {
 			EOEnterpriseObject eo = (EOEnterpriseObject) objsEnum.nextElement();
-			if (ERXRestUtils.idForEO(eo).equals(key)) {
+			if (ERXRestUtils.stringIDForEO(eo).equals(key)) {
 				filteredObjs.addObject(eo);
 			}
 		}
@@ -126,6 +133,10 @@ public abstract class ERXAbstractRestEntityDelegate implements IERXRestEntityDel
 		String formattedValue;
 		if (attributeValue == null) {
 			formattedValue = null;
+		}
+		else if (attributeValue instanceof NSTimestamp) {
+			NSTimestamp timestamp = (NSTimestamp)attributeValue;
+			formattedValue = new NSTimestampFormatter("%Y-%m-%dT%H:%M:%SZ").format(timestamp);
 		}
 		else {
 			formattedValue = attributeValue.toString();
@@ -190,7 +201,12 @@ public abstract class ERXAbstractRestEntityDelegate implements IERXRestEntityDel
 				parsedValue = Double.valueOf(attributeValue);
 			}
 			else if (NSTimestamp.class.isAssignableFrom(valueType)) {
-				parsedValue = new NSTimestampFormatter().parseObject(attributeValue);
+				if (attributeValue.indexOf(' ') == -1) {
+					parsedValue = new NSTimestampFormatter("%Y-%m-%dT%H:%M:%SZ").parseObject(attributeValue);
+				}
+				else {
+					parsedValue = new NSTimestampFormatter().parseObject(attributeValue);
+				}
 			}
 			else {
 				throw new ERXRestException("Unable to parse the value '" + attributeValue + "' into a " + valueType.getName() + ".");
@@ -218,53 +234,70 @@ public abstract class ERXAbstractRestEntityDelegate implements IERXRestEntityDel
 			throw new ERXRestException("You attempted to put a " + eoNode.name() + " into a " + entityAliasForEntityNamed(entity.name()) + ".");
 		}
 
+		IERXRestEntityDelegate entityDelegate = context.delegate().entityDelegate(entity);
 		Enumeration attributeNodesEnum = eoNode.children().objectEnumerator();
 		while (attributeNodesEnum.hasMoreElements()) {
 			ERXRestRequestNode attributeNode = (ERXRestRequestNode)attributeNodesEnum.nextElement();
 
-			String attributeName = attributeNode.name();
-			if (inserting && !canInsertProperty(entity, eo, attributeName, context)) {
-				throw new ERXRestSecurityException("You are not allowed to insert the property '" + attributeName + "' on " + entityAliasForEntityNamed(entity.name()) + ".");
+			boolean updateAttribute = true;
+			String attributeName = entityDelegate.propertyNameForPropertyAlias(entity, attributeNode.name());
+			if ("id".equals(attributeName)) {
+				updateAttribute = false;
 			}
-			else if (!inserting && !canUpdateProperty(entity, eo, attributeName, context)) {
-				throw new ERXRestSecurityException("You are not allowed to update the property '" + attributeName + "' on " + entityAliasForEntityNamed(entity.name()) + ".");
-			}
+			
+			if (updateAttribute) {
+				if (inserting && !canInsertProperty(entity, eo, attributeName, context)) {
+					throw new ERXRestSecurityException("You are not allowed to insert the property '" + attributeName + "' on " + entityAliasForEntityNamed(entity.name()) + ".");
+				}
+				else if (!inserting && !canUpdateProperty(entity, eo, attributeName, context)) {
+					throw new ERXRestSecurityException("You are not allowed to update the property '" + attributeName + "' on " + entityAliasForEntityNamed(entity.name()) + ".");
+				}
 
-			EORelationship relationship = entity.relationshipNamed(attributeName);
-			if (relationship != null) {
-				EOEntity destinationEntity = relationship.destinationEntity();
-				if (!relationship.isToMany()) {
-					EOEnterpriseObject originalObject = (EOEnterpriseObject) valueForKey(entity, eo, attributeName, context);
-					String id = attributeNode.attributeForKey("id");
-					if (id == null) {
-						eo.removeObjectFromBothSidesOfRelationshipWithKey(originalObject, attributeName);
-					}
-					else {
-						EOEnterpriseObject newObject = context.delegate().entityDelegate(destinationEntity).objectWithKey(destinationEntity, id, context);
-						if (originalObject == null && newObject != null) {
-							eo.addObjectToBothSidesOfRelationshipWithKey(newObject, attributeName);
+				EORelationship relationship = entity.relationshipNamed(attributeName);
+				if (relationship != null) {
+					EOEntity destinationEntity = relationship.destinationEntity();
+					if (!relationship.isToMany()) {
+						EOEnterpriseObject originalObject = (EOEnterpriseObject) valueForKey(entity, eo, attributeName, context);
+						String id = idForNode(attributeNode);
+						// MS: ignore nil="true" to-one?
+						if (id == null || attributeNode.isNull()) {
+							if (!relationship.isMandatory()) {
+								eo.removeObjectFromBothSidesOfRelationshipWithKey(originalObject, attributeName);
+							}
+							else {
+								// MS: Throw?
+							}
 						}
-						else if (originalObject != null && !originalObject.equals(newObject)) {
-							eo.removeObjectFromBothSidesOfRelationshipWithKey(originalObject, attributeName);
-							if (newObject != null) {
+						else {
+							EOEnterpriseObject newObject = context.delegate().entityDelegate(destinationEntity).objectWithKey(destinationEntity, id, context);
+							if (originalObject == null && newObject != null) {
 								eo.addObjectToBothSidesOfRelationshipWithKey(newObject, attributeName);
 							}
+							else if (originalObject != null && !originalObject.equals(newObject)) {
+								eo.removeObjectFromBothSidesOfRelationshipWithKey(originalObject, attributeName);
+								if (newObject != null) {
+									eo.addObjectToBothSidesOfRelationshipWithKey(newObject, attributeName);
+								}
+							}
+						}
+					}
+					else {
+						NSArray currentObjects = (NSArray) valueForKey(entity, eo, attributeName, context);
+						NSArray toManyNodes = attributeNode.children();
+						// MS: ignore nil="true" to-many?
+						if (!attributeNode.isNull()) {
+							updateArrayFromDocument(entity, eo, attributeName, destinationEntity, currentObjects, toManyNodes, context);
 						}
 					}
 				}
 				else {
-					NSArray currentObjects = (NSArray) valueForKey(entity, eo, attributeName, context);
-					NSArray toManyNodes = attributeNode.children();
-					updateArrayFromDocument(entity, eo, attributeName, destinationEntity, currentObjects, toManyNodes, context);
-				}
-			}
-			else {
-				String attributeValue = attributeNode.value();
-				try {
-					takeValueForKey(entity, eo, attributeName, attributeValue, context);
-				}
-				catch (ParseException e) {
-					throw new ERXRestException("Failed to parse attribute value '" + attributeValue + "'.", e);
+					String attributeValue = attributeNode.value();
+					try {
+						takeValueForKey(entity, eo, attributeName, attributeValue, context);
+					}
+					catch (ParseException e) {
+						throw new ERXRestException("Failed to parse attribute value '" + attributeValue + "'.", e);
+					}
 				}
 			}
 		}
@@ -272,6 +305,20 @@ public abstract class ERXAbstractRestEntityDelegate implements IERXRestEntityDel
 		updated(entity, eo, context);
 	}
 
+	protected String idForNode(ERXRestRequestNode attributeNode) {
+		String id = attributeNode.attributeForKey("id");
+		if (id == null) {
+			ERXRestRequestNode idNode = attributeNode.childNamed("id");
+			if (idNode != null) {
+				id = idNode.value();
+			}
+			else {
+				id = attributeNode.value();
+			}
+		}
+		return id;
+	}
+	
 	public void updateArrayFromDocument(EOEntity parentEntity, EOEnterpriseObject parentObject, String attributeName, EOEntity entity, NSArray currentObjects, NSArray toManyNodes, ERXRestContext context) throws ERXRestException, ERXRestNotFoundException, ERXRestSecurityException {
 		NSMutableArray keepObjects = new NSMutableArray();
 		NSMutableArray addObjects = new NSMutableArray();
@@ -285,7 +332,7 @@ public abstract class ERXAbstractRestEntityDelegate implements IERXRestEntityDel
 				throw new ERXRestException("You attempted to put a " + toManyNodeName + " into a " + entityAliasForEntityNamed(entity.name()) + ".");
 			}
 
-			String id = toManyNode.attributeForKey("id");
+			String id = idForNode(toManyNode);
 			Object relatedObject = objectWithKey(entity, id, context);
 			if (currentObjects.containsObject(relatedObject)) {
 				System.out.println("AbstractERXRestDelegate.updateArray: keeping " + relatedObject + " in " + parentObject + " (" + attributeName + ")");

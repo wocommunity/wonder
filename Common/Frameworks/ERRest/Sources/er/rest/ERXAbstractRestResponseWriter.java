@@ -43,7 +43,7 @@ public abstract class ERXAbstractRestResponseWriter implements IERXRestResponseW
 		Enumeration valuesEnum = values.objectEnumerator();
 		while (valuesEnum.hasMoreElements()) {
 			EOEnterpriseObject eo = (EOEnterpriseObject) valuesEnum.nextElement();
-			ERXRestKey eoKey = result.extend(ERXRestUtils.idForEO(eo), eo);
+			ERXRestKey eoKey = result.extend(ERXRestUtils.stringIDForEO(eo), eo);
 			valueKeys.addObject(eoKey);
 		}
 
@@ -72,7 +72,7 @@ public abstract class ERXAbstractRestResponseWriter implements IERXRestResponseW
 			}
 
 			EOEnterpriseObject eo = (EOEnterpriseObject) value;
-			String id = ERXRestUtils.idForEO(eo);
+			Object id = ERXRestUtils.idForEO(eo);
 
 			boolean alreadyVisited = visitedObjects.containsObject(eo);
 			if (alreadyVisited) {
@@ -201,7 +201,7 @@ public abstract class ERXAbstractRestResponseWriter implements IERXRestResponseW
 	 * @param indent
 	 *            the indent level
 	 */
-	protected abstract void appendVisitedToResponse(ERXRestContext context, WOResponse response, EOEntity entity, EOEnterpriseObject eo, String objectName, String entityName, String id, int indent);
+	protected abstract void appendVisitedToResponse(ERXRestContext context, WOResponse response, EOEntity entity, EOEnterpriseObject eo, String objectName, String entityName, Object id, int indent);
 
 	/**
 	 * Write an object to the response without showing its details. This is typically similar to
@@ -225,7 +225,7 @@ public abstract class ERXAbstractRestResponseWriter implements IERXRestResponseW
 	 * @param indent
 	 *            the indent level
 	 */
-	protected abstract void appendNoDetailsToResponse(ERXRestContext context, WOResponse response, EOEntity entity, EOEnterpriseObject eo, String objectName, String entityName, String id, int indent);
+	protected abstract void appendNoDetailsToResponse(ERXRestContext context, WOResponse response, EOEntity entity, EOEnterpriseObject eo, String objectName, String entityName, Object id, int indent);
 
 	/**
 	 * Writes the visible details of an object to the response. Permissions have already been checked by the time this
@@ -260,7 +260,7 @@ public abstract class ERXAbstractRestResponseWriter implements IERXRestResponseW
 	 * @throws ParseException
 	 *             if a parse error occurs
 	 */
-	protected abstract void appendDetailsToResponse(ERXRestContext context, WOResponse response, EOEntity entity, EOEnterpriseObject eo, String objectName, String entityName, String id, NSArray displayKeys, int indent, NSMutableSet visitedObjects) throws ERXRestException, ERXRestSecurityException, ERXRestNotFoundException, ParseException;
+	protected abstract void appendDetailsToResponse(ERXRestContext context, WOResponse response, EOEntity entity, EOEnterpriseObject eo, String objectName, String entityName, Object id, NSArray displayKeys, int indent, NSMutableSet visitedObjects) throws ERXRestException, ERXRestSecurityException, ERXRestNotFoundException, ParseException;
 
 	/**
 	 * Writes the bare primitive out to the response. Permissions have already been checked by the time this method is

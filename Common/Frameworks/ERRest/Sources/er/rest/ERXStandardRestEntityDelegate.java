@@ -311,12 +311,16 @@ public abstract class ERXStandardRestEntityDelegate extends ERXAbstractRestEntit
 	 */
 	public void addViewPropertyName(String entityName, String visiblePropertyName) {
 		_viewPropertyNames.addObject(entityName + "." + visiblePropertyName);
-
-		String propertyAliasKey = ERXXmlRestResponseWriter.REST_PREFIX + entityName + "." + visiblePropertyName + ".alias";
+		
+		updatePropertyAliasForPropertyNamed(entityName, visiblePropertyName);
+	}
+	
+	protected void updatePropertyAliasForPropertyNamed(String entityName, String propertyName) {
+		String propertyAliasKey = ERXXmlRestResponseWriter.REST_PREFIX + entityName + "." + propertyName + ".alias";
 		String propertyAlias = ERXProperties.stringForKey(propertyAliasKey);
 		if (propertyAlias != null) {
-			_propertyAliasForPropertyName.setObjectForKey(propertyAlias, entityName + "." + visiblePropertyName);
-			_propertyNameForPropertyAlias.setObjectForKey(visiblePropertyName, entityName + "." + propertyAlias);
+			_propertyAliasForPropertyName.setObjectForKey(propertyAlias, entityName + "." + propertyName);
+			_propertyNameForPropertyAlias.setObjectForKey(propertyName, entityName + "." + propertyAlias);
 		}
 	}
 

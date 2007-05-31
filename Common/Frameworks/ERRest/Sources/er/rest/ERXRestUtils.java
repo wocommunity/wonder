@@ -92,7 +92,25 @@ public class ERXRestUtils {
 	 * @param eo the EO to get a primary key for
 	 * @return the primary key
 	 */
-	public static String idForEO(EOEnterpriseObject eo) {
+	public static String stringIDForEO(EOEnterpriseObject eo) {
+		Object id = ERXRestUtils.idForEO(eo);
+		String idStr;
+		if (id instanceof Object[]) {
+			throw new IllegalArgumentException(eo.entityName() + " has a compound primary key, which is currently not supported.");
+		}
+		else {
+			idStr = String.valueOf(id);
+		}
+		return idStr;
+	}
+	
+	/**
+	 * Returns the primary key of the given EO.
+	 * 
+	 * @param eo the EO to get a primary key for
+	 * @return the primary key
+	 */
+	public static Object idForEO(EOEnterpriseObject eo) {
 		EOGlobalID gid = eo.editingContext().globalIDForObject(eo);
 		if (!(gid instanceof EOKeyGlobalID)) {
 			throw new IllegalArgumentException("Unsupported primary key type '" + gid + "'.");
@@ -102,7 +120,13 @@ public class ERXRestUtils {
 		if (keyValues.length > 1) {
 			throw new IllegalArgumentException("Compound primary keys (" + eo.entityName() + ") are not currently supported.");
 		}
-		Object id = keyValues[0];
-		return String.valueOf(id);
+		Object id;
+		if (keyValues.length == 1) {
+			id = keyValues[0];
+		}
+		else {
+			id = keyValues;
+		}
+		return id;
 	}
 }
