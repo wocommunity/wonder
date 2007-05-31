@@ -2,13 +2,13 @@ AllowsNull: WOConditional {
 	condition = allowsNull;
 }
 
-ERXLocalizedString1: WOString {
-	value = d2wContext.yesButtonLabel;
+ERXLocalizedString1: ERXLocalizedString {
+	value = trueValue.name;
 	escapeHTML = false;
 }
 
-ERXLocalizedString2: WOString {
-	value = d2wContext.noButtonLabel;
+ERXLocalizedString2: ERXLocalizedString {
+	value = falseValue.name;
 	escapeHTML = false;
 }
 
