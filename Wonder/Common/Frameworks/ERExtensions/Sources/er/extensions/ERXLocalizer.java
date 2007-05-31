@@ -28,6 +28,7 @@ import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation.NSNotification;
 import com.webobjects.foundation.NSNotificationCenter;
 import com.webobjects.foundation.NSNumberFormatter;
+import com.webobjects.foundation.NSPropertyListSerialization;
 import com.webobjects.foundation.NSSelector;
 import com.webobjects.foundation.NSTimestampFormatter;
 
@@ -187,6 +188,9 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
     
     protected void addToCreatedKeys(Object value, String key) {
     	createdKeys.takeValueForKey(value, key);
+    	if(key != null && key.indexOf(" ") > 0) {
+    		log.info("Value added: " + key + "->" + value  + " in " + NSPropertyListSerialization.stringFromPropertyList(ERXWOContext.componentPath(ERXWOContext.currentContext())));
+    	}
     }
     
     /**
@@ -507,6 +511,10 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
     public String language() { return language; }
     public NSDictionary createdKeys() { return createdKeys; }
 
+    public void dumpCreatedKeys() {
+    	log.info(NSPropertyListSerialization.stringFromPropertyList(createdKeys()));
+    }
+    
     public Object localizedValueForKeyWithDefault(String key) {
         if(key == null) {
             log.warn("Attempt to insert null key!");

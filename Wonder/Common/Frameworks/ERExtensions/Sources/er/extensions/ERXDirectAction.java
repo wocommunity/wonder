@@ -361,11 +361,10 @@ public class ERXDirectAction extends WODirectAction {
     
     
     public WOActionResults dumpCreatedKeysAction() {
-    	WOResponse r = null;
+    	WOResponse r = new WOResponse();
     	if (ERXApplication.isDevelopmentModeSafe()) {
     		session();
-            System.out.println(NSPropertyListSerialization.stringFromPropertyList(ERXLocalizer.currentLocalizer().createdKeys()));
-    		return new WOResponse();
+            ERXLocalizer.currentLocalizer().dumpCreatedKeys();
     	}
 		return r;
     }
