@@ -7,10 +7,12 @@ import java.util.Enumeration;
 import com.webobjects.appserver.WOApplication;
 import com.webobjects.appserver.WOAssociation;
 import com.webobjects.appserver.WOComponent;
+import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WOResourceManager;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSBundle;
 import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 
 /**
@@ -195,5 +197,22 @@ public class ERXComponentUtilities {
 			template = ERXStringUtilities.stringFromURL(templateUrl);
 		}
 		return template;
+	}
+	
+	/**
+	 * Returns an array of the current component names.
+	 * @return
+	 */
+	public static NSArray componentTree() {
+		WOContext context = ERXWOContext.currentContext();
+		NSMutableArray result = new NSMutableArray();
+		if(context != null) {
+			WOComponent c = context.component();
+			while(c != null) {
+				result.addObject(c.name());
+				c = c.parent();
+			}
+		}
+		return result;
 	}
 }
