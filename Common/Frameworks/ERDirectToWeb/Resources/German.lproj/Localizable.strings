@@ -21,7 +21,12 @@
 	"ERD2W.removeButtonLabel" = "Entfernen";
 	"ERD2W.deleteButtonLabel" = "L\U00f6schen";
 	"ERD2W.deleteSelectedButtonLabel" = "Ausgew\U00e4hlte l\U00f6schen";
-	"ERD2W.pickButtonLabel" = "Select";
+	"ERD2W.pickButtonLabel" = "Ausw\U00e4hlen";
+
+  "ERD2WBoolean.DontCare" = "Egal"; 
+  "ERD2WBoolean.Unset" = "Egal"; 
+  "ERD2WBoolean.Yes" = "Ja"; 
+  "ERD2WBoolean.No" = "Nein";
 
 	"ERD2W.tasks.inspect" = "@@displayNameForEntity@@ ansehen";
 	"ERD2W.tasks.edit" = "@@displayNameForEntity@@ bearbeiten";
