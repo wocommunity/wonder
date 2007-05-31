@@ -30,6 +30,11 @@
 	"ERD2W.tasks.select" = "Select @@displayNameForEntity@@";
 	"ERD2W.tasks.confirm" = "Really @@displayNameForEntity@@?";
 
+  "ERD2WBoolean.DontCare" = "Don't care"; 
+  "ERD2WBoolean.Unset" = "Unset"; 
+  "ERD2WBoolean.Yes" = "Yes"; 
+  "ERD2WBoolean.No" = "No";
+
 	"ERD2WEditToManyRelationship.noChoiceAvailable" = "No @@displayNameForEntity@@ available at this time";
 	"ERD2WInspect.alreadyAborted" = "<b>You already aborted this operation</b>. Please hit cancel and try again from the first step";
 	"ERD2WList.confirmDeletionMessage" = "<b>Are you sure you want to delete the following @@displayNameForEntity@@?</b><br />@@object.userPresentableDescription@@";
