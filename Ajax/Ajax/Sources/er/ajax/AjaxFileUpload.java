@@ -39,7 +39,7 @@ import er.extensions.ERXUnitAwareDecimalFormat;
  * @binding data the NSData that will be bound with the contents of the upload
  * @binding inputStream will be bound to an input stream on the contents of the upload
  * @binding outputStream the output stream to write the contents of the upload to
- * @binding streamToFilePath the path to write the upload to
+ * @binding streamToFilePath the path to write the upload to, can be a directory
  * @binding finalFilePath the final file path of the upload (when streamToFilePath is set)
  * @binding filePath the name of the uploaded file
  * @binding allowCancel if true, the cancel link is visible
@@ -277,11 +277,47 @@ public class AjaxFileUpload extends WOComponent {
 				boolean renamedFile;
 				boolean renameFile;
 				if (streamToFile.exists()) {
-					renameFile = ERXComponentUtilities.booleanValueForBinding(this, "overwrite");
+					boolean overwrite = ERXComponentUtilities.booleanValueForBinding(this, "overwrite");
+					
+					if (streamToFile.isDirectory()) {
+						File parentDir = streamToFile;
+						String fileName = fileNameFromBrowserSubmittedPath(progress.fileName());
+						streamToFile = new File(parentDir, fileName);
+						if (!overwrite) {
+							// try to reserve file name
+							if (!streamToFile.createNewFile()) {
+								// didn't work, so try new name consisting of
+								// prefix + number + suffix
+								int dotIndex = fileName.lastIndexOf('.');
+								String prefix, suffix;
+
+								if (dotIndex < 0) {
+									prefix = fileName;
+									suffix = "";
+								}
+								else {
+									prefix = fileName.substring(0, dotIndex);
+									suffix = fileName.substring(dotIndex);
+								}
+
+								// try until we can reserve a file
+								do {
+									// using System.currentTimeMillis() as number for now
+									streamToFile = new File(parentDir, prefix + "-" + System.currentTimeMillis() + suffix);
+								}
+								while (!streamToFile.createNewFile());
+							}
+						}
+						renameFile = true;
+					}
+					else {
+						renameFile = overwrite;
+					}
 				}
 				else {
 					renameFile = true;
 				}
+
 				if (renameFile && !streamToFile.isDirectory()) {
 					ERXFileUtilities.renameTo(progress.tempFile(), streamToFile);
 					renamedFile = true;
@@ -324,4 +360,23 @@ public class AjaxFileUpload extends WOComponent {
 		WOActionResults results = (WOActionResults) valueForBinding("failedAction");
 		return results;
 	}
+	
+    public static String fileNameFromBrowserSubmittedPath(String path) {
+    	// Windows
+    	int separatorIndex = path.lastIndexOf("\\");
+        // Unix
+    	if (separatorIndex == -1) {
+            separatorIndex = path.lastIndexOf("/");
+        }
+    	// MacOS 9
+        if (separatorIndex == -1) {
+        	separatorIndex = path.lastIndexOf(":");
+        }
+        if ( separatorIndex != -1 ) {
+            return path.substring(separatorIndex + 1);
+        }
+        else {
+            return path;
+        }
+    }
 }
