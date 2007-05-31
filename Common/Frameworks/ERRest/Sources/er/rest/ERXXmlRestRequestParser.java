@@ -70,7 +70,6 @@ public class ERXXmlRestRequestParser implements IERXRestRequestParser {
 		ERXRestRequestNode rootRequestNode = null;
 
 		String contentStr = request.contentString();
-		System.out.println("ERXXmlRestRequestParser.parseRestRequest: " + contentStr);
 		if (contentStr != null && contentStr.length() > 0) {
 			// MS: Support direct updating of primitive type keys -- so if you don't want to
 			// wrap your request in XML, this will allow it
