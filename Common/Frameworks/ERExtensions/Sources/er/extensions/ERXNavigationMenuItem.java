@@ -198,8 +198,11 @@ public class ERXNavigationMenuItem extends ERXStatelessComponent {
     }
 
     public Object resolveValue(String key) {
-        return key!=null && key.startsWith("^") ? valueForKeyPath(key.substring(1)) : key;
-    }
+    	if(key != null && key.startsWith("^")) {
+    		return valueForKeyPath(key.substring(1));
+    	}
+		return key;
+	}
 
     public boolean hasActivity() {
         if (_hasActivity == null)
@@ -212,6 +215,25 @@ public class ERXNavigationMenuItem extends ERXStatelessComponent {
         return hasActivity() && !isDisabled();
     }
 
-    public String displayName() { return (String)resolveValue(navigationItem().displayName()); }
+    public String displayName() {
+    	String name = (String) resolveValue(navigationItem().displayName());
+    	if(name != null) {
+    		if(ERXProperties.booleanForKey("er.extensions.ERXNavigationManager.localizeDisplayKeys")) {
+    			String localizerKey = "Nav." + name;
+    			String localizedValue = ERXLocalizer.currentLocalizer().localizedStringForKey(localizerKey);
+    			if(localizedValue == null) {
+    				localizedValue = ERXLocalizer.currentLocalizer().localizedStringForKey(name);
+    				if(localizedValue != null) {
+    					log.info("Found old-style entry: " + localizerKey + "->" + localizedValue);
+    					ERXLocalizer.currentLocalizer().takeValueForKey(localizedValue, localizerKey);
+    					name = localizedValue;
+    				}
+    			} else {
+    				name = localizedValue;
+    			}
+    		}
+    	}
+		return name;
+	}
     
 }
