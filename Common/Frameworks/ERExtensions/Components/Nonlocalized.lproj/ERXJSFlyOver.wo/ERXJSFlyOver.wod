@@ -33,6 +33,18 @@ RollOverLink: WOGenericContainer {
 Span: WOGenericContainer {
 	elementName = "span";
 	id = spanId;
-	style = "visibility:hidden; z-index: 100; position: absolute; width: 400px; background-color: white; border: 1px solid black;";
+	style = "visibility:hidden; z-index: 100; position: absolute; ";
 	onClick = hideString;
+	needsClick = needsClick;
+}
+
+
+Align : WOString {
+  value = alignString;
+}
+
+
+NotNeedsClick : WOConditional {
+  condition = needsClick;
+  negate = true;
 }
