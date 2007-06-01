@@ -2,6 +2,8 @@ package er.extensions;
 
 import java.util.Enumeration;
 
+import org.apache.log4j.Logger;
+
 import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WOAssociation;
 import com.webobjects.appserver.WOComponent;
@@ -13,6 +15,8 @@ import com.webobjects.appserver.WOResponse;
 import com.webobjects.appserver._private.WODynamicGroup;
 import com.webobjects.appserver._private.WOHTMLBareString;
 import com.webobjects.foundation.NSDictionary;
+
+import er.extensions.ERXEOAccessUtilities.LogEntry;
 
 /**
  * Allows for multiple Component Contents.
@@ -127,63 +131,90 @@ Template2: ERXWOTemplate {
  */
 public class ERXWOComponentContent extends WODynamicElement {
     
+	public static Logger log = Logger.getLogger(ERXWOComponentContent.class);
+	
     public static String WOHTMLTemplateNameAttribute = "templateName";
 
-    protected String _templateName;
+    private WOAssociation _templateName;
     protected WOElement _defaultTemplate;
     
     public ERXWOComponentContent(String name, NSDictionary associations, WOElement woelement) {
         super(name, associations, woelement);
-        WOAssociation assoc = (WOAssociation) associations.objectForKey("templateName");
-        if(!assoc.isValueConstant()) {
-            throw new IllegalStateException("You must bind 'templateName' to a constant string");
+        _templateName = (WOAssociation) associations.objectForKey("templateName");
+        if(!_templateName.isValueConstant()) {
+            //throw new IllegalStateException("You must bind 'templateName' to a constant string");
         }
-        _templateName = (String) assoc.valueInComponent(null);
         _defaultTemplate = woelement == null ? new WOHTMLBareString("") : woelement;
     }
     
-    private WOElement template(WOComponent component) {
-        WODynamicGroup content = (WODynamicGroup) component._childTemplate();
-        WOElement result;
-        for(Enumeration e = content.childrenElements().objectEnumerator(); e.hasMoreElements(); ) {
-            result = (WOElement) e.nextElement();
-            if(result instanceof ERXWOTemplate) {
-                if(((ERXWOTemplate)result).templateName().equals(_templateName)) {
-                    return result;
-                }
+    private WOElement template(WODynamicGroup content, WOComponent component) {
+        String myName = (String) _templateName.valueInComponent(component);
+        WOElement result = null;
+        for(Enumeration e = content.childrenElements().objectEnumerator(); e.hasMoreElements() && result == null ; ) {
+        	WOElement current = (WOElement) e.nextElement();
+            if(current instanceof ERXWOTemplate) {
+            	ERXWOTemplate template = (ERXWOTemplate)current;
+            	String name = template.templateName(component);
+            	if(name.equals(myName)) {
+            		result = current;
+            	}
+            } else if (current instanceof WODynamicGroup) {
+            	WODynamicGroup group = (WODynamicGroup) current;
+            	result = template(group, component);
             }
         }
-        return _defaultTemplate;
+        return result;
     }
-    
+
+    private WOElement template(WOComponent component) {
+    	WOElement content =  component._childTemplate();
+    	WOElement result = null;
+    	if (content instanceof WODynamicGroup) {
+			WODynamicGroup group = (WODynamicGroup) content;
+			result = template(group, component);
+		}
+    	return result;
+    }
+
+    public void takeValuesFromRequest(WORequest worequest, WOContext wocontext) {
+    	WOComponent component = wocontext.component();
+    	WOElement template = template(component);
+    	if(template != null) {
+    		wocontext._setCurrentComponent(component.parent());
+    		template.takeValuesFromRequest(worequest, wocontext);
+    		wocontext._setCurrentComponent(component);
+    	} else {
+    		_defaultTemplate.takeValuesFromRequest(worequest, wocontext);
+    	}
+    }
+
+    public WOActionResults invokeAction(WORequest worequest, WOContext wocontext) {
+    	WOComponent component = wocontext.component();
+    	WOElement template = template(component);
+    	WOActionResults result;
+    	if(template != null) {
+    		wocontext._setCurrentComponent(component.parent());
+    		result = template.invokeAction(worequest, wocontext);
+    		wocontext._setCurrentComponent(component);
+    	} else {
+    		result = _defaultTemplate.invokeAction(worequest, wocontext);
+    	}
+    	return result;
+    }
+
     public void appendToResponse(WOResponse woresponse, WOContext wocontext) {
         WOComponent component = wocontext.component();
         WOElement template = template(component);
-        wocontext._setCurrentComponent(component.parent());
-        template.appendToResponse(woresponse, wocontext);
-        wocontext._setCurrentComponent(component);
-    }
-    
-    public WOActionResults invokeAction(WORequest worequest, WOContext wocontext) {
-        WOComponent component = wocontext.component();
-        WOElement template = template(component);
-        wocontext._setCurrentComponent(component.parent());
-        WOActionResults result = template.invokeAction(worequest, wocontext);
-        wocontext._setCurrentComponent(component);
-        return result;
-    }
-    
-    public void takeValuesFromRequest(WORequest worequest, WOContext wocontext) {
-        WOComponent component = wocontext.component();
-        WOElement template = template(component);
-        wocontext._setCurrentComponent(component.parent());
-        template.takeValuesFromRequest(worequest, wocontext);
-        wocontext._setCurrentComponent(component);
+        if(template != null) {
+        	wocontext._setCurrentComponent(component.parent());
+        	template.appendToResponse(woresponse, wocontext);
+        	wocontext._setCurrentComponent(component);
+        } else {
+        	_defaultTemplate.appendToResponse(woresponse, wocontext);
+        }
     }
 
     public String toString() {
         return "<" + getClass().getName() + "@" + System.identityHashCode(this) + " : " + _templateName  + ">";
     }
 }
-
-
