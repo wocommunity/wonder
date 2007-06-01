@@ -3,8 +3,10 @@
 	<classpathentry kind="src" path="Sources"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/ERExtensions"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/ERDirectToWeb"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/JavaWOExtensions"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/Ajax"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/ERJars"/>
-	<classpathentry kind="con" path="org.objectstyle.wolips.WO_CLASSPATH/Ajax/JavaWOExtensions/JavaDirectToWeb/JavaDTWGeneration/JavaEOAccess/JavaEOControl/JavaEOGeneration/JavaFoundation/JavaJDBCAdaptor/JavaWebObjects/JavaXML"/>
+	<classpathentry kind="con" path="org.objectstyle.wolips.WO_CLASSPATH/JavaDirectToWeb/JavaDTWGeneration/JavaEOAccess/JavaEOControl/JavaEOGeneration/JavaFoundation/JavaJDBCAdaptor/JavaWebObjects/JavaXML"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="/Library/WebObjects/Extensions/servlet.jar"/>
 	<classpathentry kind="lib" path="Libraries/Tidy.jar"/>
