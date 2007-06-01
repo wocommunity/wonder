@@ -29,7 +29,6 @@ PopupList: WOPopUpButton {
 	onChange = ^onChange;
 	onBlur = ^onBlur;
 	escapeHTML = false;
-	noSelectionString = ^noSelectionString;
 }
 
 RadioButtonMatrix: ERXRadioButtonMatrix {
