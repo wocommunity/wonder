@@ -7,14 +7,14 @@ function ERXJSFlyOverCustomComponent_show(link,obj) {
     	ERXJSFlyOverCustomComponent_hide(currentERXFlyOver);
     	currentERXFlyOver = null;
     }
-    var style=obj.style; 
-    style.left=link.style.left;
-    // style.top=link.style.bottom;
+    var style=obj.style;
+    style.top = "0px";
+ 	style.<webobject name = "Align"/> = "0px";
+ 	if(obj.getAttribute('needsClick') != 'true') {
+    	style.top = "20px";
+    	style.left = link.style.width;
+    }
     style.visibility='visible';
-    var linkPos = ERXJSFlyOverCustomComponent_getPos(link);
-    var objPos = ERXJSFlyOverCustomComponent_getPos(obj);
-    obj.style.top = 0;
-    <webobject name="OnClickConditional">obj.style.left = (50);</webobject>
     currentERXFlyOver = obj;
 }
 function ERXJSFlyOverCustomComponent_hideAuto(obj) {
@@ -37,24 +37,7 @@ function ERXJSFlyOverCustomComponent_toggle(link, obj) {
     	ERXJSFlyOverCustomComponent_show(link, obj);
     }
 }
-
-function ERXJSFlyOverCustomComponent_getPos(obj) {
-    var pos = new Object();
-    pos.left = 0;
-    pos.top = 0;
-    pos.width = obj.offsetWidth;
-    pos.height = obj.offsetHeight;
-
-    while(obj.offsetParent) {
-        if(obj.offsetParent) {
-            pos.left += obj.offsetLeft;
-            pos.top += obj.offsetTop;
-        }
-        obj = obj.offsetParent;
-    }
-    return pos;
-}
 </script>
-</webobject><span style="position: relative;"><webobject name="RollOverConditional"><webobject name="RollOverLink"><webobject name=Label></webobject></webobject></webobject><webobject name="OnClickConditional"><webobject name="OnClickLink"><webobject name=Label></webobject></webobject></webobject><webobject name=Span><webobject name=Content></webobject></webobject></span>
+</webobject><span style="position: relative; text-align: left;" class="ERXJSFlyOver"><webobject name="RollOverConditional"><webobject name="RollOverLink"><webobject name=Label></webobject></webobject></webobject><webobject name="OnClickConditional"><webobject name="OnClickLink"><webobject name=Label></webobject></webobject></webobject><webobject name=Span><webobject name=Content></webobject></webobject></span>
 
 
