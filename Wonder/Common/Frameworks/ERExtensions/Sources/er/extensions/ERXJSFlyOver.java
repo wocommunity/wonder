@@ -4,7 +4,7 @@ package er.extensions;
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 
-public class ERXJSFlyOver extends WOComponent {
+public class ERXJSFlyOver extends ERXStatelessComponent {
 
     protected String _linkId;
     protected String _spanId;
@@ -12,10 +12,6 @@ public class ERXJSFlyOver extends WOComponent {
     public ERXJSFlyOver(WOContext context) {
         super(context);
     }
-
-    /** component does not synchronize it's variables */
-    public boolean synchronizesVariablesWithBindings() { return false; }
-    public boolean isStateless() { return true; }
 
     public void reset() {
         super.reset();
@@ -25,6 +21,14 @@ public class ERXJSFlyOver extends WOComponent {
    
     public String id() {
         return ERXStringUtilities.replaceStringByStringInString(".", "_", context().elementID());
+    }
+    
+    public String alignString() {
+    	return stringValueForBinding("align", "right");
+    }
+    
+    public boolean needsClick() {
+    	return booleanValueForBinding("needsClick", false);
     }
 
     public String linkId() {
