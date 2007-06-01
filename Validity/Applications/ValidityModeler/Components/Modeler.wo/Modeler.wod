@@ -1,31 +1,31 @@
 ActiveImage1: WOActiveImage {
 	action = deleteRuleInList;
 	border = 0;
-	filename = "trashcan.gif";
+	filename = "graphics/trashcan.gif";
 	framework = "app";
 }
 
 ActiveImage2: WOActiveImage {
 	action = deleteKeyValueAction;
-	filename = "trashcan.gif";
+	filename = "graphics/trashcan.gif";
 	framework = "app";
 }
 
 ActiveImage3: WOActiveImage {
 	action = showEntityAction;
-	filename = "view.gif";
+	filename = "graphics/view.gif";
 	framework = "app";
 }
 
 ActiveImage4: WOActiveImage {
 	action = newRuleAction;
-	filename = "add.gif";
+	filename = "graphics/add.gif";
 	framework = "app";
 }
 
 ActiveImage5: WOActiveImage {
 	action = newKeyValueAction;
-	filename = "newkeyvalue.gif";
+	filename = "graphics/newkeyvalue.gif";
 	framework = "app";
 	border = 0;
 }
@@ -33,14 +33,14 @@ ActiveImage5: WOActiveImage {
 ActiveImage7: WOActiveImage {
 	action = demoteRule;
 	border = 0;
-	filename = "arrow_up.gif";
+	filename = "graphics/arrow_up.gif";
 	framework = "app";
 }
 
 ActiveImage9: WOActiveImage {
 	action = promoteRule;
 	border = 0;
-	filename = "arrow_down.gif";
+	filename = "graphics/arrow_down.gif";
 	framework = "app";
 }
 
@@ -218,59 +218,59 @@ Hyperlink7: WOHyperlink {
 }
 
 Image1: WOImage {
-	filename = "bar_key.gif";
+	filename = "graphics/bar/bar_key.gif";
 	framework = "app";
 }
 
 Image10: WOImage {
 	border = 0;
-	filename = "cancel.gif";
+	filename = "graphics/cancel.gif";
 	framework = "app";
 }
 
 Image11: WOImage {
 	border = 0;
-	filename = "delete.gif";
+	filename = "graphics/delete.gif";
 	framework = "app";
 }
 
 Image2: WOImage {
-	filename = "bar_diamond.gif";
+	filename = "graphics/bar/bar_diamond.gif";
 	framework = "app";
 }
 
 Image3: WOImage {
-	filename = "bar_lock.gif";
+	filename = "graphics/bar/bar_lock.gif";
 	framework = "app";
 }
 
 Image4: WOImage {
-	filename = "bar_null.gif";
+	filename = "graphics/bar/bar_null.gif";
 	framework = "app";
 }
 
 Image5: WOImage {
-	filename = "key.gif";
+	filename = "graphics/key.gif";
 	framework = "app";
 }
 
 Image6: WOImage {
-	filename = "diamond.gif";
+	filename = "graphics/diamond.gif";
 	framework = "app";
 }
 
 Image7: WOImage {
-	filename = "lock.gif";
+	filename = "graphics/lock.gif";
 	framework = "app";
 }
 
 Image8: WOImage {
-	filename = "null.gif";
+	filename = "graphics/null.gif";
 	framework = "app";
 }
 
 Image9: WOImage {
-	filename = "exception_icon.gif";
+	filename = "graphics/exception_icon.gif";
 	framework = "WOBox";
 	height = 59;
 	width = 64;
@@ -278,7 +278,7 @@ Image9: WOImage {
 
 ImageButton1: WOImageButton {
 	border = 0;
-	filename = "save.gif";
+	filename = "graphics/save.gif";
 	framework = "app";
 	action = saveAction;
 }

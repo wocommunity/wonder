@@ -5,7 +5,7 @@ ComponentContent2: WOComponentContent {
 }
 
 Image1: WOImage {
-	filename = "header.gif";
+	filename = "graphics/header.gif";
 	framework = "app";
 }
 

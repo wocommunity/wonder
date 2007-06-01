@@ -1,12 +1,12 @@
 ActiveImage1: WOActiveImage {
 	action = saveChanges;
-	filename = "save.gif";
+	filename = "graphics/save.gif";
 	framework = "app";
 }
 
 ActiveImage2: WOActiveImage {
 	action = saveChanges;
-	filename = "save.gif";
+	filename = "graphics/save.gif";
 	framework = "app";
 }
 
@@ -82,13 +82,13 @@ Hyperlink7: WOHyperlink {
 
 Image1: WOImage {
 	border = 0;
-	filename = "trashcan.gif";
+	filename = "graphics/trashcan.gif";
 	framework = "app";
 }
 
 Image2: WOImage {
 	border = 0;
-	filename = "trashcan.gif";
+	filename = "graphics/trashcan.gif";
 	framework = "app";
 }
 

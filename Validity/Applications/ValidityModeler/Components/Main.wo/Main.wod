@@ -1,12 +1,12 @@
 ActiveImage1: WOActiveImage {
 	action = checkPasswordAction;
-	filename = "login.gif";
+	filename = "graphics/login.gif";
 	framework = "app";
 }
 
 ActiveImage2: WOActiveImage {
 	action = loadEOModelAction;
-	filename = "open.gif";
+	filename = "graphics/open.gif";
 	framework = "app";
 	valign = "absmiddle";
 	border = 0;
@@ -40,7 +40,7 @@ Hyperlink1: WOHyperlink {
 }
 
 Image2: WOImage {
-	filename = "exception_icon.gif";
+	filename = "graphics/exception_icon.gif";
 	height = 59;
 	width = 64;
 }
