@@ -22,6 +22,7 @@
 	"ERD2W.deleteButtonLabel" = "L\U00f6schen";
 	"ERD2W.deleteSelectedButtonLabel" = "Ausgew\U00e4hlte l\U00f6schen";
 	"ERD2W.pickButtonLabel" = "Ausw\U00e4hlen";
+	"ERD2W.noSelectionString" = "- keine Auswahl -";
 
   "ERD2WBoolean.DontCare" = "Egal"; 
   "ERD2WBoolean.Unset" = "Egal"; 
