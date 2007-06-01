@@ -198,6 +198,7 @@ er.extensions.ERXGracefulShutdown.SignalsToHandle=(TERM, INT)
 # Navigation 
 #########################################################################
 er.extensions.ERXNavigationManager.NavigationMenuFileName = NavigationMenu.plist
+er.extensions.ERXNavigationManager.localizeDisplayKeys = false
 
 #########################################################################
 # Shared EO loading patching 
