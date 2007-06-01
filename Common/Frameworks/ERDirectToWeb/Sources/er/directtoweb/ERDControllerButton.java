@@ -23,10 +23,10 @@ public class ERDControllerButton extends ERDActionButton implements ERDBranchInt
     }
 
     public boolean isFlyOver() {
-        return !("linkList".equals(valueForBinding("uiStyle")) || isButton());
+        return !("linkList".equals(valueForBinding("controllerButtonUIStyle")) || isButton());
     }
     public boolean isButton() {
-        return "buttonList".equals(valueForBinding("uiStyle"));
+        return "buttonList".equals(valueForBinding("controllerButtonUIStyle"));
     }
     
     /** find the next non-null NextPageDelegate in the component tree, break if there is a D2WPage found beforehand */
