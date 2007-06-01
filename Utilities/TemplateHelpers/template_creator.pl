@@ -1,12 +1,5 @@
 #!/usr/bin/perl
 # Template creator tool
-# Use this tool to easily create your own look from the ERDirectToWebJava
-# templates
-# It creates subclasses for every class whose name ends with "Template"
-# and pre- and postfixes those with supplied parameters:
-#   ERD2WInspectPage -> CMSInspectPagePlain
-# it will also create a d2wmodel that contains rules like
-#   *true* -> templateNameForInspectPage = "CMSInspectPagePlain" (20)
 use Getopt::Long;
 
 my %options;
@@ -16,25 +9,36 @@ $ok = GetOptions(\%options, "package=s", "prefix=s", "postfix=s",  "output=s", "
 ($dest, $prefix, $postfix, $package, $neutral) = ($options{'output'}, $options{'prefix'}, $options{'postfix'}, $options{'package'}, $options{'neutral'});
 $ok = $ok && defined($dest) && defined($dest) && defined($prefix) && defined($postfix) && defined($package);  
 if(!$ok) {
-    die(q(Usage: template_creator.pl
+    die(q(
+ Use this tool to easily create your own look from the ERDirectToWebJava
+ templates
+ It creates subclasses for every class whose name ends with "Template"
+ and pre- and postfixes those with supplied parameters:
+   ERD2WInspectPage -> CMSInspectPagePlain
+ it will also create a d2wmodel that contains rules like
+   *true* -> templateNameForInspectPage = "CMSInspectPagePlain" (20)
+   
+ Usage: template_creator.pl
         -package com.foo   package name for the templates
         -prefix  BAS       prefix for the templates
         -postfix AdminPage postfix for the templates
         -output  BASLook   destination directory
         -neutral           use ERNeutralLook instead of ERD2W
-    ));
+    ) . "\n");
 }
 
 if($neutral) {
     # you may need to adjust this path
     # ERNeutralLook has "standard" pages
     $pathToERDirectToWeb = "~/Roots/ERNeutralLook.framework/Resources/";
+    die("Can't find $pathToERDirectToWeb") if(!-e $pathToERDirectToWeb);
     $pattern = 'ERNEU(.*?)Page';
     $Nonlocalized = "";
     $Suffix = "Page.wo";
 } else {
     # ERD2W has more experimental but advanced pages
     $pathToERDirectToWeb = "~/Roots/ERDirectToWeb.framework/Resources/";
+#    die("Can't find $pathToERDirectToWeb") if(!-e $pathToERDirectToWeb);
     $pattern = 'ERD2W(.*?)PageTemplate';
     $Nonlocalized = "";
     $Suffix = "Template.wo";
@@ -99,3 +103,42 @@ system "mkdir -p $dest/Resources/";
 open D2W, ">$dest/Resources/d2w.d2wmodel" || die("Can't open $dest/Resources/d2w.d2wmodel");
 print D2W "{ rules = ( $rules );}";
 close D2W;
+
+open D2W, ">$dest/.classpath" || die("Can't open $dest/.classpath");
+print D2W q(<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+        <classpathentry kind="src" path="Sources"/>
+        <classpathentry kind="con" path="org.objectstyle.wolips.WO_CLASSPATH/ERJars/ERExtensions/ERDirectToWeb/JavaDirectToWeb/JavaDTWGeneration/JavaEOAccess/JavaEOControl/JavaFoundation/JavaWebObjects/JavaXML/JavaWOExtensions"/>
+        <classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+        <classpathentry kind="output" path="bin"/>
+</classpath>
+);
+close D2W;
+
+open D2W, ">$dest/.project" || die("Can't open $dest/.project");
+print D2W q(<?xml version="1.0" encoding="UTF-8"?>
+<projectDescription>
+        <name>) . $dest . q(</name>
+        <comment></comment>
+        <projects>
+        </projects>
+        <buildSpec>
+                <buildCommand>
+                        <name>org.eclipse.jdt.core.javabuilder</name>
+                        <arguments>
+                        </arguments>
+                </buildCommand>
+                <buildCommand>
+                        <name>org.objectstyle.wolips.incrementalbuilder</name>
+                        <arguments>
+                        </arguments>
+                </buildCommand>
+        </buildSpec>
+        <natures>
+                <nature>org.eclipse.jdt.core.javanature</nature>
+                <nature>org.objectstyle.wolips.incrementalframeworknature</nature>
+        </natures>
+</projectDescription>
+);
+close D2W;
+
