@@ -189,7 +189,7 @@ public class ERDDefaultDisplayNameAssignment extends ERDAssignment implements ER
 		String formerResult = ERXLocalizer.currentLocalizer().localizedStringForKey(result);
 		if(formerResult != null) {
 			result = formerResult;
-			log.info("Found an old-style entry: " + localizerKey +" ->" + formerResult);
+			log.info("Found an old-style entry: " + localizerKey +"->" + formerResult);
 		}
 		ERXLocalizer.currentLocalizer().takeValueForKey(result, localizerKey);
 		return result;
