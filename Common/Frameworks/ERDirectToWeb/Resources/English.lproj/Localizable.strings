@@ -21,6 +21,7 @@
 	"ERD2W.removeButtonLabel" = "Remove";
 	"ERD2W.deleteButtonLabel" = "Delete";
 	"ERD2W.deleteSelectedButtonLabel" = "Delete Selected";
+	"ERD2W.noSelectionString" = "- none -";
 
 	"ERD2W.tasks.inspect" = "Inspect @@displayNameForEntity@@";
 	"ERD2W.tasks.edit" = "Edit @@displayNameForEntity@@";
