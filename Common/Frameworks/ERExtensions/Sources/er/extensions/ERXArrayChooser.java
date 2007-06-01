@@ -97,7 +97,9 @@ public abstract class ERXArrayChooser extends ERXStatelessComponent {
             if(_noneString == null) {
                 _noneString = "ERXArrayChooser.noneString";
             }
-            _noneString = localizer().localizedStringForKeyWithDefault(_noneString);
+            if(_noneString != null) {
+            	_noneString = localizer().localizedStringForKeyWithDefault(_noneString);
+            }
         }
         return _noneString;
     }
@@ -350,7 +352,7 @@ public abstract class ERXArrayChooser extends ERXStatelessComponent {
         } else {
             currentValue = NSKeyValueCodingAdditions.Utility.valueForKeyPath(theCurrentItem, destinationDisplayKey());
         }
-        if(localizeDisplayKeys() && currentValue != null) {
+        if(localizeDisplayKeys() && currentValue != null && theCurrentItem!=NO_SELECTION_STRING) {
             currentValue = localizer().localizedStringForKeyWithDefault(currentValue.toString());
         }
         if(includeUnmatchedValues() && theCurrentItem!=NO_SELECTION_STRING && unmatchedValues().containsObject(theCurrentItem)) {
