@@ -147,29 +147,29 @@ public class ERXWOComponentContent extends WODynamicElement {
         }
         _defaultTemplate = woelement == null ? new WOHTMLBareString("") : woelement;
     }
-    
-    private WOElement template(WODynamicGroup content, WOComponent component) {
-        String myName = (String) _templateName.valueInComponent(component);
-        WOElement result = null;
-        for(Enumeration e = content.childrenElements().objectEnumerator(); e.hasMoreElements() && result == null ; ) {
-        	WOElement current = (WOElement) e.nextElement();
-        	if(current instanceof ERXWOTemplate) {
-        		ERXWOTemplate template = (ERXWOTemplate)current;
-        		String name = template.templateName(component);
-        		if(name.equals(myName)) {
-        			result = current;
-        		}
-        	}
-        }
-        return result;
-    }
 
     private WOElement template(WOComponent component) {
+    	String myName = (String) _templateName.valueInComponent(component);
     	WOElement content =  component._childTemplate();
     	WOElement result = null;
     	if (content instanceof WODynamicGroup) {
 			WODynamicGroup group = (WODynamicGroup) content;
-			result = template(group, component);
+	        for(Enumeration e = group.childrenElements().objectEnumerator(); e.hasMoreElements() && result == null ; ) {
+	        	WOElement current = (WOElement) e.nextElement();
+	        	if(current instanceof ERXWOTemplate) {
+	        		ERXWOTemplate template = (ERXWOTemplate)current;
+	        		String name = template.templateName(component);
+	        		if(name.equals(myName)) {
+	        			result = template;
+	        		}
+	        	}
+	        }
+		} else if (content instanceof ERXWOTemplate) {
+			ERXWOTemplate template = (ERXWOTemplate) content;
+    		String name = template.templateName(component);
+    		if(name.equals(myName)) {
+    			result = template;
+    		}
 		}
     	return result;
     }
