@@ -12,6 +12,7 @@ import com.webobjects.appserver.WODynamicElement;
 import com.webobjects.appserver.WOElement;
 import com.webobjects.appserver.WORequest;
 import com.webobjects.appserver.WOResponse;
+import com.webobjects.appserver._private.WOConditional;
 import com.webobjects.appserver._private.WODynamicGroup;
 import com.webobjects.appserver._private.WOHTMLBareString;
 import com.webobjects.foundation.NSDictionary;
@@ -152,16 +153,13 @@ public class ERXWOComponentContent extends WODynamicElement {
         WOElement result = null;
         for(Enumeration e = content.childrenElements().objectEnumerator(); e.hasMoreElements() && result == null ; ) {
         	WOElement current = (WOElement) e.nextElement();
-            if(current instanceof ERXWOTemplate) {
-            	ERXWOTemplate template = (ERXWOTemplate)current;
-            	String name = template.templateName(component);
-            	if(name.equals(myName)) {
-            		result = current;
-            	}
-            } else if (current instanceof WODynamicGroup) {
-            	WODynamicGroup group = (WODynamicGroup) current;
-            	result = template(group, component);
-            }
+        	if(current instanceof ERXWOTemplate) {
+        		ERXWOTemplate template = (ERXWOTemplate)current;
+        		String name = template.templateName(component);
+        		if(name.equals(myName)) {
+        			result = current;
+        		}
+        	}
         }
         return result;
     }
