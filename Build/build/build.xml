@@ -67,6 +67,7 @@
             <param name="project.principal.class" value="er.extensions.ERXExtensions" />
             <param name="project.name" value="ERExtensions" />
             <param name="project.dir" value="Common/Frameworks/ERExtensions" />
+            <param name="patches.dir" value="Common/Frameworks/ERExtensions/${erx.patches.dir}" />
 
             <param name="use.wonder.core" value="true" />
         </antcall>
@@ -696,6 +697,7 @@
     </target>
 
     <target name="build">
+        <property name="include.source" value="true" />
         <antcall target="all.run" >
             <param name="build.action" value="build" />
         </antcall>

@@ -193,11 +193,12 @@ There are many ways to use this script:
             </and>
         </condition>
         <property name="wonder.lib.root" value="${build.root}" />
-        <property name="include.source" value="true" />
         <property name="wonder.framework.install.root" value="${wo.localroot}/Library/Frameworks" />
         <property name="web.framework.install.root" value="${wo.server.root}/Frameworks" />
         <property name="wonder.application.install.root" value="${wo.localroot}/Library/WebObjects/JavaApplications" />
         <property name="web.application.install.root" value="${wo.server.root}" />
+        <!-- just some existing value -->
+        <property name="patches.dir" value="${wonder.root}/Build/build" />
     </target>
 
     <target name="global.properties" depends="global.environment">
@@ -423,6 +424,31 @@ There are many ways to use this script:
                 <include name="JavaDTWGeneration.framework" />
             </frameworks>
         </wocompile>
+        <wocompile srcdir="${patches.dir}" destdir="${build.classes}" debug="on" optimize="off" deprecation="off" source="${compiler.source}" target="${compiler.target}">
+            <classpath>
+                <fileset dir="${project.dir}/Libraries">
+                    <include name="**/*.jar" />
+                </fileset>
+            </classpath>
+            <frameworks dir="${wo.frameworks}"> 
+                <include name="JavaFoundation.framework" />
+                <include name="JavaEOAccess.framework" />
+                <include name="JavaEOControl.framework" />
+                <include name="JavaWebObjects.framework" />
+                <include name="JavaWOJSPServlet.framework" />
+                <include name="JavaPlot.framework" />
+                <include name="JavaJDBCAdaptor.framework" />
+                <include name="JavaXML.framework" />
+            </frameworks>
+            <frameworks dir="${wonder.lib.root}"> 
+                <include name="JavaWOExtensions.framework" />
+            </frameworks>
+            <frameworks dir="${wo.frameworks}" if="use.webobjects.d2w"> 
+                <include name="JavaDirectToWeb.framework" />
+                <include name="JavaEOProject.framework" />
+                <include name="JavaDTWGeneration.framework" />
+            </frameworks>
+        </wocompile>
     </target>
 
     <target name="global.framework.build" depends="global.properties,global.compile">
@@ -441,6 +467,7 @@ There are many ways to use this script:
             <classes dir="${project.dir}/Sources">
                 <include name="**/*" />
                 <exclude name="**/*.class" />
+                <exclude name="**/*.java" />
                 <exclude name="**/.svn" />
                 <exclude name="**/CVS" />
             </classes>
@@ -481,6 +508,7 @@ There are many ways to use this script:
             </classes>
             <classes dir="${project.dir}/Sources">
                 <include name="**/*" />
+                <exclude name="**/*.java" />
                 <exclude name="**/*.class" />
                 <exclude name="**/.svn" />
                 <exclude name="**/CVS" />
