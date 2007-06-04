@@ -41,6 +41,14 @@ public class WRQuickReport extends WOComponent  {
         NSNotificationCenter.defaultCenter().addObserver(this, synchModelSelector, DRReportModel.DRReportModelUpdateNotification, null);
         NSNotificationCenter.defaultCenter().addObserver(this, synchModelSelector, DRReportModel.DRReportModelRebuildNotification, null);
     }
+    
+    public String reportComponentName() {
+        String name = (String) valueForBinding("reportComponentName");
+        if(name == null) {
+            name =  "WRReport";
+        }
+        return name;
+    }
 
     public void synchModel(NSNotification notification) {
         if(_model == notification.object() && !dontSyncModel()) {
