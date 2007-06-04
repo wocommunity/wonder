@@ -56,6 +56,7 @@ public abstract class ERXBrowser implements NSKeyValueCoding {
 
     public static final String UNKNOWN_BROWSER = "Unknown Broswer";
 
+    public static final String ROBOT 	= "robot";
     public static final String ICAB 	= "iCab";
     public static final String IE	= "IE";
     public static final String NETSCAPE = "Netscape";
@@ -113,6 +114,12 @@ public abstract class ERXBrowser implements NSKeyValueCoding {
     public abstract NSDictionary userInfo();
 
     public abstract boolean isUnknownBrowser();
+
+    /**
+     * Browser is isRobot?
+     * @return true if browser is robot.
+     */
+    public abstract boolean isRobot();
 
     /**
      * Browser is iCab?

@@ -82,6 +82,7 @@ public class ERXBasicBrowser extends ERXBrowser {
     private final String          _geckoRevision;
     private final NSDictionary    _userInfo;
 
+    private final boolean         _isRobot;
     private final boolean         _isICab;
     private final boolean         _isIE;
     private final boolean         _isNetscape;
@@ -130,6 +131,7 @@ public class ERXBasicBrowser extends ERXBrowser {
 
         _geckoRevision = userInfo != null ? (String) userInfo.objectForKey("geckoRevision") : null;
 
+        _isRobot = _browserName.equals(ROBOT);
         _isICab = _browserName.equals(ICAB);
         _isIE = _browserName.equals(IE);
         _isNetscape = _browserName.equals(NETSCAPE);
@@ -161,7 +163,7 @@ public class ERXBasicBrowser extends ERXBrowser {
         _isVersion4 = -1 < _version.indexOf("4.");
         _isVersion3 = -1 < _version.indexOf("3.");
         _isVersion2 = -1 < _version.indexOf("2.");
-
+       
         _isMacOS = _platform.equals(MACOS);
         _isWindows = _platform.equals(WINDOWS);
         _isLinux = _platform.equals(LINUX);
@@ -199,6 +201,10 @@ public class ERXBasicBrowser extends ERXBrowser {
 
     public boolean isUnknownBrowser() {
         return _isUnknownBrowser;
+    }
+
+    public boolean isRobot() {
+        return _isRobot;
     }
 
     public boolean isICab() {
