@@ -296,7 +296,7 @@ public class ERXEOAccessUtilities {
 
     public static EOModelGroup modelGroup(EOEditingContext ec) {
         if (ec == null) {
-            ERXSession s = ERXExtensions.session();
+            ERXSession s = ERXSession.session();
             if (s != null) {
                 ec = s.defaultEditingContext();
             }
