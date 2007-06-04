@@ -550,6 +550,32 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
     public String localizedStringForKey(String key) {
         return (String)localizedValueForKey(key);
     }
+    
+    private String displayNameForKey(String key) {
+    	return ERXStringUtilities.displayNameForKey(key);
+    }
+    
+    /**
+     * Returns a localized string for the given prefix and keyPath, inserting it
+     * "prefix.keyPath" = "Key Path"; Also tries to find "Key Path" 
+     * @param prefix
+     * @param key
+     * @return
+     */
+    public String localizedDisplayNameForKey(String prefix, String key) {
+    	String localizerKey = prefix + "." + key;
+		String result = localizedStringForKey(localizerKey);
+		if(result == null) {
+			result = displayNameForKey(key);
+			String localized = localizedStringForKey(result);
+			if(localized != null) {
+				result = localized;
+				log.info("Found an old-style entry: " + localizerKey + "->" + result);
+			}
+			takeValueForKey(result, localizerKey);
+		}
+		return result;
+    }
 
     public String localizedTemplateStringForKeyWithObject(String key, Object o1) {
     	return localizedTemplateStringForKeyWithObjectOtherObject(key, o1, null);
