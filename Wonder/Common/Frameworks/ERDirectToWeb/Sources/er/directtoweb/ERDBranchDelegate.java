@@ -49,6 +49,7 @@ public abstract class ERDBranchDelegate implements ERDBranchDelegateInterface {
     public static final String BRANCH_CHOICES = "branchChoices";
     public static final String BRANCH_NAME = "branchName";
     public static final String BRANCH_LABEL = "branchButtonLabel";
+    public static final String BRANCH_PREFIX = "Button";
     
     /**
      * Implementation of the {@link NextPageDelegate NextPageDelegate}
@@ -91,7 +92,7 @@ public abstract class ERDBranchDelegate implements ERDBranchDelegateInterface {
      */
     protected NSDictionary branchChoiceDictionary(String method, String label) {
     	if(label == null) {
-    		label = ERXStringUtilities.displayNameForKey(method);
+    		label = ERXLocalizer.currentLocalizer().localizedDisplayNameForKey(BRANCH_PREFIX, method);
     	}
     	return ERXDictionaryUtilities.dictionaryWithObjectsAndKeys(new Object [] { method, BRANCH_NAME, label, BRANCH_LABEL});
     }
@@ -122,13 +123,19 @@ public abstract class ERDBranchDelegate implements ERDBranchDelegateInterface {
         			method = (String) o;
         		}
         		if(label == null) {
-        			String localizerKey = "Button." + method;
-        			label = ERXLocalizer.currentLocalizer().localizedStringForKey(localizerKey);
-        			if(label == null) {
-               			label = ERXStringUtilities.displayNameForKey(method);
-               			ERXLocalizer.currentLocalizer().takeValueForKey(label, localizerKey);
+        			label = ERXLocalizer.currentLocalizer().localizedDisplayNameForKey(BRANCH_PREFIX, method);
+           		} else if(label.startsWith(BRANCH_PREFIX + ".")){
+           			String localizerKey = label;
+        			String localized = ERXLocalizer.currentLocalizer().localizedStringForKey(label);
+        			if(localized == null) {
+        				label = ERXLocalizer.currentLocalizer().localizedDisplayNameForKey(BRANCH_PREFIX, method);
+            			ERXLocalizer.currentLocalizer().takeValueForKey(label, localizerKey);
+            		} else {
+            			label = localized;
         			}
-        		} else {
+           		} else {
+           			// assume it's a user-provided value. If we have an entry in the localizer, use it
+           			// otherwise just return it.
         			label = ERXLocalizer.currentLocalizer().localizedStringForKeyWithDefault(label);
         		}
         		entry.setObjectForKey(label, BRANCH_LABEL);
