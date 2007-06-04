@@ -360,6 +360,12 @@ er.extensions.ERXComponentActionRedirector.enabled=false
 ## (Optional) the multicast port to use (defaults to 9753, and only necessary if you are using multicast)
 #er.extensions.jgroupsSynchronizer.multicastPort=9753
 
+## (Optional) The local bind address defines the network interface that will be used
+## to transmit and receive multicast messages.  If not set, multicast synchronizer
+## will use WOApplication.application().hostAddress().  If you want to run outside
+## of a WOApplication, you should set this value explicitly. 
+#er.extensions.jgroupsSynchronizer.localBindAddress=
+
 ## (Optional) the JGroups group name to use (defaults to WOApplication.application.name)
 #er.extensions.jgroupsSynchronizer.groupName=MyGroupName
 
