@@ -365,6 +365,7 @@ public class ERXBrowserFactory {
 					robotExpressions.addObject(Pattern.compile(item));
 				}
 			}
+			userAgent = userAgent.toLowerCase();
 			for (Enumeration iter = robotExpressions.objectEnumerator(); iter.hasMoreElements();) {
 				Pattern pattern = (Pattern) iter.nextElement();
 				if(pattern.matcher(userAgent).matches()) {
