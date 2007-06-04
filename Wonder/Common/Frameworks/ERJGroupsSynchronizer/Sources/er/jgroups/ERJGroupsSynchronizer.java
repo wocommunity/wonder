@@ -54,6 +54,15 @@ public class ERJGroupsSynchronizer extends ERXRemoteSynchronizer {
       jgroupsPropertiesFramework = "ERJGroupsSynchronizer";
     }
     _groupName = ERXProperties.stringForKeyWithDefault("er.extensions.jgroupsSynchronizer.groupName", WOApplication.application().name());
+
+    String localBindAddressStr = ERXProperties.stringForKey("er.extensions.jgroupsSynchronizer.localBindAddress");
+    if (localBindAddressStr == null) {
+      System.setProperty("bind.address", WOApplication.application().hostAddress().getHostAddress());
+    }
+    else {
+      System.setProperty("bind.address", localBindAddressStr);
+    }
+
     URL propertiesUrl = WOApplication.application().resourceManager().pathURLForResourceNamed(jgroupsPropertiesFile, jgroupsPropertiesFramework, null);
     _channel = new JChannel(propertiesUrl);
     _channel.setOpt(Channel.LOCAL, Boolean.FALSE);
