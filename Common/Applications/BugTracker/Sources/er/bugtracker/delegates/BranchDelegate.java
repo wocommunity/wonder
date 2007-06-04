@@ -25,19 +25,6 @@ public class BranchDelegate extends ERDBranchDelegate {
         return (Session)sender.session();
     }
 
-    protected NSDictionary branchChoiceDictionary(String method, String label) {
-    	if(label == null) {
-    		String localized = ERXLocalizer.currentLocalizer().localizedStringForKey("Button." + method);
-    		if(localized == null) {
-    			label = ERXStringUtilities.displayNameForKey(method);
-    			ERXLocalizer.currentLocalizer().takeValueForKey(label, "Button." + method);
-    		} else {
-    			label = localized;
-    		}
-    	}
-    	return ERXDictionaryUtilities.dictionaryWithObjectsAndKeys(new Object [] { method, BRANCH_NAME, label, BRANCH_LABEL});
-    }
-
     protected NSArray defaultBranchChoices(D2WContext context) {
     	
         NSArray result = super.defaultBranchChoices(context);
