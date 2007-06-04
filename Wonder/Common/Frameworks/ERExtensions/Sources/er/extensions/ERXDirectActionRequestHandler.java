@@ -103,7 +103,7 @@ public class ERXDirectActionRequestHandler extends WODirectActionRequestHandler 
                 WOContext context = (WOContext)ERXThreadStorage.valueForKey("wocontext");
                 session = context != null ? context.session() : null;
             } else {
-                session = ERXExtensions.session();   // get it from the thread specific storage
+                session = ERXSession.session();   // get it from the thread specific storage
             }
 
             if (session != null  &&  session instanceof ERXSession) {

@@ -1010,17 +1010,19 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
      * Sets the current session for this thread. This is called
      * from {@link ERXSession}'s awake and sleep methods.
      * @param session that is currently active for this thread.
+     * @deprecated use  ERXSession.setSession(session) instead
      */
     public synchronized static void setSession(ERXSession session) {
-        ERXThreadStorage.takeValueForKey(session, "session");
+    	 ERXSession.setSession(session);
     }
 
     /**
      * Returns the current session object for this thread.
      * @return current session object for this thread
+     * @deprecated use  ERXSession.session() instead
      */
     public synchronized static ERXSession session() {
-        return (ERXSession)ERXThreadStorage.valueForKey("session");
+        return  ERXSession.session();
     }
 
     /**
