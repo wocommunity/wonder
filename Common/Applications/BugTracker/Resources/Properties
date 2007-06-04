@@ -9,3 +9,5 @@ ERXLanguages = (en,de)
 er.extensions.ERXLocalizer.availableLanguages=(English,German)
 #er.extensions.ERXLocalizer.availableLanguages=(English)
 er.extensions.ERXLocalizer.frameworkSearchPath=("app", "BTBusinessLogic", "ERExtras", "ERDirectToWeb", "ERExtensions")
+
+er.extensions.ERXJDBCAdaptor.className=er.extensions.ERXJDBCAdaptor
