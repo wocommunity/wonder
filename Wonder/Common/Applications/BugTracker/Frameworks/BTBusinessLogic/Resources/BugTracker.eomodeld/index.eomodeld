@@ -62,11 +62,6 @@
        }, 
        
        {
-           className = er.bugtracker.State;
-           name = State;
-       }, 
-       
-       {
            className = er.bugtracker.TestItem;
            name = TestItem;
        }, 
@@ -91,7 +86,6 @@
        Priority, 
        RequirementSubType, 
        RequirementType, 
-       State, 
        TestItemState
     );
 }

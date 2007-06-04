@@ -55,7 +55,7 @@ public class StatusComponent extends ERDCustomEditComponent {
     public String filename() {
         String result="closed.gif";
         if (bug()!=null) {
-            int img=bug().state().sortOrder().intValue() - 1;
+            int img=bug().state().sortOrder()- 1;
             result=bugIcons[img];
         }
         return result;

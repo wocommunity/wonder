@@ -150,16 +150,17 @@
            };
        }, 
        
+     
        {
            columnName = STATE_ID;
-           name = stateID;
+           name = state;
            prototypeName = osType;
-           userInfo = 
-           {
-               modificationDate = "2002-05-06 07:42:12 +0200";
-           };
+           adaptorValueConversionMethodName = value;
+           factoryMethodArgumentType = EOFactoryMethodArgumentIsNSString;
+           valueClassName = er.bugtracker.State;
+           valueFactoryMethodName = state;
        }, 
-       
+          
        {
            columnName = SUBJECT;
            name = subject;
@@ -206,7 +207,7 @@
        releaseID, 
        requirementSubTypeID, 
        requirementTypeID, 
-       stateID, 
+       state, 
        subject, 
        textDescription, 
        type
@@ -251,7 +252,6 @@
            priority, 
            requirementSubType, 
            requirementType, 
-           state, 
            subject, 
            targetRelease, 
            textDescription, 
@@ -479,26 +479,6 @@
               }
            );
            name = requirementType;
-           userInfo = 
-           {
-               modificationDate = "2002-05-04 13:06:03 +0200";
-           };
-       }, 
-       
-       {
-           destination = State;
-           isMandatory = Y;
-           isToMany = N;
-           joinSemantic = EOInnerJoin;
-           joins = 
-           (
-              
-              {
-                  destinationAttribute = id;
-                  sourceAttribute = stateID;
-              }
-           );
-           name = state;
            userInfo = 
            {
                modificationDate = "2002-05-04 13:06:03 +0200";
