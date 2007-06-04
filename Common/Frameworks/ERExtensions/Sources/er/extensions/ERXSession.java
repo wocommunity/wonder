@@ -645,4 +645,12 @@ public class ERXSession extends ERXAjaxSession implements Serializable {
     }
     return toStr;
   }
+
+  public static ERXSession session() {
+	  return (ERXSession) ERXThreadStorage.valueForKey("session");
+  }
+
+  public static void setSession(ERXSession session) {
+	  ERXThreadStorage.takeValueForKey(session, "session");
+  }
 }
