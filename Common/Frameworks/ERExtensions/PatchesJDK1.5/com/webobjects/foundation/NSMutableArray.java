@@ -291,11 +291,11 @@ public class NSMutableArray <E> extends NSArray<E> {
         return new NSMutableArray(this);
     }
 
-    public NSArray immutableClone() {
+    public NSArray<E> immutableClone() {
         return new NSArray(this);
     }
 
-    public NSMutableArray mutableClone() {
+    public NSMutableArray<E> mutableClone() {
         return (NSMutableArray) clone();
     }
 
