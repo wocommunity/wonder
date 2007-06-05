@@ -17,36 +17,11 @@ import com.webobjects.foundation.NSDictionary;
  * <code>&lt;input&gt;</code> tags. This allows you to use HTML content and superior style
  * features. <br />
  * Unfortunately, IE is totally broken and always submits all buttons on a page,
- * which makes it unusable for actions. So, for the time being this component emits
- * a <code>&lt;span class="ERXSubmitButton"&gt;</code> with a hyperlink and the real, but invisible submit button
- * inside. The actual click is triggered by javascript, so your IE users must have it turned on.<br />
- * You need some stylesheet similar to this to make it look like a normal <code>button</code>:<pre><code>
- * .ERXSubmitButton a {
- * 	color: buttontext;
- * 	cursor: default;
- * 	background-color: buttonface;
- * 	border-style: outset;
- * 	border-width: 2px;
- * 	border-top-color: buttonface;
- * 	border-left-color: buttonface;
- * 	border-right-color: buttonshadow;
- * 	border-bottom-color: buttonshadow;
- * 	padding: 0px 6px;
- * 	font-size: small;
- * 	font-family: sans-serif;
- * 	line-height: normal !important;
- * }
- * 
- * .ERXSubmitButton a:active {
- * 	border-top-color: buttonshadow;
- * 	border-left-color: buttonshadow;
- * 	border-right-color: buttonface;
- * 	border-bottom-color: buttonface;
- * }
- * </code></pre>
- * but of course, the whole idea is that you can style it any way you want.<br />
+ * which makes it unusable for actions. So this component inserts some javascript to fix this.
+ * Of course, this means your button is only usable with scripting turned on in IE.<br />
  * You can add this class via ERXPatcher.setClassForName(ERXSubmitButton.class, "WOSubmitButton");
- * and see how this works out or use it explicitely.
+ * and see how this works out or use it explicitely. If you just patch it into the system,
+ * the value is used as the content, otherwise you can put any html you like into it.
  * @author ak
  */
 public class ERXSubmitButton extends WOInput {
