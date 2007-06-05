@@ -7,13 +7,13 @@ import java.util.*;
 /**
  * NSArray reimplementation to support JDK 1.5 templates. Use with
  * <pre>
- * public () {...}
  * NSArray&lt;Bug&gt; bugs = ds.fetchObjects();
+ * 
  * for(Bug : bugs) {
  * 	  ...
  * }</pre>
  *
- * @param &lt;E&gt;
+ * @param &lt;E&gt; type of array contents
  */
 
 public class NSArray<E> implements Cloneable, Serializable, NSCoding, NSKeyValueCoding, NSKeyValueCodingAdditions, _NSFoundationCollection, List<E> {
