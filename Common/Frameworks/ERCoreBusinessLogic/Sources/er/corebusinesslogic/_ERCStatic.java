@@ -19,18 +19,6 @@ public abstract class _ERCStatic extends ERXGenericRecord {
 
     public static abstract class _ERCStaticClazz extends ERXGenericRecord.ERXGenericRecordClazz {
 
-        public NSArray objectsForPreferences(EOEditingContext context, String keyBinding) {
-            EOFetchSpecification spec = EOFetchSpecification.fetchSpecificationNamed("preferences", "ERCStatic");
-
-            NSMutableDictionary bindings = new NSMutableDictionary();
-
-            if (keyBinding != null)
-                bindings.setObjectForKey(keyBinding, "key");
-            spec = spec.fetchSpecificationWithQualifierBindings(bindings);
-
-            return context.objectsWithFetchSpecification(spec);
-        }
-
     }
 
 
