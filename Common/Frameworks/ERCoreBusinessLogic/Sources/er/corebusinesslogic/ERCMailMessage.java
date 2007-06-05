@@ -82,8 +82,8 @@ public class ERCMailMessage extends _ERCMailMessage {
      * 'Ready To Be Sent'.
      * @param anEditingContext inserted into
      */
-    public void awakeFromInsertion(EOEditingContext anEditingContext) {
-        super.awakeFromInsertion(anEditingContext);
+    public void init(EOEditingContext anEditingContext) {
+        super.init(anEditingContext);
         setState(ERCMailState.READY_TO_BE_SENT_STATE);
         
         boolean shouldArchive = ERXProperties.booleanForKeyWithDefault("er.corebusinesslogic.ERCMailMessage.ShouldArchive", false);
