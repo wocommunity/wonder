@@ -68,8 +68,8 @@ public class ERCStatic extends _ERCStatic {
 
         public void invalidateCache() { _staticsPerKey.removeAllObjects(); }
 
-        private static EOEditingContext _privateEditingContext;
-        private static EOEditingContext privateEditingContext() {
+        private EOEditingContext _privateEditingContext;
+        private EOEditingContext privateEditingContext() {
             if (_privateEditingContext == null) {
                 if (ERXProperties.booleanForKeyWithDefault("er.corebusinesslogic.ERCStatic.UseSeparateChannel", true)) {
                     _privateEditingContext = ERXEC.newEditingContext(new EOObjectStoreCoordinator());
@@ -86,20 +86,20 @@ public class ERCStatic extends _ERCStatic {
             return _privateEditingContext;
         }
 
-        public static String staticStoredValueForKey(EOEditingContext ec, String key) {
+        public String staticStoredValueForKey(EOEditingContext ec, String key) {
             return staticStoredValueForKey(ec, key, false);
         }
         
-        public static String staticStoredValueForKey(EOEditingContext ec, String key, boolean noCache) {
-            ERCStatic entry = ERCStatic.staticClazz().objectMatchingKey(ec, key, noCache);
+        public String staticStoredValueForKey(EOEditingContext ec, String key, boolean noCache) {
+            ERCStatic entry = ERCStatic.clazz.objectMatchingKey(ec, key, noCache);
             return entry != null ? entry.value() : null;
         }
 
-        public static int staticStoredIntValueForKey(EOEditingContext ec, String key) {
+        public int staticStoredIntValueForKey(EOEditingContext ec, String key) {
             return staticStoredIntValueForKey(ec, key, false);
         }
         
-        public static int staticStoredIntValueForKey(EOEditingContext ec, String key, boolean noCache) {
+        public int staticStoredIntValueForKey(EOEditingContext ec, String key, boolean noCache) {
             int result = -1;
             String s = staticStoredValueForKey(ec, key, noCache);
             if (s != null) {
@@ -110,7 +110,7 @@ public class ERCStatic extends _ERCStatic {
             return result;
         }
 
-        public static String staticStoredValueForKey(String key, boolean noCache) {
+        public String staticStoredValueForKey(String key, boolean noCache) {
             String value = null;
             privateEditingContext().lock();
             try {
@@ -121,15 +121,15 @@ public class ERCStatic extends _ERCStatic {
             return value;
         }
 
-        public static String staticStoredValueForKey(String key) {
+        public String staticStoredValueForKey(String key) {
             return staticStoredValueForKey(key, false);
         }
         
-        public static int staticStoredIntValueForKey(String key) {
+        public int staticStoredIntValueForKey(String key) {
             return staticStoredIntValueForKey(key, false);
         }
 
-        public static int staticStoredIntValueForKey(String key, boolean noCache) {
+        public int staticStoredIntValueForKey(String key, boolean noCache) {
             int value = 0;
             privateEditingContext().lock();
             try {
@@ -140,7 +140,7 @@ public class ERCStatic extends _ERCStatic {
             return value;
         }        
         
-        public static void takeStaticStoredValueForKey(String value,
+        public void takeStaticStoredValueForKey(String value,
                                                        String key) {
             privateEditingContext().lock();
             try {
@@ -153,10 +153,10 @@ public class ERCStatic extends _ERCStatic {
             }
         }
 
-        public static void takeStaticStoredValueForKey(EOEditingContext editingContext,
+        public void takeStaticStoredValueForKey(EOEditingContext editingContext,
                                                        String value,
                                                        String key) {
-            ERCStatic entry = ERCStatic.staticClazz().objectMatchingKey(editingContext,key);
+            ERCStatic entry = ERCStatic.clazz.objectMatchingKey(editingContext,key);
             if (entry==null) {
                 entry=(ERCStatic)ERXEOControlUtilities.createAndInsertObject(editingContext, "ERCStatic");
                 entry.setKey(key);
@@ -165,9 +165,7 @@ public class ERCStatic extends _ERCStatic {
         }
     }
 
-    public static ERCStaticClazz staticClazz() {
-        return (ERCStaticClazz)EOEnterpriseObjectClazz.clazzForEntityNamed("ERCStatic");
-    }
+    public static ERCStaticClazz clazz = new ERCStaticClazz();
 
     public String toString() {
         return entityName()+": "+key()+"="+value();
