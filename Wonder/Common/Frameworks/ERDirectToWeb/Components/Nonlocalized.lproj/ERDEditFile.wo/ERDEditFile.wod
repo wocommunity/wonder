@@ -1,0 +1,40 @@
+FileExists: WOConditional {
+	condition = fileExists;
+}
+
+NotFileExists: WOConditional {
+	condition = fileExists;
+	negate = true;
+}
+
+SelectMessage: ERXLocalizedString {
+	value = "ERDEditFileUpload.select";
+}
+
+UploadMessage: ERXLocalizedString {
+	value = "ERDEditFileUpload.upload";
+}
+
+ObjectKeyPathValue: WOString {
+	value = objectKeyPathValue;
+}
+
+UploadActionButton: WOSubmitButton {
+	action = uploadAction;
+	value = "ERDEditFileUpload.upload";
+}
+
+DeleteActionButton: WOSubmitButton {
+	action = deleteAction;
+	value = "ERDEditFileUpload.delete";
+}
+
+Upload: WOFileUpload {
+    data = fileContents;
+    filePath = fileName;
+	copyData = false;
+}
+
+hasNoSetting: WOConditional {
+	condition = objectKeyPathValue;
+}
