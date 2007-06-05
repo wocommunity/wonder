@@ -56,6 +56,32 @@ public class ERXSubmitButton extends WOInput {
     protected WOAssociation _directActionName;
     protected WOAssociation _shouldSubmitForm;
     
+    private static String ieFix = "<script>window.btnunload = window.onload;\n" +
+    "window.onload = function() {\n" +
+    "    var btns = document.getElementsByTagName('button');\n" +
+    "    for(var i=0;i<btns.length;i++) {\n" +
+    "        btns[i].btnonclick = btns[i].onclick;\n" +
+    "        btns[i].onclick = function() {\n" +
+    "            var bs = document.getElementsByTagName('button');\n" +
+    "            for (var i=0;i<btns.length;i++) {\n" +
+    "                if (btns[i] != this) \n" +
+    "                    btns[i].disabled = true;\n" +
+    "            }" +
+    "            this.innerHTML = this.value;\n" +
+    "            if(this.btnonclick) return this.btnonclick();\n" +
+    "            return true;\n" +
+    "        }\n" +
+    "    }\n" +
+    "    if(window.btnunload) return window.btnunload();\n" +
+    "};</script>";
+    
+    public static void appendIEButtonFixToResponse(WOResponse woresponse) {
+		if(!ERXWOContext.contextDictionary().containsKey("ERXWOSubmit.ieFixed")) {
+			woresponse._appendContentAsciiString(ieFix);
+			ERXWOContext.contextDictionary().setObjectForKey(Boolean.TRUE, "ERXWOSubmit.ieFixed");
+		}
+    }
+    
     public ERXSubmitButton(String arg0, NSDictionary nsdictionary, WOElement arg2) {
         super("button", nsdictionary, arg2);
         if(_value == null)
@@ -96,17 +122,12 @@ public class ERXSubmitButton extends WOInput {
     }
     
     protected void _appendOpenTagToResponse(WOResponse woresponse, WOContext wocontext) {
-    	if(useButton(wocontext)) {
-    		woresponse.appendContentCharacter('<');
-    		woresponse._appendContentAsciiString(elementName(wocontext));   	
-        	appendAttributesToResponse(woresponse, wocontext);
-        	woresponse.appendContentCharacter('>');
-    	} else {
-           	woresponse._appendContentAsciiString("<span class=\"ERXSubmitButton\"><a");   	
-        	appendAttributesToResponse(woresponse, wocontext);
-        	woresponse.appendContentCharacter('>');
-    	}
-    }
+    	appendIEButtonFixToResponse(woresponse);
+    	woresponse.appendContentCharacter('<');
+    	woresponse._appendContentAsciiString(elementName(wocontext));   	
+    	appendAttributesToResponse(woresponse, wocontext);
+    	woresponse.appendContentCharacter('>');
+     }
     
     public void appendAttributesToResponse(WOResponse woresponse, WOContext wocontext) {
     	appendConstantAttributesToResponse(woresponse, wocontext);
@@ -118,36 +139,18 @@ public class ERXSubmitButton extends WOInput {
     		woresponse.appendContentCharacter(' ');
     		woresponse._appendContentAsciiString("disabled=\"disabled\"");
     	}
-    	if(useButton(wocontext)) {
-    		_appendValueAttributeToResponse(woresponse, wocontext);
-    		_appendNameAttributeToResponse(woresponse, wocontext);
-    		if(!shouldSubmitForm) {
-    			String action = (String) wocontext.componentActionURL();
-    			woresponse._appendTagAttributeAndValue("onclick", "document.location.href='" + action + "'; return false;", false);
-    		}
-    	} else {
-	   		woresponse._appendContentAsciiString(" style=\"text-decoration: none;\"; href=\"#\" onclick=\"this.firstChild.click(); void(0);\">");
-    		woresponse._appendContentAsciiString("<input type=\"submit\" style=\"position: absolute; display:none; visibility: hidden;\"");
-
-    		if(!shouldSubmitForm) {
-    			String action = (String) wocontext.componentActionURL();
-    			woresponse._appendTagAttributeAndValue("onclick", "document.location.href='" + action + "'; return false;", false);
-    		}
- 
-    		_appendValueAttributeToResponse(woresponse, wocontext);
-    		_appendNameAttributeToResponse(woresponse, wocontext);
-    		woresponse._appendContentAsciiString(" /");   	
+    	_appendValueAttributeToResponse(woresponse, wocontext);
+    	_appendNameAttributeToResponse(woresponse, wocontext);
+    	if(!shouldSubmitForm) {
+    		String action = (String) wocontext.componentActionURL();
+    		woresponse._appendTagAttributeAndValue("onclick", "document.location.href='" + action + "'; return false;", false);
     	}
     }
 
     protected void _appendCloseTagToResponse(WOResponse woresponse, WOContext wocontext) {
-    	if(useButton(wocontext)) {
-       		woresponse._appendContentAsciiString("</");
-       		woresponse._appendContentAsciiString(elementName(wocontext));
-       		woresponse.appendContentCharacter('>');
-     	} else {
-       		woresponse._appendContentAsciiString("</a></span>");  
-    	}
+    	woresponse._appendContentAsciiString("</");
+    	woresponse._appendContentAsciiString(elementName(wocontext));
+    	woresponse.appendContentCharacter('>');
     }
 
     public WOActionResults invokeAction(WORequest worequest, WOContext wocontext) {
@@ -217,9 +220,4 @@ public class ERXSubmitButton extends WOInput {
     		woresponse.appendContentString(" />");
     	}
     }
-
-	private boolean useButton(WOContext wocontext) {
-		String userAgent = wocontext.request().headerForKey("user-agent");
-    	return userAgent != null && userAgent.indexOf("MSIE") < 0;
-	}
 }
