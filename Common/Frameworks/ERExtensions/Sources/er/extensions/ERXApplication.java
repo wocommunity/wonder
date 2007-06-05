@@ -54,6 +54,7 @@ import com.webobjects.foundation.NSData;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSForwardException;
 import com.webobjects.foundation.NSKeyValueCoding;
+import com.webobjects.foundation.NSKeyValueCodingAdditions;
 import com.webobjects.foundation.NSLog;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
@@ -1341,5 +1342,27 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
         WOMessage.setDefaultURLEncoding(encoding);
         ERXMessageEncoding.setDefaultEncoding(encoding);
         ERXMessageEncoding.setDefaultEncodingForAllLanguages(encoding);
+	}
+
+	public NSKeyValueCodingAdditions constants() {
+		return new NSKeyValueCodingAdditions() {
+
+			public void takeValueForKey(Object value, String key) {
+				throw new IllegalArgumentException("Can't set constant");
+			}
+
+			public Object valueForKey(String key) {
+				return ERXConstant.constantsForClassName(key);
+			}
+
+			public void takeValueForKeyPath(Object value, String keyPath) {
+				throw new IllegalArgumentException("Can't set constant");
+			}
+
+			public Object valueForKeyPath(String keyPath) {
+				return valueForKey(keyPath);
+			}
+			
+		};
 	}
 }

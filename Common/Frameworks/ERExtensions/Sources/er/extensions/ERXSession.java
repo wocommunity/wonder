@@ -528,6 +528,14 @@ public class ERXSession extends ERXAjaxSession implements Serializable {
     messageEncoding().setEncodingToResponse(aResponse);
     super.appendToResponse(aResponse, aContext);
   }
+  
+  /**
+   * Bringing application into KVC.
+   * @return
+   */
+  public ERXApplication application() {
+	  return ERXApplication.erxApplication();
+  }
 
   /**
    * Overrides terminate to free up resources and unregister for notifications.
