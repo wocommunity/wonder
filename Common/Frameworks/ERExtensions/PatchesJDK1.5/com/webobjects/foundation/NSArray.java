@@ -838,11 +838,11 @@ public class NSArray<E> implements Cloneable, Serializable, NSCoding, NSKeyValue
 		return this;
 	}
 
-	public NSArray immutableClone() {
+	public NSArray<E> immutableClone() {
 		return this;
 	}
 
-	public NSMutableArray mutableClone() {
+	public NSMutableArray<E> mutableClone() {
 		return new NSMutableArray(this);
 	}
 
