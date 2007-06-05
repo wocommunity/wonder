@@ -5,10 +5,15 @@ import java.math.BigDecimal;
 import java.util.*;
 
 /**
- * NSArray reimplementation to support JDK 1.5 templates.
- * @author ak
+ * NSArray reimplementation to support JDK 1.5 templates. Use with
+ * <pre>
+ * public () {...}
+ * NSArray&lt;Bug&gt; bugs = ds.fetchObjects();
+ * for(Bug : bugs) {
+ * 	  ...
+ * }</pre>
  *
- * @param <E>
+ * @param &lt;E&gt;
  */
 
 public class NSArray<E> implements Cloneable, Serializable, NSCoding, NSKeyValueCoding, NSKeyValueCodingAdditions, _NSFoundationCollection, List<E> {
@@ -1063,18 +1068,3 @@ public class NSArray<E> implements Cloneable, Serializable, NSCoding, NSKeyValue
 		}
 	}
 }
-
-/*
- * DECOMPILATION REPORT
- * 
- * Decompiled from:
- * /System/Library/Frameworks/JavaFoundation.framework/Resources/Java/javafoundation.jar
- * Total time: 164 ms Jad reported messages/errors: Overlapped try statements
- * detected. Not all exception handlers will be resolved in the method
- * operatorNames Overlapped try statements detected. Not all exception handlers
- * will be resolved in the method setOperatorForKey Overlapped try statements
- * detected. Not all exception handlers will be resolved in the method
- * operatorForKey Overlapped try statements detected. Not all exception handlers
- * will be resolved in the method removeOperatorForKey Exit status: 0 Caught
- * exceptions:
- */
