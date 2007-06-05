@@ -61,9 +61,43 @@
             <param name="use.wonder.core" value="true" />
         </antcall>
     </target>
+    
+    <target name="ERExtensions.patch">
+        <delete file="${build.classes}/com/webobjects/foundation/NSMutableArray.class" />
+        <wocompile srcdir="${patches.dir}" destdir="${build.classes}" debug="on" optimize="off" deprecation="off" source="${compiler.source}" target="${compiler.target}">
+            <classpath>
+                <fileset dir="${project.dir}/Libraries">
+                    <include name="**/*.jar" />
+                </fileset>
+            </classpath>
+            <frameworks dir="${wo.frameworks}"> 
+                <include name="JavaFoundation.framework" />
+                <include name="JavaEOAccess.framework" />
+                <include name="JavaEOControl.framework" />
+                <include name="JavaWebObjects.framework" />
+                <include name="JavaWOJSPServlet.framework" />
+                <include name="JavaPlot.framework" />
+                <include name="JavaJDBCAdaptor.framework" />
+                <include name="JavaXML.framework" />
+            </frameworks>
+            <frameworks dir="${wonder.lib.root}"> 
+                <include name="JavaWOExtensions.framework" />
+            </frameworks>
+            <frameworks dir="${wo.frameworks}" if="use.webobjects.d2w"> 
+                <include name="JavaDirectToWeb.framework" />
+                <include name="JavaEOProject.framework" />
+                <include name="JavaDTWGeneration.framework" />
+            </frameworks>
+        </wocompile>
+    </target>
 
     <target name="ERExtensions.all">
+        <condition property="patch.erx" value="ERExtensions.patch">
+            <equals arg1="${compiler.source}" arg2="1.5" />
+        </condition>
+        <property name="patch.erx" value="global.dummy" />
         <antcall target="global.framework.${build.action}" >
+            <param name="after.compile" value="${patch.erx}" />
             <param name="project.principal.class" value="er.extensions.ERXExtensions" />
             <param name="project.name" value="ERExtensions" />
             <param name="project.dir" value="Common/Frameworks/ERExtensions" />

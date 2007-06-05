@@ -165,7 +165,8 @@ There are many ways to use this script:
             <param name="project.name" value="${project.name}" />
         </antcall>
     </target>
-    
+    <target name="global.dummy" />
+   
    <target name="global.environment">
         <property name="wonder.root" value="${basedir}" />
         <property file="${wonder.root}/Build/build/build.properties" />
@@ -178,6 +179,7 @@ There are many ways to use this script:
         <!-- default values. can be overridden by *.properties files or -D options. -->
         <property name="wo.woroot" value="/System" />
         <property name="wo.localroot" value="/" />
+        <property name="after.compile" value="global.dummy" />
         <property name="wo.frameworks" value="${wo.woroot}/Library/Frameworks" />
         <property name="wo.local.frameworks" value="${wo.wolocalroot}/Library/Frameworks" />
         <property name="build.root" value="${user.home}/Roots" />
@@ -424,31 +426,7 @@ There are many ways to use this script:
                 <include name="JavaDTWGeneration.framework" />
             </frameworks>
         </wocompile>
-        <wocompile srcdir="${patches.dir}" destdir="${build.classes}" debug="on" optimize="off" deprecation="off" source="${compiler.source}" target="${compiler.target}">
-            <classpath>
-                <fileset dir="${project.dir}/Libraries">
-                    <include name="**/*.jar" />
-                </fileset>
-            </classpath>
-            <frameworks dir="${wo.frameworks}"> 
-                <include name="JavaFoundation.framework" />
-                <include name="JavaEOAccess.framework" />
-                <include name="JavaEOControl.framework" />
-                <include name="JavaWebObjects.framework" />
-                <include name="JavaWOJSPServlet.framework" />
-                <include name="JavaPlot.framework" />
-                <include name="JavaJDBCAdaptor.framework" />
-                <include name="JavaXML.framework" />
-            </frameworks>
-            <frameworks dir="${wonder.lib.root}"> 
-                <include name="JavaWOExtensions.framework" />
-            </frameworks>
-            <frameworks dir="${wo.frameworks}" if="use.webobjects.d2w"> 
-                <include name="JavaDirectToWeb.framework" />
-                <include name="JavaEOProject.framework" />
-                <include name="JavaDTWGeneration.framework" />
-            </frameworks>
-        </wocompile>
+        <antcall target="${after.compile}" />
     </target>
 
     <target name="global.framework.build" depends="global.properties,global.compile">
