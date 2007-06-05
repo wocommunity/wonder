@@ -143,38 +143,38 @@ public class ERCoreBusinessLogic extends ERXFrameworkPrincipal {
     }
 
     public static String staticStoredValueForKey(String key) {
-        return ERCStatic.ERCStaticClazz.staticStoredValueForKey(key);
+        return ERCStatic.clazz.staticStoredValueForKey(key);
     }
     
     public static int staticStoredIntValueForKey(String key) {
-        return ERCStatic.ERCStaticClazz.staticStoredIntValueForKey(key);
+        return ERCStatic.clazz.staticStoredIntValueForKey(key);
     }
 
     public static String staticStoredValueForKey(String key, boolean noCache) {
-        return ERCStatic.ERCStaticClazz.staticStoredValueForKey(key, noCache);
+        return ERCStatic.clazz.staticStoredValueForKey(key, noCache);
     }
     
     public static int staticStoredIntValueForKey(String key, boolean noCache) {
-        return ERCStatic.ERCStaticClazz.staticStoredIntValueForKey(key, noCache);
+        return ERCStatic.clazz.staticStoredIntValueForKey(key, noCache);
     }    
 
     public static String staticStoredValueForKey(String key, EOEditingContext ec) {
-        return ERCStatic.ERCStaticClazz.staticStoredValueForKey(ec, key);
+        return ERCStatic.clazz.staticStoredValueForKey(ec, key);
     }
     public static int staticStoredIntValueForKey(String key, EOEditingContext ec) {
-        return ERCStatic.ERCStaticClazz.staticStoredIntValueForKey(ec, key);
+        return ERCStatic.clazz.staticStoredIntValueForKey(ec, key);
     }
 
     public static void takeStaticStoredValueForKey(String value, String key, EOEditingContext editingContext) {
-        ERCStatic.ERCStaticClazz.takeStaticStoredValueForKey(editingContext, value, key);
+        ERCStatic.clazz.takeStaticStoredValueForKey(editingContext, value, key);
     }
 
     public static void takeStaticStoredValueForKey(String value, String key) {
-        ERCStatic.ERCStaticClazz.takeStaticStoredValueForKey(value, key);
+        ERCStatic.clazz.takeStaticStoredValueForKey(value, key);
     }    
 
     public static void invalidateStaticValueForKeyCache() {
-        ERCStatic.staticClazz().invalidateCache();
+        ERCStatic.clazz.invalidateCache();
     }
 
     //	===========================================================================

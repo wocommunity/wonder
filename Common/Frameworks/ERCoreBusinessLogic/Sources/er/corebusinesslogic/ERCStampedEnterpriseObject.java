@@ -62,27 +62,15 @@ public abstract class ERCStampedEnterpriseObject extends ERXGenericRecord {
 
 
     public EOEnterpriseObject insertionLogEntry=null;
-
-    protected Boolean _implementsLogEntryInterface;
-    
-    public boolean implementsLogEntryInterface() {
-        if (_implementsLogEntryInterface == null) {
-            if (this instanceof ERCLogEntryInterface) {
-                _implementsLogEntryInterface = Boolean.TRUE;
-            } else {
-                _implementsLogEntryInterface = Boolean.FALSE;                
-            }
-        }
-        return _implementsLogEntryInterface.booleanValue();
-    }
     
     public void init(EOEditingContext ec) {
         super.init(ec);
-        if (implementsLogEntryInterface()) {
-            String relationshipName = ((ERCLogEntryInterface)this).relationshipNameForLogEntry();
-            EOEnterpriseObject logType = ((ERCLogEntryInterface)this).logEntryType();
+        if (this instanceof ERCLogEntryInterface) {
+            ERCLogEntryInterface lei = (ERCLogEntryInterface) this;
+            String relationshipName =lei.relationshipNameForLogEntry();
+            EOEnterpriseObject logType = lei.logEntryType();
             if (relationshipName != null && logType != null) {
-                insertionLogEntry=ERCLogEntry.createLogEntryLinkedToEO(logType, null, this, relationshipName);
+                insertionLogEntry=ERCLogEntry.clazz.createLogEntryLinkedToEO(logType, null, this, relationshipName);
             }
         }
         // We now set the date created/last modified in willInsert/Update/Delete
