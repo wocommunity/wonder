@@ -8,6 +8,7 @@ package er.extensions;
 
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
+import com.webobjects.appserver.WOResponse;
 
 // A Submit button that can be used stand alone.
 /**
@@ -52,7 +53,16 @@ shouldSubmitForm: if false, will let the submit button use javascript code to se
     }
 
     
+    public boolean useButton() {
+    	return ERXPatcher.classForName("WOSubmitButton").equals(ERXSubmitButton.class);
+    }
     
+    public void appendToResponse(WOResponse aResponse, WOContext aContext) {
+    	if(useButton()) {
+    		ERXSubmitButton.appendIEButtonFixToResponse(aResponse);
+    	}
+    	super.appendToResponse(aResponse, aContext);
+    }
 
     // determines wether the form this component is in (wether it was output by this component or not
     // has to be submitted or can be bypassed
