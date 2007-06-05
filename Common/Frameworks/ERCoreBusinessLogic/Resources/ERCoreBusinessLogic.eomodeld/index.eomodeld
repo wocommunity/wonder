@@ -3,7 +3,10 @@
     EOModelVersion = 2.1;
     adaptorName = JDBC;
     connectionDictionary = 
-    {};
+    {
+        URL = jdbc:mysql://localhost/bug;
+        username = root;
+    };
     entities = 
     (
        
