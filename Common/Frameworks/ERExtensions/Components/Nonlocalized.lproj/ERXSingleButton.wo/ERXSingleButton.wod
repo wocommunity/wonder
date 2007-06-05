@@ -24,6 +24,22 @@ ButtonAsInput: WOGenericElement {
     style = ^style;
 }
 
+ButtonAsButton: WOGenericContainer {
+    elementName = "button";
+    type = "submit";
+    value = ^value;
+    invokeAction = ^action;
+    onClick=jsString;
+    name = context.elementID;
+    class = ^class;
+    style = ^style;
+}
+
+Value : WOString {
+	value = ^value;
+	valueWhenEmpty = "Submit";
+}
+
 DontUseSubmitButton: WOConditional {
 	condition = useSubmitButton;
 	negate = true;
@@ -46,4 +62,13 @@ OptionalForm: ERXOptionalForm {
 
 UseSubmitButton: WOConditional {
 	condition = useSubmitButton;
+}
+
+UseButton : WOConditional {
+  condition = useButton;
+}
+
+DontUseButton : WOConditional {
+  condition = useButton;
+  negate = true;
 }
