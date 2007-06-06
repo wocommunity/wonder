@@ -1196,6 +1196,9 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 				developmentMode = true;
 			}
 		}
+		// AK: these are for quickly uncommenting while testing
+		// if(true) return false;
+		// if(true) return true;
 		return developmentMode;
 	}
 
