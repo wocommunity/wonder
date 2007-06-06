@@ -32,8 +32,6 @@ public class ERCaptcha extends ERXStatelessComponent {
 	
 	private static final Logger log = Logger.getLogger(ERCaptcha.class);
 	private static ImageCaptchaService _captchaService = new DefaultManageableImageCaptchaService();
-	private NSData _captcha;
-	private String _response;
 
 	public ERCaptcha(WOContext context) {
 		super(context);
@@ -44,11 +42,15 @@ public class ERCaptcha extends ERXStatelessComponent {
 	}
 
 	public void setCaptcha(NSData captcha) {
-		_captcha = captcha;
+		if(captcha == null) {
+			session().removeObjectForKey("ERCaptcha.captcha");
+		} else {
+			session().setObjectForKey(captcha, "ERCaptcha.captcha");
+		}
 	}
 
 	public NSData captcha() {
-		return _captcha;
+		return (NSData) session().objectForKey("ERCaptcha.captcha");
 	}
 
 	public String mimeType() {
@@ -56,11 +58,15 @@ public class ERCaptcha extends ERXStatelessComponent {
 	}
 
 	public void setResponse(String response) {
-		_response = response;
+		if(response == null) {
+			session().removeObjectForKey("ERCaptcha.response");
+		} else {
+			session().setObjectForKey(response, "ERCaptcha.response");
+		}
 	}
 
 	public String response() {
-		return _response;
+		return (String) session().objectForKey("ERCaptcha.response");
 	}
 
 	public void takeValuesFromRequest(WORequest request, WOContext context) {
@@ -68,27 +74,27 @@ public class ERCaptcha extends ERXStatelessComponent {
 		if (context._wasFormSubmitted()) {
 			Boolean validated = Boolean.FALSE;
 			try {
-				validated = _captchaService.validateResponseForID(context.elementID(), _response);
+				validated = _captchaService.validateResponseForID(context.elementID(), response());
 			}
 			catch (CaptchaServiceException e) {
 				e.printStackTrace();
 			}
 			finally {
-				_captcha = null;
+				setCaptcha(null);
 			}
 			setValueForBinding(validated, "validated");
 		}
 	}
 
 	public void appendToResponse(WOResponse response, WOContext context) {
-		if (_captcha == null) {
+		if (captcha() == null) {
 			byte[] captchaChallengeAsJpeg = null;
 			ByteArrayOutputStream captchaOutputStream = new ByteArrayOutputStream();
 			try {
 				BufferedImage challenge = _captchaService.getImageChallengeForID(context.elementID());
 				JPEGImageEncoder captchaEncoder = JPEGCodec.createJPEGEncoder(captchaOutputStream);
 				captchaEncoder.encode(challenge);
-				_captcha = new NSData(captchaOutputStream.toByteArray());
+				setCaptcha(new NSData(captchaOutputStream.toByteArray()));
 			}
 			catch (Throwable e) {
 				log.error("Failed to create JPEG for Captcha.", e);
@@ -98,7 +104,7 @@ public class ERCaptcha extends ERXStatelessComponent {
 	}
 
 	public WOActionResults resetCaptcha() {
-		_captcha = null;
+		setCaptcha(null);
 		return null;
 	}
 }
