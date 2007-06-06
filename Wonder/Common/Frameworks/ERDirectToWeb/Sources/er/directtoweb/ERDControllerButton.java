@@ -7,6 +7,8 @@ import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
+
+import er.extensions.ERXSubmitButton;
 /**
  * Action button that looks for the inner-most page with a pageController (which must be
  * a ERDBranchDelegateInterface), collects all the actions from there 
@@ -27,6 +29,18 @@ public class ERDControllerButton extends ERDActionButton implements ERDBranchInt
     }
     public boolean isButton() {
         return "buttonList".equals(valueForBinding("controllerButtonUIStyle"));
+    }
+    
+    public String cssForChoice() {
+    	String css = (String) branch.objectForKey("branchClass");
+    	if(css == null) {
+    		css = "";
+    	}
+    	css += " " + ERXSubmitButton.STYLE_PREFIX + branch.objectForKey("branchName");
+    	if(css.length() ==0 ) {
+    		css = null;
+    	}
+    	return css;
     }
     
     /** find the next non-null NextPageDelegate in the component tree, break if there is a D2WPage found beforehand */

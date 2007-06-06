@@ -17,12 +17,15 @@ import com.webobjects.foundation.NSMutableDictionary;
 
 import er.extensions.ERXNavigationManager;
 import er.extensions.ERXNavigationState;
+import er.extensions.ERXPatcher;
+import er.extensions.ERXSubmitButton;
 
 public class PageWrapper extends WOComponent {
     static final Logger log = Logger.getLogger(PageWrapper.class);
 
     public PageWrapper(WOContext aContext) {
         super(aContext);
+        ERXPatcher.setClassForName(ERXSubmitButton.class, "WOSubmitButton");
     }
 
     public String pageName() {

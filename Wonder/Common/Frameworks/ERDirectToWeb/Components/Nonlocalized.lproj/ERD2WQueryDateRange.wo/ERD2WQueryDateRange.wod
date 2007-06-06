@@ -15,15 +15,11 @@ DateReadableDescription: WOString {
 	value = dateReadableDescription;
 }
 
-String1: WOString {
-	value = session.localizer.ERD2WQueryDateRange.to;
+SessionLocalizerERD2WQueryDateRangeTo: ERXLocalizedString {
+	value = "ERD2WQueryDateRange.to";
 }
 
-String2: WOString {
-	value = session.localizer.ERD2WQueryDateRange.format;
-}
-
-String3: WOString {
-	value = session.localizer.ERD2WQueryDateRange.from;
+SessionLocalizerERD2WQueryDateRangeFrom: ERXLocalizedString {
+	value = "ERD2WQueryDateRange.from";
 }
 
