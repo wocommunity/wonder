@@ -6,6 +6,7 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.extensions;
 
+import com.webobjects.appserver.WOAssociation;
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WOResponse;
@@ -52,7 +53,23 @@ shouldSubmitForm: if false, will let the submit button use javascript code to se
         return result;
     }
 
-    
+    public String buttonCssClass() {
+    	String css = (String) valueForBinding("css");
+    	if(css == null) {
+    		css = "";
+    	}
+    	WOAssociation assoc = _associationWithName("action");
+    	if(assoc != null) {
+    		css += " " + ERXSubmitButton.STYLE_PREFIX + assoc.keyPath().replaceAll("\\W+", "");
+    	} else {
+    		css += " " + ERXSubmitButton.STYLE_PREFIX + valueForBinding("directActionName");
+    	}
+    	if(css.length() == 0) {
+    		css = null;
+    	}
+    	return css;
+    }
+
     public boolean useButton() {
     	return ERXPatcher.classForName("WOSubmitButton").equals(ERXSubmitButton.class);
     }

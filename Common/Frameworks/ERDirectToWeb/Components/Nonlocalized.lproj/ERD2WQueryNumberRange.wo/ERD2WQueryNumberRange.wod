@@ -4,15 +4,15 @@ LowerBound: WOTextField {
 	value = minValue;
 }
 
-String1: WOString {
+SessionLocalizerERD2WQueryNumberRangeTo: WOString {
 	value = session.localizer.ERD2WQueryNumberRange.to;
 }
 
-String2: WOString {
+SessionLocalizerERD2WQueryNumberRangeNumber: WOString {
 	value = session.localizer.ERD2WQueryNumberRange.number;
 }
 
-String3: WOString {
+SessionLocalizerERD2WQueryNumberRangeFrom: WOString {
 	value = session.localizer.ERD2WQueryNumberRange.from;
 }
 

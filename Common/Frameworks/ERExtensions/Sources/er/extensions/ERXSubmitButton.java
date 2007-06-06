@@ -1,5 +1,7 @@
 package er.extensions;
 
+import org.apache.log4j.Logger;
+
 import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WOAssociation;
 import com.webobjects.appserver.WOComponent;
@@ -26,6 +28,11 @@ import com.webobjects.foundation.NSDictionary;
  */
 public class ERXSubmitButton extends WOInput {
 
+	public static final Logger log = Logger.getLogger(ERXSubmitButton.class);
+
+	public static final String STYLE_PREFIX = "ERXSubmitButton-";
+	
+    protected WOAssociation _class;
     protected WOAssociation _action;
     protected WOAssociation _actionClass;
     protected WOAssociation _directActionName;
@@ -65,6 +72,7 @@ public class ERXSubmitButton extends WOInput {
         _action = (WOAssociation)_associations.removeObjectForKey("action");
         _actionClass = (WOAssociation)_associations.removeObjectForKey("actionClass");
         _directActionName = (WOAssociation)_associations.removeObjectForKey("directActionName");
+        _class = (WOAssociation)_associations.removeObjectForKey("class");
         if(_action != null && _action.isValueConstant())
             throw new WODynamicElementCreationException("<" + getClass().getName() + ">'action' is a constant.");
         if(_action != null && _directActionName != null || _action != null && _actionClass != null)
@@ -108,6 +116,21 @@ public class ERXSubmitButton extends WOInput {
     	appendConstantAttributesToResponse(woresponse, wocontext);
     	appendNonURLAttributesToResponse(woresponse, wocontext);
     	appendURLAttributesToResponse(woresponse, wocontext);
+       	String css = "";
+    	if(_class != null) {
+    		css = (String) _class.valueInComponent(wocontext.component());
+    	}
+    	WOAssociation assoc = _action;
+
+    	if(_action != null) {
+    		css += " " + STYLE_PREFIX + _action.keyPath().replaceAll("\\W+", "");
+    	} else if(_directActionName != null) {
+    		css += " " + STYLE_PREFIX + _directActionName.valueInComponent(wocontext.component());
+    	}
+    	// log.info(css);
+    	if(css.length() > 0) {
+    		woresponse._appendTagAttributeAndValue("class", css, false);
+    	}
     	boolean shouldSubmitForm = (_shouldSubmitForm != null ? _shouldSubmitForm.booleanValueInComponent(wocontext.component()) : true);
 
     	if(disabledInComponent(wocontext.component())) {
