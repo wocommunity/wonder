@@ -212,7 +212,7 @@ public class Bug extends _Bug implements Markable {
         }
         
         protected EOQualifier qualifierForPerson(People owner) {
-            return ERXEOControlUtilities.andQualifier(
+            return ERXEOControlUtilities.orQualifier(
                     new EOKeyValueQualifier(Key.OWNER, EOQualifier.QualifierOperatorEqual, owner),
                     new EOKeyValueQualifier(Key.ORIGINATOR, EOQualifier.QualifierOperatorEqual, owner)
             );
@@ -227,6 +227,10 @@ public class Bug extends _Bug implements Markable {
         
         protected EOQualifier andQualifier(EOQualifier q1, EOQualifier q2) {
             return ERXEOControlUtilities.andQualifier(q1, q2);
+        }
+        
+        protected EOQualifier ordQualifier(EOQualifier q1, EOQualifier q2) {
+            return ERXEOControlUtilities.orQualifier(q1, q2);
         }
         
         protected EOFetchSpecification newFetchSpecification(EOQualifier qualifier) {
