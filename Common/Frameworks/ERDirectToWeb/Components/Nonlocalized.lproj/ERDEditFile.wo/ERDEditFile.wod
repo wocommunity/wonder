@@ -7,12 +7,12 @@ NotFileExists: WOConditional {
 	negate = true;
 }
 
-SelectMessage: ERXLocalizedString {
-	value = "ERDEditFileUpload.select";
+SelectMessage: WOString {
+	value = selectMessage;
 }
 
-UploadMessage: ERXLocalizedString {
-	value = "ERDEditFileUpload.upload";
+UploadMessage: WOString {
+	value = uploadMessage;
 }
 
 ObjectKeyPathValue: WOString {
@@ -21,12 +21,12 @@ ObjectKeyPathValue: WOString {
 
 UploadActionButton: WOSubmitButton {
 	action = uploadAction;
-	value = "ERDEditFileUpload.upload";
+	value = uploadButton;
 }
 
 DeleteActionButton: WOSubmitButton {
 	action = deleteAction;
-	value = "ERDEditFileUpload.delete";
+	value = deleteButton;
 }
 
 Upload: WOFileUpload {
