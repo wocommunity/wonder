@@ -19,6 +19,17 @@ SQL: WOHyperlink {
 	class = ^linkClass;
 }
 
+CSSUrl : WOResourceURL {
+	framework = "ERExtensions";
+	filename = "css-debug.css";
+}
+
+CSS: WOHyperlink {
+	href = "#";
+	onclick = "ERD2WDebugFlags_cssDebug();void(0);";
+	class = ^linkClass;
+}
+
 Clear: WOHyperlink {
 	action = clearD2WRuleCache;
 	class = ^linkClass;
