@@ -13,6 +13,6 @@
 	<classpathentry kind="lib" path="Libraries/commons-logging-1.03.jar"/>
 	<classpathentry kind="lib" path="Libraries/xmlsec-1.1.jar"/>
 	<classpathentry kind="lib" path="Libraries/jug-1.1.jar"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.launching.macosx.MacOSXType/JDK 1.4.2"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
