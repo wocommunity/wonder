@@ -6,15 +6,15 @@ import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WOResponse;
 import com.webobjects.foundation.NSTimestamp;
 
-import er.ajax.AjaxUtils;
-
 public class HelloAjaxWorld extends WOComponent {
 	private NSTimestamp _timestamp;
 	private String _helloWorld;
+	private String _helloAjaxWorld;
 	
 	public HelloAjaxWorld(WOContext context) {
 		super(context);
-		_helloWorld = "Hello WOrld";
+		_helloWorld = "Hello WOrld.";
+		_helloAjaxWorld = "Hello Ajax WOrld!";
 	}
 
 	public void appendToResponse(WOResponse woresponse, WOContext wocontext) {
@@ -30,13 +30,17 @@ public class HelloAjaxWorld extends WOComponent {
 		return _helloWorld;
 	}
 
+	public String helloAjaxWorld() {
+		return _helloAjaxWorld;
+	}
+
 	public WOActionResults updateHelloWorld() {
-		if (AjaxUtils.isAjaxRequest(context().request())) {
-			_helloWorld = _helloWorld + ", <b>Ajax!</b>";
-		}
-		else {
-			_helloWorld = _helloWorld + ", Again";
-		}
+		_helloWorld = _helloWorld + " <i>Boring.</i>";
+		return null;
+	}
+
+	public WOActionResults updateHelloAjaxWorld() {
+		_helloAjaxWorld = _helloAjaxWorld + " <b>Fun!</b>";
 		return null;
 	}
 }
