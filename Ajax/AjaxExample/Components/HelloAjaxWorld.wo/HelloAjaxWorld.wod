@@ -4,7 +4,12 @@ AjaxExampleComponent : AjaxExampleComponent {
 
 AjaxUpdateLink : AjaxUpdateLink {
 	updateContainerID = "ajaxContent";
-	action = updateHelloWorld;
+	action = updateHelloAjaxWorld;
+}
+
+HelloAjaxWorld : WOString {
+	value = helloAjaxWorld;
+	escapeHTML = false;
 }
 
 HelloWorld : WOString {
