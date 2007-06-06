@@ -19,6 +19,7 @@ IsNotFlyOver : WOConditional {
 ChoiceButton: ERXSingleButton {
 	action = performAction;
 	value = branchButtonLabel;
+	class = cssForChoice;
 }
 
 ChoiceLink: WOHyperlink {

@@ -25,6 +25,18 @@
 	width: 100%;
 }
 
+.Embed .InspectRepetitionTable {
+	width: 100%;
+}
+
+.Embed .ListRepetitionTable {
+	width: 100%;
+}
+
+.Embed {
+	width: 100%;
+}
+
 /* Basic overall typography for the site. */
 body, li, td, p, br, form, input, text, select, option, textarea, th, ol, ul, table, blockquote {  
 	padding: 0px;
@@ -93,10 +105,6 @@ a:hover {
 
 .InspectRepetitionTable {
 	width: 100%;
-}
-
-.TopActions {
-	text-align: right;
 }
 
 form {
@@ -202,9 +210,28 @@ body {
 }
 
 .QueryTable {
+	position: relative;
 	float: left;
 	border-right: 5px solid #240203;
 	margin-right: 25px;
+	width: 200px;
+}
+
+.QueryTable .ReturnButton {
+	display: none;
+}
+
+.QueryTable .PropertyCell {
+	position: relative;
+	display: block;
+}
+
+.QueryTable .ERD2WExample {
+	position: absolute;
+	top: -1.5em;
+	right: 5px;
+	font-size: 9px;
+	font-style: italic;
 }
 
 .LayoutTable {
@@ -266,11 +293,11 @@ body {
 }
 
 select {
-	width: 300px;
+	width: 200px;
 }
 
 .ERD2WQueryOperatorPopup {
-	width: 180px;
+	width: 120px;
 }
 
 .Section {
@@ -318,10 +345,9 @@ td.Banner {
     vertical-align: middle;
 }
 
-.PropertyCell input {
+.InspectRepetitionTable .PropertyCell input {
     vertical-align: top;
 }
-
 
 H1 {
     font-weight: bold;
@@ -505,30 +531,11 @@ button {
 	text-align: center;
 }
 
-.Actions {
+.Actions, .TopActions {
 	text-align: right;
+	padding: 5px 0px;
 }
 
-.ERXSubmitButton a {
-	color: buttontext;
-	cursor: default;
-	background-color: #4b0000;
-	border-style: outset;
-	border-width: 2px;
-	border-top-color: buttonface;
-	border-left-color: buttonface;
-	border-right-color: buttonshadow;
-	border-bottom-color: buttonshadow;
-	padding: 0px 6px;
-	margin: 5px;
-	font-size: small;
-	font-family: sans-serif;
-	line-height: normal !important;
-}
-
-.ERXSubmitButton a:active {
-	border-top-color: buttonshadow;
-	border-left-color: buttonshadow;
-	border-right-color: buttonface;
-	border-bottom-color: buttonface;
+.ERXSubmitButton-createTestItem {
+	width: auto;
 }
