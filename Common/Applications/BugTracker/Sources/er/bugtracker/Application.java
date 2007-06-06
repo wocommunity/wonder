@@ -19,7 +19,9 @@ import com.webobjects.foundation.NSLog;
 import er.extensions.ERXApplication;
 import er.extensions.ERXEC;
 import er.extensions.ERXNavigationManager;
+import er.extensions.ERXPatcher;
 import er.extensions.ERXProperties;
+import er.extensions.ERXSubmitButton;
 import er.extensions.ERXWOContext;
 
 public class Application extends ERXApplication {
@@ -45,6 +47,9 @@ public class Application extends ERXApplication {
         ERXNavigationManager.manager().configureNavigation();
         setContextClassName("er.extensions.ERXWOContext");
         setPageRefreshOnBacktrackEnabled(true);
+        ERXPatcher.setClassForName(ERXSubmitButton.class, "WOSubmitButton");
+        // ERXPatcher.setClassForName(WOSubmitButton.class, "WOSubmitButton");
+
         // http://myhost:aPort/cgi-bin/WebObjects/MyApp.woa/wa/WOEventSetup
         setDefaultRequestHandler(requestHandlerForKey(directActionRequestHandlerKey()));
         setTimeOut(8 * 60 * 60); // set the timeout to 8 hours.

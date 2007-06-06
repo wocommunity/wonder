@@ -44,10 +44,10 @@ MinName: WOTextField {
 	size = formatLength;
 }
 
-and: WOString {
-	value = session.localizer.ERDQueryDateRangeJavaScript.and;
+and: ERXLocalizedString {
+	value = "ERDQueryDateRangeJavaScript.and";
 }
 
-between: WOString {
-	value = session.localizer.ERDQueryDateRangeJavaScript.between;
+between: ERXLocalizedString {
+	value = "ERDQueryDateRangeJavaScript.between";
 }
