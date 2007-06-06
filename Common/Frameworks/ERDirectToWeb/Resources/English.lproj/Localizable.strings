@@ -36,6 +36,12 @@
   "ERD2WBoolean.Yes" = "Yes"; 
   "ERD2WBoolean.No" = "No";
 
+"ERDEditFile.selectMessage" = "Select a file on you local disk:";
+"ERDEditFile.uploadMessage" = "Upload the file to the server:";
+"ERDEditFile.selectButton" = "Select File";
+"ERDEditFile.uploadButton" = "Upload File";
+"ERDEditFile.deleteButton" = "Delete File";
+
 	"ERD2WEditToManyRelationship.noChoiceAvailable" = "No @@displayNameForEntity@@ available at this time";
 	"ERD2WInspect.alreadyAborted" = "<b>You already aborted this operation</b>. Please hit cancel and try again from the first step";
 	"ERD2WList.confirmDeletionMessage" = "<b>Are you sure you want to delete the following @@displayNameForEntity@@?</b><br />@@object.userPresentableDescription@@";
