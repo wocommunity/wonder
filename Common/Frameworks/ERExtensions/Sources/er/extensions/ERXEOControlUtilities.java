@@ -1575,7 +1575,25 @@ public class ERXEOControlUtilities {
 	   }
 	   return new EOAndQualifier(new NSArray(new Object[]{q1, q2}));
     }
+
    
+   /**
+    * Joins the given qualifiers with an OR. One or both arguments may be null,
+    * if both are null, null is returned.
+    * @param q1
+    * @param q2
+    * @return
+    */
+   public static EOQualifier orQualifier(EOQualifier q1, EOQualifier q2) {
+	   if(q1 == null) {
+		   return q2;
+	   }
+	   if(q2 == null) {
+		   return q1;
+	   }
+	   return new EOOrQualifier(new NSArray(new Object[]{q1, q2}));
+    }
+
    /**
     * Given a qualifier of EOAndQualifiers and EOKVQualifiers, make then evaluate to
     * true on the given object. 
