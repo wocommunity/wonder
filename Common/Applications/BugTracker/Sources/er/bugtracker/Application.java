@@ -16,6 +16,7 @@ import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSLog;
 
+import er.bugtracker.mail.MailReader;
 import er.extensions.ERXApplication;
 import er.extensions.ERXEC;
 import er.extensions.ERXNavigationManager;
@@ -27,20 +28,11 @@ import er.extensions.ERXWOContext;
 public class Application extends ERXApplication {
 
     public String databaseName = "BugTracker";
+    
+    private MailReader reader;
 
     public static void main(String argv[]) {
         ERXApplication.main(argv, Application.class);
-    }
-
-    private String _userDefaultName;
-
-    public String name() {
-        if (_userDefaultName == null) {
-            _userDefaultName = System.getProperty("BTApplicationName");
-            if (_userDefaultName == null)
-                _userDefaultName = super.name();
-        }
-        return _userDefaultName;
     }
 
     public Application() {
@@ -57,43 +49,10 @@ public class Application extends ERXApplication {
     }
 
     public void finishInitialization() {
+        if(ERXProperties.booleanForKeyWithDefault("BugReporter.processMails", false)) {
+            reader = new MailReader(null);
+            reader.startReader();
+        }
         NSLog.debug.appendln("finishInitialization called.");
-        try {
-            boolean runBatchReport = ERXProperties.booleanForKey("BTRunBatchReport");
-            if (runBatchReport) {
-                runBatchReport();
-                System.exit(0);
-            }
-        } catch (ExceptionInInitializerError e) {
-            NSLog.err.appendln("Original exception " + e.getException());
-        }
-    }
-
-    /**
-     * we run over all people in the DB and send them a summary email if they
-     * have unread bugs
-     */
-    public void runBatchReport() {
-        EOEditingContext ec = ERXEC.newEditingContext();
-        ec.lock();
-        try {
-            NSArray everybody = People.clazz.allObjects(ec);
-            for (Enumeration e = everybody.objectEnumerator(); e.hasMoreElements();) {
-                People person = (People) e.nextElement();
-                NSDictionary bindings = new NSDictionary(new Object[] { person }, new Object[] { "user" });
-                NSArray unreadBugs = person.unreadBugs();
-                String email = person.email();
-                if (unreadBugs.count() > 0 && email != null && email.length() != 0) {
-                    WOComponent emailBody = pageWithName("BugReportEmail", ERXWOContext.newContext());
-                    emailBody.takeValueForKey(unreadBugs, "unreadBugs");
-                    emailBody.takeValueForKey(person, "owner");
-                    WOMailDelivery.sharedInstance().composeComponentEmail("bugtracker@netstruxr.com", new NSArray(email), null,
-                            "You have " + unreadBugs.count() + " unread bug(s)", emailBody, true);
-                    NSLog.debug.appendln("Sending report to " + email + ": " + unreadBugs.count() + " unread bugs");
-                }
-            }
-        } finally {
-            ec.unlock();
-        }
     }
 }
