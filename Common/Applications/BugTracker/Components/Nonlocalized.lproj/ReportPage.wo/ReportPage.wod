@@ -32,7 +32,7 @@ QuickReport: WRQuickReport {
 	model = model;
 	showTopCriteriaLabel = true;
 	showNavigation = true;
-//	showPresentationControls = true;
+	showPresentationControls = true;
 	reportComponentName = reportComponentName;
 }
 ShowAsChartLink: WOHyperlink {
