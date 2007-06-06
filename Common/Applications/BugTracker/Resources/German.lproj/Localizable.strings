@@ -1,4 +1,7 @@
 {
+"er.plot.ERPPieChart" = "Als Tortendiagramm";
+"er.plot.ERPCategoryChart" = "Als Balkendiagramm";
+
 	"Button.close" = "Schliessen";
 	"Button.comment" = "Kommentieren";
 	"Button.createNew" = "Neu";
