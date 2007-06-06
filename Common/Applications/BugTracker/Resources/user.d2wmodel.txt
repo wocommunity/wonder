@@ -67,6 +67,7 @@
     50 : ((task = 'edit' and smartAttribute.userInfo.prototypeName = 'longText') or propertyKey = 'newText') => componentName = ERD2WEditLargeString [com.webobjects.directtoweb.Assignment], 
     50 : ((task = 'edit' or task = 'inspect') and (entity.name = 'Bug' or entity.name = 'Requirement') and propertyKey = 'newText') => displayNameForProperty =  [com.webobjects.directtoweb.Assignment], 
     50 : ((task = 'edit' or task = 'inspect') and (entity.name = 'Bug' or entity.name = 'Requirement') and propertyKey = 'sortedComments') => displayNameForProperty =  [com.webobjects.directtoweb.Assignment], 
+    50 : (task = 'edit' and (entity.name = 'Comment' or entity.name = 'Bug' or entity.name = 'Requirement') and propertyKey = 'textDescription') => componentName = ERDEditHTML [com.webobjects.directtoweb.Assignment], 
     50 : (task = 'query' and entity.name = 'Bug') => displayPropertyKeys = ("(Common)", anyText, dateModified, dateSubmitted, isFeatureRequest, priority, state, "(People)", owner, originator
 ) [com.webobjects.directtoweb.Assignment], 
     50 : ((task = 'list' or task = 'inspect' or task = 'select' or task = 'pick') and propertyKey = 'state' and (entity.name = 'Requirement' or entity.name = 'Bug')) => componentName = StatusComponent [com.webobjects.directtoweb.Assignment], 
