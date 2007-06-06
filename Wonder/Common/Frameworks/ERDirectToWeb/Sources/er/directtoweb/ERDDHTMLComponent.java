@@ -16,7 +16,7 @@ import er.extensions.ERXStringUtilities;
 
 /**
  * Rich text edit component.<br />
- * 
+ * @deprecated use ERDEditHTML instead
  */
 
 public class ERDDHTMLComponent extends ERDCustomEditComponent {
