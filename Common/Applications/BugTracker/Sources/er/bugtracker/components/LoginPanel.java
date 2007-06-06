@@ -20,6 +20,7 @@ public class LoginPanel extends ERXStatelessComponent {
 
     public String username;
     public String password;
+    public boolean validated;
     public boolean rememberPassword;
     public String errorMessage;
 
@@ -46,6 +47,11 @@ public class LoginPanel extends ERXStatelessComponent {
         
         Session session = (Session)session();
         editingContext = session.defaultEditingContext();
+
+        if (!validated && false) {// captcha disabled for now
+            errorMessage="The captcha is wrong!";
+            return null;
+        }
 
         if (username==null || password==null) {
             errorMessage="Please specify both fields!";

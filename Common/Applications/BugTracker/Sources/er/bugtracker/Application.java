@@ -6,24 +6,16 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.bugtracker;
 
-import java.util.Enumeration;
-
-import com.webobjects.appserver.WOComponent;
-import com.webobjects.appserver.WOMailDelivery;
 import com.webobjects.directtoweb.D2W;
-import com.webobjects.eocontrol.EOEditingContext;
-import com.webobjects.foundation.NSArray;
-import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSLog;
 
 import er.bugtracker.mail.MailReader;
 import er.extensions.ERXApplication;
-import er.extensions.ERXEC;
 import er.extensions.ERXNavigationManager;
 import er.extensions.ERXPatcher;
 import er.extensions.ERXProperties;
 import er.extensions.ERXSubmitButton;
-import er.extensions.ERXWOContext;
+import er.rest.ERXRestRequestHandler;
 
 public class Application extends ERXApplication {
 
@@ -38,6 +30,7 @@ public class Application extends ERXApplication {
     public Application() {
         ERXNavigationManager.manager().configureNavigation();
         setContextClassName("er.extensions.ERXWOContext");
+        registerRequestHandler(ERXRestRequestHandler.createUnsafeRequestHandler(false, false), "rest");
         setPageRefreshOnBacktrackEnabled(true);
         ERXPatcher.setClassForName(ERXSubmitButton.class, "WOSubmitButton");
         // ERXPatcher.setClassForName(WOSubmitButton.class, "WOSubmitButton");

@@ -17,5 +17,7 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/WRReporting"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/ExcelGenerator"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/ERPlot"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/ERCaptcha"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/ERRest"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
