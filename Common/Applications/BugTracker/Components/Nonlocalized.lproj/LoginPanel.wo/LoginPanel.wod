@@ -23,6 +23,10 @@ PasswordField: WOPasswordField {
 	width = "16";
 }
 
+Captcha : ERCaptcha {
+	validated = validated;
+}
+
 CheckBox1: WOCheckBox {
 	checked = rememberPassword;
 }
