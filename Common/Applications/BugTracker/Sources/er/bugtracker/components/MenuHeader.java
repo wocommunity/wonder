@@ -7,26 +7,19 @@
 
 package er.bugtracker.components;
 
+import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
-import com.webobjects.directtoweb.D2W;
+import com.webobjects.appserver.WOCookie;
+import com.webobjects.appserver.WORedirect;
+import com.webobjects.appserver.WORequest;
 import com.webobjects.directtoweb.D2WPage;
-import com.webobjects.directtoweb.EditPageInterface;
-import com.webobjects.directtoweb.InspectPageInterface;
-import com.webobjects.directtoweb.ListPageInterface;
-import com.webobjects.eoaccess.EODatabaseDataSource;
-import com.webobjects.eoaccess.EOEntity;
-import com.webobjects.eoaccess.EOUtilities;
-import com.webobjects.eocontrol.EOEnterpriseObject;
-import com.webobjects.eocontrol.EOFetchSpecification;
-import com.webobjects.eocontrol.EOKeyValueQualifier;
-import com.webobjects.eocontrol.EOQualifier;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSKeyValueCoding;
 import com.webobjects.foundation.NSMutableDictionary;
+import com.webobjects.foundation.NSTimestamp;
 
 import er.bugtracker.Factory;
-import er.bugtracker.Session;
 import er.extensions.ERXNavigationManager;
 import er.extensions.ERXNavigationState;
 
@@ -78,6 +71,19 @@ public class MenuHeader extends WOComponent {
 
     public String bugNumber;
 
+    public WOActionResults logout() {
+    	WORedirect page = (WORedirect) pageWithName("WORedirect");
+    	page.setUrl(session().context().directActionURLForActionNamed("entrance", null));
+    	WORequest r = context().request();
+    	WOCookie loginCookie=WOCookie.cookieWithName("BTL", "-");
+    	loginCookie.setExpires(NSTimestamp.DistantFuture);
+    	loginCookie.setPath("/");
+
+    	context().response().addCookie(loginCookie);
+    	session().terminate();
+    	return page;
+    }
+    
     public WOComponent findBugByNumber() {
         if(bugNumber != null) {
             return Factory.bugTracker().findBugs(bugNumber);
