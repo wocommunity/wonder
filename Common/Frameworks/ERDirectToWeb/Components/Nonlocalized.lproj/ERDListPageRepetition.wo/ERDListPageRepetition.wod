@@ -36,6 +36,12 @@ ExtraListComponent : WOSwitchComponent {
 	d2wContext = localContext;
 }
 
+InspectRepetition : ERDInspectPageRepetition {
+	object = d2wContext.object;
+	d2wContext = localContext;
+	displayPropertyKeys = currentSection.keys;
+}
+
 HasExtraListComponent :WOConditional {
 	condition = d2wContext.extraListComponentName;
 }
@@ -78,18 +84,18 @@ ComponentContent1: WOComponentContent {
 }
 
 DividingCells: WOGenericContainer {
-	colspan = d2wContext.displayPropertyKeys.count;
+	colspan = displayPropertyKeyCount;
 	elementName = "td";
 }
 
 ActionCell: WOGenericContainer {
-	colspan = d2wContext.displayPropertyKeys.count;
+	colspan = displayPropertyKeyCount;
 	elementName = "td";
 	class="ActionCell";
 }
 
 ExtraCell: WOGenericContainer {
-	colspan = d2wContext.displayPropertyKeys.count;
+	colspan = displayPropertyKeyCount;
 	elementName = "td";
 	class="ExtraCell";
 }
@@ -101,7 +107,7 @@ Objects: WORepetition {
 }
 
 HasSections: WOConditional {
-	condition = hasSections;
+	condition = false; //hasSections;
 }
 
 IsPropertySortable: WOConditional {
@@ -157,6 +163,11 @@ SectionCell: WOGenericContainer {
 
 SectionRepetition: WORepetition {
 	list = sectionsContents;
+	item = currentSection;
+}
+
+ItemSectionRepetition: WORepetition {
+	list = itemSectionsContents;
 	item = currentSection;
 }
 
