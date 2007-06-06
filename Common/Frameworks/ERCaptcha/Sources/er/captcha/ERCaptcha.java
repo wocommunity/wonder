@@ -17,6 +17,8 @@ import com.webobjects.appserver.WORequest;
 import com.webobjects.appserver.WOResponse;
 import com.webobjects.foundation.NSData;
 
+import er.extensions.ERXStatelessComponent;
+
 /**
  * ERCaptcha presents a captcha image to the use along with a text field
  * for the user to identify the image.
@@ -26,7 +28,8 @@ import com.webobjects.foundation.NSData;
  *  
  * @author mschrag
  */
-public class ERCaptcha extends WOComponent {
+public class ERCaptcha extends ERXStatelessComponent {
+	
 	private static final Logger log = Logger.getLogger(ERCaptcha.class);
 	private static ImageCaptchaService _captchaService = new DefaultManageableImageCaptchaService();
 	private NSData _captcha;
