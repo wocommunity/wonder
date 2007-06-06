@@ -7,6 +7,8 @@ import com.webobjects.appserver.WODisplayGroup;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
 
+import er.extensions.ERXArrayUtilities;
+
 /**
  * Can be used as a repetition in list pages.
  *
@@ -44,6 +46,23 @@ public class ERDListPageRepetition extends ERDAttributeRepetition {
         NSDictionary actions = (NSDictionary)valueForBinding("actions");
         return actions == null ? NO_ACTIONS : actions;
     }
+    
+    public NSArray sectionsContents() {
+    	NSArray result = super.sectionsContents();
+    	if(result.count() == 1) {
+    		return result;
+    	}
+    	ERD2WContainer pair = (ERD2WContainer) result.objectAtIndex(0);
+    	return (NSArray) new NSArray(pair);
+    }
+    
+    public NSArray itemSectionsContents() {
+    	NSArray result = super.sectionsContents();
+    	if(result.count() == 1) {
+    		return NSArray.EmptyArray;
+    	}
+    	return ERXArrayUtilities.arrayByRemovingFirstObject(result);
+    }
 
     public NSArray leftActions() {
         return (NSArray)actions().objectForKey("left");
@@ -67,5 +86,9 @@ public class ERDListPageRepetition extends ERDAttributeRepetition {
     
     public String rowClass() {
     	return "AttributeRow" + (rowIndex % 2);
+    }
+    
+    public int displayPropertyKeyCount() {
+     	return ((ERD2WContainer)sectionsContents().objectAtIndex(0)).keys.count();
     }
 }
