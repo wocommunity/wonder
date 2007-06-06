@@ -10,5 +10,8 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/ERCoreBusinessLogic"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/ERJavaMail"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/PostgresqlPlugIn"/>
+	<classpathentry kind="lib" path="Libraries/activation-1.0.2.jar"/>
+	<classpathentry kind="lib" path="Libraries/pop3.jar"/>
+	<classpathentry kind="lib" path="Libraries/imap.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
