@@ -1,6 +1,6 @@
 Content: WOComponentContent {}
 
-String3: WOString {
+Now: WOString {
 	dateformat = "%A, %B %d, %Y";
 	value = now;
 }
