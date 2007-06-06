@@ -1,17 +1,16 @@
 
-
 /* FSAdaptor - Decompiled by JODE
-* Visit http://jode.sourceforge.net/
-*/
+ * Visit http://jode.sourceforge.net/
+ */
 package er.fsadaptor;
+
 import com.webobjects.eoaccess.EOAdaptor;
 import com.webobjects.eoaccess.EOAdaptorContext;
 import com.webobjects.eoaccess.EOModel;
 import com.webobjects.eoaccess.EOSQLExpressionFactory;
 import com.webobjects.eoaccess.EOSchemaGeneration;
 
-public final class FSAdaptor extends EOAdaptor
-{
+public final class FSAdaptor extends EOAdaptor {
     public FSAdaptor(String aName) {
         super(aName);
     }
@@ -25,8 +24,7 @@ public final class FSAdaptor extends EOAdaptor
     }
 
     public Class defaultExpressionClass() {
-        throw new UnsupportedOperationException
-        ("FSAdaptor.defaultExpressionClass");
+        throw new UnsupportedOperationException("FSAdaptor.defaultExpressionClass");
     }
 
     public EOSQLExpressionFactory expressionFactory() {
@@ -38,8 +36,6 @@ public final class FSAdaptor extends EOAdaptor
     }
 
     public EOSchemaGeneration synchronizationFactory() {
-        throw new UnsupportedOperationException
-        ("FSAdaptor.synchronizationFactory");
+        throw new UnsupportedOperationException("FSAdaptor.synchronizationFactory");
     }
 }
-
