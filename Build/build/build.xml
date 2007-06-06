@@ -217,6 +217,7 @@
 
             <param name="use.webobjects.d2w" value="true" />
             <param name="use.wonder.d2w" value="true" />
+            <param name="use.wonder.mail" value="true" />
             <param name="use.wonder.logic" value="true" />
         </antcall>
     </target>
@@ -229,16 +230,7 @@
             <param name="project.dir" value="Common/Applications/BugTracker" />
 
             <param name="use.webobjects.d2w" value="true" />
-            <param name="use.wonder.d2w" value="true" />
-            <param name="use.wonder.logic" value="true" />
-            <param name="use.wonder.mail" value="true" />
-            <param name="use.woognl" value="true" />
-            <param name="use.reporting" value="true" />
-            <param name="use.excel" value="true" />
-            <param name="use.plot" value="true" />
-            <param name="use.wonder.ajax" value="true" />
-            <param name="use.additional.framework.1" value="BTBusinessLogic.framework" />
-            <param name="use.additional.framework.2" value="PostgresqlPlugIn.framework" />
+            <param name="wonder.lib.root.bundles" value="Ajax/BTBusinessLogic/ERCoreBusinessLogic/ERPrototypes/ERJars/ERExtensions/ERDirectToWeb/JavaWOExtensions/DRGrouping/WRReporting/ERPlot/ERRest/PostgresqlPlugIn/ExcelGeneration/ERCaptcha" />
         </antcall>
     </target>
 
