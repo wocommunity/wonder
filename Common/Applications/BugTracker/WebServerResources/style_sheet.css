@@ -29,11 +29,11 @@
 	width: 100%;
 }
 
-.Embed .ListRepetitionTable {
+PropertyCell .ListTable {
 	width: 100%;
 }
 
-.Embed {
+.ListTable .ListRepetitionTable {
 	width: 100%;
 }
 
@@ -525,11 +525,28 @@ H6
 }
 
 button {
-	background-color: #4b0000;
-	color: white;
-	width: 80px;
+    background-color: #ededed;
+	color: black;
+	border-width: 1px;
+	border-color: #444;
+	text-transform: captialize;
+	padding: 3px 10px;
 	text-align: center;
+	margin-right: 5px;
+	cursor: pointer;
 }
+
+button:hover {
+    background-color: #888;
+}
+
+
+button:active {
+    background-color: #444;
+	color: white;
+	border-color: #ededed;
+}
+
 
 .Actions, .TopActions {
 	text-align: right;
