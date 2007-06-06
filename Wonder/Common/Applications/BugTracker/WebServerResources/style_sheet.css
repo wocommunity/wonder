@@ -29,7 +29,7 @@
 	width: 100%;
 }
 
-PropertyCell .ListTable {
+.PropertyCell .ListTable {
 	width: 100%;
 }
 
@@ -54,7 +54,9 @@ body, li, td, p, br, form, input, text, select, option, textarea, th, ol, ul, ta
 	border-bottom: 1px dotted black;
 }
 
-
+.ListTable .Section {
+	display: none;
+}
 
 .LayoutTable img {
 	vertical-align: middle;
@@ -569,4 +571,43 @@ button:active {
 
 .ERXSubmitButton-createTestItem {
 	width: auto;
+}
+
+ERDControllerButtonLinkList {
+	display: inline;
+	list-style-type: none;
+}
+
+.ERDControllerButtonLinkList li {
+	display: inline;
+}
+
+#reports li {
+	display: inline;
+}
+
+.InspectTable {
+	position: relative;
+	
+}
+
+.ERDHasChangesMarker {
+	position: absolute;
+	right: 20px;
+	top:12px;
+}
+
+.ERXJSFlyOver {
+}
+
+.ERXJSFlyOver ul {
+	background-color: white;
+	border: 1px dotted black;
+	padding: 10px;
+	padding-left: 20px;
+	text-align: left;
+}
+
+.ERXJSFlyOver li {
+	white-space: nowrap;
 }
