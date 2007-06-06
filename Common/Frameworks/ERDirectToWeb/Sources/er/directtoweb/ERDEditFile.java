@@ -26,6 +26,7 @@ import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSPathUtilities;
 import com.webobjects.foundation.NSValidation;
 
+import er.extensions.ERXLocalizer;
 import er.extensions.ERXSimpleTemplateParser;
 import er.extensions.ERXValidationException;
 import er.extensions.ERXValidationFactory;
@@ -50,7 +51,40 @@ public class ERDEditFile extends ERDCustomEditComponent {
     public ERDEditFile(WOContext context) {
         super(context);
     }
-
+    
+    private String localizedValueForBinding(String binding) {
+        String result = (String)valueForBinding(binding);
+        if(result == null) {
+            result = ERXLocalizer.currentLocalizer().localizedStringForKeyWithDefault("ERDEditFile." + binding);
+        }
+        return result;
+    }
+    
+    public String selectMessage() {
+        String result = (String)localizedValueForBinding("selectMessage");
+        return result;
+    }
+    
+    public String uploadMessage() {
+        String result = (String)localizedValueForBinding("uploadMessage");
+        return result;
+    }
+    
+    public String selectButton() {
+        String result = (String)localizedValueForBinding("selectButton");
+        return result;
+    }
+    
+    public String uploadButton() {
+        String result = (String)localizedValueForBinding("uploadButton");
+        return result;
+    }
+    
+    public String deleteButton() {
+        String result = (String)localizedValueForBinding("deleteButton");
+        return result;
+    }
+    
     void extract(InputStream in, String[] files) throws IOException {
         ZipInputStream zis = new ZipInputStream(in);
         ZipEntry e;
@@ -124,6 +158,7 @@ public class ERDEditFile extends ERDCustomEditComponent {
         super.takeValuesFromRequest(q,c);
         uploadFile();
         try {
+            // allow for uploads that don't end up in the object
             if(key().charAt(0) != '#')
                 object().validateTakeValueForKeyPath(objectKeyPathValue(),key());
         } catch(Throwable e) {
