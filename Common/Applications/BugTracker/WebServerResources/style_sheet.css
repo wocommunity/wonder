@@ -540,6 +540,20 @@ button:hover {
     background-color: #888;
 }
 
+.TopActions {
+	position: relative;
+	display: block;
+}
+
+.Actions .ERDPrinterButton {
+	display: none;
+}
+
+.ERDPrinterButton {
+	position: absolute;
+	right: 0px;
+	top: -20px;
+}
 
 button:active {
     background-color: #444;
