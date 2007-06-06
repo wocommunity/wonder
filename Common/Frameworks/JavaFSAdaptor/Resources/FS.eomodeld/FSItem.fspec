@@ -1,0 +1,14 @@
+{
+    item = {
+        class = EOFetchSpecification; 
+        entityName = FSItem; 
+        fetchLimit = 0; 
+        isDeep = YES; 
+        qualifier = {
+            class = EOKeyValueQualifier; 
+            key = parent; 
+            selectorName = "isEqualTo:"; 
+            value = {"_key" = parent; class = EOQualifierVariable; }; 
+        }; 
+    }; 
+}
