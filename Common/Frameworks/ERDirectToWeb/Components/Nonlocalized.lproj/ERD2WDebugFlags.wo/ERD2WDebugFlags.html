@@ -1,7 +1,25 @@
 <WEBOBJECT NAME=Show>
+<script>
+function ERD2WDebugFlags_cssDebug() {
+    var newSS;
+    newSS=document.getElementById('debug-stylesheet');
+    if(newSS){
+        newSS.href=null;
+        document.documentElement.childNodes[0].removeChild(newSS);
+    } else {
+        newSS=document.createElement('link');
+        newSS.rel='stylesheet';
+        newSS.type='text/css';
+        newSS.href='<webobject name=CSSUrl></webobject>';
+        newSS.id='debug-stylesheet';
+        document.documentElement.childNodes[0].appendChild(newSS);
+    }
+}
+</script>
 <ul>
 	<li><WEBOBJECT NAME=Log4J>Log4J</WEBOBJECT></li>
 	<li><WEBOBJECT NAME=D2W>D2W</WEBOBJECT> </li>
+	<li><WEBOBJECT NAME=CSS>CSS</WEBOBJECT> </li>
 	<li><WEBOBJECT NAME=SQL>Toggle SQL</WEBOBJECT></li>
 	<li><WEBOBJECT NAME=Clear>Clear D2W Cache</WEBOBJECT></li>
 	<li><WEBOBJECT NAME=Dump>Created keys</WEBOBJECT></li>
