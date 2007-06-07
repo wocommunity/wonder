@@ -12,6 +12,8 @@ import java.math.BigDecimal;
 
 public abstract class _TestItem extends ERXGenericRecord {
 
+    public static final String ENTITY = "TestItem";
+
     public interface Key  {
         public static final String TITLE = "title";
         public static final String TEXT_DESCRIPTION = "textDescription";
@@ -27,6 +29,18 @@ public abstract class _TestItem extends ERXGenericRecord {
     }
 
     public static abstract class _TestItemClazz extends ERXGenericRecord.ERXGenericRecordClazz {
+    
+    	public TestItem createTestItem(EOEditingContext editingContext, String controlled, NSTimestamp dateCreated, Number id, String title, er.bugtracker.Component component, er.bugtracker.TestItemState state) {
+	   		TestItem eo = (TestItem)EOUtilities.createAndInsertInstance(editingContext, TestItem.ENTITY);
+	    	eo.setControlled(controlled);
+	    	eo.setDateCreated(dateCreated);
+	    	eo.setId(id);
+	    	eo.setTitle(title);
+	    	eo.setComponent(component);
+	    	eo.setState(state);
+	    	return eo;
+ 		}
+
 
         public NSArray objectsForUnclosedTestItems(EOEditingContext context, er.bugtracker.People userBinding) {
             EOFetchSpecification spec = EOFetchSpecification.fetchSpecificationNamed("unclosedTestItems", "TestItem");

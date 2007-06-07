@@ -12,11 +12,20 @@ import java.math.BigDecimal;
 
 public abstract class _RequirementSubType extends ERXGenericRecord {
 
+    public static final String ENTITY = "RequirementSubType";
+
     public interface Key  {
         public static final String SUB_TYPE_DESCRIPTION = "subTypeDescription";  
     }
 
     public static abstract class _RequirementSubTypeClazz extends ERXGenericRecord.ERXGenericRecordClazz {
+    
+    	public RequirementSubType createRequirementSubType(EOEditingContext editingContext, String subTypeDescription) {
+	   		RequirementSubType eo = (RequirementSubType)EOUtilities.createAndInsertInstance(editingContext, RequirementSubType.ENTITY);
+	    	eo.setSubTypeDescription(subTypeDescription);
+	    	return eo;
+ 		}
+
 
         public NSArray objectsForFetchAll(EOEditingContext context) {
             EOFetchSpecification spec = EOFetchSpecification.fetchSpecificationNamed("FetchAll", "RequirementSubType");

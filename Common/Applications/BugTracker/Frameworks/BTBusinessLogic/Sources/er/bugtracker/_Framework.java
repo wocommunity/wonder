@@ -12,6 +12,8 @@ import java.math.BigDecimal;
 
 public abstract class _Framework extends ERXGenericRecord {
 
+    public static final String ENTITY = "Framework";
+
     public interface Key  {
         public static final String OWNER = "owner";
         public static final String OWNED_SINCE = "ownedSince";
@@ -20,6 +22,14 @@ public abstract class _Framework extends ERXGenericRecord {
     }
 
     public static abstract class _FrameworkClazz extends ERXGenericRecord.ERXGenericRecordClazz {
+    
+    	public Framework createFramework(EOEditingContext editingContext, String name, Number ordering) {
+	   		Framework eo = (Framework)EOUtilities.createAndInsertInstance(editingContext, Framework.ENTITY);
+	    	eo.setName(name);
+	    	eo.setOrdering(ordering);
+	    	return eo;
+ 		}
+
 
         public NSArray objectsForOrderedFrameworks(EOEditingContext context) {
             EOFetchSpecification spec = EOFetchSpecification.fetchSpecificationNamed("orderedFrameworks", "Framework");

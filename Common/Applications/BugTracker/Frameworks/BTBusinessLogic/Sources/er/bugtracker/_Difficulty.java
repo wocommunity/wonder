@@ -12,11 +12,20 @@ import java.math.BigDecimal;
 
 public abstract class _Difficulty extends ERXGenericRecord {
 
+    public static final String ENTITY = "Difficulty";
+
     public interface Key  {
         public static final String DIFFICULTY_DESCRIPTION = "difficultyDescription";  
     }
 
     public static abstract class _DifficultyClazz extends ERXGenericRecord.ERXGenericRecordClazz {
+    
+    	public Difficulty createDifficulty(EOEditingContext editingContext, String difficultyDescription) {
+	   		Difficulty eo = (Difficulty)EOUtilities.createAndInsertInstance(editingContext, Difficulty.ENTITY);
+	    	eo.setDifficultyDescription(difficultyDescription);
+	    	return eo;
+ 		}
+
 
         public NSArray objectsForFetchAll(EOEditingContext context) {
             EOFetchSpecification spec = EOFetchSpecification.fetchSpecificationNamed("FetchAll", "Difficulty");

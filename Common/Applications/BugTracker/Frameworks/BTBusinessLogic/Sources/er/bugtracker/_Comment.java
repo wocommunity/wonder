@@ -12,14 +12,26 @@ import java.math.BigDecimal;
 
 public abstract class _Comment extends ERXGenericRecord {
 
+    public static final String ENTITY = "Comment";
+
     public interface Key  {
         public static final String TEXT_DESCRIPTION = "textDescription";
+        public static final String PARENT = "parent";
         public static final String ORIGINATOR = "originator";
         public static final String DATE_SUBMITTED = "dateSubmitted";
-        public static final String BUG = "bug";  
+        public static final String BUG = "bug";
+        public static final String ATTACHEMENTS = "attachements";  
     }
 
     public static abstract class _CommentClazz extends ERXGenericRecord.ERXGenericRecordClazz {
+    
+    	public Comment createComment(EOEditingContext editingContext, er.bugtracker.Bug bug, er.bugtracker.People originator) {
+	   		Comment eo = (Comment)EOUtilities.createAndInsertInstance(editingContext, Comment.ENTITY);
+	    	eo.setBug(bug);
+	    	eo.setOriginator(originator);
+	    	return eo;
+ 		}
+
 
     }
 
@@ -51,6 +63,25 @@ public abstract class _Comment extends ERXGenericRecord {
     }
     public void setOriginator(er.bugtracker.People object) {
         takeStoredValueForKey(object, Key.ORIGINATOR);
+    }
+
+
+    public er.bugtracker.Comment parent() {
+        return (er.bugtracker.Comment)storedValueForKey(Key.PARENT);
+    }
+    public void setParent(er.bugtracker.Comment object) {
+        takeStoredValueForKey(object, Key.PARENT);
+    }
+
+
+    public NSArray attachements() {
+        return (NSArray)storedValueForKey(Key.ATTACHEMENTS);
+    }
+    public void addToAttachements(er.bugtracker.Attachement object) {
+        includeObjectIntoPropertyWithKey(object, Key.ATTACHEMENTS);
+    }
+    public void removeFromAttachements(er.bugtracker.Attachement object) {
+        excludeObjectFromPropertyWithKey(object, Key.ATTACHEMENTS);
     }
 
 }

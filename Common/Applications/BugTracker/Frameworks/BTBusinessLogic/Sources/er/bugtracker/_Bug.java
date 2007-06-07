@@ -12,9 +12,10 @@ import java.math.BigDecimal;
 
 public abstract class _Bug extends ERXGenericRecord {
 
+    public static final String ENTITY = "Bug";
+
     public interface Key  {
         public static final String TYPE = "type";
-        public static final String TEXT_DESCRIPTION = "textDescription";
         public static final String TEST_ITEMS = "testItems";
         public static final String TARGET_RELEASE = "targetRelease";
         public static final String SUBJECT = "subject";
@@ -32,6 +33,21 @@ public abstract class _Bug extends ERXGenericRecord {
     }
 
     public static abstract class _BugClazz extends ERXGenericRecord.ERXGenericRecordClazz {
+    
+    	public Bug createBug(EOEditingContext editingContext, Boolean isFeatureRequest, Boolean isRead, er.bugtracker.State state, String subject, er.bugtracker.Component component, er.bugtracker.People originator, er.bugtracker.People owner, er.bugtracker.Priority priority, er.bugtracker.Release targetRelease) {
+	   		Bug eo = (Bug)EOUtilities.createAndInsertInstance(editingContext, Bug.ENTITY);
+	    	eo.setIsFeatureRequest(isFeatureRequest);
+	    	eo.setIsRead(isRead);
+	    	eo.setState(state);
+	    	eo.setSubject(subject);
+	    	eo.setComponent(component);
+	    	eo.setOriginator(originator);
+	    	eo.setOwner(owner);
+	    	eo.setPriority(priority);
+	    	eo.setTargetRelease(targetRelease);
+	    	return eo;
+ 		}
+
 
         public NSArray objectsForBugsFiledRecently(EOEditingContext context, NSTimestamp dateBinding, er.bugtracker.People userBinding) {
             EOFetchSpecification spec = EOFetchSpecification.fetchSpecificationNamed("bugsFiledRecently", "Bug");
@@ -114,18 +130,19 @@ public abstract class _Bug extends ERXGenericRecord {
         takeStoredValueForKey((aValue ? Boolean.TRUE : Boolean.FALSE), Key.IS_READ);
     }
 
+    public er.bugtracker.State state() {
+        er.bugtracker.State value = (er.bugtracker.State)storedValueForKey(Key.STATE);
+        return value;
+    }
+    public void setState(er.bugtracker.State aValue) {
+        takeStoredValueForKey(aValue, Key.STATE);
+    }
+
     public String subject() {
         return (String)storedValueForKey(Key.SUBJECT);
     }
     public void setSubject(String aValue) {
         takeStoredValueForKey(aValue, Key.SUBJECT);
-    }
-
-    public String textDescription() {
-        return (String)storedValueForKey(Key.TEXT_DESCRIPTION);
-    }
-    public void setTextDescription(String aValue) {
-        takeStoredValueForKey(aValue, Key.TEXT_DESCRIPTION);
     }
 
     public String type() {
@@ -172,14 +189,6 @@ public abstract class _Bug extends ERXGenericRecord {
     }
     public void setPriority(er.bugtracker.Priority object) {
         takeStoredValueForKey(object, Key.PRIORITY);
-    }
-
-
-    public er.bugtracker.State state() {
-        return (er.bugtracker.State)storedValueForKey(Key.STATE);
-    }
-    public void setState(er.bugtracker.State object) {
-        takeStoredValueForKey(object, Key.STATE);
     }
 
 

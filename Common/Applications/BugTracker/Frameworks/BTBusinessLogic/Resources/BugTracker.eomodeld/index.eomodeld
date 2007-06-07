@@ -6,6 +6,11 @@
     (
        
        {
+           className = er.bugtracker.Attachement;
+           name = Attachement;
+       }, 
+       
+       {
            className = er.bugtracker.Bug;
            name = Bug;
        }, 
