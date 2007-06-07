@@ -12,6 +12,8 @@ import java.math.BigDecimal;
 
 public abstract class _ERCMailMessage extends ERCStampedEnterpriseObject {
 
+    public static final String ENTITY = "ERCMailMessage";
+
     public interface Key extends ERCStampedEnterpriseObject.Key {
         public static final String X_MAILER = "xMailer";
         public static final String TO_ADDRESSES = "toAddresses";
@@ -36,6 +38,7 @@ public abstract class _ERCMailMessage extends ERCStampedEnterpriseObject {
     }
 
     public static abstract class _ERCMailMessageClazz extends ERXGenericRecord.ERXGenericRecordClazz {
+ 
 
         public NSArray objectsForMessagesToBeSent(EOEditingContext context) {
             EOFetchSpecification spec = EOFetchSpecification.fetchSpecificationNamed("messagesToBeSent", "ERCMailMessage");
