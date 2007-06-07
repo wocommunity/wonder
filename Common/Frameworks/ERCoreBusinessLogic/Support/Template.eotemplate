@@ -39,12 +39,15 @@ else$><$
 endif$>
 public abstract class _<$classNameWithoutPackage$> extends <$parentName$> {
 
+    public static final String ENTITY = "<$classNameWithoutPackage$>";
+
     public interface Key <$if parentName != coreSuperClass $>extends <$parentName$>.Key<$endif$> {<$foreach key classProperties.@reversedArray do$>
         public static final String <$key.name.uppercaseUnderbarString$> = "<$key.name$>";<$endforeach do
 $>  
     }
 
     public static abstract class _<$classNameWithoutPackage$>Clazz extends <$clazzName$>.<$clazzName$>Clazz {
+ 
 <$foreach FetchSpec javaBeautifiedFetchSpecificationDictionaries.@sortedNameArray do$>
         public NSArray objectsFor<$FetchSpec.niceName$>(EOEditingContext context<$foreach Binding FetchSpec.bindings.@sortedNameArray do2$>, <$Binding.codeType$><$Binding.name$>Binding<$endforeach do2$>) {
             EOFetchSpecification spec = EOFetchSpecification.fetchSpecificationNamed("<$FetchSpec.fetchName$>", "<$name$>");

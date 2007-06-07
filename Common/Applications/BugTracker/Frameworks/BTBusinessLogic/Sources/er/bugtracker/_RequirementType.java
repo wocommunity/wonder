@@ -19,13 +19,7 @@ public abstract class _RequirementType extends ERXGenericRecord {
     }
 
     public static abstract class _RequirementTypeClazz extends ERXGenericRecord.ERXGenericRecordClazz {
-    
-    	public RequirementType createRequirementType(EOEditingContext editingContext, String typeDescription) {
-	   		RequirementType eo = (RequirementType)EOUtilities.createAndInsertInstance(editingContext, RequirementType.ENTITY);
-	    	eo.setTypeDescription(typeDescription);
-	    	return eo;
- 		}
-
+ 
 
         public NSArray objectsForFetchAll(EOEditingContext context) {
             EOFetchSpecification spec = EOFetchSpecification.fetchSpecificationNamed("FetchAll", "RequirementType");

@@ -33,21 +33,7 @@ public abstract class _Bug extends ERXGenericRecord {
     }
 
     public static abstract class _BugClazz extends ERXGenericRecord.ERXGenericRecordClazz {
-    
-    	public Bug createBug(EOEditingContext editingContext, Boolean isFeatureRequest, Boolean isRead, er.bugtracker.State state, String subject, er.bugtracker.Component component, er.bugtracker.People originator, er.bugtracker.People owner, er.bugtracker.Priority priority, er.bugtracker.Release targetRelease) {
-	   		Bug eo = (Bug)EOUtilities.createAndInsertInstance(editingContext, Bug.ENTITY);
-	    	eo.setIsFeatureRequest(isFeatureRequest);
-	    	eo.setIsRead(isRead);
-	    	eo.setState(state);
-	    	eo.setSubject(subject);
-	    	eo.setComponent(component);
-	    	eo.setOriginator(originator);
-	    	eo.setOwner(owner);
-	    	eo.setPriority(priority);
-	    	eo.setTargetRelease(targetRelease);
-	    	return eo;
- 		}
-
+ 
 
         public NSArray objectsForBugsFiledRecently(EOEditingContext context, NSTimestamp dateBinding, er.bugtracker.People userBinding) {
             EOFetchSpecification spec = EOFetchSpecification.fetchSpecificationNamed("bugsFiledRecently", "Bug");

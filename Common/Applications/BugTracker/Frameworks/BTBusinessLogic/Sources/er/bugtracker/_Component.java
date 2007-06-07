@@ -25,14 +25,7 @@ public abstract class _Component extends ERXGenericRecord {
     }
 
     public static abstract class _ComponentClazz extends ERXGenericRecord.ERXGenericRecordClazz {
-    
-    	public Component createComponent(EOEditingContext editingContext, String textDescription, er.bugtracker.People owner) {
-	   		Component eo = (Component)EOUtilities.createAndInsertInstance(editingContext, Component.ENTITY);
-	    	eo.setTextDescription(textDescription);
-	    	eo.setOwner(owner);
-	    	return eo;
- 		}
-
+ 
 
     }
 
