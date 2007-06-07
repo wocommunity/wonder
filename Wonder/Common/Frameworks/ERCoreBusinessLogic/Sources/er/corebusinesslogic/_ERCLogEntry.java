@@ -12,6 +12,8 @@ import java.math.BigDecimal;
 
 public abstract class _ERCLogEntry extends ERXGenericRecord {
 
+    public static final String ENTITY = "ERCLogEntry";
+
     public interface Key  {
         public static final String USER_ID = "userID";
         public static final String TEXT = "text";
@@ -19,6 +21,7 @@ public abstract class _ERCLogEntry extends ERXGenericRecord {
     }
 
     public static abstract class _ERCLogEntryClazz extends ERXGenericRecord.ERXGenericRecordClazz {
+ 
 
     }
 

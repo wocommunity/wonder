@@ -26,18 +26,7 @@ public abstract class _People extends ERXGenericRecord {
     }
 
     public static abstract class _PeopleClazz extends ERXGenericRecord.ERXGenericRecordClazz {
-    
-    	public People createPeople(EOEditingContext editingContext, Boolean isActive, Boolean isAdmin, Boolean isCustomerService, Boolean isEngineering, String login, String password) {
-	   		People eo = (People)EOUtilities.createAndInsertInstance(editingContext, People.ENTITY);
-	    	eo.setIsActive(isActive);
-	    	eo.setIsAdmin(isAdmin);
-	    	eo.setIsCustomerService(isCustomerService);
-	    	eo.setIsEngineering(isEngineering);
-	    	eo.setLogin(login);
-	    	eo.setPassword(password);
-	    	return eo;
- 		}
-
+ 
 
         public NSArray objectsForActiveUsers(EOEditingContext context) {
             EOFetchSpecification spec = EOFetchSpecification.fetchSpecificationNamed("activeUsers", "People");

@@ -24,14 +24,7 @@ public abstract class _Comment extends ERXGenericRecord {
     }
 
     public static abstract class _CommentClazz extends ERXGenericRecord.ERXGenericRecordClazz {
-    
-    	public Comment createComment(EOEditingContext editingContext, er.bugtracker.Bug bug, er.bugtracker.People originator) {
-	   		Comment eo = (Comment)EOUtilities.createAndInsertInstance(editingContext, Comment.ENTITY);
-	    	eo.setBug(bug);
-	    	eo.setOriginator(originator);
-	    	return eo;
- 		}
-
+ 
 
     }
 
