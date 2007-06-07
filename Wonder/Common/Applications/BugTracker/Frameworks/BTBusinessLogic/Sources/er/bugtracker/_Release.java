@@ -12,6 +12,8 @@ import java.math.BigDecimal;
 
 public abstract class _Release extends ERXGenericRecord {
 
+    public static final String ENTITY = "Release";
+
     public interface Key  {
         public static final String REQUIREMENTS = "requirements";
         public static final String NAME = "name";
@@ -20,6 +22,14 @@ public abstract class _Release extends ERXGenericRecord {
     }
 
     public static abstract class _ReleaseClazz extends ERXGenericRecord.ERXGenericRecordClazz {
+    
+    	public Release createRelease(EOEditingContext editingContext, Boolean isOpen, String name) {
+	   		Release eo = (Release)EOUtilities.createAndInsertInstance(editingContext, Release.ENTITY);
+	    	eo.setIsOpen(isOpen);
+	    	eo.setName(name);
+	    	return eo;
+ 		}
+
 
         public NSArray objectsForFetchAll(EOEditingContext context) {
             EOFetchSpecification spec = EOFetchSpecification.fetchSpecificationNamed("FetchAll", "Release");

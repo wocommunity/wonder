@@ -12,6 +12,8 @@ import java.math.BigDecimal;
 
 public abstract class _Component extends ERXGenericRecord {
 
+    public static final String ENTITY = "Component";
+
     public interface Key  {
         public static final String TEXT_DESCRIPTION = "textDescription";
         public static final String TEST_ITEMS = "testItems";
@@ -23,6 +25,14 @@ public abstract class _Component extends ERXGenericRecord {
     }
 
     public static abstract class _ComponentClazz extends ERXGenericRecord.ERXGenericRecordClazz {
+    
+    	public Component createComponent(EOEditingContext editingContext, String textDescription, er.bugtracker.People owner) {
+	   		Component eo = (Component)EOUtilities.createAndInsertInstance(editingContext, Component.ENTITY);
+	    	eo.setTextDescription(textDescription);
+	    	eo.setOwner(owner);
+	    	return eo;
+ 		}
+
 
     }
 

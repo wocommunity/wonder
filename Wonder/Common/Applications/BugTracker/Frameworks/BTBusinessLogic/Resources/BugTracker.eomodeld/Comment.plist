@@ -42,6 +42,17 @@
        
        {
            allowsNull = Y;
+           columnName = PARENT_ID;
+           name = parentID;
+           prototypeName = id;
+           userInfo = 
+           {
+               modificationDate = "2002-05-06 07:28:05 +0200";
+           };
+       }, 
+       
+       {
+           allowsNull = Y;
            columnName = DESCRIPTION;
            name = textDescription;
            prototypeName = longText;
@@ -56,14 +67,17 @@
        bugID, 
        id, 
        originatorID, 
+       parentID, 
        textDescription
     );
     className = er.bugtracker.Comment;
     classProperties = 
     (
+       attachements, 
        bug, 
        dateSubmitted, 
        originator, 
+       parent, 
        textDescription
     );
     externalName = Comment;
@@ -83,6 +97,22 @@
     );
     relationships = 
     (
+       
+       {
+           destination = Attachement;
+           isMandatory = N;
+           isToMany = Y;
+           joinSemantic = EOInnerJoin;
+           joins = 
+           (
+              
+              {
+                  destinationAttribute = commentID;
+                  sourceAttribute = id;
+              }
+           );
+           name = attachements;
+       }, 
        
        {
            destination = Bug;
@@ -118,6 +148,20 @@
            {
                modificationDate = "2002-05-04 13:06:03 +0200";
            };
+       }, 
+       
+       {
+           destination = Comment;
+           joinSemantic = EOInnerJoin;
+           joins = 
+           (
+              
+              {
+                  destinationAttribute = id;
+                  sourceAttribute = parentID;
+              }
+           );
+           name = parent;
        }
     );
 }
