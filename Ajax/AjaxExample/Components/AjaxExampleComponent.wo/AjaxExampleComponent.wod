@@ -2,6 +2,14 @@ RPCHyperlink : WOHyperlink {
 	pageName = "ProxyExample";
 }
 
+UpdateContainerInContainerLink : WOHyperlink {
+	pageName = "ContainerInContainer";
+}
+
+UpdateTriggerLink : WOHyperlink {
+	pageName = "UpdateTriggerExample";
+}
+
 AutocompletionLink : WOHyperlink {
 	pageName = "AutoCompleteExample";
 }
