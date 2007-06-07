@@ -196,6 +196,7 @@ There are many ways to use this script:
         </condition>
         <property name="wonder.lib.root" value="${build.root}" />
         <property name="wonder.framework.install.root" value="${wo.localroot}/Library/Frameworks" />
+        <property name="wonder.jar.install.root" value="${wo.localroot}/Library/WebObjects/lib" />
         <property name="web.framework.install.root" value="${wo.server.root}/Frameworks" />
         <property name="wonder.application.install.root" value="${wo.localroot}/Library/WebObjects/JavaApplications" />
         <property name="web.application.install.root" value="${wo.server.root}" />
@@ -464,7 +465,13 @@ There are many ways to use this script:
                 <include name="**/*" />
             </wsresources>
         </woframework>
- 
+        
+        <jar destfile="${build.root}/${project.name}-${project.version}.jar">
+            <fileset dir="${build.classes}"/>
+            <fileset dir="${build.root}/${project.name}.framework/" includes="Resources/**/*" excludes="**/*.jar"/>
+            <fileset dir="${build.root}/${project.name}.framework/" includes="WebServerResources/**/*"/>
+        </jar>
+
         <echo message="-------------------------------------" />
         <echo message="${project.name}.framework done" />
         <echo message="-------------------------------------" />
@@ -652,6 +659,9 @@ There are many ways to use this script:
     <target name="global.framework.install" depends="global.properties">
         <copy todir="${wonder.framework.install.root}/${project.name}.framework">
             <fileset dir="${build.root}/${project.name}.framework" />
+        </copy>
+        <copy todir="${wonder.jar.install.root}/">
+            <fileset file="${build.root}/${project.name}-${project.version}.jar" />
         </copy>
     </target>
 
