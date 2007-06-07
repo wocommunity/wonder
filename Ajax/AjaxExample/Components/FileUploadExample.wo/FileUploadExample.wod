@@ -1,7 +1,3 @@
-Now : WOString {
-	value = now;
-}
-
 AjaxExampleComponent : AjaxExampleComponent {
 	title = "Ajax Progress / File Upload";
 }
@@ -12,10 +8,6 @@ FinishedImage : WOResourceURL {
 
 UnfinishedImage : WOResourceURL {
 	filename = "progress-remainder.gif";
-}
-
-UploadUpdateContainer : AjaxUpdateContainer {
-	id = "UploadContainer";
 }
 
 CanceledConditional : WOConditional {
