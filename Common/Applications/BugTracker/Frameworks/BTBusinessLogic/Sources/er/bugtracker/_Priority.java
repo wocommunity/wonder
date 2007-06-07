@@ -12,12 +12,22 @@ import java.math.BigDecimal;
 
 public abstract class _Priority extends ERXGenericRecord {
 
+    public static final String ENTITY = "Priority";
+
     public interface Key  {
         public static final String TEXT_DESCRIPTION = "textDescription";
         public static final String SORT_ORDER = "sortOrder";  
     }
 
     public static abstract class _PriorityClazz extends ERXGenericRecord.ERXGenericRecordClazz {
+    
+    	public Priority createPriority(EOEditingContext editingContext, Number sortOrder, String textDescription) {
+	   		Priority eo = (Priority)EOUtilities.createAndInsertInstance(editingContext, Priority.ENTITY);
+	    	eo.setSortOrder(sortOrder);
+	    	eo.setTextDescription(textDescription);
+	    	return eo;
+ 		}
+
 
         public NSArray objectsForFetchAll(EOEditingContext context) {
             EOFetchSpecification spec = EOFetchSpecification.fetchSpecificationNamed("FetchAll", "Priority");
