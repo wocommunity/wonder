@@ -4,12 +4,12 @@ insert into PRIORITY (ID, SORT_ORDER, DESCRIPTION) values ('high', 2, 'High');
 insert into PRIORITY (ID, SORT_ORDER, DESCRIPTION) values ('medm', 3, 'Medium');
 insert into PRIORITY (ID, SORT_ORDER, DESCRIPTION) values ('low ', 4, 'Low');
 
-DELETE FROM STATE;
-insert into STATE (ID, SORT_ORDER, DESCRIPTION) values ('anzl', 1, 'Analyze');
-insert into STATE (ID, SORT_ORDER, DESCRIPTION) values ('buld', 2, 'Build');
-insert into STATE (ID, SORT_ORDER, DESCRIPTION) values ('vrfy', 3, 'Verify');
-insert into STATE (ID, SORT_ORDER, DESCRIPTION) values ('dcmt', 4, 'Document');
-insert into STATE (ID, SORT_ORDER, DESCRIPTION) values ('clsd', 5, 'Closed');
+-- DELETE FROM STATE;
+-- insert into STATE (ID, SORT_ORDER, DESCRIPTION) values ('anzl', 1, 'Analyze');
+-- insert into STATE (ID, SORT_ORDER, DESCRIPTION) values ('buld', 2, 'Build');
+-- insert into STATE (ID, SORT_ORDER, DESCRIPTION) values ('vrfy', 3, 'Verify');
+-- insert into STATE (ID, SORT_ORDER, DESCRIPTION) values ('dcmt', 4, 'Document');
+-- insert into STATE (ID, SORT_ORDER, DESCRIPTION) values ('clsd', 5, 'Closed');
 
 DELETE FROM TEST_ITEM_STATE;
 insert into TEST_ITEM_STATE (ID,  SORT_ORDER, NAME) values ('open', 1, 'Open');

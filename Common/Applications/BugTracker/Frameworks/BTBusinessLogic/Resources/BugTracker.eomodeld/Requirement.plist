@@ -150,17 +150,16 @@
            };
        }, 
        
-     
        {
+           adaptorValueConversionMethodName = value;
            columnName = STATE_ID;
+           factoryMethodArgumentType = EOFactoryMethodArgumentIsNSString;
            name = state;
            prototypeName = osType;
-           adaptorValueConversionMethodName = value;
-           factoryMethodArgumentType = EOFactoryMethodArgumentIsNSString;
            valueClassName = er.bugtracker.State;
            valueFactoryMethodName = state;
        }, 
-          
+       
        {
            columnName = SUBJECT;
            name = subject;
@@ -168,17 +167,6 @@
            userInfo = 
            {
                modificationDate = "2002-05-06 07:36:56 +0200";
-           };
-       }, 
-       
-       {
-           allowsNull = Y;
-           columnName = DESCRIPTION;
-           name = textDescription;
-           prototypeName = longText;
-           userInfo = 
-           {
-               modificationDate = "2002-05-06 07:37:10 +0200";
            };
        }, 
        
@@ -209,7 +197,6 @@
        requirementTypeID, 
        state, 
        subject, 
-       textDescription, 
        type
     );
     className = er.bugtracker.Requirement;
@@ -232,7 +219,6 @@
        subject, 
        targetRelease, 
        testItems, 
-       textDescription, 
        type
     );
     externalName = BUG;
@@ -254,7 +240,6 @@
            requirementType, 
            subject, 
            targetRelease, 
-           textDescription, 
            type
         );
     };

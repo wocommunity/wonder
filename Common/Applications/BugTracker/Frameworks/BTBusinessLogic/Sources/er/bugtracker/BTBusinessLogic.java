@@ -257,7 +257,9 @@ delete from TEST_ITEM;
                 framework.setName(string);
                 framework.setOrdering(new Integer(i));
             }
-            
+            log.info("Saving...");
+            ec.saveChanges();
+ 
             int MAX = 500;
 
             log.info("Creating bugs: "+ MAX);
@@ -274,7 +276,6 @@ delete from TEST_ITEM;
                 bug.setOriginator(randomUser());
                 bug.setOwner(randomUser());
                 bug.setPreviousOwner(randomUser());
-                bug.setTextDescription(randomText(3));
                 bug.setPriority(randomPriority());
                 bug.setState(randomState());
                 bug.setIsFeatureRequest(i % 4 == 0);
@@ -297,7 +298,6 @@ delete from TEST_ITEM;
                 bug.setOriginator(randomUser());
                 bug.setOwner(randomUser());
                 bug.setPreviousOwner(randomUser());
-                bug.setTextDescription(randomText(3));
                 bug.setPriority(randomPriority());
                 bug.setState(randomState());
                 bug.setIsFeatureRequest(i % 4 == 0);

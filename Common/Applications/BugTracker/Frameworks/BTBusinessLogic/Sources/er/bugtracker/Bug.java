@@ -40,6 +40,9 @@ public class Bug extends _Bug implements Markable {
         setOwner(People.clazz.currentUser(editingContext()));
         setDateSubmitted(new NSTimestamp());
         setDateModified(new NSTimestamp());
+        Comment comment = (Comment) Comment.clazz.createAndInsertObject(ec);
+        comment.setOriginator(originator());
+        addToComments(comment);
     }
 
     public void markAsRead() {
@@ -64,6 +67,24 @@ public class Bug extends _Bug implements Markable {
     public void touch() {
         markUnread();
         setDateModified(new NSTimestamp());
+    }
+
+    public NSArray commentsByDate() {
+        NSArray comments = comments();
+        comments = (NSArray) comments.valueForKeyPath("@sortAsc." + Comment.Key.DATE_SUBMITTED);
+        return comments;
+    }
+
+    private Comment firstComment() {
+        return (Comment) commentsByDate().objectAtIndex(0);
+    }
+    
+    public String textDescription() {
+        return firstComment().textDescription();
+    }
+    
+    public void setTextDescription(String value) {
+        firstComment().setTextDescription(value);
     }
 
     // FIXME:(ak) now *what* is this supposed to do???
