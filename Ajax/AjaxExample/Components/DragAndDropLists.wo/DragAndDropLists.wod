@@ -4,7 +4,6 @@ AjaxExampleComponent : AjaxExampleComponent {
 
 LeftDropBlock : AjaxDroppable {
 	id = "leftDropBlock";
-	//onDrop = "function(element, droppableElement) { element.hide(); bothListsUpdate(); }";
 	updateContainerID = "bothLists";
 	action = droppedOnLeft;
 	droppedObject = droppedObject;
@@ -13,7 +12,6 @@ LeftDropBlock : AjaxDroppable {
 
 RightDropBlock : AjaxDroppable {
 	id = "rightDropBlock";
-	//onDrop = "function(element, droppableElement) { element.hide(); bothListsUpdate(); }";
 	updateContainerID = "bothLists";
 	action = droppedOnRight;
 	droppedObject = droppedObject;
@@ -42,5 +40,4 @@ RightItemRepetition : WORepetition {
 
 BothLists : AjaxUpdateContainer {
 	id = "bothLists";
-	evalScripts = true;
 }
