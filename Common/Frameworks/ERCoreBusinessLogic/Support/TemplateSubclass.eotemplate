@@ -11,7 +11,7 @@ public class <$classNameWithoutPackage$> extends _<$classNameWithoutPackage$><$i
     private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(<$classNameWithoutPackage$>.class);
 
     public static final <$classNameWithoutPackage$>Clazz clazz = new <$classNameWithoutPackage$>Clazz();
-    public static class <$classNameWithoutPackage$>Clazz extends _<$classNameWithoutPackage$>.<$classNameWithoutPackage$>Clazz {/* more clazz methods here */}
+    public static class <$classNameWithoutPackage$>Clazz extends _<$classNameWithoutPackage$>._<$classNameWithoutPackage$>Clazz {/* more clazz methods here */}
 
     public final static String ENTITY = "<$name$>";
 
