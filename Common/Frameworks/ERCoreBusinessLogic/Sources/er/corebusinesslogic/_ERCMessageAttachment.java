@@ -12,6 +12,8 @@ import java.math.BigDecimal;
 
 public abstract class _ERCMessageAttachment extends ERXGenericRecord {
 
+    public static final String ENTITY = "ERCMessageAttachment";
+
     public interface Key  {
         public static final String MIME_TYPE = "mimeType";
         public static final String MAIL_MESSAGE = "mailMessage";
@@ -19,6 +21,7 @@ public abstract class _ERCMessageAttachment extends ERXGenericRecord {
     }
 
     public static abstract class _ERCMessageAttachmentClazz extends ERXGenericRecord.ERXGenericRecordClazz {
+ 
 
     }
 

@@ -12,6 +12,8 @@ import java.math.BigDecimal;
 
 public abstract class _ERCPreference extends ERXGenericRecord {
 
+    public static final String ENTITY = "ERCPreference";
+
     public interface Key  {
         public static final String VALUE = "value";
         public static final String USER_ID = "userID";
@@ -19,6 +21,7 @@ public abstract class _ERCPreference extends ERXGenericRecord {
     }
 
     public static abstract class _ERCPreferenceClazz extends ERXGenericRecord.ERXGenericRecordClazz {
+ 
 
         public NSArray objectsForPreferences(EOEditingContext context, String keyBinding) {
             EOFetchSpecification spec = EOFetchSpecification.fetchSpecificationNamed("preferences", "ERCPreference");

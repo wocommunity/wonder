@@ -12,6 +12,8 @@ import java.math.BigDecimal;
 
 public abstract class _ERCMailMessageArchive extends er.corebusinesslogic.ERCMailMessage {
 
+    public static final String ENTITY = "ERCMailMessageArchive";
+
     public interface Key extends er.corebusinesslogic.ERCMailMessage.Key {
         public static final String X_MAILER = "xMailer";
         public static final String TO_ADDRESSES = "toAddresses";
@@ -36,6 +38,7 @@ public abstract class _ERCMailMessageArchive extends er.corebusinesslogic.ERCMai
     }
 
     public static abstract class _ERCMailMessageArchiveClazz extends ERXGenericRecord.ERXGenericRecordClazz {
+ 
 
     }
 

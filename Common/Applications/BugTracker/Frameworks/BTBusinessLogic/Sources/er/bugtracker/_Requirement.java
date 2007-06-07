@@ -36,21 +36,7 @@ public abstract class _Requirement extends er.bugtracker.Bug {
     }
 
     public static abstract class _RequirementClazz extends Bug.BugClazz {
-    
-    	public Requirement createRequirement(EOEditingContext editingContext, Boolean isFeatureRequest, Boolean isRead, er.bugtracker.State state, String subject, er.bugtracker.Component component, er.bugtracker.People originator, er.bugtracker.People owner, er.bugtracker.Priority priority, er.bugtracker.Release targetRelease) {
-	   		Requirement eo = (Requirement)EOUtilities.createAndInsertInstance(editingContext, Requirement.ENTITY);
-	    	eo.setIsFeatureRequest(isFeatureRequest);
-	    	eo.setIsRead(isRead);
-	    	eo.setState(state);
-	    	eo.setSubject(subject);
-	    	eo.setComponent(component);
-	    	eo.setOriginator(originator);
-	    	eo.setOwner(owner);
-	    	eo.setPriority(priority);
-	    	eo.setTargetRelease(targetRelease);
-	    	return eo;
- 		}
-
+ 
 
         public NSArray objectsForMyRequirements(EOEditingContext context, er.bugtracker.People userBinding) {
             EOFetchSpecification spec = EOFetchSpecification.fetchSpecificationNamed("myRequirements", "Requirement");

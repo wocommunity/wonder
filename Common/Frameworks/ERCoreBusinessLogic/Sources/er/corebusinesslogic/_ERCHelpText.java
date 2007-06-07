@@ -12,12 +12,15 @@ import java.math.BigDecimal;
 
 public abstract class _ERCHelpText extends ERXGenericRecord {
 
+    public static final String ENTITY = "ERCHelpText";
+
     public interface Key  {
         public static final String VALUE = "value";
         public static final String KEY = "key";  
     }
 
     public static abstract class _ERCHelpTextClazz extends ERXGenericRecord.ERXGenericRecordClazz {
+ 
 
         public NSArray objectsForKey(EOEditingContext context, String keyBinding) {
             EOFetchSpecification spec = EOFetchSpecification.fetchSpecificationNamed("Key", "ERCHelpText");

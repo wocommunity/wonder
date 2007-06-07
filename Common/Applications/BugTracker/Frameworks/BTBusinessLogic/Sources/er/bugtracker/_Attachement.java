@@ -21,15 +21,7 @@ public abstract class _Attachement extends ERXGenericRecord {
     }
 
     public static abstract class _AttachementClazz extends ERXGenericRecord.ERXGenericRecordClazz {
-    
-    	public Attachement createAttachement(EOEditingContext editingContext, String fileName, String mimeType, er.bugtracker.Comment comment) {
-	   		Attachement eo = (Attachement)EOUtilities.createAndInsertInstance(editingContext, Attachement.ENTITY);
-	    	eo.setFileName(fileName);
-	    	eo.setMimeType(mimeType);
-	    	eo.setComment(comment);
-	    	return eo;
- 		}
-
+ 
 
     }
 
