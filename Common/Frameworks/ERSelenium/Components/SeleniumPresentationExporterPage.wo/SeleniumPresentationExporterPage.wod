@@ -1,0 +1,4 @@
+ElementsRepetition : WORepetition {
+	list = test.elements;
+	item = element;
+}

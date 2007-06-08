@@ -1,0 +1,23 @@
+<wo:if condition="$testContents" negate="true">
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+	<title>Selenium Test Suite</title>
+</head>
+<body> 
+	<table id="suiteTable" cellpadding="1" cellspacing="1" border="1">
+		<tbody>
+		<tr><td>Test Suite</td></tr>
+		<wo name="TestDirectoriesRepetition">
+			<wo name="TestsRepetition">
+			<tr><td><wo name="TestLink"/></td></tr>
+			</wo>
+		</wo>
+		</tbody>
+	</table>
+</body>
+</html>
+</wo>
+<wo:if condition="$testContents">
+<wo name="TestContents"/>
+</wo>
