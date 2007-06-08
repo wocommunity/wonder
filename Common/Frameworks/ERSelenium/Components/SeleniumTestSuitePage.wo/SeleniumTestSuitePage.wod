@@ -1,0 +1,20 @@
+TestDirectoriesRepetition : WORepetition {
+	list = testDirectories;
+	item = repDirectory;
+}
+
+TestsRepetition : WORepetition {
+	list = repDirectory.testFiles;
+	item = repTestFile;
+}
+
+TestContents : WOString {
+	escapeHTML = false;
+	value = testContents;
+}
+
+TestLink : WOHyperlink {
+	target = "testFrame";
+	href = testLink;
+	string = "~repTestFile.getName + ' - ' + repDirectory.directory.getName";
+}

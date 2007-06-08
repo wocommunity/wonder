@@ -1,0 +1,23 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+	<title><wo:string value="$test.name"/></title>
+</head>
+<body> 
+	<table border="1" cellpadding="1" cellspacing="1">
+		<wo name="ElementsRepetition">
+			<wo:if condition="~isMetaCommand(element)">
+				<wo:if condition="~element.name == \"M\"">
+					<tr><td><b><wo:string value="~localizedStringWithDefault(\"MainScenarioPrefix\",\"MS: \")"/><wo:string value="$element.argumentsString"/></b></td></tr>
+				</wo>
+				<wo:if condition="~element.name == \"A\"">
+					<tr><td><i><wo:string value="~localizedStringWithDefault(\"AlternativeScenarioPrefix\",\"AS: \")"/><wo:string value="$element.argumentsString"/></i></td></tr>
+				</wo>
+			</wo>
+			<wo:if condition="~isComment(element)">
+				<tr><td><wo:string value="$element.value"/></td></tr>
+			</wo>
+		</wo>
+	</table>
+</body>
+</html>
