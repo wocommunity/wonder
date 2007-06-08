@@ -1,0 +1,21 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+	<meta content="text/html; charset=UTF-8" http-equiv="Content-Type"/>
+	<title><wo:string value="$test.name"/></title>
+</head>
+<body> 
+<table border="1" cellpadding="1" cellspacing="1">
+	<thead>
+		<tr><td colspan="3" rowspan="1"></td></tr>
+	</thead>
+	<tbody>
+	<wo:WORepetition item="$element" list="$test.elements">
+		<wo:if condition="~isCommand(element)">
+			<tr><td><wo:string value="$element.name"/></td><td><wo:string value="$element.target"/></td><td><wo:string value="$element.value"/></td></tr>
+		</wo>
+	</wo>
+	</tbody>
+</table>
+</body>
+</html>

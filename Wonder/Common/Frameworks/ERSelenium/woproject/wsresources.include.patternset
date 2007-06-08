@@ -1,0 +1,7 @@
+**/*.gif
+**/*.xsl
+**/*.css
+**/*.png
+**/*.jpg
+**/*.js
+**/selenium-core
