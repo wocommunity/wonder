@@ -5,9 +5,13 @@ er.extensions.ERXEnterpriseObject.updateInverseRelationships=true
 er.extensions.ERXEnterpriseObject.applyRestrictingQualifierOnInsert=true
 java.awt.headless=true
 
-ERXLanguages = (en,de)
-er.extensions.ERXLocalizer.availableLanguages=(English,German)
-#er.extensions.ERXLocalizer.availableLanguages=(English)
+ERXLanguages = (en)
+#er.extensions.ERXLocalizer.availableLanguages=(English,German)
+er.extensions.ERXLocalizer.availableLanguages=(English)
 er.extensions.ERXLocalizer.frameworkSearchPath=("app", "BTBusinessLogic", "ERExtras", "ERDirectToWeb", "ERExtensions")
+er.extensions.ERXLocalizer.fileNamesToWatch = ("Localizable.strings","ValidationTemplate.strings")
 
 er.extensions.ERXJDBCAdaptor.className=er.extensions.ERXJDBCAdaptor
+
+SeleniumTestsEnabled = true
+SeleniumActionsClass = er.bugtracker.tests.SeleniumSetupActions

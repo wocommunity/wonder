@@ -1,0 +1,57 @@
+|open|/wa/SeleniumAction/resetSession||
+|assertTextPresent|Action command succeeded.||
+|open|/wa/SeleniumAction/ensureTestAdmin||
+|assertTextPresent|Action command succeeded.||
+|open|/||
+Create framework
+|clickAndWait|link=Frameworks||
+|assertTextPresent|CreateFramework||
+|assertTextPresent|OnlineHatSystem||
+|clickAndWait|link=CreateFramework||
+|assertTextPresent|Step 1 of 1||
+Leave the fields empty
+|type|xpath=(id('CreateFramework')//input[@type='text'])[3]||
+|type|xpath=(id('CreateFramework')//input[@type='text'])[4]||
+|clickAndWait|//button[@value='Save']||
+|assertTextPresent|Please provide a Name.||
+|assertTextPresent|Please provide an Ordering.||
+Enter correct values
+|type|xpath=(id('CreateFramework')//input[@type='text'])[3]|__SeleniumTestFramework|
+|type|xpath=(id('CreateFramework')//input[@type='text'])[4]|10|
+|clickAndWait|//button[@value='Save']||
+Set page size to 1 and go to the last page
+|clickAndWait|link=OnlineHatSystem||
+|type|xpath=(//input[@type='text'])[3]|1|
+|submitAndWait|xpath=(//form)[4]||
+|type|xpath=(//input[@type='text'])[4]|0|
+|submitAndWait|xpath=(//form)[5]||
+|assertTextPresent|__SeleniumTestFramework||
+|assertText|xpath=id('ListFramework')/table/tbody/tr[2]/td/table/tbody/tr[4]/td/table/tbody/tr[3]/td[2]/font//text()|SeleniumName|
+Return and grab hat
+|assertTextPresent|Return Hat||
+|clickAndWait|link=Return Hat||
+|assertTextPresent|Grab Hat||
+|assertText|xpath=id('ListFramework')/table/tbody/tr[2]/td/table/tbody/tr[4]/td/table/tbody/tr[3]/td[3]/text()|None|
+|clickAndWait|link=Grab Hat||
+|assertText|xpath=id('ListFramework')/table/tbody/tr[2]/td/table/tbody/tr[4]/td/table/tbody/tr[3]/td[2]/font//text()|SeleniumName|
+Check the view page
+|clickAndWait|link=View||
+|assertTextPresent|__SeleniumTestFramework||
+|clickAndWait|//button[@value='Return']||
+Check edit page
+|clickAndWait|link=Edit||
+|assertValue|xpath=(id('EditFramework')//input[@type='text'])[3]|__SeleniumTestFramework|
+|assertValue|xpath=(id('EditFramework')//input[@type='text'])[4]|10|
+|type|xpath=(id('EditFramework')//input[@type='text'])[3]|__SeleniumTestFrameworkEdited|
+|type|xpath=(id('EditFramework')//input[@type='text'])[4]|100|
+|type|xpath=(id('EditFramework')//input[@type='text'])[5]||
+|clickAndWait|//button[@value='Save']||
+|assertTextPresent|__SeleniumTestFrameworkEdited||
+Deleting the added framework
+|clickAndWait|link=Delete||
+|assertTextPresent|Are you sure you want to delete the following Framework?||
+|assertTextPresent|__SeleniumTestFrameworkEdited||
+|clickAndWait|//button[@value='OK']||
+|assertTextNotPresent|__SeleniumTestFrameworkEdited||
+Cleanup
+|open|/wa/SeleniumAction/deleteTestPeople||
