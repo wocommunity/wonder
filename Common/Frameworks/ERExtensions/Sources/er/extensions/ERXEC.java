@@ -538,7 +538,7 @@ public class ERXEC extends EOEditingContext {
 	 */
 	protected void autoUnlock(boolean wasAutoLocked) {
 		if (wasAutoLocked) {
-			boolean shouldUnlock = (!coalesceAutoLocks() || autoLockCount > 1 || ERXThreadStorage.valueForKey("wocontext") == null);
+			boolean shouldUnlock = (!coalesceAutoLocks() || autoLockCount > 1 || ERXWOContext.currentContext() == null);
 			if (shouldUnlock) {
 				unlock();
 				autoLockCount--;

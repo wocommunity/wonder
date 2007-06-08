@@ -100,7 +100,7 @@ public class ERXDirectActionRequestHandler extends WODirectActionRequestHandler 
             if(false) {
                 // ak only enable when fixed
                 // as we will create deadlocks checking out the session this early.
-                WOContext context = (WOContext)ERXThreadStorage.valueForKey("wocontext");
+                WOContext context = ERXWOContext.currentContext();
                 session = context != null ? context.session() : null;
             } else {
                 session = ERXSession.session();   // get it from the thread specific storage
