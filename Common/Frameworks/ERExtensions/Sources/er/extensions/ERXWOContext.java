@@ -30,8 +30,8 @@ public class ERXWOContext extends WOContext implements ERXMutableUserInfoHolderI
     private static Observer observer;
     private boolean _generateCompleteURLs;
 
+    public static final String CONTEXT_KEY = "wocontext";
     private static final String CONTEXT_DICTIONARY_KEY = "ERXWOContext.dict";
-    private static final String CONTEXT_KEY = "ERXWOContext";
 	private static final String SECURE_RESOURCES_KEY = "er.ajax.secureResources";
 
     public static class Observer {
