@@ -3,7 +3,7 @@ RPCHyperlink : WOHyperlink {
 }
 
 UpdateContainerInContainerLink : WOHyperlink {
-	pageName = "ContainerInContainer";
+	pageName = "UpdateContainerInContainer";
 }
 
 UpdateTriggerLink : WOHyperlink {
