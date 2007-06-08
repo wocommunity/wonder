@@ -135,7 +135,7 @@ public class SeleniumTestSuitePage extends ERXStatelessComponent {
 		}
 		
 		
-    	File testFile = new File(DEFAULT_SELENIUM_TESTS_ROOT + "/" + directory + "/" + testName);
+    	File testFile = new File(ERXProperties.stringForKeyWithDefault("SeleniumTestsRoot", DEFAULT_SELENIUM_TESTS_ROOT) + "/" + directory + "/" + testName);
     	try {
     		String fileContents = ERXFileUtilities.stringFromFile(testFile, "UTF-8");
     		return importer.process(fileContents);
