@@ -442,7 +442,7 @@ public class ERXMailAppender extends AppenderSkeleton {
     public NSMutableDictionary composeExceptionPageDictionary(LoggingEvent event) {
         NSMutableDictionary result = new NSMutableDictionary();
 
-        WOContext currentContext = (WOContext)ERXThreadStorage.valueForKey("wocontext");
+        WOContext currentContext = ERXWOContext.currentContext();
         NSDictionary extraInformation = null;
         if (currentContext != null) {
             extraInformation = ERXApplication.erxApplication().extraInformationForExceptionInContext(null, currentContext);
