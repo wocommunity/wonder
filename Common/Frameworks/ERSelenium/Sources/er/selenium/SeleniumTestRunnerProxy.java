@@ -53,7 +53,7 @@ public class SeleniumTestRunnerProxy extends WORequestHandler {
         super();
     }
     
-    @Override
+    // @Override
     public WOResponse handleRequest(WORequest request) {
     	NSArray pathElements = request.requestHandlerPathArray();
     	

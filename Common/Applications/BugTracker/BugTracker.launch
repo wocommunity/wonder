@@ -2,7 +2,7 @@
 <launchConfiguration type="org.objectstyle.wolips.launching.WOLocalJavaApplication">
 <stringAttribute key="WOJavaLocalApplicationLaunchConfigurationDelegate.WebServerConnect" value="false"/>
 <stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="er.bugtracker.Application"/>
-<stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="-NSProjectSearchPath (/Volumes/Home/Wonder/Common/Applications,/Volumes/Home/Wonder/Common/Frameworks)&#13;-er.extensions.ERXApplication.developmentMode YES"/>
+<stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="-NSProjectSearchPath (/Volumes/Home/Wonder/Common/Applications,/Volumes/Home/Wonder/Common/Frameworks)&#13;-er.extensions.ERXApplication.developmentMode YES&#13;-DBugTracker.password=kedaji"/>
 <listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_TYPES">
 <listEntry value="4"/>
 </listAttribute>

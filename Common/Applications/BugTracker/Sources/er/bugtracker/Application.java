@@ -42,7 +42,7 @@ public class Application extends ERXApplication {
     }
 
     public void finishInitialization() {
-        if(ERXProperties.booleanForKeyWithDefault("BugReporter.processMails", false)) {
+        if(ERXProperties.booleanForKeyWithDefault("BugTracker.processMails", false)) {
             reader = new MailReader(null);
             reader.startReader();
         }

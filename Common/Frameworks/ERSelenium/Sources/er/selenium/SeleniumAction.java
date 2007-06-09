@@ -42,7 +42,7 @@ public class SeleniumAction extends WODirectAction {
 		super(request);
 	}
 	
-	@Override
+	// @Override
 	public WOActionResults performActionNamed(String anActionName) {
 		WOComponent resultPage = pageWithName(SeleniumActionResultPage.class.getSimpleName());
 		assert(resultPage != null);

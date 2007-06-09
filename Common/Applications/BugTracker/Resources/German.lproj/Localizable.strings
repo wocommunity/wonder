@@ -17,8 +17,8 @@
 	"Button.resolve" = "Abschliessen";
 	"Button.returnHat" = "Freigeben";
 	"Button.view" = "Ansehen";
-	"CreateTestItemFromBug.templateString" = "[Von Bug #@@@@]";
-	"CreateTestItemFromReq.templateString" = "[Von Anforderung #@@@@]";
+	"CreateTestItemFromBug.templateString" = "[Von Bug #@@bugid@@]";
+	"CreateTestItemFromRequirement.templateString" = "[Von Anforderung #@@bugid@@]";
 	"Entity.name.Bug" = "Bug";
 	"Entity.name.Component" = "Componente";
 	"Entity.name.Framework" = "Framework";

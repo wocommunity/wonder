@@ -3,6 +3,7 @@ package er.bugtracker.mail;
 import java.io.IOException;
 import java.util.Properties;
 
+import javax.mail.Address;
 import javax.mail.AuthenticationFailedException;
 import javax.mail.Folder;
 import javax.mail.Message;
@@ -28,6 +29,7 @@ public class MailReader extends Thread {
     private String queueName;
 
     public MailReader(String queue) {
+        super("MailReader");
         queueName = queue;
         server = getProperty(queue, "server");
         user = getProperty(queue, "user");
@@ -105,14 +107,20 @@ public class MailReader extends Thread {
 
     private Message processMessage(Message message) throws MessagingException, IOException {
         log.info("Processing mail: " + message.getSubject());
-        if (false) {
-            Object content = message.getContent();
-            if (content instanceof Multipart) {
-                handleMultipart((Multipart) content);
-            } else {
-                handlePart(message);
+        if (true) {
+            Address senders[] = message.getFrom();
+            if(senders.length > 0) {
+                Address sender = senders[0];
+                log.info(sender);
+                // People user = People.clazz.userByEmail();
+                Object content = message.getContent();
+                if (content instanceof Multipart) {
+                    handleMultipart((Multipart) content);
+                } else {
+                    handlePart(message);
+                }
+                // message.setFlag(Flags.Flag.DELETED, true);
             }
-            // message.setFlag(Flags.Flag.DELETED, true);
         }
         return message;
     }
