@@ -2,7 +2,7 @@
 	ReportBugsPerComponent = { 
         model = {
             AttributeDef = (
-                {keyPath = "~valueForKeyPath(\"@count\").intValue()"; "total" = "true"; format="#,##0.#;-;#,##0.#"; },
+                {keyPath = "~valueForKeyPath(\"@count\").intValue()"; "total" = "true"; format="#,##0.#;-;#,##0.#"; label="Bug count"; },
             ); 
             GroupDef = (
                 {
@@ -59,7 +59,7 @@
 	ReportBugsPerUser = {
          model = {
             AttributeDef = (
-                {keyPath = "~valueForKeyPath(\"@count\").intValue()"; "total" = "true"; format="#,##0.#;-;#,##0.#"; },
+                {keyPath = "~valueForKeyPath(\"@count\").intValue()"; "total" = "true"; format="#,##0.#;-;#,##0.#"; label="Bug count"; },
             ); 
             GroupDef = (
                 {

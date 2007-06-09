@@ -1,23 +1,21 @@
 package er.bugtracker.delegates;
 
-import java.util.Enumeration;
-
+import com.webobjects.appserver.WOApplication;
 import com.webobjects.appserver.WOComponent;
+import com.webobjects.appserver.WOSession;
 import com.webobjects.directtoweb.D2WContext;
+import com.webobjects.directtoweb.D2WPage;
+import com.webobjects.directtoweb.ERD2WContext;
 import com.webobjects.directtoweb.InspectPageInterface;
 import com.webobjects.eocontrol.EOEnterpriseObject;
 import com.webobjects.foundation.NSArray;
-import com.webobjects.foundation.NSDictionary;
-import com.webobjects.foundation.NSMutableDictionary;
 
 import er.bugtracker.Factory;
 import er.bugtracker.Session;
 import er.directtoweb.ERD2WMessagePage;
 import er.directtoweb.ERDBranchDelegate;
 import er.directtoweb.ERDDeletionDelegate;
-import er.extensions.ERXDictionaryUtilities;
 import er.extensions.ERXLocalizer;
-import er.extensions.ERXStringUtilities;
 
 public class BranchDelegate extends ERDBranchDelegate {
 
@@ -34,6 +32,9 @@ public class BranchDelegate extends ERDBranchDelegate {
         }
         if(context.task().equals("inspect")) {
             result = choiceByRemovingKeys(new NSArray("view"), result);
+        }
+        if(!context.task().equals("list")) {
+            result = choiceByRemovingKeys(new NSArray("excel"), result);
         }
         if(context.task().equals("edit")) {
             result = choiceByRemovingKeys(new NSArray("edit"), result);

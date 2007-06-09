@@ -311,6 +311,9 @@ There are many ways to use this script:
                 <include name="ERExtensions.framework" />
                 <include name="ERDirectToWeb.framework" />
             </frameworks>
+            <frameworks dir="${wonder.lib.root}" if="use.wonder.testing"> 
+                <include name="ERSelenium.framework" />
+            </frameworks>
             <frameworks dir="${wonder.lib.root}" if="use.wonder.mail"> 
                 <include name="ERJavaMail.framework" />
             </frameworks>
@@ -530,6 +533,9 @@ There are many ways to use this script:
                 <include name="ERJars.framework" />
                 <include name="ERExtensions.framework" />
                 <include name="ERDirectToWeb.framework" />
+            </frameworks>
+            <frameworks dir="${wonder.lib.root}" if="use.wonder.testing"> 
+                <include name="ERSelenium.framework" />
             </frameworks>
             <frameworks dir="${wonder.lib.root}" if="use.wonder.logic"> 
                 <include name="ERPrototypes.framework" />

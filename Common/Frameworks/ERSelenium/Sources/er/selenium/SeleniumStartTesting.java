@@ -59,14 +59,14 @@ public class SeleniumStartTesting extends WODirectAction {
 		return context.urlWithRequestHandlerKey("_sl_", "selenium-core/TestRunner.html", queryStr.toString());
 	}
 	
-	@Override
+	// @Override
 	public WOActionResults defaultAction() {
 		WORedirect redirect = new WORedirect(context());
 		redirect.setUrl(buildUrl(true));
 		return redirect;
 	}
 	
-	@Override
+	// @Override
 	public WOActionResults performActionNamed(String anActionName) {
 		return defaultAction();
 	}

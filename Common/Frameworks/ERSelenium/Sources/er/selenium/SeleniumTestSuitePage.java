@@ -240,7 +240,7 @@ public class SeleniumTestSuitePage extends ERXStatelessComponent {
     	}
     }
     
-    @Override
+    // @Override
     public void reset() {
     	super.reset();
     	_testDirectories = null;
