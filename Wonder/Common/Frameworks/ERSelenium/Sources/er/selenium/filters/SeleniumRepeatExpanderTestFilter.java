@@ -30,6 +30,7 @@ import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 
 import er.selenium.SeleniumTest;
+import er.selenium.SeleniumTest.Command;
 
 public class SeleniumRepeatExpanderTestFilter extends SeleniumTestFilterHelper implements SeleniumTestFilter {
 	private static final Logger log = Logger.getLogger(SeleniumRepeatExpanderTestFilter.class);
@@ -57,7 +58,7 @@ public class SeleniumRepeatExpanderTestFilter extends SeleniumTestFilterHelper i
 						throw new RuntimeException("There must be a valid command after 'values' metacommand");
 					}
 					
-					valuesData.setObjectForKey(new ValueData(metaCommand.arguments(), i - repeatIndex), i - repeatIndex);
+					valuesData.setObjectForKey(new ValueData(metaCommand.arguments(), i - repeatIndex), new Integer(i - repeatIndex));
 					repetitionCount = metaCommand.arguments().count();
 					elements.set(i, new SeleniumTest.Comment("#values"));
 				}
@@ -69,7 +70,7 @@ public class SeleniumRepeatExpanderTestFilter extends SeleniumTestFilterHelper i
 		}
 				
 		for (int i = 1; i < valuesData.count(); ++i) {
-			if (((ValueData)valuesData.get(i)).values.count() != repetitionCount) {
+			if (((ValueData)valuesData.objectForKey(new Integer(i))).values.count() != repetitionCount) {
 				throw new RuntimeException("All 'values' metacommands inside 'repeat'-'done' repetition must have equal number of arguments");
 			}
 		}
@@ -80,10 +81,10 @@ public class SeleniumRepeatExpanderTestFilter extends SeleniumTestFilterHelper i
 		for (int j = 0; j < repetitionCount; ++j) {
 			elements.insertObjectAtIndex(new SeleniumTest.Comment("#iteration"), insertIndex++);
 			for (int i = repeatIndex + 1; i < doneIndex; ++i) {
-				ValueData data = (ValueData)valuesData.objectForKey(i - repeatIndex);
+				ValueData data = (ValueData)valuesData.objectForKey(new Integer(i - repeatIndex));
 				if (data != null) {
 					elements.insertObjectAtIndex(new SeleniumTest.Comment("#value " + data.values.get(j).toString()), insertIndex++);
-					SeleniumTest.Command nextCommand = ((SeleniumTest.Command)elements.get(i + 1)).clone();
+					SeleniumTest.Command nextCommand = (Command) ((SeleniumTest.Command)elements.objectAtIndex(i + 1)).clone();
 					nextCommand.setValue(data.values.get(j).toString());
 					elements.insertObjectAtIndex(nextCommand, insertIndex++);
 					++i;
@@ -94,7 +95,7 @@ public class SeleniumRepeatExpanderTestFilter extends SeleniumTestFilterHelper i
 		}
 	}
 	
-	@Override
+	// @Override
 	public void processTestElements(NSMutableArray elements) {
 		int repeatIndex = -1;
 		boolean shouldProcess;

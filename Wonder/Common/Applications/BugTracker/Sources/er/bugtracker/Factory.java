@@ -92,7 +92,7 @@ public class Factory extends ERD2WFactory implements NSKeyValueCoding {
 
     protected InspectPageInterface createPageNamed(String name) {
         EditPageInterface epi = editPageForNewObjectWithConfigurationNamed(name, session());
-        epi.setNextPage(homePage());
+        // epi.setNextPage(homePage());
         return epi;
     }
     
@@ -278,7 +278,7 @@ public class Factory extends ERD2WFactory implements NSKeyValueCoding {
             bug = (Bug) bug.localInstanceIn(peer);
             TestItem testItem = (TestItem) TestItem.clazz.createAndInsertObject(peer);
             testItem.setComponent(bug.component());
-            String description = ERXLocalizer.currentLocalizer().localizedTemplateStringForKeyWithObject("CreateTestItemFromReq.templateString", this);
+            String description = ERXLocalizer.currentLocalizer().localizedTemplateStringForKeyWithObject("CreateTestItemFrom"+bug.entityName()+".templateString", bug);
             testItem.setTextDescription(description);
             bug.addToTestItems(testItem);
             EditPageInterface epi=(EditPageInterface)createPageNamed("CreateTestItemFrom" + bug.entityName() );

@@ -18,6 +18,7 @@ public abstract class _Release extends ERXGenericRecord {
         public static final String REQUIREMENTS = "requirements";
         public static final String NAME = "name";
         public static final String IS_OPEN = "isOpen";
+        public static final String DATE_DUE = "dateDue";
         public static final String BUGS = "bugs";  
     }
 
@@ -32,6 +33,13 @@ public abstract class _Release extends ERXGenericRecord {
 
     }
 
+
+    public NSTimestamp dateDue() {
+        return (NSTimestamp)storedValueForKey(Key.DATE_DUE);
+    }
+    public void setDateDue(NSTimestamp aValue) {
+        takeStoredValueForKey(aValue, Key.DATE_DUE);
+    }
 
     public boolean isOpen() {
         return ((Boolean)storedValueForKey(Key.IS_OPEN)).booleanValue();

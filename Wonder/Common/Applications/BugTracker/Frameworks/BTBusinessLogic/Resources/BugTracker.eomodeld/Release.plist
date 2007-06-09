@@ -4,6 +4,17 @@
     (
        
        {
+           allowsNull = N;
+           columnName = DATE_DUE;
+           name = dateDue;
+           prototypeName = dateTime;
+           userInfo = 
+           {
+               modificationDate = "2002-05-06 07:15:02 +0200";
+           };
+       }, 
+       
+       {
            columnName = ID;
            name = id;
            prototypeName = id;
@@ -43,13 +54,19 @@
     classProperties = 
     (
        bugs, 
+       dateDue, 
        isOpen, 
        name, 
        requirements
     );
     externalName = RELEASE;
     internalInfo = 
-    {};
+    {
+        _clientClassPropertyNames = 
+        (
+           dateDue
+        );
+    };
     name = Release;
     primaryKeyAttributes = 
     (

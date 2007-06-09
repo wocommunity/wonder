@@ -34,14 +34,15 @@ public class SeleniumActionResultPage extends ERXStatelessComponent {
     	return _actionName;
     }
 
-    @Override
+    // @Override
     public void appendToResponse(WOResponse aResponse, WOContext aContext) {    	
 		String actionResult;
 		if (ERXProperties.booleanForKeyWithDefault("SeleniumTestsEnabled", false)) {
 			String actionsClassName = ERXProperties.stringForKey("SeleniumActionsClass");
 
 			try {
-				(actionsClassName == null ? SeleniumDefaultSetupActions.class : Class.forName(actionsClassName)).getMethod(_actionName, new Class[]{ WOResponse.class, WOContext.class }).invoke(null, aResponse, aContext);
+				(actionsClassName == null ? SeleniumDefaultSetupActions.class : 
+                    Class.forName(actionsClassName)).getMethod(_actionName, new Class[]{ WOResponse.class, WOContext.class }).invoke(null, new Object[]{aResponse, aContext});
 				actionResult = ACTION_COMMAND_SUCCEEDED_MESSAGE;
 			} catch (ClassNotFoundException  e) {
 				actionResult = ACTIONS_CLASS_NOT_FOUND_MESSAGE;
