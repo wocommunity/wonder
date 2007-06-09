@@ -237,6 +237,13 @@ delete from TEST_ITEM;
                 }
                 releases.addObject(release);
             }
+            NSTimestamp dateDue = new NSTimestamp().timestampByAddingGregorianUnits(0, 5, 0, 0, 0, 0);
+            for(int i = 8; i >= 0; i--) {
+                Release release = (Release) releases.objectAtIndex(i);
+                release.setDateDue(dateDue);
+                dateDue = dateDue.timestampByAddingGregorianUnits(0, -(randomInt(2)+1), 0, 0, 0, 0);
+                log.info(dateDue);
+            }
 
             for(int i = 0; i < 10; i++) {
                 Component component = (Component) Component.clazz.createAndInsertObject(ec);

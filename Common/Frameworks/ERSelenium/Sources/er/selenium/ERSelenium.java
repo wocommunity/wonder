@@ -48,7 +48,7 @@ public class ERSelenium extends ERXFrameworkPrincipal {
         return sharedInstance;
     }
     
-    @Override
+    // @Override
     public void finishInitialization() {
     	// TODO: check for multithreading/synchronization issued with factory
     	// instance() method

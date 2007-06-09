@@ -31,8 +31,9 @@ import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSMutableArray;
 
 public class SeleniumTest implements Cloneable {	
+    
 	public static abstract class Element implements Cloneable {
-		public abstract Element clone();
+		public abstract Object clone();
 	}
 	
 	public static class Comment extends Element {
@@ -52,7 +53,7 @@ public class SeleniumTest implements Cloneable {
 			return _value;
 		}
 		
-		public Comment clone() {
+		public Object clone() {
 			return new Comment(_value);
 		}
 		
@@ -126,7 +127,7 @@ public class SeleniumTest implements Cloneable {
 			return result.toString();
 		}
 		
-		public MetaCommand clone() {
+		public Object clone() {
 			return new MetaCommand(_name, _arguments);
 		}
 		
@@ -183,7 +184,7 @@ public class SeleniumTest implements Cloneable {
 			return _value;
 		}
 		
-		public Command clone() {
+		public Object clone() {
 			return new Command(_name, _target, _value);
 		}
 		
@@ -229,7 +230,7 @@ public class SeleniumTest implements Cloneable {
 		_name = name;
 	}
 	
-	public SeleniumTest clone() {
+	public Object clone() {
 		return new SeleniumTest(_name, _elements);
 	}
 	

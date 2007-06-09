@@ -7,6 +7,8 @@
 
 package er.bugtracker;
 
+import java.util.Enumeration;
+
 import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WOApplication;
 import com.webobjects.appserver.WOComponent;
@@ -17,7 +19,10 @@ import com.webobjects.directtoweb.ErrorPageInterface;
 import com.webobjects.eoaccess.EOModelGroup;
 import com.webobjects.eoaccess.EOUtilities;
 import com.webobjects.eocontrol.EOEditingContext;
+import com.webobjects.foundation.NSMutableArray;
 
+import er.calendar.ERPublishCalendarPage;
+import er.calendar.ERSimpleEvent;
 import er.directtoweb.ERD2WDirectAction;
 import er.extensions.ERXCrypto;
 import er.extensions.ERXEC;
@@ -27,6 +32,25 @@ public class DirectAction extends ERD2WDirectAction {
 
     public DirectAction(WORequest aRequest) {
         super(aRequest);
+    }
+
+    public WOActionResults calendarAction() {
+        EOEditingContext ec = ERXEC.newEditingContext();
+        ec.lock();
+        try {
+            ERPublishCalendarPage calendar = (ERPublishCalendarPage) pageWithName("ERPublishCalendarPage");
+            calendar.setCalendarName("Release Map");
+            NSMutableArray releases = new NSMutableArray();
+            for (Enumeration e = Release.clazz.allObjects(ec).objectEnumerator(); e.hasMoreElements();) {
+                final Release element = (Release) e.nextElement();
+                ERSimpleEvent event = new ERSimpleEvent(element.dateDue(), null, element.name(), element.primaryKey());
+                releases.addObject(event);
+            }
+            calendar.addEventsFromArray(releases);
+            return calendar;
+        } finally {
+            ec.unlock();
+        }
     }
 
     public WOComponent pingAction() {
