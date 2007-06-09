@@ -1,0 +1,4 @@
+ShowLink : WOHyperlink {
+	action = showAction;
+	string = "Show";
+}

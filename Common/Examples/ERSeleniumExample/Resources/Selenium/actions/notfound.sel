@@ -1,0 +1,3 @@
+Test for invalid Selenium Action
+|open|/wa/SeleniumAction/fakeAction|
+|assertTextPresent|Invalid action command.|
