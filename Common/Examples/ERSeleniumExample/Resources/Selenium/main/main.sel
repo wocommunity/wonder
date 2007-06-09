@@ -1,0 +1,4 @@
+Simple test for ERSelenium
+|open|/|
+|clickAndWait|link=Show|
+|assertText|//body|Sample Message|

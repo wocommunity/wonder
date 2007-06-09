@@ -1,0 +1,3 @@
+Test for successful Selenium Action
+|open|/wa/SeleniumAction/successfulAction|
+|assertTextPresent|Action command succeeded.|
