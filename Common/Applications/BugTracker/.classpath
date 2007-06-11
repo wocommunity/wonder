@@ -21,6 +21,7 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/ERRest"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/ERCalendar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/ERExcelLook"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/WOOgnl"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/ERSelenium"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

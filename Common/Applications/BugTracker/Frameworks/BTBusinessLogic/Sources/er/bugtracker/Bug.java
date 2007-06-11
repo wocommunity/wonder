@@ -331,6 +331,12 @@ public class Bug extends _Bug implements Markable {
             fs.setIsDeep(false);
             return fs;
         }
+
+        public NSArray allBugsForUser(EOEditingContext context, People people) {
+            EOFetchSpecification fs = newFetchSpecification(
+                    qualifierForOwner(people));
+            return context.objectsWithFetchSpecification(fs);
+        }
     }
 
     public static final BugClazz clazz = new BugClazz();
