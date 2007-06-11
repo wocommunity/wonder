@@ -1,4 +1,4 @@
-|open|/wa/SeleniumAction/ensureTestAdmin||
+|open|/wa/SeleniumAction/ensurePeopleSetup||
 |assertTextPresent|Action command succeeded.||
 |open|/wa/SeleniumAction/resetSession||
 |assertTextPresent|Action command succeeded.||
@@ -9,13 +9,13 @@ Try to login as inactive use
 |clickAndWait|//button[@value='Login']||
 |assertTextPresent|Sorry your account is inactive!||
 Try to login as non-admin
-|type|//input[@type = 'text']|user105|
+|type|//input[@type = 'text']|user101|
 |type|//input[@type = 'password']|user|
 |clickAndWait|//button[@value='Login']||
 |assertTextNotPresent|Components||
 |assertTextNotPresent|Releases||
 |assertTextNotPresent|Peoples||
-|assertTextNotPresent|Frameworks||
+//|assertTextNotPresent|Frameworks||
 |clickAndWait|link=LogOut||
 |assertText|xpath=/html/body/center/form/h1/text()|Bug Tracker|
 Login as administrator
