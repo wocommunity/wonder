@@ -20,7 +20,10 @@ import er.bugtracker.People;
 import er.bugtracker.Session;
 import er.extensions.ERXCrypto;
 import er.extensions.ERXEC;
+import er.extensions.ERXEOAccessUtilities;
 import er.extensions.ERXEOControlUtilities;
+import er.extensions.ERXLocalizer;
+import er.extensions.ERXSession;
 import er.extensions.ERXUtilities;
 import er.selenium.SeleniumDefaultSetupActions;
 
@@ -32,23 +35,28 @@ public class SeleniumSetupActions extends SeleniumDefaultSetupActions {
 	private static final String NAME = "SeleniumName";
 
 	public static void deleteTestPeople(WOResponse response, WOContext context) {
-		People people = People.clazz.userWithUsernamePassword(context.session().defaultEditingContext(), USERNAME, PASSWORD);
-		if (people != null) {
-			EOEditingContext ec = ERXEC.newEditingContext();
-			people = (People) EOUtilities.localInstanceOfObject(ec, people);
-			people.delete();
-			ERXUtilities.deleteObjects(ec, Bug.clazz.bugsOwnedWithUser(ec, people));
-			
-			/* TODO: this should be done in BTBusinessLogic */
-			EOKeyValueQualifier frameworkQualifier = new EOKeyValueQualifier(Framework.Key.OWNER, EOQualifier.QualifierOperatorEqual, people);
-			assert(frameworkQualifier != null);
-			NSArray frameworks = ERXEOControlUtilities.objectsWithQualifier(ec, 
-					Framework.class.getSimpleName(), frameworkQualifier, null, false);
-			ERXUtilities.deleteObjects(ec, frameworks);
-			
-			ec.saveChanges();
-			log.debug("People " + USERNAME + " deleted");
-		}
+	    People people = People.clazz.userWithUsernamePassword(context.session().defaultEditingContext(), USERNAME, PASSWORD);
+	    if (people != null) {
+	        EOEditingContext ec = ERXEC.newEditingContext();
+	        ec.lock();
+	        try {
+	            people = (People) EOUtilities.localInstanceOfObject(ec, people);
+                ERXUtilities.deleteObjects(ec, people.allBugs());
+                people.delete();
+	            // ERXEOAccessUtilities.deleteRowsDescribedByQualifier(ec, Bug.ENTITY, qualifier)
+	            /* TODO: this should be done in BTBusinessLogic */
+	            EOKeyValueQualifier frameworkQualifier = new EOKeyValueQualifier(Framework.Key.OWNER, EOQualifier.QualifierOperatorEqual, people);
+	            assert(frameworkQualifier != null);
+	            NSArray frameworks = ERXEOControlUtilities.objectsWithQualifier(ec, 
+	                    Framework.class.getSimpleName(), frameworkQualifier, null, false);
+	            ERXUtilities.deleteObjects(ec, frameworks);
+
+	            ec.saveChanges();
+	        } finally {
+	            ec.unlock();
+	        }
+	        log.debug("People " + USERNAME + " deleted");
+	    }
 	}
 	
 	private static People addTestPeople(WOContext context, boolean isAdmin) {
@@ -69,20 +77,32 @@ public class SeleniumSetupActions extends SeleniumDefaultSetupActions {
 		dummyCookie.setDomain(null);  // Let the browser set the domain
 		dummyCookie.setExpires(new NSTimestamp().timestampByAddingGregorianUnits(0, -2, 0, 0, 0, 0));
 		response.addCookie(dummyCookie);
-		
-		SeleniumDefaultSetupActions.resetSession(response, context);
+        SeleniumDefaultSetupActions.resetSession(response, context);
 	}
 
 	public static void ensureTestPeopleAreLoggedIn(WOResponse response, WOContext context) {
 		Session session = (Session) context.session();
+        session.setLanguage("English");
 		People people = People.clazz.userWithUsernamePassword(context.session().defaultEditingContext(), USERNAME, PASSWORD);
 		session.setUser(people);
 	}
 
-	public static void ensureTestAdmin(WOResponse response, WOContext context) {
-		deleteTestPeople(response, context);
-		addTestPeople(context, true);
-		ensureTestPeopleAreLoggedIn(response, context);
-	}
+    public static void ensureTestAdmin(WOResponse response, WOContext context) {
+        deleteTestPeople(response, context);
+        addTestPeople(context, true);
+        ensureTestPeopleAreLoggedIn(response, context);
+    }
+
+    public static void ensurePeopleSetup(WOResponse response, WOContext context) {
+        ensureTestAdmin(response, context);
+        People people = People.clazz.userWithUsernamePassword(context.session().defaultEditingContext(), "user100", "user");
+        people.setIsActive(false);
+        people = People.clazz.userWithUsernamePassword(context.session().defaultEditingContext(), "user101", "user");
+        people.setIsActive(true);
+        people.setIsAdmin(false);
+        people.setIsEngineering(false);
+        people.setIsCustomerService(true);
+        context.session().defaultEditingContext().saveChanges();
+    }
 	
 }

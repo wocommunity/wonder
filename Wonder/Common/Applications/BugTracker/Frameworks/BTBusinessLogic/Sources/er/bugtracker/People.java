@@ -113,6 +113,10 @@ public class People extends _People implements ERCoreUserInterface {
         return Bug.clazz.unreadBugsWithUser(editingContext(), this);
     }
 
+    public NSArray allBugs() {
+        return Bug.clazz.allBugsForUser(editingContext(), this);
+    }
+    
     public NSArray allRequirements() {
         if (isEngineering()) {
             return Requirement.clazz.myTotalRequirementsEngineeringWithUser(editingContext(), this);

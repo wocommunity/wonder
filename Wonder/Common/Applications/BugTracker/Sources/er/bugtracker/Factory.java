@@ -92,7 +92,7 @@ public class Factory extends ERD2WFactory implements NSKeyValueCoding {
 
     protected InspectPageInterface createPageNamed(String name) {
         EditPageInterface epi = editPageForNewObjectWithConfigurationNamed(name, session());
-        // epi.setNextPage(homePage());
+        epi.setNextPage(homePage());
         return epi;
     }
     
