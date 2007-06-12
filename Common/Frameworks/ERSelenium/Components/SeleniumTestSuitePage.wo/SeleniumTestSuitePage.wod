@@ -13,8 +13,18 @@ TestContents : WOString {
 	value = testContents;
 }
 
+HasTestContents : WOConditional {
+	condition = testContents;
+}
+
+HasNoTestContents : WOConditional {
+	condition = testContents;
+	negate = true;
+}
+
 TestLink : WOHyperlink {
 	target = "testFrame";
 	href = testLink;
-	string = "~repTestFile.getName + ' - ' + repDirectory.directory.getName";
+	string = repTestFile.name;
+//	string = "~repTestFile.getName + ' - ' + repDirectory.directory.getName";
 }

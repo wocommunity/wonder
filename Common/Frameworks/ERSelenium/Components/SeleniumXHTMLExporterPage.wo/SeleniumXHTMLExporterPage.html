@@ -2,7 +2,7 @@
 <html>
 <head>
 	<meta content="text/html; charset=UTF-8" http-equiv="Content-Type"/>
-	<title><wo:string value="$test.name"/></title>
+	<title><webobject name = "TestName"/></title>
 </head>
 <body> 
 <table border="1" cellpadding="1" cellspacing="1">
@@ -10,11 +10,14 @@
 		<tr><td colspan="3" rowspan="1"></td></tr>
 	</thead>
 	<tbody>
-	<wo:WORepetition item="$element" list="$test.elements">
-		<wo:if condition="~isCommand(element)">
-			<tr><td><wo:string value="$element.name"/></td><td><wo:string value="$element.target"/></td><td><wo:string value="$element.value"/></td></tr>
-		</wo>
-	</wo>
+	<webobject name = "Tests">
+	<webobject name = "IsCommand">
+			<tr>
+			<td><webobject name = "ElementName"/></td>
+			<td><webobject name = "ElementTarget"/></td>
+			<td><webobject name = "ElementValue"/></td></tr>
+		</webobject>
+	</webobject>
 	</tbody>
 </table>
 </body>
