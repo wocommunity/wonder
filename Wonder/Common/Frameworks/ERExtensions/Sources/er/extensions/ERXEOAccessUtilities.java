@@ -1012,75 +1012,83 @@ public class ERXEOAccessUtilities {
             	}
             }
             if (needsLog) {
-                String description = "\"" + entityName + "\"@" + channel.adaptorContext().hashCode() + " expression took "
-                        + millisecondsNeeded + " ms: " + expression.statement();
-                StringBuffer sb = new StringBuffer();
-                NSArray variables = expression.bindVariableDictionaries();
-                int cnt = variables != null ? variables.count() : 0;
-                if (cnt > 0) {
-                    sb.append(" withBindings: ");
-                    for (int i = 0; i < cnt; i++) {
-                        NSDictionary nsdictionary = (NSDictionary) variables.objectAtIndex(i);
-                        Object obj = nsdictionary.valueForKey("BindVariableValue");
-                        String attributeName = (String) nsdictionary.valueForKey("BindVariableName");
-                        if (obj instanceof String) {
-                            obj = EOSQLExpression.sqlStringForString((String) obj);
-                        } else if (obj instanceof NSData) {
-                            // ak: this is just for logging, however we would
-                            // like to get readable data
-                            // in particular for PKs and with postgres this
-                            // works.
-                            // plain EOF is broken, though
-                            try {
-                                if (((NSData) obj).length() < 50) {
-                                    obj = expression.sqlStringForData((NSData) obj);
-                                }
-                            } catch (ArrayIndexOutOfBoundsException ex) {
-                                // ignore, this is a bug in EOF
-                            }
-                            if (obj instanceof NSData) {
-                                // produces very yucky output
-                                obj = obj.toString();
-                            }
-                        } else {
-                            if (expression.entity() != null) {
-                                EOAttribute attribute = expression.entity().anyAttributeNamed(attributeName);
-                                if (attribute != null) {
-                                    obj = expression.formatValueForAttribute(obj, attribute);
-                                }
-                            }
-                        }
-                        if (i != 0)
-                            sb.append(", ");
-                        sb.append(i + 1);
-                        sb.append(":");
-                        sb.append(obj);
-                        sb.append("[");
-                        sb.append(attributeName);
-                        sb.append("]");
-                    }
-                }
-                description = description + sb.toString();
+                String logString = createLogString(channel, expression, millisecondsNeeded);
+        		if (logString.length() > maxLength) {
+        		    logString = logString.substring(0, maxLength);
+        		}
 
-                if (description.length() > maxLength) {
-                    description = description.substring(0, maxLength);
-                }
                 if (millisecondsNeeded > errorMilliseconds) {
-                    sqlLoggingLogger.error(description, new RuntimeException("Statement running too long"));
-                } else if (millisecondsNeeded > warnMilliseconds) {
-                    sqlLoggingLogger.warn(description);
-                } else if (millisecondsNeeded > infoMilliseconds) {
-                    if (sqlLoggingLogger.isInfoEnabled()) {
-                        sqlLoggingLogger.info(description);
-                    }
-                } else if (millisecondsNeeded > debugMilliseconds) {
-                    if (sqlLoggingLogger.isDebugEnabled()) {
-                        sqlLoggingLogger.debug(description);
-                    }
-                }
+        		    sqlLoggingLogger.error(logString, new RuntimeException("Statement running too long"));
+        		} else if (millisecondsNeeded > warnMilliseconds) {
+        		    sqlLoggingLogger.warn(logString);
+        		} else if (millisecondsNeeded > infoMilliseconds) {
+        		    if (sqlLoggingLogger.isInfoEnabled()) {
+        		        sqlLoggingLogger.info(logString);
+        		    }
+        		} else if (millisecondsNeeded > debugMilliseconds) {
+        		    if (sqlLoggingLogger.isDebugEnabled()) {
+        		        sqlLoggingLogger.debug(logString);
+        		    }
+        		}
+
             }
         }
     }
+
+	public static String createLogString(EOAdaptorChannel channel, EOSQLExpression expression, long millisecondsNeeded) {
+        String entityName = (expression.entity() != null ? expression.entity().name() : "Unknown");
+		String description = "\"" + entityName + "\"@" + channel.adaptorContext().hashCode() + " expression took "
+		        + millisecondsNeeded + " ms: " + expression.statement();
+		StringBuffer sb = new StringBuffer();
+		NSArray variables = expression.bindVariableDictionaries();
+		int cnt = variables != null ? variables.count() : 0;
+		if (cnt > 0) {
+		    sb.append(" withBindings: ");
+		    for (int i = 0; i < cnt; i++) {
+		        NSDictionary nsdictionary = (NSDictionary) variables.objectAtIndex(i);
+		        Object obj = nsdictionary.valueForKey("BindVariableValue");
+		        String attributeName = (String) nsdictionary.valueForKey("BindVariableName");
+		        if (obj instanceof String) {
+		            obj = EOSQLExpression.sqlStringForString((String) obj);
+		        } else if (obj instanceof NSData) {
+		            // ak: this is just for logging, however we would
+		            // like to get readable data
+		            // in particular for PKs and with postgres this
+		            // works.
+		            // plain EOF is broken, though
+		            try {
+		                if (((NSData) obj).length() < 50) {
+		                    obj = expression.sqlStringForData((NSData) obj);
+		                }
+		            } catch (ArrayIndexOutOfBoundsException ex) {
+		                // ignore, this is a bug in EOF
+		            }
+		            if (obj instanceof NSData) {
+		                // produces very yucky output
+		                obj = obj.toString();
+		            }
+		        } else {
+		            if (expression.entity() != null) {
+		                EOAttribute attribute = expression.entity().anyAttributeNamed(attributeName);
+		                if (attribute != null) {
+		                    obj = expression.formatValueForAttribute(obj, attribute);
+		                }
+		            }
+		        }
+		        if (i != 0)
+		            sb.append(", ");
+		        sb.append(i + 1);
+		        sb.append(":");
+		        sb.append(obj);
+		        sb.append("[");
+		        sb.append(attributeName);
+		        sb.append("]");
+		    }
+		}
+		description = description + sb.toString();
+
+		return description;
+	}
     
     
     /**
