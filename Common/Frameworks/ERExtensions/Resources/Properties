@@ -256,6 +256,10 @@ er.extensions.ERXComponentActionRedirector.enabled=false
 ## What entities to watch
 # er.extensions.ERXAdaptorChannelDelegate.trace.entityMatchPattern = .*
 
+## Collect last x statements to dump them at a later time (if you don't set this, defaults to false and 10)
+# er.extensions.ERXSQLExpressionTracker.collectLastStatements = false
+# er.extensions.ERXSQLExpressionTracker.numberOfStatementsToCollect = 10
+
 
 #########################################################################
 # ERXDatabaseContextDelegate 
