@@ -1,4 +1,4 @@
-<wo:if condition="$testContents" negate="true">
+<webobject name="HasNoTestContents">
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -7,17 +7,17 @@
 <body> 
 	<table id="suiteTable" cellpadding="1" cellspacing="1" border="1">
 		<tbody>
-		<tr><td>Test Suite</td></tr>
-		<wo name="TestDirectoriesRepetition">
-			<wo name="TestsRepetition">
-			<tr><td><wo name="TestLink"/></td></tr>
-			</wo>
-		</wo>
+		<tr><td>Test Suites</td></tr>
+		<webobject name="TestDirectoriesRepetition">
+			<webobject name="TestsRepetition">
+			<tr><td><webobject name="TestLink"/></td></tr>
+			</webobject>
+		</webobject>
 		</tbody>
 	</table>
 </body>
 </html>
-</wo>
-<wo:if condition="$testContents">
-<wo name="TestContents"/>
-</wo>
+</webobject>
+<webobject name="HasTestContents">
+<webobject name="TestContents"/>
+</webobject>

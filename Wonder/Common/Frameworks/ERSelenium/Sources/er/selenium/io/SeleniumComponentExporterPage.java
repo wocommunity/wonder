@@ -54,14 +54,26 @@ public class SeleniumComponentExporterPage extends ERXStatelessComponent {
     	return element instanceof SeleniumTest.Command;
     }
     
+    public boolean isCommand() {
+        return isCommand(element);
+    }
+    
     public boolean isMetaCommand(SeleniumTest.Element element) {
     	return element instanceof SeleniumTest.MetaCommand;
     }
     
+    public boolean isMetaCommand() {
+        return isMetaCommand(element);
+    }
+
     public boolean isComment(SeleniumTest.Element element) {
     	return element instanceof SeleniumTest.Comment;
     }
     
+    public boolean isComment() {
+        return isComment(element);
+    }
+
     public String timestamp() {
     	return new NSTimestamp().toString();
     }
