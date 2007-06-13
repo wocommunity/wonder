@@ -12,6 +12,8 @@ import java.util.Vector;
 
 import org.apache.log4j.Logger;
 
+import com.webobjects.eoaccess.EOEntity;
+import com.webobjects.eoaccess.EOModelGroup;
 import com.webobjects.eocontrol.EOEnterpriseObject;
 import com.webobjects.eocontrol.EOFetchSpecification;
 import com.webobjects.eocontrol.EOQualifier;
@@ -1217,13 +1219,13 @@ public class ERXArrayUtilities extends Object {
      * @return array filtered and sorted by the named fetch specification.
      */    
     public static NSArray filteredArrayWithEntityFetchSpecification(NSArray array, String entity, String fetchSpec, NSDictionary bindings) {
+        EOEntity wrongParamEntity = EOModelGroup.defaultGroup().entityNamed(fetchSpec);
+        if (wrongParamEntity != null) {
+        	fetchSpec = entity;
+			entity = wrongParamEntity.name();
+			log.error("filteredArrayWithEntityFetchSpecification Calling conventions have changed from fetchSpec, entity to entity, fetchSpec");
+		}
         EOFetchSpecification spec = EOFetchSpecification.fetchSpecificationNamed(fetchSpec, entity);
-        if(spec == null) {
-        	spec = EOFetchSpecification.fetchSpecificationNamed(entity, fetchSpec);
-        	if(spec != null) {
-        		log.error("filteredArrayWithEntityFetchSpecification Calling conventions have changed from fetchSpec, entity to entity, fetchSpec");
-        	}
-        }
         NSArray sortOrderings, result;
         EOQualifier qualifier;
 
