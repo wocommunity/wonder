@@ -82,7 +82,7 @@ public class ERXAdaptorChannelDelegate {
 		if (_numberOfStatementsToCollect == null) {
 			_numberOfStatementsToCollect = new Integer (ERXProperties.intForKeyWithDefault("er.extensions.ERXSQLExpressionTracker.numberOfStatementsToCollect", 10));
 		}
-		return _numberOfStatementsToCollect;
+		return _numberOfStatementsToCollect.intValue();
 	}
 	
 	private boolean collectLastStatements () {
@@ -125,7 +125,7 @@ public class ERXAdaptorChannelDelegate {
 		}
 		else {
 			log.info("No collected statements available.");
-			if (!this._collectLastStatements) {
+			if (!this._collectLastStatements.booleanValue()) {
 				log.info("You have to set the property 'er.extensions.ERXSQLExpressionTracker.collectLastStatements = true'. to make this feature work.");
 			}
 		}
