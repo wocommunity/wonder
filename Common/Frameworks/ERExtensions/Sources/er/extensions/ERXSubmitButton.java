@@ -63,7 +63,7 @@ public class ERXSubmitButton extends WOInput {
 			ERXWOContext.contextDictionary().setObjectForKey(Boolean.TRUE, "ERXWOSubmit.ieFixed");
 		}
     }
-    
+
     public ERXSubmitButton(String arg0, NSDictionary nsdictionary, WOElement arg2) {
         super("button", nsdictionary, arg2);
         if(_value == null)
@@ -77,6 +77,11 @@ public class ERXSubmitButton extends WOInput {
             throw new WODynamicElementCreationException("<" + getClass().getName() + ">'action' is a constant.");
         if(_action != null && _directActionName != null || _action != null && _actionClass != null)
             throw new WODynamicElementCreationException("<" + getClass().getName() + "> Either 'action' and 'directActionName' both exist, or 'action' and 'actionClass' both exist ");
+    }
+    	   
+    protected boolean isDisabledInContext(WOContext context) {
+    	WOAssociation disabled = (WOAssociation) ERXKeyValueCodingUtilities.privateValueForKey(this, "_disabled");
+    	return disabled != null && disabled.booleanValueInComponent(context.component());
     }
 
     protected String type() {
@@ -133,7 +138,7 @@ public class ERXSubmitButton extends WOInput {
     	}
     	boolean shouldSubmitForm = (_shouldSubmitForm != null ? _shouldSubmitForm.booleanValueInComponent(wocontext.component()) : true);
 
-    	if(disabledInComponent(wocontext.component())) {
+    	if(isDisabledInContext(wocontext)) {
     		woresponse.appendContentCharacter(' ');
     		woresponse._appendContentAsciiString("disabled=\"disabled\"");
     	}
@@ -154,7 +159,7 @@ public class ERXSubmitButton extends WOInput {
     public WOActionResults invokeAction(WORequest worequest, WOContext wocontext) {
         Object obj = null;
         WOComponent wocomponent = wocontext.component();
-        if(!disabledInComponent(wocomponent) && wocontext._wasFormSubmitted()) {
+        if(!isDisabledInContext(wocontext) && wocontext._wasFormSubmitted()) {
             if(wocontext._isMultipleSubmitForm()) {
                 if(worequest.formValueForKey(nameInContext(wocontext, wocomponent)) != null) {
                     wocontext._setActionInvoked(true);

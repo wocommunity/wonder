@@ -51,10 +51,15 @@ public class ERXWOTextField extends WOInput /*ERXPatcher.DynamicElementsPatches.
 	public String type() {
 		return "text";
 	}
-	
+	   
+    protected boolean isDisabledInContext(WOContext context) {
+    	WOAssociation disabled = (WOAssociation) ERXKeyValueCodingUtilities.privateValueForKey(this, "_disabled");
+    	return disabled != null && disabled.booleanValueInComponent(context.component());
+    }
+
 	public void takeValuesFromRequest(WORequest worequest, WOContext wocontext) {
 		WOComponent component = wocontext.component();
-		if(!disabledInComponent(component) && wocontext._wasFormSubmitted()) {
+		if(!isDisabledInContext(wocontext) && wocontext._wasFormSubmitted()) {
 			String name = nameInContext(wocontext, component);
 			if(name != null) {
 				String stringValue = worequest.stringFormValueForKey(name);
