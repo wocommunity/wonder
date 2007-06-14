@@ -45,3 +45,7 @@ Edit: WOHyperlink {
 	directActionName = "editLocalizedFiles";
 	class = ^linkClass;
 }
+Test: WOHyperlink {
+	actionClass = "er.selenium.SeleniumStartTesting";
+	class = ^linkClass;
+}
