@@ -1,7 +1,9 @@
 package com.webobjects.foundation;
 
 import java.lang.reflect.Array;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.ConcurrentModificationException;
 import java.util.Iterator;
 import java.util.List;
@@ -32,6 +34,10 @@ public class NSMutableArray <E> extends NSArray<E> {
     public static final Object ERX_MARKER = "Wonder";
     
     public NSMutableArray() {
+    }
+    
+    public NSMutableArray(Collection<E> collection) {
+    	super(collection);
     }
 
     public NSMutableArray(int capacity) {

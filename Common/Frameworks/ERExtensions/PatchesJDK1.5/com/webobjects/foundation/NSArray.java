@@ -317,6 +317,22 @@ public class NSArray<E> implements Cloneable, Serializable, NSCoding, NSKeyValue
 		}
 	}
 
+	public NSArray(Collection collection, boolean checkForNull) {
+		_recomputeHashCode = true;
+		if (collection == null) {
+			throw new NullPointerException("Collection cannot be null");
+		}
+		else {
+			Object anArray[] = collection.toArray();
+			initFromObjects(anArray, 0, anArray.length, checkForNull);
+			return;
+		}
+	}
+
+	public NSArray(Collection collection) {
+		this(collection, true);
+	}
+
 	protected E[] objectsNoCopy() {
 		if (_objectsCache == null) {
 			if (_count == 0) {
@@ -1049,6 +1065,10 @@ public class NSArray<E> implements Cloneable, Serializable, NSCoding, NSKeyValue
 		}
 	}
 
+	public static NSArray emptyArray() {
+		return EmptyArray;
+	}
+	
 	static {
 		_CLASS = _NSUtilitiesExtra._classWithFullySpecifiedNamePrime("com.webobjects.foundation.NSArray");
 		try {
