@@ -285,6 +285,7 @@
     20 : smartAttribute.className = 'com.webobjects.foundation.NSTimestamp' => formatter = %b %d,%Y [com.webobjects.directtoweb.Assignment], 
     20 : (task = 'list' and subTask = 'group') => groupingComponentName = ERDDefaultSectionComponent [com.webobjects.directtoweb.Assignment], 
     20 : (task = 'list' and subTask = 'csv') => groupingComponentName = ERDDefaultSectionComponentCSV [com.webobjects.directtoweb.Assignment], 
+    20 : (task = 'edit' and componentName = 'D2WEditBoolean') => displayRequiredMarker = false [com.webobjects.directtoweb.BooleanAssignment], 
     20 : (task = 'edit' and smartAttribute.className = 'java.lang.String') => componentName = ERD2WEditString [com.webobjects.directtoweb.Assignment], 
     20 : entity.userInfo.isSortedJoinEntity = 'true' => keyWhenRelationship = <ERDSortedManyToManyAssignment> [er.directtoweb.ERDSortedManyToManyAssignment], 
     20 : (not (task = 'edit') and propertyKey like '*email' and not (task = 'query')) => componentName = ERDDisplayMailTo [com.webobjects.directtoweb.Assignment], 
