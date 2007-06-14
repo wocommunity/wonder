@@ -48,10 +48,15 @@ public class ERXWOPasswordField extends WOInput {
   protected String type() {
     return "password";
   }
+  
+  protected boolean isDisabledInContext(WOContext context) {
+  	WOAssociation disabled = (WOAssociation) ERXKeyValueCodingUtilities.privateValueForKey(this, "_disabled");
+  	return disabled != null && disabled.booleanValueInComponent(context.component());
+  }
 
   public void takeValuesFromRequest(WORequest request, WOContext context) {
     WOComponent component = context.component();
-    if (!disabledInComponent(component) && context._wasFormSubmitted()) {
+    if (!isDisabledInContext(context) && context._wasFormSubmitted()) {
       String name = nameInContext(context, component);
       if (name != null) {
         String value = request.stringFormValueForKey(name);

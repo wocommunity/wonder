@@ -138,9 +138,18 @@ public class ERXWOForm extends com.webobjects.appserver._private.WOHTMLDynamicEl
 		_clearFormName(context);
     	return result;
     }
-
+/*   5.4
+    protected NSDictionary computeQueryDictionaryInContext(String aRequestHandlerPath, WOAssociation queryDictionary, NSDictionary otherQueryAssociations, WOContext aContext) {
+     NSDictionary aQueryDict = __queryDictionaryInContext(queryDictionary, aContext);
+        NSDictionary anotherQueryDict = __otherQueryDictionaryInContext(otherQueryAssociations, aContext);
+       return aContext.computeQueryDictionary(aRequestHandlerPath, aQueryDict, anotherQueryDict);
+    }
+*/
     protected void _appendHiddenFieldsToResponse(WOResponse response, WOContext context) {
     	boolean flag = _actionClass != null;
+    	// AK: 5.4 
+    	// String actionPath = computeActionStringInContext(_actionClass, _directActionName, context);
+    	// NSDictionary hiddenFields = computeQueryDictionaryInContext(actionPath, _queryDictionary, _otherQueryAssociations, context);
     	NSDictionary hiddenFields = computeQueryDictionaryInContext(_actionClass, _directActionName, _queryDictionary, flag, _otherQueryAssociations, context);
     	if(hiddenFields.count() > 0) {
     		for(Enumeration enumeration = hiddenFields.keyEnumerator(); enumeration.hasMoreElements(); ) {

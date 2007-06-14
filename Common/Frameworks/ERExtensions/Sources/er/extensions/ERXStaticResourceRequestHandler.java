@@ -80,9 +80,17 @@ public class ERXStaticResourceRequestHandler extends WORequestHandler {
 				if(uri.startsWith("file:")) {
 					// remove file:/
 					uri = uri.substring(5);
+				} else {
+					
 				}
 			} else {
-				sb.append(documentRoot);
+				int index = uri.indexOf("/wodata=");
+
+				if(index >= 0) {
+					uri = uri.substring(index+"/wodata=".length());
+				} else {
+					sb.append(documentRoot);
+				}
 			}
 			sb.append(uri);
 			String path = sb.toString();
