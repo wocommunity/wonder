@@ -77,11 +77,12 @@ public class ERCaptcha extends ERXStatelessComponent {
 				validated = _captchaService.validateResponseForID(context.elementID(), response());
 			}
 			catch (CaptchaServiceException e) {
-				e.printStackTrace();
+				log.error(e);
 			}
 			finally {
 				setCaptcha(null);
 			}
+			
 			setValueForBinding(validated, "validated");
 		}
 	}
