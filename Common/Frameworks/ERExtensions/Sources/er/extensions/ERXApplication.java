@@ -341,7 +341,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 	public static void setup(String[] argv) {
 		_wasERXApplicationMainInvoked = true;
 		String cps[] = new String[] {"java.class.path", "com.webobjects.classpath"};
-        propertiesFromArgv = NSProperties.valuesFromArgv(argv);
+		propertiesFromArgv = NSProperties.valuesFromArgv(argv);
         allFrameworks = new HashSet();
 		for (int var = 0; var < cps.length; var++) {
 			String cpName = cps[var];
@@ -352,7 +352,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 				String systemLibs = "";
 				for (int i = 0; i < parts.length; i++) {
 					String jar = parts[i];
-//					System.out.println("Checking: " + jar);
+					// System.out.println("Checking: " + jar);
 					// all patched frameworks here
 					if(isSystemJar(jar)) {
 						systemLibs += jar + File.pathSeparator;
@@ -400,7 +400,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 		}
 		catch (NoSuchFieldException e) {
 			System.err.println("No ERX_MARKER field in NSMutableArray found. \nThis means your class path is incorrect. Adjust it so that ERExtensions come before JavaFoundation.");
-			System.exit(1);
+			//System.exit(1);
 		}
 		catch (Exception e) {
 			e.printStackTrace();
