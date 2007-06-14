@@ -39,7 +39,7 @@ public class ERSimpleEvent extends Object implements ERCalendarEvent {
      */
     public ERSimpleEvent (NSTimestamp aStartTime, NSTimestamp anEndTime, String aSummary, String aUniqueId) {
 	startTime = aStartTime;
-	endTime = anEndTime;
+	endTime = anEndTime == null ? aStartTime : anEndTime;
 	summary = aSummary;
 	uniqueId = aUniqueId;
     }
