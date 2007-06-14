@@ -145,4 +145,67 @@ public class ERXKeyValueCodingUtilities {
             takeValueForKey(arg0, arg1);
         }
     };
+
+    public static Object privateValueForKey(Object target, String key) {
+    	Field field = accessibleFieldForKey(target, key);
+    	try {
+    		if(field != null) {
+        		return field.get(target);
+    		} else {
+    	    	throw new NSKeyValueCoding.UnknownKeyException("Key "+ key + " not found", target, key);
+    		}
+    	}
+    	catch (IllegalArgumentException e) {
+    		throw NSForwardException._runtimeExceptionForThrowable(e);
+    	}
+    	catch (IllegalAccessException e) {
+    		throw NSForwardException._runtimeExceptionForThrowable(e);
+    	}
+    }
+
+    public static void takePrivateValueForKey(Object target, Object value, String key) {
+    	Field field = accessibleFieldForKey(target, key);
+    	try {
+    		if(field != null) {
+        		field.set(target, value);
+    		} else {
+    	    	throw new NSKeyValueCoding.UnknownKeyException("Key "+ key + " not found", target, key);
+    		}
+    	}
+    	catch (IllegalArgumentException e) {
+    		throw NSForwardException._runtimeExceptionForThrowable(e);
+    	}
+    	catch (IllegalAccessException e) {
+    		throw NSForwardException._runtimeExceptionForThrowable(e);
+    	}
+    }
+
+    private static Field accessibleFieldForKey(Object target, String key) {
+    	Field f = fieldForKey(target, key);
+    	if(f != null) {
+    		f.setAccessible(true);
+    	}
+    	return f;
+    }
+    
+
+    public static Field fieldForKey(Object target, String key) {
+    	Field field = null;
+    	Class c = target.getClass();
+    	while(field == null && c != null) {
+    		try {
+    			field = c.getDeclaredField(key);
+    			if(field != null) { 
+    				return field;
+    			}
+    		}
+    		catch (SecurityException e) {
+    			throw NSForwardException._runtimeExceptionForThrowable(e);
+    		}
+    		catch (NoSuchFieldException e) {
+    			c = c.getSuperclass();
+    		}
+    	}
+    	return null;
+    }
 }
