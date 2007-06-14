@@ -8,9 +8,12 @@ import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WORequest;
 import com.webobjects.appserver.WOResponse;
 import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSKeyValueCoding;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
+import com.webobjects.foundation.NSUndoManager;
 
+import er.extensions.ERXKeyValueCodingUtilities;
 import er.extensions.ERXResponse;
 
 /**
@@ -56,8 +59,16 @@ public class AjaxResponse extends ERXResponse {
 			String originalSenderID = _context.senderID();
 			_context._setSenderID("");
 			try {
-				StringBuffer content = _content;
-				_content = new StringBuffer();
+				StringBuffer content;
+				//AK: don't ask...
+				if (((Object)_content) instanceof StringBuilder) {
+					StringBuilder builder = (StringBuilder)(Object) _content;
+					content = new StringBuffer();
+					ERXKeyValueCodingUtilities.takePrivateValueForKey(this, new StringBuilder(),  "_content");
+				} else {
+					content = (StringBuffer)(Object)_content;
+					ERXKeyValueCodingUtilities.takePrivateValueForKey(this, new StringBuffer(),  "_content");
+				}
 				NSMutableDictionary userInfo = AjaxUtils.mutableUserInfo(_request);
 				userInfo.setObjectForKey(Boolean.TRUE, AjaxResponse.AJAX_UPDATE_PASS);
 				WOActionResults woactionresults = WOApplication.application().invokeAction(_request, _context);

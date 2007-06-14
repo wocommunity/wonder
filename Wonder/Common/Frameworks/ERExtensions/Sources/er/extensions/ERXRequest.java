@@ -85,7 +85,8 @@ public  class ERXRequest extends WORequest {
     public String stringFormValueForKey(String key) {
     	String result = super.stringFormValueForKey(key);
     	if (result == null && "wodata".equals(key)) {
-    		WODynamicURL url = _uriDecomposed();
+    	    // AK this cast *is* needed, trust me...
+    		WODynamicURL url = (WODynamicURL) _uriDecomposed();
     		if (WOApplication.application().resourceRequestHandlerKey().equals(url.requestHandlerKey())) {
     			String requestHandlerPath = "file:/" + url.requestHandlerPath().substring("wodata=/".length());
     			result = requestHandlerPath.replace('+', ' ');

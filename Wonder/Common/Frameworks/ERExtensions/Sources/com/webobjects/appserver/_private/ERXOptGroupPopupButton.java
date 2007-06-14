@@ -4,6 +4,8 @@ package com.webobjects.appserver._private;
 import com.webobjects.appserver.*;
 import com.webobjects.foundation.*;
 
+import er.extensions.ERXKeyValueCodingUtilities;
+
 
 /**
  * Quick hack at extending WOPopUpButton to use HTML 4 optgroups.  It adds two bindings:
@@ -102,12 +104,17 @@ public class ERXOptGroupPopupButton extends WOPopUpButton
              
              String valueAsString = null;
              String displayStringAsString = null;
-             if (_string != null || _value != null)
-             {
+             WOAssociation displayStringAssociation = null;
+             if(ERXKeyValueCodingUtilities.fieldForKey(this, "_string") != null) {
+            	 displayStringAssociation = (WOAssociation) ERXKeyValueCodingUtilities.privateValueForKey(this, "_string");
+             } else {
+            	 displayStringAssociation = (WOAssociation) ERXKeyValueCodingUtilities.privateValueForKey(this, "_disabled");
+             }
 
-                if (_string != null)
-                {
-                    Object displayString = _string.valueInComponent(parent);
+             if (displayStringAssociation != null || _value != null) {
+
+				if (displayStringAssociation != null) {
+                    Object displayString = displayStringAssociation.valueInComponent(parent);
                     if (displayString != null)
                     {
                         displayStringAsString = displayString.toString();
