@@ -27,7 +27,7 @@ import er.extensions.ERXSession;
 import er.extensions.ERXUtilities;
 import er.selenium.SeleniumDefaultSetupActions;
 
-public class SeleniumSetupActions extends SeleniumDefaultSetupActions {
+public class SeleniumSetupActions  {
 	public final static Logger log = Logger.getLogger(SeleniumSetupActions.class);
 	
 	public static final String USERNAME = "sel_name";
