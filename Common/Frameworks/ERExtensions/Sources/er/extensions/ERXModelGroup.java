@@ -12,7 +12,10 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.Enumeration;
 import java.util.Hashtable;
+import java.util.Iterator;
+import java.util.Map;
 
+import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
 import com.webobjects.eoaccess.EOAdaptor;
@@ -25,6 +28,7 @@ import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSBundle;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSForwardException;
+import com.webobjects.foundation.NSKeyValueCoding;
 import com.webobjects.foundation.NSLog;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
@@ -96,7 +100,7 @@ public class ERXModelGroup extends EOModelGroup {
 	public void loadModelsFromLoadedBundles() {
 		EOModelGroup.setDefaultGroup(this);
 		NSArray nsarray = NSBundle.frameworkBundles();
-
+		
 		if (log.isDebugEnabled()) {
 			log.debug("Loading bundles" + nsarray.valueForKey("name"));
 		}
@@ -1055,21 +1059,54 @@ public class ERXModelGroup extends EOModelGroup {
 		}
 	}
 
+	private static final NSArray _prototypeKeys = new NSArray(new Object[] { "externalType", "columnName", "readOnly", "valueClassName", "valueType", "width", "precision", "scale", "writeFormat", "readFormat", "userInfo", "serverTimeZone", "valueFactoryMethodName", "adaptorValueConversionMethodName", "factoryMethodArgumentType", "allowsNull", "parameterDirection", "_internalInfo" });
+
+	public static NSArray _prototypeKeys() {
+		return _prototypeKeys;
+	}
+
+	public static Object _keyForEnum(int key) {
+		return _prototypeKeys().objectAtIndex(key);
+	}
+
+	public static int _enumForKey(String key) {
+		return _prototypeKeys().indexOfObject(key);
+	}
+
+	public static boolean _isKeyEnumOverriden(EOAttribute att, int key) {
+		if(true) return att._isKeyEnumOverriden(key);
+		boolean result = false;
+		if(att.prototype() != null) {
+			Map characteristics = (Map) NSKeyValueCoding.Utility.valueForKey(att, "overwrittenCharacteristics");
+			for (Iterator iter = characteristics.entrySet().iterator(); iter.hasNext();) {
+				Map.Entry element = (Map.Entry) iter.next();
+				String charateristic = element.getKey().toString();
+				Boolean value =  ((Boolean)element.getValue());
+				if(charateristic.equalsIgnoreCase(_keyForEnum(key).toString())) {
+					return value.booleanValue();
+				}
+			}
+		}
+		return result;
+	}
+
 	/**
 	 * Flattens a single attribute with the respective prototype.
+	 * 
 	 * @param prototypeAttribute
 	 * @param attribute
 	 */
 	private void flattenPrototypeAttribute(EOAttribute prototypeAttribute, EOAttribute attribute) {
-		NSArray prototypeKeys = EOAttribute._prototypeKeys();
+		NSArray prototypeKeys = _prototypeKeys();
 		NSMutableArray overriddenKeys = new NSMutableArray();
 		Enumeration prototypeKeysEnum = prototypeKeys.objectEnumerator();
 		while (prototypeKeysEnum.hasMoreElements()) {
 			String prototypeKey = (String) prototypeKeysEnum.nextElement();
-			if (attribute._isKeyEnumOverriden(EOAttribute._enumForKey(prototypeKey))) {
+			if (_isKeyEnumOverriden(attribute, _enumForKey(prototypeKey))) {
 				overriddenKeys.addObject(prototypeKey);
 			}
 		}
+		String className = attribute.className();
 		// AK: for whatever reason, when we have a custom value type of type string, it gets reset to NSData.
 		// Presumably, this is because EOM outputs other keys than WO and the logic to get at the actual
 		// value type is pretty broken.
@@ -1093,11 +1130,12 @@ public class ERXModelGroup extends EOModelGroup {
 		attribute.setUserInfo(userInfo);
 		EOKeyValueCodingAdditions.Utility.takeValuesFromDictionary(attribute, valuesToReplace);
 		if(hasCustomClass) {
-			Class clazz = ERXPatcher.classForName(attribute.className());
+			Class clazz = ERXPatcher.classForName(className);
 			if(ERXConstant.StringConstant.class.isAssignableFrom(clazz)) {
 				attribute.setFactoryMethodArgumentType(EOAttribute.FactoryMethodArgumentIsString);
+				
 				// AK: the following two calls are needed to clear the cached values from the attribute
-				attribute.setClassName(attribute.className());
+				attribute.setClassName(className);
 				attribute.setValueFactoryMethodName(attribute.valueFactoryMethodName());
 				log.info("Attribute : " + attribute + " changed " + attribute.adaptorValueType() + " " + attribute.factoryMethodArgumentType());
 			}
