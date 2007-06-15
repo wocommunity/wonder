@@ -488,7 +488,15 @@ public class AjaxGrid extends WOComponent {
 	 * @return batch size for the display grid
 	 */
 	protected int batchSize() {
-		return Integer.parseInt((String) configurationData().valueForKey(BATCH_SIZE));
+		Object batchSizeObj = configurationData().objectForKey(AjaxGrid.BATCH_SIZE);
+		int batchSize;
+		if (batchSizeObj instanceof String) {
+			batchSize = Integer.parseInt((String)batchSizeObj);
+		}
+		else {
+			batchSize = ((Number)batchSizeObj).intValue();
+		}
+		return batchSize;
 	}
 
 	/**
