@@ -15,6 +15,7 @@
     0 : *true* => renderBorder = true [com.webobjects.directtoweb.BooleanAssignment], 
     0 : *true* => noChoiceAvailableMessage =  [com.webobjects.directtoweb.Assignment], 
     0 : *true* => sortKeyForList = propertyKey [er.directtoweb.ERDKeyValueAssignment], 
+    0 : *true* => showCreateObjectLink = false [com.webobjects.directtoweb.Assignment], 
     0 : *true* => showEditButton = false [com.webobjects.directtoweb.BooleanAssignment], 
     0 : *true* => allowsFiltering = false [com.webobjects.directtoweb.BooleanAssignment], 
     0 : *true* => singleSelection = false [com.webobjects.directtoweb.BooleanAssignment], 
