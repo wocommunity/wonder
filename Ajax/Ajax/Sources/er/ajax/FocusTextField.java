@@ -31,7 +31,7 @@ public class FocusTextField extends ERXWOTextField {
 	public FocusTextField(String tagname, NSDictionary nsdictionary, WOElement woelement) {
 		super(tagname, nsdictionary, woelement);
 
-		_id = (WOAssociation) _associations.valueForKey("id");
+		_id = (WOAssociation) nsdictionary.valueForKey("id");
 		if (_id == null) {
 			throw new WODynamicElementCreationException("<" + getClass().getName() + "> id is a required binding.");
 		}
