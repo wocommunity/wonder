@@ -16,6 +16,7 @@
     {"author" = "0"; "class" = "com.webobjects.directtoweb.Rule"; "rhs" = {"class" = "com.webobjects.directtoweb.BooleanAssignment"; "keyPath" = "renderBorder"; "value" = "true"; }; }, 
     {"author" = "0"; "class" = "com.webobjects.directtoweb.Rule"; "rhs" = {"class" = "com.webobjects.directtoweb.Assignment"; "keyPath" = "noChoiceAvailableMessage"; "value" = ""; }; }, 
     {"author" = "0"; "class" = "com.webobjects.directtoweb.Rule"; "rhs" = {"class" = "er.directtoweb.ERDKeyValueAssignment"; "keyPath" = "sortKeyForList"; "value" = "propertyKey"; }; }, 
+    {"author" = "0"; "class" = "com.webobjects.directtoweb.Rule"; "rhs" = {"class" = "com.webobjects.directtoweb.Assignment"; "keyPath" = "showCreateObjectLink"; "value" = "false"; }; }, 
     {"author" = "0"; "class" = "com.webobjects.directtoweb.Rule"; "rhs" = {"class" = "com.webobjects.directtoweb.BooleanAssignment"; "keyPath" = "showEditButton"; "value" = "false"; }; }, 
     {"author" = "0"; "class" = "com.webobjects.directtoweb.Rule"; "rhs" = {"class" = "com.webobjects.directtoweb.BooleanAssignment"; "keyPath" = "allowsFiltering"; "value" = "false"; }; }, 
     {"author" = "0"; "class" = "com.webobjects.directtoweb.Rule"; "rhs" = {"class" = "com.webobjects.directtoweb.BooleanAssignment"; "keyPath" = "singleSelection"; "value" = "false"; }; }, 
