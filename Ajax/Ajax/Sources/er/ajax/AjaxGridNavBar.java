@@ -8,6 +8,8 @@ import com.webobjects.appserver.WODisplayGroup;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSMutableDictionary;
 
+import er.extensions.ERXValueUtilities;
+
 /**
  * Abstract super class for a navigation bar that can be used with AjaxGrid. Use
  * of this is not mandatory, it is provided as a convenience.
@@ -234,14 +236,7 @@ public abstract class AjaxGridNavBar extends WOComponent {
 	 */
 	public int currentBatchSize() {
 		Object batchSizeObj = configurationData().objectForKey(AjaxGrid.BATCH_SIZE);
-		int batchSize;
-		if (batchSizeObj instanceof String) {
-			batchSize = Integer.parseInt((String)batchSizeObj);
-		}
-		else {
-			batchSize = ((Number)batchSizeObj).intValue();
-		}
-		return batchSize;
+		return ERXValueUtilities.intValue(batchSizeObj);
 	}
 
 	/**
