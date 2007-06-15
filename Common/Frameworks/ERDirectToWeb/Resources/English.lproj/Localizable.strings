@@ -103,6 +103,7 @@
 	"ERDEditToManyRelationship.remove" = "Remove";
 	"ERDEmptyListMessage.emptyEmbeddedListMessage" = "<b>No matching @@displayNameForDestinationEntity@@ records found.</b>";
 	"ERDEmptyListMessage.emptyListMessage" = "<b>No matching @@displayNameForEntity@@ records found.</b>";
+	"ERDEmptyListMessage.createObjectStringTemplate" = "Create New Entry";
 	"ERDInspect.clear" = "Clear";
 	"ERDInspect.create" = "Create";
 	"ERDInspect.objectUnsetMessage" = "No @@displayNameForDestinationEntity@@ set.";
