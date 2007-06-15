@@ -16,6 +16,8 @@ import com.webobjects.foundation.NSKeyValueCodingAdditions;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 
+import er.extensions.ERXValueUtilities;
+
 
 /**
  * Ajax powered grid based on HTML Table that provides drag and drop column
@@ -489,14 +491,7 @@ public class AjaxGrid extends WOComponent {
 	 */
 	protected int batchSize() {
 		Object batchSizeObj = configurationData().objectForKey(AjaxGrid.BATCH_SIZE);
-		int batchSize;
-		if (batchSizeObj instanceof String) {
-			batchSize = Integer.parseInt((String)batchSizeObj);
-		}
-		else {
-			batchSize = ((Number)batchSizeObj).intValue();
-		}
-		return batchSize;
+		return ERXValueUtilities.intValue(batchSizeObj);
 	}
 
 	/**
