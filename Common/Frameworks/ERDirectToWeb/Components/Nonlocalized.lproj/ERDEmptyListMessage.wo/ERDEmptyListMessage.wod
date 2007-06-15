@@ -29,3 +29,16 @@ EmptyListMessage: WOString {
 	escapeHTML = false;
 }
 
+ShowCreateObjectLink : WOConditional {
+	condition = showCreateObjectLink;
+}
+
+CreateObjectLink : WOHyperlink {
+	action = createObject;
+}
+
+CreateObjectString : ERXLocalizedString {
+	templateString = "ERDEmptyListMessage.createObjectStringTemplate";
+	object = bindings;
+	escapeHTML = false;
+}
