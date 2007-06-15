@@ -98,6 +98,7 @@
 	"ERDEditToManyRelationship.remove" = "Entfernen";
 	"ERDEmptyListMessage.emptyEmbeddedListMessage" = "<b>Keine @@displayNameForDestinationEntity@@ gefunden.</b>";
 	"ERDEmptyListMessage.emptyListMessage" = "<b>Keine @@displayNameForEntity@@ gefunden.</b>";
+	"ERDEmptyListMessage.createObjectStringTemplate" = "Neuen Eintrag anlegen";
 	"ERDInspect.clear" = "L\U00f6schen";
 	"ERDInspect.create" = "Anlegen";
 	"ERDInspect.objectUnsetMessage" = "Kein @@displayNameForDestinationEntity@@ gesetzt.";
