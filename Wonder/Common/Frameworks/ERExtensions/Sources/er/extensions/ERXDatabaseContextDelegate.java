@@ -105,7 +105,7 @@ public class ERXDatabaseContextDelegate {
     	} else if(exLog.isInfoEnabled()) {
     		exLog.info("JDBC Exception occured: " + throwable);
     	}
-    	if(throwable.getMessage() != null && throwable.getMessage().indexOf("_obtainOpenChannel") > 0) {
+    	if(throwable.getMessage() != null && throwable.getMessage().indexOf("_obtainOpenChannel") != -1) {
     		NSArray models = databaseContext.database().models();
     		for(Enumeration e = models.objectEnumerator(); e.hasMoreElements(); ) {
     			EOModel model = (EOModel)e.nextElement();
