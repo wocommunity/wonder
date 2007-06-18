@@ -185,8 +185,10 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
                 EOQualifierSQLGeneration.Support.supportForClass(ERXToManyQualifier.class));
         registerSQLSupportForSelector(new NSSelector(ERXRegExQualifier.MatchesSelectorName), 
                 EOQualifierSQLGeneration.Support.supportForClass(ERXRegExQualifier.class));
-        //AK: in 5.4 disable 
-        // EOQualifierSQLGeneration.Support.setSupportForClass(new ERXInOrQualifierSupport(), EOOrQualifier._CLASS);
+		if (!ERXApplication.isWO54()) {
+	        //AK: in 5.4 disable 
+			EOQualifierSQLGeneration.Support.setSupportForClass(new ERXInOrQualifierSupport(), EOOrQualifier._CLASS);
+		}
 		
 		// ERXObjectStoreCoordinatorPool has a static initializer, so just load the class if
 		// the configuration setting exists
