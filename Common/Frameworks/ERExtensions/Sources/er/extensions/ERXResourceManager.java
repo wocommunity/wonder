@@ -110,7 +110,7 @@ public class ERXResourceManager extends WOResourceManager {
 			String encoded = WOURLEncoder.encode(fileURL);
 			WOContext context = null;
 			String key = WOApplication.application().resourceRequestHandlerKey();
-			if (ERXApplication.isWO54()) {
+			if (WOApplication.application().isDirectConnectEnabled() && ERXApplication.isWO54()) {
 				// AK: 5.4
 				key =  "_wr_";
 			}
