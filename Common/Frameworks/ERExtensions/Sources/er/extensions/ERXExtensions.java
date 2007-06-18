@@ -42,6 +42,7 @@ import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation.NSNotification;
 import com.webobjects.foundation.NSNotificationCenter;
 import com.webobjects.foundation.NSSelector;
+import com.webobjects.jdbcadaptor.JDBCAdaptorException;
 
 import er.extensions.remoteSynchronizer.ERXRemoteSynchronizer;
 
@@ -237,7 +238,13 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
         }
         
         public String sqlStringForSQLExpression(EOQualifier eoqualifier, EOSQLExpression e) {
-            return supportForQualifier(eoqualifier).sqlStringForSQLExpression(eoqualifier, e);
+        	try {
+        		return supportForQualifier(eoqualifier).sqlStringForSQLExpression(eoqualifier, e);
+        	}
+        	catch (JDBCAdaptorException ex) {
+        		ERXExtensions._log.error("Failed to generate sql string for qualifier " + eoqualifier + " on entity " + e.entity() + ".");
+        		throw ex;
+        	}
         }
 
         public EOQualifier schemaBasedQualifierWithRootEntity(EOQualifier eoqualifier, EOEntity eoentity) {
