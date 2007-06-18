@@ -86,6 +86,7 @@ public class DependentListsExample extends WOComponent {
 	}
 
 	public void setSelectedCounty(County selectedCounty) {
+		System.out.println("DependentListsExample.setSelectedCounty: selected county = " + selectedCounty);
 		if (!_changedState && _selectedCounty != selectedCounty) {
 			_selectedCounty = selectedCounty;
 			_changedCounty = true;

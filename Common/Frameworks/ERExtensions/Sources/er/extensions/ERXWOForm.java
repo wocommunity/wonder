@@ -7,6 +7,7 @@
 
 package er.extensions;
 
+import java.lang.reflect.Method;
 import java.util.Enumeration;
 
 import org.apache.log4j.Logger;
@@ -20,6 +21,7 @@ import com.webobjects.appserver.WORequest;
 import com.webobjects.appserver.WOResponse;
 import com.webobjects.appserver._private.WOConstantValueAssociation;
 import com.webobjects.appserver._private.WODynamicElementCreationException;
+import com.webobjects.appserver._private.WOHTMLDynamicElement;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSLog;
 import com.webobjects.foundation._NSDictionaryUtilities;
@@ -138,19 +140,48 @@ public class ERXWOForm extends com.webobjects.appserver._private.WOHTMLDynamicEl
 		_clearFormName(context);
     	return result;
     }
-/*   5.4
-    protected NSDictionary computeQueryDictionaryInContext(String aRequestHandlerPath, WOAssociation queryDictionary, NSDictionary otherQueryAssociations, WOContext aContext) {
-     NSDictionary aQueryDict = __queryDictionaryInContext(queryDictionary, aContext);
-        NSDictionary anotherQueryDict = __otherQueryDictionaryInContext(otherQueryAssociations, aContext);
-       return aContext.computeQueryDictionary(aRequestHandlerPath, aQueryDict, anotherQueryDict);
-    }
-*/
+
+    // WO 5.4
+//    protected NSDictionary computeQueryDictionaryInContext(String aRequestHandlerPath, WOAssociation queryDictionary, NSDictionary otherQueryAssociations, WOContext aContext) {
+//    	try {
+//			Class woFormClass = getClass();
+//			__queryDictionaryInContext(queryDictionary, aContext);
+//			Method __queryDictionaryInContextMethod = woFormClass.getMethod("__queryDictionaryInContext", new Class[] { WOAssociation.class, WOContext.class });
+//			NSDictionary aQueryDict = (NSDictionary) __queryDictionaryInContextMethod.invoke(this, new Object[] { queryDictionary, aContext });
+//			
+//			Method __otherQueryDictionaryInContextMethod = woFormClass.getMethod("__otherQueryDictionaryInContext", new Class[] { NSDictionary.class, WOContext.class });
+//			NSDictionary anotherQueryDict = (NSDictionary) __otherQueryDictionaryInContextMethod.invoke(this, new Object[] { otherQueryAssociations, aContext });
+//
+//			Method computeQueryDictionaryMethod = woFormClass.getMethod("computeQueryDictionary", new Class[] { String.class, NSDictionary.class, NSDictionary.class });
+//			NSDictionary queryDict = (NSDictionary) computeQueryDictionaryMethod.invoke(this, new Object[] { aRequestHandlerPath, aQueryDict, anotherQueryDict });
+//			return queryDict;
+//		}
+//		catch (Exception e) {
+//			throw new RuntimeException("computeQueryDictionaryInContext failed.", e);
+//		}
+//    }
+    
     protected void _appendHiddenFieldsToResponse(WOResponse response, WOContext context) {
     	boolean flag = _actionClass != null;
-    	// AK: 5.4 
-    	// String actionPath = computeActionStringInContext(_actionClass, _directActionName, context);
-    	// NSDictionary hiddenFields = computeQueryDictionaryInContext(actionPath, _queryDictionary, _otherQueryAssociations, context);
-    	NSDictionary hiddenFields = computeQueryDictionaryInContext(_actionClass, _directActionName, _queryDictionary, flag, _otherQueryAssociations, context);
+    	NSDictionary hiddenFields;
+    	if (ERXApplication.isWO54()) {
+			try {
+				Method computeQueryDictionaryInContextMethod = WOHTMLDynamicElement.class.getDeclaredMethod("computeQueryDictionaryInContext", new Class[] { String.class, WOAssociation.class, NSDictionary.class, WOContext.class });
+				hiddenFields = (NSDictionary) computeQueryDictionaryInContextMethod.invoke(this, new Object[] { "", _queryDictionary, _otherQueryAssociations, context });
+			}
+			catch (Exception e) {
+				throw new RuntimeException("computeQueryDictionaryInContext failed.", e);
+			}
+    	}
+    	else {
+			try {
+				Method computeQueryDictionaryInContextMethod = WOHTMLDynamicElement.class.getDeclaredMethod("computeQueryDictionaryInContext", new Class[] { WOAssociation.class, WOAssociation.class, WOAssociation.class, boolean.class, NSDictionary.class, WOContext.class });
+				hiddenFields = (NSDictionary) computeQueryDictionaryInContextMethod.invoke(this, new Object[] { _actionClass, _directActionName, _queryDictionary, Boolean.valueOf(flag), _otherQueryAssociations, context });
+			}
+			catch (Exception e) {
+				throw new RuntimeException("computeQueryDictionaryInContext failed.", e);
+			}
+    	}
     	if(hiddenFields.count() > 0) {
     		for(Enumeration enumeration = hiddenFields.keyEnumerator(); enumeration.hasMoreElements(); ) {
     			String s = (String)enumeration.nextElement();

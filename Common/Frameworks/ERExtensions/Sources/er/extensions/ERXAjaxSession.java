@@ -35,7 +35,7 @@ public class ERXAjaxSession extends WOSession {
    * but you need to update the corresponding value in AjaxUtils.  This is to keep the dependencies
    * between the two frameworks independent.
    */
-  public static final String DONT_STORE_PAGE = "ERXSession.DontStorePage";
+  public static final String DONT_STORE_PAGE = "erxsession.dont_store_page";
 
   /**
    * Key that is used to specify that a page should go in the replacement cache instead of
@@ -44,11 +44,11 @@ public class ERXAjaxSession extends WOSession {
    * corresponding value in AjaxUtils.  This is to keep the dependencies between the two
    * frameworks independent.
    */
-  public static final String PAGE_REPLACEMENT_CACHE_LOOKUP_KEY = "pageCacheKey";
+  public static final String PAGE_REPLACEMENT_CACHE_LOOKUP_KEY = "page_cache_key";
 
-  private static final String ORIGINAL_CONTEXT_ID_KEY = "originalContextID";
+  private static final String ORIGINAL_CONTEXT_ID_KEY = "original_context_id";
 
-  private static final String PAGE_REPLACEMENT_CACHE_KEY = "pageReplacementCache";
+  private static final String PAGE_REPLACEMENT_CACHE_KEY = "page_replacement_cache";
 
   private static int MAX_PAGE_REPLACEMENT_CACHE_SIZE = Integer.parseInt(System.getProperty("er.extensions.maxPageReplacementCacheSize", "30"));
 

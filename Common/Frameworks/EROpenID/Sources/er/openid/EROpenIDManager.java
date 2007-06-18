@@ -1,5 +1,6 @@
 package er.openid;
 
+import java.lang.reflect.Method;
 import java.util.Enumeration;
 import java.util.List;
 
@@ -28,7 +29,9 @@ import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WORedirect;
 import com.webobjects.appserver.WORequest;
 import com.webobjects.appserver.WOSession;
+import com.webobjects.foundation.NSDictionary;
 
+import er.extensions.ERXApplication;
 import er.extensions.ERXProperties;
 import er.extensions.ERXRequest;
 
@@ -109,12 +112,27 @@ public class EROpenIDManager {
 
     public String returnToUrl(WORequest request, WOContext context) {
       String returnToUrl;
-      context._generateCompleteURLs();
-      try {
-        returnToUrl = context._directActionURL("ERODirectAction/openIDResponse", null, true);
+      if (ERXApplication.isWO54()) {
+        try {
+          Method directActionURLForActionNamedMethod = context.getClass().getMethod("directActionURLForActionNamed", new Class[] { String.class, NSDictionary.class, boolean.class, boolean.class });
+          returnToUrl = (String) directActionURLForActionNamedMethod.invoke(context, new Object[] { "ERODirectAction/openIDResponse", null, Boolean.TRUE, Boolean.TRUE });
+        }
+        catch (Exception e) {
+          throw new RuntimeException("directActionURLForActionNamed failed.", e);
+        }
       }
-      finally {
-        context._generateRelativeURLs();
+      else {
+        context._generateCompleteURLs();
+        try {
+          Method _directActionURLMethod = context.getClass().getMethod("_directActionURL", new Class[] { String.class, NSDictionary.class, boolean.class });
+          returnToUrl = (String) _directActionURLMethod.invoke(context, new Object[] { "ERODirectAction/openIDResponse", null, Boolean.TRUE });
+        }
+        catch (Exception e) {
+          throw new RuntimeException("_directActionURL failed.", e);
+        }
+        finally {
+          context._generateRelativeURLs();
+        }
       }
       return returnToUrl;
     }

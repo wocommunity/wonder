@@ -43,9 +43,6 @@ import com.webobjects.appserver.WOResourceManager;
 import com.webobjects.appserver.WOResponse;
 import com.webobjects.appserver.WOSession;
 import com.webobjects.appserver.WOTimer;
-import com.webobjects.eoaccess.EOAdaptorChannel;
-import com.webobjects.eoaccess.EODatabaseContext;
-import com.webobjects.eoaccess.EOGeneralAdaptorException;
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.eocontrol.EOTemporaryGlobalID;
 import com.webobjects.foundation.NSArray;
@@ -65,7 +62,6 @@ import com.webobjects.foundation.NSPropertyListSerialization;
 import com.webobjects.foundation.NSRange;
 import com.webobjects.foundation.NSSelector;
 import com.webobjects.foundation.NSTimestamp;
-import com.webobjects.jdbcadaptor.JDBCAdaptorException;
 
 import er.extensions.migration.ERXMigrator;
 
@@ -76,6 +72,8 @@ import er.extensions.migration.ERXMigrator;
  */
 
 public abstract class ERXApplication extends ERXAjaxApplication implements ERXGracefulShutdown.GracefulApplication {
+	private static Boolean isWO54 = null;
+	
 
 	/** logging support */
 	public static final Logger log = Logger.getLogger(ERXApplication.class);
@@ -495,6 +493,9 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 		registerRequestHandler(new ERXDirectActionRequestHandler(), directActionRequestHandlerKey());
 		if (isDirectConnectEnabled()) {
 			registerRequestHandler(new ERXStaticResourceRequestHandler(), "_wr_");
+			if (ERXApplication.isWO54()) {
+				registerRequestHandler(new ERXStaticResourceRequestHandler(), "wr");
+			}
 		}
 
 		Long timestampLag = Long.getLong("EOEditingContextDefaultFetchTimestampLag");
@@ -1157,6 +1158,24 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 		return _useSessionStoreDeadlockDetection.booleanValue();
 	}
 
+	/**
+	 * Returns true if this app is running in WO 5.4.
+	 * 
+	 * @return true if this app is running in WO 5.4
+	 */
+	public static boolean isWO54() {
+		if (ERXApplication.isWO54 == null) {
+			try {
+				Method getWebObjectsVersionMethod = WOApplication.class.getMethod("getWebObjectsVersion", new Class[0]);
+				ERXApplication.isWO54 = Boolean.TRUE;
+			}
+			catch (Exception e) {
+				ERXApplication.isWO54 = Boolean.FALSE;
+			}
+		}
+		return ERXApplication.isWO54.booleanValue();
+	}
+	
 	/**
 	 * Returns whether or not this application is in development mode.  This one is
 	 * named "Safe" because it does not require you to be running an ERXApplication (and
