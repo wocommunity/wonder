@@ -202,6 +202,9 @@ There are many ways to use this script:
         <property name="web.application.install.root" value="${wo.server.root}" />
         <!-- just some existing value -->
         <property name="patches.dir" value="${wonder.root}/Build/build" />
+        <property name="classes.exclude.0" value="does_not_exists_hopefully" />
+        <property name="classes.exclude.1" value="does_not_exists_hopefully" />
+        <property name="classes.exclude.2" value="does_not_exists_hopefully" />
     </target>
 
     <target name="global.properties" depends="global.environment">
@@ -293,6 +296,10 @@ There are many ways to use this script:
             <classpath>
                 <fileset dir="${project.dir}/Libraries">
                     <include name="**/*.jar" />
+                    <!-- ak: i know, fix this...-->
+                    <exclude name="${compile.exclude.1}" />
+                    <exclude name="${compile.exclude.2}" />
+                    <exclude name="${compile.exclude.3}" />
                 </fileset>
             </classpath>
            <frameworks dir="${wonder.lib.root}" if="wonder.lib.root.bundles" bundles="${wonder.lib.root.bundles}" embed="${wonder.lib.root.bundles.embed}"/>
