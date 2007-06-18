@@ -9,13 +9,13 @@ package er.extensions;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Method;
 import java.net.URL;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Map;
 
-import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
 import com.webobjects.eoaccess.EOAdaptor;
@@ -1074,8 +1074,18 @@ public class ERXModelGroup extends EOModelGroup {
 	}
 
 	public static boolean _isKeyEnumOverriden(EOAttribute att, int key) {
-		// 5.4 - Comment out next line
-		if(false) return att._isKeyEnumOverriden(key);
+		if (!ERXApplication.isWO54()) {
+			// 5.4 - API changed
+			try {
+				Method isKeyEnumOverriddenMethod = att.getClass().getMethod("_isKeyEnumOverriden", new Class[] { int.class });
+				Boolean isKeyEnumOverridden = (Boolean)isKeyEnumOverriddenMethod.invoke(att, new Object[] { new Integer(key) });
+				return isKeyEnumOverridden.booleanValue();
+			}
+			catch (Exception e) {
+				throw new RuntimeException("_isKeyEnumOverridden failed.", e);
+			}
+		}
+		
 		boolean result = false;
 		if(att.prototype() != null) {
 			Map characteristics = (Map) NSKeyValueCoding.Utility.valueForKey(att, "overwrittenCharacteristics");
