@@ -1074,7 +1074,8 @@ public class ERXModelGroup extends EOModelGroup {
 	}
 
 	public static boolean _isKeyEnumOverriden(EOAttribute att, int key) {
-		if(true) return att._isKeyEnumOverriden(key);
+		// 5.4 - Comment out next line
+		if(false) return att._isKeyEnumOverriden(key);
 		boolean result = false;
 		if(att.prototype() != null) {
 			Map characteristics = (Map) NSKeyValueCoding.Utility.valueForKey(att, "overwrittenCharacteristics");
