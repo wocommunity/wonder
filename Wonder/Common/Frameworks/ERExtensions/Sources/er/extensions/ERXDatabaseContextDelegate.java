@@ -110,8 +110,9 @@ public class ERXDatabaseContextDelegate {
     		for(Enumeration e = models.objectEnumerator(); e.hasMoreElements(); ) {
     			EOModel model = (EOModel)e.nextElement();
     			NSDictionary dict = model.connectionDictionary();
-    			log.info(model.name() + ": " + (dict == null ? "No connectionddict!" : dict.toString()));
+    			log.info(model.name() + ": " + (dict == null ? "No connection dictionary!" : dict.toString()));
     		}
+    		new ERXJDBCConnectionAnalyzer(databaseContext.database().adaptor().connectionDictionary());
     	}
     	//EOEditingContext ec = ERXEC.newEditingContext();
     	//log.info(NSPropertyListSerialization.stringFromPropertyList(EOUtilities.modelGroup(ec).models().valueForKey("connectionDictionary")));
