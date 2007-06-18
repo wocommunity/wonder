@@ -105,8 +105,8 @@ public class ERXObjectStoreCoordinatorSynchronizer {
 
 	public void addObjectStore(EOObjectStoreCoordinator osc) {
 		synchronized (_coordinators) {
-			if (!_coordinators.contains(osc)) {
-				_coordinators.add(osc);
+			if (!_coordinators.containsObject(osc)) {
+				_coordinators.addObject(osc);
 				NSSelector sel = new NSSelector("publishChange", new Class[] { NSNotification.class });
 				NSNotificationCenter.defaultCenter().addObserver(this, sel, EOObjectStore.ObjectsChangedInStoreNotification, osc);
 				NSSelector snapshotCacheChanged = new NSSelector("snapshotCacheChanged", new Class[] { NSNotification.class });
@@ -117,8 +117,8 @@ public class ERXObjectStoreCoordinatorSynchronizer {
 
 	public void removeObjectStore(EOObjectStoreCoordinator osc) {
 		synchronized (_coordinators) {
-			if (_coordinators.contains(osc)) {
-				_coordinators.remove(osc);
+			if (_coordinators.containsObject(osc)) {
+				_coordinators.removeObject(osc);
 				NSNotificationCenter.defaultCenter().removeObserver(this, EOObjectStore.ObjectsChangedInStoreNotification, osc);
 			}
 			else {
@@ -138,7 +138,7 @@ public class ERXObjectStoreCoordinatorSynchronizer {
 
 	public void publishChange(NSNotification n) {
 		boolean processingMulticastNotifications = ERXObjectStoreCoordinatorSynchronizer.isProcessingRemoteNotifications();
-		if (_coordinators.size() > 1 || (_remoteSynchronizer != null && !processingMulticastNotifications)) {
+		if (_coordinators.count() > 1 || (_remoteSynchronizer != null && !processingMulticastNotifications)) {
 			EOObjectStoreCoordinator osc = (EOObjectStoreCoordinator) n.object();
 			NSDictionary userInfo = n.userInfo();
 			if (userInfo == null || userInfo.valueForKey(ERXObjectStoreCoordinatorSynchronizer.SYNCHRONIZER_KEY) == null) {
