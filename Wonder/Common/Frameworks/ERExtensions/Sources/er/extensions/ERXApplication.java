@@ -392,16 +392,18 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 			ClassLoader loader = AppClassLoader.getAppClassLoader();
 			Thread.currentThread().setContextClassLoader(loader);
 		}
-		Class arrayClass = NSMutableArray.class;
-		try {
-			Field f = arrayClass.getField("ERX_MARKER");
-		}
-		catch (NoSuchFieldException e) {
-			System.err.println("No ERX_MARKER field in NSMutableArray found. \nThis means your class path is incorrect. Adjust it so that ERExtensions come before JavaFoundation.");
-			//System.exit(1);
-		}
-		catch (Exception e) {
-			e.printStackTrace();
+		if (!ERXApplication.isWO54()) {
+			Class arrayClass = NSMutableArray.class;
+			try {
+				Field f = arrayClass.getField("ERX_MARKER");
+			}
+			catch (NoSuchFieldException e) {
+				System.err.println("No ERX_MARKER field in NSMutableArray found. \nThis means your class path is incorrect. Adjust it so that ERExtensions come before JavaFoundation.");
+				System.exit(1);
+			}
+			catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 		NSNotificationCenter.defaultCenter().addObserver(ERXApplication.class, new NSSelector("bundleDidLoad", new Class[] { NSNotification.class }), "NSBundleDidLoadNotification", null);
 		ERXConfigurationManager.defaultManager().setCommandLineArguments(argv);
