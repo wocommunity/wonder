@@ -95,9 +95,11 @@ public class ERXStaticResourceRequestHandler extends WORequestHandler {
 			sb.append(uri);
 			String path = sb.toString();
 			try {
+				path = path.replace('+', ' ');
 				file = new File(path);
 				length = (int) file.length();
 				is = new FileInputStream(file);
+				
 				contentType = rm.contentTypeForResourceNamed(path);
 				log.debug("Reading file '" + file + "' for uri: " + uri);
 			} catch (IOException ex) {
