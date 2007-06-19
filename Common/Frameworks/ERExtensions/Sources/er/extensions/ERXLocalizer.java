@@ -11,8 +11,14 @@ import java.net.URL;
 import java.text.DateFormatSymbols;
 import java.text.Format;
 import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.Hashtable;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.Locale;
+import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.apache.log4j.Logger;
 
@@ -378,8 +384,14 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
 	protected Hashtable _numberFormatters = new Hashtable();
 	protected String language;
 	protected Locale locale;
+	
+	private Map _plurifyRules;
+	private Map _singularifyRules;
 
 	public ERXLocalizer(String aLanguage) {
+		_plurifyRules = new HashMap();
+		_singularifyRules = new HashMap();
+		
 		language = aLanguage;
 		cache = new NSMutableDictionary();
 		createdKeys = new NSMutableDictionary();
@@ -459,6 +471,184 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
 				}
 			}
 		}
+		
+		_plurifyRules = plurifyRules();
+		_singularifyRules = singularifyRules();
+	}
+
+	/**
+	 * Returns the plurify rules for the current language.  This first checks for a property of the form:
+	 * 
+	 * <code>
+	 * er.extensions.ERXLocalizer.en.plurifyRules=(.*)person$=$1people:(.*)man$=$1men
+	 * </code>
+	 * 
+	 * which is
+	 * 
+	 * <code>
+	 * er.extensions.ERXLocalizer.en.plurifyRules=pattern1=replacement1:pattern2=replacement2:etc
+	 * </code>
+	 * 
+	 * In the absence of a rule set for a particular language, the default rules are English and ported
+	 * from the pluralizer in Rails.
+	 * 
+	 * @return the plurify rules for the current language
+	 */
+	protected Map plurifyRules() {
+		Map plurifyRules;
+		String plurifyRulesStr = ERXProperties.stringForKeyWithDefault("er.extensions.ERXLocalizer." + language + ".plurifyRules", null);
+		if (plurifyRulesStr == null) {
+			plurifyRules = defaultPlurifyRules();
+		}
+		else {
+			plurifyRules = new LinkedHashMap();
+			String[] rulePairs = plurifyRulesStr.split(":");
+			for (int i = 0; i < rulePairs.length; i ++) {
+				String[] rulePair = rulePairs[i].split("=");
+				Pattern pattern = Pattern.compile(rulePair[0], Pattern.CASE_INSENSITIVE);
+				plurifyRules.put(pattern, rulePair[1]);
+			}
+		}
+		return plurifyRules;
+
+	}
+	
+	/**
+	 * Returns the default plurify rules for this language.  The default implementation is 
+	 * English and ported from the plurify code in Ruby on Rails.  The returned Map should
+	 * have regex Pattern objects as keys mapping to the replacement String to apply to
+	 * that pattern. 
+	 * 
+	 * @return the default plurify rules
+	 */
+	protected Map defaultPlurifyRules() {
+		Map defaultPlurifyRules = new LinkedHashMap();
+
+		defaultPlurifyRules.put(Pattern.compile("^equipment$", Pattern.CASE_INSENSITIVE), "equipment");
+		defaultPlurifyRules.put(Pattern.compile("^information$", Pattern.CASE_INSENSITIVE), "information");
+		defaultPlurifyRules.put(Pattern.compile("^rice$", Pattern.CASE_INSENSITIVE), "rice");
+		defaultPlurifyRules.put(Pattern.compile("^money$", Pattern.CASE_INSENSITIVE), "money");
+		defaultPlurifyRules.put(Pattern.compile("^species$", Pattern.CASE_INSENSITIVE), "species");
+		defaultPlurifyRules.put(Pattern.compile("^series$", Pattern.CASE_INSENSITIVE), "series");
+		defaultPlurifyRules.put(Pattern.compile("^fish$", Pattern.CASE_INSENSITIVE), "fish");
+		defaultPlurifyRules.put(Pattern.compile("^sheep$", Pattern.CASE_INSENSITIVE), "sheep");
+
+		defaultPlurifyRules.put(Pattern.compile("(.*)person$", Pattern.CASE_INSENSITIVE), "$1people");
+		defaultPlurifyRules.put(Pattern.compile("(.*)man$", Pattern.CASE_INSENSITIVE), "$1men");
+		defaultPlurifyRules.put(Pattern.compile("(.*)child$", Pattern.CASE_INSENSITIVE), "$1children");
+		defaultPlurifyRules.put(Pattern.compile("(.*)sex$", Pattern.CASE_INSENSITIVE), "$1sexes");
+		defaultPlurifyRules.put(Pattern.compile("(.*)move$", Pattern.CASE_INSENSITIVE), "$1moves");
+		
+		defaultPlurifyRules.put(Pattern.compile("(.*)(quiz)$", Pattern.CASE_INSENSITIVE), "$1$2zes");
+		defaultPlurifyRules.put(Pattern.compile("(.*)^(ox)$", Pattern.CASE_INSENSITIVE), "$1$2en");
+		defaultPlurifyRules.put(Pattern.compile("(.*)([m|l])ouse$", Pattern.CASE_INSENSITIVE), "$1$2ice");
+		defaultPlurifyRules.put(Pattern.compile("(.*)(matr|vert|ind)ix|ex$", Pattern.CASE_INSENSITIVE), "$1$2ices");
+		defaultPlurifyRules.put(Pattern.compile("(.*)(x|ch|ss|sh)$", Pattern.CASE_INSENSITIVE), "$1$2es");
+		defaultPlurifyRules.put(Pattern.compile("(.*)([^aeiouy]|qu)y$", Pattern.CASE_INSENSITIVE), "$1$2ies");
+		defaultPlurifyRules.put(Pattern.compile("(.*)(hive)$", Pattern.CASE_INSENSITIVE), "$1$2s");
+		defaultPlurifyRules.put(Pattern.compile("(.*)(?:([^f])fe|([lr])f)$", Pattern.CASE_INSENSITIVE), "$1$2$3ves");
+		defaultPlurifyRules.put(Pattern.compile("(.*)sis$", Pattern.CASE_INSENSITIVE), "$1ses");
+		defaultPlurifyRules.put(Pattern.compile("(.*)([ti])um$", Pattern.CASE_INSENSITIVE), "$1$2a");
+		defaultPlurifyRules.put(Pattern.compile("(.*)(buffal|tomat)o$", Pattern.CASE_INSENSITIVE), "$1$2oes");
+		defaultPlurifyRules.put(Pattern.compile("(.*)(bu)s$", Pattern.CASE_INSENSITIVE), "$1$2ses");
+		defaultPlurifyRules.put(Pattern.compile("(.*)(alias|status)$", Pattern.CASE_INSENSITIVE), "$1$2es");
+		defaultPlurifyRules.put(Pattern.compile("(.*)(octop|vir)us$", Pattern.CASE_INSENSITIVE), "$1$2i");
+		defaultPlurifyRules.put(Pattern.compile("(.*)(ax|test)is$", Pattern.CASE_INSENSITIVE), "$1$2es");
+		defaultPlurifyRules.put(Pattern.compile("(.*)s$", Pattern.CASE_INSENSITIVE), "$1s");
+		defaultPlurifyRules.put(Pattern.compile("(.*)$", Pattern.CASE_INSENSITIVE), "$1s");
+
+		return defaultPlurifyRules;
+	}
+
+	/**
+	 * Returns the singularify rules for the current language.  This first checks for a property of the form:
+	 * 
+	 * <code>
+	 * er.extensions.ERXLocalizer.en.singularifyRules=(.*)person$=$1people:(.*)man$=$1men
+	 * </code>
+	 * 
+	 * which is
+	 * 
+	 * <code>
+	 * er.extensions.ERXLocalizer.en.singularifyRules=pattern1=replacement1:pattern2=replacement2:etc
+	 * </code>
+	 * 
+	 * In the absence of a rule set for a particular language, the default rules are English and ported
+	 * from the singularizer in Rails.
+	 * 
+	 * @return the singularify rules for the current language
+	 */
+	protected Map singularifyRules() {
+		Map singularifyRules;
+		String plurifyRulesStr = ERXProperties.stringForKeyWithDefault("er.extensions.ERXLocalizer." + language + ".singularifyRules", null);
+		if (plurifyRulesStr == null) {
+			singularifyRules = defaultSingularifyRules();
+		}
+		else {
+			singularifyRules = new LinkedHashMap();
+			String[] rulePairs = plurifyRulesStr.split(":");
+			for (int i = 0; i < rulePairs.length; i ++) {
+				String[] rulePair = rulePairs[i].split("=");
+				Pattern pattern = Pattern.compile(rulePair[0], Pattern.CASE_INSENSITIVE);
+				singularifyRules.put(pattern, rulePair[1]);
+			}
+		}
+		return singularifyRules;
+
+	}
+	
+	/**
+	 * Returns the default singularify rules for this language.  The default implementation is 
+	 * English and ported from the singularize code in Ruby on Rails.  The returned Map should
+	 * have regex Pattern objects as keys mapping to the replacement String to apply to
+	 * that pattern. 
+	 * 
+	 * @return the default singularify rules
+	 */
+	protected Map defaultSingularifyRules() {
+		Map defaultSingularifyRules = new LinkedHashMap();
+
+		defaultSingularifyRules.put(Pattern.compile("^equipment$", Pattern.CASE_INSENSITIVE), "equipment");
+		defaultSingularifyRules.put(Pattern.compile("^information$", Pattern.CASE_INSENSITIVE), "information");
+		defaultSingularifyRules.put(Pattern.compile("^rice$", Pattern.CASE_INSENSITIVE), "rice");
+		defaultSingularifyRules.put(Pattern.compile("^money$", Pattern.CASE_INSENSITIVE), "money");
+		defaultSingularifyRules.put(Pattern.compile("^species$", Pattern.CASE_INSENSITIVE), "species");
+		defaultSingularifyRules.put(Pattern.compile("^series$", Pattern.CASE_INSENSITIVE), "series");
+		defaultSingularifyRules.put(Pattern.compile("^fish$", Pattern.CASE_INSENSITIVE), "fish");
+		defaultSingularifyRules.put(Pattern.compile("^sheep$", Pattern.CASE_INSENSITIVE), "sheep");
+
+		defaultSingularifyRules.put(Pattern.compile("(.*)people$", Pattern.CASE_INSENSITIVE), "$1person");
+		defaultSingularifyRules.put(Pattern.compile("(.*)men$", Pattern.CASE_INSENSITIVE), "$1man");
+		defaultSingularifyRules.put(Pattern.compile("(.*)children$", Pattern.CASE_INSENSITIVE), "$1child");
+		defaultSingularifyRules.put(Pattern.compile("(.*)sexes$", Pattern.CASE_INSENSITIVE), "$1sex");
+		defaultSingularifyRules.put(Pattern.compile("(.*)moves$", Pattern.CASE_INSENSITIVE), "$1move");
+
+		defaultSingularifyRules.put(Pattern.compile("(.*)(quiz)zes$", Pattern.CASE_INSENSITIVE), "$1$2");
+		defaultSingularifyRules.put(Pattern.compile("(.*)(matr)ices$", Pattern.CASE_INSENSITIVE), "$1$2ix");
+		defaultSingularifyRules.put(Pattern.compile("(.*)(vert|ind)ices$", Pattern.CASE_INSENSITIVE), "$1$2ex");
+		defaultSingularifyRules.put(Pattern.compile("(.*)^(ox)en", Pattern.CASE_INSENSITIVE), "$1$2");
+		defaultSingularifyRules.put(Pattern.compile("(.*)(alias|status)es$", Pattern.CASE_INSENSITIVE), "$1$2");
+		defaultSingularifyRules.put(Pattern.compile("(.*)(octop|vir)i$", Pattern.CASE_INSENSITIVE), "$1$2us");
+		defaultSingularifyRules.put(Pattern.compile("(.*)(cris|ax|test)es$", Pattern.CASE_INSENSITIVE), "$1$2is");
+		defaultSingularifyRules.put(Pattern.compile("(.*)(shoe)s$", Pattern.CASE_INSENSITIVE), "$1$2");
+		defaultSingularifyRules.put(Pattern.compile("(.*)(o)es$", Pattern.CASE_INSENSITIVE), "$1$2");
+		defaultSingularifyRules.put(Pattern.compile("(.*)(bus)es$", Pattern.CASE_INSENSITIVE), "$1$2");
+		defaultSingularifyRules.put(Pattern.compile("(.*)([m|l])ice$", Pattern.CASE_INSENSITIVE), "$1$2ouse");
+		defaultSingularifyRules.put(Pattern.compile("(.*)(x|ch|ss|sh)es$", Pattern.CASE_INSENSITIVE), "$1$2");
+		defaultSingularifyRules.put(Pattern.compile("(.*)(m)ovies$", Pattern.CASE_INSENSITIVE), "$1$2ovie");
+		defaultSingularifyRules.put(Pattern.compile("(.*)(s)eries$", Pattern.CASE_INSENSITIVE), "$1$2eries");
+		defaultSingularifyRules.put(Pattern.compile("(.*)([^aeiouy]|qu)ies$", Pattern.CASE_INSENSITIVE), "$1$2y");
+		defaultSingularifyRules.put(Pattern.compile("(.*)([lr])ves$", Pattern.CASE_INSENSITIVE), "$1$2f");
+		defaultSingularifyRules.put(Pattern.compile("(.*)(tive)s$", Pattern.CASE_INSENSITIVE), "$1$2");
+		defaultSingularifyRules.put(Pattern.compile("(.*)(hive)s$", Pattern.CASE_INSENSITIVE), "$1$2");
+		defaultSingularifyRules.put(Pattern.compile("(.*)([^f])ves$", Pattern.CASE_INSENSITIVE), "$1$2fe");
+		defaultSingularifyRules.put(Pattern.compile("(.*)(^analy)ses$", Pattern.CASE_INSENSITIVE), "$1$2sis");
+		defaultSingularifyRules.put(Pattern.compile("(.*)((a)naly|(b)a|(d)iagno|(p)arenthe|(p)rogno|(s)ynop|(t)he)ses$", Pattern.CASE_INSENSITIVE), "$1$2$3sis");
+		defaultSingularifyRules.put(Pattern.compile("(.*)([ti])a$", Pattern.CASE_INSENSITIVE), "$1$2um");
+		defaultSingularifyRules.put(Pattern.compile("(.*)(n)ews$", Pattern.CASE_INSENSITIVE), "$1$2ews");
+		defaultSingularifyRules.put(Pattern.compile("(.*)s$", Pattern.CASE_INSENSITIVE), "$1");
+
+		return defaultSingularifyRules;
 	}
 
 	protected void addEntriesToCache(NSDictionary dict) {
@@ -619,33 +809,42 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
 		return key;
 	}
 
-	protected String plurify(String s, int howMany) {
-		String result = s;
-		if (s != null && howMany != 1) {
-			if (s.endsWith("y"))
-				result = s.substring(0, s.length() - 1) + "ies";
-			else if (s.endsWith("s") && !s.endsWith("ss")) {
-				// we assume it's already plural. There are a few words this will break this heuristic
-				// e.g. gas --> gases
-				// but otherwise for Documents we get Documentses..
-			}
-			else if (s.endsWith("s") || s.endsWith("ch") || s.endsWith("sh") || s.endsWith("x"))
-				result += "es";
-			else
-				result += "s";
-		}
-		return result;
+	protected String plurify(String str, int howMany) {
+		return applyRules(str, _plurifyRules);
 	}
 
-	protected String singularify(String value) {
-		String result = value;
-		if (value != null) {
-			if (value.endsWith("ies"))
-				result = value.substring(0, value.length() - 3) + "y";
-			else if (value.endsWith("hes"))
-				result = value.substring(0, value.length() - 2);
-			else if (!value.endsWith("ss") && (value.endsWith("s") || value.endsWith("ses")))
-				result = value.substring(0, value.length() - 1);
+	protected String singularify(String str) {
+		return applyRules(str, _singularifyRules);
+	}
+
+	/**
+	 * Apply the set of rules in the given Map to the input String and return
+	 * a modified string that matches the case of the input string.  For instance,
+	 * if the input string is "Person" and the rules are _plurifyRules, then this
+	 * would return "People".
+	 *   
+	 * @param str the input string
+	 * @param rules the rules to apply
+	 * @return a case-matched string converted according to the rules
+	 */
+	protected String applyRules(String str, Map rules) {
+		String result = str;
+		if (str != null) {
+			boolean converted = false;
+			Iterator rulesIter = rules.entrySet().iterator();
+			while (!converted && rulesIter.hasNext()) {
+				Map.Entry rule = (Map.Entry) rulesIter.next();
+				Pattern rulePattern = (Pattern) rule.getKey();
+				Matcher ruleMatcher = rulePattern.matcher(str);
+				if (ruleMatcher.matches()) {
+					String ruleReplacement = (String) rule.getValue(); 
+					result = ruleMatcher.replaceFirst(ruleReplacement);
+					converted = true;
+				}
+			}
+			if (converted) {
+				result = ERXStringUtilities.matchCase(str, result);
+			}
 		}
 		return result;
 	}
@@ -656,7 +855,7 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
 		NSDictionary dict = new NSDictionary(new Object[] { plurifiedString(name, count), new Integer(count) }, new Object[] { "pluralString", "pluralCount" });
 		return localizedTemplateStringForKeyWithObjectOtherObject(key, dict, helper);
 	}
-
+	
 	/**
 	 * Returns a plurified string
 	 * 
