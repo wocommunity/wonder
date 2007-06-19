@@ -36,6 +36,7 @@ import java.util.zip.ZipOutputStream;
 import org.apache.log4j.Logger;
 
 import com.webobjects.appserver.WOApplication;
+import com.webobjects.appserver.WOResourceManager;
 import com.webobjects.appserver._private.WOEncodingDetector;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSBundle;
@@ -382,7 +383,14 @@ public class ERXFileUtilities {
      *		file object
      */
     public static URL pathURLForResourceNamed(String fileName, String frameworkName, NSArray languages) {
-        URL url = WOApplication.application().resourceManager().pathURLForResourceNamed(fileName, frameworkName, languages);
+    	URL url = null;
+    	WOApplication application = WOApplication.application();
+    	if (application != null) {
+	    	WOResourceManager resourceManager = application.resourceManager();
+	    	if (resourceManager != null) {
+	    		url = resourceManager.pathURLForResourceNamed(fileName, frameworkName, languages);
+	    	}
+    	}
         return url;
     }
 
