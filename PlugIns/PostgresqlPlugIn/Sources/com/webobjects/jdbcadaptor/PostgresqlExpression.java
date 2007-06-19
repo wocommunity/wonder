@@ -92,7 +92,7 @@ public class PostgresqlExpression extends JDBCExpression {
     /**
      * Holds array of join clauses.
      */
-    private NSMutableArray _alreadyJoined = new NSMutableArray();    
+    private NSMutableArray _alreadyJoined = new NSMutableArray();
     
     /**
      * Fetch spec limit ivar
@@ -102,6 +102,8 @@ public class PostgresqlExpression extends JDBCExpression {
     private Boolean _enableIdentifierQuoting;
     
     private Boolean _enableBooleanQuoting;
+
+	private Boolean _useLowercaseForCaseInsensitiveLike;
     
     /**
      * Overridden to remove the rtrim usage. The original implementation
@@ -110,9 +112,13 @@ public class PostgresqlExpression extends JDBCExpression {
      */
     public PostgresqlExpression(EOEntity entity) {
         super(entity);
-    }
+
+    	if (this.useLowercaseForCaseInsensitiveLike()) {
+    		_upperFunctionName = "LOWER";
+    	}
+}
     
-    /**
+	/**
      * Checks the system property
      * <code>com.webobjects.jdbcadaptor.PostgresqlExpression.enableBooleanQuoting</code>
      * to enable or disable quoting (default) of boolean items.
@@ -221,7 +227,7 @@ public class PostgresqlExpression extends JDBCExpression {
             ? relationshipKey
             : relationshipKey.substring( relationshipKey.lastIndexOf( "." ) + 1 );
         r = rightEntity.anyRelationshipNamed( relationshipKey );
-        // fix from Michael MŸller for the case Foo.fooBars.bar has a Bar.foo relationship (instead of Bar.foos)
+        // fix from Michael Mï¿½ller for the case Foo.fooBars.bar has a Bar.foo relationship (instead of Bar.foos)
         if( r == null || r.destinationEntity() != leftEntity ) {
             r = leftEntity.anyRelationshipNamed( relationshipKey );
         }
@@ -843,4 +849,18 @@ public class PostgresqlExpression extends JDBCExpression {
         }
         return convertedString.toString();
     }
+    
+	/**
+     * Checks the system property
+     * <code>com.webobjects.jdbcadaptor.PostgresqlExpression.useLowercaseForCaseInsensitiveLike</code>
+     * to use the "lower" function for caseInsensitive compares
+     * 
+     * @return
+     */
+    private boolean useLowercaseForCaseInsensitiveLike() {
+		if (_useLowercaseForCaseInsensitiveLike == null) {
+			_useLowercaseForCaseInsensitiveLike = Boolean.getBoolean(getClass().getName() + ".useLowercaseForCaseInsensitiveLike") ? Boolean.TRUE : Boolean.FALSE;
+		}
+		return _useLowercaseForCaseInsensitiveLike.booleanValue();
+	}
 }
