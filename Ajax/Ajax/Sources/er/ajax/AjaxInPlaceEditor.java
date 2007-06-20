@@ -29,7 +29,7 @@ public class AjaxInPlaceEditor extends AjaxDynamicElement {
   private WOAssociation _dateFormat;
   private WOAssociation _numberFormat;
   private WOAssociation _useDecimalNumber;
-
+  
   public AjaxInPlaceEditor(String name, NSDictionary associations, WOElement children) {
     super(name, associations, children);
     _idAssociation = (WOAssociation) associations.objectForKey("id");
@@ -71,6 +71,7 @@ public class AjaxInPlaceEditor extends AjaxDynamicElement {
     ajaxOptionsArray.addObject(new AjaxOption("loadingText", AjaxOption.STRING));
     ajaxOptionsArray.addObject(new AjaxOption("callback", AjaxOption.SCRIPT));
     ajaxOptionsArray.addObject(new AjaxOption("submitOnBlur", AjaxOption.BOOLEAN));
+    ajaxOptionsArray.addObject(new AjaxOption("valueWhenEmpty", AjaxOption.STRING));
     //ajaxOptionsArray.addObject(new AjaxOption("ajaxOptions", AjaxOption.SCRIPT));
     NSMutableDictionary options = AjaxOption.createAjaxOptionsDictionary(ajaxOptionsArray, component, associations());
     return options;
@@ -121,6 +122,7 @@ public class AjaxInPlaceEditor extends AjaxDynamicElement {
   protected void addRequiredWebResources(WOResponse response, WOContext context) {
     AjaxUtils.addScriptResourceInHead(context, response, "prototype.js");
     AjaxUtils.addScriptResourceInHead(context, response, "scriptaculous.js");
+    AjaxUtils.addScriptResourceInHead(context, response, "wonder.js");
   }
 
   // Formatting/Parsing method "inspired by" WOTextField

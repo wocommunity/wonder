@@ -31,6 +31,7 @@
 		<binding name="callback"/>
 		<binding name="submitOnBlur"/>
 		<binding name="ajaxOptions"/>
+		<binding name="valueWhenEmpty"/>
 		<binding defaults="Actions" name="action"/>
 	  <validation message="&apos;value&apos; is a required binding">
 			<unbound name="value"/>
