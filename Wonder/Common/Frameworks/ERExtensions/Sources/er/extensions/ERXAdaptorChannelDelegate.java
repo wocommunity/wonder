@@ -1,7 +1,5 @@
 package er.extensions;
 
-import java.util.Enumeration;
-import java.util.Iterator;
 import java.util.LinkedList;
 
 import org.apache.log4j.Logger;
@@ -10,7 +8,6 @@ import com.webobjects.eoaccess.EOAdaptorChannel;
 import com.webobjects.eoaccess.EODatabaseChannel;
 import com.webobjects.eoaccess.EODatabaseContext;
 import com.webobjects.eoaccess.EOSQLExpression;
-import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSNotification;
 import com.webobjects.foundation.NSNotificationCenter;
 import com.webobjects.foundation.NSSelector;
@@ -117,7 +114,7 @@ public class ERXAdaptorChannelDelegate {
 	 * set to true to collect executed statements.
 	 */
 	public synchronized void dumpLastStatements () {
-			log.info("******* dumping collected SQL statements *******");
+		log.info("******* dumping collected SQL statements *******");
 		if (this._lastStatements != null) {
 			for (int i = 0; i < _lastStatements.size(); i++) {
 				log.info(_lastStatements.get(i));
@@ -129,6 +126,16 @@ public class ERXAdaptorChannelDelegate {
 				log.info("You have to set the property 'er.extensions.ERXSQLExpressionTracker.collectLastStatements = true'. to make this feature work.");
 			}
 		}
+		_lastStatements = new LinkedList();
 		log.info("************************************************");
+	}
+	
+	/**
+	 * Return the last collected SQL statements
+	 * @author cug - Jun 20, 2007
+	 * @return
+	 */
+	public LinkedList lastStatements () {
+		return this._lastStatements;
 	}
 }
