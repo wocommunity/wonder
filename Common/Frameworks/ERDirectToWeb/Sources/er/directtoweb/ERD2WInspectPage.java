@@ -176,12 +176,14 @@ public class ERD2WInspectPage extends ERD2WPage implements InspectPageInterface,
     public boolean shouldValidateBeforeSave() { return ERXValueUtilities.booleanValue(d2wContext().valueForKey("shouldValidateBeforeSave")); }
     public boolean shouldCollectValidationExceptions() { return ERXValueUtilities.booleanValue(d2wContext().valueForKey("shouldCollectValidationExceptions")); }
     public boolean shouldRecoverFromOptimisticLockingFailure() { return ERXValueUtilities.booleanValueWithDefault(d2wContext().valueForKey("shouldRecoverFromOptimisticLockingFailure"), false); }
+    public boolean shouldRevertUponSaveFailure() { return ERXValueUtilities.booleanValueWithDefault(d2wContext().valueForKey("shouldRevertUponSaveFailure"), false); }
 
     public boolean tryToSaveChanges(boolean validateObject) { // throws Throwable {
     	validationLog.debug("tryToSaveChanges calling validateForSave");
     	boolean saved = false;
     	if(object()!=null) {
     		EOEditingContext ec = object().editingContext();
+    		boolean shouldRevert = false;
     		try {
     			if (object()!=null && validateObject && shouldValidateBeforeSave()) {
     				if (ec.insertedObjects().containsObject(object()))
@@ -189,9 +191,16 @@ public class ERD2WInspectPage extends ERD2WPage implements InspectPageInterface,
     				else
     					object().validateForUpdate();
     			}
-    			if (object()!=null && shouldSaveChanges() && ec.hasChanges()) {
-    				ec.saveChanges();
-    			}
+            if (object()!=null && shouldSaveChanges() && ec.hasChanges()) {
+                try {
+                    ec.saveChanges();
+                } catch (RuntimeException e) {
+                    if( shouldRevertUponSaveFailure() ) {
+                        shouldRevert = true;
+                    }
+                    throw e;
+                }
+    		}
     			saved = true;
     		} catch (NSValidation.ValidationException ex) {
     			setErrorMessage(ERXLocalizer.currentLocalizer().localizedTemplateStringForKeyWithObject("CouldNotSave", ex));
@@ -204,7 +213,16 @@ public class ERD2WInspectPage extends ERD2WPage implements InspectPageInterface,
     			} else {
     				throw ex;
     			}
-    		}
+			} finally {
+				if( shouldRevert ) {
+					ec.lock();
+					try {
+						ec.revert();
+					} finally {
+						ec.unlock();
+					}
+				}
+			}
     	} else {
     		saved = true;
     	}
