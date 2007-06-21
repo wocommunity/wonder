@@ -166,10 +166,12 @@ public class ERD2WInspectPage extends ERD2WPage implements InspectPageInterface,
     public boolean shouldValidateBeforeSave() { return ERXValueUtilities.booleanValue(d2wContext().valueForKey("shouldValidateBeforeSave")); }
     public boolean shouldCollectValidationExceptions() { return ERXValueUtilities.booleanValue(d2wContext().valueForKey("shouldCollectValidationExceptions")); }
     public boolean shouldRecoverFromOptimisticLockingFailure() { return ERXValueUtilities.booleanValueWithDefault(d2wContext().valueForKey("shouldRecoverFromOptimisticLockingFailure"), false); }
+    public boolean shouldRevertUponSaveFailure() { return ERXValueUtilities.booleanValueWithDefault(d2wContext().valueForKey("shouldRevertUponSaveFailure"), false); }
 
     public boolean tryToSaveChanges(boolean validateObject) { // throws Throwable {
         validationLog.debug("tryToSaveChanges calling validateForSave");
         boolean saved = false;
+        boolean shouldRevert = false;
         try {
             if (object()!=null && validateObject && shouldValidateBeforeSave()) {
                 if (_context.insertedObjects().containsObject(object()))
@@ -177,8 +179,16 @@ public class ERD2WInspectPage extends ERD2WPage implements InspectPageInterface,
                 else
                     object().validateForUpdate();
             }
-            if (object()!=null && shouldSaveChanges() && object().editingContext().hasChanges())
-                ERXEOControlUtilities.saveChanges(object().editingContext());
+            if (object()!=null && shouldSaveChanges() && object().editingContext().hasChanges()) {
+                try {
+                    ERXEOControlUtilities.saveChanges(object().editingContext());
+                } catch (RuntimeException e) {
+                    if( shouldRevertUponSaveFailure() ) {
+                        shouldRevert = true;
+                    }
+                    throw e;
+                }
+            }
             saved = true;
         } catch (NSValidation.ValidationException ex) {
             errorMessage = ERXLocalizer.currentLocalizer().localizedTemplateStringForKeyWithObject("CouldNotSave", ex);
@@ -188,6 +198,16 @@ public class ERD2WInspectPage extends ERD2WPage implements InspectPageInterface,
                 errorMessage = ERXLocalizer.currentLocalizer().localizedTemplateStringForKeyWithObject("CouldNotSavePleaseReapply", d2wContext());
             } else {
                 throw ex;
+            }
+        } finally {
+            if( shouldRevert ) {
+                EOEditingContext ec = object().editingContext();
+                ec.lock();
+                try {
+                    ec.revert();
+                } finally {
+                    ec.unlock();
+                }
             }
         }
 
