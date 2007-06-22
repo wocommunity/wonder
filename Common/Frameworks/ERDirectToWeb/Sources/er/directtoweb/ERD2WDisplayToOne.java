@@ -9,6 +9,7 @@ package er.directtoweb;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.directtoweb.D2WDisplayToOne;
 
+import er.extensions.ERXLocalizer;
 import er.extensions.ERXValueUtilities;
 
 /**
@@ -22,7 +23,7 @@ public class ERD2WDisplayToOne extends D2WDisplayToOne {
     
     public Object toOneDescription() {
         Object description = super.toOneDescription();
-        return description != null ? description : d2wContext().valueForKey("noSelectionString");
+        return description != null ? description : ERXLocalizer.currentLocalizer().localizedStringForKeyWithDefault((String) d2wContext().valueForKey("noSelectionString"));
     }
     
     public boolean isDisabled() {
