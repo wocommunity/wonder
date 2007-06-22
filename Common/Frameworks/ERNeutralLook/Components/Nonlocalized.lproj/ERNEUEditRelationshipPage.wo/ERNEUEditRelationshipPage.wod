@@ -50,6 +50,10 @@ HeaderRow: WOGenericContainer {
 	elementName = "tr";
 }
 
+Help: ERDDebuggingHelp {
+	d2wContext = d2wContext;
+}
+
 InspectComponent: D2WEdit {
 	action = saveAction;
 	entityName = entity.name;
@@ -165,6 +169,11 @@ ReturnButton: WOImage {
 
 ReturnLink: WOHyperlink {
 	action = returnAction;
+}
+
+ShouldAllowEditingConditional: WOConditional {
+	condition = isEntityReadOnly;
+	negate = true;
 }
 
 ToManyForm: WOForm {
