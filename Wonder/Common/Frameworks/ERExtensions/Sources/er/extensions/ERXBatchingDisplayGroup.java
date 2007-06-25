@@ -246,15 +246,22 @@ public class ERXBatchingDisplayGroup extends ERXDisplayGroup {
 	 */
 	public Object fetch() {
 		if (isBatching()) {
-			// TODO: call the respective delegate methods
+			_NSDelegate delegate = null;
+			if (this.delegate() != null) {
+				delegate = new _NSDelegate(WODisplayGroup.Delegate.class, delegate());
+				if(delegate.respondsTo("displayGroupShouldFetch") && !delegate.booleanPerform("displayGroupShouldFetch", this)) {
+		            return null;
+				}
+			}
+			
 			if (undoManager() != null) {
 				undoManager().removeAllActionsWithTarget(this);
 			}
 			NSNotificationCenter.defaultCenter().postNotification("WODisplayGroupWillFetch", this);
 			refetch();
-			if (delegate() != null) {
-				_NSDelegate delegate = new _NSDelegate(WODisplayGroup.Delegate.class, delegate());
-				if (delegate != null && delegate.respondsTo("displayGroupDidFetchObjects")) {
+			if (delegate != null) {
+				// was initialized above
+				if (delegate.respondsTo("displayGroupDidFetchObjects")) {
 					delegate.perform("displayGroupDidFetchObjects", this, _displayedObjects);
 				}
 			}
