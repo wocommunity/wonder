@@ -15,6 +15,7 @@ import com.webobjects.appserver.WOResponse;
 import er.extensions.ERXLogger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import er.extensions.*;
 
 // This class tries to strip out all the HTML in subcomponents so that it can be generically exported using the Excel libs
 public class ERExcelEscapeForXMLWrapper extends WOComponent {
@@ -59,10 +60,19 @@ public class ERExcelEscapeForXMLWrapper extends WOComponent {
             Pattern realNewlinePattern = Pattern.compile("(\r(\n)?)+", Pattern.DOTALL);
             Pattern nonBlankingSpacePattern = Pattern.compile("(\\&nbsp\\;)+", Pattern.CASE_INSENSITIVE);
             Pattern collapseWhiteSpacePattern = Pattern.compile("(\\s{2,})+", Pattern.CASE_INSENSITIVE);
+            Pattern stylePattern = Pattern.compile("<style[^>]*>[^<]+</style>", Pattern.CASE_INSENSITIVE);
+            Pattern scriptPattern = Pattern.compile("<script[^>]*>[^<]+</script>", Pattern.CASE_INSENSITIVE);
 
             text = realNewlinePattern.matcher(text).replaceAll("");
             text = htmlNewlinePattern.matcher(text).replaceAll("\n");
             text = nonBlankingSpacePattern.matcher(text).replaceAll(" ");
+            text = stylePattern.matcher(text).replaceAll("");
+            text = scriptPattern.matcher(text).replaceAll("");
+
+            String extraRegExToStrip=ERXProperties.stringForKey("er.directtoweb.excel.ERExcelEscapeForXMLWrapper.extraRegExToStrip");
+
+            if (extraRegExToStrip != null)
+                text = text.replaceAll(extraRegExToStrip,"");
 
             text = text.replaceAll("<[^>]+>", ""); // strip ALL HTML tags; it's not worth dealing with.
 
