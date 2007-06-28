@@ -12,9 +12,9 @@
     <binding name="selectedValue" passthrough="NO"/>
     <binding name="noSelectionString" passthrough="NO"/>
     <binding name="escapeHTML" passthrough="NO" defaults="YES/NO"/>
-    <binding name="groups" required="YES"/>
+    <binding name="group" required="YES"/>
     <binding name="label" />
-        
+
     <validation message="'list' must not be a constant">
       <and>
         <bound name="list"/>
