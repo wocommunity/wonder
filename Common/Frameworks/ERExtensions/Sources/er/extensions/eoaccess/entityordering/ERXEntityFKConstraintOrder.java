@@ -24,7 +24,7 @@ import er.extensions.ERXArrayUtilities;
  * determined by the abstract <code>buildDependancyList(NSMutableArray)</code>.
  * </p>
  *
- * @author Copyright (c) 2006-2006 Harte-Hanks Shoppers, Inc.
+ * @author chill
  */
 public class ERXEntityFKConstraintOrder extends ERXEntityOrder
 {
