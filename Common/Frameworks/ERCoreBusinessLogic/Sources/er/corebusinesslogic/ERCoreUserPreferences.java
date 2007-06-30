@@ -180,11 +180,12 @@ public class ERCoreUserPreferences implements NSKeyValueCoding {
                 editingContext().revert();
             }
         }catch(Throwable t){
-            log.error("Problem during ERCoreUserPreferences:takeValueForKey:"+t);
+            log.error("Problem during ERCoreUserPreferences:takeValueForKey:",t);
             //We are throwing away that editing context because it may be hosed at that point
             _editingContext = null;
         }finally {
-            editingContext().unlock();
+            if (_editingContext != null)
+                editingContext().unlock();
         }
         NSNotificationCenter.defaultCenter().postNotification(PreferenceDidChangeNotification,
                                                               new NSDictionary(value, key));
