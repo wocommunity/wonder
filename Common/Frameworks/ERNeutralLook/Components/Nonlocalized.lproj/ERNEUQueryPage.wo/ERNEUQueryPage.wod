@@ -73,6 +73,7 @@ PageWrapper: WOSwitchComponent {
 QueryForm: WOForm {
 	action = queryAction;
 	name = "QueryForm";
+	multipleSubmit = true;
 }
 
 QueryResetButton: WOResetButton {
@@ -133,6 +134,18 @@ ReturnButton: WOImage {
 	height = "31";
 	name = "Returns to the previous page";
 	width = "88";
+}
+
+SavedQueryComponentDefined: WOConditional {
+	condition = d2wContext.savedQueryComponentName;
+}
+
+SavedQuerySwitchedComponent:  WOSwitchComponent {
+	WOComponentName = d2wContext.savedQueryComponentName;
+	_componentUnroll = true;
+	_unroll = true;
+	displayGroup = displayGroup;
+	localContext = localContext;
 }
 
 ShowCancel: WOConditional {
