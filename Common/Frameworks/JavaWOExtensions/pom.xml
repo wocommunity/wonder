@@ -17,32 +17,16 @@
 
 	<dependencies>
 		<dependency>
-			<groupId>webobjects.apple</groupId>
-			<artifactId>java-webobjects</artifactId>
+			<groupId>com.apple.webobjects</groupId>
+				<artifactId>JavaWebObjects</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>webobjects.apple</groupId>
-			<artifactId>java-foundation</artifactId>
+			<groupId>com.apple.webobjects</groupId>
+			<artifactId>JavaEOAccess</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>webobjects.apple</groupId>
-			<artifactId>java-eo-access</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>webobjects.apple</groupId>
-			<artifactId>java-eo-control</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>webobjects.apple</groupId>
-			<artifactId>java-xml</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>webobjects.apple</groupId>
-			<artifactId>java-jdbc-adaptor</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>webobjects.apple</groupId>
-			<artifactId>java-wo-jsp-servlet</artifactId>
+			<groupId>com.apple.webobjects</groupId>
+			<artifactId>JavaWOJSPServlet</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>log4j</groupId>
