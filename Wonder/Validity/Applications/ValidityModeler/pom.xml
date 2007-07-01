@@ -1,32 +1,28 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
 	<parent>
-		<groupId>wonder.common</groupId>
-		<artifactId>frameworks</artifactId>
+		<groupId>wonder.validity</groupId>
+		<artifactId>validity-all</artifactId>
 		<version>3.0.1-SNAPSHOT</version>
-		<relativePath>..</relativePath>
+		<relativePath>../..</relativePath>
 	</parent>
 
-	<modelVersion>4.0.0</modelVersion>
-	<groupId>wonder.common</groupId>
-	<artifactId>ERExtensions</artifactId>
+	<groupId>wonder.validity</groupId>
+	<artifactId>ValidityModeler</artifactId>
 	<version>3.0.1-SNAPSHOT</version>
-	<name>ERExtensions</name>
-	<packaging>woframework</packaging>
+	<name>ValidityModeler</name>
+	<packaging>woapplication</packaging>
 
 	<dependencies>
 		<dependency>
-			<groupId>wonder.common</groupId>
-			<artifactId>JavaWOExtensions</artifactId>
+			<groupId>wonder.validity</groupId>
+			<artifactId>Validity</artifactId>
 			<version>3.0.1-SNAPSHOT</version>
 		</dependency>
-		<dependency>
-			<groupId>icu4j</groupId>
-			<artifactId>icu4j</artifactId>
-		</dependency>
 	</dependencies>
-	
 	<build>
 		<sourceDirectory>Sources</sourceDirectory>
 	</build>
