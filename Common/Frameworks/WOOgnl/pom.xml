@@ -17,16 +17,8 @@
 
 	<dependencies>
 		<dependency>
-			<groupId>webobjects.apple</groupId>
-			<artifactId>java-webobjects</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>webobjects.apple</groupId>
-			<artifactId>java-foundation</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>webobjects.apple</groupId>
-			<artifactId>java-dtw</artifactId>
+			<groupId>com.apple.webobjects</groupId>
+			<artifactId>JavaDirectToWeb</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>ognl</groupId>

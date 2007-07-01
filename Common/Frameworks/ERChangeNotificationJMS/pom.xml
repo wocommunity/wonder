@@ -17,20 +17,12 @@
 
 	<dependencies>
 		<dependency>
-			<groupId>webobjects.apple</groupId>
-			<artifactId>java-webobjects</artifactId>
+			<groupId>com.apple.webobjects</groupId>
+				<artifactId>JavaWebObjects</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>webobjects.apple</groupId>
-			<artifactId>java-foundation</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>webobjects.apple</groupId>
-			<artifactId>java-eo-access</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>webobjects.apple</groupId>
-			<artifactId>java-eo-control</artifactId>
+			<groupId>com.apple.webobjects</groupId>
+			<artifactId>JavaEOAccess</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>jms</groupId>
