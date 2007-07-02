@@ -153,7 +153,7 @@ public class NSArray<E> implements Cloneable, Serializable, NSCoding, NSKeyValue
 	public static final String MinimumOperatorName = "min";
 	public static final String SumOperatorName = "sum";
 	public static final String AverageOperatorName = "avg";
-	static final long serialVersionUID = -819034676L;
+	static final long serialVersionUID = -3789592578296478260L;
 	private static final String SerializationValuesFieldKey = "objects";
 	private static NSMutableDictionary _operators = new NSMutableDictionary(8);
 	protected static int _NSArrayClassHashCode;
