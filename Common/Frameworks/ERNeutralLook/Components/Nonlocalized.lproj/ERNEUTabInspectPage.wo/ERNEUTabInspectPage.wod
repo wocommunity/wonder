@@ -4,16 +4,6 @@ AttributeRepetition: WORepetition {
 	list = currentSectionKeys;
 }
 
-SubmitChanges2: WOImageButton {
-	action = submitAction;
-	border = 0;
-	filename = "SaveMetalBtn.gif";
-	framework = "JavaDirectToWeb";
-	height = 1;
-	name = "Saves your changes";
-	width = 1;
-}
-
 AttributeValue1: WOSwitchComponent { 
 	WOComponentName = d2wContext.componentName;
 	_componentUnroll = true;
@@ -303,6 +293,20 @@ PrinterFriendlyLink: ERXJSOpenWindowHyperlink {
 	target = "PrinterFriendly";
 }
 
+ProprtyKeyComponentGenericContainer: WOGenericContainer {
+	align = "left";
+	elementName = "td";
+	otherTagString = otherTagStringsForPropertyKeyComponentCell;
+	valign = "top";
+}
+
+ProprtyKeyComponentGenericContainer2: WOGenericContainer {
+	elementName = "td";
+	otherTagString = otherTagStringsForPropertyKeyComponentCell;
+	valign = "top";
+	width = 120;
+}
+
 ReturnButton: WOImage {
 	alt = "Returns to the previous page";
 	border = "0";
@@ -355,6 +359,16 @@ SubmitChanges: WOImageButton {
 	height = "31";
 	name = "Saves your changes";
 	width = "88";
+}
+
+SubmitChanges2: WOImageButton {
+	action = submitAction;
+	border = 0;
+	filename = "SaveMetalBtn.gif";
+	framework = "JavaDirectToWeb";
+	height = 1;
+	name = "Saves your changes";
+	width = 1;
 }
 
 SubmitChanges4: WOImageButton {

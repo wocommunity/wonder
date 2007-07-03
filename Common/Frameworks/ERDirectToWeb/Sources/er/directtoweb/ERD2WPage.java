@@ -62,6 +62,9 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
         public static final String displayPropertyKeys = "displayPropertyKeys";
         public static final String tabSectionsContents = "tabSectionsContents";
         public static final String alternateKeyInfo = "alternateKeyInfo";
+
+        // The propertyKey whose form widget gets the focus upon loading an edit page.
+        public static final String firstResponderKey = "firstResponderKey";
     }
     
     /** logging support */
@@ -297,6 +300,25 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
         return true;
     }
 
+    /**
+     * True if the entity is read only. Returns
+     * <code>!(isEntityEditable()) </code>
+     */
+    public boolean isEntityReadOnly() {
+        return !isEntityEditable();
+    }
+
+    /**
+     * If the key <code>isEntityEditable</code> is set, then this value is
+     * used, otherwise the value from the super implementation, which checks if
+     * the entity is not in the list of <code>readOnlyEntityNames</code>.
+     *
+     * @return
+     */
+    public boolean isEntityEditable() {
+        return ERXValueUtilities.booleanValueWithDefault(d2wContext().valueForKey("isEntityEditable"), !super.isEntityReadOnly());
+    }
+
     /** Checks if there is a validation exception in the D2WContext for the current property key. */
     public boolean hasValidationExceptionForPropertyKey() {
         return d2wContext().propertyKey() != null && keyPathsWithValidationExceptions.count() != 0 ?
@@ -422,6 +444,29 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
             branchName = (String)branch.valueForKey("branchName");
         }
         return branchName;
+    }
+
+    /**
+     * Checks if the delegate is present and can be invoked, then returns the
+     * page from it.
+     *
+     * @return
+     */
+    protected WOComponent nextPageFromDelegate() {
+        WOComponent result = null;
+        NextPageDelegate delegate = nextPageDelegate();
+        if (delegate != null) {
+            if (!((delegate instanceof ERDBranchDelegate) && (branchName() == null))) {
+                // AK CHECKME: we assume here, because nextPage() in
+                // ERDBranchDelegate is final,
+                // we can't do something reasonable when none of the branch
+                // buttons was selected.
+                // This allows us to throw a branch delegate at any page, even
+                // when no branch was taken
+                result = delegate.nextPage(this);
+            }
+        }
+        return result;
     }
 
     /**

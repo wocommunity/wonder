@@ -4,16 +4,6 @@ AttributeRepetition: WORepetition {
 	list = d2wContext.displayPropertyKeys;
 }
 
-SubmitChanges2: WOImageButton {
-	action = submitAction;
-	border = 0;
-	filename = "SaveMetalBtn.gif";
-	framework = "JavaDirectToWeb";
-	height = 1;
-	name = "Saves your changes";
-	width = 1;
-}
-
 AttributeValue: WOSwitchComponent {
 	WOComponentName = d2wContext.componentName;
 	_componentUnroll = true;
@@ -188,6 +178,9 @@ IsEntityWritable2: WOConditional {
 	negate = true;
 }
 
+IsFirstResponderKeyConditional: Unknown {
+}
+
 IsNotEditingConditional: WOConditional {
 	_unroll = true;
 	condition = isEditing;
@@ -218,6 +211,11 @@ PageWrapper: WOSwitchComponent {
 	WOComponentName = pageWrapperName;
 	_componentUnroll = true;
 	_unroll = true;
+}
+
+ProprtyKeyComponentGenericContainer: WOGenericContainer {
+	elementName = "td";
+	otherTagString = otherTagStringsForPropertyKeyComponentCell;
 }
 
 QueryRow: WOGenericContainer {
@@ -278,6 +276,16 @@ SubmitChanges: WOImageButton {
 	height = "31";
 	name = "Saves your changes";
 	width = "88";
+}
+
+SubmitChanges2: WOImageButton {
+	action = submitAction;
+	border = 0;
+	filename = "SaveMetalBtn.gif";
+	framework = "JavaDirectToWeb";
+	height = 1;
+	name = "Saves your changes";
+	width = 1;
 }
 
 SwitchComponent1: WOSwitchComponent {

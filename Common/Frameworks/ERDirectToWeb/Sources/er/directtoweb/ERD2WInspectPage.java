@@ -31,14 +31,19 @@ public class ERD2WInspectPage extends ERD2WPage implements InspectPageInterface,
     public static final ERXLogger log = ERXLogger.getERXLogger(ERD2WInspectPage.class);
     public static final ERXLogger validationCat = ERXLogger.getERXLogger(ERD2WInspectPage.class, "validation");
 
+    protected static String firstResponderContainerName = "FirstResponderContainer";
+    
+
     public String urlForCurrentState() {
-        NSDictionary dict = null;
-        String actionName = d2wContext().dynamicPage();
-        String primaryKeyString = ERXEOControlUtilities.primaryKeyStringForObject(object());
-        if(primaryKeyString != null) {
-            dict = new NSDictionary(primaryKeyString, "__key");
-        }
-        return context().directActionURLForActionNamed(actionName, dict);
+    	NSDictionary dict = null;
+    	String actionName = d2wContext().dynamicPage();
+    	if(object() != null) {
+    		String primaryKeyString = ERXEOControlUtilities.primaryKeyStringForObject(object());
+    		if(primaryKeyString != null) {
+    			dict = new NSDictionary(primaryKeyString, "__key");
+    		}
+    	}
+    	return context().directActionURLForActionNamed(actionName, dict).replaceAll("&amp;", "&");
     }
 
     
@@ -54,7 +59,7 @@ public class ERD2WInspectPage extends ERD2WPage implements InspectPageInterface,
     public WOComponent nextPage(boolean doConfirm) {
         Object inspectConfirmConfigurationName = d2wContext().valueForKey("inspectConfirmConfigurationName");
         if(doConfirm && inspectConfirmConfigurationName != null && ! "".equals(inspectConfirmConfigurationName)) {
-            WOComponent ipi = D2W.factory().pageForConfigurationNamed((String)d2wContext().valueForKey("inspectConfirmConfigurationName"), session());
+            WOComponent ipi = D2W.factory().pageForConfigurationNamed((String)inspectConfirmConfigurationName, session());
             if (ipi instanceof InspectPageInterface) {
                 ((InspectPageInterface)ipi).setObject((EOEnterpriseObject)d2wContext().valueForKey("object"));
                 ((InspectPageInterface)ipi).setNextPageDelegate(nextPageDelegate());
@@ -64,10 +69,14 @@ public class ERD2WInspectPage extends ERD2WPage implements InspectPageInterface,
                 ((ERDFollowPageInterface)ipi).setPreviousPage(context().page());
             return (WOComponent)ipi;
         }
-        return (nextPageDelegate() != null) ? nextPageDelegate().nextPage(this) : super.nextPage();
+        WOComponent result = nextPageFromDelegate();
+    	if(result == null) {
+    		result = super.nextPage();
+    	}
+        return result;
     }
-
-    public boolean isEntityReadOnly() {
+	
+	public boolean isEntityReadOnly() {
         return !ERXValueUtilities.booleanValueWithDefault(d2wContext().valueForKey("isEntityEditable"), !super.isEntityReadOnly());
     }
     
@@ -102,7 +111,7 @@ public class ERD2WInspectPage extends ERD2WPage implements InspectPageInterface,
             object().editingContext().revert();
         }
         return nextPage(false);
-    }    
+    }
 
     public boolean shouldRenderBorder() { return ERXValueUtilities.booleanValue(d2wContext().valueForKey("shouldRenderBorder")); }
     public boolean shouldShowActionButtons() { return ERXValueUtilities.booleanValue(d2wContext().valueForKey("shouldShowActionButtons")); }
@@ -171,46 +180,52 @@ public class ERD2WInspectPage extends ERD2WPage implements InspectPageInterface,
     public boolean tryToSaveChanges(boolean validateObject) { // throws Throwable {
         validationLog.debug("tryToSaveChanges calling validateForSave");
         boolean saved = false;
-        boolean shouldRevert = false;
-        try {
-            if (object()!=null && validateObject && shouldValidateBeforeSave()) {
-                if (_context.insertedObjects().containsObject(object()))
-                    object().validateForInsert();
-                else
-                    object().validateForUpdate();
-            }
-            if (object()!=null && shouldSaveChanges() && object().editingContext().hasChanges()) {
-                try {
-                    ERXEOControlUtilities.saveChanges(object().editingContext());
-                } catch (RuntimeException e) {
-                    if( shouldRevertUponSaveFailure() ) {
-                        shouldRevert = true;
+        if (object() != null) {
+            EOEditingContext ec = object().editingContext();
+            boolean shouldRevert = false;
+            try {
+                if (object() != null && validateObject && shouldValidateBeforeSave()) {
+                    if (ec.insertedObjects().containsObject(object()))
+                        object().validateForInsert();
+                    else
+                        object().validateForUpdate();
+                }
+                if (object() != null && shouldSaveChanges() && ec.hasChanges()) {
+                    try {
+                        ec.saveChanges();
+                    } catch (RuntimeException e) {
+                        if (shouldRevertUponSaveFailure()) {
+                            shouldRevert = true;
+                        }
+                        throw e;
                     }
-                    throw e;
                 }
-            }
-            saved = true;
-        } catch (NSValidation.ValidationException ex) {
-            errorMessage = ERXLocalizer.currentLocalizer().localizedTemplateStringForKeyWithObject("CouldNotSave", ex);
-            validationFailedWithException(ex, ex.object(), "saveChangesExceptionKey");
-        } catch(EOGeneralAdaptorException ex) {
-            if(shouldRecoverFromOptimisticLockingFailure() && ERXEOAccessUtilities.recoverFromAdaptorException(object().editingContext(), ex)) {
-                errorMessage = ERXLocalizer.currentLocalizer().localizedTemplateStringForKeyWithObject("CouldNotSavePleaseReapply", d2wContext());
-            } else {
-                throw ex;
-            }
-        } finally {
-            if( shouldRevert ) {
-                EOEditingContext ec = object().editingContext();
-                ec.lock();
-                try {
-                    ec.revert();
-                } finally {
-                    ec.unlock();
-                }
-            }
-        }
+                saved = true;
+            } catch (NSValidation.ValidationException ex) {
+                setErrorMessage(ERXLocalizer.currentLocalizer().localizedTemplateStringForKeyWithObject("CouldNotSave", ex));
+                validationFailedWithException(ex, ex.object(), "saveChangesExceptionKey");
+            } catch (EOGeneralAdaptorException ex) {
 
+                if (shouldRecoverFromOptimisticLockingFailure() && ERXEOAccessUtilities.recoverFromAdaptorException(object().editingContext(), ex)) {
+                    errorMessage = ERXLocalizer.currentLocalizer().localizedTemplateStringForKeyWithObject("CouldNotSavePleaseReapply", d2wContext());
+                } else {
+                    throw ex;
+                }
+            } finally {
+                if (shouldRevert) {
+                    EOEditingContext context = object().editingContext();
+                    context.lock();
+                    try {
+                        context.revert();
+                    } finally {
+                        context.unlock();
+                    }
+                }
+            }
+
+        } else {
+            saved = true;
+        }
         return saved;
     }
     
@@ -218,7 +233,7 @@ public class ERD2WInspectPage extends ERD2WPage implements InspectPageInterface,
         WOComponent returnComponent = null;
         // catch the case where the user hits cancel and then the back button
         if (object()!=null && object().editingContext()==null) {
-            errorMessage = ERXLocalizer.currentLocalizer().localizedTemplateStringForKeyWithObject("ERD2WInspect.alreadyAborted", d2wContext());
+            setErrorMessage(ERXLocalizer.currentLocalizer().localizedTemplateStringForKeyWithObject("ERD2WInspect.alreadyAborted", d2wContext()));
             clearValidationFailed();
         } else {
             if (errorMessages.count()==0) {
@@ -231,7 +246,7 @@ public class ERD2WInspectPage extends ERD2WPage implements InspectPageInterface,
             } else {
                 // if we don't do this, we end up with the error message in two places
                 // in errorMessages and errorMessage (super class)
-                errorMessage=null;
+                setErrorMessage(null);
             }
         }
         return returnComponent;
@@ -247,11 +262,104 @@ public class ERD2WInspectPage extends ERD2WPage implements InspectPageInterface,
         WOComponent result=ERD2WFactory.erFactory().printerFriendlyPageForD2WContext(d2wContext(),session());
         ((EditPageInterface)result).setObject(object());
         return result;
-    }    
+    }
 
+    /**
+     * Generates other strings to be included in the WOGenericContainer tag for the propertyKey component cell.  This is
+     * used in conjunction with the <code>firstResponderKey</code> to mark the cell where the propertyKey is that named 
+     * by the <code>firstResponderKey</code> so that the "focusing" JavaScript {@see #tabScriptString tabScriptString}
+     * can identify it.
+     * @return a String to be included in the <code>td<td> tag for the propertyKey component cell.
+     */
+    public String otherTagStringsForPropertyKeyComponentCell() {
+        String firstResponderKey = (String)d2wContext().valueForKey(Keys.firstResponderKey);
+        if (firstResponderKey != null && firstResponderKey.equals(propertyKey())) {
+            return " id=\"" + firstResponderContainerName + "\"";
+        }
+        return null;
+    }
+
+    /**
+     * <p>Constructs a JavaScript string that will give a particular field focus when the page is loaded.  If the key
+     * <code>firstResponderKey</code> from the d2wContext resolves, the script will attempt to focus on the form field
+     * belonging to the property key named by the <code>firstResponderKey</code>.  Otherwise, the script will just focus
+     * on the first field in the form.</p>
+     *
+     * <p>Note that the key <code>useFocus</code> must resolve to <code>true</code> in order for the script to be
+     * generated.</p>
+     * @return a JavaScript string.
+     */
     public String tabScriptString() {
-        return "var elem = document.EditForm.elements[0];"+
-        "if (elem!=null && (elem.type == 'text' || elem.type ==  'area')) elem.focus();";
+        if (d2wContext().valueForKey(Keys.firstResponderKey) != null) {
+            return scriptForFirstResponderActivation();
+        } else {
+            String result="";
+    		String formName = ERXWOForm.formName(context(), "EditForm");
+			if (formName!=null) {
+				result="var elem = document."+formName+".elements[0];"+
+				"if (elem!=null && (elem.type == 'text' || elem.type ==  'area')) elem.focus();";
+			}
+			return result;
+        }
+    }
+
+    /**
+     * <p>Constructs a JavaScript string to include in the WOComponent that will give a particular field focus when the
+     * page is loaded, if the key <code>firstResponderKey</code> from the d2wContext resolves.  The script will attempt
+     * to focus on the form field belonging to the property key named by the <code>firstResponderKey</code>.
+     * @return a JavaScript string to bring focus to a specific form element.
+     */
+    public String scriptForFirstResponderActivation() {
+        /* This is a bit of a roundabout way of getting to the form element for the propertyKey designated by the
+         * firstResponderKey.  The problem is that, basically, we don't know what component will be rendered until
+         * the rules are fired.  We also can't find the component by name or by id because we don't get to attach
+         * that info. to the components used by D2W, since they are all very generic.
+         *
+         * So, the approach here is to:
+         *
+         * 1) Get as close as possible to the right form field by demarcating the containing element (the table cell)
+         * with the id="FirstResponderContainer" property. See the otherTagStringsForPropertyKeyComponentCell method.
+         * Then the JavaScript can easily find the element with that id.
+         * 2) Once we have that, the script goes spelunking through the element's children until it finds
+         * one that is of a reasonable type to be used in a form.
+         * 3) Finally, the script attempts to activate the focus on that form element.
+         */
+        if (d2wContext().valueForKey(Keys.firstResponderKey) == null) { return null; }
+
+        StringBuffer sb = new StringBuffer();
+        sb.append("function activateFirstResponder() {\n");
+
+        // Get the container element.
+        sb.append("\tvar container = document.getElementById('").append(firstResponderContainerName).append("');\n");
+        sb.append("\tif (!container) { return; }\n");
+
+        // Go through all the child elements of the container to find
+        // the first that is of a type that can be used as a form input.
+        // Note that this excludes image and button/submit tags.
+        sb.append("\tvar candidates = container.getElementsByTagName('*');\n");
+        sb.append("\tif (candidates && candidates.length > 0) {\n");
+        sb.append("\t\tfor (var i = 0; i < candidates.length; i++) {\n");
+        sb.append("\t\t\tvar el = candidates[i];\n");
+        sb.append("\t\t\tvar type = el.type;\n");
+
+        sb.append("\t\t\tif (type == 'text' || type == 'checkbox' || type == 'radio' || \n");
+        sb.append("\t\t\t\ttype == 'select-one' || type == 'select-multiple' || \n");
+        sb.append("\t\t\t\ttype == 'file') {\n");
+
+        // Found an element of an acceptable type.  Try to set focus on it.
+        sb.append("\t\t\t\ttry {\n");
+        sb.append("\t\t\t\t\tel.focus();\n");
+        sb.append("\t\t\t\t\treturn;\n");
+        sb.append("\t\t\t\t} catch (e) {}// Eat the exception.\n");
+        sb.append("\t\t\t}\n");
+        sb.append("\t\t}\n");
+        sb.append("\t}\n");
+        sb.append("}");
+
+        // Now call the function.
+        sb.append("activateFirstResponder();");
+
+        return sb.toString();
     }
 }
 
