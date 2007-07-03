@@ -77,16 +77,30 @@ public class ERD2WTabInspectPage extends ERD2WInspectPage implements ERDTabEditP
         return result;
     }
 
+	/**
+     * <p>Constructs a JavaScript string that will give a particular field focus when the page is loaded.  If the key
+     * <code>firstResponderKey</code> from the d2wContext resolves, the script will attempt to focus on the form field
+     * belonging to the property key named by the <code>firstResponderKey</code>.  Otherwise, the script will just focus
+     * on the first field in the form.</p>
+     *
+     * <p>Note that the key <code>useFocus</code> must resolve to <code>true</code> in order for the script to be
+     * generated.</p>
+     * @return a JavaScript string.
+     */
     public String tabScriptString() {
-		String result="";
-		String formName = ERXWOForm.formName(context(), "EditForm");		
-		if (formName!=null) {
-			int pos=tabSectionsContents().count()-1;
-			result="var pos=0;\n if (document."+formName+".elements.length>"+pos+
-				") pos="+pos+";\n var elem = document."+formName+".elements["+pos+
-				"];\n if (elem!=null && (elem.type == 'text' || elem.type ==  'area')) elem.focus();";
-		}
-		return result;
+		if (d2wContext().valueForKey(Keys.firstResponderKey) != null) {
+            return scriptForFirstResponderActivation();
+        } else {
+            String result = "";
+            String formName = ERXWOForm.formName(context(), "EditForm");
+            if (formName != null) {
+                int pos = tabSectionsContents().count() - 1;
+                result = "var pos=0;\n if (document." + formName + ".elements.length>" + pos +
+                        ") pos=" + pos + ";\n var elem = document." + formName + ".elements[" + pos +
+                        "];\n if (elem!=null && (elem.type == 'text' || elem.type ==  'area')) elem.focus();";
+            }
+            return result;
+        }
     }
  
     private boolean d2wContextValueForKey(String key, boolean defaultValue) {
