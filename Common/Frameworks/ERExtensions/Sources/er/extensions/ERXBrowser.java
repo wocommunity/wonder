@@ -72,6 +72,7 @@ public abstract class ERXBrowser implements NSKeyValueCoding {
     public static final String MACOS	= "MacOS";
     public static final String WINDOWS 	= "Windows";
     public static final String LINUX	= "Linux";
+    public static final String IPHONE	= "iPhone";
 
     public static final String POWER_PC	= "PowerPC";
     public static final String UNKNOWN_CPU = "Unknown CPU";
@@ -186,6 +187,7 @@ public abstract class ERXBrowser implements NSKeyValueCoding {
     public abstract boolean isMacOS();
     public abstract boolean isWindows();
     public abstract boolean isLinux();
+    public abstract boolean isIPhone();
 
     /**
      * Gets the message encoding for a given request. Default implementation
