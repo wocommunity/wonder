@@ -48,6 +48,8 @@ public class ERD2WInspectPage extends ERD2WPage implements InspectPageInterface,
     public static final Logger log = Logger.getLogger(ERD2WInspectPage.class);
     public static final Logger validationCat = Logger.getLogger(ERD2WInspectPage.class+".validation");
 
+	protected static String firstResponderContainerName = "FirstResponderContainer";
+
     public String urlForCurrentState() {
     	NSDictionary dict = null;
     	String actionName = d2wContext().dynamicPage();
@@ -262,17 +264,106 @@ public class ERD2WInspectPage extends ERD2WPage implements InspectPageInterface,
         WOComponent result=ERD2WFactory.erFactory().printerFriendlyPageForD2WContext(d2wContext(),session());
         ((EditPageInterface)result).setObject(object());
         return result;
-    }    
-
-    public String tabScriptString() {
-		String result="";
-    	String formName = ERXWOForm.formName(context(), "EditForm");
-		if (formName!=null) {
-			result="var elem = document."+formName+".elements[0];"+
-			"if (elem!=null && (elem.type == 'text' || elem.type ==  'area')) elem.focus();";
-		}
-		return result;
     }
+
+	/**
+     * Generates other strings to be included in the WOGenericContainer tag for the propertyKey component cell.  This is
+     * used in conjunction with the <code>firstResponderKey</code> to mark the cell where the propertyKey is that named 
+     * by the <code>firstResponderKey</code> so that the "focusing" JavaScript {@see #tabScriptString tabScriptString}
+     * can identify it.
+     * @return a String to be included in the <code>td<td> tag for the propertyKey component cell.
+     */
+    public String otherTagStringsForPropertyKeyComponentCell() {
+        String firstResponderKey = (String)d2wContext().valueForKey(Keys.firstResponderKey);
+        if (firstResponderKey != null && firstResponderKey.equals(propertyKey())) {
+            return " id=\"" + firstResponderContainerName + "\"";
+        }
+        return null;
+    }
+
+	/**
+     * <p>Constructs a JavaScript string that will give a particular field focus when the page is loaded.  If the key
+     * <code>firstResponderKey</code> from the d2wContext resolves, the script will attempt to focus on the form field
+     * belonging to the property key named by the <code>firstResponderKey</code>.  Otherwise, the script will just focus
+     * on the first field in the form.</p>
+     *
+     * <p>Note that the key <code>useFocus</code> must resolve to <code>true</code> in order for the script to be
+     * generated.</p>
+     * @return a JavaScript string.
+     */
+    public String tabScriptString() {
+		if (d2wContext().valueForKey(Keys.firstResponderKey) != null) {
+			return scriptForFirstResponderActivation();
+		} else {
+			String result="";
+			String formName = ERXWOForm.formName(context(), "EditForm");
+			if (formName!=null) {
+				result="var elem = document."+formName+".elements[0];"+
+				"if (elem!=null && (elem.type == 'text' || elem.type ==  'area')) elem.focus();";
+			}
+			return result;
+		}
+    }
+
+	/**
+	     * <p>Constructs a JavaScript string to include in the WOComponent that will give a particular field focus when the
+     * page is loaded, if the key <code>firstResponderKey</code> from the d2wContext resolves.  The script will attempt
+     * to focus on the form field belonging to the property key named by the <code>firstResponderKey</code>.
+     * @return a JavaScript string to bring focus to a specific form element.
+     */
+    public String scriptForFirstResponderActivation() {
+        /* This is a bit of a roundabout way of getting to the form element for the propertyKey designated by the
+         * firstResponderKey.  The problem is that, basically, we don't know what component will be rendered until
+         * the rules are fired.  We also can't find the component by name or by id because we don't get to attach
+         * that info. to the components used by D2W, since they are all very generic.
+         *
+         * So, the approach here is to:
+         *
+         * 1) Get as close as possible to the right form field by demarcating the containing element (the table cell)
+         * with the id="FirstResponderContainer" property. See the otherTagStringsForPropertyKeyComponentCell method.
+         * Then the JavaScript can easily find the element with that id.
+         * 2) Once we have that, the script goes spelunking through the element's children until it finds
+         * one that is of a reasonable type to be used in a form.
+         * 3) Finally, the script attempts to activate the focus on that form element.
+         */
+        if (d2wContext().valueForKey(Keys.firstResponderKey) == null) { return null; }
+
+        StringBuffer sb = new StringBuffer();
+        sb.append("function activateFirstResponder() {\n");
+
+        // Get the container element.
+        sb.append("\tvar container = document.getElementById('").append(firstResponderContainerName).append("');\n");
+        sb.append("\tif (!container) { return; }\n");
+
+        // Go through all the child elements of the container to find
+        // the first that is of a type that can be used as a form input.
+        // Note that this excludes image and button/submit tags.
+        sb.append("\tvar candidates = container.getElementsByTagName('*');\n");
+        sb.append("\tif (candidates && candidates.length > 0) {\n");
+        sb.append("\t\tfor (var i = 0; i < candidates.length; i++) {\n");
+        sb.append("\t\t\tvar el = candidates[i];\n");
+        sb.append("\t\t\tvar type = el.type;\n");
+
+        sb.append("\t\t\tif (type == 'text' || type == 'checkbox' || type == 'radio' || \n");
+        sb.append("\t\t\t\ttype == 'select-one' || type == 'select-multiple' || \n");
+        sb.append("\t\t\t\ttype == 'file') {\n");
+
+        // Found an element of an acceptable type.  Try to set focus on it.
+        sb.append("\t\t\t\ttry {\n");
+        sb.append("\t\t\t\t\tel.focus();\n");
+        sb.append("\t\t\t\t\treturn;\n");
+        sb.append("\t\t\t\t} catch (e) {}// Eat the exception.\n");
+        sb.append("\t\t\t}\n");
+        sb.append("\t\t}\n");
+        sb.append("\t}\n");
+        sb.append("}");
+
+        // Now call the function.
+        sb.append("activateFirstResponder();");
+
+        return sb.toString();
+    }
+
 }
 
 
