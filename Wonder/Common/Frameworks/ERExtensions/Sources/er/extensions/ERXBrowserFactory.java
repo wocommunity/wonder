@@ -85,6 +85,7 @@ import com.webobjects.foundation.NSMutableDictionary;
  * Netscape 6.2.3   Mozilla/5.0 (Macintosh; U; PPC Mac OS X; en-US; rv:0.9.4.1) Gecko/20020508 Netscape6/6.2.3
  * OmniWeb 4.1-v422 Mozilla/4.5 (compatible; OmniWeb/4.1-v422; Mac_PowerPC)
  * Safari 1.0b(v48) Mozilla/5.0 (Macintosh; U; PPC Mac OS X; en-us) AppleWebKit/48 (like Gecko) Safari/48
+ * iPhone 1.0       Mozilla/5.0 (iPhone; U; CPU like Mac OS X; en) AppleWebKit/420+ (KHTML, like Gecko) Version/3.0 Mobile/1A543a Safari/419.3
  * 
  * Windows 2000
  * ----------------------------------------------------------------------------------
@@ -431,6 +432,7 @@ public class ERXBrowserFactory {
     public String parsePlatform(String userAgent) {
         String platform = ERXBrowser.UNKNOWN_PLATFORM;
         if      (userAgent.indexOf("Win") > -1) 	platform = ERXBrowser.WINDOWS;
+        else if (userAgent.indexOf("iPhone") > -1) 	platform = ERXBrowser.IPHONE;
         else if (userAgent.indexOf("Mac") > -1) 	platform = ERXBrowser.MACOS;
         else if (userAgent.indexOf("Linux") > -1) 	platform = ERXBrowser.LINUX;
         return platform;
@@ -442,8 +444,6 @@ public class ERXBrowserFactory {
         else if (userAgent.indexOf("PPC") > -1) 	cpu = ERXBrowser.POWER_PC;
         return cpu;
     }
-
-
 
     private String _browserString(String userAgent) {
         String browserString = userAgent;

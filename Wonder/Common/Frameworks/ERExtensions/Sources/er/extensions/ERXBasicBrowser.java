@@ -114,6 +114,7 @@ public class ERXBasicBrowser extends ERXBrowser {
     private final boolean         _isMacOS;
     private final boolean         _isWindows;
     private final boolean         _isLinux;
+    private final boolean         _isIPhone;
     private final boolean         _isUnknownPlatform;
 
     public ERXBasicBrowser(String browserName, String version, String mozillaVersion, String platform, NSDictionary userInfo) {
@@ -167,6 +168,7 @@ public class ERXBasicBrowser extends ERXBrowser {
         _isMacOS = _platform.equals(MACOS);
         _isWindows = _platform.equals(WINDOWS);
         _isLinux = _platform.equals(LINUX);
+        _isIPhone = _platform.equals(IPHONE);
         _isUnknownPlatform = _platform.equals(UNKNOWN_PLATFORM);
     }
 
@@ -316,6 +318,10 @@ public class ERXBasicBrowser extends ERXBrowser {
 
     public boolean isLinux() {
         return _isLinux;
+    }
+
+    public boolean isIPhone() {
+        return _isIPhone;
     }
 
     /**
