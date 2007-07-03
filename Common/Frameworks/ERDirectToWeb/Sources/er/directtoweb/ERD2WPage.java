@@ -111,6 +111,9 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
         public static final String tabSectionsContents = "tabSectionsContents";
 
         public static final String alternateKeyInfo = "alternateKeyInfo";
+
+		// The propertyKey whose form widget gets the focus upon loading an edit page.
+		public static final String firstResponderKey = "firstResponderKey";
     }
 
     /** logging support */
