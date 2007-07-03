@@ -8,6 +8,7 @@ import com.webobjects.jdbcadaptor.JDBCAdaptor;
 
 
 import er.extensions.eoaccess.entityordering.*;
+import er.extensions.jdbcadaptor.*;
 
 
 
