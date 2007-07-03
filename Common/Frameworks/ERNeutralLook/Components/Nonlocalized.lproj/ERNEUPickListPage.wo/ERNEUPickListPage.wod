@@ -45,6 +45,10 @@ Conditional2: WOConditional {
 	condition = shouldShowSelectAll;
 }
 
+DisplayBottomBatchNavigationConditional: WOConditional {
+	condition = d2wContext.displayBottomBatchNavigation;
+}
+
 ERXNonNullConditional1: WOConditional {
 	condition = hasBranchChoices;
 	negate = true;
@@ -135,6 +139,14 @@ NavBar: ERXBatchNavigationBarInForm {
 	objectName = d2wContext.displayNameForEntity;
 	textColor = d2wContext.textColor;
 	width = 550;
+        d2wContext = d2wContext;
+}
+
+NavBar2: ERXBatchNavigationBarInForm {
+	bgcolor = backgroundColorForTable;
+	displayGroup = displayGroup;
+	objectName = d2wContext.displayNameForEntity;
+	textColor = d2wContext.textColor;
         d2wContext = d2wContext;
 }
 

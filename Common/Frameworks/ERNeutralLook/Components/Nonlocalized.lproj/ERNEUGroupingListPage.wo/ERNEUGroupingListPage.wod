@@ -37,7 +37,18 @@ Conditional1: WOConditional {
 	negate = true;
 }
 
+DisplayBottomBatchNavigationConditional: WOConditional {
+	condition = d2WContext.displayBottomBatchNavigation;
+}
+
 ERPrinterButton: ERDPrinterButton {
+	d2wContext = d2wContext;
+	dataSource = dataSource;
+	displayGroup = displayGroup;
+	task = "list";
+}
+
+ERPrinterButton2: ERDPrinterButton {
 	d2wContext = d2wContext;
 	dataSource = dataSource;
 	displayGroup = displayGroup;
@@ -90,6 +101,11 @@ GenericContainer3: WOGenericContainer {
 	colspan = colspanForNavBar;
 	elementName = "TD";
 	height = 1;
+}
+
+HasPrinterFriendlyVersionConditional2: WOConditional {
+	condition = d2wContext.hasPrinterFriendlyVersion;
+	negate = true;
 }
 
 Help: ERDDebuggingHelp {
@@ -195,7 +211,18 @@ NavBar1: WOSwitchComponent {
 	objectName = d2wContext.displayNameForEntity;
 //	textColor = d2wContext.textColor;
 	width = 550;
-        d2wContext = d2wContext;
+    d2wContext = d2wContext;
+	bgcolor = d2wContext.backgroundColorForTable;
+	WOComponentName = d2wContext.batchNavigationBarComponentName;
+}
+
+NavBar2: WOSwitchComponent {   
+//	bgcolor = "#ff0000"; // backgroundColorForTable;
+	displayGroup = displayGroup;
+	objectName = d2wContext.displayNameForEntity;
+//	textColor = d2wContext.textColor;
+	width = 550;
+    d2wContext = d2wContext;
 	bgcolor = d2wContext.backgroundColorForTable;
 	WOComponentName = d2wContext.batchNavigationBarComponentName;
 }
@@ -247,4 +274,14 @@ ShowCancel2: WOConditional {
 SwitchComponent1: WOSwitchComponent {
 	WOComponentName = d2wContext.headComponentName;
 	d2wContext = d2wContext;
+}
+
+TableCellForBottomBatchNaviationGenericContainer: WOGenericContainer {
+	colspan = colspanForNavBar;
+	elementName = "TD";
+}
+
+TableRowForBottomBatchNavigationGenericContainer: WOGenericContainer {
+	bgcolor = "#ebebeb"; //backgroundColorForTable;
+	elementName = "TR";
 }
