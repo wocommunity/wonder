@@ -6,6 +6,10 @@ AreThereReferenceEO: ERXNonNullConditional {
 	condition = referenceEOs;
 }
 
+AreThereReferenceEO2: ERXNonNullConditional {
+	condition = referenceEOs;
+}
+
 AttributeCell: WOGenericContainer {
 	align = d2wContext.justification;
 	elementName = "td";
@@ -54,6 +58,10 @@ Conditional1: WOConditional {
 	condition = isEntityEditable;
 }
 
+DisplayBottomBatchNavigationConditional: WOConditional {
+	condition = d2wContext.displayBottomBatchNavigation;
+}
+
 ERXNonNullConditional1: ERXNonNullConditional {
 	condition = d2wContext.editButtonComponentName;
 	negate = true;
@@ -93,12 +101,22 @@ FilterDisplayGroupButton: ERDFilterDisplayGroupButton {
 	displayGroup = displayGroup;
 }
 
+FilterDisplayGroupButton2: ERDFilterDisplayGroupButton {
+	d2wContext = d2wContext;
+	displayGroup = displayGroup;
+}
+
 FontContainer: WOGenericContainer {
 	color = d2wContext.textColor;
 	elementName = "font";
 }
 
 Generic1: WOGenericContainer {
+	BGCOLOR = referenceEO.backgroundColor; //VALID
+	elementName = "td";
+}
+
+Generic2: WOGenericContainer {
 	BGCOLOR = referenceEO.backgroundColor; //VALID
 	elementName = "td";
 }
@@ -190,6 +208,15 @@ NavBar: WOSwitchComponent {
        	 d2wContext = d2wContext;
 }
 
+NavBar2: WOSwitchComponent {
+    WOComponentName = d2wContext.batchNavigationBarComponentName;
+	bgcolor = backgroundColorForTable;
+	displayGroup = displayGroup;
+	objectName = d2wContext.displayNameForEntity;
+	textColor = d2wContext.textColor;
+       	 d2wContext = d2wContext;
+}
+
 PageWrapper: WOSwitchComponent {
 	WOComponentName = pageWrapperName;
 	_componentUnroll = true;
@@ -197,6 +224,11 @@ PageWrapper: WOSwitchComponent {
 }
 
 Repetition1: WORepetition {
+	item = referenceEO;
+	list = referenceEOs;
+}
+
+Repetition2: WORepetition {
 	item = referenceEO;
 	list = referenceEOs;
 }
@@ -251,6 +283,10 @@ SortOrder: ERXSortOrder {
 }
 
 String1: WOString {
+	value = referenceEO.name; // VALID
+}
+
+String2: WOString {
 	value = referenceEO.name; // VALID
 }
 
