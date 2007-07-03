@@ -54,6 +54,10 @@ Conditional2: WOConditional {
 	condition = shouldShowSelectAll;
 }
 
+DisplayBottomBatchNavigationConditional: WOConditional {
+	condition = d2wContext.displayBottomBatchNavigation;
+}
+
 ERXNonNullConditional1: WOConditional {
 	condition = hasBranchChoices;
 	negate = true;
@@ -79,7 +83,18 @@ ExcelExportButton: WOSwitchComponent {
 	d2wContext = d2wContext;
 }
 
+ExcelExportButton2: WOSwitchComponent {
+	WOComponentName = d2wContext.excelExportButtonCompomentName;
+	displayGroup = displayGroup;
+	d2wContext = d2wContext;
+}
+
 FilterDisplayGroupButton: ERDFilterDisplayGroupButton {
+	d2wContext = d2wContext;
+	displayGroup = displayGroup;
+}
+
+FilterDisplayGroupButton2: ERDFilterDisplayGroupButton {
 	d2wContext = d2wContext;
 	displayGroup = displayGroup;
 }
@@ -138,6 +153,10 @@ IsGenericExportButtonKnown: WOConditional {
 	condition = d2wContext.excelExportButtonCompomentName;
 }
 
+IsGenericExportButtonKnown2: WOConditional {
+	condition = d2wContext.excelExportButtonCompomentName;
+}
+
 IsPropertySortable: WOConditional {
 	_unroll = true;
 	condition = d2wContext.propertyIsSortable;
@@ -178,6 +197,14 @@ NavBar: ERXBatchNavigationBarInForm {
 	objectName = d2wContext.displayNameForEntity;
 	textColor = d2wContext.textColor;
 	width = 550;
+        d2wContext = d2wContext;
+}
+
+NavBar2: ERXBatchNavigationBarInForm {
+	bgcolor = backgroundColorForTable;
+	displayGroup = displayGroup;
+	objectName = d2wContext.displayNameForEntity;
+	textColor = d2wContext.textColor;
         d2wContext = d2wContext;
 }
 
