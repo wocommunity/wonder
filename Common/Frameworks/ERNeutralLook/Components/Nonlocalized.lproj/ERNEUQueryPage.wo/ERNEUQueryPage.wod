@@ -92,6 +92,15 @@ QuerySubmitButton: WOActiveImage {
 	width = "88";
 }
 
+QuerySubmitButton2: WOActiveImage {
+	action = queryAction;
+	border = 0;
+	filename = "SearchDBMetalBtn.gif";
+	framework = "JavaDirectToWeb";
+	height = 1;
+	width = 1;
+}
+
 QueryTable: WOGenericContainer {
 	_unroll = true;
 	border = 0;
