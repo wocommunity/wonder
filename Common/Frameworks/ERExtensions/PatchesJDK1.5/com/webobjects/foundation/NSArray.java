@@ -959,8 +959,16 @@ public class NSArray<E> implements Cloneable, Serializable, NSCoding, NSKeyValue
 	}
 
 	public <T> T[] toArray(T objects[]) {
-		NSArray array = arrayByAddingObjectsFromArray(new NSArray(objects));
-		return (T[]) array.objects();
+		// ak: the original imp is plain garbage. Who came up with this?
+		// NSArray array = arrayByAddingObjectsFromArray(new NSArray(objects));
+		// return (T[]) array.objects();
+		if(objects.length < _objects.length) {
+			objects = (T[]) java.lang.reflect.Array.newInstance(objects.getClass().getComponentType(), _objects.length);
+		}
+		for (int i = 0; i < _objects.length; i++) {
+			objects[i] = (T) _objects[i];
+		}
+		return objects;
 	}
 
 	public boolean containsAll(Collection<?> c) {
