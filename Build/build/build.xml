@@ -112,8 +112,8 @@
             <param name="project.dir" value="Common/Frameworks/ERExtensions" />
             <param name="patches.dir" value="Common/Frameworks/ERExtensions/${erx.patches.dir}" />
             <!-- kind of cheating here...-->
-            <param name="classes.exclude.0" value="com/webobjects/appserver/_private/WOHTTPIO.java" />
-            <param name="classes.exclude.1" value="com/webobjects/foundation/NSArray.java" />
+            <!--param name="classes.exclude.0" value="com/webobjects/appserver/_private/WOHTTPIO.java" />
+            <param name="classes.exclude.1" value="com/webobjects/foundation/NSArray.java" /-->
 
             <param name="use.wonder.core" value="true" />
         </antcall>
