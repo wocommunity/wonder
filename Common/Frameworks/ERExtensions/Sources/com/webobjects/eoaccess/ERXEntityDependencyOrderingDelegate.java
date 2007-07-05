@@ -18,7 +18,7 @@ import er.extensions.eoaccess.entityordering.ERXEntityOrder;
  * operations on databases like MS SQL that do not support deferred constraints like a real database.
  * The easiest way to use this is:</p>
  * <pre>
- * ERXMultiDatabaseContextDelegate.addDefaultDelegate(new ERXEntityDependencyOrderingDelegate());
+ * ERXDatabaseContextMulticastingDelegate.addDefaultDelegate(new ERXEntityDependencyOrderingDelegate());
  * </pre>
  *
  * @author chill
