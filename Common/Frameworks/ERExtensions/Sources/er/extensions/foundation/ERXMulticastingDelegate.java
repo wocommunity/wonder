@@ -6,7 +6,7 @@ import com.webobjects.foundation._NSDelegate;
 
 
 /**
- * <p>By design, WebObjects' classes that accept a delegate only accept a single object.  ERXDelegateMulticast allows multiple
+ * <p>By design, WebObjects' classes that accept a delegate only accept a single object.  ERXMulticastingDelegate allows multiple
  * delegate objects to be aggregated and presented as a single delegate object.</p>
  *
  * <p>Delegates are called in the order they are added.  Methods are called until one of the delegates handles the message.
@@ -15,7 +15,7 @@ import com.webobjects.foundation._NSDelegate;
  *
  * <p>Here is an example if you have multiple delegates that you want to set up.</p>
  * <pre>
- * ERXMultiDatabaseContextDelegate multiDelegate = new ERXMultiDatabaseContextDelegate();
+ * ERXDatabaseContextMulticastingDelegate multiDelegate = new ERXDatabaseContextMulticastingDelegate();
  * multiDeletegate.addDelegate(new ERXDatabaseContextDelegate());
  * multiDeletegate.addDelegate(new ERXEntityDependencyOrderingDelegate());
  * EODatabaseContext.setDefaultDelegate(multiDelegate);
@@ -24,16 +24,16 @@ import com.webobjects.foundation._NSDelegate;
  * <p>Here is a usage example to handle the case where a deletegate may already be set</p>
  * <pre>
  * Object newDelegate = new ERXEntityDependencyOrderingDelegate();
- * ERXMultiDatabaseContextDelegate multiDelegate;
+ * ERXDatabaseContextMulticastingDelegate multiDelegate;
  * if (EODatabaseContext.defaultDelegate() == null) {
- *     multiDelegate = new ERXMultiDatabaseContextDelegate();
+ *     multiDelegate = new ERXDatabaseContextMulticastingDelegate();
  * }
  * else {
- *     if (EODatabaseContext.defaultDelegate() instanceof ERXMultiDatabaseContextDelegate) {
- *            multiDelegate = (ERXMultiDatabaseContextDelegate)EODatabaseContext.defaultDelegate();
+ *     if (EODatabaseContext.defaultDelegate() instanceof ERXDatabaseContextMulticastingDelegate) {
+ *            multiDelegate = (ERXDatabaseContextMulticastingDelegate)EODatabaseContext.defaultDelegate();
  *     }
  *     else {
- *         multiDelegate = new ERXMultiDatabaseContextDelegate();
+ *         multiDelegate = new ERXDatabaseContextMulticastingDelegate();
  *         multiDelegate.addDelegate(EODatabaseContext.defaultDelegate());
  *     }
  * }
@@ -42,12 +42,12 @@ import com.webobjects.foundation._NSDelegate;
  * </pre>
  *
  * <p>This class needs to be implemented for each delegate interface.  All methods on the interface should be implemented
- * and should call one of the perform... or booleanPerform... methods on this class.  See ERXMultiDatabaseContextDelegate
+ * and should call one of the perform... or booleanPerform... methods on this class.  See ERXDatabaseContextMulticastingDelegate
  * for example usage. One result of this implementation is that delegates can be added and removed at any time.</p>
  *
  * @author chill
  */
-public abstract class ERXDelegateMulticast {
+public abstract class ERXMulticastingDelegate {
 
     private NSMutableArray delegates = new NSMutableArray();
 
