@@ -37,7 +37,7 @@
 
     <target name="ERSelenium.all">
         <antcall target="global.framework.${build.action}" >
-            <param name="project.principal.class" value="" />
+            <param name="project.principal.class" value="er.selenium.ERSelenium" />
             <param name="project.name" value="ERSelenium" />
             <param name="project.dir" value="Common/Frameworks/ERSelenium" />
             <param name="use.wonder.core" value="true" />
