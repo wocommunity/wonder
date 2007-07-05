@@ -222,7 +222,7 @@ public abstract class AjaxGridNavBar extends WOComponent {
 
 		// Keep display group in synch to avoid display update issues
 		
-		displayGroup().setNumberOfObjectsPerBatch(currentBatchSize());
+		displayGroup().setNumberOfObjectsPerBatch(ERXValueUtilities.intValue(currentBatchSize()));
 	}
 
 	/**
@@ -234,9 +234,8 @@ public abstract class AjaxGridNavBar extends WOComponent {
 	 * @return displayGroup().numberOfObjectsPerBatch() as a String for the
 	 *         option input
 	 */
-	public int currentBatchSize() {
-		Object batchSizeObj = configurationData().objectForKey(AjaxGrid.BATCH_SIZE);
-		return ERXValueUtilities.intValue(batchSizeObj);
+	public String currentBatchSize() {
+		return (String) configurationData().objectForKey(AjaxGrid.BATCH_SIZE);
 	}
 
 	/**

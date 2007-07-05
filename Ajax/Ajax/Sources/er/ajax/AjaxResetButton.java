@@ -41,6 +41,7 @@ public class AjaxResetButton extends WOComponent {
     public void appendToResponse(WOResponse response, WOContext context) {
         super.appendToResponse(response, context);
         AjaxUtils.addScriptResourceInHead(context, response, "prototype.js");
+        AjaxUtils.addScriptResourceInHead(context, response, "scriptaculous.js");
         AjaxUtils.addScriptResourceInHead(context, response, "wonder.js");
     }
     
