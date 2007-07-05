@@ -42,6 +42,7 @@ public class ERXWOContext extends WOContext implements ERXMutableUserInfoHolderI
     			ERXWOContext._insertPendingInResponse(response);
     		}
     		ERXWOContext.setCurrentContext(null);
+    		ERXThreadStorage.removeValueForKey(ERXWOContext.CONTEXT_DICTIONARY_KEY);
     	}
     }
     
