@@ -7,22 +7,16 @@ import org.apache.log4j.Logger;
 import com.webobjects.eoaccess.EOEntity;
 import com.webobjects.eoaccess.EOModelGroup;
 import com.webobjects.eoaccess.EORelationship;
+import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSMutableDictionary;
+import com.webobjects.foundation.NSMutableSet;
 
 import er.extensions.ERXArrayUtilities;
 
 
 
 /**
- * <p>
  * Creates ordering based on foreign key dependencies.
- * </p>
- *
- * <p>
- * Group 1 is entities with no dependencies. Group 2 is entities with
- * dependencies on entities in group 1. Group 3 is entities with dependencies on
- * entities in groups 1 and 2. etc. The dependcies between entities are
- * determined by the abstract <code>buildDependancyList(NSMutableArray)</code>.
- * </p>
  *
  * @author chill
  */
@@ -30,7 +24,6 @@ public class ERXEntityFKConstraintOrder extends ERXEntityOrder
 {
 
     private static Logger logger = Logger.getLogger(ERXEntityFKConstraintOrder.class);
-    public static final String REFERENCING_ENTITIES = "ERXEntityFKConstraintOrder.REFERENCING_ENTITIES";
 
 
     /**
@@ -45,7 +38,7 @@ public class ERXEntityFKConstraintOrder extends ERXEntityOrder
 
 
     /**
-     * Convenience constructor for implementing classes.  Uses EOModelGroup.defaultGroup().
+     * Convenience constructor for implementing classes.  Uses <code>EOModelGroup.defaultGroup()</code>.
      */
     public ERXEntityFKConstraintOrder() {
         super();
@@ -53,11 +46,14 @@ public class ERXEntityFKConstraintOrder extends ERXEntityOrder
 
 
     /**
-     * Processes the list of entities, creating the entitiesReferencing() list based on foreign key constraints.
+     * Processes the list of entities, creating the ordering dictionary based on foreign key constraints.
+     *
+     * @return a dictionary keyed on dependencyKeyFor(EOEntity)
      */
-    protected void buildDependancyList() {
-        logger.debug("Building dependancy list");
+    protected NSDictionary dependenciesByEntity() {
+        logger.debug("Building dependency list");
 
+        NSMutableDictionary dependencyList = new NSMutableDictionary(allEntities().count());
         for (Enumeration entityEnum = allEntities().objectEnumerator(); entityEnum.hasMoreElements();) {
             EOEntity entity = (EOEntity) entityEnum.nextElement();
             logger.trace("Finding dependencies of " + entity.name());
@@ -68,21 +64,23 @@ public class ERXEntityFKConstraintOrder extends ERXEntityOrder
                 if (hasForeignKeyConstraint(relationship)) {
                     EOEntity destinationEntity = relationship.destinationEntity();
                     logger.trace("Recording dependency on " + destinationEntity.name());
-                    entitiesDependentOn(destinationEntity).addObject(entity.name());
+                    entitiesDependentOn(dependencyList, destinationEntity).addObject(entity.name());
                 }
                 else {
-                    logger.trace("Ignoring, is not FK relationship");
+                    logger.trace("Ignoring, is not FK relationship or vertical inheritance parent");
                 }
             }
         }
-        logger.debug("Finished building dependancy list");
+        logger.debug("Finished building dependency list");
 
         if (logger.isTraceEnabled()) {
             for (int i = 0; i < allEntities().count(); i++) {
                 EOEntity entity = (EOEntity) allEntities().objectAtIndex(i);
-                logger.trace("Entity " + entity.name() + " is referenced by " + entitiesDependentOn(entity));
+                logger.trace("Entity " + entity.name() + " is referenced by " + entitiesDependentOn(dependencyList, entity));
             }
         }
+
+        return dependencyList;
     }
 
 
@@ -93,7 +91,7 @@ public class ERXEntityFKConstraintOrder extends ERXEntityOrder
     protected boolean hasForeignKeyConstraint(EORelationship relationship) {
         logger.trace("Examining relationshp " + relationship.name());
 
-        // These can't be accomodated by entity ordering, these require record within the entity
+        // These can't be accomodated by entity ordering, these require ordering within the operations for an entity
         if (relationship.entity().equals(relationship.destinationEntity())) {
             logger.trace("Ignoring: self reflexive relationship");
             return false;
@@ -107,19 +105,58 @@ public class ERXEntityFKConstraintOrder extends ERXEntityOrder
         // Primary key to primary key relationships are excluded.
         else if (ERXArrayUtilities.arraysAreIdenticalSets(relationship.sourceAttributes(),
                                                           relationship.entity().primaryKeyAttributes()) ) {
+            // PK - PK relationships for vertical inheritance (child to parent) also need to be considered in ordering
+            if (relationship.destinationEntity().equals(relationship.entity().parentEntity())) {
+                logger.trace("Is vertical inheritance PK to PKconstraint");
+                return true;
+            }
+
+            // Bug?  Do these need to be included?
             logger.trace("No FK constraint: Is PK to PK");
             return false;
         }
 
+        logger.trace("Is FK constraint");
         return true;
     }
 
 
     /**
-     * @return REFERENCING_ENTITIES
+     * This implementation returns <code>entity.externalName()</code> as the dependcy is actually on tables not EOEntities
+     * .
+     * @param entity EOEntity to return key into dependency dictionary for
+     *
+     * @return key for <code>entity</code> into dependency dictionary returned by <code>dependenciesByEntity()</code>
      */
-    protected String userInfoKey() {
-        return REFERENCING_ENTITIES;
+    protected String dependencyKeyFor(EOEntity entity) {
+        if (entity.externalName() == null) {
+            return "Abstract Dummy Entity";
+        }
+        return entity.externalName();
+    }
+
+
+    /**
+     * Returns the list of the names of the entities that reference (depend on)
+     * this entity. This list is populated by <code>builddependencyList()</code>.
+     * If <code>builddependencyList()</code> has not finished executing, the
+     * list returned by this method may not be complete.
+     *
+     * @param dependencies
+     *            list of dependencies being built by
+     *            <code>builddependencyList()</code>
+     * @param entity
+     *            EOEntity to return list of referencing entities for
+     * @return list of names of entities previously recorded as referencing this
+     *         entity
+     */
+    protected NSMutableSet entitiesDependentOn(NSMutableDictionary dependencies, EOEntity entity) {
+        NSMutableSet referencingEntities = (NSMutableSet) dependencies.objectForKey(dependencyKeyFor(entity));
+        if (referencingEntities == null) {
+            referencingEntities = new NSMutableSet();
+            dependencies.setObjectForKey(referencingEntities, dependencyKeyFor(entity));
+        }
+        return referencingEntities;
     }
 
 }
