@@ -7,7 +7,7 @@ import er.ajax.*;
 
 public class AjaxGridExampleNavBar extends AjaxGridNavBar {
 
-	public NSArray batchSizes = new NSArray(new Integer[] { Integer.valueOf(2), Integer.valueOf(4), Integer.valueOf(6), Integer.valueOf(8), Integer.valueOf(10) });
+	public NSArray batchSizes = new NSArray(new String[] { "2", "4", "6", "8", "10" });
 	public int batchSize;
 
 	public AjaxGridExampleNavBar(WOContext context) {
