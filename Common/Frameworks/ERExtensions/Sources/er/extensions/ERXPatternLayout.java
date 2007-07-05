@@ -246,7 +246,11 @@ class ERXPatternParser extends PatternParser {
                     if (j == 0) {
                         value = ERXThreadStorage.valueForKey(part);
                     } else {
-                        value = NSKeyValueCoding.Utility.valueForKey(value, part);
+                    	try {
+                    		value = NSKeyValueCoding.Utility.valueForKey(value, part);
+                    	} catch(Throwable t) {
+                    		value = "ERR: " + part + " ->"+ t.getMessage();
+                    	}
                     }
                     if (value == null)
                         break;
