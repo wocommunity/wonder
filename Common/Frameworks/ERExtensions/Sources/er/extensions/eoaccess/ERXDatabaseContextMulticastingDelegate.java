@@ -14,25 +14,25 @@ import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSForwardException;
 
-import er.extensions.foundation.ERXDelegateMulticast;
+import er.extensions.foundation.ERXMulticastingDelegate;
 
 
 /**
- * Subclass of <code>er.extensions.foundation.ERXDelegateMulticast</code> that implements
+ * Subclass of <code>er.extensions.foundation.ERXMulticastingDelegate</code> that implements
  * <code>com.webobjects.eoaccess.EODatabaseContext.Delegate</code>. Use this to aggregate multiple delegate objects
  * for <code>EODatabaseContext.Delegate</code>
  *
- * @see er.extensions.foundation.ERXDelegateMulticast
+ * @see er.extensions.foundation.ERXMulticastingDelegate
  * @see com.webobjects.eoaccess.EODatabaseContext.Delegate
  * @author chill
  */
-public class ERXMultiDatabaseContextDelegate extends ERXDelegateMulticast implements EODatabaseContext.Delegate {
+public class ERXDatabaseContextMulticastingDelegate extends ERXMulticastingDelegate implements EODatabaseContext.Delegate {
 
     private Method orderAdaptorOperations;
 
 
 
-    public ERXMultiDatabaseContextDelegate() {
+    public ERXDatabaseContextMulticastingDelegate() {
         super();
         try {
             orderAdaptorOperations = EODatabaseContext.class.getDeclaredMethod("orderAdaptorOperations", new Class[] {});
@@ -48,30 +48,30 @@ public class ERXMultiDatabaseContextDelegate extends ERXDelegateMulticast implem
      * <p>Convenience method to add <code>newDelegate</code> as the last delegate called for
      * <code>EODatabaseContext.defaultDelegate()</code>.  There are three cases to handle:</p>
      * <ol>
-     * <li>If there is no default delegate defined, an <code>ERXMultiDatabaseContextDelegate</code>
+     * <li>If there is no default delegate defined, an <code>ERXDatabaseContextMulticastingDelegate</code>
      * is created as the default delegate, and <code>newDelegate</code> added.</li>
      *
-     * <li>If there is a default delegate defined, and it is a <code>ERXMultiDatabaseContextDelegate</code>,
+     * <li>If there is a default delegate defined, and it is a <code>ERXDatabaseContextMulticastingDelegate</code>,
      * <code>newDelegate</code> is added at the end of the delegate chain.</li>
      *
-     * <li>If there is a default delegate defined, and it is not a <code>ERXMultiDatabaseContextDelegate</code>,
-     * an <code>ERXMultiDatabaseContextDelegate</code> is created as the default delegate, the existing delegate is
+     * <li>If there is a default delegate defined, and it is not a <code>ERXDatabaseContextMulticastingDelegate</code>,
+     * an <code>ERXDatabaseContextMulticastingDelegate</code> is created as the default delegate, the existing delegate is
      * added, then <code>newDelegate</code> is added at the end of the delegate chain.</li>
      * </ol>
      *
      * @param newDelegate
      */
     public static void addDefaultDelegate(Object newDelegate) {
-        ERXMultiDatabaseContextDelegate multiDelegate;
+        ERXDatabaseContextMulticastingDelegate multiDelegate;
          if (EODatabaseContext.defaultDelegate() == null) {
-             multiDelegate = new ERXMultiDatabaseContextDelegate();
+             multiDelegate = new ERXDatabaseContextMulticastingDelegate();
          }
          else {
-             if (EODatabaseContext.defaultDelegate() instanceof ERXMultiDatabaseContextDelegate) {
-                    multiDelegate = (ERXMultiDatabaseContextDelegate)EODatabaseContext.defaultDelegate();
+             if (EODatabaseContext.defaultDelegate() instanceof ERXDatabaseContextMulticastingDelegate) {
+                    multiDelegate = (ERXDatabaseContextMulticastingDelegate)EODatabaseContext.defaultDelegate();
              }
              else {
-                 multiDelegate = new ERXMultiDatabaseContextDelegate();
+                 multiDelegate = new ERXDatabaseContextMulticastingDelegate();
                  multiDelegate.addDelegate(EODatabaseContext.defaultDelegate());
              }
          }
