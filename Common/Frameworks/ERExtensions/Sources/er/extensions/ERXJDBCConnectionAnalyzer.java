@@ -88,6 +88,9 @@ public class ERXJDBCConnectionAnalyzer {
 			findJDBCDriver();
 			testConnection();
 		}
+		catch (RuntimeException t) {
+			ERXJDBCConnectionAnalyzer.log.error(t.getMessage());
+		}
 		finally {
 			EOObjectStoreCoordinator.defaultCoordinator().unlock();
 		}
