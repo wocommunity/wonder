@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<wodefinitions>
+	<wo wocomponentcontent="true" class="ERXClickableContainer">
+		<binding name="elementName"/>
+		<binding name="action"/>
+		<binding name="class"/>
+		<binding name="id"/>
+	</wo>
+</wodefinitions>
