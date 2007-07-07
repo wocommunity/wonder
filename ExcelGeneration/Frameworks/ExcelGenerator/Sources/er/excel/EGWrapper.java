@@ -77,7 +77,7 @@ public class EGWrapper extends ERXNonSynchronizingComponent {
             super.appendToResponse(newResponse, context);
 
             String contentString = newResponse.contentString();
-
+            contentString = contentString.replaceAll("&nbsp;", "");
             if (log.isDebugEnabled()) {
                 log.debug("Converting content string:\n" + contentString);
             }
