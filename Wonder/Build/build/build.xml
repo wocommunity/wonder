@@ -242,7 +242,7 @@
             <param name="project.dir" value="Common/Applications/BugTracker" />
 
             <param name="use.webobjects.d2w" value="true" />
-            <param name="wonder.lib.root.bundles" value="Ajax/BTBusinessLogic/ERCoreBusinessLogic/ERPrototypes/ERJars/ERExtensions/ERDirectToWeb/JavaWOExtensions/DRGrouping/WRReporting/ERPlot/ERRest/PostgresqlPlugIn/ExcelGeneration/ERCaptcha/ERSelenium/ERCalendar" />
+            <param name="wonder.lib.root.bundles" value="Ajax/BTBusinessLogic/ERCoreBusinessLogic/ERPrototypes/ERJars/ERExtensions/ERDirectToWeb/JavaWOExtensions/DRGrouping/WRReporting/ERPlot/ERRest/PostgresqlPlugIn/ExcelGenerator/WOOgnl/ERCaptcha/ERSelenium/ERCalendar/ERJavaMail/ERExcelLook" />
         </antcall>
     </target>
 
