@@ -5,25 +5,23 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
 	<parent>
-		<groupId>wonder.common</groupId>
-		<artifactId>common</artifactId>
+		<groupId>wonder.dynareporting</groupId>
+		<artifactId>dynareporting</artifactId>
 		<version>4.0.0-SNAPSHOT</version>
 		<relativePath>..</relativePath>
 	</parent>
 
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>wonder.common</groupId>
-	<artifactId>applications</artifactId>
+	<groupId>wonder.dynareporting</groupId>
+	<artifactId>frameworks</artifactId>
 	<version>4.0.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
-	<name>Applications</name>
+	<name>Frameworks</name>
 
-	<!-- modules>
-		Requires Dyna, Dyna requires common, Bugtracker is part of common
-		<module>BugTracker/Frameworks/BTBusinessLogic</module>
-		<module>BugTracker</module>
-		<module>ERMailer</module>
-	</modules -->
+	<modules>
+		<module>DRGrouping</module>
+		<module>WRReporting</module>
+	</modules>
 </project>
 

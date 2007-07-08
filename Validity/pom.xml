@@ -8,20 +8,20 @@
 	<parent>
 		<groupId>wonder</groupId>
 		<artifactId>wonder</artifactId>
-		<version>3.0.1-SNAPSHOT</version>
+		<version>4.0.0-SNAPSHOT</version>
 		<relativePath>..</relativePath>
 	</parent>
 
 	<groupId>wonder.validity</groupId>
 	<artifactId>validity-all</artifactId>
-	<version>3.0.1-SNAPSHOT</version>
+	<version>4.0.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<name>ValidityAll</name>
 
-	<modules>
+	<!-- modules>
 		<module>Frameworks/Validity</module>
 		<module>Examples/ValidityExample</module>
 		<module>Applications/ValidityModeler</module>
-	</modules>
+	</modules -->
 </project>
 
