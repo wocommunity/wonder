@@ -54,13 +54,19 @@ public class IMBuddyStatus extends WOComponent {
 	public boolean isBuddyOnline() {
 		boolean buddyOnline;
 		if (_buddyOnline == null) {
-			try {
-				buddyOnline = instantMessenger().isBuddyOnline(_buddyName);
+			IInstantMessenger instantMessenger = instantMessenger();
+			if (instantMessenger != null) {
+				try {
+					buddyOnline = instantMessenger.isBuddyOnline(_buddyName);
+					_buddyOnline = Boolean.valueOf(buddyOnline);
+				}
+				catch (InstantMessengerException e) {
+					buddyOnline = false;
+				}
 			}
-			catch (InstantMessengerException e) {
+			else {
 				buddyOnline = false;
 			}
-			_buddyOnline = Boolean.valueOf(buddyOnline);
 		}
 		else {
 			buddyOnline = _buddyOnline.booleanValue();
@@ -71,13 +77,19 @@ public class IMBuddyStatus extends WOComponent {
 	public boolean isBuddyAway() {
 		boolean buddyAway;
 		if (_buddyAway == null) {
-			try {
-				buddyAway = instantMessenger().isBuddyAway(_buddyName);
+			IInstantMessenger instantMessenger = instantMessenger();
+			if (instantMessenger != null) {
+				try {
+					buddyAway = instantMessenger().isBuddyAway(_buddyName);
+					_buddyAway = Boolean.valueOf(buddyAway);
+				}
+				catch (InstantMessengerException e) {
+					buddyAway = false;
+				}
 			}
-			catch (InstantMessengerException e) {
+			else {
 				buddyAway = false;
 			}
-			_buddyAway = Boolean.valueOf(buddyAway);
 		}
 		else {
 			buddyAway = _buddyAway.booleanValue();
