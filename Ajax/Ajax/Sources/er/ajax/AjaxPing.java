@@ -22,8 +22,6 @@ import com.webobjects.appserver.WOContext;
  * @author mschrag
  */
 public class AjaxPing extends WOComponent {
-	private Object _lastCacheKey;
-
 	public AjaxPing(WOContext context) {
 		super(context);
 	}
@@ -46,36 +44,14 @@ public class AjaxPing extends WOComponent {
 	}
 	
 	/**
-	 * Returns whether or not the target should be refreshed.
-	 * 
-	 * @return whether or not the target should be refreshed
-	 */
-	public boolean refreshTarget() {
-		boolean refreshTarget = false;
-		Object cacheKey = valueForBinding("cacheKey");
-		if (_lastCacheKey == null) {
-			_lastCacheKey = cacheKey;
-		}
-		else if (!cacheKey.equals(_lastCacheKey)) {
-			refreshTarget = true;
-			_lastCacheKey = cacheKey;
-		}
-		return refreshTarget;
-	}
-
-	/**
-	 * Returns the target container ID.
-	 * @return the target container ID
-	 */
-	public String targetContainerID() {
-		return (String) valueForBinding("targetContainerID");
-	}
-	
-	/**
 	 * Returns the ID of the ping container.
 	 * @return the ID of the ping container
 	 */
 	public String id() {
-		return targetContainerID() + "Ping";
+		String targetContainerID = (String)valueForBinding("targetContainerID");
+		if (targetContainerID == null) {
+			targetContainerID = AjaxUtils.toSafeElementID(context().elementID());
+		}
+		return targetContainerID + "Ping";
 	}
 }
