@@ -1,0 +1,19 @@
+PingUpdateContainer : AjaxUpdateContainer {
+	id = id;
+}
+
+ID : WOString {
+	value = id;
+}
+
+Frequency : WOString {
+	value = frequency;
+}
+
+RefreshTargetConditional : WOConditional {
+	condition = refreshTarget;
+}
+
+TargetContainerID : WOString {
+	value = targetContainerID;
+}
