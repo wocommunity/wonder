@@ -6,13 +6,13 @@
 	<parent>
 		<groupId>wonder.validity</groupId>
 	    <artifactId>validity-all</artifactId>
-		<version>3.0.1-SNAPSHOT</version>
+		<version>4.0.0-SNAPSHOT</version>
 		<relativePath>../..</relativePath>
 	</parent>
 
 	<groupId>wonder.validity</groupId>
 	<artifactId>ValidityExample</artifactId>
-	<version>3.0.1-SNAPSHOT</version>
+	<version>4.0.0-SNAPSHOT</version>
 	<name>ValidityExample</name>
 	<packaging>woapplication</packaging>
 
@@ -20,7 +20,7 @@
 		<dependency>
 			<groupId>wonder.validity</groupId>
 			<artifactId>Validity</artifactId>
-			<version>3.0.1-SNAPSHOT</version>
+			<version>4.0.0-SNAPSHOT</version>
 		</dependency>
 	</dependencies>
 	<build>
