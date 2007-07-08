@@ -22,6 +22,8 @@ import com.webobjects.appserver.WOContext;
  * @author mschrag
  */
 public class AjaxPing extends WOComponent {
+	private String _id;
+	
 	public AjaxPing(WOContext context) {
 		super(context);
 	}
@@ -48,10 +50,9 @@ public class AjaxPing extends WOComponent {
 	 * @return the ID of the ping container
 	 */
 	public String id() {
-		String targetContainerID = (String)valueForBinding("targetContainerID");
-		if (targetContainerID == null) {
-			targetContainerID = AjaxUtils.toSafeElementID(context().elementID());
+		if (_id == null) {
+			_id = AjaxUtils.toSafeElementID(context().elementID());
 		}
-		return targetContainerID + "Ping";
+		return _id;
 	}
 }
