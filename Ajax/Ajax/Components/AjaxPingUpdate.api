@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<wodefinitions>
+	<wo wocomponentcontent = "false" class = "AjaxPingUpdate">
+		<binding name = "cacheKey"/>
+		<binding name = "targetContainerID"/>
+
+		<validation message="&apos;cacheKey&apos; is a required binding">
+			<unbound name = "cacheKey"/>
+		</validation>
+
+		<validation message="&apos;targetContainerID&apos; is a required binding">
+			<unbound name = "targetContainerID"/>
+		</validation>
+	</wo>
+</wodefinitions>
