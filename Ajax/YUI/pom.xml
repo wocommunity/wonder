@@ -4,14 +4,14 @@
 	<parent>
 		<groupId>wonder.ajax</groupId>
 		<artifactId>ajax-all</artifactId>
-		<version>3.0.1-SNAPSHOT</version>
+		<version>4.0.0-SNAPSHOT</version>
 		<relativePath>..</relativePath>
 	</parent>
 
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>wonder.ajax</groupId>
 	<artifactId>YUI</artifactId>
-	<version>3.0.1-SNAPSHOT</version>
+	<version>4.0.0-SNAPSHOT</version>
 	<name>YUI</name>
 	<packaging>woframework</packaging>
 
@@ -19,7 +19,7 @@
 		<dependency>
 			<groupId>wonder.ajax</groupId>
 			<artifactId>Ajax</artifactId>
-			<version>3.0.1-SNAPSHOT</version>
+			<version>4.0.0-SNAPSHOT</version>
 		</dependency>
 	</dependencies>
 	<build>
