@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <wodefinitions>
-	<wo wocomponentcontent = "false" class = "AjaxPing">
+	<wo wocomponentcontent = "true" class = "AjaxPing">
 		<binding name = "cacheKey"/>
 		<binding name = "targetContainerID"/>
 		<binding name = "frequency"/>
