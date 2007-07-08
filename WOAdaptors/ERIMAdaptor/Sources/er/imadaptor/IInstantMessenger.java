@@ -1,5 +1,7 @@
 package er.imadaptor;
 
+import java.util.List;
+
 
 /**
  * IInstantMessenger defines the interface for an instant messenger implementation to hook into the ERIMAdaptor
@@ -8,6 +10,13 @@ package er.imadaptor;
  * @author mschrag
  */
 public interface IInstantMessenger {
+  /**
+   * Returns the timestamp of the last buddy list modification.
+   * 
+   * @return the timestamp of the last buddy list modification
+   */
+  public long buddyListLastModified();
+  
 	/**
 	 * Returns the screen name of the current user.
 	 */
@@ -83,6 +92,23 @@ public interface IInstantMessenger {
 	 * @throws InstantMessengerException
 	 */
 	public void removeBuddy(String buddyName) throws InstantMessengerException;
+
+	/**
+	 * Returns the names of the buddy list groups.
+	 * 
+	 * @return the names of the buddy list groups
+	 * @throws InstantMessengerException
+	 */
+	public String[] getGroupNames() throws InstantMessengerException;
+		
+	/**
+	 * Returns the names of the buddies in the given group.
+	 * 
+	 * @param groupName the name of the group to list
+	 * @return the names of the buddies in the given group
+	 * @throws InstantMessengerException
+	 */
+	public String[] getBuddiesInGroupNamed(String groupName) throws InstantMessengerException;
 
 	/**
 	 * Sends a message to the specified buddy.

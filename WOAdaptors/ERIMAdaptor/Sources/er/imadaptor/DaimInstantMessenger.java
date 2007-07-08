@@ -12,18 +12,22 @@ import org.walluck.oscar.client.Buddy;
 import org.walluck.oscar.client.DaimLoginEvent;
 
 public class DaimInstantMessenger extends AbstractInstantMessenger {
-	private boolean myConnected;
-	private DaimOscarClient myOscarClient;
-	private long myLastConnectionAttempt;
+	private boolean _connected;
+	private DaimOscarClient _oscarClient;
+	private long _lastConnectionAttempt;
 
 	public DaimInstantMessenger(String screenName, String password) {
 		super(screenName, password);
 	}
+	
+	public long buddyListLastModified() {
+		return System.currentTimeMillis();
+	}
 
 	public void addBuddy(String buddyName) throws InstantMessengerException {
 		try {
-			if (myOscarClient != null) {
-				myOscarClient.addBuddy(buddyName, "Group");
+			if (_oscarClient != null) {
+				_oscarClient.addBuddy(buddyName, "Group");
 			}
 		}
 		catch (IOException e) {
@@ -36,15 +40,15 @@ public class DaimInstantMessenger extends AbstractInstantMessenger {
 	}
 
 	public void connect() throws IMConnectionException {
-		if (myConnected) {
+		if (_connected) {
 			disconnect();
 		}
 		long now = System.currentTimeMillis();
-		if (now - myLastConnectionAttempt > (1000 * 60 * 15)) {
-			myLastConnectionAttempt = now;
+		if (now - _lastConnectionAttempt > (1000 * 60 * 15)) {
+			_lastConnectionAttempt = now;
 			try {
-				myOscarClient = new DaimOscarClient();
-				myOscarClient.login(getScreenName(), getPassword());
+				_oscarClient = new DaimOscarClient();
+				_oscarClient.login(getScreenName(), getPassword());
 			}
 			catch (IOException e) {
 				throw new IMConnectionException("Failed to connect to AIM.", e);
@@ -56,18 +60,27 @@ public class DaimInstantMessenger extends AbstractInstantMessenger {
 	}
 
 	public void disconnect() {
-		if (myOscarClient != null) {
-			myOscarClient.logout();
-			myOscarClient = null;
+		if (_oscarClient != null) {
+			_oscarClient.logout();
+			_oscarClient = null;
 		}
 	}
 
 	public boolean isConnected() {
-		return myConnected;
+		return _connected;
 	}
 
 	public boolean isBuddyOnline(String buddyName) {
-		return myOscarClient != null && myOscarClient.isBuddyOnline(buddyName);
+		return _oscarClient != null && _oscarClient.isBuddyOnline(buddyName);
+	}
+
+	public String[] getGroupNames() {
+		return new String[] { "Buddies" };
+	}
+
+	public String[] getBuddiesInGroupNamed(String groupName) {
+		List buddiesList = _oscarClient.getBuddies();
+		return (String[]) buddiesList.toArray(new String[buddiesList.size()]);
 	}
 
 	public String getAwayMessage(String buddyName) {
@@ -84,8 +97,8 @@ public class DaimInstantMessenger extends AbstractInstantMessenger {
 
 	public void sendMessage(String buddyName, String message, boolean ignoreIfOffline) throws MessageException {
 		try {
-			if (myOscarClient != null) {
-				myOscarClient.sendIM(buddyName, message, AIMConstants.AIM_FLAG_AOL);
+			if (_oscarClient != null) {
+				_oscarClient.sendIM(buddyName, message, AIMConstants.AIM_FLAG_AOL);
 			}
 		}
 		catch (IOException e) {
@@ -94,57 +107,62 @@ public class DaimInstantMessenger extends AbstractInstantMessenger {
 	}
 
 	public class DaimOscarClient extends AbstractOscarClient {
-		private List myBuddies;
-		private List myOnlineBuddies;
-		private List myOfflineBuddies;
+		private List _buddies;
+		private List _onlineBuddies;
+		private List _offlineBuddies;
 
 		public DaimOscarClient() {
-			myBuddies = new LinkedList();
-			myOnlineBuddies = new LinkedList();
-			myOfflineBuddies = new LinkedList();
+			_buddies = new LinkedList();
+			_onlineBuddies = new LinkedList();
+			_offlineBuddies = new LinkedList();
 		}
 
 		public boolean isBuddyOnline(String buddyName) {
 			boolean online;
-			synchronized (myBuddies) {
-				online = myOnlineBuddies.contains(buddyName.toLowerCase());
+			synchronized (_buddies) {
+				online = _onlineBuddies.contains(buddyName.toLowerCase());
 			}
 			return online;
+		}
+
+		public List getBuddies() {
+			return _buddies;
 		}
 
 		public void buddyOffline(String buddyName, Buddy buddy) {
 			if (buddyName != null) {
 				String lcBuddyName = buddyName.toLowerCase();
-				myOnlineBuddies.remove(lcBuddyName);
-				myOfflineBuddies.add(lcBuddyName);
+				_onlineBuddies.remove(lcBuddyName);
+				_offlineBuddies.add(lcBuddyName);
 			}
 		}
 
 		public void buddyOnline(String buddyName, Buddy buddy) {
 			if (buddyName != null) {
 				String lcBuddyName = buddyName.toLowerCase();
-				myOfflineBuddies.remove(lcBuddyName);
-				myOnlineBuddies.add(lcBuddyName);
+				_offlineBuddies.remove(lcBuddyName);
+				_onlineBuddies.add(lcBuddyName);
 			}
 		}
 
 		public void removeBuddy(String buddyName) {
-			
+
 		}
+
 		public void newBuddyList(Buddy[] buddies) {
-			synchronized (myBuddies) {
-				myBuddies.clear();
-				myOnlineBuddies.clear();
-				myOfflineBuddies.clear();
+			synchronized (_buddies) {
+				_buddies.clear();
+				_onlineBuddies.clear();
+				_offlineBuddies.clear();
 				for (int i = 0; i < buddies.length; i++) {
-					myBuddies.add(buddies[i].getName().toLowerCase());
+					_buddies.add(buddies[i].getName().toLowerCase());
 				}
 			}
 		}
 
 		public void loginDone(DaimLoginEvent event) {
 			super.loginDone(event);
-			myConnected = true;
+			_connected = true;
 		}
 
 		public void incomingICQ(UserInfo userInfo, int arg1, int arg2, String message) {
@@ -170,12 +188,12 @@ public class DaimInstantMessenger extends AbstractInstantMessenger {
 
 		public void loginError(DaimLoginEvent event) {
 			super.loginError(event);
-			myConnected = false;
+			_connected = false;
 		}
 
 		public void logout() {
 			super.logout();
-			myConnected = false;
+			_connected = false;
 		}
 	}
 
