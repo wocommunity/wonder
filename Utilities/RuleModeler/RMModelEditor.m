@@ -337,11 +337,11 @@
     NSTableColumn   *aCol;
     
     while(aCol = [anEnum nextObject]){
-        if([[aCol dataCell] isKindOfClass:[RMTextFieldCell class]]){
-            [[aCol dataCell] bind:@"highlightsMatchingWords" toObject:[NSUserDefaultsController sharedUserDefaultsController] withKeyPath:@"values.highlightSearchFilterOccurences" options:nil];
-            [[aCol dataCell] bind:@"caseSensitivity" toObject:rulesController withKeyPath:@"searchIsCaseSensitive" options:nil];
-            [[aCol dataCell] bind:@"highlightColor" toObject:[NSUserDefaultsController sharedUserDefaultsController] withKeyPath:@"values.searchFilterHighlightColor" options:[NSDictionary dictionaryWithObject:@"NSUnarchiveFromData" forKey:NSValueTransformerNameBindingOption]];
-            [[aCol dataCell] bind:@"highlightedWords" toObject:rulesController withKeyPath:@"searchWords" options:nil];
+        NSCell  *dataCell = [aCol dataCell];
+        
+        if([dataCell isKindOfClass:[RMTextFieldCell class]]){
+            [dataCell setLineBreakMode:NSLineBreakByClipping];
+            [dataCell setScrollable:YES];
         }
     }
     
@@ -702,6 +702,17 @@
 
 - (NSNumber *)rhsValueIsNotMarker {
     return [NSNumber numberWithBool:!NSIsControllerMarker([rulesController valueForKeyPath:@"selection.rhs.valueAsString"])];
+}
+
+- (void)tableView:(NSTableView *)aTableView willDisplayCell:(id)aCell forTableColumn:(NSTableColumn *)aTableColumn row:(int)rowIndex
+{
+    if([aCell isKindOfClass:[RMTextFieldCell class]]){
+        // We can't use bindings for that, because tableView copies cells
+        [aCell setHighlightedWords:[rulesController searchWords]];
+        [aCell setCaseSensitivity:[rulesController searchIsCaseSensitive]];
+        [aCell setHighlightColor:[[NSValueTransformer valueTransformerForName:@"NSUnarchiveFromData"] transformedValue:[[NSUserDefaults standardUserDefaults] objectForKey:@"searchFilterHighlightColor"]]];
+        [aCell setHighlightsMatchingWords:[[NSUserDefaults standardUserDefaults] boolForKey:@"highlightSearchFilterOccurences"]];
+    }
 }
 
 #pragma mark Completion for textView/textField

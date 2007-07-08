@@ -51,19 +51,14 @@
 - (void)highlightMatchingWords {
     NSString                    *stringValue = [self stringValue];
     NSRange                     searchRange = NSMakeRange(0, [stringValue length]);
-    // Unlike for other classes, we can't copy the attributedStringValue, 
-    // because when cell is in tableView, textColor is not correct when table selection changes.
-//    NSMutableAttributedString   *attributedString = [[self attributedStringValue] mutableCopy];
-    NSMutableAttributedString   *attributedString = [[NSMutableAttributedString alloc] initWithString:stringValue];
-    NSMutableParagraphStyle     *paragraphStyle = [[NSParagraphStyle defaultParagraphStyle] mutableCopy];
-  
-//    [attributedString removeAttribute:NSBackgroundColorAttributeName range:searchRange];
-    [attributedString setAttributes:[NSDictionary dictionaryWithObject:[NSFont systemFontOfSize:[NSFont smallSystemFontSize]] forKey:NSFontAttributeName] range:searchRange];
+    NSMutableAttributedString   *attributedString = [[self attributedStringValue] mutableCopy];
 
-    // Change paragraph style to clip long lines, instead of showing only full words
-    [paragraphStyle setLineBreakMode:NSLineBreakByClipping];
-    [attributedString addAttribute:NSParagraphStyleAttributeName value:paragraphStyle range:searchRange];
-    [paragraphStyle release];
+    // There is no API that can tell us when highlight color should NOT be used:
+    // When rule is disabled, even when selected, we need to use textColor which defaults to [NSColor disabledControlTextColor]
+    if ([self isHighlighted] && !_cFlags.needsHighlightedText)
+        [attributedString addAttribute:NSForegroundColorAttributeName value:[NSColor selectedControlTextColor] range:searchRange];
+    else
+        [attributedString addAttribute:NSForegroundColorAttributeName value:[self textColor] range:searchRange];
 
     if ([self highlightsMatchingWords] && [[self highlightedWords] count] > 0) {
         NSEnumerator    *wordEnum = [[self highlightedWords] objectEnumerator];
@@ -87,7 +82,6 @@
     }
     [self setAttributedStringValue:attributedString];
     [attributedString release];
-    [[self controlView] setNeedsDisplay:YES];
 }
 
 - (NSArray *)highlightedWords {
@@ -100,8 +94,10 @@
         
         highlightedWords = [newHighlightedWords copy];
         [oldHighlightedWords release];
-        if ([self highlightsMatchingWords])
+        if ([self highlightsMatchingWords]){
             [self highlightMatchingWords];
+            [(NSControl *)[self controlView] updateCell:self];
+        }
     }
 }
 
@@ -112,15 +108,11 @@
 - (void)setCaseSensitivity:(BOOL)newCaseSensitivity {
     if (caseSensitivity != newCaseSensitivity) {
         caseSensitivity = newCaseSensitivity;
-        if ([self highlightsMatchingWords])
+        if ([self highlightsMatchingWords]){
             [self highlightMatchingWords];
+            [(NSControl *)[self controlView] updateCell:self];
+        }
     }
-}
-
-- (void)drawWithFrame:(NSRect)cellFrame inView:(NSView *)controlView {
-    if ([self highlightsMatchingWords])
-        [self highlightMatchingWords];
-    [super drawWithFrame:cellFrame inView:controlView];
 }
 
 - (NSColor *)highlightColor
@@ -136,8 +128,10 @@
         highlightColor = (value != nil ? [value copy] : nil);
         if(oldValue != nil)
             [oldValue release];
-        if ([self highlightsMatchingWords])
+        if ([self highlightsMatchingWords]){
             [self highlightMatchingWords];
+            [(NSControl *)[self controlView] updateCell:self];
+        }
     }
 }
 
@@ -147,8 +141,6 @@
     
     result->highlightedWords = [highlightedWords copy];
     result->highlightColor = [highlightColor copy];
-    if ([result highlightsMatchingWords])
-        [result highlightMatchingWords];
     
     return result;
 }
@@ -161,6 +153,7 @@
     if (highlightsMatchingWords != newHighlightsMatchingWords) {
         highlightsMatchingWords = newHighlightsMatchingWords;
         [self highlightMatchingWords];
+        [(NSControl *)[self controlView] updateCell:self];
     }
 }
 

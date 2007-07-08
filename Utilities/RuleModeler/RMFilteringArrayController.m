@@ -107,6 +107,8 @@
             [self doSetSearchWords:[NSArray array]];
         }
     }
+    else
+        [self doSetSearchWords:[NSArray array]]; // Search has been reset
     
     NS_DURING {
         [self setFilterPredicate:predicate];
