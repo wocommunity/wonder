@@ -300,7 +300,7 @@ public class ERXJDBCMigrationLock implements IERXMigrationLock {
 		EOModel dbUpdaterModel = dbUpdaterModelWithModel(model, adaptor);
 		NSMutableDictionary row = new NSMutableDictionary();
 		row.setObjectForKey(model.name(), "modelName");
-		row.setObjectForKey(updateLock, "UpdateLock");
+		row.setObjectForKey(updateLock, "updateLock");
 		row.setObjectForKey(version, "version");
 		if (lockOwnerName != null) {
 			row.setObjectForKey(lockOwnerName, "lockOwner");
