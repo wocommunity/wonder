@@ -13,8 +13,31 @@ FIXME Paste multiple lines in searchField -> garbage on refresh of searchField (
 FIXME Wrong window cascading when opening model after group has been opened
 FIXME In rhs textview: when 'no selection' placeholder, don't allow selection; idem for multiple, when not editable. Idem for textfield, as currently clicking on field lets placeholder disappear
 FIXME When file edited externally, sometimes RM loses path of file at save
+FIXME Undo manager error: edit rhs value: type "D2, and complete, type " to finish, then tab to rule list, then undo -> file still modified
+
+1.3.1:
+Fixed bug when closing model group
+Fixed bug when parsing EOKeyComparisonQualifier value
+Added option to set default rule priority (now set to 100).
+Added option (local + global) to display lhs in a formatted form, one comparison qualifier per line.
+Added option to put parentheses around comparison qualifiers.
+Now updates tooltip list after user modifies d2wclientConfigurationPaths
+Changed rhs value text size to match other fields text size
+
+1.3.2:
+Fixed font size for missing lhs in tableviews
+Now also uses grey color for disabled rules in model editor
+Added completion for lhs and rhs, based on Apple and Wonder frameworks values, as well as all open documents values
+Added optional highlighting of search term in all fields
+Fixed update of rule order in files
+
+1.3.3:
+Regression bug. In rule list, displayed text was cut on words, not on characters, i.e. displayed "task = " when it would have enough space to display "task = 'ed".
+Regression bug. In rule list, for disabled rules, displayed text was still in black instead of grey.
+
 
 For 1.4:
+FIXME Rule firing: also return rules not matching keyPath
 - When lhs/rhs.value fields are _not_editable_, use grey color instead of black
 - For the missing placeholder of NSTextView: when we need the placeholder, switch NSTextView to NSTextField? Problem: click on multiple -> editable -> textview again
 - Double-clicking a parenthesis in lhs/rhs fields should select whole parenthesized content + parentheses
