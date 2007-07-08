@@ -135,6 +135,11 @@ public class InstantMessengerAdaptor extends WOAdaptor implements IMessageListen
 		}
 		return connection;
 	}
+	
+	public void _removeInstantMessengerConnection(InstantMessengerConnection connection) {
+		connection.disconnect();
+		_instantMessengers.remove(connection.instantMessenger().getScreenName());
+	}
 
 	public void removeInstantMessenger(String screenName) {
 		InstantMessengerConnection existingConnection = (InstantMessengerConnection) _instantMessengers.remove(screenName);
