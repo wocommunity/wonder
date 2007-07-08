@@ -114,6 +114,9 @@ public abstract class ERXMigration implements IERXMigration {
 	 */
 	protected String getSQLForMigration(String migrationName) {
 		NSBundle bundle = NSBundle.bundleForName(this.migrationBundleName());
+		if (bundle == null) {
+			bundle = NSBundle._appBundleForName(this.migrationBundleName());
+		}
 		NSArray resourcePaths = bundle.resourcePathsForResources("migration", null);
 
 		if (resourcePaths != null) {
