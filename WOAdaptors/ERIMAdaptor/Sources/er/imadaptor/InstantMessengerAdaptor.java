@@ -14,20 +14,24 @@ import com.webobjects.appserver.WOApplication;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WORequest;
 import com.webobjects.appserver.WOResponse;
+import com.webobjects.appserver.WOSession;
 import com.webobjects.appserver._private.WODynamicURL;
 import com.webobjects.appserver._private.WOURLEncoder;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDelayedCallbackCenter;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableDictionary;
+import com.webobjects.foundation.NSNotification;
+import com.webobjects.foundation.NSNotificationCenter;
+import com.webobjects.foundation.NSSelector;
 
-import er.extensions.ERXAsyncQueue;
+import er.extensions.ERXProperties;
 
 public class InstantMessengerAdaptor extends WOAdaptor implements IMessageListener {
 	static {
 		LoggingSystem.setLogManager(new JOscarLogManager());
 	}
-	private static Logger log = Logger.getLogger(InstantMessengerAdaptor.class);
+	public static Logger log = Logger.getLogger(InstantMessengerAdaptor.class);
 
 	public static final String IM_FACTORY_KEY = "IMFactory";
 	public static final String SCREEN_NAME_KEY = "IMScreenName";
@@ -50,76 +54,50 @@ public class InstantMessengerAdaptor extends WOAdaptor implements IMessageListen
 	public static final String RAW_MESSAGE_KEY = "RawMessage";
 
 	private WOApplication _application;
-	private String _screenName;
-	private String _password;
 	private IInstantMessengerFactory _factory;
-	private IInstantMessenger _instantMessenger;
-
-	private Map _conversations;
-	private long _conversationTimeout;
-	private boolean _running;
-	private boolean _autoLogin;
-	private String _conversationActionName;
+	private Map _instantMessengers;
 
 	private String _centralizeScreenName;
-	private String _watcherScreenName;
-	private String _watcherPassword;
-	private IInstantMessengerFactory _watcherFactory;
-	private IInstantMessenger _watcherInstantMessenger;
-	private Thread _watcherThread;
-	private IMConnectionTester _watcherTester;
-	private Thread _watchedThread;
-	private IMConnectionTester _watchedTester;
-	private InstantMessageQueue _messageQueue;
+	private String _defaultScreenName;
+	private String _conversationActionName;
+	private long _conversationTimeout;
+	private boolean _autoLogin;
+
+	private boolean _running;
 
 	public InstantMessengerAdaptor(String name, NSDictionary parameters) {
 		super(name, parameters);
 
-		_messageQueue = new InstantMessageQueue();
-		_messageQueue.start();
+		NSNotificationCenter.defaultCenter().addObserver(this, new NSSelector("sessionDidCreate", new Class[] { NSNotification.class }), WOSession.SessionDidCreateNotification, null);
 
-		_conversations = new HashMap();
 		_application = WOApplication.application();
+		_instantMessengers = new HashMap();
 
-		_centralizeScreenName = propertyNamed(InstantMessengerAdaptor.CENTRALIZE_SCREEN_NAME_KEY, parameters, false);
-		_screenName = propertyNamed(InstantMessengerAdaptor.SCREEN_NAME_KEY, parameters, true);
-		_password = propertyNamed(InstantMessengerAdaptor.PASSWORD_KEY, parameters, true);
-		_factory = getFactory(InstantMessengerAdaptor.IM_FACTORY_KEY, parameters);
+		_centralizeScreenName = ERXProperties.stringForKey(InstantMessengerAdaptor.CENTRALIZE_SCREEN_NAME_KEY);
+		_factory = getFactory(InstantMessengerAdaptor.IM_FACTORY_KEY);
 
-		_conversationTimeout = 1000 * 60 * 5;
-		String conversationTimeoutStr = (String) parameters.objectForKey(InstantMessengerAdaptor.CONVERSATION_TIMEOUT_KEY);
-		if (conversationTimeoutStr == null) {
-			conversationTimeoutStr = System.getProperty(InstantMessengerAdaptor.CONVERSATION_TIMEOUT_KEY);
+		_conversationTimeout = ERXProperties.longForKeyWithDefault(InstantMessengerAdaptor.CONVERSATION_TIMEOUT_KEY, 1000 * 60 * 5);
+		_conversationActionName = ERXProperties.stringForKeyWithDefault(InstantMessengerAdaptor.CONVERSATION_ACTION_NAME_KEY, "imConversation");
+		_autoLogin = ERXProperties.booleanForKeyWithDefault(InstantMessengerAdaptor.AUTO_LOGIN_KEY, false);
+
+		String defaultScreenName = ERXProperties.stringForKey(InstantMessengerAdaptor.SCREEN_NAME_KEY);
+		String defaultPassword = ERXProperties.stringForKey(InstantMessengerAdaptor.PASSWORD_KEY);
+		if (defaultScreenName != null) {
+			setDefaultInstantMessenger(defaultScreenName, defaultPassword);
 		}
-		if (conversationTimeoutStr != null) {
-			_conversationTimeout = Long.valueOf(conversationTimeoutStr).longValue();
-		}
 
-		_conversationActionName = (String) parameters.objectForKey(InstantMessengerAdaptor.CONVERSATION_ACTION_NAME_KEY);
-		if (_conversationActionName == null) {
-			_conversationActionName = System.getProperty(InstantMessengerAdaptor.CONVERSATION_ACTION_NAME_KEY);
-			if (_conversationActionName == null) {
-				_conversationActionName = "imConversation";
+		boolean watcherEnabled = ERXProperties.booleanForKeyWithDefault(InstantMessengerAdaptor.WATCHER_ENABLED_KEY, false);
+		if (watcherEnabled) {
+			String watcherScreenName = ERXProperties.stringForKey(InstantMessengerAdaptor.WATCHER_SCREEN_NAME_KEY);
+			String watcherPassword = ERXProperties.stringForKey(InstantMessengerAdaptor.WATCHER_PASSWORD_KEY);
+			if (watcherScreenName == null || watcherPassword == null) {
+				throw new IllegalArgumentException("You must set both '" + InstantMessengerAdaptor.WATCHER_SCREEN_NAME_KEY + "' and '" + InstantMessengerAdaptor.WATCHER_PASSWORD_KEY + "' if '" + InstantMessengerAdaptor.WATCHER_ENABLED_KEY + "' is true.");
 			}
-		}
-
-		_autoLogin = true;
-		String autoLoginStr = (String) parameters.objectForKey(InstantMessengerAdaptor.AUTO_LOGIN_KEY);
-		if (autoLoginStr == null) {
-			autoLoginStr = System.getProperty(InstantMessengerAdaptor.AUTO_LOGIN_KEY);
-		}
-		if (autoLoginStr != null && !Boolean.valueOf(autoLoginStr).booleanValue()) {
-			_autoLogin = false;
-		}
-
-		String watcherEnabledStr = (String) parameters.objectForKey(InstantMessengerAdaptor.WATCHER_ENABLED_KEY);
-		if (watcherEnabledStr == null) {
-			watcherEnabledStr = System.getProperty(InstantMessengerAdaptor.WATCHER_ENABLED_KEY);
-		}
-		if (watcherEnabledStr != null && Boolean.valueOf(watcherEnabledStr).booleanValue()) {
-			_watcherScreenName = propertyNamed(InstantMessengerAdaptor.WATCHER_SCREEN_NAME_KEY, parameters, true);
-			_watcherPassword = propertyNamed(InstantMessengerAdaptor.WATCHER_PASSWORD_KEY, parameters, true);
-			_watcherFactory = getFactory(InstantMessengerAdaptor.WATCHER_IM_FACTORY_KEY, parameters);
+			IInstantMessengerFactory watcherFactory = getFactory(InstantMessengerAdaptor.WATCHER_IM_FACTORY_KEY);
+			InstantMessengerConnection defaultInstantMessengerConnection = _defaultInstantMessengerConnection();
+			if (defaultInstantMessengerConnection != null) {
+				defaultInstantMessengerConnection.setWatchDog(watcherScreenName, watcherPassword, watcherFactory);
+			}
 		}
 	}
 
@@ -136,36 +114,53 @@ public class InstantMessengerAdaptor extends WOAdaptor implements IMessageListen
 		return matchingAdaptor;
 	}
 
+	public InstantMessengerConnection setDefaultInstantMessenger(String screenName, String password) {
+		_defaultScreenName = screenName;
+		return _addInstantMessenger(screenName, password);
+	}
+
+	public InstantMessengerConnection addInstantMessenger(String screenName, String password) {
+		return _addInstantMessenger(screenName, password);
+	}
+
+	public InstantMessengerConnection _addInstantMessenger(String screenName, String password) {
+		InstantMessengerConnection existingConnection = (InstantMessengerConnection) _instantMessengers.get(screenName);
+		if (existingConnection != null) {
+			existingConnection.disconnect();
+		}
+		InstantMessengerConnection connection = new InstantMessengerConnection(screenName, password, _factory);
+		_instantMessengers.put(screenName, connection);
+		if (_running && _autoLogin) {
+			connection.connect(this);
+		}
+		return connection;
+	}
+
+	public void removeInstantMessenger(String screenName) {
+		InstantMessengerConnection existingConnection = (InstantMessengerConnection) _instantMessengers.remove(screenName);
+		if (existingConnection != null) {
+			existingConnection.disconnect();
+		}
+	}
+
+	public IInstantMessenger instantMessengerForScreenName(String screenName) {
+		IInstantMessenger instantMessenger = null;
+		InstantMessengerConnection connection = _instantMessengerConnectionNamed(screenName);
+		if (connection != null) {
+			instantMessenger = connection.instantMessenger();
+		}
+		return instantMessenger;
+	}
+
+	/**
+	 * @deprecated use defaultInstantMessenger() instead
+	 */
 	public IInstantMessenger instantMessenger() {
-		return _instantMessenger;
+		return defaultInstantMessenger();
 	}
 
-	protected String propertyNamed(String key, NSDictionary parameters, boolean required) {
-		String value = (String) parameters.objectForKey(key);
-		if (value == null) {
-			value = System.getProperty(key);
-		}
-		if (required && value == null) {
-			throw new RuntimeException("Missing required property " + key + ".");
-		}
-		return value;
-	}
-
-	protected IInstantMessengerFactory getFactory(String key, NSDictionary parameters) {
-		String factoryClass = propertyNamed(key, parameters, false);
-		try {
-			IInstantMessengerFactory factory;
-			if (factoryClass == null) {
-				factory = new JOscarInstantMessenger.Factory();
-			}
-			else {
-				factory = (IInstantMessengerFactory) Class.forName(factoryClass).newInstance();
-			}
-			return factory;
-		}
-		catch (Throwable t) {
-			throw new RuntimeException("Invalidate InstantMessengerFactory: " + factoryClass, t);
-		}
+	public IInstantMessenger defaultInstantMessenger() {
+		return instantMessengerForScreenName(_defaultScreenName);
 	}
 
 	public static boolean isIMRequest(WOContext context) {
@@ -190,43 +185,24 @@ public class InstantMessengerAdaptor extends WOAdaptor implements IMessageListen
 	}
 
 	public static Conversation conversation(WORequest request) {
-		return (Conversation) request.userInfo().objectForKey(InstantMessengerAdaptor.CONVERSATION_KEY);
+		NSDictionary userInfo = request.userInfo();
+		Conversation conversation = null;
+		if (userInfo != null) {
+			conversation = (Conversation) userInfo.objectForKey(InstantMessengerAdaptor.CONVERSATION_KEY);
+		}
+		return conversation;
 	}
 
 	public void registerForEvents() {
-		_instantMessenger = _factory.createInstantMessenger(_screenName, _password);
 		if (_autoLogin) {
-			connect();
-		}
-	}
-
-	public void connect() {
-		_instantMessenger.addMessageListener(this);
-		try {
-			_instantMessenger.connect();
-		}
-		catch (Throwable e) {
-			InstantMessengerAdaptor.log.debug("Failed to connect to provider.", e);
-		}
-
-		if (_watcherFactory != null) {
-			_watcherInstantMessenger = _watcherFactory.createInstantMessenger(_watcherScreenName, _watcherPassword);
-			try {
-				_watcherInstantMessenger.connect();
+			Iterator instantMessengerIter = _instantMessengers.entrySet().iterator();
+			while (instantMessengerIter.hasNext()) {
+				Map.Entry instantMessengerEntry = (Map.Entry) instantMessengerIter.next();
+				String screenName = (String) instantMessengerEntry.getKey();
+				InstantMessengerConnection connection = (InstantMessengerConnection) instantMessengerEntry.getValue();
+				connection.connect(this);
 			}
-			catch (Throwable e) {
-				InstantMessengerAdaptor.log.debug("Failed to connect watcher to provider.", e);
-			}
-
-			_watcherTester = new IMConnectionTester(_watcherInstantMessenger, _instantMessenger, 60000, 30000);
-			_watcherThread = new Thread(_watcherTester);
-			_watcherThread.start();
-
-			_watchedTester = new IMConnectionTester(_instantMessenger, _watcherInstantMessenger, 60000, 30000);
-			_watchedThread = new Thread(_watchedTester);
-			_watchedThread.start();
 		}
-
 		_running = true;
 		Thread conversationExpiration = new Thread(new ConversationExpirationRunnable());
 		conversationExpiration.start();
@@ -234,13 +210,13 @@ public class InstantMessengerAdaptor extends WOAdaptor implements IMessageListen
 
 	public void unregisterForEvents() {
 		_running = false;
-		if (_instantMessenger != null) {
-			_instantMessenger.disconnect();
-		}
-		if (_watcherInstantMessenger != null) {
-			_watchedTester.stop();
-			_watcherTester.stop();
-			_watcherInstantMessenger.disconnect();
+		Iterator instantMessengerIter = _instantMessengers.entrySet().iterator();
+		while (instantMessengerIter.hasNext()) {
+			Map.Entry instantMessengerEntry = (Map.Entry) instantMessengerIter.next();
+			String screenName = (String) instantMessengerEntry.getKey();
+			InstantMessengerConnection connection = (InstantMessengerConnection) instantMessengerEntry.getValue();
+			connection.disconnect();
+			instantMessengerIter.remove();
 		}
 	}
 
@@ -248,47 +224,19 @@ public class InstantMessengerAdaptor extends WOAdaptor implements IMessageListen
 		return true;
 	}
 
-	protected void conversationExpired(Conversation conversation) {
-
-	}
-
-	protected void removeExpiredConversations() {
-		synchronized (_conversations) {
-			Iterator conversationsIter = _conversations.entrySet().iterator();
-			while (conversationsIter.hasNext()) {
-				Map.Entry entry = (Map.Entry) conversationsIter.next();
-				Conversation conversation = (Conversation) entry.getValue();
-				if (conversation.isExpired(_conversationTimeout)) {
-					conversationExpired(conversation);
-					conversationsIter.remove();
-				}
-			}
-		}
-	}
-
 	public synchronized void messageReceived(IInstantMessenger instantMessenger, String buddyName, String rawMessage) {
 		if (log.isInfoEnabled()) {
 			log.info("Received message from '" + buddyName + "': " + rawMessage);
 		}
+		String screenName = instantMessenger.getScreenName();
 		String message = rawMessage;
 		if (message != null) {
 			message = message.replaceAll("<[^>]+>", "");
 			message = message.trim();
 		}
-		Conversation conversation;
-		synchronized (_conversations) {
-			conversation = (Conversation) _conversations.get(buddyName);
-			if (conversation == null || conversation.isExpired(_conversationTimeout)) {
-				conversation = new Conversation();
-				conversation.setBuddyName(buddyName);
-				_conversations.put(buddyName, conversation);
-			}
-			else {
-				conversation.ping();
-			}
-		}
 
 		StringBuffer uri = new StringBuffer();
+		Conversation conversation = _instantMessengerConnectionNamed(screenName).conversationForBuddyNamed(buddyName, _conversationTimeout);
 		String requestUrl = conversation.requestUrl();
 		if (requestUrl == null) {
 			String webserverConnectUrl = _application.webserverConnectURL();
@@ -336,6 +284,7 @@ public class InstantMessengerAdaptor extends WOAdaptor implements IMessageListen
 
 		NSMutableDictionary userInfo = new NSMutableDictionary();
 		userInfo.setObjectForKey(Boolean.TRUE, InstantMessengerAdaptor.IS_IM_KEY);
+		userInfo.setObjectForKey(screenName, InstantMessengerAdaptor.SCREEN_NAME_KEY);
 		userInfo.setObjectForKey(buddyName, InstantMessengerAdaptor.BUDDY_NAME_KEY);
 		userInfo.setObjectForKey(message, InstantMessengerAdaptor.MESSAGE_KEY);
 		userInfo.setObjectForKey(rawMessage, InstantMessengerAdaptor.RAW_MESSAGE_KEY);
@@ -345,20 +294,24 @@ public class InstantMessengerAdaptor extends WOAdaptor implements IMessageListen
 		WOResponse response;
 		try {
 			response = _application.dispatchRequest(request);
-			String newSessionID = request.sessionID();
-			if (newSessionID != null) {
-				conversation.setSessionID(newSessionID);
+			// String newSessionID = request.sessionID();
+			// if (newSessionID != null) {
+			// conversation.setSessionID(newSessionID);
+			// }
+			if (response != null) {
+				String nextRequestUrl = response.headerForKey(InstantMessengerAdaptor.IM_ACTION_URL_KEY);
+				conversation.setRequestUrl(nextRequestUrl);
+				String responseMessage = response.contentString();
+				if (responseMessage != null) {
+					responseMessage = responseMessage.trim();
+				}
+				if (responseMessage.length() > 0) {
+					if (log.isInfoEnabled()) {
+						log.info("Sending message to '" + buddyName + "': " + responseMessage);
+					}
+					sendMessage(screenName, buddyName, responseMessage, true);
+				}
 			}
-			String nextRequestUrl = response.headerForKey(InstantMessengerAdaptor.IM_ACTION_URL_KEY);
-			conversation.setRequestUrl(nextRequestUrl);
-			String responseMessage = response.contentString();
-			if (responseMessage != null) {
-				responseMessage = responseMessage.trim();
-			}
-			if (log.isInfoEnabled()) {
-				log.info("Sending message to '" + buddyName + "': " + responseMessage);
-			}
-			_instantMessenger.sendMessage(buddyName, responseMessage, true);
 		}
 		catch (Throwable t) {
 			InstantMessengerAdaptor.log.error(toString() + " Exception occurred while responding to client: " + t.toString(), t);
@@ -366,47 +319,61 @@ public class InstantMessengerAdaptor extends WOAdaptor implements IMessageListen
 		NSDelayedCallbackCenter.defaultCenter().eventEnded();
 	}
 
-	public void sendMessage(String buddyName, String message, boolean block) throws MessageException {
+	public void sessionDidCreate(NSNotification notification) {
+		WOSession session = (WOSession) notification.object();
+		WORequest request = session.context().request();
+		Conversation conversation = InstantMessengerAdaptor.conversation(request);
+		if (conversation != null) {
+			conversation.setSessionID(session.sessionID());
+		}
+	}
+
+	public void sendMessage(String screenName, String buddyName, String message, boolean block) throws MessageException {
 		if (_centralizeScreenName != null) {
 			log.warn("IM's are centralized; replacing '" + buddyName + "' with '" + _centralizeScreenName + "'");
 			buddyName = _centralizeScreenName;
 		}
-		if (block) {
-			instantMessenger().sendMessage(buddyName, message, true);
+		IInstantMessenger instantMessenger = instantMessengerForScreenName(screenName);
+		if (instantMessenger == null) {
+			log.error("There is no connection for the screen name '" + screenName + "'.");
 		}
 		else {
-			_messageQueue.enqueue(new Message(buddyName, message));
+			instantMessenger.sendMessage(buddyName, message, true);
 		}
 	}
 
-	protected class InstantMessageQueue extends ERXAsyncQueue {
-		public void process(Object object) {
-			Message message = (Message) object;
-			try {
-				IInstantMessenger instantMessenger = InstantMessengerAdaptor.this.instantMessenger();
-				InstantMessengerAdaptor.this.instantMessenger().sendMessage(message.buddyName(), message.contents(), true);
+	public InstantMessengerConnection _instantMessengerConnectionNamed(String screenName) {
+		return (InstantMessengerConnection) _instantMessengers.get(screenName);
+	}
+
+	public InstantMessengerConnection _defaultInstantMessengerConnection() {
+		return _instantMessengerConnectionNamed(_defaultScreenName);
+	}
+
+	protected IInstantMessengerFactory getFactory(String key) {
+		String factoryClass = ERXProperties.stringForKey(key);
+		try {
+			IInstantMessengerFactory factory;
+			if (factoryClass == null) {
+				factory = new JOscarInstantMessenger.Factory();
 			}
-			catch (MessageException e) {
-				InstantMessengerAdaptor.log.error(e);
+			else {
+				factory = (IInstantMessengerFactory) Class.forName(factoryClass).newInstance();
 			}
+			return factory;
+		}
+		catch (Throwable t) {
+			throw new RuntimeException("Invalidate InstantMessengerFactory: " + factoryClass, t);
 		}
 	}
 
-	protected class Message {
-		private String _contents;
-		private String _buddyName;
-
-		public Message(String buddyName, String contents) {
-			_buddyName = buddyName;
-			_contents = contents;
-		}
-
-		public String contents() {
-			return _contents;
-		}
-
-		public String buddyName() {
-			return _buddyName;
+	protected void removeExpiredConversations() {
+		Iterator instantMessengerIter = _instantMessengers.entrySet().iterator();
+		while (instantMessengerIter.hasNext()) {
+			Map.Entry instantMessengerEntry = (Map.Entry) instantMessengerIter.next();
+			String screenName = (String) instantMessengerEntry.getKey();
+			InstantMessengerConnection connection = (InstantMessengerConnection) instantMessengerEntry.getValue();
+			connection.removeExpiredConversations(_conversationTimeout);
 		}
 	}
 
