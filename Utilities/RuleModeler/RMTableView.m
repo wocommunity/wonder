@@ -39,60 +39,48 @@
  * Catches delete and backspace keys to perform deletion
  * Catches return key to perform addition
  * Provides invertSelection: action
- * See http://homepage.mac.com/mmalc/CocoaExamples/controllers.html
+ * See http://rentzsch.com/cocoa/NSTableViewCocoaBindingsDeleteKey
  */
 @implementation RMTableView
 
-- (void)bind:(NSString *)binding toObject:(id)observable withKeyPath:(NSString *)keyPath options:(NSDictionary *)options {	
-	if ([binding isEqualToString:@"content"]) {
-		tableContentController = observable;
-		[tableContentKey release];
-		tableContentKey = [keyPath copy];
-    }
-	[super bind:binding toObject:observable withKeyPath:keyPath options:options];
+- (NSArrayController *) tableContentController {
+	return [[self infoForBinding:@"content"] objectForKey:NSObservedObjectKey];
 }
 
 - (void)keyDown:(NSEvent *)event {
-	unichar key = [[event charactersIgnoringModifiers] characterAtIndex:0];
+    NSString *chars = [event characters];
     
-	// get flags and strip the lower 16 (device dependant) bits
-	unsigned int flags = ( [event modifierFlags] & 0x00FF );
-    
-	if ((key == NSDeleteCharacter && flags == 0) || (key == NSDeleteFunctionKey && ([event modifierFlags] & NSFunctionKeyMask))) { 
-        if ([self isEnabled] && [tableContentController canRemove]) {
-            [tableContentController removeObjectsAtArrangedObjectIndexes:[self selectedRowIndexes]];
-        }
-        else
-			NSBeep();
-    }
-	else if ((key == NSCarriageReturnCharacter) && flags == 0) { 
-        if ([self isEnabled] && [tableContentController canAdd]) {
-            if ([[self delegate] respondsToSelector:@selector(addToTableView:)])
-                [[self delegate] addToTableView:self];
+    if([chars length] > 0){
+        unichar            key = [chars characterAtIndex:0];
+        NSArrayController  *tableContentController = [self tableContentController];
+        
+        if (key == NSDeleteCharacter || key == NSDeleteFunctionKey || key == NSDeleteCharFunctionKey) { 
+            if ([self isEnabled] && [tableContentController canRemove]) {
+                [tableContentController remove:self];
+            }
             else
-                [tableContentController add:nil];
+                NSBeep();
+            return;
         }
-        else
-            NSBeep();
+        else if (key == NSCarriageReturnCharacter) { 
+            if ([self isEnabled] && [tableContentController canAdd]) {
+                if ([[self delegate] respondsToSelector:@selector(addToTableView:)])
+                    [[self delegate] addToTableView:self];
+                else
+                    [tableContentController add:self];
+            }
+            else
+                NSBeep();
+            return;
+        }
     }
-	else {
-		[super keyDown:event]; // let somebody else handle the event 
-    }
-}
-
-- (void)unbind:(NSString *)binding {
-	[super unbind:binding];
-	
-	if ([binding isEqualToString:@"content"]) {
-		tableContentController = nil;
-		[tableContentKey release];
-		tableContentKey = nil;
-    }
+    [super keyDown:event]; // let somebody else handle the event 
 }
 
 - (IBAction)invertSelection:(id)sender {
-    unsigned    maxIndex = [[tableContentController arrangedObjects] count] - 1;
-    NSIndexSet  *inverseIndexSet = [[tableContentController selectionIndexes] inverseIndexWithMaxIndex:maxIndex];
+	NSArrayController   *tableContentController = [self tableContentController];
+    unsigned            maxIndex = [[tableContentController arrangedObjects] count] - 1;
+    NSIndexSet          *inverseIndexSet = [[tableContentController selectionIndexes] inverseIndexWithMaxIndex:maxIndex];
     
     [tableContentController setSelectionIndexes:inverseIndexSet];
 }

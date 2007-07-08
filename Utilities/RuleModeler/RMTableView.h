@@ -36,11 +36,10 @@
 
 
 @interface RMTableView : NSTableView {
-	NSArrayController   *tableContentController;
-	NSString            *tableContentKey;
 }
 
 - (IBAction) invertSelection:(id)sender;
+- (NSArrayController *) tableContentController;
 
 @end
 
