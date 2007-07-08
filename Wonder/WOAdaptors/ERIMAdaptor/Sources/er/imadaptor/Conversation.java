@@ -8,6 +8,7 @@ import com.webobjects.foundation.NSMutableDictionary;
  * @author mschrag
  */
 public class Conversation {
+	private String _screenName;
 	private String _buddyName;
 	private String _sessionID;
 	private String _requestUrl;
@@ -17,6 +18,14 @@ public class Conversation {
 	public Conversation() {
 		_lastContact = System.currentTimeMillis();
 		_values = new NSMutableDictionary();
+	}
+	
+	public void setScreenName(String screenName) {
+		_screenName = screenName;
+	}
+	
+	public String screenName() {
+		return _screenName;
 	}
 
 	public String requestUrl() {

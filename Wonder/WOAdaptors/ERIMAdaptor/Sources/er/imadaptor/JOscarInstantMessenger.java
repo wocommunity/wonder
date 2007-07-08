@@ -1,5 +1,6 @@
 package er.imadaptor;
 
+import java.beans.PropertyChangeEvent;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
@@ -11,6 +12,7 @@ import net.kano.joustsim.oscar.AimSession;
 import net.kano.joustsim.oscar.BuddyInfo;
 import net.kano.joustsim.oscar.BuddyInfoManager;
 import net.kano.joustsim.oscar.DefaultAimSession;
+import net.kano.joustsim.oscar.GlobalBuddyInfoListener;
 import net.kano.joustsim.oscar.State;
 import net.kano.joustsim.oscar.StateEvent;
 import net.kano.joustsim.oscar.StateListener;
@@ -24,6 +26,7 @@ import net.kano.joustsim.oscar.oscar.service.icbm.Message;
 import net.kano.joustsim.oscar.oscar.service.icbm.MessageInfo;
 import net.kano.joustsim.oscar.oscar.service.icbm.SimpleMessage;
 import net.kano.joustsim.oscar.oscar.service.ssi.Buddy;
+import net.kano.joustsim.oscar.oscar.service.ssi.MutableBuddy;
 import net.kano.joustsim.oscar.oscar.service.ssi.MutableBuddyList;
 import net.kano.joustsim.oscar.oscar.service.ssi.MutableGroup;
 import net.kano.joustsim.oscar.oscar.service.ssi.SsiService;
@@ -36,6 +39,7 @@ public class JOscarInstantMessenger extends AbstractInstantMessenger {
 
 	private boolean _connected;
 	private long _lastConnectionAttempt;
+	private long _lastBuddyListChange;
 
 	public JOscarInstantMessenger(String screenName, String password) {
 		super(screenName, password);
@@ -43,11 +47,20 @@ public class JOscarInstantMessenger extends AbstractInstantMessenger {
 		_conversationHandler = new ConversationHandler();
 	}
 
+	public long buddyListLastModified() {
+		return _lastBuddyListChange;
+	}
+
+	protected void buddyListModified() {
+		_lastBuddyListChange = System.currentTimeMillis();
+	}
+
 	protected class AimStateHandler implements StateListener {
 		public void handleStateChange(StateEvent event) {
 			State state = event.getNewState();
 			if (state == State.ONLINE) {
 				_conn = event.getAimConnection();
+				_conn.getBuddyInfoManager().addGlobalBuddyInfoListener(new BuddyChangeListener());
 				IcbmService icbmService = _conn.getIcbmService();
 				icbmService.addIcbmListener(_icbmHandler);
 				_connected = true;
@@ -63,8 +76,23 @@ public class JOscarInstantMessenger extends AbstractInstantMessenger {
 		}
 	}
 
+	protected class BuddyChangeListener implements GlobalBuddyInfoListener {
+		public void buddyInfoChanged(BuddyInfoManager buddyinfomanager, Screenname screenname, BuddyInfo buddyinfo, PropertyChangeEvent propertychangeevent) {
+			JOscarInstantMessenger.this.buddyListModified();
+		}
+
+		public void newBuddyInfo(BuddyInfoManager buddyinfomanager, Screenname screenname, BuddyInfo buddyinfo) {
+			JOscarInstantMessenger.this.buddyListModified();
+		}
+
+		public void receivedStatusUpdate(BuddyInfoManager buddyinfomanager, Screenname screenname, BuddyInfo buddyinfo) {
+			JOscarInstantMessenger.this.buddyListModified();
+		}
+	}
+
 	protected class IcbmHandler implements IcbmListener {
 		public void buddyInfoUpdated(IcbmService service, Screenname sn, IcbmBuddyInfo buddyInfo) {
+			JOscarInstantMessenger.this.buddyListModified();
 		}
 
 		public void newConversation(IcbmService service, Conversation conv) {
@@ -109,6 +137,55 @@ public class JOscarInstantMessenger extends AbstractInstantMessenger {
 			awayMessage = buddyInfo.getAwayMessage();
 		}
 		return awayMessage;
+	}
+
+	public String[] getGroupNames() {
+		String[] groupNames;
+		if (_connected && _conn != null) {
+			BuddyInfoManager buddyInfoManager = _conn.getBuddyInfoManager();
+			SsiService ssiService = _conn.getSsiService();
+			MutableBuddyList buddyList = ssiService.getBuddyList();
+			List groupsList = buddyList.getGroups();
+			groupNames = new String[groupsList.size()];
+			int groupNum = 0;
+			Iterator groupsIter = groupsList.iterator();
+			while (groupsIter.hasNext()) {
+				MutableGroup group = (MutableGroup) groupsIter.next();
+				groupNames[groupNum++] = group.getName();
+			}
+		}
+		else {
+			groupNames = new String[0];
+		}
+		return groupNames;
+	}
+
+	public String[] getBuddiesInGroupNamed(String groupName) {
+		String[] buddyNames = null;
+		if (_connected && _conn != null) {
+			BuddyInfoManager buddyInfoManager = _conn.getBuddyInfoManager();
+			SsiService ssiService = _conn.getSsiService();
+			MutableBuddyList buddyList = ssiService.getBuddyList();
+			List groupsList = buddyList.getGroups();
+			Iterator groupsIter = groupsList.iterator();
+			while (groupsIter.hasNext()) {
+				MutableGroup group = (MutableGroup) groupsIter.next();
+				if (groupName.equals(group.getName())) {
+					List buddies = group.getBuddiesCopy();
+					buddyNames = new String[buddies.size()];
+					int buddyNum = 0;
+					Iterator buddiesIter = buddies.iterator();
+					while (buddiesIter.hasNext()) {
+						MutableBuddy buddy = (MutableBuddy) buddiesIter.next();
+						buddyNames[buddyNum++] = buddy.getScreenname().getNormal();
+					}
+				}
+			}
+		}
+		if (buddyNames == null) {
+			buddyNames = new String[0];
+		}
+		return buddyNames;
 	}
 
 	public void removeBuddy(String buddyName) {
@@ -176,11 +253,12 @@ public class JOscarInstantMessenger extends AbstractInstantMessenger {
 	}
 
 	public synchronized void connect() throws IMConnectionException {
-		if (_connected || _conn != null) {
+		boolean wasConnected = _connected;
+		if (wasConnected || _conn != null) {
 			disconnect();
 		}
 		long now = System.currentTimeMillis();
-		if (now - _lastConnectionAttempt > (1000 * 60 * 15)) {
+		if (wasConnected || now - _lastConnectionAttempt > (1000 * 60 * 15)) {
 			_lastConnectionAttempt = now;
 
 			Screenname sn = new Screenname(getScreenName());
@@ -211,20 +289,22 @@ public class JOscarInstantMessenger extends AbstractInstantMessenger {
 	}
 
 	public synchronized void sendMessage(String buddyName, String message, boolean ignoreIfOffline) throws MessageException {
-		BuddyInfo buddyInfo = _addBuddyIfNecessary(buddyName);
-		if (buddyInfo != null) {
-			if (!buddyInfo.isOnline()) {
-				if (!ignoreIfOffline) {
-					throw new BuddyOfflineException("The buddy '" + buddyName + "' is not online.");
+		if (message != null) {
+			BuddyInfo buddyInfo = _addBuddyIfNecessary(buddyName);
+			if (buddyInfo != null) {
+				if (!buddyInfo.isOnline()) {
+					if (!ignoreIfOffline) {
+						throw new BuddyOfflineException("The buddy '" + buddyName + "' is not online.");
+					}
 				}
-			}
-			else {
-				if (message.length() > 2048) {
-					message = message.substring(0, 2048);
+				else {
+					if (message.length() > 2048) {
+						message = message.substring(0, 2048);
+					}
+					Conversation conv = _conn.getIcbmService().getImConversation(buddyInfo.getScreenname());
+					conv.open();
+					conv.sendMessage(new SimpleMessage(message));
 				}
-				Conversation conv = _conn.getIcbmService().getImConversation(buddyInfo.getScreenname());
-				conv.open();
-				conv.sendMessage(new SimpleMessage(message));
 			}
 		}
 	}

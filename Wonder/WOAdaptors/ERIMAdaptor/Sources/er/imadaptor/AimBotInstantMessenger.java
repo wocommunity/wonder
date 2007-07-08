@@ -1,5 +1,9 @@
 package er.imadaptor;
 
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+
 import com.levelonelabs.aim.AIMBuddy;
 import com.levelonelabs.aim.AIMClient;
 import com.levelonelabs.aim.AIMListener;
@@ -13,6 +17,10 @@ public class AimBotInstantMessenger extends AbstractInstantMessenger {
 	public AimBotInstantMessenger(String screenName, String password) {
 		super(screenName, password);
 		_listener = new AimBotListener();
+	}
+	
+	public long buddyListLastModified() {
+		return System.currentTimeMillis();
 	}
 
 	public synchronized boolean isBuddyOnline(String buddyName) {
@@ -47,7 +55,22 @@ public class AimBotInstantMessenger extends AbstractInstantMessenger {
 			_sender.removeBuddy(new AIMBuddy(buddyName));
 		}
 	}
-	
+
+	public String[] getGroupNames() {
+		return new String[] { "Buddies" };
+	}
+
+	public String[] getBuddiesInGroupNamed(String groupName) {
+		List buddyNamesList = new LinkedList();
+		Iterator buddyNamesIter = _sender.getBuddyNames();
+		while (buddyNamesIter.hasNext()) {
+			String buddyName = (String) buddyNamesIter.next();
+			buddyNamesList.add(buddyName);
+		}
+		String[] buddyNames = (String[]) buddyNamesList.toArray(new String[buddyNamesList.size()]);
+		return buddyNames;
+	}
+
 	public synchronized void connect() throws IMConnectionException {
 		if (_connected) {
 			disconnect();
