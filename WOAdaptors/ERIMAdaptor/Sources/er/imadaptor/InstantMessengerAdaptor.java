@@ -111,6 +111,11 @@ public class InstantMessengerAdaptor extends WOAdaptor implements IMessageListen
 				matchingAdaptor = (InstantMessengerAdaptor) adaptor;
 			}
 		}
+		
+		if (matchingAdaptor == null) {
+			throw new IllegalStateException("You must set WOAdditionalAdaptors=({WOAdaptor=\"er.imadaptor.InstantMessengerAdaptor\";})");
+		}
+		
 		return matchingAdaptor;
 	}
 
