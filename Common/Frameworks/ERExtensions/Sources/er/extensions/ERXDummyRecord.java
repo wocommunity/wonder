@@ -18,6 +18,7 @@ import com.webobjects.eocontrol.EOGlobalID;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSKeyValueCoding;
 import com.webobjects.foundation.NSMutableArray;
+import com.webobjects.foundation.NSMutableDictionary;
 
 /**
  * Put POJOs into EOF (sort of). This class is mainly usefull when used with
@@ -206,6 +207,10 @@ public class ERXDummyRecord extends EOCustomObject {
 		if (pojoModel == null) {
 			pojoModel = new EOModel();
 			pojoModel.setName("PojoModel");
+			//ak: fake name for possible NPE
+			pojoModel.setAdaptorName("JDBCAdaptor");
+			//ak: fake dict for possible NPE
+			pojoModel.setConnectionDictionary(new NSMutableDictionary());
 			EOModelGroup.defaultGroup().addModel(pojoModel);
 		}
 		EOEntity entity = EOModelGroup.defaultGroup().entityNamed(entityName);
