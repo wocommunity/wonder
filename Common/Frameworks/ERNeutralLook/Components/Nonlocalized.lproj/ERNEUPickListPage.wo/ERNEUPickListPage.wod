@@ -67,6 +67,17 @@ ERXNonNullConditional2: ERXNonNullConditional {
 	condition = hasBranchChoices;
 }
 
+EditImage: WOImage {
+	alt = "Edit that Object";
+	border = 0;
+	filename = "write-btn.gif";
+	framework = "JavaDirectToWeb";
+}
+
+EditObjectHyperlink: WOHyperlink {
+	action = editObjectAction;
+}
+
 EmptyMessageComponent: WOSwitchComponent {
 	WOComponentName = d2wContext.emptyListComponentName;
 	d2wContext = d2wContext;
@@ -123,28 +134,23 @@ HideReturnOnSelect3: WOConditional {
 	negate = true;
 }
 
-InspectImage: WOActiveImage {
+InspectImage: WOImage {
 	alt = "Inspect that Object";
 	border = "0";
 	filename = "magglass-btn.gif";
 	framework = "JavaDirectToWeb";
+}
+
+InspectObjectHyperlink: WOHyperlink {
 	action = inspectObjectAction;
 }
 
-InspectImage2: WOActiveImage {
-	alt = "Inspect that Object";
-	border = 0;
-	filename = "write-btn.gif";
-	framework = "JavaDirectToWeb";
-	action = editObjectAction;
-}
-
-IsEntityNotWritable: WOConditional {
+IsEntityInspectableConditional: WOConditional {
 	_unroll = true;
 	condition = isEntityInspectable;
 }
 
-IsEntityNotWritable2: WOConditional {
+IsEntityWritableConditional: WOConditional {
 	_unroll = true;
 	condition = isEntityEditable;
 }

@@ -11,14 +11,12 @@
 						<TH VALIGN=BOTTOM>Select</TH>
 					</WEBOBJECT><WEBOBJECT NAME=EntityRepetition><WEBOBJECT NAME=ListTableRow>
 							<TD>
-								<TABLE>
-									<TR>
-										<TD></TD>
-										<TD><WEBOBJECT NAME=IsEntityNotWritable>
-												<WEBOBJECT NAME=InspectImage></WEBOBJECT>
-											</WEBOBJECT><WEBOBJECT NAME=IsEntityNotWritable2> <WEBOBJECT NAME=InspectImage2></WEBOBJECT> </WEBOBJECT></TD>
-									</TR>
-								</TABLE>
+								<webobject name="IsEntityInspectableConditional">
+									<webobject name="InspectObjectHyperlink"><webobject name="InspectImage"></webobject></webobject>
+								</webobject>
+								<webobject name="IsEntityWritableConditional">
+									<webobject name="EditObjectHyperlink"><webobject name="EditImage"></webobject></webobject>
+								</webobject>
 							</TD>
 							<WEBOBJECT NAME=AttributeRepetition><WEBOBJECT NAME=AttributeCell>
 									<WEBOBJECT NAME=AttributeDisplay></WEBOBJECT>
