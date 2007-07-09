@@ -7,50 +7,9 @@ Binary installation should be straightforward:
 - put the application in /Library/WebObjects/Applications
 - put the WebServerReources in /Library/WebServer/Documents/WebObjects
 
-Compiling Wonder distribution from scratch
-==========================================
-If you like to build everything by yourself, the following setup is required:
-- create a Folder ~/Roots
-- an installation of Ant (either via fink or manually) in your path.
-- The presence of servlet.jar in your classpath. 
-  The easiest way to do this under Mac OS X is to drop the jar in 
-  ~/Library/Java/Extensions or /Library/Java/Extensions (requires root privileges, though). 
-  On Mac OS X, you can find a copy under /Developer/Java/J2EE/jakarta-servletapi-4/lib/
-- A properties file named wobuild.properties under your ~/Library (on Mac OS X, don't 
-  know on Windows), which will contains something like this:
+See this document for information on getting started:
 
-==== START wobuild.properties ====
-
-wo.dir.root=/ 
-wo.woroot=/
-wo.dir.user.home.library.frameworks=/User/yourname/Library/Frameworks
-wo.dir.local=/
-wo.wosystemroot=/System
-wo.dir.library=/System/Library
-wo.dir.user.home.library=/User/yourname/Library
-wo.dir.local.library=/Library
-wo.dir.library.frameworks=/System/Library/Frameworks
-wo.dir.local.library.frameworks=/Library/Frameworks
-wo.wolocalroot=/
-wo.dir.system=/System
-
-==== END wobuild.properties ====
-
-- then call up
-
-   ant frameworks
-   sudo ant frameworks.install
-   
-   ant applications
-   sudo ant applications.install
-   
-   ant examples
-   sudo ant examples.install
-
-at the top-level folder. 
-
-Also, please take a look at the 'GettingStarted' document.
-
+  http://en.wikibooks.org/wiki/Programming:WebObjects/Project_WONDER/Quickstart
 
 Installing Jikes
 ================
