@@ -106,7 +106,11 @@ public class ERXDummyRecord extends EOCustomObject {
 		}
 
 		public boolean equals(Object obj) {
-			return ((GlobalID) obj).object == object;
+			if (obj instanceof GlobalID) {
+				GlobalID gid = (GlobalID) obj;
+				return gid.object == object;
+			}
+			return false;
 		}
 
 		public int hashCode() {
