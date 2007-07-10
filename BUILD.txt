@@ -76,10 +76,6 @@ Steps 1-4 are required only once or when you clean your local Maven repository (
 
   mvn install:install-file -DgroupId=icu4j -DartifactId=icu4j -Dversion=2.8 -Dpackaging=jar -Dfile=Common/Frameworks/ERJars/Libraries/icu4j_2_8.jar
 
-  mvn install:install-file -DgroupId=javax -DartifactId=mailapi -Dversion=1.1 -Dpackaging=jar -Dfile=Common/Frameworks/ERJavaMail/Libraries/mailapi.jar
-
-  mvn install:install-file -DgroupId=javax -DartifactId=activation -Dversion=1.0.2 -Dpackaging=jar -Dfile=Common/Frameworks/ERJavaMail/Libraries/activation-1.0.2.jar
-
   mvn install:install-file -DgroupId=jndi -DartifactId=jndi -Dversion=1.2.1 -Dpackaging=jar -Dfile=Common/Frameworks/ERChangeNotificationJMS/Libraries/jndi_1.2.1.jar
 
   mvn install:install-file -DgroupId=jms -DartifactId=jms -Dversion=1.0.2 -Dpackaging=jar -Dfile=Common/Frameworks/ERChangeNotificationJMS/Libraries/jms_1.0.2a.jar
