@@ -15,6 +15,7 @@ import com.webobjects.eoaccess.EORelationship;
 import com.webobjects.eoaccess.EOSQLExpression;
 import com.webobjects.eoaccess.EOUtilities;
 import com.webobjects.eocontrol.EOAndQualifier;
+import com.webobjects.eocontrol.EOClassDescription;
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.eocontrol.EOEnterpriseObject;
 import com.webobjects.eocontrol.EOKeyValueQualifier;
@@ -27,6 +28,7 @@ import com.webobjects.foundation.NSKeyValueCoding;
 import com.webobjects.foundation.NSKeyValueCodingAdditions;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
+import com.webobjects.foundation.NSSet;
 
 /**
  * The ERXInQualifier is useful for creating qualifiers that
@@ -35,7 +37,7 @@ import com.webobjects.foundation.NSMutableDictionary;
  * For example constructing this qualifer:<br>
  * <code>ERXInQualifier q = new ERXInQualifier("userId", arrayOfNumbers);</code>
  * Then this qualifier would generate SQL of the form:
- * USER_ID IN (&lt;array of numbers or data>)
+ * USER_ID IN (&lt;array of numbers or data&gt;)
  */
 // ENHANCEME: Should support restrictive qualifiers, don't need to subclass KeyValueQualifier
 public class ERXInQualifier extends EOKeyValueQualifier implements Cloneable {
@@ -114,18 +116,33 @@ public class ERXInQualifier extends EOKeyValueQualifier implements Cloneable {
     // FIXME: this doesn't work right with EOs when the key() is keypath across a relationship
     public boolean evaluateWithObject(Object object) {
         Object value = null;
+        String key = key();
         if(object instanceof EOEnterpriseObject) {
             EOEnterpriseObject eo = (EOEnterpriseObject)object;
             EOEditingContext ec = eo.editingContext();
-            if(eo.classDescription().attributeKeys().containsObject(key())) {
-                value = NSKeyValueCodingAdditions.Utility.valueForKeyPath(eo, key());
-            } else if(EOUtilities.entityNamed(ec, eo.entityName()).primaryKeyAttributeNames().containsObject(key())) {
-                // when object is an EO and key() is a cross-relationship keypath, we drop through to this case
+            EOClassDescription cd = eo.classDescription();
+            if (cd.attributeKeys().containsObject(key)) {
+                value = NSKeyValueCodingAdditions.Utility.valueForKeyPath(eo, key);
+            } else if (cd.toOneRelationshipKeys().containsObject(key)) {
+                value = eo.valueForKeyPath(key);
+            } else if (EOUtilities.entityNamed(ec, eo.entityName()).primaryKeyAttributeNames().containsObject(key)) {
+                // when object is an EO and key is a cross-relationship keypath, we drop through to this case
                 // and we'll fail.
-                value = EOUtilities.primaryKeyForObject(ec,eo).objectForKey(key());
+                value = EOUtilities.primaryKeyForObject(ec,eo).objectForKey(key);
+            } else {
+                // ok, it could be any key-path not directly listed as a to-one relationship
+                value = NSKeyValueCodingAdditions.Utility.valueForKeyPath(eo, key);
+                if (value instanceof NSArray) {
+                    // here we will only handle to-many (NSArray).
+                    // so we try to compare 'n' values with 'm' objects.
+                    // we use set intersection
+                    NSSet vs = new NSSet((NSArray) value);
+                    NSSet vss = new NSSet((NSArray) values());
+                    return vs.intersectsSet(vss);
+                }
             }
         } else {
-            value = NSKeyValueCodingAdditions.Utility.valueForKeyPath(object, key());
+            value = NSKeyValueCodingAdditions.Utility.valueForKeyPath(object, key);
         }
         return value != null && values().containsObject(value);
     }
