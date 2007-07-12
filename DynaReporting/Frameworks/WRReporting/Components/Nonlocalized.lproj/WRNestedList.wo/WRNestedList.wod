@@ -1,17 +1,11 @@
 Content: WOComponentContent {
 }
 
-ListRepetition: WORepetition {
-    list = ^list;
-    item = ^item;
-    index = ^index;
-}
-
-PopLevel: com.webobjects.woextensions.WOMethodInvocation {
+PopLevel: WOMethodInvocation {
     invoke = popLevel;
 }
 
-PushLevel: com.webobjects.woextensions.WOMethodInvocation {
+PushLevel: WOMethodInvocation {
     invoke = pushLevel;
 }
 
@@ -26,11 +20,15 @@ Sublist: WRNestedList {
 }
 
 SublistConditional: WOConditional {
-    // ** Only generate the sublist if it exists.
-    // ** This is how the recursion is terminated.
     condition = ^sublist;
 }
 notSublistConditional: WOConditional {
     condition = ^sublist;
 	negate= true;
+}
+
+ListRepetition: WORepetition {
+    list = ^list;
+    item = ^item;
+    index = ^index;
 }
