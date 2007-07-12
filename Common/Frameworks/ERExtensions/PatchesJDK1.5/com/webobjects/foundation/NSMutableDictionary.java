@@ -20,6 +20,9 @@ import java.util.Map;
  * @param &lt;V&gt;
  *            type of value contents
  */
+
+//TODO iterator.remove() throws unimplemented
+
 @SuppressWarnings("unchecked")
 public class NSMutableDictionary<K, V> extends NSDictionary<K, V> {
 
