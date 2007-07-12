@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wodefinitions>
+    <wo class="ERXInlineTemplate" wocomponentcontent="false">
+        <binding name = "html"/>
+        <binding name = "wod"/>
+        <binding name = "errorTemplate"/>
+        <binding name = "proxyParent"/>
+        <binding name = "cacheKey"/>
+        <binding name = "cacheVersion"/>
+        <validation message="&amp;apos;html&amp;apos; is a required binding">
+        	<unbound name="html"/>
+        </validation>
+    </wo>
+</wodefinitions>

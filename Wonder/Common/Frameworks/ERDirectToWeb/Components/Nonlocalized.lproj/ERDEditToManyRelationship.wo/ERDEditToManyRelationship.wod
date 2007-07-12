@@ -1,0 +1,55 @@
+AddButton: WOSubmitButton {
+	action = addObjectsAction;
+	value = ^addButtonLabel;
+}
+
+HasObjects: WOConditional {
+	condition = objects.count;
+}
+
+DeleteButton: WOSubmitButton {
+	action = deleteObjectsAction;
+	value = ^deleteSelectedButtonLabel;
+}
+
+Edit: ERXD2WInspect {
+	pageConfiguration = pageConfiguration;
+	object = currentObject;
+}
+
+EntityName: WOString {
+	value = destinationEntityName;
+}
+
+HasRemove: WOConditional {
+	condition = ^hasRemove;
+}
+
+Index: WOString {
+	value = index;
+}
+
+IsSelected: WOCheckBox {
+	checked = isSelected;
+}
+
+ItemsToAdd: WOTextField {
+	size = 2;
+	value = objectsToAdd;
+	numberformat = "0";
+}
+
+List: WORepetition {
+	item = currentObject;
+	list = objects;
+	index = index;
+}
+
+RemoveButton: WOSubmitButton {
+	action = removeObjectsAction;
+	value = ^removeButtonLabel;
+}
+
+TaskIsEdit: WOConditional {
+	condition = isEditing;
+}

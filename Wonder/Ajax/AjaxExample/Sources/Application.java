@@ -2,9 +2,6 @@
 
 import org.apache.log4j.Logger;
 
-import com.webobjects.appserver.WOComponent;
-import com.webobjects.appserver.WOContext;
-
 import er.extensions.*;
 
 public class Application extends ERXApplication {
@@ -13,16 +10,10 @@ public class Application extends ERXApplication {
         ERXApplication.main(argv, Application.class);
     }
 
-    public WOComponent pageWithName(String s, WOContext wocontext) {
-		return super.pageWithName(s, wocontext);
-	}
-
-	public Application() {
+    public Application() {
         super();
         log.info("Welcome to " + this.name() + " !");
-        log.info("Welcome to " + System.getProperty("java.class.path").replace(':', '\n') + " !");
         /* ** put your initialization code in here ** */
         setAllowsConcurrentRequestHandling(true);
-        setDefaultRequestHandler(requestHandlerForKey(directActionRequestHandlerKey()));
     }
 }

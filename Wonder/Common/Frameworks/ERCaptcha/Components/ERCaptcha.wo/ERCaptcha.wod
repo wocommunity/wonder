@@ -1,0 +1,18 @@
+CaptchaImage : WOImage {
+	data = captcha;
+	mimeType = mimeType;
+	class = "captcha";
+}
+
+CaptchaResponse : WOTextField {
+	value = response;
+}
+
+HasResetTextConditional : WOConditional {
+	condition = ^resetText;
+}
+
+ResetCaptcha : WOSubmitButton {
+	action = resetCaptcha;
+	value = ^resetText;
+}

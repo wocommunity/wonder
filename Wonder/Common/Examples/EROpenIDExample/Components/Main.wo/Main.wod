@@ -1,0 +1,4 @@
+LoginForm : WOForm {
+	directActionName = "openIDRequest";
+	actionClass = "ERODirectAction";
+}

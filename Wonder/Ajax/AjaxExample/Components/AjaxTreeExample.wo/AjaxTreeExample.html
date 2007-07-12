@@ -1,0 +1,50 @@
+<webobject name = "AjaxExampleComponent">
+	<style>
+	ul.tree img.nodeControl {
+		border: none;
+		vertical-align: top;
+	}
+
+	ul.tree ul {
+		margin: 0px;
+		padding: 0px 0px 0px 19px;
+	}
+
+	ul.tree li {
+		list-style: none;
+	}
+
+	ul.tree li a {
+		text-decoration: none;
+		font-family: "Helvetica";
+	}
+	
+	ul.tree .nodeLabel {
+		margin-left: 19px;
+		margin-top: -16px;
+		margin-bottom: 3px;
+	}
+	</style>
+	
+	Below is an example of the AjaxTree component:
+	
+	<webobject name = "AjaxTree"><div class = "nodeLabel">
+		<webobject name = "TreeNodeAction"/>
+		<br>
+		two-line label
+		</div></webobject>
+	
+	Below the tree.
+
+	<p>
+	
+	Tree using Delegate:
+		
+	<webobject name = "AjaxTree2"><div class = "nodeLabel">
+		<webobject name = "TreeNodeAction"/>
+		<br>
+		two-line label
+		</div></webobject>
+		
+	<webobject name = "Busy"></webobject>
+</webobject>

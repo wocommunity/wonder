@@ -1,0 +1,17 @@
+Grid: AjaxGrid {
+	configurationData = configData;
+	displayGroup = displayGroup;
+	afterUpdate = "ajaxGridExampleNavBarUpdate();";
+}
+ 
+AjaxExampleComponent : AjaxExampleComponent {
+	title = "Ajax Grid";
+}
+
+
+NavBar: AjaxGridExampleNavBar {
+	containerID = "ajaxGridExampleNavBar";
+    displayGroup = displayGroup;
+    configurationData = configData;
+}
+

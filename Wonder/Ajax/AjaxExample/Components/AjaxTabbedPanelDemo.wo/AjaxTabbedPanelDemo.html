@@ -1,0 +1,79 @@
+<webobject name = "AjaxExampleComponent">
+<style>
+.ajaxTabbedPanel {
+  width: auto;
+  border-bottom: 1px solid #c0c0c0;
+  padding: 10px 0 0 20px;
+}
+
+.ajaxTabbedPanelTab-selected {
+  display: inline;
+  padding: 3px 7px 1px 7px;
+  background: #ffffff;
+  border: 1px solid #c0c0c0;
+  border-bottom: 0;
+}
+
+.ajaxTabbedPanelTab-unselected {
+  display: inline;
+  padding: 2px 7px 0 7px;
+  background: #f0f0f0;
+  border: 1px solid #c0c0c0;
+  border-bottom: 0;
+  color: #c0c0c0;
+}
+
+.ajaxTabbedPanelTab-selected a {
+  font-weight: bold;
+  color: #0066CC;
+  padding: 6px;
+}
+
+.ajaxTabbedPanelTab-unselected a {
+  padding: 6px;
+  color: #a0a0a0;
+}
+
+.ajaxTabbedPanelPanes {
+  width: 97%;
+  padding-left: 0px;
+  margin: 2%;
+  min-height: 300px;
+  overflow: auto;
+}
+
+.ajaxTabbedPanelPane-selected {
+  list-style-type: none;
+  display: block;
+  padding: 10px;
+}
+
+.ajaxTabbedPanelPane-unselected {
+  list-style-type: none;
+  display: none;
+}
+
+.tabBox {
+  border: 1px solid #c0c0c0;
+  height: 400px;
+  width: 400px;
+  overflow: auto;
+}
+
+</style>
+  <div class="tabBox">
+    <webObject name="TabbedPanel">
+        <webObject name="Tab1">
+            <webObject name="SlowLoadingComponent"/>
+        </webObject name="Tab1">
+        <webObject name="Tab2">
+            This is inline content on the same page as the panel and tabs are declared.
+        </webObject name="Tab2">
+    </webObject name="TabbedPanel">
+  </div>
+    <div id="busydiv" style="display: none;">
+        <img alt="Wait" src="http://www.napyfab.com/ajax-indicators/images/indicator_waitanim.gif">
+        Loading...
+    </div>
+
+</webobject name = "AjaxExampleComponent">

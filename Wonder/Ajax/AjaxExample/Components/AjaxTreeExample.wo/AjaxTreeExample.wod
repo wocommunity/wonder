@@ -1,0 +1,32 @@
+AjaxExampleComponent : AjaxExampleComponent {
+	title = "Ajax Tree";
+}
+
+AjaxTree2 : AjaxTree {
+	id = "delegateTree";
+	class = "tree";
+	root = rootTreeNode2;
+	item = treeNode;
+	delegate = delegate;
+	showRoot = false;
+}
+
+AjaxTree : AjaxTree {
+	id = "exampleTree";
+	class = "tree";
+	root = rootTreeNode;
+	item = treeNode;
+	parentKeyPath = "parentTreeNode";
+	childrenKeyPath = "childrenTreeNodes";
+	rootExpanded = true;
+}
+
+TreeNodeAction : WOHyperlink {
+	action = nodeSelected;
+	string = treeNode.toString;
+}
+
+Busy : AjaxBusyIndicator {
+	busyImage = "busyBigSpinner.gif";
+	busyImageFramework = "Ajax";
+}

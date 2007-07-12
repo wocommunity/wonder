@@ -1,0 +1,25 @@
+<webobject name = "AjaxExampleComponent">
+	A common technique in Ajax applications is to Effect.highlight (yellow flash) items that change as 
+	a result of an Ajax operation.  This example shows the use of AjaxHighlight to achieve this.  AjaxHighlight
+	provides a registery in which you can register objects that should be highlighted, then you can use an AjaxHighlight 
+	component (which acts much like a WOGenericContainer) passing it a value to match against.  If the value for the 
+	AjaxHighlight component is in the highlight registry, it will be highlighted for you.  For instance, in the example
+	below, when you save a comment, the new comment object is put into the registry.  In the list of comments, the &lt;li&gt;
+	tags are actually AjaxHighlight containers that bind their value to the comment in the repetition.  It's a lot harder to
+	explain than it is to use :)  Look at the example source, and I think it will make sense.
+	
+	<webobject name = "CommentContainer">
+		<ul>
+			<webobject name = "CommentRepetition">
+				<webobject name = "Comment">
+					<webobject name = "CommentText"/>
+				</webobject>
+			</webobject>
+		</ul>
+		Add a Comment:
+		<webobject name = "CommentForm">
+			<webobject name = "CommentField"/>
+			<webobject name = "SaveAction"/>
+		</webobject>
+	</webobject>
+</webobject>

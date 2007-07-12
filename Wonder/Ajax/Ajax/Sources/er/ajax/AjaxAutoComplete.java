@@ -14,75 +14,18 @@ import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 
 /**
- * This component implement the Scriptaculous http://script.aculo.us  Autocompleter combo-box.<br/>
- * This is a component that look like a text field, where when you start entering value, it start giving you a menu of options related to what you type.  Think about the auto-completion feature of many IDE (XCode / Eclipse) inside a textField.<br/>
- *<br/>
- * The scriptaculous library has 2 version of the autocompleter combo-box : a local version and an ajax version.
- *
- * <h3>Local</h3>
- * The local version hold the list of values all in memory (client-side), there is no interaction.  If the number of elements is big enough to be in a WOPopUP, then this variant is well suited for you.  If the list of element to show is too big, then you might prefer the 'ajax' version.<br/>
- * You have to tell the component that it is local (by default it is 'ajax' type) using the « isLocal » binding.
- * Then the « list » binding will need to provide all the objects needed to be found.  Filtering of the list as you type will be done client-side, all javascript.
- *
- * <h3>Ajax</h3>
  * Autocomplete field similar to what google has. You bind a value and a method
  * that returns a list and it hits the server on each keystroke and displays the
  * results.
- *
- * <h2>Synopsis</h2>
- * AjaxAutoComplete {	list=<em>a_NSArray</em>;
-						[item=<em>a_String</em>;]
-						[value=<em>a_String</em>;]
-						[displayString=<em>a_String</em>;]
-						[isLocal=<em>a_Boolean</em>;]
-						[tokens=<em>?</em>;]
-						[frequency=<em>?</em>;]
-						[minChars=<em>?</em>;]
-						[indicator=<em>?</em>;]
-						[updateElement=<em>?</em>;]
-						[afterUpdateElement=<em>?</em>;]
-						[fullSearch=<em>boolean</em>;]
-						[partialSearch=<em>boolean</em>;] }
- *
- * <h2>Bindings</h2>
- * <blockquote>
- * <dl>
- * <dt>list</dt>
- *   <dd>Bind to an nsarray, this method return the whole list of object to be displayed.  When used in an Ajax context, the component will push first to the <cite>value</cite> binding, giving you the chance to narrow the list of elements displayed.  When used in a Local context, the list should contain all possible objects.  the list will be filtered by the scriptaculous engine.</dd>
- * <dt>item</dt>
- *   <dd>Bind to the current element of the list.  This can be used to customized the string representation (in conjuction with the <cite>displayString</cite> binding) of the object.</dd>
- * <dt>value</dt>
- *   <dd>Bind to a string variable that will hold the text entered.</dd>
- * <dt>displayString</dt>
- *   <dd>Used to get the string representation of the object (work in conjunction with the <cite>item</cite> binding).</dd>
- * <dt>isLocal</dt>
- *   <dd>Boolean indicating if you want the list to be completely client-side.  Binding a true value, would mean that the list will filtered on the client.</dd>
- * <dt>token</dt>
- *   <dd>Look at the scriptaculous documentation.</dd>
- * <dt>frequency</dt>
- *   <dd>Look at the scriptaculous documentation.</dd>
- * <dt>minChars</dt>
- *   <dd>Look at the scriptaculous documentation.</dd>
- * <dt>indicator</dt>
- *   <dd>Look at the scriptaculous documentation.</dd>
- * <dt>updateElement</dt>
- *   <dd>Look at the scriptaculous documentation.</dd>
- * <dt>afterUpdateElement</dt>
- *   <dd>Look at the scriptaculous documentation.</dd>
- * <dt>fullSearch</dt>
- *   <dd>Look at the scriptaculous documentation.</dd>
- * <dt>partialSearch</dt>
- *   <dd>Look at the scriptaculous documentation.</dd>
- * </dl>
- * </blockquote>
- 
+ * 
  * @author ak
+ * 
  */
 public class AjaxAutoComplete extends AjaxComponent {
 
     public String divName;
     public String fieldName;
-
+    
     public AjaxAutoComplete(WOContext context) {
         super(context);
     }
@@ -118,8 +61,6 @@ public class AjaxAutoComplete extends AjaxComponent {
       ajaxOptionsArray.addObject(new AjaxOption("indicator", AjaxOption.SCRIPT));
       ajaxOptionsArray.addObject(new AjaxOption("updateElement", AjaxOption.SCRIPT));
       ajaxOptionsArray.addObject(new AjaxOption("afterUpdateElement", AjaxOption.SCRIPT));
-	  ajaxOptionsArray.addObject(new AjaxOption("fullSearch", AjaxOption.BOOLEAN));
-	  ajaxOptionsArray.addObject(new AjaxOption("partialSearch", AjaxOption.BOOLEAN));
       NSMutableDictionary options = AjaxOption.createAjaxOptionsDictionary(ajaxOptionsArray, this);
       return options;
     }
@@ -129,49 +70,12 @@ public class AjaxAutoComplete extends AjaxComponent {
      */
     public void appendToResponse(WOResponse res, WOContext ctx) {
         super.appendToResponse(res, ctx);
-		boolean isLocal = hasBinding("isLocal") && ((Boolean) valueForBinding("isLocal")).booleanValue();
-		if (isLocal) {
-			StringBuffer str = new StringBuffer();
-			str.append("<script type=\"text/javascript\">\n// <![CDATA[\n");
-			str.append("new Autocompleter.Local('");
-			str.append(fieldName);
-			str.append("','");
-			str.append(divName);
-			str.append("',");
-			str.append("new Array(");
-			NSArray list = (NSArray) valueForBinding("list");
-			int max = list.count();
-			String cnt = "";
-			boolean hasItem = hasBinding("item");
-			for (int i = 0; i < max; i++) {
-				Object ds = list.objectAtIndex(i);
-				if (i > 0) {
-					str.append(",");
-				}
-				str.append("\n\"");
-				if (hasItem) {
-                    setValueForBinding(ds, "item");
-             	}
-            	Object displayValue = valueForBinding("displayString", valueForBinding("item", ds));
-				str.append(displayValue.toString());
-				// TODO: We should escape the javascript string delimiter (") to keep the javascript interpreter happy.
-				//str.append(displayValue.toString().replaceAll("\"", "\\\\\\\\\"")); // doesn't work
-
-				str.append(cnt);
-				str.append("\"");
-			}
-			str.append("),");
-			AjaxOptions.appendToBuffer(createAjaxOptions(), str, ctx);
-			str.append(");\n// ]]>\n</script>\n");
-			res.appendContentString(String.valueOf(str));
-		} else {
-			String actionUrl = ctx.componentActionURL();
-			res.appendContentString("<script type = \"text/javascript\" language = \"javascript\"><!--\n");
-			res.appendContentString("new Ajax.Autocompleter('"+fieldName+"', '"+divName+"', '"+actionUrl+"', ");
-			AjaxOptions.appendToResponse(createAjaxOptions(), res, ctx);
-			res.appendContentString(");");
-			res.appendContentString("//--></script>");
-		}
+        String actionUrl = ctx.componentActionURL();
+        res.appendContentString("<script type = \"text/javascript\" language = \"javascript\"><!--\n");
+        res.appendContentString("new Ajax.Autocompleter('"+fieldName+"', '"+divName+"', '"+actionUrl+"', ");
+        AjaxOptions.appendToResponse(createAjaxOptions(), res, ctx);
+        res.appendContentString(");");
+        res.appendContentString("//--></script>");
     }
 
     /**

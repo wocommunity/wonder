@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+	<parent>
+		<groupId>wonder.common</groupId>
+		<artifactId>common</artifactId>
+		<version>4.0.0-SNAPSHOT</version>
+		<relativePath>..</relativePath>
+	</parent>
+
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>wonder.common</groupId>
+	<artifactId>frameworks</artifactId>
+	<version>4.0.0-SNAPSHOT</version>
+	<packaging>pom</packaging>
+	<name>Frameworks</name>
+
+	<modules>
+		<module>JavaWOExtensions</module>
+		<module>ERExtensions</module>
+		<module>ERDirectToWeb</module>
+		<module>ERCalendar</module>
+		<module>ERJavaMail</module>
+		<module>ERCoreBusinessLogic</module>
+		<module>ERPlot</module>
+		<module>ERWorkerChannel</module>
+		<module>ERPrototypes</module>
+		<module>ERExcelLook</module>
+		<module>ERChangeNotificationJMS</module>
+		<module>ERNeutralLook</module>
+		<module>ERIndexing</module>
+		<module>ERRest</module>
+		<module>ERSelenium</module>
+		<module>WOOgnl</module>
+	</modules>
+</project>
+

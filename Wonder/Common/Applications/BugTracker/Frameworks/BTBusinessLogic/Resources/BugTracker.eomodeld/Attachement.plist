@@ -1,0 +1,74 @@
+
+{
+    attributes = 
+    (
+       
+       {
+           allowsNull = N;
+           columnName = commentID;
+           name = commentID;
+           prototypeName = id;
+       }, 
+       
+       {
+           allowsNull = N;
+           columnName = fileName;
+           name = fileName;
+           prototypeName = varchar1000;
+       }, 
+       
+       {
+           allowsNull = N;
+           name = id;
+           prototypeName = id;
+       }, 
+       
+       {
+           allowsNull = N;
+           columnName = mimeType;
+           name = mimeType;
+           prototypeName = varchar100;
+       }
+    );
+    attributesUsedForLocking = 
+    (
+       commentID, 
+       fileName, 
+       id, 
+       mimeType
+    );
+    className = er.bugtracker.Attachement;
+    classProperties = 
+    (
+       comment, 
+       fileName, 
+       mimeType
+    );
+    externalName = attachement;
+    internalInfo = 
+    {};
+    name = Attachement;
+    primaryKeyAttributes = 
+    (
+       id
+    );
+    relationships = 
+    (
+       
+       {
+           destination = Comment;
+           isMandatory = Y;
+           isToMany = N;
+           joinSemantic = EOInnerJoin;
+           joins = 
+           (
+              
+              {
+                  destinationAttribute = id;
+                  sourceAttribute = commentID;
+              }
+           );
+           name = comment;
+       }
+    );
+}

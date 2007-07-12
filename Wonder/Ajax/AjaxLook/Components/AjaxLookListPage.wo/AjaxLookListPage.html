@@ -1,0 +1,62 @@
+<webobject name="Wrapper">
+<webobject name="Styles"><webobject name="PropertiesPlain">
+#<webobject name="PageName"></webobject>Grid .ygrid-col-<webobject name="PropertyIndex"></webobject> {
+}
+</webobject></webobject>
+<div id="<webobject name="PageName"></webobject>Grid"></div>
+<div id="paging" class="pagination"></div>
+
+<webobject name="Proxy"></webobject>
+
+<script>
+
+WONDER.grid.registerEditor("rated", new WONDER.grid.SelectEditor('Rating'));
+
+var columnModel = new WONDER.grid.DefaultColumnModel([
+	<webobject name="Properties"> {
+		id:       "<webobject name="PropertyKey"></webobject>",
+		header:   "<webobject name="DisplayNameForProperty"></webobject>",
+		tooltip:  "Click to sort by <webobject name="DisplayNameForProperty"></webobject>", 
+		editor:   WONDER.grid.Editors['<webobject name="PropertyClass"></webobject>'], 
+		renderer: WONDER.grid.Renderers['<webobject name="PropertyClass"></webobject>']
+	}</webobject>
+]);
+
+var dataModel = new WONDER.grid.EODataModel({
+   root: 'nsarray',
+   id: 'id',
+   fields: [<webobject name="Properties">{
+   	  name: "<webobject name="PropertyKey"></webobject>", 
+   	  preprocessor: WONDER.grid.Preprocessors['<webobject name="PropertyClass"></webobject>'],
+  	  postprocessor: WONDER.grid.Postprocessors['<webobject name="PropertyClass"></webobject>']
+   }</webobject>]
+});
+
+var selectionModel = new YAHOO.ext.grid.EditorAndSelectionModel();
+
+//var selectionModel = new YAHOO.ext.grid.SingleSelectionModel();
+// selectionModel.addListener('selectionchange', EnableDelete);
+
+var <webobject name="PageName"></webobject>Grid = new WONDER.grid.Grid('<webobject name="PageName"></webobject>Grid', dataModel, columnModel, selectionModel);
+<webobject name="PageName"></webobject>Grid.render();
+<webobject name="PageName"></webobject>Grid.getDataModel().loadData(json.<webobject name="PageName"></webobject>.fetchObjects());
+
+function endDrag(e) {
+	alert(e);
+}
+
+<webobject name="PageName"></webobject>Grid.addListener('dragdrop',endDrag);
+// the grid is ready, load page 1 of topics 
+// <webobject name="PageName"></webobject>Grid.getDataModel().addListener('beforeload', onBeginUpdate);
+// <webobject name="PageName"></webobject>Grid.getDataModel().addListener('load', onEndUpdate);
+// <webobject name="PageName"></webobject>Grid.getDataModel().loadPage(1);
+
+function test() {
+	alert("hi");
+	var objects = json.<webobject name="PageName"></webobject>.fetchObjects();
+	<webobject name="PageName"></webobject>Grid.getDataModel().loadData(objects);
+	return objects;
+}
+// document.body.onload = function() { test();};
+</script>
+</webobject>

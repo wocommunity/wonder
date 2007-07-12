@@ -1,0 +1,21 @@
+ExcelButton : ERExcelButton {
+	WOComponentName = d2wContext.printerButtonComponentName;
+	d2wContext = d2wContext;
+	dataSource = parent.dataSource;
+	displayGroup = parent.displayGroup;
+	task = "list";
+	show = parent.displayGroup.displayedObjects.count;
+}
+
+Title : ERCDisplayHelpText {
+	context = localContext;
+	key = "title";
+	defaultValue = title;
+	prefix = ^pageConfiguration;
+}
+
+CMS : ERCDisplayHelpText {
+	context = localContext;
+	key = "explaination";
+	prefix = ^pageConfiguration;
+}

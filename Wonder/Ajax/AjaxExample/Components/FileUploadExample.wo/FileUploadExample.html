@@ -1,0 +1,69 @@
+<webobject name = "AjaxExampleComponent">
+<style>
+table.progressBarContainer {
+	width: 100%;
+	border-spacing: 0px;
+}
+
+table.progressBarContainer td {
+	font-family: Helvetica;
+	font-size: 8pt;
+	padding: 2px;
+	color: rgb(100, 100, 100);
+}
+
+table.progressBarContainer td.progressValue {
+	white-space: nowrap;
+}
+
+table.progressBar {
+	border: 1px solid black;
+}
+
+table.progressBar td.percentageFinished {
+	background-image: url(<webobject name = "FinishedImage"/>);
+	background-repeat: repeat-x;
+}
+
+table.progressBar td.percentageFinished.done {
+	background-image: url(<webobject name = "UnfinishedImage"/>);
+	background-repeat: repeat-x;
+}
+
+table.progressBar td.percentageUnfinished {
+	background-image: url(<webobject name = "UnfinishedImage"/>);
+	background-repeat: repeat-x;
+}
+
+table.progressBarContainer td.progressMaximum {
+	white-space: nowrap;
+}
+</style>
+<p>
+<b>AjaxFileUpload</b>
+</p>
+This AjaxFileUpload does not bind to anything, so its file is just immediately deleted.  It allows all of the same binding options 
+as WOFileUpload.  This demo has a maximum file upload size of 2M (change this in Properties if you want to try a local file upload).
+<p>
+<webobject name = "AjaxFileUpload">
+	<webobject name = "UploadDoneConditional">
+		<p>
+			<webobject name = "SucceededConditional">
+				<i>Your upload succeeded.</i>
+			</webobject>
+			<webobject name = "CanceledConditional">
+				<i>Your upload was canceled.</i>
+			</webobject>
+			<webobject name = "FailedConditional">
+				<i>Your upload failed: <webobject name = "FailureMessage"/></i>
+			</webobject>
+		</p>
+	</webobject>
+</webobject>
+</p>
+<p>
+Here's a progress bar attached to a thread that is just incrementing the progress value.
+<webobject name = "AjaxProgress"/>
+</p>
+
+</webobject>

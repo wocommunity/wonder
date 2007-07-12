@@ -50,20 +50,8 @@ public abstract class AjaxDynamicElement extends WODynamicGroup {
 	  }
   }
 
-  protected void addScriptResourceInHead(WOContext context, WOResponse response, String framework, String fileName) {
-    AjaxUtils.addScriptResourceInHead(context, response, framework, fileName);
-  }
-  
   protected void addScriptResourceInHead(WOContext context, WOResponse response, String fileName) {
-     AjaxUtils.addScriptResourceInHead(context, response, fileName);
-  }
-  
-  protected void addStylesheetResourceInHead(WOContext context, WOResponse response, String fileName) {
-    AjaxUtils.addStylesheetResourceInHead(context, response, fileName);
-  }
-  
-  protected void addStylesheetResourceInHead(WOContext context, WOResponse response, String framework, String fileName) {
-    AjaxUtils.addStylesheetResourceInHead(context, response, framework, fileName);
+    AjaxUtils.addScriptResourceInHead(context, response, fileName);
   }
 
   /**

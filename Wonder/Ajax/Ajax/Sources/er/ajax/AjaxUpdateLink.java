@@ -79,9 +79,7 @@ public class AjaxUpdateLink extends AjaxDynamicElement {
           if(updateContainerID != null) {
               WOResponse response = AjaxUtils.createResponse(context);
               response.setHeader("text/javascript", "content-type");
-              response.setContent("new Ajax.Updater('"+updateContainerID+"', $('"+updateContainerID+"').getAttribute('updateUrl'), {evalScripts: " +
-              		valueForBinding("evalScripts", "false", context.component()) +
-              		"})");
+              response.setContent("new Ajax.Updater('"+updateContainerID+"', $('"+updateContainerID+"').getAttribute('updateUrl'), {})");
               results = response;
           }
       }

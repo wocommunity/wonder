@@ -1,0 +1,115 @@
+ExampleInPlace : AjaxInPlace {
+	saveAction = valueSaved;
+	cancelAction = valueCancelled;
+}
+
+Edit : ERXWOTemplate {
+	templateName = "edit";
+}
+
+Value : WOString {
+	value = value;
+}
+
+ValueField : FocusTextField {
+	value = value;
+	id = "valueField";
+	selectAll = true;
+	onEnter = "alert('You hit enter and I am showing you an onEnter handler now.')";
+}
+
+View : ERXWOTemplate {
+	templateName = "view";
+}
+
+ExampleInPlaceManual : AjaxInPlace {
+	id = "ExampleInPlaceManual";
+	saveAction = valueSaved;
+	cancelAction = valueCancelled;
+	manualControl = true;
+}
+
+ClickToEdit : WOHyperlink {
+	href = "javascript:void(0)";
+	onclick = "ExampleInPlaceManualEdit()";
+}
+
+EditManual : ERXWOTemplate {
+	templateName = "edit";
+}
+
+ViewManual : ERXWOTemplate {
+	templateName = "view";
+}
+
+ManualValue : WOString {
+	value = manualValue;
+
+}
+ManualValueField : WOTextField {
+	value = manualValue;
+	size = "30";
+}
+
+ClickToSave : WOHyperlink {
+	href = "javascript:void(0)";
+	onclick = "ExampleInPlaceManualSave()";
+}
+
+ClickToCancel : WOHyperlink {
+	href = "javascript:void(0)";
+	onclick = "ExampleInPlaceManualCancel()";
+}
+
+AjaxExampleComponent : AjaxExampleComponent {
+	title = "AjaxInPlace";
+}
+
+FancyInPlace : AjaxInPlace {
+	id = "fancy";
+	manualEditControl = true;
+}
+
+FancyEdit : ERXWOTemplate {
+	templateName = "edit";
+}
+
+FancyView : ERXWOTemplate {
+	templateName = "view";
+}
+
+FirstName : WOString {
+	value = firstName;
+}
+
+FirstNameField : WOTextField {
+	value = firstName;
+	size = "30";
+}
+
+LastName : WOString {
+	value = lastName;
+}
+
+LastNameField : WOTextField {
+	value = lastName;
+	size = "30";
+}
+
+PhoneNumber : WOString {
+	value = phoneNumber;
+}
+
+PhoneNumberField : WOTextField {
+	value = phoneNumber;
+	size = "30";
+}
+
+FancySave : AjaxSubmitButton {
+	value = "save";
+	onClick = "fancySave()";
+}
+
+FancyCancel : AjaxFunctionLink {
+	onclick = "fancyCancel()";
+}

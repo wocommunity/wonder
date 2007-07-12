@@ -1,0 +1,38 @@
+
+LoginForm: WOForm {
+    action = login;
+	multipleSubmit = YES;
+}
+
+Conditional1: WOConditional {
+	condition = errorMessage.length;
+}
+
+String1: WOString {
+	value = errorMessage;
+}
+
+UsernameField: WOTextField {
+	value = username;
+	width = "16";
+	name = "username";
+}
+
+PasswordField: WOPasswordField {
+	value = password;
+	width = "16";
+}
+
+Captcha : ERCaptcha {
+	validated = validated;
+}
+
+CheckBox1: WOCheckBox {
+	checked = rememberPassword;
+}
+
+LoginButton: WOSubmitButton {
+    action = login;
+    alt = "Login to BugTracker";
+    value = "Login";
+}

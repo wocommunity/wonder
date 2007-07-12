@@ -1,0 +1,77 @@
+AjaxExampleComponent : AjaxExampleComponent {
+	title = "Link Example";
+}
+
+AjaxActionLink : AjaxUpdateLink {
+	action = exampleAction;
+	onSuccess = "function() { alert('I finished!') }";
+}
+
+ReplaceLink : AjaxUpdateLink {
+	action = replaceLinkAction;
+	replaceID = "ExampleReplacementArea";
+}
+
+AjaxHyperlinkFunction : AjaxHyperlink {
+	action = exampleAction;
+	functionName = "testHyperlinkFunction";
+}
+
+AjaxUpdateFunction : AjaxUpdateLink {
+	action = exampleAction;
+	functionName = "testUpdateFunction";
+	updateContainerID = "ExampleUpdateContainer";
+}
+
+ExampleUpdateContainer : AjaxUpdateContainer {
+	id = "ExampleUpdateContainer";
+}
+
+ExampleForm : WOForm {
+	multipleSubmit = true;
+	name = "ExampleForm";
+}
+
+AjaxSubmitFunction : AjaxSubmitButton {
+	action = exampleAction;
+	functionName = "testSubmitFunction";
+}
+
+AjaxSubmitFunction2 : AjaxSubmitButton {
+	action = exampleAction;
+	functionName = "testSubmitFunction2";
+	showUI = true;
+	value = "AjaxSubmitFunction2 (showUI = true)";
+	button = true;
+}
+
+Now : WOString {
+	value = now;
+}
+
+Word : WOString {
+	value = repetitionWord;
+}
+
+WordAction : AjaxUpdateLink {
+	action = wordSelected;
+	updateContainerID = "wordUpdater";
+}
+
+WordList : WORepetition {
+	list = words;
+	item = repetitionWord;
+}
+
+WordUpdater : AjaxUpdateContainer {
+	id = "wordUpdater";
+}
+
+SelectedWord : WOString {
+	value = selectedWord;
+}
+
+OnClickServerLink : AjaxUpdateLink {
+	action = onClickServerAction;
+	onClickServer = "alert('onClickServer alerted');";
+}

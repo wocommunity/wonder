@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<wodefinitions>
+	<wo wocomponentcontent="true" class="AjaxHyperlink.java">
+		<binding name = "elementName"/>
+		<binding name = "class"/>
+		<binding name = "id"/>
+		<binding name = "value"/>
+		<binding name = "style"/>
+		<binding name = "action"/>
+		<binding name = "title"/>
+		<binding name = "disabled"/>
+		<binding name = "functionName"/>
+		
+		<binding name = "onClickBefore"/>
+		<binding name = "onClick"/>
+		<binding name = "onClickServer"/>
+		<binding name = "onLoading"/>
+		<binding name = "onComplete"/>
+		<binding name = "onSuccess"/>
+		<binding name = "onFailure"/>
+		<binding name = "evalScripts"/>
+	</wo>
+</wodefinitions>

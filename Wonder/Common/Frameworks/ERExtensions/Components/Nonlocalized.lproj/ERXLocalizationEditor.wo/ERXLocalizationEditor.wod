@@ -1,0 +1,164 @@
+EditFramework : WOHyperlink {
+	action = editFramework;
+}
+
+Entries : WORepetition {
+	list = displayGroup.displayedObjects;
+	item = currentEntry;
+}
+
+BatchNavigationBar : ERXBatchNavigationBar {
+	displayGroup = displayGroup;
+}
+
+KeyMatch :WOTextField {
+	value = displayGroup.queryMatch.key; // VALID
+}
+
+Find : WOSubmitButton {
+	action = displayGroup.qualifyDisplayGroup;
+	value = "Find";
+}
+
+Save : WOSubmitButton {
+	action = saveFramework;
+	value = "Save";
+}
+
+Form : WOForm {
+	multipleSubmit = true;
+	style = "border: 1px solid #aaa;";
+	name = "EditForm"; // for batch bar...
+}
+
+SearchForm : WOForm {
+	multipleSubmit = true;
+}
+
+Entry : WOSwitchComponent {
+	value = currentValue;
+	WOComponentName = valueComponentName;
+	rows = 5;
+	class = highlightClass;
+}
+
+Filename : WOString {
+	value = currentFilename;
+}
+
+Filenames: WORepetition {
+	item = currentFilename;
+	list = fileNamesToWatch;
+}
+
+Framework : WOString {
+	value = currentFramework;
+}
+
+Frameworks : WORepetition {
+	item = currentFramework;
+	list = frameworkSearchPath;
+}
+
+HasData: WOConditional {
+	condition = data.allKeys.count; // VALID
+}
+
+ValueCell : WOGenericContainer {
+	elementName = "td";
+	width = valueCellWidth;
+	class = "valueCell";
+}
+
+Key: WOString {
+	value = currentEntry.key; // VALID
+}
+
+KeyCell : WOGenericContainer {
+	elementName = "td";
+	colspan = availableLanguages.count;
+	align = "left";
+	bgcolor = "#eee";
+	class = "keyCell";
+}
+
+Language : WOHyperlink {
+	action = sortEntries;
+	string = currentLanguage;
+}
+
+Languages : WORepetition {
+	list = availableLanguages;
+	item = currentLanguage;
+}
+
+Url: WOString {
+	value = urlForSelectedFile;
+}
+
+TableHeaderForFileList : WOGenericContainer {
+	elementName = "th";
+	colspan = frameworkSearchPath.count;
+}
+
+EditLocalizedFilesString : ERXLocalizedString {
+	value = "Edit Localized Files";
+}
+
+FileNameString : ERXLocalizedString {
+	value = "Filename";
+}
+
+FileAvailableInString : ERXLocalizedString {
+	value = "Files available in:";
+}
+
+CurrentlyEditingString : ERXLocalizedString {
+	value = "Currently Editing:";
+}
+
+SearchForKeyString : ERXLocalizedString {
+	value = "Search for Key";
+}
+
+KeyString : ERXLocalizedString {
+	value = "Key";
+}
+
+BatchNavigationCellTop : WOGenericContainer {
+	elementName = "td";
+	colspan = colspanForBatchNavigation;
+	align = "right";
+	class="borderBottomCell";
+}
+
+BatchNavigationCell : WOGenericContainer {
+	elementName = "td";
+	class="borderTopCell";
+	colspan = colspanForBatchNavigation;
+	align = "right";
+}
+
+AddForm : WOForm {
+}
+
+AddKeyTextField : WOTextField {
+	value = keyToAdd;
+}
+
+AddButton : WOSubmitButton {
+	action = addEntry;
+	value = "Add";
+}
+
+AddKeyString : ERXLocalizedString {
+	value = "Add Key";
+}
+
+DeleteLink : WOHyperlink {
+	action = removeEntry;
+}
+
+DeleteString : ERXLocalizedString {
+	value = "Remove entry";
+}

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wodefinitions>
+	<wo class="AjaxObserveField" wocomponentcontent="false">
+		<binding name="observeFieldID"/>
+		<binding name="updateContainerID"/>
+		<binding name="fullSubmit"/>
+		<binding name="observeFieldFrequency"/>
+		<binding name="action"/>
+		
+		<binding name="evalScripts"/>
+		<binding name="insertion"/>
+		<binding name="onLoading"/>
+		<binding name="onComplete"/>
+		<binding name="onSuccess"/>
+		<binding name="onFailure"/>
+		<binding name="onException"/>
+		
+	  <validation message = "&apos;observeFieldID&apos; and &apos;updateContainerID&apos; are required bindings">
+	    <unbound name = "observeFieldID"/>
+	    <unbound name = "updateContainerID"/>
+	  </validation>
+	</wo>
+</wodefinitions>

@@ -1,0 +1,26 @@
+BusyClass : WOString {
+	value = busyClass;
+}
+
+HasBusyClass : WOConditional {
+	condition = busyClass;
+}
+
+BusyImageConditional : WOConditional {
+	condition = busyImage;
+}
+
+BusyDiv : WOGenericContainer {
+	elementName = "div";
+	id = divID;
+	style = "display: none; position: absolute; width: 100%; height: 100%; top: 0px; left: 0px; z-index: 9999;";
+}
+
+BusyImage : WOImage {
+	filename = busyImage;
+	framework = busyImageFramework;
+}
+
+DivID : WOString {
+	value = divID;
+}

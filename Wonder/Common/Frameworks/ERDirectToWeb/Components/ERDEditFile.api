@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wodefinitions>
+    <wo class="ERDEditFileUpload.java" wocomponentcontent="false">
+        <binding name="uploadDirectory"/>
+        <binding name="selectMessage"/>
+        <validation message="'selectMessage' is a required binding">
+            <unbound name="selectMessage"/>
+        </validation>
+        <binding name="uploadMessage"/>
+        <binding name="object"/>
+        <binding name="key"/>
+        <validation message="'object' is a required binding">
+            <unbound name="object"/>
+        </validation>
+        <validation message="'key' is a required binding">
+            <unbound name="key"/>
+        </validation>
+    </wo>
+</wodefinitions>

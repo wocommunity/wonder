@@ -1,0 +1,22 @@
+AjaxExampleComponent : AjaxExampleComponent {
+	title = "Ajax Tabbed Panel";
+}
+
+TabbedPanel: AjaxTabbedPanel {
+	id = "tabbedPanel";
+	busyDiv = "busydiv";
+}
+
+Tab1: AjaxTabbedPanelTab {
+	id = "panel1";
+	name = "Slow Loading Content";
+}
+
+Tab2: AjaxTabbedPanelTab {
+	name = "Inline Content";
+	isSelected = true;
+}
+
+
+SlowLoadingComponent: SlowLoadingComponent {
+}

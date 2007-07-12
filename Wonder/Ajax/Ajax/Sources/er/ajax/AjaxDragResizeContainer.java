@@ -28,7 +28,7 @@ public class AjaxDragResizeContainer extends AjaxComponent {
     public void appendToResponse(WOResponse response, WOContext context) {
 	_dragResizeContainerID = (String) valueForBinding("id", AjaxUtils.toSafeElementID(context().elementID())
 		+ "_DragResizeContainer");
-	_actionUrl = context.componentActionURL();
+	_actionUrl = AjaxUtils.ajaxComponentActionUrl(context);
 	super.appendToResponse(response, context);
     }
 
@@ -103,8 +103,8 @@ public class AjaxDragResizeContainer extends AjaxComponent {
 	addScriptResourceInHead(response, "dragresize.js");
     }
 
-    protected WOActionResults handleRequest(WORequest request, WOContext context) {
-	WOResponse result = AjaxUtils.createResponse(context);
+    public WOActionResults handleRequest(WORequest request, WOContext context) {
+	WOResponse result = AjaxUtils.createResponse(request, context);
 	result.setHeader("text/javascript", "content-type");
 
 	if (canSetValueForBinding("report")) {
@@ -121,7 +121,7 @@ public class AjaxDragResizeContainer extends AjaxComponent {
 	if (canGetValueForBinding("action")) {
 	    WOActionResults results = (WOActionResults) valueForBinding("action");
 	    if (results != null) {
-		System.out.println("AjaxDragResize.handleRequest: Not quite sure what to do with non-null results yet ...");
+	    	System.out.println("AjaxDragResize.handleRequest: Not quite sure what to do with non-null results yet ...");
 	    }
 	}
 	return result;

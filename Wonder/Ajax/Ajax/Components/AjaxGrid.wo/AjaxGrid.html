@@ -1,0 +1,27 @@
+<webobject name="UpdateColumnOrder"/>
+<webobject name="GridUpdater">
+<webobject name="Table">
+	<tr>
+		<th class="ajaxGridRemoveSorting"><webobject name="RemoveSorting"><span>X</span><em>&nbsp;</em></webobject name="RemoveSorting"></th>
+		<webobject name="ColumnRepetition">
+			<th class="ajaxGridColumnTitle"><webobject name="SortColumn"><webobject name="ColumnTitle"/></webobject name="SortColumn">
+			<webobject name="IsColumnSorted">
+				<webobject name="IsColumnSortedAscending"><span class="ajaxGridSortAscending"><webobject name="SortIndex"/> <span>up</span><em>&nbsp;</em></span></webobject name="IsColumnSortedAscending">
+				<webobject name="IsColumnSortedDescending"><span class="ajaxGridSortDescending"><webobject name="SortIndex"/> <span>down</span><em>&nbsp;</em></span></webobject name="IsColumnSortedDescending">
+			</webobject name="IsColumnSorted"></th>
+		</webobject name="ColumnRepetition">
+	</tr>
+	<webobject name="RowRepetition">
+		<webobject name="TableRow">
+			<td class="ajaxGridSelectRow"><webobject name="ToggleRowSelection">
+				<webobject name="IsRowNotSelected"><span>&nbsp;&nbsp;&nbsp;</span></webobject name="IsRowNotSelected">
+				<webobject name="IsRowSelected"><span>X</span><em>&nbsp;</em></webobject name="IsRowSelected">
+			</webobject name="ToggleRowSelection"></td>
+			<webobject name="ColumnRepetition">
+				<webobject name="TableData"><webobject name="ColumnValue"/></webobject name="TableData">
+			</webobject name="ColumnRepetition">
+		</webobject name="TableRow">
+	</webobject name="RowRepetition">
+</webobject name="Table">
+</webobject name="GridUpdater">
+<webobject name="InitScript"/>

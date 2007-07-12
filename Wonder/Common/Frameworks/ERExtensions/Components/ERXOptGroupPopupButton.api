@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<wodefinitions>
+  <wo class="com.webobjects.appserver._private.ERXOptGroupPopupButton">
+    <binding name="selection" passthrough="NO" settable="YES"/>
+    <binding name="list" passthrough="NO" required="YES"/>
+    <binding name="displayString" passthrough="NO"/>
+    <binding name="disabled" passthrough="NO" defaults="YES/NO"/>
+    <binding name="name"/>
+    <binding name="value" passthrough="NO"/>
+    <binding name="item" passthrough="NO"/>
+    <binding name="otherTagString" passthrough="NO"/>
+    <binding name="selectedValue" passthrough="NO"/>
+    <binding name="noSelectionString" passthrough="NO"/>
+    <binding name="escapeHTML" passthrough="NO" defaults="YES/NO"/>
+    <binding name="group" required="YES"/>
+    <binding name="label" />
+
+    <validation message="'list' must not be a constant">
+      <and>
+        <bound name="list"/>
+        <ungettable name="list"/>
+      </and>
+    </validation>
+
+    <validation message="'item' may not be a constant when 'displayString' or 'value' is bound">
+      <and>
+        <or>
+          <bound name="displayString"/>
+          <bound name="value"/>
+        </or>
+        <unsettable name="item"/>
+      </and>
+    </validation>
+
+    <validation message="'item' must be bound when 'displayString' or 'value' is bound">
+      <and>
+        <or>
+          <bound name="displayString"/>
+          <bound name="value"/>
+        </or>
+        <unbound name="item"/>
+      </and>
+    </validation>
+
+    <validation message="'selectedValue' and 'selection' cannot both be bound">
+      <and>
+        <bound name="selection"/>
+        <bound name="selectedValue"/>
+      </and>
+    </validation>
+  </wo>
+</wodefinitions>

@@ -1,0 +1,97 @@
+Building Instructions
+=========================
+
+You can build Project Wonder with Ant, Maven and Eclipse.
+
+For information on getting started with Project Wonder, go to:
+
+    http://en.wikibooks.org/wiki/Programming:WebObjects/Project_WONDER/Quickstart
+
+Building with Ant: 
+=========================
+
+Ant should be found in /Developer/Java/Ant/bin
+
+1. Open a terminal and cd into the Wonder root directory.
+
+2. A servlet.jar file needs to be available for some parts of Wonder. On Mac OS X, the
+   servlet.jar file should be located under the /Developer/Java/J2EE directory. The
+   servlet.jar file can be placed in the /Library/WebObjects/Extensions directory,
+   or its equivalent on a Windows system.
+
+3. A wobuild.properties file should be placed in, on Mac OS X, the ~/Library directory.
+   On Windows, this should go into a Library folder in the directory pointed to
+   by the 'user.home' Java system property. Usually, this may be at
+   C:\Documents and Settings\<user name>\Library.
+
+   An example of this file is:
+
+   ==== START wobuild.properties ====
+
+   wo.woroot=/
+   wo.wosystemroot=/System
+   wo.wolocalroot=/
+
+   ==== END wobuild.properties ====
+
+   These may, or may not, be necessary for some functionality:
+
+   ==== START wobuild.properties, perhaps  ====
+
+   wo.dir.root=/
+   wo.dir.user.home.library.frameworks=/User/yourname/Library/Frameworks
+   wo.dir.local=/
+   wo.dir.library=/System/Library
+   wo.dir.user.home.library=/User/yourname/Library
+   wo.dir.local.library=/Library
+   wo.dir.library.frameworks=/System/Library/Frameworks
+   wo.dir.local.library.frameworks=/Library/Frameworks
+   wo.dir.system=/System
+
+   ==== END wobuild.properties, perhaps  ====
+
+4. Invoke ant -projecthelp, but normally you would do:
+
+  ant frameworks; sudo ant frameworks.install
+  ant applications; sudo ant applications.install
+  ant examples; sudo ant examples.install
+
+If you want to not use the "sudo", you will need write permissions on /Library/Frameworks,
+/Library/WebObjects/JavaApplications, and a few other directories.
+
+Building with Maven: 
+=========================
+
+Steps 1-4 are required only once or when you clean your local Maven repository (rm -Rf ~/.m2)
+
+1. Install Maven http://maven.apache.org
+ 
+2. Open a terminal and cd into the Wonder root directory.
+
+3. Import the webobjects frameworks as jars into the local repository:
+
+  mvn --non-recursive org.objectstyle.woproject.maven2:maven-wobootstrap-plugin::bootstrap
+
+4. Import some jars into the local maven repository:
+
+  mvn install:install-file -DgroupId=icu4j -DartifactId=icu4j -Dversion=2.8 -Dpackaging=jar -Dfile=Common/Frameworks/ERJars/Libraries/icu4j_2_8.jar
+
+  mvn install:install-file -DgroupId=jndi -DartifactId=jndi -Dversion=1.2.1 -Dpackaging=jar -Dfile=Common/Frameworks/ERChangeNotificationJMS/Libraries/jndi_1.2.1.jar
+
+  mvn install:install-file -DgroupId=jms -DartifactId=jms -Dversion=1.0.2 -Dpackaging=jar -Dfile=Common/Frameworks/ERChangeNotificationJMS/Libraries/jms_1.0.2a.jar
+
+  mvn install:install-file -DgroupId=metaparadigm -DartifactId=jsonrpc -Dversion=1.0 -Dpackaging=jar -Dfile=Ajax/Ajax/Libraries/jsonrpc.jar
+
+5. Build wonder
+
+  mvn install
+
+Building with Eclipse:
+=========================
+
+1. Install Eclipse http://maven.apache.org
+
+2. Install WOLips
+
+3. Open the projects you need, choose "WOLips>Install..." in the context menu
+

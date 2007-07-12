@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wodefinitions>
+	<wo class="AjaxBusyIndicator" wocomponentcontent="false">
+		<binding name = "divID"/>
+		<binding name = "busyImage"/>
+		<binding name = "busyImageFramework"/>
+		<binding name = "busyClass"/>
+	</wo>
+</wodefinitions>

@@ -130,50 +130,16 @@ public class AjaxUtils {
    * @param response
    * @param fileName
    */
-  public static void addScriptResourceInHead(WOContext context, WOResponse response, String framework, String fileName) {
-    String startTag = "<script type=\"text/javascript\" src=\"";
-    String endTag = "\"></script>";
-    addResourceInHead(context, response, framework, fileName, startTag, endTag);
-  }
-  
   public static void addScriptResourceInHead(WOContext context, WOResponse response, String fileName) {
-      addScriptResourceInHead(context, response, "Ajax", fileName);
-  }
-  
-  /**
-   * Adds a stylesheet link tag with a correct resource url in the html head tag if it isn't already present in 
-   * the response.
-   * @param response
-   * @param fileName
-   */
-  public static void addStylesheetResourceInHead(WOContext context, WOResponse response, String framework, String fileName) {
-    String startTag = "<link rel=\"stylesheet\" href=\"";
-    String endTag = "\"/>";
-    addResourceInHead(context, response, framework, fileName, startTag, endTag);
-  }
-  
-  public static void addStylesheetResourceInHead(WOContext context, WOResponse response, String fileName) {
-      addStylesheetResourceInHead(context, response, "Ajax", fileName);
-  }
-
-  /**
-   * Adds a reference to an arbitrary file with a correct resource url wrapped between startTag and endTag in 
-   * the html head tag if it isn't already present in the response.
-   * @param response
-   * @param fileName
-   * @param startTag
-   * @param endTag 
-   */
-  public static void addResourceInHead(WOContext context, WOResponse response, String framework, String fileName, String startTag, String endTag) {
     NSMutableDictionary userInfo = AjaxUtils.mutableUserInfo(context.response());
     if (userInfo.objectForKey(fileName) == null) {
       userInfo.setObjectForKey(fileName, fileName);
       WOResourceManager rm = WOApplication.application().resourceManager();
-      String url = rm.urlForResourceNamed(fileName, framework, context.session().languages(), context.request());
-      String html = startTag + url + endTag;
-      AjaxUtils.insertInResponseBeforeTag(response, html, AjaxUtils.htmlCloseHead());
+      String url = rm.urlForResourceNamed(fileName, "Ajax", context.session().languages(), context.request());
+      String js = "<script type=\"text/javascript\" src=\"" + url + "\"></script>";
+      AjaxUtils.insertInResponseBeforeTag(response, js, AjaxUtils.htmlCloseHead());
     }
-  }	
+  }
 
   /**
    * Adds javascript code in a script tag in the html head tag. 
@@ -196,7 +162,6 @@ public class AjaxUtils {
     // WOComponent wocomponent = context.component();
     // System.out.println(wocomponent.name() + " e:" + elementID + " - s: " + senderID + " - in " + invokeWOElementID);
     boolean shouldHandleRequest = elementID != null && (elementID.startsWith(senderID) || (invokeWOElementID != null && invokeWOElementID.equals(elementID)));
-    // System.out.println("el: "+elementID+", sender: "+senderID+", invoke: "+invokeWOElementID+ ", shouldHandleRequest: "+shouldHandleRequest);
     return shouldHandleRequest;
   }
 

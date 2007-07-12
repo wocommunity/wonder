@@ -5,92 +5,90 @@ package er.ajax;
 import java.util.*;
 
 import com.webobjects.appserver.*;
-import com.webobjects.foundation.*;
 
 public class AjaxDragResize extends AjaxComponent {
-    private static final String COMPONENT_RESIZABLES_MAP_KEY = "AjaxComponentResizablesMap";
+  private static final String COMPONENT_RESIZABLES_MAP_KEY = "AjaxComponentResizablesMap";
+  private String _dragResizeID;
 
-    public AjaxDragResize(WOContext context) {
-	super(context);
+  public AjaxDragResize(WOContext context) {
+    super(context);
+    _dragResizeID = (String) valueForBinding("id", AjaxUtils.toSafeElementID(context().elementID()) + "_DragResize");
+  }
+
+  public boolean synchronizesVariablesWithBindings() {
+    return false;
+  }
+
+  public static Object resizableObjectForPage(WOComponent page, String resizableID) {
+    Object resizableObject = null;
+    Map componentResizablesMap = (Map) page.context().session().objectForKey(AjaxDragResize.COMPONENT_RESIZABLES_MAP_KEY);
+    if (componentResizablesMap != null) {
+      Map resizablesMap = (Map) componentResizablesMap.get(page);
+      if (resizablesMap != null) {
+        resizableObject = resizablesMap.get(resizableID);
+      }
+    }
+    return resizableObject;
+  }
+
+  public void appendToResponse(WOResponse res, WOContext ctx) {
+    if (canGetValueForBinding("object")) {
+      Object resizableObject = valueForBinding("object");
+      WOComponent page = context().page();
+      Map componentDraggablesMap = (Map) ctx.session().objectForKey(AjaxDragResize.COMPONENT_RESIZABLES_MAP_KEY);
+      if (componentDraggablesMap == null) {
+        componentDraggablesMap = new WeakHashMap();
+        ctx.session().setObjectForKey(componentDraggablesMap, AjaxDragResize.COMPONENT_RESIZABLES_MAP_KEY);
+      }
+      Map resizablesMap = (Map) componentDraggablesMap.get(page);
+      if (resizablesMap == null) {
+        resizablesMap = new HashMap();
+        componentDraggablesMap.put(page, resizablesMap);
+      }
+      String id = dragResizeID();
+      if (resizableObject == null) {
+        resizablesMap.remove(id);
+      }
+      else {
+        resizablesMap.put(id, resizableObject);
+      }
+    }
+    super.appendToResponse(res, ctx);
+  }
+
+  public String dragResizeID() {
+    return _dragResizeID;
+  }
+
+  public String cssClass() {
+    return (String) valueForBinding("class", "drsElement");
+  }
+
+  public String style() {
+    StringBuffer sb = new StringBuffer();
+    sb.append("position: absolute; ");
+    sb.append("left: ");
+    sb.append(valueForBinding("left"));
+    sb.append("px; top: ");
+    sb.append(valueForBinding("top"));
+    sb.append("px; width: ");
+    sb.append(valueForBinding("width"));
+    sb.append("px; height: ");
+    sb.append(valueForBinding("height"));
+    sb.append("px;");
+    if (canGetValueForBinding("style")) {
+      sb.append(valueForBinding("style"));
     }
 
-    public boolean isStateless() {
-	return true;
-    }
+    return sb.toString();
+  }
 
-    public boolean synchronizesVariablesWithBindings() {
-	return false;
-    }
+  protected void addRequiredWebResources(WOResponse response) {
+    addStylesheetResourceInHead(response, "dragresize.css");
+  }
 
-    public static Object resizableObjectForPage(WOComponent page, String resizableID) {
-	Object resizableObject = null;
-	Map componentResizablesMap = (Map) page.context().session().objectForKey(AjaxDragResize.COMPONENT_RESIZABLES_MAP_KEY);
-	if (componentResizablesMap != null) {
-	    Map resizablesMap = (Map) componentResizablesMap.get(page);
-	    if (resizablesMap != null) {
-		resizableObject = resizablesMap.get(resizableID);
-	    }
-	}
-	return resizableObject;
-    }
-
-    public void appendToResponse(WOResponse res, WOContext ctx) {
-	if (canGetValueForBinding("object")) {
-	    Object resizableObject = valueForBinding("object");
-	    WOComponent page = context().page();
-	    Map componentDraggablesMap = (Map) ctx.session().objectForKey(AjaxDragResize.COMPONENT_RESIZABLES_MAP_KEY);
-	    if (componentDraggablesMap == null) {
-		componentDraggablesMap = new WeakHashMap();
-		ctx.session().setObjectForKey(componentDraggablesMap, AjaxDragResize.COMPONENT_RESIZABLES_MAP_KEY);
-	    }
-	    Map resizablesMap = (Map) componentDraggablesMap.get(page);
-	    if (resizablesMap == null) {
-		resizablesMap = new HashMap();
-		componentDraggablesMap.put(page, resizablesMap);
-	    }
-	    String id = dragResizeID();
-	    if (resizableObject == null) {
-		resizablesMap.remove(id);
-	    } else {
-		resizablesMap.put(id, resizableObject);
-	    }
-	}
-	super.appendToResponse(res, ctx);
-    }
-
-    public String dragResizeID() {
-	return (String) valueForBinding("id", AjaxUtils.toSafeElementID(context().elementID()) + "_DragResize");
-    }
-
-    public String cssClass() {
-	return (String) valueForBinding("class","drsElement");
-    }
-
-    public String style() {
-	StringBuffer sb = new StringBuffer();
-	sb.append("position: absolute; ");
-	sb.append("left: ");
-	sb.append(valueForBinding("left"));
-	sb.append("px; top: ");
-	sb.append(valueForBinding("top"));
-	sb.append("px; width: ");
-	sb.append(valueForBinding("width"));
-	sb.append("px; height: ");
-	sb.append(valueForBinding("height"));
-	sb.append("px;");
-	if (canGetValueForBinding("style")) {
-	    sb.append(valueForBinding("style"));
-	}
-
-	return sb.toString();
-    }
-
-    protected void addRequiredWebResources(WOResponse response) {
-	addStylesheetResourceInHead(response, "dragresize.css");
-    }
-
-    protected WOActionResults handleRequest(WORequest request, WOContext context) {
-	return null;
-    }
+  public WOActionResults handleRequest(WORequest request, WOContext context) {
+    return null;
+  }
 
 }

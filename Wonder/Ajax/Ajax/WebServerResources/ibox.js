@@ -121,10 +121,10 @@ var ibox_type = 0;
 	var ibox_footer = getElem('ibox_footer');
 	if(title != "") {ibox_footer.innerHTML = title;} else {ibox_footer.innerHTML = "&nbsp;";}
 
-	url = url.toLowerCase(); // have to lowercase
+	// url = url.toLowerCase(); // have to lowercase
 	
 	// file checking code borrowed from thickbox
-	var urlString = /\.jpg|\.jpeg|\.png|\.gif|\.html|\.htm|\.php|\.cfm|\.asp|\.aspx|\.jsp|\.jst|\.rb|\.txt/g;
+	var urlString = /\.jpg|\.jpeg|\.png|\.gif|\.html|\.htm|\.php|\.cfm|\.asp|\.aspx|\.jsp|\.jst|\.rb|\.txt|\/wo\/|\/wa\//g;
 	var urlType = url.match(urlString);
 	
 	if(urlType == '.jpg' || urlType == '.jpeg' || urlType == '.png' || urlType == '.gif'){
@@ -189,10 +189,9 @@ var ibox_type = 0;
 
 	}else if(urlType=='.htm'||urlType=='.html'||urlType=='.php'||
 			 urlType=='.asp'||urlType=='.aspx'||urlType=='.jsp'||
-			 urlType=='.jst'||urlType=='.rb'||urlType=='.txt'||
+			 urlType=='.jst'||urlType=='.rb'||urlType=='.txt'||urlType=='/wo/'||urlType=='/wa/'||
 			 urlType=='.cfm') {
 			
-	
 			ibox_type = 2;
 	
 			showIndicator();

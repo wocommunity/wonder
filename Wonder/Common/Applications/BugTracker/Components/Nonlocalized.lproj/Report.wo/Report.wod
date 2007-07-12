@@ -1,0 +1,161 @@
+attribLabel: ERXLocalizedString{
+	value= attribLabel;
+	escapeHTML = true;
+	valueWhenEmpty = "";
+}
+
+attribs: WORepetition{
+	list = attributeListAtDepth;
+	item = attrib;
+}
+
+attributeTd:WOGenericContainer{
+	elementName = "th";
+	colspan = colSpan;
+	rowspan = rowSpan;
+	class = classAttributeTd;
+	id = idAttributeTd;
+}
+
+colSpanTd: WOGenericContainer{
+	elementName = "td";
+	colspan = horzColSpan;
+	class = classColSpanTd;
+}
+
+colSpanTdHead: WOGenericContainer{
+	elementName = "th";
+	colspan = horzColSpan;
+	class = "WRTitle";
+}
+
+criteriaLabel: ERXLocalizedString {
+	value = topCriteria.label;
+	escapeHTML = true;
+}
+
+depthList:WORepetition{
+	count = depthCount;
+	index = depth;
+}
+
+hCriteriaList: WRNestedList {
+    list = topHorzGroupCriteriaList;
+    item = topCriteria;
+    index = currentIndex;
+    level = currentLevel;
+    sublist = horzSubList;
+    //action = nestedListClicked;
+    //isOrdered = true;
+}
+
+hCriteriaList2: WRNestedList {
+    list = topHorzGroupCriteriaList;
+    item = topCriteria;
+    index = currentIndex;
+    level = currentLevel;
+    sublist = horzSubList2;
+    //action = nestedListClicked;
+    //isOrdered = YES;
+}
+
+hasTitle: WOConditional {
+	condition = hasTitle;
+}
+
+horzDimensions: WORepetition { 
+	list=horzDimensions; 
+	item=hGroup;
+}
+
+
+numberOfCrits:WORepetition{
+	count = numberOfCrits;
+	index = currentIndex;
+}
+
+recordGroup: WOSwitchComponent {
+	WOComponentName = componentName;
+	model = model;
+	recordGroup= recordGroup;
+	showHeadings= showRecordGroupHeadings;
+	displayType = selectedRecordGroupDisplayType;
+	totalToShow = recordGroupTotalToShow;
+	formatForSingleTotal = recordGroupTotalFormat;
+	showAsTable = showRecordGroupAsTable;
+	colorForCoords = colorForCoords;
+	colors = colorDict;
+	totalDict = totalDict;
+    coordinates = currentCoordinates;
+	reportStyle = selectedReportStyle;
+	renderMode=^renderMode;
+}
+
+rowSpanTd: WOGenericContainer{
+	elementName = "td";
+	rowspan = vertRowSpan;
+	class = classRowSpanTd;
+}
+
+rowSpanTd2: WOGenericContainer{
+	elementName = "td";
+	nowrap = "nowrap";
+	class = classRowSpanTd;
+ cellType="CELL_TYPE_STRING" ;
+}
+
+showHeadersForAsCells: WOConditional{
+	condition = showHeadersForAsCells;
+}
+
+showIndentCell: WOConditional{
+	condition= showIndentCell;
+}
+
+showNoColNoRow: WOConditional{
+	condition= showNoColNoRow;
+}
+
+showSingleCol:WOConditional{
+	condition= showSingleCol;
+}
+
+showSingleRow:WOConditional{
+	condition= showSingleRow;
+}
+
+showTopCrits: WOConditional {
+	condition = showTopCriteriaLabel;
+}
+
+title: ERXLocalizedString {
+	value = title;
+	escapeHTML = true;
+}
+
+vCriteriaList: WRNestedList {
+    list = topVertGroupCriteriaList;
+    item = topCriteriaV;
+    index = currentIndexV;
+    level = currentLevelV;
+    sublist = vertSubList;
+    //action = nestedListClicked;
+    //isOrdered = YES;
+}
+
+vGroups: WORepetition { list= vertDimensions; item= vGroup;}
+
+vIndentCriteriaLabel: ERXLocalizedString{
+	value = vIndentCriteriaLabel;
+	escapeHTML = true;
+}
+
+vcriteriaLabel: ERXLocalizedString{
+	value = topCriteriaVLabel;
+	escapeHTML = true;
+}
+
+vindent:WORepetition{
+	count = vheadingCount; 
+	index = vheadingIndex;
+}

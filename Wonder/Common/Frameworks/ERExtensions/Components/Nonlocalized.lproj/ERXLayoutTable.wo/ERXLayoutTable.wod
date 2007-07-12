@@ -1,0 +1,42 @@
+CellContainer:  WOGenericContainer {
+    elementName = "td";
+    bgcolor = ^cellBackgroundColor;
+    align = ^cellAlign;
+    valign = ^cellVAlign;
+	width = ^cellWidth;
+	rowspan = cellRowSpan;
+	colspan = cellColSpan;
+}
+
+ColRepetition: WORepetition {
+    count = colCount;
+    index = currentCol;
+}
+
+Content: WOComponentContent {
+}
+
+HasItem : WOConditional {
+	condition = ^item;
+}
+
+RowRepetition: WORepetition {
+    count = rowCount;
+    index = currentRow;
+}
+
+TableContainer: WOGenericContainer {
+    elementName = "table";
+    bgcolor = ^tableBackgroundColor;
+    border = ^border;
+    cellpadding = ^cellpadding;
+    cellspacing = ^cellspacing;
+	width = ^tableWidth;
+	otherTagString = ^otherTagString;
+	class = ^tableClass;
+}
+
+TableRow: WOGenericContainer {
+    elementName = "tr";
+    bgcolor = ^rowBackgroundColor;
+}

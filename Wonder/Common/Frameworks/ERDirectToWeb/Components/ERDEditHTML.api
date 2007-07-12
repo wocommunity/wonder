@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wodefinitions>
+    <wo class="ERDEditHTML.java" wocomponentcontent="false">
+        <binding name="object"/>
+        <binding name="key"/>
+        <binding name="size"/>
+        <binding name="rows"/>
+        <validation message="'object' is a required binding">
+            <unbound name="object"/>
+        </validation>
+        <validation message="'key' is a required binding">
+            <unbound name="key"/>
+        </validation>
+    </wo>
+</wodefinitions>

@@ -1,0 +1,165 @@
+EditComponent : ERXWOComponentContent {
+	templateName = "edit";
+}
+
+IsChangingToEditConditional : WOConditional {
+	condition = changingToEdit;
+}
+
+IsChangingToViewConditional : WOConditional {
+	condition = changingToView;
+}
+
+IsEditingConditional : WOConditional {
+	condition = editing;
+}
+
+IsNotEditingConditional : WOConditional {
+	condition = editing;
+	negate = true;
+}
+
+UpdateContainer : AjaxUpdateContainer {
+	id = id;
+	class = ^class;
+	style = ^style;
+	elementName = elementName;
+	evalScripts = true;
+	onLoading = ^onLoading;
+	onRefreshComplete = ^onRefreshComplete;
+}
+
+ManualViewControlConditional : WOConditional {
+	condition = manualViewControl;
+}
+
+NotManualViewControlConditional : WOConditional {
+	condition = manualViewControl;
+	negate = true;
+}
+
+NotManualEditControlConditional : WOConditional {
+	condition = manualEditControl;
+	negate = true;
+}
+
+EditFunction : AjaxUpdateLink {
+	action = startEditing;
+	onClick = ^onEditClick;
+	onSuccess = ^onEditSuccess;
+	onFailure = ^onEditFailure;
+	//onClickServer = updateFunctionName;
+	onLoading = ^onEditing;
+	evalScripts = true;
+	disabled = ^disabled;
+	functionName = editFunctionName;
+	updateContainerID = id;
+	insertion = ^editInsertion;
+	insertionDuration = ^editInsertionDuration;
+	beforeInsertionDuration = ^editBeforeInsertionDuration;
+	afterInsertionDuration = ^editAfterInsertionDuration;
+}
+
+EditAction : WOGenericContainer {
+	elementName = "div";
+	onclick = editFunctionCall;
+	class = ^editClass;
+}
+
+SaveLabel : WOString {
+	value = ^saveLabel;
+	valueWhenEmpty = "save";
+}
+
+CancelLabel : WOString {
+	value = ^cancelLabel;
+	valueWhenEmpty = "cancel";
+}
+
+CancelFunction : AjaxUpdateLink {
+	action = cancel;
+	onClick = ^onCancelClick;
+	//onClickServer = updateFunctionName;
+	onSuccess = ^onCancelSuccess;
+	onFailure = ^onCancelFailure;
+	onLoading = ^onCancelling;
+	evalScripts = true;
+	functionName = cancelFunctionName;
+	updateContainerID = cancelUpdateContainerID;
+	insertion = ^cancelInsertion;
+	insertionDuration = ^cancelInsertionDuration;
+	beforeInsertionDuration = ^cancelBeforeInsertionDuration;
+	afterInsertionDuration = ^cancelAfterInsertionDuration;
+}
+
+CancelAction : WOGenericContainer {
+	elementName = "a";
+	href = "javascript:void(0)";
+	onclick = cancelFunctionCall;
+	class = ^cancelClass;
+}
+
+EditForm : WOForm {
+	multipleSubmit = true;
+	name = id;
+	disabled = linkOnSave;
+}
+
+LinkOnSaveConditional : WOConditional {
+	condition = linkOnSave;
+}
+
+SubmitOnSaveConditional : WOConditional {
+	condition = submitOnSave;
+}
+
+SaveSubmitFunction : AjaxSubmitButton {
+	action = save;
+	button = false;
+	formName = id;
+	onClick = ^onSaveClick;
+	//onClickServer = updateFunctionName;
+	onSuccess = ^onSaveSuccess;
+	onFailure = ^onSaveFailure;
+	onLoading = ^onSaving;
+	evalScripts = true;
+	functionName = saveFunctionName;
+	updateContainerID = saveUpdateContainerID;
+	insertion = ^saveInsertion;
+	insertionDuration = ^saveInsertionDuration;
+	beforeInsertionDuration = ^saveBeforeInsertionDuration;
+	afterInsertionDuration = ^saveAfterInsertionDuration;
+	formSerializer = ^formSerializer;
+}
+
+SaveLinkFunction : AjaxUpdateLink {
+	action = save;
+	formName = id;
+	onClick = ^onSaveClick;
+	//onClickServer = updateFunctionName;
+	onSuccess = ^onSaveSuccess;
+	onFailure = ^onSaveFailure;
+	onLoading = ^onSaving;
+	evalScripts = true;
+	functionName = saveFunctionName;
+	updateContainerID = saveUpdateContainerID;
+	insertion = ^saveInsertion;
+	insertionDuration = ^saveInsertionDuration;
+	beforeInsertionDuration = ^saveBeforeInsertionDuration;
+	afterInsertionDuration = ^saveAfterInsertionDuration;
+}
+
+SaveAction : WOGenericContainer {
+	elementName = "a";
+	href = "javascript:void(0)";
+	onclick = saveFunctionCall;
+	class = ^saveClass;
+}
+
+ViewComponent : ERXWOComponentContent {
+	templateName = "view";
+}
+
+ID : WOString {
+	value = id;
+}

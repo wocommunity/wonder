@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wodefinitions>
+  <wo class="AjaxFunctionLink">
+    <binding name="string" passthrough="NO"/>
+    <binding name="otherTagString" passthrough="NO"/>
+    <binding name="disabled" passthrough="NO" defaults="YES/NO"/>
+    <binding name="onclick" passthrough="YES"/>
+    <binding name="updateContainerID"/>
+    <binding name="action"/>
+    
+    <validation message = "You cannot bind both 'action' and 'onclick'.">
+    	<bound name = "action"/>
+    	<bound name = "onclick"/>
+    </validation>
+    
+    <validation message = "If 'updateContainerID' is bound, then 'action' must also be bound.">
+    	<bound name = "updateContainerID"/>
+    	<unbound name = "action"/>
+    </validation>
+  </wo>
+</wodefinitions>

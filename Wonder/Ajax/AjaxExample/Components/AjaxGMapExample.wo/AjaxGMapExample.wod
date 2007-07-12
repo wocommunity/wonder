@@ -1,0 +1,55 @@
+Map1 : AjaxGMap {
+	address = address;
+	width = 450;
+	height = 340;
+	id = "map1";
+	control = "SmallMap";
+	zoomLevel = 15;
+}
+
+SearchMarker : AjaxGMarker {
+	address = address;
+	infoWindowHtml = address;
+	mapID = "map1";
+	id = "searchMarker";
+}
+
+AddressSearchForm : WOForm {
+	multipleSubmit = true;
+}
+
+AddressTextField : WOTextField {
+	value = address;
+	size = 50;
+}
+
+AddressSearchSubmitButton : WOSubmitButton {
+	action = search;
+	value = "go";
+}
+
+Map2 : AjaxGMap {
+	lat = "37.545722";
+	lng = "-77.449226";
+	control = "OverviewMap";
+	id = "map2";
+}
+
+Marker1 : AjaxGMarker {
+	lat = "37.545722";
+	lng = "-77.449226";
+	mapID = "map2";
+	id = "marker1";
+	infoWindowHtml = "This AjaxGMarker is created by<br/> giving longitude and latitude";
+}
+
+Marker2 : AjaxGMarker {
+	address = "1000 W Main St, Richmond, VA, 23220";
+	mapID = "map2";
+	id = "marker2";
+	infoWindowHtml = "This AjaxGMarker is created by giving an address";
+}
+
+HeaderFooter : AjaxExampleComponent {
+	title = "Google Maps";
+}

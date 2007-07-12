@@ -1,0 +1,36 @@
+<center>
+<webobject name=LoginForm>
+    <h1>Bug Tracker</h1>
+    <table border=0 cellpadding=4 cellspacing=2>
+        <tr valign=middle>
+            <td align=CENTER><webobject name=Conditional1><table border=1 bgcolor=#ff5a6a><tr><td><font color=#000000><b><webobject name=String1></webobject></b></font></td></tr></table></webobject></td>
+        </tr>
+        <tr>
+            <td>
+                <table border=1 cellpadding=2 cellspacing=0>
+                    <tr>
+                        <th align=right> Username: </th>
+                        <td align=right>
+                            <webobject name=UsernameField></webobject>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th align=right> Password: </th>
+                        <td align=right>
+                            <webobject name=PasswordField></webobject>
+                        </td>
+                    </tr>
+                    <tr><td colspan=2 align=right><webobject name=Captcha></webobject></td></tr>
+                    <tr><td><b>Remember Password:</b></td><td><webobject name=CheckBox1></webobject></td></tr>
+                    <tr><td colspan=2 align=right>
+                            <br>
+                            <webobject name=LoginButton></webobject>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+</webobject>
+<script>window.document.forms[0].username.focus();</script>
+</center>

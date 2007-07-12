@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<wodefinitions>
+        <wo wocomponentcontent="true" class="ERXJavaScript.java">
+		<binding name="scriptSource"/>
+		<binding name="scriptFile"/>
+		<binding name="scriptKey"/>
+		<binding name="scriptFramework"/>
+		<binding name="scriptString"/>
+		<binding name="hideInComment"/>
+        </wo>
+</wodefinitions>
