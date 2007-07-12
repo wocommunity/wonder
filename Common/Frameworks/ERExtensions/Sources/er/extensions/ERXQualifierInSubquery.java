@@ -153,6 +153,14 @@ public class ERXQualifierInSubquery extends EOQualifier implements EOQualifierSQ
                                                          false,
                                                          true,
                                                          null);
+        
+        if (qualifier != null) {
+        	qualifier = EOQualifierSQLGeneration.Support._schemaBasedQualifierWithRootEntity(qualifier, entity);
+        }
+        if (qualifier != fs.qualifier()) {
+            fs.setQualifier(qualifier);
+        }
+        
         // ASSUME: This makes a few assumptions, if anyone can figure out a full proof way that would be nice to get the model
         //	   Note you can't use: EOAdaptor.adaptorWithModel(e.entity().model()).expressionFactory(); as this creates a
         //
@@ -163,7 +171,13 @@ public class ERXQualifierInSubquery extends EOQualifier implements EOQualifierSQ
         NSArray subAttributes = destinationAttName != null ? new NSArray(entity.attributeNamed(destinationAttName)) : entity.primaryKeyAttributes();
         
         EOSQLExpression subExpression = factory.expressionForEntity(entity);
-        subExpression.aliasesByRelationshipPath().setObjectForKey("t1", "");
+        
+        // Arroz: Having this table identifier replacement causes serious problems if
+        // you have more than a table being processed in the subquery. Disabling it will
+        // aparently not cause problems, because t0 inside the subquery is not the same
+        // t0 outside it.
+        
+        //subExpression.aliasesByRelationshipPath().setObjectForKey("t1", "");
         subExpression.setUseAliases(true);
         subExpression.prepareSelectExpressionWithAttributes(subAttributes,
                                                             false,
@@ -178,7 +192,8 @@ public class ERXQualifierInSubquery extends EOQualifier implements EOQualifierSQ
             e.addBindVariableDictionary((NSDictionary)bindEnumeration.nextElement());
         }
         
-        sb.append(ERXStringUtilities.replaceStringByStringInString("t0.", "t1.", subExpression.statement()));        
+        //sb.append(ERXStringUtilities.replaceStringByStringInString("t0.", "t1.", subExpression.statement()));        
+        sb.append(subExpression.statement());    
         sb.append(" ) ");
         return sb.toString();
     }
