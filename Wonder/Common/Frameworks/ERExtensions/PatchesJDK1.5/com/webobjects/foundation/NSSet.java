@@ -408,19 +408,20 @@ public class NSSet<T> implements Cloneable, Serializable, NSCoding, _NSFoundatio
 	public T[] toArray() {
 		return objectsNoCopy();
 	}
-	public Object[] toArray(Object a[]) {
-		if (a == null) {
+	public Object[] toArray(Object objects[]) {
+		if (objects == null) {
 			throw new NullPointerException("Cannot pass null as parameter");
 		}
 		Object currObjects[] = objectsNoCopy();
-		if (a.length < currObjects.length) {
-			return currObjects;
+		if (objects.length < currObjects.length) {
+			objects = (T[]) java.lang.reflect.Array.newInstance(objects.getClass().getComponentType(), _objects.length);
 		}
-		else {
-			System.arraycopy(((currObjects)), 0, ((a)), 0, currObjects.length);
-			return a;
+		for (int i = 0; i < _objects.length; i++) {
+			objects[i] = (T) _objects[i];
 		}
+		return objects;
 	}
+
 	public String toString() {
 		StringBuffer buffer = new StringBuffer(128);
 		buffer.append("(");
