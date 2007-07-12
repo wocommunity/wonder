@@ -3,6 +3,7 @@
     "com.webobjects.directtoweb.KeyValueAssignment", 
     "com.webobjects.directtoweb.BooleanAssignment", 
     "com.webobjects.directtoweb.DefaultAssignment",
+    "com.webobjects.directtoweb.EntityAssignment",
     "com.webobjects.directtoweb.TabDictionaryComputer",
     "er.directtoweb.ERDDefaultActionAssignment",
     "er.directtoweb.ERDDefaultConfigurationNameAssignment",
