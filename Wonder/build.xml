@@ -88,7 +88,7 @@
     <target name="dist">
         <ant antFile="Build/build/build.xml" target="dist">
             <property name="dist.base" value="dist" />
-            <property name="project.version" value="3.0" />
+            <property name="project.version" value="4.0" />
         </ant>
     </target>
 
