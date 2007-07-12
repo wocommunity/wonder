@@ -13,7 +13,7 @@ public class WRAttributeListEditor extends WOComponent implements DRAttributeEdi
     protected NSArray _attributeList;
     protected String attributeUpdateAction;
 
-    protected DRAttribute attribute;
+    public DRAttribute attribute;
     protected int currentIndexAtt;
     protected int currentLevelAtt;
 
