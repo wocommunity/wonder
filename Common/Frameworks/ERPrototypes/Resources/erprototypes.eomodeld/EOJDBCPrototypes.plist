@@ -163,7 +163,6 @@
            };
            valueClassName = NSString;
            valueType = c;
-           width = 100000000;
        }, 
        
        {
