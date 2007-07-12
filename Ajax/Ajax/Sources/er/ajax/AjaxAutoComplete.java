@@ -54,6 +54,11 @@ import com.webobjects.foundation.NSMutableDictionary;
  * @binding isLocal boolean indicating if you want the list to be completely
  *          client-side. Binding a true value, would mean that the list will
  *          filtered on the client.
+ * @binding isLocalSharedList boolean indicating if the list needs to be shared.
+ * @binding localSharedVarName the name of the javascript variable to use to 
+ *          store the list in.  The list is stored in the userInfo dictionary
+ *          on the server side to allow for shared use by multiple auto complete 
+ *          components.
  * @binding token
  * @binding frequency Look at the scriptaculous documentation.
  * @binding minChars Look at the scriptaculous documentation.
@@ -62,6 +67,9 @@ import com.webobjects.foundation.NSMutableDictionary;
  * @binding afterUpdateElement Look at the scriptaculous documentation.
  * @binding fullSearch Look at the scriptaculous documentation.
  * @binding partialSearch Look at the scriptaculous documentation.
+ * @binding choices Look at the scriptaculous documentation (Local only)
+ * @binding partialChars Look at the scriptaculous documentation (Local only)
+ * @binding ignoreCase Look at the scriptaculous documentation (Local only)
  * 
  * @author ak
  */
@@ -109,6 +117,9 @@ public class AjaxAutoComplete extends AjaxComponent {
 	  ajaxOptionsArray.addObject(new AjaxOption("partialSearch", AjaxOption.BOOLEAN));
 	  ajaxOptionsArray.addObject(new AjaxOption("defaultValue", AjaxOption.STRING));
 	  ajaxOptionsArray.addObject(new AjaxOption("autoSelect", AjaxOption.BOOLEAN));
+	  ajaxOptionsArray.addObject(new AjaxOption("choices", AjaxOption.NUMBER));
+	  ajaxOptionsArray.addObject(new AjaxOption("partialChars", AjaxOption.NUMBER));
+	  ajaxOptionsArray.addObject(new AjaxOption("ignoreCase", AjaxOption.BOOLEAN));
       NSMutableDictionary options = AjaxOption.createAjaxOptionsDictionary(ajaxOptionsArray, this);
       return options;
     }
