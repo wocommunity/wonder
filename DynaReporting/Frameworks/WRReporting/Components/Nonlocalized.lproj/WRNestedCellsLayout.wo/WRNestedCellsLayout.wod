@@ -11,7 +11,7 @@ groupDepth:WORepetition{
 
 recordGroupTest:WRRecordGroup{
 	model = model;
-	recordGroup= recordGroupTest;
+	recordGroup= recordGroup;
 	showHeadings= showRecordGroupHeadings;
 	displayType = selectedRecordGroupDisplayType;
 	totalToShow = recordGroupTotalToShow;
