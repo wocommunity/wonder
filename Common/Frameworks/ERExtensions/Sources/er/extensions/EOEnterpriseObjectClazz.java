@@ -88,7 +88,7 @@ public class EOEnterpriseObjectClazz extends Object {
         tmp.setColumnName("p_objectCountUnique"+foo.name());
         tmp.setClassName("java.lang.Number");
         tmp.setValueType("i");
-        tmp.setReadFormat("count( unique t0."+foo.columnName()+")");
+        tmp.setReadFormat("count( distinct t0."+foo.columnName()+")");
         return tmp;
     }
 
