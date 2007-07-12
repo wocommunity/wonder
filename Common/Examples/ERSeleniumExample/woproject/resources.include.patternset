@@ -1,9 +1,3 @@
-**/Properties
-**/*.eomodeld/
-**/*.d2wmodel
-**/*.wo/
-**/*.api
-**/*.strings
-**/*.plist
-Properties
-**/Selenium
+Components/**/*.wo
+Components/**/*.api
+Resources/**/*
