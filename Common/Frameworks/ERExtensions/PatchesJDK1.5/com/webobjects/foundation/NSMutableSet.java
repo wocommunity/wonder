@@ -16,6 +16,9 @@ import java.util.Collection;
  * @param &lt;T&gt;
  *            type of set contents
  */
+
+//TODO iterator.remove() throws unimplemented
+
 @SuppressWarnings("unchecked")
 public class NSMutableSet<T> extends NSSet<T> {
 
