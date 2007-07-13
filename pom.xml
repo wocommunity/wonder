@@ -73,7 +73,7 @@
 				<extensions>true</extensions>
 				<version>2.0.7</version>
         			<configuration>
-           				<skipAppleProvidedFrameworks>false</skipAppleProvidedFrameworks>
+           				<skipAppleProvidedFrameworks>true</skipAppleProvidedFrameworks>
 				</configuration>
 			</plugin>
 			<plugin>
