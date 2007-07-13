@@ -3,6 +3,8 @@
 	<wo wocomponentcontent="true" class="ERXClickableContainer">
 		<binding name="elementName"/>
 		<binding name="action"/>
+		<binding name="actionClass"/>
+		<binding name="directActionName"/>
 		<binding name="class"/>
 		<binding name="id"/>
 	</wo>
