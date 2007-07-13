@@ -658,7 +658,7 @@ public class NSDictionary<K, V> implements Cloneable, Serializable, NSCoding, NS
 	public static final Class _CLASS;
 	public static final Class _MAP_ENTRY_CLASS;
 	public static final NSDictionary EmptyDictionary = new NSDictionary();
-	static final long serialVersionUID = 0xb6c588eL;
+	static final long serialVersionUID = 2886170486405617806L;
 	private static final Class _objectArrayClass;
 	protected transient int _capacity;
 	protected transient int _hashtableBuckets;

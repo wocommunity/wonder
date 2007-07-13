@@ -162,7 +162,7 @@ public class NSMutableDictionary<K, V> extends NSDictionary<K, V> {
 	}
 
 	public static final Class _CLASS = _NSUtilitiesExtra._classWithFullySpecifiedNamePrime("com.webobjects.foundation.NSMutableDictionary");
-	static final long serialVersionUID = 0x1d6146f8L;
+	static final long serialVersionUID = 6690723083816355576L;
 
 	/**
 	 * Associate the <tt>value</tt> with <tt>key</tt> in this map. If the
