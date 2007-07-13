@@ -1,6 +1,7 @@
 package er.extensions;
 
 import com.webobjects.appserver.WOAssociation;
+import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WOElement;
 import com.webobjects.appserver.WOResponse;
@@ -20,12 +21,19 @@ import com.webobjects.foundation.NSMutableDictionary;
  * 
  * @binding elementName the HTML element name to use (div by default)
  * @binding action the action to perform
+ * @binding actionClass the class name that contains the direct action
+ * @binding directActionName the name of the direct action to execute
  * 
  * @author mschrag
  */
 public class ERXClickableContainer extends WOGenericContainer {
+	private WOAssociation _actionClass;
+	private WOAssociation _directActionName;
+
 	public ERXClickableContainer(String name, NSDictionary associations, WOElement template) {
 		super(name, ERXClickableContainer._processAssociations(associations), template);
+		_actionClass = (WOAssociation) _associations.removeObjectForKey("actionClass");
+		_directActionName = (WOAssociation) _associations.removeObjectForKey("directActionName");
 	}
 
 	protected static NSDictionary _processAssociations(NSDictionary associations) {
@@ -42,8 +50,20 @@ public class ERXClickableContainer extends WOGenericContainer {
 
 	public void appendAttributesToResponse(WOResponse response, WOContext context) {
 		super.appendAttributesToResponse(response, context);
+		WOComponent component = context.component();
 		response.appendContentString(" onclick = \"location.href='");
-		response.appendContentString(context.componentActionURL());
+		String url;
+		if (_directActionName != null) {
+			String actionName = (String) _directActionName.valueInComponent(component);
+			if (_actionClass != null) {
+				actionName = actionName + "/" + (String) _actionClass.valueInComponent(component);
+			}
+			url = context.directActionURLForActionNamed(actionName, null);
+		}
+		else {
+			url = context.componentActionURL();
+		}
+		response.appendContentString(url);
 		response.appendContentString("'\" style = \"cursor: pointer;\"");
 	}
 }
