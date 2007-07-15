@@ -101,9 +101,9 @@ public class ERXDatabaseContextDelegate {
      */
     public boolean databaseContextShouldHandleDatabaseException(EODatabaseContext databaseContext, Throwable throwable) {
     	if(exLog.isDebugEnabled()) {
-    		exLog.debug("JDBC Exception occured: " + throwable, throwable);
+    		exLog.debug("Database Exception occured: " + throwable, throwable);
     	} else if(exLog.isInfoEnabled()) {
-    		exLog.info("JDBC Exception occured: " + throwable);
+    		exLog.info("Database Exception occured: " + throwable);
     	}
     	if(throwable.getMessage() != null && throwable.getMessage().indexOf("_obtainOpenChannel") != -1) {
     		NSArray models = databaseContext.database().models();
@@ -112,7 +112,9 @@ public class ERXDatabaseContextDelegate {
     			NSDictionary dict = model.connectionDictionary();
     			log.info(model.name() + ": " + (dict == null ? "No connection dictionary!" : dict.toString()));
     		}
-    		new ERXJDBCConnectionAnalyzer(databaseContext.database().adaptor().connectionDictionary());
+    		if ("JDBC".equals(databaseContext.adaptorContext().adaptor().name())) {
+    			new ERXJDBCConnectionAnalyzer(databaseContext.database().adaptor().connectionDictionary());
+    		}
     	}
     	//EOEditingContext ec = ERXEC.newEditingContext();
     	//log.info(NSPropertyListSerialization.stringFromPropertyList(EOUtilities.modelGroup(ec).models().valueForKey("connectionDictionary")));
