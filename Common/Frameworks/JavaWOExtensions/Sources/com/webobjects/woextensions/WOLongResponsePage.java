@@ -136,7 +136,7 @@ public abstract class WOLongResponsePage extends WOComponent implements Runnable
         if (!_performingAction) {
             _performingAction = true;
             try {
-                Thread t = new Thread(this);
+                Thread t = new Thread(this, "WOLongResponsePage: " + getClass().getName());
                 t.start();
             } catch (Exception localException) {
                 throw new RuntimeException ("<WOLongResponsePage> Exception occurred while creating long response thread: "+localException.toString());
