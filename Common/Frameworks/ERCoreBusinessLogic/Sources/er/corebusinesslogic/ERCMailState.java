@@ -2,9 +2,7 @@
 // (c) by Anjo Krank (ak@kcmedia.ag)
 package er.corebusinesslogic;
 
-import com.webobjects.foundation.*;
 import com.webobjects.eocontrol.*;
-import com.webobjects.eoaccess.*;
 import er.extensions.*;
 
 /**
@@ -35,7 +33,7 @@ public class ERCMailState extends _ERCMailState {
     
     public static class ERCMailStateClazz extends _ERCMailStateClazz {
         public ERCMailState sharedMailStateForKey(String key) {
-            return (ERCMailState)objectWithPrimaryKeyValue(EOSharedEditingContext.defaultSharedEditingContext(), key);
+            return (ERCMailState)ERXEOControlUtilities.sharedObjectWithPrimaryKey(entityName(), key);
         }
         
         public void initializeSharedData() {
@@ -50,7 +48,7 @@ public class ERCMailState extends _ERCMailState {
                 ERCMailState.PROCESSING_STATE = sharedMailStateForKey("proc");
             } else {
                 // make ERCMailState non-shared so it does not get loaded
-                ERXUtilities.makeEditableSharedEntityNamed("ERCMailState");
+                ERXEOAccessUtilities.makeEditableSharedEntityNamed("ERCMailState");
             }
         }
     }
