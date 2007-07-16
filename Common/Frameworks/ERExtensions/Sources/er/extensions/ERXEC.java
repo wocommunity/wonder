@@ -94,7 +94,7 @@ public class ERXEC extends EOEditingContext {
 	 */
 	private Boolean coalesceAutoLocks;
 
-	/** how many times we did automatically lock. */ 
+	/** if true, there is an autolock on this editingContext */ 
 	private boolean autoLocked;
 
 	/** how many times has the EC been locked. */
