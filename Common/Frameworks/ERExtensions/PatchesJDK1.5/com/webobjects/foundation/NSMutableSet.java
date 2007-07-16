@@ -173,7 +173,7 @@ public class NSMutableSet<T> extends NSSet<T> {
 	}
 
 	public static final Class _CLASS = _NSUtilities._classWithFullySpecifiedName("com.webobjects.foundation.NSMutableSet");
-	static final long serialVersionUID = 0x73769e5dL;
+	static final long serialVersionUID = -6054074706096120227L;
 
 	/**
 	 * Add <tt>o</tt> to the set and return true if <tt>o</tt> is not null

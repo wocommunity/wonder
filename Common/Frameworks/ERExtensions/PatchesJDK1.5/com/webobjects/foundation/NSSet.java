@@ -26,7 +26,7 @@ public class NSSet<T> implements Cloneable, Serializable, NSCoding, _NSFoundatio
 
 	private static final ObjectStreamField serialPersistentFields[];
 
-	static final long serialVersionUID = 0x508ecb88L;
+	static final long serialVersionUID = -8833684352747517048L;
 
 	static {
 		_CLASS = _NSUtilities._classWithFullySpecifiedName("com.webobjects.foundation.NSSet");
