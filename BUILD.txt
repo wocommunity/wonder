@@ -56,8 +56,8 @@ Ant should be found in /Developer/Java/Ant/bin
   ant applications; sudo ant applications.install
   ant examples; sudo ant examples.install
 
-If you want to not use the "sudo", you will need write permissions on /Library/Frameworks,
-/Library/WebObjects/JavaApplications, and a few other directories.
+If you have write priviliges in /Library/Frameworks, /Library/WebObjects/JavaApplications, and
+/Library/WebServer/Documents/WebObjects/Frameworks, you may do without the "sudo".
 
 Building with Maven: 
 =========================
@@ -89,7 +89,7 @@ Steps 1-4 are required only once or when you clean your local Maven repository (
 Building with Eclipse:
 =========================
 
-1. Install Eclipse http://maven.apache.org
+1. Install Eclipse http://www.eclipse.org
 
 2. Install WOLips
 
