@@ -516,10 +516,17 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
      * @see er.extensions.ERXEnterpriseObject#primaryKeyAttributeNames()
      */
     public NSArray primaryKeyAttributeNames() {
-        EOEntity entity = ERXEOAccessUtilities.entityNamed(editingContext(), entityName());
-        return entity.primaryKeyAttributeNames();
+        return entity().primaryKeyAttributeNames();
     }
 
+    /**
+     * Returns the entity for the current object.
+     * Defers to {@link ERXEOAccessUtilities#entityNamed ERXEOAccessUtilities.entityNamed()} for the actual work.
+     * @return EOEntity for the current object
+     */
+    public EOEntity entity() {
+        return ERXEOAccessUtilities.entityNamed(editingContext(), entityName());
+    }
     
     /** caches the primary key dictionary for the given object */
     private NSDictionary _primaryKeyDictionary;
