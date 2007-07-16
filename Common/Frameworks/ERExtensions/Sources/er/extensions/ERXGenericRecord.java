@@ -9,7 +9,6 @@ package er.extensions;
 import com.webobjects.foundation.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.eoaccess.*;
-import com.webobjects.appserver.*;
 import java.lang.*;
 import java.lang.reflect.*;
 import java.util.*;
@@ -656,8 +655,25 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
      * @return the committed snapshot value for the given key
      */
     public Object committedSnapshotValueForKey(String key) {
-        NSDictionary snapshot = editingContext().committedSnapshotForObject(this);
+        NSDictionary snapshot = committedSnapshot();
         return snapshot != null ? snapshot.objectForKey(key) : null;
+    }
+
+    /**
+     * This method exists because {@link com.webobjects.eocontrol.EOEditingContext#committedSnapshotForObject EOEditingContext.committedSnapshotForObject()}
+     * gives unexpected results for newly inserted objects if {@link com.webobjects.eocontrol.EOEditingContext#processRecentChanges() EOEditingContext.processRecentChanges()} has been called.
+     * This method always returns a dictionary whose values are all NSKeyValueCoding.NullValue in the case of a newly inserted object. 
+     * @return the committed snapshot
+     */
+    public NSDictionary committedSnapshot() {
+        if( !isNewObject() ) {
+            return editingContext().committedSnapshotForObject(this);
+        } else {
+            NSArray keys = allPropertyKeys();
+            NSMutableDictionary allNullDict = new NSMutableDictionary(keys.count());
+            ERXDictionaryUtilities.setObjectForKeys(allNullDict, NSKeyValueCoding.NullValue, keys);
+            return allNullDict;
+        }
     }
 
     /**
@@ -683,7 +699,7 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
      *         committed snapshot.
      */
     public NSDictionary changesFromCommittedSnapshot() {
-        return changesFromSnapshot(editingContext().committedSnapshotForObject(this));
+        return changesFromSnapshot(committedSnapshot());
     }
 
     /**

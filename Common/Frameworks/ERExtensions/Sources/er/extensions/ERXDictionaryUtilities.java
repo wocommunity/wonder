@@ -135,4 +135,28 @@ public class ERXDictionaryUtilities extends Object {
         return result != null ? result : NSArray.EmptyArray;
     }
 
+    /**
+     * Sets the object for each of the keys in the array on a mutable dictionary.
+     *
+     * @param dictionary dictionary to mutate.  a null dictionary is a no-op.
+     * @param object object to set.  an exception will be thrown if object is null.
+     * @param keys array of keys to invoke <code>setObjectForKey()</code> for each key.  a null
+     *        or empty array is a no-op.
+     */
+    public static void setObjectForKeys(final NSMutableDictionary dictionary, final Object object, final NSArray keys) {
+        // n.b.: we explicitly don't check for a null object to be consistent with the rest of
+        //       NSMutableDictionary's API
+        if ( dictionary != null && keys != null && keys.count() > 0 ) {
+            if ( keys.count() == 1 ) {
+                dictionary.setObjectForKey(object, keys.objectAtIndex(0));
+            }
+            else {
+                final Enumeration e = keys.objectEnumerator();
+
+                while ( e.hasMoreElements() ) {
+                    dictionary.setObjectForKey(object, e.nextElement());
+                }
+            }
+        }
+    }
 }
