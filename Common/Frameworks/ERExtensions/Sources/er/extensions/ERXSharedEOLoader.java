@@ -106,33 +106,35 @@ public class ERXSharedEOLoader {
     // actually carries out the loading of shared EOs.
     public void loadSharedObjectsForModel(EOModel aModel) {
         NSArray entities = aModel.entitiesWithSharedObjects();
-        // calling defaultSharedEditingContext "turns on" sharing, so don't
-        // call it unless we know there are objects to preload.
-        EOSharedEditingContext dsec = EOSharedEditingContext.defaultSharedEditingContext();
+        if (entities != null && entities.count() > 0) {
+            // calling defaultSharedEditingContext "turns on" sharing, so don't
+            // call it unless we know there are objects to preload.
+            EOSharedEditingContext dsec = EOSharedEditingContext.defaultSharedEditingContext();
 
-        if (entities != null && entities.count() > 0 && dsec != null) {
-            // Load the shared EOs
-            for (Enumeration e = entities.objectEnumerator(); e.hasMoreElements();) {
-                EOEntity entity = (EOEntity)e.nextElement();
-                /* For EOs that are completely shared the below for loop results in *2* fetches
-                for 1 fs (fetchAll) when the entity is caching the code below works around this with only 1 fetch. */
-                if (entity.sharedObjectFetchSpecificationNames().count() == 1 &&
-                    entity.sharedObjectFetchSpecificationNames().lastObject().equals("FetchAll")) {
-                    try {
-                        EOUtilities.objectsForEntityNamed(dsec, entity.name());
-                    } catch (Exception e1) {
-                        log.error("Exception occurred for entity named: " + entity.name() + " in Model: " + aModel.name() + e1);
-                        throw new RuntimeException(e.toString());
-                    }
-                } else {
-                    for (Enumeration ee = entity.sharedObjectFetchSpecificationNames().objectEnumerator(); ee.hasMoreElements();) {
-                        String fsn = (String)ee.nextElement();
-                        EOFetchSpecification fs = entity.fetchSpecificationNamed(fsn);
-                        if (fs != null) {
-                            log.debug("Loading "+entity.name()+" - "+fsn);
-                            dsec.bindObjectsWithFetchSpecification(fs, fsn);
+            if (dsec != null) {
+                // Load the shared EOs
+                for (Enumeration e = entities.objectEnumerator(); e.hasMoreElements();) {
+                    EOEntity entity = (EOEntity)e.nextElement();
+                    /* For EOs that are completely shared the below for loop results in *2* fetches
+                    for 1 fs (fetchAll) when the entity is caching the code below works around this with only 1 fetch. */
+                    if (entity.sharedObjectFetchSpecificationNames().count() == 1 &&
+                        entity.sharedObjectFetchSpecificationNames().lastObject().equals("FetchAll")) {
+                        try {
+                            EOUtilities.objectsForEntityNamed(dsec, entity.name());
+                        } catch (Exception e1) {
+                            log.error("Exception occurred for entity named: " + entity.name() + " in Model: " + aModel.name() + e1);
+                            throw new RuntimeException(e.toString());
                         }
-                    }                    
+                    } else {
+                        for (Enumeration ee = entity.sharedObjectFetchSpecificationNames().objectEnumerator(); ee.hasMoreElements();) {
+                            String fsn = (String)ee.nextElement();
+                            EOFetchSpecification fs = entity.fetchSpecificationNamed(fsn);
+                            if (fs != null) {
+                                log.debug("Loading "+entity.name()+" - "+fsn);
+                                dsec.bindObjectsWithFetchSpecification(fs, fsn);
+                            }
+                        }
+                    }
                 }
             }
         }
