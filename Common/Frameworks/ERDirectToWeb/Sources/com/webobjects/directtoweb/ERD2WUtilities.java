@@ -40,7 +40,6 @@ public class ERD2WUtilities {
     // Should just return null instead of throwing.
     public static Object contextValueForKeyNoInferenceNoException(D2WContext c, String keyPath) {
         Object result = null;
-        String oriKeyPath = keyPath;
         int i = keyPath.indexOf(".");
         if (i == -1) {
             result = c.valueForKeyNoInference(keyPath);
