@@ -20,13 +20,8 @@ import com.webobjects.eocontrol.EOEnterpriseObject;
 
 import er.extensions.ERXEC;
 import er.extensions.ERXValueUtilities;
-import er.extensions.ERXLogger;
 
 public class ERD2WEditRelationshipPage extends D2WEditRelationshipPage {
-    
-    /** logging support */
-    public final static ERXLogger log = ERXLogger.getERXLogger(ERD2WEditRelationshipPage.class);
-
     
     /** interface for all the keys used in this pages code */
     public static interface Keys {
