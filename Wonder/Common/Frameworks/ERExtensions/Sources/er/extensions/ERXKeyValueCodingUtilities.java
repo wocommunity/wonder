@@ -46,14 +46,14 @@ public class ERXKeyValueCodingUtilities {
     }
     
     /**
-     * Extends key-value coding to a class. You can currently only
-     * get the static fields of the class, not method results.
-     * Java arrays and collections are morphed into NSArrays. The implementation is pretty slow,
-     * but I didn't exactly want to re-implement all of NSKeyValueCoding here.
-     * @param clazz
-     * @param key
-     * @return
-     */
+	 * Extends key-value coding to a class. Java arrays and collections are
+	 * morphed into NSArrays. The implementation is pretty slow, but I didn't
+	 * exactly want to re-implement all of NSKeyValueCoding here.
+	 * 
+	 * @param clazz
+	 * @param key
+	 * @return
+	 */
     public static Object classValueForKey(Class clazz, String key) {
         Object result = null;
         if(key != null) {
@@ -76,8 +76,13 @@ public class ERXKeyValueCodingUtilities {
                     for (int i = 0; i < fields.length && !found; i++) {
                         Field current = fields[i];
                         if(current.getName().equals(key)) {
-                            result = current.get(clazz);
-                            found = true;
+                        	boolean isAccessible = current.isAccessible();
+                        	// AK: should have a check for existance of KeyValueCodingProtectedAccessor here
+                        	// AK: disabled, only for testing
+                        	// current.setAccessible(true);
+                        	result = current.get(clazz);
+                        	// current.setAccessible(isAccessible);
+                        	found = true;
                         }
                     }
                 }
@@ -91,7 +96,7 @@ public class ERXKeyValueCodingUtilities {
                 if(result.getClass().getComponentType() != null) {
                     result = new NSArray((Object[])result);
                 } else if(result instanceof Collection) {
-                    NSMutableArray array = new NSMutableArray();
+                    NSMutableArray array = new NSMutableArray(((Collection)result).size());
                     for (Iterator iter = ((Collection)result).iterator(); iter.hasNext();) {
                         array.addObject(iter.next());
                     }
