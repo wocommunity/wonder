@@ -110,6 +110,13 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 	/** Notifcation to post when all bundles were loaded but before their principal was called */
 	public static final String ApplicationDidCreateNotification = "NSApplicationDidCreateNotification";
 
+	/**
+	 * ThreadLocal that designates that the given thread is currently dispatching a request.  This is not
+	 * stored in ERXThreadStorage, because it defaults to an inheritable thread local, which would defeat
+	 * the purpose of this check.  
+	 */ 
+	private static ThreadLocal isInRequest = new ThreadLocal();
+	
 	private static Properties allBundleProps;
 	
     private static NSDictionary propertiesFromArgv; 
@@ -1018,6 +1025,34 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 	}
 
 	/**
+	 * Initializes the current thread for a request.
+	 */
+	public static void _startRequest() {
+		ERXApplication.isInRequest.set(Boolean.TRUE);
+	}
+	
+	/**
+	 * Cleans up the current thread after a request is complete.
+	 */
+	public static void _endRequest() {
+		ERXApplication.isInRequest.remove();
+		// We always want to clean up the thread storage variables, so they don't end up on
+		// someone else's thread by accident
+		ERXThreadStorage.reset();
+		// We *always* want to unlock left over ECs.
+		ERXEC.unlockAllContextsForCurrentThread();
+	}
+	
+	/**
+	 * Returns true if the current thread is dispatching a request.
+	 * 
+	 * @return true if the current thread is dispatching a request
+	 */
+	public static boolean isInRequest() {
+		return ERXApplication.isInRequest.get() != null;
+	}
+	
+	/**
 	 * Overridden to allow for redirected responses and null the thread local storage.
 	 * 
 	 * @param request
@@ -1027,6 +1062,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 	public WOResponse dispatchRequest(WORequest request) {
 		WOResponse response = null;
 		try {
+			ERXApplication._startRequest();
 			if (useComponentActionRedirection()) {
 				ERXComponentActionRedirector redirector = ERXComponentActionRedirector.redirectorForRequest(request);
 				if (redirector == null) {
@@ -1043,19 +1079,16 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 			else {
 				response = super.dispatchRequest(request);
 			}
-			WOContext context = ERXWOContext.currentContext();
-			if (context != null && context.request() != null) {
-				if (ERXApplication.requestHandlingLog.isDebugEnabled()) {
+			
+			if (ERXApplication.requestHandlingLog.isDebugEnabled()) {
+				WOContext context = ERXWOContext.currentContext();
+				if (context != null && context.request() != null) {
 					ERXApplication.requestHandlingLog.debug(context.request());
 				}
 			}
 		}
 		finally {
-			// We always want to clean up the thread storage variables, so they don't end up on
-			// someone else's thread by accident
-			ERXThreadStorage.reset();
-			// We *always* want to unlock left over ECs.
-			ERXEC.unlockAllContextsForCurrentThread();
+			ERXApplication._endRequest();
 		}
 		if (requestHandlingLog.isDebugEnabled()) {
 			requestHandlingLog.debug("Returning, encoding: " + response.contentEncoding() + " response: " + response);
@@ -1084,6 +1117,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 				}
 			}
 		}
+		
 		return response;
 	}
 
