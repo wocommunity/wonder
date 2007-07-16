@@ -119,11 +119,12 @@ public class ERXSharedEOLoader {
     // actually carries out the loading of shared EOs.
     public void loadSharedObjectsForModel(EOModel aModel) {
         NSArray entities = aModel.entitiesWithSharedObjects();
+        if (entities != null && entities.count() > 0) {
         // calling defaultSharedEditingContext "turns on" sharing, so don't
         // call it unless we know there are objects to preload.
         EOSharedEditingContext dsec = EOSharedEditingContext.defaultSharedEditingContext();
 
-        if (entities != null && entities.count() > 0 && dsec != null) {
+            if (dsec != null) {
             // Load the shared EOs
             for (Enumeration e = entities.objectEnumerator(); e.hasMoreElements();) {
                 EOEntity entity = (EOEntity)e.nextElement();
@@ -149,6 +150,7 @@ public class ERXSharedEOLoader {
                 }
             }
         }
+    }
     }
     
     // As models are added to the application, this method receives
