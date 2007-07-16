@@ -91,6 +91,9 @@ public class ERD2WModel extends D2WModel {
     protected ERD2WModel(File file) {
         super(file);
     }
+    public ERD2WModel(URL url) {
+        super(url);
+    }
     protected ERD2WModel(EOKeyValueUnarchiver unarchiver) {
         super(unarchiver);
     }
