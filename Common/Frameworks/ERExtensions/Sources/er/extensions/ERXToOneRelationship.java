@@ -110,10 +110,31 @@ public class ERXToOneRelationship extends WOToOneRelationship {
                     ads.setArray(possibleChoices);
                     setDataSource(ads);
                 } else {
-                    EODatabaseDataSource aDatabaseDataSource = new EODatabaseDataSource(anEditingContext, destinationEntity.name());
-                    if (hasBinding("qualifier"))
-                        aDatabaseDataSource.setAuxiliaryQualifier((EOQualifier)valueForBinding("qualifier"));
-                    setDataSource(aDatabaseDataSource);
+                    String destinationEntityName = destinationEntity.name();
+
+                    if( ERXEOAccessUtilities.entityWithNamedIsShared(anEditingContext, destinationEntityName) ) {
+                        EOArrayDataSource arrayDataSource = new EOArrayDataSource(destinationEntity.classDescriptionForInstances(), anEditingContext);
+                        NSArray sharedEOs = (NSArray)anEditingContext.sharedEditingContext().objectsByEntityName().objectForKey(destinationEntityName);
+
+                        if ((sharedEOs != null) && hasBinding("qualifier")) {
+                            EOQualifier qualifier = (EOQualifier)valueForBinding("qualifier");
+                            if( qualifier != null ) {
+                                sharedEOs = EOQualifier.filteredArrayWithQualifier(sharedEOs, qualifier);
+                            }
+                        }
+
+                        if( sharedEOs == null ) { //just in case--but shouldn't happen
+                            sharedEOs = NSArray.EmptyArray;
+                        }
+
+                        arrayDataSource.setArray(sharedEOs);
+                        setDataSource(arrayDataSource);
+                    } else {
+                        EODatabaseDataSource aDatabaseDataSource = new EODatabaseDataSource(anEditingContext, destinationEntityName);
+                        if (hasBinding("qualifier"))
+                            aDatabaseDataSource.setAuxiliaryQualifier((EOQualifier)valueForBinding("qualifier"));
+                        setDataSource(aDatabaseDataSource);
+                    }
                 }
             }
         }
