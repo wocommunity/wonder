@@ -94,11 +94,11 @@ public class ERXEC extends EOEditingContext {
 	 */
 	private Boolean coalesceAutoLocks;
 
-	/** how many times we did automatically lock. */
-	private int autoLockCount = 0;
+	/** how many times we did automatically lock. */ 
+	private boolean autoLocked;
 
 	/** how many times has the EC been locked. */
-	private int lockCount = 0;
+	private int lockCount;
 
 	/**
 	 * holds a flag if the EC is in finalize(). This is needed because we can't
@@ -195,9 +195,9 @@ public class ERXEC extends EOEditingContext {
 			// the EC from end of the vector
 			for (int i = ecs.size() - 1; i >= 0; i--) {
 				EOEditingContext ec = (EOEditingContext) ecs.get(i);
-				boolean openAutoLocks = (ec instanceof ERXEC && ((ERXEC) ec).autoLockCount() > 0);
+				boolean openAutoLocks = (ec instanceof ERXEC && ((ERXEC) ec).isAutoLocked());
 				if (openAutoLocks) {
-					log.debug("Unlocking leftover autolock: " + ec);
+					log.debug("Unlocking autolocked editing context: " + ec);
 				}
 				else {
 					log.warn("Unlocking context that wasn't unlocked in RR-Loop!: " + ec);
@@ -208,6 +208,7 @@ public class ERXEC extends EOEditingContext {
 				catch (IllegalStateException ex) {
 					log.error("Could not unlock EC: " + ec, ex);
 				}
+				
 			}
 		}
 	}
@@ -359,7 +360,7 @@ public class ERXEC extends EOEditingContext {
 				throw new IllegalStateException("You must enable the EC unlocker if you want to coalesce autolocks.");
 			}
 		}
-		return coalesceAutoLocks.booleanValue();
+		return coalesceAutoLocks.booleanValue() && ERXApplication.isInRequest();
 	}
 
 	/**
@@ -465,8 +466,8 @@ public class ERXEC extends EOEditingContext {
 		// a hanging autoLock at the final unlock, so we want to reset the
 		// autolock count to zero so things behave properly when you
 		// next use autolocking
-		if (coalesceAutoLocks() && lockCount == 0 && autoLockCount > 0) {
-			autoLockCount = 0;
+		if (lockCount == 0 && autoLocked) {
+			autoLocked = false;
 		}
 		if (traceOpenEditingContextLocks) {
 			synchronized (this) {
@@ -490,13 +491,6 @@ public class ERXEC extends EOEditingContext {
 	}
 
 	/**
-	 * Returns the autoLockCount
-	 */
-	protected int autoLockCount() {
-		return autoLockCount;
-	}
-
-	/**
 	 * Utility to actually emit the log messages and do the locking, based on
 	 * the result of {@link #useAutoLock()}.
 	 * 
@@ -512,18 +506,16 @@ public class ERXEC extends EOEditingContext {
 
 		if (lockCount == 0) {
 			wasAutoLocked = true;
-			autoLockCount++;
+			autoLocked = true;
 			lock();
 		}
 
-		if (lockCount == 0) {
-			if (!isAutoLocked() && !isFinalizing) {
-				if (lockTrace.isDebugEnabled()) {
-					lockTrace.debug("called method " + method + " without a lock, ec=" + this, new Exception());
-				}
-				else {
-					lockLogger.warn("called method " + method + " without a lock, ec=" + this);
-				}
+		if (lockCount == 0 && !isAutoLocked() && !isFinalizing) {
+			if (lockTrace.isDebugEnabled()) {
+				lockTrace.debug("called method " + method + " without a lock, ec=" + this, new Exception());
+			}
+			else {
+				lockLogger.warn("called method " + method + " without a lock, ec=" + this);
 			}
 		}
 
@@ -538,10 +530,11 @@ public class ERXEC extends EOEditingContext {
 	 */
 	protected void autoUnlock(boolean wasAutoLocked) {
 		if (wasAutoLocked) {
-			boolean shouldUnlock = (!coalesceAutoLocks() || autoLockCount > 1 || ERXWOContext.currentContext() == null);
-			if (shouldUnlock) {
+			// MS: Coalescing autolocks leaves the last autolock open to be closed
+			// by the request.
+			if (autoLocked && !coalesceAutoLocks()) {
 				unlock();
-				autoLockCount--;
+				autoLocked = false;
 			}
 		}
 	}
@@ -552,7 +545,7 @@ public class ERXEC extends EOEditingContext {
 	 * @return true if we were autolocked.
 	 */
 	public boolean isAutoLocked() {
-		return autoLockCount > 0;
+		return autoLocked;
 	}
 
 	protected void _checkOpenLockTraces() {
