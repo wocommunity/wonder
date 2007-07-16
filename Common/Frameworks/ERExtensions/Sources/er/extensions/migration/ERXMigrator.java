@@ -131,7 +131,7 @@ public class ERXMigrator {
 		Iterator migrationsIter = migrations.keySet().iterator();
 		while (migrationsIter.hasNext()) {
 			IERXMigration migration = (IERXMigration) migrationsIter.next();
-			ModelVersion modelVersion = (ModelVersion) migrations.get(migration);
+			ERXModelVersion modelVersion = (ERXModelVersion) migrations.get(migration);
 			EOModel model = modelVersion.model();
 			String adaptorName = model.adaptorName();
 			String migrationLockClassName = ERXProperties.stringForKeyWithDefault("er.migration." + adaptorName + ".lockClassName", "er.extensions.migration.ERX" + adaptorName + "MigrationLock");
@@ -159,7 +159,7 @@ public class ERXMigrator {
 		Iterator postMigrationsIter = postMigrations.keySet().iterator();
 		while (postMigrationsIter.hasNext()) {
 			IERXPostMigration postMigration = (IERXPostMigration) postMigrationsIter.next();
-			ModelVersion modelVersion = (ModelVersion) postMigrations.get(postMigration);
+			ERXModelVersion modelVersion = (ERXModelVersion) postMigrations.get(postMigration);
 			EOEditingContext editingContext = ERXEC.newEditingContext();
 			try {
 				postMigration.postUpgrade(editingContext, modelVersion.model());
@@ -275,11 +275,9 @@ public class ERXMigrator {
 	 * ModelVersion represents a particular version of an EOModel.
 	 * 
 	 * @author mschrag
+	 * @deprecated Use er.extensions.migration.ERXModelVersion instead
 	 */
-	public static class ModelVersion {
-		private EOModel _model;
-		private int _version;
-
+	public static class ModelVersion extends ERXModelVersion {
 		/**
 		 * @param model
 		 *            a model
@@ -287,8 +285,7 @@ public class ERXMigrator {
 		 *            the version of that model
 		 */
 		public ModelVersion(EOModel model, int version) {
-			_model = model;
-			_version = version;
+			super(model, version);
 		}
 
 		/**
@@ -298,25 +295,7 @@ public class ERXMigrator {
 		 *            the version of that model
 		 */
 		public ModelVersion(String modelName, int version) {
-			this(EOModelGroup.defaultGroup().modelNamed(modelName), version);
-		}
-
-		/**
-		 * Returns the model for this version.
-		 * 
-		 * @return the model for this version
-		 */
-		public EOModel model() {
-			return _model;
-		}
-
-		/**
-		 * Returns the version dependency for this model.
-		 * 
-		 * @return the version dependency for this model
-		 */
-		public int version() {
-			return _version;
+			super(modelName, version);
 		}
 	}
 
@@ -324,12 +303,12 @@ public class ERXMigrator {
 		private EOEditingContext _editingContext;
 		private IERXMigrationLock _database;
 		private IERXMigration _migration;
-		private ModelVersion _modelVersion;
+		private ERXModelVersion _modelVersion;
 		private Map _migrations;
 		private String _lockOwnerName;
 		private Map _postMigrations;
 
-		public ERXMigrationAction(EOEditingContext editingContext, IERXMigration migration, ModelVersion modelVersion, IERXMigrationLock database, String lockOwnerName, Map postMigrations) {
+		public ERXMigrationAction(EOEditingContext editingContext, IERXMigration migration, ERXModelVersion modelVersion, IERXMigrationLock database, String lockOwnerName, Map postMigrations) {
 			_editingContext = editingContext;
 			_modelVersion = modelVersion;
 			_migration = migration;
