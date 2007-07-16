@@ -178,7 +178,9 @@ public class ERXLocalizationEditor extends WOComponent {
      		if(!newDict.equals(dict)) {
      			throw new IllegalStateException("Data wasn't equal when comparing before save");
      		} else {
-     			ERXFileUtilities.stringToFile(result, new File(url.getFile()));
+     			if(url != null) {
+     				ERXFileUtilities.stringToFile(result, new File(url.getFile()));
+     			}
      		}
     	}
     }
