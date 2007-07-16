@@ -1021,7 +1021,9 @@ public class ERXModelGroup extends EOModelGroup {
 								if (!attribute.isFlattened()) {
 									String prototypeAttributeName = attribute.prototypeName();
 									if (prototypeAttributeName == null) {
-										log.warn(model.name() + "/" + entity.name() + "/" + attribute.name() + " does not have a prototype attribute name.  This can occur if the model cannot resolve ANY prototypes when loaded.  There must be a stub prototype for the model to load with that can then be replaced with the appropriate database-specific model.");
+										if (attribute.externalType() == null) {
+											log.warn(model.name() + "/" + entity.name() + "/" + attribute.name() + " does not have a prototype attribute name.  This can occur if the model cannot resolve ANY prototypes when loaded.  There must be a stub prototype for the model to load with that can then be replaced with the appropriate database-specific model.");
+										}
 									}
 									else {
 										EOAttribute prototypeAttribute = prototypeEntity.attributeNamed(prototypeAttributeName);
