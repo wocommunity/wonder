@@ -897,19 +897,31 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
         if (userName != null  &&  userName.length() > 0) { 
         	String resourceApplicationUserPropertiesPath = ERXFileUtilities.pathForResourceNamed("Properties." + userName, "app", null);
             if (resourceApplicationUserPropertiesPath != null) {
-            	applicationUserPropertiesPath = getActualPath(resourceApplicationUserPropertiesPath);
+            	applicationUserPropertiesPath = ERXProperties.getActualPath(resourceApplicationUserPropertiesPath);
             }
         }
         return applicationUserPropertiesPath;
     }
 
     /**
-     * Gets an array of optionally defined configuration
-     * files. 
-     * @return array of configuration file names (absolute paths)
+     * Gets an array of optionally defined configuration files.  For each file, if it does not
+     * exist as an absolute path, ERXProperties will attempt to resolve it as an application resource
+     * and use that instead.
+     *  
+     * @return array of configuration file names
      */
     public static NSArray optionalConfigurationFiles() {
-        return arrayForKey("er.extensions.ERXProperties.OptionalConfigurationFiles");
+    	NSMutableArray optionalConfigurationFiles = arrayForKey("er.extensions.ERXProperties.OptionalConfigurationFiles").mutableClone();
+    	for (int i = 0; i < optionalConfigurationFiles.count(); i ++) {
+    		String optionalConfigurationFile = (String)optionalConfigurationFiles.objectAtIndex(i);
+    		if (!new File(optionalConfigurationFile).exists()) {
+	        	String resourcePropertiesPath = ERXFileUtilities.pathForResourceNamed(optionalConfigurationFile, "app", null);
+	        	if (resourcePropertiesPath != null) {
+	            	optionalConfigurationFiles.replaceObjectAtIndex(ERXProperties.getActualPath(resourcePropertiesPath), i);
+	        	}
+    		}
+    	}
+    	return optionalConfigurationFiles;
     }
     
     /**
