@@ -1,9 +1,7 @@
 package er.excel;
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
+import java.lang.reflect.*;
 
-import com.webobjects.foundation.NSKeyValueCoding;
+import com.webobjects.foundation.*;
 
 public class KeyValueCodingProtectedAccessor
 extends NSKeyValueCoding.ValueAccessor
