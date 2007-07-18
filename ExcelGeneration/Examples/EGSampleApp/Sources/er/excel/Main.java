@@ -1,7 +1,6 @@
 package er.excel;
 
 import com.webobjects.appserver.*;
-import er.extensions.*;
 
 public class Main extends WOComponent {
     public Main(WOContext aContext) {

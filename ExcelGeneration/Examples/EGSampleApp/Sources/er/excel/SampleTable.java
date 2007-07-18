@@ -1,9 +1,8 @@
 package er.excel;
 
-import com.webobjects.foundation.*;
+import org.apache.log4j.*;
+
 import com.webobjects.appserver.*;
-import com.webobjects.eocontrol.*;
-import er.extensions.*;
 
 /**
  * Class for Excel Component SampleTable.
@@ -17,7 +16,7 @@ import er.extensions.*;
 public class SampleTable extends WOComponent {
 
     /** logging support */
-    private static final ERXLogger log = ERXLogger.getERXLogger(SampleTable.class,"components,excel");
+    private static final Logger log = Logger.getLogger(SampleTable.class);
     
 	public boolean enabled = false;
     
