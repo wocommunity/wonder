@@ -3,9 +3,8 @@
 	<classpathentry kind="src" path="Sources"/>
 	<classpathentry kind="con" path="org.objectstyle.wolips.WO_CLASSPATH/JavaFoundation/JavaWebObjects/JavaXML"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="lib" path="Libraries/poi-2.0-final-20040302.jar"/>
-	<classpathentry kind="lib" path="Libraries/commons-logging-1.0.1.jar"/>
 	<classpathentry kind="src" path="/ERExtensions"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/ERJars"/>
+	<classpathentry kind="lib" path="Libraries/poi-3.0.1-FINAL-20070705.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
