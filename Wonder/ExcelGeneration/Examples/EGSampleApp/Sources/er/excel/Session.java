@@ -6,9 +6,6 @@
 //
 package er.excel;
 
-import com.webobjects.foundation.*;
-import com.webobjects.appserver.*;
-import com.webobjects.eocontrol.*;
 import er.extensions.*;
 
 public class Session extends ERXSession {
