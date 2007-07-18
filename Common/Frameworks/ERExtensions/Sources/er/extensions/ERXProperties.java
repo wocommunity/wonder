@@ -915,14 +915,16 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
      */
     public static NSArray optionalConfigurationFiles() {
     	NSMutableArray optionalConfigurationFiles = arrayForKey("er.extensions.ERXProperties.OptionalConfigurationFiles").mutableClone();
-    	for (int i = 0; i < optionalConfigurationFiles.count(); i ++) {
-    		String optionalConfigurationFile = (String)optionalConfigurationFiles.objectAtIndex(i);
-    		if (!new File(optionalConfigurationFile).exists()) {
-	        	String resourcePropertiesPath = ERXFileUtilities.pathForResourceNamed(optionalConfigurationFile, "app", null);
-	        	if (resourcePropertiesPath != null) {
-	            	optionalConfigurationFiles.replaceObjectAtIndex(ERXProperties.getActualPath(resourcePropertiesPath), i);
-	        	}
-    		}
+    	if (optionalConfigurationFiles != null) {
+	    	for (int i = 0; i < optionalConfigurationFiles.count(); i ++) {
+	    		String optionalConfigurationFile = (String)optionalConfigurationFiles.objectAtIndex(i);
+	    		if (!new File(optionalConfigurationFile).exists()) {
+		        	String resourcePropertiesPath = ERXFileUtilities.pathForResourceNamed(optionalConfigurationFile, "app", null);
+		        	if (resourcePropertiesPath != null) {
+		            	optionalConfigurationFiles.replaceObjectAtIndex(ERXProperties.getActualPath(resourcePropertiesPath), i);
+		        	}
+	    		}
+	    	}
     	}
     	return optionalConfigurationFiles;
     }
