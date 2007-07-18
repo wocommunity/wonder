@@ -1,2 +1,3 @@
-**/Resources/*
-**/Components/*
+Resources/**/*
+Components/**/*.wo/
+Components/**/*.api
