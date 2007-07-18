@@ -794,7 +794,7 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
                     projectsInfo.addObject("User:        WebObjects.properties " + aPropertiesPath);  
                     propertiesPaths.addObject(aPropertiesPath);
                 } catch (java.io.IOException ex) {
-                    // do nothing
+                	ERXProperties.log.error("Failed to load the configuration file '" + file.getAbsolutePath() + "'.", ex);
                 }
             }
         }
@@ -812,8 +812,11 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
                         projectsInfo.addObject("Optional Configuration:    " + aPropertiesPath);
                         propertiesPaths.addObject(aPropertiesPath);
                     } catch (java.io.IOException ex) {
-                        // do nothing
+                    	ERXProperties.log.error("Failed to load configuration file '" + file.getAbsolutePath() + "'.", ex);
                     }                    
+                }
+                else {
+                	ERXProperties.log.error("The optional configuration file '" + file.getAbsolutePath() + "' either does not exist or could not be read.");
                 }
             }
         }

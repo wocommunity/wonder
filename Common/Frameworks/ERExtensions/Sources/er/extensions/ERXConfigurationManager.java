@@ -274,11 +274,10 @@ public class ERXConfigurationManager {
 
         if (additionalConfigurationFiles.count() > 0) {
             Properties systemProperties = System.getProperties();
-            for (Enumeration configEnumerator = additionalConfigurationFiles.objectEnumerator();
-                 configEnumerator.hasMoreElements();) {
+            for (Enumeration configEnumerator = additionalConfigurationFiles.objectEnumerator(); configEnumerator.hasMoreElements();) {
                 String configFile = (String)configEnumerator.nextElement();
                 File file = new File(configFile);
-                if (file.exists()  &&  file.isFile()  &&  file.canRead()) {
+                if (file.exists() && file.isFile() && file.canRead()) {
                     try {
                         Properties props = ERXProperties.propertiesFromFile(file);
                         ERXProperties.transferPropertiesFromSourceToDest(props, systemProperties);
@@ -287,9 +286,13 @@ public class ERXConfigurationManager {
                         log.error("Unable to load optional configuration file: " + configFile, ex);
                     }
                 }
+                else {
+                	ERXConfigurationManager.log.error("The optional configuration file '" + file.getAbsolutePath() + "' either does not exist or cannot be read.");
+                }
             }
-            if (_commandLineArguments != null  &&  _commandLineArguments.length > 0)
+            if (_commandLineArguments != null  &&  _commandLineArguments.length > 0) {
                 _reinsertCommandLineArgumentsToSystemProperties(_commandLineArguments);
+            }
         }
     }
     
