@@ -19,12 +19,15 @@ import com.webobjects.eoaccess.EODatabaseContext;
 import com.webobjects.eoaccess.EOEntity;
 import com.webobjects.eoaccess.EOModel;
 import com.webobjects.eoaccess.EOModelGroup;
+import com.webobjects.eoaccess.EOSQLExpression;
+import com.webobjects.eoaccess.EOSchemaGeneration;
 import com.webobjects.eoaccess.EOSynchronizationFactory;
 import com.webobjects.eoaccess.EOUtilities;
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableArray;
+import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation.NSTimestamp;
 import com.webobjects.jdbcadaptor.JDBCAdaptorException;
 
@@ -182,6 +185,12 @@ delete from TEST_ITEM;
                     EOSynchronizationFactory syncFactory = (EOSynchronizationFactory) channel.adaptorContext().adaptor().synchronizationFactory();
                     ERXSQLHelper helper = ERXSQLHelper.newSQLHelper(channel);
                     NSDictionary options = helper.defaultOptionDictionary(true, dropTables);
+                    
+                    // Primary key support creation throws an unwanted exception if EO_PK_TABLE already 
+                    // exists (e.g. in case of MySQL), so we add pk support in a stand-alone step
+                    options = optionsWithPrimaryKeySupportDiabled(options);
+                    createPrimaryKeySupportForModel(eomodel, channel, syncFactory);
+                    
                     String sqlScript = syncFactory.schemaCreationScriptForEntities(eomodel.entities(), options);
                     log.info("Creating tables: " + eomodel.name());
                     ERXJDBCUtilities.executeUpdateScript(channel, sqlScript);
@@ -204,6 +213,24 @@ delete from TEST_ITEM;
             }
             
         }
+
+		private NSDictionary optionsWithPrimaryKeySupportDiabled(NSDictionary options) {
+			NSMutableDictionary mutableOptions = options.mutableClone();
+			mutableOptions.setObjectForKey("NO", EOSchemaGeneration.CreatePrimaryKeySupportKey);
+			return mutableOptions.immutableClone();
+		}
+
+		private void createPrimaryKeySupportForModel(EOModel eomodel, EOAdaptorChannel channel, EOSynchronizationFactory syncFactory) {
+			try {
+				NSArray pkSupportExpressions = syncFactory.primaryKeySupportStatementsForEntityGroups(new NSArray(eomodel.entities()));
+				Enumeration enumeration = pkSupportExpressions.objectEnumerator();
+				while (enumeration .hasMoreElements()) {
+					EOSQLExpression expression = (EOSQLExpression) enumeration.nextElement();
+					channel.evaluateExpression(expression);
+				}
+			} catch (Exception e) {
+			}
+		}
         
         private void createDummyData() {
             priorities = Priority.clazz.allObjects(ec).mutableClone();
