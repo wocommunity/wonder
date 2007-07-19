@@ -12,14 +12,17 @@ import java.util.Enumeration;
 import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WOApplication;
 import com.webobjects.appserver.WOComponent;
+import com.webobjects.appserver.WOCookie;
 import com.webobjects.appserver.WORedirect;
 import com.webobjects.appserver.WORequest;
+import com.webobjects.appserver.WOResponse;
 import com.webobjects.directtoweb.D2W;
 import com.webobjects.directtoweb.ErrorPageInterface;
 import com.webobjects.eoaccess.EOModelGroup;
 import com.webobjects.eoaccess.EOUtilities;
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.foundation.NSMutableArray;
+import com.webobjects.foundation.NSTimestamp;
 
 import er.calendar.ERPublishCalendarPage;
 import er.calendar.ERSimpleEvent;
@@ -181,10 +184,20 @@ public class DirectAction extends ERD2WDirectAction {
     }
 
     public WOActionResults logoutAction() {
-        WORedirect redirectPage = (WORedirect) pageWithName("WORedirect");
-        redirectPage.setUrl("/");
-        if (existingSession() != null)
-            existingSession().terminate();
-        return redirectPage;
+    	WORedirect redirect = (WORedirect) pageWithName("WORedirect");
+    	redirect.setUrl(context().directActionURLForActionNamed("entrance", null));
+    	WOResponse response = redirect.generateResponse();
+
+    	WOCookie loginCookie = new WOCookie("BTL", "-");
+    	loginCookie.setExpires(NSTimestamp.DistantFuture);
+    	loginCookie.setPath("/");
+    	response.addCookie(loginCookie);
+    	
+    	if (existingSession() != null) {
+    		existingSession().terminate();
+		}
+
+    	return response;
     }
+
 }

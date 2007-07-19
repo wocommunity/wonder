@@ -21,7 +21,7 @@ freeQuery: WOHyperlink {
 }
 
 Main: WOHyperlink {
-	action = logout;
+	directActionName = "logout";
 }
 
 Menu : ERXNavigationMenu {
