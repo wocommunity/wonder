@@ -61,13 +61,13 @@ public class AjaxResponse extends ERXResponse {
 			try {
 				StringBuffer content;
 				//AK: don't ask...
-				if (((Object)_content) instanceof StringBuilder) {
+				if (((Object)_content) instanceof StringBuffer) {
+					content = (StringBuffer)(Object)_content;
+					ERXKeyValueCodingUtilities.takePrivateValueForKey(this, new StringBuffer(),  "_content");
+				} else {
 					StringBuilder builder = (StringBuilder)(Object) _content;
 					content = new StringBuffer();
 					ERXKeyValueCodingUtilities.takePrivateValueForKey(this, new StringBuilder(),  "_content");
-				} else {
-					content = (StringBuffer)(Object)_content;
-					ERXKeyValueCodingUtilities.takePrivateValueForKey(this, new StringBuffer(),  "_content");
 				}
 				NSMutableDictionary userInfo = AjaxUtils.mutableUserInfo(_request);
 				userInfo.setObjectForKey(Boolean.TRUE, AjaxResponse.AJAX_UPDATE_PASS);
