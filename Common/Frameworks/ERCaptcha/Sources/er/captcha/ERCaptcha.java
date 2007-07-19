@@ -17,8 +17,6 @@ import com.webobjects.appserver.WORequest;
 import com.webobjects.appserver.WOResponse;
 import com.webobjects.foundation.NSData;
 
-import er.extensions.ERXStatelessComponent;
-
 /**
  * ERCaptcha presents a captcha image to the use along with a text field
  * for the user to identify the image.
@@ -28,10 +26,11 @@ import er.extensions.ERXStatelessComponent;
  *  
  * @author mschrag
  */
-public class ERCaptcha extends ERXStatelessComponent {
-	
+public class ERCaptcha extends WOComponent {
 	private static final Logger log = Logger.getLogger(ERCaptcha.class);
 	private static ImageCaptchaService _captchaService = new DefaultManageableImageCaptchaService();
+	private NSData _captcha;
+	private String _response;
 
 	public ERCaptcha(WOContext context) {
 		super(context);
@@ -42,15 +41,11 @@ public class ERCaptcha extends ERXStatelessComponent {
 	}
 
 	public void setCaptcha(NSData captcha) {
-		if(captcha == null) {
-			session().removeObjectForKey("ERCaptcha.captcha");
-		} else {
-			session().setObjectForKey(captcha, "ERCaptcha.captcha");
-		}
+		_captcha = captcha;
 	}
 
 	public NSData captcha() {
-		return (NSData) session().objectForKey("ERCaptcha.captcha");
+		return _captcha;
 	}
 
 	public String mimeType() {
@@ -58,15 +53,11 @@ public class ERCaptcha extends ERXStatelessComponent {
 	}
 
 	public void setResponse(String response) {
-		if(response == null) {
-			session().removeObjectForKey("ERCaptcha.response");
-		} else {
-			session().setObjectForKey(response, "ERCaptcha.response");
-		}
+		_response = response;
 	}
 
 	public String response() {
-		return (String) session().objectForKey("ERCaptcha.response");
+		return _response;
 	}
 
 	public void takeValuesFromRequest(WORequest request, WOContext context) {
@@ -74,28 +65,27 @@ public class ERCaptcha extends ERXStatelessComponent {
 		if (context._wasFormSubmitted()) {
 			Boolean validated = Boolean.FALSE;
 			try {
-				validated = _captchaService.validateResponseForID(context.elementID(), response());
+				validated = _captchaService.validateResponseForID(context.elementID(), _response);
 			}
 			catch (CaptchaServiceException e) {
-				log.error(e);
+				ERCaptcha.log.error("Captcha service failed.", e);
 			}
 			finally {
-				setCaptcha(null);
+				_captcha = null;
 			}
-			
 			setValueForBinding(validated, "validated");
 		}
 	}
 
 	public void appendToResponse(WOResponse response, WOContext context) {
-		if (captcha() == null) {
+		if (_captcha == null) {
 			byte[] captchaChallengeAsJpeg = null;
 			ByteArrayOutputStream captchaOutputStream = new ByteArrayOutputStream();
 			try {
 				BufferedImage challenge = _captchaService.getImageChallengeForID(context.elementID());
 				JPEGImageEncoder captchaEncoder = JPEGCodec.createJPEGEncoder(captchaOutputStream);
 				captchaEncoder.encode(challenge);
-				setCaptcha(new NSData(captchaOutputStream.toByteArray()));
+				_captcha = new NSData(captchaOutputStream.toByteArray());
 			}
 			catch (Throwable e) {
 				log.error("Failed to create JPEG for Captcha.", e);
@@ -105,7 +95,7 @@ public class ERCaptcha extends ERXStatelessComponent {
 	}
 
 	public WOActionResults resetCaptcha() {
-		setCaptcha(null);
+		_captcha = null;
 		return null;
 	}
 }
