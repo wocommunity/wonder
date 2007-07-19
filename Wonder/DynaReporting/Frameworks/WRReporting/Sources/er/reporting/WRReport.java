@@ -54,6 +54,7 @@ public class WRReport extends WOComponent  {
     protected Boolean _showCustomReportStyle;
     protected boolean _initializedDimensionArrayFromBindings;
     protected Boolean _showTopCriteriaLabel;
+    protected Boolean _shouldTotalCheck;
 
     public WRReport(WOContext c) {
         super(c);
@@ -71,6 +72,10 @@ public class WRReport extends WOComponent  {
         NSNotificationCenter.defaultCenter().addObserver(this, rebuildModelSelector, DRReportModel.DRReportModelRebuildNotification, null);
     }
 
+    public Object recordGroupTest() {
+      throw new IllegalStateException("There is a component bound to this variable and it doesn't exist.  If you need this component to work, please look at what this is supposed to do and submit a patch.");
+    }
+    
     public void finalize() throws Throwable {
         NSNotificationCenter.defaultCenter().removeObserver(this);
         super.finalize();
@@ -118,6 +123,7 @@ public class WRReport extends WOComponent  {
         _showPresentationControls = null;
         _showRecordGroupHeadings = null;
         _showTopCriteriaLabel = null;
+        _shouldTotalCheck = null;
         _recordGroupTotalToShow = null;
         _currentZCriteria.removeAllObjects();
         //_initializedDimensionArrayFromBindings = false;
@@ -156,7 +162,21 @@ public class WRReport extends WOComponent  {
         _showPresentationControls = v ? Boolean.TRUE : Boolean.FALSE;
     }
     
+    public void setShouldTotalCheck(boolean shouldTotalCheck) {
+      _shouldTotalCheck = Boolean.valueOf(shouldTotalCheck);
+    }
+    
+    public boolean shouldTotalCheck() {
+      if (_shouldTotalCheck == null) {
+        _shouldTotalCheck = booleanValueForBinding("shouldTotalCheck");
+      }
+      return _shouldTotalCheck.booleanValue();
+    }
 
+    public NSDictionary currentZCriteria() {
+      return _currentZCriteria;
+    }
+    
     public String selectedRecordGroupDisplayType() {
         if (_selectedRecordGroupDisplayType == null) {
             _selectedRecordGroupDisplayType = (String)this.valueForBinding("selectedRecordGroupDisplayType");
@@ -166,10 +186,10 @@ public class WRReport extends WOComponent  {
         }
         return _selectedRecordGroupDisplayType;
     }
+    
     public void setSelectedRecordGroupDisplayType(String v) {
         _selectedRecordGroupDisplayType = v;
     }
-
 
     public String selectedReportStyle() {
         if (_selectedReportStyle == null) {
