@@ -28,10 +28,14 @@ import er.extensions.ERXSelectorUtilities;
  */
 public abstract class ERCStampedEnterpriseObject extends ERXGenericRecord {
 
-    public interface Key {
-        public static final String CREATED = "created";
-        public static final String LAST_MODIFIED = "lastModified";
-     }
+	public interface Key {
+		public static final String CREATED = "created";
+		public static final String LAST_MODIFIED = "lastModified";
+	}
+
+	public static abstract class ERCStampedEnterpriseObjectClazz extends ERXGenericRecord.ERXGenericRecordClazz {
+
+	}
     
     /** logging support */
     public static Logger log = Logger.getLogger(ERCStampedEnterpriseObject.class);
