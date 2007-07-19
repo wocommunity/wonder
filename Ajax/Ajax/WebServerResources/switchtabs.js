@@ -40,7 +40,8 @@ var AjaxTabbedPanel = {
 
       var pane = $(paneID);
       if (pane.innerHTML=='' || pane.innerHTML==busyContent) {
-         new Ajax.Updater(pane, pane.getAttribute('updateUrl'), {asynchronous:1, evalScripts:true, onLoading:function(request){pane.innerHTML=busyContent;}})
+         new PeriodicalExecuter(function(pe) { if (pane.innerHTML=='' || pane.innerHTML==busyContent) {pane.innerHTML=busyContent}; pe.stop()}, 0.5);
+         new Ajax.Updater(pane, pane.getAttribute('updateUrl'), {asynchronous:1, evalScripts:true})
       }
     },
 
