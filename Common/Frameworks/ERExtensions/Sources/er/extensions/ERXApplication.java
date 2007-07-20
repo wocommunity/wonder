@@ -366,8 +366,17 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 						normalLibs += jar + File.pathSeparator;
 					}
 					String bundle = jar.replaceAll(".*?[/\\\\](\\w+)\\.framework.*", "$1");
-					if (bundle.matches("^\\w+$") && !"JavaVM".equals(bundle)) {
-						allFrameworks.add(bundle);
+					String excludes = "(JavaVM)";
+					if(isWO54()) {
+						excludes = "(JavaVM|JavaWebServicesSupport|JavaEODistribution|JavaWebServicesGeneration|JavaWebServicesClient)";
+					}
+					if (bundle.matches("^\\w+$") && !bundle.matches(excludes)) {
+						String info = jar.replaceAll("(.*?[/\\\\]\\w+\\.framework/Resources/).*", "$1Info.plist");
+						if(new File(info).exists()) {
+							allFrameworks.add(bundle);
+						} else {
+							// System.out.println("Ommitted: " + info);
+						}
 					} else if(jar.endsWith(".jar")) {
 						String info = stringFromJar(jar, "Resources/Info.plist");
 						if(info != null) {
