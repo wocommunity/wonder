@@ -8,7 +8,6 @@ import sun.misc.BASE64Encoder;
 import com.webobjects.appserver.WOApplication;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WORequest;
-import com.webobjects.appserver._private.WODynamicURL;
 import com.webobjects.appserver._private.WOProperties;
 import com.webobjects.appserver._private.WOShared;
 import com.webobjects.foundation.NSArray;
@@ -85,10 +84,11 @@ public  class ERXRequest extends WORequest {
     public String stringFormValueForKey(String key) {
     	String result = super.stringFormValueForKey(key);
     	if (result == null && "wodata".equals(key)) {
-    	    // AK this cast *is* needed, trust me...
-    		WODynamicURL url = (WODynamicURL) _uriDecomposed();
-    		if (WOApplication.application().resourceRequestHandlerKey().equals(url.requestHandlerKey())) {
-    			String requestHandlerPath = "file:/" + url.requestHandlerPath().substring("wodata=/".length());
+    	    // AK: yet another crappy 5.4 fix, WODynamicURL changed packages
+    		String requestHandlerKey = (String)valueForKeyPath("_uriDecomposed.requestHandlerKey");
+    		if (WOApplication.application().resourceRequestHandlerKey().equals(requestHandlerKey)) {
+    			String requestHandlerPath = (String)valueForKeyPath("_uriDecomposed.requestHandlerPath");
+        		requestHandlerPath = "file:/" +  requestHandlerPath.substring("wodata=/".length());
     			result = requestHandlerPath.replace('+', ' ');
     		}
     	}
