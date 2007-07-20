@@ -709,6 +709,10 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 		WORequest worequest = new ERXRequest(aMethod, aURL, anHTTPVersion, someHeaders, aContent, someInfo);
 		return worequest;
 	}
+	
+	public WORequest createRequest(String aMethod, String aURL, String anHTTPVersion, Map someHeaders, NSData aContent, NSDictionary someInfo) {
+		return createRequest(aMethod, aURL, anHTTPVersion, new NSDictionary(someHeaders), aContent, someInfo);
+	}
 
 	/**
 	 * Used to instanciate a WOComponent when no context is available, typically ouside of a session
