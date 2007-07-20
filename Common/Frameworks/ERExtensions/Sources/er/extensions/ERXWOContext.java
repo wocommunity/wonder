@@ -252,7 +252,8 @@ public class ERXWOContext extends WOContext implements ERXMutableUserInfoHolderI
 	protected static void _insertPendingInResponse(WOResponse response) {
 		NSMutableDictionary contextDictionary = ERXWOContext.contextDictionary();
 		NSMutableDictionary pendingInserts = (NSMutableDictionary)contextDictionary.objectForKey("ERXWOContext.pendingInserts");
-		if (pendingInserts != null) {
+		String contentType =  response.headerForKey("content-type");
+		if (pendingInserts != null && contentType != null &&  contentType.startsWith("text/html")) {
 			Enumeration tagEnum = pendingInserts.keyEnumerator();
 			while (tagEnum.hasMoreElements()) {
 				String tag = (String)tagEnum.nextElement();
