@@ -957,7 +957,7 @@ public class ERXEOAccessUtilities {
     	}
     	
     	public String toString() {
-    		return  count() + ": " + min() + "/" + max() + "/" + avg() + "->" + statement;
+    		return  count() + "/" + sum() + " : " + min() + "/" + max() + "/" + avg() + "->" + statement;
     	}
     }
     
