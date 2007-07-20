@@ -51,6 +51,7 @@ import com.webobjects.foundation.NSKeyValueCoding;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation.NSMutableSet;
+import com.webobjects.foundation.NSPropertyListSerialization;
 import com.webobjects.foundation.NSSet;
 import com.webobjects.jdbcadaptor.JDBCPlugIn;
 
@@ -961,12 +962,29 @@ public class ERXEOAccessUtilities {
     	}
     }
     
-    public static NSMutableDictionary statistics;
+    private static NSMutableDictionary statistics;
 
+    /**
+     * Initializes the SQL logging stats. This is not particularily thread safe, so use it only during debugging.
+     *
+     */
     public static synchronized void initStatistics() {
     	statistics = (NSMutableDictionary) new NSMutableDictionary();
     }
     
+    /**
+     * Logs the SQL statements since the last call to initStatistics() ordered by some key. 
+     * @param key key to sort on ("sum", "count", "min", "max", "avg")
+     */
+    public static void logStatistics(String key) {
+    	if(statistics != null) {
+    		synchronized (statistics) {
+    			NSArray values = ERXArrayUtilities.sortedArraySortedWithKey(statistics.allValues(), key);
+    			log.info(NSPropertyListSerialization.stringFromPropertyList(values));
+    		}
+    	}
+    }
+
     public static void logExpression(EOAdaptorChannel channel, EOSQLExpression expression, long startTime) {
         if (sqlLoggingLogger == null) {
             sqlLoggingLogger = Logger.getLogger("er.extensions.ERXAdaptorChannelDelegate.sqlLogging");
