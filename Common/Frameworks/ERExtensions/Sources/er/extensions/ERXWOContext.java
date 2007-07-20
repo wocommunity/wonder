@@ -6,6 +6,7 @@
 //
 package er.extensions;
 
+import java.lang.reflect.Method;
 import java.util.Enumeration;
 
 import com.webobjects.appserver.WOApplication;
@@ -17,6 +18,7 @@ import com.webobjects.appserver.WOResourceManager;
 import com.webobjects.appserver.WOResponse;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSForwardException;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation.NSMutableSet;
@@ -340,6 +342,33 @@ public class ERXWOContext extends WOContext implements ERXMutableUserInfoHolderI
 			String html = startTag + url + endTag + "\n";
 			ERXWOContext.insertInResponseBeforeTag(response, html, ERXWOContext._htmlCloseHeadTag(), appendIfTagMissing, enqueueIfTagMissing);
 			addedResources.addObject(fileName);
+		}
+	}
+	
+	/**
+	 * Call this anywhere you would have called _directActionURL in 5.3 if you want to be 5.4 compatible.
+	 * 
+	 * @param context the WOContext to operate on
+	 * @param actionName the name of the direct action to lookup
+	 * @param queryParams the query parameters to use
+	 * @param secure whether or not the URL should be HTTPS
+	 * @return the URL to the given direct action
+	 */
+	public static String _directActionURL(WOContext context, String actionName, NSDictionary queryParams, boolean secure) {
+		try {
+			String directActionURL;
+			if (ERXApplication.isWO54()) {
+				Method _directActionURLMethod = context.getClass().getMethod("_directActionURL", new Class[] { String.class, NSDictionary.class, boolean.class, int.class, boolean.class });
+				directActionURL = (String)_directActionURLMethod.invoke(context, new Object[] { actionName, queryParams, Boolean.valueOf(secure), new Integer(0), Boolean.FALSE });
+			}
+			else {
+				Method _directActionURLMethod = context.getClass().getMethod("_directActionURL", new Class[] { String.class, NSDictionary.class, boolean.class });
+				directActionURL = (String)_directActionURLMethod.invoke(context, new Object[] { actionName, queryParams, Boolean.valueOf(secure) });
+			}
+			return directActionURL;
+		}
+		catch (Exception e) {
+			throw new NSForwardException(e);
 		}
 	}
 }
