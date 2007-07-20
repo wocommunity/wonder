@@ -218,7 +218,10 @@ public class NSDictionary<K, V> implements Cloneable, Serializable, NSCoding, NS
 			_copyMutableDictionary(otherDictionary);
 		}
 	}
-
+	public NSDictionary(Map<K, V> map) {
+		this(map, false);
+	}
+	
 	public NSDictionary(Map<K, V> map, boolean ignoreNull) {
 		_initializeDictionary();
 		if (map != null) {
@@ -456,7 +459,11 @@ public class NSDictionary<K, V> implements Cloneable, Serializable, NSCoding, NS
 	public Class classForCoder() {
 		return _CLASS;
 	}
-
+	
+	public static NSDictionary emptyDictionary() {
+		return NSDictionary.EmptyDictionary;
+	}
+	
 	public static Object decodeObject(NSCoder coder) {
 		int count = coder.decodeInt();
 		Object keys[] = new Object[count];
@@ -672,8 +679,8 @@ public class NSDictionary<K, V> implements Cloneable, Serializable, NSCoding, NS
 	protected transient int _deletionLimit;
 	protected static int _NSDictionaryClassHashCode;
 	protected static int _NSDictionaryMapEntryHashCode;
-	protected NSSet _keySetCache;
-	protected NSSet _entrySetCache;
+	protected Set _keySetCache;
+	protected Set _entrySetCache;
 	private static final ObjectStreamField serialPersistentFields[];
 
 	static {
