@@ -711,7 +711,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 	}
 	
 	public WORequest createRequest(String aMethod, String aURL, String anHTTPVersion, Map someHeaders, NSData aContent, NSDictionary someInfo) {
-		return createRequest(aMethod, aURL, anHTTPVersion, new NSDictionary(someHeaders), aContent, someInfo);
+		return createRequest(aMethod, aURL, anHTTPVersion, new NSDictionary(someHeaders, false), aContent, someInfo);
 	}
 
 	/**
