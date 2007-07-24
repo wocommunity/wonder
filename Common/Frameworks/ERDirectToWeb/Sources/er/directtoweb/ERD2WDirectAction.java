@@ -415,7 +415,7 @@ public abstract class ERD2WDirectAction extends ERXDirectAction {
                 }
             }
         } catch(Exception ex) {
-            log.error("Error with action " + anActionName + ":" + ex + ", formValues:" + context().request().formValues());
+            log.error("Error with action " + anActionName + ":" + ex + ", formValues:" + context().request().formValues(), ex);
             newPage = reportException(ex);
         }
         return newPage;
