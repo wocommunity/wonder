@@ -27,6 +27,8 @@ import com.webobjects.foundation.NSNotificationCenter;
  * and this should be the only effected class .. in theory.
  */
 public class ERXLogger extends org.apache.log4j.Logger {
+	
+	public static final String CONFIGURE_LOGGING_WITH_SYSTEM_PROPERTIES = "configureLoggingWithSystemProperties";
 
     /** logging supprt */
     public static Logger log;
