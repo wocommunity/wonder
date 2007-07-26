@@ -34,7 +34,7 @@ public class KeyValueCodingProtectedAccessor extends NSKeyValueCoding.ValueAcces
     public Object methodValue(Object object, Method method) throws IllegalArgumentException, IllegalAccessException,
         InvocationTargetException {
             //log.warn("MethodValue, method: " + method.toString() + " object: " + object.toString());
-            return method.invoke(object, null);
+            return method.invoke(object,  (Object[])null);
         }
 
     public void setMethodValue(Object object, Method method, Object value) throws IllegalArgumentException, IllegalAccessException,
