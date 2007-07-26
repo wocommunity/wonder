@@ -598,6 +598,7 @@
     </target>
     <target name="YUI.all">
         <antcall target="global.framework.${build.action}" >
+            <param name="project.type" value="framework" />
             <param name="project.principal.class" value="" />
             <param name="project.name" value="YUI" />
             <param name="project.dir" value="Ajax/YUI" />
@@ -728,6 +729,7 @@
              	<exclude name="**/dist/**"/>
              	<exclude name="**/bin/**"/>
              	<exclude name="**/build/**"/>
+             	<include name="**/Build/build/**"/>
              	<exclude name="**/target/**"/>
             </fileset>
         </copy>
