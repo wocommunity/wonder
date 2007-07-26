@@ -1,9 +1,7 @@
 package com.webobjects.foundation;
 
 import java.lang.reflect.Array;
-import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.ConcurrentModificationException;
 import java.util.Iterator;
 import java.util.List;
@@ -25,7 +23,7 @@ import java.util.Vector;
  * supplied will will be used again without changes in code on your side. <br />
  * @author ak
  */
-public class NSMutableArray <E> extends NSArray<E> {
+public class NSMutableArray extends NSArray {
 
 	public static final Class _CLASS = _NSUtilitiesExtra._classWithFullySpecifiedNamePrime("com.webobjects.foundation.NSMutableArray");
     
@@ -34,10 +32,6 @@ public class NSMutableArray <E> extends NSArray<E> {
     public static final Object ERX_MARKER = "Wonder";
     
     public NSMutableArray() {
-    }
-    
-    public NSMutableArray(Collection<E> collection) {
-    	super(collection);
     }
 
     public NSMutableArray(int capacity) {
@@ -50,15 +44,15 @@ public class NSMutableArray <E> extends NSArray<E> {
         }
     }
 
-    public NSMutableArray(E object) {
+    public NSMutableArray(Object object) {
         super(object);
     }
 
-    public NSMutableArray(E objects[]) {
+    public NSMutableArray(Object objects[]) {
         super(objects);
     }
 
-    public NSMutableArray(E objects[], NSRange range) {
+    public NSMutableArray(Object objects[], NSRange range) {
         super(objects, range);
     }
 
@@ -88,7 +82,7 @@ public class NSMutableArray <E> extends NSArray<E> {
         }
     }
 
-    public void addObject(E object) {
+    public void addObject(Object object) {
         if (object == null) {
             throw new IllegalArgumentException("Attempt to insert null into an " + getClass().getName() + ".");
         } else {
@@ -99,7 +93,7 @@ public class NSMutableArray <E> extends NSArray<E> {
         }
     }
 
-    public void addObjects(E objects[]) {
+    public void addObjects(Object objects[]) {
         if (objects != null && objects.length > 0) {
             for (int i = 0; i < objects.length; i++)
                 if (objects[i] == null)
@@ -116,11 +110,11 @@ public class NSMutableArray <E> extends NSArray<E> {
      * @deprecated Method replaceObjectAtIndex is deprecated
      */
 
-    public void replaceObjectAtIndex(int index, E object) {
+    public void replaceObjectAtIndex(int index, Object object) {
         replaceObjectAtIndex(object, index);
     }
 
-    public void insertObjectAtIndex(E object, int index) {
+    public void insertObjectAtIndex(Object object, int index) {
         if (object == null)
             throw new IllegalArgumentException("Attempt to insert null into an  " + getClass().getName() + ".");
         if (index >= 0 && index <= _count) {
@@ -136,7 +130,7 @@ public class NSMutableArray <E> extends NSArray<E> {
         }
     }
 
-    public E removeObjectAtIndex(int index) {
+    public Object removeObjectAtIndex(int index) {
         if (index >= 0 && index < _count) {
             _count--;
             Object result = _objects[index];
@@ -144,7 +138,7 @@ public class NSMutableArray <E> extends NSArray<E> {
                 System.arraycopy(_objects, index + 1, _objects, index, _count - index);
             _objects[_count] = null;
             clearCache();
-            return (E) result;
+            return result;
         }
         if (_count == 0)
             throw new IllegalArgumentException("Array is empty");
@@ -172,12 +166,12 @@ public class NSMutableArray <E> extends NSArray<E> {
         }
     }
 
-    public void addObjectsFromArray(NSArray<E> otherArray) {
+    public void addObjectsFromArray(NSArray otherArray) {
         if (otherArray != null)
             addObjects(otherArray.objectsNoCopy());
     }
 
-    public void replaceObjectsInRange(NSRange range, NSArray<E> otherArray, NSRange otherRange) {
+    public void replaceObjectsInRange(NSRange range, NSArray otherArray, NSRange otherRange) {
         if (range == null || otherRange == null)
             throw new IllegalArgumentException("Both ranges cannot be null");
         if (otherArray == null)
@@ -204,7 +198,7 @@ public class NSMutableArray <E> extends NSArray<E> {
 
     }
 
-    public E removeLastObject() {
+    public Object removeLastObject() {
         if (count() == 0)
             return null;
         else
@@ -297,11 +291,11 @@ public class NSMutableArray <E> extends NSArray<E> {
         return new NSMutableArray(this);
     }
 
-    public NSArray<E> immutableClone() {
+    public NSArray immutableClone() {
         return new NSArray(this);
     }
 
-    public NSMutableArray<E> mutableClone() {
+    public NSMutableArray mutableClone() {
         return (NSMutableArray) clone();
     }
 
@@ -399,14 +393,14 @@ public class NSMutableArray <E> extends NSArray<E> {
     /**
      * Bugfix for the broken implementation in NSArray.
      */
-    public <T> T[] toArray(T array[]) {
+    public Object[] toArray(Object array[]) {
     	int i = size();
     	if (array.length < i) {
-    		array = (T[]) Array.newInstance(((Object) (array)).getClass().getComponentType(), i);
+    		array = (Object[]) Array.newInstance(((Object) (array)).getClass().getComponentType(), i);
     	}
-    	T result[] = array;
+    	Object result[] = array;
     	for (int j = 0; j < i; j++) {
-    		result[j] = (T) objectAtIndex(j);
+    		result[j] = objectAtIndex(j);
     	}
 
     	if (array.length > i) {
@@ -417,31 +411,31 @@ public class NSMutableArray <E> extends NSArray<E> {
 
     //AK: from here on only java.util.List stuff
 
-    public E set(int index, E element) {
-    	E old = objectAtIndex(index);
+    public Object set(int index, Object element) {
+    	Object old = objectAtIndex(index);
     	if(element != old) {
     		replaceObjectAtIndex(element, index);
     	}
     	return old;
     }
 
-    public void add(int index, E element) {
+    public void add(int index, Object element) {
         insertObjectAtIndex(element, index);
     }
 
-    public boolean add(E element) {
+    public boolean add(Object element) {
         addObject(element);
         return true;
     }
 
-    public boolean addAll(Collection<? extends E> collection) {
-        addObjects((E[]) collection.toArray());
+    public boolean addAll(Collection collection) {
+        addObjects(collection.toArray());
         return true;
     }
 
-    public boolean addAll(int index, Collection<? extends E> collection) {
+    public boolean addAll(int index, Collection collection) {
         boolean modified = false;
-        Iterator<E> e = (Iterator<E>) collection.iterator();
+        Iterator e = collection.iterator();
         while (e.hasNext()) {
             add(index++, e.next());
             modified = true;
@@ -449,8 +443,8 @@ public class NSMutableArray <E> extends NSArray<E> {
         return modified;
     }
 
-    public E remove(int index) {
-        E result = removeObjectAtIndex(index);
+    public Object remove(int index) {
+        Object result = removeObjectAtIndex(index);
         return result;
     }
 
@@ -577,7 +571,7 @@ public class NSMutableArray <E> extends NSArray<E> {
             checkForComodification();
 
             try {
-                NSMutableArray.this.set(lastRet, (E)o);
+                NSMutableArray.this.set(lastRet, o);
                 expectedModCount = modCount;
             } catch (IndexOutOfBoundsException e) {
                 throw new ConcurrentModificationException();
@@ -588,7 +582,7 @@ public class NSMutableArray <E> extends NSArray<E> {
             checkForComodification();
 
             try {
-                NSMutableArray.this.add(cursor++, (E)o);
+                NSMutableArray.this.add(cursor++, o);
                 lastRet = -1;
                 expectedModCount = modCount;
             } catch (IndexOutOfBoundsException e) {
