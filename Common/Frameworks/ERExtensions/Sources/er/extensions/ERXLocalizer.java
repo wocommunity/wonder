@@ -207,9 +207,11 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
 	}
 
 	protected void addToCreatedKeys(Object value, String key) {
-		createdKeys.takeValueForKey(value, key);
-		if (key != null && key.indexOf(" ") > 0) {
-			log.info("Value added: " + key + "->" + value + " in " + NSPropertyListSerialization.stringFromPropertyList(ERXWOContext.componentPath(ERXWOContext.currentContext())));
+		if (key != null && value != null) {
+			createdKeys.takeValueForKey(value, key);
+			if (key.indexOf(" ") > 0) {
+				log.info("Value added: " + key + "->" + value + " in " + NSPropertyListSerialization.stringFromPropertyList(ERXWOContext.componentPath(ERXWOContext.currentContext())));
+			}
 		}
 	}
 
@@ -672,7 +674,9 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
 	}
 
 	protected void setCacheValueForKey(Object value, String key) {
-		cache.setObjectForKey(value, key);
+		if (key != null && value != null) {
+			cache.setObjectForKey(value, key);
+		}
 	}
 
 	public Object valueForKeyPath(String key) {
