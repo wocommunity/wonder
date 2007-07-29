@@ -216,7 +216,7 @@ public class ERXWOContext extends WOContext implements ERXMutableUserInfoHolderI
     	NSMutableArray result = new NSMutableArray();
     	if (context != null) {
 	    	WOComponent component = context.component();
-	    	while(component != null) {
+	    	while(component != null && component.name() != null) {
 	    		result.insertObjectAtIndex(component.name(), 0);
 	    		component = component.parent();
 	    	}
