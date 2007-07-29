@@ -14,6 +14,8 @@
 //
 package er.extensions;
 
+import java.math.BigDecimal;
+
 import com.webobjects.eoaccess.EOEntity;
 import com.webobjects.eoaccess.EOQualifierSQLGeneration;
 import com.webobjects.eoaccess.EOSQLExpression;
@@ -21,11 +23,13 @@ import com.webobjects.eocontrol.EOClassDescription;
 import com.webobjects.eocontrol.EOKeyValueQualifier;
 import com.webobjects.eocontrol.EOQualifier;
 import com.webobjects.eocontrol.EOQualifierEvaluation;
+import com.webobjects.eocontrol.EOQualifierVariable;
 import com.webobjects.foundation.NSComparator;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSKeyValueCoding;
 import com.webobjects.foundation.NSMutableSet;
 import com.webobjects.foundation.NSTimestamp;
+import com.webobjects.foundation._NSStringUtilities;
 
 /**
 * The between qualifier allows qualification on an
@@ -351,4 +355,27 @@ public class ERXBetweenQualifier extends EOKeyValueQualifier implements EOQualif
     public Object clone() {
         return new ERXBetweenQualifier(this.key(), this.minimumValue(), this.maximumValue());
     }
+    
+    public String toString() {
+        return "(" + _key + " between " + valueStringForValue(_minimumValue) + " and " + valueStringForValue(_maximumValue) + ")";
+    }
+
+    private String valueStringForValue(Object aValue) {
+        String valueString;
+        if(aValue == NSKeyValueCoding.NullValue)
+            valueString = "null";
+        else
+        if(aValue instanceof String)
+            valueString = "'" + (String)aValue + "'";
+        else
+        if((aValue instanceof Number) && !(aValue instanceof BigDecimal))
+            valueString = aValue.toString();
+        else
+        if(aValue instanceof EOQualifierVariable)
+            valueString = "$" + ((EOQualifierVariable)aValue).key();
+        else
+            valueString = "(" + (aValue == null ? "null" : aValue.getClass().getName()) + ")" + _NSStringUtilities.quotedStringWithQuote(aValue == null ? "null" : aValue.toString(), '\'');
+        return  valueString;
+    }
+
 }
