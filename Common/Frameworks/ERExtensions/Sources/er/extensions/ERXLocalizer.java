@@ -325,7 +325,25 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
 
 	public static NSArray frameworkSearchPath() {
 		if (frameworkSearchPath == null) {
-			frameworkSearchPath = ERXProperties.arrayForKeyWithDefault("er.extensions.ERXLocalizer.frameworkSearchPath", new NSArray(new Object[] { "app", "ERDirectToWeb", "ERExtensions" }));
+			frameworkSearchPath = ERXProperties.arrayForKey("er.extensions.ERXLocalizer.frameworkSearchPath");
+			if(frameworkSearchPath == null) {
+				NSMutableArray defaultValue = new NSMutableArray();
+				for (Enumeration e = NSBundle.frameworkBundles().objectEnumerator(); e.hasMoreElements();) {
+					NSBundle bundle = (NSBundle) e.nextElement();
+					String name = bundle.name();
+					if(!(name.equals("ERCoreBusinessLogic") || name.equals("ERDirectToWeb") || name.equals("ERExtensions"))) {
+						defaultValue.addObject(name);
+					}
+				}
+				if(NSBundle.bundleForName("ERCoreBusinessLogic") != null) 
+					defaultValue.addObject("ERCoreBusinessLogic");
+				if(NSBundle.bundleForName("ERDirectToWeb") != null) 
+					defaultValue.addObject("ERDirectToWeb");
+				if(NSBundle.bundleForName("ERExtensions") != null) 
+					defaultValue.addObject("ERExtensions");
+				defaultValue.insertObjectAtIndex("app", 0);
+				frameworkSearchPath = defaultValue;
+			}
 			if (log.isDebugEnabled())
 				log.debug("FrameworkSearchPath: " + frameworkSearchPath);
 		}
