@@ -15,19 +15,19 @@ CenterAction: WOSwitchComponent {
 AttributeRow : WOGenericContainer {
 	_unroll = true;
 	elementName = "tr";
-	rowClass = rowClass;
+	class = rowClass;
 } 
 
 ActionRow : WOGenericContainer {
 	_unroll = true;
 	elementName = "tr";
-	rowClass = rowClass;
+	class = rowClass;
 } 
 
 ExtraRow : WOGenericContainer {
 	_unroll = true;
 	elementName = "tr";
-	rowClass = rowClass;
+	class = rowClass;
 } 
 
 ExtraListComponent : WOSwitchComponent {
