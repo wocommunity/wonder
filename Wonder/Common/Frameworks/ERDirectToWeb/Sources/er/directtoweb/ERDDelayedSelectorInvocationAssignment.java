@@ -108,34 +108,38 @@ public class ERDDelayedSelectorInvocationAssignment extends ERDDelayedAssignment
     public Object fireNow(D2WContext c) {
         final NSArray value = (NSArray)value();
         final int valueCount = value.count();
-        final int numberOfArguments = valueCount - 2;
         final Object target;
-        final String selectorName;
-        final NSSelector selector;
-        Object[] arguments = null;
+        Object result = null;
 
         if ( valueCount < 2 )
             throw new RuntimeException("Must have at least 2 components in value: " + value);
 
         target = c.valueForKeyPath((String)value.objectAtIndex(0));
-        selectorName = (String)value.objectAtIndex(1);
-
-        if ( numberOfArguments > 0 ) {
-            arguments = new Object[numberOfArguments];
-
-            for ( int i = 2; i < valueCount; i++ )
-                arguments[i-2] = c.valueForKeyPath((String)value.objectAtIndex(i));
+        if ( target != null ) {
+            final int numberOfArguments = valueCount - 2;
+            final String selectorName = (String)value.objectAtIndex(1);
+            final NSSelector selector;
+            Object[] arguments = null;
+    
+            if ( numberOfArguments > 0 ) {
+                arguments = new Object[numberOfArguments];
+    
+                for ( int i = 2; i < valueCount; i++ )
+                    arguments[i-2] = c.valueForKeyPath((String)value.objectAtIndex(i));
+            }
+    
+            if ( _log.isDebugEnabled() ) {
+                final NSArray a = arguments != null ? new NSArray(arguments) : null;
+    
+                _log.debug("Going to fire " + selectorName + " on object " + target + " with " + numberOfArguments + " arguments: " + a);
+            }
+    
+            selector = new NSSelector(selectorName, _parameterTypesForNumberOfArguments(numberOfArguments));
+    
+            result = ERXSelectorUtilities.invoke(selector, target, arguments);
         }
 
-        if ( _log.isDebugEnabled() ) {
-            final NSArray a = arguments != null ? new NSArray(arguments) : null;
-
-            _log.debug("Going to fire " + selectorName + " on object " + target + " with " + numberOfArguments + " arguments: " + a);
-        }
-
-        selector = new NSSelector(selectorName, _parameterTypesForNumberOfArguments(numberOfArguments));
-
-        return ERXSelectorUtilities.invoke(selector, target, arguments);
+        return result;
     }
 
 }
