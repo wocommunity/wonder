@@ -6,11 +6,8 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.extensions;
 
-import com.webobjects.foundation.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.eoaccess.*;
-import com.webobjects.appserver.*;
-import java.util.*;
+import com.webobjects.eoaccess.EOEntity;
+import com.webobjects.foundation.NSArray;
 
 /** @deprecated use ERXToManyQualifier instead */
 
@@ -19,7 +16,7 @@ public class ERXEOToManyQualifier extends ERXToManyQualifier implements Cloneabl
      public ERXEOToManyQualifier(EOEntity e,
                                 String toManyKey,
                                 NSArray elements) {
-        super(e,toManyKey,elements);
+        super(toManyKey,elements);
     }
 
     /**
