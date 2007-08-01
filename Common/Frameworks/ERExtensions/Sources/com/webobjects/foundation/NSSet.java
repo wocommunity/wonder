@@ -58,15 +58,15 @@ public class NSSet<T> implements Cloneable, Serializable, NSCoding, _NSFoundatio
 		_initializeSet();
 	}
 
-	public NSSet(NSArray<T> objects) {
+	public NSSet(NSArray<? extends T> objects) {
 		this(objects == null ? null : objects.objectsNoCopy(), false);
 	}
 
-	public NSSet(NSSet<T> otherSet) {
+	public NSSet(NSSet<? extends T> otherSet) {
 		this(otherSet == null ? null : otherSet.objectsNoCopy(), false);
 	}
 
-	public NSSet(Set<T> set, boolean ignoreNull) {
+	public NSSet(Set<? extends T> set, boolean ignoreNull) {
 		if (set == null) {
 			throw new IllegalArgumentException("Set cannot be null");
 		}
@@ -155,7 +155,7 @@ public class NSSet<T> implements Cloneable, Serializable, NSCoding, _NSFoundatio
 		}
 	}
 
-	private boolean _equalsSet(NSSet<T> otherSet) {
+	private boolean _equalsSet(NSSet<?> otherSet) {
 		int count = count();
 		if (count != otherSet.count()) {
 			return false;
@@ -294,7 +294,7 @@ public class NSSet<T> implements Cloneable, Serializable, NSCoding, _NSFoundatio
 
 	}
 
-	public boolean intersectsSet(NSSet<T> otherSet) {
+	public boolean intersectsSet(NSSet<?> otherSet) {
 		if (count() != 0 && otherSet != null && otherSet.count() != 0) {
 			T objects[] = objectsNoCopy();
 			for (int i = 0; i < objects.length; i++) {
@@ -311,7 +311,7 @@ public class NSSet<T> implements Cloneable, Serializable, NSCoding, _NSFoundatio
 		return _count == 0;
 	}
 
-	public boolean isEqualToSet(NSSet<T> otherSet) {
+	public boolean isEqualToSet(NSSet<?> otherSet) {
 		if (otherSet == null) {
 			return false;
 		}
@@ -323,7 +323,7 @@ public class NSSet<T> implements Cloneable, Serializable, NSCoding, _NSFoundatio
 		}
 	}
 
-	public boolean isSubsetOfSet(NSSet<T> otherSet) {
+	public boolean isSubsetOfSet(NSSet<?> otherSet) {
 		int count = count();
 		if (otherSet == null || otherSet.count() < count) {
 			return false;
@@ -387,17 +387,17 @@ public class NSSet<T> implements Cloneable, Serializable, NSCoding, _NSFoundatio
 	public boolean retainAll(Collection<?> c) {
 		throw new UnsupportedOperationException("retainAll is not a supported operation in com.webobjects.foundation.NSSet");
 	}
-	public NSSet<T> setByIntersectingSet(NSSet<T> otherSet) {
+	public NSSet<T> setByIntersectingSet(NSSet<?> otherSet) {
 		NSMutableSet<T> set = new NSMutableSet<T>(this);
 		set.intersectSet(otherSet);
 		return set;
 	}
-	public NSSet<T> setBySubtractingSet(NSSet otherSet) {
+	public NSSet<T> setBySubtractingSet(NSSet<?> otherSet) {
 		NSMutableSet<T> set = new NSMutableSet<T>(this);
 		set.subtractSet(otherSet);
 		return set;
 	}
-	public NSSet<T> setByUnioningSet(NSSet<T> otherSet) {
+	public NSSet<T> setByUnioningSet(NSSet<? extends T> otherSet) {
 		NSMutableSet<T> set = new NSMutableSet<T>(this);
 		set.unionSet(otherSet);
 		return set;

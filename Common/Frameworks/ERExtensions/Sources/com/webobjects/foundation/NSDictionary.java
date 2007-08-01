@@ -52,7 +52,7 @@ public class NSDictionary<K, V> implements Cloneable, Serializable, NSCoding, NS
 		}
 	}
 
-	private void _copyImmutableDictionary(NSDictionary<K, V> otherDictionary) {
+	private void _copyImmutableDictionary(NSDictionary<? extends K, ? extends V> otherDictionary) {
 		_capacity = otherDictionary._capacity;
 		_count = otherDictionary._count;
 		_hashtableBuckets = otherDictionary._hashtableBuckets;
@@ -65,7 +65,7 @@ public class NSDictionary<K, V> implements Cloneable, Serializable, NSCoding, NS
 		_deletionLimit = otherDictionary._deletionLimit;
 	}
 
-	void _copyMutableDictionary(NSDictionary<K, V> otherDictionary) {
+	void _copyMutableDictionary(NSDictionary<? extends K, ? extends V> otherDictionary) {
 		_capacity = otherDictionary._capacity;
 		_count = otherDictionary._count;
 		_hashtableBuckets = otherDictionary._hashtableBuckets;
@@ -206,11 +206,11 @@ public class NSDictionary<K, V> implements Cloneable, Serializable, NSCoding, NS
 		this(objects, keys, true);
 	}
 
-	public NSDictionary(NSArray<V> objects, NSArray<K> keys) {
+	public NSDictionary(NSArray<? extends V> objects, NSArray<? extends K> keys) {
 		this(objects == null ? null : objects.objectsNoCopy(), keys == null ? null : keys.objectsNoCopy(), false);
 	}
 
-	public NSDictionary(NSDictionary<K, V> otherDictionary) {
+	public NSDictionary(NSDictionary<? extends K, ? extends V> otherDictionary) {
 		if (otherDictionary.getClass() == _CLASS) {
 			_copyImmutableDictionary(otherDictionary);
 		}
@@ -218,11 +218,11 @@ public class NSDictionary<K, V> implements Cloneable, Serializable, NSCoding, NS
 			_copyMutableDictionary(otherDictionary);
 		}
 	}
-	public NSDictionary(Map<K, V> map) {
+	public NSDictionary(Map<? extends K, ? extends V> map) {
 		this(map, false);
 	}
 	
-	public NSDictionary(Map<K, V> map, boolean ignoreNull) {
+	public NSDictionary(Map<? extends K, ? extends V> map, boolean ignoreNull) {
 		_initializeDictionary();
 		if (map != null) {
 			_ensureCapacity(map.size());
@@ -252,7 +252,7 @@ public class NSDictionary<K, V> implements Cloneable, Serializable, NSCoding, NS
 		}
 	}
 
-	public NSDictionary(Dictionary<K, V> dictionary, boolean ignoreNull) {
+	public NSDictionary(Dictionary<? extends K, ? extends V> dictionary, boolean ignoreNull) {
 		_initializeDictionary();
 		if (dictionary != null) {
 			_ensureCapacity(dictionary.size());
@@ -299,7 +299,7 @@ public class NSDictionary<K, V> implements Cloneable, Serializable, NSCoding, NS
 		return _count;
 	}
 
-	public V objectForKey(K key) {
+	public V objectForKey(Object key) {
 		return _count != 0 && key != null ? (V) _NSCollectionPrimitives.findValueInHashTable(key, _keys, _objects, _flags) : null;
 	}
 
@@ -343,7 +343,7 @@ public class NSDictionary<K, V> implements Cloneable, Serializable, NSCoding, NS
 		}
 	}
 
-	public NSArray<V> objectsForKeys(NSArray<K> keys, V notFoundMarker) {
+	public NSArray<V> objectsForKeys(NSArray<? extends K> keys, V notFoundMarker) {
 		if (keys != null) {
 			Object keysArray[] = keys.objectsNoCopy();
 			NSMutableArray array = new NSMutableArray(keysArray.length);
@@ -365,7 +365,7 @@ public class NSDictionary<K, V> implements Cloneable, Serializable, NSCoding, NS
 		}
 	}
 
-	private boolean _equalsDictionary(NSDictionary<K, V> otherDictionary) {
+	private boolean _equalsDictionary(NSDictionary<? extends K, ? extends V> otherDictionary) {
 		int count = count();
 		if (count != otherDictionary.count()) {
 			return false;
@@ -382,7 +382,7 @@ public class NSDictionary<K, V> implements Cloneable, Serializable, NSCoding, NS
 		return true;
 	}
 
-	public boolean isEqualToDictionary(NSDictionary<K, V> otherDictionary) {
+	public boolean isEqualToDictionary(NSDictionary<? extends K, ? extends V> otherDictionary) {
 		if (otherDictionary == null) {
 			return false;
 		}
@@ -615,7 +615,7 @@ public class NSDictionary<K, V> implements Cloneable, Serializable, NSCoding, NS
 		throw new UnsupportedOperationException("remove is not a supported operation in com.webobjects.foundation.NSDictionary");
 	}
 
-	public void putAll(Map t) {
+	public void putAll(Map<? extends K, ? extends V> t) {
 		throw new UnsupportedOperationException("putAll is not a supported operation in com.webobjects.foundation.NSDictionary");
 	}
 
@@ -623,7 +623,7 @@ public class NSDictionary<K, V> implements Cloneable, Serializable, NSCoding, NS
 		throw new UnsupportedOperationException("putAll is not a supported operation in com.webobjects.foundation.NSDictionary");
 	}
 
-	public Set keySet() {
+	public Set<K> keySet() {
 		if (_keySetCache == null) {
 			Object currKeys[] = keysNoCopy();
 			if (currKeys != null && currKeys.length > 0) {
@@ -636,7 +636,7 @@ public class NSDictionary<K, V> implements Cloneable, Serializable, NSCoding, NS
 		return _keySetCache;
 	}
 
-	public Collection values() {
+	public Collection<V> values() {
 		return allValues();
 	}
 

@@ -277,11 +277,11 @@ public class NSArray<E> implements Cloneable, Serializable, NSCoding, NSKeyValue
 		this(objects, range == null ? 0 : range.location(), range == null ? 0 : range.length(), true);
 	}
 
-	public NSArray(NSArray<E> otherArray) {
+	public NSArray(NSArray<? extends E> otherArray) {
 		this(otherArray == null ? null : otherArray.objectsNoCopy(), 0, otherArray == null ? 0 : otherArray.count(), false);
 	}
 
-	public NSArray(List<E> list, boolean checkForNull) {
+	public NSArray(List<? extends E> list, boolean checkForNull) {
 		_recomputeHashCode = true;
 		if (list == null) {
 			throw new IllegalArgumentException("List cannot be null");
@@ -293,7 +293,7 @@ public class NSArray<E> implements Cloneable, Serializable, NSCoding, NSKeyValue
 		}
 	}
 
-	public NSArray(Vector<E> vector, NSRange range, boolean ignoreNull) {
+	public NSArray(Vector<? extends E> vector, NSRange range, boolean ignoreNull) {
 		_recomputeHashCode = true;
 		if (range != null) {
 			if (vector == null) {
@@ -317,7 +317,7 @@ public class NSArray<E> implements Cloneable, Serializable, NSCoding, NSKeyValue
 		}
 	}
 
-	public NSArray(Collection collection, boolean checkForNull) {
+	public NSArray(Collection<? extends E> collection, boolean checkForNull) {
 		_recomputeHashCode = true;
 		if (collection == null) {
 			throw new NullPointerException("Collection cannot be null");
@@ -329,7 +329,7 @@ public class NSArray<E> implements Cloneable, Serializable, NSCoding, NSKeyValue
 		}
 	}
 
-	public NSArray(Collection collection) {
+	public NSArray(Collection<? extends E> collection) {
 		this(collection, true);
 	}
 
@@ -377,7 +377,7 @@ public class NSArray<E> implements Cloneable, Serializable, NSCoding, NSKeyValue
 		}
 	}
 
-	public NSArray<E> arrayByAddingObjectsFromArray(NSArray<E> otherArray) {
+	public NSArray<E> arrayByAddingObjectsFromArray(NSArray<? extends E> otherArray) {
 		if (otherArray != null) {
 			int count = count();
 			int otherCount = otherArray.count();
@@ -450,7 +450,7 @@ public class NSArray<E> implements Cloneable, Serializable, NSCoding, NSKeyValue
 		}
 	}
 
-	public Object firstObjectCommonWithArray(NSArray<E> otherArray) {
+	public Object firstObjectCommonWithArray(NSArray<? extends E> otherArray) {
 		if (otherArray == null) {
 			return null;
 		}
