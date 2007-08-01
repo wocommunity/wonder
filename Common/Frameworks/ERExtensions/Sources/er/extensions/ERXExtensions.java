@@ -9,7 +9,9 @@ package er.extensions;
 import com.webobjects.foundation.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.eoaccess.*;
+import com.webobjects.eoaccess.EOQualifierSQLGeneration.Support;
 import com.webobjects.appserver.*;
+import com.webobjects.jdbcadaptor.JDBCAdaptorException;
 import java.lang.reflect.Method;
 import java.lang.*;
 import java.util.*;
@@ -111,6 +113,13 @@ public class ERXExtensions {
                 debugLogger.setAllowedDebugLevel(NSLog.debug.allowedDebugLevel());
                 NSLog.setDebug(debugLogger);
             }
+
+            registerSQLSupportForSelector(new NSSelector(ERXPrimaryKeyListQualifier.IsContainedInArraySelectorName),
+                EOQualifierSQLGeneration.Support.supportForClass(ERXPrimaryKeyListQualifier.class));
+            registerSQLSupportForSelector(new NSSelector(ERXToManyQualifier.MatchesAllInArraySelectorName),
+                EOQualifierSQLGeneration.Support.supportForClass(ERXToManyQualifier.class));
+            registerSQLSupportForSelector(new NSSelector(ERXToManyQualifier.MatchesAnyInArraySelectorName),
+                EOQualifierSQLGeneration.Support.supportForClass(ERXToManyQualifier.class));
         }
 
         /**
@@ -198,6 +207,64 @@ public class ERXExtensions {
                 System.out.println("Caught exception: " + e.getMessage() + " stack: ");
                 e.printStackTrace();
             }
+    }
+
+    private static Map _qualifierKeys;
+
+    public static synchronized void registerSQLSupportForSelector(NSSelector selector, EOQualifierSQLGeneration.Support support) {
+        if(_qualifierKeys == null) {
+            _qualifierKeys = new HashMap();
+            EOQualifierSQLGeneration.Support old = EOQualifierSQLGeneration.Support.supportForClass(EOKeyValueQualifier.class);
+            EOQualifierSQLGeneration.Support.setSupportForClass(new KeyValueQualifierSQLGenerationSupport(old), EOKeyValueQualifier.class);
+        }
+        _qualifierKeys.put(selector.name(), support);
+    }
+
+    /**
+     * Support class that listens for EOKeyValueQualifiers that have a selector
+     * that was registered and uses their support instead.
+     * You'll use this mainly to bind queryOperators in display groups.
+     * @author ak
+     */
+    public static class KeyValueQualifierSQLGenerationSupport extends EOQualifierSQLGeneration.Support {
+
+        private EOQualifierSQLGeneration.Support _old;
+
+        public KeyValueQualifierSQLGenerationSupport(EOQualifierSQLGeneration.Support old) {
+            _old = old;
+        }
+
+        private EOQualifierSQLGeneration.Support supportForQualifier(EOQualifier qualifier) {
+            EOQualifierSQLGeneration.Support support = null;
+            if(qualifier instanceof EOKeyValueQualifier) {
+                synchronized (_qualifierKeys) {
+                    support = (Support) _qualifierKeys.get(((EOKeyValueQualifier)qualifier).selector().name());
+                }
+            }
+            if(support == null) {
+                support = _old;
+            }
+            return support;
+        }
+
+        public String sqlStringForSQLExpression(EOQualifier eoqualifier, EOSQLExpression e) {
+        	try {
+        		return supportForQualifier(eoqualifier).sqlStringForSQLExpression(eoqualifier, e);
+        	}
+        	catch (JDBCAdaptorException ex) {
+        		ERXExtensions._log.error("Failed to generate sql string for qualifier " + eoqualifier + " on entity " + e.entity() + ".");
+        		throw ex;
+        	}
+        }
+
+        public EOQualifier schemaBasedQualifierWithRootEntity(EOQualifier eoqualifier, EOEntity eoentity) {
+            EOQualifier result = supportForQualifier(eoqualifier).schemaBasedQualifierWithRootEntity(eoqualifier, eoentity);
+            return result;
+        }
+
+        public EOQualifier qualifierMigratedFromEntityRelationshipPath(EOQualifier eoqualifier, EOEntity eoentity, String s) {
+            return supportForQualifier(eoqualifier).qualifierMigratedFromEntityRelationshipPath(eoqualifier, eoentity, s);
+        }
     }
 
     /** logging support for the adaptor channel */

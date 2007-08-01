@@ -49,6 +49,7 @@ public class ERXToManyQualifier extends EOKeyValueQualifier implements Cloneable
     }
     
     public static String MatchesAllInArraySelectorName = "matchesAllInArray";
+    public static String MatchesAnyInArraySelectorName = "matchesAnyInArray";
 
     /** logging support */
     public static final Logger log = Logger.getLogger(ERXToManyQualifier.class);
@@ -190,8 +191,14 @@ public class ERXToManyQualifier extends EOKeyValueQualifier implements Cloneable
                     for(int i = 0; i < pKeys.count(); i++) {
                         
                         Object key = pKeys.objectAtIndex(i);
-                        String keyString = e.formatValueForAttribute(key, pk);
-                        result.append(keyString);
+
+				        if (key instanceof Number) { // Supports plain, numeric keys.
+					        key = new Long(((Number) key).longValue());
+				        } else {
+					        key = e.formatValueForAttribute(key, pk);
+				        }
+                        result.append(key);
+
                         if(i < pKeys.count()-1) {
                             result.append(",");
                         }
@@ -219,11 +226,17 @@ public class ERXToManyQualifier extends EOKeyValueQualifier implements Cloneable
             EOQualifier result = null;
             EOKeyValueQualifier qualifier = (EOKeyValueQualifier)eoqualifier;
             String key = qualifier.key();
-             if(qualifier.selector().name().equals(MatchesAllInArraySelectorName)) {
+            if (qualifier.selector().name().equals(MatchesAllInArraySelectorName)) {
             	EOQualifierSQLGeneration.Support support = EOQualifierSQLGeneration.Support.supportForClass(ERXToManyQualifier.class);
             	NSArray array = (NSArray) qualifier.value();
             	ERXToManyQualifier q = new ERXToManyQualifier(key, array, array.count() );
             	result = support.schemaBasedQualifierWithRootEntity(q, eoentity);
+                return result;
+            } else if (qualifier.selector().name().equals(MatchesAnyInArraySelectorName)) {
+                EOQualifierSQLGeneration.Support support = EOQualifierSQLGeneration.Support.supportForClass(ERXToManyQualifier.class);
+                NSArray array = (NSArray) qualifier.value();
+                ERXToManyQualifier q = new ERXToManyQualifier(key, array, 1);
+                result = support.schemaBasedQualifierWithRootEntity(q, eoentity);
                 return result;
             }
             return (EOQualifier)eoqualifier.clone();

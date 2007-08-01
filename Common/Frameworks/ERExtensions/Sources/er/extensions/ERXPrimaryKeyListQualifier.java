@@ -6,9 +6,16 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.extensions;
 
-import com.webobjects.foundation.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.eoaccess.*;
+import org.apache.log4j.Logger;
+
+import com.webobjects.eoaccess.EOEntity;
+import com.webobjects.eoaccess.EOEntityClassDescription;
+import com.webobjects.eoaccess.EOQualifierSQLGeneration;
+import com.webobjects.eoaccess.EOSQLExpression;
+import com.webobjects.eocontrol.EOEnterpriseObject;
+import com.webobjects.eocontrol.EOKeyValueQualifier;
+import com.webobjects.eocontrol.EOQualifier;
+import com.webobjects.foundation.NSArray;
 
 /**
  * The primary key list qualifier is used to generate
@@ -25,6 +32,56 @@ import com.webobjects.eoaccess.*;
  */
 public class ERXPrimaryKeyListQualifier extends ERXInQualifier {
 
+    /** logging support */
+    protected static final Logger log = Logger.getLogger(ERXPrimaryKeyListQualifier.class);
+
+    public static String IsContainedInArraySelectorName = "isContainedInArray";
+
+    static {
+        EOQualifierSQLGeneration.Support.setSupportForClass(new ERXPrimaryKeyListQualifier.Support(), ERXPrimaryKeyListQualifier.class);
+    }
+
+    /**
+     * Support class that listens for EOKeyValueQualifiers that have an <code>isContainedInArray</code>-selector and replaces these
+     * with the ERXInQualifier. This means that when you set <code>isContainedInArray</code> as a display group
+     * queryOperator and an NSArray of EOs as the value, then this qualifier is magically replaced by
+     * one that selects objects with an IN qualifier.
+     * @author ak
+     */
+    public static class Support extends EOQualifierSQLGeneration._KeyValueQualifierSupport {
+
+        public String sqlStringForSQLExpression(EOQualifier eoqualifier, EOSQLExpression e) {
+            return super.sqlStringForSQLExpression(eoqualifier, e);
+        }
+
+        public EOQualifier schemaBasedQualifierWithRootEntity(EOQualifier eoqualifier, EOEntity eoentity) {
+            EOQualifier result = null;
+            EOKeyValueQualifier qualifier = (EOKeyValueQualifier)eoqualifier;
+            String key = qualifier.key();
+            if(key.indexOf('.') < 0) {
+                // ak: this code is only for binding values in display groups and
+                // to support the twolevelrelationship and the ERD2WQuery*Relationship, it probably should go away...
+                Object value = qualifier.value();
+                if(!(value instanceof NSArray)) {
+                    value = new NSArray(value);
+                }
+                NSArray objects = ((NSArray)value);
+                if(objects.lastObject() instanceof EOEnterpriseObject) {
+                	objects = ERXEOAccessUtilities.primaryKeysForObjects(objects);
+                    value = objects;
+                }
+            }
+            EOQualifierSQLGeneration.Support support = EOQualifierSQLGeneration.Support.supportForClass(ERXInQualifier.class);
+            result = support.schemaBasedQualifierWithRootEntity(qualifier, eoentity);
+            return result;
+        }
+
+        public EOQualifier qualifierMigratedFromEntityRelationshipPath(EOQualifier eoqualifier, EOEntity eoentity, String s) {
+            return super.qualifierMigratedFromEntityRelationshipPath(eoqualifier, eoentity, s);
+        }
+    }
+
+
     /**
      * Constructs a primary key list qualifer for a given
      * set of enterprise objects. For now only use this
@@ -40,7 +97,7 @@ public class ERXPrimaryKeyListQualifier extends ERXInQualifier {
     private ERXPrimaryKeyListQualifier(String key, NSArray eos, boolean ignoreMe) {
         super(key,eos);
     }
-    
+
     /**
      * Constructs a primary key list qualifer for a given
      * set of enterprise objects and the primary key
@@ -61,11 +118,11 @@ public class ERXPrimaryKeyListQualifier extends ERXInQualifier {
      * @param key primary key attribute name
      * @param foreignKey attribute name.
      * @param eos array of enterprise objects
-     */    
+     */
     public ERXPrimaryKeyListQualifier(String key, String foreignKey, NSArray eos) {
         this(key, ERXEOAccessUtilities.snapshotsForObjectsFromRelationshipNamed(eos, foreignKey));
     }
-        
+
     /*
      * Implementation of the Cloneable interface.
      * @return cloned primary key list qualifier.
@@ -104,5 +161,5 @@ public class ERXPrimaryKeyListQualifier extends ERXInQualifier {
         if (eos == null || eos.count() == 0 || !(eos.lastObject() instanceof EOEnterpriseObject))
             throw new IllegalStateException("Attempting to construct a qualifier for a bad array: " + eos);
         return eos;
-    }    
+    }
 }
