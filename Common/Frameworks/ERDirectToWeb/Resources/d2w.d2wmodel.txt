@@ -273,6 +273,7 @@
     15 : pageConfiguration like 'EditRelationship*' => task = editRelationship [com.webobjects.directtoweb.Assignment], 
     15 : componentName = 'ERD2WQueryNonNull' => choicesNames = ("ERD2WBoolean.DontCare", "ERD2WBoolean.Yes", "ERD2WBoolean.No") [com.webobjects.directtoweb.Assignment], 
     15 : ((task = 'list' or task = 'select' or task = 'inspect') and propertyIsKeyPath = 1) => componentName = ERD2WDisplayString [com.webobjects.directtoweb.Assignment], 
+    15 : componentName = 'ERD2WCustomQueryBoolean' => choicesNames = ("ERD2WBoolean.Yes", "ERD2WBoolean.No", "ERD2WBoolean.DontCare") [com.webobjects.directtoweb.Assignment], 
     20 : targetOutput = 'xml' => title =  [com.webobjects.directtoweb.Assignment], 
     20 : targetOutput = 'xml' => offset = 0 [com.webobjects.directtoweb.Assignment], 
     20 : *true* => propertyNameComponentName = ERD2WPropertyName [com.webobjects.directtoweb.Assignment], 
