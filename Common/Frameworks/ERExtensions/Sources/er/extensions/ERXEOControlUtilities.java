@@ -73,14 +73,14 @@ public class ERXEOControlUtilities {
      * @param eos array of enterprise objects
      * @return an array of copies of local objects
      */
-    public static NSArray localInstancesOfObjects(EOEditingContext ec, NSArray eos) {
+    public static <T extends EOEnterpriseObject> NSArray<T> localInstancesOfObjects(EOEditingContext ec, NSArray<T> eos) {
         if (eos == null)
             throw new RuntimeException("ERXUtilites: localInstancesOfObjects: Array is null");
         if (ec == null)
             throw new RuntimeException("ERXUtilites: localInstancesOfObjects: EditingContext is null");
-        NSMutableArray localEos = new NSMutableArray();
-        for (Enumeration e = eos.objectEnumerator(); e.hasMoreElements();) {
-            localEos.addObject(localInstanceOfObject(ec, (EOEnterpriseObject)e.nextElement()));
+        NSMutableArray<T> localEos = new NSMutableArray<T>();
+        for (Enumeration<T> e = eos.objectEnumerator(); e.hasMoreElements();) {
+            localEos.addObject(localInstanceOfObject(ec, e.nextElement()));
         }
         return localEos;
     }
@@ -97,10 +97,10 @@ public class ERXEOControlUtilities {
      * @return an array datasource corresponding to the array
      *		of objects passed in.
      */
-    public static EOArrayDataSource dataSourceForArray(NSArray array) {
+    public static EOArrayDataSource dataSourceForArray(NSArray<? extends EOEnterpriseObject> array) {
         EOArrayDataSource dataSource = null;
         if (array != null && array.count() > 0) {
-            EOEnterpriseObject eo = (EOEnterpriseObject)array.objectAtIndex(0);
+            EOEnterpriseObject eo = array.objectAtIndex(0);
             dataSource = new EOArrayDataSource(eo.classDescription(), eo.editingContext());
             dataSource.setArray(array);
         }
@@ -220,9 +220,10 @@ public class ERXEOControlUtilities {
      * @param eo object to get a local copy of
      * @return enterprise object local to the passed in editing contex
      */
-    public static EOEnterpriseObject localInstanceOfObject(EOEditingContext ec, EOEnterpriseObject eo) {
+    @SuppressWarnings("unchecked")
+	public static <T extends EOEnterpriseObject> T localInstanceOfObject(EOEditingContext ec, T eo) {
         return eo != null && ec != null && eo.editingContext() != null && !ec.equals(eo.editingContext()) ?
-        EOUtilities.localInstanceOfObject(ec, eo) : eo;
+        (T)EOUtilities.localInstanceOfObject(ec, eo) : eo;
     }
     
     /**
