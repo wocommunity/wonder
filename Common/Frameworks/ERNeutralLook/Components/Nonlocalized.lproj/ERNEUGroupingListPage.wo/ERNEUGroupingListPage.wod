@@ -38,7 +38,7 @@ Conditional1: WOConditional {
 }
 
 DisplayBottomBatchNavigationConditional: WOConditional {
-	condition = d2WContext.displayBottomBatchNavigation;
+	condition = d2wContext.displayBottomBatchNavigation; 
 }
 
 ERPrinterButton: ERDPrinterButton {
