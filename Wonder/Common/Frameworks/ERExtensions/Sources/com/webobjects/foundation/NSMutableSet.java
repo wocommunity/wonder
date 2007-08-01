@@ -44,11 +44,11 @@ public class NSMutableSet<T> extends NSSet<T> {
 		super(objects);
 	}
 
-	public NSMutableSet(NSArray<T> objects) {
+	public NSMutableSet(NSArray<? extends T> objects) {
 		super(objects);
 	}
 
-	public NSMutableSet(NSSet<T> otherSet) {
+	public NSMutableSet(NSSet<? extends T> otherSet) {
 		super(otherSet);
 	}
 
@@ -93,7 +93,7 @@ public class NSMutableSet<T> extends NSSet<T> {
 		}
 	}
 
-	public void setSet(NSSet<T> otherSet) {
+	public void setSet(NSSet<? extends T> otherSet) {
 		if (otherSet != this) {
 			removeAllObjects();
 			if (otherSet != null) {
@@ -106,7 +106,7 @@ public class NSMutableSet<T> extends NSSet<T> {
 		}
 	}
 
-	public void addObjectsFromArray(NSArray<T> array) {
+	public void addObjectsFromArray(NSArray<? extends T> array) {
 		if (array != null) {
 			T objects[] = array.objectsNoCopy();
 			for (int i = 0; i < objects.length; i++) {
@@ -116,7 +116,7 @@ public class NSMutableSet<T> extends NSSet<T> {
 		}
 	}
 
-	public void intersectSet(NSSet<T> otherSet) {
+	public void intersectSet(NSSet<?> otherSet) {
 		if (otherSet != this) {
 			if (otherSet == null || otherSet.count() == 0) {
 				removeAllObjects();
@@ -132,7 +132,7 @@ public class NSMutableSet<T> extends NSSet<T> {
 		}
 	}
 
-	public void subtractSet(NSSet<T> otherSet) {
+	public void subtractSet(NSSet<?> otherSet) {
 		if (otherSet == null || otherSet.count() == 0) {
 			return;
 		}
@@ -140,7 +140,7 @@ public class NSMutableSet<T> extends NSSet<T> {
 			removeAllObjects();
 			return;
 		}
-		T objects[] = otherSet.objectsNoCopy();
+		Object objects[] = otherSet.objectsNoCopy();
 		for (int i = 0; i < objects.length; i++) {
 			if (member(objects[i]) != null) {
 				removeObject(objects[i]);
@@ -149,7 +149,7 @@ public class NSMutableSet<T> extends NSSet<T> {
 
 	}
 
-	public void unionSet(NSSet<T> otherSet) {
+	public void unionSet(NSSet<? extends T> otherSet) {
 		if (otherSet == null || otherSet.count() == 0 || otherSet == this) {
 			return;
 		}

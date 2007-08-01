@@ -36,7 +36,7 @@ public class NSMutableArray <E> extends NSArray<E> {
     public NSMutableArray() {
     }
     
-    public NSMutableArray(Collection<E> collection) {
+    public NSMutableArray(Collection<? extends E> collection) {
     	super(collection);
     }
 
@@ -62,15 +62,15 @@ public class NSMutableArray <E> extends NSArray<E> {
         super(objects, range);
     }
 
-    public NSMutableArray(NSArray otherArray) {
+    public NSMutableArray(NSArray<? extends E> otherArray) {
         super(otherArray);
     }
 
-    public NSMutableArray(Vector vector, NSRange range, boolean ignoreNull) {
+    public NSMutableArray(Vector<? extends E> vector, NSRange range, boolean ignoreNull) {
         super(vector, range, ignoreNull);
     }
 
-    public void setArray(NSArray otherArray) {
+    public void setArray(NSArray<? extends E> otherArray) {
         if (otherArray != this) {
             if (otherArray == null) {
                 _count = 0;
@@ -172,12 +172,12 @@ public class NSMutableArray <E> extends NSArray<E> {
         }
     }
 
-    public void addObjectsFromArray(NSArray<E> otherArray) {
+    public void addObjectsFromArray(NSArray<? extends E> otherArray) {
         if (otherArray != null)
             addObjects(otherArray.objectsNoCopy());
     }
 
-    public void replaceObjectsInRange(NSRange range, NSArray<E> otherArray, NSRange otherRange) {
+    public void replaceObjectsInRange(NSRange range, NSArray<? extends E> otherArray, NSRange otherRange) {
         if (range == null || otherRange == null)
             throw new IllegalArgumentException("Both ranges cannot be null");
         if (otherArray == null)
