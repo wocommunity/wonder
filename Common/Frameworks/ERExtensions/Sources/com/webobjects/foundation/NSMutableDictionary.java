@@ -48,15 +48,15 @@ public class NSMutableDictionary<K, V> extends NSDictionary<K, V> {
 		super(objects, keys);
 	}
 
-	public NSMutableDictionary(NSArray<V> objects, NSArray<K> keys) {
+	public NSMutableDictionary(NSArray<? extends V> objects, NSArray<? extends K> keys) {
 		super(objects, keys);
 	}
 
-	public NSMutableDictionary(NSDictionary<K, V> otherDictionary) {
+	public NSMutableDictionary(NSDictionary<? extends K, ? extends V> otherDictionary) {
 		_copyMutableDictionary(otherDictionary);
 	}
 
-	public NSMutableDictionary(Dictionary<K, V> dictionary, boolean ignoreNull) {
+	public NSMutableDictionary(Dictionary<? extends K, ? extends V> dictionary, boolean ignoreNull) {
 		super(dictionary, ignoreNull);
 	}
 
@@ -79,7 +79,7 @@ public class NSMutableDictionary<K, V> extends NSDictionary<K, V> {
 		_objectsCache = null;
 	}
 
-	public V removeObjectForKey(K key) {
+	public V removeObjectForKey(Object key) {
 		Object result = null;
 		if (key == null) {
 			throw new IllegalArgumentException("Attempt to remove null key from an " + getClass().getName() + ".");
@@ -111,7 +111,7 @@ public class NSMutableDictionary<K, V> extends NSDictionary<K, V> {
 		}
 	}
 
-	public void setDictionary(NSDictionary<K, V> otherDictionary) {
+	public void setDictionary(NSDictionary<? extends K, ? extends V> otherDictionary) {
 		if (otherDictionary != this) {
 			removeAllObjects();
 			if (otherDictionary != null) {
@@ -120,7 +120,7 @@ public class NSMutableDictionary<K, V> extends NSDictionary<K, V> {
 		}
 	}
 
-	public void addEntriesFromDictionary(NSDictionary<K, V> otherDictionary) {
+	public void addEntriesFromDictionary(NSDictionary<? extends K, ? extends V> otherDictionary) {
 		if (otherDictionary != null) {
 			Object keys[] = otherDictionary.keysNoCopy();
 			for (int i = 0; i < keys.length; i++) {
@@ -130,7 +130,7 @@ public class NSMutableDictionary<K, V> extends NSDictionary<K, V> {
 		}
 	}
 
-	public void removeObjectsForKeys(NSArray<K> keys) {
+	public void removeObjectsForKeys(NSArray keys) {
 		if (keys != null) {
 			Object keysArray[] = keys.objectsNoCopy();
 			for (int i = 0; i < keysArray.length; i++) {
@@ -206,7 +206,7 @@ public class NSMutableDictionary<K, V> extends NSDictionary<K, V> {
 	 * @param m
 	 *            Mappings to be stored in this map.
 	 */
-	public void putAll(Map m) {
+	public void putAll(Map<? extends K, ? extends V> m) {
 		addEntriesFromDictionary(new NSDictionary(m, true));
 	}
 
@@ -220,7 +220,7 @@ public class NSMutableDictionary<K, V> extends NSDictionary<K, V> {
 	/**
 	 * Return a collection view of the values contained in this map.
 	 */
-	public Collection values() {
+	public Collection<V> values() {
 		return allValues();
 	}
 
