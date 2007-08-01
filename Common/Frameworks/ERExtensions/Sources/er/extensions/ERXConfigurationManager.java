@@ -115,7 +115,7 @@ public class ERXConfigurationManager {
     static ERXConfigurationManager defaultManager = null;
     
     private String[] _commandLineArguments; 
-    private NSMutableArray _monitoredProperties;
+    private NSArray _monitoredProperties;
     private boolean _isInitialized = false;
     private boolean _isRapidTurnAroundInitialized = false;
 
@@ -176,6 +176,13 @@ public class ERXConfigurationManager {
     	}
     }
 
+    private NSArray monitoredProperties() {
+        if( _monitoredProperties == null ) {
+            _monitoredProperties = ERXProperties.pathsForUserAndBundleProperties(/* logging */ true);
+        }
+        return _monitoredProperties;
+    }
+
     /**
      * Sets up the system for rapid turnaround mode. It will watch the changes
      * on Properties files in application and framework bundles and
@@ -187,31 +194,18 @@ public class ERXConfigurationManager {
         if (_isRapidTurnAroundInitialized)      return;
 
         _isRapidTurnAroundInitialized = true;
-        
-        boolean rapidTurnaround = true;
-        
+
         if (WOApplication.application()!=null && WOApplication.application().isCachingEnabled()) {
             log.info("WOCachingEnabled is true. Disabling the rapid turnaround for Properties files");
-            rapidTurnaround = false;
+            registerPropertiesTouchFiles();
+            return;
         }
 
-        NSArray propertyPaths = ERXProperties.pathsForUserAndBundleProperties(/* logging */ true);
-        _monitoredProperties = new NSMutableArray();
-
-        for (Enumeration e = propertyPaths.objectEnumerator(); e.hasMoreElements();) {
+        for (Enumeration e = monitoredProperties().objectEnumerator(); e.hasMoreElements();) {
             String path = (String) e.nextElement();
-
-            _monitoredProperties.addObject(path);
-            
-            if (rapidTurnaround) {
                 registerForFileNotification(path, "updateSystemProperties");
             }
         }
-        
-        if (!rapidTurnaround) {
-            registerPropertiesTouchFiles();
-        }
-    }
 
     private void registerPropertiesTouchFiles() {
         String propertiesTouchFile = propertiesTouchFile();
@@ -299,7 +293,7 @@ public class ERXConfigurationManager {
     /** 
      * Updates the configuration from the current configuration and 
      * posts {@link #ConfigurationDidChangeNotification}. It also  
-     * calls {@link Logger#configureLogging} to reconfigure 
+     * calls {@link ERXLogger#configureLogging} to reconfigure 
      * the logging system. 
      * <p>
      * The configuration files: Properties and WebObjects.properties 
@@ -315,7 +309,7 @@ public class ERXConfigurationManager {
      * @param  n NSNotification object for the event (null means load all files)
      */
     public synchronized void updateSystemProperties(NSNotification n) {
-        _updateSystemPropertiesFromMonitoredProperties(n != null ? (File)n.object() : null, _monitoredProperties);
+        _updateSystemPropertiesFromMonitoredProperties(n != null ? (File)n.object() : null);
         if (_commandLineArguments != null  &&  _commandLineArguments.length > 0) 
             _reinsertCommandLineArgumentsToSystemProperties(_commandLineArguments);
         
@@ -329,7 +323,9 @@ public class ERXConfigurationManager {
     /**
      * If updatedFile is null, all files are reread.
      */
-    private void _updateSystemPropertiesFromMonitoredProperties(File updatedFile, NSArray monitoredProperties) {
+    private void _updateSystemPropertiesFromMonitoredProperties(File updatedFile) {
+        NSArray monitoredProperties = monitoredProperties();
+
         if (monitoredProperties == null  ||  monitoredProperties.count() == 0)  return;
         
         int firstDirtyFile = 0;
@@ -350,8 +346,8 @@ public class ERXConfigurationManager {
         
 
         Properties systemProperties = System.getProperties();
-        for (int i = firstDirtyFile; i < _monitoredProperties.count(); i++) {
-            String monitoredPropertiesPath = (String) _monitoredProperties.objectAtIndex(i);
+        for (int i = firstDirtyFile; i < monitoredProperties.count(); i++) {
+            String monitoredPropertiesPath = (String) monitoredProperties.objectAtIndex(i);
             Properties loadedProperty = ERXProperties.propertiesFromPath(monitoredPropertiesPath);
             ERXProperties.transferPropertiesFromSourceToDest(loadedProperty, systemProperties);
             ERXSystem.updateProperties();
