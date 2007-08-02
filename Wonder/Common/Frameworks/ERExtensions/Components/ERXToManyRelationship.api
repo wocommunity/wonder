@@ -6,11 +6,11 @@
 		<binding name="isMandatory"/>
 		<binding name="sourceEntityName"/>
 		<binding name="relationshipKey"/>
-		<binding name="destitationEntityName"/>
-		<binding name="possibleChoices"/>
-		<binding name="dataSource"/>
+		<binding name="destinationEntityName"/>
 		<binding name="destinationDisplayKey"/>
 		<binding name="destinationSortKey"/>
+		<binding name="possibleChoices"/>
+		<binding name="dataSource"/>
 		<binding name="qualifier"/>
 		<binding name="noSelectionString"/>
 		<binding name="uiStyle"/>
