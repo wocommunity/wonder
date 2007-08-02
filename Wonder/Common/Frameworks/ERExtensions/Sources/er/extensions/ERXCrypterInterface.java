@@ -1,15 +1,26 @@
-//
-//  ERXCrypterInterface.java
-//  ERExtensions
-//
-//  Created by Bruno Posokhow on Tue Jan 14 2003.
-//  Copyright (c) 2003 __MyCompanyName__. All rights reserved.
-//
 package er.extensions;
 
+/**
+ * Provides a simple interface on top of various encryption algorithms.
+ * 
+ * @author ?
+ */
 public interface ERXCrypterInterface {
+	/**
+	 * Returns a String version of the encrypted clear text.
+	 * 
+	 * @param clearText
+	 *            the text to encrypt
+	 * @return an encrypted version of the text
+	 */
+	public String encrypt(String clearText);
 
-    public String encrypt(String clearText);
-    public String decrypt(String cryptedText);
-
+	/**
+	 * Returns the decrypted String of the encrypted text.
+	 * 
+	 * @param cryptedText
+	 *            the string to decrypt
+	 * @return the decrypted string
+	 */
+	public String decrypt(String cryptedText);
 }
