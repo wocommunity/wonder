@@ -65,7 +65,7 @@ public class ERXJDBCMigrationLock implements IERXMigrationLock {
 			}
 			try {
 				EOModel dbUpdaterModel = dbUpdaterModelWithModel(model, adaptor);
-				NSMutableDictionary row = new NSMutableDictionary();
+				NSMutableDictionary<String, Object> row = new NSMutableDictionary<String, Object>();
 				row.setObjectForKey(new Integer(1), "updateLock");
 				row.setObjectForKey(lockOwnerName, "lockOwner");
 				EOEntity dbUpdaterEntity = dbUpdaterModel.entityNamed(_dbUpdaterTableName);
@@ -73,7 +73,7 @@ public class ERXJDBCMigrationLock implements IERXMigrationLock {
 				channel.cancelFetch();
 				if (count == 0) {
 					EOFetchSpecification fetchSpec = new EOFetchSpecification(_dbUpdaterTableName, new EOKeyValueQualifier("modelName", EOQualifier.QualifierOperatorEqual, model.name()), null);
-					channel.selectAttributes(new NSArray(dbUpdaterEntity.attributeNamed("updateLock")), fetchSpec, false, dbUpdaterEntity);
+					channel.selectAttributes(new NSArray<EOAttribute>(dbUpdaterEntity.attributeNamed("updateLock")), fetchSpec, false, dbUpdaterEntity);
 					NSDictionary nextRow;
 					try {
 						nextRow = channel.fetchRow();
@@ -135,7 +135,7 @@ public class ERXJDBCMigrationLock implements IERXMigrationLock {
 		try {
 			JDBCAdaptor adaptor = (JDBCAdaptor)channel.adaptorContext().adaptor();
 			EOModel dbUpdaterModel = dbUpdaterModelWithModel(model, adaptor);
-			NSMutableDictionary row = new NSMutableDictionary();
+			NSMutableDictionary<String, Object> row = new NSMutableDictionary<String, Object>();
 			row.setObjectForKey(new Integer(0), "updateLock");
 			row.setObjectForKey(NSKeyValueCoding.NullValue, "lockOwner");
 			EOEntity dbUpdaterEntity = dbUpdaterModel.entityNamed(_dbUpdaterTableName);
@@ -167,7 +167,7 @@ public class ERXJDBCMigrationLock implements IERXMigrationLock {
 			EOModel dbUpdaterModel = dbUpdaterModelWithModel(model, adaptor);
 			EOEntity dbUpdaterEntity = dbUpdaterModel.entityNamed(_dbUpdaterTableName);
 			EOFetchSpecification fetchSpec = new EOFetchSpecification(_dbUpdaterTableName, new EOKeyValueQualifier("modelName", EOQualifier.QualifierOperatorEqual, model.name()), null);
-			channel.selectAttributes(new NSArray(dbUpdaterEntity.attributeNamed("version")), fetchSpec, false, dbUpdaterEntity);
+			channel.selectAttributes(new NSArray<EOAttribute>(dbUpdaterEntity.attributeNamed("version")), fetchSpec, false, dbUpdaterEntity);
 			NSDictionary nextRow = channel.fetchRow();
 			if (nextRow == null) {
 				version = initialVersionForModel(model);
@@ -198,7 +198,7 @@ public class ERXJDBCMigrationLock implements IERXMigrationLock {
 		try {
 			JDBCAdaptor adaptor = (JDBCAdaptor)channel.adaptorContext().adaptor();
 			EOModel dbUpdaterModel = dbUpdaterModelWithModel(model, adaptor);
-			NSMutableDictionary row = new NSMutableDictionary();
+			NSMutableDictionary<String, Object> row = new NSMutableDictionary<String, Object>();
 			row.setObjectForKey(new Integer(versionNumber), "version");
 			EOEntity dbUpdaterEntity = dbUpdaterModel.entityNamed(_dbUpdaterTableName);
 			int count = channel.updateValuesInRowsDescribedByQualifier(row, new EOKeyValueQualifier("modelName", EOQualifier.QualifierOperatorEqual, model.name()), dbUpdaterEntity);
@@ -283,7 +283,7 @@ public class ERXJDBCMigrationLock implements IERXMigrationLock {
 
 	protected String dbUpdaterCreateStatement(EOModel model, JDBCAdaptor adaptor) {
 		EOModel dbUpdaterModel = dbUpdaterModelWithModel(model, adaptor);
-		NSMutableDictionary flags = new NSMutableDictionary();
+		NSMutableDictionary<String, String> flags = new NSMutableDictionary<String, String>();
 		flags.setObjectForKey("NO", EOSchemaGeneration.DropTablesKey);
 		flags.setObjectForKey("NO", EOSchemaGeneration.DropPrimaryKeySupportKey);
 		flags.setObjectForKey("YES", EOSchemaGeneration.CreateTablesKey);
@@ -292,13 +292,13 @@ public class ERXJDBCMigrationLock implements IERXMigrationLock {
 		flags.setObjectForKey("NO", EOSchemaGeneration.ForeignKeyConstraintsKey);
 		flags.setObjectForKey("NO", EOSchemaGeneration.CreateDatabaseKey);
 		flags.setObjectForKey("NO", EOSchemaGeneration.DropDatabaseKey);
-		String createTableScript = adaptor.synchronizationFactory().schemaCreationScriptForEntities(new NSArray(dbUpdaterModel.entityNamed(_dbUpdaterTableName)), flags);
+		String createTableScript = adaptor.synchronizationFactory().schemaCreationScriptForEntities(new NSArray<EOEntity>(dbUpdaterModel.entityNamed(_dbUpdaterTableName)), flags);
 		return createTableScript;
 	}
 
 	protected String dbUpdaterInsertStatement(EOModel model, JDBCAdaptor adaptor, Integer version, Integer updateLock, String lockOwnerName) {
 		EOModel dbUpdaterModel = dbUpdaterModelWithModel(model, adaptor);
-		NSMutableDictionary row = new NSMutableDictionary();
+		NSMutableDictionary<String, Object> row = new NSMutableDictionary<String, Object>();
 		row.setObjectForKey(model.name(), "modelName");
 		row.setObjectForKey(updateLock, "updateLock");
 		row.setObjectForKey(version, "version");

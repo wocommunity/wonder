@@ -28,7 +28,7 @@ public interface IERXMigration {
 	 * 
 	 * @return an array of model versions that this migration depends on
 	 */
-	public NSArray modelDependencies();
+	public NSArray<ERXModelVersion> modelDependencies();
 
 	/**
 	 * Called when migrating the database from the last version to this version. For instance if this is AuthModel1, it
