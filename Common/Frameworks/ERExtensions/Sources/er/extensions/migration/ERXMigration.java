@@ -66,7 +66,7 @@ public abstract class ERXMigration implements IERXMigration {
 
 		if (sqlString != null) {
 			log.info("Applying migration for: " + this.getClass().getName());
-			ERXJDBCUtilities.executeUpdate(channel, sqlString);
+			ERXJDBCUtilities.executeUpdateScript(channel, sqlString);
 		}
 		else {
 			if (useDatabaseSpecificMigrations()) {
@@ -94,7 +94,7 @@ public abstract class ERXMigration implements IERXMigration {
 
 		if (sqlString != null) {
 			log.info("Applying migration for: " + this.getClass().getName());
-			ERXJDBCUtilities.executeUpdate(channel, sqlString);
+			ERXJDBCUtilities.executeUpdateScript(channel, sqlString);
 		}
 		else {
 			if (useDatabaseSpecificMigrations()) {
