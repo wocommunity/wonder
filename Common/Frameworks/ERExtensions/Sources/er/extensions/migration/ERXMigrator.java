@@ -127,7 +127,7 @@ public class ERXMigrator {
 		}
 		Map migrations = _buildDependenciesForModelsNamed(modelNames);
 
-		Map postMigrations = new HashMap();
+		Map<IERXPostMigration, ERXModelVersion> postMigrations = new HashMap<IERXPostMigration, ERXModelVersion>();
 		Iterator migrationsIter = migrations.keySet().iterator();
 		while (migrationsIter.hasNext()) {
 			IERXMigration migration = (IERXMigration) migrationsIter.next();
@@ -156,10 +156,10 @@ public class ERXMigrator {
 			}
 		}
 
-		Iterator postMigrationsIter = postMigrations.keySet().iterator();
+		Iterator<IERXPostMigration> postMigrationsIter = postMigrations.keySet().iterator();
 		while (postMigrationsIter.hasNext()) {
-			IERXPostMigration postMigration = (IERXPostMigration) postMigrationsIter.next();
-			ERXModelVersion modelVersion = (ERXModelVersion) postMigrations.get(postMigration);
+			IERXPostMigration postMigration = postMigrationsIter.next();
+			ERXModelVersion modelVersion = postMigrations.get(postMigration);
 			EOEditingContext editingContext = ERXEC.newEditingContext();
 			try {
 				postMigration.postUpgrade(editingContext, modelVersion.model());
@@ -172,9 +172,9 @@ public class ERXMigrator {
 	}
 
 	protected Map _buildDependenciesForModelsNamed(NSArray modelNames) {
-		Map migrations = new LinkedHashMap();
+		Map<IERXMigration, ERXModelVersion> migrations = new LinkedHashMap<IERXMigration, ERXModelVersion>();
 		try {
-			Map versions = new HashMap();
+			Map<String, Integer> versions = new HashMap<String, Integer>();
 
 			EOModelGroup modelGroup = EOModelGroup.defaultGroup();
 			Enumeration modelNamesEnum = modelNames.objectEnumerator();
@@ -184,9 +184,9 @@ public class ERXMigrator {
 				_buildDependenciesForModel(model, ERXMigrator.LATEST_VERSION, versions, migrations);
 			}
 
-			Iterator modelNamesIter = versions.keySet().iterator();
+			Iterator<String> modelNamesIter = versions.keySet().iterator();
 			while (modelNamesIter.hasNext()) {
-				String modelName = (String) modelNamesIter.next();
+				String modelName = modelNamesIter.next();
 				EOModel model = modelGroup.modelNamed(modelName);
 				Enumeration entitiesEnum = model.entities().objectEnumerator();
 				while (entitiesEnum.hasMoreElements()) {
@@ -216,10 +216,10 @@ public class ERXMigrator {
 		return migrations;
 	}
 
-	protected void _buildDependenciesForModel(EOModel model, int migrateToVersion, Map versions, Map migrations) throws InstantiationException, IllegalAccessException {
+	protected void _buildDependenciesForModel(EOModel model, int migrateToVersion, Map<String, Integer> versions, Map<IERXMigration, ERXModelVersion> migrations) throws InstantiationException, IllegalAccessException {
 		String modelName = model.name();
 
-		Integer migratorVersion = (Integer) versions.get(modelName);
+		Integer migratorVersion = versions.get(modelName);
 		if (migratorVersion == null) {
 			migratorVersion = new Integer(-1);
 		}
@@ -247,18 +247,18 @@ public class ERXMigrator {
 
 					IERXMigration migration = (IERXMigration) erMigrationClass.newInstance();
 					versions.put(modelName, new Integer(versionNum));
-					NSArray migrationDependencies = migration.modelDependencies();
+					NSArray<ERXModelVersion> migrationDependencies = migration.modelDependencies();
 					if (migrationDependencies != null) {
-						Enumeration migrationDependenciesEnum = migrationDependencies.objectEnumerator();
+						Enumeration<ERXModelVersion> migrationDependenciesEnum = migrationDependencies.objectEnumerator();
 						while (migrationDependenciesEnum.hasMoreElements()) {
-							ModelVersion modelVersion = (ModelVersion) migrationDependenciesEnum.nextElement();
+							ERXModelVersion modelVersion = migrationDependenciesEnum.nextElement();
 							EOModel dependsOnModel = modelVersion.model();
 							int dependsOnVersion = modelVersion.version();
 							_buildDependenciesForModel(dependsOnModel, dependsOnVersion, versions, migrations);
 						}
 					}
 
-					migrations.put(migration, new ModelVersion(model, versionNum));
+					migrations.put(migration, new ERXModelVersion(model, versionNum));
 				}
 				catch (ClassNotFoundException e) {
 					done = true;
@@ -277,6 +277,7 @@ public class ERXMigrator {
 	 * @author mschrag
 	 * @deprecated Use er.extensions.migration.ERXModelVersion instead
 	 */
+	@Deprecated
 	public static class ModelVersion extends ERXModelVersion {
 		/**
 		 * @param model
@@ -304,11 +305,11 @@ public class ERXMigrator {
 		private IERXMigrationLock _database;
 		private IERXMigration _migration;
 		private ERXModelVersion _modelVersion;
-		private Map _migrations;
+		private Map<IERXMigration, ERXModelVersion> _migrations;
 		private String _lockOwnerName;
-		private Map _postMigrations;
+		private Map<IERXPostMigration, ERXModelVersion> _postMigrations;
 
-		public ERXMigrationAction(EOEditingContext editingContext, IERXMigration migration, ERXModelVersion modelVersion, IERXMigrationLock database, String lockOwnerName, Map postMigrations) {
+		public ERXMigrationAction(EOEditingContext editingContext, IERXMigration migration, ERXModelVersion modelVersion, IERXMigrationLock database, String lockOwnerName, Map<IERXPostMigration, ERXModelVersion> postMigrations) {
 			_editingContext = editingContext;
 			_modelVersion = modelVersion;
 			_migration = migration;
@@ -317,6 +318,7 @@ public class ERXMigrator {
 			_postMigrations = postMigrations;
 		}
 
+		@Override
 		protected int doPerform(EOAdaptorChannel channel) {
 			EOModel model = _modelVersion.model();
 			boolean locked;
@@ -352,7 +354,7 @@ public class ERXMigrator {
 							ERXMigrator.log.info(model.name() + " is now version " + nextVersion);
 						}
 						if (_migration instanceof IERXPostMigration) {
-							_postMigrations.put(_migration, _modelVersion);
+							_postMigrations.put((IERXPostMigration)_migration, _modelVersion);
 						}
 					}
 					else {
