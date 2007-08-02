@@ -48,7 +48,7 @@ public abstract class ERXMigration implements IERXMigration {
 	/**
 	 * No dependencies
 	 */
-	public NSArray modelDependencies() {
+	public NSArray<ERXModelVersion> modelDependencies() {
 		return null;
 	}
 
