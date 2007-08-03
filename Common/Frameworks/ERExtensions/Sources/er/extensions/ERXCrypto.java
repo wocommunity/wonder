@@ -18,23 +18,21 @@ import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSForwardException;
 import com.webobjects.foundation.NSMutableDictionary;
 
-/*
- * Compilation problems? READ THIS
- * 
- * Note: this class requires that you have JCE (javax.crypto and the sun
- * provider) installed JCE is standard in the 1.4 JDK for 1.3 you can find it at
- * http://java.sun.com/products/jce/index-121.html
- * 
- * You will have to put the 4 JCE jars in your extensions directory
- * (/Library/Java/Home/lib/ext on X) for ERExtensions to build.. And edit
- * /Library/Java/Home/lib/security/java.security, add the following line
- * security.provider.4=com.sun.crypto.provider.SunJCE
- */
-
 /**
  * Provides a wrapper around common encryption and decryption operations.
+ * ERXCrypto provides built-in support for DES and Blowfish crypters. You can
+ * use the "er.extensions.ERXCrypto.crypters" property to override or provide
+ * your own. If you only want DES and/or Blowfish, you don't need to set
+ * crypters yourself.
  * 
  * @author ?
+ * @property er.extensions.ERXCrypto.default the name of the default crypter
+ *           algorithm (default = "Blowfish")
+ * @property er.extensions.ERXCrypto.crypters comma-separated list of crypter
+ *           algorithms (i.e. "DES,Blowfish")
+ * @property er.extensions.ERXCrypto.crypter.[Algorithm] crypter class name,
+ *           should be one for each algorithm in crypters list (i.e.
+ *           er.extensions.ERXCrypto.crypter.DES)
  */
 public class ERXCrypto {
 	/** logging support */
@@ -44,7 +42,7 @@ public class ERXCrypto {
 	 * The constant for the DES encryption algorithm.
 	 */
 	public static final String DES = "DES";
-	
+
 	/**
 	 * The constant for the Blowfish encryption algorithm.
 	 */
@@ -57,26 +55,45 @@ public class ERXCrypto {
 			_crypters = new NSMutableDictionary<String, ERXCrypterInterface>();
 			_crypters.setObjectForKey(new ERXDESCrypter(), ERXCrypto.DES);
 			_crypters.setObjectForKey(new ERXBlowfishCrypter(), ERXCrypto.BLOWFISH);
+
+			NSArray<String> crypterAlgorithms = ERXProperties.componentsSeparatedByString("er.extensions.ERXCrypto.crypters", ",");
+			if (crypterAlgorithms != null) {
+				for (String crypterAlgorithm : crypterAlgorithms) {
+					String crypterClassName = ERXProperties.stringForKey("er.extensions.ERXCrypto.crypter." + crypterAlgorithm);
+					if (crypterClassName == null) {
+						throw new IllegalArgumentException("You did not provide a crypter class definition for 'er.extensions.ERXCrypto.crypter." + crypterAlgorithm + "'.");
+					}
+					try {
+						ERXCrypterInterface crypter = Class.forName(crypterClassName).asSubclass(ERXCrypterInterface.class).newInstance();
+						_crypters.setObjectForKey(crypter, crypterAlgorithm);
+					}
+					catch (Exception e) {
+						throw new NSForwardException(e, "Failed to create " + crypterAlgorithm + " crypter '" + crypterClassName + "'.");
+					}
+				}
+			}
 		}
 		return _crypters;
 	}
 
 	/**
-	 * Returns the default crypter.  By default this is Blowfish, but you can
-	 * override the choice by setting er.extensions.defaultCrypterAlgorithm.
+	 * Returns the default crypter. By default this is Blowfish, but you can
+	 * override the choice by setting er.extensions.ERXCrypto.default.
 	 * 
 	 * @return the default crypter
 	 */
 	public static ERXCrypterInterface defaultCrypter() {
-		String defaultCrypterAlgorithm = ERXProperties.stringForKeyWithDefault("er.extensions.defaultCrypterAlgorithm", ERXCrypto.BLOWFISH);
+		String defaultCrypterAlgorithm = ERXProperties.stringForKeyWithDefault("er.extensions.ERXCrypto.default", ERXCrypto.BLOWFISH);
 		return ERXCrypto.crypterForAlgorithm(defaultCrypterAlgorithm);
 	}
 
 	/**
 	 * Sets the crypter for the given algorithm.
 	 * 
-	 * @param crypter the crypter to use
-	 * @param algorithm the algorithm name
+	 * @param crypter
+	 *            the crypter to use
+	 * @param algorithm
+	 *            the algorithm name
 	 */
 	public static void setCrypterForAlgorithm(ERXCrypterInterface crypter, String algorithm) {
 		NSMutableDictionary<String, ERXCrypterInterface> crypters = ERXCrypto.crypters();
@@ -84,12 +101,14 @@ public class ERXCrypto {
 	}
 
 	/**
-	 * Returns the crypter for the given algorithm.  By default, DES and Blowfish are
-	 * available ("DES", "Blowfish", etc).
+	 * Returns the crypter for the given algorithm. By default, DES and Blowfish
+	 * are available ("DES", "Blowfish", etc).
 	 * 
-	 * @param algorithm the algorithm to lookup
+	 * @param algorithm
+	 *            the algorithm to lookup
 	 * @return the corresponding crypter
-	 * @throws IllegalArgumentException if there is no crypter for the given algorithm
+	 * @throws IllegalArgumentException
+	 *             if there is no crypter for the given algorithm
 	 */
 	public static ERXCrypterInterface crypterForAlgorithm(String algorithm) {
 		NSMutableDictionary<String, ERXCrypterInterface> crypters = ERXCrypto.crypters();
@@ -101,11 +120,12 @@ public class ERXCrypto {
 	}
 
 	/**
-	 * Decodes all of the values from a given dictionary using the default crypter.
+	 * Decodes all of the values from a given dictionary using the default
+	 * crypter.
 	 * 
 	 * @param dict
-	 *            dictionary of key value pairs where the values are
-	 *            encoded strings
+	 *            dictionary of key value pairs where the values are encoded
+	 *            strings
 	 * @return a dictionary of decoded key-value pairs
 	 */
 	public static NSMutableDictionary<String, String> decodedFormValuesDictionary(NSDictionary<String, NSArray<String>> dict) {
@@ -264,5 +284,24 @@ public class ERXCrypto {
 	@Deprecated
 	public static void setSecretKeyPath(String secretKeyPath) {
 		((ERXDESCrypter) ERXCrypto.crypterForAlgorithm(ERXCrypto.DES)).setSecretKeyPath(secretKeyPath);
+	}
+	
+	/**
+	 * Run this with ERXMainRunner passing in the plaintext you want to encrypt
+	 * using the default crypter.  This is useful if you are using encrypted 
+	 * properties and you need a quick way to know what to set the property
+	 * value to.
+	 * 
+	 * @param args the plaintext to encrypt
+	 */
+	public static void main(String[] args) {
+		if (args.length == 0) {
+			System.out.println("Usage: ERXCrypto [plaintext]");
+			System.out.println("       returns the encrypted form of the given plaintext using the default crypter");
+			System.exit(0);
+		}
+		String plaintext = args[0];
+		String encrypted = ERXCrypto.defaultCrypter().encrypt(plaintext);
+		System.out.println("ERXCrypto.main: Encrypted form of '" + plaintext + "' is '" + encrypted + "'");
 	}
 }
