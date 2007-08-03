@@ -50,7 +50,7 @@ public class ERXDirectAction extends WODirectAction {
     	if(ERXApplication.isDevelopmentModeSafe()) {
     		return true;
     	}
-    	String password = System.getProperty(passwordKey);
+    	String password = ERXProperties.decryptedStringForKey(passwordKey);
     	if(password == null || password.length() == 0) {
     		log.error("Attempt to use action when key is not set: " + passwordKey);
     		return false;
