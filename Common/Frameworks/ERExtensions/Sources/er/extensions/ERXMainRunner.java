@@ -2,6 +2,7 @@ package er.extensions;
 
 import java.lang.reflect.Method;
 
+import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation._NSUtilities;
 
 /**
@@ -39,6 +40,7 @@ public class ERXMainRunner extends ERXApplication {
 		try {
 			String mainClassName = null;
 			String mainMethodName = "main";
+			NSMutableArray<String> argsArray = new NSMutableArray<String>();
 			if (_args != null) {
 				for (int i = 0; i < _args.length; i++) {
 					if ("-mainClass".equalsIgnoreCase(_args[i])) {
@@ -46,6 +48,9 @@ public class ERXMainRunner extends ERXApplication {
 					}
 					else if ("-mainMethod".equalsIgnoreCase(_args[i])) {
 						mainMethodName = _args[++i];
+					}
+					else {
+						argsArray.addObject(_args[i]);
 					}
 				}
 			}
@@ -55,7 +60,8 @@ public class ERXMainRunner extends ERXApplication {
 			if(mainClassName.length() != 0) {
 				Class mainClass = _NSUtilities.classWithName(mainClassName);
 				Method mainMethod = mainClass.getMethod(mainMethodName, new Class[] { String[].class });
-				mainMethod.invoke(null, new Object[] { _args });
+				String[] args = argsArray.toArray(new String[argsArray.count()]);
+				mainMethod.invoke(null, new Object[] { args });
 			}
 		}
 		catch (Throwable t) {
