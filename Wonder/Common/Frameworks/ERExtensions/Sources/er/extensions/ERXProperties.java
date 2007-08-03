@@ -530,6 +530,47 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
         }
         return stringValue == UndefinedMarker ? null : stringValue;
     }
+    
+    /**
+     * Returns the decrypted value for the given property name using
+     * the default crypter if the property propertyName.encrypted=true.  For
+     * instance, if you are requesting my.password, if my.password.encrypted=true
+     * the value of my.password will be passed to the default crypter's decrypt
+     * method.
+     * 
+     * @param propertyName the property name to retrieve and optionally decrypt
+     * @return the decrypted property value
+     */
+    public static String decryptedStringForKey(String propertyName) {
+    	return ERXProperties.decryptedStringForKeyWithDefault(propertyName, null);
+    }
+    
+    /**
+     * Returns the decrypted value for the given property name using
+     * the default crypter if the property propertyName.encrypted=true.  For
+     * instance, if you are requesting my.password, if my.password.encrypted=true
+     * the value of my.password will be passed to the default crypter's decrypt
+     * method.
+     * 
+     * @param propertyName the property name to retrieve and optionally decrypt
+     * @param defaultValue the default value to return if there is no password
+     * @return the decrypted property value
+     */
+    public static String decryptedStringForKeyWithDefault(String propertyName, String defaultValue) {
+		boolean propertyNameEncrypted = ERXProperties.booleanForKeyWithDefault(propertyName + ".encrypted", false);
+		String decryptedPassword;
+		if (propertyNameEncrypted) {
+			String encryptedPassword = ERXProperties.stringForKey(propertyName);
+			decryptedPassword = ERXCrypto.defaultCrypter().decrypt(encryptedPassword);
+		}
+		else {
+			decryptedPassword = ERXProperties.stringForKey(propertyName);
+		}
+		if (decryptedPassword == null) {
+			decryptedPassword = defaultValue;
+		}
+		return decryptedPassword;
+    }
 
     /**
      * Returns an array of strings separated with the given separator string.
@@ -538,8 +579,9 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
      * @param separator the separator (",")
      * @return the array of strings or NSArray.EmptyArray if not found
      */
-    public static NSArray componentsSeparatedByString(String key, String separator) {
-    	return ERXProperties.componentsSeparatedByStringWithDefault(key, separator, NSArray.EmptyArray);
+    @SuppressWarnings("unchecked")
+    public static NSArray<String> componentsSeparatedByString(String key, String separator) {
+    	return ERXProperties.componentsSeparatedByStringWithDefault(key, separator, (NSArray<String>)NSArray.EmptyArray);
     }
 
     /**
@@ -550,14 +592,15 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
      * @param defaultValue the default array to return if there is no value
      * @return the array of strings
      */
-    public static NSArray componentsSeparatedByStringWithDefault(String key, String separator, NSArray defaultValue) {
-    	NSArray array;
+    @SuppressWarnings("unchecked")
+	public static NSArray<String> componentsSeparatedByStringWithDefault(String key, String separator, NSArray<String> defaultValue) {
+    	NSArray<String> array;
     	String str = stringForKeyWithDefault(key, null);
     	if (str == null) {
     		array = defaultValue;
     	}
     	else {
-    		array = NSArray.componentsSeparatedByString(str, separator);
+    		array = (NSArray<String>)NSArray.componentsSeparatedByString(str, separator);
     	}
     	return array;
     }
