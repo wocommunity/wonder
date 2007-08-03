@@ -1,7 +1,6 @@
 package er.extensions;
 
 import java.security.Key;
-import java.security.NoSuchAlgorithmException;
 
 import javax.crypto.Cipher;
 
@@ -58,7 +57,7 @@ public abstract class ERXAbstractBlowfishCrypter implements ERXCrypterInterface 
 	 * 
 	 * @return a secret key for the blowfish cipher
 	 */
-	protected abstract Key secretBlowfishKey() throws NoSuchAlgorithmException;
+	protected abstract Key secretBlowfishKey() throws Exception;
 
 	/**
 	 * Creates a blowfish cipher for a given mode. The two possible modes for a
