@@ -593,9 +593,9 @@ public class ERXModelGroup extends EOModelGroup {
 	}
 
 	private String getProperty(String key, String alternateKey, String defaultValue) {
-		String value = ERXSystem.getProperty(key);
+		String value = ERXProperties.stringForKey(key);
 		if (value == null) {
-			value = ERXSystem.getProperty(alternateKey);
+			value = ERXProperties.stringForKey(alternateKey);
 		}
 		if (value == null) {
 			value = defaultValue;
@@ -607,11 +607,19 @@ public class ERXModelGroup extends EOModelGroup {
 		return getProperty(key, alternateKey, null);
 	}
 
+	private String decryptProperty(String key, String alternateKey) {
+		String value = ERXProperties.decryptedStringForKey(key);
+		if (value == null) {
+			value = ERXProperties.decryptedStringForKey(alternateKey);
+		}
+		return value;
+	}
+
 	protected void fixOracleDictionary(EOModel model) {
 		String modelName = model.name();
 		String serverName = getProperty(modelName + ".DBServer", "dbConnectServerGLOBAL");
 		String userName = getProperty(modelName + ".DBUser", "dbConnectUserGLOBAL");
-		String passwd = getProperty(modelName + ".DBPassword", "dbConnectPasswordGLOBAL");
+		String passwd = decryptProperty(modelName + ".DBPassword", "dbConnectPasswordGLOBAL");
 
 		NSMutableDictionary newConnectionDictionary = new NSMutableDictionary(model.connectionDictionary());
 		if (serverName != null)
@@ -668,7 +676,7 @@ public class ERXModelGroup extends EOModelGroup {
 
 		String url = getProperty(aModelName + ".URL", "dbConnectURLGLOBAL");
 		String userName = getProperty(aModelName + ".DBUser", "dbConnectUserGLOBAL");
-		String passwd = getProperty(aModelName + ".DBPassword", "dbConnectPasswordGLOBAL");
+		String passwd = decryptProperty(aModelName + ".DBPassword", "dbConnectPasswordGLOBAL");
 		String driver = getProperty(aModelName + ".DBDriver", "dbConnectDriverGLOBAL");
 		String serverName = getProperty(aModelName + ".DBServer", "dbConnectServerGLOBAL");
 		String h = getProperty(aModelName + ".DBHostName", "dbConnectHostNameGLOBAL");
