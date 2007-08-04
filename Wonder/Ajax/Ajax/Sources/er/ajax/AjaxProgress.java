@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
+import er.extensions.ERXUnitAwareDecimalFormat;
+
 /**
  * AjaxProgress is the model for an AjaxProgressBar.  By holding
  * onto this, you can keep track of and control the progress
@@ -260,9 +262,10 @@ public class AjaxProgress {
 	 * 
 	 * @param inputStream the inputstream to copy from
 	 * @param outputStream the outputstream to copy to
+	 * @param maxSize the maximum size to read
 	 * @throws IOException if there is a failure
 	 */
-	public void copyAndTrack(InputStream inputStream, OutputStream outputStream) throws IOException {
+	public void copyAndTrack(InputStream inputStream, OutputStream outputStream, long maxSize) throws IOException {
 		byte[] buffer = new byte[64 * 1024];
 		try {
 			boolean done = false;
@@ -273,6 +276,9 @@ public class AjaxProgress {
 				}
 				else {
 					incrementValue(bytesRead);
+					if (maxSize > 0 && _value > maxSize) {
+						throw new IOException("The provided stream exceeded the maximum length of " + new ERXUnitAwareDecimalFormat(ERXUnitAwareDecimalFormat.BYTE).format(maxSize) + " bytes.");
+					}
 					outputStream.write(buffer, 0, bytesRead);
 				}
 			}
