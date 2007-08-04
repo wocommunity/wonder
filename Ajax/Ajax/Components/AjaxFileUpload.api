@@ -23,5 +23,6 @@
 		<binding name = "progressBarBeforeStart"/>
 		<binding name = "progressBarAfterDone"/>
 		<binding name = "refreshTime"/>
+		<binding name = "keepTempFile"/>
 	</wo>
 </wodefinitions>

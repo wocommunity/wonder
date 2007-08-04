@@ -40,12 +40,13 @@ import er.extensions.ERXUnitAwareDecimalFormat;
  * @binding inputStream will be bound to an input stream on the contents of the upload
  * @binding outputStream the output stream to write the contents of the upload to
  * @binding streamToFilePath the path to write the upload to, can be a directory
- * @binding finalFilePath the final file path of the upload (when streamToFilePath is set)
+ * @binding finalFilePath the final file path of the upload (when streamToFilePath is set or keepTempFile = true)
  * @binding filePath the name of the uploaded file
  * @binding allowCancel if true, the cancel link is visible
  * @binding progressBarBeforeStart if true, the progress bar is visible before the upload is started
  * @binding progressBarAfterDone if true, the progress bar is visible after the upload is done
  * @binding refreshTime the number of milliseconds to wait between refreshes
+ * @binding keepTempFile if true, don't delete the temp file that AjaxFileUpload creates
  * 
  * @author mschrag
  */
@@ -272,6 +273,7 @@ public class AjaxFileUpload extends WOComponent {
 				}
 			}
 
+			String finalFilePath = progress.tempFile().getAbsolutePath();
 			if (hasBinding("streamToFilePath")) {
 				File streamToFile = new File((String) valueForBinding("streamToFilePath"));
 				boolean renamedFile;
@@ -327,22 +329,24 @@ public class AjaxFileUpload extends WOComponent {
 					progress.setFailure(new Exception ("Could not rename file."));
 					return this.uploadFailed();
 				}
-				if (hasBinding("finalFilePath")) {
-					String finalFilePath;
-					if (renamedFile) {
-						finalFilePath = streamToFile.getAbsolutePath();
-					}
-					else {
-						finalFilePath = progress.tempFile().getAbsolutePath();
-					}
-					setValueForBinding(finalFilePath, "finalFilePath");
+				
+				if (renamedFile) {
+					finalFilePath = streamToFile.getAbsolutePath();
 				}
+				
 				deleteFile = false;
+			}
+			else if (hasBinding("keepTempFile") && deleteFile) {
+				deleteFile = ERXComponentUtilities.booleanValueForBinding(this, "keepTempFile");
 			}
 
 			if (deleteFile) {
 				progress.dispose();
 			}
+			else if (hasBinding("finalFilePath")) {
+				setValueForBinding(finalFilePath, "finalFilePath");
+			}
+
 		}
 		catch (Throwable t) {
 			progress.setFailure(t);
