@@ -110,7 +110,7 @@ public class AjaxFileUploadRequestHandler extends WORequestHandler {
 						}
 						FileOutputStream fos = new FileOutputStream(progress.tempFile());
 						try {
-							progress.copyAndTrack(uploadInputStream, fos);
+							progress.copyAndTrack(uploadInputStream, fos, _maxUploadSize);
 						}
 						finally {
 							fos.flush();
