@@ -337,7 +337,7 @@ public class AjaxFileUpload extends WOComponent {
 				deleteFile = false;
 			}
 			else if (hasBinding("keepTempFile") && deleteFile) {
-				deleteFile = ERXComponentUtilities.booleanValueForBinding(this, "keepTempFile");
+				deleteFile = !ERXComponentUtilities.booleanValueForBinding(this, "keepTempFile");
 			}
 
 			if (deleteFile) {
