@@ -307,7 +307,6 @@ public class AjaxProgressBar extends WOComponent {
 			AjaxProgressBar.unregisterProgress(session(), _progress);
 		}
 		_running = false;
-		System.out.println("AjaxProgressBar.finished: finished");
 		valueForBinding("finishedAction");
 	}
 
