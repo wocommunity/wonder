@@ -14,6 +14,7 @@ import org.apache.log4j.Logger;
 public abstract class _ERDatabaseAttachment extends er.attachment.model.ERAttachment {
 	public static final String ENTITY_NAME = "ERDatabaseAttachment";
 
+	public static final String SMALL_DATA_KEY = "smallData";
 
 	public static final String ATTACHMENT_DATA_KEY = "attachmentData";
 
@@ -31,6 +32,17 @@ public abstract class _ERDatabaseAttachment extends er.attachment.model.ERAttach
 		return localInstance;
 	}
 
+
+	public NSData smallData() {
+		return (NSData) storedValueForKey("smallData");
+	}
+
+	public void setSmallData(NSData aValue) {
+		if (_ERDatabaseAttachment.LOG.isDebugEnabled()) {
+			_ERDatabaseAttachment.LOG.debug( "updating smallData from "+smallData()+" to "+aValue );
+		}
+		takeStoredValueForKey(aValue, "smallData");
+	}
 
 	public er.attachment.model.ERAttachmentData attachmentData() {
 		return (er.attachment.model.ERAttachmentData)storedValueForKey("attachmentData");
@@ -50,10 +62,10 @@ public abstract class _ERDatabaseAttachment extends er.attachment.model.ERAttach
 		}
 	}
 
-	public static ERDatabaseAttachment createERDatabaseAttachment(EOEditingContext editingContext, String mimeType, java.lang.Boolean proxied, Integer size, String webPath, er.attachment.model.ERAttachmentData attachmentData) {
+	public static ERDatabaseAttachment createERDatabaseAttachment(EOEditingContext editingContext, String mimeType, String originalFileName, java.lang.Boolean proxied, Integer size, String webPath) {
 		ERDatabaseAttachment eoObject = (ERDatabaseAttachment)EOUtilities.createAndInsertInstance(editingContext, _ERDatabaseAttachment.ENTITY_NAME);
-		eoObject.setAttachmentDataRelationship(attachmentData);
 		eoObject.setMimeType(mimeType);
+		eoObject.setOriginalFileName(originalFileName);
 		eoObject.setProxied(proxied);
 		eoObject.setSize(size);
 		eoObject.setWebPath(webPath);

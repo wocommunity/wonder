@@ -21,6 +21,9 @@ DefaultCase : ERXWOCase {
 
 AttachmentLink : WOHyperlink {
 	href = attachmentUrl;
+	class = ^class;
+	id = ^class;
+	style = ^style;
 }
 
 AttachmentFileName : WOString {

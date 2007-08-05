@@ -22,6 +22,12 @@ import com.webobjects.eocontrol.EOEditingContext;
 import er.attachment.model.ERS3Attachment;
 import er.extensions.ERXProperties;
 
+/**
+ * ERS3AttachmentProcessor implements storing attachments in Amazon's S3 service.  For more 
+ * information about configuring an ERS3AttachmentProcessor, see the top level documentation.
+ * 
+ * @author mschrag
+ */
 public class ERS3AttachmentProcessor extends ERAttachmentProcessor<ERS3Attachment> {
   public static final String S3_URL = "http://s3.amazonaws.com";
 
@@ -51,15 +57,15 @@ public class ERS3AttachmentProcessor extends ERAttachmentProcessor<ERS3Attachmen
       throw new IllegalArgumentException("There is no 'er.attachment.s3." + configurationName + ".bucket' or 'er.attachment.s3.bucket' property set.");
     }
 
-    String keyTemplate = ERXProperties.stringForKey("er.attachment.file." + configurationName + ".key");
+    String keyTemplate = ERXProperties.stringForKey("er.attachment.s3." + configurationName + ".key");
     if (keyTemplate == null) {
-      keyTemplate = ERXProperties.stringForKey("er.attachment.file.key");
+      keyTemplate = ERXProperties.stringForKey("er.attachment.s3.key");
     }
     if (keyTemplate == null) {
       keyTemplate = "${pk}${ext}";
     }
 
-    ERS3Attachment attachment = ERS3Attachment.createERS3Attachment(editingContext, mimeType, Boolean.FALSE, Integer.valueOf((int) uploadedFile.length()), null);
+    ERS3Attachment attachment = ERS3Attachment.createERS3Attachment(editingContext, mimeType, recommendedFileName, Boolean.FALSE, Integer.valueOf((int) uploadedFile.length()), null);
     try {
       String key = ERAttachmentProcessor._parsePathTemplate(attachment, keyTemplate, recommendedFileName);
       attachment.setWebPath("/" + bucket + "/" + key);
@@ -96,6 +102,10 @@ public class ERS3AttachmentProcessor extends ERAttachmentProcessor<ERS3Attachmen
       attachment.delete();
       throw e;
     }
+    finally {
+      uploadedFile.delete();
+    }
+    
     return attachment;
   }
 

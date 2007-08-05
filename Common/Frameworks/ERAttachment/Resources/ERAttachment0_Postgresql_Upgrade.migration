@@ -1,4 +1,4 @@
-CREATE TABLE ERAttachment (height int4 , id int4 NOT NULL, mimeType varchar(100) NOT NULL, parentID int4 , proxied varchar(5) NOT NULL, size int4 NOT NULL, storageType varchar(10) , thumbnail varchar(10) , webPath varchar(1000) NOT NULL, width int4 , attachmentDataID int4 , filesystemPath varchar(255) , s3Path varchar(1000) );
+CREATE TABLE ERAttachment (height int4 , id int4 NOT NULL, mimeType varchar(100) NOT NULL, configurationName varchar(100), originalFileName varchar(255) NOT NULL, parentID int4 , proxied varchar(5) NOT NULL, size int4 NOT NULL, storageType varchar(10) , thumbnail varchar(10) , smallData bytea, webPath varchar(1000) NOT NULL, width int4 , attachmentDataID int4 , filesystemPath varchar(255) , s3Path varchar(1000) );
 
 CREATE TABLE ERAttachmentData (data bytea , id int4 NOT NULL);
 
@@ -30,3 +30,4 @@ ALTER TABLE ERAttachment ADD CONSTRAINT ERAttachment_attachmentData_FK FOREIGN K
 
 CREATE INDEX ERAttachment_attachmentDataID_idx ON ERAttachment( attachmentDataID );
 
+CREATE UNIQUE INDEX ERAttachmentWebPath on ERAttachment(WebPath);

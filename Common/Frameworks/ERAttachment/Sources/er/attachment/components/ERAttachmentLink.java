@@ -14,6 +14,16 @@ import er.attachment.model.ERAttachment;
 import er.attachment.processors.ERAttachmentProcessor;
 import er.extensions.ERXComponentUtilities;
 
+/**
+ * ERAttachmentLink is like a WOHyperlink that points to an attachment's contents.
+ * 
+ * @author mschrag
+ * @binding attachment the ERAttachment to link to
+ * @binding configurationName (optional) the configuration name for this attachment (see top level documentation)
+ * @binding class (optional) the css class
+ * @binding id (optional) the html element id
+ * @binding style (optional) the css inline style
+ */
 public class ERAttachmentLink extends WODynamicGroup {
   private WOAssociation _attachment;
   private WOAssociation _configurationName;
@@ -21,7 +31,6 @@ public class ERAttachmentLink extends WODynamicGroup {
 
   public ERAttachmentLink(String name, NSDictionary<String, WOAssociation> associations, WOElement template) {
     super(name, associations, template);
-    ERAttachmentRequestHandler.ensureRequestHandlerRegistered();
     _associations = associations.mutableClone();
     _attachment = _associations.removeObjectForKey("attachment");
     if (_attachment == null) {
