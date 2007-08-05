@@ -13,10 +13,7 @@ import com.webobjects.foundation.NSForwardException;
 
 import er.attachment.model.ERAttachment;
 import er.attachment.processors.ERAttachmentProcessor;
-import er.attachment.utils.ERMimeType;
-import er.attachment.utils.ERMimeTypeManager;
 import er.extensions.ERXComponentUtilities;
-import er.extensions.ERXFileUtilities;
 
 public class ERAttachmentUpload extends WOComponent {
   private String _mimeType;
@@ -51,7 +48,7 @@ public class ERAttachmentUpload extends WOComponent {
   public boolean ajax() {
     return ERXComponentUtilities.booleanValueForBinding(this, "ajax");
   }
-  
+
   @Override
   public WOActionResults invokeAction(WORequest request, WOContext context) {
     WOActionResults results = super.invokeAction(request, context);
@@ -66,37 +63,25 @@ public class ERAttachmentUpload extends WOComponent {
     }
     return results;
   }
-  
+
   public String tempFilePath() throws IOException {
     File tempFile = File.createTempFile("ERAttachmentUpload-", ".tmp");
     return tempFile.getAbsolutePath();
   }
-  
-  public ERAttachment _uploadSucceeded() throws IOException {
-    String type = type();
 
+  public ERAttachment _uploadSucceeded() throws IOException {
+    String type = (String) valueForBinding("type");
     EOEditingContext editingContext = (EOEditingContext) valueForBinding("editingContext");
+    File uploadedFile = new File(_finalFilePath);
+
     String mimeType = _mimeType;
     if (mimeType == null) {
       mimeType = (String) valueForBinding("mimeType");
     }
 
-    if (mimeType == null) {
-      String extension = ERXFileUtilities.fileExtension(_filePath);
-      ERMimeType erMimeType = ERMimeTypeManager.mimeTypeManager().mimeTypeForExtension(extension, false);
-      if (erMimeType != null) {
-        mimeType = erMimeType.mimeType();
-      }
-    }
-
-    if (mimeType == null) {
-      mimeType = "application/x-octet-stream";
-    }
-
-    File uploadedFile = new File(_finalFilePath);
     String configurationName = (String) valueForBinding("configurationName");
-    ERAttachmentProcessor<ERAttachment> attachmentProcessor = ERAttachmentProcessor.processorForType(type);
-    ERAttachment attachment = attachmentProcessor.process(editingContext, uploadedFile, ERXFileUtilities.fileNameFromBrowserSubmittedPath(_filePath), mimeType, configurationName);
+    
+    ERAttachment attachment = ERAttachmentProcessor.processorForType(type).process(editingContext, uploadedFile, _filePath, mimeType, configurationName);
     setValueForBinding(attachment, "attachment");
     return attachment;
   }
@@ -104,9 +89,5 @@ public class ERAttachmentUpload extends WOComponent {
   public WOActionResults uploadSucceeded() throws MalformedURLException, IOException {
     ERAttachment attachment = _uploadSucceeded();
     return (WOActionResults) valueForBinding("succeededAction");
-  }
-
-  public String type() {
-    return (String) valueForBinding("type");
   }
 }
