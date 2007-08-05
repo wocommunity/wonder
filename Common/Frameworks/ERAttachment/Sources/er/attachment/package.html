@@ -308,7 +308,11 @@ UploadAction : WOSubmitButton {
 
 <p>
 And that's it.  When the file is uploaded, it will be processed and posted to S3.  You can override "storageType" on the 
-ERAttachmentUpload, as well as "mimeType" if you are only uploading specific mimeTypes.
+ERAttachmentUpload, as well as "mimeType" if you are only uploading specific mimeTypes.  To better implement security
+in your request handler delegate, it is also possible to specify an "ownerID" binding on the upload.  This ownerID should
+be a string that corresponds to the ID of the "owner" of this attachment (like "person.primaryKey" in our avatar example).
+This provides a "loose" foreign key back to the object this attachment is associated with, providing a mechanism to look
+up the owner during the security checking process to get a better context of the request.
 </p>
 
 <p>
@@ -317,14 +321,15 @@ you will want to call the API directly.  Fortunately this is very simple to do:
 </p>
 
 <code>
-ERAttachment attachment = ERAttachmentProcessor.processorForType(storageType).process(editingContext, uploadedFile, originalFileName, mimeType, configurationName);
+ERAttachment attachment = ERAttachmentProcessor.processorForType(storageType).process(editingContext, uploadedFile, originalFileName, mimeType, configurationName, ownerID);
 </code>
 
 <p>
 In this example, storageType would be "s3", editingContext would be the editing context to create the attachment within, uploadedFile
 would be a java.io.File reference to the temporary file (which will be deleted after processing), originalFileName is the name the
 user gave the attachment on upload, mimeType can be null or set explicitly (if null, it will be guessed from the originalFileName 
-extension), and configurationName is the name of the configuration properties to use.
+extension), configurationName is the name of the configuration properties to use, and ownerID is the optional ID of the object
+that "owns" this attachment (see the description of the ownerID binding on ERAttachmentUpload for more details).
 </p>
 
 <p>

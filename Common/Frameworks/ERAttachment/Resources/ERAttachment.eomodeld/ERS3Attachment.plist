@@ -39,6 +39,13 @@
        
        {
            allowsNull = Y;
+           columnName = ownerID;
+           name = ownerID;
+           prototypeName = varchar16;
+       }, 
+       
+       {
+           allowsNull = Y;
            columnName = parentID;
            name = parentID;
            prototypeName = id;
@@ -100,6 +107,7 @@
        id, 
        mimeType, 
        originalFileName, 
+       ownerID, 
        parentID, 
        proxied, 
        s3Path, 
@@ -117,6 +125,7 @@
        height, 
        mimeType, 
        originalFileName, 
+       ownerID, 
        parentAttachment, 
        proxied, 
        s3Path, 

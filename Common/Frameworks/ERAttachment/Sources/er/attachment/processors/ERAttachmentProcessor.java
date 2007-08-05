@@ -162,7 +162,7 @@ public abstract class ERAttachmentProcessor<T extends ERAttachment> {
    * @throws IOException if the processing fails
    */
   public T process(EOEditingContext editingContext, File uploadedFile, String recommendedFilePath) throws IOException {
-    return process(editingContext, uploadedFile, recommendedFilePath, null, null);
+    return process(editingContext, uploadedFile, recommendedFilePath, null, null, null);
   }
 
   /**
@@ -177,7 +177,7 @@ public abstract class ERAttachmentProcessor<T extends ERAttachment> {
    * @throws IOException if the processing fails
    */
   public T process(EOEditingContext editingContext, File uploadedFile, String recommendedFilePath, String mimeType) throws IOException {
-    return process(editingContext, uploadedFile, recommendedFilePath, mimeType, null);
+    return process(editingContext, uploadedFile, recommendedFilePath, mimeType, null, null);
   }
 
   /**
@@ -189,10 +189,11 @@ public abstract class ERAttachmentProcessor<T extends ERAttachment> {
    * @param recommendedFilePath the filename recommended by the user during import
    * @param mimeType the mimeType to use (null = guess based on file extension)
    * @param configurationName the name of the configuration settings to use for this processor (see top level docs) 
+   * @param ownerID an arbitrary string that represents the ID of the "owner" of this thumbnail (Person.primaryKey, for instance) 
    * @return an ERAttachment that represents the file
    * @throws IOException if the processing fails
    */
-  public T process(EOEditingContext editingContext, File uploadedFile, String recommendedFilePath, String mimeType, String configurationName) throws IOException {
+  public T process(EOEditingContext editingContext, File uploadedFile, String recommendedFilePath, String mimeType, String configurationName, String ownerID) throws IOException {
     String recommendedFileName = ERXFileUtilities.fileNameFromBrowserSubmittedPath(recommendedFilePath);
 
     long maxSize = ERXProperties.longForKey("er.attachment." + configurationName + ".maxSize");
@@ -222,8 +223,9 @@ public abstract class ERAttachmentProcessor<T extends ERAttachment> {
       }
     }
 
-    T attachment = _process(editingContext, uploadedFile, recommendedFileName, suggestedMimeType, configurationName);
+    T attachment = _process(editingContext, uploadedFile, recommendedFileName, suggestedMimeType, configurationName, ownerID);
     attachment.setConfigurationName(configurationName);
+    attachment.setOwnerID(ownerID);
 
     return attachment;
   }
@@ -236,11 +238,12 @@ public abstract class ERAttachmentProcessor<T extends ERAttachment> {
    * @param uploadedFile the uploaded temporary file (which will be deleted at the end)
    * @param recommendedFilePath the filename recommended by the user during import
    * @param mimeType the mimeType to use (null = guess based on file extension)
-   * @param configurationName the name of the configuration settings to use for this processor (see top level docs) 
+   * @param configurationName the name of the configuration settings to use for this processor (see top level docs)
+   * @param ownerID an arbitrary string that represents the ID of the "owner" of this thumbnail (Person.primaryKey, for instance) 
    * @return an ERAttachment that represents the file
    * @throws IOException if the processing fails
    */
-  public abstract T _process(EOEditingContext editingContext, File uploadedFile, String recommendedFileName, String mimeType, String configurationName) throws IOException;
+  public abstract T _process(EOEditingContext editingContext, File uploadedFile, String recommendedFileName, String mimeType, String configurationName, String ownerID) throws IOException;
 
   /**
    * Returns an InputStream to the data of the given attachment.

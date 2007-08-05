@@ -32,7 +32,7 @@ public class ERS3AttachmentProcessor extends ERAttachmentProcessor<ERS3Attachmen
   public static final String S3_URL = "http://s3.amazonaws.com";
 
   @Override
-  public ERS3Attachment _process(EOEditingContext editingContext, File uploadedFile, String recommendedFileName, String mimeType, String configurationName) throws IOException {
+  public ERS3Attachment _process(EOEditingContext editingContext, File uploadedFile, String recommendedFileName, String mimeType, String configurationName, String ownerID) throws IOException {
     String accessKeyID = ERXProperties.decryptedStringForKey("er.attachment.s3." + configurationName + ".accessKeyID");
     if (accessKeyID == null) {
       accessKeyID = ERXProperties.decryptedStringForKey("er.attachment.s3.accessKeyID");

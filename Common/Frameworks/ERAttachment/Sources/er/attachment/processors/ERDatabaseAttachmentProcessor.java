@@ -22,7 +22,7 @@ import er.extensions.ERXProperties;
  */
 public class ERDatabaseAttachmentProcessor extends ERAttachmentProcessor<ERDatabaseAttachment> {
   @Override
-  public ERDatabaseAttachment _process(EOEditingContext editingContext, File uploadedFile, String recommendedFileName, String mimeType, String configurationName) throws IOException {
+  public ERDatabaseAttachment _process(EOEditingContext editingContext, File uploadedFile, String recommendedFileName, String mimeType, String configurationName, String ownerID) throws IOException {
     String webPath = ERXProperties.stringForKey("er.attachment.db." + configurationName + ".webPath");
     if (webPath == null) {
       webPath = ERXProperties.stringForKeyWithDefault("er.attachment.db.webPath", "/${pk}${ext}");
