@@ -3,6 +3,7 @@ CREATE TABLE "ERAttachment" (
 	"id" INTEGER NOT NULL,
 	"mimeType" VARCHAR(100) NOT NULL,
 	"configurationName" VARCHAR(100),
+	"ownerID" VARCHAR(16),
 	"originalFileName" VARCHAR(255) NOT NULL,
 	"parentID" INTEGER,
 	"proxied" VARCHAR(5) NOT NULL,

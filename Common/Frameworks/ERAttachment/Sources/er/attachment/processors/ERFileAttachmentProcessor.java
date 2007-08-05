@@ -22,7 +22,7 @@ import er.extensions.ERXProperties;
  */
 public class ERFileAttachmentProcessor extends ERAttachmentProcessor<ERFileAttachment> {
   @Override
-  public ERFileAttachment _process(EOEditingContext editingContext, File uploadedFile, String recommendedFileName, String mimeType, String configurationName) throws IOException {
+  public ERFileAttachment _process(EOEditingContext editingContext, File uploadedFile, String recommendedFileName, String mimeType, String configurationName, String ownerID) throws IOException {
     boolean proxy = true;
     String proxyStr = ERXProperties.stringForKey("er.attachment.file." + configurationName + ".proxy");
     if (proxyStr == null) {

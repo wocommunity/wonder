@@ -6,6 +6,7 @@
 		<binding name="attachment"/>	
 		<binding name="configurationName"/>	
 		<binding name="mimeType"/>	
+		<binding name="ownerID"/>	
 		<binding name="ajax"/>
 
 		<binding name="cancelText"/>
