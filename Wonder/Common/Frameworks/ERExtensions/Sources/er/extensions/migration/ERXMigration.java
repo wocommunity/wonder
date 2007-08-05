@@ -46,6 +46,18 @@ public abstract class ERXMigration implements IERXMigration {
 	private Boolean _useDatabaseSpecificMigrations;
 
 	/**
+	 * Override the global application preference on per-database migrations.
+	 * 
+	 * @param useDatabaseSpecificMigrations if true, database-specific migrations will be used
+	 */
+	public ERXMigration(boolean useDatabaseSpecificMigrations) {
+		_useDatabaseSpecificMigrations = Boolean.valueOf(useDatabaseSpecificMigrations);
+	}
+	
+	public ERXMigration() {
+	}
+	
+	/**
 	 * No dependencies
 	 */
 	public NSArray<ERXModelVersion> modelDependencies() {
@@ -113,9 +125,16 @@ public abstract class ERXMigration implements IERXMigration {
 	 * @return
 	 */
 	protected String getSQLForMigration(String migrationName) {
-		NSBundle bundle = NSBundle.bundleForName(this.migrationBundleName());
-		if (bundle == null) {
-			bundle = NSBundle._appBundleForName(this.migrationBundleName());
+		NSBundle bundle;
+		String migrationBundleName = this.migrationBundleName();
+		if (migrationBundleName == null) {
+			bundle = NSBundle.bundleForClass(getClass());
+		}
+		else {
+			bundle = NSBundle.bundleForName(this.migrationBundleName());
+			if (bundle == null) {
+				bundle = NSBundle._appBundleForName(this.migrationBundleName());
+			}
 		}
 		NSArray resourcePaths = bundle.resourcePathsForResources("migration", null);
 
@@ -132,12 +151,15 @@ public abstract class ERXMigration implements IERXMigration {
 	}
 
 	/**
-	 * The name to create the NSBundle for the current bundle
+	 * The name to create the NSBundle for the current bundle, defaults to the
+	 * bundle that contains the migration class.
 	 * @return
 	 */
-	protected abstract String migrationBundleName();
+	protected String migrationBundleName() {
+		return null;
+	}
 
-	private boolean useDatabaseSpecificMigrations() {
+	protected boolean useDatabaseSpecificMigrations() {
 		if (this._useDatabaseSpecificMigrations == null) {
 			this._useDatabaseSpecificMigrations = new Boolean (Boolean.getBoolean("er.extensions.migration.ERXMigration.useDatabaseSpecificMigrations"));
 		}
