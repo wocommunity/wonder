@@ -12,11 +12,38 @@ import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.foundation.NSForwardException;
 
 import er.attachment.model.ERAttachment;
+import er.attachment.model.ERDatabaseAttachment;
 import er.attachment.processors.ERAttachmentProcessor;
 import er.extensions.ERXComponentUtilities;
+import er.extensions.ERXProperties;
 
+/**
+ * <p>
+ * ERAttachmentUpload provides a very simple wrapper around either a WOFileUpload
+ * or an AjaxFileUpload component (depending on the value of the "ajax" binding).  
+ * When the upload is successfully completed, this component will automatically
+ * process the attachment.  It is not necessary to use this component -- it's 
+ * only to make the process slightly easier.  If you want to use your own
+ * existing file upload setup, in your completion action, you can simply call:
+ * </p>
+ * 
+ * <code>
+ * ERAttachment attachment = ERAttachmentProcessor.processorForType(storageType).process(editingContext, fileUploadFinalFilePath, fileUploadFilePath, mimeType, configurationName);
+ * </code>
+ *
+ * @author mschrag
+ * @binding attachment the binding to store the newly created attachment in
+ * @binding editingContext the editing context to create the attachment in
+ * @binding storageType the type of attachment to create, i.e. "s3", "db", or "file" -- defaults to "db" (or the value of er.attachment.storageType)
+ * @binding mimeType (optional) the mime type of the upload (will be guessed by extension if not set)
+ * @binding ajax (optional) if true, AjaxFileUpload is used, if false WOFileUpload is used
+ * @binding configurationName (optional) the configuration name for this attachment (see top level documentation)
+ * @binding others all AjaxFileUpload bindings are proxied
+ * 
+ * @property er.attachment.[configurationName].tempFolder (optional) the temp folder to use for WOFileUploads
+ * @property er.attachment.tempFolder (optional) the temp folder to use for WOFileUploads
+ */
 public class ERAttachmentUpload extends WOComponent {
-  private String _mimeType;
   private String _filePath;
   private String _finalFilePath;
 
@@ -65,23 +92,44 @@ public class ERAttachmentUpload extends WOComponent {
   }
 
   public String tempFilePath() throws IOException {
-    File tempFile = File.createTempFile("ERAttachmentUpload-", ".tmp");
+    String configurationName = (String) valueForBinding("configurationName");
+    String tempFolderPath = ERXProperties.stringForKey("er.attachment." + configurationName + ".tempFolder");
+    if (tempFolderPath == null) {
+      tempFolderPath = ERXProperties.stringForKey("er.attachment.tempFolder");
+    }
+    
+    File tempFile;
+    if (tempFolderPath != null) {
+      File tempFolder = new File(tempFolderPath);
+      tempFile = File.createTempFile("ERAttachmentUpload-", ".tmp", tempFolder);
+    }
+    else {
+      tempFile = File.createTempFile("ERAttachmentUpload-", ".tmp");
+    }
     return tempFile.getAbsolutePath();
   }
 
   public ERAttachment _uploadSucceeded() throws IOException {
-    String type = (String) valueForBinding("type");
+    if (_finalFilePath == null) {
+      return null;
+    }
+    
+    String configurationName = (String) valueForBinding("configurationName");
+    
+    String storageType = (String) valueForBinding("storageType");
+    if (storageType == null) {
+      storageType = ERXProperties.stringForKey("er.attachment." + configurationName + ".storageType");
+      if (storageType == null) {
+        storageType = ERXProperties.stringForKeyWithDefault("er.attachment.storageType", ERDatabaseAttachment.STORAGE_TYPE);
+      }
+    }
+    
     EOEditingContext editingContext = (EOEditingContext) valueForBinding("editingContext");
     File uploadedFile = new File(_finalFilePath);
 
-    String mimeType = _mimeType;
-    if (mimeType == null) {
-      mimeType = (String) valueForBinding("mimeType");
-    }
-
-    String configurationName = (String) valueForBinding("configurationName");
+    String mimeType = (String) valueForBinding("mimeType");
     
-    ERAttachment attachment = ERAttachmentProcessor.processorForType(type).process(editingContext, uploadedFile, _filePath, mimeType, configurationName);
+    ERAttachment attachment = ERAttachmentProcessor.processorForType(storageType).process(editingContext, uploadedFile, _filePath, mimeType, configurationName);
     setValueForBinding(attachment, "attachment");
     return attachment;
   }

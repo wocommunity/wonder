@@ -5,6 +5,13 @@
        
        {
            allowsNull = Y;
+           columnName = configurationName;
+           name = configurationName;
+           prototypeName = varchar100;
+       }, 
+       
+       {
+           allowsNull = Y;
            columnName = height;
            name = height;
            prototypeName = intNumber;
@@ -21,6 +28,13 @@
            columnName = mimeType;
            name = mimeType;
            prototypeName = varchar100;
+       }, 
+       
+       {
+           allowsNull = N;
+           columnName = originalFileName;
+           name = originalFileName;
+           prototypeName = varchar255;
        }, 
        
        {
@@ -81,9 +95,11 @@
     );
     attributesUsedForLocking = 
     (
+       configurationName, 
        height, 
        id, 
        mimeType, 
+       originalFileName, 
        parentID, 
        proxied, 
        s3Path, 
@@ -97,8 +113,10 @@
     classProperties = 
     (
        childrenAttachments, 
+       configurationName, 
        height, 
        mimeType, 
+       originalFileName, 
        parentAttachment, 
        proxied, 
        s3Path, 

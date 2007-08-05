@@ -5,6 +5,13 @@
        
        {
            allowsNull = Y;
+           columnName = configurationName;
+           name = configurationName;
+           prototypeName = varchar100;
+       }, 
+       
+       {
+           allowsNull = Y;
            columnName = filesystemPath;
            name = filesystemPath;
            prototypeName = varchar255;
@@ -28,6 +35,13 @@
            columnName = mimeType;
            name = mimeType;
            prototypeName = varchar100;
+       }, 
+       
+       {
+           allowsNull = N;
+           columnName = originalFileName;
+           name = originalFileName;
+           prototypeName = varchar255;
        }, 
        
        {
@@ -81,10 +95,12 @@
     );
     attributesUsedForLocking = 
     (
+       configurationName, 
        filesystemPath, 
        height, 
        id, 
        mimeType, 
+       originalFileName, 
        parentID, 
        proxied, 
        size, 
@@ -97,9 +113,11 @@
     classProperties = 
     (
        childrenAttachments, 
+       configurationName, 
        filesystemPath, 
        height, 
        mimeType, 
+       originalFileName, 
        parentAttachment, 
        proxied, 
        size, 

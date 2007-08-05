@@ -1,6 +1,16 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <wodefinitions>
-        <wo wocomponentcontent="false" class="ERAttachmentViewer.java">
-
-        </wo>
+	<wo wocomponentcontent="false" class="ERAttachmentViewer">
+		<binding name="attachment"/>	
+		<binding name="configurationName"/>	
+		<binding name="class"/>	
+		<binding name="id"/>
+		<binding name="style"/>
+		<binding name="width"/>
+		<binding name="height"/>
+		
+		<validation message="&apos;attachment&apos; is required.">
+			<unbound name="attachment"/>
+		</validation>
+	</wo>
 </wodefinitions>

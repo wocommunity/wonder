@@ -14,8 +14,10 @@ import org.apache.log4j.Logger;
 public abstract class _ERAttachment extends er.extensions.ERXGenericRecord {
 	public static final String ENTITY_NAME = "ERAttachment";
 
+	public static final String CONFIGURATION_NAME_KEY = "configurationName";
 	public static final String HEIGHT_KEY = "height";
 	public static final String MIME_TYPE_KEY = "mimeType";
+	public static final String ORIGINAL_FILE_NAME_KEY = "originalFileName";
 	public static final String PROXIED_KEY = "proxied";
 	public static final String SIZE_KEY = "size";
 	public static final String STORAGE_TYPE_KEY = "storageType";
@@ -41,6 +43,17 @@ public abstract class _ERAttachment extends er.extensions.ERXGenericRecord {
 	}
 
 
+	public String configurationName() {
+		return (String) storedValueForKey("configurationName");
+	}
+
+	public void setConfigurationName(String aValue) {
+		if (_ERAttachment.LOG.isDebugEnabled()) {
+			_ERAttachment.LOG.debug( "updating configurationName from "+configurationName()+" to "+aValue );
+		}
+		takeStoredValueForKey(aValue, "configurationName");
+	}
+
 	public Integer height() {
 		return (Integer) storedValueForKey("height");
 	}
@@ -61,6 +74,17 @@ public abstract class _ERAttachment extends er.extensions.ERXGenericRecord {
 			_ERAttachment.LOG.debug( "updating mimeType from "+mimeType()+" to "+aValue );
 		}
 		takeStoredValueForKey(aValue, "mimeType");
+	}
+
+	public String originalFileName() {
+		return (String) storedValueForKey("originalFileName");
+	}
+
+	public void setOriginalFileName(String aValue) {
+		if (_ERAttachment.LOG.isDebugEnabled()) {
+			_ERAttachment.LOG.debug( "updating originalFileName from "+originalFileName()+" to "+aValue );
+		}
+		takeStoredValueForKey(aValue, "originalFileName");
 	}
 
 	public java.lang.Boolean proxied() {
@@ -228,9 +252,10 @@ public abstract class _ERAttachment extends er.extensions.ERXGenericRecord {
 		}
 	}
 
-	public static ERAttachment createERAttachment(EOEditingContext editingContext, String mimeType, java.lang.Boolean proxied, Integer size, String webPath) {
+	public static ERAttachment createERAttachment(EOEditingContext editingContext, String mimeType, String originalFileName, java.lang.Boolean proxied, Integer size, String webPath) {
 		ERAttachment eoObject = (ERAttachment)EOUtilities.createAndInsertInstance(editingContext, _ERAttachment.ENTITY_NAME);
 		eoObject.setMimeType(mimeType);
+		eoObject.setOriginalFileName(originalFileName);
 		eoObject.setProxied(proxied);
 		eoObject.setSize(size);
 		eoObject.setWebPath(webPath);

@@ -1,6 +1,37 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <wodefinitions>
-        <wo wocomponentcontent="false" class="ERAttachmentUpload.java">
+	<wo wocomponentcontent="false" class="ERAttachmentUpload">
+		<binding name="editingContext"/>	
+		<binding name="storageType"/>	
+		<binding name="attachment"/>	
+		<binding name="configurationName"/>	
+		<binding name="mimeType"/>	
+		<binding name="ajax"/>
 
-        </wo>
+		<binding name="cancelText"/>
+		<binding name="cancelingText"/>
+		<binding name="startingText"/>
+		<binding name="startedFunction"/>
+		<binding name="canceledFunction"/>
+		<binding name="succeededFunction"/>
+		<binding name="failedFunction"/>
+		<binding name="finishedAction"/>
+		<binding name="canceledAction"/>
+		<binding name="succeededAction"/>
+		<binding name="failedAction"/>
+		<binding name="finishedFunction"/>
+		<binding name="allowCancel"/>
+		<binding name="progressBarBeforeStart"/>
+		<binding name="progressBarAfterDone"/>
+		<binding name="refreshTime"/>
+		<binding name="keepTempFile"/>
+		
+		<validation message="&apos;editingContext&apos; is required.">
+			<unbound name="editingContext"/>
+		</validation>
+		
+		<validation message="&apos;attachment&apos; is required.">
+			<unbound name="attachment"/>
+		</validation>
+	</wo>
 </wodefinitions>

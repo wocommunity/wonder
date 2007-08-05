@@ -13,6 +13,13 @@ import er.attachment.model.ERFileAttachment;
 import er.extensions.ERXFileUtilities;
 import er.extensions.ERXProperties;
 
+/**
+ * ERFileAttachmentProcessor implements storing attachments as files on the system that are either served
+ * via a proxy request handler or directly by the webserver.  For more information about configuring
+ * an ERFileAttachmentProcessor, see the top level documentation.
+ * 
+ * @author mschrag
+ */
 public class ERFileAttachmentProcessor extends ERAttachmentProcessor<ERFileAttachment> {
   @Override
   public ERFileAttachment _process(EOEditingContext editingContext, File uploadedFile, String recommendedFileName, String mimeType, String configurationName) throws IOException {
@@ -59,7 +66,7 @@ public class ERFileAttachmentProcessor extends ERAttachmentProcessor<ERFileAttac
       webPath = "/" + webPath;
     }
 
-    ERFileAttachment attachment = ERFileAttachment.createERFileAttachment(editingContext, mimeType, Boolean.valueOf(proxy), Integer.valueOf((int) uploadedFile.length()), webPath);
+    ERFileAttachment attachment = ERFileAttachment.createERFileAttachment(editingContext, mimeType, recommendedFileName, Boolean.valueOf(proxy), Integer.valueOf((int) uploadedFile.length()), webPath);
     try {
       webPath = ERAttachmentProcessor._parsePathTemplate(attachment, webPath, recommendedFileName);
       filesystemPath = ERAttachmentProcessor._parsePathTemplate(attachment, filesystemPath, recommendedFileName);
