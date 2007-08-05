@@ -92,6 +92,14 @@ public abstract class ERAttachmentProcessor<T extends ERAttachment> {
     return attachmentUrl;
   }
 
+  public T process(EOEditingContext editingContext, File uploadedFile, String recommendedFilePath) throws IOException {
+    return process(editingContext, uploadedFile, recommendedFilePath, null, null);
+  }
+
+  public T process(EOEditingContext editingContext, File uploadedFile, String recommendedFilePath, String mimeType) throws IOException {
+    return process(editingContext, uploadedFile, recommendedFilePath, mimeType, null);
+  }
+  
   public T process(EOEditingContext editingContext, File uploadedFile, String recommendedFilePath, String mimeType, String configurationName) throws IOException {
     String recommendedFileName = ERXFileUtilities.fileNameFromBrowserSubmittedPath(recommendedFilePath);
 
