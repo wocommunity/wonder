@@ -1,0 +1,144 @@
+
+{
+    attributes = 
+    (
+       
+       {
+           allowsNull = Y;
+           columnName = height;
+           name = height;
+           prototypeName = intNumber;
+       }, 
+       
+       {
+           allowsNull = N;
+           name = id;
+           prototypeName = id;
+       }, 
+       
+       {
+           allowsNull = N;
+           columnName = mimeType;
+           name = mimeType;
+           prototypeName = varchar100;
+       }, 
+       
+       {
+           allowsNull = Y;
+           columnName = parentID;
+           name = parentID;
+           prototypeName = id;
+       }, 
+       
+       {
+           allowsNull = N;
+           columnName = proxied;
+           name = proxied;
+           prototypeName = boolean;
+       }, 
+       
+       {
+           allowsNull = N;
+           columnName = size;
+           name = size;
+           prototypeName = intNumber;
+       }, 
+       
+       {
+           allowsNull = Y;
+           columnName = storageType;
+           name = storageType;
+           prototypeName = varchar10;
+       }, 
+       
+       {
+           allowsNull = Y;
+           columnName = thumbnail;
+           name = thumbnail;
+           prototypeName = varchar10;
+       }, 
+       
+       {
+           allowsNull = N;
+           columnName = webPath;
+           name = webPath;
+           prototypeName = varchar1000;
+       }, 
+       
+       {
+           allowsNull = Y;
+           columnName = width;
+           name = width;
+           prototypeName = intNumber;
+       }
+    );
+    attributesUsedForLocking = 
+    (
+       height, 
+       id, 
+       mimeType, 
+       parentID, 
+       proxied, 
+       size, 
+       storageType, 
+       thumbnail, 
+       webPath, 
+       width
+    );
+    className = er.attachment.model.ERAttachment;
+    classProperties = 
+    (
+       childrenAttachments, 
+       height, 
+       mimeType, 
+       parentAttachment, 
+       proxied, 
+       size, 
+       storageType, 
+       thumbnail, 
+       webPath, 
+       width
+    );
+    externalName = ERAttachment;
+    internalInfo = 
+    {};
+    isAbstractEntity = Y;
+    name = ERAttachment;
+    primaryKeyAttributes = 
+    (
+       id
+    );
+    relationships = 
+    (
+       
+       {
+           deleteRule = EODeleteRuleCascade;
+           destination = ERAttachment;
+           isToMany = Y;
+           joinSemantic = EOInnerJoin;
+           joins = 
+           (
+              
+              {
+                  destinationAttribute = parentID;
+                  sourceAttribute = id;
+              }
+           );
+           name = childrenAttachments;
+       }, 
+       
+       {
+           destination = ERAttachment;
+           joinSemantic = EOInnerJoin;
+           joins = 
+           (
+              
+              {
+                  destinationAttribute = id;
+                  sourceAttribute = parentID;
+              }
+           );
+           name = parentAttachment;
+       }
+    );
+}

@@ -1,0 +1,37 @@
+
+{
+    attributes = 
+    (
+       
+       {
+           allowsNull = Y;
+           columnName = data;
+           name = data;
+           prototypeName = blob;
+       }, 
+       
+       {
+           allowsNull = N;
+           name = id;
+           prototypeName = id;
+       }
+    );
+    attributesUsedForLocking = 
+    (
+       data, 
+       id
+    );
+    className = er.attachment.model.ERAttachmentData;
+    classProperties = 
+    (
+       data
+    );
+    externalName = ERAttachmentData;
+    internalInfo = 
+    {};
+    name = ERAttachmentData;
+    primaryKeyAttributes = 
+    (
+       id
+    );
+}
