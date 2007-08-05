@@ -18,6 +18,7 @@ public abstract class _ERAttachment extends er.extensions.ERXGenericRecord {
 	public static final String HEIGHT_KEY = "height";
 	public static final String MIME_TYPE_KEY = "mimeType";
 	public static final String ORIGINAL_FILE_NAME_KEY = "originalFileName";
+	public static final String OWNER_ID_KEY = "ownerID";
 	public static final String PROXIED_KEY = "proxied";
 	public static final String SIZE_KEY = "size";
 	public static final String STORAGE_TYPE_KEY = "storageType";
@@ -85,6 +86,17 @@ public abstract class _ERAttachment extends er.extensions.ERXGenericRecord {
 			_ERAttachment.LOG.debug( "updating originalFileName from "+originalFileName()+" to "+aValue );
 		}
 		takeStoredValueForKey(aValue, "originalFileName");
+	}
+
+	public String ownerID() {
+		return (String) storedValueForKey("ownerID");
+	}
+
+	public void setOwnerID(String aValue) {
+		if (_ERAttachment.LOG.isDebugEnabled()) {
+			_ERAttachment.LOG.debug( "updating ownerID from "+ownerID()+" to "+aValue );
+		}
+		takeStoredValueForKey(aValue, "ownerID");
 	}
 
 	public java.lang.Boolean proxied() {

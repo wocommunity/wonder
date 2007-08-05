@@ -28,7 +28,7 @@ import er.extensions.ERXProperties;
  * </p>
  * 
  * <code>
- * ERAttachment attachment = ERAttachmentProcessor.processorForType(storageType).process(editingContext, fileUploadFinalFilePath, fileUploadFilePath, mimeType, configurationName);
+ * ERAttachment attachment = ERAttachmentProcessor.processorForType(storageType).process(editingContext, fileUploadFinalFilePath, fileUploadFilePath, mimeType, configurationName, ownerID);
  * </code>
  *
  * @author mschrag
@@ -38,6 +38,7 @@ import er.extensions.ERXProperties;
  * @binding mimeType (optional) the mime type of the upload (will be guessed by extension if not set)
  * @binding ajax (optional) if true, AjaxFileUpload is used, if false WOFileUpload is used
  * @binding configurationName (optional) the configuration name for this attachment (see top level documentation)
+ * @binding ownerID (optional) a string ID of the "owner" of this attachment (Person.primaryKey for instance)
  * @binding others all AjaxFileUpload bindings are proxied
  * 
  * @property er.attachment.[configurationName].tempFolder (optional) the temp folder to use for WOFileUploads
@@ -129,7 +130,9 @@ public class ERAttachmentUpload extends WOComponent {
 
     String mimeType = (String) valueForBinding("mimeType");
     
-    ERAttachment attachment = ERAttachmentProcessor.processorForType(storageType).process(editingContext, uploadedFile, _filePath, mimeType, configurationName);
+    String ownerID = (String) valueForBinding("ownerID");
+    
+    ERAttachment attachment = ERAttachmentProcessor.processorForType(storageType).process(editingContext, uploadedFile, _filePath, mimeType, configurationName, ownerID);
     setValueForBinding(attachment, "attachment");
     return attachment;
   }
