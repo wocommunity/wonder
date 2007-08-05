@@ -26,7 +26,7 @@ public class ERS3AttachmentProcessor extends ERAttachmentProcessor<ERS3Attachmen
   public static final String S3_URL = "http://s3.amazonaws.com";
 
   @Override
-  public ERS3Attachment process(EOEditingContext editingContext, File uploadedFile, String recommendedFileName, String mimeType, String configurationName) throws IOException {
+  public ERS3Attachment _process(EOEditingContext editingContext, File uploadedFile, String recommendedFileName, String mimeType, String configurationName) throws IOException {
     String accessKeyID = ERXProperties.decryptedStringForKey("er.attachment.s3." + configurationName + ".accessKeyID");
     if (accessKeyID == null) {
       accessKeyID = ERXProperties.decryptedStringForKey("er.attachment.s3.accessKeyID");
@@ -59,7 +59,7 @@ public class ERS3AttachmentProcessor extends ERAttachmentProcessor<ERS3Attachmen
       keyTemplate = "${pk}${ext}";
     }
 
-    ERS3Attachment attachment = ERS3Attachment.createERS3Attachment(editingContext, mimeType, Boolean.FALSE, Integer.valueOf((int) uploadedFile.length()), null);
+    ERS3Attachment attachment = ERS3Attachment.createERS3Attachment(editingContext, recommendedFileName, Boolean.FALSE, Integer.valueOf((int) uploadedFile.length()), null);
     try {
       String key = ERAttachmentProcessor._parsePathTemplate(attachment, keyTemplate, recommendedFileName);
       attachment.setWebPath("/" + bucket + "/" + key);
@@ -71,7 +71,7 @@ public class ERS3AttachmentProcessor extends ERAttachmentProcessor<ERS3Attachmen
         S3StreamObject attachmentStreamObject = new S3StreamObject(attachmentInputStream, null);
 
         Map<String, List<String>> headers = new TreeMap<String, List<String>>();
-        headers.put("Content-Type", Arrays.asList(new String[] { mimeType }));
+        headers.put("Content-Type", Arrays.asList(new String[] { attachment.mimeType() }));
         headers.put("Content-Length", Arrays.asList(new String[] { String.valueOf(attachment.size()) }));
         headers.put("x-amz-acl", Arrays.asList(new String[] { "public-read" }));
         Response response = conn.putStream(bucket, key, attachmentStreamObject, headers);

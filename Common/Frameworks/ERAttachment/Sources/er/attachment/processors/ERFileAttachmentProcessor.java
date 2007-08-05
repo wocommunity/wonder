@@ -15,7 +15,7 @@ import er.extensions.ERXProperties;
 
 public class ERFileAttachmentProcessor extends ERAttachmentProcessor<ERFileAttachment> {
   @Override
-  public ERFileAttachment process(EOEditingContext editingContext, File uploadedFile, String recommendedFileName, String mimeType, String configurationName) throws IOException {
+  public ERFileAttachment _process(EOEditingContext editingContext, File uploadedFile, String recommendedFileName, String mimeType, String configurationName) throws IOException {
     boolean proxy = true;
     String proxyStr = ERXProperties.stringForKey("er.attachment.file." + configurationName + ".proxy");
     if (proxyStr == null) {
@@ -59,7 +59,7 @@ public class ERFileAttachmentProcessor extends ERAttachmentProcessor<ERFileAttac
       webPath = "/" + webPath;
     }
 
-    ERFileAttachment attachment = ERFileAttachment.createERFileAttachment(editingContext, mimeType, Boolean.valueOf(proxy), Integer.valueOf((int) uploadedFile.length()), webPath);
+    ERFileAttachment attachment = ERFileAttachment.createERFileAttachment(editingContext, recommendedFileName, Boolean.valueOf(proxy), Integer.valueOf((int) uploadedFile.length()), webPath);
     try {
       webPath = ERAttachmentProcessor._parsePathTemplate(attachment, webPath, recommendedFileName);
       filesystemPath = ERAttachmentProcessor._parsePathTemplate(attachment, filesystemPath, recommendedFileName);
