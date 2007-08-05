@@ -18,7 +18,6 @@ import com.webobjects.appserver._private.WODynamicURL;
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.foundation.NSLog;
 
-import er.ajax.AjaxFileUploadRequestHandler;
 import er.attachment.model.ERAttachment;
 import er.attachment.processors.ERAttachmentProcessor;
 import er.extensions.ERXEC;
@@ -34,7 +33,7 @@ import er.extensions.ERXFileUtilities;
  */
 public class ERAttachmentRequestHandler extends WORequestHandler {
   public static final String REQUEST_HANDLER_KEY = "attachments";
-  public static final Logger log = Logger.getLogger(AjaxFileUploadRequestHandler.class);
+  public static final Logger log = Logger.getLogger(ERAttachmentRequestHandler.class);
 
   /**
    * The delegate definition for this request handler.
