@@ -18,7 +18,6 @@
     );
     attributesUsedForLocking = 
     (
-       data, 
        id
     );
     className = er.attachment.model.ERAttachmentData;

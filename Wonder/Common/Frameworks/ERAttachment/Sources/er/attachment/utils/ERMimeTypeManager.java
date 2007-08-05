@@ -9,9 +9,20 @@ import com.webobjects.foundation.NSArray;
 
 import er.extensions.ERXProperties;
 
+/**
+ * ERMimeTypeManager provides an interface to looking up mime type metadata.
+ * 
+ * @author mschrag
+ */
 public class ERMimeTypeManager {
   private static ERMimeTypeManager INSTANCE;
 
+  /**
+   * Returns the singleton mime type manager.  See the top level documentation on information
+   * about configuring custom mime types.
+   *  
+   * @return the singleton mime type manager
+   */
   public static synchronized ERMimeTypeManager mimeTypeManager() {
     if (ERMimeTypeManager.INSTANCE == null) {
       ERMimeTypeManager mimeTypeManager = new ERMimeTypeManager();
@@ -34,8 +45,14 @@ public class ERMimeTypeManager {
     return ERMimeTypeManager.INSTANCE;
   }
 
-  public static String primaryExtension(String _contentType) {
-    ERMimeType mimeType = ERMimeTypeManager.mimeTypeManager().mimeTypeForMimeTypeString(_contentType, false);
+  /**
+   * Returns the primary extension for the given mime type.
+   * 
+   * @param mimeTypeStr the mime type string to lookup
+   * @return the primary extension or null if there is no mime type in the system that matches
+   */
+  public static String primaryExtension(String mimeTypeStr) {
+    ERMimeType mimeType = ERMimeTypeManager.mimeTypeManager().mimeTypeForMimeTypeString(mimeTypeStr, false);
     String extension = null;
     if (mimeType != null) {
       extension = mimeType.primaryExtension();
@@ -49,10 +66,23 @@ public class ERMimeTypeManager {
     _mimeTypes = new LinkedList<ERMimeType>();
   }
 
+  /**
+   * Adds a mime type definition to the manager.
+   * 
+   * @param mimeType the mime type to add
+   */
   public void addMimeType(ERMimeType mimeType) {
     _mimeTypes.add(mimeType);
   }
 
+  /**
+   * Returns the ERMimeType for the given mime type string, optionally throwing an exception
+   * if the type isn't found.
+   * 
+   * @param mimeType the mime type string to lookup
+   * @param exceptionIfNotFound if true, a NoSuchElementException exception is thrown if the mime type isn't found
+   * @return the matching ERMimeType
+   */
   public ERMimeType mimeTypeForMimeTypeString(String mimeType, boolean exceptionIfNotFound) {
     ERMimeType matchingMimeType = null;
     if (mimeType != null) {
@@ -73,6 +103,14 @@ public class ERMimeTypeManager {
     return matchingMimeType;
   }
 
+  /**
+   * Returns the ERMimeType for the given file extension, optionally throwing an exception
+   * if the type isn't found.
+   * 
+   * @param extension the file extension to lookup
+   * @param exceptionIfNotFound if true, a NoSuchElementException exception is thrown if the mime type isn't found
+   * @return the matching ERMimeType
+   */
   public ERMimeType mimeTypeForExtension(String extension, boolean exceptionIfNotFound) {
     ERMimeType matchingMimeType = null;
     if (extension != null) {

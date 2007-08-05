@@ -12,6 +12,13 @@
        
        {
            allowsNull = Y;
+           columnName = configurationName;
+           name = configurationName;
+           prototypeName = varchar100;
+       }, 
+       
+       {
+           allowsNull = Y;
            columnName = height;
            name = height;
            prototypeName = intNumber;
@@ -28,6 +35,13 @@
            columnName = mimeType;
            name = mimeType;
            prototypeName = varchar100;
+       }, 
+       
+       {
+           allowsNull = N;
+           columnName = originalFileName;
+           name = originalFileName;
+           prototypeName = varchar255;
        }, 
        
        {
@@ -49,6 +63,13 @@
            columnName = size;
            name = size;
            prototypeName = intNumber;
+       }, 
+       
+       {
+           allowsNull = Y;
+           columnName = smallData;
+           name = smallData;
+           prototypeName = blob;
        }, 
        
        {
@@ -82,9 +103,11 @@
     attributesUsedForLocking = 
     (
        attachmentDataID, 
+       configurationName, 
        height, 
        id, 
        mimeType, 
+       originalFileName, 
        parentID, 
        proxied, 
        size, 
@@ -98,11 +121,14 @@
     (
        attachmentData, 
        childrenAttachments, 
+       configurationName, 
        height, 
        mimeType, 
+       originalFileName, 
        parentAttachment, 
        proxied, 
        size, 
+       smallData, 
        storageType, 
        thumbnail, 
        webPath, 
@@ -124,7 +150,7 @@
        {
            deleteRule = EODeleteRuleCascade;
            destination = ERAttachmentData;
-           isMandatory = Y;
+           isMandatory = N;
            isToMany = N;
            joinSemantic = EOInnerJoin;
            joins = 

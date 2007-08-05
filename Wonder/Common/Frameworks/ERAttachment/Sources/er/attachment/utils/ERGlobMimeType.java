@@ -2,7 +2,17 @@ package er.attachment.utils;
 
 import com.webobjects.foundation.NSArray;
 
+/**
+ * ERGlobMimeType represents an "image/*" style mime type.
+ * 
+ * @author mschrag
+ */
 public class ERGlobMimeType extends ERMimeType {
+  /**
+   * Constructs an ERGlobMimeType.
+   * 
+   * @param _mimeType the glob mime type (i.e. image/*)
+   */
   public ERGlobMimeType(String _mimeType) {
     super(_mimeType, _mimeType, null, new NSArray<String>());
   }
