@@ -15,7 +15,7 @@ import er.extensions.ERXProperties;
 
 public class ERDatabaseAttachmentProcessor extends ERAttachmentProcessor<ERDatabaseAttachment> {
   @Override
-  public ERDatabaseAttachment process(EOEditingContext editingContext, File uploadedFile, String recommendedFileName, String mimeType, String configurationName) throws IOException {
+  public ERDatabaseAttachment _process(EOEditingContext editingContext, File uploadedFile, String recommendedFileName, String mimeType, String configurationName) throws IOException {
     String webPath = ERXProperties.stringForKey("er.attachment.db." + configurationName + ".webPath");
     if (webPath == null) {
       webPath = ERXProperties.stringForKeyWithDefault("er.attachment.db.webPath", "/${pk}${ext}");
@@ -28,7 +28,7 @@ public class ERDatabaseAttachmentProcessor extends ERAttachmentProcessor<ERDatab
     }
 
     ERAttachmentData attachmentData = ERAttachmentData.createERAttachmentData(editingContext);
-    ERDatabaseAttachment attachment = ERDatabaseAttachment.createERDatabaseAttachment(editingContext, mimeType, Boolean.TRUE, Integer.valueOf((int) uploadedFile.length()), webPath, attachmentData);
+    ERDatabaseAttachment attachment = ERDatabaseAttachment.createERDatabaseAttachment(editingContext, recommendedFileName, Boolean.TRUE, Integer.valueOf((int) uploadedFile.length()), webPath, attachmentData);
     try {
       attachment.setWebPath(ERAttachmentProcessor._parsePathTemplate(attachment, webPath, recommendedFileName));
       attachmentData.setData(new NSData(uploadedFile.toURL()));

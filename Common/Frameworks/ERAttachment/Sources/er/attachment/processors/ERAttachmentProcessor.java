@@ -14,6 +14,7 @@ import er.attachment.model.ERAttachment;
 import er.attachment.model.ERDatabaseAttachment;
 import er.attachment.model.ERFileAttachment;
 import er.attachment.model.ERS3Attachment;
+import er.attachment.utils.ERMimeType;
 import er.attachment.utils.ERMimeTypeManager;
 import er.extensions.ERXCrypto;
 import er.extensions.ERXFileUtilities;
@@ -91,7 +92,28 @@ public abstract class ERAttachmentProcessor<T extends ERAttachment> {
     return attachmentUrl;
   }
 
-  public abstract T process(EOEditingContext editingContext, File uploadedFile, String recommendedFileName, String mimeType, String configurationName) throws IOException;
+  public T process(EOEditingContext editingContext, File uploadedFile, String recommendedFilePath, String mimeType, String configurationName) throws IOException {
+    String recommendedFileName = ERXFileUtilities.fileNameFromBrowserSubmittedPath(recommendedFilePath);
+
+    String suggestedMimeType = mimeType;
+    if (suggestedMimeType == null) {
+      if (suggestedMimeType == null) {
+        String extension = ERXFileUtilities.fileExtension(recommendedFileName);
+        ERMimeType erMimeType = ERMimeTypeManager.mimeTypeManager().mimeTypeForExtension(extension, false);
+        if (erMimeType != null) {
+          suggestedMimeType = erMimeType.mimeType();
+        }
+      }
+  
+      if (suggestedMimeType == null) {
+        suggestedMimeType = "application/x-octet-stream";
+      }
+    }
+
+    return _process(editingContext, uploadedFile, recommendedFileName, suggestedMimeType, configurationName);
+  }
+  
+  public abstract T _process(EOEditingContext editingContext, File uploadedFile, String recommendedFileName, String mimeType, String configurationName) throws IOException;
 
   public abstract InputStream attachmentInputStream(T attachment) throws IOException;
 
