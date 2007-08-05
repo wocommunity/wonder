@@ -280,36 +280,10 @@ public class AjaxFileUpload extends WOComponent {
 				boolean renameFile;
 				if (streamToFile.exists()) {
 					boolean overwrite = ERXComponentUtilities.booleanValueForBinding(this, "overwrite");
-					
 					if (streamToFile.isDirectory()) {
 						File parentDir = streamToFile;
-						String fileName = fileNameFromBrowserSubmittedPath(progress.fileName());
-						streamToFile = new File(parentDir, fileName);
-						if (!overwrite) {
-							// try to reserve file name
-							if (!streamToFile.createNewFile()) {
-								// didn't work, so try new name consisting of
-								// prefix + number + suffix
-								int dotIndex = fileName.lastIndexOf('.');
-								String prefix, suffix;
-
-								if (dotIndex < 0) {
-									prefix = fileName;
-									suffix = "";
-								}
-								else {
-									prefix = fileName.substring(0, dotIndex);
-									suffix = fileName.substring(dotIndex);
-								}
-
-								// try until we can reserve a file
-								do {
-									// using System.currentTimeMillis() as number for now
-									streamToFile = new File(parentDir, prefix + "-" + System.currentTimeMillis() + suffix);
-								}
-								while (!streamToFile.createNewFile());
-							}
-						}
+						String fileName = ERXFileUtilities.fileNameFromBrowserSubmittedPath(progress.fileName());
+						streamToFile = ERXFileUtilities.reserveUniqueFile(new File(parentDir, fileName), overwrite);
 						renameFile = true;
 					}
 					else {
@@ -364,23 +338,4 @@ public class AjaxFileUpload extends WOComponent {
 		WOActionResults results = (WOActionResults) valueForBinding("failedAction");
 		return results;
 	}
-	
-    public static String fileNameFromBrowserSubmittedPath(String path) {
-    	// Windows
-    	int separatorIndex = path.lastIndexOf("\\");
-        // Unix
-    	if (separatorIndex == -1) {
-            separatorIndex = path.lastIndexOf("/");
-        }
-    	// MacOS 9
-        if (separatorIndex == -1) {
-        	separatorIndex = path.lastIndexOf(":");
-        }
-        if ( separatorIndex != -1 ) {
-            return path.substring(separatorIndex + 1);
-        }
-        else {
-            return path;
-        }
-    }
 }
