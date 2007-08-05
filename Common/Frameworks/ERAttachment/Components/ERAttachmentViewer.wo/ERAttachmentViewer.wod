@@ -1,0 +1,32 @@
+TypeSwitch : ERXWOSwitch {
+	case = attachment.erMimeType.type;
+}
+
+ImageCase : ERXWOCase {
+	case = "image";
+}
+
+Image : WOImage {
+	src = attachmentUrl;
+	class = ^class;
+	id = ^class;
+	style = ^style;
+	width = ^width;
+	height = ^height;
+}
+
+DefaultCase : ERXWOCase {
+	case = "default";
+}
+
+AttachmentLink : WOHyperlink {
+	href = attachmentUrl;
+}
+
+AttachmentFileName : WOString {
+	value = attachment.fileName;
+}
+
+HasAttachment : WOConditional {
+	condition = attachment;
+}
