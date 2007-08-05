@@ -33,6 +33,9 @@ UploadField : WOGenericElement {
 	elementName = "input";
 	type = "file";
 	name = "uploadedFile";
+	class = ^class;
+	id = ^id;
+	style = ^style;
 }
 
 UploadAction : AjaxUpdateLink {
