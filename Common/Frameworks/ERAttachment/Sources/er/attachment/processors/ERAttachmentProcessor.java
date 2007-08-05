@@ -9,7 +9,7 @@ import com.webobjects.appserver.WORequest;
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.foundation.NSMutableDictionary;
 
-import er.attachment.components.ERAttachmentRequestHandler;
+import er.attachment.ERAttachmentRequestHandler;
 import er.attachment.model.ERAttachment;
 import er.attachment.model.ERDatabaseAttachment;
 import er.attachment.model.ERFileAttachment;
@@ -18,15 +18,40 @@ import er.attachment.utils.ERMimeType;
 import er.attachment.utils.ERMimeTypeManager;
 import er.extensions.ERXCrypto;
 import er.extensions.ERXFileUtilities;
+import er.extensions.ERXProperties;
+import er.extensions.ERXValidationException;
 
+/**
+ * <p>
+ * ERAttachmentProcessors provide the implementation of the communication with the
+ * attachment storage method, including import, URL generation, and stream 
+ * generation.
+ * </p>
+ * 
+ * <p>
+ * ERAttachmentProcessors also provide support for path template variables.  Read
+ * the er.attachment package.html for more information.
+ * </p>
+ * 
+ * @author mschrag
+ *
+ * @param <T> the type of ERAttachment that this processor processes
+ * @property er.attachment.maxSize the maximum size of an uploaded attachment
+ * @property er.attachment.[configurationName] maxSize the maximum size of an uploaded attachment
+ */
 public abstract class ERAttachmentProcessor<T extends ERAttachment> {
-  public static final String EXT_VARIABLE = "\\$\\{ext\\}";
-  public static final String HASH_VARIABLE = "\\$\\{hash\\}";
-  public static final String PK_VARIABLE = "\\$\\{pk\\}";
-  public static final String FILE_NAME_VARIABLE = "\\$\\{fileName\\}";
+  private static final String EXT_VARIABLE = "\\$\\{ext\\}";
+  private static final String HASH_VARIABLE = "\\$\\{hash\\}";
+  private static final String PK_VARIABLE = "\\$\\{pk\\}";
+  private static final String FILE_NAME_VARIABLE = "\\$\\{fileName\\}";
 
   private static NSMutableDictionary<String, ERAttachmentProcessor<?>> _processors;
 
+  /**
+   * Returns all of the processors mapped by storageType.
+   *  
+   * @return all of the processors mapped by storageType
+   */
   public static synchronized NSMutableDictionary<String, ERAttachmentProcessor<?>> processors() {
     if (_processors == null) {
       _processors = new NSMutableDictionary<String, ERAttachmentProcessor<?>>();
@@ -37,24 +62,51 @@ public abstract class ERAttachmentProcessor<T extends ERAttachment> {
     return _processors;
   }
 
+  /**
+   * Returns the processor that corresponds to the given attachment.
+   * 
+   * @param <T> the attachment type
+   * @param attachment the attachment to lookup a processor for
+   * @return the attachment's processor
+   */
   public static <T extends ERAttachment> ERAttachmentProcessor<T> processorForType(T attachment) {
     return ERAttachmentProcessor.processorForType(attachment == null ? null : attachment.storageType());
   }
 
+  /**
+   * Returns the processor that corresponds to the given storage type ("s3", "db", "file", etc).
+   * 
+   * @param storageType the type of processor to lookup
+   * @return the storage type's processor
+   */
   @SuppressWarnings("unchecked")
-  public static <T extends ERAttachment> ERAttachmentProcessor<T> processorForType(String type) {
-    ERAttachmentProcessor<T> processor = (ERAttachmentProcessor<T>) ERAttachmentProcessor.processors().objectForKey(type);
+  public static <T extends ERAttachment> ERAttachmentProcessor<T> processorForType(String storageType) {
+    ERAttachmentProcessor<T> processor = (ERAttachmentProcessor<T>) ERAttachmentProcessor.processors().objectForKey(storageType);
     if (processor == null) {
-      throw new IllegalArgumentException("There is no attachment processor for the type '" + type + "'.");
+      throw new IllegalArgumentException("There is no attachment processor for the type '" + storageType + "'.");
     }
     return processor;
   }
 
-  public static synchronized void addAttachmentProcessorForType(ERAttachmentProcessor<?> processor, String type) {
-    ERAttachmentProcessor.processors().setObjectForKey(processor, type);
+  /**
+   * Adds a new attachment processor for the given storage type.
+   * 
+   * @param processor the processor
+   * @param storageType the storage type that corresponds to the processor
+   */
+  public static synchronized void addAttachmentProcessorForType(ERAttachmentProcessor<?> processor, String storageType) {
+    ERAttachmentProcessor.processors().setObjectForKey(processor, storageType);
   }
 
-  public static String _parsePathTemplate(ERAttachment attachment, String templatePath, String recommendedFileName) {
+  /**
+   * Parses a path template with ${ext}, ${fileName}, ${hash}, and ${pk} variables in it.  See the ERAttachment
+   * top level documentation for more information.
+   * 
+   * @param attachment the attachment being processed
+   * @param templatePath the template path definition
+   * @param recommendedFileName the original file name recommended by the uploading user
+   */
+  protected static String _parsePathTemplate(ERAttachment attachment, String templatePath, String recommendedFileName) {
     String parsedPath = templatePath;
     String ext = ERMimeTypeManager.primaryExtension(attachment.mimeType());
     if (ext == null) {
@@ -83,6 +135,13 @@ public abstract class ERAttachmentProcessor<T extends ERAttachment> {
     return parsedPath;
   }
 
+  /**
+   * Returns a URL to the given attachment that routes via the ERAttachmentRequestHandler.
+   * 
+   * @param attachment the attachment to proxy
+   * @param context the context
+   * @return an ERAttachmentRequestHandler URL
+   */
   protected String proxiedUrl(T attachment, WOContext context) {
     String webPath = attachment.webPath();
     if (webPath.startsWith("/")) {
@@ -92,16 +151,61 @@ public abstract class ERAttachmentProcessor<T extends ERAttachment> {
     return attachmentUrl;
   }
 
+  /**
+   * Processes an uploaded file, imports it into the appropriate data store, and returns an ERAttachment that
+   * represents it.  uploadedFile will be deleted after the import process is complete.
+   * 
+   * @param editingContext the EOEditingContext to create the ERAttachment in
+   * @param uploadedFile the uploaded temporary file (which will be deleted at the end)
+   * @param recommendedFilePath the filename recommended by the user during import
+   * @return an ERAttachment that represents the file
+   * @throws IOException if the processing fails
+   */
   public T process(EOEditingContext editingContext, File uploadedFile, String recommendedFilePath) throws IOException {
     return process(editingContext, uploadedFile, recommendedFilePath, null, null);
   }
 
+  /**
+   * Processes an uploaded file, imports it into the appropriate data store, and returns an ERAttachment that
+   * represents it.  uploadedFile will be deleted after the import process is complete.
+   * 
+   * @param editingContext the EOEditingContext to create the ERAttachment in
+   * @param uploadedFile the uploaded temporary file (which will be deleted at the end)
+   * @param recommendedFilePath the filename recommended by the user during import
+   * @param mimeType the mimeType to use (null = guess based on file extension)
+   * @return an ERAttachment that represents the file
+   * @throws IOException if the processing fails
+   */
   public T process(EOEditingContext editingContext, File uploadedFile, String recommendedFilePath, String mimeType) throws IOException {
     return process(editingContext, uploadedFile, recommendedFilePath, mimeType, null);
   }
-  
+
+  /**
+   * Processes an uploaded file, imports it into the appropriate data store, and returns an ERAttachment that
+   * represents it.  uploadedFile will be deleted after the import process is complete.
+   * 
+   * @param editingContext the EOEditingContext to create the ERAttachment in
+   * @param uploadedFile the uploaded temporary file (which will be deleted at the end)
+   * @param recommendedFilePath the filename recommended by the user during import
+   * @param mimeType the mimeType to use (null = guess based on file extension)
+   * @param configurationName the name of the configuration settings to use for this processor (see top level docs) 
+   * @return an ERAttachment that represents the file
+   * @throws IOException if the processing fails
+   */
   public T process(EOEditingContext editingContext, File uploadedFile, String recommendedFilePath, String mimeType, String configurationName) throws IOException {
     String recommendedFileName = ERXFileUtilities.fileNameFromBrowserSubmittedPath(recommendedFilePath);
+
+    long maxSize = ERXProperties.longForKey("er.attachment." + configurationName + ".maxSize");
+    if (maxSize == 0) {
+      maxSize = ERXProperties.longForKeyWithDefault("er.attachment.maxSize", 0);
+    }
+    if (maxSize > 0 && uploadedFile.length() > maxSize) {
+      uploadedFile.delete();
+      ERXValidationException maxSizeExceededException = new ERXValidationException("AttachmentExceedsMaximumLengthException", uploadedFile, "size");
+      maxSizeExceededException.takeValueForKey(Long.valueOf(maxSize), "maxSize");
+      maxSizeExceededException.takeValueForKey(recommendedFileName, "recommendedFileName");
+      throw maxSizeExceededException;
+    }
 
     String suggestedMimeType = mimeType;
     if (suggestedMimeType == null) {
@@ -112,18 +216,49 @@ public abstract class ERAttachmentProcessor<T extends ERAttachment> {
           suggestedMimeType = erMimeType.mimeType();
         }
       }
-  
+
       if (suggestedMimeType == null) {
         suggestedMimeType = "application/x-octet-stream";
       }
     }
 
-    return _process(editingContext, uploadedFile, recommendedFileName, suggestedMimeType, configurationName);
+    T attachment = _process(editingContext, uploadedFile, recommendedFileName, suggestedMimeType, configurationName);
+    attachment.setConfigurationName(configurationName);
+
+    return attachment;
   }
-  
+
+  /**
+   * Processes an uploaded file, imports it into the appropriate data store, and returns an ERAttachment that
+   * represents it.  uploadedFile will be deleted after the import process is complete.
+   * 
+   * @param editingContext the EOEditingContext to create the ERAttachment in
+   * @param uploadedFile the uploaded temporary file (which will be deleted at the end)
+   * @param recommendedFilePath the filename recommended by the user during import
+   * @param mimeType the mimeType to use (null = guess based on file extension)
+   * @param configurationName the name of the configuration settings to use for this processor (see top level docs) 
+   * @return an ERAttachment that represents the file
+   * @throws IOException if the processing fails
+   */
   public abstract T _process(EOEditingContext editingContext, File uploadedFile, String recommendedFileName, String mimeType, String configurationName) throws IOException;
 
+  /**
+   * Returns an InputStream to the data of the given attachment.
+   * 
+   * @param attachment the attachment to retrieve the data for
+   * @return an InputStream onto the data
+   * @throws IOException if the stream cannot be created
+   */
   public abstract InputStream attachmentInputStream(T attachment) throws IOException;
 
+  /**
+   * Returns a URL to the attachment's data.
+   * 
+   * @param attachment the attachment to generate a URL for
+   * @param request the current request
+   * @param context the current context
+   * @param configurationName the name of the configuration settings to use for this processor (see top level docs) 
+   * @return a URL to the attachment's data
+   */
   public abstract String attachmentUrl(T attachment, WORequest request, WOContext context, String configurationName);
 }

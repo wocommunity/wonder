@@ -43,9 +43,10 @@ public abstract class _ERFileAttachment extends er.attachment.model.ERAttachment
 		takeStoredValueForKey(aValue, "filesystemPath");
 	}
 
-	public static ERFileAttachment createERFileAttachment(EOEditingContext editingContext, String mimeType, java.lang.Boolean proxied, Integer size, String webPath) {
+	public static ERFileAttachment createERFileAttachment(EOEditingContext editingContext, String mimeType, String originalFileName, java.lang.Boolean proxied, Integer size, String webPath) {
 		ERFileAttachment eoObject = (ERFileAttachment)EOUtilities.createAndInsertInstance(editingContext, _ERFileAttachment.ENTITY_NAME);
 		eoObject.setMimeType(mimeType);
+		eoObject.setOriginalFileName(originalFileName);
 		eoObject.setProxied(proxied);
 		eoObject.setSize(size);
 		eoObject.setWebPath(webPath);

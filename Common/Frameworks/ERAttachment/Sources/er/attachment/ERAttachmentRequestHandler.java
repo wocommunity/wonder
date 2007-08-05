@@ -1,8 +1,10 @@
-package er.attachment.components;
+package er.attachment;
 
 import java.io.BufferedInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.NoSuchElementException;
 
 import org.apache.log4j.Logger;
 
@@ -22,11 +24,43 @@ import er.attachment.processors.ERAttachmentProcessor;
 import er.extensions.ERXEC;
 import er.extensions.ERXFileUtilities;
 
+/**
+ * ERAttachmentRequestHandler is the request handler that is used for loading 
+ * any proxied attachment.  To control security, you can set the delegate of this 
+ * request handler in your application constructor.  By default, all proxied 
+ * attachments are visible.
+ * 
+ * @author mschrag
+ */
 public class ERAttachmentRequestHandler extends WORequestHandler {
   public static final String REQUEST_HANDLER_KEY = "attachments";
   public static final Logger log = Logger.getLogger(AjaxFileUploadRequestHandler.class);
 
-  public ERAttachmentRequestHandler() {
+  /**
+   * The delegate definition for this request handler.
+   */
+  public static interface Delegate {
+    /**
+     * Called prior to displaying a proxied attachment to a user and can be used to implement
+     * security on top of attachments.
+     * 
+     * @param attachment the attachment that was requested
+     * @param request the current request
+     * @param context the current context
+     * @return true if the current user is allowed to view this attachment
+     */
+    public boolean attachmentVisible(ERAttachment attachment, WORequest request, WOContext context);
+  }
+
+  private ERAttachmentRequestHandler.Delegate _delegate;
+
+  /**
+   * Sets the delegate for this request handler.
+   * 
+   * @param delegate the delegate for this request handler
+   */
+  public void setDelegate(ERAttachmentRequestHandler.Delegate delegate) {
+    _delegate = delegate;
   }
 
   @Override
@@ -63,7 +97,10 @@ public class ERAttachmentRequestHandler extends WORequestHandler {
           editingContext.lock();
 
           try {
-            ERAttachment attachment = ERAttachment.fetchAttachmentWithWebPath(editingContext, webPath);
+            ERAttachment attachment = ERAttachment.fetchRequiredAttachmentWithWebPath(editingContext, webPath);
+            if (_delegate != null && !_delegate.attachmentVisible(attachment, request, context)) {
+              throw new SecurityException("You are not allowed to view the requested attachment.");
+            }
             mimeType = attachment.mimeType();
             length = attachment.size().longValue();
             InputStream rawAttachmentInputStream = ERAttachmentProcessor.processorForType(attachment).attachmentInputStream(attachment);
@@ -74,13 +111,29 @@ public class ERAttachmentRequestHandler extends WORequestHandler {
           }
           response.setHeader(mimeType, "Content-Type");
           response.setHeader(String.valueOf(length), "Content-Length");
-          
+
           String queryString = url.queryString();
           if (queryString != null && queryString.contains("attachment=true")) {
             response.setHeader("attachment; filename=" + ERXFileUtilities.fileNameFromBrowserSubmittedPath(webPath), "Content-Disposition");
           }
 
+          response.setStatus(200);
           response.setContentStream(attachmentInputStream, bufferSize, (int) length);
+        }
+        catch (SecurityException e) {
+          NSLog.out.appendln(e);
+          response.setContent(e.getMessage());
+          response.setStatus(403);
+        }
+        catch (NoSuchElementException e) {
+          NSLog.out.appendln(e);
+          response.setContent(e.getMessage());
+          response.setStatus(404);
+        }
+        catch (FileNotFoundException e) {
+          NSLog.out.appendln(e);
+          response.setContent(e.getMessage());
+          response.setStatus(404);
         }
         catch (IOException e) {
           NSLog.out.appendln(e);
@@ -98,20 +151,6 @@ public class ERAttachmentRequestHandler extends WORequestHandler {
     }
     finally {
       application.sleep();
-    }
-  }
-  
-  private static boolean _requestHandlerRegistered;
-  public static void ensureRequestHandlerRegistered() {
-    if (!_requestHandlerRegistered) {
-      synchronized (ERAttachmentViewer.class) {
-        if (!_requestHandlerRegistered) {
-          if (WOApplication.application().requestHandlerForKey(ERAttachmentRequestHandler.REQUEST_HANDLER_KEY) == null) {
-            WOApplication.application().registerRequestHandler(new ERAttachmentRequestHandler(), ERAttachmentRequestHandler.REQUEST_HANDLER_KEY);
-          }
-          _requestHandlerRegistered = true;
-        }
-      }
     }
   }
 }

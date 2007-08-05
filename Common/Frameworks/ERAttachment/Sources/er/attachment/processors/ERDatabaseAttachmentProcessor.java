@@ -1,6 +1,7 @@
 package er.attachment.processors;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -13,6 +14,12 @@ import er.attachment.model.ERAttachmentData;
 import er.attachment.model.ERDatabaseAttachment;
 import er.extensions.ERXProperties;
 
+/**
+ * ERDatabaseAttachmentProcessor implements storing attachment data as an attribute of an EO.  
+ * For more information about configuring an ERDatabaseAttachmentProcessor, see the top level documentation.
+ * 
+ * @author mschrag
+ */
 public class ERDatabaseAttachmentProcessor extends ERAttachmentProcessor<ERDatabaseAttachment> {
   @Override
   public ERDatabaseAttachment _process(EOEditingContext editingContext, File uploadedFile, String recommendedFileName, String mimeType, String configurationName) throws IOException {
@@ -27,11 +34,27 @@ public class ERDatabaseAttachmentProcessor extends ERAttachmentProcessor<ERDatab
       webPath = "/" + webPath;
     }
 
-    ERAttachmentData attachmentData = ERAttachmentData.createERAttachmentData(editingContext);
-    ERDatabaseAttachment attachment = ERDatabaseAttachment.createERDatabaseAttachment(editingContext, mimeType, Boolean.TRUE, Integer.valueOf((int) uploadedFile.length()), webPath, attachmentData);
+    boolean smallData = false;
+    String smallDataStr = ERXProperties.stringForKey("er.attachment.db." + configurationName + ".smallData");
+    if (smallDataStr == null) {
+      smallDataStr = ERXProperties.stringForKey("er.attachment.db.smallData");
+    }
+    if (smallDataStr != null) {
+      smallData = Boolean.parseBoolean(smallDataStr);
+    }
+
+    ERDatabaseAttachment attachment = ERDatabaseAttachment.createERDatabaseAttachment(editingContext, mimeType, recommendedFileName, Boolean.TRUE, Integer.valueOf((int) uploadedFile.length()), webPath);
     try {
       attachment.setWebPath(ERAttachmentProcessor._parsePathTemplate(attachment, webPath, recommendedFileName));
-      attachmentData.setData(new NSData(uploadedFile.toURL()));
+      NSData data = new NSData(uploadedFile.toURL());
+      if (smallData) {
+        attachment.setSmallData(data);
+      }
+      else {
+        ERAttachmentData attachmentData = ERAttachmentData.createERAttachmentData(editingContext);
+        attachmentData.setData(data);
+        attachment.setAttachmentDataRelationship(attachmentData);
+      }
     }
     catch (IOException e) {
       attachment.delete();
@@ -41,13 +64,30 @@ public class ERDatabaseAttachmentProcessor extends ERAttachmentProcessor<ERDatab
       attachment.delete();
       throw e;
     }
+    finally {
+      uploadedFile.delete();
+    }
 
     return attachment;
   }
 
   @Override
-  public InputStream attachmentInputStream(ERDatabaseAttachment attachment) {
-    return attachment.attachmentData().data().stream();
+  public InputStream attachmentInputStream(ERDatabaseAttachment attachment) throws FileNotFoundException {
+    NSData data = attachment.smallData();
+    if (data == null) {
+      ERAttachmentData attachmentData = attachment.attachmentData();
+      if (attachmentData != null) {
+        data = attachmentData.data();
+      }
+    }
+    InputStream attachmentInputStream;
+    if (data != null) {
+      attachmentInputStream = data.stream();
+    }
+    else {
+      throw new FileNotFoundException("There was no data available for this attachment.");
+    }
+    return attachmentInputStream;
   }
 
   @Override
