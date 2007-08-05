@@ -9,6 +9,7 @@ import com.webobjects.appserver.WOAssociation;
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WOResourceManager;
+import com.webobjects.appserver.WOResponse;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSBundle;
 import com.webobjects.foundation.NSDictionary;
@@ -205,7 +206,7 @@ public class ERXComponentUtilities {
 	 */
 	public static NSArray componentTree() {
 		WOContext context = ERXWOContext.currentContext();
-		NSMutableArray result = new NSMutableArray();
+		NSMutableArray<String> result = new NSMutableArray<String>();
 		if(context != null) {
 			WOComponent c = context.component();
 			while(c != null) {
@@ -214,5 +215,50 @@ public class ERXComponentUtilities {
 			}
 		}
 		return result;
+	}
+
+	/**
+	 * Appends a dictionary of associations as HTML attributes.
+	 * 
+	 * @param associations the associations dictionary
+	 * @param response the response to write to
+	 * @param context the context
+	 */
+	public static void appendHtmlAttributes(NSDictionary<String, WOAssociation> associations, WOResponse response, WOContext context) {
+		WOComponent component = context.component();
+		ERXComponentUtilities.appendHtmlAttributes(associations, response, component);
+	}
+  
+	/**
+	 * Appends a dictionary of associations as HTML attributes.
+	 * 
+	 * @param associations the associations dictionary
+	 * @param response the response to write to
+	 * @param component the component to evaluate the associations within
+	 */
+	public static void appendHtmlAttributes(NSDictionary<String, WOAssociation> associations, WOResponse response, WOComponent component) {
+		for (String key : associations.allKeys()) {
+			WOAssociation association = associations.objectForKey(key);
+			ERXComponentUtilities.appendHtmlAttribute(key, association, response, component);
+		}
+	}
+	  
+	/**
+	 * Appends an association as an HTML attribute.
+	 * 
+	 * @param key the key to append
+	 * @param association the association
+	 * @param response the response to write to
+	 * @param component the component to evaluate the association within
+	 */
+	public static void appendHtmlAttribute(String key, WOAssociation association, WOResponse response, WOComponent component) {
+		Object value = association.valueInComponent(component);
+		if (value != null) {
+			response.appendContentString(" ");
+			response.appendContentString(key);
+			response.appendContentString("=\"");
+			response.appendContentHTMLAttributeValue(value.toString());
+			response.appendContentString("\"");
+		}
 	}
 }
