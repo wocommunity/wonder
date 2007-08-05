@@ -59,7 +59,7 @@ public class ERS3AttachmentProcessor extends ERAttachmentProcessor<ERS3Attachmen
       keyTemplate = "${pk}${ext}";
     }
 
-    ERS3Attachment attachment = ERS3Attachment.createERS3Attachment(editingContext, recommendedFileName, Boolean.FALSE, Integer.valueOf((int) uploadedFile.length()), null);
+    ERS3Attachment attachment = ERS3Attachment.createERS3Attachment(editingContext, mimeType, Boolean.FALSE, Integer.valueOf((int) uploadedFile.length()), null);
     try {
       String key = ERAttachmentProcessor._parsePathTemplate(attachment, keyTemplate, recommendedFileName);
       attachment.setWebPath("/" + bucket + "/" + key);

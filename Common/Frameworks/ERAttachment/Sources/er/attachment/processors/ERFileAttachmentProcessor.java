@@ -59,7 +59,7 @@ public class ERFileAttachmentProcessor extends ERAttachmentProcessor<ERFileAttac
       webPath = "/" + webPath;
     }
 
-    ERFileAttachment attachment = ERFileAttachment.createERFileAttachment(editingContext, recommendedFileName, Boolean.valueOf(proxy), Integer.valueOf((int) uploadedFile.length()), webPath);
+    ERFileAttachment attachment = ERFileAttachment.createERFileAttachment(editingContext, mimeType, Boolean.valueOf(proxy), Integer.valueOf((int) uploadedFile.length()), webPath);
     try {
       webPath = ERAttachmentProcessor._parsePathTemplate(attachment, webPath, recommendedFileName);
       filesystemPath = ERAttachmentProcessor._parsePathTemplate(attachment, filesystemPath, recommendedFileName);
