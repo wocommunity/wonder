@@ -125,11 +125,11 @@ your WebObjecst applications (see the section on security below for more info).
 </p>
 
 <dl>
-	<dt>er.attachment.db.webPath / er.attachment.db.[configurationName].webPath</dt>
+	<dt>er.attachment.db.webPath / er.attachment.[configurationName].db.webPath</dt>
 	<dd>(optional) The path that will be appended to the URL after the "/attachments" request handler key.  Defaults to "/${pk}${ext}".
 	webPaths must be unique across all attachments (including ${pk} ensures this).</dd>
 	
-	<dt>er.attachment.db.smallData / er.attachment.db.[configurationName].smallData</dt>
+	<dt>er.attachment.db.smallData / er.attachment.[configurationName].db.smallData</dt>
 	<dd>(optional) Because of the memory characteristics of EOF and large BLOBs, a common design for storing data in an EO
 	is to have a to-one relationship that contains the data.  This requires an extra query to retrieve the EO that contains
 	the data, but provides better memory performance.  However, if you are storing very small amounts of data -- for instance,
@@ -151,21 +151,21 @@ attachments from within your WebObjecst applications (see the section on securit
 </p>
 
 <dl>
-	<dt>er.attachment.file.proxy / er.attachment.file.[configurationName].proxy</dt>
+	<dt>er.attachment.file.proxy / er.attachment.[configurationName].file.proxy</dt>
 	<dd>(optional) If proxy is true, then the attachment's contents will be served through the request handler proxy.  The default
 	is true.</dd>
 	
-	<dt>er.attachment.file.overwrite / er.attachment.file.[configurationName].overwrite</dt>
+	<dt>er.attachment.file.overwrite / er.attachment.[configurationName].file.overwrite</dt>
 	<dd>(optional) If you specify a filesystemPath based on ${fileName}, it is possible that you may have duplicates.  If overwrite
 	is true, then duplicates will be overwritten.  If false, then a unique name based on the template will be created using
 	a "filename-1.gif", "filename-2.gif" scheme. The default is false.</dd>
 	
-	<dt>er.attachment.file.filesystemPath / er.attachment.file.[configurationName].filesystemPath</dt>
+	<dt>er.attachment.file.filesystemPath / er.attachment.[configurationName].file.filesystemPath</dt>
 	<dd>(required) The filesystem path specifies the full path of the destination of the uploaded attachment, including its filename.
 	This property is evaluated as a path template (see above).  An example might be 
 	"/Library/WebServer/Documents/photos/${hash}/${pk}${ext}".</dd>
 	
-	<dt>er.attachment.file.webPath / er.attachment.file.[configurationName].webPath</dt>
+	<dt>er.attachment.file.webPath / er.attachment.[configurationName].file.webPath</dt>
 	<dd>(required if proxy is false) The web path specifies the patch relative to the webserver document root (or request handler if
 	proxy is true) used to locate the given attachment.  webPaths must be unique across all attachments.  If proxy is false, the
 	default webPath is "/${pk}{$ext}".  If the above example of a filesystemPath, if proxy is false, then the appropriate webPath
@@ -180,16 +180,16 @@ attachment system for a public website.  For information about signing up for an
 </p>
 
 <dl>
-	<dt>er.attachment.s3.accessKeyID / er.attachment.s3.[configurationName].accessKeyID</dt>
+	<dt>er.attachment.s3.accessKeyID / er.attachment.[configurationName].s3.accessKeyID</dt>
 	<dd>(required) Your Amazon S3 access key ID.  This is loaded using ERXProperties.decryptedStringForKey if you would like to encrypt it.</dd>
 	
-	<dt>er.attachment.s3.secretAccessKey / er.attachment.s3.[configurationName].secretAccessKey</dt>
+	<dt>er.attachment.s3.secretAccessKey / er.attachment.[configurationName].s3.secretAccessKey</dt>
 	<dd>(required) Your Amazon S3 secret access key.  This is loaded using ERXProperties.decryptedStringForKey if you would like to encrypt it.</dd>
 	
-	<dt>er.attachment.s3.bucket / er.attachment.s3.[configurationName].bucket</dt>
+	<dt>er.attachment.s3.bucket / er.attachment.[configurationName].s3.bucket</dt>
 	<dd>(required) The name of the bucket to store and retrieve attachments into.  The bucket must already exist in your S3 account.</dd> 
 
-	<dt>er.attachment.s3.key / er.attachment.s3.[configurationName].key</dt>
+	<dt>er.attachment.s3.key / er.attachment.[configurationName].s3.key</dt>
 	<dd>(optional) The name of the file to store in the S3 bucket.  This is evaluated as a path template.  The default value is "${pk}${ext}".</dd>
 </dl>
 
@@ -282,9 +282,9 @@ using a non-Ajax file upload in this example.
 <h3>Properties</h3>
 <code>
 er.attachment.Person.avatar.storageType=s3
-er.attachment.s3.Person.avatar.accessKeyID=xxxxxxxxxx
-er.attachment.s3.Person.avatar.secretAccessKey=xxxxxxxxxxxxxxx
-er.attachment.s3.Person.avatar.bucket=Avatars
+er.attachment.Person.avatar.s3.accessKeyID=xxxxxxxxxx
+er.attachment.Person.avatar.s3.secretAccessKey=xxxxxxxxxxxxxxx
+er.attachment.Person.avatar.s3.bucket=Avatars
 </code>
 
 <h3>WOD</h3>

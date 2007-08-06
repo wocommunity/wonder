@@ -1,11 +1,13 @@
 package er.attachment.model;
 
 import java.io.File;
+import java.util.NoSuchElementException;
 
 import org.apache.log4j.Logger;
 
 import com.webobjects.eocontrol.EOEditingContext;
 
+import er.attachment.processors.ERAttachmentProcessor;
 import er.attachment.utils.ERMimeType;
 import er.attachment.utils.ERMimeTypeManager;
 
@@ -51,5 +53,18 @@ public abstract class ERAttachment extends _ERAttachment {
   public static ERAttachment fetchRequiredAttachmentWithWebPath(EOEditingContext editingContext, String webPath) {
     ERAttachment attachment = ERAttachment.fetchRequiredERAttachment(editingContext, ERAttachment.WEB_PATH_KEY, webPath);
     return attachment;
+  }
+  
+  @Override
+  public void didDelete(EOEditingContext ec) {
+    super.didDelete(ec);
+    try {
+      System.out.println("ERAttachment.didDelete: deleting " + webPath());
+      ERAttachmentProcessor.processorForType(this).deleteAttachment(this);
+      System.out.println("ERAttachment.didDelete: deleted");
+    }
+    catch (Throwable e) {
+      ERAttachment.log.error("Failed to delete attachment '" + primaryKey() + "'.", e);
+    }
   }
 }

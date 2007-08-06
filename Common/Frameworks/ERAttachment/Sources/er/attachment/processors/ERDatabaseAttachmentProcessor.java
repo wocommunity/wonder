@@ -23,19 +23,19 @@ import er.extensions.ERXProperties;
 public class ERDatabaseAttachmentProcessor extends ERAttachmentProcessor<ERDatabaseAttachment> {
   @Override
   public ERDatabaseAttachment _process(EOEditingContext editingContext, File uploadedFile, String recommendedFileName, String mimeType, String configurationName, String ownerID) throws IOException {
-    String webPath = ERXProperties.stringForKey("er.attachment.db." + configurationName + ".webPath");
+    String webPath = ERXProperties.stringForKey("er.attachment." + configurationName + ".db.webPath");
     if (webPath == null) {
       webPath = ERXProperties.stringForKeyWithDefault("er.attachment.db.webPath", "/${pk}${ext}");
     }
     if (webPath == null) {
-      throw new IllegalArgumentException("There is no 'er.attachment.db." + configurationName + ".path' or 'er.attachment.db.path' property set.");
+      throw new IllegalArgumentException("There is no 'er.attachment." + configurationName + ".db.path' or 'er.attachment.db.path' property set.");
     }
     else if (!webPath.startsWith("/")) {
       webPath = "/" + webPath;
     }
 
     boolean smallData = false;
-    String smallDataStr = ERXProperties.stringForKey("er.attachment.db." + configurationName + ".smallData");
+    String smallDataStr = ERXProperties.stringForKey("er.attachment." + configurationName + ".db.smallData");
     if (smallDataStr == null) {
       smallDataStr = ERXProperties.stringForKey("er.attachment.db.smallData");
     }
@@ -93,5 +93,10 @@ public class ERDatabaseAttachmentProcessor extends ERAttachmentProcessor<ERDatab
   @Override
   public String attachmentUrl(ERDatabaseAttachment attachment, WORequest request, WOContext context, String configurationName) {
     return proxiedUrl(attachment, context);
+  }
+  
+  @Override
+  public void deleteAttachment(ERDatabaseAttachment attachment) {
+    // cascade delete rules do this for us ...
   }
 }
