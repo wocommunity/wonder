@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.List;
@@ -31,33 +32,53 @@ import er.extensions.ERXProperties;
 public class ERS3AttachmentProcessor extends ERAttachmentProcessor<ERS3Attachment> {
   public static final String S3_URL = "http://s3.amazonaws.com";
 
-  @Override
-  public ERS3Attachment _process(EOEditingContext editingContext, File uploadedFile, String recommendedFileName, String mimeType, String configurationName, String ownerID) throws IOException {
-    String accessKeyID = ERXProperties.decryptedStringForKey("er.attachment.s3." + configurationName + ".accessKeyID");
+  protected String accessKeyID(String configurationName) {
+    String accessKeyID = ERXProperties.decryptedStringForKey("er.attachment." + configurationName + ".s3.accessKeyID");
     if (accessKeyID == null) {
       accessKeyID = ERXProperties.decryptedStringForKey("er.attachment.s3.accessKeyID");
     }
     if (accessKeyID == null) {
-      throw new IllegalArgumentException("There is no 'er.attachment.s3." + configurationName + ".accessKeyID' or 'er.attachment.s3.accessKeyID' property set.");
+      throw new IllegalArgumentException("There is no 'er.attachment." + configurationName + ".s3.accessKeyID' or 'er.attachment.s3.accessKeyID' property set.");
     }
+    return accessKeyID;
+  }
 
-    String secretAccessKey = ERXProperties.decryptedStringForKey("er.attachment.s3." + configurationName + ".secretAccessKey");
+  protected String secretAccessKey(String configurationName) {
+    String secretAccessKey = ERXProperties.decryptedStringForKey("er.attachment." + configurationName + ".s3.secretAccessKey");
     if (secretAccessKey == null) {
       secretAccessKey = ERXProperties.decryptedStringForKey("er.attachment.s3.secretAccessKey");
     }
     if (secretAccessKey == null) {
-      throw new IllegalArgumentException("There is no 'er.attachment.s3." + configurationName + ".secretAccessKey' or 'er.attachment.s3.secretAccessKey' property set.");
+      throw new IllegalArgumentException("There is no 'er.attachment." + configurationName + ".s3.secretAccessKey' or 'er.attachment.s3.secretAccessKey' property set.");
     }
+    return secretAccessKey;
+  }
 
-    String bucket = ERXProperties.decryptedStringForKey("er.attachment.s3." + configurationName + ".bucket");
+  protected AWSAuthConnection awsConnection(String configurationName) {
+    AWSAuthConnection conn = new AWSAuthConnection(accessKeyID(configurationName), secretAccessKey(configurationName), true);
+    return conn;
+  }
+
+  protected QueryStringAuthGenerator queryStringAuthGenerator(String configurationName) {
+    return new QueryStringAuthGenerator(accessKeyID(configurationName), secretAccessKey(configurationName), false);
+  }
+
+  protected boolean failed(Response response) throws IOException {
+    int responseCode = response.connection.getResponseCode();
+    return (responseCode < 200 || responseCode >= 300);
+  }
+
+  @Override
+  public ERS3Attachment _process(EOEditingContext editingContext, File uploadedFile, String recommendedFileName, String mimeType, String configurationName, String ownerID) throws IOException {
+    String bucket = ERXProperties.decryptedStringForKey("er.attachment." + configurationName + ".s3.bucket");
     if (bucket == null) {
       bucket = ERXProperties.decryptedStringForKey("er.attachment.s3.bucket");
     }
     if (bucket == null) {
-      throw new IllegalArgumentException("There is no 'er.attachment.s3." + configurationName + ".bucket' or 'er.attachment.s3.bucket' property set.");
+      throw new IllegalArgumentException("There is no 'er.attachment." + configurationName + ".s3.bucket' or 'er.attachment.s3.bucket' property set.");
     }
 
-    String keyTemplate = ERXProperties.stringForKey("er.attachment.s3." + configurationName + ".key");
+    String keyTemplate = ERXProperties.stringForKey("er.attachment." + configurationName + ".s3.key");
     if (keyTemplate == null) {
       keyTemplate = ERXProperties.stringForKey("er.attachment.s3.key");
     }
@@ -70,7 +91,7 @@ public class ERS3AttachmentProcessor extends ERAttachmentProcessor<ERS3Attachmen
       String key = ERAttachmentProcessor._parsePathTemplate(attachment, keyTemplate, recommendedFileName);
       attachment.setWebPath("/" + bucket + "/" + key);
 
-      AWSAuthConnection conn = new AWSAuthConnection(accessKeyID, secretAccessKey, true);
+      AWSAuthConnection conn = awsConnection(configurationName);
       FileInputStream attachmentFileInputStream = new FileInputStream(uploadedFile);
       BufferedInputStream attachmentInputStream = new BufferedInputStream(attachmentFileInputStream);
       try {
@@ -81,17 +102,15 @@ public class ERS3AttachmentProcessor extends ERAttachmentProcessor<ERS3Attachmen
         headers.put("Content-Length", Arrays.asList(new String[] { String.valueOf(attachment.size()) }));
         headers.put("x-amz-acl", Arrays.asList(new String[] { "public-read" }));
         Response response = conn.putStream(bucket, key, attachmentStreamObject, headers);
-        int responseCode = response.connection.getResponseCode();
-        if (responseCode < 200 || responseCode >= 300) {
-          String responseMessage = response.connection.getResponseMessage();
-          throw new IOException("Failed to write '" + bucket + "/" + key + "' to S3: Error " + responseCode + ": " + responseMessage);
+        if (failed(response)) {
+          throw new IOException("Failed to write '" + bucket + "/" + key + "' to S3: Error " + response.connection.getResponseCode() + ": " + response.connection.getResponseMessage());
         }
       }
       finally {
         attachmentInputStream.close();
       }
 
-      String s3Path = new QueryStringAuthGenerator(accessKeyID, secretAccessKey, false).makeBareURL(bucket, key);
+      String s3Path = queryStringAuthGenerator(configurationName).makeBareURL(bucket, key);
       attachment.setS3Path(s3Path);
     }
     catch (IOException e) {
@@ -105,7 +124,7 @@ public class ERS3AttachmentProcessor extends ERAttachmentProcessor<ERS3Attachmen
     finally {
       uploadedFile.delete();
     }
-    
+
     return attachment;
   }
 
@@ -118,5 +137,17 @@ public class ERS3AttachmentProcessor extends ERAttachmentProcessor<ERS3Attachmen
   public String attachmentUrl(ERS3Attachment attachment, WORequest request, WOContext context, String configurationName) {
     String attachmentUrl = attachment.s3Path();
     return attachmentUrl;
+  }
+
+  @Override
+  public void deleteAttachment(ERS3Attachment attachment) throws MalformedURLException, IOException {
+    AWSAuthConnection conn = awsConnection(attachment.configurationName());
+    String[] paths = attachment.webPath().split("/");
+    String bucket = paths[1];
+    String key = paths[2];
+    Response response = conn.delete(bucket, key, null);
+    if (failed(response)) {
+      throw new IOException("Failed to delete '" + bucket + "/" + key + "' to S3: Error " + response.connection.getResponseCode() + ": " + response.connection.getResponseMessage());
+    }
   }
 }

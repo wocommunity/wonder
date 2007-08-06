@@ -24,7 +24,7 @@ public class ERFileAttachmentProcessor extends ERAttachmentProcessor<ERFileAttac
   @Override
   public ERFileAttachment _process(EOEditingContext editingContext, File uploadedFile, String recommendedFileName, String mimeType, String configurationName, String ownerID) throws IOException {
     boolean proxy = true;
-    String proxyStr = ERXProperties.stringForKey("er.attachment.file." + configurationName + ".proxy");
+    String proxyStr = ERXProperties.stringForKey("er.attachment." + configurationName + ".file.proxy");
     if (proxyStr == null) {
       proxyStr = ERXProperties.stringForKey("er.attachment.file.proxy");
     }
@@ -33,7 +33,7 @@ public class ERFileAttachmentProcessor extends ERAttachmentProcessor<ERFileAttac
     }
 
     boolean overwrite = false;
-    String overwriteStr = ERXProperties.stringForKey("er.attachment.file." + configurationName + ".overwrite");
+    String overwriteStr = ERXProperties.stringForKey("er.attachment." + configurationName + ".file.overwrite");
     if (overwriteStr == null) {
       overwriteStr = ERXProperties.stringForKey("er.attachment.file.overwrite");
     }
@@ -41,24 +41,24 @@ public class ERFileAttachmentProcessor extends ERAttachmentProcessor<ERFileAttac
       overwrite = Boolean.parseBoolean(overwriteStr);
     }
 
-    String filesystemPath = ERXProperties.stringForKey("er.attachment.file." + configurationName + ".filesystemPath");
+    String filesystemPath = ERXProperties.stringForKey("er.attachment." + configurationName + ".file.filesystemPath");
     if (filesystemPath == null) {
       filesystemPath = ERXProperties.stringForKey("er.attachment.file.filesystemPath");
     }
     if (filesystemPath == null) {
-      throw new IllegalArgumentException("There is no 'er.attachment.file." + configurationName + ".filesystemPath' or 'er.attachment.file.filesystemPath' property set.");
+      throw new IllegalArgumentException("There is no 'er.attachment." + configurationName + ".file.filesystemPath' or 'er.attachment.file.filesystemPath' property set.");
     }
     if (!filesystemPath.contains("${")) {
       filesystemPath = filesystemPath + "/attachments/${hash}/${pk}${ext}";
     }
 
-    String webPath = ERXProperties.stringForKey("er.attachment.file." + configurationName + ".webPath");
+    String webPath = ERXProperties.stringForKey("er.attachment." + configurationName + ".file.webPath");
     if (webPath == null) {
       webPath = ERXProperties.stringForKey("er.attachment.file.webPath");
     }
     if (webPath == null) {
       if (!proxy) {
-        throw new IllegalArgumentException("There is no 'er.attachment.file." + configurationName + ".webPath' or 'er.attachment.file.webPath' property set.");
+        throw new IllegalArgumentException("There is no 'er.attachment." + configurationName + ".file.webPath' or 'er.attachment.file.webPath' property set.");
       }
       webPath = "/${pk}${ext}";
     }
@@ -111,5 +111,14 @@ public class ERFileAttachmentProcessor extends ERAttachmentProcessor<ERFileAttac
       attachmentUrl = proxiedUrl(attachment, context);
     }
     return attachmentUrl;
+  }
+  
+  @Override
+  public void deleteAttachment(ERFileAttachment attachment) throws IOException {
+    String filesystemPath = attachment.filesystemPath();
+    File attachmentFile = new File(filesystemPath);
+    if (attachmentFile.exists() && !attachmentFile.delete()) {
+      throw new IOException("Failed to delete the attachment '" + attachmentFile + "'.");
+    }
   }
 }
