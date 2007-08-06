@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 
+import org.apache.log4j.Logger;
+
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WORequest;
 import com.webobjects.eocontrol.EOEditingContext;
@@ -40,6 +42,8 @@ import er.extensions.ERXValidationException;
  * @property er.attachment.[configurationName] maxSize the maximum size of an uploaded attachment
  */
 public abstract class ERAttachmentProcessor<T extends ERAttachment> {
+  public static final Logger log = Logger.getLogger(ERAttachmentProcessor.class);
+
   private static final String EXT_VARIABLE = "\\$\\{ext\\}";
   private static final String HASH_VARIABLE = "\\$\\{hash\\}";
   private static final String PK_VARIABLE = "\\$\\{pk\\}";
@@ -264,4 +268,12 @@ public abstract class ERAttachmentProcessor<T extends ERAttachment> {
    * @return a URL to the attachment's data
    */
   public abstract String attachmentUrl(T attachment, WORequest request, WOContext context, String configurationName);
+  
+  /**
+   * Deletes the attachment from the data store.
+   * 
+   * @param attachment the attachment to delete
+   * @throws IOException if the delete fails
+   */
+  public abstract void deleteAttachment(T attachment) throws IOException;
 }
