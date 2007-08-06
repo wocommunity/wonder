@@ -109,17 +109,19 @@ public class ERXMultiKey {
      * @return result of comparison
      */
     public final boolean equals(Object o) {
-        // FIXME: Potential ClassCastException here
-        ERXMultiKey o2=(ERXMultiKey)o;
-        if (_keyCount!=o2._keyCount)
-            return false;
-        for (int i=0; i<_keyCount; i++) {
-            Object k=o2._keys[i];
-            Object m=_keys[i];
-            if (m!=k && (m==null || k==null || !m.equals(k)))
-                return false;
-        }
-        return true;
+    	if (o instanceof ERXMultiKey) {
+    		ERXMultiKey o2 = (ERXMultiKey) o;
+    		if (_keyCount!=o2._keyCount)
+    			return false;
+    		for (int i=0; i<_keyCount; i++) {
+    			Object k=o2._keys[i];
+    			Object m=_keys[i];
+    			if (m!=k && (m==null || k==null || !m.equals(k)))
+    				return false;
+    		}
+    		return true;
+    	}
+    	return false;
     }
 
     /**
