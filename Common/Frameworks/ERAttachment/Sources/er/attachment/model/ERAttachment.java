@@ -59,9 +59,7 @@ public abstract class ERAttachment extends _ERAttachment {
   public void didDelete(EOEditingContext ec) {
     super.didDelete(ec);
     try {
-      System.out.println("ERAttachment.didDelete: deleting " + webPath());
       ERAttachmentProcessor.processorForType(this).deleteAttachment(this);
-      System.out.println("ERAttachment.didDelete: deleted");
     }
     catch (Throwable e) {
       ERAttachment.log.error("Failed to delete attachment '" + primaryKey() + "'.", e);
