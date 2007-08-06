@@ -11,6 +11,7 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Enumeration;
+import java.util.Iterator;
 
 import org.apache.log4j.Logger;
 
@@ -592,7 +593,9 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
                     _setClassDescriptionOnEntity(entity, cd);
                 }
             } else {
-                log.error("Unable to register descriptions for class: " + class1.getName(), new RuntimeException("Dummy"));
+            	if(class1.getName().indexOf('$') < 0) {
+            		log.error("Unable to register descriptions for class: " + class1.getName(), new RuntimeException("Dummy"));
+            	}
             }
         }
         
