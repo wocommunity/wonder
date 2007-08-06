@@ -47,7 +47,7 @@ are stored and served by simple adjusting some configuration properties.
 <h2>Installation and Setup</h2>
 <p>
 If you use Project Wonder migrations and migrateOnStartup, then the ERAttachment tables will be automatically created
-for you on the first launch.  If you do no, then you can either manually execute the .migration SQL scripts that are
+for you on the first launch.  If you do not, then you can either manually execute the .migration SQL scripts that are
 in the Resources folder, or you can open the EOModel and generate SQL for your particular database.
 </p>
 
@@ -57,7 +57,7 @@ Each processor has different settings that are required to be able to perform an
 is carried through all of them, however, is that of a "configuration".  It's very likely that a simple application
 may have multiple attachment columns -- maybe a Person has an avatar, and a Bug has a screenshot.  In this case,
 it is also often desirable to have different configuration sets for each type of attachment.  All of the 
-configuration settings can be overriden on a per configuration basis.  For instance, if you set the value
+configuration settings can be overridden on a per configuration basis.  For instance, if you set the value
 "er.attachment.s3.bucket" as the default bucket to put attachments into, you could also define a configuration 
 "Person.avatar" (the actual String is unimportant, but a good idea is to make it EntityName.relationshipName to
 keep things clear) and then also define a property "er.attachment.s3.Person.avatar.bucket" which would override
@@ -121,7 +121,7 @@ the C9ResourceStreamer, which could stream in and out of the a database column, 
 NSData blob columns.  Because of the memory characteristics of blob columns in EOF, this attachment type is only suitable
 for relatively small data sizes. All database attachments are served through the ERAttachmentRequestHandler.  Because
 it is proxied, database attachments provide the capability of security checking access to the attachments from within
-your WebObjecst applications (see the section on security below for more info).
+your WebObjects applications (see the section on security below for more info).
 </p>
 
 <dl>
@@ -166,9 +166,9 @@ attachments from within your WebObjecst applications (see the section on securit
 	"/Library/WebServer/Documents/photos/${hash}/${pk}${ext}".</dd>
 	
 	<dt>er.attachment.file.webPath / er.attachment.[configurationName].file.webPath</dt>
-	<dd>(required if proxy is false) The web path specifies the patch relative to the webserver document root (or request handler if
+	<dd>(required if proxy is false) The web path specifies the path relative to the webserver document root (or request handler if
 	proxy is true) used to locate the given attachment.  webPaths must be unique across all attachments.  If proxy is false, the
-	default webPath is "/${pk}{$ext}".  If the above example of a filesystemPath, if proxy is false, then the appropriate webPath
+	default webPath is "/${pk}{$ext}".  In the above example of a filesystemPath, if proxy is false, then the appropriate webPath
 	would be "/photos/${hash}/${pk}${ext}".</dd>
 </dl>
 
@@ -342,7 +342,7 @@ work of actually switching everything around is left as an exercise for the read
 <h2>Viewing Attachments</h2>
 <p>
 There are two ways to view an attachment -- linking or embedding.  To embed an attachment in the page (assuming it is an
-embeddeable type), you can use the ERAttachmentViewer component.  If the attachment type is not one that has a renderer,
+embeddable type), you can use the ERAttachmentViewer component.  If the attachment type is not one that has a renderer,
 ERAttachmentViewer will display a link to the attachment instead.  If you only want to provide a link, ERAttachmentLink
 works basically link a WOHyperlink except that you provide a configurationName and attachment reference.
 </p>
