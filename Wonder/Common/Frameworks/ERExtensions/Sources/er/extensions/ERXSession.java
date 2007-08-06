@@ -396,7 +396,7 @@ public class ERXSession extends ERXAjaxSession implements Serializable {
    */
   public void awake() {
     super.awake();
-    ERXExtensions.setSession(this);
+    ERXSession.setSession(this);
     ERXLocalizer.setCurrentLocalizer(localizer());
     NSNotificationCenter.defaultCenter().postNotification(SessionWillAwakeNotification, this);
 
@@ -420,7 +420,7 @@ public class ERXSession extends ERXAjaxSession implements Serializable {
     NSNotificationCenter.defaultCenter().postNotification(SessionWillSleepNotification, this);
     super.sleep();
     ERXLocalizer.setCurrentLocalizer(null);
-    ERXExtensions.setSession(null);
+    ERXSession.setSession(null);
     // reset backtracking
     _didBacktrack = null;
     Thread.currentThread().setName(_originalThreadName);
