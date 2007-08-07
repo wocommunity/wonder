@@ -1,0 +1,63 @@
+PageNumberRepetition : WORepetition {
+	list = pageNumbers;
+	item = repetitionPageNumber;
+}
+
+HasPreviousPageConditional : WOConditional {
+	condition = hasPreviousPage;
+}
+
+HasNoPreviousPageConditional : WOConditional {
+	condition = hasPreviousPage;
+	negate = true;
+}
+
+PreviousPageAction : WOHyperlink {
+	action = previousPage;
+	class = "prev";
+}
+
+HasNextPageConditional : WOConditional {
+	condition = hasNextPage;
+}
+
+HasNoNextPageConditional : WOConditional {
+	condition = hasNextPage;
+	negate = true;
+}
+
+NextPageAction : WOHyperlink {
+	action = nextPage;
+	class = "next";
+}
+
+SelectPageAction : WOHyperlink {
+	action = selectPage;
+}
+
+PageNumber : WOString {
+	value = repetitionPageNumber.pageNumber;
+}
+
+IsCurrentPageNumberConditional : WOConditional {
+	condition = currentPageNumber;
+}
+
+IsNotCurrentPageNumberConditional : WOConditional {
+	condition = currentPageNumber;
+	negate = true;
+}
+
+IsPageNumberConditional : WOConditional {
+	condition = repetitionPageNumber.pageNumber;
+}
+
+IsEllipsisConditional : WOConditional {
+	condition = repetitionPageNumber.pageNumber;
+	negate = true;
+}
+
+DisplayName : ERXPluralString {
+	count = displayGroup.allObjects.count;
+	value = displayName;
+}
