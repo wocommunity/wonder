@@ -1,0 +1,66 @@
+PageNumberRepetition : WORepetition {
+	list = pageNumbers;
+	item = repetitionPageNumber;
+}
+
+HasPreviousPageConditional : WOConditional {
+	condition = hasPreviousPage;
+}
+
+HasNoPreviousPageConditional : WOConditional {
+	condition = hasPreviousPage;
+	negate = true;
+}
+
+PreviousPageAction : AjaxUpdateLink {
+	action = previousPage;
+	class = "prev";
+	updateContainerID = updateContainerID;
+}
+
+HasNextPageConditional : WOConditional {
+	condition = hasNextPage;
+}
+
+HasNoNextPageConditional : WOConditional {
+	condition = hasNextPage;
+	negate = true;
+}
+
+NextPageAction : AjaxUpdateLink {
+	action = nextPage;
+	class = "next";
+	updateContainerID = updateContainerID;
+}
+
+SelectPageAction : AjaxUpdateLink {
+	action = selectPage;
+	updateContainerID = updateContainerID;
+}
+
+PageNumber : WOString {
+	value = repetitionPageNumber.pageNumber;
+}
+
+IsCurrentPageNumberConditional : WOConditional {
+	condition = currentPageNumber;
+}
+
+IsNotCurrentPageNumberConditional : WOConditional {
+	condition = currentPageNumber;
+	negate = true;
+}
+
+IsPageNumberConditional : WOConditional {
+	condition = repetitionPageNumber.pageNumber;
+}
+
+IsEllipsisConditional : WOConditional {
+	condition = repetitionPageNumber.pageNumber;
+	negate = true;
+}
+
+DisplayName : ERXPluralString {
+	count = displayGroup.allObjects.count;
+	value = displayName;
+}
