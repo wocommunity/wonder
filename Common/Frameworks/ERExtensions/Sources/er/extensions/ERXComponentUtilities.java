@@ -261,4 +261,32 @@ public class ERXComponentUtilities {
 			response.appendContentString("\"");
 		}
 	}
+	
+
+	/**
+	 * Returns the component for the given class without having to cast.  
+	 * For example: MyPage page = ERXComponentUtilities.pageWithName(MyPage.class, context);
+	 * 
+	 * @param <T> the type of component to 
+	 * @param componentClass the component class to lookup
+	 * @param context the context
+	 * @return the created component
+	 */
+	@SuppressWarnings("unchecked")
+	public <T extends WOComponent> T pageWithName(Class<T> componentClass, WOContext context) {
+		return (T) ERXApplication.erxApplication().pageWithName(componentClass, context);
+	}
+
+	/**
+	 * Calls pageWithName with ERXWOContext.currentContext() for the current thread.
+	 * 
+	 * @param <T> the type of component to 
+	 * @param componentClass the component class to lookup
+	 * @return the created component
+	 */
+	@SuppressWarnings("unchecked")
+	public <T extends WOComponent> T pageWithName(Class<T> componentClass) {
+		return (T) ERXApplication.erxApplication().pageWithName(componentClass);
+	}
+
 }
