@@ -1415,6 +1415,32 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
         ERXMessageEncoding.setDefaultEncodingForAllLanguages(encoding);
 	}
 
+	/**
+	 * Returns the component for the given class without having to cast.  
+	 * For example: MyPage page = ERXApplication.erxApplication().pageWithName(MyPage.class, context);
+	 * 
+	 * @param <T> the type of component to 
+	 * @param componentClass the component class to lookup
+	 * @param context the context
+	 * @return the created component
+	 */
+	@SuppressWarnings("unchecked")
+	public <T extends WOComponent> T pageWithName(Class<T> componentClass, WOContext context) {
+		return (T) super.pageWithName(componentClass.getName(), context);
+	}
+
+	/**
+	 * Calls pageWithName with ERXWOContext.currentContext() for the current thread.
+	 * 
+	 * @param <T> the type of component to 
+	 * @param componentClass the component class to lookup
+	 * @return the created component
+	 */
+	@SuppressWarnings("unchecked")
+	public <T extends WOComponent> T pageWithName(Class<T> componentClass) {
+		return (T) super.pageWithName(componentClass.getName(), ERXWOContext.currentContext());
+	}
+
 	public NSKeyValueCodingAdditions constants() {
 		return new NSKeyValueCodingAdditions() {
 
