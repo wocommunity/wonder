@@ -273,7 +273,7 @@ public class ERXComponentUtilities {
 	 * @return the created component
 	 */
 	@SuppressWarnings("unchecked")
-	public <T extends WOComponent> T pageWithName(Class<T> componentClass, WOContext context) {
+	public static <T extends WOComponent> T pageWithName(Class<T> componentClass, WOContext context) {
 		return (T) ERXApplication.erxApplication().pageWithName(componentClass, context);
 	}
 
@@ -285,7 +285,7 @@ public class ERXComponentUtilities {
 	 * @return the created component
 	 */
 	@SuppressWarnings("unchecked")
-	public <T extends WOComponent> T pageWithName(Class<T> componentClass) {
+	public static <T extends WOComponent> T pageWithName(Class<T> componentClass) {
 		return (T) ERXApplication.erxApplication().pageWithName(componentClass);
 	}
 
