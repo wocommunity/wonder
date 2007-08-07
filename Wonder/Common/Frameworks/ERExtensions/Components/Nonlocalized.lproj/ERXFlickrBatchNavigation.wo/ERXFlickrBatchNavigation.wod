@@ -3,6 +3,10 @@ PageNumberRepetition : WORepetition {
 	item = repetitionPageNumber;
 }
 
+HasMultiplePagesConditional : WOConditional {
+	condition = hasMultiplePages;
+}
+
 HasPreviousPageConditional : WOConditional {
 	condition = hasPreviousPage;
 }

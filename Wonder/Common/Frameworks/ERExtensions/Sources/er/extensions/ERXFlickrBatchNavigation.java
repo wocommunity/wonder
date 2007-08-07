@@ -53,6 +53,11 @@ public class ERXFlickrBatchNavigation extends WOComponent {
 		return _repetitionPageNumber;
 	}
 
+	public boolean hasMultiplePages() {
+    WODisplayGroup displayGroup = displayGroup();
+	  return displayGroup.batchCount() > 1;
+	}
+	
 	public boolean hasPreviousPage() {
 		WODisplayGroup displayGroup = displayGroup();
 		return displayGroup.currentBatchIndex() > 1;
