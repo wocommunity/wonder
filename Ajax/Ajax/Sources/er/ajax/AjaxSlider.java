@@ -7,10 +7,15 @@ import com.webobjects.appserver.WORequest;
 import com.webobjects.appserver.WOResponse;
 import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation.NSNumberFormatter;
+
+import er.extensions.ERXComponentUtilities;
 /**
  * Simple Ajax slider.
  * @author ak
  *
+ * @binding minimum the minimum value of this slider
+ * @binding maximum the maximum value of this slider
+ * @binding snap if true, and min/max is set, this will set "values" to be the list of integer values
  */
 public class AjaxSlider extends AjaxComponent {
 
@@ -52,6 +57,9 @@ public class AjaxSlider extends AjaxComponent {
         new AjaxOption("disabled", AjaxOption.BOOLEAN).addToDictionary(this, options);
         new AjaxOption("handleImage", AjaxOption.STRING).addToDictionary(this, options);
         new AjaxOption("handleDisabled", AjaxOption.STRING).addToDictionary(this, options);
+        new AjaxOption("increment", AjaxOption.NUMBER).addToDictionary(this, options);
+        new AjaxOption("restricted", AjaxOption.BOOLEAN).addToDictionary(this, options);
+        new AjaxOption("step", AjaxOption.NUMBER).addToDictionary(this, options);
 
         if(hasBinding("onChangeServer")) {
         	String parent = (String) valueForBinding("onChange");
@@ -74,7 +82,20 @@ public class AjaxSlider extends AjaxComponent {
         Number min = (Number)valueForBinding("minimum", new Integer(0));
         Number max = (Number)valueForBinding("maximum", new Integer(100));
         options.setObjectForKey("$R(" + min + "," + max + ")", "range");
-        
+
+        if (min != null && max != null && ERXComponentUtilities.booleanValueForBinding(this, "snap")) {
+          StringBuffer valuesBuffer = new StringBuffer();
+          valuesBuffer.append("[");
+          for (int i = min.intValue(); i <= max.intValue(); i ++ ) {
+            valuesBuffer.append(i);
+            if (i < max.intValue()) {
+              valuesBuffer.append(",");
+            }
+          }
+          valuesBuffer.append("]");
+        	options.setObjectForKey(valuesBuffer.toString(), "values");
+        }
+
         res.appendContentString("<div class=\"tracker\" id=\""+
                 _trackerId+"\"><div class=\"handle\" id=\""+
                 _handleId+"\"></div></div>");
@@ -98,11 +119,11 @@ public class AjaxSlider extends AjaxComponent {
 
     public void takeValuesFromRequest(WORequest worequest, WOContext wocontext) {
     	try {
-    		String format = (String) valueForBinding("numberformat", "0");
-    		Number num = worequest.numericFormValueForKey(wocontext.elementID(), new NSNumberFormatter(format));
-    		if(num != null) {
-    			setValueForBinding(num, "value");
-    		}
+	    		String format = (String) valueForBinding("numberformat", "0");
+	    		Number num = worequest.numericFormValueForKey(wocontext.elementID(), new NSNumberFormatter(format));
+	    		if(num != null) {
+	    			setValueForBinding(num, "value");
+	    		}
     	} catch(NumberFormatException ex) {
     		log.error(ex);
     	}
