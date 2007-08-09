@@ -43,14 +43,11 @@ public class ERAttachmentLink extends WODynamicGroup {
   public void appendToResponse(WOResponse response, WOContext context) {
     WOComponent component = context.component();
     ERAttachment attachment = (ERAttachment) _attachment.valueInComponent(component);
-    String configurationName = null;
-    if (_configurationName != null) {
-      configurationName = (String) _configurationName.valueInComponent(component);
-    }
     String attachmentUrl = "#";
     if (attachment != null) {
-      attachmentUrl = ERAttachmentProcessor.processorForType(attachment).attachmentUrl(attachment, context.request(), context, configurationName);
+      attachmentUrl = ERAttachmentProcessor.processorForType(attachment).attachmentUrl(attachment, context.request(), context);
     }
+
     response.appendContentString("<a href = \"");
     response.appendContentString(attachmentUrl);
     response.appendContentString("\"");
