@@ -18,7 +18,7 @@ HasNoPreviousPageConditional : WOConditional {
 
 PreviousPageAction : WOHyperlink {
 	action = previousPage;
-	class = "prev";
+	class = "paginatorPrev";
 }
 
 HasNextPageConditional : WOConditional {
@@ -32,7 +32,7 @@ HasNoNextPageConditional : WOConditional {
 
 NextPageAction : WOHyperlink {
 	action = nextPage;
-	class = "next";
+	class = "paginatorNext";
 }
 
 SelectPageAction : WOHyperlink {
