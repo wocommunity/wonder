@@ -1,16 +1,29 @@
 package er.attachment.components;
 
-import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 
+import er.attachment.components.viewers.AbstractERAttachmentViewer;
+import er.attachment.components.viewers.ERAttachmentDefaultViewer;
 import er.attachment.model.ERAttachment;
-import er.attachment.processors.ERAttachmentProcessor;
+import er.attachment.utils.ERMimeType;
+import er.extensions.ERXProperties;
 
 /**
+ * <p>
  * ERAttachmentViewer provides a way to drop in an embedded viewer for
- * attachments.  Currently only image/* mime types are supported, but
- * more will be coming.  Additionally, this will eventually add support
- * for requesting variations of images (like "small").
+ * attachments.  Viewers can be specified with properties.  For example,
+ * if you want to define the viewer for PDF's, you can set 
+ * er.attachment.mimeType.image/pdf.viewer=com.mine.PDFViewer or you can set
+ * er.attachment.mimeType.image/*.viewer=com.mine.DefaultImageViewer.  To 
+ * override the default fallback viewer, set
+ * er.attachment.mimeType.default.viewer=com.mine.DefaultViewer.  If an
+ * attachment is unavailable (for instance, if it is in the queue to be 
+ * sent to S3, but it's not uploaded yet), you can set
+ * er.attachment.mimeType.unavailable.viewer=com.mine.UnavailableViewer.
+ * </p>
+ * <p>
+ * There are defaults provided for several attachment types.
+ * </p> 
  *  
  * @author mschrag
  * @binding attachment the attachment to display
@@ -20,24 +33,39 @@ import er.attachment.processors.ERAttachmentProcessor;
  * @binding style (optional) the embedded css style
  * @binding width (optional) if displaying an image, sets the image width 
  * @binding height (optional) if displaying an image, sets the image height
+ * @property er.attachment.mimeType.[mimetype].viewer the class name of the viewer component for the given mime type
  */
-public class ERAttachmentViewer extends WOComponent {
+public class ERAttachmentViewer extends AbstractERAttachmentViewer {
   public ERAttachmentViewer(WOContext context) {
     super(context);
   }
 
-  public ERAttachment attachment() {
-    return (ERAttachment) valueForBinding("attachment");
-  }
+  /**
+   * @return the class name of the viewer to use for the given mime type.
+   */
+  public String viewerClassName() {
+    String viewerClassName = null;
 
-  public String attachmentUrl() {
-    WOContext context = context();
     ERAttachment attachment = attachment();
-    return ERAttachmentProcessor.processorForType(attachment).attachmentUrl(attachment, context.request(), context);
-  }
+    if (attachment != null) {
+      if (attachment.available().booleanValue()) {
+        ERMimeType mimeType = attachment.erMimeType();
+        if (mimeType != null) {
+          viewerClassName = ERXProperties.stringForKey("er.attachment.mimeType." +  mimeType.mimeType() +".viewer");
+          if (viewerClassName == null) {
+            viewerClassName = ERXProperties.stringForKey("er.attachment.mimeType." +  mimeType.globMimeType().mimeType() +".viewer");
+          }
+        }
+      }
+      else {
+        viewerClassName = ERXProperties.stringForKey("er.attachment.mimeType.unavailable.viewer");
+      }
+    }
 
-  @Override
-  public boolean synchronizesVariablesWithBindings() {
-    return false;
+    if (viewerClassName == null) {
+      viewerClassName = ERXProperties.stringForKeyWithDefault("er.attachment.mimeType.default.viewer", ERAttachmentDefaultViewer.class.getName());
+    }
+
+    return viewerClassName;
   }
 }

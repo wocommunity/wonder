@@ -9,6 +9,7 @@ import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WORequest;
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.foundation.NSData;
+import com.webobjects.foundation.NSTimestamp;
 
 import er.attachment.model.ERAttachmentData;
 import er.attachment.model.ERDatabaseAttachment;
@@ -43,7 +44,7 @@ public class ERDatabaseAttachmentProcessor extends ERAttachmentProcessor<ERDatab
       smallData = Boolean.parseBoolean(smallDataStr);
     }
 
-    ERDatabaseAttachment attachment = ERDatabaseAttachment.createERDatabaseAttachment(editingContext, mimeType, recommendedFileName, Boolean.TRUE, Integer.valueOf((int) uploadedFile.length()), webPath);
+    ERDatabaseAttachment attachment = ERDatabaseAttachment.createERDatabaseAttachment(editingContext, Boolean.TRUE, new NSTimestamp(), mimeType, recommendedFileName, Boolean.TRUE, Integer.valueOf((int) uploadedFile.length()), webPath);
     try {
       attachment.setWebPath(ERAttachmentProcessor._parsePathTemplate(attachment, webPath, recommendedFileName));
       NSData data = new NSData(uploadedFile.toURL());

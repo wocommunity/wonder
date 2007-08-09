@@ -1,6 +1,6 @@
-ViewerSwitch : WOSwitchComponent {
-	WOComponentName = viewerClassName;
+Image : ERAttachmentIcon {
 	attachment = ^attachment;
+	size = 64;
 	class = ^class;
 	id = ^class;
 	style = ^style;

@@ -46,14 +46,22 @@ public class ERAttachmentLink extends WODynamicGroup {
     String attachmentUrl = "#";
     if (attachment != null) {
       attachmentUrl = ERAttachmentProcessor.processorForType(attachment).attachmentUrl(attachment, context.request(), context);
+      if (!attachment.available().booleanValue()) {
+        response.appendContentString("<span");
+        ERXComponentUtilities.appendHtmlAttributes(_associations, response, component);
+        response.appendContentString(">");
+        super.appendToResponse(response, context);
+        response.appendContentString("</span>");
+      }
+      else {
+        response.appendContentString("<a href = \"");
+        response.appendContentString(attachmentUrl);
+        response.appendContentString("\"");
+        ERXComponentUtilities.appendHtmlAttributes(_associations, response, component);
+        response.appendContentString(">");
+        super.appendToResponse(response, context);
+        response.appendContentString("</a>");
+      }
     }
-
-    response.appendContentString("<a href = \"");
-    response.appendContentString(attachmentUrl);
-    response.appendContentString("\"");
-    ERXComponentUtilities.appendHtmlAttributes(_associations, response, component);
-    response.appendContentString(">");
-    super.appendToResponse(response, context);
-    response.appendContentString("</a>");
   }
 }
