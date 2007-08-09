@@ -4,10 +4,24 @@
     (
        
        {
+           allowsNull = N;
+           columnName = available;
+           name = available;
+           prototypeName = boolean;
+       }, 
+       
+       {
            allowsNull = Y;
            columnName = configurationName;
            name = configurationName;
            prototypeName = varchar100;
+       }, 
+       
+       {
+           allowsNull = N;
+           columnName = creationDate;
+           name = creationDate;
+           prototypeName = dateTime;
        }, 
        
        {
@@ -102,7 +116,9 @@
     );
     attributesUsedForLocking = 
     (
+       available, 
        configurationName, 
+       creationDate, 
        filesystemPath, 
        height, 
        id, 
@@ -120,8 +136,10 @@
     className = er.attachment.model.ERFileAttachment;
     classProperties = 
     (
+       available, 
        childrenAttachments, 
        configurationName, 
+       creationDate, 
        filesystemPath, 
        height, 
        mimeType, 

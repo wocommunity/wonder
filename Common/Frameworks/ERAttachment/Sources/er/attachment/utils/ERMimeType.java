@@ -27,7 +27,16 @@ public class ERMimeType {
     _uti = uti;
     _extensions = extensions;
   }
-  
+
+  /**
+   * Returns the glob type of this mime type (image/pdf=>image/*).
+   * 
+   * @return the glob type of this mime type
+   */
+  public ERGlobMimeType globMimeType() {
+    return new ERGlobMimeType(type() + "/*");
+  }
+
   /**
    * Returns true if this mime type exactly matches the other, meaning, the 
    * underlying mime type strings are identical.
@@ -38,7 +47,7 @@ public class ERMimeType {
   public boolean matchesExactly(ERMimeType mimeType) {
     return _mimeType.equalsIgnoreCase(mimeType._mimeType);
   }
-  
+
   /**
    * Supports glob mime types for comparison, so image/* matches image/jpeg.
    *  
@@ -148,7 +157,7 @@ public class ERMimeType {
   public String type() {
     return _mimeType.substring(0, _mimeType.indexOf('/'));
   }
-  
+
   /**
    * Returns the part of the mime type after the "/".
    * 
@@ -157,7 +166,7 @@ public class ERMimeType {
   public String subtype() {
     return _mimeType.substring(_mimeType.indexOf('/') + 1);
   }
-  
+
   /**
    * Returns true for image/<whatever> mime types.
    * 
