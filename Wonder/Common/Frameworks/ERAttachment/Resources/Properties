@@ -1,6 +1,6 @@
 ERAttachment.MigrationClassPrefix=er.attachment.migrations.ERAttachment
 
-er.attachment.mimeTypes=image/bmp,image/eps,image/gif,image/jp2,image/jpeg,image/pdf,image/pict,image/png,image/psd,image/raw,image/tiff,image/x-pict
+er.attachment.mimeTypes=image/bmp,image/eps,image/gif,image/jp2,image/jpeg,image/pdf,image/pict,image/png,image/psd,image/raw,image/tiff,image/x-pict,text/plain,text/html,text/xml,text/x-diff,application/zip,application/x-tar,application/x-gzip
 
 er.attachment.mimeType.image/bmp.name=BMP
 er.attachment.mimeType.image/bmp.uti=public.bmp
@@ -49,3 +49,31 @@ er.attachment.mimeType.image/tiff.extensions=tif,tiff
 er.attachment.mimeType.image/x-pict.name=X-PICT
 er.attachment.mimeType.image/x-pict.uti=com.apple.x-pict
 er.attachment.mimeType.image/x-pict.extensions=pic,pct,pict
+
+er.attachment.mimeType.text/plain.name=Text
+er.attachment.mimeType.text/plain.uti=com.toolazy.notsure
+er.attachment.mimeType.text/plain.extensions=txt
+
+er.attachment.mimeType.text/html.name=HTML
+er.attachment.mimeType.text/html.uti=com.toolazy.notsure
+er.attachment.mimeType.text/html.extensions=html,htm
+
+er.attachment.mimeType.text/xml.name=XML
+er.attachment.mimeType.text/xml.uti=com.toolazy.notsure
+er.attachment.mimeType.text/xml.extensions=xml
+
+er.attachment.mimeType.text/x-diff.name=Patch
+er.attachment.mimeType.text/x-diff.uti=com.toolazy.notsure
+er.attachment.mimeType.text/x-diff.extensions=patch
+
+er.attachment.mimeType.application/zip.name=ZIP
+er.attachment.mimeType.application/zip.uti=com.toolazy.notsure
+er.attachment.mimeType.application/zip.extensions=zip
+
+er.attachment.mimeType.application/x-gzip.name=GZIP
+er.attachment.mimeType.application/x-gzip.uti=com.toolazy.notsure
+er.attachment.mimeType.application/x-gzip.extensions=gz
+
+er.attachment.mimeType.application/x-tar.name=tar
+er.attachment.mimeType.application/x-tar.uti=com.toolazy.notsure
+er.attachment.mimeType.application/x-tar.extensions=tar

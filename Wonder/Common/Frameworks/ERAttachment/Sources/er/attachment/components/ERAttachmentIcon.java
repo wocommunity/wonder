@@ -5,6 +5,7 @@ import com.webobjects.appserver.WOContext;
 
 import er.attachment.model.ERAttachment;
 import er.attachment.processors.ERAttachmentProcessor;
+import er.attachment.utils.ERMimeType;
 
 /**
  * ERAttachmentIcon displays a linked icon image that represents the file
@@ -39,8 +40,9 @@ public class ERAttachmentIcon extends WOComponent {
     if (size != null) {
       sizeStr = size.toString();
     }
-    String ext = attachment.extension();
-    String iconPath = "icons/" + sizeStr + "/" + ext + ".png";
+    ERMimeType erMimeType = attachment.erMimeType();
+    String mimeType = erMimeType.mimeType();
+    String iconPath = "icons/" + sizeStr + "/" + mimeType + ".png";
     return iconPath;
   }
 
