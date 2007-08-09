@@ -2,6 +2,10 @@ ERAttachment.MigrationClassPrefix=er.attachment.migrations.ERAttachment
 
 er.attachment.mimeTypes=image/bmp,image/eps,image/gif,image/jp2,image/jpeg,image/pdf,image/pict,image/png,image/psd,image/raw,image/tiff,image/x-pict,text/plain,text/html,text/xml,text/x-diff,application/zip,application/x-tar,application/x-gzip,application/x-octet-stream
 
+er.attachment.mimeType.image/*.viewer=er.attachment.components.viewers.ERAttachmentImageViewer
+er.attachment.mimeType.default.viewer=er.attachment.components.viewers.ERAttachmentDefaultViewer
+er.attachment.mimeType.unavailable.viewer=er.attachment.components.viewers.ERAttachmentUnavailableViewer
+
 er.attachment.mimeType.image/bmp.name=BMP
 er.attachment.mimeType.image/bmp.uti=public.bmp
 er.attachment.mimeType.image/bmp.extensions=bmp
@@ -25,6 +29,7 @@ er.attachment.mimeType.image/jpeg.extensions=jpg,jpeg
 er.attachment.mimeType.image/pdf.name=PDF
 er.attachment.mimeType.image/pdf.uti=public.pdf
 er.attachment.mimeType.image/pdf.extensions=pdf
+er.attachment.mimeType.image/pdf.viewer=er.attachment.components.viewers.ERAttachmentDefaultViewer
 
 er.attachment.mimeType.image/pict.name=PICT
 er.attachment.mimeType.image/pict.uti=com.apple.pict

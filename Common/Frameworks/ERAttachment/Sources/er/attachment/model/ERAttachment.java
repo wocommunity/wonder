@@ -24,6 +24,12 @@ public abstract class ERAttachment extends _ERAttachment {
 
   public ERAttachment() {
   }
+  
+  @Override
+  public void didInsert() {
+    super.didInsert();
+    ERAttachmentProcessor.processorForType(this).attachmentInserted(this);
+  }
 
   /**
    * Returns the file name portion of the webPath.

@@ -14,7 +14,9 @@ import org.apache.log4j.Logger;
 public abstract class _ERAttachment extends er.extensions.ERXGenericRecord {
 	public static final String ENTITY_NAME = "ERAttachment";
 
+	public static final String AVAILABLE_KEY = "available";
 	public static final String CONFIGURATION_NAME_KEY = "configurationName";
+	public static final String CREATION_DATE_KEY = "creationDate";
 	public static final String HEIGHT_KEY = "height";
 	public static final String MIME_TYPE_KEY = "mimeType";
 	public static final String ORIGINAL_FILE_NAME_KEY = "originalFileName";
@@ -44,6 +46,17 @@ public abstract class _ERAttachment extends er.extensions.ERXGenericRecord {
 	}
 
 
+	public java.lang.Boolean available() {
+		return (java.lang.Boolean) storedValueForKey("available");
+	}
+
+	public void setAvailable(java.lang.Boolean aValue) {
+		if (_ERAttachment.LOG.isDebugEnabled()) {
+			_ERAttachment.LOG.debug( "updating available from "+available()+" to "+aValue );
+		}
+		takeStoredValueForKey(aValue, "available");
+	}
+
 	public String configurationName() {
 		return (String) storedValueForKey("configurationName");
 	}
@@ -53,6 +66,17 @@ public abstract class _ERAttachment extends er.extensions.ERXGenericRecord {
 			_ERAttachment.LOG.debug( "updating configurationName from "+configurationName()+" to "+aValue );
 		}
 		takeStoredValueForKey(aValue, "configurationName");
+	}
+
+	public NSTimestamp creationDate() {
+		return (NSTimestamp) storedValueForKey("creationDate");
+	}
+
+	public void setCreationDate(NSTimestamp aValue) {
+		if (_ERAttachment.LOG.isDebugEnabled()) {
+			_ERAttachment.LOG.debug( "updating creationDate from "+creationDate()+" to "+aValue );
+		}
+		takeStoredValueForKey(aValue, "creationDate");
 	}
 
 	public Integer height() {
@@ -264,8 +288,10 @@ public abstract class _ERAttachment extends er.extensions.ERXGenericRecord {
 		}
 	}
 
-	public static ERAttachment createERAttachment(EOEditingContext editingContext, String mimeType, String originalFileName, java.lang.Boolean proxied, Integer size, String webPath) {
+	public static ERAttachment createERAttachment(EOEditingContext editingContext, java.lang.Boolean available, NSTimestamp creationDate, String mimeType, String originalFileName, java.lang.Boolean proxied, Integer size, String webPath) {
 		ERAttachment eoObject = (ERAttachment)EOUtilities.createAndInsertInstance(editingContext, _ERAttachment.ENTITY_NAME);
+		eoObject.setAvailable(available);
+		eoObject.setCreationDate(creationDate);
 		eoObject.setMimeType(mimeType);
 		eoObject.setOriginalFileName(originalFileName);
 		eoObject.setProxied(proxied);

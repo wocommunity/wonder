@@ -62,8 +62,10 @@ public abstract class _ERDatabaseAttachment extends er.attachment.model.ERAttach
 		}
 	}
 
-	public static ERDatabaseAttachment createERDatabaseAttachment(EOEditingContext editingContext, String mimeType, String originalFileName, java.lang.Boolean proxied, Integer size, String webPath) {
+	public static ERDatabaseAttachment createERDatabaseAttachment(EOEditingContext editingContext, java.lang.Boolean available, NSTimestamp creationDate, String mimeType, String originalFileName, java.lang.Boolean proxied, Integer size, String webPath) {
 		ERDatabaseAttachment eoObject = (ERDatabaseAttachment)EOUtilities.createAndInsertInstance(editingContext, _ERDatabaseAttachment.ENTITY_NAME);
+		eoObject.setAvailable(available);
+		eoObject.setCreationDate(creationDate);
 		eoObject.setMimeType(mimeType);
 		eoObject.setOriginalFileName(originalFileName);
 		eoObject.setProxied(proxied);

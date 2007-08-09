@@ -235,6 +235,15 @@ public abstract class ERAttachmentProcessor<T extends ERAttachment> {
   }
   
   /**
+   * Called after an attachment has been inserted (from didInsert).
+   * 
+   * @param attachment the inserted attachment
+   */
+  public void attachmentInserted(T attachment) {
+    // DO NOTHING BY DEFAULT
+  }
+  
+  /**
    * Returns whether or not the proxy request handler should return this as an attachment
    * with a Content-Disposition.
    * 

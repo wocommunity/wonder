@@ -1,0 +1,8 @@
+Image : WOImage {
+	src = attachmentUrl;
+	class = ^class;
+	id = ^class;
+	style = ^style;
+	width = ^width;
+	height = ^height;
+}

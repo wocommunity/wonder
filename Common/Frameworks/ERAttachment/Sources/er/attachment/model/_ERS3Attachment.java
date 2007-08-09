@@ -43,8 +43,10 @@ public abstract class _ERS3Attachment extends er.attachment.model.ERAttachment {
 		takeStoredValueForKey(aValue, "s3Path");
 	}
 
-	public static ERS3Attachment createERS3Attachment(EOEditingContext editingContext, String mimeType, String originalFileName, java.lang.Boolean proxied, Integer size, String webPath) {
+	public static ERS3Attachment createERS3Attachment(EOEditingContext editingContext, java.lang.Boolean available, NSTimestamp creationDate, String mimeType, String originalFileName, java.lang.Boolean proxied, Integer size, String webPath) {
 		ERS3Attachment eoObject = (ERS3Attachment)EOUtilities.createAndInsertInstance(editingContext, _ERS3Attachment.ENTITY_NAME);
+		eoObject.setAvailable(available);
+		eoObject.setCreationDate(creationDate);
 		eoObject.setMimeType(mimeType);
 		eoObject.setOriginalFileName(originalFileName);
 		eoObject.setProxied(proxied);
