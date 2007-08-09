@@ -209,6 +209,25 @@ public class ERXExpiringCache<K, V> {
 		return isStale;
 	}
 
+	/**
+	 * Removes the object for the given key.
+	 * 
+	 * @param key the key to remove
+	 * @return the removed object
+	 */
+	public synchronized V removeObjectForKey(K key) {
+		removeStaleEntries();
+		Entry<V> entry = _backingDictionary.removeObjectForKey(key);
+		V value = null;
+		if (entry != null) {
+			value = entry.object();
+		}
+		return value;
+	}
+
+	/**
+	 * Removes all stale entries.
+	 */
 	private void removeStaleEntries() {
 		long now = System.currentTimeMillis();
 		if ((_lastCleanupTime + _cleanupPause) < now) {
@@ -224,15 +243,5 @@ public class ERXExpiringCache<K, V> {
 				}
 			}
 		}
-	}
-
-	public synchronized V removeObjectForKey(K key) {
-		removeStaleEntries();
-		Entry<V> entry = _backingDictionary.removeObjectForKey(key);
-		V value = null;
-		if (entry != null) {
-			value = entry.object();
-		}
-		return value;
 	}
 }
