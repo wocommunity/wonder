@@ -19,15 +19,11 @@ DefaultCase : ERXWOCase {
 	case = "default";
 }
 
-AttachmentLink : WOHyperlink {
-	href = attachmentUrl;
+AttachmentLink : ERAttachmentLink {
+	attachment = attachment;
 	class = ^class;
 	id = ^class;
 	style = ^style;
-}
-
-AttachmentFileName : WOString {
-	value = attachment.fileName;
 }
 
 HasAttachment : WOConditional {

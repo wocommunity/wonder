@@ -91,7 +91,7 @@ public class ERDatabaseAttachmentProcessor extends ERAttachmentProcessor<ERDatab
   }
 
   @Override
-  public String attachmentUrl(ERDatabaseAttachment attachment, WORequest request, WOContext context, String configurationName) {
+  public String attachmentUrl(ERDatabaseAttachment attachment, WORequest request, WOContext context) {
     return proxiedUrl(attachment, context);
   }
   

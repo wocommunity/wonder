@@ -10,6 +10,7 @@ import com.webobjects.eocontrol.EOEditingContext;
 import er.attachment.processors.ERAttachmentProcessor;
 import er.attachment.utils.ERMimeType;
 import er.attachment.utils.ERMimeTypeManager;
+import er.extensions.ERXFileUtilities;
 
 /**
  * ERAttachment is the superclass of all attachment types.  An attachment object
@@ -40,6 +41,24 @@ public abstract class ERAttachment extends _ERAttachment {
    */
   public ERMimeType erMimeType() {
     return ERMimeTypeManager.mimeTypeManager().mimeTypeForMimeTypeString(mimeType(), false);
+  }
+  
+  /**
+   * Returns the file extension of this attachment, first checking the mime type, 
+   * then returning the actual extension.
+   *  
+   * @return the file extension of this attachment
+   */
+  public String extension() {
+    String ext;
+    ERMimeType mimeType = erMimeType();
+    if (mimeType == null) {
+      ext = ERXFileUtilities.fileExtension(originalFileName()).toLowerCase();
+    }
+    else {
+      ext = mimeType.primaryExtension();
+    }
+    return ext;
   }
   
   /**
