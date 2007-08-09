@@ -28,7 +28,11 @@ public abstract class _Company extends EOGenericRecord {
 	}
 
 	public Company localInstanceOfCompany(EOEditingContext editingContext) {
-		return (Company)EOUtilities.localInstanceOfObject(editingContext, this);
+		Company localInstance = (Company)EOUtilities.localInstanceOfObject(editingContext, this);
+		if (localInstance == null) {
+			throw new IllegalStateException("You attempted to localInstance " + this + ", which has not yet committed.");
+		}
+		return localInstance;
 	}
 
 
@@ -98,23 +102,23 @@ public abstract class _Company extends EOGenericRecord {
 		takeStoredValueForKey(aValue, "zipcode");
 	}
 
-	public NSArray employees() {
-		return (NSArray)storedValueForKey("employees");
+	public NSArray<Employee> employees() {
+		return (NSArray<Employee>)storedValueForKey("employees");
 	}
 
 
 
-	public NSArray employees(EOQualifier qualifier) {
+	public NSArray<Employee> employees(EOQualifier qualifier) {
 		return employees(qualifier, null, false);
 	}
 
-	public NSArray employees(EOQualifier qualifier, boolean fetch) { 
+	public NSArray<Employee> employees(EOQualifier qualifier, boolean fetch) { 
 		return employees(qualifier, null, fetch);
 	}
 
 
-	public NSArray employees(EOQualifier qualifier, NSArray sortOrderings, boolean fetch) {
-		NSArray results;
+	public NSArray<Employee> employees(EOQualifier qualifier, NSArray<EOSortOrdering> sortOrderings, boolean fetch) {
+		NSArray<Employee> results;
 
 		if (fetch) {
 			EOQualifier fullQualifier;
@@ -134,10 +138,10 @@ public abstract class _Company extends EOGenericRecord {
 
 			results = employees();
 			if (qualifier != null) {
-				results = EOQualifier.filteredArrayWithQualifier(results, qualifier);
+				results = (NSArray<Employee>)EOQualifier.filteredArrayWithQualifier(results, qualifier);
 			}
 			if (sortOrderings != null) {
-				results = EOSortOrdering.sortedArrayUsingKeyOrderArray(results, sortOrderings);
+				results = (NSArray<Employee>)EOSortOrdering.sortedArrayUsingKeyOrderArray(results, sortOrderings);
 			}
 
 		}
@@ -185,18 +189,18 @@ public abstract class _Company extends EOGenericRecord {
 		return eoObject;
 	}
 
-	public static NSArray fetchAllCompanys(EOEditingContext editingContext) {
+	public static NSArray<Company> fetchAllCompanys(EOEditingContext editingContext) {
 		return _Company.fetchAllCompanys(editingContext, null);
 	}
 
-	public static NSArray fetchAllCompanys(EOEditingContext editingContext, NSArray sortOrderings) {
+	public static NSArray<Company> fetchAllCompanys(EOEditingContext editingContext, NSArray<EOSortOrdering> sortOrderings) {
 		return _Company.fetchCompanys(editingContext, null, sortOrderings);
 	}
 
-	public static NSArray fetchCompanys(EOEditingContext editingContext, EOQualifier qualifier, NSArray sortOrderings) {
+	public static NSArray<Company> fetchCompanys(EOEditingContext editingContext, EOQualifier qualifier, NSArray<EOSortOrdering> sortOrderings) {
 		EOFetchSpecification fetchSpec = new EOFetchSpecification(_Company.ENTITY_NAME, qualifier, sortOrderings);
 		fetchSpec.setIsDeep(true);
-		NSArray eoObjects = editingContext.objectsWithFetchSpecification(fetchSpec);
+		NSArray<Company> eoObjects = (NSArray<Company>)editingContext.objectsWithFetchSpecification(fetchSpec);
 		return eoObjects;
 	}
 
@@ -205,7 +209,7 @@ public abstract class _Company extends EOGenericRecord {
 	}
 
 	public static Company fetchCompany(EOEditingContext editingContext, EOQualifier qualifier) {
-		NSArray eoObjects = _Company.fetchCompanys(editingContext, qualifier, null);
+		NSArray<Company> eoObjects = _Company.fetchCompanys(editingContext, qualifier, null);
 		Company eoObject;
 		int count = eoObjects.count();
 		if (count == 0) {
@@ -233,7 +237,11 @@ public abstract class _Company extends EOGenericRecord {
 	}
 
 	public static Company localInstanceOfCompany(EOEditingContext editingContext, Company eo) {
-		return (eo == null) ? null : (Company)EOUtilities.localInstanceOfObject(editingContext, eo);
+		Company localInstance = (eo == null) ? null : (Company)EOUtilities.localInstanceOfObject(editingContext, eo);
+		if (localInstance == null && eo != null) {
+			throw new IllegalStateException("You attempted to localInstance " + eo + ", which has not yet committed.");
+		}
+		return localInstance;		
 	}
 
 }
