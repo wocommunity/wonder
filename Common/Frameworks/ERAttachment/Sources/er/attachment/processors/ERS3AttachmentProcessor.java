@@ -109,7 +109,7 @@ public class ERS3AttachmentProcessor extends ERAttachmentProcessor<ERS3Attachmen
     _queue.enqueue(attachment);
   }
 
-  public void performUpload(File uploadedFile, String bucket, String key, String mimeType, String configurationName) throws MalformedURLException, IOException {
+  public void performUpload(File uploadedFile, String originalFileName, String bucket, String key, String mimeType, String configurationName) throws MalformedURLException, IOException {
     try {
       AWSAuthConnection conn = awsConnection(configurationName);
       FileInputStream attachmentFileInputStream = new FileInputStream(uploadedFile);
@@ -121,6 +121,11 @@ public class ERS3AttachmentProcessor extends ERAttachmentProcessor<ERS3Attachmen
         headers.put("Content-Type", Arrays.asList(new String[] { mimeType }));
         headers.put("Content-Length", Arrays.asList(new String[] { String.valueOf(uploadedFile.length()) }));
         headers.put("x-amz-acl", Arrays.asList(new String[] { "public-read" }));
+        
+        if (originalFileName != null) {
+          headers.put("Content-Disposition", Arrays.asList(new String[] { "attachment; filename=" + originalFileName }));
+        }
+
         Response response = conn.putStream(bucket, key, attachmentStreamObject, headers);
         if (failed(response)) {
           throw new IOException("Failed to write '" + bucket + "/" + key + "' to S3: Error " + response.connection.getResponseCode() + ": " + response.connection.getResponseMessage());
@@ -218,6 +223,7 @@ public class ERS3AttachmentProcessor extends ERAttachmentProcessor<ERS3Attachmen
         String key;
         String mimeType;
         String configurationName;
+        String originalFileName = null;
 
         ERS3Attachment attachment = object.attachment();
 
@@ -227,13 +233,16 @@ public class ERS3AttachmentProcessor extends ERAttachmentProcessor<ERS3Attachmen
           key = attachment.key();
           mimeType = attachment.mimeType();
           configurationName = attachment.configurationName();
+          if (proxyAsAttachment(attachment)) {
+            originalFileName = attachment.originalFileName();
+          }
         }
         finally {
           _editingContext.unlock();
         }
 
         try {
-          ERS3AttachmentProcessor.this.performUpload(uploadedFile, bucket, key, mimeType, configurationName);
+          ERS3AttachmentProcessor.this.performUpload(uploadedFile, originalFileName, bucket, key, mimeType, configurationName);
         }
         catch (Throwable t) {
           ERAttachmentProcessor.log.error("Failed to upload '" + uploadedFile + "' to S3.", t);
