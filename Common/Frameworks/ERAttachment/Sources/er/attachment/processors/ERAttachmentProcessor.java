@@ -233,6 +233,24 @@ public abstract class ERAttachmentProcessor<T extends ERAttachment> {
 
     return attachment;
   }
+  
+  /**
+   * Returns whether or not the proxy request handler should return this as an attachment
+   * with a Content-Disposition.
+   * 
+   * @return true if the proxy should use a content-disposition
+   */
+  public boolean proxyAsAttachment(T attachment) {
+    boolean proxyAsAttachment = false;
+    String proxyAsAttachmentStr = ERXProperties.stringForKey("er.attachment." + attachment.configurationName() + ".proxyAsAttachment");
+    if (proxyAsAttachmentStr == null) {
+      proxyAsAttachmentStr = ERXProperties.stringForKey("er.attachment.proxyAsAttachment");
+    }
+    if (proxyAsAttachmentStr != null) {
+      proxyAsAttachment = Boolean.parseBoolean(proxyAsAttachmentStr);
+    }
+    return proxyAsAttachment;
+  }
 
   /**
    * Processes an uploaded file, imports it into the appropriate data store, and returns an ERAttachment that

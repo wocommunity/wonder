@@ -21,7 +21,6 @@ import com.webobjects.foundation.NSLog;
 import er.attachment.model.ERAttachment;
 import er.attachment.processors.ERAttachmentProcessor;
 import er.extensions.ERXEC;
-import er.extensions.ERXFileUtilities;
 
 /**
  * ERAttachmentRequestHandler is the request handler that is used for loading 
@@ -90,7 +89,10 @@ public class ERAttachmentRequestHandler extends WORequestHandler {
         try {
           InputStream attachmentInputStream;
           String mimeType;
+          String fileName;
           long length;
+          String queryString = url.queryString();
+          boolean proxyAsAttachment = (queryString != null && queryString.contains("attachment=true"));
 
           EOEditingContext editingContext = ERXEC.newEditingContext();
           editingContext.lock();
@@ -102,7 +104,12 @@ public class ERAttachmentRequestHandler extends WORequestHandler {
             }
             mimeType = attachment.mimeType();
             length = attachment.size().longValue();
-            InputStream rawAttachmentInputStream = ERAttachmentProcessor.processorForType(attachment).attachmentInputStream(attachment);
+            fileName = attachment.originalFileName();
+            ERAttachmentProcessor<ERAttachment> attachmentProcessor = ERAttachmentProcessor.processorForType(attachment);
+            if (!proxyAsAttachment) { 
+              proxyAsAttachment = attachmentProcessor.proxyAsAttachment(attachment);
+            }
+            InputStream rawAttachmentInputStream = attachmentProcessor.attachmentInputStream(attachment);
             attachmentInputStream = new BufferedInputStream(rawAttachmentInputStream, bufferSize);
           }
           finally {
@@ -111,9 +118,8 @@ public class ERAttachmentRequestHandler extends WORequestHandler {
           response.setHeader(mimeType, "Content-Type");
           response.setHeader(String.valueOf(length), "Content-Length");
 
-          String queryString = url.queryString();
-          if (queryString != null && queryString.contains("attachment=true")) {
-            response.setHeader("attachment; filename=" + ERXFileUtilities.fileNameFromBrowserSubmittedPath(webPath), "Content-Disposition");
+          if (proxyAsAttachment) {
+            response.setHeader("attachment; filename=" + fileName, "Content-Disposition");
           }
 
           response.setStatus(200);
