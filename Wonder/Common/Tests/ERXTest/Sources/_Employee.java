@@ -30,7 +30,11 @@ public abstract class _Employee extends EOGenericRecord {
 	}
 
 	public Employee localInstanceOfEmployee(EOEditingContext editingContext) {
-		return (Employee)EOUtilities.localInstanceOfObject(editingContext, this);
+		Employee localInstance = (Employee)EOUtilities.localInstanceOfObject(editingContext, this);
+		if (localInstance == null) {
+			throw new IllegalStateException("You attempted to localInstance " + this + ", which has not yet committed.");
+		}
+		return localInstance;
 	}
 
 
@@ -129,23 +133,23 @@ public abstract class _Employee extends EOGenericRecord {
 		}
 	}
 
-	public NSArray paychecks() {
-		return (NSArray)storedValueForKey("paychecks");
+	public NSArray<Paycheck> paychecks() {
+		return (NSArray<Paycheck>)storedValueForKey("paychecks");
 	}
 
 
 
-	public NSArray paychecks(EOQualifier qualifier) {
+	public NSArray<Paycheck> paychecks(EOQualifier qualifier) {
 		return paychecks(qualifier, null, false);
 	}
 
-	public NSArray paychecks(EOQualifier qualifier, boolean fetch) { 
+	public NSArray<Paycheck> paychecks(EOQualifier qualifier, boolean fetch) { 
 		return paychecks(qualifier, null, fetch);
 	}
 
 
-	public NSArray paychecks(EOQualifier qualifier, NSArray sortOrderings, boolean fetch) {
-		NSArray results;
+	public NSArray<Paycheck> paychecks(EOQualifier qualifier, NSArray<EOSortOrdering> sortOrderings, boolean fetch) {
+		NSArray<Paycheck> results;
 
 		if (fetch) {
 			EOQualifier fullQualifier;
@@ -165,10 +169,10 @@ public abstract class _Employee extends EOGenericRecord {
 
 			results = paychecks();
 			if (qualifier != null) {
-				results = EOQualifier.filteredArrayWithQualifier(results, qualifier);
+				results = (NSArray<Paycheck>)EOQualifier.filteredArrayWithQualifier(results, qualifier);
 			}
 			if (sortOrderings != null) {
-				results = EOSortOrdering.sortedArrayUsingKeyOrderArray(results, sortOrderings);
+				results = (NSArray<Paycheck>)EOSortOrdering.sortedArrayUsingKeyOrderArray(results, sortOrderings);
 			}
 
 		}
@@ -218,18 +222,18 @@ public abstract class _Employee extends EOGenericRecord {
 		return eoObject;
 	}
 
-	public static NSArray fetchAllEmployees(EOEditingContext editingContext) {
+	public static NSArray<Employee> fetchAllEmployees(EOEditingContext editingContext) {
 		return _Employee.fetchAllEmployees(editingContext, null);
 	}
 
-	public static NSArray fetchAllEmployees(EOEditingContext editingContext, NSArray sortOrderings) {
+	public static NSArray<Employee> fetchAllEmployees(EOEditingContext editingContext, NSArray<EOSortOrdering> sortOrderings) {
 		return _Employee.fetchEmployees(editingContext, null, sortOrderings);
 	}
 
-	public static NSArray fetchEmployees(EOEditingContext editingContext, EOQualifier qualifier, NSArray sortOrderings) {
+	public static NSArray<Employee> fetchEmployees(EOEditingContext editingContext, EOQualifier qualifier, NSArray<EOSortOrdering> sortOrderings) {
 		EOFetchSpecification fetchSpec = new EOFetchSpecification(_Employee.ENTITY_NAME, qualifier, sortOrderings);
 		fetchSpec.setIsDeep(true);
-		NSArray eoObjects = editingContext.objectsWithFetchSpecification(fetchSpec);
+		NSArray<Employee> eoObjects = (NSArray<Employee>)editingContext.objectsWithFetchSpecification(fetchSpec);
 		return eoObjects;
 	}
 
@@ -238,7 +242,7 @@ public abstract class _Employee extends EOGenericRecord {
 	}
 
 	public static Employee fetchEmployee(EOEditingContext editingContext, EOQualifier qualifier) {
-		NSArray eoObjects = _Employee.fetchEmployees(editingContext, qualifier, null);
+		NSArray<Employee> eoObjects = _Employee.fetchEmployees(editingContext, qualifier, null);
 		Employee eoObject;
 		int count = eoObjects.count();
 		if (count == 0) {
@@ -266,7 +270,11 @@ public abstract class _Employee extends EOGenericRecord {
 	}
 
 	public static Employee localInstanceOfEmployee(EOEditingContext editingContext, Employee eo) {
-		return (eo == null) ? null : (Employee)EOUtilities.localInstanceOfObject(editingContext, eo);
+		Employee localInstance = (eo == null) ? null : (Employee)EOUtilities.localInstanceOfObject(editingContext, eo);
+		if (localInstance == null && eo != null) {
+			throw new IllegalStateException("You attempted to localInstance " + eo + ", which has not yet committed.");
+		}
+		return localInstance;		
 	}
 
 }

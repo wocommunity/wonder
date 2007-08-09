@@ -25,15 +25,19 @@ public abstract class _Paycheck extends EOGenericRecord {
 	}
 
 	public Paycheck localInstanceOfPaycheck(EOEditingContext editingContext) {
-		return (Paycheck)EOUtilities.localInstanceOfObject(editingContext, this);
+		Paycheck localInstance = (Paycheck)EOUtilities.localInstanceOfObject(editingContext, this);
+		if (localInstance == null) {
+			throw new IllegalStateException("You attempted to localInstance " + this + ", which has not yet committed.");
+		}
+		return localInstance;
 	}
 
 
-	public Number amount() {
-		return (Number) storedValueForKey("amount");
+	public Double amount() {
+		return (Double) storedValueForKey("amount");
 	}
 
-	public void setAmount(Number aValue) {
+	public void setAmount(Double aValue) {
 		if (_Paycheck.LOG.isDebugEnabled()) {
 			_Paycheck.LOG.debug( "updating amount from "+amount()+" to "+aValue );
 		}
@@ -80,7 +84,7 @@ public abstract class _Paycheck extends EOGenericRecord {
 		}
 	}
 
-	public static Paycheck createPaycheck(EOEditingContext editingContext, Number amount, java.lang.Boolean cashed, NSTimestamp paymentDate, Employee employee) {
+	public static Paycheck createPaycheck(EOEditingContext editingContext, Double amount, java.lang.Boolean cashed, NSTimestamp paymentDate, Employee employee) {
 		Paycheck eoObject = (Paycheck)EOUtilities.createAndInsertInstance(editingContext, _Paycheck.ENTITY_NAME);
 		eoObject.setAmount(amount);
 		eoObject.setCashed(cashed);
@@ -89,18 +93,18 @@ public abstract class _Paycheck extends EOGenericRecord {
 		return eoObject;
 	}
 
-	public static NSArray fetchAllPaychecks(EOEditingContext editingContext) {
+	public static NSArray<Paycheck> fetchAllPaychecks(EOEditingContext editingContext) {
 		return _Paycheck.fetchAllPaychecks(editingContext, null);
 	}
 
-	public static NSArray fetchAllPaychecks(EOEditingContext editingContext, NSArray sortOrderings) {
+	public static NSArray<Paycheck> fetchAllPaychecks(EOEditingContext editingContext, NSArray<EOSortOrdering> sortOrderings) {
 		return _Paycheck.fetchPaychecks(editingContext, null, sortOrderings);
 	}
 
-	public static NSArray fetchPaychecks(EOEditingContext editingContext, EOQualifier qualifier, NSArray sortOrderings) {
+	public static NSArray<Paycheck> fetchPaychecks(EOEditingContext editingContext, EOQualifier qualifier, NSArray<EOSortOrdering> sortOrderings) {
 		EOFetchSpecification fetchSpec = new EOFetchSpecification(_Paycheck.ENTITY_NAME, qualifier, sortOrderings);
 		fetchSpec.setIsDeep(true);
-		NSArray eoObjects = editingContext.objectsWithFetchSpecification(fetchSpec);
+		NSArray<Paycheck> eoObjects = (NSArray<Paycheck>)editingContext.objectsWithFetchSpecification(fetchSpec);
 		return eoObjects;
 	}
 
@@ -109,7 +113,7 @@ public abstract class _Paycheck extends EOGenericRecord {
 	}
 
 	public static Paycheck fetchPaycheck(EOEditingContext editingContext, EOQualifier qualifier) {
-		NSArray eoObjects = _Paycheck.fetchPaychecks(editingContext, qualifier, null);
+		NSArray<Paycheck> eoObjects = _Paycheck.fetchPaychecks(editingContext, qualifier, null);
 		Paycheck eoObject;
 		int count = eoObjects.count();
 		if (count == 0) {
@@ -137,7 +141,11 @@ public abstract class _Paycheck extends EOGenericRecord {
 	}
 
 	public static Paycheck localInstanceOfPaycheck(EOEditingContext editingContext, Paycheck eo) {
-		return (eo == null) ? null : (Paycheck)EOUtilities.localInstanceOfObject(editingContext, eo);
+		Paycheck localInstance = (eo == null) ? null : (Paycheck)EOUtilities.localInstanceOfObject(editingContext, eo);
+		if (localInstance == null && eo != null) {
+			throw new IllegalStateException("You attempted to localInstance " + eo + ", which has not yet committed.");
+		}
+		return localInstance;		
 	}
 
 }
