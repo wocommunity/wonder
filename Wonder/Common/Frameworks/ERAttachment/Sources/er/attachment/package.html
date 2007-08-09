@@ -85,6 +85,10 @@ There are some properties that apply to all attachment types.
 	<dt>er.attachment.storageType / er.attachment.[configurationName].storageType</dt>
 	<dd>(optional) When using the ERAttachmentUpload component, this sets the default storage type to use for the attachment.  Examples
 	are "s3", "db", or "file".  The default is "db".</dd>
+	
+	<dt>er.attachment.proxyAsAttachment / er.attachment.[configurationName].proxyAsAttachment</dt>
+	<dd>(optional) When using the proxy request handler, this sets whether or not the request handler returns an attachment and 
+	Content-Disposition header.  This will typically cause the browser to download the attachment versus displaying inline. Defaults false.</dd>
 </dl>
 
 <h2>Path Templates</h2>
