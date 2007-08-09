@@ -41,7 +41,13 @@ public class ERAttachmentIcon extends WOComponent {
       sizeStr = size.toString();
     }
     ERMimeType erMimeType = attachment.erMimeType();
-    String mimeType = erMimeType.mimeType();
+    String mimeType;
+    if (erMimeType == null) {
+      mimeType = "application/x-octet-stream";
+    }
+    else {
+      mimeType = erMimeType.mimeType();
+    }
     String iconPath = "icons/" + sizeStr + "/" + mimeType + ".png";
     return iconPath;
   }
