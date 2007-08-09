@@ -103,6 +103,7 @@ EditForm : WOForm {
 	multipleSubmit = true;
 	name = id;
 	disabled = linkOnSave;
+	onsubmit = ^onsubmit;
 }
 
 LinkOnSaveConditional : WOConditional {
