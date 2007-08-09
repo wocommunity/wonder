@@ -52,5 +52,7 @@
 		<binding name = "cancelBeforeInsertionDuration"/>
 		<binding name = "cancelAfterInsertionDuration"/>
 		<binding name = "elementName"/>
+
+		<binding name = "onsubmit"/>
 	</wo>
 </wodefinitions>
