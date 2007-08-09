@@ -1,4 +1,4 @@
-.pages {
+.paginatorContainer {
 	text-align: center;
 	margin-bottom: 20px;
 	margin-top: 20px;
@@ -27,42 +27,42 @@
 	text-decoration: none;
 }
 
-.paginator .atStart {
+.paginator .paginatorAtStart {
 	margin-right: 20px;
 	padding: 2px 6px;
 	background: rgb(255, 255, 255);
 	color: rgb(160, 160, 160);
 }
 
-.paginator .prev {
+.paginator .paginatorPrev {
 	margin-right: 20px;
 	padding: 2px 6px;
 	border: solid 1px rgb(208, 208, 208);
 	background: rgb(255, 255, 255);
 }
 
-.paginator .break {
+.paginator .paginatorBreak {
 	padding: 2px 6px;
 	border: none;
 	background: rgb(255, 255, 255);
 	text-decoration: none;
 }
 
-.paginator .next {
+.paginator .paginatorNext {
 	margin-left: 20px;
 	padding: 2px 6px;
 	border: solid 1px rgb(208, 208, 208);
 	background: rgb(255, 255, 255);
 }
 
-.paginator .atEnd {
+.paginator .paginatorAtEnd {
 	margin-left: 20px;
 	padding: 2px 6px;
 	background: rgb(255, 255, 255);
 	color: rgb(160, 160, 160);
 }
 
-.paginator .currentPage {
+.paginator .paginatorCurrentPage {
 	padding: 2px 6px;
 	border: 1px solid rgb(144, 144, 144);
 	font-weight: bold;
@@ -79,7 +79,7 @@
 	text-decoration: none;
 }
 
-.pages div.results {
+.paginatorContainer div.paginatorResults {
 	text-align: center;
 	font: 11px/15px Arial, Helvetica;
 	color: rgb(160, 160, 160);
