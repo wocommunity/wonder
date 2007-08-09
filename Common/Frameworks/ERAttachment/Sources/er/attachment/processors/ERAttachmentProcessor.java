@@ -267,7 +267,7 @@ public abstract class ERAttachmentProcessor<T extends ERAttachment> {
    * @param configurationName the name of the configuration settings to use for this processor (see top level docs) 
    * @return a URL to the attachment's data
    */
-  public abstract String attachmentUrl(T attachment, WORequest request, WOContext context, String configurationName);
+  public abstract String attachmentUrl(T attachment, WORequest request, WOContext context);
   
   /**
    * Deletes the attachment from the data store.
