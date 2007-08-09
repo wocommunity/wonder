@@ -100,6 +100,8 @@ import er.extensions.ERXComponentUtilities;
  * @binding elementName the name of the container element (defaults to "div")
  * @binding formSerializer the name of the javascript function to call to serialize the form
  * 
+ * @binding onsubmit pass through onsubmit to form
+ * 
  * @author mschrag
  */
 public class AjaxInPlace extends WOComponent {
