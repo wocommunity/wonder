@@ -1,5 +1,7 @@
 <html>
 <head>
+</head>
+<body>
 <style>
 p {
 	color: rgb(80, 80, 80);
@@ -27,8 +29,6 @@ code {
 }
 
 </style>
-</head>
-<body>
 
 <h1>ERAttachment</h1>
 
@@ -48,7 +48,7 @@ are stored and served by simple adjusting some configuration properties.
 <p>
 If you use Project Wonder migrations and migrateOnStartup, then the ERAttachment tables will be automatically created
 for you on the first launch.  If you do not, then you can either manually execute the .migration SQL scripts that are
-in the Resources folder, or you can open the EOModel and generate SQL for your particular database.
+in the Resources folder (execute them in numeric order), or you can open the EOModel and generate SQL for your particular database.
 </p>
 
 <h2>Configuration</h2>
@@ -180,7 +180,10 @@ attachments from within your WebObjecst applications (see the section on securit
 <p>
 Amazon's S3 service is an incredibly cost-effective way to host large amounts of data, which is ideal if you are offering an
 attachment system for a public website.  For information about signing up for an account, go to 
-<a href = "http://aws.amazon.com/s3">Amazon's S3 Page</a>.
+<a href = "http://aws.amazon.com/s3">Amazon's S3 Page</a>.  Because S3 uploading may take a while, the actual upload to S3
+is performed in a background queue.  As a result, your attachment may be in an "unavailable" state (attachment.available = false)
+until the upload is complete.  The attachment components handle this state with specific views and by disabling attachment links.
+Note: Deleting an attachment that is in the unavailable state may result in the file not being removed from S3 right now.
 </p>
 
 <dl>
@@ -345,10 +348,11 @@ work of actually switching everything around is left as an exercise for the read
 
 <h2>Viewing Attachments</h2>
 <p>
-There are two ways to view an attachment -- linking or embedding.  To embed an attachment in the page (assuming it is an
+There are two ways to view an attachment -- linking and embedding.  To embed an attachment in the page (assuming it is an
 embeddable type), you can use the ERAttachmentViewer component.  If the attachment type is not one that has a renderer,
-ERAttachmentViewer will display a link to the attachment instead.  If you only want to provide a link, ERAttachmentLink
-works basically link a WOHyperlink except that you provide a configurationName and attachment reference.
+ERAttachmentViewer will display a default icon instead.  If you only want to provide a link, ERAttachmentLink
+works basically link a WOHyperlink except that you provide a configurationName and attachment reference.  Additionally,
+you can use ERAttachmentIcon to show an icon based on the mime type of the attachment.
 </p>
 
 <code>
@@ -364,10 +368,35 @@ AvatarLink : ERAttachmentLink {
 }
 </code>
 
+<h2>Custom Viewers</h2>
 <p>
-Note: Currently ERAttachmentViewer is a monolithic design.  This will be modified in the future to instead use
-WOSwitchComponents and allow custom definitions of viewer components based on the attachment's mime type.
+Viewers for attachments are pluggable.  You can create a component that extends AbstractERAttachmentViewer, and set
+some a configuration property that maps a mime type to your viewer.
 </p>
+
+<dl>
+	<dt>er.attachment.mimeType.[mimeType].viewer</dt>
+	<dd>(optional) The class name of the viewer component to display for a particular mime type.  You can set explicit
+	mime types or "glob" mime types.  For instance, you can set er.attachment.mimeType.image/pdf.viewer=com.mine.PDFViewer as
+	well as er.attachment.mimeType.image/*.viewer=com.mine.DefaultImageViewer.</dd>
+	
+	<dt>er.attachment.mimeType.default.viewer</dt>
+	<dd>(optional) The class name of the viewer component to display when no other mimetype-specific viewer matches.</dd>
+	
+	<dt>er.attachment.mimeType.unavailable.viewer</dt>
+	<dd>(optional) The class name of the viewer component to display when an attachment is in the "unavailable" state.</dd>
+</dl>
+
+<p>
+As an example, the default Properties for the framework define:
+</p>
+
+<code>
+er.attachment.mimeType.image/pdf.viewer=er.attachment.components.viewers.ERAttachmentDefaultViewer
+er.attachment.mimeType.image/*.viewer=er.attachment.components.viewers.ERAttachmentImageViewer
+er.attachment.mimeType.default.viewer=er.attachment.components.viewers.ERAttachmentDefaultViewer
+er.attachment.mimeType.unavailable.viewer=er.attachment.components.viewers.ERAttachmentUnavailableViewer
+</code>
 
 <h2>Custom Storage</h2>
 <p>

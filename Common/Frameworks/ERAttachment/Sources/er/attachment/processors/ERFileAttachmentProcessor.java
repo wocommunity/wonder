@@ -8,6 +8,7 @@ import java.io.InputStream;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WORequest;
 import com.webobjects.eocontrol.EOEditingContext;
+import com.webobjects.foundation.NSTimestamp;
 
 import er.attachment.model.ERFileAttachment;
 import er.extensions.ERXFileUtilities;
@@ -66,7 +67,7 @@ public class ERFileAttachmentProcessor extends ERAttachmentProcessor<ERFileAttac
       webPath = "/" + webPath;
     }
 
-    ERFileAttachment attachment = ERFileAttachment.createERFileAttachment(editingContext, mimeType, recommendedFileName, Boolean.valueOf(proxy), Integer.valueOf((int) uploadedFile.length()), webPath);
+    ERFileAttachment attachment = ERFileAttachment.createERFileAttachment(editingContext, Boolean.TRUE, new NSTimestamp(), mimeType, recommendedFileName, Boolean.valueOf(proxy), Integer.valueOf((int) uploadedFile.length()), webPath);
     try {
       webPath = ERAttachmentProcessor._parsePathTemplate(attachment, webPath, recommendedFileName);
       filesystemPath = ERAttachmentProcessor._parsePathTemplate(attachment, filesystemPath, recommendedFileName);

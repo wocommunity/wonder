@@ -11,10 +11,24 @@
        }, 
        
        {
+           allowsNull = N;
+           columnName = available;
+           name = available;
+           prototypeName = boolean;
+       }, 
+       
+       {
            allowsNull = Y;
            columnName = configurationName;
            name = configurationName;
            prototypeName = varchar100;
+       }, 
+       
+       {
+           allowsNull = N;
+           columnName = creationDate;
+           name = creationDate;
+           prototypeName = dateTime;
        }, 
        
        {
@@ -110,7 +124,9 @@
     attributesUsedForLocking = 
     (
        attachmentDataID, 
+       available, 
        configurationName, 
+       creationDate, 
        height, 
        id, 
        mimeType, 
@@ -128,8 +144,10 @@
     classProperties = 
     (
        attachmentData, 
+       available, 
        childrenAttachments, 
        configurationName, 
+       creationDate, 
        height, 
        mimeType, 
        originalFileName, 

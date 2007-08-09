@@ -30,7 +30,7 @@ public class ERAttachmentIcon extends WOComponent {
     ERAttachment attachment = attachment();
     return ERAttachmentProcessor.processorForType(attachment).attachmentUrl(attachment, context.request(), context);
   }
-  
+
   public String iconPath() {
     return ERAttachmentIcon.iconPath(attachment(), valueForBinding("size"));
   }
@@ -40,7 +40,10 @@ public class ERAttachmentIcon extends WOComponent {
     if (size != null) {
       sizeStr = size.toString();
     }
-    ERMimeType erMimeType = attachment.erMimeType();
+    ERMimeType erMimeType = null;
+    if (attachment != null) {
+      erMimeType = attachment.erMimeType();
+    }
     String mimeType;
     if (erMimeType == null) {
       mimeType = "application/x-octet-stream";
