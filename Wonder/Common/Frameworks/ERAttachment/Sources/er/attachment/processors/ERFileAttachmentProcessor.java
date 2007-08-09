@@ -102,7 +102,7 @@ public class ERFileAttachmentProcessor extends ERAttachmentProcessor<ERFileAttac
   }
   
   @Override
-  public String attachmentUrl(ERFileAttachment attachment, WORequest request, WOContext context, String configurationName) {
+  public String attachmentUrl(ERFileAttachment attachment, WORequest request, WOContext context) {
     String attachmentUrl;
     if (!attachment.proxied().booleanValue()) {
       attachmentUrl = attachment.webPath();

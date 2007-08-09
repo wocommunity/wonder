@@ -20,7 +20,6 @@ import er.attachment.processors.ERAttachmentProcessor;
  * @binding style (optional) the embedded css style
  * @binding width (optional) if displaying an image, sets the image width 
  * @binding height (optional) if displaying an image, sets the image height
- * 
  */
 public class ERAttachmentViewer extends WOComponent {
   public ERAttachmentViewer(WOContext context) {
@@ -34,8 +33,7 @@ public class ERAttachmentViewer extends WOComponent {
   public String attachmentUrl() {
     WOContext context = context();
     ERAttachment attachment = attachment();
-    String configurationName = (String) valueForBinding("configurationName");
-    return ERAttachmentProcessor.processorForType(attachment).attachmentUrl(attachment, context.request(), context, configurationName);
+    return ERAttachmentProcessor.processorForType(attachment).attachmentUrl(attachment, context.request(), context);
   }
 
   @Override

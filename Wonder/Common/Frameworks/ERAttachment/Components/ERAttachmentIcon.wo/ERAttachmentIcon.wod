@@ -1,0 +1,14 @@
+Icon : WOImage {
+	filename = iconPath;
+	framework = "ERAttachment";
+	id = ^id;
+	class = ^class;
+	style  = ^style;
+}
+
+Link : ERAttachmentLink {
+	attachment = ^attachment;
+	class = ^class;
+	style  = ^style;
+	configurationName = ^configurationName;
+}

@@ -134,7 +134,7 @@ public class ERS3AttachmentProcessor extends ERAttachmentProcessor<ERS3Attachmen
   }
 
   @Override
-  public String attachmentUrl(ERS3Attachment attachment, WORequest request, WOContext context, String configurationName) {
+  public String attachmentUrl(ERS3Attachment attachment, WORequest request, WOContext context) {
     String attachmentUrl = attachment.s3Path();
     return attachmentUrl;
   }
