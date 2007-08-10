@@ -42,7 +42,7 @@ public class ERDDeleteButton extends ERDActionButton {
         nextPage.setCancelDelegate(new ERDPageDelegate(context().page()));
         D2WPage d2wPage = ((D2WPage)nextPage);
         
-        String message = "ERDTrashcan.confirmDeletionMessage";
+        String message = ERXLocalizer.currentLocalizer().localizedTemplateStringForKeyWithObject("ERDTrashcan.confirmDeletionMessage", d2wContext()); 
 
         nextPage.setMessage(message);
         d2wPage.setObject(object());
