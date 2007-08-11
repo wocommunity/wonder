@@ -62,6 +62,8 @@ public class ERD2WListPage extends ERD2WPage implements ERDListPageInterface, Se
 
 	/** logging support */
 	public final static Logger log = Logger.getLogger(ERD2WListPage.class);
+	
+	protected boolean _shouldRefetch;
 
 	/**
 	 * Public constructor. Registers for
@@ -383,6 +385,11 @@ public class ERD2WListPage extends ERD2WPage implements ERDListPageInterface, Se
 			_hasToUpdate = false;
 			didUpdate();
 		}
+
+		// GN: reset the displayed batch if it is out of range
+		if (this.displayGroup() != null && this.displayGroup().currentBatchIndex() > this.displayGroup().batchCount()) {
+			this.displayGroup().setCurrentBatchIndex(1);
+		}
 		super.appendToResponse(r, c);
 	}
 
@@ -413,6 +420,7 @@ public class ERD2WListPage extends ERD2WPage implements ERDListPageInterface, Se
 				setSortOrderingsOnDisplayGroup(sortOrderings(), displayGroup());
 			}
 		}
+		
 	}
 
 	protected void willUpdate() {
@@ -624,4 +632,5 @@ public class ERD2WListPage extends ERD2WPage implements ERDListPageInterface, Se
 		}
 		return _referenceEOs;
 	}
+
 }
