@@ -115,15 +115,8 @@ public class ERXCrypto {
 
     // DELETEME: Duplicate ivar in ERXExtensions
     private final static String hexDigits = "0123456789abcdef";
-    // DELETEME: Duplicate method in ERXExtensions
     public static String bytesToString(byte[] bytes) {
-        StringBuffer result=new StringBuffer();
-        int length=bytes.length;
-        for (int i=0; i<length; i++) {
-            result.append( hexDigits.charAt( ( bytes [i] >>> 4 ) & 0xf ) );
-            result.append( hexDigits.charAt( bytes [i] & 0xf ) );
-        }
-        return result.toString();
+        return ERXStringUtilities.byteArrayToHexString(bytes);
     }
 
     /**
