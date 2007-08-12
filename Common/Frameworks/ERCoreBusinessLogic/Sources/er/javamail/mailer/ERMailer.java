@@ -164,6 +164,10 @@ public class ERMailer {
                  messageEnumerator.hasMoreElements();) {
                 ERCMailMessage mailMessage = (ERCMailMessage)messageEnumerator.nextElement();
 
+                if( !mailMessage.isReadyToSendState() ) { //due to the operation of the batch iterator, we may pull records that have already been sent
+                    continue;
+                }
+
                 if (log.isDebugEnabled())
                     log.debug("Sending mail message: " + mailMessage);
 
