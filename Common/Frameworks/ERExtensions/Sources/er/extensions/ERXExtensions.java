@@ -549,13 +549,6 @@ public class ERXExtensions {
     }
 
     /**
-     * @deprecated use {@link ERXStringUtilities#numberOfOccurrencesOfCharInString(int,String)
-     */
-    public static String stringWithNtimesString(int n, String s) {
-        return ERXStringUtilities.stringWithNtimesString(n, s);
-    }
-
-    /**
      * Removes all of the HTML tags from a given string.
      * Note: that this is a very simplistic implementation
      * and will most likely not work with complex HTML.
@@ -622,7 +615,7 @@ public class ERXExtensions {
             isFree = runtime.freeMemory();
             i++;
         } while (isFree > wasFree && (maxLoop<=0 || i<maxLoop) );
-        runtime.runFinalization();
+        runtime.runFinalization(); //TODO: should this be inside the loop?
     }
 
     /**
@@ -645,13 +638,6 @@ public class ERXExtensions {
         
         EOGlobalID gid = eo.editingContext().globalIDForObject(eo);
         return gid.isTemporary();
-    }
-
-    /**
-     * @deprecated use {@link ERXEOControlUtilities.primaryKeyStringForObject(EOEnterpriseObject)}
-     */
-    public static String primaryKeyForObject(EOEnterpriseObject eo) {
-        return ERXEOControlUtilities.primaryKeyStringForObject(eo);
     }
 
     /**
@@ -767,11 +753,7 @@ public class ERXExtensions {
      * @return treu if they are not equal, false if they are
      */
     public static boolean safeDifferent(Object v1, Object v2) {
-        return
-        v1==v2 ? false :
-        v1==null && v2!=null ||
-        v1!=null && v2==null ||
-        !v1.equals(v2);
+        return v1 != v2 && (v1 == null || v2 == null || !v1.equals(v2));
     }
 
     /**
@@ -1207,12 +1189,20 @@ public class ERXExtensions {
     // MOVEME: ERXEOFUtilities
     public static void refreshSharedObjectsWithName(String entityName) {
         if (entityName == null) {
-            throw new IllegalStateException("Entity name argument is null for method: refreshSharedObjectsWithName");
+            throw new IllegalArgumentException("Entity name argument is null for method: refreshSharedObjectsWithName");
         }
         EOSharedEditingContext sharedEC = EOSharedEditingContext.defaultSharedEditingContext();
         sharedEC.lock();
         try {
             EOEntity entity = ERXEOAccessUtilities.entityNamed(sharedEC, entityName);
+
+            //if entity caches objects, clear out the cache
+            if( entity.cachesObjects() ) {
+                EODatabaseContext databaseContext = EOUtilities.databaseContextForModelNamed(sharedEC, entity.model().name());
+                EODatabase database = databaseContext.database();
+                database.invalidateResultCacheForEntityNamed(entityName);
+            }
+
             NSArray fetchSpecNames = entity.sharedObjectFetchSpecificationNames();
             int count =  (fetchSpecNames != null) ? fetchSpecNames.count() : 0;
 
