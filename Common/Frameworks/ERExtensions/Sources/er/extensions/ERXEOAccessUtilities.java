@@ -652,9 +652,9 @@ public class ERXEOAccessUtilities {
                 e.removeSharedObjectFetchSpecificationByName((String)fetchSpecNameObjectEnumerator.nextElement());
             } 
         } else if (e == null) {
-            log.warn("MakeSharedEntityEditable: unable to find entity named: " + entityName);            
+            log.warn("makeEditableSharedEntityNamed: unable to find entity named: " + entityName);
         } else {
-            log.warn("MakeSharedEntityEditable: entity already editable: " + entityName);
+            log.warn("makeEditableSharedEntityNamed: entity already editable: " + entityName);
         }
     }    
 }
