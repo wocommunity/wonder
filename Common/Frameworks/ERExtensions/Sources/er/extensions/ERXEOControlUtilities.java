@@ -534,6 +534,7 @@ public class ERXEOControlUtilities {
     public static NSArray sharedObjectsForEntityNamed(String entityName) {
         NSArray sharedEos = (NSArray)EOSharedEditingContext.defaultSharedEditingContext().objectsByEntityName().objectForKey(entityName);
         if (sharedEos == null) {
+            //TODO: Fetch in this case?
             log.warn("Unable to find any shared objects for the entity named: " + entityName);
         }
         return sharedEos != null ? sharedEos : NSArray.EmptyArray;
@@ -551,19 +552,48 @@ public class ERXEOControlUtilities {
         return EOUtilities.objectWithFetchSpecificationAndBindings(EOSharedEditingContext.defaultSharedEditingContext(), entityName, fetchSpec, null);
     }
 
+    public static NSArray sharedObjectsWithFetchSpecificationNamed(String entityName, String fetchSpecName) {
+        NSArray result = null;
+
+        EOSharedEditingContext sharedEditingContext = EOSharedEditingContext.defaultSharedEditingContext();
+        NSDictionary objectsByFetchSpecName = (NSDictionary)sharedEditingContext.objectsByEntityNameAndFetchSpecificationName().objectForKey(entityName);
+        if( objectsByFetchSpecName != null ) {
+            result = (NSArray)objectsByFetchSpecName.objectForKey(fetchSpecName);
+        }
+
+        if( result == null ) {
+            EOEntity entity = EOUtilities.entityNamed(sharedEditingContext, entityName);
+            EOFetchSpecification fetchSpecification = entity.fetchSpecificationNamed(fetchSpecName);
+
+            sharedEditingContext.bindObjectsWithFetchSpecification(fetchSpecification, fetchSpecName);
+
+            objectsByFetchSpecName = (NSDictionary)sharedEditingContext.objectsByEntityNameAndFetchSpecificationName().objectForKey(entityName);
+            if( objectsByFetchSpecName != null ) { //shouldn't be
+                result = (NSArray)objectsByFetchSpecName.objectForKey(fetchSpecName);
+            }
+        }
+
+        if( result == null ) {
+            result = NSArray.EmptyArray;
+        }
+
+        return result;
+    }
     /**
      * Gets the shared enterprise object with the given primary
      * from the default shared editing context. This has the
      * advantage of not requiring a roundtrip to the database to
-     * lookup the object.
+     * lookup the object. But, it will fetch if the object is not
+     * found in the default shared editing context.
      * @param entityName name of the entity
-     * @param pk primary key of object to be found
+     * @param primaryKey primary key of object to be found
      * @return the shared object registered in the default shared editing context
      */
     public static EOEnterpriseObject sharedObjectWithPrimaryKey(String entityName, Object primaryKey) {
         EOKeyGlobalID gid = EOKeyGlobalID.globalIDWithEntityName(entityName, new Object[] {primaryKey});
-        EOEnterpriseObject eo = EOSharedEditingContext.defaultSharedEditingContext().objectForGlobalID(gid);
-        return (eo != null) ? eo : EOUtilities.objectWithPrimaryKeyValue(EOSharedEditingContext.defaultSharedEditingContext(),
+        EOSharedEditingContext sharedEditingContext = EOSharedEditingContext.defaultSharedEditingContext();
+        EOEnterpriseObject eo = sharedEditingContext.objectForGlobalID(gid);
+        return (eo != null) ? eo : EOUtilities.objectWithPrimaryKeyValue(sharedEditingContext,
                                                      entityName,
                                                      primaryKey);
     }
@@ -574,7 +604,7 @@ public class ERXEOControlUtilities {
      * are substituted returning a fetch specification that can be used.
      * @param entityName name of the entity that the fetch specification is bound to
      * @param fetchSpecificationName name of the fetch specification
-     * @param dictionary of qualifier bindings
+     * @param bindings dictionary of qualifier bindings
      * @return fetch specification identified by name and potentially with the qualifier
      * 		bindings replaced.
      */
