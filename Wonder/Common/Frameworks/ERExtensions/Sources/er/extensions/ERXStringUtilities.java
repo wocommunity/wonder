@@ -843,9 +843,9 @@ public class ERXStringUtilities {
      * @return hex string
      */
     public static String byteArrayToHexString(byte[] block) {
-        StringBuffer buf = new StringBuffer();
         int len = block.length;
-        for (int i = 0; i < len; i++) {
+        StringBuffer buf = new StringBuffer(2 * len);
+        for (int i = 0; i < len; ++i) {
             int high = ((block[i] & 0xf0) >> 4);
             int low  =  (block[i] & 0x0f);
             buf.append(HEX_CHARS[high]);
