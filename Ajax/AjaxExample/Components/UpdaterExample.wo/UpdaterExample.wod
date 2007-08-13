@@ -12,10 +12,6 @@ UpdateFromWindowLink : WOHyperlink {
 	target = "_blank";
 }
 
-EffectScript : AjaxIncludeScript {
-	name = "effects.js";
-}
-
 DirectActionReplacementLink : AjaxUpdateLink {
 	directActionName = "exampleReplacement";
 	replaceID = "directActionReplacementDiv";
