@@ -75,3 +75,8 @@ OnClickServerLink : AjaxUpdateLink {
 	action = onClickServerAction;
 	onClickServer = "alert('onClickServer alerted');";
 }
+
+ClickableContainer : ERXClickableContainer {
+	directActionName = "default";
+	style = "border: 1px solid black; background-color: red";
+}
