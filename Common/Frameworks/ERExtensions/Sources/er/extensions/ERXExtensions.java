@@ -18,12 +18,14 @@ import org.apache.log4j.Logger;
 
 import com.webobjects.appserver.WOSession;
 import com.webobjects.eoaccess.EOAttribute;
+import com.webobjects.eoaccess.EODatabase;
 import com.webobjects.eoaccess.EODatabaseContext;
 import com.webobjects.eoaccess.EOEntity;
 import com.webobjects.eoaccess.EOModelGroup;
 import com.webobjects.eoaccess.EOQualifierSQLGeneration;
 import com.webobjects.eoaccess.EORelationship;
 import com.webobjects.eoaccess.EOSQLExpression;
+import com.webobjects.eoaccess.EOUtilities;
 import com.webobjects.eoaccess.EOQualifierSQLGeneration.Support;
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.eocontrol.EOEnterpriseObject;
