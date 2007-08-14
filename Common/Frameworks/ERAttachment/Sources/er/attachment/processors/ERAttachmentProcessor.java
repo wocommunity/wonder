@@ -91,6 +91,20 @@ public abstract class ERAttachmentProcessor<T extends ERAttachment> {
     }
     return processor;
   }
+  
+  /**
+   * Returns the processor that corresponds to the given configuration name ("s3", "db", "file", etc).
+   * 
+   * @param configurationName the configuration name to use to lookup the default storage type
+   * @return the storage type's processor
+   */
+  public static <T extends ERAttachment> ERAttachmentProcessor<T> processorForConfigurationName(String configurationName) {
+    String storageType = ERXProperties.stringForKey("er.attachment." + configurationName + ".storageType");
+    if (storageType == null) {
+      storageType = ERXProperties.stringForKeyWithDefault("er.attachment.storageType", ERDatabaseAttachment.STORAGE_TYPE);
+    }
+    return processorForType(storageType);
+  }
 
   /**
    * Adds a new attachment processor for the given storage type.
