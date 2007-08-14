@@ -15,6 +15,7 @@ import er.attachment.ERAttachmentRequestHandler;
 import er.attachment.model.ERAttachment;
 import er.attachment.model.ERDatabaseAttachment;
 import er.attachment.model.ERFileAttachment;
+import er.attachment.model.ERPendingAttachment;
 import er.attachment.model.ERS3Attachment;
 import er.attachment.utils.ERMimeType;
 import er.attachment.utils.ERMimeTypeManager;
@@ -180,7 +181,7 @@ public abstract class ERAttachmentProcessor<T extends ERAttachment> {
    * @throws IOException if the processing fails
    */
   public T process(EOEditingContext editingContext, File uploadedFile, String recommendedFilePath) throws IOException {
-    return process(editingContext, uploadedFile, recommendedFilePath, null, null, null);
+    return process(editingContext, new ERPendingAttachment(uploadedFile, recommendedFilePath, null, null, null));
   }
 
   /**
@@ -195,7 +196,7 @@ public abstract class ERAttachmentProcessor<T extends ERAttachment> {
    * @throws IOException if the processing fails
    */
   public T process(EOEditingContext editingContext, File uploadedFile, String recommendedFilePath, String mimeType) throws IOException {
-    return process(editingContext, uploadedFile, recommendedFilePath, mimeType, null, null);
+    return process(editingContext, new ERPendingAttachment(uploadedFile, recommendedFilePath, mimeType, null, null));
   }
 
   /**
@@ -212,8 +213,22 @@ public abstract class ERAttachmentProcessor<T extends ERAttachment> {
    * @throws IOException if the processing fails
    */
   public T process(EOEditingContext editingContext, File uploadedFile, String recommendedFilePath, String mimeType, String configurationName, String ownerID) throws IOException {
-    String recommendedFileName = ERXFileUtilities.fileNameFromBrowserSubmittedPath(recommendedFilePath);
-
+    return process(editingContext, new ERPendingAttachment(uploadedFile, recommendedFilePath, mimeType, configurationName, ownerID));
+  }
+  /**
+   * Processes an uploaded file, imports it into the appropriate data store, and returns an ERAttachment that
+   * represents it.  uploadedFile will be deleted after the import process is complete.
+   * 
+   * @param editingContext the EOEditingContext to create the ERAttachment in
+   * @param pendingAttachment the ERPendingAttachment that encapsulates the import information
+   * @return an ERAttachment that represents the file
+   * @throws IOException if the processing fails
+   */
+  public T process(EOEditingContext editingContext, ERPendingAttachment pendingAttachment) throws IOException {
+    File uploadedFile = pendingAttachment.uploadedFile();
+    String recommendedFileName = pendingAttachment.recommendedFileName();
+    String configurationName = pendingAttachment.configurationName();
+    
     long maxSize = ERXProperties.longForKey("er.attachment." + configurationName + ".maxSize");
     if (maxSize == 0) {
       maxSize = ERXProperties.longForKeyWithDefault("er.attachment.maxSize", 0);
@@ -226,14 +241,19 @@ public abstract class ERAttachmentProcessor<T extends ERAttachment> {
       throw maxSizeExceededException;
     }
 
-    String suggestedMimeType = mimeType;
+    String suggestedMimeType = pendingAttachment.mimeType();
+    if (suggestedMimeType != null) {
+      ERMimeType erMimeType = ERMimeTypeManager.mimeTypeManager().mimeTypeForMimeTypeString(suggestedMimeType, false);
+      if (erMimeType == null) {
+        suggestedMimeType = null;
+      }
+    }
+    
     if (suggestedMimeType == null) {
-      if (suggestedMimeType == null) {
-        String extension = ERXFileUtilities.fileExtension(recommendedFileName);
-        ERMimeType erMimeType = ERMimeTypeManager.mimeTypeManager().mimeTypeForExtension(extension, false);
-        if (erMimeType != null) {
-          suggestedMimeType = erMimeType.mimeType();
-        }
+      String extension = ERXFileUtilities.fileExtension(recommendedFileName);
+      ERMimeType erMimeType = ERMimeTypeManager.mimeTypeManager().mimeTypeForExtension(extension, false);
+      if (erMimeType != null) {
+        suggestedMimeType = erMimeType.mimeType();
       }
 
       if (suggestedMimeType == null) {
@@ -241,6 +261,7 @@ public abstract class ERAttachmentProcessor<T extends ERAttachment> {
       }
     }
 
+    String ownerID = pendingAttachment.ownerID();
     T attachment = _process(editingContext, uploadedFile, recommendedFileName, suggestedMimeType, configurationName, ownerID);
     attachment.setConfigurationName(configurationName);
     attachment.setOwnerID(ownerID);
