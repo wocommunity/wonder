@@ -1180,22 +1180,24 @@ public class ERXFileUtilities {
 	 * @return the file name portion
 	 */
     public static String fileNameFromBrowserSubmittedPath(String path) {
-    	// Windows
-    	int separatorIndex = path.lastIndexOf("\\");
-        // Unix
-    	if (separatorIndex == -1) {
-            separatorIndex = path.lastIndexOf("/");
-        }
-    	// MacOS 9
-        if (separatorIndex == -1) {
-        	separatorIndex = path.lastIndexOf(":");
-        }
         String fileName = path;
-        if (separatorIndex != -1) {
-        	fileName = path.substring(separatorIndex + 1);
-        }
-        // ... A tiny security check here ... Just in case.
-        fileName = fileName.replaceAll("\\.\\.", "_");
+    	if (path != null) {
+	    	// Windows
+	    	int separatorIndex = path.lastIndexOf("\\");
+	        // Unix
+	    	if (separatorIndex == -1) {
+	            separatorIndex = path.lastIndexOf("/");
+	        }
+	    	// MacOS 9
+	        if (separatorIndex == -1) {
+	        	separatorIndex = path.lastIndexOf(":");
+	        }
+	        if (separatorIndex != -1) {
+	        	fileName = path.substring(separatorIndex + 1);
+	        }
+	        // ... A tiny security check here ... Just in case.
+	        fileName = fileName.replaceAll("\\.\\.", "_");
+    	}
         return fileName;
     }
     
