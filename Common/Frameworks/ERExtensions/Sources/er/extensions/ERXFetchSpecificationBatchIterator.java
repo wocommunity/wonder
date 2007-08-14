@@ -164,14 +164,6 @@ public class ERXFetchSpecificationBatchIterator implements Iterator, Enumeration
     }
 
     /**
-     * @return same as {@link #count()}
-     * @deprecated Use {@link #count()} instead.
-     */
-    public int objectFetchCount() {
-        return count();
-    }
-
-    /**
      * Gets the current number of objects
      * fetched thus far.
      * @return current number of objects fetched.
