@@ -1,0 +1,365 @@
+<html>
+<body>
+<h1>Migrations</h1>
+
+<h2>Overview</h2>
+<p>
+One of the annoying aspects of having a deployed application is   
+maintaining, organizing, and executing database revisions.  Rails has   
+the concept of "migrations" for declaring ordered sets of database   
+changes, and their basic approach was the original inspiration for   
+Project Wonder's migrations along with Christian Pekeler's work on
+database versioning.  However, it's fairly common in WO/EOF   
+to have multiple frameworks that each have their own models and their   
+own needs for database versioning, and this can introduce a lot of   
+complexity that the previous work didn't directly address that
+ERXMigrations attempt to resolve in a consistent way.
+</p> 
+
+<p>
+There are several aspects of database versioning and EOF that need to   
+be considered.  One major issue to contend with in EOF is that your   
+mapping between your code and the database is declared in your   
+EOModel.  You generally only have a SINGLE version of your EOModel   
+(and class files), though -- the latest one.  So if you are running a   
+migration from version 5 to version 10, in general you can't touch   
+EO's at all, because the model that loads is very likely out of sync   
+with the current state of the database.  More importantly, even if   
+you know that at the moment the model is in sync, you have to   
+consider FUTURE state.  If you're writing the migration for version 5   
+and talking to an EO, that EO might not exist in version 25, and if   
+you ever have to migrate from, say, 3 to 25, you would pass through 5   
+and it would explode because you're talking about version 5 EO's with   
+a version 25 model.  Wonder migrations don't yet address this   
+specific aspect, though I do have some ideas about it.  In the   
+meantime, as a general rule, you are not allowed to talk EO's/ 
+EOModels/etc in the midst of a migration -- you need to (right now)   
+talk straight SQL <em>Note: There is now also an API called
+ERXMigrationDatabse/ERXMigrationTable/ERXMigrationColumn that provides
+a simplified API on top of EOSynchroniationFactory that allows you to
+avoid using SQL for many common cases.</em>.  There is a special hook that I'll mention later   
+that can be used in very limited instances to do some EO work, but   
+just don't think about it for now.  Rails actually has a simpler API   
+for doing common transformations that Wonder might pickup some   
+equivalent for (something like EOSynchronizationFactory, but not   
+insane). 
+</p>
+<p>
+Another aspect to consider is framework interdependencies.  This   
+turns out to appear deceptively simple, but is actually quite nasty.   
+When I first set out, I thought I would just look at your framework   
+dependencies, migrate each up to their latest version and be done.   
+But of course, nothing is ever easy.  In reality, framework   
+dependencies weave in and out of versions.  To migrate my app from   
+version 10 to version 15, version 11 might depend on CoreFramework 5   
+and version 12 might depend on CoreFramework 8 and version 15 might   
+depend on CoreFramework 13.  If you apply the same issues from above,   
+you realize that you have to expect things in the right order,   
+because tables and columns might not exist at the right time if you   
+don't.  So in Wonder migrations, each migration step can declare a   
+list of other model versions that it depends on, and Wonder will   
+build the graph and figure out the order in which to execute them all   
+so that you end up in a happy state.  Wonder always ends up migrating   
+every model to the latest version by the end.  The route it takes to   
+get there may weave through versions across models, but once all the   
+intermodel dependencies are met and executed, it then proceeds to   
+migrate each model up to the latest revision. 
+</p>
+
+<h2>Example</h2>
+<p>
+So lets look at an example and some code: 
+</p>
+<h3>HotNew.app's HotNewModel:</h3>
+<ul>
+	<li>v0 = depends on AccountingModel v2, CoreModel v3</li> 
+  <li>v1 = depends on AccountingModel v5</li> 
+   <li>v2 = depends on AccountingModel v8, CoreModel v5</li>
+</ul>
+  
+<h3>Accounting.framework's AccountingModel:</h3>
+<ul>
+	<li>v0 = depends on CoreModel v0</li> 
+	<li>v1</li>
+	<li>v2 = depends on CoreModel v2</li> 
+	<li>v3</li>
+	<li>v4</li>
+	<li>v5</li> 
+	<li>v6</li>
+	<li>v7 = depends on CoreModel v5</li> 
+	<li>v8</li> 
+	<li>v9</li>
+</ul>
+	
+<h3>Core.framework's CoreModel:</h3>
+<ul> 
+	<li>v0</li> 
+	<li>v1</li> 
+	<li>v2</li>
+	<li>v3</li>
+	<li>v4</li>
+	<li>v5</li>
+	<li>v6</li>
+</ul>
+
+<p>
+Would get executed as (I regret now choosing so many versions :) ):
+</p>
+
+<h3>Flattened Dependencies</h3>
+<ol> 
+	<li>CoreModel v0</li> 
+	<li>AccountingModel v0</li> 
+	<li>CoreModel v1</li>
+	<li>CoreModel v2</li>
+	<li>AccountingModel v1</li> 
+	<li>AccountingModel v2</li>
+	<li>CoreModel v3</li>
+	<li>HotNewModel v0</li>
+	<li>AccountingModel v3</li>
+	<li>AccountingModel v4</li>
+	<li>AccountingModel v5</li>
+	<li>HotNewModel v1</li>
+	<li>AccountingModel v4</li>
+	<li>AccountingModel v5</li>
+	<li>AccountingModel v6</li>
+	<li>CoreModel v4</li>
+	<li>CoreModel v5</li>
+	<li>AccountingModel v7</li>
+	<li>AccountingModel v8</li>
+	<li>HotNewModel v2</li>
+	<li>CoreModel v6</li>
+	<li>AccountingModel v9</li>
+</ol>
+
+<p>
+The "dependency flattener" is not magic -- it is definitely possible   
+for you to build some crazy broken dependencies.  In practice, I have   
+not run into a case where this happens to me with multiple   
+interdependent models, but just be aware of this. 
+</p>
+<p>
+So now that we see the order that it executes, how do we set this up? 
+</p>
+
+<h2>Properties</h2>
+<p>
+In my Properties file, I define the following: 
+</p>
+<pre>
+er.migration.migrateAtStartup=true 
+er.migration.createTablesIfNecessary=true 
+er.migration.modelNames=HotNewModel
+
+HotNewModel.MigrationClassPrefix=com.mdimension.hotnew.migration.HotNewModel 
+</pre>
+
+<h3>er.migration.migrateAtStartup</h3>
+<p>
+<em>er.migration.migrateAtStartup</em> tells Wonder to automatically execute   
+migrations when the app starts ... I generally leave this on, but   
+this WILL modify your database, so you should be mindful when you   
+deploy it into production that you've tested your migrations   
+properly.  Before I deploy to production, I always clone the   
+production database and run the migrations in testing, and I always   
+make a backup of the production database before starting with a new   
+migration.  Better safe than sorry. 
+</p>
+
+<h3>er.migration.createTablesIfNecessary</h3>
+<p>
+Migrations track the current   
+versions of your models in a table named "_DBUpdater".
+createTablesIfNecessary tells wonder to just autogenerate these   
+tables if they don't exist.  If you don't run as a database user with   
+create permissions, you will want to turn this off.  When you attempt   
+to start, it will tell you the create table statement to execute when   
+it fails to run.  You should also be careful of this setting if you
+run with multiple instances the first time you startup your app, 
+because this table is used for locking across multiple instances. 
+</p>
+
+<h3>er.migration.modelNames</h3>
+<p>
+<em>er.migration.modelNames</em> defines the list of top level models to   
+migrate.  You do not need to list all the models here, only the top   
+level model.  Migrations will look for superclasses and relationships   
+to determine interdependent models that must be migrated first (along   
+with explicit model interdependencies you declare in your migration). 
+</p>
+
+<h3>[modelName].MigrationClassPrefix</h3>
+<p>
+Last but not least, the <em>MigrationClassPrefix</em>.  In this case, we have   
+a model named HotNewModel.eomodeld, and therefore we have a   
+<em>HotNewModel.MigrationClassPrefix</em>.  Wonder migrations take this value   
+and append incrementing numbers to the name   
+(com.mdimension.hotnew.migration.HotNewModel5,   
+com.mdimension.hotnew.migration.HotNewModel6, etc).  If you don't   
+declare this value, migrations will look for a packageless class with   
+the same name as the model.  In the above example, each framework   
+would declare the migration class prefixes for its own models in the   
+framework Properties file, so the top level app Properties would only   
+define the app's model. 
+</p>
+
+<h2>Java</h2>
+<p>
+So what does a migration look like, you ask? 
+</p>
+<pre>
+package com.mdimension.hotnew.migration; 
+
+public class HotNewModel2 implements IERXMigration { 
+   public NSArray<ERXModelVersion> modelDependencies() { 
+     return new NSArray<ERXModelVersion>(new ERXModelVersion[] { new ERXModelVersion("AccountingModel", 8), new ERXModelVersion("CoreModel", 5) }); 
+   } 
+
+   public void upgrade(EOEditingContext editingContext, EOAdaptorChannel channel, EOModel model) throws Throwable { 
+     ERXJDBCUtilities.executeUpdateScriptFromResourceNamed(channel, "HotNewModel2-" + ERXJDBCUtilities.databaseProductName(channel) + ".sql", null); 
+     ERXJDBCUtilities.executeUpdate(channel, "update Person set name = 'Mike' where age = 28"); 
+   }
+
+   public void downgrade(EOEditingContext editingContext, EOAdaptorChannel channel, EOModel model) throws Throwable { 
+     // whatever it takes to invert those 
+   } 
+} 
+</pre>
+<p>
+I end up using:
+</p>
+<pre> 
+     ERXJDBCUtilities.executeUpdateScriptFromResourceNamed(channel, "HotNewModel2-" + ERXJDBCUtilities.databaseProductName(channel) + ".sql", null); 
+</pre>
+<p>
+pretty frequently, so that will probably end up with a shorter syntax   
+one of these days, but this ends up loading HotNewModel2-FrontBase.sql 
+or HotNewModel2-Postgresql.sql from the Resources   
+folder, depending on the connection dictionary that is executing them   
+at the time.  The second line is generally database independent, so I   
+can just execute it in place -- use your best judgement on this one.   
+If your migration doesn't have explicit dependencies (i.e. a previous   
+version specified its dependencies, and you're fine with the same),   
+you can just return NSArray.EmptyArray from modelDependencies.
+<em>Note: A core API now exists for this by having your migration
+extend the ERXMigration base class.</em> 
+</p>
+<p>
+I'm generally too lazy to write downgrade, and honestly Wonder   
+doesn't even have the code to order the dependencies to EXECUTE a   
+downgrade, and some migrations are nearly impossible to invert   
+anyway, so write it if it makes you feel better, but it's not getting   
+executed just yet, so don't kill yourself :) 
+</p>
+
+<h2>Transactions</h2>
+<p>
+Each migration executes in a transaction, and the version table   
+update occurs within that transaction.  Depending on your database   
+and the operations you perform, sometimes it's not feasible to   
+execute the migration in a single transaction.  You can either split   
+the migrations then into two migrations, or you can manually commit   
+the channel connection if you have to, but know that if you are   
+manually committing, you are sacrificing rollback-ability.  By the   
+time you get to production, you really don't want migrations to fail,   
+though, so I recommend testing first ... It's just less pain that   
+deploy-and-pray. 
+</p>
+
+<h2>Introducing Migrations into Existing Systems</h2>
+<p>
+The migrations counter starts at zero, so YourModel0 is the first   
+migration that will run.  Migration zero is the one that will   
+generally have your first create table statements in it.  So if you   
+are wanting to use migrations on an application that is already   
+deployed with an existing database, you need to tell the migration   
+system "I'm already at version 1 (or version x), so don't recreate   
+the tables -- just pretend you've already done that."  You can use   
+<em>YourModelName.InitialMigrationVersion=2</em> (for example) in your   
+properties file to specify this.  I generally specify these ONLY in   
+the Application properties file (and not in a framework Properties   
+file), because a framework might be reused in multiple applications,   
+and any NEW deployment would actually need to start at 0 (rather than   
+the application-specific "v2"). 
+</p>
+
+<h2>Never Say Never: EOModel Access</h2>
+<p>
+So what about that reference I made to "never touch EO's ..... OK   
+SOMETIMES you can touch EO's". 
+</p>
+<p>
+It turns out that the REAL restriction for touching EO's is that you   
+can ONLY touch them once all the migrations have run -- not DURING.   
+For instance, your migration zero might create a bunch of tables, but   
+it's also very common to want to create a bunch of initial data.   
+This is really handy to do with EO's.  But because of the   
+restrictions with versioning, it can't happen as part of the   
+migration process itself.  Instead, there is a mechanism that will   
+let you "queue up" EO operations to perform when your migrations are   
+done.  The HUGE catch here is that these do NOT participate in the   
+database version tracking.  That means if a "post operation" fails,   
+it's gone and will not reexecute (because migrations believe it is   
+already at the correct version).  I may deal with this in a better   
+way in future versions by tracking post op version separately, but   
+for now, just don't let them fail :) 
+</p>
+<p>
+To perform a "post op", your migration can implement   
+IERXPostMigration instead of IERXMigration, and this adds the   
+additional method: 
+</p>
+<pre>
+   public void postUpgrade(EOEditingContext editingContext, EOModel model) throws Throwable; 
+</pre>
+<p>
+So as migrations are running in dependency order, ERXMigrator keeps   
+track of "Post Migrations", which will themselves execute in   
+dependency order, but only after a completely successful model   
+migration.  So by the time IERXPostMigrations begin to run, all of   
+your EOModels will match the database tables.  postUpgrades also each   
+run in a transaction.  editingContext.saveChanges() will be called   
+for you after postUpgrade is done. 
+</p>
+
+<h2>Conclusion</h2>
+<p>
+So that's it!  Migrations.  I know this is a lot to soak in ... It   
+looks daunting.  The theory behind it is WAY more complicated than   
+just using them, though.  Once you get the hang of declaring your   
+dependencies, you will find this to be a life saver.  My technique   
+now is that I migrate ALL the time.  Meaning, I write migrations for   
+use in development.  I never modify my database through the database   
+tools -- only migrations.  This way, I make sure that when I deploy,   
+all revisions were properly recorded.  The biggest annoyance at the   
+moment is that you have to do the SQL yourself, but to be honest, you   
+were already doing this before unless you were doing all but the   
+simplest of database revisions (i.e. schema update with no model   
+interdependencies and no data revisions). 
+</p>
+<p>
+As I mentioned before, we may introduce a simpler database   
+transformation API for things like adding columns, removing columns,   
+add/remove "not null", etc. It will likely be some blend of EOModel   
+API (which currently requires too much manual setup in code to do on   
+the fly) and EOSynchronizationFactory (which is just way to tricky to   
+use for normal things).  <em>Note: There is now an API for this.  See
+ERXMigrationDatabase, ERXMigrationTable, and ERXMigrationColumn</em>.
+</p>
+<p>
+It's also possible that Entity Modeler may   
+provide mechanisms to track changes and tag revisions at some point,   
+though EOModel format does not capture quite enough metadata to   
+really be able to automate revisions, and some revisions could NEVER   
+be done automatically (where you have to munge data), so I don't know   
+where exactly this will go.  There's also the possibility of   
+providing an API to more easily load in specific model versions   
+(where you might have MyModel5.eomodelrev, etc) during migrations so   
+you can actually do EO-y things, though this gets REALLY tricky,   
+since you are talking to two versions at once in a migration. 
+</p>
+<p>
+Go forth and migrate.
+</p>
+</body>
+</html> 
