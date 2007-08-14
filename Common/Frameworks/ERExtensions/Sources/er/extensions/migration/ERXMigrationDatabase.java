@@ -54,7 +54,7 @@ import com.webobjects.jdbcadaptor.JDBCAdaptor;
  * </p> 
  * <code>
  * ERXMigrationDatabase database = ERXMigrationDatabase.database(channel);
- * ERXMigrationTable table = ERXMigrationDatabase.database(channel).newTableNamed("TestPerson4");
+ * ERXMigrationTable table = ERXMigrationDatabase.database(channel).newTableNamed("TestPerson");
  * table.newStringColumn("FirstName", 100, false);
  * table.newStringColumn("LastName", 100, false);
  * table.newStringColumn("EmailAddress", 100, false);
