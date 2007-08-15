@@ -84,6 +84,7 @@ import er.extensions.ERXWOForm;
  * 
  * @binding editClass the class of the div that you click on to trigger edit mode (yes this name sucks)
  * @binding canEdit if true, edit mode is entered; if false, view mode remains active
+ * @binding editOnly if true, edit mode is locked on (and save controls don't show if it's in a parent form); if false, you can switch between edit and view mode
  * @binding onEditClick the action to fire when edit mode is triggered
  * @binding onEditSuccess the javascript function to execute after a successful edit
  * @binding onEditFailure the javascript function to execute after a failed edit
@@ -278,6 +279,9 @@ public class AjaxInPlace extends WOComponent {
 		if (!manualEditControl && hasBinding("manualEditControl")) {
 			manualEditControl = ERXComponentUtilities.booleanValueForBinding(this, "manualEditControl");
 		}
+		if (_alreadyInForm != null && _alreadyInForm.booleanValue() && editOnly()) {
+		  manualEditControl = true;
+		}
 		return manualEditControl;
 	}
 
@@ -297,11 +301,15 @@ public class AjaxInPlace extends WOComponent {
 		return disabled;
 	}
 
+	public boolean editOnly() {
+	  return ERXComponentUtilities.booleanValueForBinding(this, "editOnly");
+	}
+	
 	public boolean editing() {
 		if (hasBinding("editing")) {
 			_editing = ERXComponentUtilities.booleanValueForBinding(this, "editing");
 		}
-		return !disabled() && _editing;
+		return !disabled() && (_editing || editOnly());
 	}
 
 	public boolean canEdit() {
@@ -359,7 +367,7 @@ public class AjaxInPlace extends WOComponent {
 				canSave = canSave();
 			}
 			// check to see if we can save after firing the action (in case validation failed or something)
-			if (canSave) {
+			if (canSave && !editOnly()) {
 				setEditing(false);
 			}
 		}
@@ -369,7 +377,9 @@ public class AjaxInPlace extends WOComponent {
 
 	public WOActionResults cancel() {
 		WOActionResults results = (WOActionResults) valueForBinding("cancelAction");
-		setEditing(false);
+		if (!editOnly()) {
+			setEditing(false);
+		}
 		// ignore results
 		return null;
 	}

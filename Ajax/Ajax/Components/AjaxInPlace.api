@@ -37,6 +37,7 @@
 		<binding name = "submitOnSave"/>
 		<binding name = "canSave"/>
 		<binding name = "canEdit"/>
+		<binding name = "editOnly"/>
 		
 		<binding name = "editInsertion"/>
 		<binding name = "editInsertionDuration"/>
