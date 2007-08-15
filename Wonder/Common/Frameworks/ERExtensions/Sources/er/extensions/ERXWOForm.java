@@ -125,7 +125,9 @@ public class ERXWOForm extends com.webobjects.appserver._private.WOHTMLDynamicEl
 		boolean wasMultipleSubmitForm = context._isMultipleSubmitForm();
     	context._setActionInvoked(false);
 		context._setIsMultipleSubmitForm(_multipleSubmit == null ? false : _multipleSubmit.booleanValueInComponent(context.component()));
-		_setFormName(context);
+    	if (!wasInForm) {
+    		_setFormName(context);
+    	}
     	WOActionResults result = super.invokeAction(worequest, context);
     	if(!wasInForm && !context._wasActionInvoked() && context._wasFormSubmitted()) {
     		if(_action != null) {
@@ -137,7 +139,9 @@ public class ERXWOForm extends com.webobjects.appserver._private.WOHTMLDynamicEl
     	}
 		context._setIsMultipleSubmitForm(wasMultipleSubmitForm);
     	_exitFormInContext(context, wasInForm, wasFormSubmitted);
-		_clearFormName(context);
+    	if (!wasInForm) {
+    		_clearFormName(context);
+    	}
     	return result;
     }
 
@@ -214,14 +218,18 @@ public class ERXWOForm extends com.webobjects.appserver._private.WOHTMLDynamicEl
     	if (forceFormSubmitted) {
     		context._setFormSubmitted(true);
     	}
-		_setFormName(context);
+    	if (!wasInForm) {
+    		_setFormName(context);
+    	}
     	super.takeValuesFromRequest(request, context);
     	if (forceFormSubmitted) {
     		context._setFormSubmitted(false);
     	}
     	//log.info(context.elementID() + "->" + context.senderID() + "->" + context._wasFormSubmitted());
     	_exitFormInContext(context, wasInForm, wasFormSubmitted);
-		_clearFormName(context);
+    	if (!wasInForm) {
+    		_clearFormName(context);
+    	}
     }
 
     protected void _setFormName(WOContext context) {
@@ -234,7 +242,12 @@ public class ERXWOForm extends com.webobjects.appserver._private.WOHTMLDynamicEl
     }
 
     protected void _clearFormName(WOContext context) {
-        ERXWOContext.contextDictionary().removeObjectForKey("formName");
+    	if(_formName != null) {
+    		String formName = (String)_formName.valueInComponent(context.component());
+    		if(formName != null) {
+    			ERXWOContext.contextDictionary().removeObjectForKey("formName");
+    		}
+    	}
     }
     
     public void appendAttributesToResponse(WOResponse response, WOContext context) {
