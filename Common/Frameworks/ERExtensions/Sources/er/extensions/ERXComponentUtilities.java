@@ -23,7 +23,8 @@ import com.webobjects.foundation.NSMutableDictionary;
  */
 public class ERXComponentUtilities {
 	/**
-	 * Returns a query parameter dictionary from a set of ?key=association WOAssociation dictionary.
+	 * Returns a query parameter dictionary from a set of ?key=association
+	 * WOAssociation dictionary.
 	 * 
 	 * @param associations
 	 *            the set of associations
@@ -37,7 +38,8 @@ public class ERXComponentUtilities {
 	}
 
 	/**
-	 * Returns a query parameter dictionary from a set of ?key=association WOAssociation dictionary.
+	 * Returns a query parameter dictionary from a set of ?key=association
+	 * WOAssociation dictionary.
 	 * 
 	 * @param associations
 	 *            the set of associations
@@ -67,7 +69,8 @@ public class ERXComponentUtilities {
 	}
 
 	/**
-	 * Returns the set of ?key=value associations from an associations dictionary.
+	 * Returns the set of ?key=value associations from an associations
+	 * dictionary.
 	 * 
 	 * @param associations
 	 *            the associations to enumerate
@@ -77,8 +80,10 @@ public class ERXComponentUtilities {
 	}
 
 	/**
-	 * Returns the set of ?key=value associations from an associations dictionary. If removeQueryParameterAssociations
-	 * is true, the corresponding entries will be removed from the associations dictionary that was passed in.
+	 * Returns the set of ?key=value associations from an associations
+	 * dictionary. If removeQueryParameterAssociations is true, the
+	 * corresponding entries will be removed from the associations dictionary
+	 * that was passed in.
 	 * 
 	 * @param associations
 	 *            the associations to enumerate
@@ -119,15 +124,38 @@ public class ERXComponentUtilities {
 	 * @return a boolean
 	 */
 	public static boolean booleanValueForBinding(WOComponent component, String bindingName) {
-		Boolean value = (Boolean) component.valueForBinding(bindingName);
-		return value != null && value.booleanValue();
+		return ERXComponentUtilities.booleanValueForBinding(component, bindingName, false);
+	}
+
+	/**
+	 * Returns the boolean value of a binding.
+	 * 
+	 * @param component
+	 *            the component
+	 * @param bindingName
+	 *            the name of the boolean binding
+	 * @param defaultValue
+	 *            the default value if the binding is null
+	 * @return a boolean
+	 */
+	public static boolean booleanValueForBinding(WOComponent component, String bindingName, boolean defaultValue) {
+		Boolean valueBoolean = (Boolean) component.valueForBinding(bindingName);
+		boolean value;
+		if (valueBoolean == null) {
+			value = defaultValue;
+		}
+		else {
+			value = valueBoolean.booleanValue();
+		}
+		return value;
 	}
 
 	/**
 	 * Returns the URL of the html template for the given component name.
 	 * 
 	 * @param componentName
-	 *            the name of the component to load a template for (without the .wo)
+	 *            the name of the component to load a template for (without the
+	 *            .wo)
 	 * @param languages
 	 *            the list of languages to use for finding components
 	 * @return the URL to the html template (or null if there isn't one)
@@ -140,9 +168,11 @@ public class ERXComponentUtilities {
 	 * Returns the URL of the template for the given component name.
 	 * 
 	 * @param componentName
-	 *            the name of the component to load a template for (without the .wo)
+	 *            the name of the component to load a template for (without the
+	 *            .wo)
 	 * @param extension
-	 *            the file extension of the template (without the dot -- i.e. "html")
+	 *            the file extension of the template (without the dot -- i.e.
+	 *            "html")
 	 * @param languages
 	 *            the list of languages to use for finding components
 	 * @return the URL to the template (or null if there isn't one)
@@ -165,25 +195,31 @@ public class ERXComponentUtilities {
 	}
 
 	/**
-	 * Returns the contents of the html template for the given component name as a string.
+	 * Returns the contents of the html template for the given component name as
+	 * a string.
 	 * 
 	 * @param componentName
-	 *            the name of the component to load a template for (without the .wo)
+	 *            the name of the component to load a template for (without the
+	 *            .wo)
 	 * @param languages
 	 *            the list of languages to use for finding components
-	 * @return the string contents of the html template (or null if there isn't one)
+	 * @return the string contents of the html template (or null if there isn't
+	 *         one)
 	 */
 	public static String htmlTemplate(String componentName, NSArray languages) throws IOException {
 		return ERXComponentUtilities.template(componentName, "html", languages);
 	}
 
 	/**
-	 * Returns the contents of the template for the given component name as a string.
+	 * Returns the contents of the template for the given component name as a
+	 * string.
 	 * 
 	 * @param componentName
-	 *            the name of the component to load a template for (without the .wo)
+	 *            the name of the component to load a template for (without the
+	 *            .wo)
 	 * @param extension
-	 *            the file extension of the template (without the dot -- i.e. "html")
+	 *            the file extension of the template (without the dot -- i.e.
+	 *            "html")
 	 * @param languages
 	 *            the list of languages to use for finding components
 	 * @return the string contents of the template (or null if there isn't one)
@@ -199,17 +235,18 @@ public class ERXComponentUtilities {
 		}
 		return template;
 	}
-	
+
 	/**
 	 * Returns an array of the current component names.
+	 * 
 	 * @return
 	 */
 	public static NSArray componentTree() {
 		WOContext context = ERXWOContext.currentContext();
 		NSMutableArray<String> result = new NSMutableArray<String>();
-		if(context != null) {
+		if (context != null) {
 			WOComponent c = context.component();
-			while(c != null) {
+			while (c != null) {
 				result.addObject(c.name());
 				c = c.parent();
 			}
@@ -220,21 +257,27 @@ public class ERXComponentUtilities {
 	/**
 	 * Appends a dictionary of associations as HTML attributes.
 	 * 
-	 * @param associations the associations dictionary
-	 * @param response the response to write to
-	 * @param context the context
+	 * @param associations
+	 *            the associations dictionary
+	 * @param response
+	 *            the response to write to
+	 * @param context
+	 *            the context
 	 */
 	public static void appendHtmlAttributes(NSDictionary<String, WOAssociation> associations, WOResponse response, WOContext context) {
 		WOComponent component = context.component();
 		ERXComponentUtilities.appendHtmlAttributes(associations, response, component);
 	}
-  
+
 	/**
 	 * Appends a dictionary of associations as HTML attributes.
 	 * 
-	 * @param associations the associations dictionary
-	 * @param response the response to write to
-	 * @param component the component to evaluate the associations within
+	 * @param associations
+	 *            the associations dictionary
+	 * @param response
+	 *            the response to write to
+	 * @param component
+	 *            the component to evaluate the associations within
 	 */
 	public static void appendHtmlAttributes(NSDictionary<String, WOAssociation> associations, WOResponse response, WOComponent component) {
 		for (String key : associations.allKeys()) {
@@ -242,14 +285,18 @@ public class ERXComponentUtilities {
 			ERXComponentUtilities.appendHtmlAttribute(key, association, response, component);
 		}
 	}
-	  
+
 	/**
 	 * Appends an association as an HTML attribute.
 	 * 
-	 * @param key the key to append
-	 * @param association the association
-	 * @param response the response to write to
-	 * @param component the component to evaluate the association within
+	 * @param key
+	 *            the key to append
+	 * @param association
+	 *            the association
+	 * @param response
+	 *            the response to write to
+	 * @param component
+	 *            the component to evaluate the association within
 	 */
 	public static void appendHtmlAttribute(String key, WOAssociation association, WOResponse response, WOComponent component) {
 		Object value = association.valueInComponent(component);
@@ -261,15 +308,18 @@ public class ERXComponentUtilities {
 			response.appendContentString("\"");
 		}
 	}
-	
 
 	/**
-	 * Returns the component for the given class without having to cast.  
-	 * For example: MyPage page = ERXComponentUtilities.pageWithName(MyPage.class, context);
+	 * Returns the component for the given class without having to cast. For
+	 * example: MyPage page = ERXComponentUtilities.pageWithName(MyPage.class,
+	 * context);
 	 * 
-	 * @param <T> the type of component to 
-	 * @param componentClass the component class to lookup
-	 * @param context the context
+	 * @param <T>
+	 *            the type of component to
+	 * @param componentClass
+	 *            the component class to lookup
+	 * @param context
+	 *            the context
 	 * @return the created component
 	 */
 	@SuppressWarnings("unchecked")
@@ -278,10 +328,13 @@ public class ERXComponentUtilities {
 	}
 
 	/**
-	 * Calls pageWithName with ERXWOContext.currentContext() for the current thread.
+	 * Calls pageWithName with ERXWOContext.currentContext() for the current
+	 * thread.
 	 * 
-	 * @param <T> the type of component to 
-	 * @param componentClass the component class to lookup
+	 * @param <T>
+	 *            the type of component to
+	 * @param componentClass
+	 *            the component class to lookup
 	 * @return the created component
 	 */
 	@SuppressWarnings("unchecked")
