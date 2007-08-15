@@ -11,6 +11,7 @@ import com.webobjects.appserver.WORequest;
 import com.webobjects.appserver.WOResponse;
 
 import er.extensions.ERXComponentUtilities;
+import er.extensions.ERXWOContext;
 import er.extensions.ERXWOForm;
 
 /**
@@ -116,7 +117,7 @@ public class AjaxInPlace extends WOComponent {
 	private String _id;
 	private boolean _changingToEdit;
 	private boolean _changingToView;
-	private Boolean _alreadyInForm;
+	private boolean _alreadyInForm;
 
 	public AjaxInPlace(WOContext context) {
 		super(context);
@@ -147,6 +148,7 @@ public class AjaxInPlace extends WOComponent {
 	}
 	
 	public WOActionResults invokeAction(WORequest aRequest, WOContext aContext) {
+    _alreadyInForm = context().isInForm();
 		WOActionResults results = super.invokeAction(aRequest, aContext);
 		// MS: see appendToResponse
 		_id = null;
@@ -154,12 +156,14 @@ public class AjaxInPlace extends WOComponent {
 	}
 	
 	public void takeValuesFromRequest(WORequest aRequest, WOContext aContext) {
+    _alreadyInForm = context().isInForm();
 		super.takeValuesFromRequest(aRequest, aContext);
 		// MS: see appendToResponse
 		_id = null;
 	}
 
 	public void appendToResponse(WOResponse aResponse, WOContext aContext) {
+    _alreadyInForm = context().isInForm();
 		super.appendToResponse(aResponse, aContext);
 		// MS: id was being cached, but if the structure of the page changes,
 		// it can cache too aggressively.  We really only care that the id
@@ -202,7 +206,7 @@ public class AjaxInPlace extends WOComponent {
 	
 	public String formName() {
 	  String formName = null;
-	  if (_alreadyInForm.booleanValue()) {
+	  if (_alreadyInForm) {
 	    formName = ERXWOForm.formName(context(), null);
 	    if (formName == null) {
 	      AjaxInPlace.log.warn(id() + " is already inside of a form, but that form has no name, so AjaxInPlace can't work properly.");
@@ -228,10 +232,7 @@ public class AjaxInPlace extends WOComponent {
 	}
 	
 	public boolean disableForm() {
-	  if (_alreadyInForm == null) {
-		  _alreadyInForm = Boolean.valueOf(context().isInForm());
-	  }
-	  return _alreadyInForm.booleanValue() || linkOnSave();
+	  return _alreadyInForm || linkOnSave();
 	}
 
 	public String updateFunctionName() {
@@ -279,7 +280,7 @@ public class AjaxInPlace extends WOComponent {
 		if (!manualEditControl && hasBinding("manualEditControl")) {
 			manualEditControl = ERXComponentUtilities.booleanValueForBinding(this, "manualEditControl");
 		}
-		if (_alreadyInForm != null && _alreadyInForm.booleanValue() && editOnly()) {
+		if (_alreadyInForm && editOnly()) {
 		  manualEditControl = true;
 		}
 		return manualEditControl;
