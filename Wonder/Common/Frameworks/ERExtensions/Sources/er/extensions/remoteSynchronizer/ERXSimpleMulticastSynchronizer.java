@@ -139,6 +139,17 @@ public class ERXSimpleMulticastSynchronizer extends ERXRemoteSynchronizer {
 		_multicastSocket.leaveGroup(_multicastGroup, _localNetworkInterface);
 		_listening = false;
 	}
+	
+	protected boolean handleMessageType(int messageType, RemoteChange remoteChange, DataInputStream dis) {
+		boolean handled = false;
+		if (messageType == ERXSimpleMulticastSynchronizer.JOIN) {
+			handled = true;
+		}
+		else if (messageType == ERXSimpleMulticastSynchronizer.LEAVE) {
+			handled = true;
+		}
+		return handled;
+	}
 
 	public void listen() throws IOException {
 		Thread listenThread = new Thread(new Runnable() {

@@ -56,8 +56,8 @@ public abstract class ERXRemoteSynchronizer {
 	private static final int INSERT = 3;
 	private static final int UPDATE = 4;
 	private static final int DELETE = 5;
-	private static final int INVALIDATE = 6;
 	private static final int TO_MANY_UPDATE = 6;
+	private static final int INVALIDATE = 7;
 
 	private static final int BYTE_TYPE = 1;
 	private static final int SHORT_TYPE = 2;
@@ -122,9 +122,13 @@ public abstract class ERXRemoteSynchronizer {
 			}
 			remoteChange.addRemoteCacheChange(change);
 		}
-		else {
+		else if (!handleMessageType(messageType, remoteChange, dis)) {
 			throw new IllegalArgumentException("Unknown remote message type #" + messageType + ".");
 		}
+	}
+	
+	protected boolean handleMessageType(int messageType, RemoteChange remoteChange, DataInputStream dis) {
+		return false;
 	}
 
 	protected void _writeCacheChange(DataOutputStream dos, ERXDatabase.CacheChange cacheChange) throws IOException {
