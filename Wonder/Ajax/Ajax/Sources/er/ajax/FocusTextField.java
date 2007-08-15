@@ -5,7 +5,6 @@ import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WOElement;
 import com.webobjects.appserver.WOResponse;
-import com.webobjects.appserver._private.WODynamicElementCreationException;
 import com.webobjects.foundation.NSDictionary;
 
 import er.extensions.ERXWOTextField;
@@ -32,16 +31,23 @@ public class FocusTextField extends ERXWOTextField {
 		super(tagname, nsdictionary, woelement);
 
 		_id = (WOAssociation) nsdictionary.valueForKey("id");
-		if (_id == null) {
-			throw new WODynamicElementCreationException("<" + getClass().getName() + "> id is a required binding.");
-		}
-		//_associations.setObjectForKey(_id, ")
 		_selectAll = (WOAssociation) _associations.removeObjectForKey("selectAll");
 		_focus = (WOAssociation) _associations.removeObjectForKey("focus");
 		_onEnter = (WOAssociation) _associations.removeObjectForKey("onEnter");
 		_onKeyPress = (WOAssociation) _associations.removeObjectForKey("onkeypress");
 	}
 
+	public String id(WOComponent component, WOContext context) {
+    String id = null;
+    if (_id != null) {
+      id = (String) _id.valueInComponent(component);
+    }
+	  if (id == null) {
+	    id = AjaxUtils.toSafeElementID(context.elementID());
+	  }
+	  return id;
+	}
+	
 	public void appendToResponse(WOResponse response, WOContext context) {
 		AjaxUtils.addScriptResourceInHead(context, response, "prototype.js");
 
@@ -50,7 +56,7 @@ public class FocusTextField extends ERXWOTextField {
 		WOComponent component = context.component();
 		boolean focus = (_focus == null || _focus.booleanValueInComponent(component));
 		boolean selectAll = (_selectAll != null && _selectAll.booleanValueInComponent(component));
-		String id = (String) _id.valueInComponent(component);
+		String id = id(component, context);
 		String onEnterScript = (_onEnter != null) ? (String)_onEnter.valueInComponent(component) : null;
 		FocusTextField.appendJavascriptToResponse(response, context, id, focus, selectAll, onEnterScript);
 	}
@@ -60,7 +66,10 @@ public class FocusTextField extends ERXWOTextField {
 		WOComponent component = wocontext.component();
 		String onKeyPress = (_onKeyPress != null) ? (String) _onKeyPress.valueInComponent(component) : null;
 		String onEnterScript = (_onEnter != null) ? (String) _onEnter.valueInComponent(component) : null;
-		String id = (String) _id.valueInComponent(component);
+    String id = id(component, wocontext);
+    if (_id == null) {
+      response.appendContentString(" id = \"" + id + "\"");
+    }
 		FocusTextField._appendAttributesFromAssociationsToResponse(response, wocontext, id, onKeyPress, onEnterScript);
 	}
 
