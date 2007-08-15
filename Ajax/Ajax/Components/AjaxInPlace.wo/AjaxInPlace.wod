@@ -67,8 +67,7 @@ EditAction : WOGenericContainer {
 }
 
 SaveLabel : WOString {
-	value = ^saveLabel;
-	valueWhenEmpty = "save";
+	value = saveLabel;
 }
 
 CancelLabel : WOString {
@@ -102,8 +101,17 @@ CancelAction : WOGenericContainer {
 EditForm : WOForm {
 	multipleSubmit = true;
 	name = id;
-	disabled = linkOnSave;
+	disabled = disableForm;
 	onsubmit = ^onsubmit;
+}
+
+ButtonConditional : WOConditional {
+	condition = button;
+}
+
+LinkConditional : WOConditional {
+	condition = button;
+	negate = true;
 }
 
 LinkOnSaveConditional : WOConditional {
@@ -117,7 +125,7 @@ SubmitOnSaveConditional : WOConditional {
 SaveSubmitFunction : AjaxSubmitButton {
 	action = save;
 	button = false;
-	formName = id;
+	formName = formName;
 	onClick = ^onSaveClick;
 	//onClickServer = updateFunctionName;
 	onSuccess = ^onSaveSuccess;
@@ -135,7 +143,7 @@ SaveSubmitFunction : AjaxSubmitButton {
 
 SaveLinkFunction : AjaxUpdateLink {
 	action = save;
-	formName = id;
+	formName = formName;
 	onClick = ^onSaveClick;
 	//onClickServer = updateFunctionName;
 	onSuccess = ^onSaveSuccess;
@@ -150,10 +158,18 @@ SaveLinkFunction : AjaxUpdateLink {
 	afterInsertionDuration = ^saveAfterInsertionDuration;
 }
 
-SaveAction : WOGenericContainer {
+SaveLinkAction : WOGenericContainer {
 	elementName = "a";
 	href = "javascript:void(0)";
 	onclick = saveFunctionCall;
+	class = ^saveClass;
+}
+
+SaveButtonAction : WOGenericContainer {
+	elementName = "input";
+	type = "button";
+	onclick = saveFunctionCall;
+	value = saveLabel;
 	class = ^saveClass;
 }
 
