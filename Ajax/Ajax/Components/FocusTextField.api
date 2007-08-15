@@ -9,9 +9,5 @@
 		<binding name = "focus"/>
 		<binding name = "onkeypress"/>
 		<binding name = "onEnter"/>
-
-    <validation message = "&apos;id&apos; is a required binding.">
-	    <unbound name = "id"/>
-    </validation>
   </wo>
 </wodefinitions>
