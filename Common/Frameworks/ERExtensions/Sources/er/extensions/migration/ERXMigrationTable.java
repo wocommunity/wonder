@@ -1,5 +1,6 @@
 package er.extensions.migration;
 
+import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.sql.Types;
 
@@ -14,8 +15,10 @@ import com.webobjects.eoaccess.EOSchemaSynchronization;
 import com.webobjects.eocontrol.EOKeyValueQualifier;
 import com.webobjects.eocontrol.EOQualifier;
 import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSData;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableArray;
+import com.webobjects.foundation.NSTimestamp;
 
 import er.extensions.ERXJDBCUtilities;
 
@@ -31,6 +34,7 @@ public class ERXMigrationTable {
 	private ERXMigrationDatabase _database;
 	private NSMutableArray<ERXMigrationColumn> _columns;
 	private String _name;
+	private boolean _new;
 
 	/**
 	 * Constructs an ERXMigrationTable.
@@ -42,6 +46,7 @@ public class ERXMigrationTable {
 		_database = database;
 		_columns = new NSMutableArray<ERXMigrationColumn>();
 		_name = name;
+		_new = true;
 	}
 
 	/**
@@ -69,6 +74,24 @@ public class ERXMigrationTable {
 	 */
 	public String name() {
 		return _name;
+	}
+	
+	/**
+	 * Returns true if this table has not yet been created in the database.
+	 * 
+	 * @return if this table has not yet been created in the database
+	 */
+	public boolean isNew() {
+		return _new;
+	}
+	
+	/**
+	 * Sets whether or not this table has been created in the database.
+	 * 
+	 * @param isNew if true, the table has been created
+	 */
+	public void _setNew(boolean isNew) {
+		_new = isNew;
 	}
 
 	/**
@@ -116,7 +139,13 @@ public class ERXMigrationTable {
 		NSArray<ERXMigrationColumn> existingColumns = EOQualifier.filteredArrayWithQualifier(_columns, new EOKeyValueQualifier("name", EOQualifier.QualifierOperatorCaseInsensitiveLike, name));
 		ERXMigrationColumn column;
 		if (existingColumns.count() == 0) {
-			column = newColumn(name, 0, 0, 0, 0, false);
+			try {
+				column = _newColumn(name, 0, 0, 0, 0, false, null, false);
+			}
+			catch (SQLException e) {
+				throw new IllegalStateException("This should never have executed a database operation.", e);
+			}
+			column._setNew(false);
 			_columns.addObject(column);
 		}
 		else {
@@ -164,12 +193,60 @@ public class ERXMigrationTable {
 	 * @param precision the precision of the column (or 0 for unspecified)
 	 * @param scale the scale of the column (or 0 for unspecified)
 	 * @param allowsNull if true, the column will allow null values
+	 * @param defaultValue the default value for the column
 	 * @return the new ERXMigrationColumn
+	 * @throws SQLException if the column cannot be created 
 	 */
-	public ERXMigrationColumn newColumn(String name, int jdbcType, int width, int precision, int scale, boolean allowsNull) {
-		ERXMigrationColumn newColumn = new ERXMigrationColumn(this, name, jdbcType, width, precision, scale, allowsNull);
+	public ERXMigrationColumn _newColumn(String name, int jdbcType, int width, int precision, int scale, boolean allowsNull, Object defaultValue, boolean autocreate) throws SQLException {
+		ERXMigrationColumn newColumn = new ERXMigrationColumn(this, name, jdbcType, width, precision, scale, allowsNull, defaultValue);
 		_columns.addObject(newColumn);
+		if (autocreate) {
+			newColumn.create();
+		}
 		return newColumn;
+	}
+
+	/**
+	 * Returns a new ERXMigrationColumn with the given attributes.  This method is the
+	 * most general-purpose of the .newXxx methods.  If this table already exists, 
+	 * calling the .newXxxColumn methods will immediate execute the SQL to add the
+	 * columns to the table.  If this table is new, however, calling .newXxxColumn
+	 * will only return a metadata object, and you must call .create() on
+	 * the table.
+	 *  
+	 * @param name the name of the column to create
+	 * @param jdbcType the JDBC type of the column (see java.sql.Types)
+	 * @param width the width of the column (or 0 for unspecified)
+	 * @param precision the precision of the column (or 0 for unspecified)
+	 * @param scale the scale of the column (or 0 for unspecified)
+	 * @param allowsNull if true, the column will allow null values
+	 * @param defaultValue the default value for the column
+	 * @return the new ERXMigrationColumn
+	 * @throws SQLException if the column cannot be created 
+	 */
+	public ERXMigrationColumn newColumn(String name, int jdbcType, int width, int precision, int scale, boolean allowsNull, Object defaultValue) throws SQLException {
+		return _newColumn(name, jdbcType, width, precision, scale, allowsNull, defaultValue, !_new);
+	}
+
+	/**
+	 * Returns a new ERXMigrationColumn with the given attributes.  This method is the
+	 * most general-purpose of the .newXxx methods.  If this table already exists, 
+	 * calling the .newXxxColumn methods will immediate execute the SQL to add the
+	 * columns to the table.  If this table is new, however, calling .newXxxColumn
+	 * will only return a metadata object, and you must call .create() on
+	 * the table.
+	 *  
+	 * @param name the name of the column to create
+	 * @param jdbcType the JDBC type of the column (see java.sql.Types)
+	 * @param width the width of the column (or 0 for unspecified)
+	 * @param precision the precision of the column (or 0 for unspecified)
+	 * @param scale the scale of the column (or 0 for unspecified)
+	 * @param allowsNull if true, the column will allow null values
+	 * @return the new ERXMigrationColumn
+	 * @throws SQLException if the column cannot be created 
+	 */
+	public ERXMigrationColumn newColumn(String name, int jdbcType, int width, int precision, int scale, boolean allowsNull) throws SQLException {
+		return _newColumn(name, jdbcType, width, precision, scale, allowsNull, null, !_new);
 	}
 
 	/**
@@ -179,9 +256,24 @@ public class ERXMigrationTable {
 	 * @param width the max width of the varchar
 	 * @param allowsNull if true, the column will allow null values
 	 * @return the new ERXMigrationColumn
+	 * @throws SQLException if the column cannot be created 
 	 */
-	public ERXMigrationColumn newStringColumn(String name, int width, boolean allowsNull) {
+	public ERXMigrationColumn newStringColumn(String name, int width, boolean allowsNull) throws SQLException {
 		return newColumn(name, Types.VARCHAR, width, 0, 0, allowsNull);
+	}
+
+	/**
+	 * Returns a new String column (VARCHAR).  See newColumn(..) for the full docs.
+	 * 
+	 * @param name the name of the column
+	 * @param width the max width of the varchar
+	 * @param allowsNull if true, the column will allow null values
+	 * @param defaultValue the default value of this column
+	 * @return the new ERXMigrationColumn
+	 * @throws SQLException if the column cannot be created 
+	 */
+	public ERXMigrationColumn newStringColumn(String name, int width, boolean allowsNull, String defaultValue) throws SQLException {
+		return newColumn(name, Types.VARCHAR, width, 0, 0, allowsNull, defaultValue);
 	}
 
 	/**
@@ -190,9 +282,23 @@ public class ERXMigrationTable {
 	 * @param name the name of the column
 	 * @param allowsNull if true, the column will allow null values
 	 * @return the new ERXMigrationColumn
+	 * @throws SQLException if the column cannot be created 
 	 */
-	public ERXMigrationColumn newIntegerColumn(String name, boolean allowsNull) {
+	public ERXMigrationColumn newIntegerColumn(String name, boolean allowsNull) throws SQLException {
 		return newColumn(name, Types.INTEGER, 0, 0, 0, allowsNull);
+	}
+
+	/**
+	 * Returns a new integer column.  See newColumn(..) for the full docs.
+	 * 
+	 * @param name the name of the column
+	 * @param allowsNull if true, the column will allow null values
+	 * @param defaultValue the default value of this column
+	 * @return the new ERXMigrationColumn
+	 * @throws SQLException if the column cannot be created 
+	 */
+	public ERXMigrationColumn newIntegerColumn(String name, boolean allowsNull, Integer defaultValue) throws SQLException {
+		return newColumn(name, Types.INTEGER, 0, 0, 0, allowsNull, defaultValue);
 	}
 
 	/**
@@ -202,9 +308,24 @@ public class ERXMigrationTable {
 	 * @param scale the scale of the integer
 	 * @param allowsNull if true, the column will allow null values
 	 * @return the new ERXMigrationColumn
+	 * @throws SQLException if the column cannot be created 
 	 */
-	public ERXMigrationColumn newIntegerColumn(String name, int scale, boolean allowsNull) {
+	public ERXMigrationColumn newIntegerColumn(String name, int scale, boolean allowsNull) throws SQLException {
 		return newColumn(name, Types.INTEGER, 0, 0, scale, allowsNull);
+	}
+
+	/**
+	 * Returns a new integer column.  See newColumn(..) for the full docs.
+	 * 
+	 * @param name the name of the column
+	 * @param scale the scale of the integer
+	 * @param allowsNull if true, the column will allow null values
+	 * @param defaultValue the default value of this column
+	 * @return the new ERXMigrationColumn
+	 * @throws SQLException if the column cannot be created 
+	 */
+	public ERXMigrationColumn newIntegerColumn(String name, int scale, boolean allowsNull, Integer defaultValue) throws SQLException {
+		return newColumn(name, Types.INTEGER, 0, 0, scale, allowsNull, defaultValue);
 	}
 
 	/**
@@ -215,9 +336,25 @@ public class ERXMigrationTable {
 	 * @param precision the precision of the integer
 	 * @param allowsNull if true, the column will allow null values
 	 * @return the new ERXMigrationColumn
+	 * @throws SQLException if the column cannot be created 
 	 */
-	public ERXMigrationColumn newIntegerColumn(String name, int scale, int precision, boolean allowsNull) {
+	public ERXMigrationColumn newIntegerColumn(String name, int scale, int precision, boolean allowsNull) throws SQLException {
 		return newColumn(name, Types.INTEGER, 0, scale, precision, allowsNull);
+	}
+
+	/**
+	 * Returns a new integer column.  See newColumn(..) for the full docs.
+	 * 
+	 * @param name the name of the column
+	 * @param scale the scale of the integer
+	 * @param precision the precision of the integer
+	 * @param allowsNull if true, the column will allow null values
+	 * @param defaultValue the default value of this column
+	 * @return the new ERXMigrationColumn
+	 * @throws SQLException if the column cannot be created 
+	 */
+	public ERXMigrationColumn newIntegerColumn(String name, int scale, int precision, boolean allowsNull, Object defaultValue) throws SQLException {
+		return newColumn(name, Types.INTEGER, 0, scale, precision, allowsNull, defaultValue);
 	}
 
 	/**
@@ -228,9 +365,25 @@ public class ERXMigrationTable {
 	 * @param precision the precision of the float
 	 * @param allowsNull if true, the column will allow null values
 	 * @return the new ERXMigrationColumn
+	 * @throws SQLException if the column cannot be created 
 	 */
-	public ERXMigrationColumn newFloatColumn(String name, int precision, int scale, boolean allowsNull) {
+	public ERXMigrationColumn newFloatColumn(String name, int precision, int scale, boolean allowsNull) throws SQLException {
 		return newColumn(name, Types.FLOAT, 0, precision, scale, allowsNull);
+	}
+
+	/**
+	 * Returns a new float column.  See newColumn(..) for the full docs.
+	 * 
+	 * @param name the name of the column
+	 * @param scale the scale of the float
+	 * @param precision the precision of the float
+	 * @param allowsNull if true, the column will allow null values
+	 * @param defaultValue the default value of this column
+	 * @return the new ERXMigrationColumn
+	 * @throws SQLException if the column cannot be created 
+	 */
+	public ERXMigrationColumn newFloatColumn(String name, int precision, int scale, boolean allowsNull, Float defaultValue) throws SQLException {
+		return newColumn(name, Types.FLOAT, 0, precision, scale, allowsNull, defaultValue);
 	}
 
 	/**
@@ -241,9 +394,25 @@ public class ERXMigrationTable {
 	 * @param precision the precision of the BigDecimal
 	 * @param allowsNull if true, the column will allow null values
 	 * @return the new ERXMigrationColumn
+	 * @throws SQLException if the column cannot be created 
 	 */
-	public ERXMigrationColumn newBigDecimalColumn(String name, int precision, int scale, boolean allowsNull) {
+	public ERXMigrationColumn newBigDecimalColumn(String name, int precision, int scale, boolean allowsNull) throws SQLException {
 		return newColumn(name, Types.DECIMAL, 0, precision, scale, allowsNull);
+	}
+
+	/**
+	 * Returns a new BigDecimal column.  See newColumn(..) for the full docs.
+	 * 
+	 * @param name the name of the column
+	 * @param scale the scale of the BigDecimal
+	 * @param precision the precision of the BigDecimal
+	 * @param allowsNull if true, the column will allow null values
+	 * @param defaultValue the default value of this column
+	 * @return the new ERXMigrationColumn
+	 * @throws SQLException if the column cannot be created 
+	 */
+	public ERXMigrationColumn newBigDecimalColumn(String name, int precision, int scale, boolean allowsNull, BigDecimal defaultValue) throws SQLException {
+		return newColumn(name, Types.DECIMAL, 0, precision, scale, allowsNull, defaultValue);
 	}
 
 	/**
@@ -252,9 +421,23 @@ public class ERXMigrationTable {
 	 * @param name the name of the column
 	 * @param allowsNull if true, the column will allow null values
 	 * @return the new ERXMigrationColumn
+	 * @throws SQLException if the column cannot be created 
 	 */
-	public ERXMigrationColumn newBooleanColumn(String name, boolean allowsNull) {
+	public ERXMigrationColumn newBooleanColumn(String name, boolean allowsNull) throws SQLException {
 		return newColumn(name, Types.VARCHAR, 5, 0, 0, allowsNull);
+	}
+
+	/**
+	 * Returns a new varchar(5) boolean column.  See newColumn(..) for the full docs.
+	 * 
+	 * @param name the name of the column
+	 * @param allowsNull if true, the column will allow null values
+	 * @param defaultValue the default value of this column
+	 * @return the new ERXMigrationColumn
+	 * @throws SQLException if the column cannot be created 
+	 */
+	public ERXMigrationColumn newBooleanColumn(String name, boolean allowsNull, Boolean defaultValue) throws SQLException {
+		return newColumn(name, Types.VARCHAR, 5, 0, 0, allowsNull, defaultValue);
 	}
 
 	/**
@@ -263,9 +446,23 @@ public class ERXMigrationTable {
 	 * @param name the name of the column
 	 * @param allowsNull if true, the column will allow null values
 	 * @return the new ERXMigrationColumn
+	 * @throws SQLException if the column cannot be created 
 	 */
-	public ERXMigrationColumn newIntBooleanColumn(String name, boolean allowsNull) {
+	public ERXMigrationColumn newIntBooleanColumn(String name, boolean allowsNull) throws SQLException {
 		return newColumn(name, Types.INTEGER, 0, 0, 0, allowsNull);
+	}
+
+	/**
+	 * Returns a new integer boolean column.  See newColumn(..) for the full docs.
+	 * 
+	 * @param name the name of the column
+	 * @param allowsNull if true, the column will allow null values
+	 * @param defaultValue the default value of this column
+	 * @return the new ERXMigrationColumn
+	 * @throws SQLException if the column cannot be created 
+	 */
+	public ERXMigrationColumn newIntBooleanColumn(String name, boolean allowsNull, Boolean defaultValue) throws SQLException {
+		return newColumn(name, Types.INTEGER, 0, 0, 0, allowsNull, defaultValue);
 	}
 
 	/**
@@ -275,9 +472,24 @@ public class ERXMigrationTable {
 	 * @param width the width of the blob
 	 * @param allowsNull if true, the column will allow null values
 	 * @return the new ERXMigrationColumn
+	 * @throws SQLException if the column cannot be created 
 	 */
-	public ERXMigrationColumn newBlobColumn(String name, int width, boolean allowsNull) {
+	public ERXMigrationColumn newBlobColumn(String name, int width, boolean allowsNull) throws SQLException {
 		return newColumn(name, Types.BLOB, width, 0, 0, allowsNull);
+	}
+
+	/**
+	 * Returns a new Blob column.  See newColumn(..) for the full docs.
+	 * 
+	 * @param name the name of the column
+	 * @param width the width of the blob
+	 * @param allowsNull if true, the column will allow null values
+	 * @param defaultValue the default value of this column
+	 * @return the new ERXMigrationColumn
+	 * @throws SQLException if the column cannot be created 
+	 */
+	public ERXMigrationColumn newBlobColumn(String name, int width, boolean allowsNull, NSData defaultValue) throws SQLException {
+		return newColumn(name, Types.BLOB, width, 0, 0, allowsNull, defaultValue);
 	}
 
 	/**
@@ -286,9 +498,23 @@ public class ERXMigrationTable {
 	 * @param name the name of the column
 	 * @param allowsNull if true, the column will allow null values
 	 * @return the new ERXMigrationColumn
+	 * @throws SQLException if the column cannot be created 
 	 */
-	public ERXMigrationColumn newTimestampColumn(String name, boolean allowsNull) {
+	public ERXMigrationColumn newTimestampColumn(String name, boolean allowsNull) throws SQLException {
 		return newColumn(name, Types.TIMESTAMP, 0, 0, 0, allowsNull);
+	}
+
+	/**
+	 * Returns a new timestamp column.  See newColumn(..) for the full docs.
+	 * 
+	 * @param name the name of the column
+	 * @param allowsNull if true, the column will allow null values
+	 * @param defaultValue the default value of this column
+	 * @return the new ERXMigrationColumn
+	 * @throws SQLException if the column cannot be created 
+	 */
+	public ERXMigrationColumn newTimestampColumn(String name, boolean allowsNull, NSTimestamp defaultValue) throws SQLException {
+		return newColumn(name, Types.TIMESTAMP, 0, 0, 0, allowsNull, defaultValue);
 	}
 
 	/**
@@ -320,7 +546,16 @@ public class ERXMigrationTable {
 	 * @throws SQLException if the creation fails
 	 */
 	public void create() throws SQLException {
-		ERXJDBCUtilities.executeUpdateScript(_database.adaptorChannel(), ERXMigrationDatabase._stringsForExpressions(_createExpressions()));
+		if (_new) {
+			ERXJDBCUtilities.executeUpdateScript(_database.adaptorChannel(), ERXMigrationDatabase._stringsForExpressions(_createExpressions()));
+			for (ERXMigrationColumn column : _columns) {
+				column._setNew(false);
+			}
+			_new = false;
+		}
+		else {
+			ERXMigrationDatabase.log.warn("You called .create() on the table '" + _name + "', but it was already created.");
+		}
 	}
 
 	/**
