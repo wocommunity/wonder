@@ -8,6 +8,7 @@ import com.webobjects.eoaccess.EOSQLExpression;
 import com.webobjects.eoaccess.EOSchemaSynchronization;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.jdbcadaptor.JDBCAdaptor;
 
 import er.extensions.ERXJDBCUtilities;
@@ -26,6 +27,8 @@ public class ERXMigrationColumn {
 	private int _precision;
 	private int _scale;
 	private boolean _allowsNull;
+	private Object _defaultValue;
+	private boolean _new;
 
 	/**
 	 * Constructs a new ERXMigrationColumn.
@@ -37,8 +40,9 @@ public class ERXMigrationColumn {
 	 * @param precision the precision of the column (or 0 for unspecified)
 	 * @param scale the scale of the column (or 0 for unspecified)
 	 * @param allowsNull if true, the column will allow null values
+	 * @param defaultValue this will set the "Default" hint in the EOAttribute's userInfo dictionary (your plugin must support this)
 	 */
-	protected ERXMigrationColumn(ERXMigrationTable table, String name, int jdbcType, int width, int precision, int scale, boolean allowsNull) {
+	protected ERXMigrationColumn(ERXMigrationTable table, String name, int jdbcType, int width, int precision, int scale, boolean allowsNull, Object defaultValue) {
 		_table = table;
 		_name = name;
 		_jdbcType = jdbcType;
@@ -46,6 +50,8 @@ public class ERXMigrationColumn {
 		_precision = precision;
 		_scale = scale;
 		_allowsNull = allowsNull;
+		_defaultValue = defaultValue;
+		_new = true;
 	}
 
 	/**
@@ -146,6 +152,42 @@ public class ERXMigrationColumn {
 	public int scale() {
 		return _scale;
 	}
+	
+	/**
+	 * Sets the default value of this column.
+	 * 
+	 * @param defaultValue the default value of this column
+	 */
+	public void setDefaultValue(Object defaultValue) {
+		_defaultValue = defaultValue;
+	}
+	
+	/**
+	 * Returns the default value of this column.
+	 * 
+	 * @return the default value of this column
+	 */
+	public Object defaultValue() {
+		return _defaultValue;
+	}
+	
+	/**
+	 * Returns true if this column has not yet been created in the database.
+	 * 
+	 * @return if this column has not yet been created in the database
+	 */
+	public boolean isNew() {
+		return _new;
+	}
+	
+	/**
+	 * Sets whether or not this column has been created in the database.
+	 * 
+	 * @param isNew if true, the column has been created
+	 */
+	public void _setNew(boolean isNew) {
+		_new = isNew;
+	}
 
 	/**
 	 * Returns an EOAttribute with all of its fields filled in based
@@ -166,11 +208,24 @@ public class ERXMigrationColumn {
 	 * @param entity the entity to add the attribute to
 	 * @return an EOAttribute with all of its fields filled in
 	 */
+	@SuppressWarnings("unchecked")
 	public EOAttribute _newAttribute(EOEntity entity) {
 		JDBCAdaptor adaptor = (JDBCAdaptor) _table.database().adaptor();
 		EOAttribute attribute = adaptor.createAttribute(_name, _name, _jdbcType, adaptor.externalTypeForJDBCType(_jdbcType), _precision, _scale, _allowsNull ? 1 : 0);
 		if (_width > 0) {
 			attribute.setWidth(_width);
+		}
+		if (_defaultValue != null) {
+			NSDictionary userInfo = attribute.userInfo();
+			NSMutableDictionary mutableUserInfo;
+			if (userInfo == null) {
+				mutableUserInfo = new NSMutableDictionary();
+			}
+			else {
+				mutableUserInfo = userInfo.mutableClone();
+			}
+			mutableUserInfo.setObjectForKey(_defaultValue, "er.extensions.eoattribute.default");
+			attribute.setUserInfo(mutableUserInfo);
 		}
 		entity.addAttribute(attribute);
 		return attribute;
@@ -195,7 +250,13 @@ public class ERXMigrationColumn {
 	 * @throws SQLException if the creation fails
 	 */
 	public void create() throws SQLException {
-		ERXJDBCUtilities.executeUpdateScript(_table.database().adaptorChannel(), ERXMigrationDatabase._stringsForExpressions(_createExpressions()));
+		if (_new) {
+			ERXJDBCUtilities.executeUpdateScript(_table.database().adaptorChannel(), ERXMigrationDatabase._stringsForExpressions(_createExpressions()));
+			_new = false;
+		}
+		else {
+			ERXMigrationDatabase.log.warn("You called .create() on the column '" + _name + "', but it was already created.");
+		}
 	}
 
 	/**
