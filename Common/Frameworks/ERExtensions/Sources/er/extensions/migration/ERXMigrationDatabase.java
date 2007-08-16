@@ -1,5 +1,7 @@
 package er.extensions.migration;
 
+import org.apache.log4j.Logger;
+
 import com.webobjects.eoaccess.EOAdaptor;
 import com.webobjects.eoaccess.EOAdaptorChannel;
 import com.webobjects.eoaccess.EOModel;
@@ -46,7 +48,7 @@ import com.webobjects.jdbcadaptor.JDBCAdaptor;
  * column to a table:  
  * </p>
  * <code>
- * ERXMigrationDatabase.database(channel).existingTableNamed("Request").newStringColumn("requestedByEmailAddress", 255, true).create();
+ * ERXMigrationDatabase.database(channel).existingTableNamed("Request").newStringColumn("requestedByEmailAddress", 255, true);
  * </code>
  * 
  * <p>
@@ -73,16 +75,13 @@ import com.webobjects.jdbcadaptor.JDBCAdaptor;
  * <p>
  * In the above examples, database.existingTableNamed and table.existingColumnNamed are called.  Calling table/database.existingXxx() does 
  * not perform database reverse engineering.  It only creates a stub entry that is enough to perform operations like deleting, renaming, 
- * foreign keys, etc.  Likewise, calling table.newXxx does not actually create the element in the database, rather it returns a metadata
- * wrapper (similar to EOAttribute, etc, but with migration-specific API's).  The objects returned from a call to .newXxx generally allow
- * you to execute the creation of the object by calling .create() on them. For instance, in the case of a column, you can .newColumn it from
- * a table, then .create() on the column.   You should generally not call .create() on an object you obtained from a call to .existingXxx,
+ * foreign keys, etc.  Calling table.newXxx does not create the element in the database if the table is new, rather it returns a metadata
+ * wrapper (similar to EOAttribute, etc, but with migration-specific API's).  However, if the table already exists, calling .newXxxColumn
+ * on the table will create the column immediately.  You should generally not call .create() on an object you obtained from a call to .existingXxx,
  * because it will only be a stub and generally insufficient to actually create in the database.  The call to .existingXxx implies that 
- * the corresponding element already exists in the database.  If you are creating an entire table, it is not SQL to .create() the individual
- * columns without having .create()'d the table first.  However, it's fairly inefficient to create the table only to turn around and 
- * alter the table with all of its columns.  Instead, you can use the batching API like the second example where you can call 
- * database.newTableNamed(), then .newColumn all the columns in it, followed by a table.create() to create the entire block.  For foreign
- * keys, you must have .create()'d both tables (or use existing tables) prior to calling the foreign key methods.
+ * the corresponding element already exists in the database.  If you are creating an entire table, you can use the batching API like the 
+ * second example where you can call database.newTableNamed(), then .newColumn all the columns in it, followed by a table.create() to 
+ * create the entire block.  For foreign keys, you must have .create()'d both tables (or use existing tables) prior to calling the foreign key methods.
  * </p>
  * 
  * <p>
@@ -93,7 +92,9 @@ import com.webobjects.jdbcadaptor.JDBCAdaptor;
  * @author mschrag
  */
 public class ERXMigrationDatabase {
-	private EOAdaptorChannel _adaptorChannel;
+  public static final Logger log = Logger.getLogger(ERXMigrationDatabase.class);
+
+  private EOAdaptorChannel _adaptorChannel;
 	private NSMutableArray<ERXMigrationTable> _tables;
 
 	/**
@@ -151,6 +152,7 @@ public class ERXMigrationDatabase {
 		ERXMigrationTable table;
 		if (existingTables.count() == 0) {
 			table = new ERXMigrationTable(this, name);
+			table._setNew(false);
 			_tables.addObject(table);
 		}
 		else {
