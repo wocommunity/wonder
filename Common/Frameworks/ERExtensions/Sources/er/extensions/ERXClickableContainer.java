@@ -29,7 +29,7 @@ import com.webobjects.foundation.NSMutableDictionary;
 public class ERXClickableContainer extends WOGenericContainer {
 	private WOAssociation _actionClass;
 	private WOAssociation _directActionName;
-
+	
 	public ERXClickableContainer(String name, NSDictionary associations, WOElement template) {
 		super(name, ERXClickableContainer._processAssociations(associations), template);
 		_actionClass = (WOAssociation) _associations.removeObjectForKey("actionClass");
@@ -44,6 +44,9 @@ public class ERXClickableContainer extends WOGenericContainer {
 		}
 		if (!mutableAssociations.containsKey("elementName")) {
 			mutableAssociations.setObjectForKey(new WOConstantValueAssociation("div"), "elementName");
+		}
+		if (!mutableAssociations.containsKey("style")) {
+			mutableAssociations.setObjectForKey(new WOConstantValueAssociation("cursor: pointer;"), "style");
 		}
 		return mutableAssociations;
 	}
@@ -64,6 +67,6 @@ public class ERXClickableContainer extends WOGenericContainer {
 			url = context.componentActionURL();
 		}
 		response.appendContentString(url);
-		response.appendContentString("'\" style = \"cursor: pointer;\"");
+		response.appendContentString("'\"");
 	}
 }
