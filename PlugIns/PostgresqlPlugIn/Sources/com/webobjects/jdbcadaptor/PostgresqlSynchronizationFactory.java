@@ -22,7 +22,7 @@ public class PostgresqlSynchronizationFactory extends EOSynchronizationFactory i
     public PostgresqlSynchronizationFactory(EOAdaptor adaptor) {
         super(adaptor);
     }
-
+    
     public NSArray _foreignKeyConstraintStatementsForEntityGroup(NSArray group) {
         if (group == null)
             return NSArray.EmptyArray;

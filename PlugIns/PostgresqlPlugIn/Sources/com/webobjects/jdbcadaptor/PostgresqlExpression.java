@@ -14,6 +14,7 @@ import com.webobjects.eocontrol.EOQualifier;
 import com.webobjects.eocontrol.EOSortOrdering;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSData;
+import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSForwardException;
 import com.webobjects.foundation.NSKeyValueCoding;
 import com.webobjects.foundation.NSLog;
@@ -22,6 +23,7 @@ import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation.NSSelector;
 import com.webobjects.foundation.NSTimestamp;
 import com.webobjects.foundation.NSTimestampFormatter;
+import com.webobjects.foundation._NSStringUtilities;
 
 /**
  * Postgres needs special handling of NSData conversion, special
@@ -623,6 +625,22 @@ public class PostgresqlExpression extends JDBCExpression {
      */
     public String externalNameQuoteCharacter() { 
         return (enableIdentifierQuoting() ? EXTERNAL_NAME_QUOTE_CHARACTER : ""); 
+    }
+    
+    public void addCreateClauseForAttribute(EOAttribute attribute) {
+      NSDictionary userInfo = attribute.userInfo();
+      Object defaultValue = null;
+      if (userInfo != null) {
+        defaultValue = userInfo.valueForKey("er.extensions.eoattribute.default");
+      }
+      String sql;
+      if (defaultValue == null) {
+        sql = _NSStringUtilities.concat(attribute.columnName(), " ", columnTypeStringForAttribute(attribute), " ", allowsNullClauseForConstraint(attribute.allowsNull()));
+      }
+      else {
+        sql = _NSStringUtilities.concat(attribute.columnName(), " ", columnTypeStringForAttribute(attribute), " DEFAULT ", formatValueForAttribute(defaultValue, attribute), " ", allowsNullClauseForConstraint(attribute.allowsNull()));
+      }
+      appendItemToListString(sql, _listString());
     }
    
     /**
