@@ -193,6 +193,11 @@ public class AjaxInPlaceEditor extends AjaxDynamicElement {
       }
       response.appendContentString(strValue);
     }
+	// Workaround for inplace control staying in "Saving..." mode forever
+    // when empty value was supplied
+    String contentString = response.contentString();
+    if (contentString == null || contentString.equals("")) {
+    	response.appendContentString(" ");
+    }
   }
-
 }
