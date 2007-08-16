@@ -662,93 +662,14 @@ public class FrontbasePlugIn extends JDBCPlugIn {
 		}
 
 		public StringBuffer addCreateClauseForAttribute(EOAttribute eoattribute) {
-			StringBuffer sql = new StringBuffer();
-
-			sql.append("\"");
-			sql.append(eoattribute.columnName());
-			sql.append("\" ");
-			sql.append(columnTypeStringForAttribute(eoattribute));
-
-			NSDictionary dictionary = eoattribute.userInfo();
-
-			if (dictionary == null) {
-				sql.append(eoattribute.allowsNull() ? "" : " NOT NULL");
-				return sql;
-			}
-
-			// Default values.
-			if (dictionary.valueForKey("Default") != null) {
-				sql.append(" DEFAULT ");
-				sql.append(dictionary.valueForKey("Default"));
-			}
-
-			// Column constraints.
-			if (!eoattribute.allowsNull()) {
-				sql.append(" NOT NULL");
-			}
-			if (dictionary.valueForKey("Unique") != null && dictionary.valueForKey("Unique").equals("true")) {
-				sql.append(" UNIQUE");
-			}
-			if (dictionary.valueForKey("Check") != null) {
-				sql.append(" CHECK ");
-				sql.append(dictionary.valueForKey("Check"));
-			}
-
-			// Column collation.
-			if (dictionary.valueForKey("Collate") != null) {
-				sql.append(" COLLATE ");
-				sql.append(dictionary.valueForKey("Collate"));
-			}
-			return sql;
+			EOSQLExpression expression = _expressionForEntity(eoattribute.entity());
+			expression.addCreateClauseForAttribute(eoattribute);
+			return new StringBuffer(expression.listString());
 		}
 
 		public String columnTypeStringForAttribute(EOAttribute eoattribute) {
-			String externalTypeName = eoattribute.externalType();
-			NSDictionary modelTypeInfo = JDBCAdaptor.typeInfoForModel(((EOEntity) eoattribute.parent()).model());
-			NSDictionary typeInfo = (NSDictionary) modelTypeInfo.objectForKey(externalTypeName);
-
-			if (typeInfo == null) {
-				throw new JDBCAdaptorException("Unable to find type information for external type '" + externalTypeName + "' in attribute '" + eoattribute.name() + "' of entity '" + ((EOEntity) eoattribute.parent()).name() + "'.  Check spelling and capitalization.", null);
-			}
-			int createParams;
-			try {
-				Object createParamsObj = typeInfo.objectForKey("createParams");
-				if (createParamsObj instanceof Integer) {
-					createParams = ((Integer)createParamsObj).intValue();
-				}
-				else {
-					createParams = Integer.parseInt((String) createParamsObj);
-				}
-			}
-			catch (NumberFormatException numberformatexception) {
-				createParams = 0;
-			}
-			switch (createParams) {
-				case 2:
-					int precision = eoattribute.precision();
-					if (precision == 0) {
-						return eoattribute.externalType();
-					}
-					int scale = eoattribute.scale();
-					if (scale == 0) {
-						return eoattribute.externalType() + "(" + precision + ")";
-					}
-					else {
-						return eoattribute.externalType() + "(" + precision + "," + scale + ")";
-					}
-				case 1:
-					int length = eoattribute.width();
-					if (length == 0) {
-						length = eoattribute.precision();
-					}
-					if (length == 0) {
-						return eoattribute.externalType();
-					}
-					else {
-						return eoattribute.externalType() + "(" + length + ")";
-					}
-			}
-			return eoattribute.externalType();
+			EOSQLExpression expression = _expressionForEntity(eoattribute.entity());
+			return expression.columnTypeStringForAttribute(eoattribute);
 		}
 		
 		public NSArray statementsToInsertColumnForAttribute(EOAttribute attribute, NSDictionary options) {
@@ -851,6 +772,101 @@ public class FrontbasePlugIn extends JDBCPlugIn {
 			super(eoentity);
 			_rtrimFunctionName = null;
 			_externalQuoteChar = "\"";
+		}
+		
+		public void addCreateClauseForAttribute(EOAttribute attribute) {
+			StringBuffer sql = new StringBuffer();
+
+			sql.append("\"");
+			sql.append(attribute.columnName());
+			sql.append("\" ");
+			sql.append(columnTypeStringForAttribute(attribute));
+
+			NSDictionary dictionary = attribute.userInfo();
+
+			if (dictionary == null) {
+				sql.append(attribute.allowsNull() ? "" : " NOT NULL");
+			}
+			else {
+				// Default values.
+				if (dictionary.valueForKey("Default") != null) {
+					sql.append(" DEFAULT ");
+					sql.append(dictionary.valueForKey("Default"));
+				}
+
+				if (dictionary.valueForKey("er.extensions.eoattribute.default") != null) {
+					sql.append(" DEFAULT ");
+					sql.append(formatValueForAttribute(dictionary.valueForKey("er.extensions.eoattribute.default"), attribute));
+				}
+
+				// Column constraints.
+				if (!attribute.allowsNull()) {
+					sql.append(" NOT NULL");
+				}
+				if (dictionary.valueForKey("Unique") != null && dictionary.valueForKey("Unique").equals("true")) {
+					sql.append(" UNIQUE");
+				}
+				if (dictionary.valueForKey("Check") != null) {
+					sql.append(" CHECK ");
+					sql.append(dictionary.valueForKey("Check"));
+				}
+	
+				// Column collation.
+				if (dictionary.valueForKey("Collate") != null) {
+					sql.append(" COLLATE ");
+					sql.append(dictionary.valueForKey("Collate"));
+				}
+			}
+		    appendItemToListString(sql.toString(), _listString());
+		}
+		
+		public String columnTypeStringForAttribute(EOAttribute attribute) {
+			String externalTypeName = attribute.externalType();
+			NSDictionary modelTypeInfo = JDBCAdaptor.typeInfoForModel(((EOEntity) attribute.parent()).model());
+			NSDictionary typeInfo = (NSDictionary) modelTypeInfo.objectForKey(externalTypeName);
+
+			if (typeInfo == null) {
+				throw new JDBCAdaptorException("Unable to find type information for external type '" + externalTypeName + "' in attribute '" + attribute.name() + "' of entity '" + ((EOEntity) attribute.parent()).name() + "'.  Check spelling and capitalization.", null);
+			}
+			int createParams;
+			try {
+				Object createParamsObj = typeInfo.objectForKey("createParams");
+				if (createParamsObj instanceof Integer) {
+					createParams = ((Integer)createParamsObj).intValue();
+				}
+				else {
+					createParams = Integer.parseInt((String) createParamsObj);
+				}
+			}
+			catch (NumberFormatException numberformatexception) {
+				createParams = 0;
+			}
+			switch (createParams) {
+				case 2:
+					int precision = attribute.precision();
+					if (precision == 0) {
+						return attribute.externalType();
+					}
+					int scale = attribute.scale();
+					if (scale == 0) {
+						return attribute.externalType() + "(" + precision + ")";
+					}
+					else {
+						return attribute.externalType() + "(" + precision + "," + scale + ")";
+					}
+				case 1:
+					int length = attribute.width();
+					if (length == 0) {
+						length = attribute.precision();
+					}
+					if (length == 0) {
+						return attribute.externalType();
+					}
+					else {
+						return attribute.externalType() + "(" + length + ")";
+					}
+			}
+			return attribute.externalType();
 		}
 
 		public Class _synchronizationFactoryClass() {
