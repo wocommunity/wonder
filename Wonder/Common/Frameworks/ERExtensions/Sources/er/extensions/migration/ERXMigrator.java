@@ -133,18 +133,9 @@ public class ERXMigrator {
 			IERXMigration migration = (IERXMigration) migrationsIter.next();
 			ERXModelVersion modelVersion = (ERXModelVersion) migrations.get(migration);
 			EOModel model = modelVersion.model();
-			String adaptorName = model.adaptorName();
-			String migrationLockClassName = ERXProperties.stringForKeyWithDefault("er.migration." + adaptorName + ".lockClassName", "er.extensions.migration.ERX" + adaptorName + "MigrationLock");
-			IERXMigrationLock database;
-			try {
-				Class migrationLockClass = Class.forName(migrationLockClassName);
-				database = (IERXMigrationLock) migrationLockClass.newInstance();
-			}
-			catch (Throwable t) {
-				throw new ERXMigrationFailedException("Failed to create migration lock class '" + migrationLockClassName + "'.", t);
-			}
+			IERXMigrationLock migrationLock = databaseLockForModel(model);
 			EOEditingContext editingContext = ERXEC.newEditingContext();
-			ERXMigrationAction migrationAction = new ERXMigrationAction(editingContext, migration, modelVersion, database, _lockOwnerName, postMigrations);
+			ERXMigrationAction migrationAction = new ERXMigrationAction(editingContext, migration, modelVersion, migrationLock, _lockOwnerName, postMigrations);
 			try {
 				migrationAction.perform(editingContext, model.name());
 			}
@@ -171,6 +162,20 @@ public class ERXMigrator {
 		}
 	}
 
+	protected IERXMigrationLock databaseLockForModel(EOModel model) {
+		String adaptorName = model.adaptorName();
+		String migrationLockClassName = ERXProperties.stringForKeyWithDefault("er.migration." + adaptorName + ".lockClassName", "er.extensions.migration.ERX" + adaptorName + "MigrationLock");
+		IERXMigrationLock databaseLock;
+		try {
+			Class migrationLockClass = Class.forName(migrationLockClassName);
+			databaseLock = (IERXMigrationLock) migrationLockClass.newInstance();
+		}
+		catch (Throwable t) {
+			throw new ERXMigrationFailedException("Failed to create migration lock class '" + migrationLockClassName + "'.", t);
+		}
+		return databaseLock;
+	}
+	
 	protected Map _buildDependenciesForModelsNamed(NSArray modelNames) {
 		Map<IERXMigration, ERXModelVersion> migrations = new LinkedHashMap<IERXMigration, ERXModelVersion>();
 		try {
@@ -302,18 +307,18 @@ public class ERXMigrator {
 
 	protected static class ERXMigrationAction extends ChannelAction {
 		private EOEditingContext _editingContext;
-		private IERXMigrationLock _database;
+		private IERXMigrationLock _migrationLock;
 		private IERXMigration _migration;
 		private ERXModelVersion _modelVersion;
 		private Map<IERXMigration, ERXModelVersion> _migrations;
 		private String _lockOwnerName;
 		private Map<IERXPostMigration, ERXModelVersion> _postMigrations;
 
-		public ERXMigrationAction(EOEditingContext editingContext, IERXMigration migration, ERXModelVersion modelVersion, IERXMigrationLock database, String lockOwnerName, Map<IERXPostMigration, ERXModelVersion> postMigrations) {
+		public ERXMigrationAction(EOEditingContext editingContext, IERXMigration migration, ERXModelVersion modelVersion, IERXMigrationLock migrationLock, String lockOwnerName, Map<IERXPostMigration, ERXModelVersion> postMigrations) {
 			_editingContext = editingContext;
 			_modelVersion = modelVersion;
 			_migration = migration;
-			_database = database;
+			_migrationLock = migrationLock;
 			_lockOwnerName = lockOwnerName;
 			_postMigrations = postMigrations;
 		}
@@ -323,7 +328,7 @@ public class ERXMigrator {
 			EOModel model = _modelVersion.model();
 			boolean locked;
 			do {
-				locked = _database.tryLock(channel, model, _lockOwnerName);
+				locked = _migrationLock.tryLock(channel, model, _lockOwnerName);
 				if (!locked) {
 					try {
 						Thread.sleep(5 * 1000);
@@ -339,14 +344,14 @@ public class ERXMigrator {
 
 			if (locked) {
 				try {
-					int currentVersion = _database.versionNumber(channel, model);
+					int currentVersion = _migrationLock.versionNumber(channel, model);
 					int nextVersion = _modelVersion.version();
 					if (currentVersion < nextVersion) {
 						if (ERXMigrator.log.isInfoEnabled()) {
 							ERXMigrator.log.info("Upgrading " + model.name() + " to version " + nextVersion + " with migration '" + _migration + "'");
 						}
 						_migration.upgrade(_editingContext, channel, model);
-						_database.setVersionNumber(channel, model, nextVersion);
+						_migrationLock.setVersionNumber(channel, model, nextVersion);
 						_editingContext.saveChanges();
 						channel.adaptorContext().commitTransaction();
 						channel.adaptorContext().beginTransaction();
@@ -365,7 +370,7 @@ public class ERXMigrator {
 					throw new ERXMigrationFailedException("Migration failed.", t);
 				}
 				finally {
-					_database.unlock(channel, model);
+					_migrationLock.unlock(channel, model);
 				}
 			}
 
