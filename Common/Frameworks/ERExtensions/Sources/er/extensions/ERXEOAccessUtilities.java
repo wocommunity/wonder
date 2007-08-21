@@ -909,11 +909,10 @@ public class ERXEOAccessUtilities {
     	private long max;
     	private long sum;
     	private String statement;
-    	
     	private Set traces = Collections.synchronizedSet(new HashSet());
     	
     	public LogEntry(String statement) {
-    		this.statement = statement.replaceAll(" IN \\(.*", " IN (");
+    		this.statement = statement;
     		
     	}
     	
@@ -943,9 +942,9 @@ public class ERXEOAccessUtilities {
     		count++;
     		sum += time;
     		if(false) {
-    			Throwable t = new RuntimeException();
-    			t.fillInStackTrace();
-    			traces.add(t);
+    			//Throwable t = new RuntimeException();
+    			//t.fillInStackTrace();
+    			traces.add(ERXUtilities.stackTrace());
     		}
     	}
     	
@@ -958,18 +957,30 @@ public class ERXEOAccessUtilities {
     	}
     	
     	public String toString() {
-    		return  count() + "/" + sum() + " : " + min() + "/" + max() + "/" + avg() + "->" + statement;
+    		return  count() + "/" + sum() + " : " + min() + "/" + max() + "/" + avg() + "|"  + traces.size() + "->" + statement; // + "\n" + traces.iterator().next();
     	}
     }
     
-    private static NSMutableDictionary statistics;
+    private static ThreadLocal<NSMutableDictionary> statistics = new ThreadLocal<NSMutableDictionary>();
+    private static NSMutableSet allStatistics = new NSMutableSet();
 
     /**
-     * Initializes the SQL logging stats. This is not particularily thread safe, so use it only during debugging.
+     * Initializes the SQL logging stats.
      *
      */
     public static synchronized void initStatistics() {
-    	statistics = (NSMutableDictionary) new NSMutableDictionary();
+    	
+    	NSMutableDictionary s = statistics();
+    	if(s != null) {
+    		allStatistics.removeObject(s);
+    	}
+    	s = new NSMutableDictionary();
+    	statistics.set(s);
+    	allStatistics.addObject(s);
+    }
+    
+    private static NSMutableDictionary statistics() {
+    	return statistics.get();
     }
     
     /**
@@ -977,10 +988,16 @@ public class ERXEOAccessUtilities {
      * @param key key to sort on ("sum", "count", "min", "max", "avg")
      */
     public static void logStatistics(String key) {
+    	NSMutableDictionary statistics = statistics();
     	if(statistics != null) {
     		synchronized (statistics) {
     			NSArray values = ERXArrayUtilities.sortedArraySortedWithKey(statistics.allValues(), key);
-    			log.info(NSPropertyListSerialization.stringFromPropertyList(values));
+    			if(values.count() > 0) {
+    				String result = NSPropertyListSerialization.stringFromPropertyList(values);
+    				//result = result.replaceAll("\\n\\t", "\n\t\t");
+    				//result = result.replaceAll("\\n", "\n\t\t");
+    				log.info(result);
+    			}
     		}
     	}
     }
@@ -1018,13 +1035,14 @@ public class ERXEOAccessUtilities {
                     needsLog = true;
                 }
             }
+            NSMutableDictionary statistics = statistics();
             if(statistics != null) {
             	synchronized (statistics) {
-            		String statement = expression.statement();
+            		String statement = expression.statement().replaceAll(" IN \\(.*", " IN (");
             		LogEntry entry = (LogEntry) statistics.objectForKey(statement);
             		if(entry == null) {
             			entry = new LogEntry(statement);
-            			statistics.setObjectForKey(entry, entry.statement());
+            			statistics.setObjectForKey(entry, statement);
             		}
             		entry.add(millisecondsNeeded);
             	}
