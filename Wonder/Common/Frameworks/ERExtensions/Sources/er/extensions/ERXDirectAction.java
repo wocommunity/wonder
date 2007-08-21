@@ -99,7 +99,7 @@ public class ERXDirectAction extends WODirectAction {
      */
  
     public WOActionResults statsAction() {
-        WOStatsPage nextPage = (WOStatsPage) pageWithName("WOStatsPage");
+        WOStatsPage nextPage = (WOStatsPage) pageWithName("ERXStatisticsPage");
         nextPage.password = context().request().stringFormValueForKey("pw");
         return nextPage.submit();
     }
@@ -129,6 +129,9 @@ public class ERXDirectAction extends WODirectAction {
         return eventsAction();
     }
 
+    
+    
+    
     /**
      * Action used for changing logging settings at runtime. This method is only active
      * when WOCachingEnabled is disabled (we take this to mean that the application is
