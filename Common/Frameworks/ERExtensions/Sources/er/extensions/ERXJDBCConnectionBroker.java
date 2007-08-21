@@ -61,7 +61,7 @@ import com.webobjects.jdbcadaptor.JDBCPlugIn;
 
 // CHECKME ak: How should the maxCheckout stuff work? We can't really close a
 // connection while it still active??
-public class ERXJDBCConnectionBroker {
+public class ERXJDBCConnectionBroker implements ERXJDBCAdaptor.ConnectionBroker {
 
     public static final Logger log = Logger.getLogger(ERXJDBCConnectionBroker.class);
 
