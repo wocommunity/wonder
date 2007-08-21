@@ -1,0 +1,290 @@
+
+ALLOWED: WOConditional {
+	condition = session.allowedToViewStatistics;
+}
+
+ActionAvg: WOString {
+	numberformat = "0.000";
+	value = actionAvg;
+}
+
+ActionBar: WOCompletionBar {
+	align = "RIGHT";
+	numberformat = "0";
+	value = actionCount;
+	valueMax = maxActionCount;
+}
+
+ActionMax: WOString {
+	numberformat = "0.000";
+	value = actionMax;
+}
+
+ActionMin: WOString {
+	numberformat = "0.000";
+	value = actionMin;
+}
+
+ActionName: WOString {
+	value = currentKey;
+}
+
+ActionsRepetition: WODictionaryRepetition {
+	dictionary = directActionsDict;
+	item = currentItem;
+	key = currentKey;
+}
+
+AvgComponentActionTransactions: WOString {
+	numberformat = "0.000";
+	value = avgComponentActionTransactions;
+}
+
+AvgDirectActionTransactions: WOString {
+	numberformat = "0.000";
+	value = avgDirectActionTransactions;
+}
+
+AvgIdleTime: WOString {
+	numberformat = "0.000";
+	value = avgIdleTime;
+}
+
+AvgTransactionTime: WOString {
+	numberformat = "0.000";
+	value = avgTransactionTime;
+}
+
+BAR_DETAILS: WOCompletionBar {
+	align = "RIGHT";
+	numberformat = "0%";
+	value = detailPercent;
+}
+
+ComponentActionTransactions: WOString {
+	value = componentActionTransactions;
+}
+
+Instance: WOConditional {
+	condition = instance;
+}
+
+DetailCount: WOString {
+	value = detailCount;
+}
+
+DetailName: WOString {
+	value = currentKey;
+}
+
+DetailsRepetition: WODictionaryRepetition {
+	dictionary = detailsDict;
+	item = currentItem;
+	key = currentKey;
+}
+
+DirectActionTransactions: WOString {
+	value = directActionTransactions;
+}
+
+Form1: WOForm {
+}
+
+Form4: WOForm {
+	directActionName = "WOStats";
+}
+
+Link: WOHyperlink {
+	disabled = vendorURLdisabled;
+	href = vendorURL;
+	string = vendorDescription;
+	target = "VENDOR_WINDOW";
+}
+
+ISLASTUSER: WOConditional {
+	condition = isLastUser;
+}
+
+ISLOGPATH: WOConditional {
+	condition = isLogPath;
+}
+
+ISMAXSESSIONS: WOConditional {
+	condition = maxSessionsDate;
+}
+
+LOGPATH: WOString {
+	value = statsDict.LogFile; // VALID
+}
+
+MaxSessions: WOString {
+	dateformat = "%H:%M:%S on %a, %b %d %Y %Z";
+	value = maxSessionsDate;
+}
+
+MemoryKeyCell: WOString {
+	value = currentKey;
+}
+
+MemoryRepetition: WODictionaryRepetition {
+	dictionary = memoryDict;
+	item = currentItem;
+	key = currentKey;
+}
+
+MemoryValueCell: WOString {
+	numberformat = "0,000,000";
+	value = currentItem;
+}
+
+MovingAvgIdleTime: WOString {
+	numberformat = "0.000";
+	value = movingAvgIdleTime;
+}
+
+MovingAvgSampleSize: WOString {
+	value = movingAvgSampleSize;
+}
+
+MovingAvgTransactionTime: WOString {
+	numberformat = "0.000";
+	value = movingAvgTransactionTime;
+}
+
+PASSWORD: WOPasswordField {
+	WIDTH = 12;
+	value = password;
+}
+
+PageAvg: WOString {
+	numberformat = "0.000";
+	value = pageAvg;
+}
+
+PageCountBar: WOCompletionBar {
+	align = "RIGHT";
+	numberformat = "0";
+	value = pageCount;
+	valueMax = maxPageCount;
+}
+
+PageMax: WOString {
+	numberformat = "0.000";
+	value = pageMax;
+}
+
+PageMin: WOString {
+	numberformat = "0.000";
+	value = pageMin;
+}
+
+PageName: WOString {
+	value = currentKey;
+}
+
+PagesRepetition: WODictionaryRepetition {
+	dictionary = pagesDict;
+	item = currentItem;
+	key = currentKey;
+}
+
+PoweredByImage: WOImage {
+	alt = "Powered By WebObjects";
+	border = "0";
+	filename = "PoweredByWebObjects.gif";
+	height = "34";
+	name = "Powered By WebObjects";
+	width = "125";
+}
+
+REFRESH: WOSubmitButton {
+	directActionName = "WOStats";
+	value = "Refresh Page";
+}
+
+REFUSED: WOConditional {
+	condition = session.allowedToViewStatistics;
+	negate = "1";
+}
+
+RunningTime: WOString {
+	value = runningTime;
+}
+
+SUBMIT: WOSubmitButton {
+	action = submit;
+}
+
+SessionMemoryKeyCell: WOString {
+	value = currentKey;
+}
+
+SessionMemoryRepetition: WODictionaryRepetition {
+	dictionary = sessionMemoryDict;
+	item = currentItem;
+	key = currentKey;
+}
+
+SessionMemoryValueCell: WOString {
+	numberformat = "000,000";
+	value = currentItem;
+}
+
+SessionStatsField: WOString {
+	value = currentItem;
+}
+
+SessionStatsRepetition: WORepetition {
+	item = currentItem;
+	list = sessionStats;
+}
+
+SessionsKeyCell: WOString {
+	value = currentKey;
+}
+
+SessionsRepetition: WODictionaryRepetition {
+	dictionary = sessionsDict;
+	item = currentItem;
+	key = currentKey;
+}
+
+SessionsValueCell: WOString {
+	numberformat = "0.00";
+	value = currentItem;
+}
+
+JdkVersion: WOString {
+	value = jdkVersion;
+}
+
+Host: WOString {
+	value = host;
+}
+
+ApplicationName: WOString {
+	value = application.name;
+}
+
+StatsDictStartedAt: WOString {
+	dateformat = "%H:%M:%S on %a, %b %d %Y %Z";
+	value = statsDict.StartedAt; // VALID
+}
+
+OperatingSystem: WOString {
+	value = operatingSystem;
+}
+
+Instance1: WOString {
+	value = instance;
+}
+
+Transactions: WOString {
+	value = transactions.Transactions; // VALID
+}
+
+USERNAME: WOTextField {
+	WIDTH = 12;
+	value = userName;
+}
+
