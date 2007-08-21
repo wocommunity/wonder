@@ -32,6 +32,11 @@ import com.webobjects.jdbcadaptor.JDBCContext;
  */
 public class ERXJDBCAdaptor extends JDBCAdaptor {
 
+	public static interface ConnectionBroker {
+		   public void freeConnection(Connection conn);
+		   public Connection getConnection();
+	}
+	
 	public static final Logger log = Logger.getLogger(ERXJDBCAdaptor.class);
 
 	public static final String USE_CONNECTION_BROKER_KEY = "er.extensions.ERXJDBCAdaptor.useConnectionBroker";
@@ -280,7 +285,7 @@ public class ERXJDBCAdaptor extends JDBCAdaptor {
 		return c;
 	}
 
-	private ERXJDBCConnectionBroker connectionBroker() {
+	private ConnectionBroker connectionBroker() {
 		return ERXJDBCConnectionBroker.connectionBrokerForAdaptor(this);
 	}
 
