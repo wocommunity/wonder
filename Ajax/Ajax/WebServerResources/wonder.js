@@ -378,3 +378,55 @@ Ajax.InPlaceEditor.prototype = Object.extend(Ajax.InPlaceEditor.prototype, {
         this.__onComplete(transport);
     }
 });
+
+/**
+ * Hoverable, adds support for "delayed onmouseout" events, so you don't
+ * that obnoxious onhover behavior where it immediately unhovers when
+ * you slightly mouse out of the element.
+ *
+ * Specify elements that receive this behavior with a .hoverable class,
+ * and in CSS, your elements will become .hoverable.hover when they're
+ * in the delayed hover state.
+ *
+ * Call Hoverable.register() in your footer to enable this feature, and
+ * include behaviour.js in your page.     
+ */
+var Hoverable = {
+  _rules : {
+    '.hoverable' : function(element) {
+      element.onmouseover = function() {
+        Hoverable.over(this);
+      },
+
+      element.onmouseout = function() {
+        Hoverable.out(this);
+      }
+    }
+  },
+
+  over : function(element) {
+    element.addClassName("hover");
+    if (element['hoverCount'] == undefined) {
+      element['hoverCount'] = 0;
+    }
+    else {
+      element['hoverCount'] ++;
+    }
+  },
+
+  out : function(element) {
+    setTimeout(Hoverable._end.bind(element, element['hoverCount']), 300);
+  },
+
+  _end : function(hoverCount) {
+    var element = this;
+    if (element['hoverCount'] == hoverCount) {
+      element.removeClassName("hover");
+    }
+  },
+
+  register : function() {
+    Behaviour.register(Hoverable._rules);
+  }
+}
+ 
