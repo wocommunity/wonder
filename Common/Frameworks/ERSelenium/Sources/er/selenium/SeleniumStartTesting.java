@@ -32,6 +32,8 @@ import com.webobjects.appserver.WODirectAction;
 import com.webobjects.appserver.WORedirect;
 import com.webobjects.appserver.WORequest;
 
+import er.extensions.ERXValueUtilities;
+
 public class SeleniumStartTesting extends WODirectAction {
 	private static final Logger log = Logger.getLogger(SeleniumStartTesting.class);
 	
@@ -62,7 +64,7 @@ public class SeleniumStartTesting extends WODirectAction {
 	// @Override
 	public WOActionResults defaultAction() {
 		WORedirect redirect = new WORedirect(context());
-		redirect.setUrl(buildUrl(true));
+		redirect.setUrl(buildUrl(ERXValueUtilities.booleanValueWithDefault(context().request().formValueForKey("auto"), true)));
 		return redirect;
 	}
 	
