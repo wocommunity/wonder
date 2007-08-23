@@ -2,19 +2,7 @@ AjaxExampleComponent : AjaxExampleComponent {
 	title = "Ajax Long Response";
 }
 
-AjaxUpdateContainer : AjaxUpdateContainer {
-	id = "taskInfo";
-	elementName = "div";
-	class = "exampleArea";
-	frequency = 1;
-}
-
-StopThread: AjaxHyperlink {
-	action = stopTask;
-	onSuccess = "taskInfoUpdate";
-}
-
-String1: WOString {
+Test: WOString {
 	value = test;
 }
 
@@ -26,20 +14,27 @@ TaskIsAlive : WOConditional {
 	condition = task.isAlive;
 }
 
+TaskIsNotAlive : WOConditional {
+	condition = task.isAlive;
+	negate = true;
+}
+
 Status: WOString {
 	value = task.status;
 }
 
-UpdateScript: WOString {
-	value = onClickServer;
-}
-
-Form: WOForm {
-}
-
-AjaxUpdateLink: AjaxHyperlink {
+StartThread: AjaxHyperlink {
 	action = startTask;
-	value = "Start task";
 	onSuccess = "taskInfoUpdate";
-	// onClickServer = "new Ajax.Updater('taskInfo', $(taskInfo).updateUrl, {})};";
+}
+
+StopThread: AjaxHyperlink {
+	action = stopTask;
+	onSuccess = "taskInfoUpdate";
+}
+
+AjaxLongResponse: AjaxLongResponse {
+	id = "taskInfo";
+	class = "exampleArea";
+	isRunning = task.isAlive;
 }
