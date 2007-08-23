@@ -9,15 +9,16 @@
 }
 				</style>
 
-This example shows how you might use an AjaxUpdateContainer to refresh as the progress of a background operation changes.  You
+This example shows how you might use an AjaxLongResponse to refresh as the progress of a background operation changes.  You
 should also check out the Progress / File Upload example for one that uses the AjaxProgressBar.
 
-        <p>Initial time: <webobject name="String1"></webobject></p>
-        <p><webobject name="Form"><webobject name="AjaxUpdateLink">Start task</webobject></webobject></p>
-        <webobject name="AjaxUpdateContainer">
+        <p>Initial time: <webobject name="Test"></webobject></p>
+        <p><webobject name="StartThread">Start task</webobject></p>
+        <webobject name="AjaxLongResponse">
         	<webobject name="HasTask">
         		<p>Current status: <b><webobject name="Status"></webobject></b></p>
-        		<webobject name="TaskIsAlive"><p><webobject name="StopThread">Stop task</webobject></p><script type="text/javascript"><webobject name="UpdateScript"></webobject></script></webobject>
+        		<webobject name="TaskIsAlive"><p><webobject name="StopThread">Stop task</webobject></p></webobject>
+        		<webobject name="TaskIsNotAlive"><p>The task is stopped</p></webobject>
         	</webobject>
         </webobject>
  </webobject>
