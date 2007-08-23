@@ -1,0 +1,18 @@
+AjaxUpdateContainer : AjaxUpdateContainer {
+	id = ^id;
+	elementName = elementName;
+	class = ^class;
+	style = ^style;
+	frequency = frequency;
+}
+
+IsRunning : WOConditional {
+	condition = ^isRunning;
+}
+
+Content: WOComponentContent {
+}
+
+ID : WOString {
+	value = ^id;
+}
