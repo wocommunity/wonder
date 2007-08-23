@@ -6,15 +6,20 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.extensions;
 
+import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import com.webobjects.appserver.WOApplication;
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WORequest;
 import com.webobjects.appserver.WOResponse;
 import com.webobjects.appserver.WOSession;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSMutableArray;
+import com.webobjects.foundation.NSMutableDictionary;
 
 /**
  * The ERXAjaxSession is the part of ERXSession that is modified to
@@ -185,19 +190,20 @@ public class ERXAjaxSession extends WOSession {
           Iterator entryIterator = pageReplacementCache.entrySet().iterator();
           Map.Entry oldestEntry = (Map.Entry) entryIterator.next();
           entryIterator.remove();
-          //System.out.println("ERXSession.savePage: " + pageCacheKey + " removing oldest entry = " + ((TransactionRecord)oldestEntry.getValue()).key());
+          // System.out.println("ERXSession.savePage: " + pageCacheKey + " removing oldest entry = " + ((TransactionRecord)oldestEntry.getValue()).key());
         }
 
         TransactionRecord pageRecord = new TransactionRecord(page, context, pageCacheKey);
         pageReplacementCache.put(context.contextID(), pageRecord);
         //System.out.println("ERXSession.savePage: " + pageCacheKey + " new context = " + context.contextID());
-        //System.out.println("ERXSession.savePage: " + pageCacheKey + " = " + pageReplacementCache);
+        // System.out.println("ERXSession.savePage: " + pageCacheKey + " = " + pageReplacementCache);
 
         ERXAjaxApplication.cleanUpHeaders(response);
       }
     }
     else {
-      super.savePage(page);
+        // System.out.println("ERXSession.super.savePage");
+     super.savePage(page);
     }
   }
 
@@ -257,12 +263,126 @@ public class ERXAjaxSession extends WOSession {
     }
     return removedCacheEntry;
   }
+  
 
-  /**
-   * Extension of restorePageForContextID that implements the other side of Page Replacement Cache.
-   */
+  	/**
+	 * A dict of contextID/pages
+	 */
+	protected NSMutableDictionary _permanentPageCache;
+	
+	/**
+	 * The currently active contextIDs for the permanent pages.
+	 */
+	protected NSMutableArray _permanentContextIDArray;
+
+	/**
+	 * Returns the permanent page cache. Initializes it if needed.
+	 * @return
+	 */
+	protected NSMutableDictionary _permanentPageCache() {
+		if (_permanentPageCache == null) {
+			_permanentPageCache = new NSMutableDictionary(64);
+			_permanentContextIDArray = new NSMutableArray(64);
+		}
+		return _permanentPageCache;
+	}
+
+	/**
+	 * Returns the page for the given contextID, null if none is present.
+	 * @param contextID
+	 * @return
+	 */
+	protected WOComponent _permanentPageWithContextID(String contextID) {
+		WOComponent wocomponent = null;
+		if (_permanentPageCache != null)
+			wocomponent = (WOComponent) _permanentPageCache.objectForKey(contextID);
+		return wocomponent;
+	}
+
+	/**
+	 * Semi-private method that saves the current page. Overridden to put the page in the
+	 * permanent page cache if it's already in there.
+	 */
+	public void _saveCurrentPage() {
+		WOContext _currentContext = context();
+		if (_currentContext != null) {
+			String contextID = context().contextID();
+			// System.out.println("ERXSession._saveCurrentPage: " + contextID);
+			WOComponent currentPage = _currentContext._pageComponent();
+			if (currentPage != null && currentPage._isPage()) {
+				WOComponent permanentSenderPage = _permanentPageWithContextID(_currentContext._requestContextID());
+				WOComponent permanentCurrentPage = _permanentPageWithContextID(contextID);
+				if (permanentCurrentPage == null && _permanentPageCache().containsValue(currentPage)) {
+					//AK: note that we put it directly in the cache, not bothering with
+					// savePageInPermanentCache() as this one would clear out the old IDs
+					_permanentPageCache.setObjectForKey(currentPage, contextID);
+				}
+				else if (permanentCurrentPage != currentPage) {
+					WOApplication woapplication = WOApplication.application();
+					if (permanentSenderPage == currentPage && woapplication.permanentPageCacheSize() != 0) {
+						if (_shouldPutInPermanentCache(currentPage))
+							savePageInPermanentCache(currentPage);
+					}
+					else if (woapplication.pageCacheSize() != 0)
+						savePage(currentPage);
+
+				}
+			}
+		}
+	}
+
+	/**
+	 * Reimplementation of the rather wierd super imp which references an interface probably no
+	 * one has ever heard of...
+	 * @param wocomponent
+	 * @return
+	 */
+	protected boolean _shouldPutInPermanentCache(WOComponent wocomponent) {
+		boolean flag = true;
+		if(false) {
+			return true;
+		}
+		if ((com.webobjects.appserver._private._PermanentCacheSingleton.class).isInstance(wocomponent)) {
+			flag = false;
+		}
+		else {
+			NSArray nsarray = (NSArray) ERXKeyValueCodingUtilities.privateValueForKey(wocomponent, "_subcomponents");
+			if (nsarray != null && nsarray != NSArray.EmptyArray) {
+				for(Enumeration enumeration = nsarray.objectEnumerator(); flag && enumeration.hasMoreElements(); ) {
+					if (!_shouldPutInPermanentCache((WOComponent) enumeration.nextElement()))
+						flag = false;
+				}
+			}
+		}
+		return flag;
+	}
+	
+	
+	/**
+	 * Saves a page in the permanent cache. Overridden to not save in the super implementation's iVars but in our own.
+	 */
+	// FIXME: ak: as we save the perm pages under a lot of context IDs, we should have a way to actually limit the size...
+	// not sure how, though
+	public void savePageInPermanentCache(WOComponent wocomponent) {
+		WOContext wocontext = context();
+		String contextID = wocontext.contextID();
+		// System.out.println("ERXSession.savePageInPermanentCache: " + contextID);
+		NSMutableDictionary permanentPageCache = _permanentPageCache();
+		for (int i = WOApplication.application().permanentPageCacheSize(); _permanentContextIDArray.count() >= i; _permanentContextIDArray.removeObjectAtIndex(0)) {
+			String s1 = (String) _permanentContextIDArray.objectAtIndex(0);
+			WOComponent page = (WOComponent) permanentPageCache.removeObjectForKey(s1);
+		}
+
+		permanentPageCache.setObjectForKey(wocomponent, contextID);
+		_permanentContextIDArray.addObject(contextID);
+	}
+	
+	/**
+	 * Extension of restorePageForContextID that implements the other side of
+	 * Page Replacement Cache.
+	 */
   public WOComponent restorePageForContextID(String contextID) {
-    //System.out.println("ERXSession.restorePageForContextID: " + contextID + " restoring page");
+	// 	System.out.println("ERXSession.restorePageForContextID: " + contextID + " restoring page");
     LinkedHashMap pageReplacementCache = (LinkedHashMap) objectForKey(ERXAjaxSession.PAGE_REPLACEMENT_CACHE_KEY);
 
     WOComponent page = null;
@@ -280,9 +400,13 @@ public class ERXAjaxSession extends WOSession {
         cleanPageReplacementCacheIfNecessary();
       }
     }
-
+    // AK: this will get handled last in the super implementation, so we do it here
+    if(page == null)
+    	page = _permanentPageWithContextID(contextID);
+    if(page != null)
+    	page._awakeInContext(context());
     if (page == null) {
-      page = super.restorePageForContextID(contextID);
+    	page = super.restorePageForContextID(contextID);
     }
 
     if (page != null) {
