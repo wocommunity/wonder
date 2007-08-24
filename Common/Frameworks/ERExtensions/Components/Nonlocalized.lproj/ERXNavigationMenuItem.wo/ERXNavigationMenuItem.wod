@@ -1,3 +1,24 @@
+Conditional1: WOConditional {
+	condition = hasActivityAndIsEnabled;
+}
+
+Conditional2: WOConditional {
+	condition = hasActivityAndIsEnabled;
+	negate = true;
+}
+
+Hyperlink: WOGenericContainer { 
+	elementName = "A";
+	href = contextComponentActionURL;
+	invokeAction = menuItemSelected;
+    class = linkClass;
+}
+
+Image2: WOImage {
+	filename = "NewMarker.gif";
+	framework = "ERExtensions";
+}
+
 MeetsDisplayConditions:WOConditional {
 	condition=meetsDisplayConditions;
 }
@@ -11,12 +32,19 @@ NotUsingTablesConditional:WOConditional {
 	condition=false;
 }
 
+String1: WOString {
+	value = displayName;
+    escapeHTML=false;
+}
+
 Td: WOGenericContainer { 
-    elementName = "td";
-    width = navigationItemWidth;
-    class = linkClass;
-    id = navigationItemID;
-    nowrap="nowrap";
+    align="center";
+    valign="middle";
+    elementName = "TD";
+    width = navigationItem.width;
+    bgcolor=tdColor;
+    id=navigationItem.uniqueID;
+    otherTagString="NOWRAP";
 }
 
 UsingTablesConditional:WOConditional {
@@ -27,6 +55,7 @@ contextComponentActionURL: WOGenericContainer {
 	elementName = "a";
 	href = contextComponentActionURL;
 	invokeAction = menuItemSelected;
+	class = linkClass;
 }
 
 displayName: WOString {

@@ -1,3 +1,11 @@
+Conditional1: WOConditional {
+	condition = showLevel3; 
+}
+
+Conditional2: WOConditional {
+	condition = showLevel2;
+}
+
 Conditional4: WOConditional {
 	condition = showLevel3;
 }
@@ -6,16 +14,28 @@ Conditional5: WOConditional {
 	condition = showLevel2;
 }
 
-HasLevel1SpacerWidth: ERXNonZeroConditional {
-	condition = level1SpacerWidth;
+DynamicNavTable: WOGenericContainer {
+	border = 0;
+	cellpadding = 0;
+	cellspacing = 0;
+	elementName = "TABLE"; 
+	width="100%";
 }
 
-HasLevel2SpacerWidth: ERXNonZeroConditional {
-	condition = level2SpacerWidth;
+Image1: WOImage {
+	border = 0;
+	height = 18;
+	filename = "s.gif";
+	framework = "ERExtensions";
+	width = level3SpacerWidth;
 }
 
-HasLevel3SpacerWidth: ERXNonZeroConditional {
-	condition = level3SpacerWidth;
+Image2: WOImage {
+	border = 0;
+	height = 18;
+	width = level2SpacerWidth;
+	filename = "s.gif";
+	framework = "ERExtensions";
 }
 
 Image3: WOImage {
@@ -25,8 +45,41 @@ Image3: WOImage {
 	width = level1SpacerWidth;
 }
 
+NonZeroConditional1: ERXNonZeroConditional {
+	condition = level2SpacerWidth;
+}
+
+
+NonZeroConditional2: ERXNonZeroConditional {
+	condition = level3SpacerWidth;
+}
+
+NonZeroConditional3: ERXNonZeroConditional {
+	condition = level1SpacerWidth;
+}
+
 NotUsingTablesConditional:WOConditional {
 condition=false;
+}
+
+Padder: WOGenericContainer {
+     elementName="td";
+    otherTagString=paddingWidth;
+}
+
+Repetition1: WORepetition {
+	item = aNavigationItem;
+	list = level2Items;
+}
+
+Repetition2: WORepetition {
+	item = aNavigationItem;
+	list = level3Items;
+}
+
+Repetition3: WORepetition {
+	item = aNavigationItem;
+	list = level1Items;
 }
 
 UsingTablesConditional:WOConditional {
@@ -38,9 +91,17 @@ l1NavObject: ERXNavigationMenuItem {
     level=1;
 }
 
+l1NavObject2: ERXNavigationMenuItem {
+	navigationItem = aNavigationItem;
+}
+
 l2NavObject: ERXNavigationMenuItem {
 	navigationItem = aNavigationItem;
 	level=2;
+}
+
+l2NavObject2: ERXNavigationMenuItem {
+	navigationItem = aNavigationItem;
 }
 
 l3navObject: ERXNavigationMenuItem {
@@ -48,41 +109,23 @@ l3navObject: ERXNavigationMenuItem {
     level=3;
 }
 
+l3navObject2: ERXNavigationMenuItem {
+	navigationItem = aNavigationItem;
+}
+
 level1Items: WORepetition {
 	item = aNavigationItem;
 	list = level1Items;
 }
-
-level1SpacerWidth: WOImage {
-	height = 5;
-	width = level1SpacerWidth;
-	filename = "s.gif";
-	framework = "ERExtensions";
-}
-
 
 level2Items: WORepetition {
 	item = aNavigationItem;
 	list = level2Items;
 }
 
-level2SpacerWidth: WOImage {
-	height = 5;
-	width = level2SpacerWidth;
-	filename = "s.gif";
-	framework = "ERExtensions";
-}
-
 level3Items: WORepetition {
 	item = aNavigationItem;
 	list = level3Items;
-}
-
-level3SpacerWidth: WOImage {
-	height = 5;
-	width = level3SpacerWidth;
-	filename = "s.gif";
-	framework = "ERExtensions";
 }
 
 
