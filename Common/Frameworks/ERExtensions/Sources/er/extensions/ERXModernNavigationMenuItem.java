@@ -275,24 +275,6 @@ public class ERXModernNavigationMenuItem extends ERXStatelessComponent {
     public NSKeyValueCodingAdditions navigationContext() {
         return (NSKeyValueCodingAdditions)valueForBinding("navigationContext");
     }
-
-    public String additionalTagsForItem() {
-        NSMutableArray inlineStyleDeclarations =  new NSMutableArray();
-        String result = EMPTY_STRING;
-
-        if (navigationItem().width() > 0) {
-            inlineStyleDeclarations.addObject("width: " + navigationItem().width() + "px;");
-        }
-
-        if (navigationItem().height() > 0) {
-            inlineStyleDeclarations.addObject("height: " + navigationItem().height() + "px;");
-        }
-
-        if (inlineStyleDeclarations.count() > 0) {
-            result += " style=\"" + inlineStyleDeclarations.componentsJoinedByString(" ") + "\"";
-        }
-
-        return result;
-    }
+    
 
 }
