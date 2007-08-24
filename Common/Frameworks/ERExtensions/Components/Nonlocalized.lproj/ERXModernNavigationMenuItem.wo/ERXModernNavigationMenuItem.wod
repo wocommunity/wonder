@@ -1,0 +1,90 @@
+ChildrenRepetition: WORepetition {
+	list = children;
+	item = aChildItem;
+}
+
+ChildrenRepetition2: WORepetition {
+	list = children;
+	item = aChildItem;
+}
+
+DisplayNameString: WOString {
+	value = displayName;
+}
+
+DoesNotHaveActionConditional: WOConditional {
+	condition = contextComponentActionURL;
+	negate = true;
+}
+
+ERXModernNavigationMenuItem1: ERXModernNavigationMenuItem {
+	navigationItem = aChildItem;
+	navigationContext = navigationContext;
+}
+
+ERXModernNavigationMenuItem2: ERXModernNavigationMenuItem {
+	navigationItem = aChildItem;
+	navigationContext = navigationContext;
+}
+
+HasActionConditional: WOConditional {
+	condition = contextComponentActionURL;
+}
+
+HasChildrenConditional: WOConditional {
+	condition = children.count;
+}
+
+IsDisabledConditional: WOConditional {
+	condition = isDisabled;
+}
+
+IsNotDisabledConditional: WOConditional {
+	condition = isDisabled;
+	negate = true;
+}
+
+IsNotRootNodeConditional: WOConditional {
+	condition = navigationItem.isRootNode;
+	negate = true;
+}
+
+IsRootNodeConditional: WOConditional {
+	condition = navigationItem.isRootNode;
+}
+
+ListItemTag: WOGenericContainer {
+	elementName = "li";
+	otherTagString = additionalTagsForItem;
+	class = itemStyleClass;
+	id = navigationItemID;
+}
+
+MeetsDisplayConditions:WOConditional {
+	condition=meetsDisplayConditions;
+}
+
+NewMarker: WOImage {
+	filename = "NewMarker.gif";
+	framework = "ERExtensions";
+}
+
+contextComponentActionURL: WOGenericContainer { 
+	elementName = "a";
+	href = contextComponentActionURL;
+	invokeAction = menuItemSelected;
+}
+
+displayName: WOString {
+	value = displayName;
+    escapeHTML=false;
+}
+
+displayName2: WOString {
+	value = displayName;
+    escapeHTML=false;
+}
+
+hasActivityAndIsEnabled: WOConditional {
+	condition = hasActivityAndIsEnabled;
+}

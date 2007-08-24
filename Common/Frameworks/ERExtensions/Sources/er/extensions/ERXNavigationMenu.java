@@ -6,17 +6,21 @@
 //
 package er.extensions;
 
-import com.webobjects.foundation.*;
-import com.webobjects.appserver.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.eoaccess.*;
+import org.apache.log4j.Logger;
 
-/** Please read "Documentation/Navigation.html" to fnd out how to use the navigation components.*/
+import com.webobjects.appserver.WOActionResults;
+import com.webobjects.appserver.WOContext;
+import com.webobjects.appserver.WORequest;
+import com.webobjects.appserver.WOResponse;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSKeyValueCoding;
+
+/** Please read "Documentation/Navigation.html" to find out how to use the navigation components.*/
 
 public class ERXNavigationMenu extends ERXStatelessComponent {
 
     /** logging support */
-    public static final ERXLogger log = ERXLogger.getERXLogger(ERXNavigationMenu.class);
+    public static final Logger log = Logger.getLogger(ERXNavigationMenu.class);
     
     public ERXNavigationItem aNavigationItem;
 
@@ -60,17 +64,24 @@ public class ERXNavigationMenu extends ERXStatelessComponent {
     public void setUpMenu() {
         if (!_menuIsSetUp) {
             if (navigationContext() != null) {
-                NSArray navigationState = (NSArray)navigationContext().valueForKey("navigationState");
-                NSArray additionalNavigationState = (NSArray)navigationContext().valueForKey("additionalNavigationState");
-                if (navigationState != null && navigationState.count() > 0) {
-                    navigationState().setState(navigationState);                    
-                } else if (additionalNavigationState != null && additionalNavigationState.count() > 0) {
-                    if (additionalNavigationState != null && additionalNavigationState.count() > 0)
-                        navigationState().setAdditionalState(additionalNavigationState);
-                    else
-                        navigationState().setAdditionalState(null);
-                } else if (ERXValueUtilities.booleanValue(navigationContext().valueForKey("shouldResetNavigationState"))) {
-                    navigationState().setState(NSArray.EmptyArray);
+                Object o = navigationContext().valueForKey("navigationState");
+                if(o != null) {
+                    NSArray navigationState = (o instanceof NSArray ? (NSArray)o : NSArray.componentsSeparatedByString(o.toString(), "."));
+                    if (navigationState != null && navigationState.count() > 0) {
+                        navigationState().setState(navigationState);
+                    } else {
+                        o = (NSArray)navigationContext().valueForKey("additionalNavigationState");
+                        o = (o == null ? NSArray.EmptyArray : o);
+                        NSArray additionalNavigationState = (o instanceof NSArray ? (NSArray)o : NSArray.componentsSeparatedByString(o.toString(), "."));
+                        if (additionalNavigationState != null && additionalNavigationState.count() > 0) {
+                            if (additionalNavigationState != null && additionalNavigationState.count() > 0)
+                                navigationState().setAdditionalState(additionalNavigationState);
+                            else
+                                navigationState().setAdditionalState(null);
+                        } else if (ERXValueUtilities.booleanValue(navigationContext().valueForKey("shouldResetNavigationState"))) {
+                            navigationState().setState(NSArray.EmptyArray);
+                        }
+                    }
                 }
             }
 
@@ -122,7 +133,7 @@ public class ERXNavigationMenu extends ERXStatelessComponent {
     }
 
     public WOActionResults invokeAction(WORequest r, WOContext c) {
-        WOActionResults results=null;
+        WOActionResults results = null;
         setUpMenu();
         try {
             results = super.invokeAction(r,c);
@@ -138,8 +149,7 @@ public class ERXNavigationMenu extends ERXStatelessComponent {
         int totalWidth = 0;
         int lev1Width = level1Width();
         int lev2Width = level2Width();
-        int result = 0;
-        int i = 0;
+        int i;
 
         for (i=0; i < level1Items().count(); i++) {
             ERXNavigationItem anObject = (ERXNavigationItem)level1Items().objectAtIndex(i);
@@ -171,10 +181,9 @@ public class ERXNavigationMenu extends ERXStatelessComponent {
     public int setupLevel3SpacerWidth() {
         //String tmpString = new String();
         int totalWidth = 0;
-        int result = 0;
         int lev2Width = level2SpacerWidth() + level2Width();
         int lev3Width = level3Width();
-        int i = 0;
+        int i;
 
         for (i=0; i < _level2Items.count(); i++) {
             ERXNavigationItem anObject = (ERXNavigationItem)_level2Items.objectAtIndex(i);
@@ -214,9 +223,8 @@ public class ERXNavigationMenu extends ERXStatelessComponent {
     }
 
     public int menuLevelsToShow() {
-        int result=1;
         NSArray tmpArray = navigationState().state();
-        result= tmpArray.count()+(tmpArray.count() <= 2 ? 1 : 0);
+        int result = tmpArray.count() + (tmpArray.count() <= 2 ? 1 : 0);
         return result;
     }
 
@@ -262,7 +270,11 @@ public class ERXNavigationMenu extends ERXStatelessComponent {
         return totalWidth;
     }
 
-    public int setupLevel1SpacerWidth() { return navItemsTableWidth()-level1Width(); }
+    public int setupLevel1SpacerWidth() {
+        int level1Width = level1Width();
+        // If we're not using widths in our items, the width will be 0, and we don't want to force a minimum width.
+        return level1Width == 0 ? 0 : navItemsTableWidth() - level1Width;
+    }
 
     public void setLevel1Items(NSArray newLevel1Items) { _level1Items = newLevel1Items; }
     public void setLevel1SpacerWidth(int newLevel1SpacerWidth) { _level1SpacerWidth = newLevel1SpacerWidth; }
@@ -273,7 +285,7 @@ public class ERXNavigationMenu extends ERXStatelessComponent {
 
     public int navItemsTableWidth() {
         int level1Width=level1Width();
-        return level1Width < 600 ? 600 : level1Width;
+        return level1Width < 200 ? 200 : level1Width;
     }
 
     public String paddingWidth() { return ((ERXSession)session()).browser().isNetscape() ? "width=\"100%\"" : ""; }

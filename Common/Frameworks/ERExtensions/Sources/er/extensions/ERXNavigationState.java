@@ -6,15 +6,20 @@
 //
 package er.extensions;
 
-import com.webobjects.foundation.*;
-
 import java.util.Enumeration;
 
-/** Please read "Documentation/Navigation.html" to fnd out how to use the navigation components.*/
+import org.apache.log4j.Logger;
+
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSKeyValueCodingAdditions;
+import com.webobjects.foundation.NSMutableArray;
+import com.webobjects.foundation.NSRange;
+
+/** Please read "Documentation/Navigation.html" to find out how to use the navigation components.*/
 public class ERXNavigationState {
 
     /** logging support */
-    public static final ERXLogger log = ERXLogger.getERXLogger(ERXNavigationState.class);
+    public static final Logger log = Logger.getLogger(ERXNavigationState.class);
     
     protected NSArray _additionalState;
     protected NSArray _state;
@@ -131,7 +136,7 @@ public class ERXNavigationState {
                         children = (NSArray)levelRoot.childrenChoices().objectForKey((String)o);
                         if (children == null)
                             log.warn("For nav core object: " + levelRoot + " and child binding: " + levelRoot.childrenBinding()
-                                     + " couldn't find children for choice key: " + (String)o);
+                                     + " couldn't find children for choice key: " + o);
                     } else {
                         log.warn("For nav core object: " + levelRoot + " and child binding: " + levelRoot.childrenBinding()
                                  + " recieved binding object: " + o);

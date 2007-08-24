@@ -8,23 +8,27 @@
 /* ERXNavigation.java created by max on Thu 27-Jul-2000 */
 package er.extensions;
 
-import com.webobjects.foundation.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.eoaccess.*;
-import com.webobjects.appserver.*;
-import java.util.*;
+import java.util.StringTokenizer;
+
+import org.apache.log4j.Logger;
+
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSMutableArray;
+import com.webobjects.foundation.NSRange;
 
 // FIXME: Alot of this needs to move up as it is specific to our navigation structure.
 /**
- * Not very generic right now, but will be in the future. Nice for mantaining a stack based navigation system, ie drilling down pushes nav state onto the stack and backing up pops state off the stack.<br />
- * Please read "Documentation/Navigation.html" to fnd out how to use the navigation components.
+ * Not very generic right now, but will be in the future. Nice for mantaining a
+ * stack based navigation system, ie drilling down pushes nav state onto the
+ * stack and backing up pops state off the stack.<br />
+ * Please read "Documentation/Navigation.html" to fnd out how to use the
+ * navigation components.
  * 
  */
-
 public class ERXNavigation {
 
     /** logging support */
-    public static ERXLogger log = ERXLogger.getERXLogger("er.navigation.extensions.ERXNavigation");
+    public static Logger log = Logger.getLogger("er.navigation.extensions.ERXNavigation");
 
     protected NSArray _additionalNavigationState, _navigationState;
     protected boolean isDisabled;
@@ -46,6 +50,7 @@ public class ERXNavigation {
             log.debug("Setting additional navigation state: " + value);
         _additionalNavigationState = value;
     }
+    
     // Not used.
     public String sectionTitleString(int currentNavigationLevel) {
         String sectionTitle = "";
@@ -87,6 +92,7 @@ public class ERXNavigation {
         _navigationState = navigationState;
         _additionalNavigationState = null;
     }
+
     public void setNavigationStateWithString(String navigationStateString) {
         if (navigationStateString != null) {
             NSMutableArray navigationState = new NSMutableArray();
@@ -97,6 +103,7 @@ public class ERXNavigation {
             setNavigationState(navigationState);
         }
     }
+
     public String navigationStateString() {
         if (navigationState() != null) {
             return navigationState().componentsJoinedByString(".");
@@ -109,7 +116,7 @@ public class ERXNavigation {
     
     public boolean isDisabled() { return isDisabled; }
     public void setIsDisabled(boolean newIsDisabled) { isDisabled = newIsDisabled; }
-
+    
     public boolean shouldDisplayHeaderTitle() { return _shouldDisplayHeaderTitle; }
     public void setShouldDisplayHeaderTitle(boolean newShouldDisplayHeaderTitle) {
         _shouldDisplayHeaderTitle = newShouldDisplayHeaderTitle;

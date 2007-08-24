@@ -17,14 +17,15 @@ import com.webobjects.foundation.NSMutableDictionary;
  * @author mschrag
  */
 // FIXME: the last entry stays in the cache if it is not requested.
-public class ERXExpiringCache<K, V> {
-	private static class Entry<V> {
+// Note that this is an un-genericized version of the file from Wonder trunk. - TC
+public class ERXExpiringCache {
+	private static class Entry {
 		private long _expiration;
 		private Object _versionKey;
-		private V _object;
+		private Object _object;
 		private boolean _stale;
 
-		public Entry(V o, long expiration, Object version) {
+		public Entry(Object o, long expiration, Object version) {
 			_expiration = expiration;
 			_versionKey = version;
 			_object = o;
@@ -48,7 +49,7 @@ public class ERXExpiringCache<K, V> {
 			return _stale;
 		}
 
-		protected V object() {
+		protected Object object() {
 			return _object;
 		}
 	}
@@ -63,7 +64,7 @@ public class ERXExpiringCache<K, V> {
 	 */
 	public static final Object NO_VERSION = new Object();
 
-	private NSMutableDictionary<K, ERXExpiringCache.Entry<V>> _backingDictionary;
+	private NSMutableDictionary _backingDictionary;
 	private long _expiryTime;
 	private long _cleanupPause;
 	private long _lastCleanupTime;
@@ -101,7 +102,7 @@ public class ERXExpiringCache<K, V> {
 			_cleanupPause = 60 * 1000L;
 		}
 		_lastCleanupTime = 0L;
-		_backingDictionary = new NSMutableDictionary<K, Entry<V>>();
+		_backingDictionary = new NSMutableDictionary();
 	}
 	
 	/**
@@ -124,7 +125,7 @@ public class ERXExpiringCache<K, V> {
 	 * @param key
 	 *            the lookup key
 	 */
-	public synchronized void setObjectForKey(V object, K key) {
+	public synchronized void setObjectForKey(Object object, String key) {
 		setObjectForKeyWithVersion(object, key, ERXExpiringCache.NO_VERSION);
 	}
 
@@ -135,7 +136,7 @@ public class ERXExpiringCache<K, V> {
 	 * @param key the lookup key
 	 * @param currentVersionKey the version of the object right now
 	 */
-	public synchronized void setObjectForKeyWithVersion(V object, K key, Object currentVersionKey) {
+	public synchronized void setObjectForKeyWithVersion(Object object, String key, Object currentVersionKey) {
 		removeStaleEntries();
 		long expirationTime;
 		if (_expiryTime == ERXExpiringCache.NO_TIMEOUT) {
@@ -144,7 +145,7 @@ public class ERXExpiringCache<K, V> {
 		else {
 			expirationTime = System.currentTimeMillis() + _expiryTime;
 		}
-		Entry<V> entry = new Entry<V>(object, expirationTime, currentVersionKey);
+		Entry entry = new Entry(object, expirationTime, currentVersionKey);
 		_backingDictionary.setObjectForKey(entry, key);
 	}
 
@@ -154,7 +155,7 @@ public class ERXExpiringCache<K, V> {
 	 * @param key the key to lookup with
 	 * @return the value in the cache or null
 	 */
-	public synchronized V objectForKey(K key) {
+	public synchronized Object objectForKey(String key) {
 		return objectForKeyWithVersion(key, ERXExpiringCache.NO_VERSION);
 	}
 
@@ -168,9 +169,9 @@ public class ERXExpiringCache<K, V> {
 	 * @param currentVersionKey the current version of this key
 	 * @return the value in the cache or null
 	 */
-	public synchronized V objectForKeyWithVersion(K key, Object currentVersionKey) {
-		Entry<V> entry = _backingDictionary.objectForKey(key);
-		V value = null;
+	public synchronized Object objectForKeyWithVersion(String key, Object currentVersionKey) {
+		Entry entry = (Entry)_backingDictionary.objectForKey(key);
+		Object value = null;
 		if (entry != null) {
 			if (entry.isStale(System.currentTimeMillis(), currentVersionKey)) {
 				_backingDictionary.removeObjectForKey(key);
@@ -201,7 +202,7 @@ public class ERXExpiringCache<K, V> {
 	 * @return true if the value is stale
 	 */
 	public synchronized boolean isStaleWithVersion(Object key, Object currentVersionKey) {
-		Entry<V> entry = _backingDictionary.objectForKey(key);
+		Entry entry = (Entry)_backingDictionary.objectForKey(key);
 		boolean isStale = false;
 		if (entry != null) {
 			isStale = entry.isStale(System.currentTimeMillis(), currentVersionKey);
@@ -215,10 +216,10 @@ public class ERXExpiringCache<K, V> {
 	 * @param key the key to remove
 	 * @return the removed object
 	 */
-	public synchronized V removeObjectForKey(K key) {
+	public synchronized Object removeObjectForKey(String key) {
 		removeStaleEntries();
-		Entry<V> entry = _backingDictionary.removeObjectForKey(key);
-		V value = null;
+		Entry entry = (Entry)_backingDictionary.removeObjectForKey(key);
+		Object value = null;
 		if (entry != null) {
 			value = entry.object();
 		}
@@ -232,9 +233,9 @@ public class ERXExpiringCache<K, V> {
 		long now = System.currentTimeMillis();
 		if ((_lastCleanupTime + _cleanupPause) < now) {
 			_lastCleanupTime = System.currentTimeMillis();
-			for (Enumeration<K> keyEnum = _backingDictionary.keyEnumerator(); keyEnum.hasMoreElements();) {
-				K key = keyEnum.nextElement();
-				Entry<V> entry = _backingDictionary.objectForKey(key);
+			for (Enumeration keyEnum = _backingDictionary.keyEnumerator(); keyEnum.hasMoreElements();) {
+				String key = (String)keyEnum.nextElement();
+				Entry entry = (Entry)_backingDictionary.objectForKey(key);
 				// ak: add 10 seconds as a safety margin
 				// we need this because the entry could be requested
 				// when we just checked and noticed it is ok

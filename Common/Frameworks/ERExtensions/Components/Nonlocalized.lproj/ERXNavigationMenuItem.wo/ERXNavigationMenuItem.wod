@@ -1,35 +1,52 @@
-Conditional1: WOConditional {
-	condition = hasActivityAndIsEnabled;
+MeetsDisplayConditions:WOConditional {
+	condition=meetsDisplayConditions;
 }
 
-Conditional2: WOConditional {
-	condition = hasActivityAndIsEnabled;
-	negate = true;
-}
-
-Hyperlink: WOGenericContainer { 
-	elementName = "A";
-	href = contextComponentActionURL;
-	invokeAction = menuItemSelected;
-    class = linkClass;
-}
-
-Image2: WOImage {
+NewMarker: WOImage {
 	filename = "NewMarker.gif";
 	framework = "ERExtensions";
 }
 
-String1: WOString {
+NotUsingTablesConditional:WOConditional {
+	condition=false;
+}
+
+Td: WOGenericContainer { 
+    elementName = "td";
+    width = navigationItemWidth;
+    class = linkClass;
+    id = navigationItemID;
+    nowrap="nowrap";
+}
+
+UsingTablesConditional:WOConditional {
+	condition=true;
+}
+
+contextComponentActionURL: WOGenericContainer { 
+	elementName = "a";
+	href = contextComponentActionURL;
+	invokeAction = menuItemSelected;
+}
+
+displayName: WOString {
 	value = displayName;
     escapeHTML=false;
 }
 
-Td: WOGenericContainer { 
-    align="center";
-    valign="middle";
-    elementName = "TD";
-    width = navigationItem.width;
-    bgcolor=tdColor;
-    id=navigationItem.uniqueID;
-    otherTagString="NOWRAP";
+hasActivityAndIsEnabled: WOConditional {
+	condition = hasActivityAndIsEnabled;
+}
+
+hasNoActivityAndIsEnabled: WOConditional {
+	condition = hasActivityAndIsEnabled;
+	negate = true;
+}
+
+li: WOGenericContainer { 
+    elementName = "li";
+    width = navigationItemWidth;
+    class = linkClass;
+    id = navigationItemID;
+    nowrap="nowrap";
 }

@@ -1,0 +1,40 @@
+<webobject name="IsRootNodeConditional">
+	<webobject name="ChildrenRepetition2"> 
+		<webobject name="ERXModernNavigationMenuItem2"></webobject> 
+	</webobject>
+</webobject>
+
+<webobject name="IsNotRootNodeConditional">
+    <webobject name="MeetsDisplayConditions">
+    	<webobject name="ListItemTag">
+    		<webobject name="IsNotDisabledConditional">
+    			
+        		<webobject name="HasActionConditional">
+        			<webobject name="contextComponentActionURL">
+        				<webobject name="displayName"></webobject>
+        			</webobject>
+        		</webobject>
+        		<webobject name="DoesNotHaveActionConditional">
+        			<webobject name="displayName2"></webobject>
+        		</webobject>
+    			
+        		<webobject name="hasActivityAndIsEnabled">
+        			<webobject name="NewMarker"></webobject>
+        		</webobject>
+        		
+        		<webobject name="HasChildrenConditional">
+        		<ul>
+        			<webobject name="ChildrenRepetition">
+        				<webobject name="ERXModernNavigationMenuItem1"></webobject>
+        			</webobject>
+        		</ul>
+        		</webobject>
+    		</webobject>
+    
+        	<webobject name="IsDisabledConditional">
+        		<span><webobject name="DisplayNameString"></webobject></span>
+        	</webobject>
+    	</webobject>
+        
+    </webobject>
+</webobject>

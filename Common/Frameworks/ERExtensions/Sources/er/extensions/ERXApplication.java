@@ -25,6 +25,7 @@ import java.io.*;
  */
 
 public abstract class ERXApplication extends ERXAjaxApplication implements ERXGracefulShutdown.GracefulApplication {
+    private static Boolean isWO54 = null;
 
     /** logging support */
     public static final ERXLogger log = ERXLogger.getERXLogger(ERXApplication.class);
@@ -715,6 +716,77 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
         }
         return _useSessionStoreDeadlockDetection.booleanValue();
     }
+    /**
+	 * Returns true if this app is running in WO 5.4.
+	 *
+	 * @return true if this app is running in WO 5.4
+	 */
+	public static boolean isWO54() {
+		if (ERXApplication.isWO54 == null) {
+			try {
+				Method getWebObjectsVersionMethod = WOApplication.class.getMethod("getWebObjectsVersion", new Class[0]);
+				ERXApplication.isWO54 = Boolean.TRUE;
+			}
+			catch (Exception e) {
+				ERXApplication.isWO54 = Boolean.FALSE;
+			}
+		}
+		return ERXApplication.isWO54.booleanValue();
+	}
+
+	/**
+	 * Returns whether or not this application is in development mode.  This one is
+	 * named "Safe" because it does not require you to be running an ERXApplication (and
+	 * because you can't have a static and not-static method of the same name. bah).  If
+	 * you are using ERXApplication, this will call isDevelopmentMode on your application.
+	 * If not, it will call ERXApplication_defaultIsDevelopmentMode() which checks
+	 * for the system properties "er.extensions.ERXApplication.developmentMode"
+	 * and/or "WOIDE".
+	 *
+	 * @return whether or not the current application is in development mode
+	 */
+	public static boolean isDevelopmentModeSafe() {
+		boolean developmentMode;
+		WOApplication application = WOApplication.application();
+		if (application instanceof ERXApplication) {
+			ERXApplication erxApplication = (ERXApplication)application;
+			developmentMode = erxApplication.isDevelopmentMode();
+		}
+		else {
+			developmentMode = ERXApplication._defaultIsDevelopmentMode();
+		}
+		return developmentMode;
+	}
+
+	/**
+	 * Returns whether or not this application is running in development-mode. If you are using Xcode, you should add a
+	 * WOIDE=Xcode setting to your launch parameters.
+	 */
+	protected static boolean _defaultIsDevelopmentMode() {
+		boolean developmentMode = false;
+		if (ERXProperties.stringForKey("er.extensions.ERXApplication.developmentMode") != null) {
+			developmentMode = ERXProperties.booleanForKey("er.extensions.ERXApplication.developmentMode");
+		}
+		else {
+			String ide = ERXProperties.stringForKey("WOIDE");
+			if ("WOLips".equals(ide) || "Xcode".equals(ide)) {
+				developmentMode = true;
+			}
+		}
+		// AK: these are for quickly uncommenting while testing
+		// if(true) return false;
+		// if(true) return true;
+		return developmentMode;
+	}
+
+	/**
+	 * Returns whether or not this application is running in development-mode. If you are using Xcode, you should add a
+	 * WOIDE=Xcode setting to your launch parameters.
+	 */
+	public boolean isDevelopmentMode() {
+		return ERXApplication._defaultIsDevelopmentMode();
+	}
+
 
     /** holds the info on checked-out sessions */
     private Hashtable _sessions = new Hashtable();
@@ -802,6 +874,28 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
     public ERXFormatterFactory formatterFactory() {
         return formatterProvider;
     }
+
+    protected Boolean _responseCompressionEnabled;
+
+	/**
+	 * checks the value of <code>er.extensions.ERXApplication.responseCompressionEnabled</code> and if true turns on
+	 * response compression by gzip
+	 */
+	public boolean responseCompressionEnabled() {
+		if (_responseCompressionEnabled == null) {
+			_responseCompressionEnabled = ERXProperties.booleanForKeyWithDefault("er.extensions.ERXApplication.responseCompressionEnabled", false) ? Boolean.TRUE : Boolean.FALSE;
+		}
+		return _responseCompressionEnabled.booleanValue();
+	}
+
+    /**
+	 * This method is called by ERXWOContext and provides the application a hook to rewrite generated URLs.
+	 * @param url the URL to rewrite
+	 * @return the rewritten URL
+	 */
+	public String _rewriteURL(String url) {
+		return url;
+	}
 }
 
 
