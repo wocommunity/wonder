@@ -302,7 +302,7 @@ public class ERXMutableURL {
 	 * @param queryParameters
 	 *            the new query parameters
 	 */
-	public synchronized void setQueryParameters(NSDictionary<String, Object> queryParameters) {
+	public synchronized void setQueryParameters(NSDictionary<String, ? extends Object> queryParameters) {
 		clearQueryParameters();
 		addQueryParameters(queryParameters);
 	}
@@ -315,7 +315,7 @@ public class ERXMutableURL {
 	 *            the new query parameters
 	 */
 	@SuppressWarnings("unchecked")
-	public synchronized void addQueryParameters(NSDictionary<String, Object> queryParameters) {
+	public synchronized void addQueryParameters(NSDictionary<String, ? extends Object> queryParameters) {
 		if (queryParameters != null) {
 			Enumeration<String> keyEnum = queryParameters.keyEnumerator();
 			while (keyEnum.hasMoreElements()) {
