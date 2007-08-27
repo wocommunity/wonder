@@ -17,8 +17,6 @@ import com.webobjects.appserver._private.WODynamicGroup;
 import com.webobjects.appserver._private.WOHTMLBareString;
 import com.webobjects.foundation.NSDictionary;
 
-import er.extensions.ERXEOAccessUtilities.LogEntry;
-
 /**
  * Allows for multiple Component Contents.
 
