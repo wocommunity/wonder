@@ -11,6 +11,11 @@ IsRunning : WOConditional {
 	condition = ^isRunning;
 }
 
+IsNotRunning : WOConditional {
+	condition = ^isRunning;
+	negate = true;
+}
+
 Content: WOComponentContent {
 }
 
