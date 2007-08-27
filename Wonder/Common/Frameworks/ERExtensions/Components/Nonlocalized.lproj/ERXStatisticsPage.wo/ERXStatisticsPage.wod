@@ -198,7 +198,7 @@ PoweredByImage: WOImage {
 }
 
 REFRESH: WOSubmitButton {
-	directActionName = "WOStats";
+	directActionName = "stats";
 	value = "Refresh Page";
 }
 
@@ -288,3 +288,40 @@ USERNAME: WOTextField {
 	value = userName;
 }
 
+ResetStats : WOHyperlink {
+	directActionName = "resetStats";
+}
+
+ERXStatsRepetition : WORepetition {
+	list = aggregateLogEntries.@sortDesc.avg;
+	item = aggregateLogEntry;
+}
+
+ERXStatsKey : WOString {
+	value = aggregateLogEntry.key;
+}
+
+ERXStatsCount : WOString {
+	value = aggregateLogEntry.count;
+	numberformat = "#,##0";
+}
+
+ERXStatsMin : WOString {
+	value = aggregateLogEntry.min;
+	numberformat = "#,##0";
+}
+
+ERXStatsMax : WOString {
+	value = aggregateLogEntry.max;
+	numberformat = "#,##0";
+}
+
+ERXStatsSum : WOString {
+	value = aggregateLogEntry.sum;
+	numberformat = "#,##0";
+}
+
+ERXStatsAvg : WOString {
+	value = aggregateLogEntry.avg;
+	numberformat = "#,##0.00";
+}

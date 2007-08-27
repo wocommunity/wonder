@@ -20,7 +20,6 @@ import com.webobjects.appserver.WORequest;
 import com.webobjects.appserver.WOResponse;
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.foundation.NSArray;
-import com.webobjects.foundation.NSPropertyListSerialization;
 import com.webobjects.woextensions.WOEventDisplayPage;
 import com.webobjects.woextensions.WOEventSetupPage;
 import com.webobjects.woextensions.WOStatsPage;
@@ -91,17 +90,31 @@ public class ERXDirectAction extends WODirectAction {
         return result;
     }
 
-    
-    
     /**
      * Direct access to WOStats by giving over the password in the "pw" parameter.
      * @return
      */
- 
     public WOActionResults statsAction() {
         WOStatsPage nextPage = (WOStatsPage) pageWithName("ERXStatisticsPage");
         nextPage.password = context().request().stringFormValueForKey("pw");
         return nextPage.submit();
+    }
+    
+    /**
+     * Direct access to reset the stats by giving over the password in the "pw" parameter.  This
+     * calls ERXStats.reset();
+     * 
+     * @return
+     */
+    public WOActionResults resetStatsAction() {
+    	WOActionResults result = null;
+        if (canPerformActionWithPasswordKey("er.extensions.ERXStatisticsPassword")) {
+        	ERXStats.reset();
+        	WORedirect redirect = new WORedirect(context());
+        	redirect.setUrl(context().directActionURLForActionNamed("stats", null));
+        	result = redirect;
+        }
+        return result;
     }
     
     /**

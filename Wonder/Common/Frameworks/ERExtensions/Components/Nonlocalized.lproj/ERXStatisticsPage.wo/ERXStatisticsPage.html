@@ -72,439 +72,468 @@
           </tr>
         </table>
       </webobject>
-      <hr>
+      <hr />
+      <br>
+        <center>
+          <table border = "2" cellpadding = "4" cellspacing = "2" bgcolor = "#d0d0d0">
+            <tr align = "CENTER" bgcolor = "#b0b0b0">
+              <td colspan = "6">
+                <font size = "+1">
+                  <b>Application Statistics</b>
+                </font>
+              </td>
+            </tr>
+            <tr>
+              <td>&nbsp</td>
+              <td align = "CENTER">
+                <font size = "-1">Transactions</font>
+              </td>
+              <td align = "CENTER">
+                <font size = "-1">
+                  Average Transaction
+                  <br>Time</br>
+                </font>
+              </td>
+              <td align = "CENTER">
+                <font size = "-1">
+                  Average Idle
+                  <br>Time</br>
+                </font>
+              </td>
+              <td align = "CENTER">
+                <font size = "-1">
+                  Moving Average*
+                  <br>Transaction Time</br>
+                </font>
+              </td>
+              <td align = "CENTER">
+                <font size = "-1">
+                  Moving Average*
+                  <br>Idle Time</br>
+                </font>
+              </td>
+            </tr>
+            <tr>
+              <td>Overall</td>
+              <td align = "CENTER">
+                <font color = "#0000FF">
+                  <webobject name = "Transactions"></webobject>
+                </font>
+              </td>
+              <td align = "CENTER">
+                <font color = "#0000FF">
+                  <webobject name = "AvgTransactionTime"></webobject>
+                </font>
+              </td>
+              <td align = "CENTER">
+                <font color = "#0000FF">
+                  <webobject name = "AvgIdleTime"></webobject>
+                </font>
+              </td>
+              <td align = "CENTER">
+                <font color = "#0000FF">
+                  <webobject name = "MovingAvgTransactionTime"></webobject>
+                </font>
+              </td>
+              <td align = "CENTER">
+                <font color = "#0000FF">
+                  <webobject name = "MovingAvgIdleTime"></webobject>
+                </font>
+              </td>
+            </tr>
+            <tr>
+              <td>Component Actions</td>
+              <td align = "CENTER">
+                <font color = "#0000FF">
+                  <webobject name = "ComponentActionTransactions"></webobject>
+                </font>
+              </td>
+              <td align = "CENTER">
+                <font color = "#0000FF">
+                  <webobject name = "AvgComponentActionTransactions"></webobject>
+                </font>
+              </td>
+              <td align = "CENTER">
+                <font size = "-1">NA</font>
+              </td>
+              <td align = "CENTER">&nbsp</td>
+              <td align = "CENTER">
+                <font size = "-1">NA</font>
+              </td>
+            </tr>
+            <tr>
+              <td>Direct Actions</td>
+              <td align = "CENTER">
+                <font color = "#0000FF">
+                  <webobject name = "DirectActionTransactions"></webobject>
+                </font>
+              </td>
+              <td align = "CENTER">
+                <font color = "#0000FF">
+                  <webobject name = "AvgDirectActionTransactions"></webobject>
+                </font>
+              </td>
+              <td align = "CENTER">
+                <font size = "-1">NA</font>
+              </td>
+              <td align = "CENTER">&nbsp</td>
+              <td align = "CENTER">
+                <font size = "-1">NA</font>
+              </td>
+            </tr>
+            <tr>
+              <td>Started at</td>
+              <td colspan = "5">
+                <font color = "#0000FF">
+                  <webobject name = "StatsDictStartedAt"></webobject>
+                </font>
+              </td>
+            </tr>
+            <tr>
+              <td>Running time</td>
+              <td colspan = "5">
+                <font color = "#0000FF">
+                  <webobject name = "RunningTime"></webobject>
+                </font>
+              </td>
+            </tr>
+          </table>
+          <font size = "-1">
+            * The sample size for Moving Averages is
+            <font color = "#0000FF">
+              <webobject name = "MovingAvgSampleSize"></webobject>
+            </font>
+            transactions.
+          </font>
+        </center>
+        <hr />
+        <center>
+          <table border = "2" cellpadding = "4" cellspacing = "2" bgcolor = "#d0d0d0">
+            <tr align = "CENTER" bgcolor = "#b0b0b0">
+              <td colspan = "2">
+                <font size = "+1">
+                  <b>Sessions Statistics</b>
+                </font>
+              </td>
+            </tr>
+            <webobject name = "SessionsRepetition">
+              <tr>
+                <td>
+                  <webobject name = "SessionsKeyCell"></webobject>
+                </td>
+                <td>
+                  <font color = "#0000FF">
+                    <webobject name = "SessionsValueCell"></webobject>
+                  </font>
+                </td>
+              </tr>
+            </webobject>
+            <webobject name = "ISMAXSESSIONS">
+              <tr>
+                <td colspan = "2">
+                  Peak Concurrent Sessions at
+                  <br>
+                    <font color = "#0000FF">
+                      <webobject name = "MaxSessions"></webobject>
+                    </font>
+                  </br>
+                </td>
+              </tr>
+            </webobject>
+          </table>
+        </center>
         <br>
           <center>
-            <table border = "2" cellpadding = "4" cellspacing = "2" bgcolor = "#d0d0d0">
-              <tr align = "CENTER" bgcolor = "#b0b0b0">
-                <td colspan = "6">
-                  <font size = "+1">
-                    <b>Application Statistics</b>
-                  </font>
-                </td>
-              </tr>
+            <table border = "0" width = "100%">
+<!--   spacer table - invisible   -->
               <tr>
-                <td>&nbsp</td>
                 <td align = "CENTER">
-                  <font size = "-1">Transactions</font>
-                </td>
-                <td align = "CENTER">
-                  <font size = "-1">
-                    Average Transaction
-                    <br>Time</br>
-                  </font>
-                </td>
-                <td align = "CENTER">
-                  <font size = "-1">
-                    Average Idle
-                    <br>Time</br>
-                  </font>
-                </td>
-                <td align = "CENTER">
-                  <font size = "-1">
-                    Moving Average*
-                    <br>Transaction Time</br>
-                  </font>
-                </td>
-                <td align = "CENTER">
-                  <font size = "-1">
-                    Moving Average*
-                    <br>Idle Time</br>
-                  </font>
-                </td>
-              </tr>
-              <tr>
-                <td>Overall</td>
-                <td align = "CENTER">
-                  <font color = "#0000FF">
-                    <webobject name = "Transactions"></webobject>
-                  </font>
+                  <table border = "2" cellpadding = "4" cellspacing = "2" bgcolor = "#d0d0d0">
+                    <tr align = "CENTER" bgcolor = "#b0b0b0">
+                      <td colspan = "2">
+                        <b>Memory Usage (bytes)</b>
+                      </td>
+                    </tr>
+                    <webobject name = "MemoryRepetition">
+                      <tr>
+                        <td>
+                          <webobject name = "MemoryKeyCell"></webobject>
+                        </td>
+                        <td align = "RIGHT">
+                          <font color = "#0000FF">
+                            <webobject name = "MemoryValueCell"></webobject>
+                          </font>
+                        </td>
+                      </tr>
+                    </webobject>
+                  </table>
                 </td>
                 <td align = "CENTER">
-                  <font color = "#0000FF">
-                    <webobject name = "AvgTransactionTime"></webobject>
-                  </font>
-                </td>
-                <td align = "CENTER">
-                  <font color = "#0000FF">
-                    <webobject name = "AvgIdleTime"></webobject>
-                  </font>
-                </td>
-                <td align = "CENTER">
-                  <font color = "#0000FF">
-                    <webobject name = "MovingAvgTransactionTime"></webobject>
-                  </font>
-                </td>
-                <td align = "CENTER">
-                  <font color = "#0000FF">
-                    <webobject name = "MovingAvgIdleTime"></webobject>
-                  </font>
-                </td>
-              </tr>
-              <tr>
-                <td>Component Actions</td>
-                <td align = "CENTER">
-                  <font color = "#0000FF">
-                    <webobject name = "ComponentActionTransactions"></webobject>
-                  </font>
-                </td>
-                <td align = "CENTER">
-                  <font color = "#0000FF">
-                    <webobject name = "AvgComponentActionTransactions"></webobject>
-                  </font>
-                </td>
-                <td align = "CENTER">
-                  <font size = "-1">NA</font>
-                </td>
-                <td align = "CENTER">&nbsp</td>
-                <td align = "CENTER">
-                  <font size = "-1">NA</font>
-                </td>
-              </tr>
-              <tr>
-                <td>Direct Actions</td>
-                <td align = "CENTER">
-                  <font color = "#0000FF">
-                    <webobject name = "DirectActionTransactions"></webobject>
-                  </font>
-                </td>
-                <td align = "CENTER">
-                  <font color = "#0000FF">
-                    <webobject name = "AvgDirectActionTransactions"></webobject>
-                  </font>
-                </td>
-                <td align = "CENTER">
-                  <font size = "-1">NA</font>
-                </td>
-                <td align = "CENTER">&nbsp</td>
-                <td align = "CENTER">
-                  <font size = "-1">NA</font>
-                </td>
-              </tr>
-              <tr>
-                <td>Started at</td>
-                <td colspan = "5">
-                  <font color = "#0000FF">
-                    <webobject name = "StatsDictStartedAt"></webobject>
-                  </font>
-                </td>
-              </tr>
-              <tr>
-                <td>Running time</td>
-                <td colspan = "5">
-                  <font color = "#0000FF">
-                    <webobject name = "RunningTime"></webobject>
-                  </font>
+                  <table border = "2" cellpadding = "4" cellspacing = "2" bgcolor = "#d0d0d0">
+                    <tr align = "CENTER" bgcolor = "#b0b0b0">
+                      <td colspan = "2">
+                        <b>Avg. Memory Usage Per Session (bytes)</b>
+                      </td>
+                    </tr>
+                    <webobject name = "SessionMemoryRepetition">
+                      <tr>
+                        <td>
+                          <webobject name = "SessionMemoryKeyCell"></webobject>
+                        </td>
+                        <td align = "RIGHT">
+                          <font color = "#0000FF">
+                            <webobject name = "SessionMemoryValueCell"></webobject>
+                          </font>
+                        </td>
+                      </tr>
+                    </webobject>
+                  </table>
                 </td>
               </tr>
             </table>
-            <font size = "-1">
-              * The sample size for Moving Averages is
-              <font color = "#0000FF">
-                <webobject name = "MovingAvgSampleSize"></webobject>
-              </font>
-              transactions.
-            </font>
           </center>
-          <hr>
+          <br>
+            <webobject name = "ISLASTUSER">
+              Response Descriptions For Last User :
+              <br>
+                <center>
+                  <table border = "2" cellpadding = "4" cellspacing = "2" bgcolor = "#d0d0d0" width = "80%">
+                    <webobject name = "SessionStatsRepetition">
+                      <tr>
+                        <td>
+                          <font color = "#0000FF">
+                            <webobject name = "SessionStatsField"></webobject>
+                          </font>
+                        </td>
+                      </tr>
+                    </webobject>
+                  </table>
+                </center>
+              </br>
+            </webobject>
+            <hr />
             <center>
-              <table border = "2" cellpadding = "4" cellspacing = "2" bgcolor = "#d0d0d0">
-                <tr align = "CENTER" bgcolor = "#b0b0b0">
-                  <td colspan = "2">
+              <table border = "2" cellpadding = "4" cellspacing = "2" width = "80%" bgcolor = "#d0d0d0">
+                <tr>
+                  <td colspan = "5" align = "CENTER" bgcolor = "#b0b0b0">
                     <font size = "+1">
-                      <b>Sessions Statistics</b>
+                      <b>
+                        Component Action
+							Statistics
+                      </b>
                     </font>
                   </td>
                 </tr>
-                <webobject name = "SessionsRepetition">
+                <tr align = "CENTER" bgcolor = "#d6d8df">
+                  <td width = "20%">Name</td>
+                  <td width = "50%">Served</td>
+                  <td width = "10%">Min</td>
+                  <td width = "10%">Avg</td>
+                  <td width = "10%">Max</td>
+                </tr>
+                <webobject name = "PagesRepetition">
                   <tr>
-                    <td>
-                      <webobject name = "SessionsKeyCell"></webobject>
-                    </td>
-                    <td>
+                    <td align = "CENTER">
                       <font color = "#0000FF">
-                        <webobject name = "SessionsValueCell"></webobject>
+                        <webobject name = "PageName"></webobject>
                       </font>
                     </td>
-                  </tr>
-                </webobject>
-                <webobject name = "ISMAXSESSIONS">
-                  <tr>
-                    <td colspan = "2">
-                      Peak Concurrent Sessions at
-                      <br>
-                        <font color = "#0000FF">
-                          <webobject name = "MaxSessions"></webobject>
-                        </font>
-                      </br>
+                    <td align = "left">
+                      <webobject name = "PageCountBar"></webobject>
+                    </td>
+                    <td align = "CENTER">
+                      <font color = "#0000FF">
+                        <webobject name = "PageMin"></webobject>
+                      </font>
+                    </td>
+                    <td align = "CENTER">
+                      <font color = "#0000FF">
+                        <b>
+                          <webobject name = "PageAvg"></webobject>
+                        </b>
+                      </font>
+                    </td>
+                    <td align = "CENTER">
+                      <font color = "#0000FF">
+                        <webobject name = "PageMax"></webobject>
+                      </font>
                     </td>
                   </tr>
                 </webobject>
               </table>
             </center>
-            <br>
-              <center>
-                <table border = "0" width = "100%">
-<!--  spacer table - invisible  -->
+            <hr />
+            <center>
+              <table border = "2" cellpadding = "4" cellspacing = "2" width = "80%" bgcolor = "#d0d0d0">
+                <tr>
+                  <td colspan = "5" align = "CENTER" bgcolor = "#b0b0b0">
+                    <font size = "+1">
+                      <b>Direct Action Statistics</b>
+                    </font>
+                  </td>
+                </tr>
+                <tr align = "CENTER" bgcolor = "#d6d8df">
+                  <td width = "20%">Name</td>
+                  <td width = "50%">Served</td>
+                  <td width = "10%">Min</td>
+                  <td width = "10%">Avg</td>
+                  <td width = "10%">Max</td>
+                </tr>
+                <webobject name = "ActionsRepetition">
                   <tr>
                     <td align = "CENTER">
-                      <table border = "2" cellpadding = "4" cellspacing = "2" bgcolor = "#d0d0d0">
-                        <tr align = "CENTER" bgcolor = "#b0b0b0">
-                          <td colspan = "2">
-                            <b>Memory Usage (bytes)</b>
-                          </td>
-                        </tr>
-                        <webobject name = "MemoryRepetition">
-                          <tr>
-                            <td>
-                              <webobject name = "MemoryKeyCell"></webobject>
-                            </td>
-                            <td align = "RIGHT">
-                              <font color = "#0000FF">
-                                <webobject name = "MemoryValueCell"></webobject>
-                              </font>
-                            </td>
-                          </tr>
-                        </webobject>
-                      </table>
+                      <font color = "#0000FF">
+                        <webobject name = "ActionName"></webobject>
+                      </font>
+                    </td>
+                    <td align = "left">
+                      <webobject name = "ActionBar"></webobject>
                     </td>
                     <td align = "CENTER">
-                      <table border = "2" cellpadding = "4" cellspacing = "2" bgcolor = "#d0d0d0">
-                        <tr align = "CENTER" bgcolor = "#b0b0b0">
-                          <td colspan = "2">
-                            <b>Avg. Memory Usage Per Session (bytes)</b>
-                          </td>
-                        </tr>
-                        <webobject name = "SessionMemoryRepetition">
-                          <tr>
-                            <td>
-                              <webobject name = "SessionMemoryKeyCell"></webobject>
-                            </td>
-                            <td align = "RIGHT">
-                              <font color = "#0000FF">
-                                <webobject name = "SessionMemoryValueCell"></webobject>
-                              </font>
-                            </td>
-                          </tr>
-                        </webobject>
-                      </table>
+                      <font color = "#0000FF">
+                        <webobject name = "ActionMin"></webobject>
+                      </font>
+                    </td>
+                    <td align = "CENTER">
+                      <font color = "#0000FF">
+                        <b>
+                          <webobject name = "ActionAvg"></webobject>
+                        </b>
+                      </font>
+                    </td>
+                    <td align = "CENTER">
+                      <font color = "#0000FF">
+                        <webobject name = "ActionMax"></webobject>
+                      </font>
+                    </td>
+                  </tr>
+                </webobject>
+              </table>
+            </center>
+            <hr />
+            <center>
+              <table border = "2" cellPadding = "4" cellspacing = "2" width = "80%" bgcolor = "#d0d0d0">
+                <tr>
+                  <td colspan = "3" align = "CENTER" bgcolor = "#b0b0b0">
+                    <font size = "+1">
+                      <b>
+                        Detailed
+							Statistics
+                      </b>
+                    </font>
+                  </td>
+                </tr>
+                <tr align = "CENTER" bgcolor = "#d6d8df">
+                  <td width = "40%">Response Description</td>
+                  <td width = "50%">Percent Of Total</td>
+                  <td width = "10%">Served</td>
+                </tr>
+                <webobject name = "DetailsRepetition">
+                  <tr>
+                    <td align = "CENTER">
+                      <font color = "#0000FF">
+                        <webobject name = "DetailName"></webobject>
+                      </font>
+                    </td>
+                    <td align = "left">
+                      <webobject name = "BAR_DETAILS"></webobject>
+                    </td>
+                    <td align = "CENTER">
+                      <font color = "#0000FF">
+                        <webobject name = "DetailCount"></webobject>
+                      </font>
+                    </td>
+                  </tr>
+                </webobject>
+              </table>
+              <br>
+                <webobject name = "ISLOGPATH">
+                  <hr />
+                  <br>
+                    Statistics Details Saved In Common Log Format In File
+                    <font color = "#0000FF">
+                      <webobject name = "LOGPATH"></webobject>
+                    </font>
+                  </br>
+                </webobject>
+                <hr />
+                <center>
+                  <table border = "2" cellpadding = "4" cellspacing = "2" width = "80%" bgcolor = "#d0d0d0">
+                    <tr>
+                      <td colspan = "5" align = "CENTER" bgcolor = "#b0b0b0">
+                        <font size = "+1">
+                          <b>ERX Stats (<webobject name = "ResetStats">reset</webobject>)</b>
+                        </font>
+                      </td>
+                    </tr>
+                    <tr align = "CENTER" bgcolor = "#d6d8df">
+                      <td width = "50%">Key</td>
+                      <td width = "10%">Count</td>
+                      <td width = "10%">Min</td>
+                      <td width = "10%">Avg</td>
+                      <td width = "10%">Max</td>
+                      <td width = "10%">Sum</td>
+                    </tr>
+                    <webobject name = "ERXStatsRepetition">
+                      <tr>
+                        <td>
+                          <webobject name = "ERXStatsKey" />
+                        </td>
+                        <td>
+                          <webobject name = "ERXStatsCount" />
+                        </td>
+                        <td>
+                          <webobject name = "ERXStatsMin" />
+                        </td>
+                        <td>
+                          <webobject name = "ERXStatsAvg" />
+                        </td>
+                        <td>
+                          <webobject name = "ERXStatsMax" />
+                        </td>
+                        <td>
+                          <webobject name = "ERXStatsSum" />
+                        </td>
+                      </tr>
+                    </webobject>
+                  </table>
+                </center>
+                <hr />
+                <table width = "80%" border = "2" cellspacing = "2" cellpadding = "4" bgcolor = "#d0d0d0">
+                  <tr>
+                    <td colspan = "2" bgcolor = "#b0b0b0" align = "CENTER">
+                      <font size = "+1">
+                        <b>
+                          Java VM
+							Information
+                        </b>
+                      </font>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Vendor</td>
+                    <td>
+                      <webobject name = "Link"></webobject>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>JDK</td>
+                    <td>
+                      <webobject name = "JdkVersion"></webobject>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Operating System</td>
+                    <td>
+                      <webobject name = "OperatingSystem"></webobject>
                     </td>
                   </tr>
                 </table>
-              </center>
-              <br>
-                <webobject name = "ISLASTUSER">
-                  Response Descriptions For Last User :
-                  <br>
-                    <center>
-                      <table border = "2" cellpadding = "4" cellspacing = "2" bgcolor = "#d0d0d0" width = "80%">
-                        <webobject name = "SessionStatsRepetition">
-                          <tr>
-                            <td>
-                              <font color = "#0000FF">
-                                <webobject name = "SessionStatsField"></webobject>
-                              </font>
-                            </td>
-                          </tr>
-                        </webobject>
-                      </table>
-                    </center>
-                  </br>
-                </webobject>
-                <hr>
-                  <center>
-                    <table border = "2" cellpadding = "4" cellspacing = "2" width = "80%" bgcolor = "#d0d0d0">
-                      <tr>
-                        <td colspan = "5" align = "CENTER" bgcolor = "#b0b0b0">
-                          <font size = "+1">
-                            <b>
-                              Component Action
-							Statistics
-                            </b>
-                          </font>
-                        </td>
-                      </tr>
-                      <tr align = "CENTER" bgcolor = "#d6d8df">
-                        <td width = "20%">Name</td>
-                        <td width = "50%">Served</td>
-                        <td width = "10%">Min</td>
-                        <td width = "10%">Avg</td>
-                        <td width = "10%">Max</td>
-                      </tr>
-                      <webobject name = "PagesRepetition">
-                        <tr>
-                          <td align = "CENTER">
-                            <font color = "#0000FF">
-                              <webobject name = "PageName"></webobject>
-                            </font>
-                          </td>
-                          <td align = "left">
-                            <webobject name = "PageCountBar"></webobject>
-                          </td>
-                          <td align = "CENTER">
-                            <font color = "#0000FF">
-                              <webobject name = "PageMin"></webobject>
-                            </font>
-                          </td>
-                          <td align = "CENTER">
-                            <font color = "#0000FF">
-                              <b>
-                                <webobject name = "PageAvg"></webobject>
-                              </b>
-                            </font>
-                          </td>
-                          <td align = "CENTER">
-                            <font color = "#0000FF">
-                              <webobject name = "PageMax"></webobject>
-                            </font>
-                          </td>
-                        </tr>
-                      </webobject>
-                    </table>
-                  </center>
-                  <hr>
-                    <center>
-                      <table border = "2" cellpadding = "4" cellspacing = "2" width = "80%" bgcolor = "#d0d0d0">
-                        <tr>
-                          <td colspan = "5" align = "CENTER" bgcolor = "#b0b0b0">
-                            <font size = "+1">
-                              <b>Direct Action Statistics</b>
-                            </font>
-                          </td>
-                        </tr>
-                        <tr align = "CENTER" bgcolor = "#d6d8df">
-                          <td width = "20%">Name</td>
-                          <td width = "50%">Served</td>
-                          <td width = "10%">Min</td>
-                          <td width = "10%">Avg</td>
-                          <td width = "10%">Max</td>
-                        </tr>
-                        <webobject name = "ActionsRepetition">
-                          <tr>
-                            <td align = "CENTER">
-                              <font color = "#0000FF">
-                                <webobject name = "ActionName"></webobject>
-                              </font>
-                            </td>
-                            <td align = "left">
-                              <webobject name = "ActionBar"></webobject>
-                            </td>
-                            <td align = "CENTER">
-                              <font color = "#0000FF">
-                                <webobject name = "ActionMin"></webobject>
-                              </font>
-                            </td>
-                            <td align = "CENTER">
-                              <font color = "#0000FF">
-                                <b>
-                                  <webobject name = "ActionAvg"></webobject>
-                                </b>
-                              </font>
-                            </td>
-                            <td align = "CENTER">
-                              <font color = "#0000FF">
-                                <webobject name = "ActionMax"></webobject>
-                              </font>
-                            </td>
-                          </tr>
-                        </webobject>
-                      </table>
-                    </center>
-                    <hr>
-                      <center>
-                        <table border = "2" cellPadding = "4" cellspacing = "2" width = "80%" bgcolor = "#d0d0d0">
-                          <tr>
-                            <td colspan = "3" align = "CENTER" bgcolor = "#b0b0b0">
-                              <font size = "+1">
-                                <b>
-                                  Detailed
-							Statistics
-                                </b>
-                              </font>
-                            </td>
-                          </tr>
-                          <tr align = "CENTER" bgcolor = "#d6d8df">
-                            <td width = "40%">Response Description</td>
-                            <td width = "50%">Percent Of Total</td>
-                            <td width = "10%">Served</td>
-                          </tr>
-                          <webobject name = "DetailsRepetition">
-                            <tr>
-                              <td align = "CENTER">
-                                <font color = "#0000FF">
-                                  <webobject name = "DetailName"></webobject>
-                                </font>
-                              </td>
-                              <td align = "left">
-                                <webobject name = "BAR_DETAILS"></webobject>
-                              </td>
-                              <td align = "CENTER">
-                                <font color = "#0000FF">
-                                  <webobject name = "DetailCount"></webobject>
-                                </font>
-                              </td>
-                            </tr>
-                          </webobject>
-                        </table>
-                        <br>
-                          <webobject name = "ISLOGPATH">
-                            <hr>
-                              <br>
-                                Statistics Details Saved In Common Log Format In File
-                                <font color = "#0000FF">
-                                  <webobject name = "LOGPATH"></webobject>
-                                </font>
-                              </br>
-                            </hr>
-                          </webobject>
-                          <hr>
-                            <table width = "80%" border = "2" cellspacing = "2" cellpadding = "4" bgcolor = "#d0d0d0">
-                              <tr>
-                                <td colspan = "2" bgcolor = "#b0b0b0" align = "CENTER">
-                                  <font size = "+1">
-                                    <b>
-                                      Java VM
-							Information
-                                    </b>
-                                  </font>
-                                </td>
-                              </tr>
-                              <tr>
-                                <td>Vendor</td>
-                                <td>
-                                  <webobject name = "Link"></webobject>
-                                </td>
-                              </tr>
-                              <tr>
-                                <td>JDK</td>
-                                <td>
-                                  <webobject name = "JdkVersion"></webobject>
-                                </td>
-                              </tr>
-                              <tr>
-                                <td>Operating System</td>
-                                <td>
-                                  <webobject name = "OperatingSystem"></webobject>
-                                </td>
-                              </tr>
-                            </table>
-                            <p></p>
-                            <br>
-                              <a href = "http://www.apple.com/WebObjects">
-                                <webobject name = "PoweredByImage"></webobject>
-                              </a>
-                            </br>
-                          </hr>
-                        </br>
-                      </center>
-                    </hr>
-                  </hr>
-                </hr>
               </br>
-            </br>
-          </hr>
+            </center>
+          </br>
         </br>
-      </hr>
+      </br>
     </webobject>
   </body>
 </html>
