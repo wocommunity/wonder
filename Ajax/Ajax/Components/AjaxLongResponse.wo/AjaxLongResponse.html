@@ -1,3 +1,5 @@
-<webobject name="AjaxUpdateContainer"><webobject name="Content"></webobject></webobject><webobject name="IsRunning"><script type="text/javascript">
-<webobject name=ID></webobject>PeriodicalUpdater.start();
-</script></webobject>
+<webobject name="AjaxUpdateContainer"><webobject name="Content"></webobject><webobject name="IsRunning"><script type="text/javascript">
+if(!<webobject name=ID></webobject>PeriodicalUpdater.isRunning()){ <webobject name=ID></webobject>PeriodicalUpdater.start();}
+</script></webobject><webobject name="IsNotRunning"><script type="text/javascript">
+if(<webobject name=ID></webobject>PeriodicalUpdater.isRunning()){ <webobject name=ID></webobject>Stop();}
+</script></webobject></webobject>
