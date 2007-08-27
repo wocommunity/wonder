@@ -169,6 +169,9 @@ public class AjaxUpdateContainer extends AjaxDynamicElement {
 					AjaxOptions.appendToResponse(options, response, context);
 					response.appendContentString(");");
 					response.appendContentString(id + "Stop = function() { " + id + "PeriodicalUpdater.stop() };");
+					if(booleanValueForBinding("stopped", false, component)) {
+						response.appendContentString(id + "Stop();");
+					}
 				}
 	
 				if (observeFieldID != null) {
