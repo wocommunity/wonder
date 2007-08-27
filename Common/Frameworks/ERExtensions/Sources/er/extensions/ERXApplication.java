@@ -1076,6 +1076,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 		WOResponse response = null;
 		try {
 			ERXApplication._startRequest();
+			ERXStats.initStatisticsIfNecessary();
 			if (useComponentActionRedirection()) {
 				ERXComponentActionRedirector redirector = ERXComponentActionRedirector.redirectorForRequest(request);
 				if (redirector == null) {
