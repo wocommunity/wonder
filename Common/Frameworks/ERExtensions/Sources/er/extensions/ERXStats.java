@@ -14,10 +14,36 @@ import com.webobjects.foundation.NSPropertyListSerialization;
 import com.webobjects.foundation.NSSet;
 
 /**
+ * <p>
  * ERXStats provides a simple interface for logging statistics information like
  * WOEvent, but also tracked on a per-thread basis (so you can dump stats just
  * for a particular thread). DO PROBABLY DO NOT WANT TO TURN THIS ON IN
  * PRODUCTION.
+ * </p>
+ * 
+ * <p>
+ * As an example, you may want to track stats on keypaths in your components.  In your
+ * base components, you could add:
+ * </p>
+ * <code>
+ * public Object valueForKeyPath(String keyPath) {
+ *   Object value;
+ *   if (_shouldTrackStats) {
+ *     String logName = ERXStringUtilities.getSimpleClassName(getClass()) + ": " + keyPath;
+ *     ERXStats.markStart(logName);
+ *     try {
+ *       value = super.valueForKeyPath(keyPath);
+ *     }
+ *     finally {
+ *       ERXStats.markEnd(logName);
+ *     }
+ *   }
+ *   else {
+ *     value = super.valueForKeyPath(keyPath);
+ *   }
+ *   return value;
+ * }
+ * </code>
  * 
  * @author anjo
  * @author mschrag
