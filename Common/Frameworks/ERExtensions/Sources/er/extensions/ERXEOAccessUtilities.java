@@ -59,7 +59,6 @@ import com.webobjects.jdbcadaptor.JDBCPlugIn;
  * Collection of EOAccess related utilities.
  */
 public class ERXEOAccessUtilities {
-
     /** logging support */
     public static final Logger log = Logger.getLogger(ERXEOAccessUtilities.class);
     
@@ -896,112 +895,6 @@ public class ERXEOAccessUtilities {
         return rootEntityForEntity(EOModelGroup.defaultGroup().entityNamed(entityName));
     }
 
-    /**
-     * 
-     * @param expression
-     * @param startTime
-     */
-    
-    public static class LogEntry {
-    	
-    	private long count;
-    	private long min;
-    	private long max;
-    	private long sum;
-    	private String statement;
-    	private Set traces = Collections.synchronizedSet(new HashSet());
-    	
-    	public LogEntry(String statement) {
-    		this.statement = statement;
-    		
-    	}
-    	
-    	public long count() {
-    		return count;
-    	}
-    	
-    	public long min() {
-    		return min;
-    	}
-    	
-    	public long max() {
-    		return max;
-    	}
-    	
-    	public long sum() {
-    		return sum;
-    	}
-    	
-    	public void add(long time) {
-    		if(time < min) {
-    			min = time;
-    		}
-    		if(time > max) {
-    			max = time;
-    		}
-    		count++;
-    		sum += time;
-    		if(false) {
-    			//Throwable t = new RuntimeException();
-    			//t.fillInStackTrace();
-    			traces.add(ERXUtilities.stackTrace());
-    		}
-    	}
-    	
-    	public float avg() {
-    		return count == 0 ? 0 : (sum/((float)count));
-    	}
-    	
-    	public String statement() {
-    		return statement;
-    	}
-    	
-    	public String toString() {
-    		return  count() + "/" + sum() + " : " + min() + "/" + max() + "/" + avg() + "|"  + traces.size() + "->" + statement; // + "\n" + traces.iterator().next();
-    	}
-    }
-    
-    private static ThreadLocal<NSMutableDictionary> statistics = new ThreadLocal<NSMutableDictionary>();
-    private static NSMutableSet allStatistics = new NSMutableSet();
-
-    /**
-     * Initializes the SQL logging stats.
-     *
-     */
-    public static synchronized void initStatistics() {
-    	
-    	NSMutableDictionary s = statistics();
-    	if(s != null) {
-    		allStatistics.removeObject(s);
-    	}
-    	s = new NSMutableDictionary();
-    	statistics.set(s);
-    	allStatistics.addObject(s);
-    }
-    
-    private static NSMutableDictionary statistics() {
-    	return statistics.get();
-    }
-    
-    /**
-     * Logs the SQL statements since the last call to initStatistics() ordered by some key. 
-     * @param key key to sort on ("sum", "count", "min", "max", "avg")
-     */
-    public static void logStatistics(String key) {
-    	NSMutableDictionary statistics = statistics();
-    	if(statistics != null) {
-    		synchronized (statistics) {
-    			NSArray values = ERXArrayUtilities.sortedArraySortedWithKey(statistics.allValues(), key);
-    			if(values.count() > 0) {
-    				String result = NSPropertyListSerialization.stringFromPropertyList(values);
-    				//result = result.replaceAll("\\n\\t", "\n\t\t");
-    				//result = result.replaceAll("\\n", "\n\t\t");
-    				log.info(result);
-    			}
-    		}
-    	}
-    }
-
     public static void logExpression(EOAdaptorChannel channel, EOSQLExpression expression, long startTime) {
         if (sqlLoggingLogger == null) {
             sqlLoggingLogger = Logger.getLogger("er.extensions.ERXAdaptorChannelDelegate.sqlLogging");
@@ -1035,17 +928,9 @@ public class ERXEOAccessUtilities {
                     needsLog = true;
                 }
             }
-            NSMutableDictionary statistics = statistics();
-            if(statistics != null) {
-            	synchronized (statistics) {
-            		String statement = expression.statement().replaceAll(" IN \\(.*", " IN (");
-            		LogEntry entry = (LogEntry) statistics.objectForKey(statement);
-            		if(entry == null) {
-            			entry = new LogEntry(statement);
-            			statistics.setObjectForKey(entry, statement);
-            		}
-            		entry.add(millisecondsNeeded);
-            	}
+            if (ERXStats.isTrackingStatistics()) {
+                String statement = expression.statement().replaceAll(" IN \\(.*", " IN (");
+            	ERXStats.addDurationForKey(millisecondsNeeded, statement);
             }
             if (needsLog) {
                 String logString = createLogString(channel, expression, millisecondsNeeded);
@@ -1610,5 +1495,35 @@ public class ERXEOAccessUtilities {
  			}
  		}
  		return mismatches;
+ 	}
+ 	
+ 	/**
+ 	 * @deprecated use ERXStats.initStatistics
+ 	 */
+ 	public static synchronized void initStatistics() {
+ 		ERXStats.initStatistics();
+ 	}
+
+ 	/**
+ 	 * @deprecated use ERXStats.logStatisticsForOperation
+ 	 */
+ 	public static void logStatistics(String key) {
+ 	    ERXStats.logStatisticsForOperation(key);
+ 	}
+
+ 	/**
+ 	 * @deprecated use er.extensions.ERXStats.LogEntry
+ 	 */
+ 	public static class LogEntry extends ERXStats.LogEntry {
+		public LogEntry(String message) {
+			super(message);
+		}
+		
+		/**
+		 * @deprecated use ERXStats.key
+		 */
+		public String statement() {
+			return key();
+		}
  	}
 }
