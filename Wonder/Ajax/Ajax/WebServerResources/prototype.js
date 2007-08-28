@@ -1033,9 +1033,7 @@ Ajax.PeriodicalUpdater.prototype = Object.extend(new Ajax.Base(), {
     this.updater = {};
     this.container = container;
     this.url = url;
-	if(!options.stopped) {
-		this.start();
-	}
+	this.start();
     this.timer = undefined;
   },
 
@@ -1043,17 +1041,11 @@ Ajax.PeriodicalUpdater.prototype = Object.extend(new Ajax.Base(), {
     this.options.onComplete = this.updateComplete.bind(this);
     this.onTimerEvent();
   },
-
-  isRunning: function() {
-  	// return this.updater && this.updater.options && this.updater.options.onComplete != undefined;
-  	return this.timer != undefined;
-  },
   
 
   stop: function() {
     this.updater.options.onComplete = undefined;
     clearTimeout(this.timer);
-    this.timer = undefined;
     (this.onComplete || Prototype.emptyFunction).apply(this, arguments);
   },
 
