@@ -25,6 +25,12 @@ public class ERXStatisticsPage extends WOStatsPage {
 	public NSArray<LogEntry> aggregateLogEntries() {
 		if (_aggregateLogEntries == null) {
 			_aggregateLogEntries = ERXStats.aggregateLogEntries();
+			// AK: should be stored in session...
+			String key = context().request().stringFormValueForKey("sort");
+			if(key == null) {
+				key = "avg";
+			}
+			_aggregateLogEntries = (NSArray<LogEntry>) _aggregateLogEntries.valueForKeyPath("@sortDesc."+key);
 		}
 		return _aggregateLogEntries;
 	}
