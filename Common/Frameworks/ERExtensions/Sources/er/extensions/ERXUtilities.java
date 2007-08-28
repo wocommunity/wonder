@@ -432,7 +432,8 @@ public class ERXUtilities {
         }
         // clipping the early parts of the stack trace which include
         // ERXUtilities.stackTrace()
-        return result.substring(122);
+        //"java.lang.Throwable 	at er.extensions.ERXUtilities.stackTrace(ERXUtilities.java:429)".length()
+        return result.substring(84);
     }
 
     /**
