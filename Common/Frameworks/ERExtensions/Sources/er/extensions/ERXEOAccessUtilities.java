@@ -935,6 +935,9 @@ public class ERXEOAccessUtilities {
             	// IN's can be quite long and are normally not bound
                	statement = statement.replaceAll(" IN \\(.*?\\)", " IN ([removed])");
                	statement = statement.replaceAll("([a-zA-Z0-9_\\.]+)\\s+IN \\(.*?\\)(\\s+OR\\s+\\1\\s+IN \\(.*?\\))+", " IN ([multi removed])");
+               	statement = statement.replaceAll("((t0|T0)\\.[a-zA-Z0-9_]+\\,\\s*)?(t0|T0)\\.[a-zA-Z0-9_\\.]+\\s+FROM\\s+", "t0.* FROM ");
+              	statement = statement.replaceAll("[tT]0\\.[a-zA-Z0-9_]+\\,\\s+", "");
+             	statement = statement.replaceFirst("[tT]0\\.[a-zA-Z0-9_]+\\s+FROM ", "T0.* FROM ");
             	ERXStats.addDurationForKey(millisecondsNeeded, entityName + ": " +statement);
             }
             if (needsLog) {
