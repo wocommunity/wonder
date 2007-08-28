@@ -294,7 +294,7 @@ ResetStats : WOHyperlink {
 }
 
 ERXStatsRepetition : WORepetition {
-	list = aggregateLogEntries.@sortDesc.avg;
+	list = aggregateLogEntries;
 	item = aggregateLogEntry;
 }
 
