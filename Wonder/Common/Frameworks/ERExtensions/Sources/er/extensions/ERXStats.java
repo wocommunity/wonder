@@ -1,5 +1,7 @@
 package er.extensions;
 
+import java.math.BigDecimal;
+import java.math.MathContext;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
@@ -54,6 +56,7 @@ import com.webobjects.foundation.NSSet;
 public class ERXStats {
 	private static final String STATS_INITIALIZED_KEY = "er.extensions.erxStats.initialized";
 	private static final String STATS_START_TIME_KEY = "er.extensions.erxStats.startTime";
+	private static final String STATS_LAST_TIME_KEY = "er.extensions.erxStats.lastTime";
 	private static final String STATS_KEY = "er.extensions.erxStats.statistics";
 
 	public static final Logger log = Logger.getLogger(ERXStats.class);
@@ -66,9 +69,17 @@ public class ERXStats {
 	 * will automatically call this.
 	 */
 	public static void initStatisticsIfNecessary() {
-		if (ERXProperties.booleanForKey("er.extensions.erxStats.enabled")) {
+		if (areStatisticsEnabled()) {
 			ERXStats.initStatistics();
 		}
+	}
+
+	/**
+	 * 
+	 * @return
+	 */
+	private static boolean areStatisticsEnabled() {
+		return ERXProperties.booleanForKey("er.extensions.erxStats.enabled");
 	}
 
 	/**
@@ -251,7 +262,7 @@ public class ERXStats {
 	
 	/**
 	 * Logs the messages since the last call to initStatistics() ordered by some
-	 * key.
+	 * key. Note that no log message is output if there aren't any values
 	 * 
 	 * @param operation
 	 *            operation to sort on ("sum", "count", "min", "max", "avg")
@@ -264,10 +275,16 @@ public class ERXStats {
 					NSArray values = ERXArrayUtilities.sortedArraySortedWithKey(statistics.allValues(), operation);
 					if (values.count() > 0) {
 						Long startTime = (Long) ERXThreadStorage.valueForKey(STATS_START_TIME_KEY);
+						Long lastTime = (Long) ERXThreadStorage.valueForKey(STATS_LAST_TIME_KEY);
+						long currentTime = System.currentTimeMillis();
 						String result = NSPropertyListSerialization.stringFromPropertyList(values);
 						// result = result.replaceAll("\\n\\t", "\n\t\t");
 						// result = result.replaceAll("\\n", "\n\t\t");
-						log.debug((startTime != null ? (System.currentTimeMillis() - startTime.longValue()) + " ms: ": "" ) + result);
+						log.debug(
+								(startTime != null ? "Time since init " + (currentTime - startTime.longValue()) + " ms ": "" ) + 
+								(lastTime != null ? ", last log " + (currentTime - lastTime.longValue()) + " ms ": "" ) + 
+								"(cnt/sum : min/max/avg|trace cnt -> key) = " + result);
+						ERXThreadStorage.takeValueForKey(new Long(currentTime), ERXStats.STATS_LAST_TIME_KEY);
 					}
 				}
 			}
@@ -292,6 +309,7 @@ public class ERXStats {
 		public LogEntry(String key) {
 			_key = key;
 			_avg = -1.0f;
+			_min = Long.MAX_VALUE;
 		}
 
 		public synchronized void _add(LogEntry logEntry) {
@@ -368,7 +386,7 @@ public class ERXStats {
 
 		@Override
 		public String toString() {
-			return count() + "/" + sum() + " : " + min() + "/" + max() + "/" + avg() + "|" + _traces.size() + "->" + _key;
+			return count() + "/" + sum() + " : " + min() + "/" + max() + "/" + new BigDecimal(avg(), MathContext.DECIMAL32).setScale(2, BigDecimal.ROUND_HALF_EVEN) + "|" + _traces.size() + "->" + _key;
 			// + "\n" + traces.iterator().next();
 		}
 	}
