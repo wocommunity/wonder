@@ -53,6 +53,7 @@ import com.webobjects.foundation.NSSet;
  */
 public class ERXStats {
 	private static final String STATS_INITIALIZED_KEY = "er.extensions.erxStats.initialized";
+	private static final String STATS_START_TIME_KEY = "er.extensions.erxStats.startTime";
 	private static final String STATS_KEY = "er.extensions.erxStats.statistics";
 
 	public static final Logger log = Logger.getLogger(ERXStats.class);
@@ -76,6 +77,7 @@ public class ERXStats {
 	 */
 	public static void initStatistics() {
 		ERXThreadStorage.takeValueForKey(Boolean.TRUE, ERXStats.STATS_INITIALIZED_KEY);
+		ERXThreadStorage.takeValueForKey(new Long(System.currentTimeMillis()), STATS_START_TIME_KEY);
 		ERXThreadStorage.removeValueForKey(ERXStats.STATS_KEY);
 	}
 
@@ -261,10 +263,11 @@ public class ERXStats {
 				synchronized (statistics) {
 					NSArray values = ERXArrayUtilities.sortedArraySortedWithKey(statistics.allValues(), operation);
 					if (values.count() > 0) {
+						Long startTime = (Long) ERXThreadStorage.valueForKey(STATS_START_TIME_KEY);
 						String result = NSPropertyListSerialization.stringFromPropertyList(values);
 						// result = result.replaceAll("\\n\\t", "\n\t\t");
 						// result = result.replaceAll("\\n", "\n\t\t");
-						log.debug(result);
+						log.debug((startTime != null ? (System.currentTimeMillis() - startTime.longValue()) + " ms: ": "" ) + result);
 					}
 				}
 			}
