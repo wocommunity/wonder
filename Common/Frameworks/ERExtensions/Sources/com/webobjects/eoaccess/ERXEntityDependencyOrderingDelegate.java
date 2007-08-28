@@ -54,7 +54,7 @@ public class ERXEntityDependencyOrderingDelegate {
                     logger.debug("Entity ordering:\n " + entityNameOrdering.componentsJoinedByString("\n"));
                 }
 
-                adaptorOpComparator = new EOAdaptorOpComparator(entityNameOrdering);
+                adaptorOpComparator = new ERXAdaptorOpComparator(entityNameOrdering);
             }
             catch (ComparisonException e) {
                 throw NSForwardException._runtimeExceptionForThrowable(e);
@@ -88,4 +88,14 @@ public class ERXEntityDependencyOrderingDelegate {
     }
 
 
+    public boolean databaseContextShouldHandleDatabaseException(EODatabaseContext dbCtxt, Throwable exception)
+    {
+    	// Useful for debugging
+    	if ( ! (exception instanceof EOGeneralAdaptorException))
+    	{
+        	logger.error("Unexpected non-EOGeneralAdaptorException exception", exception);
+    	}
+    	
+    	return true;
+    }
 }
