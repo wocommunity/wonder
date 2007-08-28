@@ -81,6 +81,9 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 	/** request logging support */
 	public static final Logger requestHandlingLog = Logger.getLogger("er.extensions.ERXApplication.RequestHandling");
 
+	/** statistic logging support */
+	public static final Logger statsLog = Logger.getLogger("er.extensions.ERXApplication.Statistics");
+
 	private static boolean _wasERXApplicationMainInvoked = false;
 
 	/**
@@ -424,6 +427,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 		NSNotificationCenter.defaultCenter().addObserver(ERXApplication.class, new NSSelector("bundleDidLoad", new Class[] { NSNotification.class }), "NSBundleDidLoadNotification", null);
 		ERXConfigurationManager.defaultManager().setCommandLineArguments(argv);
 		ERXFrameworkPrincipal.setUpFrameworkPrincipalClass(ERXExtensions.class);
+		ERXStats.initStatistics();
 	}
 
 	public void installDefaultEncoding(String encoding) {
@@ -628,7 +632,8 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 	 * batch application tasks.
 	 */
 	public void didFinishLaunching() {
-		// empty
+		ERXStats.logStatisticsForOperation(statsLog, "sum");
+		ERXStats.reset();
 	}
 
 	/**
@@ -1064,7 +1069,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 	public static boolean isInRequest() {
 		return ERXApplication.isInRequest.get() != null;
 	}
-	
+		
 	/**
 	 * Overridden to allow for redirected responses and null the thread local storage.
 	 * 
@@ -1102,6 +1107,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 			}
 		}
 		finally {
+	        ERXStats.logStatisticsForOperation(statsLog, "sum");
 			ERXApplication._endRequest();
 		}
 		if (requestHandlingLog.isDebugEnabled()) {
