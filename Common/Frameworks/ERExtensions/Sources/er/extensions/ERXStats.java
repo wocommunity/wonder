@@ -64,7 +64,7 @@ public class ERXStats {
 	 * er.extensions.erxStats.enabled is true. ERXApplication.dispatchRequest
 	 * will automatically call this.
 	 */
-	public static synchronized void initStatisticsIfNecessary() {
+	public static void initStatisticsIfNecessary() {
 		if (ERXProperties.booleanForKey("er.extensions.erxStats.enabled")) {
 			ERXStats.initStatistics();
 		}
@@ -74,7 +74,7 @@ public class ERXStats {
 	 * Initializes the logging stats manually. You can all this if you want to
 	 * turn on thread logging just for a particular area of your application.
 	 */
-	public static synchronized void initStatistics() {
+	public static void initStatistics() {
 		ERXThreadStorage.takeValueForKey(Boolean.TRUE, ERXStats.STATS_INITIALIZED_KEY);
 		ERXThreadStorage.removeValueForKey(ERXStats.STATS_KEY);
 	}
@@ -100,11 +100,13 @@ public class ERXStats {
 		if (statistics == null) {
 			statistics = new NSMutableDictionary<String, LogEntry>();
 			ERXThreadStorage.takeValueForKey(statistics, ERXStats.STATS_KEY);
-			ERXStats._allStatistics.addObject(statistics);
+			synchronized (_allStatistics) {
+				ERXStats._allStatistics.addObject(statistics);
 
-			int maxStatistics = ERXProperties.intForKeyWithDefault("er.extensions.erxStats.max", 1000);
-			if (ERXStats._allStatistics.count() > maxStatistics) {
-				ERXStats._allStatistics.removeObjectAtIndex(0);
+				int maxStatistics = ERXProperties.intForKeyWithDefault("er.extensions.erxStats.max", 1000);
+				if (ERXStats._allStatistics.count() > maxStatistics) {
+					ERXStats._allStatistics.removeObjectAtIndex(0);
+				}
 			}
 		}
 		return statistics;
@@ -158,10 +160,12 @@ public class ERXStats {
 	public static LogEntry aggregateLogEntryForKey(String key) {
 		LogEntry aggregateLogEntry = new LogEntry(key);
 		if (key != null) {
-			for (NSMutableDictionary<String, LogEntry> statistics : ERXStats._allStatistics) {
-				LogEntry logEntry = statistics.objectForKey(key);
-				if (logEntry != null) {
-					aggregateLogEntry._add(logEntry);
+			synchronized (ERXStats._allStatistics) {
+				for (NSMutableDictionary<String, LogEntry> statistics : ERXStats._allStatistics) {
+					LogEntry logEntry = statistics.objectForKey(key);
+					if (logEntry != null) {
+						aggregateLogEntry._add(logEntry);
+					}
 				}
 			}
 		}
@@ -240,15 +244,28 @@ public class ERXStats {
 	 *            operation to sort on ("sum", "count", "min", "max", "avg")
 	 */
 	public static void logStatisticsForOperation(String operation) {
-		NSMutableDictionary statistics = ERXStats.statistics();
-		if (statistics != null) {
-			synchronized (statistics) {
-				NSArray values = ERXArrayUtilities.sortedArraySortedWithKey(statistics.allValues(), operation);
-				if (values.count() > 0) {
-					String result = NSPropertyListSerialization.stringFromPropertyList(values);
-					// result = result.replaceAll("\\n\\t", "\n\t\t");
-					// result = result.replaceAll("\\n", "\n\t\t");
-					ERXStats.log.info(result);
+		logStatisticsForOperation(log, operation);
+	}
+	
+	/**
+	 * Logs the messages since the last call to initStatistics() ordered by some
+	 * key.
+	 * 
+	 * @param operation
+	 *            operation to sort on ("sum", "count", "min", "max", "avg")
+	 */
+	public static void logStatisticsForOperation(Logger log, String operation) {
+		if(log.isDebugEnabled()) {
+			NSMutableDictionary statistics = ERXStats.statistics();
+			if (statistics != null) {
+				synchronized (statistics) {
+					NSArray values = ERXArrayUtilities.sortedArraySortedWithKey(statistics.allValues(), operation);
+					if (values.count() > 0) {
+						String result = NSPropertyListSerialization.stringFromPropertyList(values);
+						// result = result.replaceAll("\\n\\t", "\n\t\t");
+						// result = result.replaceAll("\\n", "\n\t\t");
+						log.debug(result);
+					}
 				}
 			}
 		}
