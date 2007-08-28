@@ -88,7 +88,7 @@ public class ERXStats {
 	 * @return
 	 */
 	public static boolean traceCollectingEnabled() {
-		return ERXProperties.booleanForKeyWithDefault("er.extensions.erxStats.traceCollectingEnabled", true);
+		return ERXProperties.booleanForKeyWithDefault("er.extensions.erxStats.traceCollectingEnabled", false);
 	}
 
 	/**
