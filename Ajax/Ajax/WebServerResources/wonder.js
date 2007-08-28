@@ -252,6 +252,58 @@ AjaxPeriodicUpdater.prototype = {
 	}
 };
 
+Ajax.StoppedPeriodicalUpdater = Class.create();
+Ajax.StoppedPeriodicalUpdater.prototype = Object.extend(new Ajax.Base(), {
+  initialize: function(container, url, options) {
+    this.setOptions(options);
+    this.onComplete = this.options.onComplete;
+
+    this.frequency = (this.options.frequency || 2);
+    this.decay = (this.options.decay || 1);
+
+    this.updater = {};
+    this.container = container;
+    this.url = url;
+	if(!options.stopped) {
+		this.start();
+	}
+    this.timer = undefined;
+  },
+
+  start: function() {
+    this.options.onComplete = this.updateComplete.bind(this);
+    this.onTimerEvent();
+  },
+
+  isRunning: function() {
+  	// return this.updater && this.updater.options && this.updater.options.onComplete != undefined;
+  	return this.timer != undefined;
+  },
+  
+
+  stop: function() {
+    this.updater.options.onComplete = undefined;
+    clearTimeout(this.timer);
+    this.timer = undefined;
+    (this.onComplete || Prototype.emptyFunction).apply(this, arguments);
+  },
+
+  updateComplete: function(request) {
+    if (this.options.decay) {
+      this.decay = (request.responseText == this.lastText ?
+        this.decay * this.options.decay : 1);
+
+      this.lastText = request.responseText;
+    }
+    this.timer = setTimeout(this.onTimerEvent.bind(this),
+      this.decay * this.frequency * 1000);
+  },
+
+  onTimerEvent: function() {
+    this.updater = new Ajax.Updater(this.container, this.url, this.options);
+  }
+});
+
 var AjaxHintedText = {
     register : function(name) {
         name = name ? "form#" + name : "form";
