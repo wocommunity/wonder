@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.math.MathContext;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Set;
 
 import org.apache.log4j.Logger;
@@ -80,6 +81,14 @@ public class ERXStats {
 	 */
 	private static boolean areStatisticsEnabled() {
 		return ERXProperties.booleanForKey("er.extensions.erxStats.enabled");
+	}
+	
+	/**
+	 * 
+	 * @return
+	 */
+	public static boolean traceCollectingEnabled() {
+		return ERXProperties.booleanForKeyWithDefault("er.extensions.erxStats.traceCollectingEnabled", true);
 	}
 
 	/**
@@ -304,6 +313,7 @@ public class ERXStats {
 		private long _sum;
 		private String _key;
 		private Set<String> _traces = Collections.synchronizedSet(new HashSet<String>());
+		private NSArray<String> _traceArray = null;
 		private long _lastMark;
 
 		public LogEntry(String key) {
@@ -324,6 +334,7 @@ public class ERXStats {
 			_count += logEntry._count;
 			_avg = -1.0f;
 			_traces.addAll(logEntry._traces);
+			_traceArray = null;
 		}
 
 		public synchronized long count() {
@@ -366,10 +377,12 @@ public class ERXStats {
 			_count++;
 			_sum += time;
 			_avg = -1.0f;
-			if (false) {
+			if (traceCollectingEnabled()) {
 				// Throwable t = new RuntimeException();
 				// t.fillInStackTrace();
-				_traces.add(ERXUtilities.stackTrace());
+				String trace = ERXUtilities.stackTrace(); 
+				_traces.add(trace);
+				_traceArray = null;
 			}
 		}
 
@@ -384,6 +397,20 @@ public class ERXStats {
 			return _key;
 		}
 
+		public NSArray traces() {
+			if(_traceArray == null || true) {
+				NSMutableArray traces =  new NSMutableArray();
+				for (String trace : _traces) {
+					trace = trace.replaceAll("at\\s+(com.webobjects|java|er|sun)\\..*?\\n", "...\n");
+					trace = trace.replaceAll("(\\.\\.\\.\\s+)+", "...\n\t");
+					trace = trace.replaceAll("dd(\\.\\.\\.\\s+)+", "...\n\t");
+					traces.addObject(trace);
+				}
+				_traceArray = traces;
+			}
+			return _traceArray;
+		}
+		
 		@Override
 		public String toString() {
 			return count() + "/" + sum() + " : " + min() + "/" + max() + "/" + new BigDecimal(avg(), MathContext.DECIMAL32).setScale(2, BigDecimal.ROUND_HALF_EVEN) + "|" + _traces.size() + "->" + _key;

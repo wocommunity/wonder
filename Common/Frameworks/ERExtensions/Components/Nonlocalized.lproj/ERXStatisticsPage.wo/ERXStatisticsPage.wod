@@ -289,6 +289,7 @@ USERNAME: WOTextField {
 }
 
 ResetStats : WOHyperlink {
+	actionClass = "ERXDirectAction";
 	directActionName = "resetStats";
 }
 
@@ -299,6 +300,10 @@ ERXStatsRepetition : WORepetition {
 
 ERXStatsKey : WOString {
 	value = aggregateLogEntry.key;
+}
+
+ERXStatsTraces : WOString {
+	value = aggregateLogEntry.traces;
 }
 
 ERXStatsCount : WOString {
@@ -324,4 +329,8 @@ ERXStatsSum : WOString {
 ERXStatsAvg : WOString {
 	value = aggregateLogEntry.avg;
 	numberformat = "#,##0.00";
+}
+
+HasTraces : WOConditional {
+  condition = aggregateLogEntry.traces.count;
 }
