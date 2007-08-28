@@ -165,11 +165,16 @@ public class AjaxUpdateContainer extends AjaxDynamicElement {
 				AjaxUtils.appendScriptHeader(response);
 	
 				if (frequency != null) {
-					response.appendContentString(id + "PeriodicalUpdater = new Ajax.PeriodicalUpdater('" + id + "', $('" + id + "').getAttribute('updateUrl'), ");
+					String type = "PeriodicalUpdater";
+					boolean stopped = booleanValueForBinding("stopped", false, component);
+					if(stopped) {
+						type = "StoppedPeriodicalUpdater";
+					}
+					response.appendContentString(id + "PeriodicalUpdater = new Ajax." + type + "('" + id + "', $('" + id + "').getAttribute('updateUrl'), ");
 					AjaxOptions.appendToResponse(options, response, context);
 					response.appendContentString(");");
 					response.appendContentString(id + "Stop = function() { " + id + "PeriodicalUpdater.stop() };");
-					if(booleanValueForBinding("stopped", false, component)) {
+					if(stopped) {
 						response.appendContentString(id + "Stop();");
 					}
 				}
