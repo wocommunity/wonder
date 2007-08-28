@@ -930,12 +930,11 @@ public class ERXEOAccessUtilities {
             }
             if (ERXStats.isTrackingStatistics()) {
             	String statement = expression.statement();
-            	//AK: special postgres data PK handling
+            	// AK: special postgres data PK handling
             	statement = statement.replaceAll("decode\\(.*?\\)", "?");
             	// IN's can be quite long and are normally not bound
-               	statement = statement.replaceAll(" IN \\(.*\\)", " IN (?)");
-               	//AK: may be wrong (foo in bar or foo in baz->foo in (?)), but I'm too lazy...
-               	statement = statement.replaceAll("IN \\(.*\\)\\s+OR\\s+[a-zA-Z0-9_\\.]+\\s+IN \\(.*\\)", " IN (?)");
+               	statement = statement.replaceAll(" IN \\(.*?\\)", " IN ([removed])");
+               	statement = statement.replaceAll("([a-zA-Z0-9_\\.]+)\\s+IN \\(.*?\\)(\\s+OR\\s+\\1\\s+IN \\(.*?\\))+", " IN ([multi removed])");
             	ERXStats.addDurationForKey(millisecondsNeeded, entityName + ": " +statement);
             }
             if (needsLog) {
@@ -1501,35 +1500,5 @@ public class ERXEOAccessUtilities {
  			}
  		}
  		return mismatches;
- 	}
- 	
- 	/**
- 	 * @deprecated use ERXStats.initStatistics
- 	 */
- 	public static synchronized void initStatistics() {
- 		ERXStats.initStatistics();
- 	}
-
- 	/**
- 	 * @deprecated use ERXStats.logStatisticsForOperation
- 	 */
- 	public static void logStatistics(String key) {
- 	    ERXStats.logStatisticsForOperation(key);
- 	}
-
- 	/**
- 	 * @deprecated use er.extensions.ERXStats.LogEntry
- 	 */
- 	public static class LogEntry extends ERXStats.LogEntry {
-		public LogEntry(String message) {
-			super(message);
-		}
-		
-		/**
-		 * @deprecated use ERXStats.key
-		 */
-		public String statement() {
-			return key();
-		}
  	}
 }
