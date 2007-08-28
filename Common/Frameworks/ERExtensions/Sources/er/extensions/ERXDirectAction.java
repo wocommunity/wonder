@@ -111,7 +111,7 @@ public class ERXDirectAction extends WODirectAction {
         if (canPerformActionWithPasswordKey("er.extensions.ERXStatisticsPassword")) {
         	ERXStats.reset();
         	WORedirect redirect = new WORedirect(context());
-        	redirect.setUrl(context().directActionURLForActionNamed("stats", null));
+        	redirect.setUrl(context().directActionURLForActionNamed("ERXDirectAction/stats", null));
         	result = redirect;
         }
         return result;
