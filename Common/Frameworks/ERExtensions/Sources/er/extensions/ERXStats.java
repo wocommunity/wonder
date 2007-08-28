@@ -98,6 +98,7 @@ public class ERXStats {
 	public static void initStatistics() {
 		ERXThreadStorage.takeValueForKey(Boolean.TRUE, ERXStats.STATS_INITIALIZED_KEY);
 		ERXThreadStorage.takeValueForKey(new Long(System.currentTimeMillis()), STATS_START_TIME_KEY);
+		ERXThreadStorage.removeValueForKey(ERXStats.STATS_LAST_TIME_KEY);
 		ERXThreadStorage.removeValueForKey(ERXStats.STATS_KEY);
 	}
 
