@@ -930,7 +930,7 @@ public class ERXEOAccessUtilities {
             }
             if (ERXStats.isTrackingStatistics()) {
                 String statement = expression.statement().replaceAll(" IN \\(.*", " IN (");
-            	ERXStats.addDurationForKey(millisecondsNeeded, statement);
+            	ERXStats.addDurationForKey(millisecondsNeeded, entityName + ": " +statement);
             }
             if (needsLog) {
                 String logString = createLogString(channel, expression, millisecondsNeeded);
