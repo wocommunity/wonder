@@ -57,6 +57,8 @@ public class ERXAjaxSession extends WOSession {
 
   private static int MAX_PAGE_REPLACEMENT_CACHE_SIZE = Integer.parseInt(System.getProperty("er.extensions.maxPageReplacementCacheSize", "30"));
 
+  private static boolean overridePrivateCache = ERXProperties.booleanForKey("er.extensions.overridePrivateCache");
+  
   /*
    * ERTransactionRecord is a reimplementation of WOTransactionRecord for
    * use with Ajax background request page caching.
@@ -164,6 +166,7 @@ public class ERXAjaxSession extends WOSession {
   public void savePage(WOComponent page) {
 	WOContext context = context();
     if (ERXAjaxApplication.shouldNotStorePage(context)) {
+    	// System.out.println("Not storing page: " + context.request().uri());
       WORequest request = context.request();
       WOResponse response = context.response();
       String pageCacheKey = null;
@@ -304,30 +307,34 @@ public class ERXAjaxSession extends WOSession {
 	 * permanent page cache if it's already in there.
 	 */
 	public void _saveCurrentPage() {
-		WOContext _currentContext = context();
-		if (_currentContext != null) {
-			String contextID = context().contextID();
-			// System.out.println("ERXSession._saveCurrentPage: " + contextID);
-			WOComponent currentPage = _currentContext._pageComponent();
-			if (currentPage != null && currentPage._isPage()) {
-				WOComponent permanentSenderPage = _permanentPageWithContextID(_currentContext._requestContextID());
-				WOComponent permanentCurrentPage = _permanentPageWithContextID(contextID);
-				if (permanentCurrentPage == null && _permanentPageCache().containsValue(currentPage)) {
-					//AK: note that we put it directly in the cache, not bothering with
-					// savePageInPermanentCache() as this one would clear out the old IDs
-					_permanentPageCache.setObjectForKey(currentPage, contextID);
-				}
-				else if (permanentCurrentPage != currentPage) {
-					WOApplication woapplication = WOApplication.application();
-					if (permanentSenderPage == currentPage && woapplication.permanentPageCacheSize() != 0) {
-						if (_shouldPutInPermanentCache(currentPage))
-							savePageInPermanentCache(currentPage);
+		if(overridePrivateCache) {
+			WOContext _currentContext = context();
+			if (_currentContext != null) {
+				String contextID = context().contextID();
+				// System.out.println("ERXSession._saveCurrentPage: " + contextID);
+				WOComponent currentPage = _currentContext._pageComponent();
+				if (currentPage != null && currentPage._isPage()) {
+					WOComponent permanentSenderPage = _permanentPageWithContextID(_currentContext._requestContextID());
+					WOComponent permanentCurrentPage = _permanentPageWithContextID(contextID);
+					if (permanentCurrentPage == null && _permanentPageCache().containsValue(currentPage)) {
+						// AK: note that we put it directly in the cache, not bothering with
+						// savePageInPermanentCache() as this one would clear out the old IDs
+						_permanentPageCache.setObjectForKey(currentPage, contextID);
 					}
-					else if (woapplication.pageCacheSize() != 0)
-						savePage(currentPage);
+					else if (permanentCurrentPage != currentPage) {
+						WOApplication woapplication = WOApplication.application();
+						if (permanentSenderPage == currentPage && woapplication.permanentPageCacheSize() != 0) {
+							if (_shouldPutInPermanentCache(currentPage))
+								savePageInPermanentCache(currentPage);
+						}
+						else if (woapplication.pageCacheSize() != 0)
+							savePage(currentPage);
 
+					}
 				}
 			}
+		} else {
+			super._saveCurrentPage();
 		}
 	}
 
@@ -364,17 +371,22 @@ public class ERXAjaxSession extends WOSession {
 	// FIXME: ak: as we save the perm pages under a lot of context IDs, we should have a way to actually limit the size...
 	// not sure how, though
 	public void savePageInPermanentCache(WOComponent wocomponent) {
-		WOContext wocontext = context();
-		String contextID = wocontext.contextID();
-		// System.out.println("ERXSession.savePageInPermanentCache: " + contextID);
-		NSMutableDictionary permanentPageCache = _permanentPageCache();
-		for (int i = WOApplication.application().permanentPageCacheSize(); _permanentContextIDArray.count() >= i; _permanentContextIDArray.removeObjectAtIndex(0)) {
-			String s1 = (String) _permanentContextIDArray.objectAtIndex(0);
-			WOComponent page = (WOComponent) permanentPageCache.removeObjectForKey(s1);
+		if(overridePrivateCache) {
+			WOContext wocontext = context();
+			String contextID = wocontext.contextID();
+			// System.out.println("ERXSession.savePageInPermanentCache: " + contextID);
+			NSMutableDictionary permanentPageCache = _permanentPageCache();
+			for (int i = WOApplication.application().permanentPageCacheSize(); _permanentContextIDArray.count() >= i; _permanentContextIDArray.removeObjectAtIndex(0)) {
+				String s1 = (String) _permanentContextIDArray.objectAtIndex(0);
+				WOComponent page = (WOComponent) permanentPageCache.removeObjectForKey(s1);
+			}
+
+			permanentPageCache.setObjectForKey(wocomponent, contextID);
+			_permanentContextIDArray.addObject(contextID);
+		} else {
+			super.savePageInPermanentCache(wocomponent);
 		}
 
-		permanentPageCache.setObjectForKey(wocomponent, contextID);
-		_permanentContextIDArray.addObject(contextID);
 	}
 	
 	/**
@@ -401,10 +413,11 @@ public class ERXAjaxSession extends WOSession {
       }
     }
     // AK: this will get handled last in the super implementation, so we do it here
-    if(page == null)
-    	page = _permanentPageWithContextID(contextID);
-    if(page != null)
-    	page._awakeInContext(context());
+    if(page == null && overridePrivateCache) {
+    	page = _permanentPageWithContextID(contextID); 
+    	if(page != null)
+    		page._awakeInContext(context());
+    }
     if (page == null) {
     	page = super.restorePageForContextID(contextID);
     }
