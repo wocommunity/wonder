@@ -6,10 +6,28 @@
 //
 package er.extensions;
 
-import com.webobjects.foundation.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.eoaccess.*;
-import java.util.*;
+import java.util.Enumeration;
+
+import org.apache.log4j.Logger;
+
+import com.webobjects.eoaccess.EOAttribute;
+import com.webobjects.eoaccess.EODatabaseContext;
+import com.webobjects.eoaccess.EODatabaseDataSource;
+import com.webobjects.eoaccess.EOEntity;
+import com.webobjects.eoaccess.EOModelGroup;
+import com.webobjects.eoaccess.EOUtilities;
+import com.webobjects.eocontrol.EOArrayDataSource;
+import com.webobjects.eocontrol.EOClassDescription;
+import com.webobjects.eocontrol.EOEditingContext;
+import com.webobjects.eocontrol.EOEnterpriseObject;
+import com.webobjects.eocontrol.EOFetchSpecification;
+import com.webobjects.eocontrol.EOKeyValueQualifier;
+import com.webobjects.eocontrol.EOQualifier;
+import com.webobjects.eocontrol.EOSortOrdering;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSMutableArray;
+import com.webobjects.foundation.NSMutableDictionary;
 
 /**
  * Adds class-level inheritance to EOF.<br />
@@ -29,8 +47,8 @@ public class EOEnterpriseObjectClazz extends Object {
     /**
      * logging support
      */
-    public static final ERXLogger log = ERXLogger.getERXLogger(EOEnterpriseObjectClazz.class);
-    
+    public static final Logger log = Logger.getLogger(EOEnterpriseObjectClazz.class);
+
     /**
      * caches the clazz objects
      */
@@ -61,7 +79,7 @@ public class EOEnterpriseObjectClazz extends Object {
     }
 
     /**
-     * @param foo 
+     * @param foo
      */
     protected static EOAttribute objectCountUniqueAttribute(EOAttribute foo) {
         EOAttribute tmp = new EOAttribute();
@@ -70,7 +88,7 @@ public class EOEnterpriseObjectClazz extends Object {
         tmp.setColumnName("p_objectCountUnique"+foo.name());
         tmp.setClassName("java.lang.Number");
         tmp.setValueType("i");
-        tmp.setReadFormat("count( unique t0."+foo.columnName()+")");
+        tmp.setReadFormat("count( distinct t0."+foo.columnName()+")");
         return tmp;
     }
 
@@ -80,16 +98,113 @@ public class EOEnterpriseObjectClazz extends Object {
     private String _entityName;
 
     /**
-     * Default public constructor
+     * Default public constructor. In case you let your code generate with a template,
+     * you can simply call:<pre><code>
+     * public static FooClazz clazz = new FooClazz();
+     * </code></pre> and the constructor will auto-discover your entity name. This only
+     * works when you have a concrete subclass for the entity in question, though.
      */
     public EOEnterpriseObjectClazz() {
+    	initialize();
     }
+
+    /**
+     * Called by the constructor.
+     *
+     */
+    protected void initialize() {
+	}
+
+	protected void discoverEntityName() {
+		// AK: If your class is enclosed by a EO subclass the constructor
+		// will auto-discover the corresponding entity name. Not sure we need this, though.
+		if(_entityName == null) {
+			String className = getClass().getName();
+			int index = className.indexOf('$');
+			if(index > 0) {
+				className = className.substring(0, index);
+				Class c = ERXPatcher.classForName(className);
+				if(c != null) {
+					// we should use the class description, but it's too early for that when we
+					// do this as a result of a static variable init.
+					NSArray entities = (NSArray) EOModelGroup.defaultGroup().models().valueForKeyPath("entities.@flatten");
+					EOQualifier q = new EOKeyValueQualifier("className", EOQualifier.QualifierOperatorEqual, className);
+					NSArray candidates = EOQualifier.filteredArrayWithQualifier(entities, q);
+					if(candidates.count() > 1) {
+						log.warn("More than one entity found: " + candidates);
+					}
+					EOEntity entity = (EOEntity) candidates.lastObject();
+					if(entity != null) {
+						String entityName = entity.name();
+						// HACK AK: this relies on you having set up your classes correctly,
+						// meaning that you have exactly one final class var per EO class, with the correct
+						// superclasses set up (so EOBase gets loaded before EOSubclass)
+						if(allClazzes.allKeys().containsObject(entityName)) { //allClazzes.containsKey(entityName) -- requires WO 5.3
+							_entityName = entityName;
+						} else {
+							setEntityName(entityName);
+						}
+					}
+				}
+			}
+		}
+	}
+
+    /**
+     * Constructor that also supplies an entity name.
+     * @param entityName
+     */
+    public EOEnterpriseObjectClazz(String entityName) {
+    	setEntityName(entityName);
+    }
+
+    /**
+     * Convenience init so you can chain constructor calls:<pre><code>
+     * public static FooClazz clazz = (FooClazz)new FooClazz().init("Foo");
+     * </code></pre>
+     * without having to override the default constructor or the one
+     * that takes an entity name. Also useful when you don't have a special
+     * clazz defined for your entity, but would rather take one from a superclass.
+     * @param entityName
+     * @return
+     */
+    public EOEnterpriseObjectClazz init(String entityName) {
+    	setEntityName(entityName);
+		return this;
+    }
+
+    /**
+     * Returns the class description for the entity.
+     */
+
+    public EOClassDescription classDescription() {
+    	return entity().classDescriptionForInstances();
+    }
+
+    /**
+     * Utility to return a new array datasource
+     * @param ec
+     * @return
+     */
+    public EOArrayDataSource newArrayDataSource(EOEditingContext ec) {
+    	return new EOArrayDataSource(classDescription(), ec);
+    }
+
+    /**
+     * Utility to return a new database datasource
+     * @param ec
+     * @return
+     */
+     public EODatabaseDataSource newDatabaseDataSource(EOEditingContext ec) {
+    	return new EODatabaseDataSource(ec, entityName());
+    }
+
 
     /**
      * Resets the clazz cache.
      */
     public static void resetClazzCache() { allClazzes.removeAllObjects(); }
-    
+
     /**
      * Method used to get a clazz object for a given entity name.
      * This method will cache the generated clazz object so that
@@ -102,14 +217,13 @@ public class EOEnterpriseObjectClazz extends Object {
         if(clazz == null) {
             clazz = factory().classFromEntity(ERXEOAccessUtilities.entityNamed(null, entityName));
             clazz.setEntityName(entityName);
-            allClazzes.setObjectForKey(clazz,entityName);
         }
         if(log.isDebugEnabled()) {
             log.debug("clazzForEntityNamed '" +entityName+ "': " + clazz.getClass().getName());
         }
         return clazz;
     }
-    
+
     /**
      * Creates and inserts an object of the type of
      * the clazz into the given editing context.
@@ -131,9 +245,13 @@ public class EOEnterpriseObjectClazz extends Object {
      */
     public NSArray newPrimaryKeys(EOEditingContext ec, int i) {
         EOEntity entity = entity(ec);
-        EODatabaseContext dc = EODatabaseContext.registeredDatabaseContextForModel(entity.model(), ec);
-        
-        return dc.availableChannel().adaptorChannel().primaryKeysForNewRowsWithEntity(i, entity);
+        EODatabaseContext dbc = EODatabaseContext.registeredDatabaseContextForModel(entity.model(), ec);
+        dbc.lock();
+        try {
+        	return dbc.availableChannel().adaptorChannel().primaryKeysForNewRowsWithEntity(i, entity);
+        } finally {
+        	dbc.unlock();
+        }
     }
 
     /**
@@ -189,11 +307,11 @@ public class EOEnterpriseObjectClazz extends Object {
      * primary key value and corresponding to the clazz's
      * entity name.
      * @param ec editing context to fetch into
-     * @param pk primary key value
+     * @param pk primary key value. Compound primary keys are given as NSDictionaries.
      * @return enterprise object for the specified primary key value.
      */
     public EOEnterpriseObject objectWithPrimaryKeyValue(EOEditingContext ec, Object pk) {
-        return EOUtilities.objectWithPrimaryKeyValue(ec, entityName(), pk);
+        return ERXEOControlUtilities.objectWithPrimaryKeyValue(ec, entityName(), pk, null);
     }
 
     /**
@@ -203,7 +321,7 @@ public class EOEnterpriseObjectClazz extends Object {
      * @param ec editing context
      * @param qualifier qualifier string
      * @param args qualifier format arguments
-     * @param qualifer format string
+     * @param qualifier format string
      * @return array of objects corresponding to the passed in parameters.
      */
     public NSArray objectsWithQualifierFormat(EOEditingContext ec, String qualifier, NSArray args) {
@@ -216,7 +334,7 @@ public class EOEnterpriseObjectClazz extends Object {
      * off of the entity corresponding to the current clazz.
      * @param ec editing content to fetch into
      * @param name fetch specification name
-     * @param bindings used to resolve binding keys within the fetch 
+     * @param bindings used to resolve binding keys within the fetch
      *     specification
      * @return array of objects fetched using the given fetch specification
      */
@@ -225,16 +343,22 @@ public class EOEnterpriseObjectClazz extends Object {
     }
 
     /**
-     * Sets the entity name of the clazz.
+     * Sets the entity name of the clazz. Also registers the clazz in the cache.
      * @param name of the entity
      */
-    public void setEntityName(String name) { _entityName = name; }
-    
+    protected void setEntityName(String name) {
+		_entityName = name;
+    	allClazzes.setObjectForKey(this, _entityName);
+	}
+
     /**
      * Gets the entity name of the clazz.
      * @return entity name of the clazz.
      */
-    public String entityName() { return _entityName; }
+	public String entityName() {
+		discoverEntityName();
+		return _entityName;
+	}
 
     /**
      * Gets the entity corresponding to the entity
@@ -258,7 +382,7 @@ public class EOEnterpriseObjectClazz extends Object {
     /**
      * Gets a fetch specification for a given name.
      * @param name of the fetch specification
-     * @return fetch specification for the given name and the clazz's entity 
+     * @return fetch specification for the given name and the clazz's entity
      *     name
      */
     public EOFetchSpecification fetchSpecificationNamed(String name) {
@@ -269,11 +393,40 @@ public class EOEnterpriseObjectClazz extends Object {
      * Gets a fetch specification for a given name.
      * @param ec editing context to use for finding the model group
      * @param name of the fetch specification
-     * @return fetch specification for the given name and the clazz's entity 
+     * @return fetch specification for the given name and the clazz's entity
      *     name
      */
     public EOFetchSpecification fetchSpecificationNamed(EOEditingContext ec, String name) {
         return entity(ec).fetchSpecificationNamed(name);
+    }
+
+    /**
+     * Filters an array with a given fetch spec.
+     * @param array
+     * @param spec
+     * @param bindings
+     * @return
+     */
+    public NSArray filteredArray(NSArray array, EOFetchSpecification spec, NSDictionary bindings) {
+    	EOQualifier qualifier;
+
+        if (bindings != null) {
+            spec = spec.fetchSpecificationWithQualifierBindings(bindings);
+        }
+
+        NSArray result = new NSArray(array);
+
+        qualifier = spec.qualifier();
+
+        if (qualifier != null) {
+            result = EOQualifier.filteredArrayWithQualifier(result, qualifier);
+        }
+        NSArray sortOrderings = spec.sortOrderings();
+        if (sortOrderings != null) {
+            result = EOSortOrdering.sortedArrayUsingKeyOrderArray(result,sortOrderings);
+        }
+
+        return result;
     }
 
     /**
@@ -286,30 +439,8 @@ public class EOEnterpriseObjectClazz extends Object {
      * @param qualifier to find the matching objects
      * @return number of matching objects
      */
-    public Number objectCountWithQualifier(EOEditingContext ec, EOQualifier qualifier) {
-        String entityName = entityName();
-        
-        NSArray results = null;
-
-        EOAttribute attribute = EOEnterpriseObjectClazz.objectCountAttribute();
-        EOEntity entity = entity(ec);
-        EOQualifier schemaBasedQualifier = entity.schemaBasedQualifier(qualifier);
-        EOFetchSpecification fs = new EOFetchSpecification(entityName, schemaBasedQualifier, null);
-        synchronized (entity) {
-            entity.addAttribute(attribute);
-
-            fs.setFetchesRawRows(true);
-            fs.setRawRowKeyPaths(new NSArray(attribute.name()));
-
-            results = ec.objectsWithFetchSpecification(fs);
-
-            entity.removeAttribute(attribute);
-        }
-        if ((results != null) && (results.count() == 1)) {
-            NSDictionary row = (NSDictionary) results.lastObject();
-            return (Number)row.objectForKey(attribute.name());
-        }
-        return null;
+    public Integer objectCountWithQualifier(EOEditingContext ec, EOQualifier qualifier) {
+    	return (Integer) ERXEOControlUtilities._aggregateFunctionWithQualifierAndAggregateAttribute(ec, entityName(), qualifier, EOEnterpriseObjectClazz.objectCountAttribute());
     }
 
     /**
@@ -320,13 +451,12 @@ public class EOEnterpriseObjectClazz extends Object {
      * rows matching the qualification.
      * @param ec ec used to perform the count in
      * @param fetchSpecName name of the fetch specification
-     * @param bindings dictionary of bindings for the fetch 
+     * @param bindings dictionary of bindings for the fetch
      *     specification
-     * @return number of objects matching the given fetch  specification and 
+     * @return number of objects matching the given fetch  specification and
      *     bindings
      */
-    public Number objectCountWithFetchSpecificationAndBindings(EOEditingContext ec, String fetchSpecName,  NSDictionary bindings) {
-        String entityName = entityName();
+    public Integer objectCountWithFetchSpecificationAndBindings(EOEditingContext ec, String fetchSpecName,  NSDictionary bindings) {
         EOFetchSpecification unboundFetchSpec;
         EOFetchSpecification boundFetchSpec;
 
@@ -343,11 +473,11 @@ public class EOEnterpriseObjectClazz extends Object {
      * keys for a given qualifier.
      * @param ec editing context, not used
      * @param eoqualifier to construct the fetch spec with
-     * @param sortOrderings array of sort orderings to sort the result 
+     * @param sortOrderings array of sort orderings to sort the result
      *     set with.
      * @param additionalKeys array of additional key paths to construct
      *      the raw rows key paths to fetch.
-     * @return fetch specification that can be used to fetch primary keys for 
+     * @return fetch specification that can be used to fetch primary keys for
      *     a given qualifier and sort orderings.
      */
     // FIXME: The ec parameter is not needed, nor used.
@@ -381,7 +511,6 @@ public class EOEnterpriseObjectClazz extends Object {
      * @return array of primary keys matching a given qualifier
      */
     public NSArray primaryKeysMatchingQualifier(EOEditingContext ec, EOQualifier eoqualifier, NSArray sortOrderings) {
-        String entityName = entityName();
         EOFetchSpecification fs = primaryKeyFetchSpecificationForEntity(ec, eoqualifier, sortOrderings, null);
         //NSArray nsarray = EOUtilities.rawRowsForQualifierFormat(ec, fs.qualifier(), );
         NSArray nsarray = ec.objectsWithFetchSpecification(fs);
@@ -392,14 +521,13 @@ public class EOEnterpriseObjectClazz extends Object {
      * Fetches an array of primary keys matching the values
      * in a given dictionary.
      * @param ec editing context to fetch into
-     * @param nsdictionary dictionary of key value pairs to match 
+     * @param nsdictionary dictionary of key value pairs to match
      *     against.
      * @param sortOrderings array of sort orders to sort the result set
      *      by.
      * @return array of primary keys matching the given criteria.
      */
     public NSArray primaryKeysMatchingValues(EOEditingContext ec, NSDictionary nsdictionary, NSArray sortOrderings) {
-        String entityName = entityName();
         return primaryKeysMatchingQualifier(ec, EOQualifier.qualifierToMatchAllValues(nsdictionary), sortOrderings);
     }
 
@@ -412,7 +540,6 @@ public class EOEnterpriseObjectClazz extends Object {
      * @return array of faults for an array of primary key dictionaries.
      */
     public NSArray faultsFromRawRows(EOEditingContext ec, NSArray nsarray) {
-        String entityName = entityName();
         int count = nsarray.count();
         NSMutableArray faults = new NSMutableArray(count);
         for( int i = 0; i < count; i ++ ) {
@@ -420,7 +547,7 @@ public class EOEnterpriseObjectClazz extends Object {
         }
         return faults;
     }
-    
+
     /**
      * Fetches an array of faults matching a given qualifier.
      * @param ec editing context to use to fetch into
@@ -428,7 +555,6 @@ public class EOEnterpriseObjectClazz extends Object {
      * @return array of faults that match the given qualifier
      */
     public NSArray faultsMatchingQualifier(EOEditingContext ec, EOQualifier eoqualifier) {
-        String entityName = entityName();
         NSArray nsarray = primaryKeysMatchingQualifier(ec, eoqualifier, null);
         return faultsFromRawRows(ec, nsarray);
     }
@@ -442,7 +568,6 @@ public class EOEnterpriseObjectClazz extends Object {
      * @return array of faults that match the given qualifier
      */
     public NSArray faultsMatchingQualifier(EOEditingContext ec, EOQualifier eoqualifier, NSArray sortOrderings) {
-        String entityName = entityName();
         NSArray nsarray = primaryKeysMatchingQualifier(ec, eoqualifier, sortOrderings);
         return faultsFromRawRows(ec, nsarray);
     }
@@ -455,7 +580,6 @@ public class EOEnterpriseObjectClazz extends Object {
      * @return array of faults that match the given criteria
      */
     public NSArray faultsMatchingValues(EOEditingContext ec, NSDictionary nsdictionary, NSArray sortOrderings) {
-        String entityName = entityName();
         NSArray nsarray = primaryKeysMatchingValues(ec, nsdictionary, sortOrderings);
         return faultsFromRawRows(ec, nsarray);
     }
@@ -491,7 +615,7 @@ public class EOEnterpriseObjectClazz extends Object {
     	protected EOEnterpriseObjectClazz newInstanceOfGenericRecordClazz() {
             return new ERXGenericRecord.ERXGenericRecordClazz();
         }
-    	
+
     	protected String clazzNameForEntity(EOEntity entity) {
     		return entity.className() + "$" + entity.name() + "Clazz";
     	}

@@ -364,6 +364,29 @@ public class ERXEOControlUtilities {
     }
 
     /**
+     * Returns an {@link com.webobjects.foundation.NSArray NSArray} containing the primary keys from the resulting rows starting
+     * at start and stopping at end using a custom SQL, derived from the SQL
+     * which the {@link com.webobjects.eocontrol.EOFetchSpecification EOFetchSpecification} would use normally {@link com.webobjects.eocontrol.EOFetchSpecification#setHints(NSDictionary) setHints()}
+     *
+     * @param ec editingcontext to fetch objects into
+     * @param spec fetch specification for the fetch
+     * @param start
+     * @param end
+     *
+     * @return primary keys in the given range
+     */
+    public static NSArray primaryKeyValuesInRange(EOEditingContext ec, EOFetchSpecification spec, int start, int end) {
+        EOEntity entity = ERXEOAccessUtilities.entityNamed(ec, spec.entityName());
+        NSArray pkNames = (NSArray) entity.primaryKeyAttributes().valueForKey("name");
+        spec.setFetchesRawRows(true);
+        spec.setRawRowKeyPaths(pkNames);
+        EOSQLExpression sql = ERXEOAccessUtilities.sqlExpressionForFetchSpecification(ec, spec, start, end);
+        NSDictionary hints = new NSDictionary(sql, "EOCustomQueryExpressionHintKey");
+        spec.setHints(hints);
+        return ec.objectsWithFetchSpecification(spec);
+    }
+
+    /**
      * Returns the number of objects matching the given
      * qualifier for a given entity name. Implementation
      * wise this method will generate the correct sql to only
@@ -374,9 +397,9 @@ public class ERXEOControlUtilities {
      * @param qualifier to find the matching objects
      * @return number of matching objects
      */
-    public static Number objectCountWithQualifier(EOEditingContext ec, String entityName, EOQualifier qualifier) {
+    public static Integer objectCountWithQualifier(EOEditingContext ec, String entityName, EOQualifier qualifier) {
         EOAttribute attribute = EOEnterpriseObjectClazz.objectCountAttribute();
-        return _objectCountWithQualifierAndAttribute(ec,entityName,qualifier,attribute);
+        return (Integer)_aggregateFunctionWithQualifierAndAggregateAttribute(ec, entityName, qualifier, attribute);
     }
 
     /**
@@ -391,30 +414,83 @@ public class ERXEOControlUtilities {
      * @return number of matching objects
      * @attributeName name of attribute in same entity to consider in order to determine uniqueness
      */
-    public static Number objectCountUniqueWithQualifierAndAttribute(EOEditingContext ec, String entityName, EOQualifier qualifier, String attributeName) {
+    public static Integer objectCountUniqueWithQualifierAndAttribute(EOEditingContext ec, String entityName, EOQualifier qualifier, String attributeName) {
         EOEntity entity = EOUtilities.entityNamed(ec, entityName);
         EOAttribute attribute = entity.attributeNamed(attributeName);
-        EOAttribute att2 = EOEnterpriseObjectClazz.objectCountUniqueAttribute(attribute);
-        return _objectCountWithQualifierAndAttribute(ec,entityName,qualifier,att2);
+        EOAttribute aggregateAttribute = EOEnterpriseObjectClazz.objectCountUniqueAttribute(attribute);
+        return (Integer)_aggregateFunctionWithQualifierAndAggregateAttribute(ec, entityName, qualifier, aggregateAttribute);
     }
 
-    private static Number _objectCountWithQualifierAndAttribute(EOEditingContext ec, String entityName, EOQualifier qualifier, EOAttribute attribute) {
-        NSArray results = null;
-        EOEntity entity = EOUtilities.entityNamed(ec, entityName);
-        EOQualifier schemaBasedQualifier = entity.schemaBasedQualifier(qualifier);
-        EOFetchSpecification fs = new EOFetchSpecification(entity.name(), schemaBasedQualifier, null);
-        synchronized (entity) {
-            entity.addAttribute(attribute);
-            fs.setFetchesRawRows(true);
-            fs.setRawRowKeyPaths(new NSArray(attribute.name()));
-            results = ec.objectsWithFetchSpecification(fs);
-            entity.removeAttribute(attribute);
-        }
-        if ((results != null) && (results.count() == 1)) {
-            NSDictionary row = (NSDictionary) results.lastObject();
-            return (Number)row.objectForKey(attribute.name());
-        }
-        return null;
+    /**
+     * Returns the number of objects in the database with the qualifier and counting attribute.  This implementation
+     * queries the database directly without loading the objects into memory.
+     *
+     * @param ec the editing context
+     * @param entityName the name of the entity
+     * @param qualifier the qualifier to filter with
+     * @param aggregateAttribute the attribute that contains the "count(*)" definition
+     * @return the number of objects
+     */
+    public static Object _aggregateFunctionWithQualifierAndAggregateAttribute(EOEditingContext ec, String entityName, EOQualifier qualifier, EOAttribute aggregateAttribute) {
+		EOEntity entity = ERXEOAccessUtilities.entityNamed(ec, entityName);
+		EOModel model = entity.model();
+		EODatabaseContext databaseContext = EODatabaseContext.registeredDatabaseContextForModel(model, ec);
+		databaseContext.lock();
+		try {
+			EOSQLExpressionFactory sqlFactory = databaseContext.adaptorContext().adaptor().expressionFactory();
+			EOQualifier schemaBasedQualifier = entity.schemaBasedQualifier(qualifier);
+			EOFetchSpecification fetchSpec = new EOFetchSpecification(entity.name(), schemaBasedQualifier, null);
+			fetchSpec.setFetchesRawRows(true);
+
+			EOSQLExpression sqlExpr = sqlFactory.expressionForEntity(entity);
+			sqlExpr.prepareSelectExpressionWithAttributes(new NSArray(aggregateAttribute), false, fetchSpec);
+
+			EOAdaptorChannel adaptorChannel = databaseContext.availableChannel().adaptorChannel();
+			if (!adaptorChannel.isOpen()) {
+				adaptorChannel.openChannel();
+			}
+			Object aggregateValue = null;
+			NSArray attributes = new NSArray(aggregateAttribute);
+			adaptorChannel.evaluateExpression(sqlExpr);
+			try {
+				adaptorChannel.setAttributesToFetch(attributes);
+				NSDictionary row = adaptorChannel.fetchRow();
+				if (row != null) {
+					aggregateValue = row.objectForKey(aggregateAttribute.name());
+				}
+			}
+			finally {
+				adaptorChannel.cancelFetch();
+			}
+		    return aggregateValue;
+		}
+		finally {
+			databaseContext.unlock();
+		}
+    }
+
+    /**
+     * Computes an aggregate function for a given attribute
+     * restricted by a given qualifier. For instance
+     * select MAX(AGE) from User where name like 'M*'
+     *
+     * @param ec editing context used for the fetch
+     * @param entityName name of the entity
+     * @param attributeName attribute for the function to be performed on
+     * @param function name, ie MAX, MIN, AVG, etc.
+     * @param fetchSpecificationName of fetch specification from which the qualifier will be derived
+     * @return aggregate result of the fuction call
+     */
+    public static Number aggregateFunctionWithQualifier(EOEditingContext ec,
+                                                        String entityName,
+                                                        String attributeName,
+                                                        String function,
+                                                        String fetchSpecificationName,
+                                                        NSDictionary bindings) {
+       EOFetchSpecification fs = fetchSpecificationNamedWithBindings(entityName,
+                                                                     fetchSpecificationName,
+                                                                     bindings);
+        return aggregateFunctionWithQualifier(ec, entityName, attributeName, function, fs.qualifier());
     }
 
     /**
@@ -430,22 +506,23 @@ public class ERXEOControlUtilities {
      * @return aggregate result of the fuction call
      */
     public static Number aggregateFunctionWithQualifier(EOEditingContext ec,
-                                                        String entityName,
-                                                        String attributeName,
-                                                        String function,
-                                                        String fetchSpecificationName,
-                                                        NSDictionary bindings) {
-       EOFetchSpecification fs = fetchSpecificationNamedWithBindings(entityName,
-                                                                     fetchSpecificationName,
-                                                                     bindings);
-        return aggregateFunctionWithQualifier(ec, entityName, attributeName, function, fs.qualifier());
+            String entityName,
+            String attributeName,
+            String function,
+            EOQualifier qualifier) {
+    	Number number = null;
+    	Object obj = _aggregateFunctionWithQualifier(ec, entityName, attributeName, function, Number.class, "i", qualifier);
+    	if (obj instanceof Number) {
+    		number = (Number)obj;
+    	}
+    	return number;
     }
-    
+
     /**
      * Computes an aggregate function for a given attribute
      * restricted by a given qualifier. For instance
      * select MAX(AGE) from User where name like 'M*'
-     * 
+     *
      * @param ec editing context used for the fetch
      * @param entityName name of the entity
      * @param attributeName attribute for the function to be performed on
@@ -453,37 +530,32 @@ public class ERXEOControlUtilities {
      * @param qualifier to restrict data set
      * @return aggregate result of the fuction call
      */
-    public static Number aggregateFunctionWithQualifier(EOEditingContext ec,
+    public static NSTimestamp aggregateTimestampWithQualifier(EOEditingContext ec,
+            String entityName,
+            String attributeName,
+            String function,
+            EOQualifier qualifier) {
+    	NSTimestamp timestamp = null;
+    	Object obj = _aggregateFunctionWithQualifier(ec, entityName, attributeName, function, NSTimestamp.class, null, qualifier);
+    	if (obj instanceof NSTimestamp) {
+    		timestamp = (NSTimestamp)obj;
+    	}
+    	return timestamp;
+    }
+
+    public static Object _aggregateFunctionWithQualifier(EOEditingContext ec,
                                                         String entityName,
                                                         String attributeName,
                                                         String function,
+                                                        Class valueClass,
+                                                        String valueType,
                                                         EOQualifier qualifier) {
-        EOEntity entity = EOUtilities.entityNamed(ec, entityName);
-
-        NSArray results = null;
-
         EOAttribute attribute = ERXEOAccessUtilities.createAggregateAttribute(ec,
                                                                               function,
                                                                               attributeName,
-                                                                              entityName);
+                                                                              entityName, valueClass, valueType);
 
-        EOQualifier schemaBasedQualifier = entity.schemaBasedQualifier(qualifier);
-        EOFetchSpecification fs = new EOFetchSpecification(entityName, schemaBasedQualifier, null);
-        synchronized (entity) {
-            entity.addAttribute(attribute);
-
-            fs.setFetchesRawRows(true);
-            fs.setRawRowKeyPaths(new NSArray(attribute.name()));
-
-            results = ec.objectsWithFetchSpecification(fs);
-
-            entity.removeAttribute(attribute);
-        }
-        if ((results != null) && (results.count() == 1)) {
-            NSDictionary row = (NSDictionary) results.lastObject();
-            return (Number)row.objectForKey(attribute.name());
-        }
-        return null;        
+        return ERXEOControlUtilities._aggregateFunctionWithQualifierAndAggregateAttribute(ec, entityName, qualifier, attribute);
     }
 
     /**

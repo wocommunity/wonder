@@ -314,41 +314,60 @@ public class ERXEOAccessUtilities {
     }
 
     /**
-     * Creates an aggregate attribute for a given function name. These can then be
-     * used to query on when using raw rows.
-     * @param ec editing context used to locate the model group
-     * @param function name of the function MAX, MIN, etc
-     * @param attributeName name of the attribute
-     * @param entityName name of the entity
+     * Creates an aggregate integer attribute for a given function name. These can then
+     * be used to query on when using raw rows.
+     *
+     * @param ec
+     *            editing context used to locate the model group
+     * @param function
+     *            name of the function MAX, MIN, etc
+     * @param attributeName
+     *            name of the attribute
+     * @param entityName
+     *            name of the entity
      * @return aggregate function attribute
      */
-    public static EOAttribute createAggregateAttribute(EOEditingContext ec,
-                                                       String function,
-                                                       String attributeName,
-                                                       String entityName) {
-        if (function == null)
-            throw new IllegalStateException("Function is null.");
-        if (attributeName == null)
-            throw new IllegalStateException("Attribute name is null.");
-        if (entityName == null)
-            throw new IllegalStateException("Entity name is null.");
-        
+    public static EOAttribute createAggregateAttribute(EOEditingContext ec, String function, String attributeName, String entityName) {
+    	return ERXEOAccessUtilities.createAggregateAttribute(ec, function, attributeName, entityName, Number.class, "i");
+    }
+
+    /**
+     * Creates an aggregate attribute for a given function name. These can then
+     * be used to query on when using raw rows.
+     *
+     * @param ec
+     *            editing context used to locate the model group
+     * @param function
+     *            name of the function MAX, MIN, etc
+     * @param attributeName
+     *            name of the attribute
+     * @param entityName
+     *            name of the entity
+     * @param valueClass the java class of this attribute's values
+     * @param valueType the EOAttribute value type
+     * @return aggregate function attribute
+     */
+    public static EOAttribute createAggregateAttribute(EOEditingContext ec, String function, String attributeName, String entityName, Class valueClass, String valueType) {
+        if (function == null) throw new IllegalStateException("Function is null.");
+        if (attributeName == null) throw new IllegalStateException("Attribute name is null.");
+        if (entityName == null) throw new IllegalStateException("Entity name is null.");
+
         EOEntity entity = ERXEOAccessUtilities.entityNamed(ec, entityName);
 
-        if (entity == null)
-            throw new IllegalStateException("Unable find entity named: " + entityName);
-        
+        if (entity == null) throw new IllegalStateException("Unable find entity named: " + entityName);
+
         EOAttribute attribute = entity.attributeNamed(attributeName);
 
         if (attribute == null)
-            throw new IllegalStateException("Unable find attribute named: " + attributeName
-                                            + " for entity: " + entityName);
-        
+                throw new IllegalStateException("Unable find attribute named: " + attributeName + " for entity: " + entityName);
+
         EOAttribute aggregate = new EOAttribute();
         aggregate.setName("p_object" + function + "Attribute");
         aggregate.setColumnName("p_object" + function + "Attribute");
-        aggregate.setClassName("java.lang.Number");
-        aggregate.setValueType("i");
+        aggregate.setClassName(valueClass.getName());
+        if (valueType != null) {
+        	aggregate.setValueType(valueType);
+        }
         aggregate.setReadFormat(function + "(t0." + attribute.columnName() + ")");
         return aggregate;
     }
