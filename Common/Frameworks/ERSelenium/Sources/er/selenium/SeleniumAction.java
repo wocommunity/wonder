@@ -34,6 +34,10 @@ import com.webobjects.appserver.WOResponse;
 import com.webobjects.foundation.NSSelector;
 import com.webobjects.foundation.NSTimestamp;
 
+/**
+ * Default handler class, gets replaced by the startup process.
+ *
+ */
 public class SeleniumAction extends WODirectAction {
 
 	private static final Logger log = Logger.getLogger(SeleniumAction.class);

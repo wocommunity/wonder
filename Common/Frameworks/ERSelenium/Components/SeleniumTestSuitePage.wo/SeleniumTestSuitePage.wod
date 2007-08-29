@@ -22,6 +22,10 @@ HasNoTestContents : WOConditional {
 	negate = true;
 }
 
+TestDirectory : WOString {
+	value = repDirectory.name;
+}
+
 TestLink : WOHyperlink {
 	target = "testFrame";
 	href = testLink;

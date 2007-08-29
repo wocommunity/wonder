@@ -33,6 +33,10 @@ import com.webobjects.appserver.WORedirect;
 import com.webobjects.appserver.WORequest;
 import com.webobjects.appserver.WOResponse;
 
+/**
+ * DirectAction that starts testing. 
+ * Has wa/SeleniumStartTesting, wa/SeleniumStartTesting/run and wa/SeleniumStartTesting/edit.
+ */
 public class SeleniumStartTesting extends WODirectAction {
 	private static final Logger log = Logger.getLogger(SeleniumStartTesting.class);
 	
