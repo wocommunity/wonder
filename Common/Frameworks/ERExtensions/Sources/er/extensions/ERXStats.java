@@ -399,15 +399,14 @@ public class ERXStats {
 		}
 
 		public NSArray traces() {
-			if(_traceArray == null || true) {
-				NSMutableArray traces =  new NSMutableArray();
+			if(_traceArray == null) {
+				NSMutableSet traces =  new NSMutableSet();
 				for (String trace : _traces) {
 					trace = trace.replaceAll("at\\s+(com.webobjects|java|er|sun)\\..*?\\n", "...\n");
 					trace = trace.replaceAll("(\\.\\.\\.\\s+)+", "...\n\t");
-					trace = trace.replaceAll("dd(\\.\\.\\.\\s+)+", "...\n\t");
 					traces.addObject(trace);
 				}
-				_traceArray = traces;
+				_traceArray = traces.allObjects();
 			}
 			return _traceArray;
 		}
