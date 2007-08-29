@@ -32,6 +32,9 @@ import com.webobjects.appserver.WODirectAction;
 import com.webobjects.appserver.WORedirect;
 import com.webobjects.appserver.WORequest;
 import com.webobjects.appserver.WOResponse;
+import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSMutableDictionary;
+import com.webobjects.foundation.NSSelector;
 
 /**
  * DirectAction that starts testing. 
@@ -46,14 +49,14 @@ public class SeleniumStartTesting extends WODirectAction {
 		super(request);
 	}
 	
-	public String buildUrl(boolean auto) {
+	public String buildUrl(String suite, boolean auto) {
 		WOContext context = context();
         // context._generateCompleteURLs();
 		String baseUrl = "http://" + WOApplication.application().hostAddress().getHostAddress();
 		
 		StringBuilder queryStr = new StringBuilder();
 //		queryStr.append("baseUrl=" + baseUrl);
-		queryStr.append("test=" + context.directActionURLForActionNamed("SeleniumTestSuite", null));
+		queryStr.append("test=" + context.directActionURLForActionNamed("SeleniumTestSuite" + (suite != null ? "/" + suite :  ""), null));
 		queryStr.append("&resultsUrl=" + context.directActionURLForActionNamed( "SeleniumTestResults", null));
 		//TODO: add filename check here
 		String resultsFile = (String)context().request().formValueForKey(RESULTS_FILE_KEY);
@@ -85,8 +88,8 @@ public class SeleniumStartTesting extends WODirectAction {
         return response;
     }
     
-    private WOActionResults result(boolean edit) {
-        String url = buildUrl(edit);
+    private WOActionResults result(String suite, boolean edit) {
+        String url = buildUrl(suite, edit);
         if(context().request().formValueForKey("ide") != null) {
             return html(url);
         }
@@ -94,10 +97,19 @@ public class SeleniumStartTesting extends WODirectAction {
     }
  
     public WOActionResults editAction() {
-        return result(true);
+        return result(null, true);
     }
     
     public WOActionResults runAction() {
-        return result(false);
+        return result(null, false);
+    }
+    
+    public WOActionResults performActionNamed(String anActionName) {
+        if("defaultAction".equals(anActionName)) {
+            anActionName = null;
+        } else if(new NSSelector(anActionName + "Action").implementedByObject(this)) {
+            return super.performActionNamed(anActionName);
+        }
+        return result(anActionName, false);
     }
 }
