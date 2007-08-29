@@ -38,6 +38,9 @@ import com.webobjects.foundation.NSComparator;
 import er.extensions.ERXFileUtilities;
 import er.extensions.ERXProperties;
 
+/**
+ * Direct action that returns the test results. This class is not used by users.
+ */
 public class SeleniumTestResults extends WODirectAction {
 	private static final Logger log = Logger.getLogger(SeleniumAction.class);
 	
