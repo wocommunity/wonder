@@ -115,11 +115,12 @@ public class SeleniumTestSuitePage extends ERXStatelessComponent {
 		while (iter.hasNext()) {
 		    File directory = (File)iter.next();
 		    NSArray testFilesList = buildTestsListForDirectory(directory);
-		    if (testFilesList.count() > 0)
-		        if( getTestDirectory() != null && directory.getName().equals(getTestDirectory())) {
+		    if (testFilesList.count() > 0) {
+		        if(getTestDirectory() == null || (getTestDirectory() != null && directory.getName().equals(getTestDirectory()))) {
 		            TestDirectory testDirectory = new TestDirectory(directory, testFilesList);
 		            result.setObjectForKey(testDirectory, directory.getName());
 		        }
+            }
 		}
 
 		return result;
@@ -203,7 +204,7 @@ public class SeleniumTestSuitePage extends ERXStatelessComponent {
     		_testDirectories = buildTestDirectoriesList();
     	}
     	
-    	return _testDirectories.allValues();
+    	return (NSArray) _testDirectories.allValues().valueForKey("@sortAsc.name");
     }
     
     public String testLink() {
