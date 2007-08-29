@@ -94,12 +94,15 @@ public class SeleniumTestResults extends WODirectAction {
     }
     
     public WOActionResults defaultAction() {
-    	return processReport(null);
+        return processReport(null);
     }
-    
+
     public WOActionResults performActionNamed(String actionName) {
-		if (actionName.equals("default"))
-			return defaultAction();
-    	return processReport(actionName);
+        if(!ERSelenium.testsEnabled()) {
+            return new WOResponse();
+        }
+        if (actionName.equals("default"))
+            return defaultAction();
+        return processReport(actionName);
     }
 }

@@ -26,6 +26,7 @@ package er.selenium;
 import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WODirectAction;
 import com.webobjects.appserver.WORequest;
+import com.webobjects.appserver.WOResponse;
 
 /**
  * Starts testing of a suite of tests (a directory)
@@ -43,6 +44,9 @@ public class SeleniumTestSuite extends WODirectAction {
 		
 	// @Override
 	public WOActionResults performActionNamed(String anActionName) {
+        if(!ERSelenium.testsEnabled()) {
+            return new WOResponse();
+        }
 		if (anActionName.equals("default"))
 			return defaultAction();
 				
