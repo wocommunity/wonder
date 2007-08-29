@@ -11,7 +11,11 @@ import com.webobjects.appserver.WOResponse;
 import er.extensions.ERXProperties;
 import er.extensions.ERXStatelessComponent;
 import er.extensions.ERXUtilities;
-
+/**
+ * Simple result page.
+ * @deprecated
+ *
+ */
 public class SeleniumActionResultPage extends ERXStatelessComponent {
 	private static final Logger log = Logger.getLogger(SeleniumTestSuitePage.class);
 	

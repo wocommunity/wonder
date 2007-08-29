@@ -27,6 +27,9 @@ import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WODirectAction;
 import com.webobjects.appserver.WORequest;
 
+/**
+ * Starts testing of a suite of tests (a directory)
+ */
 public class SeleniumTestSuite extends WODirectAction {
 	
 	public SeleniumTestSuite(WORequest request) {
@@ -35,10 +38,9 @@ public class SeleniumTestSuite extends WODirectAction {
 	
 	// @Override
 	public WOActionResults defaultAction() {
-		return pageWithName("SeleniumTestSuitePage");
+	    return pageWithName(SeleniumTestSuitePage.class.getName());
 	}
 		
-	// TODO: implement support for files with '_' in names
 	// @Override
 	public WOActionResults performActionNamed(String anActionName) {
 		if (anActionName.equals("default"))
@@ -47,7 +49,7 @@ public class SeleniumTestSuite extends WODirectAction {
 		String testDirectory = null;
 		String test = null;
 		
-		int splitterPos = anActionName.indexOf('_');
+		int splitterPos = anActionName.indexOf(ERSelenium.SUITE_SEPERATOR);
 		if (splitterPos == -1) {
 			testDirectory = anActionName;
 		} else {

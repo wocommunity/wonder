@@ -29,6 +29,9 @@ import com.webobjects.appserver.WOResponse;
 import com.webobjects.foundation.NSBundle;
 import com.webobjects.foundation.NSTimestamp;
 
+/**
+ * Default "start tests" class.
+ */
 public class SeleniumDefaultSetupActions {
 	
 	public static void resetSession(WOResponse response, WOContext context) {

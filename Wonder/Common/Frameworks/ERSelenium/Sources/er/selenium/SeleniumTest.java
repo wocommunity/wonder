@@ -30,6 +30,9 @@ import org.apache.log4j.Logger;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSMutableArray;
 
+/**
+ * Data object for a test.
+ */
 public class SeleniumTest implements Cloneable {	
     
 	public static abstract class Element implements Cloneable {

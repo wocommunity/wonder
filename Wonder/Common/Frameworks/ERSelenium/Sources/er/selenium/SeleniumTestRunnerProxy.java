@@ -40,6 +40,9 @@ import com.webobjects.foundation.NSNotificationCenter;
 
 import er.extensions.ERXFileUtilities;
 
+/**
+ * Request hanlder for selenium tests. Returns the files to get parsed by the runner.
+ */
 public class SeleniumTestRunnerProxy extends WORequestHandler {
 	private static final Logger log = Logger.getLogger(SeleniumTestRunnerProxy.class);
 	
