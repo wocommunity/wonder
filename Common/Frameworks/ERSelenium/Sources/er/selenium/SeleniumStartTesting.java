@@ -31,8 +31,7 @@ import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WODirectAction;
 import com.webobjects.appserver.WORedirect;
 import com.webobjects.appserver.WORequest;
-
-import er.extensions.ERXValueUtilities;
+import com.webobjects.appserver.WOResponse;
 
 public class SeleniumStartTesting extends WODirectAction {
 	private static final Logger log = Logger.getLogger(SeleniumStartTesting.class);
@@ -45,6 +44,7 @@ public class SeleniumStartTesting extends WODirectAction {
 	
 	public String buildUrl(boolean auto) {
 		WOContext context = context();
+        // context._generateCompleteURLs();
 		String baseUrl = "http://" + WOApplication.application().hostAddress().getHostAddress();
 		
 		StringBuilder queryStr = new StringBuilder();
@@ -58,18 +58,42 @@ public class SeleniumStartTesting extends WODirectAction {
 		
 		if (auto)
 			queryStr.append("&auto=true");
-		return context.urlWithRequestHandlerKey("_sl_", "selenium-core/TestRunner.html", queryStr.toString());
+		String url = context.urlWithRequestHandlerKey("_sl_", "selenium-core/TestRunner.html", queryStr.toString());
+        // doesn't work, pity
+        // url = url.replaceFirst(".*?selenium-core/TestRunner.html", "chrome://selenium-ide/content/selenium/TestRunner.html");
+        return url;
 	}
 	
 	// @Override
 	public WOActionResults defaultAction() {
-		WORedirect redirect = new WORedirect(context());
-		redirect.setUrl(buildUrl(ERXValueUtilities.booleanValueWithDefault(context().request().formValueForKey("auto"), true)));
-		return redirect;
+		return runAction();
 	}
-	
-	// @Override
-	public WOActionResults performActionNamed(String anActionName) {
-		return defaultAction();
-	}
+    
+    private WOActionResults redirect(String url) {
+        WORedirect redirect = new WORedirect(context());
+        redirect.setUrl(url);
+        return redirect;
+    }
+    
+    private WOActionResults html(String url) {
+        WOResponse response = new WOResponse();
+        response.appendContentString("<html><body><a href='" + url + "'>go</a><body></html>");
+        return response;
+    }
+    
+    private WOActionResults result(boolean edit) {
+        String url = buildUrl(edit);
+        if(context().request().formValueForKey("ide") != null) {
+            return html(url);
+        }
+        return redirect(url);
+    }
+ 
+    public WOActionResults editAction() {
+        return result(true);
+    }
+    
+    public WOActionResults runAction() {
+        return result(false);
+    }
 }
