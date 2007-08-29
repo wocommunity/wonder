@@ -103,8 +103,11 @@ public class SeleniumStartTesting extends WODirectAction {
     public WOActionResults runAction() {
         return result(null, false);
     }
-    
+
     public WOActionResults performActionNamed(String anActionName) {
+        if(!ERSelenium.testsEnabled()) {
+            return new WOResponse();
+        }
         if("defaultAction".equals(anActionName)) {
             anActionName = null;
         } else if(new NSSelector(anActionName + "Action").implementedByObject(this)) {

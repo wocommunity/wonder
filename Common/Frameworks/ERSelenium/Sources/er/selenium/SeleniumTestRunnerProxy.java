@@ -58,6 +58,10 @@ public class SeleniumTestRunnerProxy extends WORequestHandler {
     
     // @Override
     public WOResponse handleRequest(WORequest request) {
+        if(!ERSelenium.testsEnabled()) {
+            return new WOResponse();
+        }
+ 
     	NSArray pathElements = request.requestHandlerPathArray();
     	
     	StringBuilder builder = new StringBuilder();
