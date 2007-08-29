@@ -1,0 +1,7 @@
+## Flag to say whether to run tests at all
+# SeleniumTestsEnabled = true
+
+## Which class is the "SeleniumAction" class. If its a direct action, the methods get
+## called by DA conventions as fooAction() otherwise by foo(response, context)
+# SeleniumActionsClass = er.whatever.SomeClass
+
