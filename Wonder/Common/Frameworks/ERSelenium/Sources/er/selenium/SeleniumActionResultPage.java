@@ -17,11 +17,16 @@ public class SeleniumActionResultPage extends ERXStatelessComponent {
 	
 	public static final String ACTION_NAME_KEY = "actionName";
 
-	public static final String SELENIUM_TESTS_DISABLED_MESSAGE = "Selenium tests are disabled.";
-	public static final String ACTIONS_CLASS_NOT_FOUND_MESSAGE = "Actions class not found";
-	public static final String ACTION_COMMAND_FAILED_MESSAGE = "Action command failed.";
-	public static final String INVALID_ACTION_COMMAND_MESSAGE = "Invalid action command.";
-	public static final String ACTION_COMMAND_SUCCEEDED_MESSAGE = "Action command succeeded.";
+    /** @deprecated */
+	public static final String SELENIUM_TESTS_DISABLED_MESSAGE = ERSelenium.SELENIUM_TESTS_DISABLED_MESSAGE;
+    /** @deprecated */
+	public static final String ACTIONS_CLASS_NOT_FOUND_MESSAGE = ERSelenium.ACTIONS_CLASS_NOT_FOUND_MESSAGE;
+    /** @deprecated */
+	public static final String ACTION_COMMAND_FAILED_MESSAGE = ERSelenium.ACTION_COMMAND_FAILED_MESSAGE;
+    /** @deprecated */
+	public static final String INVALID_ACTION_COMMAND_MESSAGE = ERSelenium.INVALID_ACTION_COMMAND_MESSAGE;
+    /** @deprecated */
+	public static final String ACTION_COMMAND_SUCCEEDED_MESSAGE = ERSelenium.ACTION_COMMAND_SUCCEEDED_MESSAGE;
 	
 	private String _actionName;
 	
@@ -40,27 +45,27 @@ public class SeleniumActionResultPage extends ERXStatelessComponent {
     // @Override
     public void appendToResponse(WOResponse aResponse, WOContext aContext) {    	
 		String actionResult;
-		if (ERXProperties.booleanForKeyWithDefault("SeleniumTestsEnabled", false)) {
+		if (ERSelenium.testsEnabled()) {
 			String actionsClassName = ERXProperties.stringForKeyWithDefault("SeleniumActionsClass", SeleniumDefaultSetupActions.class.getName());
 
 			try {
 				Class c = Class.forName(actionsClassName);
                 Method m = c.getMethod(_actionName, new Class[]{ WOResponse.class, WOContext.class });
                 m.invoke(null, new Object[]{aResponse, aContext});
-				actionResult = ACTION_COMMAND_SUCCEEDED_MESSAGE;
+				actionResult = ERSelenium.ACTION_COMMAND_SUCCEEDED_MESSAGE;
 			} catch (ClassNotFoundException  e) {
-				actionResult = ACTIONS_CLASS_NOT_FOUND_MESSAGE;
+				actionResult = ERSelenium.ACTIONS_CLASS_NOT_FOUND_MESSAGE;
 			} catch (NoSuchMethodException e) {
-				actionResult = INVALID_ACTION_COMMAND_MESSAGE;
+				actionResult = ERSelenium.INVALID_ACTION_COMMAND_MESSAGE;
 			} catch (Exception e) {
 				log.error(e.toString());
 				log.error(ERXUtilities.stackTrace(e));
-				actionResult = ACTION_COMMAND_FAILED_MESSAGE;
+				actionResult = ERSelenium.ACTION_COMMAND_FAILED_MESSAGE;
 			}
 
 		} else {
 			log.error("Selenium tests support is disabled. You can turn them on using SeleniumTestsEnabled=true in Properties files");
-			actionResult = SELENIUM_TESTS_DISABLED_MESSAGE;
+			actionResult = ERSelenium.SELENIUM_TESTS_DISABLED_MESSAGE;
 		}
 		
 		aResponse.appendContentString(actionResult);
