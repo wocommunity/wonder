@@ -52,7 +52,7 @@ public class SeleniumTestSuitePage extends ERXStatelessComponent {
 	private static final String DEFAULT_SELENIUM_TESTS_ROOT = "./Contents/Resources/Selenium";
 	private static final String DEFAULT_EXPORTER_NAME = "xhtml";
 
-	protected static class TestDirectory {
+	public static class TestDirectory {
 		public File directory;
 		public NSArray testFiles;
 		
@@ -60,6 +60,10 @@ public class SeleniumTestSuitePage extends ERXStatelessComponent {
 			directory = aDirectory;
 			testFiles = aTestFiles;
 		}
+        
+        public String getName() {
+            return directory.getName();
+        }
 	}
 	
 	protected String getFileExtension(String filename) {
@@ -206,7 +210,7 @@ public class SeleniumTestSuitePage extends ERXStatelessComponent {
     	String format = context().request().stringFormValueForKey("format");
     	if (format != null)
     		queryArgs.setObjectForKey(format, "format");
-    	return context().directActionURLForActionNamed("SeleniumTestSuite/" + repDirectory.directory.getName() +'_' + repTestFile.getName(), queryArgs);
+    	return context().directActionURLForActionNamed("SeleniumTestSuite/" + repDirectory.directory.getName() +'|' + repTestFile.getName(), queryArgs);
     }
     
     public String testContents() {
