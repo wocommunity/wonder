@@ -210,7 +210,7 @@ public class SeleniumTestSuitePage extends ERXStatelessComponent {
     	String format = context().request().stringFormValueForKey("format");
     	if (format != null)
     		queryArgs.setObjectForKey(format, "format");
-    	return context().directActionURLForActionNamed("SeleniumTestSuite/" + repDirectory.directory.getName() +'|' + repTestFile.getName(), queryArgs);
+    	return context().directActionURLForActionNamed("SeleniumTestSuite/" + repDirectory.directory.getName() +ERSelenium.SUITE_SEPERATOR + repTestFile.getName(), queryArgs);
     }
     
     public String testContents() {
