@@ -757,36 +757,46 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 	protected WOTimer _killTimer;
 
 	/**
-	 * Checks if the free memory is less than the threshold given in er.extensions.ERXApplication.memoryThreshold 
-	 * (should be around 0.90). This helps when the app is becoming unresponsive because it's more busy
-	 * garbage colleting than processing requests. The default is to do nothing unless the property is set.
+	 * Checks if the free memory is less than the threshold given in
+	 * <code>er.extensions.ERXApplication.memoryThreshold</code> (should be
+	 * set to around 0.90) and if it is greater start to refuse new sessions
+	 * until more memory becomes available. This helps when the app is becoming
+	 * unresponsive because it's more busy garbage colleting than processing
+	 * requests. The default is to do nothing unless the property is set. This
+	 * method is called on each request, but garbage collection will be done
+	 * only every minute.
 	 * 
+	 * @author ak
 	 */
-    protected void checkMemory() {
-    	if(memoryThreshold != null) {
-            synchronized (this) {
-                long total = Runtime.getRuntime().totalMemory();
-                long free = Runtime.getRuntime().freeMemory();
-                long max = Runtime.getRuntime().maxMemory();
-                long time = System.currentTimeMillis();
+	protected void checkMemory() {
+		if(memoryThreshold != null) {
+			long max = Runtime.getRuntime().maxMemory();
+			long total = Runtime.getRuntime().totalMemory();
+	
+			if(total == max) {
+				// only do sth when we maxed out memory
+				synchronized (this) {
+					long free = Runtime.getRuntime().freeMemory();
+					long time = System.currentTimeMillis();
 
-                // ak: when the runtime has maxed out the totalMem and the free mem is less than 5%, we GC
-                if(((total - free) > memoryThreshold.doubleValue() *max) && (total == max) && (time > _lastGC + 60*1000L)) {
-                    _lastGC = time;
-                    Runtime.getRuntime().gc();
-                    total = Runtime.getRuntime().totalMemory();
-                    free = Runtime.getRuntime().freeMemory();
-                    max = Runtime.getRuntime().maxMemory();
-                }
+					// ak: when the runtime has maxed out the totalMem and the free mem is less than 5%, we GC
+					if(((total - free) > memoryThreshold.doubleValue() *max) && (time > _lastGC + 60*1000L)) {
+						_lastGC = time;
+						Runtime.getRuntime().gc();
+						total = Runtime.getRuntime().totalMemory();
+						free = Runtime.getRuntime().freeMemory();
+						max = Runtime.getRuntime().maxMemory();
+					}
 
-                boolean shouldRefuse = ((total - free) > memoryThreshold.doubleValue() * max) && (total == max);
-                if(isRefusingNewSessions() != shouldRefuse) {
-                	log.warn("Refuse new sessions set to: " + shouldRefuse);
-                    refuseNewSessions(shouldRefuse);
-                }
-            }
-    	}
-    }
+					boolean shouldRefuse = ((total - free) > memoryThreshold.doubleValue() * max);
+					if(isRefusingNewSessions() != shouldRefuse) {
+						log.warn("Refuse new sessions set to: " + shouldRefuse);
+						refuseNewSessions(shouldRefuse);
+					}
+				}
+			}
+		}
+	}
 
 	/**
 	 * Overridden to install/uninstall a timer that will terminate the application in <code>ERTimeToKill</code>
@@ -804,14 +814,14 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 		if (isRefusingNewSessions()) {
 			int timeToKill = ERXProperties.intForKey("ERTimeToKill");
 			if (timeToKill > 0) {
-				log.info("Registering kill timer");
+				log.warn("Registering kill timer in " + timeToKill + "seconds");
 				NSTimestamp exitDate = (new NSTimestamp()).timestampByAddingGregorianUnits(0, 0, 0, 0, 0, timeToKill);
 				_killTimer = new WOTimer(exitDate, 0, this, "killInstance", null, null, false);
 				_killTimer.schedule();
 			}
 		}
 	}
-
+	
 	/**
 	 * Killing the instance will log a 'Forcing exit' message and then call <code>System.exit(1)</code>
 	 */
