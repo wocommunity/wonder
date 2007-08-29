@@ -27,10 +27,12 @@ import org.apache.log4j.Logger;
 
 import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WOComponent;
+import com.webobjects.appserver.WOCookie;
 import com.webobjects.appserver.WODirectAction;
 import com.webobjects.appserver.WORequest;
 import com.webobjects.appserver.WOResponse;
 import com.webobjects.foundation.NSSelector;
+import com.webobjects.foundation.NSTimestamp;
 
 public class SeleniumAction extends WODirectAction {
 
@@ -69,21 +71,30 @@ public class SeleniumAction extends WODirectAction {
 	
 	// @Override
     public WOActionResults performActionNamed(String anActionName) {
+        WOActionResults result = null;
         if(ERSelenium.testsEnabled()) {
             if(ERSelenium.isDirectAction()) {
                 if(new NSSelector(anActionName + "Action").implementedByObject(this)) {
-                    return _perform(anActionName);
+                    result = _perform(anActionName);
                 } else {
-                    return simpleResponse(ERSelenium.INVALID_ACTION_COMMAND_MESSAGE);
+                    result = simpleResponse(ERSelenium.INVALID_ACTION_COMMAND_MESSAGE);
                 }
             } else {
                 WOComponent resultPage = pageWithName(SeleniumActionResultPage.class.getSimpleName());
                 assert(resultPage != null);
                 resultPage.takeValueForKey(anActionName, SeleniumActionResultPage.ACTION_NAME_KEY);
-                return resultPage;
+                result = resultPage;
             }
+        } else {
+            log.error("Selenium tests support is disabled. You can turn them on using SeleniumTestsEnabled=true in Properties files");
+            result = simpleResponse(ERSelenium.SELENIUM_TESTS_DISABLED_MESSAGE);
         }
-        log.error("Selenium tests support is disabled. You can turn them on using SeleniumTestsEnabled=true in Properties files");
-        return simpleResponse(ERSelenium.SELENIUM_TESTS_DISABLED_MESSAGE);
+        WOResponse response = result.generateResponse();
+        if(!session().isTerminating()) {
+            result = response;
+            session()._appendCookieToResponse(response);
+        }
+        log.debug("Out Session: " + session().sessionID() + response.cookies());
+        return result;
     }
 }
