@@ -1,5 +1,7 @@
 package er.extensions;
 
+import java.text.Format;
+
 import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WOResponse;
@@ -20,6 +22,14 @@ public class ERXStatisticsPage extends WOStatsPage {
 	public void appendToResponse(WOResponse response, WOContext context) {
 		super.appendToResponse(response, context);
 		_aggregateLogEntries = null;
+	}
+	
+	public Format byteFormat() {
+		return new ERXUnitAwareDecimalFormat(ERXUnitAwareDecimalFormat.BYTE);
+	}
+	
+	public Format timeFormat() {
+		return new ERXUnitAwareDecimalFormat(ERXUnitAwareDecimalFormat.SECOND);
 	}
 
 	public NSArray<LogEntry> aggregateLogEntries() {
