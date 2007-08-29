@@ -1,3 +1,6 @@
+## take a look at the wiki
+## http://wiki.objectstyle.org/confluence/display/WO/Programming__WebObjects-Project+WONDER-Frameworks-ERSelenium
+
 ## Flag to say whether to run tests at all
 # SeleniumTestsEnabled = true
 
