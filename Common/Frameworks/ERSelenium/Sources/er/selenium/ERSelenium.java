@@ -26,6 +26,8 @@ package er.selenium;
 import com.webobjects.appserver.WOApplication;
 
 import er.extensions.ERXFrameworkPrincipal;
+import er.extensions.ERXPatcher;
+import er.extensions.ERXProperties;
 import er.selenium.io.SeleniumComponentExporter;
 import er.selenium.io.SeleniumImporterExporterFactory;
 import er.selenium.io.SeleniumPresentationExporterPage;
@@ -35,6 +37,18 @@ import er.selenium.io.SeleniumXHTMLExporterPage;
 import er.selenium.io.SeleniumXHTMLImporter;
 
 public class ERSelenium extends ERXFrameworkPrincipal {
+
+    public static final String SELENIUM_TESTS_DISABLED_MESSAGE = "Selenium tests are disabled.";
+    public static final String ACTIONS_CLASS_NOT_FOUND_MESSAGE = "Actions class not found";
+    public static final String ACTION_COMMAND_FAILED_MESSAGE = "Action command failed.";
+    public static final String INVALID_ACTION_COMMAND_MESSAGE = "Invalid action command.";
+    public static final String ACTION_COMMAND_SUCCEEDED_MESSAGE = "Action command succeeded.";
+
+    private static boolean isDirectAction;
+    
+    public static boolean isDirectAction() {
+        return isDirectAction;
+    }
     
     static {
         setUpFrameworkPrincipalClass(ERSelenium.class);
@@ -48,10 +62,22 @@ public class ERSelenium extends ERXFrameworkPrincipal {
         return sharedInstance;
     }
     
+    public static boolean testsEnabled() {
+        return ERXProperties.booleanForKeyWithDefault("SeleniumTestsEnabled", false);
+    }
+    
     // @Override
     public void finishInitialization() {
     	// TODO: check for multithreading/synchronization issued with factory
     	// instance() method
+        String actionsClassName = ERXProperties.stringForKeyWithDefault("SeleniumActionsClass", SeleniumDefaultSetupActions.class.getName());
+        Class c = ERXPatcher.classForName(actionsClassName);
+        if(c != null) {
+            if(SeleniumAction.class.isAssignableFrom(c)) {
+                ERXPatcher.setClassForName(c, "SeleniumAction");
+                isDirectAction = true;
+            }
+        }
     	SeleniumImporterExporterFactory.instance().registerImporter(".html", new SeleniumXHTMLImporter());
     	SeleniumImporterExporterFactory.instance().registerExporter(new SeleniumComponentExporter("xhtml", SeleniumXHTMLExporterPage.class.getName()));
     	SeleniumImporterExporterFactory.instance().registerImporter(".sel", new SeleniumSeleneseImporter());
