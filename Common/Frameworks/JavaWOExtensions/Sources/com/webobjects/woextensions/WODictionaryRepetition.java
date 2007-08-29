@@ -9,6 +9,7 @@ package com.webobjects.woextensions;
 
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
+import com.webobjects.eocontrol.EOSortOrdering;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
 
@@ -43,13 +44,16 @@ public class WODictionaryRepetition extends WOComponent {
                 _keyList = NSArray.EmptyArray;
             } else {
                 _keyList = _dictionary.allKeys();
+                _keyList = EOSortOrdering.sortedArrayUsingKeyOrderArray(_keyList, new NSArray(new EOSortOrdering("toString", EOSortOrdering.CompareAscending)));
             }
         }
         return _dictionary;
     }
 
     public NSArray keyList()  {
-        if (_keyList==null) dictionary();
+        if (_keyList==null) {
+        	dictionary();
+        }
         return _keyList;
     }
 
