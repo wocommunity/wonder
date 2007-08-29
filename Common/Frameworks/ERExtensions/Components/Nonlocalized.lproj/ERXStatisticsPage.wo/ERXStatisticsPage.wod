@@ -85,6 +85,7 @@ DetailsRepetition: WODictionaryRepetition {
 
 DirectActionTransactions: WOString {
 	value = directActionTransactions;
+	numberformat = "#,000";
 }
 
 Form1: WOForm {
@@ -133,7 +134,7 @@ MemoryRepetition: WODictionaryRepetition {
 }
 
 MemoryValueCell: WOString {
-	numberformat = "0,000,000";
+	formatter = byteFormat;
 	value = currentItem;
 }
 
@@ -226,7 +227,7 @@ SessionMemoryRepetition: WODictionaryRepetition {
 }
 
 SessionMemoryValueCell: WOString {
-	numberformat = "000,000";
+	formatter = byteFormat;
 	value = currentItem;
 }
 
@@ -293,6 +294,12 @@ ResetStats : WOHyperlink {
 	directActionName = "resetStats";
 }
 
+ShowTraces : WOHyperlink {
+	actionClass = "ERXDirectAction";
+	directActionName = "stats";
+	?showTraces = 1;
+}
+
 ERXStatsRepetition : WORepetition {
 	list = aggregateLogEntries;
 	item = aggregateLogEntry;
@@ -304,6 +311,20 @@ ERXStatsKey : WOString {
 
 ERXStatsTraces : WOString {
 	value = aggregateLogEntry.traces;
+}
+
+ERXStatsCountBar : WOCompletionBar {
+	align = "RIGHT";
+	numberformat = "0";
+	value = aggregateLogEntry.count;
+	valueMax = aggregateLogEntries.@sum.count;
+}
+
+ERXStatsSumBar : WOCompletionBar {
+	align = "RIGHT";
+	numberformat = "0";
+	value = aggregateLogEntry.sum;
+	valueMax = aggregateLogEntries.@sum.sum;
 }
 
 ERXStatsCount : WOString {
@@ -331,6 +352,6 @@ ERXStatsAvg : WOString {
 	numberformat = "#,##0.00";
 }
 
-HasTraces : WOConditional {
-  condition = aggregateLogEntry.traces.count;
+ShouldShowTraces : WOConditional {
+  condition = context.request.formValues.showTraces;
 }

@@ -221,7 +221,7 @@
                 <td>
                   <webobject name = "SessionsKeyCell"></webobject>
                 </td>
-                <td>
+                <td align="right">
                   <font color = "#0000FF">
                     <webobject name = "SessionsValueCell"></webobject>
                   </font>
@@ -251,7 +251,7 @@
                   <table border = "2" cellpadding = "4" cellspacing = "2" bgcolor = "#d0d0d0">
                     <tr align = "CENTER" bgcolor = "#b0b0b0">
                       <td colspan = "2">
-                        <b>Memory Usage (bytes)</b>
+                        <b>Memory Usage</b>
                       </td>
                     </tr>
                     <webobject name = "MemoryRepetition">
@@ -462,7 +462,7 @@
                     <tr>
                       <td colspan = "5" align = "CENTER" bgcolor = "#b0b0b0">
                         <font size = "+1">
-                          <b>ERX Stats (<webobject name = "ResetStats">reset</webobject>)</b>
+                          <b>ERX Stats (<webobject name = "ResetStats">reset</webobject>, <webobject name = "ShowTraces">show traces</webobject>)</b>
                         </font>
                       </td>
                     </tr>
@@ -479,16 +479,9 @@
                           <webobject name = "ERXStatsKey" />
                         </td>
                       </tr>
-                      <webobject name = "HasTraces">
-	                      <tr>
-	                        <td colspan="5">
-	                          <pre><webobject name = "ERXStatsTraces" /></pre>
-	                        </td>
-	                      </tr>
-	                      </webobject>
                       <tr>
                         <td>
-                          <webobject name = "ERXStatsCount" />
+                          <webobject name = "ERXStatsCountBar" />
                         </td>
                         <td>
                           <webobject name = "ERXStatsMin" />
@@ -500,9 +493,16 @@
                           <webobject name = "ERXStatsMax" />
                         </td>
                         <td>
-                          <webobject name = "ERXStatsSum" />
+                          <webobject name = "ERXStatsSumBar" />
                         </td>
                       </tr>
+                      <webobject name = "ShouldShowTraces">
+	                      <tr>
+	                        <td colspan="5">
+	                          <pre><webobject name = "ERXStatsTraces" /></pre>
+	                        </td>
+	                      </tr>
+	                  </webobject>
                     </webobject>
                   </table>
                 </center>
