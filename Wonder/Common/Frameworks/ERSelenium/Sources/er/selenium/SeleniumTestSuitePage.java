@@ -113,14 +113,15 @@ public class SeleniumTestSuitePage extends ERXStatelessComponent {
 		NSArray files = new NSArray(rootDir.listFiles());
 		Iterator iter = files.iterator();
 		while (iter.hasNext()) {
-			File directory = (File)iter.next();
-			NSArray testFilesList = buildTestsListForDirectory(directory);
-			if (testFilesList.count() > 0) {
-				TestDirectory testDirectory = new TestDirectory(directory, testFilesList);
-				result.setObjectForKey(testDirectory, directory.getName());
-			}
+		    File directory = (File)iter.next();
+		    NSArray testFilesList = buildTestsListForDirectory(directory);
+		    if (testFilesList.count() > 0)
+		        if( getTestDirectory() != null && directory.getName().equals(getTestDirectory())) {
+		            TestDirectory testDirectory = new TestDirectory(directory, testFilesList);
+		            result.setObjectForKey(testDirectory, directory.getName());
+		        }
 		}
-		
+
 		return result;
 	}
 	
