@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.math.BigDecimal;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
@@ -107,10 +108,10 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 	/** Holds the framework names during startup */
 	private static Set allFrameworks;
 
-	/** Notifcation to post when all bundles were loaded but before their principal was called */
+	/** Notification to post when all bundles were loaded but before their principal was called */
 	public static final String AllBundlesLoadedNotification = "NSBundleAllBundlesLoaded";
 
-	/** Notifcation to post when all bundles were loaded but before their principal was called */
+	/** Notification to post when all bundles were loaded but before their principal was called */
 	public static final String ApplicationDidCreateNotification = "NSApplicationDidCreateNotification";
 
 	/**
@@ -124,6 +125,16 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 	
     private static NSDictionary propertiesFromArgv; 
 
+    /**
+     * Time that garbage collection was last called when checking memory.
+     */
+    private long _lastGC = 0;
+    
+    /**
+     * Holds the value of the property er.extensions.ERXApplication.memoryThreshold
+     */
+    protected BigDecimal memoryThreshold;
+    
 	private static Properties readProperties(File file) {
 		Properties result = null;
 		if (file.exists()) {
@@ -140,7 +151,6 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 		}
 		return result;
 	}
-    
 	/**
 	 * Copies the props from the command line to the static dict propertiesFromArgv.
 	 *
@@ -427,7 +437,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 		NSNotificationCenter.defaultCenter().addObserver(ERXApplication.class, new NSSelector("bundleDidLoad", new Class[] { NSNotification.class }), "NSBundleDidLoadNotification", null);
 		ERXConfigurationManager.defaultManager().setCommandLineArguments(argv);
 		ERXFrameworkPrincipal.setUpFrameworkPrincipalClass(ERXExtensions.class);
-		ERXStats.initStatistics();
+		ERXStats.initStatisticsIfNecessary();
 	}
 
 	public void installDefaultEncoding(String encoding) {
@@ -546,6 +556,8 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 		// AK: this makes it possible to retrieve the creating instance from an NSData PK.
 		// it should still be unique, as one host can only have one running instance to a port
 		EOTemporaryGlobalID._setProcessIdentificationBytesFromInt(port().intValue());
+		
+		memoryThreshold = ERXProperties.bigDecimalForKey("er.extensions.ERXApplication.memoryThreshold");
 	}
 
 	/**
@@ -613,6 +625,8 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 	 */
 	public final void didFinishLaunching(NSNotification n) {
 		didFinishLaunching();
+		ERXStats.logStatisticsForOperation(statsLog, "sum");
+		// ERXStats.reset();
 		if (isDevelopmentMode() && !autoOpenInBrowser()) {
 			log.warn("You are running in development mode with WOAutoOpenInBrowser = false.  No browser will open and it will look like the application is hung, but it's not.  There's just not a browser opening automatically.");
 		}
@@ -632,8 +646,6 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 	 * batch application tasks.
 	 */
 	public void didFinishLaunching() {
-		ERXStats.logStatisticsForOperation(statsLog, "sum");
-		ERXStats.reset();
 	}
 
 	/**
@@ -743,6 +755,38 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 	}
 
 	protected WOTimer _killTimer;
+
+	/**
+	 * Checks if the free memory is less than the threshold given in er.extensions.ERXApplication.memoryThreshold 
+	 * (should be around 0.90). This helps when the app is becoming unresponsive because it's more busy
+	 * garbage colleting than processing requests. The default is to do nothing unless the property is set.
+	 * 
+	 */
+    protected void checkMemory() {
+    	if(memoryThreshold != null) {
+            synchronized (this) {
+                long total = Runtime.getRuntime().totalMemory();
+                long free = Runtime.getRuntime().freeMemory();
+                long max = Runtime.getRuntime().maxMemory();
+                long time = System.currentTimeMillis();
+
+                // ak: when the runtime has maxed out the totalMem and the free mem is less than 5%, we GC
+                if(((total - free) > memoryThreshold.doubleValue() *max) && (total == max) && (time > _lastGC + 60*1000L)) {
+                    _lastGC = time;
+                    Runtime.getRuntime().gc();
+                    total = Runtime.getRuntime().totalMemory();
+                    free = Runtime.getRuntime().freeMemory();
+                    max = Runtime.getRuntime().maxMemory();
+                }
+
+                boolean shouldRefuse = ((total - free) > memoryThreshold.doubleValue() * max) && (total == max);
+                if(isRefusingNewSessions() != shouldRefuse) {
+                	log.warn("Refuse new sessions set to: " + shouldRefuse);
+                    refuseNewSessions(shouldRefuse);
+                }
+            }
+    	}
+    }
 
 	/**
 	 * Overridden to install/uninstall a timer that will terminate the application in <code>ERTimeToKill</code>
@@ -1082,6 +1126,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 		try {
 			ERXApplication._startRequest();
 			ERXStats.initStatisticsIfNecessary();
+			checkMemory();
 			if (useComponentActionRedirection()) {
 				ERXComponentActionRedirector redirector = ERXComponentActionRedirector.redirectorForRequest(request);
 				if (redirector == null) {

@@ -17,17 +17,6 @@
 # er.extensions.ERXProperties.OptionalConfigurationFiles = (/more/files)
 
 #########################################################################
-# Compiler Proxy
-#########################################################################
-## Note that the compiler proxy is useful only in XCode, not in Eclipse
-
-## Enables the Compiler Proxy.
-er.extensions.ERXCompilerProxyEnabled = false
-
-## Throw an exception if a compile fails
-CPRaiseOnError = false
-
-#########################################################################
 # Localizer
 #########################################################################
 
@@ -404,6 +393,10 @@ er.extensions.ERXComponentActionRedirector.enabled=false
 ## When the logs get rotated [24 hours in ms]
 # er.extensions.ERXApplication.StatisticsLogRotationFrequency = 86400000 
 
+## When set, starts refusing new session once memory is filled up to this 
+## threshold, which results in a more responsive app. If mem comes available again
+## the app again starts to accept new session.
+# er.extensions.ERXApplication.memoryThreshold=0.90
 
 ## Enable reponse compression when user agent accepts gzip
 # er.extensions.ERXApplication.responseCompressionEnabled = true
