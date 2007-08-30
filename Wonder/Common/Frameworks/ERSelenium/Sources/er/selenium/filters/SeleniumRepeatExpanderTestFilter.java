@@ -70,7 +70,7 @@ public class SeleniumRepeatExpanderTestFilter extends SeleniumTestFilterHelper i
 		}
 				
 		for (int i = 1; i < valuesData.count(); ++i) {
-			if (((ValueData)valuesData.objectForKey(new Integer(i))).values.count() != repetitionCount) {
+			if (((ValueData)valuesData.allValues().objectAtIndex(i-1)).values.count() != repetitionCount) {
 				throw new RuntimeException("All 'values' metacommands inside 'repeat'-'done' repetition must have equal number of arguments");
 			}
 		}
