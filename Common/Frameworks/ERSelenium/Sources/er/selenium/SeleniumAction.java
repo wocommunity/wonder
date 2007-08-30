@@ -23,16 +23,17 @@
 
 package er.selenium;
 
+import java.util.Enumeration;
+
 import org.apache.log4j.Logger;
 
 import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WOComponent;
-import com.webobjects.appserver.WOCookie;
 import com.webobjects.appserver.WODirectAction;
 import com.webobjects.appserver.WORequest;
 import com.webobjects.appserver.WOResponse;
+import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSSelector;
-import com.webobjects.foundation.NSTimestamp;
 
 /**
  * Default handler class, gets replaced by the startup process.
@@ -45,7 +46,19 @@ public class SeleniumAction extends WODirectAction {
 	public SeleniumAction(WORequest request) {
 		super(request);
 	}
-    
+
+    protected WOResponse dictionaryResponse(NSDictionary dict) {
+        WOResponse response = new WOResponse();
+        response.appendContentString("<html><body>");
+        for (Enumeration e = dict.keyEnumerator(); e.hasMoreElements();) {
+            Object key = e.nextElement();
+            Object value = dict.objectForKey(key);
+            response.appendContentString("<span id='" + key + "'>" + value + "</span>\n");
+        }
+        response.appendContentString("</body></html>");
+        return response;
+    }
+  
     protected WOResponse simpleResponse(String s) {
         WOResponse response = new WOResponse();
         response.appendContentString(s);
