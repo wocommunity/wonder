@@ -72,7 +72,9 @@ public class ERXBatchingDisplayGroup extends ERXDisplayGroup {
 	 */
 	public int batchCount() {
 		if (isBatching()) {
-			refetchIfNecessary();
+			if (_displayedObjects == null) {
+				refetch();
+			}
 			return _batchCount;
 		}
 		return super.batchCount();
@@ -82,10 +84,11 @@ public class ERXBatchingDisplayGroup extends ERXDisplayGroup {
 	 * Overriden to clear out our array of fetched objects.
 	 */
 	public void setCurrentBatchIndex(int index) {
-		if (isBatching() && currentBatchIndex() != index) {
+		int previousBatchIndex = currentBatchIndex();
+		super.setCurrentBatchIndex(index);
+		if (isBatching() && previousBatchIndex != index) {
 			_displayedObjects = null;
 		}
-		super.setCurrentBatchIndex(index);
 	}
 
 	/**
@@ -229,7 +232,7 @@ public class ERXBatchingDisplayGroup extends ERXDisplayGroup {
 		
 		_displayedObjects = objectsInRange(start, end);
 	}
-
+	
 	protected void updateBatchCount() {
 		if (numberOfObjectsPerBatch() == 0) {
 			_batchCount = 0;
