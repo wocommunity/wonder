@@ -55,6 +55,11 @@ public class ERXDirectAction extends WODirectAction {
     		return false;
     	}
     	String requestPassword = request().stringFormValueForKey("pw");
+    	if(requestPassword == null) {
+    		requestPassword = (String) context().session().objectForKey("ERXDirectAction." + passwordKey);
+    	} else {
+    		context().session().setObjectForKey(requestPassword, "ERXDirectAction." + passwordKey);
+    	}
     	if(requestPassword == null || requestPassword.length() == 0) {
     		return false;
     	}
@@ -108,7 +113,7 @@ public class ERXDirectAction extends WODirectAction {
      */
     public WOActionResults resetStatsAction() {
     	WOActionResults result = null;
-        if (canPerformActionWithPasswordKey("er.extensions.ERXStatisticsPassword")) {
+        if (canPerformActionWithPasswordKey("WOStatisticsPassword")) {
         	ERXStats.reset();
         	WORedirect redirect = new WORedirect(context());
         	redirect.setUrl(context().directActionURLForActionNamed("ERXDirectAction/stats", null));
