@@ -149,6 +149,9 @@ public class ERXBatchingDisplayGroup extends ERXDisplayGroup {
 		NSArray selectedObjects = selectedObjects();
 		super.setSortOrderings(nsarray);
 		setSelectedObjects(selectedObjects);
+		if (isBatching()) {
+			_displayedObjects = null;
+		}
 	}
 
 	/**
