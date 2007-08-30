@@ -454,8 +454,10 @@ class ERXPatternParser extends PatternParser {
             // when debug level logging is enabled for the perser. 
             _templateParser.isLoggingDisabled = true;
             _jvmInfo = new NSMutableDictionary();
-            // work in progress; this is the fixed template.
-            _template = "@@usedMemory@@ used/@@freeMemory@@ free";
+            format = format.replaceFirst("(^|\\W)u(\\W|$)", "$1@@usedMemory@@$2");
+            format = format.replaceFirst("(^|\\W)f(\\W|$)", "$1@@freeMemory@@$2");
+            format = format.replaceFirst("(^|\\W)t(\\W|$)", "$1@@totalMemory@@$2");
+            _template = format;
         }
         
         /**
