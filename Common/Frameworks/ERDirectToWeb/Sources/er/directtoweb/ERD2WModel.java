@@ -360,13 +360,19 @@ public class ERD2WModel extends D2WModel {
         }
     }
 
-    static void addKeyToVector(String key, Vector vector) {
+    private static final NSSet _addKeyToVectorDefaultKeysToTakeLiterally = new NSSet(new Object[] { "object", "session" });
+    
+    protected NSSet _addKeyToVectorKeysToTakeLiterally() {
+        return _addKeyToVectorDefaultKeysToTakeLiterally;        
+    }
+
+    protected void _addKeyToVector(String key, Vector vector) {
         if (key.indexOf(".")!=-1) {
             // we only take the first atom, unless it's object or session
             NSArray a=NSArray.componentsSeparatedByString(key,".");
             String firstAtom=(String)a.objectAtIndex(0);
-            if (!firstAtom.equals("object") && !firstAtom.equals("session"))
-                key=firstAtom;
+            if ( ! _addKeyToVectorKeysToTakeLiterally().containsObject(firstAtom) )
+                key = firstAtom;
         }
         if (!vector.contains(key))
             vector.addElement(key);
@@ -406,7 +412,7 @@ public class ERD2WModel extends D2WModel {
             ERDQualifierTraversal.traverseQualifier(r.lhs(),c);
             for (Enumeration e2=c.keys.objectEnumerator(); e2.hasMoreElements(); ) {
                 String k=(String)e2.nextElement();
-                addKeyToVector(k,dependendantKeys);
+                _addKeyToVector(k,dependendantKeys);
             }
             // also add those from the assignment
             // if the assignment is delayed, do not add them here;
@@ -426,7 +432,7 @@ public class ERD2WModel extends D2WModel {
                 if (extraKeys!=null) {
                     for (Enumeration e6=extraKeys.objectEnumerator(); e6.hasMoreElements(); ) {
                         String k=(String)e6.nextElement();
-                        addKeyToVector(k, recipientForNewKeys);
+                        _addKeyToVector(k, recipientForNewKeys);
                     }
                 }
             } else if (r.rhs() instanceof DefaultAssignment) {
@@ -434,12 +440,12 @@ public class ERD2WModel extends D2WModel {
                 // since it does not implement ERDComputingAssignmentInterface, we add the required keys explicitely here
                 // another way to do this would be to introduce a rule with the required keys in their LHS, but that is
                 // quite a few rules and this is a bit more self contained
-                addKeyToVector("task", dependendantKeys);
-                addKeyToVector("entity", dependendantKeys);
-                addKeyToVector("propertyKey", dependendantKeys);
+                _addKeyToVector("task", dependendantKeys);
+                _addKeyToVector("entity", dependendantKeys);
+                _addKeyToVector("propertyKey", dependendantKeys);
             }
             if(localizationEnabled && r.rhs() instanceof ERDLocalizableAssignmentInterface) {
-                addKeyToVector("session.language", dependendantKeys);
+                _addKeyToVector("session.language", dependendantKeys);
             }
             c.keys=new NSMutableArray();
         }
@@ -462,13 +468,13 @@ public class ERD2WModel extends D2WModel {
                             if (newKeys!=null) {
                                 for (Enumeration e5=newKeys.elements(); e5.hasMoreElements();) {
                                     String s=(String)e5.nextElement();
-                                    addKeyToVector(s, keys);
+                                    _addKeyToVector(s, keys);
                                 }
                             }
                             if (keyFromDelayedAssignment!=null) {
                                 for (Enumeration e5=keyFromDelayedAssignment.elements(); e5.hasMoreElements();) {
                                     String s=(String)e5.nextElement();
-                                    addKeyToVector(s, keys);
+                                    _addKeyToVector(s, keys);
                                 }
                             }                            
                         }
@@ -987,5 +993,20 @@ public class ERD2WModel extends D2WModel {
             log.error(ex,ex);
         }
         return null;
+    }
+    
+    public void _diagnoseCache() {
+        final Map cache = _cache;
+        final Set keySet = cache.keySet();
+        final Iterator keySetIterator = keySet.iterator();
+
+        System.out.println("Cache size is: " + cache.size());
+        
+        while ( keySetIterator.hasNext() ) {
+            final Object theKey = keySetIterator.next();
+            final Object theValue = cache.get(theKey);
+
+            System.out.println("\t" + theKey + " -> " + theValue);
+        }
     }
 }
