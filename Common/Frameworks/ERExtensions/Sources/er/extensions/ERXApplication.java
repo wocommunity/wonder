@@ -759,12 +759,12 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 	/**
 	 * Checks if the free memory is less than the threshold given in
 	 * <code>er.extensions.ERXApplication.memoryThreshold</code> (should be
-	 * set to around 0.90) and if it is greater start to refuse new sessions
-	 * until more memory becomes available. This helps when the app is becoming
-	 * unresponsive because it's more busy garbage colleting than processing
-	 * requests. The default is to do nothing unless the property is set. This
-	 * method is called on each request, but garbage collection will be done
-	 * only every minute.
+	 * set to around 0.90 meaning 80% of total memory or 100 meaning 100 MB) and
+	 * if it is greater start to refuse new sessions until more memory becomes
+	 * available. This helps when the app is becoming unresponsive because it's
+	 * more busy garbage colleting than processing requests. The default is to
+	 * do nothing unless the property is set. This method is called on each
+	 * request, but garbage collection will be done only every minute.
 	 * 
 	 * @author ak
 	 */
@@ -772,27 +772,28 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 		if(memoryThreshold != null) {
 			long max = Runtime.getRuntime().maxMemory();
 			long total = Runtime.getRuntime().totalMemory();
-	
-			if(total == max) {
-				// only do sth when we maxed out memory
-				synchronized (this) {
-					long free = Runtime.getRuntime().freeMemory();
-					long time = System.currentTimeMillis();
+			long free = Runtime.getRuntime().freeMemory() + (max - total);
+			long used = max - free;
+			long threshold = (long)(memoryThreshold.doubleValue() < 1.0 ? memoryThreshold.doubleValue() * max : (max - (memoryThreshold.doubleValue() * 1024*1024)));
 
-					// ak: when the runtime has maxed out the totalMem and the free mem is less than 5%, we GC
-					if(((total - free) > memoryThreshold.doubleValue() *max) && (time > _lastGC + 60*1000L)) {
-						_lastGC = time;
-						Runtime.getRuntime().gc();
-						total = Runtime.getRuntime().totalMemory();
-						free = Runtime.getRuntime().freeMemory();
-						max = Runtime.getRuntime().maxMemory();
-					}
+			// only do sth when we maxed out memory
+			synchronized (this) {
+				long time = System.currentTimeMillis();
+				// ak: when the runtime has maxed out the totalMem and the free mem is less than 5%, we GC
+				if((used > threshold) && (time > _lastGC + 60*1000L)) {
+					_lastGC = time;
+					Runtime.getRuntime().gc();
+					max = Runtime.getRuntime().maxMemory();
+					total = Runtime.getRuntime().totalMemory();
+					free = Runtime.getRuntime().freeMemory() + (max - total);
+					used = max - free;
+				}
 
-					boolean shouldRefuse = ((total - free) > memoryThreshold.doubleValue() * max);
-					if(isRefusingNewSessions() != shouldRefuse) {
-						log.warn("Refuse new sessions set to: " + shouldRefuse);
-						refuseNewSessions(shouldRefuse);
-					}
+				boolean shouldRefuse = (used > threshold);
+				if(isRefusingNewSessions() != shouldRefuse) {
+					log.warn("Refuse new sessions set to: " + shouldRefuse);
+					// using super, so we don't trigger the kill timer!
+					refuseNewSessions(shouldRefuse);
 				}
 			}
 		}
