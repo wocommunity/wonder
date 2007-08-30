@@ -40,6 +40,16 @@ public class ERXBatchingDisplayGroup extends ERXDisplayGroup {
 	protected Boolean _isBatching;
 
 	/**
+	 * If we're batching and the displayed objects have not been fetched,
+	 * do a refetch() of them.
+	 */
+	protected void refetchIfNecessary() {
+		if (isBatching() && _displayedObjects == null) {
+			refetch();
+		}
+	}
+	
+	/**
 	 * Determines if batching is possible.
 	 * 
 	 * @return true if dataSource is an instance of EODatabaseDataSource
@@ -62,6 +72,7 @@ public class ERXBatchingDisplayGroup extends ERXDisplayGroup {
 	 */
 	public int batchCount() {
 		if (isBatching()) {
+			refetchIfNecessary();
 			return _batchCount;
 		}
 		return super.batchCount();
@@ -104,9 +115,7 @@ public class ERXBatchingDisplayGroup extends ERXDisplayGroup {
 	 */
 	public NSArray displayedObjects() {
 		if (isBatching()) {
-			if (_displayedObjects == null) {
-				refetch();
-			}
+			refetchIfNecessary();
 			return _displayedObjects;
 		}
 		return super.displayedObjects();
