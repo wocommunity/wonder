@@ -789,7 +789,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 					used = max - free;
 				}
 
-				boolean shouldRefuse = (used > threshold);
+				boolean shouldRefuse = (used > threshold) || _killTimer != null;
 				if(isRefusingNewSessions() != shouldRefuse) {
 					log.warn("Refuse new sessions set to: " + shouldRefuse);
 					// using super, so we don't trigger the kill timer!
