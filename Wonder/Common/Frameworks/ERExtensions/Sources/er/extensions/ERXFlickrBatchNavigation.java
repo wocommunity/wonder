@@ -92,7 +92,7 @@ public class ERXFlickrBatchNavigation extends WOComponent {
 	public String displayName() {
 		String displayName = (String) valueForBinding("displayName");
 		if (displayName == null) {
-			displayName = "item";
+			displayName = ERXLocalizer.currentLocalizer().localizedStringForKey("ERXFlickrBatchNavigation.item");
 		}
 		return displayName;
 	}
