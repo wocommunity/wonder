@@ -2,9 +2,9 @@
 	<webobject name = "HasMultiplePagesConditional">
 		<div class = "paginator">
 			<webobject name = "HasPreviousPageConditional">
-				<webobject name = "PreviousPageAction">&lt; Prev</webobject>
+				<webobject name = "PreviousPageAction">&lt;<webobject name="PreviousLabel"/></webobject>
 			</webobject>
-			<webobject name = "HasNoPreviousPageConditional"><span class="paginatorAtStart">&lt; Prev</span></webobject>
+			<webobject name = "HasNoPreviousPageConditional"><span class="paginatorAtStart">&lt;<wo name="PreviousLabel"/></span></webobject>
 			<webobject name = "PageNumberRepetition">
 				<webobject name = "IsCurrentPageNumberConditional"><span class="paginatorCurrentPage"><webobject name = "PageNumber"/></span></webobject>
 				<webobject name = "IsNotCurrentPageNumberConditional">
@@ -15,9 +15,9 @@
 				</webobject>
 			</webobject>
 			<webobject name = "HasNextPageConditional">
-				<webobject name = "NextPageAction">Next &gt;</webobject>
+				<webobject name = "NextPageAction"><webobject name="NextLabel"/>&gt;</webobject>
 			</webobject>
-			<webobject name = "HasNoNextPageConditional"><span class="paginatorAtEnd">Next &gt;</span></webobject>
+			<webobject name = "HasNoNextPageConditional"><span class="paginatorAtEnd"><wo name="NextLabel"/>&gt;</span></webobject>
 		</div>
 	</webobject>
 	<div class="paginatorResults">(<webobject name = "DisplayName"/>)</div>
