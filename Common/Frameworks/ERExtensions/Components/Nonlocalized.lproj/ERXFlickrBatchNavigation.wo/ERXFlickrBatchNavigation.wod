@@ -21,6 +21,10 @@ PreviousPageAction : WOHyperlink {
 	class = "paginatorPrev";
 }
 
+PreviousLabel : ERXLocalizedString {
+	value = "ERXFlickrBatchNavigation.previous";
+}
+
 HasNextPageConditional : WOConditional {
 	condition = hasNextPage;
 }
@@ -33,6 +37,10 @@ HasNoNextPageConditional : WOConditional {
 NextPageAction : WOHyperlink {
 	action = nextPage;
 	class = "paginatorNext";
+}
+
+NextLabel : ERXLocalizedString {
+	value = "ERXFlickrBatchNavigation.next";
 }
 
 SelectPageAction : WOHyperlink {
