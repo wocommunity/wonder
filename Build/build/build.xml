@@ -250,7 +250,7 @@
     <target name="ERSeleniumExample.all">
         <antcall target="global.application.${build.action}" >
             <param name="project.type" value="application" />
-            <param name="project.principal.class" value="Application" />
+            <param name="project.principal.class" value="er.seleniumexample.Application" />
             <param name="project.name" value="ERSeleniumExample" />
             <param name="project.dir" value="Common/Examples/ERSeleniumExample" />
  
