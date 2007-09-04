@@ -25,7 +25,7 @@ import com.webobjects.foundation.NSSelector;
  * ERXEnterpriseObjectArrayCache&lt;HelpText&gt; helpTextCache = new ERXEnterpriseObjectArrayCache&lt;HelpText&gt;("HelpText") {
  *    protected void handleUnsuccessfullQueryForKey(Object key) {
  *       NSArray helpTexts = ... fetch from somewhere
- *       cache().put(key, helpTexts);
+ *       setObjectsForKey(helpTexts, key);
  *   }
  * };
  * ...
@@ -187,7 +187,7 @@ public class ERXEnterpriseObjectArrayCache<T extends EOEnterpriseObject> {
      * implementation puts a not-found marker in the cache so
      * the next query will return null. You could override this
      * method to create an EO with sensible default values and
-     * call {@link #addObject(EOEnterpriseObject)} on it.
+     * call {@link #setObjectsForKey(NSArray, Object)} on it.
      * @param key
      */
     protected void handleUnsuccessfullQueryForKey(Object key) {
