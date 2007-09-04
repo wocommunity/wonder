@@ -19,43 +19,46 @@ import com.webobjects.foundation.NSNotificationCenter;
 import com.webobjects.foundation.NSSelector;
 
 /**
- * Caches one entity by a given key. Listens to
+ * Caches objects of one entity by a given key. Listens to
  * EOEditingContextDidSaveChanges notifications to track changes.
- * Typically you'd have an "identifier" property and you'd fetch values by:<code><pre>
- * ERXEnterpriseObjectCache&lt;HelpText&gt; helpTextCache = new ERXEnterpriseObjectCache&lt;HelpText&gt;("HelpText", "pageConfiguration");
+ * Typically you'd fetch values by:<code><pre>
+ * ERXEnterpriseObjectArrayCache&lt;HelpText&gt; helpTextCache = new ERXEnterpriseObjectArrayCache&lt;HelpText&gt;("HelpText") {
+ *    protected void handleUnsuccessfullQueryForKey(Object key) {
+ *       NSArray helpTexts = ... fetch from somewhere
+ *       cache().put(key, helpTexts);
+ *   }
+ * };
  * ...
- * HelpText helpText = helpTextCache.objectForKey(ec, "ListHelpText");
+ * NSArray&lt;HelpText&gt; helpTexts = helpTextCache.objectsForKey(ec, "AllTexts");
+ * ...
  * </pre></code>
  * You can supply a timeout after which the cache is to get cleared and all the objects refetched. Note
  * that this implementation only caches the global IDs, not the actual data. 
- * @author ak inspired by a class from Dominik Westner
+ * @author ak
  */
-public class ERXEnterpriseObjectCache<T extends EOEnterpriseObject> {
+public class ERXEnterpriseObjectArrayCache<T extends EOEnterpriseObject> {
     private String _entityName;
-    private String _keyPath;
-    private Map _cache;
+    private Map<Object, NSArray<EOGlobalID>> _cache;
     private long _timeout;
     private long _fetchTime;
-    protected static final EOGlobalID NO_GID_MARKER= new EOTemporaryGlobalID();
+    protected static final NSArray NOT_FOUND_MARKER= new NSArray();
     
     /**
      * Creates the cache for the given entity name and the given keypath. No
      * timeout value is used.
      * @param entityName
-     * @param keyPath
      */
-    public ERXEnterpriseObjectCache(String entityName, String keyPath) {
-       this(entityName, keyPath, 0L);
+    public ERXEnterpriseObjectArrayCache(String entityName) {
+       this(entityName, 0L);
     }
     
     /**
      * Creates the cache for the given entity name and the given keypath. No
      * timeout value is used.
      * @param entityName
-     * @param keyPath
      */
-    public ERXEnterpriseObjectCache(Class c, String keyPath) {
-       this(entityNameForClass(c), keyPath);
+    public ERXEnterpriseObjectArrayCache(Class c) {
+       this(entityNameForClass(c));
     }
     
     private static String entityNameForClass(Class c) {
@@ -78,9 +81,8 @@ public class ERXEnterpriseObjectCache<T extends EOEnterpriseObject> {
      * @param keyPath
      * @param timeout
      */
-    public ERXEnterpriseObjectCache(String entityName, String keyPath, long timeout) {
+    public ERXEnterpriseObjectArrayCache(String entityName, long timeout) {
         _entityName = entityName;
-        _keyPath = keyPath;
         _timeout = timeout;
         NSSelector selector = ERXSelectorUtilities.notificationSelector("editingContextDidSaveChanges");
         NSNotificationCenter.defaultCenter().addObserver(this, selector, 
@@ -125,14 +127,6 @@ public class ERXEnterpriseObjectCache<T extends EOEnterpriseObject> {
     protected String entityName() {
         return _entityName;
     }
-    
-    /**
-     * The key path which should get used for the key of the cache.
-     * @return
-     */
-    protected String keyPath() {
-        return _keyPath;
-    }
 
     /**
      * Returns the backing cache. If the cache is to old, it is cleared first.
@@ -145,103 +139,47 @@ public class ERXEnterpriseObjectCache<T extends EOEnterpriseObject> {
         }
         if(_cache == null) {
             _cache = Collections.synchronizedMap(new HashMap()); 
-            EOEditingContext ec = ERXEC.newEditingContext();
-            ec.lock();
-            try {
-                NSArray objects = initialObjects(ec);
-                for (Enumeration enumeration = objects.objectEnumerator(); enumeration.hasMoreElements();) {
-                    T eo = (T) enumeration.nextElement();
-                    addObject(eo);
-                }
-            } finally {
-                ec.unlock();
-            }
             _fetchTime = System.currentTimeMillis();
         }
         return _cache;
     }
 
     /**
-     * Returns the objects to cache initially.
-     * @param ec
-     * @return
-     */
-    protected NSArray<T> initialObjects(EOEditingContext ec) {
-        NSArray objects = EOUtilities.objectsForEntityNamed(ec, entityName());
-        return objects;
-    }
-
-    /**
-     * Add an object to the cache. Subclasses may want to override this if the object 
-     * to reside under more than one entry (eg, title and identifier).
-     * @param eo
-     */
-    public void addObject(T eo) {
-        Object key = eo.valueForKeyPath(keyPath());
-        addObjectForKey(eo, key);
-    }
-
-    /**
-     * Add an object to the cache with the given key. The object
+     * Add a list of objects to the cache with the given key. The object
      * can be null.
-     * @param eo
+     * @param eos array of objects
      */
-    public void addObjectForKey(T eo, Object key) {
-        EOGlobalID gid = NO_GID_MARKER;
-        if(eo != null) {
-            gid = eo.editingContext().globalIDForObject(eo);
+    public void setObjectsForKey(NSArray<T> eos, Object key) {
+        NSArray<EOGlobalID> gids = NOT_FOUND_MARKER;
+        if(eos != null) {
+            gids = ERXEOControlUtilities.globalIDsForObjects(eos);
         }
-        cache().put(key, gid);
+        cache().put(key, gids);
     }
     
     /**
-     * Retrieves an EO that matches the given key or null if no match 
+     * Retrieves a list of EOs that matches the given key or null if no match 
      * is in the cache.
-     * @param ec editing context to get the object into
-     * @param key key value under which the object is registered 
+     * @param ec editing context to get the objects into
+     * @param key key value under which the objects are registered 
      * @return
      */
-    public T objectForKey(EOEditingContext ec, Object key) {
-        Map cache = cache();
-        EOGlobalID gid = (EOGlobalID) cache.get(key);
-        if(gid == NO_GID_MARKER) {
+    public NSArray<T> objectsForKey(EOEditingContext ec, Object key) {
+        Map<String, NSArray<EOGlobalID>> cache = cache();
+        NSArray<EOGlobalID> gids = cache.get(key);
+        if(gids == NOT_FOUND_MARKER) {
             return null;
-        } else if(gid == null) {
+        } else if(gids == null) {
             handleUnsuccessfullQueryForKey(key);
-            gid = (EOGlobalID) cache.get(key);
-            if(gid == NO_GID_MARKER) {
+            gids = cache.get(key);
+            if(gids == NOT_FOUND_MARKER) {
                 return null;
-            } else if(gid == null) {
+            } else if(gids == null) {
                return null;
             }
         }
-        T eo = (T) ec.faultForGlobalID(gid, ec);
-        return eo;
-    }
-    
-    /**
-     * Retrieves an EO that matches the given key or null if no match 
-     * is in the cache.
-     * @param ec editing context to get the object into
-     * @param key key value under which the object is registered 
-     * @return
-     */
-    public T objectsForKey(EOEditingContext ec, Object key) {
-        Map cache = cache();
-        EOGlobalID gid = (EOGlobalID) cache.get(key);
-        if(gid == NO_GID_MARKER) {
-            return null;
-        } else if(gid == null) {
-            handleUnsuccessfullQueryForKey(key);
-            gid = (EOGlobalID) cache.get(key);
-            if(gid == NO_GID_MARKER) {
-                return null;
-            } else if(gid == null) {
-               return null;
-            }
-        }
-        T eo = (T) ec.faultForGlobalID(gid, ec);
-        return eo;
+        NSArray<T> eos = (NSArray<T>) ERXEOControlUtilities.faultsForGlobalIDs(ec, gids);
+        return eos;
     }
   
     /**
@@ -253,7 +191,7 @@ public class ERXEnterpriseObjectCache<T extends EOEnterpriseObject> {
      * @param key
      */
     protected void handleUnsuccessfullQueryForKey(Object key) {
-        cache().put(key, NO_GID_MARKER);
+        cache().put(key, NOT_FOUND_MARKER);
     }
 
     /**
