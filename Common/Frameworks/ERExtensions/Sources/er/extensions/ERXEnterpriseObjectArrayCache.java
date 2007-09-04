@@ -84,11 +84,18 @@ public class ERXEnterpriseObjectArrayCache<T extends EOEnterpriseObject> {
     public ERXEnterpriseObjectArrayCache(String entityName, long timeout) {
         _entityName = entityName;
         _timeout = timeout;
-        NSSelector selector = ERXSelectorUtilities.notificationSelector("editingContextDidSaveChanges");
+        registerForNotifications();
+    }
+
+	protected void registerForNotifications() {
+		NSSelector selector = ERXSelectorUtilities.notificationSelector("editingContextDidSaveChanges");
         NSNotificationCenter.defaultCenter().addObserver(this, selector, 
                 EOEditingContext.EditingContextDidSaveChangesNotification, null);
-    }
-    
+        selector = ERXSelectorUtilities.notificationSelector("clearCaches");
+        NSNotificationCenter.defaultCenter().addObserver(this, selector, 
+                ERXEnterpriseObjectCache.ClearCachesNotification, null);
+	}
+
     /**
      * Helper to check if an array of EOs contains the handled entity. 
      * @param eos
@@ -124,6 +131,17 @@ public class ERXEnterpriseObjectArrayCache<T extends EOEnterpriseObject> {
         }
     }
     
+    /**
+     * Handler for the clearCaches notification. Calls reset if
+     * n.object is the entity name.
+     * @param n
+     */
+    public void clearCaches(NSNotification n) {
+    	if(n.object() == null || entityName().equals(n.object())) {
+    		reset();
+    	}
+    }
+
     protected String entityName() {
         return _entityName;
     }

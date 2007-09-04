@@ -38,6 +38,9 @@ public class ERXEnterpriseObjectCache<T extends EOEnterpriseObject> {
     private long _fetchTime;
     protected static final EOGlobalID NO_GID_MARKER= new EOTemporaryGlobalID();
     
+    
+    public static String ClearCachesNotification = "ERXEnterpriseObjectCache.ClearCaches";
+    
     /**
      * Creates the cache for the given entity name and the given keypath. No
      * timeout value is used.
@@ -82,10 +85,17 @@ public class ERXEnterpriseObjectCache<T extends EOEnterpriseObject> {
         _entityName = entityName;
         _keyPath = keyPath;
         _timeout = timeout;
-        NSSelector selector = ERXSelectorUtilities.notificationSelector("editingContextDidSaveChanges");
+        registerForNotifications();
+    }
+
+	protected void registerForNotifications() {
+		NSSelector selector = ERXSelectorUtilities.notificationSelector("editingContextDidSaveChanges");
         NSNotificationCenter.defaultCenter().addObserver(this, selector, 
                 EOEditingContext.EditingContextDidSaveChangesNotification, null);
-    }
+        selector = ERXSelectorUtilities.notificationSelector("clearCaches");
+        NSNotificationCenter.defaultCenter().addObserver(this, selector, 
+                ERXEnterpriseObjectCache.ClearCachesNotification, null);
+	}
     
     /**
      * Helper to check if an array of EOs contains the handled entity. 
@@ -120,6 +130,17 @@ public class ERXEnterpriseObjectCache<T extends EOEnterpriseObject> {
             }
             reset();
         }
+    }
+    
+    /**
+     * Handler for the clearCaches notification. Calls reset if
+     * n.object is the entity name.
+     * @param n
+     */
+    public void clearCaches(NSNotification n) {
+    	if(n.object() == null || entityName().equals(n.object())) {
+    		reset();
+    	}
     }
     
     protected String entityName() {
