@@ -18,6 +18,7 @@ import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation.NSMutableSet;
+import com.webobjects.foundation.NSSet;
 
 import er.extensions.ERXDatabase;
 import er.extensions.ERXProperties;
@@ -67,20 +68,20 @@ public abstract class ERXRemoteSynchronizer {
 	private static final int STRING_TYPE = 6;
 
 	private IChangeListener _listener;
-	private NSArray _includeEntityNames;
-	private NSArray _excludeEntityNames;
+	private NSSet _includeEntityNames;
+	private NSSet _excludeEntityNames;
 
 	public ERXRemoteSynchronizer(IChangeListener listener) {
 		_listener = listener;
 		String includeEntityNames = ERXProperties.stringForKey("er.extensions.remoteSynchronizer.includeEntities");
 		NSArray includeEntityNamesArray = null;
 		if (includeEntityNames != null) {
-			_includeEntityNames = NSArray.componentsSeparatedByString(includeEntityNames, ",");
+			_includeEntityNames = new NSSet(NSArray.componentsSeparatedByString(includeEntityNames, ",").toArray());
 		}
 		NSArray excludeEntityNamesArray = null;
 		String excludeEntityNames = ERXProperties.stringForKey("er.extensions.remoteSynchronizer.excludeEntities");
 		if (excludeEntityNames != null) {
-			_excludeEntityNames = NSArray.componentsSeparatedByString(excludeEntityNames, ",");
+			_excludeEntityNames = new NSSet(NSArray.componentsSeparatedByString(excludeEntityNames, ",").toArray());
 		}
 	}
 
