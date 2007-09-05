@@ -252,7 +252,16 @@ public class ERD2WModel extends D2WModel {
         return fireRuleForKeyPathInContext(_cache, keyPath, context);
     }
     
+    protected boolean _shouldUseCacheForFiringRuleForKeyPathInContext(final String keyPath, final D2WContext context) {
+        return true;
+    }
+    
     private Object fireRuleForKeyPathInContext(Map cache, String keyPath, D2WContext context) {
+        final boolean useCache = _shouldUseCacheForFiringRuleForKeyPathInContext(keyPath, context);
+
+        if ( ! useCache && ruleTraceEnabledLog.isDebugEnabled() )
+            ruleTraceEnabledLog.debug("CACHE DISABLED for keyPath: " + keyPath);
+        
         String[] significantKeys=(String[])_significantKeysPerKey.get(keyPath);
         if (significantKeys==null) return null;
         short s=(short)significantKeys.length;
@@ -263,7 +272,7 @@ public class ERD2WModel extends D2WModel {
             lhsKeys[i]=ERD2WUtilities.contextValueForKeyNoInferenceNoException(context, significantKeys[i]);
         } 
         lhsKeys[s]=keyPath;
-        Object result=cache.get(k);
+        Object result=useCache ? cache.get(k) : null;
         if (result==null) {
             boolean resetTraceRuleFiring = false;
             Logger ruleFireLog=null;
@@ -285,7 +294,8 @@ public class ERD2WModel extends D2WModel {
             } else {
                 result=super.fireRuleForKeyPathInContext(keyPath,context);
             }
-            cache.put(k,result==null ? NULL_VALUE : result);
+            if ( useCache )
+                cache.put(k,result==null ? NULL_VALUE : result);
             if (ruleTraceEnabledLog.isDebugEnabled()) {
                 if (ruleFireLog.isDebugEnabled())
                 ruleFireLog.debug("FIRE: " +keyPath +  " depends on: "  + new NSArray(significantKeys) + " = " + k
