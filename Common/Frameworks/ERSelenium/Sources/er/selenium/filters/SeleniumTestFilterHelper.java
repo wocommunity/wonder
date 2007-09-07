@@ -30,10 +30,10 @@ import com.webobjects.foundation.NSMutableArray;
 import er.selenium.SeleniumTest;
 
 public abstract class SeleniumTestFilterHelper {
-	public void processSingleTestElement(SeleniumTest.Element element) {
+	protected void processSingleTestElement(SeleniumTest.Element element) {
 	}
 	
-	public void processTestElements(NSMutableArray elements) {
+	protected void processTestElements(NSMutableArray elements) {
 		Iterator iter = elements.iterator();
 		while (iter.hasNext()) {
 			processSingleTestElement((SeleniumTest.Element)iter.next());

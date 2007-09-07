@@ -96,7 +96,7 @@ public class SeleniumRepeatExpanderTestFilter extends SeleniumTestFilterHelper i
 	}
 	
 	// @Override
-	public void processTestElements(NSMutableArray elements) {
+	protected void processTestElements(NSMutableArray elements) {
 		int repeatIndex = -1;
 		boolean shouldProcess;
 		
