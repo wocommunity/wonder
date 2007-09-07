@@ -34,7 +34,7 @@ public class SeleniumPresentationFilter extends SeleniumTestFilterHelper impleme
 	}
 
 	// @Override
-	public void processTestElements(NSMutableArray elements) {
+	protected void processTestElements(NSMutableArray elements) {
 		
 	}
 }
