@@ -1166,6 +1166,7 @@ public class FrontbasePlugIn extends JDBCPlugIn {
 				}
 				case FB_TinyInteger:
 				case FB_Numeric:
+				case FB_Integer:
 				case FB_Decimal: {
 					if (obj instanceof BigDecimal) {
 						return ((BigDecimal) obj).setScale(eoattribute.scale(), BigDecimal.ROUND_HALF_UP).toString();
