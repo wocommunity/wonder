@@ -790,10 +790,10 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 
 				boolean shouldRefuse = (used > threshold);
 				if (isRefusingNewSessions() != shouldRefuse) {
+					log.error("Refuse new sessions set to: " + shouldRefuse);
 					// not changing anything when the kill timer is set (we
 					// already refusing session by monitor)
 					if (_killTimer != null) {
-						log.warn("Refuse new sessions set to: " + shouldRefuse);
 						// using super, so we don't trigger the kill timer, as
 						// this is called when we actually have
 						// a lot of sessions at the moment
