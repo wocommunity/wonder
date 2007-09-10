@@ -51,6 +51,19 @@ public class ERXExpiringCache<K, V> {
 		protected V object() {
 			return _object;
 		}
+
+		@Override
+		public String toString() {
+			return super.toString()
+				+ " { " 
+				+ "expiration = "
+				+ ( _expiration == ERXExpiringCache.NO_TIMEOUT ? "NO_TIMEOUT" : new java.util.Date(_expiration) )
+				+ ", version = "
+				+ ( _versionKey == ERXExpiringCache.NO_VERSION ? "NO_VERSION" : _versionKey )
+				+ ", object = "
+				+ _object
+				+ " }";
+		}
 	}
 
 	/**
@@ -202,7 +215,7 @@ public class ERXExpiringCache<K, V> {
 	 */
 	public synchronized boolean isStaleWithVersion(Object key, Object currentVersionKey) {
 		Entry<V> entry = _backingDictionary.objectForKey(key);
-		boolean isStale = false;
+		boolean isStale = true;
 		if (entry != null) {
 			isStale = entry.isStale(System.currentTimeMillis(), currentVersionKey);
 		}
@@ -244,4 +257,10 @@ public class ERXExpiringCache<K, V> {
 			}
 		}
 	}
+
+	@Override
+	public String toString() {
+		return super.toString() + " " + _backingDictionary;
+	}
+
 }
