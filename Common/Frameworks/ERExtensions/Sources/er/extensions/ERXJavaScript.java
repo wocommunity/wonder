@@ -41,10 +41,10 @@ import com.webobjects.foundation._NSStringUtilities;
 public class ERXJavaScript extends WOHTMLDynamicElement {
 
     private static ERXExpiringCache cache(WOSession session) {
-    	ERXExpiringCache cache = (ERXExpiringCache) session.objectForKey("ERXStylesheet.cache");
+    	ERXExpiringCache cache = (ERXExpiringCache) session.objectForKey("ERXJavaScript.cache");
     	if(cache == null) {
     		cache = new ERXExpiringCache(60);
-    		session.setObjectForKey(cache, "ERXStylesheet.cache");
+    		session.setObjectForKey(cache, "ERXJavaScript.cache");
     	}
     	return cache;
     }
