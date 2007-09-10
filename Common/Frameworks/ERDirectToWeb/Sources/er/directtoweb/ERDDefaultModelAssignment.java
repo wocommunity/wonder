@@ -37,8 +37,8 @@ public class ERDDefaultModelAssignment extends ERDAssignment {
 
     /** holds the array of keys this assignment depends upon */
     protected static final NSDictionary keys = ERXDictionaryUtilities.dictionaryWithObjectsAndKeys( new Object [] {
-        new NSArray(new Object[] {"propertyKey", "object.entityName"}), "smartAttribute",
-        new NSArray(new Object[] {"propertyKey", "object.entityName"}), "smartRelationship",
+        new NSArray(new Object[] {"propertyKey", "object.entityName", "entity.name"}), "smartAttribute",
+        new NSArray(new Object[] {"propertyKey", "object.entityName", "entity.name"}), "smartRelationship",
         new NSArray(new Object[] {"smartAttribute"}), "smartDefaultRows",
         new NSArray(new Object[] {"smartAttribute"}), "smartDefaultAttributeWidth",
         new NSArray(new Object[] {"smartRelationship"}), "destinationEntity",
