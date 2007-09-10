@@ -4,7 +4,6 @@ import java.math.BigDecimal;
 import java.math.MathContext;
 import java.util.Collections;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.Set;
 
 import org.apache.log4j.Logger;
@@ -277,8 +276,8 @@ public class ERXStats {
 	 * @param operation
 	 *            operation to sort on ("sum", "count", "min", "max", "avg")
 	 */
-	public static void logStatisticsForOperation(Logger log, String operation) {
-		if(log.isDebugEnabled()) {
+	public static void logStatisticsForOperation(Logger statsLog, String operation) {
+		if(statsLog.isDebugEnabled()) {
 			NSMutableDictionary statistics = ERXStats.statistics();
 			if (statistics != null) {
 				synchronized (statistics) {
@@ -290,7 +289,7 @@ public class ERXStats {
 						String result = NSPropertyListSerialization.stringFromPropertyList(values);
 						// result = result.replaceAll("\\n\\t", "\n\t\t");
 						// result = result.replaceAll("\\n", "\n\t\t");
-						log.debug(
+						statsLog.debug(
 								(startTime != null ? "Time since init " + (currentTime - startTime.longValue()) + " ms ": "" ) + 
 								(lastTime != null ? ", last log " + (currentTime - lastTime.longValue()) + " ms ": "" ) + 
 								"(cnt/sum : min/max/avg|trace cnt -> key) = " + result);
@@ -400,7 +399,7 @@ public class ERXStats {
 
 		public NSArray traces() {
 			if(_traceArray == null) {
-				NSMutableSet traces =  new NSMutableSet();
+				NSMutableSet<String> traces =  new NSMutableSet<String>();
 				for (String trace : _traces) {
 					trace = trace.replaceAll("at\\s+(com.webobjects|java|er|sun)\\..*?\\n", "...\n");
 					trace = trace.replaceAll("(\\.\\.\\.\\s+)+", "...\n\t");
