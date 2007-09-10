@@ -587,7 +587,7 @@ public class ERXEOControlUtilities {
     public static NSArray sharedObjectsMatchingKeyAndValue(String entityName, String key, Object value) {
         NSArray filtered = null;
         EOKeyValueQualifier qualifier = new EOKeyValueQualifier(key, EOQualifier.QualifierOperatorEqual, value);
-        NSArray sharedEos = (NSArray)EOSharedEditingContext.defaultSharedEditingContext().objectsByEntityName().objectForKey(entityName);
+        NSArray sharedEos = sharedObjectsForEntityNamed(entityName);
         if (sharedEos != null) {
             filtered = EOQualifier.filteredArrayWithQualifier(sharedEos, qualifier);
         } else {
@@ -598,15 +598,23 @@ public class ERXEOControlUtilities {
 
     /**
      * Gets all of the shared objects for a given entity name. Note that
-     * if the entity has not been loaded yet, ie it's model has not been
-     * accessed then this method will return an empty array.
+     * if the shared objects for the corresponding model have not been loaded yet,
+     * this method will trigger their loading (unless automatic loading has been disabled via a call to
+     * {@link com.webobjects.eoaccess.EODatabaseContext#setSharedObjectLoadingEnabled(boolean)}).
+     * Returns an empty array if no shared objects were found.
      * @param entityName name of the shared entity
-     * @return array of bound shared objects for the given entity name
+     * @return array of bound shared objects for the given entity name, or an empty array
      */
     public static NSArray sharedObjectsForEntityNamed(String entityName) {
-        NSArray sharedEos = (NSArray)EOSharedEditingContext.defaultSharedEditingContext().objectsByEntityName().objectForKey(entityName);
+        EOSharedEditingContext sharedEC = EOSharedEditingContext.defaultSharedEditingContext();
+        NSArray sharedEos = (NSArray)sharedEC.objectsByEntityName().objectForKey(entityName);
+        if (sharedEos == null) { //call registeredDatabaseContextForModel() to trigger loading the model's shared EOs (if set to happen automatically), then try again
+            EOEntity entity = ERXEOAccessUtilities.entityNamed(sharedEC, entityName);
+            EODatabaseContext.registeredDatabaseContextForModel(entity.model(), sharedEC);
+            sharedEos = (NSArray)sharedEC.objectsByEntityName().objectForKey(entityName);
+        }
+
         if (sharedEos == null) {
-            //TODO: Fetch in this case?
             log.warn("Unable to find any shared objects for the entity named: " + entityName);
         }
         return sharedEos != null ? sharedEos : NSArray.EmptyArray;
