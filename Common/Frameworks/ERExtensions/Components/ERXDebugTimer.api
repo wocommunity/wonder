@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <wodefinitions>
-        <wo wocomponentcontent="false" class="ERXDebugTimer">
-
-        </wo>
+	<wo wocomponentcontent="true" class="ERXDebugTimer">
+		<binding name = "displayName"/>
+	</wo>
 </wodefinitions>
