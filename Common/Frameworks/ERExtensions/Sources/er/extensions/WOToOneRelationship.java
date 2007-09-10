@@ -284,7 +284,7 @@ public class WOToOneRelationship extends WOComponent {
 
                 if( ERXEOAccessUtilities.entityWithNamedIsShared(anEditingContext, destinationEntityName) ) {
                     EOArrayDataSource arrayDataSource = new EOArrayDataSource(destinationEntity.classDescriptionForInstances(), anEditingContext);
-                    NSArray sharedEOs = (NSArray)anEditingContext.sharedEditingContext().objectsByEntityName().objectForKey(destinationEntityName);
+                    NSArray sharedEOs = ERXEOControlUtilities.sharedObjectsForEntityNamed(destinationEntityName);
 
                     arrayDataSource.setArray(sharedEOs);
                     dataSource = arrayDataSource;

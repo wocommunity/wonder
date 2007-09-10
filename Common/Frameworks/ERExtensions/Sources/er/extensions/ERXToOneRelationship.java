@@ -114,7 +114,7 @@ public class ERXToOneRelationship extends WOToOneRelationship {
 
                     if( ERXEOAccessUtilities.entityWithNamedIsShared(anEditingContext, destinationEntityName) ) {
                         EOArrayDataSource arrayDataSource = new EOArrayDataSource(destinationEntity.classDescriptionForInstances(), anEditingContext);
-                        NSArray sharedEOs = (NSArray)anEditingContext.sharedEditingContext().objectsByEntityName().objectForKey(destinationEntityName);
+                        NSArray sharedEOs = ERXEOControlUtilities.sharedObjectsForEntityNamed(destinationEntityName);
 
                         if ((sharedEOs != null) && hasBinding("qualifier")) {
                             EOQualifier qualifier = (EOQualifier)valueForBinding("qualifier");
