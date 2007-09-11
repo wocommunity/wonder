@@ -378,6 +378,11 @@ public class ERXPatcher {
 				_id = (WOAssociation) super._associations.removeObjectForKey("id");
 			}
 
+			protected void _appendNameAttributeToResponse(WOResponse woresponse, WOContext wocontext) {
+				super._appendNameAttributeToResponse(woresponse, wocontext);
+				appendIdentifierTagAndValue(this, _id, woresponse, wocontext);
+			}
+
 			public void appendToResponse(WOResponse woresponse, WOContext wocontext) {
 				WOResponse newResponse = new WOResponse();
 				super.appendToResponse(newResponse, wocontext);
