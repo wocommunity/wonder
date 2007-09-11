@@ -1405,9 +1405,10 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 				String sessionID = wosession.sessionID();
 				SessionInfo sessionInfo = (SessionInfo) _sessions.get(sessionID);
 				if (sessionInfo == null) {
-					throw new IllegalStateException("Check-In of session that was not checked out");
-				}
-				_sessions.remove(sessionID);
+					log.error("Check-In of session that was not checked out, most likely diue to an exception in session.awake(): " + sessionID);
+				} else {
+					_sessions.remove(sessionID);
+                }
 			}
 		}
 		super.saveSessionForContext(wocontext);
@@ -1415,7 +1416,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 
 	/** Overridden to check the sessions */
 	public WOSession restoreSessionWithID(String sessionID, WOContext wocontext) {
-		WOSession session;
+		WOSession session = null;
 		if (useSessionStoreDeadlockDetection()) {
 			SessionInfo sessionInfo = (SessionInfo) _sessions.get(sessionID);
 			if (sessionInfo != null) {
