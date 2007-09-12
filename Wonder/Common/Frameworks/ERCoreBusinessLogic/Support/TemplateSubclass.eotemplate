@@ -13,12 +13,10 @@ public class <$classNameWithoutPackage$> extends _<$classNameWithoutPackage$><$i
     public static final <$classNameWithoutPackage$>Clazz clazz = new <$classNameWithoutPackage$>Clazz();
     public static class <$classNameWithoutPackage$>Clazz extends _<$classNameWithoutPackage$>._<$classNameWithoutPackage$>Clazz {/* more clazz methods here */}
 
-    public final static String ENTITY = "<$name$>";
-
     public interface Key extends _<$classNameWithoutPackage$>.Key {}
 
     /**
-     * Intitializes the EO. This is called when an EO is created, not when it is 
+     * Initializes the EO. This is called when an EO is created, not when it is 
      * inserted into an EC.
      */
     public void init(EOEditingContext ec) {
