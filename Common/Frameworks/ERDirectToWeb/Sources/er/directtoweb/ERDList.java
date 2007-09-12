@@ -6,16 +6,24 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.directtoweb;
 
-import com.webobjects.foundation.*;
-import com.webobjects.appserver.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.eoaccess.*;
-import com.webobjects.directtoweb.*;
-import er.extensions.*;
+import org.apache.log4j.Logger;
+
+import com.webobjects.appserver.WOComponent;
+import com.webobjects.appserver.WOContext;
+import com.webobjects.directtoweb.D2W;
+import com.webobjects.directtoweb.EditPageInterface;
+import com.webobjects.directtoweb.EditRelationshipPageInterface;
+import com.webobjects.eocontrol.EOEditingContext;
+import com.webobjects.eocontrol.EOEnterpriseObject;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSDictionary;
+
+import er.extensions.ERXEOControlUtilities;
+import er.extensions.ERXValueUtilities;
 
 /**
  * Used to edit a toMany relationship by allowing the user to pick the eos that belong in the relationship.<br />
- * 
+ *
  * @binding object
  * @binding key
  * @binding emptyListMessage
@@ -26,8 +34,8 @@ import er.extensions.*;
 public class ERDList extends ERDCustomEditComponent {
 
     /* logging support */
-    static final ERXLogger log = ERXLogger.getERXLogger(ERDList.class);
-    
+    static final Logger log = Logger.getLogger(ERDList.class);
+
     protected NSArray list;
 
     public ERDList(WOContext context) { super(context); }
@@ -37,6 +45,14 @@ public class ERDList extends ERDCustomEditComponent {
     public void reset() {
         list = null;
         super.reset();
+    }
+
+    public NSDictionary settings() {
+        String pc = d2wContext().dynamicPage();
+        if(pc != null) {
+            return new NSDictionary(pc, "parentPageConfiguration");
+        }
+        return null;
     }
 
     public WOComponent createObjectAction() {
@@ -49,8 +65,10 @@ public class ERDList extends ERDCustomEditComponent {
     			epi.setMasterObjectAndRelationshipKey(object(), key());
     			epi.setNextPage(context().page());
     		} else if(nextPage instanceof EditPageInterface) {
-    			EOEnterpriseObject object = ERD2WUtilities.localInstanceFromObjectWithD2WContext(object(), d2wContext());
-    			EOEditingContext ec = object.editingContext();
+    	    	Object value = d2wContext().valueForKey("useNestedEditingContext");
+    	    	boolean createNestedContext = ERXValueUtilities.booleanValue(value);
+    	    	EOEnterpriseObject object = ERXEOControlUtilities.editableInstanceOfObject(object(), createNestedContext);
+	 			EOEditingContext ec = object.editingContext();
     			ec.lock();
     			try {
     				EOEnterpriseObject eo = ERXEOControlUtilities.createAndAddObjectToRelationship(ec, object, key(), (String)valueForBinding("destinationEntityName"), null);
@@ -67,7 +85,7 @@ public class ERDList extends ERDCustomEditComponent {
     	return nextPage;
     }
     // we will get asked quite a lot of times, so caching is in order
-    
+
     public NSArray list() {
         if (list == null) {
             try {
@@ -91,24 +109,24 @@ public class ERDList extends ERDCustomEditComponent {
     public boolean erD2WListOmitCenterTag() {
         return hasBinding("erD2WListOmitCenterTag") ? booleanValueForBinding("erD2WListOmitCenterTag") : false;
     }
-    
+
     public Object valueForKey(String key) {
         Object o = super.valueForKey(key);
         if (key.indexOf("emptyListMessage")!=-1) {
             log.debug("key = emptyListMessage, value = "+o);
-        } 
+        }
         return o;
     }
     public Object valueForBinding(String key) {
         Object o = super.valueForBinding(key);
         if (key.indexOf("emptyListMessage")!=-1) {
             log.debug("key = emptyListMessage, value = "+o);
-        } 
+        }
         return o;
     }
     public String emptyListMessage() {
         log.info("asked for emptyListMessage");
         return "nix";
     }
-    
+
 }

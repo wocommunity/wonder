@@ -612,6 +612,19 @@ public class ERXEOAccessUtilities {
         }
         return entity;
     }
+
+    /** Returns the EOEntity for the provided EOEnterpriseObject if one exists
+     *
+     * @param eo the EOEnterpriseObject
+     * @return the EOEntity from the EOEnterpriseObject
+     */
+    public static EOEntity entityForEo(EOEnterpriseObject eo) {
+        EOClassDescription classDesc = eo.classDescription();
+
+        if (classDesc instanceof EOEntityClassDescription)
+            return ((EOEntityClassDescription)classDesc).entity();
+        return null;
+    }
     
     public static NSArray classPropertiesNotInParent(EOEntity entity, boolean includeAttributes, boolean includeToOneRelationships, boolean includeToManyRelationships) {
         Object parent = entity.parentEntity();

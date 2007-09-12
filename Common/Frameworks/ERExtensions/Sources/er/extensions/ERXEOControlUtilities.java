@@ -101,6 +101,59 @@ public class ERXEOControlUtilities {
         eodetaildatasource.qualifyWithRelationshipKey(key, object);
         return eodetaildatasource;
     }
+    
+    /**
+     * Creates a new, editable instance of the supplied object. Takes into account if the object is
+     * newly inserted, lives in a shared context and can either create a peer or nested context.
+     *
+     * @param eo object for the new instance
+     * @param createNestedContext true, if we should create a nested context (otherwise we create a peer context)
+     *
+     * @return new EO in new editing context
+     */
+     public static EOEnterpriseObject editableInstanceOfObject(EOEnterpriseObject eo,
+     		boolean createNestedContext) {
+
+     	if(eo == null) throw new IllegalArgumentException("EO can't be null");
+     	EOEditingContext ec = eo.editingContext();
+
+     	if(ec == null) throw new IllegalArgumentException("EO must live in an EC");
+
+        boolean isNewObject = ERXEOControlUtilities.isNewObject(eo);
+
+        // Check for old EOF bug and do nothing as we can't localInstance
+        // anything here
+        if (ERXProperties.webObjectsVersionAsDouble() < 5.21d && isNewObject) {
+            return eo;
+        }
+
+        EOEnterpriseObject localObject = eo;
+
+        // Either we have an already saved object or a new one and create a nested context.
+        // Otherwise (new object and a peer) we should probably raise, but simple return the EO
+        if((isNewObject && createNestedContext) || !isNewObject) {
+    		// create either peer or nested context
+     		EOEditingContext newEc = ERXEC.newEditingContext(createNestedContext
+     				? ec : ec.parentObjectStore());
+     		ec.lock();
+     		try {
+     			newEc.lock();
+     			try {
+     				if(ec instanceof EOSharedEditingContext
+     	     				|| ec.sharedEditingContext() == null) {
+     	     			newEc.setSharedEditingContext(null);
+     	     		}
+     	     		localObject = EOUtilities.localInstanceOfObject(newEc, eo);
+     				localObject.willRead();
+     			} finally {
+     				newEc.unlock();
+     			}
+     		} finally {
+     			ec.unlock();
+     		}
+     	}
+      	return localObject;
+     }
 
     /**
      * This has one advantage over the standard EOUtilites
@@ -1090,7 +1143,80 @@ public class ERXEOControlUtilities {
 
         return result != null ? result : NSArray.EmptyArray;
     }
+    
+    /** returns a NSArray containing EOEnterpriseObjects (actually faults...) for the provided EOGlobalIDs.
+     * @param ec the EOEditingContext in which the EOEnterpriseObjects should be faulted
+     * @param gids the EOGlobalIDs
+     * @return a NSArray of EOEnterpriseObjects
+     */
+    public static NSArray faultsForGlobalIDs(EOEditingContext ec, NSArray gids) {
+        int c = gids.count();
+        NSMutableArray a = new NSMutableArray(c);
+        for (int i = 0; i < c; i++) {
+            EOGlobalID gid = (EOGlobalID)gids.objectAtIndex(i);
+            EOEnterpriseObject eo = ec.faultForGlobalID(gid, ec);
+            a.addObject(eo);
+        }
+        return a;
+    }
+    
+    public static NSArray faultsForRawRowsFromEntity(EOEditingContext ec, NSArray primKeys, String entityName) {
+        int c = primKeys.count();
+        NSMutableArray a = new NSMutableArray(c);
+        for (int i = 0; i < c; i++) {
+            NSDictionary pkDict = (NSDictionary)primKeys.objectAtIndex(i);
+            EOEnterpriseObject eo = ec.faultForRawRow(pkDict, entityName);
+            a.addObject(eo);
+        }
+        return a;
+    }
 
+    /**
+     * Tests if an enterprise object is a new object by
+     * looking to see if it is in the list of inserted
+     * objects for the editing context or if the editing
+     * context is null.<br/>
+     * <br/>
+     * Note: An object that has been deleted will have it's
+     * editing context set to null which means this method
+     * would report true for an object that has been deleted
+     * from the database.
+     * @param eo enterprise object to check
+     * @return true or false depending on if the object is a
+     *		new object.
+     */
+    public static boolean isNewObject(EOEnterpriseObject eo) {
+        if (eo.editingContext() == null) return true;
+
+        EOGlobalID gid = eo.editingContext().globalIDForObject(eo);
+        return gid.isTemporary();
+    }
+
+    /** Returns the name from the root entity from the EOEnterpriseObject
+     *
+     * @param eo the EOEnterpriseObject from which to the the root entity
+     *
+     * @return the name from the root entity from the EOEnterpriseObject
+     */
+    public static String rootEntityName(EOEnterpriseObject eo) {
+        EOEntity entity = rootEntity(eo);
+        return entity.name();
+    }
+
+    /** Returns the root entity from the EOEnterpriseObject
+     *
+     * @param eo the EOEnterpriseObject from which to the the root entity
+     *
+     * @return the root entity from the EOEnterpriseObject
+     */
+    public static EOEntity rootEntity(EOEnterpriseObject eo) {
+        EOEntity entity = ERXEOAccessUtilities.entityForEo(eo);
+        while (entity.parentEntity() != null) {
+            entity = entity.parentEntity();
+        }
+        return entity;
+    }
+    
     /**
      * Smarter version of normal <code>saveChanges()</code> method that corrects issues with
      * <code>flushCaches()</code> needing to be called on objects in the parent context when

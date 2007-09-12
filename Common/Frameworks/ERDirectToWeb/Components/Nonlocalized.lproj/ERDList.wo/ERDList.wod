@@ -1,52 +1,35 @@
 Content2: WOComponentContent {}
 
+HasCreateButtonComponentName: WOConditional {
+	condition = d2wContext.createButtonComponentName;
+}
+
+HasNoCreateButtonComponentName: WOConditional {
+	condition = d2wContext.createButtonComponentName;
+	negate = true;
+}
+
 List1: ERXD2WList { 	
 	pageConfiguration = ^listConfigurationName;
 	list = list;
 	entityName = ^destinationEntityName;
-}
-
-NoEmptyListMessage: ERXNonNullConditional {
-	condition = ^emptyListMessage;
-	negate = true;
-}
-
-NonNullConditional1: ERXNonNullConditional {
-	condition = ^emptyListMessage;
-}
-
-NonNullConditional2: ERXNonNullConditional {
-	condition = ^emptyListComponentName;
-}
-
-NonZeroConditional1: ERXNonZeroConditional {
-	condition = list.count;
-}
-
-NonZeroConditional2: ERXNonZeroConditional {
-	condition = list.count;
-	negate = true;
+	settings = settings;
 }
 
 Select: WOSubmitButton {
 	action = createObjectAction;
-	value = session.localizer.ERDList.create;
+	value = ^createButtonLabel;
 }
 
 ShowActions: WOConditional {
 	condition = ^showActions;
 }
 
-String1: WOString {
-	value = ^emptyListMessage;
-	escapeHTML = false;
-}
-
 String3: WOString {
 	value = ^destinationEntity.name;
 }
 
-SwitchComponent2: WOSwitchComponent {
-	WOComponentName = ^emptyListComponentName;
-	d2wContext = ^d2wContext;
+SwitchComponent1: WOSwitchComponent {
+	WOComponentName = ^createButtonComponentName;
+	d2wContext = d2wContext;
 }
