@@ -54,7 +54,7 @@ public class NSMutableArray <E> extends NSArray<E> {
         super(object);
     }
 
-    public NSMutableArray(E objects[]) {
+    public NSMutableArray(E... objects) {
         super(objects);
     }
 
