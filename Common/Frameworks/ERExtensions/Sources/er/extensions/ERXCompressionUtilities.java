@@ -33,13 +33,41 @@ public class ERXCompressionUtilities {
 	public static NSData gzipInputStreamAsNSData(InputStream input, int length) {
 		try {
 			ERXRefByteArrayOutputStream bos = new ERXRefByteArrayOutputStream(length);
-			GZIPOutputStream out = new GZIPOutputStream(bos);
+			if (input != null) {
+				GZIPOutputStream out = new GZIPOutputStream(bos);
+	
+				ERXFileUtilities.writeInputStreamToOutputStream(input, out);
+	
+				out.finish();
+				out.close();
+			}
+			return bos.toNSData();
+		}
+		catch (IOException e) {
+			log.error("Failed to gzip byte array.", e);
+			return null;
+		}
+	}
 
-			ERXFileUtilities.writeInputStreamToOutputStream(input, out);
-
-			out.finish();
-			out.close();
-
+	public static NSData gzipNSDataAsNSData(NSData data) {
+		NSData gzippedData = null;
+		if (data != null) {
+			gzippedData = ERXCompressionUtilities.gzipByteArrayAsNSData(data._bytesNoCopy(), 0, data.length());
+		}
+		return gzippedData;
+	}
+	
+	public static NSData gzipByteArrayAsNSData(byte[] input, int offset, int length) {
+		try {
+			ERXRefByteArrayOutputStream bos = new ERXRefByteArrayOutputStream(length);
+			if (input != null) {
+				GZIPOutputStream out = new GZIPOutputStream(bos);
+	
+				out.write(input, offset, length);
+	
+				out.finish();
+				out.close();
+			}
 			return bos.toNSData();
 		}
 		catch (IOException e) {
