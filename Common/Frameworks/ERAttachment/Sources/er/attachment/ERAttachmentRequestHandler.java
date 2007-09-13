@@ -14,12 +14,12 @@ import com.webobjects.appserver.WORequest;
 import com.webobjects.appserver.WORequestHandler;
 import com.webobjects.appserver.WOResponse;
 import com.webobjects.appserver.WOSession;
-import com.webobjects.appserver._private.WODynamicURL;
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.foundation.NSLog;
 
 import er.attachment.model.ERAttachment;
 import er.attachment.processors.ERAttachmentProcessor;
+import er.extensions.ERXDynamicURL;
 import er.extensions.ERXEC;
 
 /**
@@ -81,7 +81,7 @@ public class ERAttachmentRequestHandler extends WORequestHandler {
         session = WOApplication.application().restoreSessionWithID(wosid, context);
       }
       try {
-        WODynamicURL url = request._uriDecomposed();
+        ERXDynamicURL url = new ERXDynamicURL(request._uriDecomposed());
         // MS: This is kind of goofy because we lookup by path, your web path needs to 
         // have a leading slash on it.
         String webPath = "/" + url.requestHandlerPath();
