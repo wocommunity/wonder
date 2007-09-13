@@ -38,10 +38,12 @@ public class ERXWOBrowser extends WOInput {
 	WOAssociation _multiple;
 	WOAssociation _escapeHTML;
 	private boolean _loggedSlow;
+	private WOAssociation _disabled;
 
 	public ERXWOBrowser(String s, NSDictionary nsdictionary, WOElement woelement) {
 		super("select", nsdictionary, null);
 		_loggedSlow = false;
+		_disabled = (WOAssociation) nsdictionary.objectForKey("disabled");
 		_list = (WOAssociation) _associations.removeObjectForKey("list");
 		_item = (WOAssociation) _associations.removeObjectForKey("item");
 		_displayString = (WOAssociation) _associations.removeObjectForKey("displayString");
