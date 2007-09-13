@@ -58,53 +58,40 @@ public class SeleniumAction extends WODirectAction {
         response.appendContentString("</body></html>");
         return response;
     }
-  
-    protected WOResponse simpleResponse(String s) {
+    
+    protected WOResponse stringResponse(String s) {
         WOResponse response = new WOResponse();
         response.appendContentString(s);
-        return response;
+        return response;  	
+    }
+  
+    // @Deprecated
+    protected WOResponse simpleResponse(String s) {
+    	return stringResponse(s);
     }
     
     protected WOResponse success() {
-        return simpleResponse(ERSelenium.ACTION_COMMAND_SUCCEEDED_MESSAGE);
-    }
-    
-    protected WOResponse fail(String s) {
-        return simpleResponse(ERSelenium.ACTION_COMMAND_FAILED_MESSAGE + s);
+        return stringResponse(ERSelenium.ACTION_COMMAND_SUCCEEDED_MESSAGE);
     }
     
     protected WOResponse fail() {
-        return fail("");
+    	return stringResponse(ERSelenium.ACTION_COMMAND_FAILED_MESSAGE);
     }
 
-    protected WOActionResults _perform(String anActionName) {
-        try {
-            return super.performActionNamed(anActionName);
-        } catch(Exception ex) {
-            log.error(ex, ex);
-        }
-        return simpleResponse(ERSelenium.ACTION_COMMAND_FAILED_MESSAGE);
+    protected WOResponse fail(String s) {
+        return stringResponse(ERSelenium.ACTION_COMMAND_FAILED_MESSAGE + " " + s);
     }
+
 	
 	// @Override
     public WOActionResults performActionNamed(String anActionName) {
+    	log.debug("Selenium Action: " + anActionName);
         WOActionResults result = null;
         if(ERSelenium.testsEnabled()) {
-            if(ERSelenium.isDirectAction()) {
-                if(new NSSelector(anActionName + "Action").implementedByObject(this)) {
-                    result = _perform(anActionName);
-                } else {
-                    result = simpleResponse(ERSelenium.INVALID_ACTION_COMMAND_MESSAGE);
-                }
-            } else {
-                WOComponent resultPage = pageWithName(SeleniumActionResultPage.class.getSimpleName());
-                assert(resultPage != null);
-                resultPage.takeValueForKey(anActionName, SeleniumActionResultPage.ACTION_NAME_KEY);
-                result = resultPage;
-            }
+        	super.performActionNamed(anActionName);
         } else {
             log.error("Selenium tests support is disabled. You can turn them on using SeleniumTestsEnabled=true in Properties files");
-            result = simpleResponse(ERSelenium.SELENIUM_TESTS_DISABLED_MESSAGE);
+            result = stringResponse(ERSelenium.SELENIUM_TESTS_DISABLED_MESSAGE);
         }
         WOResponse response = result.generateResponse();
         if(!session().isTerminating()) {
