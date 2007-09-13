@@ -88,7 +88,7 @@ public class SeleniumAction extends WODirectAction {
     	log.debug("Selenium Action: " + anActionName);
         WOActionResults result = null;
         if(ERSelenium.testsEnabled()) {
-        	super.performActionNamed(anActionName);
+        	result = super.performActionNamed(anActionName);
         } else {
             log.error("Selenium tests support is disabled. You can turn them on using SeleniumTestsEnabled=true in Properties files");
             result = stringResponse(ERSelenium.SELENIUM_TESTS_DISABLED_MESSAGE);
