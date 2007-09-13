@@ -48,8 +48,9 @@ public class ERDList extends ERDCustomEditComponent {
     }
 
     public NSDictionary settings() {
+        if (null == d2wContext()) { return null; }
         String pc = d2wContext().dynamicPage();
-        if(pc != null) {
+        if (pc != null) {
             return new NSDictionary(pc, "parentPageConfiguration");
         }
         return null;

@@ -284,7 +284,34 @@ public class ERDirectToWeb {
         return ERD2WFactory.erFactory().errorPageForException(e, session);
     }
 
-    public static void reportException(Exception ex, D2WContext d2wContext) {
+    /**
+     * Subclass of NSForwardException that can hold a d2wContext. Useful when the exception
+     * occurs while evaluating embedded components. The page's d2wContext will not show you the error.
+     *
+     * @author ak
+     */
+    public static class D2WException extends NSForwardException {
+
+		private D2WContext _context;
+
+		public D2WException(Exception ex, D2WContext context) {
+			super(ex);
+			_context = context;
+		}
+
+		public D2WContext d2wContext() {
+			return _context;
+		}
+	}
+
+    /**
+     * Logs some debugging info and and throws a D2WException that wraps the original exception.
+     * This is usefull when your app fails very deep inside of a repetition of switch components
+     * and you need to find out just what the state of the D2WContext is.
+     * @param ex
+     * @param d2wContext
+     */
+    public static synchronized void reportException(Exception ex, D2WContext d2wContext) {
         if(d2wContext != null) {
             log.error("Exception <"+ex+">: "+
                       "pageConfiguration <" + d2wContext.valueForKeyPath("pageConfiguration") + ">, "+
@@ -294,10 +321,23 @@ public class ERDirectToWeb {
                       "componentName <" + d2wContext().valueForKey("componentName") + ">, "+
                       "customComponent <" +  d2wContext().valueForKey("customComponentName") + ">", ex);
         } else {
-            log.error("Exception <"+ex+">: with NULL d2wContext", ex);
+            log.error("Exception <"+ex+">: with NULL d2wContext"/*, ex*/);
         }
-        if(ERXProperties.booleanForKeyWithDefault("er.directtoweb.ERDirectToWeb.shouldRaiseExceptions", true))
-            throw new NSForwardException(ex);
+        if(shouldRaiseException(true)) {
+            if(!(ex instanceof D2WException)) {
+                ex = new D2WException(ex, d2wContext);
+            }
+            throw (D2WException)ex;
+        }
+    }
+
+    /**
+     * Checks the system property <code>er.directtoweb.ERDirectToWeb.shouldRaiseExceptions</code>.
+     * @param defaultValue
+     * @return
+     */
+    public static boolean shouldRaiseException(boolean defaultValue) {
+        return ERXProperties.booleanForKeyWithDefault("er.directtoweb.ERDirectToWeb.shouldRaiseExceptions", defaultValue);
     }
     
     public static String displayNameForPropertyKey(String key, String entityName, String language) {

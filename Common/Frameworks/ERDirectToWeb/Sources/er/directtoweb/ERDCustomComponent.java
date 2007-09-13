@@ -6,12 +6,17 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.directtoweb;
 
-import com.webobjects.foundation.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.eoaccess.*;
-import com.webobjects.appserver.*;
-import com.webobjects.directtoweb.*;
-import er.extensions.*;
+import org.apache.log4j.Logger;
+
+import com.webobjects.appserver.WOComponent;
+import com.webobjects.appserver.WOContext;
+import com.webobjects.appserver.WOResponse;
+import com.webobjects.directtoweb.D2WContext;
+import com.webobjects.foundation.NSDictionary;
+
+import er.extensions.ERXConstant;
+import er.extensions.ERXExceptionHolder;
+import er.extensions.ERXNonSynchronizingComponent;
 
 /**
  * Base class of many custom components.<br />
@@ -28,10 +33,10 @@ public abstract class ERDCustomComponent extends ERXNonSynchronizingComponent im
         public static final String extraBindings = "extraBindings";
         public static final String propertyKey = "propertyKey";
     }
-    
+
     /** logging support */
-    public final static ERXLogger log = ERXLogger.getERXLogger(ERDCustomComponent.class);
-    
+    public final static Logger log = Logger.getLogger(ERDCustomComponent.class);
+
     /** Designated constructor */
     public ERDCustomComponent(WOContext context) {
         super(context);
@@ -80,7 +85,7 @@ public abstract class ERDCustomComponent extends ERXNonSynchronizingComponent im
         }
         return d2wContext;
     }
-    
+
     /** Validation Support. Passes errors to the parent. */
     public void validationFailedWithException (Throwable e, Object value, String keyPath) {
         parent().validationFailedWithException(e,value,keyPath);
@@ -165,16 +170,19 @@ public abstract class ERDCustomComponent extends ERXNonSynchronizingComponent im
         Object value=null;
         logDebugInfo();
         if (super.hasBinding(binding)) {
-            log.debug("super.hasBinding(binding) == true for binding "+binding);
+        		if (log.isDebugEnabled())
+        			log.debug("super.hasBinding(binding) == true for binding "+binding);
             value = originalValueForBinding(binding);
         } else if(d2wContextFromBindings() != null) {
-            log.debug("has d2wContext == true for binding "+binding);
+    			if (log.isDebugEnabled())
+    				log.debug("has d2wContext == true for binding "+binding);
             value = d2wContextValueForBinding(binding);
         } else {
             value = parentValueForBinding(binding);
         }
         if (value == null && binding != null && extraBindings() != null) {
-            log.debug("inside the extraBindings branch for binding "+binding);
+    			if (log.isDebugEnabled())
+    				log.debug("inside the extraBindings branch for binding "+binding);
             value = extraBindingsValueForBinding(binding);
         }
         if (log.isDebugEnabled()) {
@@ -239,14 +247,22 @@ public abstract class ERDCustomComponent extends ERXNonSynchronizingComponent im
     }
 
     public void appendToResponse(WOResponse r, WOContext c) {
-        try {
+        if(!ERDirectToWeb.shouldRaiseException(false)) {
             // in the case where we are non-synchronizing but not stateless, make sure we pull again
             if (!synchronizesVariablesWithBindings() && !isStateless()) {
                 reset();
             }
             super.appendToResponse(r,c);
-        } catch(Exception ex) {
-            ERDirectToWeb.reportException(ex, d2wContext());
+        } else {
+            try {
+                // in the case where we are non-synchronizing but not stateless, make sure we pull again
+                if (!synchronizesVariablesWithBindings() && !isStateless()) {
+                    reset();
+                }
+                super.appendToResponse(r,c);
+            } catch(Exception ex) {
+                ERDirectToWeb.reportException(ex, d2wContext());
+            }
         }
     }
 }
