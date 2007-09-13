@@ -28,7 +28,7 @@ public class ERXDynamicURL {
 			_dynamicUrl = dynamicUrl;
 		}
 		catch (Throwable t) {
-			throw new NSForwardException("Failed to create ERXDynamicURL.", t);
+			throw new RuntimeException("Failed to create ERXDynamicURL.", t);
 		}
 	}
 
