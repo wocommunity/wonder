@@ -409,7 +409,7 @@ public class WOHttpIO {
             inputstream = woresponse.contentInputStream();
             if (inputstream != null) {
                 j = woresponse.contentInputStreamBufferSize();
-                i = woresponse.contentInputStreamLength();
+                i = (int)woresponse.contentInputStreamLength();
             }
         }
         if (inputstream == null) {

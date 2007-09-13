@@ -69,6 +69,10 @@ public class ERXWOBrowser extends WOInput {
 	public String toString() {
 		return "<" +getClass().getSimpleName() + " list: " + _list.toString() + " item: " + (_item == null ? "null" : _item.toString()) + " string: " + (_displayString == null ? "null" : _displayString.toString()) + " selections: " + (_selections == null ? "null" : _selections.toString()) + " selectedValues: " + (_selectedValues == null ? "null" : _selectedValues.toString()) + " multiple: " + (_multiple == null ? "null" : _multiple.toString()) + " size: " + (_size == null ? "null" : _size.toString()) + " escapeHTML: " + (_escapeHTML == null ? "null" : _escapeHTML.toString()) + " >";
 	}
+	
+	public boolean disabledInComponent(WOComponent component) {
+		return _disabled != null && _disabled.booleanValueInComponent(component);
+	}
 
 	private void _slowTakeValuesFromRequest(WORequest worequest, WOContext wocontext) {
 		WOComponent wocomponent = wocontext.component();
