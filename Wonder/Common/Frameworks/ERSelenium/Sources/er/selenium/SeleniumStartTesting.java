@@ -96,11 +96,11 @@ public class SeleniumStartTesting extends WODirectAction {
         return redirect(url);
     }
  
-    public WOActionResults editAction() {
+    public WOActionResults runAction() {
         return result(null, true);
     }
     
-    public WOActionResults runAction() {
+    public WOActionResults editAction() {
         return result(null, false);
     }
 
