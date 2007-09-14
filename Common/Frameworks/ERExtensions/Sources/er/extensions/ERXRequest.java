@@ -1,5 +1,6 @@
 package er.extensions;
 import java.net.InetAddress;
+import java.util.Enumeration;
 
 import org.apache.log4j.Logger;
 
@@ -58,21 +59,36 @@ public  class ERXRequest extends WORequest {
     
     /** Returns a cooked version of the languages the user has set in his Browser.
      * Adds "Nonlocalized" and {@link ERXLocalizer#defaultLanguage()} if not
-     * already present.
+     * already present. Transforms regionalized en_us to English_US as a key.
      * @return cooked version of user's languages
      */
     public NSArray browserLanguages() {
         if (_browserLanguages == null) {
+        	NSMutableArray languageKeys = new NSMutableArray();
             NSArray fixedLanguages = null;
             String string = this.headerForKey("accept-language");
             if (string != null) {
-                NSArray rawLanguages
-                = NSArray.componentsSeparatedByString(string, ",");
+                NSArray rawLanguages = NSArray.componentsSeparatedByString(string, ",");
                 fixedLanguages = fixAbbreviationArray(rawLanguages);
+                for (Enumeration e = fixedLanguages.objectEnumerator(); e.hasMoreElements();) {
+					String languageKey = (String) e.nextElement();
+					String language = (String) WOProperties.TheLanguageDictionary.objectForKey(languageKey);
+					if(language == null) {
+						int index = language.indexOf('_');
+						if(index > 0) {
+							String mainLanguageKey = language.substring(0, index - 1);
+							String region = language.substring(index);
+							language = (String) WOProperties.TheLanguageDictionary.objectForKey(mainLanguageKey);
+							if(language != null) {
+								language = language + region.toUpperCase();
+							}
+						}
+					}
+					if(language != null) {
+						languageKeys.addObject(language);
+					}
+				}
             }
-            NSMutableArray languageKeys =
-                WOProperties.TheLanguageDictionary.objectsForKeys(fixedLanguages,
-                                                                  null).mutableClone();
             languageKeys.addObject("Nonlocalized");
             if(!languageKeys.containsObject(ERXLocalizer.defaultLanguage()))
                 languageKeys.addObject(ERXLocalizer.defaultLanguage());
