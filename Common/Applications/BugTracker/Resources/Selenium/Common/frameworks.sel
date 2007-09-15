@@ -1,6 +1,6 @@
-|open|/wa/SeleniumAction/resetSession||
+|open|/wa/Selenium/resetSession||
 |assertTextPresent|Action command succeeded.||
-|open|/wa/SeleniumAction/ensureTestAdmin||
+|open|/wa/Selenium/ensureTestAdmin||
 |assertTextPresent|Action command succeeded.||
 |open|/||
 Create framework
@@ -54,4 +54,4 @@ Deleting the added framework
 |clickAndWait|//button[@value='OK']||
 |assertTextNotPresent|__SeleniumTestFrameworkEdited||
 Cleanup
-|open|/wa/SeleniumAction/deleteTestPeople||
+|open|/wa/Selenium/deleteTestPeople||
