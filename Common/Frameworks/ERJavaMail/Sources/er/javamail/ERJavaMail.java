@@ -187,7 +187,13 @@ public class ERJavaMail extends ERXFrameworkPrincipal {
 			System.setProperty("mail." + smtpProtocol + ".host", smtpHost);
 		}
 		log.debug("er.javamail.smtpHost: " + smtpHost);
-
+		
+		String port = System.getProperty("er.javamail.smtpPort");
+		if (port != null && port.length() > 0) {
+			System.setProperty("mail." + smtpProtocol + ".port" , port);
+			log.debug("ERJavaMail will use smtp port: " + port);
+		}
+		
 		boolean smtpAuth = ERXProperties.booleanForKey("er.javamail.smtpAuth");
 		log.debug("ERJavaMail will use authenticated SMTP connections.");
 		if (smtpAuth) {

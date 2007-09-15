@@ -49,3 +49,7 @@ er.javamail.milliSecondsWaitIfSenderOverflowed = 6000
 
 # To prevent sending mail to certain addresses you can use the black list
 # er.javamail.BlackListEmailAddressPatterns=("*@baddomain.com", "badperson@mycompany.com")
+
+
+# * The port to use with the smtp server, if not set, defaults to 25
+#er.javamail.smtpPort = 25
