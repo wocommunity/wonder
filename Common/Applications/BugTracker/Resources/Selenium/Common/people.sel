@@ -1,6 +1,6 @@
-|open|/wa/SeleniumAction/ensurePeopleSetup||
+|open|/wa/Selenium/ensurePeopleSetup||
 |assertTextPresent|Action command succeeded.||
-|open|/wa/SeleniumAction/resetSession||
+|open|/wa/Selenium/resetSession||
 |assertTextPresent|Action command succeeded.||
 |open|/||
 Try to login as inactive use

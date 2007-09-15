@@ -2,8 +2,10 @@ package er.bugtracker.tests;
 
 import org.apache.log4j.Logger;
 
+import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WOCookie;
+import com.webobjects.appserver.WORequest;
 import com.webobjects.appserver.WOResponse;
 import com.webobjects.directtoweb.D2W;
 import com.webobjects.foundation.NSArray;
@@ -25,17 +27,17 @@ import er.extensions.ERXEOControlUtilities;
 import er.extensions.ERXLocalizer;
 import er.extensions.ERXSession;
 import er.extensions.ERXUtilities;
-import er.selenium.SeleniumDefaultSetupActions;
+import er.selenium.SeleniumAction;
 
-public class SeleniumSetupActions  {
-	public final static Logger log = Logger.getLogger(SeleniumSetupActions.class);
+public class Selenium extends SeleniumAction  {
+	public final static Logger log = Logger.getLogger(Selenium.class);
 	
 	public static final String USERNAME = "sel_name";
 	public static final String PASSWORD = "sel_pass";
 	private static final String NAME = "SeleniumName";
-
-	public static void deleteTestPeople(WOResponse response, WOContext context) {
-	    People people = People.clazz.userWithUsernamePassword(context.session().defaultEditingContext(), USERNAME, PASSWORD);
+	
+	private void deleteTestPeople() {
+	    People people = People.clazz.userWithUsernamePassword(session().defaultEditingContext(), USERNAME, PASSWORD);
 	    if (people != null) {
 	        EOEditingContext ec = ERXEC.newEditingContext();
 	        ec.lock();
@@ -59,7 +61,7 @@ public class SeleniumSetupActions  {
 	    }
 	}
 	
-	private static People addTestPeople(WOContext context, boolean isAdmin) {
+	private People addTestPeople(boolean isAdmin) {
 		EOEditingContext ec = ERXEC.newEditingContext();
 		People people = (People) People.clazz.createAndInsertObject(ec);
 		people.setName(NAME);
@@ -71,38 +73,56 @@ public class SeleniumSetupActions  {
 		return people;
 	}
 	
-	public static void resetSession(WOResponse response, WOContext context) {
+	private WOActionResults ensureTestPeopleAreLoggedIn() {
+		Session session = (Session)session();
+        session.setLanguage("English");
+		People people = People.clazz.userWithUsernamePassword(session.defaultEditingContext(), USERNAME, PASSWORD);
+		session.setUser(people);
+		return success();
+	}
+
+	public Selenium(WORequest request) {
+		super(request);
+	}
+	
+	public WOActionResults resetSessionAction() {
 		WOCookie dummyCookie = new WOCookie("BTL", "dummy");
 		dummyCookie.setPath("/");
 		dummyCookie.setDomain(null);  // Let the browser set the domain
 		dummyCookie.setExpires(new NSTimestamp().timestampByAddingGregorianUnits(0, -2, 0, 0, 0, 0));
+		
+		WOResponse response = success();
 		response.addCookie(dummyCookie);
-        SeleniumDefaultSetupActions.resetSession(response, context);
+        session().terminate();
+        return response;
 	}
 
-	public static void ensureTestPeopleAreLoggedIn(WOResponse response, WOContext context) {
-		Session session = (Session) context.session();
-        session.setLanguage("English");
-		People people = People.clazz.userWithUsernamePassword(context.session().defaultEditingContext(), USERNAME, PASSWORD);
-		session.setUser(people);
-	}
-
-    public static void ensureTestAdmin(WOResponse response, WOContext context) {
-        deleteTestPeople(response, context);
-        addTestPeople(context, true);
-        ensureTestPeopleAreLoggedIn(response, context);
+    public WOActionResults ensureTestAdminAction() {
+        deleteTestPeople();
+        addTestPeople(true);
+        return ensureTestPeopleAreLoggedIn();
     }
 
-    public static void ensurePeopleSetup(WOResponse response, WOContext context) {
-        ensureTestAdmin(response, context);
-        People people = People.clazz.userWithUsernamePassword(context.session().defaultEditingContext(), "user100", "user");
+    public WOActionResults ensurePeopleSetupAction() {
+    	Session session = (Session)session();
+        People people = People.clazz.userWithUsernamePassword(session.defaultEditingContext(), "user100", "user");
+        assert people != null;
         people.setIsActive(false);
-        people = People.clazz.userWithUsernamePassword(context.session().defaultEditingContext(), "user101", "user");
+        
+        people = People.clazz.userWithUsernamePassword(session.defaultEditingContext(), "user101", "user");
+        assert people != null;
         people.setIsActive(true);
         people.setIsAdmin(false);
         people.setIsEngineering(false);
         people.setIsCustomerService(true);
-        context.session().defaultEditingContext().saveChanges();
+        session.defaultEditingContext().saveChanges();
+        
+        return ensureTestAdminAction();
+    }
+    
+    public WOActionResults deleteTestPeopleAction() {
+    	deleteTestPeople();
+    	return success();
     }
 	
 }
