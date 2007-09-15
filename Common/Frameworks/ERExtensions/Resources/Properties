@@ -458,6 +458,10 @@ dbMinConnectionsGLOBAL=1
 # if you want to use synchronization features
 # er.extensions.ERXLongPrimaryKeyFactory.encodeHostInPkValue=false
 # er.extensions.ERXLongPrimaryKeyFactory.hostCode=a value between 0 and 2<<10
+
+## the amount of keys to cache
+# er.extensions.ERXLongPrimaryKeyFactory.increaseBy = 1000
+
 #########################################################################
 # ERXWOResponseCache 
 #########################################################################
