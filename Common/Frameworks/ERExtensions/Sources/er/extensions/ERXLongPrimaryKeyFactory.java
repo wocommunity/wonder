@@ -62,8 +62,9 @@ public class ERXLongPrimaryKeyFactory {
 	private  Boolean         encodeHostInPkValue;
 	private  Integer 		hostCode;
 	private  Hashtable      pkCache      = new Hashtable();
-	private  int            increaseBy   = 0;
-
+	
+	private  Integer increaseBy;
+	
 	private Long getNextPkValueForEntity(String ename) {
 		Long pk = cachedPkValue(ename);
 		if (encodeHostInPkValue()) {
@@ -381,8 +382,8 @@ public class ERXLongPrimaryKeyFactory {
 	}
 
 	/**
-	 * creates 1000 primary key values for the specified entity and updates the
-	 * database
+	 * creates x primary key values for the specified entity and updates the
+	 * database, where x is the number specified in increaseBy
 	 * 
 	 * @param s,
 	 *            the stack into which the pk values should be inserted
@@ -393,16 +394,23 @@ public class ERXLongPrimaryKeyFactory {
 		Long pkValueStart = getNextPkValueForEntityIncreaseBy(ename, 10, increaseBy());
 		long value = pkValueStart.longValue();
 		log.debug("filling pkCache for " + ename + ", starting at " + value);
-		for (int i = increaseBy(); i-- > 1;) {
+		for (int i = increaseBy(); i > 0;  i--) {
 			s.push(new Long(i + value));
 		}
 	}
 
+	/**
+	 * The amount of cached keys, set the property
+	 * <code>er.extensions.ERXLongPrimaryKeyFactory.increaseBy</code> to the
+	 * interval you want to use.
+	 * 
+	 * @return the interval to use for cached keys
+	 */
 	private int increaseBy() {
-		if (increaseBy == 0) {
-			increaseBy = 1000;
+		if (increaseBy == null) {
+			increaseBy = new Integer(ERXProperties.intForKeyWithDefault("er.extensions.ERXLongPrimaryKeyFactory.increaseBy", 1000));
 		}
-		return increaseBy;
+		return increaseBy.intValue();
 	}
 
 }
