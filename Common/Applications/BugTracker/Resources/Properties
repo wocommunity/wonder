@@ -14,4 +14,3 @@ er.extensions.ERXLocalizer.fileNamesToWatch = ("Localizable.strings","Validation
 er.extensions.ERXJDBCAdaptor.className=er.extensions.ERXJDBCAdaptor
 
 SeleniumTestsEnabled = true
-SeleniumActionsClass = er.bugtracker.tests.SeleniumSetupActions
