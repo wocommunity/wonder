@@ -92,6 +92,7 @@ Object.extend(Form, {
 
     for (var i = 0; i < elements.length; i++) {
 			if (elements[i].type != 'submit') {
+        if (elements[i].type == 'select-multiple' && !elements[i].value) continue;
 	      var queryComponent = Form.Element.serialize(elements[i]);
 	      if (queryComponent) {
 	        queryComponents.push(queryComponent);
