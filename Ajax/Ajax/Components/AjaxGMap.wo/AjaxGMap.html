@@ -18,6 +18,17 @@
 			</webobject>
 	  }
 	}
-	    
-	load<webobject name = "MapContainerID"/>();
+	
+	if (window.addEventListener) { 
+		window.addEventListener('load', load<webobject name = "MapContainerID"/>, false);
+		window.addEventListener('unload', GUnload, false);
+	}
+	else if (window.attachEvent) { 
+		window.attachEvent('onload', load<webobject name = "MapContainerID"/>);
+		window.attachEvent('onunload', GUnload);
+	}
+	else {
+		window.onload = load<webobject name = "MapContainerID"/>;
+		window.onunload = GUnload;
+	}
 </script>
