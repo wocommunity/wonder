@@ -248,7 +248,7 @@ public class AjaxSubmitButton extends AjaxDynamicElement {
 
   protected void addRequiredWebResources(WOResponse res, WOContext context) {
     addScriptResourceInHead(context, res, "prototype.js");
-    addScriptResourceInHead(context, res, "scriptaculous.js");
+	addScriptResourceInHead(context, res, "effects.js");
     addScriptResourceInHead(context, res, "wonder.js");
   }
 

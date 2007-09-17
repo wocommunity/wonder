@@ -204,10 +204,7 @@ public class AjaxAutoComplete extends AjaxComponent {
 		boolean isDisabled = hasBinding("disabled") && ((Boolean) valueForBinding("disabled")).booleanValue();
 		if ( !isDisabled ) {
 			addScriptResourceInHead(res, "prototype.js");
-			addScriptResourceInHead(res, "scriptaculous.js");
 			addScriptResourceInHead(res, "effects.js");
-			addScriptResourceInHead(res, "builder.js");
-			addScriptResourceInHead(res, "dragdrop.js");
 			addScriptResourceInHead(res, "controls.js");
 			addScriptResourceInHead(res, "wonder.js");
 		}
