@@ -96,11 +96,11 @@ public class FocusTextField extends ERXWOTextField {
 		if (focus || selectAll) {
 			response.appendContentString("setTimeout(function() { ");
 		}
-		if (focus) {
-			response.appendContentString("Field.focus('" + id + "');");
-		}
 		if (selectAll) {
 			response.appendContentString("Field.select('" + id + "');");
+		}
+		if (focus) {
+			response.appendContentString("Field.focus('" + id + "');");
 		}
 		if (focus || selectAll) {
 			response.appendContentString(" }, 10);");
