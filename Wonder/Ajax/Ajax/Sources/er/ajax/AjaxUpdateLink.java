@@ -48,6 +48,7 @@ import er.extensions.ERXStringUtilities;
  * @binding button if true, this is rendered as a javascript button
  * 
  * @binding effect synonym of afterEffect except it always applies to updateContainerID
+ * @binding effectDuration the duration of the effect to apply before
  * @binding beforeEffect the Scriptaculous effect to apply onSuccess ("highlight", "slideIn", "blindDown", etc);
  * @binding beforeEffectID the ID of the container to apply the "before" effect to (blank = try nearest container, then
  *          try updateContainerID)
@@ -80,7 +81,7 @@ public class AjaxUpdateLink extends AjaxDynamicElement {
 		String function = (String) valueForBinding("function", component);
 		String replaceID = (String) valueForBinding("replaceID", component);
 
-		AjaxUpdateLink.addEffect(options, (String) valueForBinding("effect", component), updateContainerID);
+		AjaxUpdateLink.addEffect(options, (String) valueForBinding("effect", component), updateContainerID, (String) valueForBinding("effectDuration", component));
 		String afterEffectID = (String) valueForBinding("afterEffectID", component);
 		if (afterEffectID == null) {
 			afterEffectID = AjaxUpdateContainer.currentUpdateContainerID();
@@ -88,7 +89,7 @@ public class AjaxUpdateLink extends AjaxDynamicElement {
 				afterEffectID = updateContainerID;
 			}
 		}
-		AjaxUpdateLink.addEffect(options, (String) valueForBinding("afterEffect", component), afterEffectID);
+		AjaxUpdateLink.addEffect(options, (String) valueForBinding("afterEffect", component), afterEffectID, (String) valueForBinding("afterEffectDuration", component));
 
 		String beforeEffect = (String) valueForBinding("beforeEffect", component);
 
@@ -210,7 +211,7 @@ public class AjaxUpdateLink extends AjaxDynamicElement {
 		return onClickBuffer.toString();
 	}
 
-	public static void addEffect(NSMutableDictionary options, String effect, String updateContainerID) {
+	public static void addEffect(NSMutableDictionary options, String effect, String updateContainerID, String duration) {
 		if (effect != null) {
 			if (options.objectForKey("onSuccess") != null) {
 				throw new WODynamicElementCreationException("You cannot specify both an effect and a custom onSuccess function.");
@@ -219,8 +220,16 @@ public class AjaxUpdateLink extends AjaxDynamicElement {
 			if (updateContainerID == null) {
 				throw new WODynamicElementCreationException("You cannot specify an effect without an updateContainerID.");
 			}
+			
+			StringBuffer effectBuffer = new StringBuffer();
+			effectBuffer.append("function() { new " + AjaxUpdateLink.fullEffectName(effect) + "('" + updateContainerID + "', {  queue:'end'");
+			if (duration != null) {
+				effectBuffer.append(", duration: ");
+				effectBuffer.append(duration);
+			}
+			effectBuffer.append("}) }");
 
-			options.setObjectForKey("function() { new " + AjaxUpdateLink.fullEffectName(effect) + "('" + updateContainerID + "', { queue:'end'}) }", "onSuccess");
+			options.setObjectForKey(effectBuffer.toString(), "onSuccess");
 		}
 	}
 
