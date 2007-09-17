@@ -20,7 +20,7 @@ public class AjaxBusyIndicator extends AjaxComponent {
 
   protected void addRequiredWebResources(WOResponse res) {
     addScriptResourceInHead(res, "prototype.js");
-    addScriptResourceInHead(res, "scriptaculous.js");
+	addScriptResourceInHead(res, "effects.js");
   }
 
   public String busyClass() {
