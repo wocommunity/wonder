@@ -38,7 +38,7 @@ public class AjaxUpdateContainer extends AjaxDynamicElement {
 	 */
 	protected void addRequiredWebResources(WOResponse response, WOContext context) {
 		addScriptResourceInHead(context, response, "prototype.js");
-		addScriptResourceInHead(context, response, "scriptaculous.js");
+    	addScriptResourceInHead(context, response, "effects.js");
 		addScriptResourceInHead(context, response, "wonder.js");
 	}
 	
