@@ -39,11 +39,13 @@ import er.extensions.ERXWOForm;
  * @binding formSerializer the name of the javascript function to call to serialize the form
  * 
  * @binding effect synonym of afterEffect except it always applies to updateContainerID
+ * @binding effectDuration synonym of afterEffectDuration except it always applies to updateContainerID
  * @binding beforeEffect the Scriptaculous effect to apply onSuccess ("highlight", "slideIn", "blindDown", etc);
  * @binding beforeEffectID the ID of the container to apply the "before" effect to (blank = try nearest container, then try updateContainerID)
  * @binding beforeEffectDuration the duration of the effect to apply before
  * @binding afterEffect the Scriptaculous effect to apply onSuccess ("highlight", "slideIn", "blindDown", etc);
  * @binding afterEffectID the ID of the container to apply the "after" effect to (blank = try nearest container, then try updateContainerID)
+ * @binding afterEffectDuration the duration of the effect to apply after
  * 
  * @binding insertion JavaScript function to evaluate when the update takes place (or effect shortcuts like "Effect.blind", or "Effect.BlindUp")
  * @binding insertionDuration the duration of the before and after insertion animation (if using insertion) 
@@ -177,7 +179,7 @@ public class AjaxSubmitButton extends AjaxDynamicElement {
 	
     NSMutableDictionary options = createAjaxOptions(component, formReference);
 	
-	AjaxUpdateLink.addEffect(options, (String) valueForBinding("effect", component), updateContainerID);
+	AjaxUpdateLink.addEffect(options, (String) valueForBinding("effect", component), updateContainerID, (String) valueForBinding("effectDuration", component));
 	String afterEffectID = (String) valueForBinding("afterEffectID", component);
 	if (afterEffectID == null) {
 		afterEffectID = AjaxUpdateContainer.currentUpdateContainerID();
@@ -185,7 +187,7 @@ public class AjaxSubmitButton extends AjaxDynamicElement {
 			afterEffectID = updateContainerID;
 		}
 	}
-	AjaxUpdateLink.addEffect(options, (String) valueForBinding("afterEffect", component), afterEffectID);
+	AjaxUpdateLink.addEffect(options, (String) valueForBinding("afterEffect", component), afterEffectID, (String) valueForBinding("afterEffectDuration", component));
 	
     AjaxOptions.appendToBuffer(options, onClickBuffer, context);
     onClickBuffer.append(")");
