@@ -74,10 +74,10 @@ public  class ERXRequest extends WORequest {
 					String languageKey = (String) e.nextElement();
 					String language = (String) WOProperties.TheLanguageDictionary.objectForKey(languageKey);
 					if(language == null) {
-						int index = language.indexOf('_');
+						int index = languageKey.indexOf('_');
 						if(index > 0) {
-							String mainLanguageKey = language.substring(0, index - 1);
-							String region = language.substring(index);
+							String mainLanguageKey = languageKey.substring(0, index - 1);
+							String region = languageKey.substring(index);
 							language = (String) WOProperties.TheLanguageDictionary.objectForKey(mainLanguageKey);
 							if(language != null) {
 								language = language + region.toUpperCase();
