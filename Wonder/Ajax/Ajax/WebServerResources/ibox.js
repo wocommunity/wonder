@@ -3,10 +3,14 @@ For more info & download: http://www.ibegin.com/blog/p_ibox.html
 Created for iBegin.com - local search done right
 MIT Licensed Style
 *********************************************************/
-var indicator_img_path = "indicator.gif";
+var indicator_img_path = "/images/indicator.gif";
 var indicator_img_html = "<img name=\"ibox_indicator\" src=\""+indicator_img_path+"\" alt=\"Loading...\" style=\"width:128px;height:128px;\"/>"; // don't remove the name
 
+var opacity_level = 8; // how transparent our overlay bg is
+var ibAttr = "rel"; 	// our attribute identifier for our iBox elements
+	
 
+var imgPreloader = new Image(); // create an preloader object
 function init_ibox() {
 	var elem_wrapper = "ibox";
 	
@@ -17,7 +21,6 @@ function init_ibox() {
 	
 	// Or make sure we only check <a> tags
 	var docRoot = document.getElementsByTagName("a");
-	var ibAttr = "rel"; 	// our attribute identifier for our iBox elements
 
 	var e;
 	for (var i = 0; i < docRoot.length - 1; i++) {
@@ -30,11 +33,14 @@ function init_ibox() {
 							var params = parseQuery(t.substr(5,999));
 							var url = this.href;
 							if(this.target != "") {url = this.target} 
+	
 							var title = this.title;
-							showBG();
-							showIbox(url,title,params);	// show ibox
-							window.onscroll = maintPos;
-							window.onresize = maintPos;
+
+							if(showIbox(url,title,params)) {
+								showBG();
+								window.onscroll = maintPos;
+								window.onresize = maintPos;
+							}
 							return false;
 						}; 
 						
@@ -45,36 +51,29 @@ function init_ibox() {
 
 showBG = function() {
 	var box_w = getElem('ibox_w');
+	
 
-	var opacity_level = 8;
 	box_w.style.opacity = 0;
 	box_w.style.filter = 'alpha(opacity=0)';
-
 	setBGOpacity = setOpacity;
 	for (var i=0;i<=opacity_level;i++) {setTimeout("setIboxOpacity('ibox_w',"+i+")",70*i);} // from quirksmode.org
+	
 		
 	box_w.style.display = "";
 	var pagesize = new getPageSize();
 	var scrollPos = new getScrollPos();
 	var ua = navigator.userAgent;
+	
 	if(ua.indexOf("MSIE ") != -1) {box_w.style.width = pagesize.width+'px';} 
-	else {box_w.style.width = pagesize.width-20+'px';}
+	/*else {box_w.style.width = pagesize.width-20+'px';}*/ // scrollbars removed! Hurray!
 	box_w.style.height = pagesize.height+scrollPos.scrollY+'px';
-	selectVisibility("hidden");
-}
 
-/* Scrollbar hiding by Heidi http://liquidlead-art.com/ */
-selectVisibility = function(v) {
-	var selectElems = document.getElementsByTagName('select');	
-	for(var i = 0; i < selectElems.length; ++i) {
-		selectElems[i].style.visibility = v;
-	}
 }
 
 hideBG = function() {
 	var box_w = getElem('ibox_w');
 	box_w.style.display = "none";
-	selectVisibility("visible");
+
 }
 
 var loadCancelled = false;
@@ -114,58 +113,78 @@ createIbox = function(elem) {
 
 var ibox_w_height = 0;
 showIbox = function(url,title,params) {
-var ibox = getElem('ibox_wrapper');
-var ibox_type = 0;
+	
+	var ibox = getElem('ibox_wrapper');
+	var ibox_type = 0;
 												
 	// set title here
 	var ibox_footer = getElem('ibox_footer');
 	if(title != "") {ibox_footer.innerHTML = title;} else {ibox_footer.innerHTML = "&nbsp;";}
-
-	// url = url.toLowerCase(); // have to lowercase
 	
 	// file checking code borrowed from thickbox
-	var urlString = /\.jpg|\.jpeg|\.png|\.gif|\.html|\.htm|\.php|\.cfm|\.asp|\.aspx|\.jsp|\.jst|\.rb|\.txt|\/wo\/|\/wa\//g;
-	var urlType = url.match(urlString);
+	var urlString = /\.jpg|\.jpeg|\.png|\.gif|\.html|\.htm|\.php|\.cfm|\.asp|\.aspx|\.jsp|\.jst|\.rb|\.rhtml|\.txt/g;
 	
+	var urlType = url.match(urlString);
+
 	if(urlType == '.jpg' || urlType == '.jpeg' || urlType == '.png' || urlType == '.gif'){
-		ibox_type = 0;
+		ibox_type = 1;
+	} else if(url.indexOf("#") != -1) {
+		ibox_type = 2;
+	} else if(urlType=='.htm'||urlType=='.html'||urlType=='.php'||
+			 urlType=='.asp'||urlType=='.aspx'||urlType=='.jsp'||
+			 urlType=='.jst'||urlType=='.rb'||urlType=='.txt'||urlType=='.rhtml'||
+			 urlType=='.cfm') {
+		ibox_type = 3;
+	} else {
+		// override our ibox type if forced param exist
+		if(params['type']) {ibox_type = parseInt(params['type']);}
+		else{hideIbox();return false;}
+	}
+	
+	ibox_type = parseInt(ibox_type);
 
+
+	switch(ibox_type) {
 		
-		showIndicator();
-		
-		var imgPreloader = new Image();
-		
-		imgPreloader.onload = function(){
+		case 1:
 
-			imgPreloader = resizeImageToScreen(imgPreloader);
-			hideIndicator();
-
-			getElem('ibox_content').style.overflow = "hidden";
-
-			var strHTML = "<a href=\"javascript:void(null);\"><img name=\"ibox_img\" src=\""+url+"\" style=\"width:"+imgPreloader.width+"px;height:"+imgPreloader.height+"px;border:0;\"/></a>";
+			showIndicator();
 			
-			if(loadCancelled == false) {
-				// set width and height
-				ibox.style.height = imgPreloader.height+'px';
-				ibox.style.width = imgPreloader.width+'px';
-				ibox.style.display = "";
-				ibox.style.visibility = "hidden";
-				posToCenter(ibox); 	
-				ibox.style.visibility = "visible";
-				setIBoxContent(strHTML);
-			}
+			imgPreloader = new Image();
+			
+			imgPreloader.onload = function(){
+	
+				imgPreloader = resizeImageToScreen(imgPreloader);
+				hideIndicator();
+	
+				var strHTML = "<img name=\"ibox_img\" src=\""+url+"\" style=\"width:"+imgPreloader.width+"px;height:"+imgPreloader.height+"px;border:0;cursor:hand;margin:0;padding:0;position:absolute;\"/>";
+	
+				if(loadCancelled == false) {
+					
+					// set width and height
+					ibox.style.height = imgPreloader.height+'px';
+					ibox.style.width = imgPreloader.width+'px';
 				
-		}
-		
-		loadCancelled = false;
-		imgPreloader.src = url;
-		
+					ibox.style.display = "";
+					ibox.style.visibility = "hidden";
+					posToCenter(ibox); 	
+					ibox.style.visibility = "visible";
 
-		
-	} else if(url.indexOf("#") > 0) {
+					setIBoxContent(strHTML);
+				}
+					
+			}
+			
+			loadCancelled = false;
+			imgPreloader.src = url;
+			
+			break;
+
+		case 2:
+			
 			var strHTML = "";
-			ibox_type = 1;
 
+			
 			if(params['height']) {ibox.style.height = params['height']+'px';} 
 			else {ibox.style.height = '280px';}
 			
@@ -177,26 +196,23 @@ var ibox_type = 0;
 			ibox.style.visibility = "hidden";
 			posToCenter(ibox); 	
 			ibox.style.visibility = "visible";
-
+			
+			getElem('ibox_content').style.overflow = "auto";
+			
 			var elemSrcId = url.substr(url.indexOf("#") + 1,1000);
+			
 			var elemSrc = getElem(elemSrcId);
 			
-			if(elemSrc) {
-				strHTML = elemSrc.innerHTML;
-			}
-
+			if(elemSrc) {strHTML = elemSrc.innerHTML;}
+		
 			setIBoxContent(strHTML);
-
-	}else if(urlType=='.htm'||urlType=='.html'||urlType=='.php'||
-			 urlType=='.asp'||urlType=='.aspx'||urlType=='.jsp'||
-			 urlType=='.jst'||urlType=='.rb'||urlType=='.txt'||urlType=='/wo/'||urlType=='/wa/'||
-			 urlType=='.cfm') {
 			
-			ibox_type = 2;
-	
+			break;
+			
+		case 3:
 			showIndicator();
 			http.open('get',url,true);
-	
+
 			http.onreadystatechange = function() {
 				if(http.readyState == 4){
 					hideIndicator();
@@ -211,19 +227,22 @@ var ibox_type = 0;
 					ibox.style.visibility = "hidden";
 					posToCenter(ibox); 	
 					ibox.style.visibility = "visible";
-
+					getElem('ibox_content').style.overflow = "auto";
+					
 					var response = http.responseText;
 					setIBoxContent(response);
-					
 					
 				}
 			}
 			
 			http.setRequestHeader("Content-Type","application/x-www-form-urlencoded; charset=UTF-8");
 			http.send(null);
-
+			break;
+		
+		default:
 			
-	} 
+	 } 
+	 
 	
 	ibox.style.opacity = 0;
 	ibox.style.filter = 'alpha(opacity=0)';	
@@ -232,17 +251,12 @@ var ibox_type = 0;
 	setIboxOpacity = setOpacity;
 	for (var i=0;i<=ibox_op_level;i++) {setTimeout("setIboxOpacity('ibox_wrapper',"+i+")",30*i);}
 
-
-	if(ibox_type == 1 || ibox_type == 2) {
+	if(ibox_type == 2 || ibox_type == 3) {
 		ibox.onclick = null;getElem("ibox_close_a").onclick = function() {hideIbox();}
-	} else {
-		ibox.onclick = hideIbox;getElem("ibox_close_a").onclick = null;
-	}
+	} else {ibox.onclick = hideIbox;getElem("ibox_close_a").onclick = null;}
 
+	return true;
 }
-
-
-
 
 setOpacity = function (elemid,value)	{
 		var e = getElem(elemid);
@@ -251,7 +265,6 @@ setOpacity = function (elemid,value)	{
 }
 
 resizeImageToScreen = function(objImg) {
-	
 	
 	var pagesize = new getPageSize();
 	
@@ -275,21 +288,27 @@ resizeImageToScreen = function(objImg) {
 			objImg.width = x;
 		}
 	}
-	
+
 	return objImg;
 }
 
 maintPos = function() {
+	
 	var ibox = getElem('ibox_wrapper');
 	var box_w = getElem('ibox_w');
 	var pagesize = new getPageSize();
+	var scrollPos = new getScrollPos();
 	var ua = navigator.userAgent;
-	
+
 	if(ua.indexOf("MSIE ") != -1) {box_w.style.width = pagesize.width+'px';} 
-	else {box_w.style.width = pagesize.width-20+'px';}
+	/*else {box_w.style.width = pagesize.width-20+'px';}*/
 
 	if(ua.indexOf("Opera/9") != -1) {box_w.style.height = document.body.scrollHeight+'px';}
-	else {box_w.style.height = document.body.scrollHeight+50+'px';}
+	else {box_w.style.height = pagesize.height+scrollPos.scrollY+'px';}
+	
+	// alternative 1
+	//box_w.style.height = document.body.scrollHeight+50+'px';	
+	
 	posToCenter(ibox);
 	
 }
@@ -333,13 +352,14 @@ getElementSize = function(elem) {
 setIBoxContent = function(str) {
 	clearIboxContent();
 	var e = getElem('ibox_content');
-	e.innerHTML = str;
 	e.style.overflow = "auto";
+	e.innerHTML = str;
+	
 }
 clearIboxContent = function() {
 	var e = getElem('ibox_content');
 	e.innerHTML = "";
-	e.style.overflow = "hidden";
+
 }
 
 
