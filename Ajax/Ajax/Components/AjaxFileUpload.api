@@ -24,5 +24,6 @@
 		<binding name = "progressBarAfterDone"/>
 		<binding name = "refreshTime"/>
 		<binding name = "keepTempFile"/>
+		<binding name = "uploadLabel"/>
 	</wo>
 </wodefinitions>
