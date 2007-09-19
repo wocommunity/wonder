@@ -42,7 +42,7 @@ UploadAction : AjaxUpdateLink {
 	updateContainerID = progressBarID;
 	action = startUpload;
 	button = true;
-	value = "Upload";
+	value = uploadLabel;
 	disabled = false;
 }
 

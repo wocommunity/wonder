@@ -47,6 +47,7 @@ import er.extensions.ERXUnitAwareDecimalFormat;
  * @binding progressBarAfterDone if true, the progress bar is visible after the upload is done
  * @binding refreshTime the number of milliseconds to wait between refreshes
  * @binding keepTempFile if true, don't delete the temp file that AjaxFileUpload creates
+ * @binding uploadLabel the label to display on the Upload button ("Upload" by default)
  * 
  * @author mschrag
  */
@@ -93,6 +94,14 @@ public class AjaxFileUpload extends WOComponent {
 		return false;
 	}
 
+	public String uploadLabel() {
+		String uploadLabel = (String)valueForBinding("uploadLabel");
+		if (uploadLabel == null) {
+			uploadLabel = "Upload";
+		}
+		return uploadLabel;
+	}
+	
 	public boolean progressBarBeforeStart() {
 		boolean progressBarBeforeStart = false;
 		if (hasBinding("progressBarBeforeStart")) {
