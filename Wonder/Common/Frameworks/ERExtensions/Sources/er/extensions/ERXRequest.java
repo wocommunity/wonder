@@ -29,6 +29,13 @@ public  class ERXRequest extends WORequest {
     public static final Logger log = Logger.getLogger(ERXRequest.class);
 
     protected static Boolean isBrowserFormValueEncodingOverrideEnabled;
+
+    protected static final String UNKNOWN_HOST = "UNKNOWN";
+
+    protected static final NSArray<String> HOST_ADDRESS_KEYS = new NSArray<String>(new String[]{"remote_host", "remote_addr", "remote_user", "x-webobjects-remote-addr"});
+
+    protected static final NSArray<String> HOST_NAME_KEYS = new NSArray<String>(new String[]{"x-forwarded-host", "Host", "x-webobjects-server-name", "server_name", "http_host"});
+    
     public boolean isBrowserFormValueEncodingOverrideEnabled() {
         if (isBrowserFormValueEncodingOverrideEnabled == null) {
             isBrowserFormValueEncodingOverrideEnabled = ERXProperties.booleanForKeyWithDefault("er.extensions.ERXRequest.BrowserFormValueEncodingOverrideEnabled", false) ? Boolean.TRUE : Boolean.FALSE;
@@ -332,33 +339,46 @@ public  class ERXRequest extends WORequest {
     }
     
     /**
-     * Returns the remote host name. Works in various setups, like
-     * direct connect, deployed etc. If no host name can be found,
-     * returns "UNKNOWN".
+     * @deprecated Use remoteHostAddress() instead
      */
     public String remoteHost() {
-        String host = null;
+    	return remoteHostAddress();
+    }
+
+    /**
+     * Returns the remote client host address. Works in various setups, like
+     * direct connect, deployed etc. If no host name can be found,
+     * returns "UNKNOWN".
+     * 
+     * @return remote client host address
+     */
+    public String remoteHostAddress() {
         if (WOApplication.application().isDirectConnectEnabled()) {
-            InetAddress hostAdd = _originatingAddress();
-            if (hostAdd != null) {
-                host = hostAdd.getHostAddress();
-                return host;
+            if (_originatingAddress() != null) {
+                return _originatingAddress().getHostAddress();
             }
         }
-        if (host == null) {
-            host = headerForKey("remote_host");
-            if (host != null) return host;
-            
-            host= headerForKey("remote_addr");
-            if (host != null) return host;
-            
-            host = headerForKey("remote_user");
-            if (host != null) return host;
-            
-            host = headerForKey("x-webobjects-remote-addr");
-            if (host != null) return host;
-        }
-        return "UNKNOWN";
+        for (String key : HOST_ADDRESS_KEYS) {
+			if (headerForKey(key) != null) {
+				return headerForKey(key);
+			}
+		}
+        return UNKNOWN_HOST;
+    }
+    
+    /**
+     * Returns the remote client host name. If no host name can be found,
+     * returns "UNKNOWN".
+     * 
+     * @return remote client host name
+     */
+    public String remoteHostName() {
+    	for (String key : HOST_NAME_KEYS) {
+			if (headerForKey(key) != null) {
+				return headerForKey(key);
+			}
+		}
+    	return UNKNOWN_HOST;
     }
 
 	public NSMutableDictionary mutableUserInfo() {
