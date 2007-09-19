@@ -21,6 +21,8 @@ import com.webobjects.foundation.NSMutableSet;
  * @@, then a possible template might look like: "Hello, @@name@@.  How are
  * you feeling today?",  In this case the object will get asked for the
  * value name. This works with key-paths as well.
+ * 
+ * @property er.extensions.ERXSimpleTemplateParser.useOldDelimiter if false, only @@ delimeters are supported (defaults to true)
  */
 public class ERXSimpleTemplateParser {
 
@@ -73,7 +75,7 @@ public class ERXSimpleTemplateParser {
     private final String _undefinedKeyLabel;
 
     /** Defines if @ can be used as alternative delimiter */
-    private boolean _useOldDelimiter = true;
+    private Boolean _useOldDelimiter;
 
     
     /** 
@@ -107,7 +109,14 @@ public class ERXSimpleTemplateParser {
      */
     public ERXSimpleTemplateParser(String undefinedKeyLabel, boolean useOldDelimiter) {
         this(undefinedKeyLabel);
-        _useOldDelimiter = useOldDelimiter;
+        _useOldDelimiter = Boolean.valueOf(useOldDelimiter);
+    }
+    
+    protected boolean useOldDelimiter() {
+    	if (_useOldDelimiter == null) {
+    		_useOldDelimiter = Boolean.valueOf(ERXProperties.booleanForKeyWithDefault("er.extensions.ERXSimpleTemplateParser.useOldDelimiter", true));
+    	}
+    	return _useOldDelimiter.booleanValue();
     }
     
     /**
@@ -195,7 +204,7 @@ public class ERXSimpleTemplateParser {
             log.debug("Delim: " + delimiter);
             log.debug("otherObject: " + otherObject);
         }
-        if (_useOldDelimiter && delimiter.equals(DEFAULT_DELIMITER) && template.indexOf(delimiter) < 0 && template.indexOf(DEPRECATED_DELIMITER) >= 0) {
+        if (useOldDelimiter() && delimiter.equals(DEFAULT_DELIMITER) && template.indexOf(delimiter) < 0 && template.indexOf(DEPRECATED_DELIMITER) >= 0) {
             if (!isLoggingDisabled) {
                 log.warn("It seems that the template string '" + template + "' is using the old delimiter '@' instead of '@@'. I will use '@' for now but you should fix this by updating the template.");
             }
