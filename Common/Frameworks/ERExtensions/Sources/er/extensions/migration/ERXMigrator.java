@@ -245,7 +245,7 @@ public class ERXMigrator {
 					}
 					catch (ClassNotFoundException e) {
 						if (ERXMigrator.log.isDebugEnabled()) {
-							ERXMigrator.log.debug("Looking for vendor-specific migration '" + vendorMigrationClassName + "-' ...");
+							ERXMigrator.log.debug("Looking for vendor-specific migration '" + vendorMigrationClassName + "' ...");
 						}
 						erMigrationClass = Class.forName(vendorMigrationClassName);
 					}
