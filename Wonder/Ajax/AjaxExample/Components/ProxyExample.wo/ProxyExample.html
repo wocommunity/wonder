@@ -6,17 +6,18 @@
         <webobject name = "URLDict_CSS"></webobject>
         <webobject name = "URLDict_JS"/>
         <script type="text/javascript"> 
-function add() { 
-	var add_field = document.getElementById("add_field"); 
-	add_field.value = jason.wopage.add(); 
-} 
-function addMore(combien) { 
-	var add_field = document.getElementById("add_field"); 
-	add_field.value = jason.wopage.addMore(combien); 
-} </script>
-        <script> function bodyOnLoad() { 
+		function add() { 
+			var add_field = document.getElementById("add_field"); 
+			add_field.value = jason.wopage.add(); 
+		} 
+		function addMore(combien) { 
+			var add_field = document.getElementById("add_field"); 
+			add_field.value = jason.wopage.addMore(combien); 
+		} 
+        function bodyOnLoad() { 
         	dictOnLoad(); 
-} </script>
+		} 
+		</script>
     </head>
     <body onload="bodyOnLoad();">
         <h1><webobject name="Image1"></webobject>JSON-RPC-Java (requires servlet.jar in your /Library/WebObjects/Extensions)</h1>
