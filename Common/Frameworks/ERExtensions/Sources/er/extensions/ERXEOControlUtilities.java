@@ -1794,4 +1794,107 @@ public class ERXEOControlUtilities {
 	   }
 	   return result;
    }
+   
+   /**
+	 * Validates whether the values of the specified keyPaths are unique for an
+	 * Entity. Throws a {@link ERXValidationException} if there is already an EO
+	 * with the same values on the given key paths.
+	 * 
+	 * Should be combined with a constraint on the corresponding database
+	 * columns. <br />
+	 * <br />
+	 * Based on Zak Burke's idea he posted to WOCode a while ago. <br />
+	 * <br />
+	 * Use in <code>validateForSave</code> like this:
+	 * 
+	 * <pre>
+	 *       ...
+	 *       public class WikiPage extends _WikiPage {
+	 *       ...
+	 *       	public void validateForSave() throws ValidationException {
+	 *       		super.validateForSave();
+	 *       		ERXEOControlUtilities.validateUniquenessOf(this, ERXQ.equals(&quot;active&quot;, true), &quot;title&quot;, &quot;wiki&quot;);
+	 *       	}
+	 *       ...
+	 *       }
+	 * </pre>
+	 * 
+	 * Combine with entries in <code>ValidationTemplate.strings</code> like:
+	 * 
+	 * <pre>
+	 * &quot;WikiPage.title,space.UniquenessViolationNewObject&quot; = &quot;The page cannot be created. There is already a page named &lt;b&gt;@@value.title@@&lt;/b&gt; in Wiki &lt;b&gt;@@value.wiki.name@@&lt;/b&gt;.&quot;;
+	 * &quot;WikiPage.title,space.UniquenessViolationExistingObject&quot; = &quot;The page cannot be changed this way. There is already a page named &lt;b&gt;@@value.title@@&lt;/b&gt; in Wiki &lt;b&gt;@@value.wiki.name@@&lt;/b&gt;.&quot;;
+	 * </pre>
+	 * 
+	 * @param eo
+	 *            the {@link EOEnterpriseObject} to validate
+	 * 
+	 * @param keys
+	 *            an arbitrary number of keyPaths to validate.
+	 * 
+	 * @param restrictingQualifier
+	 *            an optional resticting qualifier to exclude certain objects
+	 *            from the check
+	 * 
+	 * @throws ERXValidationException
+	 *             if an EO with the same property values already exists. If you
+	 *             specify more than one keyPath to validate, the 'key' property
+	 *             will be a comma separated string of the provided keyPaths.
+	 *             'value' will be a dictionary with the supplied keyPaths as
+	 *             keys and the values corresponding to these keys in the
+	 *             supplied eo as values.
+	 * 
+	 * @author th
+	 */
+	public static void validateUniquenessOf(EOEnterpriseObject eo, EOQualifier restrictingQualifier, String... keys) {
+		NSArray<String> keyPaths = new NSArray(keys);
+		NSDictionary<String, Object> dict = ERXDictionaryUtilities.dictionaryFromObjectWithKeys(eo, keyPaths);
+		EOQualifier qualifier = EOKeyValueQualifier.qualifierToMatchAllValues(dict);
+		if (restrictingQualifier != null) {
+			qualifier = ERXEOControlUtilities.andQualifier(qualifier, restrictingQualifier);
+		}
+		// take into account unsaved objects and skip deleted objects. The
+		// "includeNewObjects" part won't work for inheritance!
+		NSArray<EOEnterpriseObject> objects = ERXEOControlUtilities.objectsWithQualifier(eo.editingContext(), eo.entityName(), qualifier, null, true, false, false, true);
+		// should we throw if the supplied eo is not included in the results?
+		objects = ERXArrayUtilities.arrayMinusObject(objects, eo);
+		int count = objects.count();
+		if (count == 0) {
+			// everything OK
+		}
+		else {
+			String keyPathsString = keyPaths.componentsJoinedByString(",");
+			if (count == 1) {
+				// if we get here, we found an object matching the values
+				if (ERXEOControlUtilities.isNewObject(eo)) {
+					throw ERXValidationFactory.defaultFactory().createException(eo, keyPathsString, dict, "UniquenessViolationNewObject");
+				}
+				else {
+					throw ERXValidationFactory.defaultFactory().createException(eo, keyPathsString, dict, "UniquenessViolationExistingObject");
+				}
+			}
+			else {
+				// DB is already inconsitent!
+				throw ERXValidationFactory.defaultFactory().createException(eo, keyPathsString, dict, "UniquenessViolationDatabaseInconsistent");
+			}
+		}
+	}
+
+	/**
+	 * Convinience method which calls
+	 * <code>validateUniquenessOf(EOEnterpriseObject
+	 * eo, EOQualifier restrictingQualifier, String... keys)</code>
+	 * with <code>null</code> as <code>restrictingQualifier</code>.
+	 * 
+	 * @param eo
+	 *            the {@link EOEnterpriseObject} to validate
+	 * @param keys
+	 *            an arbitrary number of keyPaths to validate.
+	 * 
+	 * @author th
+	 */
+	public static void validateUniquenessOf(EOEnterpriseObject eo, String... keys) {
+		validateUniquenessOf(eo, null, keys);
+	}
+	
 }
