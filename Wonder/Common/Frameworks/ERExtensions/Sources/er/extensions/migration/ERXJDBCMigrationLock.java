@@ -21,18 +21,23 @@ import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.jdbcadaptor.JDBCAdaptor;
 
 import er.extensions.ERXJDBCUtilities;
+import er.extensions.ERXModelGroup;
 import er.extensions.ERXProperties;
 
 /**
  * JDBC implementation of the migration lock.
  * 
- * @property er.migration.JDBC.dbUpdaterTableName the name of the db update version table (defaults to _DBUpdater)
- * @property er.migration.createTablesIfNecessary if true, the tables and model rows will be created automatically.
- *           *ONLY SET THIS IF YOU ARE RUNNING IN DEVELOPMENT MODE OR WITH A SINGLE INSTANCE*. If you are running
- *           multiple instances, the instances will not be able to acquire locks properly and you may end up with
- *           multiple instances attempting to create lock tables and/or failing to startup properly.
- * @property <ModelName>.InitialMigrationVersion the starting version number (in case you are retrofitting a project
- *           with migrations)
+ * @property er.migration.JDBC.dbUpdaterTableName the name of the db update
+ *           version table (defaults to _DBUpdater)
+ * @property er.migration.createTablesIfNecessary if true, the tables and model
+ *           rows will be created automatically. *ONLY SET THIS IF YOU ARE
+ *           RUNNING IN DEVELOPMENT MODE OR WITH A SINGLE INSTANCE*. If you are
+ *           running multiple instances, the instances will not be able to
+ *           acquire locks properly and you may end up with multiple instances
+ *           attempting to create lock tables and/or failing to startup
+ *           properly.
+ * @property <ModelName>.InitialMigrationVersion the starting version number (in
+ *           case you are retrofitting a project with migrations)
  * @author mschrag
  */
 public class ERXJDBCMigrationLock implements IERXMigrationLock {
@@ -55,7 +60,7 @@ public class ERXJDBCMigrationLock implements IERXMigrationLock {
 	}
 
 	public boolean _tryLock(EOAdaptorChannel channel, EOModel model, String lockOwnerName, boolean createTableIfMissing) {
-		JDBCAdaptor adaptor = (JDBCAdaptor)channel.adaptorContext().adaptor();
+		JDBCAdaptor adaptor = (JDBCAdaptor) channel.adaptorContext().adaptor();
 		try {
 			int count;
 			boolean wasOpen = true;
@@ -133,7 +138,7 @@ public class ERXJDBCMigrationLock implements IERXMigrationLock {
 			wasOpen = false;
 		}
 		try {
-			JDBCAdaptor adaptor = (JDBCAdaptor)channel.adaptorContext().adaptor();
+			JDBCAdaptor adaptor = (JDBCAdaptor) channel.adaptorContext().adaptor();
 			EOModel dbUpdaterModel = dbUpdaterModelWithModel(model, adaptor);
 			NSMutableDictionary<String, Object> row = new NSMutableDictionary<String, Object>();
 			row.setObjectForKey(new Integer(0), "updateLock");
@@ -163,7 +168,7 @@ public class ERXJDBCMigrationLock implements IERXMigrationLock {
 		}
 		int version;
 		try {
-			JDBCAdaptor adaptor = (JDBCAdaptor)channel.adaptorContext().adaptor();
+			JDBCAdaptor adaptor = (JDBCAdaptor) channel.adaptorContext().adaptor();
 			EOModel dbUpdaterModel = dbUpdaterModelWithModel(model, adaptor);
 			EOEntity dbUpdaterEntity = dbUpdaterModel.entityNamed(_dbUpdaterTableName);
 			EOFetchSpecification fetchSpec = new EOFetchSpecification(_dbUpdaterTableName, new EOKeyValueQualifier("modelName", EOQualifier.QualifierOperatorEqual, model.name()), null);
@@ -196,7 +201,7 @@ public class ERXJDBCMigrationLock implements IERXMigrationLock {
 			wasOpen = false;
 		}
 		try {
-			JDBCAdaptor adaptor = (JDBCAdaptor)channel.adaptorContext().adaptor();
+			JDBCAdaptor adaptor = (JDBCAdaptor) channel.adaptorContext().adaptor();
 			EOModel dbUpdaterModel = dbUpdaterModelWithModel(model, adaptor);
 			NSMutableDictionary<String, Object> row = new NSMutableDictionary<String, Object>();
 			row.setObjectForKey(new Integer(versionNumber), "version");
@@ -230,6 +235,10 @@ public class ERXJDBCMigrationLock implements IERXMigrationLock {
 			dbUpdaterModel = _dbUpdaterModelCache;
 		}
 		else {
+			ERXModelGroup modelGroup = (ERXModelGroup) model.modelGroup();
+			EOEntity prototypeEntity = modelGroup.entityNamed(modelGroup.prototypeEntityNameForModel(model));
+			boolean isWonderPrototype = (prototypeEntity != null && prototypeEntity.model().name().equals("erprototypes"));
+
 			dbUpdaterModel = new EOModel();
 			dbUpdaterModel.setConnectionDictionary(model.connectionDictionary());
 			dbUpdaterModel.setAdaptorName(model.adaptorName());
@@ -240,39 +249,57 @@ public class ERXJDBCMigrationLock implements IERXMigrationLock {
 			dbUpdaterModel.addEntity(dbUpdaterEntity);
 
 			EOAttribute modelNameAttribute = new EOAttribute();
+			if (isWonderPrototype) {
+				modelNameAttribute.setExternalType(prototypeEntity.attributeNamed("varchar100").externalType());
+			}
+			else {
+				modelNameAttribute.setExternalType(adaptor.externalTypeForJDBCType(Types.VARCHAR));
+			}
 			modelNameAttribute.setName("modelName");
 			modelNameAttribute.setColumnName("modelname");
 			modelNameAttribute.setClassName("java.lang.String");
 			modelNameAttribute.setWidth(100);
 			modelNameAttribute.setAllowsNull(false);
-			
-			modelNameAttribute.setExternalType(adaptor.externalTypeForJDBCType(Types.VARCHAR));
 			dbUpdaterEntity.addAttribute(modelNameAttribute);
 
 			EOAttribute versionAttribute = new EOAttribute();
+			if (isWonderPrototype) {
+				versionAttribute.setExternalType(prototypeEntity.attributeNamed("intNumber").externalType());
+			}
+			else {
+				versionAttribute.setExternalType(adaptor.externalTypeForJDBCType(Types.INTEGER));
+			}
 			versionAttribute.setName("version");
 			versionAttribute.setColumnName("version");
 			versionAttribute.setClassName("java.lang.Number");
-			versionAttribute.setExternalType(adaptor.externalTypeForJDBCType(Types.INTEGER));
 			versionAttribute.setAllowsNull(false);
-
 			dbUpdaterEntity.addAttribute(versionAttribute);
 
 			EOAttribute updateLockAttribute = new EOAttribute();
+			if (isWonderPrototype) {
+				updateLockAttribute.setExternalType(prototypeEntity.attributeNamed("intNumber").externalType());
+			}
+			else {
+				updateLockAttribute.setExternalType(adaptor.externalTypeForJDBCType(Types.INTEGER));
+			}
 			updateLockAttribute.setName("updateLock");
 			updateLockAttribute.setColumnName("updatelock");
 			updateLockAttribute.setClassName("java.lang.Number");
 			updateLockAttribute.setAllowsNull(false);
-			updateLockAttribute.setExternalType(adaptor.externalTypeForJDBCType(Types.INTEGER));
 			dbUpdaterEntity.addAttribute(updateLockAttribute);
 
 			EOAttribute lockOwnerAttribute = new EOAttribute();
+			if (isWonderPrototype) {
+				lockOwnerAttribute.setExternalType(prototypeEntity.attributeNamed("varchar100").externalType());
+			}
+			else {
+				lockOwnerAttribute.setExternalType(adaptor.externalTypeForJDBCType(Types.VARCHAR));
+			}
 			lockOwnerAttribute.setName("lockOwner");
 			lockOwnerAttribute.setColumnName("lockowner");
 			lockOwnerAttribute.setClassName("java.lang.String");
 			lockOwnerAttribute.setWidth(100);
 			lockOwnerAttribute.setAllowsNull(true);
-			lockOwnerAttribute.setExternalType(adaptor.externalTypeForJDBCType(Types.VARCHAR));
 			dbUpdaterEntity.addAttribute(lockOwnerAttribute);
 
 			_lastUpdatedModel = model;
