@@ -134,7 +134,7 @@ public class ERXValidationFactory {
         Object keys[] = {				// MESSAGE LIST:
             "to be null", 				// "The 'xxxxx' property is not allowed to be NULL"
             "Invalid Number", 				// "Invalid Number"
-            "must have a", 				// "The owner property of Bug must have a People assigned "
+            "must have a ", 				// "The owner property of Bug must have a People assigned "
             "must have at least one",			// "The exercises property of ERPCompanyRole must have at least one ERPExercise"
             "relationship, there is a related object",	// "Removal of ERPAccount object denied because its children relationship is not empty"
             "relationship, there are related objects",	// "Removal of ERPAccount object denied because its children relationship is not empty"
@@ -381,7 +381,7 @@ public class ERXValidationFactory {
         }
         if (message == null) {
         	Object context = erv.context();
-        	// AK: as the exception doesn«t have a very special idea in how the message should get 
+        	// AK: as the exception doesnï¿½t have a very special idea in how the message should get 
         	// formatted when gets displayed, we ask the context *first* before asking the exception.
         	String template = templateForException(erv);
         	if(template.startsWith(UNDEFINED_VALIDATION_TEMPLATE)) {
