@@ -569,6 +569,7 @@ public class ERXJDBCUtilities {
 	 *             if an error occurs reading the script
 	 */
 	public static int executeUpdateScriptFromResourceNamed(EOAdaptorChannel channel, String resourceName, String frameworkName) throws SQLException, IOException {
+		ERXJDBCUtilities.log.info("Executing SQL script '" + resourceName + "' from " + frameworkName + " ...");
 		InputStream sqlScript = WOApplication.application().resourceManager().inputStreamForResourceNamed(resourceName, frameworkName, NSArray.EmptyArray);
 		if (sqlScript == null) {
 			throw new IllegalArgumentException("There is no resource named '" + resourceName + "'.");
