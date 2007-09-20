@@ -31,7 +31,7 @@ URLDict_JS: ERXJavaScript {
 	scriptSource = "dict.js";
 }
 
-URLSite_CSS: WOResourceURL {
+URLSite_CSS: ERXStyleSheet {
 	filename = "site.css";
 }
 
