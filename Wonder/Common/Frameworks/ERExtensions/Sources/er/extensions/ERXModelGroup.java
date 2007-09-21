@@ -855,7 +855,7 @@ public class ERXModelGroup extends EOModelGroup {
 		fixPrototypesForModel(model);
 	}
 
-	protected String prototypeEntityNameForModel(EOModel model) {
+	public String prototypeEntityNameForModel(EOModel model) {
 		String modelName = model.name();
 		String prototypeEntityName = getProperty(modelName + ".EOPrototypesEntity", "dbEOPrototypesEntityGLOBAL");
 		NSDictionary databaseConfig = databaseConfigForModel(model);
