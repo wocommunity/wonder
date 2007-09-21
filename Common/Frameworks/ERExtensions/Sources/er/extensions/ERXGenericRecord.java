@@ -116,7 +116,7 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
 
     protected String insertionStackTrace = null;
     
-    protected boolean updateInverseRelationships = false;
+    protected boolean updateInverseRelationships = ERXEnterpriseObject.updateInverseRelationships;
     
     
     
