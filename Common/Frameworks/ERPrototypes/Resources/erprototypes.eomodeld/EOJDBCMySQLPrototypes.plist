@@ -151,7 +151,7 @@
        
        {
            columnName = "";
-           externalType = BLOB;
+           externalType = TEXT;
            name = longText;
            userInfo = 
            {
@@ -246,7 +246,7 @@
        
        {
            columnName = "";
-           externalType = BLOB;
+           externalType = TEXT;
            name = varchar1000;
            userInfo = 
            {
@@ -297,7 +297,7 @@
        
        {
            columnName = "";
-           externalType = LONGBLOB;
+           externalType = LONGTEXT;
            name = varcharLarge;
            userInfo = 
            {
