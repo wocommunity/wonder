@@ -22,6 +22,9 @@ import com.webobjects.foundation.NSValidation;
  * Replacement for WOTextField. Provides for localized formatters. 
  * Never use this directly, rather use WOTextField and let the ERXPatcher handle the
  * replacement of WOTextField in all cases.
+ * 
+ * @binding blankIsNull if false, "" will not be converted to null; if true, "" will be converted to null. Default is true.
+ * 
  * @author ak
  */
 public class ERXWOTextField extends WOInput /*ERXPatcher.DynamicElementsPatches.TextField*/ {
@@ -32,6 +35,7 @@ public class ERXWOTextField extends WOInput /*ERXPatcher.DynamicElementsPatches.
 	protected WOAssociation _dateFormat;
 	protected WOAssociation _numberFormat;
 	protected WOAssociation _useDecimalNumber;
+	protected WOAssociation _blankIsNull;
 
 	public ERXWOTextField(String tagname, NSDictionary nsdictionary, WOElement woelement) {
 		super("input", nsdictionary, woelement);
@@ -42,6 +46,7 @@ public class ERXWOTextField extends WOInput /*ERXPatcher.DynamicElementsPatches.
 		_dateFormat = (WOAssociation)_associations.removeObjectForKey("dateformat");
 		_numberFormat = (WOAssociation)_associations.removeObjectForKey("numberformat");
 		_useDecimalNumber = (WOAssociation)_associations.removeObjectForKey("useDecimalNumber");
+		_blankIsNull = (WOAssociation)_associations.removeObjectForKey("blankIsNull");
 		
 		if(_dateFormat != null && _numberFormat != null) {
 			throw new WODynamicElementCreationException("<" + getClass().getName() + "> Cannot have 'dateFormat' and 'numberFormat' attributes at the same time.");
@@ -62,7 +67,15 @@ public class ERXWOTextField extends WOInput /*ERXPatcher.DynamicElementsPatches.
 		if(!isDisabledInContext(wocontext) && wocontext._wasFormSubmitted()) {
 			String name = nameInContext(wocontext, component);
 			if(name != null) {
-				String stringValue = worequest.stringFormValueForKey(name);
+				String stringValue;
+				boolean blankIsNull = _blankIsNull == null || _blankIsNull.booleanValueInComponent(component);
+				if (blankIsNull) {
+					stringValue = worequest.stringFormValueForKey(name);
+				}
+				else {
+					Object objValue = worequest.formValueForKey(name);
+					stringValue = (objValue == null) ? null : objValue.toString();
+				}
 				Object result = stringValue;
 				if(stringValue != null) {
 					Format format = null;
@@ -98,7 +111,7 @@ public class ERXWOTextField extends WOInput /*ERXPatcher.DynamicElementsPatches.
 						if(result != null && _useDecimalNumber != null && _useDecimalNumber.booleanValueInComponent(component)) {
 							result = new BigDecimal(result.toString());
 						}
-					} else if(result.toString().length() == 0) {
+					} else if(blankIsNull && result.toString().length() == 0) {
 						result = null;
 					}
 				}
