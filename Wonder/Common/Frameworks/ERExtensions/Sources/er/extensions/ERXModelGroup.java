@@ -104,7 +104,13 @@ public class ERXModelGroup extends EOModelGroup {
 		if (log.isDebugEnabled()) {
 			log.debug("Loading bundles" + nsarray.valueForKey("name"));
 		}
-		
+		// clear the cached class descriptions - if descriptions are there, they
+		// are from a previous load of the models, and may be out of date
+		if (ERXEntityClassDescription._factory != null) {
+			log.warn("Clearing previous class descriptions");
+			ERXEntityClassDescription._factory.reset();
+		}
+
 		NSMutableDictionary modelNameURLDictionary = new NSMutableDictionary();
 		NSMutableArray modelNames = new NSMutableArray();
 		NSMutableArray bundles = new NSMutableArray();
