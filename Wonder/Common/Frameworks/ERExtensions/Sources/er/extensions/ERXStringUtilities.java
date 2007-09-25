@@ -997,7 +997,7 @@ public class ERXStringUtilities {
     /**
      * Converts ThisIsATest to this_is_a_test
      * @param camelString the StringWithCaps
-     * @return the StringWithoutUnderscores
+     * @return the string_with_underscores
      */
     public static String camelCaseToUnderscore(String camelString) {
     	StringBuffer underscore = new StringBuffer();
@@ -1006,7 +1006,7 @@ public class ERXStringUtilities {
     		if (Character.isUpperCase(ch) && i > 0) {
     			underscore.append("_");
     		}
-    		underscore.append(ch);
+    		underscore.append(Character.toLowerCase(ch));
     	}
     	return underscore.toString();
     }
