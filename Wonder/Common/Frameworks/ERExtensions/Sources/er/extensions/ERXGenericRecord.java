@@ -66,6 +66,10 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
         return ERXProperties.booleanForKeyWithDefault("er.extensions.ERXGenericRecord.shouldTrimSpaces", false);
     }
 
+    public static boolean localizationShouldFallbackToDefaultLanguage(){
+        return ERXProperties.booleanForKeyWithDefault("er.extensions.ERXGenericRecord.localizationShouldFallbackToDefaultLanguage", false);
+    }
+  
     private String localizedKey(String key) {
         EOClassDescription cd = classDescription();
         if(cd instanceof ERXEntityClassDescription) {
@@ -79,11 +83,26 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
 		public LocalizedBinding(String key) {
 			super(null, key);
 		}
-
+		
 		public Object valueInObject(Object object) {
 			ERXGenericRecord eo = (ERXGenericRecord) object;
 			String localizedKey = eo.localizedKey(_key);
 			Object value = eo.valueForKey(localizedKey);
+			if (localizedKey != null &&
+				(value == null || "".equals(value)) &&
+				localizationShouldFallbackToDefaultLanguage()) {
+				ERXLocalizer currentLocalizer = ERXLocalizer.currentLocalizer();
+				String defaultLanguage = ERXLocalizer.defaultLanguage();
+				if (!currentLocalizer.language().equals(defaultLanguage)) {
+					if (log.isDebugEnabled()) {
+						log.debug("no data found for '" + eo.entityName() + ':' + _key + "' for language " +
+								  currentLocalizer.language() + ", trying " + defaultLanguage );
+					}
+					ERXLocalizer.setCurrentLocalizer(ERXLocalizer.localizerForLanguage(defaultLanguage));
+					value = eo.valueForKey(eo.localizedKey(_key));
+				    ERXLocalizer.setCurrentLocalizer(currentLocalizer);
+				}
+			}
 			return value;
 		}
 
