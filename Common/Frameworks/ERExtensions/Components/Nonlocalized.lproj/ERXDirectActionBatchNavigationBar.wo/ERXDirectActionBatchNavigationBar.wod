@@ -1,0 +1,87 @@
+LocalizedStringForPage : WOString {
+  value = localizer.BatchNavigator.PAGE;
+}
+
+PageNumbersRepetition : WORepetition {
+  list = batchNumbers;
+  item = dictInRepetition;
+}
+
+IsSelectedConditional : WOConditional {
+  condition = isSelected;
+}
+
+Link : WOHyperlink {
+  	directActionName = actionName;
+	actionClass = actionClass;
+	disabled = dictInRepetition.disabled;
+	queryDictionary = additionalUrlParameters;
+  	?batch = dictInRepetition.batchNumber;
+}
+
+CurrentNumber : WOString {
+  value = dictInRepetition.batchString;
+}
+
+ERXElse : ERXElse {
+}
+
+Link1 : WOHyperlink {
+  directActionName = actionName;
+  actionClass =  actionClass;
+  disabled = dictInRepetition.disabled;
+  queryDictionary = additionalUrlParameters;
+  ?batch = dictInRepetition.batchNumber;
+}
+
+CurrentNumber1 : WOString {
+  value = dictInRepetition.batchString;
+}
+
+NextPageLink : WOHyperlink {
+  directActionName = actionName;
+  actionClass = actionClass;
+  queryDictionary = additionalUrlParameters;
+  ?batch = nextBatch;
+}
+
+PreviousPageLink : WOHyperlink {
+  directActionName = actionName;
+  actionClass = actionClass;
+  queryDictionary = additionalUrlParameters;
+  ?batch = previousBatch;
+}
+
+IsNotLastBatchConditional : WOConditional {
+	condition = isLastBatch;
+	negate = true;
+}
+
+IsNotFirstBatchConditional : WOConditional {
+	condition = isFirstBatch;
+	negate = true;
+}
+
+
+DivContainer : WOGenericContainer {
+	elementName = "div";
+	class = containerCssClass;
+}
+
+ShowPageStringConditional : WOConditional {
+	condition = showPageString;
+}
+
+ShowPageNumbersConditional : WOConditional {
+	condition = showPageNumbers;
+}
+
+BackString : WOString {
+	value = backString;
+	escapeHTML = false;
+}
+
+ForwardString : WOString {
+	value = forwardString;
+	escapeHTML = false;
+}
