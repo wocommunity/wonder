@@ -994,6 +994,23 @@ public class ERXStringUtilities {
     	return camelCase.toString();
     }
     
+    /**
+     * Converts ThisIsATest to this_is_a_test
+     * @param camelString the StringWithCaps
+     * @return the StringWithoutUnderscores
+     */
+    public static String camelCaseToUnderscore(String camelString) {
+    	StringBuffer underscore = new StringBuffer();
+    	for (int i = 0; i < camelString.length(); i ++) {
+    		char ch = camelString.charAt(i);
+    		if (Character.isUpperCase(ch) && i > 0) {
+    			underscore.append("_");
+    		}
+    		underscore.append(ch);
+    	}
+    	return underscore.toString();
+    }
+    
     public static boolean stringEqualsString(String s1, String s2) {
         if (s1 == s2) return true;
         if (s1 != null && s2 != null && s1.equals(s2)) return true;
