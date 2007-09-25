@@ -71,6 +71,12 @@ er.extensions.ERXLocalizer.availableLanguages = (English,German,Japanese)
 ## but here's the default value
 # er.extensions.ERXArrayChooser.sortCaseInsensitive = false
 
+## If using EO localization, this will cause ERXGenericRecord to look for data
+## in the attribute for the default language if the data for the current langage is 
+## null or an empty string. Only works for reads from the attribute not writes 
+## (valueForKey vs. takeValueForKey).
+# er.extensions.ERXGenericRecord.localizationShouldFallbackToDefaultLanguage = true
+
 #########################################################################
 # Encoding
 #########################################################################
