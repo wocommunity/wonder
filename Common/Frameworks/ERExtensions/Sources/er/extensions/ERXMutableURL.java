@@ -517,7 +517,9 @@ public class ERXMutableURL {
 						String value = valuesIter.next();
 						sb.append(URLEncoder.encode(key, "UTF-8"));
 						if (value != null) {
-							sb.append('=');
+							if (key.length() > 0) {
+								sb.append('=');
+							}
 							sb.append(URLEncoder.encode(value, "UTF-8"));
 						}
 						if (valuesIter.hasNext()) {
