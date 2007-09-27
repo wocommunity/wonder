@@ -59,7 +59,7 @@
        
        {
            columnName = "";
-           externalType = DOUBLE;
+           externalType = DECIMAL;
            name = currencyAmount;
            precision = 38;
            scale = 4;
