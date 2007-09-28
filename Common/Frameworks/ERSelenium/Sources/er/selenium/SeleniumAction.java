@@ -28,12 +28,13 @@ import java.util.Enumeration;
 import org.apache.log4j.Logger;
 
 import com.webobjects.appserver.WOActionResults;
-import com.webobjects.appserver.WOComponent;
+import com.webobjects.appserver.WOCookie;
 import com.webobjects.appserver.WODirectAction;
 import com.webobjects.appserver.WORequest;
 import com.webobjects.appserver.WOResponse;
+import com.webobjects.foundation.NSBundle;
 import com.webobjects.foundation.NSDictionary;
-import com.webobjects.foundation.NSSelector;
+import com.webobjects.foundation.NSTimestamp;
 
 /**
  * Default handler class, gets replaced by the startup process.
@@ -47,6 +48,26 @@ public class SeleniumAction extends WODirectAction {
 		super(request);
 	}
 
+    protected String[] cookieKeys() {
+        return new String[]{};
+    }
+    
+    protected void resetSession(WOResponse response) {
+        if(context().hasSession() || true) {
+            session().terminate();
+        }
+        String[] keys = cookieKeys();
+        for (int i = 0; i < keys.length; i++) {
+            String key = keys[i];
+            WOCookie dummyCookie = new WOCookie(key, "dummy");
+            dummyCookie.setPath("/");
+            dummyCookie.setDomain(null);  // Let the browser set the domain
+            dummyCookie.setExpires(new NSTimestamp().timestampByAddingGregorianUnits(0, -2, 0, 0, 0, 0));
+            response.addCookie(dummyCookie);
+        }
+    }
+
+    
     protected WOResponse dictionaryResponse(NSDictionary dict) {
         WOResponse response = new WOResponse();
         response.appendContentString("<html><body>");
