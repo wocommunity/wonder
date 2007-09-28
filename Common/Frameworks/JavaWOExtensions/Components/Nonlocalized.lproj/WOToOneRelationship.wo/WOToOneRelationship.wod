@@ -6,6 +6,7 @@ Browser: WOBrowser {
 	multiple = false;
 	selections = selection;
 	size = ^size;
+	disabled = ^disabled;
 }
 
 IsBrowserConditional: WOConditional {
@@ -25,6 +26,7 @@ PopupList: WOPopUpButton {
 	item = theCurrentItem;
 	list = theList;
 	selection = selection;
+	disabled = ^disabled;
 }
 
 RadioButtonMatrix: WORadioButtonMatrix {
@@ -32,6 +34,7 @@ RadioButtonMatrix: WORadioButtonMatrix {
 	list = theList;
 	maxColumns = ^maxColumns;
 	selection = selection;
+	disabled = ^disabled;
 }
 
 String: WOString {
