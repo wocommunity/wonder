@@ -775,6 +775,19 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
     public boolean isNewObject() {
         return ERXEOControlUtilities.isNewObject(this);
     }
+
+    /**
+     * Returns true if this EO has been modified in this editing context.  In EOF terms,
+     * this means that the EO's snapshot in this EC is not .equals the original database
+     * snapshot for the EO.
+     * 
+     * @return true if this EO's snapshot does not match the original snapshot
+     */
+    public boolean isUpdatedObject() {
+    	NSDictionary snapshot = snapshot();
+    	NSDictionary originalSnapshot = __originalSnapshot();
+    	return originalSnapshot != null && !originalSnapshot.equals(snapshot);
+    }
     
     /**
      * Overrides the default validation mechanisms to provide
