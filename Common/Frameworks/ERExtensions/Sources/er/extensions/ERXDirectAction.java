@@ -45,7 +45,7 @@ public class ERXDirectAction extends WODirectAction {
      * @param passwordKey
      * @return
      */
-    private boolean canPerformActionWithPasswordKey(String passwordKey) {
+    protected boolean canPerformActionWithPasswordKey(String passwordKey) {
     	if(ERXApplication.isDevelopmentModeSafe()) {
     		return true;
     	}
