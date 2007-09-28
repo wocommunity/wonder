@@ -28,21 +28,27 @@ import er.extensions.remoteSynchronizer.ERXRemoteSynchronizer.RefByteArrayOutput
 
 /**
  * NSNotificationCenter that can post simple notifications to other apps.
- * Currently just serializes the NSNotification, so be sure not to put EOs or stuff into it.
- * Also posts back to your own app, so you might need to be carefull...
+ * Serializes the NSNotification, so be sure not to put EOs or similar stuff
+ * into it. Also the <code>object</code> is sent into the stream, so you must
+ * override <code>equals()</code> so it also gets the notification on the
+ * other side (totally untested).<br >
+ * Note: you must specifically register here, not at <code>NSNotificationCenter.defaultCenter()</code>.
+ * 
  * @author ak
  */
 
-// TODO configure per notification if to post back or not?
 // TODO subclass of NSNotification that custom-serialize itself
-
+// TODO make ERXRemoteNotificationCenter and make this a subclass
 public class ERJGroupsNotificationCenter extends NSNotificationCenter {
 
     private static final Logger log = Logger.getLogger(ERJGroupsNotificationCenter.class);
 
     private String _groupName;
 
+    private boolean _postLocal;
+
     private JChannel _channel;
+
     private JChannel _backchannel;
 
     private static ERJGroupsNotificationCenter _sharedInstance;
@@ -54,7 +60,7 @@ public class ERJGroupsNotificationCenter extends NSNotificationCenter {
             jgroupsPropertiesFile = "jgroups-default.xml";
             jgroupsPropertiesFramework = "ERJGroupsSynchronizer";
         }
-        _groupName = ERJGroupsNotificationCenter.class.getName();
+        _groupName = ERXProperties.stringForKeyWithDefault("er.extensions.jgroupsNotificationCenter.groupName", "ERJGroupsNotificationCenter");
 
         String localBindAddressStr = ERXProperties.stringForKey("er.extensions.jgroupsNotificationCenter.localBindAddress");
         if (localBindAddressStr == null) {
@@ -65,7 +71,8 @@ public class ERJGroupsNotificationCenter extends NSNotificationCenter {
 
         URL propertiesUrl = WOApplication.application().resourceManager().pathURLForResourceNamed(jgroupsPropertiesFile, jgroupsPropertiesFramework, null);
         _channel = new JChannel(propertiesUrl);
-        _channel.setOpt(Channel.LOCAL, Boolean.TRUE);
+        _postLocal = ERXProperties.booleanForKeyWithDefault("er.extensions.jgroupsNotificationCenter.postLocal", false);
+        _channel.setOpt(Channel.LOCAL, Boolean.FALSE);
         _channel.connect(_groupName);
         _channel.setReceiver(new ExtendedReceiverAdapter() {
             // @Override
@@ -78,13 +85,12 @@ public class ERJGroupsNotificationCenter extends NSNotificationCenter {
                     Object object = dis.readObject();
                     NSDictionary userInfo = (NSDictionary) dis.readObject();
                     NSNotification notification = new NSNotification(name, object, userInfo);
-                     if (log.isInfoEnabled()) {
-                        log.info("Received " + name + " notification from " + message.getSrc());
-                    }
                     if (log.isDebugEnabled()) {
-                        log.info("  Details = " + notification);
+                        log.debug("Received notification: " + notification);
+                    } else if (log.isInfoEnabled()) {
+                        log.info("Received " + notification.name() + " notification.");
                     }
-                    NSNotificationCenter.defaultCenter().postNotification(notification);
+                    postLocalNotification(notification);
                 } catch (IOException e) {
                     log.error("Failed to read notification: " + e, e);
                 } catch (ClassNotFoundException e) {
@@ -101,18 +107,29 @@ public class ERJGroupsNotificationCenter extends NSNotificationCenter {
 
     public static ERJGroupsNotificationCenter defaultCenter() {
         if (_sharedInstance == null) {
-            try {
-                _sharedInstance = new ERJGroupsNotificationCenter();
-            } catch (ChannelException e) {
-                throw NSForwardException._runtimeExceptionForThrowable(e);
+            synchronized (ERJGroupsNotificationCenter.class) {
+                if (_sharedInstance == null) {
+                    try {
+                        _sharedInstance = new ERJGroupsNotificationCenter();
+                    } catch (ChannelException e) {
+                        throw NSForwardException._runtimeExceptionForThrowable(e);
+                    }
+                }
             }
         }
         return _sharedInstance;
     }
 
+    public void postLocalNotification(NSNotification notification) {
+        super.postNotification(notification);
+    }
+
     public void postNotification(NSNotification notification) {
         try {
             writeNotification(notification);
+            if (_postLocal) {
+                postLocalNotification(notification);
+            }
         } catch (Exception e) {
             throw NSForwardException._runtimeExceptionForThrowable(e);
         }
@@ -126,11 +143,10 @@ public class ERJGroupsNotificationCenter extends NSNotificationCenter {
         dos.writeObject(notification.userInfo());
         dos.flush();
         dos.close();
-        if (log.isInfoEnabled()) {
-            log.info("Sending " + notification.name() + " notification.");
-        }
         if (log.isDebugEnabled()) {
-            log.info("  Details = " + notification);
+            log.debug("Sending notification: " + notification);
+        } else if (log.isInfoEnabled()) {
+            log.info("Sending " + notification.name() + " notification.");
         }
         Message message = new Message(null, null, baos.buffer(), 0, baos.size());
         _channel.send(message);
