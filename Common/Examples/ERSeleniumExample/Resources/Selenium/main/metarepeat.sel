@@ -1,0 +1,12 @@
+"@repeat" metacommand example
+|open|/|
+|clickAndWait|link=Show|
+@repeat
+|pause|500||
+@values Value1 Value2 Value3
+|type|//body/div[2]/input[1]|Value0|
+|pause|500||
+@values AnotherValue1 AnotherValue2 AnotherValue3
+|type|//body/div[2]/input[2]|AnotherValue0|
+|pause|500||
+@done
