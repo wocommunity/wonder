@@ -113,7 +113,15 @@ public class ERXStyleSheet extends ERXStatelessComponent {
 		}
     	return result;
     }
-
+    
+    /**
+     * Returns the media type for this stylesheet
+     * @return
+     */
+    public String mediaType() {
+    	return stringValueForBinding("media");
+    }
+    
     /**
      * Returns the languages for the request.
      * @return
@@ -149,6 +157,10 @@ public class ERXStyleSheet extends ERXStatelessComponent {
     		href = wocontext.directActionURLForActionNamed(Sheet.class.getName() + "/" + key, null);
     	}
     	woresponse._appendTagAttributeAndValue("href", href, false);
+    	String media = mediaType();
+    	if (media != null) {
+    		woresponse._appendTagAttributeAndValue("media", mediaType(), false);
+    	}
     	woresponse._appendContentAsciiString("></link>");
     	ERXWOContext.insertInResponseBeforeTag(r, woresponse.contentString(), ERXWOContext._htmlCloseHeadTag(), false, true);
     }
