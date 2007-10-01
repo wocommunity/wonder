@@ -38,6 +38,7 @@ import er.extensions.ERXProperties;
 import er.extensions.ERXStatelessComponent;
 import er.extensions.ERXUtilities;
 import er.selenium.filters.SeleniumCompositeTestFilter;
+import er.selenium.filters.SeleniumIncludeTestFilter;
 import er.selenium.filters.SeleniumOverrideOpenTestFilter;
 import er.selenium.filters.SeleniumPresentationFilter;
 import er.selenium.filters.SeleniumRepeatExpanderTestFilter;
@@ -179,6 +180,10 @@ public class SeleniumTestSuitePage extends ERXStatelessComponent {
 	public SeleniumTestFilter testFilter() {
 		if (_testFilter == null) {
 			_testFilter = new SeleniumCompositeTestFilter();
+			String testsRoot = ERXProperties.stringForKeyWithDefault("SeleniumTestsRoot", DEFAULT_SELENIUM_TESTS_ROOT);
+			String[] searchPaths = {testsRoot + '/' + _testDirectory, testsRoot}; 
+			_testFilter.addTestFilter(new SeleniumIncludeTestFilter(new NSArray(searchPaths)));
+
 			_testFilter.addTestFilter(new SeleniumRepeatExpanderTestFilter());
 			_testFilter.addTestFilter(new SeleniumOverrideOpenTestFilter(context().urlWithRequestHandlerKey(null, null, null)));
 		}
