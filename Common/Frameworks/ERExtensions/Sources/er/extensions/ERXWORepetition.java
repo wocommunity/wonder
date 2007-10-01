@@ -60,6 +60,7 @@ import com.webobjects.foundation.NSKeyValueCodingAdditions;
  * @binding uniqueKey a String keypath on item (relative to item, not relative to the component)
  * @binding checkHashCodes if true, checks the validity of repetition references during the RR loop
  * @binding raiseOnUnmatchedObject if true, an exception is thrown when the repetition does not find a matching object
+ * @binding debugHashCodes if true, prints out hashcodes for each entry in the repetition as it is traversed
  * 
  * @author ak
  */
@@ -76,6 +77,7 @@ public class ERXWORepetition extends WODynamicGroup {
 	protected WOAssociation _checkHashCodes;
 	protected WOAssociation _raiseOnUnmatchedObject;
 	protected WOAssociation _eoSupport;
+	protected WOAssociation _debugHashCodes;
 
 	private static boolean _checkHashCodesDefault = ERXProperties.booleanForKey(ERXWORepetition.class.getName() + ".checkHashCodes");
 	private static boolean _raiseOnUnmatchedObjectDefault = ERXProperties.booleanForKey(ERXWORepetition.class.getName() + ".raiseOnUnmatchedObject");
@@ -157,6 +159,7 @@ public class ERXWORepetition extends WODynamicGroup {
 		_uniqueKey = (WOAssociation) associations.objectForKey("uniqueKey");
 		_checkHashCodes = (WOAssociation) associations.objectForKey("checkHashCodes");
 		_raiseOnUnmatchedObject = (WOAssociation) associations.objectForKey("raiseOnUnmatchedObject");
+		_debugHashCodes = (WOAssociation) associations.objectForKey("debugHashCodes");
 		_eoSupport = (WOAssociation) associations.objectForKey("eoSupport");
 
 		if (_list == null && _count == null) {
@@ -213,6 +216,9 @@ public class ERXWORepetition extends WODynamicGroup {
 		}
 		else {
 			hashCode = Math.abs(System.identityHashCode(object));
+		}
+		if (_debugHashCodes != null && _debugHashCodes.booleanValueInComponent(component)) {
+			log.info("debugHashCodes for '" + _list.keyPath() + "', " + object + " = " + hashCode);
 		}
 		return hashCode;
 		// return (object == null ? 0 : Math.abs(object.hashCode()));
