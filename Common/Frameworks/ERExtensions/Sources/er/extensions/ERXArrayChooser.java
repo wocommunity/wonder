@@ -375,7 +375,7 @@ public abstract class ERXArrayChooser extends ERXStatelessComponent {
             try {
                 localObject.validateValueForKey(value, realRelationshipKey);
             } catch (NSValidation.ValidationException eov) {
-                parent().validationFailedWithException(eov, value, realRelationshipKey);
+                parent().validationFailedWithException(eov, value, relationshipKey());
             }
         }
     }
