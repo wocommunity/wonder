@@ -2,7 +2,7 @@
 <classpath>
 	<classpathentry kind="src" path="Sources"/>
 	<classpathentry kind="con" path="org.objectstyle.wolips.WO_CLASSPATH/JavaEOAccess/JavaEOControl/JavaEOProject/JavaFoundation/JavaJDBCAdaptor/JavaWebObjects/JavaWOJSPServlet/JavaXML"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.launching.macosx.MacOSXType/JVM 1.5.0 (MacOS X Default)"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/ERJars"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/JavaWOExtensions"/>
 	<classpathentry kind="output" path="bin"/>
