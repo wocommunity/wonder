@@ -70,6 +70,6 @@ IsEllipsisConditional : WOConditional {
 }
 
 DisplayName : ERXPluralString {
-	count = displayGroup.allObjects.count;
+	count = objects.count;
 	value = displayName;
 }
