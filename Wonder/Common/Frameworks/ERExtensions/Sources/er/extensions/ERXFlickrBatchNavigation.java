@@ -41,6 +41,14 @@ public class ERXFlickrBatchNavigation extends WOComponent {
 		return false;
 	}
 
+	public NSArray objects() {
+		if (displayGroup() instanceof ERXDisplayGroup) {
+			ERXDisplayGroup dg = (ERXDisplayGroup) displayGroup();
+			return dg.filteredObjects();
+		}
+		return displayGroup().allObjects();
+	}
+	
 	public WODisplayGroup displayGroup() {
 		return (WODisplayGroup) valueForBinding("displayGroup");
 	}
