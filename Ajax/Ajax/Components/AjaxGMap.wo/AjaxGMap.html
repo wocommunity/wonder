@@ -1,7 +1,6 @@
 <webobject name = "MapContainer"/>
-<script type="text/javascript">
+<script type="text/javascript" defer="defer">
 	var <webobject name = "MapContainerID"/>;
-	function load<webobject name = "MapContainerID"/>() {
     if (GBrowserIsCompatible()) {
 	    <webobject name = "MapContainerID"/> = new GMap2(document.getElementById('<webobject name = "MapContainerID"/>'));
 
@@ -17,18 +16,5 @@
 			  <webobject name = "MapContainerID"/>.addControl(new G<webobject name = "ControlType"/>Control());
 			</webobject>
 	  }
-	}
 	
-	if (window.addEventListener) { 
-		window.addEventListener('load', load<webobject name = "MapContainerID"/>, false);
-		window.addEventListener('unload', GUnload, false);
-	}
-	else if (window.attachEvent) { 
-		window.attachEvent('onload', load<webobject name = "MapContainerID"/>);
-		window.attachEvent('onunload', GUnload);
-	}
-	else {
-		window.onload = load<webobject name = "MapContainerID"/>;
-		window.onunload = GUnload;
-	}
 </script>
