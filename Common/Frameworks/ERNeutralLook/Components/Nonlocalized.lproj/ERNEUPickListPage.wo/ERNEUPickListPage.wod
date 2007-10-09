@@ -197,21 +197,23 @@ ListTableRow: WOGenericContainer {
 	elementName = "tr";
 }
 
-NavBar: ERXBatchNavigationBarInForm {
+NavBar: WOSwitchComponent {
+    WOComponentName = d2wContext.batchNavigationBarComponentName;
 	bgcolor = backgroundColorForTable;
 	displayGroup = displayGroup;
 	objectName = d2wContext.displayNameForEntity;
 	textColor = d2wContext.textColor;
 	width = 550;
-        d2wContext = d2wContext;
+       	 d2wContext = d2wContext;
 }
 
-NavBar2: ERXBatchNavigationBarInForm {
+NavBar2: WOSwitchComponent {
+    WOComponentName = d2wContext.batchNavigationBarComponentName;
 	bgcolor = backgroundColorForTable;
 	displayGroup = displayGroup;
 	objectName = d2wContext.displayNameForEntity;
 	textColor = d2wContext.textColor;
-        d2wContext = d2wContext;
+       	 d2wContext = d2wContext;
 }
 
 NumberOfItems: WOString {
