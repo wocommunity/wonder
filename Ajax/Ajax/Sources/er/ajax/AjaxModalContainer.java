@@ -38,14 +38,24 @@ public class AjaxModalContainer extends AjaxDynamicElement {
         String href = (String) valueForBinding("href", component);
         if(href == null) {
             if(associations().objectForKey("action") != null) {
-                href = AjaxUtils.ajaxComponentActionUrl(context);
+            	// don't use ajax request handler here
+                href = context.componentActionURL();
             }
             if(href == null) {
                 href = "#" + divID;
             }
         }
         appendTagAttributeToResponse(response, "href", href);
-        appendTagAttributeToResponse(response, "rel", "ibox&height="+valueForBinding("height", component)+"&width=" + valueForBinding("width", component));
+		String relAttributeValue = "ibox";
+		Object height = valueForBinding("height", component);
+		Object width = valueForBinding("width", component);
+		if (height != null) {
+			relAttributeValue += "&height=" + height;
+		}
+		if (width != null) {
+			relAttributeValue += "&width=" + width;
+		}
+		response._appendTagAttributeAndValue("rel", relAttributeValue, false); // don't escape the ampersands
         appendTagAttributeToResponse(response, "title", valueForBinding("title", component));
         appendTagAttributeToResponse(response, "value", valueForBinding("value", component));
         appendTagAttributeToResponse(response, "class", valueForBinding("class", component));
