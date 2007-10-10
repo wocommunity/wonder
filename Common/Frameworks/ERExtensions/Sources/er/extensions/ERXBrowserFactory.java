@@ -369,7 +369,7 @@ public class ERXBrowserFactory {
 			userAgent = userAgent.toLowerCase();
 			for (Enumeration iter = robotExpressions.objectEnumerator(); iter.hasMoreElements();) {
 				Pattern pattern = (Pattern) iter.nextElement();
-				if(pattern.matcher(userAgent).matches()) {
+				if(pattern.matcher(userAgent).find()) {
 					return true;
 				}
 			}
