@@ -122,7 +122,7 @@ showIbox = function(url,title,params) {
 	if(title != "") {ibox_footer.innerHTML = title;} else {ibox_footer.innerHTML = "&nbsp;";}
 	
 	// file checking code borrowed from thickbox
-	var urlString = /\.jpg|\.jpeg|\.png|\.gif|\.html|\.htm|\.php|\.cfm|\.asp|\.aspx|\.jsp|\.jst|\.rb|\.rhtml|\.txt/g;
+	var urlString = /\.jpg|\.jpeg|\.png|\.gif|\.html|\.htm|\.php|\.cfm|\.asp|\.aspx|\.jsp|\.jst|\.rb|\.rhtml|\.txt|\/wo\/|\/wa\//g;
 	
 	var urlType = url.match(urlString);
 
@@ -133,7 +133,7 @@ showIbox = function(url,title,params) {
 	} else if(urlType=='.htm'||urlType=='.html'||urlType=='.php'||
 			 urlType=='.asp'||urlType=='.aspx'||urlType=='.jsp'||
 			 urlType=='.jst'||urlType=='.rb'||urlType=='.txt'||urlType=='.rhtml'||
-			 urlType=='.cfm') {
+			 urlType=='.cfm'||urlType=='/wo/'||urlType=='/wa/') {
 		ibox_type = 3;
 	} else {
 		// override our ibox type if forced param exist
