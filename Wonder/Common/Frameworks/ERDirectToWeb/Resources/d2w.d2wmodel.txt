@@ -257,6 +257,7 @@
 ) [com.webobjects.directtoweb.Assignment], 
     10 : (task = 'edit' and smartRelationship.destinationEntity.sharedObjectFetchSpecificationNames.count > 0 and smartRelationship.isToMany = 1) => componentName = ERD2WEditToManyRelationship [com.webobjects.directtoweb.Assignment], 
     10 : (propertyKey like 'a*' or propertyKey like 'e*' or propertyKey like 'u*' or propertyKey like 'i*' or propertyKey like 'o*' or propertyKey like 'u*') => indefiniteArticleForProperty = an [com.webobjects.directtoweb.Assignment], 
+    10 : ((task = 'list' or task = 'select' or task = 'inspect') and (attribute.className = 'java.lang.Number' or attribute.className = 'java.math.BigDecimal')) => componentName = D2WDisplayNumber [com.webobjects.directtoweb.Assignment], 
     10 : (task = 'query' and smartRelationship.destinationEntity.sharedObjectFetchSpecificationNames.count > 0 and not (smartRelationship.isToMany = 1)) => componentName = ERD2WQueryToOneRelationship [com.webobjects.directtoweb.Assignment], 
     10 : (propertyKey like 'a*' or propertyKey like 'e*' or propertyKey like 'u*' or propertyKey like 'i*' or propertyKey like 'o*' or propertyKey like 'u*') => upperIndefiniteArticleForProperty = An [com.webobjects.directtoweb.Assignment], 
     10 : (task = 'edit' and session.javaScriptEnabled != 1 and (smartAttribute.className = 'com.webobjects.foundation.NSTimestamp' or smartAttribute.allowsNull = 0)) => componentName = ERDEditDatePopup [com.webobjects.directtoweb.Assignment], 
