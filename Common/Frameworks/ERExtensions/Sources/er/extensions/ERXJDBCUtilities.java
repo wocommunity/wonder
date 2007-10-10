@@ -649,7 +649,14 @@ public class ERXJDBCUtilities {
 	 */
 	public static String databaseProductName(EOModel model) {
 		EODatabaseContext databaseContext = EODatabaseContext.registeredDatabaseContextForModel(model, ERXEC.newEditingContext());
-		JDBCAdaptor adaptor = (JDBCAdaptor) databaseContext.database().adaptor();
-		return adaptor.plugIn().databaseProductName();
+		EOAdaptor adaptor = databaseContext.database().adaptor();
+		String databaseProductName;
+		if (adaptor instanceof JDBCAdaptor) {
+			databaseProductName = ((JDBCAdaptor) adaptor).plugIn().databaseProductName();
+		}
+		else {
+			databaseProductName = adaptor.name();
+		}
+		return databaseProductName;
 	}
 }
