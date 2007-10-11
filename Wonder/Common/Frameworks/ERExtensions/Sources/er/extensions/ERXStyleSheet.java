@@ -159,7 +159,7 @@ public class ERXStyleSheet extends ERXStatelessComponent {
     	woresponse._appendTagAttributeAndValue("href", href, false);
     	String media = mediaType();
     	if (media != null) {
-    		woresponse._appendTagAttributeAndValue("media", mediaType(), false);
+    		woresponse._appendTagAttributeAndValue("media", media, false);
     	}
     	woresponse._appendContentAsciiString("></link>");
     	ERXWOContext.insertInResponseBeforeTag(r, woresponse.contentString(), ERXWOContext._htmlCloseHeadTag(), false, true);
