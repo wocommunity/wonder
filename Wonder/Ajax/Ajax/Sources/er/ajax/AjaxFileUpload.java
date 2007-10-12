@@ -48,6 +48,7 @@ import er.extensions.ERXUnitAwareDecimalFormat;
  * @binding refreshTime the number of milliseconds to wait between refreshes
  * @binding keepTempFile if true, don't delete the temp file that AjaxFileUpload creates
  * @binding uploadLabel the label to display on the Upload button ("Upload" by default)
+ * @binding uploadFunctionName the upload button will instead be a function with the given name
  * 
  * @author mschrag
  */
