@@ -257,6 +257,15 @@ er.extensions.ERXComponentActionRedirector.enabled=false
 
 
 #########################################################################
+# ERXDatabaseContext
+#########################################################################
+## Defines the DBC class
+# er.extensions.ERXDatabaseContext.className = er.extensions.ERXDatabaseContext
+
+## but only if it is activated or remote syncing is on
+# er.extensions.ERXDatabaseContext.activate = true
+
+#########################################################################
 # ERXDatabaseContextDelegate 
 #########################################################################
 ## Instead of throwing an exception, you can define which entities
