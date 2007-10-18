@@ -26,6 +26,7 @@ public class ERXDynamicURL {
 				_delegate = new _NSDelegate(Class.forName("com.webobjects.appserver._private.WODynamicURL"));
 			}
 			_dynamicUrl = dynamicUrl;
+			_delegate.setDelegate(_dynamicUrl);
 		}
 		catch (Throwable t) {
 			throw new RuntimeException("Failed to create ERXDynamicURL.", t);
