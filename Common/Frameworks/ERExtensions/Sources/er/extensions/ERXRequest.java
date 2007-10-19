@@ -83,7 +83,7 @@ public  class ERXRequest extends WORequest {
 					if(language == null) {
 						int index = languageKey.indexOf('_');
 						if(index > 0) {
-							String mainLanguageKey = languageKey.substring(0, index - 1);
+							String mainLanguageKey = languageKey.substring(0, index);
 							String region = languageKey.substring(index);
 							language = (String) WOProperties.TheLanguageDictionary.objectForKey(mainLanguageKey);
 							if(language != null) {
