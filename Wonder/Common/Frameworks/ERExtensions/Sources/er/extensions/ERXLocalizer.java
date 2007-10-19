@@ -238,6 +238,16 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
 			if (availableLanguages().containsObject(language)) {
 				return localizerForLanguage(language);
 			}
+			else {
+				// try to do a fallback to the base language if this was regionalized
+				int index = language.indexOf('_');
+				if (index > 0) {
+					language = language.substring(0, index);
+					if (availableLanguages().containsObject(language)) {
+						return localizerForLanguage(language);
+					}
+				}
+			}
 		}
 		return localizerForLanguage((String) languages.objectAtIndex(0));
 	}
