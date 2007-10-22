@@ -8,6 +8,7 @@ package er.extensions;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Field;
@@ -336,8 +337,9 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 				return content;
 			}
 			return null;
-		}
-		catch (IOException e1) {
+		} catch (FileNotFoundException e1) {
+			return null;
+		}	catch (IOException e1) {
 			throw NSForwardException._runtimeExceptionForThrowable(e1);
 		}
 	}
@@ -388,7 +390,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 						if(new File(info).exists()) {
 							allFrameworks.add(bundle);
 						} else {
-							// System.out.println("Ommitted: " + info);
+							// System.out.println("Omitted: " + info);
 						}
 					} else if(jar.endsWith(".jar")) {
 						String info = stringFromJar(jar, "Resources/Info.plist");
