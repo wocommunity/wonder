@@ -118,12 +118,29 @@ public class ERXWOForm extends com.webobjects.appserver._private.WOHTMLDynamicEl
     	context.setInForm(wasInForm);
     	context._setFormSubmitted(wasFormSubmitted);
     }
+    
+    protected String _enctype(WOContext context) {
+    	return _enctype != null ? (String)_enctype.valueInComponent(context.component()) : null;
+    }
+
+    protected void _setEnctype(String enctype) {
+		ERXWOContext.contextDictionary().setObjectForKey(enctype.toLowerCase(), "enctype");
+	}
+
+	protected void _clearEnctype() {
+		ERXWOContext.contextDictionary().removeObjectForKey("enctype");
+	}
 
     public WOActionResults invokeAction(WORequest worequest, WOContext context) {
     	boolean wasFormSubmitted = context._wasFormSubmitted();
 		boolean wasInForm = _enterFormInContext(context);
 		boolean wasMultipleSubmitForm = context._isMultipleSubmitForm();
         
+		String enctype = _enctype(context);
+		if(enctype != null) {
+			_setEnctype(enctype);
+    	}
+
     	context._setActionInvoked(false);
 		context._setIsMultipleSubmitForm(_multipleSubmit == null ? false : _multipleSubmit.booleanValueInComponent(context.component()));
 		_setFormName(context, wasInForm);
@@ -139,6 +156,7 @@ public class ERXWOForm extends com.webobjects.appserver._private.WOHTMLDynamicEl
 		context._setIsMultipleSubmitForm(wasMultipleSubmitForm);
     	_exitFormInContext(context, wasInForm, wasFormSubmitted);
 		_clearFormName(context, wasInForm);
+		_clearEnctype();
     	return result;
     }
 
@@ -270,12 +288,10 @@ public class ERXWOForm extends com.webobjects.appserver._private.WOHTMLDynamicEl
 		if(formName != null) {
 			response._appendTagAttributeAndValue("name", formName, false);
 		}
-    	if(_enctype != null) {
-    		String enctype = (String)_enctype.valueInComponent(context.component());
-    		if(enctype != null) {
-    			ERXWOContext.contextDictionary().setObjectForKey(enctype.toLowerCase(), "enctype");
-    			response._appendTagAttributeAndValue("enctype", enctype, false);
-    		}
+		String enctype = _enctype(context);
+    	if(enctype != null) {
+    		_setEnctype(enctype);
+    		response._appendTagAttributeAndValue("enctype", enctype, false);
     	}
         boolean secure = _secure != null && _secure.booleanValueInComponent(context.component());
         Object hrefObject = null;
@@ -326,7 +342,7 @@ public class ERXWOForm extends com.webobjects.appserver._private.WOHTMLDynamicEl
         	appendChildrenToResponse(response, context);
             _appendCloseTagToResponse(response, context);
             _clearFormName(context, wasInForm);
-            ERXWOContext.contextDictionary().removeObjectForKey("enctype");
+            _clearEnctype();
         } else {
         	if (!_disabled(context)) {
         		log.warn("This FORM is embedded inside another FORM. Omitting Tags: " + this.toString());
