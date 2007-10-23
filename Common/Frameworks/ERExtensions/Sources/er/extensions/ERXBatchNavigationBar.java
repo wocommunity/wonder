@@ -54,6 +54,7 @@ public class ERXBatchNavigationBar extends ERXStatelessComponent {
     public final static String BatchSizeChanged = "BatchSizeChanged";
 
     public boolean wasInForm;
+    private String _threadStorageKey;
     
     /** Public constructor */
     public ERXBatchNavigationBar(WOContext aContext) {
@@ -63,18 +64,20 @@ public class ERXBatchNavigationBar extends ERXStatelessComponent {
     public void awake() {
     	super.awake();
     	wasInForm = context().isInForm();
+    	_threadStorageKey = "ERXBatchNavigationBar_numberOfObjectsPerBatch_" + context().elementID();
     }
 
     public void reset() {
         super.reset();
         _displayGroup = null;
+        _threadStorageKey=null;
     }
     
     public void appendToResponse(WOResponse response, WOContext context) {
-        // set the numberOfObjectsPerBatch
-        
-        if (newNumberOfObjectsPerBatch!=null && newNumberOfObjectsPerBatch.intValue() != displayGroup().numberOfObjectsPerBatch()) {
-            if (displayGroup()!=null) {
+    	// set the numberOfObjectsPerBatch
+        Number newNumberOfObjectsPerBatch = (Number) ERXThreadStorage.valueForKey(_threadStorageKey);
+        if (newNumberOfObjectsPerBatch != null && newNumberOfObjectsPerBatch.intValue() != displayGroup().numberOfObjectsPerBatch()) {
+        	if (displayGroup()!=null) {
             	NSArray selection = selection();
                 
                 if(log.isDebugEnabled()) log.debug("Setting db # of objects per batch to "+newNumberOfObjectsPerBatch);
@@ -90,8 +93,8 @@ public class ERXBatchNavigationBar extends ERXStatelessComponent {
                                                                       ERXConstant.integerForInt(newNumberOfObjectsPerBatch.intValue()),
                                                                       new NSDictionary(d2wcontext,"d2wContext"));
             }
+            ERXThreadStorage.takeValueForKey(null, _threadStorageKey);
         }
-        newNumberOfObjectsPerBatch = null;
         
         if (displayGroup() != null  &&  ! displayGroup().hasMultipleBatches()) {
             if (currentBatchIndex() != 0) 
@@ -102,7 +105,6 @@ public class ERXBatchNavigationBar extends ERXStatelessComponent {
     
     private WODisplayGroup _displayGroup;
 
-    private Number newNumberOfObjectsPerBatch;
     public WODisplayGroup displayGroup() {
         if (_displayGroup == null) {
             _displayGroup = (WODisplayGroup)valueForBinding("displayGroup");
@@ -131,7 +133,7 @@ public class ERXBatchNavigationBar extends ERXStatelessComponent {
     }
     
     public void setNumberOfObjectsPerBatch(Number newValue) {
-        newNumberOfObjectsPerBatch = newValue;
+    	ERXThreadStorage.takeValueForKey(newValue, _threadStorageKey);
     }
 
     public int filteredObjectsCount() {
