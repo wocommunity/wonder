@@ -138,8 +138,7 @@ public class RuleEditor extends WOComponent {
     public String objectAsString(Rule o) {
         EOKeyValueArchiver eokeyvaluearchiver = new EOKeyValueArchiver();
         o.encodeWithKeyValueArchiver(eokeyvaluearchiver);
-        return NSPropertyListSerialization._Utilities
-            .stringFromPropertyList(eokeyvaluearchiver.dictionary());
+        return NSPropertyListSerialization.stringFromPropertyList(eokeyvaluearchiver.dictionary());
     }
     public WOComponent eval() {
         qualifier = null;

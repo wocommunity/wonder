@@ -718,6 +718,14 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 	 * @return a new WORequest object
 	 */
 	public WORequest createRequest(String aMethod, String aURL, String anHTTPVersion, NSDictionary someHeaders, NSData aContent, NSDictionary someInfo) {
+		return _createRequest(aMethod, aURL, anHTTPVersion, new NSDictionary(someHeaders, false), aContent, someInfo);
+	}
+
+	public WORequest createRequest(String aMethod, String aURL, String anHTTPVersion, Map someHeaders, NSData aContent, NSDictionary someInfo) {
+		return _createRequest(aMethod, aURL, anHTTPVersion, new NSDictionary(someHeaders, false), aContent, someInfo);
+	}
+
+    protected WORequest _createRequest(String aMethod, String aURL, String anHTTPVersion, NSDictionary someHeaders, NSData aContent, NSDictionary someInfo) {
 
 		// Workaround for #3428067 (Apache Server Side Include module will feed
 		// "INCLUDED" as the HTTP version, which causes a request object not to be
@@ -728,10 +736,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 		WORequest worequest = new ERXRequest(aMethod, aURL, anHTTPVersion, someHeaders, aContent, someInfo);
 		return worequest;
 	}
-	
-	public WORequest createRequest(String aMethod, String aURL, String anHTTPVersion, Map someHeaders, NSData aContent, NSDictionary someInfo) {
-		return createRequest(aMethod, aURL, anHTTPVersion, new NSDictionary(someHeaders, false), aContent, someInfo);
-	}
+
 
 	/**
 	 * Used to instanciate a WOComponent when no context is available, typically ouside of a session
