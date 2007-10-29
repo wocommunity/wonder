@@ -17,12 +17,12 @@ import ognl.OgnlException;
 import ognl.OgnlRuntime;
 import ognl.helperfunction.WOHelperFunctionHTMLParser;
 import ognl.helperfunction.WOHelperFunctionHTMLTemplateParser;
+import ognl.helperfunction.compatibility.WOMiddleManParser;
 
 import org.apache.log4j.Logger;
 
 import com.webobjects.appserver.WOApplication;
 import com.webobjects.appserver.WOAssociation;
-import com.webobjects.appserver._private.WOParser;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableArray;
@@ -94,18 +94,13 @@ public class WOOgnl {
         OgnlRuntime.setElementsAccessor(NSSet.class, e);
         // Register template parser
         if (!"false".equals(System.getProperty("ognl.active"))) {
-        	if ("true".equalsIgnoreCase(System.getProperty("ognl.helperFunctions"))) {
-        	    WOParser.setWOHTMLTemplateParserClassName("ognl.helperfunction.WOHelperFunctionHTMLTemplateParser");
-        	    if ("true".equalsIgnoreCase(System.getProperty("ognl.inlineBindings"))) {
-        	    	WOHelperFunctionHTMLTemplateParser.setAllowInlineBindings(true);
-        	    }
-        	    if ("true".equalsIgnoreCase(System.getProperty("ognl.parseStandardTags"))) {
-        	    	WOHelperFunctionHTMLParser.setParseStandardTags(true);
-        	    }
-        	}
-        	else {
-        		WOParser.setWOHTMLTemplateParserClassName("ognl.webobjects.WOOgnlHTMLTemplateParser");
-        	}
+    	    WOMiddleManParser.setWOHTMLTemplateParserClassName("ognl.helperfunction.WOHelperFunctionHTMLTemplateParser");
+    	    if ("true".equalsIgnoreCase(System.getProperty("ognl.inlineBindings"))) {
+    	    	WOHelperFunctionHTMLTemplateParser.setAllowInlineBindings(true);
+    	    }
+    	    if ("true".equalsIgnoreCase(System.getProperty("ognl.parseStandardTags"))) {
+    	    	WOHelperFunctionHTMLParser.setParseStandardTags(true);
+    	    }
         }
     }
 

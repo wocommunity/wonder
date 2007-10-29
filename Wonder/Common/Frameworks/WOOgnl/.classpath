@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="Sources"/>
+	<classpathentry kind="src" path="Sources_WO53"/>
 	<classpathentry kind="con" path="org.objectstyle.wolips.WO_CLASSPATH/JavaEOAccess/JavaEOControl/JavaFoundation/JavaJDBCAdaptor/JavaWebObjects/JavaXML"/>
 	<classpathentry exported="true" kind="lib" path="Libraries/ognl-2.6.7.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/ERJars"/>
