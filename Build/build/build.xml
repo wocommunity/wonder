@@ -17,7 +17,49 @@
             <param name="project.dir" value="Common/Frameworks/ERJars" />
         </antcall>
     </target>
-   
+        
+    <target name="WOOgnl53.pre">
+        <delete>
+            <fileset dir="Common/Frameworks/WOOgnl/Sources/" includes="ognl/helperfunction/compatibility/**.java" />
+            <fileset dir="Common/Frameworks/WOOgnl/Sources/" includes="ognl/helperfunction/WOHelperFunctionHTMLTemplateParser.class" excludes="ognl/helperfunction/_WOHelperFunctionHTMLTemplateParser.class" />
+            <fileset dir="Common/Frameworks/WOOgnl/Sources/" includes="com/webobjects/appserver/**/*.java" />
+        </delete>
+        <copy todir="Common/Frameworks/WOOgnl/Sources">
+            <fileset dir="Common/Frameworks/WOOgnl/Sources_WO53" includes="**/*.java"/>
+        </copy>
+    </target>
+
+    <target name="WOOgnl54.pre">
+        <delete>
+            <fileset dir="Common/Frameworks/WOOgnl/Sources/" includes="ognl/helperfunction/compatibility/**.java" />
+            <fileset dir="Common/Frameworks/WOOgnl/Sources/" includes="ognl/helperfunction/WOHelperFunctionHTMLTemplateParser.class" excludes="ognl/helperfunction/_WOHelperFunctionHTMLTemplateParser.class" />
+            <fileset dir="Common/Frameworks/WOOgnl/Sources/" includes="com/webobjects/appserver/**/*.java" />
+        </delete>
+        <copy todir="Common/Frameworks/WOOgnl/Sources">
+            <fileset dir="Common/Frameworks/WOOgnl/Sources_WO54" includes="**/*.java"/>
+        </copy>
+    </target>
+
+    <target name="WOOgnl.post">
+        <delete>
+            <fileset dir="Common/Frameworks/WOOgnl/Sources/" includes="ognl/helperfunction/compatibility/**.java" />
+            <fileset dir="Common/Frameworks/WOOgnl/Sources/" includes="ognl/helperfunction/WOHelperFunctionHTMLTemplateParser.class" excludes="ognl/helperfunction/_WOHelperFunctionHTMLTemplateParser.class" />
+            <fileset dir="Common/Frameworks/WOOgnl/Sources/" includes="com/webobjects/appserver/**/*.java" />
+        </delete>
+    </target>
+
+    <target name="WOOgnl.all">
+        <antcall target="global.framework.${build.action}" >
+            <param name="project.principal.class" value="ognl.webobjects.WOOgnl" />
+            <param name="before.compile" value="${woognl.pre}" />
+            <param name="after.compile" value="WOOgnl.post" />
+            <param name="project.name" value="WOOgnl" />
+            <param name="project.dir" value="Common/Frameworks/WOOgnl" />
+
+            <param name="use.wonder.jars" value="true" />
+        </antcall>
+    </target>
+
     <target name="JavaWOExtensions.all">
         <antcall target="global.framework.${build.action}" >
             <param name="project.principal.class" value="" />
@@ -82,15 +124,13 @@
     </target>
 
     <target name="ERExtensions.all">
-        <property name="patch.erx" value="global.dummy" />
         <antcall target="global.framework.${build.action}" >
-            <param name="after.compile" value="${patch.erx}" />
             <param name="project.principal.class" value="er.extensions.ERXExtensions" />
             <param name="project.name" value="ERExtensions" />
             <param name="project.dir" value="Common/Frameworks/ERExtensions" />
             <!-- kind of cheating here...-->
-            <!--param name="classes.exclude.0" value="com/webobjects/appserver/_private/WOHTTPIO.java" />
-            <param name="classes.exclude.1" value="com/webobjects/foundation/NSArray.java" /-->
+            <param name="classes.exclude.0" value="${erx.class.exclude.0}" />
+            <param name="classes.exclude.1" value="${erx.class.exclude.1}" />
 
             <param name="use.wonder.core" value="true" />
         </antcall>
@@ -185,16 +225,6 @@
             <param name="use.webobjects.d2w" value="true" />
             <param name="use.wonder.d2w" value="true" />
             <param name="use.wonder.logic" value="true" />
-        </antcall>
-    </target>
-    
-    <target name="WOOgnl.all">
-        <antcall target="global.framework.${build.action}" >
-            <param name="project.principal.class" value="ognl.webobjects.WOOgnl" />
-            <param name="project.name" value="WOOgnl" />
-            <param name="project.dir" value="Common/Frameworks/WOOgnl" />
-
-            <param name="use.wonder.jars" value="true" />
         </antcall>
     </target>
 
@@ -654,6 +684,10 @@
         The targets here correspond to a top-level directory, split into frameworks, apps and examples
         to add your own, add a target definition above and choose the correct group below 
      -->
+
+    <target name="patchable.frameworks.all" depends="ERJars.all, JavaWOExtensions.all, ERExtensions.all, ERDirectToWeb.all, ERNeutralLook.all, ERSelenium.all, WOOgnl.all, ERPrototypes.all, ERPlot.all, ERIndexing.all, ERCaptcha.all, EROpenID.all, ERJGroupsSynchronizer.all, ERRest.all, ERAttachment.all, ERJavaMail.all, ERCoreBusinessLogic.all, ERChangeNotificationJMS.all, ERCalendar.all, ERExcelLook.all, ERWorkerChannel.all, BTBusinessLogic.all, ERMiniUglyLook.all" />
+
+
     <target name="common.frameworks.all" depends="ERJars.all, JavaWOExtensions.all, ERExtensions.all, ERDirectToWeb.all, ERNeutralLook.all, ERSelenium.all, WOOgnl.all, ERPrototypes.all, ERPlot.all, ERIndexing.all, ERCaptcha.all, EROpenID.all, ERJGroupsSynchronizer.all, ERRest.all, ERAttachment.all, ERJavaMail.all, ERCoreBusinessLogic.all, ERChangeNotificationJMS.all, ERCalendar.all, ERExcelLook.all, ERWorkerChannel.all, BTBusinessLogic.all, ERMiniUglyLook.all" />
     
     <target name="common.applications.all" depends="BugTracker.all, ERMailer.all" />
@@ -681,8 +715,10 @@
     <target name="paypal.frameworks.all" depends="WOPayPal.all" />
     <target name="woadaptors.all" depends="ERIMAdaptor.all" />
     <target name="experimental.all" depends="DevStudio.all" />
+
+    <target name="frameworks.all" depends="common.frameworks.all, excelgeneration.frameworks.all, ajax.frameworks.all, woadaptors.all, validity.frameworks.all, svgobjects.frameworks.all, plugins.all, paypal.frameworks.all, dynareporting.frameworks.all, woadaptors.all">
+     </target>
     
-    <target name="frameworks.all" depends="common.frameworks.all, excelgeneration.frameworks.all, ajax.frameworks.all, woadaptors.all, validity.frameworks.all, svgobjects.frameworks.all, plugins.all, paypal.frameworks.all, dynareporting.frameworks.all, woadaptors.all"/>
     <target name="applications.all" depends="DevStudio.all, common.applications.all, validity.applications.all"/>
     <target name="examples.all" depends="common.examples.all, excelgeneration.examples.all, validity.examples.all, dynareporting.examples.all, ajax.examples.all, experimental.all"/>
 
@@ -725,11 +761,30 @@
             excludes="**/CVS/*, **/dist/**" />
     </target>
 
-    <target name="build">
+    
+    <target name="patch.54">
+       <property name="woognl.pre" value="WOOgnl54.pre" />
+       <property name="erx.class.exclude.0" value="com/webobjects/appserver/_private/WOHTTPIO.java" />  
+       <property name="erx.class.exclude.1" value="com/webobjects/foundation/NSArray.java" /> 
+
         <property name="include.source" value="true" />
         <antcall target="all.run" >
             <param name="build.action" value="build" />
         </antcall>
+    </target>
+    
+    <target name="patch.53">
+       <property name="woognl.pre" value="WOOgnl53.pre" />
+
+        <property name="include.source" value="true" />
+        <antcall target="all.run" >
+            <param name="build.action" value="build" />
+        </antcall>
+    </target>
+
+    <target name="build">
+        <property name="wonder.patch" value="53" />
+        <antcall target="patch.${wonder.patch}" ></antcall>
     </target>
 
     <target name="install">
