@@ -179,6 +179,7 @@ There are many ways to use this script:
         <!-- default values. can be overridden by *.properties files or -D options. -->
         <property name="wo.woroot" value="/System" />
         <property name="wo.localroot" value="/" />
+        <property name="before.compile" value="global.dummy" />
         <property name="after.compile" value="global.dummy" />
         <property name="wo.frameworks" value="${wo.woroot}/Library/Frameworks" />
         <property name="wo.local.frameworks" value="${wo.wolocalroot}/Library/Frameworks" />
@@ -201,6 +202,7 @@ There are many ways to use this script:
         <property name="wonder.application.install.root" value="${wo.localroot}/Library/WebObjects/JavaApplications" />
         <property name="web.application.install.root" value="${wo.server.root}" />
         <!-- just some existing value -->
+        <property name="project.sources.dir" value="${project.dir}/Sources" />
         <property name="patches.dir" value="${wonder.root}/Build/build" />
         <property name="classes.exclude.0" value="does_not_exists_hopefully" />
         <property name="classes.exclude.1" value="does_not_exists_hopefully" />
@@ -219,7 +221,7 @@ There are many ways to use this script:
             </fileset>
         </path>
         <mkdir dir="${project.dir}/Libraries" />
-        <mkdir dir="${project.dir}/Sources" />
+        <mkdir dir="${project.sources.dir}" />
         <mkdir dir="${project.dir}/Resources" />
         <mkdir dir="${project.dir}/Components" />
         <mkdir dir="${project.dir}/WebServerResources" />
@@ -291,8 +293,10 @@ There are many ways to use this script:
          <taskdef name="wocompile" classname="org.objectstyle.woproject.ant.WOCompile">
             <classpath refid="ant.classpath"/>
         </taskdef>
-        <echo message="${project.dir}/Sources" />
-        <wocompile srcdir="${project.dir}/Sources" destdir="${build.classes}" debug="on" optimize="off" deprecation="off" source="${compiler.source}" target="${compiler.target}">
+        <echo message="${project.sources.dir}" />
+         
+       <antcall target="${before.compile}" />
+       <wocompile srcdir="${project.sources.dir}" destdir="${build.classes}" debug="on" optimize="off" deprecation="off" source="${compiler.source}" target="${compiler.target}">
             <classpath>
                 <fileset dir="${project.dir}/Libraries">
                     <include name="**/*.jar" />
@@ -453,14 +457,14 @@ There are many ways to use this script:
             <classes dir="${build.classes}">
                 <include name="**/*.class" />
             </classes>
-            <classes dir="${project.dir}/Sources">
+            <classes dir="${project.sources.dir}">
                 <include name="**/*" />
                 <exclude name="**/*.class" />
                 <exclude name="**/*.java" />
                 <exclude name="**/.svn" />
                 <exclude name="**/CVS" />
             </classes>
-            <sources dir="${project.dir}/Sources" if="include.source">
+            <sources dir="${project.sources.dir}" if="include.source">
                 <include name="**/*.java" />
             </sources>
             <resources dir="${project.dir}/Components">
@@ -501,14 +505,14 @@ There are many ways to use this script:
                 <exclude name=".svn" />
                 <exclude name=".CVS" />
             </classes>
-            <classes dir="${project.dir}/Sources">
+            <classes dir="${project.sources.dir}">
                 <include name="**/*" />
                 <exclude name="**/*.java" />
                 <exclude name="**/*.class" />
                 <exclude name="**/.svn" />
                 <exclude name="**/CVS" />
             </classes>
-            <sources dir="${project.dir}/Sources" if="include.source">
+            <sources dir="${project.sources.dir}" if="include.source">
                 <include name="**/*.java" />
             </sources>
             <lib dir="${project.dir}/Libraries">
