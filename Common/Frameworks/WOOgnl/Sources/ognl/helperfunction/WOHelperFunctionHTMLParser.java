@@ -4,11 +4,12 @@ import java.util.NoSuchElementException;
 import java.util.Stack;
 import java.util.StringTokenizer;
 
+import ognl.helperfunction.compatibility.WOMiddleManDeclarationFormatException;
+import ognl.helperfunction.compatibility.WOMiddleManHTMLFormatException;
+
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
-import com.webobjects.appserver._private.WODeclarationFormatException;
-import com.webobjects.appserver._private.WOHTMLFormatException;
 import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation._NSStringUtilities;
 
@@ -27,7 +28,7 @@ public class WOHelperFunctionHTMLParser {
 	private static final String WEBOBJECT_END_TAG = "</webobject";
 	private static final String WEBOBJECT_START_TAG = "<webobject";
 	private static final String WO_REPLACEMENT_MARKER = "__REPL__";
-	
+
 	private static boolean _parseStandardTags = false;
 	private NSMutableDictionary _stackDict;
 
@@ -40,12 +41,12 @@ public class WOHelperFunctionHTMLParser {
 		_unparsedTemplate = unparsedTemplate;
 		_contentText = new StringBuffer(128);
 	}
-	
-	public static void setParseStandardTags (boolean flag) {
+
+	public static void setParseStandardTags(boolean flag) {
 		_parseStandardTags = flag;
 	}
 
-	public void parseHTML() throws WOHTMLFormatException, WODeclarationFormatException, ClassNotFoundException {
+	public void parseHTML() throws WOMiddleManHTMLFormatException, WOMiddleManDeclarationFormatException, ClassNotFoundException {
 		_stackDict = new NSMutableDictionary();
 		StringTokenizer templateTokenizer = new StringTokenizer(_unparsedTemplate, "<");
 		boolean flag = true;
@@ -171,23 +172,23 @@ public class WOHelperFunctionHTMLParser {
 	 * @param token
 	 * @return a rewritten token if it has an inline binding or a closing tag, if it belongs to a rewritten token
 	 */
-	private String checkToken (String token) {
+	private String checkToken(String token) {
 		String original = new String(token);
 		try {
-			if (token == null || token.toLowerCase().startsWith(WOHelperFunctionHTMLParser.WEBOBJECT_START_TAG) 
-					|| token.toLowerCase().startsWith(WOHelperFunctionHTMLParser.WO_START_TAG)) {
+			if (token == null || token.toLowerCase().startsWith(WOHelperFunctionHTMLParser.WEBOBJECT_START_TAG) || token.toLowerCase().startsWith(WOHelperFunctionHTMLParser.WO_START_TAG)) {
 				// we return immediately, if it is a webobject token
 				return token;
 			}
-			
+
 			String[] tokenParts = token.split(" ");
 			String tokenPart = tokenParts[0].substring(1);
-			
+
 			if (token.indexOf("\"$") != -1 && token.startsWith("<")) {
 				// we assume a dynamic tag
 				token = token.replaceAll(tokenParts[0], "<wo:" + WO_REPLACEMENT_MARKER + tokenPart);
-				if (log.isDebugEnabled()) log.debug("Rewritten <" + tokenPart + " ...> tag to <wo:" + tokenPart + " ...>");
-				
+				if (log.isDebugEnabled())
+					log.debug("Rewritten <" + tokenPart + " ...> tag to <wo:" + tokenPart + " ...>");
+
 				if (!token.endsWith("/")) {
 					// no need to keep information for self closing tags
 					Stack stack = (Stack) _stackDict.objectForKey(tokenPart);
@@ -218,7 +219,8 @@ public class WOHelperFunctionHTMLParser {
 				if (stack != null && !stack.empty()) {
 					String stackContent = (String) stack.pop();
 					if (stackContent.equals(WO_REPLACEMENT_MARKER)) {
-						if (log.isDebugEnabled()) log.debug("Replaced end tag for '" + tokenParts[0].substring(2) + "' with 'wo' endtag");
+						if (log.isDebugEnabled())
+							log.debug("Replaced end tag for '" + tokenParts[0].substring(2) + "' with 'wo' endtag");
 						token = "</wo";
 					}
 				}
@@ -229,16 +231,16 @@ public class WOHelperFunctionHTMLParser {
 			e.printStackTrace();
 			return original;
 		}
-		return token;	
+		return token;
 	}
-	
-	private void startOfWebObjectTag(String token) throws WOHTMLFormatException {
+
+	private void startOfWebObjectTag(String token) throws WOMiddleManHTMLFormatException {
 		didParseText();
 		_contentText.append(token);
 		didParseOpeningWebObjectTag();
 	}
 
-	private void endOfWebObjectTag(String token) throws WODeclarationFormatException, WOHTMLFormatException, ClassNotFoundException {
+	private void endOfWebObjectTag(String token) throws WOMiddleManDeclarationFormatException, WOMiddleManHTMLFormatException, ClassNotFoundException {
 		didParseText();
 		_contentText.append(token);
 		didParseClosingWebObjectTag();
@@ -256,7 +258,7 @@ public class WOHelperFunctionHTMLParser {
 		}
 	}
 
-	private void didParseOpeningWebObjectTag() throws WOHTMLFormatException {
+	private void didParseOpeningWebObjectTag() throws WOMiddleManHTMLFormatException {
 		if (_contentText != null) {
 			if (log.isDebugEnabled()) {
 				log.debug("Parsed Opening WebObject (" + _contentText.length() + ") : " + _contentText);
@@ -268,7 +270,7 @@ public class WOHelperFunctionHTMLParser {
 		}
 	}
 
-	private void didParseClosingWebObjectTag() throws WODeclarationFormatException, WOHTMLFormatException, ClassNotFoundException, ClassNotFoundException {
+	private void didParseClosingWebObjectTag() throws WOMiddleManDeclarationFormatException, WOMiddleManHTMLFormatException, ClassNotFoundException, ClassNotFoundException {
 		if (_contentText != null) {
 			if (log.isDebugEnabled()) {
 				log.debug("Parsed Closing WebObject (" + _contentText.length() + ") : " + _contentText);
