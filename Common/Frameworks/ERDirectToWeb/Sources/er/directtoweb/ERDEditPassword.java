@@ -100,17 +100,19 @@ public class ERDEditPassword extends ERDCustomEditComponent {
     
     public void takeValuesFromRequest(WORequest r, WOContext c) {
         super.takeValuesFromRequest(r,c);
-        if(passwordConfirmationValidates()) {
-            updateContextValues();
-        } else {
-            String password = password();
-            if(!passwordExists() || (passwordExists() && password != null)) {
-                try {
-                    object().validateTakeValueForKeyPath(password, key());
-                } catch(NSValidation.ValidationException ex) {
-                    validationFailedWithException(ex, password, key());
-                }
-            }
-        }
+        if (c._wasFormSubmitted()) {
+        	if(passwordConfirmationValidates()) {
+        		updateContextValues();
+        	} else {
+        		String password = password();
+        		if(!passwordExists() || (passwordExists() && password != null)) {
+        			try {
+        				object().validateTakeValueForKeyPath(password, key());
+        			} catch(NSValidation.ValidationException ex) {
+        				validationFailedWithException(ex, password, key());
+        			}
+        		}
+        	}
+		}
     }
 }
