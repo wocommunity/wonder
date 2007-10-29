@@ -21,7 +21,7 @@
     <target name="WOOgnl53.pre">
         <delete>
             <fileset dir="Common/Frameworks/WOOgnl/Sources/" includes="ognl/helperfunction/compatibility/**.java" />
-            <fileset dir="Common/Frameworks/WOOgnl/Sources/" includes="ognl/helperfunction/WOHelperFunctionHTMLTemplateParser.class" excludes="ognl/helperfunction/_WOHelperFunctionHTMLTemplateParser.class" />
+            <fileset dir="Common/Frameworks/WOOgnl/Sources/" includes="ognl/helperfunction/WOHelperFunctionHTMLTemplateParser.java" excludes="ognl/helperfunction/_WOHelperFunctionHTMLTemplateParser.java" />
             <fileset dir="Common/Frameworks/WOOgnl/Sources/" includes="com/webobjects/appserver/**/*.java" />
         </delete>
         <copy todir="Common/Frameworks/WOOgnl/Sources">
@@ -32,7 +32,7 @@
     <target name="WOOgnl54.pre">
         <delete>
             <fileset dir="Common/Frameworks/WOOgnl/Sources/" includes="ognl/helperfunction/compatibility/**.java" />
-            <fileset dir="Common/Frameworks/WOOgnl/Sources/" includes="ognl/helperfunction/WOHelperFunctionHTMLTemplateParser.class" excludes="ognl/helperfunction/_WOHelperFunctionHTMLTemplateParser.class" />
+            <fileset dir="Common/Frameworks/WOOgnl/Sources/" includes="ognl/helperfunction/WOHelperFunctionHTMLTemplateParser.java" excludes="ognl/helperfunction/_WOHelperFunctionHTMLTemplateParser.java" />
             <fileset dir="Common/Frameworks/WOOgnl/Sources/" includes="com/webobjects/appserver/**/*.java" />
         </delete>
         <copy todir="Common/Frameworks/WOOgnl/Sources">
@@ -43,7 +43,7 @@
     <target name="WOOgnl.post">
         <delete>
             <fileset dir="Common/Frameworks/WOOgnl/Sources/" includes="ognl/helperfunction/compatibility/**.java" />
-            <fileset dir="Common/Frameworks/WOOgnl/Sources/" includes="ognl/helperfunction/WOHelperFunctionHTMLTemplateParser.class" excludes="ognl/helperfunction/_WOHelperFunctionHTMLTemplateParser.class" />
+            <fileset dir="Common/Frameworks/WOOgnl/Sources/" includes="ognl/helperfunction/WOHelperFunctionHTMLTemplateParser.java" excludes="ognl/helperfunction/_WOHelperFunctionHTMLTemplateParser.java" />
             <fileset dir="Common/Frameworks/WOOgnl/Sources/" includes="com/webobjects/appserver/**/*.java" />
         </delete>
     </target>
