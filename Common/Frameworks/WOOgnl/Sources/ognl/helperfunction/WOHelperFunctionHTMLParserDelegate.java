@@ -1,13 +1,13 @@
 package ognl.helperfunction;
 
-import com.webobjects.appserver._private.WODeclarationFormatException;
-import com.webobjects.appserver._private.WOHTMLFormatException;
+import ognl.helperfunction.compatibility.WOMiddleManDeclarationFormatException;
+import ognl.helperfunction.compatibility.WOMiddleManHTMLFormatException;
 
 public interface WOHelperFunctionHTMLParserDelegate {
 
-	public void didParseOpeningWebObjectTag(String content, WOHelperFunctionHTMLParser htmlParser) throws WOHTMLFormatException;
+	public void didParseOpeningWebObjectTag(String content, WOHelperFunctionHTMLParser htmlParser) throws WOMiddleManHTMLFormatException;
 
-	public void didParseClosingWebObjectTag(String content, WOHelperFunctionHTMLParser htmlParser) throws WODeclarationFormatException, WOHTMLFormatException, ClassNotFoundException;
+	public void didParseClosingWebObjectTag(String content, WOHelperFunctionHTMLParser htmlParser) throws WOMiddleManDeclarationFormatException, WOMiddleManHTMLFormatException, ClassNotFoundException;
 
 	public void didParseComment(String comment, WOHelperFunctionHTMLParser htmlParser);
 

@@ -2,6 +2,9 @@ package ognl.helperfunction;
 
 import java.util.Enumeration;
 
+import ognl.helperfunction.compatibility.WOMiddleManDeclarationFormatException;
+import ognl.helperfunction.compatibility.WOMiddleManHTMLFormatException;
+import ognl.helperfunction.compatibility.WOMiddleManParser;
 import ognl.webobjects.WOOgnl;
 
 import org.apache.log4j.Level;
@@ -11,17 +14,13 @@ import com.webobjects.appserver.WOAssociation;
 import com.webobjects.appserver.WOElement;
 import com.webobjects.appserver._private.WOConstantValueAssociation;
 import com.webobjects.appserver._private.WODeclaration;
-import com.webobjects.appserver._private.WODeclarationFormatException;
 import com.webobjects.appserver._private.WOHTMLCommentString;
-import com.webobjects.appserver._private.WOHTMLFormatException;
-import com.webobjects.appserver._private.WOHTMLWebObjectTag;
 import com.webobjects.appserver._private.WOKeyValueAssociation;
-import com.webobjects.appserver._private.WOParser;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableDictionary;
 
-public class WOHelperFunctionHTMLTemplateParser extends WOParser implements WOHelperFunctionHTMLParserDelegate {
+public class _WOHelperFunctionHTMLTemplateParser extends WOMiddleManParser implements WOHelperFunctionHTMLParserDelegate {
 	public static Logger log = Logger.getLogger(WOHelperFunctionHTMLTemplateParser.class);
 
 	private static NSMutableDictionary _tagShortcutMap = new NSMutableDictionary();
@@ -72,13 +71,19 @@ public class WOHelperFunctionHTMLTemplateParser extends WOParser implements WOHe
 	private NSMutableDictionary _declarations;
 	private int _inlineBindingCount;
 
-	public WOHelperFunctionHTMLTemplateParser(String htmlString, String declarationString, NSArray languages) {
+	public _WOHelperFunctionHTMLTemplateParser(String referenceName, String HTMLString, String declarationString, NSArray languages, Object associationFactory, Object namespaceProvider) {
+		super(referenceName, HTMLString, declarationString, languages, null, null);
+		_declarations = null;
+		_currentWebObjectTag = new WOHTMLWebObjectTag();
+	}
+	
+	public _WOHelperFunctionHTMLTemplateParser(String htmlString, String declarationString, NSArray languages) {
 		super(htmlString, declarationString, languages);
 		_declarations = null;
 		_currentWebObjectTag = new WOHTMLWebObjectTag();
 	}
 
-	protected void parseInlineAssociation(StringBuffer keyBuffer, StringBuffer valueBuffer, NSMutableDictionary bindings) throws WOHTMLFormatException {
+	protected void parseInlineAssociation(StringBuffer keyBuffer, StringBuffer valueBuffer, NSMutableDictionary bindings) throws WOMiddleManHTMLFormatException {
 		String key = keyBuffer.toString().trim();
 		String value = valueBuffer.toString().trim();
 		NSDictionary quotedStrings;
@@ -88,7 +93,7 @@ public class WOHelperFunctionHTMLTemplateParser extends WOParser implements WOHe
 				value = value.substring(0, value.length() - 1);
 			}
 			else {
-				throw new WOHTMLFormatException(valueBuffer + " starts with quote but does not end with one.");
+				throw new WOMiddleManHTMLFormatException(valueBuffer + " starts with quote but does not end with one.");
 			}
 			if (value.startsWith("$")) {
 				value = value.substring(1);
@@ -108,7 +113,7 @@ public class WOHelperFunctionHTMLTemplateParser extends WOParser implements WOHe
 		bindings.setObjectForKey(association, key);
 	}
 
-	protected WODeclaration parseInlineBindings(String tag, int colonIndex) throws WOHTMLFormatException {
+	protected WODeclaration parseInlineBindings(String tag, int colonIndex) throws WOMiddleManHTMLFormatException {
 		StringBuffer keyBuffer = new StringBuffer();
 		StringBuffer valueBuffer = new StringBuffer();
 		StringBuffer elementTypeBuffer = new StringBuffer();
@@ -128,7 +133,7 @@ public class WOHelperFunctionHTMLTemplateParser extends WOParser implements WOHe
 			else if (inQuote && ch == '\\') {
 				index++;
 				if (index == length) {
-					throw new WOHTMLFormatException("'" + tag + "' has a '\\' as the last character.");
+					throw new WOMiddleManHTMLFormatException("'" + tag + "' has a '\\' as the last character.");
 				}
 				if (tag.charAt(index) == '$') {
 					currentBuffer.append("\\$");
@@ -159,14 +164,14 @@ public class WOHelperFunctionHTMLTemplateParser extends WOParser implements WOHe
 			}
 		}
 		if (inQuote) {
-			throw new WOHTMLFormatException("'" + tag + "' has a quote left open.");
+			throw new WOMiddleManHTMLFormatException("'" + tag + "' has a quote left open.");
 		}
 		if (keyBuffer.length() > 0) {
 			if (valueBuffer.length() > 0) {
 				parseInlineAssociation(keyBuffer, valueBuffer, associations);
 			}
 			else {
-				throw new WOHTMLFormatException("'" + tag + "' defines a key but no value.");
+				throw new WOMiddleManHTMLFormatException("'" + tag + "' defines a key but no value.");
 			}
 		}
 		String elementType = elementTypeBuffer.toString();
@@ -200,7 +205,7 @@ public class WOHelperFunctionHTMLTemplateParser extends WOParser implements WOHe
 		return declaration;
 	}
 
-	public void didParseOpeningWebObjectTag(String s, WOHelperFunctionHTMLParser htmlParser) throws WOHTMLFormatException {
+	public void didParseOpeningWebObjectTag(String s, WOHelperFunctionHTMLParser htmlParser) throws WOMiddleManHTMLFormatException {
 		if (_allowInlineBindings) {
 			int spaceIndex = s.indexOf(' ');
 			int colonIndex;
@@ -221,10 +226,10 @@ public class WOHelperFunctionHTMLTemplateParser extends WOParser implements WOHe
 		}
 	}
 
-	public void didParseClosingWebObjectTag(String s, WOHelperFunctionHTMLParser htmlParser) throws WODeclarationFormatException, WOHTMLFormatException, ClassNotFoundException {
+	public void didParseClosingWebObjectTag(String s, WOHelperFunctionHTMLParser htmlParser) throws WOMiddleManDeclarationFormatException, WOMiddleManHTMLFormatException, ClassNotFoundException {
 		WOHTMLWebObjectTag webobjectTag = _currentWebObjectTag.parentTag();
 		if (_currentWebObjectTag == null || webobjectTag == null) {
-			throw new WOHTMLFormatException("<" + getClass().getName() + "> Unbalanced WebObject tags. Either there is an extra closing </WEBOBJECT> tag in the html template, or one of the opening <WEBOBJECT ...> tag has a typo (extra spaces between a < sign and a WEBOBJECT tag ?).");
+			throw new WOMiddleManHTMLFormatException("<" + getClass().getName() + "> Unbalanced WebObject tags. Either there is an extra closing </WEBOBJECT> tag in the html template, or one of the opening <WEBOBJECT ...> tag has a typo (extra spaces between a < sign and a WEBOBJECT tag ?).");
 		}
 		WOElement element = _currentWebObjectTag.dynamicElement(_declarations, _languages);
 		_currentWebObjectTag = webobjectTag;
@@ -240,27 +245,27 @@ public class WOHelperFunctionHTMLTemplateParser extends WOParser implements WOHe
 		_currentWebObjectTag.addChildElement(text);
 	}
 
-	private void parseDeclarations() throws WODeclarationFormatException {
+	private void parseDeclarations() throws WOMiddleManDeclarationFormatException {
 		if (_declarations == null && _declarationString != null) {
 			_declarations = WOHelperFunctionDeclarationParser.declarationsWithString(_declarationString);
 		}
 	}
 
-	private WOElement parseHTML() throws WOHTMLFormatException, WODeclarationFormatException, ClassNotFoundException {
+	private WOElement parseHTML() throws WOMiddleManHTMLFormatException, WOMiddleManDeclarationFormatException, ClassNotFoundException {
 		WOElement currentWebObjectTemplate = null;
 		if (_HTMLString != null && _declarations != null) {
 			WOHelperFunctionHTMLParser htmlParser = new WOHelperFunctionHTMLParser(this, _HTMLString);
 			htmlParser.parseHTML();
 			String webobjectTagName = _currentWebObjectTag.name();
 			if (webobjectTagName != null) {
-				throw new WOHTMLFormatException("There is an unbalanced WebObjects tag named '" + webobjectTagName + "'.");
+				throw new WOMiddleManHTMLFormatException("There is an unbalanced WebObjects tag named '" + webobjectTagName + "'.");
 			}
 			currentWebObjectTemplate = _currentWebObjectTag.template();
 		}
 		return currentWebObjectTemplate;
 	}
 
-	public WOElement parse() throws WODeclarationFormatException, WOHTMLFormatException, ClassNotFoundException {
+	public WOElement parse() throws WOMiddleManDeclarationFormatException, WOMiddleManHTMLFormatException, ClassNotFoundException {
 		parseDeclarations();
 		for (Enumeration e = declarations().objectEnumerator(); e.hasMoreElements();) {
 			WODeclaration declaration = (WODeclaration) e.nextElement();
@@ -323,8 +328,6 @@ public class WOHelperFunctionHTMLTemplateParser extends WOParser implements WOHe
 				StringBuffer ognlKeyPath = new StringBuffer();
 				ognlKeyPath.append("~");
 				ognlKeyPath.append("@" + WOHelperFunctionRegistry.class.getName() + "@registry()._helperInstanceForFrameworkNamed(#this, \"");
-				ognlKeyPath.append(helperFunctionName);
-				ognlKeyPath.append("\", \"");
 				ognlKeyPath.append(targetKeyPath);
 				ognlKeyPath.append("\", \"");
 				ognlKeyPath.append(frameworkName);
