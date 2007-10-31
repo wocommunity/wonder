@@ -1,0 +1,20 @@
+# Properties file for wotaskd
+# Overrides the JavaWebObjects.framework Properties
+
+WOAutoOpenInBrowser=false
+WODebuggingEnabled=false
+WODirectConnectEnabled=true
+WOCachingEnabled=true
+WOPort=1085
+
+# deployment defaults
+WOMonitorEnabled=false
+WOLifebeatDestinationPort=1085
+WOLifebeatEnabled=false
+
+# wotaskd specific defaults
+WOMulticastAddress=239.128.14.2
+WORespondsToMulticastQuery=false 
+WOSavesAdaptorConfiguration=false
+WOAssumeApplicationIsDeadMultiplier=4
+WOShouldUseSpawn=true

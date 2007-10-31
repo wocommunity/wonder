@@ -1,0 +1,154 @@
+<WEBOBJECT name=NavPage></WEBOBJECT>
+	<P align=right><WEBOBJECT name=ReturnLink><WEBOBJECT name=DetailViewButton></WEBOBJECT></WEBOBJECT></P>
+
+       	<FONT SIZE=+1><B>
+		Configuring Instance "<FONT SIZE=+1><WEBOBJECT name=InstName></WEBOBJECT></FONT>" on <FONT SIZE=+1><WEBOBJECT NAME=String1></WEBOBJECT></FONT>
+	</B></FONT>
+	<BR>
+	The Instance must be restarted for changes to take effect.
+	<BR>
+	<FONT SIZE=-1>
+		(Changes to these settings only affect this instance;<BR>
+		to affect all instances, use the <WEBOBJECT name=AppConfigureLink>Application Configure Page</WEBOBJECT>)<BR>
+	</FONT>
+	<P ALIGN=CENTER><FONT COLOR=#FF0000><WEBOBJECT NAME=WarningMessage></WEBOBJECT></FONT></P>
+	<BR>
+       	<TABLE BORDER=1 CELLPADDING=10 CELLSPACING=1 WIDTH=95%>
+       		<TR>
+       			<TD>
+			<CENTER>
+			<FONT SIZE=+1><B>Instance Settings</B></FONT><BR>
+       			<WEBOBJECT name=ArgumentsForm>
+       			<TABLE BORDER=1 CELLPADDING=2 CELLSPACING=2 WIDTH=90%>
+       				<TR>
+       				       	<TD ALIGN=RIGHT>Port:</TD>
+       				       	<TD><WEBOBJECT NAME=Port></WEBOBJECT> (The instance must be off to change this setting)</TD>
+       				</TR>
+       				<TR>
+       				       	<TD ALIGN=RIGHT>ID:</TD>
+       				       	<TD><WEBOBJECT NAME=TextField1></WEBOBJECT></TD>
+       				</TR>
+       				<WEBOBJECT NAME=isWindowsHost>
+       				<TR>
+       				      	<TD>&nbsp;</TD>
+       				       	<TD><FONT SIZE=-1><B>Note:</B> 
+       				       		This instance is on a Microsoft Windows host. 
+       				       		A drive letter (e.g. "D:") may be required to create a valid path.
+       				       	</FONT></TD>
+       				</TR>
+       				</WEBOBJECT>
+       				<TR>
+       				      	<TD ALIGN=RIGHT><WEBOBJECT NAME=pathDiff></WEBOBJECTS>Path*:</TD>
+       				       	<TD><WEBOBJECT NAME=Path></WEBOBJECT>
+       				       		<WEBOBJECT name=PathPickerWizardLink>
+       				       			<WEBOBJECT name=PathWizardImage></WEBOBJECT>
+       				       		</WEBOBJECT></TD>
+       				</TR>
+       				<TR>
+     					<TD ALIGN=RIGHT><WEBOBJECT NAME=minDiff></WEBOBJECTS>Minimum Active Sessions:</TD>
+      					<TD><WEBOBJECT NAME=TextField2></WEBOBJECT></TD>
+       				</TR>
+       				<TR>
+      					<TD ALIGN=RIGHT><WEBOBJECT NAME=cachingDiff></WEBOBJECTS>Caching enabled:</TD>
+      					<TD><WEBOBJECT NAME=Caching></WEBOBJECT></TD>
+       				</TR>
+       				<TR>
+      					<TD ALIGN=RIGHT><WEBOBJECT NAME=outputDiff></WEBOBJECTS>Output Path:</TD>
+      					<TD><WEBOBJECT NAME=OutputPath></WEBOBJECT>
+      					      	<WEBOBJECT NAME=PathPickerWizardLink2>
+      					       		<WEBOBJECT NAME=PathWizardImage2></WEBOBJECT>
+      					       	</WEBOBJECT></TD>
+       				</TR>
+       				<TR>
+      					<TD ALIGN=RIGHT><WEBOBJECT NAME=browserDiff></WEBOBJECTS>Auto Open In Browser:</TD>
+      					<TD><WEBOBJECT NAME=CheckBox2></WEBOBJECT></TD>
+       				</TR>
+       				<TR>
+      					<TD ALIGN=RIGHT><WEBOBJECT NAME=debugDiff></WEBOBJECTS>Debugging enabled:</TD>
+      					<TD><WEBOBJECT NAME=DebuggingEnabled></WEBOBJECT></TD>
+       				</TR>
+       				<TR>
+      					<TD ALIGN=RIGHT><WEBOBJECT NAME=lifebeatDiff></WEBOBJECTS>Lifebeat Interval:</TD>
+      					<TD><WEBOBJECT NAME=TextField3></WEBOBJECT></TD>
+       				</TR>
+       				<TR>
+      					<TD ALIGN=RIGHT VALIGN=TOP><WEBOBJECT NAME=argsDiff></WEBOBJECTS>Additional<BR>Arguments:</TD>
+      					<TD><WEBOBJECT NAME=AdditionalArguments></WEBOBJECT></TD>
+       				</TR>
+			</TABLE>
+		      	<FONT SIZE=-1>* The path of the executable (inside the '.woa' directory).</FONT>
+		      	<FONT SIZE=-1><FONT COLOR=#FF0000>**</FONT> Setting differs from the Application level setting.</FONT>
+		       	<BR><BR>
+			<WEBOBJECT name=InstanceSettingsSubmit></WEBOBJECT>
+		       	<BR><BR>
+		       	With the current settings, this instance will be started with the following arguments:
+      			<BR>
+      			<TABLE BORDER=1 CELLPADDING=8 BGCOLOR=#E0E0F0>
+      				<TR><TD>
+      					<TT><WEBOBJECT name=CommandLineString></WEBOBJECT></TT>
+      				</TD></TR>
+      			</TABLE>
+      			</WEBOBJECT>
+      			</TD>
+      		</TR>
+      	</TABLE>
+	<BR>
+       	<TABLE BORDER=1 CELLPADDING=10 CELLSPACING=1 WIDTH=95%>
+       		<TR>
+       			<TD>
+			<CENTER>
+			<FONT SIZE=+1><B>Adaptor Settings</B></FONT><BR>
+			<WEBOBJECT name=AdaptorSettingsForm>
+			<TABLE cellpadding=2 cellspacing=2 BORDER=1>
+				<TR>
+					<TD ALIGN="RIGHT">Send timeout:</TD>
+					<TD><WEBOBJECT name=SendTimeoutField></WEBOBJECT></TD>
+				</TR>
+				<TR>
+					<TD ALIGN="RIGHT">Receive timeout:</TD>
+					<TD><WEBOBJECT name=ReceiveTimeoutField></WEBOBJECT></TD>
+				</TR>
+				<TR>
+					<TD ALIGN="RIGHT">Connect timeout:</TD>
+					<TD><WEBOBJECT name=ConnectTimeoutField></WEBOBJECT></TD>
+				</TR>
+				<TR>
+					<TD ALIGN="RIGHT">Send Buffer Size:</TD>
+					<TD><WEBOBJECT name=PoolsizeField></WEBOBJECT></TD>
+				</TR>
+				<TR>
+					<TD ALIGN=RIGHT>Receive Buffer Size:</TD>
+					<TD><WEBOBJECT NAME=TextField4></WEBOBJECT></TD>
+				</TR>
+			</TABLE><BR>
+			<WEBOBJECT name=UpdateAdaptorButton></webobject>
+			</WEBOBJECT>
+			</TD>
+		</TR>
+	</TABLE>
+	<BR>
+       	<TABLE BORDER=1 CELLPADDING=10 CELLSPACING=1 WIDTH=95%>
+       		<TR>
+       			<TD>
+			<CENTER>
+			<FONT SIZE=+1><B>Force Quit</B></FONT><BR>
+			<WEBOBJECT name=ForceQuitForm>
+			Clicking this button will force quit this instance.<BR>
+			The instance will do no error handling, nor will it attempt to finish processing requests in progress.<BR>
+			This only works on 5.2 applications or above.<br>
+			The instance should exit within <WEBOBJECTS name=lifebeatIntervalString></WEBOBJECTS> seconds. <br>
+			<BR>
+			<WEBOBJECT name=ForceQuitButton></webobject>
+			</WEBOBJECT>
+			</TD>
+		</TR>
+	</TABLE>
+
+</CENTER>
+  </TD></TR>
+</TABLE>
+</CENTER>
+
+</BODY>
+</HTML>
+

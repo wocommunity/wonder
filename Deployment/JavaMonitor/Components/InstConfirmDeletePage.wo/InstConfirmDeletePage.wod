@@ -1,0 +1,18 @@
+CancelClicked: WOHyperlink {
+    action = cancelClicked;
+}
+
+DeleteClicked: WOHyperlink {
+    action = deleteClicked;
+}
+
+InstHost: WOString {
+    value = mySession.mInstance.hostName;
+}
+
+InstName: WOString {
+    value = mySession.mInstance.displayName;
+}
+NavPage: NavigationPage {
+	currentPage = APP_PAGE;
+}

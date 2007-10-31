@@ -1,0 +1,26 @@
+NavPage: NavigationPage {
+	currentPage = APP_PAGE;
+}
+
+ClearDeaths: WOHyperlink {
+    action = clearDeathsClicked;
+}
+
+ReturnLink: WOHyperlink {
+    action = returnClicked;
+}
+
+DeathRepetition: WORepetition {
+    list = mySession.mInstance.deaths;
+    item = aDeath;
+    index = anIndex;
+}
+
+DeathIndex: WOString {
+    value = anIndexPlusOne;
+}
+
+DeathDescription: WOString {
+    value = aDeath;
+//    dateformat = "%m/%d/%Y %H:%M:%S %Z";
+}

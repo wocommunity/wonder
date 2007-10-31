@@ -1,0 +1,92 @@
+AddHostForm: WOForm {}
+
+AddHostSubmitButton: WOSubmitButton {
+    action = addHostClicked;
+    value = "Add Host";
+}
+
+ConfigureHostLink: WOHyperlink {
+    action = configureHostClicked;
+}
+
+ConfigureButton: WOImage {
+	alt = "Configure";
+	border = "0";
+	filename = "ButtonConfig.gif";
+	height = "28";
+	width = "67";
+}
+
+DeleteButton: WOImage {
+    filename = "ButtonDelete.gif";
+    height = "17";
+    width = "55";
+    alt = "Delete";
+    border = "0";
+}
+
+ErrorMsg: WOString {
+	value = session.message;
+	escapeHTML = false;
+}
+
+HostAddress: WOString {
+    value = currentHost.addressAsString;
+}
+
+HostIsAvailable: WOConditional {
+    condition = currentHost.isAvailable;
+}
+
+HostIsNOTAvailable: WOConditional {
+    condition = currentHost.isAvailable;
+    negate = true;
+}
+
+HostName: WOString {
+    value = currentHost.name;
+}
+
+HostNameTextField: WOTextField {
+    size = "20";
+    value = newHostName;
+}
+
+HostOSName: WOString {
+    value = currentHost.operatingSystem;
+}
+
+HostsRepetition: WORepetition {
+    list = theApplication.siteConfig.hostArray;
+    item = currentHost;
+}
+
+InstanceCount: WOString {
+    value = currentHost.runningInstances;
+}
+
+NavPage: NavigationPage {
+	currentPage = HOST_PAGE;
+}
+
+PopUpButton1: WOPopUpButton {
+	list = hostTypeList;
+	selection = hostTypeSelection;
+}
+
+ProcessorDescription: WOString {
+    value = currentHost.processorType;
+}
+
+RemoveHostLink: WOHyperlink {
+    action = removeHostClicked;
+}
+
+String1: WOString {
+	value = currentHost.type;
+}
+wotaskdLink: WOHyperlink {
+	action = displayWotaskdInfoClicked;
+	target = "_blank";
+}
+
