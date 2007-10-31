@@ -701,65 +701,48 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 	}
 
 	/**
-	 * Creates the request object for this loop. Overridden to use an {@link ERXRequest} object that fixes a bug with
-	 * localization.
-	 * 
-	 * @param aMethod
-	 *            the HTTP method object used to send the request, must be one of "GET", "POST" or "HEAD"
-	 * @param aURL -
-	 *            must be non-null
-	 * @param anHTTPVersion -
-	 *            the version of HTTP used
-	 * @param someHeaders -
-	 *            dictionary whose String keys correspond to header names
-	 * @param aContent -
-	 *            the HTML content of the receiver
-	 * @param someInfo -
-	 *            an NSDictionary that can contain any kind of information related to the current response.
-	 * @return a new WORequest object
+	 * Creates the request object for this loop. Calls _createRequest(). For WO 5.3.
 	 */
 	public WORequest createRequest(String aMethod, String aURL, String anHTTPVersion, NSDictionary someHeaders, NSData aContent, NSDictionary someInfo) {
-		return _createRequest(aMethod, aURL, anHTTPVersion, new NSDictionary(someHeaders, false), aContent, someInfo);
+		return _createRequest(aMethod, aURL, anHTTPVersion, someHeaders, aContent, someInfo);
+	}
+    
+
+    /**
+     * Creates the request object for this loop. Calls _createRequest(). For WO 5.4.
+     */
+	public WORequest createRequest(String method, String aurl, String anHTTPVersion, Map<String, ? extends List<String>> someHeaders, NSData content, Map<String, Object> someInfo) {
+		return _createRequest(method, aurl, anHTTPVersion, new NSDictionary(someHeaders, true), content, new NSDictionary(someInfo, true));
 	}
 
-	public WORequest createRequest(String aMethod, String aURL, String anHTTPVersion, Map someHeaders, NSData aContent, NSDictionary someInfo) {
-		return _createRequest(aMethod, aURL, anHTTPVersion, new NSDictionary(someHeaders, false), aContent, someInfo);
-	}
-
+	/**
+	 * Bottleneck for WORequest creation in WO 5.3 and 5.4 to use an {@link ERXRequest} object that fixes a bug with
+	 * localization.
+	 */
     protected WORequest _createRequest(String aMethod, String aURL, String anHTTPVersion, NSDictionary someHeaders, NSData aContent, NSDictionary someInfo) {
 
 		// Workaround for #3428067 (Apache Server Side Include module will feed
 		// "INCLUDED" as the HTTP version, which causes a request object not to be
-		// created by an excepion.
+		// created by an exception.
 		if (anHTTPVersion.startsWith("INCLUDED"))
 			anHTTPVersion = "HTTP/1.0";
 
 		WORequest worequest = new ERXRequest(aMethod, aURL, anHTTPVersion, someHeaders, aContent, someInfo);
 		return worequest;
 	}
-    
-
-    /**
-     * 5.4 workaround
-     */
-	public WORequest createRequest(String method, String aurl, String anHTTPVersion, Map<String, ? extends List<String>> someHeaders, NSData content, Map<String, Object> someInfo) {
-		return this._createRequest(method, aurl, anHTTPVersion, new NSDictionary(someHeaders, false), content, new NSDictionary(someInfo, false));
-	}
 
 
 	/**
-	 * Used to instanciate a WOComponent when no context is available, typically ouside of a session
+	 * Used to instantiate a WOComponent when no context is available, typically outside of a session
 	 * 
 	 * @param pageName -
-	 *            The name of the WOComponent that must be instanciated.
+	 *            The name of the WOComponent that must be instantiated.
 	 * @return created WOComponent with the given name
 	 */
-	public static WOComponent instantiatePage(String pageName) {
-		// Create a context from a fake request
-		WORequest fakeRequest = new ERXRequest("GET", "", "HTTP/1.1", null, null, null);
-		WOContext context = application().createContextForRequest(fakeRequest);
-		return application().pageWithName(pageName, context);
-	}
+    public static WOComponent instantiatePage(String pageName) {
+    	WOContext context = ERXWOContext.newContext();
+    	return application().pageWithName(pageName, context);
+    }
 
 	/**
 	 * Stops the application from handling any new requests. Will still handle requests from existing sessions.
@@ -775,10 +758,10 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 	/**
 	 * Checks if the free memory is less than the threshold given in
 	 * <code>er.extensions.ERXApplication.memoryThreshold</code> (should be
-	 * set to around 0.90 meaning 90% of total memory or 100 meaning 100 MB of min
-	 * available mem) and if it is greater start to refuse new sessions until
-	 * more memory becomes available. This helps when the app is becoming
-	 * unresponsive because it's more busy garbage colleting than processing
+	 * set to around 0.90 meaning 90% of total memory or 100 meaning 100 MB of minimal
+	 * available memory) and if it is greater start to refuse new sessions until
+	 * more memory becomes available. This helps when the application is becoming
+	 * unresponsive because it's more busy garbage collecting than processing
 	 * requests. The default is to do nothing unless the property is set. This
 	 * method is called on each request, but garbage collection will be done
 	 * only every minute.
@@ -861,7 +844,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 
 	/**
 	 * The name suffix is appended to the current name of the application. This adds the ability to add a useful suffix
-	 * to differentuate between different sets of applications on the same machine.<br/> <br/> The name suffix is set
+	 * to differentiate between different sets of applications on the same machine.<br/> <br/> The name suffix is set
 	 * via the System property <b>ERApplicationNameSuffix</b>.<br/> <br/> For example if the name of an application is
 	 * Buyer and you want to have a training instance appear with the name BuyerTraining then you would set the
 	 * ERApplicationNameSuffix to Training.<br/> <br/>
@@ -985,7 +968,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 		if (ERXProperties.booleanForKey("er.extensions.ERXApplication.redirectOnMissingObjects")) {
 			// AK: the idea here is that you might have a stale object that was deleted from the DB
 			// while you weren't looking so the next time around your page might get a chance earlier to
-			// realize it isn't there anymore. Unfortunalty, this doesn�t work in all scenarios.
+			// realize it isn't there anymore. Unfortunately, this doesn't work in all scenarios.
 			if (exception instanceof ERXDatabaseContextDelegate.ObjectNotAvailableException && context != null) {
 				String retryKey = context.request().stringFormValueForKey("ERXRetry");
 				if (retryKey == null) {
@@ -1020,8 +1003,8 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 	}
 
 	/**
-	 * Handles the potentially fatal OutOfMemoryError by quiting the application ASAP. Broken out into a separate method
-	 * to make custom error handling easier, ie generating your own error pages in production, etc.
+	 * Handles the potentially fatal OutOfMemoryError by quitting the application ASAP. Broken out into a separate method
+	 * to make custom error handling easier, ie. generating your own error pages in production, etc.
 	 * 
 	 * @param exception
 	 *            to check if it is a fatal exception.
@@ -1274,7 +1257,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 	protected Boolean _useSessionStoreDeadlockDetection;
 
 	/**
-	 * Deadlock in session-store detection. Note that the detection only work in singlethreaded mode, and is mostly
+	 * Deadlock in session-store detection. Note that the detection only work in single-threaded mode, and is mostly
 	 * useful to find cases when a session is checked out twice in a single RR-loop, which will lead to a session store
 	 * lockup. Set the <code>er.extensions.ERXApplication.useSessionStoreDeadlockDetection=true</code> property to
 	 * actually the this feature.
