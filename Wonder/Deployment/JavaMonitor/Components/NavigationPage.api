@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<wodefinitions>
+	<wo class="NavigationPage" wocomponentcontent="false">
+		<binding name="currentPage"/>
+		<validation message="'currentPage' is a required binding">
+			<unbound name="currentPage"/>
+		</validation>
+	</wo>
+</wodefinitions>
