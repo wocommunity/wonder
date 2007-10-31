@@ -1,11 +1,11 @@
 package er.attachment.components;
 
-import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 
 import er.attachment.model.ERAttachment;
 import er.attachment.processors.ERAttachmentProcessor;
 import er.attachment.utils.ERMimeType;
+import er.extensions.ERXStatelessComponent;
 
 /**
  * ERAttachmentIcon displays a linked icon image that represents the file
@@ -16,7 +16,7 @@ import er.attachment.utils.ERMimeType;
  * @binding attachment the attachment to display
  * @binding configurationName (optional) the configuration name for this attachment (see top level documentation)
  */
-public class ERAttachmentIcon extends WOComponent {
+public class ERAttachmentIcon extends ERXStatelessComponent {
   public ERAttachmentIcon(WOContext context) {
     super(context);
   }
