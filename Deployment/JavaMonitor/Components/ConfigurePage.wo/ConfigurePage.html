@@ -1,0 +1,114 @@
+<WEBOBJECT name=NavPage></WEBOBJECT>
+	<P ALIGN=CENTER><FONT COLOR=#FF0000><WEBOBJECT NAME=ErrorMsg></WEBOBJECT></FONT></P>
+       	<TABLE BORDER=1 CELLPADDING=10 CELLSPACING=1 WIDTH=95%>
+       		<TR>
+       			<TD>
+       				<CENTER>
+       				<FONT size=+1><B>HTTP Adaptor URL</B></FONT><BR>
+       				<WEBOBJECT name= AdaptorSettingsForm>
+       					Enter the complete URL to the WebObjects HTTP adaptor.<BR>
+       					<BR>
+       					Example: <TT>http://store.apple.com/cgi-bin/WebObjects</TT><BR>
+       					<BR>
+       					URL to Adaptor:
+       					<WEBOBJECT name=AdaptorURLField></WEBOBJECT><BR><BR>
+       					<WEBOBJECT name=SubmitAdaptorButton></WEBOBJECT>
+       				</WEBOBJECT>
+       				</CENTER>
+       			</TD>
+       		</TR>
+       	</TABLE>
+	<BR>
+	<TABLE BORDER=1 CELLPADDING=10 CELLSPACING=1 WIDTH=95%>
+		<TR>
+			<TD>
+			<CENTER>
+			<FONT size=+1><B>HTTP Adaptor Settings</B></FONT><BR>
+			<WEBOBJECT NAME=AdaptorSettingsForm>
+			<TABLE cellpadding=2 cellspacing=2 BORDER=1>
+			    <TR>
+				<TD ALIGN=RIGHT>Load balancing scheme:</TD>
+				<TD><WEBOBJECT NAME=LoadBalancingScheme></WEBOBJECT><BR>
+					Custom Scheduler Name: <WEBOBJECT NAME=TextField8></WEBOBJECT> (Optional)</TD>
+			    </TR>
+			    <TR>
+				<TD ALIGN=RIGHT>Retries:</TD>
+				<TD><WEBOBJECT NAME=RetriesField></WEBOBJECT></TD>
+			    </TR>
+			    <TR>
+				<TD ALIGN=RIGHT>Redirection URL:</TD>
+				<TD><WEBOBJECT NAME=RedirectionURLField></WEBOBJECT></TD>
+			    </TR>
+			    <TR>
+				<TD ALIGN=RIGHT>Dormant:</TD>
+				<TD><WEBOBJECT NAME=TimeoutField></WEBOBJECT></TD>
+			    </TR>
+			    <TR>
+				<TD ALIGN=RIGHT>Send Timeout:</TD>
+				<TD><WEBOBJECT NAME=SendTimeoutField></WEBOBJECT></TD>
+			    </TR>
+			    <TR>
+				<TD ALIGN=RIGHT>Receive Timeout:</TD>
+				<TD><WEBOBJECT NAME=ReceiveTimeoutField></WEBOBJECT></TD>
+			    </TR>
+			    <TR>
+				<TD ALIGN=RIGHT>Connect Timeout:</TD>
+				<TD><WEBOBJECT NAME=ConnectTimeoutField></WEBOBJECT></TD>
+			    </TR>
+			    <TR>
+				<TD ALIGN=RIGHT>Send Buffer Size:</TD>
+				<TD><WEBOBJECT NAME=ConnectTimeoutField2></WEBOBJECT></TD>
+			    </TR>
+			    <TR>
+				<TD ALIGN=RIGHT>Receive Buffer Size:</TD>
+				<TD><WEBOBJECT NAME=ConnectTimeoutField3></WEBOBJECT></TD>
+			    </TR>
+			    <TR>
+				<TD ALIGN=RIGHT>Connection Pool Size:</TD>
+				<TD><WEBOBJECT NAME=PoolsizeField></WEBOBJECT></TD>
+			    </TR>
+			    <TR>
+				<TD ALIGN=RIGHT>URL Version:</TD>
+				<TD><WEBOBJECT NAME=PopUpButton1></WEBOBJECT></TD>
+			</TABLE><BR>
+       			<WEBOBJECT NAME=UpdateAdaptorButton></WEBOBJECT>
+			</WEBOBJECT>
+			</CENTER>
+			</TD>
+		</TR>
+	</TABLE>
+	<BR>
+       	<TABLE BORDER=1 CELLPADDING=10 CELLSPACING=1 WIDTH=95%>
+       		<TR>
+       			<TD>
+       				<CENTER>
+       				<FONT size=+1><B>Email Notifications</B></FONT><BR>
+       				Monitor can send email notifications if an SMTP host is supplied.<BR>
+				To use email notifications, go to the application configuration page 
+				to set email addresses for each of your applications.<BR>
+       				<WEBOBJECT name=EmailForm>
+       				<TABLE cellpadding=2 cellspacing=2 BORDER=1>
+       				    <TR>
+       					<TD align=right>SMTP host:</TD><TD>
+       					<WEBOBJECT NAME=SMTPHostField3></WEBOBJECT></TD>
+       				    </TR>
+       				    <TR>
+       					<TD align=right>Return address:</TD>
+       					<TD><WEBOBJECT NAME=SMTPHostField4></WEBOBJECT></TD>
+       				    </TR>
+       				</TABLE>
+       				<BR>
+       				<WEBOBJECT name=UpdateEmailButton></WEBOBJECT>
+       				</WEBOBJECT><BR>
+       			 	</CENTER>
+       			</TD>
+       		</TR>
+       	</TABLE>
+
+</CENTER>
+  </TD></TR>
+</TABLE>
+</CENTER>
+
+</BODY>
+</HTML>

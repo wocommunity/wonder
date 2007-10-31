@@ -1,0 +1,99 @@
+AddApplicationForm: WOForm {
+    action = addApplicationClicked;
+}
+
+AddApplicationSubmitButton: WOSubmitButton {
+    action = addApplicationClicked;
+    value = "Add Application";
+}
+
+AppDetailsLink: WOHyperlink {
+    action = appDetailsClicked;
+}
+
+AppIsNOTRunning: WOConditional {
+    condition = currentApplication.isRunning;
+    negate = YES;
+}
+
+AppIsRunning: WOConditional {
+    condition = currentApplication.isRunning;
+}
+
+ApplicationName: WOString {
+    value = currentApplication.name;
+}
+
+ApplicationNameLink: WOHyperlink {
+    string = currentApplication.name;
+    href = hrefToApp;
+    target = "new";
+}
+
+ApplicationNameTextField: WOTextField {
+    size = "20";
+    value = newApplicationName;
+}
+
+ApplicationsRepetition: WORepetition {
+    list = theApplication.siteConfig.applicationArray;
+    item = currentApplication;
+}
+
+ConfigButton: WOImage {
+    filename = "ButtonConfig.gif";
+    height = "28";
+    width = "67";
+    alt = "Configure";
+    border = "0";
+}
+
+ConfigureLink: WOHyperlink {
+    action = configureClicked;
+}
+
+DeleteButton: WOImage {
+    filename = "ButtonDelete.gif";
+    height = "17";
+    width = "55";
+    alt = "Delete";
+    border = "0";
+}
+
+DeleteLink: WOHyperlink {
+    action = deleteClicked;
+}
+
+DetailViewButton: WOImage {
+    filename = "ButtonDetailView.gif";
+    height = "28";
+    width = "66";
+    alt = "Detail View";
+    border = "0";
+}
+
+MessageString: WOString {
+	value = session.message;
+}
+
+NavPage: NavigationPage {
+	currentPage = APP_PAGE;
+}
+
+RunningInstancesCount: WOString {
+    value = currentApplication.runningInstancesCount;
+}
+
+TotalInstancesCount: WOString {
+    value = currentApplication.instanceArray.count;
+}
+
+
+
+ShouldOfferLogout: WOConditional {
+	condition = logoutRequired;
+}
+
+LogoutLink: WOHyperlink {
+	action = logoutClicked;
+}

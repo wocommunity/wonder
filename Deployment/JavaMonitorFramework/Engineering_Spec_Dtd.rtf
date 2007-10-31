@@ -1,0 +1,398 @@
+{\rtf1\mac\ansicpg10000\cocoartf100
+{\fonttbl\f0\fmodern\fcharset77 Courier-Bold;\f1\fmodern\fcharset77 Courier;}
+{\colortbl;\red255\green255\blue255;}
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f0\b\fs28 \cf0 *****************\
+REUSABLE ELEMENTS (use of these elements is indicated in bold)\
+*****************\
+
+\f1\b0\fs24 \
+<!ELEMENT site (password?, woAdaptor?, SMTPhost?, emailReturnAddr?, viewRefreshEnabled, viewRefreshRate?, sequence, retries?, scheduler?, dormant?, redir?, sendTimeout?, recvTimeout?, cnctTimeout?, sendBufSize?, recvBufSize?, poolsize?, urlVersion?)><!ATTLIST site type "NSDictionary">\
+	<!ELEMENT password (#PCDATA)><!ATTLIST password type "NSString">\
+	<!ELEMENT woAdaptor (#PCDATA)><!ATTLIST woAdaptor type "NSString">\
+	<!ELEMENT SMTPhost (#PCDATA)><!ATTLIST SMTPhost type "NSString">\
+	<!ELEMENT emailReturnAddr (#PCDATA)><!ATTLIST emailReturnAddr type "NSString">\
+	<!ELEMENT viewRefreshEnabled (#PCDATA)><!ATTLIST viewRefreshEnabled type "NSString">\
+		<!-- ("YES" | "NO" ) -->\
+	<!ELEMENT viewRefreshRate (#PCDATA)><!ATTLIST viewRefreshRate type "NSNumber">\
+	<!ELEMENT sequence (#PCDATA)><!ATTLIST sequence type "NSNumber">\
+	<!ELEMENT retries (#PCDATA)><!ATTLIST retries type "NSNumber">\
+	<!ELEMENT scheduler (#PCDATA)><!ATTLIST scheduler type "NSString">\
+		<!-- ( "RANDOM" | "ROUNDROBIN" | "LOADAVERAGE" | <Custom Scheduler Name> ) -->\
+	<!ELEMENT dormant (#PCDATA)><!ATTLIST dormant type "NSNumber">\
+	<!ELEMENT redir (#PCDATA)><!ATTLIST redir type "NSString">\
+	<!ELEMENT sendTimeout (#PCDATA)><!ATTLIST sendTimeout type "NSNumber">\
+	<!ELEMENT recvTimeout (#PCDATA)><!ATTLIST recvTimeout type "NSNumber">\
+	<!ELEMENT cnctTimeout (#PCDATA)><!ATTLIST cnctTimeout type "NSNumber">\
+	<!ELEMENT sendBufSize (#PCDATA)><!ATTLIST sendBufSize type "NSNumber">\
+	<!ELEMENT recvBufSize (#PCDATA)><!ATTLIST recvBufSize type "NSNumber">\
+	<!ELEMENT poolsize (#PCDATA)><!ATTLIST poolsize type "NSNumber">\
+	<!ELEMENT urlVersion (#PCDATA)><!ATTLIST urlVersion type "NSNumber">\
+		<!-- ( "3" | "4" ) -->\
+
+\f0\b \
+
+\f1\b0 \
+<!ELEMENT host (name, type)><!ATTLIST host type "NSDictionary">\
+	<!ELEMENT name (#PCDATA)><!ATTLIST name type "NSString">\
+	<!ELEMENT type (#PCDATA)><!ATTLIST type type "NSString">\
+		<!-- ( "MACOSX" | "WINDOWS" | "UNIX" ) -->\
+\
+
+\f0\b \
+
+\f1\b0 <!ELEMENT application (name, startingPort, timeForStartup, phasedStartup, autoRecover, minimumActiveSessionsCount?, winPath, unixPath, macPath, cachingEnabled?, adaptor?, adaptorThreads?, listenQueueSize?, adaptorThreadsMin?, adaptorThreadsMax?, debuggingEnabled?, unixOutputPath?, winOutputPath?, macOutputPath?, autoOpenInBrowser?, lifebeatInterval?, additionalArgs?, notificationEmail?, schedulingEnabled, lifespan?, phasedRestart, retries?, scheduler?, dormant?, redir?, sendTimeout?, recvTimeout?, cnctTimeout?, sendBufSize?, recvBufSize?, poolsize?, urlVersion?)><!ATTLIST application type "NSDictionary">\
+	<!ELEMENT name (#PCDATA)><!ATTLIST name type "NSString">\
+	<!ELEMENT startingPort (#PCDATA)><!ATTLIST startingPort type "NSNumber">\
+	<!ELEMENT timeForStartup (#PCDATA)><!ATTLIST timeForStartup type "NSNumber">\
+	<!ELEMENT phasedStartup (#PCDATA)><!ATTLIST phasedStartup type "NSString">\
+		<!-- ("YES" | "NO" ) -->\
+	<!ELEMENT autoRecover (#PCDATA)><!ATTLIST autoRecover type "NSString">\
+		<!-- ("YES" | "NO" ) -->\
+	<!ELEMENT minimumActiveSessionsCount (#PCDATA)><!ATTLIST minimumActiveSessionsCount type "NSNumber">\
+	<!ELEMENT winPath (#PCDATA)><!ATTLIST winPath type "NSString">\
+	<!ELEMENT unixPath (#PCDATA)><!ATTLIST unixPath type "NSString">\
+	<!ELEMENT macPath (#PCDATA)><!ATTLIST macPath type "NSString">\
+	<!ELEMENT cachingEnabled (#PCDATA)><!ATTLIST cachingEnabled type "NSString">\
+		<!-- ("YES" | "NO" ) -->\
+	<!ELEMENT adaptor (#PCDATA)><!ATTLIST adaptor type "NSString">\
+	<!ELEMENT adaptorThreads (#PCDATA)><!ATTLIST adaptorThreads type "NSNumber">\
+	<!ELEMENT listenQueueSize (#PCDATA)><!ATTLIST listenQueueSize type "NSNumber">\
+	<!ELEMENT adaptorThreadsMin (#PCDATA)><!ATTLIST adaptorThreadsMin type "NSNumber">\
+	<!ELEMENT adaptorThreadsMax (#PCDATA)><!ATTLIST adaptorThreadsMax type "NSNumber">\
+	<!ELEMENT debuggingEnabled (#PCDATA)><!ATTLIST debuggingEnabled type "NSString">\
+		<!-- ("YES" | "NO" ) -->\
+	<!ELEMENT unixOutputPath (#PCDATA)><!ATTLIST unixOutputPath type "NSString">\
+	<!ELEMENT winOutputPath (#PCDATA)><!ATTLIST winOutputPath type "NSString">\
+	<!ELEMENT macOutputPath (#PCDATA)><!ATTLIST macOutputPath type "NSString">\
+	<!ELEMENT autoOpenInBrowser (#PCDATA)><!ATTLIST autoOpenInBrowser type "NSString">\
+		<!-- ("YES" | "NO" ) -->\
+	<!ELEMENT lifebeatInterval (#PCDATA)><!ATTLIST lifebeatInterval type "NSNumber">\
+	<!ELEMENT additionalArgs (#PCDATA)><!ATTLIST additionalArgs type "NSString">\
+	<!ELEMENT notificationEmailEnabled (#PCDATA)><!ATTLIST notificationEmailEnabled type "NSString">\
+		<!-- ("YES" | "NO" ) -->\
+	<!ELEMENT notificationEmailAddr (#PCDATA)><!ATTLIST notificationEmailAddr type "NSString">\
+	<!ELEMENT retries (#PCDATA)><!ATTLIST retries type "NSNumber">\
+	<!ELEMENT scheduler (#PCDATA)><!ATTLIST scheduler type "NSString">\
+		<!-- ( "RANDOM" | "ROUNDROBIN" | "LOADAVERAGE" ) -->\
+	<!ELEMENT dormant (#PCDATA)><!ATTLIST dormant type "NSNumber">\
+	<!ELEMENT redir (#PCDATA)><!ATTLIST redir type "NSString">\
+	<!ELEMENT sendTimeout (#PCDATA)><!ATTLIST sendTimeout type "NSNumber">\
+	<!ELEMENT recvTimeout (#PCDATA)><!ATTLIST recvTimeout type "NSNumber">\
+	<!ELEMENT cnctTimeout (#PCDATA)><!ATTLIST cnctTimeout type "NSNumber">\
+	<!ELEMENT sendBufSize (#PCDATA)><!ATTLIST sendBufSize type "NSNumber">\
+	<!ELEMENT recvBufSize (#PCDATA)><!ATTLIST recvBufSize type "NSNumber">\
+	<!ELEMENT poolsize (#PCDATA)><!ATTLIST poolsize type "NSNumber">\
+	<!ELEMENT urlVersion (#PCDATA)><!ATTLIST urlVersion type "NSNumber">\
+		<!-- ( "3" | "4" ) -->\
+\
+\
+<!ELEMENT instance (hostName, id, port, applicationName, autoRecover, refuseNewSessions, minimumActiveSessionsCount?, path, cachingEnabled?, debuggingEnabled?, outputPath?, autoOpenInBrowser?, lifebeatInterval?, additionalArgs?, sendTimeout?, recvTimeout?, cnctTimeout?, sendBufSize?, recvBufSize?)><!ATTLIST instance type "NSDictionary">\
+	<!ELEMENT hostName (#PCDATA)><!ATTLIST hostName type "NSString">\
+	<!ELEMENT id (#PCDATA)><!ATTLIST id type "NSNumber">\
+	<!ELEMENT port (#PCDATA)><!ATTLIST port type "NSNumber">\
+	<!ELEMENT applicationName (#PCDATA)><!ATTLIST applicationName type "NSString">\
+	<!ELEMENT autoRecover (#PCDATA)><!ATTLIST autoRecover type "NSString">\
+		<!-- ("YES" | "NO" ) -->\
+	<!ELEMENT minimumActiveSessionsCount (#PCDATA)><!ATTLIST minimumActiveSessionsCount type "NSNumber">\
+	<!ELEMENT path (#PCDATA)><!ATTLIST path type "NSString">\
+	<!ELEMENT cachingEnabled (#PCDATA)><!ATTLIST cachingEnabled type "NSString">\
+		<!-- ("YES" | "NO" ) -->\
+	<!ELEMENT debuggingEnabled (#PCDATA)><!ATTLIST debuggingEnabled type "NSString">\
+		<!-- ("YES" | "NO" ) -->\
+	<!ELEMENT outputPath (#PCDATA)><!ATTLIST outputPath type "NSString">\
+	<!ELEMENT autoOpenInBrowser (#PCDATA)><!ATTLIST autoOpenInBrowser type "NSString">\
+		<!-- ("YES" | "NO" ) -->\
+	<!ELEMENT lifebeatInterval (#PCDATA)><!ATTLIST lifebeatInterval type "NSNumber">\
+	<!ELEMENT additionalArgs (#PCDATA)><!ATTLIST additionalArgs type "NSString">\
+	<!ELEMENT schedulingEnabled (#PCDATA)><!ATTLIST schedulingEnabled type "NSString">\
+		<!-- ("YES" | "NO" ) -->\
+	<!ELEMENT schedulingType (#PCDATA)><!ATTLIST schedulingType type "NSString">\
+		<!-- ("HOURLY" | "DAILY" | "WEEKLY" ) -->\
+	<!ELEMENT schedulingHourlyStartTime (#PCDATA)><!ATTLIST schedulingHourlyStartTime type "NSString">\
+		<!-- 0 through 23 in hourly increments, matching Calendar.HOUR_OF_DAY, used for HOURLY -->\
+	<!ELEMENT schedulingDailyStartTime (#PCDATA)><!ATTLIST schedulingDailyStartTime type "NSString">\
+		<!-- 0 through 23 in hourly increments, matching Calendar.HOUR_OF_DAY, used for DAILY -->\
+	<!ELEMENT schedulingWeeklyStartTime (#PCDATA)><!ATTLIST schedulingWeeklyStartTime type "NSString">\
+		<!-- 0 through 23 in hourly increments, matching Calendar.HOUR_OF_DAY, used for WEEKLY -->\
+	<!ELEMENT schedulingStartDay (#PCDATA)><!ATTLIST schedulingStartDay type "NSNumber">\
+		<!-- 0-6, representing Sunday through Saturday (Matching Calendar.DAY_OF_WEEK -->\
+	<!ELEMENT schedulingInterval (#PCDATA)><!ATTLIST schedulingInterval type "NSNumber">\
+		<!-- Interval between restarts, measured in hours -->\
+	<!ELEMENT gracefulScheduling (#PCDATA)><!ATTLIST gracefulScheduling type "NSString">\
+		<!-- ("YES" | "NO" ) -->\
+	<!ELEMENT sendTimeout (#PCDATA)><!ATTLIST sendTimeout type "NSNumber">\
+	<!ELEMENT recvTimeout (#PCDATA)><!ATTLIST recvTimeout type "NSNumber">\
+	<!ELEMENT cnctTimeout (#PCDATA)><!ATTLIST cnctTimeout type "NSNumber">\
+	<!ELEMENT sendBufSize (#PCDATA)><!ATTLIST sendBufSize type "NSNumber">\
+	<!ELEMENT recvBufSize (#PCDATA)><!ATTLIST recvBufSize type "NSNumber">\
+\
+\
+\
+<!ELEMENT success (#PCDATA)><!ATTLIST success type "NSString" #REQUIRED>\
+	<!-- ( "YES" | "NO" ) -->\
+\
+<!ELEMENT errorMessage (#PCDATA)><!ATTLIST errorMessage type "NSString" #REQUIRED>\
+\
+<!ELEMENT errorResponse (element)><!ATTLIST errorResponse type "NSArray">\
+	<!ELEMENT element (#PCDATA)><!ATTLIST element type "NSString">\
+\
+\
+
+\f0\b\fs28 **************\
+SiteConfig.dtd\
+**************
+\fs24 \
+
+\f1\b0 \
+<!ELEMENT SiteConfig (
+\f0\b site, 
+\f1\b0 hostArray, applicationArray, instanceArray)><!ATTLIST SiteConfig type "NSDictionary">\
+	<!ELEMENT hostArray (element*)><!ATTLIST hostArray type "NSArray">\
+		<!-- each element should be a 
+\f0\b host
+\f1\b0  -->\
+	<!ELEMENT applicationArray (element*)><!ATTLIST applicationArray type "NSArray">\
+		<!-- each element should be an 
+\f0\b application
+\f1\b0  -->\
+	<!ELEMENT instanceArray (element*)><!ATTLIST instanceArray type "NSArray">\
+		<!-- each element should be an 
+\f0\b instance
+\f1\b0  -->\
+\
+\
+\
+\
+
+\f0\b\fs28 ***********\
+ -> wotaskd\
+
+\fs24 \
+Note: All of the below can be used in combinations. Regardless, all are contained within a single large element:\
+	<!ELEMENT monitorRequest (commandWotaskd?, updateWotaskd?, queryWotaskd?)>\
+	<!ATTLIST monitorRequest type "NSDictionary">\
+All of the responses are contained within a single large element:
+\fs28 \
+
+\fs24 	<!ELEMENT monitorResponse (errorResponse?, commandWotaskdResponse?, updateWotaskdResponse?, (SiteConfig|hostResponse|applicationResponse|instanceResponse)?)>\
+	<!ATTLIST monitorResponse type "NSDictionary">\
+
+\fs28 ***********\
+
+\f1\b0\fs24 \
+\
+Command:\
+	Request:\
+		<!ELEMENT commandWotaskd (element, element+)><!ATTLIST commandWotaskd type "NSArray">\
+			<!ELEMENT element (#PCDATA)><!ATTLIST element type "NSString">\
+				<!-- ( "START" | "STOP" | "REFUSE" | "ACCEPT" | "CLEAR" ) -->\
+				<!-- a single element stating the type of action to perform. Should be first in the array -->\
+			<!ELEMENT element (applicationName, id, host, port)><!ATTLIST element type "NSDictionary">\
+				<!ELEMENT applicationName (#PCDATA)><!ATTLIST applicationName type "NSString">\
+				<!ELEMENT id (#PCDATA)><!ATTLIST id type "NSNumber">\
+				<!ELEMENT hostName (#PCDATA)><!ATTLIST hostName type "NSString">\
+				<!ELEMENT port (#PCDATA)><!ATTLIST port type "NSNumber">\
+	Response:\
+		<!ELEMENT commandWotaskdResponse (element+)><!ATTLIST commandWotaskdResponse type "NSArray">\
+			<!-- These are in the same order as the initial request -->\
+			<!ELEMENT element (
+\f0\b success, errorMessage?
+\f1\b0 )><!ATTLIST element type "NSDictionary">\
+				\
+\
+\
+\
+Update:\
+	Request:\
+		<!ELEMENT updateWotaskd (clear|overwrite|(remove?, add?, configure?))><!ATTLIST updateWotaskd type "NSDictionary">\
+			<!ELEMENT clear (#PCDATA)><!ATTLIST clear type "NSString">\
+				<!-- ( "SITE" ) -->\
+			<!ELEMENT overwrite (
+\f0\b SiteConfig.dtd
+\f1\b0 )><!ATTLIST overwrite type "NSDictionary">\
+			<!ELEMENT sync (
+\f0\b SiteConfig.dtd
+\f1\b0 )><!ATTLIST sync type "NSDictionary">\
+			<!ELEMENT remove (hostArray?, applicationArray?, instanceArray?)><!ATTLIST remove type "NSDictionary">\
+				<!ELEMENT hostArray (element*)><!ATTLIST hostArray type "NSArray">\
+					<!-- each element should be a 
+\f0\b host
+\f1\b0  -->\
+				<!ELEMENT applicationArray (element*)><!ATTLIST applicationArray type "NSArray">\
+					<!-- each element should be an 
+\f0\b application
+\f1\b0  -->\
+				<!ELEMENT instanceArray (element*)><!ATTLIST instanceArray type "NSArray">\
+					<!-- each element should be an 
+\f0\b instance
+\f1\b0  -->\
+			<!ELEMENT add (hostArray?, applicationArray?, instanceArray?)><!ATTLIST add type "NSDictionary">\
+				<!ELEMENT hostArray (element*)><!ATTLIST hostArray type "NSArray">\
+					<!-- each element should be a 
+\f0\b host
+\f1\b0  -->\
+				<!ELEMENT applicationArray (element*)><!ATTLIST applicationArray type "NSArray">\
+					<!-- each element should be an 
+\f0\b application
+\f1\b0  -->\
+				<!ELEMENT instanceArray (element*)><!ATTLIST instanceArray type "NSArray">\
+					<!-- each element should be an 
+\f0\b instance
+\f1\b0  -->\
+			<!ELEMENT configure (
+\f0\b site
+\f1\b0 ?, hostArray?, applicationArray?, instanceArray?)><!ATTLIST configure type "NSDictionary">\
+				<!ELEMENT hostArray (element*)><!ATTLIST hostArray type "NSArray">\
+					<!-- each element should be a 
+\f0\b host
+\f1\b0  -->\
+				<!ELEMENT applicationArray (element*)><!ATTLIST applicationArray type "NSArray">\
+					<!-- each element should be an 
+\f0\b application
+\f1\b0  -->\
+				<!ELEMENT instanceArray (element*)><!ATTLIST instanceArray type "NSArray">\
+					<!-- each element should be an 
+\f0\b instance
+\f1\b0  -->\
+	Response:\
+		<!ELEMENT updateWotaskdResponse (clear|overwrite|(remove?, add?, configure?))><!ATTLIST updateWotaskdResponse type "NSDictionary">\
+			<!ELEMENT clear (success, errorMessage?)><!ATTLIST clear type "NSDictionary">\
+			<!ELEMENT overwrite (success, errorMessage?)><!ATTLIST overwrite type "NSDictionary">\
+			<!ELEMENT remove (hostArray?, applicationArray?, instanceArray?)><!ATTLIST remove type "NSDictionary">\
+				<!ELEMENT hostArray (element+)><!ATTLIST hostArray type "NSArray">\
+					<!-- These are in the same order as the initial request -->\
+					<!ELEMENT element (
+\f0\b success, errorMessage?
+\f1\b0 )><!ATTLIST element type "NSDictionary">\
+				<!ELEMENT applicationArray (element*)><!ATTLIST applicationArray type "NSArray">\
+					<!-- These are in the same order as the initial request -->\
+					<!ELEMENT element (
+\f0\b success, errorMessage?
+\f1\b0 )><!ATTLIST element type "NSDictionary">\
+				<!ELEMENT instanceArray (element*)><!ATTLIST instanceArray type "NSArray">\
+					<!-- These are in the same order as the initial request -->\
+					<!ELEMENT element (
+\f0\b success, errorMessage?
+\f1\b0 )><!ATTLIST element type "NSDictionary">\
+			<!ELEMENT add (hostArray?, applicationArray?, instanceArray?)><!ATTLIST add type "NSDictionary">\
+				<!ELEMENT hostArray (element+)><!ATTLIST hostArray type "NSArray">\
+					<!-- These are in the same order as the initial request -->\
+					<!ELEMENT element (
+\f0\b success, errorMessage?
+\f1\b0 )><!ATTLIST element type "NSDictionary">\
+				<!ELEMENT applicationArray (element*)><!ATTLIST applicationArray type "NSArray">\
+					<!-- These are in the same order as the initial request -->\
+					<!ELEMENT element (
+\f0\b success, errorMessage?
+\f1\b0 )><!ATTLIST element type "NSDictionary">\
+				<!ELEMENT instanceArray (element*)><!ATTLIST instanceArray type "NSArray">\
+					<!-- These are in the same order as the initial request -->\
+					<!ELEMENT element (
+\f0\b success, errorMessage?
+\f1\b0 )><!ATTLIST element type "NSDictionary">\
+			<!ELEMENT configure (site?, adaptor?, hostArray?, applicationArray?, instanceArray?)><!ATTLIST configure type "NSDictionary">\
+				<!ELEMENT hostArray (element+)><!ATTLIST hostArray type "NSArray">\
+					<!-- These are in the same order as the initial request -->\
+					<!ELEMENT element (
+\f0\b success, errorMessage?
+\f1\b0 )><!ATTLIST element type "NSDictionary">\
+				<!ELEMENT applicationArray (element*)><!ATTLIST applicationArray type "NSArray">\
+					<!-- These are in the same order as the initial request -->\
+					<!ELEMENT element (
+\f0\b success, errorMessage?
+\f1\b0 )><!ATTLIST element type "NSDictionary">\
+				<!ELEMENT instanceArray (element*)><!ATTLIST instanceArray type "NSArray">\
+					<!-- These are in the same order as the initial request -->\
+					<!ELEMENT element (
+\f0\b success, errorMessage?
+\f1\b0 )><!ATTLIST element type "NSDictionary">\
+				<!ELEMENT site (success, errorMessage?)><!ATTLIST site type "NSDictionary">\
+\
+Query\
+	Request:\
+		<!ELEMENT queryWotaskd><!ATTLIST queryWotaskd type "NSString">\
+		<!-- ( SITE | HOST | APPLICATION | INSTANCE ) -->\
+	SITE Response:\
+		<!-- Returns the current 
+\f0\b SiteConfig
+\f1\b0  -->\
+	HOST Response:\
+		<!ELEMENT hostResponse (runningInstances, numberOfProcessors, processorType, operatingSystem, memory)><!ATTLIST hostResponse type "NSDictionary">\
+			<!ELEMENT runningInstances (#PCDATA)><!ATTLIST runningInstances type "NSNumber">\
+			<!ELEMENT numberOfProcessors (#PCDATA)><!ATTLIST numberOfProcessors type "NSNumber">\
+			<!ELEMENT processorType (#PCDATA)><!ATTLIST processorType type "NSString">\
+			<!ELEMENT operatingSystem (#PCDATA)><!ATTLIST operatingSystem type "NSString">\
+			<!ELEMENT memory (#PCDATA)><!ATTLIST memory type "NSNumber">\
+	APPLICATION Response:\
+		<!ELEMENT applicationResponse (element*)><!ATTLIST applicationResponse type "NSArray">\
+			<!ELEMENT element (name, runningInstances)><!ATTLIST element type "NSDictionary">\
+				<!ELEMENT name (#PCDATA)><!ATTLIST name type "NSString">\
+				<!ELEMENT runningInstances (#PCDATA)><!ATTLIST runningInstances type "NSNumber">\
+	INSTANCE Response:\
+		<!ELEMENT instanceResponse (element*)><!ATTLIST instanceResponse type "NSArray">\
+			<!ELEMENT element (applicationName, id, host, port, runningState, refusingNewSessions, statistics?, deaths?)*><!ATTLIST element type "NSDictionary">\
+				<!ELEMENT applicationName (#PCDATA)><!ATTLIST applicationName type "NSString">\
+				<!ELEMENT id (#PCDATA)><!ATTLIST id type "NSNumber">\
+				<!ELEMENT host (#PCDATA)><!ATTLIST host type "NSString">\
+				<!ELEMENT port (#PCDATA)><!ATTLIST port type "NSNumber">\
+				<!ELEMENT runningState (#PCDATA)><!ATTLIST runningState type "NSString">\
+					<!-- ( "STOPPED" | "STARTED" | "STOPPING" | "STARTING" | "UNKNOWN" ) -->\
+				<!ELEMENT refusingNewSessions (#PCDATA)><!ATTLIST refusingNewSessions type "NSString">\
+					<!-- ( "YES" | "NO" ) -->\
+				<!ELEMENT statistics (#PCDATA)><!ATTLIST statistics type "NSDictionary">\
+					<!ELEMENT transactions (#PCDATA)><!ATTLIST transactions type "NSString">\
+					<!ELEMENT activeSessions (#PCDATA)><!ATTLIST activeSessions type "NSString">\
+					<!ELEMENT avgTransactionTime (#PCDATA)><!ATTLIST avgTransactionTime type "NSString">\
+					<!ELEMENT averageIdlePeriod (#PCDATA)><!ATTLIST averageIdlePeriod type "NSString">\
+					<!ELEMENT startedAt (#PCDATA)><!ATTLIST startedAt type "NSString">\
+				<!ELEMENT deaths (element)><!ATTLIST deaths type "NSArray">\
+					<!ELEMENT element (#PCDATA)><!ATTLIST element type "NSString">\
+						<!-- death date -->\
+\
+\
+
+\f0\b\fs28 \
+
+\f1\b0\fs24 \
+
+\f0\b\fs28 ************************\
+-> Application Instances\
+\
+
+\fs24 Note: All of the below can be used in combinations. Regardless, all are contained within a single large element:\
+	<!ELEMENT instanceRequest (commandInstance?, queryInstance?)>\
+	<!ATTLIST instanceRequest type "NSDictionary">\
+All of the responses are contained within a single large element:
+\fs28 \
+
+\fs24 	<!ELEMENT instanceResponse (errorResponse?, commandInstanceResponse?, queryInstanceResponse?)>\
+	<!ATTLIST instanceResponse type "NSDictionary">\
+
+\fs28 ************************\
+
+\f1\b0\fs24 \
+Command:\
+	Request: \
+		<!ELEMENT commandInstance (command, minimumActiveSessionsCount?)><!ATTLIST commandInstance type "NSDictionary">\
+			<!ELEMENT command(#PCDATA)><!ATTLIST command type "NSString">\
+				<!-- "TERMINATE" | "REFUSE" | "ACCEPT" -->\
+			<!ELEMENT minimumActiveSessionsCount (#PCDATA)><!ATTLIST minimumActiveSessionsCount type "NSNumber">\
+	Response: \
+		<!ELEMENT commandInstanceResponse (success, errorMessage?)><!ATTLIST commandInstanceResponse type "NSDictionary">\
+\
+Query: \
+	Request:\
+		<!ELEMENT queryInstance><!ATTLIST queryInstance type "NSString">\
+		<!-- ( "STATISTICS" ) -->\
+	Response: \
+		<!ELEMENT queryInstanceResponse (#PCDATA)><!ATTLIST queryInstanceResponse type "NSString">\
+		<!-- This is a plist of statistics - must at least return: \
+				Transactions	-> Transactions\
+								-> Avg. Transaction Time\
+								-> Avg. Idle Time\
+				Sessions 	-> Current Active Sessions\
+				StartedAt\
+		-->\
+}

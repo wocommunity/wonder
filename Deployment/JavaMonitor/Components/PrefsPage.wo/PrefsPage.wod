@@ -1,0 +1,57 @@
+AdminPassword1: WOPasswordField {
+    value = adminPassword1;
+}
+
+AdminPassword2: WOPasswordField {
+    value = adminPassword2;
+}
+
+AdminPasswordIsNotSet: WOConditional {
+    condition = theApplication.siteConfig.isPasswordRequired;
+    negate = YES;
+}
+
+AdminPasswordIsSet: WOConditional {
+    condition = theApplication.siteConfig.isPasswordRequired;
+}
+
+AutoRefreshCheckbox: WOCheckBox {
+    checked = theApplication.siteConfig.viewRefreshEnabled;
+}
+
+AutoRefreshTimeIntervalField: WOTextField {
+    value = theApplication.siteConfig.viewRefreshRate;
+    size = "3";
+    numberformat = "0";
+}
+
+DetailViewForm: WOForm {}
+
+DetailViewSubmitButton: WOSubmitButton {
+    action = detailViewUpdateClicked;
+    value = "Update Settings";
+}
+
+ErrorMsg: WOString {
+      value = session.message;
+      escapeHTML = NO;
+}
+
+NavPage: NavigationPage {
+	currentPage = PREF_PAGE;
+}
+
+PasswordChangeForm: WOForm {
+	multipleSubmit = YES;
+}
+
+PasswordChangeFormSubmit: WOSubmitButton {
+    value = "Change Password";
+    action = passwordChangeClicked;
+}
+
+PasswordChangeFormSubmit2: WOSubmitButton {
+    value = "Reset Password";
+    action = passwordResetClicked;
+}
+

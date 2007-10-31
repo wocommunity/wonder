@@ -1,0 +1,387 @@
+ActualRatePerMinute: WOString {
+	numberformat = "0.00";
+	value = actualRatePerMinute;
+}
+
+ActualRatePerSecond: WOString {
+	numberformat = "0.00";
+	value = actualRatePerSecond;
+}
+
+AddInstanceButton: WOImage {
+	alt = "Add instance";
+	border = "0";
+	filename = "ButtonAddInstance.gif";
+	height = "28";
+	width = "88";
+}
+
+AddInstanceLink: WOHyperlink {
+	action = addInstanceClicked;
+}
+
+AppLink: WOHyperlink {
+	href = hrefToApp;
+	target = "new";
+}
+
+AppName: WOString {
+	value = mySession.mApplication.name;
+}
+
+AppIsNOTRunning: WOConditional {
+	condition = mySession.mApplication.isRunning_M;
+	negate = true;
+}
+
+AppIsRunning: WOConditional {
+	condition = mySession.mApplication.isRunning_M;
+}
+
+AutoRecoverImage: WOImage {
+	alt = autoRecoverImageText;
+	border = "0";
+	filename = autoRecoverImage;
+	height = "24";
+	width = "34";
+}
+
+ClearDeathsLink: WOHyperlink {
+	action = clearAllDeathsClicked;
+}
+
+ConfigButton: WOImage {
+	alt = "Configure";
+	border = "0";
+	filename = "ButtonConfig.gif";
+	height = "28";
+	width = "67";
+}
+
+ConfigureLink: WOHyperlink {
+    action = configureApplicationClicked;
+}
+
+DeleteButton: WOImage {
+	alt = "Delete";
+	border = "0";
+	filename = "ButtonDelete.gif";
+	height = "17";
+	width = "55";
+}
+
+
+StartAllLink: WOHyperlink {
+	action = startAllClicked;
+}
+StopAllLink: WOHyperlink {
+	action = stopAllClicked;
+}
+AutoRecoverEnableAllLink: WOHyperlink {
+	action = autoRecoverEnableAllClicked;
+}
+AutoRecoverDisableAllLink: WOHyperlink {
+	action = autoRecoverDisableAllClicked;
+}
+AcceptNewSessionsAllLink: WOHyperlink {
+	action = acceptNewSessionsAllClicked;
+}
+RefuseNewSessionsAllLink: WOHyperlink {
+	action = refuseNewSessionsAllClicked;
+}
+SchedulingEnableAllLink: WOHyperlink {
+	action = schedulingEnableAllClicked;
+}
+SchedulingDisableAllLink: WOHyperlink {
+	action = schedulingDisableAllClicked;
+}
+
+
+HasInstancesConditional: WOConditional {
+	condition = hasInstances;
+}
+
+IFSchedulingIsOff: WOConditional {
+	condition = selectedInstance.schedulingEnabled;
+	negate = true;
+}
+
+IFSchedulingIsOn: WOConditional {
+	condition = selectedInstance.schedulingEnabled;
+}
+
+InstActiveSessions: WOString {
+	value = selectedInstance.activeSessions;
+}
+
+InstAverageIdle: WOString {
+	value = selectedInstance.averageIdlePeriod;
+}
+
+InstAverageTransaction: WOString {
+	value = selectedInstance.avgTransactionTime;
+}
+
+InstConfigureLink: WOHyperlink {
+	action = configureInstanceClicked;
+}
+
+InstDeathCount: WOString {
+	numberformat = "0";
+	value = selectedInstance.deathCount;
+}
+
+InstDeathDetailImage: WOImage {
+	alt = "View times/dates for Deaths";
+	border = "0";
+	filename = "RightTriangle.gif";
+	framework = "WOExtensions";
+	height = "12";
+	width = "7";
+}
+
+InstDeathDetailLink: WOHyperlink {
+	action = instanceDeathDetailClicked;
+}
+
+InstDeleteLink: WOHyperlink {
+	action = deleteInstanceClicked;
+}
+
+InstIndex: WOString {
+	value = selectedInstance.displayName;
+}
+
+InstDirectLink: WOHyperlink {
+	href = hrefToInstDirect;
+	target = "new";
+}
+
+InstAdaptorLink: WOHyperlink {
+	href = hrefToInst;
+	target = "new";
+}
+
+InstRunningOnHost: WOString {
+	value = selectedInstance.displayHostAndPort;
+}
+
+InstStatusImage: WOImage {
+	alt = instanceStatusImageText;
+	border = "0";
+	filename = instanceStatusImage;
+	height = "35";
+	width = "49";
+}
+
+InstTransactions: WOString {
+	value = selectedInstance.transactions;
+}
+
+InstanceRepetition: WORepetition {
+	item = selectedInstance;
+	list = mySession.mApplication.instanceArray;
+}
+
+InstanceRunningConditional: WOConditional {
+	condition = selectedInstance.isRunning_M;
+}
+
+InstanceNOTRunningConditional: WOConditional {
+	condition = selectedInstance.isRunning_M;
+	negate = true;
+}
+
+IsRefreshEnabled: WOConditional {
+	condition = isRefreshEnabled;
+}
+
+LinkToWOStats: WOHyperlink {
+	href = linkToWOStats;
+	target = "_blank";
+}
+
+MessageString: WOString {
+	value = session.message;
+}
+
+NavPage: NavigationPage {
+	currentPage = APP_PAGE;
+}
+
+NextShutdown: WOString {
+    value = nextShutdown;
+//    dateformat = "%m/%d/%Y %H:%M:%S %Z";
+}
+
+Refresh: WOMetaRefresh {
+	action = refreshClicked;
+	seconds = theApplication.siteConfig.viewRefreshRate;
+}
+
+RefreshLink: WOHyperlink {
+	action = refreshClicked;
+}
+
+RefreshRate: WOString {
+	value = theApplication.siteConfig.viewRefreshRate;
+}
+
+RefuseNewSessionsImage: WOImage {
+	alt = refuseNewSessionsImageText;
+	border = "0";
+	filename = refuseNewSessionsImage;
+	height = "24";
+	width = "34";
+}
+
+SchedulingImage: WOImage {
+	alt = schedulingImageText;
+	border = "0";
+	filename = schedulingImage;
+	height = "24";
+	width = "34";
+}
+
+
+ShouldDisplayDeathDetailLink: WOConditional {
+	condition = shouldDisplayDeathDetailLink;
+}
+
+ShouldNOTDisplayDeathDetailLink: WOConditional {
+	condition = shouldDisplayDeathDetailLink;
+	negate = true;
+}
+
+
+
+StartInstanceLink: WOHyperlink {
+	action = startInstance;
+}
+StopInstanceLink: WOHyperlink {
+	action = stopInstance;
+}
+
+
+
+StartImage: WOImage {
+	alt = "Start";
+	border = "0";
+	filename = "start.gif";
+	height = "15";
+	width = "13";
+}
+StopImage: WOImage {
+	alt = "Stop";
+	border = "0";
+	filename = "stop.gif";
+	height = "15";
+	width = "13";
+}
+
+
+YellowOnImage: WOImage {
+	alt = "ON";
+	border = "0";
+	filename = "Panel_On_Yellow.gif";
+	height = "24";
+	width = "34";
+}
+OffImage: WOImage {
+	alt = "OFF";
+	border = "0";
+	filename = "Panel_Off.gif";
+	height = "24";
+	width = "34";
+}
+
+
+
+
+
+ToggleAutoRecoverLink: WOHyperlink {
+	action = toggleAutoRecover;
+}
+
+ToggleRefuseNewSessionsLink: WOHyperlink {
+	action = toggleRefuseNewSessions;
+}
+ToggleSchedulingLink: WOHyperlink {
+	action = toggleScheduling;
+}
+
+TotalActiveSessions: WOString {
+	numberformat = "0";
+	value = totalActiveSessions;
+}
+
+TotalAverageIdleTime: WOString {
+	numberformat = "0.000";
+	value = totalAverageIdleTime;
+}
+
+TotalAverageTransaction: WOString {
+	numberformat = "0.000";
+	value = totalAverageTransaction;
+}
+
+TotalTransactions: WOString {
+	numberformat = "0";
+	value = totalTransactions;
+}
+
+WOStatsButton: WOImage {
+	alt = "Jump to WOStats";
+	border = "0";
+	filename = "ButtonWOStats.gif";
+	height = "28";
+	width = "76";
+}
+
+WOStatsOffButton: WOImage {
+	alt = "WOStats";
+	border = "0";
+	filename = "ButtonWOStatsOff.gif";
+	height = "28";
+	width = "76";
+}
+
+
+// Start of Add Instance Stuff
+
+AddHostsLink : WOHyperlink {
+    action = hostsPageClicked;
+}
+
+AddInstanceForm: WOForm {}
+
+AddInstanceSubmitButton: WOSubmitButton {
+    action = addInstanceClicked;
+    value = "Add ";
+}
+
+AddApplicationName: WOString {
+    value = anApp.displayName;
+}
+
+AddHasHostsConditional: WOConditional {
+    condition = hasHosts;
+}
+
+AddHasNOHostsConditional : WOConditional {
+    condition = hasHosts;
+    negate = YES;
+}
+
+AddHostPopUp: WOPopUpButton {
+    list = theApplication.siteConfig.hostArray;
+    item = aHost;
+    displayString = aHost.name;
+    selection = selectedHost;
+}
+
+AddNumInstances: WOTextField {
+    value = numberToAdd;
+    size = "3";
+    numberformat = "0";
+}

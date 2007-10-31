@@ -1,0 +1,1080 @@
+<WEBOBJECT name="NavPage"></WEBOBJECT>
+</CENTER>
+
+<a name="00"></a>
+<ul>
+<li><a href="#01"><b>What are Monitor and wotaskd?</b></a></li>
+<li><a href="#02"><b>What is the difference between <code>http://host:2001/cgi-bin/WebObjects/MyApp.woa</code>, <code>http://host/cgi-bin/WebObjects/MyApp.woa</code>, and <code>http://host/cgi-bin/WebObjects/MyApp.woa/-2001</code> ?</b></a></li>
+<li><a href="#03"><b>What is Load-balancing?</b></a></li>
+<li><a href="#04"><b>How do I set up an application for Deployment through the Web server using Monitor?</b></a></li>
+<li><a href="#05"><b>How do I set up an application for Development through the Web server?</b></a></li>
+<li><a href="#06"><b>What HTTP adaptor Settings are there?</b></a></li>
+<li><a href="#07"><b>How does the HTTP adaptor find instances?</b></a></li>
+<li><a href="#08"><b>How do I find the Web server URLs for Development instances if I don't know the port?</b></a></li>
+<li><a href="#09"><b>How does wotaskd know if an instance is alive?</b></a></li>
+<li><a href="#10"><b>How does wotaskd control instances?</b></a></li>
+<li><a href="#11"><b>How do I tell whether wotaskd is running?</b></a></li>
+<li><a href="#12"><b>How do I prevent "false" instance deaths from being reported in Monitor?</b></a></li>
+<li><a href="#13"><b>What deployment related Flags are there?</b></a></li>
+<li><a href="#14"><b>How do I run multiple wotaskds on a host?</b></a></li>
+<li><a href="#15"><b>What instance defaults and settings are available through Monitor?</b></a></li>
+<li><a href="#16"><b>What application settings are available through Monitor?</b></a></li>
+<li><a href="#17"><b>What is Instance Scheduling?</b></a></li>
+<li><a href="#18"><b>Monitor's Hosts page</b></a></li>
+<li><a href="#19"><b>Monitor's Detail View page</b></a></li>
+<li><a href="#20"><b>Deployment FAQ</b></a></li>
+</ul>
+
+<p>&nbsp;</p>
+<hr size=5>
+<p>&nbsp;</p>
+
+<p><a name="01"><font size="+2"><b>What are Monitor and wotaskd?</b></font></a> <a href="#00"><font size="-1">(top)</font></a><br>
+</p>
+
+<blockquote>
+    <p>Monitor and wotaskd are part of the WebObjects
+    deployment strategy. Each machine that is running a
+    WebObjects application should have the WebObjects Task Daemon
+    (wotaskd) running on it. To configure these applications for
+    deployment, the Monitor application should be run, but
+    once configured, only the wotaskds need remain running. Each
+    wotaskd is only responsible for all WebObjects applications
+    running on the same host. The Web server adaptor (or
+    WebObjects HTTP adaptor) communicates with the wotaskds on
+    each host to discover what WebObjects applications are
+    available. Instances communicate their state to wotaskd
+    through the use of TCP lifebeats, while wotaskd controls
+    instances through special DirectActions.</p>
+    <p><b>Monitor MUST be run from a machine that is both
+    running wotaskd AND is a &quot;managed&quot; host. </b></p>
+    <p><b>NEVER run more than one Monitor for a set of Hosts.</b></p>
+    <p><b>ALWAYS run Monitor and wotaskd behind a firewall.</b></p>
+</blockquote>
+
+<p><br>
+<br>
+</p>
+
+<hr>
+
+<p><br>
+<br>
+</p>
+
+<p><a name="02"><font size="+2"><b>What is the difference between 
+<code>http://host:2001/cgi-bin/WebObjects/MyApp.woa</code>, 
+<code>http://host/cgi-bin/WebObjects/MyApp.woa</code>, and 
+<code>http://host/cgi-bin/WebObjects/MyApp.woa/-2001</code> ?</b></font></a> <a href="#00"><font size="-1">(top)</font></a><br>
+</p>
+
+<blockquote>
+    A WebObjects application can be accessed 3 ways: <br>
+    The first (<code>http://host:2001/cgi-bin/WebObjects/MyApp.woa</code>) is Direct Connect. <br>
+    The second (<code>http://host/cgi-bin/WebObjects/MyApp.woa</code>) is through the Web server as a Deployment application. <br>
+    The third (<code>http://host/cgi-bin/WebObjects/MyApp.woa/-2001</code>) is through the Web server as a Development application.<br>
+    <br>
+    <ul>
+        <li>In Direct Connect, the browser is sending requests and receiving responses directly from the application; the Web server is not involved at all. Resources for the application (images, etc) are served by the application itself. The browser is connected directly to the port (2001 in the example URL) of the application. To use an application in Direct Connect does not require the use of wotaskd or Monitor. </li>
+        <li>When accessing a Deployment application through the Web server, a browser sends a request to the Web server (typically port 80). The Web server gives the request to the WebObjects HTTP adaptor, which passes it on to the application. The application's response is returned to the adaptor, which gives it to the Web server, which sends it to the browser. Resources for the application (images, etc) are served by the Web server, which requires a split install. Accessing an application through the adaptor provides several benefits: Pooling of connections, verification of requests, serving of resources, and load-balancing between multiple instances. Typically, applications are deployed through the Web server for security and performance reasons. Deploying an application using Monitor and wotaskd is described below.</li>
+        <li>Accessing a Development application through the Web server is similar to accessing a Deployment application, except that load-balancing between instances does not occur. Development applications make it possible to test an application through the Web server without fully deploying it. Accessing a Developer application is described below.</li>
+    </ul>
+</blockquote>
+
+<p><br>
+<br>
+</p>
+
+<hr>
+
+<p><br>
+<br>
+</p>
+
+<p><a name="03"><font size="+2"><b>What is Load-balancing?</b></font></a> <a href="#00"><font size="-1">(top)</font></a><br>
+</p>
+
+<blockquote>
+    <p>Requests to an application through the Web server are load-balanced
+    by the adaptor. In load-balancing, if the request is not
+    directed at a specific instance of an application, it is assigned to an
+    instance of that application chosen by the adaptor. Load-balancing takes
+    place between instances with the same name (cf <code>WOApplicationName</code>).
+    The default load-balancing
+    scheme is Random, where an instance is chosen arbitrarily,
+    but other load-balancing schemes are available. Round Robin
+    distributes a request to instances one after another. Load Average
+    attempts to balance load to the instances by evenly
+    distributing the sessions between instances.</p>
+</blockquote>
+
+<p><br>
+<br>
+</p>
+
+<hr>
+
+<p><br>
+<br>
+</p>
+
+<p><a name="04"><font size="+2"><b>How do I set up an application for
+deployment through the Web server using Monitor?</b></font></a> <a href="#00"><font size="-1">(top)</font></a><br>
+</p>
+
+<blockquote>
+    <ol>
+        <li>Make sure the applications have been split-installed.
+            (A copy of the WebServerResources directory should be located in the Web server document root in the path:
+	    <code>/WebObjects/MyApp.woa/Contents/WebServerResources</code>).</li>
+        <li>Start Monitor (located in $NEXT_ROOT/Library/WebObjects/JavaApplications).</li>
+        <li>Go to the Hosts page.</li>
+        <li>Add the host that the WebObjects application(s) are on.</li>
+        <li>Go to the Site page.</li>
+        <li>Set the HTTP adaptor URL to the Web server adaptor URL.</li>
+        <li>Go to Applications page.</li>
+        <li>Enter the application name and click Add.
+            The application name is the name that the
+            Web server adaptors use to access the application. The
+            name does not have to match the actual name of the
+            application.</li>
+        <li>In the Application Configure page, choose the path to
+            the application, and any other defaults.</li>
+        <li>Click Detail View.</li>
+        <li>Add instances on the hosts. By default, they will be
+            auto-recovered, and will start shortly after being
+            added. If they are not auto-recovered, click the
+            green button in the column &quot;Start-Stop&quot; to
+            start the instances.</li>
+        <li>Running instances are now accessible through the
+            Web server.</li>
+    </ol>
+</blockquote>
+
+<p><br>
+<br>
+</p>
+
+<hr>
+
+<p><br>
+<br>
+</p>
+
+<p><a name="05"><font size="+2"><b>How do I set up an application for development
+through the Web server?</b></font></a> <a href="#00"><font size="-1">(top)</font></a><br>
+</p>
+
+<blockquote>
+    <ol>
+        <li>Developer instances are instances that are not
+            configured through Monitor/wotaskd. They are
+            typically instances that are just started manually
+            by a developer (either by hand or through
+            Project Builder) for testing purposes. wotaskd should
+            automatically pick up the existence of the instance
+            and report it to the HTTP adaptor; the instance is
+            then accessible through the local Web server for
+            testing. Unregistered instances are never load-balanced
+            by the adaptor. Unregistered instances may be
+            accessed through the local Web server only; Web servers
+            on other machines will not see them.</li>
+        <li>Make sure the applications have been split-installed
+            (the WebServerResources are located in the Web server
+            document root).</li>
+        <li>Start the application and note the port that it is
+            running on. <code>-WOPort</code> can be used to set the port, and
+            <code>-WOApplicationName</code> can be used to set the application
+            name for the Web server adaptor.</li>
+        <li>To access unregistered instances, the URL is: <blockquote>
+                <p><code>http://localhost/cgi-bin/WebObjects/&lt;app
+                name&gt;.woa/&lt;negative port number&gt;</code></p>
+            </blockquote>
+        </li>
+    </ol>
+</blockquote>
+
+<p><br>
+<br>
+</p>
+
+<hr>
+
+<p><br>
+<br>
+</p>
+
+<p><a name="06"><font size="+2"><b>What HTTP adaptor settings are there?</b></font></a> <a href="#00"><font size="-1">(top)</font></a><br>
+</p>
+
+<blockquote>
+    Most adaptor settings can be set at globally, on a per-application basis, and on a per-instance basis. When sending configuration information to the HTTP adaptor, Monitor first checks if the instance has a value set. If it doesn't, it checks if the application has a value set. If it doesn't it checks if there are global settings. If there are no global settings, it will allow the HTTP adaptor to use it's own defaults.<br> 
+    <dl>
+        <dt>Load Balancing </dt>
+        <dd>The load-balancing scheme that the HTTP adaptor
+            should use for instances of this application. The
+            standard choices are Random, Round Robin, and Load Average.
+            A custom load-balancer name may also be passed to the
+            HTTP adaptor. </dd>
+        <dt>Retries </dt>
+        <dd>The number of times a request is retried if a
+            communications failure occurs before an error page is
+            returned. </dd>
+        <dt>Redirection URL </dt>
+        <dd>If an instance fails to respond to a direct request,
+            this is the URL that the client is redirected to. </dd>
+        <dt>Dormant </dt>
+        <dd>After an instance fails to respond, the number of
+            times the adaptor skips that instance before trying
+            again. </dd>
+        <dt>Send Timeout </dt>
+        <dd>Seconds before the adaptor gives up trying to send
+            data to an instance. </dd>
+        <dt>Receive Timeout </dt>
+        <dd>Seconds before the adaptor gives up waiting for a
+            response from the instance. </dd>
+        <dt>Connect Timeout </dt>
+        <dd>Seconds before the adaptor gives up connecting to an
+            instance. </dd>
+        <dt>Send Buffer Size </dt>
+        <dd>Size of the TCP send buffer on the connection to the
+            instance from the HTTP adaptor. </dd>
+        <dt>Receive Buffer </dt>
+        <dd>Size of the TCP receive buffer on the connection to
+            the instance from the HTTP adaptor. </dd>
+        <dt>Connection Pool Size </dt>
+        <dd>The maximum number of simultaneous connections a
+            particular adaptor process should keep open to each
+            configured instance. </dd>
+        <dt>URL Version </dt>
+        <dd>What WebObjects URL version the application responds
+            to. All WebObjects 4, 4.5, and 5 applications use version 4 URLs by
+            default. </dd>
+    </dl>
+</blockquote>
+
+<p><br>
+<br>
+</p>
+
+<hr>
+
+<p><br>
+<br>
+</p>
+
+<p><a name="07"><font size="+2"><b>How does the HTTP adaptor find instances?</b></font></a> <a href="#00"><font size="-1">(top)</font></a><br>
+</p>
+
+<blockquote>
+    <dl>
+        <dt>The HTTP (or Web server) adaptor finds instances
+            through one of 3 mechanisms: Multicast, Host List or
+            File. By default, Adaptors are configured to use a
+            Host List of <code>http://localhost:1085</code>, and
+            wotaskds do not respond to multicast. Configuration
+            of the various HTTP adaptors is platform-specific,
+            and is covered in the adaptor documentation. <BR>NOTE: 
+	    if changing the configuration for apache or cgi adaptors
+	    delete the WOAdaptorState file, typically located in /tmp/,
+	    before starting the Web server again.</dt>
+    </dl>
+    <p>In Multicast, the adaptor broadcasts a UDP request
+    throughout its subnet. wotaskds that receive the request
+    respond with their configuration URLs. Once the list of
+    configuration URLs is gathered, configuration proceeds as in
+    Host List. wotaskds do not respond to multicast broadcasts by
+    default. The configuration style is </p>
+    <blockquote>
+        <p><code>webobjects://&lt;multicast address&gt;:&lt;port&gt;&nbsp;&lt;request
+        interval&gt;</code></p>
+    </blockquote>
+    <p>In Host List, the adaptor requests a configuration file
+    from each host in the Host List. The XML file provides a list
+    of running Applications and Instances on that wotaskd. The
+    configuration format is </p>
+    <blockquote>
+        <p><code>http://&lt;hostname&gt;:&lt;port&gt;,http://&lt;hostname&gt;:&lt;port&gt;,&lt;etc...&gt;&nbsp;&lt;request
+        interval&gt;</code><br>
+        <br>
+        Host List is the default configuration mode, set to </p>
+        <blockquote>
+            <p><code>http://localhost:1085 10&quot;</code></p>
+        </blockquote>
+    </blockquote>
+    <p>In File configuration, the adaptor reads an XML file from
+    the local file system that describes the application and
+    instance configurations. The configuration format is </p>
+    <blockquote>
+        <p><code>file://&lt;path to WOConfig.xml&gt;&nbsp;&lt;request
+        interval&gt;</code></p>
+    </blockquote>
+    <p>&nbsp;</p>
+    <p><b>WOConfig.xml DTD</b><br>
+    </p>
+    <pre>&lt;?xml version=&quot;1.0&quot; encoding=&quot;ASCII&quot;?&gt;
+
+&lt;!ELEMENT adaptor (application)*&gt;
+        &lt;!ELEMENT application (instance)*&gt;
+                &lt;!ATTLIST application 
+                        name CDATA #REQUIRED
+                        retries CDATA #IMPLIED
+                        scheduler ( &quot;RANDOM&quot; | &quot;ROUNDROBIN&quot; | &quot;LOADAVERAGE&quot;
+                                    | &lt;!-- Custom Scheduler Name --&gt; ) #IMPLIED
+                        dormant CDATA #IMPLIED
+                        protocol &quot;http&quot; #IMPLIED
+                        redir CDATA #IMPLIED
+                        poolsize CDATA #IMPLIED
+                        urlVersion ( &quot;3&quot; | &quot;4&quot; ) #IMPLIED
+                        additionalArgs CDATA #IMPLIED&gt;
+                &lt;!ELEMENT instance&gt;
+                        &lt;!ATTLIST instance
+                                id CDATA #REQUIRED 
+                                port CDATA #REQUIRED 
+                                host CDATA #REQUIRED
+                                sendTimeout CDATA #IMPLIED
+                                recvTimeout CDATA #IMPLIED
+                                cnctTimeout CDATA #IMPLIED
+                                sendBufSize CDATA #IMPLIED
+                                recvBufSize CDATA #IMPLIED
+                                additionalArgs CDATA #IMPLIED&gt;
+</pre>
+</blockquote>
+
+<p><br>
+<br>
+</p>
+
+<hr>
+
+<p><br>
+<br>
+</p>
+
+<p><a name="08"><font size="+2"><b>How do I find the Web server URLs for
+Development instances if I don't know the port?</b></font></a> <a href="#00"><font size="-1">(top)</font></a><br>
+</p>
+
+<blockquote>
+    <p>The Adaptors can be configured to display an information
+    page when requested. The URL is typically something like</p>
+    <blockquote>
+        <p><font face="Times New Roman"><code>http://localhost/cgi-bin/WebObjects/WOAdaptorInfo</code></font>
+        </p>
+    </blockquote>
+    <p>A username and password may also be required: </p>
+    <blockquote>
+        <p><font face="Times New Roman"><code>http://localhost/cgi-bin/WebObjects/WOAdaptorInfo?user=u&amp;password=p</code></font></p>
+    </blockquote>
+    <p>Configuration of the Web server adaptors is platform-specific, 
+    and is covered by the adaptor documentation.</p>
+</blockquote>
+
+<p><br>
+<br>
+</p>
+
+<hr>
+
+<p><br>
+<br>
+</p>
+
+<p><a name="09"><font size="+2"><b>How does wotaskd know if an instance is alive?</b></font></a> <a href="#00"><font size="-1">(top)</font></a><br>
+</p>
+
+<blockquote>
+    <p>Instances update their status with their wotaskd by the
+    use of lifebeats. Lifebeats are sent through a TCP/IP
+    connection, and are sent every 30 seconds by default. wotaskd
+    considers an instance &quot;dead&quot; when it has failed to
+    send a lifebeat for 120 seconds (by default). Instances can
+    also notify wotaskd of impending crash or manual stop by
+    sending crash or stop messages. Lifebeats are sent from a
+    separate thread, and should not interfere with or be affected
+    by, normal request processing.</p>
+</blockquote>
+
+<p><br>
+<br>
+</p>
+
+<hr>
+
+<p><br>
+<br>
+</p>
+
+<p><a name="10"><font size="+2"><b>How does wotaskd control instances?</b></font></a> <a href="#00"><font size="-1">(top)</font></a><br>
+</p>
+
+<blockquote>
+    <p>Each wotaskd communicates with and controls its instances
+    through the use of special DirectActions. There is a
+    RequestHandler for each application, registered under the key
+    &quot;womp&quot; that handles these administrative
+    DirectActions. To prevent wotaskd from administering an
+    application, invoke the following method in your WOApplication subclass constructor:</p>
+    <blockquote>
+        <p><code>removeRequestHandlerForKey(&quot;womp&quot;);</code></p>
+    </blockquote>
+    <p>Administrative DirectActions are not normally counted in
+    instance statistics; to count them, programmatically invoke </p>
+    <blockquote>
+        <p><code>requestHandlerForKey(&quot;womp&quot;).shouldAddToStatistics = true;</code></p>
+    </blockquote>
+</blockquote>
+
+<p><br>
+<br>
+</p>
+
+<hr>
+
+<p><br>
+<br>
+</p>
+
+<p><a name="11"><font size="+2"><b>How do I tell whether wotaskd is running?</b></font></a> <a href="#00"><font size="-1">(top)</font></a><br>
+</p>
+
+<blockquote>
+    <p>There are two methods to find out whether wotaskd is running on a
+    particular host. The first is to use the Hosts page in
+    Monitor. The second is to open a browser and check the
+    URL:</p>
+    <blockquote>
+        <p><font face="Times New Roman"><code>http://&lt;host&gt;:1085/cgi-bin/WebObjects/wotaskd.woa/wa/woconfig</code></font></p>
+    </blockquote>
+    <p>which should return an XML file with the current
+    configuration if wotaskd is running. </p>
+</blockquote>
+
+<p><br>
+<br>
+</p>
+
+<hr>
+
+<p><br>
+<br>
+</p>
+
+<p><a name="12"><font size="+2"><b>How do I prevent "false" instance deaths from being reported in Monitor?</b></font></a> <a href="#00"><font size="-1">(top)</font></a><br>
+</p>
+
+<blockquote>
+    If wotaskd fails to receive a lifebeat from an instance for a set period of time, it marks that instance as dead. During periods of high load, there are several settings that affect this:<br>
+    <ol>
+    <li>Don't leave Monitor on the Detail View page with Auto Refresh active. This can be configured in the Preferences page of Monitor</li>
+    <li>Change the default configuration interval for the HTTP adaptor from 10 seconds to something larger, such as 30 seconds. (adaptor configuration is platform specfic; see the adaptor documentation for details).</li>
+    <li>Change the default lifebeat interval for the instances from 30 seconds to something larger, such as 60 seconds. This can be done in the Application Configurate page or the Instance Configure pages in Monitor.</li>
+    <li>Change <code>WOAssumeAppIsDeadMultiplier</code> from the default of 4 to something larger, such as 6. This is a command-line flag passed to wotaskd upon startup.</li>
+    </ol>
+</blockquote>
+
+<p><br>
+<br>
+</p>
+
+<hr>
+
+<p><br>
+<br>
+</p>
+
+<p><a name="13"><font size="+2"><b>What deployment-related arguments are there?</b></font></a> <a href="#00"><font size="-1">(top)</font></a><br>
+</p>
+
+<blockquote>
+    <p>Flags can be passed to an application on the
+    command-line (<code>-WODefaultName Value</code>), or may be set
+    in a file named <code>Properties</code> in the application's
+    directory (typically <code>AppName.woa/Contents/Resources/Properties</code>).
+    The Properties file should be in Java format (1 key-value
+    pair to a line, with the format being <code>key=value</code> -
+    use <code>true</code> or <code>false</code>, not <code>YES</code> or <code>NO</code>).</p>
+    <dl>
+        <dt><b>Monitor and wotaskd specific defaults</b><br>
+            </dt>
+        <dd><dl>
+                <dt>WODeploymentConfigurationDirectory </dt>
+                <dd>Each wotaskd writes its current
+                    configuration to disk whenever a change is
+                    made. It writes the SiteConfig.xml file in
+                    the directory specified by this default. The
+                    default value for this is <code>$LOCAL_ROOT/Library/WebObjects/Configuration/</code>.
+                    This, along with <code>-WOLifebeatDestinationPort</code>,
+                    allows for running multiple wotaskds on a
+                    single machine. This directory is also where
+                    wotaskd writes its adaptor configuration
+                    file (<code>WOConfig.xml</code>) if requested. </dd>
+            </dl>
+            <p><br>
+            </p>
+        </dd>
+        <dt><b>wotaskd specific defaults</b><br>
+            </dt>
+        <dd><dl>
+                <dt>WORespondsToMulticastQuery </dt>
+                <dd>Controls whether a given wotaskd should
+                    respond to multicast-configuration queries
+                    from the HTTP adaptor. Defaults to <code>false</code>. </dd>
+                <dt>WOSavesAdaptorConfiguration </dt>
+                <dd>Controls whether a given wotaskd should write
+                    an HTTP adaptor configuration file (<code>WOConfig.xml</code>)
+                    to disk. Defaults to <code>false</code>. </dd>
+                <dt>WOMulticastAddress </dt>
+                <dd>Allows users to specify a different multicast
+                    address for wotaskd to expect multicast
+                    queries on. Defaults to <code>239.128.14.2</code>
+                </dd>
+                <dt>WOAssumeApplicationIsDeadMultiplier </dt>
+                <dd>Allows users to specify the amount of time
+                    that wotaskd waits for a missing lifebeat
+                    before marking an instance dead. It specifies
+                    a multiplier against the <code>WOLifebeatInterval</code>,
+                    defaulting to 4x (so the default interval
+                    would be 120 seconds). </dd>
+                <!--<dt>WOShouldUseSpawn </dt>
+                <dd>Controls whether wotaskd should start
+                    instances using a system-specific launcher;
+                    this allows for starting applications in the
+                    background, as well as circumventing Windows-specific
+                    issues with launch output. Defaults to <code>true</code>. </dd>-->
+            </dl>
+            <p><br>
+            </p>
+        </dd>
+        <dt><b>General Application Defaults</b><br>
+            </dt>
+        <dd><dl>
+                <dt>WOMonitorEnabled </dt>
+                <dd>Determines if the instance is being monitored
+                    by a wotaskd. Monitor sets this to <code>true</code>  
+                    automatically when it starts an instance. It
+                    normally defaults to <code>false</code>. </dd>
+                <dt>WOLifebeatDestinationPort </dt>
+                <dd>Sets the port that lifebeats should be sent
+                    to. More generally, this is the port that
+                    wotaskd is running on; Monitor should use
+                    this default if wotaskd is running on a port
+                    other than <code>1085</code>. Defaults to <code>1085</code>, and is
+                    automatically set for any instance started by
+                    wotaskd. </dd>
+                <dt>WOLifebeatEnabled </dt>
+                <dd>Determines whether the instance should send
+                    lifebeats or not. Defaults to <code>true</code>, but fails
+                    after 5 consecutive attempts to send a
+                    lifebeat. Automatically set for any instance
+                    started by wotaskd. </dd>
+                <dt>WOOutputPath </dt>
+                <dd>Allows output for an instance to be
+                    redirected to the file specified by this
+                    default. Setting the path to <code>/dev/null</code>
+                    causes the application to swallow its output.
+                    Otherwise, it implies that all output should
+                    be written to the specified file. If the file
+                    doesn't exist, or can't be written to, treat
+                    as <code>/dev/null</code>. Defaults to nothing
+                    (output is generated normally). </dd>
+                <dt>WOLifebeatInterval </dt>
+                <dd>Allows users to set the time between
+                    lifebeats sent to wotaskd. It defaults to <code>30</code>
+                    seconds. </dd>
+                <dt>WOApplicationName </dt>
+                <dd>Allows wotaskd to set the value of
+                    <code>Application.name()</code>, to properly register
+                    lifebeats. The adaptor will only load-balance between
+                    instances with the same name; thus <code>WOApplicationName</code> can be
+                    used to create "groups" of instances, even if the instances
+                    have the same executable name. Defaults to the executable name.
+                    Set automatically for instances started by
+                    wotaskd. </dd>
+                <dt>WOHost</dt>
+                <dd>Allows applications to specify which
+                    network interface they should bind to when running.
+                    This option should only be used on hosts with
+                    multiple network interfaces (IP addresses). Set automatically for
+                    instances started by wotaskd. Thus, this property should be set
+		    only for wotaskd and Monitor.</dd>
+            </dl>
+        </dd>
+    </dl>
+</blockquote>
+
+<p><br>
+<br>
+</p>
+
+<hr>
+
+<p><br>
+<br>
+</p>
+
+<p><a name="14"><font size="+2"><b>How do I run multiple wotaskds on a host?</b></font></a> <a href="#00"><font size="-1">(top)</font></a><br>
+</p>
+
+<ul>
+    <li>wotaskd needs to be started with <code>-WOPort &lt;newPort&gt;</code>
+        and <code>-WODeploymentConfigurationDirectory &lt;path&gt;</code> </li>
+    <li>Monitor needs to be started with <code>-WOLifebeatDestinationPort
+        &lt;newPort&gt;</code> and <code>-WODeploymentConfigurationDirectory &lt;path&gt;</code> </li>
+    <li>Instances monitored by the wotaskd need to be started
+        with <code>-WOLifebeatDestinationPort &lt;newPort&gt;</code>. This
+        will be done automatically if the instance is started by
+        wotaskd.</li>
+</ul>
+
+<p><br>
+<br>
+</p>
+
+<hr>
+
+<p><br>
+<br>
+</p>
+
+<p><a name="15"><font size="+2"><b>What instance defaults and settings are
+available through Monitor?</b></font></a> <a href="#00"><font size="-1">(top)</font></a><br>
+</p>
+
+<blockquote>
+    <dl>
+        <dt>Path </dt>
+        <dd>The path to the application executable - this must be
+            the full path to the executable inside the '.woa'
+            directory. There are three default paths: MacOSX, Windows,
+            and Unix (cf Hosts Page). When an instance
+            is created, it chooses the Path appropriate to the
+            type of Host it is on. No Default. </dd>
+        <dt>Auto Recover </dt>
+        <dd>If the instance crashes or is shut down, Monitor
+            restarts it. Monitor also starts the instance upon
+            startup. This setting doesn't apply to scheduled
+            instances. Defaults to <code>true</code>. </dd>
+        <dt>Minimum Active Sessions </dt>
+        <dd>If an instance is set to Refuse New Sessions, the
+            instance exits when the number of sessions is less
+            than or equal to this number. Defaults to <code>0</code>. </dd>
+        <dt>Caching Enabled </dt>
+        <dd>Determines whether component caching is enabled. <code>-WOCachingEnabled</code>.
+            Defaults to <code>true</code>. </dd>
+        <dt>Debugging Enabled </dt>
+        <dd>Is debugging output enabled. For WebObjects 5.x
+            applications, this is equivalent to setting Debug
+            Level to at least Informational, and adding the 
+	    WebObjects Debug Group. <code>-WODebuggingEnabled</code>. 
+	    Defaults to <code>false</code>. </dd>
+        <dt>OutputPath </dt>
+        <dd>Output from the instance can be redirected to a file
+            on disk. (cf Path for explanations of MacOSX/Windows/Unix).
+            Should be the path to a directory - each instance
+            automatically has its output filename set to 'AppName-ID'.
+            <code>-WOOutputPath</code>. Defaults to nothing; output is not
+            saved. </dd>
+        <dt>Auto Open In Browser and Auto Open Client Application </dt>
+        <dd>When an instance is started, should it automatically
+            open a browser to its main page. JavaClient applications will 
+	    automatically open a client application. <code>-WOAutoOpenInBrowser</code> 
+	    and <code>-WOAutoOpenClientApplication</code>.
+            Defaults to <code>false</code>. </dd>
+        <dt>Lifebeat Interval </dt>
+        <dd>How often should lifebeats be sent back to wotaskd/Monitor.
+            <code>-WOLifebeatInterval</code>. Defaults to <code>30</code>, typically
+            shouldn't be changed. </dd>
+        <dt>Additional Arguments </dt>
+        <dd>These are additional arguments passed to the
+            instances upon startup. NOTE: To pass Java properties that contain 
+	    spaces, use <code>&quot;-Dkey=the value&quot;</code> (including quotes).</dd>
+    </dl>
+</blockquote>
+
+<p><br>
+<br>
+</p>
+
+<hr>
+
+<p><br>
+<br>
+</p>
+
+<p><a name="16"><font size="+2"><b>What application settings are available through
+Monitor?</b></font></a> <a href="#00"><font size="-1">(top)</font></a><br>
+</p>
+
+<blockquote>
+    <dl>
+        <dt>Name </dt>
+        <dd>Application names may only contain alphanumeric
+            characters ('-' and '.' are allowed as well). The
+            application name in Monitor does not need
+            to match the name of the actual application's
+            executable. Load-balancing in the adaptor takes place
+            between instances that have the same name in wotaskd.
+            (cf <code>WOApplicationName</code>). </dd>
+        <dt>Starting Port </dt>
+        <dd>New instances are assigned the next port number
+            higher than the starting port that doesn't conflict
+            with another instance (from any application). The
+            port number can also be set on an instance by
+            instance basis. Defaults to <code>2001</code>. </dd>
+        <dt>Time Allowed for Startup </dt>
+        <dd>The amount of time the Monitor waits for an instance
+            to start before it decides the instance has failed to
+            start. Defaults to <code>30</code> seconds. </dd>
+        <dt>Phased Startup </dt>
+        <dd>After wotaskd launches, it starts up auto-recovered 
+	    instances of this application one at a time, 
+	    instead of all at once. Defaults to <code>false</code>. </dd>
+        <dt>Adaptor </dt>
+        <dd>The default adaptor an instance should use. This is
+            <i>not</i> the HTTP adaptor used by the Web server, but
+            rather the internal object that distributes
+            connections to WOWorkerThreads. Defaults to
+            <code>WODefaultAdaptor</code>, and normally should not be changed.
+            <code>-WODefaultAdaptor</code>. </dd>
+        <dt>Minimum Adaptor Threads </dt>
+        <dd>The starting number of WorkerThreads the WODefaultAdaptor 
+            should create to handle incoming requests. This
+            setting applies to the WODefaultAdaptor for WebObjects 5.x.
+	    <code>-WOWorkerThreadCountMin</code>. Defaults to <code>16</code>.
+        </dd>
+        <dt>Maximum Adaptor Threads </dt>
+        <dd>The maximum number of WorkerThreads that the default adaptor
+            should create to handle incoming requests. As the load on
+	    an application instance grows, the WODefaultAdaptor
+	    will create new WorkerThreads to handle requests. This
+            setting only applies to the WODefaultAdaptor for WebObjects 5.x. 
+	    Setting this to -1 will let the number of WorkerThreads 
+	    grow indefinitely.
+	    <code>-WOWorkerThreadCountMax</code>. Defaults to <code>256</code>.
+        </dd>
+        <dt>Adaptor Threads </dt>
+        <dd>The number of WorkerThreads that the default adaptor
+            should create to handle incoming requests. This
+            setting only applies to the
+            WODefaultAdaptor for WebObjects 4.5.x. 
+	    This is DEPRECATED for WebObjects 5.x applications.
+	    <code>-WOWorkerThreadCount</code>. Defaults to <code>8</code>.
+        </dd>
+        <dt>ListenQueue Size </dt>
+        <dd>The number of unhandled incoming connections that an
+            instance can have. <code>-WOListenQueueSize</code>. Defaults to
+            <code>128</code>. </dd>
+    </dl>
+</blockquote>
+
+<p><br>
+<br>
+</p>
+
+<hr>
+
+<p><br>
+<br>
+</p>
+
+<p><a name="17"><font size="+2"><b>What is Instance Scheduling?</b></font></a> <a href="#00"><font size="-1">(top)</font></a><br>
+</p>
+
+<blockquote>
+    <p>Each instance can be independantly scheduled using the
+    Application Configure page. During scheduling, an
+    instance is restarted at regular intervals.<br>
+    </p>
+    <dl>
+        <dt>Graceful Scheduling </dt>
+        <dd>If an instance is gracefully scheduled, rather than
+            shutting down immediately, it refuses new sessions.
+            Existing sessions continue as normal. Once the number
+            of active sessions drops to the Minimum Active
+            Session Count (typically 0), the instance is
+            restarted. If this option is not selected, the instance
+            restarts at its scheduled time, terminating active sessions.</dd>
+        <dt>Hourly Scheduling </dt>
+        <dd>The instance is restarted ever X hours, with
+            calculations starting at Y O'Clock. (Ex. Every 6
+            hours, starting at 3am means the instance would
+            restart at 3am, 9am, 3pm, 9pm every day). </dd>
+        <dt>Daily scheduling </dt>
+        <dd>The instance is restarted at X O'Clock every day. (Ex.
+            At 3am every day). </dd>
+        <dt>Weekly Scheduling </dt>
+        <dd>The instance is restarted at X O'Clock, on a
+            particular day every week. (Ex. Every Sunday at 3am).
+        </dd>
+    </dl>
+</blockquote>
+
+<p><br>
+<br>
+</p>
+
+<hr>
+
+<p><br>
+<br>
+</p>
+
+<p><a name="18"><font size="+2"><b>Monitor's Hosts page</b></font></a> <a href="#00"><font size="-1">(top)</font></a><br>
+</p>
+
+<blockquote>
+    <p>A host is only available if it is running a wotaskd daemon
+    of the correct protocol (WebObjects 5.x). If available,
+    clicking the YES hyperlink displays the current
+    configuration of that host, including its SiteConfig,
+    startup options, and its response to various HTTP server
+    requests.<br>
+    </p>
+    <dl>
+        <dt>Add Host </dt>
+        <dd>Hosts may be added by short hostname, fully qualified
+            hostname, or IP address. Hosts may be added of type
+            MacOSX, Windows, Unix (this is used in determining the
+            type of Path and Output Path chosen by an Instance on
+            the host). </dd>
+    </dl>
+</blockquote>
+
+<p><br>
+<br>
+</p>
+
+<hr>
+
+<p><br>
+<br>
+</p>
+
+<p><a name="19"><font size="+2"><b>Monitor's Detail View page</b></font></a> <a href="#00"><font size="-1">(top)</font></a><br>
+</p>
+
+<blockquote>
+    <p>The Detail View page may be set to refresh at regular
+    intervals, or not at all, in the Preferences page. The
+    default is to refresh the page every 60 seconds. The page may
+    also be manually refreshed by clicking Refresh Now.<br>
+    Hyperlinks for active instances are generated using the HTTP
+    adaptor URL from the Site Configuration Page.<br>
+    </p>
+    <dl>
+        <dt>Application Name </dt>
+        <dd>If any instances of this application are on, this is
+            a link to the application URL, using the HTTP adaptor
+            URL from the Site page. If the Http adaptor
+            URL isn't set, http://localhost/cgi-bin/WebObjects is
+            used instead. The request is load balanced. </dd>
+        <dt>Each instance has the following displays: </dt>
+        <dd><dl>
+                <dt>Name-ID </dt>
+                <dd>If the instance is active, this is a link to
+                    that instance through the HTTP adaptor. If
+                    the adaptor URL is not set through the
+                    SiteConfigure page, the default is
+                    &quot;http://localhost/cgi-bin/WebObjects&quot;.
+                    This will open a new browser page. The request is not load
+                    balanced through the adaptors, it is sent
+                    directly to the instance. </dd>
+                <dt>Host-Port </dt>
+                <dd>If the instance is active, this is a link to
+                    the instance in &quot;Direct Connect&quot;
+                    mode, not through the Web server. This will open a new browser
+                    page. </dd>
+                <dt>Status </dt>
+                <dd>Green is On, Red is Off, Sweeping Up is
+                    turning on and Sweeping Down is turning off. 
+                <dt>Start-Stop </dt>
+                <dd>Click the Green button to start, the Red
+                    button to stop the instance. </dd>
+                <dt>Auto-Recover </dt>
+                <dd>Is the instance configured for Auto-Recovery;
+                    clicking changes the state. Scheduled instances
+                    are always auto-recovering, and will show
+                    a Yellow ON.</dd>
+                <dt>Refusing New Sessions </dt>
+                <dd>Is the instance Refusing New Sessions;
+                    clicking changes the state. Scheduled instances
+                    show Yellow, and cannot be controlled manually.i</dd>
+                <dt>Scheduling State </dt>
+                <dd>Is the current instance scheduled; clicking
+                    changes the state. </dd>
+                <dt>Statistics </dt>
+                <dd>Displays the statistics for that instance.
+                    Clicking WOStats brings up a new browser
+                    window showing detailed statistics. Deaths
+                    shows the number of unexpected deaths for
+                    this instance (this doesn't include manual
+                    shutdowns or scheduled shutdowns). Clicking
+                    the number links to a page with the times of
+                    each crash. </dd>
+                <dt>Config </dt>
+                <dd>A link to the configuration page for that
+                    instance. </dd>
+                <dt>Delete </dt>
+                <dd>Deletes the instance. </dd>
+            </dl>
+        </dd>
+        <dt>All the instances may also be controlled
+            simultaneously (ALL INSTANCES): </dt>
+        <dd><dl>
+                <dt>Start-Stop </dt>
+                <dd>Click the Green button to start all instances,
+                    the Red button to stop all instances. </dd>
+                <dt>Auto-Recover </dt>
+                <dd>Click the Green button to enable all
+                    instances for Auto-Recovery, the Red button
+                    to disable. </dd>
+                <dt>Refusing New Sessions </dt>
+                <dd>Click the Green button to set all instances
+                    to Refuse New Sessions, the Red button to
+                    allow all instances to Accept New Sessions. </dd>
+                <dt>Scheduling State </dt>
+                <dd>Click the Green button to enable scheduling
+                    for all instances, the Red button to disable
+                    scheduling for all instances.</dd> 
+                <dt>Statistics </dt>
+                <dd>Displays the total statistics for all
+                    instances. Below the WOStats button is a
+                    calculation of transactions per second for
+                    the application as a whole. The Clear Deaths
+                    link will clear Death Histories for all
+                    instances. </dd>
+                <dt>Config </dt>
+                <dd>A link to the configuration page for the
+                    application. </dd>
+            </dl>
+        </dd>
+        <dt>Add X instances to host Y </dt>
+        <dd>Adds the requested number of instances to run on a
+            particular host. </dd>
+    </dl>
+</blockquote>
+
+<p><br>
+<br>
+</p>
+
+<hr>
+
+<p><br>
+<br>
+</p>
+
+<p><a name="20"><font size="+2"><b>Deployment FAQ</b></font></a> <a href="#00"><font size="-1">(top)</font></a><br>
+</p>
+
+<blockquote>
+    <B>Q:</B> My application is starting on the wrong IP address!<BR>
+    <B>A:</B> Use <code>-WOHost &lt;hostname or IP address&gt;</code>. This will force the application to bind  
+    to a particular IP address. If you are using Monitor/wotaskd, make sure that  
+    both are started with the same <code>-WOHost</code> argument - wotaskd will make sure that  
+    any instances it starts will have the correct <code>WOHost</code> setting. <BR>
+    <BR>
+    <B>Q:</B> When I run an application, everything seems fine, but none of my pages get   
+    rendered! In particular, everything is returning without the opening bracket (&lt;)  
+    in the HTML code. <BR>
+    <B>A:</B> You are using an older version of the Java runtime. WebObjects requires at  
+    least a 1.3.1 runtime (both the VM and the standard libraries).   <BR>
+    <BR>
+    <B>Q:</B> When I build an application on Windows, and move it to Solaris/MacOSX, it  
+    won't run - I get a permission denied error. <BR>
+    <B>A:</B> The launch script is probably not executable. Executing the command  
+    <code>cd MyApp.woa; chmod a+x Myapp</code> fixes the problem.   <BR>
+    <BR>
+    <B>Q:</B> When I invoke <code>(Application) WOApplication.application()</code>, I get a  
+	<code>java.lang.ClassCastException: com.webobjects.appserver.WOApplication</code>. <BR>
+    <B>A:</B> In your subclass of WOApplication, you must have the lines: <BR>
+	<BLOCKQUOTE><CODE>
+	public static void main(String argv[]) { <BR>
+	&nbsp;&nbsp;&nbsp;&nbsp;WOApplication.main(argv, Application.class); <BR>
+	}   
+	</CODE></BLOCKQUOTE>
+    <BR>
+    <B>Q:</B> Applications won't start from Monitor, but they seem to start OK from the  
+    command line. <BR>
+    <B>A:</B> It's likely that you have a hostname defined in the DNS, and have an IP  
+    address, but your <code>/etc/hostconfig</code> lists your hostname as <code>-AUTOMATIC-</code>.  
+    Change <code>-AUTOMATIC-</code> to your actual hostname. You need to restart your computer  
+    for this to take effect (though a <code>kill -HUP</code> of inetd might work as well).   <BR>
+    <BR>
+    <B>Q:</B> I'm having trouble with the adaptor. How do I get more information about  
+    what's happening? <BR>
+    <B>A:</B> Enable adaptor logging -- in the temp directory of the HTTP server (/tmp on  
+    Solaris/MacOSX, execute <code>echo $TEMP</code> to find it on Win2k) create an empty file named  
+    <code>logWebObjects</code>, owned by root. The adaptor log will be created in the same  
+    directory, and will be named <code>WebObjects.log</code>. The adaptors do not need to be restarted in  
+    order for logging to start or stop.    <BR>
+    <BR>
+    <B>Q:</B> I launch an application instance from Monitor, but the launch fails after 30 secs.  
+    Monitor then tries to launch the application again repeatedly, taxing system 
+    resources. After a little while, the new instances eventually die, and my original 
+    instance eventually comes up. <BR>
+    <B>A:</B> Your application likely takes longer than 30 seconds to launch. In Monitor, set 
+    Time For Startup to a larger number (roughly the time it takes for your 
+    application to start + a little leeway).   <BR>
+    <BR>
+    <B>Q:</B> Can I use 4.5.x and 5.x on the same machine? <BR>
+    <B>A:</B> The only supported mixed deployment is 4.5.1 Deployment + 5.x Deployment. No mixed  
+    developments are supported. In addition, in a mixed 4.5.1/5.x deployment, only the  
+    5.x tools (wotaskd and Monitor) should be used.  <BR>
+    <BR>
+    <B>Q:</B> What is the difference between the 4.5.1 and 5.x HTTP adaptors? <BR>
+    <B>A:</B> Only bug-fixes. In general, the most recent adaptors should be used, regardless of 
+    whether they are from 4.5.1 or 5.x. Note that versions of the adaptor previous to 
+    4.5.1 (i.e. 4.5 and before) are not compatible.   <BR>
+    <BR>
+    <B>Q:</B> My application has a page that takes quite some time to return. Eventually, I get an  
+    "No Instance Available" message - how do I fix this? <BR>
+    <B>A:</B> You may either use Monitor to increase the read timeout in the adaptor settings  
+    to at least the length of time you expect your longest page to take, or use a  
+    WOLongResponsePage. Generally, using WOLongResponsePage is the best, as it is more flexible 
+    and provides a better user experience. <BR>
+    <BR>
+    <B>Q:</B> My application works fine when I have a developer installation, 
+       but I can't connect to it when I have a deployment installation. <BR>
+    <B>A:</B> In a deployment install, <code>WODirectConnectEnabled</code> defaults to <code>false</code>, so you won't be able to 
+       connect directly -- only through the adaptor. To change this, start your application with 
+       <code>-WODirectConnectEnabled true</code>. <BR>
+    <BR>
+    <B>Q:</B> While running my application, it eventually freezes. Before it dies, I see the following debugging logs: <BR>
+    <BLOCKQUOTE><CODE>
+    &lt;com.webobjects.appserver._private.WODefaultAdaptor&gt;: Growing number of WOWorkerThreads to 32 <BR>
+    &lt;com.webobjects.appserver._private.WODefaultAdaptor&gt;: Growing number of WOWorkerThreads to 64 <BR>
+    &lt;com.webobjects.appserver._private.WODefaultAdaptor&gt;: Growing number of WOWorkerThreads to 128 <BR>
+    &lt;com.webobjects.appserver._private.WODefaultAdaptor&gt;: Growing number of WOWorkerThreads to 256 <BR>
+    </CODE></BLOCKQUOTE>
+    <B>A:</B> WebObjects grows the number of worker threads as the number of concurrent requests increases. However, if your application doesn't finish processing the request, most likely due to a deadlock, the threads will never finish. Thus, the number of threads grows to the allowed maximum, and then the application appears to "freeze".  <BR>
+    <BR>
+    <B>Q:</B> I'm pretty sure I have a deadlock. How do I find out where? <BR>
+    <B>A:</B> Bzzt. Still not a deployment question. On MacOS X a quick way to determine whether a deadlock exists is to run your application in Terminal, in the foreground, and when your application deadlocks, press <code>Control-\</code> .   <BR>
+    <BR>
+    <B>Q:</B> Help! I can't access the WOStats page! <BR>
+    <B>A:</B> You can set the password (the user is ignored) as an argument: <code>-WOStatisticsPassword myPassword</code> .   <BR>
+    <BR>
+    <B>Q:</B> What happened to the defaults database?! (defaults write...) <BR>
+    <B>A:</B> WebObjects 5 uses <code>java.util.Properties</code>. The simplest solution is to use use Properties files. A Properties file is a text file named <code>Properties</code> located in the Resources folder of your WOA bundle and/or frameworks. Inside the file are <code>key=value pairs</code>, one to a line. <BR>
+    <BR>
+    <B>Q:</B> When I try to run any WebObjects 5.x applications on Windows, I get the following error: <BR>
+    <BLOCKQUOTE><CODE>
+    com.webobjects.foundation.NSForwardException [java.io.UnsupportedEncodingException] MacRoman
+    </CODE></BLOCKQUOTE>
+    <B>A:</B> The Windows English JRE does not have all the character encodings. Use the International JRE or the JDK instead. <BR>
+    <BR>
+    <B>Q:</B> If I am deploying my application in a JSP/Servlet container, do I need wotaskd, Monitor, or the HTTP adaptors? Do I need to have WebObjects installed on the application server? <BR>
+    <B>A:</B> If you are deploying in a JSP/Servlet container (such as Tomcat or WebLogic), you do not need (and cannot use) wotaskd, Monitor or the HTTP adaptors. However, WebObjects must be installed on the application server. <BR>
+    <BR>
+</blockquote>
+
+<CENTER>
+</CENTER>
+  </TD></TR>
+</TABLE>
+</CENTER>
+
+</BODY>
+</HTML>

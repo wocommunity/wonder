@@ -1,0 +1,234 @@
+<WEBOBJECT NAME=IsRefreshEnabled>
+<WEBOBJECT name=Refresh></WEBOBJECT>
+</WEBOBJECT>
+<WEBOBJECT name=NavPage></WEBOBJECT>
+
+<CENTER>
+        <B><FONT SIZE="+3">
+        <WEBOBJECT name=AppIsRunning><WEBOBJECT name=AppLink><WEBOBJECT NAME=AppName></WEBOBJECT></WEBOBJECT></WEBOBJECT>
+        <WEBOBJECT name=AppIsNOTRunning><WEBOBJECT name=AppName></WEBOBJECT></WEBOBJECT>
+        </FONT></B>
+	<BR>
+<WEBOBJECT name=IsRefreshEnabled>
+	<FONT SIZE=-1>This page automatically updates every <WEBOBJECT name=RefreshRate></WEBOBJECT> seconds.</FONT><BR>
+</WEBOBJECT>
+	<FONT SIZE=-1><WEBOBJECT name=RefreshLink>Refresh Now</WEBOBJECT></FONT><BR>
+
+<P ALIGN=CENTER><FONT COLOR=#FF0000><B><BR><WEBOBJECT NAME=MessageString></WEBOBJECT></B></FONT></P>
+
+<TABLE BORDER=1 CELLPADDING=2 CELLSPACING=0 BGCOLOR=#E8E8E8>
+    <TR BGCOLOR=#C0C0C0>
+        <TD ALIGN=CENTER ROWSPAN=2><FONT SIZE=-1><B>Name</B></FONT></TD>
+        <TD ALIGN=CENTER ROWSPAN=2><FONT SIZE=-1><B>Host<BR>-<BR>Port</B></FONT></TD>
+        <TD ALIGN=CENTER ROWSPAN=2><FONT SIZE=-1><B>Status</B></FONT></TD>
+        <TD ALIGN=CENTER ROWSPAN=2><FONT SIZE=-1><B>Start<BR>-<BR>Stop</B></FONT></TD>
+        <TD ALIGN=CENTER ROWSPAN=2><FONT SIZE=-1><B>Auto<BR>Recover</B></FONT></TD>
+        <TD ALIGN=CENTER ROWSPAN=2><FONT SIZE=-1><B>Refuse<BR>New<BR>Sessions</B></FONT></TD>
+        <TD ALIGN=CENTER ROWSPAN=2><FONT SIZE=-1><B>Scheduled</B></FONT></TD>
+        <TD ALIGN=CENTER ROWSPAN=2><FONT SIZE=-1><B>Next<BR>Shutdown</B></FONT></TD>
+        <TD ALIGN=CENTER COLSPAN=6><B> Statistics </B></TD>
+        <TD ALIGN=CENTER ROWSPAN=2><FONT SIZE=-1><B>Configure</B></FONT></TD>
+        <TD ALIGN=CENTER ROWSPAN=2><FONT SIZE=-1><B>Delete</B></FONT></TD>
+    </TR>
+    <TR BGCOLOR=#C0C0C0>
+        <TD ALIGN=CENTER><FONT SIZE=-1><B>Trans-<BR>actions</B></FONT></TD>
+        <TD ALIGN=CENTER><FONT SIZE=-1><B>Active<BR>Sessions</B></FONT></TD>
+        <TD ALIGN=CENTER><FONT SIZE=-1><B>Average<BR>Trans-<BR>action</B></FONT></TD>
+        <TD ALIGN=CENTER><FONT SIZE=-1><B>Average<BR>Idle<BR>Period</B></FONT></TD>
+        <TD ALIGN=CENTER><FONT SIZE=-1><B>Deaths </B></FONT></TD>
+        <TD ALIGN=CENTER><FONT SIZE=-1><B>WOStats</B></FONT></TD>
+    </TR>
+
+    <WEBOBJECT NAME=InstanceRepetition>
+    <TR>
+
+	<!-- Instance Number -->
+        <TD ALIGN=CENTER>
+            <WEBOBJECT NAME=InstanceRunningConditional>
+                <WEBOBJECT NAME=InstAdaptorLink><WEBOBJECT NAME=InstIndex></WEBOBJECT></WEBOBJECT>
+            </WEBOBJECT>
+            <WEBOBJECT NAME=InstanceNOTRunningConditional>
+                <WEBOBJECT NAME=InstIndex></WEBOBJECT>
+            </WEBOBJECT>
+        </TD>
+
+	<!-- Host - Port -->
+        <TD ALIGN=CENTER VALIGN=MIDDLE>
+            <FONT SIZE=-1>
+            <WEBOBJECT NAME=InstanceRunningConditional>
+                <WEBOBJECT NAME=InstDirectLink><WEBOBJECT NAME=InstRunningOnHost></WEBOBJECT></WEBOBJECT>
+            </WEBOBJECT>
+            <WEBOBJECT NAME=InstanceNOTRunningConditional>
+                <WEBOBJECT NAME=InstRunningOnHost></WEBOBJECT>
+            </WEBOBJECT>
+            </FONT>
+        </TD>
+
+	<!-- Status (On/Off/Starting/Stopping) -->
+        <TD ALIGN=CENTER VALIGN=MIDDLE>
+            <WEBOBJECT NAME=InstStatusImage></WEBOBJECT>
+        </TD>
+
+	<!-- Start/Stop Buttons -->
+        <TD ALIGN=CENTER VALIGN=MIDDLE NOWRAP>
+		<WEBOBJECT NAME=StartInstanceLink><WEBOBJECT NAME=StartImage></WEBOBJECT></WEBOBJECT>
+		<WEBOBJECT NAME=StopInstanceLink><WEBOBJECT NAME=StopImage></WEBOBJECT></WEBOBJECT>
+	</TD>
+
+        <!-- Auto-Recover -->
+        <TD ALIGN=CENTER VALIGN=MIDDLE>
+            <WEBOBJECT NAME=IFSchedulingIsOn><WEBOBJECT NAME=YellowOnImage></WEBOBJECT></WEBOBJECT>
+            <WEBOBJECT NAME=IFSchedulingIsOff>
+                <WEBOBJECT NAME=ToggleAutoRecoverLink><WEBOBJECT name=AutoRecoverImage></WEBOBJECT></WEBOBJECT>
+            </WEBOBJECT>
+        </TD>
+
+	<!-- Refuse New Sessions -->
+        <TD ALIGN=CENTER VALIGN=MIDDLE>
+            <WEBOBJECT name=IFSchedulingIsOn><WEBOBJECT NAME=RefuseNewSessionsImage></WEBOBJECT></WEBOBJECT>
+            <WEBOBJECT name=IFSchedulingIsOff>
+                <WEBOBJECT NAME=InstanceRunningConditional>
+                    <WEBOBJECT NAME=ToggleRefuseNewSessionsLink><WEBOBJECT NAME=RefuseNewSessionsImage></WEBOBJECT></WEBOBJECT>
+                </WEBOBJECT>
+                <WEBOBJECT NAME=InstanceNOTRunningConditional>
+                    <WEBOBJECT name=OffImage></WEBOBJECT>
+                </WEBOBJECT>
+            </WEBOBJECT>
+        </TD>
+
+	<!-- Schedule -->
+        <TD ALIGN=CENTER VALIGN=MIDDLE>
+	    <WEBOBJECT NAME=ToggleSchedulingLink><WEBOBJECT NAME=SchedulingImage></WEBOBJECT></WEBOBJECT>
+        </TD>
+
+	<!-- Next Scheduled Shutdown -->
+        <TD ALIGN=CENTER VALIGN=MIDDLE>
+	    <WEBOBJECT NAME=NextShutdown></WEBOBJECT>
+        </TD>
+
+	<!-- Statistics -->
+        <TD ALIGN=CENTER VALIGN=MIDDLE>
+            <WEBOBJECT name=InstTransactions></WEBOBJECT>
+        </TD>
+        <TD ALIGN=CENTER VALIGN=MIDDLE>
+            <WEBOBJECT name=InstActiveSessions></WEBOBJECT>
+        </TD>
+        <TD ALIGN=CENTER VALIGN=MIDDLE>
+            <WEBOBJECT name=InstAverageTransaction></WEBOBJECT>
+        </TD>
+        <TD ALIGN=CENTER VALIGN=MIDDLE>
+            <WEBOBJECT name=InstAverageIdle></WEBOBJECT>
+        </TD>
+        <TD ALIGN=CENTER VALIGN=MIDDLE>
+            <WEBOBJECT name=ShouldDisplayDeathDetailLink>
+                <WEBOBJECT name=InstDeathDetailLink><WEBOBJECT name=InstDeathCount></WEBOBJECT></WEBOBJECT>
+	    </WEBOBJECT>
+            <WEBOBJECT name=ShouldNOTDisplayDeathDetailLink> - </WEBOBJECT>
+        </TD>
+        <TD ALIGN=CENTER VALIGN=MIDDLE>
+            <WEBOBJECT name=InstanceRunningConditional>
+		<WEBOBJECT name=LinkToWOStats><WEBOBJECT NAME=WOStatsButton></WEBOBJECT></WEBOBJECT>
+            </WEBOBJECT>
+            <WEBOBJECT name=InstanceNOTRunningConditional>
+		<WEBOBJECT name=WOStatsOffButton></WEBOBJECT>
+            </WEBOBJECT>
+        </TD>
+
+	<!-- Configure -->
+        <TD ALIGN=CENTER VALIGN=MIDDLE>
+            <WEBOBJECT NAME=InstConfigureLink><WEBOBJECT NAME=ConfigButton></WEBOBJECT></WEBOBJECT>
+        </TD>
+
+	<!-- Delete -->
+        <TD ALIGN=CENTER VALIGN=MIDDLE>
+            <WEBOBJECT NAME=InstDeleteLink><WEBOBJECT NAME=DeleteButton></WEBOBJECT></WEBOBJECT>
+        </TD>
+    </TR>
+    </WEBOBJECT>
+
+    <WEBOBJECT name=HasInstancesConditional>
+    <TR><TD colSpan=15 bgColor=#ffffff>&nbsp</TD></TR>
+
+    <TR BGCOLOR=#D4D4D4>
+        <TD vAlign=center align=middle colSpan=3><FONT size=+1><B>ALL INSTANCES: </B></FONT></TD>
+
+	<!-- Start / Stop All -->
+        <TD ALIGN=CENTER VALIGN=MIDDLE NOWRAP>
+		<WEBOBJECT NAME=StartAllLink><WEBOBJECT NAME=StartImage></WEBOBJECT></WEBOBJECT>
+		<WEBOBJECT NAME=StopAllLink><WEBOBJECT NAME=StopImage></WEBOBJECT></WEBOBJECT>
+	</TD>
+
+	<!-- AutoRecover All-->
+        <TD ALIGN=CENTER VALIGN=MIDDLE NOWRAP>
+		<WEBOBJECT NAME=AutoRecoverEnableAllLink><WEBOBJECT NAME=StartImage></WEBOBJECT></WEBOBJECT>
+		<WEBOBJECT NAME=AutoRecoverDisableAllLink><WEBOBJECT NAME=StopImage></WEBOBJECT></WEBOBJECT>
+	</TD>
+
+	<!-- Refuse New Sessions All -->
+        <TD ALIGN=CENTER VALIGN=MIDDLE NOWRAP>
+		<WEBOBJECT NAME=RefuseNewSessionsAllLink><WEBOBJECT NAME=StartImage></WEBOBJECT></WEBOBJECT>
+		<WEBOBJECT NAME=AcceptNewSessionsAllLink><WEBOBJECT NAME=StopImage></WEBOBJECT></WEBOBJECT>
+	</TD>
+
+	<!-- Scheduling All -->
+        <TD ALIGN=CENTER VALIGN=MIDDLE NOWRAP>
+		<WEBOBJECT NAME=SchedulingEnableAllLink><WEBOBJECT NAME=StartImage></WEBOBJECT></WEBOBJECT>
+		<WEBOBJECT NAME=SchedulingDisableAllLink><WEBOBJECT NAME=StopImage></WEBOBJECT></WEBOBJECT>
+	</TD>
+
+	<!-- Next Scheduled Shutdown -->
+        <TD>&nbsp</TD>
+
+	<!-- Statistics All -->
+        <TD ALIGN=CENTER VALIGN=MIDDLE>
+            <WEBOBJECT NAME=TotalTransactions></WEBOBJECT>
+        </TD>
+        <TD ALIGN=CENTER VALIGN=MIDDLE>
+            <WEBOBJECT NAME=TotalActiveSessions></WEBOBJECT>
+        </TD>
+        <TD ALIGN=CENTER VALIGN=MIDDLE>
+            <WEBOBJECT NAME=TotalAverageTransaction></WEBOBJECT>
+        </TD>
+        <TD ALIGN=CENTER VALIGN=MIDDLE>
+            <WEBOBJECT NAME=TotalAverageIdleTime></WEBOBJECT>
+        </TD>
+        <TD ALIGN=CENTER VALIGN=MIDDLE>
+            <WEBOBJECT NAME=ClearDeathsLink>Clear<BR>Deaths</WEBOBJECT>
+        </TD>
+        <TD ALIGN=CENTER VALIGN=MIDDLE>
+            <WEBOBJECT NAME=ActualRatePerMinute></WEBOBJECT> TPM
+        </TD>
+
+	<!-- Configure -->
+        <TD ALIGN=CENTER VALIGN=MIDDLE>
+            <WEBOBJECT NAME=ConfigureLink><WEBOBJECT NAME=ConfigButton></WEBOBJECT></WEBOBJECT>
+        </TD>
+        <TD>&nbsp</TD>
+    </TR>
+    </WEBOBJECT>
+</TABLE>
+<BR>
+<BR>
+<HR>
+<BR>
+<BR>
+<WEBOBJECT NAME=AddHasHostsConditional>
+<WEBOBJECT NAME=AddInstanceForm>
+	<WEBOBJECT NAME=AddInstanceSubmitButton></WEBOBJECT>
+	<WEBOBJECT NAME=AddNumInstances></WEBOBJECT> instance(s) on host: 
+	<WEBOBJECT NAME=AddHostPopUp></WEBOBJECT>
+</WEBOBJECT>
+</WEBOBJECT>
+<WEBOBJECT NAME=AddHasNOHostsConditional>
+	There are no hosts configured.<BR><BR>
+	Please <WEBOBJECT NAME=AddHostsLink>add hosts</WEBOBJECT> before adding instances.
+</WEBOBJECT>
+
+
+</CENTER>
+  </TD></TR>
+</TABLE>
+</CENTER>
+
+</BODY>
+</HTML>
