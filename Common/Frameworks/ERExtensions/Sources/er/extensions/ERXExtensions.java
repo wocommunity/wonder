@@ -152,7 +152,7 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
     		ERXJDBCAdaptor.registerJDBCAdaptor();
     		EODatabaseContext.setDefaultDelegate(ERXDatabaseContextDelegate.defaultDelegate());
     		ERXAdaptorChannelDelegate.setupDelegate();
-    		ERXEC.factory().setDefaultDelegateOnEditingContext(EOSharedEditingContext.defaultSharedEditingContext(), true);
+    		NSNotificationCenter.defaultCenter().addObserver(this, new NSSelector("sharedEditingContextWasInitialized", ERXConstant.NotificationClassArray), EOSharedEditingContext.DefaultSharedEditingContextWasInitializedNotification, null);
 
     		ERXEntityClassDescription.registerDescription();
     		if (!ERXProperties.webObjectsVersionIs52OrHigher()) {
@@ -308,6 +308,17 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
     public void editingContextDidCreate(NSNotification n) {
         EOEditingContext ec = (EOEditingContext)n.object();
         ERXExtensions.retainEditingContextForCurrentSession(ec);
+    }
+    
+    /**
+     * This method is called for the following notification
+     * {@link EOSharedEditingContext#DefaultSharedEditingContextWasInitializedNotification}
+     * 
+     * @param n the notification.
+     */
+    public void sharedEditingContextWasInitialized(NSNotification n) {
+    	EOSharedEditingContext sec = (EOSharedEditingContext)n.object();
+    	ERXEC.factory().setDefaultDelegateOnEditingContext(sec, true);
     }
 
     /** logging support for the adaptor channel */
