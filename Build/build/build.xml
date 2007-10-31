@@ -686,6 +686,7 @@
             <param name="project.principal.class" value="com.webobjects.monitor.application.Application" />
             <param name="project.name" value="JavaMonitor" />
             <param name="project.dir" value="Deployment/JavaMonitor" />
+            <param name="use.wonder.core" value="true" />
       		<param name="use.additional.framework.1" value="JavaMonitorFramework.framework" />
         </antcall>
     </target>
@@ -696,6 +697,7 @@
             <param name="project.principal.class" value="com.webobjects.monitor.wotaskd.Application" />
             <param name="project.name" value="wotaskd" />
             <param name="project.dir" value="Deployment/wotaskd" />
+            <param name="use.wonder.core" value="true" />
       		<param name="use.additional.framework.1" value="JavaMonitorFramework.framework" />
         </antcall>
     </target>
@@ -705,6 +707,7 @@
             <param name="project.principal.class" value="" />
             <param name="project.name" value="JavaMonitorFramework" />
             <param name="project.dir" value="Deployment/JavaMonitorFramework" />
+            <param name="use.wonder.core" value="true" />
         </antcall>
     </target>
    
