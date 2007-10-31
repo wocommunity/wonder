@@ -8,9 +8,11 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.FieldPosition;
+import java.util.Enumeration;
 import java.util.Properties;
 
 import com.webobjects.eoaccess.EOAdaptor;
+import com.webobjects.eoaccess.EOAdaptorContext;
 import com.webobjects.eoaccess.EOAttribute;
 import com.webobjects.eoaccess.EOEntity;
 import com.webobjects.eoaccess.EORelationship;
@@ -274,63 +276,92 @@ public class FrontbasePlugIn extends JDBCPlugIn {
 			return clob.getSubString(1L, (int) clob.length());
 	}
 
-	public NSArray newPrimaryKeys(int i, EOEntity eoentity, JDBCChannel jdbcchannel) {
-		NSMutableArray nsmutablearray = new NSMutableArray();
+	public NSArray newPrimaryKeys(int numberOfKeys, EOEntity eoentity, JDBCChannel jdbcchannel) {
+		NSMutableArray pkDicts = new NSMutableArray();
 
-		for (int j = 0; j < i; j++) {
-			NSDictionary nsdictionary = _newPrimaryKey(eoentity, jdbcchannel);
-			if (nsdictionary == null)
-				return null;
-			nsmutablearray.addObject(nsdictionary);
+		boolean pksGenerated = true;
+		int numberOfKeysLeft = numberOfKeys;
+		int keyBatchSize = 10;
+		while (pksGenerated && numberOfKeysLeft > 0) {
+			int thisKeyBatchSize = Math.min(keyBatchSize, numberOfKeysLeft);
+			pksGenerated = _newPrimaryKeys(thisKeyBatchSize, eoentity, jdbcchannel, pkDicts);
+			numberOfKeysLeft -= thisKeyBatchSize;
+		}
+		
+		if (!pksGenerated) {
+			pkDicts = null;
 		}
 
-		return nsmutablearray;
+		return pkDicts;
 	}
 
-	private NSDictionary _newPrimaryKey(EOEntity eoentity, JDBCChannel jdbcchannel) {
-		String sql;
-
+	private boolean _newPrimaryKeys(int keyBatchSize, EOEntity eoentity, JDBCChannel jdbcchannel, NSMutableArray pkDicts) {
+		if (keyBatchSize == 0) {
+			return true;
+		}
+		
 		NSArray primaryKeyAttributes = eoentity.primaryKeyAttributes();
-
-		NSMutableDictionary d = new NSMutableDictionary();
-		d.setObjectForKey("UNIQUE", "name");
-
-		if (primaryKeyAttributes == null)
-			return null;
+		if (primaryKeyAttributes == null) {
+			return false;
+		}
 
 		EOAttribute attribute = (EOAttribute) primaryKeyAttributes.lastObject();
-
-		if (attribute.className().endsWith("NSData")) {
-			d.setObjectForKey("NSData", "valueClassName");
-
-			if (attribute.externalType().startsWith("BIT")) {
-				sql = "VALUES NEW_UID(" + (attribute.width() >> 3) + ");";
+		boolean isNSData = attribute.className().endsWith("NSData");
+		
+		StringBuffer sql = new StringBuffer();
+		sql.append("VALUES (");
+		for (int keyNum = 0; keyNum < keyBatchSize; keyNum ++) {
+			if (isNSData) {
+				if (attribute.externalType().startsWith("BIT")) {
+					sql.append("NEW_UID(" + (attribute.width() >> 3) + ")");
+				}
+				else {
+					sql.append("NEW_UID(" + attribute.width() + ")");
+				}
 			}
 			else {
-				sql = "VALUES NEW_UID(" + attribute.width() + ");";
+				sql.append("SELECT UNIQUE FROM " + quoteTableName(eoentity.primaryKeyRootName()));
+			}
+			if (keyNum < keyBatchSize - 1) {
+				sql.append(", ");
 			}
 		}
-		else {
-			sql = "SELECT UNIQUE FROM " + quoteTableName(eoentity.primaryKeyRootName());
-			d.setObjectForKey("NSNumber", "valueClassName");
-		}
+		
+		sql.append(")");
 
-		EOSQLExpression eosqlexpression = expressionFactory().expressionForString(sql);
-		NSArray tmp = jdbcchannel._fetchRowsForSQLExpressionAndAttributes(eosqlexpression, new NSArray(new EOAttribute(d, null)));
-
-		if (tmp != null && tmp.count() > 0) {
-			Object obj = ((NSDictionary) tmp.lastObject()).objectForKey("UNIQUE");
-
-			NSMutableDictionary result = new NSMutableDictionary();
-
-			for (int i = 0; i < primaryKeyAttributes.count(); i++) {
-				result.setObjectForKey(obj, ((EOAttribute) primaryKeyAttributes.objectAtIndex(i)).name());
-			}
-
-			return result;
-		}
-		else
-			return null;
+		boolean pksGenerated = false;
+		EOSQLExpression eosqlexpression = expressionFactory().expressionForString(sql.toString());
+		EOAdaptorContext adaptorContext = jdbcchannel.adaptorContext();
+	    adaptorContext.transactionDidBegin();
+	    jdbcchannel.evaluateExpression(eosqlexpression);
+	    if (jdbcchannel._errorEvaluateExpression()) {
+	    	adaptorContext.transactionDidRollback();
+	    	jdbcchannel._setErrorEvaluateExpression(false);
+	    }
+	    else {
+	    	NSMutableDictionary row = jdbcchannel.fetchRow();
+	    	jdbcchannel.cancelFetch();
+	    	adaptorContext.transactionDidCommit();
+	    	if (row != null && row.count() > 0) {
+		    	NSArray pkValues = row.allValues();
+		    	if (pkValues.count() == keyBatchSize) {
+		    		Enumeration keysEnum = pkValues.objectEnumerator();
+		    		while (keysEnum.hasMoreElements()) {
+		    			Object obj = keysEnum.nextElement();
+		    			NSMutableDictionary pkDict = new NSMutableDictionary();
+		    			Enumeration pkAttributeEnum = primaryKeyAttributes.objectEnumerator();
+		    			while (pkAttributeEnum.hasMoreElements()) {
+		    				EOAttribute pkAttribute = (EOAttribute)pkAttributeEnum.nextElement();
+		    				pkDict.setObjectForKey(obj, pkAttribute.name());
+		    			}
+		    			pkDicts.addObject(pkDict);
+		    		}
+		    		pksGenerated = true;
+		    	}
+	    	}
+	    }
+	    
+	    return pksGenerated;
 	}
 
 	protected static final int FB_Boolean = 1;
