@@ -234,6 +234,20 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
      * to provide your own ERXEntityClassDescription subclass.
      */
     public static class Factory {
+    	
+    	/**
+    	 * Notification sent prior to prepareEntityForRegistration. Allows any
+    	 * munging of the entity that doesn't involve attributes or relationships.
+    	 * e.g., setting the className of the entity or a restricting qualifier.
+    	 */
+    	public static final String DidPrepareEntityNotification = "DidPrepareEntityNotification";
+    	/**
+    	 * Notification sent per entity after all entities have been registered.
+    	 * This is the safest place to do entity munging involving attributes
+    	 * or relationships.
+    	 */
+    	public static final String WillRegisterEntityNotification = "WillRegisterEntityNotification";
+    	
         /** Public constructor */
         public Factory() {}
 
@@ -266,6 +280,15 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
                 _isFixingRelationshipsEnabled = ERXProperties.booleanForKey("er.extensions.ERXEntityClassDescription.isFixingRelationshipsEnabled") ? Boolean.TRUE : Boolean.FALSE;
             }
             return _isFixingRelationshipsEnabled.booleanValue();
+        }
+        
+        /** false until initial registration of entities has occurred */
+        private boolean _hasPreparedEntities;
+        /**
+         * @return true if all entities have been prepared and will be registered.
+         */
+        public boolean hasPreparedEntities() {
+        	return _hasPreparedEntities;
         }
 
         /**
@@ -311,6 +334,13 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
                         defaultLog.warn("Entity classDescription is not ERXEntityClassDescription: " + entity.name());
                     }
                 }
+            }
+            reset();
+            _hasPreparedEntities = true;
+            for (Enumeration ge = EOModelGroup.defaultGroup().models().objectEnumerator(); ge.hasMoreElements();) {
+            	EOModel model = (EOModel)ge.nextElement();
+            	log.debug("Will register entities for model:" + model.name());
+            	registerDescriptionForEntitiesInModel(model);
             }
         }
         
@@ -423,7 +453,9 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
                 eoentity.setClassName(alternateClassName);
             } else if (className.equals("EOGenericRecord")) {
                 eoentity.setClassName(defaultClassName);
-            } 
+            }
+            String notificationName = hasPreparedEntities() ? WillRegisterEntityNotification : DidPrepareEntityNotification;
+            NSNotificationCenter.defaultCenter().postNotification( notificationName, eoentity );
         }
 
         /**
