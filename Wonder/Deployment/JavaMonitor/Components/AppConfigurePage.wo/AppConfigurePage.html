@@ -1,0 +1,293 @@
+<WEBOBJECT name=NavPage></WEBOBJECT>
+
+<P align=right><WEBOBJECT name=ReturnLink><WEBOBJECT name=DetailViewButton></WEBOBJECT></WEBOBJECT><P>
+
+<FONT SIZE=+1><B>Configuring Application "<FONT SIZE=+1><WEBOBJECT name=AppName></WEBOBJECT></FONT>"</B></FONT>
+<P ALIGN=CENTER><FONT COLOR=#FF0000><WEBOBJECT NAME=ErrorMsg></WEBOBJECT></FONT></P>
+<BR>
+<BR>
+</CENTER>
+<WEBOBJECT name=NewInstanceConditional>
+    <TABLE BORDER=1 CELLPADDING=10 CELLSPACING=1 WIDTH=95%><TR><TD>
+        <WEBOBJECT name=InstDefaultsForm>
+        New Instances will be automatically configured to have the following settings.<BR>
+	Defaults may be pushed individually (or together) to existing instances using the "Push" buttons in the far right column.<BR>
+	To only set defaults for new instances (existing instances remain unchanged), use the "Update for New Instances Only" button at the bottom.<BR>
+	<BR>
+	<CENTER>
+        <TABLE BORDER=1 CELLPADDING=2 CELLSPACING=2>
+        <TR>
+            <TD ALIGN=RIGHT> Path*: </TD>
+            <TD ALIGN=RIGHT>
+		MacOSX: <WEBOBJECT NAME=TextField12></WEBOBJECT>
+		<WEBOBJECT NAME=PathPickerWizard5><WEBOBJECT NAME=PathWizardImage></WEBOBJECT></WEBOBJECT><BR>
+		Windows: <WEBOBJECT NAME=TextField11></WEBOBJECT>
+		<WEBOBJECT NAME=PathPickerWizard4><WEBOBJECT NAME=PathWizardImage></WEBOBJECT></WEBOBJECT><BR>
+                Unix: <WEBOBJECT name=PathField></WEBOBJECT>
+                <WEBOBJECT name=PathPickerWizard><WEBOBJECT name=PathWizardImage></WEBOBJECT></WEBOBJECT>
+            </TD>
+	    <TD BGCOLOR=#D0D0D0 ALIGN=CENTER><WEBOBJECT name=PathOnlyButton></WEBOBJECT></TD>
+        </TR>
+        <TR>
+            <TD ALIGN=RIGHT>Auto Recover: </TD>
+            <TD>
+                <WEBOBJECT name=AutoRecoverCheckbox></WEBOBJECT>
+		<FONT size=-1> (Does not apply to scheduled instances)</FONT>
+            </TD>
+	    <TD BGCOLOR=#D0D0D0 ALIGN=CENTER><WEBOBJECT name=AutoRecoverOnlyButton></WEBOBJECT></TD>
+        </TR>
+        <TR>
+            <TD ALIGN=RIGHT>Minimum Active Sessions: </TD>
+            <TD><WEBOBJECT name=MinimumActiveSessionField></WEBOBJECT></TD>
+	    <TD BGCOLOR=#D0D0D0 ALIGN=CENTER><WEBOBJECT name=MinimumOnlyButton></WEBOBJECT></TD>
+        </TR>
+        <TR>
+            <TD ALIGN=RIGHT>Caching enabled: </TD>
+            <TD><WEBOBJECT name=CachingEnabledCheckbox></WEBOBJECT></TD>
+	    <TD BGCOLOR=#D0D0D0 ALIGN=CENTER><WEBOBJECT name=CachingOnlyButton></WEBOBJECT></TD>
+        </TR>
+        <TR>
+            <TD ALIGN=RIGHT>Debugging enabled: </TD>
+            <TD><WEBOBJECT name=DebuggingLogsCheckbox></WEBOBJECT></TD>
+	    <TD BGCOLOR=#D0D0D0 ALIGN=CENTER><WEBOBJECT name=DebuggingOnlyButton></WEBOBJECT></TD>
+        </TR>
+        <TR>
+            <TD ALIGN=RIGHT>Output Path**:</TD>
+	    <TD ALIGN=RIGHT>
+		MacOSX: <WEBOBJECT NAME=TextField10></WEBOBJECT>
+		<WEBOBJECT NAME=PathPickerWizard6><WEBOBJECT NAME=PathWizardImage></WEBOBJECT></WEBOBJECT><BR>
+		Windows: <WEBOBJECT NAME=TextField6></WEBOBJECT>
+		<WEBOBJECT NAME=PathPickerWizard3><WEBOBJECT NAME=PathWizardImage></WEBOBJECT></WEBOBJECT><BR>
+		Unix: <WEBOBJECT NAME=TextField3></WEBOBJECT>
+		<WEBOBJECT NAME=PathPickerWizard2><WEBOBJECT NAME=PathWizardImage></WEBOBJECT></WEBOBJECT>
+	    </TD>
+	    <TD BGCOLOR=#D0D0D0 ALIGN=CENTER><WEBOBJECT name=OutputOnlyButton></WEBOBJECT></TD>
+	</TR>
+	<TR>
+	    <TD ALIGN=RIGHT>Auto Open In Browser<br>Auto Open Client Application:</TD>
+	    <TD><WEBOBJECT NAME=CheckBox6></WEBOBJECT></TD>
+	    <TD BGCOLOR=#D0D0D0 ALIGN=CENTER><WEBOBJECT name=AutoOpenOnlyButton></WEBOBJECT></TD>
+	</TR>
+	<TR>
+	    <TD ALIGN=RIGHT>Lifebeat Interval:</TD>
+	    <TD><WEBOBJECT NAME=TextField7></WEBOBJECT></TD>
+	    <TD BGCOLOR=#D0D0D0 ALIGN=CENTER><WEBOBJECT name=LifebeatOnlyButton></WEBOBJECT></TD>
+	</TR>
+	<TR>
+            <TD ALIGN=RIGHT>Additional<BR>Arguments: </TD>
+            <TD><WEBOBJECT name=ArgsField></WEBOBJECT></TD>
+	    <TD BGCOLOR=#D0D0D0 ALIGN=CENTER><WEBOBJECT name=AddArgsOnlyButton></WEBOBJECT></TD>
+        </TR>
+        <TR>
+            <TD COLSPAN=2 ALIGN=CENTER><WEBOBJECT name=SaveChangesSubmitButton></WEBOBJECT></TD>
+	    <TD BGCOLOR=#D0D0D0 ALIGN=CENTER><WEBOBJECT name=PushSubmitButton></WEBOBJECT></TD>
+        </TR>
+        </TABLE>
+	</CENTER>
+        <BR>
+        * The path of the executable (inside the '.woa' directory).<P>** This should be a directory - the path should end with a file separator (instance logs will be saved as &lt;ApplicationName&gt;-&lt;ID&gt;)</P>
+        </WEBOBJECT>
+    </TD>
+    </TR>
+</TABLE>
+</WEBOBJECT>
+<BR>
+
+<WEBOBJECT name=ApplicationConfigConditional>
+    <TABLE BORDER=1 CELLPADDING=10 CELLSPACING=1 WIDTH=95%><TR><TD>
+        <WEBOBJECT name=AppSettingsForm>
+	<CENTER>
+        <TABLE BORDER=1 CELLPADDING=2 CELLSPACING=2>
+        <TR>
+		<TD ALIGN=RIGHT>Name: </TD>
+		<TD><WEBOBJECT name=RealNameField></WEBOBJECT> (All instances of this application must be off to change the name)</TD>
+        </TR>
+        <TR>
+        	<TD ALIGN=RIGHT>Starting Port: </TD>
+        	<TD><WEBOBJECT NAME=TextField4></WEBOBJECT></TD>
+        </TR>
+        <TR>
+        	<TD ALIGN=RIGHT>Time Allowed For Startup: </TD>
+        	<TD><WEBOBJECT NAME=TextField5></WEBOBJECT></TD>
+        </TR>
+        <TR>
+        	<TD ALIGN=RIGHT>Phased Startup: </TD>
+        	<TD><WEBOBJECT NAME=CheckBox1></WEBOBJECT></TD>
+        </TR>
+        <TR>
+            <TD ALIGN=RIGHT>Adaptor: </TD>
+            <TD>
+		<WEBOBJECT name=AdaptorField></WEBOBJECT>
+                <FONT size=-1>('WODefaultAdaptor' is the default)</FONT>
+            </TD>
+        </TR>
+
+        <TR>
+            <TD ALIGN=RIGHT>Minimum Adaptor threads: </TD>
+            <TD>
+                <WEBOBJECT name=AdaptorThreadsMinField></WEBOBJECT>
+                <FONT size=-1>(Applies only to the WODefaultAdaptor for WO 5.x)</FONT>
+            </TD>
+        </TR>
+        <TR>
+            <TD ALIGN=RIGHT>Maximum Adaptor threads: </TD>
+            <TD>
+                <WEBOBJECT name=AdaptorThreadsMaxField></WEBOBJECT>
+                <FONT size=-1>(Applies only to the WODefaultAdaptor for WO 5.x)</FONT>
+            </TD>
+        </TR>
+
+        <TR>
+            <TD ALIGN=RIGHT>Adaptor threads: </TD>
+            <TD>
+                <WEBOBJECT name=AdaptorThreadsField></WEBOBJECT>
+                <FONT size=-1>(Applies only to the WODefaultAdaptor for WO 4.5.x)</FONT>
+            </TD>
+        </TR>
+        <TR>
+            <TD ALIGN=RIGHT>Listen Queue Size: </TD>
+            <TD><WEBOBJECT name=ListenQueueSizeField></WEBOBJECT></TD>
+        </TR>
+        <TR>
+            <TD ALIGN=RIGHT>Project Search Path: </TD>
+            <TD><WEBOBJECT name=ProjectSearchPathField></WEBOBJECT></TD>
+        </TR>
+        <TR>
+            <TD ALIGN=RIGHT>Session TimeOut (sec): </TD>
+            <TD><WEBOBJECT name=SessionTimeOutField></WEBOBJECT></TD>
+        </TR>
+        <TR>
+            <TD ALIGN=RIGHT>Statistics Page Password: </TD>
+            <TD><WEBOBJECT name=StatisticsPasswordField></WEBOBJECT></TD>
+        </TR>
+        </TABLE><BR>
+	<WEBOBJECT name=AppDefaultsOnlyButton></WEBOBJECT></TD>
+	</CENTER>
+        </WEBOBJECT>
+    </TD></TR></TABLE>
+</WEBOBJECT>
+<BR>
+<WEBOBJECT name=SchedulingConditional>
+    <TABLE BORDER=1 CELLPADDING=5 CELLSPACING=1 WIDTH=95%><TR><TD ALIGN=CENTER>
+        <P>With this feature you can have Monitor schedule your instances to restart instances at regular intervals.<BR>
+           Note that all scheduled instances automatically act as if they are AutoRecovering.</P>
+        <P></P>
+		<WEBOBJECT NAME=Conditional1>There are no Instances configured for this Application.</WEBOBJECT>
+		<WEBOBJECT NAME=Conditional2>
+		<WEBOBJECT NAME=Option3Form>
+			<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=1>
+				<TR><TH>ID</TH>
+				<TH>Host-Port</TH>
+				<TH>Is<BR>Scheduled</TH>
+				<TH>Graceful<BR>Scheduling</TH>
+				<TH COLSPAN=3>Scheduling Type</TH></TR>
+			<WEBOBJECT NAME=Repetition1>
+				<TR><TD><WEBOBJECT NAME=String1></WEBOBJECT></TD>
+				<TD><WEBOBJECT NAME=String2></WEBOBJECT></TD>
+				<TD ALIGN=CENTER><WEBOBJECT NAME=CheckBox2></WEBOBJECT></TD>
+				<TD ALIGN=CENTER><WEBOBJECT NAME=CheckBox7></WEBOBJECT></TD>
+				<TD ALIGN=CENTER><WEBOBJECT NAME=RadioButton1></WEBOBJECT><BR>
+					Every <WEBOBJECT NAME=PopUpButton6></WEBOBJECT> hours,<BR>
+					starting at <WEBOBJECT NAME=PopUpButtonH></WEBOBJECT> hours.</TD>
+				<TD ALIGN=CENTER><WEBOBJECT NAME=RadioButton2></WEBOBJECT><BR>
+					Every day at <WEBOBJECT NAME=PopUpButtonD></WEBOBJECT> hours.</TD>
+				<TD ALIGN=CENTER><WEBOBJECT NAME=RadioButton3></WEBOBJECT><BR>
+					Every week on <WEBOBJECT NAME=PopUpButton8></WEBOBJECT>,<BR>
+					at <WEBOBJECT NAME=PopUpButtonW></WEBOBJECT> hours.</TD></TR>
+			</WEBOBJECT>
+			</TABLE><BR>
+			<WEBOBJECT NAME=SubmitButton2></WEBOBJECT>
+		</WEBOBJECT>
+		</WEBOBJECT>
+    </TD></TR></TABLE>
+</WEBOBJECT>
+<BR>
+<WEBOBJECT name=EmailConditional>
+    <TABLE BORDER=1 CELLPADDING=5 CELLSPACING=1 WIDTH=95%><TR><TD>
+    <WEBOBJECT name=NOSmtpHostConfigured>
+        Monitor needs an SMTP host and a Return Address configured in order to send email notifications.<BR>
+	Go to the <WEBOBJECT name=ConfigurePageLink>Configure Page</WEBOBJECT> to setup an SMTP host and specify a Return Address.<BR>
+    </WEBOBJECT>
+    <WEBOBJECT name=SmtpHostConfigured>
+        When instances of this application terminate unexpectedly, Monitor will send an email notification to the email addresses below. 
+	Instance terminations from manual shutdowns (through Monitor) or scheduling are not counted as unexpected terminations.<BR>
+        <BR>
+        <WEBOBJECT name=EmailForm>
+		<CENTER>
+		<WEBOBJECT NAME=CheckBox3></WEBOBJECT> <B>Email Notifications are Enabled</B>
+	        <BR><BR>
+		Enter multiple email addresses separated by commas.<BR>
+	        <WEBOBJECT name=EmailAddressesField></WEBOBJECT>
+		<BR>
+		<WEBOBJECT NAME=SubmitButton1></WEBOBJECT>
+		</CENTER>
+        </WEBOBJECT>
+    </WEBOBJECT>
+    </TD></TR></TABLE>
+</WEBOBJECT>
+<BR>
+<WEBOBJECT name=AdaptorSpecificConditional>
+    <TABLE BORDER=1 CELLPADDING=10 CELLSPACING=1 WIDTH=95%><TR><TD>
+    <WEBOBJECT name=AdaptorSettingsForm>
+    <CENTER>
+    <TABLE CELLPADDING=2 CELLSPACING=2 BORDER=1>
+	<TR>
+		<TD ALIGN="RIGHT">Load balancing scheme:</TD>
+		<TD> <WEBOBJECT name=LoadBalancingScheme></WEBOBJECT><BR>
+			Custom Scheduler Name: <WEBOBJECT NAME=TextField8></WEBOBJECT> (optional)</TD>
+	</TR>
+	<TR>
+		<TD ALIGN="RIGHT">Retries:</TD>
+		<TD><WEBOBJECT name=RetriesField></WEBOBJECT></TD>
+	</TR>
+	<TR>
+		<TD ALIGN="RIGHT">Redirection URL:</TD>
+		<TD><WEBOBJECT name=RedirectionURLField></WEBOBJECT></TD>
+	</TR>
+	<TR>
+		<TD ALIGN="RIGHT">Dormant:</TD>
+		<TD><WEBOBJECT name=TimeoutField></WEBOBJECT></TD>
+	</TR>
+	<TR>
+		<TD ALIGN="RIGHT">Send timeout:</TD>
+		<TD><WEBOBJECT name=SendTimeoutField></WEBOBJECT></TD>
+	</TR>
+	<TR>
+		<TD ALIGN="RIGHT">Receive timeout:</TD>
+		<TD><WEBOBJECT name=ReceiveTimeoutField></WEBOBJECT></TD>
+	</TR>
+	<TR>
+		<TD ALIGN="RIGHT">Connect timeout:</TD>
+		<TD><WEBOBJECT name=ConnectTimeoutField></WEBOBJECT></TD>
+	</TR>
+	<TR>
+		<TD ALIGN=RIGHT>Send Buffer Size:</TD>
+		<TD><WEBOBJECT NAME=ConnectTimeoutField2></WEBOBJECT></TD>
+	</TR>
+	<TR>
+		<TD ALIGN=RIGHT>Receive Buffer Size:</TD>
+		<TD><WEBOBJECT NAME=ConnectTimeoutField3></WEBOBJECT></TD>
+	</TR>
+	<TR>
+		<TD ALIGN="RIGHT">Connection pool size:</TD>
+		<TD><WEBOBJECT name=PoolsizeField></WEBOBJECT></TD>
+	</TR>
+	<TR>
+		<TD ALIGN=RIGHT>URL Version:</TD>
+		<TD><WEBOBJECT NAME=PopUpButton1></WEBOBJECT></TD>
+	</TR>
+    </TABLE><BR>
+    <WEBOBJECT name=UpdateAdaptorButton></WEBOBJECT></TD>
+    </CENTER>
+    </WEBOBJECT>
+    </TD></TR></TABLE>
+</WEBOBJECT>
+
+<CENTER>
+</CENTER>
+  </TD></TR>
+</TABLE>
+</CENTER>
+
+</BODY>
+</HTML>

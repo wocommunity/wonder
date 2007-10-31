@@ -1,0 +1,4 @@
+NavPage: NavigationPage {
+	currentPage = HELP_PAGE;
+}
+

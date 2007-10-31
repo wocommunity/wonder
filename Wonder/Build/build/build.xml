@@ -679,7 +679,35 @@
             <param name="project.dir" value="PlugIns/FrontBasePlugIn" />
         </antcall>
     </target>
-    
+     
+    <target name="JavaMonitor.all">
+        <antcall target="global.application.${build.action}" >
+            <param name="project.type" value="application" />
+            <param name="project.principal.class" value="com.webobjects.monitor.application.Application" />
+            <param name="project.name" value="JavaMonitor" />
+            <param name="project.dir" value="Deployment/JavaMonitor" />
+      		<param name="use.additional.framework.1" value="JavaMonitorFramework.framework" />
+        </antcall>
+    </target>
+
+    <target name="wotaskd.all">
+        <antcall target="global.application.${build.action}" >
+            <param name="project.type" value="application" />
+            <param name="project.principal.class" value="com.webobjects.monitor.wotaskd.Application" />
+            <param name="project.name" value="wotaskd" />
+            <param name="project.dir" value="Deployment/wotaskd" />
+      		<param name="use.additional.framework.1" value="JavaMonitorFramework.framework" />
+        </antcall>
+    </target>
+
+    <target name="JavaMonitorFramework.all">
+        <antcall target="global.framework.${build.action}" >
+            <param name="project.principal.class" value="" />
+            <param name="project.name" value="JavaMonitorFramework" />
+            <param name="project.dir" value="Deployment/JavaMonitorFramework" />
+        </antcall>
+    </target>
+   
     <!-- 
         The targets here correspond to a top-level directory, split into frameworks, apps and examples
         to add your own, add a target definition above and choose the correct group below 
@@ -697,6 +725,8 @@
     <target name="dynareporting.frameworks.all" depends="DRGrouping.all, WRReporting.all" />
     <target name="dynareporting.examples.all" depends="DocsByExample.all, DynaReporter.all, DRGroupingTest.all" />
     
+    <target name="deployment.all" depends="JavaMonitorFramework.all, JavaMonitor.all, wotaskd.all" />
+
     <target name="excelgeneration.frameworks.all" depends="ExcelGenerator.all" />
     <target name="excelgeneration.examples.all" depends="EGSampleApp.all" />
     
@@ -723,7 +753,7 @@
     <target name="examples.all" depends="common.examples.all, excelgeneration.examples.all, validity.examples.all, dynareporting.examples.all, ajax.examples.all, experimental.all"/>
 
 
-    <target name="all.run" depends="frameworks.all, applications.all, examples.all"/>
+    <target name="all.run" depends="frameworks.all, applications.all, examples.all, deployment.all"/>
     
     <target name="dist">
         <!-- do dist target on known frameworks -->
