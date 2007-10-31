@@ -1,10 +1,10 @@
 package er.attachment.components.viewers;
 
-import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 
 import er.attachment.model.ERAttachment;
 import er.attachment.processors.ERAttachmentProcessor;
+import er.extensions.ERXStatelessComponent;
 
 /**
  * AbstractERAttachmentViewer is the superclass of all viewer plugins.
@@ -18,7 +18,7 @@ import er.attachment.processors.ERAttachmentProcessor;
  * @binding width (optional) if displaying an image, sets the image width 
  * @binding height (optional) if displaying an image, sets the image height
  */
-public abstract class AbstractERAttachmentViewer extends WOComponent {
+public abstract class AbstractERAttachmentViewer extends ERXStatelessComponent {
 
   public AbstractERAttachmentViewer(WOContext context) {
     super(context);
