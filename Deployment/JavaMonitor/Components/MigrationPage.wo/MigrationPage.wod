@@ -1,0 +1,59 @@
+CheckBox1: WOCheckBox {
+	value = true;
+	selection = shouldRestartApache;
+}
+
+Conditional1: WOConditional {
+	condition = isMigrationCompleted;
+}
+
+Conditional2: WOConditional {
+	negate = true;
+	condition = isMigrationCompleted;
+}
+
+Conditional3: WOConditional {
+	condition = isFailed;
+}
+
+FileUpload1: WOFileUpload {
+	data = identityContent;
+	filePath = sshIdentityFilepath;
+}
+
+Form1: WOForm {
+}
+
+Form2: WOForm {
+}
+
+NavPage: NavigationPage {
+	currentPage = MIGRATION_PAGE;
+}
+
+ResetButton1: WOResetButton {
+}
+
+SubmitButton1: WOSubmitButton {
+	action = migrate;
+}
+
+Text1: WOString {
+	value = adaptorConfigContent;
+}
+
+Text2: WOText {
+	value = migrationStackTrace;
+}
+
+TextField1: WOTextField {
+	value = username;
+}
+
+TextField3: WOTextField {
+	value = host;
+}
+
+TextField4: WOTextField {
+	value = remoteFilepath;
+}

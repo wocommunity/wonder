@@ -1,0 +1,32 @@
+HostConfigureButton: WOSubmitButton {
+    action = configureHostClicked;
+    value = "Configure Host";
+}
+
+HostSyncButton: WOSubmitButton {
+    action = syncHostClicked;
+    value = "Synchronize Host";
+}
+
+HostName: WOString {
+	value = mySession.mHost.name;
+}
+HostSettingsForm: WOForm {}
+HostSyncForm: WOForm {}
+
+HostTypePopup: WOPopUpButton {
+	list = hostTypeList;
+	selection = hostTypeSelection;
+}
+
+ErrorMsg: WOString {
+	value = session.message;
+	escapeHTML = false;
+}
+
+
+NavPage: NavigationPage {
+	currentPage = HOST_PAGE;
+}
+
+
