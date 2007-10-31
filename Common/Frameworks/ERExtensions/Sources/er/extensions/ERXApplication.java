@@ -21,6 +21,7 @@ import java.util.Enumeration;
 import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Random;
@@ -735,6 +736,14 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 
 		WORequest worequest = new ERXRequest(aMethod, aURL, anHTTPVersion, someHeaders, aContent, someInfo);
 		return worequest;
+	}
+    
+
+    /**
+     * 5.4 workaround
+     */
+	public WORequest createRequest(String method, String aurl, String anHTTPVersion, Map<String, ? extends List<String>> someHeaders, NSData content, Map<String, Object> someInfo) {
+		return this._createRequest(method, aurl, anHTTPVersion, new NSDictionary(someHeaders, false), content, new NSDictionary(someInfo, false));
 	}
 
 
