@@ -642,6 +642,21 @@ public class PostgresqlExpression extends JDBCExpression {
       }
       appendItemToListString(sql, _listString());
     }
+    
+    /**
+     * cug: Quick hack for bug in WebObjects 5.4 where the "not null" statement is added without a space, 
+     * and "addCreateClauseForAttribute" is not called anymore. Will probably change.
+     */
+    public String allowsNullClauseForConstraint(boolean allowsNull)
+    {
+        if(allowsNull)
+            return "";
+        Object value = jdbcInfo().objectForKey("NON_NULLABLE_COLUMNS");
+        if(value != null && value.equals("T"))
+            return " NOT NULL";
+        else
+            return "";
+    }
    
     /**
      * Overridden because the original version does not correctly quote mixed case fields in all cases.
