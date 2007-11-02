@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<wodefinitions>
+  <wo class="ERXDataHyperlink" wocomponentcontent = "true">
+    <binding name="actionClass" passthrough="NO" defaults="Direct Action Classes"/>
+    <binding name="target" passthrough="NO"/>
+    <binding name="fragmentIdentifier"/>
+    <binding name="queryDictionary" passthrough="NO"/>
+    <binding name="directActionName" passthrough="NO" defaults="Direct Actions"/>
+    <binding name="href"/>
+    <binding name="string" passthrough="NO"/>
+    <binding name="pageName" passthrough="NO" defaults="Page Names"/>
+    <binding name="action" passthrough="NO" defaults="Actions"/>
+    <binding name="otherTagString" passthrough="NO"/>
+    <binding name="disabled" passthrough="NO" defaults="YES/NO"/>
+    <binding name="secure" passthrough="NO" defaults="YES/NO"/>
+
+    <binding name="id" />
+    <binding name="name" />
+    <binding name="class" />
+    <binding name="style" />
+
+    <validation message="the 'secure' attribute has no effect on the 'href' attribute">
+      <and>
+        <bound name="href"/>
+        <bound name="secure"/>
+      </and>
+    </validation>
+
+    <validation message="either one of 'action', 'href', or 'pageName' may be bound, or either or both of 'actionClass' and 'directActionName' may be bound">
+      <count test="!=1">
+        <bound name="action"/>
+        <bound name="href"/>
+        <bound name="pageName"/>
+        <or>
+          <bound name="actionClass"/>
+          <bound name="directActionName"/>
+        </or>
+      </count>
+    </validation>
+  </wo>
+</wodefinitions>
