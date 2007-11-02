@@ -27,7 +27,7 @@ public class ERXDataHyperlink extends ERXHyperlink {
 
 	@Override
 	@SuppressWarnings("unchecked")
-	protected NSMutableDictionary<String, WOAssociation> nonUrlAttributeAssociations() {
+	public NSMutableDictionary<String, WOAssociation> nonUrlAttributeAssociations() {
 		NSMutableDictionary<String, WOAssociation> nonUrlAttributeAssociations = super.nonUrlAttributeAssociations();
 		if (_pageName != null) {
 			nonUrlAttributeAssociations = new NSMutableDictionary();
