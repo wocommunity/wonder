@@ -5,6 +5,7 @@ import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WOElement;
 import com.webobjects.appserver.WORequest;
 import com.webobjects.appserver.WOResponse;
+import com.webobjects.appserver._private.WODynamicElementCreationException;
 import com.webobjects.foundation.NSDictionary;
 
 /**
@@ -29,6 +30,9 @@ public class ERXWOFileUpload extends com.webobjects.appserver._private.WOFileUpl
     public ERXWOFileUpload(String string, NSDictionary nsdictionary,
                         WOElement woelement) {
         super(string, nsdictionary, woelement);
+        if (nsdictionary.objectForKey("data") != null && nsdictionary.objectForKey("filePath") == null) {
+            throw new WODynamicElementCreationException("<" + getClass().getName() + "> 'filePath' must be bound if 'data' is bound.");
+        }
     }
 
     public void checkEnctype(WOContext context) {
@@ -37,7 +41,8 @@ public class ERXWOFileUpload extends com.webobjects.appserver._private.WOFileUpl
     	}
     }
     
-    public void takeValuesFromRequest(WORequest worequest, WOContext wocontext) {
+    @Override
+	public void takeValuesFromRequest(WORequest worequest, WOContext wocontext) {
     	try {
     		super.takeValuesFromRequest(worequest, wocontext);
     	} catch(IllegalStateException ex) {
@@ -53,7 +58,8 @@ public class ERXWOFileUpload extends com.webobjects.appserver._private.WOFileUpl
     	}
     }
     
-    public void appendToResponse(WOResponse response, WOContext context) {
+    @Override
+	public void appendToResponse(WOResponse response, WOContext context) {
         checkEnctype(context);
         super.appendToResponse(response, context);
     }
