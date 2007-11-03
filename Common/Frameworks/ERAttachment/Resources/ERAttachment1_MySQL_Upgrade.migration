@@ -1,0 +1,3 @@
+alter table ERAttachment add available varchar(5) default 'true' not null;
+
+alter table ERAttachment add creationDate timestamp default timestamp '2007-08-01 00:00:00' not null;
