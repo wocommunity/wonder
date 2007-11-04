@@ -1,20 +1,19 @@
-package com.mdimension.jchronic;
+package er.chronic;
 
 import java.util.Calendar;
 import java.util.LinkedList;
 import java.util.List;
 
 import junit.framework.TestCase;
-
-import com.mdimension.jchronic.handlers.Handler;
-import com.mdimension.jchronic.repeaters.EnumRepeaterDayPortion;
-import com.mdimension.jchronic.repeaters.RepeaterDayName;
-import com.mdimension.jchronic.repeaters.RepeaterDayPortion;
-import com.mdimension.jchronic.repeaters.RepeaterTime;
-import com.mdimension.jchronic.repeaters.RepeaterDayName.DayName;
-import com.mdimension.jchronic.utils.Span;
-import com.mdimension.jchronic.utils.Time;
-import com.mdimension.jchronic.utils.Token;
+import er.chronic.handlers.Handler;
+import er.chronic.repeaters.EnumRepeaterDayPortion;
+import er.chronic.repeaters.RepeaterDayName;
+import er.chronic.repeaters.RepeaterDayPortion;
+import er.chronic.repeaters.RepeaterTime;
+import er.chronic.repeaters.RepeaterDayName.DayName;
+import er.chronic.utils.Span;
+import er.chronic.utils.Time;
+import er.chronic.utils.Token;
 
 public class ChronicTestCase extends TestCase {
   private Calendar _now;
