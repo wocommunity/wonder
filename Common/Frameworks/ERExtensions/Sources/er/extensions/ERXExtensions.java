@@ -54,10 +54,10 @@ import er.extensions.remoteSynchronizer.ERXRemoteSynchronizer;
  * loaded (even before the Application constructor is called)
  * This class has a boat-load of stuff in it that will hopefully
  * be finding better homes in the future. This class serves as
- * the initilization point of this framework, look in the static
+ * the initialization point of this framework, look in the static
  * initializer to see all the stuff that is initially setup when
  * this class is loaded. This class also has a boat load of
- * string, array and eof utilities as well as the factory methods
+ * string, array and EOF utilities as well as the factory methods
  * for creating editing contexts with the default delegates set.
  */
 public class ERXExtensions extends ERXFrameworkPrincipal {
@@ -317,7 +317,7 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
      * @param n the notification.
      */
     public void sharedEditingContextWasInitialized(NSNotification n) {
-    	EOSharedEditingContext sec = (EOSharedEditingContext)n.object();
+    	EOSharedEditingContext sec = EOSharedEditingContext.defaultSharedEditingContext();
     	ERXEC.factory().setDefaultDelegateOnEditingContext(sec, true);
     }
 
