@@ -127,8 +127,8 @@ public class MSiteConfig extends MObject {
 
     
     /********** Errors  **********/
-    public _NSThreadsafeMutableDictionary globalErrorDictionary = new _NSThreadsafeMutableDictionary<Object, Object>(new NSMutableDictionary <Object, Object>());
-    public _NSThreadsafeMutableArray hostErrorArray = new _NSThreadsafeMutableArray <Object>(new NSMutableArray<Object>());
+    public _NSThreadsafeMutableDictionary globalErrorDictionary = new _NSThreadsafeMutableDictionary(new NSMutableDictionary <Object, Object>());
+    public _NSThreadsafeMutableArray hostErrorArray = new _NSThreadsafeMutableArray(new NSMutableArray<Object>());
     /**********/
 
 
