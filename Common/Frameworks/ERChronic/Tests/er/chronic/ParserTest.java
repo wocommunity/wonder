@@ -1,12 +1,11 @@
-package com.mdimension.jchronic;
+package er.chronic;
 
 import java.util.Calendar;
 
 import junit.framework.TestCase;
-
-import com.mdimension.jchronic.tags.Pointer;
-import com.mdimension.jchronic.utils.Span;
-import com.mdimension.jchronic.utils.Time;
+import er.chronic.tags.Pointer;
+import er.chronic.utils.Span;
+import er.chronic.utils.Time;
 
 public class ParserTest extends TestCase {
   public static final Calendar TIME_2006_08_16_14_00_00 = Time.construct(2006, 8, 16, 14, 0, 0, 0);

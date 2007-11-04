@@ -1,11 +1,10 @@
-package com.mdimension.jchronic;
+package er.chronic;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
 
 import junit.framework.TestCase;
-
-import com.mdimension.jchronic.numerizer.Numerizer;
+import er.chronic.numerizer.Numerizer;
 
 public class NumerizerTestCase extends TestCase {
   public void testStraightParsing() {

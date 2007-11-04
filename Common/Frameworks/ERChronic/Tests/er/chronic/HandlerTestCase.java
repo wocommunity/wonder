@@ -1,27 +1,26 @@
-package com.mdimension.jchronic;
+package er.chronic;
 
 import java.util.Calendar;
 import java.util.LinkedList;
 import java.util.List;
 
 import junit.framework.TestCase;
-
-import com.mdimension.jchronic.handlers.DummyHandler;
-import com.mdimension.jchronic.handlers.Handler;
-import com.mdimension.jchronic.handlers.HandlerTypePattern;
-import com.mdimension.jchronic.handlers.TagPattern;
-import com.mdimension.jchronic.repeaters.EnumRepeaterDayPortion;
-import com.mdimension.jchronic.repeaters.Repeater;
-import com.mdimension.jchronic.repeaters.RepeaterDayName;
-import com.mdimension.jchronic.repeaters.RepeaterDayPortion;
-import com.mdimension.jchronic.repeaters.RepeaterMonthName;
-import com.mdimension.jchronic.repeaters.RepeaterTime;
-import com.mdimension.jchronic.repeaters.RepeaterYear;
-import com.mdimension.jchronic.tags.Pointer;
-import com.mdimension.jchronic.tags.Scalar;
-import com.mdimension.jchronic.tags.ScalarDay;
-import com.mdimension.jchronic.utils.Time;
-import com.mdimension.jchronic.utils.Token;
+import er.chronic.handlers.DummyHandler;
+import er.chronic.handlers.Handler;
+import er.chronic.handlers.HandlerTypePattern;
+import er.chronic.handlers.TagPattern;
+import er.chronic.repeaters.EnumRepeaterDayPortion;
+import er.chronic.repeaters.Repeater;
+import er.chronic.repeaters.RepeaterDayName;
+import er.chronic.repeaters.RepeaterDayPortion;
+import er.chronic.repeaters.RepeaterMonthName;
+import er.chronic.repeaters.RepeaterTime;
+import er.chronic.repeaters.RepeaterYear;
+import er.chronic.tags.Pointer;
+import er.chronic.tags.Scalar;
+import er.chronic.tags.ScalarDay;
+import er.chronic.utils.Time;
+import er.chronic.utils.Token;
 
 public class HandlerTestCase extends TestCase {
   private Calendar _now;
