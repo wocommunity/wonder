@@ -1,13 +1,12 @@
-package com.mdimension.jchronic;
+package er.chronic;
 
 import java.util.Calendar;
 
 import junit.framework.TestCase;
-
-import com.mdimension.jchronic.tags.Scalar;
-import com.mdimension.jchronic.tags.StringTag;
-import com.mdimension.jchronic.utils.Time;
-import com.mdimension.jchronic.utils.Token;
+import er.chronic.tags.Scalar;
+import er.chronic.tags.StringTag;
+import er.chronic.utils.Time;
+import er.chronic.utils.Token;
 
 public class TokenTestCase extends TestCase {
   private Calendar _now;
