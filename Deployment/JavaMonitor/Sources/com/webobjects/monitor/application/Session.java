@@ -77,21 +77,21 @@ public class Session extends WOSession  {
 
     
     /********** Error/Informational Messages **********/
-    _NSThreadsafeMutableArray<Object> errorMessageArray = new _NSThreadsafeMutableArray<Object>(new NSMutableArray<Object>());
+    _NSThreadsafeMutableArray errorMessageArray = new _NSThreadsafeMutableArray(new NSMutableArray<Object>());
     public String message() {
         String _message = null;
         if (theApplication.siteConfig() != null) {
             NSArray globalArray = theApplication.siteConfig().globalErrorDictionary.allValues();
             if ( (globalArray != null) && (globalArray.count() > 0) ) {
                 addObjectsFromArrayIfAbsentToErrorMessageArray(globalArray);
-                theApplication.siteConfig().globalErrorDictionary = new _NSThreadsafeMutableDictionary<Object, Object>(new NSMutableDictionary<Object, Object>());
+                theApplication.siteConfig().globalErrorDictionary = new _NSThreadsafeMutableDictionary(new NSMutableDictionary<Object, Object>());
             }
         }
         if (NSLog.debugLoggingAllowedForLevelAndGroups(NSLog.DebugLevelInformational, NSLog.DebugGroupDeployment))
             NSLog.debug.appendln("message(): " + errorMessageArray.array());
         if ( (errorMessageArray != null) && (errorMessageArray.count() > 0) ) {
             _message = errorMessageArray.componentsJoinedByString(", ");
-            errorMessageArray = new _NSThreadsafeMutableArray<Object>(new NSMutableArray<Object>());
+            errorMessageArray = new _NSThreadsafeMutableArray(new NSMutableArray<Object>());
         }
         return _message;
     }

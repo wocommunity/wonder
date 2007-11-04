@@ -214,7 +214,7 @@ public class MHost extends MObject {
         if (aConfig.hostErrorArray.count() > 0) {
             _syncRequest = null;
             final WORequest aSyncRequest = syncRequest(aConfig);
-            final _NSThreadsafeMutableArray<MHost> syncHosts = aConfig.hostErrorArray;
+            final _NSThreadsafeMutableArray syncHosts = aConfig.hostErrorArray;
             if (NSLog.debugLoggingAllowedForLevelAndGroups(NSLog.DebugLevelDetailed, NSLog.DebugGroupDeployment))
                 NSLog.debug.appendln("Sending sync requests to: " + syncHosts.array());
 //            final MSiteConfig finalConfig = aConfig;
@@ -223,7 +223,7 @@ public class MHost extends MObject {
                 final int j = i;
                 Runnable work = new Runnable() {
                     public void run() {
-                        MHost aHost = syncHosts.objectAtIndex(j);
+                        MHost aHost = (MHost)syncHosts.objectAtIndex(j);
                         aHost.sendRequestToWotaskd(aSyncRequest, true, true);
                     }
                 };
