@@ -1,4 +1,4 @@
-package com.mdimension.jchronic;
+package er.chronic;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;

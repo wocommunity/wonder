@@ -1,12 +1,11 @@
-package com.mdimension.jchronic;
+package er.chronic;
 
 import java.util.Calendar;
 
 import junit.framework.TestCase;
-
-import com.mdimension.jchronic.repeaters.RepeaterTime;
-import com.mdimension.jchronic.tags.Pointer;
-import com.mdimension.jchronic.utils.Time;
+import er.chronic.repeaters.RepeaterTime;
+import er.chronic.tags.Pointer;
+import er.chronic.utils.Time;
 
 public class RepeaterTimeTest extends TestCase {
   private Calendar _now;
