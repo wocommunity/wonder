@@ -1,0 +1,32 @@
+<p>
+ERChronic is a nearly direct port to Java of the <a href = "http://chronic.rubyforge.org/">Ruby Chronic library</a>.  Currently neither Ruby
+Chronic nor ERChronic are internationalized, though extending the parsers to support additional languages is probably not terribly complicated (most
+are just a set of regular expressions, etc).
+</p>
+
+<p>
+Using Chronic is very simple:
+</p>
+
+<pre>
+Span result = Chronic.parse("two weeks from today");
+</pre>
+
+<p>
+A Span object can represent either a point in time or a range of times.  If a Span represents a point in time, result.isSingularity() will return true.
+Chronic.parse also has a variant that takes an Options object, which allows control of the parser behavior (specifying what "now" is, controlling
+how ERChronic handles ambiguous times, and several other settings).  
+</p>
+
+<p>
+Other examples of parseable strings:
+<ul>
+	<li>tomorrow</li>
+	<li>next monday at 7:30</li>
+	<li>may 15th</li>
+	<li>tomorrow morning</li>
+	<li>yesterday at 9:00</li>
+	<li>tomorrow at 11pm</li>
+	<li>wednesday last week</li>
+</ul>
+</p>
