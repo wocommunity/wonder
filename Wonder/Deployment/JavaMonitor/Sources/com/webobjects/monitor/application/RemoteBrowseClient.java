@@ -20,6 +20,7 @@ import com.webobjects.appserver.WOResponse;
 import com.webobjects.appserver.xml.WOXMLException;
 import com.webobjects.appserver.xml._JavaMonitorDecoder;
 import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSData;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSLog;
@@ -78,13 +79,13 @@ public class RemoteBrowseClient extends MonitorComponent {
         try {
             Application theApplication = (Application) WOApplication.application();
             WOHTTPConnection anHTTPConnection = new WOHTTPConnection(aHost.name(), theApplication.lifebeatDestinationPort());
-            NSMutableDictionary<String, ? extends List<String>> aHeadersDict = theApplication.siteConfig().passwordDictionary().mutableClone();
+            NSMutableDictionary<String, NSMutableArray<String>> aHeadersDict = (NSMutableDictionary<String, NSMutableArray<String>>)theApplication.siteConfig().passwordDictionary().mutableClone();
             WORequest aRequest = null;
             WOResponse aResponse = null;
             boolean requestSucceeded = false;
-        	aHeadersDict.setObjectForKey(new NSArray <String>(aString != null && aString.length() > 0 ? aString : "/Library/WebObjects"), "filepath");
+        	aHeadersDict.setObjectForKey(new NSMutableArray <String>(aString != null && aString.length() > 0 ? aString : "/Library/WebObjects"), "filepath");
         	if (showFiles) {
-                aHeadersDict.setObjectForKey(new NSArray <String>("YES"), "showFiles");
+                aHeadersDict.setObjectForKey(new NSMutableArray <String>("YES"), "showFiles");
             }
 
             aRequest = new WORequest(MObject._GET, RemoteBrowseClient.getPathString, MObject._HTTP1, aHeadersDict, null, null);
