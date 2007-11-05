@@ -20,7 +20,7 @@ import er.extensions.ERXEnterpriseObjectArrayCache;
  */
 public class ERCEnterpriseObjectArrayCache<T extends EOEnterpriseObject> extends ERXEnterpriseObjectArrayCache<EOEnterpriseObject> {
 
-    protected Map<String, NSArray<EOGlobalID>> _cache;
+    protected ERCachingMap<String, NSArray<EOGlobalID>> _cache;
 
     public ERCEnterpriseObjectArrayCache(String entityName) {
         this(entityName, 0L);
@@ -34,7 +34,7 @@ public class ERCEnterpriseObjectArrayCache<T extends EOEnterpriseObject> extends
         super(entityName, timeout);
     }
 
-    private synchronized Map<String, NSArray<EOGlobalID>> cache() {
+    private synchronized ERCachingMap<String, NSArray<EOGlobalID>> cache() {
         if (_cache == null) {
             _cache = new ERCachingMap<String, NSArray<EOGlobalID>>();
         }
@@ -42,7 +42,7 @@ public class ERCEnterpriseObjectArrayCache<T extends EOEnterpriseObject> extends
     }
 
     protected void setCachedArrayForKey(NSArray<EOGlobalID> gids, Object key) {
-        cache().put(key.toString(), gids);
+        cache().put(key.toString(), gids, timeout());
     }
 
     protected NSArray<EOGlobalID> cachedArrayForKey(Object key) {
