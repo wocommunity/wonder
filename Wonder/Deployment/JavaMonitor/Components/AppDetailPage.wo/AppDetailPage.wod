@@ -102,24 +102,24 @@ HasInstancesConditional: WOConditional {
 }
 
 IFSchedulingIsOff: WOConditional {
-	condition = selectedInstance.schedulingEnabled;
+	condition = currentInstance.schedulingEnabled;
 	negate = true;
 }
 
 IFSchedulingIsOn: WOConditional {
-	condition = selectedInstance.schedulingEnabled;
+	condition = currentInstance.schedulingEnabled;
 }
 
 InstActiveSessions: WOString {
-	value = selectedInstance.activeSessions;
+	value = currentInstance.activeSessions;
 }
 
 InstAverageIdle: WOString {
-	value = selectedInstance.averageIdlePeriod;
+	value = currentInstance.averageIdlePeriod;
 }
 
 InstAverageTransaction: WOString {
-	value = selectedInstance.avgTransactionTime;
+	value = currentInstance.avgTransactionTime;
 }
 
 InstConfigureLink: WOHyperlink {
@@ -128,7 +128,7 @@ InstConfigureLink: WOHyperlink {
 
 InstDeathCount: WOString {
 	numberformat = "0";
-	value = selectedInstance.deathCount;
+	value = currentInstance.deathCount;
 }
 
 InstDeathDetailImage: WOImage {
@@ -149,7 +149,7 @@ InstDeleteLink: WOHyperlink {
 }
 
 InstIndex: WOString {
-	value = selectedInstance.displayName;
+	value = currentInstance.displayName;
 }
 
 InstDirectLink: WOHyperlink {
@@ -163,7 +163,7 @@ InstAdaptorLink: WOHyperlink {
 }
 
 InstRunningOnHost: WOString {
-	value = selectedInstance.displayHostAndPort;
+	value = currentInstance.displayHostAndPort;
 }
 
 InstStatusImage: WOImage {
@@ -175,20 +175,20 @@ InstStatusImage: WOImage {
 }
 
 InstTransactions: WOString {
-	value = selectedInstance.transactions;
+	value = currentInstance.transactions;
 }
 
 InstanceRepetition: WORepetition {
-	item = selectedInstance;
-	list = mySession.mApplication.instanceArray;
+	item = currentInstance;
+	list = displayGroup.allObjects;
 }
 
 InstanceRunningConditional: WOConditional {
-	condition = selectedInstance.isRunning_M;
+	condition = currentInstance.isRunning_M;
 }
 
 InstanceNOTRunningConditional: WOConditional {
-	condition = selectedInstance.isRunning_M;
+	condition = currentInstance.isRunning_M;
 	negate = true;
 }
 
@@ -384,4 +384,25 @@ AddNumInstances: WOTextField {
     value = numberToAdd;
     size = "3";
     numberformat = "0";
+}
+
+SelectAllForm : WOForm {
+	action = selectAll;
+} 
+
+SelectOneForm : WOForm {
+	action = selectOne;
+} 
+
+IsSelected : WOCheckBox {
+	checked = isSelectedInstance;
+	onchange = "this.form.submit()";
+}
+
+SelectNotRunning : WOHyperlink {
+	action = selectNotRunning;
+}
+
+SelectRunning : WOHyperlink {
+	action = selectRunning;
 }
