@@ -18,11 +18,33 @@ import com.webobjects.foundation.NSMutableSet;
  * @author giorgio_v
  */
 public class PostgresqlSynchronizationFactory extends EOSynchronizationFactory implements EOSchemaGeneration, EOSchemaSynchronization {
-
+    
+    private Boolean _enableIdentifierQuoting;
+  
     public PostgresqlSynchronizationFactory(EOAdaptor adaptor) {
         super(adaptor);
     }
-    
+
+    private boolean enableIdentifierQuoting() {
+        if(_enableIdentifierQuoting == null) {
+            _enableIdentifierQuoting = Boolean.getBoolean(PostgresqlExpression.class.getName() + ".enableIdentifierQuoting") ? Boolean.TRUE : Boolean.FALSE;
+        }
+        return _enableIdentifierQuoting.booleanValue();
+    }
+
+    protected String formatTableName(String name) {
+        if (!enableIdentifierQuoting()) {
+            return name;
+        }
+        return (new StringBuilder()).append("\"").append(name).append("\"").toString();
+    }
+
+    protected String formatColumnName(String name) {
+        if (!enableIdentifierQuoting()) {
+            return name;
+        }
+        return (new StringBuilder()).append("\"").append(name).append("\"").toString();
+    }
     public NSArray _foreignKeyConstraintStatementsForEntityGroup(NSArray group) {
         if (group == null)
             return NSArray.EmptyArray;
@@ -261,6 +283,12 @@ public class PostgresqlSynchronizationFactory extends EOSynchronizationFactory i
             }
         }
         return results;
+    }
+
+    @Override
+    public NSArray<EOSQLExpression> createTableStatementsForEntityGroup(NSArray<EOEntity> aArg0) {
+        // AK TODO Auto-generated method stub
+        return super.createTableStatementsForEntityGroup(aArg0);
     }
 
     public static boolean entityUsesSeparateTable(EOEntity entity) {
