@@ -222,7 +222,7 @@ public class MApplication extends MObject {
     NSMutableArray _instanceArray = new NSMutableArray();
     NSMutableArray _hostArray = new NSMutableArray();
 
-    public NSMutableArray instanceArray() { return _instanceArray; }
+    public NSArray instanceArray() { return _instanceArray; }
     public NSArray hostArray() { return _hostArray; }
     /**********/
 
