@@ -18,6 +18,6 @@
 	</buildSpec>
 	<natures>
 		<nature>org.eclipse.jdt.core.javanature</nature>
-		<nature>org.objectstyle.wolips.incrementalapplicationnature</nature>
+		<nature>org.objectstyle.wolips.incrementalframeworknature</nature>
 	</natures>
 </projectDescription>
