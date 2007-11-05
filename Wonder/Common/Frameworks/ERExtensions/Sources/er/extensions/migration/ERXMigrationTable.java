@@ -140,7 +140,7 @@ public class ERXMigrationTable {
 		ERXMigrationColumn column;
 		if (existingColumns.count() == 0) {
 			try {
-				column = _newColumn(name, 0, 0, 0, 0, false, null, false);
+				column = _newColumn(name, 0, 0, 0, 0, false, null, null, false);
 			}
 			catch (SQLException e) {
 				throw new IllegalStateException("This should never have executed a database operation.", e);
@@ -197,8 +197,8 @@ public class ERXMigrationTable {
 	 * @return the new ERXMigrationColumn
 	 * @throws SQLException if the column cannot be created 
 	 */
-	public ERXMigrationColumn _newColumn(String name, int jdbcType, int width, int precision, int scale, boolean allowsNull, Object defaultValue, boolean autocreate) throws SQLException {
-		ERXMigrationColumn newColumn = new ERXMigrationColumn(this, name, jdbcType, width, precision, scale, allowsNull, defaultValue);
+	public ERXMigrationColumn _newColumn(String name, int jdbcType, int width, int precision, int scale, boolean allowsNull, String overrideValueType, Object defaultValue, boolean autocreate) throws SQLException {
+		ERXMigrationColumn newColumn = new ERXMigrationColumn(this, name, jdbcType, width, precision, scale, allowsNull, overrideValueType, defaultValue);
 		_columns.addObject(newColumn);
 		if (autocreate) {
 			newColumn.create();
@@ -224,8 +224,8 @@ public class ERXMigrationTable {
 	 * @return the new ERXMigrationColumn
 	 * @throws SQLException if the column cannot be created 
 	 */
-	public ERXMigrationColumn newColumn(String name, int jdbcType, int width, int precision, int scale, boolean allowsNull, Object defaultValue) throws SQLException {
-		return _newColumn(name, jdbcType, width, precision, scale, allowsNull, defaultValue, !_new);
+	public ERXMigrationColumn newColumn(String name, int jdbcType, int width, int precision, int scale, boolean allowsNull, String overrideValueType, Object defaultValue) throws SQLException {
+		return _newColumn(name, jdbcType, width, precision, scale, allowsNull, overrideValueType, defaultValue, !_new);
 	}
 
 	/**
@@ -245,8 +245,8 @@ public class ERXMigrationTable {
 	 * @return the new ERXMigrationColumn
 	 * @throws SQLException if the column cannot be created 
 	 */
-	public ERXMigrationColumn newColumn(String name, int jdbcType, int width, int precision, int scale, boolean allowsNull) throws SQLException {
-		return _newColumn(name, jdbcType, width, precision, scale, allowsNull, null, !_new);
+	public ERXMigrationColumn newColumn(String name, int jdbcType, int width, int precision, int scale, boolean allowsNull, String overrideValueType) throws SQLException {
+		return _newColumn(name, jdbcType, width, precision, scale, allowsNull, overrideValueType, null, !_new);
 	}
 
 	/**
@@ -259,7 +259,7 @@ public class ERXMigrationTable {
 	 * @throws SQLException if the column cannot be created 
 	 */
 	public ERXMigrationColumn newStringColumn(String name, int width, boolean allowsNull) throws SQLException {
-		return newColumn(name, Types.VARCHAR, width, 0, 0, allowsNull);
+		return newColumn(name, Types.VARCHAR, width, 0, 0, allowsNull, null);
 	}
 
 	/**
@@ -273,7 +273,7 @@ public class ERXMigrationTable {
 	 * @throws SQLException if the column cannot be created 
 	 */
 	public ERXMigrationColumn newStringColumn(String name, int width, boolean allowsNull, String defaultValue) throws SQLException {
-		return newColumn(name, Types.VARCHAR, width, 0, 0, allowsNull, defaultValue);
+		return newColumn(name, Types.VARCHAR, width, 0, 0, allowsNull, null, defaultValue);
 	}
 
 	/**
@@ -285,7 +285,7 @@ public class ERXMigrationTable {
 	 * @throws SQLException if the column cannot be created 
 	 */
 	public ERXMigrationColumn newIntegerColumn(String name, boolean allowsNull) throws SQLException {
-		return newColumn(name, Types.INTEGER, 0, 0, 0, allowsNull);
+		return newColumn(name, Types.INTEGER, 0, 0, 0, allowsNull, null);
 	}
 
 	/**
@@ -298,7 +298,7 @@ public class ERXMigrationTable {
 	 * @throws SQLException if the column cannot be created 
 	 */
 	public ERXMigrationColumn newIntegerColumn(String name, boolean allowsNull, Integer defaultValue) throws SQLException {
-		return newColumn(name, Types.INTEGER, 0, 0, 0, allowsNull, defaultValue);
+		return newColumn(name, Types.INTEGER, 0, 0, 0, allowsNull, null, defaultValue);
 	}
 
 	/**
@@ -311,7 +311,7 @@ public class ERXMigrationTable {
 	 * @throws SQLException if the column cannot be created 
 	 */
 	public ERXMigrationColumn newIntegerColumn(String name, int scale, boolean allowsNull) throws SQLException {
-		return newColumn(name, Types.INTEGER, 0, 0, scale, allowsNull);
+		return newColumn(name, Types.INTEGER, 0, 0, scale, allowsNull, null);
 	}
 
 	/**
@@ -325,7 +325,7 @@ public class ERXMigrationTable {
 	 * @throws SQLException if the column cannot be created 
 	 */
 	public ERXMigrationColumn newIntegerColumn(String name, int scale, boolean allowsNull, Integer defaultValue) throws SQLException {
-		return newColumn(name, Types.INTEGER, 0, 0, scale, allowsNull, defaultValue);
+		return newColumn(name, Types.INTEGER, 0, 0, scale, allowsNull, null, defaultValue);
 	}
 
 	/**
@@ -339,7 +339,7 @@ public class ERXMigrationTable {
 	 * @throws SQLException if the column cannot be created 
 	 */
 	public ERXMigrationColumn newIntegerColumn(String name, int scale, int precision, boolean allowsNull) throws SQLException {
-		return newColumn(name, Types.INTEGER, 0, scale, precision, allowsNull);
+		return newColumn(name, Types.INTEGER, 0, scale, precision, allowsNull, null);
 	}
 
 	/**
@@ -354,7 +354,7 @@ public class ERXMigrationTable {
 	 * @throws SQLException if the column cannot be created 
 	 */
 	public ERXMigrationColumn newIntegerColumn(String name, int scale, int precision, boolean allowsNull, Object defaultValue) throws SQLException {
-		return newColumn(name, Types.INTEGER, 0, scale, precision, allowsNull, defaultValue);
+		return newColumn(name, Types.INTEGER, 0, scale, precision, allowsNull, null, defaultValue);
 	}
 
 	/**
@@ -368,7 +368,7 @@ public class ERXMigrationTable {
 	 * @throws SQLException if the column cannot be created 
 	 */
 	public ERXMigrationColumn newFloatColumn(String name, int precision, int scale, boolean allowsNull) throws SQLException {
-		return newColumn(name, Types.FLOAT, 0, precision, scale, allowsNull);
+		return newColumn(name, Types.FLOAT, 0, precision, scale, allowsNull, null);
 	}
 
 	/**
@@ -383,7 +383,7 @@ public class ERXMigrationTable {
 	 * @throws SQLException if the column cannot be created 
 	 */
 	public ERXMigrationColumn newFloatColumn(String name, int precision, int scale, boolean allowsNull, Float defaultValue) throws SQLException {
-		return newColumn(name, Types.FLOAT, 0, precision, scale, allowsNull, defaultValue);
+		return newColumn(name, Types.FLOAT, 0, precision, scale, allowsNull, null, defaultValue);
 	}
 
 	/**
@@ -397,7 +397,7 @@ public class ERXMigrationTable {
 	 * @throws SQLException if the column cannot be created 
 	 */
 	public ERXMigrationColumn newBigDecimalColumn(String name, int precision, int scale, boolean allowsNull) throws SQLException {
-		return newColumn(name, Types.DECIMAL, 0, precision, scale, allowsNull);
+		return newColumn(name, Types.DECIMAL, 0, precision, scale, allowsNull, null);
 	}
 
 	/**
@@ -412,7 +412,7 @@ public class ERXMigrationTable {
 	 * @throws SQLException if the column cannot be created 
 	 */
 	public ERXMigrationColumn newBigDecimalColumn(String name, int precision, int scale, boolean allowsNull, BigDecimal defaultValue) throws SQLException {
-		return newColumn(name, Types.DECIMAL, 0, precision, scale, allowsNull, defaultValue);
+		return newColumn(name, Types.DECIMAL, 0, precision, scale, allowsNull, null, defaultValue);
 	}
 
 	/**
@@ -424,7 +424,7 @@ public class ERXMigrationTable {
 	 * @throws SQLException if the column cannot be created 
 	 */
 	public ERXMigrationColumn newBooleanColumn(String name, boolean allowsNull) throws SQLException {
-		return newColumn(name, Types.VARCHAR, 5, 0, 0, allowsNull);
+		return newColumn(name, Types.VARCHAR, 5, 0, 0, allowsNull, null);
 	}
 
 	/**
@@ -437,7 +437,7 @@ public class ERXMigrationTable {
 	 * @throws SQLException if the column cannot be created 
 	 */
 	public ERXMigrationColumn newBooleanColumn(String name, boolean allowsNull, Boolean defaultValue) throws SQLException {
-		return newColumn(name, Types.VARCHAR, 5, 0, 0, allowsNull, defaultValue);
+		return newColumn(name, Types.VARCHAR, 5, 0, 0, allowsNull, null, defaultValue);
 	}
 
 	/**
@@ -449,7 +449,7 @@ public class ERXMigrationTable {
 	 * @throws SQLException if the column cannot be created 
 	 */
 	public ERXMigrationColumn newIntBooleanColumn(String name, boolean allowsNull) throws SQLException {
-		return newColumn(name, Types.INTEGER, 0, 0, 0, allowsNull);
+		return newColumn(name, Types.INTEGER, 0, 0, 0, allowsNull, null);
 	}
 
 	/**
@@ -462,7 +462,7 @@ public class ERXMigrationTable {
 	 * @throws SQLException if the column cannot be created 
 	 */
 	public ERXMigrationColumn newIntBooleanColumn(String name, boolean allowsNull, Boolean defaultValue) throws SQLException {
-		return newColumn(name, Types.INTEGER, 0, 0, 0, allowsNull, defaultValue);
+		return newColumn(name, Types.INTEGER, 0, 0, 0, allowsNull, null, defaultValue);
 	}
 
 	/**
@@ -475,7 +475,7 @@ public class ERXMigrationTable {
 	 * @throws SQLException if the column cannot be created 
 	 */
 	public ERXMigrationColumn newBlobColumn(String name, int width, boolean allowsNull) throws SQLException {
-		return newColumn(name, Types.BLOB, width, 0, 0, allowsNull);
+		return newColumn(name, Types.BLOB, width, 0, 0, allowsNull, null);
 	}
 
 	/**
@@ -489,7 +489,7 @@ public class ERXMigrationTable {
 	 * @throws SQLException if the column cannot be created 
 	 */
 	public ERXMigrationColumn newBlobColumn(String name, int width, boolean allowsNull, NSData defaultValue) throws SQLException {
-		return newColumn(name, Types.BLOB, width, 0, 0, allowsNull, defaultValue);
+		return newColumn(name, Types.BLOB, width, 0, 0, allowsNull, null, defaultValue);
 	}
 
 	/**
@@ -501,7 +501,7 @@ public class ERXMigrationTable {
 	 * @throws SQLException if the column cannot be created 
 	 */
 	public ERXMigrationColumn newTimestampColumn(String name, boolean allowsNull) throws SQLException {
-		return newColumn(name, Types.TIMESTAMP, 0, 0, 0, allowsNull);
+		return newColumn(name, Types.TIMESTAMP, 0, 0, 0, allowsNull, ERXMigrationColumn.NULL_VALUE_TYPE);
 	}
 
 	/**
@@ -514,7 +514,7 @@ public class ERXMigrationTable {
 	 * @throws SQLException if the column cannot be created 
 	 */
 	public ERXMigrationColumn newTimestampColumn(String name, boolean allowsNull, NSTimestamp defaultValue) throws SQLException {
-		return newColumn(name, Types.TIMESTAMP, 0, 0, 0, allowsNull, defaultValue);
+		return newColumn(name, Types.TIMESTAMP, 0, 0, 0, allowsNull, ERXMigrationColumn.NULL_VALUE_TYPE, defaultValue);
 	}
 
 	/**
