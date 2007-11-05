@@ -222,7 +222,8 @@ delete from TEST_ITEM;
 
 		private void createPrimaryKeySupportForModel(EOModel eomodel, EOAdaptorChannel channel, EOSynchronizationFactory syncFactory) {
 			try {
-				NSArray pkSupportExpressions = syncFactory.primaryKeySupportStatementsForEntityGroups(new NSArray(eomodel.entities()));
+			    //AK: the (Object) cast is needed, because in 5.4 new NSArray(obj) != new NSArray(array).
+				NSArray pkSupportExpressions = syncFactory.primaryKeySupportStatementsForEntityGroups(new NSArray((Object)eomodel.entities()));
 				Enumeration enumeration = pkSupportExpressions.objectEnumerator();
 				while (enumeration .hasMoreElements()) {
 					EOSQLExpression expression = (EOSQLExpression) enumeration.nextElement();
