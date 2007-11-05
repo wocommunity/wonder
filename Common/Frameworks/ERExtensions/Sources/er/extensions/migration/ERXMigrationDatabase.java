@@ -10,6 +10,7 @@ import com.webobjects.eoaccess.EOSynchronizationFactory;
 import com.webobjects.eocontrol.EOKeyValueQualifier;
 import com.webobjects.eocontrol.EOQualifier;
 import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.jdbcadaptor.JDBCAdaptor;
 
@@ -92,8 +93,9 @@ import com.webobjects.jdbcadaptor.JDBCAdaptor;
  * @author mschrag
  */
 public class ERXMigrationDatabase {
-  public static final Logger log = Logger.getLogger(ERXMigrationDatabase.class);
+	public static final Logger log = Logger.getLogger(ERXMigrationDatabase.class);
 
+  private EOModel _model;
   private EOAdaptorChannel _adaptorChannel;
 	private NSMutableArray<ERXMigrationTable> _tables;
 
@@ -102,8 +104,9 @@ public class ERXMigrationDatabase {
 	 * 
 	 * @param adaptorChannel the adaptor channel to connect to
 	 */
-	private ERXMigrationDatabase(EOAdaptorChannel adaptorChannel) {
+	private ERXMigrationDatabase(EOAdaptorChannel adaptorChannel, EOModel model) {
 		_adaptorChannel = adaptorChannel;
+		_model = model;
 		_tables = new NSMutableArray<ERXMigrationTable>();
 	}
 
@@ -194,7 +197,14 @@ public class ERXMigrationDatabase {
 	 */
 	public EOModel _blankModel() {
 		EOModel blankModel = new EOModel();
-		blankModel.setConnectionDictionary(_adaptorChannel.adaptorContext().adaptor().connectionDictionary());
+		NSDictionary connectionDictionary = null;
+		if (_model != null) {
+			connectionDictionary = _model.connectionDictionary();
+		}
+		if (connectionDictionary == null) {
+			connectionDictionary = _adaptorChannel.adaptorContext().adaptor().connectionDictionary();
+		}
+		blankModel.setConnectionDictionary(connectionDictionary);
 		blankModel.setAdaptorName(_adaptorChannel.adaptorContext().adaptor().name());
 		return blankModel;
 	}
@@ -213,13 +223,30 @@ public class ERXMigrationDatabase {
 	 * a new ERXMigrationDatabase for every call, so if you need to perform multiple 
 	 * operations within a single database instance (for instance, adding foreign keys
 	 * that talk to two tables), you should operate within a single ERXMigrationDatabase
-	 * instance.
+	 * instance.  If you have a model, you should use database(adaptorChannel, model)
+	 * instead of this variant so that migrations can use the connection dictionary 
+	 * that is closest to being correct.
 	 * 
 	 * @param adaptorChannel the adaptor channel to operate within
 	 * @return an ERXMigrationDatabase
 	 */
 	public static ERXMigrationDatabase database(EOAdaptorChannel adaptorChannel) {
-		return new ERXMigrationDatabase(adaptorChannel);
+		return new ERXMigrationDatabase(adaptorChannel, null);
+	}
+
+	/**
+	 * Returns an ERXMigrationDatabase for the given EOAdaptorChannel.  This will return
+	 * a new ERXMigrationDatabase for every call, so if you need to perform multiple 
+	 * operations within a single database instance (for instance, adding foreign keys
+	 * that talk to two tables), you should operate within a single ERXMigrationDatabase
+	 * instance.
+	 * 
+	 * @param adaptorChannel the adaptor channel to operate within
+	 * @param model the model that corresponds to this table
+	 * @return an ERXMigrationDatabase
+	 */
+	public static ERXMigrationDatabase database(EOAdaptorChannel adaptorChannel, EOModel model) {
+		return new ERXMigrationDatabase(adaptorChannel, model);
 	}
 
 	/**
@@ -230,7 +257,7 @@ public class ERXMigrationDatabase {
 	 * @param expressions the expressions to check
 	 */
 	public static void _ensureNotEmpty(NSArray<EOSQLExpression> expressions) {
-		if (expressions.count() == 0) {
+		if (expressions == null || expressions.count() == 0) {
 			throw new ERXMigrationFailedException("Your EOSynchronizationFactory does not support this operation.");
 		}
 	}
