@@ -12,6 +12,7 @@ IN NO EVENT SHALL APPLE BE LIABLE FOR ANY SPECIAL, INDIRECT, INCIDENTAL OR CONSE
 SUCH DAMAGE.
  */
 import com.webobjects.appserver.WOComponent;
+import com.webobjects.appserver.WOContext;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.monitor._private.MHost;
 import com.webobjects.monitor._private.MInstance;
@@ -20,6 +21,10 @@ public class AppDeathPage extends MonitorComponent  {
 	private static final long	serialVersionUID	= -2462045617649768062L;
 	public Object aDeath;
     public int anIndex;
+
+    public AppDeathPage(WOContext aWocontext) {
+        super(aWocontext);
+    }
 
     public WOComponent clearDeathsClicked() {
         sendCommandInstancesToWotaskds("CLEAR", new NSArray <MInstance>(mySession().mInstance), new NSArray <MHost>(mySession().mInstance.host()));

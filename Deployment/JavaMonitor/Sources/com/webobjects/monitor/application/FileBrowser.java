@@ -11,6 +11,7 @@ The Apple Software is provided by Apple on an "AS IS" basis.  APPLE MAKES NO WAR
 IN NO EVENT SHALL APPLE BE LIABLE FOR ANY SPECIAL, INDIRECT, INCIDENTAL OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) ARISING IN ANY WAY OUT OF THE USE, REPRODUCTION, MODIFICATION AND/OR DISTRIBUTION OF THE APPLE SOFTWARE, HOWEVER CAUSED AND WHETHER UNDER THEORY OF CONTRACT, TORT (INCLUDING NEGLIGENCE), STRICT LIABILITY OR OTHERWISE, EVEN IF APPLE HAS BEEN  ADVISED OF THE POSSIBILITY OF 
 SUCH DAMAGE.
  */
+import com.webobjects.appserver.WOContext;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSLog;
@@ -19,6 +20,10 @@ import com.webobjects.monitor._private.MHost;
 import com.webobjects.monitor._private.MonitorException;
 
 public class FileBrowser extends MonitorComponent  {
+
+    public FileBrowser(WOContext aWocontext) {
+        super(aWocontext);
+    }
 	private static final long	serialVersionUID	= 7523872426979817711L;
 
     String startingPath;  // passed in

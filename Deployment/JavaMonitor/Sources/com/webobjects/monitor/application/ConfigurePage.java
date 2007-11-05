@@ -12,13 +12,18 @@ IN NO EVENT SHALL APPLE BE LIABLE FOR ANY SPECIAL, INDIRECT, INCIDENTAL OR CONSE
 SUCH DAMAGE.
  */
 import com.webobjects.appserver.WOComponent;
+import com.webobjects.appserver.WOContext;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.monitor._private.MObject;
 import com.webobjects.monitor._private.String_Extensions;
 
 public class ConfigurePage extends MonitorComponent  {
 
-    /**
+
+    public ConfigurePage(WOContext aWocontext) {
+        super(aWocontext);
+    }
+  /**
 	 * serialVersionUID
 	 */
 	private static final long	serialVersionUID	= -3447899695208425947L;
