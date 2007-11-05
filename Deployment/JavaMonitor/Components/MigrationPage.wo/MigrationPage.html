@@ -11,7 +11,7 @@ WebObjects Applications Deployment Migration
 <br/>
 
 Preview your http-webobjects.conf file for your Apache 2.x WebServer: 
-<br/><pre><webobject name="Text1"></webobject></pre>
+<br/><pre><p align="left"><webobject name="adaptorConfigContent"></webobject></p></pre>
 <br/>
 <webobject name="Form2">
 	<table border="1" width="100%">
@@ -24,13 +24,13 @@ Preview your http-webobjects.conf file for your Apache 2.x WebServer:
 		<tr><td>http-webobjects.conf filepath</td><td><webobject name="TextField4"></webobject></td>
 			<td>Please provide a location on the WebServer where JavaMonitor should transfer the http-webobjects.conf file to.</td></tr>
 		<tr><td></td><td><webobject name="CheckBox1"></webobject>Restart Apache WebServer</td></tr>
-		<tr><td></td><td><webobject name="ResetButton1"></webobject><webobject name="SubmitButton1"></webobject></td><td></td></tr>
+		<tr><td></td><td><webobject name="ResetButton1"></webobject><webobject name="MigrateButton"></webobject></td><td></td></tr>
 	</table>
 </webobject>
 <br/>
-<webobject name="Conditional1"><b>JavaMonitor has migrated your WebObjects Applications deployment successfully.</b></webobject>
-<webobject name="Conditional2">
-	<webobject name="Conditional3">JavaMonitor could not migrate your WebObjects Applications deployment. <webobject name="Text2"></webobject></webobject>
+<webobject name="IsMigrationCompleted"><b>JavaMonitor has migrated your WebObjects Applications deployment successfully.</b></webobject>
+<webobject name="NotIsMigrationCompleted">
+	<webobject name="IsFailed">JavaMonitor could not migrate your WebObjects Applications deployment. <webobject name="Text2"></webobject></webobject>
 </webobject>
 </body>
 </html>
