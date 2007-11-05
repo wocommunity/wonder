@@ -285,12 +285,6 @@ public class PostgresqlSynchronizationFactory extends EOSynchronizationFactory i
         return results;
     }
 
-    @Override
-    public NSArray<EOSQLExpression> createTableStatementsForEntityGroup(NSArray<EOEntity> aArg0) {
-        // AK TODO Auto-generated method stub
-        return super.createTableStatementsForEntityGroup(aArg0);
-    }
-
     public static boolean entityUsesSeparateTable(EOEntity entity) {
         if (entity.parentEntity() == null)
             return true;
