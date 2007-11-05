@@ -5,15 +5,7 @@
      more info about the builds can be found there
     -->
     <target name="clean">
-        <ant antFile="Build/build/build.xml" target="frameworks.all">
-            <property name="build.action" value="clean" />
-        </ant>
-        <ant antFile="Build/build/build.xml" target="applications.all">
-            <property name="build.action" value="clean" />
-        </ant>
-        <ant antFile="Build/build/build.xml" target="examples.all">
-            <property name="build.action" value="clean" />
-        </ant>
+        <ant antFile="Build/build/build.xml" target="clean" />
     </target>
 
     <target name="frameworks">
