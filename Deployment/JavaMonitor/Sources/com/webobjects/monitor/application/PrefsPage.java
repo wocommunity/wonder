@@ -12,6 +12,7 @@ IN NO EVENT SHALL APPLE BE LIABLE FOR ANY SPECIAL, INDIRECT, INCIDENTAL OR CONSE
 SUCH DAMAGE.
  */
 import com.webobjects.appserver.WOComponent;
+import com.webobjects.appserver.WOContext;
 
 public class PrefsPage extends MonitorComponent  {
     /**
@@ -21,6 +22,10 @@ public class PrefsPage extends MonitorComponent  {
 	public String adminPassword1;
     public String adminPassword2;
 
+
+    public PrefsPage(WOContext aWocontext) {
+        super(aWocontext);
+    }
 
     /********** Monitor Section **********/
     public WOComponent passwordChangeClicked() {

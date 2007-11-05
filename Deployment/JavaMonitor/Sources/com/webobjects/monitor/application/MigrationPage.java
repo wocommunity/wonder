@@ -19,6 +19,7 @@ import java.nio.channels.FileChannel;
 
 import com.webobjects.appserver.WOApplication;
 import com.webobjects.appserver.WOComponent;
+import com.webobjects.appserver.WOContext;
 import com.webobjects.foundation.NSData;
 
 public class MigrationPage extends MonitorComponent {
@@ -42,7 +43,11 @@ public class MigrationPage extends MonitorComponent {
 	// internal use
 	protected String adaptorConfigContent;
 	protected String adaptorConfigLocalFilepath;// = "/tmp/http-webobjects.conf";
-  	
+
+    public MigrationPage(WOContext aWocontext) {
+        super(aWocontext);
+    }
+
 	public String adaptorConfigContent(){
 		final Application app = (Application)WOApplication.application();
 		adaptorConfigContent = app._siteConfig.generateHttpWebObjectsConfig().toString();

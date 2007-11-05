@@ -12,9 +12,14 @@ IN NO EVENT SHALL APPLE BE LIABLE FOR ANY SPECIAL, INDIRECT, INCIDENTAL OR CONSE
 SUCH DAMAGE.
  */
 import com.webobjects.appserver.WOComponent;
+import com.webobjects.appserver.WOContext;
 
 public class AppConfirmDeletePage extends MonitorComponent  {
 	private static final long	serialVersionUID	= -755026353794418667L;
+
+    public AppConfirmDeletePage(WOContext aWocontext) {
+        super(aWocontext);
+    }
 
 	public WOComponent deleteClicked() {
         theApplication._lock.startWriting();

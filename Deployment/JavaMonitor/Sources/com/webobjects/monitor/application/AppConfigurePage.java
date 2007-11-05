@@ -12,6 +12,7 @@ IN NO EVENT SHALL APPLE BE LIABLE FOR ANY SPECIAL, INDIRECT, INCIDENTAL OR CONSE
 SUCH DAMAGE.
  */
 import com.webobjects.appserver.WOComponent;
+import com.webobjects.appserver.WOContext;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.monitor._private.MApplication;
 import com.webobjects.monitor._private.MInstance;
@@ -34,6 +35,10 @@ public class AppConfigurePage extends MonitorComponent  {
     public boolean isAdaptorSettingsSectionVisible = false;
 
     MApplication appDefaults = new MApplication(mySession().mApplication.values(), _sc, null);
+
+    public AppConfigurePage(WOContext aWocontext) {
+        super(aWocontext);
+    }
 
     public WOComponent detailPageClicked() {
         return pageWithName("AppDetailPage");
