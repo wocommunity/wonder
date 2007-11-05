@@ -236,4 +236,11 @@ public class ERXEnterpriseObjectArrayCache<T extends EOEnterpriseObject> {
         _cache = null;
     }
     
+    protected long timeout() {
+    	return _timeout;
+    }
+    
+    protected long fetchTime() {
+    	return _fetchTime;
+    }
 }
