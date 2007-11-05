@@ -3,16 +3,16 @@ CheckBox1: WOCheckBox {
 	selection = shouldRestartApache;
 }
 
-Conditional1: WOConditional {
+IsMigrationCompleted: WOConditional {
 	condition = isMigrationCompleted;
 }
 
-Conditional2: WOConditional {
+NotIsMigrationCompleted: WOConditional {
 	negate = true;
 	condition = isMigrationCompleted;
 }
 
-Conditional3: WOConditional {
+IsFailed: WOConditional {
 	condition = isFailed;
 }
 
@@ -34,11 +34,11 @@ NavPage: NavigationPage {
 ResetButton1: WOResetButton {
 }
 
-SubmitButton1: WOSubmitButton {
+MigrateButton: WOSubmitButton {
 	action = migrate;
 }
 
-Text1: WOString {
+adaptorConfigContent: WOString {
 	value = adaptorConfigContent;
 }
 
