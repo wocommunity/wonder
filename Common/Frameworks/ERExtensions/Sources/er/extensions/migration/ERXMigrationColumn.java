@@ -14,12 +14,15 @@ import com.webobjects.jdbcadaptor.JDBCAdaptor;
 import er.extensions.ERXJDBCUtilities;
 
 /**
- * ERXMigrationColumn is conceptually equivalent to an EOAttribute in the ERXMigrationXxx model.  To
- * obtain an ERXMigrationColumn, call ERXMigrationTable.newXxxColumn(..).
- *  
+ * ERXMigrationColumn is conceptually equivalent to an EOAttribute in the
+ * ERXMigrationXxx model. To obtain an ERXMigrationColumn, call
+ * ERXMigrationTable.newXxxColumn(..).
+ * 
  * @author mschrag
  */
 public class ERXMigrationColumn {
+	public static final String NULL_VALUE_TYPE = "___NULL_VALUE_TYPE___";
+
 	private ERXMigrationTable _table;
 	private String _name;
 	private int _jdbcType;
@@ -29,20 +32,30 @@ public class ERXMigrationColumn {
 	private boolean _allowsNull;
 	private Object _defaultValue;
 	private boolean _new;
+	private String _overrideValueType;
 
 	/**
 	 * Constructs a new ERXMigrationColumn.
 	 * 
-	 * @param table the parent table
-	 * @param name the name of the column to create
-	 * @param jdbcType the JDBC type of the column (see java.sql.Types)
-	 * @param width the width of the column (or 0 for unspecified)
-	 * @param precision the precision of the column (or 0 for unspecified)
-	 * @param scale the scale of the column (or 0 for unspecified)
-	 * @param allowsNull if true, the column will allow null values
-	 * @param defaultValue this will set the "Default" hint in the EOAttribute's userInfo dictionary (your plugin must support this)
+	 * @param table
+	 *            the parent table
+	 * @param name
+	 *            the name of the column to create
+	 * @param jdbcType
+	 *            the JDBC type of the column (see java.sql.Types)
+	 * @param width
+	 *            the width of the column (or 0 for unspecified)
+	 * @param precision
+	 *            the precision of the column (or 0 for unspecified)
+	 * @param scale
+	 *            the scale of the column (or 0 for unspecified)
+	 * @param allowsNull
+	 *            if true, the column will allow null values
+	 * @param defaultValue
+	 *            this will set the "Default" hint in the EOAttribute's userInfo
+	 *            dictionary (your plugin must support this)
 	 */
-	protected ERXMigrationColumn(ERXMigrationTable table, String name, int jdbcType, int width, int precision, int scale, boolean allowsNull, Object defaultValue) {
+	protected ERXMigrationColumn(ERXMigrationTable table, String name, int jdbcType, int width, int precision, int scale, boolean allowsNull, String overrideValueType, Object defaultValue) {
 		_table = table;
 		_name = name;
 		_jdbcType = jdbcType;
@@ -50,6 +63,7 @@ public class ERXMigrationColumn {
 		_precision = precision;
 		_scale = scale;
 		_allowsNull = allowsNull;
+		_overrideValueType = overrideValueType;
 		_defaultValue = defaultValue;
 		_new = true;
 	}
@@ -64,9 +78,11 @@ public class ERXMigrationColumn {
 	}
 
 	/**
-	 * Sets the name of this column.  This does not perform a column rename operation.
+	 * Sets the name of this column. This does not perform a column rename
+	 * operation.
 	 * 
-	 * @param name the name of this column
+	 * @param name
+	 *            the name of this column
 	 */
 	public void _setName(String name) {
 		_name = name;
@@ -82,9 +98,11 @@ public class ERXMigrationColumn {
 	}
 
 	/**
-	 * Sets the width of this column.  This does not perform a column resize operation.
+	 * Sets the width of this column. This does not perform a column resize
+	 * operation.
 	 * 
-	 * @param width the width of this column
+	 * @param width
+	 *            the width of this column
 	 */
 	public void _setWidth(int width) {
 		_width = width;
@@ -100,9 +118,11 @@ public class ERXMigrationColumn {
 	}
 
 	/**
-	 * Sets whether or not this column allows nulls.  This does not perform a column change operation.
+	 * Sets whether or not this column allows nulls. This does not perform a
+	 * column change operation.
 	 * 
-	 * @param allowsNull if true, this column allows nulls
+	 * @param allowsNull
+	 *            if true, this column allows nulls
 	 */
 	public void _setAllowsNull(boolean allowsNull) {
 		_allowsNull = allowsNull;
@@ -118,9 +138,11 @@ public class ERXMigrationColumn {
 	}
 
 	/**
-	 * Sets the precision of this column.  This does not perform a column change operation.
+	 * Sets the precision of this column. This does not perform a column change
+	 * operation.
 	 * 
-	 * @param precision the precision of this column
+	 * @param precision
+	 *            the precision of this column
 	 */
 	public void _setPrecision(int precision) {
 		_precision = precision;
@@ -136,9 +158,11 @@ public class ERXMigrationColumn {
 	}
 
 	/**
-	 * Sets the scale of this column.  This does not perform a column change operation.
+	 * Sets the scale of this column. This does not perform a column change
+	 * operation.
 	 * 
-	 * @param scale the scale of this column
+	 * @param scale
+	 *            the scale of this column
 	 */
 	public void _setScale(int scale) {
 		_scale = scale;
@@ -152,16 +176,37 @@ public class ERXMigrationColumn {
 	public int scale() {
 		return _scale;
 	}
-	
+
+	/**
+	 * Sets the value type for the underlying attribute for this column.
+	 * 
+	 * @param valueType
+	 *            the value type for the underlying attribute for this column
+	 */
+	public void _setOverrideValueType(String overrideValueType) {
+		_overrideValueType = overrideValueType;
+	}
+
+	/**
+	 * Returns the value type associated with the underlying attribute (or null
+	 * to have this autoselected).
+	 * 
+	 * @return the value type associated with the underlying attribute
+	 */
+	public String overrideValueType() {
+		return _overrideValueType;
+	}
+
 	/**
 	 * Sets the default value of this column.
 	 * 
-	 * @param defaultValue the default value of this column
+	 * @param defaultValue
+	 *            the default value of this column
 	 */
 	public void setDefaultValue(Object defaultValue) {
 		_defaultValue = defaultValue;
 	}
-	
+
 	/**
 	 * Returns the default value of this column.
 	 * 
@@ -170,7 +215,7 @@ public class ERXMigrationColumn {
 	public Object defaultValue() {
 		return _defaultValue;
 	}
-	
+
 	/**
 	 * Returns true if this column has not yet been created in the database.
 	 * 
@@ -179,20 +224,21 @@ public class ERXMigrationColumn {
 	public boolean isNew() {
 		return _new;
 	}
-	
+
 	/**
 	 * Sets whether or not this column has been created in the database.
 	 * 
-	 * @param isNew if true, the column has been created
+	 * @param isNew
+	 *            if true, the column has been created
 	 */
 	public void _setNew(boolean isNew) {
 		_new = isNew;
 	}
 
 	/**
-	 * Returns an EOAttribute with all of its fields filled in based
-	 * on the properties of this ERXMigrationColumn.  The attribute
-	 * is attached to a table._blankEntity().
+	 * Returns an EOAttribute with all of its fields filled in based on the
+	 * properties of this ERXMigrationColumn. The attribute is attached to a
+	 * table._blankEntity().
 	 * 
 	 * @return an EOAttribute with all of its fields filled in
 	 */
@@ -201,11 +247,12 @@ public class ERXMigrationColumn {
 	}
 
 	/**
-	 * Returns an EOAttribute with all of its fields filled in based
-	 * on the properties of this ERXMigrationColumn.  The attribute
-	 * is attached to the given entity.
+	 * Returns an EOAttribute with all of its fields filled in based on the
+	 * properties of this ERXMigrationColumn. The attribute is attached to the
+	 * given entity.
 	 * 
-	 * @param entity the entity to add the attribute to
+	 * @param entity
+	 *            the entity to add the attribute to
 	 * @return an EOAttribute with all of its fields filled in
 	 */
 	@SuppressWarnings("unchecked")
@@ -227,6 +274,15 @@ public class ERXMigrationColumn {
 			mutableUserInfo.setObjectForKey(_defaultValue, "er.extensions.eoattribute.default");
 			attribute.setUserInfo(mutableUserInfo);
 		}
+		if (_overrideValueType != null) {
+			if (ERXMigrationColumn.NULL_VALUE_TYPE.equals(_overrideValueType)) {
+				attribute.setValueType(null);
+			}
+			else {
+				attribute.setValueType(_overrideValueType);
+			}
+			adaptor.assignExternalTypeForAttribute(attribute);
+		}
 		entity.addAttribute(attribute);
 		return attribute;
 	}
@@ -247,7 +303,8 @@ public class ERXMigrationColumn {
 	/**
 	 * Executes the SQL operations to create this column.
 	 * 
-	 * @throws SQLException if the creation fails
+	 * @throws SQLException
+	 *             if the creation fails
 	 */
 	public void create() throws SQLException {
 		if (_new) {
@@ -275,7 +332,8 @@ public class ERXMigrationColumn {
 	/**
 	 * Executes the SQL operations to delete this column.
 	 * 
-	 * @throws SQLException if the delete fails
+	 * @throws SQLException
+	 *             if the delete fails
 	 */
 	public void delete() throws SQLException {
 		ERXJDBCUtilities.executeUpdateScript(_table.database().adaptorChannel(), ERXMigrationDatabase._stringsForExpressions(_deleteExpressions()));
@@ -285,7 +343,8 @@ public class ERXMigrationColumn {
 	/**
 	 * Returns an array of EOSQLExpressions for renaming this column.
 	 * 
-	 * @param newName the new name of this column
+	 * @param newName
+	 *            the new name of this column
 	 * @return an array of EOSQLExpressions for renaming this column
 	 */
 	@SuppressWarnings("unchecked")
@@ -300,8 +359,10 @@ public class ERXMigrationColumn {
 	/**
 	 * Executes the SQL operations to rename this column.
 	 * 
-	 * @param newName the new name of this column
-	 * @throws SQLException if the rename fails
+	 * @param newName
+	 *            the new name of this column
+	 * @throws SQLException
+	 *             if the rename fails
 	 */
 	public void renameTo(String newName) throws SQLException {
 		ERXJDBCUtilities.executeUpdateScript(_table.database().adaptorChannel(), ERXMigrationDatabase._stringsForExpressions(_renameToExpressions(newName)));
