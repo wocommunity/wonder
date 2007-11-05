@@ -839,12 +839,12 @@ public class MSiteConfig extends MObject {
 //                        }
                         
 						final String route = anApp.name() + "_" + host + "_" + port + "_" + id;
-						result.append("\tBalancerMember http://" + host + ":" + port + "/cgi-bin/webobjects/" + anApp.name() + ".woa route=" + route + "\n");
+						result.append("\tBalancerMember http://" + host + ":" + port + "/cgi-bin/WebObjects/" + anApp.name() + ".woa route=" + route + "\n");
                     } // end if (!(onlyIncludeRunningInstances && !anInst.isRunning()));
 //                }
 
                 result.append("</Proxy>\n");
-				result.append("ProxyPass /cgi-bin/webobjects/" + anApp.name() + ".woa balancer://" + anApp.name() + ".woa stickysession=woclusteragentid nofailover=On\n");
+				result.append("ProxyPass /cgi-bin/WebObjects/" + anApp.name() + ".woa balancer://" + anApp.name() + ".woa stickysession=woclusteragentid nofailover=On\n");
 				result.append("\n");
 //            } // end if (!(onlyIncludeRunningInstances && anApp.isRunning()))
         } // end Application Enumeration
