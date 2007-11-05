@@ -11,7 +11,6 @@ import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.eocontrol.EOEnterpriseObject;
 import com.webobjects.eocontrol.EOGlobalID;
 import com.webobjects.eocontrol.EOObjectStoreCoordinator;
-import com.webobjects.eocontrol.EOTemporaryGlobalID;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSNotification;
@@ -41,7 +40,11 @@ public class ERXEnterpriseObjectArrayCache<T extends EOEnterpriseObject> {
     private Map<Object, NSArray<EOGlobalID>> _cache;
     private long _timeout;
     private long _fetchTime;
-    protected static final NSArray NOT_FOUND_MARKER= new NSArray();
+    
+    public static class NotFoundArray extends NSArray {
+    }
+    
+    protected static final NSArray NOT_FOUND_MARKER= new NotFoundArray();
     
     /**
      * Creates the cache for the given entity name and the given keypath. No
@@ -61,7 +64,7 @@ public class ERXEnterpriseObjectArrayCache<T extends EOEnterpriseObject> {
        this(entityNameForClass(c));
     }
     
-    private static String entityNameForClass(Class c) {
+    protected static String entityNameForClass(Class c) {
     	EOEditingContext ec = ERXEC.newEditingContext();
     	ec.lock();
     	try {
@@ -102,9 +105,9 @@ public class ERXEnterpriseObjectArrayCache<T extends EOEnterpriseObject> {
      * @return
      */
     private boolean hadRelevantChanges(NSDictionary dict, String key) {
-        NSArray eos = (NSArray) dict.objectForKey(key);
-        for (Enumeration enumeration = eos.objectEnumerator(); enumeration.hasMoreElements();) {
-            EOEnterpriseObject eo = (EOEnterpriseObject) enumeration.nextElement();
+        NSArray<EOEnterpriseObject> eos = (NSArray<EOEnterpriseObject>) dict.objectForKey(key);
+        for (Enumeration<EOEnterpriseObject> enumeration = eos.objectEnumerator(); enumeration.hasMoreElements();) {
+            EOEnterpriseObject eo = enumeration.nextElement();
             if(eo.entityName().equals(entityName())) {
                 return true;
             }
@@ -150,7 +153,7 @@ public class ERXEnterpriseObjectArrayCache<T extends EOEnterpriseObject> {
      * Returns the backing cache. If the cache is to old, it is cleared first.
      * @return
      */
-    protected synchronized Map cache() {
+    private synchronized Map cache() {
         long now = System.currentTimeMillis();
         if(_timeout > 0L && (now - _timeout) > _fetchTime) {
             reset();
@@ -165,15 +168,23 @@ public class ERXEnterpriseObjectArrayCache<T extends EOEnterpriseObject> {
     /**
      * Add a list of objects to the cache with the given key. The object
      * can be null.
-     * @param eos array of objects
+     * @param bugs array of objects
      */
-    public void setObjectsForKey(NSArray<T> eos, Object key) {
+    public void setObjectsForKey(NSArray<? extends EOEnterpriseObject> bugs, Object key) {
         NSArray<EOGlobalID> gids = NOT_FOUND_MARKER;
-        if(eos != null) {
-            gids = ERXEOControlUtilities.globalIDsForObjects(eos);
+        if(bugs != null) {
+            gids = ERXEOControlUtilities.globalIDsForObjects(bugs);
         }
-        cache().put(key, gids);
+        setCachedArrayForKey(gids, key);
     }
+
+	protected void setCachedArrayForKey(NSArray<EOGlobalID> gids, Object key) {
+		cache().put(key, gids);
+	}
+
+	protected NSArray<EOGlobalID> cachedArrayForKey(Object key) {
+		return (NSArray<EOGlobalID>) cache().get(key);
+	}
     
     /**
      * Retrieves a list of EOs that matches the given key or null if no match 
@@ -183,22 +194,27 @@ public class ERXEnterpriseObjectArrayCache<T extends EOEnterpriseObject> {
      * @return
      */
     public NSArray<T> objectsForKey(EOEditingContext ec, Object key) {
-        Map<String, NSArray<EOGlobalID>> cache = cache();
-        NSArray<EOGlobalID> gids = cache.get(key);
-        if(gids == NOT_FOUND_MARKER) {
-            return null;
-        } else if(gids == null) {
-            handleUnsuccessfullQueryForKey(key);
-            gids = cache.get(key);
-            if(gids == NOT_FOUND_MARKER) {
+    	synchronized (this) {
+            NSArray<EOGlobalID> gids = cachedArrayForKey(key);
+            if(isNotFound(gids)) {
                 return null;
             } else if(gids == null) {
-               return null;
+                handleUnsuccessfullQueryForKey(key);
+                gids = cachedArrayForKey(key);
+                if(isNotFound(gids)) {
+                    return null;
+                } else if(gids == null) {
+                   return null;
+                }
             }
-        }
-        NSArray<T> eos = (NSArray<T>) ERXEOControlUtilities.faultsForGlobalIDs(ec, gids);
-        return eos;
+            NSArray<T> eos = (NSArray<T>) ERXEOControlUtilities.faultsForGlobalIDs(ec, gids);
+            return eos;
+		}
     }
+
+	protected boolean isNotFound(NSArray<EOGlobalID> gids) {
+		return gids != null ? NotFoundArray.class == gids.getClass() : gids == null;
+	}
   
     /**
      * Called when a query hasn't found an entry in the cache. This
@@ -209,7 +225,7 @@ public class ERXEnterpriseObjectArrayCache<T extends EOEnterpriseObject> {
      * @param key
      */
     protected void handleUnsuccessfullQueryForKey(Object key) {
-        cache().put(key, NOT_FOUND_MARKER);
+        setCachedArrayForKey(NOT_FOUND_MARKER, key);
     }
 
     /**
