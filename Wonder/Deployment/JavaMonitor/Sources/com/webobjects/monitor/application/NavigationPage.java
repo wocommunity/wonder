@@ -12,6 +12,7 @@ IN NO EVENT SHALL APPLE BE LIABLE FOR ANY SPECIAL, INDIRECT, INCIDENTAL OR CONSE
 SUCH DAMAGE.
  */
 import com.webobjects.appserver.WOComponent;
+import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WOResourceManager;
 
 public class NavigationPage extends MonitorComponent {
@@ -42,7 +43,11 @@ public class NavigationPage extends MonitorComponent {
     String backgroundImageName = "background.gif";
 
     public int currentPage = APP_PAGE;
-    
+
+    public NavigationPage(WOContext aWocontext) {
+        super(aWocontext);
+    }
+
     public String barImageName() {
         return _barImageNames[currentPage];
     }

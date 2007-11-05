@@ -12,6 +12,7 @@ IN NO EVENT SHALL APPLE BE LIABLE FOR ANY SPECIAL, INDIRECT, INCIDENTAL OR CONSE
 SUCH DAMAGE.
  */
 import com.webobjects.appserver.WOComponent;
+import com.webobjects.appserver.WOContext;
 import com.webobjects.monitor._private.MHost;
 
 public class PathWizardPage2 extends MonitorComponent  {
@@ -25,6 +26,10 @@ public class PathWizardPage2 extends MonitorComponent  {
     public WOComponent callbackPage;
     public String aPath = null;
     public boolean showFiles = true;
+
+    public PathWizardPage2(WOContext aWocontext) {
+        super(aWocontext);
+    }
 
     public void setHost (MHost aHost) {
         host = aHost;

@@ -15,6 +15,7 @@ import java.util.Enumeration;
 
 import com.webobjects.appserver.WOApplication;
 import com.webobjects.appserver.WOComponent;
+import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WOResponse;
 import com.webobjects.appserver.xml.WOXMLException;
 import com.webobjects.appserver.xml._JavaMonitorCoder;
@@ -42,6 +43,10 @@ public class MonitorComponent extends WOComponent {
     final int MIGRATION_PAGE = 5;
 	
     public Application theApplication = (Application)WOApplication.application();
+
+    public MonitorComponent(WOContext aWocontext) {
+        super(aWocontext);
+    }
 
     public Session mySession() {
         return (Session) super.session();
