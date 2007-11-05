@@ -62,6 +62,11 @@ public class ERXJDBCMigrationLock implements IERXMigrationLock {
 	public boolean _tryLock(EOAdaptorChannel channel, EOModel model, String lockOwnerName, boolean createTableIfMissing) {
 		JDBCAdaptor adaptor = (JDBCAdaptor) channel.adaptorContext().adaptor();
 		try {
+			// MS: This forces the models to load their jdbc2Info if they aren't already.  This
+			// prevents deadlocks from happening further within migrations when the new migration
+			// API is used.
+			adaptor.externalTypesWithModel(model);
+			
 			int count;
 			boolean wasOpen = true;
 			if (!channel.isOpen()) {
