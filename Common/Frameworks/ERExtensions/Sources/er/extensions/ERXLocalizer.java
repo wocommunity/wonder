@@ -486,11 +486,14 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
 							dict = newDict;
 						}
 						addEntriesToCache(dict);
-						if (!WOApplication.application().isCachingEnabled() && !monitoredFiles.containsObject(path)) {
-							ERXFileNotificationCenter.defaultCenter().addObserver(observer, new NSSelector("fileDidChange", ERXConstant.NotificationClassArray), path.getFile());
-							monitoredFiles.addObject(path);
+						if (!WOApplication.application().isCachingEnabled()) {
+							synchronized (monitoredFiles) {
+								if (!monitoredFiles.containsObject(path)) {
+									ERXFileNotificationCenter.defaultCenter().addObserver(observer, new NSSelector("fileDidChange", ERXConstant.NotificationClassArray), path.getFile());
+									monitoredFiles.addObject(path);
+								}
+							}
 						}
-
 					}
 					catch (Exception ex) {
 						log.warn("Exception loading: " + fileName + " - " + (framework == null ? "app" : framework) + " - " + languages + ":" + ex, ex);
