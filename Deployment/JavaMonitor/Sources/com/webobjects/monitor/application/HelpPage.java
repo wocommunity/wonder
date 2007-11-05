@@ -1,4 +1,6 @@
 package com.webobjects.monitor.application;
+
+import com.webobjects.appserver.WOContext;
 /*
 © Copyright 2006- 2007 Apple Computer, Inc. All rights reserved.
 
@@ -13,6 +15,10 @@ SUCH DAMAGE.
  */
 
 public class HelpPage extends MonitorComponent {
+
+    public HelpPage(WOContext aWocontext) {
+        super(aWocontext);
+    }
 
 	/**
 	 * serialVersionUID

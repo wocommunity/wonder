@@ -12,6 +12,7 @@ IN NO EVENT SHALL APPLE BE LIABLE FOR ANY SPECIAL, INDIRECT, INCIDENTAL OR CONSE
 SUCH DAMAGE.
  */
 import com.webobjects.appserver.WOComponent;
+import com.webobjects.appserver.WOContext;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.monitor._private.MHost;
 
@@ -25,6 +26,10 @@ public class PathWizardPage1 extends MonitorComponent  {
     public String callbackExpand;
     public WOComponent callbackPage;
     public boolean showFiles = true;
+
+    public PathWizardPage1(WOContext aWocontext) {
+        super(aWocontext);
+    }
 
     public void setCallbackKeypath (String aValue) {
         callbackKeypath = aValue;

@@ -21,6 +21,7 @@ import java.net.UnknownHostException;
 
 import com.webobjects.appserver.WOApplication;
 import com.webobjects.appserver.WOComponent;
+import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WOHTTPConnection;
 import com.webobjects.appserver.WORequest;
 import com.webobjects.appserver.WOResponse;
@@ -31,6 +32,10 @@ import com.webobjects.monitor._private.MObject;
 import com.webobjects.monitor._private.String_Extensions;
 
 public class HostsPage extends MonitorComponent  {
+
+    public HostsPage(WOContext aWocontext) {
+        super(aWocontext);
+    }
     /**
 	 * serialVersionUID
 	 */

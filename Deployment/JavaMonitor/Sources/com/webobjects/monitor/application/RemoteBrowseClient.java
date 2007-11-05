@@ -14,6 +14,7 @@ SUCH DAMAGE.
 import java.util.List;
 
 import com.webobjects.appserver.WOApplication;
+import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WOHTTPConnection;
 import com.webobjects.appserver.WORequest;
 import com.webobjects.appserver.WOResponse;
@@ -32,6 +33,10 @@ import com.webobjects.monitor._private.MonitorException;
 public class RemoteBrowseClient extends MonitorComponent {
 	private static final long	serialVersionUID	= 3929193699509459110L;
 	static private byte[] evilHack = "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>".getBytes();
+
+    public RemoteBrowseClient(WOContext aWocontext) {
+        super(aWocontext);
+    }
 
     static public NSDictionary _getFileListOutOfResponse(WOResponse aResponse, String thePath) throws MonitorException {
         NSData responseContent = aResponse.content();
