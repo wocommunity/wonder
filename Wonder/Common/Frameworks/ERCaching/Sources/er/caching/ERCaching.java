@@ -3,6 +3,8 @@ package er.caching;
 import com.danga.memcached.SockIOPool;
 
 import er.extensions.ERXFrameworkPrincipal;
+import er.extensions.ERXProperties;
+import er.extensions.ERXSystem;
 
 public class ERCaching extends ERXFrameworkPrincipal {
 
@@ -20,18 +22,23 @@ public class ERCaching extends ERXFrameworkPrincipal {
            throw NSForwardException._runtimeExceptionForThrowable(e);
         }
 */
-        String[] serverlist = { "localhost:1624" };
+        String servers = ERXProperties.stringForKey("er.caching.servers");
+        if(servers.length() == 0) {
+            log.error("No Servers found");
+            return;
+        }
+        String[] serverlist = servers.split(",\\s*");
 
         // initialize the pool for memcache servers
         SockIOPool pool = SockIOPool.getInstance();
         pool.setServers(serverlist);
 
-        pool.setInitConn(5);
-        pool.setMinConn(5);
-        pool.setMaxConn(50);
-        pool.setMaintSleep(30);
+        pool.setInitConn(ERXProperties.intForKeyWithDefault("er.caching.initialConnections", 5));
+        pool.setMinConn(ERXProperties.intForKeyWithDefault("er.caching.minConnections", 5));
+        pool.setMaxConn(ERXProperties.intForKeyWithDefault("er.caching.initialConnections", 50));
+        pool.setMaintSleep(ERXProperties.intForKeyWithDefault("er.caching.sleepTime", 30));
 
-        pool.setNagle(false);
+        pool.setNagle(ERXProperties.booleanForKeyWithDefault("er.caching.useNagle", false));
         pool.initialize();
 
     }
