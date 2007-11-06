@@ -1,5 +1,7 @@
 package com.webobjects.jdbcadaptor;
 
+import java.util.Iterator;
+
 import com.webobjects.eoaccess.EOAdaptor;
 import com.webobjects.eoaccess.EOAttribute;
 import com.webobjects.eoaccess.EOEntity;
@@ -297,18 +299,44 @@ public class PostgresqlSynchronizationFactory extends EOSynchronizationFactory i
         }
         return false;
     }
-
+    
     /**
-     * Replaces a given string by another string in a string.
-     * 
-     * @param old
-     *            string to be replaced
-     * @param newString
-     *            to be inserted
-     * @param buffer
-     *            string to have the replacement done on it
-     * @return string after having all of the replacement done.
+     * Quote table name if necessary
      */
+    public NSArray createTableStatementsForEntityGroup(NSArray entityGroup) {
+		NSMutableSet columnNames = new NSMutableSet();
+		StringBuffer aStatement = new StringBuffer(128);
+		if (entityGroup != null && entityGroup.count() > 0) {
+			EOSQLExpression sqlExpr = _expressionForEntity((EOEntity) entityGroup.objectAtIndex(0));
+			for (Iterator entityIterator = entityGroup.iterator(); entityIterator.hasNext();) {
+				EOEntity entity = (EOEntity) entityIterator.next();
+				Iterator attributeIterator = entity.attributes().iterator();
+				while (attributeIterator.hasNext()) {
+					EOAttribute attribute = (EOAttribute) attributeIterator.next();
+					String columnName = attribute.columnName();
+					if (!attribute.isDerived() && !attribute.isFlattened() && columnName != null && columnName.length() > 0 && !columnNames.contains(columnName)) {
+						sqlExpr.appendItemToListString(_columnCreationClauseForAttribute(attribute), aStatement);
+						columnNames.addObject(columnName);
+					}
+				}
+			}
+			return new NSArray(_expressionForString((new StringBuilder()).append("CREATE TABLE ").append(this.formatTableName(((EOEntity) entityGroup.objectAtIndex(0)).externalName())).append(" (").append(aStatement.toString()).append(")").toString()));
+		} else {
+			return new NSArray();
+		}
+	}
+    
+    /**
+	 * Replaces a given string by another string in a string.
+	 * 
+	 * @param old
+	 *            string to be replaced
+	 * @param newString
+	 *            to be inserted
+	 * @param buffer
+	 *            string to have the replacement done on it
+	 * @return string after having all of the replacement done.
+	 */
     public static String replaceStringByStringInString(String old, String newString, String buffer) {
         int begin, end;
         int oldLength = old.length();
