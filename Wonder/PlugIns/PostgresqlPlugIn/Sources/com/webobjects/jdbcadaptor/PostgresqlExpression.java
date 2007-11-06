@@ -4,10 +4,12 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
+import java.util.Enumeration;
 
 import com.webobjects.eoaccess.EOAttribute;
 import com.webobjects.eoaccess.EOEntity;
 import com.webobjects.eoaccess.EOJoin;
+import com.webobjects.eoaccess.EOModel;
 import com.webobjects.eoaccess.EORelationship;
 import com.webobjects.eocontrol.EOFetchSpecification;
 import com.webobjects.eocontrol.EOQualifier;
@@ -33,6 +35,7 @@ import com.webobjects.foundation._NSStringUtilities;
  * @author Arturo Perez: JOIN clauses
  * @author David Teran: Timestamps handling
  * @author Tim Cummings: case sensitive table and column names
+ * @author cug: hacks for identifier quoting while creating tables
  */
 public class PostgresqlExpression extends JDBCExpression {
 
@@ -587,13 +590,81 @@ public class PostgresqlExpression extends JDBCExpression {
      * Overrides the parent implementation to add an <code>INITIALLY DEFERRED</code> to the generated statement.
      * Useful you want to generate the schema-building SQL from a pure java environment.
      * 
+     * cug: Also handles identifier quoting now
+     * 
      * @param relationship  the relationship
      * @param sourceColumns the source columns for the constraints
      * @param destinationColumns    the destination columns for the constraints
      */
-    public void prepareConstraintStatementForRelationship( EORelationship relationship, NSArray sourceColumns, NSArray destinationColumns ) {
-        super.prepareConstraintStatementForRelationship( relationship, sourceColumns, destinationColumns );
-        setStatement( statement() + " INITIALLY DEFERRED" );
+    @SuppressWarnings("unchecked")
+	public void prepareConstraintStatementForRelationship(EORelationship relationship, NSArray sourceColumns, NSArray destinationColumns) {
+		
+    	EOEntity entity = relationship.entity();
+		String tableName = entity.externalName();
+		
+		int lastDot = tableName.lastIndexOf('.');
+		
+		if (lastDot >= 0) {
+			tableName = tableName.substring(lastDot + 1);
+		}
+		
+		String constraintName = _NSStringUtilities.concat(tableName, "_", relationship.name(), "_FK");
+		
+		// quotes the identifier in the array
+		
+		String sourceKeyList = this.quoteArrayContents(sourceColumns).componentsJoinedByString(", ");
+		String destinationKeyList = this.quoteArrayContents(destinationColumns).componentsJoinedByString(", ");
+		
+		EOModel sourceModel = entity.model();
+		EOModel destModel = relationship.destinationEntity().model();
+		if (sourceModel != destModel && !sourceModel.connectionDictionary().equals(destModel.connectionDictionary())) {
+			throw new IllegalArgumentException((new StringBuilder()).append("prepareConstraintStatementForRelationship unable to create a constraint for ").append(relationship.name()).append(" because the source and destination entities reside in different databases").toString());
+		} 
+		else {
+			setStatement((new StringBuilder())
+					.append("ALTER TABLE ")
+					.append(quoteIdentifier(entity.externalName()))
+					.append(" ADD CONSTRAINT ")
+					.append(quoteIdentifier(constraintName))
+					.append(" FOREIGN KEY (")
+					.append(sourceKeyList)
+					.append(") REFERENCES ")
+					.append(quoteIdentifier(relationship.destinationEntity().externalName()))
+					.append(" (")
+					.append(destinationKeyList)
+					.append(") INITIALLY DEFERRED")
+					.toString());
+		}
+	}
+    
+    /**
+     * Takes an array of strings and quotes every single string, if set to do so
+     * 
+     * @param a - array of strings
+     * 
+     * @return array of quoted or unquoted strings, depends on enableIdentifierQuoting
+     */
+    @SuppressWarnings("unchecked")
+	private NSArray quoteArrayContents (NSArray a) {
+    	Enumeration enumeration = a.objectEnumerator();
+    	NSMutableArray result = new NSMutableArray();
+    	while (enumeration.hasMoreElements()) {
+    		String identifier = (String) enumeration.nextElement();
+    		String quotedString = this.quoteIdentifier(identifier);
+    		result.addObject(quotedString);
+    	}
+    	return result;
+    }
+    
+    /**
+     * Quotes the string if necessary (checks the Property)
+     * 
+     * @param identifier - the string to quote
+     * 
+     * @return quoted or unquoted string (check with enableIdentifierQuoting)
+     */
+    private String quoteIdentifier (String identifier) {
+   		return this.externalNameQuoteCharacter() + identifier + this.externalNameQuoteCharacter();
     }
     
     
@@ -635,10 +706,10 @@ public class PostgresqlExpression extends JDBCExpression {
       }
       String sql;
       if (defaultValue == null) {
-        sql = _NSStringUtilities.concat(attribute.columnName(), " ", columnTypeStringForAttribute(attribute), " ", allowsNullClauseForConstraint(attribute.allowsNull()));
+        sql = _NSStringUtilities.concat(this.quoteIdentifier(attribute.columnName()), " ", columnTypeStringForAttribute(attribute), " ", allowsNullClauseForConstraint(attribute.allowsNull()));
       }
       else {
-        sql = _NSStringUtilities.concat(attribute.columnName(), " ", columnTypeStringForAttribute(attribute), " DEFAULT ", formatValueForAttribute(defaultValue, attribute), " ", allowsNullClauseForConstraint(attribute.allowsNull()));
+        sql = _NSStringUtilities.concat(this.quoteIdentifier(attribute.columnName()), " ", columnTypeStringForAttribute(attribute), " DEFAULT ", formatValueForAttribute(defaultValue, attribute), " ", allowsNullClauseForConstraint(attribute.allowsNull()));
       }
       appendItemToListString(sql, _listString());
     }
