@@ -764,9 +764,28 @@
     <target name="woadaptors.all" depends="ERIMAdaptor.all" />
     <target name="experimental.all" depends="DevStudio.all" />
 
-    <target name="frameworks.all" depends="common.frameworks.all, excelgeneration.frameworks.all, ajax.frameworks.all, woadaptors.all, validity.frameworks.all, svgobjects.frameworks.all, plugins.all, paypal.frameworks.all, dynareporting.frameworks.all, woadaptors.all">
+    <target name="_frameworks.all" depends="common.frameworks.all, excelgeneration.frameworks.all, ajax.frameworks.all, woadaptors.all, validity.frameworks.all, svgobjects.frameworks.all, plugins.all, paypal.frameworks.all, dynareporting.frameworks.all, woadaptors.all">
      </target>
-    
+     
+     <target name="frameworks.patch54.all">
+       <property name="woognl.pre" value="WOOgnl54.pre" />
+       <property name="erx.class.exclude.0" value="com/webobjects/appserver/_private/WOHTTPIO.java" />  
+       <property name="erx.class.exclude.1" value="com/webobjects/foundation/NSArray.java" /> 
+
+        <antcall target="_frameworks.all" />
+     </target>
+     
+     <target name="frameworks.patch53.all">
+        <property name="woognl.pre" value="WOOgnl53.pre" />
+        <antcall target="_frameworks.all" />
+     </target>
+     
+     <target name="frameworks.all">
+        <!-- AK: need to remove when 54 is default -->
+        <property name="wonder.patch" value="53" />
+        <antcall target="frameworks.patch${wonder.patch}.all" ></antcall>
+     </target>
+   
     <target name="applications.all" depends="DevStudio.all, common.applications.all, validity.applications.all"/>
     <target name="examples.all" depends="common.examples.all, excelgeneration.examples.all, validity.examples.all, dynareporting.examples.all, ajax.examples.all, experimental.all"/>
 
@@ -831,6 +850,7 @@
     </target>
 
     <target name="build">
+        <!-- AK: need to remove when 54 is default -->
         <property name="wonder.patch" value="53" />
         <antcall target="patch.${wonder.patch}" ></antcall>
     </target>
