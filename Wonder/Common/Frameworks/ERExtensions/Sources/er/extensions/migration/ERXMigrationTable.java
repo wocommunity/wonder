@@ -623,7 +623,17 @@ public class ERXMigrationTable {
 	/**
 	 * Executes the SQL operations to add this primary key constraint (only supports single attribute PK's right now).
 	 * 
-	 * @param column the primary key column to create
+	 * @param columnName the name of the column to set as the primary key
+	 * @throws SQLException if the constraint fails
+	 */
+	public void setPrimaryKey(String columnName) throws SQLException {
+		setPrimaryKey(existingColumnNamed(columnName));
+	}
+
+	/**
+	 * Executes the SQL operations to add this primary key constraint (only supports single attribute PK's right now).
+	 * 
+	 * @param column the primary key column to designate as a primary key
 	 * @throws SQLException if the constraint fails
 	 */
 	public void setPrimaryKey(ERXMigrationColumn column) throws SQLException {
@@ -641,6 +651,17 @@ public class ERXMigrationTable {
 		NSArray<EOSQLExpression> expressions = schemaGeneration.foreignKeyConstraintStatementsForRelationship(_newRelationship(sourceColumn, destinationColumn));
 		ERXMigrationDatabase._ensureNotEmpty(expressions);
 		return expressions;
+	}
+
+	/**
+	 * Executes the SQL operations to add this foreign key constraint (only supports single attribute FK's right now).
+	 * 
+	 * @param sourceColumnName the source column name of the relationship
+	 * @param destinationColumn the destination column of the relationship (should be the PK of the destination table)
+	 * @throws SQLException if the add fails
+	 */
+	public void addForeignKey(String sourceColumnName, ERXMigrationColumn destinationColumn) throws SQLException {
+		addForeignKey(existingColumnNamed(sourceColumnName), destinationColumn);
 	}
 
 	/**
