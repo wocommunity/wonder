@@ -300,7 +300,7 @@ public class ERXQ {
 	 * @param values the values
 	 * @return an EOQualifier
 	 */
-	public static EOQualifier in(String key, Object... values) {
+	public static EOQualifier inObjects(String key, Object... values) {
 		NSMutableArray<EOQualifier> qualifiers = new NSMutableArray<EOQualifier>();
 		for (Object value : values) {
 			qualifiers.addObject(ERXQ.equals(key, value));
