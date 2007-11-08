@@ -137,7 +137,7 @@ public class WOHelperFunctionRegistry {
 				helperInstance = _cachedHelperInstanceForFrameworkNamed(helpedClass, WOHelperFunctionRegistry.APP_FRAMEWORK_NAME);
 			}
 			if (helperInstance != null) {
-				if (classImplementsMethod(helperFunction.getClass(), helperFunction)) {
+				if (classImplementsMethod(helperInstance.getClass(), helperFunction)) {
 					setHelperInstanceForClassInFrameworkNamed(helperInstance, helperFunction, helpedClass, frameworkName);
 				} else {
 					helperInstance = null;
