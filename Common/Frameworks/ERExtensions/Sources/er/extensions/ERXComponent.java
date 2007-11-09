@@ -365,10 +365,10 @@ public abstract class ERXComponent extends WOComponent {
 	 * Override and return true for any components to which you would like to
 	 * allow page level access.
 	 * 
-	 * @return false by default
+	 * @return true by default
 	 */
 	protected boolean isPageAccessAllowed() {
-		return false;
+		return true;
 	}
 
 	/**
