@@ -57,7 +57,16 @@ public abstract class ERXAjaxApplication extends WOApplication {
       boolean shouldNotStorePage = (shouldNotStorePage(response) || shouldNotStorePage(request) || isAjaxSubmit(request));
       return shouldNotStorePage;
     }
-    
+
+	/**
+	 * Return whether or not the given request is an Ajax request.
+	 * @param request the request the check
+	 */
+	public static boolean isAjaxRequest(WORequest request) {
+		String requestedWith = request.headerForKey("x-requested-with");
+		return "XMLHttpRequest".equals(requestedWith);
+	}
+
     /**
      * Returns true if this is an ajax submit.
      */
