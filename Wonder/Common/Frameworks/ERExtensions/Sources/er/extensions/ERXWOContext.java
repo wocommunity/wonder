@@ -89,12 +89,14 @@ public class ERXWOContext extends WOContext implements ERXMutableUserInfoHolderI
         super(worequest);
     }
     
-    public void _generateCompleteURLs() {
+    @Override
+	public void _generateCompleteURLs() {
     	super._generateCompleteURLs();
     	_generateCompleteURLs = true;
     }
     
-    public void _generateRelativeURLs() {
+    @Override
+	public void _generateRelativeURLs() {
     	super._generateRelativeURLs();
     	_generateCompleteURLs = false;
     }
@@ -119,7 +121,8 @@ public class ERXWOContext extends WOContext implements ERXMutableUserInfoHolderI
         return mutableUserInfo();
     }
 
-    public String _urlWithRequestHandlerKey(String requestHandlerKey, String requestHandlerPath, String queryString, boolean secure) {
+    @Override
+	public String _urlWithRequestHandlerKey(String requestHandlerKey, String requestHandlerPath, String queryString, boolean secure) {
         String url = super._urlWithRequestHandlerKey(requestHandlerKey, requestHandlerPath, queryString, secure);
         url = ERXApplication.erxApplication()._rewriteURL(url);
         return url;
@@ -212,8 +215,8 @@ public class ERXWOContext extends WOContext implements ERXMutableUserInfoHolderI
      * @param context
      * @return
      */
-    public static NSArray componentPath(WOContext context) {
-    	NSMutableArray result = new NSMutableArray();
+    public static NSArray<String> componentPath(WOContext context) {
+    	NSMutableArray<String> result = new NSMutableArray<String>();
     	if (context != null) {
 	    	WOComponent component = context.component();
 	    	while(component != null) {
@@ -273,6 +276,7 @@ public class ERXWOContext extends WOContext implements ERXMutableUserInfoHolderI
 		}
 	}
 	
+	@SuppressWarnings("unchecked")
 	protected static void _insertInResponseBeforeTag(WOResponse response, String content, String tag, boolean appendIfTagMissing, boolean enqueueIfTagMissing) {
 		String stream = response.contentString();
 		int tagIndex = stream.indexOf(tag);
@@ -306,6 +310,72 @@ public class ERXWOContext extends WOContext implements ERXMutableUserInfoHolderI
 	}
 
 	/**
+	 * Adds a script tag with a correct resource url in the html head tag if it isn't already present in the response.
+	 * 
+	 * @param context the context
+	 * @param response the response
+	 * @param framework the framework that contains the file
+	 * @param fileName the name of the javascript file to add
+	 */
+	public static void addScriptResourceInHead(WOContext context, WOResponse response, String framework, String fileName) {
+		String startTag = "<script type=\"text/javascript\" src=\"";
+		String endTag = "\"></script>";
+		ERXWOContext.addResourceInHead(context, response, framework, fileName, startTag, endTag);
+	}
+
+	/**
+	 * Adds a stylesheet link tag with a correct resource url in the html head tag if it isn't already present in the
+	 * response.
+	 * 
+	 * @param context the context
+	 * @param response the response
+	 * @param framework the framework that contains the file
+	 * @param fileName the name of the css file to add
+	 */
+	public static void addStylesheetResourceInHead(WOContext context, WOResponse response, String framework, String fileName) {
+		String startTag = "<link rel = \"stylesheet\" type = \"text/css\" href = \"";
+		String endTag = "\"/>";
+		ERXWOContext.addResourceInHead(context, response, framework, fileName, startTag, endTag);
+	}
+
+	/**
+	 * Adds javascript code in a script tag in the html head tag.
+	 * 
+	 * @param response the response to write into
+	 * @param script the javascript code to insert 
+	 */
+	public static void addScriptCodeInHead(WOResponse response, String script) {
+		String js = "<script type=\"text/javascript\">\n" + script + "\n</script>";
+		ERXWOContext.insertInResponseBeforeTag(response, js, ERXWOContext._htmlCloseHeadTag(), false, true);
+	}
+
+	/**
+	 * Returns a javascript-safe version of the given element ID.
+	 * 
+	 * @param elementID the element ID
+	 * @return a javascript-safe version (i.e. "wo_1_2_3_10") 
+	 */
+	public static String toSafeElementID(String elementID) {
+		return "wo_" + elementID.replace('.', '_');
+	}
+
+	/**
+	 * Adds a reference to an arbitrary file with a correct resource url wrapped between startTag and endTag in the html
+	 * head tag if it isn't already present in the response.
+	 * 
+	 * @param context the context
+	 * @param response the response
+	 * @param framework the framework that contains the file
+	 * @param fileName the name of the file to add
+	 * @param startTag the HTML to prepend before the URL
+	 * @param endTag the HTML to append after the URL
+	 */
+	public static void addResourceInHead(WOContext context, WOResponse response, String framework, String fileName, String startTag, String endTag) {
+		boolean enqueueIfTagMissing = !ERXAjaxApplication.isAjaxRequest(context.request());
+		ERXWOContext.addResourceInHead(context, response, framework, fileName, startTag, endTag, false, enqueueIfTagMissing);
+	}
+
+	/**
 	 * Adds a reference to an arbitrary file with a correct resource url wrapped between startTag and endTag in the html
 	 * head tag if it isn't already present in the response.
 	 * 
@@ -314,6 +384,7 @@ public class ERXWOContext extends WOContext implements ERXMutableUserInfoHolderI
 	 * @param startTag
 	 * @param endTag
 	 */
+	@SuppressWarnings("unchecked")
 	public static void addResourceInHead(WOContext context, WOResponse response, String framework, String fileName, String startTag, String endTag, boolean appendIfTagMissing, boolean enqueueIfTagMissing) {
 		NSMutableDictionary userInfo = contextDictionary();
 		NSMutableSet addedResources = (NSMutableSet)userInfo.objectForKey("ERXWOContext.addedResources");
