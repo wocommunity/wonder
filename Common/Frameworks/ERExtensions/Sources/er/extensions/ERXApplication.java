@@ -537,6 +537,12 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 		if (timestampLag != null)
 			EOEditingContext.setDefaultFetchTimestampLag(timestampLag.longValue());
 
+		String defaultEncoding = System.getProperty("er.extensions.ERXApplication.DefaultEncoding");
+		if (defaultEncoding != null) {
+			log.debug("Setting default encoding to \"" + defaultEncoding + "\"");
+			installDefaultEncoding(defaultEncoding);
+		}
+
 		String defaultMessageEncoding = System.getProperty("er.extensions.ERXApplication.DefaultMessageEncoding");
 		if (defaultMessageEncoding != null) {
 			log.debug("Setting WOMessage default encoding to \"" + defaultMessageEncoding + "\"");
