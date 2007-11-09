@@ -10,6 +10,7 @@ import com.webobjects.appserver.WOResponse;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableDictionary;
 
+import er.extensions.ERXAjaxApplication;
 import er.extensions.ERXAjaxSession;
 import er.extensions.ERXProperties;
 import er.extensions.ERXResourceManager;
@@ -29,8 +30,7 @@ public class AjaxUtils {
 	 * @param request the request the check
 	 */
 	public static boolean isAjaxRequest(WORequest request) {
-		String requestedWith = request.headerForKey("x-requested-with");
-		return "XMLHttpRequest".equals(requestedWith);
+		return ERXAjaxApplication.isAjaxRequest(request);
 	}
 	
 	public static void setPageReplacementCacheKey(WOContext _context, String _key) {
@@ -98,28 +98,26 @@ public class AjaxUtils {
 		if (ERXProperties.booleanForKey("er.ajax.compressed") && ("prototype.js".equals(fileName) || "scriptaculous.js".equals(fileName))) {
 			processedFileName = "sc-17-proto-15-compressed.js";
 		}
-		String startTag = "<script type=\"text/javascript\" src=\"";
-		String endTag = "\"></script>";
-		AjaxUtils.addResourceInHead(context, response, framework, processedFileName, startTag, endTag);
+		ERXWOContext.addScriptResourceInHead(context, response, framework, processedFileName);
 	}
 
+	/**
+	 * Calls ERXWOContext.addScriptResourceInHead with "Ajax" framework
+	 */
 	public static void addScriptResourceInHead(WOContext context, WOResponse response, String fileName) {
 		AjaxUtils.addScriptResourceInHead(context, response, "Ajax", fileName);
 	}
 
 	/**
-	 * Adds a stylesheet link tag with a correct resource url in the html head tag if it isn't already present in the
-	 * response.
-	 * 
-	 * @param response
-	 * @param fileName
+	 * Calls ERXWOContext.addStylesheetResourceInHead
 	 */
 	public static void addStylesheetResourceInHead(WOContext context, WOResponse response, String framework, String fileName) {
-		String startTag = "<link rel = \"stylesheet\" type = \"text/css\" href = \"";
-		String endTag = "\"/>";
-		AjaxUtils.addResourceInHead(context, response, framework, fileName, startTag, endTag);
+		ERXWOContext.addStylesheetResourceInHead(context, response, framework, fileName);
 	}
 
+	/**
+	 * Calls ERXWOContext.addStylesheetResourceInHead with "Ajax" framework
+	 */
 	public static void addStylesheetResourceInHead(WOContext context, WOResponse response, String fileName) {
 		AjaxUtils.addStylesheetResourceInHead(context, response, "Ajax", fileName);
 	}
@@ -134,8 +132,7 @@ public class AjaxUtils {
 	 * @param endTag
 	 */
 	public static void addResourceInHead(WOContext context, WOResponse response, String framework, String fileName, String startTag, String endTag) {
-		boolean enqueueIfTagMissing = !AjaxUtils.isAjaxRequest(context.request());
-		ERXWOContext.addResourceInHead(context, response, framework, fileName, startTag, endTag, false, enqueueIfTagMissing);
+		ERXWOContext.addResourceInHead(context, response, framework, fileName, startTag, endTag);
 		
 		// MS: OK ... Sheesh.  If you're not using Wonder's ERXResourceManager #1, you're a bad person, but #2 in development mode
 		// you have a lame resource URL that does not act like a path (wr/wodata=/path/to/your/resource), rather it acts like a query string
@@ -148,6 +145,7 @@ public class AjaxUtils {
 		// load the dependent js files on its behalf.  You really should just suck it up and use ERXResourceManager because it really is just
 		// better.  But if you're holding out and scared like a child, then we'll do this for you. 
 		if (!(WOApplication.application().resourceManager() instanceof ERXResourceManager) && "Ajax".equals(framework) && "scriptaculous.js".equals(fileName) && !(context.request() == null || context.request() != null && context.request().isUsingWebServer() && !WOApplication.application()._rapidTurnaroundActiveForAnyProject())) {
+			boolean enqueueIfTagMissing = !AjaxUtils.isAjaxRequest(context.request());
 			ERXWOContext.addResourceInHead(context, response, framework, "builder.js", startTag, endTag, false, enqueueIfTagMissing);
 			ERXWOContext.addResourceInHead(context, response, framework, "effects.js", startTag, endTag, false, enqueueIfTagMissing);
 			ERXWOContext.addResourceInHead(context, response, framework, "dragdrop.js", startTag, endTag, false, enqueueIfTagMissing);
@@ -157,18 +155,17 @@ public class AjaxUtils {
 	}
 
 	/**
-	 * Adds javascript code in a script tag in the html head tag.
-	 * 
-	 * @param response
-	 * @param script
+	 * Calls ERXWOContext.addScriptCodeInHead.
 	 */
 	public static void addScriptCodeInHead(WOResponse response, String script) {
-		String js = "<script type=\"text/javascript\">\n" + script + "\n</script>";
-		ERXWOContext.insertInResponseBeforeTag(response, js, ERXWOContext._htmlCloseHeadTag(), false, true);
+		ERXWOContext.addScriptCodeInHead(response, script);
 	}
 
+	/**
+	 * Calls ERXWOContext.toSafeElementID.
+	 */
 	public static String toSafeElementID(String elementID) {
-		return "wo_" + elementID.replace('.', '_');
+		return ERXWOContext.toSafeElementID(elementID);
 	}
 
 	public static boolean shouldHandleRequest(WORequest request, WOContext context, String containerID) {
