@@ -80,6 +80,17 @@ public class AjaxResponse extends ERXResponse {
 						responseAppender.appendToResponse(this, _context);
 					}
 				}
+				int length;
+				if (((Object)_content) instanceof StringBuffer) {
+					StringBuffer buffer = (StringBuffer)(Object)_content;
+					length = buffer.length();
+				} else {
+					StringBuilder builder = (StringBuilder)(Object) _content;
+					length = builder.length();
+				}
+				if (length == 0) {
+					Ajax.log.warn("You performed an Ajax update, but no response was generated. A common cause of this is that you spelled your updateContainerID wrong.  You specified a container ID '" + AjaxUpdateContainer.updateContainerID(_request) + "'."); 
+				}
 			}
 			finally {
 				_context._setSenderID(originalSenderID);
