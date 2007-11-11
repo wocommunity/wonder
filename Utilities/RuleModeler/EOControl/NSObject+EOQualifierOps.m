@@ -220,3 +220,13 @@ static EONull *null = nil;
 }
 
 @end /* NSDate(ImplementedQualifierComparisons) */
+
+@implementation NSNull(ImplementedQualifierComparisons)
+
+- (NSComparisonResult)compare:(id)_object
+{
+    return self == _object ? NSOrderedSame : NSOrderedDescending;
+}
+
+@end
+
