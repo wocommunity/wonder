@@ -35,7 +35,7 @@
 #import "RMModelGroupEditor.h"
 #import "RMModelGroup.h"
 #import "Rule.h"
-#import "DMToolbarUtils.m"
+#import "DMToolbarUtils.h"
 
 
 //#define EDITABLE_MODELS
