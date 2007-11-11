@@ -28,7 +28,7 @@
 
 #import "RMPreferencesWindow.h"
 
-#import "DMToolbarUtils.m"
+#import "DMToolbarUtils.h"
 
 @implementation RMPreferencesWindow
 
@@ -49,6 +49,7 @@
     
  
     [self addPreferencePane:generalPane identifier:@"GeneralPane" icon:[NSImage imageNamed:@"NSApplicationIcon"] label:NSLocalizedString(@"General", @"Toolbar item label") toolTip:NSLocalizedString(@"General Preferences", @"Toolbar item tooltip") target:self action:@selector(toolbarAction:) menu:NULL];
+    [self addPreferencePane:documentPane identifier:@"DocumentPane" icon:[NSImage imageNamed:@"DocumentPane"] label:NSLocalizedString(@"Document", @"Toolbar item label") toolTip:NSLocalizedString(@"Document Preferences", @"Toolbar item tooltip") target:self action:@selector(toolbarAction:) menu:NULL];
     [self addPreferencePane:colorPane identifier:@"ColorPane" icon:[NSImage imageNamed:@"ColorPane"] label:NSLocalizedString(@"Colors", @"Toolbar item label") toolTip:NSLocalizedString(@"Color Preferences", @"Toolbar item tooltip") target:self action:@selector(toolbarAction:) menu:NULL];
     
     [self prepareToolbar];
