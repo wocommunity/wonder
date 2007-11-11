@@ -42,7 +42,7 @@ function sel$() {
   return results.length < 2 ? results[0] : results;
 }
 
-function $A(iterable) {
+function sel$A(iterable) {
   if (!iterable) return [];
   if (iterable.toArray) {
     return iterable.toArray();
@@ -55,9 +55,9 @@ function $A(iterable) {
 }
 
 function fnBind() {
-  var args = $A(arguments), __method = args.shift(), object = args.shift();
+  var args = sel$A(arguments), __method = args.shift(), object = args.shift();
   var retval = function() {
-    return __method.apply(object, args.concat($A(arguments)));
+    return __method.apply(object, args.concat(sel$A(arguments)));
   }
   retval.__method = __method;
   return retval;
@@ -327,7 +327,7 @@ function triggerKeyEvent(element, eventType, keySequence, canBubble, controlKeyD
 }
 
 function removeLoadListener(element, command) {
-    LOG.info('Removing loadListenter for ' + element + ', ' + command);
+    LOG.debug('Removing loadListenter for ' + element + ', ' + command);
     if (window.removeEventListener)
         element.removeEventListener("load", command, true);
     else if (window.detachEvent)
@@ -335,7 +335,7 @@ function removeLoadListener(element, command) {
 }
 
 function addLoadListener(element, command) {
-    LOG.info('Adding loadListenter for ' + element + ', ' + command);
+    LOG.debug('Adding loadListenter for ' + element + ', ' + command);
     var augmentedCommand = function() {
         command.call(this, element);
     }
@@ -371,6 +371,25 @@ function getTagName(element) {
         tagName = element.tagName.toLowerCase();
     }
     return tagName;
+}
+
+function selArrayToString(a) {
+    if (isArray(a)) {
+        // DGF copying the array, because the array-like object may be a non-modifiable nodelist
+        var retval = [];
+        for (var i = 0; i < a.length; i++) {
+            var item = a[i];
+            var replaced = new String(item).replace(/([,\\])/g, '\\$1');
+            retval[i] = replaced;
+        }
+        return retval;
+    }
+    return new String(a);
+}
+
+
+function isArray(x) {
+    return ((typeof x) == "object") && (x["length"] != null);
 }
 
 function absolutify(url, baseUrl) {
@@ -500,8 +519,25 @@ function reassembleLocation(loc) {
 
 function canonicalize(url) {
     var tempLink = window.document.createElement("link");
-    tempLink.href = url; // this will canonicalize the href
-    return tempLink.href;
+    tempLink.href = url; // this will canonicalize the href on most browsers
+    var loc = parseUrl(tempLink.href)
+    if (!/\/\.\.\//.test(loc.pathname)) {
+    	return tempLink.href;
+    }
+  	// didn't work... let's try it the hard way
+  	var originalParts = loc.pathname.split("/");
+  	var newParts = [];
+  	newParts.push(originalParts.shift());
+  	for (var i = 0; i < originalParts.length; i++) {
+  		var part = originalParts[i];
+  		if (".." == part) {
+  			newParts.pop();
+  			continue;
+  		}
+  		newParts.push(part);
+  	}
+  	loc.pathname = newParts.join("/");
+    return reassembleLocation(loc);
 }
 
 function extractExceptionMessage(ex) {
@@ -707,6 +743,17 @@ function AssertionFailedError(message) {
 
 function SeleniumError(message) {
     var error = new Error(message);
+    if (typeof(arguments.caller) != 'undefined') { // IE, not ECMA
+        var result = '';
+        for (var a = arguments.caller; a != null; a = a.caller) {
+            result += '> ' + a.callee.toString() + '\n';
+            if (a.caller == a) {
+                result += '*';
+                break;
+            }
+        }
+        error.stack = result;
+    }
     error.isSeleniumError = true;
     return error;
 }
@@ -749,6 +796,11 @@ function openSeparateApplicationWindow(url, suppressMozillaWarning) {
     window.moveTo(window.screenX, 0);
 
     var appWindow = window.open(url + '?start=true', 'main');
+    if (appWindow == null) {
+        var errorMessage = "Couldn't open app window; is the pop-up blocker enabled?"
+        LOG.error(errorMessage);
+        throw new Error("Couldn't open app window; is the pop-up blocker enabled?");
+    }
     try {
         var windowHeight = 500;
         if (window.outerHeight) {
