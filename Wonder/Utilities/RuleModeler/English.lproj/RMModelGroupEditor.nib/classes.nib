@@ -12,6 +12,7 @@
         {
             ACTIONS = {
                 changeCaseSensitivityOption = id; 
+                changeParsingOption = id; 
                 changeQualifierMatchingOption = id; 
                 changeWordMatchingOption = id; 
                 focus = id; 
