@@ -97,4 +97,6 @@ typedef enum {
 
 - (void) setFirstResponderInPart:(RMWindowPart)part;
 
+- (IBAction)openInNewWindow:(id)sender;
+
 @end

@@ -31,7 +31,7 @@
 #import "RMModel.h"
 #import "Rule.h"
 #import "Assignment.h"
-#import "DMToolbarUtils.m"
+#import "DMToolbarUtils.h"
 #import "RMFilteringArrayController.h"
 #import "EOControl.h"
 #import "RMCompletionManager.h"
@@ -202,20 +202,25 @@
         [self didChangeValueForKey:@"rhsValueIsNotMarker"];
     }
     else if ([keyPath isEqualToString:@"rules"]) {
-        int aChangeKind = [[change objectForKey:NSKeyValueChangeKindKey] intValue];
-        
-        if (aChangeKind == NSKeyValueChangeInsertion) {
-            NSIndexSet  *indexes = [change objectForKey:NSKeyValueChangeIndexesKey];
-
-            [[[[self model] undoManager] prepareWithInvocationTarget:[self document]] removeRulesAtIndexes:indexes];
-            [[[self model] undoManager] setActionName:[self actionNameWhenInserting:YES ruleCount:[indexes count]]];
-        }
-        else if(aChangeKind == NSKeyValueChangeRemoval){
-            NSArray     *removedRules = [change objectForKey:NSKeyValueChangeOldKey];
-            NSIndexSet  *indexes = [change objectForKey:NSKeyValueChangeIndexesKey];
+        // Support for multiple window controllers:
+        // we want to register the undo/redo only for the first controller.
+        // We should probably move that code to RMModel.
+        if([[[self document] windowControllers] objectAtIndex:0] == self){
+            int aChangeKind = [[change objectForKey:NSKeyValueChangeKindKey] intValue];
             
-            [[[[self model] undoManager] prepareWithInvocationTarget:[self document]] insertRules:removedRules atIndexes:indexes];
-            [[[self model] undoManager] setActionName:[self actionNameWhenInserting:NO ruleCount:[removedRules count]]];
+            if (aChangeKind == NSKeyValueChangeInsertion) {
+                NSIndexSet  *indexes = [change objectForKey:NSKeyValueChangeIndexesKey];
+                
+                [[[[self model] undoManager] prepareWithInvocationTarget:[self document]] removeRulesAtIndexes:indexes];
+                [[[self model] undoManager] setActionName:[self actionNameWhenInserting:YES ruleCount:[indexes count]]];
+            }
+            else if(aChangeKind == NSKeyValueChangeRemoval){
+                NSArray     *removedRules = [change objectForKey:NSKeyValueChangeOldKey];
+                NSIndexSet  *indexes = [change objectForKey:NSKeyValueChangeIndexesKey];
+                
+                [[[[self model] undoManager] prepareWithInvocationTarget:[self document]] insertRules:removedRules atIndexes:indexes];
+                [[[self model] undoManager] setActionName:[self actionNameWhenInserting:NO ruleCount:[removedRules count]]];
+            }
         }
     }
     else if ([keyPath isEqualToString:@"values.useParenthesesForComparisonQualifier"]) {
@@ -497,19 +502,40 @@
     [self remove:sender];
 }
 
+- (void)_optimizedAddRules:(NSArray *)rules
+{
+    // Paste optimization: insertion was fast, but undo was slow, because insertion was done one rule after the other
+    // (that's Apple implementation of -[NSArrayController addObjects:]), thus removal undo was registered once per rule
+    // (and undo/redo message was wrong). By disabling observation during paste, 
+    // and manually creating the undo here, we get much faster undo (and correct undo/redo message).
+    // We can't use -[RMModel insertRules:atIndexes:], because index is different than array controller's.
+    // If we wanted to perform insertion in one go, unlike NSArrayController, then we'd need to modify -arrangeObjects: to
+    // move the newly inserted objects to the end of the list, like the original implementation.
+    NSIndexSet  *indexes = [NSIndexSet indexSetWithIndexesInRange:NSMakeRange([[rulesController arrangedObjects] count], [rules count])];
+    
+    [[self document] removeObserver:[[[self document] windowControllers] objectAtIndex:0] forKeyPath:@"rules"];
+    
+    [rulesController addObjects:rules];
+    
+    // WARNING Code copied from observeValueForKeyPath:ofObject:change:context:
+    [[[[self model] undoManager] prepareWithInvocationTarget:[self document]] removeRulesAtIndexes:indexes];
+    [[[self model] undoManager] setActionName:[self actionNameWhenInserting:YES ruleCount:[indexes count]]];
+    [[self document] addObserver:[[[self document] windowControllers] objectAtIndex:0] forKeyPath:@"rules" options:NSKeyValueObservingOptionOld context:NULL];
+}
+
 - (IBAction)paste:(id)sender {
     NSResponder *firstResponder = [[self window] firstResponder];
     
     if (firstResponder == rulesTableView) {
-	NSPasteboard *pb = [NSPasteboard generalPasteboard];
-	NSString *type = [pb availableTypeFromArray:[NSArray arrayWithObject:@"D2WRules"]];
-	
-	if (type) {
-	    NSDictionary *plist = [pb propertyListForType:@"D2WRules"];	    
-        NSArray *rules = [Rule rulesFromMutablePropertyList:plist];
-	    
-	    [rulesController addObjects:rules];
-	}
+        NSPasteboard    *pb = [NSPasteboard generalPasteboard];
+        NSString        *type = [pb availableTypeFromArray:[NSArray arrayWithObject:@"D2WRules"]];
+        
+        if (type) {
+            NSDictionary    *plist = [pb propertyListForType:@"D2WRules"];	    
+            NSArray         *rules = [Rule rulesFromMutablePropertyList:plist];
+            
+            [self _optimizedAddRules:rules];
+        }
     }
 }
 
@@ -532,7 +558,7 @@
 	    idx = [rowIdx indexGreaterThanIndex:idx];
 	}
 	
-	[rulesController addObjects:rows];
+    [self _optimizedAddRules:rows];
     }
 }
 
@@ -713,6 +739,10 @@
         [aCell setHighlightColor:[[NSValueTransformer valueTransformerForName:@"NSUnarchiveFromData"] transformedValue:[[NSUserDefaults standardUserDefaults] objectForKey:@"searchFilterHighlightColor"]]];
         [aCell setHighlightsMatchingWords:[[NSUserDefaults standardUserDefaults] boolForKey:@"highlightSearchFilterOccurences"]];
     }
+}
+
+- (IBAction)openInNewWindow:(id)sender {
+    [[(RMModel *)[self document] makeNewWindowController] showWindow:sender]; // Cast is not exact, but both RMModel and RMModelGroup have the same method
 }
 
 #pragma mark Completion for textView/textField
