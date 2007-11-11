@@ -51,11 +51,17 @@ static NSString *ruleModelType = @"Apple D2WModel File";
     [super dealloc];
 }
 
-- (void)makeWindowControllers {
+- (id)makeNewWindowController {
     RMModelEditor *editor = [[RMModelEditor alloc] init];
     
     [self addWindowController:editor];
     [editor release];
+    
+    return editor;
+}
+
+- (void)makeWindowControllers {
+    [self makeNewWindowController];
 }
 
 static NSArray * _sortDescriptors = nil;
@@ -122,7 +128,7 @@ static NSArray * _sortDescriptors = nil;
         NSData *data = [[NSPropertyListSerialization openStepFormatStringFromPropertyList:plist level:(prettyPrint ? INT_MAX:2) escapeNonASCII:YES errorDescription:&errorDesc] dataUsingEncoding:NSUTF8StringEncoding];
         
         if (errorDesc) {
-            NSLog(errorDesc);
+            NSLog(@"%@", errorDesc);
             *outError = [NSError errorWithDomain:@"RuleModeler" code:0 userInfo:[NSDictionary dictionaryWithObject:errorDesc forKey:NSLocalizedDescriptionKey]];
         }
         
@@ -185,6 +191,8 @@ static NSArray * _sortDescriptors = nil;
             *outError = [NSError errorWithDomain:@"RuleModeler" code:0 userInfo:[NSDictionary dictionaryWithObject:NSLocalizedString(@"No 'rules' key-value pair", @"Error message") forKey:NSLocalizedDescriptionKey]];
             return NO;
         }
+
+        [[self windowControllers] makeObjectsPerformSelector:@selector(unfocus:) withObject:self]; // Reset focus (else could contain invalid rules - though we might clear them out)
         
         return YES;
     }
@@ -236,7 +244,12 @@ static NSArray * _sortDescriptors = nil;
     [_rules insertObject:obj atIndex:theIndex];
 	[obj setModel:self];
 }
-
+/*
+- (void)updateChangeCount:(NSDocumentChangeType)changeType {
+    NSLog(@"updateChangeCount:%d", changeType);
+    [super updateChangeCount:changeType];
+}
+*/
 - (void)removeObjectFromRulesAtIndex:(unsigned)theIndex {
     [_rules removeObjectAtIndex:theIndex];
 }
