@@ -57,6 +57,8 @@
 		554B1C3D0B751079003869C4 /* common.h in Headers */ = {isa = PBXBuildFile; fileRef = 554B1C3C0B751079003869C4 /* common.h */; };
 		554B1EBE0B7D382D003869C4 /* EOQualifier+RuleModeler.h in Headers */ = {isa = PBXBuildFile; fileRef = 554B1EBC0B7D382D003869C4 /* EOQualifier+RuleModeler.h */; };
 		554B1EBF0B7D382D003869C4 /* EOQualifier+RuleModeler.m in Sources */ = {isa = PBXBuildFile; fileRef = 554B1EBD0B7D382D003869C4 /* EOQualifier+RuleModeler.m */; };
+		5554D92D0CE7B73300C7A1D4 /* DocumentPane.icns in Resources */ = {isa = PBXBuildFile; fileRef = 5554D92C0CE7B73300C7A1D4 /* DocumentPane.icns */; };
+		5554D92F0CE7B8FC00C7A1D4 /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5554D92E0CE7B8FC00C7A1D4 /* Carbon.framework */; };
 		556B41DB0B2333E5006933C5 /* EOAndQualifier.m in Sources */ = {isa = PBXBuildFile; fileRef = 556B41D00B2333E5006933C5 /* EOAndQualifier.m */; };
 		556B41DC0B2333E5006933C5 /* EOKeyValueQualifier.m in Sources */ = {isa = PBXBuildFile; fileRef = 556B41D10B2333E5006933C5 /* EOKeyValueQualifier.m */; };
 		556B41DD0B2333E5006933C5 /* EONotQualifier.m in Sources */ = {isa = PBXBuildFile; fileRef = 556B41D20B2333E5006933C5 /* EONotQualifier.m */; };
@@ -188,6 +190,8 @@
 		554B1C3C0B751079003869C4 /* common.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = common.h; path = EOControl/common.h; sourceTree = "<group>"; };
 		554B1EBC0B7D382D003869C4 /* EOQualifier+RuleModeler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "EOQualifier+RuleModeler.h"; sourceTree = "<group>"; };
 		554B1EBD0B7D382D003869C4 /* EOQualifier+RuleModeler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "EOQualifier+RuleModeler.m"; sourceTree = "<group>"; };
+		5554D92C0CE7B73300C7A1D4 /* DocumentPane.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = DocumentPane.icns; sourceTree = "<group>"; };
+		5554D92E0CE7B8FC00C7A1D4 /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = /System/Library/Frameworks/Carbon.framework; sourceTree = "<absolute>"; };
 		556B41D00B2333E5006933C5 /* EOAndQualifier.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; name = EOAndQualifier.m; path = EOControl/EOAndQualifier.m; sourceTree = "<group>"; };
 		556B41D10B2333E5006933C5 /* EOKeyValueQualifier.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; name = EOKeyValueQualifier.m; path = EOControl/EOKeyValueQualifier.m; sourceTree = "<group>"; };
 		556B41D20B2333E5006933C5 /* EONotQualifier.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; name = EONotQualifier.m; path = EOControl/EONotQualifier.m; sourceTree = "<group>"; };
@@ -252,6 +256,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				8D15AC340486D014006FF6A4 /* Cocoa.framework in Frameworks */,
+				5554D92F0CE7B8FC00C7A1D4 /* Carbon.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -261,6 +266,7 @@
 		1058C7A6FEA54F5311CA2CBB /* Linked Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				5554D92E0CE7B8FC00C7A1D4 /* Carbon.framework */,
 				1058C7A7FEA54F5311CA2CBB /* Cocoa.framework */,
 			);
 			name = "Linked Frameworks";
@@ -337,6 +343,7 @@
 		2A37F4B8FDCFA73011CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				5554D92C0CE7B73300C7A1D4 /* DocumentPane.icns */,
 				55A0E2380B93519F0086057D /* ColorPane.tiff */,
 				5514F5CD0B8E47C9002AD3F9 /* RMCompletionManager-assignmentClassNames.plist */,
 				5514F5AD0B8E4047002AD3F9 /* RMCompletionManager-lhsKeyPaths.plist */,
@@ -630,6 +637,7 @@
 				5514F5CE0B8E47CA002AD3F9 /* RMCompletionManager-assignmentClassNames.plist in Resources */,
 				5514F65F0B8E50D2002AD3F9 /* RMCompletionManager-rhsStringValues.plist in Resources */,
 				55A0E2390B93519F0086057D /* ColorPane.tiff in Resources */,
+				5554D92D0CE7B73300C7A1D4 /* DocumentPane.icns in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
