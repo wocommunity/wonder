@@ -9,11 +9,21 @@ FIXME No window position is saved!
 FIXME Edit rhs.value with lots of values: first, appears rather collapsed; edit and tab out -> appears very expanded, and much nicer!
 FIXME Save search even if user didn't press return button, but left the search field.
 FIXME With multiple selection marker (or null value) in textview, displayed value is not a placeholder, unlike in textfields
-FIXME Paste multiple lines in searchField -> garbage on refresh of searchField (bug in AppKit?). -> remove line returns from pasted string
 FIXME Wrong window cascading when opening model after group has been opened
 FIXME In rhs textview: when 'no selection' placeholder, don't allow selection; idem for multiple, when not editable. Idem for textfield, as currently clicking on field lets placeholder disappear
 FIXME When file edited externally, sometimes RM loses path of file at save
 FIXME Undo manager error: edit rhs value: type "D2, and complete, type " to finish, then tab to rule list, then undo -> file still modified
+FIXME The 'disabled' color bug is still not fixed: from group, filter out list so that first listed rule is a disabled one. => invalid text color.
+FIXME in group table, unable to select rhs key value with double-click (combobox...)
+FIXME set view with focus on, then revert, Focus is still on, but nothing is displayed => reset focus too
+FIXME focus on set of rules, and filter with pattern. Select first. Duplicate it => exception logged in console: "Error inserting object at arranged object index 9". Same problem with copy/paste!
+FIXME focus on set of rules. Duplicate one, then filter -> duplicated one is no longer displayed!!!
+FIXME Absolute path for group models doesn't work! Sometimes still relative!!! Probably due to original path which is a link.
+FIXME Problems when files externally touched while referenced in opened group
+FIXME It may happen that the LHS field doesn't highlight all occurrences of all search terms
+FIXME Duplicating a rule reorders rules
+FIXME Uses too much memory. E.g. with 5400 rules, it uses 90MB real memory. There is a 0.4MB leak when closing the group doc, and when opening it, it needs too much memory -> use local AP. It uses also too much memory without any open doc.
+
 
 1.3.1:
 Fixed bug when closing model group
@@ -35,20 +45,34 @@ Fixed update of rule order in files
 Regression bug. In rule list, displayed text was cut on words, not on characters, i.e. displayed "task = " when it would have enough space to display "task = 'ed".
 Regression bug. In rule list, for disabled rules, displayed text was still in black instead of grey.
 
+1.4.0:
+Now user can open same model/group in multiple windows
+Changing search term parsing (with/without EO qualifier) is now done from search menu (was global pref)
+Search field placeholder now reflects search options
+Restore previously opened documents (option) - when set and Shift pressed at startup, does not reopen
+Fixed bug if pasting/duplicating rule when displays focussed and filtered rules
+Fixed qualifier parser error (missing qualifier after AND/OR)
+Enhanced undo of pasting multiple rules (much faster)
+Removed undo inside textview (edition of RHS value in model), because causes problems with document undo.
+Now resets focus after revert
+Fixed bug with undo/redo label after pasting multiple rules
+Fixed display bug with multiple lines in searchField
+Capitalisation change in 'Assignment Class' column title
 
-For 1.4:
+
+
+For 1.5:
 FIXME Rule firing: also return rules not matching keyPath
 - When lhs/rhs.value fields are _not_editable_, use grey color instead of black
 - For the missing placeholder of NSTextView: when we need the placeholder, switch NSTextView to NSTextField? Problem: click on multiple -> editable -> textview again
 - Double-clicking a parenthesis in lhs/rhs fields should select whole parenthesized content + parentheses
-- Restore previously opened documents (option)
 - In lhs field, display scrollers when necessary -> textView refusing tabs, returns.
 - In rhs value textView, display 'Null Value' or 'Multiple Values' when necessary. Null Value is black (should be grey). Problem is that these are not placeholder values: when you click on field, value is still displayed.
 - In preferences, user can enter a list of rhs.keyPaths that always appear in the combobox; that list could, for example, display all keypaths used in Apple/Wonder D2W, plus custom ones. We could also do the same for the assignment classes.
 - [ak] Spell-checking in the qualifiers and components! I just had the umpteenth time a displayPopertyKey or a propertyName or whatever. These things are a bitch to track down...
 - In model group view, user can assign one color per model, manually. [ak] What would be ok is to define some "system" frameworks (ER, D2W) and shade those in lighter grey. Or use the Finder color for the model file...
 - In assignment class combobox, use same display name as in tableview (optional)
-- Add action to show rules identical to selected one; for model and model groups. What does define 'identical' rules? Same lhs/rhs.keyPath?
+- Add action to show rules identical to selected one; for model and model groups. What does define 'identical' rules? Same lhs/rhs.keyPath? same prio(?), lhs (don't care about order), rhs key => rules would be chosen at random!
 - Additional searching for duplicates, without comparing the rhs.value: if value is different, or priority is different, we should warn user.
 - Add contextual menu for tableview to act on clicked rule, not on selection, unlike the menu actions.
 - Allow associating comment to model, model group and rules
@@ -59,20 +83,19 @@ FIXME Rule firing: also return rules not matching keyPath
   - re-order qualifier keys
   - make all qualifiers w/o "*" "equals" instead of "like"
   - [ds] Find and replace, textual -> find=focus, with selection on first rule, with matching text selected in editor -> user can next/previous/replace&find
-- Add support for special characters \n, \r, etc. in lhs {use value transformer}
+- Add support for special characters \n, \r, space, etc. in lhs {use value transformer}
 - Add qualifier matching search: option in popup - when set, disable 'search as you type': user types rule qualifier, and we returns all rules containing that qualifier, e.g. task = 'edit'
+- Cmd-E should put selected text into search field
 
 Later:
 - Would it be possible to create smart groups, user-defined, which would filter rules according to some qualifiers? User would type a qualifier (e.g. "task='edit'"), an action (colorize, show, hide row?), and existing rules would be applied that filter. Multiple smart group could be ANDed or ORed.
 - Smart groups: view like Spotlight results view: blue separator contains title + selection info + search field (active)
-- Colorize result parts according to filter qualifier, i.e. if user typed 'color' then colorize the 'color' occurences in lhs/rhs, plus a color indication whether lhs or rhs matches
 - Maybe a nonsense idea: There are the keys you can edit in the d2wClient file. Eg. "refreshRefetchedObjects" for a query page. You could fetch these and put them into a tooltip as a reminder? Problem is that I don't know where you would take that information from: the d2wclient file doesn't contain such information; what it has is a list of editors for some page, but the editor name is not a D2W keypath (e.g. see backgroundColorForTable). We'd need to extend the d2wclient file to contain that information.
 - List of d2wclient.plist files: display in red when file not available
 - A graphical editor for the qualifiers, like RuleEditor or Xcode. [ak] I prefer RuleEditor's over Xcode's, because it needs less space; but it needs to allow reordering, operator changing.
 - Auto-normalizing of qualifiers: always task, entity, pageConfiguration, propertyKey in that order (or some other). Order should be user-configurable, and not applied automatically (only from a user action)
 - In model group, allow user to show/hide a model in the group
 - Automatic save (there is an API in Cocoa to do that, though I haven't used it yet)
-- Allow displaying rules in more than one window
 - Syntax-highlighting of qualifier, i.e. use specific colors for numbers, strings, operators, keys, etc.
 - Save search options in defaults
 - Change focus image
@@ -81,6 +104,8 @@ Later:
 - Open a group; touch all models of group, and go back to RM -> displays as many alert panels as touched models. Could it be possible to display only one alert? Could it be possible to avoid the second 'revert' alert?
 - [ak] Make the RuleModeler hook into the app (highlight touched rules, of get PC, task and entity from page). Synchronized with the running D2W app, like the D2W assistant.
 - Use RBSplitView to allow programmatically collapsing splitviews (http://www.brockerhoff.net/src/rbs.html)
+- Cmd-double-click on detail field in group editor should open model editor, with focus on same field - even try to perform double/triple click to select same word/line
+- Refresh search field content with NSFindPboard content?
 
 
 Abandoned:
