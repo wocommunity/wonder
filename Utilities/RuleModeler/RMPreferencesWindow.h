@@ -35,6 +35,7 @@
     
     IBOutlet NSView                     *generalPane;
     IBOutlet NSView                     *colorPane;
+    IBOutlet NSView                     *documentPane;
     
     NSMutableDictionary                 *toolbarItems;
     NSMutableDictionary			*preferencePanes;
