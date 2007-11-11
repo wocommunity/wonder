@@ -32,6 +32,7 @@ var debugMode = false;
 var relayToRC = null;
 var proxyInjectionMode = false;
 var uniqueId = 'sel_' + Math.round(100000 * Math.random());
+var seleniumSequenceNumber = 0;
 
 var RemoteRunnerOptions = classCreate();
 objectExtend(RemoteRunnerOptions.prototype, URLConfiguration.prototype);
@@ -62,7 +63,7 @@ objectExtend(RemoteRunnerOptions.prototype, {
             if (args.length < 2) return null;
             this.queryString = args[1];
         } else if (proxyInjectionMode) {
-            this.queryString = selenium.browserbot.getCurrentWindow().location.search.substr(1);
+            this.queryString = window.location.search.substr(1);
         } else {
             this.queryString = top.location.search.substr(1);
         }
@@ -77,8 +78,8 @@ function runSeleniumTest() {
 
     if (runOptions.isMultiWindowMode()) {
         testAppWindow = openSeparateApplicationWindow('Blank.html', true);
-    } else if (sel$('myiframe') != null) {
-        var myiframe = sel$('myiframe');
+    } else if (sel$('selenium_myiframe') != null) {
+        var myiframe = sel$('selenium_myiframe');
         if (myiframe) {
             testAppWindow = myiframe.contentWindow;
         }
@@ -95,7 +96,7 @@ function runSeleniumTest() {
         debugMode = runOptions.isDebugMode();
     }
     if (proxyInjectionMode) {
-        LOG.log = logToRc;
+        LOG.logHook = logToRc;
         selenium.browserbot._modifyWindow(testAppWindow);
     }
     else if (debugMode) {
@@ -130,19 +131,16 @@ function buildDriverUrl() {
     var slashPairOffset = s.indexOf("//") + "//".length
     var pathSlashOffset = s.substring(slashPairOffset).indexOf("/")
     return s.substring(0, slashPairOffset + pathSlashOffset) + "/selenium-server/driver/";
+    //return "http://localhost" + uniqueId + "/selenium-server/driver/";
 }
 
 function logToRc(logLevel, message) {
-    if (logLevel == null) {
-        logLevel = "debug";
-    }
     if (debugMode) {
-        sendToRC("logLevel=" + logLevel + ":" + message.replace(/[\n\r\015]/g, " ") + "\n", "logging=true");
+        if (logLevel == null) {
+            logLevel = "debug";
+        }
+        sendToRCAndForget("logLevel=" + logLevel + ":" + message.replace(/[\n\r\015]/g, " ") + "\n", "logging=true");
     }
-}
-
-function isArray(x) {
-    return ((typeof x) == "object") && (x["length"] != null);
 }
 
 function serializeString(name, s) {
@@ -204,19 +202,19 @@ objectExtend(RemoteRunner.prototype, {
 
     commandStarted : function(command) {
         this.commandNode = document.createElement("div");
-        var innerHTML = command.command + '(';
+        var cmdText = command.command + '(';
         if (command.target != null && command.target != "") {
-            innerHTML += command.target;
+            cmdText += command.target;
             if (command.value != null && command.value != "") {
-                innerHTML += ', ' + command.value;
+                cmdText += ', ' + command.value;
             }
         }
-        innerHTML += ")";
-        if (innerHTML.length >40) {
-            innerHTML = innerHTML.substring(0,40);
-            innerHTML += "...";
+        cmdText += ")";
+        if (cmdText.length >40) {
+            cmdText = cmdText.substring(0,40);
+            cmdText += "...";
         }
-        this.commandNode.innerHTML = innerHTML;
+        this.commandNode.appendChild(document.createTextNode(cmdText));
         this.commandNode.style.backgroundColor = workingColor;
         if (document.getElementById("commandList") != null) {
             document.getElementById("commandList").removeChild(cmd1);
@@ -250,7 +248,9 @@ objectExtend(RemoteRunner.prototype, {
             if (result.result == null) {
                 postResult = "OK";
             } else {
-                postResult = "OK," + result.result;
+                var actualResult = result.result;
+                actualResult = selArrayToString(actualResult);
+                postResult = "OK," + actualResult;
             }
             this.commandNode.style.backgroundColor = doneColor;
         }
@@ -270,7 +270,9 @@ objectExtend(RemoteRunner.prototype, {
     },
 
     _HandleHttpResponse : function() {
+        // When request is completed
         if (this.xmlHttpForCommandsAndResults.readyState == 4) {
+            // OK
             if (this.xmlHttpForCommandsAndResults.status == 200) {
             	if (this.xmlHttpForCommandsAndResults.responseText=="") {
                     LOG.error("saw blank string xmlHttpForCommandsAndResults.responseText");
@@ -279,7 +281,9 @@ objectExtend(RemoteRunner.prototype, {
                 var command = this._extractCommand(this.xmlHttpForCommandsAndResults);
                 this.currentCommand = command;
                 this.continueTestAtCurrentCommand();
-            } else {
+            }
+            // Not OK 
+            else {
                 var s = 'xmlHttp returned: ' + this.xmlHttpForCommandsAndResults.status + ": " + this.xmlHttpForCommandsAndResults.statusText;
                 LOG.error(s);
                 this.currentCommand = null;
@@ -364,22 +368,94 @@ function sendToRC(dataToBePosted, urlParms, callback, xmlHttpObject, async) {
     if (urlParms) {
         url += urlParms;
     }
-    url += "&localFrameAddress=" + (proxyInjectionMode ? makeAddressToAUTFrame() : "top");
-    url += getSeleniumWindowNameURLparameters();
-    url += "&uniqueId=" + uniqueId;
-
+    url = addUrlParams(url);
+    url += "&sequenceNumber=" + seleniumSequenceNumber++;
+    
+    var wrappingCallback;
     if (callback == null) {
-        callback = function() {
-        };
+        callback = function() {};
+        wrappingCallback = callback;
+    } else {
+        wrappingCallback = function() {
+            if (xmlHttpObject.readyState == 4) {
+                if (xmlHttpObject.status == 200) {
+                    var retry = false;
+                    if (typeof currentTest != 'undefined') {
+                        var command = currentTest._extractCommand(xmlHttpObject);
+                            //console.log("*********** " + command.command + " | " + command.target + " | " + command.value);
+                        if (command.command == 'retryLast') {
+                            retry = true;
+                        }
+                    }
+                    if (retry) {
+                        setTimeout(fnBind(function() {
+                            sendToRC("RETRY", "retry=true", callback, xmlHttpObject, async);
+                        }, this), 1000);
+                    } else {
+                        callback();
+                    }
+                }
+            }
+        }
     }
-    url += buildDriverParams() + preventBrowserCaching();
-    dataToBePosted = "postedData=" + encodeURIComponent(dataToBePosted);
+    
+    var postedData = "postedData=" + encodeURIComponent(dataToBePosted);
 
     //xmlHttpObject.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
     xmlHttpObject.open("POST", url, async);
-    xmlHttpObject.onreadystatechange = callback;
-    xmlHttpObject.send(dataToBePosted);
+    xmlHttpObject.onreadystatechange = wrappingCallback;
+    xmlHttpObject.send(postedData);
     return null;
+}
+
+function addUrlParams(url) {
+    return url + "&localFrameAddress=" + (proxyInjectionMode ? makeAddressToAUTFrame() : "top")
+    + getSeleniumWindowNameURLparameters()
+    + "&uniqueId=" + uniqueId
+    + buildDriverParams() + preventBrowserCaching()
+}
+
+function sendToRCAndForget(dataToBePosted, urlParams) {
+    var url;
+    if (!(browserVersion.isChrome || browserVersion.isHTA)) { 
+        // DGF we're behind a proxy, so we can send our logging message to literally any host, to avoid 2-connection limit
+        var protocol = "http:";
+        if (window.location.protocol == "https:") {
+            // DGF if we're in HTTPS, use another HTTPS url to avoid security warning
+            protocol = "https:";
+        }
+        // we don't choose a super large random value, but rather 1 - 16, because this matches with the pre-computed
+        // tunnels waiting on the Selenium Server side. This gives us higher throughput than the two-connection-per-host
+        // limitation, but doesn't require we generate an extremely large ammount of fake SSL certs either.
+        url = protocol + "//" + Math.floor(Math.random()* 16 + 1) + ".selenium.doesnotexist/selenium-server/driver/?" + urlParams;
+    } else {
+        url = buildDriverUrl() + "?" + urlParams;
+    }
+    url = addUrlParams(url);
+    
+    var method = "GET";
+    if (method == "POST") {
+        // DGF submit a request using an iframe; we can't see the response, but we don't need to
+        // TODO not using this mechanism because it screws up back-button
+        var loggingForm = document.createElement("form");
+        loggingForm.method = "POST";
+        loggingForm.action = url;
+        loggingForm.target = "seleniumLoggingFrame";
+        var postedDataInput = document.createElement("input");
+        postedDataInput.type = "hidden";
+        postedDataInput.name = "postedData";
+        postedDataInput.value = dataToBePosted;
+        loggingForm.appendChild(postedDataInput);
+        document.body.appendChild(loggingForm);
+        loggingForm.submit();
+        document.body.removeChild(loggingForm);
+    } else {
+        var postedData = "&postedData=" + encodeURIComponent(dataToBePosted);
+        var scriptTag = document.createElement("script");
+        scriptTag.src = url + postedData;
+        document.body.appendChild(scriptTag);
+        document.body.removeChild(scriptTag);
+    }
 }
 
 function buildDriverParams() {
@@ -423,11 +499,13 @@ function getSeleniumWindowNameURLparameters() {
         return s;
     }
     if (w["seleniumWindowName"] == null) {
-    	s +=  'generatedSeleniumWindowName_' + Math.round(100000 * Math.random());
+        if (w.name) {
+            w["seleniumWindowName"] = w.name;
+        } else {
+    	    w["seleniumWindowName"] = 'generatedSeleniumWindowName_' + Math.round(100000 * Math.random());
+    	}
     }
-    else {
-    	s += w["seleniumWindowName"];
-    }
+    s += w["seleniumWindowName"];
     var windowOpener = w.opener;
     for (key in windowOpener) {
         var val = null;
@@ -467,3 +545,27 @@ function makeAddressToAUTFrame(w, frameNavigationalJSexpression)
     }
     return null;
 }
+
+Selenium.prototype.doSetContext = function(context) {
+    /**
+   * Writes a message to the status bar and adds a note to the browser-side
+   * log.
+   *
+   * @param context
+   *            the message to be sent to the browser
+   */
+    //set the current test title
+    var ctx = document.getElementById("context");
+    if (ctx != null) {
+        ctx.innerHTML = context;
+    }
+};
+
+Selenium.prototype.doCaptureScreenshot = function(filename) {
+    /**
+    * Captures a PNG screenshot to the specified file.
+    *
+    * @param filename the absolute path to the file to be written, e.g. "c:\blah\screenshot.png"
+    */
+    // This doesn't really do anything on the JS side; we let the Selenium Server take care of this for us!
+};

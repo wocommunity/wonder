@@ -45,6 +45,10 @@ objectExtend(HtmlTestRunner.prototype, {
     },
 
     loadSuiteFrame: function() {
+        var logLevel = this.controlPanel.getDefaultLogLevel();
+        if (logLevel) {
+            LOG.setLogLevelThreshold(logLevel);
+        }
         if (selenium == null) {
             var appWindow = this._getApplicationWindow();
             try { appWindow.location; }
@@ -76,7 +80,7 @@ objectExtend(HtmlTestRunner.prototype, {
         if (this.controlPanel.isMultiWindowMode()) {
             return this._getSeparateApplicationWindow();
         }
-        return sel$('myiframe').contentWindow;
+        return sel$('selenium_myiframe').contentWindow;
     },
 
     _getSeparateApplicationWindow: function () {
@@ -97,7 +101,8 @@ objectExtend(HtmlTestRunner.prototype, {
             addLoadListener(this._getApplicationWindow(), fnBind(this._startSingleTest, this));
             this._getApplicationWindow().src = this.controlPanel.getAutoUrl();
         } else {
-            this.getTestSuite().getSuiteRows()[0].loadTestCase();
+            var testCaseLoaded = fnBind(function(){this.testCaseLoaded=true;},this);
+            this.getTestSuite().getSuiteRows()[0].loadTestCase(testCaseLoaded);
         }
     },
 
@@ -187,10 +192,12 @@ objectExtend(SeleniumFrame.prototype, {
             // this works in every browser (except Firefox in chrome mode)
             var styleSheetPath = window.location.pathname.replace(/[^\/\\]+$/, "selenium-test.css");
             if (browserVersion.isIE && window.location.protocol == "file:") {
-                styleSheetPath = "file://" + styleSheetPath;
+                styleSheetPath = "file:///" + styleSheetPath;
             }
             styleLink.href = styleSheetPath;
         }
+        // DGF You're only going to see this log message if you set defaultLogLevel=debug
+        LOG.debug("styleLink.href="+styleLink.href);
         head.appendChild(styleLink);
     },
 
@@ -205,7 +212,8 @@ objectExtend(SeleniumFrame.prototype, {
         var isChrome = browserVersion.isChrome || false;
         var isHTA = browserVersion.isHTA || false;
         // DGF TODO multiWindow
-        location += "?thisIsChrome=" + isChrome + "&thisIsHTA=" + isHTA;
+        location += (location.indexOf("?") == -1 ? "?" : "&");
+        location += "thisIsChrome=" + isChrome + "&thisIsHTA=" + isHTA; 
         if (browserVersion.isSafari) {
             // safari doesn't reload the page when the location equals to current location.
             // hence, set the location to blank so that the page will reload automatically.
@@ -268,7 +276,7 @@ function getSuiteFrame() {
     var f = sel$('testSuiteFrame');
     if (f == null) {
         f = top;
-        // proxyInjection mode does not set myiframe
+        // proxyInjection mode does not set selenium_myiframe
     }
     return f;
 }
@@ -277,7 +285,7 @@ function getTestFrame() {
     var f = sel$('testFrame');
     if (f == null) {
         f = top;
-        // proxyInjection mode does not set myiframe
+        // proxyInjection mode does not set selenium_myiframe
     }
     return f;
 }
@@ -384,6 +392,10 @@ objectExtend(HtmlTestRunnerControlPanel.prototype, {
 
     getAutoUrl: function() {
         return this._getQueryParameter("autoURL");
+    },
+    
+    getDefaultLogLevel: function() {
+        return this._getQueryParameter("defaultLogLevel");
     },
 
     getResultsUrl: function() {
@@ -593,7 +605,7 @@ objectExtend(HtmlTestSuite.prototype, {
     },
 
     getTestTable: function() {
-        var tables = $A(this.suiteDocument.getElementsByTagName("table"));
+        var tables = sel$A(this.suiteDocument.getElementsByTagName("table"));
         return tables[0];
     },
 
@@ -603,7 +615,7 @@ objectExtend(HtmlTestSuite.prototype, {
 
     _collectSuiteRows: function () {
         var result = [];
-        var tables = $A(this.suiteDocument.getElementsByTagName("table"));
+        var tables = sel$A(this.suiteDocument.getElementsByTagName("table"));
         var testTable = tables[0];
         for (rowNum = 1; rowNum < testTable.rows.length; rowNum++) {
             var rowElement = testTable.rows[rowNum];
@@ -611,7 +623,7 @@ objectExtend(HtmlTestSuite.prototype, {
         }
         
         // process the unsuited rows as well
-        for (var tableNum = 1; tableNum < $A(this.suiteDocument.getElementsByTagName("table")).length; tableNum++) {
+        for (var tableNum = 1; tableNum < sel$A(this.suiteDocument.getElementsByTagName("table")).length; tableNum++) {
             testTable = tables[tableNum];
             for (rowNum = 1; rowNum < testTable.rows.length; rowNum++) {
                 var rowElement = testTable.rows[rowNum];
@@ -713,7 +725,7 @@ objectExtend(TestResult.prototype, {
 
         form.id = "resultsForm";
         form.method = "post";
-        form.target = "myiframe";
+        form.target = "selenium_myiframe";
 
         var resultsUrl = this.controlPanel.getResultsUrl();
         if (!resultsUrl) {
@@ -766,10 +778,21 @@ objectExtend(TestResult.prototype, {
             }
         }
 
-        form.createHiddenField("numTestTotal", rowNum);
+        form.createHiddenField("numTestTotal", rowNum-1);
 
         // Add HTML for the suite itself
         form.createHiddenField("suite", this.suiteTable.parentNode.innerHTML);
+
+        var logMessages = [];
+        while (LOG.pendingMessages.length > 0) {
+            var msg = LOG.pendingMessages.shift();
+            logMessages.push(msg.type);
+            logMessages.push(": ");
+            logMessages.push(msg.msg);
+            logMessages.push('\n');
+        }
+        var logOutput = logMessages.join("");
+        form.createHiddenField("log", logOutput);
 
         if (this.controlPanel.shouldSaveResultsToFile()) {
             this._saveToFile(resultsUrl, form);
@@ -788,22 +811,50 @@ objectExtend(TestResult.prototype, {
         for (var i = 0; i < form.elements.length; i++) {
             inputs[form.elements[i].name] = form.elements[i].value;
         }
+        
         var objFSO = new ActiveXObject("Scripting.FileSystemObject")
+        
+        // DGF get CSS
+        var styles = "";
+        try {
+            var styleSheetPath = window.location.pathname.replace(/[^\/\\]+$/, "selenium-test.css");
+            if (window.location.protocol == "file:") {
+                var stylesFile = objFSO.OpenTextFile(styleSheetPath, 1);
+                styles = stylesFile.ReadAll();
+            } else {
+                var xhr = XmlHttp.create();
+                xhr.open("GET", styleSheetPath, false);
+                xhr.send("");
+                styles = xhr.responseText;
+            }
+        } catch (e) {}
+        
         var scriptFile = objFSO.CreateTextFile(fileName);
-        scriptFile.WriteLine("<html><body>\n<h1>Test suite results </h1>" +
-                             "\n\n<table>\n<tr>\n<td>result:</td>\n<td>" + inputs["result"] + "</td>\n" +
-                             "</tr>\n<tr>\n<td>totalTime:</td>\n<td>" + inputs["totalTime"] + "</td>\n</tr>\n" +
-                             "<tr>\n<td>numTestPasses:</td>\n<td>" + inputs["numTestPasses"] + "</td>\n</tr>\n" +
-                             "<tr>\n<td>numTestFailures:</td>\n<td>" + inputs["numTestFailures"] + "</td>\n</tr>\n" +
-                             "<tr>\n<td>numCommandPasses:</td>\n<td>" + inputs["numCommandPasses"] + "</td>\n</tr>\n" +
-                             "<tr>\n<td>numCommandFailures:</td>\n<td>" + inputs["numCommandFailures"] + "</td>\n</tr>\n" +
-                             "<tr>\n<td>numCommandErrors:</td>\n<td>" + inputs["numCommandErrors"] + "</td>\n</tr>\n" +
-                             "<tr>\n<td>" + inputs["suite"] + "</td>\n<td>&nbsp;</td>\n</tr>");
+        
+        
+        scriptFile.WriteLine("<html><head><title>Test suite results</title><style>");
+        scriptFile.WriteLine(styles);
+        scriptFile.WriteLine("</style>");
+        scriptFile.WriteLine("<body>\n<h1>Test suite results</h1>" +
+             "\n\n<table>\n<tr>\n<td>result:</td>\n<td>" + inputs["result"] + "</td>\n" +
+             "</tr>\n<tr>\n<td>totalTime:</td>\n<td>" + inputs["totalTime"] + "</td>\n</tr>\n" +
+             "<tr>\n<td>numTestTotal:</td>\n<td>" + inputs["numTestTotal"] + "</td>\n</tr>\n" +
+             "<tr>\n<td>numTestPasses:</td>\n<td>" + inputs["numTestPasses"] + "</td>\n</tr>\n" +
+             "<tr>\n<td>numTestFailures:</td>\n<td>" + inputs["numTestFailures"] + "</td>\n</tr>\n" +
+             "<tr>\n<td>numCommandPasses:</td>\n<td>" + inputs["numCommandPasses"] + "</td>\n</tr>\n" +
+             "<tr>\n<td>numCommandFailures:</td>\n<td>" + inputs["numCommandFailures"] + "</td>\n</tr>\n" +
+             "<tr>\n<td>numCommandErrors:</td>\n<td>" + inputs["numCommandErrors"] + "</td>\n</tr>\n" +
+             "<tr>\n<td>" + inputs["suite"] + "</td>\n<td>&nbsp;</td>\n</tr></table><table>");
         var testNum = inputs["numTestTotal"];
-        for (var rowNum = 1; rowNum < testNum; rowNum++) {
+        
+        for (var rowNum = 1; rowNum <= testNum; rowNum++) {
             scriptFile.WriteLine("<tr>\n<td>" + inputs["testTable." + rowNum] + "</td>\n<td>&nbsp;</td>\n</tr>");
         }
-        scriptFile.WriteLine("</table></body></html>");
+        scriptFile.WriteLine("</table><pre>");
+        var log = inputs["log"];
+        log=log.replace(/&/gm,"&amp;").replace(/</gm,"&lt;").replace(/>/gm,"&gt;").replace(/"/gm,"&quot;").replace(/'/gm,"&apos;");
+        scriptFile.WriteLine(log);
+        scriptFile.WriteLine("</pre></body></html>");
         scriptFile.Close();
     }
 });
@@ -829,11 +880,11 @@ objectExtend(HtmlTestCase.prototype, {
 
     _collectCommandRows: function () {
         var commandRows = [];
-        var tables = $A(this.testDocument.getElementsByTagName("table"));
+        var tables = sel$A(this.testDocument.getElementsByTagName("table"));
         var self = this;
         for (var i = 0; i < tables.length; i++) {
             var table = tables[i];
-            var tableRows = $A(table.rows);
+            var tableRows = sel$A(table.rows);
             for (var j = 0; j < tableRows.length; j++) {
                 var candidateRow = tableRows[j];
                 if (self.isCommandRow(candidateRow)) {
@@ -1020,6 +1071,7 @@ objectExtend(HtmlRunnerTestLoop.prototype, {
         this.metrics = metrics;
 
         this.htmlTestCase = htmlTestCase;
+        LOG.info("Starting test " + htmlTestCase.testDocument.location.pathname);
 
         se = selenium;
         global.se = selenium;

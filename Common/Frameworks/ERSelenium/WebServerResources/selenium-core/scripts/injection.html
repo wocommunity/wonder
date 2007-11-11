@@ -3,7 +3,6 @@
     {
 
         __SELENIUM_JS__
-
 // Some background on the code below: broadly speaking, where we are relative to other windows
 // when running in proxy injection mode depends on whether we are in a frame set file or not.
 //
@@ -18,18 +17,15 @@
 // assigned a regular frame for selenium?)
 //
 BrowserBot.prototype.getContentWindow = function() {
-    if (window["seleniumInSameWindow"] != null) return window;
-    return window.parent;
+    return window;
 };
 
 BrowserBot.prototype.getTargetWindow = function(windowName) {
-    if (window["seleniumInSameWindow"] != null) return window;
-    return window.parent;
+    return window;
 };
 
 BrowserBot.prototype.getCurrentWindow = function() {
-    if (window["seleniumInSameWindow"] != null) return window;
-    return window.parent;
+    return window;
 };
 
 LOG.openLogWindow = function(message, className) {
@@ -40,10 +36,6 @@ BrowserBot.prototype.relayToRC = function(name) {
 	var object = eval(name);
         var s = 'state:' + serializeObject(name, object) + "\n";
         sendToRC(s,"state=true");
-}
-
-BrowserBot.prototype.relayBotToRC = function(s) {
-	this.relayToRC("selenium." + s);
 }
 
 function selenium_frameRunTest(oldOnLoadRoutine) {
@@ -60,7 +52,7 @@ function seleniumOnLoad() {
 }
 
 function seleniumOnUnload() {
-	sendToRC("OK"); // just in case some poor PI server thread is waiting for a response
+	sendToRC("Current window or frame is closed!", "closing=true");
 }
 
 if (window.addEventListener) {
@@ -75,5 +67,6 @@ else {
 }
 
 injectedSessionId = @SESSION_ID@;
+proxyInjectionMode = true;
 }
 </script>

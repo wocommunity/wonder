@@ -37,14 +37,14 @@ function Selenium(browserbot) {
      * 
      * <ul>
      * <li><strong>identifier</strong>=<em>id</em>: 
-     * Select the element with the specified @id attribute. If no match is
-     * found, select the first element whose @name attribute is <em>id</em>.
+     * Select the element with the specified &#064;id attribute. If no match is
+     * found, select the first element whose &#064;name attribute is <em>id</em>.
      * (This is normally the default; see below.)</li>
      * <li><strong>id</strong>=<em>id</em>:
-     * Select the element with the specified @id attribute.</li>
+     * Select the element with the specified &#064;id attribute.</li>
      *
      * <li><strong>name</strong>=<em>name</em>:
-     * Select the first element with the specified @name attribute.
+     * Select the first element with the specified &#064;name attribute.
      * <ul class="first last simple">
      * <li>username</li>
      * <li>name=username</li>
@@ -71,12 +71,12 @@ function Selenium(browserbot) {
      * <li><strong>xpath</strong>=<em>xpathExpression</em>: 
      * Locate an element using an XPath expression.
      * <ul class="first last simple">
-     * <li>xpath=//img[@alt='The image alt text']</li>
-     * <li>xpath=//table[@id='table1']//tr[4]/td[2]</li>
-     * <li>xpath=//a[contains(@href,'#id1')]</li>
-     * <li>xpath=//a[contains(@href,'#id1')]/@class</li>
-     * <li>xpath=(//table[@class='stylee'])//th[text()='theHeaderText']/../td</li>
-     * <li>xpath=//input[@name='name2' and @value='yes']</li>
+     * <li>xpath=//img[&#064;alt='The image alt text']</li>
+     * <li>xpath=//table[&#064;id='table1']//tr[4]/td[2]</li>
+     * <li>xpath=//a[contains(&#064;href,'#id1')]</li>
+     * <li>xpath=//a[contains(&#064;href,'#id1')]/&#064;class</li>
+     * <li>xpath=(//table[&#064;class='stylee'])//th[text()='theHeaderText']/../td</li>
+     * <li>xpath=//input[&#064;name='name2' and &#064;value='yes']</li>
      * <li>xpath=//*[text()="right"]</li>
      *
      * </ul>
@@ -740,7 +740,9 @@ Selenium.prototype.doOpen = function(url) {
    * @param url the URL to open; may be relative or absolute
    */
     this.browserbot.openLocation(url);
-    return this.makePageLoadCondition();
+    if (window["proxyInjectionMode"] == null || !window["proxyInjectionMode"]) {
+        return this.makePageLoadCondition();
+    } // in PI mode, just return "OK"; the server will waitForLoad
 };
 
 Selenium.prototype.doOpenWindow = function(url, windowID) {
@@ -800,6 +802,8 @@ Selenium.prototype.doSelectFrame = function(locator) {
     * Selects a frame within the current window.  (You may invoke this command
     * multiple times to select nested frames.)  To select the parent frame, use
     * "relative=parent" as a locator; to select the top frame, use "relative=top".
+    * You can also select a frame by its 0-based index number; select the first frame with
+    * "index=0", or the third frame with "index=2".
     *
     * <p>You may also use a DOM expression to identify the frame you want directly,
     * like this: <code>dom=frames["main"].frames["subframe"]</code></p>
@@ -808,25 +812,6 @@ Selenium.prototype.doSelectFrame = function(locator) {
     */
         this.browserbot.selectFrame(locator);
 };
-
-Selenium.prototype.getLogMessages = function() {
-    /**
-        * Return the contents of the log.
-    *
-        * <p>This is a placeholder intended to make the code generator make this API
-        * available to clients.  The selenium server will intercept this call, however,
-        * and return its recordkeeping of log messages since the last call to this API.
-        * Thus this code in JavaScript will never be called.</p>
-        *
-        * <p>The reason I opted for a servercentric solution is to be able to support
-        * multiple frames served from different domains, which would break a
-        * centralized JavaScript logging mechanism under some conditions.</p>
-    *
-        * @return string all log messages seen since the last call to this API
-    */
-        return "getLogMessages should be implemented in the selenium server";
-};
-
 
 Selenium.prototype.getWhetherThisFrameMatchFrameExpression = function(currentFrameString, target) {
     /**
@@ -842,44 +827,7 @@ Selenium.prototype.getWhetherThisFrameMatchFrameExpression = function(currentFra
      * @param target new frame (which might be relative to the current one)
      * @return boolean true if the new frame is this code's window
      */
-    var isDom = false;
-    if (target.indexOf("dom=") == 0) {
-        target = target.substr(4);
-        isDom = true;
-    }
-    var t;
-    try {
-        eval("t=" + currentFrameString + "." + target);
-    } catch (e) {
-    }
-    var autWindow = this.browserbot.getCurrentWindow();
-    if (t != null) {
-        if (t.window == autWindow) {
-            return true;
-        }
-        return false;
-    }
-    if (isDom) {
-        return false;
-    }
-    var currentFrame;
-    eval("currentFrame=" + currentFrameString);
-    if (target == "relative=up") {
-        if (currentFrame.window.parent == autWindow) {
-            return true;
-        }
-        return false;
-    }
-    if (target == "relative=top") {
-        if (currentFrame.window.top == autWindow) {
-            return true;
-        }
-        return false;
-    }
-    if (autWindow.name == target && currentFrame.window == autWindow.parent) {
-        return true;
-    }
-    return false;
+    return this.browserbot.doesThisFrameMatchFrameExpression(currentFrameString, target);
 };
 
 Selenium.prototype.getWhetherThisWindowMatchWindowExpression = function(currentWindowString, target) {
@@ -945,14 +893,31 @@ Selenium.prototype.doWaitForPopUp.dontCheckAlertsAndConfirms = true;
 Selenium.prototype.doChooseCancelOnNextConfirmation = function() {
     /**
    * By default, Selenium's overridden window.confirm() function will
-   * return true, as if the user had manually clicked OK.  After running
+   * return true, as if the user had manually clicked OK; after running
    * this command, the next call to confirm() will return false, as if
-   * the user had clicked Cancel.
+   * the user had clicked Cancel.  Selenium will then resume using the
+   * default behavior for future confirmations, automatically returning 
+   * true (OK) unless/until you explicitly call this command for each
+   * confirmation.
    *
    */
-    this.browserbot.cancelNextConfirmation();
+    this.browserbot.cancelNextConfirmation(false);
 };
 
+Selenium.prototype.doChooseOkOnNextConfirmation = function() {
+    /**
+   * Undo the effect of calling chooseCancelOnNextConfirmation.  Note
+   * that Selenium's overridden window.confirm() function will normally automatically
+   * return true, as if the user had manually clicked OK, so you shouldn't
+   * need to use this command unless for some reason you need to change
+   * your mind prior to the next confirmation.  After any confirmation, Selenium will resume using the
+   * default behavior for future confirmations, automatically returning 
+   * true (OK) unless/until you explicitly call chooseCancelOnNextConfirmation for each
+   * confirmation.
+   *
+   */
+    this.browserbot.cancelNextConfirmation(true);
+};
 
 Selenium.prototype.doAnswerOnNextPrompt = function(answer) {
     /**
@@ -1180,18 +1145,18 @@ Selenium.prototype.getEval = function(script) {
    * have multiple lines, but only the result of the last line will be returned.
    *
    * <p>Note that, by default, the snippet will run in the context of the "selenium"
-   * object itself, so <code>this</code> will refer to the Selenium object, and <code>window</code> will
-   * refer to the top-level runner test window, not the window of your application.</p>
+   * object itself, so <code>this</code> will refer to the Selenium object.  Use <code>window</code> to
+   * refer to the window of your application, e.g. <code>window.document.getElementById('foo')</code></p>
    *
-   * <p>If you need a reference to the window of your application, you can refer
-   * to <code>this.browserbot.getCurrentWindow()</code> and if you need to use
+   * <p>If you need to use
    * a locator to refer to a single element in your application page, you can
-   * use <code>this.browserbot.findElement("foo")</code> where "foo" is your locator.</p>
+   * use <code>this.browserbot.findElement("id=foo")</code> where "id=foo" is your locator.</p>
    *
    * @param script the JavaScript snippet to run
    * @return string the results of evaluating the snippet
    */
     try {
+        var window = this.browserbot.getCurrentWindow();
         var result = eval(script);
         // Selenium RC doesn't allow returning null
         if (null == result) return "null";
@@ -1256,7 +1221,7 @@ Selenium.prototype.getSelectedLabels = function(selectLocator) {
    * @param selectLocator an <a href="#locators">element locator</a> identifying a drop-down menu
    * @return string[] an array of all selected option labels in the specified select drop-down
    */
-    return this.findSelectedOptionProperties(selectLocator, "text").join(",");
+    return this.findSelectedOptionProperties(selectLocator, "text");
 }
 
 Selenium.prototype.getSelectedLabel = function(selectLocator) {
@@ -1274,7 +1239,7 @@ Selenium.prototype.getSelectedValues = function(selectLocator) {
    * @param selectLocator an <a href="#locators">element locator</a> identifying a drop-down menu
    * @return string[] an array of all selected option values in the specified select drop-down
    */
-    return this.findSelectedOptionProperties(selectLocator, "value").join(",");
+    return this.findSelectedOptionProperties(selectLocator, "value");
 }
 
 Selenium.prototype.getSelectedValue = function(selectLocator) {
@@ -1292,7 +1257,7 @@ Selenium.prototype.getSelectedIndexes = function(selectLocator) {
    * @param selectLocator an <a href="#locators">element locator</a> identifying a drop-down menu
    * @return string[] an array of all selected option indexes in the specified select drop-down
    */
-    return this.findSelectedOptionProperties(selectLocator, "index").join(",");
+    return this.findSelectedOptionProperties(selectLocator, "index");
 }
 
 Selenium.prototype.getSelectedIndex = function(selectLocator) {
@@ -1310,7 +1275,7 @@ Selenium.prototype.getSelectedIds = function(selectLocator) {
    * @param selectLocator an <a href="#locators">element locator</a> identifying a drop-down menu
    * @return string[] an array of all selected option IDs in the specified select drop-down
    */
-    return this.findSelectedOptionProperties(selectLocator, "id").join(",");
+    return this.findSelectedOptionProperties(selectLocator, "id");
 }
 
 Selenium.prototype.getSelectedId = function(selectLocator) {
@@ -1356,9 +1321,6 @@ Selenium.prototype.findSelectedOptionProperties = function(locator, property) {
         if (element.options[i].selected)
         {
             var propVal = element.options[i][property];
-            if (propVal.replace) {
-                propVal.replace(/,/g, "\\,");
-            }
             selectedOptions.push(propVal);
         }
     }
@@ -1385,11 +1347,11 @@ Selenium.prototype.getSelectOptions = function(selectLocator) {
     var selectOptions = [];
 
     for (var i = 0; i < element.options.length; i++) {
-        var option = element.options[i].text.replace(/,/g, "\\,");
+        var option = element.options[i].text;
         selectOptions.push(option);
     }
 
-    return selectOptions.join(",");
+    return selectOptions;
 };
 
 
@@ -1397,7 +1359,7 @@ Selenium.prototype.getAttribute = function(attributeLocator) {
     /**
    * Gets the value of an element attribute.
    *
-   * @param attributeLocator an element locator followed by an @ sign and then the name of the attribute, e.g. "foo@bar"
+   * @param attributeLocator an element locator followed by an &#064; sign and then the name of the attribute, e.g. "foo&#064;bar"
    * @return string the value of the specified attribute
    */
    var result = this.browserbot.findAttribute(attributeLocator);
@@ -1431,13 +1393,12 @@ Selenium.prototype.isTextPresent = function(pattern) {
 
 Selenium.prototype.isElementPresent = function(locator) {
     /**
-   * Verifies that the specified element is somewhere on the page.
-   * @param locator an <a href="#locators">element locator</a>
-   * @return boolean true if the element is present, false otherwise
-   */
-    try {
-        this.browserbot.findElement(locator);
-    } catch (e) {
+    * Verifies that the specified element is somewhere on the page.
+    * @param locator an <a href="#locators">element locator</a>
+    * @return boolean true if the element is present, false otherwise
+    */
+    var element = this.browserbot.findElementOrNull(locator);
+    if (element == null) {
         return false;
     }
     return true;
@@ -1483,10 +1444,9 @@ Selenium.prototype.findEffectiveStyle = function(element) {
     if (element.style == undefined) {
         return undefined; // not a styled element
     }
-    var window = this.browserbot.getCurrentWindow();
     if (window.getComputedStyle) {
         // DOM-Level-2-CSS
-        return window.getComputedStyle(element, null);
+        return this.browserbot.getCurrentWindow().getComputedStyle(element, null);
     }
     if (element.currentStyle) {
         // non-standard IE alternative
@@ -1575,7 +1535,7 @@ Selenium.prototype.findWindow = function(soughtAfterWindowPropertyValue) {
    }
    else {
        // matching "name":
-       // If we are not in proxy injection mode, then the top-level test window will be named myiframe.
+       // If we are not in proxy injection mode, then the top-level test window will be named selenium_myiframe.
         // But as far as the interface goes, we are expected to match a blank string to this window, if
         // we are searching with respect to the widow name.
         // So make a special case so that this logic will work:
@@ -1694,25 +1654,22 @@ Selenium.prototype.doDragAndDropToObject = function(locatorOfObjectToBeDragged, 
    this.doDragAndDrop(locatorOfObjectToBeDragged, movementsString);
 };
 
-Selenium.prototype.doWindowFocus = function(windowName) {
-/** Gives focus to a window
+Selenium.prototype.doWindowFocus = function() {
+/** Gives focus to the currently selected window
    *
-   * @param windowName name of the window to be given focus
    */
-   this.findWindow(windowName).focus();
+   this.browserbot.getCurrentWindow().focus();
 };
 
 
-Selenium.prototype.doWindowMaximize = function(windowName) {
-/** Resize window to take up the entire screen
+Selenium.prototype.doWindowMaximize = function() {
+/** Resize currently selected window to take up the entire screen
    *
-   * @param windowName name of the window to be enlarged
    */
-   var window = this.findWindow(windowName);
+   var window = this.browserbot.getCurrentWindow();
    if (window!=null && window.screen) {
        window.moveTo(0,0);
-        window.outerHeight = screen.availHeight;
-        window.outerWidth = screen.availWidth;
+       window.resizeTo(screen.availWidth, screen.availHeight);
    }
 };
 
@@ -1801,12 +1758,12 @@ Selenium.prototype.getElementIndex = function(locator) {
 
 Selenium.prototype.isOrdered = function(locator1, locator2) {
     /**
-     * Check if these two elements have same parent and are ordered. Two same elements will
+     * Check if these two elements have same parent and are ordered siblings in the DOM. Two same elements will
      * not be considered ordered.
      *
      * @param locator1 an <a href="#locators">element locator</a> pointing to the first element
      * @param locator2 an <a href="#locators">element locator</a> pointing to the second element
-     * @return boolean true if two elements are ordered and have same parent, false otherwise
+     * @return boolean true if element1 is the previous sibling of element2, false otherwise
      */
     var element1 = this.browserbot.findElement(locator1);
     var element2 = this.browserbot.findElement(locator2);
@@ -2003,27 +1960,6 @@ Selenium.prototype.getCursorPosition = function(locator) {
 }
 
 
-Selenium.prototype.doSetContext = function(context, logLevelThreshold) {
-    /**
-   * Writes a message to the status bar and adds a note to the browser-side
-   * log.
-   *
-   * <p>If logLevelThreshold is specified, set the threshold for logging
-   * to that level (debug, info, warn, error).</p>
-   *
-   * <p>(Note that the browser-side logs will <i>not</i> be sent back to the
-   * server, and are invisible to the Client Driver.)</p>
-   *
-   * @param context
-   *            the message to be sent to the browser
-   * @param logLevelThreshold one of "debug", "info", "warn", "error", sets the threshold for browser-side logging
-   */
-    if  (logLevelThreshold==null || logLevelThreshold=="") {
-        return this.browserbot.setContext(context);
-    }
-    return this.browserbot.setContext(context, logLevelThreshold);
-};
-
 Selenium.prototype.getExpression = function(expression) {
     /**
      * Returns the specified expression.
@@ -2035,6 +1971,46 @@ Selenium.prototype.getExpression = function(expression) {
      * @return string the value passed in
      */
     return expression;
+}
+
+Selenium.prototype.getXpathCount = function(xpath) {
+    /**
+    * Returns the number of nodes that match the specified xpath, eg. "//table" would give
+    * the number of tables.
+    * 
+    * @param xpath the xpath expression to evaluate. do NOT wrap this expression in a 'count()' function; we will do that for you.
+    * @return number the number of nodes that match the specified xpath
+    */
+    var result = this.browserbot.evaluateXPathCount(xpath, this.browserbot.getDocument());
+    return result;
+}
+
+Selenium.prototype.doAssignId = function(locator, identifier) {
+    /**
+    * Temporarily sets the "id" attribute of the specified element, so you can locate it in the future
+    * using its ID rather than a slow/complicated XPath.  This ID will disappear once the page is
+    * reloaded.
+    * @param locator an <a href="#locators">element locator</a> pointing to an element
+    * @param identifier a string to be used as the ID of the specified element
+    */
+    var element = this.browserbot.findElement(locator);
+    element.id = identifier;
+}
+
+Selenium.prototype.doAllowNativeXpath = function(allow) {
+    /**
+    * Specifies whether Selenium should use the native in-browser implementation
+    * of XPath (if any native version is available); if you pass "false" to
+    * this function, we will always use our pure-JavaScript xpath library.
+    * Using the pure-JS xpath library can improve the consistency of xpath
+    * element locators between different browser vendors, but the pure-JS
+    * version is much slower than the native implementations.
+    * @param allow boolean, true means we'll prefer to use native XPath; false means we'll only use JS XPath
+    */
+    if ("false" == allow || "0" == allow) { // The strings "false" and "0" are true values in JS
+        allow = false;
+    }
+    this.browserbot.allowNativeXpath = allow;
 }
 
 Selenium.prototype.doWaitForCondition = function(script, timeout) {
@@ -2050,7 +2026,9 @@ Selenium.prototype.doWaitForCondition = function(script, timeout) {
    * @param script the JavaScript snippet to run
    * @param timeout a timeout in milliseconds, after which this command will return with an error
    */
+   
     return Selenium.decorateFunctionWithTimeout(function () {
+        var window = selenium.browserbot.getCurrentWindow();
         return eval(script);
     }, timeout);
 };
@@ -2082,6 +2060,24 @@ Selenium.prototype.doWaitForPageToLoad = function(timeout) {
      * flag when it first notices a page load.  Running any other Selenium command after
      * turns the flag to false.  Hence, if you want to wait for a page to load, you must
      * wait immediately after a Selenium command that caused a page-load.</p>
+     * @param timeout a timeout in milliseconds, after which this command will return with an error
+     */
+    // in pi-mode, the test and the harness share the window; thus if we are executing this code, then we have loaded
+    if (window["proxyInjectionMode"] == null || !window["proxyInjectionMode"]) {
+        return this.makePageLoadCondition(timeout);
+    }
+};
+
+Selenium.prototype.doWaitForFrameToLoad = function(frameAddress, timeout) {
+    /**
+     * Waits for a new frame to load.
+     *
+     * <p>Selenium constantly keeps track of new pages and frames loading, 
+     * and sets a "newPageLoaded" flag when it first notices a page load.</p>
+     * 
+     * See waitForPageToLoad for more information.
+     * 
+     * @param frameAddress FrameAddress from the server side
      * @param timeout a timeout in milliseconds, after which this command will return with an error
      */
     // in pi-mode, the test and the harness share the window; thus if we are executing this code, then we have loaded
@@ -2199,6 +2195,84 @@ Selenium.prototype.doDeleteCookie = function(name,path) {
     this.browserbot.getDocument().cookie = cookie;
 }
 
+Selenium.prototype.doSetBrowserLogLevel = function(logLevel) {
+    /**
+    * Sets the threshold for browser-side logging messages; log messages beneath this threshold will be discarded.
+    * Valid logLevel strings are: "debug", "info", "warn", "error" or "off".
+    * To see the browser logs, you need to
+    * either show the log window in GUI mode, or enable browser-side logging in Selenium RC.
+    *
+    * @param logLevel one of the following: "debug", "info", "warn", "error" or "off"
+    */
+    if (logLevel == null || logLevel == "") {
+        throw new SeleniumError("You must specify a log level");
+    }
+    logLevel = logLevel.toLowerCase();
+    if (LOG.logLevels[logLevel] == null) {
+        throw new SeleniumError("Invalid log level: " + logLevel);
+    }
+    LOG.setLogLevelThreshold(logLevel);
+}
+
+Selenium.prototype.doRunScript = function(script) {
+    /**
+    * Creates a new "script" tag in the body of the current test window, and 
+    * adds the specified text into the body of the command.  Scripts run in
+    * this way can often be debugged more easily than scripts executed using
+    * Selenium's "getEval" command.  Beware that JS exceptions thrown in these script
+    * tags aren't managed by Selenium, so you should probably wrap your script
+    * in try/catch blocks if there is any chance that the script will throw
+    * an exception.
+    * @param script the JavaScript snippet to run
+    */
+    var win = this.browserbot.getCurrentWindow();
+    var doc = win.document;
+    var scriptTag = doc.createElement("script");
+    scriptTag.type = "text/javascript"
+    scriptTag.text = script;
+    doc.body.appendChild(scriptTag);
+}
+
+Selenium.prototype.doAddLocationStrategy = function(strategyName, functionDefinition) {
+    /**
+    * Defines a new function for Selenium to locate elements on the page.
+    * For example,
+    * if you define the strategy "foo", and someone runs click("foo=blah"), we'll
+    * run your function, passing you the string "blah", and click on the element 
+    * that your function
+    * returns, or throw an "Element not found" error if your function returns null.
+    *
+    * We'll pass three arguments to your function:
+    * <ul>
+    * <li>locator: the string the user passed in</li>
+    * <li>inWindow: the currently selected window</li>
+    * <li>inDocument: the currently selected document</li>
+    * </ul>
+    * The function must return null if the element can't be found.
+    * 
+    * @param strategyName the name of the strategy to define; this should use only
+    *   letters [a-zA-Z] with no spaces or other punctuation.
+    * @param functionDefinition a string defining the body of a function in JavaScript.
+    *   For example: <code>return inDocument.getElementById(locator);</code>
+    */
+    if (!/^[a-zA-Z]+$/.test(strategyName)) {
+        throw new SeleniumError("Invalid strategy name: " + strategyName);
+    }
+    var strategyFunction;
+    try {
+        strategyFunction = new Function("locator", "inDocument", "inWindow", functionDefinition);
+    } catch (ex) {
+        throw new SeleniumError("Error evaluating function definition: " + extractExceptionMessage(ex));
+    }
+    var safeStrategyFunction = function() {
+        try {
+            return strategyFunction.apply(this, arguments);
+        } catch (ex) {
+            throw new SeleniumError("Error executing strategy function " + strategyName + ": " + extractExceptionMessage(ex));
+        }
+    }
+    this.browserbot.locationStrategies[strategyName] = safeStrategyFunction;
+}
 
 /**
  *  Factory for creating "Option Locators".
