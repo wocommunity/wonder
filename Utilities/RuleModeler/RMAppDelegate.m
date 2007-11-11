@@ -34,6 +34,7 @@
 #import "RMModel.h"
 #import "Rule.h"
 #import "EOControl.h"
+#import <Carbon/Carbon.h> // Necessary only for GetCurrentEventKeyModifiers()
 
 @implementation RMAppDelegate
 
@@ -167,6 +168,42 @@
         [newDocument showWindows];
     } else {
         [[NSAlert alertWithError:outError] runModal];
+    }
+}
+
+- (void)applicationDidFinishLaunching:(NSNotification *)aNotification
+{
+    // -[NSApplication currentEvent] returns nil; the only way to get the Shift info is to use a Carbon call
+    if ([[NSUserDefaults standardUserDefaults] boolForKey:@"restoreOpenDocuments"] && (GetCurrentEventKeyModifiers() & shiftKey) != shiftKey) {
+        NSEnumerator    *anEnum = [[[NSUserDefaults standardUserDefaults] arrayForKey:@"restoredDocumentURLs"] objectEnumerator];
+        NSString        *eachURLString;
+        
+        while (eachURLString = [anEnum nextObject]) {
+            NSURL   *anURL = [NSURL URLWithString:eachURLString];
+            
+            if (anURL != nil) {
+                [[NSDocumentController sharedDocumentController] openDocumentWithContentsOfURL:anURL display:YES error:NULL];
+            }
+        }
+    }
+}
+
+- (void)applicationWillTerminate:(NSNotification *)aNotification
+{
+    if ([[NSUserDefaults standardUserDefaults] boolForKey:@"restoreOpenDocuments"]) {
+        NSEnumerator    *anEnum = [[[NSDocumentController sharedDocumentController] documents] objectEnumerator];
+        NSDocument      *eachDocument;
+        NSMutableArray  *paths = [NSMutableArray array];
+        
+        while (eachDocument = [anEnum nextObject]) {
+            if ([[eachDocument windowControllers] count] > 0 && [eachDocument fileURL] != nil) {
+                [paths addObject:[[[eachDocument fileURL] standardizedURL] description]];
+            }
+        }
+        [[NSUserDefaults standardUserDefaults] setObject:paths forKey:@"restoredDocumentURLs"];
+    }
+    else {
+        [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"restoredDocumentURLs"];
     }
 }
 
