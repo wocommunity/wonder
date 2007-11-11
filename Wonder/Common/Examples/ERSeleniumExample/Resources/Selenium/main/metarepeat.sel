@@ -9,4 +9,7 @@
 @values AnotherValue1 AnotherValue2 AnotherValue3
 |type|//body/div[2]/input[2]|AnotherValue0|
 |pause|500||
+@targets targetValue1 targetValue2 targetValue3
+|store|targetValue0|targetVariable|
+|type|//body/div[2]/input[2]|${targetVariable}|
 @done

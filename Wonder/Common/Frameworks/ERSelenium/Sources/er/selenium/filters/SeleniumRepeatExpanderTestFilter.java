@@ -29,49 +29,56 @@ import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 
+import er.extensions.ERXArrayUtilities;
 import er.selenium.SeleniumTest;
 import er.selenium.SeleniumTest.Command;
 
 public class SeleniumRepeatExpanderTestFilter extends SeleniumTestFilterHelper implements SeleniumTestFilter {
 	private static final Logger log = Logger.getLogger(SeleniumRepeatExpanderTestFilter.class);
 
-	protected static class ValueData {
-		NSArray values;
-		int offset;
+	protected static class LoopData {
+		enum PlacementType { Target, Value };
 		
-		public ValueData(NSArray aValues, int aOffset) {
+		NSArray<String> values;
+		int targetOffset;
+		PlacementType placement;
+		
+		LoopData(NSArray<String> aValues, int aTargetOffset, PlacementType aPlacement) {
 			values = aValues;
-			offset = aOffset;
+			targetOffset = aTargetOffset;
+			placement = aPlacement;
 		}
 	}
 	
 	protected void generateIterations(NSMutableArray elements, int repeatIndex, int doneIndex) {
-		NSMutableDictionary valuesData = new NSMutableDictionary();
+		NSMutableDictionary<Integer, LoopData> loopData = new NSMutableDictionary<Integer, LoopData>();
 		
 		int repetitionCount = -1;
 		for (int i = repeatIndex + 1; i < doneIndex; ++i) {
 			SeleniumTest.Element element = (SeleniumTest.Element)elements.get(i);
 			if (element instanceof SeleniumTest.MetaCommand) {
 				SeleniumTest.MetaCommand metaCommand = (SeleniumTest.MetaCommand)element;
-				if (metaCommand.getName().equals("values")) {
+				String mcName = metaCommand.getName();
+				if (mcName.equals("values") || mcName.equals("targets")) {
 					if (!(elements.get(i + 1) instanceof SeleniumTest.Command)) {
-						throw new RuntimeException("There must be a valid command after 'values' metacommand");
+						throw new RuntimeException("There must be a valid command immediately after 'values' or 'targets' metacommand");
 					}
-					
-					valuesData.setObjectForKey(new ValueData(metaCommand.arguments(), i - repeatIndex), new Integer(i - repeatIndex));
+
+					int relTargetIndex = i + 1 - repeatIndex;
+					loopData.setObjectForKey(new LoopData((NSArray<String>)metaCommand.arguments(), relTargetIndex, mcName.equals("values") ? LoopData.PlacementType.Value : LoopData.PlacementType.Target), new Integer(relTargetIndex));
 					repetitionCount = metaCommand.arguments().count();
-					elements.set(i, new SeleniumTest.Comment("#values"));
+					elements.set(i, new SeleniumTest.Comment('#' + mcName));
 				}
 			}
 		}
 		
-		if (valuesData.count() == 0) {
-			throw new RuntimeException("No 'values' metacommands specified between 'repeat' and 'done'");
+		if (loopData.count() == 0) {
+			throw new RuntimeException("No 'values' or 'targets' metacommands specified between 'repeat' and 'done'");
 		}
-				
-		for (int i = 1; i < valuesData.count(); ++i) {
-			if (((ValueData)valuesData.allValues().objectAtIndex(i-1)).values.count() != repetitionCount) {
-				throw new RuntimeException("All 'values' metacommands inside 'repeat'-'done' repetition must have equal number of arguments");
+
+		for (LoopData ld : loopData.allValues()) {
+			if (ld.values.count() != repetitionCount) {
+				throw new RuntimeException("All 'values' and 'targets' metacommands inside 'repeat'-'done' repetition must have equal number of arguments");
 			}
 		}
 		
@@ -81,13 +88,24 @@ public class SeleniumRepeatExpanderTestFilter extends SeleniumTestFilterHelper i
 		for (int j = 0; j < repetitionCount; ++j) {
 			elements.insertObjectAtIndex(new SeleniumTest.Comment("#iteration"), insertIndex++);
 			for (int i = repeatIndex + 1; i < doneIndex; ++i) {
-				ValueData data = (ValueData)valuesData.objectForKey(new Integer(i - repeatIndex));
+				LoopData data = loopData.objectForKey(new Integer(i - repeatIndex));
+				
 				if (data != null) {
-					elements.insertObjectAtIndex(new SeleniumTest.Comment("#value " + data.values.get(j).toString()), insertIndex++);
-					SeleniumTest.Command nextCommand = (Command) ((SeleniumTest.Command)elements.objectAtIndex(i + 1)).clone();
-					nextCommand.setValue(data.values.get(j).toString());
-					elements.insertObjectAtIndex(nextCommand, insertIndex++);
-					++i;
+					SeleniumTest.Command newCommand = (Command)((SeleniumTest.Command)elements.objectAtIndex(i)).clone();
+					switch (data.placement) {
+					case Target:
+						elements.insertObjectAtIndex(new SeleniumTest.Comment("#target " + data.values.get(j)), insertIndex++);
+						newCommand.setTarget(data.values.get(j));
+						break;
+					case Value:
+						elements.insertObjectAtIndex(new SeleniumTest.Comment("#value " + data.values.get(j)), insertIndex++);
+						newCommand.setValue(data.values.get(j));
+						break;
+					default:
+						break;
+					}
+					
+					elements.insertObjectAtIndex(newCommand, insertIndex++);
 				} else {
 					elements.insertObjectAtIndex(((SeleniumTest.Element)elements.get(i)).clone(), insertIndex++);
 				}
