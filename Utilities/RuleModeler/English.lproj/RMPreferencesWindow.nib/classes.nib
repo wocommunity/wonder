@@ -13,6 +13,7 @@
             OUTLETS = {
                 colorPane = NSView; 
                 d2wclientConfigurationPathTableView = NSTableView; 
+                documentPane = NSView; 
                 generalPane = NSView; 
                 removePathButtonCell = NSButtonCell; 
                 userDefaultsController = NSUserDefaultsController; 
