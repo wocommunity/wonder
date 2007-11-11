@@ -35,6 +35,7 @@
     IBOutlet NSSearchField   *searchField;
     BOOL    searchIsCaseSensitive;
     BOOL    searchMatchesAnyWord;
+    BOOL    textualSearchOnly;
     NSArray *searchWords;
 }
 
@@ -52,8 +53,10 @@
 
 - (IBAction)changeCaseSensitivityOption:(id)sender;
 - (IBAction)changeWordMatchingOption:(id)sender;
+- (IBAction)changeParsingOption:(id)sender;
 
 - (BOOL)searchIsCaseSensitive;
 - (NSArray *)searchWords;
+- (BOOL)textualSearchOnly;
 
 @end

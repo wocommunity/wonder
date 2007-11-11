@@ -49,7 +49,13 @@
     BOOL        performTextualSearch = NO;
     
     if (value != nil && [value length] > 0) {
-        if(![[NSUserDefaults standardUserDefaults] boolForKey:@"textualSearchOnly"]){
+        // The following block is here to fix a bug in AppKit:
+        // Paste multiple lines in searchField -> garbage on refresh of searchField -> we remove line returns from pasted string
+        if([value rangeOfString:@"\n"].length > 0){
+            value = [[value componentsSeparatedByString:@"\n"] componentsJoinedByString:@" "];
+            [searchField setStringValue:value];
+        }
+        if(![self textualSearchOnly]){
             NS_DURING {
                 predicate = [NSPredicate predicateWithFormat:[value stringByAppendingString:@" or (isNewRule = YES)"]];
                 // WARNING If user typed a valid qualifier (format), but qualifier raises an exception when applied to rules,
@@ -130,13 +136,59 @@
 }
 
 - (void)addObjects:(NSArray *)objects {
+//    if([objects count])
+//        NSLog(@"addObjects: 1st = %p, %@", [objects objectAtIndex:0], [objects objectAtIndex:0]);
     [objects setValue:[NSNumber numberWithBool:YES] forKey:@"isNewRule"]; // FIXME Not a good idea to hardcode that method here
     
-    [super addObjects:objects];
+    if(0/*focussedObjects*/){
+        NSArray *saved = focussedObjects; // Already retained
+        
+        focussedObjects = nil;
+        [self rearrangeObjects];
+        [super addObjects:objects];
+        focussedObjects = [[saved arrayByAddingObjectsFromArray:objects] retain];
+        [saved release];
+        [self rearrangeObjects];
+    }
+    else{
+        if(![self clearsFilterPredicateOnInsertion]){
+            [self setClearsFilterPredicateOnInsertion:YES]; // If we don't set it to YES, then an exception will raise: 'Error inserting object at arranged object index X' when (focussed and) filtered, though index is correct
+            if(focussedObjects){
+                NSArray     *saved = focussedObjects; // Already retained
+                NSPredicate *newFilterPredicate = nil;
+                
+                if([[self filterPredicate] isKindOfClass:[NSCompoundPredicate class]] && [[(NSComparisonPredicate *)[[(NSCompoundPredicate *)[self filterPredicate] subpredicates] objectAtIndex:0] rightExpression] constantValue] == focussedObjects)
+                    newFilterPredicate = [[[[(NSCompoundPredicate *)[self filterPredicate] subpredicates] objectAtIndex:1] retain] autorelease]; // We need to retain+autorelease it, else it would disappear in -setFilterPredicate:
+//                [focussedObjects release];
+                focussedObjects = nil;
+                [self setFilterPredicate:nil];
+
+                [super addObjects:objects];
+                
+                focussedObjects = [[saved arrayByAddingObjectsFromArray:objects] retain];
+                [saved release];
+                [self setFilterPredicate:newFilterPredicate];
+//                [self rearrangeObjects];
+            }
+            else{
+                NSPredicate *newFilterPredicate = [[self filterPredicate] retain];
+
+                [self setFilterPredicate:nil];
+                
+                [super addObjects:objects];
+
+                [self setFilterPredicate:newFilterPredicate];
+                [newFilterPredicate release];
+            }
+            [self setClearsFilterPredicateOnInsertion:NO];
+        }
+        else
+        [super addObjects:objects]; // FIXME Raises 'Error inserting object at arranged object index X' when (focussed and) filtered, though index is correct
+    }
 }
 
 - (NSArray *)arrangeObjects:(NSArray *)objects {
-    if (focussedObjects) {
+    if (0/*focussedObjects*/) {
         // We need to check that all focussed objects are still in objects:
         // if an objects' item is deleted (externally), then we must no longer
         // display that item, but, to allow user to undo the deletion and see
@@ -144,6 +196,7 @@
         // focussedObjects list.
         // There is one problem though: if deleted item was selected, on undo it
         // is no longer selected.
+#if 0
         NSMutableArray  *passedObjects = [NSMutableArray arrayWithArray:focussedObjects];
         NSEnumerator    *anEnum = [focussedObjects objectEnumerator];
         id              eachObject;
@@ -155,11 +208,17 @@
                 [passedObjects removeObjectIdenticalTo:eachObject];
             }
         }
-        
+  
         return [super arrangeObjects:passedObjects];
+#else
+#endif
     }
-    else
-        return [super arrangeObjects:objects];
+    else{
+        NSArray     *result = [super arrangeObjects:objects];
+//        NSLog(@"arrangeObjects:(%d objects) returns %d objects", [objects count], [result count]);
+        return result;
+//        return [super arrangeObjects:objects];
+    }
 }
 
 - (IBAction)focus:(id)sender {
@@ -169,7 +228,7 @@
     [focussedObjects release];
     focussedObjects = [[NSMutableArray alloc] initWithArray:[self selectedObjects]];
     if([[NSUserDefaults standardUserDefaults] boolForKey:@"focusResetsSearch"])
-        [self setFilterPredicate:nil]; // Optional?
+        [self setFilterPredicate:nil];
     [self rearrangeObjects];
     if(![[NSUserDefaults standardUserDefaults] boolForKey:@"focusKeepsSelection"])
         [self setSelectedObjects:[NSArray array]];
@@ -182,8 +241,16 @@
     [self willChangeValueForKey:@"focussing"];
     [self willChangeValueForKey:@"canUnfocus"];
     [self willChangeValueForKey:@"focusImage"];
-    [focussedObjects release];
-    focussedObjects = nil;
+//    NSAssert([[self filterPredicate] isKindOfClass:[NSCompoundPredicate class]] && [[[(NSComparisonPredicate *)[[(NSCompoundPredicate *)[self filterPredicate] subpredicates] objectAtIndex:0] rightExpression] arguments] objectAtIndex:0] == focussedObjects);
+    if(focussedObjects){
+        NSPredicate *newFilterPredicate = nil;
+        
+        if([[self filterPredicate] isKindOfClass:[NSCompoundPredicate class]] && [[(NSComparisonPredicate *)[[(NSCompoundPredicate *)[self filterPredicate] subpredicates] objectAtIndex:0] rightExpression] constantValue] == focussedObjects)
+            newFilterPredicate = [[[[(NSCompoundPredicate *)[self filterPredicate] subpredicates] objectAtIndex:1] retain] autorelease]; // We need to retain+autorelease it, else it would disappear in -setFilterPredicate:
+        [focussedObjects release];
+        focussedObjects = nil;
+        [self setFilterPredicate:newFilterPredicate];
+    }
     [self rearrangeObjects];
     [self didChangeValueForKey:@"focusImage"];
     [self didChangeValueForKey:@"canUnfocus"];
@@ -202,6 +269,14 @@
 
 - (BOOL)canUnfocus {
     return focussedObjects != nil;
+}
+
+- (id)initWithCoder:(NSCoder *)coder {
+    if (self = [super initWithCoder:coder]) {
+        textualSearchOnly = [[NSUserDefaults standardUserDefaults] boolForKey:@"textualSearchOnly"];
+    }
+    
+    return self;
 }
 
 - (void)dealloc {
@@ -227,10 +302,44 @@
 }
 
 - (void)setFilterPredicate:(NSPredicate *)filterPredicate {
+    NSPredicate *newFilterPredicate = filterPredicate;
+    
+    if(focussedObjects){
+        NSPredicate *focusPredicate = [NSPredicate predicateWithFormat:@"self IN %@" argumentArray:[NSArray arrayWithObject:focussedObjects]];
+        
+        if(filterPredicate)
+            newFilterPredicate = [[[NSCompoundPredicate alloc] initWithType:NSAndPredicateType subpredicates:[NSArray arrayWithObjects:focusPredicate, filterPredicate, nil]] autorelease];
+        else
+            newFilterPredicate = focusPredicate;
+    }
     [[self arrangedObjects] setValue:[NSNumber numberWithBool:NO] forKey:@"isNewRule"]; // FIXME Not a good idea to hardcode that method here
-    [super setFilterPredicate:filterPredicate];
+    [super setFilterPredicate:newFilterPredicate];
     if(filterPredicate == nil)
         [searchField setStringValue:@""];
+}
+
+- (void)updateSearchFieldPlaceholder
+{
+    NSString    *aPlaceholder;
+    
+    if(textualSearchOnly){
+        if(searchIsCaseSensitive){
+            if(searchMatchesAnyWord)
+                aPlaceholder = NSLocalizedString(@"Terms (any, case-sensitive)", @"Search field placeholder");
+            else
+                aPlaceholder = NSLocalizedString(@"Terms (all, case-sensitive)", @"Search field placeholder");
+        }
+        else{
+            if(searchMatchesAnyWord)
+                aPlaceholder = NSLocalizedString(@"Terms (any, case-insensitive)", @"Search field placeholder");
+            else
+                aPlaceholder = NSLocalizedString(@"Terms (all, case-insensitive)", @"Search field placeholder");
+        }
+    }
+    else
+        aPlaceholder = NSLocalizedString(@"Terms or EOQualifier format", @"Search field placeholder");
+    
+    [[searchField cell] setPlaceholderString:aPlaceholder];
 }
 
 - (NSSearchField *)searchField
@@ -245,6 +354,7 @@
         searchField = (value != nil ? [value retain] : nil);
         if (oldValue != nil)
             [oldValue release];
+        [self updateSearchFieldPlaceholder];
     }
 }
 
@@ -255,12 +365,26 @@
     searchIsCaseSensitive = ([sender state] != NSOnState); // Invert option
     [self didChangeValueForKey:@"searchIsCaseSensitive"];
     [sender setState:(searchIsCaseSensitive ? NSOnState:NSOffState)];
+    [self updateSearchFieldPlaceholder];
     [self search:searchField];
 }
 
 - (IBAction)changeWordMatchingOption:(id)sender {
+    [self willChangeValueForKey:@"searchMatchesAnyWord"];
     searchMatchesAnyWord = ([sender state] != NSOnState); // Invert option
+    [self didChangeValueForKey:@"searchMatchesAnyWord"];
     [sender setState:(searchMatchesAnyWord ? NSOnState:NSOffState)];
+    [self updateSearchFieldPlaceholder];
+    [self search:searchField];
+}
+
+- (IBAction)changeParsingOption:(id)sender {
+    [self willChangeValueForKey:@"textualSearchOnly"];
+    textualSearchOnly = ([sender state] != NSOnState); // Invert option
+    [self didChangeValueForKey:@"textualSearchOnly"];
+    [sender setState:(textualSearchOnly ? NSOnState:NSOffState)];
+    [self updateSearchFieldPlaceholder];
+    // TODO Maybe we should also disable 'search as you type' when not textual search?
     [self search:searchField];
 }
 
@@ -270,6 +394,24 @@
 
 - (NSArray *)searchWords {
     return searchWords;
+}
+
+- (BOOL)textualSearchOnly {
+    return textualSearchOnly;
+}
+
+- (void)setTextualSearchOnly:(BOOL)newTextualSearchOnly {
+    if(textualSearchOnly != newTextualSearchOnly){
+        textualSearchOnly = newTextualSearchOnly;
+    }
+}
+
+- (BOOL)validateMenuItem:(id <NSMenuItem>)anItem
+{
+    if(([anItem action] == @selector(changeCaseSensitivityOption:) || [anItem action] == @selector(changeWordMatchingOption:)) && !textualSearchOnly)
+        return NO;
+    else
+        return [super validateMenuItem:anItem];
 }
 
 @end
