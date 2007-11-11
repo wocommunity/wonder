@@ -106,11 +106,17 @@ NSString *RMModelGroupType = @"Rule Model Group";
     [super dealloc];
 }
 
-- (void)makeWindowControllers {
+- (id)makeNewWindowController {
     RMModelGroupEditor *editor = [[RMModelGroupEditor alloc] init];
     
     [self addWindowController:editor];
     [editor release];
+    
+    return editor;
+}
+
+- (void)makeWindowControllers {
+    [self makeNewWindowController];
 }
 
 - (BOOL)saveToURL:(NSURL *)absoluteURL ofType:(NSString *)typeName forSaveOperation:(NSSaveOperationType)saveOperation error:(NSError **)outError {
@@ -195,6 +201,7 @@ NSString *RMModelGroupType = @"Rule Model Group";
         NSEnumerator    *pathEnum = [[aDict objectForKey:@"modelPaths"] objectEnumerator];
         NSString        *aPath;
         NSString        *basePath = [[[self fileURL] path] stringByDeletingLastPathComponent];
+        BOOL            returnValue;
         
         [[self undoManager] disableUndoRegistration];
         [self setModelContainers:[NSArray array]];
@@ -214,7 +221,13 @@ NSString *RMModelGroupType = @"Rule Model Group";
         }
         [[self undoManager] enableUndoRegistration];
         
-        return (aDict != nil);
+        returnValue = (aDict != nil);
+        
+        if (returnValue) {
+            [[self windowControllers] makeObjectsPerformSelector:@selector(unfocus:) withObject:self]; // Reset focus (else could contain invalid rules - though we might clear them out)
+        }
+        
+        return returnValue;
     }
     else{
         *outError = [NSError errorWithDomain:@"RuleModeler" code:NSFileReadInvalidFileNameError userInfo:[NSDictionary dictionaryWithObject:NSLocalizedString(@"Unknown file type", @"Error message") forKey:NSLocalizedDescriptionKey]];
