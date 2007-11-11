@@ -15,4 +15,6 @@
     defaultRulePriority = 100;
 //    highlightSearchFilterOccurences = YES;
 //    searchFilterHighlightColor = <NSColor as NSData>;
+    restoreOpenDocuments = NO;
+//    restoredDocumentURLs = <NSArray of NSURL as strings>;
 }
