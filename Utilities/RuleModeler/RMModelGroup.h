@@ -67,4 +67,6 @@ extern NSString *RMModelGroupType;
 - (void) insertObject:(id)obj inModelContainersAtIndex:(unsigned)theIndex;
 - (void) removeObjectFromModelContainersAtIndex:(unsigned)theIndex;
 
+- (id)makeNewWindowController;
+
 @end
