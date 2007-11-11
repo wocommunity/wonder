@@ -1154,7 +1154,7 @@ static EOQualifier *_testOperator(id _ctx, const char *_buf,
 
   pos = _countWhiteSpaces(_buf, _bufLen);  
   
-  if (_bufLen < 4) {/* at least OR or AND and somethink more */   
+  if (_bufLen < 4) {/* at least OR or AND and something more */   
     if (qDebug)
       NSLog(@"_testOperator return nil for <%s> ", _buf);
     return nil;
@@ -1173,8 +1173,18 @@ static EOQualifier *_testOperator(id _ctx, const char *_buf,
       pos    += 2;
       *isAnd  = NO;
   }
+  else{
+      if (qDebug)
+          NSLog(@"_testOperator got no AND nor OR for <%s> ", _buf);
+      return nil; // No need to go further
+  }
+
   pos += _countWhiteSpaces(_buf + pos, _bufLen - pos);
   qual = _parseSingleQualifier(_ctx, _buf + pos, _bufLen - pos, &len);
+  if (!qual){
+      [NSException raise:NSInvalidArgumentException 
+                  format:@"Expected qualifier after %@", *isAnd ? @"AND" : @"OR"]; // TESTME!
+  }
   *_opLen = pos + len;
   if (qDebug)
     NSLog(@"_testOperator return %@ for <%s> ", qual, _buf);
@@ -1195,7 +1205,7 @@ static EOQualifier *_parseCompoundQualifier(id _ctx, const char *_buf,
 
   if ((q0 = _parseSingleQualifier(_ctx, _buf, _bufLen, &len)) == nil) {
     if (qDebug)
-      NSLog(@"_parseAndOrQualifier return nil for <%s> ", _buf);
+      NSLog(@"1_parseCompoundQualifier return nil for <%s> ", _buf);
     
     return nil;
   }
@@ -1203,7 +1213,7 @@ static EOQualifier *_parseCompoundQualifier(id _ctx, const char *_buf,
 
   if (!(q1 = _testOperator(_ctx, _buf + pos, _bufLen - pos, &len, &isAnd))) {
     if (qDebug)
-      NSLog(@"_parseAndOrQualifier return nil for <%s> ", _buf);
+      NSLog(@"2_parseCompoundQualifier return nil for <%s> ", _buf);
     return nil;
   }
   pos  += len;
@@ -1242,7 +1252,7 @@ static EOQualifier *_parseCompoundQualifier(id _ctx, const char *_buf,
     : [_ctx orQualifierWithArray:array];
   
   if (qDebug)
-    NSLog(@"_parseAndOrQualifier return <%@> for <%s> ", result, _buf);
+    NSLog(@"3_parseCompoundQualifier return <%@> for <%s> ", result, _buf);
 
   return result;
 }
