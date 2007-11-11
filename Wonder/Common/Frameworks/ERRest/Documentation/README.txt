@@ -1,1 +1,0 @@
-See the javadoc for ERXRestRequestHandler, ERXXmlRestResponseWriter, and ERXStandardRestEntityDelegate.

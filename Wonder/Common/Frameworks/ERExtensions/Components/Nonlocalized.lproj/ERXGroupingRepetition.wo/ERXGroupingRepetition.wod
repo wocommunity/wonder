@@ -1,6 +1,0 @@
-ComponentContent: WOComponentContent {}
-
-Repetition: WORepetition {
-    list=sections;
-    item=sectionItem;
-}

@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<wodefinitions>
-	<wo class="ERDSectionImage" wocomponentcontent="false">
-
-		<binding name="sectionImageName"/>
-		<binding name="displayNameForSectionKey"/>
-	</wo>
-</wodefinitions>

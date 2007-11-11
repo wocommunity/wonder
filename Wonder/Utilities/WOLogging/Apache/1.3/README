@@ -1,6 +1,0 @@
-
-WOLogging works with the Wonder Apache 1.3 Adaptor available in the Adaptors/Apache module provided that the header/variable name is "x-webobjects-customenv". The original Wonder Apache adaptor transforms the header named "x-webobjects-customenv" into an env. variable of the same name.
-
-For Apache 2.0 please apply the patch available in Utilities/WOLogging/apache/2.0
-
-

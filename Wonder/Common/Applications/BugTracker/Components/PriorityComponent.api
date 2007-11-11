@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<wodefinitions>
-    <wo class="PriorityComponent" wocomponentcontent="false">
-        <binding name="object"/>
-        <binding name="key"/>
-    </wo>
-</wodefinitions>

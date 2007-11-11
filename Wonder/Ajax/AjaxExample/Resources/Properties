@@ -1,7 +1,0 @@
-ajax.google.maps.apiKey=ABQIAAAABnqa-5vnwbcuVjOqT_UguRRD8rgMro1ErFTzFq_cZ7wuzaXx-RR-_GceyJyG1yKMYKBVtNpPvIuM4w
-er.ajax.AjaxFileRequestHandler.maxUploadSize=2000000
-
-log4j.rootLogger=INFO,STDOUT
-log4j.appender.STDOUT=org.apache.log4j.ConsoleAppender
-log4j.appender.STDOUT.layout=er.extensions.ERXPatternLayout
-log4j.appender.STDOUT.layout.ConversionPattern=%-5p %d{HH:mm:ss} (%-20c:%L):  %m%n

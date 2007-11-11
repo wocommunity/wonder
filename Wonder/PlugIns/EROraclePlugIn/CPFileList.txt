@@ -1,3 +1,0 @@
-Sources/com/webobjects/jdbcadaptor/EROracleExpression.java:com.webobjects.jdbcadaptor
-Sources/com/webobjects/jdbcadaptor/EROraclePlugIn.java:com.webobjects.jdbcadaptor
-Sources/com/webobjects/jdbcadaptor/EROracleSynchronizationFactory.java:com.webobjects.jdbcadaptor

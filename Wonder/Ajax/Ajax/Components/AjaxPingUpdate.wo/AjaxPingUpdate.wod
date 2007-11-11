@@ -1,7 +1,0 @@
-RefreshTargetConditional : WOConditional {
-	condition = refreshTarget;
-}
-
-TargetContainerID : WOString {
-	value = targetContainerID;
-}

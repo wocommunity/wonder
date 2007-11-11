@@ -1,4 +1,0 @@
-SubmitButton1: WOSubmitButton {
-	action = pickAction;
-	value = pickButtonLabel;
-}

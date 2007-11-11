@@ -1,9 +1,0 @@
-Text : WOText {
-	rows = ^rows;
-	cols = ^length;
-	value = objectKeyPathValue;
-}
-
-Src: ERXJavaScript {
-	scriptSource = sourceUrl;
-}

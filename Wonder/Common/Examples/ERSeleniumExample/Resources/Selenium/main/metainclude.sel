@@ -1,7 +1,0 @@
-"@include" metacommand example
-Including file with relative path
-@include main.sel
-Including file with absolute (relatively to Selenium tests root) path
-@include actions/success.sel
-Including file containing other metacommands
-@include metarepeat.sel

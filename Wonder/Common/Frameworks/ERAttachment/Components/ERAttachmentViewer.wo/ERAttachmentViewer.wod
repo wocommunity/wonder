@@ -1,9 +1,0 @@
-ViewerSwitch : WOSwitchComponent {
-	WOComponentName = viewerClassName;
-	attachment = ^attachment;
-	class = ^class;
-	id = ^class;
-	style = ^style;
-	width = ^width;
-	height = ^height;
-}

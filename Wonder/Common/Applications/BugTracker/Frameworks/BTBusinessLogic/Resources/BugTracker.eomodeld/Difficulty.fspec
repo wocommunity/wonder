@@ -1,9 +1,0 @@
-
-{
-    FetchAll = 
-    {
-        class = EOFetchSpecification;
-        entityName = Difficulty;
-        fetchLimit = 0;
-    };
-}

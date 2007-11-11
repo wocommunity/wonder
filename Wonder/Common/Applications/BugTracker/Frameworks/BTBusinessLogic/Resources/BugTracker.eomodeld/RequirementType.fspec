@@ -1,9 +1,0 @@
-
-{
-    FetchAll = 
-    {
-        class = EOFetchSpecification;
-        entityName = RequirementType;
-        fetchLimit = 0;
-    };
-}

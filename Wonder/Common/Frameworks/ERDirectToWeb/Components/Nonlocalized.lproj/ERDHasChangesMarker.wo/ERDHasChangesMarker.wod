@@ -1,8 +1,0 @@
-HasChanges: WOConditional {
-	condition = hasChanges;
-}
-
-Floppy: WOImage {
-	filename = "floppy.gif";
-	framework = "ERExtensions";
-}

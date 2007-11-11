@@ -1,7 +1,0 @@
-Hyperlink1: WOHyperlink {
-	action = showExcelAction;
-}
-
-Hyperlink2: WOHyperlink {
-	action = showSampleAction;
-}

@@ -1,7 +1,0 @@
-HeaderFooter : YUIHeaderFooter {
-	title = "Panel";
-}
-
-LinkTooltip : YUITooltip {
-	context = "exampleLink";
-}

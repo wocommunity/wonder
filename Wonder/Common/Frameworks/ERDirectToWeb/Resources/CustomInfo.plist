@@ -1,5 +1,0 @@
-{
-    NSJavaAware=YES;
-    NSJavaNeeded=YES;
-    NSPrincipalClass = er.directtoweb.ERDirectToWeb;
-}

@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<wodefinitions>
-	<wo wocomponentcontent = "true" class="AjaxAccordionTab">
-		<binding name = "title"/>
-		<binding name = "id"/>
-	</wo>
-</wodefinitions>

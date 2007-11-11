@@ -1,3 +1,0 @@
-Test for erroneous Selenium Action
-|open|/wa/Selenium/erroneous|
-|assertTextPresent|Action command failed.|

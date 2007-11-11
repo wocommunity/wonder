@@ -1,4 +1,0 @@
-SubmitButton6: WOSubmitButton { action = selectAll; value = "Select All Shown"; }
-
-SubmitButton4: WOSubmitButton { action = clearSelected; value = "Clear Selected"; }
-SubmitButton5: WOSubmitButton { action = deleteSelected; value = "Delete Selected"; }

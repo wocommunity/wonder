@@ -1,6 +1,0 @@
-String : ERXLocalizedString {
-	templateString = templateString;
-	object = d2wContext.object;
-	escapeHTML = ^escapeHTML;
-	valueWhenEmpty = ^valueWhenEmpty;
-}

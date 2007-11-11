@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<wodefinitions>
-	<wo class="ERXJSSubmitFunction">
-		<binding name="name"/>
-		<binding name="formName" required = "true" />
-		<binding name="functionName" required = "true" />
-		<binding name="action" required = "true" />
-	</wo>
-</wodefinitions>

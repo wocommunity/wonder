@@ -1,4 +1,0 @@
-wotaskdContent: WOString {
-	value = wotaskdText;
-	escapeHTML = "NO";
-}

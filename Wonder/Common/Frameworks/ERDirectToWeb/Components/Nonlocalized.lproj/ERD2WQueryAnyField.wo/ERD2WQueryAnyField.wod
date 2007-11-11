@@ -1,9 +1,0 @@
-AnyField: ERDAnyField {
-	displayGroup = displayGroup;
-	displayKey = relationshipContext.displayNameForProperty;
-	key = relationshipContext.propertyKey;
-	keyList = relationshipContextDisplayAttributesKeys;
-	relationshipKey = relationshipKey;
-	selectedKey = selectedKey;
-	sourceEntityName = entity.name;
-}

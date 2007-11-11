@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<wodefinitions>
-	<wo class="ERXEditingContextInspector" wocomponentcontent="false">
-
-		<binding name="object"/>
-		<binding name="debugPageProvider"/>
-	</wo>
-</wodefinitions>

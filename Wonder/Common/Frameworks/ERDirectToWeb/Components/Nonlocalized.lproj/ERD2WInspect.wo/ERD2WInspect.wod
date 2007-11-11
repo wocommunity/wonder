@@ -1,6 +1,0 @@
-ERXD2WInspect1: ERXD2WInspect {
-	entityName = objectKeyPathValue.entityName; // VALID
-	object = objectKeyPathValue;
-	pageConfiguration = ^inspectConfigurationName;
-}
-

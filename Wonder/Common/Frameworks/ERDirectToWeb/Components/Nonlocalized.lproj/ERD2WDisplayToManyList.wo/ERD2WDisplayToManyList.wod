@@ -1,6 +1,0 @@
-ERListDisplay1: ERXListDisplay {
-	attribute = keyWhenRelationship;
-	list = list;
-	nullArrayDisplay = d2wContext.emptyArrayDisplayString;
-}
-

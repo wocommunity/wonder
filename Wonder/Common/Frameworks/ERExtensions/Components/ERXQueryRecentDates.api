@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<wodefinitions>
-	<wo class="ERXQueryRecentDates" wocomponentcontent="false">
-
-		<binding name="displayGroup"/>
-		<binding name="key"/>
-	</wo>
-</wodefinitions>

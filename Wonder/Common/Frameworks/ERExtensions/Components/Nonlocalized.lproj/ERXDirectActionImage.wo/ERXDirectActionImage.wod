@@ -1,6 +1,0 @@
-Generic1: WOGenericElement {
-	elementName = "img";
-	src = href;
-        width=^width;
-        height=^height;
-}

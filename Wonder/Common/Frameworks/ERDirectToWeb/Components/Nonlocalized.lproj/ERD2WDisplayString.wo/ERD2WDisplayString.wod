@@ -1,6 +1,0 @@
-String: WOString {
-    valueWhenEmpty=localContext.valueWhenEmpty;
-    value = objectPropertyValue;
-	escapeHTML = localContext.escapeHTML;
-}
-

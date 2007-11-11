@@ -1,3 +1,0 @@
-Test for invalid Selenium Action
-|open|/wa/Selenium/fake|
-|assertTextNotPresent|Action command succeeded.|

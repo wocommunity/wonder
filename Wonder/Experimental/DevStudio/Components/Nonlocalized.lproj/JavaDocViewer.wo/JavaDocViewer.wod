@@ -1,7 +1,0 @@
-String1: WOString {
-	value = selectedClass.documentationPath;
-}
-
-String2: WOString {
-	value = comments;
-}

@@ -1,6 +1,0 @@
-CheckBox2: WOSwitchComponent {
-    WOComponentName = selectionWidgetName;
-	checked = checked;
-	onclick ="window.event.cancelBubble = true";
-}
-

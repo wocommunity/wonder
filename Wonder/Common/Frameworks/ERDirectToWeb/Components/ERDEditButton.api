@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<wodefinitions>
-	<wo class="ERDEditButton" wocomponentcontent="false">
-
-		<binding name="object"/>
-		<binding name="d2wContext"/>
-	</wo>
-</wodefinitions>

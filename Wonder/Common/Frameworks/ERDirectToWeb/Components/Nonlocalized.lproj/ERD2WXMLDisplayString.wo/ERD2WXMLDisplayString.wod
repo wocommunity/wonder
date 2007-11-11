@@ -1,4 +1,0 @@
-String: WOString {
-    value = objectPropertyValue;
-	valueWhenEmpty = "";
-}
