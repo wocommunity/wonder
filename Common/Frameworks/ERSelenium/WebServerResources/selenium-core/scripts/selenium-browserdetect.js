@@ -24,6 +24,14 @@
 var BrowserVersion = function() {
     this.name = navigator.appName;
 
+    if (navigator.userAgent.indexOf('Mac OS X') != -1) {
+        this.isOSX = true;
+    }
+
+    if (navigator.userAgent.indexOf('Windows NT 6') != -1) {
+        this.isVista = true;
+    }
+
     if (window.opera != null) {
         this.browser = BrowserVersion.OPERA;
         this.isOpera = true;
