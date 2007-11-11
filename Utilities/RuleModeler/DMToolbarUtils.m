@@ -10,7 +10,7 @@
 #include "DMToolbarUtils.h"
 
 // addToolbarItem from "ToolbarSample - Controller.m" in ADC Sample Code - Cocoa
-static NSToolbarItem *addToolbarItem(NSMutableDictionary *theDict, NSString *identifier, NSString *label, NSString *paletteLabel, NSString *toolTip, id target, SEL settingSelector, id itemContent, SEL action, NSMenu *menu) {
+NSToolbarItem *addToolbarItem(NSMutableDictionary *theDict, NSString *identifier, NSString *label, NSString *paletteLabel, NSString *toolTip, id target, SEL settingSelector, id itemContent, SEL action, NSMenu *menu) {
     NSMenuItem *mItem;
     
     // here we create the NSToolbarItem and setup its attributes in line with the parameters
