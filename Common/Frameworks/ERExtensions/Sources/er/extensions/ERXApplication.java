@@ -437,12 +437,6 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 				if (System.getProperty("_DisableClasspathReorder") == null) {
 					System.setProperty(cpName, newCP);
 				}
-				try {
-					System.err.println(Class.forName("org.apache.axis.enum.Use"));
-				}
-				catch (ClassNotFoundException e) {
-					System.err.println("Not found!!!");
-				}
 			}
 		}
 		if (System.getProperty("_DisableClasspathReorder") == null) {
