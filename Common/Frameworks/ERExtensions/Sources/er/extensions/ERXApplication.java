@@ -301,6 +301,13 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 	}
 
 	private static boolean isSystemJar(String jar) {
+		// check system path
+		String systemRoot = System.getProperty("WORootDirectory");
+		if(systemRoot != null) {
+			if (jar.startsWith(systemRoot)) {
+				return true;
+			}
+		}
 		// check maven path
 		if (jar.indexOf("webobjects" + File.separator + "apple") > 0) {
 			return true;
@@ -356,7 +363,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 	}
 
 	/**
-	 * Called prior to actually initing the app. Defines framework load order, 
+	 * Called prior to actually initializing the app. Defines framework load order, 
 	 * class path order, checks patches etc.
 	 */
 	public static void setup(String[] argv) {
@@ -371,15 +378,22 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 				String parts[] = cp.split(File.pathSeparator);
 				String normalLibs = "";
 				String systemLibs = "";
+				String jarLibs = "";
+				String frameworkPattern = ".*?/(\\w+)\\.framework/Resources/Java/\\1.jar".toLowerCase();
+				String appPattern = ".*?/(\\w+)\\.woa/Contents/Resources/Java/\\1.jar".toLowerCase();
+				String folderPattern = ".*?/Resources/Java/?$".toLowerCase();
 				for (int i = 0; i < parts.length; i++) {
 					String jar = parts[i];
+					// Windows has \, we need to normalize
+					String fixedJar = jar.replace(File.separatorChar, '/').toLowerCase();
 					// System.out.println("Checking: " + jar);
 					// all patched frameworks here
 					if(isSystemJar(jar)) {
 						systemLibs += jar + File.pathSeparator;
-					}
-					else {
+					} else if(fixedJar.matches(frameworkPattern) || fixedJar.matches(appPattern) || fixedJar.matches(folderPattern)) {
 						normalLibs += jar + File.pathSeparator;
+					} else {
+						jarLibs += jar + File.pathSeparator;
 					}
 					String bundle = jar.replaceAll(".*?[/\\\\](\\w+)\\.framework.*", "$1");
 					String excludes = "(JavaVM)";
@@ -403,20 +417,31 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 						}
 					}
 				}
-
-				if (systemLibs.length() > 1) {
-					systemLibs = systemLibs.substring(0, systemLibs.length() - 1);
-				}
+				String newCP = "";
 				if (normalLibs.length() > 1) {
 					normalLibs = normalLibs.substring(0, normalLibs.length() - 1);
+					newCP += normalLibs;
 				}
-				cp = normalLibs + File.pathSeparator + systemLibs;
+				if (systemLibs.length() > 1) {
+					systemLibs = systemLibs.substring(0, systemLibs.length() - 1);
+					newCP += (newCP.length() > 0 ? ":" : "") + systemLibs;
+				}
+				if (jarLibs.length() > 1) {
+					jarLibs = jarLibs.substring(0, jarLibs.length() - 1);
+					newCP += (newCP.length() > 0 ? ":" : "") + jarLibs;
+				}
 				// AK: this is pretty experimental for now. The classpath reordering
 				// should actually be done in a WOLips bootstrap because as this time all
 				// the static inits of WO app have already happened (which include NSMutableArray and _NSThreadSaveSet)
-
+				System.err.println(newCP);
 				if (System.getProperty("_DisableClasspathReorder") == null) {
-					System.setProperty(cpName, cp);
+					System.setProperty(cpName, newCP);
+				}
+				try {
+					System.err.println(Class.forName("org.apache.axis.enum.Use"));
+				}
+				catch (ClassNotFoundException e) {
+					System.err.println("Not found!!!");
 				}
 			}
 		}
