@@ -1,5 +1,7 @@
 package er.extensions.migration;
 
+import java.io.UnsupportedEncodingException;
+
 import org.apache.log4j.Logger;
 
 import com.webobjects.eoaccess.EOAdaptorChannel;
@@ -7,6 +9,7 @@ import com.webobjects.eoaccess.EOModel;
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSBundle;
+import com.webobjects.foundation._NSStringUtilities;
 
 import er.extensions.ERXJDBCUtilities;
 
@@ -143,7 +146,12 @@ public abstract class ERXMigration implements IERXMigration {
 				String currentPath = (String) resourcePaths.objectAtIndex(i);
 
 				if (currentPath.endsWith(migrationName)) {
-					return new String(bundle.bytesForResourcePath(currentPath));
+					try {
+						return new String(bundle.bytesForResourcePath(currentPath), _NSStringUtilities.UTF8_ENCODING);
+					}
+					catch (UnsupportedEncodingException e) {
+						log.error(e, e);
+					}
 				}
 			}
 		}
