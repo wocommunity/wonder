@@ -189,6 +189,22 @@ public class AjaxUtils {
 		NSMutableDictionary dict = AjaxUtils.mutableUserInfo(message);
 		dict.takeValueForKey(ERXAjaxSession.DONT_STORE_PAGE, ERXAjaxSession.DONT_STORE_PAGE);
 	}
+	
+	/**
+	 * Returns an AjaxResponse with the given javascript as the body of the response.
+	 * 
+	 * @param context the WOContext
+	 * @param javascript the javascript to send
+	 * @return a new response
+	 */
+	public static WOResponse javascriptResponse(String javascript, WOContext context) {
+		WORequest request = context.request();
+		AjaxResponse response = AjaxUtils.createResponse(request, context);
+		AjaxUtils.appendScriptHeaderIfNecessary(request, response);
+		response.appendContentString(javascript);
+		AjaxUtils.appendScriptFooterIfNecessary(request, response);
+		return response;
+	}
 
 	public static void appendScriptHeaderIfNecessary(WORequest request, WOResponse response) {
 		if (AjaxUpdateContainer.hasUpdateContainerID(request)) {
