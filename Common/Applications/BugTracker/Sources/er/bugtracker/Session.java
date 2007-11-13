@@ -9,8 +9,6 @@ package er.bugtracker;
 
 import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WOComponent;
-import com.webobjects.appserver.WOContext;
-import com.webobjects.appserver.WOResponse;
 import com.webobjects.directtoweb.D2W;
 import com.webobjects.directtoweb.D2WPage;
 import com.webobjects.directtoweb.EditPageInterface;
@@ -21,8 +19,6 @@ import com.webobjects.foundation.NSKeyValueCoding;
 import com.webobjects.foundation.NSMutableDictionary;
 
 import er.corebusinesslogic.ERCoreBusinessLogic;
-import er.extensions.ERXNavigation;
-import er.extensions.ERXNavigationManager;
 import er.extensions.ERXSession;
 import er.extensions.ERXStringUtilities;
 

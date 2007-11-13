@@ -3,7 +3,6 @@ package er.bugtracker;
 import com.webobjects.appserver.WOApplication;
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
-import com.webobjects.appserver.WOSession;
 import com.webobjects.directtoweb.D2W;
 import com.webobjects.directtoweb.D2WContext;
 import com.webobjects.directtoweb.D2WPage;
@@ -31,11 +30,10 @@ import er.directtoweb.ERD2WQueryPage;
 import er.directtoweb.ERDQueryPageInterface;
 import er.extensions.EOEnterpriseObjectClazz;
 import er.extensions.ERXEC;
-import er.extensions.ERXExtensions;
 import er.extensions.ERXLocalizer;
 import er.extensions.ERXNavigationManager;
-import er.extensions.ERXNavigationState;
 import er.extensions.ERXPrimaryKeyListQualifier;
+import er.extensions.ERXSession;
 import er.extensions.ERXStringUtilities;
 
 /**
@@ -126,7 +124,7 @@ public class Factory extends ERD2WFactory implements NSKeyValueCoding {
     }
     
     private Session session() {
-        return (Session) ERXExtensions.session();
+        return (Session) ERXSession.session();
     }
     
     public WOComponent currentPage() {
