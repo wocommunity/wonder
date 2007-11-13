@@ -19,7 +19,6 @@ import com.webobjects.foundation.NSArray;
 
 import er.extensions.ERXEC;
 import er.extensions.ERXEOControlUtilities;
-import er.extensions.ERXExtensions;
 import er.extensions.ERXSession;
 import er.extensions.ERXWOContext;
 
@@ -46,7 +45,7 @@ public class ERD2WPageRunner {
 	}
 
 	public void createPages() {
-		ERXSession session = ERXExtensions.session();
+		ERXSession session = ERXSession.session();
 		// session = (ERXSession)context.session();
 		for (Enumeration pages = _pages.objectEnumerator(); pages.hasMoreElements();) {
 			String pageName = (String) pages.nextElement();

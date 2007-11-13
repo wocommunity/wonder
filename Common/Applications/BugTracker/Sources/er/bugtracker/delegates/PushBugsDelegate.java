@@ -10,7 +10,6 @@ import com.webobjects.foundation.NSArray;
 
 import er.bugtracker.Bug;
 import er.bugtracker.Session;
-import er.directtoweb.ERDBranchDelegate;
 import er.directtoweb.ERDListPageInterface;
 import er.extensions.ERXEC;
 

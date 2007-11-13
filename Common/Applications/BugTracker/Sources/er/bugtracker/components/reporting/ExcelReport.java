@@ -4,8 +4,6 @@ import org.apache.log4j.Logger;
 
 import com.webobjects.appserver.WOContext;
 
-import er.reporting.WRReport;
-
 
 
 public class ExcelReport extends Report {

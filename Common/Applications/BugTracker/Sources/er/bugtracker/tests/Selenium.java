@@ -3,29 +3,21 @@ package er.bugtracker.tests;
 import org.apache.log4j.Logger;
 
 import com.webobjects.appserver.WOActionResults;
-import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WOCookie;
 import com.webobjects.appserver.WORequest;
 import com.webobjects.appserver.WOResponse;
-import com.webobjects.directtoweb.D2W;
-import com.webobjects.foundation.NSArray;
 import com.webobjects.eoaccess.EOUtilities;
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.eocontrol.EOKeyValueQualifier;
 import com.webobjects.eocontrol.EOQualifier;
-import com.webobjects.foundation.NSBundle;
+import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSTimestamp;
 
-import er.bugtracker.Bug;
 import er.bugtracker.Framework;
 import er.bugtracker.People;
 import er.bugtracker.Session;
-import er.extensions.ERXCrypto;
 import er.extensions.ERXEC;
-import er.extensions.ERXEOAccessUtilities;
 import er.extensions.ERXEOControlUtilities;
-import er.extensions.ERXLocalizer;
-import er.extensions.ERXSession;
 import er.extensions.ERXUtilities;
 import er.selenium.SeleniumAction;
 

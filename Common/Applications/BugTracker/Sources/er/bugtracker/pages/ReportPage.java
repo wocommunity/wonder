@@ -5,8 +5,6 @@ package er.bugtracker.pages;
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WOResponse;
-import com.webobjects.directtoweb.D2WContext;
-import com.webobjects.eoaccess.EOEntity;
 import com.webobjects.eoaccess.EOUtilities;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSData;
