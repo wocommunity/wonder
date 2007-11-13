@@ -1,1 +1,1 @@
-http://en.wikibooks.org/wiki/Programming:WebObjects/Project_WONDER/Frameworks/ERSelenium
+http://wiki.objectstyle.org/confluence/display/WO/Project+WONDER-Frameworks-ERSelenium
