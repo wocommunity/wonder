@@ -72,8 +72,8 @@ public class LoginPanel extends WOComponent {
         session.setUser(userObject);
         boolean isAdmin = userObject.isAdmin();
         D2W.factory().setWebAssistantEnabled(isAdmin);
-        String encryptedIDPrimaryKey = ERXCrypto.blowfishEncode(userObject.primaryKey());
-        WOCookie loginCookie=WOCookie.cookieWithName("BTL", rememberPassword ?  encryptedIDPrimaryKey : "-");
+        String encryptedIDPrimaryKey = ERXCrypto.crypterForAlgorithm(ERXCrypto.BLOWFISH).encrypt(userObject.primaryKey());
+        WOCookie loginCookie=new WOCookie("BTL", rememberPassword ?  encryptedIDPrimaryKey : "-");
         loginCookie.setExpires(NSTimestamp.DistantFuture);
         loginCookie.setPath("/");
         context().response().addCookie(loginCookie);

@@ -79,7 +79,7 @@ public class DirectAction extends ERD2WDirectAction {
         // This gets us the encrypted ID stored for the login cookie
         String encryptedPrimaryKey = r.cookieValueForKey("BTL");
         if (encryptedPrimaryKey != null && !encryptedPrimaryKey.equals("") && !encryptedPrimaryKey.equals("-")) {
-            String clearPrimaryKey = ERXCrypto.blowfishDecode(encryptedPrimaryKey);
+            String clearPrimaryKey = ERXCrypto.crypterForAlgorithm(ERXCrypto.BLOWFISH).decrypt(encryptedPrimaryKey);
             if (clearPrimaryKey != null) {
                 clearPrimaryKey = clearPrimaryKey.trim();
                 ec.lock();
