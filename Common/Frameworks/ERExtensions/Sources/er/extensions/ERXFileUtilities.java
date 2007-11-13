@@ -314,7 +314,7 @@ public class ERXFileUtilities {
 	            if(url != null) {
 	                path = url.getFile();
 	            }
-        	} else {
+        	} else if( bundle != null ) {
         		URL url = bundle.pathURLForResourcePath(fileName);
 	            if(url != null) {
 	                path = url.getFile();
