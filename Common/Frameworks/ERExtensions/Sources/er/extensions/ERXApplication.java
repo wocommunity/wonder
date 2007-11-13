@@ -433,7 +433,6 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 				// AK: this is pretty experimental for now. The classpath reordering
 				// should actually be done in a WOLips bootstrap because as this time all
 				// the static inits of WO app have already happened (which include NSMutableArray and _NSThreadSaveSet)
-				System.err.println(newCP);
 				if (System.getProperty("_DisableClasspathReorder") == null) {
 					System.setProperty(cpName, newCP);
 				}
