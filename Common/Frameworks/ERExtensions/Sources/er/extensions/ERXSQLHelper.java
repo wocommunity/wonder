@@ -57,7 +57,7 @@ public class ERXSQLHelper {
 	/** logging support */
 	public static final Logger log = Logger.getLogger(ERXSQLHelper.class);
 
-	private static Map _sqlHelperMap = new HashMap();
+	private static Map<String, ERXSQLHelper> _sqlHelperMap = new HashMap<String, ERXSQLHelper>();
 
 	private JDBCPlugIn _plugin;
 
@@ -78,7 +78,7 @@ public class ERXSQLHelper {
 	 * 
 	 * @return a <code>String</code> containing SQL statements to create tables
 	 */
-	public String createSchemaSQLForEntitiesInModelWithNameAndOptions(NSArray entities, String modelName, NSDictionary optionsCreate) {
+	public String createSchemaSQLForEntitiesInModelWithNameAndOptions(NSArray<EOEntity> entities, String modelName, NSDictionary optionsCreate) {
 		EOModel m = ERXEOAccessUtilities.modelGroup(null).modelNamed(modelName);
 		return createSchemaSQLForEntitiesInModelAndOptions(entities, m, optionsCreate);
 	}
@@ -126,7 +126,8 @@ public class ERXSQLHelper {
 	 * 
 	 * @return a <code>String</code> containing SQL statements to create tables
 	 */
-	public String createSchemaSQLForEntitiesInModelAndOptions(NSArray entities, EOModel model, NSDictionary optionsCreate) {
+	@SuppressWarnings("unchecked")
+	public String createSchemaSQLForEntitiesInModelAndOptions(NSArray<EOEntity> entities, EOModel model, NSDictionary optionsCreate) {
 		EOEditingContext ec = ERXEC.newEditingContext();
 		ec.lock();
 		try {
@@ -136,8 +137,8 @@ public class ERXSQLHelper {
 			// But you would probably want to exit soon after calling this....
 			// EODatabaseContext databaseContext = EODatabaseContext.registeredDatabaseContextForModel(model, ec);
 			if (entities == null) {
-				Enumeration e = model.entities().objectEnumerator();
-				NSMutableArray ar = new NSMutableArray();
+				Enumeration<EOEntity> e = model.entities().objectEnumerator();
+				NSMutableArray<EOEntity> ar = new NSMutableArray<EOEntity>();
 				while (e.hasMoreElements()) {
 					EOEntity currentEntity = (EOEntity) e.nextElement();
 					if (ERXModelGroup.isPrototypeEntity(currentEntity)) {
@@ -169,7 +170,7 @@ public class ERXSQLHelper {
 	 *            the options (@see createSchemaSQLForEntitiesInModelWithNameAndOptions)
 	 * @return a sql script
 	 */
-	public String createSchemaSQLForEntitiesWithOptions(NSArray entities, EODatabaseContext databaseContext, NSDictionary optionsCreate) {
+	public String createSchemaSQLForEntitiesWithOptions(NSArray<EOEntity> entities, EODatabaseContext databaseContext, NSDictionary<String, String> optionsCreate) {
 		// get the JDBCAdaptor
 		EOAdaptorContext ac = databaseContext.adaptorContext();
 		EOSynchronizationFactory sf = ((JDBCAdaptor) ac.adaptor()).plugIn().createSynchronizationFactory();
@@ -187,7 +188,7 @@ public class ERXSQLHelper {
 	 *            the name of the EOModel
 	 * @return a <code>String</code> containing SQL statements to create tables
 	 */
-	public String createSchemaSQLForEntitiesInModelWithName(NSArray entities, String modelName) {
+	public String createSchemaSQLForEntitiesInModelWithName(NSArray<EOEntity> entities, String modelName) {
 		EOModel model = ERXEOAccessUtilities.modelGroup(null).modelNamed(modelName);
 		return createSchemaSQLForEntitiesInModel(entities, model);
 	}
@@ -203,7 +204,7 @@ public class ERXSQLHelper {
 	 * 
 	 * @return a <code>String</code> containing SQL statements to create tables
 	 */
-	public String createSchemaSQLForEntitiesInModel(NSArray entities, EOModel model) {
+	public String createSchemaSQLForEntitiesInModel(NSArray<EOEntity> entities, EOModel model) {
 		return createSchemaSQLForEntitiesInModelAndOptions(entities, model, defaultOptionDictionary(true, true));
 	}
 
@@ -229,8 +230,8 @@ public class ERXSQLHelper {
 	 * 
 	 * @return a <code>String</code> containing SQL statements to create tables
 	 */
-	public NSMutableDictionary defaultOptionDictionary(boolean create, boolean drop) {
-		NSMutableDictionary optionsCreate = new NSMutableDictionary();
+	public NSMutableDictionary<String, String> defaultOptionDictionary(boolean create, boolean drop) {
+		NSMutableDictionary<String, String> optionsCreate = new NSMutableDictionary<String, String>();
 		optionsCreate.setObjectForKey((drop) ? "YES" : "NO", EOSchemaGeneration.DropTablesKey);
 		optionsCreate.setObjectForKey((drop) ? "YES" : "NO", EOSchemaGeneration.DropPrimaryKeySupportKey);
 		optionsCreate.setObjectForKey((create) ? "YES" : "NO", EOSchemaGeneration.CreateTablesKey);
@@ -258,15 +259,16 @@ public class ERXSQLHelper {
 	 *            if true, tables and keys are dropped
 	 * @return a <code>String</code> containing SQL statements to create tables
 	 */
-	public String createSchemaSQLForEntitiesInDatabaseContext(NSArray entities, EODatabaseContext databaseContext, boolean create, boolean drop) {
+	public String createSchemaSQLForEntitiesInDatabaseContext(NSArray<EOEntity> entities, EODatabaseContext databaseContext, boolean create, boolean drop) {
 		return createSchemaSQLForEntitiesWithOptions(entities, databaseContext, defaultOptionDictionary(create,drop));
 	}
 
-	public String createIndexSQLForEntities(NSArray entities) {
+	public String createIndexSQLForEntities(NSArray<EOEntity> entities) {
 		return createIndexSQLForEntities(entities, null);
 	}
 
-	public String createIndexSQLForEntities(NSArray entities, NSArray externalTypesToIgnore) {
+	@SuppressWarnings("unchecked")
+	public String createIndexSQLForEntities(NSArray<EOEntity> entities, NSArray<String> externalTypesToIgnore) {
 		if (externalTypesToIgnore == null) {
 			externalTypesToIgnore = NSArray.EmptyArray;
 		}
@@ -289,9 +291,9 @@ public class ERXSQLHelper {
 				continue;
 			}
 
-			NSDictionary d = entity.userInfo();
-			NSMutableArray usedColumns = new NSMutableArray();
-			for (Enumeration keys = d.keyEnumerator(); keys.hasMoreElements();) {
+			NSDictionary<String, Object> d = entity.userInfo();
+			NSMutableArray<String> usedColumns = new NSMutableArray<String>();
+			for (Enumeration<String> keys = d.keyEnumerator(); keys.hasMoreElements();) {
 				String key = (String) keys.nextElement();
 				if (key.startsWith("index")) {
 					String numbers = key.substring("index".length());
@@ -316,8 +318,8 @@ public class ERXSQLHelper {
 						StringBuffer columnBuf = new StringBuffer();
 						boolean validIndex = false;
 						localBuf.append("create index " + indexName + " on " + entity.externalName() + "(");
-						for (Enumeration attributes = NSArray.componentsSeparatedByString(attributeNames, ",").objectEnumerator(); attributes.hasMoreElements();) {
-							String attributeName = (String) attributes.nextElement();
+						for (Enumeration<String> attributes = NSArray.componentsSeparatedByString(attributeNames, ",").objectEnumerator(); attributes.hasMoreElements();) {
+							String attributeName = attributes.nextElement();
 							attributeName = attributeName.trim();
 							EOAttribute attribute = entity.attributeNamed(attributeName);
 							if (attribute == null) {
@@ -434,7 +436,7 @@ public class ERXSQLHelper {
 		spec = (EOFetchSpecification) spec.clone();
 		NSArray attributes = entity.attributesToFetch();
 		if (spec.fetchesRawRows()) {
-			NSMutableArray arr = new NSMutableArray();
+			NSMutableArray<EOAttribute> arr = new NSMutableArray<EOAttribute>();
 			for (Enumeration e = spec.rawRowKeyPaths().objectEnumerator(); e.hasMoreElements();) {
 				String keyPath = (String) e.nextElement();
 				arr.addObject(entity.anyAttributeNamed(keyPath));
@@ -478,6 +480,17 @@ public class ERXSQLHelper {
 	 */
 	public String sqlForRegularExpressionQuery(String key, String value) {
 		throw new UnsupportedOperationException("There is no database-specific implementation for generating regex expressions.");
+	}
+
+	/**
+	 * Returns the SQL expression for a full text search query.
+	 * 
+	 * @param qualifier the full text qualifier
+	 * @param expression the EOSQLExpression context
+	 * @return a SQL expression
+	 */
+	public String sqlForFullTextQuery(ERXFullTextQualifier qualifier, EOSQLExpression expression) {
+		throw new UnsupportedOperationException("There is no database-specific implementation for generating full text expressions.");
 	}
 
 	/**
@@ -613,8 +626,8 @@ public class ERXSQLHelper {
 	 *            a multi-line sql statement
 	 * @return an array of sql statements
 	 */
-	public NSArray splitSQLStatements(String sql) {
-		NSMutableArray statements = new NSMutableArray();
+	public NSArray<String> splitSQLStatements(String sql) {
+		NSMutableArray<String> statements = new NSMutableArray<String>();
 		if (sql != null) {
 			StringBuffer statementBuffer = new StringBuffer();
 			int length = sql.length();
@@ -656,7 +669,7 @@ public class ERXSQLHelper {
 	 * @throws IOException
 	 *             if there is a problem reading the stream
 	 */
-	public NSArray splitSQLStatementsFromInputStream(InputStream is) throws IOException {
+	public NSArray<String> splitSQLStatementsFromInputStream(InputStream is) throws IOException {
 		return splitSQLStatements(ERXStringUtilities.stringFromInputStream(is));
 	}
 
@@ -669,7 +682,7 @@ public class ERXSQLHelper {
 	 * @throws IOException
 	 *             if there is a problem reading the stream
 	 */
-	public NSArray splitSQLStatementsFromFile(File f) throws IOException {
+	public NSArray<String> splitSQLStatementsFromFile(File f) throws IOException {
 		FileInputStream fis = new FileInputStream(f);
 		try {
 			BufferedInputStream bis = new BufferedInputStream(fis);
@@ -812,7 +825,8 @@ public class ERXSQLHelper {
 		 * 
 		 * @see createSchemaSQLForEntitiesInModelWithNameAndOptions
 		 */
-		public String createSchemaSQLForEntitiesInModelWithNameAndOptions(NSArray entities, String modelName, NSDictionary optionsCreate) {
+		@Override
+		public String createSchemaSQLForEntitiesInModelWithNameAndOptions(NSArray<EOEntity> entities, String modelName, NSDictionary optionsCreate) {
 			String oldConstraintName = null;
 			int i = 0;
 			String s = super.createSchemaSQLForEntitiesInModelWithNameAndOptions(entities, modelName, optionsCreate);
@@ -866,6 +880,7 @@ public class ERXSQLHelper {
 			return buf.toString();
 		}
 
+		@Override
 		protected String limitExpressionForSQL(EOSQLExpression expression, EOFetchSpecification fetchSpecification, String sql, long start, long end) {
 			String limitSQL;
 			/*
@@ -892,14 +907,16 @@ public class ERXSQLHelper {
 			return limitSQL;
 		}
 
+		@Override
 		protected String commandSeparatorString() {
 			String lineSeparator = System.getProperty("line.separator");
 			String commandSeparator = lineSeparator + "/" + lineSeparator;
 			return commandSeparator;
 		}
 
-		public String createIndexSQLForEntities(NSArray entities, NSArray externalTypesToIgnore) {
-			NSMutableArray oracleExternalTypesToIgnore = new NSMutableArray();
+		@Override
+		public String createIndexSQLForEntities(NSArray<EOEntity> entities, NSArray<String> externalTypesToIgnore) {
+			NSMutableArray<String> oracleExternalTypesToIgnore = new NSMutableArray<String>();
 			if (externalTypesToIgnore != null) {
 				oracleExternalTypesToIgnore.addObjectsFromArray(externalTypesToIgnore);
 			}
@@ -909,12 +926,14 @@ public class ERXSQLHelper {
 
 		}
 
+		@Override
 		public String sqlForRegularExpressionQuery(String key, String value) {
 			return "REGEXP_LIKE(" + key + ", " + value + ")";
 		}
 	}
 
 	public static class OpenBaseSQLHelper extends ERXSQLHelper {
+		@Override
 		protected String limitExpressionForSQL(EOSQLExpression expression, EOFetchSpecification fetchSpecification, String sql, long start, long end) {
 			// Openbase support for limiting result set
 			return sql + " return results " + start + " to " + end;
@@ -922,6 +941,7 @@ public class ERXSQLHelper {
 	}
 
 	public static class FrontBaseSQLHelper extends ERXSQLHelper {
+		@Override
 		public boolean shouldExecute(String sql) {
 			boolean shouldExecute = true;
 			if (sql.startsWith("SET TRANSACTION ISOLATION LEVEL")) {
@@ -933,6 +953,7 @@ public class ERXSQLHelper {
 			return shouldExecute;
 		}
 
+		@Override
 		protected String limitExpressionForSQL(EOSQLExpression expression, EOFetchSpecification fetchSpecification, String sql, long start, long end) {
 			// add TOP(start, (end - start)) after the SELECT word
 			int index = sql.indexOf("select");
@@ -943,19 +964,50 @@ public class ERXSQLHelper {
 			String limitSQL = sql.substring(0, index) + " TOP(" + start + ", " + (end - start) + ")" + sql.substring(index + 1, sql.length());
 			return limitSQL;
 		}
+		
+		@Override
+		public String sqlForFullTextQuery(ERXFullTextQualifier qualifier, EOSQLExpression expression) {
+			StringBuffer sb = new StringBuffer();
+			sb.append("satisfies(");
+			sb.append(qualifier.indexName());
+			sb.append(", '");
+			ERXFullTextQualifier.MatchType matchType = qualifier.matchType();
+			NSArray<String> terms = qualifier.terms();
+			for (String term : terms) {
+				String[] termWords = term.split(" ");
+				for (String termWord : termWords) {
+					sb.append(termWord);
+					if (matchType == ERXFullTextQualifier.MatchType.ALL) {
+						sb.append('&');
+					}
+					else if (matchType == ERXFullTextQualifier.MatchType.ANY) {
+						sb.append('|');
+					}
+				}
+			}
+			// Lop off the last '&' or '|'
+			if (terms.count() > 0) {
+				sb.setLength(sb.length() - 1);
+			}
+			sb.append("');");
+			return sb.toString();
+		}
 	}
 
 	public static class MySQLSQLHelper extends ERXSQLHelper {
+		@Override
 		protected String limitExpressionForSQL(EOSQLExpression expression, EOFetchSpecification fetchSpecification, String sql, long start, long end) {
 			return sql + " LIMIT " + start + ", " + (end - start);
 		}
 
+		@Override
 		public String sqlForRegularExpressionQuery(String key, String value) {
 			return key + " REGEXP " + value + "";
 		}
 	}
 
 	public static class PostgresqlSQLHelper extends ERXSQLHelper {
+		@Override
 		protected String formatValueForAttribute(EOSQLExpression expression, Object value, EOAttribute attribute, String key) {
 			// The Postgres Expression has a problem using bind variables so we have to get the formatted
 			// SQL string for a value instead. All Apple provided plugins must use the bind variables
@@ -965,10 +1017,12 @@ public class ERXSQLHelper {
 			return expression.formatValueForAttribute(value, attribute);
 		}
 
+		@Override
 		protected String limitExpressionForSQL(EOSQLExpression expression, EOFetchSpecification fetchSpecification, String sql, long start, long end) {
 			return sql + " LIMIT " + (end - start) + " OFFSET " + start;
 		}
 
+		@Override
 		public String sqlForRegularExpressionQuery(String key, String value) {
 			return key + " ~* " + value + "";
 		}
