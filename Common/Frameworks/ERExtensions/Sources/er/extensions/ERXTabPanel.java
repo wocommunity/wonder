@@ -183,7 +183,12 @@ public class ERXTabPanel extends WOTabPanel  {
     }
 
     public Object currentTabNameWithoutSpaces() {
-        return NSArray.componentsSeparatedByString((String)valueForKey("currentTabName"), " ").componentsJoinedByString("");
+    	String currentTabName = (String)valueForKey("currentTabName");
+    	if (currentTabName != null) {
+    		currentTabName = "tab_" + currentTabName;
+    		currentTabName = currentTabName.replaceAll("[\\s&+%.]", "_");
+    	}
+        return currentTabName;
     }
 
 
