@@ -34,7 +34,7 @@ SelectedTabConditional: WOConditional {
 switchSubmitTab: WOSubmitButton {
 	action = switchSubmitTab;
 	name = currentTabNameWithoutSpaces;
-	style = "position:absolute; left:-1000px;";
+	style = "display: none;";
 	value = "-";
 }
 
