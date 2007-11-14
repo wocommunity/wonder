@@ -243,10 +243,8 @@ public class ERXSimpleTemplateParser {
                                 log.debug("calling valueForKeyPath("+o+", "+element+")");
                             }
                             result = doGetValue(element, o);
-                             // For just in case the above doesn't throw an exception when the 
-                            // key is not defined. (NSDictionary doesn't seem to throw the exception.)
                             if(result == null) {
-                                result = _undefinedKeyLabel;
+                                result = "";
                             }
                         } catch (NSKeyValueCoding.UnknownKeyException t) {
                             result = _undefinedKeyLabel;
