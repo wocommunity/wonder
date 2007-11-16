@@ -694,7 +694,7 @@ public class ERXArrayUtilities extends Object {
      * Sorts a given array with a key in ascending fashion.
      * @param array array to be sorted.
      * @param key sort key.
-     * @param selector sort order selector to use, if null, then sort will be ascending.
+     * @param selector sort order selector to use, if null, then sort will be case insensitive ascending.
      * @return sorted array.
      */
     public static NSArray sortedArraySortedWithKey(NSArray array, String key, NSSelector selector) {
@@ -708,19 +708,19 @@ public class ERXArrayUtilities extends Object {
         * Sorts a given array with a set of keys according to the given selector.
      * @param array array to be sorted.
      * @param keys sort keys
-     * @param selector sort order selector to use, if null, then sort will be ascending.
+     * @param selector sort order selector to use, if null, then sort will be case insensitive ascending.
      * @return sorted array.
      */
     public static NSArray sortedArraySortedWithKeys(NSArray array, NSArray keys, NSSelector selector) {
         ERXAssert.PRE.notNull("Attempting to sort null array of objects.", array);
         ERXAssert.PRE.notNull("Attepting to sort an array with null keys.", keys);
         if (keys.count() < 2)
-            return sortedArraySortedWithKey(array, (String)keys.lastObject(), selector == null ? EOSortOrdering.CompareAscending : selector);
+            return sortedArraySortedWithKey(array, (String)keys.lastObject(), selector == null ? EOSortOrdering.CompareCaseInsensitiveAscending : selector);
 
         NSMutableArray order = new NSMutableArray(keys.count());
         for (Enumeration keyEnumerator = keys.objectEnumerator(); keyEnumerator.hasMoreElements();) {
             String key = (String)keyEnumerator.nextElement();
-            order.addObject(EOSortOrdering.sortOrderingWithKey(key, selector == null ? EOSortOrdering.CompareAscending : selector));
+            order.addObject(EOSortOrdering.sortOrderingWithKey(key, selector == null ? EOSortOrdering.CompareCaseInsensitiveAscending : selector));
         }
         return EOSortOrdering.sortedArrayUsingKeyOrderArray(array, order);
     }   
