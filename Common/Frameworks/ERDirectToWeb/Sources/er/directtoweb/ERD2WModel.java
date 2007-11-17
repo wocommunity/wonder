@@ -48,6 +48,7 @@ import com.webobjects.eocontrol.EOQualifier;
 import com.webobjects.eocontrol.EOQualifierEvaluation;
 import com.webobjects.eocontrol.EOSortOrdering;
 import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSBundle;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSForwardException;
 import com.webobjects.foundation.NSLog;
@@ -707,6 +708,41 @@ public class ERD2WModel extends D2WModel {
         }
         return modelFiles;
     }
+    
+    /**
+     * Overridden to support additional d2wmodel files. 
+     * Provide an array of filenames (including extension) in the property 
+     * 'er.directtoweb.ERD2WModel.additionalModelNames', these files should get 
+     * loaded and added to the rules set during application startup.
+     */
+	@Override
+	public Vector modelFilesPathURLsInBundles() {
+		Vector modelFilePaths = super.modelFilesPathURLsInBundles();
+		if (!_hasAddedExtraModelFiles) {
+			if (log.isDebugEnabled()) log.debug("Adding addtitional rule files");
+			NSArray<String> modelNames = ERXProperties.arrayForKeyWithDefault("er.directtoweb.ERD2WModel.additionalModelNames", null);
+			NSMutableArray<NSBundle> bundles = NSBundle.frameworkBundles().mutableClone();
+			bundles.addObject(NSBundle.mainBundle());
+			if (modelFilePaths != null && modelNames != null && modelNames.count() > 0 && bundles != null && bundles.count() > 0) {
+				for (NSBundle bundle : bundles) {
+					String name = bundle.name();
+					if (name != null) {
+						for (String modelName : modelNames) {
+							URL path = WOApplication.application().resourceManager().pathURLForResourceNamed(modelName, name, null);
+							if (path != null) {
+								if (log.isDebugEnabled()) log.debug("Adding file '" + path + "' from framework '" + name + "'");
+								modelFilePaths.add(path);
+							}
+						}
+					}
+				}
+			}
+			_hasAddedExtraModelFiles = true;
+		}
+		return modelFilePaths;
+	}
+	private boolean _hasAddedExtraModelFiles=false;
+    
     protected EOQualifier qualifierContainedInEnumeration(EOQualifierEvaluation q1, Enumeration e) {
         EOQualifier containedQualifier = null;
         while (e.hasMoreElements()) {
@@ -1021,4 +1057,5 @@ public class ERD2WModel extends D2WModel {
             System.out.println("\t" + theKey + " -> " + theValue);
         }
     }
+
 }
