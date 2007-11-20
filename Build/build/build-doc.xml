@@ -127,6 +127,7 @@
                    version="true"
                    use="true"
                    verbose="false"
+        	         maxmemory="128m"
                    windowtitle="Project Wonder Reference Documentation">
 
             <classpath refid="classpath"/>
