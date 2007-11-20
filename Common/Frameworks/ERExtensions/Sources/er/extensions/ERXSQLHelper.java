@@ -890,19 +890,19 @@ public class ERXSQLHelper {
 			int debug = ERXProperties.intForKeyWithDefault("OracleBatchMode", 3);
 			if (debug == 1) {
 				// this only works for the first page
-				limitSQL = "select * from (" + sql + ") where rownum between " + (start + 1) + " and " + (end + 1);
+				limitSQL = "select * from (" + sql + ") where rownum between " + (start + 1) + " and " + end;
 			}
 			else if (debug == 2) {
 				// this doesn't work at all when have have *no* order by
-				limitSQL = "select * from (" + "select " + expression.listString() + ", row_number() over (" + expression.orderByString() + ") as eo_rownum from (" + sql + ")) where eo_rownum between " + (start + 1) + " and " + (end + 1);
+				limitSQL = "select * from (" + "select " + expression.listString() + ", row_number() over (" + expression.orderByString() + ") as eo_rownum from (" + sql + ")) where eo_rownum between " + (start + 1) + " and " + end;
 			}
 			else if (debug == 3) {
 				// this works, but breaks with horizontal inheritance
-				limitSQL = "select * from (" + "select " + expression.listString().replaceAll("[Tt]\\d\\.", "") + ", rownum eo_rownum from (" + sql + ")) where eo_rownum between " + (start + 1) + " and " + (end + 1);
+				limitSQL = "select * from (" + "select " + expression.listString().replaceAll("[Tt]\\d\\.", "") + ", rownum eo_rownum from (" + sql + ")) where eo_rownum between " + (start + 1) + " and " + end;
 			}
 			else {
 				// this might work, too, but only if we have an ORDER BY
-				limitSQL = "select * from (" + "select " + (fetchSpecification.usesDistinct() ? " distinct " : "") + expression.listString() + ", row_number() over (" + expression.orderByString() + ") eo_rownum" + " from " + expression.joinClauseString() + " where " + expression.whereClauseString() + ") where eo_rownum between " + (start + 1) + " and " + (end + 1);
+				limitSQL = "select * from (" + "select " + (fetchSpecification.usesDistinct() ? " distinct " : "") + expression.listString() + ", row_number() over (" + expression.orderByString() + ") eo_rownum" + " from " + expression.joinClauseString() + " where " + expression.whereClauseString() + ") where eo_rownum between " + (start + 1) + " and " + end;
 			}
 			return limitSQL;
 		}
