@@ -85,3 +85,7 @@ ForwardString : WOString {
 	value = forwardString;
 	escapeHTML = false;
 }
+
+ShowBatchNavigationConditional : WOConditional {
+	condition = showNavigationBar;
+}

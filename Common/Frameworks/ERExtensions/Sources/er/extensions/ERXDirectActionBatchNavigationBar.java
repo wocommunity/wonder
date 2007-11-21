@@ -34,6 +34,8 @@ import com.webobjects.foundation.NSMutableDictionary;
  *          true
  * @binding showPageString (Boolean) - whether or not to show the "Page:" string
  *          to the left of the nav (will be made more flexible); default = false
+ * @binding showBatchNavigationForSinglePage (Boolean) - whether or not to show the
+ * 			the batch navigation if we have only a single page; default = true
  * 
  * @author cug - Sep 20, 2007
  */
@@ -174,6 +176,29 @@ public class ERXDirectActionBatchNavigationBar extends ERXStatelessComponent {
 	    	this.batchNumbers = tmpArray.immutableClone();
     	}
     	return batchNumbers;
+    }
+    
+    /**
+     * Returns whether we have more than one batch and should show the navigation at all 
+     * 
+     * @author cug - Nov 20, 2007
+     * @return
+     */
+    public boolean hasMoreThanOneBatch () {
+    	if (this.batchNumbers() != null && this.batchNumbers().count() > 1) {
+    		return true;
+    	}
+    	return false;
+    }
+
+    /**
+     * Should we show the batch navigation bar? Checks the binding "showBatchNavigationForSinglePage"
+     * 
+     * @author cug - Nov 20, 2007
+     * @return true if "showBatchNavigationForSinglePage" is true or there is more than one page
+     */
+    public boolean showNavigationBar () {
+    	return this.hasMoreThanOneBatch() || this.showBatchNavigationForSinglePage();
     }
     
     /**
@@ -449,9 +474,34 @@ public class ERXDirectActionBatchNavigationBar extends ERXStatelessComponent {
     	this.setValueForBinding(flag, SHOW_PAGE_NUMBERS);
     }
     
+    /**
+     * Return the value for the showBatchNavigationForSinglePage binding
+     * 
+     * @author cug - Nov 20, 2007
+     * @return value for the showBatchNavigationForSinglePage binding
+     */
+    public Boolean showBatchNavigationForSinglePage () {
+    	return this.booleanValueForBinding(SHOW_BATCH_NAVIGATION_FOR_SINGLE_PAGE, true) ? Boolean.TRUE : Boolean.FALSE ;
+    }
+    
+    /**
+     * Set the binding value for showBatchNavigationForSinglePage
+     *  
+     * @author cug - Nov 20, 2007
+     * @param flag
+     */
+    public void setShowBatchNavigationForSinglePage (Boolean flag) {
+    	this.setValueForBinding(flag, SHOW_BATCH_NAVIGATION_FOR_SINGLE_PAGE);
+    }
+    
     
     // *************************************************************************
-    // some constants 
+    // some constants
+    
+    /**
+     * key for showBatchNavigationForSinglePage binding
+     */
+    private static final String SHOW_BATCH_NAVIGATION_FOR_SINGLE_PAGE = "showBatchNavigationForSinglePage";
 
 	/**
 	 * Key for the actionName binding
