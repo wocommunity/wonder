@@ -7,14 +7,14 @@
 	<parent>
 		<groupId>wonder</groupId>
 		<artifactId>wonder</artifactId>
-		<version>4.0.0-SNAPSHOT</version>
+		<version>${wonderversion}-SNAPSHOT</version>
 	</parent>
 
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>wonder.common</groupId>
 	<artifactId>common</artifactId>
-	<version>4.0.0-SNAPSHOT</version>
+	<version>${wonderversion}-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<name>Common</name>
 
