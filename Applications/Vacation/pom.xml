@@ -6,13 +6,13 @@
 	<parent>
 		<groupId>wonder.applications</groupId>
 	    <artifactId>applications</artifactId>
-		<version>4.0.0-SNAPSHOT</version>
+		<version>${wonderversion}-SNAPSHOT</version>
 		<relativePath>..</relativePath>
 	</parent>
 
 	<groupId>wonder.applications</groupId>
 	<artifactId>Vacation</artifactId>
-	<version>4.0.0-SNAPSHOT</version>
+	<version>${wonderversion}-SNAPSHOT</version>
 	<name>Vacation</name>
 	<packaging>woapplication</packaging>
 
@@ -20,7 +20,7 @@
 		<dependency>
 			<groupId>wonder.common</groupId>
 			<artifactId>ERExtensions</artifactId>
-			<version>4.0.0-SNAPSHOT</version>
+			<version>${wonderversion}-SNAPSHOT</version>
 		</dependency>
 	</dependencies>
 	<build>
