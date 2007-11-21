@@ -5,10 +5,15 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
 	<modelVersion>4.0.0</modelVersion>
+	
+  	<properties>
+  		<woversion>5.4</woversion>
+  		<wonderversion>4.0.0</wonderversion>
+  	</properties>
 
 	<groupId>wonder</groupId>
 	<artifactId>wonder</artifactId>
-	<version>4.0.0-SNAPSHOT</version>
+	<version>${wonderversion}-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<name>Project Wonder</name>
 
@@ -26,27 +31,27 @@
 			<dependency>
 				<groupId>com.apple.webobjects</groupId>
 				<artifactId>JavaJDBCAdaptor</artifactId>
-				<version>[5.3,)</version>
+				<version>${woversion}</version>
 			</dependency>
 			<dependency>
 				<groupId>com.apple.webobjects</groupId>
 				<artifactId>JavaWebObjects</artifactId>
-				<version>[5.3,)</version>
+				<version>${woversion}</version>
 			</dependency>
 			<dependency>
 				<groupId>com.apple.webobjects</groupId>
 				<artifactId>JavaWOJSPServlet</artifactId>
-				<version>[5.3,)</version>
+				<version>${woversion}</version>
 			</dependency>
 			<dependency>
 				<groupId>com.apple.webobjects</groupId>
 				<artifactId>JavaDirectToWeb</artifactId>
-				<version>[5.3,)</version>
+				<version>${woversion}</version>
 			</dependency>
 			<dependency>
 				<groupId>com.apple.webobjects</groupId>
 				<artifactId>JavaEOAccess</artifactId>
-				<version>[5.3,)</version>
+				<version>${woversion}</version>
 			</dependency>
 			<dependency>
 				<groupId>log4j</groupId>
@@ -71,7 +76,7 @@
 				<groupId>org.objectstyle.woproject.maven2</groupId>
 				<artifactId>maven-wolifecycle-plugin</artifactId>
 				<extensions>true</extensions>
-				<version>2.0.7</version>
+				<version>2.0.10-SNAPSHOT</version>
         			<configuration>
            				<skipAppleProvidedFrameworks>true</skipAppleProvidedFrameworks>
 				</configuration>

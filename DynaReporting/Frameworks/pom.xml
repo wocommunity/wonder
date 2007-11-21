@@ -7,7 +7,7 @@
 	<parent>
 		<groupId>wonder.dynareporting</groupId>
 		<artifactId>dynareporting</artifactId>
-		<version>4.0.0-SNAPSHOT</version>
+		<version>${wonderversion}-SNAPSHOT</version>
 		<relativePath>..</relativePath>
 	</parent>
 
@@ -15,7 +15,7 @@
 
 	<groupId>wonder.dynareporting</groupId>
 	<artifactId>frameworks</artifactId>
-	<version>4.0.0-SNAPSHOT</version>
+	<version>${wonderversion}-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<name>Frameworks</name>
 
