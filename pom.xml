@@ -76,7 +76,7 @@
 				<groupId>org.objectstyle.woproject.maven2</groupId>
 				<artifactId>maven-wolifecycle-plugin</artifactId>
 				<extensions>true</extensions>
-				<version>2.0.10-SNAPSHOT</version>
+				<version>2.0.10</version>
         			<configuration>
            				<skipAppleProvidedFrameworks>true</skipAppleProvidedFrameworks>
 				</configuration>
