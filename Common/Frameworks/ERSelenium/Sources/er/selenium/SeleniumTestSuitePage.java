@@ -81,12 +81,17 @@ public class SeleniumTestSuitePage extends ERXStatelessComponent {
 		NSMutableArray result = new NSMutableArray();
 		
 		log.debug("Inspecting contents of directory '" + directory.getName());
-		NSArray filesList = ERXFileUtilities.arrayByAddingFilesInDirectory(directory, false);
+		NSArray filesList = (NSArray)ERXFileUtilities.arrayByAddingFilesInDirectory(directory, false).valueForKey("@sortAsc.name");
 		assert(filesList != null);
 		
 		Iterator i = filesList.iterator();
 		while (i.hasNext()) {
 			File file = (File)i.next();
+			String fname = file.getName();
+			if (fname.startsWith("_")) {
+				log.debug("Ignoring " + fname + " because of the starting _");
+				continue;
+			}
 			String extension = getFileExtension(file.getName());
 
 			if (extension != null) {
