@@ -5,3 +5,5 @@ Including file with absolute (relatively to Selenium tests root) path
 @include actions/success.sel
 Including file containing other metacommands
 @include metarepeat.sel
+Incuding hidden file that is not seen as a standalone test
+@include _hiddenInclude.sel
