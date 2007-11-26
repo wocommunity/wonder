@@ -1,45 +1,31 @@
-
+// Entity Modeler v1.0.1
 {
-    EOModelVersion = 2.1;
-    adaptorName = JDBC;
-    entities = 
-    (
-       
-       {
-           className = EOGenericRecord;
-           name = EOJDBCFrontBasePrototypes;
-       }, 
-       
-       {
-           className = EOGenericRecord;
-           name = EOJDBCMySQLPrototypes;
-       }, 
-       
-       {
-           className = EOGenericRecord;
-           name = EOJDBCOpenBasePrototypes;
-       }, 
-       
-       {
-           className = EOGenericRecord;
-           name = EOJDBCOraclePrototypes;
-       }, 
-       
-       {
-           className = EOGenericRecord;
-           name = EOJDBCPostgresqlPrototypes;
-       }, 
-       
-       {
-           className = EOGenericRecord;
-           name = EOJDBCPrototypes;
-       }
-    );
-    internalInfo = 
-    {
-        _deletedEntityNamesInObjectStore = 
-        (
-           EOJDBCPostgresPrototypes
-        );
-    };
+	EOModelVersion = 2.1;
+	adaptorName = JDBC;
+	entities = (
+		{
+			className = EOGenericRecord;
+			name = EOJDBCFrontBasePrototypes;
+		},
+		{
+			className = EOGenericRecord;
+			name = EOJDBCMySQLPrototypes;
+		},
+		{
+			className = EOGenericRecord;
+			name = EOJDBCOpenBasePrototypes;
+		},
+		{
+			className = EOGenericRecord;
+			name = EOJDBCOraclePrototypes;
+		},
+		{
+			className = EOGenericRecord;
+			name = EOJDBCPostgresqlPrototypes;
+		},
+		{
+			className = EOGenericRecord;
+			name = EOJDBCPrototypes;
+		}
+	);
 }
