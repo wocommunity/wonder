@@ -43,6 +43,8 @@ import com.webobjects.foundation.NSTimestampFormatter;
  */
 
 public class FrontbasePlugIn extends JDBCPlugIn {
+	static final boolean USE_NAMED_CONSTRAINTS = true;
+	
 	static final String _frontbaseIncludeSynonyms = System.getProperty("jdbcadaptor.frontbase.includeSynonyms", null);
 	static final String _frontbaseWildcardPatternForAttributes = System.getProperty("jdbcadaptor.frontbase.wildcardPatternForAttributes", null);
 	static final String _frontbaseWildcardPatternForTables = System.getProperty("jdbcadaptor.frontbase.wildcardPatternForTables", "%");
@@ -558,39 +560,59 @@ public class FrontbasePlugIn extends JDBCPlugIn {
 		public NSArray foreignKeyConstraintStatementsForRelationship(EORelationship relationship) {
 			if (!relationship.isToMany() && isPrimaryKeyAttributes(relationship.destinationEntity(), relationship.destinationAttributes())) {
 				StringBuffer sql = new StringBuffer();
+				String tableName = relationship.entity().externalName();
 
 				sql.append("ALTER TABLE ");
-				sql.append(quoteTableName(relationship.entity().externalName().toUpperCase()));
-				sql.append(" ADD FOREIGN KEY (");
+				sql.append(quoteTableName(tableName.toUpperCase()));
+				sql.append(" ADD");
 
+				StringBuffer constraint = new StringBuffer(" CONSTRAINT FOREIGN_KEY_");
+				constraint.append(tableName);
+				
+				StringBuffer fkSql = new StringBuffer(" FOREIGN KEY (");
 				NSArray attributes = relationship.sourceAttributes();
 
 				for (int i = 0; i < attributes.count(); i++) {
-					if (i != 0)
-						sql.append(", ");
+					constraint.append("_");
+					if (i != 0) 
+						fkSql.append(", ");
 
-					sql.append("\"");
-					sql.append(((EOAttribute) attributes.objectAtIndex(i)).columnName().toUpperCase());
-					sql.append("\"");
+					fkSql.append("\"");
+					String columnName = ((EOAttribute) attributes.objectAtIndex(i)).columnName();
+					fkSql.append(columnName.toUpperCase());
+					constraint.append(columnName);
+					fkSql.append("\"");
 				}
 
-				sql.append(") REFERENCES ");
-				sql.append(quoteTableName(relationship.destinationEntity().externalName().toUpperCase()));
-				sql.append(" (");
+				fkSql.append(") REFERENCES ");
+				constraint.append("_");
+				
+				String referencedExternalName = relationship.destinationEntity().externalName();
+				fkSql.append(quoteTableName(referencedExternalName.toUpperCase()));
+				constraint.append(referencedExternalName);
+				
+				fkSql.append(" (");
 
 				attributes = relationship.destinationAttributes();
 
 				for (int i = 0; i < attributes.count(); i++) {
-					if (i != 0)
-						sql.append(", ");
+					constraint.append("_");
+					if (i != 0) 
+						fkSql.append(", ");
 
-					sql.append("\"");
-					sql.append(((EOAttribute) attributes.objectAtIndex(i)).columnName().toUpperCase());
-					sql.append("\"");
+					fkSql.append("\"");
+					String referencedColumnName = ((EOAttribute) attributes.objectAtIndex(i)).columnName();
+					fkSql.append(referencedColumnName.toUpperCase());
+					constraint.append(referencedColumnName);
+					fkSql.append("\"");
 				}
 
-				sql.append(") DEFERRABLE INITIALLY DEFERRED");
+				fkSql.append(") DEFERRABLE INITIALLY DEFERRED");
 
+				if(USE_NAMED_CONSTRAINTS)
+					sql.append(constraint);
+				sql.append(fkSql);
+				
 				return new NSArray(_expressionForString(sql.toString()));
 			}
 			return NSArray.EmptyArray;
@@ -773,25 +795,37 @@ public class FrontbasePlugIn extends JDBCPlugIn {
 		public NSArray primaryKeyConstraintStatementsForEntityGroup(NSArray entityGroup) {
 			if (entityGroup.count() != 0) {
 				EOEntity entity = (EOEntity) entityGroup.objectAtIndex(0);
-				String tableName = entity.externalName().toUpperCase();
+				String tableName = entity.externalName();
 				NSArray keys = entity.primaryKeyAttributeNames();
 				StringBuffer sql = new StringBuffer();
 
 				if (tableName != null && keys.count() > 0) {
 					sql.append("ALTER TABLE ");
-					sql.append(quoteTableName(tableName));
-					sql.append(" ADD PRIMARY KEY (");
+					sql.append(quoteTableName(tableName.toUpperCase()));
+					sql.append(" ADD");
+					
+					StringBuffer constraint = new StringBuffer(" CONSTRAINT PRIMARY_KEY_");
+					constraint.append(tableName);
+
+					StringBuffer pkSql = new StringBuffer(" PRIMARY KEY (");
 
 					for (int j = 0; j < keys.count(); j++) {
+						constraint.append("_");
 						if (j != 0)
-							sql.append(",");
+							pkSql.append(",");
 
-						sql.append("\"");
-						sql.append(entity.attributeNamed((String) keys.objectAtIndex(j)).columnName().toUpperCase());
-						sql.append("\"");
+						pkSql.append("\"");
+						String columnName = entity.attributeNamed((String) keys.objectAtIndex(j)).columnName();
+						pkSql.append(columnName.toUpperCase());
+						pkSql.append("\"");
+						constraint.append(columnName);
 					}
-					sql.append(") NOT DEFERRABLE INITIALLY IMMEDIATE");
+					pkSql.append(") NOT DEFERRABLE INITIALLY IMMEDIATE");
 
+					if(USE_NAMED_CONSTRAINTS)
+						sql.append(constraint);
+					sql.append(pkSql);
+					
 					return new NSArray(_expressionForString(sql.toString()));
 				}
 			}
@@ -821,11 +855,7 @@ public class FrontbasePlugIn extends JDBCPlugIn {
 			int internalType = internalTypeForExternal(attribute.externalType());
 			boolean isLOB = internalType == FB_BLOB || internalType == FB_CLOB;
 			if (dictionary == null) {
-				if (!attribute.allowsNull()) {
-					sql.append(" NOT NULL");
-					if (isLOB)
-						sql.append(" DEFERRABLE INITIALLY DEFERRED");
-				}
+				_appendNotNullConstraintIfNecessary(attribute, sql);
 			}
 			else {
 				// Default values.
@@ -840,11 +870,8 @@ public class FrontbasePlugIn extends JDBCPlugIn {
 				}
 
 				// Column constraints.
-				if (!attribute.allowsNull()) {
-					sql.append(" NOT NULL");
-					if (isLOB)
-						sql.append(" DEFERRABLE INITIALLY DEFERRED");
-				}
+				_appendNotNullConstraintIfNecessary(attribute, sql);
+
 				if (dictionary.valueForKey("Unique") != null && dictionary.valueForKey("Unique").equals("true")) {
 					sql.append(" UNIQUE");
 				}
@@ -861,6 +888,25 @@ public class FrontbasePlugIn extends JDBCPlugIn {
 			}
 		    appendItemToListString(sql.toString(), _listString());
 		}
+		
+		private void _appendNotNullConstraintIfNecessary(EOAttribute attribute, StringBuffer sql) {
+			if (!attribute.allowsNull()) {
+				if (USE_NAMED_CONSTRAINTS) {
+					sql.append(" CONSTRAINT ");
+					sql.append(attribute.entity().externalName());
+					sql.append('_');
+					sql.append(attribute.columnName());
+					sql.append("_NOT_NULL");
+				}
+				sql.append(" NOT NULL");
+
+				int internalType = internalTypeForExternal(attribute.externalType());
+				boolean isLOB = internalType == FB_BLOB || internalType == FB_CLOB;
+				if (isLOB)
+					sql.append(" DEFERRABLE INITIALLY DEFERRED");
+			}
+		}
+
 		
 		public String columnTypeStringForAttribute(EOAttribute attribute) {
 			String externalTypeName = attribute.externalType();
