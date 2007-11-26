@@ -97,7 +97,7 @@
        
        {
            columnName = "";
-           externalType = DOUBLE;
+           externalType = "DOUBLE PRECISION";
            name = doubleNumber;
            userInfo = 
            {
