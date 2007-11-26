@@ -893,10 +893,10 @@ public class FrontbasePlugIn extends JDBCPlugIn {
 			if (!attribute.allowsNull()) {
 				if (USE_NAMED_CONSTRAINTS) {
 					sql.append(" CONSTRAINT ");
+					sql.append("NOT_NULL_");
 					sql.append(attribute.entity().externalName());
 					sql.append('_');
 					sql.append(attribute.columnName());
-					sql.append("_NOT_NULL");
 				}
 				sql.append(" NOT NULL");
 
