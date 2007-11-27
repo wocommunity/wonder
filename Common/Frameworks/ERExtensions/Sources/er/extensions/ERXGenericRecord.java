@@ -60,7 +60,7 @@ import com.webobjects.foundation.NSValidation;
 public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjectInterface, ERXGeneratesPrimaryKeyInterface, ERXEnterpriseObject {
 
     /** holds all subclass related Logger's */
-    private static NSMutableDictionary classLogs = new NSMutableDictionary();
+    private static NSMutableDictionary<Class, Logger> classLogs = new NSMutableDictionary<Class, Logger>();
 
     public static boolean shouldTrimSpaces(){
         return ERXProperties.booleanForKeyWithDefault("er.extensions.ERXGenericRecord.shouldTrimSpaces", false);
@@ -84,6 +84,7 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
 			super(null, key);
 		}
 		
+		@Override
 		public Object valueInObject(Object object) {
 			ERXGenericRecord eo = (ERXGenericRecord) object;
 			String localizedKey = eo.localizedKey(_key);
@@ -106,6 +107,7 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
 			return value;
 		}
 
+		@Override
 		public void setValueInObject(Object value, Object object) {
 			ERXGenericRecord eo = (ERXGenericRecord) object;
 			String localizedKey = eo.localizedKey(_key);
@@ -113,6 +115,7 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
 		}
 	}
 
+	@Override
 	public NSKeyValueCoding._KeyBinding _otherStorageBinding(String key) {
 		NSKeyValueCoding._KeyBinding result;
 		String localizedKey = localizedKey(key);
@@ -257,7 +260,8 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
     	return old;
     }
     
-    public Object willReadRelationship(Object aObject) {
+    @Override
+	public Object willReadRelationship(Object aObject) {
         boolean old = updateInverseRelationships(false);
         try {
             return super.willReadRelationship(aObject);
@@ -374,7 +378,8 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
      * @param editingContext to be checked to make sure it has the
      *		correct type of delegate set.
      */
-    public void awakeFromClientUpdate(EOEditingContext editingContext) {
+    @Override
+	public void awakeFromClientUpdate(EOEditingContext editingContext) {
         _checkEditingContextDelegate(editingContext);
         super.awakeFromClientUpdate(editingContext);
     }
@@ -386,7 +391,8 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
      * @param editingContext to be checked to make sure it has the
      *		correct type of delegate set.
      */
-    public void awakeFromInsertion(EOEditingContext editingContext) {
+    @Override
+	public void awakeFromInsertion(EOEditingContext editingContext) {
     	boolean old = updateInverseRelationships(false);
     	try {
     		_checkEditingContextDelegate(editingContext);
@@ -415,7 +421,8 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
     	return ERXEnterpriseObject.applyRestrictingQualifierOnInsert;
     }
 
-    public void clearProperties() {
+    @Override
+	public void clearProperties() {
     	boolean old = updateInverseRelationships(false);
     	try {
     		super.clearProperties();
@@ -423,7 +430,7 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
     		updateInverseRelationships(old);
     	}
     }
-
+    
 	/**
      * used for initialization stuff instead of awakeFromInsertion.
      * <code>awakeFromInsertions</code> is buggy because if an EO is
@@ -445,7 +452,8 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
      * @param editingContext to be checked to make sure it has the
      *		correct type of delegate set.
      */
-    public void awakeFromFetch(EOEditingContext editingContext) {
+    @Override
+	public void awakeFromFetch(EOEditingContext editingContext) {
     	boolean old = updateInverseRelationships(false);
     	try {
     	       _checkEditingContextDelegate(editingContext);
@@ -462,7 +470,8 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
      * @param eo enterprise object to be added to the relationship
      * @param key relationship to add the object to.
      */
-    public void addObjectToBothSidesOfRelationshipWithKey(EORelationshipManipulation eo, String key) {
+    @Override
+	public void addObjectToBothSidesOfRelationshipWithKey(EORelationshipManipulation eo, String key) {
         if (eo!=null &&
             ((EOEnterpriseObject)eo).editingContext()!=editingContext() &&
             !(editingContext() instanceof EOSharedEditingContext) &&
@@ -534,8 +543,9 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
     /* (non-Javadoc)
      * @see er.extensions.ERXEnterpriseObject#primaryKeyAttributeNames()
      */
-    public NSArray primaryKeyAttributeNames() {
-        return entity().primaryKeyAttributeNames();
+    @SuppressWarnings("unchecked")
+	public NSArray<String> primaryKeyAttributeNames() {
+        return (NSArray<String>)entity().primaryKeyAttributeNames();
     }
 
     /**
@@ -571,14 +581,15 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
      *		a new primary key dictionary is created, cached and returned.
      */
     // FIXME: this method is really misnamed; it should be called rawPrimaryKeyDictionary
-    public NSDictionary primaryKeyDictionary(boolean inTransaction) {
+    @SuppressWarnings("unchecked")
+	public NSDictionary<String, Object> primaryKeyDictionary(boolean inTransaction) {
         if(_primaryKeyDictionary == null) {
             if (!inTransaction) {
                 Object rawPK = rawPrimaryKey();
                 if (rawPK != null) {
                     if (log.isDebugEnabled()) log.debug("Got raw key: "+ rawPK);
-                    NSArray primaryKeyAttributeNames=primaryKeyAttributeNames();
-                    _primaryKeyDictionary = new NSDictionary(rawPK instanceof NSArray ? (NSArray)rawPK : new NSArray(rawPK), primaryKeyAttributeNames);
+                    NSArray<String> primaryKeyAttributeNames = primaryKeyAttributeNames();
+                    _primaryKeyDictionary = new NSDictionary<NSArray<String>, NSArray<Object>>(rawPK instanceof NSArray ? (NSArray<Object>)rawPK : new NSArray<Object>(rawPK), primaryKeyAttributeNames);
                 } else {
                     if (log.isDebugEnabled()) log.debug("No raw key, trying single key");
                     _primaryKeyDictionary = ERXEOControlUtilities.newPrimaryKeyDictionaryForObject(this);
@@ -630,7 +641,8 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
     /* (non-Javadoc)
      * @see er.extensions.ERXEnterpriseObject#localInstancesOf(com.webobjects.foundation.NSArray)
      */
-    public NSArray localInstancesOf(NSArray eos) {
+    @SuppressWarnings("unchecked")
+	public NSArray localInstancesOf(NSArray eos) {
         return ERXEOControlUtilities.localInstancesOfObjects(editingContext(), eos);
     }
 
@@ -684,14 +696,14 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
                     _permanentGlobalID = (EOKeyGlobalID)gid;
                 }
                 else if ( generateIfMissing ) {
-                    final NSDictionary primaryKeyDictionary = primaryKeyDictionary(false);
+                    final NSDictionary<String, Object> primaryKeyDictionary = primaryKeyDictionary(false);
                     final Object[] values;
 
                     if ( primaryKeyDictionary.count() == 1 ) {
                         values = primaryKeyDictionary.allValues().objects();
                     }
                     else {
-                        final NSArray sortedKeys = ERXDictionaryUtilities.stringKeysSortedAscending(primaryKeyDictionary);
+                        final NSArray<String> sortedKeys = ERXDictionaryUtilities.stringKeysSortedAscending(primaryKeyDictionary);
 
                         values = primaryKeyDictionary.objectsForKeys(sortedKeys, null).objects();
                     }
@@ -726,7 +738,8 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
      * @return much less verbose description of an enterprise
      *		object.
      */
-    public String toString() {
+    @Override
+	public String toString() {
         String pk = primaryKey();
         pk = (pk == null) ? "null" : pk;
         return "<" + getClass().getName() + " pk:\""+ pk + "\">";
@@ -764,7 +777,8 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
     /**
         * @deprecated use {@link ERXGenericRecord#isNewObject}
      */
-    public boolean isNewEO() {
+    @SuppressWarnings("dep-ann")
+	public boolean isNewEO() {
         return isNewObject();
     }
 
@@ -803,7 +817,8 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
      * @throws NSValidation.ValidationException if the value fails validation
      * @return the validated value
      */
-    public Object validateValueForKey(Object value, String key) throws NSValidation.ValidationException {
+    @Override
+	public Object validateValueForKey(Object value, String key) throws NSValidation.ValidationException {
         if (validation.isDebugEnabled())
             validation.debug("ValidateValueForKey on eo: " + this + " value: " + value + " key: " + key);
         if (key==null) // better to raise before calling super which will crash
@@ -815,6 +830,7 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
             if(cd instanceof ERXEntityClassDescription) {
                 ((ERXEntityClassDescription)cd).validateObjectWithUserInfo(this, value, "validateForKey." + key, key);
             }
+            value = _validateValueForKey(value, key);
         } catch (ERXValidationException e) {
             throw e;
         } catch (NSValidation.ValidationException e) {
@@ -832,6 +848,10 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
         return result;
     }
 
+	protected Object _validateValueForKey(Object value, String key) throws NSValidation.ValidationException {
+		return value;
+	}
+
     /**
      * This method performs a few checks before invoking
      * super's implementation. If the property key:
@@ -840,7 +860,8 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
      * @throws NSValidation.ValidationException if the object does not
      *		pass validation for saving to the database.
      */
-    public void validateForSave( )  throws NSValidation.ValidationException {
+    @Override
+	public void validateForSave( )  throws NSValidation.ValidationException {
         // This condition shouldn't ever happen, but it does ;)
         // CHECKME: This was a 4.5 issue, not sure if this one has been fixed yet.
         if (editingContext() != null && editingContext().deletedObjects().containsObject(this)) {
@@ -859,7 +880,8 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
      * @throws NSValidation.ValidationException if the object does not
      *		pass validation for saving to the database.
      */
-    public void validateForInsert() throws NSValidation.ValidationException {
+    @Override
+	public void validateForInsert() throws NSValidation.ValidationException {
         EOClassDescription cd = classDescription();
         if(cd instanceof ERXEntityClassDescription) {
             ((ERXEntityClassDescription)cd).validateObjectForInsert(this);
@@ -872,7 +894,8 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
      * @throws NSValidation.ValidationException if the object does not
      *		pass validation for saving to the database.
      */
-    public void validateForUpdate() throws NSValidation.ValidationException {
+    @Override
+	public void validateForUpdate() throws NSValidation.ValidationException {
         EOClassDescription cd = classDescription();
         if(cd instanceof ERXEntityClassDescription) {
             ((ERXEntityClassDescription)cd).validateObjectForUpdate(this);
@@ -895,7 +918,8 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
     /**
      * Overridden to support two-way relationship setting.
      */
-    protected void includeObjectIntoPropertyWithKey(Object o, String key) {
+    @Override
+	protected void includeObjectIntoPropertyWithKey(Object o, String key) {
     	super.includeObjectIntoPropertyWithKey(o, key);
     	if(ERXEnterpriseObject.updateInverseRelationships && o != null) {
     		String inverse = classDescription().inverseForRelationshipKey(key);
@@ -920,7 +944,8 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
     /**
      * Overridden to support two-way relationship setting.
      */
-    protected void excludeObjectFromPropertyWithKey(Object o, String key) {
+    @Override
+	protected void excludeObjectFromPropertyWithKey(Object o, String key) {
        	super.excludeObjectFromPropertyWithKey(o, key);
     	if(ERXEnterpriseObject.updateInverseRelationships && o != null) {
     		String inverse = classDescription().inverseForRelationshipKey(key);
@@ -943,7 +968,8 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
     /**
      * Overridden to support two-way relationship setting.
      */
-    public void takeStoredValueForKey(Object object, String key) {
+    @Override
+	public void takeStoredValueForKey(Object object, String key) {
     	// we only handle toOne keys here, but there is no API for that so
     	// this unreadable monster first checks the fastest thing, the the slower conditions
     	if(updateInverseRelationships) {
@@ -1016,5 +1042,4 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
      }
      
      */
-    
 }
