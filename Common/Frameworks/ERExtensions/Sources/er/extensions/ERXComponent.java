@@ -260,7 +260,7 @@ public abstract class ERXComponent extends WOComponent {
 			}
 			String frameworkName = _frameworkName();
 			for (String additionalJavascriptFile : additionalJavascriptFiles) {
-				ERXWOContext.addStylesheetResourceInHead(context, response, frameworkName, defaultJavascriptPath + additionalJavascriptFile);
+				ERXWOContext.addScriptResourceInHead(context, response, frameworkName, defaultJavascriptPath + additionalJavascriptFile);
 			}
 		}
 	}
