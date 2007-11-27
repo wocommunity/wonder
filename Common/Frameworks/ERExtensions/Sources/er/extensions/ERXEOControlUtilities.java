@@ -855,15 +855,16 @@ public class ERXEOControlUtilities {
      * null or one of the primary key attributes is not a class property.
      */
 
-    public static NSDictionary newPrimaryKeyDictionaryForObjectFromClassProperties(EOEnterpriseObject eo) {
+    @SuppressWarnings("unchecked")
+	public static NSDictionary<String, Object> newPrimaryKeyDictionaryForObjectFromClassProperties(EOEnterpriseObject eo) {
         EOEditingContext ec = eo.editingContext();
         EOEntity entity = EOUtilities.entityNamed(ec, eo.entityName());
-        NSArray pkAttributes = entity.primaryKeyAttributeNames();
+        NSArray<String> pkAttributes = entity.primaryKeyAttributeNames();
         int count = pkAttributes.count();
-        NSMutableDictionary nsmutabledictionary = new NSMutableDictionary(count);
+        NSMutableDictionary<String, Object> nsmutabledictionary = new NSMutableDictionary<String, Object>(count);
         NSArray classPropertyNames = entity.classPropertyNames();
         while (count-- != 0) {
-            String key = (String)pkAttributes.objectAtIndex(count);
+            String key = pkAttributes.objectAtIndex(count);
             if(!classPropertyNames.containsObject(key))
                 return null;
             Object value = eo.valueForKey(key);
@@ -882,7 +883,7 @@ public class ERXEOControlUtilities {
      * @return new primary key dictionary or null if a failure occured.
      */
 
-    public static NSDictionary newPrimaryKeyDictionaryForObject(EOEnterpriseObject eo) {
+    public static NSDictionary<String, Object> newPrimaryKeyDictionaryForObject(EOEnterpriseObject eo) {
         NSDictionary dict = newPrimaryKeyDictionaryForObjectFromClassProperties(eo);
         if(dict == null) {
             dict = newPrimaryKeyDictionaryForEntityNamed(eo.editingContext(), eo.entityName());

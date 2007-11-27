@@ -71,13 +71,13 @@ public class ERXModelGroup extends EOModelGroup {
 	 * <code>er.extensions.ERXModelGroup.prototypeModelNames</code> defines the names of the models that are prototypes. They
 	 * get put in front of the model load order. The default is <code>erprototypes</code>
 	 */
-	protected NSArray _prototypeModelNames = ERXProperties.componentsSeparatedByStringWithDefault("er.extensions.ERXModelGroup.prototypeModelNames", "," ,new NSArray(ERXProperties.stringForKeyWithDefault("er.extensions.ERXModelGroup.prototypeModelName", "erprototypes")));
+	protected NSArray<String> _prototypeModelNames = ERXProperties.componentsSeparatedByStringWithDefault("er.extensions.ERXModelGroup.prototypeModelNames", "," ,new NSArray<String>(ERXProperties.stringForKeyWithDefault("er.extensions.ERXModelGroup.prototypeModelName", "erprototypes")));
 
 	/**
 	 * <code>er.extensions.ERXModelGroup.modelLoadOrder</code> defines the load order of the models. When you use this property
 	 * the bundle loading will be disregarded. There is no default value.
 	 */
-	protected NSArray _modelLoadOrder = ERXProperties.componentsSeparatedByStringWithDefault("er.extensions.ERXModelGroup.modelLoadOrder", ",", NSArray.EmptyArray);
+	protected NSArray<String> _modelLoadOrder = ERXProperties.componentsSeparatedByStringWithDefault("er.extensions.ERXModelGroup.modelLoadOrder", ",", NSArray.EmptyArray);
 	
 	/**
 	 * Nofitication that is sent when the model group was created form the bundle loading.
@@ -99,10 +99,10 @@ public class ERXModelGroup extends EOModelGroup {
 	 */
 	public void loadModelsFromLoadedBundles() {
 		EOModelGroup.setDefaultGroup(this);
-		NSArray nsarray = NSBundle.frameworkBundles();
+		NSArray<NSBundle> frameworkBundles = NSBundle.frameworkBundles();
 		
 		if (log.isDebugEnabled()) {
-			log.debug("Loading bundles" + nsarray.valueForKey("name"));
+			log.debug("Loading bundles" + frameworkBundles.valueForKey("name"));
 		}
 		// clear the cached class descriptions - if descriptions are there, they
 		// are from a previous load of the models, and may be out of date
@@ -111,18 +111,18 @@ public class ERXModelGroup extends EOModelGroup {
 			ERXEntityClassDescription._factory.reset();
 		}
 
-		NSMutableDictionary modelNameURLDictionary = new NSMutableDictionary();
-		NSMutableArray modelNames = new NSMutableArray();
-		NSMutableArray bundles = new NSMutableArray();
+		NSMutableDictionary<String, URL> modelNameURLDictionary = new NSMutableDictionary<String, URL>();
+		NSMutableArray<String> modelNames = new NSMutableArray<String>();
+		NSMutableArray<NSBundle> bundles = new NSMutableArray<NSBundle>();
 		bundles.addObject(NSBundle.mainBundle());
-		bundles.addObjectsFromArray(nsarray);
+		bundles.addObjectsFromArray(frameworkBundles);
 
-		for (Enumeration e = bundles.objectEnumerator(); e.hasMoreElements(); ) {
-			NSBundle nsbundle = (NSBundle) e.nextElement();
-			NSArray paths = nsbundle.resourcePathsForResources("eomodeld", null);
+		for (Enumeration<NSBundle> e = bundles.objectEnumerator(); e.hasMoreElements(); ) {
+			NSBundle nsbundle = e.nextElement();
+			NSArray<String> paths = nsbundle.resourcePathsForResources("eomodeld", null);
 			int pathCount = paths.count();
 			for (int currentPath = 0; currentPath < pathCount; currentPath++) {
-				String indexPath = (String) paths.objectAtIndex(currentPath);
+				String indexPath = paths.objectAtIndex(currentPath);
 				if(indexPath.endsWith(".eomodeld~/index.eomodeld")) {
 					// AK: we don't want to use temp files. This is actually an error in the 
 					// builds or it happens when you open and change models from installed frameworks
@@ -144,7 +144,7 @@ public class ERXModelGroup extends EOModelGroup {
 			}
 		}
 
-		NSMutableArray modelURLs = new NSMutableArray();
+		NSMutableArray<URL> modelURLs = new NSMutableArray<URL>();
 		// First, add prototyes if specified
 		for(Enumeration prototypeModelNamesEnum = _prototypeModelNames.objectEnumerator(); prototypeModelNamesEnum.hasMoreElements(); ) {
 			String prototypeModelName = (String) prototypeModelNamesEnum.nextElement();
@@ -161,9 +161,9 @@ public class ERXModelGroup extends EOModelGroup {
 			}
 		}
 		// Next, add all models that are stated explicitely
-		for(Enumeration modelLoadOrderEnum = _modelLoadOrder.objectEnumerator(); modelLoadOrderEnum.hasMoreElements(); ) {
-			String modelName = (String) modelLoadOrderEnum.nextElement();
-			URL modelURL = (URL) modelNameURLDictionary.removeObjectForKey(modelName);
+		for(Enumeration<String> modelLoadOrderEnum = _modelLoadOrder.objectEnumerator(); modelLoadOrderEnum.hasMoreElements(); ) {
+			String modelName = modelLoadOrderEnum.nextElement();
+			URL modelURL = modelNameURLDictionary.removeObjectForKey(modelName);
 			modelNames.removeObject(modelName);
 			if (modelURL == null) {
 				throw new IllegalArgumentException("You specified the model '" + modelName + "' in your modelLoadOrder array, but it can not be found.");
@@ -171,14 +171,14 @@ public class ERXModelGroup extends EOModelGroup {
 			modelURLs.addObject(modelURL);
 		}
 		// Finally add all the rest
-		for (Enumeration e = modelNames.objectEnumerator(); e.hasMoreElements();) {
-			String name = (String) e.nextElement();
+		for (Enumeration<String> e = modelNames.objectEnumerator(); e.hasMoreElements();) {
+			String name = e.nextElement();
 			modelURLs.addObject(modelNameURLDictionary.objectForKey(name));
 		}
 
-		Enumeration modelURLEnum = modelURLs.objectEnumerator();
+		Enumeration<URL> modelURLEnum = modelURLs.objectEnumerator();
 		while (modelURLEnum.hasMoreElements()) {
-			URL url = (URL) modelURLEnum.nextElement();
+			URL url = modelURLEnum.nextElement();
 			addModelWithPathURL(url);
 		}
 		
@@ -187,9 +187,9 @@ public class ERXModelGroup extends EOModelGroup {
 		
 		if (!patchModelsOnLoad) {
 			flattenPrototypes();
-			Enumeration modelsEnum = EOModelGroup.defaultGroup().models().objectEnumerator();
+			Enumeration<EOModel> modelsEnum = EOModelGroup.defaultGroup().models().objectEnumerator();
 			while (modelsEnum.hasMoreElements()) {
-				EOModel model = (EOModel)modelsEnum.nextElement();
+				EOModel model = modelsEnum.nextElement();
 				preloadERXConstantClassesForModel(model);
 			}
 		}
@@ -209,6 +209,7 @@ public class ERXModelGroup extends EOModelGroup {
 	 * @param eomodel
 	 *            model to be added
 	 */
+	@Override
 	public void addModel(EOModel eomodel) {
 		Enumeration enumeration = _modelsByName.objectEnumerator();
 		String name = eomodel.name();
@@ -217,7 +218,7 @@ public class ERXModelGroup extends EOModelGroup {
 			return;
 		}
 		NSMutableSet nsmutableset = new NSMutableSet(128);
-		NSSet nsset = new NSSet(eomodel.entityNames());
+		NSSet<String> nsset = new NSSet<String>(eomodel.entityNames());
 		while (enumeration.hasMoreElements()) {
 			EOModel eomodel1 = (EOModel) enumeration.nextElement();
 			nsmutableset.addObjectsFromArray(eomodel1.entityNames());
@@ -282,6 +283,7 @@ public class ERXModelGroup extends EOModelGroup {
 			super(url);
 		}
 
+		@Override
 		public void setModelGroup(EOModelGroup aGroup) {
 			super.setModelGroup(aGroup);
 			if (aGroup != null) {
@@ -381,6 +383,7 @@ public class ERXModelGroup extends EOModelGroup {
 		/**
 		 * Overridden to use our prototype creation method.
 		 */
+		@Override
 		public EOAttribute prototypeAttributeNamed(String name) {
 			synchronized (_EOGlobalModelLock) {
 				if (_prototypesByName == null) {
@@ -393,6 +396,7 @@ public class ERXModelGroup extends EOModelGroup {
 		/**
 		 * Overridden to use our prototype creation method.
 		 */
+		@Override
 		public NSArray availablePrototypeAttributeNames() {
 			synchronized (_EOGlobalModelLock) {
 				if (_prototypesByName == null) {
@@ -407,6 +411,7 @@ public class ERXModelGroup extends EOModelGroup {
 	/**
 	 * Overridden to use our model class in the runtime.
 	 */
+	@Override
 	public EOModel addModelWithPathURL(URL url) {
 		EOModel model = null;
 		if (patchModelsOnLoad) {

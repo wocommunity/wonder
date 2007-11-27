@@ -131,11 +131,12 @@ public class ERXDictionaryUtilities extends Object {
     }
 
     // if you're keys are not all strings, this method will throw.
-    public static NSArray stringKeysSortedAscending(final NSDictionary d) {
+    @SuppressWarnings("unchecked")
+	public static NSArray<String> stringKeysSortedAscending(final NSDictionary<String, Object> d) {
         NSArray result = null;
 
         if ( d != null && d.count() > 0 ) {
-            final NSArray keys = d.allKeys();
+            final NSArray<String> keys = d.allKeys();
 
             result = ERXArrayUtilities.sortedArrayUsingComparator(keys, NSComparator.AscendingStringComparator);
         }
