@@ -11,7 +11,6 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Enumeration;
-import java.util.Iterator;
 
 import org.apache.log4j.Logger;
 
@@ -43,6 +42,8 @@ import com.webobjects.foundation.NSPropertyListSerialization;
 import com.webobjects.foundation.NSSelector;
 import com.webobjects.foundation.NSTimestamp;
 import com.webobjects.foundation.NSValidation;
+
+import er.extensions.partials.ERXPartial;
 
 /**
  * The main purpose of the ERXClassDescription class is
@@ -1286,5 +1287,25 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
 		return super._enforcedKVCNumberClassForKey(key);
 	}
     
+    private NSMutableArray<Class<ERXPartial>> _partialClasses = new NSMutableArray<Class<ERXPartial>>();
     
+    /**
+     * Associates a partial entity class with this entity.
+     * 
+     * @see er.extensions.partials
+     * @param partialClass the partial class to associate
+     */
+	public void _addPartialClass(Class<ERXPartial> partialClass) {
+		_partialClasses.addObject(partialClass);
+	}
+	
+	/**
+	 * Returns the list of partial entity classes for this entity.
+	 * 
+     * @see er.extensions.partials
+	 * @return the list of partial entity classes for this entity
+	 */
+	public NSArray<Class<ERXPartial>> partialClasses() {
+    	return _partialClasses;
+    }
 }
