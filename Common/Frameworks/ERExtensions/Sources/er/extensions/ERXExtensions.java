@@ -46,6 +46,7 @@ import com.webobjects.foundation.NSNotificationCenter;
 import com.webobjects.foundation.NSSelector;
 import com.webobjects.jdbcadaptor.JDBCAdaptorException;
 
+import er.extensions.partials.ERXPartialInitializer;
 import er.extensions.remoteSynchronizer.ERXRemoteSynchronizer;
 
 /**
@@ -155,6 +156,7 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
     		NSNotificationCenter.defaultCenter().addObserver(this, new NSSelector("sharedEditingContextWasInitialized", ERXConstant.NotificationClassArray), EOSharedEditingContext.DefaultSharedEditingContextWasInitializedNotification, null);
 
     		ERXEntityClassDescription.registerDescription();
+    		ERXPartialInitializer.registerModelGroupListener();
     		if (!ERXProperties.webObjectsVersionIs52OrHigher()) {
     			NSNotificationCenter.defaultCenter().addObserver(this,
     					new NSSelector("sessionDidTimeOut", ERXConstant.NotificationClassArray),

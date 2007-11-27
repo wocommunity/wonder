@@ -1,0 +1,106 @@
+package er.extensions.partials;
+
+import java.util.Enumeration;
+
+import com.webobjects.eoaccess.EOAttribute;
+import com.webobjects.eoaccess.EOEntity;
+import com.webobjects.eoaccess.EOModel;
+import com.webobjects.eoaccess.EOModelGroup;
+import com.webobjects.eoaccess.EORelationship;
+import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSMutableDictionary;
+import com.webobjects.foundation.NSNotification;
+import com.webobjects.foundation.NSNotificationCenter;
+import com.webobjects.foundation.NSSelector;
+import com.webobjects.foundation._NSUtilities;
+
+import er.extensions.ERXConstant;
+import er.extensions.ERXEntityClassDescription;
+import er.extensions.ERXModelGroup;
+import er.extensions.ERXProperties;
+
+/**
+ * ERXPartialInitializer is registered at startup and is responsible for merging
+ * partial entities together into a single entity.
+ * 
+ * @author mschrag
+ */
+public class ERXPartialInitializer {
+	private static final ERXPartialInitializer _initializer = new ERXPartialInitializer();
+
+	public static void registerModelGroupListener() {
+		if (ERXProperties.booleanForKeyWithDefault("er.extensions.partials.enabled", false)) {
+			NSNotificationCenter.defaultCenter().addObserver(_initializer, new NSSelector("modelGroupAdded", ERXConstant.NotificationClassArray), ERXModelGroup.ModelGroupAddedNotification, null);
+		}
+	}
+
+	public void modelGroupAdded(NSNotification notification) {
+		ERXModelGroup modelGroup = (ERXModelGroup) notification.object();
+		initializePartialEntities(modelGroup);
+	}
+
+	@SuppressWarnings("unchecked")
+	public void initializePartialEntities(EOModelGroup modelGroup) {
+		Enumeration modelsEnum = modelGroup.models().objectEnumerator();
+		while (modelsEnum.hasMoreElements()) {
+			EOModel model = (EOModel) modelsEnum.nextElement();
+			Enumeration entitiesEnum = model.entities().objectEnumerator();
+			while (entitiesEnum.hasMoreElements()) {
+				EOEntity partialExtensionEntity = (EOEntity) entitiesEnum.nextElement();
+				NSDictionary userInfo = partialExtensionEntity.userInfo();
+				NSDictionary entityModelerDictionary = (NSDictionary) userInfo.objectForKey("_EntityModeler");
+				if (entityModelerDictionary != null) {
+					String partialEntityName = (String) entityModelerDictionary.objectForKey("partialEntity");
+					if (partialEntityName != null) {
+						EOEntity partialEntity = modelGroup.entityNamed(partialEntityName);
+						if (partialEntity == null) {
+							throw new IllegalArgumentException("The entity '" + partialExtensionEntity.name() + "' claimed to be a partialEntity for the entity '" + partialEntity.name() + "', but there is no entity of that name.");
+						}
+
+						Enumeration partialAttributes = partialExtensionEntity.attributes().objectEnumerator();
+						while (partialAttributes.hasMoreElements()) {
+							EOAttribute partialAttribute = (EOAttribute) partialAttributes.nextElement();
+							if (partialEntity.attributeNamed(partialAttribute.name()) == null) {
+								NSMutableDictionary<String, Object> attributePropertyList = new NSMutableDictionary<String, Object>();
+								partialAttribute.encodeIntoPropertyList(attributePropertyList);
+								String factoryMethodArgumentType = (String) attributePropertyList.objectForKey("factoryMethodArgumentType");
+								// OFFICIALLY THE DUMBEST DAMN THING I'VE EVER
+								// SEEN
+								if ("EOFactoryMethodArgumentIsString".equals(factoryMethodArgumentType)) {
+									attributePropertyList.setObjectForKey("EOFactoryMethodArgumentIsNSString", "factoryMethodArgumentType");
+								}
+								EOAttribute primaryAttribute = new EOAttribute(attributePropertyList, partialEntity);
+								primaryAttribute.awakeWithPropertyList(attributePropertyList);
+								partialEntity.addAttribute(primaryAttribute);
+							}
+							else {
+								ERXModelGroup.log.debug("Skipping partial attribute " + partialExtensionEntity.name() + "." + partialAttribute.name() + " because " + partialEntity.name() + " already has an attribute of the same name.");
+							}
+						}
+
+						Enumeration partialRelationships = partialExtensionEntity.relationships().objectEnumerator();
+						while (partialRelationships.hasMoreElements()) {
+							EORelationship partialRelationship = (EORelationship) partialRelationships.nextElement();
+							if (partialEntity.relationshipNamed(partialRelationship.name()) == null) {
+								NSMutableDictionary<String, Object> relationshipPropertyList = new NSMutableDictionary<String, Object>();
+								partialRelationship.encodeIntoPropertyList(relationshipPropertyList);
+
+								EORelationship primaryRelationship = new EORelationship(relationshipPropertyList, partialEntity);
+								primaryRelationship.awakeWithPropertyList(relationshipPropertyList);
+								partialEntity.addRelationship(primaryRelationship);
+							}
+							else {
+								ERXModelGroup.log.debug("Skipping partial relationship " + partialExtensionEntity.name() + "." + partialRelationship.name() + " because " + partialEntity.name() + " already has a relationship of the same name.");
+							}
+						}
+
+						ERXEntityClassDescription ecd = (ERXEntityClassDescription) partialEntity.classDescriptionForInstances();
+						Class<ERXPartial> partialClass = (Class<ERXPartial>) _NSUtilities.classWithName(partialExtensionEntity.className());
+						ecd._addPartialClass(partialClass);
+						model.removeEntity(partialExtensionEntity);
+					}
+				}
+			}
+		}
+	}
+}
