@@ -103,6 +103,8 @@ import com.webobjects.foundation.NSTimestampFormatter;
 
 public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions {
 
+	public static final String KEY_LOCALIZER_EXCEPTIONS = "localizerExceptions";
+
 	protected static final Logger log = Logger.getLogger(ERXLocalizer.class);
 
 	protected static final Logger createdKeysLog = Logger.getLogger(ERXLocalizer.class.getName() + ".createdKeys");
@@ -685,6 +687,27 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
 	}
 
 	protected void addEntriesToCache(NSDictionary dict) {
+		try {
+			// try-catch to prevent potential CCE when the value for the key
+			// localizerExcepions is not an NSDictionary
+			NSDictionary cacheLE = (NSDictionary) cache.valueForKey(KEY_LOCALIZER_EXCEPTIONS);
+			NSDictionary dictLE = (NSDictionary) dict.valueForKey(KEY_LOCALIZER_EXCEPTIONS);
+			if (cacheLE != null && dictLE != null) {
+				if (log.isDebugEnabled())
+					log.debug("Merging localizerExceptions " + cacheLE + " with " + dictLE);
+				NSMutableDictionary mutableDictLE = dictLE.mutableClone();
+				mutableDictLE.addEntriesFromDictionary(cacheLE);
+				NSMutableDictionary mutableDict = dict.mutableClone();
+				mutableDict.takeValueForKey(mutableDictLE, KEY_LOCALIZER_EXCEPTIONS);
+				dict = mutableDict;
+				if (log.isDebugEnabled())
+					log.debug("Result of merge: " + mutableDictLE);
+			}
+		}
+		catch (RuntimeException e) {
+			log.error("Error while adding enties to cache", e);
+		}
+
 		cache.addEntriesFromDictionary(dict);
 	}
 
@@ -907,7 +930,7 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
 	 */
 	public String plurifiedString(String name, int count) {
 		if (name != null) {
-			NSKeyValueCoding exceptions = (NSKeyValueCoding) valueForKey("localizerExceptions");
+			NSKeyValueCoding exceptions = (NSKeyValueCoding) valueForKey(KEY_LOCALIZER_EXCEPTIONS);
 			if (exceptions != null) {
 				String exception = (String) exceptions.valueForKey(name + "." + count);
 				if (exception == null) {
@@ -930,7 +953,7 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
 	 */
 	public String singularifiedString(String value) {
 		if (value != null) {
-			NSKeyValueCoding exceptions = (NSKeyValueCoding) valueForKey("localizerExceptions");
+			NSKeyValueCoding exceptions = (NSKeyValueCoding) valueForKey(KEY_LOCALIZER_EXCEPTIONS);
 			if (exceptions != null) {
 				String exception = (String) exceptions.valueForKey(value + ".singular");
 				if (exception != null) {
