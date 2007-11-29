@@ -11,6 +11,14 @@ import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 
+/**
+ * ERMemoryEntityStore is the actual datastore implementation for a single entity
+ * in ERMemoryAdaptor.  It's about as simple as you can get -- each row of the 
+ * "database" is represented by a dictionary that maps attribute names to values.
+ * Additionally, this tracks a sequence number for the entity (for pk generation).
+ * 
+ * @author mschrag
+ */
 public class ERMemoryEntityStore {
   private NSMutableArray<NSMutableDictionary<String, Object>> _rows;
   private int _sequence;
