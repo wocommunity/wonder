@@ -674,6 +674,20 @@
             <param name="use.wonder.core" value="true" />
         </antcall>
     </target>
+
+    <target name="JavaMemoryAdaptor.all">
+        <antcall target="global.framework.${build.action}" >
+            <param name="project.principal.class" value="" />
+            <param name="project.customInfo.plist" value="&lt;key&gt;EOAdaptorClassName&lt;/key&gt;&lt;string&gt;er.memoryadaptor.ERMemoryAdaptor&lt;/string&gt;"/>
+            <param name="project.name" value="JavaMemoryAdaptor" />
+            <param name="project.dir" value="Common/Frameworks/JavaMemoryAdaptor" />
+      <param name = "compiler.target" value = "1.5" />
+      <param name = "compiler.source" value = "1.5" />
+
+            <param name="use.wonder.core" value="true" />
+        </antcall>
+    </target>
+
     <target name="ERWorkerChannel.all">
         <antcall target="global.framework.${build.action}" >
             <param name="project.principal.class" value="" />
@@ -734,7 +748,7 @@
         to add your own, add a target definition above and choose the correct group below 
      -->
 
-    <target name="common.frameworks.all" depends="ERJars.all, JavaWOExtensions.all, ERExtensions.all, ERDirectToWeb.all, ERNeutralLook.all, ERSelenium.all, WOOgnl.all, ERPrototypes.all, ERPlot.all, ERIndexing.all, ERChronic.all, ERCaching.all, ERCaptcha.all, EROpenID.all, ERJGroupsSynchronizer.all, ERRest.all, ERAttachment.all, ERJavaMail.all, ERCoreBusinessLogic.all, ERChangeNotificationJMS.all, ERCalendar.all, ERExcelLook.all, ERWorkerChannel.all, BTBusinessLogic.all, ERMiniUglyLook.all" />
+    <target name="common.frameworks.all" depends="ERJars.all, JavaWOExtensions.all, ERExtensions.all, ERDirectToWeb.all, ERNeutralLook.all, ERSelenium.all, WOOgnl.all, ERPrototypes.all, ERPlot.all, ERIndexing.all, ERChronic.all, ERCaching.all, ERCaptcha.all, EROpenID.all, ERJGroupsSynchronizer.all, ERRest.all, ERAttachment.all, ERJavaMail.all, ERCoreBusinessLogic.all, ERChangeNotificationJMS.all, ERCalendar.all, ERExcelLook.all, ERWorkerChannel.all, BTBusinessLogic.all, ERMiniUglyLook.all, JavaMemoryAdaptor.all" />
     
     <target name="common.applications.all" depends="BugTracker.all, ERMailer.all" />
 
