@@ -1,0 +1,18 @@
+<h1>ERMemoryAdaptor</h1>
+<h2>Overview</h2>
+<p>
+ERMemoryAdaptor provides an implementation of an EOAdaptor that lives entirely in memory.  You
+can think of ERMemoryAdaptor as a very simple in-memory database, sufficient for testing out
+EOModels without the overhead of actually creating a database.  ERMemoryAdaptor is also ideal
+for writing test cases, providing a resettable database that can execute tests very quickly.
+While MockEditingContext provides some similar abilities, ERMemoryAdaptor lives at a lower level and
+can "fool" a larger portion of the EOF stack, and also provides very simple support for transactions.
+Because ERMemoryAdaptor is not a SQL-based in-memory database, you will not be able to execute
+SQL qualifiers or custom SQL calls against it.
+</p>
+<h2>Usage</h2>
+<p>
+To use ERMemoryAdaptor, add ERMemoryAdaptor.framework to your project dependencies, and change
+the adaptor in Entity Modeler to "Memory".  Additionally, you may want to change your prototype
+to EOMemoryPrototypes.
+</p>

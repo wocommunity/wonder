@@ -10,7 +10,9 @@ import com.webobjects.foundation.NSDictionary;
 /**
  * ERMemoryAdaptor is an EOAdaptor implementation that runs entirely in memory.  There is currently
  * no persistent datastore, but this provides a useful mechanism for writing testcases or simply
- * testing a model without the overhead of setting up a database.
+ * testing a model without the overhead of setting up a database.  Internally, ERMemoryAdaptor
+ * just keeps a dictionary that maps entities to arrays of row dictionaries (it looks a lot like
+ * the snapshot cache).
  * 
  * @author mschrag
  */

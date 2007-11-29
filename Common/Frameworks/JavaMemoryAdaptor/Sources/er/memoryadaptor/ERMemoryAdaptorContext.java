@@ -15,6 +15,15 @@ import com.webobjects.foundation.NSData;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableDictionary;
 
+/**
+ * ERMemoryAdaptorContext provides the adaptor context implementation for ERMemoryAdaptor.
+ * For the most part, you don't need to interact with ERMemoryAdaptor at this level. However,
+ * the context does expose resetEntity(EOEntity) and resetAllEntities() methods which allow
+ * control over resetting the memory datastore.  This can be helpful when you need to reset
+ * the "database" between test cases.
+ * 
+ * @author mschrag
+ */
 public class ERMemoryAdaptorContext extends EOAdaptorContext {
   private boolean _hasTransaction = false;
   private NSMutableDictionary<String, ERMemoryEntityStore> _entityStores;
@@ -25,6 +34,10 @@ public class ERMemoryAdaptorContext extends EOAdaptorContext {
     _entityStores = new NSMutableDictionary<String, ERMemoryEntityStore>();
   }
 
+  /**
+   * Resets all the entities in this context, removing any known rows and
+   * clearing out any transactions.
+   */
   public void resetAllEntities() {
     _entityStores.removeAllObjects();
     if (_transactionEntityStores != null) {
@@ -32,14 +45,36 @@ public class ERMemoryAdaptorContext extends EOAdaptorContext {
     }
   }
 
+  /**
+   * Resets the given entity, removing any known rows and
+   * clearing out any transactions.
+   * 
+   * @param entity the entity to reset
+   */
   public void resetEntity(EOEntity entity) {
-    _entityStoreForEntity(entity).clear();
+    _entityStores.removeObjectForKey(entity);
+    if (_transactionEntityStores != null) {
+      _transactionEntityStores.removeObjectForKey(entity);
+    }
   }
 
+  /**
+   * Returns the ERMemoryEntityStore for the given entity.
+   * 
+   * @param entity the entity to lookup
+   * @return the datastore for the entity
+   */
   public ERMemoryEntityStore _entityStoreForEntity(EOEntity entity) {
     return _entityStoreForEntity(entity, _hasTransaction);
   }
 
+  /**
+   * Returns the ERMemoryEntityStore for the given entity.
+   * 
+   * @param entity the entity to lookup
+   * @param transactional if true, this will return a transactional view of the store 
+   * @return the datastore for the entity
+   */
   public ERMemoryEntityStore _entityStoreForEntity(EOEntity entity, boolean transactional) {
     String entityName = entity.name();
     ERMemoryEntityStore store = _entityStores.objectForKey(entityName);
