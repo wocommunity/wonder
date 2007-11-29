@@ -14,6 +14,11 @@ import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 
+/**
+ * ERMemoryAdaptorChannel provides the adaptor channel implementation for ERMemoryAdaptor.
+ * 
+ * @author mschrag
+ */
 public class ERMemoryAdaptorChannel extends EOAdaptorChannel {
   private NSArray<EOAttribute> _attributes;
   private NSMutableArray<NSMutableDictionary<String, Object>> _fetchedRows;
