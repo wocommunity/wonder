@@ -450,7 +450,7 @@ There are many ways to use this script:
             <classpath refid="ant.classpath"/>
         </taskdef>
 
-        <woframework name="${project.name}" destDir="${build.root}" principalClass="${project.principal.class}" jarName="${project.name}" version="${project.version}">
+        <woframework name="${project.name}" destDir="${build.root}" principalClass="${project.principal.class}" jarName="${project.name}" version="${project.version}" customInfoPListContent="${project.customInfo.plist}">
             <lib dir="${project.dir}/Libraries">
                 <include name="**/*.jar" />
             </lib>
