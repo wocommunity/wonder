@@ -330,6 +330,10 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 	private static String stringFromJar(String jar, String path) {
 		JarFile f;
 		try {
+			if (!new File(jar).exists()) {
+				ERXApplication.log.warn("Will not process jar '" + jar + "' because it cannot be found ...");
+				return null;
+			}
 			f = new JarFile(jar);
 			JarEntry e = (JarEntry) f.getEntry(path);
 			if(e != null) {
@@ -347,7 +351,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 			return null;
 		} catch (FileNotFoundException e1) {
 			return null;
-		}	catch (IOException e1) {
+		} catch (IOException e1) {
 			throw NSForwardException._runtimeExceptionForThrowable(e1);
 		}
 	}
