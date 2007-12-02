@@ -685,6 +685,7 @@ public class ERXModelGroup extends EOModelGroup {
 
 		boolean poolConnections = ERXJDBCAdaptor.useConnectionBroker();
 
+		String adaptor = getProperty(aModelName + ".adaptor", "dbConnectAdaptorGLOBAL");
 		String url = getProperty(aModelName + ".URL", "dbConnectURLGLOBAL");
 		String userName = getProperty(aModelName + ".DBUser", "dbConnectUserGLOBAL");
 		String passwd = decryptProperty(aModelName + ".DBPassword", "dbConnectPasswordGLOBAL");
@@ -732,6 +733,9 @@ public class ERXModelGroup extends EOModelGroup {
 		}
 
 		NSMutableDictionary newConnectionDictionary = new NSMutableDictionary(connectionDictionary);
+		if (adaptor != null) {
+			model.setAdaptorName(adaptor);
+		}
 		if (url != null)
 			newConnectionDictionary.setObjectForKey(url, "URL");
 		if (userName != null)
