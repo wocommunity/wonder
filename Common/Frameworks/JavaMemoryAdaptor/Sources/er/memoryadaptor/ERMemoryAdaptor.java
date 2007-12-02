@@ -60,4 +60,9 @@ public class ERMemoryAdaptor extends EOAdaptor {
   public EOSchemaGeneration synchronizationFactory() {
     throw new UnsupportedOperationException("ERMemoryAdaptor.synchronizationFactory");
   }
+  
+  public EOSchemaGeneration schemaSynchronizationFactory() {
+    throw new UnsupportedOperationException("ERMemoryAdaptor.schemaSynchronizationFactory");
+  }
+
 }
