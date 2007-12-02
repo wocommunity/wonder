@@ -18,8 +18,8 @@ import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.eocontrol.EOFetchSpecification;
 import com.webobjects.eocontrol.EOQualifier;
 import com.webobjects.foundation.NSArray;
-import com.webobjects.foundation.NSRange;
 import com.webobjects.foundation.NSMutableArray;
+import com.webobjects.foundation.NSRange;
 
 /**
  * The goal of the fetch specification batch iterator is to have the ability to
