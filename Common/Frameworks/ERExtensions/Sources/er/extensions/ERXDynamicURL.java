@@ -1,6 +1,5 @@
 package er.extensions;
 
-import com.webobjects.foundation.NSForwardException;
 import com.webobjects.foundation._NSDelegate;
 
 /**

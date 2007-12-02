@@ -6,8 +6,6 @@
 //
 package er.extensions;
 
-import java.util.Enumeration;
-
 import org.apache.log4j.Logger;
 
 import com.webobjects.appserver.WOComponent;

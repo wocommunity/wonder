@@ -1,5 +1,4 @@
 package er.extensions;
-import java.net.InetAddress;
 import java.util.Enumeration;
 
 import org.apache.log4j.Logger;
