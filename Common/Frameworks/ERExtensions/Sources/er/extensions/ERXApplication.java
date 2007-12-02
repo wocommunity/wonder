@@ -481,7 +481,12 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 			setContextClassName("er.extensions.ERXWOServletContext");
 
 		ERXPatcher.setClassForName(ERXWOForm.class, "WOForm");
-		ERXPatcher.setClassForName(ERXAnyField.class, "WOAnyField");
+		try {
+			ERXPatcher.setClassForName(ERXAnyField.class, "WOAnyField");
+		}
+		catch (NoClassDefFoundError e) {
+			ERXApplication.log.info("JavaWOExtensions is not loaded, so WOAnyField will not be patched.");
+		}
 		ERXPatcher.setClassForName(ERXWORepetition.class, "WORepetition");
 		ERXPatcher.setClassForName(ERXActiveImage.class, "WOActiveImage");
 
