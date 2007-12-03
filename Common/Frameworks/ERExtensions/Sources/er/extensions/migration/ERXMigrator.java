@@ -127,7 +127,7 @@ public class ERXMigrator {
 		}
 		Map migrations = _buildDependenciesForModelsNamed(modelNames);
 
-		Map<IERXPostMigration, ERXModelVersion> postMigrations = new HashMap<IERXPostMigration, ERXModelVersion>();
+		Map<IERXPostMigration, ERXModelVersion> postMigrations = new LinkedHashMap<IERXPostMigration, ERXModelVersion>();
 		Iterator migrationsIter = migrations.keySet().iterator();
 		while (migrationsIter.hasNext()) {
 			IERXMigration migration = (IERXMigration) migrationsIter.next();
