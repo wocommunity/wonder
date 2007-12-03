@@ -42,7 +42,7 @@ public class ERXLoremIpsum extends WODynamicElement {
 		else {
 			count = ((Integer) _count.valueInComponent(component)).intValue();
 		}
-		String loremIpsum = ERXLoremIpsumGenerator.generate(type, count).replaceAll("\n\n", "<p>");
+		String loremIpsum = ERXLoremIpsumGenerator.generate(type, count).replaceAll("\n\n", "<br />");
 		response.appendContentString(loremIpsum);
 		super.appendToResponse(response, context);
 	}
