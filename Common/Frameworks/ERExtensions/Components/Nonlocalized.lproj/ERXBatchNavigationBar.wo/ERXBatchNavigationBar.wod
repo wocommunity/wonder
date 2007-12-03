@@ -1,6 +1,3 @@
-BatchForm: ERXOptionalForm {
-
-}
 
 BatchNumber: WOTextField {
 	numberformat = "0";
@@ -9,8 +6,8 @@ BatchNumber: WOTextField {
 	onChange = formTarget;
 }
 
-BatchNumberForm: ERXOptionalForm {
-
+OptionalForm: ERXOptionalForm {
+	style = "display:inline";
 }
 
 hasMultipleBatches: WOConditional {
@@ -31,15 +28,6 @@ EntityName3: ERXPluralString {
 
 EntityNameConditional: WOConditional {
 	condition = hasObjectName;
-}
-
-IsInForm : WOConditional {
-	condition = context.isInForm;
-}
-
-IsNotInForm : WOConditional {
-	condition = context.isInForm;
-	negate = true;
 }
 
 DoNotUseStylesConditional : WOConditional {
@@ -63,12 +51,6 @@ ItemsPerBatch: WOTextField {
 }
 
 KeyForm: ERXOptionalForm {
-}
-
-LeftArrowImage: WOImage {
-	border = "0";
-	filename = leftArrowImage;
-	framework = imageFramework;
 }
 
 LeftArrow: WOImageButton {
@@ -95,21 +77,6 @@ NavigationTable: WOGenericContainer {
 	elementName = "Table";
 	width = ^width;
 	class = ^tableClass;
-}
-
-
-NextBatchLink: WOHyperlink {
-	action = ^displayGroup.displayNextBatch;
-}
-
-PreviousBatchLink: WOHyperlink {
-	action = ^displayGroup.displayPreviousBatch;
-}
-
-RightArrowImage: WOImage {
-	border = "0";
-	filename = rightArrowImage;
-	framework = imageFramework;
 }
 
 SortComponent: WOSortOrderManyKey {
