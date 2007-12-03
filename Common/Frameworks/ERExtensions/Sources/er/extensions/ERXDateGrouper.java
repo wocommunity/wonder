@@ -17,7 +17,7 @@ import com.webobjects.foundation.NSTimestamp;
 
 /**
  * Works much the same as a {@link WODisplayGroup}.
- * See {@link ERXMonthView} and {@link ERXWeekDisplay} for examples on how to use it.
+ * See {@link ERXMonthView} for an example on how to use it.
  *
  * @created ak on Mon Nov 04 2002
  */
@@ -183,10 +183,12 @@ public class ERXDateGrouper extends WODisplayGroup {
             log.debug("dayOfWeek: " + dayOfWeek);
             log.debug("SUNDAY: " + Calendar.SUNDAY);
         }
-        if(dayOfWeek == (!weekStartsMonday() ? Calendar.SUNDAY : Calendar.MONDAY)) {
-            return _dateForDayInYear(ERXTimestampUtility.yearOfCommonEra(value), ERXTimestampUtility.dayOfYear(value));
+        int startOfWeek = weekStartsMonday() ? Calendar.MONDAY : Calendar.SUNDAY;
+        if(dayOfWeek == startOfWeek) {
+        	return _dateForDayInYear(ERXTimestampUtility.yearOfCommonEra(value), ERXTimestampUtility.dayOfYear(value));
         }
-        return _dateForDayInYear(ERXTimestampUtility.yearOfCommonEra(value), ERXTimestampUtility.dayOfYear(value) - dayOfWeek + 1);
+		int offset = !weekStartsMonday() ? 1 : (dayOfWeek == Calendar.SUNDAY ? -5 : 2);
+		return _dateForDayInYear(ERXTimestampUtility.yearOfCommonEra(value), ERXTimestampUtility.dayOfYear(value) - dayOfWeek + offset);
     }
     protected NSTimestamp _firstDateInSameMonth(NSTimestamp value) {
         int dayOfMonth = ERXTimestampUtility.dayOfMonth(value);
@@ -252,7 +254,7 @@ public class ERXDateGrouper extends WODisplayGroup {
         NSArray result = _datesForCurrentWeek;
         if(result == null) {
             int weekOfMonth = ERXTimestampUtility.weekOfMonth(selectedDate());
-            result = (NSArray)datesForWeeksForCurrentMonth().objectAtIndex(weekOfMonth -1);
+            result = (NSArray)datesForWeeksForCurrentMonth().objectAtIndex(weekOfMonth);
         }
         return result;
     }
@@ -262,7 +264,7 @@ public class ERXDateGrouper extends WODisplayGroup {
         int startOffset = ERXTimestampUtility.dayOfYear(startDate);
         int daysInMonth = 31;
         if(ERXTimestampUtility.monthOfYear(startDate) != 12) {
-            daysInMonth = ERXTimestampUtility.dayOfYear(startDate.timestampByAddingGregorianUnits(0, 1, -1, 0, 0, 0)) - startOffset;
+            daysInMonth = ERXTimestampUtility.dayOfYear(startDate.timestampByAddingGregorianUnits(0, 1, -1, 0, 0, 0)) - startOffset + 1;
         }
         return _datesForYearStartDays(year, startOffset, daysInMonth);
     }
