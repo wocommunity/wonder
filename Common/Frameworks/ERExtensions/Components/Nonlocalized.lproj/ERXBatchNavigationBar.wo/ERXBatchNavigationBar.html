@@ -18,29 +18,28 @@
 			</webobject>
 		</webobject>
 		<td><webobject name=Content></webobject></td>
-		<webobject name=BatchForm>
-			<td align=center valign=middle class=small>
+		<td align=center valign=middle class=small>
+			<webobject name=OptionalForm>
 				<webobject name=show></webobject>
 				<webobject name=ItemsPerBatch></webobject>
-				<webobject name=items_per_page></webobject></td>
-		</webobject>
-		<webobject name=BatchNumberForm>
-			<td align=right valign=middle class=small>
-				<webobject name=hasMultipleBatches>
-					<webobject name = "IsNotInForm">
-						<webobject name=PreviousBatchLink><webobject name=LeftArrowImage></webobject></webobject>&nbsp;<webobject name=page></webobject><webobject name=BatchNumber></webobject>
-						<webobject name=of></webobject>
-						<webobject name=TotalBatches></webobject>&nbsp;
-						<webobject name=NextBatchLink><webobject name=RightArrowImage></webobject></webobject>
-					</webobject>
-					<webobject name = "IsInForm">
-						<webobject name=LeftArrow></webobject>&nbsp;<webobject name=page></webobject><webobject name=BatchNumber></webobject>
-						<webobject name=of></webobject>
-						<webobject name=TotalBatches></webobject>&nbsp;
-						<webobject name=RightArrow></webobject>
-					</webobject>
+				<webobject name=items_per_page></webobject>
+			</webobject>
+		</td>
+		<td align=right valign=middle class=small>
+			<webobject name=hasMultipleBatches>
+				<webobject name=OptionalForm>
+					<webobject name=LeftArrow></webobject>&nbsp;
 				</webobject>
-			</td>
-		</webobject>
+				<webobject name=page></webobject>
+				<webobject name=OptionalForm>
+					<webobject name=BatchNumber></webobject>
+				</webobject>
+				<webobject name=of></webobject>
+				<webobject name=TotalBatches></webobject>&nbsp;
+				<webobject name=OptionalForm>
+					<webobject name=RightArrow></webobject>
+				</webobject>
+			</webobject>
+		</td>
 	</tr>
 </webobject>
