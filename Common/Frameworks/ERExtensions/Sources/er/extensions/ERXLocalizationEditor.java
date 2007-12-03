@@ -119,7 +119,7 @@ public class ERXLocalizationEditor extends WOComponent {
     }
 
     public boolean isLargeEntry() {
-    	String language = (String) availableLanguages().objectAtIndex(0);
+    	String language = currentLanguage;
     	if (currentEntry.objectForKey(language) != null && (currentEntry.objectForKey(language).toString().length() > 25
     			|| currentEntry.objectForKey(language).toString().indexOf('\n') >= 0)) {
     		
