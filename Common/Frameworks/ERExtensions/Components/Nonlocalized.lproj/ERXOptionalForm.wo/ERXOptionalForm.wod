@@ -32,6 +32,7 @@ form: WOForm {
 	enctype = ^enctype;
 	directActionName = ^directActionName;
 	actionClass = ^actionClass;
+	style = ^style;
 }
 
 form2: WOForm {
@@ -39,4 +40,5 @@ form2: WOForm {
 	name = ^name;
 	action = ^action;
 	enctype = ^enctype;
+	style = ^style;
 }
