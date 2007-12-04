@@ -138,6 +138,7 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
 	public static void initialize() {
 		if (!isInitialized) {
 			isLocalizationEnabled = ERXProperties.booleanForKeyWithDefault("er.extensions.ERXLocalizer.isLocalizationEnabled", true);
+			ERXComparisonSupport.initialize();
 			isInitialized = true;
 		}
 	}
@@ -161,7 +162,6 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
 		if (current == null) {
 			if (!isInitialized) {
 				initialize();
-				ERXComparisonSupport.initialize();
 			}
 			current = defaultLocalizer();
 		}
