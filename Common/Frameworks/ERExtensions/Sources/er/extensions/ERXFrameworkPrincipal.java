@@ -115,8 +115,11 @@ public abstract class ERXFrameworkPrincipal {
      * @param c principal class
      */
     public static void setUpFrameworkPrincipalClass(Class c) {
+        if (initializedFrameworks.objectForKey(c.getName()) != null) {
+        	return;
+        }
         try {
-            NSLog.debug.appendln("Loaded items: " + initializedFrameworks);
+        	// NSLog.debug.appendln("Loaded items: " + initializedFrameworks);
             if(observer == null) {
                 observer = new Observer();
                 NSNotificationCenter center = NSNotificationCenter.defaultCenter();
@@ -128,13 +131,16 @@ public abstract class ERXFrameworkPrincipal {
                
             }
             if (initializedFrameworks.objectForKey(c.getName()) == null) {
-                NSLog.debug.appendln("Starting up: " + c.getName());
+            	// NSLog.debug.appendln("Starting up: " + c.getName());
                 try {
                     Field f = c.getField("REQUIRES");
                     Class requires[] = (Class[]) f.get(c);
                     for (int i = 0; i < requires.length; i++) {
-                        Class requirement = requires[i];
-                        setUpFrameworkPrincipalClass(requirement);
+                    	Class requirement = requires[i];
+                    	if(initializedFrameworks.objectForKey(requirement.getName()) == null) {
+                    		// NSLog.debug.appendln("Loading required: " + requirement.getName());
+                    		setUpFrameworkPrincipalClass(requirement);
+                    	}
                     }
                 } catch (NoSuchFieldException e) {
                     // nothing
@@ -143,11 +149,13 @@ public abstract class ERXFrameworkPrincipal {
                     NSLog.err.appendln("Can't read field REQUIRES from " + c.getName() + ", check if it is 'public static Class[] REQUIRES= new Class[] {...}' in this class");
                     throw NSForwardException._runtimeExceptionForThrowable(e);
                 }
-                ERXFrameworkPrincipal principal = (ERXFrameworkPrincipal)c.newInstance();
-                initializedFrameworks.setObjectForKey(principal,c.getName());
-                principal.initialize();
-                launchingFrameworks.addObject(principal);
-                NSLog.debug.appendln("Initialized : " + c.getName());
+                if(initializedFrameworks.objectForKey(c.getName()) == null) {
+                	ERXFrameworkPrincipal principal = (ERXFrameworkPrincipal)c.newInstance();
+                	initializedFrameworks.setObjectForKey(principal,c.getName());
+                	principal.initialize();
+                	launchingFrameworks.addObject(principal);
+                	NSLog.debug.appendln("Initialized : " + c.getName());
+                }
 
             } else {
                 NSLog.debug.appendln("Was already inited: " + c.getName());
@@ -168,7 +176,7 @@ public abstract class ERXFrameworkPrincipal {
     }
 
     public ERXFrameworkPrincipal() {
-        NSLog.debug.appendln("Started initialization: " + getClass().getName());
+        // NSLog.debug.appendln("Started initialization: " + getClass().getName());
     }
     
     /**
