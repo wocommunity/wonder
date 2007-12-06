@@ -47,9 +47,9 @@ public class _WOHelperFunctionHTMLTemplateParser extends WOMiddleManParser imple
 		WOHelperFunctionHTMLTemplateParser.registerTagShortcut("WOString", "string");
 		WOHelperFunctionHTMLTemplateParser.registerTagShortcut("WOString", "str");
 		WOHelperFunctionHTMLTemplateParser.registerTagShortcut("ERXElse", "else");
-		WOHelperFunctionHTMLTemplateParser.registerTagShortcut("WOConditional", "if");
-		WOHelperFunctionHTMLTemplateParser.registerTagShortcut("WOConditional", "condition");
-		WOHelperFunctionHTMLTemplateParser.registerTagShortcut("WOConditional", "conditional");
+		WOHelperFunctionHTMLTemplateParser.registerTagShortcut("ERXWOConditional", "if");
+		WOHelperFunctionHTMLTemplateParser.registerTagShortcut("ERXWOConditional", "condition");
+		WOHelperFunctionHTMLTemplateParser.registerTagShortcut("ERXWOConditional", "conditional");
 		WOHelperFunctionHTMLTemplateParser.registerTagShortcut("WOHyperlink", "link");
 		WOHelperFunctionHTMLTemplateParser.registerTagShortcut("WORepetition", "loop");
 		WOHelperFunctionHTMLTemplateParser.registerTagShortcut("WOTextField", "textfield");
