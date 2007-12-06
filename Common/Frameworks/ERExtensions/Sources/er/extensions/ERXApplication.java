@@ -953,15 +953,15 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 	 * 
 	 * @param exception
 	 *            to be reported
+	 * @param context
+	 *            for the exception
 	 * @param extraInfo
 	 *            dictionary of extra information about what was happening when the exception was thrown.
 	 * @return a valid response to display or null. In that case the superclasses
 	 *         {@link #handleException(Exception, WOContext)} is called
 	 */
-	public WOResponse reportException(Throwable exception, NSDictionary extraInfo) {
-		Throwable t = exception instanceof NSForwardException ? ((NSForwardException) exception).originalException() : exception;
-
-		log.error("Exception caught: " + exception.getMessage() + "\nExtra info: " + NSPropertyListSerialization.stringFromPropertyList(extraInfo) + "\n", t);
+	public WOResponse reportException(Throwable exception, WOContext context, NSDictionary extraInfo) {
+		log.error("Exception caught: " + exception.getMessage() + "\nExtra info: " + NSPropertyListSerialization.stringFromPropertyList(extraInfo) + "\n", exception);
 		return null;
 	}
 
@@ -1016,7 +1016,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 
 		// Not a fatal exception, business as usual.
 		NSDictionary extraInfo = extraInformationForExceptionInContext(exception, context);
-		WOResponse response = reportException(exception, extraInfo);
+		WOResponse response = reportException(exception, context, extraInfo);
 		if (response == null)
 			response = super.handleException(exception, context);
 		return response;
