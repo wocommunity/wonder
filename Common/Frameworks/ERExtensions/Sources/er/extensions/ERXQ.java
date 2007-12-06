@@ -391,4 +391,27 @@ public class ERXQ {
 		value = "*" + value + "*";
 		return ERXQ.likeInsensitive(key, value);
 	}
+	
+	/**
+	 * Generates a key path from a var args list of strings.  Reduces this mess:
+	 * <pre>
+	 * qualifiers.addObject(ERXQ.equals(Distribution.PUBLICATION + "." + Publication.AD + "." + Ad.STATE, DisplayAdStateMachine.ReadyForPrinting));
+	 * </pre>
+	 * to:
+	 * <pre>
+	 * qualifiers.addObject(ERXQ.equals(ERXQ.keyPath(Distribution.PUBLICATION, Publication.AD, Ad.STATE, DisplayAdStateMachine.ReadyForPrinting));
+	 * </pre>
+	 * 
+	 * @param elements one or more string to concatenate into a keyPath
+	 * @return elements with "." between them to form a keypath
+	 */
+	public static String keyPath(String... elements)
+	{
+		return new NSArray(elements).componentsJoinedByString(".");
+	}
+	    
+	 
+	    
+	    
+	    
 }
