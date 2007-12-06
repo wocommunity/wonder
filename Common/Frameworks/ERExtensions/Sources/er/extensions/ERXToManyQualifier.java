@@ -89,7 +89,7 @@ public class ERXToManyQualifier extends EOKeyValueQualifier implements Cloneable
      *		should contain.
      */
     public String toString() {
-        return "<" +_toManyKey + " contains " + (_minCount > 0 ? " all " : " " + _minCount + " " ) + " of " + _elements + ">";
+        return "<" +_toManyKey + " contains " + (_minCount > 0 ? " " + _minCount + " "  : " all ") + " of " + _elements + ">";
     }
 
     /**
@@ -127,7 +127,7 @@ public class ERXToManyQualifier extends EOKeyValueQualifier implements Cloneable
             NSArray toManyKeys=NSArray.componentsSeparatedByString(qualifier.key(),".");
             EORelationship targetRelationship=null;
             for (int i=0; i<toManyKeys.count()-1;i++) {
-                targetRelationship= targetEntity.relationshipNamed((String)toManyKeys.objectAtIndex(i));
+                targetRelationship= targetEntity.anyRelationshipNamed((String)toManyKeys.objectAtIndex(i));
                 targetEntity=targetRelationship.destinationEntity();
             }
             targetRelationship=targetEntity.relationshipNamed((String)toManyKeys.lastObject());
@@ -237,7 +237,10 @@ public class ERXToManyQualifier extends EOKeyValueQualifier implements Cloneable
     }
 
     public EOQualifier qualifierWithBindings(NSDictionary arg0, boolean arg1) {
-        throw new IllegalStateException(getClass().getName() + " doesn't support bindings");
+       	if (arg0 != null && arg0.count() > 0) {
+    		throw new IllegalStateException(getClass().getName() + " doesn't support bindings");
+    	}
+    	return this;
      }
 
     /* (non-Javadoc)
