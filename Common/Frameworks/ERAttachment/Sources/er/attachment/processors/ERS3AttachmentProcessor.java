@@ -206,7 +206,7 @@ public class ERS3AttachmentProcessor extends ERAttachmentProcessor<ERS3Attachmen
     public void enqueue(ERS3Attachment attachment) {
       _editingContext.lock();
       try {
-        ERS3Attachment localAttachment = attachment.localInstanceOfERS3Attachment(_editingContext);
+        ERS3Attachment localAttachment = attachment.localInstanceIn(_editingContext);
         ERS3QueueEntry entry = new ERS3QueueEntry(attachment._pendingUploadFile(), localAttachment);
         enqueue(entry);
       }
