@@ -55,29 +55,31 @@ public class ERDEditDatePopupOrNull extends ERDEditDatePopupCommon {
 
     public void takeValuesFromRequest (WORequest request, WOContext context) {
         super.takeValuesFromRequest (request,context);
-        if (radioValue().equals(date)){
-            NSTimestamp date = null;
-            try {
-                
-                if (time==null || time.length()!=5) {
-                    date = (NSTimestamp)ALL_FORMAT.parseObject(day+" "+ month +" "+year);
-                } else {
-                    date = (NSTimestamp)ALL_FORMAT_AND_TIME.parseObject(day+" "+ month +" "+year+" "+time);
-                }
-                object().validateTakeValueForKeyPath(date, key());
-            } catch (NSValidation.ValidationException v) {
-                parent().validationFailedWithException(v,date,key());
-            } catch(Exception e) {
-                parent().validationFailedWithException(e,date,key());
-            }
-        } else {
-            try {
-                object().validateTakeValueForKeyPath(null, key());
-            } catch (NSValidation.ValidationException v) {
-                parent().validationFailedWithException(v,null,key());
-            } catch(Exception e) {
-                parent().validationFailedWithException(e,null,key());
-            }
+        if (context._wasFormSubmitted()) {
+        	if (radioValue().equals(date)){
+        		NSTimestamp date = null;
+        		try {
+
+        			if (time==null || time.length()!=5) {
+        				date = (NSTimestamp)ALL_FORMAT.parseObject(day+" "+ month +" "+year);
+        			} else {
+        				date = (NSTimestamp)ALL_FORMAT_AND_TIME.parseObject(day+" "+ month +" "+year+" "+time);
+        			}
+        			object().validateTakeValueForKeyPath(date, key());
+        		} catch (NSValidation.ValidationException v) {
+        			parent().validationFailedWithException(v,date,key());
+        		} catch(Exception e) {
+        			parent().validationFailedWithException(e,date,key());
+        		}
+        	} else {
+        		try {
+        			object().validateTakeValueForKeyPath(null, key());
+        		} catch (NSValidation.ValidationException v) {
+        			parent().validationFailedWithException(v,null,key());
+        		} catch(Exception e) {
+        			parent().validationFailedWithException(e,null,key());
+        		}
+        	}
         }
     }
 }
