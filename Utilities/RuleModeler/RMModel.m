@@ -34,6 +34,8 @@
 
 #import "EOControl.h"
 
+#import "NSStringAdditions.h"
+
 static NSString *ruleModelType = @"Apple D2WModel File";
 
 @implementation RMModel
@@ -154,7 +156,20 @@ static NSArray * _sortDescriptors = nil;
         NSURL *url = absoluteURL;
         url = (url == nil ? [self fileURL] : url);
         if(url != nil) {
-            NSString *path = [[url path] stringByAppendingPathExtension:@"txt"];
+			NSString *urlPath = [url path];
+			NSString *wolipsPassword = [[NSUserDefaults standardUserDefaults] stringForKey:@"wolipsPassword"];
+			if (wolipsPassword != nil) {
+				int wolipsPort = [[NSUserDefaults standardUserDefaults] integerForKey:@"wolipsPort"];
+				if (wolipsPort == 0) {
+					wolipsPort = 9485;
+				}
+				
+				NSString *wolipsUrlStr = [NSString stringWithFormat:@"http://localhost:%d/refresh?pw=%@&path=%@", wolipsPort, [wolipsPassword encodePercentEscapes], [urlPath encodePercentEscapes]];
+				NSURL *wolipsUrl = [NSURL URLWithString:wolipsUrlStr];
+				[wolipsUrl resourceDataUsingCache:NO];
+			}
+										
+            NSString *path = [urlPath stringByAppendingPathExtension:@"txt"];
             result = [description writeToFile:path atomically:YES encoding:NSUTF8StringEncoding error:&errorDesc];
             if(!result) {
                 *outError = errorDesc;
