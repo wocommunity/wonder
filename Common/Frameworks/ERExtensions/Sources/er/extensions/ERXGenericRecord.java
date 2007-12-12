@@ -10,7 +10,10 @@ import java.util.Enumeration;
 
 import org.apache.log4j.Logger;
 
+import com.webobjects.eoaccess.EOAttribute;
 import com.webobjects.eoaccess.EOEntity;
+import com.webobjects.eoaccess.EOJoin;
+import com.webobjects.eoaccess.EORelationship;
 import com.webobjects.eoaccess.EOUtilities;
 import com.webobjects.eocontrol.EOClassDescription;
 import com.webobjects.eocontrol.EOEditingContext;
@@ -591,8 +594,61 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
                     NSArray<String> primaryKeyAttributeNames = primaryKeyAttributeNames();
                     _primaryKeyDictionary = new NSDictionary<NSArray<String>, NSArray<Object>>(rawPK instanceof NSArray ? (NSArray<Object>)rawPK : new NSArray<Object>(rawPK), primaryKeyAttributeNames);
                 } else {
-                    if (log.isDebugEnabled()) log.debug("No raw key, trying single key");
-                    _primaryKeyDictionary = ERXEOControlUtilities.newPrimaryKeyDictionaryForObject(this);
+                    EOEntity entity = entity();
+                    NSArray<EOAttribute> primaryKeyAttributes = entity.primaryKeyAttributes();
+                    // If the entity has a composite primary key, then we are going to make
+                    // the assumption that we can determine its primary key from the values
+                    // of the relationships that are bound to its primary key attributes rather
+                    // than attempting to generate a PK with the plugin. 
+                    if (primaryKeyAttributes.count() > 1) {
+                    	NSMutableDictionary<String, Object> compositePrimaryKey = new NSMutableDictionary<String, Object>();
+                    	boolean incompletePK = false;
+                    	for (EOAttribute primaryKeyAttribute : primaryKeyAttributes) {
+                    		Object value = null;
+	                    	for (EORelationship relationship : (NSArray<EORelationship>)entity.relationships()) {
+	                    		// .. we need to find the relationship that is associated with each PK attribute
+	                    		if (relationship._isToOneClassProperty() && relationship.sourceAttributes().contains(primaryKeyAttribute)) {
+	                    			Object obj = valueForKey(relationship.name());
+	                    			if (obj instanceof ERXGenericRecord) {
+	                    				// .. and then get the PK dictionary for the related object 
+	                    				NSDictionary<String, Object> foreignKey = ((ERXGenericRecord)obj).primaryKeyDictionary(inTransaction);
+	                    				for (EOJoin join : (NSArray<EOJoin>)relationship.joins()) {
+	                    					// .. find the particular join that is associated with this pk attribute
+	                    					if (join.sourceAttribute() == primaryKeyAttribute) {
+	                    						// .. and steal its value
+	                    						value = foreignKey.objectForKey(join.destinationAttribute().name());
+	                    						if (value == null) {
+	                    							// for some reason the pk dict is sometimes array=>array instead of
+	                    							// String=>Object, but I don't know when it is and when it isn't, so
+	                    							// we go ahead and check for both conditions.
+	                    							value = foreignKey.objectForKey(new NSArray(join.destinationAttribute().name()));
+	                    							if (value instanceof NSArray) {
+	                    								value = ((NSArray)value).lastObject();
+	                    							}
+	                    						}
+	                    					}
+	                    				}
+	                    			}
+	                    		}
+	                    	}
+	                    	
+	                    	if (value == null || value instanceof NSKeyValueCoding.Null) {
+	                    		incompletePK = true;
+	                    		value = NSKeyValueCoding.NullValue;
+	                    	}
+	                    	compositePrimaryKey.setObjectForKey(value, primaryKeyAttribute.name());
+                    	}
+                    	
+                    	// .. if any of the attributes were null, throw an exception, because you're
+                    	// not going to be able to use that PK anyway -- it's bogus
+                    	if (incompletePK) {
+                    		throw new IllegalArgumentException("You requested the primary key for the EO " + this + ", which has a composite primary key. At least one of the attributes of the primary key could not be determined, probably because one of the foreign key relationships was not set properly. The primary keys so far were " + compositePrimaryKey + ".");
+                    	}
+                    	_primaryKeyDictionary = compositePrimaryKey;
+                    }
+                    else {
+                    	_primaryKeyDictionary = ERXEOControlUtilities.newPrimaryKeyDictionaryForObject(this);
+                    }
                 }
             }
         }
