@@ -50,6 +50,33 @@ If you use Project Wonder migrations and migrateOnStartup, then the ERAttachment
 for you on the first launch.  If you do not, then you can either manually execute the .migration SQL scripts that are
 in the Resources folder (execute them in numeric order), or you can open the EOModel and generate SQL for your particular database.
 </p>
+<p>
+You will have to configure a connection dictionary for the ERAttachment model. You can do this either by setting 
+global connection properties for all of your EOModels, or by setting the connection dictionary for just the 
+ERAttachment model.
+</p>
+<h3>Global Database Properties</h3>
+<dl>
+	<dt>dbConnectURLGLOBAL</dt>
+	<dd>(optional) The jdbc URL for your database server.</dd>
+
+	<dt>dbConnectUserGLOBAL</dt>
+	<dd>(optional) The user for your database.</dd>
+	
+	<dt>dbConnectPasswordGLOBAL</dt>
+	<dd>(optional) The password corresponding to your database user.</dd>
+</dl>
+<h3>ERAttachment Model Properties</h3>
+<dl>
+	<dt>ERAttachment.URL</dt>
+	<dd>(optional) The jdbc URL for your database server.</dd>
+
+	<dt>ERAttachment.DBUser</dt>
+	<dd>(optional) The user for your database.</dd>
+	
+	<dt>ERAttachment.DBPassword</dt>
+	<dd>(optional) The password corresponding to your database user.</dd>
+</dl>
 
 <h2>Configuration</h2>
 <p>
