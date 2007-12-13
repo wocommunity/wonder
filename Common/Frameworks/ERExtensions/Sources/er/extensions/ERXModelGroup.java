@@ -186,6 +186,7 @@ public class ERXModelGroup extends EOModelGroup {
 		checkInheritanceRelationships();
 		
 		if (!patchModelsOnLoad) {
+			modifyModelsFromProperties();
 			flattenPrototypes();
 			Enumeration<EOModel> modelsEnum = EOModelGroup.defaultGroup().models().objectEnumerator();
 			while (modelsEnum.hasMoreElements()) {
@@ -947,6 +948,7 @@ public class ERXModelGroup extends EOModelGroup {
 		}
 
 		if (patchModelsOnLoad) {
+			modifyModelsFromProperties();
 			flattenPrototypes();
 			preloadERXConstantClassesForModel(model);
 		}
@@ -997,6 +999,25 @@ public class ERXModelGroup extends EOModelGroup {
 				}
 			}
 		}
+	}
+	
+	/**
+	 * Modifies various settings of the entities and attributes in this model group based on System properties.
+	 * 
+	 * @property er.extensions.ERXModelGroup.[entityName].externalName change the table name for the given entityName
+	 */
+	protected void modifyModelsFromProperties() {
+		for (Enumeration modelsEnum = models().objectEnumerator(); modelsEnum.hasMoreElements();) {
+			EOModel model = (EOModel) modelsEnum.nextElement();
+			for (Enumeration entitiesEnum = model.entities().objectEnumerator(); entitiesEnum.hasMoreElements();) {
+				EOEntity entity = (EOEntity) entitiesEnum.nextElement();
+				
+				String externalName = ERXProperties.stringForKey("er.extensions.ERXModelGroup." + entity.name() + " .externalName");
+				if (externalName != null) {
+					entity.setExternalName(externalName);
+				}
+			}
+		}		
 	}
 	
 	/**
