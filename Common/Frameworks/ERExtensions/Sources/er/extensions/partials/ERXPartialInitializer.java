@@ -2,13 +2,13 @@ package er.extensions.partials;
 
 import java.util.Enumeration;
 
-import com.webobjects.appserver.WOApplication;
 import com.webobjects.eoaccess.EOAttribute;
 import com.webobjects.eoaccess.EOEntity;
 import com.webobjects.eoaccess.EOModel;
 import com.webobjects.eoaccess.EOModelGroup;
 import com.webobjects.eoaccess.EORelationship;
 import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation.NSNotification;
 import com.webobjects.foundation.NSNotificationCenter;
@@ -29,19 +29,35 @@ import er.extensions.ERXProperties;
 public class ERXPartialInitializer {
 	private static final ERXPartialInitializer _initializer = new ERXPartialInitializer();
 
+	private NSMutableDictionary<EOEntity, NSMutableArray<Class<ERXPartial>>> _partialsForEntity = new NSMutableDictionary<EOEntity, NSMutableArray<Class<ERXPartial>>>();
+
+	public static ERXPartialInitializer initializer() {
+		return _initializer;
+	}
+
 	public static void registerModelGroupListener() {
 		if (ERXProperties.booleanForKeyWithDefault("er.extensions.partials.enabled", false)) {
+			NSNotificationCenter.defaultCenter().addObserver(_initializer, new NSSelector("modelGroupAdded", ERXConstant.NotificationClassArray), ERXModelGroup.ModelGroupAddedNotification, null);
 			// NSNotificationCenter.defaultCenter().addObserver(_initializer,
-			// new NSSelector("modelGroupAdded",
+			// new NSSelector("workaroundStupidLoadingProblem",
 			// ERXConstant.NotificationClassArray),
-			// ERXModelGroup.ModelGroupAddedNotification, null);
-			NSNotificationCenter.defaultCenter().addObserver(_initializer, new NSSelector("modelGroupAdded", ERXConstant.NotificationClassArray), WOApplication.ApplicationDidFinishLaunchingNotification, null);
+			// WOApplication.ApplicationDidFinishLaunchingNotification, null);
+		}
+	}
+
+	public void workaroundClassDescriptionResetProblem() {
+		if (ERXProperties.booleanForKeyWithDefault("er.extensions.partials.enabled", false)) {
+			for (EOEntity partialEntity : _partialsForEntity.keySet()) {
+				ERXEntityClassDescription ecd = (ERXEntityClassDescription) partialEntity.classDescriptionForInstances();
+				for (Class<ERXPartial> partialClass : _partialsForEntity.objectForKey(partialEntity)) {
+					ecd._addPartialClass(partialClass);
+				}
+			}
 		}
 	}
 
 	public void modelGroupAdded(NSNotification notification) {
-		// ERXModelGroup modelGroup = (ERXModelGroup) notification.object();
-		EOModelGroup modelGroup = EOModelGroup.defaultGroup();
+		ERXModelGroup modelGroup = (ERXModelGroup) notification.object();
 		initializePartialEntities(modelGroup);
 	}
 
@@ -102,9 +118,15 @@ public class ERXPartialInitializer {
 							}
 						}
 
-						ERXEntityClassDescription ecd = (ERXEntityClassDescription) partialEntity.classDescriptionForInstances();
+						NSMutableArray<Class<ERXPartial>> partialsForEntity = _partialsForEntity.objectForKey(partialEntity);
+						if (partialsForEntity == null) {
+							partialsForEntity = new NSMutableArray<Class<ERXPartial>>();
+							_partialsForEntity.setObjectForKey(partialsForEntity, partialEntity);
+						}
 						Class<ERXPartial> partialClass = (Class<ERXPartial>) _NSUtilities.classWithName(partialExtensionEntity.className());
+						ERXEntityClassDescription ecd = (ERXEntityClassDescription) partialEntity.classDescriptionForInstances();
 						ecd._addPartialClass(partialClass);
+						partialsForEntity.addObject(partialClass);
 						baseForPartial.setObjectForKey(partialEntity, partialExtensionEntity);
 					}
 				}
