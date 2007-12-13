@@ -610,11 +610,15 @@ public class ERXMigrationTable {
 	 * @return an array of EOSQLExpressions for setting the primary key constraint of this table
 	 */
 	@SuppressWarnings("unchecked")
-	public NSArray<EOSQLExpression> _setPrimaryKeyExpressions(ERXMigrationColumn column) {
+	public NSArray<EOSQLExpression> _setPrimaryKeyExpressions(ERXMigrationColumn... columns) {
 		EOSchemaGeneration schemaGeneration = _database.synchronizationFactory();
-		EOAttribute attribute = column._newAttribute();
-		EOEntity entity = attribute.entity();
-		entity.setPrimaryKeyAttributes(new NSArray<EOAttribute>(attribute));
+		EOEntity entity = columns[0].table()._blankEntity();
+		NSMutableArray<EOAttribute> attributes = new NSMutableArray<EOAttribute>();
+		for (ERXMigrationColumn column : columns) {
+			EOAttribute attribute = column._newAttribute(entity);
+			attributes.addObject(attribute);
+		}
+		entity.setPrimaryKeyAttributes(attributes);
 		NSArray<EOSQLExpression> expressions = schemaGeneration.primaryKeyConstraintStatementsForEntityGroup(new NSArray<EOEntity>(entity));
 		ERXMigrationDatabase._ensureNotEmpty(expressions);
 		return expressions;
@@ -633,11 +637,11 @@ public class ERXMigrationTable {
 	/**
 	 * Executes the SQL operations to add this primary key constraint (only supports single attribute PK's right now).
 	 * 
-	 * @param column the primary key column to designate as a primary key
+	 * @param columns the primary key columns to designate as primary keys
 	 * @throws SQLException if the constraint fails
 	 */
-	public void setPrimaryKey(ERXMigrationColumn column) throws SQLException {
-		ERXJDBCUtilities.executeUpdateScript(_database.adaptorChannel(), ERXMigrationDatabase._stringsForExpressions(_setPrimaryKeyExpressions(column)));
+	public void setPrimaryKey(ERXMigrationColumn... columns) throws SQLException {
+		ERXJDBCUtilities.executeUpdateScript(_database.adaptorChannel(), ERXMigrationDatabase._stringsForExpressions(_setPrimaryKeyExpressions(columns)));
 	}
 
 	/**
