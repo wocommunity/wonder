@@ -44,6 +44,7 @@ import com.webobjects.foundation.NSTimestamp;
 import com.webobjects.foundation.NSValidation;
 
 import er.extensions.partials.ERXPartial;
+import er.extensions.partials.ERXPartialInitializer;
 
 /**
  * The main purpose of the ERXClassDescription class is
@@ -343,6 +344,7 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
             	log.debug("Will register entities for model:" + model.name());
             	registerDescriptionForEntitiesInModel(model);
             }
+            ERXPartialInitializer.initializer().workaroundClassDescriptionResetProblem();
         }
         
         /**
