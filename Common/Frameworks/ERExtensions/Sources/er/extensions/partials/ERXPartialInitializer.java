@@ -2,6 +2,7 @@ package er.extensions.partials;
 
 import java.util.Enumeration;
 
+import com.webobjects.appserver.WOApplication;
 import com.webobjects.eoaccess.EOAttribute;
 import com.webobjects.eoaccess.EOEntity;
 import com.webobjects.eoaccess.EOModel;
@@ -30,17 +31,24 @@ public class ERXPartialInitializer {
 
 	public static void registerModelGroupListener() {
 		if (ERXProperties.booleanForKeyWithDefault("er.extensions.partials.enabled", false)) {
-			NSNotificationCenter.defaultCenter().addObserver(_initializer, new NSSelector("modelGroupAdded", ERXConstant.NotificationClassArray), ERXModelGroup.ModelGroupAddedNotification, null);
+			// NSNotificationCenter.defaultCenter().addObserver(_initializer,
+			// new NSSelector("modelGroupAdded",
+			// ERXConstant.NotificationClassArray),
+			// ERXModelGroup.ModelGroupAddedNotification, null);
+			NSNotificationCenter.defaultCenter().addObserver(_initializer, new NSSelector("modelGroupAdded", ERXConstant.NotificationClassArray), WOApplication.ApplicationDidFinishLaunchingNotification, null);
 		}
 	}
 
 	public void modelGroupAdded(NSNotification notification) {
-		ERXModelGroup modelGroup = (ERXModelGroup) notification.object();
+		// ERXModelGroup modelGroup = (ERXModelGroup) notification.object();
+		EOModelGroup modelGroup = EOModelGroup.defaultGroup();
 		initializePartialEntities(modelGroup);
 	}
 
 	@SuppressWarnings("unchecked")
 	public void initializePartialEntities(EOModelGroup modelGroup) {
+		NSMutableDictionary<EOEntity, EOEntity> baseForPartial = new NSMutableDictionary<EOEntity, EOEntity>();
+
 		Enumeration modelsEnum = modelGroup.models().objectEnumerator();
 		while (modelsEnum.hasMoreElements()) {
 			EOModel model = (EOModel) modelsEnum.nextElement();
@@ -97,10 +105,39 @@ public class ERXPartialInitializer {
 						ERXEntityClassDescription ecd = (ERXEntityClassDescription) partialEntity.classDescriptionForInstances();
 						Class<ERXPartial> partialClass = (Class<ERXPartial>) _NSUtilities.classWithName(partialExtensionEntity.className());
 						ecd._addPartialClass(partialClass);
-						model.removeEntity(partialExtensionEntity);
+						baseForPartial.setObjectForKey(partialEntity, partialExtensionEntity);
 					}
 				}
 			}
+		}
+
+		modelsEnum = modelGroup.models().objectEnumerator();
+		while (modelsEnum.hasMoreElements()) {
+			EOModel model = (EOModel) modelsEnum.nextElement();
+			Enumeration entitiesEnum = model.entities().objectEnumerator();
+			while (entitiesEnum.hasMoreElements()) {
+				EOEntity entity = (EOEntity) entitiesEnum.nextElement();
+				Enumeration relationships = entity.relationships().immutableClone().objectEnumerator();
+				while (relationships.hasMoreElements()) {
+					EORelationship relationship = (EORelationship) relationships.nextElement();
+					EOEntity destinationEntity = relationship.destinationEntity();
+					EOEntity baseEntity = baseForPartial.objectForKey(destinationEntity);
+					if (baseEntity != null) {
+						NSMutableDictionary<String, Object> relationshipPropertyList = new NSMutableDictionary<String, Object>();
+						relationship.encodeIntoPropertyList(relationshipPropertyList);
+						relationshipPropertyList.setObjectForKey(baseEntity.name(), "destination");
+
+						EORelationship primaryRelationship = new EORelationship(relationshipPropertyList, entity);
+						primaryRelationship.awakeWithPropertyList(relationshipPropertyList);
+						entity.removeRelationship(relationship);
+						entity.addRelationship(primaryRelationship);
+					}
+				}
+			}
+		}
+
+		for (EOEntity partialExtensionEntity : baseForPartial.allKeys()) {
+			partialExtensionEntity.model().removeEntity(partialExtensionEntity);
 		}
 	}
 }
