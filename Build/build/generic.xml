@@ -181,6 +181,8 @@ There are many ways to use this script:
         <property name="wo.localroot" value="/" />
         <property name="before.compile" value="global.dummy" />
         <property name="after.compile" value="global.dummy" />
+        <property name="project.customInfo.plist" value="" />
+        
         <property name="wo.frameworks" value="${wo.woroot}/Library/Frameworks" />
         <property name="wo.local.frameworks" value="${wo.wolocalroot}/Library/Frameworks" />
         <property name="build.root" value="${user.home}/Roots" />
