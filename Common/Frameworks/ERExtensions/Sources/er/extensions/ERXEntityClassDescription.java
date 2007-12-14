@@ -14,7 +14,6 @@ import java.util.Enumeration;
 
 import org.apache.log4j.Logger;
 
-import com.webobjects.appserver.WOApplication;
 import com.webobjects.eoaccess.EOAttribute;
 import com.webobjects.eoaccess.EOEntity;
 import com.webobjects.eoaccess.EOEntityClassDescription;
@@ -44,7 +43,6 @@ import com.webobjects.foundation.NSTimestamp;
 import com.webobjects.foundation.NSValidation;
 
 import er.extensions.partials.ERXPartial;
-import er.extensions.partials.ERXPartialInitializer;
 
 /**
  * The main purpose of the ERXClassDescription class is
@@ -196,7 +194,7 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
     protected NSMutableDictionary _initialDefaultValues;
 
     /** Holds the default factory instance */
-    public static Factory _factory;
+    private static Factory _factory;
     
     /** holds validity Methods */
     private static Method[] validityMethods = null;
@@ -231,27 +229,20 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
      * and classDescriptionNeededForClass. If you wish to provide your own
      * subclass of ERXEntityClassDescription then you need to create a
      * subclass of Factory and set that class name in the system properties
-     * under the key: er.extensions.ERXClassDescription.factoryClass
+     * under the key: <code>er.extensions.ERXClassDescription.factoryClass</code>
      * In your Factory subclass override the method: newClassDescriptionForEntity
      * to provide your own ERXEntityClassDescription subclass.
      */
     public static class Factory {
     	
-    	/**
-    	 * Notification sent prior to prepareEntityForRegistration. Allows any
-    	 * munging of the entity that doesn't involve attributes or relationships.
-    	 * e.g., setting the className of the entity or a restricting qualifier.
-    	 */
-    	public static final String DidPrepareEntityNotification = "DidPrepareEntityNotification";
-    	/**
-    	 * Notification sent per entity after all entities have been registered.
-    	 * This is the safest place to do entity munging involving attributes
-    	 * or relationships.
-    	 */
-    	public static final String WillRegisterEntityNotification = "WillRegisterEntityNotification";
-    	
-        /** Public constructor */
-        public Factory() {}
+    	/** Public constructor */
+    	public Factory() {
+    		// Need to be able to preempt the model registering descriptions.
+    		NSNotificationCenter.defaultCenter().addObserver(this, new NSSelector("modelWasAdded", ERXConstant.NotificationClassArray), EOModelGroup.ModelAddedNotification, null);
+    		NSNotificationCenter.defaultCenter().addObserver(this, new NSSelector("modelGroupWasAdded", ERXConstant.NotificationClassArray), ERXModelGroup.ModelGroupAddedNotification, null);
+    		NSNotificationCenter.defaultCenter().addObserver(this, new NSSelector("classDescriptionNeededForEntityName", ERXConstant.NotificationClassArray), EOClassDescription.ClassDescriptionNeededForEntityNameNotification, null);
+    		NSNotificationCenter.defaultCenter().addObserver(this, new NSSelector("classDescriptionNeededForClass", ERXConstant.NotificationClassArray), EOClassDescription.ClassDescriptionNeededForClassNotification, null);
+    	}
 
         public void reset() {
             _registeredModelNames = new NSMutableArray();
@@ -259,47 +250,29 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
             _classDescriptionForEntity = new NSMutableDictionary();
         }
 
-        /**
-         * Method called by the {@link com.webobjects.foundation.NSNotificationCenter NSNotificationCenter} 
-         * when an ERXCompilerProxy did reset.
-         */
-        public void compilerProxyDidCompileClasses(NSNotification n) {
-            log.debug("CompilerProxyDidCompileClasses: " + n);
-            reset();
+        protected boolean isRapidTurnaroundEnabled() {
+            return ERXProperties.booleanForKey("er.extensions.ERXEntityClassDescription.isRapidTurnaroundEnabled");
         }
 
-        private static Boolean _isRapidTurnaroundEnabled;
-        public boolean isRapidTurnaroundEnabled() {
-            if(_isRapidTurnaroundEnabled == null) {
-                _isRapidTurnaroundEnabled = ERXProperties.booleanForKey("er.extensions.ERXEntityClassDescription.isRapidTurnaroundEnabled") ? Boolean.TRUE : Boolean.FALSE;
-            }
-            return _isRapidTurnaroundEnabled.booleanValue();
-        }
-
-        private static Boolean _isFixingRelationshipsEnabled;
-        public boolean isFixingRelationshipsEnabled() {
-            if(_isFixingRelationshipsEnabled == null) {
-                _isFixingRelationshipsEnabled = ERXProperties.booleanForKey("er.extensions.ERXEntityClassDescription.isFixingRelationshipsEnabled") ? Boolean.TRUE : Boolean.FALSE;
-            }
-            return _isFixingRelationshipsEnabled.booleanValue();
-        }
-        
-        /** false until initial registration of entities has occurred */
-        private boolean _hasPreparedEntities;
-        /**
-         * @return true if all entities have been prepared and will be registered.
-         */
-        public boolean hasPreparedEntities() {
-        	return _hasPreparedEntities;
+        protected boolean isFixingRelationshipsEnabled() {
+            return ERXProperties.booleanForKey("er.extensions.ERXEntityClassDescription.isFixingRelationshipsEnabled");
         }
 
         /**
-         * Method called by the {@link com.webobjects.appserver.WOApplication WOApplication}
-         * has finished launching.
+         * Method called when a model group did load.
          */
-        public void applicationDidFinishLaunching(NSNotification n) {
-            log.debug("ApplicationDidFinishLaunching: " + n);
-            for (Enumeration ge = EOModelGroup.defaultGroup().models().objectEnumerator(); ge.hasMoreElements();) {
+        public final void modelGroupWasAdded(NSNotification n) {
+            log.debug("modelGroupWasAdded: " + n);
+            EOModelGroup group = (EOModelGroup) n.object();
+            processModelGroup(group);
+        }
+
+        /**
+         * Called when a model group finished loading. Checks foreign keys by default. Override to to more...
+         * @param group
+         */
+		protected void processModelGroup(EOModelGroup group) {
+			for (Enumeration ge = group.models().objectEnumerator(); ge.hasMoreElements();) {
                 EOModel model = (EOModel)ge.nextElement();
                 String frameworkName = null;
                 String modelPath = null;
@@ -328,7 +301,7 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
                     if(cd instanceof ERXEntityClassDescription) {
                         ((ERXEntityClassDescription)cd).readDefaultValues();
 
-                        if(modelPath != null) {
+                        if(isRapidTurnaroundEnabled() && modelPath != null) {
                             String path = modelPath + File.separator + entity.name() + ".plist";
                             ERXFileNotificationCenter.defaultCenter().addObserver(cd, new NSSelector("modelFileDidChange", ERXConstant.NotificationClassArray), path);
                         }
@@ -337,15 +310,7 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
                     }
                 }
             }
-            reset();
-            _hasPreparedEntities = true;
-            for (Enumeration ge = EOModelGroup.defaultGroup().models().objectEnumerator(); ge.hasMoreElements();) {
-            	EOModel model = (EOModel)ge.nextElement();
-            	log.debug("Will register entities for model:" + model.name());
-            	registerDescriptionForEntitiesInModel(model);
-            }
-            ERXPartialInitializer.initializer().workaroundClassDescriptionResetProblem();
-        }
+		}
         
         /**
          * Method called by the {@link com.webobjects.foundation.NSNotificationCenter NSNotificationCenter}   
@@ -355,15 +320,15 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
          * 
          * @param n notification that has the EOModel that was loaded.
          */
-        public void modelWasAddedNotification(NSNotification n) {
-            log.debug("ModelWasAddedNotification: " + ((EOModel)n.object()).name());
+        public final void modelWasAdded(NSNotification n) {
+        	EOModel model = ((EOModel)n.object());
+            log.debug("ModelWasAddedNotification: " + model.name());
             // Don't want this guy getting in our way.
-            // FIXME: This is done twice
-            NSNotificationCenter.defaultCenter().removeObserver((EOModel)n.object());
+            NSNotificationCenter.defaultCenter().removeObserver(model);
             try {
-                registerDescriptionForEntitiesInModel((EOModel)n.object());
+                registerDescriptionForEntitiesInModel(model);
             } catch (RuntimeException e) {
-                log.error("Error registering model: " + ((EOModel)n.object()).name(), e);
+                log.error("Error registering model: " + model.name(), e);
                 throw e;
             }
         }
@@ -415,7 +380,7 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
          * @param entity to create the class description for
          * @return new class description for the given entity
          */
-        public ERXEntityClassDescription newClassDescriptionForEntity(EOEntity entity) {
+        protected ERXEntityClassDescription newClassDescriptionForEntity(EOEntity entity) {
         	String key = entity.name();
         	EOModel model = entity.model();
         	if (model != null) {
@@ -447,7 +412,7 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
          * for custom validation to work at the moment.
          * @param eoentity to be prepared for registration
          */
-        public void prepareEntityForRegistration(EOEntity eoentity) {
+        protected void prepareEntityForRegistration(EOEntity eoentity) {
             String className = eoentity.className();
             String defaultClassName = ERXProperties.stringForKeyWithDefault("er.extensions.ERXEntityClassDescription.defaultClassName", ERXGenericRecord.class.getName());
             String alternateClassName = ERXProperties.stringForKey("er.extensions.ERXEntityClassDescription." + eoentity.name() + ".ClassName");
@@ -457,8 +422,6 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
             } else if (className.equals("EOGenericRecord")) {
                 eoentity.setClassName(defaultClassName);
             }
-            String notificationName = hasPreparedEntities() ? WillRegisterEntityNotification : DidPrepareEntityNotification;
-            NSNotificationCenter.defaultCenter().postNotification( notificationName, eoentity );
         }
 
         /**
@@ -534,7 +497,7 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
          * which the notifications are recieved.
          * @param model that contains all of the entities to be registerd
          */
-        public void registerDescriptionForEntitiesInModel(EOModel model) {
+        protected void registerDescriptionForEntitiesInModel(EOModel model) {
             if (!_registeredModelNames.containsObject(model.name())) {
                 for (Enumeration e = model.entities().objectEnumerator(); e.hasMoreElements();) {
                     EOEntity eoentity = (EOEntity)e.nextElement();
@@ -590,7 +553,7 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
          * different class description subclass.
          * @param entity to register the class description for
          */
-        public void registerDescriptionForEntity(EOEntity entity) {
+        protected void registerDescriptionForEntity(EOEntity entity) {
             Class entityClass = EOGenericRecord.class;
             try {
                 String className = entity.className();
@@ -616,7 +579,7 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
          * @param class1 class object to have a custom class
          *		description registered for.
          */
-        public void registerDescriptionForClass(Class class1) {
+        protected void registerDescriptionForClass(Class class1) {
             NSArray entities = (NSArray)_entitiesForClass.objectForKey(class1.getName());
             if (entities != null) {
                 if (log.isDebugEnabled())
@@ -640,12 +603,6 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
     public static Factory factory() {
         return _factory;
     }
-    
-    /** 
-     * flag to know if the <code>registerDescription</code>
-     * method has been called
-     */
-    private static boolean _registered = false;
 
     /**
      * This method is called by the principal class
@@ -659,27 +616,20 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
      * by creating and registering custom class descriptions.
      */
     public static void registerDescription() {
-        if (!_registered) {
-            _factory = null;
-            try {
-                String className = System.getProperty("er.extensions.ERXClassDescription.factoryClass");
-                if (className != null) {
-                    _factory = (Factory)Class.forName(className).newInstance();
-                }
-            } catch(Exception ex) {
-                log.warn("Exception while registering factory, using default: " + ex );
-            }
-            
-            if(_factory == null)
-                _factory=new Factory();
+    	if (_factory == null) {
+    		_factory = null;
+    		try {
+    			String className = System.getProperty("er.extensions.ERXClassDescription.factoryClass");
+    			if (className != null) {
+    				_factory = (Factory)Class.forName(className).newInstance();
+    			}
+    		} catch(Exception ex) {
+    			log.warn("Exception while registering factory, using default: " + ex );
+    		}
 
-            // Need to be able to preempt the model registering descriptions.
-            NSNotificationCenter.defaultCenter().addObserver(_factory, new NSSelector("modelWasAddedNotification", ERXConstant.NotificationClassArray), EOModelGroup.ModelAddedNotification, null);
-            NSNotificationCenter.defaultCenter().addObserver(_factory, new NSSelector("applicationDidFinishLaunching", ERXConstant.NotificationClassArray), WOApplication.ApplicationWillFinishLaunchingNotification, null);
-            NSNotificationCenter.defaultCenter().addObserver(_factory, new NSSelector("classDescriptionNeededForEntityName", ERXConstant.NotificationClassArray), EOClassDescription.ClassDescriptionNeededForEntityNameNotification, null);
-            NSNotificationCenter.defaultCenter().addObserver(_factory, new NSSelector("classDescriptionNeededForClass", ERXConstant.NotificationClassArray), EOClassDescription.ClassDescriptionNeededForClassNotification, null);
-            _registered = true;
-        }
+    		if(_factory == null)
+    			_factory=new Factory();
+    	}
     }
     
     /**
@@ -689,7 +639,7 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
     public ERXEntityClassDescription(EOEntity entity) {
         super(entity);
         _validationInfo = ERXValueUtilities.dictionaryValue(entity.userInfo().objectForKey("ERXValidation"));
-        _validationQualiferCache = (NSMutableDictionary) ERXMutableDictionary.synchronizedDictionary();
+        _validationQualiferCache = ERXMutableDictionary.synchronizedDictionary();
     }
 
     public void modelFileDidChange(NSNotification n) {
@@ -701,7 +651,7 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
             entity().setUserInfo((NSDictionary)userInfo.objectForKey("userInfo"));
             
             _validationInfo = ERXValueUtilities.dictionaryValue(entity().userInfo().objectForKey("ERXValidation"));
-            _validationQualiferCache = (NSMutableDictionary) ERXMutableDictionary.synchronizedDictionary();
+            _validationQualiferCache = ERXMutableDictionary.synchronizedDictionary();
             _initialDefaultValues = null;
             readDefaultValues();
         } catch(Exception ex) {
