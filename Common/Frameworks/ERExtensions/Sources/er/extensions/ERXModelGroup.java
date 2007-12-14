@@ -106,9 +106,9 @@ public class ERXModelGroup extends EOModelGroup {
 		}
 		// clear the cached class descriptions - if descriptions are there, they
 		// are from a previous load of the models, and may be out of date
-		if (ERXEntityClassDescription._factory != null) {
+		if (ERXEntityClassDescription.factory() != null) {
 			log.warn("Clearing previous class descriptions");
-			ERXEntityClassDescription._factory.reset();
+			ERXEntityClassDescription.factory().reset();
 		}
 
 		NSMutableDictionary<String, URL> modelNameURLDictionary = new NSMutableDictionary<String, URL>();
