@@ -140,6 +140,7 @@ public class NSMutableDictionary<K, V> extends NSDictionary<K, V> {
 		}
 	}
 
+	@Override
 	public void takeValueForKey(Object value, String key) {
 		if (value != null) {
 			setObjectForKey((V) value, (K) key);
@@ -149,18 +150,22 @@ public class NSMutableDictionary<K, V> extends NSDictionary<K, V> {
 		}
 	}
 
+	@Override
 	public Object clone() {
 		return new NSMutableDictionary<K, V>(this);
 	}
 
+	@Override
 	public NSDictionary<K, V> immutableClone() {
 		return new NSDictionary<K, V>(this);
 	}
 
+	@Override
 	public NSMutableDictionary<K, V> mutableClone() {
 		return (NSMutableDictionary<K, V>) clone();
 	}
 
+	@SuppressWarnings("hiding")
 	public static final Class _CLASS = _NSUtilitiesExtra._classWithFullySpecifiedNamePrime("com.webobjects.foundation.NSMutableDictionary");
 	static final long serialVersionUID = 6690723083816355576L;
 
@@ -177,6 +182,7 @@ public class NSMutableDictionary<K, V> extends NSDictionary<K, V> {
 	 * @return previous value associated with specified key, or null if there
 	 *         was no mapping for key.
 	 */
+	@Override
 	public V put(K key, V value) {
 		V temp = objectForKey(key);
 		setObjectForKey(value, key);
@@ -193,6 +199,7 @@ public class NSMutableDictionary<K, V> extends NSDictionary<K, V> {
 	 * @return previous value associated with key, or null if there was no
 	 *         mapping for key.
 	 */
+	@Override
 	public V remove(Object key) {
 		V temp = objectForKey((K) key);
 		removeObjectForKey((K) key);
@@ -206,6 +213,7 @@ public class NSMutableDictionary<K, V> extends NSDictionary<K, V> {
 	 * @param m
 	 *            Mappings to be stored in this map.
 	 */
+	@Override
 	public void putAll(Map<? extends K, ? extends V> m) {
 		addEntriesFromDictionary(new NSDictionary(m, true));
 	}
@@ -213,6 +221,7 @@ public class NSMutableDictionary<K, V> extends NSDictionary<K, V> {
 	/**
 	 * Remove all mappings from this map.
 	 */
+	@Override
 	public void clear() {
 		removeAllObjects();
 	}
@@ -220,6 +229,7 @@ public class NSMutableDictionary<K, V> extends NSDictionary<K, V> {
 	/**
 	 * Return a collection view of the values contained in this map.
 	 */
+	@Override
 	public Collection<V> values() {
 		return allValues();
 	}
