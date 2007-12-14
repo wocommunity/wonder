@@ -420,8 +420,9 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 		private void processJar(String jar) {
 
 			try {
-				if (!new File(jar).exists()) {
-
+				File jarFile = new File(jar);
+				if (!jarFile.exists() || jarFile.isDirectory()) {
+					return;
 				}
 				JarFile f = new JarFile(jar);
 				for (Enumeration enumerator = f.entries(); enumerator.hasMoreElements();) {
@@ -538,7 +539,6 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 							allFrameworks.add(bundle);
 							// System.out.println("Jar bundle: " + bundle);
 						}
-						checker.processJar(jar);
 					}
 				}
 				String newCP = "";
@@ -553,6 +553,11 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 				if (jarLibs.length() > 1) {
 					jarLibs = jarLibs.substring(0, jarLibs.length() - 1);
 					newCP += (newCP.length() > 0 ? ":" : "") + jarLibs;
+				}
+				String jars[] = newCP.split(":");
+				for (int i = 0; i < jars.length; i++) {
+					String jar = jars[i];
+					checker.processJar(jar);
 				}
 				// AK: this is pretty experimental for now. The classpath reordering
 				// should actually be done in a WOLips bootstrap because as this time all
