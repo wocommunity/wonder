@@ -1848,6 +1848,8 @@ public class ERXEOControlUtilities {
 	 * @author th
 	 */
 	public static void validateUniquenessOf(EOEnterpriseObject eo, EOQualifier restrictingQualifier, String... keys) {
+		if (restrictingQualifier != null && !restrictingQualifier.evaluateWithObject(eo))
+			return;
 		NSArray<String> keyPaths = new NSArray(keys);
 		NSDictionary<String, Object> dict = ERXDictionaryUtilities.dictionaryFromObjectWithKeys(eo, keyPaths);
 		EOQualifier qualifier = EOKeyValueQualifier.qualifierToMatchAllValues(dict);
