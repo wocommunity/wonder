@@ -58,6 +58,7 @@ import com.webobjects.foundation.NSKeyValueCodingAdditions;
 import com.webobjects.foundation.NSLog;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
+import com.webobjects.foundation.NSMutableSet;
 import com.webobjects.foundation.NSNotification;
 import com.webobjects.foundation.NSNotificationCenter;
 import com.webobjects.foundation.NSProperties;
@@ -177,6 +178,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 	 * 
 	 * @param n
 	 */
+    
 	public static void bundleDidLoad(NSNotification n) {
 		NSBundle bundle = (NSBundle) n.object();
 		// System.out.println(bundle.name() + ": " + allFrameworks);
@@ -184,6 +186,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 		if (allBundleProps == null) {
 			allBundleProps = new Properties();
 		}
+
 		Properties bundleProps = bundle.properties();
 		if (bundleProps != null) {
 			for (Iterator iter = bundleProps.entrySet().iterator(); iter.hasNext();) {
@@ -254,6 +257,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 			NSNotificationCenter.defaultCenter().postNotification(new NSNotification(AllBundlesLoadedNotification, NSKeyValueCoding.NullValue));
 		}
 	}
+    	
 
 	static class AppClassLoader extends URLClassLoader {
 
@@ -366,6 +370,119 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 		WOApplication.main(argv, applicationClass);
 	}
 
+	private static JarChecker checker;
+
+	/**
+	 * Utility class to track down duplicate items in the class path. Reports duplicate packages and
+	 * packages that are present in different versions.
+	 *
+	 * @author ak
+	 */
+	public static class JarChecker {
+		private static final Logger log = Logger.getLogger(JarChecker.class);
+
+		private static class Entry {
+			long _size;
+			String _jar;
+
+			public Entry(long aL, String jar) {
+				_size = aL;
+				_jar = jar;
+			}
+
+			public long size() {
+				return _size;
+			}
+
+			public String jar() {
+				return _jar;
+			}
+
+			@Override
+			public boolean equals(Object other) {
+				return ((Entry) other).size() == size();
+			}
+
+			public int hashCode() {
+				return (int) _size;
+			}
+
+			@Override
+			public String toString() {
+				return size() + "->" + jar();
+			}
+		}
+
+		private static NSMutableDictionary<String, NSMutableArray<String>> packages = new NSMutableDictionary<String, NSMutableArray<String>>();
+
+		private static NSMutableDictionary<String, NSMutableSet<Entry>> classes = new NSMutableDictionary<String, NSMutableSet<Entry>>();
+
+		private void processJar(String jar) {
+
+			try {
+				if (!new File(jar).exists()) {
+
+				}
+				JarFile f = new JarFile(jar);
+				for (Enumeration enumerator = f.entries(); enumerator.hasMoreElements();) {
+					JarEntry entry = (JarEntry) enumerator.nextElement();
+					String name = entry.getName();
+					if (entry.getName().endsWith("/") && !(name.matches("^\\w+/$") || name.startsWith("META-INF"))) {
+						NSMutableArray<String> bundles = packages.objectForKey(name);
+						if (bundles == null) {
+							bundles = new NSMutableArray<String>();
+							packages.setObjectForKey(bundles, name);
+						}
+						bundles.addObject(jar);
+					}
+					else if (!(name.startsWith("src") || name.startsWith("META-INF"))) {
+						Entry e = new Entry(entry.getSize(), jar);
+						NSMutableSet<Entry> set = classes.objectForKey(name);
+						if (set == null) {
+							set = new NSMutableSet<Entry>();
+							classes.setObjectForKey(set, name);
+						}
+						set.addObject(e);
+					}
+				}
+			}
+			catch (IOException e) {
+				// AK AK TODO: Auto-generated catch block
+				log.error(e, e);
+			}
+		}
+
+		private void reportErrors() {
+			StringBuffer sb = new StringBuffer();
+			String message = null;
+			for (Enumeration enumerator = packages.keyEnumerator(); enumerator.hasMoreElements();) {
+				String packageName = (String) enumerator.nextElement();
+				NSMutableArray<String> bundles = packages.objectForKey(packageName);
+				if (bundles.count() > 1) {
+					sb.append("\t").append(packageName).append("->").append(bundles).append("\n");
+				}
+			}
+			message = sb.toString();
+			if (message.length() > 0) {
+				log.info("The following packages appear multiple times:\n" + message);
+			}
+			sb = new StringBuffer();
+			NSMutableSet packages = new NSMutableSet();
+			for (Enumeration enumerator = classes.keyEnumerator(); enumerator.hasMoreElements();) {
+				String className = (String) enumerator.nextElement();
+				String packageName = className.replaceAll("/[^/]+?$", "");
+				NSMutableSet<Entry> bundles = classes.objectForKey(className);
+				if (bundles.count() > 1 && !packages.containsObject(packageName)) {
+					sb.append("\t").append(packageName).append("->").append(bundles).append("\n");
+					packages.addObject(packageName);
+				}
+			}
+			message = sb.toString();
+			if (message.length() > 0) {
+				log.warn("The following packages have different versions, you should remove the version you don't want:\n" + message);
+			}
+		}
+	}
 	/**
 	 * Called prior to actually initializing the app. Defines framework load order, 
 	 * class path order, checks patches etc.
@@ -375,6 +492,8 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 		String cps[] = new String[] {"java.class.path", "com.webobjects.classpath"};
 		propertiesFromArgv = NSProperties.valuesFromArgv(argv);
         allFrameworks = new HashSet();
+        checker = new JarChecker();
+        
 		for (int var = 0; var < cps.length; var++) {
 			String cpName = cps[var];
 			String cp = System.getProperty(cpName);
@@ -419,6 +538,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 							allFrameworks.add(bundle);
 							// System.out.println("Jar bundle: " + bundle);
 						}
+						checker.processJar(jar);
 					}
 				}
 				String newCP = "";
@@ -529,6 +649,9 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 	 */
 	public ERXApplication() {
 		super();
+		if (!ERXConfigurationManager.defaultManager().isDeployedAsServlet() && !_wasERXApplicationMainInvoked) {
+			_displayMainMethodWarning();
+		}
 		if (allFrameworks.size() > 0) {
 			throw new RuntimeException("ERXExtensions have not been initialized. Please report the classpath and the rest of the bundles to the Wonder mailing list: " + "\nRemaining" + allFrameworks + "\n" + System.getProperty("java.class.path"));
 		}
@@ -543,9 +666,8 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 				app.activateOptions();
 			}
 		}
-		if (!ERXConfigurationManager.defaultManager().isDeployedAsServlet() && !_wasERXApplicationMainInvoked) {
-			_displayMainMethodWarning();
-		}
+		checker.reportErrors();
+
 		NSNotificationCenter.defaultCenter().postNotification(new NSNotification(ApplicationDidCreateNotification, this));
 		installPatches();
 		lowMemBufferSize = ERXProperties.intForKeyWithDefault("er.extensions.ERXApplication.lowMemBufferSize", 0);
@@ -595,7 +717,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 		
 		memoryThreshold = ERXProperties.bigDecimalForKey("er.extensions.ERXApplication.memoryThreshold");
 	}
-
+	
 	/**
 	 * Decides whether to use editing context unlocking.
 	 * 
