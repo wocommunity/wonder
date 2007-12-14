@@ -456,7 +456,8 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 		private void reportErrors() {
 			StringBuffer sb = new StringBuffer();
 			String message = null;
-			for (Enumeration enumerator = packages.keyEnumerator(); enumerator.hasMoreElements();) {
+			NSArray keys = ERXArrayUtilities.sortedArraySortedWithKey(packages.allKeys(), "toString");
+			for (Enumeration enumerator = keys.objectEnumerator(); enumerator.hasMoreElements();) {
 				String packageName = (String) enumerator.nextElement();
 				NSMutableArray<String> bundles = packages.objectForKey(packageName);
 				if (bundles.count() > 1) {
@@ -469,7 +470,8 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 			}
 			sb = new StringBuffer();
 			NSMutableSet packages = new NSMutableSet();
-			for (Enumeration enumerator = classes.keyEnumerator(); enumerator.hasMoreElements();) {
+			keys = ERXArrayUtilities.sortedArraySortedWithKey(classes.allKeys(), "toString");
+			for (Enumeration enumerator = keys.objectEnumerator(); enumerator.hasMoreElements();) {
 				String className = (String) enumerator.nextElement();
 				String packageName = className.replaceAll("/[^/]+?$", "");
 				NSMutableSet<Entry> bundles = classes.objectForKey(className);
