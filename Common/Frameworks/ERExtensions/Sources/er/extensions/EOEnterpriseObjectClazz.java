@@ -315,7 +315,7 @@ public class EOEnterpriseObjectClazz<T extends EOEnterpriseObject> {
     }
 
     /**
-     * Fetches all of the objects matching the given qualifer
+     * Fetches all of the objects matching the given qualifier
      * format corresponding to the clazz's entity using the
      * given editing context.
      * @param ec editing context
@@ -327,9 +327,40 @@ public class EOEnterpriseObjectClazz<T extends EOEnterpriseObject> {
     public NSArray<T> objectsWithQualifierFormat(EOEditingContext ec, String qualifier, NSArray args) {
         return EOUtilities.objectsWithQualifierFormat(ec, entityName(), qualifier, args);
     }
+    
+    /**
+     * Fetches all of the objects matching the given key and value
+     * corresponding to the clazz's entity using the
+     * given editing context.
+     * @param ec editing context
+     * @param key key string
+     * @param value value
+     * @return array of objects corresponding to the passed in parameters.
+     */
+    public NSArray<T> objectsMatchingKeyAndValue(EOEditingContext ec, String key, Object value) {
+        return EOUtilities.objectsMatchingKeyAndValue(ec, entityName(), key, value);
+    }
+    
+    /**
+     * Fetches the object matching the given key and value
+     * corresponding to the clazz's entity using the
+     * given editing context. If more than one matches, throws a EOMoreThanOneException, 
+     * otherwise returns null or the match.
+     * @param ec editing context
+     * @param key key string
+     * @param value value
+     * @return array of objects corresponding to the passed in parameters.
+     */
+    public T objectMatchingKeyAndValue(EOEditingContext ec, String key, Object value) {
+        NSArray<T> result = objectsMatchingKeyAndValue(ec, key, value);
+        if(result.count() > 1) {
+        	throw new EOUtilities.MoreThanOneException("Mor than one: " + key + "->" + value);
+        }
+        return result.lastObject();
+    }
 
     /**
-     * Fetchs an array of objects for a given fetch specification
+     * Fetches an array of objects for a given fetch specification
      * and an array of bindings. The fetch specifiation is resolved
      * off of the entity corresponding to the current clazz.
      * @param ec editing content to fetch into
