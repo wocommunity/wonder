@@ -55,7 +55,8 @@ import com.webobjects.foundation.NSValidation;
  * updated for you automagically, so that you don't need to call
  * <code>other.addToBars(eo)</code> or <code>other.setBar(eo)</code>. Doing so doesn't hurt, though.
  * Giving a <code>null</code> value of removing the object from a to-many will result in the inverse 
- * relationship getting cleared. <br />
+ * relationship getting cleared. <br /> 
+ * If you *do* call addToBars(), you need to use includeObjectIntoPropertyWithKey() in this method.<br>
  * This feature should greatly help readability and reduce the number errors you make when you
  * forget to update an inverse relationship. To turn this feature on, you must set the system default 
  * <code>er.extensions.ERXEnterpriseObject.updateInverseRelationships=true</code>.
@@ -135,7 +136,7 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
 	 * {@link EOEnterpriseObjectClazz} for more information on this neat design
 	 * pattern.
 	 */
-    public static class ERXGenericRecordClazz extends EOEnterpriseObjectClazz {
+    public static class ERXGenericRecordClazz<T extends ERXGenericRecord> extends EOEnterpriseObjectClazz {
         
     }
 
