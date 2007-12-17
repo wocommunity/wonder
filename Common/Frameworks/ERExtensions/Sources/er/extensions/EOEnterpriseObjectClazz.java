@@ -43,7 +43,7 @@ import com.webobjects.foundation.NSMutableDictionary;
  * for a client-side class could then be easily switched to use the server-side EOUtilites
  * implementation.
  */
-public class EOEnterpriseObjectClazz extends Object {
+public class EOEnterpriseObjectClazz<T extends EOEnterpriseObject> {
     /**
      * logging support
      */
@@ -230,8 +230,8 @@ public class EOEnterpriseObjectClazz extends Object {
      * @param ec an editing context
      * @return newly created and inserted object
      */
-    public EOEnterpriseObject createAndInsertObject(EOEditingContext ec) {
-        EOEnterpriseObject eo = ERXEOControlUtilities.createAndInsertObject(ec,entityName());
+    public T createAndInsertObject(EOEditingContext ec) {
+        T eo = (T) ERXEOControlUtilities.createAndInsertObject(ec,entityName());
         return eo;
     }
 
@@ -261,7 +261,7 @@ public class EOEnterpriseObjectClazz extends Object {
      * @param ec editingcontext to fetch the objects into
      * @return array of all the objects for a given entity name.
      */
-    public NSArray allObjects(EOEditingContext ec) {
+    public NSArray<T> allObjects(EOEditingContext ec) {
         return EOUtilities.objectsForEntityNamed(ec, entityName());
     }
 
@@ -272,8 +272,8 @@ public class EOEnterpriseObjectClazz extends Object {
      * @param dict raw row dictionary
      * @return enterprise object for the raw row
      */
-    public EOEnterpriseObject objectFromRawRow(EOEditingContext ec, NSDictionary dict) {
-        return EOUtilities.objectFromRawRow(ec, entityNameFromRawRow(ec, dict), dict);
+    public T objectFromRawRow(EOEditingContext ec, NSDictionary dict) {
+        return (T) EOUtilities.objectFromRawRow(ec, entityNameFromRawRow(ec, dict), dict);
     }
 
     /**
@@ -310,8 +310,8 @@ public class EOEnterpriseObjectClazz extends Object {
      * @param pk primary key value. Compound primary keys are given as NSDictionaries.
      * @return enterprise object for the specified primary key value.
      */
-    public EOEnterpriseObject objectWithPrimaryKeyValue(EOEditingContext ec, Object pk) {
-        return ERXEOControlUtilities.objectWithPrimaryKeyValue(ec, entityName(), pk, null);
+    public T objectWithPrimaryKeyValue(EOEditingContext ec, Object pk) {
+        return (T) ERXEOControlUtilities.objectWithPrimaryKeyValue(ec, entityName(), pk, null);
     }
 
     /**
@@ -324,7 +324,7 @@ public class EOEnterpriseObjectClazz extends Object {
      * @param qualifer format string
      * @return array of objects corresponding to the passed in parameters.
      */
-    public NSArray objectsWithQualifierFormat(EOEditingContext ec, String qualifier, NSArray args) {
+    public NSArray<T> objectsWithQualifierFormat(EOEditingContext ec, String qualifier, NSArray args) {
         return EOUtilities.objectsWithQualifierFormat(ec, entityName(), qualifier, args);
     }
 
@@ -338,7 +338,7 @@ public class EOEnterpriseObjectClazz extends Object {
      *     specification
      * @return array of objects fetched using the given fetch specification
      */
-    public NSArray objectsWithFetchSpecificationAndBindings(EOEditingContext ec, String name, NSDictionary bindings) {
+    public NSArray<T> objectsWithFetchSpecificationAndBindings(EOEditingContext ec, String name, NSDictionary bindings) {
         return EOUtilities.objectsWithFetchSpecificationAndBindings(ec, entityName(), name, bindings);
     }
 
@@ -407,14 +407,14 @@ public class EOEnterpriseObjectClazz extends Object {
      * @param bindings
      * @return
      */
-    public NSArray filteredArray(NSArray array, EOFetchSpecification spec, NSDictionary bindings) {
+    public NSArray<T> filteredArray(NSArray<T> array, EOFetchSpecification spec, NSDictionary bindings) {
     	EOQualifier qualifier;
 
         if (bindings != null) {
             spec = spec.fetchSpecificationWithQualifierBindings(bindings);
         }
 
-        NSArray result = new NSArray(array);
+        NSArray<T> result = new NSArray(array);
         
         qualifier = spec.qualifier();
         
@@ -539,9 +539,9 @@ public class EOEnterpriseObjectClazz extends Object {
      * @param nsarray array of primary key dictionaries
      * @return array of faults for an array of primary key dictionaries.
      */
-    public NSArray faultsFromRawRows(EOEditingContext ec, NSArray nsarray) {
+    public NSArray<T> faultsFromRawRows(EOEditingContext ec, NSArray nsarray) {
         int count = nsarray.count();
-        NSMutableArray faults = new NSMutableArray(count);
+        NSMutableArray<T> faults = new NSMutableArray(count);
         for( int i = 0; i < count; i ++ ) {
             faults.addObject(objectFromRawRow(ec, (NSDictionary)nsarray.objectAtIndex(i)));
         }
@@ -554,8 +554,8 @@ public class EOEnterpriseObjectClazz extends Object {
      * @param eoqualifier qualifier to match against
      * @return array of faults that match the given qualifier
      */
-    public NSArray faultsMatchingQualifier(EOEditingContext ec, EOQualifier eoqualifier) {
-        NSArray nsarray = primaryKeysMatchingQualifier(ec, eoqualifier, null);
+    public NSArray<T> faultsMatchingQualifier(EOEditingContext ec, EOQualifier eoqualifier) {
+        NSArray<T> nsarray = primaryKeysMatchingQualifier(ec, eoqualifier, null);
         return faultsFromRawRows(ec, nsarray);
     }
 
@@ -567,8 +567,8 @@ public class EOEnterpriseObjectClazz extends Object {
      * @param sortOrderings array of sort orderings to order the faults
      * @return array of faults that match the given qualifier
      */
-    public NSArray faultsMatchingQualifier(EOEditingContext ec, EOQualifier eoqualifier, NSArray sortOrderings) {
-        NSArray nsarray = primaryKeysMatchingQualifier(ec, eoqualifier, sortOrderings);
+    public NSArray<T> faultsMatchingQualifier(EOEditingContext ec, EOQualifier eoqualifier, NSArray<EOSortOrdering> sortOrderings) {
+        NSArray<T> nsarray = primaryKeysMatchingQualifier(ec, eoqualifier, sortOrderings);
         return faultsFromRawRows(ec, nsarray);
     }
 
@@ -579,7 +579,7 @@ public class EOEnterpriseObjectClazz extends Object {
      * @param sortOrderings array of sort orderings to order the faults
      * @return array of faults that match the given criteria
      */
-    public NSArray faultsMatchingValues(EOEditingContext ec, NSDictionary nsdictionary, NSArray sortOrderings) {
+    public NSArray<T> faultsMatchingValues(EOEditingContext ec, NSDictionary nsdictionary, NSArray<EOSortOrdering> sortOrderings) {
         NSArray nsarray = primaryKeysMatchingValues(ec, nsdictionary, sortOrderings);
         return faultsFromRawRows(ec, nsarray);
     }

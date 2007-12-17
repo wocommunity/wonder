@@ -136,7 +136,7 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
 	 * {@link EOEnterpriseObjectClazz} for more information on this neat design
 	 * pattern.
 	 */
-    public static class ERXGenericRecordClazz<T extends ERXGenericRecord> extends EOEnterpriseObjectClazz {
+    public static class ERXGenericRecordClazz<T extends EOEnterpriseObject> extends EOEnterpriseObjectClazz<T> {
         
     }
 
