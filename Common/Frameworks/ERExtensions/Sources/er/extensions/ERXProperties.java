@@ -896,7 +896,7 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
     	}
     }
 
-    private static NSArray allProperties() {
+    public static NSArray allProperties() {
     	NSMutableArray props = new NSMutableArray();
     	for (Enumeration e = ERXSystem.getProperties().keys(); e.hasMoreElements();) {
     		String key = (String) e.nextElement();
