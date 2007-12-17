@@ -69,7 +69,7 @@ public class ERXCustomObject extends EOCustomObject implements ERXGuardedObjectI
      * {@link EOEnterpriseObjectClazz} for more information on this
      * neat design pattern.
      */
-    public static class ERXCustomObjectClazz extends EOEnterpriseObjectClazz {
+    public static class ERXCustomObjectClazz<T extends EOEnterpriseObject> extends EOEnterpriseObjectClazz<T> {
         
     }
 
