@@ -587,6 +587,12 @@ public class ERXSQLHelper {
 		}
 		
 		int maxPerQuery = 256;
+		
+		// Need to wrap this SQL in parens if there are multiple grougps
+		if (valueArray.count() > maxPerQuery) {
+			sb.append(" ( ");
+		}
+			
 		for(int j = 0; j < valueArray.count(); j+= maxPerQuery) { 
 			int currentSize = (j + (maxPerQuery-1) < valueArray.count() ? maxPerQuery : ((valueArray.count() % maxPerQuery)));
 			sb.append(sqlName);
@@ -611,6 +617,10 @@ public class ERXSQLHelper {
 			if(j < valueArray.count() - maxPerQuery) {
 				sb.append(" OR ");
 			}
+		}
+		
+		if (valueArray.count() > maxPerQuery) {
+			sb.append(" ) ");
 		}
 		return sb.toString();
 	}
