@@ -1279,12 +1279,34 @@ public class ERXEOAccessUtilities {
         };
         return action.perform(ec, entity.model().name());
     }
-    
+
     /**
-     * Tries to get the plugin name for a JDBC based model.
-     * @param model
+     * Creates count new primary keys for the entity. 
+     * @param ec
+     * @param entityName
+     * @param count
      * @return
      */
+	public static NSArray primaryKeysForNewRows(EOEditingContext ec, String entityName, final int count) {
+		final NSMutableArray result = new NSMutableArray();
+		final EOEntity entity = entityNamed(ec, entityName);
+		ChannelAction action = new ChannelAction() {
+			protected int doPerform(EOAdaptorChannel channel) {
+				NSArray keys = channel.primaryKeysForNewRowsWithEntity(count, entity);
+				result.addObjectsFromArray(keys);
+				return count;
+			}
+		};
+		action.perform(ec, entity.model().name());
+		return result;
+	}
+
+    /**
+	 * Tries to get the plugin name for a JDBC based model.
+	 * 
+	 * @param model
+	 * @return
+	 */
     public static String guessPluginName(EOModel model) {
         String pluginName = null;
         // If you don't explicitly set a prototype name, and you don't
