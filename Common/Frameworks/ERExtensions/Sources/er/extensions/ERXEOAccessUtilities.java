@@ -9,6 +9,7 @@ package er.extensions;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import org.apache.log4j.Logger;
@@ -1232,6 +1233,48 @@ public class ERXEOAccessUtilities {
         ChannelAction action = new ChannelAction() {
             protected int doPerform(EOAdaptorChannel channel) {
                 return channel.updateValuesInRowsDescribedByQualifier(newValues, qualifier, entity);
+            }
+        };
+        return action.perform(ec, entity.model().name());
+    }
+
+    /**
+     * Insert row described dictionary. 
+     * @param ec
+     * @param entityName
+     * @param newValues
+     * @return
+     */
+    public static int insertRow(EOEditingContext ec, String entityName, 
+            final NSDictionary newValues) {
+        final EOEntity entity = entityNamed(ec, entityName);
+        ChannelAction action = new ChannelAction() {
+            protected int doPerform(EOAdaptorChannel channel) {
+            	channel.insertRow(newValues, entity);
+                return 1;
+            }
+        };
+        return action.perform(ec, entity.model().name());
+    }
+
+    /**
+     * Insert rows described the array of dictionaries. 
+     * @param ec
+     * @param entityName
+     * @param newValues
+     * @return
+     */
+    public static int insertRows(EOEditingContext ec, String entityName, 
+            final List<NSDictionary> newValues) {
+        final EOEntity entity = entityNamed(ec, entityName);
+        ChannelAction action = new ChannelAction() {
+            protected int doPerform(EOAdaptorChannel channel) {
+            	int insert = 0;
+            	for (NSDictionary dictionary : newValues) {
+                	channel.insertRow(dictionary, entity);
+                	insert++;
+				}
+                return insert;
             }
         };
         return action.perform(ec, entity.model().name());
