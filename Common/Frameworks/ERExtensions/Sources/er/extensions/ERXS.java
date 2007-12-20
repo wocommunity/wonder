@@ -25,32 +25,32 @@ public class ERXS {
 		return EOSortOrdering.sortOrderingWithKey(key, ERXS.DESC);
 	}
 
-	public static NSArray<EOSortOrdering> descs(String key) {
-		return new NSArray<EOSortOrdering>(EOSortOrdering.sortOrderingWithKey(key, ERXS.DESC));
+	public static NSArray<EOSortOrdering> descs(String... keys) {
+		return sortOrders(DESC, keys);
 	}
 
 	public static EOSortOrdering asc(String key) {
 		return EOSortOrdering.sortOrderingWithKey(key, ERXS.ASC);
 	}
 
-	public static NSArray<EOSortOrdering> ascs(String key) {
-		return new NSArray<EOSortOrdering>(EOSortOrdering.sortOrderingWithKey(key, ERXS.ASC));
+	public static NSArray<EOSortOrdering> ascs(String... keys) {
+		return sortOrders(ASC, keys);
 	}
 
 	public static EOSortOrdering descInsensitive(String key) {
 		return EOSortOrdering.sortOrderingWithKey(key, ERXS.INS_DESC);
 	}
 
-	public static NSArray<EOSortOrdering> descInsensitives(String key) {
-		return new NSArray<EOSortOrdering>(EOSortOrdering.sortOrderingWithKey(key, ERXS.INS_DESC));
+	public static NSArray<EOSortOrdering> descInsensitives(String... keys) {
+		return sortOrders(INS_DESC, keys);
 	}
 
 	public static EOSortOrdering ascInsensitive(String key) {
 		return EOSortOrdering.sortOrderingWithKey(key, ERXS.INS_ASC);
 	}
 
-	public static NSArray<EOSortOrdering> ascInsensitives(String key) {
-		return new NSArray<EOSortOrdering>(EOSortOrdering.sortOrderingWithKey(key, ERXS.INS_ASC));
+	public static NSArray<EOSortOrdering> ascInsensitives(String... keys) {
+		return sortOrders(INS_ASC, keys);
 	}
 
 	public static NSArray<EOSortOrdering> sortOrders(String key, NSSelector comparison) {
@@ -59,6 +59,15 @@ public class ERXS {
 
 	public static NSArray<EOSortOrdering> sortOrders(String key1, NSSelector comparison1, String key2, NSSelector comparison2) {
 		return new NSArray<EOSortOrdering>(new EOSortOrdering[] { EOSortOrdering.sortOrderingWithKey(key1, comparison1), EOSortOrdering.sortOrderingWithKey(key2, comparison2) });
+	}
+
+
+	public static NSArray<EOSortOrdering> sortOrders(NSSelector sel, String...keys) {
+		NSMutableArray<EOSortOrdering> result = new NSMutableArray<EOSortOrdering>();
+		for (String key : keys) {
+			result.addObject(new EOSortOrdering(key, sel));
+		}
+		return result;
 	}
 
 	public static <T> void sort(NSMutableArray<T> array, EOSortOrdering... orderings) {
@@ -77,4 +86,13 @@ public class ERXS {
 	public static <T> NSArray<T> sorted(NSArray<T> array, NSArray<EOSortOrdering> orderings) {
 		return (NSArray<T>) EOSortOrdering.sortedArrayUsingKeyOrderArray(array, orderings);
 	}
+
+	public static NSArray<EOSortOrdering> chain(NSArray<EOSortOrdering>... arr) {
+		NSMutableArray<EOSortOrdering> result = new NSMutableArray<EOSortOrdering>();
+		for (NSArray<EOSortOrdering> value : arr) {
+			result.addObjects(value.objects());
+		}
+		return result;
+	}
+
 }

@@ -199,7 +199,7 @@ public class Bug extends _Bug implements Markable {
     
     // Class methods go here
     
-    public static class BugClazz extends _BugClazz {
+    public static class BugClazz<Bug> extends _BugClazz {
         
         protected EOQualifier qualifierForRelease(Release release) {
             if(release != null) {
@@ -339,7 +339,7 @@ public class Bug extends _Bug implements Markable {
         }
     }
 
-    public static final BugClazz clazz = new BugClazz();
+    public static final BugClazz<Bug> clazz = new BugClazz<Bug>();
 
     public void close() {
         setState(State.CLOSED);

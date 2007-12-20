@@ -1,39 +1,35 @@
-// _RequirementSubType.java
-// 
-// Created by eogenerator
-// DO NOT EDIT.  Make changes to RequirementSubType.java instead.
+// $LastChangedRevision: 4733 $ DO NOT EDIT.  Make changes to RequirementSubType.java instead.
 package er.bugtracker;
-import com.webobjects.foundation.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.eoaccess.*;
-import er.extensions.*;
-import java.util.*;
-import java.math.BigDecimal;
 
+import er.extensions.ERXGenericRecord;
+import com.webobjects.eoaccess.*;
+import com.webobjects.eocontrol.*;
+import com.webobjects.foundation.*;
+import java.math.*;
+import java.util.*;
+
+
+@SuppressWarnings("all")
 public abstract class _RequirementSubType extends ERXGenericRecord {
 
-    public static final String ENTITY = "RequirementSubType";
+	public static final String ENTITY_NAME = "RequirementSubType";
 
-    public interface Key  {
-        public static final String SUB_TYPE_DESCRIPTION = "subTypeDescription";  
+    public interface Key {
+	// Attributes
+	   public static final String SUB_TYPE_DESCRIPTION = "subTypeDescription";
+
+	// Relationships
     }
 
-    public static abstract class _RequirementSubTypeClazz extends ERXGenericRecord.ERXGenericRecordClazz {
- 
-
-        public NSArray objectsForFetchAll(EOEditingContext context) {
-            EOFetchSpecification spec = EOFetchSpecification.fetchSpecificationNamed("FetchAll", "RequirementSubType");
-
-            return context.objectsWithFetchSpecification(spec);
-        }
-
+    public static class _RequirementSubTypeClazz extends ERXGenericRecord.ERXGenericRecordClazz<RequirementSubType> {
+        /* more clazz methods here */
     }
 
+  public String subTypeDescription() {
+    return (String) storedValueForKey(Key.SUB_TYPE_DESCRIPTION);
+  }
+  public void setSubTypeDescription(String value) {
+    takeStoredValueForKey(value, Key.SUB_TYPE_DESCRIPTION);
+  }
 
-    public String subTypeDescription() {
-        return (String)storedValueForKey(Key.SUB_TYPE_DESCRIPTION);
-    }
-    public void setSubTypeDescription(String aValue) {
-        takeStoredValueForKey(aValue, Key.SUB_TYPE_DESCRIPTION);
-    }
 }
