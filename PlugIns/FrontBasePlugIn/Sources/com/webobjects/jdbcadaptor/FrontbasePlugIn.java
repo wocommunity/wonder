@@ -895,7 +895,7 @@ public class FrontbasePlugIn extends JDBCPlugIn {
 					sql.append(" CONSTRAINT ");
 					sql.append("NOT_NULL_");
 					sql.append(attribute.entity().externalName());
-					sql.append('_');
+					sql.append("__");
 					sql.append(attribute.columnName());
 				}
 				sql.append(" NOT NULL");
