@@ -5,7 +5,7 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/ERExtensions"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/ERPrototypes"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/JavaWOExtensions"/>
-	<classpathentry kind="con" path="org.objectstyle.wolips.WO_CLASSPATH/JavaDirectToWeb/JavaDTWGeneration/JavaEOAccess/JavaEOApplication/JavaEOControl/JavaEOProject/JavaFoundation/JavaJDBCAdaptor/JavaWebObjects/JavaXML"/>
+	<classpathentry kind="con" path="org.objectstyle.wolips.ContainerInitializer/10/1/JavaDirectToWeb/1/nil/1/nil/1/0/1/false/10/1/JavaDTWGeneration/1/nil/1/nil/1/0/1/false/10/1/JavaEOAccess/1/nil/1/nil/1/0/1/false/10/1/JavaEOApplication/1/nil/1/nil/1/0/1/false/10/1/JavaEOControl/1/nil/1/nil/1/0/1/false/10/1/JavaEOProject/1/nil/1/nil/1/0/1/false/10/1/JavaFoundation/1/nil/1/nil/1/0/1/false/10/1/JavaJDBCAdaptor/1/nil/1/nil/1/0/1/false/10/1/JavaWebObjects/1/nil/1/nil/1/0/1/false/10/1/JavaXML/1/nil/1/nil/1/0/1/false"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/ERCoreBusinessLogic"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/BTBusinessLogic"/>
@@ -23,5 +23,6 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/ERExcelLook"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/ERSelenium"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/WOOgnl"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/FrontBasePlugIn"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
