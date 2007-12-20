@@ -324,6 +324,24 @@ public class ERXQ {
 		}
 		return new EOOrQualifier(qualifiers);
 	}
+	
+  /**
+   * Equivalent to a new EOAndQualifier of EONotQualifier(EOKeyValueQualifier) with key equals value for each value.
+   * 
+   * @param key the key
+   * @param values the values
+   * @return an EOQualifier
+   */
+  public static EOQualifier notIn(String key, NSArray values) {
+    NSMutableArray<EOQualifier> qualifiers = new NSMutableArray<EOQualifier>();
+    Enumeration valuesEnum = values.objectEnumerator();
+    while (valuesEnum.hasMoreElements()) {
+      Object value = valuesEnum.nextElement();
+      qualifiers.addObject(ERXQ.notEquals(key, value));
+    }
+    return new EOAndQualifier(qualifiers);
+  }
+  
 
 	/**
 	 * Equivalent to key > lowerBound and key < upperBound (exclusive).  Not that this
@@ -405,13 +423,7 @@ public class ERXQ {
 	 * @param elements one or more string to concatenate into a keyPath
 	 * @return elements with "." between them to form a keypath
 	 */
-	public static String keyPath(String... elements)
-	{
-		return new NSArray(elements).componentsJoinedByString(".");
+	public static String keyPath(String... elements) {
+		return new NSArray<String>(elements).componentsJoinedByString(".");
 	}
-	    
-	 
-	    
-	    
-	    
 }
