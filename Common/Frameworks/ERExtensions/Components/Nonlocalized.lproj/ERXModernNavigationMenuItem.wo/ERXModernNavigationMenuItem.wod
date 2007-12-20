@@ -9,6 +9,7 @@ ChildrenRepetition2: WORepetition {
 }
 
 DisplayNameString: WOString {
+	escapeHTML = false;
 	value = displayName;
 }
 
