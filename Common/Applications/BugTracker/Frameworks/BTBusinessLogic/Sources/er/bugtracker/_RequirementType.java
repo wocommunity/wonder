@@ -1,39 +1,35 @@
-// _RequirementType.java
-// 
-// Created by eogenerator
-// DO NOT EDIT.  Make changes to RequirementType.java instead.
+// $LastChangedRevision: 4733 $ DO NOT EDIT.  Make changes to RequirementType.java instead.
 package er.bugtracker;
-import com.webobjects.foundation.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.eoaccess.*;
-import er.extensions.*;
-import java.util.*;
-import java.math.BigDecimal;
 
+import er.extensions.ERXGenericRecord;
+import com.webobjects.eoaccess.*;
+import com.webobjects.eocontrol.*;
+import com.webobjects.foundation.*;
+import java.math.*;
+import java.util.*;
+
+
+@SuppressWarnings("all")
 public abstract class _RequirementType extends ERXGenericRecord {
 
-    public static final String ENTITY = "RequirementType";
+	public static final String ENTITY_NAME = "RequirementType";
 
-    public interface Key  {
-        public static final String TYPE_DESCRIPTION = "typeDescription";  
+    public interface Key {
+	// Attributes
+	   public static final String TYPE_DESCRIPTION = "typeDescription";
+
+	// Relationships
     }
 
-    public static abstract class _RequirementTypeClazz extends ERXGenericRecord.ERXGenericRecordClazz {
- 
-
-        public NSArray objectsForFetchAll(EOEditingContext context) {
-            EOFetchSpecification spec = EOFetchSpecification.fetchSpecificationNamed("FetchAll", "RequirementType");
-
-            return context.objectsWithFetchSpecification(spec);
-        }
-
+    public static class _RequirementTypeClazz extends ERXGenericRecord.ERXGenericRecordClazz<RequirementType> {
+        /* more clazz methods here */
     }
 
+  public String typeDescription() {
+    return (String) storedValueForKey(Key.TYPE_DESCRIPTION);
+  }
+  public void setTypeDescription(String value) {
+    takeStoredValueForKey(value, Key.TYPE_DESCRIPTION);
+  }
 
-    public String typeDescription() {
-        return (String)storedValueForKey(Key.TYPE_DESCRIPTION);
-    }
-    public void setTypeDescription(String aValue) {
-        takeStoredValueForKey(aValue, Key.TYPE_DESCRIPTION);
-    }
 }

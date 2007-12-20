@@ -7,6 +7,8 @@ import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSTimestamp;
 
+import er.extensions.ERXS;
+
 public class Framework extends _Framework {
     static final Logger log = Logger.getLogger(Framework.class);
 
@@ -33,7 +35,7 @@ public class Framework extends _Framework {
     public static class FrameworkClazz extends _FrameworkClazz {
 
         public NSArray orderedFrameworks(EOEditingContext ec) {
-            return objectsForOrderedFrameworks(ec);
+            return objectsMatchingQualifier(ec, null, ERXS.ascs(Key.NAME));
         }
 
     }

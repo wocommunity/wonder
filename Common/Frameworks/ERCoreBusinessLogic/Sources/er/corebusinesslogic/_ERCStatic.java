@@ -1,41 +1,43 @@
-// _ERCStatic.java
-// 
-// Created by eogenerator
-// DO NOT EDIT.  Make changes to ERCStatic.java instead.
+// $LastChangedRevision: 4733 $ DO NOT EDIT.  Make changes to ERCStatic.java instead.
 package er.corebusinesslogic;
-import com.webobjects.foundation.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.eoaccess.*;
-import er.extensions.*;
-import java.util.*;
-import java.math.BigDecimal;
 
+import er.extensions.ERXGenericRecord;
+import com.webobjects.eoaccess.*;
+import com.webobjects.eocontrol.*;
+import com.webobjects.foundation.*;
+import java.math.*;
+import java.util.*;
+
+
+@SuppressWarnings("all")
 public abstract class _ERCStatic extends ERXGenericRecord {
 
-    public static final String ENTITY = "ERCStatic";
+	public static final String ENTITY_NAME = "ERCStatic";
 
-    public interface Key  {
-        public static final String VALUE = "value";
-        public static final String KEY = "key";  
+    public interface Key {
+	// Attributes
+	   public static final String KEY = "key";
+	   public static final String VALUE = "value";
+
+	// Relationships
     }
 
-    public static abstract class _ERCStaticClazz extends ERXGenericRecord.ERXGenericRecordClazz {
- 
-
+    public static class _ERCStaticClazz extends ERXGenericRecord.ERXGenericRecordClazz<ERCStatic> {
+        /* more clazz methods here */
     }
 
+  public String key() {
+    return (String) storedValueForKey(Key.KEY);
+  }
+  public void setKey(String value) {
+    takeStoredValueForKey(value, Key.KEY);
+  }
 
-    public String key() {
-        return (String)storedValueForKey(Key.KEY);
-    }
-    public void setKey(String aValue) {
-        takeStoredValueForKey(aValue, Key.KEY);
-    }
+  public String value() {
+    return (String) storedValueForKey(Key.VALUE);
+  }
+  public void setValue(String value) {
+    takeStoredValueForKey(value, Key.VALUE);
+  }
 
-    public String value() {
-        return (String)storedValueForKey(Key.VALUE);
-    }
-    public void setValue(String aValue) {
-        takeStoredValueForKey(aValue, Key.VALUE);
-    }
 }

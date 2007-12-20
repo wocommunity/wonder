@@ -1,47 +1,43 @@
-// _Priority.java
-// 
-// Created by eogenerator
-// DO NOT EDIT.  Make changes to Priority.java instead.
+// $LastChangedRevision: 4733 $ DO NOT EDIT.  Make changes to Priority.java instead.
 package er.bugtracker;
-import com.webobjects.foundation.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.eoaccess.*;
-import er.extensions.*;
-import java.util.*;
-import java.math.BigDecimal;
 
+import er.extensions.ERXGenericRecord;
+import com.webobjects.eoaccess.*;
+import com.webobjects.eocontrol.*;
+import com.webobjects.foundation.*;
+import java.math.*;
+import java.util.*;
+
+
+@SuppressWarnings("all")
 public abstract class _Priority extends ERXGenericRecord {
 
-    public static final String ENTITY = "Priority";
+	public static final String ENTITY_NAME = "Priority";
 
-    public interface Key  {
-        public static final String TEXT_DESCRIPTION = "textDescription";
-        public static final String SORT_ORDER = "sortOrder";  
+    public interface Key {
+	// Attributes
+	   public static final String SORT_ORDER = "sortOrder";
+	   public static final String TEXT_DESCRIPTION = "textDescription";
+
+	// Relationships
     }
 
-    public static abstract class _PriorityClazz extends ERXGenericRecord.ERXGenericRecordClazz {
- 
-
-        public NSArray objectsForFetchAll(EOEditingContext context) {
-            EOFetchSpecification spec = EOFetchSpecification.fetchSpecificationNamed("FetchAll", "Priority");
-
-            return context.objectsWithFetchSpecification(spec);
-        }
-
+    public static class _PriorityClazz extends ERXGenericRecord.ERXGenericRecordClazz<Priority> {
+        /* more clazz methods here */
     }
 
+  public Integer sortOrder() {
+    return (Integer) storedValueForKey(Key.SORT_ORDER);
+  }
+  public void setSortOrder(Integer value) {
+    takeStoredValueForKey(value, Key.SORT_ORDER);
+  }
 
-    public Number sortOrder() {
-        return (Number)storedValueForKey(Key.SORT_ORDER);
-    }
-    public void setSortOrder(Number aValue) {
-        takeStoredValueForKey(aValue, Key.SORT_ORDER);
-    }
+  public String textDescription() {
+    return (String) storedValueForKey(Key.TEXT_DESCRIPTION);
+  }
+  public void setTextDescription(String value) {
+    takeStoredValueForKey(value, Key.TEXT_DESCRIPTION);
+  }
 
-    public String textDescription() {
-        return (String)storedValueForKey(Key.TEXT_DESCRIPTION);
-    }
-    public void setTextDescription(String aValue) {
-        takeStoredValueForKey(aValue, Key.TEXT_DESCRIPTION);
-    }
 }

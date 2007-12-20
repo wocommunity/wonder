@@ -1,49 +1,51 @@
-// _ERCLogEntry.java
-// 
-// Created by eogenerator
-// DO NOT EDIT.  Make changes to ERCLogEntry.java instead.
+// $LastChangedRevision: 4733 $ DO NOT EDIT.  Make changes to ERCLogEntry.java instead.
 package er.corebusinesslogic;
-import com.webobjects.foundation.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.eoaccess.*;
-import er.extensions.*;
-import java.util.*;
-import java.math.BigDecimal;
 
+import er.extensions.ERXGenericRecord;
+import com.webobjects.eoaccess.*;
+import com.webobjects.eocontrol.*;
+import com.webobjects.foundation.*;
+import java.math.*;
+import java.util.*;
+
+
+@SuppressWarnings("all")
 public abstract class _ERCLogEntry extends ERXGenericRecord {
 
-    public static final String ENTITY = "ERCLogEntry";
+	public static final String ENTITY_NAME = "ERCLogEntry";
 
-    public interface Key  {
-        public static final String USER_ID = "userID";
-        public static final String TEXT = "text";
-        public static final String CREATED = "created";  
-    }
+    public interface Key {
+	// Attributes
+	   public static final String CREATED = "created";
+	   public static final String TEXT = "text";
+	   public static final String USER_ID = "userID";
 
-    public static abstract class _ERCLogEntryClazz extends ERXGenericRecord.ERXGenericRecordClazz {
- 
-
+	// Relationships
     }
 
-
-    public NSTimestamp created() {
-        return (NSTimestamp)storedValueForKey(Key.CREATED);
-    }
-    public void setCreated(NSTimestamp aValue) {
-        takeStoredValueForKey(aValue, Key.CREATED);
+    public static class _ERCLogEntryClazz extends ERXGenericRecord.ERXGenericRecordClazz<ERCLogEntry> {
+        /* more clazz methods here */
     }
 
-    public String text() {
-        return (String)storedValueForKey(Key.TEXT);
-    }
-    public void setText(String aValue) {
-        takeStoredValueForKey(aValue, Key.TEXT);
-    }
+  public NSTimestamp created() {
+    return (NSTimestamp) storedValueForKey(Key.CREATED);
+  }
+  public void setCreated(NSTimestamp value) {
+    takeStoredValueForKey(value, Key.CREATED);
+  }
 
-    public Number userID() {
-        return (Number)storedValueForKey(Key.USER_ID);
-    }
-    public void setUserID(Number aValue) {
-        takeStoredValueForKey(aValue, Key.USER_ID);
-    }
+  public String text() {
+    return (String) storedValueForKey(Key.TEXT);
+  }
+  public void setText(String value) {
+    takeStoredValueForKey(value, Key.TEXT);
+  }
+
+  public Integer userID() {
+    return (Integer) storedValueForKey(Key.USER_ID);
+  }
+  public void setUserID(Integer value) {
+    takeStoredValueForKey(value, Key.USER_ID);
+  }
+
 }

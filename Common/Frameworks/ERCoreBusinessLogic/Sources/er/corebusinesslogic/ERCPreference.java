@@ -5,11 +5,13 @@ import org.apache.log4j.Logger;
 
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.eocontrol.EOKeyValueUnarchiver;
+import com.webobjects.eocontrol.EOQualifier;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSPropertyListSerialization;
 
 import er.extensions.EOEnterpriseObjectClazz;
+import er.extensions.ERXQ;
 
 public class ERCPreference extends _ERCPreference {
     static final Logger log = Logger.getLogger(ERCPreference.class);
@@ -37,13 +39,14 @@ public class ERCPreference extends _ERCPreference {
     // Class methods go here
     
     public static class ERCPreferenceClazz extends _ERCPreferenceClazz {
-    	//AK: compatibility with new templates
-    	public NSArray preferencesWithKey(EOEditingContext ec, String key) {
-    		return objectsForPreferences(ec, key);
+
+        public NSArray preferencesWithKey(EOEditingContext ec, String key) {
+    		return objectsMatchingKeyAndValue(ec, Key.KEY, key);
     	}
-    	//AK: compatibility with new templates
-    	public NSArray userPrefsWithKeyId(EOEditingContext ec, String key, Number id) {
-    		return objectsForUserPrefs(ec, id, key);
+    	
+        public NSArray<ERCPreference> userPrefsWithKeyId(EOEditingContext ec, String key, Number id) {
+            EOQualifier q = ERXQ.and(ERXQ.equals(Key.USER_ID, id), ERXQ.equals(Key.KEY, key));
+    		return objectsMatchingQualifier(ec, q);
     	}
     }
 

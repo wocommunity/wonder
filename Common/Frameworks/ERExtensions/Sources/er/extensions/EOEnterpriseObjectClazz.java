@@ -341,6 +341,17 @@ public class EOEnterpriseObjectClazz<T extends EOEnterpriseObject> {
         return EOUtilities.objectsMatchingKeyAndValue(ec, entityName(), key, value);
     }
     
+    public NSArray<T> objectsMatchingQualifier(EOEditingContext ec, EOQualifier qualifier) {
+        return objectsMatchingQualifier(ec, qualifier, null);
+    }
+    
+    public NSArray<T> objectsMatchingQualifier(EOEditingContext ec, EOQualifier qualifier, NSArray<EOSortOrdering> sortOrdering) {
+        return ec.objectsWithFetchSpecification(new EOFetchSpecification(entityName(), qualifier, sortOrdering));
+    }
+    
+    
+    
+    
     /**
      * Fetches the object matching the given key and value
      * corresponding to the clazz's entity using the
