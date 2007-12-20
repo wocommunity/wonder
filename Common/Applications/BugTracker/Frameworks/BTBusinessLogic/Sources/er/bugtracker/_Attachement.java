@@ -1,50 +1,51 @@
-// _Attachement.java
-// 
-// Created by eogenerator
-// DO NOT EDIT.  Make changes to Attachement.java instead.
+// $LastChangedRevision: 4733 $ DO NOT EDIT.  Make changes to Attachement.java instead.
 package er.bugtracker;
-import com.webobjects.foundation.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.eoaccess.*;
-import er.extensions.*;
-import java.util.*;
-import java.math.BigDecimal;
 
+import er.extensions.ERXGenericRecord;
+import com.webobjects.eoaccess.*;
+import com.webobjects.eocontrol.*;
+import com.webobjects.foundation.*;
+import java.math.*;
+import java.util.*;
+
+
+@SuppressWarnings("all")
 public abstract class _Attachement extends ERXGenericRecord {
 
-    public static final String ENTITY = "Attachement";
+	public static final String ENTITY_NAME = "Attachement";
 
-    public interface Key  {
-        public static final String MIME_TYPE = "mimeType";
-        public static final String FILE_NAME = "fileName";
-        public static final String COMMENT = "comment";  
-    }
+    public interface Key {
+	// Attributes
+	   public static final String FILE_NAME = "fileName";
+	   public static final String MIME_TYPE = "mimeType";
 
-    public static abstract class _AttachementClazz extends ERXGenericRecord.ERXGenericRecordClazz {
- 
-
+	// Relationships
+	   public static final String COMMENT = "comment";
     }
 
-
-    public String fileName() {
-        return (String)storedValueForKey(Key.FILE_NAME);
-    }
-    public void setFileName(String aValue) {
-        takeStoredValueForKey(aValue, Key.FILE_NAME);
+    public static class _AttachementClazz extends ERXGenericRecord.ERXGenericRecordClazz<Attachement> {
+        /* more clazz methods here */
     }
 
-    public String mimeType() {
-        return (String)storedValueForKey(Key.MIME_TYPE);
-    }
-    public void setMimeType(String aValue) {
-        takeStoredValueForKey(aValue, Key.MIME_TYPE);
-    }
+  public String fileName() {
+    return (String) storedValueForKey(Key.FILE_NAME);
+  }
+  public void setFileName(String value) {
+    takeStoredValueForKey(value, Key.FILE_NAME);
+  }
 
-    public er.bugtracker.Comment comment() {
-        return (er.bugtracker.Comment)storedValueForKey(Key.COMMENT);
-    }
-    public void setComment(er.bugtracker.Comment object) {
-        takeStoredValueForKey(object, Key.COMMENT);
-    }
+  public String mimeType() {
+    return (String) storedValueForKey(Key.MIME_TYPE);
+  }
+  public void setMimeType(String value) {
+    takeStoredValueForKey(value, Key.MIME_TYPE);
+  }
+
+  public er.bugtracker.Comment comment() {
+    return (er.bugtracker.Comment)storedValueForKey(Key.COMMENT);
+  }
+  public void setComment(er.bugtracker.Comment value) {
+    takeStoredValueForKey(value, Key.COMMENT);
+  }
 
 }

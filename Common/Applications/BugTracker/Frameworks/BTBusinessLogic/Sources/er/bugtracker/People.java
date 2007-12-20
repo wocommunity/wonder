@@ -11,10 +11,14 @@ import org.apache.log4j.Logger;
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.eocontrol.EOEnterpriseObject;
 import com.webobjects.eocontrol.EOGlobalID;
+import com.webobjects.eocontrol.EOQualifier;
 import com.webobjects.foundation.NSArray;
 
+import er.bugtracker._Framework.Key;
 import er.corebusinesslogic.ERCoreBusinessLogic;
 import er.corebusinesslogic.ERCoreUserInterface;
+import er.extensions.ERXQ;
+import er.extensions.ERXS;
 
 public class People extends _People implements ERCoreUserInterface {
     static final Logger log = Logger.getLogger(People.class);
@@ -68,9 +72,9 @@ public class People extends _People implements ERCoreUserInterface {
             return null;
         }
 
-		private NSArray loginWithUsernamePassword(EOEditingContext ec, String user, String password) {
-            // TODO Auto-generated method stub
-            return objectsForLogin(ec, password, user);
+		private NSArray<People> loginWithUsernamePassword(EOEditingContext ec, String user, String password) {
+            EOQualifier q = ERXQ.and(ERXQ.equals(Key.LOGIN, user), ERXQ.equals(Key.PASSWORD, password));
+            return objectsMatchingQualifier(ec, q);
         }
 
         public People currentUser(EOEditingContext ec) {
@@ -81,8 +85,8 @@ public class People extends _People implements ERCoreUserInterface {
             ERCoreBusinessLogic.setActor(people);
         }
 
-        public NSArray activeUsers(EOEditingContext context) {
-            return objectsForActiveUsers(context);
+        public NSArray activeUsers(EOEditingContext ec) {
+            return objectsMatchingKeyAndValue(ec, Key.IS_ACTIVE, Boolean.TRUE);
         }
     }
 
