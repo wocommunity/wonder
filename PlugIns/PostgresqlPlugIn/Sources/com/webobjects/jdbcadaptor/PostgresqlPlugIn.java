@@ -20,7 +20,7 @@ import com.webobjects.foundation.NSMutableArray;
 public class PostgresqlPlugIn extends JDBCPlugIn {
 
     static {
-        setPlugInNameForSubprotocol("Postgresql", "postgresql");
+        setPlugInNameForSubprotocol(PostgresqlPlugIn.class.getName(), "postgresql");
     }
     
   /**
