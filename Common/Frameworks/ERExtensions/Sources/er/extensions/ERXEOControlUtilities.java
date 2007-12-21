@@ -40,11 +40,13 @@ import com.webobjects.eocontrol.EOQualifier;
 import com.webobjects.eocontrol.EOSharedEditingContext;
 import com.webobjects.eocontrol.EOSortOrdering;
 import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSData;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSForwardException;
 import com.webobjects.foundation.NSKeyValueCoding;
 import com.webobjects.foundation.NSKeyValueCodingAdditions;
 import com.webobjects.foundation.NSMutableArray;
+import com.webobjects.foundation.NSMutableData;
 import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation.NSMutableSet;
 import com.webobjects.foundation.NSPropertyListSerialization;
@@ -992,6 +994,13 @@ public class ERXEOControlUtilities {
                     }
                 }
             } else {
+            	if(rawValue instanceof NSMutableData) {
+                	// AK: wtf!! I got an exception 
+                	// java.lang.IllegalArgumentException: Attempt to create an EOGlobalID for the entity "Asset" with a primary key component of type com.webobjects.foundation.NSMutableData instead of type com.webobjects.foundation.NSData!
+                	// so this is a lame attempt to fix it.
+                	
+            		rawValue = new NSData((NSMutableData)rawValue);
+            	}
                 EOAttribute attribute = (EOAttribute)pks.objectAtIndex(0);
                 Object value = rawValue;
                 value = attribute.validateValue(value);
