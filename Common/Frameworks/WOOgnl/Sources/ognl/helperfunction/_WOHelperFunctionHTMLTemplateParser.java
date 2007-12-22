@@ -97,6 +97,9 @@ public class _WOHelperFunctionHTMLTemplateParser extends WOMiddleManParser imple
 			}
 			if (value.startsWith("$")) {
 				value = value.substring(1);
+				if (value.endsWith("VALID")) {
+					value = value.replaceFirst("\\s*//\\s*VALID", "");
+				}
 				quotedStrings = new NSDictionary();
 			}
 			else {
