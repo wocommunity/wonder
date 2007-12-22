@@ -15,9 +15,11 @@ import com.webobjects.eoaccess.EODatabase;
 import com.webobjects.eoaccess.EODatabaseContext;
 import com.webobjects.eoaccess.EOEntity;
 import com.webobjects.eoaccess.EOModel;
+import com.webobjects.eoaccess.EOObjectNotAvailableException;
 import com.webobjects.eoaccess.EOSQLExpression;
 import com.webobjects.eoaccess.EOSQLExpressionFactory;
 import com.webobjects.eoaccess.EOUtilities;
+import com.webobjects.eoaccess.EOUtilities.MoreThanOneException;
 import com.webobjects.eocontrol.EOAndQualifier;
 import com.webobjects.eocontrol.EOArrayDataSource;
 import com.webobjects.eocontrol.EOClassDescription;
@@ -1233,6 +1235,30 @@ public class ERXEOControlUtilities {
       return matchingObjects;
     }
 
+    /**
+     * Returns the single object of the given type matching the qualifier.
+     *  
+     * @param _editingContext the editing context to look in
+     * @param _entityName the name of the entity to look for
+     * @param _qualifier the qualifier to restrict by
+     * @return he single object of the given type matching the qualifier
+     * @throws EOObjectNotAvailableException if no objects match the qualifier
+     * @throws MoreThanOneException if more than one object matches the qualifier
+     */
+    public static EOEnterpriseObject objectWithQualifier(EOEditingContext _editingContext, String _entityName, EOQualifier _qualifier) {
+        EOFetchSpecification fetchSpec = new EOFetchSpecification(_entityName, _qualifier, null);
+        NSArray results = _editingContext.objectsWithFetchSpecification(fetchSpec);
+        if(results.count() == 0)
+        {
+        	throw new EOObjectNotAvailableException("objectWithQualifier: No objects match qualifier " + _qualifier);
+        }
+        if( results.count() > 1)
+        {
+        	throw new MoreThanOneException("objectMatchingValueForKeyEntityNamed: Matched more than one object with " +_qualifier);
+        }
+        return (EOEnterpriseObject)results.objectAtIndex(0);
+    }
+    
     /**
      * Returns the array of objects of the given type that have been inserted into 
      * the editing context and match the given qualifier.  Yes, it's odd that it
