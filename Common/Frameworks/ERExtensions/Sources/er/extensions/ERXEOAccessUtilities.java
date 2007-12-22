@@ -12,6 +12,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
 import com.webobjects.eoaccess.EOAdaptorChannel;
@@ -100,6 +101,57 @@ public class ERXEOAccessUtilities {
             }
             if (log.isDebugEnabled())
                     log.debug("Found possible entities: " + possibleEntities + " for string: " + string + " result: " + result);
+        }
+        return result;
+    }
+
+    /**
+     * Finds an entity that is associated with the table name. When inheritance is used,
+     * will return the least derived entity using that table.  This can be used to deal 
+     * with database exceptions where you only have the table name to go on. As multiple
+     * entities can map to a single table, the results of this method are inexact.
+     * 
+     * @param ec
+     *            editing context
+     * @param tableName
+     *            table (external) name to find an entity for
+     * @return found entity or null
+     */
+    public static EOEntity entityUsingTable(EOEditingContext ec, String tableName) {
+        EOEntity result = null;
+        NSMutableArray possibleEntities = new NSMutableArray();
+        
+        if (tableName != null) {
+            NSArray entities = ERXUtilities.entitiesForModelGroup(modelGroup(ec));
+            tableName = tableName.toLowerCase();
+
+            for (Enumeration e = entities.objectEnumerator(); e.hasMoreElements();) {
+            	EOEntity entity = (EOEntity)e.nextElement();
+            	if (entity.externalName() != null)
+            	{
+                	String lowercaseTableName = entity.externalName().toLowerCase();
+                    if (tableName.equals(lowercaseTableName))
+                	{
+                    	// Prefer the parent entity as long as it is using the same table
+                        EOEntity root = entity;
+                        while (root != null && root.parentEntity() != null && 
+                        	   lowercaseTableName.equals(root.parentEntity().externalName().toLowerCase()))
+                            root = root.parentEntity();
+                        if ( ! possibleEntities.containsObject(entity))
+                        	possibleEntities.addObject(entity);
+                	}
+            	}
+            }
+
+            if (possibleEntities.count() > 0) {
+                result = (EOEntity) possibleEntities.lastObject();
+            }
+            
+            if (log.isEnabledFor(Level.WARN) && possibleEntities.count() > 1) 
+                log.warn("Found multiple entities: " + possibleEntities.valueForKey("name") + " for table name: " + tableName);
+
+            if (log.isDebugEnabled())
+                log.debug("Found possible entities: " + possibleEntities.valueForKey("name") + " for table name: " + tableName + " result: " + result);
         }
         return result;
     }
