@@ -1234,6 +1234,25 @@ public class ERXEOControlUtilities {
 
       return matchingObjects;
     }
+    
+    /**
+     * Returns the single object of the given type matching the qualifier.
+     *  
+     * @param _editingContext the editing context to look in
+     * @param _entityName the name of the entity to look for
+     * @param _qualifier the qualifier to restrict by
+     * @return the single object of the given type matching the qualifier or null if no matching object found
+     * @throws MoreThanOneException if more than one object matches the qualifier
+     */
+    public static EOEnterpriseObject objectWithQualifier(EOEditingContext _editingContext, String _entityName, EOQualifier _qualifier) {
+        EOFetchSpecification fetchSpec = new EOFetchSpecification(_entityName, _qualifier, null);
+        NSArray results = _editingContext.objectsWithFetchSpecification(fetchSpec);
+        if( results.count() > 1)
+        {
+        	throw new MoreThanOneException("objectMatchingValueForKeyEntityNamed: Matched more than one object with " +_qualifier);
+        }
+        return (results.count() == 0) ? null : (EOEnterpriseObject)results.objectAtIndex(0);
+    }
 
     /**
      * Returns the single object of the given type matching the qualifier.
@@ -1245,18 +1264,13 @@ public class ERXEOControlUtilities {
      * @throws EOObjectNotAvailableException if no objects match the qualifier
      * @throws MoreThanOneException if more than one object matches the qualifier
      */
-    public static EOEnterpriseObject objectWithQualifier(EOEditingContext _editingContext, String _entityName, EOQualifier _qualifier) {
-        EOFetchSpecification fetchSpec = new EOFetchSpecification(_entityName, _qualifier, null);
-        NSArray results = _editingContext.objectsWithFetchSpecification(fetchSpec);
-        if(results.count() == 0)
+    public static EOEnterpriseObject requiredObjectWithQualifier(EOEditingContext _editingContext, String _entityName, EOQualifier _qualifier) {
+        EOEnterpriseObject result = objectWithQualifier(_editingContext, _entityName, _qualifier);
+        if(result == null)
         {
         	throw new EOObjectNotAvailableException("objectWithQualifier: No objects match qualifier " + _qualifier);
         }
-        if( results.count() > 1)
-        {
-        	throw new MoreThanOneException("objectMatchingValueForKeyEntityNamed: Matched more than one object with " +_qualifier);
-        }
-        return (EOEnterpriseObject)results.objectAtIndex(0);
+        return result;
     }
     
     /**
