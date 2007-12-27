@@ -253,7 +253,8 @@ public class ERXDateGrouper extends WODisplayGroup {
     public NSArray datesForCurrentWeek() {
         NSArray result = _datesForCurrentWeek;
         if(result == null) {
-            int weekOfMonth = ERXTimestampUtility.weekOfMonth(selectedDate());
+        	// The weekOfMonth result is one based, not zero based
+            int weekOfMonth = ERXTimestampUtility.weekOfMonth(selectedDate()) - 1;
             result = (NSArray)datesForWeeksForCurrentMonth().objectAtIndex(weekOfMonth);
         }
         return result;
