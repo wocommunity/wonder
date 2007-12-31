@@ -61,6 +61,7 @@ import com.webobjects.foundation.NSKeyValueCodingAdditions;
  * @binding checkHashCodes if true, checks the validity of repetition references during the RR loop
  * @binding raiseOnUnmatchedObject if true, an exception is thrown when the repetition does not find a matching object
  * @binding debugHashCodes if true, prints out hashcodes for each entry in the repetition as it is traversed
+ * @binding batchFetch a comma-separated list of keypaths on the "list" array binding to batch fetch
  * 
  * @author ak
  */
@@ -78,6 +79,7 @@ public class ERXWORepetition extends WODynamicGroup {
 	protected WOAssociation _raiseOnUnmatchedObject;
 	protected WOAssociation _eoSupport;
 	protected WOAssociation _debugHashCodes;
+	protected WOAssociation _batchFetch;
 
 	private static boolean _checkHashCodesDefault = ERXProperties.booleanForKey(ERXWORepetition.class.getName() + ".checkHashCodes");
 	private static boolean _raiseOnUnmatchedObjectDefault = ERXProperties.booleanForKey(ERXWORepetition.class.getName() + ".raiseOnUnmatchedObject");
@@ -161,6 +163,7 @@ public class ERXWORepetition extends WODynamicGroup {
 		_raiseOnUnmatchedObject = (WOAssociation) associations.objectForKey("raiseOnUnmatchedObject");
 		_debugHashCodes = (WOAssociation) associations.objectForKey("debugHashCodes");
 		_eoSupport = (WOAssociation) associations.objectForKey("eoSupport");
+		_batchFetch = (WOAssociation) associations.objectForKey("batchFetch");
 
 		if (_list == null && _count == null) {
 			_failCreation("Missing 'list' or 'count' attribute.");
@@ -323,7 +326,17 @@ public class ERXWORepetition extends WODynamicGroup {
 	}
 
 	protected Context createContext(WOComponent wocomponent) {
-		return new Context(_list != null ? _list.valueInComponent(wocomponent) : null);
+		Object list = (_list != null ? _list.valueInComponent(wocomponent) : null);
+		if (_batchFetch != null && list instanceof NSArray) {
+			String batchFetchKeyPaths = (String)_batchFetch.valueInComponent(wocomponent);
+			if (batchFetchKeyPaths != null) {
+				NSArray<String> keyPaths = NSArray.componentsSeparatedByString(batchFetchKeyPaths, ",");
+				if (keyPaths.count() > 0) {
+					ERXRecursiveBatchFetching.batchFetch((NSArray)list, keyPaths, true);
+				}
+			}
+		}
+		return new Context(list);
 	}
 
 	public void takeValuesFromRequest(WORequest worequest, WOContext wocontext) {
@@ -453,7 +466,7 @@ public class ERXWORepetition extends WODynamicGroup {
 		}
 		return _eoSupportDefault;
 	}
-
+	
 	public void appendToResponse(WOResponse woresponse, WOContext wocontext) {
 		WOComponent wocomponent = wocontext.component();
 		Context context = createContext(wocomponent);
