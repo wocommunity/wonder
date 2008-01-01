@@ -669,7 +669,7 @@ public class ERXPatcher {
 			for (; i < length; i++) {
 				char ch = string.charAt(i);
 
-				if ( isWhiteSpace(ch) ) {
+				if ( isWhiteSpace(ch) || ch == '>' ) {
 					break;
 
 				}
