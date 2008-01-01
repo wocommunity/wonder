@@ -669,7 +669,7 @@ public class ERXPatcher {
 			for (; i < length; i++) {
 				char ch = string.charAt(i);
 
-				if (ch == ' ') {
+				if ( isWhiteSpace(ch) ) {
 					break;
 
 				}
@@ -682,19 +682,15 @@ public class ERXPatcher {
 
 			for (; i < length; i++) {
 				char ch = string.charAt(i);
-				buf.append(ch);
-
-				switch (ch) {
-
-				case ' ':
-					i = consumeAttributeName(string, i + 1, buf);
-					break;
-
-				case '=':
+				
+				if( isWhiteSpace(ch) ) {
+					buf.append(ch);
+					// Consume white space
+				} else if( ch == '=' ) {
+					buf.append(ch);
 					i = consumeAttributeValue(string, i + 1, buf);
-					break;
-
-				case '>':
+				} else if( ch == '>' ) {
+					buf.append(ch);
 					String t = tagName.toString();
 
 					if ("img".equals(t) || "input".equals(t)) {
@@ -702,6 +698,8 @@ public class ERXPatcher {
 					}
 
 					return i - 1;
+				} else {
+					i = consumeAttributeName(string, i, buf);
 				}
 
 			}
@@ -709,22 +707,25 @@ public class ERXPatcher {
 			return length;
 		}
 
+		// FIXME This only works with attribute="value". W3C states one can use attribute='value'. This
+		// method won't support quotes, only double-quotes
 		private static final int consumeAttributeValue(String string, int index, StringBuffer buf) {
 			int length = string.length();
 			boolean hasQuotes;
-			int i;
+			int i = index;
+		
+			while( isWhiteSpace( string.charAt(i) ) ) {
+				i++; // Consume white spaces
+			}
 
 			buf.append('"');
 
-			if (string.charAt(index) != '"') {
+			if (string.charAt(i) != '"') {
 				hasQuotes = false;
-
-				i = index;
-
 			}
 			else {
 				hasQuotes = true;
-				i = index + 1;
+				i++;
 			}
 
 			for (; i < length; i++) {
@@ -783,28 +784,41 @@ public class ERXPatcher {
 		private static final int consumeAttributeName(String string, int index, StringBuffer buf) {
 			StringBuffer attName = new StringBuffer();
 			int length = string.length();
-
+			boolean afterWhiteSpace = false;
+			
 			for (int i = index; i < length; i++) {
 				char ch = string.charAt(i);
 
-				switch (ch) {
-
-				case '=':
+				if( ch == '=' ) {
 					buf.append(attName);
 					return i - 1;
-
-				case ' ':
-
-				case '>':
+				} else if( isWhiteSpace(ch) ) {
+					afterWhiteSpace = true;
+					// Just consume the white space, do nothing
+				} else if( ch == '>' ) {
 					buf.append(attName).append("=\"").append(attName).append("\"");
 					return i - 1;
-
-				default:
-					attName.append(ch);
+				} else {
+					if( afterWhiteSpace ) {
+						buf.append(attName).append("=\"").append(attName).append("\"");
+						return i - 2;
+					} else {
+						attName.append(ch);
+					}
 				}
 			}
 
 			return length;
+		}
+		
+		/**
+		 * Returns true if ch is an white space character, false otherwise.
+		 * 
+		 * @param ch
+		 * @return true if ch is white space character, false otherwise.
+		 */
+		private static final boolean isWhiteSpace( char ch ) {
+			return ch == ' ' || ch == '\n' || ch == '\r' || ch == '\t';
 		}
 
 		/**
