@@ -99,12 +99,8 @@ public class ERXArrayUtilities extends Object {
     /**
      * Groups an array of objects by a given key path. The dictionary
      * that is returned contains keys that correspond to the grouped
-     * keys values. This means that the object pointed to by the key
-     * path must be a cloneable object. For instance using the key path
-     * 'company' would not work because enterprise objects are not
-     * cloneable. Instead you might choose to use the key path 'company.name'
-     * or 'company.primaryKey', if your enterprise objects support this
-     * see {@link ERXGenericRecord} if interested.
+     * keys values. 
+     * 
      * @param objects array of objects to be grouped
      * @param keyPath path used to group the objects.
      * @return a dictionary where the keys are the grouped values and the
@@ -119,12 +115,8 @@ public class ERXArrayUtilities extends Object {
     /**
      * Groups an array of objects by a given key path. The dictionary
      * that is returned contains keys that correspond to the grouped
-     * keys values. This means that the object pointed to by the key
-     * path must be a cloneable object. For instance using the key path
-     * 'company' would not work because enterprise objects are not
-     * cloneable. Instead you might choose to use the key path 'company.name'
-     * of 'company.primaryKey', if your enterprise objects support this
-     * see {@link ERXGenericRecord} if interested.
+     * keys values. 
+     * 
      * @param eos array of objects to be grouped
      * @param keyPath path used to group the objects.
      * @param includeNulls determines if keyPaths that resolve to null
