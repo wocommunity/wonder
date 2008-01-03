@@ -20,6 +20,7 @@ public class ERORedirectionForm extends WOComponent {
     super(context);
   }
 
+  @Override
   public boolean synchronizesVariablesWithBindings() {
     return false;
   }

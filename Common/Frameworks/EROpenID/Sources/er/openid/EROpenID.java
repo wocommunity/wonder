@@ -8,6 +8,7 @@ import er.extensions.ERXFrameworkPrincipal;
  * @author mschrag
  */
 public class EROpenID extends ERXFrameworkPrincipal {
+  @Override
   public void finishInitialization() {
     // DO NOTHING
   }

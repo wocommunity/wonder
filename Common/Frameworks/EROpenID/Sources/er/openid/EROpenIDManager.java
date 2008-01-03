@@ -62,8 +62,9 @@ public class EROpenIDManager {
      * @param request the WORequest
      * @param context the WOContext
      * @return a FetchRequest
+     * @throws MessageException 
      */
-    public FetchRequest createFetchRequest(String userSuppliedString, WORequest request, WOContext context);
+    public FetchRequest createFetchRequest(String userSuppliedString, WORequest request, WOContext context) throws MessageException;
 
     /**
      * Called after a response is received from the OpenID server.
@@ -102,7 +103,8 @@ public class EROpenIDManager {
    * The default delegate implementation.
    */
   public static class DefaultDelegate implements EROpenIDManager.Delegate {
-    public FetchRequest createFetchRequest(String userSuppliedString, WORequest request, WOContext context) {
+    @SuppressWarnings("unused")
+    public FetchRequest createFetchRequest(String userSuppliedString, WORequest request, WOContext context) throws MessageException {
       return null;
     }
 
@@ -154,7 +156,8 @@ public class EROpenIDManager {
    * A simple delegate implementation that requests the user's email address.
    */
   public static class EmailDelegate extends EROpenIDManager.DefaultDelegate {
-    public FetchRequest createFetchRequest(String userSuppliedString, WORequest request, WOContext context) {
+    @Override
+    public FetchRequest createFetchRequest(String userSuppliedString, WORequest request, WOContext context) throws MessageException {
       FetchRequest fetchRequest = FetchRequest.createFetchRequest();
       fetchRequest.addAttribute("email", "http://schema.openid.net/contact/email", true);
       return fetchRequest;
