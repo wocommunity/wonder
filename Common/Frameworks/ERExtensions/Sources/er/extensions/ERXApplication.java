@@ -550,13 +550,13 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 				}
 				if (systemLibs.length() > 1) {
 					systemLibs = systemLibs.substring(0, systemLibs.length() - 1);
-					newCP += (newCP.length() > 0 ? ":" : "") + systemLibs;
+					newCP += (newCP.length() > 0 ? File.pathSeparator : "") + systemLibs;
 				}
 				if (jarLibs.length() > 1) {
 					jarLibs = jarLibs.substring(0, jarLibs.length() - 1);
-					newCP += (newCP.length() > 0 ? ":" : "") + jarLibs;
+					newCP += (newCP.length() > 0 ? File.pathSeparator : "") + jarLibs;
 				}
-				String jars[] = newCP.split(":");
+				String jars[] = newCP.split(File.pathSeparator);
 				for (int i = 0; i < jars.length; i++) {
 					String jar = jars[i];
 					checker.processJar(jar);
