@@ -24,14 +24,14 @@ import com.webobjects.foundation.NSMutableDictionary;
  */
 public  class ERXRequest extends WORequest {
 
-    /** logging support */
+	/** logging support */
     public static final Logger log = Logger.getLogger(ERXRequest.class);
 
     protected static Boolean isBrowserFormValueEncodingOverrideEnabled;
 
     protected static final String UNKNOWN_HOST = "UNKNOWN";
 
-    protected static final NSArray<String> HOST_ADDRESS_KEYS = new NSArray<String>(new String[]{"remote_host", "remote_addr", "remote_user", "x-webobjects-remote-addr"});
+    protected static final NSArray<String> HOST_ADDRESS_KEYS = new NSArray<String>(new String[]{"pc-remote-addr", "remote_host", "remote_addr", "remote_user", "x-webobjects-remote-addr"});
 
     protected static final NSArray<String> HOST_NAME_KEYS = new NSArray<String>(new String[]{"x-forwarded-host", "Host", "x-webobjects-server-name", "server_name", "http_host"});
     
@@ -45,8 +45,8 @@ public  class ERXRequest extends WORequest {
     public WOContext context() {
     	return _context();
     }
-    
-    /** Simply call superclass constructor */
+
+     /** Simply call superclass constructor */
     public ERXRequest(String string, String string0, String string1,
                       NSDictionary nsdictionary, NSData nsdata,
                       NSDictionary nsdictionary2) {
@@ -56,7 +56,7 @@ public  class ERXRequest extends WORequest {
             setDefaultFormValueEncoding(browser().formValueEncoding());
         }
     }
-
+    
     /** NSArray to keep browserLanguages in. */
     protected  NSArray _browserLanguages;
 
@@ -358,8 +358,9 @@ public  class ERXRequest extends WORequest {
             }
         }
         for (String key : HOST_ADDRESS_KEYS) {
-			if (headerForKey(key) != null) {
-				return headerForKey(key);
+        	String remoteAddressHeaderValue = headerForKey(key); 
+			if (remoteAddressHeaderValue != null) {
+				return remoteAddressHeaderValue;
 			}
 		}
         return UNKNOWN_HOST;
