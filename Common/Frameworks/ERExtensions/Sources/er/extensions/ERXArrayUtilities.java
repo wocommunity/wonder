@@ -1617,4 +1617,78 @@ public class ERXArrayUtilities extends Object {
         return result;
     }
     
+    
+	/**
+	 * Swaps the two given {@link Object}s in the given {@link NSArray} and
+	 * returns a new {@link NSArray}. If one of the {@link Object}s is not
+	 * element of the {@link NSArray} a {@link RuntimeException} will be thrown.
+	 * 
+	 * @author edgar - Jan 7, 2008
+	 * @param array
+	 *            in that the two given {@link Object}s have to be swapped
+	 * @param object1
+	 *            one object in the {@link NSArray} that will be swapped
+	 * @param object2
+	 *            the other object in the {@link NSArray} that will be swapped
+	 * 
+	 * @return the new {@link NSArray} with the swapped elements, if you provide
+	 *         an {@link NSMutableArray} you'll get a mutable array back, a normal
+	 *         NSArray otherwise
+	 * 
+	 * @throws {@link RuntimeException}
+	 *             if one of the {@link Object}s is not in the {@link NSArray}
+	 */
+    public static NSArray swapObjects(NSArray array, final Object object1, final Object object2) {
+    	int indexOfObject1 = array.indexOf(object1);
+    	int indexOfObject2 = array.indexOf(object2);
+    	
+    	if (indexOfObject1 >= 0 && indexOfObject2 >= 0) {
+    		return ERXArrayUtilities.swapObjectesAtIndexes(array, indexOfObject1, indexOfObject2);
+    	}
+    	else {
+    		throw new RuntimeException("One of the given objects is not element of the array!");
+    	}
+    }
+
+	/**
+	 * Swaps the two objects at the given indexes in the given {@link NSArray} and
+	 * returns a new {@link NSArray}.
+	 * 
+	 * @author edgar - Jan 7, 2008
+	 * @param array in that the two {@link Object}s at the given indexes have to be swapped
+	 * @param indexOfObject1 index of one object in the {@link NSArray} that will be swapped
+	 * @param indexOfObject2 index of the other object in the {@link NSArray} that will be swapped
+	 * 
+	 * @return the new {@link NSArray} with the swapped elements, if you provide
+	 *         an {@link NSMutableArray} you'll get a mutable array back, a normal
+	 *         NSArray otherwise
+	 * 
+	 * @throws {@link RuntimeException} if one of the indexes is out of bound
+	 */
+	public static NSArray swapObjectesAtIndexes(NSArray array, final int indexOfObject1, final int indexOfObject2) {
+		NSMutableArray tmpArray;
+		if (array instanceof NSMutableArray) {
+			tmpArray = (NSMutableArray) array;
+		}
+		else {
+			tmpArray = array.mutableClone();
+		}
+
+		try {
+			Object tmpObject = array.objectAtIndex(indexOfObject1);
+			tmpArray.set(indexOfObject1, array.objectAtIndex(indexOfObject2));
+			tmpArray.set(indexOfObject2, tmpObject);
+		}
+		catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+		
+		if (array instanceof NSMutableArray) {
+			return tmpArray;
+		}
+		else {
+			return tmpArray.immutableClone();
+		}
+	}
+
 }
