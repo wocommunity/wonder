@@ -23,7 +23,7 @@ import er.extensions.ERXProperties;
  */
 public class ERDatabaseAttachmentProcessor extends ERAttachmentProcessor<ERDatabaseAttachment> {
   @Override
-  public ERDatabaseAttachment _process(EOEditingContext editingContext, File uploadedFile, String recommendedFileName, String mimeType, String configurationName, String ownerID) throws IOException {
+  public ERDatabaseAttachment _process(EOEditingContext editingContext, File uploadedFile, String recommendedFileName, String mimeType, String configurationName, String ownerID, boolean pendingDelete) throws IOException {
     String webPath = ERXProperties.stringForKey("er.attachment." + configurationName + ".db.webPath");
     if (webPath == null) {
       webPath = ERXProperties.stringForKeyWithDefault("er.attachment.db.webPath", "/${pk}${ext}");
@@ -66,7 +66,9 @@ public class ERDatabaseAttachmentProcessor extends ERAttachmentProcessor<ERDatab
       throw e;
     }
     finally {
-      uploadedFile.delete();
+      if (pendingDelete) {
+        uploadedFile.delete();
+      }
     }
 
     return attachment;
@@ -95,7 +97,7 @@ public class ERDatabaseAttachmentProcessor extends ERAttachmentProcessor<ERDatab
   public String attachmentUrl(ERDatabaseAttachment attachment, WORequest request, WOContext context) {
     return proxiedUrl(attachment, context);
   }
-  
+
   @Override
   public void deleteAttachment(ERDatabaseAttachment attachment) {
     // cascade delete rules do this for us ...

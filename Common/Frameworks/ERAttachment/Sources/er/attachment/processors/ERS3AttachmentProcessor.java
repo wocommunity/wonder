@@ -43,7 +43,7 @@ public class ERS3AttachmentProcessor extends ERAttachmentProcessor<ERS3Attachmen
   }
 
   @Override
-  public ERS3Attachment _process(EOEditingContext editingContext, File uploadedFile, String recommendedFileName, String mimeType, String configurationName, String ownerID) {
+  public ERS3Attachment _process(EOEditingContext editingContext, File uploadedFile, String recommendedFileName, String mimeType, String configurationName, String ownerID, boolean pendingDelete) {
     String bucket = ERXProperties.decryptedStringForKey("er.attachment." + configurationName + ".s3.bucket");
     if (bucket == null) {
       bucket = ERXProperties.decryptedStringForKey("er.attachment.s3.bucket");
@@ -68,13 +68,15 @@ public class ERS3AttachmentProcessor extends ERAttachmentProcessor<ERS3Attachmen
       String s3Path = queryStringAuthGenerator(configurationName).makeBareURL(bucket, key);
       attachment.setS3Path(s3Path);
 
-      attachment._setPendingUploadFile(uploadedFile);
+      attachment._setPendingUploadFile(uploadedFile, pendingDelete);
 
       //performUpload(uploadedFile, bucket, key, attachment.mimeType(), configurationName);
     }
     catch (RuntimeException e) {
       attachment.delete();
-      uploadedFile.delete();
+      if (pendingDelete) {
+        uploadedFile.delete();
+      }
       throw e;
     }
 
@@ -246,7 +248,11 @@ public class ERS3AttachmentProcessor extends ERAttachmentProcessor<ERS3Attachmen
         }
         catch (Throwable t) {
           ERAttachmentProcessor.log.error("Failed to upload '" + uploadedFile + "' to S3.", t);
-          uploadedFile.delete();
+        }
+        finally {
+          if (attachment._isPendingDelete()) {
+            uploadedFile.delete();
+          }
         }
 
         _editingContext.lock();

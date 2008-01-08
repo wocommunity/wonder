@@ -19,16 +19,21 @@ public class ERS3Attachment extends _ERS3Attachment {
   private static Logger log = Logger.getLogger(ERS3Attachment.class);
 
   private File _pendingUploadFile;
+  private boolean _pendingDelete;
   
   public ERS3Attachment() {
   }
   
-  public void _setPendingUploadFile(File pendingUploadFile) {
+  public void _setPendingUploadFile(File pendingUploadFile, boolean pendingDelete) {
     _pendingUploadFile = pendingUploadFile;
   }
   
   public File _pendingUploadFile() {
     return _pendingUploadFile;
+  }
+  
+  public boolean _isPendingDelete() {
+    return _pendingDelete;
   }
 
   @Override

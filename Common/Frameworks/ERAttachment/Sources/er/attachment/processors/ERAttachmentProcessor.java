@@ -172,6 +172,21 @@ public abstract class ERAttachmentProcessor<T extends ERAttachment> {
 
   /**
    * Processes an uploaded file, imports it into the appropriate data store, and returns an ERAttachment that
+   * represents it.  uploadedFile will NOT be deleted after the import process is complete.
+   * 
+   * @param editingContext the EOEditingContext to create the ERAttachment in
+   * @param uploadedFile the file to attach (which will NOT be deleted at the end)
+   * @return an ERAttachment that represents the file
+   * @throws IOException if the processing fails
+   */
+  public T process(EOEditingContext editingContext, File uploadedFile) throws IOException {
+    ERPendingAttachment pendingAttachment = new ERPendingAttachment(uploadedFile, uploadedFile.getName(), null, null, null);
+    pendingAttachment.setPendingDelete(false);
+    return process(editingContext, pendingAttachment);
+  }
+
+  /**
+   * Processes an uploaded file, imports it into the appropriate data store, and returns an ERAttachment that
    * represents it.  uploadedFile will be deleted after the import process is complete.
    * 
    * @param editingContext the EOEditingContext to create the ERAttachment in
@@ -234,7 +249,9 @@ public abstract class ERAttachmentProcessor<T extends ERAttachment> {
       maxSize = ERXProperties.longForKeyWithDefault("er.attachment.maxSize", 0);
     }
     if (maxSize > 0 && uploadedFile.length() > maxSize) {
-      uploadedFile.delete();
+      if (pendingAttachment.isPendingDelete()) {
+        uploadedFile.delete();
+      }
       ERXValidationException maxSizeExceededException = new ERXValidationException("AttachmentExceedsMaximumLengthException", uploadedFile, "size");
       maxSizeExceededException.takeValueForKey(Long.valueOf(maxSize), "maxSize");
       maxSizeExceededException.takeValueForKey(recommendedFileName, "recommendedFileName");
@@ -262,7 +279,7 @@ public abstract class ERAttachmentProcessor<T extends ERAttachment> {
     }
 
     String ownerID = pendingAttachment.ownerID();
-    T attachment = _process(editingContext, uploadedFile, recommendedFileName, suggestedMimeType, configurationName, ownerID);
+    T attachment = _process(editingContext, uploadedFile, recommendedFileName, suggestedMimeType, configurationName, ownerID, pendingAttachment.isPendingDelete());
     attachment.setConfigurationName(configurationName);
     attachment.setOwnerID(ownerID);
 
@@ -305,11 +322,12 @@ public abstract class ERAttachmentProcessor<T extends ERAttachment> {
    * @param recommendedFilePath the filename recommended by the user during import
    * @param mimeType the mimeType to use (null = guess based on file extension)
    * @param configurationName the name of the configuration settings to use for this processor (see top level docs)
-   * @param ownerID an arbitrary string that represents the ID of the "owner" of this thumbnail (Person.primaryKey, for instance) 
+   * @param ownerID an arbitrary string that represents the ID of the "owner" of this thumbnail (Person.primaryKey, for instance)
+   * @param pendingDelete if true, the uploadedFile will be deleted after import; if false, it will be left alone
    * @return an ERAttachment that represents the file
    * @throws IOException if the processing fails
    */
-  public abstract T _process(EOEditingContext editingContext, File uploadedFile, String recommendedFileName, String mimeType, String configurationName, String ownerID) throws IOException;
+  public abstract T _process(EOEditingContext editingContext, File uploadedFile, String recommendedFileName, String mimeType, String configurationName, String ownerID, boolean pendingDelete) throws IOException;
 
   /**
    * Returns an InputStream to the data of the given attachment.
