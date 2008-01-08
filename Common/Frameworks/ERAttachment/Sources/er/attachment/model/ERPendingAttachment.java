@@ -16,6 +16,7 @@ public class ERPendingAttachment {
   private String _mimeType;
   private String _configurationName;
   private String _ownerID;
+  private boolean _pendingDelete;
 
   /**
    * Constructs an ERPendingAttachment.
@@ -67,6 +68,7 @@ public class ERPendingAttachment {
     _mimeType = mimeType;
     _configurationName = configurationName;
     _ownerID = ownerID;
+    _pendingDelete = true;
   }
 
   /**
@@ -166,6 +168,23 @@ public class ERPendingAttachment {
    */
   public void setOwnerID(String ownerID) {
     _ownerID = ownerID;
+  }
+  
+  /**
+   * Sets whether or not this attachment should be deleted after import.
+   * 
+   * @param pendingDelete whether or not this attachment should be deleted after import
+   */
+  public void setPendingDelete(boolean pendingDelete) {
+    _pendingDelete = pendingDelete;
+  }
+  
+  /**
+   * Returns whether or not this attachment should be deleted after import.
+   * @return whether or not this attachment should be deleted after import
+   */
+  public boolean isPendingDelete() {
+    return _pendingDelete;
   }
 
   @Override
