@@ -12,6 +12,7 @@ import java.util.Vector;
 
 import org.apache.log4j.Logger;
 
+import com.openbase.a.a;
 import com.webobjects.eoaccess.EOEntity;
 import com.webobjects.eoaccess.EOModelGroup;
 import com.webobjects.eocontrol.EOEnterpriseObject;
@@ -1631,22 +1632,20 @@ public class ERXArrayUtilities extends Object {
 	 * @param object2
 	 *            the other object in the {@link NSArray} that will be swapped
 	 * 
-	 * @return the new {@link NSArray} with the swapped elements, if you provide
-	 *         an {@link NSMutableArray} you'll get a mutable array back, a normal
-	 *         NSArray otherwise
+	 * @return the new {@link NSArray} with the swapped elements
 	 * 
 	 * @throws {@link RuntimeException}
 	 *             if one of the {@link Object}s is not in the {@link NSArray}
 	 */
-    public static NSArray swapObjects(NSArray array, final Object object1, final Object object2) {
+    public static NSArray arrayWithObjectsSwapped(final NSArray array, final Object object1, final Object object2) {
     	int indexOfObject1 = array.indexOf(object1);
     	int indexOfObject2 = array.indexOf(object2);
     	
     	if (indexOfObject1 >= 0 && indexOfObject2 >= 0) {
-    		return ERXArrayUtilities.swapObjectesAtIndexes(array, indexOfObject1, indexOfObject2);
+    		return ERXArrayUtilities.arrayWithObjectsAtIndexesSwapped(array, indexOfObject1, indexOfObject2);
     	}
     	else {
-    		throw new RuntimeException("One of the given objects is not element of the array!");
+    		throw new RuntimeException("At least one of the given objects is not element of the array!");
     	}
     }
 
@@ -1659,21 +1658,15 @@ public class ERXArrayUtilities extends Object {
 	 * @param indexOfObject1 index of one object in the {@link NSArray} that will be swapped
 	 * @param indexOfObject2 index of the other object in the {@link NSArray} that will be swapped
 	 * 
-	 * @return the new {@link NSArray} with the swapped elements, if you provide
-	 *         an {@link NSMutableArray} you'll get a mutable array back, a normal
-	 *         NSArray otherwise
+	 * @return the new {@link NSArray} with the swapped elements
 	 * 
 	 * @throws {@link RuntimeException} if one of the indexes is out of bound
 	 */
-	public static NSArray swapObjectesAtIndexes(NSArray array, final int indexOfObject1, final int indexOfObject2) {
-		NSMutableArray tmpArray;
-		if (array instanceof NSMutableArray) {
-			tmpArray = (NSMutableArray) array;
+	public static NSArray arrayWithObjectsAtIndexesSwapped(final NSArray array, final int indexOfObject1, final int indexOfObject2) {
+		if (array == null || array.count() < 2) {
+			throw new RuntimeException ("Array is either null or does not have enough elements.");
 		}
-		else {
-			tmpArray = array.mutableClone();
-		}
-
+		NSMutableArray tmpArray = array.mutableClone();
 		try {
 			Object tmpObject = array.objectAtIndex(indexOfObject1);
 			tmpArray.set(indexOfObject1, array.objectAtIndex(indexOfObject2));
@@ -1683,12 +1676,54 @@ public class ERXArrayUtilities extends Object {
 			throw new RuntimeException(e);
 		}
 		
-		if (array instanceof NSMutableArray) {
-			return tmpArray;
+		return tmpArray.immutableClone();
+	}
+
+	/**
+	 * Swaps two objects a and b in an array inplace 
+	 * 
+	 * @author cug - Jan 7, 2008
+	 * 
+	 * @param array the array 
+	 * @param a - first object
+	 * @param b - second object
+	 * 
+	 * @throws {@link RuntimeException} if one or both indexes are out of bounds
+	 */
+	public static void swapObjectsInArray (NSMutableArray array, Object a, Object b) {
+		if (array == null || array.count() < 2) {
+			throw new RuntimeException ("Array is either null or does not have enough elements.");
+		}
+		int indexOfA = array.indexOf(a);
+		int indexOfB = array.indexOf(b);
+		
+		if (indexOfA >= 0 && indexOfB >= 0) {
+			ERXArrayUtilities.swapObjectsAtIndexesInArray(array, indexOfA, indexOfB);
 		}
 		else {
-			return tmpArray.immutableClone();
+			throw new RuntimeException ("At least one of the objects is not element of the array!");
 		}
 	}
 
+	/**
+	 * Swaps two objects at the given indexes in an array inplace 
+	 * 
+	 * @author cug - Jan 7, 2008
+	 * 
+	 * @param array the array 
+	 * @param a - index of the first object
+	 * @param b - index of the second object
+	 * 
+	 * @throws {@link RuntimeException} if one or both indexes are out of bounds
+	 */
+	public static void swapObjectsAtIndexesInArray (NSMutableArray array, int indexOfA, int indexOfB) {
+		try {
+			Object tmp = array.replaceObjectAtIndex(array.objectAtIndex(indexOfA), indexOfB);
+			array.replaceObjectAtIndex(tmp, indexOfA);
+		}
+		catch (Exception e) {
+			throw new RuntimeException();
+		}
+	}
+	
 }
