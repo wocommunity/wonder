@@ -23,7 +23,7 @@ import er.extensions.ERXProperties;
  */
 public class ERFileAttachmentProcessor extends ERAttachmentProcessor<ERFileAttachment> {
   @Override
-  public ERFileAttachment _process(EOEditingContext editingContext, File uploadedFile, String recommendedFileName, String mimeType, String configurationName, String ownerID) throws IOException {
+  public ERFileAttachment _process(EOEditingContext editingContext, File uploadedFile, String recommendedFileName, String mimeType, String configurationName, String ownerID, boolean pendingDelete) throws IOException {
     boolean proxy = true;
     String proxyStr = ERXProperties.stringForKey("er.attachment." + configurationName + ".file.proxy");
     if (proxyStr == null) {
@@ -92,6 +92,11 @@ public class ERFileAttachmentProcessor extends ERAttachmentProcessor<ERFileAttac
     catch (RuntimeException e) {
       attachment.delete();
       throw e;
+    }
+    finally {
+      if (pendingDelete && uploadedFile.exists()) {
+        uploadedFile.delete();
+      }
     }
 
     return attachment;
