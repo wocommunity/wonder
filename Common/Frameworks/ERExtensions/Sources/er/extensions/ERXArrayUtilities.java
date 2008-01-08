@@ -12,7 +12,6 @@ import java.util.Vector;
 
 import org.apache.log4j.Logger;
 
-import com.openbase.a.a;
 import com.webobjects.eoaccess.EOEntity;
 import com.webobjects.eoaccess.EOModelGroup;
 import com.webobjects.eocontrol.EOEnterpriseObject;
