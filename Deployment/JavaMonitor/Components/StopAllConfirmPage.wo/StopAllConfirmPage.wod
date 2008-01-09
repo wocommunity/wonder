@@ -11,4 +11,5 @@ DeleteClicked: WOHyperlink {
 }
 NavPage: NavigationPage {
 	currentPage = APP_PAGE;
+	title = "Stop all";
 }

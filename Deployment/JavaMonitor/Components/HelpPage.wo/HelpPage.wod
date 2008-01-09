@@ -1,4 +1,5 @@
 NavPage: NavigationPage {
 	currentPage = HELP_PAGE;
+	title = "Help";
 }
 

@@ -182,6 +182,7 @@ Option3Form: WOForm {
 
 NavPage: NavigationPage {
 	currentPage = APP_PAGE;
+	title = appDefaults.name;
 }
 
 PathField: WOTextField {

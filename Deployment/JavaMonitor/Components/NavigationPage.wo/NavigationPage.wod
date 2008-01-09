@@ -17,6 +17,10 @@ AppleImage: WOImage {
 	border = 0;
 }
 
+Content : WOComponentContent {
+	
+}
+
 BackgroundContainer: WOGenericContainer {
 	elementName = "TD";
 	vAlign = "top";
@@ -86,4 +90,8 @@ SiteImage: WOImage {
 }
 SiteLink: WOHyperlink {
 	action = ConfigurePageClicked;
+}
+
+Title : WOString {
+  value = pageTitle;
 }

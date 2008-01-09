@@ -207,6 +207,7 @@ MessageString: WOString {
 
 NavPage: NavigationPage {
 	currentPage = APP_PAGE;
+	title = mySession.mApplication.name;
 }
 
 NextShutdown: WOString {

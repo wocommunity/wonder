@@ -44,10 +44,16 @@ public class NavigationPage extends MonitorComponent {
 
     public int currentPage = APP_PAGE;
 
+    public String title;
+    
     public NavigationPage(WOContext aWocontext) {
         super(aWocontext);
     }
 
+    public String pageTitle() {
+        return "WOMonitor: " + title;
+    }
+    
     public String barImageName() {
         return _barImageNames[currentPage];
     }

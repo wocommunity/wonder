@@ -49,6 +49,7 @@ InstName: WOString {
 
 NavPage: NavigationPage {
 	currentPage = APP_PAGE;
+	title = mySession.mInstance.displayName;
 }
 
 Path: WOTextField {
