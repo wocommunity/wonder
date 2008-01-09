@@ -16,7 +16,7 @@ import com.webobjects.appserver.WOContext;
 
 public class WotaskdInfoPage extends WOComponent {
 	private static final long	serialVersionUID	= 8612062376203913798L;
-	String wotaskdText;
+	public String wotaskdText;
 
     public WotaskdInfoPage(WOContext context) {
         super(context);

@@ -31,10 +31,10 @@ public class Session extends WOSession  {
 	public boolean  _isLoggedIn;
     private Application theApplication;
 
-    MApplication mApplication;
-    MInstance mInstance;
-    MSiteConfig mSiteConfig;
-    MHost mHost;
+    public MApplication mApplication;
+    public MInstance mInstance;
+    public MSiteConfig mSiteConfig;
+    public MHost mHost;
 
     public Session() {
         super();

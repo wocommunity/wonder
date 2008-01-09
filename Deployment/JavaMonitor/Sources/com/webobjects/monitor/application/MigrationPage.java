@@ -27,22 +27,22 @@ public class MigrationPage extends MonitorComponent {
 	 * serialVersionUID
 	 */
 	private static final long	serialVersionUID	= -1317986389844426074L;
-	protected String host;
-    protected String username;
+	public String host;
+	public String username;
 	
 	// for SSH identity file upload
-	protected NSData sshIdentityContent;
-	protected String sshIdentityFilepath;
+    public NSData sshIdentityContent;
+	public String sshIdentityFilepath;
 
-	protected String remoteFilepath;
-    protected Boolean shouldRestartApache;
+	public String remoteFilepath;
+	public Boolean shouldRestartApache;
 
 	// for UI
-    protected String migrationStackTrace = null;
+	public String migrationStackTrace = null;
 	
 	// internal use
-	protected String adaptorConfigContent;
-	protected String adaptorConfigLocalFilepath;// = "/tmp/http-webobjects.conf";
+	public String adaptorConfigContent;
+	public String adaptorConfigLocalFilepath;// = "/tmp/http-webobjects.conf";
 
     public MigrationPage(WOContext aWocontext) {
         super(aWocontext);
