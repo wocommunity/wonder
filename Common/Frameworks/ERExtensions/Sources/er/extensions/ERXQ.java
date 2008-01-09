@@ -490,7 +490,7 @@ public class ERXQ {
 	 * @return an ERXOrQualifier
 	 */
 	public static ERXOrQualifier containsAny(String key, String tokensWithWhitespace) {
-		String[] searchStrings = tokensWithWhitespace.split("\\s*");
+		String[] searchStrings = tokensWithWhitespace.split("\\s+");
 		return ERXQ.containsAny(key, searchStrings);
 	}
 
@@ -531,7 +531,7 @@ public class ERXQ {
 	 * @return an ERXAndQualifier
 	 */
 	public static ERXAndQualifier containsAll(String key, String tokensWithWhitespace) {
-		String[] searchStrings = tokensWithWhitespace.split("\\s*");
+		String[] searchStrings = tokensWithWhitespace.split("\\s+");
 		return ERXQ.containsAll(key, searchStrings);
 	}
 
