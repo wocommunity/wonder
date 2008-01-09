@@ -39,6 +39,7 @@ ErrorMsg: WOString {
 
 NavPage: NavigationPage {
 	currentPage = PREF_PAGE;
+	title = "Preferences";
 }
 
 PasswordChangeForm: WOForm {

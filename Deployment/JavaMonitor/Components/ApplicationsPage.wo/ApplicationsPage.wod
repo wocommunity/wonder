@@ -78,6 +78,7 @@ MessageString: WOString {
 
 NavPage: NavigationPage {
 	currentPage = APP_PAGE;
+	title = "Applications";
 }
 
 RunningInstancesCount: WOString {

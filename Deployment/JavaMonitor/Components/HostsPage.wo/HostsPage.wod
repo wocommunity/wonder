@@ -67,6 +67,7 @@ InstanceCount: WOString {
 
 NavPage: NavigationPage {
 	currentPage = HOST_PAGE;
+	title = "Hosts";
 }
 
 PopUpButton1: WOPopUpButton {
@@ -82,7 +83,7 @@ RemoveHostLink: WOHyperlink {
     action = removeHostClicked;
 }
 
-String1: WOString {
+HostType: WOString {
 	value = currentHost.type;
 }
 wotaskdLink: WOHyperlink {

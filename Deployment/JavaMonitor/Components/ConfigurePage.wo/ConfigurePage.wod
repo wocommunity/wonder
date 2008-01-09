@@ -39,6 +39,7 @@ LoadBalancingScheme: WOPopUpButton {
 
 NavPage: NavigationPage {
 	currentPage = SITE_PAGE;
+	title = "Configure";
 }
 
 PoolsizeField: WOTextField {

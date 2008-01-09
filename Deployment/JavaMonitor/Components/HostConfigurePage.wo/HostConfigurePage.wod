@@ -27,6 +27,8 @@ ErrorMsg: WOString {
 
 NavPage: NavigationPage {
 	currentPage = HOST_PAGE;
+	title = mySession.mHost.name;
+
 }
 
 
