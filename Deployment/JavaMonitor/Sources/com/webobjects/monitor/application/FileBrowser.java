@@ -26,21 +26,21 @@ public class FileBrowser extends MonitorComponent  {
     }
 	private static final long	serialVersionUID	= 7523872426979817711L;
 
-    String startingPath;  // passed in
-    String callbackUpdateAction;  // passed in
-    String callbackSelectionAction;  // passed in
-    MHost host; // passed in
-    boolean showFiles = true;
-    boolean isRoots = false;
-    String errorMsg;
+	public String startingPath;  // passed in
+	public String callbackUpdateAction;  // passed in
+	public String callbackSelectionAction;  // passed in
+	public MHost host; // passed in
+	public boolean showFiles = true;
+	public boolean isRoots = false;
+	public String errorMsg;
 
     boolean shouldShowError() {
         if ( (errorMsg != null) && (errorMsg.length() > 0) ) return true;
         return false;
     }
 
-    NSDictionary aCurrentFile;
-    NSArray _fileList = null;
+    public NSDictionary aCurrentFile;
+    public NSArray _fileList = null;
     
     public NSArray fileList() {
         if (_fileList == null)
