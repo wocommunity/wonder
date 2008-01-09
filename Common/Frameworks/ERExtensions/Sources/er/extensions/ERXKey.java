@@ -357,6 +357,56 @@ public class ERXKey<T> {
 	public ERXKeyValueQualifier contains(String value) {
 		return ERXQ.contains(_key, value);
 	}
+	
+	/**
+	 * Returns a qualifier that evalutes to true when the value of the given key
+	 * contains any of the given tokens (insensitively) in the search string.
+	 * The search string will be tokenized by splitting on space characters.
+	 * 
+	 * @param tokensWithWhitespace
+	 *            a whitespace separated list of tokens to search for
+	 * @return an ERXOrQualifier
+	 */
+	public ERXOrQualifier containsAny(String tokens) {
+		return ERXQ.containsAny(_key, tokens);
+	}
+	
+	/**
+	 * Returns a qualifier that evalutes to true when the value of the given key
+	 * contains any of the given tokens (insensitively).
+	 * 
+	 * @param tokens
+	 *            the list of tokens to search for
+	 * @return an ERXOrQualifier
+	 */
+	public ERXOrQualifier containsAny(String[] tokens) {
+		return ERXQ.containsAny(_key, tokens);
+	}
+	
+	/**
+	 * Returns a qualifier that evalutes to true when the value of the given key
+	 * contains all of the given tokens (insensitively) in the search string.
+	 * The search string will be tokenized by splitting on space characters.
+	 * 
+	 * @param tokensWithWhitespace
+	 *            a whitespace separated list of tokens to search for
+	 * @return an ERXAndQualifier
+	 */
+	public ERXAndQualifier containsAll(String tokens) {
+		return ERXQ.containsAll(_key, tokens);
+	}
+	
+	/**
+	 * Returns a qualifier that evalutes to true when the value of the given key
+	 * contains all of the given tokens (insensitively).
+	 * 
+	 * @param tokens
+	 *            the list of tokens to search for
+	 * @return an ERXAndQualifier
+	 */
+	public ERXAndQualifier containsAll(String[] tokens) {
+		return ERXQ.containsAll(_key, tokens);
+	}
 
 	@Override
 	public int hashCode() {
