@@ -2,14 +2,16 @@ package er.extensions;
 
 import java.util.Enumeration;
 
-import com.webobjects.eocontrol.EOAndQualifier;
 import com.webobjects.eocontrol.EOKeyValueQualifier;
-import com.webobjects.eocontrol.EONotQualifier;
-import com.webobjects.eocontrol.EOOrQualifier;
 import com.webobjects.eocontrol.EOQualifier;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSSelector;
+
+import er.extensions.qualifiers.ERXAndQualifier;
+import er.extensions.qualifiers.ERXKeyValueQualifier;
+import er.extensions.qualifiers.ERXNotQualifier;
+import er.extensions.qualifiers.ERXOrQualifier;
 
 /**
  * <p>
@@ -18,7 +20,7 @@ import com.webobjects.foundation.NSSelector;
  * </p>
  * 
  * <code>
- * EOQualifier qualifier = new EOAndQualifier(new NSArray(new Object[] { new EOKeyValueQualifier("name", EOQualifier.QualifierOperatorsEquals, "Mike"), new EOKeyValueQualifier("admin", EOQualifier.QualifierOperatorsEquals, Boolean.TRUE) }));
+ * EOQualifier qualifier = new ERXAndQualifier(new NSArray(new Object[] { new ERXKeyValueQualifier("name", EOQualifier.QualifierOperatorsEquals, "Mike"), new ERXKeyValueQualifier("admin", EOQualifier.QualifierOperatorsEquals, Boolean.TRUE) }));
  * </code>
  * 
  * <p>
@@ -101,68 +103,68 @@ public class ERXQ {
 	}
 
 	/**
-	 * Equivalent to new EOOrQualifier(new NSArray(qualifiersArray).  Nulls are skipped.
+	 * Equivalent to new ERXOrQualifier(new NSArray(qualifiersArray).  Nulls are skipped.
 	 * 
 	 * @param qualifiersArray the array of qualifiers to or
 	 * @return and EOOrQualifier
 	 */
-	public static EOOrQualifier or(EOQualifier... qualifiersArray) {
+	public static ERXOrQualifier or(EOQualifier... qualifiersArray) {
 		NSMutableArray<EOQualifier> qualifiers = new NSMutableArray<EOQualifier>();
 		for (EOQualifier qualifier : qualifiersArray) {
 			if (qualifier != null) {
 				qualifiers.addObject(qualifier);
 			}
 		}
-		return new EOOrQualifier(qualifiers);
+		return new ERXOrQualifier(qualifiers);
 	}
 
 	/**
-	 * Equivalent to new EOAndQualifier(new NSArray(qualifiersArray).  Nulls are skipped.
+	 * Equivalent to new ERXAndQualifier(new NSArray(qualifiersArray).  Nulls are skipped.
 	 * 
 	 * @param qualifiersArray the array of qualifiers to and
 	 * @return and EOAndQualifier
 	 */
-	public static EOAndQualifier and(EOQualifier... qualifiersArray) {
+	public static ERXAndQualifier and(EOQualifier... qualifiersArray) {
 		NSMutableArray<EOQualifier> qualifiers = new NSMutableArray<EOQualifier>();
 		for (EOQualifier qualifier : qualifiersArray) {
 			if (qualifier != null) {
 				qualifiers.addObject(qualifier);
 			}
 		}
-		return new EOAndQualifier(qualifiers);
+		return new ERXAndQualifier(qualifiers);
 	}
 
 	/**
-	 * Equivalent to new EOKeyValueQualifier(key, EOQualifier.QualifierOperatorLike, value);
+	 * Equivalent to new ERXKeyValueQualifier(key, EOQualifier.QualifierOperatorLike, value);
 	 * 
 	 * @param key the key
 	 * @param value the value
 	 * @return an EOKeyValueQualifier
 	 */
-	public static EOKeyValueQualifier like(String key, Object value) {
-		return new EOKeyValueQualifier(key, ERXQ.LIKE, value);
+	public static ERXKeyValueQualifier like(String key, Object value) {
+		return new ERXKeyValueQualifier(key, ERXQ.LIKE, value);
 	}
 
 	/**
-	 * Equivalent to new EOKeyValueQualifier(key, EOQualifier.QualifierOperatorCaseInsensitiveLike, value);
+	 * Equivalent to new ERXKeyValueQualifier(key, EOQualifier.QualifierOperatorCaseInsensitiveLike, value);
 	 * 
 	 * @param key the key
 	 * @param value the value
 	 * @return an EOKeyValueQualifier
 	 */
-	public static EOKeyValueQualifier likeInsensitive(String key, Object value) {
-		return new EOKeyValueQualifier(key, ERXQ.ILIKE, value);
+	public static ERXKeyValueQualifier likeInsensitive(String key, Object value) {
+		return new ERXKeyValueQualifier(key, ERXQ.ILIKE, value);
 	}
 
 	/**
-	 * Equivalent to new EOKeyValueQualifier(key, EOQualifier.QualifierOperatorEqual, value);
+	 * Equivalent to new ERXKeyValueQualifier(key, EOQualifier.QualifierOperatorEqual, value);
 	 * 
 	 * @param key the key
 	 * @param value the value
 	 * @return an EOKeyValueQualifier
 	 */
-	public static EOKeyValueQualifier equals(String key, Object value) {
-		return new EOKeyValueQualifier(key, ERXQ.EQ, value);
+	public static ERXKeyValueQualifier equals(String key, Object value) {
+		return new ERXKeyValueQualifier(key, ERXQ.EQ, value);
 	}
 
 	/**
@@ -172,174 +174,174 @@ public class ERXQ {
 	 * @param yesOrNo if true, returns isNull, if false, returns isNotNull
 	 * @return the EOKeyValueQualifier
 	 */
-	public static EOKeyValueQualifier isNull(String key, boolean yesOrNo) {
+	public static ERXKeyValueQualifier isNull(String key, boolean yesOrNo) {
 		return (yesOrNo) ? ERXQ.isNull(key) : ERXQ.isNotNull(key);
 	}
 
 	/**
-	 * Equivalent to new EOKeyValueQualifier(key, EOQualifier.QualifierOperatorEqual, null);
+	 * Equivalent to new ERXKeyValueQualifier(key, EOQualifier.QualifierOperatorEqual, null);
 	 * 
 	 * @param key the key
 	 * @return an EOKeyValueQualifier
 	 */
-	public static EOKeyValueQualifier isNull(String key) {
-		return new EOKeyValueQualifier(key, ERXQ.EQ, null);
+	public static ERXKeyValueQualifier isNull(String key) {
+		return new ERXKeyValueQualifier(key, ERXQ.EQ, null);
 	}
 
 	/**
-	 * Equivalent to new EOKeyValueQualifier(key, EOQualifier.QualifierOperatorNotEqual, null);
+	 * Equivalent to new ERXKeyValueQualifier(key, EOQualifier.QualifierOperatorNotEqual, null);
 	 * 
 	 * @param key the key
 	 * @return an EOKeyValueQualifier
 	 */
-	public static EOKeyValueQualifier isNotNull(String key) {
-		return new EOKeyValueQualifier(key, ERXQ.NE, null);
+	public static ERXKeyValueQualifier isNotNull(String key) {
+		return new ERXKeyValueQualifier(key, ERXQ.NE, null);
 	}
 
 	/**
-	 * Equivalent to new EOKeyValueQualifier(key, EOQualifier.QualifierOperatorEqual, Boolean.TRUE);
+	 * Equivalent to new ERXKeyValueQualifier(key, EOQualifier.QualifierOperatorEqual, Boolean.TRUE);
 	 * 
 	 * @param key the key
 	 * @return an EOKeyValueQualifier
 	 */
-	public static EOKeyValueQualifier isTrue(String key) {
-		return new EOKeyValueQualifier(key, ERXQ.EQ, Boolean.TRUE);
+	public static ERXKeyValueQualifier isTrue(String key) {
+		return new ERXKeyValueQualifier(key, ERXQ.EQ, Boolean.TRUE);
 	}
 
 	/**
-	 * Equivalent to new EOKeyValueQualifier(key, EOQualifier.QualifierOperatorEqual, Boolean.FALSE);
+	 * Equivalent to new ERXKeyValueQualifier(key, EOQualifier.QualifierOperatorEqual, Boolean.FALSE);
 	 * 
 	 * @param key the key
 	 * @return an EOKeyValueQualifier
 	 */
-	public static EOKeyValueQualifier isFalse(String key) {
-		return new EOKeyValueQualifier(key, ERXQ.EQ, Boolean.FALSE);
+	public static ERXKeyValueQualifier isFalse(String key) {
+		return new ERXKeyValueQualifier(key, ERXQ.EQ, Boolean.FALSE);
 	}
 
 	/**
-	 * Equivalent to new EOKeyValueQualifier(key, EOQualifier.QualifierOperatorNotEqual, value);
-	 * 
-	 * @param key the key
-	 * @param value the value
-	 * @return an EOKeyValueQualifier
-	 */
-	public static EOKeyValueQualifier notEquals(String key, Object value) {
-		return new EOKeyValueQualifier(key, ERXQ.NE, value);
-	}
-
-	/**
-	 * Equivalent to new EOKeyValueQualifier(key, EOQualifier.QualifierOperatorLessThan, value);
+	 * Equivalent to new ERXKeyValueQualifier(key, EOQualifier.QualifierOperatorNotEqual, value);
 	 * 
 	 * @param key the key
 	 * @param value the value
 	 * @return an EOKeyValueQualifier
 	 */
-	public static EOKeyValueQualifier lessThan(String key, Object value) {
-		return new EOKeyValueQualifier(key, ERXQ.LT, value);
+	public static ERXKeyValueQualifier notEquals(String key, Object value) {
+		return new ERXKeyValueQualifier(key, ERXQ.NE, value);
 	}
 
 	/**
-	 * Equivalent to new EOKeyValueQualifier(key, EOQualifier.QualifierOperatorGreaterThan, value);
+	 * Equivalent to new ERXKeyValueQualifier(key, EOQualifier.QualifierOperatorLessThan, value);
 	 * 
 	 * @param key the key
 	 * @param value the value
 	 * @return an EOKeyValueQualifier
 	 */
-	public static EOKeyValueQualifier greaterThan(String key, Object value) {
-		return new EOKeyValueQualifier(key, ERXQ.GT, value);
+	public static ERXKeyValueQualifier lessThan(String key, Object value) {
+		return new ERXKeyValueQualifier(key, ERXQ.LT, value);
 	}
 
 	/**
-	 * Equivalent to new EOKeyValueQualifier(key, EOQualifier.QualifierOperatorLessThanOrEqualTo, value);
+	 * Equivalent to new ERXKeyValueQualifier(key, EOQualifier.QualifierOperatorGreaterThan, value);
 	 * 
 	 * @param key the key
 	 * @param value the value
 	 * @return an EOKeyValueQualifier
 	 */
-	public static EOKeyValueQualifier lessThanOrEqualTo(String key, Object value) {
-		return new EOKeyValueQualifier(key, ERXQ.LTEQ, value);
+	public static ERXKeyValueQualifier greaterThan(String key, Object value) {
+		return new ERXKeyValueQualifier(key, ERXQ.GT, value);
 	}
 
 	/**
-	 * Equivalent to new EOKeyValueQualifier(key, EOQualifier.QualifierOperatorGreaterThanOrEqualTo, value);
+	 * Equivalent to new ERXKeyValueQualifier(key, EOQualifier.QualifierOperatorLessThanOrEqualTo, value);
 	 * 
 	 * @param key the key
 	 * @param value the value
 	 * @return an EOKeyValueQualifier
 	 */
-	public static EOKeyValueQualifier greaterThanOrEqualTo(String key, Object value) {
-		return new EOKeyValueQualifier(key, ERXQ.GTEQ, value);
+	public static ERXKeyValueQualifier lessThanOrEqualTo(String key, Object value) {
+		return new ERXKeyValueQualifier(key, ERXQ.LTEQ, value);
 	}
 
 	/**
-	 * Equivalent to new EONotQualifier(qualifier);
+	 * Equivalent to new ERXKeyValueQualifier(key, EOQualifier.QualifierOperatorGreaterThanOrEqualTo, value);
+	 * 
+	 * @param key the key
+	 * @param value the value
+	 * @return an EOKeyValueQualifier
+	 */
+	public static ERXKeyValueQualifier greaterThanOrEqualTo(String key, Object value) {
+		return new ERXKeyValueQualifier(key, ERXQ.GTEQ, value);
+	}
+
+	/**
+	 * Equivalent to new ERXNotQualifier(qualifier);
 	 * 
 	 * @param qualifier the qualifier to not
 	 * @return an EONotQualifier
 	 */
-	public static EONotQualifier not(EOQualifier qualifier) {
-		return new EONotQualifier(qualifier);
+	public static ERXNotQualifier not(EOQualifier qualifier) {
+		return new ERXNotQualifier(qualifier);
 	}
 
 	/**
-	 * Equivalent to new EOKeyValueQualifier(key, operator, value);
+	 * Equivalent to new ERXKeyValueQualifier(key, operator, value);
 	 * 
 	 * @param key the key
 	 * @param operator ERXQ.EQ, NE, GT, LT, etc
 	 * @param value the value
 	 * @return an EOKeyValueQualifier
 	 */
-	public static EOKeyValueQualifier compare(String key, NSSelector operator, Object value) {
-		return new EOKeyValueQualifier(key, operator, value);
+	public static ERXKeyValueQualifier compare(String key, NSSelector operator, Object value) {
+		return new ERXKeyValueQualifier(key, operator, value);
 	}
 
 	/**
-	 * Equivalent to a new EOOrQualifier of EOKeyValueQualifier with key equals value for each value.
+	 * Equivalent to a new ERXOrQualifier of EOKeyValueQualifier with key equals value for each value.
 	 * 
 	 * @param key the key
 	 * @param values the values
 	 * @return an EOQualifier
 	 */
-	public static EOQualifier inObjects(String key, Object... values) {
+	public static ERXOrQualifier inObjects(String key, Object... values) {
 		NSMutableArray<EOQualifier> qualifiers = new NSMutableArray<EOQualifier>();
 		for (Object value : values) {
 			qualifiers.addObject(ERXQ.equals(key, value));
 		}
-		return new EOOrQualifier(qualifiers);
+		return new ERXOrQualifier(qualifiers);
 	}
 
 	/**
-	 * Equivalent to a new EOOrQualifier of EOKeyValueQualifier with key equals value for each value.
+	 * Equivalent to a new ERXOrQualifier of EOKeyValueQualifier with key equals value for each value.
 	 * 
 	 * @param key the key
 	 * @param values the values
 	 * @return an EOQualifier
 	 */
-	public static EOQualifier in(String key, NSArray<?> values) {
+	public static ERXOrQualifier in(String key, NSArray<?> values) {
 		NSMutableArray<EOQualifier> qualifiers = new NSMutableArray<EOQualifier>();
 		Enumeration valuesEnum = values.objectEnumerator();
 		while (valuesEnum.hasMoreElements()) {
 			Object value = valuesEnum.nextElement();
 			qualifiers.addObject(ERXQ.equals(key, value));
 		}
-		return new EOOrQualifier(qualifiers);
+		return new ERXOrQualifier(qualifiers);
 	}
 	
   /**
-   * Equivalent to a new EOAndQualifier of EONotQualifier(EOKeyValueQualifier) with key equals value for each value.
+   * Equivalent to a new ERXAndQualifier of EONotQualifier(EOKeyValueQualifier) with key equals value for each value.
    * 
    * @param key the key
    * @param values the values
    * @return an EOQualifier
    */
-  public static EOQualifier notIn(String key, NSArray values) {
+  public static ERXAndQualifier notIn(String key, NSArray values) {
     NSMutableArray<EOQualifier> qualifiers = new NSMutableArray<EOQualifier>();
     Enumeration valuesEnum = values.objectEnumerator();
     while (valuesEnum.hasMoreElements()) {
       Object value = valuesEnum.nextElement();
       qualifiers.addObject(ERXQ.notEquals(key, value));
     }
-    return new EOAndQualifier(qualifiers);
+    return new ERXAndQualifier(qualifiers);
   }
   
 
@@ -399,13 +401,13 @@ public class ERXQ {
 	}
 
 	/**
-	 * Equivalent to new EOKeyValueQualifier(key, EOQualifier.OperatorCaseInsensitiveLike, "*" + value + "*").
+	 * Equivalent to new ERXKeyValueQualifier(key, EOQualifier.OperatorCaseInsensitiveLike, "*" + value + "*").
 	 * 
 	 * @param key the key
 	 * @param value the substring value
 	 * @return an EOKeyValueQualifier
 	 */
-	public static EOKeyValueQualifier contains(String key, String value) {
+	public static ERXKeyValueQualifier contains(String key, String value) {
 		value = "*" + value + "*";
 		return ERXQ.likeInsensitive(key, value);
 	}
