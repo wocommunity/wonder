@@ -22,9 +22,13 @@ public class ERXChainedQualifierUtils {
 	 */
 	public static ERXAndQualifier and(EOQualifier originalQualifier, EOQualifier... qualifiers) {
 		NSMutableArray<EOQualifier> newQualifiers = new NSMutableArray<EOQualifier>();
-		newQualifiers.addObject(originalQualifier);
+		if (originalQualifier != null) {
+			newQualifiers.addObject(originalQualifier);
+		}
 		for (EOQualifier qualifier : qualifiers) {
-			newQualifiers.addObject(qualifier);
+			if (qualifier != null) {
+				newQualifiers.addObject(qualifier);
+			}
 		}
 		return new ERXAndQualifier(newQualifiers);
 	}
@@ -50,9 +54,13 @@ public class ERXChainedQualifierUtils {
 	 */
 	public static ERXOrQualifier or(EOQualifier originalQualifier, EOQualifier... qualifiers) {
 		NSMutableArray<EOQualifier> newQualifiers = new NSMutableArray<EOQualifier>();
-		newQualifiers.addObject(originalQualifier);
+		if (originalQualifier != null) {
+			newQualifiers.addObject(originalQualifier);
+		}
 		for (EOQualifier qualifier : qualifiers) {
-			newQualifiers.addObject(qualifier);
+			if (qualifier != null) {
+				newQualifiers.addObject(qualifier);
+			}
 		}
 		return new ERXOrQualifier(newQualifiers);
 	}
