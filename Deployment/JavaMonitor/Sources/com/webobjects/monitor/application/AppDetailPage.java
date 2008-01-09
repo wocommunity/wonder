@@ -35,8 +35,8 @@ public class AppDetailPage extends MonitorComponent {
         if (instancesArray == null) {
             instancesArray = NSArray.EmptyArray;
         }
-        //AK: the MInstances don't really support equals()...
-        if(!displayGroup.allObjects().equals(instancesArray)) {
+        // AK: the MInstances don't really support equals()...
+        if (!displayGroup.allObjects().equals(instancesArray)) {
             displayGroup.setObjectArray(instancesArray);
         }
         displayGroup.setSelectedObjects(displayGroup.allObjects());
@@ -48,9 +48,29 @@ public class AppDetailPage extends MonitorComponent {
 
     public boolean isClearDeathSectionVisible = false;
 
+    public boolean showDetailStatistics = false;
+
     public WODisplayGroup displayGroup;
- 
+
+    public WOComponent showStatisticsClicked() {
+        showDetailStatistics = !showDetailStatistics;
+        return context().page();
+    }
+
     public WOComponent refreshClicked() {
+        return newDetailPage();
+    }
+
+    public WOComponent bounceClicked() {
+        /*
+         * there are two ways to do things: <br> installing a new releases assume
+         * we need the same instancesActive of apps as before out of
+         * instancesMax assume we have instancesPerHost instances for
+         * hostsActive hosts out of hostsMax start newInstancesPerHost = max(1,
+         * instancesActive/hostsActive*.10) wail until they are ready for former
+         * instances,
+         * 
+         */
         return newDetailPage();
     }
 
@@ -59,10 +79,10 @@ public class AppDetailPage extends MonitorComponent {
     }
 
     public void awake() {
-     }
+    }
 
     public void selectAll() {
-        if("on".equals(context().request().stringFormValueForKey("deselectall"))) {
+        if ("on".equals(context().request().stringFormValueForKey("deselectall"))) {
             displayGroup.setSelectedObjects(new NSMutableArray());
         } else {
             displayGroup.setSelectedObjects(displayGroup.allObjects());
@@ -73,7 +93,7 @@ public class AppDetailPage extends MonitorComponent {
         NSMutableArray selected = new NSMutableArray<MInstance>();
         for (Enumeration enumerator = displayGroup.allObjects().objectEnumerator(); enumerator.hasMoreElements();) {
             MInstance instance = (MInstance) enumerator.nextElement();
-            if(instance.isRunning_M()) {
+            if (instance.isRunning_M()) {
                 selected.addObject(instance);
             }
         }
@@ -84,7 +104,7 @@ public class AppDetailPage extends MonitorComponent {
         NSMutableArray selected = new NSMutableArray<MInstance>();
         for (Enumeration enumerator = displayGroup.allObjects().objectEnumerator(); enumerator.hasMoreElements();) {
             MInstance instance = (MInstance) enumerator.nextElement();
-            if(!instance.isRunning_M()) {
+            if (!instance.isRunning_M()) {
                 selected.addObject(instance);
             }
         }
@@ -92,27 +112,27 @@ public class AppDetailPage extends MonitorComponent {
     }
 
     public void selectOne() {
-         _setIsSelectedInstance(!isSelectedInstance());
+        _setIsSelectedInstance(!isSelectedInstance());
     }
 
     public void _setIsSelectedInstance(boolean selected) {
         NSMutableArray selectedObjects = displayGroup.selectedObjects().mutableClone();
-        if(selected && !selectedObjects.containsObject(currentInstance)) {
+        if (selected && !selectedObjects.containsObject(currentInstance)) {
             selectedObjects.addObject(currentInstance);
-        } else if(!selected && selectedObjects.containsObject(currentInstance)) {
+        } else if (!selected && selectedObjects.containsObject(currentInstance)) {
             selectedObjects.removeObject(currentInstance);
         }
         displayGroup.setSelectedObjects(selectedObjects);
     }
 
     public void setIsSelectedInstance(boolean selected) {
-       
+
     }
 
     public boolean isSelectedInstance() {
         return displayGroup.selectedObjects().contains(currentInstance);
     }
-    
+
     public boolean hasInstances() {
         NSArray instancesArray = mySession().mApplication.instanceArray();
         if (instancesArray == null || instancesArray.count() == 0)
@@ -205,7 +225,7 @@ public class AppDetailPage extends MonitorComponent {
         theApplication._lock.startReading();
         try {
             if (mySession().mApplication.hostArray().count() != 0) {
-                sendCommandInstancesToWotaskds("CLEAR", mySession().mApplication.instanceArray(),
+                handler().sendCommandInstancesToWotaskds("CLEAR", mySession().mApplication.instanceArray(),
                         mySession().mApplication.hostArray());
             }
         } finally {
@@ -222,7 +242,8 @@ public class AppDetailPage extends MonitorComponent {
         if ((currentInstance.state == MObject.DEAD) || (currentInstance.state == MObject.STOPPING)
                 || (currentInstance.state == MObject.CRASHING) || (currentInstance.state == MObject.UNKNOWN)) {
 
-            sendCommandInstancesToWotaskds("START", new NSArray(currentInstance), new NSArray(currentInstance.host()));
+            handler().sendCommandInstancesToWotaskds("START", new NSArray(currentInstance),
+                    new NSArray(currentInstance.host()));
             currentInstance.state = MObject.STARTING;
         }
         return newDetailPage();
@@ -231,7 +252,8 @@ public class AppDetailPage extends MonitorComponent {
     public WOComponent stopInstance() {
         if ((currentInstance.state == MObject.ALIVE) || (currentInstance.state == MObject.STARTING)) {
 
-            sendCommandInstancesToWotaskds("STOP", new NSArray(currentInstance), new NSArray(currentInstance.host()));
+            handler().sendCommandInstancesToWotaskds("STOP", new NSArray(currentInstance),
+                    new NSArray(currentInstance.host()));
             currentInstance.state = MObject.STOPPING;
         }
         return newDetailPage();
@@ -246,7 +268,8 @@ public class AppDetailPage extends MonitorComponent {
         theApplication._lock.startReading();
         try {
             if (theApplication.siteConfig().hostArray().count() != 0) {
-                sendUpdateInstancesToWotaskds(new NSArray(currentInstance), theApplication.siteConfig().hostArray());
+                handler().sendUpdateInstancesToWotaskds(new NSArray(currentInstance),
+                        theApplication.siteConfig().hostArray());
             }
         } finally {
             theApplication._lock.endReading();
@@ -258,11 +281,11 @@ public class AppDetailPage extends MonitorComponent {
     public WOComponent toggleRefuseNewSessions() {
         if (currentInstance.isRefusingNewSessions) {
             currentInstance.isRefusingNewSessions = false;
-            sendCommandInstancesToWotaskds("ACCEPT", new NSArray(currentInstance),
+            handler().sendCommandInstancesToWotaskds("ACCEPT", new NSArray(currentInstance),
                     new NSArray(currentInstance.host()));
         } else {
             currentInstance.isRefusingNewSessions = true;
-            sendCommandInstancesToWotaskds("REFUSE", new NSArray(currentInstance),
+            handler().sendCommandInstancesToWotaskds("REFUSE", new NSArray(currentInstance),
                     new NSArray(currentInstance.host()));
         }
 
@@ -278,7 +301,8 @@ public class AppDetailPage extends MonitorComponent {
         theApplication._lock.startReading();
         try {
             if (theApplication.siteConfig().hostArray().count() != 0) {
-                sendUpdateInstancesToWotaskds(new NSArray(currentInstance), theApplication.siteConfig().hostArray());
+                handler().sendUpdateInstancesToWotaskds(new NSArray(currentInstance),
+                        theApplication.siteConfig().hostArray());
             }
         } finally {
             theApplication._lock.endReading();
@@ -294,15 +318,14 @@ public class AppDetailPage extends MonitorComponent {
         // AK: uncomment for old behaviour
         // return mySession().mApplication.instanceArray();
     }
-    
+
     /** ******** Group Controls ********* */
     public WOComponent startAllClicked() {
         theApplication._lock.startReading();
         try {
             NSArray instancesArray = selectedInstances();
             if (mySession().mApplication.hostArray().count() != 0) {
-                sendCommandInstancesToWotaskds("START", instancesArray,
-                        mySession().mApplication.hostArray());
+                handler().sendCommandInstancesToWotaskds("START", instancesArray, mySession().mApplication.hostArray());
             }
 
             for (int i = 0; i < instancesArray.count(); i++) {
@@ -331,8 +354,7 @@ public class AppDetailPage extends MonitorComponent {
                 anInst.setAutoRecover(Boolean.TRUE);
             }
             if (theApplication.siteConfig().hostArray().count() != 0) {
-                sendUpdateInstancesToWotaskds(instancesArray, theApplication.siteConfig()
-                        .hostArray());
+                handler().sendUpdateInstancesToWotaskds(instancesArray, theApplication.siteConfig().hostArray());
             }
         } finally {
             theApplication._lock.endReading();
@@ -350,8 +372,7 @@ public class AppDetailPage extends MonitorComponent {
                 anInst.setAutoRecover(Boolean.FALSE);
             }
             if (theApplication.siteConfig().hostArray().count() != 0) {
-                sendUpdateInstancesToWotaskds(instancesArray, theApplication.siteConfig()
-                        .hostArray());
+                handler().sendUpdateInstancesToWotaskds(instancesArray, theApplication.siteConfig().hostArray());
             }
         } finally {
             theApplication._lock.endReading();
@@ -369,8 +390,8 @@ public class AppDetailPage extends MonitorComponent {
                 anInst.isRefusingNewSessions = false;
             }
             if (mySession().mApplication.hostArray().count() != 0) {
-                sendCommandInstancesToWotaskds("ACCEPT", instancesArray,
-                        mySession().mApplication.hostArray());
+                handler()
+                        .sendCommandInstancesToWotaskds("ACCEPT", instancesArray, mySession().mApplication.hostArray());
             }
         } finally {
             theApplication._lock.endReading();
@@ -386,8 +407,7 @@ public class AppDetailPage extends MonitorComponent {
             anInst.isRefusingNewSessions = true;
         }
         if (mySession().mApplication.hostArray().count() != 0) {
-            sendCommandInstancesToWotaskds("REFUSE", instancesArray, mySession().mApplication
-                    .hostArray());
+            handler().sendCommandInstancesToWotaskds("REFUSE", instancesArray, mySession().mApplication.hostArray());
         }
 
         return newDetailPage();
@@ -402,8 +422,7 @@ public class AppDetailPage extends MonitorComponent {
                 anInst.setSchedulingEnabled(Boolean.TRUE);
             }
             if (theApplication.siteConfig().hostArray().count() != 0) {
-                sendUpdateInstancesToWotaskds(instancesArray, theApplication.siteConfig()
-                        .hostArray());
+                handler().sendUpdateInstancesToWotaskds(instancesArray, theApplication.siteConfig().hostArray());
             }
         } finally {
             theApplication._lock.endReading();
@@ -427,8 +446,7 @@ public class AppDetailPage extends MonitorComponent {
                 anInst.setSchedulingEnabled(Boolean.FALSE);
             }
             if (theApplication.siteConfig().hostArray().count() != 0) {
-                sendUpdateInstancesToWotaskds(instancesArray, theApplication.siteConfig()
-                        .hostArray());
+                handler().sendUpdateInstancesToWotaskds(instancesArray, theApplication.siteConfig().hostArray());
             }
         } finally {
             theApplication._lock.endReading();
@@ -592,7 +610,7 @@ public class AppDetailPage extends MonitorComponent {
             }
 
             if (theApplication.siteConfig().hostArray().count() != 0) {
-                sendAddInstancesToWotaskds(newInstanceArray, theApplication.siteConfig().hostArray());
+                handler().sendAddInstancesToWotaskds(newInstanceArray, theApplication.siteConfig().hostArray());
             }
         } finally {
             theApplication._lock.endWriting();
