@@ -1,9 +1,8 @@
 <webobject name = "IsRefreshEnabled">
   <webobject name = "Refresh"></webobject>
 </webobject>
-<webobject name = "NavPage"></webobject>
-<b>
-  <font size = "+3">
+<webobject name = "NavPage">
+  <h1>
     <webobject name = "AppIsRunning">
       <webobject name = "AppLink">
         <webobject name = "AppName"></webobject>
@@ -12,29 +11,19 @@
     <webobject name = "AppIsNOTRunning">
       <webobject name = "AppName"></webobject>
     </webobject>
-  </font>
-</b>
-<br />
-<webobject name = "IsRefreshEnabled">
+  </h1>
   <font size = "-1">
+<webobject name = "IsRefreshEnabled">
     This page automatically updates every
     <webobject name = "RefreshRate"></webobject>
     seconds.
-  </font>
   <br />
 </webobject>
-<font size = "-1">
-  <webobject name = "RefreshLink">Refresh Now</webobject>
+<webobject name = "RefreshLink">Refresh Now</webobject>
 </font>
 <br />
-<p align = "CENTER">
-  <font color = "#FF0000">
-    <b>
-      <br />
-      <webobject name = "MessageString"></webobject>
-    </b>
-  </font>
-</p>
+<span class="error"><webobject name = "MessageString"></webobject>
+</span>
 <table border = "1" cellpadding = "2" cellspacing = "0" bgcolor = "#E8E8E8">
   <tr>
     <th rowspan="2">Selected</th>
@@ -64,7 +53,7 @@
 <td><webobject name = "SelectOneForm"><webobject name = "IsSelected"/></webobject></td>
 
 <!--       Instance Number       -->
-      <td align = "CENTER">
+      <td>
         <webobject name = "InstanceRunningConditional">
           <webobject name = "InstAdaptorLink">
             <webobject name = "InstIndex"></webobject>
@@ -75,7 +64,7 @@
         </webobject>
       </td>
 <!--       Host - Port       -->
-      <td align = "CENTER" valign = "MIDDLE">
+      <td>
         <font size = "-1">
           <webobject name = "InstanceRunningConditional">
             <webobject name = "InstDirectLink">
@@ -88,11 +77,11 @@
         </font>
       </td>
 <!--       Status (On/Off/Starting/Stopping)       -->
-      <td align = "CENTER" valign = "MIDDLE">
+      <td>
         <webobject name = "InstStatusImage"></webobject>
       </td>
 <!--       Start/Stop Buttons       -->
-      <td align = "CENTER" valign = "MIDDLE">
+      <td>
         <webobject name = "StartInstanceLink">
           <webobject name = "StartImage"></webobject>
         </webobject>
@@ -101,7 +90,7 @@
         </webobject>
       </td>
 <!--       Auto-Recover       -->
-      <td align = "CENTER" valign = "MIDDLE">
+      <td>
         <webobject name = "IFSchedulingIsOn">
           <webobject name = "YellowOnImage"></webobject>
         </webobject>
@@ -112,7 +101,7 @@
         </webobject>
       </td>
 <!--       Refuse New Sessions       -->
-      <td align = "CENTER" valign = "MIDDLE">
+      <td>
         <webobject name = "IFSchedulingIsOn">
           <webobject name = "RefuseNewSessionsImage"></webobject>
         </webobject>
@@ -128,29 +117,29 @@
         </webobject>
       </td>
 <!--       Schedule       -->
-      <td align = "CENTER" valign = "MIDDLE">
+      <td>
         <webobject name = "ToggleSchedulingLink">
           <webobject name = "SchedulingImage"></webobject>
         </webobject>
       </td>
 <!--       Next Scheduled Shutdown       -->
-      <td align = "CENTER" valign = "MIDDLE">
+      <td>
         <webobject name = "NextShutdown"></webobject>
       </td>
 <!--       Statistics       -->
-      <td align = "CENTER" valign = "MIDDLE">
+      <td>
         <webobject name = "InstTransactions"></webobject>
       </td>
-      <td align = "CENTER" valign = "MIDDLE">
+      <td>
         <webobject name = "InstActiveSessions"></webobject>
       </td>
-      <td align = "CENTER" valign = "MIDDLE">
+      <td>
         <webobject name = "InstAverageTransaction"></webobject>
       </td>
-      <td align = "CENTER" valign = "MIDDLE">
+      <td>
         <webobject name = "InstAverageIdle"></webobject>
       </td>
-      <td align = "CENTER" valign = "MIDDLE">
+      <td>
         <webobject name = "ShouldDisplayDeathDetailLink">
           <webobject name = "InstDeathDetailLink">
             <webobject name = "InstDeathCount"></webobject>
@@ -158,7 +147,7 @@
         </webobject>
         <webobject name = "ShouldNOTDisplayDeathDetailLink">-</webobject>
       </td>
-      <td align = "CENTER" valign = "MIDDLE">
+      <td>
         <webobject name = "InstanceRunningConditional">
           <webobject name = "LinkToWOStats">
             <webobject name = "WOStatsButton"></webobject>
@@ -169,13 +158,13 @@
         </webobject>
       </td>
 <!--       Configure       -->
-      <td align = "CENTER" valign = "MIDDLE">
+      <td>
         <webobject name = "InstConfigureLink">
           <webobject name = "ConfigButton"></webobject>
         </webobject>
       </td>
 <!--       Delete       -->
-      <td align = "CENTER" valign = "MIDDLE">
+      <td>
         <webobject name = "InstDeleteLink">
           <webobject name = "DeleteButton"></webobject>
         </webobject>
@@ -196,7 +185,7 @@
         </font>
       </td>
 <!--       Start / Stop All       -->
-      <td align = "CENTER" valign = "MIDDLE">
+      <td>
         <webobject name = "StartAllLink">
           <webobject name = "StartImage"></webobject>
         </webobject>
@@ -205,7 +194,7 @@
         </webobject>
       </td>
 <!--       AutoRecover All      -->
-      <td align = "CENTER" valign = "MIDDLE">
+      <td>
         <webobject name = "AutoRecoverEnableAllLink">
           <webobject name = "StartImage"></webobject>
         </webobject>
@@ -214,7 +203,7 @@
         </webobject>
       </td>
 <!--       Refuse New Sessions All       -->
-      <td align = "CENTER" valign = "MIDDLE">
+      <td>
         <webobject name = "RefuseNewSessionsAllLink">
           <webobject name = "StartImage"></webobject>
         </webobject>
@@ -223,7 +212,7 @@
         </webobject>
       </td>
 <!--       Scheduling All       -->
-      <td align = "CENTER" valign = "MIDDLE">
+      <td>
         <webobject name = "SchedulingEnableAllLink">
           <webobject name = "StartImage"></webobject>
         </webobject>
@@ -234,30 +223,30 @@
 <!--       Next Scheduled Shutdown       -->
       <td>&nbsp</td>
 <!--       Statistics All       -->
-      <td align = "CENTER" valign = "MIDDLE">
+      <td>
         <webobject name = "TotalTransactions"></webobject>
       </td>
-      <td align = "CENTER" valign = "MIDDLE">
+      <td>
         <webobject name = "TotalActiveSessions"></webobject>
       </td>
-      <td align = "CENTER" valign = "MIDDLE">
+      <td>
         <webobject name = "TotalAverageTransaction"></webobject>
       </td>
-      <td align = "CENTER" valign = "MIDDLE">
+      <td>
         <webobject name = "TotalAverageIdleTime"></webobject>
       </td>
-      <td align = "CENTER" valign = "MIDDLE">
+      <td>
         <webobject name = "ClearDeathsLink">
           Clear
           <br />
           Deaths
         </webobject>
       </td>
-      <td align = "CENTER" valign = "MIDDLE">
+      <td>
         <webobject name = "ActualRatePerMinute"></webobject>
         TPM      </td>
 <!--       Configure       -->
-      <td align = "CENTER" valign = "MIDDLE">
+      <td>
         <webobject name = "ConfigureLink">
           <webobject name = "ConfigButton"></webobject>
         </webobject>
@@ -282,4 +271,4 @@
   Please
   <webobject name = "AddHostsLink">add hosts</webobject>
   before adding instances.
-</webobject>
+</webobject></webobject>

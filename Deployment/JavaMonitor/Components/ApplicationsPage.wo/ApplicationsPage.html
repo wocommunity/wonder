@@ -1,67 +1,76 @@
-<WEBOBJECT name=NavPage></WEBOBJECT>
+<webobject name = "NavPage">
 <h2>Applications</h2>
-<P ALIGN=CENTER><FONT COLOR=#FF0000><B><BR><WEBOBJECT NAME=MessageString></WEBOBJECT></B></FONT></P>
-<TABLE BORDER=1 CELLPADDING=6 CELLSPACING=1 BGCOLOR="#E0E0F8">
-    <TR BGCOLOR=#C0C0D8>
-        <TD ALIGN=CENTER><FONT SIZE=-1><B> Application </B></FONT></TD>
-        <TD ALIGN=CENTER><FONT SIZE=-1><B> Instances<BR>Running </B></FONT></TD>
-        <TD ALIGN=CENTER><FONT SIZE=-1><B> Instances<BR>Configured </B></FONT></TD>
-        <TD ALIGN=CENTER><FONT SIZE=-1><B> View<BR>Instances </B></FONT></TD>
-        <TD ALIGN=CENTER><FONT SIZE=-1><B> Configuration </B></FONT></TD>
-        <TD ALIGN=CENTER>&nbsp;</TD>
-    </TR>
-    <WEBOBJECT NAME=ApplicationsRepetition>
-    <TR>
-        <TD ALIGN=CENTER>
-            <WEBOBJECT NAME=AppIsRunning>
-            	<B><WEBOBJECT NAME=ApplicationNameLink></WEBOBJECT></B>
-            </WEBOBJECT>
-            <WEBOBJECT NAME=AppIsNOTRunning>
-            	<WEBOBJECT NAME=ApplicationName></WEBOBJECT>
-            </WEBOBJECT>
-        </TD>
-        <TD ALIGN=CENTER VALIGN=MIDDLE>
-            <WEBOBJECT NAME=RunningInstancesCount></WEBOBJECT>
-        </TD>
-        <TD ALIGN=CENTER VALIGN=MIDDLE>
-            <WEBOBJECT NAME=TotalInstancesCount></WEBOBJECT>
-        </TD>
-        <TD ALIGN=CENTER VALIGN=MIDDLE>
-            <WEBOBJECT NAME=AppDetailsLink><WEBOBJECT name=DetailViewButton></WEBOBJECT></WEBOBJECT>
-        </TD>
-        <TD ALIGN=CENTER VALIGN=MIDDLE>
-            <WEBOBJECT NAME=ConfigureLink><WEBOBJECT name=ConfigButton></WEBOBJECT></WEBOBJECT>
-        </TD>
-        <TD ALIGN=CENTER VALIGN=MIDDLE>
-            <WEBOBJECT NAME=DeleteLink><WEBOBJECT name=DeleteButton></WEBOBJECT></WEBOBJECT>
-        </TD>
-    </TR>
-    </WEBOBJECT>
-</TABLE>
-<BR>
-<HR>
-<BR>
-<WEBOBJECT name=AddApplicationForm>
-Add Application Named: <WEBOBJECT name=ApplicationNameTextField></WEBOBJECT> <WEBOBJECT name=AddApplicationSubmitButton></WEBOBJECT><br>
-<FONT SIZE=-1>Note: Application names may only contain alpha-numeric or '-'.<BR><BR>
-Application names do not need to match the Application executable's filename.<BR>
-Application names are used by the adaptor for load-balancing.</FONT>
-</WEBOBJECT>
-
-</CENTER>
-  </TD></TR>
-</TABLE>
-</CENTER>
-
-<WEBOBJECT NAME=ShouldOfferLogout>
-	<CENTER>
-	<BR><BR>
-	<FONT SIZE=-1>
-	<WEBOBJECT NAME=LogoutLink>Log Out</WEBOBJECT>
-	</FONT>
-	<BR>
-	</CENTER>
-</WEBOBJECT>
-
-</BODY>
-</HTML>
+<span class = "error">
+  <webobject name = "MessageString" />
+</span>
+<table border = "1" cellpadding = "6" cellspacing = "1" bgcolor = "#E0E0F8">
+  <tr bgcolor = "#C0C0D8">
+    <th>Application</th>
+    <th>Instances Running</th>
+    <th>Instances Configured</th>
+    <th>View Instances</th>
+    <th>Configuration</th>
+    <th>&nbsp;</th>
+  </tr>
+  <webobject name = "ApplicationsRepetition">
+    <tr>
+      <td>
+        <webobject name = "AppIsRunning">
+          <b>
+            <webobject name = "ApplicationNameLink" />
+          </b>
+        </webobject>
+        <webobject name = "AppIsNOTRunning">
+          <webobject name = "ApplicationName" />
+        </webobject>
+      </td>
+      <td>
+        <webobject name = "RunningInstancesCount" />
+      </td>
+      <td>
+        <webobject name = "TotalInstancesCount" />
+      </td>
+      <td>
+        <webobject name = "AppDetailsLink">
+          <webobject name = "DetailViewButton" />
+        </webobject>
+      </td>
+      <td>
+        <webobject name = "ConfigureLink">
+          <webobject name = "ConfigButton" />
+        </webobject>
+      </td>
+      <td>
+        <webobject name = "DeleteLink">
+          <webobject name = "DeleteButton" />
+        </webobject>
+      </td>
+    </tr>
+  </webobject>
+</table>
+<hr />
+<webobject name = "AddApplicationForm">
+  Add Application Named:
+  <webobject name = "ApplicationNameTextField" />
+  <webobject name = "AddApplicationSubmitButton" />
+  <br />
+  <font size = "-1">
+    Note: Application names may only contain alpha-numeric or '-'.
+    <br />
+    <br />
+    Application names do not need to match the Application executable's filename.
+    <br />
+    Application names are used by the adaptor for load-balancing.
+  </font>
+</webobject>
+<webobject name = "ShouldOfferLogout">
+  <center>
+    <br />
+    <br />
+    <font size = "-1">
+      <webobject name = "LogoutLink">Log Out</webobject>
+    </font>
+    <br />
+  </center>
+</webobject>
+</webobject>
