@@ -14,9 +14,8 @@ import er.extensions.ERXQ;
  * example:
  * </p>
  * <code>
- * on Person: public static final ERXKey company = new ERXKey(Person.COMPANY_KEY);
+ * on Person: public static final ERXKey country = new ERXKey(Person.COUNTRY_KEY);
  * on Person: public static final ERXKey birthDate = new ERXKey(Person.BIRTH_DATE_KEY);
- * on Company: public static final ERXKey country = new ERXKey(Company.COUNTRY_KEY);
  * 
  * NSTimestamp someRandomDate = ...;
  * EOQualifier qualifier = Person.country.is(germany).and(Person.birthDate.after(someRandomDate));
