@@ -17,7 +17,7 @@ IsFailed: WOConditional {
 }
 
 FileUpload1: WOFileUpload {
-	data = identityContent;
+	data = sshIdentityContent;
 	filePath = sshIdentityFilepath;
 }
 

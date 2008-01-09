@@ -62,16 +62,16 @@ public class ConfigurePage extends MonitorComponent  {
 
 
     /********** Adaptor Section **********/
-    String _loadSchedulerSelection = null;;
-    String loadSchedulerItem;
-    NSArray loadSchedulerList = MObject.loadSchedulerArray;
+    public String _loadSchedulerSelection = null;;
+    public String loadSchedulerItem;
+    public NSArray loadSchedulerList = MObject.loadSchedulerArray;
 
-    Integer urlVersionItem;
-    NSArray urlVersionList = MObject.urlVersionArray;
+    public Integer urlVersionItem;
+    public NSArray urlVersionList = MObject.urlVersionArray;
 
-    String customSchedulerName;
+    public String customSchedulerName;
 
-    String loadSchedulerSelection() {
+    public String loadSchedulerSelection() {
         if ( (theApplication != null) && (theApplication.siteConfig().scheduler() != null) ) {
             int indexOfScheduler = MObject.loadSchedulerArrayValues.indexOfObject(theApplication.siteConfig().scheduler());
             if (indexOfScheduler != -1) {
@@ -84,15 +84,15 @@ public class ConfigurePage extends MonitorComponent  {
         }
         return _loadSchedulerSelection;
     }
-    void setLoadSchedulerSelection(String value) {
+    public void setLoadSchedulerSelection(String value) {
         _loadSchedulerSelection = value;
     }
 
-    Integer urlVersionSelection() {
+    public Integer urlVersionSelection() {
         if (theApplication != null) return theApplication.siteConfig().urlVersion();
         return null;
     }
-    void setUrlVersionSelection(Integer value) {
+    public void setUrlVersionSelection(Integer value) {
         if (theApplication != null) theApplication.siteConfig().setUrlVersion(value);
     }
 

@@ -104,11 +104,6 @@ UpdateAdaptorButton: WOSubmitButton {
 	value = "Update Adaptor Settings";
 }
 
-UpdateAutoRecoverButton: WOSubmitButton {
-    action = autoRecoverUpdateClicked;
-    value = "Update";
-}
-
 UpdateEmailButton: WOSubmitButton {
     action = emailUpdateClicked;
     value = "Update Email Notification Settings";

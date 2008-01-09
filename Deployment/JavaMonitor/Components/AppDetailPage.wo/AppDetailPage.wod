@@ -360,10 +360,6 @@ AddInstanceSubmitButton: WOSubmitButton {
     value = "Add ";
 }
 
-AddApplicationName: WOString {
-    value = anApp.displayName;
-}
-
 AddHasHostsConditional: WOConditional {
     condition = hasHosts;
 }

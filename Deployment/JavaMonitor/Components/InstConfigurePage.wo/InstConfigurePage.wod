@@ -17,11 +17,6 @@ Caching: WOCheckBox {
     checked = mySession.mInstance.cachingEnabled;
 }
 
-ChangeToNowButton: WOSubmitButton {
-    action = changeScheduleToNowClicked;
-    value = "Change to Now";
-}
-
 CheckBox2: WOCheckBox {
 	checked = mySession.mInstance.autoOpenInBrowser;
 }

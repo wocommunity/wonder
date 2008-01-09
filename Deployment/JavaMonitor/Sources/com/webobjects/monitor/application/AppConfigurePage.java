@@ -34,7 +34,7 @@ public class AppConfigurePage extends MonitorComponent  {
     public boolean isSchedulingSectionVisible = false;
     public boolean isAdaptorSettingsSectionVisible = false;
 
-    MApplication appDefaults = new MApplication(mySession().mApplication.values(), _sc, null);
+    public MApplication appDefaults = new MApplication(mySession().mApplication.values(), _sc, null);
 
     public AppConfigurePage(WOContext aWocontext) {
         super(aWocontext);
@@ -357,40 +357,40 @@ public class AppConfigurePage extends MonitorComponent  {
 
 
     /********** Scheduling Section *********/
-    boolean shouldSchedule() {
+    public boolean shouldSchedule() {
         if (mySession().mApplication.instanceArray().count() != 0)
             return true;
         return false;
     }
-    MInstance currentScheduledInstance;
-    NSArray weekList = MObject.weekArray;
-    NSArray timeOfDayList = MObject.timeOfDayArray;
-    NSArray schedulingTypeList = MObject.schedulingTypeArray;
-    NSArray schedulingIntervalList = MObject.schedulingIntervalArray;
+    public MInstance currentScheduledInstance;
+    public NSArray weekList = MObject.weekArray;
+    public NSArray timeOfDayList = MObject.timeOfDayArray;
+    public NSArray schedulingTypeList = MObject.schedulingTypeArray;
+    public NSArray schedulingIntervalList = MObject.schedulingIntervalArray;
 
-    String weekSelection() {
+    public String weekSelection() {
         return MObject.morphedSchedulingStartDay(currentScheduledInstance.schedulingStartDay());
     }
-    void setWeekSelection(String value) {
+    public void setWeekSelection(String value) {
         currentScheduledInstance.setSchedulingStartDay(MObject.morphedSchedulingStartDay(value));
     }
 
-    String timeHourlySelection() {
+    public String timeHourlySelection() {
         return MObject.morphedSchedulingStartTime(currentScheduledInstance.schedulingHourlyStartTime());
     }
-    void setTimeHourlySelection(String value) {
+    public void setTimeHourlySelection(String value) {
         currentScheduledInstance.setSchedulingHourlyStartTime(MObject.morphedSchedulingStartTime(value));
     }
-    String timeDailySelection() {
+    public String timeDailySelection() {
         return MObject.morphedSchedulingStartTime(currentScheduledInstance.schedulingDailyStartTime());
     }
-    void setTimeDailySelection(String value) {
+    public void setTimeDailySelection(String value) {
         currentScheduledInstance.setSchedulingDailyStartTime(MObject.morphedSchedulingStartTime(value));
     }
-    String timeWeeklySelection() {
+    public String timeWeeklySelection() {
         return MObject.morphedSchedulingStartTime(currentScheduledInstance.schedulingWeeklyStartTime());
     }
-    void setTimeWeeklySelection(String value) {
+    public void setTimeWeeklySelection(String value) {
         currentScheduledInstance.setSchedulingWeeklyStartTime(MObject.morphedSchedulingStartTime(value));
     }
 
@@ -414,16 +414,16 @@ public class AppConfigurePage extends MonitorComponent  {
 
 
     /********** Adaptor Settings Section *********/
-    String _loadSchedulerSelection = null;
-    String loadSchedulerItem;
-    NSArray loadSchedulerList = MObject.loadSchedulerArray;
+    public String _loadSchedulerSelection = null;
+    public String loadSchedulerItem;
+    public NSArray loadSchedulerList = MObject.loadSchedulerArray;
 
-    Integer urlVersionItem;
-    NSArray urlVersionList = MObject.urlVersionArray;
+    public Integer urlVersionItem;
+    public NSArray urlVersionList = MObject.urlVersionArray;
 
-    String customSchedulerName;
+    public String customSchedulerName;
 
-    String loadSchedulerSelection() {
+    public String loadSchedulerSelection() {
         if (mySession().mApplication.scheduler() != null) {
             int indexOfScheduler = MObject.loadSchedulerArrayValues.indexOfObject(mySession().mApplication.scheduler());
             if (indexOfScheduler != -1) {
@@ -436,14 +436,14 @@ public class AppConfigurePage extends MonitorComponent  {
         }
         return _loadSchedulerSelection;
     }
-    void setLoadSchedulerSelection(String value) {
+    public void setLoadSchedulerSelection(String value) {
         _loadSchedulerSelection = value;
     }
 
-    Integer urlVersionSelection() {
+    public Integer urlVersionSelection() {
         return mySession().mApplication.urlVersion();
     }
-    void setUrlVersionSelection(Integer value) {
+    public void setUrlVersionSelection(Integer value) {
         mySession().mApplication.setUrlVersion(value);
     }
 

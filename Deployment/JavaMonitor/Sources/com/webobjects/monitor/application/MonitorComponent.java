@@ -35,12 +35,12 @@ import com.webobjects.monitor._private.String_Extensions;
 
 public class MonitorComponent extends WOComponent {
 	private static final long	serialVersionUID	= -1880897151494772932L;
-	final int APP_PAGE = 0;
-    final int HOST_PAGE = 1;
-    final int SITE_PAGE = 2;
-    final int PREF_PAGE = 3;
-    final int HELP_PAGE = 4;
-    final int MIGRATION_PAGE = 5;
+	public final int APP_PAGE = 0;
+	public final int HOST_PAGE = 1;
+	public final int SITE_PAGE = 2;
+	public final int PREF_PAGE = 3;
+	public final int HELP_PAGE = 4;
+	public final int MIGRATION_PAGE = 5;
 	
     public Application theApplication = (Application)WOApplication.application();
 
