@@ -35,20 +35,13 @@ public class PrefsPage extends MonitorComponent  {
             theApplication.siteConfig()._setOldPassword();
             theApplication.siteConfig().setPassword(adminPassword1);
             mySession().setIsLoggedIn(true);
-            mySession().errorMessageArray.addObjectIfAbsent("Password has been updated");
+            mySession().addErrorIfAbsent("Password has been updated");
 
-            theApplication._lock.startReading();
-            try {
-                if (theApplication.siteConfig().hostArray().count() != 0) {
-                    sendUpdateSiteToWotaskds();
-                }
-            } finally {
-                theApplication._lock.endReading();
-            }
-
+            handler().sendUpdateSiteToWotaskds();
+            
             theApplication.siteConfig()._resetOldPassword();
         } else {
-            mySession().errorMessageArray.addObjectIfAbsent("Passwords did not match or were empty.  Password was NOT updated");
+            mySession().addErrorIfAbsent("Passwords did not match or were empty.  Password was NOT updated");
         }
 
         return aPage;
@@ -58,17 +51,10 @@ public class PrefsPage extends MonitorComponent  {
         theApplication.siteConfig()._setOldPassword();
         theApplication.siteConfig().resetPassword();
         PrefsPage aPage = (PrefsPage) pageWithName("PrefsPage");
-        mySession().errorMessageArray.addObjectIfAbsent("Password has been updated");
+        mySession().addErrorIfAbsent("Password has been updated");
 
-        theApplication._lock.startReading();
-        try {
-            if (theApplication.siteConfig().hostArray().count() != 0) {
-                sendUpdateSiteToWotaskds();
-            }
-        } finally {
-            theApplication._lock.endReading();
-        }
-
+        handler().sendUpdateSiteToWotaskds();
+        
         theApplication.siteConfig()._resetOldPassword();
         return aPage;
     }
@@ -77,15 +63,8 @@ public class PrefsPage extends MonitorComponent  {
 
     /********** Detail View Section **********/
     public WOComponent detailViewUpdateClicked() {
-        theApplication._lock.startReading();
-        try {
-            if (theApplication.siteConfig().hostArray().count() != 0) {
-                sendUpdateSiteToWotaskds();
-            }
-        } finally {
-            theApplication._lock.endReading();
-        }
-
+        handler().sendUpdateSiteToWotaskds();
+        
         PrefsPage aPage = (PrefsPage) pageWithName("PrefsPage");
         return aPage;
     }

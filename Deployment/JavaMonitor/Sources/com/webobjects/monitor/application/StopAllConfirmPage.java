@@ -32,7 +32,7 @@ public class StopAllConfirmPage extends MonitorComponent  {
         theApplication._lock.startReading();
         try {
             if (mySession().mApplication.hostArray().count() != 0) {
-                sendCommandInstancesToWotaskds("STOP", mySession().mApplication.instanceArray(), mySession().mApplication.hostArray());
+                handler().sendCommandInstancesToWotaskds("STOP", mySession().mApplication.instanceArray(), mySession().mApplication.hostArray());
             }
 
             NSArray instancesArray = mySession().mApplication.instanceArray();

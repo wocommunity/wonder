@@ -30,15 +30,8 @@ public class ConfigurePage extends MonitorComponent  {
 
 	/********** HTTP Server Section **********/
     public WOComponent HTTPServerUpdateClicked() {
-        theApplication._lock.startReading();
-        try {
-            if (theApplication.siteConfig().hostArray().count() != 0) {
-                sendUpdateSiteToWotaskds();
-            }
-        } finally {
-            theApplication._lock.endReading();
-        }
-
+        handler().sendUpdateSiteToWotaskds();
+        
         ConfigurePage aPage = (ConfigurePage) pageWithName("ConfigurePage");
         return aPage;
     }
@@ -46,15 +39,8 @@ public class ConfigurePage extends MonitorComponent  {
 
     /********** Email Section **********/
     public WOComponent emailUpdateClicked() {
-        theApplication._lock.startReading();
-        try {
-            if (theApplication.siteConfig().hostArray().count() != 0) {
-                sendUpdateSiteToWotaskds();
-            }
-        } finally {
-            theApplication._lock.endReading();
-        }
-
+        handler().sendUpdateSiteToWotaskds();
+        
         ConfigurePage aPage = (ConfigurePage) pageWithName("ConfigurePage");
         return aPage;
     }
@@ -112,15 +98,8 @@ public class ConfigurePage extends MonitorComponent  {
         }
         theApplication.siteConfig().setScheduler(newValue);
 
-        theApplication._lock.startReading();
-        try {
-            if (theApplication.siteConfig().hostArray().count() != 0) {
-                sendUpdateSiteToWotaskds();
-            }
-        } finally {
-            theApplication._lock.endReading();
-        }
-
+        handler().sendUpdateSiteToWotaskds();
+        
         ConfigurePage aPage = (ConfigurePage) pageWithName("ConfigurePage");
         return aPage;
     }

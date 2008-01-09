@@ -77,7 +77,12 @@ public class Session extends WOSession  {
 
     
     /********** Error/Informational Messages **********/
-    _NSThreadsafeMutableArray errorMessageArray = new _NSThreadsafeMutableArray(new NSMutableArray<Object>());
+    private _NSThreadsafeMutableArray errorMessageArray = new _NSThreadsafeMutableArray(new NSMutableArray<Object>());
+    
+    public void addErrorIfAbsent(String message) {
+        errorMessageArray.addObjectIfAbsent(message);
+    }
+    
     public String message() {
         String _message = null;
         if (theApplication.siteConfig() != null) {

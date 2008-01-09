@@ -20,33 +20,36 @@
   <br />
 </webobject>
 <webobject name = "RefreshLink">Refresh Now</webobject>
+<webobject name = "ShowDetailStatistics">Detailed Statistics</webobject>
 </font>
 <br />
 <span class="error"><webobject name = "MessageString"></webobject>
 </span>
 <table border = "1" cellpadding = "2" cellspacing = "0" bgcolor = "#E8E8E8">
   <tr>
-    <th rowspan="2">Selected</th>
-    <th rowspan="2">Name</th>
-    <th rowspan="2">Host: Port</th>
-    <th rowspan="2">Status</th>
-    <th rowspan="2">Start - Stop</th>
-    <th rowspan="2">Auto- Recover</th>
-    <th rowspan="2">Refuse New Sessions</th>
-    <th rowspan="2">Scheduled</th>
-    <th rowspan="2">Next shutdown</th>
-    <th colspan="6">Statistics</th>
-    <th rowspan="2">Configure</th>
-    <th rowspan="2">Delete</th>
+    <th>Selected</th>
+    <th>Name</th>
+    <th>Host: Port</th>
+    <th>Status</th>
+    <th>Start - Stop</th>
+    <th>Auto- Recover</th>
+    <th>Refuse New Sessions</th>
+    <th>Scheduled</th>
+    <th>Next shutdown</th>
+    <webobject name = "ShowStatistics">
+	    <th>Transactions</th>
+	    <th>Active Sessions</th>
+	    <th>Average Transactions</th>
+	    <th>Average Idle Period</th>
+	    <th>Deaths</th>
+    </webobject><webobject name = "ShowWOStats">
+		<th>WOStats</th>
+	</webobject>
+    <th>Configure</th>
+    <th>Delete</th>
   </tr>
   <tr>
-    <th>Transactions</th>
-    <th>Active Sessions</th>
-    <th>Average Transactions</th>
-    <th>Average Idle Period</th>
-    <th>Deaths</th>
-    <th>WOStats</th>
-   </tr>
+     </tr>
   <webobject name = "InstanceRepetition">
     <tr>
 <!-- Selection -->
@@ -127,7 +130,7 @@
         <webobject name = "NextShutdown"></webobject>
       </td>
 <!--       Statistics       -->
-      <td>
+      <webobject name = "ShowStatistics"><td>
         <webobject name = "InstTransactions"></webobject>
       </td>
       <td>
@@ -147,6 +150,8 @@
         </webobject>
         <webobject name = "ShouldNOTDisplayDeathDetailLink">-</webobject>
       </td>
+    </webobject>
+    <webobject name = "ShowWOStats">
       <td>
         <webobject name = "InstanceRunningConditional">
           <webobject name = "LinkToWOStats">
@@ -157,6 +162,7 @@
           <webobject name = "WOStatsOffButton"></webobject>
         </webobject>
       </td>
+      </webobject>
 <!--       Configure       -->
       <td>
         <webobject name = "InstConfigureLink">
@@ -172,9 +178,16 @@
     </tr>
   </webobject>
   <webobject name = "HasInstancesConditional">
+    <webobject name = "ShowStatistics">
     <tr>
-      <td colSpan = "15" bgColor = "#ffffff">&nbsp</td>
+      <td colSpan = "16" bgColor = "#ffffff">&nbsp</td>
     </tr>
+    </webobject>
+ 	<webobject name = "ShowWOStats">
+    <tr>
+      <td colSpan = "12" bgColor = "#ffffff">&nbsp</td>
+    </tr>
+    </webobject>
     <tr bgcolor = "#D4D4D4">
 	<td><webobject name = "SelectAllForm">
 	<input type="checkbox" name="selectall" onclick="this.form.submit()" checked="checked">/
@@ -221,8 +234,9 @@
         </webobject>
       </td>
 <!--       Next Scheduled Shutdown       -->
-      <td>&nbsp</td>
+      <td><webobject name = "BounceLink">Bounce</webobject></td>
 <!--       Statistics All       -->
+   <webobject name = "ShowStatistics">
       <td>
         <webobject name = "TotalTransactions"></webobject>
       </td>
@@ -242,9 +256,12 @@
           Deaths
         </webobject>
       </td>
+    </webobject>
+    <webobject name = "ShowWOStats">
       <td>
         <webobject name = "ActualRatePerMinute"></webobject>
         TPM      </td>
+   </webobject>
 <!--       Configure       -->
       <td>
         <webobject name = "ConfigureLink">

@@ -27,7 +27,7 @@ public class AppDeathPage extends MonitorComponent  {
     }
 
     public WOComponent clearDeathsClicked() {
-        sendCommandInstancesToWotaskds("CLEAR", new NSArray <MInstance>(mySession().mInstance), new NSArray <MHost>(mySession().mInstance.host()));
+        handler().sendCommandInstancesToWotaskds("CLEAR", new NSArray <MInstance>(mySession().mInstance), new NSArray <MHost>(mySession().mInstance.host()));
 
         return pageWithName("AppDetailPage");
     }

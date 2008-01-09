@@ -35,7 +35,7 @@ public class HostConfirmDeletePage extends MonitorComponent  {
             NSMutableArray tempHostArray = new NSMutableArray(theApplication.siteConfig().hostArray());
             tempHostArray.addObject(mySession().mHost);
 
-            sendRemoveHostToWotaskds(mySession().mHost, tempHostArray);
+            handler().sendRemoveHostToWotaskds(mySession().mHost, tempHostArray);
         } finally {
             theApplication._lock.endWriting();
         }
