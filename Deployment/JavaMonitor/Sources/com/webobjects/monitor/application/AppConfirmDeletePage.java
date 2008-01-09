@@ -27,7 +27,7 @@ public class AppConfirmDeletePage extends MonitorComponent  {
             theApplication.siteConfig().removeApplication_M(mySession().mApplication);
 
             if (theApplication.siteConfig().hostArray().count() != 0) {
-                sendRemoveApplicationToWotaskds(mySession().mApplication, theApplication.siteConfig().hostArray());
+                handler().sendRemoveApplicationToWotaskds(mySession().mApplication, theApplication.siteConfig().hostArray());
             }
         } finally {
             theApplication._lock.endWriting();

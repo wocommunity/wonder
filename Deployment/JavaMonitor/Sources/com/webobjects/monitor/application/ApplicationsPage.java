@@ -53,7 +53,7 @@ public class ApplicationsPage extends MonitorComponent  {
                     theApplication.siteConfig().addApplication_M(newApplication);
 
                     if (theApplication.siteConfig().hostArray().count() != 0) {
-                        sendAddApplicationToWotaskds(newApplication, theApplication.siteConfig().hostArray());
+                        handler().sendAddApplicationToWotaskds(newApplication, theApplication.siteConfig().hostArray());
                     }
 
                     mySession().mApplication = newApplication;

@@ -68,13 +68,13 @@ public class InstConfigurePage extends MonitorComponent  {
         if (value == null) return;
         if (!value.equals(mySession().mInstance.port())) {
             if (mySession().mInstance.state != MObject.DEAD) {
-                mySession().errorMessageArray.addObjectIfAbsent("This instance is still running; unable to change port");
+                mySession().addErrorIfAbsent("This instance is still running; unable to change port");
                 return;
             }
             if (!mySession().mInstance.host().isPortInUse(value)) {
                 mySession().mInstance.setPort(value);
             } else {
-                mySession().errorMessageArray.addObjectIfAbsent("This port is in use");
+                mySession().addErrorIfAbsent("This port is in use");
             }
         }
     }
@@ -89,7 +89,7 @@ public class InstConfigurePage extends MonitorComponent  {
             if (!mySession().mInstance.application().isIDInUse(value)) {
                 mySession().mInstance.setId(value);
             } else {
-                mySession().errorMessageArray.addObjectIfAbsent("This ID is in use");
+                mySession().addErrorIfAbsent("This ID is in use");
             }
         }
     }
@@ -98,7 +98,7 @@ public class InstConfigurePage extends MonitorComponent  {
         theApplication._lock.startReading();
         try {
             if (theApplication.siteConfig().hostArray().count() != 0) {
-                sendUpdateInstancesToWotaskds(new NSArray(mySession().mInstance), theApplication.siteConfig().hostArray());
+                handler().sendUpdateInstancesToWotaskds(new NSArray(mySession().mInstance), theApplication.siteConfig().hostArray());
             }
         } finally {
             theApplication._lock.endReading();
@@ -113,7 +113,7 @@ public class InstConfigurePage extends MonitorComponent  {
         theApplication._lock.startReading();
         try {
             if (theApplication.siteConfig().hostArray().count() != 0) {
-                sendUpdateInstancesToWotaskds(new NSArray(mySession().mInstance), theApplication.siteConfig().hostArray());
+                handler().sendUpdateInstancesToWotaskds(new NSArray(mySession().mInstance), theApplication.siteConfig().hostArray());
             }
         } finally {
             theApplication._lock.endReading();
@@ -234,7 +234,7 @@ public class InstConfigurePage extends MonitorComponent  {
 
     /********** Force Quit support **********/
     public WOComponent forceQuitClicked() {
-        sendCommandInstancesToWotaskds("QUIT", new NSArray(mySession().mInstance), new NSArray(mySession().mInstance.host()));
+        handler().sendCommandInstancesToWotaskds("QUIT", new NSArray(mySession().mInstance), new NSArray(mySession().mInstance.host()));
         return null;
     }
 

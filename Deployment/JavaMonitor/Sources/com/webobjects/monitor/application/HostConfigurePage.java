@@ -51,7 +51,7 @@ public class HostConfigurePage extends MonitorComponent  {
 
             if ( (_hostTypeSelection != null) && (!(_hostTypeSelection.toUpperCase().equals(host.type()))) ) {
                 host.setType(_hostTypeSelection.toUpperCase());
-                sendUpdateHostToWotaskds(host, theApplication.siteConfig().hostArray());
+                handler().sendUpdateHostToWotaskds(host, theApplication.siteConfig().hostArray());
             }
         } finally {
             theApplication._lock.endWriting();
@@ -63,7 +63,7 @@ public class HostConfigurePage extends MonitorComponent  {
     public WOComponent syncHostClicked() {
         MHost host = mySession().mHost;
         theApplication.siteConfig().hostErrorArray.addObjectIfAbsent(host);
-        sendUpdateHostToWotaskds(host, new NSArray(host));
+        handler().sendUpdateHostToWotaskds(host, new NSArray(host));
 
         return pageWithName("HostConfigurePage");
     }

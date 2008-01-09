@@ -47,7 +47,7 @@ public class Main extends MonitorComponent  {
         if (theApplication.siteConfig().compareStringWithPassword(password())) {
             mySession().setIsLoggedIn(true);
         } else {
-            mySession().errorMessageArray.addObjectIfAbsent("Incorrect Password");
+            mySession().addErrorIfAbsent("Incorrect Password");
             return pageWithName("Main");
         }
 

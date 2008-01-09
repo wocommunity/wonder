@@ -32,7 +32,7 @@ public class InstConfirmDeletePage extends MonitorComponent  {
             theApplication.siteConfig().removeInstance_M(mySession().mInstance);
 
             if (theApplication.siteConfig().hostArray().count() != 0) {
-                sendRemoveInstancesToWotaskds(new NSArray(mySession().mInstance), theApplication.siteConfig().hostArray());
+                handler().sendRemoveInstancesToWotaskds(new NSArray(mySession().mInstance), theApplication.siteConfig().hostArray());
             }
         } finally {
             theApplication._lock.endWriting();

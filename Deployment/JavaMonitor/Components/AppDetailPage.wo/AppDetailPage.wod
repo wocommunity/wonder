@@ -403,3 +403,18 @@ SelectNotRunning : WOHyperlink {
 SelectRunning : WOHyperlink {
 	action = selectRunning;
 }
+ShowStatistics : WOConditional {
+  condition = showDetailStatistics;
+}
+
+ShowWOStats : WOConditional {
+  condition = showDetailStatistics;
+  negate = true;
+}
+ShowDetailStatistics : WOHyperlink {
+	action = showStatisticsClicked;
+}
+
+BounceLink : WOHyperlink {
+	action = bounceClicked;
+}
