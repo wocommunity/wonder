@@ -1,11 +1,13 @@
-package er.extensions.qualifiers;
+package er.extensions;
 
 import com.webobjects.eocontrol.EOQualifier;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSKeyValueCodingAdditions;
 import com.webobjects.foundation.NSTimestamp;
 
-import er.extensions.ERXQ;
+import er.extensions.qualifiers.ERXAndQualifier;
+import er.extensions.qualifiers.ERXKeyValueQualifier;
+import er.extensions.qualifiers.ERXOrQualifier;
 
 /**
  * <p>
@@ -14,8 +16,8 @@ import er.extensions.ERXQ;
  * example:
  * </p>
  * <code>
- * on Person: public static final ERXKey country = new ERXKey(Person.COUNTRY_KEY);
- * on Person: public static final ERXKey birthDate = new ERXKey(Person.BIRTH_DATE_KEY);
+ * on Person: public static final ERXKey<Country> country = new ERXKey<Country>(Person.COUNTRY_KEY);
+ * on Person: public static final ERXKey<NSTimestamp> birthDate = new ERXKey<NSTimestamp>(Person.BIRTH_DATE_KEY);
  *
  * Country germany = ...;
  * NSTimestamp someRandomDate = ...;
@@ -24,7 +26,7 @@ import er.extensions.ERXQ;
  * 
  * @author mschrag
  */
-public class ERXKey {
+public class ERXKey<T> {
 	private String _key;
 
 	/**
@@ -371,12 +373,19 @@ public class ERXKey {
 	 * instance, if this key is "person" and you add "firstName" to it, this
 	 * will return a new ERXKey "person.firstName".
 	 * 
+	 * Note: ERXKey has a limitation that it will not return the proper generic
+	 * type if you attempt to build a keypath extension of an NSArray. For
+	 * instance, ERXKey<NSArray<Person>>.append(ERXKey<String>) will return
+	 * ERXKey<String> when, in fact, it should be ERXKey<NSArray<String>>.
+	 * This is a limitation due to type erasure with generics that we cannot
+	 * currently resolve this problem.
+	 * 
 	 * @param key
 	 *            the key to append to this keypath
 	 * @return the new appended key
 	 */
-	public ERXKey append(String key) {
-		return new ERXKey(_key + "." + key);
+	public <U> ERXKey<U> append(String key) {
+		return new ERXKey<U>(_key + "." + key);
 	}
 
 	/**
@@ -384,23 +393,36 @@ public class ERXKey {
 	 * instance, if this key is "person" and you add "firstName" to it, this
 	 * will return a new ERXKey "person.firstName".
 	 * 
+	 * Note: ERXKey has a limitation that it will not return the proper generic
+	 * type if you attempt to build a keypath extension of an NSArray. For
+	 * instance, ERXKey<NSArray<Person>>.append(ERXKey<String>) will return
+	 * ERXKey<String> when, in fact, it should be ERXKey<NSArray<String>>.
+	 * This is a limitation due to type erasure with generics that we cannot
+	 * currently resolve this problem.
+	 * 
 	 * @param key
 	 *            the key to append to this keypath
 	 * @return the new appended key
 	 */
-	public ERXKey append(ERXKey key) {
+	@SuppressWarnings("unchecked")
+	public <U> ERXKey<U> append(ERXKey<U> key) {
 		return append(key.key());
 	}
 
 	/**
 	 * Returns the value of this keypath on the given object.
 	 * 
+	 * Note: If you ERXKey representation a keypath through an NSArray, this
+	 * method will result in a ClassCastException. See the 'Note' on .append(..)
+	 * for further explanation.
+	 * 
 	 * @param obj
 	 *            the target object to apply this keypath on
 	 * @return the value of the keypath on the target object
 	 */
-	public Object valueInObject(Object obj) {
-		return NSKeyValueCodingAdditions.DefaultImplementation.valueForKeyPath(obj, _key);
+	@SuppressWarnings("unchecked")
+	public T valueInObject(Object obj) {
+		return (T) NSKeyValueCodingAdditions.DefaultImplementation.valueForKeyPath(obj, _key);
 	}
 
 	/**
@@ -411,7 +433,7 @@ public class ERXKey {
 	 * @param obj
 	 *            the object to set the value on
 	 */
-	public void takeValueInObject(Object value, Object obj) {
+	public void takeValueInObject(T value, Object obj) {
 		NSKeyValueCodingAdditions.DefaultImplementation.takeValueForKeyPath(value, obj, _key);
 	}
 
