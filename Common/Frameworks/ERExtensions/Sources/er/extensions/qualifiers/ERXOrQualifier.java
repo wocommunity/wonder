@@ -27,7 +27,9 @@ public class ERXOrQualifier extends EOOrQualifier implements IERXChainableQualif
 	public ERXOrQualifier or(EOQualifier... qualifiers) {
 		NSMutableArray<EOQualifier> newQualifiers = qualifiers().mutableClone();
 		for (EOQualifier qualifier : qualifiers) {
-			newQualifiers.addObject(qualifier);
+			if (qualifier != null) {
+				newQualifiers.addObject(qualifier);
+			}
 		}
 		return new ERXOrQualifier(newQualifiers);
 	}
