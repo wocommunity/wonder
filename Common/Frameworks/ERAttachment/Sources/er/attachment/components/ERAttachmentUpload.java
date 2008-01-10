@@ -40,6 +40,7 @@ import er.extensions.ERXProperties;
  * @binding configurationName (optional) the configuration name for this attachment (see top level documentation)
  * @binding ownerID (optional) a string ID of the "owner" of this attachment (Person.primaryKey for instance)
  * @binding others all AjaxFileUpload bindings are proxied
+ * @binding cleanup (optional) if true, the old attachment binding value will be deleted 
  * 
  * @property er.attachment.[configurationName].tempFolder (optional) the temp folder to use for WOFileUploads
  * @property er.attachment.tempFolder (optional) the temp folder to use for WOFileUploads
@@ -133,6 +134,13 @@ public class ERAttachmentUpload extends WOComponent {
     String ownerID = (String) valueForBinding("ownerID");
     
     ERAttachment attachment = ERAttachmentProcessor.processorForType(storageType).process(editingContext, uploadedFile, _filePath, mimeType, configurationName, ownerID);
+    if (ERXComponentUtilities.booleanValueForBinding(this, "cleanup", false)) {
+      ERAttachment oldAttachment = (ERAttachment) valueForBinding("attachment");
+      if (oldAttachment != null) {
+        oldAttachment.delete();
+      }
+    }
+    
     setValueForBinding(attachment, "attachment");
     return attachment;
   }
