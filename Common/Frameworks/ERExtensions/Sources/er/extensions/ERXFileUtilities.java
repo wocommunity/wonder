@@ -142,6 +142,29 @@ public class ERXFileUtilities {
         writeInputStreamToFile(is, f);
     }
 
+	/**
+	 * Writes the contents of an InputStream to a temporary file.
+	 * 
+	 * @param stream
+	 *            to pull data from
+	 * @return the temp file that was created 
+	 */
+	public static File writeInputStreamToTempFile(InputStream stream) throws IOException {
+		File tempFile = new File("_Wonder", "tmp");
+		try {
+			ERXFileUtilities.writeInputStreamToFile(stream, tempFile);
+		}
+		catch (RuntimeException e) {
+			tempFile.delete();
+			throw e;
+		}
+		catch (IOException e) {
+			tempFile.delete();
+			throw e;
+		}
+		return tempFile;
+	}
+
     /**
         * Writes the contents of an InputStream to a specified file.
      * @param file to write to
