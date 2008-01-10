@@ -216,6 +216,9 @@ public class ERXMigrator {
 				String modelName = (String) modelNamesEnum.nextElement();
 				if (!skipModelNames.containsObject(modelName)) {
 					EOModel model = modelGroup.modelNamed(modelName);
+					if (model == null) {
+						throw new IllegalArgumentException("There is no model named '" + modelName + "' in this model group.");
+					}
 					_buildDependenciesForModel(model, ERXMigrator.LATEST_VERSION, versions, migrations);
 				}
 			}
