@@ -11,7 +11,6 @@ import java.util.Enumeration;
 import org.apache.log4j.Logger;
 
 import com.webobjects.foundation.NSArray;
-import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSForwardException;
 import com.webobjects.foundation.NSKeyValueCoding;
 import com.webobjects.foundation.NSKeyValueCodingAdditions;
@@ -244,15 +243,10 @@ public class ERXSimpleTemplateParser {
                                 log.debug("calling valueForKeyPath("+o+", "+element+")");
                             }
                             result = doGetValue(element, o);
+                            // For just in case the above doesn't throw an exception when the 
+                            // key is not defined. (NSDictionary doesn't seem to throw the exception.)
                             if(result == null) {
-                            	if (o instanceof NSDictionary) {
-                            		// NSDictionary doesn't throw UnknownKeyException
-									result = _undefinedKeyLabel;
-								} else {
-									// Key path value of e.g. eo can be null and
-									// empty string seems to be more reasonable in this case
-									result = "";
-								}
+                                result = _undefinedKeyLabel;
                             }
                         } catch (NSKeyValueCoding.UnknownKeyException t) {
                             result = _undefinedKeyLabel;
