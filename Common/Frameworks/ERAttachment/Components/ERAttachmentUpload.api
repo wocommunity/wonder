@@ -8,6 +8,7 @@
 		<binding name="mimeType"/>	
 		<binding name="ownerID"/>	
 		<binding name="ajax"/>
+		<binding name="cleanup"/>
 
 		<binding name="cancelText"/>
 		<binding name="cancelingText"/>
