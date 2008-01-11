@@ -12,6 +12,7 @@
       <webobject name = "AppName"></webobject>
     </webobject>
   </h1>
+  <div>Bouncer: <webobject name = "Bouncer"/></div>
   <font size = "-1">
 <webobject name = "IsRefreshEnabled">
     This page automatically updates every
@@ -36,14 +37,14 @@
     <th>Refuse New Sessions</th>
     <th>Scheduled</th>
     <th>Next shutdown</th>
+	<th>Deaths</th>
     <webobject name = "ShowStatistics">
 	    <th>Transactions</th>
 	    <th>Active Sessions</th>
 	    <th>Average Transactions</th>
 	    <th>Average Idle Period</th>
-	    <th>Deaths</th>
-    </webobject><webobject name = "ShowWOStats">
-		<th>WOStats</th>
+   </webobject><webobject name = "ShowWOStats">
+ 		<th>WOStats</th>
 	</webobject>
     <th>Configure</th>
     <th>Delete</th>
@@ -129,6 +130,14 @@
       <td>
         <webobject name = "NextShutdown"></webobject>
       </td>
+      <td>
+        <webobject name = "ShouldDisplayDeathDetailLink">
+          <webobject name = "InstDeathDetailLink">
+            <webobject name = "InstDeathCount"></webobject>
+          </webobject>
+        </webobject>
+        <webobject name = "ShouldNOTDisplayDeathDetailLink">-</webobject>
+      </td>
 <!--       Statistics       -->
       <webobject name = "ShowStatistics"><td>
         <webobject name = "InstTransactions"></webobject>
@@ -141,14 +150,6 @@
       </td>
       <td>
         <webobject name = "InstAverageIdle"></webobject>
-      </td>
-      <td>
-        <webobject name = "ShouldDisplayDeathDetailLink">
-          <webobject name = "InstDeathDetailLink">
-            <webobject name = "InstDeathCount"></webobject>
-          </webobject>
-        </webobject>
-        <webobject name = "ShouldNOTDisplayDeathDetailLink">-</webobject>
       </td>
     </webobject>
     <webobject name = "ShowWOStats">
@@ -235,6 +236,13 @@
       </td>
 <!--       Next Scheduled Shutdown       -->
       <td><webobject name = "BounceLink">Bounce</webobject></td>
+      <td>
+        <webobject name = "ClearDeathsLink">
+          Clear
+          <br />
+          Deaths
+        </webobject>
+      </td>
 <!--       Statistics All       -->
    <webobject name = "ShowStatistics">
       <td>
@@ -248,13 +256,6 @@
       </td>
       <td>
         <webobject name = "TotalAverageIdleTime"></webobject>
-      </td>
-      <td>
-        <webobject name = "ClearDeathsLink">
-          Clear
-          <br />
-          Deaths
-        </webobject>
       </td>
     </webobject>
     <webobject name = "ShowWOStats">
