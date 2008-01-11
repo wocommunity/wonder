@@ -135,7 +135,12 @@ public class AppDetailPage extends MonitorComponent {
             if (numToStartPerHost < 1) {
                 numToStartPerHost = 1;
             }
+            boolean useScheduling = true;
 
+            for (MInstance instance : runningInstances) {
+                useScheduling &= instance.schedulingEnabled() != null && instance.schedulingEnabled().booleanValue();
+            }
+  
             NSMutableArray<MInstance> startingInstances = new NSMutableArray<MInstance>();
             for (int i = 0; i < numToStartPerHost; i++) {
                 for (MHost host : activeHosts) {
@@ -149,6 +154,10 @@ public class AppDetailPage extends MonitorComponent {
                     }
                 }
             }
+            for (MInstance instance : startingInstances) {
+                instance.setSchedulingEnabled(Boolean.TRUE);
+            }
+            handler().sendUpdateInstancesToWotaskds(startingInstances, activeHosts.allObjects());
             handler().sendStartInstancesToWotaskds(startingInstances, activeHosts.allObjects());
             boolean waiting = true;
 
@@ -172,16 +181,8 @@ public class AppDetailPage extends MonitorComponent {
                 }
             }
             log("Started instances sucessfully");
-            boolean useScheduling = true;
-
-            for (MInstance instance : runningInstances) {
-                useScheduling &= instance.isActivelyBeingScheduled;
-            }
+  
             if (useScheduling) {
-                // turn scheduling on in starting apps
-                for (MInstance instance : startingInstances) {
-                    instance.setSchedulingEnabled(Boolean.TRUE);
-                }
                 // turn scheduling off
                 for (MHost host : activeHosts) {
                     NSArray<MInstance> currentInstances = activeInstancesByHost.objectForKey(host);
@@ -208,7 +209,7 @@ public class AppDetailPage extends MonitorComponent {
             // then start to refuse new sessions
             for (MHost host : activeHosts) {
                 NSArray<MInstance> currentInstances = activeInstancesByHost.objectForKey(host);
-                for (MInstance instance : startingInstances) {
+                for (MInstance instance : currentInstances) {
                     instance.isRefusingNewSessions = true;
                 }
             }
