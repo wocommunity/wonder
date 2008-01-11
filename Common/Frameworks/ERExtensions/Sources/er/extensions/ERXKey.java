@@ -72,6 +72,20 @@ public class ERXKey<T> {
 
 	/**
 	 * Equivalent to new ERXKeyValueQualifier(key,
+	 * EOQualifier.QualifierOperatorEqual, value) only if the value is not null.
+	 * If the value is null, this will return null, allowing you to
+	 * conditionally chain an equals only if the value is non-null.
+	 * 
+	 * @param value
+	 *            the value
+	 * @return an ERXKeyValueQualifier or null
+	 */
+	public ERXKeyValueQualifier isUnlessNull(Object value) {
+		return (value == null) ? null : is(value);
+	}
+
+	/**
+	 * Equivalent to new ERXKeyValueQualifier(key,
 	 * EOQualifier.QualifierOperatorEqual, value);
 	 * 
 	 * @param value
@@ -357,7 +371,7 @@ public class ERXKey<T> {
 	public ERXKeyValueQualifier contains(String value) {
 		return ERXQ.contains(_key, value);
 	}
-	
+
 	/**
 	 * Returns a qualifier that evalutes to true when the value of the given key
 	 * contains any of the given tokens (insensitively) in the search string.
@@ -370,7 +384,7 @@ public class ERXKey<T> {
 	public ERXOrQualifier containsAny(String tokens) {
 		return ERXQ.containsAny(_key, tokens);
 	}
-	
+
 	/**
 	 * Returns a qualifier that evalutes to true when the value of the given key
 	 * contains any of the given tokens (insensitively).
@@ -382,7 +396,7 @@ public class ERXKey<T> {
 	public ERXOrQualifier containsAny(String[] tokens) {
 		return ERXQ.containsAny(_key, tokens);
 	}
-	
+
 	/**
 	 * Returns a qualifier that evalutes to true when the value of the given key
 	 * contains all of the given tokens (insensitively) in the search string.
@@ -395,7 +409,7 @@ public class ERXKey<T> {
 	public ERXAndQualifier containsAll(String tokens) {
 		return ERXQ.containsAll(_key, tokens);
 	}
-	
+
 	/**
 	 * Returns a qualifier that evalutes to true when the value of the given key
 	 * contains all of the given tokens (insensitively).
