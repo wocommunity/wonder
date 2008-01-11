@@ -1007,7 +1007,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 						log.error("Refuse new sessions set to: " + shouldRefuse);
 					}
 					else {
-						log.warn("Refuse new sessions should be set to " + shouldRefuse + ", but kill timer is set");
+						log.info("Refuse new sessions should be set to " + shouldRefuse + ", but kill timer is active or not set at all via ERTimeToKill");
 					}
 				}
 			}
