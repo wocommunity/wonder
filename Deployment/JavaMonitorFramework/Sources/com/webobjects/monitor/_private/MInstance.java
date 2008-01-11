@@ -26,148 +26,333 @@ import com.webobjects.foundation.NSTimeZone;
 import com.webobjects.foundation.NSTimestamp;
 import com.webobjects.foundation.NSTimestampFormatter;
 
-
 public class MInstance extends MObject {
     static NSTimestampFormatter dateFormatter = new NSTimestampFormatter("%m/%d/%Y %H:%M:%S %Z");
+
     static NSTimestampFormatter shutdownFormatter = new NSTimestampFormatter("%a @ %H:00");
+
     /*
-    String hostName;
-    Integer id;
-    Integer port;
-    String applicationName;
-    Boolean autoRecover;
-    Integer minimumActiveSessionsCount;
-    String path;
-    Boolean cachingEnabled;
-    Boolean debuggingEnabled;
-    String outputPath;
-    Boolean autoOpenInBrowser;
-    Integer lifebeatInterval;
-    String additionalArgs;
-    Boolean schedulingEnabled;
-    String schedulingType;	// HOURLY | WEEKLY | DAILY
-    Integer schedulingHourlyStartTime;	// 1-24 O'clock
-    Integer schedulingDailyStartTime;	// 1-24 O'clock
-    Integer schedulingWeeklyStartTime;	// 1-24 O'clock
-    Integer schedulingStartDay;	// 1-7 (Mon-Sun)
-    Integer schedulingInterval;	// in hours
-    Boolean gracefulScheduling;
-    Integer sendTimeout;
-    Integer recvTimeout;
-    Integer cnctTimeout;
-    Integer sendBufSize;
-    Integer recvBufSize;
+     * String hostName; Integer id; Integer port; String applicationName;
+     * Boolean autoRecover; Integer minimumActiveSessionsCount; String path;
+     * Boolean cachingEnabled; Boolean debuggingEnabled; String outputPath;
+     * Boolean autoOpenInBrowser; Integer lifebeatInterval; String
+     * additionalArgs; Boolean schedulingEnabled; String schedulingType; //
+     * HOURLY | WEEKLY | DAILY Integer schedulingHourlyStartTime; // 1-24
+     * O'clock Integer schedulingDailyStartTime; // 1-24 O'clock Integer
+     * schedulingWeeklyStartTime; // 1-24 O'clock Integer schedulingStartDay; //
+     * 1-7 (Mon-Sun) Integer schedulingInterval; // in hours Boolean
+     * gracefulScheduling; Integer sendTimeout; Integer recvTimeout; Integer
+     * cnctTimeout; Integer sendBufSize; Integer recvBufSize;
      */
-    
-    /********** 'values' accessors **********/
-    public String hostName() { return (String) values.valueForKey("hostName"); }
-    public void setHostName(String value) { values.takeValueForKey(value, "hostName"); _siteConfig.dataHasChanged(); }
 
-    public Integer id() { return (Integer) values.valueForKey("id"); }
-    public void setId(Integer value) { values.takeValueForKey(MObject.validatedInteger(value), "id"); _siteConfig.dataHasChanged(); }
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((_application == null) ? 0 : _application.hashCode());
+        result = prime * result + ((id() == null) ? 0 : id().hashCode());
+        return result;
+    }
 
-    public Integer port() { return (Integer) values.valueForKey("port"); }
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        final MInstance other = (MInstance) obj;
+        if (_application == null) {
+            if (other._application != null)
+                return false;
+        } else if (!_application.equals(other._application))
+            return false;
+        if (id() == null) {
+            if (other.id() != null)
+                return false;
+        } else if (!id().equals(other.id()))
+            return false;
+        return true;
+    }
+
+    /** ******** 'values' accessors ********* */
+    public String hostName() {
+        return (String) values.valueForKey("hostName");
+    }
+
+    public void setHostName(String value) {
+        values.takeValueForKey(value, "hostName");
+        _siteConfig.dataHasChanged();
+    }
+
+    public Integer id() {
+        return (Integer) values.valueForKey("id");
+    }
+
+    public void setId(Integer value) {
+        values.takeValueForKey(MObject.validatedInteger(value), "id");
+        _siteConfig.dataHasChanged();
+    }
+
+    public Integer port() {
+        return (Integer) values.valueForKey("port");
+    }
+
     public void setPort(Integer value) {
         Integer valVal = MObject.validatedInteger(value);
         if (!valVal.equals(port())) {
             setOldport(port());
-            values.takeValueForKey(valVal, "port"); _siteConfig.dataHasChanged();
+            values.takeValueForKey(valVal, "port");
+            _siteConfig.dataHasChanged();
         }
     }
 
-    public String applicationName() { return (String) values.valueForKey("applicationName"); }
-    public void setApplicationName(String value) { values.takeValueForKey(value, "applicationName"); _siteConfig.dataHasChanged(); }
+    public String applicationName() {
+        return (String) values.valueForKey("applicationName");
+    }
 
-    public Boolean autoRecover() { return (Boolean) values.valueForKey("autoRecover"); }
-    public void setAutoRecover(Boolean value) { values.takeValueForKey(value, "autoRecover"); _siteConfig.dataHasChanged(); }
+    public void setApplicationName(String value) {
+        values.takeValueForKey(value, "applicationName");
+        _siteConfig.dataHasChanged();
+    }
 
-    public Integer minimumActiveSessionsCount() { return (Integer) values.valueForKey("minimumActiveSessionsCount"); }
-    public void setMinimumActiveSessionsCount(Integer value) { values.takeValueForKey(MObject.validatedInteger(value), "minimumActiveSessionsCount"); _siteConfig.dataHasChanged(); }
+    public Boolean autoRecover() {
+        return (Boolean) values.valueForKey("autoRecover");
+    }
 
-    public String path() { return (String) values.valueForKey("path"); }
-    public void setPath(String value) { values.takeValueForKey(value, "path"); _siteConfig.dataHasChanged(); }
+    public void setAutoRecover(Boolean value) {
+        values.takeValueForKey(value, "autoRecover");
+        _siteConfig.dataHasChanged();
+    }
 
-    public Boolean cachingEnabled() { return (Boolean) values.valueForKey("cachingEnabled"); }
-    public void setCachingEnabled(Boolean value) { values.takeValueForKey(value, "cachingEnabled"); _siteConfig.dataHasChanged(); }
+    public Integer minimumActiveSessionsCount() {
+        return (Integer) values.valueForKey("minimumActiveSessionsCount");
+    }
 
-    public Boolean debuggingEnabled() { return (Boolean) values.valueForKey("debuggingEnabled"); }
-    public void setDebuggingEnabled(Boolean value) { values.takeValueForKey(value, "debuggingEnabled"); _siteConfig.dataHasChanged(); }
+    public void setMinimumActiveSessionsCount(Integer value) {
+        values.takeValueForKey(MObject.validatedInteger(value), "minimumActiveSessionsCount");
+        _siteConfig.dataHasChanged();
+    }
 
-    public String outputPath() { return (String) values.valueForKey("outputPath"); }
-    public void setOutputPath(String value) { values.takeValueForKey(MObject.validatedOutputPath(value), "outputPath"); _siteConfig.dataHasChanged(); }
+    public String path() {
+        return (String) values.valueForKey("path");
+    }
 
-    public Boolean autoOpenInBrowser() { return (Boolean) values.valueForKey("autoOpenInBrowser"); }
-    public void setAutoOpenInBrowser(Boolean value) { values.takeValueForKey(value, "autoOpenInBrowser"); _siteConfig.dataHasChanged(); }
+    public void setPath(String value) {
+        values.takeValueForKey(value, "path");
+        _siteConfig.dataHasChanged();
+    }
 
-    public Integer lifebeatInterval() { return (Integer) values.valueForKey("lifebeatInterval"); }
-    public void setLifebeatInterval(Integer value) { values.takeValueForKey(MObject.validatedLifebeatInterval(value), "lifebeatInterval"); _siteConfig.dataHasChanged(); }
+    public Boolean cachingEnabled() {
+        return (Boolean) values.valueForKey("cachingEnabled");
+    }
 
-    public String additionalArgs() { return (String) values.valueForKey("additionalArgs"); }
-    public void setAdditionalArgs(String value) { values.takeValueForKey(value, "additionalArgs"); _siteConfig.dataHasChanged(); }
+    public void setCachingEnabled(Boolean value) {
+        values.takeValueForKey(value, "cachingEnabled");
+        _siteConfig.dataHasChanged();
+    }
 
-    public Boolean schedulingEnabled() { return (Boolean) values.valueForKey("schedulingEnabled"); }
-    public void setSchedulingEnabled(Boolean value) { values.takeValueForKey(value, "schedulingEnabled"); _siteConfig.dataHasChanged(); }
+    public Boolean debuggingEnabled() {
+        return (Boolean) values.valueForKey("debuggingEnabled");
+    }
 
-    public String schedulingType() { return (String) values.valueForKey("schedulingType"); }
-    public void setSchedulingType(String value) { values.takeValueForKey(MObject.validatedSchedulingType(value), "schedulingType"); _siteConfig.dataHasChanged(); }
+    public void setDebuggingEnabled(Boolean value) {
+        values.takeValueForKey(value, "debuggingEnabled");
+        _siteConfig.dataHasChanged();
+    }
 
-    public Integer schedulingHourlyStartTime() { return (Integer) values.valueForKey("schedulingHourlyStartTime"); }
-    public void setSchedulingHourlyStartTime(Integer value) { values.takeValueForKey(MObject.validatedSchedulingStartTime(value), "schedulingHourlyStartTime"); _siteConfig.dataHasChanged(); }
+    public String outputPath() {
+        return (String) values.valueForKey("outputPath");
+    }
 
-    public Integer schedulingDailyStartTime() { return (Integer) values.valueForKey("schedulingDailyStartTime"); }
-    public void setSchedulingDailyStartTime(Integer value) { values.takeValueForKey(MObject.validatedSchedulingStartTime(value), "schedulingDailyStartTime"); _siteConfig.dataHasChanged(); }
+    public void setOutputPath(String value) {
+        values.takeValueForKey(MObject.validatedOutputPath(value), "outputPath");
+        _siteConfig.dataHasChanged();
+    }
 
-    public Integer schedulingWeeklyStartTime() { return (Integer) values.valueForKey("schedulingWeeklyStartTime"); }
-    public void setSchedulingWeeklyStartTime(Integer value) { values.takeValueForKey(MObject.validatedSchedulingStartTime(value), "schedulingWeeklyStartTime"); _siteConfig.dataHasChanged(); }
+    public Boolean autoOpenInBrowser() {
+        return (Boolean) values.valueForKey("autoOpenInBrowser");
+    }
 
-    public Integer schedulingStartDay() { return (Integer) values.valueForKey("schedulingStartDay"); }
-    public void setSchedulingStartDay(Integer value) { values.takeValueForKey(MObject.validatedSchedulingStartDay(value), "schedulingStartDay"); _siteConfig.dataHasChanged(); }
+    public void setAutoOpenInBrowser(Boolean value) {
+        values.takeValueForKey(value, "autoOpenInBrowser");
+        _siteConfig.dataHasChanged();
+    }
 
-    public Integer schedulingInterval() { return (Integer) values.valueForKey("schedulingInterval"); }
-    public void setSchedulingInterval(Integer value) { values.takeValueForKey(MObject.validatedInteger(value), "schedulingInterval"); _siteConfig.dataHasChanged(); }
+    public Integer lifebeatInterval() {
+        return (Integer) values.valueForKey("lifebeatInterval");
+    }
 
-    public Boolean gracefulScheduling() { return (Boolean) values.valueForKey("gracefulScheduling"); }
-    public void setGracefulScheduling(Boolean value) { values.takeValueForKey(value, "gracefulScheduling"); _siteConfig.dataHasChanged(); }
+    public void setLifebeatInterval(Integer value) {
+        values.takeValueForKey(MObject.validatedLifebeatInterval(value), "lifebeatInterval");
+        _siteConfig.dataHasChanged();
+    }
 
-    public Integer sendTimeout() { return (Integer) values.valueForKey("sendTimeout"); }
-    public void setSendTimeout(Integer value) { values.takeValueForKey(MObject.validatedInteger(value), "sendTimeout"); _siteConfig.dataHasChanged(); }
+    public String additionalArgs() {
+        return (String) values.valueForKey("additionalArgs");
+    }
 
-    public Integer recvTimeout() { return (Integer) values.valueForKey("recvTimeout"); }
-    public void setRecvTimeout(Integer value) { values.takeValueForKey(MObject.validatedInteger(value), "recvTimeout"); _siteConfig.dataHasChanged(); }
+    public void setAdditionalArgs(String value) {
+        values.takeValueForKey(value, "additionalArgs");
+        _siteConfig.dataHasChanged();
+    }
 
-    public Integer cnctTimeout() { return (Integer) values.valueForKey("cnctTimeout"); }
-    public void setCnctTimeout(Integer value) { values.takeValueForKey(MObject.validatedInteger(value), "cnctTimeout"); _siteConfig.dataHasChanged(); }
+    public Boolean schedulingEnabled() {
+        return (Boolean) values.valueForKey("schedulingEnabled");
+    }
 
-    public Integer sendBufSize() { return (Integer) values.valueForKey("sendBufSize"); }
-    public void setSendBufSize(Integer value) { values.takeValueForKey(MObject.validatedInteger(value), "sendBufSize"); _siteConfig.dataHasChanged(); }
+    public void setSchedulingEnabled(Boolean value) {
+        values.takeValueForKey(value, "schedulingEnabled");
+        _siteConfig.dataHasChanged();
+    }
 
-    public Integer recvBufSize() { return (Integer) values.valueForKey("recvBufSize"); }
-    public void setRecvBufSize(Integer value) { values.takeValueForKey(MObject.validatedInteger(value), "recvBufSize"); _siteConfig.dataHasChanged(); }
-    /**********/
+    public String schedulingType() {
+        return (String) values.valueForKey("schedulingType");
+    }
 
-    /********** Don't use this ***********/
-    public Integer oldport() { return (Integer) values.valueForKey("oldport"); }
-    public void setOldport(Integer value) { values.takeValueForKey(MObject.validatedInteger(value), "oldport"); _siteConfig.dataHasChanged(); }
-    /**********/
+    public void setSchedulingType(String value) {
+        values.takeValueForKey(MObject.validatedSchedulingType(value), "schedulingType");
+        _siteConfig.dataHasChanged();
+    }
 
+    public Integer schedulingHourlyStartTime() {
+        return (Integer) values.valueForKey("schedulingHourlyStartTime");
+    }
 
-    
-    /********** Object Graph **********/
+    public void setSchedulingHourlyStartTime(Integer value) {
+        values.takeValueForKey(MObject.validatedSchedulingStartTime(value), "schedulingHourlyStartTime");
+        _siteConfig.dataHasChanged();
+    }
+
+    public Integer schedulingDailyStartTime() {
+        return (Integer) values.valueForKey("schedulingDailyStartTime");
+    }
+
+    public void setSchedulingDailyStartTime(Integer value) {
+        values.takeValueForKey(MObject.validatedSchedulingStartTime(value), "schedulingDailyStartTime");
+        _siteConfig.dataHasChanged();
+    }
+
+    public Integer schedulingWeeklyStartTime() {
+        return (Integer) values.valueForKey("schedulingWeeklyStartTime");
+    }
+
+    public void setSchedulingWeeklyStartTime(Integer value) {
+        values.takeValueForKey(MObject.validatedSchedulingStartTime(value), "schedulingWeeklyStartTime");
+        _siteConfig.dataHasChanged();
+    }
+
+    public Integer schedulingStartDay() {
+        return (Integer) values.valueForKey("schedulingStartDay");
+    }
+
+    public void setSchedulingStartDay(Integer value) {
+        values.takeValueForKey(MObject.validatedSchedulingStartDay(value), "schedulingStartDay");
+        _siteConfig.dataHasChanged();
+    }
+
+    public Integer schedulingInterval() {
+        return (Integer) values.valueForKey("schedulingInterval");
+    }
+
+    public void setSchedulingInterval(Integer value) {
+        values.takeValueForKey(MObject.validatedInteger(value), "schedulingInterval");
+        _siteConfig.dataHasChanged();
+    }
+
+    public Boolean gracefulScheduling() {
+        return (Boolean) values.valueForKey("gracefulScheduling");
+    }
+
+    public void setGracefulScheduling(Boolean value) {
+        values.takeValueForKey(value, "gracefulScheduling");
+        _siteConfig.dataHasChanged();
+    }
+
+    public Integer sendTimeout() {
+        return (Integer) values.valueForKey("sendTimeout");
+    }
+
+    public void setSendTimeout(Integer value) {
+        values.takeValueForKey(MObject.validatedInteger(value), "sendTimeout");
+        _siteConfig.dataHasChanged();
+    }
+
+    public Integer recvTimeout() {
+        return (Integer) values.valueForKey("recvTimeout");
+    }
+
+    public void setRecvTimeout(Integer value) {
+        values.takeValueForKey(MObject.validatedInteger(value), "recvTimeout");
+        _siteConfig.dataHasChanged();
+    }
+
+    public Integer cnctTimeout() {
+        return (Integer) values.valueForKey("cnctTimeout");
+    }
+
+    public void setCnctTimeout(Integer value) {
+        values.takeValueForKey(MObject.validatedInteger(value), "cnctTimeout");
+        _siteConfig.dataHasChanged();
+    }
+
+    public Integer sendBufSize() {
+        return (Integer) values.valueForKey("sendBufSize");
+    }
+
+    public void setSendBufSize(Integer value) {
+        values.takeValueForKey(MObject.validatedInteger(value), "sendBufSize");
+        _siteConfig.dataHasChanged();
+    }
+
+    public Integer recvBufSize() {
+        return (Integer) values.valueForKey("recvBufSize");
+    }
+
+    public void setRecvBufSize(Integer value) {
+        values.takeValueForKey(MObject.validatedInteger(value), "recvBufSize");
+        _siteConfig.dataHasChanged();
+    }
+
+    /** ******* */
+
+    /** ******** Don't use this ********** */
+    public Integer oldport() {
+        return (Integer) values.valueForKey("oldport");
+    }
+
+    public void setOldport(Integer value) {
+        values.takeValueForKey(MObject.validatedInteger(value), "oldport");
+        _siteConfig.dataHasChanged();
+    }
+
+    /** ******* */
+
+    /** ******** Object Graph ********* */
     MHost _host;
+
     MApplication _application;
 
-    public MHost host() { return _host; }
-    public MApplication application() {return _application; }
-    /**********/
-    
-    
+    public MHost host() {
+        return _host;
+    }
+
+    public MApplication application() {
+        return _application;
+    }
+
+    /** ******* */
+
     NSTimestamp _lastRegistration = NSTimestamp.DistantPast;
+
     NSMutableArray _deaths = new NSMutableArray();
+
     public boolean isRefusingNewSessions = false;
+
     public int state = MObject.DEAD;
 
-
-    /********** Constructors **********/
+    /** ******** Constructors ********* */
     // This constructor is for adding new instances through the UI
     public MInstance(MHost aHost, MApplication anApplication, Integer anID, MSiteConfig aConfig) {
         shutdownFormatter.setDefaultFormatTimeZone(NSTimeZone.timeZoneWithName("UTC", true));
@@ -187,7 +372,7 @@ public class MInstance extends MObject {
         setSchedulingHourlyStartTime(new Integer(3));
         setSchedulingDailyStartTime(new Integer(3));
         setSchedulingWeeklyStartTime(new Integer(3));
-        setSchedulingStartDay(new Integer(1));	// Sunday
+        setSchedulingStartDay(new Integer(1)); // Sunday
         setSchedulingInterval(new Integer(12));
         setGracefulScheduling(Boolean.TRUE);
     }
@@ -196,8 +381,9 @@ public class MInstance extends MObject {
     public MInstance(NSDictionary aDict, MSiteConfig aConfig) {
         shutdownFormatter.setDefaultFormatTimeZone(NSTimeZone.timeZoneWithName("UTC", true));
         values = new NSMutableDictionary(aDict);
-        _host = aConfig.hostWithName( hostName() );
-        _application = aConfig.applicationWithName( applicationName() );
+        
+        _host = aConfig.hostWithName(hostName());
+        _application = aConfig.applicationWithName(applicationName());
         _siteConfig = aConfig;
         calculateNextScheduledShutdown();
     }
@@ -205,13 +391,16 @@ public class MInstance extends MObject {
     public void _takeNameFromApplication() {
         setApplicationName(_application.name());
     }
+
     public void _takePortFromApplication() {
         NSDictionary appValues = _application.values;
         MHost aHost = _host;
 
         Integer appPort = (Integer) appValues.valueForKey("startingPort");
-        if ( (port() == null) || ( (port() != null) && (port().intValue() < appPort.intValue()) ) ) setPort(aHost.nextAvailablePort(appPort));
+        if ((port() == null) || ((port() != null) && (port().intValue() < appPort.intValue())))
+            setPort(aHost.nextAvailablePort(appPort));
     }
+
     public void _takePathFromApplication() {
         NSDictionary appValues = _application.values;
         MHost aHost = _host;
@@ -224,6 +413,7 @@ public class MInstance extends MObject {
             values.takeValueForKey(appValues.valueForKey("macPath"), "path");
         }
     }
+
     public void _takeOutputPathFromApplication() {
         NSDictionary appValues = _application.values;
         MHost aHost = _host;
@@ -236,10 +426,12 @@ public class MInstance extends MObject {
             values.takeValueForKey(generateOutputPath((String) appValues.valueForKey("macOutputPath")), "outputPath");
         }
     }
+
     public void _takeValueFromApplication(String valueName) {
         NSDictionary appValues = _application.values;
         values.takeValueForKey(appValues.valueForKey(valueName), valueName);
     }
+
     public void takeValuesFromApplication() {
         _takeNameFromApplication();
         _takePortFromApplication();
@@ -259,23 +451,25 @@ public class MInstance extends MObject {
 
     public String generateOutputPath(String pathEndingWithSeperator) {
         if (pathEndingWithSeperator != null) {
-            return NSPathUtilities._standardizedPath(NSPathUtilities.stringByAppendingPathComponent(pathEndingWithSeperator, displayName()));
+            return NSPathUtilities._standardizedPath(NSPathUtilities.stringByAppendingPathComponent(
+                    pathEndingWithSeperator, displayName()));
         }
         return null;
     }
-    /**********/
 
+    /** ******* */
 
-
-    /********** Archiving Support **********/
-    public NSDictionary dictionaryForArchive() { return values; }
+    /** ******** Archiving Support ********* */
+    public NSDictionary dictionaryForArchive() {
+        return values;
+    }
 
     public String toString() {
-        return (values.toString() + "\n" +
-        "lastRegistration = "  + _lastRegistration + "\n" +
-        "state = " + state + "\n" +
-        "isRefusingNewSessions = "  + isRefusingNewSessions + "\n" +
-        "deaths = " + _deaths);
+        if (false) {
+            return (values.toString() + " " + "lastRegistration = " + _lastRegistration + " " + "state = " + state
+                    + " " + "isRefusingNewSessions = " + isRefusingNewSessions + " " + "deaths = " + _deaths);
+        }
+        return "MInstance@" + applicationName() + "-" + id();
     }
 
     public void extractAdaptorValuesFromApplication() {
@@ -286,7 +480,8 @@ public class MInstance extends MObject {
         adaptorValues.takeValueForKey(values.valueForKey("sendBufSize"), "sendBufSize");
         adaptorValues.takeValueForKey(values.valueForKey("recvBufSize"), "recvBufSize");
 
-        // get MApplication application settings for setting that are still not set
+        // get MApplication application settings for setting that are still not
+        // set
         if (adaptorValues.valueForKey("sendTimeout") == null)
             adaptorValues.takeValueForKey(_application.values.valueForKey("sendTimeout"), "sendTimeout");
         if (adaptorValues.valueForKey("recvTimeout") == null)
@@ -298,7 +493,8 @@ public class MInstance extends MObject {
         if (adaptorValues.valueForKey("recvBufSize") == null)
             adaptorValues.takeValueForKey(_application.values.valueForKey("recvBufSize"), "recvBufSize");
 
-        // get MSiteConfig application settings for settings that are still not set
+        // get MSiteConfig application settings for settings that are still not
+        // set
         if (adaptorValues.valueForKey("sendTimeout") == null)
             adaptorValues.takeValueForKey(_siteConfig.values.valueForKey("sendTimeout"), "sendTimeout");
         if (adaptorValues.valueForKey("recvTimeout") == null)
@@ -310,11 +506,10 @@ public class MInstance extends MObject {
         if (adaptorValues.valueForKey("recvBufSize") == null)
             adaptorValues.takeValueForKey(_siteConfig.values.valueForKey("recvBufSize"), "recvBufSize");
     }
-    /**********/
 
+    /** ******* */
 
-
-    /********** Display Name Strings **********/
+    /** ******** Display Name Strings ********* */
     public String displayName() {
         return applicationName() + "-" + id();
     }
@@ -322,65 +517,84 @@ public class MInstance extends MObject {
     public String displayHostAndPort() {
         return hostName() + ":" + port();
     }
-    /**********/
 
+    /** ******* */
 
-    /********** Statistics Support **********/
+    /** ******** Statistics Support ********* */
     NSMutableDictionary _statistics = new NSMutableDictionary();
-    public NSDictionary statistics() { return _statistics; }
-    
+
+    public NSDictionary statistics() {
+        return _statistics;
+    }
+
     public void setStatistics(NSDictionary newStatistics) {
-        _statistics.takeValueForKey(MObject.validatedStats((String) newStatistics.valueForKey("transactions")), "transactions");
-        _statistics.takeValueForKey(MObject.validatedStats((String) newStatistics.valueForKey("activeSessions")), "activeSessions");
-        _statistics.takeValueForKey(MObject.validatedStats((String) newStatistics.valueForKey("avgTransactionTime")), "avgTransactionTime");
-        _statistics.takeValueForKey(MObject.validatedStats((String) newStatistics.valueForKey("averageIdlePeriod")), "averageIdlePeriod");
-        _statistics.takeValueForKey(MObject.validatedStats((String) newStatistics.valueForKey("startedAt")), "startedAt");
+        _statistics.takeValueForKey(MObject.validatedStats((String) newStatistics.valueForKey("transactions")),
+                "transactions");
+        _statistics.takeValueForKey(MObject.validatedStats((String) newStatistics.valueForKey("activeSessions")),
+                "activeSessions");
+        _statistics.takeValueForKey(MObject.validatedStats((String) newStatistics.valueForKey("avgTransactionTime")),
+                "avgTransactionTime");
+        _statistics.takeValueForKey(MObject.validatedStats((String) newStatistics.valueForKey("averageIdlePeriod")),
+                "averageIdlePeriod");
+        _statistics.takeValueForKey(MObject.validatedStats((String) newStatistics.valueForKey("startedAt")),
+                "startedAt");
     }
 
     public String transactions() {
         if (_statistics != null) {
             Object _value = _statistics.valueForKey("transactions");
-            if (_value != null) return (_value.toString());
+            if (_value != null)
+                return (_value.toString());
         }
         return "-";
     }
+
     public String activeSessions() {
         if (_statistics != null) {
             Object _value = _statistics.valueForKey("activeSessions");
-            if (_value != null) return (_value.toString());
+            if (_value != null)
+                return (_value.toString());
         }
         return "-";
     }
+
     public String avgTransactionTime() {
         if (_statistics != null) {
             Object _value = _statistics.valueForKey("avgTransactionTime");
-            if (_value != null) return (_value.toString());
+            if (_value != null)
+                return (_value.toString());
         }
         return "-";
     }
+
     public String averageIdlePeriod() {
         if (_statistics != null) {
             Object _value = _statistics.valueForKey("averageIdlePeriod");
-            if (_value != null) return (_value.toString());
+            if (_value != null)
+                return (_value.toString());
         }
         return "-";
     }
 
     private String _statisticsError = null;
+
     public void setStatisticsError(String errorString) {
         _statisticsError = errorString;
     }
+
     public String statisticsError() {
         return _statisticsError;
     }
+
     public void resetStatisticsError() {
         _statisticsError = null;
     }
-    /**********/
 
+    /** ******* */
 
-    /********** Startup Calculations **********/
+    /** ******** Startup Calculations ********* */
     public static long TIME_FOR_STARTUP = 30;
+
     NSTimestamp _finishStartingByDate = new NSTimestamp();
 
     public void willAttemptToStart() {
@@ -392,14 +606,14 @@ public class MInstance extends MObject {
         } else {
             timeForStartup = MInstance.TIME_FOR_STARTUP;
         }
-        _finishStartingByDate = new NSTimestamp(new NSTimestamp().getTime() + (timeForStartup*1000));
+        _finishStartingByDate = new NSTimestamp(new NSTimestamp().getTime() + (timeForStartup * 1000));
     }
-    /**********/
 
+    /** ******* */
 
-    /********** State Support **********/
+    /** ******** State Support ********* */
     private int _connectFailureCount = 0;
-    
+
     public void failedToConnect() {
         _connectFailureCount++;
         if (_connectFailureCount > 2) {
@@ -411,7 +625,7 @@ public class MInstance extends MObject {
     public void succeededInConnection() {
         _connectFailureCount = 0;
     }
-    
+
     public boolean isRunning_M() {
         return (state == MObject.ALIVE);
     }
@@ -439,7 +653,7 @@ public class MInstance extends MObject {
                     state = MObject.ALIVE;
                     return true;
                 }
-            // I'm finished trying to start
+                // I'm finished trying to start
             } else {
                 // I've received a lifebeat in time
                 if (currentTime > cutOffTime) {
@@ -468,7 +682,7 @@ public class MInstance extends MObject {
             sendDeathNotificationEmail();
             state = MObject.DEAD;
             return false;
-        } else {	// UNKNOWN, DEAD, STOPPING
+        } else { // UNKNOWN, DEAD, STOPPING
             if (currentTime > cutOffTime) {
                 state = MObject.DEAD;
                 return false;
@@ -489,26 +703,30 @@ public class MInstance extends MObject {
     }
 
     public boolean isLocal_W() {
-        if (host() == _siteConfig.localHost()) return true;
+        if (host() == _siteConfig.localHost())
+            return true;
         return false;
     }
 
     private boolean _shouldDie = false;
+
     public void setShouldDie(boolean b) {
         _shouldDie = b;
     }
+
     public boolean shouldDie() {
         return _shouldDie;
     }
+
     public boolean shouldDieAndReset() {
         boolean b = _shouldDie;
         _shouldDie = false;
         return b;
     }
-    /**********/
 
-    
-    /********** Registration and Lifebeats **********/
+    /** ******* */
+
+    /** ******** Registration and Lifebeats ********* */
     public NSTimestamp lastRegistration() {
         return _lastRegistration;
     }
@@ -539,7 +757,7 @@ public class MInstance extends MObject {
         Boolean aBool = _application.notificationEmailEnabled();
         if (aBool != null) {
             shouldEmail = aBool.booleanValue();
-        } 
+        }
 
         if (shouldEmail) {
             try {
@@ -548,40 +766,50 @@ public class MInstance extends MObject {
                 String fromAddress = siteConfig().emailReturnAddr();
                 NSArray toAddress = null;
                 String subject = new String("App stopped running: " + displayName());
-                String bodyText = new String("The application " + displayName() + " listening on port " + port() + " on host " + _host.name() + " stopped running at " + (currentDate) + ".  This may be the result of a crash or an intentional shutdown from outside of wotaskd");
-                    if (fromAddress != null) {
-                        fromAddress = new String("root@" + _host.name());
-                    }
-                    if (_application.notificationEmailAddr() != null) {
-                        toAddress = NSArray.componentsSeparatedByString(_application.notificationEmailAddr(), ",");
-                    }
-                    if (mailer != null && toAddress != null && toAddress.count() > 0) {
-                        mailer.composePlainTextEmail(fromAddress, toAddress, null, subject, bodyText, true);
-                    }
-            } catch(Throwable localException) {
+                String bodyText = new String("The application " + displayName() + " listening on port " + port()
+                        + " on host " + _host.name() + " stopped running at " + (currentDate)
+                        + ".  This may be the result of a crash or an intentional shutdown from outside of wotaskd");
+                if (fromAddress != null) {
+                    fromAddress = new String("root@" + _host.name());
+                }
+                if (_application.notificationEmailAddr() != null) {
+                    toAddress = NSArray.componentsSeparatedByString(_application.notificationEmailAddr(), ",");
+                }
+                if (mailer != null && toAddress != null && toAddress.count() > 0) {
+                    mailer.composePlainTextEmail(fromAddress, toAddress, null, subject, bodyText, true);
+                }
+            } catch (Throwable localException) {
                 NSLog.err.appendln("Error attempting to send email: " + localException);
             }
         }
     }
-    /*********/
-    
-        
 
-    /********** Deaths **********/
-    public NSMutableArray deaths() { return _deaths; }
-    public void setDeaths(NSMutableArray values) { _deaths = values; }
-    public int deathCount() { return _deaths.count(); }
+    /** ****** */
+
+    /** ******** Deaths ********* */
+    public NSMutableArray deaths() {
+        return _deaths;
+    }
+
+    public void setDeaths(NSMutableArray values) {
+        _deaths = values;
+    }
+
+    public int deathCount() {
+        return _deaths.count();
+    }
+
     public void addDeath() {
         _deaths.addObject(MInstance.dateFormatter.format(new NSTimestamp()));
     }
+
     public void removeAllDeaths() {
         _deaths = new NSMutableArray();
     }
-    /**********/
 
+    /** ******* */
 
-
-    /********** Command Line Arguments **********/
+    /** ******** Command Line Arguments ********* */
     public NSArray additionalArgumentsAsArray() {
         return NSArray.componentsSeparatedByString(additionalArgs(), " ");
     }
@@ -593,7 +821,7 @@ public class MInstance extends MObject {
             return null;
         }
     }
-    
+
     public NSArray commandLineArgumentsAsArray() {
         NSMutableArray anArray = new NSMutableArray(17);
 
@@ -680,31 +908,36 @@ public class MInstance extends MObject {
         if (additionalArgsString != null && additionalArgsString.length() > 0) {
             anArray.addObjectsFromArray(additionalArgumentsAsArray());
         }
-        
+
         return anArray;
     }
 
     public String commandLineArguments() {
         return commandLineArgumentsAsArray().componentsJoinedByString(" ").replace('\n', ' ').replace('\r', ' ');
     }
-    /**********/
- 
 
-    /********** Overridden Methods for Scheduling **********/
+    /** ******* */
+
+    /** ******** Overridden Methods for Scheduling ********* */
     public void setValues(NSMutableDictionary newValues) {
         super.setValues(newValues);
-        if (isScheduled()) calculateNextScheduledShutdown();
+        if (isScheduled())
+            calculateNextScheduledShutdown();
     }
+
     public void updateValues(NSDictionary aDict) {
         super.updateValues(aDict);
-        if (isScheduled()) calculateNextScheduledShutdown();
+        if (isScheduled())
+            calculateNextScheduledShutdown();
     }
-    /**********/
 
+    /** ******* */
 
-    /********** Scheduling **********/
+    /** ******** Scheduling ********* */
     NSTimestamp _nextScheduledShutdown = NSTimestamp.DistantPast;
+
     String _nextScheduledShutdownString = "-";
+
     public boolean isActivelyBeingScheduled = false;
 
     public boolean isScheduled() {
@@ -739,11 +972,11 @@ public class MInstance extends MObject {
     public void setNextScheduledShutdownString_M(String newtime) {
         _nextScheduledShutdownString = newtime;
     }
-    
+
     public boolean nearNextScheduledShutdown(NSTimestamp rightNow) {
         long temp;
         temp = Math.abs(_nextScheduledShutdown.timeIntervalSinceTimestamp(rightNow));
-        
+
         if (temp < halfHourAsSeconds) {
             if (NSLog.debugLoggingAllowedForLevelAndGroups(NSLog.DebugLevelInformational, NSLog.DebugGroupDeployment))
                 NSLog.debug.appendln("nearNextScheduledShutdown TRUE");
@@ -754,27 +987,35 @@ public class MInstance extends MObject {
         return false;
     }
 
-    // Note that we store and calculate everything based on GMT (sort of). 
-    // User selects "17:00", as assume that this means "17:00 relative to the timezone the application is running in". 
-    // Since we do the comparisons based on the same timezone, we are slightly insulated from the timezone stuff.
-    // Finally, we use a formatter to make it "look" like we are storing in the correct timezone, even though we aren't.
-    // This should only cause problems if you change the timezone of the appserver.
+    // Note that we store and calculate everything based on GMT (sort of).
+    // User selects "17:00", as assume that this means "17:00 relative to the
+    // timezone the application is running in".
+    // Since we do the comparisons based on the same timezone, we are slightly
+    // insulated from the timezone stuff.
+    // Finally, we use a formatter to make it "look" like we are storing in the
+    // correct timezone, even though we aren't.
+    // This should only cause problems if you change the timezone of the
+    // appserver.
     public void calculateNextScheduledShutdown() {
-        if (!isScheduled()) return;
+        if (!isScheduled())
+            return;
 
         NSTimestamp currentTime = new NSTimestamp(System.currentTimeMillis(), java.util.TimeZone.getDefault());
         TimeZone currentTimeZone = currentTime.timeZone();
         int currentYear = currentTime.yearOfCommonEra();
         int currentMonth = currentTime.monthOfYear();
-        int currentDayOfMonth = currentTime.dayOfMonth();	// [1,31]
-        int currentHourOfDay = currentTime.hourOfDay();		// [0,23]
-        
-        // Java normally returns 1-7, ObjC returned 0-6, JavaFoundation will return 0-6
-        int currentDayOfWeek = currentTime.dayOfWeek();		// [0,6] == [Sunday,Saturday]
+        int currentDayOfMonth = currentTime.dayOfMonth(); // [1,31]
+        int currentHourOfDay = currentTime.hourOfDay(); // [0,23]
+
+        // Java normally returns 1-7, ObjC returned 0-6, JavaFoundation will
+        // return 0-6
+        int currentDayOfWeek = currentTime.dayOfWeek(); // [0,6] ==
+                                                        // [Sunday,Saturday]
 
         String type = schedulingType();
 
-        // KH - can we check what happens if we run overtime - NSTimestamp should take care of it, but...
+        // KH - can we check what happens if we run overtime - NSTimestamp
+        // should take care of it, but...
 
         if (type.equals("HOURLY")) {
             Integer startTimeTemp = schedulingHourlyStartTime();
@@ -783,23 +1024,29 @@ public class MInstance extends MObject {
             Integer intervalTemp = schedulingInterval();
             int interval = (intervalTemp != null) ? intervalTemp.intValue() : -1;
 
-            if ( (startTime == -1) || (interval == -1) ) return;
+            if ((startTime == -1) || (interval == -1))
+                return;
 
             // This is to make sure that we don't set it in the past!
-            while (startTime <= currentHourOfDay) startTime += interval;
+            while (startTime <= currentHourOfDay)
+                startTime += interval;
 
-            setNextScheduledShutdown(new NSTimestamp(currentYear, currentMonth, currentDayOfMonth, startTime, 0, 0, currentTimeZone));
+            setNextScheduledShutdown(new NSTimestamp(currentYear, currentMonth, currentDayOfMonth, startTime, 0, 0,
+                    currentTimeZone));
 
         } else if (type.equals("DAILY")) {
             Integer startTimeTemp = schedulingDailyStartTime();
             int startTime = (startTimeTemp != null) ? startTimeTemp.intValue() : -1;
 
-            if ( startTime == -1 ) return;
+            if (startTime == -1)
+                return;
 
             // This is to make sure that we don't set it in the past!
-            if (startTime <= currentHourOfDay) currentDayOfMonth++;
+            if (startTime <= currentHourOfDay)
+                currentDayOfMonth++;
 
-            setNextScheduledShutdown(new NSTimestamp(currentYear, currentMonth, currentDayOfMonth, startTime, 0, 0, currentTimeZone));
+            setNextScheduledShutdown(new NSTimestamp(currentYear, currentMonth, currentDayOfMonth, startTime, 0, 0,
+                    currentTimeZone));
 
         } else if (type.equals("WEEKLY")) {
             Integer startTimeTemp = schedulingWeeklyStartTime();
@@ -808,21 +1055,24 @@ public class MInstance extends MObject {
             Integer startDayTemp = schedulingStartDay();
             int startDay = (startDayTemp != null) ? startDayTemp.intValue() : -1;
 
-            if ( (startTime == -1) || (startDay == -1) ) return;
+            if ((startTime == -1) || (startDay == -1))
+                return;
 
             // This is to make sure that we don't set it in the past!
             int temp = (startDay - currentDayOfWeek);
-            currentDayOfMonth = currentDayOfMonth + ((temp < 0) ? 7+temp : temp);
+            currentDayOfMonth = currentDayOfMonth + ((temp < 0) ? 7 + temp : temp);
 
             // Same day, but checking for past times
-            if ( (temp == 0) && (startTime <= currentHourOfDay) ) currentDayOfMonth += 7;
+            if ((temp == 0) && (startTime <= currentHourOfDay))
+                currentDayOfMonth += 7;
 
-            setNextScheduledShutdown(new NSTimestamp(currentYear, currentMonth, currentDayOfMonth, startTime, 0, 0, currentTimeZone));
+            setNextScheduledShutdown(new NSTimestamp(currentYear, currentMonth, currentDayOfMonth, startTime, 0, 0,
+                    currentTimeZone));
 
         }
         if (NSLog.debugLoggingAllowedForLevelAndGroups(NSLog.DebugLevelInformational, NSLog.DebugGroupDeployment))
             NSLog.debug.appendln("calculateNextScheduledShutdown: " + _nextScheduledShutdown);
     }
-    /**********/
-    
+    /** ******* */
+
 }
