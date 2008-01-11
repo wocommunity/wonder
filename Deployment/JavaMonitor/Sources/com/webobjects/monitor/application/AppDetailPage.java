@@ -140,7 +140,7 @@ public class AppDetailPage extends MonitorComponent {
             for (MInstance instance : runningInstances) {
                 useScheduling &= instance.schedulingEnabled() != null && instance.schedulingEnabled().booleanValue();
             }
-  
+
             NSMutableArray<MInstance> startingInstances = new NSMutableArray<MInstance>();
             for (int i = 0; i < numToStartPerHost; i++) {
                 for (MHost host : activeHosts) {
@@ -155,7 +155,11 @@ public class AppDetailPage extends MonitorComponent {
                 }
             }
             for (MInstance instance : startingInstances) {
-                instance.setSchedulingEnabled(Boolean.TRUE);
+                if (useScheduling) {
+                    instance.setSchedulingEnabled(Boolean.TRUE);
+                } else {
+                    instance.setAutoRecover(Boolean.TRUE);
+                }
             }
             handler().sendUpdateInstancesToWotaskds(startingInstances, activeHosts.allObjects());
             handler().sendStartInstancesToWotaskds(startingInstances, activeHosts.allObjects());
@@ -181,29 +185,19 @@ public class AppDetailPage extends MonitorComponent {
                 }
             }
             log("Started instances sucessfully");
-  
-            if (useScheduling) {
-                // turn scheduling off
-                for (MHost host : activeHosts) {
-                    NSArray<MInstance> currentInstances = activeInstancesByHost.objectForKey(host);
-                    for (MInstance instance : currentInstances) {
-                        instance.setSchedulingEnabled(Boolean.FALSE);
-                    }
-                }
 
-            } else {
-                // turn auto-recover on for starting instances
-                for (MInstance instance : startingInstances) {
-                    instance.setAutoRecover(Boolean.TRUE);
-                }
-                // turn auto-recover on
-                for (MHost host : activeHosts) {
-                    NSArray<MInstance> currentInstances = activeInstancesByHost.objectForKey(host);
-                    for (MInstance instance : currentInstances) {
-                        instance.setAutoRecover(Boolean.TRUE);
+            // turn scheduling off
+            for (MHost host : activeHosts) {
+                NSArray<MInstance> currentInstances = activeInstancesByHost.objectForKey(host);
+                for (MInstance instance : currentInstances) {
+                    if (useScheduling) {
+                        instance.setSchedulingEnabled(Boolean.FALSE);
+                    } else {
+                        instance.setAutoRecover(Boolean.FALSE);
                     }
                 }
             }
+
             handler().sendUpdateInstancesToWotaskds(runningInstances, activeHosts.allObjects());
 
             // then start to refuse new sessions
@@ -216,17 +210,19 @@ public class AppDetailPage extends MonitorComponent {
             handler().sendRefuseSessionToWotaskds(runningInstances, activeHosts.allObjects(), true);
             log("Refused new sessions: " + runningInstances);
 
-            if (useScheduling) {
-                // turn scheduling on again, but only
-                for (MHost host : activeHosts) {
-                    NSArray<MInstance> currentInstances = activeInstancesByHost.objectForKey(host);
-                    for (int i = 0; i < currentInstances.count() - numToStartPerHost; i++) {
-                        MInstance instance = currentInstances.objectAtIndex(i);
+            // turn scheduling on again, but only
+            for (MHost host : activeHosts) {
+                NSArray<MInstance> currentInstances = activeInstancesByHost.objectForKey(host);
+                for (int i = 0; i < currentInstances.count() - numToStartPerHost; i++) {
+                    MInstance instance = currentInstances.objectAtIndex(i);
+                    if (useScheduling) {
                         instance.setSchedulingEnabled(Boolean.TRUE);
+                    } else {
+                        instance.setAutoRecover(Boolean.TRUE);
                     }
                 }
-                log("Started scheduling again: " + runningInstances);
             }
+            log("Started scheduling again: " + runningInstances);
             handler().getInstanceStatusForHosts(activeHosts.allObjects());
             log("Finished");
         }
