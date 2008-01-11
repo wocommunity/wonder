@@ -235,7 +235,7 @@ public class LocalMonitor extends ProtoLocalMonitor  {
 
                     if ( (!anInst.isRunning_W()) && (anInst.state != MObject.STARTING) &&
                          ( (anInst.isAutoRecovering()) || (anInst.isScheduled()) ) ) {
-                        anInst.isRefusingNewSessions = false;
+                        anInst.setRefusingNewSessions(false);
                         startInstance(anInst);
                     }
                 }
@@ -319,7 +319,7 @@ public class LocalMonitor extends ProtoLocalMonitor  {
 
             if ( (anInst.isLocal_W()) && (!anInst.isRunning_W()) && (anInst.state != MObject.STARTING) &&
                  ( (anInst.isAutoRecovering()) || (anInst.isScheduled()) ) ) {
-                anInst.isRefusingNewSessions = false;
+                anInst.setRefusingNewSessions(false);
                 startInstance(anInst);
 
                 if ( (phasedStartup) && (i < instArrayCount-1) ) {
