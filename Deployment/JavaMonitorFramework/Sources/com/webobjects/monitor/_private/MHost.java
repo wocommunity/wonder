@@ -29,35 +29,51 @@ import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation._NSThreadsafeMutableArray;
 
-
 public class MHost extends MObject {
     /*
-     NSString name;
-     NSString type; // WINDOWS | UNIX | MACOSX
+     * NSString name; NSString type; // WINDOWS | UNIX | MACOSX
      */
 
-    /********** 'values' accessors **********/
-    public String name() { return (String) values.valueForKey("name"); }
-    public void setName(String value) { values.takeValueForKey(value, "name"); _siteConfig.dataHasChanged(); }
+    /** ******** 'values' accessors ********* */
+    public String name() {
+        return (String) values.valueForKey("name");
+    }
 
-    public String type() { return (String) values.valueForKey("type"); }
-    public void setType(String value) { values.takeValueForKey(MObject.validatedHostType(value), "type"); _siteConfig.dataHasChanged(); }
-    /**********/
+    public void setName(String value) {
+        values.takeValueForKey(value, "name");
+        _siteConfig.dataHasChanged();
+    }
 
-    
-    /********** Object Graph **********/
+    public String type() {
+        return (String) values.valueForKey("type");
+    }
+
+    public void setType(String value) {
+        values.takeValueForKey(MObject.validatedHostType(value), "type");
+        _siteConfig.dataHasChanged();
+    }
+
+    /** ******* */
+
+    /** ******** Object Graph ********* */
     NSMutableArray _instanceArray;
+
     NSMutableArray _applicationArray = new NSMutableArray();
 
-    public NSMutableArray instanceArray() { return _instanceArray; }
-    public NSArray applicationArray() { return _applicationArray; }
-    /**********/
+    public NSMutableArray instanceArray() {
+        return _instanceArray;
+    }
 
+    public NSArray applicationArray() {
+        return _applicationArray;
+    }
 
-    /********** Constructors **********/
+    /** ******* */
+
+    /** ******** Constructors ********* */
     // From the UI
     public MHost(MSiteConfig aConfig, String name, String type) {
-        this(new NSDictionary <Object, Object>(new Object[]{name, type}, new Object[]{"name", "type"}), aConfig);
+        this(new NSDictionary<Object, Object>(new Object[] { name, type }, new Object[] { "name", "type" }), aConfig);
     }
 
     // Unarchiving or Monitor Update
@@ -73,13 +89,15 @@ public class MHost extends MObject {
         }
 
         // This is just for caching purposes
-        errorResponse = (new _JavaMonitorCoder()).encodeRootObjectForKey(new NSDictionary<String, NSArray> (new NSArray("Failed to contact " + name() +"-"+ WOApplication.application().lifebeatDestinationPort()), "errorResponse"), "instanceResponse");
+        errorResponse = (new _JavaMonitorCoder()).encodeRootObjectForKey(new NSDictionary<String, NSArray>(new NSArray(
+                "Failed to contact " + name() + "-" + WOApplication.application().lifebeatDestinationPort()),
+                "errorResponse"), "instanceResponse");
 
     }
-    /**********/
-    
 
-    /********** Adding and Removing Instance Primitives **********/
+    /** ******* */
+
+    /** ******** Adding and Removing Instance Primitives ********* */
     public void _addInstancePrimitive(MInstance anInstance) {
         _instanceArray.addObject(anInstance);
         if (!_applicationArray.containsObject(anInstance._application)) {
@@ -89,10 +107,11 @@ public class MHost extends MObject {
 
     public void _removeInstancePrimitive(MInstance anInstance) {
         _instanceArray.removeObject(anInstance);
-        // get the instances's host - check all the other instances that this application has to see if any other ones have that host
+        // get the instances's host - check all the other instances that this
+        // application has to see if any other ones have that host
         // if not, remove it.
         boolean uniqueApplication = true;
-        for (Enumeration e = _instanceArray.objectEnumerator(); e.hasMoreElements(); ) {
+        for (Enumeration e = _instanceArray.objectEnumerator(); e.hasMoreElements();) {
             MInstance anInst = (MInstance) e.nextElement();
             if (anInstance._application == anInst._application) {
                 uniqueApplication = false;
@@ -103,13 +122,15 @@ public class MHost extends MObject {
             _applicationArray.removeObject(anInstance._application);
         }
     }
-    /**********/
 
+    /** ******* */
 
-    /********** InetAddress stuff **********/
+    /** ******** InetAddress stuff ********* */
     private InetAddress _address = null;
 
-    public InetAddress address() { return _address; }
+    public InetAddress address() {
+        return _address;
+    }
 
     public String addressAsString() {
         if (_address != null) {
@@ -117,27 +138,38 @@ public class MHost extends MObject {
         }
         return "Unknown";
     }
-    /**********/
 
+    /** ******* */
 
-    /********** Archiving Support **********/
-    public NSDictionary dictionaryForArchive() { return values; }
+    @Override
+    public boolean equals(Object other) {
+        return (other instanceof MHost) && (((MHost) other)._address.equals(_address));
+    }
+
+    @Override
+    public int hashCode() {
+        return _address.hashCode();
+    }
+
+    /** ******** Archiving Support ********* */
+    public NSDictionary dictionaryForArchive() {
+        return values;
+    }
 
     public String toString() {
-        return
-        values.toString() + "\n" +
-        "address = "  + _address + "\n" +
-        "runningInstances = "  + runningInstances + "\n" +
-        "operatingSystem = "  + operatingSystem + "\n" +
-        "processorType = "  + processorType + "\n";
+        if (false) {
+            return values.toString() + " " + "address = " + _address + " " + "runningInstances = " + runningInstances
+                    + " " + "operatingSystem = " + operatingSystem + " " + "processorType = " + processorType + " ";
+        }
+        return "MHost@" + _address;
     }
-    /**********/
 
-    
+    /** ******* */
+
     public Integer runningInstancesCount_W() {
         int runningInstances = 0;
         int numInstances = _instanceArray.count();
-        for (int i=0; i<numInstances; i++) {
+        for (int i = 0; i < numInstances; i++) {
             MInstance anInstance = (MInstance) _instanceArray.objectAtIndex(i);
             if (anInstance.isRunning_W()) {
                 runningInstances++;
@@ -168,7 +200,7 @@ public class MHost extends MObject {
 
     public MInstance instanceWithPort(Integer port) {
         int instanceArrayCount = _instanceArray.count();
-        for (int i=0; i<instanceArrayCount; i++) {
+        for (int i = 0; i < instanceArrayCount; i++) {
             MInstance anInst = (MInstance) _instanceArray.objectAtIndex(i);
             if (anInst.port().equals(port)) {
                 return anInst;
@@ -177,30 +209,37 @@ public class MHost extends MObject {
         return null;
     }
 
-
-    /********** Machine Information and Availability Check (Used by MONITOR) **********/
+    /**
+     * ******** Machine Information and Availability Check (Used by MONITOR)
+     * *********
+     */
     public String runningInstances = "?";
+
     public String operatingSystem = "?";
+
     public String processorType = "?";
+
     public boolean isAvailable = false;
 
     public void _setHostInfo(NSDictionary _hostStats) {
         Object aValue = null;
-        
+
         aValue = _hostStats.valueForKey("runningInstances");
-        if (aValue != null) runningInstances = aValue.toString();
-        
+        if (aValue != null)
+            runningInstances = aValue.toString();
+
         aValue = _hostStats.valueForKey("operatingSystem");
-        if (aValue != null) operatingSystem = aValue.toString();
+        if (aValue != null)
+            operatingSystem = aValue.toString();
 
         aValue = _hostStats.valueForKey("processorType");
-        if (aValue != null) processorType =  aValue.toString();
+        if (aValue != null)
+            processorType = aValue.toString();
     }
-    /**********/
 
+    /** ******* */
 
-
-    /********** Communications Goop **********/
+    /** ******** Communications Goop ********* */
     public static WOResponse[] sendRequestToWotaskdArray(NSData content, NSArray wotaskdArray, boolean willChange) {
         MSiteConfig aConfig;
         MHost aHost = (MHost) wotaskdArray.objectAtIndex(0);
@@ -217,13 +256,13 @@ public class MHost extends MObject {
             final _NSThreadsafeMutableArray syncHosts = aConfig.hostErrorArray;
             if (NSLog.debugLoggingAllowedForLevelAndGroups(NSLog.DebugLevelDetailed, NSLog.DebugGroupDeployment))
                 NSLog.debug.appendln("Sending sync requests to: " + syncHosts.array());
-//            final MSiteConfig finalConfig = aConfig;
+            // final MSiteConfig finalConfig = aConfig;
             Thread[] workers = new Thread[syncHosts.count()];
-            for (int i=0; i<workers.length; i++) {
+            for (int i = 0; i < workers.length; i++) {
                 final int j = i;
                 Runnable work = new Runnable() {
                     public void run() {
-                        MHost aHost = (MHost)syncHosts.objectAtIndex(j);
+                        MHost aHost = (MHost) syncHosts.objectAtIndex(j);
                         aHost.sendRequestToWotaskd(aSyncRequest, true, true);
                     }
                 };
@@ -232,26 +271,27 @@ public class MHost extends MObject {
             }
 
             try {
-                for (int i=0; i<workers.length; i++) {
+                for (int i = 0; i < workers.length; i++) {
                     workers[i].join();
                 }
             } catch (InterruptedException ie) {
             }
         }
 
-        
-        final WORequest aRequest = new WORequest(MObject._POST, MObject.directActionString, MObject._HTTP1, aConfig.passwordDictionary(), content, null);
+        final WORequest aRequest = new WORequest(MObject._POST, MObject.directActionString, MObject._HTTP1, aConfig
+                .passwordDictionary(), content, null);
         final NSArray finalWotaskdArray = wotaskdArray;
         final boolean wc = willChange;
 
         Thread[] workers = new Thread[wotaskdArray.count()];
         final WOResponse[] responses = new WOResponse[workers.length];
 
-        for (int i=0; i<workers.length; i++) {
+        for (int i = 0; i < workers.length; i++) {
             final int j = i;
             Runnable work = new Runnable() {
                 public void run() {
-                    responses[j] = ((MHost) finalWotaskdArray.objectAtIndex(j)).sendRequestToWotaskd(aRequest, wc, false);
+                    responses[j] = ((MHost) finalWotaskdArray.objectAtIndex(j)).sendRequestToWotaskd(aRequest, wc,
+                            false);
                 }
             };
             workers[j] = new Thread(work);
@@ -259,7 +299,7 @@ public class MHost extends MObject {
         }
 
         try {
-            for (int i=0; i<workers.length; i++) {
+            for (int i = 0; i < workers.length; i++) {
                 workers[i].join();
             }
         } catch (InterruptedException ie) {
@@ -270,17 +310,23 @@ public class MHost extends MObject {
     }
 
     private static WORequest _syncRequest = null;
+
     private static WORequest syncRequest(MSiteConfig aConfig) {
         if (_syncRequest == null) {
-            NSMutableDictionary<String, NSDictionary> data = new NSMutableDictionary<String, NSDictionary>(aConfig.dictionaryForArchive(), "SiteConfig");
-            NSMutableDictionary<String, NSMutableDictionary<String, NSDictionary>> updateWotaskd = new NSMutableDictionary<String, NSMutableDictionary<String, NSDictionary>>(data, "sync");
-            NSMutableDictionary<String, NSMutableDictionary<String, NSMutableDictionary<String, NSDictionary>>> monitorRequest = new NSMutableDictionary<String, NSMutableDictionary<String, NSMutableDictionary<String, NSDictionary>>>(updateWotaskd, "updateWotaskd");
-            NSData content = new NSData( (new _JavaMonitorCoder()).encodeRootObjectForKey(monitorRequest, "monitorRequest") );
-            _syncRequest = new WORequest(MObject._POST, MObject.directActionString, MObject._HTTP1, aConfig.passwordDictionary(), content, null);
+            NSMutableDictionary<String, NSDictionary> data = new NSMutableDictionary<String, NSDictionary>(aConfig
+                    .dictionaryForArchive(), "SiteConfig");
+            NSMutableDictionary<String, NSMutableDictionary<String, NSDictionary>> updateWotaskd = new NSMutableDictionary<String, NSMutableDictionary<String, NSDictionary>>(
+                    data, "sync");
+            NSMutableDictionary<String, NSMutableDictionary<String, NSMutableDictionary<String, NSDictionary>>> monitorRequest = new NSMutableDictionary<String, NSMutableDictionary<String, NSMutableDictionary<String, NSDictionary>>>(
+                    updateWotaskd, "updateWotaskd");
+            NSData content = new NSData((new _JavaMonitorCoder()).encodeRootObjectForKey(monitorRequest,
+                    "monitorRequest"));
+            _syncRequest = new WORequest(MObject._POST, MObject.directActionString, MObject._HTTP1, aConfig
+                    .passwordDictionary(), content, null);
         }
         return _syncRequest;
     }
-    
+
     private String errorResponse = null;
 
     public WOResponse sendRequestToWotaskd(WORequest aRequest, boolean willChange, boolean isSync) {
@@ -289,7 +335,8 @@ public class MHost extends MObject {
         WOResponse aResponse = null;
 
         try {
-            WOHTTPConnection anHTTPConnection = new WOHTTPConnection(name(), WOApplication.application().lifebeatDestinationPort());
+            WOHTTPConnection anHTTPConnection = new WOHTTPConnection(name(), WOApplication.application()
+                    .lifebeatDestinationPort());
             anHTTPConnection.setReceiveTimeout(10000);
 
             boolean requestSucceeded = anHTTPConnection.sendRequest(aRequest);
@@ -305,7 +352,7 @@ public class MHost extends MObject {
             if (aResponse == null) {
                 isAvailable = false;
             }
-        } catch(Throwable localException) {
+        } catch (Throwable localException) {
             if (NSLog.debugLoggingAllowedForLevelAndGroups(NSLog.DebugLevelDetailed, NSLog.DebugGroupDeployment))
                 NSLog.err.appendln(localException);
             isAvailable = false;
