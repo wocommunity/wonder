@@ -418,3 +418,6 @@ ShowDetailStatistics : WOHyperlink {
 BounceLink : WOHyperlink {
 	action = bounceClicked;
 }
+Bouncer : WOString {
+  value = currentBouncer;
+}

@@ -547,7 +547,7 @@ public class DirectAction extends WODirectAction  {
                         port = anInstance.port();
                         runningState = MObject.stateArray[anInstance.state];
                         statistics = anInstance.statistics();
-                        refusingNewSessions = (anInstance.isRefusingNewSessions) ? Boolean.TRUE : Boolean.FALSE;
+                        refusingNewSessions = (anInstance.isRefusingNewSessions()) ? Boolean.TRUE : Boolean.FALSE;
                         deaths = anInstance.deaths();
                         nextShutdown = anInstance.nextScheduledShutdownString();
 
@@ -626,9 +626,9 @@ public class DirectAction extends WODirectAction  {
                 MInstance anInstance = (MInstance) instArray.objectAtIndex(i);
                 anInstance.updateRegistration(new NSTimestamp());
                 if (aResponse.headerForKey("x-webobjects-refusenewsessions") != null) {
-                    anInstance.isRefusingNewSessions = true;
+                    anInstance.setRefusingNewSessions(true);
                 } else {
-                    anInstance.isRefusingNewSessions = false;
+                    anInstance.setRefusingNewSessions(false);
                 }
 
                 NSDictionary instanceResponse = null;

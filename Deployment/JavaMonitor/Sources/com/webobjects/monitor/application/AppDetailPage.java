@@ -118,7 +118,7 @@ public class AppDetailPage extends MonitorComponent {
                         currentInstances = new NSMutableArray<MInstance>();
                         activeInstancesByHost.setObjectForKey(currentInstances, host);
                     }
-                    activeInstancesByHost.setObjectForKey(currentInstances, host);
+                    currentInstances.addObject(instance);
                 } else {
                     NSMutableArray<MInstance> currentInstances = inactiveInstancesByHost.objectForKey(host);
                     if (currentInstances == null) {
@@ -204,13 +204,14 @@ public class AppDetailPage extends MonitorComponent {
             for (MHost host : activeHosts) {
                 NSArray<MInstance> currentInstances = activeInstancesByHost.objectForKey(host);
                 for (MInstance instance : currentInstances) {
-                    instance.isRefusingNewSessions = true;
+                    instance.setRefusingNewSessions(true);
                 }
             }
             handler().sendRefuseSessionToWotaskds(runningInstances, activeHosts.allObjects(), true);
             log("Refused new sessions: " + runningInstances);
 
             // turn scheduling on again, but only
+            NSMutableArray<MInstance> restarting = new NSMutableArray<MInstance>();
             for (MHost host : activeHosts) {
                 NSArray<MInstance> currentInstances = activeInstancesByHost.objectForKey(host);
                 for (int i = 0; i < currentInstances.count() - numToStartPerHost; i++) {
@@ -220,11 +221,19 @@ public class AppDetailPage extends MonitorComponent {
                     } else {
                         instance.setAutoRecover(Boolean.TRUE);
                     }
+                    restarting.addObject(instance);
                 }
             }
-            log("Started scheduling again: " + runningInstances);
-            handler().getInstanceStatusForHosts(activeHosts.allObjects());
-            log("Finished");
+            handler().sendUpdateInstancesToWotaskds(restarting, activeHosts.allObjects());
+            log("Started scheduling again: " + restarting);
+            
+            handler().startReading();
+            try {
+                handler().getInstanceStatusForHosts(activeHosts.allObjects());
+                log("Finished");
+            } finally {
+                handler().endReading();
+            }
         }
 
         private void log(Object msg) {
@@ -269,6 +278,7 @@ public class AppDetailPage extends MonitorComponent {
             old.interrupt();
         }
         Bouncer bouncer = new Bouncer(currentApplication());
+        session().setObjectForKey(bouncer, "Bouncer." + currentApplication().name());
         bouncer.start();
         return newDetailPage();
     }
@@ -481,7 +491,7 @@ public class AppDetailPage extends MonitorComponent {
 
     public WOComponent toggleRefuseNewSessions() {
         handler().sendRefuseSessionToWotaskds(new NSArray(currentInstance), new NSArray(currentInstance.host()),
-                !currentInstance.isRefusingNewSessions);
+                !currentInstance.isRefusingNewSessions());
 
         return newDetailPage();
     }
@@ -684,13 +694,13 @@ public class AppDetailPage extends MonitorComponent {
 
     public String refuseNewSessionsImage() {
         if ((currentInstance.schedulingEnabled() != null) && (currentInstance.schedulingEnabled().booleanValue())) {
-            if (currentInstance.isRefusingNewSessions) {
+            if (currentInstance.isRefusingNewSessions()) {
                 return "Panel_On_Yellow.gif";
             } else {
                 return "Panel_Off_Yellow.gif";
             }
         } else {
-            if (currentInstance.isRefusingNewSessions) {
+            if (currentInstance.isRefusingNewSessions()) {
                 return "Panel_On_Green.gif";
             } else {
                 return "Panel_Off.gif";
@@ -699,7 +709,7 @@ public class AppDetailPage extends MonitorComponent {
     }
 
     public String refuseNewSessionsImageText() {
-        if (currentInstance.isRefusingNewSessions) {
+        if (currentInstance.isRefusingNewSessions()) {
             return "Refusing New Sessions";
         } else {
             return "Accepting New Sessions";

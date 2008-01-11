@@ -348,7 +348,7 @@ public class MInstance extends MObject {
 
     NSMutableArray _deaths = new NSMutableArray();
 
-    public boolean isRefusingNewSessions = false;
+    private boolean isRefusingNewSessions = false;
 
     public int state = MObject.DEAD;
 
@@ -381,7 +381,7 @@ public class MInstance extends MObject {
     public MInstance(NSDictionary aDict, MSiteConfig aConfig) {
         shutdownFormatter.setDefaultFormatTimeZone(NSTimeZone.timeZoneWithName("UTC", true));
         values = new NSMutableDictionary(aDict);
-        
+
         _host = aConfig.hostWithName(hostName());
         _application = aConfig.applicationWithName(applicationName());
         _siteConfig = aConfig;
@@ -467,7 +467,7 @@ public class MInstance extends MObject {
     public String toString() {
         if (false) {
             return (values.toString() + " " + "lastRegistration = " + _lastRegistration + " " + "state = " + state
-                    + " " + "isRefusingNewSessions = " + isRefusingNewSessions + " " + "deaths = " + _deaths);
+                    + " " + "isRefusingNewSessions = " + isRefusingNewSessions() + " " + "deaths = " + _deaths);
         }
         return "MInstance@" + applicationName() + "-" + id();
     }
@@ -1010,7 +1010,7 @@ public class MInstance extends MObject {
         // Java normally returns 1-7, ObjC returned 0-6, JavaFoundation will
         // return 0-6
         int currentDayOfWeek = currentTime.dayOfWeek(); // [0,6] ==
-                                                        // [Sunday,Saturday]
+        // [Sunday,Saturday]
 
         String type = schedulingType();
 
@@ -1073,6 +1073,20 @@ public class MInstance extends MObject {
         if (NSLog.debugLoggingAllowedForLevelAndGroups(NSLog.DebugLevelInformational, NSLog.DebugGroupDeployment))
             NSLog.debug.appendln("calculateNextScheduledShutdown: " + _nextScheduledShutdown);
     }
+
     /** ******* */
+
+    public void setRefusingNewSessions(boolean isRefusingNewSessions) {
+        if (isRefusingNewSessions) {
+            // NSLog.debug.appendln(this + " setRefusingNewSessions: " + isRefusingNewSessions);
+        } else {
+            // NSLog.debug.appendln(this + " setRefusingNewSessions: " + false);
+        }
+        this.isRefusingNewSessions = isRefusingNewSessions;
+    }
+
+    public boolean isRefusingNewSessions() {
+        return isRefusingNewSessions;
+    }
 
 }

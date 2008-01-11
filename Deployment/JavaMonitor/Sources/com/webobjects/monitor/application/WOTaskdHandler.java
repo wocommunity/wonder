@@ -301,7 +301,7 @@ public class WOTaskdHandler {
     protected void sendRefuseSessionToWotaskds(NSArray<MInstance> instanceArray, NSArray<MHost> wotaskdArray,
             boolean doRefuse) {
         for (MInstance instance : instanceArray) {
-            instance.isRefusingNewSessions = doRefuse;
+            instance.setRefusingNewSessions(doRefuse);
         }
         sendCommandInstancesToWotaskds((doRefuse ? "REFUSE" : "ACCEPT"), instanceArray, wotaskdArray);
     }
@@ -525,7 +525,7 @@ public class WOTaskdHandler {
                                         break;
                                     }
                                 }
-                                anInstance.isRefusingNewSessions = String_Extensions.boolValue(refusingNewSessions);
+                                anInstance.setRefusingNewSessions(String_Extensions.boolValue(refusingNewSessions));
                                 anInstance.setStatistics(statistics);
                                 anInstance.setDeaths(new NSMutableArray(deaths));
                                 anInstance.setNextScheduledShutdownString_M(nextShutdown);
