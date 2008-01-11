@@ -62,11 +62,36 @@ public class MApplication extends MObject {
     Integer urlVersion;	// 3 | 4
      */
 
+    String _name;
+    
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((name() == null) ? 0 : name().hashCode());
+        return result;
+    }
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        final MApplication other = (MApplication) obj;
+        if ( name() == null) {
+            if (other. name() != null)
+                return false;
+        } else if (! name().equals(other.name()))
+            return false;
+        return true;
+    }
     /********** 'values' accessors **********/
     public String name() { return (String) values.valueForKey("name"); }
     public void setName(String value) {
         if (!value.equals(name())) {
-            setOldname(name());
+             setOldname(name());
             values.takeValueForKey(value, "name");
             _siteConfig.dataHasChanged();
         }
@@ -222,8 +247,8 @@ public class MApplication extends MObject {
     NSMutableArray _instanceArray = new NSMutableArray();
     NSMutableArray _hostArray = new NSMutableArray();
 
-    public NSArray instanceArray() { return _instanceArray; }
-    public NSArray hostArray() { return _hostArray; }
+    public NSArray<MInstance> instanceArray() { return _instanceArray; }
+    public NSArray<MHost> hostArray() { return _hostArray; }
     /**********/
 
 
@@ -311,7 +336,10 @@ public class MApplication extends MObject {
     public NSDictionary dictionaryForArchive() { return values; }
 
     public String toString() {
-        return values.toString();
+        if(false) {
+            return values.toString();
+        }
+        return "MApplication@" + name();
     }
 
     public void extractAdaptorValuesFromSiteConfig() {

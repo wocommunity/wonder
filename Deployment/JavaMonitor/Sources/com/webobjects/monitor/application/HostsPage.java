@@ -58,12 +58,11 @@ public class HostsPage extends MonitorComponent {
             try {
                 InetAddress anAddress = InetAddress.getByName(newHostName);
 
-                theApplication._lock.startWriting();
+                handler().startWriting();
                 try {
                     if (newHostName.equalsIgnoreCase("localhost") || newHostName.equals("127.0.0.1")) {
                         // only allow this to happen if we have no other hosts!
-                        if ((theApplication.siteConfig().hostArray() != null)
-                                && (theApplication.siteConfig().hostArray().count() == 0)) {
+                        if ((siteConfig().hostArray() != null) && (siteConfig().hostArray().count() == 0)) {
                             // we're OK to add localhost.
                             nullOrError = null;
                         } else {
@@ -73,7 +72,7 @@ public class HostsPage extends MonitorComponent {
                         // this is for non-localhost hosts
                         // only allow this to happen if localhost/127.0.0.1
                         // doesn't already exist!
-                        if (theApplication.siteConfig().localhostOrLoopbackHostExists()) {
+                        if (siteConfig().localhostOrLoopbackHostExists()) {
                             nullOrError = "Additional hosts may not be added while a host named localhost or 127.0.0.1 is configured.";
                         } else {
                             // we're OK to add localhost.
@@ -81,15 +80,14 @@ public class HostsPage extends MonitorComponent {
                         }
                     }
 
-                    if ((nullOrError == null) && (theApplication.siteConfig().hostWithAddress(anAddress) == null)) {
+                    if ((nullOrError == null) && (siteConfig().hostWithAddress(anAddress) == null)) {
                         if (hostMeetsMinimumVersion(anAddress)) {
 
-                            MHost host = new MHost(theApplication.siteConfig(), newHostName, hostTypeSelection
-                                    .toUpperCase());
+                            MHost host = new MHost(siteConfig(), newHostName, hostTypeSelection.toUpperCase());
 
                             // To avoid overwriting hosts
-                            NSArray tempHostArray = new NSArray(theApplication.siteConfig().hostArray());
-                            theApplication.siteConfig().addHost_M(host);
+                            NSArray tempHostArray = new NSArray(siteConfig().hostArray());
+                            siteConfig().addHost_M(host);
 
                             handler().sendOverwriteToWotaskd(host);
 
@@ -98,24 +96,23 @@ public class HostsPage extends MonitorComponent {
                             }
 
                         } else {
-                            mySession().addErrorIfAbsent("The wotaskd on " + newHostName
-                                    + " is an older version, please upgrade before adding...");
+                            mySession().addErrorIfAbsent(
+                                    "The wotaskd on " + newHostName
+                                            + " is an older version, please upgrade before adding...");
                         }
 
                     } else {
                         if (nullOrError != null) {
                             mySession().addErrorIfAbsent(nullOrError);
                         } else {
-                            mySession().addErrorIfAbsent("The host " + newHostName
-                                    + " has already been added");
+                            mySession().addErrorIfAbsent("The host " + newHostName + " has already been added");
                         }
                     }
                 } finally {
-                    theApplication._lock.endWriting();
+                    handler().endWriting();
                 }
             } catch (UnknownHostException ex) {
-                mySession().addErrorIfAbsent("ERROR: Cannot find IP address for hostname: "
-                        + newHostName);
+                mySession().addErrorIfAbsent("ERROR: Cannot find IP address for hostname: " + newHostName);
             }
         } else {
             mySession().addErrorIfAbsent(newHostName + " is not a valid hostname");
@@ -139,8 +136,8 @@ public class HostsPage extends MonitorComponent {
         if (NSLog.debugLoggingAllowedForLevelAndGroups(NSLog.DebugLevelDetailed, NSLog.DebugGroupDeployment))
             NSLog.debug.appendln("!@#$!@#$ displayWotaskdInfoClicked creates a WOHTTPConnection");
         WotaskdInfoPage aPage = (WotaskdInfoPage) pageWithName("WotaskdInfoPage");
-        WORequest aRequest = new WORequest(MObject._POST, "/", MObject._HTTP1, theApplication.siteConfig()
-                .passwordDictionary(), null, null);
+        WORequest aRequest = new WORequest(MObject._POST, "/", MObject._HTTP1, siteConfig().passwordDictionary(), null,
+                null);
 
         WOResponse aResponse = null;
 

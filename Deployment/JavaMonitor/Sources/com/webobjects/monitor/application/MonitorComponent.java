@@ -17,18 +17,12 @@ import java.util.Enumeration;
 import com.webobjects.appserver.WOApplication;
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
-import com.webobjects.appserver.WOResponse;
-import com.webobjects.appserver.xml.WOXMLException;
-import com.webobjects.appserver.xml._JavaMonitorDecoder;
 import com.webobjects.foundation.NSArray;
-import com.webobjects.foundation.NSDictionary;
-import com.webobjects.foundation.NSLog;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.monitor._private.MApplication;
 import com.webobjects.monitor._private.MHost;
-import com.webobjects.monitor._private.MInstance;
 import com.webobjects.monitor._private.MObject;
-import com.webobjects.monitor._private.String_Extensions;
+import com.webobjects.monitor._private.MSiteConfig;
 
 public class MonitorComponent extends WOComponent {
 
@@ -55,6 +49,14 @@ public class MonitorComponent extends WOComponent {
         _handler = new WOTaskdHandler(mySession());
     }
 
+    protected NSMutableArray allHosts() {
+        return siteConfig().hostArray();
+    }
+
+    protected MSiteConfig siteConfig() {
+        return WOTaskdHandler.siteConfig();
+    }
+
     public Session mySession() {
         return (Session) super.session();
     }
@@ -64,11 +66,11 @@ public class MonitorComponent extends WOComponent {
     }
 
     public WOComponent pageWithName(String aName) {
-        theApplication._lock.startReading();
+        handler().startReading();
         try {
             _cacheState(aName);
         } finally {
-            theApplication._lock.endReading();
+            handler().endReading();
         }
         return super.pageWithName(aName);
     }
@@ -79,165 +81,24 @@ public class MonitorComponent extends WOComponent {
     private void _cacheState(String aName) {
         MApplication appForDetailPage = mySession().mApplication;
 
-        if (theApplication.siteConfig().hostArray().count() != 0) {
-            if (aName.equals("ApplicationsPage") && (theApplication.siteConfig().applicationArray().count() != 0)) {
+        if (siteConfig().hostArray().count() != 0) {
+            if (aName.equals("ApplicationsPage") && (siteConfig().applicationArray().count() != 0)) {
 
-                for (Enumeration e = theApplication.siteConfig().applicationArray().objectEnumerator(); e
-                        .hasMoreElements();) {
+                for (Enumeration e = siteConfig().applicationArray().objectEnumerator(); e.hasMoreElements();) {
                     MApplication anApp = (MApplication) e.nextElement();
                     anApp.runningInstancesCount = MObject._zeroInteger;
                 }
-
-                WOResponse[] responses = handler().sendQueryToWotaskds("APPLICATION",
-                        theApplication.siteConfig().hostArray());
-
-                NSMutableArray errorArray = new NSMutableArray();
-                NSDictionary applicationResponseDictionary;
-                NSDictionary queryResponseDictionary;
-                NSArray responseArray = null;
-                NSDictionary responseDictionary = null;
-                for (int i = 0; i < responses.length; i++) {
-                    if ((responses[i] == null) || (responses[i].content() == null)) {
-                        queryResponseDictionary = handler().emptyResponse;
-                    } else {
-                        try {
-                            queryResponseDictionary = (NSDictionary) new _JavaMonitorDecoder()
-                                    .decodeRootObject(responses[i].content());
-                        } catch (WOXMLException wxe) {
-                            NSLog.err
-                                    .appendln("MonitorComponent pageWithName(ApplicationsPage) Error decoding response: "
-                                            + responses[i].contentString());
-                            queryResponseDictionary = handler().responseParsingFailed;
-                        }
-                    }
-                    handler().getGlobalErrorFromResponse(queryResponseDictionary, errorArray);
-
-                    applicationResponseDictionary = (NSDictionary) queryResponseDictionary
-                            .valueForKey("queryWotaskdResponse");
-                    if (applicationResponseDictionary != null) {
-                        responseArray = (NSArray) applicationResponseDictionary.valueForKey("applicationResponse");
-                        if (responseArray != null) {
-                            for (int j = 0; j < responseArray.count(); j++) {
-                                responseDictionary = (NSDictionary) responseArray.objectAtIndex(j);
-                                String appName = (String) responseDictionary.valueForKey("name");
-                                Integer runningInstances = (Integer) responseDictionary.valueForKey("runningInstances");
-                                MApplication anApplication = theApplication.siteConfig().applicationWithName(appName);
-                                if (anApplication != null) {
-                                    // KH - this is massively suboptimal
-                                    anApplication.runningInstancesCount = new Integer(
-                                            anApplication.runningInstancesCount.intValue()
-                                                    + runningInstances.intValue());
-                                }
-                            }
-                        }
-                    }
-                } // for
-                if (NSLog.debugLoggingAllowedForLevelAndGroups(NSLog.DebugLevelDetailed, NSLog.DebugGroupDeployment))
-                    NSLog.debug.appendln("##### pageWithName(ApplicationsPage) errors: " + errorArray);
-                mySession().addObjectsFromArrayIfAbsentToErrorMessageArray(errorArray);
+                NSArray<MHost> hostArray = siteConfig().hostArray();
+                handler().getApplicationStatusForHosts(hostArray);
             } else if (aName.equals("AppDetailPage")) {
-                NSArray hostArray = appForDetailPage.hostArray();
-                if (hostArray.count() != 0) {
+                NSArray<MHost> hostArray = appForDetailPage.hostArray();
 
-                    WOResponse[] responses = handler().sendQueryToWotaskds("INSTANCE", hostArray);
-
-                    NSMutableArray errorArray = new NSMutableArray();
-                    NSArray responseArray = null;
-                    NSDictionary responseDictionary = null;
-                    NSDictionary queryResponseDictionary = null;
-                    for (int i = 0; i < responses.length; i++) {
-                        if ((responses[i] == null) || (responses[i].content() == null)) {
-                            responseDictionary = handler().emptyResponse;
-                        } else {
-                            try {
-                                responseDictionary = (NSDictionary) new _JavaMonitorDecoder()
-                                        .decodeRootObject(responses[i].content());
-                            } catch (WOXMLException wxe) {
-                                NSLog.err
-                                        .appendln("MonitorComponent pageWithName(AppDetailPage) Error decoding response: "
-                                                + responses[i].contentString());
-                                responseDictionary = handler().responseParsingFailed;
-                            }
-                        }
-                        handler().getGlobalErrorFromResponse(responseDictionary, errorArray);
-
-                        queryResponseDictionary = (NSDictionary) responseDictionary.valueForKey("queryWotaskdResponse");
-                        if (queryResponseDictionary != null) {
-                            responseArray = (NSArray) queryResponseDictionary.valueForKey("instanceResponse");
-                            if (responseArray != null) {
-                                for (int j = 0; j < responseArray.count(); j++) {
-                                    responseDictionary = (NSDictionary) responseArray.objectAtIndex(j);
-
-                                    String host = (String) responseDictionary.valueForKey("host");
-                                    Integer port = (Integer) responseDictionary.valueForKey("port");
-                                    String runningState = (String) responseDictionary.valueForKey("runningState");
-                                    Boolean refusingNewSessions = (Boolean) responseDictionary
-                                            .valueForKey("refusingNewSessions");
-                                    NSDictionary statistics = (NSDictionary) responseDictionary
-                                            .valueForKey("statistics");
-                                    NSArray deaths = (NSArray) responseDictionary.valueForKey("deaths");
-                                    String nextShutdown = (String) responseDictionary.valueForKey("nextShutdown");
-
-                                    MInstance anInstance = theApplication.siteConfig().instanceWithHostnameAndPort(
-                                            host, port);
-                                    if (anInstance != null) {
-                                        for (int k = 0; k < MObject.stateArray.length; k++) {
-                                            if (MObject.stateArray[k].equals(runningState)) {
-                                                anInstance.state = k;
-                                                break;
-                                            }
-                                        }
-                                        anInstance.isRefusingNewSessions = String_Extensions
-                                                .boolValue(refusingNewSessions);
-                                        anInstance.setStatistics(statistics);
-                                        anInstance.setDeaths(new NSMutableArray(deaths));
-                                        anInstance.setNextScheduledShutdownString_M(nextShutdown);
-                                    }
-                                }
-                            }
-                        }
-                    } // For Loop
-                    if (NSLog
-                            .debugLoggingAllowedForLevelAndGroups(NSLog.DebugLevelDetailed, NSLog.DebugGroupDeployment))
-                        NSLog.debug.appendln("##### pageWithName(AppDetailPage) errors: " + errorArray);
-                    mySession().addObjectsFromArrayIfAbsentToErrorMessageArray(errorArray);
-                }
+                handler().getInstanceStatusForHosts(hostArray);
             } else if (aName.equals("HostsPage")) {
-                WOResponse[] responses = handler().sendQueryToWotaskds("HOST", theApplication.siteConfig().hostArray());
+                NSArray<MHost> hostArray = siteConfig().hostArray();
 
-                NSMutableArray errorArray = new NSMutableArray();
-                NSDictionary responseDict = null;
-                for (int i = 0; i < responses.length; i++) {
-                    MHost aHost = (MHost) theApplication.siteConfig().hostArray().objectAtIndex(i);
-
-                    if ((responses[i] == null) || (responses[i].content() == null)) {
-                        responseDict = handler().emptyResponse;
-                    } else {
-                        try {
-                            responseDict = (NSDictionary) new _JavaMonitorDecoder().decodeRootObject(responses[i]
-                                    .content());
-                        } catch (WOXMLException wxe) {
-                            NSLog.err.appendln("MonitorComponent pageWithName(HostsPage) Error decoding response: "
-                                    + responses[i].contentString());
-                            responseDict = handler().responseParsingFailed;
-                        }
-                    }
-                    handler().getGlobalErrorFromResponse(responseDict, errorArray);
-
-                    NSDictionary queryResponse = (NSDictionary) responseDict.valueForKey("queryWotaskdResponse");
-                    if (queryResponse != null) {
-                        NSDictionary hostResponse = (NSDictionary) queryResponse.valueForKey("hostResponse");
-                        aHost._setHostInfo(hostResponse);
-                        aHost.isAvailable = true;
-                    } else {
-                        aHost.isAvailable = false;
-                    }
-                } // for
-                if (NSLog.debugLoggingAllowedForLevelAndGroups(NSLog.DebugLevelDetailed, NSLog.DebugGroupDeployment))
-                    NSLog.debug.appendln("##### pageWithName(HostsPage) errors: " + errorArray);
-                mySession().addObjectsFromArrayIfAbsentToErrorMessageArray(errorArray);
+                handler().getHostStatusForHosts(hostArray);
             }
         }
     }
-
 }

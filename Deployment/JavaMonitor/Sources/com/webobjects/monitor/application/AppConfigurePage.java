@@ -39,10 +39,14 @@ public class AppConfigurePage extends MonitorComponent {
 
     public boolean isAdaptorSettingsSectionVisible = false;
 
-    public MApplication appDefaults = new MApplication(mySession().mApplication.values(), _sc, null);
+    public MApplication appDefaults = new MApplication(myApplication().values(), _sc, null);
 
     public AppConfigurePage(WOContext aWocontext) {
         super(aWocontext);
+    }
+
+    private MApplication myApplication() {
+        return mySession().mApplication;
     }
 
     public WOComponent detailPageClicked() {
@@ -56,15 +60,12 @@ public class AppConfigurePage extends MonitorComponent {
 
     /** ******** New Instance Defaults ******** */
     public WOComponent defaultsUpdateClicked() {
-        theApplication._lock.startReading();
+        handler().startReading();
         try {
-            mySession().mApplication.setValues(appDefaults.values());
-            if (theApplication.siteConfig().hostArray().count() != 0) {
-                handler().sendUpdateApplicationToWotaskds(mySession().mApplication,
-                        theApplication.siteConfig().hostArray());
-            }
+            myApplication().setValues(appDefaults.values());
+            handler().sendUpdateApplicationToWotaskds(myApplication(), allHosts());
         } finally {
-            theApplication._lock.endReading();
+            handler().endReading();
         }
 
         AppConfigurePage aPage = (AppConfigurePage) pageWithName("AppConfigurePage");
@@ -73,30 +74,30 @@ public class AppConfigurePage extends MonitorComponent {
     }
 
     public WOComponent updateAppDefaultsOnly() {
-        theApplication._lock.startReading();
+        handler().startReading();
         try {
-            mySession().mApplication.setStartingPort(appDefaults.startingPort());
-            mySession().mApplication.setTimeForStartup(appDefaults.timeForStartup());
-            mySession().mApplication.setPhasedStartup(appDefaults.phasedStartup());
-            mySession().mApplication.setAdaptor(appDefaults.adaptor());
-            mySession().mApplication.setAdaptorThreads(appDefaults.adaptorThreads());
-            mySession().mApplication.setListenQueueSize(appDefaults.listenQueueSize());
-            mySession().mApplication.setAdaptorThreadsMin(appDefaults.adaptorThreadsMin());
-            mySession().mApplication.setAdaptorThreadsMax(appDefaults.adaptorThreadsMax());
-            mySession().mApplication.setProjectSearchPath(appDefaults.projectSearchPath());
-            mySession().mApplication.setSessionTimeOut(appDefaults.sessionTimeOut());
-            mySession().mApplication.setStatisticsPassword(appDefaults.statisticsPassword());
+            myApplication().setStartingPort(appDefaults.startingPort());
+            myApplication().setTimeForStartup(appDefaults.timeForStartup());
+            myApplication().setPhasedStartup(appDefaults.phasedStartup());
+            myApplication().setAdaptor(appDefaults.adaptor());
+            myApplication().setAdaptorThreads(appDefaults.adaptorThreads());
+            myApplication().setListenQueueSize(appDefaults.listenQueueSize());
+            myApplication().setAdaptorThreadsMin(appDefaults.adaptorThreadsMin());
+            myApplication().setAdaptorThreadsMax(appDefaults.adaptorThreadsMax());
+            myApplication().setProjectSearchPath(appDefaults.projectSearchPath());
+            myApplication().setSessionTimeOut(appDefaults.sessionTimeOut());
+            myApplication().setStatisticsPassword(appDefaults.statisticsPassword());
 
             boolean pushAppOnly = true;
 
-            if (mySession().mApplication.isStopped_M()) {
+            if (myApplication().isStopped_M()) {
                 String defaultsName = appDefaults.name();
-                if (!defaultsName.equals(mySession().mApplication.name())) {
-                    MApplication app = mySession().mApplication.siteConfig().applicationWithName(appDefaults.name());
+                if (!defaultsName.equals(myApplication().name())) {
+                    MApplication app = myApplication().siteConfig().applicationWithName(appDefaults.name());
                     if (app == null) {
                         pushAppOnly = false;
-                        mySession().mApplication.setName(defaultsName);
-                        NSArray _instanceArray = mySession().mApplication.instanceArray();
+                        myApplication().setName(defaultsName);
+                        NSArray _instanceArray = myApplication().instanceArray();
                         int instanceArrayCount = _instanceArray.count();
                         for (int i = 0; i < instanceArrayCount; i++) {
                             MInstance anInstance = (MInstance) _instanceArray.objectAtIndex(i);
@@ -107,15 +108,12 @@ public class AppConfigurePage extends MonitorComponent {
             }
 
             if (pushAppOnly) {
-                if (theApplication.siteConfig().hostArray().count() != 0) {
-                    handler().sendUpdateApplicationToWotaskds(mySession().mApplication,
-                            theApplication.siteConfig().hostArray());
-                }
+                handler().sendUpdateApplicationToWotaskds(myApplication(), allHosts());
             } else {
                 _defaultsPush();
             }
         } finally {
-            theApplication._lock.endReading();
+            handler().endReading();
         }
 
         AppConfigurePage aPage = (AppConfigurePage) pageWithName("AppConfigurePage");
@@ -124,9 +122,8 @@ public class AppConfigurePage extends MonitorComponent {
     }
 
     private void _defaultsPush() {
-        if (theApplication.siteConfig().hostArray().count() != 0) {
-            handler().sendUpdateApplicationAndInstancesToWotaskds(mySession().mApplication,
-                    theApplication.siteConfig().hostArray());
+        if (allHosts().count() != 0) {
+            handler().sendUpdateApplicationAndInstancesToWotaskds(myApplication(), allHosts());
         }
     }
 
@@ -137,25 +134,25 @@ public class AppConfigurePage extends MonitorComponent {
     }
 
     public WOComponent defaultsPushClicked() {
-        theApplication._lock.startReading();
+        handler().startReading();
         try {
-            mySession().mApplication.setValues(appDefaults.values());
-            mySession().mApplication.pushValuesToInstances();
+            myApplication().setValues(appDefaults.values());
+            myApplication().pushValuesToInstances();
             _defaultsPush();
         } finally {
-            theApplication._lock.endReading();
+            handler().endReading();
         }
         return _defaultPage();
     }
 
     public WOComponent updatePathOnly() {
-        theApplication._lock.startReading();
+        handler().startReading();
         try {
-            mySession().mApplication.setUnixPath(appDefaults.unixPath());
-            mySession().mApplication.setWinPath(appDefaults.winPath());
-            mySession().mApplication.setMacPath(appDefaults.macPath());
+            myApplication().setUnixPath(appDefaults.unixPath());
+            myApplication().setWinPath(appDefaults.winPath());
+            myApplication().setMacPath(appDefaults.macPath());
 
-            NSArray _instanceArray = mySession().mApplication.instanceArray();
+            NSArray _instanceArray = myApplication().instanceArray();
             int instanceArrayCount = _instanceArray.count();
             for (int i = 0; i < instanceArrayCount; i++) {
                 MInstance anInstance = (MInstance) _instanceArray.objectAtIndex(i);
@@ -163,17 +160,17 @@ public class AppConfigurePage extends MonitorComponent {
             }
             _defaultsPush();
         } finally {
-            theApplication._lock.endReading();
+            handler().endReading();
         }
         return _defaultPage();
     }
 
     public WOComponent updateAutoRecoverOnly() {
-        theApplication._lock.startReading();
+        handler().startReading();
         try {
-            mySession().mApplication.setAutoRecover(appDefaults.autoRecover());
+            myApplication().setAutoRecover(appDefaults.autoRecover());
 
-            NSArray _instanceArray = mySession().mApplication.instanceArray();
+            NSArray _instanceArray = myApplication().instanceArray();
             int instanceArrayCount = _instanceArray.count();
             for (int i = 0; i < instanceArrayCount; i++) {
                 MInstance anInstance = (MInstance) _instanceArray.objectAtIndex(i);
@@ -181,17 +178,17 @@ public class AppConfigurePage extends MonitorComponent {
             }
             _defaultsPush();
         } finally {
-            theApplication._lock.endReading();
+            handler().endReading();
         }
         return _defaultPage();
     }
 
     public WOComponent updateMinimumOnly() {
-        theApplication._lock.startReading();
+        handler().startReading();
         try {
-            mySession().mApplication.setMinimumActiveSessionsCount(appDefaults.minimumActiveSessionsCount());
+            myApplication().setMinimumActiveSessionsCount(appDefaults.minimumActiveSessionsCount());
 
-            NSArray _instanceArray = mySession().mApplication.instanceArray();
+            NSArray _instanceArray = myApplication().instanceArray();
             int instanceArrayCount = _instanceArray.count();
             for (int i = 0; i < instanceArrayCount; i++) {
                 MInstance anInstance = (MInstance) _instanceArray.objectAtIndex(i);
@@ -199,17 +196,17 @@ public class AppConfigurePage extends MonitorComponent {
             }
             _defaultsPush();
         } finally {
-            theApplication._lock.endReading();
+            handler().endReading();
         }
         return _defaultPage();
     }
 
     public WOComponent updateCachingOnly() {
-        theApplication._lock.startReading();
+        handler().startReading();
         try {
-            mySession().mApplication.setCachingEnabled(appDefaults.cachingEnabled());
+            myApplication().setCachingEnabled(appDefaults.cachingEnabled());
 
-            NSArray _instanceArray = mySession().mApplication.instanceArray();
+            NSArray _instanceArray = myApplication().instanceArray();
             int instanceArrayCount = _instanceArray.count();
             for (int i = 0; i < instanceArrayCount; i++) {
                 MInstance anInstance = (MInstance) _instanceArray.objectAtIndex(i);
@@ -217,17 +214,17 @@ public class AppConfigurePage extends MonitorComponent {
             }
             _defaultsPush();
         } finally {
-            theApplication._lock.endReading();
+            handler().endReading();
         }
         return _defaultPage();
     }
 
     public WOComponent updateDebuggingOnly() {
-        theApplication._lock.startReading();
+        handler().startReading();
         try {
-            mySession().mApplication.setDebuggingEnabled(appDefaults.debuggingEnabled());
+            myApplication().setDebuggingEnabled(appDefaults.debuggingEnabled());
 
-            NSArray _instanceArray = mySession().mApplication.instanceArray();
+            NSArray _instanceArray = myApplication().instanceArray();
             int instanceArrayCount = _instanceArray.count();
             for (int i = 0; i < instanceArrayCount; i++) {
                 MInstance anInstance = (MInstance) _instanceArray.objectAtIndex(i);
@@ -235,19 +232,19 @@ public class AppConfigurePage extends MonitorComponent {
             }
             _defaultsPush();
         } finally {
-            theApplication._lock.endReading();
+            handler().endReading();
         }
         return _defaultPage();
     }
 
     public WOComponent updateOutputOnly() {
-        theApplication._lock.startReading();
+        handler().startReading();
         try {
-            mySession().mApplication.setUnixOutputPath(appDefaults.unixOutputPath());
-            mySession().mApplication.setWinOutputPath(appDefaults.winOutputPath());
-            mySession().mApplication.setMacOutputPath(appDefaults.macOutputPath());
+            myApplication().setUnixOutputPath(appDefaults.unixOutputPath());
+            myApplication().setWinOutputPath(appDefaults.winOutputPath());
+            myApplication().setMacOutputPath(appDefaults.macOutputPath());
 
-            NSArray _instanceArray = mySession().mApplication.instanceArray();
+            NSArray _instanceArray = myApplication().instanceArray();
             int instanceArrayCount = _instanceArray.count();
             for (int i = 0; i < instanceArrayCount; i++) {
                 MInstance anInstance = (MInstance) _instanceArray.objectAtIndex(i);
@@ -255,17 +252,17 @@ public class AppConfigurePage extends MonitorComponent {
             }
             _defaultsPush();
         } finally {
-            theApplication._lock.endReading();
+            handler().endReading();
         }
         return _defaultPage();
     }
 
     public WOComponent updateAutoOpenOnly() {
-        theApplication._lock.startReading();
+        handler().startReading();
         try {
-            mySession().mApplication.setAutoOpenInBrowser(appDefaults.autoOpenInBrowser());
+            myApplication().setAutoOpenInBrowser(appDefaults.autoOpenInBrowser());
 
-            NSArray _instanceArray = mySession().mApplication.instanceArray();
+            NSArray _instanceArray = myApplication().instanceArray();
             int instanceArrayCount = _instanceArray.count();
             for (int i = 0; i < instanceArrayCount; i++) {
                 MInstance anInstance = (MInstance) _instanceArray.objectAtIndex(i);
@@ -273,17 +270,17 @@ public class AppConfigurePage extends MonitorComponent {
             }
             _defaultsPush();
         } finally {
-            theApplication._lock.endReading();
+            handler().endReading();
         }
         return _defaultPage();
     }
 
     public WOComponent updateLifebeatOnly() {
-        theApplication._lock.startReading();
+        handler().startReading();
         try {
-            mySession().mApplication.setLifebeatInterval(appDefaults.lifebeatInterval());
+            myApplication().setLifebeatInterval(appDefaults.lifebeatInterval());
 
-            NSArray _instanceArray = mySession().mApplication.instanceArray();
+            NSArray _instanceArray = myApplication().instanceArray();
             int instanceArrayCount = _instanceArray.count();
             for (int i = 0; i < instanceArrayCount; i++) {
                 MInstance anInstance = (MInstance) _instanceArray.objectAtIndex(i);
@@ -291,17 +288,17 @@ public class AppConfigurePage extends MonitorComponent {
             }
             _defaultsPush();
         } finally {
-            theApplication._lock.endReading();
+            handler().endReading();
         }
         return _defaultPage();
     }
 
     public WOComponent updateAddArgsOnly() {
-        theApplication._lock.startReading();
+        handler().startReading();
         try {
-            mySession().mApplication.setAdditionalArgs(appDefaults.additionalArgs());
+            myApplication().setAdditionalArgs(appDefaults.additionalArgs());
 
-            NSArray _instanceArray = mySession().mApplication.instanceArray();
+            NSArray _instanceArray = myApplication().instanceArray();
             int instanceArrayCount = _instanceArray.count();
             for (int i = 0; i < instanceArrayCount; i++) {
                 MInstance anInstance = (MInstance) _instanceArray.objectAtIndex(i);
@@ -309,7 +306,7 @@ public class AppConfigurePage extends MonitorComponent {
             }
             _defaultsPush();
         } finally {
-            theApplication._lock.endReading();
+            handler().endReading();
         }
         return _defaultPage();
     }
@@ -352,8 +349,8 @@ public class AppConfigurePage extends MonitorComponent {
 
     /** ******** Email Section ******** */
     public boolean isMailingConfigured() {
-        String aHost = theApplication.siteConfig().SMTPhost();
-        String anAddress = theApplication.siteConfig().emailReturnAddr();
+        String aHost = siteConfig().SMTPhost();
+        String anAddress = siteConfig().emailReturnAddr();
         if (aHost != null && aHost.length() > 0 && anAddress != null && anAddress.length() > 0) {
             return true;
         }
@@ -361,13 +358,11 @@ public class AppConfigurePage extends MonitorComponent {
     }
 
     public WOComponent emailUpdateClicked() {
-        theApplication._lock.startReading();
+        handler().startReading();
         try {
-            if (theApplication.siteConfig().hostArray().count() != 0) {
-                handler().sendUpdateApplicationToWotaskds(mySession().mApplication, theApplication.siteConfig().hostArray());
-            }
+            handler().sendUpdateApplicationToWotaskds(myApplication(), allHosts());
         } finally {
-            theApplication._lock.endReading();
+            handler().endReading();
         }
 
         AppConfigurePage aPage = (AppConfigurePage) pageWithName("AppConfigurePage");
@@ -379,7 +374,7 @@ public class AppConfigurePage extends MonitorComponent {
 
     /** ******** Scheduling Section ******** */
     public boolean shouldSchedule() {
-        if (mySession().mApplication.instanceArray().count() != 0)
+        if (myApplication().instanceArray().count() != 0)
             return true;
         return false;
     }
@@ -427,15 +422,13 @@ public class AppConfigurePage extends MonitorComponent {
     }
 
     public WOComponent schedulingUpdateClicked() {
-        theApplication._lock.startReading();
+        handler().startReading();
         try {
-            if ((mySession().mApplication.instanceArray().count() != 0)
-                    && (theApplication.siteConfig().hostArray().count() != 0)) {
-                handler().sendUpdateInstancesToWotaskds(mySession().mApplication.instanceArray(), theApplication.siteConfig()
-                        .hostArray());
+            if ((myApplication().instanceArray().count() != 0) && (allHosts().count() != 0)) {
+                handler().sendUpdateInstancesToWotaskds(myApplication().instanceArray(), allHosts());
             }
         } finally {
-            theApplication._lock.endReading();
+            handler().endReading();
         }
 
         AppConfigurePage aPage = (AppConfigurePage) pageWithName("AppConfigurePage");
@@ -459,14 +452,14 @@ public class AppConfigurePage extends MonitorComponent {
     public String customSchedulerName;
 
     public String loadSchedulerSelection() {
-        if (mySession().mApplication.scheduler() != null) {
-            int indexOfScheduler = MObject.loadSchedulerArrayValues.indexOfObject(mySession().mApplication.scheduler());
+        if (myApplication().scheduler() != null) {
+            int indexOfScheduler = MObject.loadSchedulerArrayValues.indexOfObject(myApplication().scheduler());
             if (indexOfScheduler != -1) {
                 _loadSchedulerSelection = (String) loadSchedulerList.objectAtIndex(indexOfScheduler);
             } else {
                 // Custom scheduler
                 _loadSchedulerSelection = (String) loadSchedulerList.objectAtIndex(loadSchedulerList.count() - 1);
-                customSchedulerName = mySession().mApplication.scheduler();
+                customSchedulerName = myApplication().scheduler();
             }
         }
         return _loadSchedulerSelection;
@@ -477,15 +470,15 @@ public class AppConfigurePage extends MonitorComponent {
     }
 
     public Integer urlVersionSelection() {
-        return mySession().mApplication.urlVersion();
+        return myApplication().urlVersion();
     }
 
     public void setUrlVersionSelection(Integer value) {
-        mySession().mApplication.setUrlVersion(value);
+        myApplication().setUrlVersion(value);
     }
 
     public WOComponent adaptorUpdateClicked() {
-        theApplication._lock.startReading();
+        handler().startReading();
         try {
             String newValue;
             int i = loadSchedulerList.indexOfObject(_loadSchedulerSelection);
@@ -499,13 +492,11 @@ public class AppConfigurePage extends MonitorComponent {
             } else {
                 newValue = (String) MObject.loadSchedulerArrayValues.objectAtIndex(i);
             }
-            mySession().mApplication.setScheduler(newValue);
+            myApplication().setScheduler(newValue);
 
-            if (theApplication.siteConfig().hostArray().count() != 0) {
-                handler().sendUpdateApplicationToWotaskds(mySession().mApplication, theApplication.siteConfig().hostArray());
-            }
+            handler().sendUpdateApplicationToWotaskds(myApplication(), allHosts());
         } finally {
-            theApplication._lock.endReading();
+            handler().endReading();
         }
 
         AppConfigurePage aPage = (AppConfigurePage) pageWithName("AppConfigurePage");
