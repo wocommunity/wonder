@@ -150,7 +150,7 @@ public class ERXFileUtilities {
 	 * @return the temp file that was created 
 	 */
 	public static File writeInputStreamToTempFile(InputStream stream) throws IOException {
-		File tempFile = new File("_Wonder", "tmp");
+		File tempFile = File.createTempFile("_Wonder", "tmp");
 		try {
 			ERXFileUtilities.writeInputStreamToFile(stream, tempFile);
 		}
