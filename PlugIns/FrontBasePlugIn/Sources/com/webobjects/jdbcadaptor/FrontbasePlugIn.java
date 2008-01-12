@@ -768,6 +768,14 @@ public class FrontbasePlugIn extends JDBCPlugIn {
 			}
 			return columntypes.name();
 		}
+		
+		public NSArray statementsToRenameColumnNamed(String columnName, String tableName, String newName, NSDictionary nsdictionary) {
+			return new NSArray(_expressionForString("alter column name " + quoteTableName(tableName) + "." + quoteTableName(columnName) + " to " + quoteTableName(newName)));
+		}
+		
+		public NSArray statementsToRenameTableNamed(String tableName, String newName, NSDictionary options) {
+			return new NSArray(_expressionForString("alter table name " + quoteTableName(tableName) + " to " + quoteTableName(newName)));
+		}
 
 		boolean isPrimaryKeyAttributes(EOEntity entity, NSArray attributes) {
 			NSArray keys = entity.primaryKeyAttributeNames();
