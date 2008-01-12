@@ -377,6 +377,7 @@ public class ERXMigrationColumn {
 	 * @throws SQLException
 	 *             if the change fails
 	 */
+	@SuppressWarnings("unchecked")
 	public void setAllowsNull(boolean allowsNull) throws SQLException {
 		EOSchemaSynchronization schemaSynchronization = _table.database().synchronizationFactory();
 		NSArray<EOSQLExpression> expressions = schemaSynchronization.statementsToModifyColumnNullRule(name(), _table.name(), allowsNull, NSDictionary.EmptyDictionary);
