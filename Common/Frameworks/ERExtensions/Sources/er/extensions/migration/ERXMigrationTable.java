@@ -591,7 +591,6 @@ public class ERXMigrationTable {
 		EOSchemaSynchronization schemaSynchronization = _database.synchronizationFactory();
 		NSArray<EOSQLExpression> expressions = schemaSynchronization.statementsToRenameTableNamed(name(), newName, NSDictionary.EmptyDictionary);
 		ERXMigrationDatabase._ensureNotEmpty(expressions);
-		_setName(newName);
 		return expressions;
 	}
 
@@ -602,6 +601,7 @@ public class ERXMigrationTable {
 	 */
 	public void renameTo(String newName) throws SQLException {
 		ERXJDBCUtilities.executeUpdateScript(_database.adaptorChannel(), ERXMigrationDatabase._stringsForExpressions(_renameToExpressions(newName)));
+		_setName(newName);
 	}
 
 	/**
