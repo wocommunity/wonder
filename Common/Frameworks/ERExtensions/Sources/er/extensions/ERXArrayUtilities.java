@@ -134,13 +134,38 @@ public class ERXArrayUtilities extends Object {
                                                      String keyPath,
                                                      boolean includeNulls,
                                                      String extraKeyPathForValues) {
+    	return ERXArrayUtilities.arrayGroupedByKeyPath(eos, keyPath, ERXArrayUtilities.NULL_GROUPING_KEY, extraKeyPathForValues);
+    }
+    
+    /**
+     * Groups an array of objects by a given key path. The dictionary
+     * that is returned contains keys that correspond to the grouped
+     * keys values. 
+     * 
+     * @param eos array of objects to be grouped
+     * @param keyPath path used to group the objects.
+     * @param nullGroupingKey if not-null, determines if keyPaths that resolve to null
+     *      should be allowed into the group; if so, this key is used for them
+     * @param extraKeyPathForValues allows a selected object to include
+     *		more objects in the group. This is going away in the
+     *		future.
+     * @return a dictionary where the keys are the grouped values and the
+     * 		objects are arrays of the objects that have the grouped
+     *		characteristic. Note that if the key path returns null
+     *		then one of the keys will be the static ivar NULL_GROUPING_KEY
+     */
+    // FIXME: Get rid of extraKeyPathForValues, it doesn't make sense.
+    public static NSDictionary arrayGroupedByKeyPath(NSArray eos,
+                                                     String keyPath,
+                                                     Object nullGroupingKey,
+                                                     String extraKeyPathForValues) {
         NSMutableDictionary result=new NSMutableDictionary();
         for (Enumeration e=eos.objectEnumerator(); e.hasMoreElements();) {
             Object eo = e.nextElement();
             Object key = NSKeyValueCodingAdditions.Utility.valueForKeyPath(eo,keyPath);
             boolean isNullKey = key==null || key instanceof NSKeyValueCoding.Null;
-            if (!isNullKey || includeNulls) {
-                if (isNullKey) key=NULL_GROUPING_KEY;
+            if (!isNullKey || nullGroupingKey != null) {
+                if (isNullKey) key=nullGroupingKey;
                 NSMutableArray existingGroup=(NSMutableArray)result.objectForKey(key);
                 if (existingGroup==null) {
                     existingGroup=new NSMutableArray();
@@ -155,7 +180,6 @@ public class ERXArrayUtilities extends Object {
         }
         return result;
     }
-
 
     /**
      * Groups an array of objects by a given to-many key path, where every
@@ -179,13 +203,38 @@ public class ERXArrayUtilities extends Object {
     public static NSDictionary arrayGroupedByToManyKeyPath(NSArray eos,
             String keyPath,
             boolean includeNulls) {
+    	return ERXArrayUtilities.arrayGroupedByToManyKeyPath(eos, keyPath, ERXArrayUtilities.NULL_GROUPING_KEY);
+    }
+
+    /**
+     * Groups an array of objects by a given to-many key path, where every
+     * single item in the to-many will put the object in the corresponding group. 
+     * The dictionary that is returned contains keys that correspond to the grouped
+     * keys values. This means that the object pointed to by the key
+     * path must be a cloneable object. For instance using the key path
+     * 'users' would not work because enterprise objects are not
+     * cloneable. Instead you might choose to use the key path 'users.name'
+     * of 'users.primaryKey', if your enterprise objects support this
+     * see {@link ERXGenericRecord} if interested.
+     * @param eos array of objects to be grouped
+     * @param keyPath path used to group the objects.
+     * @param nullGroupingKey if not-null, determines if keyPaths that resolve to null
+     *      should be allowed into the group; if so, this key is used for them
+     * @return a dictionary where the keys are the grouped values and the
+     *      objects are arrays of the objects that have the grouped
+     *      characteristic. Note that if the key path returns null
+     *      then one of the keys will be the static ivar NULL_GROUPING_KEY
+     */
+    public static NSDictionary arrayGroupedByToManyKeyPath(NSArray eos,
+            String keyPath,
+            Object nullGroupingKey) {
         NSMutableDictionary result=new NSMutableDictionary();
         for (Enumeration e=eos.objectEnumerator(); e.hasMoreElements();) {
             Object eo = e.nextElement();
             Object key = NSKeyValueCodingAdditions.Utility.valueForKeyPath(eo,keyPath);
             boolean isNullKey = key==null || key instanceof NSKeyValueCoding.Null;
-            if (!isNullKey || includeNulls) {
-                if (isNullKey) key=NULL_GROUPING_KEY;
+            if (!isNullKey || nullGroupingKey != null) {
+                if (isNullKey) key=nullGroupingKey;
                 NSArray array = (NSArray)key;
                 for(Enumeration keys = array.objectEnumerator(); keys.hasMoreElements(); ) {
                     key = keys.nextElement();
