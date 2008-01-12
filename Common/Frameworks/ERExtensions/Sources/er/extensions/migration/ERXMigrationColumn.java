@@ -12,7 +12,6 @@ import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.jdbcadaptor.JDBCAdaptor;
 
 import er.extensions.ERXJDBCUtilities;
-import er.extensions.ERXSQLHelper;
 
 /**
  * ERXMigrationColumn is conceptually equivalent to an EOAttribute in the
