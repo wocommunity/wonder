@@ -741,12 +741,12 @@ public class FrontbasePlugIn extends JDBCPlugIn {
 		public NSArray statementsToModifyColumnNullRule(String columnName, String tableName, boolean allowsNull, NSDictionary nsdictionary) {
 			NSArray statements;
 			if (allowsNull) {
-				statements = new NSArray(_expressionForString("alter table " + quoteTableName(tableName) + " drop constraint " + quoteTableName(FrontbasePlugIn.notNullConstraintName(tableName, columnName) + " cascade")));
+				statements = new NSArray(_expressionForString("alter table " + quoteTableName(tableName) + " drop constraint " + quoteTableName(FrontbasePlugIn.notNullConstraintName(tableName, columnName)) + " cascade"));
 			}
 			else {
-				statements = new NSArray(_expressionForString("alter table " + quoteTableName(tableName) + " add check (" + quoteTableName(FrontbasePlugIn.notNullConstraintName(tableName, columnName) + " is not null)")));
+				statements = new NSArray(_expressionForString("alter table " + quoteTableName(tableName) + " add check (" + quoteTableName(FrontbasePlugIn.notNullConstraintName(tableName, columnName)) + " is not null)"));
 			}
-			return super.statementsToModifyColumnNullRule(columnName, tableName, allowsNull, nsdictionary);
+			return statements;
 		}
 		
 		public NSArray statementsToDeleteColumnNamed(String columnName, String tableName, NSDictionary options) {
