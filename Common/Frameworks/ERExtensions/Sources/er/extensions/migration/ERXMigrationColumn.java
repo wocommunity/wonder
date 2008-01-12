@@ -12,6 +12,7 @@ import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.jdbcadaptor.JDBCAdaptor;
 
 import er.extensions.ERXJDBCUtilities;
+import er.extensions.ERXSQLHelper;
 
 /**
  * ERXMigrationColumn is conceptually equivalent to an EOAttribute in the
@@ -366,5 +367,20 @@ public class ERXMigrationColumn {
 	 */
 	public void renameTo(String newName) throws SQLException {
 		ERXJDBCUtilities.executeUpdateScript(_table.database().adaptorChannel(), ERXMigrationDatabase._stringsForExpressions(_renameToExpressions(newName)));
+	}
+
+	/**
+	 * Changes the "allows null" state of this column.
+	 * 
+	 * @param allowsNull
+	 *            if true, this column allows nulls
+	 * @throws SQLException
+	 *             if the change fails
+	 */
+	public void setAllowsNull(boolean allowsNull) throws SQLException {
+		EOSchemaSynchronization schemaSynchronization = _table.database().synchronizationFactory();
+		NSArray<EOSQLExpression> expressions = schemaSynchronization.statementsToModifyColumnNullRule(name(), _table.name(), allowsNull, NSDictionary.EmptyDictionary);
+		ERXMigrationDatabase._ensureNotEmpty(expressions);
+		ERXJDBCUtilities.executeUpdateScript(_table.database().adaptorChannel(), ERXMigrationDatabase._stringsForExpressions(expressions));
 	}
 }
