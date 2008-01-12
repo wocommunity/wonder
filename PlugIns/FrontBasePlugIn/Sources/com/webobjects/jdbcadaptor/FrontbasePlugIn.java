@@ -390,6 +390,19 @@ public class FrontbasePlugIn extends JDBCPlugIn {
 	protected static final int FB_TinyInteger = 22;
 	protected static final int FB_LongInteger = 23;
 
+	protected static String notNullConstraintName(EOAttribute attribute) {
+		return notNullConstraintName(attribute.entity().externalName(), attribute.columnName());
+	}
+	
+	protected static String notNullConstraintName(String tableName, String columnName) {
+		StringBuffer constraintBuffer = new StringBuffer();
+		constraintBuffer.append("NOT_NULL_");
+		constraintBuffer.append(tableName);
+		constraintBuffer.append("__");
+		constraintBuffer.append(columnName);
+		return constraintBuffer.toString();
+	}
+
 	protected static String quoteTableName(String s) {
 		if (s == null)
 			return null;
@@ -725,6 +738,17 @@ public class FrontbasePlugIn extends JDBCPlugIn {
 			return expression.columnTypeStringForAttribute(eoattribute);
 		}
 		
+		public NSArray statementsToModifyColumnNullRule(String columnName, String tableName, boolean allowsNull, NSDictionary nsdictionary) {
+			NSArray statements;
+			if (allowsNull) {
+				statements = new NSArray(_expressionForString("alter table " + quoteTableName(tableName) + " add check (" + quoteTableName(FrontbasePlugIn.notNullConstraintName(tableName, columnName) + " is not null)")));
+			}
+			else {
+				statements = new NSArray(_expressionForString("alter table " + quoteTableName(tableName) + " drop constraint " + quoteTableName(FrontbasePlugIn.notNullConstraintName(tableName, columnName) + " cascade")));
+			}
+			return super.statementsToModifyColumnNullRule(columnName, tableName, allowsNull, nsdictionary);
+		}
+		
 		public NSArray statementsToDeleteColumnNamed(String columnName, String tableName, NSDictionary options) {
 			return new NSArray(_expressionForString("alter table " + quoteTableName(tableName) + " drop column \"" + columnName.toUpperCase() + "\" cascade"));
 		}
@@ -901,10 +925,7 @@ public class FrontbasePlugIn extends JDBCPlugIn {
 			if (!attribute.allowsNull()) {
 				if (USE_NAMED_CONSTRAINTS) {
 					sql.append(" CONSTRAINT ");
-					sql.append("NOT_NULL_");
-					sql.append(attribute.entity().externalName());
-					sql.append("__");
-					sql.append(attribute.columnName());
+					sql.append(notNullConstraintName(attribute));
 				}
 				sql.append(" NOT NULL");
 
@@ -914,7 +935,6 @@ public class FrontbasePlugIn extends JDBCPlugIn {
 					sql.append(" DEFERRABLE INITIALLY DEFERRED");
 			}
 		}
-
 		
 		public String columnTypeStringForAttribute(EOAttribute attribute) {
 			String externalTypeName = attribute.externalType();
