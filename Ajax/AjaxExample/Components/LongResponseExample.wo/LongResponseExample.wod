@@ -37,4 +37,5 @@ AjaxLongResponse: AjaxLongResponse {
 	id = "taskInfo";
 	class = "exampleArea";
 	isRunning = task.isAlive;
+	stopped = true;
 }
