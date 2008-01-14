@@ -486,7 +486,25 @@ public class ERXKey<T> {
 	 */
 	@SuppressWarnings("unchecked")
 	public T valueInObject(Object obj) {
-		return (T) NSKeyValueCodingAdditions.DefaultImplementation.valueForKeyPath(obj, _key);
+		return (T) rawValueInObject(obj);
+	}
+
+	/**
+	 *  Returns the value of this keypath on the given object.
+	 * @param obj the target object to apply this keypath on
+	 * @return
+	 */
+	public Object rawValueInObject(Object obj) {
+		return NSKeyValueCodingAdditions.DefaultImplementation.valueForKeyPath(obj, _key);
+	}
+
+	/**
+	 * Returns the value of this keypath on the given object cast as an NSArray.
+	 * @param obj the target object to apply this keypath on
+	 * @return
+	 */
+	public NSArray<T> arrayValueInObject(Object obj) {
+		return (NSArray<T>)rawValueInObject(obj);
 	}
 
 	/**
