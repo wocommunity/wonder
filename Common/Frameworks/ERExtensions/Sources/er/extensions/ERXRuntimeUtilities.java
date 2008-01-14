@@ -93,7 +93,16 @@ public class ERXRuntimeUtilities {
 					extraInfo.setObjectForKey(ERXWOContext.componentPath(context), "CurrentComponentHierarchy");
 				}
 			}
-			extraInfo.setObjectForKey(context.request().uri(), "uri");
+			if(context.request() != null) {
+				extraInfo.setObjectForKey(context.request().uri(), "URL");
+				if(context.request().headers() != null) {
+					NSMutableDictionary<String, Object> headers = new NSMutableDictionary<String, Object>();
+					for (Object key : context.request().headerKeys()) {
+						headers.setObjectForKey(context.request().headerForKey(key), key.toString());
+					}
+					extraInfo.setObjectForKey(headers, "Headers");
+				}
+			}
 			NSSelector d2wSelector = new NSSelector("d2wContext");
 			if (d2wSelector.implementedByObject(context.page())) {
 				try {
