@@ -479,6 +479,26 @@ public class ERXQ {
 	}
 
 	/**
+	 * Returns a qualifier that evalutes to true when the value of any of the
+	 * given keys contains any of the given tokens (insensitively) in the search
+	 * string. The search string will be tokenized by splitting on space
+	 * characters.
+	 * 
+	 * @param keys
+	 *            the keys
+	 * @param tokensWithWhitespace
+	 *            a whitespace separated list of tokens to search for
+	 * @return an ERXOrQualifier
+	 */
+	public static ERXOrQualifier containsAny(NSArray<String> keys, String tokensWithWhitespace) {
+		NSMutableArray<ERXOrQualifier> qualifiers = new NSMutableArray<ERXOrQualifier>();
+		for (String key : keys) {
+			qualifiers.addObject(ERXQ.containsAny(key, tokensWithWhitespace));
+		}
+		return new ERXOrQualifier(qualifiers);
+	}
+
+	/**
 	 * Returns a qualifier that evalutes to true when the value of the given key
 	 * contains any of the given tokens (insensitively) in the search string.
 	 * The search string will be tokenized by splitting on space characters.
@@ -517,6 +537,26 @@ public class ERXQ {
 			qualifier = new ERXOrQualifier(searchQualifiers);
 		}
 		return qualifier;
+	}
+
+	/**
+	 * Returns a qualifier that evalutes to true when the value of any of the
+	 * given keys contains all of the given tokens (insensitively) in the search
+	 * string. The search string will be tokenized by splitting on space
+	 * characters.
+	 * 
+	 * @param keys
+	 *            the keys
+	 * @param tokensWithWhitespace
+	 *            a whitespace separated list of tokens to search for
+	 * @return an ERXOrQualifier
+	 */
+	public static ERXOrQualifier containsAll(NSArray<String> keys, String tokensWithWhitespace) {
+		NSMutableArray<ERXAndQualifier> qualifiers = new NSMutableArray<ERXAndQualifier>();
+		for (String key : keys) {
+			qualifiers.addObject(ERXQ.containsAll(key, tokensWithWhitespace));
+		}
+		return new ERXOrQualifier(qualifiers);
 	}
 
 	/**
