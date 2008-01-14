@@ -166,9 +166,14 @@ public class AjaxUpdateContainer extends AjaxDynamicElement {
 	
 				if (frequency != null) {
 					String type = "PeriodicalUpdater";
-					boolean stopped = booleanValueForBinding("stopped", false, component);
-					if(stopped) {
-						type = "StoppedPeriodicalUpdater";
+					boolean stopped = false;
+					if (associations().objectForKey("stopped") != null) {
+						stopped = booleanValueForBinding("stopped", false, component);
+						if (stopped) {
+							type = "StoppedPeriodicalUpdater";
+						} else {
+							type = "ActivePeriodicalUpdater";
+						}
 					}
 					response.appendContentString(id + "PeriodicalUpdater = new Ajax." + type + "('" + id + "', $('" + id + "').getAttribute('updateUrl'), ");
 					AjaxOptions.appendToResponse(options, response, context);
