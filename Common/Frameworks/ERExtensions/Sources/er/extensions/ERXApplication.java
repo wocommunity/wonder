@@ -715,6 +715,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 				registerRequestHandler(new ERXStaticResourceRequestHandler(), "wr");
 			}
 		}
+		registerRequestHandler(new ERXDirectActionRequestHandler(ERXDirectAction.class.getName(), "stats", false), "erxadm");
 
 		Long timestampLag = Long.getLong("EOEditingContextDefaultFetchTimestampLag");
 		if (timestampLag != null)
