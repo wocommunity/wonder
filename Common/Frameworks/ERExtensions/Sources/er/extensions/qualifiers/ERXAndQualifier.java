@@ -11,7 +11,7 @@ import com.webobjects.foundation.NSMutableArray;
  * @author mschrag
  */
 public class ERXAndQualifier extends EOAndQualifier implements IERXChainableQualifier {
-	public ERXAndQualifier(NSArray<EOQualifier> qualifiers) {
+	public ERXAndQualifier(NSArray<? extends EOQualifier> qualifiers) {
 		super(qualifiers);
 	}
 
