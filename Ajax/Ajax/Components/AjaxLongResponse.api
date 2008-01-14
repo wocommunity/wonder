@@ -13,5 +13,6 @@
         </validation>
         <binding name="class"/>
         <binding name="style"/>
+    	<binding defaults="Boolean" name="stopped"/>
     </wo>
 </wodefinitions>
