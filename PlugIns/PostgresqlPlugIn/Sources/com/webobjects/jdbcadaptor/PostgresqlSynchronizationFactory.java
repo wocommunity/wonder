@@ -11,6 +11,7 @@ import com.webobjects.eoaccess.EOSchemaGeneration;
 import com.webobjects.eoaccess.EOSchemaSynchronization;
 import com.webobjects.eoaccess.EOSynchronizationFactory;
 import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableSet;
 
@@ -361,4 +362,9 @@ public class PostgresqlSynchronizationFactory extends EOSynchronizationFactory i
         return convertedString.toString();
     }
 
+    @Override
+    public NSArray statementsToInsertColumnForAttribute(EOAttribute attribute, NSDictionary options) {
+      String clause = _columnCreationClauseForAttribute(attribute);
+      return new NSArray(_expressionForString("alter table " + attribute.entity().externalName() + " add " + clause));
+    }
 }
