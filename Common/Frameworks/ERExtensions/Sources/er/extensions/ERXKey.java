@@ -474,6 +474,29 @@ public class ERXKey<T> {
 	}
 
 	/**
+	 * Returns a new ERXKey that appends the given key to this keypath. For
+	 * instance, if this key is "person" and you add "firstName" to it, this
+	 * will return a new ERXKey "person.firstName".
+		ERXKey<String> k = new ERXKey<String>("foo");
+		ERXKey<NSArray<String>> a = new ERXKey<NSArray<String>>("foos");
+		k = k.append(k);
+		a = a.append(k);
+		a = k.appendAsArray(k);
+		k = k.appendAsArray(k);
+		a = k.appendAsArray(a);
+		a = a.appendAsArray(k);
+		a = a.appendAsArray(a);
+	 * 
+	 * @param key
+	 *            the key to append to this keypath
+	 * @return the new appended key
+	 */
+	@SuppressWarnings("unchecked")
+	public <U> ERXKey<NSArray<U>> appendAsArray(ERXKey<U> key) {
+		return append(key.key());
+	}
+
+	/**
 	 * Returns the value of this keypath on the given object.
 	 * 
 	 * Note: If you ERXKey representation a keypath through an NSArray, this
@@ -492,7 +515,7 @@ public class ERXKey<T> {
 	/**
 	 *  Returns the value of this keypath on the given object.
 	 * @param obj the target object to apply this keypath on
-	 * @return
+	 * @return the value of the keypath on the target object
 	 */
 	public Object rawValueInObject(Object obj) {
 		return NSKeyValueCodingAdditions.DefaultImplementation.valueForKeyPath(obj, _key);
@@ -501,7 +524,7 @@ public class ERXKey<T> {
 	/**
 	 * Returns the value of this keypath on the given object cast as an NSArray.
 	 * @param obj the target object to apply this keypath on
-	 * @return
+	 * @return the value of the keypath on the target object
 	 */
 	public NSArray<T> arrayValueInObject(Object obj) {
 		return (NSArray<T>)rawValueInObject(obj);
