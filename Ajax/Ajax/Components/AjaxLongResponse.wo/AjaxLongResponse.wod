@@ -4,7 +4,7 @@ AjaxUpdateContainer : AjaxUpdateContainer {
 	class = ^class;
 	style = ^style;
 	frequency = frequency;
-	stopped = true;
+	stopped = ^stopped;
 }
 
 IsRunning : WOConditional {
