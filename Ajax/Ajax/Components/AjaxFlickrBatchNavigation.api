@@ -4,6 +4,7 @@
 		<binding name="displayGroup"/>
 		<binding name="displayName"/>
 		<binding name="updateContainerID"/>
+		<binding name = "showPageRange"/>
 
 		<validation message="&apos;displayGroup&apos; is a required binding.">
 			<unbound name="displayGroup"/>

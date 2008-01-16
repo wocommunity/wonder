@@ -21,6 +21,7 @@ import com.webobjects.foundation.NSMutableArray;
  * @author mschrag
  * @binding displayGroup the display group to paginate
  * @binding displayName the name of the items that are being display ("photo", "bug", etc)
+ * @binding showPageRange if true, the page of items on the page is shown, for example "(1-7 of 200 items)" 
  */
 public class ERXFlickrBatchNavigation extends WOComponent {
 	private int _lastPageCount;
