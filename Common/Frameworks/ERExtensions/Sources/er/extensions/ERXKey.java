@@ -1,6 +1,8 @@
 package er.extensions;
 
+import com.webobjects.eoaccess.EOStoredProcedure;
 import com.webobjects.eocontrol.EOQualifier;
+import com.webobjects.eocontrol.EOSortOrdering;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSKeyValueCodingAdditions;
 import com.webobjects.foundation.NSTimestamp;
@@ -39,6 +41,38 @@ public class ERXKey<T> {
 		_key = key;
 	}
 
+	/**
+	 * Equivalent to ERXS.asc(key())
+	 * @return asc sort ordering for key
+	 */
+	public EOSortOrdering asc() {
+		return ERXS.asc(key());
+	}
+
+	/**
+	 * Equivalent to ERXS.desc(key())
+	 * @return desc sort ordering for key
+	 */
+	public EOSortOrdering desc() {
+		return ERXS.desc(key());
+	}
+
+	/**
+	 * Equivalent to ERXS.ascInsensitive(key())
+	 * @return ascInsensitive sort ordering for key
+	 */
+	public EOSortOrdering ascInsensitive() {
+		return ERXS.ascInsensitive(key());
+	}
+
+	/**
+	 * Equivalent to ERXS.descInsensitive(key())
+	 * @return descInsensitive sort ordering for key
+	 */
+	public EOSortOrdering descInsensitive() {
+		return ERXS.descInsensitive(key());
+	}
+	
 	/**
 	 * Returns the keypath that this ERXKey represents.
 	 * 
