@@ -41,21 +41,22 @@ public class ERXStyleSheet extends ERXStatelessComponent {
         super(aContext);
     }
 
-    private static ERXExpiringCache cache(WOSession session) {
-    	ERXExpiringCache cache = (ERXExpiringCache) session.objectForKey("ERXStylesheet.cache");
+    @SuppressWarnings("unchecked")
+	private static ERXExpiringCache<String, WOResponse> cache(WOSession session) {
+    	ERXExpiringCache<String, WOResponse> cache = (ERXExpiringCache<String, WOResponse>) session.objectForKey("ERXStylesheet.cache");
     	if(cache == null) {
-    		cache = new ERXExpiringCache(60);
+    		cache = new ERXExpiringCache<String, WOResponse>(60);
     		session.setObjectForKey(cache, "ERXStylesheet.cache");
     	}
     	return cache;
     }
     
     public static class Sheet extends WODirectAction {
-
     	public Sheet(WORequest worequest) {
 			super(worequest);
 		}
     	
+		@Override
 		public WOActionResults performActionNamed(String name) {
 			WOResponse response = (WOResponse) cache(session()).objectForKey(name);
 			return response;
@@ -139,15 +140,24 @@ public class ERXStyleSheet extends ERXStatelessComponent {
      * Appends the &ltlink&gt; tag, either by using the style sheet name and framework or
      * by using the component content and then generating a link to it.
      */
-    public void appendToResponse(WOResponse r, WOContext wocontext) {
+    @Override
+	public void appendToResponse(WOResponse r, WOContext wocontext) {
     	String href = styleSheetUrl();
-    	WOResponse woresponse = new WOResponse();
-    	woresponse._appendContentAsciiString("<link ");
-    	woresponse._appendTagAttributeAndValue("rel", "stylesheet", false);
-    	woresponse._appendTagAttributeAndValue("type", "text/css", false);
-    	if(href == null) {
+    	boolean appendContents = (href == null); 
+    	WOResponse response;
+    	if (appendContents) {
+    		response = new WOResponse();
+    	}
+    	else {
+    		response = r;
+    	}
+    	response._appendContentAsciiString("<link ");
+    	response._appendTagAttributeAndValue("rel", "stylesheet", false);
+    	response._appendTagAttributeAndValue("type", "text/css", false);
+
+    	if(appendContents) {
     		String key = styleSheetKey();
-    		ERXExpiringCache cache = cache(session());
+    		ERXExpiringCache<String, WOResponse> cache = cache(session());
     		if(cache.isStale(key) || ERXApplication.isDevelopmentModeSafe()) {
     			WOResponse newresponse = new WOResponse();
     			super.appendToResponse(newresponse, wocontext);
@@ -156,12 +166,16 @@ public class ERXStyleSheet extends ERXStatelessComponent {
     		}
     		href = wocontext.directActionURLForActionNamed(Sheet.class.getName() + "/" + key, null);
     	}
-    	woresponse._appendTagAttributeAndValue("href", href, false);
+    	response._appendTagAttributeAndValue("href", href, false);
+    	
     	String media = mediaType();
     	if (media != null) {
-    		woresponse._appendTagAttributeAndValue("media", media, false);
+    		response._appendTagAttributeAndValue("media", media, false);
     	}
-    	woresponse._appendContentAsciiString("></link>");
-    	ERXWOContext.insertInResponseBeforeTag(r, woresponse.contentString(), ERXWOContext._htmlCloseHeadTag(), false, true);
+    	
+    	response._appendContentAsciiString("></link>");
+    	if (appendContents) {
+    		ERXWOContext.insertInResponseBeforeTag(r, response.contentString(), ERXWOContext._htmlCloseHeadTag(), false, true);
+    	}
     }
 }
