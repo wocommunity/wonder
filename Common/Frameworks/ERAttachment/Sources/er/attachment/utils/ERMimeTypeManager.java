@@ -67,6 +67,22 @@ public class ERMimeTypeManager {
   }
 
   /**
+   * Removes all the mime types from this manager.
+   */
+  public void clearMimeTypes() {
+    _mimeTypes.clear();
+  }
+  
+  /**
+   * Removes the given mime type definition from this manager.
+   * 
+   * @param mimeType the mime type to remove
+   */
+  public void removeMimeType(ERMimeType mimeType) {
+    _mimeTypes.remove(mimeType);
+  }
+  
+  /**
    * Adds a mime type definition to the manager.
    * 
    * @param mimeType the mime type to add
