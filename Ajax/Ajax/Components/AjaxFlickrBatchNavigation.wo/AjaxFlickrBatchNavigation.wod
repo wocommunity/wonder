@@ -64,6 +64,18 @@ IsEllipsisConditional : WOConditional {
 	negate = true;
 }
 
+ShowPageRange : WOConditional {
+	condition = ^showPageRange;
+}
+
+FirstIndex : WOString {
+	value = displayGroup.indexOfFirstDisplayedObject;
+}
+
+LastIndex : WOString {
+	value = displayGroup.indexOfLastDisplayedObject;
+}
+
 DisplayName : ERXPluralString {
 	count = objects.count;
 	value = displayName;
