@@ -578,6 +578,11 @@ public class ERXModelGroup extends EOModelGroup {
 				if (languages.count() > 0) {
 					String name = attribute.name();
 					String columnName = attribute.columnName();
+					NSMutableDictionary attributeUserInfo = new NSMutableDictionary();
+					if(attribute.userInfo() != null) {
+						attributeUserInfo.addEntriesFromDictionary(attribute.userInfo());
+					}
+					attributeUserInfo.setObjectForKey(languages, "ERXLanguages");
 					for (int i = 0; i < languages.count(); i++) {
 						String language = (String) languages.objectAtIndex(i);
 						String newName = name + "_" + language;
@@ -593,6 +598,7 @@ public class ERXModelGroup extends EOModelGroup {
 						if (isUsedForLocking) {
 							mutableAttributesUsedForLocking.addObject(copy);
 						}
+						copy.setUserInfo(attributeUserInfo.mutableClone());
 					}
 					entity.removeAttribute(attribute);
 					mutableClassProperties.removeObject(attribute);
