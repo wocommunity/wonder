@@ -29,6 +29,12 @@ import er.extensions.qualifiers.ERXOrQualifier;
  * @author mschrag
  */
 public class ERXKey<T> {
+	
+	public interface ValueCoding {
+		public <T> T valueForKey(ERXKey<T> key);
+		public <T> void takeValueForKey(Object value, ERXKey<T> key);
+	}
+	
 	private String _key;
 
 	/**
