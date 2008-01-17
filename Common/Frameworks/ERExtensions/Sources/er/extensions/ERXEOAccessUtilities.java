@@ -1575,11 +1575,16 @@ public class ERXEOAccessUtilities {
 				while (objectsEnum.hasMoreElements()) {
 					EOEnterpriseObject object = (EOEnterpriseObject) objectsEnum.nextElement();
 					NSDictionary sourceSnapshot = databaseContext.snapshotForGlobalID(editingContext.globalIDForObject(object));
-					NSDictionary destinationPK = relationship._foreignKeyForSourceRow(sourceSnapshot);
-					EOGlobalID destinationGID = destinationEntity.globalIDForRow(destinationPK);
-					NSDictionary destinationSnapshot = databaseContext.snapshotForGlobalID(destinationGID, editingContext.fetchTimestamp());
-					if (destinationSnapshot == null) {
+					if (sourceSnapshot == null) {
 						objectsWithUnfaultedRelationships.add(object);
+					}
+					else {
+						NSDictionary destinationPK = relationship._foreignKeyForSourceRow(sourceSnapshot);
+						EOGlobalID destinationGID = destinationEntity.globalIDForRow(destinationPK);
+						NSDictionary destinationSnapshot = databaseContext.snapshotForGlobalID(destinationGID, editingContext.fetchTimestamp());
+						if (destinationSnapshot == null) {
+							objectsWithUnfaultedRelationships.add(object);
+						}
 					}
 				}
 				objectsToBatchFetch = objectsWithUnfaultedRelationships;
