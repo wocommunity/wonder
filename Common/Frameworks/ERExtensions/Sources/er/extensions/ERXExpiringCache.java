@@ -2,6 +2,9 @@ package er.extensions;
 
 import java.lang.ref.WeakReference;
 import java.util.Enumeration;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 
 import com.webobjects.foundation.NSMutableDictionary;
 
@@ -14,10 +17,10 @@ import com.webobjects.foundation.NSMutableDictionary;
  * and return null. An example version key might be the count of an array, if
  * the count changes, you want to invalidate the cached object.
  * 
- * Note that on a time-expiring cache, if you do not use the reaper 
- * startBackgroundExpiration(), or manually call removeStaleEntries(), 
- * unexpired entries will remain in the cache for the lifetime of the cache.
- *   
+ * Note that on a time-expiring cache, if you do not use the reaper with
+ * startBackgroundExpiration(), or manually call removeStaleEntries(), unexpired
+ * entries will remain in the cache for the lifetime of the cache.
+ * 
  * @author ak
  * @author mschrag
  */
@@ -72,11 +75,15 @@ public class ERXExpiringCache<K, V> {
 	 */
 	public static final Object NO_VERSION = new Object();
 
+	/**
+	 * The reaper for ERXExpiringCaches.
+	 */
+	private static ERXExpiringCache.GrimReaper _reaper;
+
 	private NSMutableDictionary<K, ERXExpiringCache.Entry<V>> _backingDictionary;
 	private long _expiryTime;
 	private long _cleanupPause;
 	private long _lastCleanupTime;
-	private GrimReaper _reaper;
 
 	/**
 	 * Constructs an ERXExpiringCache with a 60 second expiration.
@@ -249,17 +256,19 @@ public class ERXExpiringCache<K, V> {
 	 * Removes all stale entries.
 	 */
 	public synchronized void removeStaleEntries() {
-		long now = System.currentTimeMillis();
-		if ((_lastCleanupTime + _cleanupPause) < now) {
-			_lastCleanupTime = System.currentTimeMillis();
-			for (Enumeration<K> keyEnum = _backingDictionary.keyEnumerator(); keyEnum.hasMoreElements();) {
-				K key = keyEnum.nextElement();
-				Entry<V> entry = _backingDictionary.objectForKey(key);
-				// ak: add 10 seconds as a safety margin
-				// we need this because the entry could be requested
-				// when we just checked and noticed it is ok
-				if (entry.isStale(now + 10L * 1000, ERXExpiringCache.NO_VERSION)) {
-					_backingDictionary.removeObjectForKey(key);
+		if (_backingDictionary.count() > 0) {
+			long now = System.currentTimeMillis();
+			if ((_lastCleanupTime + _cleanupPause) < now) {
+				_lastCleanupTime = System.currentTimeMillis();
+				for (Enumeration<K> keyEnum = _backingDictionary.keyEnumerator(); keyEnum.hasMoreElements();) {
+					K key = keyEnum.nextElement();
+					Entry<V> entry = _backingDictionary.objectForKey(key);
+					// ak: add 10 seconds as a safety margin
+					// we need this because the entry could be requested
+					// when we just checked and noticed it is ok
+					if (entry.isStale(now + 10L * 1000, ERXExpiringCache.NO_VERSION)) {
+						_backingDictionary.removeObjectForKey(key);
+					}
 				}
 			}
 		}
@@ -271,48 +280,34 @@ public class ERXExpiringCache<K, V> {
 	}
 
 	/**
-	 * Initiates a background thread that reaps time-expired entries from this
-	 * cache ever _expiryTime seconds. If this cache is not a time-expiration
-	 * cache, this will throw an IllegalArgumentException.
-	 * 
-	 * The reaper thread holds a WeakReference to this cache and will
-	 * automatically stop when the cache is GC'd.
+	 * Adds this cache to the background thread that reaps time-expired entries
+	 * from expiring caches. If this cache is not a time-expiration cache, this
+	 * will throw an IllegalArgumentException.
 	 */
 	public void startBackgroundExpiration() {
 		if (_expiryTime == ERXExpiringCache.NO_TIMEOUT) {
 			throw new IllegalArgumentException("This ERXExpiringCache does not have an expiration time.");
 		}
-		startBackgroundExpiration(_expiryTime);
+		ERXExpiringCache.reaper().addCache(this);
 	}
 
 	/**
-	 * Initiates a background thread that reaps time-expired entries from this
-	 * cache ever reapFrequencyMillis milliseconds. If this cache is not a
-	 * time-expiration cache, this will throw an IllegalArgumentException.
-	 * 
-	 * The reaper thread holds a WeakReference to this cache and will
-	 * automatically stop when the cache is GC'd.
-	 * 
-	 * @param reapFrequencyInMillis
-	 *            the reaping frequency
-	 */
-	public synchronized void startBackgroundExpiration(long reapFrequencyInMillis) {
-		if (_reaper != null) {
-			throw new IllegalStateException("There is already a reaper on this cache.");
-		}
-		_reaper = new GrimReaper(this, reapFrequencyInMillis);
-		Thread reaperThread = new Thread(_reaper, "ERXExpiringCache Reaper");
-		reaperThread.start();
-	}
-
-	/**
-	 * Stops the background reaper.
+	 * Stops the background reaper for this cache.
 	 */
 	public synchronized void stopBackgroundExpiration() {
-		if (_reaper != null) {
-			_reaper.stop();
-			_reaper = null;
+		ERXExpiringCache.reaper().stop(this);
+	}
+
+	/**
+	 * Returns the repear for all ERXExpringCaches.
+	 * 
+	 * @return the repear for all ERXExpringCaches
+	 */
+	protected static synchronized ERXExpiringCache.GrimReaper reaper() {
+		if (_reaper == null) {
+			_reaper = new GrimReaper(ERXProperties.intForKeyWithDefault("er.extensions.ERXExpiringCache.reaperFrequency", 5000));
 		}
+		return ERXExpiringCache._reaper;
 	}
 
 	/**
@@ -321,35 +316,85 @@ public class ERXExpiringCache<K, V> {
 	 * @author mschrag
 	 */
 	protected static class GrimReaper implements Runnable {
-		private WeakReference<ERXExpiringCache> _cache;
+		private List<WeakReference<ERXExpiringCache>> _caches;
 		private long _reapFrequencyInMillis;
 		private boolean _stopped;
 
-		public GrimReaper(ERXExpiringCache cache, long reapFrequencyInMillis) {
-			_cache = new WeakReference<ERXExpiringCache>(cache);
+		public GrimReaper(long reapFrequencyInMillis) {
+			_caches = new LinkedList<WeakReference<ERXExpiringCache>>();
 			_reapFrequencyInMillis = reapFrequencyInMillis;
-		}
-
-		public void stop() {
 			_stopped = true;
 		}
 
+		public void addCache(ERXExpiringCache cache) {
+			synchronized (_caches) {
+				_caches.add(new WeakReference<ERXExpiringCache>(cache));
+				if (_stopped) {
+					start();
+				}
+			}
+
+		}
+
+		public void start() {
+			synchronized (_caches) {
+				if (_stopped) {
+					_stopped = false;
+					Thread reaperThread = new Thread(this);
+					reaperThread.start();
+				}
+			}
+		}
+
+		public void stop() {
+			synchronized (_caches) {
+				_stopped = true;
+			}
+		}
+
+		public void stop(ERXExpiringCache cache) {
+			synchronized (_caches) {
+				Iterator<WeakReference<ERXExpiringCache>> cacheIter = _caches.iterator();
+				while (cacheIter.hasNext()) {
+					WeakReference<ERXExpiringCache> cacheRef = cacheIter.next();
+					ERXExpiringCache reapingCache = cacheRef.get();
+					if (reapingCache == cache) {
+						System.out.println("GrimReaper.stop: REMOVING " + cache);
+						cacheIter.remove();
+						break;
+					}
+				}
+			}
+		}
+
 		public void run() {
-			while (!_stopped) {
+			boolean stopped = false;
+			do {
 				try {
 					Thread.sleep(_reapFrequencyInMillis);
 				}
 				catch (InterruptedException e) {
 					// IGNORE
 				}
-				ERXExpiringCache cache = _cache.get();
-				if (cache == null) {
-					_stopped = true;
-				}
-				else {
-					cache.removeStaleEntries();
+				synchronized (_caches) {
+					Iterator<WeakReference<ERXExpiringCache>> cacheIter = _caches.iterator();
+					while (cacheIter.hasNext()) {
+						WeakReference<ERXExpiringCache> cacheRef = cacheIter.next();
+						ERXExpiringCache cache = cacheRef.get();
+						if (cache == null) {
+							cacheIter.remove();
+						}
+						else {
+							cache.removeStaleEntries();
+						}
+					}
+					if (_caches.size() == 0) {
+						_stopped = true;
+						stopped = true;
+					}
 				}
 			}
+			while (!stopped);
 		}
 	}
 }
