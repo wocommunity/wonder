@@ -437,7 +437,7 @@ public class ERXMigrationTable {
 	 * @throws SQLException if the column cannot be created 
 	 */
 	public ERXMigrationColumn newBooleanColumn(String name, boolean allowsNull, Boolean defaultValue) throws SQLException {
-		return newColumn(name, Types.VARCHAR, 5, 0, 0, allowsNull, null, defaultValue);
+		return newColumn(name, Types.VARCHAR, 5, 0, 0, allowsNull, null, defaultValue == null ? null : defaultValue.toString());
 	}
 
 	/**
