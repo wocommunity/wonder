@@ -1,5 +1,6 @@
 package er.extensions;
 
+import java.lang.ref.WeakReference;
 import java.util.Enumeration;
 
 import com.webobjects.foundation.NSMutableDictionary;
@@ -8,15 +9,18 @@ import com.webobjects.foundation.NSMutableDictionary;
  * Cache that expires its entries based on time or version changes. Version can
  * be any object that represents the current state of a cached value. When
  * retrieving the value, you can retrieve it with a version key. If the version
- * key used in the retrieval does not match the original version key of the 
+ * key used in the retrieval does not match the original version key of the
  * object in the cache, then the cache will invalidate the value for that key
- * and return null.  An example version key might be the count of an array, if 
+ * and return null. An example version key might be the count of an array, if
  * the count changes, you want to invalidate the cached object.
  * 
+ * Note that on a time-expiring cache, if you do not use the reaper 
+ * startBackgroundExpiration(), or manually call removeStaleEntries(), 
+ * unexpired entries will remain in the cache for the lifetime of the cache.
+ *   
  * @author ak
  * @author mschrag
  */
-// FIXME: the last entry stays in the cache if it is not requested.
 public class ERXExpiringCache<K, V> {
 	private static class Entry<V> {
 		private long _expiration;
@@ -54,15 +58,7 @@ public class ERXExpiringCache<K, V> {
 
 		@Override
 		public String toString() {
-			return super.toString()
-				+ " { " 
-				+ "expiration = "
-				+ ( _expiration == ERXExpiringCache.NO_TIMEOUT ? "NO_TIMEOUT" : new java.util.Date(_expiration) )
-				+ ", version = "
-				+ ( _versionKey == ERXExpiringCache.NO_VERSION ? "NO_VERSION" : _versionKey )
-				+ ", object = "
-				+ _object
-				+ " }";
+			return super.toString() + " { " + "expiration = " + (_expiration == ERXExpiringCache.NO_TIMEOUT ? "NO_TIMEOUT" : new java.util.Date(_expiration)) + ", version = " + (_versionKey == ERXExpiringCache.NO_VERSION ? "NO_VERSION" : _versionKey) + ", object = " + _object + " }";
 		}
 	}
 
@@ -80,6 +76,7 @@ public class ERXExpiringCache<K, V> {
 	private long _expiryTime;
 	private long _cleanupPause;
 	private long _lastCleanupTime;
+	private GrimReaper _reaper;
 
 	/**
 	 * Constructs an ERXExpiringCache with a 60 second expiration.
@@ -116,7 +113,7 @@ public class ERXExpiringCache<K, V> {
 		_lastCleanupTime = 0L;
 		_backingDictionary = new NSMutableDictionary<K, Entry<V>>();
 	}
-	
+
 	/**
 	 * Removes all the objects in this cache.
 	 */
@@ -144,9 +141,12 @@ public class ERXExpiringCache<K, V> {
 	/**
 	 * Sets the object for the specified key and current version key.
 	 * 
-	 * @param object the object to set
-	 * @param key the lookup key
-	 * @param currentVersionKey the version of the object right now
+	 * @param object
+	 *            the object to set
+	 * @param key
+	 *            the lookup key
+	 * @param currentVersionKey
+	 *            the version of the object right now
 	 */
 	public synchronized void setObjectForKeyWithVersion(V object, K key, Object currentVersionKey) {
 		removeStaleEntries();
@@ -164,7 +164,8 @@ public class ERXExpiringCache<K, V> {
 	/**
 	 * Returns the value of the given key with an unspecified version.
 	 * 
-	 * @param key the key to lookup with
+	 * @param key
+	 *            the key to lookup with
 	 * @return the value in the cache or null
 	 */
 	public synchronized V objectForKey(K key) {
@@ -172,13 +173,14 @@ public class ERXExpiringCache<K, V> {
 	}
 
 	/**
-	 * Returns the value of the given key passing in the current version
-	 * of the cache value.  If the version key passed in does not
-	 * match the version key in the cache, the cache will invalidate
-	 * that key.
+	 * Returns the value of the given key passing in the current version of the
+	 * cache value. If the version key passed in does not match the version key
+	 * in the cache, the cache will invalidate that key.
 	 * 
-	 * @param key the key to lookup with
-	 * @param currentVersionKey the current version of this key
+	 * @param key
+	 *            the key to lookup with
+	 * @param currentVersionKey
+	 *            the current version of this key
 	 * @return the value in the cache or null
 	 */
 	public synchronized V objectForKeyWithVersion(K key, Object currentVersionKey) {
@@ -196,9 +198,11 @@ public class ERXExpiringCache<K, V> {
 	}
 
 	/**
-	 * Returns whether or not the object for the given key is a stale cache entry.
+	 * Returns whether or not the object for the given key is a stale cache
+	 * entry.
 	 * 
-	 * @param key the key to lookup
+	 * @param key
+	 *            the key to lookup
 	 * @return true if the value is stale
 	 */
 	public synchronized boolean isStale(Object key) {
@@ -206,11 +210,13 @@ public class ERXExpiringCache<K, V> {
 	}
 
 	/**
-	 * Returns whether or not the object for the given key is a stale cache entry
-	 * given the context of the current version of the key.
+	 * Returns whether or not the object for the given key is a stale cache
+	 * entry given the context of the current version of the key.
 	 * 
-	 * @param key the key to lookup
-	 * @param currentVersionKey the current version of this key
+	 * @param key
+	 *            the key to lookup
+	 * @param currentVersionKey
+	 *            the current version of this key
 	 * @return true if the value is stale
 	 */
 	public synchronized boolean isStaleWithVersion(Object key, Object currentVersionKey) {
@@ -225,7 +231,8 @@ public class ERXExpiringCache<K, V> {
 	/**
 	 * Removes the object for the given key.
 	 * 
-	 * @param key the key to remove
+	 * @param key
+	 *            the key to remove
 	 * @return the removed object
 	 */
 	public synchronized V removeObjectForKey(K key) {
@@ -241,7 +248,7 @@ public class ERXExpiringCache<K, V> {
 	/**
 	 * Removes all stale entries.
 	 */
-	private void removeStaleEntries() {
+	public synchronized void removeStaleEntries() {
 		long now = System.currentTimeMillis();
 		if ((_lastCleanupTime + _cleanupPause) < now) {
 			_lastCleanupTime = System.currentTimeMillis();
@@ -263,4 +270,86 @@ public class ERXExpiringCache<K, V> {
 		return super.toString() + " " + _backingDictionary;
 	}
 
+	/**
+	 * Initiates a background thread that reaps time-expired entries from this
+	 * cache ever _expiryTime seconds. If this cache is not a time-expiration
+	 * cache, this will throw an IllegalArgumentException.
+	 * 
+	 * The reaper thread holds a WeakReference to this cache and will
+	 * automatically stop when the cache is GC'd.
+	 */
+	public void startBackgroundExpiration() {
+		if (_expiryTime == ERXExpiringCache.NO_TIMEOUT) {
+			throw new IllegalArgumentException("This ERXExpiringCache does not have an expiration time.");
+		}
+		startBackgroundExpiration(_expiryTime);
+	}
+
+	/**
+	 * Initiates a background thread that reaps time-expired entries from this
+	 * cache ever reapFrequencyMillis milliseconds. If this cache is not a
+	 * time-expiration cache, this will throw an IllegalArgumentException.
+	 * 
+	 * The reaper thread holds a WeakReference to this cache and will
+	 * automatically stop when the cache is GC'd.
+	 * 
+	 * @param reapFrequencyInMillis
+	 *            the reaping frequency
+	 */
+	public synchronized void startBackgroundExpiration(long reapFrequencyInMillis) {
+		if (_reaper != null) {
+			throw new IllegalStateException("There is already a reaper on this cache.");
+		}
+		_reaper = new GrimReaper(this, reapFrequencyInMillis);
+		Thread reaperThread = new Thread(_reaper, "ERXExpiringCache Reaper");
+		reaperThread.start();
+	}
+
+	/**
+	 * Stops the background reaper.
+	 */
+	public synchronized void stopBackgroundExpiration() {
+		if (_reaper != null) {
+			_reaper.stop();
+			_reaper = null;
+		}
+	}
+
+	/**
+	 * The reaper runnable for ERXExpiringCache.
+	 * 
+	 * @author mschrag
+	 */
+	protected static class GrimReaper implements Runnable {
+		private WeakReference<ERXExpiringCache> _cache;
+		private long _reapFrequencyInMillis;
+		private boolean _stopped;
+
+		public GrimReaper(ERXExpiringCache cache, long reapFrequencyInMillis) {
+			_cache = new WeakReference<ERXExpiringCache>(cache);
+			_reapFrequencyInMillis = reapFrequencyInMillis;
+		}
+
+		public void stop() {
+			_stopped = true;
+		}
+
+		public void run() {
+			while (!_stopped) {
+				try {
+					Thread.sleep(_reapFrequencyInMillis);
+				}
+				catch (InterruptedException e) {
+					// IGNORE
+				}
+				ERXExpiringCache cache = _cache.get();
+				if (cache == null) {
+					_stopped = true;
+				}
+				else {
+					cache.removeStaleEntries();
+				}
+			}
+		}
+	}
 }
