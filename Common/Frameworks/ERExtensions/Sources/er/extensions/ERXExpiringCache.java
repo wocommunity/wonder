@@ -359,7 +359,6 @@ public class ERXExpiringCache<K, V> {
 					WeakReference<ERXExpiringCache> cacheRef = cacheIter.next();
 					ERXExpiringCache reapingCache = cacheRef.get();
 					if (reapingCache == cache) {
-						System.out.println("GrimReaper.stop: REMOVING " + cache);
 						cacheIter.remove();
 						break;
 					}
