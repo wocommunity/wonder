@@ -4,14 +4,14 @@
 	<parent>
 		<groupId>wonder.ajax</groupId>
 		<artifactId>ajax-all</artifactId>
-		<version>${wonderversion}-SNAPSHOT</version>
+		<version>4.0.0-SNAPSHOT</version>
 		<relativePath>..</relativePath>
 	</parent>
 
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>wonder.ajax</groupId>
 	<artifactId>AjaxExample</artifactId>
-	<version>${wonderversion}-SNAPSHOT</version>
+	<version>4.0.0-SNAPSHOT</version>
 	<name>AjaxExample</name>
 	<packaging>woapplication</packaging>
 
@@ -19,7 +19,7 @@
 		<dependency>
 			<groupId>wonder.ajax</groupId>
 			<artifactId>Ajax</artifactId>
-			<version>${wonderversion}-SNAPSHOT</version>
+			<version>4.0.0-SNAPSHOT</version>
 		</dependency>
 	</dependencies>
 	<build>
