@@ -1463,37 +1463,68 @@ public class ERXEOAccessUtilities {
     	 ERXEOAccessUtilities.batchFetchRelationship(databaseContext, relationship, objects, editingContext, skipFaultedRelationships);
      }
      
-     /**
-      * Batch fetch a relationship, optionally skipping any relationship that has already faulted in its to-many relationship.
-      * 
-      * @param databaseContext the database context to fetch in
-      * @param relationship the relationship to fetch
-      * @param objects the objects to fetch the relationship on
-      * @param editingContext the editingContext to fetch in
-      * @param skipFaultedRelationships if true, skip any object whose relationship has already been faulted
-      */
-     public static void batchFetchRelationship(EODatabaseContext databaseContext, EORelationship relationship, NSArray objects, EOEditingContext editingContext, boolean skipFaultedRelationships) {
-    	 NSArray objectsToBatchFetch;
-    	 if (skipFaultedRelationships && relationship.isToMany()) {
-	         NSMutableArray objectsWithUnfaultedRelationships = new NSMutableArray();
-	         String relationshipName = relationship.name();
-	         Enumeration objectsEnum = objects.objectEnumerator();
-	         while (objectsEnum.hasMoreElements()) {
-	         	EOEnterpriseObject object = (EOEnterpriseObject)objectsEnum.nextElement();
-	         	Object relationshipValue = object.storedValueForKey(relationshipName);
-	         	if (EOFaultHandler.isFault(relationshipValue)) {
-	         		objectsWithUnfaultedRelationships.addObject(object);
-	         	}
-	         }
-	         objectsToBatchFetch = objectsWithUnfaultedRelationships;
-    	 }
-    	 else {
-    		 objectsToBatchFetch = objects;
-    	 }
-    	 if (objects.count() > 0) {
-			 databaseContext.batchFetchRelationship(relationship, objectsToBatchFetch, editingContext);
-    	 }
-     }
+ 	/**
+ 	 * Batch fetch a relationship, optionally skipping any relationship that has
+ 	 * already faulted in its to-many relationship.
+ 	 * 
+ 	 * @param databaseContext
+ 	 *            the database context to fetch in
+ 	 * @param relationship
+ 	 *            the relationship to fetch
+ 	 * @param objects
+ 	 *            the objects to fetch the relationship on
+ 	 * @param editingContext
+ 	 *            the editingContext to fetch in
+ 	 * @param skipFaultedRelationships
+ 	 *            if true, skip any object whose relationship has already been
+ 	 *            faulted
+ 	 */
+ 	public static void batchFetchRelationship(EODatabaseContext databaseContext, EORelationship relationship, NSArray objects, EOEditingContext editingContext, boolean skipFaultedRelationships) {
+ 		NSArray objectsToBatchFetch;
+ 		if (skipFaultedRelationships) {
+ 			if (relationship.isToMany()) {
+ 				NSMutableArray objectsWithUnfaultedRelationships = new NSMutableArray();
+ 				String relationshipName = relationship.name();
+ 				Enumeration objectsEnum = objects.objectEnumerator();
+ 				while (objectsEnum.hasMoreElements()) {
+ 					EOEnterpriseObject object = (EOEnterpriseObject) objectsEnum.nextElement();
+ 					Object relationshipValue = object.storedValueForKey(relationshipName);
+ 					if (EOFaultHandler.isFault(relationshipValue)) {
+ 						objectsWithUnfaultedRelationships.addObject(object);
+ 					}
+ 				}
+ 				objectsToBatchFetch = objectsWithUnfaultedRelationships;
+ 			}
+ 			else {
+ 				NSMutableArray objectsWithUnfaultedRelationships = new NSMutableArray();
+ 				EOEntity destinationEntity = relationship.destinationEntity();
+ 				String relationshipName = relationship.name();
+ 				Enumeration objectsEnum = objects.objectEnumerator();
+ 				while (objectsEnum.hasMoreElements()) {
+ 					EOEnterpriseObject object = (EOEnterpriseObject) objectsEnum.nextElement();
+ 					NSDictionary sourceSnapshot = databaseContext.snapshotForGlobalID(editingContext.globalIDForObject(object));
+ 					if (sourceSnapshot == null) {
+ 						objectsWithUnfaultedRelationships.add(object);
+ 					}
+ 					else {
+ 						NSDictionary destinationPK = relationship._foreignKeyForSourceRow(sourceSnapshot);
+ 						EOGlobalID destinationGID = destinationEntity.globalIDForRow(destinationPK);
+ 						NSDictionary destinationSnapshot = databaseContext.snapshotForGlobalID(destinationGID, editingContext.fetchTimestamp());
+ 						if (destinationSnapshot == null) {
+ 							objectsWithUnfaultedRelationships.add(object);
+ 						}
+ 					}
+ 				}
+ 				objectsToBatchFetch = objectsWithUnfaultedRelationships;
+ 			}
+ 		}
+ 		else {
+ 			objectsToBatchFetch = objects;
+ 		}
+ 		if (objects.count() > 0) {
+ 			databaseContext.batchFetchRelationship(relationship, objectsToBatchFetch, editingContext);
+ 		}
+ 	}
  	
  	/**
  	 * In a multi-OSC or multi-instance scenario, when there are bugs, it is possible for the snapshots to become out of
