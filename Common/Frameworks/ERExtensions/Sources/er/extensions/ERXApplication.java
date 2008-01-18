@@ -1277,10 +1277,10 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 				}
 			}
 			else {
-				// We first log just in case the log4j call puts us in a bad
+				// We log just in case the log4j call puts us in a bad
 				// state.
-				NSLog.err.appendln("java.lang.Error \"" + throwable.getClass().getName() + "\" occured. Can't recover, I'm killing this instance.");
-				log.error("java.lang.Error \"" + throwable.getClass().getName() + "\" occured. Can't recover, I'm killing this instance.", throwable);
+				NSLog.err.appendln("java.lang.Error \"" + throwable.getClass().getName() + "\" occured.");
+				log.error("java.lang.Error \"" + throwable.getClass().getName() + "\" occured.", throwable);
 			}
 			if (shouldQuit)
 				Runtime.getRuntime().exit(1);
