@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.sql.SQLException;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
@@ -61,6 +62,15 @@ public class ERXSQLHelper {
 
 	private JDBCPlugIn _plugin;
 
+	
+	public void prepareConnectionForSchemaChange(EOEditingContext ec, EOModel model) {
+		// do nothing by default
+	}
+	
+	public void restoreConnectionSettingsAfterSchemaChange(EOEditingContext ec, EOModel model) {
+		// do nothing by default
+	}
+	
 	public boolean shouldExecute(String sql) {
 		return true;
 	}
@@ -951,6 +961,9 @@ public class ERXSQLHelper {
 	}
 
 	public static class FrontBaseSQLHelper extends ERXSQLHelper {
+		private static final String PREFIX_ISOLATION_LEVEL = "isolation=";
+		private static final String PREFIX_LOCKING = "locking=";
+
 		@Override
 		public boolean shouldExecute(String sql) {
 			boolean shouldExecute = true;
@@ -1001,6 +1014,57 @@ public class ERXSQLHelper {
 			}
 			sb.append("');");
 			return sb.toString();
+		}
+		
+		@Override
+		public void prepareConnectionForSchemaChange(EOEditingContext ec, EOModel model) {
+			ERXEOAccessUtilities.ChannelAction action = new ERXEOAccessUtilities.ChannelAction(){
+				@Override
+				protected int doPerform(EOAdaptorChannel channel) {
+					try {
+						ERXJDBCUtilities.executeUpdate(channel, "SET TRANSACTION ISOLATION LEVEL SERIALIZABLE, LOCKING PESSIMISTIC");
+					}
+					catch (SQLException e) {
+						throw new NSForwardException(e);
+					}
+					return 0;
+				}
+			};
+			action.perform(ec, model.name());
+		}
+		
+		@Override
+		public void restoreConnectionSettingsAfterSchemaChange(EOEditingContext ec, EOModel model) {
+			// Default settings
+			String transactionIsolationLevel = "SERIALIZABLE";
+			String lockingDiscipline = "PESSIMISTIC";
+			
+			// Guess settings from looking at the url
+			String url = (String) model.connectionDictionary().valueForKey("URL");
+			NSArray<String> urlComponents = NSArray.componentsSeparatedByString(url, "/");
+			for (String urlComponent : urlComponents) {
+				if (urlComponent.toLowerCase().startsWith(PREFIX_LOCKING)) {
+					lockingDiscipline = urlComponent.substring(PREFIX_LOCKING.length()).toUpperCase();
+				}
+				else if (urlComponent.toLowerCase().startsWith(PREFIX_ISOLATION_LEVEL)) {
+					transactionIsolationLevel = urlComponent.substring(PREFIX_ISOLATION_LEVEL.length()).toUpperCase().replaceAll("_", " ");
+				}
+			}
+			final String sql = "SET TRANSACTION ISOLATION LEVEL " + transactionIsolationLevel + ", LOCKING " + lockingDiscipline;
+			
+			ERXEOAccessUtilities.ChannelAction action = new ERXEOAccessUtilities.ChannelAction() {
+				@Override
+				protected int doPerform(EOAdaptorChannel channel) {
+					try {
+						ERXJDBCUtilities.executeUpdate(channel, sql);
+					}
+					catch (SQLException e) {
+						throw new NSForwardException(e);
+					}
+					return 0;
+				}
+			};
+			action.perform(ec, model.name());
 		}
 	}
 

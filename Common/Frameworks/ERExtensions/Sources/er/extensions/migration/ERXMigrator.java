@@ -20,6 +20,7 @@ import com.webobjects.foundation._NSUtilities;
 import er.extensions.ERXEC;
 import er.extensions.ERXJDBCUtilities;
 import er.extensions.ERXProperties;
+import er.extensions.ERXSQLHelper;
 import er.extensions.ERXEOAccessUtilities.ChannelAction;
 
 /**
@@ -166,7 +167,14 @@ public class ERXMigrator {
 			EOEditingContext editingContext = ERXEC.newEditingContext();
 			ERXMigrationAction migrationAction = new ERXMigrationAction(editingContext, migration, modelVersion, migrationLock, _lockOwnerName, postMigrations);
 			try {
-				migrationAction.perform(editingContext, model.name());
+				ERXSQLHelper helper = ERXSQLHelper.newSQLHelper(model);
+				try {
+					helper.prepareConnectionForSchemaChange(editingContext, model);
+					migrationAction.perform(editingContext, model.name());
+				}
+				finally {
+					helper.restoreConnectionSettingsAfterSchemaChange(editingContext, model);
+				}
 			}
 			catch (ERXMigrationFailedException e) {
 				throw e;
