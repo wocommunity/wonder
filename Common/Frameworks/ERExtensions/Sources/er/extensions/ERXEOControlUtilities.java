@@ -1907,7 +1907,7 @@ public class ERXEOControlUtilities {
 		}
 		// take into account unsaved objects and skip deleted objects. The
 		// "includeNewObjects" part won't work for inheritance!
-		NSArray<EOEnterpriseObject> objects = ERXEOControlUtilities.objectsWithQualifier(eo.editingContext(), eo.entityName(), qualifier, null, true, false, false, true);
+		NSArray<EOEnterpriseObject> objects = ERXEOControlUtilities.objectsWithQualifier(eo.editingContext(), eo.entityName(), qualifier, null, true, false, true, true);
 		// should we throw if the supplied eo is not included in the results?
 		objects = ERXArrayUtilities.arrayMinusObject(objects, eo);
 		int count = objects.count();
