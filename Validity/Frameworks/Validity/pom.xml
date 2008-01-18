@@ -6,13 +6,13 @@
 	<parent>
 		<groupId>wonder.validity</groupId>
 	    <artifactId>validity-all</artifactId>
-		<version>${wonderversion}-SNAPSHOT</version>
+		<version>4.0.0-SNAPSHOT</version>
 		<relativePath>../..</relativePath>
 	</parent>
 
 	<groupId>wonder.validity</groupId>
 	<artifactId>Validity</artifactId>
-	<version>${wonderversion}-SNAPSHOT</version>
+	<version>4.0.0-SNAPSHOT</version>
 	<name>Validity</name>
 	<packaging>woframework</packaging>
 
@@ -20,12 +20,12 @@
 		<dependency>
 			<groupId>wonder.common</groupId>
 			<artifactId>ERExtensions</artifactId>
-			<version>${wonderversion}-SNAPSHOT</version>
+			<version>4.0.0-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>wonder.common</groupId>
 			<artifactId>ERJavaMail</artifactId>
-			<version>${wonderversion}-SNAPSHOT</version>
+			<version>4.0.0-SNAPSHOT</version>
 		</dependency>
 	</dependencies>
 	<build>

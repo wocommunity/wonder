@@ -4,14 +4,14 @@
 	<parent>
 		<groupId>wonder.dynareporting</groupId>
 		<artifactId>frameworks</artifactId>
-		<version>${wonderversion}-SNAPSHOT</version>
+		<version>4.0.0-SNAPSHOT</version>
 		<relativePath>..</relativePath>
 	</parent>
 
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>wonder.dynareporting</groupId>
 	<artifactId>WRReporting</artifactId>
-	<version>${wonderversion}-SNAPSHOT</version>
+	<version>4.0.0-SNAPSHOT</version>
 	<name>WRReporting</name>
 	<packaging>woframework</packaging>
 
