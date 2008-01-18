@@ -502,3 +502,44 @@ dbMinConnectionsGLOBAL=1
 #########################################################################
 ## Name of the prototypes entity to use. Case insensitive. 
 # er.extensions.ERXModelGroup.prototypeModelName=erprototypes
+
+#########################################################################
+# ERXMigrator 
+#########################################################################
+## automatically execute migrations when the app starts ... Default is false.
+# er.migration.migrateAtStartup=false
+
+## Migrations track the current versions of your models in a table named "_DBUpdater". 
+## createTablesIfNecessary tells wonder to just autogenerate these tables if they don't exist.
+## Default is false.
+# er.migration.createTablesIfNecessary=false 
+
+## er.migration.modelNames defines the list of top level models to migrate. 
+## You do not need to list all the models here, only the top level model. 
+## Migrations will look for superclasses and relationships to determine interdependent models 
+## that must be migrated first (along with explicit model interdependencies you declare in your migration).
+# er.migration.modelNames=HotNewModel
+
+## [modelName].MigrationClassPrefix=some.package.MigrationClassPrefix
+## Last but not least, the MigrationClassPrefix. In this case, we have a model named HotNewModel.eomodeld, 
+## and therefore we have a HotNewModel.MigrationClassPrefix. Wonder migrations take this value and append 
+## incrementing numbers to the name (com.mdimension.hotnew.migration.HotNewModel5, com.mdimension.hotnew.migration.HotNewModel6, etc). 
+## If you don't declare this value, migrations will look for a packageless class with the same name as the model. 
+## In the above example, each framework would declare the migration class prefixes for its own models in the framework Properties file, 
+## so the top level app Properties would only define the app's model.
+# HotNewModel.MigrationClassPrefix=com.mdimension.hotnew.migration.HotNewModel
+
+## If you need database specific migrations for ERXMigration subclasses, use
+## er.extensions.migration.ERXMigration.useDatabaseSpecificMigrations=true
+## The default is not to use database specific migrations. A filename
+## for a database specific migration is then for example
+##
+## HotNewModel1_FrontBase_Upgrade.migration
+## or
+## HotNewModel1_Postgresql_Upgrade.migration
+##
+## For the database specific part of the filename, the databaseProductName as from the JDBC
+## adaptor is used. So make sure, you're using the correct filename. The migration will throw
+## an exception if the appropriate migration textfile can't be found.
+# er.extensions.migration.ERXMigration.useDatabaseSpecificMigrations=false
+
