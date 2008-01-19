@@ -33,6 +33,18 @@
 	
 	<build>
 		<sourceDirectory>Sources</sourceDirectory>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <excludes>
+                        <exclude>com/webobjects/appserver/_private/WOHttpIO.java</exclude>
+                        <exclude>com/webobjects/foundation/NSMutableArray.java</exclude>
+                    </excludes>
+                </configuration>
+             </plugin>
+         </plugins>
 	</build>
 
 </project>
