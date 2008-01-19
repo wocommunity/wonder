@@ -4,6 +4,7 @@ import java.lang.reflect.Method;
 import java.util.Enumeration;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.openid4java.association.AssociationException;
 import org.openid4java.consumer.ConsumerException;
 import org.openid4java.consumer.ConsumerManager;
@@ -24,7 +25,6 @@ import org.openid4java.util.ProxyProperties;
 
 import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WOApplication;
-import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WORedirect;
 import com.webobjects.appserver.WORequest;
@@ -36,16 +36,20 @@ import er.extensions.ERXProperties;
 import er.extensions.ERXRequest;
 
 /**
- * EROpenIDManager is the primary interface to managin an OpenID connection.
+ * EROpenIDManager is the primary interface to managing an OpenID connection.
  *
  * @property er.openid.proxyHostName the host name to use as a proxy (if necessary)
  * @property er.openid.proxyPort the port to use as a proxy (if necessary)
  * @property er.openid.formRedirectionPageName the name of the form redirection page to go to 
  *                                             (defaults to EROFormRedirectionPage, should implement IEROFormRedirectionPage)
+ * @property er.openid.requireSecureReturnURL whether to require secure return URL; default is true
+ * @property er.openid.disableRealmVerifier whether to disable realm verifier. see OpenID 2.0 specification.
  * 
  * @author mschrag
  */
 public class EROpenIDManager {
+  public static final Logger log = Logger.getLogger(EROpenIDManager.class);
+
   private static final String DISCOVERY_INFO_KEY = "openIDDiscoveryInfo";
   private static EROpenIDManager _openIDManager;
   private ConsumerManager _manager;
@@ -114,10 +118,16 @@ public class EROpenIDManager {
 
     public String returnToUrl(WORequest request, WOContext context) {
       String returnToUrl;
+      boolean requireSecureReturnURL = ERXProperties.booleanForKeyWithDefault("er.openid.requireSecureReturnURL", true);
       if (ERXApplication.isWO54()) {
         try {
-          Method directActionURLForActionNamedMethod = context.getClass().getMethod("directActionURLForActionNamed", new Class[] { String.class, NSDictionary.class, boolean.class, boolean.class });
-          returnToUrl = (String) directActionURLForActionNamedMethod.invoke(context, new Object[] { "ERODirectAction/openIDResponse", null, Boolean.TRUE, Boolean.TRUE });
+          if (requireSecureReturnURL) {
+            Method directActionURLForActionNamedMethod = context.getClass().getMethod("directActionURLForActionNamed", new Class[] { String.class, NSDictionary.class, boolean.class, boolean.class });
+            returnToUrl = (String) directActionURLForActionNamedMethod.invoke(context, new Object[] { "ERODirectAction/openIDResponse", null, Boolean.TRUE, Boolean.TRUE });
+          }
+          else {
+            returnToUrl = context.directActionURLForActionNamed("ERODirectAction/openIDResponse", new NSDictionary());
+          }
         }
         catch (Exception e) {
           throw new RuntimeException("directActionURLForActionNamed failed.", e);
@@ -126,8 +136,13 @@ public class EROpenIDManager {
       else {
         context._generateCompleteURLs();
         try {
-          Method _directActionURLMethod = context.getClass().getMethod("_directActionURL", new Class[] { String.class, NSDictionary.class, boolean.class });
-          returnToUrl = (String) _directActionURLMethod.invoke(context, new Object[] { "ERODirectAction/openIDResponse", null, Boolean.TRUE });
+          if (requireSecureReturnURL) {
+            Method _directActionURLMethod = context.getClass().getMethod("_directActionURL", new Class[] { String.class, NSDictionary.class, boolean.class });
+            returnToUrl = (String) _directActionURLMethod.invoke(context, new Object[] { "ERODirectAction/openIDResponse", null, Boolean.TRUE });
+          }
+          else {
+            returnToUrl = context.directActionURLForActionNamed("ERODirectAction/openIDResponse", new NSDictionary());
+          }
         }
         catch (Exception e) {
           throw new RuntimeException("_directActionURL failed.", e);
@@ -136,6 +151,7 @@ public class EROpenIDManager {
           context._generateRelativeURLs();
         }
       }
+      EROpenIDManager.log.debug("Return to URL: " + returnToUrl);
       return returnToUrl;
     }
 
@@ -189,6 +205,11 @@ public class EROpenIDManager {
    */
   protected EROpenIDManager() throws ConsumerException {
     _manager = new ConsumerManager();
+    boolean disableRealmVerifier = ERXProperties.booleanForKeyWithDefault("er.openid.disableRealmVerifier", false);
+    if (disableRealmVerifier) {
+      _manager.getRealmVerifier().setEnforceRpId(false);
+      EROpenIDManager.log.info("Disabling realm verifier.");
+    }
   }
 
   /**
@@ -263,13 +284,18 @@ public class EROpenIDManager {
     WOActionResults results;
     if (!discovered.isVersion2()) {
       WORedirect redirect = new WORedirect(context);
-      redirect.setUrl(authReq.getDestinationUrl(true));
+      String url = authReq.getDestinationUrl(true);
+      EROpenIDManager.log.debug("Request URL: " + url);
+      redirect.setUrl(url);
       results = redirect;
     }
     else {
       String formRedirectionPageName = ERXProperties.stringForKeyWithDefault("er.openid.formRedirectionPageName", EROFormRedirectionPage.class.getName());
-      WOComponent formRedirectionPage = WOApplication.application().pageWithName(formRedirectionPageName, context);
-      formRedirectionPage.takeValueForKey(authReq.getDestinationUrl(false), "redirectionUrl");
+      EROFormRedirectionPage formRedirectionPage = (EROFormRedirectionPage)WOApplication.application().pageWithName(formRedirectionPageName, context);
+      formRedirectionPage.setParameters( authReq.getParameterMap() );
+      String url = authReq.getDestinationUrl(false);
+      EROpenIDManager.log.debug("Request URL: " + url);
+      formRedirectionPage.takeValueForKey(url, "redirectionUrl");
       results = formRedirectionPage;
     }
 

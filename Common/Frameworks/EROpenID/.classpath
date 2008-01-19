@@ -12,7 +12,7 @@
 	<classpathentry kind="lib" path="Libraries/commons-logging-1.03.jar"/>
 	<classpathentry kind="lib" path="Libraries/xmlsec-1.1.jar"/>
 	<classpathentry kind="lib" path="Libraries/jug-1.1.jar"/>
-	<classpathentry kind="lib" path="Libraries/openid4java-0.9.4.jar"/>
+	<classpathentry kind="lib" path="Libraries/java-openid-sxip.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

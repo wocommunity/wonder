@@ -1,4 +1,20 @@
-RedirectionForm : ERORedirectionForm {
-	formName = "openidRedirectionForm";
-	redirectionUrl = redirectionUrl;
+RedirectionForm : WOGenericContainer {
+	elementName = "form";
+	name = "openidRedirectionForm";
+	method = "post";
+	action = redirectionUrl;
+	accept-charset = "utf-8";
 }
+
+FormKeyRepetition : WORepetition {
+    list = repetitionFormList;
+    item = repetitionFormKey;
+}
+
+FormHiddenField : WOGenericElement {
+    elementName = "input";
+    type = "hidden";
+    name = repetitionFormKey;
+    value = formValue;
+}
+
