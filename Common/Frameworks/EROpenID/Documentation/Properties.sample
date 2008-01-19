@@ -12,3 +12,10 @@
 
 ## (optional) the name of the form redirection page to go to (defaults to EROFormRedirectionPage, should implement IEROFormRedirectionPage)
 # er.openid.formRedirectionPageName=EROFormRedirectionPage
+
+## (optional) whether to require a secure return URL. secure return URL is not required but recommended for security.
+er.openid.requireSecureReturnURL=true
+
+## (optional) whether to disable the realm verifier. OpenID 2.0 implementations require you to provide a resource available via http
+## to indicate what are valid return pages. This allows you to disable that requirement, useful during debugging.
+er.openid.disableRealmVerifier=false
