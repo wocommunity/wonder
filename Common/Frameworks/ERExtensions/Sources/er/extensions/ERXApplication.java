@@ -685,7 +685,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 		if (!ERXConfigurationManager.defaultManager().isDeployedAsServlet() && !_wasERXApplicationMainInvoked) {
 			_displayMainMethodWarning();
 		}
-		if (allFrameworks.size() > 0) {
+		if (allFrameworks == null || allFrameworks.size() > 0) {
 			throw new RuntimeException("ERXExtensions have not been initialized. Please report the classpath and the rest of the bundles to the Wonder mailing list: " + "\nRemaining" + allFrameworks + "\n" + System.getProperty("java.class.path"));
 		}
 		if ("JavaFoundation".equals(NSBundle.mainBundle().name())) {
