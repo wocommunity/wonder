@@ -133,7 +133,8 @@ public class ERXSharedEOLoader {
                 if (entity.sharedObjectFetchSpecificationNames().count() == 1 &&
                     entity.sharedObjectFetchSpecificationNames().lastObject().equals("FetchAll")) {
                     try {
-                        EOUtilities.objectsForEntityNamed(dsec, entity.name());
+                        EOFetchSpecification fs = entity.fetchSpecificationNamed("FetchAll"); 
+                        dsec.bindObjectsWithFetchSpecification(fs, "FetchAll"); 
                     } catch (Exception e1) {
                         log.error("Exception occurred for entity named: " + entity.name() + " in Model: " + aModel.name() + e1);
                         throw new RuntimeException(e.toString());
