@@ -682,7 +682,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 	 */
 	public ERXApplication() {
 		super();
-		if (!ERXConfigurationManager.defaultManager().isDeployedAsServlet() && !_wasERXApplicationMainInvoked) {
+		if (!ERXConfigurationManager.defaultManager().isDeployedAsServlet() && !_wasERXApplicationMainInvoked || allFrameworks == null) {
 			_displayMainMethodWarning();
 		}
 		if (allFrameworks == null || allFrameworks.size() > 0) {
