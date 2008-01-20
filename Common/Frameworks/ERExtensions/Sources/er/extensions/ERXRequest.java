@@ -29,7 +29,7 @@ public  class ERXRequest extends WORequest {
 
     protected static Boolean isBrowserFormValueEncodingOverrideEnabled;
 
-    protected static final String UNKNOWN_HOST = "UNKNOWN";
+    public static final String UNKNOWN_HOST = "UNKNOWN";
 
     protected static final NSArray<String> HOST_ADDRESS_KEYS = new NSArray<String>(new String[]{"pc-remote-addr", "remote_host", "remote_addr", "remote_user", "x-webobjects-remote-addr"});
 
