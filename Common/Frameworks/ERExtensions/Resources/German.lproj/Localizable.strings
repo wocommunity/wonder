@@ -9,4 +9,6 @@
 	"ERXCheckboxMatrix.selectAll" = "Alle";
 	"ERXSortOrder.sortBy" = "Klicken Sie hier, um nach dieser Spalte zu sortieren";
 	"WOToOneRelationship.noneString" = "- none -";
+	"ERXFlickrBatchNavigation.previous" = "Zurück";
+   	"ERXFlickrBatchNavigation.next" = "Weiter";
 }
