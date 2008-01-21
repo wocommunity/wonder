@@ -80,3 +80,11 @@ DisplayName : ERXPluralString {
 	count = objects.count;
 	value = displayName;
 }
+
+NextLabel : ERXLocalizedString {
+	value = "ERXFlickrBatchNavigation.next";
+}
+
+PreviousLabel : ERXLocalizedString {
+	value = "ERXFlickrBatchNavigation.previous";
+}
