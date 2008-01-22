@@ -44,7 +44,7 @@ import com.webobjects.foundation.NSTimestampFormatter;
 
 public class FrontbasePlugIn extends JDBCPlugIn {
 	static final boolean USE_NAMED_CONSTRAINTS = true;
-	
+
 	static final String _frontbaseIncludeSynonyms = System.getProperty("jdbcadaptor.frontbase.includeSynonyms", null);
 	static final String _frontbaseWildcardPatternForAttributes = System.getProperty("jdbcadaptor.frontbase.wildcardPatternForAttributes", null);
 	static final String _frontbaseWildcardPatternForTables = System.getProperty("jdbcadaptor.frontbase.wildcardPatternForTables", "%");
@@ -289,7 +289,7 @@ public class FrontbasePlugIn extends JDBCPlugIn {
 			pksGenerated = _newPrimaryKeys(thisKeyBatchSize, eoentity, jdbcchannel, pkDicts);
 			numberOfKeysLeft -= thisKeyBatchSize;
 		}
-		
+
 		if (!pksGenerated) {
 			pkDicts = null;
 		}
@@ -301,24 +301,25 @@ public class FrontbasePlugIn extends JDBCPlugIn {
 		if (keyBatchSize == 0) {
 			return true;
 		}
-		
+
 		NSArray primaryKeyAttributes = eoentity.primaryKeyAttributes();
 		if (primaryKeyAttributes == null) {
 			return false;
 		}
 
-		EOAttribute attribute = (EOAttribute) primaryKeyAttributes.lastObject();
-		boolean isNSData = attribute.className().endsWith("NSData");
-		
+		EOAttribute firstPrimaryKeyAttribute = (EOAttribute) primaryKeyAttributes.lastObject();
+		boolean isNSData = firstPrimaryKeyAttribute.className().endsWith("NSData");
+
+		NSMutableArray attributesToFetch = new NSMutableArray();
 		StringBuffer sql = new StringBuffer();
 		sql.append("VALUES (");
-		for (int keyNum = 0; keyNum < keyBatchSize; keyNum ++) {
+		for (int keyNum = 0; keyNum < keyBatchSize; keyNum++) {
 			if (isNSData) {
-				if (attribute.externalType().startsWith("BIT")) {
-					sql.append("NEW_UID(" + (attribute.width() >> 3) + ")");
+				if (firstPrimaryKeyAttribute.externalType().startsWith("BIT")) {
+					sql.append("NEW_UID(" + (firstPrimaryKeyAttribute.width() >> 3) + ")");
 				}
 				else {
-					sql.append("NEW_UID(" + attribute.width() + ")");
+					sql.append("NEW_UID(" + firstPrimaryKeyAttribute.width() + ")");
 				}
 			}
 			else {
@@ -327,43 +328,57 @@ public class FrontbasePlugIn extends JDBCPlugIn {
 			if (keyNum < keyBatchSize - 1) {
 				sql.append(", ");
 			}
+
+			EOAttribute generatedPrimaryKeyAttribute = new EOAttribute();
+			generatedPrimaryKeyAttribute.setName("Unique" + keyNum);
+			generatedPrimaryKeyAttribute.setColumnName(firstPrimaryKeyAttribute.columnName());
+			generatedPrimaryKeyAttribute.setExternalType(firstPrimaryKeyAttribute.externalType());
+			generatedPrimaryKeyAttribute.setClassName(firstPrimaryKeyAttribute.className());
+			generatedPrimaryKeyAttribute.setValueType(firstPrimaryKeyAttribute.valueType());
+			generatedPrimaryKeyAttribute.setPrecision(firstPrimaryKeyAttribute.precision());
+			generatedPrimaryKeyAttribute.setScale(firstPrimaryKeyAttribute.scale());
+			generatedPrimaryKeyAttribute.setWidth(firstPrimaryKeyAttribute.width());
+			generatedPrimaryKeyAttribute.setAllowsNull(firstPrimaryKeyAttribute.allowsNull());
+			adaptor().plugIn().assignTypeForAttribute(generatedPrimaryKeyAttribute);
+			attributesToFetch.addObject(generatedPrimaryKeyAttribute);
 		}
-		
+
 		sql.append(")");
 
 		boolean pksGenerated = false;
 		EOSQLExpression eosqlexpression = expressionFactory().expressionForString(sql.toString());
 		EOAdaptorContext adaptorContext = jdbcchannel.adaptorContext();
-	    adaptorContext.transactionDidBegin();
-	    jdbcchannel.evaluateExpression(eosqlexpression);
-	    if (jdbcchannel._errorEvaluateExpression()) {
-	    	adaptorContext.transactionDidRollback();
-	    	jdbcchannel._setErrorEvaluateExpression(false);
-	    }
-	    else {
-	    	NSMutableDictionary row = jdbcchannel.fetchRow();
-	    	jdbcchannel.cancelFetch();
-	    	adaptorContext.transactionDidCommit();
-	    	if (row != null && row.count() > 0) {
-		    	NSArray pkValues = row.allValues();
-		    	if (pkValues.count() == keyBatchSize) {
-		    		Enumeration keysEnum = pkValues.objectEnumerator();
-		    		while (keysEnum.hasMoreElements()) {
-		    			Object obj = keysEnum.nextElement();
-		    			NSMutableDictionary pkDict = new NSMutableDictionary();
-		    			Enumeration pkAttributeEnum = primaryKeyAttributes.objectEnumerator();
-		    			while (pkAttributeEnum.hasMoreElements()) {
-		    				EOAttribute pkAttribute = (EOAttribute)pkAttributeEnum.nextElement();
-		    				pkDict.setObjectForKey(obj, pkAttribute.name());
-		    			}
-		    			pkDicts.addObject(pkDict);
-		    		}
-		    		pksGenerated = true;
-		    	}
-	    	}
-	    }
-	    
-	    return pksGenerated;
+		adaptorContext.transactionDidBegin();
+		jdbcchannel.evaluateExpression(eosqlexpression);
+		if (jdbcchannel._errorEvaluateExpression()) {
+			adaptorContext.transactionDidRollback();
+			jdbcchannel._setErrorEvaluateExpression(false);
+		}
+		else {
+			jdbcchannel.setAttributesToFetch(attributesToFetch);
+			NSMutableDictionary row = jdbcchannel.fetchRow();
+			jdbcchannel.cancelFetch();
+			adaptorContext.transactionDidCommit();
+			if (row != null && row.count() > 0) {
+				NSArray pkValues = row.allValues();
+				if (pkValues.count() == keyBatchSize) {
+					Enumeration keysEnum = pkValues.objectEnumerator();
+					while (keysEnum.hasMoreElements()) {
+						Object obj = keysEnum.nextElement();
+						NSMutableDictionary pkDict = new NSMutableDictionary();
+						Enumeration pkAttributeEnum = primaryKeyAttributes.objectEnumerator();
+						while (pkAttributeEnum.hasMoreElements()) {
+							EOAttribute pkAttribute = (EOAttribute) pkAttributeEnum.nextElement();
+							pkDict.setObjectForKey(obj, pkAttribute.name());
+						}
+						pkDicts.addObject(pkDict);
+					}
+					pksGenerated = true;
+				}
+			}
+		}
+
+		return pksGenerated;
 	}
 
 	protected static final int FB_Boolean = 1;
@@ -393,7 +408,7 @@ public class FrontbasePlugIn extends JDBCPlugIn {
 	protected static String notNullConstraintName(EOAttribute attribute) {
 		return notNullConstraintName(attribute.entity().externalName(), attribute.columnName());
 	}
-	
+
 	protected static String notNullConstraintName(String tableName, String columnName) {
 		StringBuffer constraintBuffer = new StringBuffer();
 		constraintBuffer.append("NOT_NULL_");
@@ -581,13 +596,13 @@ public class FrontbasePlugIn extends JDBCPlugIn {
 
 				StringBuffer constraint = new StringBuffer(" CONSTRAINT FOREIGN_KEY_");
 				constraint.append(tableName);
-				
+
 				StringBuffer fkSql = new StringBuffer(" FOREIGN KEY (");
 				NSArray attributes = relationship.sourceAttributes();
 
 				for (int i = 0; i < attributes.count(); i++) {
 					constraint.append("_");
-					if (i != 0) 
+					if (i != 0)
 						fkSql.append(", ");
 
 					fkSql.append("\"");
@@ -599,18 +614,18 @@ public class FrontbasePlugIn extends JDBCPlugIn {
 
 				fkSql.append(") REFERENCES ");
 				constraint.append("_");
-				
+
 				String referencedExternalName = relationship.destinationEntity().externalName();
 				fkSql.append(quoteTableName(referencedExternalName.toUpperCase()));
 				constraint.append(referencedExternalName);
-				
+
 				fkSql.append(" (");
 
 				attributes = relationship.destinationAttributes();
 
 				for (int i = 0; i < attributes.count(); i++) {
 					constraint.append("_");
-					if (i != 0) 
+					if (i != 0)
 						fkSql.append(", ");
 
 					fkSql.append("\"");
@@ -622,10 +637,10 @@ public class FrontbasePlugIn extends JDBCPlugIn {
 
 				fkSql.append(") DEFERRABLE INITIALLY DEFERRED");
 
-				if(USE_NAMED_CONSTRAINTS)
+				if (USE_NAMED_CONSTRAINTS)
 					sql.append(constraint);
 				sql.append(fkSql);
-				
+
 				return new NSArray(_expressionForString(sql.toString()));
 			}
 			return NSArray.EmptyArray;
@@ -737,7 +752,7 @@ public class FrontbasePlugIn extends JDBCPlugIn {
 			EOSQLExpression expression = _expressionForEntity(eoattribute.entity());
 			return expression.columnTypeStringForAttribute(eoattribute);
 		}
-		
+
 		public NSArray statementsToModifyColumnNullRule(String columnName, String tableName, boolean allowsNull, NSDictionary nsdictionary) {
 			NSArray statements;
 			if (allowsNull) {
@@ -748,14 +763,14 @@ public class FrontbasePlugIn extends JDBCPlugIn {
 			}
 			return statements;
 		}
-		
+
 		public NSArray statementsToDeleteColumnNamed(String columnName, String tableName, NSDictionary options) {
 			return new NSArray(_expressionForString("alter table " + quoteTableName(tableName) + " drop column \"" + columnName.toUpperCase() + "\" cascade"));
 		}
 
 		public NSArray statementsToInsertColumnForAttribute(EOAttribute attribute, NSDictionary options) {
-		    String clause = _columnCreationClauseForAttribute(attribute);
-		    return new NSArray(_expressionForString("alter table " + attribute.entity().externalName() + " add " + clause));
+			String clause = _columnCreationClauseForAttribute(attribute);
+			return new NSArray(_expressionForString("alter table " + attribute.entity().externalName() + " add " + clause));
 		}
 
 		private String statementToCreateDataTypeClause(EOSchemaSynchronization.ColumnTypes columntypes) {
@@ -792,11 +807,11 @@ public class FrontbasePlugIn extends JDBCPlugIn {
 			}
 			return columntypes.name();
 		}
-		
+
 		public NSArray statementsToRenameColumnNamed(String columnName, String tableName, String newName, NSDictionary nsdictionary) {
 			return new NSArray(_expressionForString("alter column name " + quoteTableName(tableName) + "." + quoteTableName(columnName) + " to " + quoteTableName(newName)));
 		}
-		
+
 		public NSArray statementsToRenameTableNamed(String tableName, String newName, NSDictionary options) {
 			return new NSArray(_expressionForString("alter table name " + quoteTableName(tableName) + " to " + quoteTableName(newName)));
 		}
@@ -835,7 +850,7 @@ public class FrontbasePlugIn extends JDBCPlugIn {
 					sql.append("ALTER TABLE ");
 					sql.append(quoteTableName(tableName.toUpperCase()));
 					sql.append(" ADD");
-					
+
 					StringBuffer constraint = new StringBuffer(" CONSTRAINT PRIMARY_KEY_");
 					constraint.append(tableName);
 
@@ -854,10 +869,10 @@ public class FrontbasePlugIn extends JDBCPlugIn {
 					}
 					pkSql.append(") NOT DEFERRABLE INITIALLY IMMEDIATE");
 
-					if(USE_NAMED_CONSTRAINTS)
+					if (USE_NAMED_CONSTRAINTS)
 						sql.append(constraint);
 					sql.append(pkSql);
-					
+
 					return new NSArray(_expressionForString(sql.toString()));
 				}
 			}
@@ -874,7 +889,7 @@ public class FrontbasePlugIn extends JDBCPlugIn {
 			_rtrimFunctionName = null;
 			_externalQuoteChar = "\"";
 		}
-		
+
 		public void addCreateClauseForAttribute(EOAttribute attribute) {
 			StringBuffer sql = new StringBuffer();
 
@@ -911,16 +926,16 @@ public class FrontbasePlugIn extends JDBCPlugIn {
 					sql.append(" CHECK ");
 					sql.append(dictionary.valueForKey("Check"));
 				}
-	
+
 				// Column collation.
 				if (dictionary.valueForKey("Collate") != null) {
 					sql.append(" COLLATE ");
 					sql.append(dictionary.valueForKey("Collate"));
 				}
 			}
-		    appendItemToListString(sql.toString(), _listString());
+			appendItemToListString(sql.toString(), _listString());
 		}
-		
+
 		private void _appendNotNullConstraintIfNecessary(EOAttribute attribute, StringBuffer sql) {
 			if (!attribute.allowsNull()) {
 				if (USE_NAMED_CONSTRAINTS) {
@@ -935,7 +950,7 @@ public class FrontbasePlugIn extends JDBCPlugIn {
 					sql.append(" DEFERRABLE INITIALLY DEFERRED");
 			}
 		}
-		
+
 		public String columnTypeStringForAttribute(EOAttribute attribute) {
 			String externalTypeName = attribute.externalType();
 			NSDictionary modelTypeInfo = JDBCAdaptor.typeInfoForModel(((EOEntity) attribute.parent()).model());
@@ -948,7 +963,7 @@ public class FrontbasePlugIn extends JDBCPlugIn {
 			try {
 				Object createParamsObj = typeInfo.objectForKey("createParams");
 				if (createParamsObj instanceof Integer) {
-					createParams = ((Integer)createParamsObj).intValue();
+					createParams = ((Integer) createParamsObj).intValue();
 				}
 				else {
 					createParams = Integer.parseInt((String) createParamsObj);
@@ -958,29 +973,29 @@ public class FrontbasePlugIn extends JDBCPlugIn {
 				createParams = 0;
 			}
 			switch (createParams) {
-				case 2:
-					int precision = attribute.precision();
-					if (precision == 0) {
-						return attribute.externalType();
-					}
-					int scale = attribute.scale();
-					if (scale == 0) {
-						return attribute.externalType() + "(" + precision + ")";
-					}
-					else {
-						return attribute.externalType() + "(" + precision + "," + scale + ")";
-					}
-				case 1:
-					int length = attribute.width();
-					if (length == 0) {
-						length = attribute.precision();
-					}
-					if (length == 0) {
-						return attribute.externalType();
-					}
-					else {
-						return attribute.externalType() + "(" + length + ")";
-					}
+			case 2:
+				int precision = attribute.precision();
+				if (precision == 0) {
+					return attribute.externalType();
+				}
+				int scale = attribute.scale();
+				if (scale == 0) {
+					return attribute.externalType() + "(" + precision + ")";
+				}
+				else {
+					return attribute.externalType() + "(" + precision + "," + scale + ")";
+				}
+			case 1:
+				int length = attribute.width();
+				if (length == 0) {
+					length = attribute.precision();
+				}
+				if (length == 0) {
+					return attribute.externalType();
+				}
+				else {
+					return attribute.externalType() + "(" + length + ")";
+				}
 			}
 			return attribute.externalType();
 		}
@@ -1290,27 +1305,27 @@ public class FrontbasePlugIn extends JDBCPlugIn {
 					else if (obj instanceof Number) {
 						String valueType = eoattribute.valueType();
 						if (valueType == null || "i".equals(valueType)) {
-							return String.valueOf(((Number)obj).intValue());  
+							return String.valueOf(((Number) obj).intValue());
 						}
 						else if ("l".equals(valueType)) {
-							return String.valueOf(((Number)obj).longValue());  
+							return String.valueOf(((Number) obj).longValue());
 						}
 						else if ("f".equals(valueType)) {
-							return String.valueOf(((Number)obj).floatValue());  
+							return String.valueOf(((Number) obj).floatValue());
 						}
 						else if ("d".equals(valueType)) {
-							return String.valueOf(((Number)obj).doubleValue());  
+							return String.valueOf(((Number) obj).doubleValue());
 						}
 						else if ("s".equals(valueType)) {
-							return String.valueOf(((Number)obj).shortValue());  
+							return String.valueOf(((Number) obj).shortValue());
 						}
 						else if ("c".equals(valueType)) {
-							return String.valueOf(((Number)obj).intValue());  
+							return String.valueOf(((Number) obj).intValue());
 						}
 					}
 					else if (obj instanceof Boolean) {
 						String valueType = eoattribute.valueType();
-						return String.valueOf(((Boolean)obj).booleanValue() ? 1 : 0);  
+						return String.valueOf(((Boolean) obj).booleanValue() ? 1 : 0);
 					}
 					else if (obj instanceof String) {
 						return obj.toString();
