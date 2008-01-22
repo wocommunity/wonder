@@ -255,6 +255,12 @@ public class ERXDateGrouper extends WODisplayGroup {
         if(result == null) {
         	// The weekOfMonth result is one based, not zero based
             int weekOfMonth = ERXTimestampUtility.weekOfMonth(selectedDate()) - 1;
+            // if the first week of the month has less than Calendar.getMinimalDaysInFirstWeek() (usually 4 days), 
+            // the week belongs to the previous month. The weekOfMonth variable will then contain -1.
+            if (weekOfMonth == -1) {
+            	log.debug("weekOfMonth is -1, setting to 0");
+            	weekOfMonth = 0;
+            }
             result = (NSArray)datesForWeeksForCurrentMonth().objectAtIndex(weekOfMonth);
         }
         return result;
