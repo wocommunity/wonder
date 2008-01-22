@@ -970,9 +970,15 @@ public class NSArray<E> implements Cloneable, Serializable, NSCoding, NSKeyValue
 	}
 
 	public <T> T[] toArray(T objects[]) {
-		// ak: the original imp is plain garbage. Who came up with this?
-		// NSArray array = arrayByAddingObjectsFromArray(new NSArray(objects));
-		// return (T[]) array.objects();
+		if (objects == null) {
+		  throw new NullPointerException("List.toArray() cannot have a null parameter");
+		}
+		
+		int count = count();
+		if (count <= 0) {
+			return objects;
+		}
+		
 		if(objects.length < _objects.length) {
 			objects = (T[]) java.lang.reflect.Array.newInstance(objects.getClass().getComponentType(), _objects.length);
 		}
