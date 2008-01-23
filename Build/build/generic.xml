@@ -303,9 +303,9 @@ There are many ways to use this script:
                 <fileset dir="${project.dir}/Libraries">
                     <include name="**/*.jar" />
                     <!-- ak: i know, fix this...-->
-                    <exclude name="${compile.exclude.1}" />
-                    <exclude name="${compile.exclude.2}" />
-                    <exclude name="${compile.exclude.3}" />
+                    <exclude name="${classes.exclude.0}" />
+                    <exclude name="${classes.exclude.1}" />
+                    <exclude name="${classes.exclude.2}" />
                 </fileset>
             </classpath>
            <frameworks dir="${wonder.lib.root}" if="wonder.lib.root.bundles" bundles="${wonder.lib.root.bundles}" embed="${wonder.lib.root.bundles.embed}"/>
@@ -376,8 +376,8 @@ There are many ways to use this script:
                 <include name="WOComponentElements.framework"/>
            </frameworks>
 
-           <frameworks dir="${wo.localroot}/Library/Frameworks" if="use.mysql">
-                <include name="*PlugIn*.framework"/>
+           <frameworks dir="${wonder.lib.root}" if="use.postgres">
+                <include name="*PostgresqlPlugIn.framework"/>
            </frameworks>
            <frameworks dir="${wonder.lib.root}" if="use.additional.framework.1">
                 <include name="${use.additional.framework.1}"/>
@@ -458,6 +458,9 @@ There are many ways to use this script:
             </lib>
             <classes dir="${build.classes}">
                 <include name="**/*.class" />
+                    <exclude name="${classes.exclude.0}" />
+                    <exclude name="${classes.exclude.1}" />
+                    <exclude name="${classes.exclude.2}" />
             </classes>
             <classes dir="${project.sources.dir}">
                 <include name="**/*" />
