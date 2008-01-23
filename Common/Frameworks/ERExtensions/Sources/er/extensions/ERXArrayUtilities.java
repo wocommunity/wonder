@@ -1180,7 +1180,6 @@ public class ERXArrayUtilities extends Object {
      * As such, an array sort is needed and this might be very costly depending of the size of the array.
      * @param array array of objects
      * @param keypath key path for the median
-     * @return
      */
     public static Number median(NSArray array, String keypath) {
         int count = array.count();

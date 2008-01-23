@@ -292,7 +292,6 @@ public class ERD2WQueryPage extends ERD2WPage implements ERDQueryPageInterface {
 
     /**
      * Returns the display group
-     * @return
      */
     public WODisplayGroup displayGroup() {
         return displayGroup;

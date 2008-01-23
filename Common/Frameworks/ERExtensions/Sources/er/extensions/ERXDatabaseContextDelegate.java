@@ -97,7 +97,6 @@ public class ERXDatabaseContextDelegate {
      * er.transaction.adaptor.Exceptions to DEBUG. 
      * @param databaseContext
      * @param throwable
-     * @return
      */
     public boolean databaseContextShouldHandleDatabaseException(EODatabaseContext databaseContext, Throwable throwable) {
     	if(exLog.isDebugEnabled()) {
@@ -264,7 +263,6 @@ public class ERXDatabaseContextDelegate {
     * on your setup.
     * @param eodatabasecontext
     * @param obj
-    * @return
     */
     public boolean databaseContextShouldFetchArrayFault(EODatabaseContext eodatabasecontext, Object obj) {
         if(arrayFaultCache != null) {
@@ -287,7 +285,6 @@ public class ERXDatabaseContextDelegate {
      * @param dbCtxt
      * @param adaptorOps
      * @param adChannel
-     * @return
      */
     public NSArray databaseContextWillPerformAdaptorOperations(EODatabaseContext dbCtxt, 
     		NSArray adaptorOps, EOAdaptorChannel adChannel) {

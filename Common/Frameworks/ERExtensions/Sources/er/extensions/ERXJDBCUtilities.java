@@ -431,7 +431,6 @@ public class ERXJDBCUtilities {
 	 * @param modelGroup the model group to copy
 	 * @param sourceDict the source connection dictionary
 	 * @param destDict the destination connection dictionary
-	 * @return
 	 */
 	public static void _copyDatabaseDefinedByEOModelAndConnectionDictionaryToDatabaseWithConnectionDictionary(EOModelGroup modelGroup, NSDictionary sourceDict, NSDictionary destDict) {
 		try {

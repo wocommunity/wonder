@@ -120,7 +120,6 @@ public class ERD2WListPage extends ERD2WPage implements ERDListPageInterface, Se
 	/**
 	 * Checks the d2wContext for useBatchingDisplayGroup and returns it.
 	 * 
-	 * @return
 	 */
 	public boolean useBatchingDisplayGroup() {
 		return ERXValueUtilities.booleanValue(d2wContext().valueForKey("useBatchingDisplayGroup"));
@@ -560,7 +559,6 @@ public class ERD2WListPage extends ERD2WPage implements ERDListPageInterface, Se
 	/**
 	 * Returns true of we are selecting, but not the top-level page.
 	 * 
-	 * @return
 	 */
 	public boolean isSelectingNotTopLevel() {
 		boolean result = false;

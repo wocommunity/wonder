@@ -144,7 +144,6 @@ public class ERXEOGlobalIDUtilities {
     /**
      * Groups an array of global IDs by their entity name.
      * @param globalIDs
-     * @return
      */
     public static NSDictionary globalIDsGroupedByEntityName(NSArray globalIDs) {
         return ERXArrayUtilities.arrayGroupedByKeyPath(globalIDs, "entityName");
@@ -154,7 +153,6 @@ public class ERXEOGlobalIDUtilities {
      * Translates an array of {@link EOGlobalID} to primary key values. Returns null if the given
      * global IDs are not EOKeyValueGlobalIDs and the primary keys are not single values.
      * @param globalIDs
-     * @return
      */
     public static NSArray primaryKeyValuesWithGlobalIDs(NSArray globalIDs) {
     	NSMutableArray result = new NSMutableArray();
@@ -181,7 +179,6 @@ public class ERXEOGlobalIDUtilities {
      * Translates an array of single-value raw primary values to EOGlobalIDs.
      * @param entityName
      * @param values
-     * @return
      */
     public static NSArray globalIDsWithPrimaryKeyValues(String entityName, NSArray values) {
         NSMutableArray result = new NSMutableArray();
@@ -284,7 +281,6 @@ public class ERXEOGlobalIDUtilities {
      * @param ec
      * @param globalIDs
      * @param prefetchingKeypaths
-     * @return
      */
     public static NSArray fireFaultsForGlobalIDs(EOEditingContext ec, 
     		NSArray globalIDs, NSArray prefetchingKeypaths) {
@@ -330,7 +326,6 @@ public class ERXEOGlobalIDUtilities {
      * triggering the individual faults later on. The method should use only 1 fetch for all objects per entity.
      * @param ec
      * @param globalIDs
-     * @return
      */
     public static NSArray fireFaultsForGlobalIDs(EOEditingContext ec, NSArray globalIDs) {
         return fireFaultsForGlobalIDs(ec, globalIDs, NSArray.EmptyArray);

@@ -239,7 +239,6 @@ public class ERXComponentUtilities {
 	/**
 	 * Returns an array of the current component names.
 	 * 
-	 * @return
 	 */
 	public static NSArray componentTree() {
 		WOContext context = ERXWOContext.currentContext();

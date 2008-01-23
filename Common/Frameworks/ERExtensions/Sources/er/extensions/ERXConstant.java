@@ -147,7 +147,6 @@ public abstract class ERXConstant {
 	 * Retrieves all constants for the given class name ordered by value. An empty 
 	 * NSArray is returned if the class isn't found.
 	 * @param clazzName
-	 * @return
 	 */
 	public static NSArray constantsForClassName(String clazzName) {
 		synchronized (_store) {
@@ -169,7 +168,6 @@ public abstract class ERXConstant {
      * if either class or value isn't found.
      * @param value
      * @param clazzName
-     * @return
      */
     public static Constant constantForClassNamed(Object value, String clazzName) {
         synchronized (_store) {
@@ -187,7 +185,6 @@ public abstract class ERXConstant {
 	 * Retrieves the key map for the class name.
 	 * @param name
 	 * @param create
-	 * @return
 	 */
 	private static Map keyMap(String name, boolean create) {
 		Map map = (Map) _store.get(name);
@@ -245,7 +242,6 @@ public abstract class ERXConstant {
 		
 		/**
 		 * Returns the sort order of the value.
-		 * @return
 		 */
 		public int sortOrder() {
 			return _sortOrder;
@@ -325,7 +321,6 @@ public abstract class ERXConstant {
 	     * name should be <code>Test.Status</code>, not <code>Test$Status</code>.
 		 * @param value
 		 * @param clazzName
-		 * @return
 		 */
 		public static NumberConstant constantForClassNamed(int value, String clazzName) {
 			return constantForClassNamed(integerForInt(value), clazzName);
@@ -336,7 +331,6 @@ public abstract class ERXConstant {
 		 * if either class or value isn't found.
 		 * @param value
 		 * @param clazzName
-		 * @return
 		 */
 		public static NumberConstant constantForClassNamed(Number value, String clazzName) {
             return (NumberConstant) ERXConstant.constantForClassNamed(value, clazzName);
@@ -386,7 +380,6 @@ public abstract class ERXConstant {
 		 * if either class or value isn't found.
 		 * @param value
 		 * @param clazzName
-		 * @return
 		 */
 		public static StringConstant constantForClassNamed(String value, String clazzName) {
             return (StringConstant) ERXConstant.constantForClassNamed(value, clazzName);
@@ -440,7 +433,6 @@ public abstract class ERXConstant {
          * if either class or value isn't found.
          * @param value
          * @param clazzName
-         * @return
          */
         public static ByteConstant constantForClassNamed(NSData value, String clazzName) {
             return (ByteConstant) ERXConstant.constantForClassNamed(value, clazzName);
@@ -451,7 +443,6 @@ public abstract class ERXConstant {
          * if either class or value isn't found.
          * @param value
          * @param clazzName
-         * @return
          */
         public static ByteConstant constantForClassNamed(byte value[], String clazzName) {
             return (ByteConstant) ERXConstant.constantForClassNamed(new NSData(value), clazzName);

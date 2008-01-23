@@ -87,7 +87,6 @@ public class ERXDisplayGroup extends WODisplayGroup {
 
 	/**
 	 * Returns all objects, filtered by the qualifier().
-	 * @return
 	 */
 	public NSArray filteredObjects() {
 		// FIXME AK: need to cache here

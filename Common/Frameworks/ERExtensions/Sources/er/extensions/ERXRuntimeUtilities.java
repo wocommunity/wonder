@@ -34,7 +34,6 @@ public class ERXRuntimeUtilities {
     /**
      * Returns a dictionary with useful stuff.
      * @param e
-     * @return
      */
     public static NSMutableDictionary informationForException(Exception e) {
 		NSMutableDictionary extraInfo = new NSMutableDictionary();

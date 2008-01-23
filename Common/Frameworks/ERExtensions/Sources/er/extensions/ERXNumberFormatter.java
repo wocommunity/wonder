@@ -49,7 +49,6 @@ public class ERXNumberFormatter extends NSNumberFormatter {
 
 	/**
 	 * @param object
-	 * @return
 	 */
 	public static Format defaultNumberFormatterForObject(Object object) {
 		Format result = null;
@@ -83,7 +82,6 @@ public class ERXNumberFormatter extends NSNumberFormatter {
     
     /**
      * Sets a shared instance for the specified pattern.
-     * @return shared instance of formatter
      */
     public static void setNumberFormatterForPattern(NSNumberFormatter formatter, String pattern) {
     	if(ERXLocalizer.useLocalizedFormatters()) {
@@ -163,7 +161,6 @@ public class ERXNumberFormatter extends NSNumberFormatter {
 	/**
 	 * Override this in your subclass to provide for other operations when formatting a value.
 	 * @param value
-	 * @return
 	 */
 	protected BigDecimal performFormat(BigDecimal value) {
 		if("*".equals(_operator)) {
@@ -178,7 +175,6 @@ public class ERXNumberFormatter extends NSNumberFormatter {
 	/**
 	 * Override this in your subclass to provide for other operations when parsing a value.
 	 * @param value
-	 * @return
 	 */
 	protected BigDecimal performParse(BigDecimal value) {
 		if("*".equals(_operator)) {

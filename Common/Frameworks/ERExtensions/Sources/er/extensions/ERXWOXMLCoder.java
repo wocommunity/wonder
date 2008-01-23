@@ -91,7 +91,6 @@ public class ERXWOXMLCoder extends WOXMLCoder {
          * Deserializes the given string to an instance of XMLData.
          * @param string
          * @param mappingUrl
-         * @return
          */
         public static XMLData dataForString(String string, String mappingUrl) {
             WOXMLDecoder decoder = WOXMLDecoder.decoderWithMapping(mappingUrl);

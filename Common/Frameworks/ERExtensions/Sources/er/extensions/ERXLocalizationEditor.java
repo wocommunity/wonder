@@ -130,7 +130,6 @@ public class ERXLocalizationEditor extends WOComponent {
     
     /**
      * Returns a colored border style for unset values
-     * @return
      */
     public String highlightClass () {
     	if (!hasCurrentValue()) {
@@ -141,7 +140,6 @@ public class ERXLocalizationEditor extends WOComponent {
     
     /**
      * Returns a width for the current columns
-     * @return
      */
     public String valueCellWidth () {
     	int width = 100 / availableLanguages().count();
@@ -229,7 +227,6 @@ public class ERXLocalizationEditor extends WOComponent {
     /**
      * Sorts the entries ascending with the selected language, brings empty entries to the first batches
      * 
-     * @return
      */
     public WOComponent sortEntries () {
     	EOSortOrdering sortOrdering = EOSortOrdering.sortOrderingWithKey(this.currentLanguage, EOSortOrdering.CompareAscending);
@@ -242,7 +239,6 @@ public class ERXLocalizationEditor extends WOComponent {
     /**
      * Add an entry to the array of objects
      * 
-     * @return
      */
     public WOComponent addEntry () {
     	if (this.keyToAdd != null && this.data != null && this.displayGroup != null) {
@@ -266,7 +262,6 @@ public class ERXLocalizationEditor extends WOComponent {
     /**
      * Removes the current entry from all languages
      * 
-     * @return
      */
     public WOComponent removeEntry () {
     	if (this.currentEntry != null) {

@@ -151,7 +151,6 @@ public abstract class ERDBranchDelegate implements ERDBranchDelegateInterface {
      * an underscore and take a single WOComponent as a parameter are returned.
      * The methods are sorted by this key.
      * @param context current D2W context
-     * @return
      */
     protected NSArray defaultBranchChoices(D2WContext context) {
         NSArray choices = NSArray.EmptyArray;
@@ -181,7 +180,6 @@ public abstract class ERDBranchDelegate implements ERDBranchDelegateInterface {
     /**
      * Gets the D2W context from the innermost enclosing D2W component of the sender.
      * @param sender
-     * @return
      */
     protected D2WContext d2wContext(WOComponent sender) {
         if(sender instanceof D2WComponent) {
@@ -196,7 +194,6 @@ public abstract class ERDBranchDelegate implements ERDBranchDelegateInterface {
     /**
      * return the innermost object which might be of interest
      * @param sender
-     * @return
      */
     protected EOEnterpriseObject object(WOComponent sender) {
         return object(d2wContext(sender));
@@ -205,7 +202,6 @@ public abstract class ERDBranchDelegate implements ERDBranchDelegateInterface {
     /**
      * Returns the current object form the d2w context
      * @param context
-     * @return
      */
     protected EOEnterpriseObject object(D2WContext context) {
         return (EOEnterpriseObject) context.valueForKey(ERD2WPage.Keys.object);
@@ -215,7 +211,6 @@ public abstract class ERDBranchDelegate implements ERDBranchDelegateInterface {
      * Utility to remove entries based on an array of keys
      * @param keys
      * @param choices
-     * @return
      */
     protected NSArray choiceByRemovingKeys(NSArray keys, NSArray choices) {
         NSMutableArray result = new NSMutableArray(choices.count());
