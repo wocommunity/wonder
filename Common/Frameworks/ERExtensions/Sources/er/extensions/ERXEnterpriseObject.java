@@ -479,7 +479,6 @@ public interface ERXEnterpriseObject extends EOEnterpriseObject {
 
     /**
      * Returns the names of all primary key attibutes. 
-     * @return
      */
     public abstract NSArray primaryKeyAttributeNames();
 

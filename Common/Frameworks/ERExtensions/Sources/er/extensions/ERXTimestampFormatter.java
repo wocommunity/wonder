@@ -28,10 +28,9 @@ public class ERXTimestampFormatter extends NSTimestampFormatter {
 	
 
 	/**
-     * The default pattern used by WOString and friends when no pattern is set. 
-     * Looks like this only for compatibility's sake.
+         * The default pattern used by WOString and friends when no pattern is set. 
+         * Looks like this only for compatibility's sake.
 	 * @param object
-	 * @return
 	 */
 	public static Format defaultDateFormatterForObject(Object object) {
 		Format result = null;
@@ -64,7 +63,6 @@ public class ERXTimestampFormatter extends NSTimestampFormatter {
 	
 	/**
 	 * Sets a shared instance for the specified pattern.
-	 * @return shared instance of formatter
 	 */
 	public static void setDateFormatterForPattern(NSTimestampFormatter formatter, String pattern) {
 		if(ERXLocalizer.useLocalizedFormatters()) {

@@ -30,7 +30,6 @@ public abstract class AjaxComponent extends WOComponent implements IAjaxElement 
      * supplied.
      * @param name
      * @param defaultValue
-     * @return
      */
     public Object valueForBinding(String name, Object defaultValue) {
         Object value = defaultValue;
@@ -105,7 +104,6 @@ public abstract class AjaxComponent extends WOComponent implements IAjaxElement 
      * Override this method to return the response for an Ajax request.
      * @param request
      * @param context
-     * @return
      */
     public abstract WOActionResults handleRequest(WORequest request, WOContext context);
 

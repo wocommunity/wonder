@@ -213,7 +213,6 @@ public class ERXWOContext extends WOContext implements ERXMutableUserInfoHolderI
     /**
      * Debugging help, returns the path to current component.
      * @param context
-     * @return
      */
     public static NSArray<String> componentPath(WOContext context) {
     	NSMutableArray<String> result = new NSMutableArray<String>();
@@ -235,7 +234,6 @@ public class ERXWOContext extends WOContext implements ERXMutableUserInfoHolderI
      * &lt;/head&gt;, but this can be overridden by setting the property
      * er.ajax.AJComponent.htmlCloseHead.
      * 
-     * @return
      */
 	public static String _htmlCloseHeadTag() {
 		String closeHeadTag = System.getProperty("er.ajax.AJComponent.htmlCloseHead");

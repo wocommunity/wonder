@@ -716,7 +716,6 @@ public class ERXEOAccessUtilities {
     /**
      * Crude hack to get at the end of a relationship path.
      * @param relationship
-     * @return
      */
     public static EORelationship lastRelationship(EORelationship relationship) {
         return (EORelationship) NSKeyValueCoding.Utility.valueForKey(relationship, "lastRelationship");
@@ -729,7 +728,6 @@ public class ERXEOAccessUtilities {
      * work for single-value relationships in the last element.
      * @param entity
      * @param keyPath
-     * @return
      */
     public static NSArray attributePathForKeyPath(EOEntity entity, String keyPath) {
         NSMutableArray result = new NSMutableArray();
@@ -792,7 +790,6 @@ public class ERXEOAccessUtilities {
      * 
      * @param entityName
      * @param osc
-     * @return
      */
     public static EODatabaseContext databaseContextForEntityNamed(EOObjectStoreCoordinator osc, String entityName) {
         EOModel model = EOModelGroup.modelGroupForObjectStoreCoordinator(osc).entityNamed(entityName).model();
@@ -841,7 +838,6 @@ public class ERXEOAccessUtilities {
      * Returns the last entity for the given key path. If the path is empty or null, returns the given entity.
      * @param entity
      * @param keyPath
-     * @return
      */
     private static Set _keysWithWarning = Collections.synchronizedSet(new HashSet());
     
@@ -1076,7 +1072,6 @@ public class ERXEOAccessUtilities {
      * @param keys
      * @param selector
      * @param value
-     * @return
      * @author ak
      */
     public static EOQualifier qualifierFromAttributes(NSArray attributes, NSDictionary values) {
@@ -1256,7 +1251,6 @@ public class ERXEOAccessUtilities {
      * @param ec
      * @param entityName
      * @param qualifier
-     * @return
      */
     public static int deleteRowsDescribedByQualifier(EOEditingContext ec, String entityName, 
             final EOQualifier qualifier) {
@@ -1277,7 +1271,6 @@ public class ERXEOAccessUtilities {
      * @param entityName
      * @param qualifier
      * @param newValues
-     * @return
      */
     public static int updateRowsDescribedByQualifier(EOEditingContext ec, String entityName, 
             final EOQualifier qualifier, final NSDictionary newValues) {
@@ -1295,7 +1288,6 @@ public class ERXEOAccessUtilities {
      * @param ec
      * @param entityName
      * @param newValues
-     * @return
      */
     public static int insertRow(EOEditingContext ec, String entityName, 
             final NSDictionary newValues) {
@@ -1314,7 +1306,6 @@ public class ERXEOAccessUtilities {
      * @param ec
      * @param entityName
      * @param newValues
-     * @return
      */
     public static int insertRows(EOEditingContext ec, String entityName, 
             final List<NSDictionary> newValues) {
@@ -1337,7 +1328,6 @@ public class ERXEOAccessUtilities {
      * @param ec
      * @param entityName
      * @param count
-     * @return
      */
 	public static NSArray primaryKeysForNewRows(EOEditingContext ec, String entityName, final int count) {
 		final NSMutableArray result = new NSMutableArray();
@@ -1357,7 +1347,6 @@ public class ERXEOAccessUtilities {
 	 * Tries to get the plugin name for a JDBC based model.
 	 * 
 	 * @param model
-	 * @return
 	 */
     public static String guessPluginName(EOModel model) {
         String pluginName = null;
@@ -1410,7 +1399,6 @@ public class ERXEOAccessUtilities {
       * returning <code>foo.name_de</code> where appropriate.
       * @param ec
       * @param fetchSpecification
-      * @return
       */
      public static EOFetchSpecification localizeFetchSpecification(EOEditingContext ec, EOFetchSpecification fetchSpecification) {
          if(fetchSpecification != null && fetchSpecification.sortOrderings().count() > 0) {

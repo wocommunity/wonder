@@ -107,7 +107,6 @@ public class ERXDirectActionBatchNavigationBar extends ERXStatelessComponent {
 	 * Returns "batchNumber" objects which are dictionaries with key-value-pairs for the String to display.  
 	 * 
 	 * @author cug - Sep 20, 2007
-	 * @return
 	 */
 	public NSArray<NSDictionary<String, Object>> batchNumbers() {
 
@@ -210,7 +209,6 @@ public class ERXDirectActionBatchNavigationBar extends ERXStatelessComponent {
 	 * Returns whether we have more than one batch and should show the navigation at all 
 	 * 
 	 * @author cug - Nov 20, 2007
-	 * @return
 	 */
 	public boolean hasMoreThanOneBatch() {
 		if (this.batchNumbers() != null && this.batchNumbers().count() > 1) {
@@ -259,7 +257,6 @@ public class ERXDirectActionBatchNavigationBar extends ERXStatelessComponent {
 	/**
 	 * Returns the number of the last page
 	 * 
-	 * @return
 	 */
 	public Integer lastBatch() {
 		return new Integer(this.numberOfBatches(numberOfObjects().intValue(), batchSize()));
@@ -286,7 +283,6 @@ public class ERXDirectActionBatchNavigationBar extends ERXStatelessComponent {
 	/**
 	 * Convenience method to get the localizer.
 	 * 
-	 * @return
 	 */
 	public ERXLocalizer localizer() {
 		if (this.context().hasSession()) {
@@ -452,7 +448,6 @@ public class ERXDirectActionBatchNavigationBar extends ERXStatelessComponent {
 	/**
 	 * The string for the forward link
 	 * 
-	 * @return
 	 */
 	public String forwardString() {
 		return this.stringValueForBinding(FORWARD_STRING, "forward&nbsp;&raquo;");
@@ -469,7 +464,6 @@ public class ERXDirectActionBatchNavigationBar extends ERXStatelessComponent {
 
 	/**
 	 * the string for the "back" link
-	 * @return
 	 */
 	public String backString() {
 		return this.stringValueForBinding(BACK_STRING, "&laquo;&nbsp;back");

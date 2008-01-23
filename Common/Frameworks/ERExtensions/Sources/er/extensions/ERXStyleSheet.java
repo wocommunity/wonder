@@ -117,7 +117,6 @@ public class ERXStyleSheet extends ERXStatelessComponent {
     
     /**
      * Returns the media type for this stylesheet
-     * @return
      */
     public String mediaType() {
     	return stringValueForBinding("media");
@@ -125,7 +124,6 @@ public class ERXStyleSheet extends ERXStatelessComponent {
     
     /**
      * Returns the languages for the request.
-     * @return
      */
     private NSArray languages() {
     	if(hasSession())

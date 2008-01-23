@@ -56,7 +56,6 @@ public class ERXJDBCAdaptor extends JDBCAdaptor {
 	/**
 	 * Returns whether the connection broker is active.
 	 * 
-	 * @return
 	 */
 	public static boolean useConnectionBroker() {
 		if (useConnectionBroker == null) {

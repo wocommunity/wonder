@@ -370,7 +370,6 @@ public abstract class ERD2WDirectAction extends ERXDirectAction {
      * Checks if a page configuration is allowed to render.
      * Override for a more intelligent access scheme as the default just returns true.
      * @param pageConfiguration
-     * @return
      */
     protected boolean allowPageConfiguration(String pageConfiguration) {
         return true;
@@ -378,7 +377,6 @@ public abstract class ERD2WDirectAction extends ERXDirectAction {
     
     /**
      * Returns a response with a 401 (access denied) message. Override this for something more user friendly.
-     * @return
      */
     public WOActionResults forbiddenAction() {
         WOResponse response = new WOResponse();

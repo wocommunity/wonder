@@ -52,7 +52,6 @@ public class ERXKeyValueCodingUtilities {
 	 * 
 	 * @param clazz
 	 * @param key
-	 * @return
 	 */
     public static Object classValueForKey(Class clazz, String key) {
         Object result = null;

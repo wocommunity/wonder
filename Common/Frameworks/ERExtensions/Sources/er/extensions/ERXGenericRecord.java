@@ -101,7 +101,6 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
 	 * Type-safe KVC getter (final for now)
 	 * @param <T>
 	 * @param key
-	 * @return
 	 */
 	public final <T> T valueForKey(ERXKey<T> key) {
 		return (T)valueForKeyPath(key.key());

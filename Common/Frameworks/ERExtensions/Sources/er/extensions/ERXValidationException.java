@@ -129,7 +129,6 @@ public class ERXValidationException extends NSValidation.ValidationException imp
 
     /**
      * 
-     * @return
      */
     protected String _getMessage() {
         if(message == null) {

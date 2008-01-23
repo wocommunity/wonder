@@ -280,7 +280,6 @@ public class ERXAjaxSession extends WOSession {
 
 	/**
 	 * Returns the permanent page cache. Initializes it if needed.
-	 * @return
 	 */
 	protected NSMutableDictionary _permanentPageCache() {
 		if (_permanentPageCache == null) {
@@ -293,7 +292,6 @@ public class ERXAjaxSession extends WOSession {
 	/**
 	 * Returns the page for the given contextID, null if none is present.
 	 * @param contextID
-	 * @return
 	 */
 	protected WOComponent _permanentPageWithContextID(String contextID) {
 		WOComponent wocomponent = null;
@@ -342,7 +340,6 @@ public class ERXAjaxSession extends WOSession {
 	 * Reimplementation of the rather wierd super imp which references an interface probably no
 	 * one has ever heard of...
 	 * @param wocomponent
-	 * @return
 	 */
 	protected boolean _shouldPutInPermanentCache(WOComponent wocomponent) {
 		boolean flag = true;

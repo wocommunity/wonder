@@ -220,7 +220,6 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
 	 * Gets the best localizer for a set of languages.
 	 * 
 	 * @param languages
-	 * @return
 	 */
 	public static ERXLocalizer localizerForLanguages(NSArray languages) {
 		if (!isLocalizationEnabled)
@@ -287,7 +286,6 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
 	 * Returns the default language (English) or the contents of the
 	 * <code>er.extensions.ERXLocalizer.defaultLanguage</code> property.
 	 * 
-	 * @return
 	 */
 	public static String defaultLanguage() {
 		if (defaultLanguage == null) {
@@ -836,7 +834,6 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
 	 * 
 	 * @param prefix
 	 * @param key
-	 * @return
 	 */
 	public String localizedDisplayNameForKey(String prefix, String key) {
 		String localizerKey = prefix + "." + key;
@@ -925,7 +922,6 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
 	 * 
 	 * @param name
 	 * @param count
-	 * @return
 	 */
 	public String plurifiedString(String name, int count) {
 		if (name != null) {
@@ -971,7 +967,6 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
 	 * Returns a localized date formatter for the given key.
 	 * 
 	 * @param formatString
-	 * @return
 	 */
 
 	public Format localizedDateFormatForKey(String formatString) {
@@ -1013,14 +1008,12 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
 	/**
 	 * @param formatter
 	 * @param pattern
-	 * @return
 	 */
 	public void setLocalizedNumberFormatForKey(Format formatter, String pattern) {
 		_numberFormatters.put(pattern, formatter);
 	}
 
 	/**
-	 * @return
 	 */
 	public Locale locale() {
 		return locale;
@@ -1039,7 +1032,6 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
 	}
 
 	/**
-	 * @return
 	 */
 	public static boolean useLocalizedFormatters() {
 		if (_useLocalizedFormatters == null) {

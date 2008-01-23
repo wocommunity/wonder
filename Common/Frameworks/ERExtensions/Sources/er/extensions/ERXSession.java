@@ -327,14 +327,14 @@ public class ERXSession extends ERXAjaxSession implements Serializable {
     return _debuggingStore;
   }
 
+  private boolean _editingContextWasCreated = false;
+
   /**
    * Ensures that the returned editingContext was created with
    * the {@link ERXEC} factory.
    * @return the session's default editing context with
    * 		the default delegate set.
    */
-  private boolean _editingContextWasCreated = false;
-
   public EOEditingContext defaultEditingContext() {
     if (!_editingContextWasCreated) {
       setDefaultEditingContext(ERXEC.newEditingContext());
@@ -430,7 +430,6 @@ public class ERXSession extends ERXAjaxSession implements Serializable {
   /** override this method in order to provide a different name for the WorkerThread for this rr loop
    * very useful for logging stuff: assign a log statement to a log entry. Something useful could be:
    * <code>return session().sessionID() + valueForKeyPath("user.username");
-   * @return
    */
   public String threadName() {
     return Thread.currentThread().getName();
@@ -511,7 +510,6 @@ public class ERXSession extends ERXAjaxSession implements Serializable {
    * with <code>messageEncoding</code> object.
    * @param aRequest current request
    * @param aContext current context
-   * @return super's implementation of <code>invokeAction</code>
    */
   public void takeValuesFromRequest(WORequest aRequest, WOContext aContext) {
     messageEncoding().setDefaultFormValueEncodingToRequest(aRequest);
@@ -531,7 +529,6 @@ public class ERXSession extends ERXAjaxSession implements Serializable {
   
   /**
    * Bringing application into KVC.
-   * @return
    */
   public ERXApplication application() {
 	  return ERXApplication.erxApplication();
@@ -555,6 +552,8 @@ public class ERXSession extends ERXAjaxSession implements Serializable {
     super.terminate();
   }
 
+  private Object _objectStore;
+
   /** This is a cover method which enables use of the session's object store
    * which is usually access with setObjectForKey and objectForKey. One can use
    * this method with KVC, like for example in .wod bindings:
@@ -567,8 +566,6 @@ public class ERXSession extends ERXAjaxSession implements Serializable {
    * 
    * @return an Object which implements KVC + KVC additions
    */
-  private Object _objectStore;
-
   public Object objectStore() {
     if (_objectStore == null) {
       _objectStore = new NSKeyValueCodingAdditions() {

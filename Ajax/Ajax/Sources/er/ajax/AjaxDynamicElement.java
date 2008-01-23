@@ -118,7 +118,6 @@ public abstract class AjaxDynamicElement extends WODynamicGroup implements IAjax
 	 * 
 	 * @param request
 	 * @param context
-	 * @return
 	 */
 	public abstract WOActionResults handleRequest(WORequest request, WOContext context);
 

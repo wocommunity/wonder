@@ -69,7 +69,6 @@ public class ERXSelectorUtilities {
     /**
      * Utility that returns a selector you can use with the NSNotificationCenter.
      * @param methodName
-     * @return
      */
     public static NSSelector notificationSelector(String methodName) {
         return new NSSelector(methodName, new Class[] {NSNotification.class});

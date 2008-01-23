@@ -133,7 +133,6 @@ public class ERXAdaptorChannelDelegate {
 	/**
 	 * Return the last collected SQL statements
 	 * @author cug - Jun 20, 2007
-	 * @return
 	 */
 	public LinkedList lastStatements () {
 		return this._lastStatements;

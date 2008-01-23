@@ -72,7 +72,6 @@ public class ERXGlobalLock implements NSLocking {
     
     /**
      * Call this on startup.
-     * @return
      */
     public boolean cleanup() {
     	return _lockfile.delete();

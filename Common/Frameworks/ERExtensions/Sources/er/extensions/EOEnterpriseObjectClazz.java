@@ -166,7 +166,6 @@ public class EOEnterpriseObjectClazz<T extends EOEnterpriseObject> {
      * that takes an entity name. Also useful when you don't have a special
      * clazz defined for your entity, but would rather take one from a superclass.
      * @param entityName
-     * @return
      */
     public EOEnterpriseObjectClazz init(String entityName) {
     	setEntityName(entityName);
@@ -184,7 +183,6 @@ public class EOEnterpriseObjectClazz<T extends EOEnterpriseObject> {
     /**
      * Utility to return a new array datasource
      * @param ec
-     * @return
      */
     public EOArrayDataSource newArrayDataSource(EOEditingContext ec) {
     	return new EOArrayDataSource(classDescription(), ec);
@@ -193,7 +191,6 @@ public class EOEnterpriseObjectClazz<T extends EOEnterpriseObject> {
     /**
      * Utility to return a new database datasource
      * @param ec
-     * @return
      */
      public EODatabaseDataSource newDatabaseDataSource(EOEditingContext ec) {
     	return new EODatabaseDataSource(ec, entityName());
@@ -447,7 +444,6 @@ public class EOEnterpriseObjectClazz<T extends EOEnterpriseObject> {
      * @param array
      * @param spec
      * @param bindings
-     * @return
      */
     public NSArray<T> filteredArray(NSArray<T> array, EOFetchSpecification spec, NSDictionary bindings) {
     	EOQualifier qualifier;

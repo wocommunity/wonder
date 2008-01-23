@@ -241,7 +241,6 @@ public class ERXMutableDictionary extends NSMutableDictionary implements Map {
 
 	/**
 	 * @param key
-	 * @return
 	 */
 	public Boolean booleanObjectForKey(String key) {
 		Object o = objectForKey(key);

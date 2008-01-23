@@ -96,7 +96,6 @@ public class ERXDictionaryUtilities extends Object {
 
     /**
      * @param firstRow
-     * @return
      */
     public static NSDictionary removeNullValues(NSDictionary dict) {
         NSMutableDictionary d = new NSMutableDictionary();

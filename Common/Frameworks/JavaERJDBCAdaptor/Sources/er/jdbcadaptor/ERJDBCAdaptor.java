@@ -36,7 +36,6 @@ public class ERJDBCAdaptor extends
     }
 
     /**
-     * @return
      */
     public Connection checkoutConnection() {
         Connection c = ERXJDBCConnectionBroker.connectionBrokerForAdaptor(this).getConnection();
@@ -53,7 +52,6 @@ public class ERJDBCAdaptor extends
     }
 
     /**
-     * @return
      */
     public boolean supportsTransactions() {
         return ERXJDBCConnectionBroker.connectionBrokerForAdaptor(this).supportsTransaction();

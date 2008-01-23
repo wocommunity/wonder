@@ -95,7 +95,6 @@ public class ERXModelGroup extends EOModelGroup {
 	 * The only reason this method is needed is so our model group subclass is used. Other than that it does the exact
 	 * same thing as EOModelGroup's implementation.
 	 * 
-	 * @return ERXModelGroup for all of the loaded bundles
 	 */
 	public void loadModelsFromLoadedBundles() {
 		EOModelGroup.setDefaultGroup(this);
@@ -296,7 +295,6 @@ public class ERXModelGroup extends EOModelGroup {
 		 * Utility for getting all names from an array of attributes.
 		 * 
 		 * @param attributes
-		 * @return
 		 */
 		private NSArray namesForAttributes(NSArray attributes) {
 			return (NSArray) attributes.valueForKey("name");
@@ -306,7 +304,6 @@ public class ERXModelGroup extends EOModelGroup {
 		 * Utility for getting all the attributes off an entity. If the entity is null, an empty array is returned.
 		 * 
 		 * @param entity
-		 * @return
 		 */
 		private NSArray attributesFromEntity(EOEntity entity) {
 			NSArray result = NSArray.EmptyArray;
@@ -519,7 +516,6 @@ public class ERXModelGroup extends EOModelGroup {
 	 * @param entity
 	 * @param attribute
 	 * @param newName
-	 * @return
 	 */
 	protected EOAttribute cloneAttribute(EOEntity entity, EOAttribute attribute, String newName) {
 		// NOTE: order is important here. To add the prototype,

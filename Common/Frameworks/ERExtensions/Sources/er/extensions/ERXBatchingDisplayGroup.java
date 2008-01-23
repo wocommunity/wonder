@@ -158,7 +158,6 @@ public class ERXBatchingDisplayGroup extends ERXDisplayGroup {
 	 * Utility to get the fetch spec from the datasource and the filter
 	 * qualifier.
 	 * 
-	 * @return
 	 */
 	protected EOFetchSpecification fetchSpecification() {
 		EODatabaseDataSource ds = (EODatabaseDataSource) dataSource();
@@ -180,7 +179,6 @@ public class ERXBatchingDisplayGroup extends ERXDisplayGroup {
 
 	/**
 	 * Utility to get at the number of rows when batching.
-	 * @return
 	 */
 	protected int rowCount() {
 		EOEditingContext ec = dataSource().editingContext();
@@ -194,7 +192,6 @@ public class ERXBatchingDisplayGroup extends ERXDisplayGroup {
 	 * Utility to fetch the object in a given range.
 	 * @param start
 	 * @param end
-	 * @return
 	 */
 	protected NSArray objectsInRange(int start, int end) {
 		EOEditingContext ec = dataSource().editingContext();

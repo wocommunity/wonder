@@ -1281,7 +1281,6 @@ public class ERXEOControlUtilities {
      * @param _editingContext the editing context to look in
      * @param _entityName the name of the entity to look for
      * @param _qualifier the qualifier to restrict by
-     * @return
      */
     public static NSMutableArray insertedObjects(EOEditingContext _editingContext, String _entityName, EOQualifier _qualifier) {
       NSMutableArray result = null;
@@ -1303,7 +1302,6 @@ public class ERXEOControlUtilities {
      * @param _editingContext the editing context to look in
      * @param _entityName the name of the entity to look for
      * @param _qualifier the qualifier to restrict by
-     * @return
      */
     public static NSArray updatedObjects(EOEditingContext _editingContext, String _entityName, EOQualifier _qualifier) {
       NSArray result = null;
@@ -1325,7 +1323,6 @@ public class ERXEOControlUtilities {
      * @param _editingContext the editing context to look in
      * @param _entityName the name of the entity to look for
      * @param _qualifier the qualifier to restrict by
-     * @return
      */
     public static NSArray deletedObjects(EOEditingContext _editingContext, String _entityName, EOQualifier _qualifier) {
       NSArray result = null;
@@ -1470,7 +1467,6 @@ public class ERXEOControlUtilities {
      * @param keys
      * @param selector
      * @param value
-     * @return
      * @author ak
      */
     public static EOQualifier qualifierMatchingAnyKey(NSArray keys, NSSelector selector, Object value) {
@@ -1506,7 +1502,6 @@ public class ERXEOControlUtilities {
      * Triggers all faults in an efficient manner.
      * @param ec
      * @param globalIDs
-     * @return
      */
     public static NSArray objectsForFaults(EOEditingContext ec, NSArray possibleFaults) {
         NSMutableArray result = new NSMutableArray();
@@ -1599,7 +1594,6 @@ public class ERXEOControlUtilities {
      * Returns null if no destination found.
      * @param eo
      * @param keyPath
-     * @return
      */
    public static String destinationEntityNameForKeyPath(EOEnterpriseObject eo, String keyPath) {
 	   EOEntity entity = ERXEOAccessUtilities.entityForEo(eo);
@@ -1616,7 +1610,6 @@ public class ERXEOControlUtilities {
     * @param keyPaths
     * @param selector
     * @param value
-    * @return
     */
    public static EOQualifier orQualifierForKeyPaths(NSArray keyPaths, NSSelector selector, Object value) {
 	   NSMutableArray qualifiers = new NSMutableArray(keyPaths.count());
@@ -1636,7 +1629,6 @@ public class ERXEOControlUtilities {
 	 * @param keyPaths
 	 * @param selector
 	 * @param values
-	 * @return
 	 */
    public static EOQualifier orQualifierForKeyPaths(NSArray keyPaths, NSSelector selector, NSArray values) {
 	   NSMutableArray qualifiers = new NSMutableArray(values.count());
@@ -1653,7 +1645,6 @@ public class ERXEOControlUtilities {
     * if both are null, null is returned.
     * @param q1
     * @param q2
-    * @return
     */
    public static EOQualifier andQualifier(EOQualifier q1, EOQualifier q2) {
 	   if(q1 == null) {
@@ -1671,7 +1662,6 @@ public class ERXEOControlUtilities {
     * if both are null, null is returned.
     * @param q1
     * @param q2
-    * @return
     */
    public static EOQualifier orQualifier(EOQualifier q1, EOQualifier q2) {
 	   if(q1 == null) {

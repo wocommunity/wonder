@@ -243,7 +243,6 @@ public class ERIndex {
 	 * Override this to respond to the editingContextDidSaveChanges notification.
 	 * You would want to re-index documents for which a related tag name changed, for example.
 	 * @param objects
-	 * @return
 	 */
 	protected NSArray indexableObjectsForObjects(NSArray objects) {
 		return objects;

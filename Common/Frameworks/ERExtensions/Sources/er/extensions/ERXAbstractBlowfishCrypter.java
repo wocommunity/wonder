@@ -46,7 +46,7 @@ public abstract class ERXAbstractBlowfishCrypter implements ERXCrypterInterface 
 	/**
 	 * Returns the block size for this cipher.
 	 * 
-	 * @returns the block size for this cipher
+	 * @return the block size for this cipher
 	 */
 	public int blockSize() {
 		return _blockSize;

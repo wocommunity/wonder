@@ -145,7 +145,6 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
      * Utility method to get a value from the user prefs.
      * 
      * @param key
-     * @return
      */
     protected Object userPreferencesValueForKey(String key) {
         Object result = null;
@@ -161,7 +160,6 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
      * user prefs.
      * 
      * @param key
-     * @return
      */
     protected Object userPreferencesValueForPageConfigurationKey(String key) {
         key = ERXExtensions.userPreferencesKeyFromContext(key, d2wContext());
@@ -470,7 +468,6 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
      * used, otherwise the value from the super implementation, which checks if
      * the entity is not in the list of <code>readOnlyEntityNames</code>.
      * 
-     * @return
      */
     public boolean isEntityEditable() {
         return ERXValueUtilities.booleanValueWithDefault(d2wContext().valueForKey("isEntityEditable"), !super.isEntityReadOnly());
@@ -565,7 +562,6 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
      * Collects the names of all page configurations as you walk through your
      * application.
      * 
-     * @return
      */
     public static NSArray allConfigurationNames() {
         synchronized (_allConfigurations) {
@@ -868,7 +864,6 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
      * Checks if the delegate is present and can be invoked, then returns the
      * page from it.
      * 
-     * @return
      */
     protected WOComponent nextPageFromDelegate() {
         WOComponent result = null;
@@ -950,7 +945,6 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
      * logic confined to just a handful of classes, without the need to
      * constantly create new components that just handle one action.
      * 
-     * @return
      */
     public ERDBranchDelegateInterface pageController() {
         if (_pageController == null) {

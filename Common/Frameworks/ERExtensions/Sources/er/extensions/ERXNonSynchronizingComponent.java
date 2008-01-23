@@ -151,7 +151,6 @@ public abstract class ERXNonSynchronizingComponent extends WOComponent {
     
     /**
      * Convenience method to get the localizer.
-     * @return
      */
     public ERXLocalizer localizer() {
         return ERXLocalizer.currentLocalizer();
@@ -163,7 +162,6 @@ public abstract class ERXNonSynchronizingComponent extends WOComponent {
      * rapid turnaround modes where adding a iVar would cause hot code swapping
      * to stop working.
      * 
-     * @return
      */
     public NSMutableDictionary dynamicBindings() {
         if (_dynamicBindings == null) {
