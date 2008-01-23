@@ -60,7 +60,6 @@ public final class GSVEntity extends Object implements WOXMLCoding {
      *	Sets the GSVModel the GSVEntity belongs to.
      *
      *	@param   newModel  GSVModel for the GSVEntity
-     *	@return    GSVModel the GSVEntity belongs to.
      *	@see #model
      */
     public void setModel(GSVModel newModel){

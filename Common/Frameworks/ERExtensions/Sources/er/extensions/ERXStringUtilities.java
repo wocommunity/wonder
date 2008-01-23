@@ -857,7 +857,6 @@ public class ERXStringUtilities {
     /**
      * Converts a even-length, hex-encoded String to a byte array. 
      * @param hexString
-     * @return
      */
     public static byte[] hexStringToByteArray(String hexString) {
     	int length = hexString.length();
@@ -1532,7 +1531,6 @@ public class ERXStringUtilities {
      * Debug method to get the EOAdaptorOperation as a dictionary that can be pretty-printed later.
      * The output from a EOGeneralAdaptorException.userInfo.toString is pretty much unreadable.
      * @param op
-     * @return
      */
     private static NSDictionary adaptorOperationAsDictionary(EOAdaptorOperation op) {
     	NSMutableDictionary dict = new NSMutableDictionary();
@@ -1626,7 +1624,6 @@ public class ERXStringUtilities {
 	/**
 	 * Same as NSPropertySerialization except it sorts on keys first.
 	 * @param dict
-	 * @return
 	 */
 	public static String stringFromDictionary(NSDictionary dict) {
 		NSArray orderedKeys = dict.allKeys();

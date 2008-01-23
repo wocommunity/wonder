@@ -49,7 +49,6 @@ public class ERDEmptyListMessage extends ERDCustomComponent {
      * Returns whether the "create new" link should be shown, depends on a rule like:<br><br>
      * pageConfiguration = 'ListEntity' => showCreateObjectLink = true [prio]
      * 
-     * @return 
      */
     public boolean showCreateObjectLink () {
     	boolean enabledFromRule = ERXValueUtilities.booleanValue(this.d2wContext().valueForKey("showCreateObjectLink"));

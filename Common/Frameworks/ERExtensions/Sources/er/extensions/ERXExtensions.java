@@ -399,7 +399,6 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
 
     /**
      * Returns the current state of EOAdaptor logging.
-     * @return
      */
 	public static boolean adaptorLogging() {
 		return NSLog.debugLoggingAllowedForGroups(NSLog.DebugGroupSQLGeneration|NSLog.DebugGroupDatabaseAccess);

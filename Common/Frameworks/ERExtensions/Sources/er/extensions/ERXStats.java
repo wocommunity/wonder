@@ -76,7 +76,6 @@ public class ERXStats {
 
 	/**
 	 * 
-	 * @return
 	 */
 	private static boolean areStatisticsEnabled() {
 		return ERXProperties.booleanForKey("er.extensions.erxStats.enabled");
@@ -84,7 +83,6 @@ public class ERXStats {
 	
 	/**
 	 * 
-	 * @return
 	 */
 	public static boolean traceCollectingEnabled() {
 		return ERXProperties.booleanForKeyWithDefault("er.extensions.erxStats.traceCollectingEnabled", false);

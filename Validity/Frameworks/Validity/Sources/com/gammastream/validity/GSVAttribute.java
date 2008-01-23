@@ -126,7 +126,7 @@ public final class GSVAttribute extends Object implements WOXMLCoding {
     /**
      *	Returns the parent entity for this attribute.
      *
-     *	@returns The parent entity for this attribute.
+     *	@return parent entity for this attribute.
      *	@see #setEntity
      */
     public GSVEntity entity(){

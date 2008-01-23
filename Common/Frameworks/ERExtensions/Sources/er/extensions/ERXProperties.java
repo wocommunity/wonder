@@ -244,7 +244,6 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
      * that suffix.  If not, then this caches the standard propertyName.  A cache is maintained to avoid concatenating
      * strings frequently, but may be overkill since most usage of this system doesn't involve frequent access.
      * @param propertyName
-     * @return
      */
     private static String getApplicationSpecificPropertyName(final String propertyName) {
         synchronized(AppSpecificPropertyNames) {
@@ -1062,7 +1061,6 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
     /**
      * Returns the properties as a String in Property file format. Useful when you use them 
      * as custom value types, you would set this as the conversion method name.
-     * @return
      * @throws IOException
      */
     public Object toExternalForm() throws IOException {
@@ -1075,7 +1073,6 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
      * Load the properties from a String in Property file format. Useful when you use them 
      * as custom value types, you would set this as the factory method name.
      * @param string
-     * @return
      * @throws IOException
      */
     public static ERXProperties fromExternalForm(String string) throws IOException {

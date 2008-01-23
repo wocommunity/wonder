@@ -342,7 +342,6 @@ public class ERDirectToWeb extends ERXFrameworkPrincipal {
     /**
      * Checks the system property <code>er.directtoweb.ERDirectToWeb.shouldRaiseExceptions</code>.
      * @param defaultValue
-     * @return
      */
     public static boolean shouldRaiseException(boolean defaultValue) {
         return ERXProperties.booleanForKeyWithDefault("er.directtoweb.ERDirectToWeb.shouldRaiseExceptions", defaultValue);

@@ -34,7 +34,6 @@ public class ERXDynamicURL {
 
 	/**
 	 * @see com.webobjects.appserver(\._private|)WODynamicURL.requestHandlerPath()
-	 * @return
 	 */
 	public String requestHandlerPath() {
 		return (String) _delegate.perform("requestHandlerPath");
@@ -42,7 +41,6 @@ public class ERXDynamicURL {
 
 	/**
 	 * @see com.webobjects.appserver(\._private|)WODynamicURL.queryString()
-	 * @return
 	 */
 	public String queryString() {
 		return (String) _delegate.perform("queryString");

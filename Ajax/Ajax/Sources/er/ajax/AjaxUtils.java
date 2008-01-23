@@ -43,7 +43,6 @@ public class AjaxUtils {
 	 * session to decide if you want to save the request or not.
 	 * 
 	 * @param context
-	 * @return
 	 */
 	public static AjaxResponse createResponse(WORequest request, WOContext context) {
 		AjaxResponse response = null;
@@ -81,7 +80,6 @@ public class AjaxUtils {
 	 * already one.
 	 * 
 	 * @param message
-	 * @return
 	 */
 	public static NSMutableDictionary mutableUserInfo(WOMessage message) {
 		return ERXWOContext.contextDictionary();

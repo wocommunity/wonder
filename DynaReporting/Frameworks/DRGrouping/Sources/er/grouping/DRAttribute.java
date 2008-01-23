@@ -38,7 +38,6 @@ public class DRAttribute extends Object  {
     /**
      * Creates a new DRAttributes from a DRAttributeGroup.
      * @param attributeGroup
-     * @return
      */
     public static DRAttribute withAttributeGroup(DRAttributeGroup attributeGroup) {
         DRAttribute attribute = new DRAttribute(attributeGroup);
@@ -52,7 +51,6 @@ public class DRAttribute extends Object  {
      * @param label
      * @param shouldTotal
      * @param userInfo
-     * @return
      */
     public static DRAttribute withKeyPathFormatLabelTotalUserInfo(String keyPath, String format, String label, boolean shouldTotal, NSDictionary userInfo) {
         DRAttribute attribute = new DRAttribute(keyPath, format, label, shouldTotal, userInfo);

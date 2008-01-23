@@ -100,7 +100,6 @@ public class ERXEnterpriseObjectCache<T extends EOEnterpriseObject> {
     /**
      * Helper to check if an array of EOs contains the handled entity. 
      * @param eos
-     * @return
      */
     private boolean hadRelevantChanges(NSDictionary dict, String key) {
         NSArray eos = (NSArray) dict.objectForKey(key);
@@ -149,7 +148,6 @@ public class ERXEnterpriseObjectCache<T extends EOEnterpriseObject> {
     
     /**
      * The key path which should get used for the key of the cache.
-     * @return
      */
     protected String keyPath() {
         return _keyPath;
@@ -157,7 +155,6 @@ public class ERXEnterpriseObjectCache<T extends EOEnterpriseObject> {
 
     /**
      * Returns the backing cache. If the cache is to old, it is cleared first.
-     * @return
      */
     protected synchronized Map cache() {
         long now = System.currentTimeMillis();
@@ -185,7 +182,6 @@ public class ERXEnterpriseObjectCache<T extends EOEnterpriseObject> {
     /**
      * Returns the objects to cache initially.
      * @param ec
-     * @return
      */
     protected NSArray<T> initialObjects(EOEditingContext ec) {
         NSArray objects = EOUtilities.objectsForEntityNamed(ec, entityName());
@@ -220,7 +216,6 @@ public class ERXEnterpriseObjectCache<T extends EOEnterpriseObject> {
      * is in the cache.
      * @param ec editing context to get the object into
      * @param key key value under which the object is registered 
-     * @return
      */
     public T objectForKey(EOEditingContext ec, Object key) {
         Map cache = cache();
@@ -245,7 +240,6 @@ public class ERXEnterpriseObjectCache<T extends EOEnterpriseObject> {
      * is in the cache.
      * @param ec editing context to get the object into
      * @param key key value under which the object is registered 
-     * @return
      */
     public T objectsForKey(EOEditingContext ec, Object key) {
         Map cache = cache();

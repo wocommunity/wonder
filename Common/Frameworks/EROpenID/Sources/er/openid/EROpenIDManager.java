@@ -77,7 +77,6 @@ public class EROpenIDManager {
      * @param eroResponse the EROResponse wrapper
      * @param request the WORequest
      * @param context the WOContext
-     * @return a FetchRequest
      */
     public void responseReceived(VerificationResult verification, EROResponse eroResponse, WORequest request, WOContext context);
 

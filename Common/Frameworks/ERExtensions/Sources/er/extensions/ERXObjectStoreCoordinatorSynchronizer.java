@@ -645,7 +645,6 @@ public class ERXObjectStoreCoordinatorSynchronizer {
 		 * 
 		 * @param objects
 		 * @param osc
-		 * @return
 		 */
 		protected NSDictionary snapshotsGroupedByEntity(NSArray objects, EOObjectStoreCoordinator osc) {
 			if (objects == null || objects.count() == 0) {

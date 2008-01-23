@@ -76,7 +76,6 @@ public class ERXSystem implements NSKeyValueCoding, NSKeyValueCodingAdditions {
     }
 
     /**
-     * @return
      */
     public static Properties getProperties() {
         Properties ori = NSProperties._getProperties();

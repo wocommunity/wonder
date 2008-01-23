@@ -70,7 +70,6 @@ public class ERXAdaptorOperationWrapper implements Serializable {
     /**
      * Returns an array of ERXAdaptorOperations that can be serialzed to the transport of your choice.
      * @param adaptorOps
-     * @return
      */
     public static NSArray wrappedAdaptorOperations(NSArray adaptorOps) {
         adaptorOperationsLock.lock();

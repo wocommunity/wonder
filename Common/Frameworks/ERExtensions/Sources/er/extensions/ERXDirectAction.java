@@ -43,7 +43,6 @@ public class ERXDirectAction extends WODirectAction {
     /**
      * Checks if the action can be executed.
      * @param passwordKey
-     * @return
      */
     protected boolean canPerformActionWithPasswordKey(String passwordKey) {
     	if(ERXApplication.isDevelopmentModeSafe()) {
@@ -97,7 +96,6 @@ public class ERXDirectAction extends WODirectAction {
 
     /**
      * Direct access to WOStats by giving over the password in the "pw" parameter.
-     * @return
      */
     public WOActionResults statsAction() {
         WOStatsPage nextPage = (WOStatsPage) pageWithName("ERXStatisticsPage");
@@ -109,7 +107,6 @@ public class ERXDirectAction extends WODirectAction {
      * Direct access to reset the stats by giving over the password in the "pw" parameter.  This
      * calls ERXStats.reset();
      * 
-     * @return
      */
     public WOActionResults resetStatsAction() {
     	WOActionResults result = null;
@@ -124,7 +121,6 @@ public class ERXDirectAction extends WODirectAction {
     
     /**
      * Direct access to WOEventDisplay by giving over the password in the "pw" parameter.
-     * @return
      */
     public WOActionResults eventsAction() {
         WOEventDisplayPage nextPage = (WOEventDisplayPage) pageWithName("WOEventDisplayPage");
@@ -137,7 +133,6 @@ public class ERXDirectAction extends WODirectAction {
     /**
      * Direct access to WOEventDisplay by giving over the password in the "pw" 
      * parameter and turning on all events.
-     * @return
      */
     public WOActionResults eventsSetupAction() {
         WOEventSetupPage nextPage = (WOEventSetupPage) pageWithName("WOEventSetupPage");

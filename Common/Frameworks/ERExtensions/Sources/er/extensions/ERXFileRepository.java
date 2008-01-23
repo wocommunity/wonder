@@ -31,7 +31,6 @@ public class ERXFileRepository {
 	 * Returns a parent dir for a given ID. Will create the
 	 * directory if it doesn't exist.
 	 * @param id
-	 * @return
 	 */
 	private File getDir(String id) {
 		File dir = new File(getRoot(), id.substring(0, 2) + File.separator + id.substring(2, 4));
@@ -53,7 +52,6 @@ public class ERXFileRepository {
 	/**
 	 * Returns a file for a 
 	 * @param id
-	 * @return
 	 */
 	public File getFile(String id) {
 		return new File(getDir(id), id);
@@ -62,7 +60,6 @@ public class ERXFileRepository {
 	/**
 	 * Returns true if the file is present in the repository and also exists.
 	 * @param id
-	 * @return
 	 */
 	public boolean hasFile(String id) {
 		return getFile(id).exists();
@@ -70,7 +67,6 @@ public class ERXFileRepository {
 	
 	/**
 	 * Returns the root directory for the repository.
-	 * @return
 	 */
 	public File getRoot() {
 		return _root;
@@ -84,7 +80,6 @@ public class ERXFileRepository {
 	/**
 	 * Returns the repository that is registered under the given name.
 	 * @param name
-	 * @return
 	 */
 	public static ERXFileRepository respository(String name) {
 		return (ERXFileRepository) _repositories.objectForKey(name);
@@ -94,7 +89,6 @@ public class ERXFileRepository {
 	 * Adds a repository under the given name and the given root directory.
 	 * @param name
 	 * @param root
-	 * @return
 	 */
 	public static ERXFileRepository addRepository(String name, File root) {
 		return addRepository(name, new ERXFileRepository(root));
@@ -104,7 +98,6 @@ public class ERXFileRepository {
 	 * Adds a repository under the given name and the given root directory.
 	 * @param name
 	 * @param root
-	 * @return
 	 */
 	public static ERXFileRepository addRepository(String name, ERXFileRepository repository) {
 		_repositories.setObjectForKey(repository, "name");

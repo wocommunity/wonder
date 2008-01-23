@@ -379,6 +379,8 @@ public class ERXConfigurationManager {
         return _operatingSystem;
     }
 
+    protected String documentRoot;
+
     /**
      * Path to the web server's document root.
      * This implementation tries first to resolve the
@@ -388,7 +390,6 @@ public class ERXConfigurationManager {
      * JavaWebObjects bundle.
      * @return to the web server's document root.
      */
-    protected String documentRoot; 
     public String documentRoot() {
         if (documentRoot == null) {
             // for WebObjects.properties

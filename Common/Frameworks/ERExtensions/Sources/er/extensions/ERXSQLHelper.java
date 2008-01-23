@@ -98,7 +98,6 @@ public class ERXSQLHelper {
 	 * as it may or may not leave channels open. It is simply to geenrate sql.
 	 * @param model
 	 * @param coordinator
-	 * @return
 	 */
 	private EODatabaseContext databaseContextForModel(EOModel model, EOObjectStoreCoordinator coordinator) {
 		EODatabaseContext dbc = null;
@@ -486,7 +485,6 @@ public class ERXSQLHelper {
 	 * 
 	 * @param key
 	 * @param value
-	 * @return
 	 */
 	public String sqlForRegularExpressionQuery(String key, String value) {
 		throw new UnsupportedOperationException("There is no database-specific implementation for generating regex expressions.");
