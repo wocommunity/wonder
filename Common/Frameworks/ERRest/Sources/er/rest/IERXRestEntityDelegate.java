@@ -397,7 +397,7 @@ public interface IERXRestEntityDelegate {
 	 * 
 	 * @param entity
 	 *            the entity of the object
-	 * @param eo
+	 * @param obj
 	 *            the object
 	 * @param propertyName
 	 *            the property name to check

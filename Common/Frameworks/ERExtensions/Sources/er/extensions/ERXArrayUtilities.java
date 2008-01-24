@@ -416,7 +416,7 @@ public class ERXArrayUtilities extends Object {
     /**
      * Subtracts a single object from an array.
      * @param main array to have value removed from it.
-     * @param minus object to be removed
+     * @param object to be removed
      * @return array after performing subtraction.
      */
     public static NSArray arrayMinusObject(NSArray main, Object object) {
@@ -497,7 +497,7 @@ public class ERXArrayUtilities extends Object {
      * return. To have the entire collection of <code>bars</code>
      * in one single array you would call:
      * <code>NSArray allBars = flatten(bars)</code>
-     * @param array to be flattened
+     * @param originalArray array to be flattened
      * @param filterDuplicates determines if the duplicate values
      *      should be filtered
      * @return an array containing all of the elements from
@@ -528,7 +528,7 @@ public class ERXArrayUtilities extends Object {
      * return. To have the entire collection of <code>bars</code>
      * in one single array you would call:
      * <code>NSArray allBars = flatten(bars)</code>
-     * @param array to be flattened
+     * @param originalArray array to be flattened
      * @return an array containing all of the elements from
      *      all of the arrays contained within the array
      *      passed in.
@@ -1534,7 +1534,7 @@ public class ERXArrayUtilities extends Object {
     }
     
     /** pretty prints a NSArray of two dimensional Object array which is ugly when using toString
-     * @param o the object which one wants to print as a String
+     * @param a the object which one wants to print as a String
      * @return the String which can be used in lets say 
      * <code>log.info("my array = "+ERXArrayUtilities.objectArrayToString(myArray));</code>
      */
@@ -1758,8 +1758,8 @@ public class ERXArrayUtilities extends Object {
 	 * @author cug - Jan 7, 2008
 	 * 
 	 * @param array the array 
-	 * @param a - index of the first object
-	 * @param b - index of the second object
+	 * @param indexOfA - index of the first object
+	 * @param indexOfB - index of the second object
 	 * 
 	 * @throws {@link RuntimeException} if one or both indexes are out of bounds
 	 */

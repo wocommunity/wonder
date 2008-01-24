@@ -190,7 +190,7 @@ public class ERXFileNotificationCenter {
      * Notified by the NSNotificationCenter at the end of every request-response
      * loop. It is here that all of the currently watched files are checked to
      * see if they have any changes.
-     * @param NSNotification notification posted from the NSNotificationCenter.
+     * @param n NSNotification notification posted from the NSNotificationCenter.
      */
     public void checkIfFilesHaveChanged(NSNotification n) {
         int checkPeriod = checkFilesPeriod();

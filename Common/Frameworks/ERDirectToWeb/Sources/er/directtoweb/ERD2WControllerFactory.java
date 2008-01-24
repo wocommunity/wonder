@@ -55,7 +55,6 @@ public class ERD2WControllerFactory extends ERD2WFactory {
 	
     /**
      * Public constructor
-     * @param context the context
      */
     public ERD2WControllerFactory() {
         super();

@@ -168,7 +168,7 @@ public class ERXCrypto {
 	 * determine what the original string was. Running the same string through
 	 * the Sha digest multiple times will always produce the same hash.
 	 * 
-	 * @param string
+	 * @param text
 	 *            to be put through the sha digest
 	 * @return hashed form of the given string
 	 */

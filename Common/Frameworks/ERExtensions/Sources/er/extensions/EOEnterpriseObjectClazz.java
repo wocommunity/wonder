@@ -315,10 +315,11 @@ public class EOEnterpriseObjectClazz<T extends EOEnterpriseObject> {
      * Fetches all of the objects matching the given qualifier
      * format corresponding to the clazz's entity using the
      * given editing context.
+     *
      * @param ec editing context
      * @param qualifier qualifier string
      * @param args qualifier format arguments
-     * @param qualifer format string
+     *
      * @return array of objects corresponding to the passed in parameters.
      */
     public NSArray<T> objectsWithQualifierFormat(EOEditingContext ec, String qualifier, NSArray args) {

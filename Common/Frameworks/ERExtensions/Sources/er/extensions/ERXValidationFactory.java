@@ -247,7 +247,7 @@ public class ERXValidationFactory {
      * a cover method for calling the four arguement method
      * specifying <code>null</code> for proptery and value.
      * @param eo enterprise object failing validation
-     * @param name name of the method to use to look up the validation
+     * @param method name of the method to use to look up the validation
      *		exception template, for instance "FirstNameCanNotMatchLastNameValidationException"
      * @return a custom validation exception for the given criteria
      */

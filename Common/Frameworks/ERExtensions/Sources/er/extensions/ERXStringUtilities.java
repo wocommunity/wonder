@@ -173,7 +173,7 @@ public class ERXStringUtilities {
 
     /**
      * Sets the base adjustment used for fuzzy matching
-     * @param newAdjustment factor to be used.
+     * @param newAdjustement factor to be used.
      */
     // FIXME: Not thread safe.
     // MOVEME: fuzzy matching stuff
@@ -189,13 +189,13 @@ public class ERXStringUtilities {
      *
      * @param name to be matched against
      * @param entityName name of the entity to perform the match against.
-     * @param proertyKey to be matched against
+     * @param propertyKey to be matched against
      * @param synonymsKey allows objects to have additional values to be matched
      * 		against in addition to just the value of the propertyKey
      * @param ec context to fetch data in
      * @param cleaner object used to clean a string, for example the cleaner might
      *		strip out the words 'The' and 'Inc.'
-     * @param orderings can be either <code>SORT_ASCENDING</code> or <code>SORT_DESCENDING</code> 
+     * @param sortOrderings can be either <code>SORT_ASCENDING</code> or <code>SORT_DESCENDING</code> 
      *          to tell how the results should be sorted.
      * @return an array of objects that match in a fuzzy manner the name passed in.
      */
@@ -352,7 +352,8 @@ public class ERXStringUtilities {
     /**
      * Reads the contents of a file given by a path
      * into a string.
-     * @param path to the file in the file system
+     * @param file path to the file in the file system
+     *
      * @return the contents of the file in a string
      */
     public static String stringWithContentsOfFile(File file) {
@@ -502,7 +503,8 @@ public class ERXStringUtilities {
 
     /** 
      * Locate the the first numeric character in the given string. 
-     * @param string to scan
+     * @param str string to scan
+     *
      * @return position in int. -1 for not found. 
      */ 
     public static int indexOfNumericInString(String str) {
@@ -512,7 +514,8 @@ public class ERXStringUtilities {
     /** 
      * Locate the the first numeric character 
      * after <code>fromIndex</code> in the given string. 
-     * @param string to scan
+     * @param str string to scan
+     *
      * @return position in int. -1 for not found. 
      */ 
     public static int indexOfNumericInString(String str, int fromIndex) {
@@ -1164,7 +1167,7 @@ public class ERXStringUtilities {
 
     /** checks if the specified String contains only digits. 
      * 
-     * @param aString, the string to check
+     * @param aString the string to check
      * @return true if the string contains only digits, false otherwise
      */
     public static boolean isDigitsOnly(String aString) {
@@ -1177,7 +1180,7 @@ public class ERXStringUtilities {
 
     /** checks if the specified String contains only Letters. 
      * 
-     * @param aString, the string to check
+     * @param aString the string to check
      * @return true if the string contains only Letters, false otherwise
      */
     public static boolean isLettersOnly(String aString) {
@@ -1224,7 +1227,8 @@ public class ERXStringUtilities {
      * Returns a string from the contents of the given URL.
      * 
      * @param url the URL to read from
-     * @param the string encoding to read with
+     * @param encoding the string encoding to read with
+     *
      * @return the string that was read
      * @throws IOException if the connection fails
      */

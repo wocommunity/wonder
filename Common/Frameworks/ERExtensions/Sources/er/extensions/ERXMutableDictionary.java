@@ -229,7 +229,7 @@ public class ERXMutableDictionary extends NSMutableDictionary implements Map {
 	/**
 	 * return the string value of an object for key
 	 * 
-	 * @param key,
+	 * @param key
 	 *            the key which is linked to the object
 	 * @return if objectForKey return a non null value this method returns the
 	 *         toString value from the object

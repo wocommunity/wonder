@@ -222,8 +222,7 @@ public class ERXSQLHelper {
 	 * 
 	 * @param create add create statements
 	 * @param drop add drop statements
-	 * @param model
-	 *            the EOModel <br/><br/>This method uses the following defaults options:
+	 *            <br/><br/>This method uses the following defaults options:
 	 *            <ul>
 	 *            <li>EOSchemaGeneration.DropTablesKey=YES if drop</li>
 	 *            <li>EOSchemaGeneration.DropPrimaryKeySupportKey=YES if drop</li>

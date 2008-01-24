@@ -25,7 +25,6 @@ public class ERXWOFileUpload extends com.webobjects.appserver._private.WOFileUpl
 	
     /**
      * Public constructor
-     * @param context the context
      */
     public ERXWOFileUpload(String string, NSDictionary nsdictionary,
                         WOElement woelement) {

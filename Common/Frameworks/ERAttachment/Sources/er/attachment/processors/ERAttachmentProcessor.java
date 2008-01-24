@@ -319,7 +319,7 @@ public abstract class ERAttachmentProcessor<T extends ERAttachment> {
    * 
    * @param editingContext the EOEditingContext to create the ERAttachment in
    * @param uploadedFile the uploaded temporary file (which will be deleted at the end)
-   * @param recommendedFilePath the filename recommended by the user during import
+   * @param recommendedFileName the filename recommended by the user during import
    * @param mimeType the mimeType to use (null = guess based on file extension)
    * @param configurationName the name of the configuration settings to use for this processor (see top level docs)
    * @param ownerID an arbitrary string that represents the ID of the "owner" of this thumbnail (Person.primaryKey, for instance)
@@ -344,7 +344,7 @@ public abstract class ERAttachmentProcessor<T extends ERAttachment> {
    * @param attachment the attachment to generate a URL for
    * @param request the current request
    * @param context the current context
-   * @param configurationName the name of the configuration settings to use for this processor (see top level docs) 
+   *
    * @return a URL to the attachment's data
    */
   public abstract String attachmentUrl(T attachment, WORequest request, WOContext context);

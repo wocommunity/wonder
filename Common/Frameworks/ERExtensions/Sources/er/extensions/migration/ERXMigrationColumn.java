@@ -180,7 +180,7 @@ public class ERXMigrationColumn {
 	/**
 	 * Sets the value type for the underlying attribute for this column.
 	 * 
-	 * @param valueType
+	 * @param overrideValueType
 	 *            the value type for the underlying attribute for this column
 	 */
 	public void _setOverrideValueType(String overrideValueType) {

@@ -115,7 +115,6 @@ public class ERXGracefulShutdown implements SignalHandler {
     public SignalHandler defaultHandler() { return defaultHandler; }
 
     /**
-     * @param sets the default handler
      */
     public void setDefaultHandler(SignalHandler value) { defaultHandler = value; }
 
