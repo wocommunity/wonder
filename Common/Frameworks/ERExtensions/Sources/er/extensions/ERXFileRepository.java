@@ -97,7 +97,7 @@ public class ERXFileRepository {
 	/**
 	 * Adds a repository under the given name and the given root directory.
 	 * @param name
-	 * @param root
+	 * @param repository
 	 */
 	public static ERXFileRepository addRepository(String name, ERXFileRepository repository) {
 		_repositories.setObjectForKey(repository, "name");

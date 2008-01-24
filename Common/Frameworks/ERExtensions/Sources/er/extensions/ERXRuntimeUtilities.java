@@ -171,7 +171,7 @@ public class ERXRuntimeUtilities {
      * Excecutes the specified command line commands. If envp is not null the
      * environment variables are set before executing the command.
      * 
-     * @param commands
+     * @param command
      *            the commands to execute like "ls -la" or "cp /tmp/file1
      *            /tmp/file2" or "open /Applications/*.app" new String[]{"ls",
      *            "-la"} new String[]{"cp", "/tmp/file1", "/tmp/file2"} new
@@ -259,7 +259,7 @@ public class ERXRuntimeUtilities {
      * <code>Process.waitFor()</code> should be observed and stopped if a
      * certain amount of time is over.
      * 
-     * @param commands
+     * @param command
      *            the commands to execute, this is an String array with two
      *            dimensions the following commands <br>
      *            "ls -la" or "cp /tmp/file1 /tmp/file2" or "open

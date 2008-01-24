@@ -55,10 +55,10 @@ public class ERWOMailDelivery {
 
 	/**
 	 * Creates and optionally sends a plain text email.
-	 * 
+	 *
 	 * @param fromEmailAddress
 	 *            Originating email address. Required.
-	 * @param toEmailAddress
+	 * @param toEmailAddresses
 	 *            Destination email address. Required.
 	 * @param bccEmailAddresses
 	 *            Array of Strings containing additional addressed to BCC. Null OK.
@@ -88,19 +88,20 @@ public class ERWOMailDelivery {
 	 * 
 	 * @param fromEmailAddress
 	 *            Originating email address. Required.
-	 * @param toEmailAddress
+	 * @param toEmailAddresses
 	 *            Destination email address. Required.
 	 * @param bccEmailAddresses
 	 *            Array of Strings containing additional addressed to BCC. Null OK.
 	 * @param subject
 	 *            Subject the the message. Null OK.
-	 * @param message
+	 * @param component
 	 *            Body the the message. Required.
 	 * @param sendNow
 	 *            Whether to send the message right away. If you're going to send the message right away, it's faster to
 	 *            set sendNow to true than set it to false and calling {@link #sendEmail(String)} later.
 	 */
 	public String composeComponentEmail(String fromEmailAddress, NSArray toEmailAddresses, NSArray bccEmailAddresses, String subject, WOComponent component, boolean sendNow) {
+                // XXX the component parameter above was 'message'. the real parameter could be renamed.
 		// /JAssert.notEmpty( fromEmailAddress );
 		// /JAssert.notNull( toEmailAddresses );
 		// /JAssert.greaterThan( toEmailAddresses.count(), 0 );

@@ -125,7 +125,7 @@ public class ERXMailAppender extends AppenderSkeleton {
     }
     /**
      * Sets the qualifier as a string.
-     * @param the qualifier as string.
+     * @param qualifier the qualifier as string.
      */
     public void setQualifier(String qualifier) {
         this.qualifier = qualifier;
@@ -171,7 +171,7 @@ public class ERXMailAppender extends AppenderSkeleton {
 
     /**
      * Sets the reply to address.
-     * @param reply to address to use when generating emails.
+     * @param replyTo to address to use when generating emails.
      */
     public void setReplyTo(String replyTo) { this.replyTo = replyTo; }
     
@@ -272,8 +272,8 @@ public class ERXMailAppender extends AppenderSkeleton {
     public String getExceptionPageName() { return exceptionPageName; }
 
     /**
-        * Sets the title.
-     * @param title of the mail message
+     * Sets the title.
+     * @param exceptionPageName title of the mail message
      */
     public void setExceptionPageName(String exceptionPageName) { this.exceptionPageName = exceptionPageName; }
     

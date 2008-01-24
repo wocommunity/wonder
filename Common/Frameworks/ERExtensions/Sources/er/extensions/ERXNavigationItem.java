@@ -107,7 +107,7 @@ public class ERXNavigationItem {
      * eg: conditions = ("session.user.canEditThisStuff", "session.user.isEditor")
      * will display the item only if the user can edit this stuff *and* is an editor. You can set OR conditions with
      * conditions = (("session.user.canEditThisStuff", "session.user.isEditor"))
-     * @param context context to evaluate visibility in
+     * @param component context to evaluate visibility in
      */
 
     public boolean meetsDisplayConditionsInComponent(WOComponent component) {

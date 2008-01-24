@@ -733,8 +733,8 @@ public class PostgresqlExpression extends JDBCExpression {
      * Overridden because the original version does not correctly quote mixed case fields in all cases.
      * SELECT statements were OK (useAliases is true) INSERT, UPDATE, DELETE didn't quote mixed case field names.
      * 
-     * @param data  the attribute (column name) to be converted to a SQL string
-     * @return  the SQL string for the attribute
+     * @param attribute the attribute (column name) to be converted to a SQL string
+     * @return SQL string for the attribute
      */
     public String sqlStringForAttribute(EOAttribute attribute) {
         String sql = null;

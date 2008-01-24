@@ -843,10 +843,7 @@ public class ERXEC extends EOEditingContext {
 	 * editing context if the <code>ec</code> is a nested context before and
 	 * after the save in order to get the objects and to flush caches on them.
 	 * 
-	 * @param ec
-	 *            editing context to save
 	 */
-
 	public void saveChanges() {
 		_EOAssertSafeMultiThreadedAccess("saveChanges()");
 		boolean wasAutoLocked = autoLock("saveChanges");
@@ -1472,7 +1469,7 @@ public class ERXEC extends EOEditingContext {
 	/**
 	 * Sets the default editing context factory
 	 * 
-	 * @param factory
+	 * @param aFactory
 	 *            factory used to create editing contexts
 	 */
 	public static void setFactory(Factory aFactory) {

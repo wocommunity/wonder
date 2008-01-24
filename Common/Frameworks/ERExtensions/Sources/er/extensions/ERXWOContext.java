@@ -50,7 +50,6 @@ public class ERXWOContext extends WOContext implements ERXMutableUserInfoHolderI
     
     /**
      * Public constructor
-     * @param context context of request
      */
     public static NSMutableDictionary contextDictionary() {
     	if(observer == null) {
@@ -161,7 +160,7 @@ public class ERXWOContext extends WOContext implements ERXMutableUserInfoHolderI
      * Removes Session ID (wosid) query key/value pair from the given URL 
      * string. 
      * 
-     * @param actionName  String URL
+     * @param url String URL
      * @return a String with the Session ID removed
      */ 
     public static String stripSessionIDFromURL(String url) {

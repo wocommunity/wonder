@@ -114,7 +114,7 @@ public abstract class ERXAbstractBlowfishCrypter implements ERXCrypterInterface 
 	 * the decoding cipher or else you are going to get garbage. To encode a
 	 * string have a look at <code>blowfishEncode</code>.
 	 * 
-	 * @param s
+	 * @param cryptedText
 	 *            blowfish encoded string to be decoded
 	 * @return decode clear text string
 	 */
@@ -181,7 +181,7 @@ public abstract class ERXAbstractBlowfishCrypter implements ERXCrypterInterface 
 	 * method: <code>blowfishDecode</code>. The resultant string from
 	 * encoding a string is safe for use in urls and cookies.
 	 * 
-	 * @param s
+	 * @param clearText
 	 *            string to be encrypted
 	 * @return encrypted string
 	 */

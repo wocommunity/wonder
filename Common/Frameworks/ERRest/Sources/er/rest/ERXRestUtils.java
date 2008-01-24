@@ -20,7 +20,8 @@ public class ERXRestUtils {
 	 * an EO.  This is crazy -- It tries to guess if it's looking at
 	 * a key or not.
 	 * 
-	 * @param key the possible EO key
+	 * @param restKey the possible EO key
+         *
 	 * @return true if key is a primary key
 	 */
 	public static boolean isEOID(ERXRestKey restKey) {

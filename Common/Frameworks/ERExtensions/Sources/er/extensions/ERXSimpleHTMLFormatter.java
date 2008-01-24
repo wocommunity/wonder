@@ -152,7 +152,7 @@ public class ERXSimpleHTMLFormatter extends java.text.Format {
      * Accessor method used to convert an ASCII
      * string into an HTML string.
      * @param anObject string to convert
-     * @param HTML-ified string
+     *
      */
     public String stringForObjectValue(Object anObject)
         throws IllegalArgumentException

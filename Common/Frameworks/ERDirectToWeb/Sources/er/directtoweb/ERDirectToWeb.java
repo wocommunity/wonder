@@ -176,8 +176,9 @@ public class ERDirectToWeb extends ERXFrameworkPrincipal {
      * For example ("(foo)", bar, baz) is transformed to a list of ERD2WContainers usable for section display.
      * The format ((foo, bar, baz)) is also understood.
      * @param keyArray the NSArray to convert
-     * @param start the start char
-     * @param start the end char to check for
+     * @param startChar the start char
+     * @param endChar the end char to check for
+     *
      * @return nested NSMutableArray.
      */
     public static NSMutableArray convertedPropertyKeyArray(NSArray keyArray, char startChar, char endChar) {

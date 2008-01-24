@@ -419,7 +419,7 @@ public class ERXFileUtilities {
 
     /**
      * Create an URL for a given file.
-     * @param fileName name of the file
+     * @param file name of the file
      * @return file:// URL for the given path
      */
     public static URL URLFromFile(File file) {
@@ -669,7 +669,7 @@ public class ERXFileUtilities {
      * @param deleteOriginals tells if the original files, the file is deleted even if appuser has no write
      * rights. This is compareable to a <code>rm -f filename</code> instead of <code>rm filename</code>
      * @param recursiveCopy specifies if directories should be recursively copied
-     * @param filter, which restricts the files to be copied
+     * @param filter which restricts the files to be copied
      */
     public static void copyFilesFromDirectory(File srcDirectory,
                                               File dstDirectory,
@@ -1157,8 +1157,8 @@ public class ERXFileUtilities {
     
     /** Lists all directories in the specified directory, is desired recursive.
      *  
-     * @param baseDir, the dir from which to list the child directories
-     * @param recursive, if true this methods works recursively
+     * @param baseDir the dir from which to list the child directories
+     * @param recursive if true this methods works recursively
      * @return an array of files which are directories
      */
     public static File[] listDirectories(File baseDir, boolean recursive) {

@@ -102,8 +102,6 @@ public class ERXKey<T> {
 	 * Equivalent to new ERXKeyValueQualifier(key,
 	 * EOQualifier.QualifierOperatorEqual, Boolean.FALSE);
 	 * 
-	 * @param key
-	 *            the key
 	 * @return an ERXKeyValueQualifier
 	 */
 	public ERXKeyValueQualifier isFalse() {
@@ -417,7 +415,7 @@ public class ERXKey<T> {
 	 * contains any of the given tokens (insensitively) in the search string.
 	 * The search string will be tokenized by splitting on space characters.
 	 * 
-	 * @param tokensWithWhitespace
+	 * @param tokens
 	 *            a whitespace separated list of tokens to search for
 	 * @return an ERXOrQualifier
 	 */
@@ -442,7 +440,7 @@ public class ERXKey<T> {
 	 * contains all of the given tokens (insensitively) in the search string.
 	 * The search string will be tokenized by splitting on space characters.
 	 * 
-	 * @param tokensWithWhitespace
+	 * @param tokens
 	 *            a whitespace separated list of tokens to search for
 	 * @return an ERXAndQualifier
 	 */

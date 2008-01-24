@@ -263,8 +263,6 @@ public class ERXEOAccessUtilities {
      * 
      * @param ec
      *            the EOEditingContext
-     * @param spec
-     *            the EOFetchSpecification in question
      * @param modelName
      *            the name of the model in question
      * @param expression
@@ -608,7 +606,7 @@ public class ERXEOAccessUtilities {
     /**
      * Returns true if the exception is an optimistic locking exception.
      * 
-     * @param exception
+     * @param e
      *            the exception as recieved from saveChanges()
      * @return true if the error could be handled.
      */
@@ -801,7 +799,7 @@ public class ERXEOAccessUtilities {
      * Closes the (JDBC) Connection from all database channels for the specified
      * EOObjectStoreCoordinator
      * 
-     * @param osc,
+     * @param osc
      *            the EOObjectStoreCoordinator from which the (JDBC)Connections
      *            should be closed
      */
@@ -1069,9 +1067,7 @@ public class ERXEOAccessUtilities {
     
     /**
      * Creates an AND qualifier of EOKeyValueQualifiers for every keypath in the given array of attributes.
-     * @param keys
-     * @param selector
-     * @param value
+     *
      * @author ak
      */
     public static EOQualifier qualifierFromAttributes(NSArray attributes, NSDictionary values) {
@@ -1093,7 +1089,6 @@ public class ERXEOAccessUtilities {
      * have a given EOAttribute as a source attribute. 
      * @param attrib EOAttribute to filter source attributes of
      *      relationships.
-     * @param rels array of EORelationship objects.
      * @return filtered array of EORelationship objects that have
      *      the given attribute as the source attribute.
      */
@@ -1146,11 +1141,8 @@ public class ERXEOAccessUtilities {
      * Method used to apply a set of changes to a re-fetched eo.
      * This method is used to re-apply changes to a given eo after
      * it has been refetched.
-     * @param changedValues dictionary of the changed values to be
-     *      applied to the object.
-     * @param eo enterprise object to have the changes re-applied
-     *      to.
-     * @param ent EOEntity of the failedEO
+     *
+     * @param eo enterprise object to have the changes re-applied to.
      */
     protected static void reapplyChanges(EOEnterpriseObject eo, EOGeneralAdaptorException e) {
         EOAdaptorOperation adaptorOp = (EOAdaptorOperation) e.userInfo().objectForKey(EOAdaptorChannel.FailedAdaptorOperationKey);

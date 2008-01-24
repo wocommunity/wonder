@@ -115,7 +115,7 @@ public final class GSVRule extends Object implements WOXMLCoding {
     /**
      *	Set the class name for this rule.
      *
-     *	@param    The fully qualified name of the class.
+     *	@param newClass fully qualified name of the class.
      * 	@exception java.lang.IllegalArgumentException	Thrown should the class name appear to be invalid.
      *													Currently the validation logic here always returns true.
      *	@see #cName
@@ -141,9 +141,9 @@ public final class GSVRule extends Object implements WOXMLCoding {
     /**
      *	Set the method name for this rule.
      *
-     *	@param    The name for the method.
+     *	@param newMethod name for the method.
      * 	@exception java.lang.IllegalArgumentException	Thrown should the method name appear to be invalid.
-     *													Currently the validation logic here always returns true.
+     *             Currently the validation logic here always returns true.
      *	@see #mName
      */
     public void setMName(String newMethod)  throws IllegalArgumentException {
@@ -168,7 +168,7 @@ public final class GSVRule extends Object implements WOXMLCoding {
     /**
      *	Set the error message.
      *
-     *	@param    The error message
+     *	@param newMessage the error message
      *
      *	@see #errorMessage
      */
@@ -189,7 +189,7 @@ public final class GSVRule extends Object implements WOXMLCoding {
     /**
      *	Set the documentation to the provided <code>String</code>.
      *
-     *	@param    The documentation.
+     *	@param doc the documentation.
      *
      *	@see #documentation
      */
@@ -212,7 +212,7 @@ public final class GSVRule extends Object implements WOXMLCoding {
     /**
      *	Assigns a key-value pair dictionary to this rule.
      *
-     *	@param    A dictionary of key-value pairs.
+     *	@param newParameters A dictionary of key-value pairs.
      *
      *	@see #parameters
      */
@@ -237,7 +237,7 @@ public final class GSVRule extends Object implements WOXMLCoding {
     /**
      *	Assigns a key-value pair dictionary to this rule.
      *
-     *	@param    A dictionary of key-value pairs.
+     *	@param z A dictionary of key-value pairs.
      *
      *	@see #parameters
      */

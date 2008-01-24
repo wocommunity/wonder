@@ -48,7 +48,7 @@ public class ERDKeyValueAssignment extends Assignment {
 
     /** 
      * Public constructor
-     * @param u key-value unarchiver used when unarchiving
+     * @param eokeyvalueunarchiver key-value unarchiver used when unarchiving
      *		from rule files. 
      */
     public ERDKeyValueAssignment(EOKeyValueUnarchiver eokeyvalueunarchiver) {

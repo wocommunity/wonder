@@ -45,9 +45,9 @@ public class ERXComponentUtilities {
 	 *            the set of associations
 	 * @param component
 	 *            the component to evaluate their values within
-	 * @param removeQueryParameterAssociations
+	 * @param removeQueryParametersAssociations
 	 *            should the entries be removed from the passed-in dictionary?
-	 * @return a dictionary of key=value query parameters
+	 * @return dictionary of key-value query parameters
 	 */
 	public static NSMutableDictionary queryParametersInComponent(NSMutableDictionary associations, WOComponent component, boolean removeQueryParametersAssociations) {
 		NSMutableDictionary queryParameterAssociations = ERXComponentUtilities.queryParameterAssociations(associations, removeQueryParametersAssociations);

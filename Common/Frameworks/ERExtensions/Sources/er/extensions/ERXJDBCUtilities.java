@@ -389,8 +389,6 @@ public class ERXJDBCUtilities {
 	 * ERXJDBCUtilities._copyDatabaseDefinedByEOModelAndConnectionDictionaryToDatabaseWithConnectionDictionary(model, sourceDict, destDict);
 	 * </pre>
 	 * 
-	 * @param entity
-	 *            the EOEntity which is related to the table which we want to copy
 	 * @param sourceDict
 	 *            a NSDictionary containing the following keys for the source database:
 	 *            <ol>
@@ -408,9 +406,6 @@ public class ERXJDBCUtilities {
 	 *            </ol>
 	 * @param destDict
 	 *            same as sourceDict just used for the destination database.
-	 * @param commitAtEnd,
-	 *            a boolean which defines if the destination Connection should get a commit at the end. Set this to
-	 *            false if you want to transfer multiple tables with primary key - foreign key dependencies
 	 */
 	public static void _copyDatabaseDefinedByEOModelAndConnectionDictionaryToDatabaseWithConnectionDictionary(EOModel m, NSDictionary sourceDict, NSDictionary destDict) {
 		try {
@@ -502,10 +497,9 @@ public class ERXJDBCUtilities {
 	 * 
 	 * @param channel
 	 *            the JDBCChannel to work with
-	 * @param sqlScript
+	 * @param sqlStatements
 	 *            the array of sql scripts to execute
-	 * @param filter
-	 *            the sql filter to use to filter out unwanted statements
+         *
 	 * @return the number of rows updated
 	 * @throws SQLException
 	 *             if there is a problem

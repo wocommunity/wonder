@@ -243,8 +243,10 @@ public class ERXComponentActionRedirector {
         return originalResponse;
     }
 
-    /** sets the original response.
-     *   @param the original response.
+    /**
+     * Sets the original response.
+     *
+     * @param value the original response.
      */
     public void setOriginalResponse(WOResponse value) {
         originalResponse = value;

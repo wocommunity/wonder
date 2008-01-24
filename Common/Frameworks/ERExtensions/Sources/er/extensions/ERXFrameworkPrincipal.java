@@ -102,7 +102,7 @@ public abstract class ERXFrameworkPrincipal {
     /**
      * Gets the shared framework principal instance for a given
      * class.
-     * @param principal class for a given framework
+     * @param c principal class for a given framework
      * @return framework principal initializer
      */
     public static ERXFrameworkPrincipal sharedInstance(Class c) {
