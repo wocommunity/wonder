@@ -16,7 +16,6 @@ import com.webobjects.foundation.NSDictionary;
 public class ERXWOText extends ERXPatcher.DynamicElementsPatches.Text {
     /**
      * Public constructor
-     * @param context the context
      */
     public ERXWOText(String string, NSDictionary nsdictionary,
                       WOElement woelement) {

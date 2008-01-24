@@ -213,8 +213,8 @@ public class ERXEOEncodingUtilities {
 
     /**
      * Decodes the encoded entity name.
-     * @param   the encode name.
-     * @return the decoded entity name.
+     * @param encodedName the encode name.
+     * @return decoded entity name.
      */
     public static String entityNameDecode (String encodedName) {
         String entityName = encodedName;

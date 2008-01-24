@@ -70,8 +70,8 @@ public class PostgresqlPlugIn extends JDBCPlugIn {
    *
    * @param count the batch size
    * @param entity the entity requesting primary keys
-   * @param n open JDBCChannel
-   * @return An NSArray of NSDictionary where each dictionary corresponds to a unique  primary key value
+   * @param channel open JDBCChannel
+   * @return NSArray of NSDictionary where each dictionary corresponds to a unique  primary key value
    */
   public NSArray newPrimaryKeys(int count, EOEntity entity, JDBCChannel channel) {
     if (isPrimaryKeyGenerationNotSupported(entity)) {

@@ -330,9 +330,7 @@ public class ERXDirectAction extends WODirectAction {
      * at runtime.
      * Synopsis:<br/>
      * pw=<i>aPassword</i>&key=<i>someSystemPropertyKey</i>&value=<i>someSystemPropertyValue</i>
-     * @param key the System property key
-     * @param value the System property value, can be null or empty
-     * @param password must be equal to the password set by the System property er.extensions.ERXDirectAction.ChangeSystemPropertyPassword
+     *
      * @return either null when the password is wrong or the key is missing or a new page showing the System properties
      */
     public WOActionResults systemPropertyAction() {

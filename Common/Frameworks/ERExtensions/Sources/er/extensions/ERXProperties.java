@@ -1092,7 +1092,7 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
 
     /**
      * KVC implementation.
-     * @param anObject
+     *
      * @param aKey
      */
     public Object valueForKey(String aKey) {

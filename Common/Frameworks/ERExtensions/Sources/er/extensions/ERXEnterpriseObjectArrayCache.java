@@ -58,7 +58,6 @@ public class ERXEnterpriseObjectArrayCache<T extends EOEnterpriseObject> {
     /**
      * Creates the cache for the given entity name and the given keypath. No
      * timeout value is used.
-     * @param entityName
      */
     public ERXEnterpriseObjectArrayCache(Class c) {
        this(entityNameForClass(c));
@@ -81,7 +80,6 @@ public class ERXEnterpriseObjectArrayCache<T extends EOEnterpriseObject> {
     /**
      * Creates the cache for the given entity, keypath and timeout value in milliseconds.
      * @param entityName
-     * @param keyPath
      * @param timeout
      */
     public ERXEnterpriseObjectArrayCache(String entityName, long timeout) {

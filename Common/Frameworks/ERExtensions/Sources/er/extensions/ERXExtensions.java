@@ -349,7 +349,7 @@ public class ERXExtensions extends ERXFrameworkPrincipal {
      * change a logger's setting and have that changed value change
      * the NSLog setting to log the generated SQL. This method is
      * called as part of the framework initialization process.
-     * @param observer object to register the call back with.
+     * @param anObserver object to register the call back with.
      */
     // FIXME: This shouldn't be enabled when the application is in production.
     // FIXME: Now that all of the logging has been centralized, we should just be able

@@ -38,8 +38,8 @@ public class ERXKeyValueCodingUtilities {
      * Registers the class in the KVC resolving system, so you can use 
      * <code>valueForKeyPath("MyClass.SOME_KEY")</code>. Inner classes
      * are registered with a "$", i.e. <code>MyClass$InnerClass</code>
+     *
      * @param clazz
-     * @param name
      */
     public static void registerClass(Class clazz) {
         _classes.put(ERXStringUtilities.lastPropertyKeyInKeyPath(clazz.getName()), clazz);

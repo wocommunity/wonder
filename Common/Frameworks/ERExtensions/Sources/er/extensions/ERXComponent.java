@@ -95,11 +95,8 @@ public abstract class ERXComponent extends WOComponent {
 	/**
 	 * Returns the boolean value of a binding.
 	 * 
-	 * @param component
-	 *            the component
 	 * @param bindingName
 	 *            the name of the boolean binding
-	 * @return a boolean
 	 */
 	protected boolean booleanValueForBinding(String bindingName) {
 		return ERXComponentUtilities.booleanValueForBinding(this, bindingName);
@@ -108,13 +105,10 @@ public abstract class ERXComponent extends WOComponent {
 	/**
 	 * Returns the boolean value of a binding.
 	 * 
-	 * @param component
-	 *            the component
 	 * @param bindingName
 	 *            the name of the boolean binding
 	 * @param defaultValue
 	 *            the default value if the binding is null
-	 * @return a boolean
 	 */
 	protected boolean booleanValueForBinding(String bindingName, boolean defaultValue) {
 		return ERXComponentUtilities.booleanValueForBinding(this, bindingName, defaultValue);

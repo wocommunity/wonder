@@ -70,7 +70,8 @@ public class ERXThreadStorage {
     /**
      * Gets the object associated with the keypath in the storage
      * map off of the current thread.
-     * @param keypath key path to be used to retrieve value from map.
+     *
+     * @param keyPath key path to be used to retrieve value from map.
      * @return the value stored in the map for the given key.
      */
     public static Object valueForKeyPath(String keyPath) {

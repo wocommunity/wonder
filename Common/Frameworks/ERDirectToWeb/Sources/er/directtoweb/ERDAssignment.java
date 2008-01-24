@@ -128,7 +128,7 @@ public abstract class ERDAssignment extends Assignment implements ERDComputingAs
      * Using the value of the assignment allows the passing of a 
      * parameter to your assignment method, this gives the flexibility 
      * to have several methods for the same key path.
-     * @param current context
+     * @param c current context
      * @return the name of the method to be called, by default the 
      * 		key path of the assignmnet is returned.
      */

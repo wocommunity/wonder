@@ -82,8 +82,8 @@ public class ERDActionBar extends ERDCustomEditComponent implements ERDBranchInt
     }
 
     /**
-        * Sets the user choosen branch.
-     * @param branch choosen by user.
+     * Sets the user choosen branch.
+     * @param value branch choosen by user.
      */
     public void setBranch(NSDictionary value) {
         branch = value;

@@ -627,8 +627,6 @@ public class ERXPatcher {
 		 *            the response to be corrected.
 		 * @param start
 		 *            the offset to start from.
-		 * @param pre
-		 *            the string which should be inserted at the begin of the response.
 		 */
 		public static final void correctResponse(WOResponse response, int start) {
 			String string = response.contentString();

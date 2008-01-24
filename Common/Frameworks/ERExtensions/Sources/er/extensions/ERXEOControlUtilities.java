@@ -632,7 +632,7 @@ public class ERXEOControlUtilities {
      * @param entityName name of the entity
      * @param attributeName attribute for the function to be performed on
      * @param function name, ie MAX, MIN, AVG, etc.
-     * @param qualifier to restrict data set
+     *
      * @return aggregate result of the fuction call
      */
     public static Number aggregateFunctionWithQualifier(EOEditingContext ec,
@@ -965,7 +965,7 @@ public class ERXEOControlUtilities {
     /**
      * Returns the decoded dictionary for an propertylist encoded string representation
      * of the primary key for a given object.
-     * @param eo object to get the primary key for.
+     *
      * @return string representation of the primary key of the
      *		object.
      */
@@ -1125,17 +1125,18 @@ public class ERXEOControlUtilities {
      * passed editing context or any parent editing contexts as well as specifying prefetching 
      * key paths.  Note that only NEW objects are supported in parent editing contexts.
      * 
-     * @param ec editing context to fetch it into
-     * @param entityName name of the entity
-     * @param qualifier qualifier
-     * @param prefetchKeyPaths prefetching key paths
-     * @param includeNewObjects option to include newly inserted objects in the result set
-     * @param includeNewObjectsInParentEditingContexts option to include newly inserted objects in parent editing
+     * @param _editingContext editing context to fetch it into
+     * @param _entityName name of the entity
+     * @param _qualifier qualifier
+     * @param _prefetchKeyPaths prefetching key paths
+     * @param _includeNewObjects option to include newly inserted objects in the result set
+     * @param _includeNewObjectsInParentEditingContext option to include newly inserted objects in parent editing
      *        contexts.  if true, the editing context lineage is explored, any newly-inserted objects matching the
      *        qualifier are collected and faulted down through all parent editing contexts of ec.
      * @param _filterUpdatedObjects option to include updated objects that now match the qualifier or remove updated
      *         objects thats no longer match the qualifier
      * @param _removeDeletedObjects option to remove objects that have been deleted
+     *
      * @return array of objects matching the constructed qualifier
      */
     // ENHANCEME: This should handle entity inheritance for in memory filtering
@@ -1371,7 +1372,7 @@ public class ERXEOControlUtilities {
     }
 
     /** returns a NSArray containing EOGlobalIDs from the provided eos.
-     * @param eos, the NSArray of EOEnterpriseObjects
+     * @param eos the NSArray of EOEnterpriseObjects
      * @return a NSArray of EOGlobalIDs
      */
     public static NSArray globalIDsForObjects(NSArray eos) {
@@ -1501,7 +1502,7 @@ public class ERXEOControlUtilities {
     /**
      * Triggers all faults in an efficient manner.
      * @param ec
-     * @param globalIDs
+     * @param possibleFaults globalIDs
      */
     public static NSArray objectsForFaults(EOEditingContext ec, NSArray possibleFaults) {
         NSMutableArray result = new NSMutableArray();
