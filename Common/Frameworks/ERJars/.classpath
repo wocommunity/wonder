@@ -4,7 +4,7 @@
 	<classpathentry kind="con" path="org.objectstyle.wolips.ContainerInitializer"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry exported="true" kind="lib" path="Libraries/junit.jar"/>
-	<classpathentry exported="true" kind="lib" path="Libraries/icu4j_2_8.jar"/>
+	<classpathentry exported="true" kind="lib" path="Libraries/icu4j-3_8_1.jar"/>
 	<classpathentry exported="true" kind="lib" path="Libraries/log4j-1.2.14.jar"/>
 	<classpathentry exported="true" kind="lib" path="Libraries/erxservletadaptor.jar"/>
 	<classpathentry kind="output" path="bin"/>
