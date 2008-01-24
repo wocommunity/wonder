@@ -1144,7 +1144,7 @@ public class ERXEOAccessUtilities {
      *
      * @param eo enterprise object to have the changes re-applied to.
      */
-    protected static void reapplyChanges(EOEnterpriseObject eo, EOGeneralAdaptorException e) {
+    public static void reapplyChanges(EOEnterpriseObject eo, EOGeneralAdaptorException e) {
         EOAdaptorOperation adaptorOp = (EOAdaptorOperation) e.userInfo().objectForKey(EOAdaptorChannel.FailedAdaptorOperationKey);
         NSDictionary changedValues = adaptorOp.changedValues();
         EOEntity entity = ERXEOAccessUtilities.entityForEo(eo);
