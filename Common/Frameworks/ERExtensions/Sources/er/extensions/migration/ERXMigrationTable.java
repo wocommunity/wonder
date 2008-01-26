@@ -171,6 +171,7 @@ public class ERXMigrationTable {
 		destinationEntity.setPrimaryKeyAttributes(new NSArray<EOAttribute>(destinationAttribute));
 
 		EORelationship relationship = new EORelationship();
+		relationship.setName(sourceAttribute.name() + "_" + destinationAttribute.name());
 		relationship.setEntity(entity);
 		
 		EOJoin join = new EOJoin(sourceAttribute, destinationAttribute);
