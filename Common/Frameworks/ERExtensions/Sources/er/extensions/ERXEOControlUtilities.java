@@ -1389,7 +1389,8 @@ public class ERXEOControlUtilities {
     
     /**
      * Aggregate method for <code>EOEditingContext.objectForGlobalID()</code>.
-     *
+     * <b>NOTE:</b> this only returns objects that are already registered, if you
+     * need all objects from the GIDs, use {@link #faultsForGlobalIDs(EOEditingContext, NSArray)}.
      * @see com.webobjects.eocontrol.EOEditingContext#objectForGlobalID(EOGlobalID)
      */
     public static NSArray objectsForGlobalIDs(final EOEditingContext ec, final NSArray globalIDs) {
@@ -1401,7 +1402,7 @@ public class ERXEOControlUtilities {
             
             while ( e.hasMoreElements() ) {
                 final EOGlobalID theGID = (EOGlobalID)e.nextElement();
-                final EOEnterpriseObject theObject = ec.objectForGlobalID(theGID);
+                final EOEnterpriseObject theObject = ec.faultForGlobalID(theGID, ec);
                 
                 if ( theObject != null )
                     a.addObject(theObject);
