@@ -1424,7 +1424,7 @@ public class ERXEOControlUtilities {
         NSMutableArray a = new NSMutableArray(c);
         for (int i = 0; i < c; i++) {
             EOGlobalID gid = (EOGlobalID)gids.objectAtIndex(i);
-            EOEnterpriseObject eo = ec.faultForGlobalID(gid, ec);
+            EOEnterpriseObject eo = ec.objectForGlobalID(gid);
             a.addObject(eo);
         }
         return a;
