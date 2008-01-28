@@ -893,7 +893,7 @@ public class PostgresqlExpression extends JDBCExpression {
     }
     
     /**
-     * Overriddden to return the negated value of {@see #disableBindVariables()}.
+     * Overriddden to return the negated value of {@link #disableBindVariables()}.
      */
     public boolean useBindVariables() {
         return !disableBindVariables();

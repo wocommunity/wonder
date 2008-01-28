@@ -15,7 +15,7 @@ import com.webobjects.eocontrol.EOQualifier;
 import com.webobjects.foundation.NSArray;
 
 /**
- * Better layout options that the {@see WOToManyRelationship}, in addition you can set a 
+ * Better layout options that the {@link WOToManyRelationship}, in addition you can set a 
  * qualifier on the dataSource if you passed any.<br />
  * * 
  * @binding dataSource
