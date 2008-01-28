@@ -22,8 +22,8 @@ import com.webobjects.foundation.NSKeyValueCodingAdditions;
  * Replacement for WORepetition. Is installed via ERXPatcher.setClassForName(ERXWORepetition.class, "WORepetition") into
  * the runtime system, so you don't need to reference it explicitely.
  * <ul>
- * <li>adds support for {@see java.util.List} and {@see java.lang.Array}, in addition to
- * {@see com.webobjects.foundation.NSArray} and {@see java.util.Vector} (which is a {@see java.util.List} in 1.4). This
+ * <li>adds support for {@link java.util.List} and {@link java.lang.Array}, in addition to
+ * {@link com.webobjects.foundation.NSArray} and {@link java.util.Vector} (which is a {@link java.util.List} in 1.4). This
  * is listed as Radar #3325342 since June 2003.</li>
  * <li>help with backtracking issues by adding not only the current index, but also the current object's hash code to
  * the element id, so it looks like "x.y.12345.z".<br />

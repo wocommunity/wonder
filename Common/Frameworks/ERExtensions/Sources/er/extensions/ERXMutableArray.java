@@ -23,7 +23,7 @@ import com.webobjects.foundation.NSSelector;
 import com.webobjects.foundation.NSComparator.ComparisonException;
 
 /**
- * Custom subclass of NSMutableArray. Implements {@see java.util.List} and can
+ * Custom subclass of NSMutableArray. Implements {@link java.util.List} and can
  * be used as a EOF custom value class because it can automatically en- and
  * decode an NSMutableArray as blob into a database. NOTE: As the List
  * implementation is based on the NSMutableArray implementation, care must be

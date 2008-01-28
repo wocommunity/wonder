@@ -7,7 +7,7 @@ import com.webobjects.foundation.NSMutableDictionary;
 /**
  * Allows you to store a large amount of files and folders without the hassles
  * of directory size limitations. The files are stored by an abstract 
- * "key" which is by default a {@see ERXRandomGUID}. Under the root
+ * "key" which is by default a {@link ERXRandomGUID}. Under the root
  * directory, there will be directories for the first two characters 
  * and under these again directories for the next two characters of the 
  * GUID. <br />
