@@ -999,7 +999,8 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 				if (isRefusingNewSessions() != shouldRefuse) {
 					// not changing anything when the kill timer is set (we
 					// already refusing session by monitor)
-					if (_killTimer == null &&  ERXProperties.intForKey("ERTimeToKill") > 0) {
+					boolean hasKillTimerSetting = ERXProperties.intForKey("ERTimeToKill") > 0;
+					if (_killTimer == null && hasKillTimerSetting) {
 						// using super, so we don't interfere with the kill
 						// timer, as
 						// this is called when we actually have a lot of
@@ -1008,7 +1009,9 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 						log.error("Refuse new sessions set to: " + shouldRefuse);
 					}
 					else {
-						log.info("Refuse new sessions should be set to " + shouldRefuse + ", but kill timer is active or not set at all via ERTimeToKill");
+						if (hasKillTimerSetting) {
+							log.info("Refuse new sessions should be set to " + shouldRefuse + ", but kill timer is active or not set at all via ERTimeToKill");
+						}
 					}
 				}
 			}
@@ -1165,6 +1168,10 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 	// compile.
 	public WOResponse handleActionRequestError(WORequest aRequest, Exception exception, String reason, WORequestHandler aHandler, String actionClassName, String actionName, Class actionClass, WOAction actionInstance) {
 		WOContext context = actionInstance != null ? actionInstance.context() : null;
+		if(context == null) {
+			// AK: we provide the "handleException" with not much enough info to output a reasonable error message
+			context = createContextForRequest(aRequest);
+		}
 		WOResponse response = handleException(exception, context);
 		// AK: bugfix for #4186886 (Session store deadlock with DAs). The bug
 		// occurs in 5.2.3, I'm not sure about other
@@ -1411,10 +1418,6 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 		}
 		if (requestHandlingLog.isDebugEnabled()) {
 			requestHandlingLog.debug("Returning, encoding: " + response.contentEncoding() + " response: " + response);
-		}
-		// AK: accomodate for new JavaMonitor/wotaskd
-		if (isRefusingNewSessions() && response.headerForKey("x-webobjects-refusenewsessions") == null) {
-			response.appendHeader("x-webobjects-refusenewsessions", "x-webobjects-refusenewsessions");
 		}
 
 		if (responseCompressionEnabled()) {
