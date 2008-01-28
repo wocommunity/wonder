@@ -13,7 +13,7 @@ import com.webobjects.eocontrol.EODataSource;
 import com.webobjects.eocontrol.EOQualifier;
 
 /**
- * Better layout options that the {@see WOToOneRelationship}, in addition you can set a 
+ * Better layout options that the {@link WOToOneRelationship}, in addition you can set a 
  * qualifier on the dataSource if you passed any.<br />
  *
  * @binding dataSource

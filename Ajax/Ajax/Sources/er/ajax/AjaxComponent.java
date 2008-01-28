@@ -87,7 +87,7 @@ public abstract class AjaxComponent extends WOComponent implements IAjaxElement 
     }
 
     /**
-     * Overridden to call {@see #addRequiredWebResources(WOResponse)}.
+     * Overridden to call {@link #addRequiredWebResources(WOResponse)}.
      */
     public void appendToResponse(WOResponse res, WOContext ctx) {
         super.appendToResponse(res, ctx);

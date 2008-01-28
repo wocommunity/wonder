@@ -266,10 +266,10 @@ public class ERD2WInspectPage extends ERD2WPage implements InspectPageInterface,
         return result;
     }
 
-	/**
+    /**
      * Generates other strings to be included in the WOGenericContainer tag for the propertyKey component cell.  This is
      * used in conjunction with the <code>firstResponderKey</code> to mark the cell where the propertyKey is that named 
-     * by the <code>firstResponderKey</code> so that the "focusing" JavaScript {@see #tabScriptString tabScriptString}
+     * by the <code>firstResponderKey</code> so that the "focusing" JavaScript {@link #tabScriptString tabScriptString}
      * can identify it.
      * @return a String to be included in the <code>td<td> tag for the propertyKey component cell.
      */

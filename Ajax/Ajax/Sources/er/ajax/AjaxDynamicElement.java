@@ -90,7 +90,7 @@ public abstract class AjaxDynamicElement extends WODynamicGroup implements IAjax
 	}
 
 	/**
-	 * Overridden to call {@see #addRequiredWebResources(WOResponse)}.
+	 * Overridden to call {@link #addRequiredWebResources(WOResponse)}.
 	 */
 	public void appendToResponse(WOResponse response, WOContext context) {
 		addRequiredWebResources(response, context);
