@@ -38,9 +38,10 @@ public class ERXStatisticsStore extends WOStatisticsStore {
 	}
 
 	/**
-	 * Thread that checks each second for running requests and makes a snapshot after a certain amount of time has expired.
+	 * Thread that checks each second for running requests and makes a snapshot
+	 * after a certain amount of time has expired.
 	 * 
-	 *
+	 * 
 	 * @author ak
 	 */
 	class StopWatchTimer implements Runnable {
@@ -49,7 +50,7 @@ public class ERXStatisticsStore extends WOStatisticsStore {
 		long maximumRequestWarnTime;
 		long maximumRequestFatalTime;
 
-		Map<Thread, Long> _requestThreads = Collections.synchronizedMap(new WeakHashMap<Thread, Long>());
+		Map<Thread, Long> _requestThreads = new WeakHashMap<Thread, Long>();
 		Map<Thread, Map<Thread, StackTraceElement[]>> _warnTraces = Collections.synchronizedMap(new WeakHashMap<Thread, Map<Thread, StackTraceElement[]>>());
 		Map<Thread, Map<Thread, StackTraceElement[]>> _errorTraces = Collections.synchronizedMap(new WeakHashMap<Thread, Map<Thread, StackTraceElement[]>>());
 		Map<Thread, Map<Thread, StackTraceElement[]>> _fatalTraces = Collections.synchronizedMap(new WeakHashMap<Thread, Map<Thread, StackTraceElement[]>>());
@@ -58,12 +59,14 @@ public class ERXStatisticsStore extends WOStatisticsStore {
 			new Thread(this).start();
 			maximumRequestWarnTime = ERXProperties.longForKeyWithDefault("er.extensions.ERXStatisticsStore.milliSeconds.warn", 2000L);
 			maximumRequestErrorTime = ERXProperties.longForKeyWithDefault("er.extensions.ERXStatisticsStore.milliSeconds.error", 10000L);
-			maximumRequestFatalTime = ERXProperties.longForKeyWithDefault("er.extensions.ERXStatisticsStore.milliSeconds.fatal", 5*60*1000L);
+			maximumRequestFatalTime = ERXProperties.longForKeyWithDefault("er.extensions.ERXStatisticsStore.milliSeconds.fatal", 5 * 60 * 1000L);
 		}
 
 		private long time() {
-			Long time = _requestThreads.get(Thread.currentThread());
-			return time == null ? 0L : time.longValue();
+			synchronized (_requestThreads) {
+				Long time = _requestThreads.get(Thread.currentThread());
+				return time == null ? 0L : time.longValue();
+			}
 		}
 
 		protected void endTimer(WOContext aContext, String aString) {
@@ -74,15 +77,16 @@ public class ERXStatisticsStore extends WOStatisticsStore {
 				}
 				Thread currentThread = Thread.currentThread();
 				Map<Thread, StackTraceElement[]> traces = _fatalTraces.remove(currentThread);
-				if(traces == null) {
+				if (traces == null) {
 					traces = _errorTraces.remove(currentThread);
 				}
-				if(traces == null) {
+				if (traces == null) {
 					traces = _warnTraces.remove(currentThread);
 				}
 				String trace = stringFromTraces(traces);
-				_requestThreads.remove(Thread.currentThread());
-
+				synchronized (_requestThreads) {
+					_requestThreads.remove(Thread.currentThread());
+				}
 				if (requestTime > maximumRequestFatalTime) {
 					String requestDescription = aContext == null ? aString : descriptionForContext(aContext);
 					log.fatal("Request did take too long : " + requestTime + "ms request was: " + requestDescription + trace);
@@ -124,7 +128,9 @@ public class ERXStatisticsStore extends WOStatisticsStore {
 					}
 				}
 				trace = "\n" + sb.toString();
-				// trace = trace.replaceAll("at\\s+(com.webobjects|java|er|sun)\\..*?\\n", "...\n");
+				// trace =
+				// trace.replaceAll("at\\s+(com.webobjects|java|er|sun)\\..*?\\n",
+				// "...\n");
 				// trace = trace.replaceAll("(\t\\.\\.\\.\n+)+", "\t...\n");
 			}
 			else {
@@ -139,7 +145,9 @@ public class ERXStatisticsStore extends WOStatisticsStore {
 
 		protected void startTimer() {
 			if (!hasTimerStarted()) {
-				_requestThreads.put(Thread.currentThread(), new Long(System.currentTimeMillis()));
+				synchronized (_requestThreads) {
+					_requestThreads.put(Thread.currentThread(), new Long(System.currentTimeMillis()));
+				}
 			}
 		}
 
@@ -177,7 +185,9 @@ public class ERXStatisticsStore extends WOStatisticsStore {
 
 		private void checkThreads() {
 			Map<Thread, Long> requestThreads = new HashMap<Thread, Long>();
-			requestThreads.putAll(_requestThreads);
+			synchronized (_requestThreads) {
+	            requestThreads.putAll(_requestThreads);
+			}
 			if (!requestThreads.isEmpty()) {
 				for (Iterator iterator = requestThreads.keySet().iterator(); iterator.hasNext();) {
 					Thread thread = (Thread) iterator.next();
