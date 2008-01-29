@@ -16,13 +16,22 @@ import er.extensions.ERXProperties;
  * ERODirectAction contains OpenID direct actions.
  * 
  * @property er.openid.successPageName the name of the openID success page (should implement IEROResponsePage)
- * @property er.openid.failurePageName the name of the openID failuer page (should implement IEROResponsePage)
+ * @property er.openid.failurePageName the name of the openID failure page (should implement IEROResponsePage)
  * 
  * @author mschrag
  */
 public class ERODirectAction extends ERXDirectAction {
   public ERODirectAction(WORequest request) {
     super(request);
+  }
+  
+  private WOComponent pageForKey(String key)
+  {
+      String successPageName = ERXProperties.stringForKey(key);
+      if (successPageName == null) {
+        throw new IllegalArgumentException("You must set the property '" + key + "'.");
+      }
+      return pageWithName(successPageName);
   }
 
   /**
@@ -36,9 +45,21 @@ public class ERODirectAction extends ERXDirectAction {
    * @throws DiscoveryException
    * @throws ConsumerException
    */
-  public WOActionResults openIDRequestAction() throws MessageException, DiscoveryException, ConsumerException {
+  public WOActionResults openIDRequestAction() {
     String identity = request().stringFormValueForKey("identity");
-    return EROpenIDManager.manager().authRequest(identity, request(), context());
+    WOActionResults results = null;
+    try
+    {
+      results = EROpenIDManager.manager().authRequest(identity, request(), context());
+      if (results == null)
+        results = this.pageForKey("er.openid.failurePageName");
+    }
+    catch (Exception exception)
+    {
+      EROpenIDManager.log.info(exception);
+      results = this.pageForKey("er.openid.failurePageName");
+    }
+    return results;
   }
 
   /**
@@ -51,26 +72,26 @@ public class ERODirectAction extends ERXDirectAction {
    * @throws DiscoveryException
    * @throws AssociationException
    */
-  public WOActionResults openIDResponseAction() throws MessageException, DiscoveryException, AssociationException {
-    EROResponse response = EROpenIDManager.manager().verifyResponse(request(), context());
+  public WOActionResults openIDResponseAction() {
+    EROResponse response = null;
+    try
+    {
+      response = EROpenIDManager.manager().verifyResponse(request(), context());
+    }
+    catch (Exception exception)
+    {
+      EROpenIDManager.log.info(exception);
+    }
     WOActionResults results;
-    if (response.succeeded()) {
-      String successPageName = ERXProperties.stringForKey("er.openid.successPageName");
-      if (successPageName == null) {
-        throw new IllegalArgumentException("You must set the property 'er.openid.successPageName'.");
-      }
-      WOComponent successPage = pageWithName(successPageName);
+    if (response != null && response.succeeded()) {
+      WOComponent successPage = this.pageForKey("er.openid.successPageName");
       if (successPage instanceof IEROResponsePage) {
         ((IEROResponsePage) successPage).setOpenIDResponse(response);
       }
       results = successPage;
     }
     else {
-      String failurePageName = ERXProperties.stringForKey("er.openid.failurePageName");
-      if (failurePageName == null) {
-        throw new IllegalArgumentException("You must set the property 'er.openid.failurePageName'.");
-      }
-      WOComponent failurePage = pageWithName(failurePageName);
+      WOComponent failurePage = this.pageForKey("er.openid.failurePageName");
       if (failurePage instanceof IEROResponsePage) {
         ((IEROResponsePage) failurePage).setOpenIDResponse(response);
       }
