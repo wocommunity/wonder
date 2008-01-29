@@ -263,39 +263,44 @@ public class EROpenIDManager {
     // and retrieve one service endpoint for authentication
     DiscoveryInformation discovered = _manager.associate(discoveries);
 
-    // store the discovery information in the user's session
-    session.setObjectForKey(discovered, EROpenIDManager.DISCOVERY_INFO_KEY);
+    // the next section will figure out where we go next, if anywhere.
+    WOActionResults results = null;
 
-    // configure the return_to URL where your application will receive
-    // the authentication responses from the OpenID provider
-    String returnToUrl = _delegate.returnToUrl(request, context);
+    if (discovered != null)
+    {
+      // store the discovery information in the user's session
+      session.setObjectForKey(discovered, EROpenIDManager.DISCOVERY_INFO_KEY);
 
-    // obtain a AuthRequest message to be sent to the OpenID provider
-    AuthRequest authReq = _manager.authenticate(discovered, returnToUrl);
+      // configure the return_to URL where your application will receive
+      // the authentication responses from the OpenID provider
+      String returnToUrl = _delegate.returnToUrl(request, context);
 
-    // Attribute Exchange example: fetching the 'email' attribute
-    FetchRequest fetchRequest = _delegate.createFetchRequest(userSuppliedString, request, context);
-    if (fetchRequest != null) {
-      // attach the extension to the authentication request
-      authReq.addExtension(fetchRequest);
-    }
+      // obtain a AuthRequest message to be sent to the OpenID provider
+      AuthRequest authReq = _manager.authenticate(discovered, returnToUrl);
 
-    WOActionResults results;
-    if (!discovered.isVersion2()) {
-      WORedirect redirect = new WORedirect(context);
-      String url = authReq.getDestinationUrl(true);
-      EROpenIDManager.log.debug("Request URL: " + url);
-      redirect.setUrl(url);
-      results = redirect;
-    }
-    else {
-      String formRedirectionPageName = ERXProperties.stringForKeyWithDefault("er.openid.formRedirectionPageName", EROFormRedirectionPage.class.getName());
-      EROFormRedirectionPage formRedirectionPage = (EROFormRedirectionPage)WOApplication.application().pageWithName(formRedirectionPageName, context);
-      formRedirectionPage.setParameters( authReq.getParameterMap() );
-      String url = authReq.getDestinationUrl(false);
-      EROpenIDManager.log.debug("Request URL: " + url);
-      formRedirectionPage.takeValueForKey(url, "redirectionUrl");
-      results = formRedirectionPage;
+      // Attribute Exchange example: fetching the 'email' attribute
+      FetchRequest fetchRequest = _delegate.createFetchRequest(userSuppliedString, request, context);
+      if (fetchRequest != null) {
+        // attach the extension to the authentication request
+        authReq.addExtension(fetchRequest);
+      }
+
+      if (!discovered.isVersion2()) {
+        WORedirect redirect = new WORedirect(context);
+        String url = authReq.getDestinationUrl(true);
+        EROpenIDManager.log.debug("Request URL: " + url);
+        redirect.setUrl(url);
+        results = redirect;
+      }
+      else {
+        String formRedirectionPageName = ERXProperties.stringForKeyWithDefault("er.openid.formRedirectionPageName", EROFormRedirectionPage.class.getName());
+        EROFormRedirectionPage formRedirectionPage = (EROFormRedirectionPage)WOApplication.application().pageWithName(formRedirectionPageName, context);
+        formRedirectionPage.setParameters( authReq.getParameterMap() );
+        String url = authReq.getDestinationUrl(false);
+        EROpenIDManager.log.debug("Request URL: " + url);
+        formRedirectionPage.takeValueForKey(url, "redirectionUrl");
+        results = formRedirectionPage;
+      }
     }
 
     return results;
