@@ -1,11 +1,11 @@
 package er.extensions;
 
-import com.webobjects.foundation.*;
-import com.webobjects.appserver.*;
-import com.webobjects.eocontrol.*;
+import java.text.DateFormatSymbols;
+import java.text.Format;
+import java.util.Hashtable;
 
-import java.text.*;
-import java.util.*;
+import com.webobjects.foundation.NSTimestamp;
+import com.webobjects.foundation.NSTimestampFormatter;
 
 /**
  * Provides localization to timestamp formatters.<br />
@@ -16,16 +16,21 @@ public class ERXTimestampFormatter extends NSTimestampFormatter {
 
 	/** holds a reference to the repository */
 	private static Hashtable _repository = new Hashtable();
+    
 	protected static final String DefaultKey = "ERXTimestampFormatter.DefaultKey";
+    
+    /** The default pattern used in the UI */
+    public static String DEFAULT_PATTERN = "%m/%d/%Y";
 	
 	static {
 		_repository.put(DefaultKey, new ERXTimestampFormatter());
-	};
+	}
 	
 
 	/**
+         * The default pattern used by WOString and friends when no pattern is set. 
+         * Looks like this only for compatibility's sake.
 	 * @param object
-	 * @return
 	 */
 	public static Format defaultDateFormatterForObject(Object object) {
 		Format result = null;
@@ -58,7 +63,6 @@ public class ERXTimestampFormatter extends NSTimestampFormatter {
 	
 	/**
 	 * Sets a shared instance for the specified pattern.
-	 * @return shared instance of formatter
 	 */
 	public static void setDateFormatterForPattern(NSTimestampFormatter formatter, String pattern) {
 		if(ERXLocalizer.isLocalizationEnabled()) {
