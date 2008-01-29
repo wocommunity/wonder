@@ -1,3 +1,8 @@
+AbovePropertyKeysRepetition: WORepetition {
+	item = d2wContext.propertyKey;
+	list = d2wContext.aboveDisplayPropertyKeys;
+}
+
 ActiveImage2: WOActiveImage {
 	action = editObjectInRelationship;
 	filename = "EditMetalSmBtn.gif";
@@ -27,6 +32,11 @@ Banner: WOImage {
 	width = "550";
 }
 
+BelowPropertyKeysRepetition: WORepetition {
+	item = d2wContext.propertyKey;
+	list = d2wContext.belowDisplayPropertyKeys;
+}
+
 DisplayList: WOConditional {
 	condition = displayList;
 }
@@ -42,6 +52,14 @@ DisplayQuery: WOConditional {
 EntityName: WOString {
 	_unroll = true;
 	value = entity.name;
+}
+
+HasAbovePropertyKeysConditional: ERXNonZeroConditional {
+	condition = d2wContext.aboveDisplayPropertyKeys;
+}
+
+HasBelowPropertyKeysConditional: ERXNonZeroConditional {
+	condition = d2wContext.belowDisplayPropertyKeys;
 }
 
 HeaderRow: WOGenericContainer {
@@ -113,6 +131,11 @@ PageWrapper: WOSwitchComponent {
 	WOComponentName = pageWrapperName;
 	_componentUnroll = true;
 	_unroll = true;
+}
+
+PropertyKeySwitchComponent: WOSwitchComponent {
+	WOComponentName = d2wContext.componentName;
+	localContext = d2wContext;
 }
 
 QueryButton: WOImage {

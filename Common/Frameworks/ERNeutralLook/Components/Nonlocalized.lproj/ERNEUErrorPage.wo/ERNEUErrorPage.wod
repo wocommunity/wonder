@@ -1,3 +1,13 @@
+AbovePropertyKeysRepetition: WORepetition {
+	item = d2wContext.propertyKey;
+	list = d2wContext.aboveDisplayPropertyKeys;
+}
+
+BelowPropertyKeysRepetition: WORepetition {
+	item = d2wContext.propertyKey;
+	list = d2wContext.belowDisplayPropertyKeys;
+}
+
 CancelButton: WOImage {
 	alt = "Returns to the previous page";
 	border = "0";
@@ -6,6 +16,14 @@ CancelButton: WOImage {
 	height = "31";
 	name = "Returns to the previous page";
 	width = "88";
+}
+
+HasAbovePropertyKeysConditional: ERXNonZeroConditional {
+	condition = d2wContext.aboveDisplayPropertyKeys;
+}
+
+HasBelowPropertyKeysConditional: ERXNonZeroConditional {
+	condition = d2wContext.belowDisplayPropertyKeys;
 }
 
 Help: ERDDebuggingHelp {
@@ -27,6 +45,11 @@ PageWrapper: WOSwitchComponent {
 	WOComponentName = d2wContext.pageWrapperName;
 	_componentUnroll = true;
 	_unroll = true;
+}
+
+PropertyKeySwitchComponent: WOSwitchComponent {
+	WOComponentName = d2wContext.componentName;
+	localContext = d2wContext;
 }
 
 String1: WOString {

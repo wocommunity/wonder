@@ -1,3 +1,8 @@
+AbovePropertyKeysRepetition: WORepetition {
+	item = d2wContext.propertyKey;
+	list = d2wContext.aboveDisplayPropertyKeys;
+}
+
 AttributeRepetition: WORepetition {
 	_unroll = true;
 	item = d2wContext.propertyKey;
@@ -18,6 +23,11 @@ AttributeValue2: WOSwitchComponent {
 	_unroll = true;
 	localContext = localContext;
 	object = object;
+}
+
+BelowPropertyKeysRepetition: WORepetition {
+	item = d2wContext.propertyKey;
+	list = d2wContext.belowDisplayPropertyKeys;
 }
 
 Border: ERXTableWithBorder {
@@ -193,6 +203,14 @@ Errors: ERXErrorDictionaryPanel {
 	shouldShowNewLineBelow = true;
 }
 
+HasAbovePropertyKeysConditional: ERXNonZeroConditional {
+	condition = d2wContext.aboveDisplayPropertyKeys;
+}
+
+HasBelowPropertyKeysConditional: ERXNonZeroConditional {
+	condition = d2wContext.belowDisplayPropertyKeys;
+}
+
 HasDisplayNameForProperty: ERXNonZeroConditional {
 condition=displayNameForProperty.length;
 }
@@ -293,18 +311,23 @@ PrinterFriendlyLink: ERXJSOpenWindowHyperlink {
 	target = "PrinterFriendly";
 }
 
-ProprtyKeyComponentGenericContainer: WOGenericContainer {
+PropertyKeyComponentGenericContainer: WOGenericContainer {
 	align = "left";
 	elementName = "td";
 	otherTagString = otherTagStringsForPropertyKeyComponentCell;
 	valign = "top";
 }
 
-ProprtyKeyComponentGenericContainer2: WOGenericContainer {
+PropertyKeyComponentGenericContainer2: WOGenericContainer {
 	elementName = "td";
 	otherTagString = otherTagStringsForPropertyKeyComponentCell;
 	valign = "top";
 	width = 120;
+}
+
+PropertyKeySwitchComponent: WOSwitchComponent {
+	WOComponentName = d2wContext.componentName;
+	localContext = d2wContext;
 }
 
 ReturnButton: WOImage {

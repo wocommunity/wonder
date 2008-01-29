@@ -1,3 +1,8 @@
+AbovePropertyKeysRepetition: WORepetition {
+	item = d2wContext.propertyKey;
+	list = d2wContext.aboveDisplayPropertyKeys;
+}
+
 AttributeRepetition: WORepetition {
 	_unroll = true;
 	item = d2wContext.propertyKey;
@@ -18,6 +23,11 @@ AttributeValue2: WOSwitchComponent {
 	_unroll = true;
 	localContext = localContext;
 	object = object;
+}
+
+BelowPropertyKeysRepetition: WORepetition {
+	item = d2wContext.propertyKey;
+	list = d2wContext.belowDisplayPropertyKeys;
 }
 
 Border: ERXTableWithBorder {
@@ -82,6 +92,14 @@ Errors: ERXErrorDictionaryPanel {
 	extraErrorMessage = errorMessage;
 	shouldShowNewLineAbove = true;
 	shouldShowNewLineBelow = true;
+}
+
+HasAbovePropertyKeysConditional: ERXNonZeroConditional {
+	condition = d2wContext.aboveDisplayPropertyKeys;
+}
+
+HasBelowPropertyKeysConditional: ERXNonZeroConditional {
+	condition = d2wContext.belowDisplayPropertyKeys;
 }
 
 HasSectionHelp2: ERXNonNullConditional {
@@ -172,6 +190,11 @@ PrinterFriendlyLink: ERXJSOpenWindowHyperlink {
 	action = printerFriendlyVersion;
 	scrollbars = true;
 	target = "PrinterFriendly";
+}
+
+PropertyKeySwitchComponent: WOSwitchComponent {
+	WOComponentName = d2wContext.componentName;
+	localContext = d2wContext;
 }
 
 RightArrow: WOImageButton {

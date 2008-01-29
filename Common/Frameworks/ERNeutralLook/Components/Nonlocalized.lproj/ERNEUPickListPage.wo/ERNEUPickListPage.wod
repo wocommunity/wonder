@@ -1,3 +1,8 @@
+AbovePropertyKeysRepetition: WORepetition {
+	item = d2wContext.propertyKey;
+	list = d2wContext.aboveDisplayPropertyKeys;
+}
+
 AttributeCell: WOGenericContainer {
 	_unroll = true;
 	align = d2wContext.justification;
@@ -23,7 +28,7 @@ AttributeSorter: ERXSortOrder {
 	displayGroup = displayGroup;
 	displayKey = d2wContext.displayNameForProperty;
 	key = d2wContext.sortKeyForList;
-        d2wContext = d2wContext;
+	d2wContext = d2wContext;
 }
 
 BackButton: WOHyperlink {
@@ -37,6 +42,11 @@ BackLink2: WOHyperlink {
 BackgroundColor: WOString {
 	_unroll = true;
 	value = d2wContext.backgroundColorForTable;
+}
+
+BelowPropertyKeysRepetition: WORepetition {
+	item = d2wContext.propertyKey;
+	list = d2wContext.belowDisplayPropertyKeys;
 }
 
 CheckBox2: WOSwitchComponent {
@@ -112,6 +122,14 @@ FilterDisplayGroupButton2: ERDFilterDisplayGroupButton {
 
 Form1: WOForm {
 	multipleSubmit = true;
+}
+
+HasAbovePropertyKeysConditional: ERXNonZeroConditional {
+	condition = d2wContext.aboveDisplayPropertyKeys;
+}
+
+HasBelowPropertyKeysConditional: ERXNonZeroConditional {
+	condition = d2wContext.belowDisplayPropertyKeys;
 }
 
 Help: ERDDebuggingHelp {
@@ -198,22 +216,22 @@ ListTableRow: WOGenericContainer {
 }
 
 NavBar: WOSwitchComponent {
-    WOComponentName = d2wContext.batchNavigationBarComponentName;
+	WOComponentName = d2wContext.batchNavigationBarComponentName;
 	bgcolor = backgroundColorForTable;
 	displayGroup = displayGroup;
 	objectName = d2wContext.displayNameForEntity;
 	textColor = d2wContext.textColor;
 	width = 550;
-       	 d2wContext = d2wContext;
+	 d2wContext = d2wContext;
 }
 
 NavBar2: WOSwitchComponent {
-    WOComponentName = d2wContext.batchNavigationBarComponentName;
+	WOComponentName = d2wContext.batchNavigationBarComponentName;
 	bgcolor = backgroundColorForTable;
 	displayGroup = displayGroup;
 	objectName = d2wContext.displayNameForEntity;
 	textColor = d2wContext.textColor;
-       	 d2wContext = d2wContext;
+	 d2wContext = d2wContext;
 }
 
 NumberOfItems: WOString {
@@ -222,6 +240,11 @@ NumberOfItems: WOString {
 
 PageWrapper: WOSwitchComponent {
 	WOComponentName = d2wContext.pageWrapperName;
+}
+
+PropertyKeySwitchComponent: WOSwitchComponent {
+	WOComponentName = d2wContext.componentName;
+	localContext = d2wContext;
 }
 
 Repetition1: WORepetition {

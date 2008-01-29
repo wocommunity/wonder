@@ -1,3 +1,8 @@
+AbovePropertyKeysRepetition: WORepetition {
+	item = d2wContext.propertyKey;
+	list = d2wContext.aboveDisplayPropertyKeys;
+}
+
 AttributeRepetition: WORepetition {
 	_unroll = true;
 	item = d2wContext.propertyKey;
@@ -21,6 +26,11 @@ Banner: WOImage {
 BannerConditional: WOConditional {
 	_unroll = true;
 	condition = showBanner;
+}
+
+BelowPropertyKeysRepetition: WORepetition {
+	item = d2wContext.propertyKey;
+	list = d2wContext.belowDisplayPropertyKeys;
 }
 
 CancelButton: WOImage {
@@ -129,6 +139,14 @@ FontContainer: WOGenericContainer {
 	elementName = "font";
 }
 
+HasAbovePropertyKeysConditional: ERXNonZeroConditional {
+	condition = d2wContext.aboveDisplayPropertyKeys;
+}
+
+HasBelowPropertyKeysConditional: ERXNonZeroConditional {
+	condition = d2wContext.belowDisplayPropertyKeys;
+}
+
 Help: ERDDebuggingHelp {
 	d2wContext = d2wContext;
 }
@@ -216,6 +234,11 @@ PageWrapper: WOSwitchComponent {
 ProprtyKeyComponentGenericContainer: WOGenericContainer {
 	elementName = "td";
 	otherTagString = otherTagStringsForPropertyKeyComponentCell;
+}
+
+PropertyKeySwitchComponent: WOSwitchComponent {
+	WOComponentName = d2wContext.componentName;
+	localContext = d2wContext;
 }
 
 QueryRow: WOGenericContainer {

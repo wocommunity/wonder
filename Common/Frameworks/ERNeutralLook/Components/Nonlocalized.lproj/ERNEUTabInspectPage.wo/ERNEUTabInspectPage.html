@@ -1,4 +1,17 @@
-<WEBOBJECT NAME=PageWrapper><WEBOBJECT NAME=Help></WEBOBJECT><WEBOBJECT NAME=Errors></WEBOBJECT><WEBOBJECT NAME=EditForm><WEBOBJECT NAME=SubmitChanges2></WEBOBJECT><WEBOBJECT NAME=SwitchComponent3><WEBOBJECT NAME=Border>
+<WEBOBJECT NAME=PageWrapper>
+    <WEBOBJECT NAME=Help></WEBOBJECT>
+    <WEBOBJECT NAME=Errors></WEBOBJECT>
+    <WEBOBJECT NAME=EditForm>
+        <WEBOBJECT NAME=SubmitChanges2></WEBOBJECT>
+        
+        <webobject name="HasAbovePropertyKeysConditional">
+        <webobject name="AbovePropertyKeysRepetition">
+            <webobject name="PropertyKeySwitchComponent"></webobject>
+        </webobject>
+        </webobject>
+        
+        <WEBOBJECT NAME=SwitchComponent3>
+            <WEBOBJECT NAME=Border>
 					<TABLE CELLSPACING=0 CELLPADDING=0 BORDER=0 BGCOLOR=#ebebeb>
 						<WEBOBJECT NAME=BorderWasRendered>
 							<TR BGCOLOR=#CCCCCC>
@@ -23,7 +36,7 @@
 													</WEBOBJECT><WEBOBJECT NAME=DoNotFlush>
 														<TD>&nbsp;</TD>
 													</WEBOBJECT>
-													<webobject name="ProprtyKeyComponentGenericContainer"><WEBOBJECT NAME=AttributeValue2></WEBOBJECT></webobject>
+													<webobject name="PropertyKeyComponentGenericContainer"><WEBOBJECT NAME=AttributeValue2></WEBOBJECT></webobject>
 												</TR>
 											</WEBOBJECT>
 										</TABLE>
@@ -32,7 +45,7 @@
 												<TR>
 													<TD ALIGN=LEFT WIDTH=120 VALIGN=TOP><WEBOBJECT NAME=SwitchComponent2></WEBOBJECT></TD>
 													<TD WIDTH=10>&nbsp;</TD>
-													<webobject name="ProprtyKeyComponentGenericContainer2"><WEBOBJECT NAME=AttributeValue1></WEBOBJECT></webobject>
+													<webobject name="PropertyKeyComponentGenericContainer2"><WEBOBJECT NAME=AttributeValue1></WEBOBJECT></webobject>
 												</TR>
 											</TABLE>
 										</WEBOBJECT></WEBOBJECT></TD>
@@ -67,5 +80,17 @@
 							</TD>
 						</TR>
 					</TABLE>
-				</WEBOBJECT></WEBOBJECT></WEBOBJECT><WEBOBJECT NAME=Conditional5><WEBOBJECT NAME=IsEditing><WEBOBJECT NAME=Script></WEBOBJECT></WEBOBJECT></WEBOBJECT>
-	</WEBOBJECT>
+				</WEBOBJECT>
+			</WEBOBJECT>
+			
+			<webobject name="HasBelowPropertyKeysConditional">
+			<webobject name="BelowPropertyKeysRepetition">
+                <webobject name="PropertyKeySwitchComponent"></webobject>
+            </webobject>
+            </webobject>
+			
+		</WEBOBJECT>
+		<WEBOBJECT NAME=Conditional5>
+		    <WEBOBJECT NAME=IsEditing><WEBOBJECT NAME=Script></WEBOBJECT></WEBOBJECT>
+		</WEBOBJECT>
+</WEBOBJECT>

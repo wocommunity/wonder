@@ -1,5 +1,14 @@
 <WEBOBJECT NAME=PageWrapper>
-	<WEBOBJECT NAME=Help></WEBOBJECT><WEBOBJECT NAME=BannerConditional><WEBOBJECT NAME=Banner></WEBOBJECT></WEBOBJECT><WEBOBJECT NAME=ListNotEmpty>
+	<WEBOBJECT NAME=Help></WEBOBJECT>
+	<WEBOBJECT NAME=BannerConditional><WEBOBJECT NAME=Banner></WEBOBJECT></WEBOBJECT>
+	
+	<webobject name="HasAbovePropertyKeysConditional">
+	<webobject name="AbovePropertyKeysRepetition">
+        <webobject name="PropertyKeySwitchComponent"></webobject>
+    </webobject>
+    </webobject>
+	
+	<WEBOBJECT NAME=ListNotEmpty>
 		<TABLE>
 			<TR>
 				<TD>
@@ -86,7 +95,8 @@
             <WEBOBJECT NAME=ShowCancel><WEBOBJECT NAME=BackLink><WEBOBJECT NAME=ReturnButton></WEBOBJECT></WEBOBJECT></WEBOBJECT>
          
       </CENTER>
-   </WEBOBJECT><WEBOBJECT NAME=ListEmpty>
+   </WEBOBJECT>
+   <WEBOBJECT NAME=ListEmpty>
       <BR>
       <TABLE>
          <TR>
@@ -96,16 +106,20 @@
             <TD><WEBOBJECT NAME=ExclamationImage></WEBOBJECT></TD>
             <TD>
                <CENTER>
-                  <WEBOBJECT NAME=FontContainer><B>No matching
-                     <WEBOBJECT NAME=EntityName></WEBOBJECT>
-                     records found.</B></WEBOBJECT>
+                  <WEBOBJECT NAME=FontContainer><B>No matching <WEBOBJECT NAME=EntityName></WEBOBJECT> records found.</B></WEBOBJECT>
                </CENTER>
             </TD>
          </TR>
       </TABLE>
       <BR>
       <BR>
-      
          <WEBOBJECT NAME=ShowCancel2><WEBOBJECT NAME=BackLink2><WEBOBJECT NAME=ReturnButton2></WEBOBJECT></WEBOBJECT></WEBOBJECT>
       </WEBOBJECT>
+      
+      <webobject name="HasBelowPropertyKeysConditional">
+      <webobject name="BelowPropertyKeysRepetition">
+          <webobject name="PropertyKeySwitchComponent"></webobject>
+      </webobject>
+      </webobject>
+      
 </WEBOBJECT>

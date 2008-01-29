@@ -1,3 +1,8 @@
+AbovePropertyKeysRepetition: WORepetition {
+	item = d2wContext.propertyKey;
+	list = d2wContext.aboveDisplayPropertyKeys;
+}
+
 Banner: WOImage {
 	alt = "Find";
 	border = "0";
@@ -11,6 +16,11 @@ Banner: WOImage {
 BannerConditional: WOConditional {
 	_unroll = true;
 	condition = showBanner;
+}
+
+BelowPropertyKeysRepetition: WORepetition {
+	item = d2wContext.propertyKey;
+	list = d2wContext.belowDisplayPropertyKeys;
 }
 
 EntitiesRepetition: WORepetition {
@@ -27,6 +37,14 @@ EntityName: WOString {
 FontContainer: WOGenericContainer {
 	color = d2wContext.textColor;
 	elementName = "font";
+}
+
+HasAbovePropertyKeysConditional: ERXNonZeroConditional {
+	condition = d2wContext.aboveDisplayPropertyKeys;
+}
+
+HasBelowPropertyKeysConditional: ERXNonZeroConditional {
+	condition = d2wContext.belowDisplayPropertyKeys;
 }
 
 KeyName: WOString {
@@ -55,6 +73,11 @@ PageWrapper: WOSwitchComponent {
 	WOComponentName = pageWrapperName;
 	_componentUnroll = true;
 	_unroll = true;
+}
+
+PropertyKeySwitchComponent: WOSwitchComponent {
+	WOComponentName = d2wContext.componentName;
+	localContext = d2wContext;
 }
 
 QueryAnyField: D2WQueryAnyField {

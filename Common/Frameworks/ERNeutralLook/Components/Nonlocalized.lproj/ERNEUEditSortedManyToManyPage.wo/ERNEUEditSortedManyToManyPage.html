@@ -105,7 +105,16 @@ function updateHidden(){
 
 </SCRIPT>
 
-<WEBOBJECT NAME=PageWrapper><WEBOBJECT NAME=Help></WEBOBJECT><WEBOBJECT NAME=InspectTable><TR><TD><WEBOBJECT NAME=Banner></WEBOBJECT></TD></TR><WEBOBJECT NAME=HeaderRow><TD ALIGN=left COLSPAN=3><FONT COLOR="#ffffff"><B><WEBOBJECT NAME=AttributeName></WEBOBJECT>(s)</B></FONT></TD><TD HEIGHT=10></TD></WEBOBJECT><TR><TD ALIGN=center>
+<WEBOBJECT NAME=PageWrapper>
+    <WEBOBJECT NAME=Help></WEBOBJECT>
+    
+    <webobject name="HasAbovePropertyKeysConditional">
+    <webobject name="AbovePropertyKeysRepetition">
+        <webobject name="PropertyKeySwitchComponent"></webobject>
+    </webobject>
+    </webobject>
+    
+    <WEBOBJECT NAME=InspectTable><TR><TD><WEBOBJECT NAME=Banner></WEBOBJECT></TD></TR><WEBOBJECT NAME=HeaderRow><TD ALIGN=left COLSPAN=3><FONT COLOR="#ffffff"><B><WEBOBJECT NAME=AttributeName></WEBOBJECT>(s)</B></FONT></TD><TD HEIGHT=10></TD></WEBOBJECT><TR><TD ALIGN=center>
 
 <WEBOBJECT NAME=ToManyForm><TABLE><TR><TD VALIGN=middle><FONT SIZE=-1><STRONG><WEBOBJECT NAME=NumberOfEntities></WEBOBJECT> <WEBOBJECT NAME=EntityName></WEBOBJECT>(s)</STRONG></FONT></TD><TD><WEBOBJECT NAME=AttributeValue></WEBOBJECT></TD><WEBOBJECT NAME=DisplayArrows><WEBOBJECT NAME=Conditional3><TD ALIGN=CENTER><WEBOBJECT NAME=SubmitButton1></WEBOBJECT><P ALIGN=CENTER><WEBOBJECT NAME=SubmitButton2></WEBOBJECT></P></TD>
 </WEBOBJECT>
@@ -124,5 +133,13 @@ function updateHidden(){
 </TD><TD></TD><TD></TD></TR><TR><TD>&nbsp;</TD></TR>
 <WEBOBJECT NAME=Conditional2><TR><TD ALIGN=center COLSPAN=3><WEBOBJECT NAME=ReturnLink><WEBOBJECT NAME=ReturnButton></WEBOBJECT></WEBOBJECT> <WEBOBJECT NAME=QueryLink><WEBOBJECT NAME=QueryButton></WEBOBJECT></WEBOBJECT><WEBOBJECT NAME=IsEntityWritable><WEBOBJECT NAME=NewLink><WEBOBJECT NAME=NewButton></WEBOBJECT></WEBOBJECT></WEBOBJECT></TD>
 	<TD></TD></TR>
-</WEBOBJECT></WEBOBJECT><WEBOBJECT NAME=DisplayQuery> <WEBOBJECT NAME=QueryComponent></WEBOBJECT> </WEBOBJECT><WEBOBJECT NAME=DisplayList> <WEBOBJECT NAME=ListComponent></WEBOBJECT> </WEBOBJECT><WEBOBJECT NAME=DisplayNew> <WEBOBJECT NAME=InspectComponent></WEBOBJECT> </WEBOBJECT></WEBOBJECT>
+</WEBOBJECT></WEBOBJECT><WEBOBJECT NAME=DisplayQuery> <WEBOBJECT NAME=QueryComponent></WEBOBJECT> </WEBOBJECT><WEBOBJECT NAME=DisplayList> <WEBOBJECT NAME=ListComponent></WEBOBJECT> </WEBOBJECT><WEBOBJECT NAME=DisplayNew> <WEBOBJECT NAME=InspectComponent></WEBOBJECT> </WEBOBJECT>
+
+    <webobject name="HasBelowPropertyKeysConditional">
+    <webobject name="BelowPropertyKeysRepetition">
+        <webobject name="PropertyKeySwitchComponent"></webobject>
+    </webobject>
+    </webobject>
+
+</WEBOBJECT>
 

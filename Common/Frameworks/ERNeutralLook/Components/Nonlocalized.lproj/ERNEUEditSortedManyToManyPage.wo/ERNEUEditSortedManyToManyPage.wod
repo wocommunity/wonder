@@ -1,3 +1,8 @@
+AbovePropertyKeysRepetition: WORepetition {
+	item = d2wContext.propertyKey;
+	list = d2wContext.aboveDisplayPropertyKeys;
+}
+
 Image2: WOImage {
 	filename = "down.gif";
 	border = 0;
@@ -43,6 +48,11 @@ Banner: WOImage {
 	width = "550";
 }
 
+BelowPropertyKeysRepetition: WORepetition {
+	item = d2wContext.propertyKey;
+	list = d2wContext.belowDisplayPropertyKeys;
+}
+
 Conditional1: WOConditional {
 	condition = session.javaScriptEnabled;
 }
@@ -81,6 +91,14 @@ DisplayQuery: WOConditional {
 EntityName: WOString {
 	_unroll = true;
 	value = destinationEntity.name;
+}
+
+HasAbovePropertyKeysConditional: ERXNonZeroConditional {
+	condition = d2wContext.aboveDisplayPropertyKeys;
+}
+
+HasBelowPropertyKeysConditional: ERXNonZeroConditional {
+	condition = d2wContext.belowDisplayPropertyKeys;
 }
 
 HeaderRow: WOGenericContainer {

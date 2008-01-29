@@ -1,6 +1,17 @@
-<WEBOBJECT NAME=PageWrapper><WEBOBJECT NAME=Help></WEBOBJECT>
+<WEBOBJECT NAME=PageWrapper>
+    <WEBOBJECT NAME=Help></WEBOBJECT>
    <WEBOBJECT NAME=QueryForm>
-<webobject name="QuerySubmitButton2"></webobject>      <WEBOBJECT NAME=MainTable>
+       <webobject name="QuerySubmitButton2"></webobject>
+<WEBOBJECT NAME=MainTable>
+    <webobject name="HasAbovePropertyKeysConditional">
+    <tr>
+        <td>
+            <webobject name="AbovePropertyKeysRepetition">
+                <webobject name="PropertyKeySwitchComponent"></webobject>
+             </webobject>
+        </td>
+    </tr>
+    </webobject>
          <TR VALIGN=top>
             <TD VALIGN=top ALIGN=right><WEBOBJECT NAME=QueryTable><WEBOBJECT NAME=BannerConditional>
                      <TR>
@@ -42,6 +53,15 @@
             <TD ALIGN=center>
                <WEBOBJECT NAME=ShowCancel><WEBOBJECT NAME=BackLink><WEBOBJECT NAME=ReturnButton></WEBOBJECT></WEBOBJECT></WEBOBJECT><WEBOBJECT NAME=QuerySubmitButton></WEBOBJECT>&nbsp; </TD>
          </TR>
+         <webobject name="HasBelowPropertyKeysConditional">
+         <tr>
+             <td>
+                 <webobject name="BelowPropertyKeysRepetition">
+                      <webobject name="PropertyKeySwitchComponent"></webobject>
+                  </webobject>
+             </td>
+         </tr>
+         </webobject>
       </WEBOBJECT>
    </WEBOBJECT>
 <WEBOBJECT NAME=Conditional1><WEBOBJECT NAME=Conditional2><WEBOBJECT NAME=ListPage></WEBOBJECT></WEBOBJECT></WEBOBJECT></WEBOBJECT>

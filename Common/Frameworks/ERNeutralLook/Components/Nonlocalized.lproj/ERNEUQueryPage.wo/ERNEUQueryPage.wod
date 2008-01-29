@@ -1,3 +1,8 @@
+AbovePropertyKeysRepetition: WORepetition {
+	item = d2wContext.propertyKey;
+	list = d2wContext.aboveDisplayPropertyKeys;
+}
+
 BackLink: WOHyperlink {
 	action = returnAction;
 }
@@ -15,6 +20,11 @@ Banner: WOImage {
 BannerConditional: WOConditional {
 	_unroll = true;
 	condition = showBanner;
+}
+
+BelowPropertyKeysRepetition: WORepetition {
+	item = d2wContext.propertyKey;
+	list = d2wContext.belowDisplayPropertyKeys;
 }
 
 Conditional1: WOConditional {
@@ -45,6 +55,14 @@ FontContainer: WOGenericContainer {
 	elementName = "font";
 }
 
+HasAbovePropertyKeysConditional: ERXNonZeroConditional {
+	condition = d2wContext.aboveDisplayPropertyKeys;
+}
+
+HasBelowPropertyKeysConditional: ERXNonZeroConditional {
+	condition = d2wContext.belowDisplayPropertyKeys;
+}
+
 Help: ERDDebuggingHelp {
 	d2wContext = d2wContext;
 }
@@ -68,6 +86,11 @@ PageWrapper: WOSwitchComponent {
 	WOComponentName = pageWrapperName;
 	_componentUnroll = true;
 	_unroll = true;
+}
+
+PropertyKeySwitchComponent: WOSwitchComponent {
+	WOComponentName = d2wContext.componentName;
+	localContext = d2wContext;
 }
 
 QueryForm: WOForm {

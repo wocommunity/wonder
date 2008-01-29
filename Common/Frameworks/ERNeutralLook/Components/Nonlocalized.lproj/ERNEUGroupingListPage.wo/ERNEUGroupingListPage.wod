@@ -1,3 +1,8 @@
+AbovePropertyKeysRepetition: WORepetition {
+	item = d2wContext.propertyKey;
+	list = d2wContext.aboveDisplayPropertyKeys;
+}
+
 AttributeCell: WOGenericContainer {
 	_unroll = "YES";
 	align = d2wContext.justification;
@@ -24,6 +29,11 @@ AttributeSorter: ERXSortOrder {
 	displayGroup = displayGroup;
 	displayKey = d2wContext.displayNameForProperty;
 	key = d2wContext.sortKeyForList;
+}
+
+BelowPropertyKeysRepetition: WORepetition {
+	item = d2wContext.propertyKey;
+	list = d2wContext.belowDisplayPropertyKeys;
 }
 
 ColumnLabelRepetition: WORepetition {
@@ -101,6 +111,14 @@ GenericContainer3: WOGenericContainer {
 	colspan = colspanForNavBar;
 	elementName = "TD";
 	height = 1;
+}
+
+HasAbovePropertyKeysConditional: ERXNonZeroConditional {
+	condition = d2wContext.aboveDisplayPropertyKeys;
+}
+
+HasBelowPropertyKeysConditional: ERXNonZeroConditional {
+	condition = d2wContext.belowDisplayPropertyKeys;
 }
 
 HasPrinterFriendlyVersionConditional2: WOConditional {
@@ -227,14 +245,15 @@ NavBar2: WOSwitchComponent {
 	WOComponentName = d2wContext.batchNavigationBarComponentName;
 }
 
-NonNullConditional1: ERXNonNullConditional {
-	condition = d2wContext.headComponentName;
-}
-
 PageWrapper: WOSwitchComponent {
 	WOComponentName = d2wContext.pageWrapperName;
 	_componentUnroll = true;
 	_unroll = true;
+}
+
+PropertyKeySwitchComponent: WOSwitchComponent {
+	WOComponentName = d2wContext.componentName;
+	localContext = d2wContext;
 }
 
 PropertyName: WOString {
@@ -269,11 +288,6 @@ ShowCancel: WOConditional {
 
 ShowCancel2: WOConditional {
 	condition = showCancel;
-}
-
-SwitchComponent1: WOSwitchComponent {
-	WOComponentName = d2wContext.headComponentName;
-	d2wContext = d2wContext;
 }
 
 TableCellForBottomBatchNaviationGenericContainer: WOGenericContainer {

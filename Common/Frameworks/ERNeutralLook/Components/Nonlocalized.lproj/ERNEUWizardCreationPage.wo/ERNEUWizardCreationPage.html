@@ -1,4 +1,14 @@
-<WEBOBJECT NAME=PageWrapper><WEBOBJECT NAME=Help></WEBOBJECT><WEBOBJECT NAME=EditForm><WEBOBJECT NAME=Conditional1>
+<WEBOBJECT NAME=PageWrapper>
+    <WEBOBJECT NAME=Help></WEBOBJECT>
+    <WEBOBJECT NAME=EditForm>
+        
+        <webobject name="HasAbovePropertyKeysConditional">
+        <webobject name="AbovePropertyKeysRepetition">
+            <webobject name="PropertyKeySwitchComponent"></webobject>
+        </webobject>
+        </webobject>
+        
+        <WEBOBJECT NAME=Conditional1>
 			<TABLE CELLSPACING=0 BORDER=0 CELLPADDING=3>
 				<WEBOBJECT NAME=InspectTableHeaderRow>
 					<TD ALIGN=LEFT CLASS=BannerText VALIGN=middle><WEBOBJECT NAME=StepName></WEBOBJECT></TD>
@@ -59,4 +69,20 @@
 						</TABLE>
 					</TD>
 				</TR>
-			</WEBOBJECT></WEBOBJECT><WEBOBJECT NAME=Conditional5><WEBOBJECT NAME=IsEditing><WEBOBJECT NAME=Script></WEBOBJECT></WEBOBJECT></WEBOBJECT></WEBOBJECT></WEBOBJECT>
+			</WEBOBJECT>
+			
+			<webobject name="HasBelowPropertyKeysConditional">
+		    <webobject name="BelowPropertyKeysRepetition">
+                <webobject name="PropertyKeySwitchComponent"></webobject>
+            </webobject>
+            </webobject>
+            
+	    </WEBOBJECT>
+	    
+	    <WEBOBJECT NAME=Conditional5>
+	        <WEBOBJECT NAME=IsEditing><WEBOBJECT NAME=Script></WEBOBJECT></WEBOBJECT>
+	    </WEBOBJECT>
+	
+	</WEBOBJECT>
+
+</WEBOBJECT>
