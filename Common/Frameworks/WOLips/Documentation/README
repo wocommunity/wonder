@@ -11,21 +11,19 @@ in your Properties file.
 If you do not use ERXComponent and instead have a custom component base class, you must add 
 clickToOpen support to your components on your own. You should ONLY have clickToOpen execute in your 
 component if you are in development mode.  To include it into your component base class, you can use 
-the sampe implementation in ERXComponent:
+the sample implementation from ERXComponent:
 
 	@Override
 	public void appendToResponse(WOResponse response, WOContext context) {
 		...
-		if (clickToOpenIsEnabledInYourApp) {
-			super.appendToResponse(response, context);
-		}
-		else {
-			int previousContentLength = ERXComponent._preProcessClickToOpen(response, context);
-			super.appendToResponse(response, context);
-			ERXComponent._postProcessClickToOpen(previousContentLength, getClass().getName(), response, context);
-		}
+		boolean clickToOpenEnabled = ...; 
+		int previousContentLength = ERXClickToOpenSupport.preProcessResponse(response, context, clickToOpenEnabled);
+		super.appendToResponse(response, context);
+		ERXClickToOpenSupport.postProcessResponse(previousContentLength, getClass(), response, context, clickToOpenEnabled);
 		...
 	}
+
+Note that when clickToOpenEnabled is false, the ERXClickToOpenSupport methods are no-ops.
 
 2) You must be using a recent version of WOLips that supports the WOLips Server.  In
 your WOLips preferences, you must enable the WOLips Server, set the port number and the communication
