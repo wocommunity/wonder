@@ -8,8 +8,11 @@ var WOLipsClickToOpen = {
 	active : false,
 	ignoreClick : true,
 	
+	oldSelectHandler : null,
 	oldClickHandler : null,
 	oldMoveHandler : null,
+	
+	lastTarget : null,
 	
 	start : function() {
 		if (!WOLipsClickToOpen.active) {
@@ -17,8 +20,10 @@ var WOLipsClickToOpen = {
 			$('clickToOpen').innerHTML = '<span class = "_wolUnimportant">Open</span> <span id = "_componentBreadCrumb" class = "_wolImportant">&nbsp;</span>';
 			WOLipsClickToOpen.oldClickHandler = document.onclick;
 			WOLipsClickToOpen.oldMoveHandler = document.onmousemove;
+			WOLipsClickToOpen.oldSelectHandler = document.onselectstart;
 			document.onmousemove = WOLipsClickToOpen.mouseMoved;
 			document.onclick = WOLipsClickToOpen.mouseClicked;
+			document.onselectstart = WOLips.denyHandler;
 			WOLipsClickToOpen.ignoreClick = true;
 			WOLipsClickToOpen.active = true;
 		}
@@ -31,17 +36,38 @@ var WOLipsClickToOpen = {
 		$('clickToOpen').innerHTML = 'Click to Open';
 		document.onclick = WOLipsClickToOpen.oldClickHandler;
 		document.onmousemove = WOLipsClickToOpen.oldMoveHandler;
+		document.onselectstart = WOLipsClickToOpen.oldSelectHandler;
 		WOLipsClickToOpen.oldClickHandler = null;
 		WOLipsClickToOpen.oldMoveHandler = null;
+		WOLipsClickToOpen.oldSelectHandler = null;
 		WOLipsClickToOpen.active = false;
+		WOLipsClickToOpen.targetChanged(null, false);
+	},
+	
+	targetChanged : function(target, highlight) {
+		if (target != WOLipsClickToOpen.lastTarget) {
+			if (WOLipsClickToOpen.lastTarget != null) {
+				WOLipsClickToOpen.lastTarget.removeClassName('_wolSelected');
+			}
+			if (!highlight) {
+				WOLipsClickToOpen.lastTarget = null;
+			}
+			else {
+				WOLipsClickToOpen.lastTarget = target;
+				if (target != null) {
+					target.addClassName('_wolSelected');
+				}
+			}
+		}
 	},
 	
 	mouseMoved : function(e) {
 		var target = e.target;
-	  var componentNames = WOLipsClickToOpen.componentNamesForElement(target);
-		if (componentNames != null) {
+	  var componentStack = WOLipsClickToOpen.componentStackForElement(target);
+		if (componentStack != null) {
+			WOLipsClickToOpen.targetChanged(componentStack.firstComponent, event.metaKey);
 			var componentBreadCrumb = [];
-			componentNames.each(function(value, index) {
+			componentStack.componentNames.each(function(value, index) {
 				var componentParts = value.split('.');
 				componentBreadCrumb.push(componentParts[componentParts.length - 1]);
 			});
@@ -59,23 +85,23 @@ var WOLipsClickToOpen = {
 		}
 	  var target = e.target;
 	  
-	  var componentNames = WOLipsClickToOpen.componentNamesForElement(target);
-	  if (componentNames == null || componentNames.length == 0) {
+	  var componentStack = WOLipsClickToOpen.componentStackForElement(target);
+	  if (componentStack == null || componentStack.componentNames.length == 0) {
 	  	alert('The component you selected could not be identifed.  Make sure er.component.clickToOpen=true.');
 	  }
 	  else if (WOLipsClickToOpen.url == null) {
 		  alert('You do not have a click-to-open url set.');
 		}
-		else if (componentNames.length == 1) {
-			WOLipsClickToOpen.openComponentNamed(componentNames[0]);
+		else if (componentStack.componentNames.length == 1) {
+			WOLipsClickToOpen.openComponentNamed(componentStack.componentNames[0]);
 		}
 		else {
 			if (e.metaKey) {
 				Position.prepare();
-				WOLipsClickToOpen.showComponentList(componentNames, e.x + Position.deltaX, e.y + Position.deltaY);
+				WOLipsClickToOpen.showComponentList(componentStack.componentNames, e.x + Position.deltaX, e.y + Position.deltaY);
 			}
 			else {
-				WOLipsClickToOpen.openComponentNamed(componentNames[0]);
+				WOLipsClickToOpen.openComponentNamed(componentStack.componentNames[0]);
 			}
 		}
 		Event.stop(e);
@@ -129,7 +155,8 @@ var WOLipsClickToOpen = {
   	document.getElementsByTagName("body").item(0).appendChild(componentNamesContainer);
 	},
 	
-	componentNamesForElement : function(target) {
+	componentStackForElement : function(target) {
+		var firstComponentElement = null;
 		var componentNamesStr = null;
 	  while (target != null) {
 	  	if (target.getAttribute) {
@@ -140,6 +167,9 @@ var WOLipsClickToOpen = {
 		    	}
 		    	else {
 		    		componentNamesStr += "," + componentName; 
+		    	}
+		    	if (firstComponentElement == null) {
+		    		firstComponentElement = target;
 		    	}
 		    }
 	    	target = target.up();
@@ -152,7 +182,7 @@ var WOLipsClickToOpen = {
 		if (componentNamesStr == null) {
 			componentNames = null;
 		} else {
-			componentNames = componentNamesStr.split(',');
+			componentNames = { firstComponent: firstComponentElement, componentNames: componentNamesStr.split(',') };
 		}
 		return componentNames;
 	}
@@ -160,7 +190,7 @@ var WOLipsClickToOpen = {
 
 var WOLipsToolBar = {
 	initialize : function(e) {
-		$('_wolToolBarContainer').onselectstart = function() { return false };
+		$('_wolToolBarContainer').onselectstart = WOLips.denyHandler;
 		WOLipsToolBar.update();
 	},
 	
@@ -199,6 +229,10 @@ var WOLipsToolBar = {
 var WOLips = {
 	controlFrame : null,
 
+	denyHandler : function() {
+		return false;
+	},
+	
 	perform : function(url) {
 		if (WOLips.controlFrame == null) {
 	  	WOLips.controlFrame = document.createElement("iframe");
