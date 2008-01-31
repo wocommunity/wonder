@@ -1,0 +1,13 @@
+ClickToOpenURL : WOString {
+	value = clickToOpenUrl;
+	escapeHTML = false;
+}
+
+CanClickToOpen : WOConditional {
+	condition = canClickToOpen;
+}
+
+NoClickToOpen : WOConditional {
+	condition = canClickToOpen;
+	negate = true;
+}

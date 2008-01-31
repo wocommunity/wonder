@@ -1,0 +1,49 @@
+To fully utilize WOLips.framework, you must add support for click-to-open and you must provide 
+a prototype.js implementation.  Note that click-to-open support is expensive, because it has to dig around
+your component HTML quite a bit, so you will take a performance hit in development to have it enabled.
+
+1) If your components extends ERXComponent, all you need to do is set:
+
+	er.component.clickToOpen=true
+
+in your Properties file.
+
+If you do not use ERXComponent and instead have a custom component base class, you must add 
+clickToOpen support to your components on your own. You should ONLY have clickToOpen execute in your 
+component if you are in development mode.  To include it into your component base class, you can use 
+the sampe implementation in ERXComponent:
+
+	@Override
+	public void appendToResponse(WOResponse response, WOContext context) {
+		...
+		if (clickToOpenIsEnabledInYourApp) {
+			super.appendToResponse(response, context);
+		}
+		else {
+			int previousContentLength = ERXComponent._preProcessClickToOpen(response, context);
+			super.appendToResponse(response, context);
+			ERXComponent._postProcessClickToOpen(previousContentLength, getClass().getName(), response, context);
+		}
+		...
+	}
+
+2) You must be using a recent version of WOLips that supports the WOLips Server.  In
+your WOLips preferences, you must enable the WOLips Server, set the port number and the communication
+password.  Turning on the WOLips Server requires a restart of WOLips.
+
+In your application preferences, you can then set:
+
+	wolips.host=localhost
+	wolips.port=9485
+	wolips.password=yourpassword
+	
+Only 'wolips.password' is strictly required as long as you use the default port of 9485.
+
+3) WOLips.framework needs a prototype.js.  If you are using Ajax framework, you don't need to do
+anything, because it will default to use Ajax.framework's prototype.js.  However, if you are not,
+you must set (as an example):
+
+	wolips.prototype.framework=app
+	wolips.prototype.fileName=prototype.js
+
+4) In your page wrapper, add a <wo:WOLToolbar/> component, and you're good to go. 
