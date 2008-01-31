@@ -1,5 +1,8 @@
 package er.extensions;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
@@ -15,6 +18,16 @@ import com.webobjects.foundation.NSArray;
  */
 public abstract class ERXComponent extends WOComponent {
 	/**
+	 * Boolean that controls whether or not click-to-open support is enabled.
+	 */
+	private static Boolean _clickToOpenEnabled;
+	
+	/**
+	 * Shared pattern for the click-to-open parser. 
+	 */
+	private static Pattern _clickToOpenTagPattern = Pattern.compile("<[a-zA-Z]+\\s*", Pattern.CASE_INSENSITIVE | Pattern.MULTILINE);
+	
+	/**
 	 * Constructs a new ERXComponent.
 	 * 
 	 * @param context
@@ -22,6 +35,16 @@ public abstract class ERXComponent extends WOComponent {
 	 */
 	public ERXComponent(WOContext context) {
 		super(context);
+		
+		// Just load click-to-open support one time ...
+		if (_clickToOpenEnabled == null) {
+			if (!ERXApplication.isDevelopmentModeSafe()) {
+				_clickToOpenEnabled = Boolean.FALSE;
+			}
+			else {
+				_clickToOpenEnabled = Boolean.valueOf(ERXProperties.booleanForKeyWithDefault("er.component.clickToOpen", false));
+			}
+		}
 	}
 
 	/**
@@ -83,12 +106,64 @@ public abstract class ERXComponent extends WOComponent {
 	public void appendToResponse(WOResponse response, WOContext context) {
 		_checkAccess();
 		preAppendToResponse(response, context);
-		super.appendToResponse(response, context);
+		
+		if (!ERXComponent._clickToOpenEnabled.booleanValue()) {
+			super.appendToResponse(response, context);
+		}
+		else {
+			int previousContentLength = ERXComponent._preProcessClickToOpen(response, context);
+			super.appendToResponse(response, context);
+			ERXComponent._postProcessClickToOpen(previousContentLength, getClass().getName(), response, context);
+		}
+		
 		postAppendToResponse(response, context);
 
 		if (!ERXAjaxApplication.isAjaxRequest(context.request())) {
 			_includeCSSResources(response, context);
 			_includeJavascriptResources(response, context);
+		}
+	}
+	
+	/**
+	 * Called before super.appendToResponse for click-to-open support.
+	 * 
+	 * @param response the response
+	 * @param context the context
+	 * @return the "previousContentLength" (to pass to _postProcessClickToOpen)
+	 */
+	public static int _preProcessClickToOpen(WOResponse response, WOContext context) {
+		String contentStr = response.contentString();
+		int previousContentLength = contentStr == null ? 0 : contentStr.length();
+		return previousContentLength;
+	}
+	
+	/**
+	 * Called after super.appendToResponse for click-to-open support.
+	 * 
+	 * @param previousContentLength the previousContentLength from _preProcessClickToOpen
+	 * @param componentName the name of the component being processed
+	 * @param response the response
+	 * @param context the context
+	 */
+	public static void _postProcessClickToOpen(int previousContentLength, String componentName, WOResponse response, WOContext context) {
+		String contentStr = response.contentString();
+		if (contentStr != null) {
+			Matcher tagMatcher = ERXComponent._clickToOpenTagPattern.matcher(contentStr.substring(previousContentLength));
+			if (tagMatcher.find()) {
+				int attributeOffset = previousContentLength + tagMatcher.end();
+
+				StringBuffer contentStringBuffer = new StringBuffer(contentStr);
+				String componentNameTag = "_componentName";
+				if (contentStr.substring(attributeOffset).startsWith(componentNameTag)) {
+					int openQuoteIndex = contentStr.indexOf("\"", attributeOffset);
+					contentStringBuffer.insert(openQuoteIndex + 1, componentName + ",");
+				}
+				else {
+					contentStringBuffer.insert(attributeOffset, " " + componentNameTag + " = \"" + componentName + "\" ");
+				}
+				
+				response.setContent(contentStringBuffer.toString());
+			}
 		}
 	}
 
