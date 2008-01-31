@@ -1,6 +1,5 @@
 package er.wolips.components;
 
-import com.webobjects.appserver.WOApplication;
 import com.webobjects.appserver.WOAssociation;
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
@@ -42,7 +41,7 @@ public class WOLComponentLink extends WODynamicGroup {
       app = (String) _app.valueInComponent(component);
     }
     else {
-        app = NSBundle.mainBundle().name();
+      app = NSBundle.mainBundle().name();
     }
     NSMutableDictionary params = new NSMutableDictionary();
     params.setObjectForKey(app, "app");

@@ -1,6 +1,5 @@
 package er.wolips.components;
 
-import com.webobjects.appserver.WOApplication;
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WOResponse;
@@ -35,7 +34,7 @@ public class WOLClickToOpen extends WOComponent {
   public String clickToOpenUrl() {
     String app = (String) valueForBinding("app");
     if (app == null) {
-        app = NSBundle.mainBundle().name();
+      app = NSBundle.mainBundle().name();
     }
     NSMutableDictionary params = new NSMutableDictionary();
     params.setObjectForKey(app, "app");
