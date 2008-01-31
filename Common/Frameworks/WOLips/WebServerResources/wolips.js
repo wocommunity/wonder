@@ -67,7 +67,7 @@ var WOLipsClickToOpen = {
 		}
 		else {
 			if (e.isMiddleClick()) {
-				WOLipsClickToOpen.showComponentList(componentNames, e.x, e.y);
+				WOLipsClickToOpen.showComponentList(componentNames, e.x + document.viewport.getScrollOffsets().left, e.y + document.viewport.getScrollOffsets().top);
 			}
 			else {
 				WOLipsClickToOpen.openComponentNamed(componentNames[0]);
