@@ -1,12 +1,13 @@
 <webobject name = "IsApplicationDevelopmentMode">
-	<span style = "position:fixed; bottom: 0px; left: 0px; padding: 5px 5px; -webkit-border-top-right-radius: 5px; background-color: rgba(240, 240, 255, 0.8); font-size: 8pt; border: 1px solid rgb(200, 200, 215); border-bottom: none; border-left: none;">
-		<a id = "_wolHandle" href = "javascript:void(0)" onclick = "WOLips.toggleToolBar()" style = "font-weight: bold; text-decoration: none">&gt;</a>
-		<span id = "_wolToolBar" style = "display: none">
+	<span id = "_wolToolBarContainer" style = "position:fixed; bottom: 0px; left: 0px; padding: 5px 5px; -webkit-border-top-right-radius: 5px; background-color: rgba(240, 240, 255, 0.8); font-size: 8pt; border: 1px solid rgb(200, 200, 215); border-bottom: none; border-left: none;">
+		<span id = "_wolHandle" href = "javascript:void(0)" onclick = "WOLips.toggleToolBar()" style = "font-weight: bold; text-decoration: none; cursor: pointer;">-</span>
+		<webobject name = "ToolBar">
 			&nbsp;&nbsp;&nbsp;
 			<span style = "font-weight: bold"><webobject name = "WOLComponentLink"><wo:str value = "$context.page.class.simpleName"/></webobject></span>
 			&nbsp;|&nbsp;
 			<webobject name = "WOLClickToOpen"/>
 			<webobject name = "ComponentContent"/>
-		</span>
+		</webobject>
 	</span>
+	<script>WOLips.updateToolBar()</script>
 </webobject>
