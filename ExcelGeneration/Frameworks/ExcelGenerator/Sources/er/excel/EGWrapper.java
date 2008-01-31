@@ -2,7 +2,7 @@ package er.excel;
 
 import java.io.*;
 
-import org.apache.log4j.Logger;
+import org.apache.log4j.*;
 
 import com.webobjects.appserver.*;
 import com.webobjects.foundation.*;
@@ -35,7 +35,7 @@ public class EGWrapper extends ERXNonSynchronizingComponent {
     }
     
     public boolean isEnabled() {
-    	return ERXValueUtilities.booleanValueForBindingOnComponentWithDefault("enabled", this, false);
+    	return ERXComponentUtilities.booleanValueForBinding(this, "enabled",false);
     }
     
     public String fileName() {

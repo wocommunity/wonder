@@ -175,49 +175,7 @@ public class ERXUtilities {
     public static EOArrayDataSource dataSourceForArray(NSArray array) {
         return ERXEOControlUtilities.dataSourceForArray(array);
     }
-
-    /**
-     * @deprecated see {@link ERXEOControlUtilities.arrayFromDataSource(EODataSource)}
-     */
-    public static NSArray arrayFromDataSource(EODataSource dataSource) {
-        return ERXEOControlUtilities.arrayFromDataSource(dataSource);
-    }
-    
-    /**
-     * @deprecated use ERXArrayUtilities.sortArrayWithKey(NSMutableArray,String) instead
-     */
-    public static void sortEOsUsingSingleKey(NSMutableArray eos, String key) {
-        ERXArrayUtilities.sortArrayWithKey(eos, key, EOSortOrdering.CompareCaseInsensitiveAscending);
-    }
-
-    /**
-     * @deprecated use ERXArrayUtilities.sortArrayWithKey(NSMutableArray,String,NSSelector) instead
-     */
-    public static void sortEOsUsingSingleKey(NSMutableArray eos, String key, NSSelector selector) {
-        ERXArrayUtilities.sortArrayWithKey(eos, key, selector);
-    }
-
-    /**
-     * @deprecated use ERXValueUtilities.booleanValueForBindingOnComponentWithDefault(String,WOComponent,boolean) instead
-     */
-    public static boolean booleanValueForBindingOnComponentWithDefault(String binding, WOComponent component, boolean def) {
-        return ERXValueUtilities.booleanValueForBindingOnComponentWithDefault(binding,component,def);
-    }
-    
-    /**
-     * @deprecated use ERXValueUtilities.booleanValue(Object)
-     */
-    public static boolean booleanValue(Object obj) {
-        return ERXValueUtilities.booleanValue(obj);
-    }
-
-    /**
-     * @deprecated use ERXValueUtilities.booleanValueWithDefault(Object,boolean)
-     */
-    public static boolean booleanValueWithDefault(Object obj, boolean def) {
-        return ERXValueUtilities.booleanValueWithDefault(obj,def);
-    }
-    
+ 
     /**
      * Traverses a key path to return the last {@link EORelationship}
      * object.<br/>
