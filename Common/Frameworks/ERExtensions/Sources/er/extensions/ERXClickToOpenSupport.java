@@ -23,8 +23,13 @@ public class ERXClickToOpenSupport {
 	/**
 	 * Shared pattern for the click-to-open parser.
 	 */
-	private static Pattern _tagPattern = Pattern.compile("<[a-zA-Z]+\\s*", Pattern.CASE_INSENSITIVE | Pattern.MULTILINE);
+	private static Pattern _tagPattern = Pattern.compile("<[a-zA-Z]+[a-zA-Z0-9]+\\s*", Pattern.CASE_INSENSITIVE | Pattern.MULTILINE);
 
+	/**
+	 * The marker string that is temporarily written into the buffer for click-to-open support.
+	 */
+	private static final String _marker = "<<CLICK_TO_OPEN_MARKER>>";
+	
 	/**
 	 * Returns whether or not click-to-open support is enabled.
 	 * 
@@ -50,30 +55,21 @@ public class ERXClickToOpenSupport {
 	 *            the response
 	 * @param context
 	 *            the context
-	 * @return the "previousContentLength" (to pass to postProcessResponse)
 	 * @param clickToOpenEnabled
 	 *            if false, this method is basically a no-op; if true, it
 	 *            processes the response
 	 */
-	public static int preProcessResponse(WOResponse response, WOContext context, boolean clickToOpenEnabled) {
-		int previousContentLength;
-		if (!clickToOpenEnabled) {
-			previousContentLength = 0;
+	public static void preProcessResponse(WOResponse response, WOContext context, boolean clickToOpenEnabled) {
+		if (clickToOpenEnabled) {
+			response.appendContentString(ERXClickToOpenSupport._marker);
 		}
-		else {
-			String contentStr = response.contentString();
-			previousContentLength = contentStr == null ? 0 : contentStr.length();
-		}
-		return previousContentLength;
 	}
 
 	/**
 	 * Called after super.appendToResponse for click-to-open support.
 	 * 
-	 * @param previousContentLength
-	 *            the previousContentLength from preProcessResponse
-	 * @param componentName
-	 *            the name of the component being processed
+	 * @param component
+	 *            the component being processed
 	 * @param response
 	 *            the response
 	 * @param context
@@ -82,27 +78,28 @@ public class ERXClickToOpenSupport {
 	 *            if false, this method is basically a no-op; if true, it
 	 *            processes the response
 	 */
-	public static void postProcessResponse(int previousContentLength, Class component, WOResponse response, WOContext context, boolean clickToOpenEnabled) {
+	public static void postProcessResponse(Class component, WOResponse response, WOContext context, boolean clickToOpenEnabled) {
 		if (clickToOpenEnabled) {
 			String contentStr = response.contentString();
 			if (contentStr != null) {
-				Matcher tagMatcher = ERXClickToOpenSupport._tagPattern.matcher(contentStr.substring(previousContentLength));
-				if (tagMatcher.find()) {
-					int attributeOffset = previousContentLength + tagMatcher.end();
+				StringBuffer contentStringBuffer = new StringBuffer(contentStr);
+				int markerIndex = contentStringBuffer.lastIndexOf(ERXClickToOpenSupport._marker);
+				contentStringBuffer.delete(markerIndex, markerIndex + ERXClickToOpenSupport._marker.length());
+				Matcher tagMatcher = ERXClickToOpenSupport._tagPattern.matcher(contentStringBuffer);
+				if (tagMatcher.find(markerIndex)) {
+					int attributeOffset = tagMatcher.end();
 
 					String componentName = component.getName();
-					StringBuffer contentStringBuffer = new StringBuffer(contentStr);
 					String componentNameTag = "_componentName";
-					if (contentStr.substring(attributeOffset).startsWith(componentNameTag)) {
-						int openQuoteIndex = contentStr.indexOf("\"", attributeOffset);
+					if (ERXStringUtilities.regionMatches(contentStringBuffer, attributeOffset, componentNameTag, 0, componentNameTag.length())) {
+						int openQuoteIndex = contentStringBuffer.indexOf("\"", attributeOffset);
 						contentStringBuffer.insert(openQuoteIndex + 1, componentName + ",");
 					}
 					else {
 						contentStringBuffer.insert(attributeOffset, " " + componentNameTag + " = \"" + componentName + "\" ");
 					}
-
-					response.setContent(contentStringBuffer.toString());
 				}
+				response.setContent(contentStringBuffer.toString());
 			}
 		}
 	}
