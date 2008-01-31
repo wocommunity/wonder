@@ -139,15 +139,10 @@ public class ERXComponentUtilities {
 	 * @return a boolean
 	 */
 	public static boolean booleanValueForBinding(WOComponent component, String bindingName, boolean defaultValue) {
-		Boolean valueBoolean = (Boolean) component.valueForBinding(bindingName);
-		boolean value;
-		if (valueBoolean == null) {
-			value = defaultValue;
+		if(component == null) {
+			return defaultValue;
 		}
-		else {
-			value = valueBoolean.booleanValue();
-		}
-		return value;
+		return ERXValueUtilities.booleanValueWithDefault(component.valueForBinding(bindingName), defaultValue);
 	}
 
 	/**
