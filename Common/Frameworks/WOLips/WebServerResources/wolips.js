@@ -3,6 +3,7 @@ var WOLips = {
 	ignoreClick : true,
 	clickToOpenUrl : null,
 	oldClickHandler : null,
+	oldMoveHandler : null,
 	
 	controlFrame : null,
 
@@ -20,6 +21,7 @@ var WOLips = {
 		if (!WOLips.clickToOpenActive) {
 			$('clickToOpen').innerHTML = '<span style = "color: rgb(150, 150, 150)">Select a Component:</span> <span id = "_componentBreadCrumb" style = "font-weight: bold">&nbsp;</span>';
 			WOLips.oldClickHandler = document.onclick;
+			WOLips.oldMoveHandler = document.onmousemove;
 			document.onmousemove = WOLips.clickToOpenHover;
 			document.onclick = WOLips.clickToOpen;
 			WOLips.ignoreClick = true;
@@ -33,7 +35,9 @@ var WOLips = {
 	stopClickToOpen : function() {
 		$('clickToOpen').innerHTML = 'Click to Open';
 		document.onclick = WOLips.oldClickHandler;
+		document.onmousemove = WOLips.oldMoveHandler;
 		WOLips.oldClickHandler = null;
+		WOLips.oldMoveHandler = null;
 		WOLips.clickToOpenActive = false;
 	},
 	
@@ -46,7 +50,10 @@ var WOLips = {
 				var componentParts = value.split('.');
 				componentBreadCrumb.push(componentParts[componentParts.length - 1]);
 			});
-			$('_componentBreadCrumb').innerHTML = componentBreadCrumb.join(' <span style = "color: rgb(200, 200, 200);">&gt;</span> ');
+			var componentBreadCrumbElement = $('_componentBreadCrumb');
+			if (componentBreadCrumbElement != null) {
+				componentBreadCrumbElement.innerHTML = componentBreadCrumb.join(' <span style = "color: rgb(200, 200, 200);">&gt;</span> ');
+			}
 		}
 	},
 	
