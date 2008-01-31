@@ -97,9 +97,9 @@ public abstract class ERXComponent extends WOComponent {
 		preAppendToResponse(response, context);
 		
 		boolean clickToOpenEnabled = clickToOpenEnabled(response, context); 
-		int previousContentLength = ERXClickToOpenSupport.preProcessResponse(response, context, clickToOpenEnabled);
+		ERXClickToOpenSupport.preProcessResponse(response, context, clickToOpenEnabled);
 		super.appendToResponse(response, context);
-		ERXClickToOpenSupport.postProcessResponse(previousContentLength, getClass(), response, context, clickToOpenEnabled);
+		ERXClickToOpenSupport.postProcessResponse(getClass(), response, context, clickToOpenEnabled);
 		
 		postAppendToResponse(response, context);
 
@@ -255,7 +255,8 @@ public abstract class ERXComponent extends WOComponent {
         return _dynamicBindings;
     }
     
-    public void reset() {
+    @Override
+	public void reset() {
     	super.reset();
     	if(_dynamicBindings != null) {
     		_dynamicBindings.removeAllObjects();
