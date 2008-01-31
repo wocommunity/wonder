@@ -11,6 +11,7 @@ var WOLipsClickToOpen = {
 	oldSelectHandler : null,
 	oldClickHandler : null,
 	oldMoveHandler : null,
+	oldKeyPressHandler : null,
 	
 	lastTarget : null,
 	
@@ -21,9 +22,11 @@ var WOLipsClickToOpen = {
 			WOLipsClickToOpen.oldClickHandler = document.onclick;
 			WOLipsClickToOpen.oldMoveHandler = document.onmousemove;
 			WOLipsClickToOpen.oldSelectHandler = document.onselectstart;
+			WOLipsClickToOpen.oldKeyPressHandler = document.onkeypress;
 			document.onmousemove = WOLipsClickToOpen.mouseMoved;
 			document.onclick = WOLipsClickToOpen.mouseClicked;
 			document.onselectstart = WOLips.denyHandler;
+			document.onkeypress = WOLipsClickToOpen.keyPressed;
 			WOLipsClickToOpen.ignoreClick = true;
 			WOLipsClickToOpen.active = true;
 		}
@@ -37,9 +40,11 @@ var WOLipsClickToOpen = {
 		document.onclick = WOLipsClickToOpen.oldClickHandler;
 		document.onmousemove = WOLipsClickToOpen.oldMoveHandler;
 		document.onselectstart = WOLipsClickToOpen.oldSelectHandler;
+		document.onkeypress = WOLipsClickToOpen.oldKeyPressHandler;
 		WOLipsClickToOpen.oldClickHandler = null;
 		WOLipsClickToOpen.oldMoveHandler = null;
 		WOLipsClickToOpen.oldSelectHandler = null;
+		WOLipsClickToOpen.oldKeyPressHandler = null;
 		WOLipsClickToOpen.active = false;
 		WOLipsClickToOpen.targetChanged(null, false);
 	},
@@ -58,6 +63,12 @@ var WOLipsClickToOpen = {
 					target.addClassName('_wolSelected');
 				}
 			}
+		}
+	},
+	
+	keyPressed : function(e) {
+		if (e.keyCode == 27) {
+			WOLipsClickToOpen.stop();
 		}
 	},
 	
