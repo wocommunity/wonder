@@ -3,6 +3,8 @@ package er.wolips.components;
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 
+import er.extensions.ERXComponentUtilities;
+
 /**
  * WOLToolBar renders a collapsing toolbar at the bottom of your 
  * page containing useful debugging tools that integrate with 
@@ -22,13 +24,8 @@ public class WOLToolBar extends WOComponent {
   }
   
   public String style() {
-    String style;
-    Object expandedObj = valueForBinding("expanded");
-    boolean expanded = ((expandedObj instanceof Boolean && ((Boolean)expandedObj).booleanValue()) || (expandedObj instanceof String && Boolean.valueOf((String)expandedObj).booleanValue()));
-    if (expanded) {
-      style = null;
-    }
-    else {
+    String style = null;
+    if (!ERXComponentUtilities.booleanValueForBinding(this, "expanded", false)) {
       style = "display: none";
     }
     return style;
