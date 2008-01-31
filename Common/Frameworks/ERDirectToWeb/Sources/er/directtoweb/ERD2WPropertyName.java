@@ -10,7 +10,6 @@ import org.apache.log4j.Logger;
 
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WORequest;
-import com.webobjects.directtoweb.D2WStatelessComponent;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
 
@@ -23,7 +22,7 @@ import er.extensions.ERXWOContext;
  * @binding localContext
  */
 
-public class ERD2WPropertyName extends D2WStatelessComponent {
+public class ERD2WPropertyName extends ERD2WStatelessComponent {
     public static final Logger log = Logger.getLogger(ERD2WPropertyName.class);
 
     protected String _displayNameForProperty;

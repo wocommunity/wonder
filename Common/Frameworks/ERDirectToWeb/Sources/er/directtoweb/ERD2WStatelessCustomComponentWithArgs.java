@@ -7,7 +7,6 @@
 package er.directtoweb;
 
 import com.webobjects.appserver.WOContext;
-import com.webobjects.directtoweb.D2WStatelessComponent;
 import com.webobjects.foundation.NSPropertyListSerialization;
 
 import er.extensions.ERXExceptionHolder;
@@ -18,7 +17,7 @@ import er.extensions.ERXExceptionHolder;
  * 
  */
 
-public class ERD2WStatelessCustomComponentWithArgs extends D2WStatelessComponent implements ERXExceptionHolder {
+public class ERD2WStatelessCustomComponentWithArgs extends ERD2WStatelessComponent implements ERXExceptionHolder {
 
     public ERD2WStatelessCustomComponentWithArgs(WOContext context) { super(context); }
 

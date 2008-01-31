@@ -9,7 +9,6 @@ package er.directtoweb;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WORequest;
 import com.webobjects.appserver.WOResponse;
-import com.webobjects.directtoweb.D2WStatelessComponent;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
 
@@ -20,7 +19,7 @@ import com.webobjects.foundation.NSDictionary;
  * 
  */
 
-public class ERD2WKeyMapper extends D2WStatelessComponent {
+public class ERD2WKeyMapper extends ERD2WStatelessComponent {
 
     public ERD2WKeyMapper(WOContext context) { super(context); }
     
