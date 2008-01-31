@@ -2,6 +2,11 @@ IsApplicationDevelopmentMode : WOConditional {
   condition = application.developmentMode;
 }
 
+SimpleName :WOString {
+	value = context.page.class.simpleName;
+}
+
+
 WOLComponentLink : WOLComponentLink {
   component = context.page.class.name;
 }
