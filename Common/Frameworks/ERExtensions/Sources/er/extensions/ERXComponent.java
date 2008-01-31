@@ -15,6 +15,7 @@ import com.webobjects.foundation.NSArray;
  * of miscellaneous handy features.
  * 
  * @author mschrag
+ * @property er.component.clickToOpen boolean that determines if click-to-open is enabled (only enables in development mode)
  */
 public abstract class ERXComponent extends WOComponent {
 	/**
