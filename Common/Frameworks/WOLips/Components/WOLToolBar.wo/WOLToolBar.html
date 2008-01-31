@@ -1,10 +1,51 @@
 <webobject name = "IsApplicationDevelopmentMode">
-	<span id = "_wolToolBarContainer" style = "position:fixed; bottom: 0px; left: 0px; padding: 5px 5px; z-index: 999; -webkit-border-top-right-radius: 5px; background-color: rgba(240, 240, 255, 0.8); font-size: 8pt; border: 1px solid rgb(200, 200, 215); border-bottom: none; border-left: none;">
-		<span id = "_wolHandle" href = "javascript:void(0)" onclick = "WOLipsToolbar.toggle()" style = "font-weight: bold; text-decoration: none; cursor: pointer;">-</span>
+<style>
+span#_wolToolBarContainer {
+	position:fixed;
+	bottom: 0px;
+	left: 0px;
+	padding: 5px 5px;
+	z-index: 999;
+	-webkit-border-top-right-radius: 5px;
+	background-color: rgba(240, 240, 255, 0.8);
+	font-size: 8pt;
+	border: 1px solid rgb(200, 200, 215);
+	border-bottom: none;
+	border-left: none;
+	font-family: Helvetica, Arial, Geneva;
+	color: rgb(80, 80, 95);
+}
+
+span#_wolToolBarContainer a {
+	font-size: 8pt;
+	font-family: Helvetica, Arial, Geneva;
+	color: rgb(80, 80, 95);
+	text-decoration: none;
+}
+
+span#_wolToolBarContainer span#_wolHandle {
+	color: rgb(150, 150, 150);
+	font-weight: bold;
+	text-decoration: none;
+	cursor: pointer;
+}
+
+span#_wolToolBarContainer span._wolImportant {
+	font-weight: bold;
+}
+
+span#_wolToolBarContainer span._wolUnimportant {
+	font-weight: normal;
+	color: rgb(150, 150, 150);
+}
+
+</style>	
+	<span id = "_wolToolBarContainer">
+		<span id = "_wolHandle" href = "javascript:void(0)" onclick = "WOLipsToolbar.toggle()">-</span>
 		<webobject name = "ToolBar">
 			&nbsp;&nbsp;&nbsp;
-			<span style = "font-weight: bold"><webobject name = "WOLComponentLink"><webobject name="SimpleName"/></webobject></span>
-			&nbsp;|&nbsp;
+			<span id = "_wolPageComponent" class = "_wolImportant"><webobject name = "WOLComponentLink"><webobject name="SimpleName"/></webobject></span>
+			<span class = "_wolUnimportant">&nbsp;|&nbsp;</span>
 			<webobject name = "WOLClickToOpen"/>
 			<webobject name = "ComponentContent"/>
 		</webobject>
