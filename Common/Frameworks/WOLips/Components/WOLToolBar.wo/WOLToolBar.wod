@@ -1,0 +1,10 @@
+IsApplicationDevelopmentMode : WOConditional {
+  condition = application.developmentMode;
+}
+
+WOLComponentLink : WOLComponentLink {
+  component = context.page.class.name;
+}
+
+WOLClickToOpen : WOLClickToOpen {
+}
