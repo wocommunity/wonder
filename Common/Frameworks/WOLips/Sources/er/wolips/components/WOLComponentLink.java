@@ -41,7 +41,10 @@ public class WOLComponentLink extends WODynamicGroup {
       app = (String) _app.valueInComponent(component);
     }
     else {
-      app = WOApplication.application().name();
+      app = System.getProperty("WOUserDirectory", "").replaceAll(".*?/(\\w+).woa.*", "$1");
+      if(app.length() == 0) {
+          app = WOApplication.application().name();
+      }
     }
     NSMutableDictionary params = new NSMutableDictionary();
     params.setObjectForKey(app, "app");
