@@ -14,7 +14,7 @@ var WOLipsClickToOpen = {
 	start : function() {
 		if (!WOLipsClickToOpen.active) {
 			WOLipsClickToOpen.hideComponentList();
-			$('clickToOpen').innerHTML = '<span style = "color: rgb(150, 150, 150)">Select a Component:</span> <span id = "_componentBreadCrumb" style = "font-weight: bold">&nbsp;</span>';
+			$('clickToOpen').innerHTML = '<span class = "_wolUnimportant">Open</span> <span id = "_componentBreadCrumb" class = "_wolImportant">&nbsp;</span>';
 			WOLipsClickToOpen.oldClickHandler = document.onclick;
 			WOLipsClickToOpen.oldMoveHandler = document.onmousemove;
 			document.onmousemove = WOLipsClickToOpen.mouseMoved;
@@ -47,7 +47,7 @@ var WOLipsClickToOpen = {
 			});
 			var componentBreadCrumbElement = $('_componentBreadCrumb');
 			if (componentBreadCrumbElement != null) {
-				componentBreadCrumbElement.innerHTML = componentBreadCrumb.join(' <span style = "color: rgb(200, 200, 200);">&gt;</span> ');
+				componentBreadCrumbElement.innerHTML = componentBreadCrumb.join(' <span class = "_wolUnimportant">&gt;</span> ');
 			}
 		}
 	},
