@@ -45,7 +45,7 @@ var WOLipsClickToOpen = {
 	},
 	
 	targetChanged : function(target, highlight) {
-		if (target != WOLipsClickToOpen.lastTarget) {
+		if (target != WOLipsClickToOpen.lastTarget || !highlight) {
 			if (WOLipsClickToOpen.lastTarget != null) {
 				WOLipsClickToOpen.lastTarget.removeClassName('_wolSelected');
 			}
