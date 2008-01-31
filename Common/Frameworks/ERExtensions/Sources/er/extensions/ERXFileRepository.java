@@ -75,7 +75,7 @@ public class ERXFileRepository {
 	/**
 	 * Holds the repositories.
 	 */
-	private static final NSMutableDictionary _repositories = (NSMutableDictionary) ERXMutableDictionary.synchronizedDictionary();
+	private static final NSMutableDictionary _repositories = ERXMutableDictionary.synchronizedDictionary();
 
 	/**
 	 * Returns the repository that is registered under the given name.

@@ -10,8 +10,7 @@ import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSForwardException;
 import com.webobjects.foundation.NSKeyValueCodingAdditions;
 import com.webobjects.foundation.NSMutableArray;
-
-import er.extensions.ERXMutableDictionary.ThreadSafeDictionary;
+import com.webobjects.foundation.NSMutableDictionary;
 
 /**
  * ERXInlineTemplate allows to specify a component's template dynamically. <br />
@@ -59,7 +58,7 @@ public class ERXInlineTemplate extends ERXNonSynchronizingComponent {
 
 	private static final String TEMPLATE_WOD_BINDING = "wod";
 
-	private static ThreadSafeDictionary _cache = (ThreadSafeDictionary) ERXMutableDictionary.synchronizedDictionary();
+	private static NSMutableDictionary _cache = ERXMutableDictionary.synchronizedDictionary();
 
 	private Error _deferredError = null;
 
