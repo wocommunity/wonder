@@ -10,18 +10,11 @@ import com.webobjects.appserver.WOResponse;
  */
 public class ERXResponse extends WOResponse {
 	/**
-	 * Returns the underlying StringBuffer for this response.
-	 * @return the underlying StringBuffer for this response
-	 */
-	public StringBuffer _contentStringBuffer() {
-		return _content;
-	}
-	
-	/**
 	 * The original _appendTagAttributeAndValue would skip null values, but not blank
 	 * values, which would produce html like &lt;div style = ""&gt;.  This implementation
 	 * also skips blank values.
 	 */
+	@Override
 	public void _appendTagAttributeAndValue(String name, String value, boolean escape) {
 		if (value != null && value.length() > 0) {
 			super._appendTagAttributeAndValue(name, value, escape);
