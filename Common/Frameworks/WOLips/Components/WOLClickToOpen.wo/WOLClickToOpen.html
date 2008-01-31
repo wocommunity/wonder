@@ -1,8 +1,47 @@
 <webobject name = "CanClickToOpen">
+<style>
+div#_clickToOpenComponentList {
+	font-size: 9pt;
+	position: absolute;
+	background-color: rgba(240, 240, 240, 0.8);
+	border: 1px solid rgb(200, 200, 200);
+}
+
+div#_clickToOpenComponentList h1 {
+	background-color: rgba(220, 220, 220, 0.8);
+	color: rgb(0, 0, 0);
+	font-size: 9pt;
+	font-weight: bold;
+	text-align: center;
+	margin: 0px;
+	padding: 0px;
+	border: none;
+	border-bottom: 1px solid rgb(200, 200, 200);
+}
+
+div#_clickToOpenComponentList ul {
+	font-size: 9pt;
+	margin: 0px;
+	padding: 0px;
+}
+
+div#_clickToOpenComponentList ul li {
+	list-style: none;
+	margin: 0px;
+	padding: 3px 10px;
+	cursor: pointer;
+}
+
+div#_clickToOpenComponentList ul li:hover {
+	background-color: rgba(200, 200, 215, 0.8);
+}
+
+</style>
+
 <script>
-	WOLips.clickToOpenUrl = '<webobject name = "ClickToOpenURL"/>';
+	WOLipsClickToOpen.url = '<webobject name = "ClickToOpenURL"/>';
 </script>
-<a href = "javascript:void(0);" onclick = "WOLips.startClickToOpen()" id = "clickToOpen">Click to Open</a>
+<a href = "javascript:void(0);" onclick = "WOLipsClickToOpen.start()" id = "clickToOpen">Click to Open</a>
 </webobject>
 <webobject name = "NoClickToOpen">
 Click to Open Disabled
