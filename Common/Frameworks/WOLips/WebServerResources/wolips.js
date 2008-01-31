@@ -1,3 +1,7 @@
+if (typeof Prototype == 'undefined') {
+	alert('You do not have prototype.js setup properly for WOLips.framework. Either link to Ajax.framework or set the wolips.prototype.framework and wolips.prototype.fileName properties as described in the README.');
+}
+
 var WOLipsClickToOpen = {
 	url : null,
 	
@@ -66,14 +70,15 @@ var WOLipsClickToOpen = {
 			WOLipsClickToOpen.openComponentNamed(componentNames[0]);
 		}
 		else {
-			if (e.isMiddleClick && e.isMiddleClick()) {
-				WOLipsClickToOpen.showComponentList(componentNames, e.x + document.viewport.getScrollOffsets().left, e.y + document.viewport.getScrollOffsets().top);
+			if (e.metaKey) {
+				Position.prepare();
+				WOLipsClickToOpen.showComponentList(componentNames, e.x + Position.deltaX, e.y + Position.deltaY);
 			}
 			else {
 				WOLipsClickToOpen.openComponentNamed(componentNames[0]);
 			}
 		}
-		e.stop && e.stop();
+		Event.stop(e);
 		WOLipsClickToOpen.stop();
 	  return false;
 	},
@@ -172,7 +177,7 @@ var WOLipsToolBar = {
 	toggle : function(e) {
 		$('_wolToolBar').toggle();
 		WOLipsToolBar.update();
-		e.stop && e.stop();
+		Event.stop(e);
 	},
 	
 	update : function() {
