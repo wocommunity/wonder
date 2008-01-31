@@ -149,41 +149,46 @@ var WOLipsClickToOpen = {
 	}
 }
 
-var WOLips = {
-	controlFrame : null,
-
-	openToolBar : function(e) {
+var WOLipsToolBar = {
+	initialize : function(e) {
+		$('_wolToolBarContainer').onselectstart = function() { return false };
+		WOLipsToolBar.update();
+	},
+	
+	open : function(e) {
 		$('_wolToolBar').show();
-		WOLips.updateToolBar();
+		WOLipsToolBar.update();
 	},
 	
-	hideToolBar : function(e) {
+	hide : function(e) {
 		$('_wolToolBar').hide();
-		WOLips.updateToolBar();
+		WOLipsToolBar.update();
 	},
 	
-	toggleToolBar : function(e) {
+	toggle : function(e) {
 		$('_wolToolBar').toggle();
-		WOLips.updateToolBar();
+		WOLipsToolBar.update();
 		e.stop();
 	},
 	
-	updateToolBar : function() {
+	update : function() {
 		if ($('_wolToolBar').visible()) {
-			$('_wolToolBarContainer').onselectstart = function() { return false };
 			$('_wolHandle').innerHTML = '&lt;';
-			$('_wolHandle').onclick = WOLips.toggleToolBar;
+			$('_wolHandle').onclick = WOLipsToolBar.toggle;
 			$('_wolToolBarContainer').onclick = null;
 			$('_wolToolBarContainer').style.cursor = 'inherit';
 		}
 		else {
-			$('_wolToolBarContainer').onselectstart = function() { return false };
 			$('_wolToolBarContainer').style.cursor = 'pointer';
-			$('_wolToolBarContainer').onclick = WOLips.toggleToolBar;
+			$('_wolToolBarContainer').onclick = WOLipsToolBar.toggle;
 			$('_wolHandle').innerHTML = '&gt;';
 			$('_wolHandle').onclick = null;
 		}
-	},
+	}
+};
+
+var WOLips = {
+	controlFrame : null,
 
 	perform : function(url) {
 		if (WOLips.controlFrame == null) {
