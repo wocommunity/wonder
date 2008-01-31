@@ -35,6 +35,7 @@ import com.webobjects.foundation.NSTimestamp;
 
 import er.extensions.ERXClickToOpenSupport;
 import er.extensions.ERXComponentActionRedirector;
+import er.extensions.ERXComponentUtilities;
 import er.extensions.ERXExceptionHolder;
 import er.extensions.ERXExtensions;
 import er.extensions.ERXGuardedObjectInterface;
@@ -855,7 +856,7 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
     // (ak) these actually belong to CompactEdit and PrinterFriendlyInspect
     // moved them here to avoid to much subclassing
     public boolean isEmbedded() {
-        return ERXValueUtilities.booleanValueForBindingOnComponentWithDefault("isEmbedded", this, false);
+        return ERXComponentUtilities.booleanValueForBinding(this, "isEmbedded", false);
     }
 
     /*

@@ -20,32 +20,10 @@ import com.webobjects.foundation.NSPropertyListSerialization;
 
 public class ERXValueUtilities {
     /**
-     * This method resolves bindings from WOComponents to
-     * boolean values. The added benefit (and this might not
-     * still be the case) is that when <code>false</code> is
-     * bound to a binding will pass through null. This makes
-     * it difficult to handle the case where a binding should
-     * default to true but false was actually bound to the
-     * binding.<br/>
-     * Note: This is only needed for non-syncronizing components
-     * @param binding name of the binding
-     * @param component to resolve binding request
-     * @param def default value if binding is not set
-     * @return boolean resolution of the object returned from the
-     *		valueForBinding request.
+     * @deprecated use ERXComponentUtilities.booleanValueForBinding(component, binding, def)
      */
     public static boolean booleanValueForBindingOnComponentWithDefault(String binding, WOComponent component, boolean def) {
-        // CHECKME: I don't believe the statement below is true with WO 5
-        // this method is useful because binding=NO in fact sends null, which in turns
-        // leads booleanValueWithDefault(valueForBinding("binding", true) to return true when binding=NO was specified
-        boolean result=def;
-        if (component!=null) {
-            if (component.canGetValueForBinding(binding)) {
-                Object value=component.valueForBinding(binding);
-                result=booleanValueWithDefault(value, def);
-            }
-        }
-        return result;
+        return ERXComponentUtilities.booleanValueForBinding(component, binding, def);
     }
 
     /**
@@ -105,27 +83,6 @@ public class ERXValueUtilities {
             flag = def;
         }
         return flag;
-    }
-
-    /**
-     * This method resolves bindings from WOComponents to
-     * <code>int</code> values.
-     * Note: This is only needed for non-syncronizing components
-     * @param binding name of the binding
-     * @param component to resolve binding request
-     * @param def default value if binding is not set
-     * @return boolean resolution of the object returned from the
-     *		valueForBinding request.
-     */
-    public static int intValueForBindingOnComponentWithDefault(String binding, WOComponent component, int def) {
-        int result=def;
-        if (component!=null) {
-            if (component.canGetValueForBinding(binding)) {
-                Object value=component.valueForBinding(binding);
-                result=value==null ? def : intValueWithDefault(value, def);
-            }
-        }
-        return result;
     }
 
     /**

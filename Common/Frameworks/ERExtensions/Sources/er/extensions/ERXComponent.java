@@ -129,7 +129,7 @@ public abstract class ERXComponent extends WOComponent {
      * @return result of evaluating binding as a int.
      */
     protected int intValueForBinding(String binding, int defaultValue) {
-        return ERXValueUtilities.intValueForBindingOnComponentWithDefault(binding, this, defaultValue);
+        return ERXValueUtilities.intValueWithDefault(valueForBinding(binding), defaultValue);
     }
 
     /**
@@ -149,17 +149,8 @@ public abstract class ERXComponent extends WOComponent {
      *        binding is not bound.
      * @return result of evaluating binding as a boolean.
      */
-    // CHECKME: from the name of the method, one would think that
-    // ERXValueUtilities.booleanValueForBindingOnComponentWithDefault
-    // would be the correct method to use, but after reading the comment there, I'm not sure.
     protected boolean booleanValueForBinding(String binding, boolean defaultValue) {
-		// AK: Mike's imp was:
-    	// return ERXComponentUtilities.booleanValueForBinding(this, bindingName, defaultValue);
-        if (hasBinding(binding)) {
-            return ERXValueUtilities.booleanValueWithDefault(valueForBinding(binding), false);
-        } else {
-            return defaultValue;
-        }
+		return ERXComponentUtilities.booleanValueForBinding(this, binding, defaultValue);
     }
 
     /**
