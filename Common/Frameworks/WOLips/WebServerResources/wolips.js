@@ -9,6 +9,7 @@ var WOLipsClickToOpen = {
 	
 	start : function() {
 		if (!WOLipsClickToOpen.active) {
+			WOLipsClickToOpen.hideComponentList();
 			$('clickToOpen').innerHTML = '<span style = "color: rgb(150, 150, 150)">Select a Component:</span> <span id = "_componentBreadCrumb" style = "font-weight: bold">&nbsp;</span>';
 			WOLipsClickToOpen.oldClickHandler = document.onclick;
 			WOLipsClickToOpen.oldMoveHandler = document.onmousemove;
@@ -82,7 +83,10 @@ var WOLipsClickToOpen = {
 	},
 	
 	hideComponentList : function() {
-		$('_clickToOpenComponentList').remove();
+		var componentList = $('_clickToOpenComponentList');
+		if (componentList != null) {
+			$('_clickToOpenComponentList').remove();
+		}
 	},
 	
 	showComponentList : function(componentNames, x, y) {
