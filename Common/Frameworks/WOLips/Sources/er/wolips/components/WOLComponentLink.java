@@ -7,6 +7,7 @@ import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WOElement;
 import com.webobjects.appserver.WOResponse;
 import com.webobjects.appserver._private.WODynamicGroup;
+import com.webobjects.foundation.NSBundle;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableDictionary;
 
@@ -41,10 +42,7 @@ public class WOLComponentLink extends WODynamicGroup {
       app = (String) _app.valueInComponent(component);
     }
     else {
-      app = System.getProperty("WOUserDirectory", "").replaceAll(".*?/(\\w+).woa.*", "$1");
-      if(app.length() == 0) {
-          app = WOApplication.application().name();
-      }
+        app = NSBundle.mainBundle().name();
     }
     NSMutableDictionary params = new NSMutableDictionary();
     params.setObjectForKey(app, "app");
