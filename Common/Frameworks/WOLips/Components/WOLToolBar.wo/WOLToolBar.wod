@@ -8,3 +8,6 @@ WOLComponentLink : WOLComponentLink {
 
 WOLClickToOpen : WOLClickToOpen {
 }
+
+ComponentContent : WOComponentContent {
+}
