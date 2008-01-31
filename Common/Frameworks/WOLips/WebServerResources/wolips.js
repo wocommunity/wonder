@@ -1,49 +1,39 @@
-var WOLips = {
-	clickToOpenActive : false,
+var WOLipsClickToOpen = {
+	url : null,
+	
+	active : false,
 	ignoreClick : true,
-	clickToOpenUrl : null,
+	
 	oldClickHandler : null,
 	oldMoveHandler : null,
 	
-	controlFrame : null,
-
-	toggleToolBar : function() {
-		$('_wolToolBar').toggle();
-		if ($('_wolToolBar').visible()) {
-			$('_wolHandle').innerHTML = '&lt;';
-		}
-		else {
-			$('_wolHandle').innerHTML = '&gt;';
-		}
-	},
-		
-	startClickToOpen : function() {
-		if (!WOLips.clickToOpenActive) {
+	start : function() {
+		if (!WOLipsClickToOpen.active) {
 			$('clickToOpen').innerHTML = '<span style = "color: rgb(150, 150, 150)">Select a Component:</span> <span id = "_componentBreadCrumb" style = "font-weight: bold">&nbsp;</span>';
-			WOLips.oldClickHandler = document.onclick;
-			WOLips.oldMoveHandler = document.onmousemove;
-			document.onmousemove = WOLips.clickToOpenHover;
-			document.onclick = WOLips.clickToOpen;
-			WOLips.ignoreClick = true;
-			WOLips.clickToOpenActive = true;
+			WOLipsClickToOpen.oldClickHandler = document.onclick;
+			WOLipsClickToOpen.oldMoveHandler = document.onmousemove;
+			document.onmousemove = WOLipsClickToOpen.mouseMoved;
+			document.onclick = WOLipsClickToOpen.mouseClicked;
+			WOLipsClickToOpen.ignoreClick = true;
+			WOLipsClickToOpen.active = true;
 		}
 		else {
-			WOLips.stopClickToOpen();
+			WOLipsClickToOpen.stop();
 		}
 	},
 	
-	stopClickToOpen : function() {
+	stop : function() {
 		$('clickToOpen').innerHTML = 'Click to Open';
-		document.onclick = WOLips.oldClickHandler;
-		document.onmousemove = WOLips.oldMoveHandler;
-		WOLips.oldClickHandler = null;
-		WOLips.oldMoveHandler = null;
-		WOLips.clickToOpenActive = false;
+		document.onclick = WOLipsClickToOpen.oldClickHandler;
+		document.onmousemove = WOLipsClickToOpen.oldMoveHandler;
+		WOLipsClickToOpen.oldClickHandler = null;
+		WOLipsClickToOpen.oldMoveHandler = null;
+		WOLipsClickToOpen.active = false;
 	},
 	
-	clickToOpenHover : function(e) {
+	mouseMoved : function(e) {
 		var target = e.target;
-	  var componentNames = WOLips.componentNames(target);
+	  var componentNames = WOLipsClickToOpen.componentNamesForElement(target);
 		if (componentNames != null) {
 			var componentBreadCrumb = [];
 			componentNames.each(function(value, index) {
@@ -57,32 +47,80 @@ var WOLips = {
 		}
 	},
 	
-	clickToOpen : function(e) {
-		if (WOLips.ignoreClick) {
-			WOLips.ignoreClick = false;
+	mouseClicked : function(e) {
+		if (WOLipsClickToOpen.ignoreClick) {
+			WOLipsClickToOpen.ignoreClick = false;
 			return true;
 		}
 	  var target = e.target;
 	  
-	  var componentNames = WOLips.componentNames(target);
-	  if (componentNames == null) {
+	  var componentNames = WOLipsClickToOpen.componentNamesForElement(target);
+	  if (componentNames == null || componentNames.length == 0) {
 	  	alert('The component you selected could not be identifed.  Make sure er.component.clickToOpen=true.');
 	  }
-	  else {
-		  if (WOLips.clickToOpenUrl == null) {
-		  	alert('You do not have a clickToOpenURL set.');
-		  }
-		  else {
-		  	var openComponentUrl = WOLips.clickToOpenUrl.replace('REPLACEME', componentNames[0]);
-		  	WOLips.perform(openComponentUrl);
-		  } 
+	  else if (WOLipsClickToOpen.url == null) {
+		  alert('You do not have a click-to-open url set.');
+		}
+		else if (componentNames.length == 1) {
+			WOLipsClickToOpen.openComponentNamed(componentNames[0]);
+		}
+		else {
+			if (e.isMiddleClick()) {
+				WOLipsClickToOpen.showComponentList(componentNames, e.x, e.y);
+			}
+			else {
+				WOLipsClickToOpen.openComponentNamed(componentNames[0]);
+			}
 		}
 		e.stop();
-		WOLips.stopClickToOpen();
+		WOLipsClickToOpen.stop();
 	  return false;
 	},
 	
-	componentNames : function(target) {
+	openComponentNamed : function(selectedComponentName) {
+		WOLips.perform(WOLipsClickToOpen.url.replace('REPLACEME', selectedComponentName));
+	},
+	
+	hideComponentList : function() {
+		$('_clickToOpenComponentList').remove();
+	},
+	
+	showComponentList : function(componentNames, x, y) {
+		componentNames.push(null);
+		
+  	var componentNamesContainer = document.createElement("div");
+  	componentNamesContainer.id = '_clickToOpenComponentList';
+
+  	var componentNamesTitle = document.createElement("h1");
+  	componentNamesTitle.innerHTML = 'Select a Component';
+		componentNamesContainer.appendChild(componentNamesTitle);
+  	  	
+  	
+  	var componentNamesList = document.createElement("ul");
+  	componentNames.each(function(componentName, index) {
+  		var componentNameItem = document.createElement("li");
+  		componentNameItem._componentName = componentName;
+  		if (componentName == null) {
+  			componentNameItem.innerHTML = 'Cancel';
+  		}
+  		else {
+  			componentNameItem.innerHTML = componentName.split('.').last();
+  		}
+  		componentNameItem.onclick = function() {
+  			if (componentNameItem._componentName != null) {
+  				WOLipsClickToOpen.openComponentNamed(componentNameItem._componentName);
+  			}
+  			WOLipsClickToOpen.hideComponentList();
+  		};
+  		componentNamesList.appendChild(componentNameItem);
+  	});
+		componentNamesContainer.style.left = x + 'px';
+		componentNamesContainer.style.top = y + 'px';
+		componentNamesContainer.appendChild(componentNamesList);
+  	document.getElementsByTagName("body").item(0).appendChild(componentNamesContainer);
+	},
+	
+	componentNamesForElement : function(target) {
 		var componentNamesStr = null;
 	  while (target != null) {
 	  	if (target.getAttribute) {
@@ -108,18 +146,29 @@ var WOLips = {
 			componentNames = componentNamesStr.split(',');
 		}
 		return componentNames;
+	}
+}
+
+var WOLips = {
+	controlFrame : null,
+
+	toggleToolBar : function() {
+		$('_wolToolBar').toggle();
+		if ($('_wolToolBar').visible()) {
+			$('_wolHandle').innerHTML = '&lt;';
+		}
+		else {
+			$('_wolHandle').innerHTML = '&gt;';
+		}
 	},
 
 	perform : function(url) {
 		if (WOLips.controlFrame == null) {
 	  	WOLips.controlFrame = document.createElement("iframe");
-	  	WOLips.controlFrame.src = url;
 	  	WOLips.controlFrame.style.display = 'none';
 		  document.getElementsByTagName("body").item(0).appendChild(WOLips.controlFrame);
 	  }
-	  else {
-	  	WOLips.controlFrame.src = url;
-	  }
+	  WOLips.controlFrame.src = url;
 	  //setTimeout(function () { document.getElementsByTagName("body").item(0).removeChild(iframeTag); }, 1000);
 	}
 };
