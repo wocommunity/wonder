@@ -29,9 +29,9 @@ public class ERD2WStatelessComponent extends D2WStatelessComponent {
     @Override
     public void appendToResponse(WOResponse response, WOContext context) {
         boolean clickToOpenEnabled = clickToOpenEnabled(response, context); 
-        int previousContentLength = ERXClickToOpenSupport.preProcessResponse(response, context, clickToOpenEnabled);
+        ERXClickToOpenSupport.preProcessResponse(response, context, clickToOpenEnabled);
         super.appendToResponse(response, context);
-        ERXClickToOpenSupport.postProcessResponse(previousContentLength, getClass(), response, context, clickToOpenEnabled);
+        ERXClickToOpenSupport.postProcessResponse(getClass(), response, context, clickToOpenEnabled);
     }
     
 }

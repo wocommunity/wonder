@@ -601,9 +601,9 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
         }
         
         boolean clickToOpenEnabled = clickToOpenEnabled(response, context); 
-        int previousContentLength = ERXClickToOpenSupport.preProcessResponse(response, context, clickToOpenEnabled);
+        ERXClickToOpenSupport.preProcessResponse(response, context, clickToOpenEnabled);
         super.appendToResponse(response, context);
-        ERXClickToOpenSupport.postProcessResponse(previousContentLength, getClass(), response, context, clickToOpenEnabled);
+        ERXClickToOpenSupport.postProcessResponse(getClass(), response, context, clickToOpenEnabled);
 
         NDC.pop();
     }
