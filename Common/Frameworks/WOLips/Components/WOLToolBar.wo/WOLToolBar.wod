@@ -11,3 +11,9 @@ WOLClickToOpen : WOLClickToOpen {
 
 ComponentContent : WOComponentContent {
 }
+
+ToolBar : WOGenericContainer {
+  elementName = "span";
+  id = "_wolToolBar";
+  style = style;
+}

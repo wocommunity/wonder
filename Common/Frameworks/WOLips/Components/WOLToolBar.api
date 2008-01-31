@@ -1,6 +1,7 @@
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <wodefinitions>
-        <wo wocomponentcontent="false" class="WOLToolBar.java">
+        <wo class="WOLToolBar.java" wocomponentcontent="false">
 
-        </wo>
+        <binding defaults="Boolean" name="expanded"/>
+    </wo>
 </wodefinitions>

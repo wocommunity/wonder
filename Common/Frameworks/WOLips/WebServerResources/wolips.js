@@ -152,13 +152,35 @@ var WOLipsClickToOpen = {
 var WOLips = {
 	controlFrame : null,
 
-	toggleToolBar : function() {
+	openToolBar : function(e) {
+		$('_wolToolBar').show();
+		WOLips.updateToolBar();
+	},
+	
+	hideToolBar : function(e) {
+		$('_wolToolBar').hide();
+		WOLips.updateToolBar();
+	},
+	
+	toggleToolBar : function(e) {
 		$('_wolToolBar').toggle();
+		WOLips.updateToolBar();
+		e.stop();
+	},
+	
+	updateToolBar : function() {
 		if ($('_wolToolBar').visible()) {
 			$('_wolHandle').innerHTML = '&lt;';
+			$('_wolHandle').onclick = WOLips.toggleToolBar;
+			$('_wolToolBarContainer').onclick = null;
+			$('_wolToolBarContainer').style.cursor = 'inherit';
 		}
 		else {
+			$('_wolToolBarContainer').onselectstart = function() { return false };
+			$('_wolToolBarContainer').style.cursor = 'pointer';
+			$('_wolToolBarContainer').onclick = WOLips.toggleToolBar;
 			$('_wolHandle').innerHTML = '&gt;';
+			$('_wolHandle').onclick = null;
 		}
 	},
 
