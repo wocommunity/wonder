@@ -66,14 +66,14 @@ var WOLipsClickToOpen = {
 			WOLipsClickToOpen.openComponentNamed(componentNames[0]);
 		}
 		else {
-			if (e.isMiddleClick()) {
+			if (e.isMiddleClick && e.isMiddleClick()) {
 				WOLipsClickToOpen.showComponentList(componentNames, e.x + document.viewport.getScrollOffsets().left, e.y + document.viewport.getScrollOffsets().top);
 			}
 			else {
 				WOLipsClickToOpen.openComponentNamed(componentNames[0]);
 			}
 		}
-		e.stop();
+		e.stop && e.stop();
 		WOLipsClickToOpen.stop();
 	  return false;
 	},
@@ -172,7 +172,7 @@ var WOLipsToolBar = {
 	toggle : function(e) {
 		$('_wolToolBar').toggle();
 		WOLipsToolBar.update();
-		e.stop();
+		e.stop && e.stop();
 	},
 	
 	update : function() {
