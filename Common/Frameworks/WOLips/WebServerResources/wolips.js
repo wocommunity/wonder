@@ -170,6 +170,7 @@ var WOLips = {
 	
 	updateToolBar : function() {
 		if ($('_wolToolBar').visible()) {
+			$('_wolToolBarContainer').onselectstart = function() { return false };
 			$('_wolHandle').innerHTML = '&lt;';
 			$('_wolHandle').onclick = WOLips.toggleToolBar;
 			$('_wolToolBarContainer').onclick = null;
