@@ -111,7 +111,7 @@ public class ERXBrowserFactory {
     private static final NSMutableArray robotExpressions = new NSMutableArray();
 
     /** Mapping of UAs to browsers */
-    private static final NSMutableDictionary _cache = (NSMutableDictionary) ERXMutableDictionary.synchronizedDictionary();
+    private static final NSMutableDictionary _cache = ERXMutableDictionary.synchronizedDictionary();
 
     /**
      * Gets the singleton browser factory object.

@@ -7,7 +7,6 @@
 package er.directtoweb;
 
 import com.webobjects.appserver.WOContext;
-import com.webobjects.directtoweb.D2WStatelessComponent;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSMutableArray;
 
@@ -20,7 +19,7 @@ import er.extensions.ERXConstant;
  * 
  */
 
-public class ERD2WPopUp extends D2WStatelessComponent {
+public class ERD2WPopUp extends ERD2WStatelessComponent {
 
 	public ERD2WPopUp(WOContext context) { super(context); }
 

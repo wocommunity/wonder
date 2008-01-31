@@ -76,7 +76,7 @@ public class ERXComparisonSupport {
         	// sorting by case, but disregard the Umlaut characters. So
         	// we just use the default, unless we come up with a better idea...
         	if(fixAnyway) {
-        		int i = _handleNulls(object1, object2);
+         		int i = _handleNulls(object1, object2);
         		if (i != MAGIC)
         			return i;
         		Class clazz = object1.getClass();

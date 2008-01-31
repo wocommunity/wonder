@@ -15,7 +15,7 @@ import com.webobjects.directtoweb.D2WStatelessComponent;
  * 
  */
 
-public class ERD2WDisplayAddress extends D2WStatelessComponent {
+public class ERD2WDisplayAddress extends ERD2WStatelessComponent {
 
     public ERD2WDisplayAddress(WOContext context) { super(context); }
     

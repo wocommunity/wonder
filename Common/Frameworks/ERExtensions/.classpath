@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry kind="src" path="Sources"/>
-	<classpathentry excluding="com/webobjects/foundation/" kind="src" path="PatchesJDK1.4"/>
-	<classpathentry kind="con" path="org.objectstyle.wolips.WO_CLASSPATH/JavaEOAccess/JavaEOControl/JavaEOProject/JavaFoundation/JavaJDBCAdaptor/JavaWebObjects/JavaWOJSPServlet/JavaXML"/>
+	<classpathentry excluding="com/webobjects/appserver/_private/WOHttpIO.java" kind="src" path="Sources"/>
+	<classpathentry kind="src" path="PatchesJDK1.5"/>
+	<classpathentry kind="con" path="org.objectstyle.wolips.ContainerInitializer/10/1/JavaEOAccess/1/nil/1/nil/1/0/1/false/10/1/JavaEOControl/1/nil/1/nil/1/0/1/false/10/1/JavaEOProject/1/nil/1/nil/1/0/1/false/10/1/JavaFoundation/1/nil/1/nil/1/0/1/false/10/1/JavaJDBCAdaptor/1/nil/1/nil/1/0/1/false/10/1/JavaWebObjects/1/nil/1/nil/1/0/1/false/10/1/JavaWOJSPServlet/1/nil/1/nil/1/0/1/false/10/1/JavaXML/1/nil/1/nil/1/0/1/false"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/ERJars"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/JavaWOExtensions"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>

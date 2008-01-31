@@ -55,6 +55,7 @@ public class ERXPatcher {
 	 *            class name
 	 * @return class for the registered name or null
 	 */
+	
 	public static Class classForName(String className) {
 		return _NSUtilities.classWithName(className);
 	}

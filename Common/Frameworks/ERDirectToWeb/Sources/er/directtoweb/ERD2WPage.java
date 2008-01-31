@@ -33,6 +33,7 @@ import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation.NSMutableSet;
 import com.webobjects.foundation.NSTimestamp;
 
+import er.extensions.ERXClickToOpenSupport;
 import er.extensions.ERXComponentActionRedirector;
 import er.extensions.ERXExceptionHolder;
 import er.extensions.ERXExtensions;
@@ -140,7 +141,19 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
             _context.lock();
         }
     }
-
+    
+    /**
+     * Returns whether or not click-to-open should be enabled for this component.  By
+     * default this returns ERXClickToOpenSupport.isEnabled().
+     * 
+     * @param response the response
+     * @param context the context
+     * @return whether or not click-to-open is enabled for this component
+     */
+    public boolean clickToOpenEnabled(WOResponse response, WOContext context) {
+        return ERXClickToOpenSupport.isEnabled();
+    }
+    
     /**
      * Utility method to get a value from the user prefs.
      * 
@@ -573,7 +586,7 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
      * Overridden from the parent for better logging. Reports exceptions in the
      * console for easier debugging.
      */
-    public void appendToResponse(WOResponse r, WOContext c) {
+    public void appendToResponse(WOResponse response, WOContext context) {
     	String info = "(" + d2wContext().dynamicPage() + ")";
     	// String info = "(" + getClass().getName() + (d2wContext() != null ? ("/" + d2wContext().valueForKey(Keys.pageConfiguration)) : "") + ")";
         NDC.push(info);
@@ -585,7 +598,12 @@ public abstract class ERD2WPage extends D2WPage implements ERXExceptionHolder, E
                 // log.info("" + NSPropertyListSerialization.stringFromPropertyList(_allConfigurations));
             }
         }
-        super.appendToResponse(r, c);
+        
+        boolean clickToOpenEnabled = clickToOpenEnabled(response, context); 
+        int previousContentLength = ERXClickToOpenSupport.preProcessResponse(response, context, clickToOpenEnabled);
+        super.appendToResponse(response, context);
+        ERXClickToOpenSupport.postProcessResponse(previousContentLength, getClass(), response, context, clickToOpenEnabled);
+
         NDC.pop();
     }
 
