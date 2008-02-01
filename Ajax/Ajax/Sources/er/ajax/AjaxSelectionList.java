@@ -22,6 +22,19 @@ public class AjaxSelectionList extends AjaxComponent {
 	public boolean synchronizesVariablesWithBindings() {
 		return false;
 	}
+	
+	public void setItem(Object item) {
+		if (item instanceof NSKeyValueCoding.Null) {
+			setValueForBinding(null, "item");
+		}
+		else {
+			setValueForBinding(item, "item");
+		}
+	}
+	
+	public Object item() {
+		return valueForBinding("item");
+	}
 
 	public void sleep() {
 		super.sleep();
