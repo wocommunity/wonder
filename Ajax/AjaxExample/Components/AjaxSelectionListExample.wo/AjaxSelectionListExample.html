@@ -1,0 +1,79 @@
+<webobject name = "HeaderFooter">
+<style>
+ul.productList {
+	background-color: rgb(243, 243, 243);
+	font-family: Helvetica;
+	width: 100%;
+}
+
+ul.productList li {
+	color: rgb(150, 150, 150);
+	font-size: 8pt;
+}
+
+ul.productList li h1 {
+	color: rgb(0, 0, 0);
+	background-color: inherit;
+	font-weight: bold;
+	font-size: 9pt;
+	margin: 0px;
+	padding: 0px;
+	margin-bottom: 3px;
+}
+
+ul.productList li.selected {
+	background-color: rgb(183, 183, 183);
+	color: rgb(255, 255, 255);
+}
+
+ul.productList li.selected h1 {
+	color: rgb(255, 255, 255);
+}
+
+div#contents div#productTitle {
+	font-weight: bold;
+}
+  </style>
+  <p><webobject name = "ToggleAjaxLink">Toggle Ajax / Non-Ajax</webobject></p>
+  
+  <webobject name = "TopContainer">
+  <webobject name = "NotAjax">
+	  <webobject name = "Form">
+	  	<div style = "height: 150px; width: 500px; overflow: scroll; border: 1px solid rgb(200, 200, 200);">
+			  <webobject name = "SelectionList">
+			    <li>
+			    	<h1><webobject name = "ProductTitle" /></h1>
+			    	<webobject name = "ProductPartialSummary" />
+			    </li>
+			  </webobject>
+			</div>
+		  <webobject name = "SubmitButton"/>
+		  <webobject name = "DeleteButton"/>
+	  </webobject>
+	</webobject>
+  
+  <webobject name = "Ajax">
+	  <webobject name = "Form2">
+	  	<div style = "height: 150px; width: 500px; overflow: scroll; border: 1px solid rgb(200, 200, 200);">
+			  <webobject name = "AjaxSelectionList">
+			    <li>
+			    	<h1><webobject name = "ProductTitle" /></h1>
+			    	<webobject name = "ProductPartialSummary" />
+			    </li>
+			  </webobject>
+			</div>
+		  <webobject name = "AjaxSubmitButton"/>
+		  <webobject name = "AjaxDeleteButton"/>
+	  </webobject>
+	</webobject>
+  
+  <webobject name = "AjaxUpdateContainer">
+    <div id = "productTitle">
+      <webobject name = "SelectedProductTitle" />
+    </div>
+    <div id = "productSummary">
+      <webobject name = "SelectedProductSummary" />
+    </div>
+  </webobject>
+  </webobject>
+</webobject>
