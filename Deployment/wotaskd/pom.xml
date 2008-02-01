@@ -17,8 +17,9 @@
 
 	<dependencies>
 		<dependency>
-			<groupId>com.apple.webobjects</groupId>
-			<artifactId>JavaWebObjects</artifactId>
+			<groupId>wonder.deployment</groupId>
+			<artifactId>JavaMonitorFramework</artifactId>
+			<version>4.0.0-SNAPSHOT</version>
 		</dependency>
 	</dependencies>
 	<build>
