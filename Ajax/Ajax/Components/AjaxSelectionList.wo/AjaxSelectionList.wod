@@ -27,7 +27,7 @@ List : WOGenericContainer {
 
 Items : WORepetition {
 	list = list;
-	item = ^item;
+	item = item;
 }
 
 Content : WOComponentContent {	
