@@ -22,6 +22,9 @@
 	<modules>
 		<module>JavaWOExtensions</module>
 		<module>ERExtensions</module>
+		<module>ERAttachment</module>
+		<module>ERCaching</module>
+		<module>ERCaptcha</module>
 		<module>ERDirectToWeb</module>
 		<module>ERCalendar</module>
 		<module>ERJavaMail</module>
@@ -36,6 +39,7 @@
 		<module>ERRest</module>
 		<module>ERSelenium</module>
 		<module>WOOgnl</module>
+		<module>WOLips</module>
 	</modules>
 </project>
 
