@@ -1,0 +1,88 @@
+HeaderFooter : AjaxExampleComponent {
+	title = "Ajax Selection List";
+}
+
+Form : WOForm {
+	multipleSubmit = true;
+}
+
+Form2 : WOForm {
+	multipleSubmit = true;
+}
+
+AjaxSubmitButton : AjaxSubmitButton {
+	action = selectProduct;
+	updateContainerID = "contents";
+	functionName = "selectProduct";
+}
+
+AjaxDeleteButton : AjaxSubmitButton {
+	action = deleteProduct;
+	updateContainerID = "topContainer";
+	functionName = "deleteProduct";
+}
+
+SubmitButton : WOSubmitButton {
+	action = selectProduct;
+	value = "Select";
+}
+
+DeleteButton :WOSubmitButton {
+	action = deleteProduct;
+	value = "Delete";
+}
+
+SelectionList : AjaxSelectionList {
+	elementName = "ul";
+	class = "productList";
+	list = products;
+	item = itemProduct;
+	selection = selectedProduct;
+}
+
+AjaxSelectionList : AjaxSelectionList {
+	elementName = "ul";
+	class = "productList";
+	list = products;
+	item = itemProduct;
+	selection = selectedProduct;
+	onchange = "selectProduct()";
+	ondelete = "deleteProduct()";
+}
+
+ProductTitle : WOString {
+	value = itemProduct.title;
+}
+
+ProductPartialSummary : WOString {
+	value = itemProduct.partialSummary;
+}
+
+SelectedProductSummary : WOString {
+	value = selectedProduct.summary;
+}
+
+SelectedProductTitle : WOString {
+	value = selectedProduct.title;
+}
+
+TopContainer : AjaxUpdateContainer {
+	id = "topContainer";
+}
+
+AjaxUpdateContainer : AjaxUpdateContainer {
+  id = "contents";
+}
+
+ToggleAjaxLink : WOHyperlink {
+  action = toggleAjax;
+}
+
+Ajax : WOConditional {
+  condition = ajax;
+}
+
+NotAjax : WOConditional {
+  condition = ajax;
+  negate = true;
+}

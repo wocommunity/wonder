@@ -1,0 +1,43 @@
+HeaderFooter : AjaxExampleComponent {
+	title = "Radio Buttons";
+}
+
+Form : WOForm {
+	multipleSubmit = true;
+}
+
+ButtonRepetition : WORepetition {
+	list = values;
+	item = itemValue;
+}
+
+ButtonObserver : AjaxObserveField {
+	observeFieldID = buttonID;
+	updateContainerID = "radioButtonContainer";
+	fullSubmit = true;
+	action = submit;
+}
+
+Button : WORadioButton {
+	id = buttonID;
+	checked = selected;
+	name = "buttongroup";
+}
+
+Value : WOString {
+	value = itemValue;
+}
+
+Submit : WOSubmitButton {
+	action = submit;
+	value = " Regular Submit ";
+}
+
+AjaxSubmit : AjaxSubmitButton {
+	updateContainerID = "radioButtonContainer";
+	value = " Ajax Submit ";
+}
+
+AjaxContainer : AjaxUpdateContainer {
+	id = "radioButtonContainer";
+}

@@ -116,3 +116,15 @@ Contents : WOComponentContent {
 Title : WOString {
 	value = title;
 }
+
+RadioButtons : WOHyperlink {
+	pageName = "RadioButtonExample";
+}
+
+SelectionList : WOHyperlink {
+	pageName = "AjaxSelectionListExample";
+}
+
+LiveSearch : WOHyperlink {
+	pageName = "AjaxLiveSearchExample";
+}
