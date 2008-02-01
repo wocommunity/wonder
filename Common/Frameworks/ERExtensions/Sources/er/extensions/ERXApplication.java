@@ -933,7 +933,17 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 		// created by an exception.
 		if (anHTTPVersion.startsWith("INCLUDED"))
 			anHTTPVersion = "HTTP/1.0";
-
+		
+		// Workaround for Safari on Leopard bug (post followed by redirect to GET incorrectly has content-type header).
+		// The content-type header makes the WO parser only look at the content. Which is empty.
+		// http://lists.macosforge.org/pipermail/webkit-unassigned/2007-November/053847.html
+		// http://jira.atlassian.com/browse/JRA-13791
+		if ("GET".equalsIgnoreCase(aMethod) && someHeaders.objectForKey("content-type") != null)
+		{
+			someHeaders = someHeaders.mutableClone();
+			((NSMutableDictionary)someHeaders).removeObjectForKey("content-type");
+		}
+		
 		WORequest worequest = new ERXRequest(aMethod, aURL, anHTTPVersion, someHeaders, aContent, someInfo);
 		return worequest;
 	}
