@@ -1,0 +1,24 @@
+<webobject name = "HiddenField"/>
+<webobject name = "ContainerLink">
+	<webobject name = "List">
+		<webobject name = "Items">
+			<webobject name = "Content"/>
+		</webobject>
+	</webobject>
+</webobject>
+<script>
+	var selectionList = new AjaxSelectionList('<webobject name = "ContainerID"/>');
+	selectionList.setSelectionIndex(<webobject name = "SelectedIndex"/>, false);
+	selectionList.onchange = function(list) {
+		$('<webobject name = "FieldID"/>').value = list.selectionIndex;
+		<webobject name = "IfOnChange">
+		<webobject name = "OnChange"/>
+		</webobject>
+	}
+	<webobject name = "IfOnSelect">
+	selectionList.onselect = function() { <webobject name = "OnSelect"/> }
+	</webobject>
+	<webobject name = "IfOnDelete">
+	selectionList.ondelete = function() { <webobject name = "OnDelete"/> }
+	</webobject>
+</script>

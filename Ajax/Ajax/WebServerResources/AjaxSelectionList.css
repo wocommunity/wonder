@@ -1,0 +1,55 @@
+a._selectionList {
+	color: rgb(0, 0, 0);
+	text-decoration: none;
+}
+
+a._selectionList:hover {
+	color: rgb(0, 0, 0);
+}
+
+a._selectionList:active {
+	color: rgb(0, 0, 0);
+}
+
+a._selectionList ul {
+	margin: 0px;
+	padding: 0px;
+}
+
+a._selectionList ul li {
+	list-style: none;
+	margin: 0px;
+	padding: 2px 5px;
+}
+
+a._selectionList ul li.selected {
+	background-color: rgb(200, 200, 200);
+}
+
+a._selectionList ul.focused li.selected {
+	background-color: rgb(200, 200, 255);
+}
+
+a._selectionList table {
+  margin: 0px;
+  padding: 0px;
+	border-spacing: 0px;
+	width: 100%;
+}
+
+a._selectionList table tr {
+  list-style: none;
+  margin: 0px;
+}
+
+a._selectionList table tr td {
+  padding: 2px 5px;
+}
+
+a._selectionList table tr.selected {
+  background-color: rgb(200, 200, 200);
+}
+
+a._selectionList table.focused tr.selected {
+  background-color: rgb(200, 200, 255);
+}

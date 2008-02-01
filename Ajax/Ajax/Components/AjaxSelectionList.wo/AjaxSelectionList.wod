@@ -1,0 +1,62 @@
+HiddenField : WOHiddenField {
+	value = value;
+	id = fieldID;
+}
+
+ContainerID : WOString {
+	value = containerID;
+}
+
+FieldID : WOString {
+	value = fieldID;
+}
+
+ContainerLink : WOGenericContainer {
+	elementName = "a";
+	id = containerID;
+	class = "_selectionList";
+	href = "javascript:void(0)";
+}
+
+List : WOGenericContainer {
+	elementName = elementName;
+	id = id;
+	class = ^class;
+	style = ^style;
+}
+
+Items : WORepetition {
+	list = list;
+	item = ^item;
+}
+
+Content : WOComponentContent {	
+}
+
+SelectedIndex : WOString {
+	value = selectedIndex;
+}
+
+IfOnChange : WOConditional {
+	condition = ^onchange;
+}
+
+OnChange : WOString {
+	value = ^onchange;
+}
+
+IfOnSelect : WOConditional {
+	condition = ^onselect;
+}
+
+OnSelect : WOString {
+	value = ^onselect;
+}
+
+IfOnDelete : WOConditional {
+	condition = ^ondelete;
+}
+
+OnDelete : WOString {
+	value = ^ondelete;
+}
