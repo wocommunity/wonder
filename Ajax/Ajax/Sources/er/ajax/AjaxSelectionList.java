@@ -103,7 +103,10 @@ public class AjaxSelectionList extends AjaxComponent {
 		else {
 			int index = Integer.parseInt(_value);
 			NSArray list = list();
-			Object selection = list.objectAtIndex(index);
+			Object selection = null;
+			if (index >= list.count()) {
+				selection = list.objectAtIndex(index);
+			}
 			if (selection instanceof NSKeyValueCoding.Null) {
 				setSelection(null);
 			}
