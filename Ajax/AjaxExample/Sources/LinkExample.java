@@ -5,6 +5,9 @@ import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.foundation.NSMutableArray;
 
+import er.ajax.AjaxUpdateTrigger;
+import er.ajax.AjaxUtils;
+
 public class LinkExample extends WOComponent {
   private boolean _showingSubComponent1;
   public NSMutableArray _words;
@@ -50,5 +53,9 @@ public class LinkExample extends WOComponent {
   public WOActionResults onClickServerAction() {
 	  System.out.println("LinkExample.onClickServerAction: Clicked");
 	  return null;
+  }
+  
+  public WOActionResults javascriptResponseAction() {
+	  return AjaxUtils.javascriptResponse("alert('hi');", context());
   }
 }

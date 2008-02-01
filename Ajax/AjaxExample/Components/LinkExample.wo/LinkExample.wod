@@ -71,6 +71,10 @@ SelectedWord : WOString {
 	value = selectedWord;
 }
 
+JavascriptResponseLink :AjaxUpdateLink {
+	action = javascriptResponseAction;
+}
+
 OnClickServerLink : AjaxUpdateLink {
 	action = onClickServerAction;
 	onClickServer = "alert('onClickServer alerted');";
