@@ -938,7 +938,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 		// The content-type header makes the WO parser only look at the content. Which is empty.
 		// http://lists.macosforge.org/pipermail/webkit-unassigned/2007-November/053847.html
 		// http://jira.atlassian.com/browse/JRA-13791
-		if ("GET".equalsIgnoreCase(aMethod) && someHeaders.objectForKey("content-type") != null)
+		if ("GET".equalsIgnoreCase(aMethod) && someHeaders != null && someHeaders.objectForKey("content-type") != null)
 		{
 			someHeaders = someHeaders.mutableClone();
 			((NSMutableDictionary)someHeaders).removeObjectForKey("content-type");
