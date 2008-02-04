@@ -2,6 +2,7 @@ package er.openid;
 
 import java.lang.reflect.Method;
 import java.util.Enumeration;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -15,11 +16,14 @@ import org.openid4java.discovery.Identifier;
 import org.openid4java.message.AuthRequest;
 import org.openid4java.message.AuthSuccess;
 import org.openid4java.message.MessageException;
+import org.openid4java.message.MessageExtension;
 import org.openid4java.message.Parameter;
 import org.openid4java.message.ParameterList;
 import org.openid4java.message.ax.AxMessage;
 import org.openid4java.message.ax.FetchRequest;
 import org.openid4java.message.ax.FetchResponse;
+import org.openid4java.message.sreg.SRegMessage;
+import org.openid4java.message.sreg.SRegRequest;
 import org.openid4java.util.HttpClientFactory;
 import org.openid4java.util.ProxyProperties;
 
@@ -60,6 +64,18 @@ public class EROpenIDManager {
    */
   public static interface Delegate {
     /**
+     * Returns OpenID message extensions for the fetch request. These message extensions will be sent to the OP
+     * as requests for additional information.
+     *
+     * @param userSuppliedString the string the user supplied
+     * @param request the WORequest
+     * @param context the WOContext
+     * @return a FetchRequest
+     * @throws MessageException
+     */
+    public List<MessageExtension> createFetchMessageExtensions(String userSuppliedString, WORequest request, WOContext context) throws MessageException;
+  
+    /**
      * Returns an OpenID fetch request.
      *  
      * @param userSuppliedString the string the user supplied
@@ -67,8 +83,10 @@ public class EROpenIDManager {
      * @param context the WOContext
      * @return a FetchRequest
      * @throws MessageException 
+     * @deprecated Replaced by createFetchMessageExtensions
      */
-    public FetchRequest createFetchRequest(String userSuppliedString, WORequest request, WOContext context) throws MessageException;
+    @Deprecated
+    public MessageExtension createFetchRequest(String userSuppliedString, WORequest request, WOContext context) throws MessageException;
 
     /**
      * Called after a response is received from the OpenID server.
@@ -106,8 +124,19 @@ public class EROpenIDManager {
    * The default delegate implementation.
    */
   public static class DefaultDelegate implements EROpenIDManager.Delegate {
+
     @SuppressWarnings("unused")
-    public FetchRequest createFetchRequest(String userSuppliedString, WORequest request, WOContext context) throws MessageException {
+    public List<MessageExtension> createFetchMessageExtensions(String userSuppliedString, WORequest request, WOContext context) throws MessageException {
+      MessageExtension fetchRequest = this.createFetchRequest(userSuppliedString, request, context);
+      ArrayList<MessageExtension> exts = new ArrayList<MessageExtension>();
+      if (fetchRequest != null)
+          exts.add(fetchRequest);
+      return exts;
+    }
+
+    @SuppressWarnings("unused")
+    @Deprecated
+    public MessageExtension createFetchRequest(String userSuppliedString, WORequest request, WOContext context) throws MessageException {
       return null;
     }
 
@@ -168,14 +197,25 @@ public class EROpenIDManager {
   }
 
   /**
-   * A simple delegate implementation that requests the user's email address.
+   * A simple delegate implementation that requests the user's email address. This is for example purposes only and
+   * this code is not suitable for production use. To utilize this particular delegate, the client should ask the
+   * EROResponse for a list of MessageExtensions. Then the client should iterate through those and retrieve the
+   * specific extension parameter using methods appropriate to the type of the MessageExtension. For instance, if
+   * the MessageExtension is an instance of SRegResponse, then the email parameter could be retrieved by casting the
+   * MessageExtension to an SRegResponse and then using getAttributeValue("email") to retrieve the email.
    */
   public static class EmailDelegate extends EROpenIDManager.DefaultDelegate {
     @Override
-    public FetchRequest createFetchRequest(String userSuppliedString, WORequest request, WOContext context) throws MessageException {
+    public List<MessageExtension> createFetchMessageExtensions(String userSuppliedString, WORequest request, WOContext context) throws MessageException {
+      ArrayList<MessageExtension> exts = new ArrayList<MessageExtension>();
       FetchRequest fetchRequest = FetchRequest.createFetchRequest();
-      fetchRequest.addAttribute("email", "http://schema.openid.net/contact/email", true);
-      return fetchRequest;
+      fetchRequest.addAttribute("email-axschema", "http://axschema.org/contact/email", true);
+      fetchRequest.addAttribute("email-openid", "http://schema.openid.net/contact/email", true);
+      exts.add(fetchRequest);
+      SRegRequest sregRequest = SRegRequest.createFetchRequest();
+      sregRequest.addAttribute("email",true);
+      exts.add(sregRequest);
+      return exts;
     }
   }
 
@@ -213,8 +253,7 @@ public class EROpenIDManager {
 
   /**
    * Set the delegate for this manager if you want to specify a custom
-   * FetchRequest.  By default the fetch request asks for the user's email
-   * address.
+   * FetchRequest.
    * 
    * @param delegate the new delegate
    */
@@ -278,11 +317,12 @@ public class EROpenIDManager {
       // obtain a AuthRequest message to be sent to the OpenID provider
       AuthRequest authReq = _manager.authenticate(discovered, returnToUrl);
 
-      // Attribute Exchange example: fetching the 'email' attribute
-      FetchRequest fetchRequest = _delegate.createFetchRequest(userSuppliedString, request, context);
-      if (fetchRequest != null) {
+      // add the message extensions
+      List<MessageExtension> exts = _delegate.createFetchMessageExtensions(userSuppliedString, request, context);
+      for (MessageExtension ext : exts) {
         // attach the extension to the authentication request
-        authReq.addExtension(fetchRequest);
+        EROpenIDManager.log.debug("Authentication request extension: " + ext);
+        authReq.addExtension(ext);
       }
 
       if (!discovered.isVersion2()) {
@@ -317,7 +357,9 @@ public class EROpenIDManager {
    * @throws AssociationException
    */
   public EROResponse verifyResponse(WORequest request, WOContext context) throws MessageException, DiscoveryException, AssociationException {
+
     WOSession session = context.session();
+
     // extract the parameters from the authentication response
     // (which comes in as a HTTP request from the OpenID provider)
     ParameterList responseParameters = new ParameterList();
@@ -326,6 +368,7 @@ public class EROpenIDManager {
       String formValueKey = (String) formValueKeyEnum.nextElement();
       String formValue = request.stringFormValueForKey(formValueKey);
       responseParameters.set(new Parameter(formValueKey, formValue));
+      EROpenIDManager.log.debug("Response parameter: " + formValueKey + " => " + formValue);
     }
 
     // retrieve the previously stored discovery information
@@ -341,15 +384,35 @@ public class EROpenIDManager {
 
     // examine the verification result and extract the verified identifier
     FetchResponse fetchResponse = null;
+    List<MessageExtension> messageExtensions = new ArrayList<MessageExtension>();
     Identifier identifier = verification.getVerifiedId();
     if (identifier != null) {
-      AuthSuccess authSuccess = (AuthSuccess) verification.getAuthResponse();
+      AuthSuccess authSuccess = AuthSuccess.createAuthSuccess(responseParameters);
+      EROpenIDManager.log.debug("AuthSucess:" + authSuccess);
+
       if (authSuccess.hasExtension(AxMessage.OPENID_NS_AX)) {
-        fetchResponse = (FetchResponse) authSuccess.getExtension(AxMessage.OPENID_NS_AX);
+        MessageExtension ext = authSuccess.getExtension(AxMessage.OPENID_NS_AX);
+        messageExtensions.add(ext);
+        EROpenIDManager.log.debug("MessageExtension (AX):" + ext);
+        // handle backwards, deprecated compatibility
+        if (ext instanceof FetchResponse && fetchResponse == null)
+          fetchResponse = (FetchResponse)ext;
       }
+
+      if (authSuccess.hasExtension(SRegMessage.OPENID_NS_SREG)) {
+        MessageExtension ext = authSuccess.getExtension(SRegMessage.OPENID_NS_SREG);
+        messageExtensions.add(ext);
+        EROpenIDManager.log.debug("MessageExtension (SREG):" + ext);
+      } 
+
+      if (authSuccess.hasExtension(SRegMessage.OPENID_NS_SREG11)) {
+        MessageExtension ext = authSuccess.getExtension(SRegMessage.OPENID_NS_SREG11);
+        messageExtensions.add(ext);
+        EROpenIDManager.log.debug("MessageExtension (SREG11):" + ext);
+      } 
     }
 
-    EROResponse eroResponse = new EROResponse(identifier, fetchResponse);
+    EROResponse eroResponse = new EROResponse(identifier, fetchResponse, messageExtensions);
     _delegate.responseReceived(verification, eroResponse, request, context);
     return eroResponse;
   }
