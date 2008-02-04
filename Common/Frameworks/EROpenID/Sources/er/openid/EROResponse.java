@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.openid4java.discovery.Identifier;
 import org.openid4java.message.ax.FetchResponse;
+import org.openid4java.message.MessageExtension;
 
 import com.webobjects.foundation.NSKeyValueCoding;
 
@@ -15,16 +16,19 @@ import com.webobjects.foundation.NSKeyValueCoding;
 public class EROResponse implements NSKeyValueCoding.ErrorHandling {
   private Identifier _identifier;
   private FetchResponse _fetchResponse;
+  private List<MessageExtension> _messageExtensions;
 
   /**
    * Construct a new EROResponse.
    * 
    * @param identifier the OpenID identifier (null if auth failed)
    * @param fetchResponse the FetchResponse (null if auth failed, or if there were no extended attributes)
+   * @param messageExtensions the list of message extensions returned as responses from the request
    */
-  public EROResponse(Identifier identifier, FetchResponse fetchResponse) {
+  public EROResponse(Identifier identifier, FetchResponse fetchResponse, List<MessageExtension> messageExtensions) {
     _identifier = identifier;
     _fetchResponse = fetchResponse;
+    _messageExtensions = messageExtensions;
   }
 
   /**
@@ -49,9 +53,20 @@ public class EROResponse implements NSKeyValueCoding.ErrorHandling {
    * Returns the OpenID FetchResponse that contains extended attributes from the request.
    * 
    * @return the OpenID FetchResponse
+   * @deprecated use messageExtensions instead
    */
+  @Deprecated
   public FetchResponse fetchResponse() {
     return _fetchResponse;
+  }
+
+  /**
+   * Returns the message extensions from the request.
+   *
+   * @return the list of message extensions
+   */
+  public List<MessageExtension> messageExtensions() {
+    return _messageExtensions;
   }
 
   public void handleTakeValueForUnboundKey(Object obj, String key) {
