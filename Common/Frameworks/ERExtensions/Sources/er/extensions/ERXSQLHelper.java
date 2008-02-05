@@ -44,14 +44,19 @@ import com.webobjects.jdbcadaptor.JDBCAdaptor;
 import com.webobjects.jdbcadaptor.JDBCPlugIn;
 
 /**
- * ERXSQLHelper provides support for additional database-vender-specific operations that JDBCPlugIn does not cover.
+ * ERXSQLHelper provides support for additional database-vender-specific
+ * operations that JDBCPlugIn does not cover.
  * 
- * By default this will try to load the class er.extensions.ERXSQLHelper$DatabaseVendorSQLHelper. For instance,
- * er.extensions.ERXSQLHelper$FrontBaseSQLHelper. If you want to change the helper that is used for a particular
- * database vendor, then override FrontBase.SQLHelper, Oracle.SQLHelper, etc. Case is important (because the vendor name
- * is prepended to the class name), and should match what your JDBCPlugIn.databaseProductName() returns.
+ * By default this will try to load the class
+ * er.extensions.ERXSQLHelper$DatabaseVendorSQLHelper. For instance,
+ * er.extensions.ERXSQLHelper$FrontBaseSQLHelper. If you want to change the
+ * helper that is used for a particular database vendor, then override
+ * FrontBase.SQLHelper, Oracle.SQLHelper, etc. Case is important (because the
+ * vendor name is prepended to the class name), and should match what your
+ * JDBCPlugIn.databaseProductName() returns.
  * 
- * @property databaseProductName.SQLHelper the class name of the SQLHelper for the database product name
+ * @property databaseProductName.SQLHelper the class name of the SQLHelper for
+ *           the database product name
  * 
  * @author mschrag
  */
@@ -63,31 +68,32 @@ public class ERXSQLHelper {
 
 	private JDBCPlugIn _plugin;
 
-	
 	public void prepareConnectionForSchemaChange(EOEditingContext ec, EOModel model) {
 		// do nothing by default
 	}
-	
+
 	public void restoreConnectionSettingsAfterSchemaChange(EOEditingContext ec, EOModel model) {
 		// do nothing by default
 	}
-	
+
 	public boolean shouldExecute(String sql) {
 		return true;
 	}
 
 	/**
-	 * creates SQL to create tables for the specified Entities. This can be used with EOUtilities rawRowsForSQL method
-	 * to create the tables.
+	 * creates SQL to create tables for the specified Entities. This can be used
+	 * with EOUtilities rawRowsForSQL method to create the tables.
 	 * 
 	 * @param entities
-	 *            a NSArray containing the entities for which create table statements should be generated or null if all
-	 *            entitites in the model should be used.
+	 *            a NSArray containing the entities for which create table
+	 *            statements should be generated or null if all entitites in the
+	 *            model should be used.
 	 * @param modelName
 	 *            the name of the EOModel
 	 * @param optionsCreate
 	 * 
-	 * @return a <code>String</code> containing SQL statements to create tables
+	 * @return a <code>String</code> containing SQL statements to create
+	 *         tables
 	 */
 	public String createSchemaSQLForEntitiesInModelWithNameAndOptions(NSArray<EOEntity> entities, String modelName, NSDictionary optionsCreate) {
 		EOModel m = ERXEOAccessUtilities.modelGroup(null).modelNamed(modelName);
@@ -95,8 +101,10 @@ public class ERXSQLHelper {
 	}
 
 	/**
-	 * Reimplementation that does not try to the shared objects. You should exit soon after calling this,
-	 * as it may or may not leave channels open. It is simply to geenrate sql.
+	 * Reimplementation that does not try to the shared objects. You should exit
+	 * soon after calling this, as it may or may not leave channels open. It is
+	 * simply to geenrate sql.
+	 * 
 	 * @param model
 	 * @param coordinator
 	 */
@@ -104,48 +112,48 @@ public class ERXSQLHelper {
 		EODatabaseContext dbc = null;
 		NSArray objectStores = coordinator.cooperatingObjectStores();
 		int i = 0;
-		for(int c = objectStores.count(); i < c; i++) {
+		for (int c = objectStores.count(); i < c; i++) {
 			Object objectStore = objectStores.objectAtIndex(i);
-			if((objectStore instanceof EODatabaseContext) && ((EODatabaseContext)objectStore).database().addModelIfCompatible(model)) {
-				dbc = (EODatabaseContext)objectStore;
+			if ((objectStore instanceof EODatabaseContext) && ((EODatabaseContext) objectStore).database().addModelIfCompatible(model)) {
+				dbc = (EODatabaseContext) objectStore;
 			}
 		}
 
-		if(dbc == null) {
-			dbc = (EODatabaseContext)_NSUtilities.instantiateObject(EODatabaseContext.contextClassToRegister(), new Class[] {
-				com.webobjects.eoaccess.EODatabase.class
-			}, new Object[] {
-				new EODatabase(model)
-			}, true, false);
+		if (dbc == null) {
+			dbc = (EODatabaseContext) _NSUtilities.instantiateObject(EODatabaseContext.contextClassToRegister(), new Class[] { com.webobjects.eoaccess.EODatabase.class }, new Object[] { new EODatabase(model) }, true, false);
 			coordinator.addCooperatingObjectStore(dbc);
 		}
 		return dbc;
 	}
 
 	/**
-	 * creates SQL to create tables for the specified Entities. This can be used with EOUtilities rawRowsForSQL method
-	 * to create the tables.
+	 * creates SQL to create tables for the specified Entities. This can be used
+	 * with EOUtilities rawRowsForSQL method to create the tables.
 	 * 
 	 * @param entities
-	 *            a NSArray containing the entities for which create table statements should be generated or null if all
-	 *            entitites in the model should be used.
+	 *            a NSArray containing the entities for which create table
+	 *            statements should be generated or null if all entitites in the
+	 *            model should be used.
 	 * @param model
 	 *            the EOModel
 	 * @param optionsCreate
 	 *            a NSDictionary containing the different options
 	 * 
-	 * @return a <code>String</code> containing SQL statements to create tables
+	 * @return a <code>String</code> containing SQL statements to create
+	 *         tables
 	 */
 	@SuppressWarnings("unchecked")
 	public String createSchemaSQLForEntitiesInModelAndOptions(NSArray<EOEntity> entities, EOModel model, NSDictionary optionsCreate) {
 		EOEditingContext ec = ERXEC.newEditingContext();
 		ec.lock();
 		try {
-			EODatabaseContext databaseContext = databaseContextForModel(model, (EOObjectStoreCoordinator)ec.rootObjectStore());
-			// AK the default implementation loads the shared objects, and when they don't exist, throw an an error
+			EODatabaseContext databaseContext = databaseContextForModel(model, (EOObjectStoreCoordinator) ec.rootObjectStore());
+			// AK the default implementation loads the shared objects, and when
+			// they don't exist, throw an an error
 			// which is not very useful for schema generation
 			// But you would probably want to exit soon after calling this....
-			// EODatabaseContext databaseContext = EODatabaseContext.registeredDatabaseContextForModel(model, ec);
+			// EODatabaseContext databaseContext =
+			// EODatabaseContext.registeredDatabaseContextForModel(model, ec);
 			if (entities == null) {
 				Enumeration<EOEntity> e = model.entities().objectEnumerator();
 				NSMutableArray<EOEntity> ar = new NSMutableArray<EOEntity>();
@@ -164,7 +172,8 @@ public class ERXSQLHelper {
 			}
 			String result = createSchemaSQLForEntitiesWithOptions(entities, databaseContext, optionsCreate);
 			return result;
-		} finally {
+		}
+		finally {
 			ec.unlock();
 		}
 	}
@@ -177,7 +186,8 @@ public class ERXSQLHelper {
 	 * @param databaseContext
 	 *            the database context to use
 	 * @param optionsCreate
-	 *            the options (@see createSchemaSQLForEntitiesInModelWithNameAndOptions)
+	 *            the options (@see
+	 *            createSchemaSQLForEntitiesInModelWithNameAndOptions)
 	 * @return a sql script
 	 */
 	public String createSchemaSQLForEntitiesWithOptions(NSArray<EOEntity> entities, EODatabaseContext databaseContext, NSDictionary<String, String> optionsCreate) {
@@ -188,15 +198,17 @@ public class ERXSQLHelper {
 	}
 
 	/**
-	 * creates SQL to create tables for the specified Entities. This can be used with EOUtilities rawRowsForSQL method
-	 * to create the tables.
+	 * creates SQL to create tables for the specified Entities. This can be used
+	 * with EOUtilities rawRowsForSQL method to create the tables.
 	 * 
 	 * @param entities
-	 *            a NSArray containing the entities for which create table statements should be generated or null if all
-	 *            entitites in the model should be used.
+	 *            a NSArray containing the entities for which create table
+	 *            statements should be generated or null if all entitites in the
+	 *            model should be used.
 	 * @param modelName
 	 *            the name of the EOModel
-	 * @return a <code>String</code> containing SQL statements to create tables
+	 * @return a <code>String</code> containing SQL statements to create
+	 *         tables
 	 */
 	public String createSchemaSQLForEntitiesInModelWithName(NSArray<EOEntity> entities, String modelName) {
 		EOModel model = ERXEOAccessUtilities.modelGroup(null).modelNamed(modelName);
@@ -204,15 +216,18 @@ public class ERXSQLHelper {
 	}
 
 	/**
-	 * Creates SQL to create tables for the specified Entities. This can be used with EOUtilities rawRowsForSQL method
-	 * to create the tables.
+	 * Creates SQL to create tables for the specified Entities. This can be used
+	 * with EOUtilities rawRowsForSQL method to create the tables.
 	 * 
 	 * @param entities
-	 *            a NSArray containing the entities for which create table statements should be generated or null if all
-	 *            entitites in the model should be used.
-	 * @param model the EOModel
+	 *            a NSArray containing the entities for which create table
+	 *            statements should be generated or null if all entitites in the
+	 *            model should be used.
+	 * @param model
+	 *            the EOModel
 	 * 
-	 * @return a <code>String</code> containing SQL statements to create tables
+	 * @return a <code>String</code> containing SQL statements to create
+	 *         tables
 	 */
 	public String createSchemaSQLForEntitiesInModel(NSArray<EOEntity> entities, EOModel model) {
 		return createSchemaSQLForEntitiesInModelAndOptions(entities, model, defaultOptionDictionary(true, true));
@@ -221,14 +236,17 @@ public class ERXSQLHelper {
 	/**
 	 * Creates an option dictionary to use with the other methods
 	 * 
-	 * @param create add create statements
-	 * @param drop add drop statements
-	 *            <br/><br/>This method uses the following defaults options:
+	 * @param create
+	 *            add create statements
+	 * @param drop
+	 *            add drop statements <br/><br/>This method uses the following
+	 *            defaults options:
 	 *            <ul>
 	 *            <li>EOSchemaGeneration.DropTablesKey=YES if drop</li>
 	 *            <li>EOSchemaGeneration.DropPrimaryKeySupportKey=YES if drop</li>
 	 *            <li>EOSchemaGeneration.CreateTablesKey=YES if create</li>
-	 *            <li>EOSchemaGeneration.CreatePrimaryKeySupportKey=YES if create</li>
+	 *            <li>EOSchemaGeneration.CreatePrimaryKeySupportKey=YES if
+	 *            create</li>
 	 *            <li>EOSchemaGeneration.PrimaryKeyConstraintsKey=YES if create</li>
 	 *            <li>EOSchemaGeneration.ForeignKeyConstraintsKey=YES if create</li>
 	 *            <li>EOSchemaGeneration.CreateDatabaseKey=NO</li>
@@ -237,7 +255,8 @@ public class ERXSQLHelper {
 	 *            <br/><br>
 	 *            Possible values are <code>YES</code> and <code>NO</code>
 	 * 
-	 * @return a <code>String</code> containing SQL statements to create tables
+	 * @return a <code>String</code> containing SQL statements to create
+	 *         tables
 	 */
 	public NSMutableDictionary<String, String> defaultOptionDictionary(boolean create, boolean drop) {
 		NSMutableDictionary<String, String> optionsCreate = new NSMutableDictionary<String, String>();
@@ -253,12 +272,13 @@ public class ERXSQLHelper {
 	}
 
 	/**
-	 * creates SQL to create tables for the specified Entities. This can be used with EOUtilities rawRowsForSQL method
-	 * to create the tables.
+	 * creates SQL to create tables for the specified Entities. This can be used
+	 * with EOUtilities rawRowsForSQL method to create the tables.
 	 * 
 	 * @param entities
-	 *            a NSArray containing the entities for which create table statements should be generated or null if all
-	 *            entitites in the model should be used.
+	 *            a NSArray containing the entities for which create table
+	 *            statements should be generated or null if all entitites in the
+	 *            model should be used.
 	 * @param databaseContext
 	 *            the databaseContext
 	 * 
@@ -266,10 +286,11 @@ public class ERXSQLHelper {
 	 *            if true, tables and keys are created
 	 * @param drop
 	 *            if true, tables and keys are dropped
-	 * @return a <code>String</code> containing SQL statements to create tables
+	 * @return a <code>String</code> containing SQL statements to create
+	 *         tables
 	 */
 	public String createSchemaSQLForEntitiesInDatabaseContext(NSArray<EOEntity> entities, EODatabaseContext databaseContext, boolean create, boolean drop) {
-		return createSchemaSQLForEntitiesWithOptions(entities, databaseContext, defaultOptionDictionary(create,drop));
+		return createSchemaSQLForEntitiesWithOptions(entities, databaseContext, defaultOptionDictionary(create, drop));
 	}
 
 	public String createIndexSQLForEntities(NSArray<EOEntity> entities) {
@@ -423,28 +444,35 @@ public class ERXSQLHelper {
 	}
 
 	/**
-	 * Returns the last of attributes to fetch for a fetch spec.  The entity is passed 
-	 * in here because it has likely already been looked up for the particular fetch spec.
+	 * Returns the last of attributes to fetch for a fetch spec. The entity is
+	 * passed in here because it has likely already been looked up for the
+	 * particular fetch spec.
 	 * 
-	 * @param fetchSpec the fetch spec
-	 * @param entity the entity (which should match fetchSpec.entityName())
+	 * @param fetchSpec
+	 *            the fetch spec
+	 * @param entity
+	 *            the entity (which should match fetchSpec.entityName())
 	 * @return the list of attributes to fetch
 	 */
 	@SuppressWarnings("unchecked")
 	public NSArray<EOAttribute> attributesToFetchForEntity(EOFetchSpecification fetchSpec, EOEntity entity) {
-		NSArray<EOAttribute> attributes = entity.attributesToFetch();
-		if (fetchSpec.fetchesRawRows()) {
+		NSArray<EOAttribute> attributes;
+		if (!fetchSpec.fetchesRawRows()) {
+			attributes = entity.attributesToFetch();
+		}
+		else {
 			NSMutableArray<EOAttribute> rawRowAttributes = new NSMutableArray<EOAttribute>();
-			for (String rawRowKeyPath : (NSArray<String>)fetchSpec.rawRowKeyPaths()) {
+			for (String rawRowKeyPath : (NSArray<String>) fetchSpec.rawRowKeyPaths()) {
 				rawRowAttributes.addObject(entity.anyAttributeNamed(rawRowKeyPath));
 			}
 			attributes = rawRowAttributes.immutableClone();
 		}
 		return attributes;
 	}
-	
+
 	/**
-	 * Creates the SQL which is used by the provided EOFetchSpecification, limited by the given range.
+	 * Creates the SQL which is used by the provided EOFetchSpecification,
+	 * limited by the given range.
 	 * 
 	 * @param ec
 	 *            the EOEditingContext
@@ -458,6 +486,27 @@ public class ERXSQLHelper {
 	 * @return the EOSQLExpression which the EOFetchSpecification would use
 	 */
 	public EOSQLExpression sqlExpressionForFetchSpecification(EOEditingContext ec, EOFetchSpecification spec, long start, long end) {
+		return sqlExpressionForFetchSpecification(ec, spec, start, end, null);
+	}
+
+	/**
+	 * Creates the SQL which is used by the provided EOFetchSpecification,
+	 * limited by the given range.
+	 * 
+	 * @param ec
+	 *            the EOEditingContext
+	 * @param spec
+	 *            the EOFetchSpecification in question
+	 * @param start
+	 *            start of rows to fetch
+	 * @param end
+	 *            end of rows to fetch (-1 if not used)
+	 * @param attributes
+	 *            the attributes to fetch from the given entity
+	 * 
+	 * @return the EOSQLExpression which the EOFetchSpecification would use
+	 */
+	public EOSQLExpression sqlExpressionForFetchSpecification(EOEditingContext ec, EOFetchSpecification spec, long start, long end, NSArray<EOAttribute> attributes) {
 		EOEntity entity = ERXEOAccessUtilities.entityNamed(ec, spec.entityName());
 		EOModel model = entity.model();
 		EODatabaseContext dbc = EOUtilities.databaseContextForModelNamed(ec, model.name());
@@ -479,7 +528,9 @@ public class ERXSQLHelper {
 		spec = ERXEOAccessUtilities.localizeFetchSpecification(ec, spec);
 		String url = (String) model.connectionDictionary().objectForKey("URL");
 		String lowerCaseURL = (url != null ? url.toLowerCase() : "");
-		NSArray<EOAttribute> attributes = attributesToFetchForEntity(spec, entity);
+		if (attributes == null) {
+			attributes = attributesToFetchForEntity(spec, entity);
+		}
 		EOSQLExpression sqlExpr = sqlFactory.selectStatementForAttributes(attributes, false, spec, entity);
 		String sql = sqlExpr.statement();
 		if (end >= 0) {
@@ -492,14 +543,38 @@ public class ERXSQLHelper {
 	protected String limitExpressionForSQL(EOSQLExpression expression, EOFetchSpecification fetchSpecification, String sql, long start, long end) {
 		throw new UnsupportedOperationException("There is no database-specific implementation for generating limit expressions.");
 	}
+	
+	/**
+	 * Returns the attribute read format for an aggregate function for a particular column with a name.
+	 *  
+	 * @param functionName the aggregate function to generate
+	 * @param columnName the column name to aggregate on
+	 * @param aggregateName the name to assign to the aggregate result
+	 * @return the generated read format
+	 */
+	public String readFormatForAggregateFunction(String functionName, String columnName, String aggregateName) {
+		StringBuffer sb = new StringBuffer();
+		sb.append(functionName);
+		sb.append("(");
+		sb.append(columnName);
+		sb.append(")");
+		if (aggregateName != null) {
+			sb.append(" ");
+			sb.append(aggregateName);
+		}
+        return sb.toString();
+	}
 
 	/**
-	 * Adds itemString to a comma-separated list. If listString already has entries, this method 
-	 * appends a comma followed by itemString. There is no good way to hook in and use 
-	 * EOSQLExpression's version of this, so we have our own copy of it.
+	 * Adds itemString to a comma-separated list. If listString already has
+	 * entries, this method appends a comma followed by itemString. There is no
+	 * good way to hook in and use EOSQLExpression's version of this, so we have
+	 * our own copy of it.
 	 * 
-	 * @param itemString the item to append
-	 * @param listString the list buffer
+	 * @param itemString
+	 *            the item to append
+	 * @param listString
+	 *            the list buffer
 	 */
 	public void appendItemToListString(String itemString, StringBuffer listString) {
 		if (listString.length() > 0) {
@@ -512,63 +587,72 @@ public class ERXSQLHelper {
 	 * Adds a group-by clause to the given SQL Expression based on the list of
 	 * attributes defined in the given fetch spec.
 	 * 
-	 * @param editingContext the editing context to lookup entities with 
-	 * @param fetchSpec the fetch spec to retrieve attributes from
-	 * @param expression the sql expression to add a "group by" clause to 
+	 * @param editingContext
+	 *            the editing context to lookup entities with
+	 * @param fetchSpec
+	 *            the fetch spec to retrieve attributes from
+	 * @param expression
+	 *            the sql expression to add a "group by" clause to
 	 */
 	public void addGroupByClauseToExpression(EOEditingContext editingContext, EOFetchSpecification fetchSpec, EOSQLExpression expression) {
 		EOEntity entity = ERXEOAccessUtilities.entityNamed(editingContext, fetchSpec.entityName());
-	    addGroupByClauseToExpression(attributesToFetchForEntity(fetchSpec, entity), expression);
+		addGroupByClauseToExpression(attributesToFetchForEntity(fetchSpec, entity), expression);
 	}
-	
+
 	/**
-	 * Returns the index in the expression's statement where group by and having clauses
-	 * should be inserted.
+	 * Returns the index in the expression's statement where group by and having
+	 * clauses should be inserted.
 	 * 
-	 * @param expression the expression to look into
+	 * @param expression
+	 *            the expression to look into
 	 * @return the index into statement where the group by should be inserted
 	 */
 	protected int _groupByOrHavingIndex(EOSQLExpression expression) {
 		String sql = expression.statement();
-	    int orderByIndex = sql.lastIndexOf(" ORDER BY ");
-	    if (orderByIndex == -1) {
-	      orderByIndex = sql.length();
-	    }
-	    return orderByIndex;
+		int orderByIndex = sql.lastIndexOf(" ORDER BY ");
+		if (orderByIndex == -1) {
+			orderByIndex = sql.length();
+		}
+		return orderByIndex;
 	}
 
 	/**
-	 * Adds a group-by clause to the given SQL Expression based on the given list of
-	 * attributes.
+	 * Adds a group-by clause to the given SQL Expression based on the given
+	 * list of attributes.
 	 * 
-	 * @param attributes the list of attributes to group by
-	 * @param expression the sql expression to add a "group by" clause to 
+	 * @param attributes
+	 *            the list of attributes to group by
+	 * @param expression
+	 *            the sql expression to add a "group by" clause to
 	 */
 	public void addGroupByClauseToExpression(NSArray<EOAttribute> attributes, EOSQLExpression expression) {
 		StringBuffer groupByBuffer = new StringBuffer();
 		for (EOAttribute attribute : attributes) {
-		    String attributeSqlString = expression.sqlStringForAttribute(attribute);
-		    attributeSqlString = expression.formatSQLString(attributeSqlString, attribute.readFormat());
-		    appendItemToListString(attributeSqlString, groupByBuffer);
+			String attributeSqlString = expression.sqlStringForAttribute(attribute);
+			attributeSqlString = expression.formatSQLString(attributeSqlString, attribute.readFormat());
+			appendItemToListString(attributeSqlString, groupByBuffer);
 		}
-	    groupByBuffer.insert(0, " GROUP BY ");
+		groupByBuffer.insert(0, " GROUP BY ");
 
 		StringBuffer sqlBuffer = new StringBuffer(expression.statement());
-	    sqlBuffer.insert(_groupByOrHavingIndex(expression), groupByBuffer);
-	    expression.setStatement(sqlBuffer.toString());
+		sqlBuffer.insert(_groupByOrHavingIndex(expression), groupByBuffer);
+		expression.setStatement(sqlBuffer.toString());
 	}
 
 	/**
 	 * Adds a " having count(*) > x" clause to a group by expression.
 	 * 
-	 * @param selector the comparison selector -- just like EOKeyValueQualifier
-	 * @param value the value to compare against
-	 * @param expression the expression to modify
+	 * @param selector
+	 *            the comparison selector -- just like EOKeyValueQualifier
+	 * @param value
+	 *            the value to compare against
+	 * @param expression
+	 *            the expression to modify
 	 */
 	public void addHavingCountClauseToExpression(NSSelector selector, int value, EOSQLExpression expression) {
 		Integer integerValue = Integer.valueOf(value);
 		String operatorString = expression.sqlStringForSelector(selector, integerValue);
-		
+
 		StringBuffer havingBuffer = new StringBuffer();
 		havingBuffer.append(" HAVING COUNT(*) ");
 		havingBuffer.append(operatorString);
@@ -576,10 +660,10 @@ public class ERXSQLHelper {
 		havingBuffer.append(integerValue);
 
 		StringBuffer sqlBuffer = new StringBuffer(expression.statement());
-	    sqlBuffer.insert(_groupByOrHavingIndex(expression), havingBuffer);
-	    expression.setStatement(sqlBuffer.toString());
+		sqlBuffer.insert(_groupByOrHavingIndex(expression), havingBuffer);
+		expression.setStatement(sqlBuffer.toString());
 	}
-	
+
 	/**
 	 * Returns the SQL expression for a regular expression query.
 	 * 
@@ -593,8 +677,10 @@ public class ERXSQLHelper {
 	/**
 	 * Returns the SQL expression for a full text search query.
 	 * 
-	 * @param qualifier the full text qualifier
-	 * @param expression the EOSQLExpression context
+	 * @param qualifier
+	 *            the full text qualifier
+	 * @param expression
+	 *            the EOSQLExpression context
 	 * @return a SQL expression
 	 */
 	public String sqlForFullTextQuery(ERXFullTextQualifier qualifier, EOSQLExpression expression) {
@@ -602,11 +688,15 @@ public class ERXSQLHelper {
 	}
 
 	/**
-	 * Returns the SQL expression for creating a unique index on the given set of columns
+	 * Returns the SQL expression for creating a unique index on the given set
+	 * of columns
 	 * 
-	 * @param indexName the name of the index to create
-	 * @param expression the EOSQLExpression context
-	 * @param columnNames the list of column names to index on
+	 * @param indexName
+	 *            the name of the index to create
+	 * @param expression
+	 *            the EOSQLExpression context
+	 * @param columnNames
+	 *            the list of column names to index on
 	 * @return a SQL expression
 	 */
 	public String sqlForCreateUniqueIndex(String indexName, String tableName, String... columnNames) {
@@ -614,7 +704,8 @@ public class ERXSQLHelper {
 	}
 
 	/**
-	 * Returns the number of rows the supplied EOFetchSpecification would return.
+	 * Returns the number of rows the supplied EOFetchSpecification would
+	 * return.
 	 * 
 	 * @param ec
 	 *            the EOEditingContext
@@ -669,7 +760,8 @@ public class ERXSQLHelper {
 	 * @param ec
 	 *            editing context
 	 * @param modelName
-	 *            name of the model which connects to the database that has the sequence in it
+	 *            name of the model which connects to the database that has the
+	 *            sequence in it
 	 * @param sequenceName
 	 *            name of the sequence
 	 * @return next value in the sequence
@@ -689,7 +781,8 @@ public class ERXSQLHelper {
 	}
 
 	/**
-	 * Creates a where clause string " someKey IN ( someValue1,...)". Can migrate keyPaths.
+	 * Creates a where clause string " someKey IN ( someValue1,...)". Can
+	 * migrate keyPaths.
 	 */
 	public String sqlWhereClauseStringForKey(EOSQLExpression e, String key, NSArray valueArray) {
 		if (valueArray.count() == 0) {
@@ -705,26 +798,28 @@ public class ERXSQLHelper {
 		else {
 			sqlName = e.sqlStringForAttribute(attribute);
 		}
-		
+
 		int maxPerQuery = 256;
-		
+
 		// Need to wrap this SQL in parens if there are multiple grougps
 		if (valueArray.count() > maxPerQuery) {
 			sb.append(" ( ");
 		}
-			
-		for(int j = 0; j < valueArray.count(); j+= maxPerQuery) { 
-			int currentSize = (j + (maxPerQuery-1) < valueArray.count() ? maxPerQuery : ((valueArray.count() % maxPerQuery)));
+
+		for (int j = 0; j < valueArray.count(); j += maxPerQuery) {
+			int currentSize = (j + (maxPerQuery - 1) < valueArray.count() ? maxPerQuery : ((valueArray.count() % maxPerQuery)));
 			sb.append(sqlName);
 			sb.append(" IN ");
 			sb.append("(");
-			for (int i = j; i < j+currentSize; i++) {
+			for (int i = j; i < j + currentSize; i++) {
 				if (i > j) {
 					sb.append(", ");
 				}
 				Object value = valueArray.objectAtIndex(i);
 				// AK : crude hack for queries with number constants.
-				// Apparently EOAttribute.adaptorValueByConvertingAttributeValue() doesn't actually return a suitable value
+				// Apparently
+				// EOAttribute.adaptorValueByConvertingAttributeValue() doesn't
+				// actually return a suitable value
 				if (value instanceof ERXConstant.NumberConstant) {
 					value = new Long(((Number) value).longValue());
 				}
@@ -734,11 +829,11 @@ public class ERXSQLHelper {
 				sb.append(value);
 			}
 			sb.append(")");
-			if(j < valueArray.count() - maxPerQuery) {
+			if (j < valueArray.count() - maxPerQuery) {
 				sb.append(" OR ");
 			}
 		}
-		
+
 		if (valueArray.count() > maxPerQuery) {
 			sb.append(" ) ");
 		}
@@ -938,20 +1033,23 @@ public class ERXSQLHelper {
 
 	public static class OracleSQLHelper extends ERXSQLHelper {
 		/**
-		 * oracle 9 has a maximum length of 30 characters for table names, column names and constraint names Foreign key
-		 * constraint names are defined like this from the plugin:<br/><br/>
+		 * oracle 9 has a maximum length of 30 characters for table names,
+		 * column names and constraint names Foreign key constraint names are
+		 * defined like this from the plugin:<br/><br/>
 		 * 
 		 * TABLENAME_FOEREIGNKEYNAME_FK <br/><br/>
 		 * 
 		 * The whole statement looks like this:<br/><br/>
 		 * 
-		 * ALTER TABLE [TABLENAME] ADD CONSTRAINT [CONSTRAINTNAME] FOREIGN KEY ([FK]) REFERENCES [DESTINATION_TABLE]
-		 * ([PK]) DEFERRABLE INITIALLY DEFERRED
+		 * ALTER TABLE [TABLENAME] ADD CONSTRAINT [CONSTRAINTNAME] FOREIGN KEY
+		 * ([FK]) REFERENCES [DESTINATION_TABLE] ([PK]) DEFERRABLE INITIALLY
+		 * DEFERRED
 		 * 
-		 * THIS means that the tablename and the columnname together cannot be longer than 26 characters.<br/><br/>
+		 * THIS means that the tablename and the columnname together cannot be
+		 * longer than 26 characters.<br/><br/>
 		 * 
-		 * This method checks each foreign key constraint name and if it is longer than 30 characters its replaced with
-		 * a unique name.
+		 * This method checks each foreign key constraint name and if it is
+		 * longer than 30 characters its replaced with a unique name.
 		 * 
 		 * @see createSchemaSQLForEntitiesInModelWithNameAndOptions
 		 */
@@ -1014,8 +1112,9 @@ public class ERXSQLHelper {
 		protected String limitExpressionForSQL(EOSQLExpression expression, EOFetchSpecification fetchSpecification, String sql, long start, long end) {
 			String limitSQL;
 			/*
-			 * Oracle can make you puke... These are grabbed from tips all over the net and I can't test them as it
-			 * doesn't even install on OSX. Pick your poison.
+			 * Oracle can make you puke... These are grabbed from tips all over
+			 * the net and I can't test them as it doesn't even install on OSX.
+			 * Pick your poison.
 			 */
 			int debug = ERXProperties.intForKeyWithDefault("OracleBatchMode", 3);
 			if (debug == 1) {
@@ -1097,7 +1196,7 @@ public class ERXSQLHelper {
 			String limitSQL = sql.substring(0, index) + " TOP(" + start + ", " + (end - start) + ")" + sql.substring(index + 1, sql.length());
 			return limitSQL;
 		}
-		
+
 		@Override
 		public String sqlForFullTextQuery(ERXFullTextQualifier qualifier, EOSQLExpression expression) {
 			StringBuffer sb = new StringBuffer();
@@ -1125,15 +1224,15 @@ public class ERXSQLHelper {
 			sb.append("');");
 			return sb.toString();
 		}
-		
+
 		@Override
 		public String sqlForCreateUniqueIndex(String indexName, String tableName, String... columnNames) {
 			return "ALTER TABLE \"" + tableName + "\" ADD CONSTRAINT \"" + indexName + "\" UNIQUE(\"" + new NSArray<String>(columnNames).componentsJoinedByString("\", \"") + "\") INITIALLY IMMEDIATE NOT DEFERRABLE";
 		}
-		
+
 		@Override
 		public void prepareConnectionForSchemaChange(EOEditingContext ec, EOModel model) {
-			ERXEOAccessUtilities.ChannelAction action = new ERXEOAccessUtilities.ChannelAction(){
+			ERXEOAccessUtilities.ChannelAction action = new ERXEOAccessUtilities.ChannelAction() {
 				@Override
 				protected int doPerform(EOAdaptorChannel channel) {
 					try {
@@ -1147,14 +1246,14 @@ public class ERXSQLHelper {
 			};
 			action.perform(ec, model.name());
 		}
-		
+
 		@Override
 		@SuppressWarnings("unchecked")
 		public void restoreConnectionSettingsAfterSchemaChange(EOEditingContext ec, EOModel model) {
 			// Default settings
 			String transactionIsolationLevel = "SERIALIZABLE";
 			String lockingDiscipline = "PESSIMISTIC";
-			
+
 			// Guess settings from looking at the url
 			String url = (String) model.connectionDictionary().valueForKey("URL");
 			NSArray<String> urlComponents = NSArray.componentsSeparatedByString(url, "/");
@@ -1167,7 +1266,7 @@ public class ERXSQLHelper {
 				}
 			}
 			final String sql = "SET TRANSACTION ISOLATION LEVEL " + transactionIsolationLevel + ", LOCKING " + lockingDiscipline;
-			
+
 			ERXEOAccessUtilities.ChannelAction action = new ERXEOAccessUtilities.ChannelAction() {
 				@Override
 				protected int doPerform(EOAdaptorChannel channel) {
@@ -1199,11 +1298,15 @@ public class ERXSQLHelper {
 	public static class PostgresqlSQLHelper extends ERXSQLHelper {
 		@Override
 		protected String formatValueForAttribute(EOSQLExpression expression, Object value, EOAttribute attribute, String key) {
-			// The Postgres Expression has a problem using bind variables so we have to get the formatted
-			// SQL string for a value instead. All Apple provided plugins must use the bind variables
+			// The Postgres Expression has a problem using bind variables so we
+			// have to get the formatted
+			// SQL string for a value instead. All Apple provided plugins must
+			// use the bind variables
 			// however. Frontbase can go either way
-			// MS: is expression always instanceof PostgresExpression for postgres?
-			// boolean isPostgres = e.getClass().getName().equals("com.webobjects.jdbcadaptor.PostgresqlExpression");
+			// MS: is expression always instanceof PostgresExpression for
+			// postgres?
+			// boolean isPostgres =
+			// e.getClass().getName().equals("com.webobjects.jdbcadaptor.PostgresqlExpression");
 			return expression.formatValueForAttribute(value, attribute);
 		}
 
