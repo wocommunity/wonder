@@ -1,11 +1,11 @@
-AbovePropertyKeysRepetition: WORepetition {
-	item = d2wContext.propertyKey;
-	list = d2wContext.aboveDisplayPropertyKeys;
+AboveDisplayPropertyKeys: ERD2WExtraDisplayPropertyKeysComponent {
+    localContext = d2wContext;
+	extraPropertiesKey = "aboveDisplayPropertyKeys";
 }
 
-BelowPropertyKeysRepetition: WORepetition {
-	item = d2wContext.propertyKey;
-	list = d2wContext.belowDisplayPropertyKeys;
+BelowDisplayPropertyKeys: ERD2WExtraDisplayPropertyKeysComponent {
+	localContext = d2wContext;
+	extraPropertiesKey = "belowDisplayPropertyKeys";
 }
 
 CancelButton: WOImage {
@@ -16,14 +16,6 @@ CancelButton: WOImage {
 	height = "31";
 	name = "Returns to the previous page";
 	width = "88";
-}
-
-HasAbovePropertyKeysConditional: ERXNonZeroConditional {
-	condition = d2wContext.aboveDisplayPropertyKeys;
-}
-
-HasBelowPropertyKeysConditional: ERXNonZeroConditional {
-	condition = d2wContext.belowDisplayPropertyKeys;
 }
 
 Help: ERDDebuggingHelp {
@@ -45,11 +37,6 @@ PageWrapper: WOSwitchComponent {
 	WOComponentName = d2wContext.pageWrapperName;
 	_componentUnroll = true;
 	_unroll = true;
-}
-
-PropertyKeySwitchComponent: WOSwitchComponent {
-	WOComponentName = d2wContext.componentName;
-	localContext = d2wContext;
 }
 
 String1: WOString {

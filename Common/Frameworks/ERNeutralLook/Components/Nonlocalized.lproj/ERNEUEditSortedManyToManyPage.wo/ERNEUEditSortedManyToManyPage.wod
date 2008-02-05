@@ -1,6 +1,6 @@
-AbovePropertyKeysRepetition: WORepetition {
-	item = d2wContext.propertyKey;
-	list = d2wContext.aboveDisplayPropertyKeys;
+AboveDisplayPropertyKeys: ERD2WExtraDisplayPropertyKeysComponent {
+    localContext = d2wContext;
+	extraPropertiesKey = "aboveDisplayPropertyKeys";
 }
 
 Image2: WOImage {
@@ -48,9 +48,9 @@ Banner: WOImage {
 	width = "550";
 }
 
-BelowPropertyKeysRepetition: WORepetition {
-	item = d2wContext.propertyKey;
-	list = d2wContext.belowDisplayPropertyKeys;
+BelowDisplayPropertyKeys: ERD2WExtraDisplayPropertyKeysComponent {
+	localContext = d2wContext;
+	extraPropertiesKey = "belowDisplayPropertyKeys";
 }
 
 Conditional1: WOConditional {
@@ -91,14 +91,6 @@ DisplayQuery: WOConditional {
 EntityName: WOString {
 	_unroll = true;
 	value = destinationEntity.name;
-}
-
-HasAbovePropertyKeysConditional: ERXNonZeroConditional {
-	condition = d2wContext.aboveDisplayPropertyKeys;
-}
-
-HasBelowPropertyKeysConditional: ERXNonZeroConditional {
-	condition = d2wContext.belowDisplayPropertyKeys;
 }
 
 HeaderRow: WOGenericContainer {

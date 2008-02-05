@@ -1,6 +1,6 @@
-AbovePropertyKeysRepetition: WORepetition {
-	item = d2wContext.propertyKey;
-	list = d2wContext.aboveDisplayPropertyKeys;
+AboveDisplayPropertyKeys: ERD2WExtraDisplayPropertyKeysComponent {
+    localContext = d2wContext;
+	extraPropertiesKey = "aboveDisplayPropertyKeys";
 }
 
 AttributeCell: WOGenericContainer {
@@ -44,9 +44,9 @@ BackgroundColor: WOString {
 	value = d2wContext.backgroundColorForTable;
 }
 
-BelowPropertyKeysRepetition: WORepetition {
-	item = d2wContext.propertyKey;
-	list = d2wContext.belowDisplayPropertyKeys;
+BelowDisplayPropertyKeys: ERD2WExtraDisplayPropertyKeysComponent {
+	localContext = d2wContext;
+	extraPropertiesKey = "belowDisplayPropertyKeys";
 }
 
 CheckBox2: WOSwitchComponent {
@@ -122,14 +122,6 @@ FilterDisplayGroupButton2: ERDFilterDisplayGroupButton {
 
 Form1: WOForm {
 	multipleSubmit = true;
-}
-
-HasAbovePropertyKeysConditional: ERXNonZeroConditional {
-	condition = d2wContext.aboveDisplayPropertyKeys;
-}
-
-HasBelowPropertyKeysConditional: ERXNonZeroConditional {
-	condition = d2wContext.belowDisplayPropertyKeys;
 }
 
 Help: ERDDebuggingHelp {
@@ -240,11 +232,6 @@ NumberOfItems: WOString {
 
 PageWrapper: WOSwitchComponent {
 	WOComponentName = d2wContext.pageWrapperName;
-}
-
-PropertyKeySwitchComponent: WOSwitchComponent {
-	WOComponentName = d2wContext.componentName;
-	localContext = d2wContext;
 }
 
 Repetition1: WORepetition {

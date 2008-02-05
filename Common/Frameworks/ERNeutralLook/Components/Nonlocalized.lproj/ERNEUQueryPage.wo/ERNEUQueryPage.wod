@@ -1,6 +1,6 @@
-AbovePropertyKeysRepetition: WORepetition {
-	item = d2wContext.propertyKey;
-	list = d2wContext.aboveDisplayPropertyKeys;
+AboveDisplayPropertyKeys: ERD2WExtraDisplayPropertyKeysComponent {
+    localContext = d2wContext;
+	extraPropertiesKey = "aboveDisplayPropertyKeys";
 }
 
 BackLink: WOHyperlink {
@@ -22,9 +22,9 @@ BannerConditional: WOConditional {
 	condition = showBanner;
 }
 
-BelowPropertyKeysRepetition: WORepetition {
-	item = d2wContext.propertyKey;
-	list = d2wContext.belowDisplayPropertyKeys;
+BelowDisplayPropertyKeys: ERD2WExtraDisplayPropertyKeysComponent {
+	localContext = d2wContext;
+	extraPropertiesKey = "belowDisplayPropertyKeys";
 }
 
 Conditional1: WOConditional {
@@ -86,11 +86,6 @@ PageWrapper: WOSwitchComponent {
 	WOComponentName = pageWrapperName;
 	_componentUnroll = true;
 	_unroll = true;
-}
-
-PropertyKeySwitchComponent: WOSwitchComponent {
-	WOComponentName = d2wContext.componentName;
-	localContext = d2wContext;
 }
 
 QueryForm: WOForm {

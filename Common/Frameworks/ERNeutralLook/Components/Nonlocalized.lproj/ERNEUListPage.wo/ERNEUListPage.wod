@@ -1,6 +1,6 @@
-AbovePropertyKeysRepetition: WORepetition {
-	item = d2wContext.propertyKey;
-	list = d2wContext.aboveDisplayPropertyKeys;
+AboveDisplayPropertyKeys: ERD2WExtraDisplayPropertyKeysComponent {
+    localContext = d2wContext;
+	extraPropertiesKey = "aboveDisplayPropertyKeys";
 }
 
 AreThereBackgroundColors: ERXNonNullConditional {
@@ -59,9 +59,9 @@ BannerConditional: WOConditional {
 	condition = showBanner;
 }
 
-BelowPropertyKeysRepetition: WORepetition {
-	item = d2wContext.propertyKey;
-	list = d2wContext.belowDisplayPropertyKeys;
+BelowDisplayPropertyKeys: ERD2WExtraDisplayPropertyKeysComponent {
+	localContext = d2wContext;
+	extraPropertiesKey = "belowDisplayPropertyKeys";
 }
 
 ColSpanNumber: WOString {
@@ -80,16 +80,6 @@ ComponentsToAppendRepetition: WORepetition {
 
 ComponentToAppendSwitchComponent: WOSwitchComponent {
 	WOComponentName = aComponentName;
-	localContext = d2wContext;
-}
-
-AbovePropertyKeysRepetition: WORepetition {
-	item = aComponentName;
-	list = componentsToDisplayAbove;
-}
-
-AbovePropertyKeySwitchComponent: WOSwitchComponent {
-	WOComponentName = d2wContext.componentName;
 	localContext = d2wContext;
 }
 
@@ -170,14 +160,6 @@ Generic1: WOGenericContainer {
 Generic2: WOGenericContainer {
 	BGCOLOR = referenceEO.backgroundColor;
 	elementName = "td";
-}
-
-HasAbovePropertyKeysConditional: ERXNonZeroConditional {
-	condition = d2wContext.aboveDisplayPropertyKeys;
-}
-
-HasBelowPropertyKeysConditional: ERXNonZeroConditional {
-	condition = d2wContext.belowDisplayPropertyKeys;
 }
 
 Help: ERDDebuggingHelp {
@@ -298,11 +280,6 @@ PageWrapper: WOSwitchComponent {
 	WOComponentName = pageWrapperName;
 	_componentUnroll = true;
 	_unroll = true;
-}
-
-PropertyKeySwitchComponent: WOSwitchComponent {
-	WOComponentName = d2wContext.componentName;
-	localContext = d2wContext;
 }
 
 Repetition1: WORepetition {

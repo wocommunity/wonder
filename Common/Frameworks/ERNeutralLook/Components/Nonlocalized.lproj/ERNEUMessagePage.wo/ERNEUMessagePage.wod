@@ -1,6 +1,6 @@
-AbovePropertyKeysRepetition: WORepetition {
-	item = d2wContext.propertyKey;
-	list = d2wContext.aboveDisplayPropertyKeys;
+AboveDisplayPropertyKeys: ERD2WExtraDisplayPropertyKeysComponent {
+    localContext = d2wContext;
+	extraPropertiesKey = "aboveDisplayPropertyKeys";
 }
 
 AttributeRepetition: WORepetition {
@@ -17,9 +17,9 @@ AttributeValue: WOSwitchComponent {
 	object = object;
 }
 
-BelowPropertyKeysRepetition: WORepetition {
-	item = d2wContext.propertyKey;
-	list = d2wContext.belowDisplayPropertyKeys;
+BelowDisplayPropertyKeys: ERD2WExtraDisplayPropertyKeysComponent {
+	localContext = d2wContext;
+	extraPropertiesKey = "belowDisplayPropertyKeys";
 }
 
 Conditional1: WOConditional {
@@ -56,14 +56,6 @@ Form1: WOForm {
 	multipleSubmit = true;
 }
 
-HasAbovePropertyKeysConditional: ERXNonZeroConditional {
-	condition = d2wContext.aboveDisplayPropertyKeys;
-}
-
-HasBelowPropertyKeysConditional: ERXNonZeroConditional {
-	condition = d2wContext.belowDisplayPropertyKeys;
-}
-
 HasPropertyKeys: ERXNonZeroConditional {
 	condition = d2wContext.displayPropertyKeys.count;
 }
@@ -83,11 +75,6 @@ InspectTable: WOGenericContainer {
 NoTitleAvailable: ERXNonNullConditional {
 	condition = title;
 	negate = true;
-}
-
-PropertyKeySwitchComponent: WOSwitchComponent {
-	WOComponentName = d2wContext.componentName;
-	localContext = d2wContext;
 }
 
 QueryRow: WOGenericContainer {

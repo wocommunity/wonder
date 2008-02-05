@@ -1,6 +1,6 @@
-AbovePropertyKeysRepetition: WORepetition {
-	item = d2wContext.propertyKey;
-	list = d2wContext.aboveDisplayPropertyKeys;
+AboveDisplayPropertyKeys: ERD2WExtraDisplayPropertyKeysComponent {
+    localContext = d2wContext;
+	extraPropertiesKey = "aboveDisplayPropertyKeys";
 }
 
 AttributeRepetition: WORepetition {
@@ -25,9 +25,9 @@ AttributeValue2: WOSwitchComponent {
 	object = object;
 }
 
-BelowPropertyKeysRepetition: WORepetition {
-	item = d2wContext.propertyKey;
-	list = d2wContext.belowDisplayPropertyKeys;
+BelowDisplayPropertyKeys: ERD2WExtraDisplayPropertyKeysComponent {
+	localContext = d2wContext;
+	extraPropertiesKey = "belowDisplayPropertyKeys";
 }
 
 Border: ERXTableWithBorder {
@@ -203,14 +203,6 @@ Errors: ERXErrorDictionaryPanel {
 	shouldShowNewLineBelow = true;
 }
 
-HasAbovePropertyKeysConditional: ERXNonZeroConditional {
-	condition = d2wContext.aboveDisplayPropertyKeys;
-}
-
-HasBelowPropertyKeysConditional: ERXNonZeroConditional {
-	condition = d2wContext.belowDisplayPropertyKeys;
-}
-
 HasDisplayNameForProperty: ERXNonZeroConditional {
 condition=displayNameForProperty.length;
 }
@@ -323,11 +315,6 @@ PropertyKeyComponentGenericContainer2: WOGenericContainer {
 	otherTagString = otherTagStringsForPropertyKeyComponentCell;
 	valign = "top";
 	width = 120;
-}
-
-PropertyKeySwitchComponent: WOSwitchComponent {
-	WOComponentName = d2wContext.componentName;
-	localContext = d2wContext;
 }
 
 ReturnButton: WOImage {
