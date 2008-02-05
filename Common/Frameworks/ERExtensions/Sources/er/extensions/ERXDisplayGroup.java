@@ -59,6 +59,7 @@ public class ERXDisplayGroup extends WODisplayGroup {
 	/**
 	 * Overridden to localize the fetch specification if needed.
 	 */
+	/* TODO: Changes were too great to easily bring in the localizing code.  Unncomment later when we can update the ERXLocalizer.
 	public Object fetch() {
 		if(log.isDebugEnabled()) {
 			log.debug("Fetching: " + toString(), new RuntimeException("Dummy for Stacktrace"));
@@ -84,6 +85,7 @@ public class ERXDisplayGroup extends WODisplayGroup {
 		}
 		return result;
 	}
+	*/
 
 	/**
 	 * Returns all objects, filtered by the qualifier().
