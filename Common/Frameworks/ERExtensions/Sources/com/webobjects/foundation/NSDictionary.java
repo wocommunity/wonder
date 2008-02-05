@@ -652,7 +652,7 @@ public class NSDictionary<K, V> implements Cloneable, Serializable, NSCoding, NS
 		return allValues();
 	}
 
-	public Set entrySet() {
+	public Set<Map.Entry<K, V>> entrySet() {
 		if (_entrySetCache == null) {
 			return _initMapEntrySet();
 		}
