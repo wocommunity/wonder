@@ -1086,7 +1086,7 @@ public class NSArray<E> implements Cloneable, Serializable, NSCoding, NSKeyValue
 			throw new IndexOutOfBoundsException("Illegal index value (fromIndex < 0 || toIndex > size || fromIndex > toIndex)");
 		}
 		else {
-			return subarrayWithRange(new NSRange(fromIndex, (toIndex - fromIndex) + 1));
+			return subarrayWithRange(new NSRange(fromIndex, (toIndex - fromIndex)));
 		}
 	}
 
