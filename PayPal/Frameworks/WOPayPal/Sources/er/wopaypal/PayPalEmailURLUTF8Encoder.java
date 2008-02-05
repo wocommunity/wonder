@@ -105,28 +105,28 @@ public class PayPalEmailURLUTF8Encoder
     StringBuffer sbuf = new StringBuffer();
     int len = s.length();
     for (int i = 0; i < len; i++) {
-      int ch = s.charAt(i);
-      if ('A' <= ch && ch <= 'Z') {		// 'A'..'Z'
-	sbuf.append((char)ch);
-      } else if ('a' <= ch && ch <= 'z') {	// 'a'..'z'
-	sbuf.append((char)ch);
-      } else if ('0' <= ch && ch <= '9') {	// '0'..'9'
-	sbuf.append((char)ch);
-      } else if (ch == ' ') {			// space
-	sbuf.append('+');
-      } else if (ch == '-' || ch == '_'		// unreserved
-          || ch == '.' || ch == '/') {		// this is the part where we hack the class by adding the '/' char to the unreserved set
-	sbuf.append((char)ch);
-      } else if (ch <= 0x007f) {		// other ASCII
-	sbuf.append(hex[ch]);
-      } else if (ch <= 0x07FF) {		// non-ASCII <= 0x7FF
-	sbuf.append(hex[0xc0 | (ch >> 6)]);
-	sbuf.append(hex[0x80 | (ch & 0x3F)]);
-      } else {					// 0x7FF < ch <= 0xFFFF
-	sbuf.append(hex[0xe0 | (ch >> 12)]);
-	sbuf.append(hex[0x80 | ((ch >> 6) & 0x3F)]);
-	sbuf.append(hex[0x80 | (ch & 0x3F)]);
-      }
+        int ch = s.charAt(i);
+        if ('A' <= ch && ch <= 'Z') {           // 'A'..'Z'
+            sbuf.append((char)ch);
+        } else if ('a' <= ch && ch <= 'z') {    // 'a'..'z'
+            sbuf.append((char)ch);
+        } else if ('0' <= ch && ch <= '9') {    // '0'..'9'
+            sbuf.append((char)ch);
+        } else if (ch == ' ') {                 // space
+            sbuf.append('+');
+        } else if (ch == '-' || ch == '_'       // unreserved
+            || ch == '.' || ch == '/') {        // this is the part where we hack the class by adding the '/' char to the unreserved set
+            sbuf.append((char)ch);
+        } else if (ch <= 0x007f) {              // other ASCII
+            sbuf.append(hex[ch]);
+        } else if (ch <= 0x07FF) {              // non-ASCII <= 0x7FF
+            sbuf.append(hex[0xc0 | (ch >> 6)]);
+            sbuf.append(hex[0x80 | (ch & 0x3F)]);
+        } else {                                // 0x7FF < ch <= 0xFFFF
+            sbuf.append(hex[0xe0 | (ch >> 12)]);
+            sbuf.append(hex[0x80 | ((ch >> 6) & 0x3F)]);
+            sbuf.append(hex[0x80 | (ch & 0x3F)]);
+        }
     }
     return sbuf.toString();
   }

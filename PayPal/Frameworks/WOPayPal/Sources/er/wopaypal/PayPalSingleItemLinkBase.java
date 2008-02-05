@@ -77,7 +77,7 @@ public abstract class PayPalSingleItemLinkBase extends WOComponent {
      * @param context WOContext
      */
     public PayPalSingleItemLinkBase(WOContext context) {
-	super(context);
+        super(context);
     }
 
     /** the base list of bindings to pull from WOComponents
@@ -85,21 +85,21 @@ public abstract class PayPalSingleItemLinkBase extends WOComponent {
      * @return NSArray
      */
     protected NSArray baseBindingList() {
-	return new NSArray( new Object[]
-			{   "payPalBusinessName",
-			    "userDefinableQuantity",
-			    "itemName",
-			    "itemNumber",
-			    "amount",
-                            "currencyCode",
-			    "collectShippingAddress",
-			    "allowCustomerNote",
-			    "logoURL",
-			    "returnURL",
-			    "cancelURL",
-			    "notifyURL",
-			    "useIPN",
-			    "useDefaultIPNURL" });
+        return new NSArray( new Object[]
+            {   "payPalBusinessName",
+                "userDefinableQuantity",
+                "itemName",
+                "itemNumber",
+                "amount",
+                "currencyCode",
+                "collectShippingAddress",
+                "allowCustomerNote",
+                "logoURL",
+                "returnURL",
+                "cancelURL",
+                "notifyURL",
+                "useIPN",
+                "useDefaultIPNURL" });
     } 
 
     /** for subclasses to add additional bindings
@@ -114,41 +114,38 @@ public abstract class PayPalSingleItemLinkBase extends WOComponent {
      * @return String
      */
     protected String defaultNotificationURL() {
-	StringBuffer notURL = new StringBuffer();
-	WOApplication app = application();
+        StringBuffer notURL = new StringBuffer();
+        WOApplication app = application();
 
-	//check if we're in directConnect mode
-	if (app.isDirectConnectEnabled()) {
+        //check if we're in directConnect mode
+        if (app.isDirectConnectEnabled()) {
             // we're running in development mode; try to get the i.p. address; if it's not 127.0.0.1, we'll include the notify_url parameter; .local. means we're running locally under rendezvous
-	    if (app.host().equals("localhost") || app.host().indexOf(".local.") != -1) {
-		if (app.hostAddress().getHostAddress().equals("127.0.0.1")) {
-		    // probably not connected to internet
-		    return "testing_mode"; //just so we can see this method working
-		} else {
-		    //get protocol
-		    String protocol = app.cgiAdaptorURL().substring(0, app.cgiAdaptorURL().indexOf(":"));
-		    notURL.append(protocol).append("://"); // http:// or https://
-			notURL.append(app.hostAddress().getHostAddress()); // host i.p.
-			if (app.port().intValue() != 80) { // 80 is standard web port
-			    notURL.append(":").append(app.port()); // :portNum
-			}
-			notURL.append(context().request().adaptorPrefix()).append("/"); // cgi-bin/WebObjects/
-			notURL.append(context().request().applicationName()).append(".woa/wa/PayPalAction/ipn"); // our processing action
-		}
+            if (app.host().equals("localhost") || app.host().indexOf(".local.") != -1) {
+                if (app.hostAddress().getHostAddress().equals("127.0.0.1")) {
+                    // probably not connected to internet
+                    return "testing_mode"; //just so we can see this method working
+                } else {
+                    //get protocol
+                    String protocol = app.cgiAdaptorURL().substring(0, app.cgiAdaptorURL().indexOf(":"));
+                    notURL.append(protocol).append("://"); // http:// or https://
+                    notURL.append(app.hostAddress().getHostAddress()); // host i.p.
+                    if (app.port().intValue() != 80) { // 80 is standard web port
+                        notURL.append(":").append(app.port()); // :portNum
+                    }
+                    notURL.append(context().request().adaptorPrefix()).append("/"); // cgi-bin/WebObjects/
+                    notURL.append(context().request().applicationName()).append(".woa/wa/PayPalAction/ipn"); // our processing action
+                }
 
-	    }
-	} else {
-	    // we're running the app in a deployment or testing mode
-	    notURL.append(app.cgiAdaptorURL()).append("://"); // http://host/cgi-bin/WebObjects
-	    notURL.append("/").append(context().request().applicationName()).append(".woa/"); // /applicationName.woa/
-	    notURL.append(context().request().applicationNumber()); // app instance number (for routing with multiple instances running)
-	    notURL.append("/wa/PayPalAction/ipn"); // our processing action
-	}
-	NSLog.debug.appendln("defaultNotificationURL: " + notURL.toString());
-	return notURL.toString();
+            }
+        } else {
+            // we're running the app in a deployment or testing mode
+            notURL.append(app.cgiAdaptorURL()).append("://"); // http://host/cgi-bin/WebObjects
+            notURL.append("/").append(context().request().applicationName()).append(".woa/"); // /applicationName.woa/
+            notURL.append(context().request().applicationNumber()); // app instance number (for routing with multiple instances running)
+            notURL.append("/wa/PayPalAction/ipn"); // our processing action
+        }
+        NSLog.debug.appendln("defaultNotificationURL: " + notURL.toString());
+        return notURL.toString();
     }
-    
-    
 
-    
 }

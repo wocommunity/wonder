@@ -35,13 +35,13 @@ public class PayPalViewShoppingCartHyperlink extends PayPalSingleItemHyperlink {
      * 
      */
     public String viewShoppingCartHref() {
-	StringBuffer sb = new StringBuffer();
+        StringBuffer sb = new StringBuffer();
 
-	sb.append(WOPayPal.PAYPAL_SECURE_URL_BASE);
-	sb.append(PAYPAL_CGI_COMMAND);
-	sb.append(payPalUrlParams());
+        sb.append(WOPayPal.PAYPAL_SECURE_URL_BASE);
+        sb.append(PAYPAL_CGI_COMMAND);
+        sb.append(payPalUrlParams());
 
-	return sb.toString();
+        return sb.toString();
     }
 
     /** onClickString basically takes the viewShoppingCartHref and embeds it in a JavaScript window.open() method, as per PayPal's instructions.  The JavaScript called tells the browser to open a new window that loads the viewShoppingCartHref url and has the characteristics given...
@@ -49,12 +49,12 @@ public class PayPalViewShoppingCartHyperlink extends PayPalSingleItemHyperlink {
      * @return String that contains the JavaScript code for the viewShoppingCart link
      */
     public String onClickString() {
-	StringBuffer sb = new StringBuffer();
+        StringBuffer sb = new StringBuffer();
 
-	sb.append("window.open('");
-	sb.append(viewShoppingCartHref());
-	sb.append("','cartwin','width=600,height=400,scrollbars,location,resizable,status');");
-	
-	return sb.toString();
+        sb.append("window.open('");
+        sb.append(viewShoppingCartHref());
+        sb.append("','cartwin','width=600,height=400,scrollbars,location,resizable,status');");
+
+        return sb.toString();
     }
 }
