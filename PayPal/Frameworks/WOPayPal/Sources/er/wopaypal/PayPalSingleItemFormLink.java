@@ -79,46 +79,46 @@ public class PayPalSingleItemFormLink extends
             if (this.valueForKey(key) != null) {
                 if (key.equals("payPalBusinessName")) {
                     boundValues.addObject(new NSDictionary(new Object[] { payPalBusinessName, "business"},
-                            new Object[] { "value", "key"}));
+                            new Object[] {"value", "key"}));
                 } else if (key.equals("userDefinableQuantity")) {
                     boundValues.addObject(new NSDictionary(new Object[] {
-                            (userDefinableQuantity.booleanValue() ? "1" : "0"), "undefined_quantity"}, new Object[] {
-                            "value", "key"}));
+                            (userDefinableQuantity.booleanValue() ? "1" : "0"), "undefined_quantity"}, 
+                            new Object[] {"value", "key"}));
                 } else if (key.equals("itemName")) {
-                    boundValues.addObject(new NSDictionary(new Object[] { itemName, "item_name"}, new Object[] {
-                            "value", "key"}));
+                    boundValues.addObject(new NSDictionary(new Object[] { itemName, "item_name"}, 
+                            new Object[] {"value", "key"}));
                 } else if (key.equals("itemNumber")) {
-                    boundValues.addObject(new NSDictionary(new Object[] { itemNumber, "item_number"}, new Object[] {
-                            "value", "key"}));
+                    boundValues.addObject(new NSDictionary(new Object[] { itemNumber, "item_number"}, 
+                            new Object[] {"value", "key"}));
                 } else if (key.equals("custom")) {
-                    boundValues.addObject(new NSDictionary(new Object[] { custom, "custom"}, new Object[] { "value",
-                            "key"}));
+                    boundValues.addObject(new NSDictionary(new Object[] { custom, "custom"}, 
+                            new Object[] {"value", "key"}));
                 } else if (key.equals("amount")) {
                     boundValues.addObject(new NSDictionary(new Object[] {
-                            dollarFormatter.format(Double.valueOf(amount)), "amount"}, new Object[] { "value", "key"}));
+                            dollarFormatter.format(Double.valueOf(amount)), "amount"}, 
+                            new Object[] {"value", "key"}));
                 } else if (key.equals("currencyCode")) {
-                    boundValues.addObject(new NSDictionary(new Object[] { currencyCode, "currency_code"}, new Object[] {
-                            "value", "key"}));
+                    boundValues.addObject(new NSDictionary(new Object[] { currencyCode, "currency_code"}, 
+                            new Object[] {"value", "key"}));
                 } else if (key.equals("collectShippingAddress")) {
                     boundValues.addObject(new NSDictionary(new Object[] {
-                            (collectShippingAddress.booleanValue() ? "0" : "1"), "no_shipping"}, new Object[] {
-                            "value", "key"}));
+                            (collectShippingAddress.booleanValue() ? "0" : "1"), "no_shipping"}, 
+                            new Object[] {"value", "key"}));
                 } else if (key.equals("allowCustomerNote")) {
-                    boundValues
-                            .addObject(new NSDictionary(new Object[] { (allowCustomerNote.booleanValue() ? "0" : "1"),
-                                    "no_note"}, new Object[] { "value", "key"}));
+                    boundValues.addObject(new NSDictionary(new Object[] { (allowCustomerNote.booleanValue() ? "0" : "1"), "no_note"}, 
+                            new Object[] { "value", "key"}));
                 } else if (key.equals("logoURL")) {
-                    boundValues.addObject(new NSDictionary(new Object[] { logoURL, "image_url"}, new Object[] {
-                            "value", "key"}));
+                    boundValues.addObject(new NSDictionary(new Object[] { logoURL, "image_url"}, 
+                            new Object[] {"value", "key"}));
                 } else if (key.equals("returnURL")) {
-                    boundValues.addObject(new NSDictionary(new Object[] { returnURL, "return"}, new Object[] { "value",
-                            "key"}));
+                    boundValues.addObject(new NSDictionary(new Object[] { returnURL, "return"}, 
+                            new Object[] { "value", "key"}));
                 } else if (key.equals("cancelURL")) {
-                    boundValues.addObject(new NSDictionary(new Object[] { cancelURL, "cancel_return"}, new Object[] {
-                            "value", "key"}));
+                    boundValues.addObject(new NSDictionary(new Object[] { cancelURL, "cancel_return"}, 
+                            new Object[] {"value", "key"}));
                 } else if (key.equals("notify_url") && useIPN.booleanValue()) {
-                    boundValues.addObject(new NSDictionary(new Object[] { notifyURL, "notify_url"}, new Object[] {
-                            "value", "key"}));
+                    boundValues.addObject(new NSDictionary(new Object[] { notifyURL, "notify_url"}, 
+                            new Object[] {"value", "key"}));
                 } else {
                     // received some other binding value somehow
                 }
