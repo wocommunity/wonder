@@ -1,19 +1,49 @@
 package er.extensions;
 
-import com.webobjects.foundation.*;
-import com.webobjects.eocontrol.*;
-import java.util.*;
-import java.io.*;
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.Hashtable;
+import java.util.Iterator;
+import java.util.SortedSet;
+import java.util.TreeSet;
+import java.util.Vector;
+
+import org.apache.log4j.Logger;
+
+import com.webobjects.eoaccess.EOEntity;
+import com.webobjects.eoaccess.EOModelGroup;
+import com.webobjects.eocontrol.EOEnterpriseObject;
+import com.webobjects.eocontrol.EOFetchSpecification;
+import com.webobjects.eocontrol.EOQualifier;
+import com.webobjects.eocontrol.EOQualifierEvaluation;
+import com.webobjects.eocontrol.EOSortOrdering;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSBundle;
+import com.webobjects.foundation.NSComparator;
+import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSKeyValueCoding;
+import com.webobjects.foundation.NSKeyValueCodingAdditions;
+import com.webobjects.foundation.NSMutableArray;
+import com.webobjects.foundation.NSMutableDictionary;
+import com.webobjects.foundation.NSMutableSet;
+import com.webobjects.foundation.NSPropertyListSerialization;
+import com.webobjects.foundation.NSRange;
+import com.webobjects.foundation.NSSelector;
+import com.webobjects.foundation.NSSet;
 
 /**
  * Collection of {@link com.webobjects.foundation.NSArray NSArray} utilities.
  */
 public class ERXArrayUtilities extends Object {
-    /**
-     * Holds the null grouping key for use when grouping objects
-     * based on a key that might return null and nulls are allowed
-     */
+	
+	   private static Logger log = Logger.getLogger(ERXArrayUtilities.class);
+
+	   /**
+	    * Holds the null grouping key for use when grouping objects
+	    * based on a key that might return null and nulls are allowed
+	    */
     public static final String NULL_GROUPING_KEY="**** NULL GROUPING KEY ****";
 
     /** caches if array utilities have been initialized */
@@ -69,12 +99,8 @@ public class ERXArrayUtilities extends Object {
     /**
      * Groups an array of objects by a given key path. The dictionary
      * that is returned contains keys that correspond to the grouped
-     * keys values. This means that the object pointed to by the key
-     * path must be a cloneable object. For instance using the key path
-     * 'company' would not work because enterprise objects are not
-     * cloneable. Instead you might choose to use the key path 'company.name'
-     * or 'company.primaryKey', if your enterprise objects support this
-     * see {@link ERXGenericRecord} if interested.
+     * keys values. 
+     * 
      * @param objects array of objects to be grouped
      * @param keyPath path used to group the objects.
      * @return a dictionary where the keys are the grouped values and the
@@ -89,12 +115,8 @@ public class ERXArrayUtilities extends Object {
     /**
      * Groups an array of objects by a given key path. The dictionary
      * that is returned contains keys that correspond to the grouped
-     * keys values. This means that the object pointed to by the key
-     * path must be a cloneable object. For instance using the key path
-     * 'company' would not work because enterprise objects are not
-     * cloneable. Instead you might choose to use the key path 'company.name'
-     * of 'company.primaryKey', if your enterprise objects support this
-     * see {@link ERXGenericRecord} if interested.
+     * keys values. 
+     * 
      * @param eos array of objects to be grouped
      * @param keyPath path used to group the objects.
      * @param includeNulls determines if keyPaths that resolve to null
@@ -112,13 +134,38 @@ public class ERXArrayUtilities extends Object {
                                                      String keyPath,
                                                      boolean includeNulls,
                                                      String extraKeyPathForValues) {
+    	return ERXArrayUtilities.arrayGroupedByKeyPath(eos, keyPath, ERXArrayUtilities.NULL_GROUPING_KEY, extraKeyPathForValues);
+    }
+    
+    /**
+     * Groups an array of objects by a given key path. The dictionary
+     * that is returned contains keys that correspond to the grouped
+     * keys values. 
+     * 
+     * @param eos array of objects to be grouped
+     * @param keyPath path used to group the objects.
+     * @param nullGroupingKey if not-null, determines if keyPaths that resolve to null
+     *      should be allowed into the group; if so, this key is used for them
+     * @param extraKeyPathForValues allows a selected object to include
+     *		more objects in the group. This is going away in the
+     *		future.
+     * @return a dictionary where the keys are the grouped values and the
+     * 		objects are arrays of the objects that have the grouped
+     *		characteristic. Note that if the key path returns null
+     *		then one of the keys will be the static ivar NULL_GROUPING_KEY
+     */
+    // FIXME: Get rid of extraKeyPathForValues, it doesn't make sense.
+    public static NSDictionary arrayGroupedByKeyPath(NSArray eos,
+                                                     String keyPath,
+                                                     Object nullGroupingKey,
+                                                     String extraKeyPathForValues) {
         NSMutableDictionary result=new NSMutableDictionary();
         for (Enumeration e=eos.objectEnumerator(); e.hasMoreElements();) {
             Object eo = e.nextElement();
             Object key = NSKeyValueCodingAdditions.Utility.valueForKeyPath(eo,keyPath);
             boolean isNullKey = key==null || key instanceof NSKeyValueCoding.Null;
-            if (!isNullKey || includeNulls) {
-                if (isNullKey) key=NULL_GROUPING_KEY;
+            if (!isNullKey || nullGroupingKey != null) {
+                if (isNullKey) key=nullGroupingKey;
                 NSMutableArray existingGroup=(NSMutableArray)result.objectForKey(key);
                 if (existingGroup==null) {
                     existingGroup=new NSMutableArray();
@@ -134,6 +181,73 @@ public class ERXArrayUtilities extends Object {
         return result;
     }
 
+    /**
+     * Groups an array of objects by a given to-many key path, where every
+     * single item in the to-many will put the object in the corresponding group. 
+     * The dictionary that is returned contains keys that correspond to the grouped
+     * keys values. This means that the object pointed to by the key
+     * path must be a cloneable object. For instance using the key path
+     * 'users' would not work because enterprise objects are not
+     * cloneable. Instead you might choose to use the key path 'users.name'
+     * of 'users.primaryKey', if your enterprise objects support this
+     * see {@link ERXGenericRecord} if interested.
+     * @param eos array of objects to be grouped
+     * @param keyPath path used to group the objects.
+     * @param includeNulls determines if keyPaths that resolve to null
+     *      should be allowed into the group.
+     * @return a dictionary where the keys are the grouped values and the
+     *      objects are arrays of the objects that have the grouped
+     *      characteristic. Note that if the key path returns null
+     *      then one of the keys will be the static ivar NULL_GROUPING_KEY
+     */
+    public static NSDictionary arrayGroupedByToManyKeyPath(NSArray eos,
+            String keyPath,
+            boolean includeNulls) {
+    	return ERXArrayUtilities.arrayGroupedByToManyKeyPath(eos, keyPath, ERXArrayUtilities.NULL_GROUPING_KEY);
+    }
+
+    /**
+     * Groups an array of objects by a given to-many key path, where every
+     * single item in the to-many will put the object in the corresponding group. 
+     * The dictionary that is returned contains keys that correspond to the grouped
+     * keys values. This means that the object pointed to by the key
+     * path must be a cloneable object. For instance using the key path
+     * 'users' would not work because enterprise objects are not
+     * cloneable. Instead you might choose to use the key path 'users.name'
+     * of 'users.primaryKey', if your enterprise objects support this
+     * see {@link ERXGenericRecord} if interested.
+     * @param eos array of objects to be grouped
+     * @param keyPath path used to group the objects.
+     * @param nullGroupingKey if not-null, determines if keyPaths that resolve to null
+     *      should be allowed into the group; if so, this key is used for them
+     * @return a dictionary where the keys are the grouped values and the
+     *      objects are arrays of the objects that have the grouped
+     *      characteristic. Note that if the key path returns null
+     *      then one of the keys will be the static ivar NULL_GROUPING_KEY
+     */
+    public static NSDictionary arrayGroupedByToManyKeyPath(NSArray eos,
+            String keyPath,
+            Object nullGroupingKey) {
+        NSMutableDictionary result=new NSMutableDictionary();
+        for (Enumeration e=eos.objectEnumerator(); e.hasMoreElements();) {
+            Object eo = e.nextElement();
+            Object key = NSKeyValueCodingAdditions.Utility.valueForKeyPath(eo,keyPath);
+            boolean isNullKey = key==null || key instanceof NSKeyValueCoding.Null;
+            if (!isNullKey || nullGroupingKey != null) {
+                if (isNullKey) key=nullGroupingKey;
+                NSArray array = (NSArray)key;
+                for(Enumeration keys = array.objectEnumerator(); keys.hasMoreElements(); ) {
+                    key = keys.nextElement();
+                    NSMutableArray existingGroup=(NSMutableArray)result.objectForKey(key);
+                    if (existingGroup==null) {
+                        existingGroup=new NSMutableArray();
+                        result.setObjectForKey(existingGroup,key);
+                    }
+                }
+            }
+        }
+        return result;
+    }
 
     /**
      * Simple comparision method to see if two array
@@ -198,6 +312,46 @@ public class ERXArrayUtilities extends Object {
     }
 
     /**
+     * Filters any kinds of collections that implements {@link Enumeration} 
+     * interface such as {@link com.webobjects.foundation.NSArray NSArray}, {@link com.webobjects.foundation.NSSet NSSet}, {@link Vector} 
+     * and {@link Hashtable} using the {@link com.webobjects.eocontrol.EOQualifierEvaluation EOQualifierEvaluation} interface. 
+     *
+     * @param enumeration to be filtered; to obtain an enumeration, 
+     *             use objectEnumerator() for the collections in 
+     *             com.webobjects.foundation package 
+     *             and use elements() for the Vector and Hashtable
+     * @param qualifier to do the filtering
+     * @return true if there is at least one match
+     */
+    public static boolean enumerationHasMatchWithQualifierEvaluation(Enumeration enumeration, EOQualifierEvaluation qualifier) {
+        while (enumeration.hasMoreElements()) {
+            Object object = enumeration.nextElement();
+            if (qualifier.evaluateWithObject(object)) 
+                return true;
+        }
+        return false;
+    }
+
+    /**
+     * Filters any kinds of collections that implements {@link Iterator} 
+     * interface such as {@link com.webobjects.foundation.NSArray NSArray}, {@link com.webobjects.foundation.NSSet NSSet}, {@link Vector} 
+     * and {@link Hashtable} using the {@link com.webobjects.eocontrol.EOQualifierEvaluation EOQualifierEvaluation} interface. 
+     *
+     * @param iterator to be filtered; to obtain an iterator, 
+     *             use iterator() for the java collections
+     * @param qualifier to do the filtering
+     * @return true if there is at least one match
+     */
+    public static boolean iteratorHasMatchWithQualifierEvaluation(Iterator iterator, EOQualifierEvaluation qualifier) {
+        while (iterator.hasNext()) {
+            Object object = iterator.next();
+            if (qualifier.evaluateWithObject(object)) 
+                return true;
+        }
+        return false;
+    }
+
+    /**
      * Filters any kind of collections that implements {@link Iterator} 
      * interface such as {@link ArrayList}, {@link HashMap}, {@link SortedSet} 
      * and {@link TreeSet} using the {@link com.webobjects.eocontrol.EOQualifierEvaluation EOQualifierEvaluation} interface. 
@@ -218,30 +372,25 @@ public class ERXArrayUtilities extends Object {
     }
 
     /**
-     * Filters out duplicates of an array of enterprise objects
-     * based on the value of the given key off of those objects.
-     * Note: Current implementation depends on the key returning a
-     * cloneable object. Also the order is not preseved from the
-     * original array.
-     * @param eos array of enterprise objects
-     * @param key key path to be evaluated off of every enterprise
-     *		object
-     * @return filter array of objects based on the value of a key-path.
+     * Filters out duplicates of an array of objects
+     * based on the value of the given key path off of those objects.
+     * Objects with a null value will be skipped, too.
+     * @param objects array of objects
+     * @param key keypath to be evaluated off of every object
+     * @return filter array of objects based on the value of a keypath.
      */
-    // FIXME: Broken implementation, relies on the value returned by the key to be Cloneable
-    //		also doesn't handle the case of the key returning null or an actual keyPath
-    //		and has the last object in the array winning the duplicate tie.
-    // FIXME: Does not preserve order.
-    public static NSArray arrayWithoutDuplicateKeyValue(NSArray eos, String key){
-        NSMutableDictionary dico = new NSMutableDictionary();
-        for(Enumeration e = eos.objectEnumerator(); e.hasMoreElements(); ){
-            NSKeyValueCoding eo = (NSKeyValueCoding)e.nextElement();
-            Object value = eo.valueForKey(key);
-            if(value != null){
-                dico.setObjectForKey(eo, value);
+    public static NSArray arrayWithoutDuplicateKeyValue(NSArray objects, String key){
+        NSMutableSet present = new NSMutableSet();
+        NSMutableArray result = new NSMutableArray();
+        for(Enumeration e = objects.objectEnumerator(); e.hasMoreElements(); ){
+            Object o = e.nextElement();
+            Object value = NSKeyValueCodingAdditions.Utility.valueForKeyPath(o, key);
+            if(value != null && !present.containsObject(value)) {
+                present.addObject(value);
+                result.addObject(o);
             }
         }
-        return dico.allValues();
+        return result;
     }
 
     /**
@@ -255,9 +404,9 @@ public class ERXArrayUtilities extends Object {
     public static NSArray arrayMinusArray(NSArray main, NSArray minus) {
 		NSSet minusSet = new NSSet(minus);
 		NSMutableArray mutableResult = new NSMutableArray(main.count()); 
-		Enumeration enum = main.objectEnumerator();
-		while (enum.hasMoreElements()) {
-			Object obj = enum.nextElement();
+		Enumeration e = main.objectEnumerator();
+		while (e.hasMoreElements()) {
+			Object obj = e.nextElement();
 			if (! minusSet.containsObject(obj)) 
 				mutableResult.addObject(obj);
 		}
@@ -267,7 +416,7 @@ public class ERXArrayUtilities extends Object {
     /**
      * Subtracts a single object from an array.
      * @param main array to have value removed from it.
-     * @param minus object to be removed
+     * @param object to be removed
      * @return array after performing subtraction.
      */
     public static NSArray arrayMinusObject(NSArray main, Object object) {
@@ -359,7 +508,7 @@ public class ERXArrayUtilities extends Object {
      * return. To have the entire collection of <code>bars</code>
      * in one single array you would call:
      * <code>NSArray allBars = flatten(bars)</code>
-     * @param array to be flattened
+     * @param originalArray array to be flattened
      * @param filterDuplicates determines if the duplicate values
      *      should be filtered
      * @return an array containing all of the elements from
@@ -370,13 +519,6 @@ public class ERXArrayUtilities extends Object {
         NSArray flattenedArray = flatten(originalArray);
         
         if (filterDuplicates) {
-            // it should be faster (Approximately O(N*log(N)) vs O(N^2)) to strip the 
-            // duplicates in one pass here rather than piecemeal as we flatten.  
-            // Moreover, until someone actually measures one vs. the other, one pass 
-            // is a lot cleaner and more readable. (Though if someone is sufficently 
-            // motivated, it would be possible to make it fairly readable, piecemeal and 
-            // O(N*log(N)), but it's probably better to optimize arrayWithoutDuplicates
-            // first.)
             return arrayWithoutDuplicates(flattenedArray);
         } else {
             return flattenedArray;
@@ -397,7 +539,7 @@ public class ERXArrayUtilities extends Object {
      * return. To have the entire collection of <code>bars</code>
      * in one single array you would call:
      * <code>NSArray allBars = flatten(bars)</code>
-     * @param array to be flattened
+     * @param originalArray array to be flattened
      * @return an array containing all of the elements from
      *      all of the arrays contained within the array
      *      passed in.
@@ -430,7 +572,6 @@ public class ERXArrayUtilities extends Object {
         // CLEANUP: Arguably safer to return the immutable array we are declared as returning
         return (newArray != null ? newArray : originalArray);
     }
-    
 
     /**
      * Creates an NSArray from a resource associated with a given bundle
@@ -605,7 +746,7 @@ public class ERXArrayUtilities extends Object {
      * Sorts a given array with a key in ascending fashion.
      * @param array array to be sorted.
      * @param key sort key.
-     * @param selector sort order selector to use, if null, then sort will be ascending.
+     * @param selector sort order selector to use, if null, then sort will be case insensitive ascending.
      * @return sorted array.
      */
     public static NSArray sortedArraySortedWithKey(NSArray array, String key, NSSelector selector) {
@@ -619,19 +760,19 @@ public class ERXArrayUtilities extends Object {
         * Sorts a given array with a set of keys according to the given selector.
      * @param array array to be sorted.
      * @param keys sort keys
-     * @param selector sort order selector to use, if null, then sort will be ascending.
+     * @param selector sort order selector to use, if null, then sort will be case insensitive ascending.
      * @return sorted array.
      */
     public static NSArray sortedArraySortedWithKeys(NSArray array, NSArray keys, NSSelector selector) {
         ERXAssert.PRE.notNull("Attempting to sort null array of objects.", array);
         ERXAssert.PRE.notNull("Attepting to sort an array with null keys.", keys);
         if (keys.count() < 2)
-            return sortedArraySortedWithKey(array, (String)keys.lastObject(), selector);
+            return sortedArraySortedWithKey(array, (String)keys.lastObject(), selector == null ? EOSortOrdering.CompareCaseInsensitiveAscending : selector);
 
         NSMutableArray order = new NSMutableArray(keys.count());
         for (Enumeration keyEnumerator = keys.objectEnumerator(); keyEnumerator.hasMoreElements();) {
             String key = (String)keyEnumerator.nextElement();
-            order.addObject(EOSortOrdering.sortOrderingWithKey(key, selector == null ? EOSortOrdering.CompareAscending : selector));
+            order.addObject(EOSortOrdering.sortOrderingWithKey(key, selector == null ? EOSortOrdering.CompareCaseInsensitiveAscending : selector));
         }
         return EOSortOrdering.sortedArrayUsingKeyOrderArray(array, order);
     }   
@@ -677,15 +818,17 @@ public class ERXArrayUtilities extends Object {
      * This allows for key value paths like:<br/>
      * <br/>
      * <code>myArray.valueForKey("@sort.firstName");</code><br/>
+     * <code>myArray.valueForKey("@sort.lastName,firstName");</code><br/>
      * <br/>
-     * Which in this case would return myArray sorted ascending by first name.
+     * Which in the first case would return myArray sorted ascending by first name and the second case
+     * by lastName and then by firstName.
      */
-    static class SortOperator implements NSArray.Operator
+    public static class SortOperator implements NSArray.Operator
     {
         private NSSelector selector;
         
         /** public empty constructor */
-	public SortOperator(NSSelector selector) {
+        public SortOperator(NSSelector selector) {
             this.selector = selector;
         }
 
@@ -696,16 +839,14 @@ public class ERXArrayUtilities extends Object {
          * @return immutable sorted array.
          */
         public Object compute(NSArray array, String keypath) {
-            synchronized (array) {
-                if (array.count() < 2)
-                    return array;
-                if (keypath != null && keypath.indexOf(",") != -1) {
-                    return sortedArraySortedWithKeys(array,
-                                                     NSArray.componentsSeparatedByString(keypath, ","),
-                                                     selector);
-                } else {
-                    return sortedArraySortedWithKey(array, keypath, selector);
-                }
+            if (array.count() < 2)
+                return array;
+            if (keypath != null && keypath.indexOf(",") != -1) {
+                return sortedArraySortedWithKeys(array,
+                        NSArray.componentsSeparatedByString(keypath, ","),
+                        selector);
+            } else {
+                return sortedArraySortedWithKey(array, keypath, selector);
             }
         }
     }
@@ -718,28 +859,27 @@ public class ERXArrayUtilities extends Object {
      * <code>myArray.valueForKey("@fetchSpec.fetchUsers");</code><br/>
      * <br/>
      * Which in this case would return myArray filtered and sorted by the
-     * EOFetchSpecification named fetchUsers.
+     * EOFetchSpecification named "fetchUsers" which must be a model-based fetchspec in the
+     * first object's entity.
      */
-    static class FetchSpecOperator implements NSArray.Operator
+    public static class FetchSpecOperator implements NSArray.Operator
     {
         /** public empty constructor */
-	public FetchSpecOperator() {}
-
-    /**
-     * Filters and sorts the given array by the named fetchspecification.
-     * @param array array to be filtered.
-     * @param keypath name of fetch specification.
-     * @return immutable filtered array.
-     */
-	public Object compute(NSArray array, String keypath) {
-	    synchronized(array) {
-		if(array.count() == 0) {
-		    return array;
-		}
-		EOEnterpriseObject eo = (EOEnterpriseObject)array.objectAtIndex(0);
-		return filteredArrayWithFetchSpecificationNamedEntityNamed(array, keypath, eo.entityName());
-	    }
-	}
+        public FetchSpecOperator() {}
+        
+        /**
+         * Filters and sorts the given array by the named fetchspecification.
+         * @param array array to be filtered.
+         * @param keypath name of fetch specification.
+         * @return immutable filtered array.
+         */
+        public Object compute(NSArray array, String keypath) {
+            if(array.count() == 0) {
+                return array;
+            }
+            EOEnterpriseObject eo = (EOEnterpriseObject)array.objectAtIndex(0);
+            return filteredArrayWithEntityFetchSpecification(array, eo.entityName(), keypath);
+        }
     }
 
     /**
@@ -749,9 +889,9 @@ public class ERXArrayUtilities extends Object {
      * <br/>
      * <code>myArray.valueForKey("@flatten");</code><br/>
      * <br/>
-     * Which in this case would return myArray flattened.
+     * Which in this case would return myArray flattened if myArray is an NSArray of NSArrays (of NSArrays etc).
      */
-    static class FlattenOperator extends BaseOperator {
+    public static class FlattenOperator extends BaseOperator {
         /** public empty constructor */
         public FlattenOperator() {}
 
@@ -776,20 +916,18 @@ public class ERXArrayUtilities extends Object {
      * <br/>
      * 
      */
-    static class IsEmptyOperator implements NSArray.Operator {
+    public static class IsEmptyOperator implements NSArray.Operator {
         /** public empty constructor */
         public IsEmptyOperator() {}
 
         /**
-        * returns true if the given array is empty, usefull for WOHyperlink disabled binding.
+         * returns true if the given array is empty, usefull for WOHyperlink disabled binding.
          * @param array array to be checked.
          * @param keypath name of fetch specification.
          * @return <code>Boolean.TRUE</code> if array is empty, <code>Boolean.FALSE</code> otherwise.
          */
         public Object compute(NSArray array, String keypath) {
-	    synchronized (array) {
-		return array.count() == 0 ? Boolean.TRUE : Boolean.FALSE;
-	    }
+            return array.count() == 0 ? Boolean.TRUE : Boolean.FALSE;
         }
     }
 
@@ -799,11 +937,11 @@ public class ERXArrayUtilities extends Object {
      * <br/>
      * This allows for key value paths like:<br/>
      * <br/>
-     * <code>myArray.valueForKey("@subarrayWithRange.3-20");</code><br/>
+     * <code>myArray.valueForKeyPath("@subarrayWithRange.3-20.name");</code><br/>
      * <br/>
      *
      */
-    static class SubarrayWithRangeOperator implements NSArray.Operator {
+    public static class SubarrayWithRangeOperator extends BaseOperator {
         /** public empty constructor */
         public SubarrayWithRangeOperator() {}
 
@@ -813,17 +951,23 @@ public class ERXArrayUtilities extends Object {
          * @return <code>Boolean.TRUE</code> if array is empty, <code>Boolean.FALSE</code> otherwise.
          */
         public Object compute(NSArray array, String keypath) {
-	    synchronized (array) {
-		int i1 = keypath.indexOf(".");
-		int i2 = keypath.indexOf("-");
-		if ( i1 == -1 || i2 == -1 ) {
-                    throw new IllegalArgumentException("SubarrayWithRange must be used like '@subarrayWithRange.start-length' current key path:\""
-                                                       + keypath + "\"");
-		}
-		int start = Integer.parseInt(keypath.substring(i1, i2));
-		int length = Integer.parseInt(keypath.substring(i2, keypath.length()));
-		return array.subarrayWithRange(new NSRange(start, length));
-	    }
+            int i1 = keypath.indexOf(".");
+            int i2 = keypath.indexOf("-");
+            String rest = null;
+            if ( i1 == -1 || i2 == -1 ) {
+                throw new IllegalArgumentException("subarrayWithRange must be used like @subarrayWithRange.start-length");
+            }
+            String str = keypath.substring(i1, i2);
+            int start = str.length() == 0 ? 0 : Integer.parseInt(str);
+            str = keypath.substring(i2);
+            int dot = str.indexOf(".");
+            if(dot >= 0) {
+            	rest = str.substring(dot);
+            	str = str.substring(0, dot);
+            }
+            int length = str.length() == 0 ? array.count() : Integer.parseInt(str);
+            NSArray objects = array.subarrayWithRange(new NSRange(start, length));
+            return contents(objects, rest);
         }
     }
 
@@ -836,15 +980,15 @@ public class ERXArrayUtilities extends Object {
      * <br/>
      * <code>myArray.valueForKeyPath("@unique.someOtherPath");</code><br/>
      * <br/>
-     * Which in this case would return myArray flattened.
+     * Which in this case would return only those objects which are unique in myArray.
      */
-    static class UniqueOperator extends BaseOperator {
+    public static class UniqueOperator extends BaseOperator {
         /** public empty constructor */
         public UniqueOperator() {
         }
 
         /**
-         * Flattens the given array.
+         * Removes duplicates.
          * 
          * @param array
          *            array to be filtered.
@@ -853,31 +997,29 @@ public class ERXArrayUtilities extends Object {
          * @return immutable filtered array.
          */
         public Object compute(NSArray array, String keypath) {
-            synchronized (array) {
-                array = contents(array, keypath);
-                if (array != null) array = arrayWithoutDuplicates(array);
-                return array;
-            }
+            array = contents(array, keypath);
+            if (array != null) array = arrayWithoutDuplicates(array);
+            return array;
         }
     }
 
 
     /**
-     * Define an {@link com.webobjects.foundation.NSArray.Operator NSArray.Operator} for the key <b>unique</b>.<br/>
+     * Define an {@link com.webobjects.foundation.NSArray.Operator NSArray.Operator} for the key <b>removeNullValues</b>.<br/>
      * <br/>
      * This allows for key value paths like:<br/>
      * <br/>
-     * <code>myArray.valueForKeyPath("@unique.someOtherPath");</code><br/>
+     * <code>myArray.valueForKeyPath("@removeNullValues.someOtherPath");</code><br/>
      * <br/>
-     * Which in this case would return myArray flattened.
+     * Which in this case would return myArray without the occurrences of NSKeyValueCoding.Null.
      */
-    static class RemoveNullValuesOperator extends BaseOperator {
+    public static class RemoveNullValuesOperator extends BaseOperator {
         /** public empty constructor */
         public RemoveNullValuesOperator() {
         }
 
         /**
-         * Flattens the given array.
+         * Removes null values from the given array.
          * 
          * @param array
          *            array to be filtered.
@@ -886,11 +1028,11 @@ public class ERXArrayUtilities extends Object {
          * @return immutable filtered array.
          */
         public Object compute(NSArray array, String keypath) {
-            synchronized (array) {
+            if(keypath != null) {
                 array = contents(array, keypath);
-                if (array != null) array = removeNullValues(array);
-                return array;
             }
+            if (array != null) array = removeNullValues(array);
+            return array;
         }
     }
 
@@ -903,7 +1045,7 @@ public class ERXArrayUtilities extends Object {
      * <br/>
      *
      */
-    static class ObjectAtIndexOperator implements NSArray.Operator {
+    public static class ObjectAtIndexOperator implements NSArray.Operator {
         /** public empty constructor */
         public ObjectAtIndexOperator() {}
 
@@ -914,17 +1056,15 @@ public class ERXArrayUtilities extends Object {
          * @return <code>null</code> if array is empty or value is not in index, <code>keypath</code> value otherwise.
          */
         public Object compute(NSArray array, String keypath) {
-            synchronized (array) {
-                int end = keypath.indexOf(".");
-                int index = Integer.parseInt(keypath.substring(0, end == -1 ? keypath.length() : end));
-                Object value = null;
-                if(index < array.count() )
-                    value = array.objectAtIndex(index);
-                if(end != -1 && value != null) {
-                    value = NSKeyValueCodingAdditions.Utility.valueForKeyPath(value, keypath.substring(end+1));
-                }
-                return value;
+            int end = keypath.indexOf(".");
+            int index = Integer.parseInt(keypath.substring(0, end == -1 ? keypath.length() : end));
+            Object value = null;
+            if(index < array.count() )
+                value = array.objectAtIndex(index);
+            if(end != -1 && value != null) {
+                value = NSKeyValueCodingAdditions.Utility.valueForKeyPath(value, keypath.substring(end+1));
             }
+            return value;
         }
     }
 
@@ -937,7 +1077,7 @@ public class ERXArrayUtilities extends Object {
      * <br/>
      * which will sum up all values and divide by the number of nun-null entries. 
      */
-    static class AvgNonNullOperator implements NSArray.Operator {
+    public static class AvgNonNullOperator implements NSArray.Operator {
         /** public empty constructor */
         public AvgNonNullOperator() {}
 
@@ -948,22 +1088,20 @@ public class ERXArrayUtilities extends Object {
          * @return computed average as double or <code>NULL</code>.
          */
         public Object compute(NSArray array, String keypath) {
-            synchronized (array) {
-                BigDecimal result = new BigDecimal(0L);
-                int count = 0;
-                
-                for(Enumeration e = array.objectEnumerator(); e.hasMoreElements();) {
-                    Object value = NSKeyValueCodingAdditions.Utility.valueForKeyPath(e.nextElement(), keypath);
-                    if(value != null && value != NSKeyValueCoding.NullValue) {
-                        count = count+1;
-                        result = result.add(ERXValueUtilities.bigDecimalValue(value));
-                    }
+            BigDecimal result = new BigDecimal(0L);
+            int count = 0;
+            
+            for(Enumeration e = array.objectEnumerator(); e.hasMoreElements();) {
+                Object value = NSKeyValueCodingAdditions.Utility.valueForKeyPath(e.nextElement(), keypath);
+                if(value != null && value != NSKeyValueCoding.NullValue) {
+                    count = count+1;
+                    result = result.add(ERXValueUtilities.bigDecimalValue(value));
                 }
-                if(count == 0) {
-                    return null;
-                }
-                return result.divide(BigDecimal.valueOf((long) count), result.scale() + 4, 6);
             }
+            if(count == 0) {
+                return null;
+            }
+            return result.divide(BigDecimal.valueOf((long) count), result.scale() + 4, 6);
         }
     }
 
@@ -976,7 +1114,7 @@ public class ERXArrayUtilities extends Object {
      * <br/>
      * which return a reversed result as to you would normally get.
      */
-    static class ReverseOperator extends BaseOperator {
+    public static class ReverseOperator extends BaseOperator {
         /** public empty constructor */
         public ReverseOperator() {}
 
@@ -987,23 +1125,48 @@ public class ERXArrayUtilities extends Object {
          * @return reversed array for keypath.
          */
         public Object compute(NSArray array, String keypath) {
-            synchronized (array) {
-                array = reverse(array);
-                array = contents(array, keypath);
-                return array;
-            }
+            array = reverse(array);
+            array = contents(array, keypath);
+            return array;
         }
     }
+    
+    /**
+     * Define an {@link com.webobjects.foundation.NSArray.Operator NSArray.Operator} for the key <b>median</b>.<br/>
+     * <br/>
+     * This allows for key value paths like:<br/>
+     * <br/>
+     * <code>myArray.valueForKey("@median.someMorePath");</code><br/>
+     * <br/>
+     * which return the median of the array elements at the given key path.
+     * The median is the value for which half of the elements are above and half the elements are below.
+     * As such, an array sort is needed and this might be very costly depending of the size of the array.
+     */
+    public static class MedianOperator extends BaseOperator {
+        /** public empty constructor */
+        public MedianOperator() {}
+
+        /**
+         * returns the median value for the values of the keypath.
+         * @param array array to be checked.
+         * @param keypath value of reverse.
+         * @return reversed array for keypath.
+         */
+        public Object compute(NSArray array, String keypath) {
+            return median(array, keypath);
+        }
+    }
+    
     /** 
      * Will register new NSArray operators
      * <b>sort</b>, <b>sortAsc</b>, <b>sortDesc</b>, <b>sortInsensitiveAsc</b>,
      * <b>sortInsensitiveDesc</b>, <b>unique</b>, <b>flatten</b>, <b>reverse</b> and <b>fetchSpec</b> 
      */
     public static void initialize() {
-	if (initialized) {
-	    return;
-	}
-	initialized = true;
+        if (initialized) {
+            return;
+        }
+        initialized = true;
         if (ERXProperties.booleanForKeyWithDefault("er.extensions.ERXArrayUtilities.ShouldRegisterOperators", true)) {
             NSArray.setOperatorForKey("sort", new SortOperator(EOSortOrdering.CompareAscending));
             NSArray.setOperatorForKey("sortAsc", new SortOperator(EOSortOrdering.CompareAscending));
@@ -1019,7 +1182,40 @@ public class ERXArrayUtilities extends Object {
             NSArray.setOperatorForKey("avgNonNull", new AvgNonNullOperator());
             NSArray.setOperatorForKey("reverse", new ReverseOperator());
             NSArray.setOperatorForKey("removeNullValues", new RemoveNullValuesOperator());
+            NSArray.setOperatorForKey("median", new MedianOperator());
         }
+    }
+    
+    /**
+     * Calculates the median value of an array.
+     * The median is the value for which half of the elements are above and half the elements are below.
+     * As such, an array sort is needed and this might be very costly depending of the size of the array.
+     * @param array array of objects
+     * @param keypath key path for the median
+     */
+    public static Number median(NSArray array, String keypath) {
+        int count = array.count();
+        Number value;
+        if(count == 0) {
+            value = null;
+        } else if(count == 1) {
+            value = (Number) array.valueForKeyPath(keypath);
+        } else {
+            // array = (NSArray) array.valueForKeyPath(keypath);
+            // array = ERXArrayUtilities.sortedArraySortedWithKey(array, "doubleValue");
+            array = ERXArrayUtilities.sortedArraySortedWithKey(array, keypath);
+            int mid = count / 2;
+            if(count % 2 == 0) {
+                Object o = array.objectAtIndex(mid-1);
+                Number a = (Number)NSKeyValueCodingAdditions.Utility.valueForKeyPath(o, keypath);
+                o = array.objectAtIndex(mid);
+                Number b = (Number)NSKeyValueCodingAdditions.Utility.valueForKeyPath(o, keypath);
+                value = new Double((a.doubleValue()+b.doubleValue())/2);
+            } else {
+                value = (Number) NSKeyValueCodingAdditions.Utility.valueForKeyPath(array.objectAtIndex(mid), keypath);
+            }
+        }
+        return value;
     }
 
     
@@ -1030,13 +1226,12 @@ public class ERXArrayUtilities extends Object {
      * @return filtered array.
      */
     public static NSArray arrayWithoutDuplicates(NSArray anArray) {
-        String dummy = "DUMMY";
         NSMutableArray result = new NSMutableArray();
-        NSMutableDictionary already = new NSMutableDictionary();
+        NSMutableSet already = new NSMutableSet();
         for(Enumeration e = anArray.objectEnumerator(); e.hasMoreElements();){
             Object object = e.nextElement();
-            if(already.valueForKey(""+object.hashCode())==null){
-                already.takeValueForKey(dummy, ""+object.hashCode());
+            if(!already.containsObject(object)){
+                already.addObject(object);
                 result.addObject(object);
             }
         }
@@ -1076,6 +1271,12 @@ public class ERXArrayUtilities extends Object {
      * @return array filtered and sorted by the named fetch specification.
      */    
     public static NSArray filteredArrayWithEntityFetchSpecification(NSArray array, String entity, String fetchSpec, NSDictionary bindings) {
+        EOEntity wrongParamEntity = EOModelGroup.defaultGroup().entityNamed(fetchSpec);
+        if (wrongParamEntity != null) {
+            fetchSpec = entity;
+            entity = wrongParamEntity.name();
+            log.error("filteredArrayWithEntityFetchSpecification Calling conventions have changed from fetchSpec, entity to entity, fetchSpec");
+        }
         EOFetchSpecification spec = EOFetchSpecification.fetchSpecificationNamed(fetchSpec, entity);
         NSArray sortOrderings, result;
         EOQualifier qualifier;
@@ -1105,6 +1306,13 @@ public class ERXArrayUtilities extends Object {
     }
 
     /**
+     * @deprecated
+     */
+    public static NSArray filteredArrayWithFetchSpecificationNamedEntityNamed(NSArray array, String fetchSpec, String entity) {
+        return ERXArrayUtilities.filteredArrayWithEntityFetchSpecification(array, entity, fetchSpec, null);
+    }
+
+    /**
      * Filters a given array with a named fetch specification.
      *
      * @param array array to be filtered.
@@ -1113,16 +1321,10 @@ public class ERXArrayUtilities extends Object {
      * to which the fetch specification is associated.
      * @return array filtered and sorted by the named fetch specification.
      */
-    public static NSArray filteredArrayWithEntityFetchSpecification(NSArray array, String fetchSpec, String entity) {
-        return ERXArrayUtilities.filteredArrayWithEntityFetchSpecification(array, entity, fetchSpec, null);
+    public static NSArray filteredArrayWithEntityFetchSpecification(NSArray array, String entity, String fetchSpec) {
+        return ERXArrayUtilities.filteredArrayWithEntityFetchSpecification(array, entity,  fetchSpec, null);
     }
 
-    /**
-     * @deprecated
-     */
-    public static NSArray filteredArrayWithFetchSpecificationNamedEntityNamed(NSArray array, String fetchSpec, String entity) {
-        return ERXArrayUtilities.filteredArrayWithEntityFetchSpecification(array, entity, fetchSpec, null);
-    }
     /**
      * shifts a given object in an array one value to the left (index--).
      *
@@ -1167,7 +1369,8 @@ public class ERXArrayUtilities extends Object {
         if (array != null && objects != null && array.count() > 0 && objects.count() > 0) {
             for (Enumeration e = objects.objectEnumerator(); e.hasMoreElements();) {
                 if (array.containsObject(e.nextElement())) {
-                    arrayContainsAnyObject = true; break;
+                    arrayContainsAnyObject = true; 
+                    break;
                 }
             }
         }
@@ -1255,22 +1458,22 @@ public class ERXArrayUtilities extends Object {
      * @return friendly display string
      */
     public static String friendlyDisplayForKeyPath(NSArray list, String attribute, String nullArrayDisplay, String separator, String finalSeparator) {
-        String result=null;
+        Object result = null;
         int count = list!=null ? list.count() : 0;
         if (count==0) {
             result=nullArrayDisplay;
         } else if (count == 1) {
-            result= (attribute!= null ? NSKeyValueCodingAdditions.Utility.valueForKeyPath(list.objectAtIndex(0), attribute) : list.objectAtIndex(0)).toString();
+            result= (attribute!= null ? NSKeyValueCodingAdditions.Utility.valueForKeyPath(list.objectAtIndex(0), attribute) : list.objectAtIndex(0));
         } else if (count > 1) {
             StringBuffer buffer = new StringBuffer();
             for(int i = 0; i < count; i++) {
-                String attributeValue = (attribute!= null ? NSKeyValueCodingAdditions.Utility.valueForKeyPath(list.objectAtIndex(i), attribute) : list.objectAtIndex(i)).toString();
+                Object attributeValue = (attribute!= null ? NSKeyValueCodingAdditions.Utility.valueForKeyPath(list.objectAtIndex(i), attribute) : list.objectAtIndex(i));
                 if (i>0) buffer.append(i == (count - 1) ? finalSeparator : separator);
                 buffer.append(attributeValue);
             }
             result=buffer.toString();
         }
-        return result;
+        return (result == null ? null : result.toString());
     }
 
     /**
@@ -1307,11 +1510,11 @@ public class ERXArrayUtilities extends Object {
     }
     
     /** Converts an Object array to a String array by casting each element.
-        * This is analogus to <code>String[] myStringArray = (String[])myObjectArray;</code> 
-        * except that it creates a clone of the array.
-        * @param o an Object array containing String elements
-        * @return a String array containing the same elements
-        */
+     * This is analogus to <code>String[] myStringArray = (String[])myObjectArray;</code> 
+     * except that it creates a clone of the array.
+     * @param o an Object array containing String elements
+     * @return a String array containing the same elements
+     */
     public static String[] objectArrayCastToStringArray(Object[] o) {
         String[] s = new String[o.length];
         for (int i = 0; i < o.length; i++) {
@@ -1343,7 +1546,7 @@ public class ERXArrayUtilities extends Object {
     }
     
     /** pretty prints a NSArray of two dimensional Object array which is ugly when using toString
-     * @param o the object which one wants to print as a String
+     * @param a the object which one wants to print as a String
      * @return the String which can be used in lets say 
      * <code>log.info("my array = "+ERXArrayUtilities.objectArrayToString(myArray));</code>
      */
@@ -1365,6 +1568,14 @@ public class ERXArrayUtilities extends Object {
             a.removeLastObject();
         }
         return a;
+    }
+    
+    public static String[] toStringArray(NSArray a) {
+        String[] b = new String[a.count()];
+        for (int i = a.count(); i-- > 0; b[i] = a.objectAtIndex(i).toString()) {
+          // do nothing
+        }
+        return b;
     }
 
     /**
@@ -1466,4 +1677,119 @@ public class ERXArrayUtilities extends Object {
         return result;
     }
     
+    
+    /**
+     * Swaps the two given {@link Object}s in the given {@link NSArray} and
+     * returns a new {@link NSArray}. If one of the {@link Object}s is not
+     * element of the {@link NSArray} a {@link RuntimeException} will be thrown.
+     * 
+     * @author edgar - Jan 7, 2008
+     * @param array
+     *            in that the two given {@link Object}s have to be swapped
+     * @param object1
+     *            one object in the {@link NSArray} that will be swapped
+     * @param object2
+     *            the other object in the {@link NSArray} that will be swapped
+     * 
+     * @return the new {@link NSArray} with the swapped elements
+     * 
+     * @throws {@link RuntimeException}
+     *             if one of the {@link Object}s is not in the {@link NSArray}
+     */
+     /* // Requires WO5.3 or better.
+    public static NSArray arrayWithObjectsSwapped(final NSArray array, final Object object1, final Object object2) {
+        int indexOfObject1 = array.indexOf(object1);
+        int indexOfObject2 = array.indexOf(object2);
+
+        if (indexOfObject1 >= 0 && indexOfObject2 >= 0) {
+            return ERXArrayUtilities.arrayWithObjectsAtIndexesSwapped(array, indexOfObject1, indexOfObject2);
+        }
+        else {
+            throw new RuntimeException("At least one of the given objects is not element of the array!");
+        }
+    }
+    */
+
+    /**
+     * Swaps the two objects at the given indexes in the given {@link NSArray} and
+     * returns a new {@link NSArray}.
+     * 
+     * @author edgar - Jan 7, 2008
+     * @param array in that the two {@link Object}s at the given indexes have to be swapped
+     * @param indexOfObject1 index of one object in the {@link NSArray} that will be swapped
+     * @param indexOfObject2 index of the other object in the {@link NSArray} that will be swapped
+     * 
+     * @return the new {@link NSArray} with the swapped elements
+     * 
+     * @throws {@link RuntimeException} if one of the indexes is out of bound
+     */
+     /* // Requires WO5.3 or better.
+    public static NSArray arrayWithObjectsAtIndexesSwapped(final NSArray array, final int indexOfObject1, final int indexOfObject2) {
+        if (array == null || array.count() < 2) {
+            throw new RuntimeException ("Array is either null or does not have enough elements.");
+        }
+        NSMutableArray tmpArray = array.mutableClone();
+        try {
+            Object tmpObject = array.objectAtIndex(indexOfObject1);
+            tmpArray.set(indexOfObject1, array.objectAtIndex(indexOfObject2));
+            tmpArray.set(indexOfObject2, tmpObject);
+        }
+        catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+        return tmpArray.immutableClone();
+    }
+    */
+
+    /**
+     * Swaps two objects a and b in an array inplace 
+     * 
+     * @author cug - Jan 7, 2008
+     * 
+     * @param array the array 
+     * @param a - first object
+     * @param b - second object
+     * 
+     * @throws {@link RuntimeException} if one or both indexes are out of bounds
+     */
+     /* // Requires WO5.3 or better.
+    public static void swapObjectsInArray (NSMutableArray array, Object a, Object b) {
+        if (array == null || array.count() < 2) {
+            throw new RuntimeException ("Array is either null or does not have enough elements.");
+        }
+        int indexOfA = array.indexOf(a);
+        int indexOfB = array.indexOf(b);
+
+        if (indexOfA >= 0 && indexOfB >= 0) {
+            ERXArrayUtilities.swapObjectsAtIndexesInArray(array, indexOfA, indexOfB);
+        }
+        else {
+            throw new RuntimeException ("At least one of the objects is not element of the array!");
+        }
+    }
+    */
+
+    /**
+     * Swaps two objects at the given indexes in an array inplace 
+     * 
+     * @author cug - Jan 7, 2008
+     * 
+     * @param array the array 
+     * @param indexOfA - index of the first object
+     * @param indexOfB - index of the second object
+     * 
+     * @throws {@link RuntimeException} if one or both indexes are out of bounds
+     */
+    public static void swapObjectsAtIndexesInArray (NSMutableArray array, int indexOfA, int indexOfB) {
+        try {
+            Object tmp = array.replaceObjectAtIndex(array.objectAtIndex(indexOfA), indexOfB);
+            array.replaceObjectAtIndex(tmp, indexOfA);
+        }
+        catch (Exception e) {
+            throw new RuntimeException();
+        }
+    }
+
 }
+
