@@ -12,6 +12,12 @@ import com.webobjects.foundation.NSSelector;
 public class ERXKeyValueQualifier extends EOKeyValueQualifier implements IERXChainableQualifier {
 	public ERXKeyValueQualifier(String key, NSSelector selector, Object value) {
 		super(key, selector, value);
+		if (key == null) {
+			throw new IllegalArgumentException("A KeyQualifierQualifier must have a key.");
+		}
+		if (selector == null) {
+			throw new IllegalArgumentException("A KeyQualifierQualifier must have a selector.");
+		}
 	}
 
 	public ERXAndQualifier and(EOQualifier... qualifiers) {
