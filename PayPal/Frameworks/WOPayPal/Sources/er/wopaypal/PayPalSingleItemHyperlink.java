@@ -64,7 +64,7 @@ public class PayPalSingleItemHyperlink extends PayPalSingleItemLinkBase {
 
         StringBuffer sb = new StringBuffer();
         sb.append("&business=" + urlEncode(payPalBusinessName) ); // required!!!
-        if (userDefinableQuantity!=null) {
+        if (userDefinableQuantity != null) {
             sb.append("&undefined_quantity=" + (userDefinableQuantity.booleanValue() ? "1" : "0") );  
         }
         if (itemName != null) {

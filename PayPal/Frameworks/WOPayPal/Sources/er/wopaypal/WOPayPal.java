@@ -37,10 +37,8 @@ public class WOPayPal {
         if (!_isInitialized) {
             // This is OK to call multiple times as it will only be configured the first time.
             try {
-
-        registerPayPalNotificationListenerObservers();
-
-        _isInitialized=true;
+                registerPayPalNotificationListenerObservers();
+                _isInitialized=true;
             } catch (Exception e) {
                 System.out.println("Caught exception: " + e.getMessage() + " stack: ");
                 e.printStackTrace();

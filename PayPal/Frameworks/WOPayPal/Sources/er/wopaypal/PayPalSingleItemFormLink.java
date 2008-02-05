@@ -27,7 +27,7 @@ public class PayPalSingleItemFormLink extends
     /**
      * Used in the WOConditional on the WOComponent
      */
-    public Boolean      useImageButton;
+    public Boolean useImageButton;
 
     /**
      * Constructor.
