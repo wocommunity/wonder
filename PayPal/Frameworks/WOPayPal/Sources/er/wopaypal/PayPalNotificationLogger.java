@@ -18,7 +18,7 @@ public class PayPalNotificationLogger {
     /** Constructor.
      */
     public PayPalNotificationLogger() {
-	super();
+        super();
     }
 
 

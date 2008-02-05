@@ -26,8 +26,8 @@ public class WOPayPal {
     public WOPayPal() {
         super();
     }
-    
- 
+
+
     /** ivar to determine whether the framework has been set up or not.
      */
     private static boolean _isInitialized=false;
@@ -75,6 +75,6 @@ public class WOPayPal {
                               PayPalNotificationListener.ValidPayPalPaymentReceivedNotification,
                               null);
     }
-    
+
 
 }
