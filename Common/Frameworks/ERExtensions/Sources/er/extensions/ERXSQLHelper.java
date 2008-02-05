@@ -37,6 +37,7 @@ import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSForwardException;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
+import com.webobjects.foundation.NSSelector;
 import com.webobjects.foundation.NSTimestamp;
 import com.webobjects.foundation._NSUtilities;
 import com.webobjects.jdbcadaptor.JDBCAdaptor;
@@ -149,7 +150,7 @@ public class ERXSQLHelper {
 				Enumeration<EOEntity> e = model.entities().objectEnumerator();
 				NSMutableArray<EOEntity> ar = new NSMutableArray<EOEntity>();
 				while (e.hasMoreElements()) {
-					EOEntity currentEntity = (EOEntity) e.nextElement();
+					EOEntity currentEntity = e.nextElement();
 					if (ERXModelGroup.isPrototypeEntity(currentEntity)) {
 						// we do not want to add EOXXXPrototypes entities
 						continue;
@@ -288,7 +289,7 @@ public class ERXSQLHelper {
 		String lineSeparator = System.getProperty("line.separator");
 		StringBuffer buf = new StringBuffer();
 
-		EOEntity ent = (EOEntity) entities.objectAtIndex(0);
+		EOEntity ent = entities.objectAtIndex(0);
 		String modelName = ent.model().name();
 		String commandSeparator = commandSeparatorString();
 
@@ -302,7 +303,7 @@ public class ERXSQLHelper {
 			NSDictionary<String, Object> d = entity.userInfo();
 			NSMutableArray<String> usedColumns = new NSMutableArray<String>();
 			for (Enumeration<String> keys = d.keyEnumerator(); keys.hasMoreElements();) {
-				String key = (String) keys.nextElement();
+				String key = keys.nextElement();
 				if (key.startsWith("index")) {
 					String numbers = key.substring("index".length());
 					if (ERXStringUtilities.isDigitsOnly(numbers)) {
@@ -422,6 +423,27 @@ public class ERXSQLHelper {
 	}
 
 	/**
+	 * Returns the last of attributes to fetch for a fetch spec.  The entity is passed 
+	 * in here because it has likely already been looked up for the particular fetch spec.
+	 * 
+	 * @param fetchSpec the fetch spec
+	 * @param entity the entity (which should match fetchSpec.entityName())
+	 * @return the list of attributes to fetch
+	 */
+	@SuppressWarnings("unchecked")
+	protected NSArray<EOAttribute> _attributesToFetchForEntity(EOFetchSpecification fetchSpec, EOEntity entity) {
+		NSArray<EOAttribute> attributes = entity.attributesToFetch();
+		if (fetchSpec.fetchesRawRows()) {
+			NSMutableArray<EOAttribute> rawRowAttributes = new NSMutableArray<EOAttribute>();
+			for (String rawRowKeyPath : (NSArray<String>)fetchSpec.rawRowKeyPaths()) {
+				rawRowAttributes.addObject(entity.anyAttributeNamed(rawRowKeyPath));
+			}
+			attributes = rawRowAttributes.immutableClone();
+		}
+		return attributes;
+	}
+	
+	/**
 	 * Creates the SQL which is used by the provided EOFetchSpecification, limited by the given range.
 	 * 
 	 * @param ec
@@ -442,15 +464,6 @@ public class ERXSQLHelper {
 		EOAdaptor adaptor = dbc.adaptorContext().adaptor();
 		EOSQLExpressionFactory sqlFactory = adaptor.expressionFactory();
 		spec = (EOFetchSpecification) spec.clone();
-		NSArray attributes = entity.attributesToFetch();
-		if (spec.fetchesRawRows()) {
-			NSMutableArray<EOAttribute> arr = new NSMutableArray<EOAttribute>();
-			for (Enumeration e = spec.rawRowKeyPaths().objectEnumerator(); e.hasMoreElements();) {
-				String keyPath = (String) e.nextElement();
-				arr.addObject(entity.anyAttributeNamed(keyPath));
-			}
-			attributes = arr.immutableClone();
-		}
 
 		EOQualifier qualifier = spec.qualifier();
 		if (qualifier != null) {
@@ -466,6 +479,7 @@ public class ERXSQLHelper {
 		spec = ERXEOAccessUtilities.localizeFetchSpecification(ec, spec);
 		String url = (String) model.connectionDictionary().objectForKey("URL");
 		String lowerCaseURL = (url != null ? url.toLowerCase() : "");
+		NSArray<EOAttribute> attributes = _attributesToFetchForEntity(spec, entity);
 		EOSQLExpression sqlExpr = sqlFactory.selectStatementForAttributes(attributes, false, spec, entity);
 		String sql = sqlExpr.statement();
 		if (end >= 0) {
@@ -479,6 +493,93 @@ public class ERXSQLHelper {
 		throw new UnsupportedOperationException("There is no database-specific implementation for generating limit expressions.");
 	}
 
+	/**
+	 * Adds itemString to a comma-separated list. If listString already has entries, this method 
+	 * appends a comma followed by itemString. There is no good way to hook in and use 
+	 * EOSQLExpression's version of this, so we have our own copy of it.
+	 * 
+	 * @param itemString the item to append
+	 * @param listString the list buffer
+	 */
+	public void appendItemToListString(String itemString, StringBuffer listString) {
+		if (listString.length() > 0) {
+			listString.append(", ");
+		}
+		listString.append(itemString);
+	}
+
+	/**
+	 * Adds a group-by clause to the given SQL Expression based on the list of
+	 * attributes defined in the given fetch spec.
+	 * 
+	 * @param editingContext the editing context to lookup entities with 
+	 * @param fetchSpec the fetch spec to retrieve attributes from
+	 * @param expression the sql expression to add a "group by" clause to 
+	 */
+	public void addGroupByClauseToExpression(EOEditingContext editingContext, EOFetchSpecification fetchSpec, EOSQLExpression expression) {
+		EOEntity entity = ERXEOAccessUtilities.entityNamed(editingContext, fetchSpec.entityName());
+	    addGroupByClauseToExpression(_attributesToFetchForEntity(fetchSpec, entity), expression);
+	}
+	
+	/**
+	 * Returns the index in the expression's statement where group by and having clauses
+	 * should be inserted.
+	 * 
+	 * @param expression the expression to look into
+	 * @return the index into statement where the group by should be inserted
+	 */
+	protected int _groupByOrHavingIndex(EOSQLExpression expression) {
+		String sql = expression.statement();
+	    int orderByIndex = sql.lastIndexOf(" ORDER BY ");
+	    if (orderByIndex == -1) {
+	      orderByIndex = sql.length();
+	    }
+	    return orderByIndex;
+	}
+
+	/**
+	 * Adds a group-by clause to the given SQL Expression based on the given list of
+	 * attributes.
+	 * 
+	 * @param attributes the list of attributes to group by
+	 * @param expression the sql expression to add a "group by" clause to 
+	 */
+	public void addGroupByClauseToExpression(NSArray<EOAttribute> attributes, EOSQLExpression expression) {
+		StringBuffer groupByBuffer = new StringBuffer();
+		for (EOAttribute attribute : attributes) {
+		    String attributeSqlString = expression.sqlStringForAttribute(attribute);
+		    attributeSqlString = expression.formatSQLString(attributeSqlString, attribute.readFormat());
+		    appendItemToListString(attributeSqlString, groupByBuffer);
+		}
+	    groupByBuffer.insert(0, " GROUP BY ");
+
+		StringBuffer sqlBuffer = new StringBuffer(expression.statement());
+	    sqlBuffer.insert(_groupByOrHavingIndex(expression), groupByBuffer);
+	    expression.setStatement(sqlBuffer.toString());
+	}
+
+	/**
+	 * Adds a " having count(*) > x" clause to a group by expression.
+	 * 
+	 * @param selector the comparison selector -- just like EOKeyValueQualifier
+	 * @param value the value to compare against
+	 * @param expression the expression to modify
+	 */
+	public void addHavingCountClauseToExpression(NSSelector selector, int value, EOSQLExpression expression) {
+		Integer integerValue = Integer.valueOf(value);
+		String operatorString = expression.sqlStringForSelector(selector, integerValue);
+		
+		StringBuffer havingBuffer = new StringBuffer();
+		havingBuffer.append(" HAVING COUNT(*) ");
+		havingBuffer.append(operatorString);
+		havingBuffer.append(" ");
+		havingBuffer.append(integerValue);
+
+		StringBuffer sqlBuffer = new StringBuffer(expression.statement());
+	    sqlBuffer.insert(_groupByOrHavingIndex(expression), havingBuffer);
+	    expression.setStatement(sqlBuffer.toString());
+	}
+	
 	/**
 	 * Returns the SQL expression for a regular expression query.
 	 * 
@@ -498,6 +599,18 @@ public class ERXSQLHelper {
 	 */
 	public String sqlForFullTextQuery(ERXFullTextQualifier qualifier, EOSQLExpression expression) {
 		throw new UnsupportedOperationException("There is no database-specific implementation for generating full text expressions.");
+	}
+
+	/**
+	 * Returns the SQL expression for creating a unique index on the given set of columns
+	 * 
+	 * @param indexName the name of the index to create
+	 * @param expression the EOSQLExpression context
+	 * @param columnNames the list of column names to index on
+	 * @return a SQL expression
+	 */
+	public String sqlForCreateUniqueIndex(String indexName, String tableName, String... columnNames) {
+		throw new UnsupportedOperationException("There is no database-specific implementation for generating unique index expressions.");
 	}
 
 	/**
@@ -778,7 +891,7 @@ public class ERXSQLHelper {
 
 	public static ERXSQLHelper newSQLHelper(String databaseProductName) {
 		synchronized (_sqlHelperMap) {
-			ERXSQLHelper sqlHelper = (ERXSQLHelper) _sqlHelperMap.get(databaseProductName);
+			ERXSQLHelper sqlHelper = _sqlHelperMap.get(databaseProductName);
 			if (sqlHelper == null) {
 				try {
 					String sqlHelperClassName = ERXProperties.stringForKey(databaseProductName + ".SQLHelper");
@@ -1014,6 +1127,11 @@ public class ERXSQLHelper {
 		}
 		
 		@Override
+		public String sqlForCreateUniqueIndex(String indexName, String tableName, String... columnNames) {
+			return "ALTER TABLE \"" + tableName + "\" ADD CONSTRAINT \"" + indexName + "\" UNIQUE(\"" + new NSArray<String>(columnNames).componentsJoinedByString("\", \"") + "\") INITIALLY IMMEDIATE NOT DEFERRABLE";
+		}
+		
+		@Override
 		public void prepareConnectionForSchemaChange(EOEditingContext ec, EOModel model) {
 			ERXEOAccessUtilities.ChannelAction action = new ERXEOAccessUtilities.ChannelAction(){
 				@Override
@@ -1031,6 +1149,7 @@ public class ERXSQLHelper {
 		}
 		
 		@Override
+		@SuppressWarnings("unchecked")
 		public void restoreConnectionSettingsAfterSchemaChange(EOEditingContext ec, EOModel model) {
 			// Default settings
 			String transactionIsolationLevel = "SERIALIZABLE";
