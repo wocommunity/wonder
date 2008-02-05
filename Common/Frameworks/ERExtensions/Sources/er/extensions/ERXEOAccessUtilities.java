@@ -259,7 +259,12 @@ public class ERXEOAccessUtilities {
     }
 
     /**
-     * Returns the raw rows for the given EOSQLExpression.
+     * Returns the raw rows for the given EOSQLExpression.  When possible,
+     * you should use the variant of this method that requires you to pass
+     * in the array of EOAttributes you are fetching. If you do not pass in
+     * attributes, this will use channel.describeResults(), which can produce
+     * attributes that may not be able to be faulted back into EO's because
+     * of case mismatches.
      * 
      * @param ec
      *            the EOEditingContext
@@ -271,20 +276,46 @@ public class ERXEOAccessUtilities {
      * @return array of dictionaries
      */
     public static NSArray<NSDictionary> rawRowsForSQLExpression(EOEditingContext ec, String modelName, EOSQLExpression expression) {
-        EODatabaseContext dbc = EOUtilities.databaseContextForModelNamed(ec, modelName);
+    	EOModelGroup modelGroup = EOUtilities.modelGroup(ec);
+        EOModel model = modelGroup.modelNamed(modelName);
+    	return ERXEOAccessUtilities.rawRowsForSQLExpression(ec, model, expression, null);
+    }
+
+    /**
+     * Returns the raw rows for the given EOSQLExpression.
+     * 
+     * @param ec
+     *            the EOEditingContext
+     * @param model
+     *            the model in question
+     * @param expression
+     *            the EOSQLExpression to fetch with
+     * @param attributes the attributes to fetch
+     * 
+     * @return array of dictionaries
+     */
+    public static NSArray<NSDictionary> rawRowsForSQLExpression(EOEditingContext ec, EOModel model, EOSQLExpression expression, NSArray<EOAttribute> attributes) {
+        EODatabaseContext dbc = EODatabaseContext.registeredDatabaseContextForModel(model, ec);
         dbc.lock();
-        NSMutableArray<NSDictionary> results = null;
         try {
             EOAdaptorChannel channel = dbc.availableChannel().adaptorChannel();
-            if (!channel.isOpen()) channel.openChannel();
+            if (!channel.isOpen()) {
+            	channel.openChannel();
+            }
             channel.evaluateExpression(expression);
             try {
-                channel.setAttributesToFetch(channel.describeResults());
-                results = new NSMutableArray<NSDictionary>();
+            	if (attributes == null) {
+            		channel.setAttributesToFetch(channel.describeResults());
+            	}
+            	else {
+            		channel.setAttributesToFetch(attributes);
+            	}
+                NSMutableArray<NSDictionary> results = new NSMutableArray<NSDictionary>();
                 NSDictionary row;
                 while ((row = channel.fetchRow()) != null) {
                     results.addObject(row);
                 }
+                return results;
             } catch (EOGeneralAdaptorException ex) {
                 channel.cancelFetch();
                 throw ex;
@@ -292,7 +323,6 @@ public class ERXEOAccessUtilities {
         } finally {
             dbc.unlock();
         }
-        return results;
     }
 
     /**
