@@ -75,7 +75,8 @@ public class ERXToManyQualifier extends EOKeyValueQualifier implements Cloneable
         return _elements;
     }
     
-    public String key() {
+    @Override
+	public String key() {
         return _toManyKey;
     }
     
@@ -88,7 +89,8 @@ public class ERXToManyQualifier extends EOKeyValueQualifier implements Cloneable
      * @return description of the key and which elements it
      *		should contain.
      */
-    public String toString() {
+    @Override
+	public String toString() {
         return "<" +_toManyKey + " contains " + (_minCount > 0 ? " " + _minCount + " "  : " all ") + " of " + _elements + ">";
     }
 
@@ -96,7 +98,8 @@ public class ERXToManyQualifier extends EOKeyValueQualifier implements Cloneable
      * Implementation of the Cloneable interface.
      * @return clone of the qualifier.
      */
-    public Object clone() {
+    @Override
+	public Object clone() {
         return new ERXToManyQualifier(_toManyKey, _elements, _minCount);
     }
 
@@ -119,18 +122,20 @@ public class ERXToManyQualifier extends EOKeyValueQualifier implements Cloneable
             sb.append(attribute.columnName());
         }
 
-        public String sqlStringForSQLExpression(EOQualifier eoqualifier, EOSQLExpression e) {
+		@Override
+        @SuppressWarnings("unchecked")
+		public String sqlStringForSQLExpression(EOQualifier eoqualifier, EOSQLExpression e) {
             ERXToManyQualifier qualifier = (ERXToManyQualifier)eoqualifier;
             StringBuffer result=new StringBuffer();
             EOEntity targetEntity=e.entity();
 
-            NSArray toManyKeys=NSArray.componentsSeparatedByString(qualifier.key(),".");
+            NSArray<String> toManyKeys=NSArray.componentsSeparatedByString(qualifier.key(),".");
             EORelationship targetRelationship=null;
             for (int i=0; i<toManyKeys.count()-1;i++) {
-                targetRelationship= targetEntity.anyRelationshipNamed((String)toManyKeys.objectAtIndex(i));
+                targetRelationship= targetEntity.anyRelationshipNamed(toManyKeys.objectAtIndex(i));
                 targetEntity=targetRelationship.destinationEntity();
             }
-            targetRelationship=targetEntity.relationshipNamed((String)toManyKeys.lastObject());
+            targetRelationship=targetEntity.relationshipNamed(toManyKeys.lastObject());
             targetEntity=targetRelationship.destinationEntity();
 
             if (targetRelationship.joins()==null || targetRelationship.joins().count()==0) {
@@ -147,7 +152,7 @@ public class ERXToManyQualifier extends EOKeyValueQualifier implements Cloneable
                 join=(EOJoin) secondHopRelationship.joins().objectAtIndex(0); // assumes 1 join
                 EOAttribute secondHopSourceAttribute=join.sourceAttribute();
 
-                NSMutableArray lastStopPKeyPath=new NSMutableArray(toManyKeys);
+                NSMutableArray<String> lastStopPKeyPath=new NSMutableArray<String>(toManyKeys);
                 lastStopPKeyPath.removeLastObject();
                 lastStopPKeyPath.addObject(firstHopRelationship.name());
                 lastStopPKeyPath.addObject(targetAttribute.name());
@@ -215,7 +220,8 @@ public class ERXToManyQualifier extends EOKeyValueQualifier implements Cloneable
         }
         
         // ENHANCEME: This should support restrictive qualifiers on the root entity
-        public EOQualifier schemaBasedQualifierWithRootEntity(EOQualifier eoqualifier, EOEntity eoentity) {
+        @Override
+		public EOQualifier schemaBasedQualifierWithRootEntity(EOQualifier eoqualifier, EOEntity eoentity) {
             EOQualifier result = null;
             EOKeyValueQualifier qualifier = (EOKeyValueQualifier)eoqualifier;
             String key = qualifier.key();
@@ -229,14 +235,16 @@ public class ERXToManyQualifier extends EOKeyValueQualifier implements Cloneable
             return (EOQualifier)eoqualifier.clone();
         }
 
-        public EOQualifier qualifierMigratedFromEntityRelationshipPath(EOQualifier eoqualifier, EOEntity eoentity, String relationshipPath) {
+        @Override
+		public EOQualifier qualifierMigratedFromEntityRelationshipPath(EOQualifier eoqualifier, EOEntity eoentity, String relationshipPath) {
             ERXToManyQualifier qualifier=(ERXToManyQualifier)eoqualifier;
             String newPath =  EOQualifierSQLGeneration.Support._translateKeyAcrossRelationshipPath(qualifier.key(), relationshipPath, eoentity);
             return new ERXToManyQualifier(newPath, qualifier.elements(), qualifier.minCount());
         }
     }
 
-    public EOQualifier qualifierWithBindings(NSDictionary arg0, boolean arg1) {
+    @Override
+	public EOQualifier qualifierWithBindings(NSDictionary arg0, boolean arg1) {
        	if (arg0 != null && arg0.count() > 0) {
     		throw new IllegalStateException(getClass().getName() + " doesn't support bindings");
     	}
@@ -246,12 +254,14 @@ public class ERXToManyQualifier extends EOKeyValueQualifier implements Cloneable
     /* (non-Javadoc)
      * @see com.webobjects.eocontrol.EOQualifier#validateKeysWithRootClassDescription(com.webobjects.eocontrol.EOClassDescription)
      */
-    public void validateKeysWithRootClassDescription(EOClassDescription arg0) {
+    @Override
+	public void validateKeysWithRootClassDescription(EOClassDescription arg0) {
         // TODO Auto-generated method stub
         
     }
 
-    public void addQualifierKeysToSet(NSMutableSet arg0) {
+    @Override
+	public void addQualifierKeysToSet(NSMutableSet arg0) {
         throw new IllegalStateException(getClass().getName() + " doesn't support adding keys");
     }
 }
