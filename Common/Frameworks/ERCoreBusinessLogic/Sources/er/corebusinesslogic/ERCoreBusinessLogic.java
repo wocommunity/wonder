@@ -80,7 +80,7 @@ public class ERCoreBusinessLogic extends ERXFrameworkPrincipal {
     public static EOEnterpriseObject actor(EOEditingContext ec) {
         EOEnterpriseObject result = actor();
         if (result != null && result.editingContext() != ec)
-            result = (EOEnterpriseObject)ERXUtilities.localInstanceOfObject(ec,result);
+            result = (EOEnterpriseObject)ERXEOControlUtilities.localInstanceOfObject(ec,result);
         return result;
     }
 

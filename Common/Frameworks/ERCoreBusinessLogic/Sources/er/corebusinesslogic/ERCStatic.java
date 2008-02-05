@@ -32,7 +32,7 @@ public class ERCStatic extends _ERCStatic {
                 _staticsPerKey.setObjectForKey(result, key);
                 result = result == NSKeyValueCoding.NullValue ? null : result;
             }
-            result = result != null && !result.equals(NSKeyValueCoding.NullValue) ? ERXUtilities.localInstanceOfObject(ec, (ERCStatic)result) : null;
+            result = result != null && !result.equals(NSKeyValueCoding.NullValue) ? ERXEOControlUtilities.localInstanceOfObject(ec, (ERCStatic)result) : null;
             return (ERCStatic)result;
         }
 
@@ -123,7 +123,7 @@ public class ERCStatic extends _ERCStatic {
                                                        String key) {
             ERCStatic entry = ERCStatic.staticClazz().objectMatchingKey(editingContext,key);
             if (entry==null) {
-                entry=(ERCStatic)ERXUtilities.createEO("ERCStatic", editingContext);
+                entry=(ERCStatic)ERXEOControlUtilities.createAndInsertObject(editingContext, "ERCStatic");
                 entry.setKey(key);
             }
             entry.setValue(value);
