@@ -24,7 +24,7 @@ public class WOPayPal {
     /** Constructor.
      */
     public WOPayPal() {
-	super();
+        super();
     }
     
  
@@ -38,9 +38,9 @@ public class WOPayPal {
             // This is OK to call multiple times as it will only be configured the first time.
             try {
 
-		registerPayPalNotificationListenerObservers();
+        registerPayPalNotificationListenerObservers();
 
-		_isInitialized=true;
+        _isInitialized=true;
             } catch (Exception e) {
                 System.out.println("Caught exception: " + e.getMessage() + " stack: ");
                 e.printStackTrace();
@@ -51,29 +51,29 @@ public class WOPayPal {
     /** registerPayPalNotificationListenerObservers sets up the observer in the PayPalNotificationListener to receive notifications of Instant Payment Notifications from the PayPalAction class' ipnAction method.
      */
     public static void registerPayPalNotificationListenerObservers() {
-	Object observer = PayPalNotificationListener.observer();
-	_retainer.addObject(observer);
+        Object observer = PayPalNotificationListener.observer();
+        _retainer.addObject(observer);
 
-	NSNotificationCenter.defaultCenter().addObserver(observer,
-						  new NSSelector("handleDeniedPaymentNotification", NotificationClassArray),
-						  PayPalNotificationListener.DeniedPayPalPaymentReceivedNotification,
-						  null);
-	NSNotificationCenter.defaultCenter().addObserver(observer,
-						  new NSSelector("handleFailedPaymentNotification", NotificationClassArray),
-						  PayPalNotificationListener.FailedPayPalPaymentReceivedNotification,
-						  null);
-	NSNotificationCenter.defaultCenter().addObserver(observer,
-						  new NSSelector("handleInvalidPaymentNotification", NotificationClassArray),
-						  PayPalNotificationListener.InvalidPayPalPaymentReceivedNotification,
-						  null);
-	NSNotificationCenter.defaultCenter().addObserver(observer,
-						  new NSSelector("handlePendingPaymentNotification", NotificationClassArray),
-						  PayPalNotificationListener.PendingPayPalPaymentReceivedNotification,
-						  null);
-	NSNotificationCenter.defaultCenter().addObserver(observer,
-						  new NSSelector("handleValidPaymentNotification", NotificationClassArray),
-						  PayPalNotificationListener.ValidPayPalPaymentReceivedNotification,
-						  null);
+        NSNotificationCenter.defaultCenter().addObserver(observer,
+                              new NSSelector("handleDeniedPaymentNotification", NotificationClassArray),
+                              PayPalNotificationListener.DeniedPayPalPaymentReceivedNotification,
+                              null);
+        NSNotificationCenter.defaultCenter().addObserver(observer,
+                              new NSSelector("handleFailedPaymentNotification", NotificationClassArray),
+                              PayPalNotificationListener.FailedPayPalPaymentReceivedNotification,
+                              null);
+        NSNotificationCenter.defaultCenter().addObserver(observer,
+                              new NSSelector("handleInvalidPaymentNotification", NotificationClassArray),
+                              PayPalNotificationListener.InvalidPayPalPaymentReceivedNotification,
+                              null);
+        NSNotificationCenter.defaultCenter().addObserver(observer,
+                              new NSSelector("handlePendingPaymentNotification", NotificationClassArray),
+                              PayPalNotificationListener.PendingPayPalPaymentReceivedNotification,
+                              null);
+        NSNotificationCenter.defaultCenter().addObserver(observer,
+                              new NSSelector("handleValidPaymentNotification", NotificationClassArray),
+                              PayPalNotificationListener.ValidPayPalPaymentReceivedNotification,
+                              null);
     }
     
 
