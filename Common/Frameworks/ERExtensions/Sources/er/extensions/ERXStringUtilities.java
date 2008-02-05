@@ -351,9 +351,21 @@ public class ERXStringUtilities {
      * @return string of the given file specified in the bundle
      */
     public static String stringFromResource(String name, String extension, NSBundle bundle) {
-        if(bundle != null)
-            return stringWithContentsOfFile(bundle.pathForResource(name, extension, null));
-         return stringWithContentsOfFile(ERXFileUtilities.pathForResourceNamed(name + "." + extension, null, null));
+        String path = null;
+        if(bundle == null) {
+            bundle = NSBundle.mainBundle();
+        }
+        path = bundle.resourcePathForLocalizedResourceNamed(name + (extension == null || extension.length() == 0 ? "" : "." + extension), null);
+        if(path != null) {
+            try {
+                InputStream stream = bundle.inputStreamForResourcePath(path);
+                byte bytes[] = ERXFileUtilities.bytesFromInputStream(stream);
+                return new String(bytes);
+            } catch (IOException e) {
+                log.warn("IOException when stringFromResource(" + name + "." + extension + " in bundle " + bundle.name());
+            }
+        }
+        return null;
     }
 
     public static final String firstPropertyKeyInKeyPath(String keyPath) {

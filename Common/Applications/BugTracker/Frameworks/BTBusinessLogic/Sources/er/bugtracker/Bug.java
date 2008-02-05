@@ -74,7 +74,7 @@ public class Bug extends _Bug {
         }
     }
 
-    public boolean isFeatureRequest() { return ERXUtilities.booleanValue(featureRequest()); }
+    public boolean isFeatureRequest() { return ERXValueUtilities.booleanValue(featureRequest()); }
 
     public void setState(State newState) {
         willChange();

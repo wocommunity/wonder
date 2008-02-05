@@ -162,9 +162,9 @@ public class ERMailSender extends Thread {
             try {
 		if (debug) {
 		    log.debug ("Sending a message ... " + aMessage);
-		    Enumeration enum = aMessage.getAllHeaderLines();
-		    while(enum.hasMoreElements()) {
-			String header = (String)enum.nextElement();
+		    Enumeration e = aMessage.getAllHeaderLines();
+		    while(e.hasMoreElements()) {
+			String header = (String)e.nextElement();
 			log.debug(header);
 		    }
 		}

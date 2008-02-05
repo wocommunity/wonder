@@ -302,7 +302,7 @@ public class ERXExtensions {
             sharedEOadaptorLogger = ERXLogger.getERXLogger("er.transaction.adaptor.EOSharedEOAdaptorDebugEnabled");
             if (adaptorLogger.isDebugEnabled() && !NSLog.debugLoggingAllowedForGroups(NSLog.DebugGroupSQLGeneration|NSLog.DebugGroupDatabaseAccess)) {
                 NSLog.allowDebugLoggingForGroups(NSLog.DebugGroupSQLGeneration|NSLog.DebugGroupDatabaseAccess);
-                NSLog.setAllowedDebugLevel(NSLog.DebugLevelInformational);
+                NSLog.debug.setAllowedDebugLevel(NSLog.DebugLevelInformational);
             }
             adaptorEnabled = NSLog.debugLoggingAllowedForGroups(NSLog.DebugGroupSQLGeneration|NSLog.DebugGroupDatabaseAccess) ? Boolean.TRUE : Boolean.FALSE;
                                           // Allows rapid turn-around of adaptor debugging.
@@ -332,10 +332,10 @@ public class ERXExtensions {
             if (NSLog.debugLoggingAllowedForGroups(NSLog.DebugGroupSQLGeneration|NSLog.DebugGroupDatabaseAccess) != targetState.booleanValue())
                 if (targetState.booleanValue()) {
                     NSLog.allowDebugLoggingForGroups(NSLog.DebugGroupSQLGeneration|NSLog.DebugGroupDatabaseAccess);
-                    NSLog.setAllowedDebugLevel(NSLog.DebugLevelInformational);
+                    NSLog.debug.setAllowedDebugLevel(NSLog.DebugLevelInformational);
                 } else {
                     NSLog.refuseDebugLoggingForGroups(NSLog.DebugGroupSQLGeneration|NSLog.DebugGroupDatabaseAccess);
-                    NSLog.setAllowedDebugLevel(NSLog.DebugLevelCritical);
+                    NSLog.debug.setAllowedDebugLevel(NSLog.DebugLevelCritical);
                 }
             if (targetState.booleanValue()) {
                 adaptorLogger.info("Adaptor debug on");

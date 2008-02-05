@@ -580,6 +580,19 @@ public class ERXEOAccessUtilities {
         sb.append(")");
         return sb.toString();
     }
+    
+    /**
+     * Returns the database context for the given entity in the given
+     * EOObjectStoreCoordinator
+     * 
+     * @param entityName
+     * @param osc
+     */
+    public static EODatabaseContext databaseContextForEntityNamed(EOObjectStoreCoordinator osc, String entityName) {
+        EOModel model = EOModelGroup.modelGroupForObjectStoreCoordinator(osc).entityNamed(entityName).model();
+        EODatabaseContext dbc = EODatabaseContext.registeredDatabaseContextForModel(model, osc);
+        return dbc;
+    }
 
     /**
      * Returns the last entity for the given key path. If the path is empty or null, returns the given entity.
@@ -688,5 +701,5 @@ public class ERXEOAccessUtilities {
         } else {
             log.warn("makeEditableSharedEntityNamed: entity already editable: " + entityName);
         }
-    }    
+    }
 }

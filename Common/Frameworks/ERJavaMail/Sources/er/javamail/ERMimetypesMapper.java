@@ -6,36 +6,30 @@
 
 package er.javamail;
 
-import com.webobjects.appserver.WOResourceManager;
+import java.io.InputStream;
+
+import javax.activation.MimetypesFileTypeMap;
+
 import com.webobjects.appserver.WOApplication;
-import javax.activation.*;
-import java.io.*;
+import com.webobjects.appserver.WOResourceManager;
 
-import er.extensions.ERXLogger;
-
-public class ERMimetypesMapper
-{
-    private static final ERXLogger log = ERXLogger.getERXLogger (ERMimetypesMapper.class);
-
+public class ERMimetypesMapper {
 	private static MimetypesFileTypeMap mimetypesMapper = null;
-    protected static MimetypesFileTypeMap mapper () {
-        if (mimetypesMapper == null) {
-            WOResourceManager resourceManager = WOApplication.application ().resourceManager ();
-            String path = resourceManager.pathForResourceNamed ("mime.types", "ERJavaMail", null);
 
-            try {
-                mimetypesMapper = new MimetypesFileTypeMap (path);
-            } catch (IOException e) {
-                log.error ("Error when opening 'mime.types' file.\nInstanciating a default MimetypesFileTypeMap ...");
-                mimetypesMapper = new MimetypesFileTypeMap ();
-            }
-        }
+	protected static MimetypesFileTypeMap mapper() {
+		if (mimetypesMapper == null) {
+			WOResourceManager resourceManager = WOApplication.application().resourceManager();
+			InputStream is = resourceManager.inputStreamForResourceNamed("mime.types", "ERJavaMail", null);
 
-        return mimetypesMapper;
-    }
+			mimetypesMapper = new MimetypesFileTypeMap(is);
+			is = null;
+		}
 
-	public static String mimeContentTypeForPath (String path) {
-		return ERMimetypesMapper.mapper ().getContentType (path);
+		return mimetypesMapper;
+	}
+
+	public static String mimeContentTypeForPath(String path) {
+		return ERMimetypesMapper.mapper().getContentType(path);
 	}
 
 }

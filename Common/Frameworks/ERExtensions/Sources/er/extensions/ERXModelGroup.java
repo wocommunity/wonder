@@ -9,6 +9,7 @@ package er.extensions;
 import com.webobjects.foundation.*;
 import com.webobjects.eocontrol.*;
 import com.webobjects.eoaccess.*;
+import java.net.URL;
 import java.util.Enumeration;
 
 /**
@@ -39,34 +40,58 @@ public class ERXModelGroup extends EOModelGroup {
      */
     public static EOModelGroup modelGroupForLoadedBundles() {
         EOModelGroup eomodelgroup = new ERXModelGroup();
-        NSArray nsarray = NSBundle.frameworkBundles();
-        int i = nsarray.count() + 1;
+        NSArray frameworkBundles = NSBundle.frameworkBundles();
 
-        if (log.isDebugEnabled()) log.debug("Loading bundles" + nsarray.valueForKey("name"));
+        if (log.isDebugEnabled()) {
+			log.debug("Loading bundles" + frameworkBundles.valueForKey("name"));
+		}
+        
+        NSMutableDictionary modelNameURLDictionary = new NSMutableDictionary();
+        NSMutableArray modelNames = new NSMutableArray();
+        NSMutableArray bundles = new NSMutableArray();
+		bundles.addObject(NSBundle.mainBundle());
+		bundles.addObjectsFromArray(frameworkBundles);
 
-        NSMutableArray nsmutablearray = new NSMutableArray(i);
-        nsmutablearray.addObject(NSBundle.mainBundle());
-        nsmutablearray.addObjectsFromArray(nsarray);
-        for (int i6 = 0; i6 < i; i6++) {
-            NSBundle nsbundle = (NSBundle) nsmutablearray.objectAtIndex(i6);
-            NSArray nsarray7 = nsbundle.pathsForResources("eomodeld", null);
-            int i8 = nsarray7.count();
-            for (int i9 = 0; i9 < i8; i9++) {
-                String string = (String) nsarray7.objectAtIndex(i9);
-                String string10
-                    = (NSPathUtilities.stringByDeletingPathExtension
-                       (NSPathUtilities.lastPathComponent(string)));
-                EOModel eomodel = eomodelgroup.modelNamed(string10);
-                if (eomodel == null)
-                    eomodelgroup.addModelWithPath(string);
-                else if (NSLog.debugLoggingAllowedForLevelAndGroups(1, 32768L))
-                    NSLog.debug.appendln
-                        ("Ignoring model at path \"" + string
-                         + "\" because the model group " + eomodelgroup
-                         + " already contains the model from the path \""
-                         + eomodel.path() + "\"");
+        for (Enumeration e = bundles.objectEnumerator(); e.hasMoreElements(); ) {
+            NSBundle nsbundle = (NSBundle)e.nextElement();
+            NSArray paths = nsbundle.resourcePathsForResources("eomodeld", null);
+            int pathCount = paths.count();
+            for (int currentPath = 0; currentPath < pathCount; currentPath++) {
+                String indexPath = (String)paths.objectAtIndex(currentPath);
+                if(indexPath.endsWith(".eomodeld~/index.eomodeld")) {
+					// AK: we don't want to use temp files. This is actually an error in the 
+					// builds or it happens when you open and change models from installed frameworks
+					// but I'm getting so annoyed by this that we just skip the models here
+					log.info("Not adding model, it's only a temp file: " + indexPath);
+					continue;
+				}
+                String modelPath = NSPathUtilities.stringByDeletingLastPathComponent(indexPath);
+				String modelName = (NSPathUtilities.stringByDeletingPathExtension(NSPathUtilities.lastPathComponent(modelPath)));
+                EOModel eomodel = eomodelgroup.modelNamed(modelName);
+                if (eomodel == null) {
+					URL url = nsbundle.pathURLForResourcePath(modelPath);
+					modelNameURLDictionary.setObjectForKey(url, modelName);
+					modelNames.addObject(modelName);
+				}
+				else if (NSLog.debugLoggingAllowedForLevelAndGroups(1, 32768L)) {
+					NSLog.debug.appendln("Ignoring model at path \"" + modelPath + "\" because the model group " + eomodelgroup + " already contains the model from the path \"" + eomodel.pathURL() + "\"");
+				}
             }
         }
+        
+        NSMutableArray modelURLs = new NSMutableArray();
+		// Finally add all the rest
+		for (Enumeration e = modelNames.objectEnumerator(); e.hasMoreElements();) {
+			String name = (String)e.nextElement();
+			modelURLs.addObject(modelNameURLDictionary.objectForKey(name));
+		}
+
+		Enumeration modelURLEnum = modelURLs.objectEnumerator();
+		while (modelURLEnum.hasMoreElements()) {
+			URL url = (URL)modelURLEnum.nextElement();
+			eomodelgroup.addModelWithPathURL(url);
+		}
+        
         // correcting an EOF Inheritance bug
         ((ERXModelGroup)eomodelgroup).checkInheritanceRelationships();
         return eomodelgroup;
@@ -84,11 +109,9 @@ public class ERXModelGroup extends EOModelGroup {
         Enumeration enumeration = _modelsByName.objectEnumerator();
         String name = eomodel.name();
         if (_modelsByName.objectForKey(name) != null) {
-            log.warn("The model '" + name + "' (path: " + eomodel.path()
-             + ") cannot be added to model group " + this
-             + " because it already contains a model with that name.");
-            return;
-        }
+			log.warn("The model '" + name + "' (path: " + eomodel.pathURL() + ") cannot be added to model group " + this + " because it already contains a model with that name.");
+			return;
+		}
         NSMutableSet nsmutableset = new NSMutableSet(128);
         NSSet nsset = new NSSet(eomodel.entityNames());
         while (enumeration.hasMoreElements()) {
@@ -97,9 +120,7 @@ public class ERXModelGroup extends EOModelGroup {
         }
         NSSet intersection = nsmutableset.setByIntersectingSet(nsset);
         if(intersection.count() != 0) {
-            log.warn("The model '" + name + "' (path: " + eomodel.path()
-                     + ") has an entity name conflict with the entities "
-                     + intersection + " already in the model group " + this);
+            log.warn("The model '" + name + "' (path: " + eomodel.pathURL() + ") has an entity name conflict with the entities " + intersection + " already in the model group " + this);
             Enumeration e = intersection.objectEnumerator();
             while(e.hasMoreElements()) {
                 String entityName = (String)e.nextElement();
@@ -109,8 +130,8 @@ public class ERXModelGroup extends EOModelGroup {
         }
         eomodel.setModelGroup(this);
         _modelsByName.setObjectForKey(eomodel, eomodel.name());
-        NSNotificationCenter.defaultCenter()
-            .postNotification("EOModelAddedNotification", eomodel);
+        
+        NSNotificationCenter.defaultCenter().postNotification("EOModelAddedNotification", eomodel);
     }
 
     /**

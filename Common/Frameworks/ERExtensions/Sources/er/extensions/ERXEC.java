@@ -674,7 +674,8 @@ public class ERXEC extends EOEditingContext {
         }
     }
     
-    /** Overriden to support autoLocking. */ 
+    /** Overriden to support autoLocking. */
+    /** @deprecated */
     public void saveChanges(Object obj) {
         boolean wasAutoLocked = autoLock("saveChanges");
         try {

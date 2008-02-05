@@ -64,9 +64,9 @@ public class People extends _People implements ERCoreUserInterface {
 
     // make ERD2WPropertyName happy
     public boolean isDemoUser() { return false; }
-    public boolean isEngineeringAsBoolean() { return ERXUtilities.booleanValue(isEngineering()); }
-    public boolean isActiveAsBoolean() { return ERXUtilities.booleanValue(isActive()); }
-    public boolean isAdminAsBoolean() { return ERXUtilities.booleanValue(isAdmin()); }
+    public boolean isEngineeringAsBoolean() { return ERXValueUtilities.booleanValue(isEngineering()); }
+    public boolean isActiveAsBoolean() { return ERXValueUtilities.booleanValue(isActive()); }
+    public boolean isAdminAsBoolean() { return ERXValueUtilities.booleanValue(isAdmin()); }
 
     public NSArray openBugs() {
         return Bug.clazz.bugsOwnedWithUser(editingContext(), this);

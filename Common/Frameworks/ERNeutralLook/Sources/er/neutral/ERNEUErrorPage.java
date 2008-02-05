@@ -7,15 +7,12 @@
 
 package er.neutral;
 
-import com.webobjects.foundation.*;
-import com.webobjects.appserver.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.eoaccess.*;
-import com.webobjects.directtoweb.*;
-import er.directtoweb.*;
+import com.webobjects.appserver.WOContext;
+
+import er.directtoweb.ERD2WMessagePage;
 
 
-public class ERNEUErrorPage extends ERDRecoverableErrorPage {
+public class ERNEUErrorPage extends ERD2WMessagePage {
 
     public ERNEUErrorPage(WOContext context) {
         super(context);

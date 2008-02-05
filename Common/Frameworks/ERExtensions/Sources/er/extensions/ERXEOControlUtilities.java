@@ -1191,6 +1191,44 @@ public class ERXEOControlUtilities {
         EOGlobalID gid = eo.editingContext().globalIDForObject(eo);
         return gid.isTemporary();
     }
+    
+    /**
+     * Uses <code>ERXEOControlUtilities.objectForFaults</code> to turn the faults into objects, then does in memory
+     * ordering with <code>EOSortOrdering.EOSortOrdering.sortedArrayUsingKeyOrderArray()</code>
+     *
+     * @param ec
+     * @param possibleFaults
+     * @param sortOrderings
+     * @return sorted array of EOs (no faults)
+     */
+    public static NSArray objectsForFaultWithSortOrderings (EOEditingContext ec, NSArray possibleFaults, NSArray sortOrderings) {
+            if (sortOrderings != null) {
+                return EOSortOrdering.sortedArrayUsingKeyOrderArray(ERXEOControlUtilities.objectsForFaults(ec, possibleFaults), sortOrderings);
+            }
+            return ERXEOControlUtilities.objectsForFaults(ec, possibleFaults);
+    }
+
+    /**
+     * Triggers all faults in an efficient manner.
+     * @param ec
+     * @param possibleFaults globalIDs
+     */
+    public static NSArray objectsForFaults(EOEditingContext ec, NSArray possibleFaults) {
+        NSMutableArray result = new NSMutableArray();
+        NSMutableArray faultGIDs = new NSMutableArray();
+        for (Enumeration objects = possibleFaults.objectEnumerator(); objects.hasMoreElements();) {
+            EOEnterpriseObject eo = (EOEnterpriseObject)objects.nextElement();
+            if(EOFaultHandler.isFault(eo)) {
+                EOGlobalID gid = ec.globalIDForObject(eo);
+                faultGIDs.addObject(gid);
+            } else {
+                result.addObject(eo);
+            }
+        }
+        NSArray loadedObjects = ERXEOGlobalIDUtilities.fetchObjectsWithGlobalIDs(ec, faultGIDs);
+        result.addObjectsFromArray(loadedObjects);
+        return result;
+    }
 
     /** Returns the name from the root entity from the EOEnterpriseObject
      *

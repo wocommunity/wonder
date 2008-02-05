@@ -8,6 +8,8 @@ package er.extensions;
 
 import com.webobjects.foundation.*;
 import com.webobjects.appserver.*;
+import com.webobjects.appserver._private.WOURLEncoder;
+import java.io.UnsupportedEncodingException;
 import java.util.*;
 import java.net.*;
 
@@ -71,7 +73,11 @@ public class ERXPathDirectAction extends WODirectAction {
                 NSMutableArray temp = new NSMutableArray(pathParts.count());
                 for (Enumeration pathPartEnumerator = pathParts.objectEnumerator();
                      pathPartEnumerator.hasMoreElements();) {
-                    temp.addObject(URLDecoder.decode((String)pathPartEnumerator.nextElement()));
+                    try {
+                        temp.addObject(URLDecoder.decode((String)pathPartEnumerator.nextElement(), WOURLEncoder.WO_URL_ENCODING));
+                    } catch (UnsupportedEncodingException e) {
+                        log.error("Encoding not found: " + WOURLEncoder.WO_URL_ENCODING, e);
+                    }
                 }
                 pathParts = temp;
             }

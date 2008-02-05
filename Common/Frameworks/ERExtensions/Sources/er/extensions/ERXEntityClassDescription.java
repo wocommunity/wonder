@@ -217,7 +217,7 @@ public class ERXEntityClassDescription extends EOEntityClassDescription {
                 String modelPath = null;
                 
                 if(isRapidTurnaroundEnabled()) {
-                    for(Enumeration e = NSArray.componentsSeparatedByString(model.path(), File.separator).reverseObjectEnumerator(); e.hasMoreElements(); ) {
+                    for(Enumeration e = NSArray.componentsSeparatedByString(model.pathURL().getFile(), File.separator).reverseObjectEnumerator(); e.hasMoreElements(); ) {
                         String a = (String)e.nextElement();
                         if(a.indexOf(".framework") > 0) {
                             frameworkName = a.substring(0, a.indexOf(".framework"));

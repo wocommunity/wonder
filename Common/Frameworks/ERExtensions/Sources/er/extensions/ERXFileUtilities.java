@@ -289,7 +289,25 @@ public class ERXFileUtilities {
      *		file object
      */
     public static String pathForResourceNamed(String fileName, String frameworkName, NSArray languages) {
-        return WOApplication.application().resourceManager().pathForResourceNamed(fileName, frameworkName, languages);
+        String path = null;
+        NSBundle bundle = "app".equals(frameworkName) ? NSBundle.mainBundle() : NSBundle.bundleForName(frameworkName);
+        if(bundle != null && bundle.isJar()) {
+            log.warn("Can't get path when run as jar: " + frameworkName + " - " + fileName);
+        } else {
+        	WOApplication application = WOApplication.application();
+        	if (application != null) {
+	            URL url = application.resourceManager().pathURLForResourceNamed(fileName, frameworkName, languages);
+	            if(url != null) {
+	                path = url.getFile();
+	            }
+        	} else if( bundle != null ) {
+        		URL url = bundle.pathURLForResourcePath(fileName);
+	            if(url != null) {
+	                path = url.getFile();
+	            }
+        	}
+        }
+        return path;
     }
 
     /**
