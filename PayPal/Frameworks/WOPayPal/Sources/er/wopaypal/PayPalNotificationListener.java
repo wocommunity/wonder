@@ -36,7 +36,7 @@ public class PayPalNotificationListener {
     /** Constructor.
      */
     public PayPalNotificationListener() {
-	super();
+        super();
     }
     
 
@@ -158,102 +158,102 @@ public class PayPalNotificationListener {
     /** The Observer is the object which is registered (in WOPayPal) to listen for the NSNotifications broadcast by the PayPalAction's ipnAction method.  When its methods receives a notification, they call handleNotification, passing the notification name and the Notification itself as the parameter to that method call.
      */
     public static class Observer {
-    /** Method invoked by the NSNotificationCenter when it receives a DENIED notification from PayPalAction
-     * 
-     * @param n NSNotification
-     */
-    public void handleDeniedPaymentNotification(NSNotification n) {
-        handleNotification(Delegate.PROCESS_DENIED_PAYPAL_TRANSACTION, n);
-    }
+        /** Method invoked by the NSNotificationCenter when it receives a DENIED notification from PayPalAction
+         * 
+         * @param n NSNotification
+         */
+        public void handleDeniedPaymentNotification(NSNotification n) {
+            handleNotification(Delegate.PROCESS_DENIED_PAYPAL_TRANSACTION, n);
+        }
 
-    /** Method invoked by the NSNotificationCenter when it receives a FAILED notification from PayPalAction
-     * 
-     * @param n NSNotification
-     */
-    public void handleFailedPaymentNotification(NSNotification n) {
-        handleNotification(Delegate.PROCESS_FAILED_PAYPAL_TRANSACTION, n);
-    }
+        /** Method invoked by the NSNotificationCenter when it receives a FAILED notification from PayPalAction
+         * 
+         * @param n NSNotification
+         */
+        public void handleFailedPaymentNotification(NSNotification n) {
+            handleNotification(Delegate.PROCESS_FAILED_PAYPAL_TRANSACTION, n);
+        }
 
-    /** Method invoked by the NSNotificationCenter when it receives a INVALID notification from PayPalAction
-     * 
-     * @param n NSNotification
-     */
+        /** Method invoked by the NSNotificationCenter when it receives a INVALID notification from PayPalAction
+         * 
+         * @param n NSNotification
+         */
         public void handleInvalidPaymentNotification(NSNotification n) {
-        handleNotification(Delegate.PROCESS_INVALID_PAYPAL_TRANSACTION, n);
-    }
-
-    /** Method invoked by the NSNotificationCenter when it receives a PENDING notification from PayPalAction
-     * 
-     * @param n NSNotification
-     */
-    public void handlePendingPaymentNotification(NSNotification n) {
-        handleNotification(Delegate.PROCESS_PENDING_PAYPAL_TRANSACTION, n);
-    }
-
-    /** Method invoked by the NSNotificationCenter when it receives a VALID notification from PayPalAction
-     * 
-     * @param n NSNotification
-     */
-    public void handleValidPaymentNotification(NSNotification n) {
-        handleNotification(Delegate.PROCESS_VALID_PAYPAL_TRANSACTION, n);
-    }
-
-    /** handleNotification checks to see if the delegate object can perform the method name passed in as the targetMethodName parameter.  If it can, it tries to invoke that method, passing the notification's object (a WORequest) as the parameter.
-     * 
-     * @param targetMethodName String
-     * @param n NSNotification
-     */
-    public void handleNotification(String targetMethodName, NSNotification n) {
-        Object delegate = delegate();
-        Method targetMethod = null;
-        Class[] targetParams = new Class[] { WORequest.class };
-
-        if (NSLog.debugLoggingAllowedForLevel(NSLog.DebugLevelInformational)) {
-            NSLog.debug.appendln("PayPalNotificationListener -> handleNotification: " + n.name());
-            NSLog.debug.appendln("PayPalNotificationListener -> handleNotification: trying to get delegate method:" + targetMethodName + " with params: " + targetParams.getClass().getName());
+            handleNotification(Delegate.PROCESS_INVALID_PAYPAL_TRANSACTION, n);
         }
 
-        try { //try to grab the method on the delegate
-            targetMethod = delegate.getClass().getMethod(targetMethodName, targetParams);
-        } catch (NoSuchMethodException e) {
-            if (NSLog.debugLoggingAllowedForLevel(NSLog.DebugLevelCritical)) {
-                NSLog.debug.appendln("PayPalNotificationListener -> handleNotification: NoSuchMethodException while trying to get method " + targetMethodName + ": " + e);
-            }
+        /** Method invoked by the NSNotificationCenter when it receives a PENDING notification from PayPalAction
+         * 
+         * @param n NSNotification
+         */
+        public void handlePendingPaymentNotification(NSNotification n) {
+            handleNotification(Delegate.PROCESS_PENDING_PAYPAL_TRANSACTION, n);
         }
 
-        if (targetMethod != null) { // we got the delegate's method object
-        try { // try to invoke the delegate's method with the targetParams
-            targetMethod.invoke(delegate, new Object[] { n.object() });
-        } catch(IllegalAccessException e) {
-            // if the underlying method is inaccessible.
-            if (NSLog.debugLoggingAllowedForLevel(NSLog.DebugLevelCritical)) {
-                NSLog.debug.appendln("PayPalNotificationListener -> handleNotification: IllegalAccessException while trying to invoke method " + targetMethodName + ": " + e);
-            }
-        } catch (IllegalArgumentException e) {
-            // if the number of actual and formal parameters differ, or if an unwrapping conversion fails.
-            if (NSLog.debugLoggingAllowedForLevel(NSLog.DebugLevelCritical)) {
-                NSLog.debug.appendln("PayPalNotificationListener -> handleNotification: IllegalArgumentException while trying to invoke method " + targetMethodName + ": " + e);
-            }
-        } catch (NullPointerException e) {
-            // if the specified object is null and the method is an instance method.
-            if (NSLog.debugLoggingAllowedForLevel(NSLog.DebugLevelCritical)) {
-                NSLog.debug.appendln("PayPalNotificationListener -> handleNotification: NullPointerException while trying to invoke method " + targetMethodName + ": " + e);
-            }
-        } catch (ExceptionInInitializerError e) {
-            // if the initialization provoked by this method fails.
-            if (NSLog.debugLoggingAllowedForLevel(NSLog.DebugLevelCritical)) {
-                NSLog.debug.appendln("PayPalNotificationListener -> handleNotification: ExceptionInInitializerError while trying to invoke method " + targetMethodName + ": " + e);
-            }
-        } catch (InvocationTargetException e) {
-            // if the initialization provoked by this method fails.
-            if (NSLog.debugLoggingAllowedForLevel(NSLog.DebugLevelCritical)) {
-                NSLog.debug.appendln("PayPalNotificationListener -> handleNotification: InvocationTargetException while trying to invoke method " + targetMethodName + ": " + e);
-            }
+        /** Method invoked by the NSNotificationCenter when it receives a VALID notification from PayPalAction
+         * 
+         * @param n NSNotification
+         */
+        public void handleValidPaymentNotification(NSNotification n) {
+            handleNotification(Delegate.PROCESS_VALID_PAYPAL_TRANSACTION, n);
         }
+
+        /** handleNotification checks to see if the delegate object can perform the method name passed in as the targetMethodName parameter.  If it can, it tries to invoke that method, passing the notification's object (a WORequest) as the parameter.
+         * 
+         * @param targetMethodName String
+         * @param n NSNotification
+         */
+        public void handleNotification(String targetMethodName, NSNotification n) {
+            Object delegate = delegate();
+            Method targetMethod = null;
+            Class[] targetParams = new Class[] { WORequest.class };
+
+            if (NSLog.debugLoggingAllowedForLevel(NSLog.DebugLevelInformational)) {
+                NSLog.debug.appendln("PayPalNotificationListener -> handleNotification: " + n.name());
+                NSLog.debug.appendln("PayPalNotificationListener -> handleNotification: trying to get delegate method:" + targetMethodName + " with params: " + targetParams.getClass().getName());
+            }
+
+            try { //try to grab the method on the delegate
+                targetMethod = delegate.getClass().getMethod(targetMethodName, targetParams);
+            } catch (NoSuchMethodException e) {
+                if (NSLog.debugLoggingAllowedForLevel(NSLog.DebugLevelCritical)) {
+                    NSLog.debug.appendln("PayPalNotificationListener -> handleNotification: NoSuchMethodException while trying to get method " + targetMethodName + ": " + e);
+                }
+            }
+
+            if (targetMethod != null) { // we got the delegate's method object
+                try { // try to invoke the delegate's method with the targetParams
+                    targetMethod.invoke(delegate, new Object[] { n.object() });
+                } catch(IllegalAccessException e) {
+                    // if the underlying method is inaccessible.
+                    if (NSLog.debugLoggingAllowedForLevel(NSLog.DebugLevelCritical)) {
+                        NSLog.debug.appendln("PayPalNotificationListener -> handleNotification: IllegalAccessException while trying to invoke method " + targetMethodName + ": " + e);
+                    }
+                } catch (IllegalArgumentException e) {
+                    // if the number of actual and formal parameters differ, or if an unwrapping conversion fails.
+                    if (NSLog.debugLoggingAllowedForLevel(NSLog.DebugLevelCritical)) {
+                        NSLog.debug.appendln("PayPalNotificationListener -> handleNotification: IllegalArgumentException while trying to invoke method " + targetMethodName + ": " + e);
+                    }
+                } catch (NullPointerException e) {
+                    // if the specified object is null and the method is an instance method.
+                    if (NSLog.debugLoggingAllowedForLevel(NSLog.DebugLevelCritical)) {
+                        NSLog.debug.appendln("PayPalNotificationListener -> handleNotification: NullPointerException while trying to invoke method " + targetMethodName + ": " + e);
+                    }
+                } catch (ExceptionInInitializerError e) {
+                    // if the initialization provoked by this method fails.
+                    if (NSLog.debugLoggingAllowedForLevel(NSLog.DebugLevelCritical)) {
+                        NSLog.debug.appendln("PayPalNotificationListener -> handleNotification: ExceptionInInitializerError while trying to invoke method " + targetMethodName + ": " + e);
+                    }
+                } catch (InvocationTargetException e) {
+                    // if the initialization provoked by this method fails.
+                    if (NSLog.debugLoggingAllowedForLevel(NSLog.DebugLevelCritical)) {
+                        NSLog.debug.appendln("PayPalNotificationListener -> handleNotification: InvocationTargetException while trying to invoke method " + targetMethodName + ": " + e);
+                    }
+                }
+            }
+
         }
-        
-    }
-    
+
     } // End inner class Observer
 
 

@@ -47,7 +47,6 @@ public class PayPalAction extends WODirectAction {
             NSLog.debug.appendln("PayPal's request content looks like: " + ppIPNRequest.contentString() + "\n\n");
         }
 
-
         String returnString = ppIPNRequest.contentString() + "&cmd=_notify-validate";
 
         WOHTTPConnection ppEchoConnection = new WOHTTPConnection(paypalSite, 80); // our echo to PayPal
