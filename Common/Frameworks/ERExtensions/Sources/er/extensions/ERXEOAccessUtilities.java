@@ -270,20 +270,21 @@ public class ERXEOAccessUtilities {
      * 
      * @return array of dictionaries
      */
-    public static NSArray rawRowsForSQLExpression(EOEditingContext ec, String modelName, EOSQLExpression expression) {
+    public static NSArray<NSDictionary> rawRowsForSQLExpression(EOEditingContext ec, String modelName, EOSQLExpression expression) {
         EODatabaseContext dbc = EOUtilities.databaseContextForModelNamed(ec, modelName);
         dbc.lock();
-        NSMutableArray results = null;
+        NSMutableArray<NSDictionary> results = null;
         try {
             EOAdaptorChannel channel = dbc.availableChannel().adaptorChannel();
             if (!channel.isOpen()) channel.openChannel();
             channel.evaluateExpression(expression);
             try {
                 channel.setAttributesToFetch(channel.describeResults());
-                results = new NSMutableArray();
+                results = new NSMutableArray<NSDictionary>();
                 NSDictionary row;
-                while ((row = channel.fetchRow()) != null)
+                while ((row = channel.fetchRow()) != null) {
                     results.addObject(row);
+                }
             } catch (EOGeneralAdaptorException ex) {
                 channel.cancelFetch();
                 throw ex;
