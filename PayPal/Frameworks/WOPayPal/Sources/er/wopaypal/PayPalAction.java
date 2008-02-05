@@ -41,32 +41,32 @@ public class PayPalAction extends WODirectAction {
      */
     public void ipnAction() { // processor for Instant Payment Notifications
 
-	WORequest ppIPNRequest = request(); // the incoming PayPal IPN (Instant Payment Notification)
-	if (NSLog.debugLoggingAllowedForLevel(NSLog.DebugLevelInformational)) {
-	    NSLog.debug.appendln("PayPal's request looks like: " + ppIPNRequest + "\n\n");
-	    NSLog.debug.appendln("PayPal's request content looks like: " + ppIPNRequest.contentString() + "\n\n");
-	}
-	
+        WORequest ppIPNRequest = request(); // the incoming PayPal IPN (Instant Payment Notification)
+        if (NSLog.debugLoggingAllowedForLevel(NSLog.DebugLevelInformational)) {
+            NSLog.debug.appendln("PayPal's request looks like: " + ppIPNRequest + "\n\n");
+            NSLog.debug.appendln("PayPal's request content looks like: " + ppIPNRequest.contentString() + "\n\n");
+        }
 
-	String returnString = ppIPNRequest.contentString() + "&cmd=_notify-validate";
 
-	WOHTTPConnection ppEchoConnection = new WOHTTPConnection(paypalSite, 80); // our echo to PayPal
-	WOResponse ppValidationResponse = new WOResponse(); // PayPal's validation of our echoed data
+        String returnString = ppIPNRequest.contentString() + "&cmd=_notify-validate";
 
-	// assemble User-Agent header
-	StringBuffer ua = new StringBuffer();
-	ua.append("WebObjects/5.1 [en] (");
-	ua.append(System.getProperty("os.arch"));
-	ua.append("; ");
-	ua.append(System.getProperty("os.name"));
-	ua.append(" ");
-	ua.append(System.getProperty("os.version"));
-	ua.append(")");
+        WOHTTPConnection ppEchoConnection = new WOHTTPConnection(paypalSite, 80); // our echo to PayPal
+        WOResponse ppValidationResponse = new WOResponse(); // PayPal's validation of our echoed data
 
-	NSMutableDictionary headers = new NSMutableDictionary();
-	headers.setObjectForKey("en", "Accept-Language");
-	headers.setObjectForKey("iso-8859-1,*,utf-8", "Accept-Charset");
-	headers.setObjectForKey("image/gif, image/x-xbitmap, image/jpeg, image/pjpeg, image/png, */*", "Accept");
+        // assemble User-Agent header
+        StringBuffer ua = new StringBuffer();
+        ua.append("WebObjects/5.1 [en] (");
+        ua.append(System.getProperty("os.arch"));
+        ua.append("; ");
+        ua.append(System.getProperty("os.name"));
+        ua.append(" ");
+        ua.append(System.getProperty("os.version"));
+        ua.append(")");
+
+        NSMutableDictionary headers = new NSMutableDictionary();
+        headers.setObjectForKey("en", "Accept-Language");
+        headers.setObjectForKey("iso-8859-1,*,utf-8", "Accept-Charset");
+        headers.setObjectForKey("image/gif, image/x-xbitmap, image/jpeg, image/pjpeg, image/png, */*", "Accept");
         headers.setObjectForKey(ua.toString(),"User-Agent");
 
         // the response back to PayPal
@@ -76,45 +76,45 @@ public class PayPalAction extends WODirectAction {
         ppEchoConnection.setReceiveTimeout(90 * 1000); // 90 second timeout -- this might be too long!?!
         boolean success = ppEchoConnection.sendRequest(paypalEchoRequest);
         if (success) {
-	    ppValidationResponse = ppEchoConnection.readResponse(); // read PayPal's validation
-	    // PayPal's response *content* will either be "VERIFIED" or "INVALID"
-	    if (NSLog.debugLoggingAllowedForLevel(NSLog.DebugLevelInformational)) {
+            ppValidationResponse = ppEchoConnection.readResponse(); // read PayPal's validation
+            // PayPal's response *content* will either be "VERIFIED" or "INVALID"
+            if (NSLog.debugLoggingAllowedForLevel(NSLog.DebugLevelInformational)) {
                 NSLog.debug.appendln("the response looks like: " + ppValidationResponse + "\n\n");
-		NSLog.debug.appendln("the response content looks like: " + ppValidationResponse.contentString() + "\n\n");
+                NSLog.debug.appendln("the response content looks like: " + ppValidationResponse.contentString() + "\n\n");
             }
 
-	    if (ppValidationResponse.contentString().equalsIgnoreCase("VERIFIED")) {
-		if (((String)ppIPNRequest.formValueForKey("payment_status")).equalsIgnoreCase("completed")) {
-		    //should check previous txn_id's to be sure this isn't a duplicate notification
+            if (ppValidationResponse.contentString().equalsIgnoreCase("VERIFIED")) {
+                if (((String)ppIPNRequest.formValueForKey("payment_status")).equalsIgnoreCase("completed")) {
+                //should check previous txn_id's to be sure this isn't a duplicate notification
 
-		    NSNotificationCenter.defaultCenter().postNotification(PayPalNotificationListener.ValidPayPalPaymentReceivedNotification, ppIPNRequest);
-		    
-		} else if (((String)ppIPNRequest.formValueForKey("payment_status")).equalsIgnoreCase("pending")) {
-		    // status pending
-		    NSNotificationCenter.defaultCenter().postNotification(PayPalNotificationListener.PendingPayPalPaymentReceivedNotification, ppIPNRequest);
+                NSNotificationCenter.defaultCenter().postNotification(PayPalNotificationListener.ValidPayPalPaymentReceivedNotification, ppIPNRequest);
 
-		} else if (((String)ppIPNRequest.formValueForKey("payment_status")).equalsIgnoreCase("failed")) {
-		    // bank account payment failed -- customer probably didn't have the funds
-		    NSNotificationCenter.defaultCenter().postNotification(PayPalNotificationListener.FailedPayPalPaymentReceivedNotification, ppIPNRequest);
-		    
-		} else if (((String)ppIPNRequest.formValueForKey("payment_status")).equalsIgnoreCase("denied")) {
-		    // you (the merchant) denied the payment
-		    NSNotificationCenter.defaultCenter().postNotification(PayPalNotificationListener.DeniedPayPalPaymentReceivedNotification, ppIPNRequest);
-		    
-		} else {
-		    // the payment_status value is not any of the accepted values
-		}
-	    } else if (ppValidationResponse.contentString().equalsIgnoreCase("INVALID")) {
-		// possible fraud!!!
-		NSNotificationCenter.defaultCenter().postNotification(PayPalNotificationListener.InvalidPayPalPaymentReceivedNotification, ppIPNRequest);
-		
-	    } else {
-		// received unaccepted response content string value -- log error and incoming i.p. address
-		NSLog.err.appendln("PayPalAction->ipnAction: PayPal transaction validation returned unaccepted validation status from i.p: " + (((String)ppIPNRequest.headerForKey("REMOTE_ADDR") != null) ? (String)ppIPNRequest.headerForKey("REMOTE_ADDR") : "- unknown -"));
-	    }
-	} else {
-	    NSLog.err.appendln("PayPalAction->ipnAction: PayPal transaction validation connection failed.");
-	}
+            } else if (((String)ppIPNRequest.formValueForKey("payment_status")).equalsIgnoreCase("pending")) {
+                // status pending
+                NSNotificationCenter.defaultCenter().postNotification(PayPalNotificationListener.PendingPayPalPaymentReceivedNotification, ppIPNRequest);
+
+            } else if (((String)ppIPNRequest.formValueForKey("payment_status")).equalsIgnoreCase("failed")) {
+                // bank account payment failed -- customer probably didn't have the funds
+                NSNotificationCenter.defaultCenter().postNotification(PayPalNotificationListener.FailedPayPalPaymentReceivedNotification, ppIPNRequest);
+
+            } else if (((String)ppIPNRequest.formValueForKey("payment_status")).equalsIgnoreCase("denied")) {
+                // you (the merchant) denied the payment
+                NSNotificationCenter.defaultCenter().postNotification(PayPalNotificationListener.DeniedPayPalPaymentReceivedNotification, ppIPNRequest);
+
+            } else {
+                // the payment_status value is not any of the accepted values
+            }
+            } else if (ppValidationResponse.contentString().equalsIgnoreCase("INVALID")) {
+            // possible fraud!!!
+            NSNotificationCenter.defaultCenter().postNotification(PayPalNotificationListener.InvalidPayPalPaymentReceivedNotification, ppIPNRequest);
+
+            } else {
+                // received unaccepted response content string value -- log error and incoming i.p. address
+                NSLog.err.appendln("PayPalAction->ipnAction: PayPal transaction validation returned unaccepted validation status from i.p: " + (((String)ppIPNRequest.headerForKey("REMOTE_ADDR") != null) ? (String)ppIPNRequest.headerForKey("REMOTE_ADDR") : "- unknown -"));
+            }
+        } else {
+            NSLog.err.appendln("PayPalAction->ipnAction: PayPal transaction validation connection failed.");
+        }
 
     }
 
@@ -127,11 +127,11 @@ public class PayPalAction extends WODirectAction {
      * @return WOComponent for successful PayPal transactions
      */
     public WOActionResults returnAction() {
-	String componentName = (String)System.getProperty("SuccessfulPayPalTransactionComponent");
-	if (componentName == null || componentName.equals("")) {
-	    componentName = "SuccessfulPayPalTransaction";
-	}
-	return pageWithName(componentName);
+        String componentName = (String)System.getProperty("SuccessfulPayPalTransactionComponent");
+        if (componentName == null || componentName.equals("")) {
+            componentName = "SuccessfulPayPalTransaction";
+        }
+        return pageWithName(componentName);
     }
 
     /** Provides a default method to return the page to which PayPal will send users after a cancelled transaction.
@@ -143,12 +143,12 @@ public class PayPalAction extends WODirectAction {
      * @return WOComponent for cancelled PayPal transactions
      */
     public WOActionResults cancelAction() {
-	String componentName = (String)System.getProperty("CancelledPayPalTransactionComponent");
-	if (componentName == null || componentName.equals("")) {
-	    componentName = "CancelledPayPalTransaction";
-	}
-	return pageWithName(componentName);
+        String componentName = (String)System.getProperty("CancelledPayPalTransactionComponent");
+        if (componentName == null || componentName.equals("")) {
+            componentName = "CancelledPayPalTransaction";
+        }
+        return pageWithName(componentName);
     }
 
-    
+
 }

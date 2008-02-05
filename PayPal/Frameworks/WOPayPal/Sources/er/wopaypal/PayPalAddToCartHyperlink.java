@@ -37,14 +37,13 @@ public class PayPalAddToCartHyperlink extends PayPalSingleItemHyperlink {
      *      PayPal shopping cart.
      */
     public String addToCartHref() { 
-	StringBuffer sb = new StringBuffer();
-	
-	sb.append(WOPayPal.PAYPAL_SECURE_URL_BASE); // required -- duh!!!
-	sb.append(PAYPAL_CGI_COMMAND);
-	sb.append(payPalUrlParams());
+        StringBuffer sb = new StringBuffer();
 
-	return sb.toString();
+        sb.append(WOPayPal.PAYPAL_SECURE_URL_BASE); // required -- duh!!!
+        sb.append(PAYPAL_CGI_COMMAND);
+        sb.append(payPalUrlParams());
 
+        return sb.toString();
     }
 
     /** onClickString basically takes the addToCartHref and embeds it in a JavaScript window.open() method, as per PayPal's instructions.  The JavaScript called tells the browser to open a new window that loads the addToCartHref url and has the characteristics given...
@@ -52,13 +51,13 @@ public class PayPalAddToCartHyperlink extends PayPalSingleItemHyperlink {
      * @return String that contains the JavaScript code for the addToCart link
      */
     public String onClickString() {
-	StringBuffer sb = new StringBuffer();
+        StringBuffer sb = new StringBuffer();
 
-	sb.append("window.open('");
-	sb.append(addToCartHref());
-	sb.append("','cartwin','width=600,height=400,scrollbars,location,resizable,status');");
+        sb.append("window.open('");
+        sb.append(addToCartHref());
+        sb.append("','cartwin','width=600,height=400,scrollbars,location,resizable,status');");
 
-	return sb.toString();
+        return sb.toString();
     }
 
 }
