@@ -10,8 +10,17 @@ import com.webobjects.foundation.NSSelector;
  * @author mschrag
  */
 public class ERXKeyComparisonQualifier extends EOKeyComparisonQualifier implements IERXChainableQualifier {
-	public ERXKeyComparisonQualifier(String rightKey, NSSelector selector, String leftKey) {
+	public ERXKeyComparisonQualifier(String leftKey, NSSelector selector, String rightKey) {
 		super(leftKey, selector, rightKey);
+    if (leftKey == null) {
+      throw new IllegalArgumentException("A KeyComparisonQualifier must have a left key.");
+    }
+    if (rightKey == null) {
+      throw new IllegalArgumentException("A KeyComparisonQualifier must have a right key.");
+    }
+    if (selector == null) {
+      throw new IllegalArgumentException("A KeyComparisonQualifier must have a selector.");
+    }
 	}
 
 	public ERXAndQualifier and(EOQualifier... qualifiers) {
