@@ -39,12 +39,8 @@ FontContainer: WOGenericContainer {
 	elementName = "font";
 }
 
-HasAbovePropertyKeysConditional: ERXNonZeroConditional {
-	condition = d2wContext.aboveDisplayPropertyKeys;
-}
-
-HasBelowPropertyKeysConditional: ERXNonZeroConditional {
-	condition = d2wContext.belowDisplayPropertyKeys;
+Help: ERDDebuggingHelp {
+	d2wContext = d2wContext;
 }
 
 KeyName: WOString {
