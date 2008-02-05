@@ -431,7 +431,7 @@ public class ERXSQLHelper {
 	 * @return the list of attributes to fetch
 	 */
 	@SuppressWarnings("unchecked")
-	protected NSArray<EOAttribute> _attributesToFetchForEntity(EOFetchSpecification fetchSpec, EOEntity entity) {
+	public NSArray<EOAttribute> attributesToFetchForEntity(EOFetchSpecification fetchSpec, EOEntity entity) {
 		NSArray<EOAttribute> attributes = entity.attributesToFetch();
 		if (fetchSpec.fetchesRawRows()) {
 			NSMutableArray<EOAttribute> rawRowAttributes = new NSMutableArray<EOAttribute>();
@@ -479,7 +479,7 @@ public class ERXSQLHelper {
 		spec = ERXEOAccessUtilities.localizeFetchSpecification(ec, spec);
 		String url = (String) model.connectionDictionary().objectForKey("URL");
 		String lowerCaseURL = (url != null ? url.toLowerCase() : "");
-		NSArray<EOAttribute> attributes = _attributesToFetchForEntity(spec, entity);
+		NSArray<EOAttribute> attributes = attributesToFetchForEntity(spec, entity);
 		EOSQLExpression sqlExpr = sqlFactory.selectStatementForAttributes(attributes, false, spec, entity);
 		String sql = sqlExpr.statement();
 		if (end >= 0) {
@@ -518,7 +518,7 @@ public class ERXSQLHelper {
 	 */
 	public void addGroupByClauseToExpression(EOEditingContext editingContext, EOFetchSpecification fetchSpec, EOSQLExpression expression) {
 		EOEntity entity = ERXEOAccessUtilities.entityNamed(editingContext, fetchSpec.entityName());
-	    addGroupByClauseToExpression(_attributesToFetchForEntity(fetchSpec, entity), expression);
+	    addGroupByClauseToExpression(attributesToFetchForEntity(fetchSpec, entity), expression);
 	}
 	
 	/**
