@@ -120,31 +120,46 @@
             </fileset>
         </copy>
 
-        <javadoc packagenames="er.*, com.gammastream.*"
-                   defaultexcludes="yes"
-                   destdir="${dist}/Documentation/api"
-                   author="true"
-                   version="true"
-                   use="true"
-                   source="1.4"
-                   verbose="false"
-                   windowtitle="Project Wonder Reference Documentation">
+        <javadoc
+                packagenames="er.*, com.gammastream.*"
+                author="true"
+                defaultexcludes="yes"
+                destdir="${dist}/Documentation/api"
+                failonerror="true"
+                source="1.4"
+                use="true"
+                version="true"
+                verbose="false"
+                windowtitle="Project Wonder Reference Documentation">
 
             <classpath refid="classpath"/>
             <sourcepath>
-                <pathelement path="${wonder.root}/Common/Frameworks/ERExtensions/Sources/"/>
-                <pathelement path="${wonder.root}/Common/Frameworks/ERDirectToWeb/Sources/"/>
-                <pathelement path="${wonder.root}/Common/Frameworks/ERJavaMail/Sources/"/>
+                <pathelement path="${wonder.root}/Common/Applications/BugTracker/Frameworks/BTBusinessLogic/Sources/"/>
+                <pathelement path="${wonder.root}/Common/Examples/Wrox/ERMiniUglyLook/Sources/"/>
+
                 <pathelement path="${wonder.root}/Common/Frameworks/ERCalendar/Sources/"/>
-                <pathelement path="${wonder.root}/Common/Frameworks/ERCoreBusinessLogic/Sources/"/>
                 <pathelement path="${wonder.root}/Common/Frameworks/ERChangeNotificationJMS/Sources/"/>
+                <pathelement path="${wonder.root}/Common/Frameworks/ERCoreBusinessLogic/Sources/"/>
+                <pathelement path="${wonder.root}/Common/Frameworks/ERDirectToWeb/Sources/"/>
+                <pathelement path="${wonder.root}/Common/Frameworks/ERExcelLook/Sources/"/>
+                <pathelement path="${wonder.root}/Common/Frameworks/ERExtensions/Sources/"/>
+                <pathelement path="${wonder.root}/Common/Frameworks/ERJavaMail/Sources/"/>
+                <pathelement path="${wonder.root}/Common/Frameworks/ERNeutralLook/Sources/"/>
+                <pathelement path="${wonder.root}/Common/Frameworks/ERPlot/Sources/"/>
+                <pathelement path="${wonder.root}/Common/Frameworks/ERPrototypes/Sources/"/>
                 <pathelement path="${wonder.root}/Common/Frameworks/ERWorkerChannel/Sources/"/>
+                <pathelement path="${wonder.root}/Common/Frameworks/JavaFileCachingAdaptor/Sources/"/>
+                <pathelement path="${wonder.root}/Common/Frameworks/JavaWOExtensions/Sources/"/>
                 <pathelement path="${wonder.root}/Common/Frameworks/WOOgnl/Sources/"/>
-                <pathelement path="${wonder.root}/PlugIns/PostgresqlPlugIn/Sources/"/>
+
+                <pathelement path="${wonder.root}/Ajax/Ajax/Sources"/>
+                <pathelement path="${wonder.root}/DynaReporting/Frameworks/DRGrouping/Sources/"/>
+                <pathelement path="${wonder.root}/DynaReporting/Frameworks/WRReporting/Sources"/>
                 <pathelement path="${wonder.root}/ExcelGeneration/Frameworks/ExcelGenerator/Sources/"/>
                 <pathelement path="${wonder.root}/PayPal/Frameworks/WOPayPal/Sources"/>
+                <pathelement path="${wonder.root}/PlugIns/PostgresqlPlugIn/Sources/"/>
+                <pathelement path="${wonder.root}/SVGObjects/Frameworks/SVGObjects/Sources/"/>
                 <pathelement path="${wonder.root}/Validity/Frameworks/Validity/Sources"/>
-                <pathelement path="${wonder.root}/Validity/Applications/ValidityModeler/Sources"/>
             </sourcepath>
             <doctitle><![CDATA[<h2>Project Wonder Reference Documentation</h2>]]></doctitle>
             <header><![CDATA[<em>Project Wonder ${project.version}</em>]]></header>
@@ -158,5 +173,4 @@
             <taglet name="D2WKeyTaglet" path="${wonder.root}/Build/lib/" />
         </javadoc>
     </target>
-
 </project>

@@ -218,7 +218,7 @@ public class ERXProperties {
     }
 
     /**
-     * Converts the standard propertyName into one with a .<AppName> on the end, iff the property is defined with
+     * Converts the standard propertyName into one with a .&lt;AppName> on the end, iff the property is defined with
      * that suffix.  If not, then this caches the standard propertyName.  A cache is maintained to avoid concatenating
      * strings frequently, but may be overkill since most usage of this system doesn't involve frequent access.
      * @param propertyName
