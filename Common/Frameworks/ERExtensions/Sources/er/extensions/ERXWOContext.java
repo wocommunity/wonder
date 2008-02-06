@@ -16,6 +16,7 @@ import com.webobjects.appserver.WODirectAction;
 import com.webobjects.appserver.WORequest;
 import com.webobjects.appserver.WOResourceManager;
 import com.webobjects.appserver.WOResponse;
+import com.webobjects.appserver.WOSession;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSForwardException;
@@ -46,6 +47,28 @@ public class ERXWOContext extends WOContext implements ERXMutableUserInfoHolderI
     		ERXWOContext.setCurrentContext(null);
     		ERXThreadStorage.removeValueForKey(ERXWOContext.CONTEXT_DICTIONARY_KEY);
     	}
+    }
+
+
+    /**
+     * Returns the existing session if any is given in the form values or url.
+     */
+    public WOSession existingSession() {
+    	String sessionID = _requestSessionID();
+    	if(!super.hasSession() && sessionID != null)
+    		WOApplication.application().restoreSessionWithID(sessionID, this);
+    	return _session();
+    }
+ 
+    /**
+     * Returns true if there is an existing session. 
+     */
+    @Override
+    public boolean hasSession() {
+    	if(super.hasSession()) {
+    		return true;
+    	}
+    	return existingSession() != null;
     }
     
     /**
