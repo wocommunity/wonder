@@ -42,10 +42,11 @@ public class ERD2WQueryPage extends ERD2WPage implements ERDQueryPageInterface {
     protected WODisplayGroup displayGroup;
 
     protected boolean didLoadQueryBindings;
-
     protected NSDictionary queryBindings;
 
     protected EOFetchSpecification fetchSpecification;
+    
+    protected ERDQueryDataSourceDelegateInterface queryDataSourceDelegate;
 
     public ERD2WQueryPage(WOContext context) {
         super(context);
@@ -68,16 +69,16 @@ public class ERD2WQueryPage extends ERD2WPage implements ERDQueryPageInterface {
     }
     
     public WOComponent clearAction() {
-    	displayGroup().queryBindings().removeAllObjects();
-    	displayGroup().queryMin().removeAllObjects();
-    	displayGroup().queryMax().removeAllObjects();
-    	displayGroup().queryOperator().removeAllObjects();
-    	displayGroup().queryMatch().removeAllObjects();
+        displayGroup().queryBindings().removeAllObjects();
+        displayGroup().queryMin().removeAllObjects();
+        displayGroup().queryMax().removeAllObjects();
+        displayGroup().queryOperator().removeAllObjects();
+        displayGroup().queryMatch().removeAllObjects();
        if (displayGroup() instanceof ERXDisplayGroup) {
             ERXDisplayGroup dg = (ERXDisplayGroup) displayGroup();
             dg.clearExtraQualifiers();
         }
-    	return context().page();
+        return context().page();
     }
     
     public EOFetchSpecification fetchSpecification() {
@@ -87,13 +88,14 @@ public class ERD2WQueryPage extends ERD2WPage implements ERDQueryPageInterface {
                 fetchSpecification = entity().fetchSpecificationNamed(name);
             }
         }
-    	return fetchSpecification; 
+        return fetchSpecification; 
     }
+    
     public void setFetchSpecification(EOFetchSpecification value) {
         fetchSpecification=value;
-    	if(fetchSpecification != null) {
-    		d2wContext().takeValueForKey(value.qualifier().bindingKeys(), "displayPropertyKeys");
-    	}
+        if(fetchSpecification != null) {
+            d2wContext().takeValueForKey(value.qualifier().bindingKeys(), "displayPropertyKeys");
+        }
     }
 
     public void setFetchSpecificationName(String value) {
@@ -190,12 +192,21 @@ public class ERD2WQueryPage extends ERD2WPage implements ERDQueryPageInterface {
         return ERXValueUtilities.intValueWithDefault(d2wContext().valueForKey("fetchLimit"), 0);
     }
 
+    public NSArray prefetchingRelationshipKeyPaths(){
+        return ERXValueUtilities.arrayValue(d2wContext().valueForKey("prefetchingRelationshipKeyPaths"));
+    }
+
     // add the ability to AND the existing qualifier from the DG
     public EOQualifier qualifier() {
         EOQualifier q = displayGroup.qualifier();
         EOQualifier q2 = displayGroup.qualifierFromQueryValues();
         return q == null ? q2 : (q2 == null ? q : new EOAndQualifier(new NSArray(new Object[] { q, q2 })));
     }
+
+    // Used with branching delegates.
+    protected NSDictionary branch;
+    
+    public String branchName() { return (String)branch.valueForKey("branchName"); }
 
     protected Boolean showResults = null;
 
@@ -235,15 +246,15 @@ public class ERD2WQueryPage extends ERD2WPage implements ERDQueryPageInterface {
     private boolean _wasCancelled;
     
     public WOComponent cancelAction() {
-    	WOComponent result = null;
-    	try {
-    		_wasCancelled = true;
-    		result = nextPageFromDelegate();
-    		if (result == null) {
-    			// CHECKME AK: or return null?? no way of knowing...
-    			result = nextPage();
-    		}
-    	} finally {
+        WOComponent result = null;
+        try {
+            _wasCancelled = true;
+            result = nextPageFromDelegate();
+            if (result == null) {
+                // CHECKME AK: or return null?? no way of knowing...
+                result = nextPage();
+            }
+        } finally {
             _wasCancelled = false;
         }
         return result;
@@ -265,29 +276,54 @@ public class ERD2WQueryPage extends ERD2WPage implements ERDQueryPageInterface {
         if (_wasCancelled) {
             return null;
         }
-        EODataSource ds = dataSource();
-        if (ds == null || !(ds instanceof EODatabaseDataSource)) {
-        	ds = new EODatabaseDataSource(session().defaultEditingContext(), entity().name());
-        	setDataSource(ds);
-        }
-        EOFetchSpecification fs = queryFetchSpecification();
-        if(fs == null) {
-        	fs = ((EODatabaseDataSource) ds).fetchSpecification();
-        	fs.setQualifier(qualifier());
-        	fs.setIsDeep(isDeep());
-        	fs.setUsesDistinct(usesDistinct());
-        	fs.setRefreshesRefetchedObjects(refreshRefetchedObjects());
+        
+        ERDQueryDataSourceDelegateInterface delegate = queryDataSourceDelegate();
+        if (delegate != null) {
+            return delegate.queryDataSource(this);
         } else {
-        	((EODatabaseDataSource) ds).setFetchSpecification(fs);
+            return _queryDataSource();
         }
-        int limit = fetchLimit();
-        if (limit != 0)
-        	fs.setFetchLimit(limit);
-        return ds;
     }
 
     public void setQueryDataSource(EODataSource datasource) {
         setDataSource(datasource);
+    }
+    
+    private EODataSource _queryDataSource() {
+        EODataSource ds = dataSource();
+        if (ds == null || !(ds instanceof EODatabaseDataSource)) {
+            ds = new EODatabaseDataSource(session().defaultEditingContext(), entity().name());
+            setDataSource(ds);
+        }
+        EOFetchSpecification fs = queryFetchSpecification();
+        if (fs == null) {
+            fs = ((EODatabaseDataSource) ds).fetchSpecification();
+            fs.setQualifier(qualifier());
+            fs.setIsDeep(isDeep());
+            fs.setUsesDistinct(usesDistinct());
+            fs.setRefreshesRefetchedObjects(refreshRefetchedObjects());
+        } else {
+            ((EODatabaseDataSource) ds).setFetchSpecification(fs);
+        }
+        int limit = fetchLimit();
+        if (limit != 0)
+            fs.setFetchLimit(limit);
+        NSArray prefetchingRelationshipKeyPaths = prefetchingRelationshipKeyPaths();
+        if (prefetchingRelationshipKeyPaths != null && prefetchingRelationshipKeyPaths().count() > 0) {
+            fs.setPrefetchingRelationshipKeyPaths(prefetchingRelationshipKeyPaths);
+        }
+        return ds;
+    }
+    
+    public ERDQueryDataSourceDelegateInterface queryDataSourceDelegate() {
+        if (queryDataSourceDelegate == null) {
+            queryDataSourceDelegate = (ERDQueryDataSourceDelegateInterface)d2wContext().valueForKey("queryDataSourceDelegate");
+        }
+        return queryDataSourceDelegate;
+    }
+    
+    public void setQueryDataSourceDelegate(ERDQueryDataSourceDelegateInterface delegate) {
+        queryDataSourceDelegate = delegate;
     }
 
     /**
