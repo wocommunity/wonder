@@ -82,7 +82,7 @@ public class ERTaggable<T extends ERXGenericRecord> {
    * @param tags the tags to remove (String to tokenize, NSArray<String>, etc)
    */
   @SuppressWarnings("unchecked")
-  public void removeTags(Object tags) {
+  public void removeTags(Object... tags) {
     NSArray<ERTag> erTags = tags();
     String tagsRelationshipName = _entity.tagsRelationshipName();
     NSArray<ERTag> matchingTags = ERXQ.filtered(erTags, ERTag.NAME.in(_entity.splitTagNames(tags)));
@@ -91,8 +91,19 @@ public class ERTaggable<T extends ERXGenericRecord> {
     }
   }
 
-  public void addTags(Object tags) {
-    addTags(tags, false);
+  /**
+   * This method applies tags to the target object, by parsing the tags parameter
+   * into Tag object instances and adding them to the tag collection of the object.
+   * If the tag name already exists in the tags table, it just adds a relationship
+   * to the existing tag record. If it doesn't exist, it then creates a new
+   * Tag record for it.
+   * 
+   * This is equivalent to addTags(false, tags). 
+   *
+   * @param tags the tags to add (String to tokenize, NSArray<String>, etc)
+   */
+  public void addTags(Object... tags) {
+    addTags(false, tags);
   }
 
   /**
@@ -105,7 +116,7 @@ public class ERTaggable<T extends ERXGenericRecord> {
    * @param tags the tags to add (String to tokenize, NSArray<String>, etc)
    * @param clear if true, existing tags will be removed first
    */
-  public void addTags(Object tags, boolean clear) {
+  public void addTags(boolean clear, Object... tags) {
     // clear the collection if appropriate
     if (clear) {
       clearTags();
@@ -117,7 +128,7 @@ public class ERTaggable<T extends ERXGenericRecord> {
     // append the tag names to the collection
     for (String tagName : _entity.splitTagNames(tags)) {
       // ensure that tag names don't get duplicated
-      ERTag tag = _entity.fetchTagNamed(tagName, true, editingContext);
+      ERTag tag = _entity.fetchTagNamed(editingContext, tagName, true);
       if (!erTags.containsObject(tag)) {
         _item.addObjectToBothSidesOfRelationshipWithKey(tag, tagsRelationshipName);
       }
@@ -130,8 +141,8 @@ public class ERTaggable<T extends ERXGenericRecord> {
    *
    * @param tags the tags to add (String to tokenize, NSArray<String>, etc)
    */
-  public void setTags(Object tags) {
-    addTags(tags, true);
+  public void setTags(Object... tags) {
+    addTags(true, tags);
   }
 
   /**
@@ -161,7 +172,7 @@ public class ERTaggable<T extends ERXGenericRecord> {
    * @return true if this eo is tagged with all of the given tag names, false otherwise
    */
   @SuppressWarnings("unchecked")
-  public boolean isTaggedWithAll(Object tags) {
+  public boolean isTaggedWithAll(Object... tags) {
     NSArray<String> tagNames = _entity.splitTagNames(tags);
     return ERXQ.filtered(tags(), ERTag.NAME.in(tagNames)).count() == tagNames.count();
 
@@ -174,7 +185,7 @@ public class ERTaggable<T extends ERXGenericRecord> {
    * @return true if this eo is tagged with any of the given tag names, false otherwise
    */
   @SuppressWarnings("unchecked")
-  public boolean isTaggedWithAny(Object tags) {
+  public boolean isTaggedWithAny(Object... tags) {
     NSArray<String> tagNames = _entity.splitTagNames(tags);
     return ERXQ.filtered(tags(), ERTag.NAME.in(tagNames)).count() > 0;
   }
