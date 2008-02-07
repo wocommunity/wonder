@@ -21,6 +21,7 @@ import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSTimestamp;
 
 import er.extensions.ERXJDBCUtilities;
+import er.extensions.ERXSQLHelper;
 
 /**
  * ERXMigrationTable provides table-level migration API's.  To obtain a table, you
@@ -606,7 +607,7 @@ public class ERXMigrationTable {
 	}
 
 	/**
-	 * Returns an array of EOSQLExpressions for setting the primary key constraint of this table (only supports single attribute PK's right now).
+	 * Returns an array of EOSQLExpressions for setting the primary key constraint of this table
 	 * 
 	 * @return an array of EOSQLExpressions for setting the primary key constraint of this table
 	 */
@@ -626,7 +627,35 @@ public class ERXMigrationTable {
 	}
 
 	/**
-	 * Executes the SQL operations to add this primary key constraint (only supports single attribute PK's right now).
+	 * Executes the SQL operations to add this unique index.
+	 * 
+	 * @param indexName the name of the index
+	 * @param columnName the name of the column to add a unique index on
+	 * @throws SQLException if the constraint fails
+	 */
+	public void addUniqueIndex(String indexName, String columnName) throws SQLException {
+		addUniqueIndex(indexName, existingColumnNamed(columnName));
+	}
+
+	/**
+	 * Executes the SQL operations to add a unique index.
+	 * 
+	 * @param indexName the name of the index
+	 * @param columns the columns to add a unique index on
+	 * @throws SQLException if the constraint fails
+	 */
+	public void addUniqueIndex(String indexName, ERXMigrationColumn... columns) throws SQLException {
+		ERXSQLHelper helper = ERXSQLHelper.newSQLHelper(_database.adaptorChannel());
+		String[] columnNames = new String[columns.length];
+		for (int columnNum = 0; columnNum < columns.length; columnNum ++) {
+			columnNames[columnNum] = columns[columnNum].name();
+		}
+		String sql = helper.sqlForCreateUniqueIndex(indexName, _name, columnNames);
+		ERXJDBCUtilities.executeUpdateScript(_database.adaptorChannel(), sql);
+	}
+
+	/**
+	 * Executes the SQL operations to add this primary key constraint.
 	 * 
 	 * @param columnName the name of the column to set as the primary key
 	 * @throws SQLException if the constraint fails
@@ -636,7 +665,7 @@ public class ERXMigrationTable {
 	}
 
 	/**
-	 * Executes the SQL operations to add this primary key constraint (only supports single attribute PK's right now).
+	 * Executes the SQL operations to add this primary key constraint.
 	 * 
 	 * @param columns the primary key columns to designate as primary keys
 	 * @throws SQLException if the constraint fails
