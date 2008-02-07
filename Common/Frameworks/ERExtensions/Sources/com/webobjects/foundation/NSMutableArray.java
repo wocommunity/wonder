@@ -153,7 +153,7 @@ public class NSMutableArray <E> extends NSArray<E> implements RandomAccess {
             return (E) result;
         }
         if (_count == 0)
-            throw new IllegalArgumentException("Array is empty");
+            throw new IndexOutOfBoundsException("Array is empty");
         else
             throw new IndexOutOfBoundsException("Index (" + index + ") out of bounds [0, " + (_count - 1) + "]");
     }
@@ -447,6 +447,9 @@ public class NSMutableArray <E> extends NSArray<E> implements RandomAccess {
 
     public boolean addAll(int index, Collection<? extends E> collection) {
         boolean modified = false;
+        if(collection == this) {
+        	collection = ((NSMutableArray)collection).immutableClone();
+        }
         Iterator<E> e = (Iterator<E>) collection.iterator();
         while (e.hasNext()) {
             add(index++, e.next());
