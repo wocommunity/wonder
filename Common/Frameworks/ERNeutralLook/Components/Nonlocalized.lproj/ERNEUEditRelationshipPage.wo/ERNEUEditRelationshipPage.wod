@@ -1,3 +1,8 @@
+AboveDisplayPropertyKeys: ERD2WExtraDisplayPropertyKeysComponent {
+    localContext = d2wContext;
+	extraPropertiesKey = "aboveDisplayPropertyKeys";
+}
+
 ActiveImage2: WOActiveImage {
 	action = editObjectInRelationship;
 	filename = "EditMetalSmBtn.gif";
@@ -25,6 +30,11 @@ Banner: WOImage {
 	height = "34";
 	name = "Currently...";
 	width = "550";
+}
+
+BelowDisplayPropertyKeys: ERD2WExtraDisplayPropertyKeysComponent {
+	localContext = d2wContext;
+	extraPropertiesKey = "belowDisplayPropertyKeys";
 }
 
 DisplayList: WOConditional {

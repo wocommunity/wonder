@@ -1,3 +1,8 @@
+AboveDisplayPropertyKeys: ERD2WExtraDisplayPropertyKeysComponent {
+    localContext = d2wContext;
+	extraPropertiesKey = "aboveDisplayPropertyKeys";
+}
+
 AreThereBackgroundColors: ERXNonNullConditional {
 	condition = d2wContext.referenceRelationshipForBackgroupColor;
 }
@@ -43,6 +48,11 @@ Banner: WOImage {
 
 BannerConditional: WOConditional {
 	condition = showBanner;
+}
+
+BelowDisplayPropertyKeys: ERD2WExtraDisplayPropertyKeysComponent {
+	localContext = d2wContext;
+	extraPropertiesKey = "belowDisplayPropertyKeys";
 }
 
 ColSpanNumber: WOString {
