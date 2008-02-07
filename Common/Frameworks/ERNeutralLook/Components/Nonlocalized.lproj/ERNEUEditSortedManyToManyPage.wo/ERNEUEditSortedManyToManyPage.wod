@@ -1,3 +1,8 @@
+AboveDisplayPropertyKeys: ERD2WExtraDisplayPropertyKeysComponent {
+    localContext = d2wContext;
+	extraPropertiesKey = "aboveDisplayPropertyKeys";
+}
+
 Image2: WOImage {
 	filename = "down.gif";
 	border = 0;
@@ -41,6 +46,11 @@ Banner: WOImage {
 	height = "34";
 	name = "Currently...";
 	width = "550";
+}
+
+BelowDisplayPropertyKeys: ERD2WExtraDisplayPropertyKeysComponent {
+	localContext = d2wContext;
+	extraPropertiesKey = "belowDisplayPropertyKeys";
 }
 
 Conditional1: WOConditional {
