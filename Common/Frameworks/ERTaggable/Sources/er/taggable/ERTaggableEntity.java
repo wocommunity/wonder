@@ -129,39 +129,39 @@ public class ERTaggableEntity<T extends ERXGenericRecord> {
   /**
    * Fetches all the EOs of all taggable entities that are associated with all of the given tags (unlimited).
    * 
-   * @param tags the tags to search (String to tokenize, NSArray<String>, etc)
    * @param editingContext the editing context to fetch into
+   * @param tags the tags to search (String to tokenize, NSArray<String>, etc)
    * @return a dictionary mapping entities to an array of matching EO's
    */
-  public static NSDictionary<EOEntity, NSArray<? extends ERXGenericRecord>> fetchAllTaggedWith(Object tags, EOEditingContext editingContext) {
-    return ERTaggableEntity.fetchAllTaggedWith(tags, ERTag.Inclusion.ALL, -1, editingContext);
+  public static NSDictionary<EOEntity, NSArray<? extends ERXGenericRecord>> fetchAllTaggedWith(EOEditingContext editingContext, Object tags) {
+    return ERTaggableEntity.fetchAllTaggedWith(editingContext, ERTag.Inclusion.ALL, -1, tags);
   }
 
   /**
    * Fetches all the EOs of all taggable entities that are associated with the given tags (unlimited).
    * 
+   * @param editingContext the editing context to fetch into
    * @param tags the tags to search (String to tokenize, NSArray<String>, etc)
    * @param inclusion find matches for ANY tags or ALL tags provided
-   * @param editingContext the editing context to fetch into
    * @return a dictionary mapping entities to an array of matching EO's
    */
-  public static NSDictionary<EOEntity, NSArray<? extends ERXGenericRecord>> fetchAllTaggedWith(Object tags, ERTag.Inclusion inclusion, EOEditingContext editingContext) {
-    return ERTaggableEntity.fetchAllTaggedWith(tags, inclusion, -1, editingContext);
+  public static NSDictionary<EOEntity, NSArray<? extends ERXGenericRecord>> fetchAllTaggedWith(EOEditingContext editingContext, ERTag.Inclusion inclusion, Object tags) {
+    return ERTaggableEntity.fetchAllTaggedWith(editingContext, inclusion, -1, tags);
   }
 
   /**
    * Fetches all the EOs of all taggable entities that are associated with the given tags.
    * 
+   * @param editingContext the editing context to fetch into
    * @param tags the tags to search (String to tokenize, NSArray<String>, etc)
    * @param inclusion find matches for ANY tags or ALL tags provided
    * @param limit the limit of the number of objects to return (or -1 for unlimited)
-   * @param editingContext the editing context to fetch into
    * @return a dictionary mapping entities to an array of matching EO's
    */
-  public static NSDictionary<EOEntity, NSArray<? extends ERXGenericRecord>> fetchAllTaggedWith(Object tags, ERTag.Inclusion inclusion, int limit, EOEditingContext editingContext) {
+  public static NSDictionary<EOEntity, NSArray<? extends ERXGenericRecord>> fetchAllTaggedWith(EOEditingContext editingContext, ERTag.Inclusion inclusion, int limit, Object tags) {
     NSMutableDictionary<EOEntity, NSArray<? extends ERXGenericRecord>> taggedEntities = new NSMutableDictionary<EOEntity, NSArray<? extends ERXGenericRecord>>();
     for (EOEntity taggableEntity : ERTaggableEntity.taggableEntities()) {
-      NSArray<ERXGenericRecord> taggedItems = new ERTaggableEntity<ERXGenericRecord>(taggableEntity).fetchTaggedWith(tags, inclusion, limit, editingContext);
+      NSArray<ERXGenericRecord> taggedItems = new ERTaggableEntity<ERXGenericRecord>(taggableEntity).fetchTaggedWith(editingContext, inclusion, limit, tags);
       taggedEntities.setObjectForKey(taggedItems, taggableEntity);
     }
     return taggedEntities;
@@ -374,13 +374,13 @@ public class ERTaggableEntity<T extends ERXGenericRecord> {
    * tag names from rolling back your primary editing context, which means that even if 
    * you rollback your editingContext, any tags created during its lifetime will remain.
    * 
+   * @param editingContext the editing context to fetch into
    * @param tagName the name of the tag to lookup
    * @param createIfMissing if true, missing tags will be created
-   * @param editingContext the editing context to fetch into
    * @return the corresponding ERTag (or null if not found)
    */
   @SuppressWarnings( { "cast", "unchecked" })
-  public ERTag fetchTagNamed(String tagName, boolean createIfMissing, EOEditingContext editingContext) {
+  public ERTag fetchTagNamed(EOEditingContext editingContext, String tagName, boolean createIfMissing) {
     NSArray<ERTag> tags = (NSArray<ERTag>) ERXEOControlUtilities.objectsWithQualifier(editingContext, _tagEntity.name(), ERTag.NAME.is(tagName), null, true, true, true, true);
     ERTag tag;
     if (tags.count() == 0) {
@@ -390,7 +390,7 @@ public class ERTaggableEntity<T extends ERXGenericRecord> {
         // rolls back.  It's mostly for your own good :)
         EOEditingContext newEditingContext = ERXEC.newEditingContext();
         try {
-          ERTag newTag = createTagNamed(tagName, newEditingContext);
+          ERTag newTag = createTagNamed(newEditingContext, tagName);
           newEditingContext.saveChanges();
           tag = newTag.localInstanceIn(editingContext);
         }
@@ -398,7 +398,7 @@ public class ERTaggableEntity<T extends ERXGenericRecord> {
           // We'll assume this was because of a duplicate key exception and just retry the original
           // fetch WITHOUT createIfMissing.  If that returns a null, then we know it was some other
           // crazy exception and just throw it.
-          tag = fetchTagNamed(tagName, false, editingContext);
+          tag = fetchTagNamed(editingContext, tagName, false);
           if (tag == null) {
             throw e;
           }
@@ -420,11 +420,11 @@ public class ERTaggableEntity<T extends ERXGenericRecord> {
   /**
    * Creates a tag with the given name.
    * 
-   * @param tagName the new tag name
    * @param editingContext the editing context to create within
+   * @param tagName the new tag name
    * @return the created tag
    */
-  public ERTag createTagNamed(String tagName, EOEditingContext editingContext) {
+  public ERTag createTagNamed(EOEditingContext editingContext, String tagName) {
     ERTag tag = (ERTag) EOUtilities.createAndInsertInstance(editingContext, _tagEntity.name());
     tag.setName(tagName);
     return tag;
@@ -469,8 +469,8 @@ public class ERTaggableEntity<T extends ERXGenericRecord> {
     NSMutableSet<String> tagNames = new NSMutableSet<String>();
     if (tags != null) {
       if (tags instanceof String) {
-        for (String tag : ((String) tags).split(_separator)) {
-          tagNames.addObject(_normalizer.normalize(tag));
+        for (String strTag : ((String) tags).split(_separator)) {
+          tagNames.addObject(_normalizer.normalize(strTag));
         }
       }
       else if (tags instanceof NSArray) {
@@ -490,39 +490,39 @@ public class ERTaggableEntity<T extends ERXGenericRecord> {
    * Fetches the list of objects of this entity type that are tagged
    * with all of the given tags with unlimited results. 
    * 
-   * @param tags the tags to search (String to tokenize, NSArray<String>, etc)
    * @param editingContext the editing context to fetch into
+   * @param tags the tags to search (String to tokenize, NSArray<String>, etc)
    * @return the array of matching eos
    */
-  public NSArray<T> fetchTaggedWith(Object tags, EOEditingContext editingContext) {
-    return fetchTaggedWith(tags, ERTag.Inclusion.ALL, editingContext);
+  public NSArray<T> fetchTaggedWith(EOEditingContext editingContext, Object tags) {
+    return fetchTaggedWith(editingContext, ERTag.Inclusion.ALL, tags);
   }
 
   /**
    * Fetches the list of objects of this entity type that are tagged
    * with the given tags with unlimited results. 
    * 
+   * @param editingContext the editing context to fetch into
    * @param tags the tags to search (String to tokenize, NSArray<String>, etc)
    * @param inclusion find matches for ANY tags or ALL tags provided
-   * @param editingContext the editing context to fetch into
    * @return the array of matching eos
    */
-  public NSArray<T> fetchTaggedWith(Object tags, ERTag.Inclusion inclusion, EOEditingContext editingContext) {
-    return fetchTaggedWith(tags, inclusion, -1, editingContext);
+  public NSArray<T> fetchTaggedWith(EOEditingContext editingContext, ERTag.Inclusion inclusion, Object tags) {
+    return fetchTaggedWith(editingContext, inclusion, -1, tags);
   }
 
   /**
    * Fetches the list of objects of this entity type that are tagged
    * with the given tags. 
    * 
+   * @param editingContext the editing context to fetch into
    * @param tags the tags to search (String to tokenize, NSArray<String>, etc)
    * @param inclusion find matches for ANY tags or ALL tags provided
    * @param limit limit the number of results to be returned (-1 for unlimited)
-   * @param editingContext the editing context to fetch into
    * @return the array of matching eos
    */
   @SuppressWarnings("unchecked")
-  public NSArray<T> fetchTaggedWith(Object tags, ERTag.Inclusion inclusion, int limit, EOEditingContext editingContext) {
+  public NSArray<T> fetchTaggedWith(EOEditingContext editingContext, ERTag.Inclusion inclusion, int limit, Object tags) {
     NSArray<String> tagNames = splitTagNames(tags);
     if (tagNames.count() == 0) {
       throw new IllegalArgumentException("No tags were passed in.");
@@ -550,26 +550,26 @@ public class ERTaggableEntity<T extends ERXGenericRecord> {
   /**
    * Remove all of the tags from instances of this entity type.
    * 
-   * @param tags the tags to remove (String to tokenize, NSArray<String>, etc)
    * @param editingContext the editing context to fetch into
+   * @param tags the tags to remove (String to tokenize, NSArray<String>, etc)
    */
-  public void removeTags(Object tags, EOEditingContext editingContext) {
-    replaceTags(tags, null, ERTag.Inclusion.ALL, editingContext);
+  public void removeTags(EOEditingContext editingContext, Object tags) {
+    replaceTags(editingContext, ERTag.Inclusion.ALL, tags, null);
   }
 
   /**
    * Looks for items with oldTags and replaces them with all of newTags.
    *
+   * @param editingContext the editing context to remove with
    * @param oldTags the tags to find and remove (String to tokenize, NSArray<String>, etc)
    * @param newTags the tags to add
    * @param inclusiong if ANY, finds any tags that match, removes them all, and adds newTags; if all, requires all tags to match before replacing  
-   * @param editingContext the editing context to remove with
    */
-  public void replaceTags(Object oldTags, Object newTags, ERTag.Inclusion inclusion, EOEditingContext editingContext) {
-    for (T item : fetchTaggedWith(oldTags, inclusion, editingContext)) {
+  public void replaceTags(EOEditingContext editingContext, ERTag.Inclusion inclusion, Object oldTags, Object newTags) {
+    for (T item : fetchTaggedWith(editingContext, inclusion, oldTags)) {
       ERTaggable<T> taggable = taggable(item);
       taggable.removeTags(oldTags);
-      taggable.addTags(newTags, false);
+      taggable.addTags(newTags);
     }
   }
 
@@ -583,7 +583,7 @@ public class ERTaggableEntity<T extends ERXGenericRecord> {
    * @return a dictionary of tags and their occurrence count
    */
   public NSDictionary<String, Integer> tagCount(EOEditingContext editingContext) {
-    return tagCount(-1, editingContext);
+    return tagCount(editingContext, -1);
   }
 
   /**
@@ -591,12 +591,12 @@ public class ERTaggableEntity<T extends ERXGenericRecord> {
    * and, by default, returns a dictionary in the form of { 'tag_name' => count, ... }.  This
    * does not include any restriction on the count required for results to be returned.
    *
-   * @param limit the limit of the number of results to return (ordered by count DESC)
    * @param editingContext the editing context to fetch into
+   * @param limit the limit of the number of results to return (ordered by count DESC)
    * @return a dictionary of tags and their occurrence count
    */
-  public NSDictionary<String, Integer> tagCount(int limit, EOEditingContext editingContext) {
-    return tagCount(null, -1, limit, editingContext);
+  public NSDictionary<String, Integer> tagCount(EOEditingContext editingContext, int limit) {
+    return tagCount(editingContext, null, -1, limit);
   }
 
   /**
@@ -607,13 +607,13 @@ public class ERTaggableEntity<T extends ERXGenericRecord> {
    * selector = EOQualifier.QualifierOperatorGreaterThan, count = 1 to only return tags with more 
    * than one occurrence.
    *
+   * @param editingContext the editing context to fetch into
    * @param selector a selector for the count restriction (see EOQualifier.QualifierOperators)
    * @param count the count restriction required for the result to be returned
    * @param limit the limit of the number of results to return (ordered by count DESC)
-   * @param editingContext the editing context to fetch into
    * @return a dictionary of tags and their occurrence count
    */
-  public NSDictionary<String, Integer> tagCount(NSSelector selector, int count, int limit, EOEditingContext editingContext) {
+  public NSDictionary<String, Integer> tagCount(EOEditingContext editingContext, NSSelector selector, int count, int limit) {
     NSMutableArray<EOAttribute> fetchAttributes = new NSMutableArray<EOAttribute>();
     ERXEOAttribute tagNameAttribute = new ERXEOAttribute(_entity, _tagsRelationship.name() + "." + ERTag.NAME_KEY);
     tagNameAttribute.setName("tagName");
@@ -652,13 +652,13 @@ public class ERTaggableEntity<T extends ERXGenericRecord> {
   /**
    * This method returns a simple count of the number of distinct objects which match the tags provided.
    * 
+   * @param editingContext the editing context to fetch into
    * @param tags the tags to search (String to tokenize, NSArray<String>, etc)
    * @param inclusion find matches for ANY tags or ALL tags provided
-   * @param editingContext the editing context to fetch into
    * @return the count of distinct objects for the given tags
    */
   @SuppressWarnings("unchecked")
-  public int countUniqueTaggedWith(Object tags, ERTag.Inclusion inclusion, EOEditingContext editingContext) {
+  public int countUniqueTaggedWith(EOEditingContext editingContext, ERTag.Inclusion inclusion, Object tags) {
     NSArray<String> tagNames = splitTagNames(tags);
     if (tagNames.count() == 0) {
       throw new IllegalArgumentException("No tags were passed in.");
@@ -687,7 +687,7 @@ public class ERTaggableEntity<T extends ERXGenericRecord> {
    * @param tags the tags to search (String to tokenize, NSArray<String>, etc)
    */
   @SuppressWarnings("unchecked")
-  public NSArray<String> fetchRelatedTags(Object tags, EOEditingContext editingContext) {
+  public NSArray<String> fetchRelatedTags(EOEditingContext editingContext, Object tags) {
     NSArray<String> tagNames = splitTagNames(tags);
     if (tagNames.count() == 0) {
       throw new IllegalArgumentException("No tags were passed in.");
@@ -778,7 +778,7 @@ public class ERTaggableEntity<T extends ERXGenericRecord> {
    * @param categoryList An array containing the categories to split the tags
    * @return a dictionary mapping each tag name to its corresponding category 
    */
-  public <U> NSDictionary<String, U> cloud(NSArray<U> categoryList, EOEditingContext editingContext) {
+  public <U> NSDictionary<String, U> cloud(EOEditingContext editingContext, NSArray<U> categoryList) {
     return cloud(tagCount(editingContext), categoryList);
   }
 
@@ -838,7 +838,7 @@ public class ERTaggableEntity<T extends ERXGenericRecord> {
    * @return an array of matching tags
    */
   @SuppressWarnings("unchecked")
-  public NSArray<String> fetchTagsLike(String startsWith, EOEditingContext editingContext) {
+  public NSArray<String> fetchTagsLike(EOEditingContext editingContext, String startsWith) {
     NSArray<ERTag> erTags = ERTag.fetchERTags(editingContext, ERTag.NAME.likeInsensitive(startsWith + "*"), null);
     NSArray<String> tags = (NSArray<String>) erTags.valueForKey(ERTag.NAME_KEY);
     return tags;
@@ -857,7 +857,7 @@ public class ERTaggableEntity<T extends ERXGenericRecord> {
   //* +:conditions+: any additional conditions that should be appended to the 
   //* WHERE clause of the finder SQL. Just like regular +ActiveRecord::Base#find+ methods.
   //*/
-  //public NSArray<T> findRelatedTagged(T related, int limit, EOEditingContext editingContext) {
+  //public NSArray<T> findRelatedTagged(EOEditingContext editingContext, T related, int limit) {
   //  NSArray<EOSortOrdering> sortOrderings = null;
   //  EOFetchSpecification fetchSpec = new EOFetchSpecification(_entity.name(), null, sortOrderings);
   //
