@@ -277,6 +277,7 @@ pageboy
 parasite
 patric
 patwebbot
+pear\.php\.net
 peerbot
 pegasus
 perignator
