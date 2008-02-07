@@ -11,6 +11,7 @@ import com.webobjects.appserver.WORequest;
 import com.webobjects.appserver.WOResponse;
 import com.webobjects.appserver._private.WOConstantValueAssociation;
 import com.webobjects.appserver._private.WODynamicElementCreationException;
+import com.webobjects.appserver._private.WODynamicGroup;
 import com.webobjects.appserver._private.WOInput;
 import com.webobjects.foundation.NSDictionary;
 
@@ -63,8 +64,8 @@ public class ERXSubmitButton extends WOInput {
 			ERXWOContext.contextDictionary().setObjectForKey(Boolean.TRUE, "ERXWOSubmit.ieFixed");
 		}
     }
-
-    public ERXSubmitButton(String arg0, NSDictionary nsdictionary, WOElement arg2) {
+    
+    public ERXSubmitButton(String arg0, NSDictionary<String, WOAssociation> nsdictionary, WOElement arg2) {
         super("button", nsdictionary, arg2);
         if(_value == null)
             _value = new WOConstantValueAssociation("Submit");
@@ -72,7 +73,15 @@ public class ERXSubmitButton extends WOInput {
         _action = (WOAssociation)_associations.removeObjectForKey("action");
         _actionClass = (WOAssociation)_associations.removeObjectForKey("actionClass");
         _directActionName = (WOAssociation)_associations.removeObjectForKey("directActionName");
-        _class = (WOAssociation)_associations.removeObjectForKey("class");
+        
+        // hack for 5.4
+        if (ERXApplication.isWO54()) {
+        	_class = (WOAssociation) nsdictionary.valueForKey("class");
+        }
+        else {
+        	_class = (WOAssociation)_associations.removeObjectForKey("class");
+        }
+        
         if(_action != null && _action.isValueConstant())
             throw new WODynamicElementCreationException("<" + getClass().getName() + ">'action' is a constant.");
         if(_action != null && _directActionName != null || _action != null && _actionClass != null)
@@ -122,9 +131,11 @@ public class ERXSubmitButton extends WOInput {
     	appendNonURLAttributesToResponse(woresponse, wocontext);
     	appendURLAttributesToResponse(woresponse, wocontext);
        	String css = "";
-    	if(_class != null) {
-    		css = (String) _class.valueInComponent(wocontext.component());
-    	}
+       	
+   		if (_class != null) {
+			css = (String) _class.valueInComponent(wocontext.component());
+		}
+       	
     	WOAssociation assoc = _action;
 
     	if(_action != null) {
