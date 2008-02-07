@@ -1,0 +1,109 @@
+<html>
+<body>
+<h1>ERTaggable</h1>
+<p>
+ERTaggable is a fairly direct port of the acts_as_taggable Rails mixin to EOF.  The framework provides a very 
+easy method of integrating tagging support into arbitrary entities in your applications.
+</p>
+
+<h2>Quick Start</h2>
+<p>
+Lets take the example where your model "MyModel" has a "Person" entity that you want to support tagging on.
+</p>
+<ol>
+	<li>
+		Create a migration using the helper superclass:
+		
+		<pre>
+public class MyModel0 extends ERTaggableEntity0 {
+ 	public MyModel0() {
+ 		super(Person.ENTITY_NAME);
+ 	}
+}
+		</pre>
+	</li>
+
+	<li>
+		Register the taggable in your Application constructor or framework principal:
+	
+		<pre>
+ERTaggableEntity.registerTaggable(Person.ENTITY_NAME);
+		</pre>
+	</li>
+	
+	<li>
+		Add convenience methods onto your Person class (optional, but handy):
+		
+		<pre>
+public ERTaggable<Person> taggable() {
+	return ERTaggable.taggable(this);
+}
+
+public static ERTaggableEntity<Person> taggableEntity() {
+	return new ERTaggableEntity<Person>(Person.ENTITY_NAME);
+}
+    </pre>
+  </li>
+
+	<li>
+		Tag like the wind:
+
+		<pre>
+Person mike = Person.createPerson(editingContext, "Mike Schrag");
+ERTaggable<Person> taggableMike = mike.taggable();
+taggableMike.addTags("mike employee important");
+
+NSArray<Person> matchingPeople = Person.taggableEntity().fetchTaggedWith("employee", editingContext);
+	
+NSDictionary<EOEntity, NSArray<? extends ERXGenericRecord>> matchingItems = ERTaggableEntity.fetchAllTaggedWith("mike", editingContext);
+		</pre>
+	</li>
+</ol>
+
+<h2>Nitty Gritty</h2>
+<p>
+If you choose to deviate from the "magical" route described above, you can provide several override hooks:
+</p>
+<ul>
+	<li>
+		By default all entities share the same corpus of tag names. For any entity, you can register a 
+		custom ERTag subclass that stores in a separate table instead. This is generally only an issue if
+		you need to provide tag completion and you want to restrict the set of completion offerings.  Note that
+		hooking to a custom ERTag table also requires that you use the optional constructor on the migration
+		superclass to specify the name of that entity.
+	</li>
+	
+	<li>
+		By default, tags are normalized by trimming and lowercasing them.  You can override the tag
+		normalizer that is used by setting it on your ERTaggableEntity.
+	</li>
+	
+	<li>
+		You MUST register your taggable entities prior to attempting any tagging operations.  The framework 
+		will throw an exception scolding you if you do not.
+	</li>
+	
+	<li>
+		By default, your EOModels are modified on-the-fly to inject tagging support into them.  If you don't
+		like magic, you can instead manually create the join entity between your entity and the ERTag
+		entity. You MUST also create a flattened to-many relationship from your entity to the ERTag table
+		through your join entity. If you name that relationship anything other than "tags" (or you use a
+		custom ERTag entity), you must specify the relationship name when you register the entity.
+	</li>
+
+	<li>
+		Tags are unique and shared. To ensure this, ERTag commits new tag names in a separate transaction.
+		This can lead to a potentially undesirable (yet mostly harmless) side effect where new tag names
+		may be committed even though you roll back your editing context.  Only tag names have this 
+		behavior, not tag relationships on your entities.
+	</li>
+	
+	<li>
+		If you don't want to use the migration, you need to create a join table that contains 
+		a "your entity id" (named item_[your pk column name] for each pk attribute) and an 
+		ERTagID foreign key (named tag_id).  You can name the columns whatever you want if you also
+		manually create the join entity in your EOModel.
+	</li>
+</ul>
+</body>
+</html>
