@@ -30,7 +30,11 @@ public class ERXModelVersion {
 	 *            the version of that model
 	 */
 	public ERXModelVersion(String modelName, int version) {
-		this(EOModelGroup.defaultGroup().modelNamed(modelName), version);
+		_model = EOModelGroup.defaultGroup().modelNamed(modelName);
+		_version = version;
+		if (_model == null) {
+			throw new IllegalArgumentException("There was no model named '" + modelName + "' in this model group.");
+		}
 	}
 
 	/**
