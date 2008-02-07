@@ -1,0 +1,29 @@
+ComponentName: WOString {
+	value = d2wContext.componentName;
+}
+
+DebuggingEnabled: WOConditional {
+	condition = d2wComponentNameDebuggingEnabled;
+}
+
+ExtraPropertyKeysRepetition: WORepetition {
+	item = d2wContext.propertyKey;
+	list = extraDisplayPropertyKeys;
+}
+
+HasExtraPropertyKeysConditional: ERXNonZeroConditional {
+	condition = extraDisplayPropertyKeys;
+}
+
+PropertyKey: WOString {
+	value = d2wContext.propertyKey;
+}
+
+PropertyKeySwitchComponent: WOSwitchComponent {
+	WOComponentName = d2wContext.componentName;
+	localContext = d2wContext;
+}
+
+PropertyName: ERD2WPropertyName {
+    value = d2wContext.displayNameForProperty;
+}
