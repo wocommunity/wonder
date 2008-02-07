@@ -55,7 +55,7 @@ taggableMike.addTags("mike employee important");
 
 NSArray<Person> matchingPeople = Person.taggableEntity().fetchTaggedWith(editingContext, "employee");
 	
-NSDictionary<EOEntity, NSArray<? extends ERXGenericRecord>> matchingItems = ERTaggableEntity.fetchAllTaggedWith("mike", editingContext);
+NSDictionary<EOEntity, NSArray<? extends ERXGenericRecord>> matchingItems = ERTaggableEntity.fetchAllTaggedWith(editingContext, "mike");
 		</pre>
 	</li>
 </ol>
