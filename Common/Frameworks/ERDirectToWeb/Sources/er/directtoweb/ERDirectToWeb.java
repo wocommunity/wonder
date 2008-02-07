@@ -409,7 +409,7 @@ public class ERDirectToWeb {
             // BOOGIE
             if (trace.isDebugEnabled() && !NSLog.debugLoggingAllowedForGroups(NSLog.DebugGroupRules)) {
                 NSLog.allowDebugLoggingForGroups(NSLog.DebugGroupRules);
-                NSLog.setAllowedDebugLevel(NSLog.DebugLevelDetailed);
+                NSLog.debug.setAllowedDebugLevel(NSLog.DebugLevelDetailed);
                 trace.info("Rule tracing on");
             }
             Object observer=new _Observer();
@@ -423,11 +423,11 @@ public class ERDirectToWeb {
         }
     }
     
-    // This is the actual method that turns trace rule firign on and off.
+    // This is the actual method that turns trace rule firing on and off.
     public static void configureTraceRuleFiring() {
         if (trace.isDebugEnabled() && !NSLog.debugLoggingAllowedForGroups(NSLog.DebugGroupRules)) {
             NSLog.allowDebugLoggingForGroups(NSLog.DebugGroupRules);
-            NSLog.setAllowedDebugLevel(NSLog.DebugLevelDetailed);
+            NSLog.debug.setAllowedDebugLevel(NSLog.DebugLevelDetailed);
             trace.info("Rule tracing on");
         } else if (!trace.isDebugEnabled() && NSLog.debugLoggingAllowedForGroups(NSLog.DebugGroupRules)) {
             NSLog.refuseDebugLoggingForGroups(NSLog.DebugGroupRules);
