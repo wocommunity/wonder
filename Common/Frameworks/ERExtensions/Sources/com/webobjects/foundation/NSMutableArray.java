@@ -23,7 +23,7 @@ import java.util.Vector;
  * supplied will will be used again without changes in code on your side. <br />
  * @author ak
  */
-public class NSMutableArray <E> extends NSArray<E> {
+public class NSMutableArray <E> extends NSArray<E> implements RandomAccess {
 
 	public static final Class _CLASS = _NSUtilitiesExtra._classWithFullySpecifiedNamePrime("com.webobjects.foundation.NSMutableArray");
     
@@ -68,6 +68,14 @@ public class NSMutableArray <E> extends NSArray<E> {
         super(vector, range, ignoreNull);
     }
 
+    public void ensureCapacity(int capacity) {
+    	_ensureCapacity(capacity);
+    }
+    
+    public void trimToSize() {
+    	// no op
+    }
+    
     public void setArray(NSArray<? extends E> otherArray) {
         if (otherArray != this) {
             if (otherArray == null) {
@@ -130,7 +138,7 @@ public class NSMutableArray <E> extends NSArray<E> {
             clearCache();
             return;
         } else {
-            throw new IllegalArgumentException("Index (" + index + ") out of bounds [0, " + (_count - 1) + "]");
+            throw new IndexOutOfBoundsException("Index (" + index + ") out of bounds [0, " + (_count - 1) + "]");
         }
     }
 
@@ -147,7 +155,7 @@ public class NSMutableArray <E> extends NSArray<E> {
         if (_count == 0)
             throw new IllegalArgumentException("Array is empty");
         else
-            throw new IllegalArgumentException("Index (" + index + ") out of bounds [0, " + (_count - 1) + "]");
+            throw new IndexOutOfBoundsException("Index (" + index + ") out of bounds [0, " + (_count - 1) + "]");
     }
 
     public void removeAllObjects() {
