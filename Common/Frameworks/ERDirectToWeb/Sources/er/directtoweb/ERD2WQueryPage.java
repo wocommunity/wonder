@@ -281,7 +281,7 @@ public class ERD2WQueryPage extends ERD2WPage implements ERDQueryPageInterface {
         if (delegate != null) {
             return delegate.queryDataSource(this);
         } else {
-            return _queryDataSource();
+            return defaultQueryDataSource();
         }
     }
 
@@ -289,7 +289,7 @@ public class ERD2WQueryPage extends ERD2WPage implements ERDQueryPageInterface {
         setDataSource(datasource);
     }
     
-    private EODataSource _queryDataSource() {
+    public EODataSource defaultQueryDataSource() {
         EODataSource ds = dataSource();
         if (ds == null || !(ds instanceof EODatabaseDataSource)) {
             ds = new EODatabaseDataSource(session().defaultEditingContext(), entity().name());
