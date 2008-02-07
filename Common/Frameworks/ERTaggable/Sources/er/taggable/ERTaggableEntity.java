@@ -1,0 +1,901 @@
+package er.taggable;
+
+import java.util.Map;
+
+import com.webobjects.eoaccess.EOAttribute;
+import com.webobjects.eoaccess.EOEntity;
+import com.webobjects.eoaccess.EOGeneralAdaptorException;
+import com.webobjects.eoaccess.EOJoin;
+import com.webobjects.eoaccess.EOModel;
+import com.webobjects.eoaccess.EOModelGroup;
+import com.webobjects.eoaccess.EORelationship;
+import com.webobjects.eoaccess.EOSQLExpression;
+import com.webobjects.eoaccess.EOUtilities;
+import com.webobjects.eocontrol.EOEditingContext;
+import com.webobjects.eocontrol.EOFetchSpecification;
+import com.webobjects.eocontrol.EOQualifier;
+import com.webobjects.eocontrol.EOSortOrdering;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSMutableArray;
+import com.webobjects.foundation.NSMutableDictionary;
+import com.webobjects.foundation.NSMutableSet;
+import com.webobjects.foundation.NSSelector;
+
+import er.extensions.ERXEC;
+import er.extensions.ERXEOAccessUtilities;
+import er.extensions.ERXEOAttribute;
+import er.extensions.ERXEOControlUtilities;
+import er.extensions.ERXGenericRecord;
+import er.extensions.ERXKey;
+import er.extensions.ERXSQLHelper;
+import er.taggable.model.ERTag;
+
+/**
+ * ERTaggableEntity provides entity-level tag management and fetching methods.
+ *  
+ * Typically you would provide a cover method from your entity class to an 
+ * instance of an ERTaggableEntity:
+ * 
+ * <code>
+ * public class Person extends _Person {
+ *   ...
+ *   public static ERTaggableEntity<Person> taggableEntity() {
+ *     return new ERTaggableEntity<Person>(Person.ENTITY_NAME);
+ *   }
+ * }
+ * </code>
+
+ * @author mschrag
+ *
+ * @param <T> the java class of the entity that this ERTaggableEntity is associated with 
+ */
+public class ERTaggableEntity<T extends ERXGenericRecord> {
+  /**
+   * The key stored in entity userInfo that flags an entity as taggable.
+   */
+  public static final String ERTAGGABLE_KEY = "_ERTaggable";
+
+  /**
+   * The default name of the flattened to-many relationship to the tag entity.
+   */
+  public static final String DEFAULT_TAGS_RELATIONSHIP_NAME = "tags";
+
+  private EOEntity _tagEntity;
+
+  private EOEntity _entity;
+  private EORelationship _tagsRelationship;
+
+  private String _separator = "[\\s,]+";
+  private ERTagNormalizer _normalizer = new ERDefaultTagNormalizer();
+
+  /**
+   * Constructs an ERTaggableEntity.
+   * 
+   * @param entityName the name of the entity to tag
+   */
+  public ERTaggableEntity(String entityName) {
+    this(EOModelGroup.defaultGroup().entityNamed(entityName));
+  }
+
+  /**
+   * Constructs an ERTaggableEntity associated with the tag entity "ERTag" via a
+   * flattened to-many relationship named "tags."
+   * 
+   * @param entity the entity to tag
+   */
+  public ERTaggableEntity(EOEntity entity) {
+    this(entity, null, ERTag.ENTITY_NAME);
+  }
+
+  /**
+   * Constructs an ERTaggableEntity associated with the tag entity "ERTag".
+   * 
+   * @param entity the entity to tag
+   * @param tagsRelationshipName the name of the flattened to-many relationship to the tag entity
+   */
+  public ERTaggableEntity(EOEntity entity, String tagsRelationshipName) {
+    this(entity, tagsRelationshipName, ERTag.ENTITY_NAME);
+  }
+
+  /**
+   * Constructs an ERTaggableEntity.
+   * 
+   * @param entity the entity to tag
+   * @param tagsRelationshipName the name of the flattened to-many relationship to the tag entity
+   * @param tagEntityName the name of the tag entity
+   */
+  @SuppressWarnings("unchecked")
+  public ERTaggableEntity(EOEntity entity, String tagsRelationshipName, String tagEntityName) {
+    _entity = entity;
+    if (!ERTaggableEntity.isTaggable(entity)) {
+      throw new IllegalArgumentException("The entity '" + entity.name() + "' has not been registered as taggable.");
+    }
+    _tagEntity = entity.model().modelGroup().entityNamed(tagEntityName);
+    if (tagsRelationshipName == null) {
+      _tagsRelationship = ERTaggableEntity.tagsRelationshipForEntity(entity, _tagEntity);
+    }
+    else {
+      _tagsRelationship = _entity.relationshipNamed(tagsRelationshipName);
+    }
+    if (_tagsRelationship == null) {
+      throw new IllegalArgumentException("There is no relationship on '" + _entity.name() + "' that is flattened onto '" + tagEntityName + "'.");
+    }
+    if (!_tagsRelationship.isFlattened()) {
+      throw new IllegalArgumentException("The relationship '" + _tagsRelationship.name() + "' on '" + _entity.name() + "' must be flattened.");
+    }
+  }
+
+  /**
+   * Fetches all the EOs of all taggable entities that are associated with all of the given tags (unlimited).
+   * 
+   * @param tags the tags to search (String to tokenize, NSArray<String>, etc)
+   * @param editingContext the editing context to fetch into
+   * @return a dictionary mapping entities to an array of matching EO's
+   */
+  public static NSDictionary<EOEntity, NSArray<? extends ERXGenericRecord>> fetchAllTaggedWith(Object tags, EOEditingContext editingContext) {
+    return ERTaggableEntity.fetchAllTaggedWith(tags, ERTag.Inclusion.ALL, -1, editingContext);
+  }
+
+  /**
+   * Fetches all the EOs of all taggable entities that are associated with the given tags (unlimited).
+   * 
+   * @param tags the tags to search (String to tokenize, NSArray<String>, etc)
+   * @param inclusion find matches for ANY tags or ALL tags provided
+   * @param editingContext the editing context to fetch into
+   * @return a dictionary mapping entities to an array of matching EO's
+   */
+  public static NSDictionary<EOEntity, NSArray<? extends ERXGenericRecord>> fetchAllTaggedWith(Object tags, ERTag.Inclusion inclusion, EOEditingContext editingContext) {
+    return ERTaggableEntity.fetchAllTaggedWith(tags, inclusion, -1, editingContext);
+  }
+
+  /**
+   * Fetches all the EOs of all taggable entities that are associated with the given tags.
+   * 
+   * @param tags the tags to search (String to tokenize, NSArray<String>, etc)
+   * @param inclusion find matches for ANY tags or ALL tags provided
+   * @param limit the limit of the number of objects to return (or -1 for unlimited)
+   * @param editingContext the editing context to fetch into
+   * @return a dictionary mapping entities to an array of matching EO's
+   */
+  public static NSDictionary<EOEntity, NSArray<? extends ERXGenericRecord>> fetchAllTaggedWith(Object tags, ERTag.Inclusion inclusion, int limit, EOEditingContext editingContext) {
+    NSMutableDictionary<EOEntity, NSArray<? extends ERXGenericRecord>> taggedEntities = new NSMutableDictionary<EOEntity, NSArray<? extends ERXGenericRecord>>();
+    for (EOEntity taggableEntity : ERTaggableEntity.taggableEntities()) {
+      NSArray<ERXGenericRecord> taggedItems = new ERTaggableEntity<ERXGenericRecord>(taggableEntity).fetchTaggedWith(tags, inclusion, limit, editingContext);
+      taggedEntities.setObjectForKey(taggedItems, taggableEntity);
+    }
+    return taggedEntities;
+  }
+
+  /**
+   * Returns whether or not the given entity has been registered as taggable.
+   * 
+   * @param entity the entity to check
+   * @return true if the entity is taggable, false if not
+   */
+  public static boolean isTaggable(EOEntity entity) {
+    return Boolean.TRUE.equals(entity.userInfo().objectForKey(ERTaggableEntity.ERTAGGABLE_KEY));
+  }
+
+  /**
+   * Returns an array of taggable entities.
+   * 
+   * @return an array of taggable entities
+   */
+  @SuppressWarnings("unchecked")
+  public static NSArray<EOEntity> taggableEntities() {
+    NSMutableArray<EOEntity> taggableEntities = new NSMutableArray<EOEntity>();
+    for (EOModel model : (NSArray<EOModel>) EOModelGroup.defaultGroup().models()) {
+      for (EOEntity entity : (NSArray<EOEntity>) model.entities()) {
+        if (ERTaggableEntity.isTaggable(entity)) {
+          taggableEntities.addObject(entity);
+        }
+      }
+    }
+    return taggableEntities;
+  }
+
+  /**
+   * Shortcut for getting an ERTaggableEntity for an EO.
+   * 
+   * @param <T> the type of the entity
+   * @param eo the EO
+   * @return an ERTaggableEntity corresponding to the entity of the EO
+   */
+  public static <T extends ERXGenericRecord> ERTaggableEntity<T> taggableEntity(T eo) {
+    return new ERTaggableEntity<T>(eo.entity());
+  }
+
+  /**
+   * Returns the flattened to-many relationship from the taggable entity to the given tag entity.
+   *  
+   * @param entity the taggable entity
+   * @param tagEntity the tag entity
+   * @return the flattened to-many relationship between them (or null if there isn't one)
+   */
+  @SuppressWarnings("unchecked")
+  public static EORelationship tagsRelationshipForEntity(EOEntity entity, EOEntity tagEntity) {
+    EORelationship tagsRelationship = null;
+    for (EORelationship relationship : (NSArray<EORelationship>) entity.relationships()) {
+      if (relationship.isFlattened() && tagEntity.name().equals(relationship.destinationEntity().name())) {
+        tagsRelationship = relationship;
+        break;
+      }
+    }
+    return tagsRelationship;
+  }
+
+  /**
+   * Registers the given entity name in the default model group as taggable.  An entity must
+   * be registered as taggable prior to attempting any tagging operations on it.  The application
+   * constructor is an obvious place to register an entity as taggable.  If the entity does not 
+   * contain a flattened to-many tags relationship, a join entity (between your entity and "ERTag") 
+   * and a flattened tags relationship (named "tags") will be automatically generated.
+   * 
+   * @param entityName the name of the entity to lookup
+   * @return the join entity (you can probably ignore this)
+   */
+  public static EOEntity registerTaggable(String entityName) {
+    return ERTaggableEntity.registerTaggable(EOModelGroup.defaultGroup().entityNamed(entityName));
+  }
+
+  /**
+   * Registers the given entity as taggable.  An entity must be registered as taggable prior 
+   * to attempting any tagging operations on it.  The application constructor is an obvious 
+   * place to register an entity as taggable.  If the entity does not contain a flattened 
+   * to-many tags relationship, a join entity (between your entity and "ERTag") and a 
+   * flattened tags relationship (named "tags") will be automatically generated.
+   * 
+   * @param entity the entity to register
+   * @return the join entity (you can probably ignore this)
+   */
+  public static EOEntity registerTaggable(EOEntity entity) {
+    return ERTaggableEntity.registerTaggable(entity, ERTaggableEntity.DEFAULT_TAGS_RELATIONSHIP_NAME);
+  }
+
+  /**
+   * Registers the given entity as taggable.  An entity must be registered as taggable prior 
+   * to attempting any tagging operations on it.  The application constructor is an obvious 
+   * place to register an entity as taggable.  If the entity does not contain a flattened 
+   * to-many tags relationship, a join entity and a flattened tags relationship will be 
+   * automatically generated. 
+   * 
+   * @param entity the entity to register
+   * @param tagsRelationshipName the name of the flattened to-many tags relationship
+   * @return the join entity (you can probably ignore this)
+   */
+  public static EOEntity registerTaggable(EOEntity entity, String tagsRelationshipName) {
+    return ERTaggableEntity.registerTaggable(entity, tagsRelationshipName, entity.model().modelGroup().entityNamed(ERTag.ENTITY_NAME));
+  }
+
+  /**
+   * Registers the given entity as taggable.  An entity must be registered as taggable prior 
+   * to attempting any tagging operations on it.  The application constructor is an obvious 
+   * place to register an entity as taggable.  If the entity does not contain a flattened 
+   * to-many tags relationship, a join entity and a flattened tags relationship will be 
+   * automatically generated. 
+   * 
+   * @param entity the entity to register
+   * @param tagsRelationshipName the name of the flattened to-many tags relationship
+   * @param tagEntity the ERTag entity that contains the tags for this entity
+   * @return the join entity (you can probably ignore this)
+   */
+  @SuppressWarnings("unchecked")
+  public static EOEntity registerTaggable(EOEntity entity, String tagsRelationshipName, EOEntity tagEntity) {
+    EOEntity joinEntity = null;
+    EORelationship tagsRelationship = ERTaggableEntity.tagsRelationshipForEntity(entity, tagEntity);
+    if (tagsRelationship == null) {
+      joinEntity = new EOEntity();
+      joinEntity.setName(entity.name() + "Tag");
+      joinEntity.setExternalName(joinEntity.name());
+
+      EORelationship joinToItemRelationship = new EORelationship();
+      joinToItemRelationship.setName(entity.name());
+      for (EOAttribute itemPrimaryKey : (NSArray<EOAttribute>) entity.primaryKeyAttributes()) {
+        EOAttribute itemFKAttribute = new EOAttribute();
+        itemFKAttribute.setExternalType(itemPrimaryKey.externalType());
+        itemFKAttribute.setValueType(itemPrimaryKey.valueType());
+        itemFKAttribute.setName("item_" + itemPrimaryKey.name());
+        itemFKAttribute.setColumnName("item_" + itemPrimaryKey.columnName());
+        itemFKAttribute.setClassName(itemPrimaryKey.className());
+        itemFKAttribute.setWidth(itemPrimaryKey.width());
+        itemFKAttribute.setPrecision(itemPrimaryKey.precision());
+        itemFKAttribute.setScale(itemPrimaryKey.scale());
+        itemFKAttribute.setAllowsNull(false);
+        joinEntity.addAttribute(itemFKAttribute);
+
+        joinToItemRelationship.addJoin(new EOJoin(itemFKAttribute, itemPrimaryKey));
+      }
+      joinEntity.addRelationship(joinToItemRelationship);
+
+      EORelationship joinToTagRelationship = new EORelationship();
+      joinToTagRelationship.setName(tagEntity.name());
+      for (EOAttribute tagPrimaryKey : (NSArray<EOAttribute>) tagEntity.primaryKeyAttributes()) {
+        EOAttribute tagFKAttribute = new EOAttribute();
+        tagFKAttribute.setExternalType(tagPrimaryKey.externalType());
+        tagFKAttribute.setValueType(tagPrimaryKey.valueType());
+        tagFKAttribute.setName("tag_" + tagPrimaryKey.name());
+        tagFKAttribute.setColumnName("tag_" + tagPrimaryKey.columnName());
+        tagFKAttribute.setClassName(tagPrimaryKey.className());
+        tagFKAttribute.setWidth(tagPrimaryKey.width());
+        tagFKAttribute.setPrecision(tagPrimaryKey.precision());
+        tagFKAttribute.setScale(tagPrimaryKey.scale());
+        tagFKAttribute.setAllowsNull(false);
+        joinEntity.addAttribute(tagFKAttribute);
+
+        joinToTagRelationship.addJoin(new EOJoin(tagFKAttribute, tagPrimaryKey));
+      }
+      joinEntity.addRelationship(joinToTagRelationship);
+
+      entity.model().addEntity(joinEntity);
+
+      EORelationship itemToJoinRelationship = joinToItemRelationship._makeInverseRelationship();
+      itemToJoinRelationship.setDeleteRule(1); // cascade
+      entity.addRelationship(itemToJoinRelationship);
+
+      EORelationship itemToTagsRelationship = new EORelationship();
+      itemToTagsRelationship.setDefinition(itemToJoinRelationship.name() + "." + joinToTagRelationship.name());
+      entity.addRelationship(itemToTagsRelationship);
+    }
+    else {
+      EORelationship itemToJoinRelationship = (EORelationship) tagsRelationship.componentRelationships().objectAtIndex(0);
+      joinEntity = itemToJoinRelationship.destinationEntity();
+    }
+
+    NSMutableDictionary userInfo = entity.userInfo().mutableClone();
+    userInfo.setObjectForKey(Boolean.TRUE, ERTaggableEntity.ERTAGGABLE_KEY);
+    entity.setUserInfo(userInfo);
+
+    return joinEntity;
+  }
+
+  /**
+   * Returns the tag normalizer for this entity.
+   * 
+   * @return the tag normalizer for this entity
+   */
+  public ERTagNormalizer normalizer() {
+    return _normalizer;
+  }
+
+  /**
+   * Sets the tag normalizer for this entity.
+   * 
+   * @param normalizer the tag normalizer for this entity
+   */
+  public void setNormalizer(ERTagNormalizer normalizer) {
+    _normalizer = normalizer;
+  }
+
+  /**
+   * Fetches the tag with the given name.  If that tag doesn't exist and createIfMissing
+   * is true, a tag with that name will be created (otherwise null will be returned). Tags
+   * are created in a separate transaction to prevent race conditions with duplicate
+   * tag names from rolling back your primary editing context, which means that even if 
+   * you rollback your editingContext, any tags created during its lifetime will remain.
+   * 
+   * @param tagName the name of the tag to lookup
+   * @param createIfMissing if true, missing tags will be created
+   * @param editingContext the editing context to fetch into
+   * @return the corresponding ERTag (or null if not found)
+   */
+  @SuppressWarnings( { "cast", "unchecked" })
+  public ERTag fetchTagNamed(String tagName, boolean createIfMissing, EOEditingContext editingContext) {
+    NSArray<ERTag> tags = (NSArray<ERTag>) ERXEOControlUtilities.objectsWithQualifier(editingContext, _tagEntity.name(), ERTag.NAME.is(tagName), null, true, true, true, true);
+    ERTag tag;
+    if (tags.count() == 0) {
+      if (createIfMissing) {
+        // Create it in another transaction so we can catch the dupe exception.  Note that
+        // this means that tags will ALWAYS be created even if the parent transaction
+        // rolls back.  It's mostly for your own good :)
+        EOEditingContext newEditingContext = ERXEC.newEditingContext();
+        try {
+          ERTag newTag = createTagNamed(tagName, newEditingContext);
+          newEditingContext.saveChanges();
+          tag = newTag.localInstanceIn(editingContext);
+        }
+        catch (EOGeneralAdaptorException e) {
+          // We'll assume this was because of a duplicate key exception and just retry the original
+          // fetch WITHOUT createIfMissing.  If that returns a null, then we know it was some other
+          // crazy exception and just throw it.
+          tag = fetchTagNamed(tagName, false, editingContext);
+          if (tag == null) {
+            throw e;
+          }
+        }
+      }
+      else {
+        tag = null;
+      }
+    }
+    else if (tags.count() == 1) {
+      tag = tags.objectAtIndex(0);
+    }
+    else {
+      throw new IllegalArgumentException("There was more than one tag with the name '" + tagName + "'");
+    }
+    return tag;
+  }
+
+  /**
+   * Creates a tag with the given name.
+   * 
+   * @param tagName the new tag name
+   * @param editingContext the editing context to create within
+   * @return the created tag
+   */
+  public ERTag createTagNamed(String tagName, EOEditingContext editingContext) {
+    ERTag tag = (ERTag) EOUtilities.createAndInsertInstance(editingContext, _tagEntity.name());
+    tag.setName(tagName);
+    return tag;
+  }
+
+  /**
+   * Factory method for generating an ERTaggable wrapper for an EO.
+   * 
+   * @param eo the EO to wrap
+   * @return an ERTaggable wrapper
+   */
+  public ERTaggable<T> taggable(T eo) {
+    return new ERTaggable<T>(this, eo);
+  }
+
+  /**
+   * Returns the name of the tags relationship for this entity.
+   * 
+   * @return the name of the tags relationship for this entity
+   */
+  public String tagsRelationshipName() {
+    return _tagsRelationship.name();
+  }
+
+  /**
+   * Returns the tags relationship for this entity.
+   * 
+   * @return the tags relationship for this entity
+   */
+  public EORelationship tagsRelationship() {
+    return _tagsRelationship;
+  }
+
+  /**
+   * Splits the given "tags" object (String, array of Strings, etc) into an array of normalized tag strings.
+   * 
+   * @param tags the object that contains the tags to split
+   * @return the list of split tag names
+   */
+  @SuppressWarnings("unchecked")
+  public NSArray<String> splitTagNames(Object tags) {
+    NSMutableSet<String> tagNames = new NSMutableSet<String>();
+    if (tags != null) {
+      if (tags instanceof String) {
+        for (String tag : ((String) tags).split(_separator)) {
+          tagNames.addObject(_normalizer.normalize(tag));
+        }
+      }
+      else if (tags instanceof NSArray) {
+        tagNames.addObjectsFromArray((NSArray<String>) tags);
+      }
+      else if (tags instanceof String[]) {
+        tagNames.addObjectsFromArray(new NSArray<String>((String[]) tags));
+      }
+      else {
+        throw new IllegalArgumentException("Unknown tag type '" + tags.getClass().getName() + "' (" + tags + " ).");
+      }
+    }
+    return tagNames.allObjects();
+  }
+
+  /**
+   * Fetches the list of objects of this entity type that are tagged
+   * with all of the given tags with unlimited results. 
+   * 
+   * @param tags the tags to search (String to tokenize, NSArray<String>, etc)
+   * @param editingContext the editing context to fetch into
+   * @return the array of matching eos
+   */
+  public NSArray<T> fetchTaggedWith(Object tags, EOEditingContext editingContext) {
+    return fetchTaggedWith(tags, ERTag.Inclusion.ALL, editingContext);
+  }
+
+  /**
+   * Fetches the list of objects of this entity type that are tagged
+   * with the given tags with unlimited results. 
+   * 
+   * @param tags the tags to search (String to tokenize, NSArray<String>, etc)
+   * @param inclusion find matches for ANY tags or ALL tags provided
+   * @param editingContext the editing context to fetch into
+   * @return the array of matching eos
+   */
+  public NSArray<T> fetchTaggedWith(Object tags, ERTag.Inclusion inclusion, EOEditingContext editingContext) {
+    return fetchTaggedWith(tags, inclusion, -1, editingContext);
+  }
+
+  /**
+   * Fetches the list of objects of this entity type that are tagged
+   * with the given tags. 
+   * 
+   * @param tags the tags to search (String to tokenize, NSArray<String>, etc)
+   * @param inclusion find matches for ANY tags or ALL tags provided
+   * @param limit limit the number of results to be returned (-1 for unlimited)
+   * @param editingContext the editing context to fetch into
+   * @return the array of matching eos
+   */
+  @SuppressWarnings("unchecked")
+  public NSArray<T> fetchTaggedWith(Object tags, ERTag.Inclusion inclusion, int limit, EOEditingContext editingContext) {
+    NSArray<String> tagNames = splitTagNames(tags);
+    if (tagNames.count() == 0) {
+      throw new IllegalArgumentException("No tags were passed in.");
+    }
+
+    ERXSQLHelper sqlHelper = ERXSQLHelper.newSQLHelper(_entity.model());
+
+    EOQualifier qualifier = new ERXKey<ERTag>(_tagsRelationship.name()).append(ERTag.NAME).in(tagNames);
+    NSArray<EOSortOrdering> sortOrderings = null;
+    EOFetchSpecification fetchSpec = new EOFetchSpecification(_entity.name(), qualifier, sortOrderings);
+
+    EOSQLExpression sqlExpression = sqlHelper.sqlExpressionForFetchSpecification(editingContext, fetchSpec, 0, limit);
+    sqlHelper.addGroupByClauseToExpression(editingContext, fetchSpec, sqlExpression);
+    if (inclusion == ERTag.Inclusion.ALL) {
+      sqlHelper.addHavingCountClauseToExpression(EOQualifier.QualifierOperatorEqual, tagNames.count(), sqlExpression);
+    }
+
+    NSArray<NSDictionary> rawRows = ERXEOAccessUtilities.rawRowsForSQLExpression(editingContext, _entity.model(), sqlExpression, sqlHelper.attributesToFetchForEntity(fetchSpec, _entity));
+    NSArray<T> objs;
+    objs = ERXEOControlUtilities.faultsForRawRowsFromEntity(editingContext, rawRows, _entity.name());
+    objs = ERXEOControlUtilities.objectsForFaultWithSortOrderings(editingContext, objs, fetchSpec.sortOrderings());
+    return objs;
+  }
+
+  /**
+   * Remove all of the tags from instances of this entity type.
+   * 
+   * @param tags the tags to remove (String to tokenize, NSArray<String>, etc)
+   * @param editingContext the editing context to fetch into
+   */
+  public void removeTags(Object tags, EOEditingContext editingContext) {
+    replaceTags(tags, null, ERTag.Inclusion.ALL, editingContext);
+  }
+
+  /**
+   * Looks for items with oldTags and replaces them with all of newTags.
+   *
+   * @param oldTags the tags to find and remove (String to tokenize, NSArray<String>, etc)
+   * @param newTags the tags to add
+   * @param inclusiong if ANY, finds any tags that match, removes them all, and adds newTags; if all, requires all tags to match before replacing  
+   * @param editingContext the editing context to remove with
+   */
+  public void replaceTags(Object oldTags, Object newTags, ERTag.Inclusion inclusion, EOEditingContext editingContext) {
+    for (T item : fetchTaggedWith(oldTags, inclusion, editingContext)) {
+      ERTaggable<T> taggable = taggable(item);
+      taggable.removeTags(oldTags);
+      taggable.addTags(newTags, false);
+    }
+  }
+
+  /**
+   * This method counts the number of times the tags have been applied to your objects
+   * and, by default, returns a dictionary in the form of { 'tag_name' => count, ... }.  This
+   * does not include any restriction on the count required for results to be returned nor
+   * does it limit the number of results returned.
+   *
+   * @param editingContext the editing context to fetch into
+   * @return a dictionary of tags and their occurrence count
+   */
+  public NSDictionary<String, Integer> tagCount(EOEditingContext editingContext) {
+    return tagCount(-1, editingContext);
+  }
+
+  /**
+   * This method counts the number of times the tags have been applied to your objects
+   * and, by default, returns a dictionary in the form of { 'tag_name' => count, ... }.  This
+   * does not include any restriction on the count required for results to be returned.
+   *
+   * @param limit the limit of the number of results to return (ordered by count DESC)
+   * @param editingContext the editing context to fetch into
+   * @return a dictionary of tags and their occurrence count
+   */
+  public NSDictionary<String, Integer> tagCount(int limit, EOEditingContext editingContext) {
+    return tagCount(null, -1, limit, editingContext);
+  }
+
+  /**
+   * This method counts the number of times the tags have been applied to your objects
+   * and, by default, returns a dictionary in the form of { 'tag_name' => count, ... }. Providing
+   * a selector and count allows you to add a restriction on, for instance, the minimum number of
+   * occurrences required for a result to appear. As an example, you might have 
+   * selector = EOQualifier.QualifierOperatorGreaterThan, count = 1 to only return tags with more 
+   * than one occurrence.
+   *
+   * @param selector a selector for the count restriction (see EOQualifier.QualifierOperators)
+   * @param count the count restriction required for the result to be returned
+   * @param limit the limit of the number of results to return (ordered by count DESC)
+   * @param editingContext the editing context to fetch into
+   * @return a dictionary of tags and their occurrence count
+   */
+  public NSDictionary<String, Integer> tagCount(NSSelector selector, int count, int limit, EOEditingContext editingContext) {
+    NSMutableArray<EOAttribute> fetchAttributes = new NSMutableArray<EOAttribute>();
+    ERXEOAttribute tagNameAttribute = new ERXEOAttribute(_entity, _tagsRelationship.name() + "." + ERTag.NAME_KEY);
+    tagNameAttribute.setName("tagName");
+    fetchAttributes.addObject(tagNameAttribute);
+
+    EOAttribute countAttribute = ERXEOAccessUtilities.createAggregateAttribute(editingContext, "COUNT", ERTag.NAME_KEY, _tagEntity.name(), Number.class, "i", "tagCount");
+    fetchAttributes.addObject(countAttribute);
+
+    ERXSQLHelper sqlHelper = ERXSQLHelper.newSQLHelper(_entity.model());
+    EOFetchSpecification fetchSpec = new EOFetchSpecification(_entity.name(), null, null);
+    EOSQLExpression sqlExpression = sqlHelper.sqlExpressionForFetchSpecification(editingContext, fetchSpec, 0, limit, fetchAttributes);
+    NSMutableArray<EOAttribute> groupByAttributes = new NSMutableArray<EOAttribute>(tagNameAttribute);
+    sqlHelper.addGroupByClauseToExpression(groupByAttributes, sqlExpression);
+    if (selector != null) {
+      sqlHelper.addHavingCountClauseToExpression(selector, count, sqlExpression);
+    }
+    if (limit > 0) {
+      // MS: This is lame, but the dynamic attribute is not properly resolved
+      // inside of EOSQLExpression because it's not actually part of the entity,
+      // so you can't order-by one of these attributes.  So we just have to stick
+      // it on the end and hope for the best.
+      sqlExpression.setStatement(sqlExpression.statement() + " ORDER BY tagCount DESC");
+    }
+
+    NSMutableDictionary<String, Integer> tagCounts = new NSMutableDictionary<String, Integer>();
+    NSArray<NSDictionary> rawRows = ERXEOAccessUtilities.rawRowsForSQLExpression(editingContext, _entity.model(), sqlExpression, fetchAttributes);
+    for (NSDictionary rawRow : rawRows) {
+      String name = (String) rawRow.objectForKey("tagName");
+      Integer nameCount = (Integer) rawRow.objectForKey("tagCount");
+      tagCounts.setObjectForKey(nameCount, name);
+    }
+
+    return tagCounts;
+  }
+
+  /**
+   * This method returns a simple count of the number of distinct objects which match the tags provided.
+   * 
+   * @param tags the tags to search (String to tokenize, NSArray<String>, etc)
+   * @param inclusion find matches for ANY tags or ALL tags provided
+   * @param editingContext the editing context to fetch into
+   * @return the count of distinct objects for the given tags
+   */
+  @SuppressWarnings("unchecked")
+  public int countUniqueTaggedWith(Object tags, ERTag.Inclusion inclusion, EOEditingContext editingContext) {
+    NSArray<String> tagNames = splitTagNames(tags);
+    if (tagNames.count() == 0) {
+      throw new IllegalArgumentException("No tags were passed in.");
+    }
+
+    EOQualifier qualifier = new ERXKey<ERTag>(_tagsRelationship.name()).append(ERTag.NAME).in(tagNames);
+    EOFetchSpecification fetchSpec = new EOFetchSpecification(_entity.name(), qualifier, null);
+    fetchSpec.setUsesDistinct(true);
+
+    ERXSQLHelper sqlHelper = ERXSQLHelper.newSQLHelper(_entity.model());
+    EOSQLExpression sqlExpression = sqlHelper.sqlExpressionForFetchSpecification(editingContext, fetchSpec, 0, -1);
+    sqlHelper.addGroupByClauseToExpression(editingContext, fetchSpec, sqlExpression);
+    if (inclusion == ERTag.Inclusion.ALL) {
+      sqlHelper.addHavingCountClauseToExpression(EOQualifier.QualifierOperatorEqual, tagNames.count(), sqlExpression);
+    }
+
+    int count = sqlHelper.rowCountForFetchSpecification(editingContext, fetchSpec);
+    return count;
+  }
+
+  /**
+   * Finds other tags that are related to the tags passed through the tags
+   * parameter, by finding common records that share similar sets of tags.
+   * Useful for constructing 'Related tags' lists.
+   *
+   * @param tags the tags to search (String to tokenize, NSArray<String>, etc)
+   */
+  @SuppressWarnings("unchecked")
+  public NSArray<String> fetchRelatedTags(Object tags, EOEditingContext editingContext) {
+    NSArray<String> tagNames = splitTagNames(tags);
+    if (tagNames.count() == 0) {
+      throw new IllegalArgumentException("No tags were passed in.");
+    }
+
+    NSArray<EOAttribute> pkAttrs = _entity.primaryKeyAttributes();
+    if (pkAttrs.count() > 1) {
+      throw new IllegalArgumentException("Composite primary keys are not supported for findRelatedTags.");
+    }
+
+    NSMutableArray<EOAttribute> fetchAttributes = new NSMutableArray<EOAttribute>();
+    fetchAttributes.addObjectsFromArray(_entity.primaryKeyAttributes());
+
+    ERXEOAttribute tagNameAttribute = new ERXEOAttribute(_entity, _tagsRelationship.name() + "." + ERTag.NAME_KEY);
+    tagNameAttribute.setName("tagName");
+    fetchAttributes.addObject(tagNameAttribute);
+
+    ERXSQLHelper sqlHelper = ERXSQLHelper.newSQLHelper(_entity.model());
+    EOQualifier tagNameQualifier = new ERXKey<ERTag>(_tagsRelationship.name()).append(ERTag.NAME).in(tagNames);
+    EOFetchSpecification fetchSpec = new EOFetchSpecification(_entity.name(), tagNameQualifier, null);
+    EOSQLExpression sqlExpression = sqlHelper.sqlExpressionForFetchSpecification(editingContext, fetchSpec, 0, -1, fetchAttributes);
+    NSMutableArray<EOAttribute> groupByAttributes = new NSMutableArray<EOAttribute>();
+    groupByAttributes.addObjectsFromArray(pkAttrs);
+    sqlHelper.addGroupByClauseToExpression(groupByAttributes, sqlExpression);
+    sqlHelper.addHavingCountClauseToExpression(EOQualifier.QualifierOperatorEqual, tagNames.count(), sqlExpression);
+
+    // MS: Sketchy, I know, but I don't know how to make it do the
+    // join for me without also having the tag name field selected.  I'm sure it's
+    // possible if I drop down and use lower level API's than 
+    // sqlExpr.selectStatementForAttributes. 
+    sqlHelper.removeSelectFromExpression(tagNameAttribute, sqlExpression);
+
+    NSMutableArray<Object> itemPrimaryKeys = new NSMutableArray<Object>();
+    NSArray<NSDictionary> rawRows = ERXEOAccessUtilities.rawRowsForSQLExpression(editingContext, _entity.model(), sqlExpression, pkAttrs);
+    EOAttribute pkAttr = pkAttrs.objectAtIndex(0);
+    for (NSDictionary rawRow : rawRows) {
+      Object pk = rawRow.objectForKey(pkAttr.name());
+      itemPrimaryKeys.addObject(pk);
+    }
+
+    NSMutableArray<EOAttribute> tagsFetchAttributes = new NSMutableArray<EOAttribute>();
+    // MS: We put this in just because we want to force it to do the join ... We have to
+    // pull them out later.
+    tagsFetchAttributes.addObjectsFromArray(_entity.primaryKeyAttributes());
+
+    ERXEOAttribute tagIDAttribute = new ERXEOAttribute(_entity, _tagsRelationship.name() + ".id");
+    tagIDAttribute.setName("id");
+    tagsFetchAttributes.addObject(tagIDAttribute);
+    tagsFetchAttributes.addObject(tagNameAttribute);
+
+    EOAttribute countAttribute = ERXEOAccessUtilities.createAggregateAttribute(editingContext, "COUNT", ERTag.NAME_KEY, _tagEntity.name(), Number.class, "i", "tagCount");
+    tagsFetchAttributes.addObject(countAttribute);
+
+    EOQualifier idQualifier = new ERXKey<ERTag>("id").in(itemPrimaryKeys);
+    EOFetchSpecification tagsFetchSpec = new EOFetchSpecification(_entity.name(), idQualifier, null);
+    EOSQLExpression tagsSqlExpression = sqlHelper.sqlExpressionForFetchSpecification(editingContext, tagsFetchSpec, 0, -1, tagsFetchAttributes);
+    NSMutableArray<EOAttribute> tagsGroupByAttributes = new NSMutableArray<EOAttribute>(new EOAttribute[] { tagNameAttribute, tagIDAttribute });
+    sqlHelper.addGroupByClauseToExpression(tagsGroupByAttributes, tagsSqlExpression);
+
+    // MS: This is lame, but the dynamic attribute is not properly resolved
+    // inside of EOSQLExpression because it's not actually part of the entity,
+    // so you can't order-by one of these attributes.  So we just have to stick
+    // it on the end and hope for the best.
+    tagsSqlExpression.setStatement(tagsSqlExpression.statement() + " ORDER BY tagCount DESC");
+
+    for (EOAttribute attribute : (NSArray<EOAttribute>) _entity.primaryKeyAttributes()) {
+      sqlHelper.removeSelectFromExpression(attribute, tagsSqlExpression);
+      tagsFetchAttributes.removeObject(attribute);
+    }
+
+    NSMutableArray<String> relatedTagNames = new NSMutableArray<String>();
+    NSArray<NSDictionary> tagsRawRows = ERXEOAccessUtilities.rawRowsForSQLExpression(editingContext, _entity.model(), tagsSqlExpression, tagsFetchAttributes);
+    for (NSDictionary rawRow : tagsRawRows) {
+      String name = (String) rawRow.objectForKey("tagName");
+      relatedTagNames.addObject(name);
+    }
+
+    return relatedTagNames;
+  }
+
+  /**
+   * Takes the result of a tagCount call and an array of categories and 
+   * distributes the entries in the tagCount hash evenly across the
+   * categories based on the count value for each tag.
+   *
+   * Typically, this is used to display a 'tag cloud' in your UI.
+   *
+   * @param categoryList An array containing the categories to split the tags
+   * @return a dictionary mapping each tag name to its corresponding category 
+   */
+  public <U> NSDictionary<String, U> cloud(NSArray<U> categoryList, EOEditingContext editingContext) {
+    return cloud(tagCount(editingContext), categoryList);
+  }
+
+  /**
+   * Takes the result of a tagCount call and an array of categories and 
+   * distributes the entries in the tagCount hash evenly across the
+   * categories based on the count value for each tag.
+   *
+   * Typically, this is used to display a 'tag cloud' in your UI.
+   *
+   * @param tagHash the tag dictionary returned from a tagCount call
+   * @param categoryList An array containing the categories to split the tags
+   * @return a dictionary mapping each tag name to its corresponding category 
+   */
+  public <U> NSDictionary<String, U> cloud(NSDictionary<String, Integer> tagHash, NSArray<U> categoryList) {
+    int min = 0;
+    int max = 0;
+    for (Integer count : tagHash.allValues()) {
+      if (count.intValue() > max) {
+        max = count.intValue();
+      }
+      if (count.intValue() < min) {
+        min = count.intValue();
+      }
+    }
+
+    NSMutableDictionary<String, U> cloud = new NSMutableDictionary<String, U>();
+
+    int divisor = ((max - min) / categoryList.count()) + 1;
+    for (Map.Entry<String, Integer> entry : tagHash.entrySet()) {
+      U obj = categoryList.objectAtIndex((entry.getValue().intValue() - min) / divisor);
+      cloud.setObjectForKey(obj, entry.getKey());
+    }
+
+    return cloud;
+  }
+
+  /**
+   * Returns an array of all of the available tags in the system.
+   * 
+   * @param editingContext the editing context to fetch into
+   * @return an array of matching tags
+   */
+  @SuppressWarnings("unchecked")
+  public NSArray<String> fetchAllTags(EOEditingContext editingContext) {
+    NSArray<ERTag> erTags = ERTag.fetchAllERTags(editingContext);
+    NSArray<String> tags = (NSArray<String>) erTags.valueForKey(ERTag.NAME_KEY);
+    return tags;
+  }
+
+  /**
+   * Returns an array of all of the available tags in the system that start with
+   * the given string.
+   * 
+   * @param startsWith the prefix to lookup
+   * @param editingContext the editing context to fetch into
+   * @return an array of matching tags
+   */
+  @SuppressWarnings("unchecked")
+  public NSArray<String> fetchTagsLike(String startsWith, EOEditingContext editingContext) {
+    NSArray<ERTag> erTags = ERTag.fetchERTags(editingContext, ERTag.NAME.likeInsensitive(startsWith + "*"), null);
+    NSArray<String> tags = (NSArray<String>) erTags.valueForKey(ERTag.NAME_KEY);
+    return tags;
+  }
+
+  //I just can't muster the strength the port this one right now -- that query is ROUGH :)
+  ///**
+  //* Finds other records that share the most tags with the record passed
+  //* as the +related+ parameter. Useful for constructing 'Related' or 
+  //* 'See Also' boxes and lists.
+  //*
+  //* The options are:
+  //* 
+  //* +:limit+: defaults to 5, which means the method will return the top 5 records
+  //* that share the greatest number of tags with the passed one.        
+  //* +:conditions+: any additional conditions that should be appended to the 
+  //* WHERE clause of the finder SQL. Just like regular +ActiveRecord::Base#find+ methods.
+  //*/
+  //public NSArray<T> findRelatedTagged(T related, int limit, EOEditingContext editingContext) {
+  //  NSArray<EOSortOrdering> sortOrderings = null;
+  //  EOFetchSpecification fetchSpec = new EOFetchSpecification(_entity.name(), null, sortOrderings);
+  //
+  //  NSArray<EOAttribute> entityAttributes = _entity.attributesToFetch();
+  //  NSMutableArray<EOAttribute> fetchAttributes = entityAttributes.mutableClone();
+  //
+  //  EOAttribute countAttribute = ERXEOAccessUtilities.createAggregateAttribute(editingContext, "COUNT", ERTag.NAME_KEY, _tagEntity.name(), Number.class, "i", "tagCount");
+  //  fetchAttributes.addObject(countAttribute);
+  //
+  //  ERXSQLHelper sqlHelper = ERXSQLHelper.newSQLHelper(_entity.model());
+  //  
+  //  
+  //  EOSQLExpression sqlExpression = sqlHelper.sqlExpressionForFetchSpecification(editingContext, fetchSpec, 0, limit);
+  //  sqlHelper.addGroupByClauseToExpression(editingContext, fetchSpec, sqlExpression);
+  //  if (inclusion == ERTag.Inclusion.ALL) {
+  //    sqlHelper.addHavingCountClauseToExpression(EOQualifier.QualifierOperatorEqual, tagNames.count(), sqlExpression);
+  //  }
+  //
+  //  NSArray<NSDictionary> rawRows = ERXEOAccessUtilities.rawRowsForSQLExpression(editingContext, _entity.model(), sqlExpression, sqlHelper.attributesToFetchForEntity(fetchSpec, _entity));
+  //  NSArray<T> objs;
+  //  objs = ERXEOControlUtilities.faultsForRawRowsFromEntity(editingContext, rawRows, _entity.name());
+  //  objs = ERXEOControlUtilities.objectsForFaultWithSortOrderings(editingContext, objs, fetchSpec.sortOrderings());
+  //  return objs;
+  //}
+  //def find_related_tagged(related, options = {})
+  //  related_id = related.is_a?(self) ? related.id : related
+  //  options = { :limit => 5 }.merge(options)
+  //
+  //  o, o_pk, o_fk, t, tn, t_pk, t_fk, jt = set_locals_for_sql
+  //  sql = "SELECT o.*, COUNT(jt2.#{o_fk}) AS count FROM #{o} o, #{jt} jt, #{t} t, #{jt} jt2 
+  //         WHERE jt.#{o_fk}=#{related_id} AND t.#{t_pk} = jt.#{t_fk} 
+  //         AND jt2.#{o_fk} != jt.#{o_fk} 
+  //         AND jt2.#{t_fk}=jt.#{t_fk} AND o.#{o_pk} = jt2.#{o_fk}"
+  //  sql << " AND #{sanitize_sql(options[:conditions])}" if options[:conditions]
+  //  sql << " GROUP BY o.#{o_pk}"
+  //  sql << " ORDER BY count DESC"
+  //  add_limit!(sql, options)
+  //
+  //  find_by_sql(sql)
+  //end
+}
