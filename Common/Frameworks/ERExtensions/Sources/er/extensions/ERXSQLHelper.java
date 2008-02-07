@@ -545,6 +545,23 @@ public class ERXSQLHelper {
 	}
 	
 	/**
+	 * Removes an attribute from the select list.
+	 * 
+	 * @param attribute the attribute to remove from the select list
+	 * @param sqlExpression the expression to remove from
+	 */
+	public void removeSelectFromExpression(EOAttribute attribute, EOSQLExpression sqlExpression) {
+		// MS: This is a bit brute force, but there's not really a nicer way to do this, unfortunately
+	    String sql = sqlExpression.statement();
+	    String attributeSql = sqlExpression.sqlStringForAttribute(attribute);
+	    String replaceSql = sql.replaceFirst(", " + attributeSql, "");
+	    if (replaceSql.length() == sql.length()) {
+	    	replaceSql = sql.replaceFirst(attributeSql + ", ", "");
+	    }
+	    sqlExpression.setStatement(replaceSql);
+	}
+	
+	/**
 	 * Returns the attribute read format for an aggregate function for a particular column with a name.
 	 *  
 	 * @param functionName the aggregate function to generate
