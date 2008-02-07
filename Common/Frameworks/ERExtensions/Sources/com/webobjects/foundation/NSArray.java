@@ -897,7 +897,7 @@ public class NSArray<E> implements Cloneable, Serializable, NSCoding, NSKeyValue
 				buffer.append(((Boolean) object).booleanValue() ? "true" : "false");
 			}
 			else {
-				buffer.append(object.toString());
+				buffer.append(object == this ? "THIS" : object.toString());
 			}
 		}
 
@@ -954,7 +954,7 @@ public class NSArray<E> implements Cloneable, Serializable, NSCoding, NSKeyValue
 
 	public boolean contains(Object element) {
 		if (element == null) {
-			throw new NullPointerException("com.webobjects.foundation.NSArray does not support null values");
+			return false;
 		}
 		else {
 			return containsObject(element);
