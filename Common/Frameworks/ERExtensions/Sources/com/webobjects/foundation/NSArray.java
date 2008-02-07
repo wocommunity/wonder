@@ -1044,7 +1044,7 @@ public class NSArray<E> implements Cloneable, Serializable, NSCoding, NSKeyValue
 		if (element == null) {
 			throw new NullPointerException("com.webobjects.foundation.NSArray does not support null values");
 		}
-		for (int i = 0; i < _objects.length; i++) {
+		for (int i = 0; i < count(); i++) {
 			if (_objects[i].equals(element)) {
 				lastIndex = i;
 			}
