@@ -1,3 +1,8 @@
+AboveDisplayPropertyKeys: ERD2WExtraDisplayPropertyKeysComponent {
+    localContext = d2wContext;
+	extraPropertiesKey = "aboveDisplayPropertyKeys";
+}
+
 AttributeRepetition: WORepetition {
 	_unroll = true;
 	item = d2wContext.propertyKey;
@@ -10,6 +15,11 @@ AttributeValue: WOSwitchComponent {
 	_unroll = true;
 	localContext = localContext;
 	object = object;
+}
+
+BelowDisplayPropertyKeys: ERD2WExtraDisplayPropertyKeysComponent {
+	localContext = d2wContext;
+	extraPropertiesKey = "belowDisplayPropertyKeys";
 }
 
 Conditional1: WOConditional {

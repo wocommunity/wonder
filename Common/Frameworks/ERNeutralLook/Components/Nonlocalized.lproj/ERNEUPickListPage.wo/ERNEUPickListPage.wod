@@ -1,3 +1,8 @@
+AboveDisplayPropertyKeys: ERD2WExtraDisplayPropertyKeysComponent {
+    localContext = d2wContext;
+	extraPropertiesKey = "aboveDisplayPropertyKeys";
+}
+
 AttributeCell: WOGenericContainer {
 	_unroll = true;
 	align = d2wContext.justification;
@@ -28,6 +33,11 @@ AttributeSorter: ERXSortOrder {
 
 BackLink2: WOHyperlink {
 	action = backAction;
+}
+
+BelowDisplayPropertyKeys: ERD2WExtraDisplayPropertyKeysComponent {
+	localContext = d2wContext;
+	extraPropertiesKey = "belowDisplayPropertyKeys";
 }
 
 CheckBox2: WOSwitchComponent {

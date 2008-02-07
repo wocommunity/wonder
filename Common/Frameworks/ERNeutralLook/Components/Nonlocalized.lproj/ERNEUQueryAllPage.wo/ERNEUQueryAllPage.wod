@@ -1,3 +1,8 @@
+AboveDisplayPropertyKeys: ERD2WExtraDisplayPropertyKeysComponent {
+    localContext = d2wContext;
+	extraPropertiesKey = "aboveDisplayPropertyKeys";
+}
+
 Banner: WOImage {
 	alt = "Find";
 	border = "0";
@@ -11,6 +16,11 @@ Banner: WOImage {
 BannerConditional: WOConditional {
 	_unroll = true;
 	condition = showBanner;
+}
+
+BelowDisplayPropertyKeys: ERD2WExtraDisplayPropertyKeysComponent {
+	localContext = d2wContext;
+	extraPropertiesKey = "belowDisplayPropertyKeys";
 }
 
 EntitiesRepetition: WORepetition {
@@ -27,6 +37,10 @@ EntityName: WOString {
 FontContainer: WOGenericContainer {
 	color = d2wContext.textColor;
 	elementName = "font";
+}
+
+Help: ERDDebuggingHelp {
+	d2wContext = d2wContext;
 }
 
 MoreOptionsImage: WOImage {
