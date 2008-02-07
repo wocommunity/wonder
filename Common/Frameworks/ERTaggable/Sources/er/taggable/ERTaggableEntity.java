@@ -479,6 +479,16 @@ public class ERTaggableEntity<T extends ERXGenericRecord> {
       else if (tags instanceof String[]) {
         tagNames.addObjectsFromArray(new NSArray<String>((String[]) tags));
       }
+      else if (tags instanceof Object[]) {
+        for (Object objTag : (Object[]) tags) {
+          if (objTag instanceof String) {
+            tagNames.addObject((String) objTag);
+          }
+          else {
+            throw new IllegalArgumentException("Unknown tag type '" + objTag.getClass().getName() + "' (" + objTag + " ).");
+          }
+        }
+      }
       else {
         throw new IllegalArgumentException("Unknown tag type '" + tags.getClass().getName() + "' (" + tags + " ).");
       }
