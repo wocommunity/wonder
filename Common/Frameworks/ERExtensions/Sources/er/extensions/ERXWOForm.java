@@ -49,9 +49,6 @@ import com.webobjects.foundation._NSDictionaryUtilities;
  * @author Mike Schrag (idea to secure binding)
  */  
 public class ERXWOForm extends com.webobjects.appserver._private.WOHTMLDynamicElement {
-    // This constant is currently only used with Ajax.  If you change this value, you
-    // must also change it in AjaxUtils.
-    public static final String FORCE_FORM_SUBMITTED_KEY = "_forceFormSubmitted";
     static final Logger log = Logger.getLogger(ERXWOForm.class);
     
     WOAssociation _formName;
@@ -71,7 +68,8 @@ public class ERXWOForm extends com.webobjects.appserver._private.WOHTMLDynamicEl
 
     public static boolean addDefaultSubmitButtonDefault = ERXProperties.booleanForKeyWithDefault("er.extensions.ERXWOForm.addDefaultSubmitButtonDefault", false);
     
-    public ERXWOForm(String s, NSDictionary nsdictionary, WOElement woelement) {
+    @SuppressWarnings("unchecked")
+	public ERXWOForm(String s, NSDictionary nsdictionary, WOElement woelement) {
     	super("form", nsdictionary, woelement);
     	_otherQueryAssociations = _NSDictionaryUtilities.extractObjectsForKeysWithPrefix(_associations, "?", true);
     	if(_otherQueryAssociations.count() == 0) {
@@ -101,7 +99,8 @@ public class ERXWOForm extends com.webobjects.appserver._private.WOHTMLDynamicEl
     }
 
 
-    public String toString() {
+    @Override
+	public String toString() {
     	return "<" + getClass().getName() + " action: " + (_action == null ? "null" : _action.toString()) + " actionClass: " + (_actionClass == null ? "null" : _actionClass.toString()) + " directActionName: " + (_directActionName == null ? "null" : _directActionName.toString()) + " href: " + (_href == null ? "null" : _href.toString()) + " multipleSubmit: " + (_multipleSubmit == null ? "null" : _multipleSubmit.toString()) + " queryDictionary: " + (_queryDictionary == null ? "null" : _queryDictionary.toString()) + " otherQueryAssociations: " + (_otherQueryAssociations == null ? "null" : _otherQueryAssociations.toString()) + " >";
     } 
 
@@ -123,7 +122,8 @@ public class ERXWOForm extends com.webobjects.appserver._private.WOHTMLDynamicEl
     	return _enctype != null ? (String)_enctype.valueInComponent(context.component()) : null;
     }
 
-    protected void _setEnctype(String enctype) {
+    @SuppressWarnings("unchecked")
+	protected void _setEnctype(String enctype) {
 		ERXWOContext.contextDictionary().setObjectForKey(enctype.toLowerCase(), "enctype");
 	}
 
@@ -131,7 +131,8 @@ public class ERXWOForm extends com.webobjects.appserver._private.WOHTMLDynamicEl
 		ERXWOContext.contextDictionary().removeObjectForKey("enctype");
 	}
 
-    public WOActionResults invokeAction(WORequest worequest, WOContext context) {
+    @Override
+	public WOActionResults invokeAction(WORequest worequest, WOContext context) {
     	boolean wasFormSubmitted = context._wasFormSubmitted();
 		boolean wasInForm = _enterFormInContext(context);
 		boolean wasMultipleSubmitForm = context._isMultipleSubmitForm();
@@ -214,7 +215,8 @@ public class ERXWOForm extends com.webobjects.appserver._private.WOHTMLDynamicEl
     	}
     }
 
-    public void appendChildrenToResponse(WOResponse response, WOContext context) {
+    @Override
+	public void appendChildrenToResponse(WOResponse response, WOContext context) {
     	super.appendChildrenToResponse(response, context);
     	_appendHiddenFieldsToResponse(response, context);
     }
@@ -224,21 +226,14 @@ public class ERXWOForm extends com.webobjects.appserver._private.WOHTMLDynamicEl
     	return context.directActionURLForActionNamed(s, null);
     }
 
-    public void takeValuesFromRequest(WORequest request, WOContext context) {
+    @Override
+	public void takeValuesFromRequest(WORequest request, WOContext context) {
     	boolean wasFormSubmitted = context._wasFormSubmitted();
 		boolean wasInForm = _enterFormInContext(context);
 
     	//log.info(this._formName + "->" + this.toString().replaceAll(".*(keyPath=\\w+).*", "$1"));
-    	String forceFormSubmittedElementID = (String)request.formValueForKey(ERXWOForm.FORCE_FORM_SUBMITTED_KEY);
-    	boolean forceFormSubmitted = (forceFormSubmittedElementID != null && forceFormSubmittedElementID.equals(context.elementID()));
-    	if (forceFormSubmitted) {
-    		context._setFormSubmitted(true);
-    	}
 		_setFormName(context, wasInForm);
     	super.takeValuesFromRequest(request, context);
-    	if (forceFormSubmitted) {
-    		context._setFormSubmitted(false);
-    	}
     	//log.info(context.elementID() + "->" + context.senderID() + "->" + context._wasFormSubmitted());
     	_exitFormInContext(context, wasInForm, wasFormSubmitted);
 		_clearFormName(context, wasInForm);
@@ -265,7 +260,8 @@ public class ERXWOForm extends com.webobjects.appserver._private.WOHTMLDynamicEl
         return shouldAppendFormTags;
     }
     
-    protected void _setFormName(WOContext context, boolean wasInForm) {
+    @SuppressWarnings("unchecked")
+	protected void _setFormName(WOContext context, boolean wasInForm) {
         if (_shouldAppendFormTags(context, wasInForm)) {
 	    	String formName = _formName(context);
 			if(formName != null) {
@@ -283,7 +279,8 @@ public class ERXWOForm extends com.webobjects.appserver._private.WOHTMLDynamicEl
         }
     }
     
-    public void appendAttributesToResponse(WOResponse response, WOContext context) {
+    @Override
+	public void appendAttributesToResponse(WOResponse response, WOContext context) {
     	String formName = _formName(context);
 		if(formName != null) {
 			response._appendTagAttributeAndValue("name", formName, false);
@@ -326,7 +323,8 @@ public class ERXWOForm extends com.webobjects.appserver._private.WOHTMLDynamicEl
     	}
     }
 
-    public void appendToResponse(WOResponse response, WOContext context) {
+    @Override
+	public void appendToResponse(WOResponse response, WOContext context) {
         boolean wasInForm = context.isInForm();
         context.setInForm(true);
         

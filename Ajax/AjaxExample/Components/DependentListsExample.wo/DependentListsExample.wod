@@ -18,7 +18,7 @@ StateField : WOPopUpButton {
 StateObserveField : AjaxObserveField {
 	observeFieldID = "StateFieldID";
 	updateContainerID = "CountyDiv1";
-	fullSubmit = true;
+	fullSubmit = false;
 }
 
 CountyUpdateComponent : AjaxUpdateContainer {
@@ -37,7 +37,7 @@ CountyField : WOPopUpButton {
 CountyObserveField : AjaxObserveField {
 	observeFieldID = "CountyFieldID";
 	updateContainerID = "StreetDiv1";
-	fullSubmit = true;
+	fullSubmit = false;
 }
 
 StreetField : WOPopUpButton {
@@ -52,7 +52,7 @@ StreetField : WOPopUpButton {
 StreetObserveField : AjaxObserveField {
 	observeFieldID = "StreetFieldID";
 	updateContainerID = "StreetDiv1";
-	fullSubmit = true;
+	fullSubmit = false;
 }
 
 SelectedStreetName : WOString {

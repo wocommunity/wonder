@@ -12,18 +12,13 @@ import com.webobjects.foundation.NSMutableDictionary;
 
 import er.extensions.ERXAjaxApplication;
 import er.extensions.ERXAjaxSession;
+import er.extensions.ERXApplication;
 import er.extensions.ERXProperties;
 import er.extensions.ERXResourceManager;
 import er.extensions.ERXWOContext;
 
 public class AjaxUtils {
 	private static final String SECURE_RESOURCES_KEY = "er.ajax.secureResources";
-	
-	/*
-	 * Key that is used during an Ajax form posting so that WOContext gets _wasFormSubmitted set to true. If this value
-	 * is changed, you must also change ERXWOForm.
-	 */
-	public static final String FORCE_FORM_SUBMITTED_KEY = "_forceFormSubmitted";
 
 	/**
 	 * Return whether or not the given request is an Ajax request.
@@ -130,7 +125,7 @@ public class AjaxUtils {
 	 * @param endTag
 	 */
 	public static void addResourceInHead(WOContext context, WOResponse response, String framework, String fileName, String startTag, String endTag) {
-		ERXWOContext.addResourceInHead(context, response, framework, fileName, startTag, endTag);
+		ERXWOContext.addResourceInHead(context, response, framework, fileName, startTag, endTag, true, !ERXApplication.isAjaxRequest(context.request()));
 		
 		// MS: OK ... Sheesh.  If you're not using Wonder's ERXResourceManager #1, you're a bad person, but #2 in development mode
 		// you have a lame resource URL that does not act like a path (wr/wodata=/path/to/your/resource), rather it acts like a query string
@@ -175,7 +170,7 @@ public class AjaxUtils {
 				updateContainerID = AjaxUpdateContainer.updateContainerID(request);
 			}
 		}
-		boolean shouldHandleRequest = elementID != null && (elementID.equals(senderID) || (containerID != null && containerID.equals(updateContainerID)));
+		boolean shouldHandleRequest = elementID != null && (elementID.equals(senderID) || (containerID != null && containerID.equals(updateContainerID)) || elementID.equals(ERXAjaxApplication.ajaxSubmitButtonName(request)));
 		return shouldHandleRequest;
 	}
 

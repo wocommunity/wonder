@@ -14,7 +14,7 @@ CheckBox : WOCheckBox {
 Observer : AjaxObserveField {
 	observeFieldID = "testCheckBox";
 	updateContainerID = "toggleArea";
-	fullSubmit = true;
+	fullSubmit = false;
 	action = toggled;
 }
 
@@ -22,12 +22,26 @@ ToggleAreaConditional : WOConditional {
 	condition = toggleAreaVisible;
 }
 
+TextField : WOTextField {
+	value = text;
+	size = 80;
+}
+
+CheckBox2 : WOCheckBox {
+	checked = toggleAreaVisible2;
+	id = "testCheckBox2";
+}
+
 ToggleArea2 : AjaxUpdateContainer {
 	id = "toggleArea2";
-	observeFieldID = "testCheckBox";
-	fullSubmit = true;
+	observeFieldID = "testCheckBox2";
+	fullSubmit = false;
 }
 
 ToggleArea : AjaxUpdateContainer {
 	id = "toggleArea";
+}
+
+ToggleArea2Conditional : WOConditional {
+	condition = toggleAreaVisible2;
 }

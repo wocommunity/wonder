@@ -15,12 +15,9 @@ public class DependentListsExample extends WOComponent {
 	private State _selectedState;
 	private County _selectedCounty;
 	private Street _selectedStreet;
-	private boolean _changedState;
-	private boolean _changedCounty;
 
 	private State _selectedState2;
 	private County _selectedCounty2;
-	private boolean _changedState2;
 
 	public String _address;
 	
@@ -44,15 +41,10 @@ public class DependentListsExample extends WOComponent {
 	
 	public void takeValuesFromRequest(WORequest aRequest, WOContext aContext) {
 		super.takeValuesFromRequest(aRequest, aContext);
-		_changedState = false;
-		_changedCounty = false;
-		_changedState2 = false;
 	}
 	
 	public void setSelectedCounty2(County selectedCounty2) {
-		if (!_changedState2) {
-			_selectedCounty2 = selectedCounty2;
-		}
+		_selectedCounty2 = selectedCounty2;
 	}
 	
 	public County selectedCounty2() {
@@ -62,7 +54,6 @@ public class DependentListsExample extends WOComponent {
 	public void setSelectedState2(State selectedState2) {
 		if (_selectedState2 != selectedState2) {
 			_selectedState2 = selectedState2;
-			_changedState2 = true;
 			_selectedCounty2 = null;
 		}
 	}
@@ -74,7 +65,6 @@ public class DependentListsExample extends WOComponent {
 	public void setSelectedState(State selectedState) {
 		if (_selectedState != selectedState) {
 			_selectedState = selectedState;
-			_changedState = true;
 			_selectedCounty = null;
 			_selectedStreet = null;
 			System.out.println("DependentListsExample.setSelectedState: " + _selectedState);
@@ -87,9 +77,8 @@ public class DependentListsExample extends WOComponent {
 
 	public void setSelectedCounty(County selectedCounty) {
 		System.out.println("DependentListsExample.setSelectedCounty: selected county = " + selectedCounty);
-		if (!_changedState && _selectedCounty != selectedCounty) {
+		if (_selectedCounty != selectedCounty) {
 			_selectedCounty = selectedCounty;
-			_changedCounty = true;
 			_selectedStreet = null;
 			System.out.println("DependentListsExample.setSelectedCounty: " + _selectedCounty);
 		}
