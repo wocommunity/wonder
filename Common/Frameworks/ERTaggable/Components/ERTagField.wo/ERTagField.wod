@@ -1,0 +1,23 @@
+ID : WOString {
+  value = id;
+}
+
+TagsID : WOString {
+  value = tagsID;
+}
+
+JavascriptTags : WOString {
+  value = javascriptAvailableTags;
+}
+
+TagField : WOTextField {
+  value = tags;
+  size = "60";
+  id = id;
+}
+
+AvailableTags : WOGenericContainer {
+  elementName = "div";
+  id = tagsID;
+  class = "availableTags";
+}
