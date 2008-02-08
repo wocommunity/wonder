@@ -1,0 +1,33 @@
+itemLink: WOString {
+	value = ^itemLink;
+	escapeHTML = false;
+}
+
+itemPubDate: WOString {
+	formatter = dateFormatter;
+	value = ^itemPubDate;
+}
+
+itemTitle: WOString {
+	value = ^itemTitle;
+}
+
+feedTitle: WOString {
+	value = ^feedTitle;
+}
+
+feedDescription: WOString {
+	value = ^feedDescription;
+}
+
+feedUrl: WOString {
+	value = ^feedUrl;
+}
+
+items: WORepetition {
+	item = ^item;
+	list = ^list;
+}
+
+Content : WOComponentContent {
+}
