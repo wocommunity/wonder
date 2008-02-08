@@ -3,8 +3,10 @@ package er.taggable.components;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSComparator;
 import com.webobjects.foundation.NSDictionary;
 
+import er.extensions.ERXArrayUtilities;
 import er.extensions.ERXComponent;
 import er.extensions.ERXEC;
 import er.taggable.ERTaggableEntity;
@@ -39,6 +41,11 @@ public class ERTagCloud extends ERXComponent {
   @Override
   public boolean synchronizesVariablesWithBindings() {
     return false;
+  }
+
+  @SuppressWarnings({ "cast", "unchecked" })
+  public NSArray<String> tagNames() {
+    return (NSArray<String>) ERXArrayUtilities.sortedArrayUsingComparator(tagCloud().allKeys(), NSComparator.AscendingStringComparator);
   }
 
   public String entityName() {
