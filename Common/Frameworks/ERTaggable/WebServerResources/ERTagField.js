@@ -188,6 +188,7 @@ TagField.prototype = {
 		  	tagElement.innerHTML = tag;
 				Event.observe(tagElement, "click", function() { this.toggleTag(tag); }.bindAsEventListener(this));
 		  	containerElement.appendChild(tagElement);
+		  	containerElement.appendChild(document.createTextNode(' '));
 		  	tagElements[tag] = tagElement;
 			}.bind(this));
 		}
