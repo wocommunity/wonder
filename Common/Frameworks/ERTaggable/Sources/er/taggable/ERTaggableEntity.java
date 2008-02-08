@@ -236,7 +236,11 @@ public class ERTaggableEntity<T extends ERXGenericRecord> {
    * @return the join entity (you can probably ignore this)
    */
   public static EOEntity registerTaggable(String entityName) {
-    return ERTaggableEntity.registerTaggable(EOModelGroup.defaultGroup().entityNamed(entityName));
+    EOEntity entity = EOModelGroup.defaultGroup().entityNamed(entityName);
+    if (entity == null) {
+      throw new IllegalArgumentException("There is no entity named '" + entityName + "' in this model group.");
+    }
+    return ERTaggableEntity.registerTaggable(entity);
   }
 
   /**
@@ -265,7 +269,11 @@ public class ERTaggableEntity<T extends ERXGenericRecord> {
    * @return the join entity (you can probably ignore this)
    */
   public static EOEntity registerTaggable(EOEntity entity, String tagsRelationshipName) {
-    return ERTaggableEntity.registerTaggable(entity, tagsRelationshipName, entity.model().modelGroup().entityNamed(ERTag.ENTITY_NAME));
+    EOEntity tagEntity = entity.model().modelGroup().entityNamed(ERTag.ENTITY_NAME);
+    if (tagEntity == null) {
+      throw new IllegalArgumentException("There is no entity named '" + ERTag.ENTITY_NAME + "' in this model group.");
+    }
+    return ERTaggableEntity.registerTaggable(entity, tagsRelationshipName, tagEntity);
   }
 
   /**
@@ -291,6 +299,10 @@ public class ERTaggableEntity<T extends ERXGenericRecord> {
 
       EORelationship joinToItemRelationship = new EORelationship();
       joinToItemRelationship.setName(entity.name());
+      joinToItemRelationship.setIsMandatory(true);
+      joinToItemRelationship.setToMany(false);
+      joinToItemRelationship.setJoinSemantic(EORelationship.InnerJoin);
+      joinEntity.addRelationship(joinToItemRelationship);
       for (EOAttribute itemPrimaryKey : (NSArray<EOAttribute>) entity.primaryKeyAttributes()) {
         EOAttribute itemFKAttribute = new EOAttribute();
         itemFKAttribute.setExternalType(itemPrimaryKey.externalType());
@@ -304,12 +316,16 @@ public class ERTaggableEntity<T extends ERXGenericRecord> {
         itemFKAttribute.setAllowsNull(false);
         joinEntity.addAttribute(itemFKAttribute);
 
-        joinToItemRelationship.addJoin(new EOJoin(itemFKAttribute, itemPrimaryKey));
+        EOJoin join = new EOJoin(itemFKAttribute, itemPrimaryKey);
+        joinToItemRelationship.addJoin(join);
       }
-      joinEntity.addRelationship(joinToItemRelationship);
 
       EORelationship joinToTagRelationship = new EORelationship();
       joinToTagRelationship.setName(tagEntity.name());
+      joinToTagRelationship.setIsMandatory(true);
+      joinToTagRelationship.setToMany(false);
+      joinToTagRelationship.setJoinSemantic(EORelationship.InnerJoin);
+      joinEntity.addRelationship(joinToTagRelationship);
       for (EOAttribute tagPrimaryKey : (NSArray<EOAttribute>) tagEntity.primaryKeyAttributes()) {
         EOAttribute tagFKAttribute = new EOAttribute();
         tagFKAttribute.setExternalType(tagPrimaryKey.externalType());
@@ -325,17 +341,31 @@ public class ERTaggableEntity<T extends ERXGenericRecord> {
 
         joinToTagRelationship.addJoin(new EOJoin(tagFKAttribute, tagPrimaryKey));
       }
-      joinEntity.addRelationship(joinToTagRelationship);
 
+      joinEntity.setPrimaryKeyAttributes(joinEntity.attributes());
+      joinEntity.setAttributesUsedForLocking(joinEntity.attributes());
       entity.model().addEntity(joinEntity);
 
-      EORelationship itemToJoinRelationship = joinToItemRelationship._makeInverseRelationship();
+      EORelationship itemToJoinRelationship = new EORelationship();
+      itemToJoinRelationship.setEntity(joinToItemRelationship.destinationEntity());
+      itemToJoinRelationship.setName("_eofInv_" + joinToItemRelationship.entity().name() + "_" + joinToItemRelationship.name());
+      NSArray<EOJoin> joinToItemRelationshipJoins = joinToItemRelationship.joins();
+      for (int joinNum = joinToItemRelationshipJoins.count() - 1; joinNum >= 0; joinNum--) {
+        EOJoin join = joinToItemRelationshipJoins.objectAtIndex(joinNum);
+        EOJoin inverseJoin = new EOJoin(join.destinationAttribute(), join.sourceAttribute());
+        itemToJoinRelationship.addJoin(inverseJoin);
+      }
       itemToJoinRelationship.setDeleteRule(1); // cascade
+      itemToJoinRelationship.setJoinSemantic(EORelationship.InnerJoin);
+      itemToJoinRelationship.setToMany(true);
+      itemToJoinRelationship.setPropagatesPrimaryKey(true);
       entity.addRelationship(itemToJoinRelationship);
 
       EORelationship itemToTagsRelationship = new EORelationship();
-      itemToTagsRelationship.setDefinition(itemToJoinRelationship.name() + "." + joinToTagRelationship.name());
+      itemToTagsRelationship.setName(tagsRelationshipName);
       entity.addRelationship(itemToTagsRelationship);
+      itemToTagsRelationship.setDefinition(itemToJoinRelationship.name() + "." + joinToTagRelationship.name());
+      entity.setClassProperties(entity.classProperties().arrayByAddingObject(itemToTagsRelationship));
     }
     else {
       EORelationship itemToJoinRelationship = (EORelationship) tagsRelationship.componentRelationships().objectAtIndex(0);
