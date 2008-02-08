@@ -10,7 +10,21 @@ import er.extensions.ERXEC;
 import er.taggable.ERTaggableEntity;
 
 /**
- * ERTagCloud provides a simple tag cloud component.
+ * ERTagCloud provides a simple tag cloud view.  The contents of this
+ * component will be used as the renderer for each tag.  You can use
+ * the example css file ERTagCloud.css for default styling.
+ * 
+ * As an example:
+ *
+ * <code>
+ * &lt;wo:ERTagCloud entityName = "InventoryItem"&gt;
+ *   &lt;wo:WOGenericContainer elementName = "span" class = "$tagClass"&gt;&lt;wo:str value = "$tag"/&gt;&lt;/wo:WOGenericContainer&gt;
+ * &lt;/wo:ERTagCloud&gt;
+ * </code>
+ * 
+ * @binding tag the name of the current tag being rendered
+ * @binding tagClass the class name of the current tag
+ * @binding entityName the name of the entity to load tags for
  * 
  * @author mschrag
  */
