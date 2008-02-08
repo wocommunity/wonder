@@ -1,5 +1,5 @@
 TagRepetition : WORepetition {
-	list = tagCloud.allKeys;
+	list = tagNames;
 	item = repetitionTag;
 }
 
