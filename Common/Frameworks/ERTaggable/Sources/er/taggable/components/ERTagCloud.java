@@ -9,6 +9,11 @@ import er.extensions.ERXComponent;
 import er.extensions.ERXEC;
 import er.taggable.ERTaggableEntity;
 
+/**
+ * ERTagCloud provides a simple tag cloud component.
+ * 
+ * @author mschrag
+ */
 public class ERTagCloud extends ERXComponent {
   private NSDictionary<String, String> _tagCloud;
   private String _repetitionTag;
@@ -28,6 +33,8 @@ public class ERTagCloud extends ERXComponent {
 
   public void setRepetitionTag(String repetitionTag) {
     _repetitionTag = repetitionTag;
+    setValueForBinding(_repetitionTag, "tag");
+    setValueForBinding(tagClass(), "tagClass");
   }
 
   public String repetitionTag() {
