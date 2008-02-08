@@ -22,6 +22,9 @@ import com.webobjects.foundation.NSLog;
  * @author mschrag
  */
 public abstract class ERXAjaxApplication extends WOApplication {
+	public static final String KEY_AJAX_SUBMIT_BUTTON = "AJAX_SUBMIT_BUTTON_NAME";
+	public static final String KEY_PARTIAL_FORM_SENDER_ID = "_partialSenderID";
+	
     /**
      * Checks if the page should not be stored in the cache 
      */
@@ -67,11 +70,30 @@ public abstract class ERXAjaxApplication extends WOApplication {
 		return "XMLHttpRequest".equals(requestedWith);
 	}
 
+	/**
+	 * Returns the form name of the partial form submission.
+	 * 
+	 * @param request the request
+	 * @return the form name of the partial form submission
+	 */
+	public static String partialFormSenderID(WORequest request) {
+		return request.stringFormValueForKey(ERXAjaxApplication.KEY_PARTIAL_FORM_SENDER_ID);
+	}
+	
+	/**
+	 * Returns the form name of the submitting ajax button.
+	 * 
+	 * @param request the request
+	 * @return the form name of the submitting ajax button
+	 */
+	public static String ajaxSubmitButtonName(WORequest request) {
+		return request.stringFormValueForKey(ERXAjaxApplication.KEY_AJAX_SUBMIT_BUTTON);
+	}
     /**
      * Returns true if this is an ajax submit.
      */
     public static boolean isAjaxSubmit(WORequest request) {
-        return (request.formValueForKey("AJAX_SUBMIT_BUTTON_NAME") != null);
+        return (ERXAjaxApplication.ajaxSubmitButtonName(request) != null);
     }
 
     /**
@@ -79,7 +101,8 @@ public abstract class ERXAjaxApplication extends WOApplication {
      * @param request object
      * @param context object
      */
-    public WOActionResults invokeAction(WORequest request, WOContext context) {
+    @Override
+	public WOActionResults invokeAction(WORequest request, WOContext context) {
         WOActionResults results = super.invokeAction(request, context);
         // MS: This is to support AjaxUpdateContainer.
         // MS: Note that if results == context.page() something probably went wrong

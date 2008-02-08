@@ -32,7 +32,7 @@ import com.webobjects.foundation.NSNotificationCenter;
 public class ERXWOContext extends WOContext implements ERXMutableUserInfoHolderInterface {
     private static Observer observer;
     private boolean _generateCompleteURLs;
-
+    
     public static final String CONTEXT_KEY = "wocontext";
     private static final String CONTEXT_DICTIONARY_KEY = "ERXWOContext.dict";
 	private static final String SECURE_RESOURCES_KEY = "er.ajax.secureResources";
@@ -177,6 +177,25 @@ public class ERXWOContext extends WOContext implements ERXMutableUserInfoHolderI
             url = stripSessionIDFromURL(url);
         } 
         return url;
+    }
+    
+    @Override
+    public boolean _wasFormSubmitted() {
+    	boolean wasFormSubmitted = super._wasFormSubmitted();
+    	if (wasFormSubmitted) {
+    		WORequest request = request();
+    		String partialSubmitSenderID = ERXAjaxApplication.partialFormSenderID(request);
+    		if (partialSubmitSenderID != null) {
+    			String elementID = elementID();
+    			if (!partialSubmitSenderID.equals(elementID) && !partialSubmitSenderID.startsWith(elementID + ",") && !partialSubmitSenderID.endsWith("," + elementID) && !partialSubmitSenderID.contains("," + elementID + ",")) {
+    				String ajaxSubmitButtonID = ERXAjaxApplication.ajaxSubmitButtonName(request);
+    				if (ajaxSubmitButtonID == null || !ajaxSubmitButtonID.equals(elementID)) {
+	    				wasFormSubmitted = false;
+    				}
+    			}
+    		}
+    	}
+    	return wasFormSubmitted;
     }
     
     /**
@@ -414,24 +433,24 @@ public class ERXWOContext extends WOContext implements ERXMutableUserInfoHolderI
 			userInfo.setObjectForKey(addedResources, "ERXWOContext.addedResources");
 		}
 		if (!addedResources.containsObject(fileName)) {
-			String url;
-			if (fileName.indexOf("://") != -1 || fileName.startsWith("/")) {
-				url = fileName;
-			}
-			else {
+		String url;
+		if (fileName.indexOf("://") != -1 || fileName.startsWith("/")) {
+			url = fileName;
+		}
+		else {
 				WOResourceManager rm = WOApplication.application().resourceManager();
-				NSArray languages = null;
-				if (context.hasSession()) {
-					languages = context.session().languages();
-				}
-				url = rm.urlForResourceNamed(fileName, framework, languages, context.request());
-				if (ERXProperties.stringForKey(SECURE_RESOURCES_KEY) != null) {
-					StringBuffer urlBuffer = new StringBuffer();
-			    	context.request()._completeURLPrefix(urlBuffer, ERXProperties.booleanForKey(SECURE_RESOURCES_KEY), 0);
-			    	urlBuffer.append(url);
-			    	url = urlBuffer.toString();
-				}
+			NSArray languages = null;
+			if (context.hasSession()) {
+				languages = context.session().languages();
 			}
+			url = rm.urlForResourceNamed(fileName, framework, languages, context.request());
+			if (ERXProperties.stringForKey(SECURE_RESOURCES_KEY) != null) {
+				StringBuffer urlBuffer = new StringBuffer();
+		    	context.request()._completeURLPrefix(urlBuffer, ERXProperties.booleanForKey(SECURE_RESOURCES_KEY), 0);
+		    	urlBuffer.append(url);
+		    	url = urlBuffer.toString();
+			}
+		}
 			String html = startTag + url + endTag + "\n";
 			ERXWOContext.insertInResponseBeforeTag(response, html, ERXWOContext._htmlCloseHeadTag(), appendIfTagMissing, enqueueIfTagMissing);
 			addedResources.addObject(fileName);
