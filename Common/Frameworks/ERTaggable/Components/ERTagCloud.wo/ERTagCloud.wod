@@ -1,0 +1,13 @@
+TagRepetition : WORepetition {
+	list = tagCloud.allKeys;
+	item = repetitionTag;
+}
+
+Tag : WOGenericContainer {
+	elementName = "span";
+	class = tagClass;
+}
+
+TagName : WOString {
+	value = repetitionTag;
+}
