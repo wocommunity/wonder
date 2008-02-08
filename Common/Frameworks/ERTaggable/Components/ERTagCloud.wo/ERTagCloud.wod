@@ -3,11 +3,5 @@ TagRepetition : WORepetition {
 	item = repetitionTag;
 }
 
-Tag : WOGenericContainer {
-	elementName = "span";
-	class = tagClass;
-}
-
-TagName : WOString {
-	value = repetitionTag;
+Tag : WOComponentContent {
 }

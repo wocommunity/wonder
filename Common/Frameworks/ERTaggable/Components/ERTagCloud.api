@@ -2,9 +2,12 @@
 <wodefinitions>
 	<wo wocomponentcontent="false" class="ERTagCloud.java">
 		<binding name = "entityName"/>	
+		<binding name = "tag"/>	
+		<binding name = "tagClass"/>	
 		
-	  <validation message = "&apos;entityName&apos; is a required binding">
+	  <validation message = "&apos;entityName&apos; and &apos;tag&apos; are required bindings">
 	    <unbound name = "entityName"/>
+	    <unbound name = "tag"/>
 	  </validation>
 	</wo>
 </wodefinitions>
