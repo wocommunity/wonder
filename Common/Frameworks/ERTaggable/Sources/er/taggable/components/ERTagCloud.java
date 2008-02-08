@@ -17,7 +17,7 @@ import er.taggable.ERTaggableEntity;
  * As an example:
  *
  * <code>
- * &lt;wo:ERTagCloud entityName = "InventoryItem"&gt;
+ * &lt;wo:ERTagCloud entityName = "InventoryItem" tag = "$tag" tagClass = "$tagClass"&gt;
  *   &lt;wo:WOGenericContainer elementName = "span" class = "$tagClass"&gt;&lt;wo:str value = "$tag"/&gt;&lt;/wo:WOGenericContainer&gt;
  * &lt;/wo:ERTagCloud&gt;
  * </code>
