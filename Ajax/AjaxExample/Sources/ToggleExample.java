@@ -4,10 +4,12 @@ import com.webobjects.appserver.*;
 
 public class ToggleExample extends WOComponent {
 	public boolean _toggleAreaVisible;
+	public boolean _toggleAreaVisible2;
+	public String _text;
 
 	public ToggleExample(WOContext context) {
 		super(context);
-		_toggleAreaVisible = false;
+		_text = "This text should not change!";
 	}
 	
 	public WOActionResults toggled() {

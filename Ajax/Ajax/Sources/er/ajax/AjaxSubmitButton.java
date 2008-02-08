@@ -57,8 +57,10 @@ import er.extensions.ERXWOForm;
  * @author anjo
  */
 public class AjaxSubmitButton extends AjaxDynamicElement {
-	// MS: If you change this value, make sure to change it in ERXSession.saveSession
+	// MS: If you change this value, make sure to change it in ERXAjaxApplication
   public static final String KEY_AJAX_SUBMIT_BUTTON_NAME = "AJAX_SUBMIT_BUTTON_NAME";
+	// MS: If you change this value, make sure to change it in ERXAjaxApplication
+  public static final String KEY_PARTIAL_FORM_SENDER_ID = "_partialSenderID";
 
   public AjaxSubmitButton(String name, NSDictionary associations, WOElement children) {
     super(name, associations, children);
