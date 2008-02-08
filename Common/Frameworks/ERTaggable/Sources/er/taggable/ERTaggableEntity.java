@@ -500,7 +500,10 @@ public class ERTaggableEntity<T extends ERXGenericRecord> {
     if (tags != null) {
       if (tags instanceof String) {
         for (String strTag : ((String) tags).split(_separator)) {
-          tagNames.addObject(_normalizer.normalize(strTag));
+          String normalizedTag = _normalizer.normalize(strTag);
+          if (normalizedTag != null && normalizedTag.length() > 0) {
+            tagNames.addObject(normalizedTag);
+          }
         }
       }
       else if (tags instanceof NSArray) {
