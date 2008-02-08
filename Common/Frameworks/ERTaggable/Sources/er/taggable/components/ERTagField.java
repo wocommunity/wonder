@@ -3,7 +3,9 @@ package er.taggable.components;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WOResponse;
 import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSComparator;
 
+import er.extensions.ERXArrayUtilities;
 import er.extensions.ERXWOContext;
 import er.taggable.ERTaggable;
 
@@ -33,7 +35,7 @@ public class ERTagField extends er.extensions.ERXComponent {
   @SuppressWarnings("unchecked")
   public NSArray<String> availableTags() {
     if (_availableTags == null) {
-      _availableTags = taggable().taggableEntity().fetchAllTags(taggable().item().editingContext());
+      _availableTags = ERXArrayUtilities.sortedArrayUsingComparator(taggable().taggableEntity().fetchAllTags(taggable().item().editingContext()), NSComparator.AscendingStringComparator);
     }
     return _availableTags;
   }
