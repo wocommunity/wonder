@@ -52,7 +52,25 @@ public class ERTaggable<T extends ERXGenericRecord> {
   public static <T extends ERXGenericRecord> ERTaggable<T> taggable(T eo) {
     return new ERTaggableEntity<T>(eo.entity()).taggable(eo);
   }
+  
+  /**
+   * Returns the tagged item that this is taggable is wrapping.
+   *  
+   * @return the tagged item
+   */
+  public T item() {
+    return _item;
+  }
 
+  /**
+   * Returns the taggable entity for this taggable.
+   * 
+   * @return the taggable entity for this taggable
+   */
+  public ERTaggableEntity<T> taggableEntity() {
+    return _entity;
+  }
+  
   /**
    * Returns an array of ERTags associated with this item.
    * 
