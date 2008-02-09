@@ -37,7 +37,7 @@ public class ERTaggable<T extends ERXGenericRecord> {
    * @param entity the ERTaggableEntity that corresponds to this item's entity  
    * @param item the item to wrap
    */
-  public ERTaggable(ERTaggableEntity<T> entity, T item) {
+  protected ERTaggable(ERTaggableEntity<T> entity, T item) {
     _entity = entity;
     _item = item;
   }
@@ -50,7 +50,7 @@ public class ERTaggable<T extends ERXGenericRecord> {
    * @return a taggable wrapper around the EO
    */
   public static <T extends ERXGenericRecord> ERTaggable<T> taggable(T eo) {
-    return new ERTaggableEntity<T>(eo.entity()).taggable(eo);
+    return ERTaggableEntity.taggableEntity(eo).taggable(eo);
   }
   
   /**
