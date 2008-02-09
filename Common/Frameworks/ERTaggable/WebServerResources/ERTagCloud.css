@@ -1,25 +1,25 @@
 .tagCloud1 {
-	font-size: 0.70em;
+	font-size: 0.80em;
 	color: rgb(200, 200, 200);
 }
 
 .tagCloud2 {
-	font-size: 0.80em;
+	font-size: 1.00em;
 	color: rgb(150, 150, 150);
 }
 
 .tagCloud3 {
-	font-size: 0.90em;
+	font-size: 1.10em;
 	color: rgb(100, 100, 100);
 }
 
 .tagCloud4 {
-	font-size: 1.0em;
+	font-size: 1.30em;
 	color: rgb(50, 50, 50);
 }
 
 .tagCloud5 {
-	font-size: 1.1em;
+	font-size: 1.50em;
 	color: rgb(0, 0, 0);
 }
 
