@@ -12,6 +12,7 @@ import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.jdbcadaptor.JDBCAdaptor;
 
 import er.extensions.ERXJDBCUtilities;
+import er.extensions.ERXSQLHelper;
 
 /**
  * ERXMigrationColumn is conceptually equivalent to an EOAttribute in the
@@ -258,7 +259,8 @@ public class ERXMigrationColumn {
 	@SuppressWarnings("unchecked")
 	public EOAttribute _newAttribute(EOEntity entity) {
 		JDBCAdaptor adaptor = (JDBCAdaptor) _table.database().adaptor();
-		EOAttribute attribute = adaptor.createAttribute(_name, _name, _jdbcType, adaptor.externalTypeForJDBCType(_jdbcType), _precision, _scale, _allowsNull ? 1 : 0);
+		String externalType = ERXSQLHelper.newSQLHelper(adaptor).externalTypeForJDBCType(adaptor, _jdbcType);		
+		EOAttribute attribute = adaptor.createAttribute(_name, _name, _jdbcType, externalType, _precision, _scale, _allowsNull ? 1 : 0);
 		if (_width > 0) {
 			attribute.setWidth(_width);
 		}
