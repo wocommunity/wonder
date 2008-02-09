@@ -34,6 +34,7 @@ public class ERXMigrationColumn {
 	private Object _defaultValue;
 	private boolean _new;
 	private String _overrideValueType;
+	private String _overrideExternalType;
 
 	/**
 	 * Constructs a new ERXMigrationColumn.
@@ -177,6 +178,24 @@ public class ERXMigrationColumn {
 	public int scale() {
 		return _scale;
 	}
+	
+	/**
+	 * Overrides the external type of this column.
+	 * 
+	 * @param overrideExternalType the external type to override
+	 */
+	public void _setOverrideExternalType(String overrideExternalType) {
+		_overrideExternalType = overrideExternalType;
+	}
+	
+	/**
+	 * Returns the external type of this column (or null if there is no override).
+	 * 
+	 * @return the external type of this column
+	 */
+	public String overrideExternalType() {
+		return _overrideExternalType;
+	}
 
 	/**
 	 * Sets the value type for the underlying attribute for this column.
@@ -276,6 +295,7 @@ public class ERXMigrationColumn {
 			mutableUserInfo.setObjectForKey(_defaultValue, "er.extensions.eoattribute.default");
 			attribute.setUserInfo(mutableUserInfo);
 		}
+		
 		if (_overrideValueType != null) {
 			if (ERXMigrationColumn.NULL_VALUE_TYPE.equals(_overrideValueType)) {
 				attribute.setValueType(null);
@@ -285,6 +305,11 @@ public class ERXMigrationColumn {
 			}
 			adaptor.assignExternalTypeForAttribute(attribute);
 		}
+		
+		if (_overrideExternalType != null) {
+			attribute.setExternalType(_overrideExternalType);
+		}
+		
 		entity.addAttribute(attribute);
 		return attribute;
 	}
