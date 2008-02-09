@@ -52,7 +52,7 @@ public class ERTaggable<T extends ERXGenericRecord> {
   public static <T extends ERXGenericRecord> ERTaggable<T> taggable(T eo) {
     return ERTaggableEntity.taggableEntity(eo).taggable(eo);
   }
-  
+
   /**
    * Returns the tagged item that this is taggable is wrapping.
    *  
@@ -70,7 +70,7 @@ public class ERTaggable<T extends ERXGenericRecord> {
   public ERTaggableEntity<T> taggableEntity() {
     return _entity;
   }
-  
+
   /**
    * Returns an array of ERTags associated with this item.
    * 
@@ -87,9 +87,8 @@ public class ERTaggable<T extends ERXGenericRecord> {
    */
   @SuppressWarnings("unchecked")
   public void clearTags() {
-    String tagsRelationshipName = _entity.tagsRelationshipName();
     for (ERTag tag : tags().immutableClone()) {
-      _item.removeObjectFromBothSidesOfRelationshipWithKey(tag, tagsRelationshipName);
+      removeTag(tag);
     }
   }
 
@@ -102,10 +101,9 @@ public class ERTaggable<T extends ERXGenericRecord> {
   @SuppressWarnings("unchecked")
   public void removeTags(Object tags) {
     NSArray<ERTag> erTags = tags();
-    String tagsRelationshipName = _entity.tagsRelationshipName();
     NSArray<ERTag> matchingTags = ERXQ.filtered(erTags, ERTag.NAME.in(_entity.splitTagNames(tags)));
     for (ERTag tag : matchingTags) {
-      _item.removeObjectFromBothSidesOfRelationshipWithKey(tag, tagsRelationshipName);
+      removeTag(tag);
     }
   }
 
@@ -140,7 +138,6 @@ public class ERTaggable<T extends ERXGenericRecord> {
       clearTags();
     }
 
-    String tagsRelationshipName = _entity.tagsRelationshipName();
     NSArray<ERTag> erTags = tags();
     EOEditingContext editingContext = _item.editingContext();
     // append the tag names to the collection
@@ -148,9 +145,29 @@ public class ERTaggable<T extends ERXGenericRecord> {
       // ensure that tag names don't get duplicated
       ERTag tag = _entity.fetchTagNamed(editingContext, tagName, true);
       if (!erTags.containsObject(tag)) {
-        _item.addObjectToBothSidesOfRelationshipWithKey(tag, tagsRelationshipName);
+        addTag(tag);
       }
     }
+  }
+
+  /**
+   * Adds the tag to this item.  This is the single method that to override
+   * if you need to perform some additional operations.
+   * 
+   * @param tag the tag to add
+   */
+  protected void addTag(ERTag tag) {
+    _item.addObjectToBothSidesOfRelationshipWithKey(tag, _entity.tagsRelationshipName());
+  }
+
+  /**
+   * Removes the tag from this item.  This is the single method that to override
+   * if you need to perform some additional operations.
+   * 
+   * @param tag the tag to remove
+   */
+  protected void removeTag(ERTag tag) {
+    _item.removeObjectFromBothSidesOfRelationshipWithKey(tag, _entity.tagsRelationshipName());
   }
 
   /**
