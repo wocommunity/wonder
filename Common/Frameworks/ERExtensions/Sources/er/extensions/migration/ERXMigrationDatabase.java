@@ -13,7 +13,6 @@ import com.webobjects.eocontrol.EOQualifier;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableArray;
-import com.webobjects.jdbcadaptor.JDBCAdaptor;
 
 /**
  * <p>
@@ -144,7 +143,7 @@ public class ERXMigrationDatabase {
 	 * @return the adaptor for the given channel
 	 */
 	public EOAdaptor adaptor() {
-		return (JDBCAdaptor) _adaptorChannel.adaptorContext().adaptor();
+		return _adaptorChannel.adaptorContext().adaptor();
 	}
 
 	/**
