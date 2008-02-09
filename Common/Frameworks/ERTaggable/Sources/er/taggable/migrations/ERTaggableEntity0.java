@@ -97,7 +97,7 @@ public class ERTaggableEntity0 extends ERXMigrationDatabase.Migration {
    */
   @SuppressWarnings("unchecked")
   public static void upgrade(EOEditingContext editingContext, EOAdaptorChannel channel, EOModel model, String entityName, String tagsRelationshipName, String tagEntityName) throws SQLException {
-    EOEntity joinEntity = ERTaggableEntity.registerTaggable(model.entityNamed(entityName), tagsRelationshipName, model.modelGroup().entityNamed(tagEntityName));
+    EOEntity joinEntity = ERTaggableEntity.registerTaggable(model.entityNamed(entityName), tagsRelationshipName, model.modelGroup().entityNamed(tagEntityName), null);
     EODatabaseContext databaseContext = EODatabaseContext.registeredDatabaseContextForModel(model, editingContext);
     EOSchemaGeneration generation = databaseContext.adaptorContext().adaptor().synchronizationFactory();
     NSArray<EOSQLExpression> createTableStatements = generation.createTableStatementsForEntityGroup(new NSArray<EOEntity>(joinEntity));
