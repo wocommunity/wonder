@@ -130,7 +130,7 @@ public class ERTaggableEntity<T extends ERXGenericRecord> {
     }
     else {
       try {
-        taggableEntity = taggableEntityClass.getConstructor(EOEntity.class, String.class, EOEntity.class).newInstance(entity);
+        taggableEntity = taggableEntityClass.getConstructor(EOEntity.class).newInstance(entity);
       }
       catch (Exception e) {
         throw new RuntimeException("Failed to create ERTaggableEntity for entity '" + entity + "'.", e);
