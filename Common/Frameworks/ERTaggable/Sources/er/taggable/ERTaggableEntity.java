@@ -57,9 +57,21 @@ public class ERTaggableEntity<T extends ERXGenericRecord> {
   public static final String ERTAGGABLE_KEY = "_ERTaggable";
 
   /**
+   * The key stored in entity userInfo that specifies the name of the tag entity.
+   */
+  public static final String ERTAGGABLE_TAG_ENTITY_KEY = "_ERTaggableTagEntity";
+
+  /**
+   * The key stored in entity userInfo that specifies the name of the tag relationship.
+   */
+  public static final String ERTAGGABLE_TAG_RELATIONSHIP_KEY = "_ERTaggableTagRelationship";
+
+  /**
    * The default name of the flattened to-many relationship to the tag entity.
    */
   public static final String DEFAULT_TAGS_RELATIONSHIP_NAME = "tags";
+
+  private static final NSMutableDictionary<String, Class<ERTaggableEntity>> _taggableEntities = new NSMutableDictionary<String, Class<ERTaggableEntity>>();
 
   private EOEntity _tagEntity;
 
@@ -72,30 +84,34 @@ public class ERTaggableEntity<T extends ERXGenericRecord> {
   /**
    * Constructs an ERTaggableEntity.
    * 
-   * @param entityName the name of the entity to tag
-   */
-  public ERTaggableEntity(String entityName) {
-    this(EOModelGroup.defaultGroup().entityNamed(entityName));
-  }
-
-  /**
-   * Constructs an ERTaggableEntity associated with the tag entity "ERTag" via a
-   * flattened to-many relationship named "tags."
-   * 
-   * @param entity the entity to tag
-   */
-  public ERTaggableEntity(EOEntity entity) {
-    this(entity, null, ERTag.ENTITY_NAME);
-  }
-
-  /**
-   * Constructs an ERTaggableEntity associated with the tag entity "ERTag".
-   * 
    * @param entity the entity to tag
    * @param tagsRelationshipName the name of the flattened to-many relationship to the tag entity
+   * @param tagEntityName the name of the tag entity
    */
-  public ERTaggableEntity(EOEntity entity, String tagsRelationshipName) {
-    this(entity, tagsRelationshipName, ERTag.ENTITY_NAME);
+  @SuppressWarnings("unchecked")
+  protected ERTaggableEntity(EOEntity entity) {
+    if (!ERTaggableEntity.isTaggable(entity)) {
+      throw new IllegalArgumentException("The entity '" + entity.name() + "' has not been registered as taggable.");
+    }
+
+    _entity = entity;
+
+    String tagEntityName = (String) entity.userInfo().objectForKey(ERTaggableEntity.ERTAGGABLE_TAG_ENTITY_KEY);
+    _tagEntity = _entity.model().modelGroup().entityNamed(tagEntityName);
+
+    String tagsRelationshipName = (String) entity.userInfo().objectForKey(ERTaggableEntity.ERTAGGABLE_TAG_RELATIONSHIP_KEY);
+    _tagsRelationship = _entity.relationshipNamed(tagsRelationshipName);
+  }
+
+  /**
+   * Sets the taggable entity class for the given entity name.  This allows you to override the 
+   * taggable entity that will be used throughout the framework for any particular entity. 
+   * 
+   * @param taggableEntity the taggable entity class
+   * @param entityName the name of the entity to associate with
+   */
+  public static void setTaggableEntityForEntityNamed(Class<ERTaggableEntity> taggableEntity, String entityName) {
+    ERTaggableEntity._taggableEntities.setObjectForKey(taggableEntity, entityName);
   }
 
   /**
@@ -103,27 +119,44 @@ public class ERTaggableEntity<T extends ERXGenericRecord> {
    * 
    * @param entity the entity to tag
    * @param tagsRelationshipName the name of the flattened to-many relationship to the tag entity
-   * @param tagEntityName the name of the tag entity
+   * @param tagEntity the tag entity
    */
   @SuppressWarnings("unchecked")
-  public ERTaggableEntity(EOEntity entity, String tagsRelationshipName, String tagEntityName) {
-    _entity = entity;
-    if (!ERTaggableEntity.isTaggable(entity)) {
-      throw new IllegalArgumentException("The entity '" + entity.name() + "' has not been registered as taggable.");
-    }
-    _tagEntity = entity.model().modelGroup().entityNamed(tagEntityName);
-    if (tagsRelationshipName == null) {
-      _tagsRelationship = ERTaggableEntity.tagsRelationshipForEntity(entity, _tagEntity);
+  public static <T extends ERXGenericRecord> ERTaggableEntity<T> taggableEntity(EOEntity entity) {
+    Class<ERTaggableEntity> taggableEntityClass = ERTaggableEntity._taggableEntities.objectForKey(entity.name());
+    ERTaggableEntity<T> taggableEntity;
+    if (taggableEntityClass == null) {
+      taggableEntity = new ERTaggableEntity<T>(entity);
     }
     else {
-      _tagsRelationship = _entity.relationshipNamed(tagsRelationshipName);
+      try {
+        taggableEntity = taggableEntityClass.getConstructor(EOEntity.class, String.class, EOEntity.class).newInstance(entity);
+      }
+      catch (Exception e) {
+        throw new RuntimeException("Failed to create ERTaggableEntity for entity '" + entity + "'.", e);
+      }
     }
-    if (_tagsRelationship == null) {
-      throw new IllegalArgumentException("There is no relationship on '" + _entity.name() + "' that is flattened onto '" + tagEntityName + "'.");
-    }
-    if (!_tagsRelationship.isFlattened()) {
-      throw new IllegalArgumentException("The relationship '" + _tagsRelationship.name() + "' on '" + _entity.name() + "' must be flattened.");
-    }
+    return taggableEntity;
+  }
+
+  /**
+   * Constructs an ERTaggableEntity.
+   * 
+   * @param entityName the name of the entity to tag
+   */
+  public static <T extends ERXGenericRecord> ERTaggableEntity<T> taggableEntity(String entityName) {
+    return ERTaggableEntity.taggableEntity(EOModelGroup.defaultGroup().entityNamed(entityName));
+  }
+
+  /**
+   * Shortcut for getting an ERTaggableEntity for an EO.
+   * 
+   * @param <T> the type of the entity
+   * @param eo the EO
+   * @return an ERTaggableEntity corresponding to the entity of the EO
+   */
+  public static <T extends ERXGenericRecord> ERTaggableEntity<T> taggableEntity(T eo) {
+    return ERTaggableEntity.taggableEntity(eo.entity());
   }
 
   /**
@@ -161,7 +194,7 @@ public class ERTaggableEntity<T extends ERXGenericRecord> {
   public static NSDictionary<EOEntity, NSArray<? extends ERXGenericRecord>> fetchAllTaggedWith(EOEditingContext editingContext, ERTag.Inclusion inclusion, int limit, Object tags) {
     NSMutableDictionary<EOEntity, NSArray<? extends ERXGenericRecord>> taggedEntities = new NSMutableDictionary<EOEntity, NSArray<? extends ERXGenericRecord>>();
     for (EOEntity taggableEntity : ERTaggableEntity.taggableEntities()) {
-      NSArray<ERXGenericRecord> taggedItems = new ERTaggableEntity<ERXGenericRecord>(taggableEntity).fetchTaggedWith(editingContext, inclusion, limit, tags);
+      NSArray<ERXGenericRecord> taggedItems = ERTaggableEntity.taggableEntity(taggableEntity).fetchTaggedWith(editingContext, inclusion, limit, tags);
       taggedEntities.setObjectForKey(taggedItems, taggableEntity);
     }
     return taggedEntities;
@@ -193,17 +226,6 @@ public class ERTaggableEntity<T extends ERXGenericRecord> {
       }
     }
     return taggableEntities;
-  }
-
-  /**
-   * Shortcut for getting an ERTaggableEntity for an EO.
-   * 
-   * @param <T> the type of the entity
-   * @param eo the EO
-   * @return an ERTaggableEntity corresponding to the entity of the EO
-   */
-  public static <T extends ERXGenericRecord> ERTaggableEntity<T> taggableEntity(T eo) {
-    return new ERTaggableEntity<T>(eo.entity());
   }
 
   /**
@@ -290,8 +312,15 @@ public class ERTaggableEntity<T extends ERXGenericRecord> {
    */
   @SuppressWarnings("unchecked")
   public static EOEntity registerTaggable(EOEntity entity, String tagsRelationshipName, EOEntity tagEntity) {
+    EORelationship tagsRelationship;
+    if (tagsRelationshipName == null) {
+      tagsRelationship = ERTaggableEntity.tagsRelationshipForEntity(entity, tagEntity);
+    }
+    else {
+      tagsRelationship = entity.relationshipNamed(tagsRelationshipName);
+    }
+
     EOEntity joinEntity = null;
-    EORelationship tagsRelationship = ERTaggableEntity.tagsRelationshipForEntity(entity, tagEntity);
     if (tagsRelationship == null) {
       joinEntity = new EOEntity();
       joinEntity.setName(entity.name() + "Tag");
@@ -366,6 +395,11 @@ public class ERTaggableEntity<T extends ERXGenericRecord> {
       entity.addRelationship(itemToTagsRelationship);
       itemToTagsRelationship.setDefinition(itemToJoinRelationship.name() + "." + joinToTagRelationship.name());
       entity.setClassProperties(entity.classProperties().arrayByAddingObject(itemToTagsRelationship));
+      
+      tagsRelationship = itemToTagsRelationship;
+    }
+    else if (!tagsRelationship.isFlattened()) {
+      throw new IllegalArgumentException("The relationship '" + tagsRelationship.name() + "' on '" + entity.name() + "' must be flattened.");
     }
     else {
       EORelationship itemToJoinRelationship = (EORelationship) tagsRelationship.componentRelationships().objectAtIndex(0);
@@ -374,6 +408,8 @@ public class ERTaggableEntity<T extends ERXGenericRecord> {
 
     NSMutableDictionary userInfo = entity.userInfo().mutableClone();
     userInfo.setObjectForKey(Boolean.TRUE, ERTaggableEntity.ERTAGGABLE_KEY);
+    userInfo.setObjectForKey(tagsRelationship.name(), ERTaggableEntity.ERTAGGABLE_TAG_RELATIONSHIP_KEY);
+    userInfo.setObjectForKey(tagEntity.name(), ERTaggableEntity.ERTAGGABLE_TAG_ENTITY_KEY);
     entity.setUserInfo(userInfo);
 
     return joinEntity;
