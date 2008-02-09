@@ -69,7 +69,7 @@ public class ERTagCloud extends ERXComponent {
   public NSDictionary<String, String> tagCloud() {
     if (_tagCloud == null) {
       EOEditingContext editingContext = ERXEC.newEditingContext();
-      ERTaggableEntity<?> taggableEntity = new ERTaggableEntity(entityName());
+      ERTaggableEntity<?> taggableEntity = ERTaggableEntity.taggableEntity(entityName());
       NSDictionary<String, Integer> tagCount = taggableEntity.tagCount(editingContext, 100);
       _tagCloud = taggableEntity.cloud(tagCount, new NSArray<String>(new String[] { "tagCloud1", "tagCloud2", "tagCloud3", "tagCloud4", "tagCloud5" }));
     }
