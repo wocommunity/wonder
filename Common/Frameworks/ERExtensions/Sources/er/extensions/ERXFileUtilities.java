@@ -150,7 +150,20 @@ public class ERXFileUtilities {
 	 * @return the temp file that was created 
 	 */
 	public static File writeInputStreamToTempFile(InputStream stream) throws IOException {
-		File tempFile = File.createTempFile("_Wonder", "tmp");
+		return ERXFileUtilities.writeInputStreamToTempFile(stream, "_Wonder", "tmp");
+	}
+	
+	/**
+	 * Writes the contents of an InputStream to a temporary file.
+	 * 
+	 * @param stream
+	 *            to pull data from
+	 * @param prefix the filename prefix of the temp file
+	 * @param suffix the filename suffix of the temp file
+	 * @return the temp file that was created 
+	 */
+	public static File writeInputStreamToTempFile(InputStream stream, String prefix, String suffix) throws IOException {
+		File tempFile = File.createTempFile(prefix, suffix);
 		try {
 			ERXFileUtilities.writeInputStreamToFile(stream, tempFile);
 		}
