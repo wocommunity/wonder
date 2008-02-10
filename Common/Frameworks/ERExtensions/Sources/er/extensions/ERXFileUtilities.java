@@ -193,6 +193,14 @@ public class ERXFileUtilities {
         writeInputStreamToOutputStream(stream, out);
     }
     
+    /**
+     * Copies the contents of the input stream to the given output stream.  Both streams are
+     * guaranteed to be closed by the end of this method.
+     * 
+     * @param in the input stream to copy from
+     * @param out the output stream to copy to
+     * @throws IOException if there is any failure
+     */
     public static void writeInputStreamToOutputStream(InputStream in, OutputStream out) throws IOException {
     	try {
 	        BufferedInputStream bis = new BufferedInputStream(in);
@@ -206,10 +214,10 @@ public class ERXFileUtilities {
 	        finally {
 	        	bis.close();
 	        }
+			out.flush();
     	}
     	finally {
-	        out.flush();
-	        out.close();
+			out.close();
     	}
     }
 
