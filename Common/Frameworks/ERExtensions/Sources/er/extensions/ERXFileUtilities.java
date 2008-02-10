@@ -164,16 +164,27 @@ public class ERXFileUtilities {
 	 * @return the temp file that was created 
 	 */
 	public static File writeInputStreamToTempFile(InputStream stream, String prefix, String suffix) throws IOException {
-		File tempFile = File.createTempFile(prefix, suffix);
+		File tempFile;
 		try {
-			ERXFileUtilities.writeInputStreamToFile(stream, tempFile);
+			tempFile = File.createTempFile(prefix, suffix);
+			try {
+				ERXFileUtilities.writeInputStreamToFile(stream, tempFile);
+			}
+			catch (RuntimeException e) {
+				tempFile.delete();
+				throw e;
+			}
+			catch (IOException e) {
+				tempFile.delete();
+				throw e;
+			}
 		}
 		catch (RuntimeException e) {
-			tempFile.delete();
+			stream.close();
 			throw e;
 		}
 		catch (IOException e) {
-			tempFile.delete();
+			stream.close();
 			throw e;
 		}
 		return tempFile;
