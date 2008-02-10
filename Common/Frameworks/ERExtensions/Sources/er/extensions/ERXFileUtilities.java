@@ -65,6 +65,76 @@ public class ERXFileUtilities {
     //	---------------------------------------------------------------------------
 
     /**
+     * Copies the contents of the given URL to a temporary file.
+     * 
+     * @param url the URL to copy from
+     * @param prefix the temporary file prefix
+     * @param suffix the temporary file suffix (if null, the extension from the URL is used) 
+     * @return the temporary file
+     * @throws IOException if the copy fails
+     */
+    public static File writeUrlToTempFile(String url, String prefix, String suffix) throws IOException {
+    	return ERXFileUtilities.writeUrlToTempFile(new URL(url), prefix, suffix);
+    }
+    
+    /**
+     * Copies the contents of the given URL to a temporary file.
+     * 
+     * @param url the URL to copy from
+     * @param prefix the temporary file prefix
+     * @param suffix the temporary file suffix (if null, the extension from the URL is used)
+     * @return the temporary file
+     * @throws IOException if the copy fails
+     */
+    public static File writeUrlToTempFile(URL url, String prefix, String suffix) throws IOException {
+      String extension;
+      if (suffix == null) {
+	      String urlStr = url.toExternalForm();
+	      int dotIndex = urlStr.lastIndexOf('.');
+	      if (dotIndex >= 0) {
+	        int questionMarkIndex = urlStr.indexOf('?', dotIndex);
+	        if (questionMarkIndex == -1) {
+	        	extension = urlStr.substring(dotIndex);
+	        }
+	        else {
+	        	extension = urlStr.substring(dotIndex, questionMarkIndex);
+	        }
+	      }
+	      else {
+	        extension = "";
+	      }
+      }
+      else {
+    	  extension = suffix;
+      }
+      File tempFile = ERXFileUtilities.writeInputStreamToTempFile(url.openStream(), prefix, extension);
+      return tempFile;
+    }
+
+    /**
+     * Copies the contents of the given URL to a file.
+     * 
+     * @param url the URL to copy from
+     * @param file the File to write to 
+     * @throws IOException if the copy fails
+     */
+    public static void writeUrlToTempFile(String url, File file) throws IOException {
+      ERXFileUtilities.writeUrlToTempFile(new URL(url), file);
+    }
+
+    /**
+     * Copies the contents of the given URL to a file.
+     * 
+     * @param url the URL to copy from
+     * @param file the File to write to 
+     * @throws IOException if the copy fails
+     */
+    public static void writeUrlToTempFile(URL url, File file) throws IOException {
+      ERXFileUtilities.writeInputStreamToFile(url.openStream(), file);
+    }
+    
+
+    /**
     * Returns the byte array for a given stream.
      * @param in stream to get the bytes from
      * @throws IOException if things go wrong
