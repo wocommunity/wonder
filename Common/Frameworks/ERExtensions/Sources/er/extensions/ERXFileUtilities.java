@@ -138,7 +138,8 @@ public class ERXFileUtilities {
     /**
         * @deprecated use writeInputStreamToFile(InputStream is, File f) instead
      */
-    public static void writeInputStreamToFile(File f, InputStream is) throws IOException {
+    @SuppressWarnings("dep-ann")
+	public static void writeInputStreamToFile(File f, InputStream is) throws IOException {
         writeInputStreamToFile(is, f);
     }
 
@@ -272,8 +273,7 @@ public class ERXFileUtilities {
         if (srcPath == null) throw new IllegalArgumentException("null source path not allowed");
         if (dstPath == null) throw new IllegalArgumentException("null source path not allowed");
 
-        NSMutableArray args = new NSMutableArray(7);
-
+        NSMutableArray<String> args = new NSMutableArray<String>(7);
         args.addObject("/usr/bin/scp");
         args.addObject("-B");
         args.addObject("-q");
@@ -829,9 +829,9 @@ public class ERXFileUtilities {
      * @return a NSArray containing the files in the directory. If the specified directory does not
      * exist then the array is empty.
      */
-    public static NSArray arrayByAddingFilesInDirectory(File directory, boolean recursive) {
+    public static NSArray<File> arrayByAddingFilesInDirectory(File directory, boolean recursive) {
         ERXFile erxDirectory = new ERXFile(directory.getAbsolutePath());
-        NSMutableArray files = new NSMutableArray();
+        NSMutableArray<File> files = new NSMutableArray<File>();
         if (!erxDirectory.exists()) {
             return files;
         }
@@ -844,7 +844,7 @@ public class ERXFileUtilities {
         for (int i = 0; i < fileList.length; i++) {
             File f = fileList[i];
             if (f.isDirectory() && recursive) {
-                files.addObjectsFromArray(arrayByAddingFilesInDirectory(f, true));
+                files.addObjectsFromArray(ERXFileUtilities.arrayByAddingFilesInDirectory(f, true));
             } else {
                 files.addObject(f);
             }
@@ -981,7 +981,7 @@ public class ERXFileUtilities {
         ZipOutputStream zout = new ZipOutputStream(new BufferedOutputStream(new FileOutputStream(destination)));
         zout.setLevel(level);
 
-        NSArray files = f.isDirectory() ? arrayByAddingFilesInDirectory(f, true) : new NSArray(f);
+        NSArray<File> files = f.isDirectory() ? arrayByAddingFilesInDirectory(f, true) : new NSArray<File>(f);
 
         try {
             BufferedInputStream origin = null;
@@ -990,7 +990,7 @@ public class ERXFileUtilities {
             // get a list of files from current directory
 
             for (int i = 0; i < files.count(); i++) {
-                File currentFile = (File)files.objectAtIndex(i);
+                File currentFile = files.objectAtIndex(i);
                 FileInputStream fi = new FileInputStream(currentFile);
                 origin = new BufferedInputStream(fi, 2048);
                 String entryName = currentFile.getAbsolutePath();
