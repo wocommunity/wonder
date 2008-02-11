@@ -147,31 +147,38 @@ public class ERXWOForm extends com.webobjects.appserver._private.WOHTMLDynamicEl
 
 	@Override
 	public WOActionResults invokeAction(WORequest worequest, WOContext context) {
-		boolean wasFormSubmitted = context._wasFormSubmitted();
-		boolean wasInForm = _enterFormInContext(context);
-		boolean wasMultipleSubmitForm = context._isMultipleSubmitForm();
-
-		String enctype = _enctype(context);
-		if (enctype != null) {
-			_setEnctype(enctype);
-		}
-
-		context._setActionInvoked(false);
-		context._setIsMultipleSubmitForm(_multipleSubmit == null ? false : _multipleSubmit.booleanValueInComponent(context.component()));
-		_setFormName(context, wasInForm);
-		WOActionResults result = super.invokeAction(worequest, context);
-		if (!wasInForm && !context._wasActionInvoked() && context._wasFormSubmitted()) {
-			if (_action != null) {
-				result = (WOActionResults) _action.valueInComponent(context.component());
+		boolean wasInForm = context.isInForm();
+		WOActionResults result;
+		if (_shouldAppendFormTags(context, wasInForm)) {
+			boolean wasFormSubmitted = context._wasFormSubmitted();
+			_enterFormInContext(context);
+			boolean wasMultipleSubmitForm = context._isMultipleSubmitForm();
+	
+			String enctype = _enctype(context);
+			if (enctype != null) {
+				_setEnctype(enctype);
 			}
-			if (result == null && !ERXAjaxApplication.isAjaxSubmit(worequest)) {
-				result = context.page();
+	
+			context._setActionInvoked(false);
+			context._setIsMultipleSubmitForm(_multipleSubmit == null ? false : _multipleSubmit.booleanValueInComponent(context.component()));
+			_setFormName(context, wasInForm);
+			result = super.invokeAction(worequest, context);
+			if (!wasInForm && !context._wasActionInvoked() && context._wasFormSubmitted()) {
+				if (_action != null) {
+					result = (WOActionResults) _action.valueInComponent(context.component());
+				}
+				if (result == null && !ERXAjaxApplication.isAjaxSubmit(worequest)) {
+					result = context.page();
+				}
 			}
+			context._setIsMultipleSubmitForm(wasMultipleSubmitForm);
+			_exitFormInContext(context, wasInForm, wasFormSubmitted);
+			_clearFormName(context, wasInForm);
+			_clearEnctype();
 		}
-		context._setIsMultipleSubmitForm(wasMultipleSubmitForm);
-		_exitFormInContext(context, wasInForm, wasFormSubmitted);
-		_clearFormName(context, wasInForm);
-		_clearEnctype();
+		else {
+			result = super.invokeAction(worequest, context);
+		}
 		return result;
 	}
 
@@ -256,17 +263,23 @@ public class ERXWOForm extends com.webobjects.appserver._private.WOHTMLDynamicEl
 
 	@Override
 	public void takeValuesFromRequest(WORequest request, WOContext context) {
-		boolean wasFormSubmitted = context._wasFormSubmitted();
-		boolean wasInForm = _enterFormInContext(context);
-
-		// log.info(this._formName + "->" +
-		// this.toString().replaceAll(".*(keyPath=\\w+).*", "$1"));
-		_setFormName(context, wasInForm);
-		super.takeValuesFromRequest(request, context);
-		// log.info(context.elementID() + "->" + context.senderID() + "->" +
-		// context._wasFormSubmitted());
-		_exitFormInContext(context, wasInForm, wasFormSubmitted);
-		_clearFormName(context, wasInForm);
+		boolean wasInForm = context.isInForm();
+		if (_shouldAppendFormTags(context, wasInForm)) {
+			boolean wasFormSubmitted = context._wasFormSubmitted();
+			_enterFormInContext(context);
+	
+			// log.info(this._formName + "->" +
+			// this.toString().replaceAll(".*(keyPath=\\w+).*", "$1"));
+			_setFormName(context, wasInForm);
+			super.takeValuesFromRequest(request, context);
+			// log.info(context.elementID() + "->" + context.senderID() + "->" +
+			// context._wasFormSubmitted());
+			_exitFormInContext(context, wasInForm, wasFormSubmitted);
+			_clearFormName(context, wasInForm);
+		}
+		else {
+			super.takeValuesFromRequest(request, context);
+		}
 	}
 
 	protected String _formName(WOContext context) {
@@ -360,9 +373,8 @@ public class ERXWOForm extends com.webobjects.appserver._private.WOHTMLDynamicEl
 	@Override
 	public void appendToResponse(WOResponse response, WOContext context) {
 		boolean wasInForm = context.isInForm();
-		context.setInForm(true);
-
 		if (_shouldAppendFormTags(context, wasInForm)) {
+			context.setInForm(true);
 			_setFormName(context, wasInForm);
 			_appendOpenTagToResponse(response, context);
 			if (_multipleSubmit != null && _multipleSubmit.booleanValueInComponent(context.component())) {
@@ -374,15 +386,14 @@ public class ERXWOForm extends com.webobjects.appserver._private.WOHTMLDynamicEl
 			_appendCloseTagToResponse(response, context);
 			_clearFormName(context, wasInForm);
 			_clearEnctype();
+			context.setInForm(wasInForm);
 		}
 		else {
 			if (!_disabled(context)) {
-				log.warn("This FORM is embedded inside another FORM. Omitting Tags: " + this.toString());
+				log.warn("This form is embedded inside another form, so the inner form is being omitted: " + this.toString());
 			}
 			appendChildrenToResponse(response, context);
 		}
-
-		context.setInForm(wasInForm);
 	}
 
 	/**
