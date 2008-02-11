@@ -45,6 +45,10 @@ import com.webobjects.foundation._NSDictionaryUtilities;
  * If you actually want to see those new bindings in WOBuilder, edit the file 
  * <code>WebObjects Builder.app/Contents/Resources/WebObjectDefinitions.xml</code>, which 
  * contains the .api for the dynamic elements.
+ * 
+ * @property er.extensions.ERXWOForm.multipleSubmitDefault the default value of multipleSubmit for all forms
+ * @property er.extensions.ERXWOForm.addDefaultSubmitButtonDefault whether or not a default submit button should be addd to the form
+ * 
  * @author ak
  * @author Mike Schrag (idea to secure binding)
  */  
@@ -66,6 +70,7 @@ public class ERXWOForm extends com.webobjects.appserver._private.WOHTMLDynamicEl
     protected WOAssociation _directActionName;
     protected WOAssociation _addDefaultSubmitButton;
 
+    public static boolean multipleSubmitDefault = ERXProperties.booleanForKeyWithDefault("er.extensions.ERXWOForm.multipleSubmitDefault", false);
     public static boolean addDefaultSubmitButtonDefault = ERXProperties.booleanForKeyWithDefault("er.extensions.ERXWOForm.addDefaultSubmitButtonDefault", false);
     
     @SuppressWarnings("unchecked")
@@ -78,6 +83,9 @@ public class ERXWOForm extends com.webobjects.appserver._private.WOHTMLDynamicEl
     	_action = (WOAssociation)_associations.removeObjectForKey("action");
     	_href = (WOAssociation)_associations.removeObjectForKey("href");
     	_multipleSubmit = (WOAssociation)_associations.removeObjectForKey("multipleSubmit");
+    	if (_multipleSubmit == null && multipleSubmitDefault) {
+    	  _multipleSubmit = new WOConstantValueAssociation(Boolean.valueOf(multipleSubmitDefault));
+    	}
     	_actionClass = (WOAssociation)_associations.removeObjectForKey("actionClass");
     	_queryDictionary = (WOAssociation)_associations.removeObjectForKey("queryDictionary");
     	_directActionName = (WOAssociation)_associations.removeObjectForKey("directActionName");
