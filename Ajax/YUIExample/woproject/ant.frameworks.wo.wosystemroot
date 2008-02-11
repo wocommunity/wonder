@@ -1,9 +1,9 @@
-Library/Frameworks/JavaWebObjects.framework
-Library/Frameworks/JavaFoundation.framework
-Library/Frameworks/JavaXML.framework
 Library/Frameworks/JavaEOAccess.framework
 Library/Frameworks/JavaEOControl.framework
+Library/Frameworks/JavaFoundation.framework
 Library/Frameworks/JavaJDBCAdaptor.framework
+Library/Frameworks/JavaWebObjects.framework
+Library/Frameworks/JavaXML.framework
 Library/Frameworks/JavaVM.framework
 Library/Java/Extensions/CoreAudio.jar
 Library/Java/Extensions/dns_sd.jar
@@ -15,5 +15,4 @@ Library/Java/Extensions/jai_core.jar
 Library/Java/Extensions/mlibwrapper_jai.jar
 Library/Java/Extensions/MRJToolkit.jar
 Library/Java/Extensions/QTJava.zip
-Library/Java/Extensions/QTJSupport.jar
 Library/Java/Extensions/vecmath.jar
