@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.Method;
 import java.sql.SQLException;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -722,9 +723,7 @@ public class ERXSQLHelper {
 	
 	/**
 	 * JDBCAdaptor.externalTypeForJDBCType just returns the first type it 
-	 * finds instead of trying to find a best match.  Also, it has protected versions of jdbcInfo()
-	 * and typeInfo(), which is what we need to call, so we reimplement all of it, just to try 
-	 * and figure out what the preferred database type should be find a JDBC type.  This can still 
+	 * finds instead of trying to find a best match. This can still 
 	 * fail, mind you, but it should be much better than the EOF default impl.
 	 * 
 	 * @param adaptor the adaptor to retrieve an external type for
@@ -732,31 +731,39 @@ public class ERXSQLHelper {
 	 * @return a guess at the external type name to use
 	 */
 	public String externalTypeForJDBCType(JDBCAdaptor adaptor, int jdbcType) {
-		NSDictionary connDict = adaptor.connectionDictionary();
-		NSDictionary jdbcInfo = null;
-		if (connDict != null) {
-			jdbcInfo = (NSDictionary) connDict.objectForKey("jdbc2Info");
-		}
-		if (jdbcInfo == null) {
-			jdbcInfo = adaptor.plugIn().jdbcInfo();
-		}
 		String externalType = null;
-		if (jdbcInfo != null) {
-			NSDictionary typeInfo = (NSDictionary) jdbcInfo.objectForKey("typeInfo");
-			if (typeInfo != null) {
-				String jdbcStringRep = JDBCAdaptor.stringRepresentationForJDBCType(jdbcType);
-				// We're going to guess that the jdbc string rep is a valid type in this
-				// adaptor.  If it is, then we can use that and it will probably be a better
-				// guess than just the first type we run across.
-				NSDictionary typeDescription = (NSDictionary) typeInfo.objectForKey(jdbcStringRep);
-				if (typeDescription != null) {
-					NSArray defaultJDBCType = (NSArray)typeDescription.objectForKey("defaultJDBCType");
-					if (defaultJDBCType != null && defaultJDBCType.containsObject(jdbcStringRep)) {
-						externalType = jdbcStringRep;
+		try {
+			// MS: This is super dirty, but we can deadlock if we end up trying
+			// to request jdbc2Info during a migration.  We have to be able to
+			// use the adaptor's cached version of this method and so we just
+			// have to go in through the backdoor here ...
+			Method typeInfoMethod = adaptor.getClass().getDeclaredMethod("typeInfo");
+			boolean oldAccessible = typeInfoMethod.isAccessible();
+			typeInfoMethod.setAccessible(true);
+			try {
+				NSDictionary typeInfo = (NSDictionary) typeInfoMethod.invoke(adaptor);
+				if (typeInfo != null) {
+					String jdbcStringRep = JDBCAdaptor.stringRepresentationForJDBCType(jdbcType);
+					// We're going to guess that the jdbc string rep is a valid type in this
+					// adaptor.  If it is, then we can use that and it will probably be a better
+					// guess than just the first type we run across.
+					NSDictionary typeDescription = (NSDictionary) typeInfo.objectForKey(jdbcStringRep);
+					if (typeDescription != null) {
+						NSArray defaultJDBCType = (NSArray)typeDescription.objectForKey("defaultJDBCType");
+						if (defaultJDBCType != null && defaultJDBCType.containsObject(jdbcStringRep)) {
+							externalType = jdbcStringRep;
+						}
 					}
 				}
 			}
+			finally {
+				typeInfoMethod.setAccessible(oldAccessible);
+			}
 		}
+		catch (Exception e) {
+			ERXSQLHelper.log.error("Failed to sneakily execute adaptor.typeInfo().", e);
+		}
+		
 		if (externalType == null) {
 			externalType = adaptor.externalTypeForJDBCType(jdbcType);
 		}
