@@ -32,6 +32,9 @@ public class YUIUtils {
      * @return
      */
     private static String actualFileName(String fileName) {
+        if(fileName.startsWith("ext") || fileName.startsWith("wonder")) {
+            return fileName;
+        }
         return yuiBase() + fileName;
     }
     
