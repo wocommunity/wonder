@@ -6,9 +6,35 @@ import com.webobjects.appserver.WOResponse;
 import com.webobjects.foundation.NSDictionary;
 
 import er.ajax.AjaxUtils;
+import er.extensions.ERXProperties;
 
 public class YUIUtils {
- 
+    
+    /**
+     * Holds the external URL for the YUI libs via the property <code>er.yui.base</code>.
+     */
+    private static String yuiBase;
+
+    /**
+     * Returns an external URL for the YUI libs to prepend via the property <code>er.yui.base</code> or the empty String. MUST end with "/" if set.
+     * @return
+     */
+    private static String yuiBase() {
+        if(yuiBase == null) {
+            yuiBase = ERXProperties.stringForKeyWithDefault("er.yui.base","");
+        }
+        return yuiBase;
+    }
+    
+    /**
+     * 
+     * @param fileName
+     * @return
+     */
+    private static String actualFileName(String fileName) {
+        return yuiBase() + fileName;
+    }
+    
     public static void addScriptResourceInHead(WOContext context, WOResponse response, String fileName) {
         // auto-discover and switch plain and min versions 
         if(WOApplication.application().isCachingEnabled()) {
@@ -17,11 +43,11 @@ public class YUIUtils {
             // debug version is not working in WOLips, probably due to the differences in build
             // fileName = fileName.replaceFirst("\\.js", "-debug.js");
         }
-        AjaxUtils.addScriptResourceInHead(context, response, "YUI", fileName);
+        AjaxUtils.addScriptResourceInHead(context, response, "YUI", actualFileName(fileName));
     }
 
     public static void addStylesheetResourceInHead(WOContext context, WOResponse response, String fileName) {
-        AjaxUtils.addStylesheetResourceInHead(context, response, "YUI", fileName);
+        AjaxUtils.addStylesheetResourceInHead(context, response, "YUI", actualFileName(fileName));
   }
 
   public static String id(String idBindingName, NSDictionary associations, WOContext context) {
