@@ -8,7 +8,7 @@ import org.json.JSONObject;
 
 import com.metaparadigm.jsonrpc.BigDecimalSerializer;
 import com.metaparadigm.jsonrpc.EOEnterpriseObjectSerializer;
-import com.metaparadigm.jsonrpc.JSONRPCBridge;
+import com.metaparadigm.jsonrpc.JSONBridge;
 import com.metaparadigm.jsonrpc.JSONRPCResult;
 import com.metaparadigm.jsonrpc.NSArraySerializer;
 import com.metaparadigm.jsonrpc.NSDictionarySerializer;
@@ -197,12 +197,12 @@ public class AjaxProxy extends AjaxComponent {
 			}
 			String proxyName = (String) valueForBinding("proxyName");
 
-			JSONRPCBridge bridge = null;
+			JSONBridge bridge = null;
 			if (canGetValueForBinding("AjaxBridge")) {
-				bridge = (JSONRPCBridge) valueForBinding("AjaxBridge");
+				bridge = (JSONBridge) valueForBinding("AjaxBridge");
 			}
 			else {
-				bridge = new JSONRPCBridge();
+				bridge = new JSONBridge();
 				bridge.getSerializer().registerSerializer(new EOEnterpriseObjectSerializer());
 				bridge.getSerializer().registerSerializer(new NSArraySerializer());
 				bridge.getSerializer().registerSerializer(new NSDictionarySerializer());
