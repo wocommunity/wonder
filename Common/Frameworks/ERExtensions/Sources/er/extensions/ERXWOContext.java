@@ -359,14 +359,30 @@ public class ERXWOContext extends ERXAjaxContext implements ERXMutableUserInfoHo
 	}
 
 	/**
-	 * Adds javascript code in a script tag in the html head tag.
+	 * Adds javascript code in a script tag in the html head tag (without a name). If you call
+	 * this method multiple times with the same script code, it will add multiple times.  To
+	 * prevent this, call addScriptCodeInHead(WOResponse, String, String) passing in a name for
+	 * your script.
 	 * 
 	 * @param response the response to write into
 	 * @param script the javascript code to insert 
 	 */
 	public static void addScriptCodeInHead(WOResponse response, String script) {
-		String js = "<script type=\"text/javascript\">\n" + script + "\n</script>";
-		ERXWOContext.insertInResponseBeforeTag(response, js, ERXWOContext._htmlCloseHeadTag(), false, true);
+		ERXWOContext.addScriptCodeInHead(response, script, null);
+	}
+
+	/**
+	 * Adds javascript code in a script tag in the html head tag.
+	 * 
+	 * @param response the response to write into
+	 * @param script the javascript code to insert 
+	 * @param scriptName the name of the script to insert (for duplicate checking)
+	 */
+	public static void addScriptCodeInHead(WOResponse response, String script, String scriptName) {
+		if (scriptName == null || !ERXWOContext.isResourceAddedToHead(scriptName)) {
+			String js = "<script type=\"text/javascript\">\n" + script + "\n</script>";
+			ERXWOContext.insertInResponseBeforeTag(response, js, ERXWOContext._htmlCloseHeadTag(), false, true);
+		}
 	}
 
 	/**
@@ -396,6 +412,28 @@ public class ERXWOContext extends ERXAjaxContext implements ERXMutableUserInfoHo
 	}
 
 	/**
+	 * Returns whether or not the given resource has been added to the HEAD tag.
+	 * 
+	 * @param resourceName the name of the resource to check
+	 * @return true if the resource has been added to head
+	 */
+	@SuppressWarnings("unchecked")
+	protected static boolean isResourceAddedToHead(String resourceName) {
+		NSMutableDictionary<String, Object> userInfo = contextDictionary();
+		NSMutableSet<String> addedResources = (NSMutableSet<String>)userInfo.objectForKey("ERXWOContext.addedResources");
+		if (addedResources == null) {
+			addedResources = new NSMutableSet<String>();
+			userInfo.setObjectForKey(addedResources, "ERXWOContext.addedResources");
+		}
+		boolean resourceAdded = true;
+		if (!addedResources.containsObject(resourceName)) {
+			resourceAdded = false;
+			addedResources.addObject(resourceName);
+		}
+		return resourceAdded;
+	}
+	
+	/**
 	 * Adds a reference to an arbitrary file with a correct resource url wrapped between startTag and endTag in the html
 	 * head tag if it isn't already present in the response.
 	 * 
@@ -406,35 +444,27 @@ public class ERXWOContext extends ERXAjaxContext implements ERXMutableUserInfoHo
 	 */
 	@SuppressWarnings("unchecked")
 	public static void addResourceInHead(WOContext context, WOResponse response, String framework, String fileName, String startTag, String endTag, boolean appendIfTagMissing, boolean enqueueIfTagMissing) {
-		NSMutableDictionary userInfo = contextDictionary();
-		NSMutableSet addedResources = (NSMutableSet)userInfo.objectForKey("ERXWOContext.addedResources");
-		boolean insertResource = true;
-		if (addedResources == null) {
-			addedResources = new NSMutableSet();
-			userInfo.setObjectForKey(addedResources, "ERXWOContext.addedResources");
-		}
-		if (!addedResources.containsObject(fileName)) {
-		String url;
-		if (fileName.indexOf("://") != -1 || fileName.startsWith("/")) {
-			url = fileName;
-		}
-		else {
+		if (!ERXWOContext.isResourceAddedToHead(fileName)) {
+			String url;
+			if (fileName.indexOf("://") != -1 || fileName.startsWith("/")) {
+				url = fileName;
+			}
+			else {
 				WOResourceManager rm = WOApplication.application().resourceManager();
-			NSArray languages = null;
-			if (context.hasSession()) {
-				languages = context.session().languages();
+				NSArray languages = null;
+				if (context.hasSession()) {
+					languages = context.session().languages();
+				}
+				url = rm.urlForResourceNamed(fileName, framework, languages, context.request());
+				if (ERXProperties.stringForKey(SECURE_RESOURCES_KEY) != null) {
+					StringBuffer urlBuffer = new StringBuffer();
+			    	context.request()._completeURLPrefix(urlBuffer, ERXProperties.booleanForKey(SECURE_RESOURCES_KEY), 0);
+			    	urlBuffer.append(url);
+			    	url = urlBuffer.toString();
+				}
 			}
-			url = rm.urlForResourceNamed(fileName, framework, languages, context.request());
-			if (ERXProperties.stringForKey(SECURE_RESOURCES_KEY) != null) {
-				StringBuffer urlBuffer = new StringBuffer();
-		    	context.request()._completeURLPrefix(urlBuffer, ERXProperties.booleanForKey(SECURE_RESOURCES_KEY), 0);
-		    	urlBuffer.append(url);
-		    	url = urlBuffer.toString();
-			}
-		}
 			String html = startTag + url + endTag + "\n";
 			ERXWOContext.insertInResponseBeforeTag(response, html, ERXWOContext._htmlCloseHeadTag(), appendIfTagMissing, enqueueIfTagMissing);
-			addedResources.addObject(fileName);
 		}
 	}
 	
