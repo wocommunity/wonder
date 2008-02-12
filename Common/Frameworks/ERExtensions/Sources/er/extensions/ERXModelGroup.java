@@ -1014,7 +1014,7 @@ public class ERXModelGroup extends EOModelGroup {
 			for (Enumeration entitiesEnum = model.entities().objectEnumerator(); entitiesEnum.hasMoreElements();) {
 				EOEntity entity = (EOEntity) entitiesEnum.nextElement();
 				
-				String externalName = ERXProperties.stringForKey("er.extensions.ERXModelGroup." + entity.name() + " .externalName");
+				String externalName = ERXProperties.stringForKey("er.extensions.ERXModelGroup." + entity.name() + ".externalName");
 				if (externalName != null) {
 					entity.setExternalName(externalName);
 				}
