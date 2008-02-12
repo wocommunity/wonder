@@ -12,7 +12,7 @@ import com.webobjects.foundation.NSMutableArray;
  */
 public class ERXOrQualifier extends EOOrQualifier implements IERXChainableQualifier {
 	public ERXOrQualifier(NSArray<? extends EOQualifier> qualifiers) {
-		super(qualifiers);
+		super((NSArray)qualifiers);
 	}
 
 	public ERXAndQualifier and(EOQualifier... qualifiers) {
