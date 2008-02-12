@@ -29,11 +29,15 @@ import com.webobjects.foundation.NSMutableDictionary;
 public class ERXClickableContainer extends WOGenericContainer {
 	private WOAssociation _actionClass;
 	private WOAssociation _directActionName;
+	private WOAssociation _disabled;
+	private WOAssociation _style;
 	
 	public ERXClickableContainer(String name, NSDictionary associations, WOElement template) {
 		super(name, ERXClickableContainer._processAssociations(associations), template);
 		_actionClass = (WOAssociation) _associations.removeObjectForKey("actionClass");
 		_directActionName = (WOAssociation) _associations.removeObjectForKey("directActionName");
+    _disabled = (WOAssociation) _associations.removeObjectForKey("disabled");
+    _style = (WOAssociation) _associations.objectForKey("style");
 	}
 
 	protected static NSDictionary _processAssociations(NSDictionary associations) {
@@ -45,28 +49,30 @@ public class ERXClickableContainer extends WOGenericContainer {
 		if (!mutableAssociations.containsKey("elementName")) {
 			mutableAssociations.setObjectForKey(new WOConstantValueAssociation("div"), "elementName");
 		}
-		if (!mutableAssociations.containsKey("style")) {
-			mutableAssociations.setObjectForKey(new WOConstantValueAssociation("cursor: pointer;"), "style");
-		}
 		return mutableAssociations;
 	}
 
 	public void appendAttributesToResponse(WOResponse response, WOContext context) {
 		super.appendAttributesToResponse(response, context);
 		WOComponent component = context.component();
-		response.appendContentString(" onclick = \"location.href='");
-		String url;
-		if (_directActionName != null) {
-			String actionName = (String) _directActionName.valueInComponent(component);
-			if (_actionClass != null) {
-				actionName = actionName + "/" + (String) _actionClass.valueInComponent(component);
-			}
-			url = context.directActionURLForActionNamed(actionName, null);
+		if (_disabled == null || !_disabled.booleanValueInComponent(component)) {
+		  if (_style == null) {
+		    response.appendContentString(" style = \"cursor: pointer;\"");
+		  }
+  		response.appendContentString(" onclick = \"location.href='");
+  		String url;
+  		if (_directActionName != null) {
+  			String actionName = (String) _directActionName.valueInComponent(component);
+  			if (_actionClass != null) {
+  				actionName = actionName + "/" + (String) _actionClass.valueInComponent(component);
+  			}
+  			url = context.directActionURLForActionNamed(actionName, null);
+  		}
+  		else {
+  			url = context.componentActionURL();
+  		}
+  		response.appendContentString(url);
+  		response.appendContentString("'\"");
 		}
-		else {
-			url = context.componentActionURL();
-		}
-		response.appendContentString(url);
-		response.appendContentString("'\"");
 	}
 }
