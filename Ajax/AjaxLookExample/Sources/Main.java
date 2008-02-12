@@ -14,9 +14,9 @@ public class Main extends WOComponent {
     }
 
     public WOComponent showList() {
-        ListPageInterface nextPage = (ListPageInterface) D2W.factory().pageForConfigurationNamed("ListAjaxMovie", session());
-        EODatabaseDataSource ds = new EODatabaseDataSource(session().defaultEditingContext(), "Movie");
-        ds.setFetchSpecification(new EOFetchSpecification("Movie", null, null));
+        ListPageInterface nextPage = (ListPageInterface) D2W.factory().pageForConfigurationNamed("ListAjaxBug", session());
+        EODatabaseDataSource ds = new EODatabaseDataSource(session().defaultEditingContext(), "Bug");
+        ds.setFetchSpecification(new EOFetchSpecification("Bug", null, null));
         ds.fetchSpecification().setFetchLimit(5);
         nextPage.setDataSource(ds);
         return (WOComponent) nextPage;
