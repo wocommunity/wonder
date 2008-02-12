@@ -23,6 +23,7 @@ import com.webobjects.foundation.NSMutableDictionary;
  * @binding action the action to perform
  * @binding actionClass the class name that contains the direct action
  * @binding directActionName the name of the direct action to execute
+ * @binding disabled if true, the onclick is not added to this container
  * 
  * @author mschrag
  */
