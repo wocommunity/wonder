@@ -7,7 +7,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	
   	<properties>
-  		<woversion>5.4</woversion>
+  		<woversion>5.4.1</woversion>
   	</properties>
 
 	<groupId>wonder</groupId>
