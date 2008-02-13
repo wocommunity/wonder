@@ -121,7 +121,8 @@ public class ERXValidationException extends NSValidation.ValidationException imp
      * Gets the message for this exception.
      * @return the correctly formatted validation exception.
      */
-    public String getMessage() {
+    @Override
+	public String getMessage() {
         if (message == null)
             message = ERXValidationFactory.defaultFactory().messageForException(this);
         return message;
@@ -205,7 +206,8 @@ public class ERXValidationException extends NSValidation.ValidationException imp
      * Overrides super implementation to allow for setable object value.
      * @return object object for this exception.
      */
-    public Object object() {
+    @Override
+	public Object object() {
         if(object == null)
         	object = super.object();
         return object;
@@ -351,7 +353,8 @@ public class ERXValidationException extends NSValidation.ValidationException imp
      * exceptions.
      * @return array of additional exceptions
      */
-    public NSArray additionalExceptions() {
+    @Override
+	public NSArray additionalExceptions() {
         if (additionalExceptions == null) {
             additionalExceptions = super.additionalExceptions();
             if (additionalExceptions == null)
@@ -409,7 +412,8 @@ public class ERXValidationException extends NSValidation.ValidationException imp
      * Compares this exception to anything else.
      * @return description of the validation exception
      */
-    public boolean equals(Object anotherObject) {
+    @Override
+	public boolean equals(Object anotherObject) {
         if(anotherObject != null && anotherObject instanceof ERXValidationException) {
             ERXValidationException ex = (ERXValidationException)anotherObject;
             return ERXExtensions.safeEquals(type(), ex.type()) && ERXExtensions.safeEquals(key(), ex.key()) && ERXExtensions.safeEquals(object(), ex.object())
@@ -424,7 +428,8 @@ public class ERXValidationException extends NSValidation.ValidationException imp
      * without calling <code>getMessage</code>.
      * @return description of the validation exception
      */
-    public String toString() {
+    @Override
+	public String toString() {
         return "<" + getClass().getName() + " object: " + object() + "; propertyKey: "
         + propertyKey() + "; type: " + type() + "; additionalExceptions: " + additionalExceptions() + ">";
     }
