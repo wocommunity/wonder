@@ -198,7 +198,7 @@ public class ERXValidationException extends NSValidation.ValidationException imp
      * the validation exception to an EOEnterpriseObject.
      * @return object cast as an enterprise object.
      */
-    public EOEnterpriseObject eoObject() { return (EOEnterpriseObject)object(); }
+    public EOEnterpriseObject eoObject() { return object() instanceof EOEnterpriseObject ? (EOEnterpriseObject)object() : null; }
 
 
     /**
