@@ -33,6 +33,9 @@ public class ERXValidationException extends NSValidation.ValidationException imp
     
     /** corresponds to a number formatter exception */
     public static final String InvalidNumberException = "InvalidNumberException";
+    
+    /** corresponds to a generic 'invalid value' exception */
+    public static final String InvalidValueException = "InvalidValueException";
 
     /** corresponds to a model thrown 'mandatory toOne relationship' exception */
     public static final String MandatoryToOneRelationshipException = "MandatoryToOneRelationshipException";
