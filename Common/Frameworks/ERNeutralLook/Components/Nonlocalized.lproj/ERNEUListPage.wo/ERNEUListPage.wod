@@ -105,9 +105,9 @@ EditButton: ERDEditButton {
 	object = object;
 }
 
-EntityName: WOString {
-	_unroll = true;
-	value = d2wContext.displayNameForEntity;
+EmptyMessageComponent: WOSwitchComponent {
+	WOComponentName = d2wContext.emptyListComponentName;
+	d2wContext = d2wContext;
 }
 
 EntityRepetition: WORepetition {
@@ -116,25 +116,15 @@ EntityRepetition: WORepetition {
 }
 
 ExcelExportButton: WOSwitchComponent {
-	WOComponentName = d2wContext.excelExportButtonCompomentName;
+	WOComponentName = d2wContext.excelExportButtonComponentName;
 	displayGroup = displayGroup;
 	d2wContext = d2wContext;
 }
 
 ExcelExportButton2: WOSwitchComponent {
-	WOComponentName = d2wContext.excelExportButtonCompomentName;
+	WOComponentName = d2wContext.excelExportButtonComponentName;
 	displayGroup = displayGroup;
 	d2wContext = d2wContext;
-}
-
-ExclamationImage: WOImage {
-	alt = "!";
-	border = "0";
-	filename = "exclamation.gif";
-	framework = "JavaDirectToWeb";
-	height = "32";
-	name = "!";
-	width = "32";
 }
 
 FilterDisplayGroupButton: ERDFilterDisplayGroupButton {
@@ -145,11 +135,6 @@ FilterDisplayGroupButton: ERDFilterDisplayGroupButton {
 FilterDisplayGroupButton2: ERDFilterDisplayGroupButton {
 	d2wContext = d2wContext;
 	displayGroup = displayGroup;
-}
-
-FontContainer: WOGenericContainer {
-	color = d2wContext.textColor;
-	elementName = "font";
 }
 
 Generic1: WOGenericContainer {
@@ -194,11 +179,11 @@ IsEntityWritable2: WOConditional {
 }
 
 IsGenericExportButtonKnown: WOConditional {
-	condition = d2wContext.excelExportButtonCompomentName;
+	condition = d2wContext.excelExportButtonComponentName;
 }
 
 IsGenericExportButtonKnown2: WOConditional {
-	condition = d2wContext.excelExportButtonCompomentName;
+	condition = d2wContext.excelExportButtonComponentName;
 }
 
 IsListing: WOConditional {

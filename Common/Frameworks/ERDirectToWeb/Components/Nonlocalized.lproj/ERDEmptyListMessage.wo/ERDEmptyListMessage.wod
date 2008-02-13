@@ -1,7 +1,3 @@
-EntityName: WOString {
-	value = ^displayNameForEntity;
-}
-
 ExclamationImage: WOImage {
 	border = "0";
 	filename = "exclamation.gif";
@@ -13,17 +9,36 @@ FontContainer: WOGenericContainer {
 	elementName = "font";
 }
 
-NonNullConditional1: ERXNonNullConditional {
+HasNoMessage: ERXNonNullConditional {
 	condition = ^emptyListMessage;
 	negate = true;
 }
 
-NonNullConditional2: ERXNonNullConditional {
+HasMessage: ERXNonNullConditional {
 	condition = ^emptyListMessage;
 }
 
-String1: WOString {
+EmptyListTemplate: ERXLocalizedString {
+	templateString = "ERDEmptyListMessage.emptyListMessage";
+	object = bindings;
+	escapeHTML = false;
+}
+
+EmptyListMessage: WOString {
 	value = ^emptyListMessage;
 	escapeHTML = false;
 }
 
+ShowCreateObjectLink : WOConditional {
+	condition = showCreateObjectLink;
+}
+
+CreateObjectLink : WOHyperlink {
+	action = createObject;
+}
+
+CreateObjectString : ERXLocalizedString {
+	templateString = "ERDEmptyListMessage.createObjectStringTemplate";
+	object = bindings;
+	escapeHTML = false;
+}
