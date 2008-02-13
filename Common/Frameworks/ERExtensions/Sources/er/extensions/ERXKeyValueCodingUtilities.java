@@ -8,6 +8,7 @@ package er.extensions;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.util.Collection;
 import java.util.Hashtable;
 import java.util.Iterator;
@@ -105,8 +106,35 @@ public class ERXKeyValueCodingUtilities {
         }
         return result;
     }
-    
-    
+
+    /**
+     * Returns final strings from an interface or class. Useful in particular when you want to create
+     * selection lists from your interfaces automatically. 
+     * @param c
+     */
+    public static NSArray<ERXKeyValuePair> staticStringsForClass(Class c) {
+		NSMutableArray<ERXKeyValuePair> result = new NSMutableArray();
+		Field[] fields = c.getDeclaredFields();
+		for (int i = 0; i < fields.length; i++) {
+			Field field = fields[i];
+			try {
+				if(Modifier.isFinal(field.getModifiers()) && field.getType().equals(String.class)) {
+					String key = field.getName();
+					String value = (String) field.get(c);
+					result.addObject(new ERXKeyValuePair(key, value));
+				}
+			}
+			catch (IllegalArgumentException e) {
+				throw NSForwardException._runtimeExceptionForThrowable(e);
+			}
+			catch (IllegalAccessException e) {
+				throw NSForwardException._runtimeExceptionForThrowable(e);
+			}
+		}
+		return (NSArray<ERXKeyValuePair>) result;
+
+	}
+
     public static final NSKeyValueCodingAdditions Statics = new NSKeyValueCodingAdditions() {
         /**
          * @see com.webobjects.foundation.NSKeyValueCodingAdditions#valueForKeyPath(java.lang.String)
