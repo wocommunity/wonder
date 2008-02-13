@@ -84,7 +84,7 @@ var WOLipsClickToOpen = {
 			});
 			var componentBreadCrumbElement = $('_componentBreadCrumb');
 			if (componentBreadCrumbElement != null) {
-				componentBreadCrumbElement.innerHTML = componentBreadCrumb.join(' <span class = "_wolUnimportant">&gt;</span> ');
+				componentBreadCrumbElement.innerHTML = componentBreadCrumb.join(' <span class = "_wolUnimportant">&lt;</span> ');
 			}
 		}
 	},
