@@ -960,7 +960,51 @@ public class ERXArrayUtilities extends Object {
         }
     }
 
-    
+
+    /**
+     * Define an {@link com.webobjects.foundation.NSArray.Operator NSArray.Operator} for the key <b>limit</b>, which
+     * is similar to subarrayWithRange except that it is always from 0 to the limit value.  If the limit
+     * specified is larger than the size of the array, the entire array will be returned.
+     * <br/>
+     * This allows for key value paths like:<br/>
+     * <br/>
+     * <code>myArray.valueForKeyPath("@limit.10.name");</code><br/>
+     * <br/>
+     */
+    public static class LimitOperator extends BaseOperator {
+        /**
+         * Constructs a new LimitOperator
+         **/
+        public LimitOperator() {
+        	// DO NOTHING
+        }
+
+        /**
+         * Computes the subarray of the given array.
+         * 
+         * @param array array to be checked.
+         * @param keypath name of fetch specification.
+         * @return the subarray for the given limit
+         */
+        public Object compute(NSArray array, String keypath) {
+            int dotIndex = keypath.indexOf(".");
+            String limitStr;
+            String rest;
+            if (dotIndex == -1) {
+            	limitStr = keypath;
+            	rest = null;
+            }
+            else {
+            	limitStr = keypath.substring(0, dotIndex);
+            	rest = keypath.substring(dotIndex + 1);
+            }
+            int length = limitStr.length() == 0 ? 0 : Integer.parseInt(limitStr);
+            length = Math.min(length, array.count());
+            NSArray objects = array.subarrayWithRange(new NSRange(0, length));
+            return contents(objects, rest);
+        }
+    }
+
 
     /**
      * Define an {@link com.webobjects.foundation.NSArray.Operator NSArray.Operator} for the key <b>unique</b>.<br/>
@@ -1147,7 +1191,8 @@ public class ERXArrayUtilities extends Object {
     /** 
      * Will register new NSArray operators
      * <b>sort</b>, <b>sortAsc</b>, <b>sortDesc</b>, <b>sortInsensitiveAsc</b>,
-     * <b>sortInsensitiveDesc</b>, <b>unique</b>, <b>flatten</b>, <b>reverse</b> and <b>fetchSpec</b> 
+     * <b>sortInsensitiveDesc</b>, <b>unique</b>, <b>flatten</b>, <b>reverse</b>, 
+     * <b>limit</b>, and <b>fetchSpec</b> 
      */
     public static void initialize() {
         if (initialized) {
@@ -1170,6 +1215,7 @@ public class ERXArrayUtilities extends Object {
             NSArray.setOperatorForKey("reverse", new ReverseOperator());
             NSArray.setOperatorForKey("removeNullValues", new RemoveNullValuesOperator());
             NSArray.setOperatorForKey("median", new MedianOperator());
+            NSArray.setOperatorForKey("limit", new LimitOperator());
         }
     }
     
