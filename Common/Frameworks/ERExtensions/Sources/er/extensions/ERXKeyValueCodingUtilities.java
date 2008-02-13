@@ -108,12 +108,15 @@ public class ERXKeyValueCodingUtilities {
     }
 
     /**
-     * Returns final strings from an interface or class. Useful in particular when you want to create
+     * Returns final strings constants from an interface or class. Useful in particular when you want to create
      * selection lists from your interfaces automatically. 
      * @param c
      */
     public static NSArray<ERXKeyValuePair> staticStringsForClass(Class c) {
 		NSMutableArray<ERXKeyValuePair> result = new NSMutableArray();
+		if(c.getSuperclass() != null) {
+			result.addObjectsFromArray(staticStringsForClass(c.getSuperclass()));
+		}
 		Field[] fields = c.getDeclaredFields();
 		for (int i = 0; i < fields.length; i++) {
 			Field field = fields[i];
