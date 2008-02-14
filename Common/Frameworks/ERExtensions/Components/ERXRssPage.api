@@ -10,7 +10,7 @@
         <validation message="'items' must be bound to a settable value">
             <unsettable name="items"/>
         </validation>
-        <binding name="feedName"/>
+        <binding name="feedTitle"/>
         <binding name="feedUrl"/>
         <binding name="feedDescription"/>
         <binding name="itemTitle"/>
@@ -28,5 +28,6 @@
         <validation message="'itemLink' is a required binding">
             <unbound name="itemLink"/>
         </validation>
+    <binding name="itemGuid"/>
     </wo>
 </wodefinitions>
