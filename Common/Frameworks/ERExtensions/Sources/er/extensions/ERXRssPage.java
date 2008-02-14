@@ -12,6 +12,7 @@ import com.webobjects.appserver.*;
  * @binding feedDescription
  * @binding list
  * @binding item
+ * @binding itemGuid
  * @binding itemTitle
  * @binding itemLink
  * @binding itemPubDate
@@ -26,6 +27,14 @@ public class ERXRssPage extends ERXStatelessComponent {
 
 	public Object dateFormatter() {
 		return new SimpleDateFormat("E, dd MMM yyyy hh:mm:ss Z", Locale.ENGLISH);
+	}
+	
+	public Object itemGuid() {
+		Object itemGuid = valueForBinding("itemGuid");
+		if (itemGuid == null) {
+			itemGuid = valueForBinding("itemLink");
+		}
+		return itemGuid;
 	}
 	
 	@Override

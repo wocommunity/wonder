@@ -31,3 +31,16 @@ items: WORepetition {
 
 Content : WOComponentContent {
 }
+
+itemGuid : WOString {
+	value = itemGuid;
+}
+
+HasGuid : WOConditional {
+	condition = itemGuid;
+}
+
+HasNoGuid : WOConditional {
+	condition = itemGuid;
+	negate = true;
+}
