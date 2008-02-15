@@ -16,7 +16,9 @@ import com.webobjects.foundation.NSKeyValueCodingAdditions;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 
+import er.extensions.ERXStringUtilities;
 import er.extensions.ERXValueUtilities;
+
 
 
 /**
@@ -59,6 +61,9 @@ import er.extensions.ERXValueUtilities;
  *        unselectedRowCSSStyle = &quot;background:lightgrey;&quot;;// Secondary CSS style attribute on unselected rows, optional
  *        canReorder = true;                                    // Enables (or disables) drag and drop reordering of columns
  *        batchSize = 10;                                       // Controls size of batch in display group, use zero for no batching
+ *        rowIdentifier = adKey;                                // Optional, key path into row returning a unique identifier for the row 
+ *                                                              // rowIdentifier is used to build HTML ID attributes, so a String or Number works best
+ *        
  *  
  *        columns = (                                           // List of columns to display, controls the initial display order
  *            {
@@ -268,8 +273,9 @@ public class AjaxGrid extends WOComponent {
 
 	private NSKeyValueCodingAdditions row; // local binding
 	private NSDictionary currentColumn; // local binding
-	public int rowIndex; // local binding
+	private int rowIndex; // local binding
 
+	public static final String TITLE = "title";
 	public static final String KEY_PATH = "keyPath";
 	public static final String SORT_DIRECTION = "direction";
 	public static final String SORT_ASCENDING = "ascending";
@@ -279,6 +285,7 @@ public class AjaxGrid extends WOComponent {
 	public static final String BATCH_SIZE = "batchSize";
 	public static final String UPDATE_CONTAINER_ID = "updateContainerID";
 	public static final String TABLE_ID = "tableID";
+	public static final String ROW_IDENTIFIER = "rowIdentifier";
 	public static final String CAN_REORDER = "canReorder";
 	public static final String SOURCE_COLUMN_FORM_VALUE = "sourceColumn";
 	public static final String DESTINATION_COLUMN_FORM_VALUE = "destinationColumn";
@@ -374,6 +381,13 @@ public class AjaxGrid extends WOComponent {
 		clearCachedConfiguration();
 		updateDisplayGroupSort();
 	}
+	
+	/**
+	 * @return ID to be used on AjaxUpdateLink bound to removeSorting()
+	 */
+	public String removeSortingID() {
+		return tableID() + "_RemoveSorting";
+	}
 
 	/**
 	 * This method is called when the AjaxUpdateContainer is about to update. It
@@ -465,7 +479,18 @@ public class AjaxGrid extends WOComponent {
 	public String tableID() {
 		return (String) configurationData().valueForKey(TABLE_ID);
 	}
-
+	
+	/**
+	 * Returns an optional key path into row that will return a value that uniquely identifies this row.
+	 * This should be suitable for use as part of an HTML ID attribute.
+	 * 
+	 * @return an optional key path into row that will return a value that uniquely identifies this row
+	 */
+	public String rowIdentifier() {
+		
+		return (String) configurationData().valueForKey(ROW_IDENTIFIER);
+	}
+	
 	/**
 	 * Returns COLUMNS value from configurationData()
 	 * 
@@ -495,7 +520,7 @@ public class AjaxGrid extends WOComponent {
 	}
 
 	/**
-	 * Returns EVEN_ROW_CSS_CLASS or ODD_ROW_CSS_CLASS, depending on rowIndex,
+	 * Returns EVEN_ROW_CSS_CLASS or ODD_ROW_CSS_CLASS, depending on rowIndex(),
 	 * value from configurationData() followed by SELECTED_ROW_CSS_CLASS or
 	 * UNSELECTED_ROW_CSS_CLASS, depending on isRowSelected(), value from
 	 * configurationData()
@@ -503,7 +528,7 @@ public class AjaxGrid extends WOComponent {
 	 * @return CSS class for this row
 	 */
 	public String rowClass() {
-		boolean isEven = rowIndex % 2 == 0;
+		boolean isEven = rowIndex() % 2 == 0;
 		String userClass = (String) configurationData().valueForKey(isEven ? EVEN_ROW_CSS_CLASS : ODD_ROW_CSS_CLASS);
 		String selectionClass = (String) configurationData().valueForKey(isRowSelected() ? SELECTED_ROW_CSS_CLASS : UNSELECTED_ROW_CSS_CLASS);
 
@@ -519,7 +544,7 @@ public class AjaxGrid extends WOComponent {
 	}
 
 	/**
-	 * Returns EVEN_ROW_CSS_STYLE or ODD_ROW_CSS_STYLE, depending on rowIndex,
+	 * Returns EVEN_ROW_CSS_STYLE or ODD_ROW_CSS_STYLE, depending on rowIndex(),
 	 * value from configurationData() folowed by SELECTED_ROW_CSS_STYLE or
 	 * UNSELECTED_ROW_CSS_STYLE, depending on isRowSelected(), value from
 	 * configurationData()
@@ -527,7 +552,7 @@ public class AjaxGrid extends WOComponent {
 	 * @return CSS class for this row
 	 */
 	public String rowStyle() {
-		boolean isEven = rowIndex % 2 == 0;
+		boolean isEven = rowIndex() % 2 == 0;
 		String userStyle = (String) configurationData().valueForKey(isEven ? EVEN_ROW_CSS_STYLE : ODD_ROW_CSS_STYLE);
 		String selectionStyle = (String) configurationData().valueForKey(isRowSelected() ? SELECTED_ROW_CSS_STYLE : UNSELECTED_ROW_CSS_STYLE);
 
@@ -542,6 +567,20 @@ public class AjaxGrid extends WOComponent {
 		return userStyle + " " + selectionStyle;
 	}
 
+	/**
+	 * Returns a value suitable for use as part of an HTML ID attribute that uniquely identifies this row.  If rowIdentifier()
+	 * is set, used row().valueForKeyPath(rowIdentifier()), otherwise uses "row_" and the index of the row in the list of objects.
+	 * 
+	 * @return a value suitable for use as part of an HTML ID attribute that uniquely identifies this row
+	 */
+	public String rowID() {
+		
+		if (rowIdentifier() != null) {
+			return ERXStringUtilities.safeIdentifierName(row().valueForKeyPath(rowIdentifier()).toString());
+		} 
+		return "row_" + String.valueOf(rowIndex());
+	}
+	
 	/**
 	 * @return dictionary of columns() keyed on KEY_PATH of column
 	 */
@@ -633,6 +672,17 @@ public class AjaxGrid extends WOComponent {
 		return displayGroup;
 	}
 
+	/**
+	 * @return ID to be used on AjaxUpdateLink bound to sortOrderUpdated() for currentColumn()
+	 */
+	public String currentColumnID() {
+		StringBuffer b = new StringBuffer(tableID());
+		b.append("_SortBy_");
+		b.append(ERXStringUtilities.safeIdentifierName((String)currentColumn().objectForKey(TITLE)));
+		b.append(isCurrentColumnSortedAscending() ? "_Descending" : "_Ascending");
+		return b.toString();
+	}
+	
 	/**
 	 * @return <code>true</code> if currentColumn() is part of the sort
 	 *         ordering
@@ -758,6 +808,13 @@ public class AjaxGrid extends WOComponent {
 			selectedObjects().addObject(row);
 		}
 	}
+	
+	/**
+	 * @return ID to be used on AjaxUpdateLink bound to toggleRowSelection()
+	 */
+	public String toggleRowSelectionID() {
+		return tableID() + "_ToggleRowSelection_" + rowID();
+	}
 
 	/**
 	 * @return <code>true</code> if row() is in selectedObjects()
@@ -802,6 +859,25 @@ public class AjaxGrid extends WOComponent {
 	 */
 	public void setRow(NSKeyValueCodingAdditions newRow) {
 		row = newRow;
+	}
+
+	/**
+	 * Cover method for index binding of a WORepetition.
+	 * 
+	 * @return index of the current row being rendered
+	 */
+	public int rowIndex() {
+		return rowIndex;
+	}
+
+	/**
+	 * Cover method for index binding of a WORepetition.
+	 * 
+	 * @param index
+	 *            inded of current row being rendered
+	 */
+	public void setRowIndex(int index) {
+		rowIndex = index;
 	}
 
 	/**
