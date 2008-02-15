@@ -49,6 +49,7 @@ import com.webobjects.eocontrol.EOSortOrdering;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSData;
 import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSForwardException;
 import com.webobjects.foundation.NSKeyValueCoding;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
@@ -294,35 +295,58 @@ public class ERXEOAccessUtilities {
      * 
      * @return array of dictionaries
      */
-    public static NSArray<NSDictionary> rawRowsForSQLExpression(EOEditingContext ec, EOModel model, EOSQLExpression expression, NSArray<EOAttribute> attributes) {
+    public static NSArray rawRowsForSQLExpression(EOEditingContext ec, EOModel model, EOSQLExpression expression, NSArray<EOAttribute> attributes) {
+        NSArray results = NSArray.EmptyArray;
         EODatabaseContext dbc = EODatabaseContext.registeredDatabaseContextForModel(model, ec);
+        
         dbc.lock();
         try {
-            EOAdaptorChannel channel = dbc.availableChannel().adaptorChannel();
-            if (!channel.isOpen()) {
-            	channel.openChannel();
-            }
-            channel.evaluateExpression(expression);
-            try {
-            	if (attributes == null) {
-            		channel.setAttributesToFetch(channel.describeResults());
-            	}
-            	else {
-            		channel.setAttributesToFetch(attributes);
-            	}
-                NSMutableArray<NSDictionary> results = new NSMutableArray<NSDictionary>();
-                NSDictionary row;
-                while ((row = channel.fetchRow()) != null) {
-                    results.addObject(row);
+            results = _rawRowsForSQLExpression(dbc, expression, attributes);
+        } 
+        catch (Exception localException) {
+            if (dbc._isDroppedConnectionException(localException)) {
+                try {
+                    dbc.database().handleDroppedConnection();
+                    results = _rawRowsForSQLExpression(dbc, expression, attributes);
                 }
-                return results;
-            } catch (EOGeneralAdaptorException ex) {
-                channel.cancelFetch();
-                throw ex;
+                catch(Exception ex) {
+                    throw NSForwardException._runtimeExceptionForThrowable(ex);
+                }
             }
-        } finally {
+        }
+        finally {
             dbc.unlock();
         }
+        return results;
+    }
+    
+    private static NSArray _rawRowsForSQLExpression(EODatabaseContext dbc, EOSQLExpression expression, NSArray<EOAttribute> attributes) {
+        NSMutableArray results = null;
+        EOAdaptorChannel channel = dbc.availableChannel().adaptorChannel();
+        
+        if (!channel.isOpen()) 
+            channel.openChannel();
+            
+        channel.evaluateExpression(expression);
+        if (attributes == null) {
+            channel.setAttributesToFetch(channel.describeResults());
+        }
+        else {
+            channel.setAttributesToFetch(attributes);
+        }
+        
+        try {
+            channel.setAttributesToFetch(channel.describeResults());
+            results = new NSMutableArray();
+            NSDictionary row;
+            while ((row = channel.fetchRow()) != null)
+                results.addObject(row);
+        }
+        catch (EOGeneralAdaptorException ex) {
+            channel.cancelFetch();
+            throw ex;
+        }
+        return results;
     }
 
     /**
