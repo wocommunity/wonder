@@ -1681,4 +1681,65 @@ public class ERXStringUtilities {
 		}
 		return true;
     }
+
+    /**
+     * Converts source to be suitable for use as an identifier in JavaScript.  prefix is prefixed to source
+     * if the first character of source is not suitable to start an identifier (e.g. a number).  Any characters
+     * in source that are not allowd in an identifier are replaced with replacment.
+     * 
+     * @see Character#isJavaIdentifierStart(char)
+     * @see Character#isJavaIdentifierPart(char)
+     * 
+     * @param source String to make into a indentifier name
+     * @param prefix String to prefix source with to make it a valid identifier name
+     * @param replacement character to use to replace characters in source that are no allowed in an identifier name
+     * @return source converted to a name suitable for use as an identifier in JavaScript
+     */
+    public static String safeIdentifierName(String source, String prefix, char replacement)
+    {
+    	StringBuffer b;
+    	// Add prefix if source does not start with valid character
+        if (Character.isJavaIdentifierStart(source.charAt(0))) {
+            b = new StringBuffer(source);
+        } else {
+        	b = new StringBuffer(prefix);
+        	b.append(source);
+        }
+    	
+        for (int i = 0; i < b.length(); i++) {
+            char c = b.charAt(i);
+            if ( ! Character.isJavaIdentifierPart(c)) {
+                b.setCharAt(i, replacement);
+            }
+        }
+
+        return b.toString();
+    }
+
+    /**
+     * Convenience method to call safeIdentifierName(source, prefix, '_')
+     * 
+     * @see #safeIdentifierName(String, String, char)
+     * 
+     * @param source String to make into a indentifier name
+     * @param prefix String to prefix source with to make it a valid identifier name
+     * @return source converted to a name suitable for use as an identifier in JavaScript
+     */
+    public static String safeIdentifierName(String source, String prefix) {
+    	return safeIdentifierName(source, prefix, '_');
+
+    }
+    
+    /**
+     * Convenience method to call safeIdentifierName(source, "_", '_')
+     *
+     * @see #safeIdentifierName(String, String, char)
+     * 
+     * @param source String to make into a indentifier name
+     * @return source converted to a name suitable for use as an identifier in JavaScript
+     */
+    public static String safeIdentifierName(String source) {
+    	return safeIdentifierName(source, "_", '_');
+
+    }
 }
