@@ -1576,14 +1576,14 @@ public class ERXEOAccessUtilities {
  					EOEnterpriseObject object = (EOEnterpriseObject) objectsEnum.nextElement();
  					NSDictionary sourceSnapshot = databaseContext.snapshotForGlobalID(editingContext.globalIDForObject(object));
  					if (sourceSnapshot == null) {
- 						objectsWithUnfaultedRelationships.add(object);
+ 						objectsWithUnfaultedRelationships.addObject(object);
  					}
  					else {
  						NSDictionary destinationPK = relationship._foreignKeyForSourceRow(sourceSnapshot);
  						EOGlobalID destinationGID = destinationEntity.globalIDForRow(destinationPK);
  						NSDictionary destinationSnapshot = databaseContext.snapshotForGlobalID(destinationGID, editingContext.fetchTimestamp());
  						if (destinationSnapshot == null) {
- 							objectsWithUnfaultedRelationships.add(object);
+ 							objectsWithUnfaultedRelationships.addObject(object);
  						}
  					}
  				}
