@@ -54,6 +54,7 @@ IsRowSelected: WOConditional {
 RemoveSorting: AjaxUpdateLink {
 	action = removeSorting;
 	updateContainerID = configurationData.updateContainerID; // VALID
+	id = removeSortingID;
 }
 
 RowRepetition: WORepetition {
@@ -65,6 +66,7 @@ RowRepetition: WORepetition {
 SortColumn: AjaxUpdateLink {
 	action = sortOrderUpdated;
 	updateContainerID = configurationData.updateContainerID; // VALID
+	id = currentColumnID;
 }
 
 SortIndex: WOString {
@@ -93,6 +95,7 @@ TableRow: WOGenericContainer {
 ToggleRowSelection: AjaxUpdateLink {
 	action = toggleRowSelection;
 	updateContainerID = configurationData.updateContainerID; // VALID
+	id = toggleRowSelectionID;
 }
 
 
