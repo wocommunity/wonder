@@ -8,5 +8,5 @@ Delete: AjaxUpdateLink {
 // to do a full page refresh
 OtherPage: WOHyperlink {
 	pageName = "AccordionExample";
-	string = "example";
+	string = "leave page";
 }
