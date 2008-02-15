@@ -10,7 +10,7 @@
 	oddRowCSSStyle = "background:lightgrey;";
 	selectedRowCSSStyle = "font-weight: bold;";   
 	selectedRowCSSClass = "ajaxGridSelectedRow"; 
-	 	
+	rowIdentifier = number;
     columns = (
 		{
 			title = "Column 1";		
