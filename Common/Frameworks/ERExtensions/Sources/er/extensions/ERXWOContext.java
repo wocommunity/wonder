@@ -388,11 +388,12 @@ public class ERXWOContext extends ERXAjaxContext implements ERXMutableUserInfoHo
 	/**
 	 * Returns a javascript-safe version of the given element ID.
 	 * 
+	 * @see ERXStringUtilities#safeIdentifierName(String, String, char)
 	 * @param elementID the element ID
 	 * @return a javascript-safe version (i.e. "wo_1_2_3_10") 
 	 */
 	public static String toSafeElementID(String elementID) {
-		return "wo_" + elementID.replace('.', '_');
+		return ERXStringUtilities.safeIdentifierName(elementID, "wo_", '_');
 	}
 
 	/**
