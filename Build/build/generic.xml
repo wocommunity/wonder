@@ -169,21 +169,18 @@ There are many ways to use this script:
    
    <target name="global.environment">
         <property name="wonder.root" value="${basedir}" />
-        <property file="${wonder.root}/Build/build/build.properties" />
-        <property file="${user.home}/build.wonder.properties" />
-        <property file="${user.home}/build.properties" />
+        <property file="${wonder.root}/build.properties" />
+        <property file="${user.home}/Library/wobuild.properties" />
         <property file="${wonder.root}/Build/build/default.properties" />
-        <property file="${wonder.root}/Build/build/${os.name}.properties" />
-        <property file="${wonder.root}/Build/build/default-os.properties" />
 
         <!-- default values. can be overridden by *.properties files or -D options. -->
-        <property name="wo.woroot" value="/System" />
+        <property name="wo.wosystemroot" value="/System" />
         <property name="wo.localroot" value="/" />
         <property name="before.compile" value="global.dummy" />
         <property name="after.compile" value="global.dummy" />
         <property name="project.customInfo.plist" value="" />
         
-        <property name="wo.frameworks" value="${wo.woroot}/Library/Frameworks" />
+        <property name="wo.frameworks" value="${wo.wosystemroot}/Library/Frameworks" />
         <property name="wo.local.frameworks" value="${wo.wolocalroot}/Library/Frameworks" />
         <property name="build.root" value="${user.home}/Roots" />
         <property name="build.classes" value="${build.root}/classes/${project.name}" />
@@ -298,14 +295,14 @@ There are many ways to use this script:
         <echo message="${project.sources.dir}" />
          
        <antcall target="${before.compile}" />
-       <wocompile srcdir="${project.sources.dir}" destdir="${build.classes}" debug="on" optimize="off" deprecation="off" source="${compiler.source}" target="${compiler.target}">
+       <wocompile srcdir="${project.sources.dir}" destdir="${build.classes}" debug="on" optimize="off" deprecation="off" source="${compiler.source}" target="${compiler.target}" >
+                    <exclude name="${classes.exclude.0}" />
+                    <exclude name="${classes.exclude.1}" />
+                    <exclude name="${classes.exclude.2}" />
             <classpath>
                 <fileset dir="${project.dir}/Libraries">
                     <include name="**/*.jar" />
                     <!-- ak: i know, fix this...-->
-                    <exclude name="${classes.exclude.0}" />
-                    <exclude name="${classes.exclude.1}" />
-                    <exclude name="${classes.exclude.2}" />
                 </fileset>
             </classpath>
            <frameworks dir="${wonder.lib.root}" if="wonder.lib.root.bundles" bundles="${wonder.lib.root.bundles}" embed="${wonder.lib.root.bundles.embed}"/>
@@ -648,7 +645,7 @@ There are many ways to use this script:
            <frameworks dir="${wonder.lib.root}" if="use.additional.framework.15">
                 <include name="${use.additional.framework.15}"/>
            </frameworks>
-           <frameworks dir="${wo.woroot}/Library/Frameworks" if="use.system.bundles"> 
+           <frameworks dir="${wo.wosystemroot}/Library/Frameworks" if="use.system.bundles"> 
                 <include name="JavaFoundation.framework" />
                 <include name="JavaEOAccess.framework" />
                 <include name="JavaEOControl.framework" />
@@ -661,10 +658,10 @@ There are many ways to use this script:
             <frameworks dir="${wonder.lib.root}" if="use.system.bundles"> 
                 <include name="JavaWOExtensions.framework" />
             </frameworks>
-            <frameworks dir="${wo.woroot}/Library/Frameworks" if="use.webobjects.webservices.server"> 
+            <frameworks dir="${wo.wosystemroot}/Library/Frameworks" if="use.webobjects.webservices.server"> 
                 <include name="JavaWebServices*.framework" />
             </frameworks>
-            <frameworks dir="${wo.woroot}/Library/Frameworks" if="use.webobjects.d2w"> 
+            <frameworks dir="${wo.wosystemroot}/Library/Frameworks" if="use.webobjects.d2w"> 
                 <include name="JavaDirectToWeb.framework" />
                 <include name="JavaEOProject.framework" />
                 <include name="JavaDTWGeneration.framework" />
