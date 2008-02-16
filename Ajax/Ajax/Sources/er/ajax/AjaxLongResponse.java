@@ -14,6 +14,7 @@ import er.extensions.ERXStatelessComponent;
  *          triggered (required)
  * @binding elementName elementName of the AjaxUpdate, defaults to DIV
  * @binding frequency frequency of the AjaxUpdate, defaults to 1 (sec)
+ * @binding stopped start out in stopped mode. You need to start it by yourself via JS if you use this.
  */
 public class AjaxLongResponse extends ERXStatelessComponent {
 
