@@ -336,7 +336,6 @@ public class ERXEOAccessUtilities {
         }
         
         try {
-            channel.setAttributesToFetch(channel.describeResults());
             results = new NSMutableArray();
             NSDictionary row;
             while ((row = channel.fetchRow()) != null)
