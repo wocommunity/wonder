@@ -717,6 +717,7 @@ public class ERTaggableEntity<T extends ERXGenericRecord> {
    * @param limit the limit of the number of results to return (ordered by count DESC)
    * @return a dictionary of tags and their occurrence count
    */
+  @SuppressWarnings("unchecked")
   public NSDictionary<String, Integer> tagCount(EOEditingContext editingContext, NSSelector selector, int count, int limit) {
     NSMutableArray<EOAttribute> fetchAttributes = new NSMutableArray<EOAttribute>();
     ERXEOAttribute tagNameAttribute = new ERXEOAttribute(_entity, _tagsRelationship.name() + "." + ERTag.NAME_KEY);
