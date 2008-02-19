@@ -14,6 +14,7 @@ import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableSet;
+import com.webobjects.foundation._NSStringUtilities;
 
 /**
  * A synchronization factory usable outside EOModeler
@@ -21,6 +22,7 @@ import com.webobjects.foundation.NSMutableSet;
  * @author giorgio_v
  */
 public class PostgresqlSynchronizationFactory extends EOSynchronizationFactory implements EOSchemaGeneration, EOSchemaSynchronization {
+    public static final String USING_KEY = "USING";
     
     private Boolean _enableIdentifierQuoting;
   
@@ -39,15 +41,16 @@ public class PostgresqlSynchronizationFactory extends EOSynchronizationFactory i
         if (!enableIdentifierQuoting()) {
             return name;
         }
-        return (new StringBuilder()).append("\"").append(name).append("\"").toString();
+        return "\"" + name + "\"";
     }
 
     protected String formatColumnName(String name) {
         if (!enableIdentifierQuoting()) {
             return name;
         }
-        return (new StringBuilder()).append("\"").append(name).append("\"").toString();
+        return "\"" + name + "\"";
     }
+    
     public NSArray _foreignKeyConstraintStatementsForEntityGroup(NSArray group) {
         if (group == null)
             return NSArray.EmptyArray;
@@ -360,6 +363,45 @@ public class PostgresqlSynchronizationFactory extends EOSynchronizationFactory i
             begin = end + oldLength;
         }
         return convertedString.toString();
+    }
+    
+    // I blame statementstToConvertColumnType for not taking a damn EOAttribute for
+    // having to steal this from EOSQLExpression
+    public String columnTypeStringForAttribute(EOAttribute attribute) {
+      if (attribute.precision() != 0) {
+        String precision = String.valueOf(attribute.precision());
+        String scale = String.valueOf(attribute.scale());
+        return _NSStringUtilities.concat(attribute.externalType(), "(", precision, ",", scale, ")");
+      }
+      if (attribute.width() != 0) {
+        String width = String.valueOf(attribute.width());
+        return _NSStringUtilities.concat(attribute.externalType(), "(", width, ")");
+      }
+      else {
+        return attribute.externalType();
+      }
+    }
+
+    @Override
+    public NSArray statementsToConvertColumnType(String columnName, String tableName, ColumnTypes oldType, ColumnTypes newType, NSDictionary options) {
+      EOAttribute attr = new EOAttribute();
+      attr.setName(columnName);
+      attr.setColumnName(columnName);
+      attr.setExternalType(newType.name());
+      attr.setScale(newType.scale());
+      attr.setPrecision(newType.precision());
+      attr.setWidth(newType.width());
+
+      String usingClause = "";
+      String columnTypeString = columnTypeStringForAttribute(attr);
+      if (options != null) {
+        String usingExpression = (String) options.objectForKey(PostgresqlSynchronizationFactory.USING_KEY);
+        if (usingExpression != null) {
+          usingClause = " USING " + usingExpression;
+        }
+      }
+      NSArray statements = new NSArray(_expressionForString("alter column " + formatTableName(tableName) + "." + formatColumnName(columnName) + " type " + columnTypeString + usingClause));
+      return statements;
     }
 
     @Override
