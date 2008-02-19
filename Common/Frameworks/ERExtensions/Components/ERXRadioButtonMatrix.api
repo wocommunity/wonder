@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <wodefinitions>
 	<wo class="ERXRadioButtonMatrix" wocomponentcontent="true">
 
@@ -13,17 +13,18 @@
 		<binding name="cellVAlign"/>
 		<binding name="cellWidth"/>
 		<binding name="uniqueID"/>
+		<binding name="tableOtherTagString"/>
 
-		<validation message="&apos;list&apos; is a required binding">
+		<validation message="'list' is a required binding">
 			<unbound name="list"/>
 		</validation>
 
-		<validation message="&apos;item&apos; is a required binding">
+		<validation message="'item' is a required binding">
 			<unbound name="item"/>
 		</validation>
 
-		<validation message="&apos;item&apos; must be bound to a settable value">
+		<validation message="'item' must be bound to a settable value">
 			<unsettable name="item"/>
 		</validation>
-	</wo>
+    </wo>
 </wodefinitions>

@@ -21,6 +21,7 @@ RadioButtonRepetition: ERXTable {
 	cellWidth = ^cellWidth;
 	cellVAlign = ^cellVAlign;
 	cellAlign = ^cellAlign;
-        goingVertically = ^goingVertically;
+    goingVertically = ^goingVertically;
+    otherTagString = ^tableOtherTagString;
 }
 

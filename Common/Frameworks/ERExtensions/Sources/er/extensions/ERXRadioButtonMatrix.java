@@ -25,6 +25,7 @@ import com.webobjects.foundation.NSArray;
  * @binding cellAlign
  * @binding cellVAlign
  * @binding cellWidth
+ * @binding tableOtherTagString
  */
 
 public class ERXRadioButtonMatrix extends ERXStatelessComponent {
