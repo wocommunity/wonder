@@ -178,18 +178,20 @@ public class ERXMigrationColumn {
 	public int scale() {
 		return _scale;
 	}
-	
+
 	/**
 	 * Overrides the external type of this column.
 	 * 
-	 * @param overrideExternalType the external type to override
+	 * @param overrideExternalType
+	 *            the external type to override
 	 */
 	public void _setOverrideExternalType(String overrideExternalType) {
 		_overrideExternalType = overrideExternalType;
 	}
-	
+
 	/**
-	 * Returns the external type of this column (or null if there is no override).
+	 * Returns the external type of this column (or null if there is no
+	 * override).
 	 * 
 	 * @return the external type of this column
 	 */
@@ -278,7 +280,7 @@ public class ERXMigrationColumn {
 	@SuppressWarnings("unchecked")
 	public EOAttribute _newAttribute(EOEntity entity) {
 		JDBCAdaptor adaptor = (JDBCAdaptor) _table.database().adaptor();
-		String externalType = ERXSQLHelper.newSQLHelper(adaptor).externalTypeForJDBCType(adaptor, _jdbcType);		
+		String externalType = ERXSQLHelper.newSQLHelper(adaptor).externalTypeForJDBCType(adaptor, _jdbcType);
 		EOAttribute attribute = adaptor.createAttribute(_name, _name, _jdbcType, externalType, _precision, _scale, _allowsNull ? 1 : 0);
 		if (_width > 0) {
 			attribute.setWidth(_width);
@@ -295,7 +297,7 @@ public class ERXMigrationColumn {
 			mutableUserInfo.setObjectForKey(_defaultValue, "er.extensions.eoattribute.default");
 			attribute.setUserInfo(mutableUserInfo);
 		}
-		
+
 		if (_overrideValueType != null) {
 			if (ERXMigrationColumn.NULL_VALUE_TYPE.equals(_overrideValueType)) {
 				attribute.setValueType(null);
@@ -305,11 +307,11 @@ public class ERXMigrationColumn {
 			}
 			adaptor.assignExternalTypeForAttribute(attribute);
 		}
-		
+
 		if (_overrideExternalType != null) {
 			attribute.setExternalType(_overrideExternalType);
 		}
-		
+
 		entity.addAttribute(attribute);
 		return attribute;
 	}
@@ -409,5 +411,99 @@ public class ERXMigrationColumn {
 		NSArray<EOSQLExpression> expressions = schemaSynchronization.statementsToModifyColumnNullRule(name(), _table.name(), allowsNull, NSDictionary.EmptyDictionary);
 		ERXMigrationDatabase._ensureNotEmpty(expressions);
 		ERXJDBCUtilities.executeUpdateScript(_table.database().adaptorChannel(), ERXMigrationDatabase._stringsForExpressions(expressions));
+	}
+
+	/**
+	 * Changes the data type of this column.
+	 * 
+	 * @param jdbcType
+	 *            the new JDBC type of the column (see java.sql.Types)
+	 * @param scale
+	 *            the new scale
+	 * @param precision
+	 *            the new precision
+	 * @param width
+	 *            the new width
+	 * @throws SQLException
+	 *             if the change fails
+	 */
+	@SuppressWarnings("unchecked")
+	public void setDataType(int jdbcType, int scale, int precision, int width) throws SQLException {
+		JDBCAdaptor adaptor = (JDBCAdaptor) _table.database().adaptor();
+		String externalType = ERXSQLHelper.newSQLHelper(adaptor).externalTypeForJDBCType(adaptor, jdbcType);
+		EOSchemaSynchronization schemaSynchronization = _table.database().synchronizationFactory();
+		NSArray<EOSQLExpression> expressions = schemaSynchronization.statementsToConvertColumnType(_name, _table.name(), null, new _ColumnType(externalType, scale, precision, width), null);
+		ERXMigrationDatabase._ensureNotEmpty(expressions);
+		ERXJDBCUtilities.executeUpdateScript(_table.database().adaptorChannel(), ERXMigrationDatabase._stringsForExpressions(expressions));
+		_jdbcType = jdbcType;
+		_scale = scale;
+		_precision = precision;
+		_width = width;
+	}
+
+	/**
+	 * Changes the data type of this column to a type that has a width.
+	 * 
+	 * @param jdbcType
+	 *            the new JDBC type of the column (see java.sql.Types)
+	 * @param width
+	 *            the new width
+	 * @throws SQLException
+	 *             if the change fails
+	 */
+	public void setWidthType(int jdbcType, int width) throws SQLException {
+		setDataType(jdbcType, 0, 0, width);
+	}
+
+	/**
+	 * Changes the data type of this column to a new numeric type.
+	 * 
+	 * @param jdbcType
+	 *            the new JDBC type of the column (see java.sql.Types)
+	 * @param scale
+	 *            the new scale
+	 * @param precision
+	 *            the new precision
+	 * @throws SQLException
+	 *             if the change fails
+	 */
+	public void setNumericType(int jdbcType, int scale, int precision) throws SQLException {
+		setDataType(jdbcType, scale, precision, 0);
+	}
+
+	/**
+	 * Implements EOSchemaSynchronization.ColumnTypes
+	 * 
+	 * @author mschrag
+	 */
+	public static class _ColumnType implements EOSchemaSynchronization.ColumnTypes {
+		private String _name;
+		private int _scale;
+		private int _precision;
+		private int _width;
+
+		public _ColumnType(String name, int scale, int precision, int width) {
+			_name = name;
+			_scale = scale;
+			_precision = precision;
+			_width = width;
+		}
+
+		public String name() {
+			return _name;
+		}
+
+		public int precision() {
+			return _precision;
+		}
+
+		public int scale() {
+			return _scale;
+		}
+
+		public int width() {
+			return _width;
+		}
+
 	}
 }
