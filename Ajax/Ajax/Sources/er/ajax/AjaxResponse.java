@@ -136,7 +136,6 @@ public class AjaxResponse extends ERXResponse {
 					// it is you double-clicked on.
 					String updateContainerID = request.stringFormValueForKey(AjaxUpdateContainer.UPDATE_CONTAINER_ID_KEY);
 					if (updateContainerID != null) {
-						System.out.println("AjaxResponseDelegate.handleNullActionResults: your ass go SAVED");
 						// .. .and let's make an AjaxResponse so we get our update container
 						// to be evaluated
 						AjaxUpdateContainer.setUpdateContainerID(request, updateContainerID);
