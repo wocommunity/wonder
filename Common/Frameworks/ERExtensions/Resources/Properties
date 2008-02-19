@@ -60,6 +60,10 @@ er.extensions.ERXLocalizer.availableLanguages = (English,German,Japanese)
 ## Allows you to override the locale for a language
 # er.extensions.ERXLocalizer.German.locale = de
 
+## Fallback to localized value in default language when key is not found for current language.
+## Default is false.
+# er.extensions.ERXLocalizer.fallbackToDefaultLanguage = false
+
 ## Components that use ERXToOne/ManyRelationship include missing items when using a possibleChoice
 ## This can be specified on a per-component basis in the bindings, 
 ## but here's the default value
