@@ -248,15 +248,13 @@ public  class ERXRequest extends WORequest {
                 string = string.substring(0, offset);
             offset = string.indexOf('-');
             if (offset > 0) {
-                String langPrefix = string.substring(0, 2);  //  "en" part of "en-us"
+                String langPrefix = string.substring(0, offset);  //  "en" part of "en-us"
                 if (!nsmutablearray.containsObject(langPrefix)) 
                     nsmutablearray.insertObjectAtIndex(langPrefix, 0);
                 // converts "en-us" into "en_us";
-                StringBuffer cooked = new StringBuffer(string.length());
-                cooked.append(langPrefix)
-                    .append("_")
-                    .append(string.substring(offset+1, offset+3));
-                string = cooked.toString();
+                
+                String cooked = string.replace('-', '_');
+                string = cooked;
             }
             nsmutablearray.insertObjectAtIndex(string, 0);
         }
