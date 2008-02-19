@@ -1,277 +1,266 @@
-// Entity Modeler v1.0.1
 {
-	attributes = (
-		{
-			columnName = "";
-			externalType = float4;
-			name = amount;
-			valueClassName = NSNumber;
-			valueType = d;
-		},
-		{
-			columnName = "";
-			externalType = bytea;
-			name = blob;
-			valueClassName = NSData;
-		},
-		{
-			adaptorValueConversionMethodName = toString;
-			columnName = "";
-			externalType = varchar;
-			factoryMethodArgumentType = EOFactoryMethodArgumentIsNSString;
-			name = boolean;
-			valueClassName = java.lang.Boolean;
-			valueFactoryMethodName = valueOf;
-			valueType = S;
-			width = 5;
-		},
-		{
-			columnName = "";
-			externalType = varchar;
-			name = charFlag;
-			valueClassName = NSString;
-			valueType = S;
-			width = 1;
-		},
-		{
-			adaptorValueConversionMethodName = toCryptoString;
-			columnName = "";
-			externalType = varchar;
-			factoryMethodArgumentType = EOFactoryMethodArgumentIsNSString;
-			name = cryptoString;
-			valueClassName = er.extensions.ERXCryptoString;
-			valueFactoryMethodName = createInstanceFromCryptoString;
-			width = 100;
-		},
-		{
-			columnName = "";
-			externalType = float4;
-			name = currencyAmount;
-			precision = 38;
-			scale = 4;
-			valueClassName = NSNumber;
-			valueType = B;
-		},
-		{
-			columnName = "";
-			externalType = timestamp;
-			name = date;
-			valueClassName = NSCalendarDate;
-			valueType = D;
-		},
-		{
-			columnName = "";
-			externalType = timestamp;
-			name = dateTime;
-			valueClassName = NSCalendarDate;
-			valueType = T;
-		},
-		{
-			columnName = "";
-			externalType = float8;
-			name = doubleNumber;
-			valueClassName = NSNumber;
-			valueType = d;
-		},
-		{
-			columnName = "";
-			externalType = bool;
-			name = flag;
-			valueClassName = NSNumber;
-			valueType = c;
-		},
-		{
-			columnName = id;
-			externalType = int4;
-			internalInfo = {
-				_nameInObjectStore = id;
-			};
-			name = id;
-			valueClassName = NSNumber;
-			valueType = i;
-		},
-		{
-			columnName = "";
-			externalType = bool;
-			factoryMethodArgumentType = EOFactoryMethodArgumentIsNSString;
-			name = intBoolean;
-			valueClassName = NSNumber;
-			valueType = c;
-		},
-		{
-			columnName = "";
-			externalType = int4;
-			name = intNumber;
-			valueClassName = NSNumber;
-			valueType = i;
-		},
-		{
-			columnName = "";
-			externalType = text;
-			name = longText;
-			valueClassName = NSString;
-			valueType = c;
-		},
-		{
-			adaptorValueConversionMethodName = toBlob;
-			columnName = "";
-			externalType = bytea;
-			name = mutableArray;
-			valueClassName = er.extensions.ERXMutableArray;
-			valueFactoryMethodName = fromBlob;
-		},
-		{
-			adaptorValueConversionMethodName = toBlob;
-			columnName = "";
-			externalType = bytea;
-			name = mutableDictionary;
-			valueClassName = er.extensions.ERXMutableDictionary;
-			valueFactoryMethodName = fromBlob;
-		},
-		{
-			columnName = "";
-			externalType = varchar;
-			name = osType;
-			valueClassName = NSString;
-			valueType = S;
-			width = 4;
-		},
-		{
-			columnName = "";
-			externalType = varchar;
-			name = shortString;
-			valueClassName = NSString;
-			valueType = S;
-			width = 50;
-		},
-		{
-			columnName = "";
-			externalType = varchar;
-			name = type;
-			valueClassName = NSString;
-			valueType = S;
-			width = 4;
-		},
-		{
-			columnName = "";
-			externalType = varchar;
-			name = varchar10;
-			valueClassName = NSString;
-			valueType = S;
-			width = 10;
-		},
-		{
-			columnName = "";
-			externalType = varchar;
-			name = varchar100;
-			valueClassName = NSString;
-			valueType = S;
-			width = 100;
-		},
-		{
-			columnName = "";
-			externalType = varchar;
-			name = varchar1000;
-			valueClassName = NSString;
-			valueType = S;
-			width = 1000;
-		},
-		{
-			columnName = "";
-			externalType = varchar;
-			name = varchar16;
-			valueClassName = NSString;
-			valueType = S;
-			width = 16;
-		},
-		{
-			columnName = "";
-			externalType = varchar;
-			name = varchar255;
-			valueClassName = NSString;
-			valueType = S;
-			width = 255;
-		},
-		{
-			columnName = "";
-			externalType = varchar;
-			name = varchar50;
-			valueClassName = NSString;
-			valueType = S;
-			width = 50;
-		},
-		{
-			columnName = "";
-			externalType = varchar;
-			name = varcharLarge;
-			valueClassName = NSString;
-			valueType = S;
-			width = 10000000;
-		}
-	);
-	attributesUsedForLocking = (
-		boolean,
-		id
-	);
-	className = EOGenericRecord;
-	classProperties = (
-		amount,
-		blob,
-		boolean,
-		charFlag,
-		cryptoString,
-		date,
-		dateTime,
-		doubleNumber,
-		flag,
-		intBoolean,
-		intNumber,
-		longText,
-		mutableArray,
-		mutableDictionary,
-		osType,
-		shortString,
-		type,
-		varchar10,
-		varchar100,
-		varchar1000,
-		varchar16,
-		varchar255,
-		varchar50,
-		varcharLarge
-	);
-	internalInfo = {
-		_clientClassPropertyNames = (
-			amount,
-			blob,
-			boolean,
-			charFlag,
-			cryptoString,
-			date,
-			dateTime,
-			doubleNumber,
-			flag,
-			intBoolean,
-			intNumber,
-			longText,
-			mutableArray,
-			mutableDictionary,
-			osType,
-			shortString,
-			type,
-			varchar10,
-			varchar100,
-			varchar1000,
-			varchar16,
-			varchar255,
-			varchar50,
-			varcharLarge
-		);
-		_nameInObjectStore = eopostgresprototypes;
-	};
-	isAbstractEntity = Y;
-	name = EOJDBCPostgresqlPrototypes;
-	primaryKeyAttributes = (
-		id
-	);
+    attributes = (
+        {
+            columnName = ""; 
+            externalType = decimal; 
+            name = amount; 
+            precision = 38; 
+            scale = 2; 
+            valueClassName = NSDecimalNumber; 
+        }, 
+        {columnName = ""; externalType = bytea; name = blob; valueClassName = NSData; }, 
+        {
+            adaptorValueConversionMethodName = toString; 
+            columnName = ""; 
+            externalType = varchar; 
+            factoryMethodArgumentType = EOFactoryMethodArgumentIsNSString; 
+            name = boolean; 
+            valueClassName = "java.lang.Boolean"; 
+            valueFactoryMethodName = valueOf; 
+            valueType = S; 
+            width = 5; 
+        }, 
+        {
+            columnName = ""; 
+            externalType = varchar; 
+            name = charFlag; 
+            valueClassName = NSString; 
+            valueType = S; 
+            width = 1; 
+        }, 
+        {
+            adaptorValueConversionMethodName = toCryptoString; 
+            columnName = ""; 
+            externalType = varchar; 
+            factoryMethodArgumentType = EOFactoryMethodArgumentIsNSString; 
+            name = cryptoString; 
+            valueClassName = "er.extensions.ERXCryptoString"; 
+            valueFactoryMethodName = createInstanceFromCryptoString; 
+            width = 100; 
+        }, 
+        {
+            columnName = ""; 
+            externalType = decimal; 
+            name = currencyAmount; 
+            precision = 38; 
+            scale = 4; 
+            valueClassName = NSDecimalNumber; 
+        }, 
+        {
+            columnName = ""; 
+            externalType = timestamp; 
+            name = date; 
+            valueClassName = NSCalendarDate; 
+            valueType = D; 
+        }, 
+        {
+            columnName = ""; 
+            externalType = timestamp; 
+            name = dateTime; 
+            valueClassName = NSCalendarDate; 
+            valueType = T; 
+        }, 
+        {
+            columnName = ""; 
+            externalType = float8; 
+            name = doubleNumber; 
+            valueClassName = NSNumber; 
+            valueType = d; 
+        }, 
+        {
+            columnName = ""; 
+            externalType = bool; 
+            name = flag; 
+            valueClassName = NSNumber; 
+            valueType = c; 
+        }, 
+        {
+            columnName = id; 
+            externalType = int4; 
+            internalInfo = {"_nameInObjectStore" = id; }; 
+            name = id; 
+            valueClassName = NSNumber; 
+            valueType = i; 
+        }, 
+        {
+            columnName = ""; 
+            externalType = bool; 
+            factoryMethodArgumentType = EOFactoryMethodArgumentIsNSString; 
+            name = intBoolean; 
+            valueClassName = NSNumber; 
+            valueType = c; 
+        }, 
+        {
+            columnName = ""; 
+            externalType = int4; 
+            name = intNumber; 
+            valueClassName = NSNumber; 
+            valueType = i; 
+        }, 
+        {
+            columnName = ""; 
+            externalType = text; 
+            name = longText; 
+            valueClassName = NSString; 
+            valueType = c; 
+        }, 
+        {
+            adaptorValueConversionMethodName = toBlob; 
+            columnName = ""; 
+            externalType = bytea; 
+            name = mutableArray; 
+            valueClassName = "er.extensions.ERXMutableArray"; 
+            valueFactoryMethodName = fromBlob; 
+        }, 
+        {
+            adaptorValueConversionMethodName = toBlob; 
+            columnName = ""; 
+            externalType = bytea; 
+            name = mutableDictionary; 
+            valueClassName = "er.extensions.ERXMutableDictionary"; 
+            valueFactoryMethodName = fromBlob; 
+        }, 
+        {
+            columnName = ""; 
+            externalType = varchar; 
+            name = osType; 
+            valueClassName = NSString; 
+            valueType = S; 
+            width = 4; 
+        }, 
+        {
+            columnName = ""; 
+            externalType = varchar; 
+            name = shortString; 
+            valueClassName = NSString; 
+            valueType = S; 
+            width = 50; 
+        }, 
+        {
+            columnName = ""; 
+            externalType = varchar; 
+            name = type; 
+            valueClassName = NSString; 
+            valueType = S; 
+            width = 4; 
+        }, 
+        {
+            columnName = ""; 
+            externalType = varchar; 
+            name = varchar10; 
+            valueClassName = NSString; 
+            valueType = S; 
+            width = 10; 
+        }, 
+        {
+            columnName = ""; 
+            externalType = varchar; 
+            name = varchar100; 
+            valueClassName = NSString; 
+            valueType = S; 
+            width = 100; 
+        }, 
+        {
+            columnName = ""; 
+            externalType = varchar; 
+            name = varchar1000; 
+            valueClassName = NSString; 
+            valueType = S; 
+            width = 1000; 
+        }, 
+        {
+            columnName = ""; 
+            externalType = varchar; 
+            name = varchar16; 
+            valueClassName = NSString; 
+            valueType = S; 
+            width = 16; 
+        }, 
+        {
+            columnName = ""; 
+            externalType = varchar; 
+            name = varchar255; 
+            valueClassName = NSString; 
+            valueType = S; 
+            width = 255; 
+        }, 
+        {
+            columnName = ""; 
+            externalType = varchar; 
+            name = varchar50; 
+            valueClassName = NSString; 
+            valueType = S; 
+            width = 50; 
+        }, 
+        {
+            columnName = ""; 
+            externalType = varchar; 
+            name = varcharLarge; 
+            valueClassName = NSString; 
+            valueType = S; 
+            width = 10000000; 
+        }
+    ); 
+    attributesUsedForLocking = (boolean, id); 
+    className = EOGenericRecord; 
+    classProperties = (
+        amount, 
+        blob, 
+        boolean, 
+        charFlag, 
+        cryptoString, 
+        currencyAmount, 
+        date, 
+        dateTime, 
+        doubleNumber, 
+        flag, 
+        intBoolean, 
+        intNumber, 
+        longText, 
+        mutableArray, 
+        mutableDictionary, 
+        osType, 
+        shortString, 
+        type, 
+        varchar10, 
+        varchar100, 
+        varchar1000, 
+        varchar16, 
+        varchar255, 
+        varchar50, 
+        varcharLarge
+    ); 
+    fetchSpecificationDictionary = {}; 
+    internalInfo = {
+        "_clientClassPropertyNames" = (
+            amount, 
+            blob, 
+            boolean, 
+            charFlag, 
+            cryptoString, 
+            date, 
+            dateTime, 
+            doubleNumber, 
+            flag, 
+            intBoolean, 
+            intNumber, 
+            longText, 
+            mutableArray, 
+            mutableDictionary, 
+            osType, 
+            shortString, 
+            type, 
+            varchar10, 
+            varchar100, 
+            varchar1000, 
+            varchar16, 
+            varchar255, 
+            varchar50, 
+            varcharLarge
+        ); 
+        "_nameInObjectStore" = eopostgresprototypes; 
+    }; 
+    isAbstractEntity = Y; 
+    name = EOJDBCPostgresqlPrototypes; 
+    primaryKeyAttributes = (id); 
 }
