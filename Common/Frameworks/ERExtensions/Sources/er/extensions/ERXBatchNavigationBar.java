@@ -43,6 +43,8 @@ public class ERXBatchNavigationBar extends WOComponent {
     /** Contains a string that names the notification posted when the batch size changes */
     public final static String BatchSizeChanged = "BatchSizeChanged";
     private String _buttonId=null;
+    private int numberOfObjectsPerBatch = 0;
+    private int currentBatchIndex = 0;
 
     /** Public constructor */
     public ERXBatchNavigationBar(WOContext aContext) {
@@ -59,11 +61,17 @@ public class ERXBatchNavigationBar extends WOComponent {
         _displayGroup = null;
         _buttonId = null;
     }
+
+    public void sleep() {
+        numberOfObjectsPerBatch = 0;
+        currentBatchIndex = 0;
+        super.sleep();
+    }
     
     public void appendToResponse(WOResponse response, WOContext context) {
         if (displayGroup() != null  &&  ! displayGroup().hasMultipleBatches()) {
             if (currentBatchIndex() != 0) 
-                setCurrentBatchIndex(ERXConstant.ZeroInteger);
+                _setCurrentBatchIndex(1);
         }
         super.appendToResponse(response, context);
     }
@@ -87,20 +95,32 @@ public class ERXBatchNavigationBar extends WOComponent {
         return displayGroup()!=null ? displayGroup().currentBatchIndex() : 0;        
     }
 
+    // Save new value and only apply to displayGroup if the refresh action was invoked
     public void setCurrentBatchIndex(Number newValue) {
-        if (newValue!=null) {
+        currentBatchIndex = (newValue != null)?newValue.intValue():0;
+    }
+
+    // Now only called when refresh action is invoked
+    private void _setCurrentBatchIndex(int newValue) {
+        if (newValue > 0) {
             if (displayGroup()!=null){
-                displayGroup().setCurrentBatchIndex(newValue.intValue());
-                if (log.isDebugEnabled()) log.debug("The batch index is being set to :"+newValue.intValue());
+                displayGroup().setCurrentBatchIndex(newValue);
+                if (log.isDebugEnabled()) log.debug("The batch index is being set to :"+newValue);
             }
         }
     }
-    
+
+    // Save new value and only apply to displayGroup if the refresh action was invoked
     public void setNumberOfObjectsPerBatch(Number newValue) {
-        if (newValue!=null) {
+        numberOfObjectsPerBatch = (newValue != null)?newValue.intValue():0;
+    }
+
+    // Now only called when refresh action is invoked
+    private void _setNumberOfObjectsPerBatch(int newValue) {
+        if (newValue >0) {
             if (displayGroup()!=null) {
                 log.debug("Setting db # of objects per batch to "+newValue);
-                displayGroup().setNumberOfObjectsPerBatch(newValue.intValue());
+                displayGroup().setNumberOfObjectsPerBatch(newValue);
 
                 if(log.isDebugEnabled()) log.debug("The batch index is being set to : "+ 1);
                 displayGroup().setCurrentBatchIndex(1);
@@ -108,7 +128,7 @@ public class ERXBatchNavigationBar extends WOComponent {
             Object context=valueForBinding("d2wContext");
             if (context!=null) {
                 NSNotificationCenter.defaultCenter().postNotification("BatchSizeChanged",
-                                                                      ERXConstant.integerForInt(newValue.intValue()),
+                                                                      ERXConstant.integerForInt(newValue),
                                                                       new NSDictionary(context,"d2wContext"));
             }
         }
@@ -135,7 +155,14 @@ public class ERXBatchNavigationBar extends WOComponent {
         }
     }
 
+    // Reworked the actual changing of the displayGroup to when the hidden button is clicked
+    // This fixes the problem when you have a top and bottom batch nav bar and the bottom values always win
+    // even if they are not changed since they were forced back into the displayGroup on takeValuesFromRequest.    
     public WOComponent refresh() {
+        if (log.isDebugEnabled()) log.debug("refresh START");
+        _setNumberOfObjectsPerBatch(numberOfObjectsPerBatch);
+        _setCurrentBatchIndex(currentBatchIndex);
+        if (log.isDebugEnabled()) log.debug("refresh END");
         return null;
     }
 
