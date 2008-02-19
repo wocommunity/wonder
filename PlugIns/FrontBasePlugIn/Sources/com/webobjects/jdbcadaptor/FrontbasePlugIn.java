@@ -753,13 +753,29 @@ public class FrontbasePlugIn extends JDBCPlugIn {
 			return expression.columnTypeStringForAttribute(eoattribute);
 		}
 
+		public NSArray statementsToConvertColumnType(String columnName, String tableName, ColumnTypes oldType, ColumnTypes newType, NSDictionary nsdictionary) {
+			String columnTypeString = statementToCreateDataTypeClause(newType);
+			NSArray statements = new NSArray(_expressionForString("alter column " + quoteTableName(tableName) + "." + quoteTableName(columnName) + " to " + columnTypeString));
+			return statements;
+		}
+
 		public NSArray statementsToModifyColumnNullRule(String columnName, String tableName, boolean allowsNull, NSDictionary nsdictionary) {
 			NSArray statements;
 			if (allowsNull) {
-				statements = new NSArray(_expressionForString("alter table " + quoteTableName(tableName) + " drop constraint " + quoteTableName(FrontbasePlugIn.notNullConstraintName(tableName, columnName)) + " cascade"));
+				if (USE_NAMED_CONSTRAINTS) {
+					statements = new NSArray(_expressionForString("alter table " + quoteTableName(tableName) + " drop constraint " + quoteTableName(FrontbasePlugIn.notNullConstraintName(tableName, columnName)) + " cascade"));
+				}
+				else {
+					statements = null;
+				}
 			}
 			else {
-				statements = new NSArray(_expressionForString("alter table " + quoteTableName(tableName) + " add check (" + quoteTableName(FrontbasePlugIn.notNullConstraintName(tableName, columnName)) + " is not null)"));
+				if (USE_NAMED_CONSTRAINTS) {
+					statements = new NSArray(_expressionForString("alter table " + quoteTableName(tableName) + " add constraint " + quoteTableName(FrontbasePlugIn.notNullConstraintName(tableName, columnName)) + " check (" + quoteTableName(columnName) + " is not null)"));
+				}
+				else {
+					statements = new NSArray(_expressionForString("alter table " + quoteTableName(tableName) + " add check (" + quoteTableName(columnName) + " is not null)"));
+				}
 			}
 			return statements;
 		}
@@ -953,15 +969,21 @@ public class FrontbasePlugIn extends JDBCPlugIn {
 
 		public String columnTypeStringForAttribute(EOAttribute attribute) {
 			String externalTypeName = attribute.externalType();
-			NSDictionary modelTypeInfo = JDBCAdaptor.typeInfoForModel(((EOEntity) attribute.parent()).model());
-			NSDictionary typeInfo = (NSDictionary) modelTypeInfo.objectForKey(externalTypeName);
+			NSDictionary typeInfo = (NSDictionary) jdbcInfo().objectForKey(JDBCAdaptor.TypeInfoKey);
+		    if (typeInfo == null) {
+		      typeInfo = JDBCAdaptor.typeInfoForModel(((EOEntity) attribute.parent()).model());
+		    }
+		    NSDictionary externalTypeInfo = (NSDictionary) typeInfo.objectForKey(externalTypeName);
+		    if (externalTypeInfo == null && externalTypeName != null) {
+		      externalTypeInfo = (NSDictionary) typeInfo.objectForKey(externalTypeName.toUpperCase());
+		    }
 
-			if (typeInfo == null) {
+			if (externalTypeInfo == null) {
 				throw new JDBCAdaptorException("Unable to find type information for external type '" + externalTypeName + "' in attribute '" + attribute.name() + "' of entity '" + ((EOEntity) attribute.parent()).name() + "'.  Check spelling and capitalization.", null);
 			}
 			int createParams;
 			try {
-				Object createParamsObj = typeInfo.objectForKey("createParams");
+				Object createParamsObj = externalTypeInfo.objectForKey("createParams");
 				if (createParamsObj instanceof Integer) {
 					createParams = ((Integer) createParamsObj).intValue();
 				}
