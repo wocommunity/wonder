@@ -26,7 +26,7 @@ import er.extensions.ERXWOContext;
  * @binding afterInsertionDuration the duration of the after insertion animation (if using insertion) 
  */
 public class AjaxUpdateContainer extends AjaxDynamicElement {
-	private static final String UPDATE_CONTAINER_ID_KEY = "__updateID";
+	public static final String UPDATE_CONTAINER_ID_KEY = "__updateID";
 	private static final String CURRENT_UPDATE_CONTAINER_ID_KEY = "er.ajax.AjaxUpdateContainer.currentID";
 	
 	public AjaxUpdateContainer(String name, NSDictionary associations, WOElement children) {
