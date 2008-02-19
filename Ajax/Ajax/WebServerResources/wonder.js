@@ -245,10 +245,14 @@ var AjaxSubmitButton = {
 		return options;
 	},
 	
-	generateActionUrl : function(form, queryParams) {
+	generateActionUrl : function(id, form, queryParams) {
 		var actionUrl = form.action;
 		if (queryParams != null) {
 			actionUrl.addQueryParameters(queryParams);
+		}
+		actionUrl = actionUrl.sub('/wo/', '/ajax/', 1);
+		if (id != null) {
+			actionUrl = actionUrl.addQueryParameters('__updateID=' + id);
 		}
 		return actionUrl;
 	},
@@ -275,11 +279,11 @@ var AjaxSubmitButton = {
 	},
 	
 	update : function(id, form, queryParams, options) {
-		new Ajax.Updater(id, AjaxSubmitButton.generateActionUrl(form, queryParams), AjaxSubmitButton.processOptions(form, options));
+		new Ajax.Updater(id, AjaxSubmitButton.generateActionUrl(id, form, queryParams), AjaxSubmitButton.processOptions(form, options));
 	},
 	
 	request : function(form, queryParams, options) {
-		new Ajax.Request(AjaxSubmitButton.generateActionUrl(form, queryParams), AjaxSubmitButton.processOptions(form, options));
+		new Ajax.Request(AjaxSubmitButton.generateActionUrl(null, form, queryParams), AjaxSubmitButton.processOptions(form, options));
 	}
 };
 var ASB = AjaxSubmitButton;
