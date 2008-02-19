@@ -89,21 +89,20 @@ public class AjaxSubmitButton extends AjaxDynamicElement {
 	ajaxOptionsArray.addObject(new AjaxOption("insertion", AjaxOption.SCRIPT));
     NSMutableDictionary options = AjaxOption.createAjaxOptionsDictionary(ajaxOptionsArray, component, associations());
     StringBuffer parametersBuffer = new StringBuffer();
-    String defaultFormSerializer = ERXProperties.stringForKeyWithDefault("er.ajax.formSerializer", "Form.serializeWithoutSubmits");
+    String systemDefaultFormSerializer = "Form.serializeWithoutSubmits";
+    String defaultFormSerializer = ERXProperties.stringForKeyWithDefault("er.ajax.formSerializer", systemDefaultFormSerializer);
     String formSerializer = (String) valueForBinding("formSerializer", defaultFormSerializer, component);
-    if (!defaultFormSerializer.equals(formSerializer)) {
-	    parametersBuffer.append(formSerializer);
-	    parametersBuffer.append("(" + formReference + ")");
-	    parametersBuffer.append(" + '");
-	    parametersBuffer.append("&" + AjaxSubmitButton.KEY_AJAX_SUBMIT_BUTTON_NAME + "=" + name);
-	    parametersBuffer.append("'");
-	    options.setObjectForKey(parametersBuffer.toString(), "parameters");
+    if (!defaultFormSerializer.equals(systemDefaultFormSerializer)) {
+    	// _fs = formSerializer (but short)
+	    options.setObjectForKey(formSerializer, "_fs");
     }
-    else {
-    	// _asbn = AJAX_SUBMIT_BUTTON_NAME (but short)
-	    options.setObjectForKey("'" + name + "'", "_asbn");
-    }
+	// _asbn = AJAX_SUBMIT_BUTTON_NAME (but short)
+    options.setObjectForKey("'" + name + "'", "_asbn");
 
+    // default to true in javascript
+    if ("true".equals(options.objectForKey("evalScripts"))) {
+    	options.removeObjectForKey("evalScripts");
+    }
 	AjaxUpdateContainer.expandInsertionFromOptions(options, this, component);
 
     return options;
