@@ -24,6 +24,17 @@ import com.webobjects.foundation.NSLog;
 public abstract class ERXAjaxApplication extends WOApplication {
 	public static final String KEY_AJAX_SUBMIT_BUTTON = "AJAX_SUBMIT_BUTTON_NAME";
 	public static final String KEY_PARTIAL_FORM_SENDER_ID = "_partialSenderID";
+
+	private ERXAjaxResponseDelegate _responseDelegate;
+	
+	/**
+	 * Sets the response delegate for this application.
+	 * 
+	 * @param responseDelegate the response delegate
+	 */
+	public void setResponseDelegate(ERXAjaxResponseDelegate responseDelegate) {
+		_responseDelegate = responseDelegate;
+	}
 	
     /**
      * Checks if the page should not be stored in the cache 
@@ -113,11 +124,36 @@ public abstract class ERXAjaxApplication extends WOApplication {
         	}
         	if (results == null) {
             	WOResponse response = context.response();
+
+            	if (_responseDelegate != null) {
+            		results = _responseDelegate.handleNullActionResults(request, response, context);
+            		response = context.response();
+            	}
+
             	ERXAjaxApplication.cleanUpHeaders(response);
             	results = response;
         	}
         }
         return results;
+    }
+    
+    /**
+     * ERXAjaxResponseDelegate receives callbacks from within the R-R loop
+     * when certain situations occur.
+     *  
+     * @author mschrag
+     */
+    public static interface ERXAjaxResponseDelegate {
+    	/**
+    	 * When an Ajax request generates a null result, this method is 
+    	 * called to provide an alternative response.
+    	 * 
+    	 * @param request the request
+    	 * @param response the response
+    	 * @param context the context
+    	 * @return the replacement results to use
+    	 */
+    	public WOActionResults handleNullActionResults(WORequest request, WOResponse response, WOContext context);
     }
 }
 
