@@ -89,16 +89,20 @@ public class AjaxSubmitButton extends AjaxDynamicElement {
 	ajaxOptionsArray.addObject(new AjaxOption("insertion", AjaxOption.SCRIPT));
     NSMutableDictionary options = AjaxOption.createAjaxOptionsDictionary(ajaxOptionsArray, component, associations());
     StringBuffer parametersBuffer = new StringBuffer();
-    String formSerializer = (String) valueForBinding("formSerializer", ERXProperties.stringForKeyWithDefault("er.ajax.formSerializer", "Form.serializeWithoutSubmits"), component);
-    parametersBuffer.append(formSerializer);
-    parametersBuffer.append("(" + formReference + ")");
-    parametersBuffer.append(" + '");
-    parametersBuffer.append("&" + AjaxSubmitButton.KEY_AJAX_SUBMIT_BUTTON_NAME + "=" + name);
-    parametersBuffer.append("'");
-    options.setObjectForKey(parametersBuffer.toString(), "parameters");
-	if (options.objectForKey("evalScripts") == null) {
-		options.setObjectForKey("true", "evalScripts");
-	}
+    String defaultFormSerializer = ERXProperties.stringForKeyWithDefault("er.ajax.formSerializer", "Form.serializeWithoutSubmits");
+    String formSerializer = (String) valueForBinding("formSerializer", defaultFormSerializer, component);
+    if (!defaultFormSerializer.equals(formSerializer)) {
+	    parametersBuffer.append(formSerializer);
+	    parametersBuffer.append("(" + formReference + ")");
+	    parametersBuffer.append(" + '");
+	    parametersBuffer.append("&" + AjaxSubmitButton.KEY_AJAX_SUBMIT_BUTTON_NAME + "=" + name);
+	    parametersBuffer.append("'");
+	    options.setObjectForKey(parametersBuffer.toString(), "parameters");
+    }
+    else {
+    	// _asbn = AJAX_SUBMIT_BUTTON_NAME (but short)
+	    options.setObjectForKey("'" + name + "'", "_asbn");
+    }
 
 	AjaxUpdateContainer.expandInsertionFromOptions(options, this, component);
 
@@ -166,16 +170,17 @@ public class AjaxSubmitButton extends AjaxDynamicElement {
 	}
 
 	if (updateContainerID != null) {
-		onClickBuffer.append("new Ajax.Updater('" + updateContainerID + "',");
+		onClickBuffer.append("ASB.update('" + updateContainerID + "',");
 	}
 	else {
-		onClickBuffer.append("new Ajax.Request(");
+		onClickBuffer.append("ASB.request(");
 	}
+	onClickBuffer.append(formReference);
 	if (valueForBinding("functionName", component) != null) {
-		onClickBuffer.append(formReference + ".action.addQueryParameters(additionalParams)");
+		onClickBuffer.append(",additionalParams");
 	}
 	else {
-		onClickBuffer.append(formReference + ".action");
+		onClickBuffer.append(",null");
 	}
 	onClickBuffer.append(",");
 	
