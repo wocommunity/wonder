@@ -34,6 +34,13 @@ public class Ajax extends ERXFrameworkPrincipal {
 			WOApplication.application().registerRequestHandler(new AjaxRequestHandler(), AjaxRequestHandler.AjaxRequestHandlerKey);
 			log.info("AjaxRequestHandler installed");
 		}
+		
+		// Register the AjaxResponseDelegate if you're using an ERXAjaxApplication ... This allows us
+		// to fix some weird border cases caused by structural page changes.
+		WOApplication application = WOApplication.application();
+		if (application instanceof ERXAjaxApplication) {
+			((ERXAjaxApplication)application).setResponseDelegate(new AjaxResponse.AjaxResponseDelegate());
+		}
 	}
 
 	/**
