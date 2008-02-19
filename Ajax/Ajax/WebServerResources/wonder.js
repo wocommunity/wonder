@@ -215,7 +215,7 @@ var AjaxUpdateContainer = {
 	
 	update : function(id, options) {
 		var actionUrl = $(id).getAttribute('updateUrl');
-		//actionUrl = actionUrl.addQueryParameters('__updateID='+ id);
+		actionUrl = actionUrl.addQueryParameters('__updateID='+ id);
 		new Ajax.Updater(id, actionUrl, AjaxOptions.options(options));
 	}
 };
@@ -232,7 +232,7 @@ var AjaxUpdateLink = {
 	update : function(id, options, elementID, queryParams) {
 		var actionUrl = $(id).getAttribute('updateUrl').sub('[^/]+$', elementID);
 		actionUrl = actionUrl.addQueryParameters(queryParams);
-		//actionUrl = actionUrl.addQueryParameters('__updateID='+ id);
+		actionUrl = actionUrl.addQueryParameters('__updateID='+ id);
 		new Ajax.Updater(id, actionUrl, AjaxOptions.options(options));
 	}
 };
@@ -259,7 +259,15 @@ var AjaxSubmitButton = {
 			var ajaxSubmitButtonName = newOptions['_asbn'];
 			if (ajaxSubmitButtonName != null) {
 				newOptions['_asbn'] = null;
-				newOptions['parameters'] = Form.serializeWithoutSubmits(form) + '&AJAX_SUBMIT_BUTTON_NAME=' + ajaxSubmitButtonName;
+				var formSerializer = newOptions['_fs'];
+				if (formSerializer == null) {
+					formSerializer = Form.serializeWithoutSubmits;
+				}
+				else {
+					newOptions['_fs'] = null;
+				}
+				var serializedForm = formSerializer(form);
+				newOptions['parameters'] = serializedForm + '&AJAX_SUBMIT_BUTTON_NAME=' + ajaxSubmitButtonName;
 			}
 		}
 		newOptions = AjaxSubmitButton.options(newOptions);
@@ -284,7 +292,7 @@ AjaxPeriodicUpdater.prototype = {
 	
 	start : function() {
 		var actionUrl = $(this.id).getAttribute('updateUrl');
-		//actionUrl = actionUrl.addQueryParameters('__updateID='+ id);
+		actionUrl = actionUrl.addQueryParameters('__updateID='+ id);
 		this.updater = new Ajax.PeriodicalUpdater(this.id, actionUrl, { evalScripts: true, frequency: 2.0 });
 	},
 
