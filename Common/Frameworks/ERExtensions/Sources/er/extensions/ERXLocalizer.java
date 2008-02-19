@@ -115,6 +115,8 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
 
 	private static Boolean _useLocalizedFormatters;
 
+	private static Boolean _fallbackToDefaultLanguage;
+
 	public static final String LocalizationDidResetNotification = "LocalizationDidReset";
 
 	private static Observer observer = new Observer();
@@ -812,8 +814,15 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
 		if (createdKeysLog.isDebugEnabled()) {
 			log.debug("Key not found: '" + key + "'/" + language);
 		}
-		setCacheValueForKey(NOT_FOUND, key);
-		return null;
+		if (fallbackToDefaultLanguage() && !defaultLanguage().equals(language)) {
+			Object valueInDefaultLanguage = defaultLocalizer().localizedValueForKey(key);
+			setCacheValueForKey(valueInDefaultLanguage == null ? NOT_FOUND : valueInDefaultLanguage, key);
+			return valueInDefaultLanguage;
+		}
+		else {
+			setCacheValueForKey(NOT_FOUND, key);
+			return null;
+		}
 	}
 
 	public String localizedStringForKeyWithDefault(String key) {
@@ -1042,5 +1051,12 @@ public class ERXLocalizer implements NSKeyValueCoding, NSKeyValueCodingAdditions
 
 	public String languageCode() {
 		return locale().getLanguage();
+	}
+	
+	public static boolean fallbackToDefaultLanguage() {
+		if (_fallbackToDefaultLanguage == null) {
+			_fallbackToDefaultLanguage = ERXProperties.booleanForKey("er.extensions.ERXLocalizer.fallbackToDefaultLanguage") ? Boolean.TRUE : Boolean.FALSE;
+		}
+		return _fallbackToDefaultLanguage.booleanValue();
 	}
 }
