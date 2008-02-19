@@ -214,7 +214,9 @@ var AjaxUpdateContainer = {
 	},
 	
 	update : function(id, options) {
-		new Ajax.Updater(id, $(id).getAttribute('updateUrl'), AjaxOptions.options(options));
+		var actionUrl = $(id).getAttribute('updateUrl');
+		//actionUrl = actionUrl.addQueryParameters('__updateID='+ id);
+		new Ajax.Updater(id, actionUrl, AjaxOptions.options(options));
 	}
 };
 var AUC = AjaxUpdateContainer;
@@ -230,10 +232,49 @@ var AjaxUpdateLink = {
 	update : function(id, options, elementID, queryParams) {
 		var actionUrl = $(id).getAttribute('updateUrl').sub('[^/]+$', elementID);
 		actionUrl = actionUrl.addQueryParameters(queryParams);
+		//actionUrl = actionUrl.addQueryParameters('__updateID='+ id);
 		new Ajax.Updater(id, actionUrl, AjaxOptions.options(options));
 	}
 };
 var AUL = AjaxUpdateLink;
+
+var AjaxSubmitButton = {
+	options : function(additionalOptions) {
+		var options = { asynchronous: true, evalScripts: true };
+		Object.extend(options, additionalOptions || {});
+		return options;
+	},
+	
+	generateActionUrl : function(form, queryParams) {
+		var actionUrl = form.action;
+		if (queryParams != null) {
+			actionUrl.addQueryParameters(queryParams);
+		}
+		return actionUrl;
+	},
+	
+	processOptions : function(form, options) {
+		var newOptions = options;
+		if (newOptions != null) {
+			var ajaxSubmitButtonName = newOptions['_asbn'];
+			if (ajaxSubmitButtonName != null) {
+				newOptions['_asbn'] = null;
+				newOptions['parameters'] = Form.serializeWithoutSubmits(form) + '&AJAX_SUBMIT_BUTTON_NAME=' + ajaxSubmitButtonName;
+			}
+		}
+		newOptions = AjaxSubmitButton.options(newOptions);
+		return newOptions;
+	},
+	
+	update : function(id, form, queryParams, options) {
+		new Ajax.Updater(id, AjaxSubmitButton.generateActionUrl(form, queryParams), AjaxSubmitButton.processOptions(form, options));
+	},
+	
+	request : function(form, queryParams, options) {
+		new Ajax.Request(AjaxSubmitButton.generateActionUrl(form, queryParams), AjaxSubmitButton.processOptions(form, options));
+	}
+};
+var ASB = AjaxSubmitButton;
 
 var AjaxPeriodicUpdater = Class.create();
 AjaxPeriodicUpdater.prototype = {
@@ -242,7 +283,9 @@ AjaxPeriodicUpdater.prototype = {
 	},
 	
 	start : function() {
-		this.updater = new Ajax.PeriodicalUpdater(this.id, $(this.id).getAttribute('updateUrl'), { evalScripts: true, frequency: 2.0 });
+		var actionUrl = $(this.id).getAttribute('updateUrl');
+		//actionUrl = actionUrl.addQueryParameters('__updateID='+ id);
+		this.updater = new Ajax.PeriodicalUpdater(this.id, actionUrl, { evalScripts: true, frequency: 2.0 });
 	},
 
 	stop : function() {
