@@ -424,15 +424,17 @@ public class ERXMigrationColumn {
 	 *            the new precision
 	 * @param width
 	 *            the new width
+	 * @param options
+	 *            the options to use for conversion (or null)
 	 * @throws SQLException
 	 *             if the change fails
 	 */
 	@SuppressWarnings("unchecked")
-	public void setDataType(int jdbcType, int scale, int precision, int width) throws SQLException {
+	public void setDataType(int jdbcType, int scale, int precision, int width, NSDictionary options) throws SQLException {
 		JDBCAdaptor adaptor = (JDBCAdaptor) _table.database().adaptor();
 		String externalType = ERXSQLHelper.newSQLHelper(adaptor).externalTypeForJDBCType(adaptor, jdbcType);
 		EOSchemaSynchronization schemaSynchronization = _table.database().synchronizationFactory();
-		NSArray<EOSQLExpression> expressions = schemaSynchronization.statementsToConvertColumnType(_name, _table.name(), null, new _ColumnType(externalType, scale, precision, width), null);
+		NSArray<EOSQLExpression> expressions = schemaSynchronization.statementsToConvertColumnType(_name, _table.name(), null, new _ColumnType(externalType, scale, precision, width), options);
 		ERXMigrationDatabase._ensureNotEmpty(expressions);
 		ERXJDBCUtilities.executeUpdateScript(_table.database().adaptorChannel(), ERXMigrationDatabase._stringsForExpressions(expressions));
 		_jdbcType = jdbcType;
@@ -448,11 +450,13 @@ public class ERXMigrationColumn {
 	 *            the new JDBC type of the column (see java.sql.Types)
 	 * @param width
 	 *            the new width
+	 * @param options
+	 *            the options to use for conversion (or null)
 	 * @throws SQLException
 	 *             if the change fails
 	 */
-	public void setWidthType(int jdbcType, int width) throws SQLException {
-		setDataType(jdbcType, 0, 0, width);
+	public void setWidthType(int jdbcType, int width, NSDictionary options) throws SQLException {
+		setDataType(jdbcType, 0, 0, width, options);
 	}
 
 	/**
@@ -464,11 +468,13 @@ public class ERXMigrationColumn {
 	 *            the new scale
 	 * @param precision
 	 *            the new precision
+	 * @param options
+	 *            the options to use for conversion (or null)
 	 * @throws SQLException
 	 *             if the change fails
 	 */
-	public void setNumericType(int jdbcType, int scale, int precision) throws SQLException {
-		setDataType(jdbcType, scale, precision, 0);
+	public void setNumericType(int jdbcType, int scale, int precision, NSDictionary options) throws SQLException {
+		setDataType(jdbcType, scale, precision, 0, options);
 	}
 
 	/**
