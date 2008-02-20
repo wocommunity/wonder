@@ -1089,4 +1089,52 @@ public class MInstance extends MObject {
         return isRefusingNewSessions;
     }
 
+
+    protected int intStatisticsValueForKey(String key, int defaultValue) {
+        NSDictionary aStatsDict = statistics();
+
+        if (aStatsDict != null) {
+            try {
+                String aValue = (String) aStatsDict.valueForKey(key);
+                if (aValue != null) {
+                    return (new Integer(aValue)).intValue();
+                }
+            } catch (Throwable ex) {
+                // do nothing
+            }
+        }
+        return defaultValue;
+    }
+
+    protected float floatStatisticsValueForKey(String key, float defaultValue) {
+        NSDictionary aStatsDict = statistics();
+
+        if (aStatsDict != null) {
+            try {
+                String aValue = (String) aStatsDict.valueForKey(key);
+                if (aValue != null) {
+                    return (new Float(aValue)).floatValue();
+                }
+            } catch (Throwable ex) {
+                // do nothing
+            }
+        }
+        return defaultValue;
+    }
+    
+    public int transactionsValue() {
+        return intStatisticsValueForKey("transactions", 0);
+    }
+    
+    public int activeSessionsValue() {
+        return intStatisticsValueForKey("activeSessions", 0);
+    }
+    
+    public float avgIdleTimeValue() {
+        return floatStatisticsValueForKey("averageIdlePeriod", 0);
+    }
+    
+    public float avgTransactionTimeValue() {
+        return floatStatisticsValueForKey("avgTransactionTime", 0);
+    }
 }

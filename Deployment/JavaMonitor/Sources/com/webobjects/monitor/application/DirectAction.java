@@ -15,6 +15,12 @@ package com.webobjects.monitor.application;
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WODirectAction;
 import com.webobjects.appserver.WORequest;
+import com.webobjects.appserver.WOResponse;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSPropertyListSerialization;
+import com.webobjects.monitor._private.MApplication;
+import com.webobjects.monitor._private.MSiteConfig;
+import com.webobjects.monitor.application.WOTaskdHandler.ErrorCollector;
 
 public class DirectAction extends WODirectAction {
 
@@ -26,4 +32,53 @@ public class DirectAction extends WODirectAction {
         return pageWithName("Main");
     }
 
+    protected MSiteConfig siteConfig() {
+        return WOTaskdHandler.siteConfig();
+    }
+
+    public WOResponse statisticsAction() {
+           WOResponse response = new WOResponse();
+        String pw = context().request().stringFormValueForKey("pw");
+        if(siteConfig().compareStringWithPassword(pw)) {
+            WOTaskdHandler handler = new WOTaskdHandler(new ErrorCollector() {
+
+                public void addObjectsFromArrayIfAbsentToErrorMessageArray(NSArray<String> aErrors) {
+                    
+                }});
+            handler.startReading();
+            try {
+                response.appendContentString("applicationName\trunningInstances\tmaxSessions\tavgSessions\tmaxTransactions\tavgTransactions\tmaxTransactionTime\tavgTransactionTime\tmaxIdleTime\tavgIdleTime\n");
+                for (MApplication app : siteConfig().applicationArray()) {
+                    handler.getInstanceStatusForHosts(app.hostArray());
+                    String name = app.name();
+                    NSArray instances = app.instanceArray();
+                    int count = app.instanceArray().count();
+                    Number maxSessions = (Number) app.instanceArray().valueForKeyPath("@max.activeSessionsValue");
+                    Number avgSessions =  (Number) app.instanceArray().valueForKeyPath("@avg.activeSessionsValue");
+                    Number maxTransactions =  (Number) app.instanceArray().valueForKeyPath("@max.transactionsValue");
+                    Number avgTransactions =  (Number) app.instanceArray().valueForKeyPath("@avg.transactionsValue");
+                    Number maxTransactionTime = (Number) app.instanceArray().valueForKeyPath("@max.avgTransactionTimeValue");
+                    Number avgTransactionTime = (Number) app.instanceArray().valueForKeyPath("@avg.avgTransactionTimeValue");
+                    Number maxIdleTime = (Number) app.instanceArray().valueForKeyPath("@max.avgIdleTimeValue");
+                    Number avgIdleTime = (Number) app.instanceArray().valueForKeyPath("@avg.avgIdleTimeValue");
+                    System.out.println(NSPropertyListSerialization.stringFromPropertyList(instances.valueForKey("statistics")));
+                    StringBuffer sb = new StringBuffer();
+                    sb.append(name).append("\t");
+                    sb.append(count).append("\t");
+                    sb.append(maxSessions).append("\t");
+                    sb.append(avgSessions).append("\t");
+                    sb.append(maxTransactions).append("\t");
+                    sb.append(avgTransactions).append("\t");
+                    sb.append(maxTransactionTime).append("\t");
+                    sb.append(avgTransactionTime).append("\t");
+                    sb.append(maxIdleTime).append("\t");
+                    sb.append(avgIdleTime).append("\n");
+                    response.appendContentString(sb.toString());
+                }
+            } finally {
+                handler.endReading();
+            }
+        }
+        return response;
+    }
 }
