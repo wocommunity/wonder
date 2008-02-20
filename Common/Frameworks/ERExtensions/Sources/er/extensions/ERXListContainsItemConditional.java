@@ -6,47 +6,47 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.extensions;
 
+import java.util.List;
+
+import com.webobjects.appserver.WOAssociation;
 import com.webobjects.appserver.WOComponent;
-import com.webobjects.appserver.WOContext;
-import com.webobjects.foundation.NSArray;
+import com.webobjects.appserver.WOElement;
+import com.webobjects.appserver._private.WODynamicElementCreationException;
+import com.webobjects.foundation.NSDictionary;
 
 /**
- * Conditional component that tests if a given item is contained
- * in an {@link com.webobjects.foundation.NSArray}.
- * <br/>
- * Synopsis:<br/>
- * item=<i>anItem</i>;list=<i>aList</i>;[negate=<i>aBoolean</i>;]
+ * Conditional component that tests if a given item is contained in an
+ * {@link java.util.List}.
  * 
  * @binding list array of objects
  * @binding item object to test inclusion in the list
  * @binding negate inverts the sense of the conditional.
  */
-// ENHANCEME: Should support java.util.List interface
-public class ERXListContainsItemConditional extends WOComponent {
+public class ERXListContainsItemConditional extends ERXWOConditional {
 
-    /**
-     * Public constructor.
-     * @param aContext a context
-     */
-    public ERXListContainsItemConditional(WOContext aContext) {
-        super(aContext);
-    }
+	protected WOAssociation _list;
+	protected WOAssociation _item;
 
-    /**
-     * Component is stateless
-     * @return true
-     */
-    public boolean isStateless() { return true; }
+	public ERXListContainsItemConditional(String aName, NSDictionary aDict, WOElement aElement) {
+		super(aName, aDict, aElement);
+	}
 
-    /**
-     * Tests if the bound item is contained within the
-     * bound list.
-     * @return result of comparision
-     */
-    // ENHANCEME: Should support the List interface
-    public boolean listContainsItem() {
-        NSArray list=(NSArray)valueForBinding("list");
-        Object item=valueForBinding("item");
-        return item != null && list != null && list.containsObject(item);
-    }
+	@Override
+	protected void pullAssociations(NSDictionary<String, ? extends WOAssociation> dict) {
+		_list = dict.objectForKey("list");
+		_item = dict.objectForKey("item");
+		if (_list == null || _item == null) {
+			throw new WODynamicElementCreationException("list and item must be bound");
+		}
+	}
+
+	/**
+	 * Tests if the bound item is contained within the bound list.
+	 */
+	@Override
+	protected boolean conditionInComponent(WOComponent component) {
+		List list = (List) _list.valueInComponent(component);
+		Object item = _item.valueInComponent(component);
+		return list != null && list.contains(item);
+	}
 }

@@ -6,61 +6,52 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.extensions;
 
-import org.apache.log4j.Logger;
-
+import com.webobjects.appserver.WOAssociation;
 import com.webobjects.appserver.WOComponent;
-import com.webobjects.appserver.WOContext;
+import com.webobjects.appserver.WOElement;
+import com.webobjects.appserver._private.WODynamicElementCreationException;
+import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSForwardException;
 
 /**
- * Conditional component that tests if an object is an instance of a given
- * class or interface
- * <br/>
- * Synopsis:<br/>
- * object=<i>anObject</i>;className=<i>aClassName2</i>;[negate=<i>aBoolean</i>;]
+ * Conditional component that tests if an object is an instance of a given class
+ * or interface <br/> Synopsis:<br/> object=<i>anObject</i>;className=<i>aClassName2</i>;[negate=<i>aBoolean</i>;]
  * 
  * @binding object object to test
  * @binding className class or interface name
  * @binding negate Inverts the sense of the conditional.
  */
-public class ERXInstanceOfConditional extends WOComponent {
+public class ERXInstanceOfConditional extends ERXWOConditional {
 
-    /** Public constructor */
-    public ERXInstanceOfConditional(WOContext aContext) {
-        super(aContext);
-    }
+	protected WOAssociation _object;
+	protected WOAssociation _className;
 
-    /** logging support */
-    public static final Logger log = Logger.getLogger(ERXInstanceOfConditional.class);
+	public ERXInstanceOfConditional(String aName, NSDictionary aDict, WOElement aElement) {
+		super(aName, aDict, aElement);
+	}
 
-    /** component is stateless */
-    public boolean isStateless() { return true; }
+	@Override
+	protected void pullAssociations(NSDictionary<String, ? extends WOAssociation> dict) {
+		_object = dict.objectForKey("object");
+		_className = dict.objectForKey("className");
+		if (_object == null || _className == null) {
+			throw new WODynamicElementCreationException("className and object must be bound");
+		}
+	}
 
-    /** resets cached ivars */
-    public void reset() {
-        super.reset();
-        _instanceOf = null;
-    }
-    /** cached value of comparison */
-    private Boolean _instanceOf;
-
-    /**
-     * Tests if the bound object is an instance of the class.
-     * Note: If the class is not found a ClassNotFoundException
-     * will be thrown via an NSForwardException.
-     * @return the boolean result of the <code>isInstance</code> test.
-     */
-    public boolean instanceOf() {
-        if (_instanceOf == null) {
-            Class instance = null;
-            String className = (String)valueForBinding("className");
-            if (log.isDebugEnabled())
-                log.debug("Resolving class: " + className);
-            instance = ERXPatcher.classForName(className);
-            if (instance == null)
-                throw new NSForwardException(new ClassNotFoundException((String)valueForBinding("className")));
-            _instanceOf = instance.isInstance(valueForBinding("object")) ? Boolean.TRUE : Boolean.FALSE;
-        }
-        return _instanceOf.booleanValue();
-    }
+	/**
+	 * Tests if the bound object is an instance of the class. Note: If the class
+	 * is not found a ClassNotFoundException will be thrown via an
+	 * NSForwardException.
+	 */
+	@Override
+	protected boolean conditionInComponent(WOComponent component) {
+		Object o = _object.valueInComponent(component);
+		String className = (String) _className.valueInComponent(component);
+		Class c = ERXPatcher.classForName(className);
+		if (c == null) {
+			throw new NSForwardException(new ClassNotFoundException(className));
+		}
+		return c.isInstance(o);
+	}
 }

@@ -2,6 +2,7 @@ package er.extensions;
 
 import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WOAssociation;
+import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WOElement;
 import com.webobjects.appserver.WORequest;
@@ -12,13 +13,14 @@ import com.webobjects.foundation.NSDictionary;
 
 /**
  * ERXWOConditional behaves just like WOConditional except that it tracks its condition state for use with ERXElse.
- * 
+ * Also makes it easier to override by implementing {@link #meetsConditionInComponent(WOComponent)} and {@link #pullAssociations(NSDictionary)}.
  * @author mschrag
+ * @author ak
  */
 public class ERXWOConditional extends WODynamicGroup {
 	public static final String LAST_CONDITION_KEY = "er.extensions.ERXWOConditional.lastCondition";
 
-	private WOAssociation _condition;
+	protected WOAssociation _condition;
 	private WOAssociation _negate;
 
 	public static void setLastCondition(Boolean lastCondition) {
@@ -34,15 +36,45 @@ public class ERXWOConditional extends WODynamicGroup {
 		return (Boolean) ERXWOContext.contextDictionary().objectForKey(ERXWOConditional.LAST_CONDITION_KEY);
 	}
 
-	public ERXWOConditional(String s, NSDictionary nsdictionary, WOElement woelement) {
-		super(null, null, woelement);
+	/**
+	 * Override this to return true when your condition is met.
+	 */
+	protected boolean conditionInComponent(WOComponent wocomponent) {   
+		boolean condition = _condition.booleanValueInComponent(wocomponent);
+		return condition;
+	}
 
-		_condition = (WOAssociation) nsdictionary.objectForKey("condition");
-		_negate = (WOAssociation) nsdictionary.objectForKey("negate");
+	protected final boolean meetsConditionInComponent(WOComponent wocomponent) {   
+		boolean condition = conditionInComponent(wocomponent);
 
-		if (_condition == null) {
+		boolean negate = false;
+		if (_negate != null) {
+			negate = _negate.booleanValueInComponent(wocomponent);
+		}
+
+		return condition && !negate || !condition && negate;
+	}
+
+	/**
+	 * Override to pull the associations for your condition. The
+	 * <code>negate</code> has already been pulled, so don't call super, as you
+	 * will get an IllegalStateException because <code>condition</code> isn't
+	 * bound. 
+	 */
+	protected void pullAssociations(NSDictionary<String, ? extends WOAssociation> nsdictionary) {
+
+		_condition =nsdictionary.objectForKey("condition");
+
+		if (_condition == null && getClass() == ERXWOConditional.class) {
 			throw new WODynamicElementCreationException("<" + getClass().getName() + "> Missing 'condition' attribute in initialization.");
 		}
+
+	}
+
+	public ERXWOConditional(String name, NSDictionary dict, WOElement element) {
+		super(null, null, element);
+		_negate = (WOAssociation) dict.objectForKey("negate");
+		pullAssociations(dict);
 	}
 
 	public String toString() {
@@ -51,15 +83,7 @@ public class ERXWOConditional extends WODynamicGroup {
 
 	public void takeValuesFromRequest(WORequest worequest, WOContext wocontext) {
 		ERXWOConditional.setLastCondition(Boolean.FALSE);
-		com.webobjects.appserver.WOComponent wocomponent = wocontext.component();
-		boolean flag = _condition.booleanValueInComponent(wocomponent);
-
-		boolean flag1 = false;
-		if (_negate != null) {
-			flag1 = _negate.booleanValueInComponent(wocomponent);
-		}
-
-		if (flag && !flag1 || !flag && flag1) {
+		if (meetsConditionInComponent(wocontext.component())) {
 			super.takeValuesFromRequest(worequest, wocontext);
 		}
 	}
@@ -72,15 +96,7 @@ public class ERXWOConditional extends WODynamicGroup {
 
 	public WOActionResults invokeAction(WORequest worequest, WOContext wocontext) {
 		ERXWOConditional.setLastCondition(Boolean.FALSE);
-		com.webobjects.appserver.WOComponent wocomponent = wocontext.component();
-		boolean flag = _condition.booleanValueInComponent(wocomponent);
-
-		boolean flag1 = false;
-		if (_negate != null) {
-			flag1 = _negate.booleanValueInComponent(wocomponent);
-		}
-
-		if (flag && !flag1 || !flag && flag1) {
+		if (meetsConditionInComponent(wocontext.component())) {
 			return super.invokeAction(worequest, wocontext);
 		}
 		else {
@@ -97,15 +113,7 @@ public class ERXWOConditional extends WODynamicGroup {
 
 	public void appendToResponse(WOResponse woresponse, WOContext wocontext) {
 		ERXWOConditional.setLastCondition(Boolean.FALSE);
-		com.webobjects.appserver.WOComponent wocomponent = wocontext.component();
-		boolean flag = _condition.booleanValueInComponent(wocomponent);
-
-		boolean flag1 = false;
-		if (_negate != null) {
-			flag1 = _negate.booleanValueInComponent(wocomponent);
-		}
-
-		if (flag && !flag1 || !flag && flag1) {
+		if (meetsConditionInComponent(wocontext.component())) {
 			appendChildrenToResponse(woresponse, wocontext);
 		}
 	}

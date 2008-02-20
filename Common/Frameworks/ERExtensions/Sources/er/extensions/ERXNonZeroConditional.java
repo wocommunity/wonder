@@ -7,44 +7,28 @@
 package er.extensions;
 
 import com.webobjects.appserver.WOComponent;
-import com.webobjects.appserver.WOContext;
+import com.webobjects.appserver.WOElement;
+import com.webobjects.foundation.NSDictionary;
 
 /**
  * Conditional component that tests if a given Number
  * object is non-zero.
- * <br/>
- * Synopsis:<br/>
- * condition=<i>aCondition</i>;[negate=<i>aBoolean</i>;]
- * 
  * @binding condition numeric condition to test.
  * @binding negate inverts the sense of the conditional.
  */
-public class ERXNonZeroConditional extends WOComponent {
+public class ERXNonZeroConditional extends ERXWOConditional {
 
-    /**
-     * Public constructor
-     * @param aContext a context
-     */
-    public ERXNonZeroConditional(WOContext aContext) {
-        super(aContext);
-    }
-    
-    /**
-     * Component is stateless.
-     * @return true
-     */
-    public boolean isStateless() { return true; }
-    
-    /**
-     * Tests if the condition not equal to zero or equal to
-     * null.
-     * @return if the condition is non-zero
-     */
-     // FIXME: Should be using intValue to test if it is equal to 0
-     //		so that this can handle all the types of Number subclasses
-     //		also could handle the string 0.
-    public boolean isNonZero() {
-        Object binding=valueForBinding("condition");
-        return binding!=null && !binding.equals(ERXConstant.ZeroInteger);
-    }
+	public ERXNonZeroConditional(String aName, NSDictionary aDict, WOElement aElement) {
+		super(aName, aDict, aElement);
+	}
+	
+	@Override
+	protected boolean conditionInComponent(WOComponent component) {
+		Object value = _condition.valueInComponent(component);
+		if (value instanceof Number) {
+			Number num = (Number) value;
+			return num.intValue() != 0;
+		}
+		return false;
+	}
 }
