@@ -6,47 +6,52 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.extensions;
 
+import com.webobjects.appserver.WOAssociation;
 import com.webobjects.appserver.WOComponent;
-import com.webobjects.appserver.WOContext;
+import com.webobjects.appserver.WOElement;
+import com.webobjects.appserver._private.WODynamicElementCreationException;
 import com.webobjects.eocontrol.EOEnterpriseObject;
+import com.webobjects.foundation.NSDictionary;
 
 /**
  * Conditional component that compares two objects using the <code>equals</code> method.<br/>
- * <br/>
- * Synopsis:<br/>
- * value1=<i>anObject1</i>;value2=<i>anObject2</i>;[negate=<i>aBoolean</i>;] 
- *
  * @binding value1 first object to compare
  * @binding value2 second object to compare
  * @binding negate Inverts the sense of the conditional.
  */
-public class ERXEqualConditional extends WOComponent {
+public class ERXEqualConditional extends ERXWOConditional {
 
-    /** 
-     * Public constructor
-     * @param aContext current WOContext
-     */
-    public ERXEqualConditional(WOContext aContext) {
-        super(aContext);
+	private WOAssociation _value1;
+	private WOAssociation _value2;
+
+    public ERXEqualConditional(String aS, NSDictionary aNsdictionary, WOElement aWoelement) {
+		super(aS, aNsdictionary, aWoelement);
+	}
+
+    @Override
+	protected void pullAssociations(NSDictionary<String, ? extends WOAssociation> dict) {
+    	_value1 = dict.objectForKey("value1");
+    	_value2 = dict.objectForKey("value2");
+    	if(_value1 == null || _value2 == null) {
+    		throw new WODynamicElementCreationException("value1 and value2 must both be bound");
+    	}
     }
-
-    /** component is stateless */
-    public boolean isStateless() { return true; }
     
-    /** component does not synchronize it's variables */
-    public boolean synchronizesVariablesWithBindings() { return false; }
-
     /**
      * Tests for the equality of the two value bindings. First tests a direct
      * <code>==</code> comparision then tests with an <code>equals</code> comparision.
      * @return equality of the two bindings.
      */
-    public boolean areEqual() {
-        Object v1=valueForBinding("value1");
-        Object v2=valueForBinding("value2");
+    public boolean conditionInComponent(WOComponent component) {
+        Object v1= _value1.valueInComponent(component);
+        Object v2= _value1.valueInComponent(component);
+        boolean result;
         if((v1 instanceof EOEnterpriseObject) && (v2 instanceof EOEnterpriseObject)) {
-        	return ERXEOControlUtilities.eoEquals((EOEnterpriseObject)v1, (EOEnterpriseObject)v2);
+        	result = ERXEOControlUtilities.eoEquals((EOEnterpriseObject)v1, (EOEnterpriseObject)v2);
+        } else {
+        	result = (v1==v2 || (v1!=null && v2!=null && v1.equals(v2)));
         }
-        return v1==v2 || (v1!=null && v2!=null && v1.equals(v2));
+        
+        return result;
     }
 }
