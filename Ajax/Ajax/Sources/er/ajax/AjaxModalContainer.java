@@ -12,10 +12,10 @@ import com.webobjects.foundation.*;
  * @binding style style for the link
  * @binding value value for the link ??
  * @binding id id for the link ??
- * @binding href when it is bound, the content of the url will be fetched
+ * @binding href when it is bound, the content of the url will be fetched (doesn't work)
  * @binding action when it is bound, the content of the url will be fetched
- *  *
- * @author ak
+ * 
+ * @author timo
  */
 public class AjaxModalContainer extends AjaxDynamicElement {
 
