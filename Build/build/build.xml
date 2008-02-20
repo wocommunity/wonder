@@ -797,7 +797,7 @@
     <target name="woadaptors.all" depends="ERIMAdaptor.all" />
     <target name="experimental.all" depends="DevStudio.all" />
 
-    <target name="_frameworks.all" depends="common.frameworks.all, excelgeneration.frameworks.all, ajax.frameworks.all, woadaptors.all, validity.frameworks.all, svgobjects.frameworks.all, plugins.all, paypal.frameworks.all, dynareporting.frameworks.all, woadaptors.all">
+    <target name="_frameworks.all" depends="common.frameworks.all, excelgeneration.frameworks.all, ajax.frameworks.all, woadaptors.all, validity.frameworks.all, svgobjects.frameworks.all, plugins.all, paypal.frameworks.all, dynareporting.frameworks.all, woadaptors.all, JavaMonitorFramework.all">
      </target>
      
      <target name="frameworks.patch54.all">
@@ -819,7 +819,7 @@
         <antcall target="frameworks.patch${wonder.patch}.all" ></antcall>
      </target>
    
-    <target name="applications.all" depends="DevStudio.all, common.applications.all, validity.applications.all"/>
+    <target name="applications.all" depends="DevStudio.all, common.applications.all, validity.applications.all, JavaMonitor.all, wotaskd.all"/>
     <target name="examples.all" depends="common.examples.all, excelgeneration.examples.all, validity.examples.all, dynareporting.examples.all, ajax.examples.all, experimental.all"/>
 
 
