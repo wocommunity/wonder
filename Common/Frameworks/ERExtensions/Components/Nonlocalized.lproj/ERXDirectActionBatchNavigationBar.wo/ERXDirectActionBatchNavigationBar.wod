@@ -11,6 +11,11 @@ IsSelectedConditional : WOConditional {
   condition = isSelected;
 }
 
+IsNotSelectedConditional : WOConditional {
+	condition = isSelected;
+	negate = true;
+}
+
 Link : WOHyperlink {
   	directActionName = actionName;
 	actionClass = actionClass;
@@ -21,9 +26,6 @@ Link : WOHyperlink {
 
 CurrentNumber : WOString {
   value = dictInRepetition.batchString;
-}
-
-ERXElse : ERXElse {
 }
 
 Link1 : WOHyperlink {
