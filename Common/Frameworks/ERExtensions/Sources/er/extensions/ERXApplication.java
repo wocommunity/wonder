@@ -149,6 +149,16 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 	 * er.extensions.ERXApplication.memoryThreshold
 	 */
 	protected BigDecimal memoryThreshold;
+	
+	/**
+	 * The path rewriting pattern to match (@see _rewriteURL)
+	 */
+	protected String _replaceApplicationPathPattern;
+	
+	/**
+	 * The path rewriting replacement to apply to the matched pattern (@see _rewriteURL) 
+	 */
+	protected String _replaceApplicationPathReplace;
 
 	private static Properties readProperties(File file) {
 		Properties result = null;
@@ -754,6 +764,15 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 		EOTemporaryGlobalID._setProcessIdentificationBytesFromInt(port().intValue());
 
 		memoryThreshold = ERXProperties.bigDecimalForKey("er.extensions.ERXApplication.memoryThreshold");
+		
+	    _replaceApplicationPathPattern = ERXProperties.stringForKey("er.extensions.ERXApplication.replaceApplicationPath.pattern");
+	    if (_replaceApplicationPathPattern != null && _replaceApplicationPathPattern.length() == 0) {
+	    	_replaceApplicationPathPattern = null;
+	    }
+	    _replaceApplicationPathReplace = ERXProperties.stringForKey("er.extensions.ERXApplication.replaceApplicationPath.replace");
+	    if (_replaceApplicationPathReplace != null && _replaceApplicationPathReplace.length() == 0) {
+	    	_replaceApplicationPathReplace = null;
+	    }
 	}
 
 	/**
@@ -1736,12 +1755,31 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 	 * This method is called by ERXWOContext and provides the application a hook
 	 * to rewrite generated URLs.
 	 * 
+	 * You can also set "er.extensions.replaceApplicationPath.pattern" to the pattern to
+	 * match and "er.extensions.replaceApplicationPath.replace" to the value to replace
+	 * it with.
+	 * 
+	 * For example, in Properties:
+	 * <code>
+	 * er.extensions.ERXApplication.replaceApplicationPath.pattern=/cgi-bin/WebObjects/YourApp.woa
+	 * er.extensions.ERXApplication.replaceApplicationPath.replace=/yourapp
+	 * </code>
+	 * 
+	 * and in Apache:
+	 * <code>
+	 * RewriteRule ^/yourapp(.*)$ /cgi-bin/WebObjects/YourApp.woa$1 [PT,L]
+	 * </code>
+	 *
 	 * @param url
 	 *            the URL to rewrite
 	 * @return the rewritten URL
 	 */
 	public String _rewriteURL(String url) {
-		return url;
+	    String processedURL = url;
+	    if (url != null && _replaceApplicationPathPattern != null && _replaceApplicationPathReplace != null) {
+	      processedURL = processedURL.replaceFirst(_replaceApplicationPathPattern, _replaceApplicationPathReplace);
+	    }
+		return processedURL;
 	}
 
 	/**
