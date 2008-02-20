@@ -83,16 +83,41 @@ public class ERXRuntimeUtilities {
     }
 
     public static NSMutableDictionary informationForContext(WOContext context) {
-		NSMutableDictionary extraInfo = new NSMutableDictionary();
-		if (context != null && context.page() != null) {
-			extraInfo.setObjectForKey(context.page().name(), "CurrentPage");
-			if (context.component() != null) {
-				extraInfo.setObjectForKey(context.component().name(), "CurrentComponent");
-				if (context.component().parent() != null) {
-					extraInfo.setObjectForKey(ERXWOContext.componentPath(context), "CurrentComponentHierarchy");
-				}
-			}
-			if(context.request() != null) {
+    	NSMutableDictionary extraInfo = new NSMutableDictionary();
+    	if (context != null) {
+    		if(context.page() != null) {
+    			extraInfo.setObjectForKey(context.page().name(), "CurrentPage");
+    			if (context.component() != null) {
+    				extraInfo.setObjectForKey(context.component().name(), "CurrentComponent");
+    				if (context.component().parent() != null) {
+    					extraInfo.setObjectForKey(ERXWOContext.componentPath(context), "CurrentComponentHierarchy");
+    				}
+    			}
+    			//AK: this actually should be delegated somewhere so we could handle it in ERD2W, but what the heck...
+    			NSSelector d2wSelector = new NSSelector("d2wContext");
+    			if (d2wSelector.implementedByObject(context.page())) {
+    				try {
+    					NSKeyValueCoding c = (NSKeyValueCoding) d2wSelector.invoke(context.page());
+    					if (c != null) {
+    						String pageConfiguration = (String) c.valueForKey("pageConfiguration");
+    						if (pageConfiguration != null) {
+    							extraInfo.setObjectForKey(pageConfiguration, "D2W-PageConfiguration");
+    						}
+    						String propertyKey = (String) c.valueForKey("propertyKey");
+    						if (propertyKey != null) {
+    							extraInfo.setObjectForKey(propertyKey, "D2W-PropertyKey");
+    						}
+    						NSArray displayPropertyKeys = (NSArray) c.valueForKey("displayPropertyKeys");
+    						if (displayPropertyKeys != null) {
+    							extraInfo.setObjectForKey(displayPropertyKeys, "D2W-DisplayPropertyKeys");
+    						}
+    					}
+    				}
+    				catch (Exception ex) {
+    				}
+    			}
+    		}
+    		if(context.request() != null) {
 				extraInfo.setObjectForKey(context.request().uri(), "URL");
 				if(context.request().headers() != null) {
 					NSMutableDictionary<String, Object> headers = new NSMutableDictionary<String, Object>();
@@ -102,30 +127,11 @@ public class ERXRuntimeUtilities {
 					extraInfo.setObjectForKey(headers, "Headers");
 				}
 			}
-			NSSelector d2wSelector = new NSSelector("d2wContext");
-			if (d2wSelector.implementedByObject(context.page())) {
-				try {
-					NSKeyValueCoding c = (NSKeyValueCoding) d2wSelector.invoke(context.page());
-					if (c != null) {
-						String pageConfiguration = (String) c.valueForKey("pageConfiguration");
-						if (pageConfiguration != null) {
-							extraInfo.setObjectForKey(pageConfiguration, "D2W-PageConfiguration");
-						}
-						String propertyKey = (String) c.valueForKey("propertyKey");
-						if (propertyKey != null) {
-							extraInfo.setObjectForKey(propertyKey, "D2W-PropertyKey");
-						}
-						NSArray displayPropertyKeys = (NSArray) c.valueForKey("displayPropertyKeys");
-						if (displayPropertyKeys != null) {
-							extraInfo.setObjectForKey(displayPropertyKeys, "D2W-DisplayPropertyKeys");
-						}
-					}
+			if (context.hasSession()) {
+				if(context.session().statistics() != null) {
+					extraInfo.setObjectForKey(context.session().statistics(), "PreviousPageList");
 				}
-				catch (Exception ex) {
-				}
-			}
-			if (context.hasSession() && context.session().statistics() != null) {
-				extraInfo.setObjectForKey(context.session().statistics(), "PreviousPageList");
+				extraInfo.setObjectForKey(context.session(), "Session");
 			}
 		}
 		return extraInfo;
