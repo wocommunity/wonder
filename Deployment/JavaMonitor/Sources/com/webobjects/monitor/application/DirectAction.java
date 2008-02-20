@@ -61,7 +61,6 @@ public class DirectAction extends WODirectAction {
                     Number avgTransactionTime = (Number) app.instanceArray().valueForKeyPath("@avg.avgTransactionTimeValue");
                     Number maxIdleTime = (Number) app.instanceArray().valueForKeyPath("@max.avgIdleTimeValue");
                     Number avgIdleTime = (Number) app.instanceArray().valueForKeyPath("@avg.avgIdleTimeValue");
-                    System.out.println(NSPropertyListSerialization.stringFromPropertyList(instances.valueForKey("statistics")));
                     StringBuffer sb = new StringBuffer();
                     sb.append(name).append("\t");
                     sb.append(count).append("\t");
