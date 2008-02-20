@@ -502,23 +502,13 @@ Object.extend(Object.extend(Wonder.Autocompleter.prototype, Ajax.Autocompleter.p
  * and in CSS, your elements will become .hoverable.hover when they're
  * in the delayed hover state.
  *
- * Call Hoverable.register() in your footer to enable this feature, and
- * include behaviour.js in your page.     
+ * Call Hoverable.register() in your footer to enable this feature.
  */
 var Hoverable = {
-  _rules : {
-    '.hoverable' : function(element) {
-      element.onmouseover = function() {
-        Hoverable.over(this);
-      },
-
-      element.onmouseout = function() {
-        Hoverable.out(this);
-      }
-    }
-  },
-
-  over : function(element) {
+	delay : 300,
+	
+  over : function(event) {
+  	var element = this;
     element.addClassName("hover");
     if (element['hoverCount'] == undefined) {
       element['hoverCount'] = 0;
@@ -528,8 +518,9 @@ var Hoverable = {
     }
   },
 
-  out : function(element) {
-    setTimeout(Hoverable._end.bind(element, element['hoverCount']), 300);
+  out : function(event) {
+  	var element = this;
+    setTimeout(Hoverable._end.bind(element, element['hoverCount']), Hoverable.delay);
   },
 
   _end : function(hoverCount) {
@@ -539,8 +530,14 @@ var Hoverable = {
     }
   },
 
-  register : function() {
-    Behaviour.register(Hoverable._rules);
+  register : function(delay) {
+  	if (delay !== undefined) {
+  		Hoverable.delay = delay;
+  	}
+  	$$('.hoverable').each(function(element, index) {
+  		Event.observe(element, "mouseover", Hoverable.over.bindAsEventListener(element));
+  		Event.observe(element, "mouseout", Hoverable.out.bindAsEventListener(element));
+  	});
   }
 }
  
