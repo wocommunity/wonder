@@ -1491,16 +1491,17 @@ public class ERXEOAccessUtilities {
                  EOSortOrdering item = (EOSortOrdering) enumerator.nextElement();
                  String key = item.key();
                  NSArray path = NSArray.componentsSeparatedByString(key, ".");
+                 EOEntity entity = ERXEOAccessUtilities.entityNamed(ec, fetchSpecification.entityName());
+                 String attributeName = (String) path.lastObject();
+            	 String prefix = "";
                  if(path.count() > 1) {
-                	 String prefix = "";
-                     String attributeName = (String) path.lastObject();
-                     EOEntity entity = ERXEOAccessUtilities.entityNamed(ec, fetchSpecification.entityName());
                      for (int i = 0; i < path.count() - 1; i++) {
                          String part = (String) path.objectAtIndex(i);
                          EORelationship rel = entity.anyRelationshipNamed(part);
                          entity = rel.destinationEntity();
                          prefix += part + ".";
                      }
+                 }
                      if(entity.attributeNamed(attributeName) == null) {
                     	 EOClassDescription cd = entity.classDescriptionForInstances();
                          if(cd instanceof ERXEntityClassDescription) {
@@ -1510,7 +1511,6 @@ public class ERXEOAccessUtilities {
                         	 }
                          }
                      }
-                 }
                  sortOrderings.addObject(item);
              }
              fetchSpecification.setSortOrderings(sortOrderings);
