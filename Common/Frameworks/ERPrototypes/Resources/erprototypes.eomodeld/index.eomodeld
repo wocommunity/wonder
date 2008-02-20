@@ -9,5 +9,4 @@
         {className = EOGenericRecord; name = EOJDBCPostgresqlPrototypes; }, 
         {className = EOGenericRecord; name = EOJDBCPrototypes; }
     ); 
-    internalInfo = {"_deletedEntityNamesInObjectStore" = (EOJDBCFrontBasePrototypes); }; 
 }
