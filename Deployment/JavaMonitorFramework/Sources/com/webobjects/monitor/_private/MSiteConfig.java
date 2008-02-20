@@ -139,9 +139,9 @@ public class MSiteConfig extends MObject {
     NSMutableArray _applicationArray = new NSMutableArray();
     MHost _localHost;
 
-    public NSMutableArray hostArray() { return _hostArray; }
-    public NSMutableArray instanceArray() { return _instanceArray; }
-    public NSMutableArray applicationArray() { return _applicationArray; }
+    public NSMutableArray<MHost> hostArray() { return _hostArray; }
+    public NSMutableArray<MInstance> instanceArray() { return _instanceArray; }
+    public NSMutableArray<MApplication> applicationArray() { return _applicationArray; }
     public MHost localHost() { return _localHost; }
     /**********/
 
