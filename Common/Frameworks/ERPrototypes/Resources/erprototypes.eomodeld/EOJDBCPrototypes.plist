@@ -45,6 +45,7 @@
             precision = 38; 
             scale = 4; 
             valueClassName = NSDecimalNumber; 
+            valueType = B; 
         }, 
         {
             columnName = ""; 
