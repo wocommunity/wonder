@@ -84,7 +84,7 @@ public class ERXS {
 
 	@SuppressWarnings("unchecked")
 	public static <T> NSArray<T> sorted(NSArray<T> array, NSArray<EOSortOrdering> orderings) {
-		return (NSArray<T>) EOSortOrdering.sortedArrayUsingKeyOrderArray(array, orderings);
+		return EOSortOrdering.sortedArrayUsingKeyOrderArray(array, orderings);
 	}
 
 	public static NSArray<EOSortOrdering> chain(NSArray<EOSortOrdering>... arr) {
