@@ -766,13 +766,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 		memoryThreshold = ERXProperties.bigDecimalForKey("er.extensions.ERXApplication.memoryThreshold");
 		
 	    _replaceApplicationPathPattern = ERXProperties.stringForKey("er.extensions.ERXApplication.replaceApplicationPath.pattern");
-	    if (_replaceApplicationPathPattern != null && _replaceApplicationPathPattern.length() == 0) {
-	    	_replaceApplicationPathPattern = null;
-	    }
 	    _replaceApplicationPathReplace = ERXProperties.stringForKey("er.extensions.ERXApplication.replaceApplicationPath.replace");
-	    if (_replaceApplicationPathReplace != null && _replaceApplicationPathReplace.length() == 0) {
-	    	_replaceApplicationPathReplace = null;
-	    }
 	}
 
 	/**
