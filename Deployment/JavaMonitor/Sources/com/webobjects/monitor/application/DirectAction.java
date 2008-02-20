@@ -17,8 +17,12 @@ import com.webobjects.appserver.WODirectAction;
 import com.webobjects.appserver.WORequest;
 import com.webobjects.appserver.WOResponse;
 import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSMutableArray;
+import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation.NSPropertyListSerialization;
 import com.webobjects.monitor._private.MApplication;
+import com.webobjects.monitor._private.MInstance;
 import com.webobjects.monitor._private.MSiteConfig;
 import com.webobjects.monitor.application.WOTaskdHandler.ErrorCollector;
 
@@ -35,9 +39,54 @@ public class DirectAction extends WODirectAction {
     protected MSiteConfig siteConfig() {
         return WOTaskdHandler.siteConfig();
     }
+    
+    private Object nonNull(Object value) {
+        if(value == null) {
+            return "";
+        }
+        return value;
+    }
 
+    private NSDictionary historyEntry(MApplication app) {
+        NSMutableDictionary<String, Object> result = new NSMutableDictionary<String, Object>();
+        result.setObjectForKey(app.name(), "applicationName");
+        NSArray<MInstance> allInstances = app.instanceArray();
+        result.setObjectForKey(allInstances.count(), "configuredInstances");
+        
+        int runningInstances = 0;
+        int refusingInstances = 0;
+        NSMutableArray instances = new NSMutableArray();
+        for (MInstance instance : allInstances) {
+            if (instance.isRunning_M()) {
+                runningInstances++;
+                instances.addObject(instance);
+            }
+            if (instance.isRefusingNewSessions()) {
+                refusingInstances++;
+            }
+        }
+        result.setObjectForKey(runningInstances, "runningInstances");
+        result.setObjectForKey(refusingInstances, "refusingInstances");
+        
+        result.setObjectForKey(nonNull(app.instanceArray().valueForKeyPath("@sum.activeSessionsValue")), "sumSessions");
+        result.setObjectForKey(nonNull(app.instanceArray().valueForKeyPath("@max.activeSessionsValue")), "maxSessions");
+        result.setObjectForKey(nonNull(app.instanceArray().valueForKeyPath("@avg.activeSessionsValue")), "avgSessions");
+        
+        result.setObjectForKey(nonNull(app.instanceArray().valueForKeyPath("@sum.transactionsValue")), "sumTransactions");
+        result.setObjectForKey(nonNull(app.instanceArray().valueForKeyPath("@max.transactionsValue")), "maxTransactions");
+        result.setObjectForKey(nonNull(app.instanceArray().valueForKeyPath("@avg.transactionsValue")), "avgTransactions");
+        
+        result.setObjectForKey(nonNull(app.instanceArray().valueForKeyPath("@max.avgTransactionTimeValue")), "maxAvgTransactionTime");
+        result.setObjectForKey(nonNull(app.instanceArray().valueForKeyPath("@avg.avgTransactionTimeValue")), "avgAvgTransactionTime");
+
+        result.setObjectForKey(nonNull(app.instanceArray().valueForKeyPath("@max.avgIdleTimeValue")), "maxAvgIdleTime");
+        result.setObjectForKey(nonNull(app.instanceArray().valueForKeyPath("@avg.avgIdleTimeValue")), "avgAvgIdleTime");
+          
+        return result;
+    }
+    
     public WOResponse statisticsAction() {
-           WOResponse response = new WOResponse();
+        WOResponse response = new WOResponse();
         String pw = context().request().stringFormValueForKey("pw");
         if(siteConfig().compareStringWithPassword(pw)) {
             WOTaskdHandler handler = new WOTaskdHandler(new ErrorCollector() {
@@ -47,33 +96,13 @@ public class DirectAction extends WODirectAction {
                 }});
             handler.startReading();
             try {
-                response.appendContentString("applicationName\trunningInstances\tmaxSessions\tavgSessions\tmaxTransactions\tavgTransactions\tmaxTransactionTime\tavgTransactionTime\tmaxIdleTime\tavgIdleTime\n");
+                NSMutableArray stats = new NSMutableArray();
                 for (MApplication app : siteConfig().applicationArray()) {
                     handler.getInstanceStatusForHosts(app.hostArray());
-                    String name = app.name();
-                    NSArray instances = app.instanceArray();
-                    int count = app.instanceArray().count();
-                    Number maxSessions = (Number) app.instanceArray().valueForKeyPath("@max.activeSessionsValue");
-                    Number avgSessions =  (Number) app.instanceArray().valueForKeyPath("@avg.activeSessionsValue");
-                    Number maxTransactions =  (Number) app.instanceArray().valueForKeyPath("@max.transactionsValue");
-                    Number avgTransactions =  (Number) app.instanceArray().valueForKeyPath("@avg.transactionsValue");
-                    Number maxTransactionTime = (Number) app.instanceArray().valueForKeyPath("@max.avgTransactionTimeValue");
-                    Number avgTransactionTime = (Number) app.instanceArray().valueForKeyPath("@avg.avgTransactionTimeValue");
-                    Number maxIdleTime = (Number) app.instanceArray().valueForKeyPath("@max.avgIdleTimeValue");
-                    Number avgIdleTime = (Number) app.instanceArray().valueForKeyPath("@avg.avgIdleTimeValue");
-                    StringBuffer sb = new StringBuffer();
-                    sb.append(name).append("\t");
-                    sb.append(count).append("\t");
-                    sb.append(maxSessions).append("\t");
-                    sb.append(avgSessions).append("\t");
-                    sb.append(maxTransactions).append("\t");
-                    sb.append(avgTransactions).append("\t");
-                    sb.append(maxTransactionTime).append("\t");
-                    sb.append(avgTransactionTime).append("\t");
-                    sb.append(maxIdleTime).append("\t");
-                    sb.append(avgIdleTime).append("\n");
-                    response.appendContentString(sb.toString());
+                    NSDictionary appStats = historyEntry(app);
+                    stats.addObject(appStats);
                 }
+                response.appendContentString(NSPropertyListSerialization.stringFromPropertyList(stats));
             } finally {
                 handler.endReading();
             }
