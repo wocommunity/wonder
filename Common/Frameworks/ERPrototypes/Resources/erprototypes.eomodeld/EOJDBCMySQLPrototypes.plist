@@ -7,6 +7,7 @@
             precision = 38; 
             scale = 2; 
             valueClassName = NSDecimalNumber; 
+            valueType = B; 
         }, 
         {columnName = ""; externalType = BLOB; name = blob; valueClassName = NSData; }, 
         {
@@ -44,6 +45,7 @@
             precision = 38; 
             scale = 4; 
             valueClassName = NSDecimalNumber; 
+            valueType = B; 
         }, 
         {
             columnName = ""; 
