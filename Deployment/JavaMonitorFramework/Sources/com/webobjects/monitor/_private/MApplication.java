@@ -13,6 +13,7 @@ SUCH DAMAGE.
 package com.webobjects.monitor._private;
 
 import java.util.Enumeration;
+import java.util.Iterator;
 
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
@@ -458,5 +459,4 @@ public class MApplication extends MObject {
         }
         return true;
     }
-    
 }
