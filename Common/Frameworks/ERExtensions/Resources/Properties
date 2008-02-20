@@ -432,6 +432,12 @@ er.extensions.ERXComponentActionRedirector.enabled=false
 ## and post a notification to release cache memory. Default is 0, meaning no reserve.
 # er.extensions.ERXApplication.lowMemBufferSize=1024
 
+## If you want to rewrite your application URLs from /cgi-bin/WebObjects/YourApp.woa to
+## /yourapp, you can set the following properties and add the apache rewrite rule:
+## RewriteRule ^/yourapp(.*)$ /cgi-bin/WebObjects/YourApp.woa$1 [PT,L]
+# er.extensions.ERXApplication.replaceApplicationPath.pattern=/cgi-bin/WebObjects/YourApp.woa
+# er.extensions.ERXApplication.replaceApplicationPath.replace=/yourapp
+
 #########################################################################
 # ERXJDBCConnectionBroker 
 #########################################################################
