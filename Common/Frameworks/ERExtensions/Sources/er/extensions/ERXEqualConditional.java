@@ -44,7 +44,7 @@ public class ERXEqualConditional extends ERXWOConditional {
      */
     public boolean conditionInComponent(WOComponent component) {
         Object v1= _value1.valueInComponent(component);
-        Object v2= _value1.valueInComponent(component);
+        Object v2= _value2.valueInComponent(component);
         boolean result;
         if((v1 instanceof EOEnterpriseObject) && (v2 instanceof EOEnterpriseObject)) {
         	result = ERXEOControlUtilities.eoEquals((EOEnterpriseObject)v1, (EOEnterpriseObject)v2);
