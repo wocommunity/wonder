@@ -266,13 +266,14 @@ public class ERD2WModel extends D2WModel {
         String[] significantKeys=(String[])_significantKeysPerKey.get(keyPath);
         if (significantKeys==null) return null;
         short s=(short)significantKeys.length;
-        ERXMultiKey k=new ERXMultiKey((short)(s+1));
-        Object[] lhsKeys=k.keys();
+        Object[] lhsKeys=new Object[(short)(s+1)];
         for (short i=0; i<s; i++) {
             //lhsKeys[i]=context.valueForKeyPathNoInference(significantKeys[i]);
             lhsKeys[i]=ERD2WUtilities.contextValueForKeyNoInferenceNoException(context, significantKeys[i]);
         } 
         lhsKeys[s]=keyPath;
+        ERXMultiKey k=new ERXMultiKey(lhsKeys);
+        
         Object result=useCache ? cache.get(k) : null;
         if (result==null) {
             boolean resetTraceRuleFiring = false;
