@@ -36,7 +36,7 @@ public class ERXRuntimeUtilities {
      * @param e
      */
     public static NSMutableDictionary informationForException(Exception e) {
-		NSMutableDictionary extraInfo = new NSMutableDictionary();
+		NSMutableDictionary<String, Object> extraInfo = new NSMutableDictionary<String, Object>();
 		if (e instanceof EOGeneralAdaptorException) {
 			// AK NOTE: you might have sensitive info in your failed ops...
 			NSDictionary dict = ((EOGeneralAdaptorException) e).userInfo();
@@ -67,9 +67,9 @@ public class ERXRuntimeUtilities {
 		return extraInfo;
     }
 
-    public static NSMutableDictionary informationForBundles() {
-    	NSMutableDictionary extraInfo = new NSMutableDictionary();
-    	NSMutableDictionary bundleVersions = new NSMutableDictionary();
+    public static NSMutableDictionary<String, Object> informationForBundles() {
+    	NSMutableDictionary<String, Object> extraInfo = new NSMutableDictionary<String, Object>();
+    	NSMutableDictionary<String, Object> bundleVersions = new NSMutableDictionary<String, Object>();
     	for (Enumeration bundles = NSBundle._allBundlesReally().objectEnumerator(); bundles.hasMoreElements();) {
     		NSBundle bundle = (NSBundle) bundles.nextElement();
     		String version = ERXProperties.versionStringForFrameworkNamed(bundle.name());
@@ -82,8 +82,8 @@ public class ERXRuntimeUtilities {
     	return extraInfo;
     }
 
-    public static NSMutableDictionary informationForContext(WOContext context) {
-    	NSMutableDictionary extraInfo = new NSMutableDictionary();
+    public static NSMutableDictionary<String, Object> informationForContext(WOContext context) {
+    	NSMutableDictionary<String, Object> extraInfo = new NSMutableDictionary<String, Object>();
     	if (context != null) {
     		if(context.page() != null) {
     			extraInfo.setObjectForKey(context.page().name(), "CurrentPage");
@@ -311,7 +311,7 @@ public class ERXRuntimeUtilities {
         StreamReader esr = null;
         try {
             if (log.isDebugEnabled()) {
-                log.debug("Will execute command " +  new NSArray(command).componentsJoinedByString(" "));
+                log.debug("Will execute command " +  new NSArray<String>(command).componentsJoinedByString(" "));
             }
             if (dir == null && envp == null) {
                 p = rt.exec(command);
@@ -509,7 +509,8 @@ public class ERXRuntimeUtilities {
             return _didTimeout;
         }
 
-        public void run() {
+        @Override
+		public void run() {
             try {
                 _p.exitValue();
             } catch (IllegalThreadStateException e) {
