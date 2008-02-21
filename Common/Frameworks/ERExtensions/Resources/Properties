@@ -82,13 +82,28 @@ er.extensions.ERXLocalizer.availableLanguages = (English,German,Japanese)
 # er.extensions.ERXGenericRecord.localizationShouldFallbackToDefaultLanguage = true
 
 #########################################################################
-# Encoding
+# Request and Encoding
 #########################################################################
+## This is the one-stop-shop for setting the default encoding everywhere.
+## When in doubt, set this one.
+# er.extensions.ERXApplication.DefaultEncoding=UTF-8
+
 ## Can specify the default message encoding. Defaults to ISO Latin 1
 ## Accepted encodings: http://java.sun.com/j2se/1.3/docs/guide/intl/encoding.doc.html
+## This is a subset of er.extensions.ERXApplication.DefaultEncoding.
 # er.extensions.ERXApplication.DefaultMessageEncoding=ISO8859_1
+
 er.extensions.ERXMessageEncoding.Enabled=true
+
+## If true, the browser's form value encoding is set, it will override
+## your application encoding for a given request.
 # er.extensions.ERXRequest.BrowserFormValueEncodingOverrideEnabled=true
+
+## If true, all https:// URL generation will be disabled and converted
+## into http:// URLs. If you are running in DirectConnct, this will 
+## allow you to specify secure forms and links without actually having
+## to setup SSL. 
+# er.extensions.ERXRequest.secureDisabled=false
 
 #########################################################################
 # Enterprise Object
