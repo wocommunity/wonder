@@ -1775,9 +1775,14 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 	 * er.extensions.ERXApplication.replaceApplicationPath.replace=/yourapp
 	 * </code>
 	 * 
-	 * and in Apache:
+	 * and in Apache 2.2:
 	 * <code>
 	 * RewriteRule ^/yourapp(.*)$ /cgi-bin/WebObjects/YourApp.woa$1 [PT,L]
+	 * </code>
+	 * 
+	 * or Apache 1.3:
+	 * <code>
+	 * RewriteRule ^/yourapp(.*)$ /cgi-bin/WebObjects/YourApp.woa$1 [P,L]
 	 * </code>
 	 *
 	 * @param url
