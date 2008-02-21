@@ -382,5 +382,10 @@ public class ERXDirectAction extends WODirectAction {
     	}
 		return r;
     }
-    
+
+    @SuppressWarnings("unchecked")
+    public <T extends WOComponent> T pageWithName(Class<T> componentClass) {
+      return (T) super.pageWithName(componentClass.getName());
+    }
+
 }
