@@ -717,7 +717,7 @@ public class ERXArrayUtilities extends Object {
      * @return mutable clone of sorted array.
      */
     // CHECKME ak: I probably wrote this, but do we really need it?
-    public static NSMutableArray sortedMutableArraySortedWithKey(NSArray array, String key) {
+    public static NSMutableArray<?> sortedMutableArraySortedWithKey(NSArray array, String key) {
         return sortedArraySortedWithKey(array, key).mutableClone();
     }
 
@@ -727,7 +727,7 @@ public class ERXArrayUtilities extends Object {
      * @param key sort key.
      * @return mutable clone of sorted array.
      */
-    public static NSArray sortedArraySortedWithKey(NSArray array, String key) {
+    public static <U> NSArray<U> sortedArraySortedWithKey(NSArray array, String key) {
         return sortedArraySortedWithKey(array, key, null);
     }
 
@@ -738,7 +738,7 @@ public class ERXArrayUtilities extends Object {
      * @param selector sort order selector to use, if null, then sort will be case insensitive ascending.
      * @return sorted array.
      */
-    public static NSArray sortedArraySortedWithKey(NSArray array, String key, NSSelector selector) {
+    public static <U> NSArray<U> sortedArraySortedWithKey(NSArray array, String key, NSSelector selector) {
         ERXAssert.PRE.notNull("Attempting to sort null array of objects.", array);
         ERXAssert.PRE.notNull("Attepting to sort array of objects with null key.", key);
         NSArray order=new NSArray(new Object[] {EOSortOrdering.sortOrderingWithKey(key, selector == null ? EOSortOrdering.CompareCaseInsensitiveAscending : selector)});
