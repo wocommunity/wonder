@@ -35,7 +35,7 @@ public class ERXRuntimeUtilities {
      * Returns a dictionary with useful stuff.
      * @param e
      */
-    public static NSMutableDictionary informationForException(Exception e) {
+    public static NSMutableDictionary<String, Object> informationForException(Exception e) {
 		NSMutableDictionary<String, Object> extraInfo = new NSMutableDictionary<String, Object>();
 		if (e instanceof EOGeneralAdaptorException) {
 			// AK NOTE: you might have sensitive info in your failed ops...
