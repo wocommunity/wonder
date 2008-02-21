@@ -27,13 +27,40 @@ public  class ERXRequest extends WORequest {
 	/** logging support */
     public static final Logger log = Logger.getLogger(ERXRequest.class);
 
-    protected static Boolean isBrowserFormValueEncodingOverrideEnabled;
-
     public static final String UNKNOWN_HOST = "UNKNOWN";
+
+    protected static Boolean isBrowserFormValueEncodingOverrideEnabled;
 
     protected static final NSArray<String> HOST_ADDRESS_KEYS = new NSArray<String>(new String[]{"pc-remote-addr", "remote_host", "remote_addr", "remote_user", "x-webobjects-remote-addr"});
 
     protected static final NSArray<String> HOST_NAME_KEYS = new NSArray<String>(new String[]{"x-forwarded-host", "Host", "x-webobjects-server-name", "server_name", "http_host"});
+    
+    /** NSArray to keep browserLanguages in. */
+    protected NSArray<String> _browserLanguages;
+
+    /** holds a reference to the browser object */
+    protected ERXBrowser _browser;
+
+    /**
+     * Specifies whether https should be overridden to be enabled or disabled app-wide. This is 
+     * useful if you are developing with DirectConnect and you want to be able to specif secure 
+     * forms and links, but you want to be able to continue testing them without setting up SSL.
+     * 
+     * Defaults to false, set er.extensions.ERXRequest.secureDisabled=true to turn it off.
+     */
+    protected boolean _secureDisabled;
+    
+     /** Simply call superclass constructor */
+    public ERXRequest(String string, String string0, String string1,
+                      NSDictionary nsdictionary, NSData nsdata,
+                      NSDictionary nsdictionary2) {
+        super(string, string0, string1, nsdictionary,
+              nsdata, nsdictionary2);
+        if (isBrowserFormValueEncodingOverrideEnabled() && browser().formValueEncoding() != null) {
+            setDefaultFormValueEncoding(browser().formValueEncoding());
+        }
+        _secureDisabled = ERXProperties.booleanForKeyWithDefault("er.extensions.ERXRequest.secureDisabled", false);
+    }
     
     public boolean isBrowserFormValueEncodingOverrideEnabled() {
         if (isBrowserFormValueEncodingOverrideEnabled == null) {
@@ -45,23 +72,6 @@ public  class ERXRequest extends WORequest {
     public WOContext context() {
     	return _context();
     }
-
-     /** Simply call superclass constructor */
-    public ERXRequest(String string, String string0, String string1,
-                      NSDictionary nsdictionary, NSData nsdata,
-                      NSDictionary nsdictionary2) {
-        super(string, string0, string1, nsdictionary,
-              nsdata, nsdictionary2);
-        if (isBrowserFormValueEncodingOverrideEnabled() && browser().formValueEncoding() != null) {
-            setDefaultFormValueEncoding(browser().formValueEncoding());
-        }
-    }
-    
-    /** NSArray to keep browserLanguages in. */
-    protected NSArray<String> _browserLanguages;
-
-    /** holds a reference to the browser object */
-    protected ERXBrowser _browser;
     
     /** Returns a cooked version of the languages the user has set in his Browser.
      * Adds "Nonlocalized" and {@link ERXLocalizer#defaultLanguage()} if not
@@ -158,6 +168,10 @@ public  class ERXRequest extends WORequest {
     
     @Override
 	public void _completeURLPrefix(StringBuffer stringbuffer, boolean secure, int port) {
+    	if (_secureDisabled) {
+    		secure = false;
+    	}
+    	
     	String serverName = _serverName();
         String portStr;
         if (port == 0) {
@@ -237,7 +251,7 @@ public  class ERXRequest extends WORequest {
      * @param languages NSArray of Strings
         * @return sorted NSArray of normalized Strings
         */
-    private final static NSComparator COMPARE_Qs=new _LanguageComparator();
+    private final static NSComparator COMPARE_Qs = new _LanguageComparator();
     protected NSArray<String> fixAbbreviationArray(NSArray<String> languages) {
         try {
             languages=languages.sortedArrayUsingComparator(COMPARE_Qs);
