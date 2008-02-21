@@ -155,7 +155,7 @@ public class ERD2WEditSortedManyToManyPage extends ERD2WPage implements EditRela
     // Switch to query view
     public WOComponent queryAction() {
         _state = LIST;
-        return null;
+        return context().page();
     }
 
     public WOComponent selectAction() {
