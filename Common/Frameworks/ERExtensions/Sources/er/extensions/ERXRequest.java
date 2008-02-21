@@ -41,7 +41,7 @@ public  class ERXRequest extends WORequest {
         }
         return isBrowserFormValueEncodingOverrideEnabled.booleanValue();
     }
-    
+
     public WOContext context() {
     	return _context();
     }
@@ -58,7 +58,7 @@ public  class ERXRequest extends WORequest {
     }
     
     /** NSArray to keep browserLanguages in. */
-    protected  NSArray _browserLanguages;
+    protected NSArray<String> _browserLanguages;
 
     /** holds a reference to the browser object */
     protected ERXBrowser _browser;
@@ -68,16 +68,18 @@ public  class ERXRequest extends WORequest {
      * already present. Transforms regionalized en_us to English_US as a key.
      * @return cooked version of user's languages
      */
-    public NSArray browserLanguages() {
+	@Override
+    @SuppressWarnings("unchecked")
+	public NSArray<String> browserLanguages() {
         if (_browserLanguages == null) {
-        	NSMutableArray languageKeys = new NSMutableArray();
-            NSArray fixedLanguages = null;
+        	NSMutableArray<String> languageKeys = new NSMutableArray<String>();
+            NSArray<String> fixedLanguages = null;
             String string = this.headerForKey("accept-language");
             if (string != null) {
-                NSArray rawLanguages = NSArray.componentsSeparatedByString(string, ",");
+                NSArray<String> rawLanguages = NSArray.componentsSeparatedByString(string, ",");
                 fixedLanguages = fixAbbreviationArray(rawLanguages);
-                for (Enumeration e = fixedLanguages.objectEnumerator(); e.hasMoreElements();) {
-					String languageKey = (String) e.nextElement();
+                for (Enumeration<String> e = fixedLanguages.objectEnumerator(); e.hasMoreElements();) {
+					String languageKey = e.nextElement();
 					String language = (String) WOProperties.TheLanguageDictionary.objectForKey(languageKey);
 					if(language == null) {
 						int index = languageKey.indexOf('_');
@@ -96,14 +98,16 @@ public  class ERXRequest extends WORequest {
 				}
             }
             languageKeys.addObject("Nonlocalized");
-            if(!languageKeys.containsObject(ERXLocalizer.defaultLanguage()))
+            if(!languageKeys.containsObject(ERXLocalizer.defaultLanguage())) {
                 languageKeys.addObject(ERXLocalizer.defaultLanguage());
+            }
             _browserLanguages = languageKeys.immutableClone();
         }
         return _browserLanguages;
     }
     
-    public String stringFormValueForKey(String key) {
+    @Override
+	public String stringFormValueForKey(String key) {
     	String result = super.stringFormValueForKey(key);
     	if (result == null && "wodata".equals(key)) {
     	    // AK: yet another crappy 5.4 fix, WODynamicURL changed packages
@@ -135,9 +139,11 @@ public  class ERXRequest extends WORequest {
     /**
      * Cleaning up retian count on the browser.
      */
-    public void finalize() throws Throwable {
-        if (_browser != null)
+    @Override
+	public void finalize() throws Throwable {
+        if (_browser != null) {
             ERXBrowserFactory.factory().releaseBrowser(_browser);
+        }
         super.finalize();
     }
     
@@ -150,7 +156,8 @@ public  class ERXRequest extends WORequest {
     	return ERXRequest.isRequestSecure(this);
     }
     
-    public void _completeURLPrefix(StringBuffer stringbuffer, boolean secure, int port) {
+    @Override
+	public void _completeURLPrefix(StringBuffer stringbuffer, boolean secure, int port) {
     	String serverName = _serverName();
         String portStr;
         if (port == 0) {
@@ -215,7 +222,9 @@ public  class ERXRequest extends WORequest {
             }
             return result;
         }
-        public int compare(Object o1, Object o2) {
+        
+        @Override
+		public int compare(Object o1, Object o2) {
             float f1=quality((String)o1);
             float f2=quality((String)o2);
             return f1<f2 ? OrderedDescending : ( f1==f2 ? OrderedSame : OrderedAscending ); // we want DESCENDING SORT!!
@@ -229,7 +238,7 @@ public  class ERXRequest extends WORequest {
         * @return sorted NSArray of normalized Strings
         */
     private final static NSComparator COMPARE_Qs=new _LanguageComparator();
-    protected NSArray fixAbbreviationArray(NSArray languages) {
+    protected NSArray<String> fixAbbreviationArray(NSArray<String> languages) {
         try {
             languages=languages.sortedArrayUsingComparator(COMPARE_Qs);
         } catch (NSComparator.ComparisonException e) {
@@ -237,28 +246,29 @@ public  class ERXRequest extends WORequest {
         } catch (NumberFormatException e2) {
             log.warn("Couldn't sort language array "+languages+": "+e2);
         }
-        NSMutableArray nsmutablearray = new NSMutableArray(languages.count());
-        int cnt = languages.count();
-        for (int i = cnt - 1; i >= 0; i--) {
-            String string = (String) languages.objectAtIndex(i);
+        NSMutableArray<String> languagePrefix = new NSMutableArray<String>(languages.count());
+        for (int languageNum = languages.count() - 1; languageNum >= 0; languageNum--) {
+            String language = languages.objectAtIndex(languageNum);
             int offset;
-            string = string.trim();
-            offset = string.indexOf(';');
-            if (offset > 0)
-                string = string.substring(0, offset);
-            offset = string.indexOf('-');
+            language = language.trim();
+            offset = language.indexOf(';');
             if (offset > 0) {
-                String langPrefix = string.substring(0, offset);  //  "en" part of "en-us"
-                if (!nsmutablearray.containsObject(langPrefix)) 
-                    nsmutablearray.insertObjectAtIndex(langPrefix, 0);
+                language = language.substring(0, offset);
+            }
+            offset = language.indexOf('-');
+            if (offset > 0) {
+                String langPrefix = language.substring(0, offset);  //  "en" part of "en-us"
+                if (!languagePrefix.containsObject(langPrefix)) { 
+                    languagePrefix.insertObjectAtIndex(langPrefix, 0);
+                }
                 // converts "en-us" into "en_us";
                 
-                String cooked = string.replace('-', '_');
-                string = cooked;
+                String cooked = language.replace('-', '_');
+                language = cooked;
             }
-            nsmutablearray.insertObjectAtIndex(string, 0);
+            languagePrefix.insertObjectAtIndex(language, 0);
         }
-        return nsmutablearray;
+        return languagePrefix;
     }
 
     /**
@@ -266,7 +276,8 @@ public  class ERXRequest extends WORequest {
      * if the super implementation throws an exception. This will happen
      * if the request contains malformed cookie values.
      */
-    public NSDictionary cookieValues() {
+    @Override
+	public NSDictionary cookieValues() {
         try {
             return super.cookieValues();
         } catch (Throwable t) {
@@ -282,7 +293,8 @@ public  class ERXRequest extends WORequest {
      * very large. Will now return <code>false</code> if the request
      * handler is streaming.
      */
-    public boolean isSessionIDInRequest() {
+    @Override
+	public boolean isSessionIDInRequest() {
         ERXApplication app = (ERXApplication)WOApplication.application();
         
         if (app.isStreamingRequestHandlerKey(requestHandlerKey())) {
@@ -298,8 +310,8 @@ public  class ERXRequest extends WORequest {
      * very large. Will now look for the session ID only in the cookie
      * values.
      */
-
-    protected String _getSessionIDFromValuesOrCookie(boolean inCookiesFirst) {
+    @Override
+	protected String _getSessionIDFromValuesOrCookie(boolean inCookiesFirst) {
         ERXApplication app = (ERXApplication)WOApplication.application();
 
         boolean wis = WOApplication.application().streamActionRequestHandlerKey().equals(requestHandlerKey());
@@ -338,7 +350,8 @@ public  class ERXRequest extends WORequest {
     /**
      * @deprecated Use remoteHostAddress() instead
      */
-    public String remoteHost() {
+    @Deprecated
+	public String remoteHost() {
     	return remoteHostAddress();
     }
 
