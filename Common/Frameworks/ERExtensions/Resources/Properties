@@ -449,7 +449,10 @@ er.extensions.ERXComponentActionRedirector.enabled=false
 
 ## If you want to rewrite your application URLs from /cgi-bin/WebObjects/YourApp.woa to
 ## /yourapp, you can set the following properties and add the apache rewrite rule:
+## Apache 2.2:
 ## RewriteRule ^/yourapp(.*)$ /cgi-bin/WebObjects/YourApp.woa$1 [PT,L]
+## Apache 1.3:
+## RewriteRule ^/yourapp(.*)$ /cgi-bin/WebObjects/YourApp.woa$1 [P,L]
 # er.extensions.ERXApplication.replaceApplicationPath.pattern=/cgi-bin/WebObjects/YourApp.woa
 # er.extensions.ERXApplication.replaceApplicationPath.replace=/yourapp
 
