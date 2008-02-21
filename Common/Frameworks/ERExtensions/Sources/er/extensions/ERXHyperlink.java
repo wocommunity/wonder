@@ -12,6 +12,7 @@ import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WOElement;
 import com.webobjects.appserver.WORequest;
+import com.webobjects.appserver.WOResponse;
 import com.webobjects.appserver._private.WOHyperlink;
 import com.webobjects.appserver._private.WONoContentElement;
 import com.webobjects.foundation.NSDictionary;
@@ -38,6 +39,11 @@ import com.webobjects.foundation.NSDictionary;
 public class ERXHyperlink extends WOHyperlink {
     
     public static Logger log = Logger.getLogger(ERXHyperlink.class);
+    
+    /**
+     * Defines if the hyperlink adds a default <code>rel="nofollow"</code> if an action is bound.
+     */
+    private static boolean defaultNoFollow = ERXProperties.booleanForKey("er.extensions.ERXHyperlink.defaultNoFollow");
     
     /**
      * @param arg0
@@ -68,5 +74,13 @@ public class ERXHyperlink extends WOHyperlink {
         	ERXSession.session().setObjectForKey(this.toString(), "ERXActionLogging");
         }
         return result;
+    }
+    
+    @Override
+    public void appendAttributesToResponse(WOResponse woresponse, WOContext wocontext) {
+    	super.appendAttributesToResponse(woresponse, wocontext);
+    	if(defaultNoFollow && _action != null) {
+    		woresponse.appendContentString(" rel=\"nofollow\"");
+    	}
     }
 }
