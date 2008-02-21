@@ -256,9 +256,9 @@ public class ERXWOForm extends com.webobjects.appserver._private.WOHTMLDynamicEl
 		_appendHiddenFieldsToResponse(response, context);
 	}
 
-	protected String cgiAction(WOResponse response, WOContext context) {
+	protected String cgiAction(WOResponse response, WOContext context, boolean secure) {
 		String s = computeActionStringInContext(_actionClass, _directActionName, context);
-		return context.directActionURLForActionNamed(s, null);
+		return context._directActionURL(s, null, secure);
 	}
 
 	@Override
@@ -337,36 +337,41 @@ public class ERXWOForm extends com.webobjects.appserver._private.WOHTMLDynamicEl
 		Object hrefObject = null;
 		WOComponent wocomponent = context.component();
 		super.appendAttributesToResponse(response, context);
-		if (secure) {
+		boolean generatingCompleteURLs = context instanceof ERXWOContext && ((ERXWOContext) context)._generatingCompleteURLs();
+		if (secure && !generatingCompleteURLs) {
 			context._generateCompleteURLs();
 		}
-		if (_href != null) {
-			hrefObject = _href.valueInComponent(wocomponent);
-		}
-		else if (_directActionName != null || _actionClass != null) {
-			hrefObject = cgiAction(response, context);
-		}
-		else {
-			hrefObject = context.componentActionURL();
-		}
-		if (hrefObject != null) {
-			String href = hrefObject.toString();
-			Object fragmentIdentifier = (_fragmentIdentifier != null ? _fragmentIdentifier.valueInComponent(context.component()) : null);
-			if (secure) {
-				href = href.replaceFirst("http://", "https://");
+		try {
+			if (_href != null) {
+				hrefObject = _href.valueInComponent(wocomponent);
+				// MS: This is certainly not ideal, but I suspect nobody is
+				// even calling it this way, anyway.
+				if (secure && hrefObject != null) {
+					hrefObject = hrefObject.toString().replaceFirst("http://", "https://");
+				}
 			}
-			if (fragmentIdentifier != null) {
-				href = href + "#" + fragmentIdentifier;
+			else if (_directActionName != null || _actionClass != null) {
+				hrefObject = cgiAction(response, context, secure);
 			}
-			response._appendTagAttributeAndValue("action", href, false);
+			else {
+				hrefObject = context._componentActionURL(secure);
+			}
+			if (hrefObject != null) {
+				String href = hrefObject.toString();
+				Object fragmentIdentifier = (_fragmentIdentifier != null ? _fragmentIdentifier.valueInComponent(context.component()) : null);
+				if (fragmentIdentifier != null) {
+					href = href + "#" + fragmentIdentifier;
+				}
+				response._appendTagAttributeAndValue("action", href, false);
+			}
+			else {
+				NSLog.err.appendln("<WOForm> : action attribute evaluates to null");
+			}
 		}
-		else {
-			NSLog.err.appendln("<WOForm> : action attribute evaluates to null");
-		}
-		if (secure) {
-			// FIXME: (ak) we assume that relative URL creation is on by
-			// default, so we may restore the wrong type
-			context._generateRelativeURLs();
+		finally {
+			if (secure && !generatingCompleteURLs) {
+				context._generateRelativeURLs();
+			}
 		}
 	}
 
