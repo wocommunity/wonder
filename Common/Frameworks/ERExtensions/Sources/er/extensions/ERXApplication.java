@@ -18,8 +18,8 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -89,14 +89,14 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 	/** statistic logging support */
 	public static final Logger statsLog = Logger.getLogger("er.extensions.ERXApplication.Statistics");
 
-	private static boolean _wasERXApplicationMainInvoked = false;
+	private static boolean wasERXApplicationMainInvoked = false;
 
 	/**
 	 * Notification to get posted when we can an OutOfMemoryError. You should
 	 * register your caching classes for this notification so you can release
 	 * memory. Registration should happen at launch time.
 	 */
-	public static String LowMemoryNotification = "LowMemoryNotification";
+	public static final String LowMemoryNotification = "LowMemoryNotification";
 
 	/**
 	 * Buffer we reserve lowMemBufSize KB to release when we get an
@@ -113,7 +113,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 	private static int lowMemBufferSize = 0;
 
 	/** Holds the framework names during startup */
-	private static Set allFrameworks;
+	private static Set<String> allFrameworks;
 
 	/**
 	 * Notification to post when all bundles were loaded but before their
@@ -133,7 +133,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 	 * defaults to an inheritable thread local, which would defeat the purpose
 	 * of this check.
 	 */
-	private static ThreadLocal isInRequest = new ThreadLocal();
+	private static ThreadLocal<Boolean> isInRequest = new ThreadLocal<Boolean>();
 
 	private static Properties allBundleProps;
 
@@ -153,12 +153,12 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 	/**
 	 * The path rewriting pattern to match (@see _rewriteURL)
 	 */
-	protected String _replaceApplicationPathPattern;
+	protected String replaceApplicationPathPattern;
 	
 	/**
 	 * The path rewriting replacement to apply to the matched pattern (@see _rewriteURL) 
 	 */
-	protected String _replaceApplicationPathReplace;
+	protected String replaceApplicationPathReplace;
 
 	private static Properties readProperties(File file) {
 		Properties result = null;
@@ -238,9 +238,9 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 					Field ClassPath = NSBundle.class.getDeclaredField("ClassPath");
 					ClassPath.setAccessible(true);
 					if (ClassPath.get(NSBundle.class) != null) {
-						Method init = NSBundle.class.getDeclaredMethod("InitMainBundle", null);
+						Method init = NSBundle.class.getDeclaredMethod("InitMainBundle");
 						init.setAccessible(true);
-						init.invoke(NSBundle.class, null);
+						init.invoke(NSBundle.class);
 					}
 				}
 				catch (Exception e) {
@@ -304,7 +304,8 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 			return new AppClassLoader(urls, Thread.currentThread().getContextClassLoader());
 		}
 
-		public synchronized Class loadClass(String s, boolean flag) throws ClassNotFoundException {
+		@Override
+		public synchronized Class<?> loadClass(String s, boolean flag) throws ClassNotFoundException {
 			SecurityManager securitymanager = System.getSecurityManager();
 			if (securitymanager != null) {
 				String s1 = s.replace('/', '.');
@@ -396,7 +397,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 		WOApplication.main(argv, applicationClass);
 	}
 
-	private static JarChecker checker;
+	private static JarChecker _checker;
 
 	/**
 	 * Utility class to track down duplicate items in the class path. Reports
@@ -429,6 +430,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 				return ((Entry) other).size() == size();
 			}
 
+			@Override
 			public int hashCode() {
 				return (int) _size;
 			}
@@ -482,9 +484,9 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 		private void reportErrors() {
 			StringBuffer sb = new StringBuffer();
 			String message = null;
-			NSArray keys = ERXArrayUtilities.sortedArraySortedWithKey(packages.allKeys(), "toString");
-			for (Enumeration enumerator = keys.objectEnumerator(); enumerator.hasMoreElements();) {
-				String packageName = (String) enumerator.nextElement();
+			NSArray<String> keys = ERXArrayUtilities.sortedArraySortedWithKey(packages.allKeys(), "toString");
+			for (Enumeration<String> enumerator = keys.objectEnumerator(); enumerator.hasMoreElements();) {
+				String packageName = enumerator.nextElement();
 				NSMutableArray<String> bundles = packages.objectForKey(packageName);
 				if (bundles.count() > 1) {
 					sb.append("\t").append(packageName).append("->").append(bundles).append("\n");
@@ -495,15 +497,15 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 				log.info("The following packages appear multiple times:\n" + message);
 			}
 			sb = new StringBuffer();
-			NSMutableSet packages = new NSMutableSet();
+			NSMutableSet<String> classPackages = new NSMutableSet<String>();
 			keys = ERXArrayUtilities.sortedArraySortedWithKey(classes.allKeys(), "toString");
-			for (Enumeration enumerator = keys.objectEnumerator(); enumerator.hasMoreElements();) {
-				String className = (String) enumerator.nextElement();
+			for (Enumeration<String> enumerator = keys.objectEnumerator(); enumerator.hasMoreElements();) {
+				String className = enumerator.nextElement();
 				String packageName = className.replaceAll("/[^/]+?$", "");
 				NSMutableSet<Entry> bundles = classes.objectForKey(className);
-				if (bundles.count() > 1 && !packages.containsObject(packageName)) {
+				if (bundles.count() > 1 && !classPackages.containsObject(packageName)) {
 					sb.append("\t").append(packageName).append("->").append(bundles).append("\n");
-					packages.addObject(packageName);
+					classPackages.addObject(packageName);
 				}
 			}
 			message = sb.toString();
@@ -518,11 +520,11 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 	 * order, class path order, checks patches etc.
 	 */
 	public static void setup(String[] argv) {
-		_wasERXApplicationMainInvoked = true;
+		wasERXApplicationMainInvoked = true;
 		String cps[] = new String[] { "java.class.path", "com.webobjects.classpath" };
 		propertiesFromArgv = NSProperties.valuesFromArgv(argv);
-		allFrameworks = new HashSet();
-		checker = new JarChecker();
+		allFrameworks = new HashSet<String>();
+		_checker = new JarChecker();
 
 		for (int var = 0; var < cps.length; var++) {
 			String cpName = cps[var];
@@ -590,7 +592,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 				String jars[] = newCP.split(File.pathSeparator);
 				for (int i = 0; i < jars.length; i++) {
 					String jar = jars[i];
-					checker.processJar(jar);
+					_checker.processJar(jar);
 				}
 				// AK: this is pretty experimental for now. The classpath
 				// reordering
@@ -624,13 +626,6 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 		ERXConfigurationManager.defaultManager().setCommandLineArguments(argv);
 		ERXFrameworkPrincipal.setUpFrameworkPrincipalClass(ERXExtensions.class);
 		ERXStats.initStatisticsIfNecessary();
-	}
-
-	public void installDefaultEncoding(String encoding) {
-		WOMessage.setDefaultEncoding(encoding);
-		WOMessage.setDefaultURLEncoding(encoding);
-		ERXMessageEncoding.setDefaultEncoding(encoding);
-		ERXMessageEncoding.setDefaultEncodingForAllLanguages(encoding);
 	}
 
 	/**
@@ -683,6 +678,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 		// ERXPatcher.setClassForName(ERXWOFileUpload.class, "WOFileUpload");
 	}
 
+	@Override
 	public WOResourceManager createResourceManager() {
 		return new ERXResourceManager();
 	}
@@ -692,7 +688,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 	 */
 	public ERXApplication() {
 		super();
-		if (!ERXConfigurationManager.defaultManager().isDeployedAsServlet() && !_wasERXApplicationMainInvoked || allFrameworks == null) {
+		if (!ERXConfigurationManager.defaultManager().isDeployedAsServlet() && !wasERXApplicationMainInvoked || allFrameworks == null) {
 			_displayMainMethodWarning();
 		}
 		if (allFrameworks == null || allFrameworks.size() > 0) {
@@ -710,7 +706,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 				app.activateOptions();
 			}
 		}
-		checker.reportErrors();
+		_checker.reportErrors();
 
 		NSNotificationCenter.defaultCenter().postNotification(new NSNotification(ApplicationDidCreateNotification, this));
 		installPatches();
@@ -734,7 +730,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 		String defaultEncoding = System.getProperty("er.extensions.ERXApplication.DefaultEncoding");
 		if (defaultEncoding != null) {
 			log.debug("Setting default encoding to \"" + defaultEncoding + "\"");
-			installDefaultEncoding(defaultEncoding);
+			setDefaultEncoding(defaultEncoding);
 		}
 
 		String defaultMessageEncoding = System.getProperty("er.extensions.ERXApplication.DefaultMessageEncoding");
@@ -750,6 +746,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 		NSNotificationCenter.defaultCenter().addObserver(this, new NSSelector("finishInitialization", ERXConstant.NotificationClassArray), WOApplication.ApplicationWillFinishLaunchingNotification, null);
 
 		NSNotificationCenter.defaultCenter().addObserver(this, new NSSelector("didFinishLaunching", ERXConstant.NotificationClassArray), WOApplication.ApplicationDidFinishLaunchingNotification, null);
+
 		ERXEC.setUseUnlocker(useEditingContextUnlocker());
 		ERXEC.setTraceOpenEditingContextLocks(traceOpenEditingContextLocks());
 
@@ -765,11 +762,11 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 
 		memoryThreshold = ERXProperties.bigDecimalForKey("er.extensions.ERXApplication.memoryThreshold");
 		
-	    _replaceApplicationPathPattern = ERXProperties.stringForKey("er.extensions.ERXApplication.replaceApplicationPath.pattern");
-	    if (_replaceApplicationPathPattern != null && _replaceApplicationPathPattern.length() == 0) {
-	    	_replaceApplicationPathPattern = null;
+	    replaceApplicationPathPattern = ERXProperties.stringForKey("er.extensions.ERXApplication.replaceApplicationPath.pattern");
+	    if (replaceApplicationPathPattern != null && replaceApplicationPathPattern.length() == 0) {
+	    	replaceApplicationPathPattern = null;
 	    }
-	    _replaceApplicationPathReplace = ERXProperties.stringForKey("er.extensions.ERXApplication.replaceApplicationPath.replace");
+	    replaceApplicationPathReplace = ERXProperties.stringForKey("er.extensions.ERXApplication.replaceApplicationPath.replace");
 	}
 
 	/**
@@ -808,7 +805,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 			if (log.isDebugEnabled()) {
 				log.debug("Configured statistics logging to file path \"" + logPath + "\" with rotation frequency: " + rotationFrequency);
 			}
-			statisticsStore().setLogFile(logPath, (long) rotationFrequency);
+			statisticsStore().setLogFile(logPath, rotationFrequency);
 		}
 	}
 
@@ -889,6 +886,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 	 * sessions it will also register a kill timer that will terminate the
 	 * application between 0 minutes and 1:00 minutes.<br/>
 	 */
+	@Override
 	public void run() {
 		int timeToLive = ERXProperties.intForKey("ERTimeToLive");
 		if (timeToLive > 0) {
@@ -925,6 +923,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 	 * Creates the request object for this loop. Calls _createRequest(). For WO
 	 * 5.3.
 	 */
+	@SuppressWarnings("all") // Suppress @Override warning for 5.4
 	public WORequest createRequest(String aMethod, String aURL, String anHTTPVersion, NSDictionary someHeaders, NSData aContent, NSDictionary someInfo) {
 		return _createRequest(aMethod, aURL, anHTTPVersion, someHeaders, aContent, someInfo);
 	}
@@ -933,8 +932,9 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 	 * Creates the request object for this loop. Calls _createRequest(). For WO
 	 * 5.4.
 	 */
+	@SuppressWarnings("all") // Suppress @Override warning for 5.3
 	public WORequest createRequest(String method, String aurl, String anHTTPVersion, Map<String, ? extends List<String>> someHeaders, NSData content, Map<String, Object> someInfo) {
-		return _createRequest(method, aurl, anHTTPVersion, new NSDictionary(someHeaders, true), content, new NSDictionary(someInfo, true));
+		return _createRequest(method, aurl, anHTTPVersion, new NSDictionary<String, Object>(someHeaders, true), content, new NSDictionary<String, Object>(someInfo, true));
 	}
 
 	/**
@@ -1051,6 +1051,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 	 * sessions again during that time span.
 	 */
 
+	@Override
 	public void refuseNewSessions(boolean value) {
 		super.refuseNewSessions(value);
 		// we assume that we changed our mind about killing the instance.
@@ -1115,6 +1116,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 	 * 
 	 * @return the computed name of the application.
 	 */
+	@Override
 	public String name() {
 		if (_userDefaultName == null) {
 			_userDefaultName = System.getProperty("ERApplicationName");
@@ -1156,7 +1158,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 	 * @return dictionary containing extra information for the current context.
 	 */
 	public NSMutableDictionary extraInformationForExceptionInContext(Exception e, WOContext context) {
-		NSMutableDictionary extraInfo = ERXRuntimeUtilities.informationForException(e);
+		NSMutableDictionary<String, Object> extraInfo = ERXRuntimeUtilities.informationForException(e);
 		extraInfo.addEntriesFromDictionary(ERXRuntimeUtilities.informationForContext(context));
 		extraInfo.addEntriesFromDictionary(ERXRuntimeUtilities.informationForBundles());
 		return extraInfo;
@@ -1192,6 +1194,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 	 */
 	// NOTE: if you use WO 5.1, comment out this method, otherwise it won't
 	// compile.
+	@Override
 	public WOResponse handleActionRequestError(WORequest aRequest, Exception exception, String reason, WORequestHandler aHandler, String actionClassName, String actionName, Class actionClass, WOAction actionInstance) {
 		WOContext context = actionInstance != null ? actionInstance.context() : null;
 		if(context == null) {
@@ -1224,6 +1227,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 	 *            current context
 	 * @return the WOResponse of the generated exception page.
 	 */
+	@Override
 	public WOResponse handleException(Exception exception, WOContext context) {
 		if (ERXProperties.booleanForKey("er.extensions.ERXApplication.redirectOnMissingObjects")) {
 			// AK: the idea here is that you might have a stale object that was
@@ -1345,6 +1349,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 	 * @param context
 	 *            object
 	 */
+	@Override
 	public WOActionResults invokeAction(WORequest request, WOContext context) {
 		WOActionResults results = super.invokeAction(request, context);
 		if (useComponentActionRedirection()) {
@@ -1361,6 +1366,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 	 * @param context
 	 *            object
 	 */
+	@Override
 	public void appendToResponse(WOResponse response, WOContext context) {
 		super.appendToResponse(response, context);
 		if (useComponentActionRedirection()) {
@@ -1408,6 +1414,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 	 *            object
 	 * @return response
 	 */
+	@Override
 	public WOResponse dispatchRequest(WORequest request) {
 		WOResponse response = null;
 		try {
@@ -1481,6 +1488,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 	 *            the request
 	 * @return the newly created context
 	 */
+	@Override
 	public WOContext createContextForRequest(WORequest request) {
 		WOContext context = super.createContextForRequest(request);
 		// We only want to push in the context the first time it is
@@ -1492,6 +1500,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 		return context;
 	}
 
+	@Override
 	public WOResponse createResponseInContext(WOContext context) {
 		WOResponse response = new ERXResponse();
 		return response;
@@ -1517,11 +1526,12 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 	}
 
 	/** improved streaming support */
-	protected NSMutableArray _streamingRequestHandlerKeys = new NSMutableArray(streamActionRequestHandlerKey());
+	protected NSMutableArray<String> _streamingRequestHandlerKeys = new NSMutableArray<String>(streamActionRequestHandlerKey());
 
 	public void registerStreamingRequestHandlerKey(String s) {
-		if (!_streamingRequestHandlerKeys.containsObject(s))
+		if (!_streamingRequestHandlerKeys.containsObject(s)) {
 			_streamingRequestHandlerKeys.addObject(s);
+		}
 	}
 
 	public boolean isStreamingRequestHandlerKey(String s) {
@@ -1626,7 +1636,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 	}
 
 	/** holds the info on checked-out sessions */
-	private Hashtable _sessions = new Hashtable();
+	private Map<String, SessionInfo> _sessions = new HashMap<String, SessionInfo>();
 
 	/** Holds info about where and who checked out */
 	private class SessionInfo {
@@ -1668,6 +1678,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 	}
 
 	/** Overridden to check the sessions */
+	@Override
 	public WOSession createSessionForRequest(WORequest worequest) {
 		WOSession wosession = super.createSessionForRequest(worequest);
 		if (useSessionStoreDeadlockDetection()) {
@@ -1677,12 +1688,13 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 	}
 
 	/** Overridden to check the sessions */
+	@Override
 	public void saveSessionForContext(WOContext wocontext) {
 		if (useSessionStoreDeadlockDetection()) {
 			WOSession wosession = wocontext._session();
 			if (wosession != null) {
 				String sessionID = wosession.sessionID();
-				SessionInfo sessionInfo = (SessionInfo) _sessions.get(sessionID);
+				SessionInfo sessionInfo = _sessions.get(sessionID);
 				if (sessionInfo == null) {
 					log.error("Check-In of session that was not checked out, most likely diue to an exception in session.awake(): " + sessionID);
 				}
@@ -1695,10 +1707,11 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 	}
 
 	/** Overridden to check the sessions */
+	@Override
 	public WOSession restoreSessionWithID(String sessionID, WOContext wocontext) {
 		WOSession session = null;
 		if (useSessionStoreDeadlockDetection()) {
-			SessionInfo sessionInfo = (SessionInfo) _sessions.get(sessionID);
+			SessionInfo sessionInfo = _sessions.get(sessionID);
 			if (sessionInfo != null) {
 				throw new IllegalStateException(sessionInfo.exceptionMessageForCheckout(wocontext));
 			}
@@ -1773,14 +1786,14 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 	 */
 	public String _rewriteURL(String url) {
 	    String processedURL = url;
-	    if (url != null && _replaceApplicationPathPattern != null && _replaceApplicationPathReplace != null) {
-	      processedURL = processedURL.replaceFirst(_replaceApplicationPathPattern, _replaceApplicationPathReplace);
+	    if (url != null && replaceApplicationPathPattern != null && replaceApplicationPathReplace != null) {
+	      processedURL = processedURL.replaceFirst(replaceApplicationPathPattern, replaceApplicationPathReplace);
 	    }
 		return processedURL;
 	}
 
 	/**
-	 * Set the default endocing of the app (message encodings)
+	 * Set the default encoding of the app (message encodings)
 	 * 
 	 * @param encoding
 	 */
