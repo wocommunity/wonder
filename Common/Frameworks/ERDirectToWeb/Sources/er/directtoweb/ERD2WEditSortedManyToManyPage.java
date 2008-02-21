@@ -139,7 +139,7 @@ public class ERD2WEditSortedManyToManyPage extends ERD2WPage implements EditRela
         selectDataSource = new EOArrayDataSource(destinationEntity().classDescriptionForInstances(),
                                                       queryDataSource.editingContext());
         selectDataSource.setArray(results);
-        return null;
+        return context().page();
     }
 
     public WOComponent selectAction() {
