@@ -41,7 +41,7 @@ public class ERXMultiKey {
     public ERXMultiKey() {
         _keyCount=0;
         _keys=new Object[0];
-        _hashCode = computeHash();
+        recomputeHashCode();
     }
 
     /**
@@ -52,7 +52,7 @@ public class ERXMultiKey {
     public ERXMultiKey(Object[] keys) {
         this((short)keys.length);
         System.arraycopy(keys,0,_keys,0,(int)_keyCount);
-        _hashCode = computeHash();
+        recomputeHashCode();
     }
 
     /**
@@ -63,7 +63,7 @@ public class ERXMultiKey {
     public ERXMultiKey(NSArray keys) {
         this ((short)keys.count());
         for (int i=0; i<keys.count(); i++) _keys[i]=keys.objectAtIndex(i);
-        _hashCode = computeHash();
+        recomputeHashCode();
    }
 
     /**
@@ -74,7 +74,7 @@ public class ERXMultiKey {
     public ERXMultiKey(Vector keys) {
         this ((short)keys.size());
         for (int i=0; i<keys.size(); i++) _keys[i]=keys.elementAt(i);
-        _hashCode = computeHash();
+        recomputeHashCode();
     }
 
     /**
@@ -96,7 +96,10 @@ public class ERXMultiKey {
         return _hashCode;
     }
     
-    public final int computeHash() {
+    /**
+     * Recomputes the hash code if you ever changes the keys array directly 
+     */
+    public final void recomputeHashCode() {
         int result = 0;
 
         for (int i=0; i<_keyCount; i++) {
@@ -108,7 +111,7 @@ public class ERXMultiKey {
             }
         }
 
-        return result;
+        _hashCode = result;
     }
 
     /**
