@@ -43,8 +43,8 @@ public class ERXBatchNavigationBar extends WOComponent {
     /** Contains a string that names the notification posted when the batch size changes */
     public final static String BatchSizeChanged = "BatchSizeChanged";
     private String _buttonId=null;
-    private int numberOfObjectsPerBatch = 0;
-    private int currentBatchIndex = 0;
+    private Number numberOfObjectsPerBatch;
+    private Number currentBatchIndex;
 
     /** Public constructor */
     public ERXBatchNavigationBar(WOContext aContext) {
@@ -52,28 +52,36 @@ public class ERXBatchNavigationBar extends WOComponent {
     }
 
     /** component is stateless */
-    public boolean isStateless() { return true; }
+    public boolean isStateless() { return false; }
     /** component does not synchronize it's variables */
     public boolean synchronizesVariablesWithBindings() { return false; }
 
     public void reset() {
+        if (log.isDebugEnabled()) log.debug("reset: BEGIN "+hashCode());
         super.reset();
-        _displayGroup = null;
-        _buttonId = null;
+        if (log.isDebugEnabled()) log.debug("reset: END "+hashCode());
     }
 
     public void sleep() {
-        numberOfObjectsPerBatch = 0;
-        currentBatchIndex = 0;
+        if (log.isDebugEnabled()) log.debug("sleep: BEGIN "+hashCode());
+        numberOfObjectsPerBatch = null;
+        currentBatchIndex = null;
+        _displayGroup = null;
+        _buttonId = null;
         super.sleep();
+        if (log.isDebugEnabled()) log.debug("sleep: END "+hashCode());
     }
     
     public void appendToResponse(WOResponse response, WOContext context) {
+        if (log.isDebugEnabled()) log.debug("appendToResponse: BEGIN "+hashCode());
+
         if (displayGroup() != null  &&  ! displayGroup().hasMultipleBatches()) {
             if (currentBatchIndex() != 0) 
                 _setCurrentBatchIndex(1);
         }
         super.appendToResponse(response, context);
+
+        if (log.isDebugEnabled()) log.debug("appendToResponse: END "+hashCode());
     }
     
     private WODisplayGroup _displayGroup;
@@ -97,29 +105,34 @@ public class ERXBatchNavigationBar extends WOComponent {
 
     // Save new value and only apply to displayGroup if the refresh action was invoked
     public void setCurrentBatchIndex(Number newValue) {
-        currentBatchIndex = (newValue != null)?newValue.intValue():0;
+        if (log.isDebugEnabled()) log.debug("setCurrentBatchIndex: "+hashCode() +" value = "+newValue);
+        currentBatchIndex = newValue;
     }
 
     // Now only called when refresh action is invoked
     private void _setCurrentBatchIndex(int newValue) {
+        if (log.isDebugEnabled()) log.debug("_setCurrentBatchIndex: BEGIN "+hashCode() +" value = "+newValue);
         if (newValue > 0) {
             if (displayGroup()!=null){
                 displayGroup().setCurrentBatchIndex(newValue);
                 if (log.isDebugEnabled()) log.debug("The batch index is being set to :"+newValue);
             }
         }
+        if (log.isDebugEnabled()) log.debug("_setCurrentBatchIndex: END "+hashCode());
     }
 
     // Save new value and only apply to displayGroup if the refresh action was invoked
     public void setNumberOfObjectsPerBatch(Number newValue) {
-        numberOfObjectsPerBatch = (newValue != null)?newValue.intValue():0;
+        if (log.isDebugEnabled()) log.debug("setNumberOfObjectsPerBatch: "+hashCode() +" value = "+newValue);
+        numberOfObjectsPerBatch = newValue;
     }
 
     // Now only called when refresh action is invoked
     private void _setNumberOfObjectsPerBatch(int newValue) {
+        if (log.isDebugEnabled()) log.debug("_setNumberOfObjectsPerBatch: BEGIN "+hashCode() +" value = "+newValue);
         if (newValue >0) {
             if (displayGroup()!=null) {
-                log.debug("Setting db # of objects per batch to "+newValue);
+                if (log.isDebugEnabled()) log.debug("Setting db # of objects per batch to "+newValue);
                 displayGroup().setNumberOfObjectsPerBatch(newValue);
 
                 if(log.isDebugEnabled()) log.debug("The batch index is being set to : "+ 1);
@@ -132,6 +145,7 @@ public class ERXBatchNavigationBar extends WOComponent {
                                                                       new NSDictionary(context,"d2wContext"));
             }
         }
+        if (log.isDebugEnabled()) log.debug("_setNumberOfObjectsPerBatch: END "+hashCode());
     }
 
     public int filteredObjectsCount() {
@@ -159,10 +173,14 @@ public class ERXBatchNavigationBar extends WOComponent {
     // This fixes the problem when you have a top and bottom batch nav bar and the bottom values always win
     // even if they are not changed since they were forced back into the displayGroup on takeValuesFromRequest.    
     public WOComponent refresh() {
-        if (log.isDebugEnabled()) log.debug("refresh START");
-        _setNumberOfObjectsPerBatch(numberOfObjectsPerBatch);
-        _setCurrentBatchIndex(currentBatchIndex);
-        if (log.isDebugEnabled()) log.debug("refresh END");
+        if (log.isDebugEnabled()) log.debug("refresh BEGIN "+hashCode());
+        if (numberOfObjectsPerBatch != null)
+            _setNumberOfObjectsPerBatch(numberOfObjectsPerBatch.intValue());
+
+        if (currentBatchIndex != null)
+            _setCurrentBatchIndex(currentBatchIndex.intValue());
+
+        if (log.isDebugEnabled()) log.debug("refresh END "+hashCode());
         return null;
     }
 
