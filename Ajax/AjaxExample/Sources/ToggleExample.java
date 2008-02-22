@@ -5,6 +5,7 @@ import com.webobjects.appserver.*;
 public class ToggleExample extends WOComponent {
 	public boolean _toggleAreaVisible;
 	public boolean _toggleAreaVisible2;
+	public boolean _toggleAreaVisible3;
 	public String _text;
 
 	public ToggleExample(WOContext context) {
@@ -12,8 +13,13 @@ public class ToggleExample extends WOComponent {
 		_text = "This text should not change!";
 	}
 	
-	public WOActionResults toggled() {
-		System.out.println("ToggleExample.toggled: toggled value to " + _toggleAreaVisible);
+	public WOActionResults toggled1() {
+		System.out.println("ToggleExample.toggled: toggled value 1 to " + _toggleAreaVisible);
+		return null;
+	}
+	
+	public WOActionResults toggled3() {
+		System.out.println("ToggleExample.toggled: toggled value 3 to " + _toggleAreaVisible3);
 		return null;
 	}
 }

@@ -1,22 +1,42 @@
 <webobject name = "HeaderFooter">
 	<webobject name = "Form">
-		Toggle? <webobject name = "CheckBox"/>
-		<webobject name = "Observer"/>
-		<webobject name = "ToggleArea">
-			<webobject name = "TextField"/>
-			<br/>
-			<webobject name = "ToggleAreaConditional">
-				This is a toggle area that is triggered by an AjaxObserveField.
+		<div style = "border: 1px solid red; padding: 10px">
+			Toggle? <webobject name = "CheckBox"/>
+			<webobject name = "Observer"/>
+			<webobject name = "ToggleArea">
+				<webobject name = "TextField"/>
+				<br/>
+				This area fires an action on change.
+				<br/>
+				<webobject name = "ToggleAreaConditional">
+					This is a toggle area that is triggered by an AjaxObserveField.
+				</webobject>
 			</webobject>
-		</webobject>
+		</div>
 
 		<p>
 		
-		Toggle #2? <webobject name = "CheckBox2"/>
-		<webobject name = "ToggleArea2">
-			<webobject name = "ToggleArea2Conditional">
-				This is a toggle area that is triggered with observeFieldID on AjaxUpdateContainer.
+		<div style = "border: 1px solid green; padding: 10px">
+			Toggle #2? <webobject name = "CheckBox2"/>
+			<webobject name = "ToggleArea2">
+				<webobject name = "ToggleArea2Conditional">
+					This is a toggle area that is triggered with observeFieldID on AjaxUpdateContainer.
+				</webobject>
 			</webobject>
-		</webobject>
+		</div>
+
+		<p>
+		
+		<div style = "border: 1px solid blue; padding: 10px">
+			Toggle #3? <webobject name = "CheckBox3"/>
+			<webobject name = "Observer3"/>
+			<webobject name = "ToggleArea3">
+				This area fires an action on change.
+				<br/>
+				<webobject name = "ToggleArea3Conditional">
+					This is a toggle area that is triggered with observeFieldID on AjaxUpdateContainer.
+				</webobject>
+			</webobject>
+		</div>
 	</webobject>
 </webobject>
