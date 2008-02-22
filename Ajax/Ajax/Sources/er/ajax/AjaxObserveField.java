@@ -8,7 +8,6 @@ import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WOElement;
 import com.webobjects.appserver.WORequest;
 import com.webobjects.appserver.WOResponse;
-import com.webobjects.appserver._private.WODynamicElementCreationException;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
@@ -20,7 +19,7 @@ import er.extensions.ERXAjaxApplication;
  * 
  * @binding observeFieldID the ID of the field to observe
  * @binding updateContainerID the ID of the container to update
- * @binding action the action to call when the observer fires (only works for fullSubmit = true)
+ * @binding action the action to call when the observer fires
  */
 public class AjaxObserveField extends AjaxDynamicElement {
 	public AjaxObserveField(String name, NSDictionary associations, WOElement children) {
@@ -45,6 +44,7 @@ public class AjaxObserveField extends AjaxDynamicElement {
 		ajaxOptionsArray.addObject(new AjaxOption("onException", AjaxOption.SCRIPT));
 		ajaxOptionsArray.addObject(new AjaxOption("insertion", AjaxOption.SCRIPT));
 		ajaxOptionsArray.addObject(new AjaxOption("evalScripts", AjaxOption.BOOLEAN));
+
 		NSMutableDictionary options = AjaxOption.createAjaxOptionsDictionary(ajaxOptionsArray, component, associations());
 		return options;
 	}
@@ -65,64 +65,17 @@ public class AjaxObserveField extends AjaxDynamicElement {
 
 	public static void appendToResponse(WOResponse response, WOContext context, AjaxDynamicElement element, String observeFieldID, String updateContainerID, boolean fullSubmit, NSMutableDictionary options) {
 	    WOComponent component = context.component();
-
-	    Object observeFieldFrequency = options.removeObjectForKey("observeFieldFrequency");
-	    if (observeFieldFrequency == null) {
-	    	response.appendContentString("new Form.Element.EventObserver($('" + observeFieldID + "'), function(element, value) { ");
-	    }
-	    else {
-	    	response.appendContentString("new Form.Element.Observer($('" + observeFieldID + "'), " + observeFieldFrequency + ", function(element, value) { ");
-	    }
+		String submitButtonName = nameInContext(context, component, element);
 		NSMutableDictionary observerOptions = new NSMutableDictionary();
 		if (options != null) {
 			observerOptions.addEntriesFromDictionary(options);
 		}
-		observerOptions.setObjectForKey("true", "asynchronous");
-		observerOptions.setObjectForKey("'post'", "method");
-		if (observerOptions.objectForKey("evalScripts") == null) {
-			observerOptions.setObjectForKey("true", "evalScripts");
-		}
+		AjaxSubmitButton.fillInAjaxOptions(element, component, submitButtonName, observerOptions);
 
-		if (!fullSubmit) {
-			// We need to cheat and make the WOForm that contains the form action appear to have been
-			// submitted. So we grab the action url, pull off the element ID from its action URL
-			// and pass that in as FORCE_FORM_SUBMITTED_KEY, which is processed by ERXWOForm just like
-			// senderID is on the real WOForm. Unfortunately we can't hook into the real WOForm to do
-			// this :(
-			response.appendContentString("var observedFieldForm = $('" + observeFieldID + "').form;\n");
-			//response.appendContentString("var observedFieldFormAction = observedFieldForm.action;\n");
-			//response.appendContentString("var senderID = observedFieldFormAction.substring(observedFieldFormAction.indexOf('.', observedFieldFormAction.lastIndexOf('/')) + 1);\n");
-			StringBuffer parameters = new StringBuffer();
-			parameters.append("escape($('" + observeFieldID + "').name) + '=' + escape($F('" + observeFieldID + "')) + '");
-			parameters.append("&");
-			parameters.append(AjaxSubmitButton.KEY_AJAX_SUBMIT_BUTTON_NAME + "=" + nameInContext(context, component, element));
-			parameters.append("&");
-			parameters.append(AjaxSubmitButton.KEY_PARTIAL_FORM_SENDER_ID + "=' + $('" + observeFieldID + "').name");
-			observerOptions.setObjectForKey(parameters.toString(), "parameters");
-			response.appendContentString("new Ajax.Updater('" + updateContainerID + "', $('" + observeFieldID + "').form.action, ");
-			AjaxOptions.appendToResponse(observerOptions, response, context);
-			response.appendContentString(");");
-		}
-		else {
-			StringBuffer parameters = new StringBuffer();
-			parameters.append("Form.serializeWithoutSubmits($('" + observeFieldID + "').form)");
-			parameters.append(" + '&" + AjaxSubmitButton.KEY_AJAX_SUBMIT_BUTTON_NAME + "=" + nameInContext(context, component, element) + "'");
-
-			observerOptions.setObjectForKey(parameters.toString(), "parameters");
-			String actionUrl = "$('" + observeFieldID + "').form.action";
-			if (updateContainerID != null) {
-				response.appendContentString("new Ajax.Updater('" + updateContainerID + "', " + actionUrl + ", ");
-				AjaxOptions.appendToResponse(observerOptions, response, context);
-				response.appendContentString(");");
-			}
-			else {
-				response.appendContentString("new Ajax.Request(" + actionUrl + ", ");
-				AjaxOptions.appendToResponse(observerOptions, response, context);
-				response.appendContentString(");");
-			}
-			response.appendContentString("\n");
-		}
-		response.appendContentString(" });");
+		Object observeFieldFrequency = options.removeObjectForKey("observeFieldFrequency");
+		response.appendContentString("ASB.observeField(" + AjaxUtils.quote(updateContainerID) + ", " + AjaxUtils.quote(observeFieldID) + ", " + observeFieldFrequency + ", " + (!fullSubmit) + ", ");
+		AjaxOptions.appendToResponse(observerOptions, response, context);
+		response.appendContentString(");");
 	}
 
 	public static String nameInContext(WOContext context, WOComponent component, AjaxDynamicElement element) {
