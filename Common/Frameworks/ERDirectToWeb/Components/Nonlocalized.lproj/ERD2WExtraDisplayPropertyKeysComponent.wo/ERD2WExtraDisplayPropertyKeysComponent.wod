@@ -23,7 +23,3 @@ PropertyKeySwitchComponent: WOSwitchComponent {
 	WOComponentName = d2wContext.componentName;
 	localContext = d2wContext;
 }
-
-PropertyName: ERD2WPropertyName {
-    value = d2wContext.displayNameForProperty;
-}
