@@ -21,6 +21,15 @@ public class AjaxUtils {
 	private static final String SECURE_RESOURCES_KEY = "er.ajax.secureResources";
 
 	/**
+	 * If the value is null, this returns "null", otherwise it returns '[value]'.
+	 * @param value the value to quote
+	 * @return the quoted value or "null"
+	 */
+	public static String quote(String value) {
+		return value == null ? "null" : "'" + value + "'"; 
+	}
+	
+	/**
 	 * Return whether or not the given request is an Ajax request.
 	 * @param request the request the check
 	 */
