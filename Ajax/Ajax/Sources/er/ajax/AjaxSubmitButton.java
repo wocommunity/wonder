@@ -59,7 +59,7 @@ import er.extensions.ERXWOForm;
 public class AjaxSubmitButton extends AjaxDynamicElement {
 	// MS: If you change this value, make sure to change it in ERXAjaxApplication
   public static final String KEY_AJAX_SUBMIT_BUTTON_NAME = "AJAX_SUBMIT_BUTTON_NAME";
-	// MS: If you change this value, make sure to change it in ERXAjaxApplication
+	// MS: If you change this value, make sure to change it in ERXAjaxApplication and in wonder.js
   public static final String KEY_PARTIAL_FORM_SENDER_ID = "_partialSenderID";
 
   public AjaxSubmitButton(String name, NSDictionary associations, WOElement children) {
@@ -78,8 +78,7 @@ public class AjaxSubmitButton extends AjaxDynamicElement {
     return (String) valueForBinding("name", context.elementID(), component);
   }
 
-  public NSMutableDictionary createAjaxOptions(WOComponent component, String formReference) {
-    String name = nameInContext(component.context(), component);
+  public NSMutableDictionary createAjaxOptions(WOComponent component) {
     NSMutableArray ajaxOptionsArray = new NSMutableArray();
     ajaxOptionsArray.addObject(new AjaxOption("onComplete", AjaxOption.SCRIPT));
     ajaxOptionsArray.addObject(new AjaxOption("onSuccess", AjaxOption.SCRIPT));
@@ -87,25 +86,35 @@ public class AjaxSubmitButton extends AjaxDynamicElement {
     ajaxOptionsArray.addObject(new AjaxOption("onLoading", AjaxOption.SCRIPT));
     ajaxOptionsArray.addObject(new AjaxOption("evalScripts", AjaxOption.BOOLEAN));
 	ajaxOptionsArray.addObject(new AjaxOption("insertion", AjaxOption.SCRIPT));
+	
+    String name = nameInContext(component.context(), component);
     NSMutableDictionary options = AjaxOption.createAjaxOptionsDictionary(ajaxOptionsArray, component, associations());
+    AjaxSubmitButton.fillInAjaxOptions(this, component, name, options);
+    return options;
+  }
+
+  public static void fillInAjaxOptions(AjaxDynamicElement element, WOComponent component, String submitButtonName, NSMutableDictionary options) {
     StringBuffer parametersBuffer = new StringBuffer();
     String systemDefaultFormSerializer = "Form.serializeWithoutSubmits";
     String defaultFormSerializer = ERXProperties.stringForKeyWithDefault("er.ajax.formSerializer", systemDefaultFormSerializer);
-    String formSerializer = (String) valueForBinding("formSerializer", defaultFormSerializer, component);
+    String formSerializer = (String) element.valueForBinding("formSerializer", defaultFormSerializer, component);
     if (!defaultFormSerializer.equals(systemDefaultFormSerializer)) {
     	// _fs = formSerializer (but short)
 	    options.setObjectForKey(formSerializer, "_fs");
     }
 	// _asbn = AJAX_SUBMIT_BUTTON_NAME (but short)
-    options.setObjectForKey("'" + name + "'", "_asbn");
+    options.setObjectForKey("'" + submitButtonName + "'", "_asbn");
+
+    // default to true in javascript
+    if ("true".equals(options.objectForKey("asynchronous"))) {
+    	options.removeObjectForKey("asynchronous");
+    }
 
     // default to true in javascript
     if ("true".equals(options.objectForKey("evalScripts"))) {
     	options.removeObjectForKey("evalScripts");
     }
-	AjaxUpdateContainer.expandInsertionFromOptions(options, this, component);
-
-    return options;
+	AjaxUpdateContainer.expandInsertionFromOptions(options, element, component);
   }
 
   public void appendToResponse(WOResponse response, WOContext context) {
@@ -183,7 +192,7 @@ public class AjaxSubmitButton extends AjaxDynamicElement {
 	}
 	onClickBuffer.append(",");
 	
-    NSMutableDictionary options = createAjaxOptions(component, formReference);
+    NSMutableDictionary options = createAjaxOptions(component);
 	
 	AjaxUpdateLink.addEffect(options, (String) valueForBinding("effect", component), updateContainerID, (String) valueForBinding("effectDuration", component));
 	String afterEffectID = (String) valueForBinding("afterEffectID", component);

@@ -151,7 +151,7 @@ var AjaxInPlace = {
 var AIP = AjaxInPlace;
 
 var AjaxOptions = {
-	options : function(additionalOptions) {
+	defaultOptions: function(additionalOptions) {
 		var options = { method: 'get', asynchronous: true, evalScripts: true };
 		Object.extend(options, additionalOptions || {});
 		return options;
@@ -216,7 +216,7 @@ var AjaxUpdateContainer = {
 	update : function(id, options) {
 		var actionUrl = $(id).getAttribute('updateUrl');
 		actionUrl = actionUrl.addQueryParameters('__updateID='+ id);
-		new Ajax.Updater(id, actionUrl, AjaxOptions.options(options));
+		new Ajax.Updater(id, actionUrl, AjaxOptions.defaultOptions(options));
 	}
 };
 var AUC = AjaxUpdateContainer;
@@ -233,19 +233,23 @@ var AjaxUpdateLink = {
 		var actionUrl = $(id).getAttribute('updateUrl').sub('[^/]+$', elementID);
 		actionUrl = actionUrl.addQueryParameters(queryParams);
 		actionUrl = actionUrl.addQueryParameters('__updateID='+ id);
-		new Ajax.Updater(id, actionUrl, AjaxOptions.options(options));
+		new Ajax.Updater(id, actionUrl, AjaxOptions.defaultOptions(options));
 	}
 };
 var AUL = AjaxUpdateLink;
 
 var AjaxSubmitButton = {
-	options : function(additionalOptions) {
-		var options = { asynchronous: true, evalScripts: true };
-		Object.extend(options, additionalOptions || {});
+	PartialFormSenderIDKey: '_partialSenderID',
+	
+	AjaxSubmitButtonNameKey: 'AJAX_SUBMIT_BUTTON_NAME',
+	
+	defaultOptions: function(additionalOptions) {
+		var options = AjaxOptions.defaultOptions(additionalOptions);
+		options['method'] = 'post';
 		return options;
 	},
 	
-	generateActionUrl : function(id, form, queryParams) {
+	generateActionUrl: function(id, form, queryParams) {
 		var actionUrl = form.action;
 		if (queryParams != null) {
 			actionUrl.addQueryParameters(queryParams);
@@ -257,33 +261,88 @@ var AjaxSubmitButton = {
 		return actionUrl;
 	},
 	
-	processOptions : function(form, options) {
-		var newOptions = options;
-		if (newOptions != null) {
-			var ajaxSubmitButtonName = newOptions['_asbn'];
+	processOptions: function(form, options) {
+		var processedOptions = null;
+		if (options != null) {
+			processedOptions = new Hash(options);
+			var ajaxSubmitButtonName = processedOptions['_asbn'];
 			if (ajaxSubmitButtonName != null) {
-				newOptions['_asbn'] = null;
-				var formSerializer = newOptions['_fs'];
-				if (formSerializer == null) {
-					formSerializer = Form.serializeWithoutSubmits;
+				processedOptions['_asbn'] = null;
+				var parameters = processedOptions['parameters'];
+				if (parameters === undefined || parameters == null) {
+					var formSerializer = processedOptions['_fs'];
+					if (formSerializer == null) {
+						formSerializer = Form.serializeWithoutSubmits;
+					}
+					else {
+						processedOptions['_fs'] = null;
+					}
+					var serializedForm = formSerializer(form);
+					processedOptions['parameters'] = serializedForm + '&' + AjaxSubmitButton.AjaxSubmitButtonNameKey + '=' + ajaxSubmitButtonName;
 				}
 				else {
-					newOptions['_fs'] = null;
+					processedOptions['parameters'] = parameters + '&' + AjaxSubmitButton.AjaxSubmitButtonNameKey + '=' + ajaxSubmitButtonName;
 				}
-				var serializedForm = formSerializer(form);
-				newOptions['parameters'] = serializedForm + '&AJAX_SUBMIT_BUTTON_NAME=' + ajaxSubmitButtonName;
 			}
 		}
-		newOptions = AjaxSubmitButton.options(newOptions);
-		return newOptions;
+		processedOptions = AjaxSubmitButton.defaultOptions(processedOptions);
+		return processedOptions;
 	},
 	
-	update : function(id, form, queryParams, options) {
-		new Ajax.Updater(id, AjaxSubmitButton.generateActionUrl(id, form, queryParams), AjaxSubmitButton.processOptions(form, options));
+	partial: function(updateContainerID, formFieldID, options) {
+		var optionsCopy = new Hash(options); 
+		var formField = $(formFieldID);
+		var form = formField.form;
+		
+		var queryParams = {};
+		queryParams[formField.name] = $F(formField);
+		queryParams[AjaxSubmitButton.PartialFormSenderIDKey] = formField.name;
+		optionsCopy['parameters'] = Hash.toQueryString(queryParams);
+		
+		AjaxSubmitButton.update(updateContainerID, form, null, optionsCopy);
 	},
 	
-	request : function(form, queryParams, options) {
-		new Ajax.Request(AjaxSubmitButton.generateActionUrl(null, form, queryParams), AjaxSubmitButton.processOptions(form, options));
+	update: function(id, form, queryParams, options) {
+		var finalUrl = AjaxSubmitButton.generateActionUrl(id, form, queryParams);
+		var finalOptions = AjaxSubmitButton.processOptions(form, options)
+		new Ajax.Updater(id, finalUrl, finalOptions);
+	},
+	
+	request: function(form, queryParams, options) {
+		var finalUrl = AjaxSubmitButton.generateActionUrl(null, form, queryParams);
+		var finalOptions = AjaxSubmitButton.processOptions(form, options);
+		new Ajax.Request(finalUrl, finalOptions);
+	},
+	
+	observeField: function(updateContainerID, formFieldID, observeFieldFrequency, partial, options) {
+		var submitFunction;
+		if (partial) {
+			// We need to cheat and make the WOForm that contains the form action appear to have been
+			// submitted. So we grab the action url, pull off the element ID from its action URL
+			// and pass that in as FORCE_FORM_SUBMITTED_KEY, which is processed by ERXWOForm just like
+			// senderID is on the real WOForm. Unfortunately we can't hook into the real WOForm to do
+			// this :(
+			submitFunction = function(element, value) {
+				ASB.partial(updateContainerID, formFieldID, options);
+			}
+		}
+		else if (updateContainerID != null) {
+			submitFunction = function(element, value) {
+				ASB.update(updateContainerID, $(formFieldID).form, null, options);
+			}
+		}
+		else {
+			submitFunction = function(element, value) {
+				ASB.request($(formFieldID).form, null, options);
+			}
+		}
+
+		if (observeFieldFrequency == null) {
+	    	new Form.Element.EventObserver($(formFieldID), submitFunction);
+		}
+		else {
+	    	new Form.Element.Observer($(formFieldID), observeFieldFrequency, submitFunction);
+		}
 	}
 };
 var ASB = AjaxSubmitButton;
@@ -505,9 +564,9 @@ Object.extend(Object.extend(Wonder.Autocompleter.prototype, Ajax.Autocompleter.p
  * Call Hoverable.register() in your footer to enable this feature.
  */
 var Hoverable = {
-	delay : 300,
+	delay: 300,
 	
-  over : function(event) {
+  over: function(event) {
   	var element = this;
     element.addClassName("hover");
     if (element['hoverCount'] == undefined) {
@@ -518,19 +577,24 @@ var Hoverable = {
     }
   },
 
-  out : function(event) {
+  out: function(event) {
   	var element = this;
     setTimeout(Hoverable._end.bind(element, element['hoverCount']), Hoverable.delay);
   },
 
-  _end : function(hoverCount) {
+  _end: function(hoverCount) {
     var element = this;
     if (element['hoverCount'] == hoverCount) {
       element.removeClassName("hover");
     }
   },
 
-  register : function(delay) {
+	unregister: function(element) {
+ 		Event.stopObserving(element, "mouseover", Hoverable.over.bindAsEventListener(element));
+ 		Event.stopObserving(element, "mouseout", Hoverable.out.bindAsEventListener(element));
+	},
+	
+  register: function(delay) {
   	if (delay !== undefined) {
   		Hoverable.delay = delay;
   	}
