@@ -14,7 +14,7 @@
 			</webobject>
 		</div>
 
-		<p>
+		<p></p>
 		
 		<div style = "border: 1px solid green; padding: 10px">
 			Toggle #2? <webobject name = "CheckBox2"/>
@@ -25,7 +25,7 @@
 			</webobject>
 		</div>
 
-		<p>
+		<p></p>
 		
 		<div style = "border: 1px solid blue; padding: 10px">
 			Toggle #3? <webobject name = "CheckBox3"/>
@@ -38,5 +38,22 @@
 				</webobject>
 			</webobject>
 		</div>
+		
+		<p></p>
+		
+		<div style = "border: 1px solid yellow; padding: 10px">
+			This uses an AjaxObserveField container, observing all of the checkboxes.
+			<webobject name = "ToggleArea4">
+				Selected Names: <webobject name = "SelectedNames"/>
+				<br/>
+			</webobject>
+			<webobject name = "ObserveContainer">
+				<ul>
+					<webobject name = "Names">
+						<li><webobject name = "WOCheckBox"/> <webobject name = "RepetitionName"/></li>
+					</webobject>
+				</ul>
+			</webobject>
+		</div>		
 	</webobject>
 </webobject>

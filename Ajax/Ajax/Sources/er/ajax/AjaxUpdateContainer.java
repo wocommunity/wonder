@@ -186,7 +186,7 @@ public class AjaxUpdateContainer extends AjaxDynamicElement {
 	
 				if (observeFieldID != null) {
 					boolean fullSubmit = booleanValueForBinding("fullSubmit", false, component);
-					AjaxObserveField.appendToResponse(response, context, this, observeFieldID, id, fullSubmit, createObserveFieldOptions(component));
+					AjaxObserveField.appendToResponse(response, context, this, observeFieldID, false, id, fullSubmit, createObserveFieldOptions(component));
 				}
 	
 	//			response.appendContentString(id + "Update = function() { new Ajax.Updater('" + id + "', $('" + id + "').getAttribute('updateUrl'), ");
