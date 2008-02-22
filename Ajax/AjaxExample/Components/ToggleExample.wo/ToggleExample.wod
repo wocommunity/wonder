@@ -15,7 +15,11 @@ Observer : AjaxObserveField {
 	observeFieldID = "testCheckBox";
 	updateContainerID = "toggleArea";
 	fullSubmit = false;
-	action = toggled;
+	action = toggled1;
+}
+
+ToggleArea : AjaxUpdateContainer {
+	id = "toggleArea";
 }
 
 ToggleAreaConditional : WOConditional {
@@ -38,10 +42,26 @@ ToggleArea2 : AjaxUpdateContainer {
 	fullSubmit = false;
 }
 
-ToggleArea : AjaxUpdateContainer {
-	id = "toggleArea";
-}
-
 ToggleArea2Conditional : WOConditional {
 	condition = toggleAreaVisible2;
+}
+
+Observer3 : AjaxObserveField {
+	observeFieldID = "testCheckBox3";
+	updateContainerID = "toggleArea3";
+	fullSubmit = true;
+	action = toggled3;
+}
+
+CheckBox3 : WOCheckBox {
+	checked = toggleAreaVisible3;
+	id = "testCheckBox3";
+}
+
+ToggleArea3 : AjaxUpdateContainer {
+	id = "toggleArea3";
+}
+
+ToggleArea3Conditional : WOConditional {
+	condition = toggleAreaVisible3;
 }
