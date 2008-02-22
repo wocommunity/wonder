@@ -13,10 +13,26 @@ import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 
 import er.extensions.ERXAjaxApplication;
+import er.extensions.ERXComponentUtilities;
+import er.extensions.ERXValueUtilities;
 
 /**
- * AjaxObserveField requires ERExtensions, specifically ERXWOForm.
+ * AjaxObserveField allows you to perform an Ajax submit (and optional update) based
+ * on the state of a form field changing.  If you specify an observeFieldID, that
+ * single field will be observed for changes.  If you also specify an updateContainerID,
+ * the given container will be refreshed after the field changes.  If you do NOT specify
+ * an observeFieldID, all of the form fields contained within this component will be
+ * observed for changes instead.  The list of form fields to observe is obtained on 
+ * the client side, so you should not put AjaxUpdateContainers INSIDE of this component
+ * or any fields inside of the container will no be observed after an update.  Instead,
+ * AjaxObserveFields should be surrounded by a container.
  * 
+ * If you leave of observeFieldID, AjaxObserveField must generate an HTML container, so
+ * that it can find the form fields that correspond to this component from the client
+ * side.
+ * 
+ * @binding id the ID of the observe field container (only useful if you leave off observeFieldID).
+ * @binding elementName the name of the html tag to generate with observeFieldID is null 
  * @binding observeFieldID the ID of the field to observe
  * @binding updateContainerID the ID of the container to update
  * @binding action the action to call when the observer fires
@@ -50,20 +66,39 @@ public class AjaxObserveField extends AjaxDynamicElement {
 	}
 
 	public void appendToResponse(WOResponse response, WOContext context) {
+		super.appendToResponse(response, context);
+		
 		WOComponent component = context.component();
 		String observeFieldID = (String) valueForBinding("observeFieldID", component);
 		String updateContainerID = (String) valueForBinding("updateContainerID", component);
-		if (observeFieldID != null || updateContainerID != null) {
-			AjaxUtils.appendScriptHeader(response);
-			NSMutableDictionary options = createAjaxOptions(component);
-			Boolean fullSubmitBoolean = (Boolean) valueForBinding("fullSubmit", component);
-			boolean fullSubmit = (fullSubmitBoolean != null && fullSubmitBoolean.booleanValue());
-			AjaxObserveField.appendToResponse(response, context, this, observeFieldID, updateContainerID, fullSubmit, options);
-			AjaxUtils.appendScriptFooter(response);
+		NSMutableDictionary options = createAjaxOptions(component);
+		boolean fullSubmit = ERXComponentUtilities.booleanValueForBinding(component, "fullSubmit", false);
+		boolean observeFieldDescendents;
+		if (observeFieldID != null) {
+			observeFieldDescendents = false;
 		}
+		else {
+			observeFieldDescendents = true;
+			observeFieldID = (String)valueForBinding("id", component);
+			if (observeFieldID == null) {
+				observeFieldID = AjaxUtils.toSafeElementID(context.elementID());
+			}
+			String elementName = (String)valueForBinding("elementName", component);
+			if (elementName == null) {
+				elementName = "div";
+			}
+			response.appendContentString("<" + elementName + " id = \"" + observeFieldID + "\">");
+			if (hasChildrenElements()) {
+				appendChildrenToResponse(response, context);
+			}
+			response.appendContentString("</" + elementName + ">");
+		}
+		AjaxUtils.appendScriptHeader(response);
+		AjaxObserveField.appendToResponse(response, context, this, observeFieldID, observeFieldDescendents, updateContainerID, fullSubmit, options);
+		AjaxUtils.appendScriptFooter(response);
 	}
 
-	public static void appendToResponse(WOResponse response, WOContext context, AjaxDynamicElement element, String observeFieldID, String updateContainerID, boolean fullSubmit, NSMutableDictionary options) {
+	public static void appendToResponse(WOResponse response, WOContext context, AjaxDynamicElement element, String observeFieldID, boolean observeDescendentFields, String updateContainerID, boolean fullSubmit, NSMutableDictionary options) {
 	    WOComponent component = context.component();
 		String submitButtonName = nameInContext(context, component, element);
 		NSMutableDictionary observerOptions = new NSMutableDictionary();
@@ -73,7 +108,14 @@ public class AjaxObserveField extends AjaxDynamicElement {
 		AjaxSubmitButton.fillInAjaxOptions(element, component, submitButtonName, observerOptions);
 
 		Object observeFieldFrequency = options.removeObjectForKey("observeFieldFrequency");
-		response.appendContentString("ASB.observeField(" + AjaxUtils.quote(updateContainerID) + ", " + AjaxUtils.quote(observeFieldID) + ", " + observeFieldFrequency + ", " + (!fullSubmit) + ", ");
+		if (observeDescendentFields) {
+			response.appendContentString("ASB.observeDescendentFields");
+		}
+		else {
+			response.appendContentString("ASB.observeField");
+		}
+		
+		response.appendContentString("(" + AjaxUtils.quote(updateContainerID) + ", " + AjaxUtils.quote(observeFieldID) + ", " + observeFieldFrequency + ", " + (!fullSubmit) + ", ");
 		AjaxOptions.appendToResponse(observerOptions, response, context);
 		response.appendContentString(");");
 	}

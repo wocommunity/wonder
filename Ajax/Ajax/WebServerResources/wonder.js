@@ -314,6 +314,14 @@ var AjaxSubmitButton = {
 		new Ajax.Request(finalUrl, finalOptions);
 	},
 	
+	observeDescendentFields: function(updateContainerID, containerID, observeFieldFrequency, partial, options) {
+    $(containerID).descendants().find(function(element) {
+      if (element.type != 'hidden' && ['input', 'select', 'textarea'].include(element.tagName.toLowerCase())) {
+      	AjaxSubmitButton.observeField(updateContainerID, element, observeFieldFrequency, partial, options);
+      }
+    });
+	},
+	
 	observeField: function(updateContainerID, formFieldID, observeFieldFrequency, partial, options) {
 		var submitFunction;
 		if (partial) {

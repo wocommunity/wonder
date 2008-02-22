@@ -65,3 +65,28 @@ ToggleArea3 : AjaxUpdateContainer {
 ToggleArea3Conditional : WOConditional {
 	condition = toggleAreaVisible3;
 }
+
+ToggleArea4 : AjaxUpdateContainer {
+  id = "ToggleArea4";
+}
+
+ObserveContainer : AjaxObserveField {
+  updateContainerID = "ToggleArea4";
+}
+
+Names : WORepetition {
+  list = names;
+  item = repetitionName;
+}
+
+WOCheckBox : WOCheckBox {
+  checked = nameSelected;
+}
+
+SelectedNames : WOString {
+  value = selectedNames;
+}
+
+RepetitionName : WOString {
+  value = repetitionName;
+}
