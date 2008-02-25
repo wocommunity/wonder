@@ -13,7 +13,6 @@ import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 
 import er.extensions.ERXAjaxApplication;
-import er.extensions.ERXComponentUtilities;
 
 /**
  * AjaxObserveField allows you to perform an Ajax submit (and optional update) based
@@ -71,7 +70,7 @@ public class AjaxObserveField extends AjaxDynamicElement {
 		String observeFieldID = (String) valueForBinding("observeFieldID", component);
 		String updateContainerID = (String) valueForBinding("updateContainerID", component);
 		NSMutableDictionary options = createAjaxOptions(component);
-		boolean fullSubmit = ERXComponentUtilities.booleanValueForBinding(component, "fullSubmit", false);
+		boolean fullSubmit = booleanValueForBinding("fullSubmit", false, component);
 		boolean observeFieldDescendents;
 		if (observeFieldID != null) {
 			observeFieldDescendents = false;
@@ -98,7 +97,7 @@ public class AjaxObserveField extends AjaxDynamicElement {
 	}
 
 	public static void appendToResponse(WOResponse response, WOContext context, AjaxDynamicElement element, String observeFieldID, boolean observeDescendentFields, String updateContainerID, boolean fullSubmit, NSMutableDictionary options) {
-	    WOComponent component = context.component();
+		WOComponent component = context.component();
 		String submitButtonName = nameInContext(context, component, element);
 		NSMutableDictionary observerOptions = new NSMutableDictionary();
 		if (options != null) {
