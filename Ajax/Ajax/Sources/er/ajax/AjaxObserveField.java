@@ -14,7 +14,6 @@ import com.webobjects.foundation.NSMutableDictionary;
 
 import er.extensions.ERXAjaxApplication;
 import er.extensions.ERXComponentUtilities;
-import er.extensions.ERXValueUtilities;
 
 /**
  * AjaxObserveField allows you to perform an Ajax submit (and optional update) based
@@ -32,7 +31,7 @@ import er.extensions.ERXValueUtilities;
  * side.
  * 
  * @binding id the ID of the observe field container (only useful if you leave off observeFieldID).
- * @binding elementName the name of the html tag to generate with observeFieldID is null 
+ * @binding elementName the name of the html tag to generate with observeFieldID if it is null, uses <code>div</code> by default.
  * @binding observeFieldID the ID of the field to observe
  * @binding updateContainerID the ID of the container to update
  * @binding action the action to call when the observer fires
