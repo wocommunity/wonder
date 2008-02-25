@@ -288,7 +288,7 @@ public class ERXWOForm extends com.webobjects.appserver._private.WOHTMLDynamicEl
 			formName = (String) _formName.valueInComponent(context.component());
 		}
 		if (formName == null) {
-			formName = "form_" + context.elementID().replace('.', '_');
+			formName = "form_" + ERXWOContext.toSafeElementID(context.elementID());
 		}
 		return formName;
 	}
