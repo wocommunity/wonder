@@ -447,7 +447,8 @@ public class ERXConfigurationManager {
                 // each of these properties may have an optional applicationName tacked onto the end.
                 // for example:  dbConnectURLGLOBAL.MyApp takes precedence over dbConnectURLGLOBAL
                 NSDictionary jdbcInfoDictionary = null;
-                String applicationName = WOApplication.application().name();
+                WOApplication application = WOApplication.application();
+                String applicationName = application != null ? application.name() : null;
                 String url = System.getProperty(aModelName + ".URL");
                 url = url == null ? _getProperty(ERXConfigurationManager.dbConnectURLGLOBAL, applicationName) : url;
                 String userName= System.getProperty(aModelName + ".DBUser");
