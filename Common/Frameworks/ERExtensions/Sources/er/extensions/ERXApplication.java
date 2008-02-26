@@ -932,9 +932,10 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 	 * Creates the request object for this loop. Calls _createRequest(). For WO
 	 * 5.4.
 	 */
-	@SuppressWarnings("all") // Suppress @Override warning for 5.3
+	@SuppressWarnings("all")
+	// Suppress @Override warning for 5.3
 	public WORequest createRequest(String method, String aurl, String anHTTPVersion, Map<String, ? extends List<String>> someHeaders, NSData content, Map<String, Object> someInfo) {
-		return _createRequest(method, aurl, anHTTPVersion, new NSDictionary<String, Object>(someHeaders, true), content, new NSDictionary<String, Object>(someInfo, true));
+		return _createRequest(method, aurl, anHTTPVersion, (someHeaders != null ? new NSDictionary<String, Object>(someHeaders, true) : null), content, (someInfo != null ? new NSDictionary<String, Object>(someInfo, true) : null));
 	}
 
 	/**
