@@ -431,7 +431,7 @@ public class ERXBrowserFactory {
     public String parsePlatform(String userAgent) {
         String platform = ERXBrowser.UNKNOWN_PLATFORM;
         if      (userAgent.indexOf("Win") > -1) 	platform = ERXBrowser.WINDOWS;
-        else if (userAgent.indexOf("iPhone") > -1) 	platform = ERXBrowser.IPHONE;
+        else if ((userAgent.indexOf("iPhone") > -1) || (userAgent.indexOf("iPod") > -1)) 	platform = ERXBrowser.IPHONE;
         else if (userAgent.indexOf("Mac") > -1) 	platform = ERXBrowser.MACOS;
         else if (userAgent.indexOf("Linux") > -1) 	platform = ERXBrowser.LINUX;
         return platform;
