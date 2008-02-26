@@ -10,7 +10,7 @@ import com.webobjects.appserver.WOResponse;
 import er.extensions.ERXProperties;
 
 /**
- * Instantiates a Google Map (an object of GMap2 javascript class) at the given location (specified by lat&lng or address) with given properties. IMPORTANT: your GMaps api key must be specified in your properties file.
+ * Instantiates a Google Map (an object of GMap2 javascript class) at the given location (specified by lat&lng or address) with given properties. IMPORTANT: your GMaps api key must be specified in your properties file as <code>ajax.google.maps.apiKey</code>.
  * 
  * @author eric robinson
  * @binding id the id of the div that the map is rendered into. If none is given, a unique id will be generated. This is also the name of the map javascript object, which can be accessed after the map has been instantiated.
