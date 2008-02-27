@@ -21,6 +21,7 @@ import com.webobjects.jdbcadaptor.JDBCAdaptor;
 import er.extensions.ERXJDBCUtilities;
 import er.extensions.ERXModelGroup;
 import er.extensions.ERXProperties;
+import er.extensions.ERXSQLHelper;
 
 /**
  * JDBC implementation of the migration lock.
@@ -256,7 +257,7 @@ public class ERXJDBCMigrationLock implements IERXMigrationLock {
 				modelNameAttribute.setExternalType(prototypeEntity.attributeNamed("varchar100").externalType());
 			}
 			else {
-				modelNameAttribute.setExternalType(adaptor.externalTypeForJDBCType(Types.VARCHAR));
+				modelNameAttribute.setExternalType(ERXSQLHelper.newSQLHelper(adaptor).externalTypeForJDBCType(adaptor, Types.VARCHAR));
 			}
 			modelNameAttribute.setName("modelName");
 			modelNameAttribute.setColumnName("modelname");
@@ -270,7 +271,7 @@ public class ERXJDBCMigrationLock implements IERXMigrationLock {
 				versionAttribute.setExternalType(prototypeEntity.attributeNamed("intNumber").externalType());
 			}
 			else {
-				versionAttribute.setExternalType(adaptor.externalTypeForJDBCType(Types.INTEGER));
+				versionAttribute.setExternalType(ERXSQLHelper.newSQLHelper(adaptor).externalTypeForJDBCType(adaptor, Types.INTEGER));
 			}
 			versionAttribute.setName("version");
 			versionAttribute.setColumnName("version");
@@ -283,7 +284,7 @@ public class ERXJDBCMigrationLock implements IERXMigrationLock {
 				updateLockAttribute.setExternalType(prototypeEntity.attributeNamed("intNumber").externalType());
 			}
 			else {
-				updateLockAttribute.setExternalType(adaptor.externalTypeForJDBCType(Types.INTEGER));
+				updateLockAttribute.setExternalType(ERXSQLHelper.newSQLHelper(adaptor).externalTypeForJDBCType(adaptor, Types.INTEGER));
 			}
 			updateLockAttribute.setName("updateLock");
 			updateLockAttribute.setColumnName("updatelock");
@@ -296,7 +297,7 @@ public class ERXJDBCMigrationLock implements IERXMigrationLock {
 				lockOwnerAttribute.setExternalType(prototypeEntity.attributeNamed("varchar100").externalType());
 			}
 			else {
-				lockOwnerAttribute.setExternalType(adaptor.externalTypeForJDBCType(Types.VARCHAR));
+				lockOwnerAttribute.setExternalType(ERXSQLHelper.newSQLHelper(adaptor).externalTypeForJDBCType(adaptor, Types.VARCHAR));
 			}
 			lockOwnerAttribute.setName("lockOwner");
 			lockOwnerAttribute.setColumnName("lockowner");
