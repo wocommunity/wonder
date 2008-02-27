@@ -730,6 +730,7 @@ public class ERXSQLHelper {
 	 * @param jdbcType the JDBC type number
 	 * @return a guess at the external type name to use
 	 */
+	@SuppressWarnings("unchecked")
 	public String externalTypeForJDBCType(JDBCAdaptor adaptor, int jdbcType) {
 		String externalType = null;
 		try {
@@ -744,6 +745,16 @@ public class ERXSQLHelper {
 				NSDictionary typeInfo = (NSDictionary) typeInfoMethod.invoke(adaptor);
 				if (typeInfo != null) {
 					String jdbcStringRep = JDBCAdaptor.stringRepresentationForJDBCType(jdbcType);
+					
+					// MS: We need to do a case-insensitive lookup of the JDBC string representation,
+					// because some databases say "VARCHAR" and some "varchar".  Awesome.
+					for (String possibleJdbcStringRep : (NSArray<String>)typeInfo.allKeys()) {
+						if (jdbcStringRep.equalsIgnoreCase(possibleJdbcStringRep)) {
+							jdbcStringRep = possibleJdbcStringRep;
+							break;
+						}
+					}
+					
 					// We're going to guess that the jdbc string rep is a valid type in this
 					// adaptor.  If it is, then we can use that and it will probably be a better
 					// guess than just the first type we run across.
