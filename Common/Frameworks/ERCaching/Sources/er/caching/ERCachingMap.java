@@ -9,7 +9,7 @@ import com.danga.memcached.MemCachedClient;
 
 @SuppressWarnings("hiding")
 public class ERCachingMap<String, V extends Object> implements Map<String, V> {
-    
+
     private MemCachedClient _client;
 
     private synchronized MemCachedClient client() {
@@ -38,7 +38,7 @@ public class ERCachingMap<String, V extends Object> implements Map<String, V> {
     }
 
     public V put(String key, V value, long timeout) {
-        V old = null; //get(arg0);
+        V old = null; // get(arg0);
         client().set(key.toString(), value, timeout);
         return old;
     }

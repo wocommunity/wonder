@@ -19,136 +19,146 @@
  */
 package com.danga.memcached.test;
 
-import com.danga.memcached.*;
+import java.util.Hashtable;
 
-import java.util.*;
+import com.danga.memcached.MemCachedClient;
+import com.danga.memcached.SockIOPool;
+import com.jehiah.memcached.Main;
 
 public class MemCachedTest {
 
-	// store results from threads
-	private static Hashtable<Integer,StringBuilder> threadInfo =
-		new Hashtable<Integer,StringBuilder>();
-    
-	/**
-	 * This runs through some simple tests of the MemCacheClient.
-	 *
-	 * Command line args:
-	 * args[0] = number of threads to spawn
-	 * args[1] = number of runs per thread
-	 * args[2] = size of object to store 
-	 *
-	 * @param args the command line arguments
-	 */
-	public static void main(String[] args) {
+    // store results from threads
+    private static Hashtable<Integer, StringBuilder> threadInfo = new Hashtable<Integer, StringBuilder>();
 
-		String[] serverlist = { "localhost:1624" };
+    /**
+     * This runs through some simple tests of the MemCacheClient.
+     * 
+     * Command line args: args[0] = number of threads to spawn args[1] = number
+     * of runs per thread args[2] = size of object to store
+     * 
+     * @param args
+     *            the command line arguments
+     * @throws Exception 
+     */
+    public static void main(String[] args) throws Exception {
 
-		// initialize the pool for memcache servers
-		SockIOPool pool = SockIOPool.getInstance();
-		pool.setServers( serverlist );
+        try {
+            Main.main(new String[] {"-p", "1624"});
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+          
+        String[] serverlist = { "localhost:1624" };
 
-		pool.setInitConn(5);
-		pool.setMinConn(5);
-		pool.setMaxConn(50);
-		pool.setMaintSleep(30);
+        // initialize the pool for memcache servers
+        SockIOPool pool = SockIOPool.getInstance();
+        pool.setServers(serverlist);
 
-		pool.setNagle(false);
-		pool.initialize();
+        pool.setInitConn(5);
+        pool.setMinConn(5);
+        pool.setMaxConn(50);
+        pool.setMaintSleep(30);
 
-		int threads = Integer.parseInt(args[0]);
-		int runs = Integer.parseInt(args[1]);
-		int size = 1024 * Integer.parseInt(args[2]);	// how many kilobytes
+        pool.setNagle(false);
+        pool.initialize();
 
-		// get object to store
-		int[] obj = new int[size];
-		for (int i = 0; i < size; i++) {
-			obj[i] = i;
-		}
+        int threads = Integer.parseInt(args[0]);
+        int runs = Integer.parseInt(args[1]);
+        int size = 1024 * Integer.parseInt(args[2]); // how many kilobytes
 
-		String[] keys = new String[size];
-		for (int i = 0; i < size; i++) {
-			keys[i] = "test_key" + i;
-		}
+        // get object to store
+        int[] obj = new int[size];
+        for (int i = 0; i < size; i++) {
+            obj[i] = i;
+        }
 
-		for (int i = 0; i < threads; i++) {
-			bench b = new bench(runs, i, obj, keys);
-			b.start();
-		}
+        String[] keys = new String[size];
+        for (int i = 0; i < size; i++) {
+            keys[i] = "test_key" + i;
+        }
 
-		int i = 0;
-		while (i < threads) {
-			if (threadInfo.containsKey(new Integer(i))) {
-				System.out.println( threadInfo.get( new Integer( i ) ) );
-				i++;
-			}
-			else {
-				try {
-					Thread.sleep(1000);
-				}
-				catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-			}
-		}
+        for (int i = 0; i < threads; i++) {
+            bench b = new bench(runs, i, obj, keys);
+            b.start();
+        }
 
-		pool.shutDown();
-		System.exit(1);
-	}
+        int i = 0;
+        while (i < threads) {
+            if (threadInfo.containsKey(new Integer(i))) {
+                System.out.println(threadInfo.get(new Integer(i)));
+                i++;
+            } else {
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
 
-	/** 
-	 * Test code per thread. 
-	 */
-	private static class bench extends Thread {
-		private int runs;
-		private int threadNum;
-		private int[] object;
-		private String[] keys;
-		private int size;
+        pool.shutDown();
+        System.exit(1);
+    }
 
-		public bench(int runs, int threadNum, int[] object, String[] keys) {
-			this.runs = runs;
-			this.threadNum = threadNum;
-			this.object = object;
-			this.keys = keys;
-			this.size = object.length;
-		}
+    /**
+     * Test code per thread.
+     */
+    private static class bench extends Thread {
+        private int runs;
 
-		public void run() {
+        private int threadNum;
 
-			StringBuilder result = new StringBuilder();
+        private int[] object;
 
-			// get client instance
-			MemCachedClient mc = new MemCachedClient();
-			mc.setCompressEnable(false);
-			mc.setCompressThreshold(0);
+        private String[] keys;
 
-			// time deletes
-			long start = System.currentTimeMillis();
-			for (int i = 0; i < runs; i++) {
-				mc.delete(keys[i]);
-			}
-			long elapse = System.currentTimeMillis() - start;
-			float avg = (float) elapse / runs;
-			result.append("\nthread " + threadNum + ": runs: " + runs + " deletes of obj " + (size/1024) + "KB -- avg time per req " + avg + " ms (total: " + elapse + " ms)");
+        private int size;
 
-			// time stores
-			start = System.currentTimeMillis();
-			for (int i = 0; i < runs; i++) {
-				mc.set(keys[i], object);
-			}
-			elapse = System.currentTimeMillis() - start;
-			avg = (float) elapse / runs;
-			result.append("\nthread " + threadNum + ": runs: " + runs + " stores of obj " + (size/1024) + "KB -- avg time per req " + avg + " ms (total: " + elapse + " ms)");
+        public bench(int runs, int threadNum, int[] object, String[] keys) {
+            this.runs = runs;
+            this.threadNum = threadNum;
+            this.object = object;
+            this.keys = keys;
+            this.size = object.length;
+        }
 
-			start = System.currentTimeMillis();
-			for (int i = 0; i < runs; i++) {
-				mc.get(keys[i]);
-			}
-			elapse = System.currentTimeMillis() - start;
-			avg = (float) elapse / runs;
-			result.append("\nthread " + threadNum + ": runs: " + runs + " gets of obj " + (size/1024) + "KB -- avg time per req " + avg + " ms (total: " + elapse + " ms)");
+        public void run() {
 
-			threadInfo.put(new Integer(threadNum), result);
-		}
-	}
+            StringBuilder result = new StringBuilder();
+
+            // get client instance
+            MemCachedClient mc = new MemCachedClient();
+            mc.setCompressEnable(false);
+            mc.setCompressThreshold(0);
+
+            // time deletes
+            long start = System.currentTimeMillis();
+            for (int i = 0; i < runs; i++) {
+                mc.delete(keys[i]);
+            }
+            long elapse = System.currentTimeMillis() - start;
+            float avg = (float) elapse / runs;
+            result.append("\nthread " + threadNum + ": runs: " + runs + " deletes of obj " + (size / 1024) + "KB -- avg time per req " + avg + " ms (total: " + elapse + " ms)");
+
+            // time stores
+            start = System.currentTimeMillis();
+            for (int i = 0; i < runs; i++) {
+                mc.set(keys[i], object);
+            }
+            elapse = System.currentTimeMillis() - start;
+            avg = (float) elapse / runs;
+            result.append("\nthread " + threadNum + ": runs: " + runs + " stores of obj " + (size / 1024) + "KB -- avg time per req " + avg + " ms (total: " + elapse + " ms)");
+
+            start = System.currentTimeMillis();
+            for (int i = 0; i < runs; i++) {
+                mc.get(keys[i]);
+            }
+            elapse = System.currentTimeMillis() - start;
+            avg = (float) elapse / runs;
+            result.append("\nthread " + threadNum + ": runs: " + runs + " gets of obj " + (size / 1024) + "KB -- avg time per req " + avg + " ms (total: " + elapse + " ms)");
+
+            threadInfo.put(new Integer(threadNum), result);
+        }
+    }
 }
