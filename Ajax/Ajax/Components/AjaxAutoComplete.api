@@ -18,6 +18,9 @@
     <binding name="afterUpdateElement"/>
     <binding name="fullSearch"/>
     <binding name="partialSearch"/>
+    <binding name="choices"/>
+    <binding name="partialChars"/>
+    <binding name="ignoreCase"/>
 
     <validation message="&apos;list&apos; is a required binding">
       <unbound name="list"/>
