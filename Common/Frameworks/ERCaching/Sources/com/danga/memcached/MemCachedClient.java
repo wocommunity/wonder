@@ -23,15 +23,25 @@
  */
 package com.danga.memcached;
 
-import java.util.*;
-import java.util.zip.*;
-import java.nio.*;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
+import java.io.UnsupportedEncodingException;
 import java.net.InetAddress;
-import java.nio.charset.*;
-import java.nio.channels.*;
-import java.nio.channels.spi.*;
-import java.io.*;
 import java.net.URLEncoder;
+import java.nio.ByteBuffer;
+import java.nio.channels.SelectionKey;
+import java.nio.channels.Selector;
+import java.nio.channels.SocketChannel;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.zip.GZIPInputStream;
+import java.util.zip.GZIPOutputStream;
 
 import org.apache.log4j.Logger;
 
@@ -638,7 +648,7 @@ public class MemCachedClient {
     public boolean set(String key, Object value, Date expiry) {
         return set("set", key, value, expiry, null, primitiveAsString);
     }
-    
+
     public boolean set(String key, Object value, long expiry) {
         return set("set", key, value, expiry, null, primitiveAsString);
     }
@@ -815,7 +825,7 @@ public class MemCachedClient {
     private boolean set(String cmdname, String key, Object value, Date expiry, Integer hashCode, boolean asString) {
         return set(cmdname, key, value, (expiry == null ? 0L : expiry.getTime()), hashCode, asString);
     }
-    
+
     private boolean set(String cmdname, String key, Object value, long expiry, Integer hashCode, boolean asString) {
 
         if (cmdname == null || cmdname.trim().equals("") || key == null) {
