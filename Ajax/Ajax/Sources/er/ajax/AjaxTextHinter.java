@@ -9,7 +9,7 @@ import com.webobjects.appserver.WOResponse;
 import com.webobjects.foundation.NSDictionary;
 
 /**
- * Hints input and textarea fields with ghosted text that serves as an explainatation for the user what to enter.
+ * Hints input and textarea fields with ghosted text that serves as an explanation for the user what to enter.
  * The style "ajax-hinted-text-with-default" defines the color for this.
  * 
  * The default value for the field comes from setting default = "something"; on the input element.  For instance,
