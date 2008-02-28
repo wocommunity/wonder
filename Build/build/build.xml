@@ -872,7 +872,7 @@
     <target name="patch.54">
        <property name="woognl.pre" value="WOOgnl54.pre" />
        <property name="erx.class.exclude.0" value="com/webobjects/appserver/_private/WOHTTPIO.java" />  
-       <property name="erx.class.exclude.1" value="com/webobjects/foundation/NSArray.java" /> 
+       <property name="erx.class.exclude.1" value="com/webobjects/foundation/*.*" /> 
 
         <property name="include.source" value="true" />
         <antcall target="all.run" >
