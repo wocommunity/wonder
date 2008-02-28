@@ -743,6 +743,7 @@ public class ERXSQLHelper {
 			typeInfoMethod.setAccessible(true);
 			try {
 				NSDictionary typeInfo = (NSDictionary) typeInfoMethod.invoke(adaptor);
+				
 				if (typeInfo != null) {
 					String jdbcStringRep = JDBCAdaptor.stringRepresentationForJDBCType(jdbcType);
 					
@@ -764,7 +765,7 @@ public class ERXSQLHelper {
 					if (typeDescription != null) {
 						NSArray defaultJDBCType = (NSArray)typeDescription.objectForKey("defaultJDBCType");
 						if (defaultJDBCType != null && defaultJDBCType.containsObject(jdbcStringRep)) {
-							externalType = jdbcStringRep;
+							externalType = typeInfoStringRep;
 						}
 					}
 				}
