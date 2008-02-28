@@ -4,7 +4,6 @@ import com.danga.memcached.SockIOPool;
 
 import er.extensions.ERXFrameworkPrincipal;
 import er.extensions.ERXProperties;
-import er.extensions.ERXSystem;
 
 public class ERCaching extends ERXFrameworkPrincipal {
 
@@ -14,17 +13,17 @@ public class ERCaching extends ERXFrameworkPrincipal {
 
     public void finishInitialization() {
         // finally setup the server
-        /*ServiceRegistry registry = new SimpleServiceRegistry();
-        InetSocketAddress addr = new InetSocketAddress("localhost", 1624);
-        try {
-            registry.bind(new Service("Memcached", TransportType.SOCKET, addr), new ServerSessionHandler(1000, "0.1", true, 0, 32 * 1024000));
-        } catch (IOException e) {
-           throw NSForwardException._runtimeExceptionForThrowable(e);
-        }
-*/
+        /*
+         * ServiceRegistry registry = new SimpleServiceRegistry();
+         * InetSocketAddress addr = new InetSocketAddress("localhost", 1624);
+         * try { registry.bind(new Service("Memcached", TransportType.SOCKET,
+         * addr), new ServerSessionHandler(1000, "0.1", true, 0, 32 * 1024000)); }
+         * catch (IOException e) { throw
+         * NSForwardException._runtimeExceptionForThrowable(e); }
+         */
         String servers = ERXProperties.stringForKey("er.caching.servers");
-        if(servers.length() == 0) {
-            log.error("No Servers found");
+        if (servers == null || servers.length() == 0) {
+            log.error("No Servers found, set er.caching.servers=server1:port1,server2:port2...");
             return;
         }
         String[] serverlist = servers.split(",\\s*");

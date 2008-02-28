@@ -5,7 +5,10 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/ERExtensions"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/ERPrototypes"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/JavaWOExtensions"/>
-	<classpathentry kind="con" path="org.objectstyle.wolips.WO_CLASSPATH/JavaEOAccess/JavaEOControl/JavaFoundation/JavaJDBCAdaptor/JavaWebObjects/JavaXML"/>
+	<classpathentry kind="con" path="org.objectstyle.wolips.ContainerInitializer/10/1/JavaEOAccess/1/nil/1/nil/1/0/1/false/10/1/JavaEOControl/1/nil/1/nil/1/0/1/false/10/1/JavaFoundation/1/nil/1/nil/1/0/1/false/10/1/JavaJDBCAdaptor/1/nil/1/nil/1/0/1/false/10/1/JavaWebObjects/1/nil/1/nil/1/0/1/false/10/1/JavaXML/1/nil/1/nil/1/0/1/false"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="Libraries/commons-collections-3.1.jar"/>
+	<classpathentry kind="lib" path="Libraries/commons-cli-1.0.jar"/>
+	<classpathentry kind="lib" path="Libraries/mina-core-1.1.5.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

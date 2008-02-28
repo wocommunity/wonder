@@ -1,21 +1,20 @@
 package er.caching;
 
-import java.util.Map;
-
 import com.webobjects.eocontrol.EOEnterpriseObject;
 import com.webobjects.eocontrol.EOGlobalID;
 import com.webobjects.foundation.NSArray;
 
 import er.extensions.ERXEnterpriseObjectArrayCache;
+
 /**
- Usage example:
- 
-            ERCEnterpriseObjectArrayCache&lt;Bug&gt; cache = new ERCEnterpriseObjectArrayCache&lt;Bug&gt;("Bug");
-            cache.setObjectsForKey(bugs, "all");
-            NSArray&lt;Bug&gt; objects = cache.objectsForKey("all");
- 
+ * Usage example:
+ * 
+ * ERCEnterpriseObjectArrayCache&lt;Bug&gt; cache = new
+ * ERCEnterpriseObjectArrayCache&lt;Bug&gt;("Bug"); cache.setObjectsForKey(bugs,
+ * "all"); NSArray&lt;Bug&gt; objects = cache.objectsForKey("all");
+ * 
  * @author ak
- *
+ * 
  * @param <T>
  */
 public class ERCEnterpriseObjectArrayCache<T extends EOEnterpriseObject> extends ERXEnterpriseObjectArrayCache<EOEnterpriseObject> {
