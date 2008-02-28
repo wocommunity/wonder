@@ -379,6 +379,7 @@ tulipchain
 turnitinbot
 turtle
 turtlescanner
+twiceler
 ucsd
 udmsearch
 ultraseek
