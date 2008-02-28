@@ -1,9 +1,9 @@
-Conditional1: WOConditional {
+NotDisabled: WOConditional {
 	condition = ^disabled;
 	negate = true;
 }
 
-Conditional2: WOConditional {
+Disabled: WOConditional {
 	condition = ^disabled;
 }
 
