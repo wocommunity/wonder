@@ -103,7 +103,7 @@ public class ERXStyleSheet extends ERXStatelessComponent {
     }
 
     /**
-     * Returns key under whic the stylesheet should be placed in the cache.
+     * Returns key under which the stylesheet should be placed in the cache.
      * If no key is given, the session id is used.
      * @return style sheet framework name
      */
