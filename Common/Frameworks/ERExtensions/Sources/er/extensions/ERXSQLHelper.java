@@ -746,11 +746,13 @@ public class ERXSQLHelper {
 				if (typeInfo != null) {
 					String jdbcStringRep = JDBCAdaptor.stringRepresentationForJDBCType(jdbcType);
 					
-					// MS: We need to do a case-insensitive lookup of the JDBC string representation,
+					String typeInfoStringRep = jdbcStringRep;
+					
+					// MS: We need to do a case-insensitive lookup of the type info string representation,
 					// because some databases say "VARCHAR" and some "varchar".  Awesome.
-					for (String possibleJdbcStringRep : (NSArray<String>)typeInfo.allKeys()) {
-						if (jdbcStringRep.equalsIgnoreCase(possibleJdbcStringRep)) {
-							jdbcStringRep = possibleJdbcStringRep;
+					for (String possibleTypeInfoStringRep : (NSArray<String>)typeInfo.allKeys()) {
+						if (typeInfoStringRep.equalsIgnoreCase(possibleTypeInfoStringRep)) {
+							typeInfoStringRep = possibleTypeInfoStringRep;
 							break;
 						}
 					}
@@ -758,7 +760,7 @@ public class ERXSQLHelper {
 					// We're going to guess that the jdbc string rep is a valid type in this
 					// adaptor.  If it is, then we can use that and it will probably be a better
 					// guess than just the first type we run across.
-					NSDictionary typeDescription = (NSDictionary) typeInfo.objectForKey(jdbcStringRep);
+					NSDictionary typeDescription = (NSDictionary) typeInfo.objectForKey(typeInfoStringRep);
 					if (typeDescription != null) {
 						NSArray defaultJDBCType = (NSArray)typeDescription.objectForKey("defaultJDBCType");
 						if (defaultJDBCType != null && defaultJDBCType.containsObject(jdbcStringRep)) {
