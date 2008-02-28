@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Method;
 import java.sql.SQLException;
+import java.sql.Types;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
@@ -1399,6 +1400,32 @@ public class ERXSQLHelper {
 		@Override
 		public String sqlForRegularExpressionQuery(String key, String value) {
 			return key + " ~* " + value + "";
+		}
+		
+		/**
+		 * For most types, finding the type in jdbc2Info's typeInfo will provide us
+		 * with a correct type mapping.  For Postgresql, it has the honor of not 
+		 * actually having a type named "integer," so EOF goes on a hunt for a type
+		 * that MIGHT match (which is just bad, btw) and comes up with "serial".
+		 * 
+		 * We know better than EOF.
+		 * 
+		 * For any other case, we pass it up to the default impl.
+		 * 
+		 * @param adaptor the adaptor to retrieve an external type for
+		 * @param jdbcType the JDBC type number
+		 * @return a guess at the external type name to use
+		 */
+		@Override
+		public String externalTypeForJDBCType(JDBCAdaptor adaptor, int jdbcType) {
+			String externalType;
+			if (jdbcType == Types.INTEGER) {
+				externalType = "int4";
+			}
+			else {
+				externalType = super.externalTypeForJDBCType(adaptor, jdbcType);
+			}
+			return externalType;
 		}
 	}
 }
