@@ -23,18 +23,10 @@ import java.util.Map;
 
 import com.danga.memcached.MemCachedClient;
 import com.danga.memcached.SockIOPool;
-import com.jehiah.memcached.Main;
 
 public class MemCachedBench {
 
     public static void main(String[] args)  {
-        try {
-            Main.main(new String[] {"-p", "1624"});
-        } catch (Exception e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        
         int runs = Integer.parseInt(args[0]);
         int start = Integer.parseInt(args[1]);
 
