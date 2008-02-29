@@ -23,7 +23,6 @@ import java.util.Hashtable;
 
 import com.danga.memcached.MemCachedClient;
 import com.danga.memcached.SockIOPool;
-import com.jehiah.memcached.Main;
 
 public class MemCachedTest {
 
@@ -41,14 +40,7 @@ public class MemCachedTest {
      * @throws Exception 
      */
     public static void main(String[] args) throws Exception {
-
-        try {
-            Main.main(new String[] {"-p", "1624"});
-        } catch (Exception e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-          
+         
         String[] serverlist = { "localhost:1624" };
 
         // initialize the pool for memcache servers
