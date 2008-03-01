@@ -1328,7 +1328,7 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
 			String key = (String) keyObj;
 			if (key != null && key.length() > 0) {
 				String value = originalProperties.getProperty(key);
-				if (!operatorKeys.isEmpty() && key.indexOf(".@") != -1) {
+				if (operatorKeys.count() > 0 && key.indexOf(".@") != -1) {
 					ERXProperties.Operator operator = null;
 					NSDictionary<String, String> computedProperties = null;
 					for (String operatorKey : operatorKeys) {
