@@ -19,6 +19,7 @@ import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
+import java.util.TreeSet;
 
 import org.apache.log4j.Logger;
 
@@ -29,6 +30,7 @@ import com.webobjects.foundation.NSBundle;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSKeyValueCoding;
 import com.webobjects.foundation.NSMutableArray;
+import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation.NSProperties;
 import com.webobjects.foundation.NSPropertyListSerialization;
 
@@ -1098,4 +1100,266 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
     public Object valueForKey(String aKey) {
          return getProperty(aKey);
     }
+
+	/**
+	 * Stores the mapping between operator keys and operators
+	 */
+	private static final NSMutableDictionary<String, ERXProperties.Operator> operators = new NSMutableDictionary<String, ERXProperties.Operator>();
+
+	/**
+	 * Registers a property operator for a particular key.
+	 * 
+	 * @param operator
+	 *            the operator to register
+	 * @param key
+	 *            the key name of the operator
+	 */
+	public static void setOperatorForKey(ERXProperties.Operator operator, String key) {
+		ERXProperties.operators.setObjectForKey(operator, key);
+	}
+
+	/**
+	 * <p>
+	 * Property operators work like array operators. In your properties, you can
+	 * define keys like:
+	 * </p>
+	 * 
+	 * <code>
+	 * er.extensions.akey.@someOperatorKey.aparameter=somevalue
+	 * </code>
+	 * 
+	 * <p>
+	 * Which will be processed by the someOperatorKey operator. Because
+	 * properties get handled very early in the startup process, you should
+	 * register operators somewhere like a static block in your Application
+	 * class. For instance, if you wanted to register the forInstance operator,
+	 * you might put the following your Application class:
+	 * </p>
+	 * 
+	 * <code>
+	 * static {
+	 *   ERXProperties.setOperatorForKey(new ERXProperties.InRangeOperator(100), ERXProperties.InRangeOperator.ForInstanceKey);
+	 * }
+	 * </code>
+	 * 
+	 * <p>
+	 * It's important to note that property operators evaluate at load time, not
+	 * access time, so the compute function should not depend on any runtime
+	 * state to execute. Additionally, access to other properties inside the
+	 * compute method should be very carefully considered because it's possible
+	 * that the operators are evaluated before all of the properties in the
+	 * system are loaded.
+	 * </p>
+	 * 
+	 * @author mschrag
+	 */
+	public static interface Operator {
+		/**
+		 * Performs some computation on the key, value, and parameters and
+		 * returns a dictionary of new properties. If this method returns null,
+		 * the original key and value will be used. If any other dictionary is
+		 * returned, the properties in the dictionary will be copied into the
+		 * destination properties.
+		 * 
+		 * @param key
+		 *            the key ("er.extensions.akey" in
+		 *            "er.extensions.akey.@someOperatorKey.aparameter=somevalue")
+		 * @param value
+		 *            ("somevalue" in
+		 *            "er.extensions.akey.@someOperatorKey.aparameter=somevalue")
+		 * @param parameters
+		 *            ("aparameter" in
+		 *            "er.extensions.akey.@someOperatorKey.aparameter=somevalue")
+		 * @return a dictionary of properties (or null to use the original key
+		 *         and value)
+		 */
+		public NSDictionary<String, String> compute(String key, String value, String parameters);
+	}
+
+	/**
+	 * <p>
+	 * InRangeOperator provides support for defining properties that only
+	 * get set if a value falls within a specific range of values.
+	 * </p>
+	 * 
+	 * <p>
+	 * An example of this is instance-number-based properties, where you want to 
+	 * only set a specific value if the instance number of the application falls
+	 * within a certain value. In this example, because instance number is 
+	 * something that is associated with a request rather than the application 
+	 * itself, it is up to the class registering this operator to specify which 
+	 * instance number this application is (via, for instance, a custom system property).
+	 * </p>
+	 * 
+	 * <p>
+	 * InRangeOperator supports specifying keys like:
+	 * </p>
+	 * 
+	 * <code>er.extensions.akey.@forInstance.50=avalue</code>
+	 * <p>
+	 * which would set the value of "er.extensions.akey" to "avalue" if this
+	 * instance is 50.
+	 * </p>
+	 * 
+	 * <code>er.extensions.akey.@forInstance.60,70=avalue</code>
+	 * <p>
+	 * which would set the value of "er.extensions.akey" to "avalue" if this
+	 * instance is 60 or 70.
+	 * </p>
+	 * 
+	 * <code>er.extensions.akey.@forInstance.100-300=avalue</code>
+	 * <p>
+	 * which would set the value of "er.extensions.akey" to "avalue" if this
+	 * instance is between 100 and 300 (inclusive).
+	 * </p>
+	 * 
+	 * <code>er.extensions.akey.@forInstance.20-30,500=avalue</code>
+	 * <p>
+	 * which would set the value of "er.extensions.akey" to "avalue" if this
+	 * instance is between 20 and 30 (inclusive), or if the instance is 50.
+	 * </p>
+	 * 
+	 * <p>
+	 * If there are multiple inRange operators that match for the same key,
+	 * the last property (when sorted alphabetically by key name) will win. As a
+	 * result, it's important to not define overlapping ranges, or you
+	 * may get unexpected results.
+	 * </p>
+	 * 
+	 * @author mschrag
+	 */
+	public static class InRangeOperator implements ERXProperties.Operator {
+		/**
+		 * The default key name of the ForInstance variant of the InRange operator.
+		 */
+		public static final String ForInstanceKey = "forInstance";
+
+		private int _instanceNumber;
+
+		/**
+		 * Constructs a new InRangeOperator.
+		 * 
+		 * @param value
+		 *            the instance number of this application
+		 */
+		public InRangeOperator(int value) {
+			_instanceNumber = value;
+		}
+
+		public NSDictionary<String, String> compute(String key, String value, String parameters) {
+			NSDictionary<String, String> computedProperties = null;
+			if (parameters != null && parameters.length() > 0) {
+				boolean instanceNumberMatches = false;
+				String[] ranges = parameters.split(",");
+				for (String range : ranges) {
+					range = range.trim();
+					int dashIndex = range.indexOf('-');
+					if (dashIndex == -1) {
+						int singleValue = Integer.parseInt(range);
+						if (_instanceNumber == singleValue) {
+							instanceNumberMatches = true;
+							break;
+						}
+					}
+					else {
+						int lowValue = Integer.parseInt(range.substring(0, dashIndex).trim());
+						int highValue = Integer.parseInt(range.substring(dashIndex + 1).trim());
+						if (_instanceNumber >= lowValue && _instanceNumber <= highValue) {
+							instanceNumberMatches = true;
+							break;
+						}
+					}
+				}
+				if (instanceNumberMatches) {
+					computedProperties = new NSDictionary<String, String>(value, key);
+				}
+				else {
+					computedProperties = new NSDictionary<String, String>();
+				}
+			}
+			return computedProperties;
+		}
+	}
+
+	/**
+	 * <p>
+	 * Encrypted operator supports decrypting values using the default crypter. To register this
+	 * operator, add the following static block to your Application class:
+	 * </p>
+	 * 
+	 * <code>
+	 * static {
+	 *   ERXProperties.setOperatorForKey(new ERXProperties.EncryptedOperator(), ERXProperties.EncryptedOperator.Key);
+	 * }
+	 * </code>
+	 * 
+	 * Call er.extensions.ERXProperties.EncryptedOperator.register() in an Application static
+	 * block to register this operator.
+	 * </p> 
+	 * 
+	 * @author mschrag
+	 */
+	public static class EncryptedOperator implements ERXProperties.Operator {
+		public static final String Key = "encrypted";
+
+		public static void register() {
+			ERXProperties.setOperatorForKey(new ERXProperties.EncryptedOperator(), ERXProperties.EncryptedOperator.Key);
+		}
+
+		public NSDictionary<String, String> compute(String key, String value, String parameters) {
+			String decryptedValue = ERXCrypto.defaultCrypter().decrypt(value);
+			return new NSDictionary<String, String>(decryptedValue, key);
+		}
+	}
+
+	/**
+	 * For each property in originalProperties, process the keys and avlues with
+	 * the registered property operators and stores the converted value into
+	 * destinationProperties.
+	 * 
+	 * @param originalProperties
+	 *            the properties to convert
+	 * @param destinationProperties
+	 *            the properties to copy into
+	 */
+	public static void evaluatePropertyOperators(Properties originalProperties, Properties destinationProperties) {
+		NSArray<String> operatorKeys = ERXProperties.operators.allKeys();
+		for (Object keyObj : new TreeSet<Object>(originalProperties.keySet())) {
+			String key = (String) keyObj;
+			if (key != null && key.length() > 0) {
+				String value = originalProperties.getProperty(key);
+				if (!operatorKeys.isEmpty() && key.indexOf(".@") != -1) {
+					ERXProperties.Operator operator = null;
+					NSDictionary<String, String> computedProperties = null;
+					for (String operatorKey : operatorKeys) {
+						String operatorKeyWithAt = ".@" + operatorKey;
+						if (key.endsWith(operatorKeyWithAt)) {
+							operator = ERXProperties.operators.objectForKey(operatorKey);
+							computedProperties = operator.compute(key.substring(0, key.length() - operatorKeyWithAt.length()), value, null);
+							break;
+						}
+						else {
+							int keyIndex = key.indexOf(operatorKeyWithAt + ".");
+							operator = ERXProperties.operators.objectForKey(operatorKey);
+							computedProperties = operator.compute(key.substring(0, keyIndex), value, key.substring(keyIndex + operatorKeyWithAt.length() + 1));
+							break;
+						}
+					}
+
+					if (computedProperties == null) {
+						destinationProperties.put(key, value);
+					}
+					else {
+						originalProperties.remove(key);
+						for (String computedKey : computedProperties.allKeys()) {
+							destinationProperties.put(computedKey, computedProperties.objectForKey(computedKey));
+						}
+					}
+				}
+				else {
+					destinationProperties.put(key, value);
+				}
+			}
+		}
+	}
 }
