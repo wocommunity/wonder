@@ -113,7 +113,7 @@ public class ERXSystem implements NSKeyValueCoding, NSKeyValueCodingAdditions {
 	}
 
 	/**
-	 * Converts the properties from NSProperties._getProperties() and replaces
+	 * Converts and evaluates the properties from NSProperties._getProperties() and replaces
 	 * the converted values in-place.
 	 */
 	public static void updateProperties() {
