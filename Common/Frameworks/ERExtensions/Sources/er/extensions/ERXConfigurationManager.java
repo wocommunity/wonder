@@ -270,6 +270,7 @@ public class ERXConfigurationManager {
                     try {
                         Properties props = ERXProperties.propertiesFromFile(file);
                         ERXProperties.transferPropertiesFromSourceToDest(props, systemProperties);
+                        ERXSystem.updateProperties();
                     } catch (java.io.IOException ex) {
                         log.error("Unable to load optional configuration file: " + configFile, ex);
                     }
@@ -341,6 +342,7 @@ public class ERXConfigurationManager {
             String monitoredPropertiesPath = (String) monitoredProperties.objectAtIndex(i);
             Properties loadedProperty = ERXProperties.propertiesFromPath(monitoredPropertiesPath);
             ERXProperties.transferPropertiesFromSourceToDest(loadedProperty, systemProperties);
+            ERXSystem.updateProperties();
         }
     }
 
@@ -348,6 +350,7 @@ public class ERXConfigurationManager {
         Properties commandLineProperties = ERXProperties.propertiesFromArgv(commandLineArguments);
         Properties systemProperties = System.getProperties(); 
         ERXProperties.transferPropertiesFromSourceToDest(commandLineProperties, systemProperties);
+        ERXSystem.updateProperties();
         log.debug("Reinserted the command line arguments to the system properties.");
     }
 
