@@ -1340,9 +1340,11 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
 						}
 						else {
 							int keyIndex = key.indexOf(operatorKeyWithAt + ".");
-							operator = ERXProperties.operators.objectForKey(operatorKey);
-							computedProperties = operator.compute(key.substring(0, keyIndex), value, key.substring(keyIndex + operatorKeyWithAt.length() + 1));
-							break;
+							if (keyIndex != -1) {
+								operator = ERXProperties.operators.objectForKey(operatorKey);
+								computedProperties = operator.compute(key.substring(0, keyIndex), value, key.substring(keyIndex + operatorKeyWithAt.length() + 1));
+								break;
+							}
 						}
 					}
 
