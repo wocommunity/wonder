@@ -118,7 +118,12 @@ Object.extend(Form, {
     	
     	selects = $(form).getElementsByTagName('select');
     	for (selectIdx=0; selectIdx < selects.length; selectIdx++) {
-    		selects[selectIdx].selectedIndex = -1;
+    	alert(selects[selectIdx].type);
+            if (selects[selectIdx].type == 'select-multiple') {
+                selects[selectIdx].selectedIndex = -1;
+            } else {
+                selects[selectIdx].selectedIndex = 0;
+            }
     	}
     }
 });  
