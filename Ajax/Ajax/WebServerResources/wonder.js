@@ -118,7 +118,7 @@ Object.extend(Form, {
     	
     	selects = $(form).getElementsByTagName('select');
     	for (selectIdx=0; selectIdx < selects.length; selectIdx++) {
-    		selects[selectIdx].selectedIndex = 0;
+    		selects[selectIdx].selectedIndex = -1;
     	}
     }
 });  
