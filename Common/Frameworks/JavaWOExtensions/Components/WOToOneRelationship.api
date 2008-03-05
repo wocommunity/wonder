@@ -10,17 +10,17 @@
 		<binding name="sourceEntityName"/>
 		<binding name="sourceObject"/>
 		<binding name="uiStyle"/>
+		<binding name="selection"/>
 
-		<validation message="&apos;sourceEntityName&apos; is a required binding">
-			<unbound name="sourceEntityName"/>
-		</validation>
-
-		<validation message="&apos;sourceObject&apos; is a required binding">
-			<unbound name="sourceObject"/>
-		</validation>
-
-		<validation message="&apos;relationshipKey&apos; is a required binding">
-			<unbound name="relationshipKey"/>
+		<validation message = "You must bind &apos;selection&apos; or &apos;sourceEntityName&apos;, &apos;sourceObject&apos;, and &apos;relationshipKey&apos;.">
+			<and>
+				<unbound name = "selection"/>
+				<or>
+					<unbound name="sourceEntityName"/>
+					<unbound name="sourceObject"/>
+					<unbound name="relationshipKey"/>
+				</or>
+			</and>
 		</validation>
 	</wo>
 </wodefinitions>

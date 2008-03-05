@@ -2,8 +2,10 @@ package er.extensions;
 
 import org.apache.log4j.Logger;
 
+import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WORequest;
+import com.webobjects.appserver._private.WOKeyValueAssociation;
 import com.webobjects.eoaccess.EODatabaseDataSource;
 import com.webobjects.eoaccess.EOEntity;
 import com.webobjects.eoaccess.EORelationship;
@@ -128,6 +130,9 @@ public abstract class ERXArrayChooser extends ERXStatelessComponent {
     public String sourceEntityName() {
         if(_sourceEntityName == null) {
             _sourceEntityName = (String)valueForBinding("sourceEntityName");
+            if (_sourceEntityName == null) {
+            	loadBindingsFromSelection();
+            }
         }
         return _sourceEntityName;
     }
@@ -162,6 +167,42 @@ public abstract class ERXArrayChooser extends ERXStatelessComponent {
         	}
         }
         return ec;
+    }
+    
+    /**
+     * <p>
+     * I'm lazy. I don't want to bind sourceObject, sourceEntityName, and relationshipKey.
+     * Work it out, Wonder, that's what I say.  So if you bind, for instance:
+     * </p>
+     * 
+     * <code>
+     * selection = person.company;
+     * </code>
+     * 
+     * <p>
+     * ... it will figure out that the sourceObject is "person", the relationshipKey is "company"
+     * and the sourceEntityName is "Person".
+     * </p>
+     */
+    protected void loadBindingsFromSelection() {
+    	WOKeyValueAssociation selectionAssociation = (WOKeyValueAssociation)_associationWithName("selection");
+    	if (selectionAssociation != null) {
+	    	String selectionKeyPath = selectionAssociation.keyPath();
+	    	WOComponent parent = parent();
+	    	int lastDotIndex = selectionKeyPath.lastIndexOf('.');
+	    	if (lastDotIndex == -1) {
+	    		_sourceObject = parent;
+	    		_relationshipKey = selectionKeyPath;
+	    	}
+	    	else {
+	    		String sourceObjectKeyPath = selectionKeyPath.substring(0, lastDotIndex);
+	    		_sourceObject = parent.valueForKeyPath(sourceObjectKeyPath);
+	    		_relationshipKey = selectionKeyPath.substring(lastDotIndex + 1);
+		    	if (_sourceObject instanceof EOEnterpriseObject) {
+		    		_sourceEntityName = ((EOEnterpriseObject)_sourceObject).entityName();
+		    	}
+	    	}
+    	}
     }
 
 
@@ -206,6 +247,9 @@ public abstract class ERXArrayChooser extends ERXStatelessComponent {
     public String relationshipKey() {
         if(_relationshipKey == null) {
             _relationshipKey = (String)valueForBinding("relationshipKey");
+            if (_relationshipKey == null) {
+            	loadBindingsFromSelection();
+            }
         }
         return _relationshipKey;
     }
@@ -214,7 +258,10 @@ public abstract class ERXArrayChooser extends ERXStatelessComponent {
         if(_sourceObject == null) {
             _sourceObject = valueForBinding("sourceObject");
             if(_sourceObject == null) {
-                throw new IllegalStateException("sourceObject is a required binding.");
+            	loadBindingsFromSelection();
+            	if (_sourceObject == null) {
+            		throw new IllegalStateException("sourceObject is a required binding.");
+            	}
             }
         }
         return _sourceObject;
