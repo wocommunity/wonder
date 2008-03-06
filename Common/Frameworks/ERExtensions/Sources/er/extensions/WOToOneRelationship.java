@@ -73,6 +73,9 @@ public class WOToOneRelationship extends ERXArrayChooser {
         }
         
         updateSourceObject(value);
+        if (hasBinding("selection") && !(sourceObject() instanceof EOEnterpriseObject)) {
+        	setValueForBinding(value, "selection");
+        }
     }
 
     public NSArray currentValues() {

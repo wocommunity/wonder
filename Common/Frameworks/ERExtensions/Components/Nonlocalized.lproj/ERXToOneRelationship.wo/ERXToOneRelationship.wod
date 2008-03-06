@@ -6,6 +6,9 @@ Browser: WOBrowser {
 	selections = selection;
 	size = ^size;
     name=^popupName;
+	class = ^class;
+	id = ^id;
+	disabled = ^disabled;
 }
 
 IsBrowserConditional: WOConditional {
@@ -29,6 +32,9 @@ PopupList: WOPopUpButton {
 	onChange = ^onChange;
 	onBlur = ^onBlur;
 	escapeHTML = false;
+	class = ^class;
+	id = ^id;
+	disabled = ^disabled;
 }
 
 RadioButtonMatrix: ERXRadioButtonMatrix {
@@ -38,6 +44,9 @@ RadioButtonMatrix: ERXRadioButtonMatrix {
 	selection = selection;
 	uniqueID = ^uniqueID;
     goingVertically = ^goingVertically;
+	class = ^class;
+	id = ^id;
+	disabled = ^disabled;
 }
 
 String: WOString {
