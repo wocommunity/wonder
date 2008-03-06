@@ -151,9 +151,15 @@ public abstract class ERXArrayChooser extends ERXStatelessComponent {
     }
     
     protected NSArray destinationSortKeys() {
-        String s = destinationSortKey();
-        NSArray a = NSArray.componentsSeparatedByString(s, ",");
-        return a;
+        String destinationSortKey = destinationSortKey();
+        NSArray destinationSortKeys;
+        if (destinationSortKey != null) {
+        	destinationSortKeys = NSArray.componentsSeparatedByString(destinationSortKey, ",");
+        }
+        else {
+        	destinationSortKeys = NSArray.EmptyArray;
+        }
+        return destinationSortKeys;
     }
 
     protected EOEditingContext editingContext() {
@@ -211,6 +217,10 @@ public abstract class ERXArrayChooser extends ERXStatelessComponent {
     }
 
     public String destinationEntityName() {
+    	return _destinationEntityName(true);
+    }
+    
+    public String _destinationEntityName(boolean throwExceptionIfMissing) {
         if(_destinationEntityName == null) {
             _destinationEntityName = (String)valueForBinding("destinationEntityName");
             if(_destinationEntityName == null) {
@@ -234,11 +244,12 @@ public abstract class ERXArrayChooser extends ERXStatelessComponent {
                         destinationEntity = ERXEOAccessUtilities.entityNamed(ec, anEntityName);
                     }
                 }
-                if(destinationEntity == null) {
-                    throw new IllegalStateException("Destination entity could not be retrieved from EO of bindings. Either set the \"sourceObject\" to an EO, provide the \"sourceEntityName\" and \"relationshipKey\", the \"destinationEntityName\" or the \"list\" binding.");
+                if(destinationEntity == null && throwExceptionIfMissing) {
+                    throw new IllegalStateException("Destination entity could not be retrieved from EO of bindings. Either set the \"sourceObject\" to an EO, provide the \"sourceEntityName\" and \"relationshipKey\", the \"destinationEntityName\" or the \"possibleChoices\" binding.");
                 }
-                
-                _destinationEntityName = destinationEntity.name();
+                if (destinationEntity != null) {
+                	_destinationEntityName = destinationEntity.name();
+                }
             }
         }
         return _destinationEntityName;
@@ -271,7 +282,9 @@ public abstract class ERXArrayChooser extends ERXStatelessComponent {
         if(_destinationDisplayKey == null) {
             _destinationDisplayKey = (String)valueForBinding("destinationDisplayKey");
             if(_destinationDisplayKey == null) {
-                _destinationDisplayKey = "userPresentableDescription";
+            	if (_destinationEntityName(false) != null) {
+            		_destinationDisplayKey = "userPresentableDescription";
+            	}
             }
         }
         return _destinationDisplayKey;
@@ -344,6 +357,9 @@ public abstract class ERXArrayChooser extends ERXStatelessComponent {
 
     public void setTheCurrentItem(Object aValue) {
         theCurrentItem = aValue;
+        if (hasBinding("item")) {
+        	setValueForBinding(theCurrentItem, "item");
+        }
     }
 
     public abstract NSArray currentValues();
@@ -368,8 +384,11 @@ public abstract class ERXArrayChooser extends ERXStatelessComponent {
             		_list = NSArray.EmptyArray;
             	}
             }
+            NSArray destinationSortKeys = destinationSortKeys();
             NSSelector sorting = (sortCaseInsensitive() ? EOSortOrdering.CompareAscending : EOSortOrdering.CompareCaseInsensitiveAscending);
-            _list = ERXArrayUtilities.sortedArraySortedWithKeys(_list, destinationSortKeys(), sorting);
+            if (destinationSortKeys != null && destinationSortKeys.count() > 0) {
+	            _list = ERXArrayUtilities.sortedArraySortedWithKeys(_list, destinationSortKeys, sorting);
+            }
             if(includeUnmatchedValues()) {
             	NSArray currentValues = currentValues();
             	if(currentValues.count() > 0) {
@@ -380,7 +399,9 @@ public abstract class ERXArrayChooser extends ERXStatelessComponent {
                 		if(_unmatchedValues.lastObject() instanceof EOEnterpriseObject) {
             				_unmatchedValues = ERXEOControlUtilities.localInstancesOfObjects(editingContext(), _unmatchedValues);
             			}
-            			_unmatchedValues = ERXArrayUtilities.sortedArraySortedWithKeys(_unmatchedValues, destinationSortKeys(), sorting);
+                        if (destinationSortKeys != null && destinationSortKeys.count() > 0) {
+                        	_unmatchedValues = ERXArrayUtilities.sortedArraySortedWithKeys(_unmatchedValues, destinationSortKeys, sorting);
+                        }
             			_list = _list.arrayByAddingObjectsFromArray(_unmatchedValues);
             		}
             	} else {
@@ -396,7 +417,10 @@ public abstract class ERXArrayChooser extends ERXStatelessComponent {
         Object currentValue;
         if (theCurrentItem==NO_SELECTION_STRING) {
             currentValue = noneString();
-        } else {
+        } else if (hasBinding("displayString")) {
+            currentValue = valueForBinding("displayString");
+        }
+        else {
             currentValue = NSKeyValueCodingAdditions.Utility.valueForKeyPath(theCurrentItem, destinationDisplayKey());
         }
         if(localizeDisplayKeys() && currentValue != null && theCurrentItem!=NO_SELECTION_STRING) {
