@@ -1440,10 +1440,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 			}
 
 			if (ERXApplication.requestHandlingLog.isDebugEnabled()) {
-				WOContext context = ERXWOContext.currentContext();
-				if (context != null && context.request() != null) {
-					ERXApplication.requestHandlingLog.debug(context.request());
-				}
+				ERXApplication.requestHandlingLog.debug(request);
 			}
 		}
 		finally {
