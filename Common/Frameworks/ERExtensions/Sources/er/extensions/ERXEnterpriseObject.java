@@ -20,9 +20,7 @@ public interface ERXEnterpriseObject extends EOEnterpriseObject {
     /** logging support for modified objects */
     public static final Logger logMod = Logger.getLogger("er.transaction.delegate.EREditingContextDelegate.modifiedObjects");
 
-    public final static boolean updateInverseRelationships = ERXProperties.booleanForKey("er.extensions.ERXEnterpriseObject.updateInverseRelationships");
-
-    public final static boolean applyRestrictingQualifierOnInsert = ERXProperties.booleanForKey("er.extensions.ERXEnterpriseObject.applyRestrictingQualifierOnInsert");
+    public static final boolean applyRestrictingQualifierOnInsert = ERXProperties.booleanForKey("er.extensions.ERXEnterpriseObject.applyRestrictingQualifierOnInsert");
     
 
     /**
@@ -607,4 +605,15 @@ public interface ERXEnterpriseObject extends EOEnterpriseObject {
     public abstract void batchCheckConsistency()
             throws NSValidation.ValidationException;
 
+	
+    /**
+     * Toggles whether or not inverse relationships should be updates.  This is
+     * called by ERXGenericRecord.InverseRelationshipUpdater to prevent infinite
+     * loops and should not be called by anything else unless you know exactly
+     * what you are doing.
+     * 
+     * @param newValue whether or not inverse relationships should be updated
+     * @return the previous setting of the updateInverseRelationships setting
+     */
+	public abstract boolean _setUpdateInverseRelationships(boolean newValue);
 }
