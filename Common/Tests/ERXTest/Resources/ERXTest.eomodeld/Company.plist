@@ -29,7 +29,7 @@
         }
     ); 
     attributesUsedForLocking = (address1, address2, city, id, name, state, zipcode); 
-    className = Company; 
+    className = "er.erxtest.model.Company"; 
     classProperties = (address1, address2, city, employees, name, state, zipcode); 
     externalName = Company; 
     fetchSpecificationDictionary = {}; 

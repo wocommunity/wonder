@@ -1,9 +1,10 @@
+package er.erxtest.tests;
 import junit.framework.TestCase;
 import er.extensions.ERXExpiringCache;
 
 public class ERXExpiringCacheTestCase extends TestCase {
   public void testThatItWorksAtAll() {
-    ERXExpiringCache<String, String> cache = new ERXExpiringCache<String, String>(10);
+    ERXExpiringCache<String, String> cache = new ERXExpiringCache<String, String>(100);
     cache.setObjectForKey("Krank", "Anjo");
     cache.setObjectForKey("Schrag", "Mike");
     assertEquals("Schrag", cache.objectForKey("Mike"));
@@ -59,7 +60,9 @@ public class ERXExpiringCacheTestCase extends TestCase {
   }
 
   public void testTimeExpiration() {
-    ERXExpiringCache<String, String> cache = new ERXExpiringCache<String, String>(10);
+    ERXExpiringCache<String, String> cache = new ERXExpiringCache<String, String>(15);
+    cache.startBackgroundExpiration();
+    
     cache.setObjectForKey("Krank", "Anjo");
     cache.setObjectForKey("Schrag", "Mike");
     assertEquals("Schrag", cache.objectForKey("Mike"));
@@ -82,7 +85,7 @@ public class ERXExpiringCacheTestCase extends TestCase {
     assertEquals("Hill", cache.objectForKey("Chuck"));
 
     try {
-      Thread.sleep(7000);
+      Thread.sleep(12000);
     }
     catch (Throwable t) {
       t.printStackTrace();
@@ -92,7 +95,7 @@ public class ERXExpiringCacheTestCase extends TestCase {
     assertEquals("Hill", cache.objectForKey("Chuck"));
     
     try {
-      Thread.sleep(5000);
+      Thread.sleep(10000);
     }
     catch (Throwable t) {
       t.printStackTrace();
@@ -100,5 +103,7 @@ public class ERXExpiringCacheTestCase extends TestCase {
     assertEquals(null, cache.objectForKey("Mike"));
     assertEquals(null, cache.objectForKey("Anjo"));
     assertEquals(null, cache.objectForKey("Chuck"));
+    
+    cache.stopBackgroundExpiration();
   }
 }

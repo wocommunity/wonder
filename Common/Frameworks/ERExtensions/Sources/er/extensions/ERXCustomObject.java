@@ -58,7 +58,7 @@ import com.webobjects.foundation.NSValidation;
 public class ERXCustomObject extends EOCustomObject implements ERXGuardedObjectInterface, ERXGeneratesPrimaryKeyInterface, ERXEnterpriseObject {
 
     /** holds all subclass related Logger's */
-    private static NSMutableDictionary classLogs = new NSMutableDictionary();
+    private static NSMutableDictionary<Class, Logger> classLogs = new NSMutableDictionary<Class, Logger>();
      
     public static boolean shouldTrimSpaces(){
         return ERXProperties.booleanForKeyWithDefault("er.extensions.ERXCustomObject.shouldTrimSpaces", false);
@@ -77,11 +77,19 @@ public class ERXCustomObject extends EOCustomObject implements ERXGuardedObjectI
     
     protected boolean wasInitialized;
     
+    private boolean _updateInverseRelationships = ERXGenericRecord.InverseRelationshipUpdater.updateInverseRelationships();
+
+	public boolean _setUpdateInverseRelationships(boolean newValue) {
+		boolean old = _updateInverseRelationships;
+		_updateInverseRelationships = newValue;
+		return old;
+	}
+
     /* (non-Javadoc)
      * @see er.extensions.ERXEnterpriseObject#getClassLog()
      */
     public Logger getClassLog() {
-        Logger classLog = (Logger)classLogs.objectForKey(this.getClass());
+        Logger classLog = classLogs.objectForKey(this.getClass());
         if ( classLog == null) {
             synchronized(classLogs) {
                 classLog = Logger.getLogger(this.getClass());
@@ -296,7 +304,8 @@ public class ERXCustomObject extends EOCustomObject implements ERXGuardedObjectI
      * @param editingContext to be checked to make sure it has the
      *      correct type of delegate set.
      */
-    public void awakeFromClientUpdate(EOEditingContext editingContext) {
+    @Override
+	public void awakeFromClientUpdate(EOEditingContext editingContext) {
         _checkEditingContextDelegate(editingContext);
         super.awakeFromClientUpdate(editingContext);
         wasInitialized = true;
@@ -309,7 +318,8 @@ public class ERXCustomObject extends EOCustomObject implements ERXGuardedObjectI
      * @param editingContext to be checked to make sure it has the
      *      correct type of delegate set.
      */
-    public void awakeFromInsertion(EOEditingContext editingContext) {
+    @Override
+	public void awakeFromInsertion(EOEditingContext editingContext) {
         _checkEditingContextDelegate(editingContext);
         if (insertionTrackingLog.isDebugEnabled()) {
             insertionStackTrace = ERXUtilities.stackTrace();
@@ -344,7 +354,8 @@ public class ERXCustomObject extends EOCustomObject implements ERXGuardedObjectI
      * @param editingContext to be checked to make sure it has the
      *      correct type of delegate set.
      */
-    public void awakeFromFetch(EOEditingContext editingContext) {
+    @Override
+	public void awakeFromFetch(EOEditingContext editingContext) {
         _checkEditingContextDelegate(editingContext);
         super.awakeFromFetch(editingContext);
         wasInitialized = true;
@@ -357,7 +368,8 @@ public class ERXCustomObject extends EOCustomObject implements ERXGuardedObjectI
      * @param eo enterprise object to be added to the relationship
      * @param key relationship to add the object to.
      */
-    public void addObjectToBothSidesOfRelationshipWithKey(EORelationshipManipulation eo, String key) {
+    @Override
+	public void addObjectToBothSidesOfRelationshipWithKey(EORelationshipManipulation eo, String key) {
         if (eo!=null &&
             ((EOEnterpriseObject)eo).editingContext()!=editingContext() &&
             !(editingContext() instanceof EOSharedEditingContext) &&
@@ -463,7 +475,8 @@ public class ERXCustomObject extends EOCustomObject implements ERXGuardedObjectI
      *      a new primary key dictionary is created, cached and returned.
      */
     // FIXME: this method is really misnamed; it should be called rawPrimaryKeyDictionary
-    public NSDictionary primaryKeyDictionary(boolean inTransaction) {
+    @SuppressWarnings("unchecked")
+	public NSDictionary primaryKeyDictionary(boolean inTransaction) {
         if(_primaryKeyDictionary == null) {
             if (!inTransaction) {
                 Object rawPK = rawPrimaryKey();
@@ -505,7 +518,8 @@ public class ERXCustomObject extends EOCustomObject implements ERXGuardedObjectI
     /* (non-Javadoc)
      * @see er.extensions.ERXEnterpriseObject#localInstancesOf(com.webobjects.foundation.NSArray)
      */
-    public NSArray localInstancesOf(NSArray eos) {
+    @SuppressWarnings("unchecked")
+	public NSArray localInstancesOf(NSArray eos) {
         return ERXEOControlUtilities.localInstancesOfObjects(editingContext(), eos);
     }
 
@@ -552,7 +566,8 @@ public class ERXCustomObject extends EOCustomObject implements ERXGuardedObjectI
      * @return much less verbose description of an enterprise
      *      object.
      */
-    public String toString() {
+    @Override
+	public String toString() {
         String pk = primaryKey();
         pk = (pk == null) ? "null" : pk;
         return "<" + getClass().getName() + " pk:\""+ pk + "\">";
@@ -617,7 +632,8 @@ public class ERXCustomObject extends EOCustomObject implements ERXGuardedObjectI
      * @throws NSValidation.ValidationException if the value fails validation
      * @return the validated value
      */
-    public Object validateValueForKey(Object value, String key) throws NSValidation.ValidationException {
+    @Override
+	public Object validateValueForKey(Object value, String key) throws NSValidation.ValidationException {
         if (validation.isDebugEnabled())
             validation.debug("ValidateValueForKey on eo: " + this + " value: " + value + " key: " + key);
         if (key==null) // better to raise before calling super which will crash
@@ -654,7 +670,8 @@ public class ERXCustomObject extends EOCustomObject implements ERXGuardedObjectI
      * @throws NSValidation.ValidationException if the object does not
      *      pass validation for saving to the database.
      */
-    public void validateForSave( )  throws NSValidation.ValidationException {
+    @Override
+	public void validateForSave( )  throws NSValidation.ValidationException {
         // This condition shouldn't ever happen, but it does ;)
         // CHECKME: This was a 4.5 issue, not sure if this one has been fixed yet.
         if (editingContext() != null && editingContext().deletedObjects().containsObject(this)) {
@@ -673,7 +690,8 @@ public class ERXCustomObject extends EOCustomObject implements ERXGuardedObjectI
      * @throws NSValidation.ValidationException if the object does not
      *      pass validation for saving to the database.
      */
-    public void validateForInsert() throws NSValidation.ValidationException {
+    @Override
+	public void validateForInsert() throws NSValidation.ValidationException {
         EOClassDescription cd = classDescription();
         if(cd instanceof ERXEntityClassDescription) {
             ((ERXEntityClassDescription)cd).validateObjectForInsert(this);
@@ -686,7 +704,8 @@ public class ERXCustomObject extends EOCustomObject implements ERXGuardedObjectI
      * @throws NSValidation.ValidationException if the object does not
      *      pass validation for saving to the database.
      */
-    public void validateForUpdate() throws NSValidation.ValidationException {
+    @Override
+	public void validateForUpdate() throws NSValidation.ValidationException {
         EOClassDescription cd = classDescription();
         if(cd instanceof ERXEntityClassDescription) {
             ((ERXEntityClassDescription)cd).validateObjectForUpdate(this);
@@ -699,7 +718,8 @@ public class ERXCustomObject extends EOCustomObject implements ERXGuardedObjectI
      * @throws NSValidation.ValidationException if the object does not
      *      pass validation for saving to the database.
      */
-    public void validateForDelete() throws NSValidation.ValidationException {
+    @Override
+	public void validateForDelete() throws NSValidation.ValidationException {
         EOClassDescription cd = classDescription();
         if(cd instanceof ERXEntityClassDescription) {
             ((ERXEntityClassDescription)cd).validateObjectForDelete(this);
@@ -718,102 +738,40 @@ public class ERXCustomObject extends EOCustomObject implements ERXGuardedObjectI
      */
     public void batchCheckConsistency() throws NSValidation.ValidationException {}
     
-    /**
-     * Overridden to support two-way relationship setting.
-     */
-    protected void includeObjectIntoPropertyWithKey(Object o, String key) {
-    	super.includeObjectIntoPropertyWithKey(o, key);
-    	if(ERXEnterpriseObject.updateInverseRelationships && o != null) {
-    		String inverse = classDescription().inverseForRelationshipKey(key);
-    		if(inverse != null) {
-    			EOEnterpriseObject eo = (EOEnterpriseObject) o;
-				if(!eo.isToManyKey(inverse)) {
-					EOEnterpriseObject value = (EOEnterpriseObject)eo.valueForKey(inverse);
-					if(value != this) {
-						eo.takeValueForKey(this, inverse);
-					}
-				} else {
-					NSArray values = (NSArray)eo.valueForKey(inverse);
-					if(!values.containsObject(this)) {
-						eo.addObjectToPropertyWithKey(this, inverse);
-					}
-				}
-    		}
-    	}
-    }
+	/**
+	 * Overridden to support two-way relationship setting.
+	 */
+	@Override
+	protected void includeObjectIntoPropertyWithKey(Object o, String key) {
+		if (_updateInverseRelationships) {
+			ERXGenericRecord.InverseRelationshipUpdater.includeObjectIntoPropertyWithKey(this, o, key);
+		}
+		super.includeObjectIntoPropertyWithKey(o, key);
+	}
     
+	/**
+	 * Overridden to support two-way relationship setting.
+	 */
+	@Override
+	protected void excludeObjectFromPropertyWithKey(Object o, String key) {
+		if (_updateInverseRelationships) {
+			ERXGenericRecord.InverseRelationshipUpdater.excludeObjectFromPropertyWithKey(this, o, key);
+		}
+		super.excludeObjectFromPropertyWithKey(o, key);
+	}
     
-    /**
-     * Overridden to support two-way relationship setting.
-     */
-    protected void excludeObjectFromPropertyWithKey(Object o, String key) {
-       	super.excludeObjectFromPropertyWithKey(o, key);
-    	if(ERXEnterpriseObject.updateInverseRelationships && o != null) {
-    		String inverse = classDescription().inverseForRelationshipKey(key);
-    		if(inverse != null) {
-				EOEnterpriseObject eo = (EOEnterpriseObject) o;
-    			if(!eo.isToManyKey(inverse)) {
-					if(eo.valueForKey(inverse) != null) {
-						eo.takeValueForKey(null, inverse);
-					}
-				} else {
-					NSArray values = (NSArray)eo.valueForKey(inverse);
-					if(values.containsObject(this)) {
-						eo.removeObjectFromPropertyWithKey(this, inverse);
-					}
-				}
-    		}
-    	}
-    }
-    
-    /**
-     * Overridden to support two-way relationship setting.
-     */
-    public void takeStoredValueForKey(Object object, String key) {
-    	// we only handle toOne keys here, but there is no API for that so
-    	// this unreadable monster first checks the fastest thing, the the slower conditions
-    	if(ERXEnterpriseObject.updateInverseRelationships && wasInitialized && (object instanceof EOEnterpriseObject || 
-    			((object == null) && !isToManyKey(key) 
-    					&& classDescriptionForDestinationKey(key) != null))) {
-    		String inverse = classDescription().inverseForRelationshipKey(key);
-    		if(inverse != null) {
-    			if(object != null) {
-    				EOEnterpriseObject eo = (EOEnterpriseObject)object;
-    				super.takeStoredValueForKey(object, key);
-    				if(eo.isToManyKey(inverse)) {
-    					NSArray values = (NSArray)eo.valueForKey(inverse);
-    					if(!values.containsObject(this)) {
-    						eo.addObjectToPropertyWithKey(this, inverse);
-    					}
-    				} else {
-    					EOEnterpriseObject old = (EOEnterpriseObject) eo.valueForKey(inverse);
-    					if(old != this) {
-    						eo.takeValueForKey(this, inverse);
-    					}
-    				}
-    			} else {
-    				EOEnterpriseObject old = (EOEnterpriseObject) valueForKey(key);
-    				super.takeStoredValueForKey(null, key);
-    				if(old != null) { 
-    					if(old.isToManyKey(inverse)) {
-    						NSArray values = (NSArray) old.valueForKey(inverse);
-    						if(values.containsObject(this)) {
-    							old.removeObjectFromPropertyWithKey(this, inverse);
-    						}
-    					} else {
-    						if(old == this) {
-    							old.takeValueForKey(null, inverse);
-        					}
-    					}
-    				}
-    			}
-    		} else {
-    			super.takeStoredValueForKey(object, key);
-    		}
-    	} else {
-    		super.takeStoredValueForKey(object, key);
-    	}
-    }
+	@Override
+	public void takeValueForKey(Object value, String key) {
+		super.takeValueForKey(value, key);
+	}
+	
+	@Override
+	public void takeStoredValueForKey(Object value, String key) {
+		if (_updateInverseRelationships) {
+			ERXGenericRecord.InverseRelationshipUpdater.takeStoredValueForKey(this, value, key);
+		}
+		super.takeStoredValueForKey(value, key);
+	}
 
     
     // Debugging aids -- turn off during production

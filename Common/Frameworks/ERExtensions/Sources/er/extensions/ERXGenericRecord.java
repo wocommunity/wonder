@@ -83,6 +83,7 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
 	 * @param key
 	 * @return NSArray of language/locale keys
 	 */
+	@SuppressWarnings("unchecked")
 	public NSArray<String> localesForKey(String key) {
 		NSArray<String> result = NSArray.EmptyArray;
 		EOClassDescription cd = classDescription();
@@ -102,6 +103,7 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
 	 * @param <T>
 	 * @param key
 	 */
+	@SuppressWarnings("unchecked")
 	public final <T> T valueForKey(ERXKey<T> key) {
 		return (T)valueForKeyPath(key.key());
 	}
@@ -182,7 +184,7 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
 
 	protected String insertionStackTrace = null;
 
-	protected boolean updateInverseRelationships = ERXEnterpriseObject.updateInverseRelationships;
+	private boolean _updateInverseRelationships = ERXGenericRecord.InverseRelationshipUpdater.updateInverseRelationships;
 
 	/*
 	 * (non-Javadoc)
@@ -190,7 +192,7 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
 	 * @see er.extensions.ERXEnterpriseObject#getClassLog()
 	 */
 	public Logger getClassLog() {
-		Logger classLog = (Logger) classLogs.objectForKey(this.getClass());
+		Logger classLog = classLogs.objectForKey(this.getClass());
 		if (classLog == null) {
 			synchronized (classLogs) {
 				classLog = Logger.getLogger(this.getClass());
@@ -319,20 +321,20 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
 			trimSpaces();
 	}
 
-	protected boolean updateInverseRelationships(boolean newValue) {
-		boolean old = updateInverseRelationships;
-		updateInverseRelationships = newValue;
+	public boolean _setUpdateInverseRelationships(boolean newValue) {
+		boolean old = _updateInverseRelationships;
+		_updateInverseRelationships = newValue;
 		return old;
 	}
 
 	@Override
 	public Object willReadRelationship(Object aObject) {
-		boolean old = updateInverseRelationships(false);
+		boolean old = _setUpdateInverseRelationships(false);
 		try {
 			return super.willReadRelationship(aObject);
 		}
 		finally {
-			updateInverseRelationships(old);
+			_setUpdateInverseRelationships(old);
 		}
 	}
 
@@ -491,7 +493,7 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
 	 */
 	@Override
 	public void awakeFromInsertion(EOEditingContext editingContext) {
-		boolean old = updateInverseRelationships(false);
+		boolean old = _setUpdateInverseRelationships(false);
 		try {
 			_checkEditingContextDelegate(editingContext);
 			if (insertionTrackingLog.isDebugEnabled()) {
@@ -512,7 +514,7 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
 			}
 		}
 		finally {
-			updateInverseRelationships(old);
+			_setUpdateInverseRelationships(old);
 		}
 	}
 
@@ -522,12 +524,12 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
 
 	@Override
 	public void clearProperties() {
-		boolean old = updateInverseRelationships(false);
+		boolean old = _setUpdateInverseRelationships(false);
 		try {
 			super.clearProperties();
 		}
 		finally {
-			updateInverseRelationships(old);
+			_setUpdateInverseRelationships(old);
 		}
 	}
 
@@ -557,13 +559,13 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
 	 */
 	@Override
 	public void awakeFromFetch(EOEditingContext editingContext) {
-		boolean old = updateInverseRelationships(false);
+		boolean old = _setUpdateInverseRelationships(false);
 		try {
 			_checkEditingContextDelegate(editingContext);
 			super.awakeFromFetch(editingContext);
 		}
 		finally {
-			updateInverseRelationships(old);
+			_setUpdateInverseRelationships(old);
 		}
 	}
 
@@ -664,7 +666,7 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
 	 */
 	@SuppressWarnings("unchecked")
 	public NSArray<String> primaryKeyAttributeNames() {
-		return (NSArray<String>) entity().primaryKeyAttributeNames();
+		return entity().primaryKeyAttributeNames();
 	}
 
 	/**
@@ -1168,25 +1170,10 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
 	 */
 	@Override
 	protected void includeObjectIntoPropertyWithKey(Object o, String key) {
-		super.includeObjectIntoPropertyWithKey(o, key);
-		if (ERXEnterpriseObject.updateInverseRelationships && o != null) {
-			String inverse = classDescription().inverseForRelationshipKey(key);
-			if (inverse != null) {
-				EOEnterpriseObject eo = (EOEnterpriseObject) o;
-				if (!eo.isToManyKey(inverse)) {
-					EOEnterpriseObject value = (EOEnterpriseObject) eo.valueForKey(inverse);
-					if (value != this) {
-						eo.takeValueForKey(this, inverse);
-					}
-				}
-				else {
-					NSArray values = (NSArray) eo.valueForKey(inverse);
-					if (!values.containsObject(this)) {
-						eo.addObjectToPropertyWithKey(this, inverse);
-					}
-				}
-			}
+		if (_updateInverseRelationships) {
+			InverseRelationshipUpdater.includeObjectIntoPropertyWithKey(this, o, key);
 		}
+		super.includeObjectIntoPropertyWithKey(o, key);
 	}
 
 	/**
@@ -1194,83 +1181,26 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
 	 */
 	@Override
 	protected void excludeObjectFromPropertyWithKey(Object o, String key) {
-		super.excludeObjectFromPropertyWithKey(o, key);
-		if (ERXEnterpriseObject.updateInverseRelationships && o != null) {
-			String inverse = classDescription().inverseForRelationshipKey(key);
-			if (inverse != null) {
-				EOEnterpriseObject eo = (EOEnterpriseObject) o;
-				if (!eo.isToManyKey(inverse)) {
-					if (eo.valueForKey(inverse) != null) {
-						eo.takeValueForKey(null, inverse);
-					}
-				}
-				else {
-					NSArray values = (NSArray) eo.valueForKey(inverse);
-					if (values.containsObject(this)) {
-						eo.removeObjectFromPropertyWithKey(this, inverse);
-					}
-				}
-			}
+		if (_updateInverseRelationships) {
+			InverseRelationshipUpdater.excludeObjectFromPropertyWithKey(this, o, key);
 		}
+		super.excludeObjectFromPropertyWithKey(o, key);
 	}
-
+	
 	/**
 	 * Overridden to support two-way relationship setting.
 	 */
 	@Override
-	public void takeStoredValueForKey(Object object, String key) {
-		// we only handle toOne keys here, but there is no API for that so
-		// this unreadable monster first checks the fastest thing, the the
-		// slower conditions
-		if (updateInverseRelationships) {
-			if ((object instanceof EOEnterpriseObject || ((object == null) && !isToManyKey(key) && classDescriptionForDestinationKey(key) != null))) {
-				String inverse = classDescription().inverseForRelationshipKey(key);
-				if (inverse != null) {
-					if (object != null) {
-						EOEnterpriseObject eo = (EOEnterpriseObject) object;
-						super.takeStoredValueForKey(object, key);
-						if (eo.isToManyKey(inverse)) {
-							NSArray values = (NSArray) eo.valueForKey(inverse);
-							if (!values.containsObject(this)) {
-								eo.addObjectToPropertyWithKey(this, inverse);
-							}
-						}
-						else {
-							EOEnterpriseObject old = (EOEnterpriseObject) eo.valueForKey(inverse);
-							if (old != this) {
-								eo.takeValueForKey(this, inverse);
-							}
-						}
-					}
-					else {
-						EOEnterpriseObject old = (EOEnterpriseObject) valueForKey(key);
-						super.takeStoredValueForKey(null, key);
-						if (old != null) {
-							if (old.isToManyKey(inverse)) {
-								NSArray values = (NSArray) old.valueForKey(inverse);
-								if (values.containsObject(this)) {
-									old.removeObjectFromPropertyWithKey(this, inverse);
-								}
-							}
-							else {
-								if (old == this) {
-									old.takeValueForKey(null, inverse);
-								}
-							}
-						}
-					}
-				}
-				else {
-					super.takeStoredValueForKey(object, key);
-				}
-			}
-			else {
-				super.takeStoredValueForKey(object, key);
-			}
+	public void takeValueForKey(Object value, String key) {
+		super.takeValueForKey(value, key);
+	}
+	
+	@Override
+	public void takeStoredValueForKey(Object value, String key) {
+		if (_updateInverseRelationships) {
+			InverseRelationshipUpdater.takeStoredValueForKey(this, value, key);
 		}
-		else {
-			super.takeStoredValueForKey(object, key);
-		}
+		super.takeStoredValueForKey(value, key);
 	}
 
 	// Debugging aids -- turn off during production
@@ -1293,4 +1223,200 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
 	 * super.takeStoredValueForKey(value,key); }
 	 * 
 	 */
+	
+	/**
+	 * Provides automatic inverse relationship updating for ERXGenericRecord and ERXCustomObject.
+	 * 
+	 * @property er.extensions.ERXEnterpriseObject.updateInverseRelationships if true, inverse relationships are automatically updated
+	 * 
+	 * @author mschrag
+	 */
+	public static class InverseRelationshipUpdater {
+	    private static boolean updateInverseRelationships = ERXProperties.booleanForKey("er.extensions.ERXEnterpriseObject.updateInverseRelationships");
+
+	    /**
+	     * Toggles the global setting for updating inverse relationships.
+	     * 
+	     * @param updateInverseRelationships if true, inverse relationships are automatically updated
+	     */
+	    public static void setUpdateInverseRelationships(boolean updateInverseRelationships) {
+	    	ERXGenericRecord.InverseRelationshipUpdater.updateInverseRelationships = updateInverseRelationships;
+		}
+	    
+	    /**
+	     * Returns whether or not inverse relationships are automatically updated.
+	     * 
+	     * @return if true, inverse relationships are automatically updated
+	     */
+	    public static boolean updateInverseRelationships() {
+			return ERXGenericRecord.InverseRelationshipUpdater.updateInverseRelationships;
+		}
+	    
+	    /**
+	     * Called from eo.includeObjectIntoPropertyWithKey.
+	     * 
+	     * @param object the object being updated
+	     * @param value the value to include in the relationship
+	     * @param key the name of the relationship to update
+	     */
+		public static void includeObjectIntoPropertyWithKey(ERXEnterpriseObject object, Object value, String key) {
+			if (value != null) {
+				String inverse = object.classDescription().inverseForRelationshipKey(key);
+				if (inverse != null) {
+					ERXEnterpriseObject eo = (ERXEnterpriseObject) value;
+					if (!eo.isToManyKey(inverse)) {
+						EOEnterpriseObject inverseValue = (EOEnterpriseObject) eo.valueForKey(inverse);
+						if (inverseValue != object) {
+							boolean oldUpdateInverseRelationship = eo._setUpdateInverseRelationships(false);
+							try {
+								eo.takeValueForKey(object, inverse);
+							}
+							finally {
+								eo._setUpdateInverseRelationships(oldUpdateInverseRelationship);
+							}
+						}
+					}
+					else {
+						NSArray values = (NSArray) eo.valueForKey(inverse);
+						if (!values.containsObject(object)) {
+							boolean oldUpdateInverseRelationship = eo._setUpdateInverseRelationships(false);
+							try {
+								eo.addObjectToPropertyWithKey(object, inverse);
+							}
+							finally {
+								eo._setUpdateInverseRelationships(oldUpdateInverseRelationship);
+							}
+						}
+					}
+				}
+			}
+		}
+		
+	    /**
+	     * Called from eo.excludeObjectFromPropertyWithKey.
+	     * 
+	     * @param object the object being updated
+	     * @param value the value to remove from the relationship
+	     * @param key the name of the relationship to update
+	     */
+		public static void excludeObjectFromPropertyWithKey(ERXEnterpriseObject object, Object value, String key) {
+			if (value != null) {
+				String inverse = object.classDescription().inverseForRelationshipKey(key);
+				if (inverse != null) {
+					ERXEnterpriseObject eo = (ERXEnterpriseObject) value;
+					if (!eo.isToManyKey(inverse)) {
+						if (eo.valueForKey(inverse) != null) {
+							boolean oldUpdateInverseRelationship = eo._setUpdateInverseRelationships(false);
+							try {
+								eo.takeValueForKey(null, inverse);
+							}
+							finally {
+								eo._setUpdateInverseRelationships(oldUpdateInverseRelationship);
+							}
+						}
+					}
+					else {
+						NSArray values = (NSArray) eo.valueForKey(inverse);
+						if (values.containsObject(object)) {
+							boolean oldUpdateInverseRelationship = eo._setUpdateInverseRelationships(false);
+							try {
+								eo.removeObjectFromPropertyWithKey(object, inverse);
+							}
+							finally {
+								eo._setUpdateInverseRelationships(oldUpdateInverseRelationship);
+							}
+						}
+					}
+				}
+			}
+		}
+	
+	    /**
+	     * Called from eo.takeValueForKey.
+	     * 
+	     * @param object the object being updated
+	     * @param value the value to set on the key
+	     * @param key the name of the key to update
+	     */
+		public static void takeStoredValueForKey(ERXEnterpriseObject object, Object value, String key) {
+			// we only handle toOne keys here, but there is no API for that so
+			// this unreadable monster first checks the fastest thing, the the
+			// slower conditions
+			if (value instanceof EOEnterpriseObject || (value == null && !object.isToManyKey(key) && object.classDescriptionForDestinationKey(key) != null)) {
+				String inverse = object.classDescription().inverseForRelationshipKey(key);
+				// Is there any inverse relationship?
+				if (inverse != null) {
+					ERXEnterpriseObject oldValueEO = (ERXEnterpriseObject) object.valueForKey(key);
+
+					// If the object isn't null, we need to perform the equivalent of
+					// an addObjectToBothSidesOfRelationshipWithKey
+					if (value != null) {
+						// If we're replacing a previous value (that isn't the same instance), 
+						// then we want to remove this object from the CURRENT inverse
+						// relationship
+						if (oldValueEO != null && oldValueEO != object) {
+							oldValueEO.removeObjectFromPropertyWithKey(object, inverse);
+						}
+						
+						ERXEnterpriseObject newValueEO = (ERXEnterpriseObject) value;
+						//object._superTakeValueForKey(value, key);
+						if (newValueEO.isToManyKey(inverse)) {
+							NSArray inverseOldValues = (NSArray) newValueEO.valueForKey(inverse);
+							if (inverseOldValues == null || !inverseOldValues.containsObject(object)) {
+								boolean oldUpdateInverseRelationship = newValueEO._setUpdateInverseRelationships(false);
+								try {
+									newValueEO.addObjectToPropertyWithKey(object, inverse);
+								}
+								finally {
+									newValueEO._setUpdateInverseRelationships(oldUpdateInverseRelationship);
+								}
+							}
+						}
+						else {
+							EOEnterpriseObject inverseOldValue = (EOEnterpriseObject) newValueEO.valueForKey(inverse);
+							if (inverseOldValue != object) {
+								boolean oldUpdateInverseRelationship = newValueEO._setUpdateInverseRelationships(false);
+								try {
+									newValueEO.takeStoredValueForKey(object, inverse);
+								}
+								finally {
+									newValueEO._setUpdateInverseRelationships(oldUpdateInverseRelationship);
+								}
+							}
+						}
+					}
+					// If the object is a null, we need to perform the equivalent of
+					// an removeObjectFromBothSidesOfRelationshipWithKey
+					else {
+						//object._superTakeValueForKey(null, key);
+						if (oldValueEO != null) {
+							if (oldValueEO.isToManyKey(inverse)) {
+								NSArray inverseOldValues = (NSArray) oldValueEO.valueForKey(inverse);
+								if (inverseOldValues != null && inverseOldValues.containsObject(object)) {
+									boolean oldUpdateInverseRelationship = oldValueEO._setUpdateInverseRelationships(false);
+									try {
+										oldValueEO.removeObjectFromPropertyWithKey(object, inverse);
+									}
+									finally {
+										oldValueEO._setUpdateInverseRelationships(oldUpdateInverseRelationship);
+									}
+								}
+							}
+							else {
+								if (oldValueEO == object) {
+									boolean oldUpdateInverseRelationship = oldValueEO._setUpdateInverseRelationships(false);
+									try {
+										oldValueEO.takeStoredValueForKey(null, inverse);
+									}
+									finally {
+										oldValueEO._setUpdateInverseRelationships(oldUpdateInverseRelationship);
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
 }

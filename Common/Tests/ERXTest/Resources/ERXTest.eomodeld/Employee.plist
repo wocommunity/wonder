@@ -36,8 +36,19 @@
         }
     ); 
     attributesUsedForLocking = (address1, address2, city, companyID, id, manager, name, state, zipcode); 
-    className = Employee; 
-    classProperties = (address1, address2, city, company, manager, name, paychecks, state, zipcode); 
+    className = "er.erxtest.model.Employee"; 
+    classProperties = (
+        address1, 
+        address2, 
+        city, 
+        company, 
+        manager, 
+        name, 
+        paychecks, 
+        roles, 
+        state, 
+        zipcode
+    ); 
     externalName = Employee; 
     fetchSpecificationDictionary = {}; 
     name = Employee; 
@@ -53,12 +64,22 @@
         }, 
         {
             deleteRule = EODeleteRuleCascade; 
+            destination = EmployeeRole; 
+            isToMany = Y; 
+            joinSemantic = EOInnerJoin; 
+            joins = ({destinationAttribute = employeeId; sourceAttribute = id; }); 
+            name = employeeRoles; 
+            propagatesPrimaryKey = Y; 
+        }, 
+        {
+            deleteRule = EODeleteRuleCascade; 
             destination = Paycheck; 
             isMandatory = N; 
             isToMany = Y; 
             joinSemantic = EOInnerJoin; 
             joins = ({destinationAttribute = employeeID; sourceAttribute = id; }); 
             name = paychecks; 
-        }
+        }, 
+        {definition = "employeeRoles.role"; name = roles; }
     ); 
 }

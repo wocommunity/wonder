@@ -991,12 +991,12 @@ public class ERXEC extends EOEditingContext {
 			if (eoenterpriseobject instanceof ERXGenericRecord) {
 				ERXGenericRecord eo = (ERXGenericRecord) eoenterpriseobject;
 				// gross hack to not trigger the two-way relationships
-				boolean old = eo.updateInverseRelationships(false);
+				boolean old = eo._setUpdateInverseRelationships(false);
 				try {
 					super.initializeObject(eoenterpriseobject, eoglobalid, eoeditingcontext);
 				}
 				finally {
-					eo.updateInverseRelationships(old);
+					eo._setUpdateInverseRelationships(old);
 				}
 			}
 			else {

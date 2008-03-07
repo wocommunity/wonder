@@ -12,7 +12,7 @@
         {columnName = paymentDate; name = paymentDate; prototypeName = dateTime; }
     ); 
     attributesUsedForLocking = (amount, cashed, employeeID, id, paymentDate); 
-    className = Paycheck; 
+    className = "er.erxtest.model.Paycheck"; 
     classProperties = (amount, cashed, employee, paymentDate); 
     externalName = Paycheck; 
     fetchSpecificationDictionary = {}; 
