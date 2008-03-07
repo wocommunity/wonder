@@ -1,14 +1,13 @@
 {
     EOModelVersion = "2.1"; 
     adaptorName = JDBC; 
-    connectionDictionary = {
-        URL = "jdbc:FrontBase//127.0.0.1/ERXObjectStoreCoordinatorSynchronizerTest"; 
-        username = ERXObjectStoreCoordinatorSynchronizerTest; 
-    }; 
+    connectionDictionary = {URL = "jdbc:FrontBase://127.0.0.1/ERXTest"; username = ERXTest; }; 
     entities = (
-        {className = Company; name = Company; }, 
-        {className = Employee; name = Employee; }, 
-        {className = Paycheck; name = Paycheck; }
+        {className = "er.erxtest.model.Company"; name = Company; }, 
+        {className = "er.erxtest.model.Employee"; name = Employee; }, 
+        {className = EOGenericRecord; name = EmployeeRole; }, 
+        {className = "er.erxtest.model.Paycheck"; name = Paycheck; }, 
+        {className = "er.erxtest.model.Role"; name = Role; }
     ); 
     userInfo = {
         "_EntityModeler" = {
@@ -16,10 +15,7 @@
             databaseConfigs = {
                 Default = {
                     adaptorName = JDBC; 
-                    connectionDictionary = {
-                        URL = "jdbc:FrontBase//127.0.0.1/ERXObjectStoreCoordinatorSynchronizerTest"; 
-                        username = ERXObjectStoreCoordinatorSynchronizerTest; 
-                    }; 
+                    connectionDictionary = {URL = "jdbc:FrontBase://127.0.0.1/ERXTest"; username = ERXTest; }; 
                     prototypeEntityName = EOJDBCFrontBasePrototypes; 
                 }; 
             }; 
