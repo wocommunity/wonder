@@ -718,7 +718,7 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
 					if (log.isDebugEnabled())
 						log.debug("Got raw key: " + rawPK);
 					NSArray<String> primaryKeyAttributeNames = primaryKeyAttributeNames();
-					_primaryKeyDictionary = new NSDictionary<NSArray<String>, NSArray<Object>>(rawPK instanceof NSArray ? (NSArray<Object>) rawPK : new NSArray<Object>(rawPK), primaryKeyAttributeNames);
+					_primaryKeyDictionary = new NSDictionary<String, Object>(rawPK instanceof NSArray ? (NSArray<Object>) rawPK : new NSArray<Object>(rawPK), primaryKeyAttributeNames);
 				}
 				else {
 					EOEntity entity = entity();
