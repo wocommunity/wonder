@@ -28,9 +28,11 @@ import com.webobjects.foundation._NSStringUtilities;
  *   <li> you can specify which framework the script comes from.
  * </ul>
  * @binding scriptSource SRC attribute, either a full URL or the filename of the script 
+ * @binding filename (same as scriptSource, but matches ERXStyleSheet)
  * @binding scriptFile the filename of the script when it should be 
  *    included in the page (only for compatibility, simply use the content)
  * @binding scriptFramework name of the framework for the script
+ * @binding framework (same as scriptFramework, but matches ERXStyleSheet)
  * @binding scriptString the script text when it should be 
  *    included in the page (only for compatibility, simply use the content)
  * @binding scriptKey if set, the content will get rendered into an external script src
@@ -40,10 +42,11 @@ import com.webobjects.foundation._NSStringUtilities;
 
 public class ERXJavaScript extends WOHTMLDynamicElement {
 
-    private static ERXExpiringCache cache(WOSession session) {
-    	ERXExpiringCache cache = (ERXExpiringCache) session.objectForKey("ERXJavaScript.cache");
+    @SuppressWarnings("unchecked")
+	private static ERXExpiringCache<Object, WOResponse> cache(WOSession session) {
+    	ERXExpiringCache<Object, WOResponse> cache = (ERXExpiringCache<Object, WOResponse>) session.objectForKey("ERXJavaScript.cache");
     	if(cache == null) {
-    		cache = new ERXExpiringCache(60);
+    		cache = new ERXExpiringCache<Object, WOResponse>(60);
     		session.setObjectForKey(cache, "ERXJavaScript.cache");
     	}
     	return cache;
@@ -55,8 +58,9 @@ public class ERXJavaScript extends WOHTMLDynamicElement {
 			super(worequest);
     	}
 
-    	public WOActionResults performActionNamed(String name) {
-    		WOResponse response = (WOResponse) cache(session()).objectForKey(name);
+    	@Override
+		public WOActionResults performActionNamed(String name) {
+    		WOResponse response = ERXJavaScript.cache(session()).objectForKey(name);
     		return response;
     	}
     }
@@ -64,7 +68,9 @@ public class ERXJavaScript extends WOHTMLDynamicElement {
 	/** logging support */
 	public static final Logger log = Logger.getLogger(ERXJavaScript.class);
 
+	WOAssociation _framework;
 	WOAssociation _scriptFramework;
+	WOAssociation _filename;
 	WOAssociation _scriptFile;
 	WOAssociation _scriptString;
 	WOAssociation _scriptSource;
@@ -77,23 +83,38 @@ public class ERXJavaScript extends WOHTMLDynamicElement {
 		_scriptFile = (WOAssociation)_associations.removeObjectForKey("scriptFile");
 		_scriptString = (WOAssociation)_associations.removeObjectForKey("scriptString");
 		_scriptSource = (WOAssociation)_associations.removeObjectForKey("scriptSource");
+		_filename = (WOAssociation)_associations.removeObjectForKey("filename");
 		_language = (WOAssociation)_associations.removeObjectForKey("language");
 		_scriptKey = (WOAssociation)_associations.removeObjectForKey("scriptKey");
 		_hideInComment = (WOAssociation)_associations.removeObjectForKey("hideInComment");
 		_scriptFramework = (WOAssociation) _associations.removeObjectForKey("scriptFramework");
+		_framework = (WOAssociation) _associations.removeObjectForKey("framework");
 		if((_scriptFile != null && _scriptString != null) 
-				|| (_scriptFile != null && _scriptSource != null) 
-				|| (_scriptString != null && _scriptSource != null)) {
-			throw new WODynamicElementCreationException("<" + getClass().getName() + "> Only one of 'scriptFile' or 'scriptString' or 'scriptSource' attributes can be specified.");
+				|| (_scriptFile != null && (_scriptSource != null || _filename != null)) 
+				|| (_scriptString != null && (_scriptSource != null || _filename != null))) {
+			throw new WODynamicElementCreationException("<" + getClass().getName() + "> Only one of 'scriptFile' or 'scriptString' or 'scriptSource/filename' attributes can be specified.");
+		}
+		if (_scriptFramework != null && _framework != null) {
+			throw new WODynamicElementCreationException("<" + getClass().getName() + "> Only one of 'scriptFramework' or 'framework' can be specified.");
+		}
+		if (_scriptSource != null && _filename != null) {
+			throw new WODynamicElementCreationException("<" + getClass().getName() + "> Only one of 'scriptFile' or 'filename' can be specified.");
 		}
 	}
 
+	@Override
 	public void appendAttributesToResponse(WOResponse woresponse, WOContext wocontext) {
 		WOComponent wocomponent = wocontext.component();
 		woresponse._appendContentAsciiString(" type=\"text/javascript\"");
 		String src = null;
-		if(_scriptSource != null) {
-			String srcFromBindings = (String)_scriptSource.valueInComponent(wocomponent);
+		if(_scriptSource != null || _filename != null) {
+			String srcFromBindings;
+			if (_scriptSource != null) {
+				srcFromBindings = (String)_scriptSource.valueInComponent(wocomponent);
+			}
+			else {
+				srcFromBindings = (String) _filename.valueInComponent(wocomponent);
+			}
 			if(srcFromBindings != null) {
 				if(!WOStaticURLUtilities.isRelativeURL(srcFromBindings)) {
 					src = srcFromBindings;
@@ -102,6 +123,9 @@ public class ERXJavaScript extends WOHTMLDynamicElement {
 						String framework = null;
 						if(_scriptFramework != null) {
 							framework = (String) _scriptFramework.valueInComponent(wocomponent);
+						}
+						else if (_framework != null) {
+							framework = (String) _framework.valueInComponent(wocomponent);
 						}
 						src = wocontext._urlForResourceNamed(srcFromBindings, framework, true);
 						if(src == null) {
@@ -117,7 +141,7 @@ public class ERXJavaScript extends WOHTMLDynamicElement {
 		if(src == null && _scriptKey != null) {
 			key = _scriptKey.valueInComponent(wocomponent);
 			if(key != null) {
-				ERXExpiringCache cache = cache(wocontext.session());
+				ERXExpiringCache<Object, WOResponse> cache = ERXJavaScript.cache(wocontext.session());
 				boolean render = cache.isStale(key);
 				render |= ERXApplication.isDevelopmentModeSafe();
 				if(render) {
@@ -138,6 +162,7 @@ public class ERXJavaScript extends WOHTMLDynamicElement {
 	}
 
 
+	@Override
 	public void appendChildrenToResponse(WOResponse woresponse, WOContext wocontext) {
 			String script = "";
 			boolean hideInComment = true;
@@ -155,6 +180,9 @@ public class ERXJavaScript extends WOHTMLDynamicElement {
 					String framework = null;
 					if(_scriptFramework != null) {
 						framework = (String) _scriptFramework.valueInComponent(wocomponent);
+					}
+					else if (_framework != null) {
+						framework = (String) _framework.valueInComponent(wocomponent);
 					}
 					java.net.URL url = WOApplication.application().resourceManager().pathURLForResourceNamed(filename, framework, wocontext._languages());
 					if(url == null) {
@@ -181,6 +209,7 @@ public class ERXJavaScript extends WOHTMLDynamicElement {
 			}
 	}
 
+	@Override
 	public void appendToResponse(WOResponse woresponse, WOContext wocontext) {
 		if(wocontext == null || woresponse == null) {
 			return;
@@ -189,7 +218,7 @@ public class ERXJavaScript extends WOHTMLDynamicElement {
 		if(s != null) {
 			_appendOpenTagToResponse(woresponse, wocontext);
 		}
-		if(_scriptSource == null && hasChildrenElements() 
+		if(_scriptSource == null && _filename == null && hasChildrenElements() 
 				&& _scriptKey == null) {
 			appendChildrenToResponse(woresponse, wocontext);
 		}
@@ -198,6 +227,7 @@ public class ERXJavaScript extends WOHTMLDynamicElement {
 		}
 	}
     
+	@Override
 	public String toString() {
 		StringBuffer sb = new StringBuffer();
 		sb.append("<");
@@ -205,7 +235,9 @@ public class ERXJavaScript extends WOHTMLDynamicElement {
 		sb.append(" scriptFile=" + _scriptFile);
 		sb.append(" scriptString=" + _scriptString);
 		sb.append(" scriptFramework=" + _scriptFramework);
+		sb.append(" framework=" + _framework);
 		sb.append(" scriptSource=" + _scriptSource);
+		sb.append(" filename=" + _filename);
 		sb.append(" hideInComment=" + _hideInComment);
 		sb.append(" language=" + _language);
 		sb.append(">");
