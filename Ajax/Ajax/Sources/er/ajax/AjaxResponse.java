@@ -2,7 +2,6 @@ package er.ajax;
 
 import java.util.Enumeration;
 
-import com.webobjects.appserver.AjaxProtectedAccessor;
 import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WOApplication;
 import com.webobjects.appserver.WOContext;
