@@ -16,17 +16,17 @@
 		<binding name="showToolTips"/>
 		<binding name="chart"/>
 		<binding name="configuration"/>
-
+		
 		<validation message="Either items, nameKey, categoryKey and valueKey or dataset must be bound">
-			<or>
-				<and>
+			<and>
+				<or>
 					<unbound name="items"/>
 					<unbound name="nameKey"/>
 					<unbound name="valueKey"/>
 					<unbound name="categoryKey"/>
-				</and>
+				</or>
 				<unbound name="dataset"/>
-			</or>
+			</and>
 		</validation>
 	</wo>
 </wodefinitions>
