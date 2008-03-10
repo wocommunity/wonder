@@ -83,6 +83,20 @@ public class ERXPartial<T extends ERXGenericRecord> {
     }
 
 	/**
+	 * Calls primaryEO.includeObjectIntoPropertyWithKey.
+	 */
+    public void includeObjectIntoPropertyWithKey(Object value, String key) {
+    	_primaryEO.includeObjectIntoPropertyWithKey(value, key);
+    }
+    
+	/**
+	 * Calls primaryEO.excludeObjectFromPropertyWithKey.
+	 */
+    public void excludeObjectFromPropertyWithKey(Object value, String key) {
+    	_primaryEO.excludeObjectFromPropertyWithKey(value, key);
+    }
+    
+	/**
 	 * Calls primaryEO.addObjectToBothSidesOfRelationshipWithKey.
 	 */
     public void addObjectToBothSidesOfRelationshipWithKey(EORelationshipManipulation eo, String key) {
