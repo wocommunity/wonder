@@ -1699,7 +1699,7 @@ public class ERXStringUtilities {
     {
     	StringBuffer b;
     	// Add prefix if source does not start with valid character
-        if (Character.isJavaIdentifierStart(source.charAt(0))) {
+        if (source == null || source.length() == 0 || Character.isJavaIdentifierStart(source.charAt(0))) {
             b = new StringBuffer(source);
         } else {
         	b = new StringBuffer(prefix);
