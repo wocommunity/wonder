@@ -241,4 +241,40 @@ public class ERXDictionaryUtilities extends Object {
         }
      }
 
+     @SuppressWarnings("unchecked")
+     /**
+      * Returns a deep clone of the given dictionary.  A deep clone will attempt to 
+      * clone the keys and values (deeply) of this dictionary as well as the 
+      * dictionary itself.
+      * 
+      * @param dict the dictionary to clone
+      * @param onlyCollections if true, only collections in this dictionary will be cloned, not individual values
+      * @return a deep clone of dict
+      */
+     public static NSDictionary deepClone(NSDictionary dict, boolean onlyCollections) {
+    	 NSMutableDictionary clonedDict = null;
+    	 if (dict != null) {
+    		 clonedDict = dict.mutableClone();
+	    	 for (Object key : dict.allKeys()) {
+	    		 Object value = dict.objectForKey(key);
+	    		 Object cloneKey = ERXUtilities.deepClone(key, onlyCollections);
+	    		 Object cloneValue = ERXUtilities.deepClone(value, onlyCollections);
+	    		 if (cloneKey != key) {
+	    			 clonedDict.removeObjectForKey(key);
+	    			 if (cloneValue != null) {
+	    				 clonedDict.setObjectForKey(cloneValue, cloneKey);
+	    			 }
+	    		 }
+	    		 else if (cloneValue != null) {
+	    			 if (cloneValue != value) {
+	    				 clonedDict.setObjectForKey(cloneValue, cloneKey);
+	    			 }
+	    		 }
+	    		 else {
+	    			 clonedDict.removeObjectForKey(key);
+	    		 }
+	    	 }
+    	 }
+    	 return clonedDict;
+     }
 }
