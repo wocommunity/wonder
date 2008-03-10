@@ -1169,7 +1169,7 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
 	 * Overridden to support two-way relationship setting.
 	 */
 	@Override
-	protected void includeObjectIntoPropertyWithKey(Object o, String key) {
+	public void includeObjectIntoPropertyWithKey(Object o, String key) {
 		if (_updateInverseRelationships) {
 			InverseRelationshipUpdater.includeObjectIntoPropertyWithKey(this, o, key);
 		}
@@ -1180,7 +1180,7 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
 	 * Overridden to support two-way relationship setting.
 	 */
 	@Override
-	protected void excludeObjectFromPropertyWithKey(Object o, String key) {
+	public void excludeObjectFromPropertyWithKey(Object o, String key) {
 		if (_updateInverseRelationships) {
 			InverseRelationshipUpdater.excludeObjectFromPropertyWithKey(this, o, key);
 		}
