@@ -1818,5 +1818,62 @@ public class ERXArrayUtilities extends Object {
 			throw new RuntimeException();
 		}
 	}
-	
+
+	@SuppressWarnings("unchecked")
+     /**
+      * Returns a deep clone of the given array.  A deep clone will attempt 
+      * to clone the values of this array as well as the array itself.
+      * 
+      * @param array the array to clone
+      * @param onlyCollections if true, only collections in this array will be cloned, not individual values
+      * @return a deep clone of array
+      */
+	public static NSArray deepClone(NSArray array, boolean onlyCollections) {
+		NSMutableArray clonedArray = null;
+		if (array != null) {
+			clonedArray = array.mutableClone();
+			for (int i = array.count() - 1; i >= 0; i --) {
+				Object value = array.objectAtIndex(i);
+				Object clonedValue = ERXUtilities.deepClone(value, onlyCollections);
+				if (clonedValue != null) {
+					if (clonedValue != value) {
+						clonedArray.replaceObjectAtIndex(clonedValue, i);
+					}
+				}
+				else {
+					clonedArray.removeObjectAtIndex(i);
+				}
+			}
+		}
+		return clonedArray;
+    }
+
+	@SuppressWarnings("unchecked")
+     /**
+      * Returns a deep clone of the given set.  A deep clone will attempt 
+      * to clone the values of this set as well as the set itself.
+      * 
+      * @param set the set to clone
+      * @param onlyCollections if true, only collections in this array will be cloned, not individual values
+      * @return a deep clone of set
+      */
+	public static NSSet deepClone(NSSet set, boolean onlyCollections) {
+		NSMutableSet clonedSet = null;
+		if (set != null) {
+			clonedSet = set.mutableClone();
+			for (Object value : set) {
+				Object clonedValue = ERXUtilities.deepClone(value, onlyCollections);
+				if (clonedValue != null) {
+					if (clonedValue != value) {
+						clonedSet.removeObject(value);
+						clonedSet.addObject(clonedValue);
+					}
+				}
+				else {
+					clonedSet.removeObject(value);
+				}
+			}
+		}
+		return clonedSet;
+    }
 }
