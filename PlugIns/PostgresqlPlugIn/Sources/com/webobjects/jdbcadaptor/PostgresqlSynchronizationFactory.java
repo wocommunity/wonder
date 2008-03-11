@@ -5,6 +5,7 @@ import java.util.Iterator;
 import com.webobjects.eoaccess.EOAdaptor;
 import com.webobjects.eoaccess.EOAttribute;
 import com.webobjects.eoaccess.EOEntity;
+import com.webobjects.eoaccess.EOModel;
 import com.webobjects.eoaccess.EORelationship;
 import com.webobjects.eoaccess.EOSQLExpression;
 import com.webobjects.eoaccess.EOSchemaGeneration;
@@ -237,6 +238,27 @@ public class PostgresqlSynchronizationFactory extends EOSynchronizationFactory i
         }
         return results;
     }
+    
+    /**
+     * Returns true if Entity Modeler is running the operation on this model.
+     * 
+     * @param model the model to check
+     * @return true if Entity Modeler is running
+     */
+    protected boolean isInEntityModeler(EOModel model) {
+      boolean inEntityModeler = false;
+      if (model != null) {
+        NSDictionary userInfo = model.userInfo();
+        NSDictionary entityModelerDict = (NSDictionary) userInfo.objectForKey("_EntityModeler");
+        if (entityModelerDict != null) {
+          Boolean inEntityModelerBoolean = (Boolean)entityModelerDict.objectForKey("inEntityModeler");
+          if (inEntityModelerBoolean != null && inEntityModelerBoolean.booleanValue()) {
+            inEntityModeler = inEntityModelerBoolean.booleanValue();
+          }
+        }
+      }
+      return inEntityModeler;
+    }
 
     /**
      * Generates the PostgreSQL-specific SQL statements to create the primary
@@ -279,9 +301,12 @@ public class PostgresqlSynchronizationFactory extends EOSynchronizationFactory i
 
                     sql = "CREATE TEMP TABLE EOF_TMP_TABLE AS SELECT SETVAL('" + sequenceName + "', (SELECT MAX(" + attributeName + ") FROM " + tableName + "))";
                     results.addObject(createExpression(entity, sql));
-
-                    sql = "DROP TABLE EOF_TMP_TABLE";
-                    results.addObject(createExpression(entity, sql));
+                    
+                    // In Entity Modeler, we want to skip over the drop statement
+                    if (!isInEntityModeler(entity.model())) {
+                      sql = "DROP TABLE EOF_TMP_TABLE";
+                      results.addObject(createExpression(entity, sql));
+                    }
 
                     sql = "ALTER TABLE " + tableName + " ALTER COLUMN " + attributeName + " SET DEFAULT nextval( '" + sequenceName + "' )";
                     results.addObject(createExpression(entity, sql));
