@@ -6,7 +6,6 @@ ant.classpaths.wo.wolocalroot
 ant.classpaths.user.home
 CPFileList.txt
 WebServerResources
-Resources
 PostgresqlPlugIn.xcodeproj
 Libraries
 Components
