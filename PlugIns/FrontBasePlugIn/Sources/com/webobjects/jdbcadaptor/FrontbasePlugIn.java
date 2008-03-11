@@ -1,5 +1,7 @@
 package com.webobjects.jdbcadaptor;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.lang.reflect.Method;
 import java.math.BigDecimal;
 import java.sql.Blob;
@@ -32,6 +34,7 @@ import com.webobjects.foundation.NSLog;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation.NSMutableSet;
+import com.webobjects.foundation.NSPropertyListSerialization;
 import com.webobjects.foundation.NSSelector;
 import com.webobjects.foundation.NSTimeZone;
 import com.webobjects.foundation.NSTimestampFormatter;
@@ -43,6 +46,8 @@ import com.webobjects.foundation.NSTimestampFormatter;
  */
 
 public class FrontbasePlugIn extends JDBCPlugIn {
+	private static final String QUERY_STRING_USE_BUNDLED_JDBC_INFO = "useBundledJdbcInfo";
+
 	static final boolean USE_NAMED_CONSTRAINTS = true;
 
 	static final String _frontbaseIncludeSynonyms = System.getProperty("jdbcadaptor.frontbase.includeSynonyms", null);
@@ -76,6 +81,35 @@ public class FrontbasePlugIn extends JDBCPlugIn {
 
 	public String databaseProductName() {
 		return "FrontBase";
+	}
+
+	/**
+	 * <P>
+	 * WebObjects 5.4's version of JDBCAdaptor will use this in order to assemble the name of the prototype to use when
+	 * it loads models.
+	 * </P>
+	 * 
+	 * @return the name of the plugin.
+	 */
+	public String name() {
+		return "FrontBase";
+	}
+
+	/**
+	 * <P>
+	 * This method returns true if the connection URL for the database has a special flag on it which indicates to the
+	 * system that the jdbcInfo which has been bundled into the plugin is acceptable to use in place of actually going
+	 * to the database and getting it.
+	 * 
+	 * @return
+	 */
+	protected boolean shouldUseBundledJdbcInfo() {
+		boolean shouldUseBundledJdbcInfo = false;
+		String url = connectionURL();
+		if (url != null) {
+			shouldUseBundledJdbcInfo = url.toLowerCase().matches(".*/" + FrontbasePlugIn.QUERY_STRING_USE_BUNDLED_JDBC_INFO.toLowerCase() + "=(true|yes)(\\/|$)");
+		}
+		return shouldUseBundledJdbcInfo;
 	}
 
 	public Class defaultExpressionClass() {
@@ -145,29 +179,75 @@ public class FrontbasePlugIn extends JDBCPlugIn {
 		return properties;
 	}
 
+	/**
+	 * <P>
+	 * This is usually extracted from the the database using JDBC, but this is really inconvenient for users who are
+	 * trying to generate SQL at some. A specific version of the data has been written into the property list of the
+	 * framework and this can be used as a hard-coded equivalent.
+	 * </P>
+	 */
 	public NSDictionary jdbcInfo() {
-		NSMutableDictionary dictionary = new NSMutableDictionary(super.jdbcInfo());
-		NSMutableDictionary dictionary1 = new NSMutableDictionary((NSDictionary) dictionary.objectForKey("typeInfo"));
-		NSDictionary nsdictionary = (NSDictionary) dictionary1.objectForKey("CHARACTER");
-		dictionary1.setObjectForKey(nsdictionary, "CHAR");
-		nsdictionary = (NSDictionary) dictionary1.objectForKey("CHARACTER VARYING");
-		dictionary1.setObjectForKey(nsdictionary, "VARCHAR");
-		dictionary1.setObjectForKey(nsdictionary, "CHAR VARYING");
-		nsdictionary = (NSDictionary) dictionary1.objectForKey("BIT");
-		dictionary1.setObjectForKey(nsdictionary, "BYTE");
-		nsdictionary = (NSDictionary) dictionary1.objectForKey("BIT VARYING");
-		dictionary1.setObjectForKey(nsdictionary, "BYTE VARYING");
+		// you can swap this code out to write the property list out in order // to get a fresh copy of the
+		// JDBCInfo.plist
+//		try {
+//			String jdbcInfoS = NSPropertyListSerialization.stringFromPropertyList(super.jdbcInfo());
+//			FileOutputStream fos = new FileOutputStream("/tmp/JDBCInfo.plist");
+//			fos.write(jdbcInfoS.getBytes());
+//			fos.close();
+//		}
+//		catch (Exception e) {
+//			throw new IllegalStateException("problem writing JDBCInfo.plist", e);
+//		}
 
-		dictionary.setObjectForKey(dictionary1, "typeInfo");
-		JDBCContext jdbccontext = adaptor()._cachedAdaptorContext();
-		try {
-			jdbccontext.connection().commit();
+		boolean shouldUseBundledJdbcInfo = shouldUseBundledJdbcInfo();
+		NSDictionary jdbcInfo;
+		// have a look at the JDBC connection URL to see if the flag has been set to
+		// specify that the hard-coded jdbcInfo information should be used.
+		if (shouldUseBundledJdbcInfo) {
+			if (NSLog.debugLoggingAllowedForLevel(NSLog.DebugLevelDetailed)) {
+				NSLog.debug.appendln("Loading jdbcInfo from JDBCInfo.plist as opposed to using the JDBCPlugIn default implementation.");
+			}
+
+			InputStream jdbcInfoStream = getClass().getResourceAsStream("/JDBCInfo.plist");
+			if (jdbcInfoStream == null) {
+				throw new IllegalStateException("Unable to find 'JDBCInfo.plist' in this plugin jar.");
+			}
+
+			try {
+				jdbcInfo = (NSDictionary) NSPropertyListSerialization.propertyListFromData(new NSData(jdbcInfoStream, 2048), "US-ASCII");
+			}
+			catch (IOException e) {
+				throw new RuntimeException("Failed to load 'JDBCInfo.plist' from this plugin jar.", e);
+			}
 		}
-		catch (SQLException sqlexception) {
-			if (NSLog.debugLoggingAllowedForLevelAndGroups(3, 0x000010000L))
-				NSLog.debug.appendln(sqlexception);
+		else {
+			jdbcInfo = super.jdbcInfo();
 		}
-		return dictionary;
+
+		NSMutableDictionary mutableJdbcInfo = new NSMutableDictionary(jdbcInfo);
+		NSMutableDictionary typeInfoDict = new NSMutableDictionary((NSDictionary) mutableJdbcInfo.objectForKey("typeInfo"));
+		NSDictionary typeDict = (NSDictionary) typeInfoDict.objectForKey("CHARACTER");
+		typeInfoDict.setObjectForKey(typeDict, "CHAR");
+		typeDict = (NSDictionary) typeInfoDict.objectForKey("CHARACTER VARYING");
+		typeInfoDict.setObjectForKey(typeDict, "VARCHAR");
+		typeInfoDict.setObjectForKey(typeDict, "CHAR VARYING");
+		typeDict = (NSDictionary) typeInfoDict.objectForKey("BIT");
+		typeInfoDict.setObjectForKey(typeDict, "BYTE");
+		typeDict = (NSDictionary) typeInfoDict.objectForKey("BIT VARYING");
+		typeInfoDict.setObjectForKey(typeDict, "BYTE VARYING");
+
+		mutableJdbcInfo.setObjectForKey(typeInfoDict, "typeInfo");
+		if (!shouldUseBundledJdbcInfo) {
+			JDBCContext jdbccontext = adaptor()._cachedAdaptorContext();
+			try {
+				jdbccontext.connection().commit();
+			}
+			catch (SQLException sqlexception) {
+				if (NSLog.debugLoggingAllowedForLevelAndGroups(3, 0x000010000L))
+					NSLog.debug.appendln(sqlexception);
+			}
+		}
+		return mutableJdbcInfo;
 	}
 
 	EOQualifier primaryKeyQualifier(EOQualifier eoqualifier, EOEntity eoentity) {
@@ -970,13 +1050,13 @@ public class FrontbasePlugIn extends JDBCPlugIn {
 		public String columnTypeStringForAttribute(EOAttribute attribute) {
 			String externalTypeName = attribute.externalType();
 			NSDictionary typeInfo = (NSDictionary) jdbcInfo().objectForKey(JDBCAdaptor.TypeInfoKey);
-		    if (typeInfo == null) {
-		      typeInfo = JDBCAdaptor.typeInfoForModel(((EOEntity) attribute.parent()).model());
-		    }
-		    NSDictionary externalTypeInfo = (NSDictionary) typeInfo.objectForKey(externalTypeName);
-		    if (externalTypeInfo == null && externalTypeName != null) {
-		      externalTypeInfo = (NSDictionary) typeInfo.objectForKey(externalTypeName.toUpperCase());
-		    }
+			if (typeInfo == null) {
+				typeInfo = JDBCAdaptor.typeInfoForModel(((EOEntity) attribute.parent()).model());
+			}
+			NSDictionary externalTypeInfo = (NSDictionary) typeInfo.objectForKey(externalTypeName);
+			if (externalTypeInfo == null && externalTypeName != null) {
+				externalTypeInfo = (NSDictionary) typeInfo.objectForKey(externalTypeName.toUpperCase());
+			}
 
 			if (externalTypeInfo == null) {
 				throw new JDBCAdaptorException("Unable to find type information for external type '" + externalTypeName + "' in attribute '" + attribute.name() + "' of entity '" + ((EOEntity) attribute.parent()).name() + "'.  Check spelling and capitalization.", null);
