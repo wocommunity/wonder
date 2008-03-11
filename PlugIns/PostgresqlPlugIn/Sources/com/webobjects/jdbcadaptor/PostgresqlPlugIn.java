@@ -85,19 +85,17 @@ public class PostgresqlPlugIn extends JDBCPlugIn {
    * </P> 
    */
   public NSDictionary jdbcInfo() {
-    /*
     // you can swap this code out to write the property list out in order
     // to get a fresh copy of the JDBCInfo.plist.
-    try {
-      String jdbcInfoS = NSPropertyListSerialization.stringFromPropertyList(super.jdbcInfo());
-      FileOutputStream fos = new FileOutputStream("/tmp/JDBCInfo.plist");
-      fos.write(jdbcInfoS.getBytes());
-      fos.close();
-    }
-    catch(Exception e) {
-      throw new IllegalStateException("problem writing JDBCInfo.plist",e);
-    }
-    */
+//    try {
+//      String jdbcInfoS = NSPropertyListSerialization.stringFromPropertyList(super.jdbcInfo());
+//      FileOutputStream fos = new FileOutputStream("/tmp/JDBCInfo.plist");
+//      fos.write(jdbcInfoS.getBytes());
+//      fos.close();
+//    }
+//    catch(Exception e) {
+//      throw new IllegalStateException("problem writing JDBCInfo.plist",e);
+//    }
 
     NSDictionary jdbcInfo;
     // have a look at the JDBC connection URL to see if the flag has been set to
