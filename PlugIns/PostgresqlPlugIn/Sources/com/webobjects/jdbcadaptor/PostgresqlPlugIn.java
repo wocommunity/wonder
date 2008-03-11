@@ -7,9 +7,13 @@ import com.webobjects.eoaccess.EOEntity;
 import com.webobjects.eoaccess.EOSQLExpression;
 import com.webobjects.eoaccess.EOSynchronizationFactory;
 import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSBundle;
+import com.webobjects.foundation.NSData;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSForwardException;
+import com.webobjects.foundation.NSLog;
 import com.webobjects.foundation.NSMutableArray;
+import com.webobjects.foundation.NSPropertyListSerialization;
 
 /**
  * WO runtime plugin with support for Postgresql.
@@ -18,10 +22,11 @@ import com.webobjects.foundation.NSMutableArray;
  * @author giorgio_v
  */
 public class PostgresqlPlugIn extends JDBCPlugIn {
-
-    static {
-        setPlugInNameForSubprotocol(PostgresqlPlugIn.class.getName(), "postgresql");
-    }
+  private static final String QUERY_STRING_USE_BUNDLED_JDBC_INFO = "useBundledJdbcInfo";
+  
+  static {
+      setPlugInNameForSubprotocol(PostgresqlPlugIn.class.getName(), "postgresql");
+  }
     
   /**
    * Designated constructor.
@@ -42,6 +47,78 @@ public class PostgresqlPlugIn extends JDBCPlugIn {
    */
   public String databaseProductName() {
     return "Postgresql";
+  }
+
+  /**
+   * <P>WebObjects 5.4's version of JDBCAdaptor will use this
+   * in order to assemble the name of the prototype to use when
+   * it loads models.</P>
+   * @return the name of the plugin.
+   */
+  public String name() {
+    return "Postgresql";
+  }
+
+  /**
+   * <P>This method returns true if the connection URL for the
+   * database has a special flag on it which indicates to the
+   * system that the jdbcInfo which has been bundled into the
+   * plugin is acceptable to use in place of actually going to
+   * the database and getting it.
+   * @return
+   */
+  protected boolean shouldUseBundledJdbcInfo() {
+    boolean shouldUseBundledJdbcInfo = false;
+    String url = connectionURL();
+    if (url != null) {
+      shouldUseBundledJdbcInfo = url.toLowerCase().matches(".*(\\?|\\?.*&)" + PostgresqlPlugIn.QUERY_STRING_USE_BUNDLED_JDBC_INFO.toLowerCase() + "=(true|yes)(\\&|$)");
+    }
+    return shouldUseBundledJdbcInfo;
+  }
+
+  /**
+   * <P>This is usually extracted from the the database using
+   * JDBC, but this is really inconvenient for users who are
+   * trying to generate SQL at some.  A specific version of the
+   * data has been written into the property list of the
+   * framework and this can be used as a hard-coded equivalent.
+   * </P> 
+   */
+  public NSDictionary jdbcInfo() {
+    /*
+    // you can swap this code out to write the property list out in order
+    // to get a fresh copy of the JDBCInfo.plist.
+    try {
+      String jdbcInfoS = NSPropertyListSerialization.stringFromPropertyList(super.jdbcInfo());
+      FileOutputStream fos = new FileOutputStream("/tmp/JDBCInfo.plist");
+      fos.write(jdbcInfoS.getBytes());
+      fos.close();
+    }
+    catch(Exception e) {
+      throw new IllegalStateException("problem writing JDBCInfo.plist",e);
+    }
+    */
+
+    NSDictionary jdbcInfo;
+    // have a look at the JDBC connection URL to see if the flag has been set to
+    // specify that the hard-coded jdbcInfo information should be used.
+    if(shouldUseBundledJdbcInfo()) {
+      if(NSLog.debugLoggingAllowedForLevel(NSLog.DebugLevelDetailed)) {
+        NSLog.debug.appendln("Loading jdbcInfo from JDBCInfo.plist as opposed to using the JDBCPlugIn default implementation.");
+      }
+      
+      NSBundle bundle = NSBundle.bundleForClass(this.getClass());
+      byte[] jdbcInfoBytes = bundle.bytesForResourcePath("JDBCInfo.plist");
+      if (jdbcInfoBytes == null) {
+        throw new IllegalStateException("Unable to find the 'JDBCInfo.plist' resource in the bundle '" + bundle.toString() + "'.");
+      }
+
+      jdbcInfo = (NSDictionary) NSPropertyListSerialization.propertyListFromData(new NSData(jdbcInfoBytes), "US-ASCII");
+    }
+    else {
+      jdbcInfo = super.jdbcInfo();
+    }
+    return jdbcInfo;
   }
 
   /**
