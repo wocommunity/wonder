@@ -1,5 +1,7 @@
 package com.webobjects.jdbcadaptor;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Enumeration;
 
 import com.webobjects.eoaccess.EOAttribute;
@@ -7,7 +9,6 @@ import com.webobjects.eoaccess.EOEntity;
 import com.webobjects.eoaccess.EOSQLExpression;
 import com.webobjects.eoaccess.EOSynchronizationFactory;
 import com.webobjects.foundation.NSArray;
-import com.webobjects.foundation.NSBundle;
 import com.webobjects.foundation.NSData;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSForwardException;
@@ -105,13 +106,17 @@ public class PostgresqlPlugIn extends JDBCPlugIn {
         NSLog.debug.appendln("Loading jdbcInfo from JDBCInfo.plist as opposed to using the JDBCPlugIn default implementation.");
       }
       
-      NSBundle bundle = NSBundle.bundleForClass(this.getClass());
-      byte[] jdbcInfoBytes = bundle.bytesForResourcePath("JDBCInfo.plist");
-      if (jdbcInfoBytes == null) {
-        throw new IllegalStateException("Unable to find the 'JDBCInfo.plist' resource in the bundle '" + bundle.toString() + "'.");
+      InputStream jdbcInfoStream = getClass().getResourceAsStream("/JDBCInfo.plist");
+      if (jdbcInfoStream == null) {
+        throw new IllegalStateException("Unable to find 'JDBCInfo.plist' in this plugin jar.");
       }
 
-      jdbcInfo = (NSDictionary) NSPropertyListSerialization.propertyListFromData(new NSData(jdbcInfoBytes), "US-ASCII");
+      try {
+        jdbcInfo = (NSDictionary) NSPropertyListSerialization.propertyListFromData(new NSData(jdbcInfoStream, 2048), "US-ASCII");
+      }
+      catch (IOException e) {
+        throw new RuntimeException("Failed to load 'JDBCInfo.plist' from this plugin jar.", e);
+      }
     }
     else {
       jdbcInfo = super.jdbcInfo();
