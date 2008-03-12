@@ -27,3 +27,22 @@ Wrapper: AjaxExampleComponent {
 NumRequestsString: WOString {
 	value = numRequests;
 }
+
+WaitSmall : WOImage {
+  framework = "Ajax";
+  filename = "wait20.gif";
+  id = "busy1";
+  style = "display:none;";
+}
+
+WaitSmall2 : WOImage {
+  framework = "Ajax";
+  filename = "wait20.gif";
+  id = "busy2";
+  style = "display:none;";
+}
+
+WaitBig : WOImage {
+  framework = "Ajax";
+  filename = "wait30.gif";
+}

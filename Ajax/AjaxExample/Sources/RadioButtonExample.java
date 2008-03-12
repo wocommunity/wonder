@@ -17,6 +17,10 @@ public class RadioButtonExample extends com.webobjects.appserver.WOComponent {
 		}
 		_selectedItems = new NSMutableSet<Integer>();
 	}
+	
+	public NSMutableSet<Integer> selectedItems() {
+		return _selectedItems;
+	}
 
 	public NSMutableArray<Integer> getValues() {
 		return _values;
@@ -35,8 +39,13 @@ public class RadioButtonExample extends com.webobjects.appserver.WOComponent {
 	}
 
 	public void setSelected(boolean selected) {
-		System.out.println("RadioButtonExample.setSelected: " + _itemValue + " = " + selected);
-		_selectedItems.addObject(_itemValue);
+		if (selected) {
+			//_selectedItems.removeAllObjects();
+			_selectedItems.addObject(_itemValue);
+		}
+		else {
+			_selectedItems.removeObject(_itemValue);
+		}
 	}
 
 	public boolean isSelected() {
@@ -44,6 +53,7 @@ public class RadioButtonExample extends com.webobjects.appserver.WOComponent {
 	}
 	
 	public WOActionResults submit() {
+		System.out.println("RadioButtonExample.submit: submit");
 		return null;
 	}
 }
