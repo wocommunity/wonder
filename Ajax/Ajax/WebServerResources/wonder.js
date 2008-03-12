@@ -118,7 +118,6 @@ Object.extend(Form, {
     	
     	selects = $(form).getElementsByTagName('select');
     	for (selectIdx=0; selectIdx < selects.length; selectIdx++) {
-    	alert(selects[selectIdx].type);
             if (selects[selectIdx].type == 'select-multiple') {
                 selects[selectIdx].selectedIndex = -1;
             } else {
