@@ -28,7 +28,7 @@ import com.webobjects.foundation.NSMutableDictionary;
  *          enabled); default = &laquo;&nbsp;back
  * @binding forwardString (String) - the string to use for the "forward" link
  *          (HTML enabled); default = back&nbsp;&raquo;
- * @binding showPageNumber (Boolean) - whether or not to show the page numbers
+ * @binding showPageNumbers (Boolean) - whether or not to show the page numbers
  *          (you might want to show only the back and forward links); default =
  *          true
  * @binding showPageString (Boolean) - whether or not to show the "Page:" string
