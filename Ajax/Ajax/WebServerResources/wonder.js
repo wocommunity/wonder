@@ -268,7 +268,8 @@ var AjaxSubmitButton = {
 	processOptions: function(form, options) {
 		var processedOptions = null;
 		if (options != null) {
-			processedOptions = new Hash(options);
+			processedOptions = Object.extend(new Object(), options);
+			
 			var ajaxSubmitButtonName = processedOptions['_asbn'];
 			if (ajaxSubmitButtonName != null) {
 				processedOptions['_asbn'] = null;
@@ -294,7 +295,7 @@ var AjaxSubmitButton = {
 	},
 	
 	partial: function(updateContainerID, formFieldID, options) {
-		var optionsCopy = new Hash(options); 
+		var optionsCopy = Object.extend(new Object(), options); 
 		var formField = $(formFieldID);
 		var form = formField.form;
 		
@@ -308,7 +309,7 @@ var AjaxSubmitButton = {
 	
 	update: function(id, form, queryParams, options) {
 		var finalUrl = AjaxSubmitButton.generateActionUrl(id, form, queryParams);
-		var finalOptions = AjaxSubmitButton.processOptions(form, options)
+		var finalOptions = AjaxSubmitButton.processOptions(form, options);
 		new Ajax.Updater(id, finalUrl, finalOptions);
 	},
 	
@@ -350,7 +351,12 @@ var AjaxSubmitButton = {
 		}
 
 		if (observeFieldFrequency == null) {
+			if ($(formFieldID).type.toLowerCase() == 'radio') {
+	    	new Form.Element.RadioButtonObserver($(formFieldID), submitFunction);
+			}
+			else {
 	    	new Form.Element.EventObserver($(formFieldID), submitFunction);
+			}
 		}
 		else {
 	    	new Form.Element.Observer($(formFieldID), observeFieldFrequency, submitFunction);
@@ -378,10 +384,9 @@ AjaxPeriodicUpdater.prototype = {
 		}
 	}
 };
-Ajax.ActivePeriodicalUpdater = Class.create();
-Ajax.ActivePeriodicalUpdater.prototype = Object.extend(new Ajax.Base(), {
-  initialize: function(container, url, options) {
-    this.setOptions(options);
+Ajax.ActivePeriodicalUpdater = Class.create(Ajax.Base, {
+  initialize: function($super, container, url, options) {
+    $super(options);
     this.onComplete = this.options.onComplete;
 
     this.frequency = (this.options.frequency || 2);
@@ -390,7 +395,7 @@ Ajax.ActivePeriodicalUpdater.prototype = Object.extend(new Ajax.Base(), {
     this.updater = {};
     this.container = container;
     this.url = url;
-	this.start();
+		this.start();
     this.timer = undefined;
   },
 
@@ -427,10 +432,9 @@ Ajax.ActivePeriodicalUpdater.prototype = Object.extend(new Ajax.Base(), {
   }
 });
 
-Ajax.StoppedPeriodicalUpdater = Class.create();
-Ajax.StoppedPeriodicalUpdater.prototype = Object.extend(new Ajax.Base(), {
-  initialize: function(container, url, options) {
-    this.setOptions(options);
+Ajax.StoppedPeriodicalUpdater = Class.create(Ajax.Base, {
+  initialize: function($super, container, url, options) {
+    $super(options);
     this.onComplete = this.options.onComplete;
 
     this.frequency = (this.options.frequency || 2);
@@ -616,4 +620,12 @@ var Hoverable = {
   	});
   }
 }
+
+Form.Element.RadioButtonObserver = Class.create(Form.Element.EventObserver, {
+  onElementEvent: function() {
+    var value = this.getValue();
+	  this.callback(this.element, value);
+  	this.lastValue = value;
+  },
+});
  

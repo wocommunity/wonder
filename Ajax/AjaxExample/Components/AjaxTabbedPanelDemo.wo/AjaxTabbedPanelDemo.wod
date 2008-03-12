@@ -20,3 +20,8 @@ Tab2: AjaxTabbedPanelTab {
 
 SlowLoadingComponent: SlowLoadingComponent {
 }
+
+BusyImage : WOImage {
+  framework = "Ajax";
+  filename = "wait30.gif";
+}

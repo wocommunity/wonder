@@ -7,19 +7,15 @@ if (typeof Ajax != 'undefined' && typeof Ajax.InPlaceEditor != 'undefined') {
 	Ajax.InPlaceEditor.prototype.__getText = Ajax.InPlaceEditor.prototype.getText;
 	Ajax.InPlaceEditor.prototype.__onComplete = Ajax.InPlaceEditor.prototype.onComplete;
 	Ajax.InPlaceEditor.prototype = Object.extend(Ajax.InPlaceEditor.prototype, {
-	
-	    initialize: function(element, url, options){
-	        this.__initialize(element,url,options)
-	        this.setOptions(options); 
-	        this._checkEmpty();
-	    },
-	
-	    setOptions: function(options){
-	        this.options = Object.extend(Object.extend(this.options,{
+		  initialize: function(element, url, options) {
+		    	var newOptions = Object.extend(options || {}, {
 	            valueWhenEmpty: 'click to edit...',
 	            emptyClassName: 'inplaceeditor-empty'
-	        }),options||{});
+	        });
+	        this.__initialize(element,url,newOptions)
+	        this._checkEmpty();
 	    },
+	    
 	    _checkEmpty: function(){
 	        if( this.element.innerHTML.length == 0 ){
 	            this.element.appendChild(
@@ -28,7 +24,7 @@ if (typeof Ajax != 'undefined' && typeof Ajax.InPlaceEditor != 'undefined') {
 	    },
 	
 	    getText: function(){
-	        document.getElementsByClassName(this.options.emptyClassName,this.element).each(function(child){
+	    		$A(this.element.getElementsByClassName(this.options.emptyClassName)).each(function(child){
 	            this.element.removeChild(child);
 	        }.bind(this));
 	        return this.__getText();

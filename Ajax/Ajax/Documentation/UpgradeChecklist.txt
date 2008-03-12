@@ -1,0 +1,10 @@
+This is the checklist of specific code to review when upgrading prototype.js versions:
+
+wonder_inplace.js
+* overrides features of Ajax.InPlaceEditor
+
+wonder.js
+* Ajax.StoppedPeriodicalUpdater extends Ajax.Base
+* Ajax.ActivePeriodicalUpdater extends Ajax.Base
+* Form.Element.RadioButtonObserver extends Form.Element.EventObserver
+* AjaxSubmitButton.observeField works around a prototype bug with observing radio buttons
