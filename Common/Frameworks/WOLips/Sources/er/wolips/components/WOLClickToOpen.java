@@ -23,8 +23,8 @@ public class WOLClickToOpen extends WOComponent {
   }
 
   @Override
-  public boolean synchronizesVariablesWithBindings() {
-    return false;
+  public boolean isStateless() {
+    return true;
   }
 
   public boolean canClickToOpen() {

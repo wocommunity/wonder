@@ -19,8 +19,8 @@ public class WOLToolBar extends WOComponent {
   }
   
   @Override
-  public boolean synchronizesVariablesWithBindings() {
-    return false;
+  public boolean isStateless() {
+    return true;
   }
   
   public String style() {
