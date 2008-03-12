@@ -41,3 +41,6 @@ AjaxSubmit : AjaxSubmitButton {
 AjaxContainer : AjaxUpdateContainer {
 	id = "radioButtonContainer";
 }
+SelectedItems : WOString {
+  value = selectedItems;
+}

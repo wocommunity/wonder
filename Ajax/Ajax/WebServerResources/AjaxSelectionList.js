@@ -12,6 +12,8 @@ AjaxSelectionList.prototype = {
 
 	itemType: null,
 	lastClick: 0,
+	
+	repeatKey: false,
 
 	initialize: function(id) {
 		this.container = $(id);
@@ -36,6 +38,8 @@ AjaxSelectionList.prototype = {
 		Event.observe(this.container, "focus", this.containerFocused.bindAsEventListener(this));
 		Event.observe(this.container, "blur", this.containerBlurred.bindAsEventListener(this));
 		Event.observe(this.container, "keypress", this.containerKeyPressed.bindAsEventListener(this));
+		Event.observe(this.container, "keydown", this.containerKeyDown.bindAsEventListener(this));
+		Event.observe(this.container, "keyup", this.containerKeyUp.bindAsEventListener(this));
 		Event.observe(this.container, "mousedown", function(e) { Event.stop(e); });
 		this.observeItems();
 	},
@@ -187,22 +191,46 @@ AjaxSelectionList.prototype = {
 		}
 	},
 
-	containerKeyPressed: function(e) {
+	processKey: function(e, press) {
+		var repeatKey = !press || this.repeatKey;
+		if (press) {
+			this.repeatKey = true;
+		}
 		if (e.keyCode == Event.KEY_DOWN) {
-			this.selectNext();
+			if (repeatKey) {
+				this.selectNext();
+			}
 			Event.stop(e);
 		}
 		else if (e.keyCode == Event.KEY_UP) {
-			this.selectPrevious();
+			if (repeatKey) {
+				this.selectPrevious();
+			}
 			Event.stop(e);
 		}
 		else if (e.keyCode == Event.KEY_RETURN) {
-			this.fireSelectAction();
+			if (repeatKey) {
+				this.fireSelectAction();
+			}
 			Event.stop(e);
 		}
 		else if (e.keyCode == Event.KEY_DELETE || e.keyCode == Event.KEY_BACKSPACE) {
-			this.fireDeleteAction();
+			if (repeatKey) {
+				this.fireDeleteAction();
+			}
 			Event.stop(e);
 		}
+	},
+	
+	containerKeyPressed: function(e) {
+		this.processKey(e, true);
+	},
+	
+	containerKeyUp: function(e) {
+	},
+	
+	containerKeyDown: function(e) {
+		this.repeatKey = false;
+		this.processKey(e, false);
 	}
 }

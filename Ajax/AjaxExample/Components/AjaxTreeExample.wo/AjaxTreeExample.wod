@@ -27,6 +27,6 @@ TreeNodeAction : WOHyperlink {
 }
 
 Busy : AjaxBusyIndicator {
-	busyImage = "busyBigSpinner.gif";
+	busyImage = "wait30.gif";
 	busyImageFramework = "Ajax";
 }
