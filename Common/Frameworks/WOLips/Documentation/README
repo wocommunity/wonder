@@ -40,7 +40,7 @@ And add this to the launch arguments:
 
 3) You must be using a recent version of WOLips that supports the WOLips Server.  In
 your WOLips preferences, you must enable the WOLips Server, set the port number and the communication
-password.  Turning on the WOLips Server requires a restart of WOLips.
+password.  Turning on the WOLips Server requires a restart of Eclipse.
 
 In your application preferences, you can then set:
 
@@ -59,3 +59,5 @@ you must set (as an example):
 
 5) In your page wrapper, add a <wo:WOLToolBar/> component, and you're good to go.  Look in the lower
 left hand corner of the browser window for the link.
+
+For more detail see: http://wiki.objectstyle.org/confluence/display/WOL/Click+to+Open
