@@ -19,7 +19,6 @@ import com.webobjects.appserver._private.WOKeyValueAssociation;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableDictionary;
-import com.webobjects.foundation.NSDelayedCallbackCenter._Delegate;
 
 public class _WOHelperFunctionHTMLTemplateParser extends WOMiddleManParser implements WOHelperFunctionHTMLParserDelegate {
 	public static Logger log = Logger.getLogger(WOHelperFunctionHTMLTemplateParser.class);
@@ -229,6 +228,53 @@ public class _WOHelperFunctionHTMLTemplateParser extends WOMiddleManParser imple
 			log.debug("inserted WebObject with Name '" + _currentWebObjectTag.name() + "'.");
 		}
 	}
+	
+	protected boolean isInline(WOHTMLWebObjectTag tag) {
+		String name = tag.name();
+		return name != null && name.startsWith("_") && name.length() > 1 && name.indexOf('_', 1) != -1; 
+	}
+	
+	protected String componentName(WOHTMLWebObjectTag tag) {
+		String name = tag.name();
+		// This goofiness reparses back out inline binding names
+		if (name == null) {
+			name = "[none]";
+		}
+		else if (isInline(tag)) {
+			int secondUnderscoreIndex = name.indexOf('_', 1);
+			if (secondUnderscoreIndex != -1) {
+				name = name.substring(1, secondUnderscoreIndex);
+			}
+		}
+		return name;
+	}
+	
+	protected String prettyDeclaration(WODeclaration declaration) {
+		StringBuffer declarationStr = new StringBuffer();
+		if (declaration == null) {
+			declarationStr.append("[none]");  
+		}
+		else {
+			declarationStr.append("Component Type = " + declaration.type());
+			declarationStr.append(", Bindings = { ");
+			Enumeration keyEnum = declaration.associations().keyEnumerator();
+			while (keyEnum.hasMoreElements()) {
+				String key = (String)keyEnum.nextElement();
+				Object assoc = declaration.associations().objectForKey(key);
+				if (assoc instanceof WOKeyValueAssociation) {
+					declarationStr.append(key + "=" + ((WOKeyValueAssociation)assoc).keyPath());
+				}
+				else if (assoc instanceof WOConstantValueAssociation) {
+					declarationStr.append(key + "=" + ((WOConstantValueAssociation)assoc).keyPath());
+				}
+				else {
+					declarationStr.append(key + "=" + assoc);
+				}
+			}
+			declarationStr.append(" }");
+		}
+		return declarationStr.toString();
+	}
 
 	public void didParseClosingWebObjectTag(String s, WOHelperFunctionHTMLParser htmlParser) throws WOMiddleManDeclarationFormatException, WOMiddleManHTMLFormatException, ClassNotFoundException {
 		WOHTMLWebObjectTag webobjectTag = _currentWebObjectTag.parentTag();
@@ -241,7 +287,7 @@ public class _WOHelperFunctionHTMLTemplateParser extends WOMiddleManParser imple
 			_currentWebObjectTag.addChildElement(element);
 		}
 		catch (RuntimeException e) {
-			throw new RuntimeException("Failed to create a component named '" + _currentWebObjectTag.name() + "' with the declarations " + _declarations + ".", e);
+			throw new RuntimeException("Unable to load the component named '" + componentName(_currentWebObjectTag) + "' with the declaration " + prettyDeclaration((WODeclaration) _declarations.objectForKey(_currentWebObjectTag.name())) + ". Make sure the .wo folder is where it's supposed to be and the name is spelled correctly.", e);
 		}
 	}
 
