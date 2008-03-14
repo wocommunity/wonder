@@ -21,12 +21,19 @@ var AjaxTabbedPanel = {
       var panelist = this.getChildrenByTagName($(paneControlID), 'li');
       var nodes = $A(panelist);
 
-      selectedPane.className='ajaxTabbedPanelPane-selected';
+	   // Find the currently seleted tab, de-select it and notify the application  
       nodes.each(function(node){
         if (node.id != selectedPane.id) {
-          node.className='ajaxTabbedPanelPane-unselected';
+          if (node.className == 'ajaxTabbedPanelPane-selected') {
+            new Ajax.Request(node.getAttribute('updateUrl') + "?didSelect=false",  {asynchronous:1, evalScripts:false})
+            node.className='ajaxTabbedPanelPane-unselected';
+          }
         };
       });
+
+      // Select the new tab and ntify the app of the selected tab
+      selectedPane.className='ajaxTabbedPanelPane-selected';
+       new Ajax.Request(selectedPane.getAttribute('updateUrl') + "?didSelect=true",  {asynchronous:1, evalScripts:false})
     },
 
     // Loads the panel contents if not already loaded
@@ -41,7 +48,7 @@ var AjaxTabbedPanel = {
       var pane = $(paneID);
       if (pane.innerHTML=='' || pane.innerHTML==busyContent) {
          new PeriodicalExecuter(function(pe) { if (pane.innerHTML=='' || pane.innerHTML==busyContent) {pane.innerHTML=busyContent}; pe.stop()}, 0.5);
-         new Ajax.Updater(pane, pane.getAttribute('updateUrl'), {asynchronous:1, evalScripts:true})
+         new Ajax.Updater(pane, pane.getAttribute('updateUrl'), {asynchronous:1, evalScripts:true});
       }
     },
 
