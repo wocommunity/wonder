@@ -153,7 +153,7 @@ public class ERXMigrator {
 		String skipModelNamesStr = ERXProperties.stringForKey("er.migration.skipModelNames");
 		NSArray<String> skipModelNames = NSArray.EmptyArray;
 		if (skipModelNamesStr != null) {
-			skipModelNames = NSArray.componentsSeparatedByString(modelNamesStr, ",");
+			skipModelNames = NSArray.componentsSeparatedByString(skipModelNamesStr, ",");
 		}
 		Map<IERXMigration, ERXModelVersion> migrations = _buildDependenciesForModelsNamed(modelNames, skipModelNames);
 
