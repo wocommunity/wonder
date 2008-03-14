@@ -17,163 +17,173 @@ import com.webobjects.appserver.WOSession;
 import com.webobjects.foundation.NSArray;
 
 /**
- * Adds a style sheet to a page. You can either supply
- * a complete URL, a file and framework name or put something in the component content.
- * The content of the component is cached under a "key" binding and then delivered 
- * via a direct action, so it doesn't need to get re-rendered to often.
+ * Adds a style sheet to a page. You can either supply a complete URL, a file
+ * and framework name or put something in the component content. The content of
+ * the component is cached under a "key" binding and then delivered via a direct
+ * action, so it doesn't need to get re-rendered to often.
+ * 
  * @binding filename name of the style sheet
  * @binding framework name of the framework for the style sheet
  * @binding href url to the style sheet
- * @binding key key to cache the style sheet under. Default is the 
- *   sessionID
+ * @binding key key to cache the style sheet under. Default is the sessionID
+ * @property er.extensions.ERXStyleSheet.xhtml (defaults true) if false, link
+ *           tags are not closed, which is compatible with older HTML
  */
-//FIXME: cache should be able to cache on calues of bindings, not a single key
+// FIXME: cache should be able to cache on calues of bindings, not a single key
 public class ERXStyleSheet extends ERXStatelessComponent {
 
-    /** logging support */
-    public static final Logger log = Logger.getLogger(ERXStyleSheet.class);
+	/** logging support */
+	public static final Logger log = Logger.getLogger(ERXStyleSheet.class);
 
-    /**
-     * Public constructor
-     * @param aContext a context
-     */
-    public ERXStyleSheet(WOContext aContext) {
-        super(aContext);
-    }
+	/**
+	 * Public constructor
+	 * 
+	 * @param aContext
+	 *            a context
+	 */
+	public ERXStyleSheet(WOContext aContext) {
+		super(aContext);
+	}
 
-    @SuppressWarnings("unchecked")
+	@SuppressWarnings("unchecked")
 	private static ERXExpiringCache<String, WOResponse> cache(WOSession session) {
-    	ERXExpiringCache<String, WOResponse> cache = (ERXExpiringCache<String, WOResponse>) session.objectForKey("ERXStylesheet.cache");
-    	if(cache == null) {
-    		cache = new ERXExpiringCache<String, WOResponse>(60);
-    		session.setObjectForKey(cache, "ERXStylesheet.cache");
-    	}
-    	return cache;
-    }
-    
-    public static class Sheet extends WODirectAction {
-    	public Sheet(WORequest worequest) {
+		ERXExpiringCache<String, WOResponse> cache = (ERXExpiringCache<String, WOResponse>) session.objectForKey("ERXStylesheet.cache");
+		if (cache == null) {
+			cache = new ERXExpiringCache<String, WOResponse>(60);
+			session.setObjectForKey(cache, "ERXStylesheet.cache");
+		}
+		return cache;
+	}
+
+	public static class Sheet extends WODirectAction {
+		public Sheet(WORequest worequest) {
 			super(worequest);
 		}
-    	
+
 		@Override
 		public WOActionResults performActionNamed(String name) {
-			WOResponse response = (WOResponse) cache(session()).objectForKey(name);
+			WOResponse response = ERXStyleSheet.cache(session()).objectForKey(name);
 			return response;
 		}
-    }
-    
-    /**
-     * returns the complete url to the style sheet.
-     * @return style sheet url
-     */
-    public String styleSheetUrl() {
-    	String url = (String) valueForBinding("styleSheetUrl");
-    	url = ( url == null ? (String) valueForBinding("href") : url);
-    	if(url == null) {
-    		String name = styleSheetName();
-    		if(name != null) {
-    			url = application().resourceManager().urlForResourceNamed(styleSheetName(),
-    					styleSheetFrameworkName(),languages(),context().request());
-    		}
-    	}
-        return url;
-    }
-    
-    /**
-     * Returns the style sheet framework name either resolved
-     * via the binding <b>framework</b>.
-     * @return style sheet framework name
-     */
-    public String styleSheetFrameworkName() {
-    	String result = (String)valueForBinding("styleSheetFrameworkName");
-    	result = (result == null ? (String) valueForBinding("framework") : result);
-    	return result;
-    }
+	}
 
-    /**
-     * Returns the style sheet name either resolved
-     * via the binding <b>filename</b>.
-     * @return style sheet name
-     */
-    public String styleSheetName() {
-    	String result = (String)valueForBinding("styleSheetName");
-    	result = (result == null ? (String) valueForBinding("filename") : result);
-    	return result;
-    }
+	/**
+	 * returns the complete url to the style sheet.
+	 * 
+	 * @return style sheet url
+	 */
+	public String styleSheetUrl() {
+		String url = (String) valueForBinding("styleSheetUrl");
+		url = (url == null ? (String) valueForBinding("href") : url);
+		if (url == null) {
+			String name = styleSheetName();
+			if (name != null) {
+				url = application().resourceManager().urlForResourceNamed(styleSheetName(), styleSheetFrameworkName(), languages(), context().request());
+			}
+		}
+		return url;
+	}
 
-    /**
-     * Returns key under which the stylesheet should be placed in the cache.
-     * If no key is given, the session id is used.
-     * @return style sheet framework name
-     */
-    public String styleSheetKey() {
-    	String result = (String)valueForBinding("key");
-		if(result == null)  {
+	/**
+	 * Returns the style sheet framework name either resolved via the binding
+	 * <b>framework</b>.
+	 * 
+	 * @return style sheet framework name
+	 */
+	public String styleSheetFrameworkName() {
+		String result = (String) valueForBinding("styleSheetFrameworkName");
+		result = (result == null ? (String) valueForBinding("framework") : result);
+		return result;
+	}
+
+	/**
+	 * Returns the style sheet name either resolved via the binding <b>filename</b>.
+	 * 
+	 * @return style sheet name
+	 */
+	public String styleSheetName() {
+		String result = (String) valueForBinding("styleSheetName");
+		result = (result == null ? (String) valueForBinding("filename") : result);
+		return result;
+	}
+
+	/**
+	 * Returns key under which the stylesheet should be placed in the cache. If
+	 * no key is given, the session id is used.
+	 * 
+	 * @return style sheet framework name
+	 */
+	public String styleSheetKey() {
+		String result = (String) valueForBinding("key");
+		if (result == null) {
 			result = context().session().sessionID();
 		}
-    	return result;
-    }
-    
-    /**
-     * Returns the media type for this stylesheet
-     */
-    public String mediaType() {
-    	return stringValueForBinding("media");
-    }
-    
-    /**
-     * Returns the languages for the request.
-     */
-    private NSArray languages() {
-    	if(hasSession())
-    		return session().languages();
-    	WORequest request = context().request();
-    	if (request != null)
-    		return request.browserLanguages();
-    	return null;
-    }
+		return result;
+	}
 
-    /**
-     * Appends the &ltlink&gt; tag, either by using the style sheet name and framework or
-     * by using the component content and then generating a link to it.
-     */
-    @Override
+	/**
+	 * Returns the media type for this stylesheet
+	 */
+	public String mediaType() {
+		return stringValueForBinding("media");
+	}
+
+	/**
+	 * Returns the languages for the request.
+	 */
+	private NSArray languages() {
+		if (hasSession())
+			return session().languages();
+		WORequest request = context().request();
+		if (request != null)
+			return request.browserLanguages();
+		return null;
+	}
+
+	/**
+	 * Appends the &ltlink&gt; tag, either by using the style sheet name and
+	 * framework or by using the component content and then generating a link to
+	 * it.
+	 */
+	@Override
 	public void appendToResponse(WOResponse r, WOContext wocontext) {
-    	String href = styleSheetUrl();
-    	boolean appendContents = (href == null); 
-    	WOResponse response;
-    	if (appendContents) {
-    		response = new WOResponse();
-    	}
-    	else {
-    		response = r;
-    	}
-    	response._appendContentAsciiString("<link ");
-    	response._appendTagAttributeAndValue("rel", "stylesheet", false);
-    	response._appendTagAttributeAndValue("type", "text/css", false);
+		String href = styleSheetUrl();
+		boolean appendContents = (href == null);
+		WOResponse response;
+		if (appendContents) {
+			response = new WOResponse();
+		}
+		else {
+			response = r;
+		}
+		response._appendContentAsciiString("<link ");
+		response._appendTagAttributeAndValue("rel", "stylesheet", false);
+		response._appendTagAttributeAndValue("type", "text/css", false);
 
-    	if(appendContents) {
-    		String key = styleSheetKey();
-    		ERXExpiringCache<String, WOResponse> cache = cache(session());
-    		if(cache.isStale(key) || ERXApplication.isDevelopmentModeSafe()) {
-    			WOResponse newresponse = new WOResponse();
-    			super.appendToResponse(newresponse, wocontext);
-    			newresponse.setHeader("text/css", "content-type");
-    			cache.setObjectForKey(newresponse, key);
-    		}
-    		href = wocontext.directActionURLForActionNamed(Sheet.class.getName() + "/" + key, null);
-    	}
-    	response._appendTagAttributeAndValue("href", href, false);
-    	
-    	String media = mediaType();
-    	if (media != null) {
-    		response._appendTagAttributeAndValue("media", media, false);
-    	}
-    	
-    	response._appendContentAsciiString("></link>");
-    	if (appendContents) {
-    		ERXWOContext.insertInResponseBeforeTag(r, response.contentString(), ERXWOContext._htmlCloseHeadTag(), false, true);
-    	}
-    }
+		if (appendContents) {
+			String key = styleSheetKey();
+			ERXExpiringCache<String, WOResponse> cache = cache(session());
+			if (cache.isStale(key) || ERXApplication.isDevelopmentModeSafe()) {
+				WOResponse newresponse = new WOResponse();
+				super.appendToResponse(newresponse, wocontext);
+				newresponse.setHeader("text/css", "content-type");
+				cache.setObjectForKey(newresponse, key);
+			}
+			href = wocontext.directActionURLForActionNamed(Sheet.class.getName() + "/" + key, null);
+		}
+		response._appendTagAttributeAndValue("href", href, false);
+
+		String media = mediaType();
+		if (media != null) {
+			response._appendTagAttributeAndValue("media", media, false);
+		}
+
+		response._appendContentAsciiString(">");
+		if (ERXProperties.booleanForKeyWithDefault("er.extensions.ERXStyleSheet.xhtml", true)) {
+			response._appendContentAsciiString("</link>");
+		}
+		if (appendContents) {
+			ERXWOContext.insertInResponseBeforeTag(r, response.contentString(), ERXWOContext._htmlCloseHeadTag(), false, true);
+		}
+	}
 }
