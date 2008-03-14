@@ -19,6 +19,7 @@ import com.webobjects.appserver._private.WOKeyValueAssociation;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableDictionary;
+import com.webobjects.foundation.NSDelayedCallbackCenter._Delegate;
 
 public class _WOHelperFunctionHTMLTemplateParser extends WOMiddleManParser implements WOHelperFunctionHTMLParserDelegate {
 	public static Logger log = Logger.getLogger(WOHelperFunctionHTMLTemplateParser.class);
@@ -234,9 +235,14 @@ public class _WOHelperFunctionHTMLTemplateParser extends WOMiddleManParser imple
 		if (_currentWebObjectTag == null || webobjectTag == null) {
 			throw new WOMiddleManHTMLFormatException("<" + getClass().getName() + "> Unbalanced WebObject tags. Either there is an extra closing </WEBOBJECT> tag in the html template, or one of the opening <WEBOBJECT ...> tag has a typo (extra spaces between a < sign and a WEBOBJECT tag ?).");
 		}
-		WOElement element = _currentWebObjectTag.dynamicElement(_declarations, _languages);
-		_currentWebObjectTag = webobjectTag;
-		_currentWebObjectTag.addChildElement(element);
+		try {
+			WOElement element = _currentWebObjectTag.dynamicElement(_declarations, _languages);
+			_currentWebObjectTag = webobjectTag;
+			_currentWebObjectTag.addChildElement(element);
+		}
+		catch (RuntimeException e) {
+			throw new RuntimeException("Failed to create a component named '" + _currentWebObjectTag.name() + "' with the declarations " + _declarations + ".", e);
+		}
 	}
 
 	public void didParseComment(String comment, WOHelperFunctionHTMLParser htmlParser) {
