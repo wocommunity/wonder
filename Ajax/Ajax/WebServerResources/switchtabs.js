@@ -7,12 +7,12 @@ var AjaxTabbedPanel = {
       var tablist = this.getChildrenByTagName($(tabControlID), 'li');
       var nodes = $A(tablist);
 
-      selectedTab.className = 'ajaxTabbedPanelTab-selected';
       nodes.each(function(node){
-        if (node.id != selectedTab.id) {
-          node.className = 'ajaxTabbedPanelTab-unselected';
-        };
+          if (node.id != selectedTab.id) {
+              node.removeClassName('ajaxTabbedPanelTab-selected').addClassName('ajaxTabbedPanelTab-unselected');
+          }
       });
+      selectedTab.removeClassName('ajaxTabbedPanelTab-unselected').addClassName('ajaxTabbedPanelTab-selected');
     },
 
     // Change which panel appears
@@ -24,15 +24,15 @@ var AjaxTabbedPanel = {
 	   // Find the currently seleted tab, de-select it and notify the application  
       nodes.each(function(node){
         if (node.id != selectedPane.id) {
-          if (node.className == 'ajaxTabbedPanelPane-selected') {
+          if (node.hasClassName('ajaxTabbedPanelPane-selected')) {
             new Ajax.Request(node.getAttribute('updateUrl') + "?didSelect=false",  {asynchronous:1, evalScripts:false})
-            node.className='ajaxTabbedPanelPane-unselected';
+            node.removeClassName('ajaxTabbedPanelPane-selected').addClassName('ajaxTabbedPanelPane-unselected');
           }
         };
       });
 
       // Select the new tab and ntify the app of the selected tab
-      selectedPane.className='ajaxTabbedPanelPane-selected';
+      selectedPane.removeClassName('ajaxTabbedPanelPane-unselected').addClassName('ajaxTabbedPanelPane-selected');
        new Ajax.Request(selectedPane.getAttribute('updateUrl') + "?didSelect=true",  {asynchronous:1, evalScripts:false})
     },
 
