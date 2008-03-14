@@ -10,11 +10,12 @@ TabbedPanel: AjaxTabbedPanel {
 Tab1: AjaxTabbedPanelTab {
 	id = "panel1";
 	name = "Slow Loading Content";
+	isSelected = isSlowLoadingContentSelected;
 }
 
 Tab2: AjaxTabbedPanelTab {
 	name = "Inline Content";
-	isSelected = true;
+	isSelected = isInlineContentSelected;
 }
 
 
