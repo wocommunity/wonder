@@ -354,7 +354,13 @@ public class ERXWOContext extends ERXAjaxContext implements ERXMutableUserInfoHo
 	 */
 	public static void addStylesheetResourceInHead(WOContext context, WOResponse response, String framework, String fileName) {
 		String startTag = "<link rel = \"stylesheet\" type = \"text/css\" href = \"";
-		String endTag = "\"/>";
+		String endTag;
+		if (ERXStyleSheet.shouldCloseLinkTags()) {
+			endTag = "\"/>";
+		}
+		else {
+			endTag = "\">";
+		}
 		ERXWOContext.addResourceInHead(context, response, framework, fileName, startTag, endTag);
 	}
 

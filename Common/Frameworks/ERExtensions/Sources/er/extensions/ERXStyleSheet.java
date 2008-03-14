@@ -179,11 +179,23 @@ public class ERXStyleSheet extends ERXStatelessComponent {
 		}
 
 		response._appendContentAsciiString(">");
-		if (ERXProperties.booleanForKeyWithDefault("er.extensions.ERXStyleSheet.xhtml", true)) {
+		if (ERXStyleSheet.shouldCloseLinkTags()) {
 			response._appendContentAsciiString("</link>");
 		}
 		if (appendContents) {
 			ERXWOContext.insertInResponseBeforeTag(r, response.contentString(), ERXWOContext._htmlCloseHeadTag(), false, true);
 		}
+	}
+
+	/**
+	 * Returns whether or not XHTML link tags should be used. If false, then
+	 * link tags will not be closed, which is more compatible with certain
+	 * browser parsers. Set the 'er.extensions.ERXStyleSheet.xhtml' to control
+	 * this property.
+	 * 
+	 * @return true of link tags should be closed, false otherwise
+	 */
+	public static boolean shouldCloseLinkTags() {
+		return ERXProperties.booleanForKeyWithDefault("er.extensions.ERXStyleSheet.xhtml", true);
 	}
 }
