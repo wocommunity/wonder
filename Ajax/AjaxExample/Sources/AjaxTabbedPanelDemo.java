@@ -8,4 +8,25 @@ public class AjaxTabbedPanelDemo extends WOComponent {
         super(context);
     }
 
+
+    public boolean isSlowLoadingContentSelected() {
+    	return "SlowLoadingContent".equals(theSession().selectedTab);
+    }
+
+    public void setIsSlowLoadingContentSelected(boolean isSelected) {
+    	if (isSelected) theSession().selectedTab = "SlowLoadingContent";
+    }
+
+    public boolean isInlineContentSelected() {
+    	return "InlineContent".equals(theSession().selectedTab);
+    }
+
+    public void setIsInlineContentSelected(boolean isSelected) {
+    	if (isSelected) theSession().selectedTab = "InlineContent";
+    }
+
+    public Session theSession() {
+    	return (Session)session();
+    }
+
 }
