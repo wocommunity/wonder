@@ -7,6 +7,7 @@
 package er.extensions;
 
 import java.lang.reflect.Method;
+import java.net.MalformedURLException;
 import java.util.Enumeration;
 
 import com.webobjects.appserver.WOApplication;
@@ -515,5 +516,188 @@ public class ERXWOContext extends ERXAjaxContext implements ERXMutableUserInfoHo
 		catch (Exception e) {
 			throw new NSForwardException(e);
 		}
+	}
+
+	/**
+	 * Generates direct action URLs with support for various overrides.
+	 * 
+	 * @param context
+	 *            the context to generate the URL within
+	 * @param directActionName
+	 *            the direct action name
+	 * @param secure
+	 *            true = https, false = http, null = same as request
+	 * @param includeSessionID
+	 *            if false, removes wosid from query parameters
+	 * @return the constructed direct action URL
+	 */
+	public static String directActionUrl(WOContext context, String directActionName, Boolean secure, boolean includeSessionID) {
+		return ERXWOContext.directActionUrl(context, null, null, null, directActionName, null, secure, includeSessionID);
+	}
+
+	/**
+	 * Generates direct action URLs with support for various overrides.
+	 * 
+	 * @param context
+	 *            the context to generate the URL within
+	 * @param directActionName
+	 *            the direct action name
+	 * @param key
+	 *            the query parameter key to add (or null to skip)
+	 * @param value
+	 *            the query parameter value to add (or null to skip)
+	 * @param secure
+	 *            true = https, false = http, null = same as request
+	 * @param includeSessionID
+	 *            if false, removes wosid from query parameters
+	 * @return the constructed direct action URL
+	 */
+	public static String directActionUrl(WOContext context, String directActionName, String key, String value, Boolean secure, boolean includeSessionID) {
+		return ERXWOContext.directActionUrl(context, null, null, null, directActionName, key, value, secure, includeSessionID);
+	}
+
+	/**
+	 * Generates direct action URLs with support for various overrides.
+	 * 
+	 * @param context
+	 *            the context to generate the URL within
+	 * @param directActionName
+	 *            the direct action name
+	 * @param queryParameters
+	 *            the query parameters to append (or null)
+	 * @param secure
+	 *            true = https, false = http, null = same as request
+	 * @param includeSessionID
+	 *            if false, removes wosid from query parameters
+	 * @return the constructed direct action URL
+	 */
+	public static String directActionUrl(WOContext context, String directActionName, NSDictionary<String, ? extends Object> queryParameters, Boolean secure, boolean includeSessionID) {
+		return ERXWOContext.directActionUrl(context, null, null, null, directActionName, queryParameters, secure, includeSessionID);
+	}
+
+	/**
+	 * Generates direct action URLs with support for various overrides.
+	 * 
+	 * @param context
+	 *            the context to generate the URL within
+	 * @param host
+	 *            the host name for the URL (or null for default)
+	 * @param port
+	 *            the port number of the URL (or null for default)
+	 * @param path
+	 *            the custom path prefix (or null for none)
+	 * @param directActionName
+	 *            the direct action name
+	 * @param key
+	 *            the query parameter key to add (or null to skip)
+	 * @param value
+	 *            the query parameter value to add (or null to skip)
+	 * @param secure
+	 *            true = https, false = http, null = same as request
+	 * @param includeSessionID
+	 *            if false, removes wosid from query parameters
+	 * @return the constructed direct action URL
+	 */
+	public static String directActionUrl(WOContext context, String host, Integer port, String path, String directActionName, String key, Object value, Boolean secure, boolean includeSessionID) {
+		NSDictionary<String, ? extends Object> queryParameters = null;
+		if (key != null && value != null) {
+			queryParameters = new NSDictionary<String, Object>(value, key);
+		}
+		return ERXWOContext.directActionUrl(context, host, port, path, directActionName, queryParameters, secure, includeSessionID);
+	}
+
+	/**
+	 * Generates direct action URLs with support for various overrides.
+	 * 
+	 * @param context
+	 *            the context to generate the URL within
+	 * @param host
+	 *            the host name for the URL (or null for default)
+	 * @param port
+	 *            the port number of the URL (or null for default)
+	 * @param path
+	 *            the custom path prefix (or null for none)
+	 * @param directActionName
+	 *            the direct action name
+	 * @param queryParameters
+	 *            the query parameters to append (or null)
+	 * @param secure
+	 *            true = https, false = http, null = same as request
+	 * @param includeSessionID
+	 *            if false, removes wosid from query parameters
+	 * @return the constructed direct action URL
+	 */
+	public static String directActionUrl(WOContext context, String host, Integer port, String path, String directActionName, NSDictionary<String, ? extends Object> queryParameters, Boolean secure, boolean includeSessionID) {
+		boolean completeUrls;
+
+		boolean currentlySecure = ERXRequest.isRequestSecure(context.request());
+		boolean secureBool = (secure == null) ? currentlySecure : secure.booleanValue();
+
+		if (host == null && currentlySecure == secureBool && port == null) {
+			completeUrls = true;
+		}
+		else if (context instanceof ERXWOContext) {
+			completeUrls = ((ERXWOContext) context)._generatingCompleteURLs();
+		}
+		else {
+			completeUrls = false;
+		}
+
+		if (!completeUrls) {
+			context._generateCompleteURLs();
+		}
+
+		String url;
+		try {
+			ERXMutableURL mu = new ERXMutableURL();
+			boolean customPath = (path != null && path.length() > 0);
+			if (!customPath) {
+				mu.setURL(ERXWOContext._directActionURL(context, directActionName, queryParameters, secureBool));
+				if (!includeSessionID) {
+					mu.removeQueryParameter("wosid");
+				}
+			}
+			else {
+				if (secureBool) {
+					mu.setProtocol("https");
+				}
+				else {
+					mu.setProtocol("http");
+				}
+				mu.setHost(context.request()._serverName());
+				mu.setPath(path + directActionName);
+				mu.setQueryParameters(queryParameters);
+				if (includeSessionID && context.session().storesIDsInURLs()) {
+					mu.setQueryParameter("wosid", context.session().sessionID());
+				}
+			}
+
+			if (port != null) {
+				mu.setPort(port);
+			}
+
+			if (host != null && host.length() > 0) {
+				mu.setHost(host);
+				if (mu.protocol() == null) {
+					if (secureBool) {
+						mu.setProtocol("https");
+					}
+					else {
+						mu.setProtocol("http");
+					}
+				}
+			}
+
+			url = mu.toExternalForm();
+		}
+		catch (MalformedURLException e) {
+			throw new RuntimeException("Failed to create url for direct action '" + directActionName + "'.", e);
+		}
+		finally {
+			if (!completeUrls) {
+				context._generateRelativeURLs();
+			}
+		}
+		return url;
 	}
 }
