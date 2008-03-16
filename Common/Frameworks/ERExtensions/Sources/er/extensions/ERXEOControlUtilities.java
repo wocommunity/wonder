@@ -362,7 +362,7 @@ public class ERXEOControlUtilities {
     public static void refaultObject(EOEnterpriseObject eo) {
         if (eo != null && !eo.isFault()) {
             EOEditingContext ec = eo.editingContext();
-            NSArray gids = new NSArray(ec.globalIDForObject(eo));
+            NSArray<EOGlobalID> gids = new NSArray<EOGlobalID>(ec.globalIDForObject(eo));
             ec.invalidateObjectsWithGlobalIDs(gids);
         }
     }
@@ -422,15 +422,16 @@ public class ERXEOControlUtilities {
      * @return fetch specification that can be used to fetch primary keys for
      * 		a given qualifier and sort orderings.
      */
-    public static EOFetchSpecification primaryKeyFetchSpecificationForEntity(EOEditingContext ec,
+    @SuppressWarnings("unchecked")
+	public static EOFetchSpecification primaryKeyFetchSpecificationForEntity(EOEditingContext ec,
                                                                       String entityName,
                                                                       EOQualifier eoqualifier,
-                                                                      NSArray sortOrderings,
-                                                                      NSArray additionalKeys) {
+                                                                      NSArray<EOSortOrdering> sortOrderings,
+                                                                      NSArray<String> additionalKeys) {
         EOEntity entity = ERXEOAccessUtilities.entityNamed(ec, entityName);
         EOFetchSpecification fs = new EOFetchSpecification(entityName, eoqualifier, sortOrderings);
         fs.setFetchesRawRows(true);
-        NSMutableArray keys = new NSMutableArray(entity.primaryKeyAttributeNames());
+        NSMutableArray<String> keys = new NSMutableArray<String>(entity.primaryKeyAttributeNames());
         if (additionalKeys != null) {
             keys.addObjectsFromArray(additionalKeys);
         }
@@ -450,7 +451,7 @@ public class ERXEOControlUtilities {
     public static NSArray primaryKeysMatchingQualifier(EOEditingContext ec,
                                                        String entityName,
                                                        EOQualifier eoqualifier,
-                                                       NSArray sortOrderings) {
+                                                       NSArray<EOSortOrdering> sortOrderings) {
         EOFetchSpecification fs = ERXEOControlUtilities.primaryKeyFetchSpecificationForEntity(ec,
                                                                                               entityName,
                                                                                               eoqualifier,
@@ -474,26 +475,57 @@ public class ERXEOControlUtilities {
                                                                String entityName,
                                                                Object primaryKeyValue,
                                                                NSArray prefetchingKeyPaths) {
+    	return ERXEOControlUtilities.objectWithPrimaryKeyValue(ec, entityName, primaryKeyValue, prefetchingKeyPaths, true);
+    }
+    
+    /**
+     * Fetches an enterprise object based on a given primary key value.
+     * This method has an advantage over the standard EOUtilities method
+     * in that you can specify prefetching key paths as well as refreshing
+     * the snapshot of the given object
+     * @param ec editing context to fetch into
+     * @param entityName name of the entity
+     * @param primaryKeyValue primary key value. Compound primary keys are given as NSDictionaries.
+     * @param prefetchingKeyPaths key paths to fetch off of the eo
+     * @param refreshRefetchedObjects if true, the object will be refetched and refreshed
+     * @return enterprise object matching the given value or null if none is foudn
+     * @throws IllegalStateException if the entity has a compound key and only one key is provided or 
+     * if more than one object is found matching the value.
+     */    
+    @SuppressWarnings("unchecked")
+	public static EOEnterpriseObject objectWithPrimaryKeyValue(EOEditingContext ec,
+                                                               String entityName,
+                                                               Object primaryKeyValue,
+                                                               NSArray prefetchingKeyPaths, boolean refreshRefetchedObjects) {
         EOEntity entity = EOUtilities.entityNamed(ec, entityName);
-        NSDictionary values;
+        NSDictionary<String, Object> values;
         if(primaryKeyValue instanceof NSDictionary) {
-            values = (NSDictionary)primaryKeyValue;
+            values = (NSDictionary<String, Object>)primaryKeyValue;
         }  else {
             if (entity.primaryKeyAttributes().count() != 1) {
-                throw new IllegalStateException("Entity \"" + entity.name() + "\" has a compound primary key. Can't be used with the method: objectWithPrimaryKeyValue");
+                throw new IllegalStateException("The entity '" + entity.name() + "' has a compound primary key and cannot be used with a single primary key value.");
             }
-            values = new NSDictionary(primaryKeyValue,
+            values = new NSDictionary<String, Object>(primaryKeyValue,
                                ((EOAttribute)entity.primaryKeyAttributes().lastObject()).name());
         }
-        EOQualifier qualfier = EOQualifier.qualifierToMatchAllValues(values);
-        EOFetchSpecification fs = new EOFetchSpecification(entityName, qualfier, null);
-        // Might as well get fresh stuff
-        fs.setRefreshesRefetchedObjects(true);
-        if (prefetchingKeyPaths != null)
-            fs.setPrefetchingRelationshipKeyPaths(prefetchingKeyPaths);
-        NSArray eos = ec.objectsWithFetchSpecification(fs);
-        if (eos.count() > 1)
-            throw new IllegalStateException("Found multiple objects for entity \"" + entity.name() + " with primary key value: " + primaryKeyValue);
+        NSArray eos;
+        if (prefetchingKeyPaths == null && !refreshRefetchedObjects) {
+        	EOGlobalID gid = entity.globalIDForRow(values);
+        	eos = new NSArray<EOEnterpriseObject>(ec.faultForGlobalID(gid, ec));
+        }
+        else {
+	        EOQualifier qualfier = EOQualifier.qualifierToMatchAllValues(values);
+	        EOFetchSpecification fs = new EOFetchSpecification(entityName, qualfier, null);
+	        // Might as well get fresh stuff
+	        fs.setRefreshesRefetchedObjects(refreshRefetchedObjects);
+	        if (prefetchingKeyPaths != null) {
+	        	fs.setPrefetchingRelationshipKeyPaths(prefetchingKeyPaths);
+	        }
+	        eos = ec.objectsWithFetchSpecification(fs);
+        }
+        if (eos.count() > 1) {
+            throw new IllegalStateException("Found multiple objects for the entity '" + entity.name() + "' with primary key value: " + primaryKeyValue);
+        }
         return eos.count() == 1 ? (EOEnterpriseObject)eos.lastObject() : null;
     }
     
@@ -511,7 +543,7 @@ public class ERXEOControlUtilities {
      */
     public static NSArray objectsInRange(EOEditingContext ec, EOFetchSpecification spec, int start, int end) {
         EOSQLExpression sql = ERXEOAccessUtilities.sqlExpressionForFetchSpecification(ec, spec, start, end);
-        NSDictionary hints = new NSDictionary(sql, "EOCustomQueryExpressionHintKey");
+        NSDictionary<String, EOSQLExpression> hints = new NSDictionary<String, EOSQLExpression>(sql, "EOCustomQueryExpressionHintKey");
         spec.setHints(hints);
 
         return ec.objectsWithFetchSpecification(spec);
@@ -535,7 +567,7 @@ public class ERXEOControlUtilities {
         spec.setFetchesRawRows(true);
         spec.setRawRowKeyPaths(pkNames);
         EOSQLExpression sql = ERXEOAccessUtilities.sqlExpressionForFetchSpecification(ec, spec, start, end);
-        NSDictionary hints = new NSDictionary(sql, "EOCustomQueryExpressionHintKey");
+        NSDictionary<String, EOSQLExpression> hints = new NSDictionary<String, EOSQLExpression>(sql, "EOCustomQueryExpressionHintKey");
         spec.setHints(hints);
         return ec.objectsWithFetchSpecification(spec);
     }
@@ -597,14 +629,14 @@ public class ERXEOControlUtilities {
 			fetchSpec.setFetchesRawRows(true);
 	
 			EOSQLExpression sqlExpr = sqlFactory.expressionForEntity(entity);
-			sqlExpr.prepareSelectExpressionWithAttributes(new NSArray(aggregateAttribute), false, fetchSpec);
+			sqlExpr.prepareSelectExpressionWithAttributes(new NSArray<EOAttribute>(aggregateAttribute), false, fetchSpec);
 	
 			EOAdaptorChannel adaptorChannel = databaseContext.availableChannel().adaptorChannel();
 			if (!adaptorChannel.isOpen()) {
 				adaptorChannel.openChannel();
 			}
 			Object aggregateValue = null; 
-			NSArray attributes = new NSArray(aggregateAttribute);
+			NSArray<EOAttribute> attributes = new NSArray<EOAttribute>(aggregateAttribute);
 			adaptorChannel.evaluateExpression(sqlExpr);
 			try {
 				adaptorChannel.setAttributesToFetch(attributes);
@@ -888,7 +920,7 @@ public class ERXEOControlUtilities {
      */
 
     public static NSDictionary<String, Object> newPrimaryKeyDictionaryForObject(EOEnterpriseObject eo) {
-        NSDictionary dict = newPrimaryKeyDictionaryForObjectFromClassProperties(eo);
+        NSDictionary<String, Object> dict = newPrimaryKeyDictionaryForObjectFromClassProperties(eo);
         if(dict == null) {
             dict = newPrimaryKeyDictionaryForEntityNamed(eo.editingContext(), eo.entityName());
         }
@@ -911,18 +943,20 @@ public class ERXEOControlUtilities {
      * @return a dictionary containing a new primary key for the given
      *		entity.
      */
-    public static NSDictionary newPrimaryKeyDictionaryForEntityNamed(EOEditingContext ec, String entityName) {
+    @SuppressWarnings("unchecked")
+	public static NSDictionary<String, Object> newPrimaryKeyDictionaryForEntityNamed(EOEditingContext ec, String entityName) {
         EOEntity entity = ERXEOAccessUtilities.entityNamed(ec, entityName);
         EODatabaseContext dbContext = EODatabaseContext.registeredDatabaseContextForModel(entity.model(), ec);
-        NSDictionary primaryKey = null;
+        NSDictionary<String, Object> primaryKey = null;
         try {
             dbContext.lock();
             EOAdaptorChannel adaptorChannel = dbContext.availableChannel().adaptorChannel();
-            if (!adaptorChannel.isOpen())
+            if (!adaptorChannel.isOpen()) {
                 adaptorChannel.openChannel();
-            NSArray arr = adaptorChannel.primaryKeysForNewRowsWithEntity(1, entity);
+            }
+            NSArray<NSDictionary<String, Object>> arr = adaptorChannel.primaryKeysForNewRowsWithEntity(1, entity);
             if (arr != null) {
-                primaryKey = (NSDictionary)arr.lastObject();
+                primaryKey = arr.lastObject();
             } else {
                 log.warn("Could not get primary key array for entity: " + entityName);
             }
@@ -969,16 +1003,19 @@ public class ERXEOControlUtilities {
      * @return string representation of the primary key of the
      *		object.
      */
-    public static NSDictionary primaryKeyDictionaryForString(EOEditingContext ec, String entityName, String string) {
-        if(string == null)
+    @SuppressWarnings("unchecked")
+	public static NSDictionary<String, Object> primaryKeyDictionaryForString(EOEditingContext ec, String entityName, String string) {
+        if(string == null) {
             return null;
+        }
+        
         if(string.trim().length()==0) {
             return NSDictionary.EmptyDictionary;
         }
         
         EOEntity entity = ERXEOAccessUtilities.entityNamed(ec, entityName);
         NSArray pks = entity.primaryKeyAttributes();
-        NSMutableDictionary pk = new NSMutableDictionary();
+        NSMutableDictionary<String, Object> pk = new NSMutableDictionary<String, Object>();
         try {
             Object rawValue = NSPropertyListSerialization.propertyListFromString(string);
             if(rawValue instanceof NSArray) {
@@ -1020,10 +1057,11 @@ public class ERXEOControlUtilities {
      * of the primary key for a given object.
      */
 
-    public static EOGlobalID globalIDForString(EOEditingContext ec, String entityName, String string) {
-    	NSDictionary values = primaryKeyDictionaryForString(ec, entityName, string);
+    @SuppressWarnings("unchecked")
+	public static EOGlobalID globalIDForString(EOEditingContext ec, String entityName, String string) {
+    	NSDictionary<String, Object> values = primaryKeyDictionaryForString(ec, entityName, string);
     	EOEntity entity = ERXEOAccessUtilities.entityNamed(ec, entityName);
-        NSArray pks = entity.primaryKeyAttributeNames();
+        NSArray<String> pks = entity.primaryKeyAttributeNames();
         EOGlobalID gid = EOKeyGlobalID.globalIDWithEntityName(entityName, values.objectsForKeys(pks, null).objects());
     	return gid;
     }
