@@ -3,16 +3,10 @@ package er.ajax;
 import java.text.ParseException;
 import java.util.NoSuchElementException;
 
-import org.json.JSONArray;
+import org.jabsorb.JSONRPCBridge;
+import org.jabsorb.JSONRPCResult;
 import org.json.JSONObject;
 
-import com.metaparadigm.jsonrpc.BigDecimalSerializer;
-import com.metaparadigm.jsonrpc.EOEnterpriseObjectSerializer;
-import com.metaparadigm.jsonrpc.JSONBridge;
-import com.metaparadigm.jsonrpc.JSONRPCResult;
-import com.metaparadigm.jsonrpc.NSArraySerializer;
-import com.metaparadigm.jsonrpc.NSDictionarySerializer;
-import com.metaparadigm.jsonrpc.NSTimestampSerializer;
 import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WORequest;
@@ -20,31 +14,31 @@ import com.webobjects.appserver.WOResponse;
 import com.webobjects.foundation.NSKeyValueCoding;
 import com.webobjects.foundation.NSMutableDictionary;
 
+import er.ajax.json.EOEnterpriseObjectSerializer;
+import er.ajax.json.JSONRequestHandler;
+import er.ajax.json.NSArraySerializer;
+import er.ajax.json.NSDictionarySerializer;
+import er.ajax.json.NSTimestampSerializer;
+
 /**
- * Handles javascript-java communication (client-server) between the javascript
- * world running in a web browser and the java world, running in a WebObject
- * application. This remote-procedure-call communication is done using json
- * protocol, as implemented by the JSON-RPC library.
+ * Handles javascript-java communication (client-server) between the javascript world running in a web browser and the
+ * java world, running in a WebObject application. This remote-procedure-call communication is done using json protocol,
+ * as implemented by the JSON-RPC library.
  * <p>
- * This component generate javascript code that will initialize a variable that
- * will be the starting point for rpc communication. The name of this variable
- * is given in the <code>name</code> binding. There will be an object, server
- * side that will be the proxy and will handle the request. You can define the
- * proxy on the server side (it has to be a JSONRPCBridge). The proxy will be
- * your window to the java world, from there you can access your java objects
- * from the javascript side. The name for this java variable is
- * <code>proxyName</code>. By default, it will configure the parent component
- * as one java proxy object and name it <code>wopage</code> from the
- * javascript side. A JSONRPCBridge object is created if not given as a binding.
- * If the binding is there but the value is null, it will create the bridge then
- * push it to the binding. That way, you can configure a single bridge for
- * multiple proxy objects. It is of good practice to provide a value in a
- * binding (at least a binding) so that the object is not created on every ajax
+ * This component generate javascript code that will initialize a variable that will be the starting point for rpc
+ * communication. The name of this variable is given in the <code>name</code> binding. There will be an object, server
+ * side that will be the proxy and will handle the request. You can define the proxy on the server side (it has to be a
+ * JSONRPCBridge). The proxy will be your window to the java world, from there you can access your java objects from the
+ * javascript side. The name for this java variable is <code>proxyName</code>. By default, it will configure the
+ * parent component as one java proxy object and name it <code>wopage</code> from the javascript side. A JSONRPCBridge
+ * object is created if not given as a binding. If the binding is there but the value is null, it will create the bridge
+ * then push it to the binding. That way, you can configure a single bridge for multiple proxy objects. It is of good
+ * practice to provide a value in a binding (at least a binding) so that the object is not created on every ajax
  * request.
  * </p>
  * <p>
- * The <em>proxy</em> object will be the one visible for RPC from the
- * javascript world. For example, the following binding:<br>
+ * The <em>proxy</em> object will be the one visible for RPC from the javascript world. For example, the following
+ * binding:<br>
  * <code>
  * PageProxy : AjaxProxy {<br>
  *      proxyName = "wopage";<br>
@@ -98,6 +92,7 @@ public class AjaxProxy extends AjaxComponent {
 
 	public AjaxProxy(WOContext context) {
 		super(context);
+		JSONRequestHandler._initializeBridge();
 	}
 
 	/**
@@ -115,9 +110,8 @@ public class AjaxProxy extends AjaxComponent {
 	}
 
 	/**
-	 * Adds the jsonrpc.js script to the head in the response if not already
-	 * present and also adds a javascript proxy for the supplied bridge under
-	 * the name "JSONRPC_<variableName>".
+	 * Adds the jsonrpc.js script to the head in the response if not already present and also adds a javascript proxy
+	 * for the supplied bridge under the name "JSONRPC_<variableName>".
 	 * 
 	 * @param res
 	 */
@@ -163,31 +157,6 @@ public class AjaxProxy extends AjaxComponent {
 		try {
 			input = new JSONObject(inputString);
 
-			// Get method name and arguments
-			String methodName = null;
-			JSONArray arguments = null;
-
-			try {
-				methodName = input.getString("method");
-			}
-			catch (NoSuchElementException ne) {
-				// nothing
-			}
-
-			// Back compatibility for <= 0.7 clients
-			if (methodName != null) {
-				arguments = input.getJSONArray("params");
-			}
-			// Is this a CallableReference it will have a non-zero objectID
-			int reference = input.optInt("objectID");
-
-			if (reference != 0) {
-				log.debug("Call objectID=" + reference + " " + methodName + "(" + arguments + ")");
-			}
-			else {
-				log.debug("Call " + methodName + "(" + arguments + ")");
-			}
-
 			Object proxy;
 			if (canGetValueForBinding("proxy")) {
 				proxy = valueForBinding("proxy");
@@ -197,29 +166,18 @@ public class AjaxProxy extends AjaxComponent {
 			}
 			String proxyName = (String) valueForBinding("proxyName");
 
-			JSONBridge bridge = null;
+			JSONRPCBridge bridge = null;
 			if (canGetValueForBinding("AjaxBridge")) {
-				bridge = (JSONBridge) valueForBinding("AjaxBridge");
+				bridge = (JSONRPCBridge) valueForBinding("AjaxBridge");
 			}
 			else {
-				bridge = new JSONBridge();
-				bridge.getSerializer().registerSerializer(new EOEnterpriseObjectSerializer());
-				bridge.getSerializer().registerSerializer(new NSArraySerializer());
-				bridge.getSerializer().registerSerializer(new NSDictionarySerializer());
-				bridge.getSerializer().registerSerializer(new NSTimestampSerializer());
-				bridge.getSerializer().registerSerializer(new BigDecimalSerializer());
+				bridge = new JSONRPCBridge();
 				if (canSetValueForBinding("AjaxBridge")) {
 					setValueForBinding(bridge, "AjaxBridge");
 				}
 			}
-
-			bridge.setDebug(log.isDebugEnabled());
 			bridge.registerObject(proxyName, proxy);
-			output = bridge.call(new Object[] { proxy }, input);
-		}
-		catch (ParseException e) {
-			log.error("Can't parse call: " + inputString);
-			output = JSONRPCResult.MSG_ERR_PARSE;
+			output = bridge.call(new Object[] { request, context, response, proxy }, input);
 		}
 		catch (NoSuchElementException e) {
 			log.error("No method in request");
