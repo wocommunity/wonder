@@ -69,53 +69,69 @@ public class JSONRequestHandler extends WORequestHandler {
 	@Override
 	public WOResponse handleRequest(WORequest request) {
 		WOApplication application = WOApplication.application();
-		WOContext context = application.createContextForRequest(request);
-		WOResponse response = application.createResponseInContext(context);
-
-		Object output;
+		application.awake();
 		try {
-			String inputString = request.contentString();
-			JSONObject input = new JSONObject(inputString);
-			String wosid = request.cookieValueForKey("wosid");
-			if (wosid == null) {
-				ERXMutableURL url = new ERXMutableURL();
-				url.setQueryParameters(request.queryString());
-				wosid = url.queryParameter("wosid");
-				if (wosid == null && input.has("wosid")) {
-					wosid = input.getString("wosid");
-				}
-			}
-			context._setRequestSessionID(wosid);
-			WOSession session = null;
-			if (context._requestSessionID() != null) {
-				session = WOApplication.application().restoreSessionWithID(wosid, context);
-			}
+			WOContext context = application.createContextForRequest(request);
+			WOResponse response = application.createResponseInContext(context);
+	
+			Object output;
 			try {
-				output = _jsonBridge.call(new Object[] { request, response, context }, input);
-			}
-			finally {
+				String inputString = request.contentString();
+				JSONObject input = new JSONObject(inputString);
+				String wosid = request.cookieValueForKey("wosid");
+				if (wosid == null) {
+					ERXMutableURL url = new ERXMutableURL();
+					url.setQueryParameters(request.queryString());
+					wosid = url.queryParameter("wosid");
+					if (wosid == null && input.has("wosid")) {
+						wosid = input.getString("wosid");
+					}
+				}
+				context._setRequestSessionID(wosid);
+				WOSession session = null;
 				if (context._requestSessionID() != null) {
-					WOApplication.application().saveSessionForContext(context);
+					session = WOApplication.application().restoreSessionWithID(wosid, context);
+				}
+				if (session != null) {
+					session.awake();
+				}
+				try {
+					output = _jsonBridge.call(new Object[] { request, response, context }, input);
+				}
+				finally {
+					try {
+						if (session != null) {
+							session.sleep();
+						}
+					}
+					finally {
+						if (context._requestSessionID() != null) {
+							WOApplication.application().saveSessionForContext(context);
+						}
+					}
 				}
 			}
+			catch (NoSuchElementException e) {
+				e.printStackTrace();
+				output = JSONRPCResult.MSG_ERR_NOMETHOD;
+			}
+			catch (JSONException e) {
+				e.printStackTrace();
+				output = JSONRPCResult.MSG_ERR_PARSE;
+			}
+			catch (Throwable t) {
+				t.printStackTrace();
+				output = JSONRPCResult.MSG_ERR_PARSE;
+			}
+	
+			//System.out.println("JSONRequestHandler.handleRequest: output = " + output);
+			if (output != null) {
+				response.appendContentString(output.toString());
+			}
+			return response;
 		}
-		catch (NoSuchElementException e) {
-			e.printStackTrace();
-			output = JSONRPCResult.MSG_ERR_NOMETHOD;
+		finally {
+			application.sleep();
 		}
-		catch (JSONException e) {
-			e.printStackTrace();
-			output = JSONRPCResult.MSG_ERR_PARSE;
-		}
-		catch (Throwable t) {
-			t.printStackTrace();
-			output = JSONRPCResult.MSG_ERR_PARSE;
-		}
-
-		//System.out.println("JSONRequestHandler.handleRequest: output = " + output);
-		if (output != null) {
-			response.appendContentString(output.toString());
-		}
-		return response;
 	}
 }
