@@ -81,7 +81,19 @@ public class _EOCheapCopyArray extends NSArray implements EOFaulting {
 		return super.hashCode();
 	}
 	
-    public ListIterator listIterator() {
+	@Override
+	public Object[] toArray() {
+		willRead();
+		return super.toArray();
+	}
+	
+	@Override
+	public Object[] toArray(Object[] objects) {
+		willRead();
+		return super.toArray(objects);
+	}
+
+	public ListIterator listIterator() {
 		willRead();
 		return super.listIterator();
 	}
