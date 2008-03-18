@@ -10,7 +10,6 @@ import org.jabsorb.serializer.MarshallException;
 import org.jabsorb.serializer.ObjectMatch;
 import org.jabsorb.serializer.SerializerState;
 import org.jabsorb.serializer.UnmarshallException;
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -19,7 +18,6 @@ import com.webobjects.eoaccess.EOUtilities;
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.eocontrol.EOEnterpriseObject;
 import com.webobjects.eocontrol.EOGlobalID;
-import com.webobjects.eocontrol.EOKeyGlobalID;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation.NSMutableSet;
@@ -29,6 +27,7 @@ import er.extensions.ERXEC;
 import er.extensions.ERXEOControlUtilities;
 import er.extensions.ERXProperties;
 import er.extensions.ERXRandomGUID;
+import er.extensions.ERXStringUtilities;
 
 /**
  * La classe EOEnterpriseObjectSerializer s'occupe de la conversion des objets paramêtres de type
@@ -86,10 +85,15 @@ public class EOEnterpriseObjectSerializer extends AbstractSerializer {
 			if (eoDict == null) {
 				throw new UnmarshallException("eo missing");
 			}
-			String entityName = eoDict.getString("_entityName");
+			String gidString = jso.getString("gid");
+			if (gidString == null) {
+				throw new UnmarshallException("gid missing");
+			}
+			String parts[] = gidString.split("/");
+			String ecid = parts[0];
+			String entityName = parts[1];
 			EOGlobalID keyGlobalID;
-			String ecid = eoDict.getString("_ecid");
-
+	
 			EOEditingContext ec = null;
 			if(ecid != null) {
 				ec = editingContextForKey(ecid);
@@ -100,10 +104,20 @@ public class EOEnterpriseObjectSerializer extends AbstractSerializer {
 			}
 			ec.lock();
 			try {
-				String pk = eoDict.getString("_gid");
-				keyGlobalID = ERXEOControlUtilities.globalIDForString(ec, entityName, pk);
-				EOEnterpriseObject eo = ec.faultForGlobalID(keyGlobalID, ec);
-				//AK: apply values... otherwise this stuff doesn't make much sense
+				String pk = parts.length > 2 ? parts[2] : null;
+				EOEnterpriseObject eo;
+				if(pk != null && pk.length() > 0) {
+					pk = ERXStringUtilities.urlDecode(pk);
+					keyGlobalID = ERXEOControlUtilities.globalIDForString(ec, entityName, pk);
+					eo = ec.faultForGlobalID(keyGlobalID, ec);
+				} else {
+					eo = ERXEOControlUtilities.createAndInsertObject(ec, entityName);
+				}
+				for (Iterator iterator = eoDict.keys(); iterator.hasNext();) {
+					String key = (String) iterator.next();
+					Object value = eoDict.get(key);
+					eo.takeValueForKey(value, key);
+				}
 				return eo;
 			}
 			finally {
@@ -122,6 +136,11 @@ public class EOEnterpriseObjectSerializer extends AbstractSerializer {
 			JSONObject eoData = new JSONObject();
 			obj.put("javaClass", o.getClass().getName());
 			obj.put("eo", eoData);
+
+			EOEditingContext ec = eo.editingContext();
+			String ecid = registerEditingContext(ec);
+			String pk = ERXStringUtilities.urlEncode(ERXEOControlUtilities.primaryKeyStringForObject(eo));
+			obj.put("gid", ecid + "/" + eo.entityName() +  "/" + pk);
 			String keyPath = null;
 			try {
 				addAttributes(state, eo, eoData);
@@ -150,8 +169,6 @@ public class EOEnterpriseObjectSerializer extends AbstractSerializer {
 	 */
 	public void addAttributes(SerializerState state, EOEnterpriseObject source, JSONObject destination) throws MarshallException {
 		try {
-			EOEditingContext ec = source.editingContext();
-			EOEntity entity = EOUtilities.entityForObject(ec, source);
 
 			NSArray publicAttributeNames = EOEnterpriseObjectSerializer.publicAttributeNames(source);
 			for (Enumeration e = source.attributeKeys().objectEnumerator(); e.hasMoreElements();) {
@@ -160,12 +177,6 @@ public class EOEnterpriseObjectSerializer extends AbstractSerializer {
 					destination.put(attributeName, ser.marshall(state, source, source.storedValueForKey(attributeName), attributeName));
 				}
 			}
-
-			destination.put("_entityName", entity.name());
-			String ecid = registerEditingContext(ec);
-			destination.put("_ecid", ecid);
-			String pk = ERXEOControlUtilities.primaryKeyStringForObject(source);
-			destination.put("_gid", pk);
 		}
 		catch (JSONException e) {
 			throw new MarshallException("Failed to marshall EO.", e);
