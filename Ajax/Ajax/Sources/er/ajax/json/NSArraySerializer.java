@@ -22,6 +22,7 @@ package er.ajax.json;
 
 import java.util.Enumeration;
 
+import org.jabsorb.JSONSerializer;
 import org.jabsorb.serializer.AbstractSerializer;
 import org.jabsorb.serializer.MarshallException;
 import org.jabsorb.serializer.ObjectMatch;
@@ -118,7 +119,9 @@ public class NSArraySerializer extends AbstractSerializer {
 			int i = 0;
 			try {
 				for (; i < jsonlist.length(); i++) {
-					al.addObject(ser.unmarshall(state, null, jsonlist.get(i)));
+					Object object = jsonlist.get(i);
+					object = ser.unmarshall(state, null, object);
+					al.addObject(object);
 				}
 			}
 			catch (UnmarshallException e) {
@@ -145,14 +148,23 @@ public class NSArraySerializer extends AbstractSerializer {
 			JSONArray arr = new JSONArray();
 			obj.put("javaClass", o.getClass().getName());
 			obj.put("nsarray", arr);
+			state.push(o, array, "nsarray");
 			int index = 0;
 			try {
 				for (Enumeration e = array.objectEnumerator(); e.hasMoreElements(); index++) {
-					arr.put(ser.marshall(state, o, e.nextElement(), Integer.valueOf(index)));
+					Object json = ser.marshall(state, array, e.nextElement(), new Integer(index));
+					if (JSONSerializer.CIRC_REF_OR_DUPLICATE == json)
+						arr.put(JSONObject.NULL);
+					else
+						arr.put(json);
+					index++;
 				}
 			}
 			catch (MarshallException e) {
 				throw new MarshallException("element " + index + " " + e.getMessage());
+			}
+			finally {
+				state.pop();
 			}
 			return obj;
 		}
