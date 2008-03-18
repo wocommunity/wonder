@@ -45,6 +45,7 @@ public class JSONRequestHandler extends WORequestHandler {
 			JSONRPCBridge.getSerializer().registerSerializer(new NSDictionarySerializer());
 			JSONRPCBridge.getSerializer().registerSerializer(new NSTimestampSerializer());
 			JSONRPCBridge.getSerializer().registerSerializer(new NSDataSerializer());
+			JSONRPCBridge.getSerializer().registerSerializer(new ERXConstantSerializer());
 			isInitialized = true;
 		}
 		catch (Exception e) {
