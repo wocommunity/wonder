@@ -12,9 +12,9 @@ import er.ajax.AjaxDynamicElement;
 import er.ajax.AjaxUtils;
 
 /**
- * AjaxJSONClient renders a "new JSONRpcClient('...')" with a URL back
- * to your application (along with a session ID if there is one).
- *
+ * AjaxJSONClient renders a "new JSONRpcClient('...')" with a URL back to your application (along with a session ID if
+ * there is one).
+ * 
  * <code>
  * var jsonClient = <wo:AjaxJSONClient/>;
  * </code>
@@ -29,13 +29,13 @@ public class AjaxJSONClient extends AjaxDynamicElement {
 
 	public void appendToResponse(WOResponse woresponse, WOContext wocontext) {
 		String queryString = null;
-		if (wocontext.request().sessionID() != null) {
+		if (wocontext.request().sessionID() != null && wocontext.session().storesIDsInURLs()) {
 			queryString = "wosid=" + wocontext.request().sessionID();
 		}
 		String jsonUrl = wocontext.urlWithRequestHandlerKey(JSONRequestHandler.RequestHandlerKey, "", queryString);
 		woresponse.appendContentString("new JSONRpcClient(");
 		WOComponent component = wocontext.component();
-		String callback = (String)valueForBinding("callback", component);
+		String callback = (String) valueForBinding("callback", component);
 		if (callback != null) {
 			woresponse.appendContentString(callback);
 			woresponse.appendContentString(",");

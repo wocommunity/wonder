@@ -101,6 +101,31 @@ public class JSONRequestHandler extends WORequestHandler {
 				}
 				try {
 					output = _jsonBridge.call(new Object[] { request, response, context }, input);
+					if (context._session() != null) {
+						WOSession contextSession = context._session();
+						// If this is a new session, then we have to force it to be a cookie session
+						if (wosid == null) {
+							boolean storesIDsInCookies = contextSession.storesIDsInCookies();
+							try {
+								contextSession.setStoresIDsInCookies(true);
+								contextSession._appendCookieToResponse(response);
+							}
+							finally {
+								contextSession.setStoresIDsInCookies(storesIDsInCookies);
+							}
+						}
+						else {
+							contextSession._appendCookieToResponse(response);
+						}
+					}
+					if (output != null) {
+						response.appendContentString(output.toString());
+					}
+
+					if (response != null) {
+						response._finalizeInContext(context);
+						response.disableClientCaching();
+					}
 				}
 				finally {
 					try {
@@ -109,7 +134,7 @@ public class JSONRequestHandler extends WORequestHandler {
 						}
 					}
 					finally {
-						if (context._requestSessionID() != null) {
+						if (context._session() != null) {
 							WOApplication.application().saveSessionForContext(context);
 						}
 					}
@@ -128,9 +153,6 @@ public class JSONRequestHandler extends WORequestHandler {
 				output = new JSONRPCResult(JSONRPCResult.CODE_ERR_PARSE, null, t.getMessage());
 			}
 
-			if (output != null) {
-				response.appendContentString(output.toString());
-			}
 			return response;
 		}
 		finally {
