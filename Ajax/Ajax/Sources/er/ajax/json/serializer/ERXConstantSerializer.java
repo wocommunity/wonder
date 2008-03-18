@@ -1,4 +1,4 @@
-package er.ajax.json;
+package er.ajax.json.serializer;
 
 import org.jabsorb.serializer.AbstractSerializer;
 import org.jabsorb.serializer.MarshallException;

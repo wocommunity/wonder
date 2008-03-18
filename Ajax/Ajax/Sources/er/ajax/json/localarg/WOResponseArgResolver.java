@@ -1,4 +1,4 @@
-package er.ajax.json;
+package er.ajax.json.localarg;
 
 import org.jabsorb.localarg.LocalArgResolveException;
 import org.jabsorb.localarg.LocalArgResolver;

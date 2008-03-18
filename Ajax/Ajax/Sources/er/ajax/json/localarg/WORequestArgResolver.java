@@ -1,16 +1,16 @@
-package er.ajax.json;
+package er.ajax.json.localarg;
 
 import org.jabsorb.localarg.LocalArgResolveException;
 import org.jabsorb.localarg.LocalArgResolver;
 
-import com.webobjects.appserver.WOContext;
+import com.webobjects.appserver.WORequest;
 
-public class WOSessionArgResolver implements LocalArgResolver {
+public class WORequestArgResolver implements LocalArgResolver {
 	public Object resolveArg(Object obj) throws LocalArgResolveException {
-		if (!(obj instanceof WOContext)) {
+		if (!(obj instanceof WORequest)) {
 			throw new LocalArgResolveException("Invalid context.");
 		}
-		return ((WOContext) obj).session();
+		return obj;
 	}
 
 }

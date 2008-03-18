@@ -1,6 +1,4 @@
-package er.ajax.json;
-
-import org.json.JSONArray;
+package er.ajax.json.client;
 
 /**
  * IJSONEnterpriseObject is a stub interface you can implement in
