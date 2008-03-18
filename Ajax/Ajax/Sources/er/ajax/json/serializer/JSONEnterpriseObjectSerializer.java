@@ -62,6 +62,7 @@ public class JSONEnterpriseObjectSerializer extends AbstractSerializer {
         BeanSerializer beanSerializer = new BeanSerializer();
         beanSerializer.setOwner(ser);
         Object obj = beanSerializer.unmarshall(state, javaClass, eoDict);
+        state.setSerialized(o, obj);
         return obj;
       }
       finally {
