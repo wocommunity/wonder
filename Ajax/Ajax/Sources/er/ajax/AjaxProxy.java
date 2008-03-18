@@ -143,7 +143,9 @@ public class AjaxProxy extends AjaxComponent {
 		WOResponse response = AjaxUtils.createResponse(request, context);
 
 		String inputString = request.contentString();
-		log.debug("Input: " + inputString);
+		if (log.isDebugEnabled()) {
+			log.debug("AjaxProxy.handleRequest: input = " + inputString);
+		}
 
 		// Process the request
 		JSONObject input = null;
@@ -183,7 +185,9 @@ public class AjaxProxy extends AjaxComponent {
 		}
 
 		// Write the response
-		log.debug("JSONRPCServlet.service send: " + output.toString());
+		if (log.isDebugEnabled()) {
+			log.debug("AjaxProxy.handleRequest: output = " + output);
+		}
 		response.appendContentString(output.toString());
 		return response;
 	}
