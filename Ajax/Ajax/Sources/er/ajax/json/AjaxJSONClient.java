@@ -1,6 +1,7 @@
 package er.ajax.json;
 
 import com.webobjects.appserver.WOActionResults;
+import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WOElement;
 import com.webobjects.appserver.WORequest;
@@ -10,6 +11,17 @@ import com.webobjects.foundation.NSDictionary;
 import er.ajax.AjaxDynamicElement;
 import er.ajax.AjaxUtils;
 
+/**
+ * AjaxJSONClient renders a "new JSONRpcClient('...')" with a URL back
+ * to your application (along with a session ID if there is one).
+ *
+ * <code>
+ * var jsonClient = <wo:AjaxJSONClient/>;
+ * </code>
+ * 
+ * @author mschrag
+ * @binding callback the initialization callback
+ */
 public class AjaxJSONClient extends AjaxDynamicElement {
 	public AjaxJSONClient(String name, NSDictionary associations, WOElement element) {
 		super(name, associations, element);
@@ -21,7 +33,16 @@ public class AjaxJSONClient extends AjaxDynamicElement {
 			queryString = "wosid=" + wocontext.request().sessionID();
 		}
 		String jsonUrl = wocontext.urlWithRequestHandlerKey(JSONRequestHandler.RequestHandlerKey, "", queryString);
-		woresponse.appendContentString("new JSONRpcClient('" + jsonUrl + "')");
+		woresponse.appendContentString("new JSONRpcClient(");
+		WOComponent component = wocontext.component();
+		String callback = (String)valueForBinding("callback", component);
+		if (callback != null) {
+			woresponse.appendContentString(callback);
+			woresponse.appendContentString(",");
+		}
+		woresponse.appendContentString("'");
+		woresponse.appendContentString(jsonUrl);
+		woresponse.appendContentString("')");
 	}
 
 	protected void addRequiredWebResources(WOResponse response, WOContext context) {
