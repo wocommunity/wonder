@@ -11,30 +11,16 @@ import org.json.JSONArray;
  */
 public interface IJSONEnterpriseObject {
   /**
-   * Returns the entity name of the original EO.
-   * 
-   * @return the entity name of the original EO
-   */
-  public String entityName();
-
-  /**
-   * Sets the entity name of the original EO.
-   * 
-   * @param entityName the entity name of the original EO
-   */
-  public void setEntityName(String entityName);
-
-  /**
    * Returns the global ID of the original EO.
    * 
    * @return the global ID of the original EO
    */
-  public JSONArray globalID();
+  public String globalID();
 
   /**
    * Sets the global ID of the original EO.
    * 
    * @param globalID the global ID of the original EO
    */
-  public void setGlobalID(JSONArray globalID);
+  public void setGlobalID(String globalID);
 }

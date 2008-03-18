@@ -1,6 +1,5 @@
 package er.ajax.json;
 
-import org.json.JSONArray;
 
 /**
  * The base class of a JSONEnterpriseObject that implements the
@@ -9,22 +8,13 @@ import org.json.JSONArray;
  * @author mschrag
  */
 public class JSONEnterpriseObject implements IJSONEnterpriseObject {
-  private String _entityName;
-  private JSONArray _globalID;
+  private String _globalID;
 
-  public String entityName() {
-    return _entityName;
-  }
-
-  public void setEntityName(String entityName) {
-    _entityName = entityName;
-  }
-
-  public JSONArray globalID() {
+  public String globalID() {
     return _globalID;
   }
 
-  public void setGlobalID(JSONArray globalID) {
+  public void setGlobalID(String globalID) {
     _globalID = globalID;
   }
 }

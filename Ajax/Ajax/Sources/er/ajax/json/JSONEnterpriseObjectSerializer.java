@@ -49,10 +49,7 @@ public class JSONEnterpriseObjectSerializer extends AbstractSerializer {
       if (eoDict == null) {
         throw new UnmarshallException("eo missing");
       }
-      String entityName = eoDict.getString("_entityName");
-      JSONArray gid = eoDict.getJSONArray("_gid");
-
-      eoDict.put("entityName", entityName);
+      String gid = jso.getString("gid");
       eoDict.put("globalID", gid);
 
       String javaClassName = jso.getString("javaClass");
@@ -80,10 +77,8 @@ public class JSONEnterpriseObjectSerializer extends AbstractSerializer {
       JSONObject obj = new JSONObject();
       JSONObject eoData = new JSONObject();
       obj.put("javaClass", o.getClass().getName());
+      obj.put("gid", eo.globalID());
       obj.put("eo", eoData);
-
-      eoData.put("_entityName", eo.entityName());
-      eoData.put("_gid", eo.globalID());
       return obj;
     }
     catch (JSONException e) {
