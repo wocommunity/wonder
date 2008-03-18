@@ -15,8 +15,11 @@ import org.jabsorb.serializer.UnmarshallException;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import sun.security.krb5.internal.crypto.Des;
+
 import com.webobjects.eoaccess.EOEntity;
 import com.webobjects.eoaccess.EOUtilities;
+import com.webobjects.eocontrol.EOClassDescription;
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.eocontrol.EOEnterpriseObject;
 import com.webobjects.eocontrol.EOGlobalID;
@@ -84,7 +87,10 @@ public class EOEnterpriseObjectSerializer extends AbstractSerializer {
 	public Object unmarshall(SerializerState state, Class clazz, Object o) throws UnmarshallException {
 		try {
 			JSONObject jso = (JSONObject) o;
-			JSONObject eoDict = jso.getJSONObject("eo");
+			JSONObject eoDict = jso;
+			if(jso.has("eo")) {
+				jso.getJSONObject("eo");
+			}
 			if (eoDict == null) {
 				throw new UnmarshallException("eo missing");
 			}
@@ -118,8 +124,10 @@ public class EOEnterpriseObjectSerializer extends AbstractSerializer {
 				}
 				for (Iterator iterator = eoDict.keys(); iterator.hasNext();) {
 					String key = (String) iterator.next();
-					Object value = eoDict.get(key);
-					eo.takeValueForKey(value, key);
+					if(!("javaClass".equals(key) || "gid".equals(key))) {
+						Object value = eoDict.get(key);
+						eo.takeValueForKey(value, key);
+					}
 				}
 				state.setSerialized(o, eo);
 				return eo;
@@ -173,16 +181,31 @@ public class EOEnterpriseObjectSerializer extends AbstractSerializer {
 				destination.put("eo", eoData);
 				state.push(source, eoData, "eo");
 			}
-			NSArray publicAttributeNames = EOEnterpriseObjectSerializer.publicAttributeNames(source);
-			for (Enumeration e = source.attributeKeys().objectEnumerator(); e.hasMoreElements();) {
-				String attributeName = (String) e.nextElement();
-				if (publicAttributeNames.containsObject(attributeName)) {
-					Object value = ser.marshall(state, source, source.storedValueForKey(attributeName), attributeName);
-					if (JSONSerializer.CIRC_REF_OR_DUPLICATE == value)
-						destination.put(attributeName, JSONObject.NULL);
-					else
-						destination.put(attributeName, value);
+			EOClassDescription cd = source.classDescription();
+			NSArray publicAttributeNames = attributeNames(source);
+			for (Enumeration e = publicAttributeNames.objectEnumerator(); e.hasMoreElements();) {
+				String key = (String) e.nextElement();
+				Object jsonValue;
+				if(cd.toManyRelationshipKeys().containsObject(key)) {
+					JSONObject rel = new JSONObject();
+					rel.put("javaClass", "com.webobjects.eocontrol.EOArrayFault");
+					rel.put("sourceGlobalID", destination.get("gid"));
+					rel.put("relationshipName", key);
+					jsonValue = rel;
+				} else if (cd.toOneRelationshipKeys().containsObject(key)) {
+					JSONObject rel = new JSONObject();
+					rel.put("javaClass", "com.webobjects.eocontrol.EOFault");
+					rel.put("sourceGlobalID", destination.get("gid"));
+					rel.put("relationshipName", key);
+					jsonValue = rel;
+				} else {
+					Object value = source.valueForKey(key);
+					jsonValue = ser.marshall(state, source, value, key);
 				}
+				if (JSONSerializer.CIRC_REF_OR_DUPLICATE == jsonValue)
+					destination.put(key, JSONObject.NULL);
+				else
+					destination.put(key, jsonValue);
 			}
 		}
 		catch (JSONException e) {
@@ -195,6 +218,15 @@ public class EOEnterpriseObjectSerializer extends AbstractSerializer {
 		}
 	}
 
+	/**
+	 * Override to return the appropriate attribute names.
+	 * @param eo
+	 * @return
+	 */
+	protected NSArray<String> attributeNames(EOEnterpriseObject eo) {
+		return EOEnterpriseObjectSerializer.publicAttributeNames(eo);
+	}
+	
 	/**
 	 * Returns an array of attribute names from the EOEntity of source that are used in the primary key, or in forming
 	 * relationships. These can be presumed to be exposed primary or foreign keys and handled accordingly when copying
