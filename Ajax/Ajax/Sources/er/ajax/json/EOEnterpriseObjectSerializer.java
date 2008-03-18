@@ -90,7 +90,7 @@ public class EOEnterpriseObjectSerializer extends AbstractSerializer {
 				keyValues[i] = gid.get(i);
 			}
 			EOEnterpriseObject eo;
-			EOKeyGlobalID keyGlobalID = new _EOIntegralKeyGlobalID(entityName, keyValues);
+			EOKeyGlobalID keyGlobalID = EOKeyGlobalID.globalIDWithEntityName(entityName, keyValues);
 			EOEditingContext editingContext = _editingContextFactory.newEditingContext();
 			editingContext.lock();
 			try {
@@ -130,7 +130,7 @@ public class EOEnterpriseObjectSerializer extends AbstractSerializer {
 	/**
 	 * This copies the attributes from the source EOEnterpriseObject to the destination. Only attributes which are class
 	 * properties are copied. However if an attribute is a class property and also used in a relationship it is assumed
-	 * to be an exposed primary or forign key and not copied. Such attributes are set to null. See
+	 * to be an exposed primary or foreign key and not copied. Such attributes are set to null. See
 	 * exposedKeyAttributeNames for details on how this is determined. It can be used when creating custom
 	 * implementations of the duplicate() method in EOCopyable.
 	 * 
