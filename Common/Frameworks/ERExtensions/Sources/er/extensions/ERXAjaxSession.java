@@ -22,14 +22,10 @@ import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 
 /**
- * The ERXAjaxSession is the part of ERXSession that is modified to
- * handle Ajax requests.  If you want to use the Ajax framework without
- * using other parts of Project Wonder (i.e. ERXSession or ERXApplication),
- * you should steal all of the code in ERXAjaxSession and ERXAjaxApplication.
- * 
- * You should also steal ERXWOForm (or at least the force form submit stuff)
- * if you want partial form submits to work properly (i.e. the dependent lists
- * example).
+ * ERXAjaxSession is the part of ERXSession that handles Ajax requests.
+ * If you want to use the Ajax framework without using other parts of Project
+ * Wonder (i.e. ERXSession or ERXApplication), you should steal all of the code
+ * in ERXAjaxSession, ERXAjaxApplication, and ERXAjaxContext.
  * 
  * @author mschrag
  */
