@@ -27,4 +27,12 @@ public class SimplePerson {
 	public void setAge(int age) {
 		_age = age;
 	}
+	
+	public int hashCode() {
+		return _name.hashCode();
+	}
+	
+	public boolean equals(Object obj) {
+		return obj instanceof SimplePerson && ((SimplePerson)obj)._name.equals(_name);
+	}
 }
