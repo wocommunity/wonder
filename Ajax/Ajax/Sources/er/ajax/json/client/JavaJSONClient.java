@@ -1,4 +1,4 @@
-package er.ajax.json;
+package er.ajax.json.client;
 
 import java.lang.reflect.Field;
 
@@ -6,6 +6,13 @@ import org.jabsorb.JSONSerializer;
 import org.jabsorb.client.Client;
 import org.jabsorb.client.HTTPSession;
 import org.jabsorb.client.TransportRegistry;
+
+import er.ajax.json.serializer.ERXConstantSerializer;
+import er.ajax.json.serializer.JSONEnterpriseObjectSerializer;
+import er.ajax.json.serializer.NSArraySerializer;
+import er.ajax.json.serializer.NSDataSerializer;
+import er.ajax.json.serializer.NSDictionarySerializer;
+import er.ajax.json.serializer.NSTimestampSerializer;
 
 /**
  * If you are trying to communicate with a WO JSON server from another Java app, JavaJSONClient provides a factory for

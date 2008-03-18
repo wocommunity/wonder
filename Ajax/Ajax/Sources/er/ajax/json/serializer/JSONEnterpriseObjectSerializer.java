@@ -1,4 +1,4 @@
-package er.ajax.json;
+package er.ajax.json.serializer;
 
 import org.jabsorb.serializer.AbstractSerializer;
 import org.jabsorb.serializer.MarshallException;
@@ -11,6 +11,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.webobjects.foundation.NSMutableDictionary;
+
+import er.ajax.json.client.IJSONEnterpriseObject;
 
 /**
  * JSONEnterpriseObjectSerializer turns EO's from a JSON server into

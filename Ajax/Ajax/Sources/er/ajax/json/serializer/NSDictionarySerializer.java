@@ -18,7 +18,7 @@
  *
  */
 
-package er.ajax.json;
+package er.ajax.json.serializer;
 
 import java.util.Enumeration;
 import java.util.Iterator;
