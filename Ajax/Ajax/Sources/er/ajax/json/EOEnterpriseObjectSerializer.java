@@ -231,26 +231,30 @@ public class EOEnterpriseObjectSerializer extends AbstractSerializer {
 			return new EOEditingContext();
 		}
 	}
-	
-	private static Map<String, EOEditingContext> contexts = new WeakHashMap<String, EOEditingContext>();
+
+	private static Map<EOEditingContext, String> contexts = new WeakHashMap<EOEditingContext, String>();
 
 	public static String registerEditingContext(EOEditingContext ec) {
 		synchronized (contexts) {
-			for (Iterator iterator = contexts.entrySet().iterator(); iterator.hasNext();) {
-				Map.Entry<String, EOEditingContext> entry = (Map.Entry<String, EOEditingContext>) iterator.next();
-				if(entry.getValue() == ec) {
-					return entry.getKey();
-				}
+			String id = contexts.get(ec);
+			if (id != null) {
+				return id;
 			}
-			String id = ERXRandomGUID.newGid();
-			contexts.put(id, ec);
+			id = ERXRandomGUID.newGid();
+			contexts.put(ec, id);
 			return id;
 		}
 	}
 
 	public static EOEditingContext editingContextForKey(String key) {
 		synchronized (contexts) {
-			return contexts.get(key);
+			for (Iterator iterator = contexts.entrySet().iterator(); iterator.hasNext();) {
+				Map.Entry<EOEditingContext, String> entry = (Map.Entry<EOEditingContext, String>) iterator.next();
+				if(entry.getValue().equals(key)) {
+					return entry.getKey();
+				}
+			}
+			return null;
 		}
 	}
 	
