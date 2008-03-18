@@ -20,8 +20,6 @@
 
 package er.ajax.json;
 
-import java.util.Enumeration;
-
 import org.jabsorb.serializer.AbstractSerializer;
 import org.jabsorb.serializer.MarshallException;
 import org.jabsorb.serializer.ObjectMatch;
@@ -31,13 +29,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSData;
-import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableData;
 import com.webobjects.foundation.NSPropertyListSerialization;
-import com.webobjects.foundation.NSTimeZone;
-import com.webobjects.foundation.NSTimestamp;
 
 /**
  * Transforms NSData between JavaScript and Java.
