@@ -38,6 +38,8 @@ public class JavaJSONClient {
 		serializer.registerSerializer(new NSArraySerializer());
 		serializer.registerSerializer(new NSDictionarySerializer());
 		serializer.registerSerializer(new NSTimestampSerializer());
+		serializer.registerSerializer(new NSDataSerializer());
+		serializer.registerSerializer(new ERXConstantSerializer());
 		return client;
 	}
 }
