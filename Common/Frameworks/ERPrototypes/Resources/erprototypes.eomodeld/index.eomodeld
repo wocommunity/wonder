@@ -7,6 +7,7 @@
         {className = EOGenericRecord; name = EOJDBCOpenBasePrototypes; }, 
         {className = EOGenericRecord; name = EOJDBCOraclePrototypes; }, 
         {className = EOGenericRecord; name = EOJDBCPostgresqlPrototypes; }, 
-        {className = EOGenericRecord; name = EOJDBCPrototypes; }
+        {className = EOGenericRecord; name = EOJDBCPrototypes; },
+        {className = EOGenericRecord; name = EOMemoryPrototypes; }
     ); 
 }
