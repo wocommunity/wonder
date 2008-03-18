@@ -113,18 +113,17 @@ public class JSONRequestHandler extends WORequestHandler {
 			}
 			catch (NoSuchElementException e) {
 				e.printStackTrace();
-				output = JSONRPCResult.MSG_ERR_NOMETHOD;
+				output = new JSONRPCResult(JSONRPCResult.CODE_ERR_NOMETHOD, null, JSONRPCResult.MSG_ERR_NOMETHOD);
 			}
 			catch (JSONException e) {
 				e.printStackTrace();
-				output = JSONRPCResult.MSG_ERR_PARSE;
+				output = new JSONRPCResult(JSONRPCResult.CODE_ERR_PARSE, null, JSONRPCResult.MSG_ERR_PARSE);
 			}
 			catch (Throwable t) {
 				t.printStackTrace();
-				output = JSONRPCResult.MSG_ERR_PARSE;
+				output = new JSONRPCResult(JSONRPCResult.CODE_ERR_PARSE, null, t.getMessage());
 			}
 	
-			//System.out.println("JSONRequestHandler.handleRequest: output = " + output);
 			if (output != null) {
 				response.appendContentString(output.toString());
 			}
