@@ -1,6 +1,5 @@
 package er.ajax;
 
-import java.text.ParseException;
 import java.util.NoSuchElementException;
 
 import org.jabsorb.JSONRPCBridge;
@@ -14,11 +13,7 @@ import com.webobjects.appserver.WOResponse;
 import com.webobjects.foundation.NSKeyValueCoding;
 import com.webobjects.foundation.NSMutableDictionary;
 
-import er.ajax.json.EOEnterpriseObjectSerializer;
-import er.ajax.json.JSONRequestHandler;
-import er.ajax.json.NSArraySerializer;
-import er.ajax.json.NSDictionarySerializer;
-import er.ajax.json.NSTimestampSerializer;
+import er.ajax.json.JSONBridge;
 
 /**
  * Handles javascript-java communication (client-server) between the javascript world running in a web browser and the
@@ -92,7 +87,6 @@ public class AjaxProxy extends AjaxComponent {
 
 	public AjaxProxy(WOContext context) {
 		super(context);
-		JSONRequestHandler._initializeBridge();
 	}
 
 	/**
@@ -171,7 +165,7 @@ public class AjaxProxy extends AjaxComponent {
 				bridge = (JSONRPCBridge) valueForBinding("AjaxBridge");
 			}
 			else {
-				bridge = new JSONRPCBridge();
+				bridge = JSONBridge.createBridge();
 				if (canSetValueForBinding("AjaxBridge")) {
 					setValueForBinding(bridge, "AjaxBridge");
 				}
