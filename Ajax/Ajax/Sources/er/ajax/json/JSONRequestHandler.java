@@ -50,6 +50,10 @@ public class JSONRequestHandler extends WORequestHandler {
 		JSONRequestHandler._initializeBridge();
 	}
 
+	public JSONRPCBridge getJSONBridge() {
+		return _jsonBridge;
+	}
+
 	public void registerSerializer(Serializer serializer) throws Exception {
 		JSONRPCBridge.getSerializer().registerSerializer(serializer);
 	}
@@ -73,7 +77,7 @@ public class JSONRequestHandler extends WORequestHandler {
 		try {
 			WOContext context = application.createContextForRequest(request);
 			WOResponse response = application.createResponseInContext(context);
-	
+
 			Object output;
 			try {
 				String inputString = request.contentString();
@@ -123,7 +127,7 @@ public class JSONRequestHandler extends WORequestHandler {
 				t.printStackTrace();
 				output = new JSONRPCResult(JSONRPCResult.CODE_ERR_PARSE, null, t.getMessage());
 			}
-	
+
 			if (output != null) {
 				response.appendContentString(output.toString());
 			}
