@@ -49,8 +49,9 @@ public class ERXConstantSerializer extends AbstractSerializer {
 				throw new UnmarshallException("ERXConstant missing");
 			}
 			String javaClassName = jso.getString("javaClass");
-			return ERXConstant.constantForClassNamed(object, javaClassName);
-
+			ERXConstant.Constant constant = ERXConstant.constantForClassNamed(object, javaClassName);
+			state.setSerialized(o, constant);
+			return constant;
 		}
 		catch (Exception e) {
 			throw new UnmarshallException("Failed to unmarshall ERXConstant.", e);
