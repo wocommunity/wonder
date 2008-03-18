@@ -1,0 +1,1 @@
+ -destination Sources -java -javaTemplate _WonderEntity.java -model Resources/AjaxExample.eomodeld -packagedirs -refmodel /Library/Frameworks/ERPrototypes.framework/Resources/erprototypes.eomodeld -subclassDestination Sources -subclassJavaTemplate WonderEntity.java -verbose

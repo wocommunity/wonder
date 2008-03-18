@@ -27,19 +27,41 @@
 		$('ExampleDiv').appendChild(ul);
 	}
 		
-	function testData() {
+	function testDuplicates() {
 		var data = json.example.simpleData();
-		data.list.each(function(item, index) {
+		data.nsarray.each(function(item, index) {
 			if (item == null) {
 				alert('Item #' + index + ' was null! Server=>Client fixups failed.');
 			}
 		});
 		alert("verified? " + json.example.verifySimpleData(data));
 	}
+		
+	function testCircular() {
+		var data = json.example.complexData();
+		data.nsarray.each(function(item, index) {
+			if (item == null) {
+				alert('Item #' + index + ' was null! Server=>Client fixups failed.');
+			}
+		});
+		alert("verified? " + json.example.verifyComplexData(data));
+	}
+		
+	function testEO() {
+		var data = json.example.eoData();
+		data.nsarray.each(function(item, index) {
+			if (item == null) {
+				alert('Item #' + index + ' was null! Server=>Client fixups failed.');
+			}
+		});
+		alert("verified? " + json.example.verifyEOData(data));
+	}
 	</script>
 	<button onclick = "getOnePerson()">Get One Person</button>
 	<button onclick = "getPeople()">Get People</button>
-	<button onclick = "testData()">Test Data</button>
+	<button onclick = "testDuplicates()">Test Duplicates</button>
+	<button onclick = "testCircular()">Test Circular</button>
+	<button onclick = "testEO()">Test EO</button>
 
 	<h1>JSONRequestHandler Example</h1>
 	<p>

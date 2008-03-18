@@ -23,15 +23,15 @@ public class ExampleService {
 	}
 
 	public NSArray somePeople() {
-		NSMutableArray<Person> people = new NSMutableArray<Person>();
-		people.add(new Person("Mike", 29));
-		people.add(new Person("Andrew", 2));
-		people.add(new Person("Kirsten", 29));
-		people.add(new Person("Jonathan", 36));
+		NSMutableArray<ComplexPerson> people = new NSMutableArray<ComplexPerson>();
+		people.add(new ComplexPerson("Mike", 29));
+		people.add(new ComplexPerson("Andrew", 2));
+		people.add(new ComplexPerson("Kirsten", 29));
+		people.add(new ComplexPerson("Jonathan", 36));
 		return people;
 	}
 	
-	public void printPerson(Person person) {
+	public void printPerson(ComplexPerson person) {
 		System.out.println("ExampleService.printPerson: " + person.getName());
 	}
 }
