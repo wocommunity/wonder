@@ -26,9 +26,15 @@
 		$('ExampleDiv').innerHTML = 'People: ';
 		$('ExampleDiv').appendChild(ul);
 	}
+		
+	function testData() {
+		var data = json.example.someData();
+		alert("equals: " + json.example.verifyData(data));
+	}
 	</script>
 	<button onclick = "getOnePerson()">Get One Person</button>
 	<button onclick = "getPeople()">Get People</button>
+	<button onclick = "testData()">Test Data</button>
 
 	<h1>JSONRequestHandler Example</h1>
 	<p>
