@@ -1,6 +1,7 @@
 package er.ajax.json.serializer;
 
 import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.WeakHashMap;
@@ -28,6 +29,7 @@ import er.extensions.ERXEC;
 import er.extensions.ERXEOControlUtilities;
 import er.extensions.ERXProperties;
 import er.extensions.ERXRandomGUID;
+import er.extensions.ERXSession;
 import er.extensions.ERXStringUtilities;
 
 /**
@@ -242,9 +244,26 @@ public class EOEnterpriseObjectSerializer extends AbstractSerializer {
 		}
 	}
 
-	private static Map<EOEditingContext, String> contexts = new WeakHashMap<EOEditingContext, String>();
+	private static Map<EOEditingContext, String> _contexts = new WeakHashMap<EOEditingContext, String>();
 
+	public static Map<EOEditingContext, String> contexts() {
+		Map<EOEditingContext, String> contexts;
+		ERXSession session = ERXSession.session();
+		if (session == null) {
+			contexts = _contexts;
+		}
+		else {
+			contexts = (Map<EOEditingContext, String>) session.objectForKey("_jsonContexts");
+			if (contexts == null) {
+				contexts = new HashMap<EOEditingContext, String>();
+				session.setObjectForKey(contexts, "_jsonContexts");
+			}
+		}
+		return contexts;
+	}
+	
 	public static String registerEditingContext(EOEditingContext ec) {
+		Map<EOEditingContext, String> contexts = contexts();
 		synchronized (contexts) {
 			String id = contexts.get(ec);
 			if (id != null) {
@@ -257,6 +276,7 @@ public class EOEnterpriseObjectSerializer extends AbstractSerializer {
 	}
 
 	public static EOEditingContext editingContextForKey(String key) {
+		Map<EOEditingContext, String> contexts = contexts();
 		synchronized (contexts) {
 			for (Iterator iterator = contexts.entrySet().iterator(); iterator.hasNext();) {
 				Map.Entry<EOEditingContext, String> entry = (Map.Entry<EOEditingContext, String>) iterator.next();
