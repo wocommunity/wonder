@@ -26,6 +26,7 @@ import com.webobjects.foundation.NSMutableSet;
 import com.webobjects.foundation.NSSet;
 
 import er.extensions.ERXEC;
+import er.extensions.ERXEOControlUtilities;
 import er.extensions.ERXProperties;
 import er.extensions.ERXRandomGUID;
 
@@ -86,30 +87,27 @@ public class EOEnterpriseObjectSerializer extends AbstractSerializer {
 				throw new UnmarshallException("eo missing");
 			}
 			String entityName = eoDict.getString("_entityName");
-			JSONArray gid = eoDict.getJSONArray("_gid");
-			int gidLength = gid.length();
-			Object[] keyValues = new Object[gidLength];
-			for (int i = 0; i < gidLength; i++) {
-				keyValues[i] = gid.get(i);
-			}
-			EOKeyGlobalID keyGlobalID = EOKeyGlobalID.globalIDWithEntityName(entityName, keyValues);
+			EOGlobalID keyGlobalID;
 			String ecid = eoDict.getString("_ecid");
-			
-			EOEditingContext editingContext = null;
+
+			EOEditingContext ec = null;
 			if(ecid != null) {
-				editingContext = editingContextForKey(ecid);
+				ec = editingContextForKey(ecid);
 			}
-			if(editingContext == null) {
-				editingContext = _editingContextFactory.newEditingContext();
-				registerEditingContext(editingContext);
+			if(ec == null) {
+				ec = _editingContextFactory.newEditingContext();
+				registerEditingContext(ec);
 			}
-			editingContext.lock();
+			ec.lock();
 			try {
-				EOEnterpriseObject eo = editingContext.faultForGlobalID(keyGlobalID, editingContext);
+				String pk = eoDict.getString("_gid");
+				keyGlobalID = ERXEOControlUtilities.globalIDForString(ec, entityName, pk);
+				EOEnterpriseObject eo = ec.faultForGlobalID(keyGlobalID, ec);
+				//AK: apply values... otherwise this stuff doesn't make much sense
 				return eo;
 			}
 			finally {
-				editingContext.unlock();
+				ec.unlock();
 			}
 		}
 		catch (JSONException e) {
@@ -164,13 +162,10 @@ public class EOEnterpriseObjectSerializer extends AbstractSerializer {
 			}
 
 			destination.put("_entityName", entity.name());
-			destination.put("_ecid", registerEditingContext(ec));
-			EOGlobalID gid = ec.globalIDForObject(source);
-			if (gid instanceof EOKeyGlobalID) {
-				EOKeyGlobalID key = (EOKeyGlobalID) gid;
-				Object[] keyValues = key._keyValuesNoCopy();
-				destination.put("_gid", ser.marshall(state, source, keyValues, "_gid"));
-			}
+			String ecid = registerEditingContext(ec);
+			destination.put("_ecid", ecid);
+			String pk = ERXEOControlUtilities.primaryKeyStringForObject(source);
+			destination.put("_gid", pk);
 		}
 		catch (JSONException e) {
 			throw new MarshallException("Failed to marshall EO.", e);
