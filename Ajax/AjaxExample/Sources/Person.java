@@ -1,6 +1,13 @@
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSMutableArray;
+
 
 
 public class Person {
+	
+	private Person _spouse;
+	private NSMutableArray<Person> _children = new NSMutableArray<Person>();
+
 	private String _name;
 	private int _age;
 
@@ -27,5 +34,21 @@ public class Person {
 
 	public void setAge(int age) {
 		_age = age;
+	}
+
+	public Person getSpouse() {
+		return _spouse;
+	}
+
+	public void setSpouse(Person spouse) {
+		_spouse = spouse;
+	}
+
+	public NSArray<Person> getChildren() {
+		return _children;
+	}
+
+	public void setChildren(NSArray<Person> children) {
+		_children = children != null ? children.mutableClone() : null;
 	}
 }

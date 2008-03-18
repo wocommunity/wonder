@@ -20,7 +20,7 @@
 		ul.id = 'people';
 		people.nsarray.each(function(person, index) {
 			var li = document.createElement('li');
-			li.innerHTML = person.name + ' (' + person.age + ')';
+			li.innerHTML = person ? person.name + ' (' + person.age + ')' : "null";
 			ul.appendChild(li);
 		});
 		$('ExampleDiv').innerHTML = 'People: ';
@@ -29,6 +29,7 @@
 		
 	function testData() {
 		var data = json.example.someData();
+		alert("equals: " + data);
 		alert("equals: " + json.example.verifyData(data));
 	}
 	</script>
