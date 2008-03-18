@@ -47,6 +47,9 @@ public class JSONBridge extends JSONRPCBridge {
 	public static JSONBridge createBridge() {
 		_initializeBridge();
 		JSONBridge result = new JSONBridge();
+		// AK: remove this when we find out why dupes don't work
+		JSONBridge.getSerializer().setFixupCircRefs(false);
+		JSONBridge.getSerializer().setFixupDuplicates(false);
 		return result;
 	}
 }
