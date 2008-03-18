@@ -103,7 +103,7 @@ YAHOO.extendX(WONDER.grid.EODataModel, YAHOO.ext.grid.JSONDataModel, {
         	var rowData = [];
     	    var root = eval('data.' + this.schema.root);
     	    for(var i = 0; i < root.length; i++) {
-    			var node = root[i]['eo'];
+    			var node = root[i]['eo'] ? root[i]['eo'] :  root[i];
     			var colData = [];
     			colData.node = node;
     			colData.id = (typeof node[idField] != 'undefined' && node[idField] !== '' ? node[idField] : String(i));
