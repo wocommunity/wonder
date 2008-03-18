@@ -48,7 +48,7 @@ public class JSONBridge extends JSONRPCBridge {
 		_initializeBridge();
 		JSONBridge result = new JSONBridge();
 		// AK: remove this when we find out why dupes don't work
-		boolean value = true;
+		boolean value = false;
 		JSONBridge.getSerializer().setFixupCircRefs(value);
 		JSONBridge.getSerializer().setFixupDuplicates(value);
 		return result;
