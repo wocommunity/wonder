@@ -627,4 +627,4 @@ Form.Element.RadioButtonObserver = Class.create(Form.Element.EventObserver, {
 	  this.callback(this.element, value);
   	this.lastValue = value;
   }
-}); 
+});
