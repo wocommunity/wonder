@@ -60,7 +60,9 @@ public class NSTimestampSerializer extends AbstractSerializer {
 				}
 			}
 			if (NSTimestamp.class.equals(clazz)) {
-				return new NSTimestamp(time, NSTimeZone.getTimeZone(tz));
+				NSTimestamp timestamp = new NSTimestamp(time, NSTimeZone.getTimeZone(tz));
+				state.setSerialized(o, timestamp);
+				return timestamp;
 			}
 			throw new UnmarshallException("invalid class " + clazz);
 		}
