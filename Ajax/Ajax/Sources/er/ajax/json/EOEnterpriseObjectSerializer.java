@@ -1,6 +1,9 @@
 package er.ajax.json;
 
+import java.util.Collections;
 import java.util.Enumeration;
+import java.util.Map;
+import java.util.WeakHashMap;
 
 import org.jabsorb.serializer.AbstractSerializer;
 import org.jabsorb.serializer.MarshallException;
@@ -17,7 +20,6 @@ import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.eocontrol.EOEnterpriseObject;
 import com.webobjects.eocontrol.EOGlobalID;
 import com.webobjects.eocontrol.EOKeyGlobalID;
-import com.webobjects.eocontrol._EOIntegralKeyGlobalID;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation.NSMutableSet;
@@ -25,6 +27,7 @@ import com.webobjects.foundation.NSSet;
 
 import er.extensions.ERXEC;
 import er.extensions.ERXProperties;
+import er.extensions.ERXRandomGUID;
 
 /**
  * La classe EOEnterpriseObjectSerializer s'occupe de la conversion des objets paramêtres de type
@@ -89,17 +92,25 @@ public class EOEnterpriseObjectSerializer extends AbstractSerializer {
 			for (int i = 0; i < gidLength; i++) {
 				keyValues[i] = gid.get(i);
 			}
-			EOEnterpriseObject eo;
 			EOKeyGlobalID keyGlobalID = EOKeyGlobalID.globalIDWithEntityName(entityName, keyValues);
-			EOEditingContext editingContext = _editingContextFactory.newEditingContext();
+			String ecid = eoDict.getString("_ecid");
+			
+			EOEditingContext editingContext = null;
+			if(ecid != null) {
+				editingContext = editingContextForKey(ecid);
+			}
+			if(editingContext == null) {
+				editingContext = _editingContextFactory.newEditingContext();
+				registerEditingContext(editingContext);
+			}
 			editingContext.lock();
 			try {
-				eo = editingContext.faultForGlobalID(keyGlobalID, editingContext);
+				EOEnterpriseObject eo = editingContext.faultForGlobalID(keyGlobalID, editingContext);
+				return eo;
 			}
 			finally {
 				editingContext.unlock();
 			}
-			return eo;
 		}
 		catch (JSONException e) {
 			throw new UnmarshallException("Failed to unmarshall EO.", e);
@@ -141,7 +152,8 @@ public class EOEnterpriseObjectSerializer extends AbstractSerializer {
 	 */
 	public void addAttributes(SerializerState state, EOEnterpriseObject source, JSONObject destination) throws MarshallException {
 		try {
-			EOEntity entity = EOUtilities.entityForObject(source.editingContext(), source);
+			EOEditingContext ec = source.editingContext();
+			EOEntity entity = EOUtilities.entityForObject(ec, source);
 
 			NSArray publicAttributeNames = EOEnterpriseObjectSerializer.publicAttributeNames(source);
 			for (Enumeration e = source.attributeKeys().objectEnumerator(); e.hasMoreElements();) {
@@ -152,7 +164,8 @@ public class EOEnterpriseObjectSerializer extends AbstractSerializer {
 			}
 
 			destination.put("_entityName", entity.name());
-			EOGlobalID gid = source.editingContext().globalIDForObject(source);
+			destination.put("_ecid", registerEditingContext(ec));
+			EOGlobalID gid = ec.globalIDForObject(source);
 			if (gid instanceof EOKeyGlobalID) {
 				EOKeyGlobalID key = (EOKeyGlobalID) gid;
 				Object[] keyValues = key._keyValuesNoCopy();
@@ -178,7 +191,7 @@ public class EOEnterpriseObjectSerializer extends AbstractSerializer {
 
 		EOEntity entity = EOUtilities.entityForObject(source.editingContext(), source);
 		NSArray publicAttributeNames = (NSArray) EOEnterpriseObjectSerializer.publicAttributes.objectForKey(entity.name());
-
+		//AK: should use clientProperties from EM
 		if (publicAttributeNames == null) {
 			NSMutableSet publicAttributeSet = new NSMutableSet();
 			NSArray publicAttributes = ERXProperties.arrayForKey("er.ajax.json." + entity.name() + ".attributes");
@@ -212,4 +225,17 @@ public class EOEnterpriseObjectSerializer extends AbstractSerializer {
 			return new EOEditingContext();
 		}
 	}
+	
+	public static Map<String, EOEditingContext> contexts = Collections.synchronizedMap(new WeakHashMap<String, EOEditingContext>());
+	
+	public static String registerEditingContext(EOEditingContext ec) {
+		String id = ERXRandomGUID.newGid();
+		contexts.put(id, ec);
+		return id;
+	}
+
+	public static EOEditingContext editingContextForKey(String key) {
+		return contexts.get(key);
+	}
+	
 }
