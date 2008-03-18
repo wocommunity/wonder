@@ -28,7 +28,12 @@ public class JSONRequestHandler extends WORequestHandler {
 		return requestHandler;
 	}
 
+	private static boolean isInitialized;
+	
 	public static void _initializeBridge() {
+		if(isInitialized) {
+			return;
+		}
 		try {
 			JSONRPCBridge.registerLocalArgResolver(WOResponse.class, WOResponse.class, new WOResponseArgResolver());
 			JSONRPCBridge.registerLocalArgResolver(WORequest.class, WORequest.class, new WORequestArgResolver());
@@ -40,6 +45,7 @@ public class JSONRequestHandler extends WORequestHandler {
 			JSONRPCBridge.getSerializer().registerSerializer(new NSDictionarySerializer());
 			JSONRPCBridge.getSerializer().registerSerializer(new NSTimestampSerializer());
 			JSONRPCBridge.getSerializer().registerSerializer(new NSDataSerializer());
+			isInitialized = true;
 		}
 		catch (Exception e) {
 			throw new RuntimeException("Failed to initialize JSON.");
