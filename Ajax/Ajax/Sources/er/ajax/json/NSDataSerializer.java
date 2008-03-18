@@ -67,14 +67,14 @@ public class NSDataSerializer extends AbstractSerializer {
 			}
 
 			String string = jso.getString("bytes");
-			NSData data = NSPropertyListSerialization.dataFromPropertyList(string, "ASCII");
-			if (NSData.class.equals(clazz)) {
+			NSData data = (NSData) NSPropertyListSerialization.propertyListFromString(string);
+			if (NSData.class.isAssignableFrom(clazz)) {
 				return ObjectMatch.OKAY;
 			}
 			throw new UnmarshallException("invalid class " + clazz);
 		}
 		catch (JSONException e) {
-			throw new UnmarshallException("Failed to unmarshall NSTimestamp.", e);
+			throw new UnmarshallException("Failed to unmarshall NSData.", e);
 		}
 	}
 
@@ -87,7 +87,10 @@ public class NSDataSerializer extends AbstractSerializer {
 			}
 
 			String string = jso.getString("bytes");
-			NSData data = NSPropertyListSerialization.dataFromPropertyList(string, "ASCII");
+			NSData data = (NSData) NSPropertyListSerialization.propertyListFromString(string);
+			if (NSMutableData.class.equals(clazz)) {
+				return new NSMutableData(data);
+			}
 			if (NSData.class.equals(clazz)) {
 				return data;
 			}
@@ -101,11 +104,10 @@ public class NSDataSerializer extends AbstractSerializer {
 
 	public Object marshall(SerializerState state, Object p, Object o) throws MarshallException {
 		try {
-			long time;
 			String bytes;
 
 			if (o instanceof NSData) {
-				bytes = NSPropertyListSerialization.stringFromPropertyList(p);
+				bytes = NSPropertyListSerialization.stringFromPropertyList(o);
 			}
 			else {
 				throw new MarshallException("cannot marshall date using class " + o.getClass());

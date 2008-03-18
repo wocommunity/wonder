@@ -1,7 +1,8 @@
-
 import com.webobjects.appserver.WOContext;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSMutableArray;
+import com.webobjects.foundation.NSPropertyListSerialization;
+import com.webobjects.foundation.NSTimestamp;
 
 public class JSONExample extends com.webobjects.appserver.WOComponent {
 	private JSONProxy _proxy;
@@ -28,6 +29,18 @@ public class JSONExample extends com.webobjects.appserver.WOComponent {
 
 		public Person onePerson() {
 			return _people.objectAtIndex(0);
+		}
+
+		private NSArray<Object> someData = new NSArray<Object>(
+				new Object[] { new Integer(0), "test", new NSTimestamp(), NSPropertyListSerialization.propertyListFromString("<0000c0a8004a0000d2f5480400000113c81c0584c55806fa>") });
+
+		public NSArray someData() {
+			return someData;
+		}
+
+		public boolean verifyData(NSArray value) {
+			System.out.println("JSONExample.verifyData: \n" + value + " vs \n" + someData);
+			return value.equals(someData);
 		}
 
 		public NSArray people() {
