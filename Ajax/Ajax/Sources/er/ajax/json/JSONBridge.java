@@ -7,6 +7,17 @@ import com.webobjects.appserver.WORequest;
 import com.webobjects.appserver.WOResponse;
 import com.webobjects.appserver.WOSession;
 
+import er.ajax.json.localarg.WOContextArgResolver;
+import er.ajax.json.localarg.WORequestArgResolver;
+import er.ajax.json.localarg.WOResponseArgResolver;
+import er.ajax.json.localarg.WOSessionArgResolver;
+import er.ajax.json.serializer.EOEnterpriseObjectSerializer;
+import er.ajax.json.serializer.ERXConstantSerializer;
+import er.ajax.json.serializer.NSArraySerializer;
+import er.ajax.json.serializer.NSDataSerializer;
+import er.ajax.json.serializer.NSDictionarySerializer;
+import er.ajax.json.serializer.NSTimestampSerializer;
+
 /**
  * Subclass of JSONRPCBridge.
  * 
@@ -48,7 +59,7 @@ public class JSONBridge extends JSONRPCBridge {
 		_initializeBridge();
 		JSONBridge result = new JSONBridge();
 		// AK: remove this when we find out why dupes don't work
-		boolean value = false;
+		boolean value = true;
 		JSONBridge.getSerializer().setFixupCircRefs(value);
 		JSONBridge.getSerializer().setFixupDuplicates(value);
 		return result;

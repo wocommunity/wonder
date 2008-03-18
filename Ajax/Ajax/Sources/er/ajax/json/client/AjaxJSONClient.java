@@ -1,4 +1,4 @@
-package er.ajax.json;
+package er.ajax.json.client;
 
 import com.webobjects.appserver.WOActionResults;
 import com.webobjects.appserver.WOComponent;
@@ -10,6 +10,7 @@ import com.webobjects.foundation.NSDictionary;
 
 import er.ajax.AjaxDynamicElement;
 import er.ajax.AjaxUtils;
+import er.ajax.json.JSONRequestHandler;
 
 /**
  * AjaxJSONClient renders a "new JSONRpcClient('...')" with a URL back to your application (along with a session ID if
