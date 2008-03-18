@@ -5,6 +5,7 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.WeakHashMap;
 
+import org.jabsorb.JSONSerializer;
 import org.jabsorb.serializer.AbstractSerializer;
 import org.jabsorb.serializer.MarshallException;
 import org.jabsorb.serializer.ObjectMatch;
@@ -133,20 +134,25 @@ public class EOEnterpriseObjectSerializer extends AbstractSerializer {
 		try {
 			EOEnterpriseObject eo = (EOEnterpriseObject) o;
 			JSONObject obj = new JSONObject();
-			JSONObject eoData = new JSONObject();
 			obj.put("javaClass", o.getClass().getName());
-			obj.put("eo", eoData);
 
 			EOEditingContext ec = eo.editingContext();
 			String ecid = registerEditingContext(ec);
 			String pk = ERXStringUtilities.urlEncode(ERXEOControlUtilities.primaryKeyStringForObject(eo));
 			obj.put("gid", ecid + "/" + eo.entityName() +  "/" + pk);
 			String keyPath = null;
+
+			JSONObject eoData = new JSONObject();
+			obj.put("eo", eoData);
+			state.push(o, eoData, "eo");
 			try {
 				addAttributes(state, eo, eoData);
 			}
 			catch (MarshallException e) {
 				throw new MarshallException("element " + keyPath + " " + e.getMessage());
+			}
+			finally {
+				state.pop();
 			}
 			return obj;
 		}
@@ -174,7 +180,11 @@ public class EOEnterpriseObjectSerializer extends AbstractSerializer {
 			for (Enumeration e = source.attributeKeys().objectEnumerator(); e.hasMoreElements();) {
 				String attributeName = (String) e.nextElement();
 				if (publicAttributeNames.containsObject(attributeName)) {
-					destination.put(attributeName, ser.marshall(state, source, source.storedValueForKey(attributeName), attributeName));
+					Object value = ser.marshall(state, source, source.storedValueForKey(attributeName), attributeName);
+					if (JSONSerializer.CIRC_REF_OR_DUPLICATE == value)
+						destination.put(attributeName, JSONObject.NULL);
+					else
+						destination.put(attributeName, value);
 				}
 			}
 		}

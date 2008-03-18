@@ -24,10 +24,17 @@ public class JSONExample extends com.webobjects.appserver.WOComponent {
 		super(context);
 		_proxy = new JSONProxy();
 		_people = new NSMutableArray<Person>();
-		_people.add(new Person("Mike", 29));
-		_people.add(new Person("Andrew", 2));
-		_people.add(new Person("Kirsten", 29));
-		_people.add(new Person("Jonathan", 36));
+		Person mike = new Person("Mike", 29);
+		Person kirsten = new Person("Kirsten", 29);
+		Person andrew = new Person("Andrew", 2);
+		mike.setSpouse(kirsten);
+		kirsten.setSpouse(mike);
+		mike.setChildren(new NSArray<Person>(andrew));
+		kirsten.setChildren(new NSArray<Person>(andrew));
+		
+		_people.add(mike);
+		_people.add(kirsten);
+		_people.add(andrew);
 	}
 
 	public JSONProxy proxy() {
