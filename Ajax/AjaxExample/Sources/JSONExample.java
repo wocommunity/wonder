@@ -1,3 +1,6 @@
+import java.util.LinkedList;
+import java.util.List;
+
 import com.webobjects.appserver.WOContext;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSMutableArray;
@@ -49,6 +52,22 @@ public class JSONExample extends com.webobjects.appserver.WOComponent {
 		public Person onePerson() {
 			return _people.objectAtIndex(0);
 		}
+		
+		private List<SimplePerson> simpleData;
+		
+		public List simpleData() {
+			if (simpleData == null) {
+				simpleData = new LinkedList<SimplePerson>();
+				SimplePerson p = new SimplePerson("Mike", 29);
+				simpleData.add(p);
+				simpleData.add(p);
+			}
+			return simpleData;
+		}
+		
+		public boolean verifySimpleData(List data) {
+			return simpleData.equals(data); 
+		}
 
 		private NSArray<Object> someData = new NSArray<Object>(
 				// AK: new json doesn't handle this
@@ -60,7 +79,7 @@ public class JSONExample extends com.webobjects.appserver.WOComponent {
 		}
 
 		public boolean verifyData(NSArray value) {
-			System.out.println("JSONExample.verifyData: \n" + value + " vs \n" + someData);
+			System.out.println("JSONExample.verifyData: \nactual:   " + value + "\nexpected: " + someData);
 			return value.equals(someData);
 		}
 

@@ -28,9 +28,13 @@
 	}
 		
 	function testData() {
-		var data = json.example.someData();
-		alert("equals: " + data);
-		alert("equals: " + json.example.verifyData(data));
+		var data = json.example.simpleData();
+		data.list.each(function(item, index) {
+			if (item == null) {
+				alert('Item #' + index + ' was null! Server=>Client fixups failed.');
+			}
+		});
+		alert("verified? " + json.example.verifySimpleData(data));
 	}
 	</script>
 	<button onclick = "getOnePerson()">Get One Person</button>
