@@ -1,23 +1,3 @@
-/*
- * JSON-RPC-Java - a JSON-RPC to Java Bridge with dynamic invocation
- *
- * $Id$
- *
- * Copyright Metaparadigm Pte. Ltd. 2004.
- * Michael Clark <michael@metaparadigm.com>
- *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public (LGPL)
- * License as published by the Free Software Foundation; either
- * version 2.1 of the License, or (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details: http://www.gnu.org/
- *
- */
-
 package er.ajax.json;
 
 import java.util.Enumeration;
@@ -33,143 +13,194 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSKeyValueCoding;
 import com.webobjects.foundation.NSMutableArray;
 
 /**
- * Transforms NSArray between JavaScript and Java.
+ * Serialises NSArrays
  * 
- * @author Jean-François Veillette <jfveillette@os.ca>
- * @version $Revision$, $Date$ <br>
- *          &copy; 2005 OS communications informatiques, inc. Tous droits réservés.
+ * TODO: if this serialises a superclass does it need to also specify the subclasses?
  */
 public class NSArraySerializer extends AbstractSerializer {
+	/**
+	 * Unique serialisation id.
+	 */
+	private final static long serialVersionUID = 2;
+
+	/**
+	 * Classes that this can serialise.
+	 */
 	private static Class[] _serializableClasses = new Class[] { NSArray.class, NSMutableArray.class };
+
+	/**
+	 * Classes that this can serialise to.
+	 */
 	private static Class[] _JSONClasses = new Class[] { JSONObject.class };
 
-	public Class[] getSerializableClasses() {
-		return _serializableClasses;
+	public boolean canSerialize(Class clazz, Class jsonClazz) {
+		return (super.canSerialize(clazz, jsonClazz) || ((jsonClazz == null || jsonClazz == JSONObject.class) && NSArray.class.isAssignableFrom(clazz)));
 	}
 
 	public Class[] getJSONClasses() {
 		return _JSONClasses;
 	}
 
-	public boolean canSerialize(Class clazz, Class jsonClazz) {
-		return (super.canSerialize(clazz, jsonClazz) || ((jsonClazz == null || jsonClazz == JSONArray.class) && NSArray.class.isAssignableFrom(clazz)));
+	public Class[] getSerializableClasses() {
+		return _serializableClasses;
 	}
 
-	/**
-	 * @see com.metaparadigm.jsonrpc.Serializer#doTryToUnmarshall(java.lang.Class, java.lang.Object)
-	 */
-	public ObjectMatch tryUnmarshall(SerializerState state, Class clazz, Object o) throws UnmarshallException {
-		try {
-			JSONObject jso = (JSONObject) o;
-			String java_class = jso.getString("javaClass");
-			if (java_class == null) {
-				throw new UnmarshallException("no type hint");
-			}
-			if (!(java_class.equals("com.webobjects.foundation.NSArray") || java_class.equals("com.webobjects.foundation.NSMutableArray"))) {
-				throw new UnmarshallException("not a NSArray");
-			}
+	public Object marshall(SerializerState state, Object p, Object o) throws MarshallException {
+		NSArray nsarray = (NSArray) o;
+		JSONObject obj = new JSONObject();
+		JSONArray arr = new JSONArray();
 
-			JSONArray jsonlist = jso.getJSONArray("nsarray");
-			if (jsonlist == null) {
-				throw new UnmarshallException("nsarray missing");
-			}
-			int i = 0;
-			ObjectMatch m = new ObjectMatch(-1);
+		// TODO: this same block is done everywhere.
+		// Have a single function to do it.
+		if (ser.getMarshallClassHints()) {
 			try {
-				for (; i < jsonlist.length(); i++) {
-					m = ser.tryUnmarshall(state, null, jsonlist.get(i)).max(m);
-				}
+				obj.put("javaClass", o.getClass().getName());
 			}
-			catch (UnmarshallException e) {
-				throw new UnmarshallException("element " + i + " " + e.getMessage());
+			catch (JSONException e) {
+				throw new MarshallException("javaClass not found!");
 			}
-			return m;
+		}
+		try {
+			obj.put("nsarray", arr);
+			state.push(o, arr, "nsarray");
 		}
 		catch (JSONException e) {
-			throw new UnmarshallException("Failed to unmarshall NSArray.", e);
+			throw new MarshallException("Error setting nsarray: " + e);
 		}
+		int index = 0;
+		try {
+			Enumeration e = nsarray.objectEnumerator();
+			while (e.hasMoreElements()) {
+				Object json = ser.marshall(state, arr, e.nextElement(), new Integer(index));
+				if (JSONSerializer.CIRC_REF_OR_DUPLICATE != json) {
+					arr.put(json);
+				}
+				else {
+					// put a slot where the object would go, so it can be fixed up properly in the fix up phase
+					arr.put(JSONObject.NULL);
+				}
+				index++;
+			}
+		}
+		catch (MarshallException e) {
+			throw (MarshallException) new MarshallException("element " + index).initCause(e);
+		}
+		finally {
+			state.pop();
+		}
+		return obj;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.metaparadigm.jsonrpc.Serializer#doUnmarshall(java.lang.Class, java.lang.Object)
-	 */
-	public Object unmarshall(SerializerState state, Class clazz, Object o) throws UnmarshallException {
+	// TODO: try unMarshall and unMarshall share 90% code. Put in into an
+	// intermediate function.
+	// TODO: Also cache the result somehow so that an unmarshall
+	// following a tryUnmarshall doesn't do the same work twice!
+	public ObjectMatch tryUnmarshall(SerializerState state, Class clazz, Object o) throws UnmarshallException {
+		JSONObject jso = (JSONObject) o;
+		String java_class;
 		try {
-			JSONObject jso = (JSONObject) o;
-			String java_class = jso.getString("javaClass");
-			if (java_class == null) {
-				throw new UnmarshallException("no type hint");
+			java_class = jso.getString("javaClass");
+		}
+		catch (JSONException e) {
+			throw new UnmarshallException("Could not read javaClass", e);
+		}
+		if (java_class == null) {
+			throw new UnmarshallException("no type hint");
+		}
+		if (!(java_class.equals("com.webobjects.foundation.NSArray") || java_class.equals("com.webobjects.foundation.NSMutableArray"))) {
+			throw new UnmarshallException("not an NSArray");
+		}
+		JSONArray jsonNSArray;
+		try {
+			jsonNSArray = jso.getJSONArray("nsarray");
+		}
+		catch (JSONException e) {
+			throw new UnmarshallException("Could not read nsarray: " + e.getMessage(), e);
+		}
+		if (jsonNSArray == null) {
+			throw new UnmarshallException("nsarray missing");
+		}
+		int i = 0;
+		ObjectMatch m = new ObjectMatch(-1);
+		state.setSerialized(o, m);
+		try {
+			for (; i < jsonNSArray.length(); i++) {
+				m.setMismatch(ser.tryUnmarshall(state, null, jsonNSArray.get(i)).max(m).getMismatch());
 			}
-			NSMutableArray al = null;
-			if (java_class.equals("com.webobjects.foundation.NSArray") || java_class.equals("com.webobjects.foundation.NSMutableArray")) {
-				al = new NSMutableArray();
-			}
-			else {
-				throw new UnmarshallException("not a NSArray");
-			}
-			JSONArray jsonlist = jso.getJSONArray("nsarray");
-			if (jsonlist == null) {
-				throw new UnmarshallException("nsarray missing");
-			}
-			int i = 0;
-			try {
-				for (; i < jsonlist.length(); i++) {
-					Object object = jsonlist.get(i);
-					object = ser.unmarshall(state, null, object);
-					al.addObject(object);
+		}
+		catch (UnmarshallException e) {
+			throw new UnmarshallException("element " + i + " " + e.getMessage(), e);
+		}
+		catch (JSONException e) {
+			throw new UnmarshallException("element " + i + " " + e.getMessage(), e);
+		}
+		return m;
+	}
+
+	public Object unmarshall(SerializerState state, Class clazz, Object o) throws UnmarshallException {
+		JSONObject jso = (JSONObject) o;
+		String java_class;
+		try {
+			java_class = jso.getString("javaClass");
+		}
+		catch (JSONException e) {
+			throw new UnmarshallException("Could not read javaClass", e);
+		}
+		if (java_class == null) {
+			throw new UnmarshallException("no type hint");
+		}
+		NSMutableArray al;
+		boolean immutableClone = false;
+		if (java_class.equals("com.webobjects.foundation.NSArray")) {
+			al = new NSMutableArray(); // we have to be able to add to it
+			immutableClone = true;
+		}
+		else if (java_class.equals("com.webobjects.foundation.NSMutableArray")) {
+			al = new NSMutableArray();
+		}
+		else {
+			throw new UnmarshallException("not an NSArray");
+		}
+
+		JSONArray jsonNSArray;
+		try {
+			jsonNSArray = jso.getJSONArray("nsarray");
+		}
+		catch (JSONException e) {
+			throw new UnmarshallException("Could not read nsarray: " + e.getMessage(), e);
+		}
+		if (jsonNSArray == null) {
+			throw new UnmarshallException("nsarray missing");
+		}
+		state.setSerialized(o, al);
+		int i = 0;
+		try {
+			for (; i < jsonNSArray.length(); i++) {
+				Object obj = ser.unmarshall(state, null, jsonNSArray.get(i));
+				if (obj != null) {
+					al.addObject(obj);
+				}
+				else {
+					al.addObject(NSKeyValueCoding.NullValue);
 				}
 			}
-			catch (UnmarshallException e) {
-				throw new UnmarshallException("element " + i + " " + e.getMessage());
-			}
+		}
+		catch (UnmarshallException e) {
+			throw new UnmarshallException("element " + i + " " + e.getMessage(), e);
+		}
+		catch (JSONException e) {
+			throw new UnmarshallException("element " + i + " " + e.getMessage(), e);
+		}
+		if (immutableClone) {
+			return al.immutableClone();
+		}
+		else {
 			return al;
 		}
-		catch (JSONException e) {
-			throw new UnmarshallException("Failed to unmarshall NSArray.", e);
-		}
-
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.metaparadigm.jsonrpc.Serializer#doMarshall(java.lang.Object)
-	 */
-	public Object marshall(SerializerState state, Object p, Object o) throws MarshallException {
-		try {
-			// TODO Auto-generated method stub
-			NSArray array = (NSArray) o;
-			JSONObject obj = new JSONObject();
-			JSONArray arr = new JSONArray();
-			obj.put("javaClass", o.getClass().getName());
-			obj.put("nsarray", arr);
-			state.push(o, array, "nsarray");
-			int index = 0;
-			try {
-				for (Enumeration e = array.objectEnumerator(); e.hasMoreElements(); index++) {
-					Object json = ser.marshall(state, array, e.nextElement(), new Integer(index));
-					if (JSONSerializer.CIRC_REF_OR_DUPLICATE == json)
-						arr.put(JSONObject.NULL);
-					else
-						arr.put(json);
-					index++;
-				}
-			}
-			catch (MarshallException e) {
-				throw new MarshallException("element " + index + " " + e.getMessage());
-			}
-			finally {
-				state.pop();
-			}
-			return obj;
-		}
-		catch (JSONException e) {
-			throw new MarshallException("Failed to marshall NSArray.", e);
-		}
-	}
 }
