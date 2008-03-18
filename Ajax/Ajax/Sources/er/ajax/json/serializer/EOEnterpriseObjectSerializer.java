@@ -143,20 +143,8 @@ public class EOEnterpriseObjectSerializer extends AbstractSerializer {
 			String ecid = registerEditingContext(ec);
 			String pk = ERXStringUtilities.urlEncode(ERXEOControlUtilities.primaryKeyStringForObject(eo));
 			obj.put("gid", ecid + "/" + eo.entityName() +  "/" + pk);
-			String keyPath = null;
 
-			JSONObject eoData = new JSONObject();
-			obj.put("eo", eoData);
-			state.push(o, eoData, "eo");
-			try {
-				addAttributes(state, eo, eoData);
-			}
-			catch (MarshallException e) {
-				throw new MarshallException("element " + keyPath + " " + e.getMessage());
-			}
-			finally {
-				state.pop();
-			}
+			addAttributes(state, eo, obj);
 			return obj;
 		}
 		catch (JSONException e) {
@@ -177,8 +165,14 @@ public class EOEnterpriseObjectSerializer extends AbstractSerializer {
 	 *            the EOEnterpriseObject to copy attribute values to
 	 */
 	public void addAttributes(SerializerState state, EOEnterpriseObject source, JSONObject destination) throws MarshallException {
+		boolean useEO = false;
 		try {
-
+			JSONObject eoData = destination;
+			if(useEO) {
+				destination = new JSONObject();
+				destination.put("eo", eoData);
+				state.push(source, eoData, "eo");
+			}
 			NSArray publicAttributeNames = EOEnterpriseObjectSerializer.publicAttributeNames(source);
 			for (Enumeration e = source.attributeKeys().objectEnumerator(); e.hasMoreElements();) {
 				String attributeName = (String) e.nextElement();
@@ -193,6 +187,11 @@ public class EOEnterpriseObjectSerializer extends AbstractSerializer {
 		}
 		catch (JSONException e) {
 			throw new MarshallException("Failed to marshall EO.", e);
+		}
+		finally {
+			if(useEO) {
+				state.pop();
+			}
 		}
 	}
 
