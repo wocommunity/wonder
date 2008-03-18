@@ -83,9 +83,12 @@ public class NSDataSerializer extends AbstractSerializer {
 			String string = jso.getString("bytes");
 			NSData data = (NSData) NSPropertyListSerialization.propertyListFromString(string);
 			if (NSMutableData.class.equals(clazz)) {
-				return new NSMutableData(data);
+				NSMutableData mutableData = new NSMutableData(data);
+				state.setSerialized(o, mutableData);
+				return mutableData;
 			}
-			if (NSData.class.equals(clazz)) {
+			else if (NSData.class.equals(clazz)) {
+				state.setSerialized(o, data);
 				return data;
 			}
 			throw new UnmarshallException("invalid class " + clazz);
