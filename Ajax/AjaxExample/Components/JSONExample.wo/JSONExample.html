@@ -1,0 +1,63 @@
+<webobject name = "AjaxExampleComponent">
+	<webobject name = "ERXJavaScript"/>
+	
+	<h1>AjaxProxy Example</h1>
+	<webobject name = "AjaxProxy"/>
+	<p id = "ExampleDiv">
+		This is a blank div.
+	</p>
+	<script>
+	function getOnePerson() {
+		var person = json.example.onePerson();
+		
+		$('ExampleDiv').innerHTML = 'Person: ' + person.name + ', Age: ' + person.age;
+	}
+
+	function getPeople() {
+		var people = json.example.people();
+		
+		var ul = document.createElement('ul');
+		ul.id = 'people';
+		people.nsarray.each(function(person, index) {
+			var li = document.createElement('li');
+			li.innerHTML = person.name + ' (' + person.age + ')';
+			ul.appendChild(li);
+		});
+		$('ExampleDiv').innerHTML = 'People: ';
+		$('ExampleDiv').appendChild(ul);
+	}
+	</script>
+	<button onclick = "getOnePerson()">Get One Person</button>
+	<button onclick = "getPeople()">Get People</button>
+
+	<h1>JSONRequestHandler Example</h1>
+	<p>
+	Check out AjaxExample's Application class to see how this was registered.
+	</p>
+	<script>
+		function printThisString() {
+			<webobject name = "AjaxJSONClient"/>.exampleService.printThisString('hi');
+		}
+
+		function returnMySessionID() {
+			var json = <webobject name = "AjaxJSONClient"/>;
+			var sessionID = json.exampleService.returnMySessionID();
+			alert(sessionID);
+		}
+
+		function returnThisApplicationName() {
+			alert(<webobject name = "AjaxJSONClient"/>.exampleService.returnThisApplicationName());
+		}
+		
+		function complexObject() {
+			var json = <webobject name = "AjaxJSONClient"/>;
+			var people = json.exampleService.somePeople();
+			var firstPerson = people.nsarray[0];
+			json.exampleService.printPerson(firstPerson);
+		}
+	</script>
+	<button onclick = "printThisString()">Print to Console</button>
+	<button onclick = "returnMySessionID()">Alert My Session ID</button>
+	<button onclick = "returnThisApplicationName()">Alert My Application Name</button>
+	<button onclick = "complexObject()">Complex Object (Watch Console)</button>
+</webobject>

@@ -125,6 +125,6 @@ SelectionList : WOHyperlink {
 	pageName = "AjaxSelectionListExample";
 }
 
-LiveSearch : WOHyperlink {
-	pageName = "AjaxLiveSearchExample";
+JSONExample : WOHyperlink {
+	pageName = "JSONExample";
 }
