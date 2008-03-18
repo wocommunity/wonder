@@ -1,7 +1,7 @@
 package er.ajax.json;
 
-import java.util.Collections;
 import java.util.Enumeration;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.WeakHashMap;
 
@@ -226,16 +226,26 @@ public class EOEnterpriseObjectSerializer extends AbstractSerializer {
 		}
 	}
 	
-	public static Map<String, EOEditingContext> contexts = Collections.synchronizedMap(new WeakHashMap<String, EOEditingContext>());
-	
+	private static Map<String, EOEditingContext> contexts = new WeakHashMap<String, EOEditingContext>();
+
 	public static String registerEditingContext(EOEditingContext ec) {
-		String id = ERXRandomGUID.newGid();
-		contexts.put(id, ec);
-		return id;
+		synchronized (contexts) {
+			for (Iterator iterator = contexts.entrySet().iterator(); iterator.hasNext();) {
+				Map.Entry<String, EOEditingContext> entry = (Map.Entry<String, EOEditingContext>) iterator.next();
+				if(entry.getValue() == ec) {
+					return entry.getKey();
+				}
+			}
+			String id = ERXRandomGUID.newGid();
+			contexts.put(id, ec);
+			return id;
+		}
 	}
 
 	public static EOEditingContext editingContextForKey(String key) {
-		return contexts.get(key);
+		synchronized (contexts) {
+			return contexts.get(key);
+		}
 	}
 	
 }
