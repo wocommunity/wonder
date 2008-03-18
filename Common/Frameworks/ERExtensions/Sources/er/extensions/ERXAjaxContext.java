@@ -11,7 +11,9 @@ import com.webobjects.appserver.WORequest;
 
 /**
  * ERXAjaxContext provides the overrides necessary methods for partial form
- * submits to work.
+ * submits to work. If you want to use the Ajax framework without using other
+ * parts of Project Wonder (i.e. ERXSession or ERXApplication), you should steal
+ * all of the code in ERXAjaxSession, ERXAjaxApplication, and ERXAjaxContext.
  * 
  * @author mschrag
  */
