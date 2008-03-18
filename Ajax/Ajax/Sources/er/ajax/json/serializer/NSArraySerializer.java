@@ -176,7 +176,6 @@ public class NSArraySerializer extends AbstractSerializer {
 		if (jsonNSArray == null) {
 			throw new UnmarshallException("nsarray missing");
 		}
-		state.setSerialized(o, al);
 		int i = 0;
 		try {
 			for (; i < jsonNSArray.length(); i++) {
@@ -188,18 +187,18 @@ public class NSArraySerializer extends AbstractSerializer {
 					al.addObject(NSKeyValueCoding.NullValue);
 				}
 			}
+			NSArray finalArray = al;
+			if (immutableClone) {
+				finalArray = al.immutableClone();
+			}
+			state.setSerialized(o, finalArray);
+			return finalArray;
 		}
 		catch (UnmarshallException e) {
 			throw new UnmarshallException("element " + i + " " + e.getMessage(), e);
 		}
 		catch (JSONException e) {
 			throw new UnmarshallException("element " + i + " " + e.getMessage(), e);
-		}
-		if (immutableClone) {
-			return al.immutableClone();
-		}
-		else {
-			return al;
 		}
 	}
 
