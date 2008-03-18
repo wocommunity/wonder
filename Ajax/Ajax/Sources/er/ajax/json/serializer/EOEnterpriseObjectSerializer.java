@@ -121,6 +121,7 @@ public class EOEnterpriseObjectSerializer extends AbstractSerializer {
 					Object value = eoDict.get(key);
 					eo.takeValueForKey(value, key);
 				}
+				state.setSerialized(o, eo);
 				return eo;
 			}
 			finally {
