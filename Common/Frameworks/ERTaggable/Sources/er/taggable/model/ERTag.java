@@ -3,7 +3,6 @@ package er.taggable.model;
 import org.apache.log4j.Logger;
 
 import com.webobjects.eoaccess.EOEntity;
-import com.webobjects.eoaccess.EOModelGroup;
 import com.webobjects.eocontrol.EOEditingContext;
 
 import er.extensions.ERXEC;
@@ -38,7 +37,6 @@ public class ERTag extends _ERTag {
    */
   public void untagAllTaggables() {
     EOEditingContext editingContext = editingContext();
-    EOModelGroup modelGroup = entity().model().modelGroup();
     for (EOEntity entity : ERTaggableEntity.taggableEntities()) {
       ERTaggableEntity taggableEntity = ERTaggableEntity.taggableEntity(entity);
       taggableEntity.removeTags(editingContext, this);
