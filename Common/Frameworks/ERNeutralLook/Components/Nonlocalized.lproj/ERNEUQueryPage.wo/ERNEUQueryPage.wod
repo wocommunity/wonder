@@ -86,11 +86,6 @@ QueryForm: WOForm {
 	multipleSubmit = true;
 }
 
-QueryResetButton: WOResetButton {
-	title = "Clear Form";
-	value = "Clear";
-}
-
 QuerySubmitButton: WOActiveImage {
 	action = queryAction;
 	alt = "Find objects matching the query";
