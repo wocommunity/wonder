@@ -8,7 +8,6 @@ import com.webobjects.foundation.NSTimestamp;
 import er.ajax.example.Company;
 import er.extensions.ERXConstant;
 import er.extensions.ERXEC;
-import er.memoryadaptor.ERMemoryAdaptorContext;
 
 public class JSONExample extends com.webobjects.appserver.WOComponent {
 	private JSONProxy _proxy;
