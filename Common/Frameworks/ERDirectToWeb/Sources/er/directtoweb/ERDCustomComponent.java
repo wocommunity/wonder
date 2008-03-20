@@ -12,6 +12,7 @@ import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WOResponse;
 import com.webobjects.directtoweb.D2WContext;
+import com.webobjects.directtoweb.D2WPage;
 import com.webobjects.foundation.NSDictionary;
 
 import er.extensions.ERXConstant;
@@ -244,6 +245,24 @@ public abstract class ERDCustomComponent extends ERXNonSynchronizingComponent im
     /** Should the property keys be shown. */
     public boolean d2wPropertyKeyDebuggingEnabled() {
         return ERDirectToWeb.d2wPropertyKeyDebuggingEnabled(session());
+    }
+    
+    /**
+     * Finds the containing D2WPage, if possible.  There are certain situations when having a 
+     * reference to the containing D2W page is useful, e.g., when needing to use the userInfo 
+     * dictionary of {@link ERD2WPage} to pass information between subcomponents.
+     * @return the containing D2WPage
+     */
+    public D2WPage d2wPage() {
+        // Can't just use context().page(), because the d2wPage isn't necessarily the top-level
+        // component.
+        WOComponent component = this;
+
+        do {
+            component = component.parent();
+        } while( component != null && !(component instanceof D2WPage) );
+
+        return (D2WPage)component;
     }
 
     public void appendToResponse(WOResponse r, WOContext c) {
