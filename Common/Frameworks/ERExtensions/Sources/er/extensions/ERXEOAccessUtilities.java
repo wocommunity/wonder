@@ -63,14 +63,14 @@ import com.webobjects.jdbcadaptor.JDBCPlugIn;
 public class ERXEOAccessUtilities {
     /** logging support */
     public static final Logger log = Logger.getLogger(ERXEOAccessUtilities.class);
-    
+
     /** SQL logger */
     private static Logger sqlLoggingLogger = null;
 
     /**
      * Finds an entity that is contained in a string. This is used a lot in
      * DirectToWeb. Example: "ListAllStudios"=>Studio
-     * 
+     *
      * @param ec
      *            editing context
      * @param string
@@ -108,10 +108,10 @@ public class ERXEOAccessUtilities {
 
     /**
      * Finds an entity that is associated with the table name. When inheritance is used,
-     * will return the least derived entity using that table.  This can be used to deal 
+     * will return the least derived entity using that table.  This can be used to deal
      * with database exceptions where you only have the table name to go on. As multiple
      * entities can map to a single table, the results of this method are inexact.
-     * 
+     *
      * @param ec
      *            editing context
      * @param tableName
@@ -121,7 +121,7 @@ public class ERXEOAccessUtilities {
     public static EOEntity entityUsingTable(EOEditingContext ec, String tableName) {
         EOEntity result = null;
         NSMutableArray possibleEntities = new NSMutableArray();
-        
+
         if (tableName != null) {
             NSArray entities = ERXUtilities.entitiesForModelGroup(modelGroup(ec));
             tableName = tableName.toLowerCase();
@@ -135,7 +135,7 @@ public class ERXEOAccessUtilities {
                 	{
                     	// Prefer the parent entity as long as it is using the same table
                         EOEntity root = entity;
-                        while (root != null && root.parentEntity() != null && 
+                        while (root != null && root.parentEntity() != null &&
                         	   lowercaseTableName.equals(root.parentEntity().externalName().toLowerCase()))
                             root = root.parentEntity();
                         if ( ! possibleEntities.containsObject(entity))
@@ -147,8 +147,8 @@ public class ERXEOAccessUtilities {
             if (possibleEntities.count() > 0) {
                 result = (EOEntity) possibleEntities.lastObject();
             }
-            
-            if (log.isEnabledFor(Level.WARN) && possibleEntities.count() > 1) 
+
+            if (log.isEnabledFor(Level.WARN) && possibleEntities.count() > 1)
                 log.warn("Found multiple entities: " + possibleEntities.valueForKey("name") + " for table name: " + tableName);
 
             if (log.isDebugEnabled())
@@ -159,7 +159,7 @@ public class ERXEOAccessUtilities {
 
     /**
      * Method used to determine if a given entity is a shared entity.
-     * 
+     *
      * @param ec
      *            editing context
      * @param entityName
@@ -175,7 +175,7 @@ public class ERXEOAccessUtilities {
 
     /**
      * Convenience method to get the next unique ID from a sequence.
-     * 
+     *
      * @param ec
      *            editing context
      * @param modelName
@@ -199,7 +199,7 @@ public class ERXEOAccessUtilities {
      * the {@link com.webobjects.eoaccess.EOUtilities EOUtilities}
      * <code>rawRowsForSQL</code> in that it can be used with other statements
      * besides just SELECT without throwing exceptions.
-     * 
+     *
      * @param ec
      *            editing context that determines which model group and database
      *            context to use.
@@ -223,7 +223,7 @@ public class ERXEOAccessUtilities {
      * the {@link com.webobjects.eoaccess.EOUtilities EOUtilities}
      * <code>rawRowsForSQL</code> in that it can be used with other statements
      * besides just SELECT without throwing exceptions.
-     * 
+     *
      * @param ec
      *            editing context that determines which model group and database
      *            context to use.
@@ -239,20 +239,28 @@ public class ERXEOAccessUtilities {
     // sql in a non-blocking fashion.
     public static void evaluateSQLWithEntity(EOEditingContext ec, EOEntity entity, String exp) {
         EODatabaseContext dbContext = EODatabaseContext.registeredDatabaseContextForModel(entity.model(), ec);
-        EOAdaptorChannel adaptorChannel = dbContext.availableChannel().adaptorChannel();
-        if (!adaptorChannel.isOpen()) adaptorChannel.openChannel();
-        EOSQLExpressionFactory factory = adaptorChannel.adaptorContext().adaptor().expressionFactory();
-        adaptorChannel.evaluateExpression(factory.expressionForString(exp));
+        dbContext.lock();
+        try {
+            EOAdaptorChannel adaptorChannel = dbContext.availableChannel().adaptorChannel();
+            if (!adaptorChannel.isOpen()) {
+            	adaptorChannel.openChannel();
+            }
+            EOSQLExpressionFactory factory = adaptorChannel.adaptorContext().adaptor().expressionFactory();
+            adaptorChannel.evaluateExpression(factory.expressionForString(exp));
+        }
+        finally {
+        	dbContext.unlock();
+        }
     }
 
     /**
      * Creates the SQL which is used by the provides EOFetchSpecification.
-     * 
+     *
      * @param ec
      *            the EOEditingContext
      * @param spec
      *            the EOFetchSpecification in question
-     * 
+     *
      * @return the SQL which the EOFetchSpecification would use
      */
     public static String sqlForFetchSpecification(EOEditingContext ec, EOFetchSpecification spec) {
@@ -266,14 +274,14 @@ public class ERXEOAccessUtilities {
      * attributes, this will use channel.describeResults(), which can produce
      * attributes that may not be able to be faulted back into EO's because
      * of case mismatches.
-     * 
+     *
      * @param ec
      *            the EOEditingContext
      * @param modelName
      *            the name of the model in question
      * @param expression
      *            the EOSQLExpression in question
-     * 
+     *
      * @return array of dictionaries
      */
     public static NSArray<NSDictionary> rawRowsForSQLExpression(EOEditingContext ec, String modelName, EOSQLExpression expression) {
@@ -284,7 +292,7 @@ public class ERXEOAccessUtilities {
 
     /**
      * Returns the raw rows for the given EOSQLExpression.
-     * 
+     *
      * @param ec
      *            the EOEditingContext
      * @param model
@@ -292,17 +300,17 @@ public class ERXEOAccessUtilities {
      * @param expression
      *            the EOSQLExpression to fetch with
      * @param attributes the attributes to fetch
-     * 
+     *
      * @return array of dictionaries
      */
     public static NSArray rawRowsForSQLExpression(EOEditingContext ec, EOModel model, EOSQLExpression expression, NSArray<EOAttribute> attributes) {
         NSArray results = NSArray.EmptyArray;
         EODatabaseContext dbc = EODatabaseContext.registeredDatabaseContextForModel(model, ec);
-        
+
         dbc.lock();
         try {
             results = _rawRowsForSQLExpression(dbc, expression, attributes);
-        } 
+        }
         catch (Exception localException) {
             if (dbc._isDroppedConnectionException(localException)) {
                 try {
@@ -319,14 +327,14 @@ public class ERXEOAccessUtilities {
         }
         return results;
     }
-    
+
     private static NSArray _rawRowsForSQLExpression(EODatabaseContext dbc, EOSQLExpression expression, NSArray<EOAttribute> attributes) {
         NSMutableArray results = null;
         EOAdaptorChannel channel = dbc.availableChannel().adaptorChannel();
-        
-        if (!channel.isOpen()) 
+
+        if (!channel.isOpen())
             channel.openChannel();
-            
+
         channel.evaluateExpression(expression);
         if (attributes == null) {
             channel.setAttributesToFetch(channel.describeResults());
@@ -334,7 +342,7 @@ public class ERXEOAccessUtilities {
         else {
             channel.setAttributesToFetch(attributes);
         }
-        
+
         try {
             results = new NSMutableArray();
             NSDictionary row;
@@ -351,7 +359,7 @@ public class ERXEOAccessUtilities {
     /**
      * Creates the SQL which is used by the provided EOFetchSpecification,
      * limited by the given range.
-     * 
+     *
      * @param ec
      *            the EOEditingContext
      * @param spec
@@ -361,7 +369,7 @@ public class ERXEOAccessUtilities {
      * @param end
      *            end of rows to fetch (-1 if not used)
      * @deprecated
-     * 
+     *
      * @return the EOSQLExpression which the EOFetchSpecification would use
      */
     public static EOSQLExpression sqlExpressionForFetchSpecification(EOEditingContext ec, EOFetchSpecification spec, long start, long end) {
@@ -374,7 +382,7 @@ public class ERXEOAccessUtilities {
     /**
      * Returns the number of rows the supplied EOFetchSpecification would
      * return.
-     * 
+     *
      * @param ec
      *            the EOEditingContext
      * @param spec
@@ -393,7 +401,7 @@ public class ERXEOAccessUtilities {
      * If ec is null, it will try to get at the session via thread storage and
      * use its defaultEditingContext. This is here now so we can remove the
      * delgate in ERXApplication.
-     * 
+     *
      * @param ec
      *            editing context used to locate the model group (can be null)
      */
@@ -416,7 +424,7 @@ public class ERXEOAccessUtilities {
 
     /**
      * Similar to the helper in EUUtilities, but allows for null editingContext.
-     * 
+     *
      * @param ec
      *            editing context used to locate the model group (can be null)
      * @param entityName
@@ -430,7 +438,7 @@ public class ERXEOAccessUtilities {
     /**
      * Creates an aggregate integer attribute for a given function name. These can then
      * be used to query on when using raw rows.
-     * 
+     *
      * @param ec
      *            editing context used to locate the model group
      * @param function
@@ -444,11 +452,11 @@ public class ERXEOAccessUtilities {
     public static EOAttribute createAggregateAttribute(EOEditingContext ec, String function, String attributeName, String entityName) {
     	return ERXEOAccessUtilities.createAggregateAttribute(ec, function, attributeName, entityName, Number.class, "i");
     }
-    
+
     /**
      * Creates an aggregate attribute for a given function name. These can then
      * be used to query on when using raw rows.
-     * 
+     *
      * @param ec
      *            editing context used to locate the model group
      * @param function
@@ -458,17 +466,17 @@ public class ERXEOAccessUtilities {
      * @param entityName
      *            name of the entity
      * @param valueClass the java class of this attribute's values
-     * @param valueType the EOAttribute value type  
+     * @param valueType the EOAttribute value type
      * @return aggregate function attribute
      */
     public static EOAttribute createAggregateAttribute(EOEditingContext ec, String function, String attributeName, String entityName, Class valueClass, String valueType) {
     	return ERXEOAccessUtilities.createAggregateAttribute(ec, function, attributeName, entityName, valueClass, valueType, null);
     }
-    
+
     /**
      * Creates an aggregate attribute for a given function name. These can then
      * be used to query on when using raw rows.
-     * 
+     *
      * @param ec
      *            editing context used to locate the model group
      * @param function
@@ -479,7 +487,7 @@ public class ERXEOAccessUtilities {
      *            name of the entity
      * @param aggregateName the name to assign to the aggregate column in the query
      * @param valueClass the java class of this attribute's values
-     * @param valueType the EOAttribute value type  
+     * @param valueType the EOAttribute value type
      * @return aggregate function attribute
      */
     public static EOAttribute createAggregateAttribute(EOEditingContext ec, String function, String attributeName, String entityName, Class valueClass, String valueType, String aggregateName) {
@@ -516,7 +524,7 @@ public class ERXEOAccessUtilities {
         if (valueType != null) {
         	aggregate.setValueType(valueType);
         }
-        
+
         // MS: This "t0." is totally wrong, but it is required.  It should be dynamically
         // generated, but this function doesn't have an EOSQLExpression to operate on
         aggregate.setReadFormat(ERXSQLHelper.newSQLHelper(entity.model()).readFormatForAggregateFunction(function, "t0." + attribute.columnName(), aggregateName));
@@ -525,30 +533,30 @@ public class ERXEOAccessUtilities {
 
     /** oracle 9 has a maximum length of 30 characters for table names, column names and constraint names
      * Foreign key constraint names are defined like this from the plugin:<br/><br/>
-     * 
+     *
      * TABLENAME_FOEREIGNKEYNAME_FK <br/><br/>
-     * 
+     *
      * The whole statement looks like this:<br/><br/>
-     * 
+     *
      * ALTER TABLE [TABLENAME] ADD CONSTRAINT [CONSTRAINTNAME] FOREIGN KEY ([FK]) REFERENCES [DESTINATION_TABLE] ([PK]) DEFERRABLE INITIALLY DEFERRED
-     * 
+     *
      * THIS means that the tablename and the columnname together cannot
      * be longer than 26 characters.<br/><br/>
-     * 
+     *
      * This method checks each foreign key constraint name and if it is longer than 30 characters its replaced
      * with a unique name.
-     * 
+     *
      * @see createSchemaSQLForEntitiesInModelWithNameAndOptions
      */
     public static String createSchemaSQLForEntitiesInModelWithNameAndOptionsForOracle9(NSArray entities, String modelName, NSDictionary optionsCreate) {
         EODatabaseContext dc = EOUtilities.databaseContextForModelNamed(ERXEC.newEditingContext(), modelName);
         return ERXSQLHelper.newSQLHelper(dc).createSchemaSQLForEntitiesInModelWithNameAndOptions(entities, modelName, optionsCreate);
     }
-    
+
     /**
      * creates SQL to create tables for the specified Entities. This can be used
      * with EOUtilities rawRowsForSQL method to create the tables.
-     * 
+     *
      * @param entities
      *            a NSArray containing the entities for which create table
      *            statements should be generated or null if all entitites in the
@@ -570,7 +578,7 @@ public class ERXEOAccessUtilities {
      *            <li>EOSchemaGeneration.DropDatabaseKey</li>
      *            <br/><br>
      *            Possible values are <code>YES</code> and <code>NO</code>
-     * 
+     *
      * @return a <code>String</code> containing SQL statements to create
      *         tables
      * @deprecated
@@ -579,10 +587,10 @@ public class ERXEOAccessUtilities {
         EODatabaseContext dc = EOUtilities.databaseContextForModelNamed(ERXEC.newEditingContext(), modelName);
         return ERXSQLHelper.newSQLHelper(dc).createSchemaSQLForEntitiesInModelWithNameAndOptions(entities, modelName, optionsCreate);
     }
-    
+
     /**
      * Creates the schema sql for a set of entities.
-     * 
+     *
      * @param entities the entities to create sql for
      * @param databaseContext the database context to use
      * @param optionsCreate the options (@see createSchemaSQLForEntitiesInModelWithNameAndOptions)
@@ -592,11 +600,11 @@ public class ERXEOAccessUtilities {
     public static String createSchemaSQLForEntitiesWithOptions(NSArray entities, EODatabaseContext databaseContext, NSDictionary optionsCreate) {
     	return ERXSQLHelper.newSQLHelper(databaseContext).createSchemaSQLForEntitiesWithOptions(entities, databaseContext, optionsCreate);
     }
-    
+
     /**
      * creates SQL to create tables for the specified Entities. This can be used
      * with EOUtilities rawRowsForSQL method to create the tables.
-     * 
+     *
      * @param entities
      *            a NSArray containing the entities for which create table
      *            statements should be generated or null if all entitites in the
@@ -616,7 +624,7 @@ public class ERXEOAccessUtilities {
      *            </ul>
      *            <br/><br>
      *            Possible values are <code>YES</code> and <code>NO</code>
-     * 
+     *
      * @return a <code>String</code> containing SQL statements to create
      *         tables
      * @deprecated
@@ -629,7 +637,7 @@ public class ERXEOAccessUtilities {
     /**
      * creates SQL to create tables for the specified Entities. This can be used
      * with EOUtilities rawRowsForSQL method to create the tables.
-     * 
+     *
      * @param entities
      *            a NSArray containing the entities for which create table
      *            statements should be generated or null if all entitites in the
@@ -663,7 +671,7 @@ public class ERXEOAccessUtilities {
     public static String createIndexSQLForEntities(NSArray entities) {
         return createIndexSQLForEntities(entities, null);
     }
-    
+
     /**
      * @deprecated
      */
@@ -696,7 +704,7 @@ public class ERXEOAccessUtilities {
 
     /**
      * Returns true if the exception is an optimistic locking exception.
-     * 
+     *
      * @param e
      *            the exception as recieved from saveChanges()
      * @return true if the error could be handled.
@@ -753,7 +761,7 @@ public class ERXEOAccessUtilities {
      * the same method that EOF uses by default for generating primary keys. See
      * {@link ERXGeneratesPrimaryKeyInterface}for more information about using
      * a newly created dictionary as the primary key for an enterprise object.
-     * 
+     *
      * @param ec
      *            editing context
      * @param entityName
@@ -783,10 +791,10 @@ public class ERXEOAccessUtilities {
     	}
     	return primaryKey;
     }
-    
+
     /**
      * Creates an array containing all of the primary keys of the given objects.
-     * 
+     *
      * @param eos
      *            array of enterprise objects
      */
@@ -813,7 +821,7 @@ public class ERXEOAccessUtilities {
     /**
      * Creates an array of relationships and attributes from the given keypath to give to the
      * EOSQLExpression method <code>sqlStringForAttributePath</code>. If the last element is a
-     * relationship, then the relationship's source attribute will get chosen. As such, this can only 
+     * relationship, then the relationship's source attribute will get chosen. As such, this can only
      * work for single-value relationships in the last element.
      * @param entity
      * @param keyPath
@@ -826,7 +834,7 @@ public class ERXEOAccessUtilities {
             part = parts[i];
             EORelationship relationship = entity.anyRelationshipNamed(part);
             if(relationship == null) {
-            	// CHECKME AK:  it would probably be better to return null 
+            	// CHECKME AK:  it would probably be better to return null
             	// to indocate that this is not a valid path?
             	return NSArray.EmptyArray;
             }
@@ -862,7 +870,7 @@ public class ERXEOAccessUtilities {
 
     /**
      * Returns the database context for an EO.
-     * 
+     *
      * @param eo the EO to get a database context for
      * @return the eo's database context
      */
@@ -872,11 +880,11 @@ public class ERXEOAccessUtilities {
         EODatabaseContext databaseContext = (EODatabaseContext) osc.objectStoreForObject(eo);
         return databaseContext;
     }
-    
+
     /**
      * Returns the database context for the given entity in the given
      * EOObjectStoreCoordinator
-     * 
+     *
      * @param entityName
      * @param osc
      */
@@ -889,7 +897,7 @@ public class ERXEOAccessUtilities {
     /**
      * Closes the (JDBC) Connection from all database channels for the specified
      * EOObjectStoreCoordinator
-     * 
+     *
      * @param osc
      *            the EOObjectStoreCoordinator from which the (JDBC)Connections
      *            should be closed
@@ -908,7 +916,7 @@ public class ERXEOAccessUtilities {
                     EODatabaseChannel dbch = (EODatabaseChannel) channels.objectAtIndex(j);
                     if (!dbch.adaptorChannel().adaptorContext().hasOpenTransaction()) {
                         dbch.adaptorChannel().closeChannel();
-                        
+
                     } else {
                         log.warn("could not close Connection from " + dbch + " because its EOAdaptorContext "
                                 + dbch.adaptorChannel().adaptorContext() + " had open Transactions");
@@ -929,7 +937,7 @@ public class ERXEOAccessUtilities {
      * @param keyPath
      */
     private static Set _keysWithWarning = Collections.synchronizedSet(new HashSet());
-    
+
     public static EOEntity destinationEntityForKeyPath(EOEntity entity, String keyPath) {
         if(keyPath == null || keyPath.length() == 0) {
             return entity;
@@ -955,13 +963,13 @@ public class ERXEOAccessUtilities {
     }
 
     /** Returns the EOEntity for the provided EOEnterpriseObject if one exists
-     * 
+     *
      * @param eo the EOEnterpriseObject
      * @return the EOEntity from the EOEnterpriseObject
      */
     public static EOEntity entityForEo(EOEnterpriseObject eo) {
         EOClassDescription classDesc = eo.classDescription();
-        
+
         if (classDesc instanceof EOEntityClassDescription)
             return ((EOEntityClassDescription)classDesc).entity();
         return null;
@@ -984,10 +992,10 @@ public class ERXEOAccessUtilities {
 	            }
 	        }
         }
-        
+
         NSArray parentRelationships = (NSArray) entity.parentEntity().relationships().valueForKey("name");
         NSArray relationships = entity.relationships();
-        
+
         for (int i = relationships.count(); i-- > 0;) {
             EORelationship element = (EORelationship) relationships.objectAtIndex(i);
             if ((element.isToMany() && includeToManyRelationships)
@@ -1002,7 +1010,7 @@ public class ERXEOAccessUtilities {
     }
 
     public static NSArray externalNamesForEntity(EOEntity entity, boolean includeParentEntities) {
-        if (includeParentEntities) { 
+        if (includeParentEntities) {
             entity = rootEntityForEntity(entity);
         }
         NSMutableArray entityNames = new NSMutableArray();
@@ -1013,7 +1021,7 @@ public class ERXEOAccessUtilities {
                 entityNames.addObjectsFromArray(names);
             }
         }
-        entityNames.addObject(entity.externalName()); 
+        entityNames.addObject(entity.externalName());
         return ERXArrayUtilities.arrayWithoutDuplicates(entityNames);
     }
 
@@ -1154,8 +1162,8 @@ public class ERXEOAccessUtilities {
 
 		return description;
 	}
-    
-    
+
+
     /**
      * Creates an AND qualifier of EOKeyValueQualifiers for every keypath in the given array of attributes.
      *
@@ -1177,7 +1185,7 @@ public class ERXEOAccessUtilities {
 
     /**
      * Filters a list of relationships for only the ones that
-     * have a given EOAttribute as a source attribute. 
+     * have a given EOAttribute as a source attribute.
      * @param attrib EOAttribute to filter source attributes of
      *      relationships.
      * @return filtered array of EORelationship objects that have
@@ -1242,7 +1250,7 @@ public class ERXEOAccessUtilities {
         EOEditingContext ec = eo.editingContext();
         NSArray keys = changedValues.allKeys();
         NSMutableSet relationships = new NSMutableSet();
-        
+
         for (int i=0; i<keys.count(); i++) {
             String key = (String)keys.objectAtIndex(i);
             EOAttribute attrib = entity.attributeNamed(key);
@@ -1278,10 +1286,10 @@ public class ERXEOAccessUtilities {
             }
         }
     }
-    
+
     /**
      * Deals with the nitty-gritty of direct row manipulation by
-     * correctly opening, closing, locking and unlocking the 
+     * correctly opening, closing, locking and unlocking the
      * needed EOF objects for direct row manipulation. Wraps the
      * actions in a transaction.
      * The API is not really finalized, if someone has a better idea
@@ -1289,7 +1297,7 @@ public class ERXEOAccessUtilities {
      * @author ak
      */
     public static abstract class ChannelAction {
- 
+
         protected abstract int doPerform(EOAdaptorChannel channel);
 
         public int perform(EOEditingContext ec, String modelName) {
@@ -1313,7 +1321,7 @@ public class ERXEOAccessUtilities {
                     } catch(RuntimeException ex) {
                         channel.adaptorContext().rollbackTransaction();
                         throw ex;
-                    } 
+                    }
                 } finally {
                     if(!wasOpen) {
                         channel.closeChannel();
@@ -1328,14 +1336,14 @@ public class ERXEOAccessUtilities {
     }
 
     /**
-     * Deletes rows described by the qualifier. Note that the values and the qualifier need to be on an attribute 
-     * and not on a relationship level. I.e. you need to give relationshipForeignKey = pk of object instead of 
+     * Deletes rows described by the qualifier. Note that the values and the qualifier need to be on an attribute
+     * and not on a relationship level. I.e. you need to give relationshipForeignKey = pk of object instead of
      * relatedObject = object
      * @param ec
      * @param entityName
      * @param qualifier
      */
-    public static int deleteRowsDescribedByQualifier(EOEditingContext ec, String entityName, 
+    public static int deleteRowsDescribedByQualifier(EOEditingContext ec, String entityName,
             final EOQualifier qualifier) {
         final EOEntity entity = entityNamed(ec, entityName);
         ChannelAction action = new ChannelAction() {
@@ -1347,15 +1355,15 @@ public class ERXEOAccessUtilities {
     }
 
     /**
-     * Updates rows described by the qualifier. Note that the values and the qualifier need to be on an attribute 
-     * and not on a relationship level. I.e. you need to give relationshipForeignKey = pk of object instead of 
+     * Updates rows described by the qualifier. Note that the values and the qualifier need to be on an attribute
+     * and not on a relationship level. I.e. you need to give relationshipForeignKey = pk of object instead of
      * relatedObject = object. The newValues dictionaries also holds foreign keys, not objects.
      * @param ec
      * @param entityName
      * @param qualifier
      * @param newValues
      */
-    public static int updateRowsDescribedByQualifier(EOEditingContext ec, String entityName, 
+    public static int updateRowsDescribedByQualifier(EOEditingContext ec, String entityName,
             final EOQualifier qualifier, final NSDictionary newValues) {
         final EOEntity entity = entityNamed(ec, entityName);
         ChannelAction action = new ChannelAction() {
@@ -1367,12 +1375,12 @@ public class ERXEOAccessUtilities {
     }
 
     /**
-     * Insert row described dictionary. 
+     * Insert row described dictionary.
      * @param ec
      * @param entityName
      * @param newValues
      */
-    public static int insertRow(EOEditingContext ec, String entityName, 
+    public static int insertRow(EOEditingContext ec, String entityName,
             final NSDictionary newValues) {
         final EOEntity entity = entityNamed(ec, entityName);
         ChannelAction action = new ChannelAction() {
@@ -1385,12 +1393,12 @@ public class ERXEOAccessUtilities {
     }
 
     /**
-     * Insert rows described the array of dictionaries. 
+     * Insert rows described the array of dictionaries.
      * @param ec
      * @param entityName
      * @param newValues
      */
-    public static int insertRows(EOEditingContext ec, String entityName, 
+    public static int insertRows(EOEditingContext ec, String entityName,
             final List<NSDictionary> newValues) {
         final EOEntity entity = entityNamed(ec, entityName);
         ChannelAction action = new ChannelAction() {
@@ -1407,7 +1415,7 @@ public class ERXEOAccessUtilities {
     }
 
     /**
-     * Creates count new primary keys for the entity. 
+     * Creates count new primary keys for the entity.
      * @param ec
      * @param entityName
      * @param count
@@ -1428,7 +1436,7 @@ public class ERXEOAccessUtilities {
 
     /**
 	 * Tries to get the plugin name for a JDBC based model.
-	 * 
+	 *
 	 * @param model
 	 */
     public static String guessPluginName(EOModel model) {
@@ -1445,7 +1453,7 @@ public class ERXEOAccessUtilities {
         }
         return pluginName;
     }
-    
+
     /**
      * Tries to get the plugin name for a connection dictionary.
      * @param connectionDictionary the connectionDictionary to guess a plugin name for
@@ -1476,7 +1484,7 @@ public class ERXEOAccessUtilities {
         }
         return pluginName;
     }
-     
+
      /**
       * Returns a new fetch spec by morphing sort oderings containing the keys <code>foo.name</code>
       * returning <code>foo.name_de</code> where appropriate.
@@ -1517,10 +1525,10 @@ public class ERXEOAccessUtilities {
          }
          return fetchSpecification;
      }
-     
+
      /**
       * Batch fetch a relationship, optionally skipping any relationship that has already faulted in its to-many relationship.
-      * 
+      *
       * @param databaseContext the database context to fetch in
       * @param entityName the name of the entity to fetch on
       * @param relationshipName the name of the relationship in that entity to fetch
@@ -1533,11 +1541,11 @@ public class ERXEOAccessUtilities {
     	 EORelationship relationship = entity.relationshipNamed(relationshipName);
     	 ERXEOAccessUtilities.batchFetchRelationship(databaseContext, relationship, objects, editingContext, skipFaultedRelationships);
      }
-     
+
  	/**
  	 * Batch fetch a relationship, optionally skipping any relationship that has
  	 * already faulted in its to-many relationship.
- 	 * 
+ 	 *
  	 * @param databaseContext
  	 *            the database context to fetch in
  	 * @param relationship
@@ -1596,12 +1604,12 @@ public class ERXEOAccessUtilities {
  			databaseContext.batchFetchRelationship(relationship, objectsToBatchFetch, editingContext);
  		}
  	}
- 	
+
  	/**
  	 * In a multi-OSC or multi-instance scenario, when there are bugs, it is possible for the snapshots to become out of
  	 * sync with the database. It is useful to have some way to determine when exactly this condition occurs for writing
  	 * test cases.
- 	 * 
+ 	 *
  	 * @return a set of strings that describe the mismatches that occurred
  	 */
  	public static NSSet verifyAllSnapshots() {
