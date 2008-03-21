@@ -35,11 +35,11 @@ ERTaggableEntity.registerTaggable(Person.ENTITY_NAME);
 		Add convenience methods onto your Person class (optional, but handy):
 		
 		<pre>
-public ERTaggable<Person> taggable() {
+public ERTaggable&lt;Person&gt; taggable() {
 	return ERTaggable.taggable(this);
 }
 
-public static ERTaggableEntity<Person> taggableEntity() {
+public static ERTaggableEntity&lt;Person&gt; taggableEntity() {
 	return ERTaggableEntity.taggableEntity(Person.ENTITY_NAME);
 }
     </pre>
@@ -50,12 +50,12 @@ public static ERTaggableEntity<Person> taggableEntity() {
 
 		<pre>
 Person mike = Person.createPerson(editingContext, "Mike Schrag");
-ERTaggable<Person> taggableMike = mike.taggable();
+ERTaggable&lt;Person&gt; taggableMike = mike.taggable();
 taggableMike.addTags("mike employee important");
 
-NSArray<Person> matchingPeople = Person.taggableEntity().fetchTaggedWith(editingContext, "employee");
+NSArray&lt;Person&gt; matchingPeople = Person.taggableEntity().fetchTaggedWith(editingContext, "employee");
 	
-NSDictionary<EOEntity, NSArray<? extends ERXGenericRecord>> matchingItems = ERTaggableEntity.fetchAllTaggedWith(editingContext, "mike");
+NSDictionary&lt;EOEntity, NSArray&lt;? extends ERXGenericRecord&gt;&gt; matchingItems = ERTaggableEntity.fetchAllTaggedWith(editingContext, "mike");
 		</pre>
 	</li>
 </ol>
