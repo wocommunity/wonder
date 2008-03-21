@@ -21,7 +21,8 @@ import com.webobjects.foundation.NSMutableArray;
  * @author mschrag
  * @binding displayGroup the display group to paginate
  * @binding displayName the name of the items that are being display ("photo", "bug", etc)
- * @binding showPageRange if true, the page of items on the page is shown, for example "(1-7 of 200 items)" 
+ * @binding showPageRange if true, the page of items on the page is shown, for example "(1-7 of 200 items)"
+ * @binding small if true, a compressed page count style is used 
  */
 public class ERXFlickrBatchNavigation extends WOComponent {
 	private int _lastPageCount;
@@ -119,27 +120,46 @@ public class ERXFlickrBatchNavigation extends WOComponent {
 		if (_lastPageCount != pageCount || _lastCurrentPageNumber != currentPageNumber || _lastPageSize != pageSize) {
 			_pageNumbers = new NSMutableArray<PageNumber>();
 
-			int endCount = 2;
-			int nearCount = 3;
+			int nearEdgeCount;
+			int endCount;
+			int nearCount;
+			int minimumCount;
+
+			if (ERXComponentUtilities.booleanValueForBinding(this, "small", false)) {
+				nearEdgeCount = 1;
+				endCount = 1;
+				nearCount = 0;
+				minimumCount = 5;
+			}
+			else {
+				nearEdgeCount = 8;
+				endCount = 2;
+				nearCount = 3;
+				minimumCount = 15;
+			}
 			
-			if (pageCount <= 15) {
+			if (pageCount <= minimumCount) {
 				addPageNumbers(1, pageCount);
 			}
-			else if (currentPageNumber <= 8) {
-				addPageNumbers(1, Math.max(7, currentPageNumber + nearCount));
+			else if (currentPageNumber <= nearEdgeCount) {
+				addPageNumbers(1, Math.max(nearEdgeCount - 1, currentPageNumber + nearCount));
 				addEllipsis();
 				addPageNumbers(pageCount - endCount + 1, pageCount);
 			}
-			else if (currentPageNumber > pageCount - 8) {
+			else if (currentPageNumber > pageCount - nearEdgeCount) {
 				addPageNumbers(1, endCount);
 				addEllipsis();
-				addPageNumbers(Math.min(pageCount - 6, currentPageNumber - nearCount), pageCount);
+				addPageNumbers(Math.min(pageCount - nearEdgeCount + 2, currentPageNumber - nearCount), pageCount);
 			}
 			else {
 				addPageNumbers(1, endCount);
-				addEllipsis();
-				addPageNumbers(currentPageNumber - nearCount, currentPageNumber + nearCount);
-				addEllipsis();
+				if (currentPageNumber - nearCount > (endCount + 1)) {
+					addEllipsis();
+				}
+				addPageNumbers(Math.max(endCount + 1, currentPageNumber - nearCount), Math.min(currentPageNumber + nearCount, pageCount - endCount));
+				if (currentPageNumber + nearCount < pageCount - endCount) {
+					addEllipsis();
+				}
 				addPageNumbers(pageCount - endCount + 1, pageCount);
 			}
 
