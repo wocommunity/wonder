@@ -13,6 +13,7 @@ import er.extensions.ERXFlickrBatchNavigation;
  * @binding displayName the name of the items that are being display ("photo", "bug", etc)
  * @binding updateContainerID (optional) the id of the container to refresh (defaults to the nearest parent)
  * @binding showPageRange if true, the page of items on the page is shown, for example "(1-7 of 200 items)" 
+ * @binding small if true, a compressed page count style is used 
  */
 public class AjaxFlickrBatchNavigation extends ERXFlickrBatchNavigation {
 	public AjaxFlickrBatchNavigation(WOContext context) {
