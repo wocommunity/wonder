@@ -60,7 +60,7 @@ public class ERTagField extends er.extensions.ERXComponent {
         availableTags = tagCount.allKeys();
       }
       else {
-        NSDictionary<String, Integer> tagCount = taggable().taggableEntity().tagCount(editingContext, ERXQ.GT, minimum, limit);
+        NSDictionary<String, Integer> tagCount = taggable().taggableEntity().tagCount(editingContext, ERXQ.GTEQ, minimum, limit);
         availableTags = tagCount.allKeys();
       }
       _availableTags = ERXArrayUtilities.sortedArrayUsingComparator(availableTags, NSComparator.AscendingStringComparator);
