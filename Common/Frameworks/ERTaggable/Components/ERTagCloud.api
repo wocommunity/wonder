@@ -1,13 +1,18 @@
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <wodefinitions>
-	<wo wocomponentcontent="false" class="ERTagCloud.java">
-		<binding name = "entityName"/>	
-		<binding name = "tag"/>	
-		<binding name = "tagClass"/>	
+	<wo class="ERTagCloud.java" wocomponentcontent="false">
+		<binding name="entityName"/>	
+		<binding name="tag"/>	
+		<binding name="tagClass"/>	
 		
-	  <validation message = "&apos;entityName&apos; and &apos;tag&apos; are required bindings">
-	    <unbound name = "entityName"/>
-	    <unbound name = "tag"/>
+	  <validation message="'entityName' and 'tag' are required bindings">
+	    <unbound name="entityName"/>
+	    <unbound name="tag"/>
 	  </validation>
-	</wo>
+	<binding name="minimum"/>
+        <binding name="limit"/>
+        <binding name="categories"/>
+        <binding name="categoryCount"/>
+    <binding name="tagClassPrefix"/>
+    </wo>
 </wodefinitions>
