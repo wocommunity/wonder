@@ -2,10 +2,13 @@ package er.taggable.components;
 
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WOResponse;
+import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSComparator;
+import com.webobjects.foundation.NSDictionary;
 
 import er.extensions.ERXArrayUtilities;
+import er.extensions.ERXQ;
 import er.extensions.ERXWOContext;
 import er.taggable.ERTaggable;
 
@@ -17,6 +20,8 @@ import er.taggable.ERTaggable;
  *  
  * @author mschrag
  * @binding taggable the ERTaggable to manage
+ * @binding limit the maximum number of tags to show
+ * @binding minimum the minimum tag count required for a tag to be shown
  */
 public class ERTagField extends er.extensions.ERXComponent {
   private String _id;
@@ -32,10 +37,33 @@ public class ERTagField extends er.extensions.ERXComponent {
     return (ERTaggable<?>) valueForBinding("taggable");
   }
 
+  public int minimum() {
+    return intValueForBinding("minimum", -1);
+  }
+
+  public int limit() {
+    return intValueForBinding("limit", -1);
+  }
+
   @SuppressWarnings("unchecked")
   public NSArray<String> availableTags() {
     if (_availableTags == null) {
-      _availableTags = ERXArrayUtilities.sortedArrayUsingComparator(taggable().taggableEntity().fetchAllTags(taggable().item().editingContext()), NSComparator.AscendingStringComparator);
+      EOEditingContext editingContext = taggable().item().editingContext();
+      int minimum = minimum();
+      int limit = limit();
+      NSArray<String> availableTags;
+      if (minimum == -1 && limit == -1) {
+        availableTags = taggable().taggableEntity().fetchAllTags(editingContext);
+      }
+      else if (minimum == -1) {
+        NSDictionary<String, Integer> tagCount = taggable().taggableEntity().tagCount(editingContext, limit);
+        availableTags = tagCount.allKeys();
+      }
+      else {
+        NSDictionary<String, Integer> tagCount = taggable().taggableEntity().tagCount(editingContext, ERXQ.GT, minimum, limit);
+        availableTags = tagCount.allKeys();
+      }
+      _availableTags = ERXArrayUtilities.sortedArrayUsingComparator(availableTags, NSComparator.AscendingStringComparator);
     }
     return _availableTags;
   }

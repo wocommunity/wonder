@@ -3,8 +3,10 @@
         <wo class="ERTagField.java" wocomponentcontent="false">
 
         <binding name="taggable"/>
-        <validation message="&apos;taggable&apos; is a required binding">
+        <validation message="'taggable' is a required binding">
             <unbound name="taggable"/>
         </validation>
+    <binding name="limit"/>
+        <binding name="minimum"/>
     </wo>
 </wodefinitions>
