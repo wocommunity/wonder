@@ -1,8 +1,8 @@
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <wodefinitions>
     <wo class="ERXStyleSheet" wocomponentcontent="true">
-        <binding name="framework"/>
-        <binding name="filename"/>
+        <binding defaults="Frameworks" name="framework"/>
+        <binding defaults="Resources" name="filename"/>
         <binding name="href"/>
         <binding name="key"/>
         <binding name="media"/>
