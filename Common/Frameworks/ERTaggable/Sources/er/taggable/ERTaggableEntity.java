@@ -724,7 +724,7 @@ public class ERTaggableEntity<T extends ERXGenericRecord> {
     tagNameAttribute.setName("tagName");
     fetchAttributes.addObject(tagNameAttribute);
 
-    EOAttribute countAttribute = ERXEOAccessUtilities.createAggregateAttribute(editingContext, "COUNT", ERTag.NAME_KEY, _tagEntity.name(), Number.class, "i", "tagCount");
+    EOAttribute countAttribute = ERXEOAccessUtilities.createAggregateAttribute(editingContext, "COUNT", ERTag.NAME_KEY, _tagEntity.name(), Number.class, "i", "tagCount", "t2");
     fetchAttributes.addObject(countAttribute);
 
     ERXSQLHelper sqlHelper = ERXSQLHelper.newSQLHelper(_entity.model());
@@ -843,7 +843,7 @@ public class ERTaggableEntity<T extends ERXGenericRecord> {
     tagsFetchAttributes.addObject(tagIDAttribute);
     tagsFetchAttributes.addObject(tagNameAttribute);
 
-    EOAttribute countAttribute = ERXEOAccessUtilities.createAggregateAttribute(editingContext, "COUNT", ERTag.NAME_KEY, _tagEntity.name(), Number.class, "i", "tagCount");
+    EOAttribute countAttribute = ERXEOAccessUtilities.createAggregateAttribute(editingContext, "COUNT", ERTag.NAME_KEY, _tagEntity.name(), Number.class, "i", "tagCount", "t2");
     tagsFetchAttributes.addObject(countAttribute);
 
     EOQualifier idQualifier = new ERXKey<ERTag>("id").in(itemPrimaryKeys);
