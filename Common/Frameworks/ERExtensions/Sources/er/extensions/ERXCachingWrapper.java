@@ -117,7 +117,7 @@ public class ERXCachingWrapper extends ERXStatelessComponent {
     			keys = (NSArray)value;
     		} else if(value instanceof String) {
     			keys = (NSArray) NSPropertyListSerialization.propertyListFromString((String) value);
-    		} else {
+    		} else if (value != null) {
     			throw new IllegalArgumentException("keys must be a NSArray or a property list String");
     		}
     		if(keys == null) {
