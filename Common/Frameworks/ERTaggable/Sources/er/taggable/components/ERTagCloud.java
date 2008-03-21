@@ -109,7 +109,7 @@ public class ERTagCloud extends ERXComponent {
         tagCount = taggableEntity.tagCount(editingContext, limit);
       }
       else {
-        tagCount = taggableEntity.tagCount(editingContext, ERXQ.GT, minimum, limit);
+        tagCount = taggableEntity.tagCount(editingContext, ERXQ.GTEQ, minimum, limit);
       }
       NSArray<String> categories = categories();
       if (categories == null) {
