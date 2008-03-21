@@ -16,7 +16,7 @@ TagField.prototype = {
   	this.textElement = $(textElement);
   	this.tagsElement = $(tagsElement);
   	this.lastValue = this.textElement.value;
-		Event.observe(this.textElement, "keypress", this.keyPress.bindAsEventListener(this));
+		Event.observe(this.textElement, "keydown", this.keyPress.bindAsEventListener(this));
 		Event.observe(this.textElement, "keyup", this.keyUp.bindAsEventListener(this));
 		
 		this.processTyping();
