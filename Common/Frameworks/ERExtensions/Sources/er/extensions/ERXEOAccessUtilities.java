@@ -470,7 +470,7 @@ public class ERXEOAccessUtilities {
      * @return aggregate function attribute
      */
     public static EOAttribute createAggregateAttribute(EOEditingContext ec, String function, String attributeName, String entityName, Class valueClass, String valueType) {
-    	return ERXEOAccessUtilities.createAggregateAttribute(ec, function, attributeName, entityName, valueClass, valueType, null);
+    	return ERXEOAccessUtilities.createAggregateAttribute(ec, function, attributeName, entityName, valueClass, valueType, null, null);
     }
     
     /**
@@ -487,10 +487,32 @@ public class ERXEOAccessUtilities {
      *            name of the entity
      * @param aggregateName the name to assign to the aggregate column in the query
      * @param valueClass the java class of this attribute's values
-     * @param valueType the EOAttribute value type  
+     * @param valueType the EOAttribute value type
      * @return aggregate function attribute
      */
     public static EOAttribute createAggregateAttribute(EOEditingContext ec, String function, String attributeName, String entityName, Class valueClass, String valueType, String aggregateName) {
+    	return ERXEOAccessUtilities.createAggregateAttribute(ec, function, attributeName, entityName, valueClass, valueType, aggregateName, null);
+    }
+    
+    /**
+     * Creates an aggregate attribute for a given function name. These can then
+     * be used to query on when using raw rows.
+     * 
+     * @param ec
+     *            editing context used to locate the model group
+     * @param function
+     *            name of the function MAX, MIN, etc
+     * @param attributeName
+     *            name of the attribute
+     * @param entityName
+     *            name of the entity
+     * @param aggregateName the name to assign to the aggregate column in the query
+     * @param valueClass the java class of this attribute's values
+     * @param valueType the EOAttribute value type
+     * @param entityTableAlias the "t0"-style name of the attribute in this query (or null for "t0")  
+     * @return aggregate function attribute
+     */
+    public static EOAttribute createAggregateAttribute(EOEditingContext ec, String function, String attributeName, String entityName, Class valueClass, String valueType, String aggregateName, String entityTableAlias) {
         if (function == null) {
         	throw new IllegalStateException("Function is null.");
         }
@@ -527,7 +549,10 @@ public class ERXEOAccessUtilities {
         
         // MS: This "t0." is totally wrong, but it is required.  It should be dynamically
         // generated, but this function doesn't have an EOSQLExpression to operate on
-        aggregate.setReadFormat(ERXSQLHelper.newSQLHelper(entity.model()).readFormatForAggregateFunction(function, "t0." + attribute.columnName(), aggregateName));
+        if (entityTableAlias == null) {
+        	entityTableAlias = "t0";
+        }
+        aggregate.setReadFormat(ERXSQLHelper.newSQLHelper(entity.model()).readFormatForAggregateFunction(function, entityTableAlias + "." + attribute.columnName(), aggregateName));
         return aggregate;
     }
 
