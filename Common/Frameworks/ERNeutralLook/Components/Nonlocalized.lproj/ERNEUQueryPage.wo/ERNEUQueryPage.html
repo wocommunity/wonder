@@ -1,21 +1,22 @@
 <WEBOBJECT NAME=PageWrapper><WEBOBJECT NAME=Help></WEBOBJECT>
    <WEBOBJECT NAME=QueryForm>
-       
-       <webobject name="AboveDisplayPropertyKeys"></webobject>
-       
-      <WEBOBJECT NAME=MainTable>
+    
+    <webobject name="AboveDisplayPropertyKeys"></webobject>
+    
+    <webobject name="QuerySubmitButton2"></webobject>
+	<WEBOBJECT NAME=MainTable>
          <TR VALIGN=top>
             <TD VALIGN=top ALIGN=right><WEBOBJECT NAME=QueryTable><WEBOBJECT NAME=BannerConditional>
                      <TR>
                         <TD ALIGN=center>
                            <TABLE BORDER=0>
                               <TR>
-                                 <TD><WEBOBJECT NAME=Banner></WEBOBJECT></TD>
+                                 <TD colspan="2"><WEBOBJECT NAME=Banner></WEBOBJECT></TD>
                               </TR>
                               <WEBOBJECT NAME=QueryTableHeaderRow>
-                                 <TD ALIGN=left><B><WEBOBJECT NAME=FontContainer><WEBOBJECT NAME=EntityName></WEBOBJECT><WEBOBJECT NAME=FetchLimitConditional>
+                                 <TD align="left"><B><WEBOBJECT NAME=FontContainer><WEBOBJECT NAME=EntityName></WEBOBJECT><WEBOBJECT NAME=FetchLimitConditional>
                                           (<WEBOBJECT NAME=FetchLimit></WEBOBJECT>
-                                          max)</WEBOBJECT></WEBOBJECT></B></TD>
+                                          max)</WEBOBJECT></WEBOBJECT></B></TD><webobject name="SavedQueryComponentDefined"><td align="left"><webobject name="SavedQuerySwitchedComponent"></webobject></td></webobject>
                               </WEBOBJECT>
                            </TABLE>
                         </TD>
@@ -53,5 +54,5 @@
    <WEBOBJECT NAME=Conditional1><WEBOBJECT NAME=Conditional2><WEBOBJECT NAME=ListPage></WEBOBJECT></WEBOBJECT></WEBOBJECT>
 
    <webobject name="BelowDisplayPropertyKeys"></webobject>
-
+    
 </WEBOBJECT>

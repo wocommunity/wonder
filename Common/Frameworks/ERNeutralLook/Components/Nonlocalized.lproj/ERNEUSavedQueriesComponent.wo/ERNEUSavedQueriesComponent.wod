@@ -1,0 +1,71 @@
+AddNewQuery: WOSubmitButton {
+	action = addNewQuery;
+	value = "Add New";
+}
+
+ClearForm: WOSubmitButton {
+	action = clearForm;
+	value = "Clear Form";
+}
+
+ClearFormButton: WOSubmitButton {
+	action = clearForm;
+	value = "Clear Form";
+}
+
+DeleteAllSavedQueries: WOSubmitButton {
+	action = deleteAllSavedQueries;
+	value = "Delete All";
+	disabled = hasNoSavedQueries;
+	onClick = "return confirm('Are you sure you want to delete all the saved queries?');";
+}
+
+DeleteCurrentQuery: WOSubmitButton {
+	action = deleteCurrentQuery;
+	value = "Delete";
+	disabled = isNoSelectedQuery;
+	onClick = "return confirm('Are you sure you want to delete this saved query?');";
+}
+
+HasSavedQueries: WOConditional {
+	condition = true;
+}
+
+
+HasSelectedQuery: WOConditional {
+	condition = true;
+}
+
+HiddenPopupChangedButton: WOImageButton {
+	action = popupChangedSelection;
+	ID = "SavedQueryHiddenButton";
+	width=1;
+	height=1;
+	filename = "s.gif";
+	framework = "ERExtensions";
+}
+
+MakeDefaultSavedQuery: WOSubmitButton {
+	action = makeDefaultSavedQuery;
+	value = "Make Default";
+	disabled = isSelectedQueryTheDefault;
+}
+
+NewQueryNameTextField: WOTextField {
+	value = newQueryName;
+}
+
+SavedQueryPopup: WOPopUpButton {
+	displayString = aSavedQuery.name;
+	item = aSavedQuery;
+	list = savedQueries;
+	noSelectionString = "- None -";
+	onChange = "return document.getElementById('SavedQueryHiddenButton').click();";
+	selection = selectedSavedQuery;
+}
+
+UpdateQuery: WOSubmitButton {
+	action = updateCurrentQuery;
+	value = "Update";
+	disabled = isNoSelectedQuery;
+}
