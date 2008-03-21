@@ -123,7 +123,7 @@ public class ERXJDBCMigrationLock implements IERXMigrationLock {
 			String createTableStatement = dbUpdaterCreateStatement(model, adaptor);
 			if (createTableIfMissing) {
 				try {
-					log.warn("Failed to lock.  Attempting to create the table and lock again. Original reason for failure: ", e);
+					log.warn("Locking failed, but this might be OK if this is the first time you are running migrations.  If things keep running, it probably worked fine.  The original reason for the failure: ", e);
 					ERXJDBCUtilities.executeUpdateScript(channel, createTableStatement);
 					return _tryLock(channel, model, lockOwnerName, false);
 				}
