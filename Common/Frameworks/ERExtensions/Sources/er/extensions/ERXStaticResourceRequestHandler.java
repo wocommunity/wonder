@@ -96,6 +96,7 @@ public class ERXStaticResourceRequestHandler extends WORequestHandler {
 			String path = sb.toString();
 			try {
 				path = path.replace('+', ' ');
+				path = path.replaceAll("\\?.*", "");
 				file = new File(path);
 				length = (int) file.length();
 				is = new FileInputStream(file);
