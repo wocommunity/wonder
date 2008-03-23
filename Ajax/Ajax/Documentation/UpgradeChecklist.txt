@@ -8,3 +8,6 @@ wonder.js
 * Ajax.ActivePeriodicalUpdater extends Ajax.Base
 * Form.Element.RadioButtonObserver extends Form.Element.EventObserver
 * AjaxSubmitButton.observeField works around a prototype bug with observing radio buttons
+
+prototype.js
+* descendantOf: Applied http://dev.rubyonrails.org/ticket/10413
