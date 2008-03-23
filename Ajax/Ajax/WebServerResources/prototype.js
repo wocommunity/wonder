@@ -1868,7 +1868,8 @@ Element.Methods = {
     if (element.compareDocumentPosition)
       return (element.compareDocumentPosition(ancestor) & 8) === 8;
 
-    if (element.sourceIndex && !Prototype.Browser.Opera) {
+		// MS: http://dev.rubyonrails.org/ticket/10413 (Fixed in Prototype 1.6.1)
+    if (element.sourceIndex && ancestor.sourceIndex && !Prototype.Browser.Opera) {
       var e = element.sourceIndex, a = ancestor.sourceIndex,
        nextAncestor = ancestor.nextSibling;
       if (!nextAncestor) {
