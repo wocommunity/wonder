@@ -69,7 +69,13 @@ public class ERDDeletionDelegate implements NextPageDelegate {
                     }
                 } else {
                     editingContext.deleteObject(_object);
-                    editingContext.saveChanges();
+                    if (ERXExtensions.isNewObject(_object)) {
+                        // This is necessary to force state synching, e.g., for display groups, etc.
+                        editingContext.processRecentChanges();
+                    } else {
+                        // Only save if the object is NOT new.
+                        editingContext.saveChanges();
+                    }
                     _object=null;
                 }
             } catch (NSValidation.ValidationException e) {
