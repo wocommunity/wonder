@@ -102,6 +102,16 @@ public class ERTaggableEntity<T extends ERXGenericRecord> {
     String tagsRelationshipName = (String) entity.userInfo().objectForKey(ERTaggableEntity.ERTAGGABLE_TAG_RELATIONSHIP_KEY);
     _tagsRelationship = _entity.relationshipNamed(tagsRelationshipName);
   }
+  
+  @Override
+  public int hashCode() {
+    return _entity.hashCode(); 
+  }
+  
+  @Override
+  public boolean equals(Object obj) {
+    return (obj instanceof ERTaggableEntity && ((ERTaggableEntity)obj)._entity.equals(_entity)); 
+  }
 
   /**
    * Sets the taggable entity class for the given entity name.  This allows you to override the 
