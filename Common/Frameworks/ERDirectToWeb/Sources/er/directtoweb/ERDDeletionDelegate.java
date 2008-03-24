@@ -27,6 +27,7 @@ import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSValidation;
 
 import er.extensions.ERXEC;
+import er.extensions.ERXEOControlUtilities;
 import er.extensions.ERXValidationException;
 import er.extensions.ERXValidationFactory;
 
@@ -82,7 +83,13 @@ public class ERDDeletionDelegate implements NextPageDelegate {
                     }
                 } else {
                     editingContext.deleteObject(_object);
-                    editingContext.saveChanges();
+                    if (ERXEOControlUtilities.isNewObject(_object)) {
+                        // This is necessary to force state synching, e.g., for display groups, etc.
+                        editingContext.processRecentChanges();
+                    } else {
+                        // Only save if the object is NOT new.
+                        editingContext.saveChanges();
+                    }
                     _object = null;
                 }
             } catch (EOObjectNotAvailableException e) {
