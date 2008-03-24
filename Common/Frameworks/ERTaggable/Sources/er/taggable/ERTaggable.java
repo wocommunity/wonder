@@ -41,6 +41,16 @@ public class ERTaggable<T extends ERXGenericRecord> {
     _entity = entity;
     _item = item;
   }
+  
+  @Override
+  public int hashCode() {
+    return _item.hashCode(); 
+  }
+  
+  @Override
+  public boolean equals(Object obj) {
+    return (obj instanceof ERTaggable && ((ERTaggable)obj)._item.equals(_item)); 
+  }
 
   /**
    * A factory method for generating a taggable from an EO.
