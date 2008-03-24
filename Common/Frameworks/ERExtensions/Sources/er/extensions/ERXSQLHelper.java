@@ -619,6 +619,23 @@ public class ERXSQLHelper {
 	}
 
 	/**
+	 * Returns the index in the expression's statement where order by 
+	 * clauses should be inserted.
+	 * 
+	 * @param expression
+	 *            the expression to look into
+	 * @return the index into statement where the order by should be inserted
+	 */
+	public int _orderByIndex(EOSQLExpression expression) {
+		String sql = expression.statement();
+		int orderByInsertIndex = sql.lastIndexOf(" LIMIT ");
+		if (orderByInsertIndex == -1) {
+			orderByInsertIndex = sql.length();
+		}
+		return orderByInsertIndex;
+	}
+	
+	/**
 	 * Returns the index in the expression's statement where group by and having
 	 * clauses should be inserted.
 	 * 
@@ -626,13 +643,16 @@ public class ERXSQLHelper {
 	 *            the expression to look into
 	 * @return the index into statement where the group by should be inserted
 	 */
-	protected int _groupByOrHavingIndex(EOSQLExpression expression) {
+	public int _groupByOrHavingIndex(EOSQLExpression expression) {
 		String sql = expression.statement();
-		int orderByIndex = sql.lastIndexOf(" ORDER BY ");
-		if (orderByIndex == -1) {
-			orderByIndex = sql.length();
+		int groupByInsertIndex = sql.lastIndexOf(" ORDER BY ");
+		if (groupByInsertIndex == -1) {
+			groupByInsertIndex = sql.lastIndexOf(" LIMIT ");
+			if (groupByInsertIndex == -1) {
+				groupByInsertIndex = sql.length();
+			}
 		}
-		return orderByIndex;
+		return groupByInsertIndex;
 	}
 
 	/**
@@ -1275,7 +1295,7 @@ public class ERXSQLHelper {
 				index = sql.indexOf("SELECT");
 			}
 			index += 6;
-			String limitSQL = sql.substring(0, index) + " TOP(" + start + ", " + (end - start) + ")" + sql.substring(index + 1, sql.length());
+			String limitSQL = sql.substring(0, index) + " TOP(" + start + ", " + (end - start) + ") " + sql.substring(index + 1, sql.length());
 			return limitSQL;
 		}
 
