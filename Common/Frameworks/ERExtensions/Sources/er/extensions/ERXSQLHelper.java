@@ -1375,6 +1375,11 @@ public class ERXSQLHelper {
 		public String sqlForRegularExpressionQuery(String key, String value) {
 			return key + " REGEXP " + value + "";
 		}
+		
+		@Override
+		public String sqlForCreateUniqueIndex(String indexName, String tableName, String... columnNames) {
+			return "ALTER TABLE `" + tableName + "` ADD UNIQUE `" + indexName + "` (`" + new NSArray<String>(columnNames).componentsJoinedByString("`, `") + "`)";
+		}
 	}
 
 	public static class PostgresqlSQLHelper extends ERXSQLHelper {
