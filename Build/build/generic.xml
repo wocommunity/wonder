@@ -242,7 +242,7 @@ There are many ways to use this script:
             <classpath refid="ant.classpath"/>
         </taskdef>
         <echo message="${project.dir}/Sources" />
-        <wocompile srcdir="${project.dir}/Sources" destdir="${build.classes}" debug="on" optimize="off" deprecation="on" source="1.4" target="1.4">
+        <wocompile srcdir="${project.dir}/Sources" destdir="${build.classes}" debug="on" optimize="off" deprecation="on" source="1.5" target="1.5">
             <classpath>
                 <fileset dir="${project.dir}/Libraries">
                     <include name="**/*.jar" />

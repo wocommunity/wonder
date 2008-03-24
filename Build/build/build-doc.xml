@@ -126,7 +126,7 @@
                 defaultexcludes="yes"
                 destdir="${dist}/Documentation/api"
                 failonerror="true"
-                source="1.4"
+                source="1.5"
                 use="true"
                 version="true"
                 verbose="false"
@@ -165,7 +165,7 @@
             <header><![CDATA[<em>Project Wonder ${project.version}</em>]]></header>
             <bottom><![CDATA[Copyright &#169; 2002 &#8211; 2004  Project Wonder.]]></bottom>
             <footer><![CDATA[Last updated: ${updated.date} &#149; ${updated.time}]]></footer>
-            <link href="http://java.sun.com/j2se/1.4/docs/api/"/>
+            <link href="http://java.sun.com/j2se/1.5/docs/api/"/>
             <link href="http://developer.apple.com/documentation/WebObjects/Reference/API/" packagelistLoc="${wonder.root}/Build/build/webobjects-package-list"/>
             <link href="http://jakarta.apache.org/log4j/docs/api/"/>
             <link href="http://www.junit.org/junit/javadoc/3.7/"/>
