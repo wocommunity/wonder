@@ -28,11 +28,21 @@ public class ERTagField extends er.extensions.ERXComponent {
   private NSArray<String> _availableTags;
   private String _tags;
   private boolean _tagsChanged;
+  private ERTaggable<?> _taggable;
 
   public ERTagField(WOContext context) {
     super(context);
   }
 
+  protected void clearCacheIfNecessary() {
+    ERTaggable<?> taggable = taggable();
+    if (taggable == null || (taggable != _taggable && !taggable.equals(_taggable))) {
+      _tags = null;
+      _availableTags = null;
+      _taggable = taggable;
+    }
+  }
+  
   public ERTaggable<?> taggable() {
     return (ERTaggable<?>) valueForBinding("taggable");
   }
@@ -47,6 +57,7 @@ public class ERTagField extends er.extensions.ERXComponent {
 
   @SuppressWarnings("unchecked")
   public NSArray<String> availableTags() {
+    clearCacheIfNecessary();
     if (_availableTags == null) {
       EOEditingContext editingContext = taggable().item().editingContext();
       int minimum = minimum();
@@ -82,6 +93,7 @@ public class ERTagField extends er.extensions.ERXComponent {
   }
 
   public String tags() {
+    clearCacheIfNecessary();
     if (_tags == null) {
       _tags = taggable().tagNames().componentsJoinedByString(" ");
       if (_tags.length() > 0) {
@@ -92,9 +104,11 @@ public class ERTagField extends er.extensions.ERXComponent {
   }
 
   public void setTags(String tags) {
-    if (_tags != tags || tags == null || !tags.equals(_tags)) {
+    clearCacheIfNecessary();
+    if (tags == null || (tags != _tags && !tags.equals(_tags))) {
       taggable().setTags(tags);
       _tags = tags;
+      _availableTags = null;
     }
   }
 
