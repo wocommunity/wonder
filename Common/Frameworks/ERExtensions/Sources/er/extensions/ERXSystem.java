@@ -15,6 +15,7 @@ public class ERXSystem {
    */
   public static void updateProperties() {
     Properties originalProperties = System.getProperties();
-    ERXProperties.evaluatePropertyOperators(originalProperties, originalProperties);
+    // bhenry: Comment this out for now, causing NoSuchMethodError
+    //ERXProperties.evaluatePropertyOperators(originalProperties, originalProperties);
   }
 }
