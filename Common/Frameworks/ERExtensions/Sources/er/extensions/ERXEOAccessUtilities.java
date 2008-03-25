@@ -321,6 +321,7 @@ public class ERXEOAccessUtilities {
                     throw NSForwardException._runtimeExceptionForThrowable(ex);
                 }
             }
+            throw NSForwardException._runtimeExceptionForThrowable(localException);
         }
         finally {
             dbc.unlock();
