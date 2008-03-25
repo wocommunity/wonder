@@ -6,9 +6,33 @@
 		<binding name="updateContainerID"/>
 		<binding name="showPageRange"/>
 
-		<validation message="'displayGroup' is a required binding.">
-			<unbound name="displayGroup"/>
+		<validation message="'displayGroup' or ('currentBatchIndex', 'parentActionName', 'maxNumberOfObjects', 'numberOfObjectsPerBatch') must be bound, but not both.">
+			<and>
+				<bound name="displayGroup"/>
+				<and>
+					<bound name="currentBatchIndex"/>
+	        		<bound name="parentActionName"/>
+	       	 		<bound name="maxNumberOfObjects"/>
+	        		<bound name="numberOfObjectsPerBatch"/>
+				</and>
+			</and>
 		</validation>
-	<binding defaults="Boolean" name="small"/>
+		<validation message="'displayGroup' or ('currentBatchIndex', 'parentActionName', 'maxNumberOfObjects', 'numberOfObjectsPerBatch') must be bound, but not both.">
+			<not>
+				<bound name="displayGroup"/>
+				<and>
+					<bound name="currentBatchIndex"/>
+	        		<bound name="parentActionName"/>
+	       	 		<bound name="maxNumberOfObjects"/>
+	        		<bound name="numberOfObjectsPerBatch"/>
+				</and>
+			</not>
+		</validation>
+		
+		<binding defaults="Boolean" name="small"/>
+	    <binding name="currentBatchIndex"/>
+	    <binding name="parentActionName"/>
+	    <binding name="maxNumberOfObjects"/>
+	    <binding name="numberOfObjectsPerBatch"/>
     </wo>
 </wodefinitions>
