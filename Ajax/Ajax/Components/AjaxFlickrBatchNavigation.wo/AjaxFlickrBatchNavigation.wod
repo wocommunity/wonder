@@ -69,15 +69,15 @@ ShowPageRange : WOConditional {
 }
 
 FirstIndex : WOString {
-	value = displayGroup.indexOfFirstDisplayedObject;
+	value = firstIndex;
 }
 
 LastIndex : WOString {
-	value = displayGroup.indexOfLastDisplayedObject;
+	value = lastIndex;
 }
 
 DisplayName : ERXPluralString {
-	count = objects.count;
+	count = displayNameCount;
 	value = displayName;
 }
 
