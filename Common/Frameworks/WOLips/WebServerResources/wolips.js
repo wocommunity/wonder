@@ -226,7 +226,7 @@ var WOLipsToolBar = {
 			$('_wolHandle').innerHTML = '&lt;';
 			$('_wolHandle').onclick = WOLipsToolBar.toggle;
 			$('_wolToolBarContainer').onclick = null;
-			$('_wolToolBarContainer').style.cursor = 'inherit';
+			$('_wolToolBarContainer').style.cursor = null;
 		}
 		else {
 			$('_wolToolBarContainer').style.cursor = 'pointer';
