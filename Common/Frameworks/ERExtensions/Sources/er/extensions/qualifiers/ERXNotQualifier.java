@@ -2,6 +2,10 @@ package er.extensions.qualifiers;
 
 import com.webobjects.eocontrol.EONotQualifier;
 import com.webobjects.eocontrol.EOQualifier;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSMutableArray;
+
+import er.extensions.ERXQ;
 
 /**
  * ERXNotQualifier is a chainable extension of EONotQualifier.
@@ -23,5 +27,13 @@ public class ERXNotQualifier extends EONotQualifier implements IERXChainableQual
 
 	public ERXOrQualifier or(EOQualifier... qualifiers) {
 		return ERXChainedQualifierUtils.or(this, qualifiers);
+	}
+	
+	public void filter(NSMutableArray<?> array) {
+		ERXQ.filter(array, this);
+	}
+	
+	public <T> NSArray<T> filtered(NSArray<T> array) {
+		return ERXQ.filtered(array, this);
 	}
 }

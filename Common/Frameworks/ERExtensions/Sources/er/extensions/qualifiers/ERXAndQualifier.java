@@ -5,6 +5,8 @@ import com.webobjects.eocontrol.EOQualifier;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSMutableArray;
 
+import er.extensions.ERXQ;
+
 /**
  * ERXAndQualifier is a chainable extension of EOAndQualifier.
  * 
@@ -12,7 +14,7 @@ import com.webobjects.foundation.NSMutableArray;
  */
 public class ERXAndQualifier extends EOAndQualifier implements IERXChainableQualifier {
 	public ERXAndQualifier(NSArray<EOQualifier> qualifiers) {
-		super(qualifiers);
+		super((NSArray)qualifiers);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -32,5 +34,13 @@ public class ERXAndQualifier extends EOAndQualifier implements IERXChainableQual
 
 	public ERXOrQualifier or(EOQualifier... qualifiers) {
 		return ERXChainedQualifierUtils.or(this, qualifiers);
+	}
+	
+	public void filter(NSMutableArray<?> array) {
+		ERXQ.filter(array, this);
+	}
+	
+	public <T> NSArray<T> filtered(NSArray<T> array) {
+		return ERXQ.filtered(array, this);
 	}
 }
