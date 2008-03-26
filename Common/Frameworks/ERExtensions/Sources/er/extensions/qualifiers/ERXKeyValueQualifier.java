@@ -2,7 +2,11 @@ package er.extensions.qualifiers;
 
 import com.webobjects.eocontrol.EOKeyValueQualifier;
 import com.webobjects.eocontrol.EOQualifier;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSSelector;
+
+import er.extensions.ERXQ;
 
 /**
  * ERXKeyValueQualifier is a chainable extension of EOKeyValueQualifier.
@@ -30,5 +34,13 @@ public class ERXKeyValueQualifier extends EOKeyValueQualifier implements IERXCha
 
 	public ERXOrQualifier or(EOQualifier... qualifiers) {
 		return ERXChainedQualifierUtils.or(this, qualifiers);
+	}
+	
+	public void filter(NSMutableArray<?> array) {
+		ERXQ.filter(array, this);
+	}
+	
+	public <T> NSArray<T> filtered(NSArray<T> array) {
+		return ERXQ.filtered(array, this);
 	}
 }

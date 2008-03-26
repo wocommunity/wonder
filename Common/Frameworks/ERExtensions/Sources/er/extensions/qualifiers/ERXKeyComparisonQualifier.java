@@ -2,7 +2,11 @@ package er.extensions.qualifiers;
 
 import com.webobjects.eocontrol.EOKeyComparisonQualifier;
 import com.webobjects.eocontrol.EOQualifier;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSSelector;
+
+import er.extensions.ERXQ;
 
 /**
  * ERXKeyComparisonQualifier is a chainable extension of EOKeyComparisonQualifier.
@@ -33,5 +37,13 @@ public class ERXKeyComparisonQualifier extends EOKeyComparisonQualifier implemen
 
 	public ERXOrQualifier or(EOQualifier... qualifiers) {
 		return ERXChainedQualifierUtils.or(this, qualifiers);
+	}
+	
+	public void filter(NSMutableArray<?> array) {
+		ERXQ.filter(array, this);
+	}
+	
+	public <T> NSArray<T> filtered(NSArray<T> array) {
+		return ERXQ.filtered(array, this);
 	}
 }
