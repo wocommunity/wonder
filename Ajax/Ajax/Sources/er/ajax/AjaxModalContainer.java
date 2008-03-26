@@ -12,12 +12,12 @@ import er.extensions.ERXStringUtilities;
  * @binding label label for the link
  * @binding class class for the link
  * @binding style style for the link
- * @binding value value for the link ??
- * @binding id id for the link ??
+ * @binding value value for the link (??)
+ * @binding id id for the link
  * @binding closeLabel string for the close link
  * @binding title title string for the link label and the window
- * @binding href when it is bound, the content of the url will be fetched (doesn't work)
- * @binding action when it is bound, the content of the url will be fetched
+ * @binding href when it is bound, the content of the url will be fetched into an iframe.
+ * @binding action when it is bound, the content of the url will be fetched into a div
  * 
  * @author timo
  * @author ak
@@ -72,12 +72,16 @@ public class AjaxModalContainer extends AjaxDynamicElement {
         appendTagAttributeToResponse(response, "id", valueForBinding("id", component));
         response.appendContentString(">");
         response.appendContentString((String) valueForBinding("label",component));
-        response.appendContentString("</a><div");
-        appendTagAttributeToResponse(response, "id", divID);
-        appendTagAttributeToResponse(response, "style", "display:none;");
-        response.appendContentString(">");
-        appendChildrenToResponse(response, context);
-        response.appendContentString("</div>");
+        response.appendContentString("</a>");
+        if(href.startsWith("#")) {
+        	response.appendContentString("<div");
+
+        	appendTagAttributeToResponse(response, "id", divID);
+        	appendTagAttributeToResponse(response, "style", "display:none;");
+        	response.appendContentString(">");
+        	appendChildrenToResponse(response, context);
+        	response.appendContentString("</div>");
+        }
         super.appendToResponse(response, context);
     }
 

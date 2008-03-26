@@ -742,6 +742,25 @@ var iBox = function()
   }();
   _pub.plugins.register(iBoxPlugin_YouTube);
 
+  //AK added support for iframes/external urls
+  var iBoxPlugin_External = function()
+  {
+    return {
+      match: function(url)
+      {
+      	var server = document.location.href.replace(new RegExp("(http:\/\/[^\/]+)\/.*"), "$1");
+        return url.indexOf(server) == -1;
+      },
+
+      render: function(url, params)
+      {
+       var html = "<iframe style='width: 100%; height: 100%; margin: 0; padding: 0; border: 0' src='" + url + "'></iframe>";
+        _pub.html(html, params);
+      }
+    }
+  }();
+  _pub.plugins.register(iBoxPlugin_External);
+
   var iBoxPlugin_Document = function()
   {
     return {
