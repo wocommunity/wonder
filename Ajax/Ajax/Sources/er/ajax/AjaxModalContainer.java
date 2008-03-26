@@ -5,6 +5,8 @@ package er.ajax;
 
 import com.webobjects.appserver.*;
 import com.webobjects.foundation.*;
+
+import er.extensions.ERXStringUtilities;
 /**
  * Shows a link and wraps an area that is later presented as a modal window.
  * @binding label label for the link
@@ -12,10 +14,13 @@ import com.webobjects.foundation.*;
  * @binding style style for the link
  * @binding value value for the link ??
  * @binding id id for the link ??
+ * @binding closeLabel string for the close link
+ * @binding title title string for the link label and the window
  * @binding href when it is bound, the content of the url will be fetched (doesn't work)
  * @binding action when it is bound, the content of the url will be fetched
  * 
  * @author timo
+ * @author ak
  */
 public class AjaxModalContainer extends AjaxDynamicElement {
 
@@ -34,7 +39,7 @@ public class AjaxModalContainer extends AjaxDynamicElement {
     public void appendToResponse(WOResponse response, WOContext context) {
         WOComponent component = context.component();
         String divID=AjaxUtils.toSafeElementID(context.elementID());
-        response.appendContentString("<a ");
+        response.appendContentString("<a");
         String href = (String) valueForBinding("href", component);
         if(href == null) {
             if(associations().objectForKey("action") != null) {
@@ -49,11 +54,15 @@ public class AjaxModalContainer extends AjaxDynamicElement {
 		String relAttributeValue = "ibox";
 		Object height = valueForBinding("height", component);
 		Object width = valueForBinding("width", component);
+		Object closeLabel = valueForBinding("closeLabel", component);
 		if (height != null) {
 			relAttributeValue += "&height=" + height;
 		}
 		if (width != null) {
 			relAttributeValue += "&width=" + width;
+		}
+		if (closeLabel != null) {
+			relAttributeValue += "&closeLabel=" + ERXStringUtilities.urlEncode(closeLabel.toString());
 		}
 		response._appendTagAttributeAndValue("rel", relAttributeValue, false); // don't escape the ampersands
         appendTagAttributeToResponse(response, "title", valueForBinding("title", component));
@@ -63,7 +72,7 @@ public class AjaxModalContainer extends AjaxDynamicElement {
         appendTagAttributeToResponse(response, "id", valueForBinding("id", component));
         response.appendContentString(">");
         response.appendContentString((String) valueForBinding("label",component));
-        response.appendContentString("</a><div ");
+        response.appendContentString("</a><div");
         appendTagAttributeToResponse(response, "id", divID);
         appendTagAttributeToResponse(response, "style", "display:none;");
         response.appendContentString(">");
