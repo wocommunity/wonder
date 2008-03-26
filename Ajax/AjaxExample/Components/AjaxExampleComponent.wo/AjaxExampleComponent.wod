@@ -98,6 +98,10 @@ AjaxTabbedPanelLink: WOHyperlink {
 	pageName = "AjaxTabbedPanelDemo";
 }
 
+ModalContainer: WOHyperlink {
+	pageName = "ModalContainerExample";
+}
+
 AjaxFileUpload : WOHyperlink {
 	pageName = "FileUploadExample";
 }

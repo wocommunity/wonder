@@ -1,0 +1,33 @@
+AjaxExampleComponent : AjaxExampleComponent {
+	title = "Modal Container Example";
+}
+
+ContentBox: AjaxModalContainer {
+	label = "Click me to show";
+	width = 300;
+	height = 400;
+	closeLabel = "Close me";
+	title = "Super cool title";
+}
+
+ActionBox: AjaxModalContainer {
+	label = "Click me to show";
+	width = 300;
+	height = 400;
+	closeLabel = "Close me";
+	title = "Super cool title";
+	action = context.page;
+}
+
+HrefBox: AjaxModalContainer {
+	label = "Click me to show";
+	width = 300;
+	height = 400;
+	closeLabel = "Close me";
+	title = "Super cool title";
+	href = "http://www.apple.com";
+}
+
+Form: WOForm {
+	
+}
