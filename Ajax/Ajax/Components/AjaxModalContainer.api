@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<wodefinitions>
+	<wo wocomponentcontent = "true" class="AjaxModalContainer">
+		<binding name = "id"/>
+		<binding name = "label"/>
+		<binding name = "title"/>
+		<binding name = "closeLabel"/>
+		<binding name = "width"/>
+		<binding name = "heigth"/>
+		<binding name = "action"/>
+		<binding name = "href"/>
+		<binding name = "style"/>
+		<binding name = "class"/>
+	</wo>
+</wodefinitions>

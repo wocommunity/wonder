@@ -19,13 +19,22 @@ ActionBox: AjaxModalContainer {
 	action = context.page;
 }
 
-HrefBox: AjaxModalContainer {
+InternalHrefBox: AjaxModalContainer {
 	label = "Click me to show";
 	width = 300;
 	height = 400;
 	closeLabel = "Close me";
 	title = "Super cool title";
-	href = "http://www.apple.com";
+	href = "/";
+}
+
+HrefBox: AjaxModalContainer {
+	label = "Click me to show";
+	width = 300;
+	height = 400;
+	closeLabel = "<b>Close</b> me";
+	title = "Super cool title";
+	href = "http://www.heise.de";
 }
 
 Form: WOForm {
