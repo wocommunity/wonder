@@ -10,6 +10,12 @@ var iBox = function()
     // label for the close link
     close_label: 'Close',
 
+    // AK: added message
+    error_message_loading: 'There was an error loading the document.',
+
+    // AK: added message
+    loading_message: 'Loading...',
+
     // padding around the box
     padding: 100,
     
@@ -493,7 +499,7 @@ var iBox = function()
 
     els.loading = document.createElement('div');
     els.loading.id = 'ibox_loading';
-    els.loading.innerHTML = 'Loading...';
+    els.loading.innerHTML = _pub.loading_message;
     els.loading.style.display = 'none';
     els.loading.onclick = function() {
       _pub.hide();
@@ -515,6 +521,8 @@ var iBox = function()
     var child2 = document.createElement('a');
     child2.innerHTML = _pub.close_label;
     child2.href = 'javascript:void(0)';
+    //AK: added id
+    child2.id = 'ibox_close_link';
     child2.onclick = _pub.hide;
     child.appendChild(child2);
   
@@ -572,7 +580,7 @@ var iBox = function()
     els.footer.innerHTML = title || "&nbsp;";
 
     els.overlay.style.display = "block";
-    // AK commented
+    // AK commented, is already in CSS
     // els.overlay.style.backgroundImage = "url('" + _pub.base_url + "images/bg.png')";
 	// AK added
 	// alert(document.getElementById('ibox_footer_wrapper').firstChild);
@@ -624,7 +632,8 @@ var iBox = function()
     _pub.http = _pub.createXMLHttpRequest();
   };
 
-  _pub.addEvent(window, 'keypress', function(e){ if (e.keyCode == (window.event ? 27 : e.DOM_VK_ESCAPE)) { iBox.hide(); }});
+  //AK : keypress didn't work for some reason
+  _pub.addEvent(window, 'keyup', function(e){if (e.keyCode == (window.event ? 27 : e.DOM_VK_ESCAPE)) { iBox.hide(); }});
   _pub.addEvent(window, 'resize', _pub.reposition);
   _pub.addEvent(window, 'load', initialize);
 
@@ -671,7 +680,7 @@ var iBox = function()
         if (!elemSrc)
         {
           was_error = true;
-          _pub.html(document.createTextNode('There was an error loading the document.'), params);
+          _pub.html(document.createTextNode(_pub.error_message_loading), params);
         }
         else
         {
@@ -710,7 +719,7 @@ var iBox = function()
         }
         img.onerror = function()
         {
-          _pub.html(document.createTextNode('There was an error loading the document.'), params);
+          _pub.html(document.createTextNode(_pub.error_message_loading), params);
         }
         img.src = url;
       }
@@ -784,7 +793,7 @@ var iBox = function()
             }
             else
             {
-              _pub.html(document.createTextNode('There was an error loading the document.'), params);
+              _pub.html(document.createTextNode(_pub.error_message_loading), params);
             }
           }
         }
