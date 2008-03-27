@@ -762,10 +762,8 @@ public class ERXFileUtilities {
                                          ERXExtensions.freeProcessResources(task);
                                      }
                                  }
-
-
     /**
-        * Copys all of the files in a given directory to another directory.
+     * Copies all of the files in a given directory to another directory.  Existing files are replaced.
      * @param srcDirectory source directory
      * @param dstDirectory destination directory
      * @param deleteOriginals tells if the original files, the file is deleted even if appuser has no write
@@ -773,9 +771,29 @@ public class ERXFileUtilities {
      * @param recursiveCopy specifies if directories should be recursively copied
      * @param filter which restricts the files to be copied
      */
+	 public static void copyFilesFromDirectory(File srcDirectory,
+	                                           File dstDirectory,
+	                                           boolean deleteOriginals,
+	                                           boolean recursiveCopy,
+	                                           FileFilter filter)
+	     throws FileNotFoundException, IOException {
+		 copyFilesFromDirectory(srcDirectory, dstDirectory, deleteOriginals, true, recursiveCopy, filter);
+ 	}
+
+    /**
+     * Copies all of the files in a given directory to another directory.
+     * @param srcDirectory source directory
+     * @param dstDirectory destination directory
+     * @param deleteOriginals tells if the original files, the file is deleted even if appuser has no write
+     * rights. This is compareable to a <code>rm -f filename</code> instead of <code>rm filename</code>
+	 * @param replaceExistingFiles true if the destination should be overwritten if it already exists
+     * @param recursiveCopy specifies if directories should be recursively copied
+     * @param filter which restricts the files to be copied
+     */
     public static void copyFilesFromDirectory(File srcDirectory,
                                               File dstDirectory,
                                               boolean deleteOriginals,
+                                              boolean replaceExistingFiles,
                                               boolean recursiveCopy,
                                               FileFilter filter)
         throws FileNotFoundException, IOException {
@@ -796,10 +814,14 @@ public class ERXFileUtilities {
                             renameTo(srcFile, dstFile);
                         } else {
                             dstFile.mkdirs();
-                            copyFilesFromDirectory(srcFile, dstFile, deleteOriginals, recursiveCopy, filter);
+                            copyFilesFromDirectory(srcFile, dstFile, deleteOriginals, replaceExistingFiles, recursiveCopy, filter);
                         }
                     } else if (!srcFile.isDirectory()) {
-                        copyFileToFile(srcFile, dstFile, deleteOriginals, true);
+                    	if (replaceExistingFiles || ! dstFile.exists()) {
+                            copyFileToFile(srcFile, dstFile, deleteOriginals, true);
+                    	} else if (log.isDebugEnabled()) {
+                            log.debug("Destination file: " + dstFile + " skipped as it exists and replaceExistingFiles is set to false.");
+                      }
                     } else if (log.isDebugEnabled()) {
                         log.debug("Source file: " + srcFile + " is a directory inside: "
                                   + dstDirectory + " and recursive copy is set to false.");
