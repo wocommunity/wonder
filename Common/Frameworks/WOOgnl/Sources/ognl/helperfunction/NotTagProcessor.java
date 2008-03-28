@@ -11,7 +11,7 @@ import com.webobjects.foundation.NSMutableDictionary;
  */
 public class NotTagProcessor extends WOTagProcessor {
 	public WODeclaration createDeclaration(String elementName, String elementType, NSMutableDictionary associations) {
-		String newElementType = "WOConditional";
+		String newElementType = "ERXWOConditional";
 		if (associations.objectForKey("negate") != null) {
 			throw new IllegalArgumentException("You already specified a binding for 'negate' of " + associations.objectForKey("negate") + " on a wo:not.");
 		}
