@@ -266,12 +266,23 @@ public class ERXFileUtilities {
      * @param stream to pull data from
      */
     public static void writeInputStreamToFile(InputStream stream, File file) throws IOException {
-        if (file == null) throw new IllegalArgumentException("Attempting to write to a null file!");
-        File parent = file.getParentFile();
-        if(parent != null && !parent.exists()) {
-            parent.mkdirs();
-        }
-        FileOutputStream out = new FileOutputStream(file);
+    	FileOutputStream out;
+    	try {
+	        if (file == null) throw new IllegalArgumentException("Attempting to write to a null file!");
+	        File parent = file.getParentFile();
+	        if(parent != null && !parent.exists()) {
+	            parent.mkdirs();
+	        }
+	        out = new FileOutputStream(file);
+    	}
+    	catch (IOException e) {
+    		stream.close();
+    		throw e;
+    	}
+    	catch (RuntimeException e) {
+    		stream.close();
+    		throw e;
+    	}
         writeInputStreamToOutputStream(stream, out);
     }
     
