@@ -418,11 +418,14 @@ public class ERTaggableEntity<T extends ERXGenericRecord> {
       itemToJoinRelationship.setPropagatesPrimaryKey(true);
       entity.addRelationship(itemToJoinRelationship);
 
+      NSMutableArray properties = entity.classProperties().mutableClone();
+      properties.remove(itemToJoinRelationship);
+      entity.setClassProperties(properties);
+
       EORelationship itemToTagsRelationship = new EORelationship();
       itemToTagsRelationship.setName(tagsRelationshipName);
       entity.addRelationship(itemToTagsRelationship);
       itemToTagsRelationship.setDefinition(itemToJoinRelationship.name() + "." + joinToTagRelationship.name());
-      entity.setClassProperties(entity.classProperties().arrayByAddingObject(itemToTagsRelationship));
 
       tagsRelationship = itemToTagsRelationship;
     }
