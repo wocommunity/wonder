@@ -113,7 +113,7 @@ public abstract class ERXMulticastingDelegate {
      * The other perform... and booleanPerform... methods simply call this method.
      *
      * @param methodName the name of the delegate method to call
-     * @param args 0 or more arguements to pass to the delegate method
+     * @param args 0 or more arguments to pass to the delegate method
      * @param defaultResult the value to return if none of the delegates implement this method
      * @return value returned by the last delegate called
      */
