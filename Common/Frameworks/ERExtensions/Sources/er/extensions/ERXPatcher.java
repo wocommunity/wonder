@@ -101,7 +101,7 @@ public class ERXPatcher {
 		ERXPatcher.setClassForName(WOToOneRelationship.class, "WOToOneRelationship");
 
 		ERXPatcher.setClassForName(ERXHyperlink.class, "WOHyperlink");
-		if (!ERXApplication.isWO54()) {
+		if (!ERXApplication.isWO54() || ERXProperties.booleanForKey("er.extensions.WOConditional.patch")) {
 			ERXPatcher.setClassForName(ERXWOConditional.class, "WOConditional");
 		}
 	}
