@@ -68,6 +68,10 @@ public class NSMutableArray <E> extends NSArray<E> implements RandomAccess {
         super(vector, range, ignoreNull);
     }
 
+    public NSMutableArray(List<? extends E> list, NSRange range, boolean ignoreNull) {
+      super(list, range, ignoreNull);
+    }
+
     public void ensureCapacity(int capacity) {
     	_ensureCapacity(capacity);
     }
