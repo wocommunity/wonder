@@ -5,6 +5,7 @@ import com.webobjects.eoaccess.EOAdaptorContext;
 import com.webobjects.eoaccess.EOModel;
 import com.webobjects.eoaccess.EOSQLExpressionFactory;
 import com.webobjects.eoaccess.EOSchemaGeneration;
+import com.webobjects.eoaccess.EOSynchronizationFactory;
 import com.webobjects.foundation.NSDictionary;
 
 /**
@@ -60,9 +61,8 @@ public class ERMemoryAdaptor extends EOAdaptor {
   public EOSchemaGeneration synchronizationFactory() {
     throw new UnsupportedOperationException("ERMemoryAdaptor.synchronizationFactory");
   }
-  
-  public EOSchemaGeneration schemaSynchronizationFactory() {
+
+  public EOSynchronizationFactory schemaSynchronizationFactory() {
     throw new UnsupportedOperationException("ERMemoryAdaptor.schemaSynchronizationFactory");
   }
-
 }
