@@ -146,7 +146,9 @@ public class ERXWOContext extends ERXAjaxContext implements ERXMutableUserInfoHo
 	@Override
 	public String _urlWithRequestHandlerKey(String requestHandlerKey, String requestHandlerPath, String queryString, boolean secure) {
 		String url = super._urlWithRequestHandlerKey(requestHandlerKey, requestHandlerPath, queryString, secure);
-		url = ERXApplication.erxApplication()._rewriteURL(url);
+		if (!ERXApplication.isWO54()) {
+			url = ERXApplication.erxApplication()._rewriteURL(url);
+		}
 		return url;
 	}
 
