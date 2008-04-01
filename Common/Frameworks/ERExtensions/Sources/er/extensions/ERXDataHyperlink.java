@@ -9,7 +9,6 @@ import com.webobjects.appserver.WORequest;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSKeyValueCoding;
-import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 
 /**
@@ -24,27 +23,33 @@ import com.webobjects.foundation.NSMutableDictionary;
  * The ones defined by WOHyperlink and additionally "id", "class", "onclick" and
  * "otherTagString", which are handled like bindings on a stock WOHyperlink.
  * 
+ * If the "pageName" binding is not set, ERXDataHyperlink will behave like a
+ * regular WOHyperlink.
+ * 
  * @author mschrag
  * @author timo
  */
 public class ERXDataHyperlink extends ERXHyperlink {
-	private final static NSArray<String> BINDINGS_HANDLED_BY_SUPER_CLASS = new NSMutableArray<String>("id", "class", "onclick", "otherTagString");
-	private NSMutableDictionary<String,WOAssociation> _bindingAssociations=new NSMutableDictionary<String,WOAssociation>();
+	private final static NSArray<String> BINDINGS_HANDLED_BY_SUPER_CLASS = new NSArray<String>(new String[] {"id", "class", "onclick", "otherTagString"});
+	private NSMutableDictionary<String, WOAssociation> _bindingAssociations;
 	
 	@SuppressWarnings("unchecked")
 	public ERXDataHyperlink(String s, NSDictionary associations, WOElement woelement) {
 		// The WOHyperlink's constructor will remove all associations from
 		// super._associations that directly affect WOHyperlink
 		super(s, associations, woelement);
-		NSMutableDictionary<String, WOAssociation> superAssociations = super._associations;
-		for (String key : superAssociations.allKeys()) {
-			// leave anything listed in BINDINGS_HANDLED_BY_SUPERCLASS in
-			// super._associations to be handled by the superclass.
-			if (!BINDINGS_HANDLED_BY_SUPER_CLASS.containsObject(key)) {
-				// Move all other associations to our own _bindingAssociations,
-				// so they can later be used as bindings for the page specified
-				// in pageName.
-				_bindingAssociations.setObjectForKey(superAssociations.removeObjectForKey(key), key);
+		if (_pageName != null) {
+			_bindingAssociations = new NSMutableDictionary<String, WOAssociation>();
+			NSMutableDictionary<String, WOAssociation> superAssociations = super._associations;
+			for (String key : superAssociations.allKeys()) {
+				// leave anything listed in BINDINGS_HANDLED_BY_SUPERCLASS in
+				// super._associations to be handled by the superclass.
+				if (!BINDINGS_HANDLED_BY_SUPER_CLASS.containsObject(key)) {
+					// Move all other associations to our own _bindingAssociations,
+					// so they can later be used as bindings for the page specified
+					// in pageName.
+					_bindingAssociations.setObjectForKey(superAssociations.removeObjectForKey(key), key);
+				}
 			}
 		}
 	}
