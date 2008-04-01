@@ -552,7 +552,7 @@ public class ERXSession extends ERXAjaxSession implements Serializable {
     super.terminate();
   }
 
-  private Object _objectStore;
+  private NSKeyValueCodingAdditions _objectStore;
 
   /** This is a cover method which enables use of the session's object store
    * which is usually access with setObjectForKey and objectForKey. One can use
@@ -566,7 +566,7 @@ public class ERXSession extends ERXAjaxSession implements Serializable {
    * 
    * @return an Object which implements KVC + KVC additions
    */
-  public Object objectStore() {
+  public NSKeyValueCodingAdditions objectStore() {
     if (_objectStore == null) {
       _objectStore = new NSKeyValueCodingAdditions() {
         public void takeValueForKey(Object arg0, String arg1) {
