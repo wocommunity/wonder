@@ -216,6 +216,7 @@ public class ERXWOForm extends com.webobjects.appserver._private.WOHTMLDynamicEl
 	// }
 	// }
 
+
 	protected void _appendHiddenFieldsToResponse(WOResponse response, WOContext context) {
 		boolean flag = _actionClass != null;
 		NSDictionary hiddenFields;
@@ -225,7 +226,13 @@ public class ERXWOForm extends com.webobjects.appserver._private.WOHTMLDynamicEl
 				hiddenFields = (NSDictionary) computeQueryDictionaryInContextMethod.invoke(this, new Object[] { "", _queryDictionary, _otherQueryAssociations, context });
 			}
 			catch (Exception e) {
-				throw new RuntimeException("computeQueryDictionaryInContext failed.", e);
+				try {
+					Method computeQueryDictionaryInContextMethod = WOHTMLDynamicElement.class.getDeclaredMethod("computeQueryDictionaryInContext", new Class[] { String.class, WOAssociation.class, NSDictionary.class, boolean.class, WOContext.class });
+					hiddenFields = (NSDictionary) computeQueryDictionaryInContextMethod.invoke(this, new Object[] { "", _queryDictionary, _otherQueryAssociations, false, context });
+				}
+				catch (Exception ex1) {
+					throw new RuntimeException("computeQueryDictionaryInContext failed.", ex1);
+				}
 			}
 		}
 		else {
