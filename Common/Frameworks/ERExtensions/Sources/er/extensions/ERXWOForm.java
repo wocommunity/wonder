@@ -7,6 +7,7 @@
 
 package er.extensions;
 
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Enumeration;
 
@@ -341,6 +342,15 @@ public class ERXWOForm extends com.webobjects.appserver._private.WOHTMLDynamicEl
 			response._appendTagAttributeAndValue("enctype", enctype, false);
 		}
 		boolean secure = _secure != null && _secure.booleanValueInComponent(context.component());
+		if (_secure == null && ERXApplication.isWO54()) {
+			try {
+				Boolean secureMode = (Boolean)WOContext.class.getDeclaredMethod("secureMode").invoke(context);
+				secure = secureMode.booleanValue();
+			}
+			catch (Throwable t) {
+				throw new RuntimeException("Failed to invoke 'secureMode' on WOForm.", t);
+			}
+		}
 		Object hrefObject = null;
 		WOComponent wocomponent = context.component();
 		super.appendAttributesToResponse(response, context);
