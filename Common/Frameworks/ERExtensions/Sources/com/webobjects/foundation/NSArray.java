@@ -344,6 +344,27 @@ public class NSArray<E> implements Cloneable, Serializable, NSCoding, NSKeyValue
 		this(collection, true);
 	}
 
+    public NSArray(List<? extends E> list, NSRange range, boolean ignoreNull) {
+/* 121*/        _recomputeHashCode = true;
+/* 469*/        if(range != null) {
+/* 470*/            if(list == null)
+/* 471*/                throw new IllegalArgumentException("Vector cannot be null");
+/* 474*/            int count = list.size();
+/* 475*/            int rangeLocation = range.location();
+/* 476*/            int rangeLength = range.length();
+/* 478*/            _initializeWithCapacity(count);
+/* 479*/            for(int i = 0; i < rangeLength; i++) {
+/* 480*/                Object object = list.get(i + rangeLocation);
+/* 481*/                if(object != null)
+/* 482*/                    _objects[_count++] = object;
+/* 483*/                else
+/* 483*/                if(!ignoreNull)
+/* 484*/                    throw new IllegalArgumentException((new StringBuilder("Attempt to insert null into an  ")).append(getClass().getName()).append(".").toString());
+            }
+
+        }
+    }
+
 	protected E[] objectsNoCopy() {
 		if (_objectsCache == null) {
 			if (_count == 0) {
