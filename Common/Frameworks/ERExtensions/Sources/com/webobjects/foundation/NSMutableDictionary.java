@@ -59,6 +59,14 @@ public class NSMutableDictionary<K, V> extends NSDictionary<K, V> {
 	public NSMutableDictionary(Dictionary<? extends K, ? extends V> dictionary, boolean ignoreNull) {
 		super(dictionary, ignoreNull);
 	}
+	
+	public NSMutableDictionary(Map<? extends K, ? extends V> map) {
+		super(map);
+	}
+	
+	public NSMutableDictionary(Map<? extends K, ? extends V> map, boolean ignoreNull) {
+		super(map, ignoreNull);
+	}
 
 	public void setObjectForKey(V object, K key) {
 		if (object == null) {
