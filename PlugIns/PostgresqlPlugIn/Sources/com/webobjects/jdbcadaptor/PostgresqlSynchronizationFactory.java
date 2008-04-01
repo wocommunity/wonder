@@ -15,6 +15,7 @@ import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableSet;
+import com.webobjects.foundation._NSDictionaryUtilities;
 import com.webobjects.foundation._NSStringUtilities;
 
 /**
@@ -434,4 +435,94 @@ public class PostgresqlSynchronizationFactory extends EOSynchronizationFactory i
       String clause = _columnCreationClauseForAttribute(attribute);
       return new NSArray(_expressionForString("alter table " + attribute.entity().externalName() + " add " + clause));
     }
+    
+    public String schemaCreationScriptForEntities(NSArray allEntities, NSDictionary options)
+    {
+/* 741*/        StringBuffer result = new StringBuffer();
+/* 744*/        if(options == null)
+/* 745*/            options = NSDictionary.EmptyDictionary;
+/* 747*/        NSArray statements = schemaCreationStatementsForEntities(allEntities, options);
+/* 748*/        int i = 0;
+/* 748*/        for(int count = statements.count(); i < count; i++)
+/* 749*/            appendExpressionToScript((EOSQLExpression)statements.objectAtIndex(i), result);
+
+/* 751*/        return new String(result);
+    }
+
+    public NSArray schemaCreationStatementsForEntities(NSArray allEntities, NSDictionary options)
+    {
+/* 879*/        NSMutableArray result = new NSMutableArray();
+/* 880*/        if(allEntities == null || allEntities.count() == 0)
+/* 881*/            return result;
+/* 883*/        if(options == null)
+/* 884*/            options = NSDictionary.EmptyDictionary;
+/* 889*/        NSDictionary connectionDictionary = ((EOEntity)allEntities.lastObject()).model().connectionDictionary();
+/* 892*/        boolean createDatabase = _NSDictionaryUtilities.boolValueForKeyDefault(options, "createDatabase", false);
+/* 893*/        boolean dropDatabase = _NSDictionaryUtilities.boolValueForKeyDefault(options, "dropDatabase", false);
+/* 895*/        if(createDatabase || dropDatabase)
+        {
+/* 896*/            boolean adminCommentsNeeded = false;
+/* 897*/            NSArray dropDatabaseStatements = null;
+/* 898*/            NSArray createDatabaseStatements = null;
+/* 900*/            if(dropDatabase)
+            {
+/* 901*/                dropDatabaseStatements = dropDatabaseStatementsForConnectionDictionary(connectionDictionary, null);
+/* 903*/                if(dropDatabaseStatements == null)
+/* 904*/                    dropDatabaseStatements = new NSArray(_expressionForString("/* The 'Drop Database' option is unavailable. */"));
+/* 907*/                else
+/* 907*/                    adminCommentsNeeded = true;
+            }
+/* 911*/            if(createDatabase)
+            {
+/* 912*/                createDatabaseStatements = createDatabaseStatementsForConnectionDictionary(connectionDictionary, null);
+/* 914*/                if(createDatabaseStatements == null)
+/* 915*/                    createDatabaseStatements = new NSArray(_expressionForString("/* The 'Create Database' option is unavailable. */"));
+/* 918*/                else
+/* 918*/                    adminCommentsNeeded = true;
+            }
+/* 922*/            if(adminCommentsNeeded)
+/* 923*/                result.addObject(_expressionForString("/* connect as an administrator */"));
+/* 926*/            if(dropDatabaseStatements != null)
+/* 927*/                result.addObjectsFromArray(dropDatabaseStatements);
+/* 930*/            if(createDatabaseStatements != null)
+/* 931*/                result.addObjectsFromArray(createDatabaseStatements);
+/* 934*/            if(adminCommentsNeeded)
+/* 935*/                result.addObject(_expressionForString("/* connect as the user from the connection dictionary */"));
+        }
+/* 939*/        if(_NSDictionaryUtilities.boolValueForKeyDefault(options, "dropPrimaryKeySupport", true))
+        {
+/* 940*/            NSArray entityGroups = primaryKeyEntityGroupsForEntities(allEntities);
+/* 941*/            result.addObjectsFromArray(dropPrimaryKeySupportStatementsForEntityGroups(entityGroups));
+        }
+/* 944*/        if(_NSDictionaryUtilities.boolValueForKeyDefault(options, "dropTables", true))
+        {
+/* 945*/            NSArray entityGroups = tableEntityGroupsForEntities(allEntities);
+/* 946*/            result.addObjectsFromArray(dropTableStatementsForEntityGroups(entityGroups));
+        }
+/* 949*/        if(_NSDictionaryUtilities.boolValueForKeyDefault(options, "createTables", true))
+        {
+/* 950*/            NSArray entityGroups = tableEntityGroupsForEntities(allEntities);
+/* 951*/            result.addObjectsFromArray(createTableStatementsForEntityGroups(entityGroups));
+        }
+/* 954*/        if(_NSDictionaryUtilities.boolValueForKeyDefault(options, "createPrimaryKeySupport", true))
+        {
+/* 955*/            NSArray entityGroups = primaryKeyEntityGroupsForEntities(allEntities);
+/* 956*/            result.addObjectsFromArray(primaryKeySupportStatementsForEntityGroups(entityGroups));
+                }
+/* 959*/        if(_NSDictionaryUtilities.boolValueForKeyDefault(options, "primaryKeyConstraints", true))
+                {
+/* 960*/            NSArray entityGroups = tableEntityGroupsForEntities(allEntities);
+/* 961*/            result.addObjectsFromArray(primaryKeyConstraintStatementsForEntityGroups(entityGroups));
+                }
+/* 964*/        if(_NSDictionaryUtilities.boolValueForKeyDefault(options, "foreignKeyConstraints", false))
+                {
+/* 965*/            NSArray entityGroups = tableEntityGroupsForEntities(allEntities);
+/* 966*/            int i = 0;
+/* 966*/            for(int iCount = entityGroups.count(); i < iCount; i++)
+/* 967*/                result.addObjectsFromArray(_foreignKeyConstraintStatementsForEntityGroup((NSArray)entityGroups.objectAtIndex(i)));
+
+                }
+/* 970*/        return result;
+            }
+
 }
