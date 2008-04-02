@@ -115,6 +115,9 @@ public class AjaxSelectionList extends AjaxComponent {
 	}
 
 	public String value() {
+		if (_value == null) {
+			_value = String.valueOf(selectedIndex());
+		}
 		return _value;
 	}
 
@@ -133,21 +136,23 @@ public class AjaxSelectionList extends AjaxComponent {
 
 	public void takeValuesFromRequest(WORequest request, WOContext context) {
 		super.takeValuesFromRequest(request, context);
-		if (_value == null) {
-			setSelection(null);
-		}
-		else {
-			int index = Integer.parseInt(_value);
-			NSArray list = list();
-			Object selection = null;
-			if (index < list.count()) {
-				selection = list.objectAtIndex(index);
-			}
-			if (selection instanceof NSKeyValueCoding.Null) {
+		if (context._wasFormSubmitted()) {
+			if (_value == null) {
 				setSelection(null);
 			}
 			else {
-				setSelection(selection);
+				int index = Integer.parseInt(_value);
+				NSArray list = list();
+				Object selection = null;
+				if (index < list.count()) {
+					selection = list.objectAtIndex(index);
+				}
+				if (selection instanceof NSKeyValueCoding.Null) {
+					setSelection(null);
+				}
+				else {
+					setSelection(selection);
+				}
 			}
 		}
 	}
