@@ -67,16 +67,20 @@ var WOLipsClickToOpen = {
 	},
 	
 	keyPressed : function(e) {
-		if (e.keyCode == 27) {
+        if (!e) var e = window.event;
+		if (e.keyCode == Event.KEY_ESC) {
 			WOLipsClickToOpen.stop();
 		}
 	},
 	
 	mouseMoved : function(e) {
-		var target = e.target;
+      if (!e) var e = window.event;
+	  var target = e.target;
+	  if (!target) target = e.srcElement;
 	  var componentStack = WOLipsClickToOpen.componentStackForElement(target);
 		if (componentStack != null) {
-			WOLipsClickToOpen.targetChanged(componentStack.firstComponent, event.metaKey);
+			//WOLipsClickToOpen.targetChanged(componentStack.firstComponent, e.ctrlKey);
+			WOLipsClickToOpen.targetChanged(componentStack.firstComponent, e.metaKey);
 			var componentBreadCrumb = [];
 			componentStack.componentNames.each(function(value, index) {
 				var componentParts = value.split('.');
@@ -90,12 +94,13 @@ var WOLipsClickToOpen = {
 	},
 	
 	mouseClicked : function(e) {
-		if (WOLipsClickToOpen.ignoreClick) {
-			WOLipsClickToOpen.ignoreClick = false;
-			return true;
-		}
+	  if (WOLipsClickToOpen.ignoreClick) {
+	    WOLipsClickToOpen.ignoreClick = false;
+	    return true;
+	  }
+      if (!e) var e = window.event;
 	  var target = e.target;
-	  
+	  if (!target) target = e.srcElement;
 	  var componentStack = WOLipsClickToOpen.componentStackForElement(target);
 	  if (componentStack == null || componentStack.componentNames.length == 0) {
 	  	alert('The component you selected could not be identifed.  Make sure er.component.clickToOpen=true.');
@@ -107,9 +112,9 @@ var WOLipsClickToOpen = {
 			WOLipsClickToOpen.openComponentNamed(componentStack.componentNames[0]);
 		}
 		else {
+			//if (e.ctrlKey) {
 			if (e.metaKey) {
-				Position.prepare();
-				WOLipsClickToOpen.showComponentList(componentStack.componentNames, e.x + Position.deltaX, e.y + Position.deltaY);
+				WOLipsClickToOpen.showComponentList(componentStack.componentNames, Event.pointerX(e), Event.pointerY(e));
 			}
 			else {
 				WOLipsClickToOpen.openComponentNamed(componentStack.componentNames[0]);
@@ -183,7 +188,7 @@ var WOLipsClickToOpen = {
 		    		firstComponentElement = target;
 		    	}
 		    }
-	    	target = target.up();
+	    	target = Element.up(target);
 	    }
 	    else {
 	    	target = null;
@@ -218,6 +223,7 @@ var WOLipsToolBar = {
 	toggle : function(e) {
 		$('_wolToolBar').toggle();
 		WOLipsToolBar.update();
+		if (!e) var e = window.event;
 		Event.stop(e);
 	},
 	
