@@ -58,7 +58,7 @@ public class ERXInlineTemplate extends ERXNonSynchronizingComponent {
 
 	private static final String TEMPLATE_WOD_BINDING = "wod";
 
-	private static NSMutableDictionary _cache = ERXMutableDictionary.synchronizedDictionary();
+	private static NSMutableDictionary<String, CacheEntry> _cache = ERXMutableDictionary.synchronizedDictionary();
 
 	private Error _deferredError = null;
 
@@ -95,7 +95,7 @@ public class ERXInlineTemplate extends ERXNonSynchronizingComponent {
 	
 	public void takeValueForKeyPath(Object value, String keyPath) {
 		try {
-			NSMutableArray keyPathComponents = NSArray.componentsSeparatedByString(keyPath, ".").mutableClone();
+			NSMutableArray<String> keyPathComponents = NSArray.componentsSeparatedByString(keyPath, ".").mutableClone();
 			String firstKey = (String) keyPathComponents.removeObjectAtIndex(0);
 			if (bindingKeys().contains(firstKey)) {
 				if (keyPathComponents.count() > 0) {
@@ -133,7 +133,7 @@ public class ERXInlineTemplate extends ERXNonSynchronizingComponent {
 
 	public Object valueForKeyPath(String keyPath) {
 		try {
-			NSMutableArray keyPathComponents = NSArray.componentsSeparatedByString(keyPath, ".").mutableClone();
+			NSMutableArray<String> keyPathComponents = NSArray.componentsSeparatedByString(keyPath, ".").mutableClone();
 			String firstKey = (String) keyPathComponents.removeObjectAtIndex(0);
 			Object value;
 			if (bindingKeys().contains(firstKey)) {
@@ -186,7 +186,7 @@ public class ERXInlineTemplate extends ERXNonSynchronizingComponent {
 			WOElement element = null;
 			String cacheKey = (String) valueForBinding(CACHE_KEY_BINDING);
 			if (cacheKey != null) { // should cache
-				CacheEntry cacheEntry = (CacheEntry) _cache.valueForKey(cacheKey);
+				CacheEntry cacheEntry = _cache.objectForKey(cacheKey);
 				Object requestedVersion = valueForBinding(CACHE_VERSION_BINDING);
 				if (cacheEntry != null && (requestedVersion == null || requestedVersion.equals(cacheEntry.version()))) {
 					// requestedVersion matches or is null
