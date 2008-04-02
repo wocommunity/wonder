@@ -1,88 +1,119 @@
-<WEBOBJECT NAME=PageWrapper>
-    <WEBOBJECT NAME=Help></WEBOBJECT>
+<webobject name="PageWrapper">
+	<webobject name="Help"></webobject>
 
-    <webobject name="AboveDisplayPropertyKeys"></webobject>
+	<webobject name="AboveDisplayPropertyKeys"></webobject>
 
-   <WEBOBJECT NAME=MainTable>
-      <TR>
-         <TD><WEBOBJECT NAME=EditingForm><WEBOBJECT NAME=SubmitChanges2></WEBOBJECT>
-               <TABLE>
-                  <TR VALIGN=top>
-                     <TD VALIGN=top ALIGN=right><WEBOBJECT NAME=InspectTable>
-                           <WEBOBJECT NAME=BannerConditional>
+   <webobject name="MainTable">
+	  <tr>
+		 <td>
+			<webobject name="EditingForm">
+			
+			<p style="display: none;"><webobject name="SubmitChangesButton"></webobject></p>
+			
+			<table>
+				<tr>
+					<td valign="top" align="right">
+						<webobject name="InspectTable">
+							<webobject name="BannerConditional">
+							<tr>
+								<td align="center">
+									<table border="0" cellpadding="0" cellspacing="0">
+										<tr>
+											<td>
+												<webobject name="Banner"></webobject>
+											</td>
+										</tr>
 
-                              <TR>
-                                 <TD ALIGN=center COLSPAN=3>
-                                    <TABLE BORDER=0 CELLPADDING=0 CELLSPACING=0>
-                                       <TR>
-                                          <TD>
-                                             <WEBOBJECT NAME=Banner></WEBOBJECT>
-                                          </TD>
-                                       </TR>
+										<webobject name="InspectTableHeaderRow">
+											<td align="left"><strong><webobject name="EntityName"></webobject></strong></td>
+										</webobject>
 
-                                       <WEBOBJECT NAME=InspectTableHeaderRow>
-                                          <TD ALIGN=left COLSPAN=3><B><WEBOBJECT NAME=EntityName></WEBOBJECT></B><WEBOBJECT NAME=FontContainer><B></B></WEBOBJECT></TD>
-                                       </WEBOBJECT>
-
-                                    </TABLE>
-                                 </TD>
-                              </TR>
-                           </WEBOBJECT>
-                           				<TR>
-                           					<TD ALIGN=center COLSPAN=3><WEBOBJECT NAME=Errors></WEBOBJECT></TD>
-                          			 	</TR>
-                           <TR>
-                              <TD VALIGN=top ALIGN=center>
-                                 <TABLE BORDER=0 CELLPADDING=2 CELLSPACING=2>
-                                    <WEBOBJECT NAME=AttributeRepetition>
-                                       <WEBOBJECT NAME=QueryRow>
-                                          <td align="right"><webobject name="SwitchComponent1"></webobject></td>
-                                          <webobject name="PropertyKeyComponentGenericContainer"><webobject name="AttributeValue"></webobject></webobject>
-                                       </WEBOBJECT>
-                                    </WEBOBJECT>
-                                 </TABLE>
-                              </TD>
-                           </TR>
-                        </WEBOBJECT>
-                     </TD>
-                  </TR>
-                  <TR>
-                     <TD ALIGN=center COLSPAN=3>
-                        <TABLE BORDER=0 CELLPADDING=0 CELLSPACING=0>
-                           <TR>
-                              <TD ALIGN=center>
-                                 <WEBOBJECT NAME=IsEditingConditional><WEBOBJECT NAME=Conditional3><WEBOBJECT NAME=SubmitButton1></WEBOBJECT></WEBOBJECT>
-                                    <WEBOBJECT NAME=Conditional1><WEBOBJECT NAME=Conditional11><WEBOBJECT NAME=SubmitButton6></WEBOBJECT></WEBOBJECT><WEBOBJECT NAME=Conditional10><WEBOBJECT NAME=CancelLink><WEBOBJECT NAME=CancelButton></WEBOBJECT></WEBOBJECT></WEBOBJECT></WEBOBJECT>
-                                 </WEBOBJECT>
-                                 <WEBOBJECT NAME=IsNotEditingConditional>
-                                    <WEBOBJECT NAME=ShowCancel><WEBOBJECT NAME=ReturnLink><WEBOBJECT NAME=ReturnButton></WEBOBJECT></WEBOBJECT></WEBOBJECT>
-                                 </WEBOBJECT>
-                              </TD>
-                              <WEBOBJECT NAME=IsEntityWritable>
-                                 <TD ALIGN=right>
-                                    <WEBOBJECT NAME=Conditional8><WEBOBJECT NAME=DeleteLink><WEBOBJECT NAME=DeleteButton></WEBOBJECT></WEBOBJECT></WEBOBJECT><WEBOBJECT NAME=Conditional9><WEBOBJECT NAME=SubmitButton5></WEBOBJECT></WEBOBJECT>
-                                 </TD>
-                              </WEBOBJECT>
-                              <TD ALIGN=left>
-                                 <WEBOBJECT NAME=IsEntityWritable2>
-                                    <WEBOBJECT NAME=IsNotEditingConditional2>
-                                       <WEBOBJECT NAME=EditLink><WEBOBJECT NAME=EditImage></WEBOBJECT></WEBOBJECT>
-                                    </WEBOBJECT>
-                                 </WEBOBJECT>
-                                 <WEBOBJECT NAME=IsEditingConditional2>
-                                    <WEBOBJECT NAME=Conditional12><WEBOBJECT NAME=SubmitButton2></WEBOBJECT></WEBOBJECT><WEBOBJECT NAME=Conditional2><WEBOBJECT NAME=SubmitChanges></WEBOBJECT></WEBOBJECT>
-                                 </WEBOBJECT>
-                              </TD>
-                           </TR>
-                        </TABLE>
-                     </TD>
-                  </TR>
-               </TABLE>
-            </WEBOBJECT>
-         </TD>
-      </TR>
-   </WEBOBJECT>
+									</table>
+								</td>
+							</tr>
+							</webobject>
+							<tr>
+								<td align="center"><webobject name="Errors"></webobject></td>
+							</tr>
+						   <tr>
+							  <td valign="top" align="center">
+								 <table border="0" cellpadding="2" cellspacing="2">
+									<webobject name="AttributeRepetition">
+									   <webobject name="InspectRow">
+										  <td align="right"><webobject name="SwitchComponent1"></webobject></td>
+										  <webobject name="PropertyKeyComponentGenericContainer"><webobject name="AttributeValue"></webobject></webobject>
+									   </webobject>
+									</webobject>
+								 </table>
+							  </td>
+							</tr>
+						</webobject>
+					 </td>
+				</tr>
+				<tr>
+					<td align="center">
+						<table border="0" cellpadding="0" cellspacing="0">
+							<tr>
+								<td align="center">
+									<webobject name="ShowCancel">
+										<webobject name="IsEditingConditional">
+											<webobject name="IsIEConditional">
+												<webobject name="CancelSubmitButton"></webobject>
+											</webobject>
+											<webobject name="IsNotIEConditional">
+												<webobject name="CancelLink"><webobject name="CancelButton"></webobject></webobject>
+											</webobject>
+										</webobject>
+										<webobject name="IsNotEditingConditional">
+											<webobject name="ReturnLink"><webobject name="ReturnButton"></webobject></webobject>
+										</webobject>
+									</webobject>
+								</td>
+								<webobject name="IsEntityWritable">
+									<td align="right">
+										<webobject name="ShowDelete">
+											<webobject name="IsNotIEConditional">
+												<webobject name="DeleteLink"><webobject name="DeleteButton"></webobject></webobject>
+											</webobject>
+											<webobject name="IsIEConditional">
+												<webobject name="DeleteSubmitButton"></webobject>
+											</webobject>
+										</webobject>
+									</td>
+								</webobject>
+								<td align="left">
+									<webobject name="ShowSubmit">
+										<webobject name="IsEntityNotWritable">
+											<webobject name="IsNotEditingConditional">
+												<webobject name="EditLink"><webobject name="EditImage"></webobject></webobject>
+											</webobject>
+										</webobject>
+										<webobject name="IsEditingConditional">
+											<webobject name="IsIEConditional">
+												<webobject name="SaveSubmitButton"></webobject>
+											</webobject>
+											<webobject name="IsNotIEConditional">
+												<webobject name="SubmitChangesButton"></webobject>
+											</webobject>
+										</webobject>
+									</webobject>
+								</td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+			</table>
+			</webobject>
+		 </td>
+	  </tr>
+   </webobject>
    
    <webobject name="BelowDisplayPropertyKeys"></webobject>
    
-<WEBOBJECT NAME=Conditional5><WEBOBJECT NAME=IsEditingConditional5><WEBOBJECT NAME=Script></WEBOBJECT></WEBOBJECT></WEBOBJECT></WEBOBJECT>
+<webobject name="UseFocusConditional">
+	<webobject name="IsEditingConditional">
+		<webobject name="FocusScript"></webobject>
+	</webobject>
+</webobject>
+
+</WEBOBJECT>
