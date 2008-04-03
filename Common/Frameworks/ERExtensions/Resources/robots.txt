@@ -312,6 +312,7 @@ robi
 robocrawl
 robofox
 robopal
+robot
 robozilla
 roverbot
 rpt\-httpclient
