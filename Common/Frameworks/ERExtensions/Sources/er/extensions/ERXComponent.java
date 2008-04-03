@@ -133,6 +133,17 @@ public abstract class ERXComponent extends WOComponent {
     }
 
     /**
+     * Resolves a given binding as a float value.
+     * @param binding binding to be resolved as a float value.
+     * @param defaultValue default float value to be used if the
+     *        binding is not bound.
+     * @return result of evaluating binding as a float.
+     */
+    protected float floatValueForBinding(String binding, float defaultValue) {
+        return ERXValueUtilities.floatValueWithDefault(valueForBinding(binding), defaultValue);
+    }
+
+    /**
      * Resolves a given binding as a boolean value. Defaults to
      * false.
      * @param binding binding to be resolved as a boolean value.

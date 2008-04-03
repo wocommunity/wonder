@@ -128,6 +128,48 @@ public class ERXValueUtilities {
     }
 
     /**
+     * Basic utility method for reading float values. The current
+     * implementation uses {@link #floatValueWithDefault(Object, float)}
+     * with a default of <code>0</code>.
+     * @param obj object to be evaluated
+     * @return boolean evaluation of the given object
+     */
+    public static float floatValue(Object obj) {
+        return floatValueWithDefault(obj,0);
+    }
+
+    /**
+     * Basic utility method for reading <code>float</code> values. The current
+     * implementation tests if the object is an instance of
+     * a String, Number and Boolean. Booleans are 1 if they equal
+     * <code>true</code>. The default value is used if
+     * the object is null or the boolean value is false.
+     * @param obj object to be evaluated
+     * @param def default value if object is null
+     * @return float evaluation of the given object
+     */
+    public static float floatValueWithDefault(Object obj, float def) {
+        float value = def;
+        if (obj != null) {
+            if (obj instanceof Number) {
+                value = ((Number)obj).floatValue();
+            } else if(obj instanceof String) {
+                try {
+                    String s = ((String)obj).trim(); // Need to trim trailing space
+                    if(s.length() > 0)
+                        value = Float.parseFloat(s);
+                } catch(NumberFormatException numberformatexception) {
+                    throw new IllegalStateException("Error parsing float from value : <" + obj + ">");
+                }
+            } else if (obj instanceof Boolean)
+                value = ((Boolean)obj).booleanValue() ? 1 : def;
+        } else {
+            value = def;
+        }
+        return value;
+    }
+
+    /**
      * This method resolves bindings from WOComponents to
      * <code>long</code> values.
      * Note: This is only needed for non-syncronizing components
