@@ -67,7 +67,7 @@ public class ERD2WPickListPage extends ERD2WListPage implements ERDPickPageInter
      * @return if we have a nextPage set
      */
     public boolean showCancel() {
-        return (!(nextPageDelegate() instanceof ERDBranchDelegate)) && nextPage() != null;
+        return ((!(nextPageDelegate() instanceof ERDBranchDelegate)) && nextPage() != null) || cancelPage() !=null;
     }
 
     public boolean checked() {
