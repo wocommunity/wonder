@@ -163,8 +163,8 @@ public class AjaxUpdateContainer extends AjaxDynamicElement {
 			boolean skipFunction = frequency == null && observeFieldID == null && booleanValueForBinding("skipFunction", false, component);
 			if (!skipFunction) {
 				AjaxUtils.appendScriptHeader(response);
-	
-				if (frequency != null && ((Number) frequency).intValue() > 0) {
+				
+				if (frequency != null) {
 					String type = "PeriodicalUpdater";
 					boolean stopped = false;
 					if (associations().objectForKey("stopped") != null) {
