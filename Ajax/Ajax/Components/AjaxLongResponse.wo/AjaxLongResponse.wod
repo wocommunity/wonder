@@ -5,6 +5,7 @@ AjaxUpdateContainer : AjaxUpdateContainer {
 	style = ^style;
 	frequency = frequency;
 	stopped = ^stopped;
+	onRefreshComplete = ^onRefreshComplete; 
 }
 
 IsRunning : WOConditional {
