@@ -120,8 +120,9 @@ public class ERXLocalizationEditor extends WOComponent {
 
     public boolean isLargeEntry() {
     	String language = currentLanguage;
-    	if (currentEntry.objectForKey(language) != null && (currentEntry.objectForKey(language).toString().length() > 25
-    			|| currentEntry.objectForKey(language).toString().indexOf('\n') >= 0)) {
+    	Object object = currentEntry.objectForKey(language);
+		if (object != null && (object.toString().length() > 25
+    			|| object.toString().indexOf('\n') >= 0 || !(object instanceof String))) {
     		
     		return true;
     	}
@@ -154,7 +155,7 @@ public class ERXLocalizationEditor extends WOComponent {
     }
     
     public String valueComponentName() {
-    	return isLargeEntry() ? "WOText" : "WOTextField";
+    	return isLargeEntry()? "WOText" : "WOTextField";
     }
     
     public void saveFramework() throws IOException {
