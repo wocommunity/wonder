@@ -44,6 +44,7 @@ public abstract class ERXArrayChooser extends ERXStatelessComponent {
     public static boolean sortCaseInsensitiveDefault = ERXProperties.booleanForKeyWithDefault("er.extensions.ERXArrayChooser.sortCaseInsensitive", false);
        
     protected final static String NO_SELECTION_STRING = "ERXArrayChooser.NoSelectionString";
+    protected final static String NO_SORT_STRING = "WONoSorting";
     
     protected Boolean _localizeDisplayKeys;
     protected Boolean _includeUnmatchedValues;
@@ -140,8 +141,11 @@ public abstract class ERXArrayChooser extends ERXStatelessComponent {
     public String destinationSortKey() {
         if (_destinationSortKey == null) {
             _destinationSortKey = (String)valueForBinding("destinationSortKey");
-            if (_destinationSortKey == null|| _destinationSortKey.length() == 0)
+            if (_destinationSortKey == null|| _destinationSortKey.length() == 0) {
                 _destinationSortKey = destinationDisplayKey();
+            } else if (NO_SORT_STRING.equals(_destinationSortKey)) {
+            	_destinationSortKey = null;
+            }
         }
         return _destinationSortKey;
     }
