@@ -164,7 +164,7 @@ public class AjaxUpdateContainer extends AjaxDynamicElement {
 			if (!skipFunction) {
 				AjaxUtils.appendScriptHeader(response);
 	
-				if (frequency != null) {
+				if (frequency != null && ((Number) frequency).intValue() > 0) {
 					String type = "PeriodicalUpdater";
 					boolean stopped = false;
 					if (associations().objectForKey("stopped") != null) {
