@@ -28,6 +28,7 @@ import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
+import com.webobjects.foundation.NSSocketUtilities;
 
 /**
  * Adds class-level inheritance to EOF.<br />
@@ -438,6 +439,15 @@ public class EOEnterpriseObjectClazz<T extends EOEnterpriseObject> {
      */
     public EOFetchSpecification fetchSpecificationNamed(EOEditingContext ec, String name) {
         return entity(ec).fetchSpecificationNamed(name);
+    }
+
+    /**
+     * Creates a fetch spec for the entity.
+     * @return fetch specification for the given name and the clazz's entity 
+     *     name
+     */
+    public ERXFetchSpecification<T> createFetchSpecification(EOQualifier qualifier, NSArray<EOSortOrdering> sortings) {
+        return new ERXFetchSpecification(entityName(), qualifier, sortings);
     }
 
     /**
