@@ -1,0 +1,8 @@
+HasDocumentation : WOConditional {
+	condition = ^object.userInfo._EntityModeler.documentation; // VALID
+}
+
+Documentation : WOString {
+	value = ^object.userInfo._EntityModeler.documentation; // VALID
+	escapeHTML = false;
+}
