@@ -49,7 +49,7 @@ public abstract class ERXAjaxApplication extends WOApplication {
 		// wrong
 		if (ERXAjaxApplication.shouldNotStorePage(context)) {
 			if (results == context.page()) {
-				NSLog.out.appendln("ERXAjaxApplication.invokeAction: An Ajax response return context.page(), which is almost certainly an error.");
+				NSLog.out.appendln("ERXAjaxApplication.invokeAction: An Ajax response returned context.page(), which is almost certainly an error.");
 				results = null;
 			}
 			if (results == null) {
