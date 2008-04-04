@@ -74,7 +74,7 @@ RadioButton1: WORadioButton {
 	selection = selection;
 }
 
-Repetition2: WORepetition {
+Choices: WORepetition {
 	item = item;
 	list = choices;
 }
@@ -90,11 +90,11 @@ RightArrow: WOImageButton {
 	framework = "ERExtensions";
 }
 
-String1: WOString {
+DisplayName: WOString {
 	value = displayName;
 }
 
-String2: WOString {
+D2wContextExplanationString: WOString {
 	value = d2wContext.explanationString;
 }
 
