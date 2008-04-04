@@ -20,12 +20,19 @@ import com.webobjects.foundation.NSArray;
  * Adds a style sheet to a page. You can either supply a complete URL, a file
  * and framework name or put something in the component content. The content of
  * the component is cached under a "key" binding and then delivered via a direct
- * action, so it doesn't need to get re-rendered to often.
+ * action, so it doesn't need to get re-rendered too often.
  * 
  * @binding filename name of the style sheet
  * @binding framework name of the framework for the style sheet
  * @binding href url to the style sheet
- * @binding key key to cache the style sheet under. Default is the sessionID
+ * @binding key key to cache the style sheet under when using the component
+ *          content. Default is the sessionID. That means, you should *really*
+ *          explicitly set a key, when you use more than one ERXStyleSheet using
+ *          the component content method within one session
+ * @binding inline when true, the generated link tag will be appended inline,
+ *          when false it'll be placed in the head of the page, when unset it
+ *          will be placed inline for ajax requests and in the head for regular
+ *          requests
  * @property er.extensions.ERXStyleSheet.xhtml (defaults true) if false, link
  *           tags are not closed, which is compatible with older HTML
  */
@@ -50,6 +57,7 @@ public class ERXStyleSheet extends ERXStatelessComponent {
 		ERXExpiringCache<String, WOResponse> cache = (ERXExpiringCache<String, WOResponse>) session.objectForKey("ERXStylesheet.cache");
 		if (cache == null) {
 			cache = new ERXExpiringCache<String, WOResponse>(60);
+			cache.startBackgroundExpiration();
 			session.setObjectForKey(cache, "ERXStylesheet.cache");
 		}
 		return cache;
@@ -131,7 +139,7 @@ public class ERXStyleSheet extends ERXStatelessComponent {
 	/**
 	 * Returns the languages for the request.
 	 */
-	private NSArray languages() {
+	private NSArray<String> languages() {
 		if (hasSession())
 			return session().languages();
 		WORequest request = context().request();
@@ -148,24 +156,24 @@ public class ERXStyleSheet extends ERXStatelessComponent {
 	@Override
 	public void appendToResponse(WOResponse r, WOContext wocontext) {
 		String href = styleSheetUrl();
-		boolean appendContents = (href == null);
-		WOResponse response;
-		if (appendContents) {
-			response = new WOResponse();
-		}
-		else {
-			response = r;
-		}
+		// default to inline for ajax requests
+		boolean inline = booleanValueForBinding("inline", ERXAjaxApplication.isAjaxRequest(wocontext.request()));
+		WOResponse response = inline ? r : new WOResponse();
 		response._appendContentAsciiString("<link ");
 		response._appendTagAttributeAndValue("rel", "stylesheet", false);
 		response._appendTagAttributeAndValue("type", "text/css", false);
 
-		if (appendContents) {
+		if (href == null) {
 			String key = styleSheetKey();
 			ERXExpiringCache<String, WOResponse> cache = cache(session());
 			if (cache.isStale(key) || ERXApplication.isDevelopmentModeSafe()) {
 				WOResponse newresponse = new WOResponse();
 				super.appendToResponse(newresponse, wocontext);
+				// appendToResponse above will change the response of
+				// "wocontext" to "newresponse". When this happens during an
+				// Ajax request, it will lead to backtracking errors on
+				// subsequent requests, so restore the original response "r"
+				wocontext._setResponse(r);  
 				newresponse.setHeader("text/css", "content-type");
 				cache.setObjectForKey(newresponse, key);
 			}
@@ -182,7 +190,7 @@ public class ERXStyleSheet extends ERXStatelessComponent {
 		if (ERXStyleSheet.shouldCloseLinkTags()) {
 			response._appendContentAsciiString("</link>");
 		}
-		if (appendContents) {
+		if (!inline) {
 			ERXWOContext.insertInResponseBeforeTag(r, response.contentString(), ERXWOContext._htmlCloseHeadTag(), false, true);
 		}
 	}
