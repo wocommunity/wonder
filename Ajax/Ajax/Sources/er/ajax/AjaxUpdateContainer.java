@@ -14,6 +14,7 @@ import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 
+import er.extensions.ERXValueUtilities;
 import er.extensions.ERXWOContext;
 
 /**
@@ -170,13 +171,15 @@ public class AjaxUpdateContainer extends AjaxDynamicElement {
 					// try to convert to a number to check whether it is 0
 					boolean isNotZero = true;
 					try {
-						BigDecimal numberFrequency = new BigDecimal(frequency.toString());
-						if (numberFrequency.doubleValue() == 0.0d) {
+						float numberFrequency = ERXValueUtilities.floatValue(frequency);
+						if (numberFrequency == 0.0) {
 							// set this only to false if it can be converted to 0
 							isNotZero = false;
 						}
 					}
-					catch (Exception e) {}
+					catch (RuntimeException e) {
+						throw new IllegalStateException("Error parsing float from value : <" + frequency + ">");
+					}
 					
 					if (isNotZero) {
 						String type = "PeriodicalUpdater";
