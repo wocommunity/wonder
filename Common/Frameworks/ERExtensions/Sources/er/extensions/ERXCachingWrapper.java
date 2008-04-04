@@ -204,7 +204,7 @@ public class ERXCachingWrapper extends ERXStatelessComponent {
 		if(entry == null) {
 			return super.invokeAction(request, context);
 		}
-		return context().page();
+		return null;
 	}
 	
 	public void appendToResponse(WOResponse response, WOContext context) {
