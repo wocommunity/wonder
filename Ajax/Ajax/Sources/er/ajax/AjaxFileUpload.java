@@ -348,4 +348,8 @@ public class AjaxFileUpload extends WOComponent {
 		WOActionResults results = (WOActionResults) valueForBinding("failedAction");
 		return results;
 	}
+
+	public String srcUrl() {
+		return context().directActionURLForActionNamed("ERXDirectAction/empty", null);
+	}
 }
