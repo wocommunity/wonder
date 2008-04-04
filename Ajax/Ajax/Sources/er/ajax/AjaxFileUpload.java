@@ -353,6 +353,6 @@ public class AjaxFileUpload extends WOComponent {
 	}
 
 	public String srcUrl() {
-		return context()._directActionURL("ERXDirectAction/empty", null, ERXRequest.isRequestSecure(context().request()));
+		return ERXWOContext._directActionURL(context(), "ERXDirectAction/empty", null, ERXRequest.isRequestSecure(context().request()));
 	}
 }
