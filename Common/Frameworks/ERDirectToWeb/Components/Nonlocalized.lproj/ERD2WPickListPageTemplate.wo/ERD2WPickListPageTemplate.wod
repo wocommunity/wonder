@@ -2,16 +2,16 @@ BackLink2: WOHyperlink {
 	action = backAction;
 }
 
-Conditional1: WOConditional {
+NotIsListEmpty: WOConditional {
 	condition = isListEmpty;
 	negate = true;
 }
 
-Conditional2: WOConditional {
+IsListEmpty: WOConditional {
 	condition = isListEmpty;
 }
 
-Conditional3: WOConditional {
+D2wContextHasPrinterFriendlyVersion: WOConditional {
 	condition = d2wContext.hasPrinterFriendlyVersion;
 }
 
@@ -88,7 +88,7 @@ PageWrapper: WOSwitchComponent {
 	_unroll = true;
 }
 
-Repetition1: WORepetition {
+BranchChoices: WORepetition {
 	item = branch;
 	list = branchChoices;
 }
@@ -113,27 +113,27 @@ ShowCancel3: WOConditional {
 	condition = d2wContext.showActions;
 }
 
-SubmitButton1: WOSubmitButton {
+BackActionButton: WOSubmitButton {
 	action = backAction;
 	value = d2wContext.pickButtonLabel;
 }
 
-SubmitButton2: WOSubmitButton {
+NextPageButton: WOSubmitButton {
 	action = nextPage;
 	value = "Cancel";
 }
 
-SubmitButton3: WOSubmitButton {
+BackActionButton1: WOSubmitButton {
 	action = backAction;
 	value = branch.branchButtonLabel;
 }
 
-SubmitButton4: WOSubmitButton {
+SelectAllButton: WOSubmitButton {
 	action = selectAll;
 	value = "Select All";
 }
 
-SubmitButton5: WOSubmitButton {
+UnselectAllButton: WOSubmitButton {
 	action = unselectAll;
 	value = "Select None";
 }
