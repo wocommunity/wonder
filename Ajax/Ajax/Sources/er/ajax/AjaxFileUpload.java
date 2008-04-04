@@ -14,7 +14,10 @@ import com.webobjects.foundation.NSData;
 
 import er.extensions.ERXComponentUtilities;
 import er.extensions.ERXFileUtilities;
+import er.extensions.ERXRequest;
 import er.extensions.ERXUnitAwareDecimalFormat;
+import er.extensions.ERXWOConditional;
+import er.extensions.ERXWOContext;
 
 /**
  * AjaxFileUpload provides an Ajax wrapper around the file upload process. This works pretty differently than
@@ -350,6 +353,6 @@ public class AjaxFileUpload extends WOComponent {
 	}
 
 	public String srcUrl() {
-		return context().directActionURLForActionNamed("ERXDirectAction/empty", null);
+		return context()._directActionURL("ERXDirectAction/empty", null, ERXRequest.isRequestSecure(context().request()));
 	}
 }
