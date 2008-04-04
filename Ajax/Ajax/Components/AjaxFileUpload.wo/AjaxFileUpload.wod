@@ -1,6 +1,6 @@
 HiddenFrame : WOIFrame {
 	name = uploadFrameName;
-	src = "/";
+	src = srcUrl;
 	width = "0";
 	height = "0";
 	style = "border: none;";
