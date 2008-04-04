@@ -382,6 +382,16 @@ public class ERXDirectAction extends WODirectAction {
     	}
 		return r;
     }
+    
+    /**
+     * Returns an empty response.
+     * 
+     * @return nothing
+     */
+    public WOActionResults emptyAction() {
+    	WOResponse response = new WOResponse();
+    	return response;
+    }
 
     @SuppressWarnings("unchecked")
     public <T extends WOComponent> T pageWithName(Class<T> componentClass) {
