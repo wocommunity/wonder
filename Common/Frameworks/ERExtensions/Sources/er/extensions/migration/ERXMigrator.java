@@ -2,9 +2,11 @@ package er.extensions.migration;
 
 import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.log4j.Logger;
 
@@ -231,29 +233,36 @@ public class ERXMigrator {
 				}
 			}
 
-			Iterator<String> modelNamesIter = versions.keySet().iterator();
-			while (modelNamesIter.hasNext()) {
-				String modelName = modelNamesIter.next();
-				EOModel model = modelGroup.modelNamed(modelName);
-				Enumeration entitiesEnum = model.entities().objectEnumerator();
-				while (entitiesEnum.hasMoreElements()) {
-					EOEntity entity = (EOEntity) entitiesEnum.nextElement();
-					EOEntity parentEntity = entity.parentEntity();
-					if (parentEntity != null && !parentEntity.model().equals(model)) {
-						EOModel parentModel = parentEntity.model();
-						_buildDependenciesForModel(parentModel, LATEST_VERSION, versions, migrations);
-					}
-					Enumeration relationshipsEnum = entity.relationships().objectEnumerator();
-					while (relationshipsEnum.hasMoreElements()) {
-						EORelationship relationship = (EORelationship) relationshipsEnum.nextElement();
-						EOEntity destinationEntity = relationship.destinationEntity();
-						if (destinationEntity != null && !destinationEntity.model().equals(model)) {
-							EOModel destinationModel = destinationEntity.model();
-							_buildDependenciesForModel(destinationModel, LATEST_VERSION, versions, migrations);
+			Set<String> processedModelNames = new HashSet<String>();
+			Set<String> pendingModelNames = new HashSet<String>(versions.keySet());
+			while (!pendingModelNames.isEmpty()) {
+				Iterator<String> modelNamesIter = pendingModelNames.iterator();
+				while (modelNamesIter.hasNext()) {
+					String modelName = modelNamesIter.next();
+					EOModel model = modelGroup.modelNamed(modelName);
+					Enumeration entitiesEnum = model.entities().objectEnumerator();
+					while (entitiesEnum.hasMoreElements()) {
+						EOEntity entity = (EOEntity) entitiesEnum.nextElement();
+						EOEntity parentEntity = entity.parentEntity();
+						if (parentEntity != null && !parentEntity.model().equals(model)) {
+							EOModel parentModel = parentEntity.model();
+							_buildDependenciesForModel(parentModel, LATEST_VERSION, versions, migrations);
+						}
+						Enumeration relationshipsEnum = entity.relationships().objectEnumerator();
+						while (relationshipsEnum.hasMoreElements()) {
+							EORelationship relationship = (EORelationship) relationshipsEnum.nextElement();
+							EOEntity destinationEntity = relationship.destinationEntity();
+							if (destinationEntity != null && !destinationEntity.model().equals(model)) {
+								EOModel destinationModel = destinationEntity.model();
+								_buildDependenciesForModel(destinationModel, LATEST_VERSION, versions, migrations);
+							}
 						}
 					}
+					_buildDependenciesForModel(model, LATEST_VERSION, versions, migrations);
+					processedModelNames.add(modelName);
 				}
-				_buildDependenciesForModel(model, LATEST_VERSION, versions, migrations);
+				pendingModelNames.addAll(versions.keySet());
+				pendingModelNames.removeAll(processedModelNames);
 			}
 		}
 		catch (InstantiationException e) {
