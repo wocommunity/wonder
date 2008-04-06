@@ -94,7 +94,8 @@ public class WOOgnl {
         OgnlRuntime.setElementsAccessor(NSSet.class, e);
         // Register template parser
         if (!"false".equals(System.getProperty("ognl.active"))) {
-    	    WOMiddleManParser.setWOHTMLTemplateParserClassName("ognl.helperfunction.WOHelperFunctionHTMLTemplateParser");
+        	String parserClassName = System.getProperty("ognl.parserClassName", "ognl.helperfunction.WOHelperFunctionHTMLTemplateParser");
+        	WOMiddleManParser.setWOHTMLTemplateParserClassName(parserClassName);
     	    if ("true".equalsIgnoreCase(System.getProperty("ognl.inlineBindings"))) {
     	    	WOHelperFunctionHTMLTemplateParser.setAllowInlineBindings(true);
     	    }
