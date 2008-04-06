@@ -31,6 +31,7 @@ import com.webobjects.foundation.NSNotification;
 import com.webobjects.foundation.NSNotificationCenter;
 import com.webobjects.foundation.NSSelector;
 import com.webobjects.foundation.NSSet;
+import com.webobjects.foundation._NSUtilities;
 
 public class WOOgnl {
 	public static Logger log = Logger.getLogger(WOOgnl.class);
@@ -50,6 +51,16 @@ public class WOOgnl {
         } catch (Exception e) {
         	WOOgnl.log.error("Failed to configure WOOgnl.", e);
         }
+    }
+
+    private static Hashtable associationMappings = new Hashtable();
+    
+    public static void setAssociationClassForPrefix(Class clazz, String prefix) {
+    	associationMappings.put(prefix, clazz);
+    }
+    
+    private WOAssociation createAssociationForClass(Class clazz, String value) {
+    	return (WOAssociation) _NSUtilities.instantiateObject(clazz, new Class[]{String.class}, new Object[]{value}, true, false);
     }
 
     public static class Observer {
@@ -106,27 +117,46 @@ public class WOOgnl {
     }
 
     public void convertOgnlConstantAssociations(NSMutableDictionary associations) {
-        for (Enumeration e = associations.objectEnumerator(); e.hasMoreElements();) {
-            WOAssociation association = (WOAssociation)e.nextElement();
-            if (association.isValueConstant()) {
+        for (Enumeration e = associations.keyEnumerator(); e.hasMoreElements();) {
+        	String name = (String)e.nextElement();
+        	WOAssociation association = (WOAssociation) associations.objectForKey(name);
+            if(association.isValueConstant()) {
+            	//AK: shouldn't this be "instanceof WOConstantAssociation"?
                 Object constantValue = association.valueInComponent(null);
-                if (constantValue != null && constantValue instanceof String && ((String)constantValue).startsWith(ognlBindingFlag())) {
-                    String ognlExpression = ((String)constantValue).substring(ognlBindingFlag().length(),
-                                                                              ((String)constantValue).length());
-                    if (ognlExpression.length() > 0) {
-                        WOOgnlAssociation ognlAssociation = new WOOgnlAssociation(ognlExpression);
-                        NSArray keys = associations.allKeysForObject(association);
-                        //if (log.isDebugEnabled())
-                        //    log.debug("Constructing Ognl association for binding key(s): "
-                        //              + (keys.count() == 1 ? keys.lastObject() : keys) + " expression: " + ognlExpression);
-                        if (keys.count() == 1) {
-                            associations.setObjectForKey(ognlAssociation, keys.lastObject());
-                        }else {
-                            for (Enumeration ee = keys.objectEnumerator(); ee.hasMoreElements();) {
-                                associations.setObjectForKey(ognlAssociation, e.nextElement());    
-                            }
-                        }
-                    }
+                if (constantValue != null && constantValue instanceof String) {
+                	if(associationMappings.size() != 0) {
+                		int index = name.indexOf(':');
+                		if(index > 0) {
+                			String prefix = name.substring(0, index);
+                			if(prefix != null) {
+                				Class c = (Class) associationMappings.get(prefix);
+                				if(c != null) {
+                					String postfix = name.substring(index+1);
+                					WOAssociation newAssociation = createAssociationForClass(c, constantValue.toString());
+                					associations.removeObjectForKey(name);
+                					associations.setObjectForKey(newAssociation, postfix);
+                				}
+                			}
+                		}
+                	}
+                	if(((String)constantValue).startsWith(ognlBindingFlag())) {
+                		String ognlExpression = ((String)constantValue).substring(ognlBindingFlag().length(),
+                				((String)constantValue).length());
+                		if (ognlExpression.length() > 0) {
+                			WOAssociation newAssociation = new WOOgnlAssociation(ognlExpression);
+                			NSArray keys = associations.allKeysForObject(association);
+                			//if (log.isDebugEnabled())
+                			//    log.debug("Constructing Ognl association for binding key(s): "
+                			//              + (keys.count() == 1 ? keys.lastObject() : keys) + " expression: " + ognlExpression);
+                			if (keys.count() == 1) {
+                				associations.setObjectForKey(newAssociation, keys.lastObject());
+                			} else {
+                				for (Enumeration ee = keys.objectEnumerator(); ee.hasMoreElements();) {
+                					associations.setObjectForKey(newAssociation, e.nextElement());    
+                				}
+                			}
+                		}
+                	}
                 }
             }
         }
