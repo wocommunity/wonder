@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<wodefinitions>
+	<wo class="ERXKeyValueSetter" wocomponentcontent="true">
+ 
+		<binding name="source"/>
+		<binding name="destination"/>
+		<binding name="sourceKeypath"/>
+		<binding name="destinationKeypath"/>
+
+		<validation message="&apos;source&apos; is a required binding">
+			<unbound name="source"/>
+		</validation>
+
+		<validation message="&apos;destination&apos; is a required binding">
+			<unbound name="destination"/>
+		</validation>
+	</wo>
+</wodefinitions>
