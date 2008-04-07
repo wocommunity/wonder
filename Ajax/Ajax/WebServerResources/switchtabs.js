@@ -8,6 +8,7 @@ var AjaxTabbedPanel = {
       var nodes = $A(tablist);
 
       nodes.each(function(node){
+          $(node);  // Force prototype extension of node for IE 7
           if (node.id != selectedTab.id) {
               node.removeClassName('ajaxTabbedPanelTab-selected').addClassName('ajaxTabbedPanelTab-unselected');
           }
@@ -23,6 +24,7 @@ var AjaxTabbedPanel = {
 
 	   // Find the currently seleted tab, de-select it and notify the application  
       nodes.each(function(node){
+        $(node);  // Force prototype extension of node for IE 7
         if (node.id != selectedPane.id) {
           if (node.hasClassName('ajaxTabbedPanelPane-selected')) {
             new Ajax.Request(node.getAttribute('updateUrl') + "?didSelect=false",  {asynchronous:1, evalScripts:false})
