@@ -182,7 +182,7 @@ public class ERXDummyRecord extends EOCustomObject {
 
 	private static Method _methodForName(Class clazz, String name) {
 		try {
-			return clazz.getDeclaredMethod(name, null);
+			return clazz.getDeclaredMethod(name, (Class[])null);
 		}
 		catch (SecurityException e) {
 		}
