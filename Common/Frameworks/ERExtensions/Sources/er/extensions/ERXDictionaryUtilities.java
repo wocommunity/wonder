@@ -6,13 +6,17 @@
 //
 package er.extensions;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.Enumeration;
 
+import com.webobjects.appserver.WOMessage;
 import com.webobjects.eocontrol.EOKeyValueCoding;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSBundle;
 import com.webobjects.foundation.NSComparator;
 import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSForwardException;
 import com.webobjects.foundation.NSKeyValueCoding;
 import com.webobjects.foundation.NSKeyValueCodingAdditions;
 import com.webobjects.foundation.NSMutableDictionary;
@@ -277,4 +281,33 @@ public class ERXDictionaryUtilities extends Object {
     	 }
     	 return clonedDict;
      }
+     
+     /**
+	 * Encodes a dictionary into a string that can be used in a request uri.
+	 * @param dict dictionary with form values
+	 * @param separator optional value separator
+	 * @return
+	 */
+	public static String queryStringForDictionary(NSDictionary<Object, Object> dict, String separator) {
+		if (separator == null) {
+			separator = "&";
+		}
+		StringBuffer sb = new StringBuffer(100);
+		for (Enumeration e = dict.allKeys().objectEnumerator(); e.hasMoreElements();) {
+			Object key = (Object) e.nextElement();
+			try {
+				sb.append(URLEncoder.encode(key.toString(), WOMessage.defaultURLEncoding()));
+				sb.append("=");
+				sb.append(URLEncoder.encode(dict.objectForKey(key).toString(), WOMessage.defaultURLEncoding()));
+				if (e.hasMoreElements()) {
+					sb.append(separator);
+				}
+			}
+			catch (UnsupportedEncodingException ex) {
+				// yeah right...like this will ever happen
+				throw NSForwardException._runtimeExceptionForThrowable(ex);
+			}
+		}
+		return sb.toString();
+	}
 }
