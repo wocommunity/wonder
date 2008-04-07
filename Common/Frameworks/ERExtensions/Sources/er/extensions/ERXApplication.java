@@ -1462,10 +1462,22 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 			if ((contentType != null) && (contentType.startsWith("text/") || contentType.equals("application/x-javascript"))) {
 				String acceptEncoding = request.headerForKey("accept-encoding");
 				if ((acceptEncoding != null) && (acceptEncoding.toLowerCase().indexOf("gzip") != -1)) {
-					NSData input = response.content();
-					byte[] inputBytes = input._bytesNoCopy();
 					long start = System.currentTimeMillis();
-					byte[] compressedData = ERXCompressionUtilities.gzipByteArray(inputBytes);
+					long inputBytesLength;
+					InputStream contentInputStream = response.contentInputStream();
+					byte[] compressedData;
+					if (contentInputStream != null) {
+						inputBytesLength = response.contentInputStreamLength();
+						NSData compressedNSData = ERXCompressionUtilities.gzipInputStreamAsNSData(contentInputStream, (int)inputBytesLength);
+						compressedData = compressedNSData._bytesNoCopy();
+						response.setContentStream(null, 0, 0);
+					}
+					else {
+						NSData input = response.content();
+						byte[] inputBytes = input._bytesNoCopy();
+						inputBytesLength = inputBytes.length;
+						compressedData = ERXCompressionUtilities.gzipByteArray(inputBytes);
+					}
 					if (compressedData == null) {
 						// something went wrong
 					}
@@ -1474,7 +1486,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 						response.setHeader(String.valueOf(compressedData.length), "content-length");
 						response.setHeader("gzip", "content-encoding");
 						if (log.isDebugEnabled()) {
-							log.debug("before: " + inputBytes.length + ", after " + compressedData.length + ", time: " + (System.currentTimeMillis() - start));
+							log.debug("before: " + inputBytesLength + ", after " + compressedData.length + ", time: " + (System.currentTimeMillis() - start));
 						}
 					}
 				}
