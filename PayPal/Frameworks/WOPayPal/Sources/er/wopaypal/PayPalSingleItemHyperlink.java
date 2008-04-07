@@ -117,7 +117,7 @@ public class PayPalSingleItemHyperlink extends PayPalSingleItemLinkBase {
     private String urlEncode(String input) {
         String output = null;
         try {
-            output = URLEncoder.encode(custom, "UTF-8");
+            output = URLEncoder.encode(input, "UTF-8");
         } catch (UnsupportedEncodingException uee) {
             NSLog.err.appendln("Could not URL encode input string.  Error: " + uee.getMessage());
         }
