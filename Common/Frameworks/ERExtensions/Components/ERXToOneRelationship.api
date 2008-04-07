@@ -27,12 +27,17 @@
 		<binding name="id"/>
 		<binding name="disabled" defaults="Boolean"/>
 
-		<validation message = "You must bind selection or sourceEntityName, sourceObject, and relationshipKey.">
+		<validation message = "You must bind selection or (sourceObject and relationshipKey) and (sourceEntityName or possibleChoices).">
 			<and>
 				<unbound name = "selection"/>
 				<or>
 					<unbound name="sourceEntityName"/>
-        	<unbound name="relationshipKey"/>
+        			<unbound name="relationshipKey"/>
+					<unbound name="sourceObject"/>
+				</or>
+				<or>
+					<unbound name="possibleChoices"/>
+        			<unbound name="relationshipKey"/>
 					<unbound name="sourceObject"/>
 				</or>
 			</and>
