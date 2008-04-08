@@ -55,7 +55,7 @@ public class InstantMessengerAdaptor extends WOAdaptor implements IMessageListen
 
 	private WOApplication _application;
 	private IInstantMessengerFactory _factory;
-	private Map _instantMessengers;
+	private Map<String, InstantMessengerConnection> _instantMessengers;
 
 	private String _centralizeScreenName;
 	private String _defaultScreenName;
@@ -71,7 +71,7 @@ public class InstantMessengerAdaptor extends WOAdaptor implements IMessageListen
 		NSNotificationCenter.defaultCenter().addObserver(this, new NSSelector("sessionDidCreate", new Class[] { NSNotification.class }), WOSession.SessionDidCreateNotification, null);
 
 		_application = WOApplication.application();
-		_instantMessengers = new HashMap();
+		_instantMessengers = new HashMap<String, InstantMessengerConnection>();
 
 		_centralizeScreenName = ERXProperties.stringForKey(InstantMessengerAdaptor.CENTRALIZE_SCREEN_NAME_KEY);
 		_factory = getFactory(InstantMessengerAdaptor.IM_FACTORY_KEY);
@@ -129,7 +129,7 @@ public class InstantMessengerAdaptor extends WOAdaptor implements IMessageListen
 	}
 
 	public InstantMessengerConnection _addInstantMessenger(String screenName, String password) {
-		InstantMessengerConnection existingConnection = (InstantMessengerConnection) _instantMessengers.get(screenName);
+		InstantMessengerConnection existingConnection = _instantMessengers.get(screenName);
 		if (existingConnection != null) {
 			existingConnection.disconnect();
 		}
@@ -147,7 +147,7 @@ public class InstantMessengerAdaptor extends WOAdaptor implements IMessageListen
 	}
 
 	public void removeInstantMessenger(String screenName) {
-		InstantMessengerConnection existingConnection = (InstantMessengerConnection) _instantMessengers.remove(screenName);
+		InstantMessengerConnection existingConnection = _instantMessengers.remove(screenName);
 		if (existingConnection != null) {
 			existingConnection.disconnect();
 		}
@@ -203,6 +203,7 @@ public class InstantMessengerAdaptor extends WOAdaptor implements IMessageListen
 		return conversation;
 	}
 
+	@Override
 	public void registerForEvents() {
 		if (_autoLogin) {
 			Iterator instantMessengerIter = _instantMessengers.entrySet().iterator();
@@ -218,6 +219,7 @@ public class InstantMessengerAdaptor extends WOAdaptor implements IMessageListen
 		conversationExpiration.start();
 	}
 
+	@Override
 	public void unregisterForEvents() {
 		_running = false;
 		Iterator instantMessengerIter = _instantMessengers.entrySet().iterator();
@@ -230,6 +232,7 @@ public class InstantMessengerAdaptor extends WOAdaptor implements IMessageListen
 		}
 	}
 
+	@Override
 	public boolean dispatchesRequestsConcurrently() {
 		return true;
 	}
@@ -353,7 +356,7 @@ public class InstantMessengerAdaptor extends WOAdaptor implements IMessageListen
 	}
 
 	public InstantMessengerConnection _instantMessengerConnectionNamed(String screenName) {
-		return (InstantMessengerConnection) _instantMessengers.get(screenName);
+		return _instantMessengers.get(screenName);
 	}
 
 	public InstantMessengerConnection _defaultInstantMessengerConnection() {
@@ -373,7 +376,7 @@ public class InstantMessengerAdaptor extends WOAdaptor implements IMessageListen
 			return factory;
 		}
 		catch (Throwable t) {
-			throw new RuntimeException("Invalidate InstantMessengerFactory: " + factoryClass, t);
+			throw new RuntimeException("Invalid InstantMessengerFactory: " + factoryClass, t);
 		}
 	}
 

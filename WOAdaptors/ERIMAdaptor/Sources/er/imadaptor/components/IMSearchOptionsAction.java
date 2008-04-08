@@ -18,6 +18,7 @@ public class IMSearchOptionsAction extends AbstractIMSearchAction {
 		super(name, associations, element);
 	}
 
+	@Override
 	protected boolean searchInsideMessage() {
 		return false;
 	}

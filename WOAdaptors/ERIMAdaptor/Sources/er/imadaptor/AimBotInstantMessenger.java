@@ -61,13 +61,13 @@ public class AimBotInstantMessenger extends AbstractInstantMessenger {
 	}
 
 	public String[] getBuddiesInGroupNamed(String groupName) {
-		List buddyNamesList = new LinkedList();
+		List<String> buddyNamesList = new LinkedList<String>();
 		Iterator buddyNamesIter = _sender.getBuddyNames();
 		while (buddyNamesIter.hasNext()) {
 			String buddyName = (String) buddyNamesIter.next();
 			buddyNamesList.add(buddyName);
 		}
-		String[] buddyNames = (String[]) buddyNamesList.toArray(new String[buddyNamesList.size()]);
+		String[] buddyNames = buddyNamesList.toArray(new String[buddyNamesList.size()]);
 		return buddyNames;
 	}
 

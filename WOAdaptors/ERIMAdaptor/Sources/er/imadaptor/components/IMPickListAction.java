@@ -23,6 +23,7 @@ public class IMPickListAction extends WOComponent {
 		super(context);
 	}
 
+	@Override
 	public boolean synchronizesVariablesWithBindings() {
 		return false;
 	}
@@ -70,12 +71,14 @@ public class IMPickListAction extends WOComponent {
 		return item;
 	}
 
+	@Override
 	public void appendToResponse(WOResponse response, WOContext context) {
 		String actionUrl = context._componentActionURL(false);
 		response.setHeader(actionUrl, InstantMessengerAdaptor.IM_ACTION_URL_KEY);
 		super.appendToResponse(response, context);
 	}
 
+	@Override
 	public WOActionResults invokeAction(WORequest request, WOContext context) {
 		WOActionResults results = null;
 		if (context.elementID().equals(context.senderID())) {

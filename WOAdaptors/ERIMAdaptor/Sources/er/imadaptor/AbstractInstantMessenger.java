@@ -1,17 +1,17 @@
 package er.imadaptor;
 
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 public abstract class AbstractInstantMessenger implements IInstantMessenger {
 	private String _screenName;
 	private String _password;
-	private List _listeners;
+	private List<IMessageListener> _listeners;
 
 	public AbstractInstantMessenger(String screenName, String password) {
 		_screenName = screenName;
 		_password = password;
-		_listeners = new ArrayList();
+		_listeners = new LinkedList<IMessageListener>();
 	}
 
 	public String getScreenName() {
@@ -31,9 +31,7 @@ public abstract class AbstractInstantMessenger implements IInstantMessenger {
 	}
 
 	protected void fireMessageReceived(String buddyName, String message) {
-		int listenerCount = _listeners.size();
-		for (int i = 0; i < listenerCount; i++) {
-			IMessageListener listener = (IMessageListener) _listeners.get(i);
+		for (IMessageListener listener : _listeners) {
 			listener.messageReceived(this, buddyName, message);
 		}
 	}
