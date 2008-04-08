@@ -34,6 +34,7 @@ public class IMBuddyStatus extends WOComponent {
 		return _screenName;
 	}
 
+	@Override
 	public void appendToResponse(WOResponse woresponse, WOContext wocontext) {
 		_buddyOnline = null;
 		_buddyAway = null;

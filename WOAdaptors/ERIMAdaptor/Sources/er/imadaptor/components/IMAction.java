@@ -20,12 +20,14 @@ public class IMAction extends WODynamicElement {
 		_action = (WOAssociation) assocationsDictionary.objectForKey("action");
 	}
 
+	@Override
 	public void appendToResponse(WOResponse response, WOContext context) {
 		String actionUrl = context._componentActionURL(false);
 		response.setHeader(actionUrl, InstantMessengerAdaptor.IM_ACTION_URL_KEY);
 		super.appendToResponse(response, context);
 	}
 
+	@Override
 	public WOActionResults invokeAction(WORequest request, WOContext context) {
 		String s = null;
 		WOActionResults results = null;

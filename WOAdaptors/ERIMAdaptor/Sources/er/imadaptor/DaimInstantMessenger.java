@@ -78,9 +78,10 @@ public class DaimInstantMessenger extends AbstractInstantMessenger {
 		return new String[] { "Buddies" };
 	}
 
+	@SuppressWarnings("unchecked")
 	public String[] getBuddiesInGroupNamed(String groupName) {
-		List buddiesList = _oscarClient.getBuddies();
-		return (String[]) buddiesList.toArray(new String[buddiesList.size()]);
+		List<String> buddiesList = _oscarClient.getBuddies();
+		return buddiesList.toArray(new String[buddiesList.size()]);
 	}
 
 	public String getAwayMessage(String buddyName) {
@@ -107,14 +108,14 @@ public class DaimInstantMessenger extends AbstractInstantMessenger {
 	}
 
 	public class DaimOscarClient extends AbstractOscarClient {
-		private List _buddies;
-		private List _onlineBuddies;
-		private List _offlineBuddies;
+		private List<String> _buddies;
+		private List<String> _onlineBuddies;
+		private List<String> _offlineBuddies;
 
 		public DaimOscarClient() {
-			_buddies = new LinkedList();
-			_onlineBuddies = new LinkedList();
-			_offlineBuddies = new LinkedList();
+			_buddies = new LinkedList<String>();
+			_onlineBuddies = new LinkedList<String>();
+			_offlineBuddies = new LinkedList<String>();
 		}
 
 		public boolean isBuddyOnline(String buddyName) {
@@ -129,6 +130,7 @@ public class DaimInstantMessenger extends AbstractInstantMessenger {
 			return _buddies;
 		}
 
+		@Override
 		public void buddyOffline(String buddyName, Buddy buddy) {
 			if (buddyName != null) {
 				String lcBuddyName = buddyName.toLowerCase();
@@ -137,6 +139,7 @@ public class DaimInstantMessenger extends AbstractInstantMessenger {
 			}
 		}
 
+		@Override
 		public void buddyOnline(String buddyName, Buddy buddy) {
 			if (buddyName != null) {
 				String lcBuddyName = buddyName.toLowerCase();
@@ -149,6 +152,7 @@ public class DaimInstantMessenger extends AbstractInstantMessenger {
 
 		}
 
+		@Override
 		public void newBuddyList(Buddy[] buddies) {
 			synchronized (_buddies) {
 				_buddies.clear();
@@ -160,11 +164,13 @@ public class DaimInstantMessenger extends AbstractInstantMessenger {
 			}
 		}
 
+		@Override
 		public void loginDone(DaimLoginEvent event) {
 			super.loginDone(event);
 			_connected = true;
 		}
 
+		@Override
 		public void incomingICQ(UserInfo userInfo, int arg1, int arg2, String message) {
 			super.incomingICQ(userInfo, arg1, arg2, message);
 			if (userInfo != null) {
@@ -173,6 +179,7 @@ public class DaimInstantMessenger extends AbstractInstantMessenger {
 			}
 		}
 
+		@Override
 		public void incomingIM(Buddy buddy, UserInfo userInfo, AOLIM im) {
 			super.incomingIM(buddy, userInfo, im);
 			String message = im.getMsg();
@@ -182,15 +189,18 @@ public class DaimInstantMessenger extends AbstractInstantMessenger {
 			}
 		}
 
+		@Override
 		public void login(String screenName, String password) throws IOException {
 			super.login(screenName, password);
 		}
 
+		@Override
 		public void loginError(DaimLoginEvent event) {
 			super.loginError(event);
 			_connected = false;
 		}
 
+		@Override
 		public void logout() {
 			super.logout();
 			_connected = false;

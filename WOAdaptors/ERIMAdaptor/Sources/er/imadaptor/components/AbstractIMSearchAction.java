@@ -123,6 +123,7 @@ abstract class AbstractIMSearchAction extends IMAction {
 		return selectedValues;
 	}
 
+	@Override
 	protected void actionInvoked(WORequest request, WOContext context) {
 		WOComponent component = context.component();
 		String message = InstantMessengerAdaptor.message(request);
