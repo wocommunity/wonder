@@ -40,6 +40,7 @@ import er.extensions.ERXWOContext;
  * @binding hidden if true, when the value is highlighted, the element will be display: none
  * @binding newHidden if true, when the value is highlighted, the element will be display: none for new objects
  * @binding updateHidden if true, when the value is highlighted, the element will be display: none for updated objects
+ * @binding delay if set, the delay that is applied before the effect is executed
  * 
  * @author mschrag
  */
@@ -58,6 +59,7 @@ public class AjaxHighlight extends WODynamicGroup {
 	private WOAssociation _hidden;
 	private WOAssociation _newHidden;
 	private WOAssociation _updateHidden;
+	private WOAssociation _delay;
 
 	public AjaxHighlight(String name, NSDictionary associations, WOElement template) {
 		super(name, associations, template);
@@ -77,6 +79,7 @@ public class AjaxHighlight extends WODynamicGroup {
 		_hidden = (WOAssociation) associations.valueForKey("hidden");
 		_newHidden = (WOAssociation) associations.valueForKey("newHidden");
 		_updateHidden = (WOAssociation) associations.valueForKey("updateHidden");
+		_delay = (WOAssociation) associations.valueForKey("delay");
 	}
 
 	public void appendToResponse(WOResponse response, WOContext context) {
@@ -179,7 +182,10 @@ public class AjaxHighlight extends WODynamicGroup {
 					response.appendContentString((String)_duration.valueInComponent(component));
 					
 				}
-	
+				if (_delay != null) {
+					response.appendContentString(", delay: ");
+					response.appendContentString((String) _delay.valueInComponent(component));
+				}
 				response.appendContentString("});");
 	
 				AjaxUtils.appendScriptFooter(response);

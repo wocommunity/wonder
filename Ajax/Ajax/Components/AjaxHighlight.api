@@ -15,6 +15,7 @@
 		<binding name = "hidden"/>
 		<binding name = "newHidden"/>
 		<binding name = "updateHidden"/>
+		<binding name = "delay"/>
     
     <validation message="&apos;value&apos; must be bound.">
 	    <unbound name = "value"/>
