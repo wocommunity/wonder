@@ -21,6 +21,7 @@ public class IMTextAction extends IMAction {
 		_allowBlanks = (WOAssociation) associations.objectForKey("allowBlanks");
 	}
 
+	@Override
 	protected void actionInvoked(WORequest request, WOContext context) {
 		WOComponent component = context.component();
 		String message = InstantMessengerAdaptor.message(request);

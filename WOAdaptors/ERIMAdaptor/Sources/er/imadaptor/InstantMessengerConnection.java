@@ -12,10 +12,10 @@ public class InstantMessengerConnection {
 	private InstantMessageQueue _messageQueue;
 	private IInstantMessenger _instantMessenger;
 	private InstantMessengerWatchDog _watchDog;
-	private Map _conversations;
+	private Map<String, Conversation> _conversations;
 
 	protected InstantMessengerConnection() {
-		_conversations = new HashMap();
+		_conversations = new HashMap<String, Conversation>();
 		_messageQueue = new InstantMessageQueue();
 		_messageQueue.start();
 	}
@@ -53,15 +53,15 @@ public class InstantMessengerConnection {
 		return _watchDog;
 	}
 
-	public List conversations() {
-		List conversations = new LinkedList(_conversations.values());
+	public List<Conversation> conversations() {
+		List<Conversation> conversations = new LinkedList<Conversation>(_conversations.values());
 		return conversations;
 	}
 
 	public Conversation conversationForBuddyNamed(String buddyName, long conversationTimeout) {
 		Conversation conversation;
 		synchronized (_conversations) {
-			conversation = (Conversation) _conversations.get(buddyName);
+			conversation = _conversations.get(buddyName);
 			System.out.println("InstantMessengerConnection.conversationForBuddyNamed: conversation = " + conversation);
 			if (conversation == null || conversation.isExpired(conversationTimeout)) {
 				System.out.println("InstantMessengerConnection.conversationForBuddyNamed:   ... created a new one");
@@ -145,9 +145,9 @@ public class InstantMessengerConnection {
 		}
 	}
 
-	protected class InstantMessageQueue extends ERXAsyncQueue {
-		public void process(Object object) {
-			Message message = (Message) object;
+	protected class InstantMessageQueue extends ERXAsyncQueue<Message> {
+		@Override
+		public void process(Message message) {
 			try {
 				IInstantMessenger instantMessenger = InstantMessengerConnection.this.instantMessenger();
 				instantMessenger.sendMessage(message.buddyName(), message.contents(), true);

@@ -1,8 +1,5 @@
 package er.imadaptor;
 
-import java.util.List;
-
-
 /**
  * IInstantMessenger defines the interface for an instant messenger implementation to hook into the ERIMAdaptor
  * framework.

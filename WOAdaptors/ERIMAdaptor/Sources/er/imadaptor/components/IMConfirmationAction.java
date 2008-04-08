@@ -26,6 +26,7 @@ public class IMConfirmationAction extends IMAction {
 		_confirmed = (WOAssociation) associations.objectForKey("confirmed");
 	}
 
+	@Override
 	protected void actionInvoked(WORequest request, WOContext context) {
 		String message = request.stringFormValueForKey(InstantMessengerAdaptor.MESSAGE_KEY);
 		String lowercaseMessage = message.trim().toLowerCase();
