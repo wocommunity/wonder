@@ -1774,4 +1774,49 @@ public class ERXStringUtilities {
 			throw NSForwardException._runtimeExceptionForThrowable(e);
 		}
     }
+    
+    /**
+     * Pads a string to the specified number of chars by adding the the given pad char on the right side.  If the
+     * string is longer than paddedLength, it is returned unchanged.
+     *
+     * @param string the string to pad
+     * @param padChar the character to pad with
+     * @param paddedLength the length to pad to
+     * @return the padded string
+     */
+    public static String rightPad(String string, char padChar, int paddedLength) {
+    	if (string.length() >= paddedLength) {
+    		return string;
+    	}
+    	
+        StringBuffer buffer = new StringBuffer(string);
+        for (int i = string.length(); i < paddedLength; i++) {
+            buffer.append(padChar);
+        }
+        return buffer.toString();
+    }
+    
+    
+    /**
+     * Pads a string to the specified number of chars by adding the the given pad char on the left side.  If the
+     * string is longer than paddedLength, it is returned unchanged.
+     *
+     * @param string the string to pad
+     * @param padChar the character to pad with
+     * @param paddedLength the length to pad to
+     * @return the padded string
+     */
+    public static String leftPad(String string, char padChar, int paddedLength) {
+    	if (string.length() >= paddedLength) {
+    		return string;
+    	}
+    	
+        StringBuffer buffer = new StringBuffer();
+        for (int i = string.length(); i < paddedLength; i++) {
+            buffer.append(padChar);
+        }
+        buffer.append(string);
+        return buffer.toString();
+    }
+    
 }
