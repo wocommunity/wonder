@@ -6,10 +6,21 @@
 //
 package er.extensions;
 
-import com.webobjects.foundation.*;
-import com.webobjects.eocontrol.*;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.Enumeration;
-import java.lang.*;
+
+import com.webobjects.appserver.WOMessage;
+import com.webobjects.eocontrol.EOKeyValueCoding;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSBundle;
+import com.webobjects.foundation.NSComparator;
+import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSForwardException;
+import com.webobjects.foundation.NSKeyValueCoding;
+import com.webobjects.foundation.NSKeyValueCodingAdditions;
+import com.webobjects.foundation.NSMutableDictionary;
+import com.webobjects.foundation.NSPropertyListSerialization;
 
 /**
  * Collection of {@link com.webobjects.foundation.NSDictionary NSDictionary} utilities.
@@ -42,7 +53,8 @@ public class ERXDictionaryUtilities extends Object {
      * @return NSDictionary de-serialized from the property list.
      */
     public static NSDictionary dictionaryFromPropertyList(String name, NSBundle bundle) {
-        return (NSDictionary)NSPropertyListSerialization.propertyListFromString(ERXStringUtilities.stringFromResource(name, "plist", bundle));
+        String string = ERXStringUtilities.stringFromResource(name, "plist", bundle);
+        return (NSDictionary)NSPropertyListSerialization.propertyListFromString(string);
     }
 
     /**
@@ -78,7 +90,7 @@ public class ERXDictionaryUtilities extends Object {
         NSMutableDictionary result=new NSMutableDictionary();
         if (d != null && a != null) {
             for (Enumeration e = d.allKeys().objectEnumerator(); e.hasMoreElements();) {
-                String key = (String)e.nextElement();
+                Object key = e.nextElement();
                 if (!a.containsObject(key))
                     result.setObjectForKey(d.objectForKey(key), key);
             }
@@ -87,8 +99,7 @@ public class ERXDictionaryUtilities extends Object {
     }
 
     /**
-     * @param firstRow
-     * @return
+     *
      */
     public static NSDictionary removeNullValues(NSDictionary dict) {
         NSMutableDictionary d = new NSMutableDictionary();
@@ -123,7 +134,8 @@ public class ERXDictionaryUtilities extends Object {
     }
 
     // if you're keys are not all strings, this method will throw.
-    public static NSArray stringKeysSortedAscending(final NSDictionary d) {
+    @SuppressWarnings("unchecked")
+	public static NSArray stringKeysSortedAscending(final NSDictionary d) {
         NSArray result = null;
 
         if ( d != null && d.count() > 0 ) {
@@ -134,6 +146,56 @@ public class ERXDictionaryUtilities extends Object {
 
         return result != null ? result : NSArray.EmptyArray;
     }
+
+    /**
+     * @param d dictionary to sort keys from
+     * @return keys from d sorted by ascending value they are mapped to
+     */
+    public static NSArray keysSortedByValueAscending(final NSDictionary d) {
+        NSArray result = null;
+
+        if ( d != null && d.count() > 0 ) {
+            final NSArray keys = d.allKeys();
+
+            result = ERXArrayUtilities.sortedArrayUsingComparator(keys, new NSDictionaryKeyValueComparator(d));
+        }
+
+        return result != null ? result : NSArray.EmptyArray;
+    }
+
+     /**
+      * Removes entries from both dictionaries that match, leaving you with two dictionaries containing
+      * only values that did NOT match.  Note that this comparison considers null == EO/NSKeyValueCoding.NullValue.
+      *
+      * @param dict1 the first dictionary
+      * @param dict2 the second dictionary
+      */
+     public static void removeMatchingEntries(NSMutableDictionary dict1, NSMutableDictionary dict2) {
+         ERXDictionaryUtilities._removeMatchingEntries(dict1, dict2, true);
+     }
+
+     public static void _removeMatchingEntries(NSMutableDictionary snapshot1, NSMutableDictionary snapshot2, boolean removeInverse) {
+         Enumeration keys1Enum = snapshot1.allKeys().immutableClone().objectEnumerator();
+         while (keys1Enum.hasMoreElements()) {
+             String key = (String)keys1Enum.nextElement();
+             Object value1 = snapshot1.objectForKey(key);
+             Object value2 = snapshot2.objectForKey(key);
+             boolean value1IsNull = (value1 == null || value1 == EOKeyValueCoding.NullValue || value1 == NSKeyValueCoding.NullValue);
+             boolean value2IsNull = (value2 == null || value2 == EOKeyValueCoding.NullValue || value2 == NSKeyValueCoding.NullValue);
+             if (value1IsNull && value2IsNull) {
+                 snapshot1.removeObjectForKey(key);
+                 snapshot2.removeObjectForKey(key);
+             }
+             else if (value1 != null && value1.equals(value2)) {
+                 snapshot1.removeObjectForKey(key);
+                 snapshot2.removeObjectForKey(key);
+             }
+         }
+         // flip around the comparison and remove again
+         if (removeInverse) {
+             _removeMatchingEntries(snapshot2, snapshot1, false);
+         }
+     }
 
     /**
      * Sets the object for each of the keys in the array on a mutable dictionary.
@@ -159,4 +221,94 @@ public class ERXDictionaryUtilities extends Object {
             }
         }
     }
+
+     /**
+      * Compares dictionary keys based on the value they are associated with.  Useful for getting a list
+      * of keys in alphabetical order of their values.
+     */
+     public static class NSDictionaryKeyValueComparator extends NSComparator {
+         private NSDictionary dictionary;
+
+         public NSDictionaryKeyValueComparator(NSDictionary aDictionary) {
+             super();
+             dictionary = aDictionary;
+         }
+
+        public int compare(Object key1, Object key2) throws ComparisonException {
+            Object value1 = dictionary.objectForKey(key1);
+            Object value2 = dictionary.objectForKey(key2);
+            if ( ! (value1 instanceof Comparable && value2 instanceof Comparable)) {
+                throw new ComparisonException("dictionary values are not comparable");
+            }
+
+            return ((Comparable)value1).compareTo(value2);
+        }
+     }
+
+     @SuppressWarnings("unchecked")
+     /**
+      * Returns a deep clone of the given dictionary.  A deep clone will attempt to 
+      * clone the keys and values (deeply) of this dictionary as well as the 
+      * dictionary itself.
+      * 
+      * @param dict the dictionary to clone
+      * @param onlyCollections if true, only collections in this dictionary will be cloned, not individual values
+      * @return a deep clone of dict
+      */
+     public static NSDictionary deepClone(NSDictionary dict, boolean onlyCollections) {
+    	 NSMutableDictionary clonedDict = null;
+    	 if (dict != null) {
+    		 clonedDict = dict.mutableClone();
+	    	 for (Enumeration keysEnum = dict.allKeys().objectEnumerator(); keysEnum.hasMoreElements();) {
+				 Object key = keysEnum.nextElement(); 
+	    		 Object value = dict.objectForKey(key);
+	    		 Object cloneKey = ERXUtilities.deepClone(key, onlyCollections);
+	    		 Object cloneValue = ERXUtilities.deepClone(value, onlyCollections);
+	    		 if (cloneKey != key) {
+	    			 clonedDict.removeObjectForKey(key);
+	    			 if (cloneValue != null) {
+	    				 clonedDict.setObjectForKey(cloneValue, cloneKey);
+	    			 }
+	    		 }
+	    		 else if (cloneValue != null) {
+	    			 if (cloneValue != value) {
+	    				 clonedDict.setObjectForKey(cloneValue, cloneKey);
+	    			 }
+	    		 }
+	    		 else {
+	    			 clonedDict.removeObjectForKey(key);
+	    		 }
+	    	 }
+    	 }
+    	 return clonedDict;
+     }
+
+     /**
+	 * Encodes a dictionary into a string that can be used in a request uri.
+	 * @param dict dictionary with form values
+	 * @param separator optional value separator
+	 * @return
+	 */
+	public static String queryStringForDictionary(NSDictionary dict, String separator) {
+		if (separator == null) {
+			separator = "&";
+		}
+		StringBuffer sb = new StringBuffer(100);
+		for (Enumeration e = dict.allKeys().objectEnumerator(); e.hasMoreElements();) {
+			Object key = (Object) e.nextElement();
+			try {
+				sb.append(URLEncoder.encode(key.toString(), WOMessage.defaultURLEncoding()));
+				sb.append("=");
+				sb.append(URLEncoder.encode(dict.objectForKey(key).toString(), WOMessage.defaultURLEncoding()));
+				if (e.hasMoreElements()) {
+					sb.append(separator);
+				}
+			}
+			catch (UnsupportedEncodingException ex) {
+				// yeah right...like this will ever happen
+				throw NSForwardException._runtimeExceptionForThrowable(ex);
+			}
+		}
+		return sb.toString();
+	}
 }

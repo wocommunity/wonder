@@ -6,13 +6,32 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.extensions;
 
-import com.webobjects.foundation.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.eoaccess.*;
-import com.webobjects.appserver.*;
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
+import java.lang.reflect.Method;
 import java.util.Enumeration;
 import java.util.TimeZone;
-import java.io.*;
+
+import com.webobjects.appserver.WOComponent;
+import com.webobjects.eoaccess.EOEntity;
+import com.webobjects.eoaccess.EOModelGroup;
+import com.webobjects.eoaccess.EORelationship;
+import com.webobjects.eoaccess.EOUtilities;
+import com.webobjects.eocontrol.EOArrayDataSource;
+import com.webobjects.eocontrol.EODataSource;
+import com.webobjects.eocontrol.EOEditingContext;
+import com.webobjects.eocontrol.EOEnterpriseObject;
+import com.webobjects.eocontrol.EOSortOrdering;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSBundle;
+import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSMutableArray;
+import com.webobjects.foundation.NSMutableDictionary;
+import com.webobjects.foundation.NSMutableSet;
+import com.webobjects.foundation.NSSelector;
+import com.webobjects.foundation.NSSet;
+import com.webobjects.foundation.NSTimestamp;
+import com.webobjects.foundation.NSTimestampFormatter;
 
 /**
  * Diverse collection of utility methods for handling everything from
@@ -510,4 +529,39 @@ public class ERXUtilities {
         }
     }
 
+    /**
+     * Returns a deep clone of the given object.  A deep clone will attempt 
+     * to clone any contained values (in the case of an NSArray or NSDictionary)
+     * as well as the value itself.
+     * 
+     * @param obj the object to clone
+     * @param onlyCollections if true, only collections will be cloned, not individual values
+     * @return a deep clone of obj
+     */
+	@SuppressWarnings("unchecked")
+	public static <T> T deepClone(T obj, boolean onlyCollections) {
+		Object clone;
+		if (obj instanceof NSArray) {
+			clone = ERXArrayUtilities.deepClone((NSArray)obj, onlyCollections);
+		}
+		else if (obj instanceof NSSet) {
+			clone = ERXArrayUtilities.deepClone((NSSet)obj, onlyCollections);
+		}
+		else if (obj instanceof NSDictionary) {
+			clone = ERXDictionaryUtilities.deepClone((NSDictionary)obj, onlyCollections);
+		}
+		else if (!onlyCollections && obj instanceof Cloneable) {
+            try {
+				Method m = obj.getClass().getMethod("clone", ERXConstant.EmptyClassArray);
+				clone = m.invoke(obj, ERXConstant.EmptyObjectArray);
+			}
+			catch (Exception e) {
+				throw new RuntimeException("Failed to clone " + obj + ".", e);
+			}
+		}
+		else {
+			clone = obj;
+		}
+		return (T)clone;
+	}
 }

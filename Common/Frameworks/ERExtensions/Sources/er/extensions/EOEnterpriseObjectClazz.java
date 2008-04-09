@@ -43,7 +43,7 @@ import com.webobjects.foundation.NSMutableDictionary;
  * for a client-side class could then be easily switched to use the server-side EOUtilites
  * implementation.
  */
-public class EOEnterpriseObjectClazz extends Object {
+public class EOEnterpriseObjectClazz {
     /**
      * logging support
      */
@@ -329,7 +329,49 @@ public class EOEnterpriseObjectClazz extends Object {
     }
 
     /**
-     * Fetchs an array of objects for a given fetch specification
+     * Fetches all of the objects matching the given key and value
+     * corresponding to the clazz's entity using the
+     * given editing context.
+     * @param ec editing context
+     * @param key key string
+     * @param value value
+     * @return array of objects corresponding to the passed in parameters.
+     */
+    public NSArray objectsMatchingKeyAndValue(EOEditingContext ec, String key, Object value) {
+        return EOUtilities.objectsMatchingKeyAndValue(ec, entityName(), key, value);
+    }
+    
+    public NSArray objectsMatchingQualifier(EOEditingContext ec, EOQualifier qualifier) {
+        return objectsMatchingQualifier(ec, qualifier, null);
+    }
+    
+    public NSArray objectsMatchingQualifier(EOEditingContext ec, EOQualifier qualifier, NSArray sortOrdering) {
+        return ec.objectsWithFetchSpecification(new EOFetchSpecification(entityName(), qualifier, sortOrdering));
+    }
+    
+    
+    
+    
+    /**
+     * Fetches the object matching the given key and value
+     * corresponding to the clazz's entity using the
+     * given editing context. If more than one matches, throws a EOMoreThanOneException, 
+     * otherwise returns null or the match.
+     * @param ec editing context
+     * @param key key string
+     * @param value value
+     * @return array of objects corresponding to the passed in parameters.
+     */
+    public EOEnterpriseObject objectMatchingKeyAndValue(EOEditingContext ec, String key, Object value) {
+        NSArray result = objectsMatchingKeyAndValue(ec, key, value);
+        if(result.count() > 1) {
+        	throw new EOUtilities.MoreThanOneException("Mor than one: " + key + "->" + value);
+        }
+        return (EOEnterpriseObject)result.lastObject();
+    }
+
+    /**
+     * Fetches an array of objects for a given fetch specification
      * and an array of bindings. The fetch specifiation is resolved
      * off of the entity corresponding to the current clazz.
      * @param ec editing content to fetch into
@@ -348,7 +390,7 @@ public class EOEnterpriseObjectClazz extends Object {
      */
     protected void setEntityName(String name) {
 		_entityName = name;
-    	allClazzes.setObjectForKey(this, _entityName);
+		allClazzes.setObjectForKey(this, _entityName);
 	}
 
     /**

@@ -8,6 +8,7 @@ package er.extensions;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.util.Collection;
 import java.util.Hashtable;
 import java.util.Iterator;
@@ -38,22 +39,21 @@ public class ERXKeyValueCodingUtilities {
      * Registers the class in the KVC resolving system, so you can use 
      * <code>valueForKeyPath("MyClass.SOME_KEY")</code>. Inner classes
      * are registered with a "$", i.e. <code>MyClass$InnerClass</code>
+     *
      * @param clazz
-     * @param name
      */
     public static void registerClass(Class clazz) {
         _classes.put(ERXStringUtilities.lastPropertyKeyInKeyPath(clazz.getName()), clazz);
     }
     
     /**
-     * Extends key-value coding to a class. You can currently only
-     * get the static fields of the class, not method results.
-     * Java arrays and collections are morphed into NSArrays. The implementation is pretty slow,
-     * but I didn't exactly want to re-implement all of NSKeyValueCoding here.
-     * @param clazz
-     * @param key
-     * @return
-     */
+	 * Extends key-value coding to a class. Java arrays and collections are
+	 * morphed into NSArrays. The implementation is pretty slow, but I didn't
+	 * exactly want to re-implement all of NSKeyValueCoding here.
+	 * 
+	 * @param clazz
+	 * @param key
+	 */
     public static Object classValueForKey(Class clazz, String key) {
         Object result = null;
         if(key != null) {
@@ -76,8 +76,13 @@ public class ERXKeyValueCodingUtilities {
                     for (int i = 0; i < fields.length && !found; i++) {
                         Field current = fields[i];
                         if(current.getName().equals(key)) {
-                            result = current.get(clazz);
-                            found = true;
+                        	boolean isAccessible = current.isAccessible();
+                        	// AK: should have a check for existance of KeyValueCodingProtectedAccessor here
+                        	// AK: disabled, only for testing
+                        	// current.setAccessible(true);
+                        	result = current.get(clazz);
+                        	// current.setAccessible(isAccessible);
+                        	found = true;
                         }
                     }
                 }
@@ -91,7 +96,7 @@ public class ERXKeyValueCodingUtilities {
                 if(result.getClass().getComponentType() != null) {
                     result = new NSArray((Object[])result);
                 } else if(result instanceof Collection) {
-                    NSMutableArray array = new NSMutableArray();
+                    NSMutableArray array = new NSMutableArray(((Collection)result).size());
                     for (Iterator iter = ((Collection)result).iterator(); iter.hasNext();) {
                         array.addObject(iter.next());
                     }
@@ -102,6 +107,36 @@ public class ERXKeyValueCodingUtilities {
         return result;
     }
     
+    /**
+     * Returns final strings constants from an interface or class. Useful in particular when you want to create
+     * selection lists from your interfaces automatically. 
+     * @param c
+     */
+    public static NSArray staticStringsForClass(Class c) {
+		NSMutableArray result = new NSMutableArray();
+		if(c.getSuperclass() != null) {
+			result.addObjectsFromArray(staticStringsForClass(c.getSuperclass()));
+		}
+		Field[] fields = c.getDeclaredFields();
+		for (int i = 0; i < fields.length; i++) {
+			Field field = fields[i];
+			try {
+				if(Modifier.isFinal(field.getModifiers()) && field.getType().equals(String.class)) {
+					String key = field.getName();
+					String value = (String) field.get(c);
+					result.addObject(new ERXKeyValuePair(key, value));
+				}
+			}
+			catch (IllegalArgumentException e) {
+				throw NSForwardException._runtimeExceptionForThrowable(e);
+			}
+			catch (IllegalAccessException e) {
+				throw NSForwardException._runtimeExceptionForThrowable(e);
+			}
+		}
+		return (NSArray) result;
+
+	}
     
     public static final NSKeyValueCodingAdditions Statics = new NSKeyValueCodingAdditions() {
         /**
@@ -145,4 +180,67 @@ public class ERXKeyValueCodingUtilities {
             takeValueForKey(arg0, arg1);
         }
     };
+
+    public static Object privateValueForKey(Object target, String key) {
+    	Field field = accessibleFieldForKey(target, key);
+    	try {
+    		if(field != null) {
+        		return field.get(target);
+    		} else {
+    	    	throw new NSKeyValueCoding.UnknownKeyException("Key "+ key + " not found", target, key);
+    		}
+    	}
+    	catch (IllegalArgumentException e) {
+    		throw NSForwardException._runtimeExceptionForThrowable(e);
+    	}
+    	catch (IllegalAccessException e) {
+    		throw NSForwardException._runtimeExceptionForThrowable(e);
+    	}
+    }
+
+    public static void takePrivateValueForKey(Object target, Object value, String key) {
+    	Field field = accessibleFieldForKey(target, key);
+    	try {
+    		if(field != null) {
+        		field.set(target, value);
+    		} else {
+    	    	throw new NSKeyValueCoding.UnknownKeyException("Key "+ key + " not found", target, key);
+    		}
+    	}
+    	catch (IllegalArgumentException e) {
+    		throw NSForwardException._runtimeExceptionForThrowable(e);
+    	}
+    	catch (IllegalAccessException e) {
+    		throw NSForwardException._runtimeExceptionForThrowable(e);
+    	}
+    }
+
+    private static Field accessibleFieldForKey(Object target, String key) {
+    	Field f = fieldForKey(target, key);
+    	if(f != null) {
+    		f.setAccessible(true);
+    	}
+    	return f;
+    }
+    
+
+    public static Field fieldForKey(Object target, String key) {
+    	Field field = null;
+    	Class c = target.getClass();
+    	while(field == null && c != null) {
+    		try {
+    			field = c.getDeclaredField(key);
+    			if(field != null) { 
+    				return field;
+    			}
+    		}
+    		catch (SecurityException e) {
+    			throw NSForwardException._runtimeExceptionForThrowable(e);
+    		}
+    		catch (NoSuchFieldException e) {
+    			c = c.getSuperclass();
+    		}
+    	}
+    	return null;
+    }
 }
