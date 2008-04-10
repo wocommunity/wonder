@@ -121,7 +121,7 @@ public class ERXProperties {
      * @see #webObjectsVersion
      */
     public static String sourceVersionString() {
-        NSDictionary versionDictionary = (NSDictionary)ERXFileUtilities.readPropertyListFromFileInFramework("version.plist", "JavaWebObjects", null);
+        NSDictionary versionDictionary = (NSDictionary)ERXFileUtilities.readPropertyListFromFileInFramework("version.plist", "JavaWebObjects");
 
         String versionString = (String) versionDictionary.objectForKey("SourceVersion");
         return versionString == null  ?  ""  :  versionString.trim(); // trim() removes the line ending char
@@ -507,6 +507,39 @@ public class ERXProperties {
             System.setProperty(propertyName, stringValue == null ? UndefinedMarker : stringValue);
         }
         return stringValue == UndefinedMarker ? null : stringValue;
+    }
+
+	/**
+     * Returns an array of strings separated with the given separator string.
+     * 
+     * @param key the key to lookup
+     * @param separator the separator (",")
+     * @return the array of strings or NSArray.EmptyArray if not found
+     */
+    @SuppressWarnings("unchecked")
+    public static NSArray componentsSeparatedByString(String key, String separator) {
+    	return ERXProperties.componentsSeparatedByStringWithDefault(key, separator, NSArray.EmptyArray);
+    }
+
+    /**
+     * Returns an array of strings separated with the given separator string.
+     * 
+     * @param key the key to lookup
+     * @param separator the separator (",")
+     * @param defaultValue the default array to return if there is no value
+     * @return the array of strings
+     */
+    @SuppressWarnings("unchecked")
+	public static NSArray componentsSeparatedByStringWithDefault(String key, String separator, NSArray defaultValue) {
+    	NSArray array;
+    	String str = stringForKeyWithDefault(key, null);
+    	if (str == null) {
+    		array = defaultValue;
+    	}
+    	else {
+    		array = NSArray.componentsSeparatedByString(str, separator);
+    	}
+    	return array;
     }
 
     /**
