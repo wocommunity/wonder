@@ -347,6 +347,34 @@ public class ERXExtensions {
     }
 
     /**
+     * Returns the current state of EOAdaptor logging.
+     */
+	public static boolean adaptorLogging() {
+		return NSLog.debugLoggingAllowedForGroups(NSLog.DebugGroupSQLGeneration|NSLog.DebugGroupDatabaseAccess);
+	}
+
+    /**
+     * Turn EOAdaptor logging on and off.
+     * @param onOff
+     */
+    public static void setAdaptorLogging(boolean onOff) {
+    	Boolean targetState = onOff ? Boolean.TRUE : Boolean.FALSE;
+    	if (NSLog.debugLoggingAllowedForGroups(NSLog.DebugGroupSQLGeneration|NSLog.DebugGroupDatabaseAccess) != targetState.booleanValue()) {
+    		if (targetState.booleanValue()) {
+    			NSLog.allowDebugLoggingForGroups(NSLog.DebugGroupSQLGeneration|NSLog.DebugGroupDatabaseAccess);
+    		} else {
+    			NSLog.refuseDebugLoggingForGroups(NSLog.DebugGroupSQLGeneration|NSLog.DebugGroupDatabaseAccess);
+    		}
+    	}
+    	if (targetState.booleanValue()) {
+    		adaptorLogger.info("Adaptor debug on");
+    	} else {
+    		adaptorLogger.info("Adaptor debug off");
+    	}
+    	adaptorEnabled = targetState;
+   }
+
+    /**
      * deprecated see {@link ERXEC}
      */
     public static ERXEditingContextDelegate defaultEditingContextDelegate() {

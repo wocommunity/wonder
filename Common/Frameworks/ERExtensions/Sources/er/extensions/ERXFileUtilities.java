@@ -6,15 +6,50 @@
 //
 package er.extensions;
 
-import java.io.*;
-// Java 1.4 only
-import java.nio.channels.*;
-import java.net.*;
-import java.util.*;
-import java.util.zip.*;
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileFilter;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.Reader;
+import java.io.StringReader;
+import java.io.Writer;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Enumeration;
+import java.util.zip.GZIPInputStream;
+import java.util.zip.GZIPOutputStream;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
+import java.util.zip.ZipOutputStream;
 
-import com.webobjects.appserver.*;
-import com.webobjects.foundation.*;
+import org.apache.log4j.Logger;
+
+import com.webobjects.appserver.WOApplication;
+import com.webobjects.appserver.WOResourceManager;
+import com.webobjects.appserver._private.WOEncodingDetector;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSBundle;
+import com.webobjects.foundation.NSData;
+import com.webobjects.foundation.NSForwardException;
+import com.webobjects.foundation.NSMutableArray;
+import com.webobjects.foundation.NSPropertyListSerialization;
+
+import er.extensions.ERXRuntimeUtilities.Result;
+import er.extensions.ERXRuntimeUtilities.TimeoutException;
 
 /**
 * Collection of handy {java.io.File} utilities.
@@ -26,11 +61,81 @@ public class ERXFileUtilities {
     //	---------------------------------------------------------------------------
 
     /** logging support */
-    public static final ERXLogger log = ERXLogger.getERXLogger(ERXFileUtilities.class);
+    public static final Logger log = Logger.getLogger(ERXFileUtilities.class);
 
     //	===========================================================================
     //	Class Methods
     //	---------------------------------------------------------------------------
+
+    /**
+     * Copies the contents of the given URL to a temporary file.
+     * 
+     * @param url the URL to copy from
+     * @param prefix the temporary file prefix
+     * @param suffix the temporary file suffix (if null, the extension from the URL is used) 
+     * @return the temporary file
+     * @throws IOException if the copy fails
+     */
+    public static File writeUrlToTempFile(String url, String prefix, String suffix) throws IOException {
+    	return ERXFileUtilities.writeUrlToTempFile(new URL(url), prefix, suffix);
+    }
+    
+    /**
+     * Copies the contents of the given URL to a temporary file.
+     * 
+     * @param url the URL to copy from
+     * @param prefix the temporary file prefix
+     * @param suffix the temporary file suffix (if null, the extension from the URL is used)
+     * @return the temporary file
+     * @throws IOException if the copy fails
+     */
+    public static File writeUrlToTempFile(URL url, String prefix, String suffix) throws IOException {
+      String extension;
+      if (suffix == null) {
+	      String urlStr = url.toExternalForm();
+	      int dotIndex = urlStr.lastIndexOf('.');
+	      if (dotIndex >= 0) {
+	        int questionMarkIndex = urlStr.indexOf('?', dotIndex);
+	        if (questionMarkIndex == -1) {
+	        	extension = urlStr.substring(dotIndex);
+	        }
+	        else {
+	        	extension = urlStr.substring(dotIndex, questionMarkIndex);
+	        }
+	      }
+	      else {
+	        extension = "";
+	      }
+      }
+      else {
+    	  extension = suffix;
+      }
+      File tempFile = ERXFileUtilities.writeInputStreamToTempFile(url.openStream(), prefix, extension);
+      return tempFile;
+    }
+
+    /**
+     * Copies the contents of the given URL to a file.
+     * 
+     * @param url the URL to copy from
+     * @param file the File to write to 
+     * @throws IOException if the copy fails
+     */
+    public static void writeUrlToTempFile(String url, File file) throws IOException {
+      ERXFileUtilities.writeUrlToTempFile(new URL(url), file);
+    }
+
+    /**
+     * Copies the contents of the given URL to a file.
+     * 
+     * @param url the URL to copy from
+     * @param file the File to write to 
+     * @throws IOException if the copy fails
+     */
+    public static void writeUrlToTempFile(URL url, File file) throws IOException {
+      ERXFileUtilities.writeInputStreamToFile(url.openStream(), file);
+    }
+    
 
     /**
     * Returns the byte array for a given stream.
@@ -66,7 +171,6 @@ public class ERXFileUtilities {
         * Returns a string from the input stream using the default
      * encoding.
      * @param in stream to read
-     * @param encoding to be used, null will use the default
      * @return string representation of the stream.
      */
     public static String stringFromInputStream(InputStream in) throws IOException {
@@ -129,14 +233,62 @@ public class ERXFileUtilities {
             bytesRead += fis.read(data, bytesRead, n - bytesRead);
         return data;
     }
-    
-    
+
+
     /**
         * @deprecated use writeInputStreamToFile(InputStream is, File f) instead
      */
-    public static void writeInputStreamToFile(File f, InputStream is) throws IOException {
+    @SuppressWarnings("dep-ann")
+	public static void writeInputStreamToFile(File f, InputStream is) throws IOException {
         writeInputStreamToFile(is, f);
     }
+
+	/**
+	 * Writes the contents of an InputStream to a temporary file.
+	 * 
+	 * @param stream
+	 *            to pull data from
+	 * @return the temp file that was created 
+	 */
+	public static File writeInputStreamToTempFile(InputStream stream) throws IOException {
+		return ERXFileUtilities.writeInputStreamToTempFile(stream, "_Wonder", "tmp");
+	}
+	
+	/**
+	 * Writes the contents of an InputStream to a temporary file.
+	 * 
+	 * @param stream
+	 *            to pull data from
+	 * @param prefix the filename prefix of the temp file
+	 * @param suffix the filename suffix of the temp file
+	 * @return the temp file that was created 
+	 */
+	public static File writeInputStreamToTempFile(InputStream stream, String prefix, String suffix) throws IOException {
+		File tempFile;
+		try {
+			tempFile = File.createTempFile(prefix, suffix);
+			try {
+				ERXFileUtilities.writeInputStreamToFile(stream, tempFile);
+			}
+			catch (RuntimeException e) {
+				tempFile.delete();
+				throw e;
+			}
+			catch (IOException e) {
+				tempFile.delete();
+				throw e;
+			}
+		}
+		catch (RuntimeException e) {
+			stream.close();
+			throw e;
+		}
+		catch (IOException e) {
+			stream.close();
+			throw e;
+		}
+		return tempFile;
+	}
 
     /**
         * Writes the contents of an InputStream to a specified file.
@@ -144,40 +296,102 @@ public class ERXFileUtilities {
      * @param stream to pull data from
      */
     public static void writeInputStreamToFile(InputStream stream, File file) throws IOException {
-        if (file == null) throw new IllegalArgumentException("Attempting to write to a null file!");
-        FileOutputStream out = new FileOutputStream(file);
+    	FileOutputStream out;
+    	try {
+	        if (file == null) throw new IllegalArgumentException("Attempting to write to a null file!");
+	        File parent = file.getParentFile();
+	        if(parent != null && !parent.exists()) {
+	            parent.mkdirs();
+	        }
+	        out = new FileOutputStream(file);
+    	}
+    	catch (IOException e) {
+    		stream.close();
+    		throw e;
+    	}
+    	catch (RuntimeException e) {
+    		stream.close();
+    		throw e;
+    	}
         writeInputStreamToOutputStream(stream, out);
     }
-
+    
+    
     public static void writeInputStreamToGZippedFile(InputStream stream, File file) throws IOException {
         if (file == null) throw new IllegalArgumentException("Attempting to write to a null file!");
         FileOutputStream out = new FileOutputStream(file);
         writeInputStreamToOutputStream(stream, new GZIPOutputStream(out));
         out.close();
     }
-    
+
+    /**
+     * Copies the contents of the input stream to the given output stream.  Both streams are
+     * guaranteed to be closed by the end of this method.
+     * 
+     * @param in the input stream to copy from
+     * @param out the output stream to copy to
+     * @throws IOException if there is any failure
+     */
     public static void writeInputStreamToOutputStream(InputStream in, OutputStream out) throws IOException {
-        BufferedInputStream bis = new BufferedInputStream(in);
-        byte buf[] = new byte[1024 * 50]; //64 KBytes buffer
+    	try {
+	        BufferedInputStream bis = new BufferedInputStream(in);
+	        try {
+		        byte buf[] = new byte[1024 * 50]; //64 KBytes buffer
+		        int read = -1;
+		        while ((read = bis.read(buf)) != -1) {
+		            out.write(buf, 0, read);
+		        }
+	        }
+	        finally {
+	        	bis.close();
+	        }
+			out.flush();
+    	}
+    	finally {
+			out.close();
+    	}
+    }
+
+    /**
+     * Writes the contents of <code>s</code> to <code>f</code>
+     * using the platform's default encoding.
+     * 
+     * @param s the string to be written to file
+     * @param f the destination file
+     */
+    public static void stringToFile(String s, File f) throws IOException {
+        stringToFile( s, f, System.getProperty("file.encoding") );
+    }
+    
+    /**
+     * Writes the contents of <code>s</code> to <code>f</code>
+     * using specified encoding.
+     * 
+     * @param s the string to be written to file
+     * @param f the destination file
+     * @param encoding  the desired encoding
+     */
+    public static void stringToFile(String s, File f, String encoding) throws IOException {
+        if (s == null) throw new IllegalArgumentException("string argument cannot be null");
+        if (f == null) throw new IllegalArgumentException("file argument cannot be null");
+        if (encoding == null) throw new IllegalArgumentException("encoding argument cannot be null");
+        Reader reader = new BufferedReader(new StringReader(s));
+        FileOutputStream fos = new FileOutputStream(f);
+        Writer out;
+        if( encoding == null )
+            out = new BufferedWriter( new OutputStreamWriter(fos) );
+        else
+            out = new BufferedWriter( new OutputStreamWriter(fos, encoding) );        
+        char buf[] = new char[1024 * 50];
         int read = -1;
-        while ((read = bis.read(buf)) != -1) {
+        while ((read = reader.read(buf)) != -1) {
             out.write(buf, 0, read);
         }
-        bis.close();
+        reader.close();
         out.flush();
         out.close();
         
     }
-
-    public static void stringToFile(String s, File f) throws IOException {
-        if (s == null) throw new NullPointerException("string argument cannot be null");
-        if (f == null) throw new NullPointerException("file argument cannot be null");
-
-        byte[] bytes = s.getBytes();
-        ByteArrayInputStream bais = new ByteArrayInputStream(bytes);
-        writeInputStreamToFile(bais, f);
-    }
-
 
     public static void stringToGZippedFile(String s, File f) throws IOException {
         if (s == null) throw new NullPointerException("string argument cannot be null");
@@ -199,33 +413,25 @@ public class ERXFileUtilities {
         if (srcPath == null) throw new IllegalArgumentException("null source path not allowed");
         if (dstPath == null) throw new IllegalArgumentException("null source path not allowed");
 
-        ArrayList args = new ArrayList(7);
+        NSMutableArray args = new NSMutableArray(7);
+        args.addObject("/usr/bin/scp");
+        args.addObject("-B");
+        args.addObject("-q");
+        args.addObject("-o"); 
+        args.addObject("StrictHostKeyChecking=no");
+        args.addObject(((srcHost != null) ? (srcHost + ":") : "") + srcPath);
+        args.addObject(((dstHost != null) ? (dstHost + ":") : "") + dstPath);
 
-        args.add("/usr/bin/scp");
-        args.add("-B");
-        args.add("-q");
-        args.add("-o"); args.add("StrictHostKeyChecking=no");
-        args.add(((srcHost != null) ? (srcHost + ":") : "") + srcPath);
-        args.add(((dstHost != null) ? (dstHost + ":") : "") + dstPath);
-
-        String[] cmd = (String[])args.toArray(new String[]{});
-
-        Process task = null;
+        String[] cmd = ERXArrayUtilities.toStringArray(args);
         try {
-            task = Runtime.getRuntime().exec(cmd);
-            while (true) {
-                try { task.waitFor(); break; }
-                catch (InterruptedException e) {}
+            Result result = ERXRuntimeUtilities.execute(cmd, null, null, 0L);
+            if(result.getExitValue() != 0) {
+                throw new IOException("Unable to remote copy file: (exit status = " + result.getExitValue() + ") " + result.getErrorAsString() + "\n");
             }
-            if (task.exitValue() != 0) {
-                BufferedReader err = new BufferedReader(new InputStreamReader(task.getErrorStream()));
-                String message = err.readLine();
-                throw new IOException("Unable to remote copy file: (exit status = " + task.exitValue() + ") " + message + "\n");
-            }
-        } finally {
-            ERXExtensions.freeProcessResources(task);
+        } catch (TimeoutException e) {
+            throw new IOException("Command timed out");
         }
-    }
+   }
 
     /**
         * Copy a file across hosts using scp.
@@ -248,7 +454,7 @@ public class ERXFileUtilities {
     }
 
     /**
-     * Returns a string from the file using the default
+        * Returns a string from the file using the default
      * encoding.
      * @param f file to read
      * @return string representation of that file.
@@ -276,6 +482,9 @@ public class ERXFileUtilities {
      * @return string representation of the file.
      */
     public static String stringFromFile(File f, String encoding) throws IOException {
+        if (encoding == null) {
+            return new String(bytesFromFile(f));
+        }
         return new String(bytesFromFile(f), encoding);
     }
 
@@ -309,6 +518,35 @@ public class ERXFileUtilities {
         }
         return path;
     }
+    
+    /**
+     * Determines if a given resource exists. This is done
+     * to get a single entry point due to the deprecation of pathForResourceNamed
+     * @param fileName name of the file
+     * @param frameworkName name of the framework, null or "app"
+     *      for the application bundle
+     * @return the absolutePath method off of the
+     *      file object
+     */
+    public static boolean resourceExists(String fileName, String frameworkName, NSArray languages) {
+        URL url = WOApplication.application().resourceManager().pathURLForResourceNamed(fileName, frameworkName, languages);
+        return url != null;
+    }
+    
+    
+   
+    
+    /**
+     * Get the input stream from the specified Resource. 
+     * @param fileName name of the file
+     * @param frameworkName name of the framework, null or "app"
+     *		for the application bundle
+     * @return the absolutePath method off of the
+     *		file object
+     */
+    public static InputStream inputStreamForResourceNamed(String fileName, String frameworkName, NSArray languages) {
+        return WOApplication.application().resourceManager().inputStreamForResourceNamed(fileName, frameworkName, languages);
+    }
 
     /**
         * Returns a path containing an optional root with a directory hierarchy based on the current time
@@ -340,18 +578,20 @@ public class ERXFileUtilities {
      *		file object
      */
     public static URL pathURLForResourceNamed(String fileName, String frameworkName, NSArray languages) {
-        URL url = null;
-        try {
-            url = new URL("file://" + pathForResourceNamed(fileName, frameworkName, languages));
-        } catch(MalformedURLException ex) {
-            throw new NSForwardException(ex);
-        }
+    	URL url = null;
+    	WOApplication application = WOApplication.application();
+    	if (application != null) {
+	    	WOResourceManager resourceManager = application.resourceManager();
+	    	if (resourceManager != null) {
+	    		url = resourceManager.pathURLForResourceNamed(fileName, frameworkName, languages);
+	    	}
+    	}
         return url;
     }
 
     /**
      * Create an URL for a given file.
-     * @param fileName name of the file
+     * @param file name of the file
      * @return file:// URL for the given path
      */
     public static URL URLFromFile(File file) {
@@ -404,8 +644,8 @@ public class ERXFileUtilities {
     }
 
     /**
-        * Reads a file in from the file system and then parses
-     * it as if it were a property list.
+     * Reads a file in from the file system and then parses
+     * it as if it were a property list, using the platform's default encoding.
      * @param fileName name of the file
      * @param aFrameWorkName name of the framework, null or
      *		'app' for the application bundle.
@@ -413,13 +653,28 @@ public class ERXFileUtilities {
      *		specified.
      */
     public static Object readPropertyListFromFileInFramework(String fileName, String aFrameWorkName) {
-        return readPropertyListFromFileInFramework(fileName, aFrameWorkName, null);
+        return readPropertyListFromFileInFramework(fileName, aFrameWorkName, null, System.getProperty("file.encoding"));
     }
 
     /**
-        * Reads a file in from the file system for the given set
+     * Reads a file in from the file system and then parses
+     * it as if it were a property list, using the specified encoding.
+     *
+     * @param fileName name of the file
+     * @param aFrameWorkName name of the framework, null or
+     *		'app' for the application bundle.
+     * @param encoding  the encoding used with <code>fileName</code>
+     * @return de-serialized object from the plist formatted file
+     *		specified.
+     */
+    public static Object readPropertyListFromFileInFramework(String fileName, String aFrameWorkName, String encoding) {
+        return readPropertyListFromFileInFramework(fileName, aFrameWorkName, null, encoding);
+    }
+    
+    /**
+     * Reads a file in from the file system for the given set
      * of languages and then parses the file as if it were a
-     * property list.
+     * property list, using the platform's default encoding.
      * @param fileName name of the file
      * @param aFrameWorkName name of the framework, null or
      *		'app' for the application bundle.
@@ -427,42 +682,69 @@ public class ERXFileUtilities {
      * @return de-serialized object from the plist formatted file
      *		specified.
      */
-    // FIXME: Not the best way of handling encoding
-    // ENHANCEME: Should be using an InputStream instead of a File
     public static Object readPropertyListFromFileInFramework(String fileName,
                                                              String aFrameWorkName,
                                                              NSArray languageList) {
-        return readPropertyListFromFileInFramework(fileName,aFrameWorkName,languageList,null);
-    }
-
-    public static Object readPropertyListFromFileInFramework(String fileName,
-                                                             String aFrameWorkName,
-                                                             NSArray languageList,
-                                                             String encoding
-                                                             ) {
-        String filePath = pathForResourceNamed(fileName, aFrameWorkName, languageList);
-        Object result=null;
-        if (filePath!=null) {
-            File file = new File(filePath);
+        Object plist = null;
+        try {
+            plist = readPropertyListFromFileInFramework( fileName, aFrameWorkName, languageList, System.getProperty("file.encoding")); 
+        } catch (IllegalArgumentException e) {
             try {
-                try {
-                    if (encoding == null) {
-                        result = NSPropertyListSerialization.propertyListFromString(stringFromFile(file));                        
-                    } else {
-                        result = NSPropertyListSerialization.propertyListFromString(stringFromFile(file, encoding));
-                    }
-                } catch (IllegalArgumentException iae) {
-                    result = NSPropertyListSerialization.propertyListFromString(stringFromFile(file, "UTF-16"));
-                }
-            } catch (IOException ioe) {
-                log.error("ConfigurationManager: Error reading file <"+filePath+">");
+                // BUGFIX: we didnt use an encoding before, so java tried to guess the encoding. Now some Localizable.strings plists
+                // are encoded in MacRoman whereas others are UTF-16.
+                plist = readPropertyListFromFileInFramework( fileName, aFrameWorkName, languageList, "UTF-16" );
+            } catch (IllegalArgumentException e1) {
+                // OK, whatever it is, try to parse it!
+                plist = readPropertyListFromFileInFramework( fileName, aFrameWorkName, languageList, "UTF-8" );
             }
         }
-        return result;
+        return plist;
     }
 
     /**
-        * Deletes all of the files in a given directory with the option to
+     * Reads a file in from the file system for the given set
+     * of languages and then parses the file as if it were a
+     * property list, using the specified encoding.
+     *
+     * @param fileName name of the file
+     * @param aFrameWorkName name of the framework, null or
+     *		'app' for the application bundle.
+     * @param languageList language list search order
+     * @param encoding  the encoding used with <code>fileName</code>
+     * @return de-serialized object from the plist formatted file
+     *		specified.
+     */    
+    public static Object readPropertyListFromFileInFramework(String fileName,
+            String aFrameWorkName,
+            NSArray languageList,
+            String encoding) {
+        Object result = null;
+        try {
+        	InputStream stream = inputStreamForResourceNamed(fileName, aFrameWorkName, languageList);
+        	if(stream != null) {
+        		String stringFromFile;
+        		if(true) {
+        			stringFromFile = stringFromInputStream(stream, encoding);
+        		} else {
+        			byte bytes[] = bytesFromInputStream(stream);
+            		String guessed = WOEncodingDetector.sharedInstance().guessEncodingForData(new NSData(bytes));
+            		if(!guessed.equals(encoding) && !"ASCII".equals(guessed)) {
+        				stringFromFile = new String(bytes, guessed);
+        				log.info("Encoding differs, guessed: " + guessed + " wanted: " + encoding + " fileName:"  + aFrameWorkName + "/" + fileName +  languageList);
+        			} else {
+        				stringFromFile = new String(bytes, encoding);
+        			}
+        		}
+        		result = NSPropertyListSerialization.propertyListFromString(stringFromFile);
+            }
+        } catch (IOException ioe) {
+            log.error("ConfigurationManager: Error reading file <"+fileName+"> from framework " + aFrameWorkName);
+        }
+        return result;
+    }
+    
+    /**
+     * Deletes all of the files in a given directory with the option to
      * recursively delete all of the directories in the given directory.
      * @param directory to delete all of the files from
      * @param recurseIntoDirectories determines if the delete is recursive
@@ -495,17 +777,19 @@ public class ERXFileUtilities {
     public static boolean deleteDirectory(File directory) {
         if (! directory.isDirectory()) return directory.delete();
 
+        boolean deletedAllFiles = true;
         String[] fileNames = directory.list();
         for (int i = 0; i < fileNames.length; i++) {
             File file = new File(directory, fileNames[i]);
 
             if (file.isDirectory()) {
-                if (!deleteDirectory(file)) return false;
+                if (!deleteDirectory(file) && deletedAllFiles) deletedAllFiles = false;
             } else {
-                if (!file.delete()) return false;
+                if (!file.delete() && deletedAllFiles) deletedAllFiles = false;
             }
         }
-        return directory.delete();
+        if (!directory.delete() && deletedAllFiles) deletedAllFiles = false;
+        return deletedAllFiles;
     }
 
     /**
@@ -548,20 +832,38 @@ public class ERXFileUtilities {
                                          ERXExtensions.freeProcessResources(task);
                                      }
                                  }
-
-
     /**
-        * Copys all of the files in a given directory to another directory.
+     * Copies all of the files in a given directory to another directory.  Existing files are replaced.
      * @param srcDirectory source directory
      * @param dstDirectory destination directory
      * @param deleteOriginals tells if the original files, the file is deleted even if appuser has no write
      * rights. This is compareable to a <code>rm -f filename</code> instead of <code>rm filename</code>
      * @param recursiveCopy specifies if directories should be recursively copied
-     * @param filter, which restricts the files to be copied
+     * @param filter which restricts the files to be copied
+     */
+	 public static void copyFilesFromDirectory(File srcDirectory,
+	                                           File dstDirectory,
+	                                           boolean deleteOriginals,
+	                                           boolean recursiveCopy,
+	                                           FileFilter filter)
+	     throws FileNotFoundException, IOException {
+		 copyFilesFromDirectory(srcDirectory, dstDirectory, deleteOriginals, true, recursiveCopy, filter);
+ 	}
+
+    /**
+     * Copies all of the files in a given directory to another directory.
+     * @param srcDirectory source directory
+     * @param dstDirectory destination directory
+     * @param deleteOriginals tells if the original files, the file is deleted even if appuser has no write
+     * rights. This is compareable to a <code>rm -f filename</code> instead of <code>rm filename</code>
+	 * @param replaceExistingFiles true if the destination should be overwritten if it already exists
+     * @param recursiveCopy specifies if directories should be recursively copied
+     * @param filter which restricts the files to be copied
      */
     public static void copyFilesFromDirectory(File srcDirectory,
                                               File dstDirectory,
                                               boolean deleteOriginals,
+                                              boolean replaceExistingFiles,
                                               boolean recursiveCopy,
                                               FileFilter filter)
         throws FileNotFoundException, IOException {
@@ -572,8 +874,6 @@ public class ERXFileUtilities {
                 srcDirectory.listFiles(filter) :
                 srcDirectory.listFiles();
             if (srcFiles != null && srcFiles.length > 0) {
-                FileInputStream in = null;
-                FileOutputStream out = null;
 
                 for (int i = 0; i < srcFiles.length; i++) {
                     File srcFile = srcFiles[i];
@@ -581,13 +881,17 @@ public class ERXFileUtilities {
                     if (srcFile.isDirectory() && recursiveCopy) {
                         // Create the destination directory
                         if (deleteOriginals) {
-                            srcFile.renameTo(dstFile);
+                            renameTo(srcFile, dstFile);
                         } else {
-                            dstFile.mkdir();
-                            copyFilesFromDirectory(srcFile, dstFile, deleteOriginals, recursiveCopy, filter);
+                            dstFile.mkdirs();
+                            copyFilesFromDirectory(srcFile, dstFile, deleteOriginals, replaceExistingFiles, recursiveCopy, filter);
                         }
                     } else if (!srcFile.isDirectory()) {
-                        copyFileToFile(srcFile, dstFile, deleteOriginals, true);
+                    	if (replaceExistingFiles || ! dstFile.exists()) {
+                            copyFileToFile(srcFile, dstFile, deleteOriginals, true);
+                    	} else if (log.isDebugEnabled()) {
+                            log.debug("Destination file: " + dstFile + " skipped as it exists and replaceExistingFiles is set to false.");
+                      }
                     } else if (log.isDebugEnabled()) {
                         log.debug("Source file: " + srcFile + " is a directory inside: "
                                   + dstDirectory + " and recursive copy is set to false.");
@@ -608,43 +912,25 @@ public class ERXFileUtilities {
     public static void copyFileToFile(File srcFile, File dstFile, boolean deleteOriginals, boolean forceDelete)
         throws FileNotFoundException, IOException {
             if (srcFile.exists() && srcFile.isFile()) {
+            		boolean copied = false;
                 if (deleteOriginals && (!forceDelete || srcFile.canWrite())) {
-                    srcFile.renameTo(dstFile);
-                } else {
+                    copied = srcFile.renameTo(dstFile);
+                } 
+                if(!copied) {
                     Throwable thrownException=null;
                     File  parent = dstFile.getParentFile();
                     parent.mkdirs();
                     FileInputStream in = new FileInputStream(srcFile);
                     FileOutputStream out = new FileOutputStream(dstFile);
                     try {
-                        //////////////////////
-                        // Java 1.4 Only
-                        //////////////////////
 
-                        // Create channel on the source
-                        FileChannel srcChannel = in.getChannel();
-
-                        // Create channel on the destination
-                        FileChannel dstChannel = out.getChannel();
-
-                        // Copy file contents from source to destination
-                        dstChannel.transferFrom(srcChannel, 0, srcChannel.size());
-
-                        // Close the channels
-                        srcChannel.close();
-                        dstChannel.close();
-
-                        //////////////////////
-                        // Java 1.3
-                        //////////////////////
-                        /*
                         //50 KBytes buffer
                         byte buf[] = new byte[1024 * 50];
                         int read = -1;
                         while ((read = in.read(buf)) != -1) {
                             out.write(buf, 0, read);
                         }
-                         */
+
                         if (deleteOriginals && (srcFile.canWrite() || forceDelete))
                             srcFile.delete();
                     } catch (Throwable t) {
@@ -717,12 +1003,13 @@ public class ERXFileUtilities {
      * exist then the array is empty.
      */
     public static NSArray arrayByAddingFilesInDirectory(File directory, boolean recursive) {
+        ERXFile erxDirectory = new ERXFile(directory.getAbsolutePath());
         NSMutableArray files = new NSMutableArray();
-        if (!directory.exists()) {
+        if (!erxDirectory.exists()) {
             return files;
         }
 
-        File[] fileList = directory.listFiles();
+        File[] fileList = erxDirectory.listFiles();
         if (fileList == null) {
             return files;
         }
@@ -730,7 +1017,7 @@ public class ERXFileUtilities {
         for (int i = 0; i < fileList.length; i++) {
             File f = fileList[i];
             if (f.isDirectory() && recursive) {
-                files.addObjectsFromArray(arrayByAddingFilesInDirectory(f, true));
+                files.addObjectsFromArray(ERXFileUtilities.arrayByAddingFilesInDirectory(f, true));
             } else {
                 files.addObject(f);
             }
@@ -766,8 +1053,9 @@ public class ERXFileUtilities {
     }
 
     /**
-        * Decompresses the specified zipfile. If the file is a compressed directory, the whole subdirectory
-     * structure is created as a subdirectory from destination. If destination is <code>null</code>
+     * Decompresses the specified zipfile. If the file is a compressed directory, the whole subdirectory
+     * structure is created as a subdirectory with the name if the zip file minus the .zip extension
+     * from destination. All intermittent directories are also created. If destination is <code>null</code>
      * then the <code>System Property</code> "java.io.tmpdir" is used as destination for the
      * uncompressed file(s).
      *
@@ -791,7 +1079,7 @@ public class ERXFileUtilities {
         if (destination != null) {
             absolutePath = destination.getAbsolutePath();
             if (!destination.exists()) {
-                destination.mkdir();
+                destination.mkdirs();
             } else if (!destination.isDirectory()) {
                 absolutePath = absolutePath.substring(0, absolutePath.lastIndexOf(File.separator));
             }
@@ -812,7 +1100,7 @@ public class ERXFileUtilities {
                 if (dir.endsWith(".zip")) {
                     dir = dir.substring(0, dir.length() - 4);
                 }
-                new File(dir).mkdir();
+                new File(dir).mkdirs();
                 absolutePath = dir + File.separator;
             }
         } else {
@@ -824,7 +1112,7 @@ public class ERXFileUtilities {
             String name = ze.getName();
             if (ze.isDirectory()) {
                 File d = new File(absolutePath + name);
-                d.mkdir();
+                d.mkdirs();
                 if (log.isDebugEnabled()) {
                     log.debug("created directory "+d.getAbsolutePath());
                 }
@@ -880,7 +1168,12 @@ public class ERXFileUtilities {
                 origin = new BufferedInputStream(fi, 2048);
                 String entryName = currentFile.getAbsolutePath();
                 if (!absolutePaths) {
-                    entryName = entryName.substring(f.getAbsolutePath().length() + 1, entryName.length());
+                		if (f.isDirectory()) {
+                			entryName = entryName.substring(f.getAbsolutePath().length() + 1, entryName.length());
+                		} else {
+                			entryName = entryName.substring(f.getParentFile().getAbsolutePath().length() + 1, entryName.length());
+                		}
+                    
                 }
 
                 ZipEntry entry = new ZipEntry(entryName);
@@ -981,4 +1274,204 @@ public class ERXFileUtilities {
         }
     }
     
+    /** shortens a filename, for example aVeryLongFileName.java -> aVer...Name.java
+     * @param name the name to modify
+     * @param maxLength the maximum length of the name.
+     * <code>maxLength</code> values under 4 have no effect, the returned string is
+     * always a....java
+     * @return the shortened filename
+     */
+    public static String shortenFilename(String name, int maxLength) {
+        String ext = fileExtension( name );
+        String s = removeFileExtension( name );
+        // not sure but we could use \u2026, instead...
+        String elips = "...";
+        int elipsLength = elips.length();
+        int stringLength = s.length();
+        if( stringLength == maxLength )
+            return name;
+        if( maxLength  <= elipsLength )
+            maxLength = elipsLength + 1;
+        int noOfChars = maxLength - elipsLength;
+        int mod = noOfChars%2;
+        int firstHalf = noOfChars/2 + mod;
+        int secondHalf = firstHalf - mod;        
+        StringBuffer sb = new StringBuffer();
+        sb.append( s.substring( 0, firstHalf ) );
+        sb.append( elips );
+        sb.append( s.substring( stringLength-secondHalf, stringLength ) );
+        sb.append( "." );
+        sb.append( ext );
+        return sb.toString();
+    }
+
+    /** returns the filename without its fileExtension
+     * @param name the name of the file
+     * @return the name of the file without the fileExtension
+     */
+    public static String removeFileExtension(String name) {
+        int index = name.lastIndexOf(".");
+        if (index == -1) {
+            return name;
+        } else {
+            return name.substring(0, index);
+        }
+    }
+
+    /** returns the fileExtension from the specified filename
+     * @param name the name of the file
+     * @return the fileExtension
+     */
+    public static String fileExtension(String name) {
+        int index = name.lastIndexOf(".");
+        if (index == -1) {
+            return "";
+        } else {
+            return name.substring(index + 1);
+        }
+    }
+
+    /** Deletes all files in filesToDelete
+     *  uses the methdo deleteDirectory
+     * 
+     * @param filesToDelete
+     */
+    public static boolean deleteFiles(NSMutableArray filesToDelete) {
+        boolean deletedAllFiles = true;
+        for (int i = filesToDelete.count(); i-- > 0;) {
+            File currentFile = (File) filesToDelete.objectAtIndex(i);
+            if (!deleteFile(currentFile) && deletedAllFiles) deletedAllFiles = false;
+        }
+        return deletedAllFiles;
+    }
+
+    public static boolean deleteFile(File fileToDelete) {
+        return deleteDirectory(fileToDelete);
+    }
+    
+    /** Lists all directories in the specified directory, is desired recursive.
+     *  
+     * @param baseDir the dir from which to list the child directories
+     * @param recursive if true this methods works recursively
+     * @return an array of files which are directories
+     */
+    public static File[] listDirectories(File baseDir, boolean recursive) {
+        File[] files = baseDir.listFiles(new FileFilter() {
+
+            public boolean accept(File f) {
+                return f.isDirectory();
+            }
+        });
+        if (recursive) {
+        	NSMutableArray a = new NSMutableArray(files);
+            for (int i = files.length; i-- > 0;) {
+                File currentDir = files [i];
+                File[] currentDirs = listDirectories(currentDir, true);
+                a.addObjects(currentDirs);
+            }
+            Object[] objects = a.objects();
+            files = new File[objects.length];
+            System.arraycopy(objects, 0, files, 0, objects.length);
+        }
+        return files;
+    }
+
+    /** moves a file from one location to another one. This works different
+     * than java.io.File.renameTo as renameTo does not work across partitions
+     * 
+     * @param source
+     * @param destination
+     * @throws IOException
+     * @throws FileNotFoundException
+     */
+    public static void renameTo(File source, File destination) throws FileNotFoundException, IOException {
+        if (!source.renameTo(destination)) {
+            ERXFileUtilities.copyFileToFile(source, destination, true, true);
+        }
+    }
+    
+	/**
+	 * Returns the file name portion of a browser submitted path.
+	 * 
+	 * @param path the full path from the browser
+	 * @return the file name portion
+	 */
+    public static String fileNameFromBrowserSubmittedPath(String path) {
+        String fileName = path;
+    	if (path != null) {
+	    	// Windows
+	    	int separatorIndex = path.lastIndexOf("\\");
+	        // Unix
+	    	if (separatorIndex == -1) {
+	            separatorIndex = path.lastIndexOf("/");
+	        }
+	    	// MacOS 9
+	        if (separatorIndex == -1) {
+	        	separatorIndex = path.lastIndexOf(":");
+	        }
+	        if (separatorIndex != -1) {
+	        	fileName = path.substring(separatorIndex + 1);
+	        }
+	        // ... A tiny security check here ... Just in case.
+	        fileName = fileName.replaceAll("\\.\\.", "_");
+    	}
+        return fileName;
+    }
+    
+    /**
+     * Reserves a unique file on the filesystem based on the given file name.  If the given
+     * file cannot be reserved, then "-1", "-2", etc will be appended to the filename in front
+     * of the extension until a unique file name is found.  This will also ensure that the
+     * parent folder is created. 
+     * 
+     * @param desiredFile the desired destination file to write
+     * @param overwrite if true, this will immediately return desiredFile
+     * @return a unique, reserved, filename
+     * @throws IOException if the file cannot be created
+     */
+    public static File reserveUniqueFile(File desiredFile, boolean overwrite) throws IOException {
+		File destinationFile = desiredFile;
+		
+		// ... make sure the destination folder exists.  This code runs twice here
+		// in case there was a race condition.
+	    File destinationFolder = destinationFile.getParentFile();
+	    if (!destinationFolder.exists()) {
+	      if (!destinationFolder.mkdirs()) {
+	        if (!destinationFolder.exists()) {
+	          throw new IOException("Unable to create the destination folder '" + destinationFolder + "'.");
+	        }
+	      }
+	    }
+
+		if (!overwrite) {
+			// try to reserve file name
+			if (!desiredFile.createNewFile()) {
+				File parentFolder = desiredFile.getParentFile();
+				String fileName = desiredFile.getName();
+				// didn't work, so try new name consisting of
+				// prefix + number + suffix
+				int dotIndex = fileName.lastIndexOf('.');
+				String prefix, suffix;
+
+				if (dotIndex < 0) {
+					prefix = fileName;
+					suffix = "";
+				}
+				else {
+					prefix = fileName.substring(0, dotIndex);
+					suffix = fileName.substring(dotIndex);
+				}
+
+				int counter = 1;
+				// try until we can reserve a file
+				do {
+					destinationFile = new File(parentFolder, prefix + "-" + counter + suffix);
+					counter ++;
+				}
+				while (!destinationFile.createNewFile());
+			}
+		}
+		
+		return destinationFile;
+    }
 }

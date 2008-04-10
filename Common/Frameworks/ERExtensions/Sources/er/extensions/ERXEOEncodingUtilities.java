@@ -6,53 +6,68 @@
 //
 package er.extensions;
 
-import com.webobjects.foundation.NSArray;
-import com.webobjects.foundation.NSDictionary;
-import com.webobjects.foundation.NSMutableArray;
-import com.webobjects.foundation.NSMutableDictionary;
-import com.webobjects.foundation.NSPropertyListSerialization;
+import java.util.Enumeration;
 
-import com.webobjects.eocontrol.EOEnterpriseObject;
-import com.webobjects.eocontrol.EOEditingContext;
-import com.webobjects.eocontrol.EOObjectStoreCoordinator;
+import org.apache.log4j.Logger;
 
 import com.webobjects.eoaccess.EOAttribute;
 import com.webobjects.eoaccess.EOEntity;
 import com.webobjects.eoaccess.EOModel;
 import com.webobjects.eoaccess.EOModelGroup;
 import com.webobjects.eoaccess.EOUtilities;
-
-import java.util.Enumeration;
+import com.webobjects.eocontrol.EOEditingContext;
+import com.webobjects.eocontrol.EOEnterpriseObject;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSComparator;
+import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSForwardException;
+import com.webobjects.foundation.NSMutableArray;
+import com.webobjects.foundation.NSMutableDictionary;
+import com.webobjects.foundation.NSPropertyListSerialization;
+import com.webobjects.foundation.NSTimestampFormatter;
 
 public class ERXEOEncodingUtilities {
 
     /** logging support */
-    public static final ERXLogger log = ERXLogger.getERXLogger(ERXEOEncodingUtilities.class);
+    public static final Logger log = Logger.getLogger(ERXEOEncodingUtilities.class);
 
     /**
      * Holds the default entity name separator
      * that is used when objects are encoded into urls.
-     * Default value is: _
+     * Default value is: _ and it must not equal 
+     * <code>AttributeValueSeparator</code>
      */
     private static String EntityNameSeparator = "_";
+    
+    /**
+     * Holds the attribute value separator used
+     * when objects with compound keys are encoded into urls.
+     * Its value is: .
+     */
+    //immutable to avoid changing encoding/decoding methods... 
+    private static String AttributeValueSeparator = ".";
 
     /** Key used in EOModeler to specify the encoded (or abbreviated) entity 
      * named used when encoding an enterprise-object is an url. 
      */
     public final static String EncodedEntityNameKey = "EncodedEntityName";
 
+    /** This dictionary contains the encoded entity names used in the defaultGroup */ 
+    protected static NSMutableDictionary _encodedEntityNames = null;
+
     private static boolean SpecifySeparatorInURL = true;
     
     private static boolean initialized;
+    
     
     /** Class initialization */
     public synchronized static void init() {
         // Find out if the user has set properties different than the defaults
         // EntityNameSeparator
         String entityNameSep = System.getProperty("er.extensions.ERXEOEncodingUtilities.EntityNameSeparator");
-        if ((entityNameSep != null) && (entityNameSep.length() > 0))
+        if ((entityNameSep != null) && (entityNameSep.length() > 0) && !entityNameSep.equals(AttributeValueSeparator))
             setEntityNameSeparator(entityNameSep);
-
+        
         // Specify separator in link ?
         setSpecifySeparatorInURL(ERXProperties.booleanForKeyWithDefault("er.extensions.ERXEOEncodingUtilities.SpecifySeparatorInURL", true));
         initialized = true;
@@ -77,26 +92,57 @@ public class ERXEOEncodingUtilities {
         return EntityNameSeparator;
     }
 
+    /** @deprecated use <code>decodeEnterpriseObjectsFromFormValues</code> instead */
     public static NSArray enterpriseObjectsFromFormValues(EOEditingContext ec, NSDictionary formValues) {
-        if (ec == null)
-            throw new RuntimeException("Attempting to decode enterprise objects with null editing context.");
         return decodeEnterpriseObjectsFromFormValues(ec, formValues);
     }
-
+    
+    /**
+     * Returns enterprise objects grouped by entity name. 
+     * The specific encoding is
+     * specified in the method: <code>encodeEnterpriseObjectsPrimaryKeyForUrl
+     * @param ec    the editing context to fetch the objects from
+     * @param formValues    dictionary where the values are an
+     *		encoded representation of the primary key values in either
+     *		cleartext or encrypted format.
+     * @return enterprise objects grouped by entity name
+     */
+    //DELETEME?: grouping objects is not this class' responsibility...
     public static NSDictionary groupedEnterpriseObjectsFromFormValues(EOEditingContext ec, NSDictionary formValues) {
-        NSArray formValueObjects = enterpriseObjectsFromFormValues(ec, formValues);
+        NSArray formValueObjects = decodeEnterpriseObjectsFromFormValues(ec, formValues);
         return ERXArrayUtilities.arrayGroupedByKeyPath(formValueObjects, "entityName");
     }
-
+    
+    /**
+     * Returns the enterprise object fetched with decoded <code>formValues</code> from
+     * <code>entityName</code>.
+     * @param ec    the editing context to fetch the object from
+     * @param entityName    the entity to fetch the object from
+     * @param formValues    dictionary where the values are an
+     *		encoded representation of the primary key values in either
+     *		cleartext or encrypted format.
+     * @return the enterprise object
+     */
     public static EOEnterpriseObject enterpriseObjectForEntityNamedFromFormValues(EOEditingContext ec, String entityName, NSDictionary formValues) {
         NSArray entityGroup = enterpriseObjectsForEntityNamedFromFormValues(ec, entityName, formValues);
         if (entityGroup.count() > 1)
             log.warn("Multiple objects for entity name: " + entityName + " expecting one. objects: " + entityGroup);
         return entityGroup.count() > 0 ? (EOEnterpriseObject)entityGroup.lastObject() : null;
     }
-
+    
+    /**
+     * Returns the enterprise objects fetched with decoded <code>formValues</code> from
+     * <code>entityName</code>.
+     * @param ec    the editing context to fetch the objects from
+     * @param entityName    the entity to fetch the objects from
+     * @param formValues    dictionary where the values are an
+     *		encoded representation of the primary key values in either
+     *		cleartext or encrypted format.
+     * @return the enterprise objects
+     */
     public static NSArray enterpriseObjectsForEntityNamedFromFormValues(EOEditingContext ec, String entityName, NSDictionary formValues) {
-        NSDictionary groups = groupedEnterpriseObjectsFromFormValues(ec, formValues);
+        NSArray formValueObjects = decodeEnterpriseObjectsFromFormValues(ec, formValues);
+        NSDictionary groups = ERXArrayUtilities.arrayGroupedByKeyPath(formValueObjects, "entityName");
 	EOEntity entity = ERXEOAccessUtilities.entityNamed(ec, entityName);        
 	NSMutableArray entityGroup = new NSMutableArray();
         if (entity != null && entity.isAbstractEntity()) {
@@ -104,7 +150,7 @@ public class ERXEOEncodingUtilities {
                 EOEntity subEntity = (EOEntity)e.nextElement();
                 NSArray aGroup = (NSArray)groups.objectForKey(subEntity.name());
                 if (aGroup != null)
-                    entityGroup.addObjectsFromArray(aGroup);        
+                    entityGroup.addObjectsFromArray(aGroup);
             }
         } else {
             entityGroup.addObjectsFromArray((NSArray)groups.objectForKey(entityName));            
@@ -112,13 +158,11 @@ public class ERXEOEncodingUtilities {
         return entityGroup != null ? entityGroup : NSArray.EmptyArray;
     }
     
-    /** This dictionary contains the encoded entity names used in the defaultGroup */ 
-    protected static NSMutableDictionary _encodedEntityNames = null;
-
     /**
      * This method encodes the entity name of the enterprise object
      * by searching in the default model group wether it can find
      * the key EncodedEntityNameKey in the user info dictionary.
+     * @param eo    the enterprise object
      * @return the encoded entity name defaulting to the given eo's entityName
      */
     public static String entityNameEncode (EOEnterpriseObject eo) {
@@ -140,31 +184,37 @@ public class ERXEOEncodingUtilities {
     // FIXME: (tuscland) Should we listen to model group notifications ?
     // If this method is called too early, we might not have all the entities in the model group,
     // but this case is rare.
-    // FIXME: This code is not thread safe
     protected static final NSDictionary encodedEntityNames () {
-        if (_encodedEntityNames == null) {
-            _encodedEntityNames = new NSMutableDictionary ();
-            NSArray models = (NSArray)EOModelGroup.defaultGroup ().models ();
-            for (Enumeration en = models.objectEnumerator ();
-                en.hasMoreElements ();) {
-                NSArray entities = ((EOModel)en.nextElement ()).entities ();
-                for (Enumeration entEn = entities.objectEnumerator ();
-                    entEn.hasMoreElements ();) {
-                    EOEntity entity = (EOEntity)entEn.nextElement ();
-                    NSDictionary userInfo = entity.userInfo ();
-                    String encodedEntityName = (String)entity.userInfo ().objectForKey (EncodedEntityNameKey);
-                    if (encodedEntityName != null)
-                        _encodedEntityNames.setObjectForKey (entity.name (), encodedEntityName);
-                }
-            }
-        }
+    	if (_encodedEntityNames == null) {
+    		synchronized(ERXEOEncodingUtilities.class) {
+    			if(_encodedEntityNames == null) {
+    				_encodedEntityNames = new NSMutableDictionary ();
+    				NSArray models = (NSArray)EOModelGroup.defaultGroup ().models ();
+    				for (Enumeration en = models.objectEnumerator ();
+    				en.hasMoreElements ();) {
+    					NSArray entities = ((EOModel)en.nextElement ()).entities ();
+    					for (Enumeration entEn = entities.objectEnumerator ();
+    					entEn.hasMoreElements ();) {
+    						EOEntity entity = (EOEntity)entEn.nextElement ();
+    						NSDictionary userInfo = entity.userInfo ();
+    						if(userInfo != null) {
+    							String encodedEntityName = (String)userInfo.objectForKey (EncodedEntityNameKey);
+    							if (encodedEntityName != null)
+    								_encodedEntityNames.setObjectForKey (entity.name (), encodedEntityName);
+    						}
+    					}
+    				}
+    			}
+    		}
+    	}
 
-        return _encodedEntityNames;
+    	return _encodedEntityNames;
     }
 
     /**
      * Decodes the encoded entity name.
-     * @return the decoded entity name.
+     * @param encodedName the encode name.
+     * @return decoded entity name.
      */
     public static String entityNameDecode (String encodedName) {
         String entityName = encodedName;
@@ -190,7 +240,7 @@ public class ERXEOEncodingUtilities {
     public static NSDictionary dictionaryOfFormValuesForEnterpriseObjects(NSArray eos, String separator, boolean encrypt){
         String base = encodeEnterpriseObjectsPrimaryKeyForUrl(eos, separator, encrypt);
         NSArray elements = NSArray.componentsSeparatedByString(base, "&");
-        return(NSDictionary)NSPropertyListSerialization.propertyListFromString("{"+elements.componentsJoinedByString(";")+"}");
+        return(NSDictionary)NSPropertyListSerialization.propertyListFromString("{"+elements.componentsJoinedByString(";")+";}");
     }
 
     /**
@@ -230,7 +280,12 @@ public class ERXEOEncodingUtilities {
      * <br/>
      * Note that in the above encoding the seperator is always passed and the upper case
      * E specifies if the corresponding value should be decrypted.
-     * Note: At the moment this method does not handle compound primary keys
+     * Compound primary keys are supported, giving the following url:
+     * sep=_&EntityName_1=1.1&EntityName_2=1.2
+     * where <code>1.1</code> and <code>1.2</code> are the primary key values. Key values 
+     * follow alphabetical  order for their attribute names, just like 
+     * <code>ERXEOControlUtilities.primaryKeyArrayForObject</code>.
+     * Note: At the moment the attribute value separator cannot be changed.
      * <br/>
      * <b>EncodedEntityName</b><br/>
      * You can specify an abbreviation for the encoded entityName.
@@ -267,25 +322,24 @@ public class ERXEOEncodingUtilities {
         // Iterate through the objects
         for(Enumeration e = eos.objectEnumerator(); e.hasMoreElements();) {
             EOEnterpriseObject eo =(EOEnterpriseObject)e.nextElement();
-
+            
             // Get the primary key of the object
-            String pk = ERXEOControlUtilities.primaryKeyStringForObject(eo);
-            if(pk == null && eo instanceof ERXGeneratesPrimaryKeyInterface) {
-                NSDictionary pkDict =((ERXGeneratesPrimaryKeyInterface)eo).primaryKeyDictionary(false);
-                if(pkDict != null && pkDict.allValues().count() == 1)
-                    pk = pkDict.allValues().lastObject().toString();
-                else
-                    log.warn("Attempting to use an eo: " + eo + " that implements GeneratesPrimaryKeyInterface that gave back: " + pkDict);
+            NSArray pkValues = ERXEOControlUtilities.primaryKeyArrayForObject(eo);
+            if( pkValues == null && eo instanceof ERXGeneratesPrimaryKeyInterface) {
+                NSDictionary pkDict = ((ERXGeneratesPrimaryKeyInterface)eo).primaryKeyDictionary(false);
+                if( pkDict != null )
+                    pkValues = pkDict.allValues();
             }
-
-            if(pk == null)
+            if(pkValues == null)
                 throw new RuntimeException("Primary key is null for object: " + eo);
-
+            String pk = pkValues.componentsJoinedByString( AttributeValueSeparator );
+            
             // Get the EncodedEntityName of the object
             String encodedEntityName = entityNameEncode (eo);
 
             // Add the result to the list of encoded objects
-            encoded.addObject(encodedEntityName + separator + (encrypt ? "E" : "") + c++ + "=" +(encrypt ? ERXCrypto.blowfishEncode(pk) : pk));
+            encoded.addObject(encodedEntityName + separator + (encrypt ? "E" : "") + c++ + "=" +
+                              (encrypt ? ERXCrypto.blowfishEncode(pk) : pk));
         }
 
         // Return the result as an url-encoded string
@@ -301,61 +355,89 @@ public class ERXEOEncodingUtilities {
      * </code>.
      * @param ec editingcontext to fetch the objects from
      * @param values form value dictionary where the values are an
-     *		NSArray containing the primary key of the object in either
+     *		encoded representation of the primary key values in either
      *		cleartext or encrypted format.
      * @return array of enterprise objects corresponding to the passed
-     *		in form value array.
+     *		in form values.
      */
     public static NSArray decodeEnterpriseObjectsFromFormValues(EOEditingContext ec, NSDictionary values) {
+        if (ec == null)
+            throw new IllegalArgumentException("Attempting to decode enterprise objects with null editing context.");
+        if (values == null )
+            throw new IllegalArgumentException("Attempting to decode enterprise objects with null form values.");
         if(log.isDebugEnabled()) log.debug("values = "+values);
-        NSMutableArray encoded = new NSMutableArray();
+        NSMutableArray result = new NSMutableArray();
 
-        NSArray temp = (NSArray)values.objectForKey("sep");
-        String separator = temp != null && temp.count() > 0 ?(String)temp.lastObject() : null;
-        if(temp != null && temp.count() > 1)
-            log.warn("Found multiple separators in form values: " + temp);
-        if(separator == null)
-            separator = entityNameSeparator();
+        String separator = values.objectForKey( "sep" ) != null ? (String) values.objectForKey( "sep" ) : entityNameSeparator();
 
             for(Enumeration e = values.keyEnumerator(); e.hasMoreElements();) {
-                String key =(String)e.nextElement();
+                Object o = e.nextElement();
+                String key =(String)o;
                 if(key.indexOf(separator) != -1) {
                     boolean isEncrypted = key.indexOf(separator + "E") != -1;
                     String encodedEntityName = key.substring(0, key.indexOf(separator));
                     String entityName = entityNameDecode (encodedEntityName);
-
-		    // FIXME: This needs to be made case insensitive
+                    entityName = entityName == null ? encodedEntityName : entityName;
                     EOEntity entity = ERXEOAccessUtilities.entityNamed(ec, entityName);
                     if(entity != null) {
-                        if(entity.primaryKeyAttributes().count() == 1) {
-                            for(Enumeration ee =((NSArray)values.objectForKey(key)).objectEnumerator(); ee.hasMoreElements();) {
-                                String value =(String)ee.nextElement();
-                                if(isEncrypted) {
-                                    value = ERXCrypto.blowfishDecode(value);
-                                    if(value != null)
-                                        value = value.trim();
-                                }
-                                if(value != null) {
-                                    // ENHANCEME: Could just form a fault here seeing that we have the pk.
-                                    EOEnterpriseObject eo =(EOEnterpriseObject)EOUtilities
-                                        .objectMatchingKeyAndValue(ec, entity.name(),
-                                        ((EOAttribute)entity.primaryKeyAttributes().lastObject()).name(), value);
-                                    if(eo != null)
-                                        encoded.addObject(eo);
-                                } else {
-                                    log.warn("Value null after blowfish decode: " 
-                                                            + values.objectForKey(key));
-                                }
-                            }
-                        } else {
-                            log.warn("Entity: " + entity.name() + " has compound pk. Attributes: " 
-                                                            + entity.primaryKeyAttributes());
-                        }
-                } else {                    
-                    log.warn("Unable to find entity for name: " + entityName);
+                        NSDictionary pk = processPrimaryKeyValue( (String) values.objectForKey(key), entity, isEncrypted );
+                        result.addObject
+                            ( EOUtilities.objectWithPrimaryKey(ec, entity.name(), pk) );
+                    } else {                    
+                        log.warn("Unable to find entity for name: " + entityName);
                 }
             }
         }
-        return encoded;
+        return result;
     }    
+    
+    /**
+     * Generates an NSDictionary representing primary key values, both simple and compound. If values are encrypted we try to 
+     * create the correct attribute value type. Supported types are: strings, numbers, timestamps and custom 
+     * attributes with a factory method using a string argument.
+     * 
+     * @param value the primary key value, either a single value or a collection
+     * @param entity    the entity used to gather primary key information
+     * @param isEncrypted yes/no
+     * @return a dictionary with primary key values
+     */
+    private static NSDictionary processPrimaryKeyValue( String value, EOEntity entity, boolean isEncrypted ) {
+        NSArray pkAttributeNames = entity.primaryKeyAttributeNames();
+        try {
+            pkAttributeNames = pkAttributeNames.sortedArrayUsingComparator
+            ( NSComparator.AscendingStringComparator );
+        } catch( NSComparator.ComparisonException ex ) {
+            log.error( "Unable to sort attribute names: "+ ex );
+            throw new NSForwardException(ex);
+        }
+        NSArray values = isEncrypted
+            ? NSArray.componentsSeparatedByString( ERXCrypto.blowfishDecode(value).trim(), AttributeValueSeparator )
+            : NSArray.componentsSeparatedByString( value, AttributeValueSeparator );  
+        int attrCount = pkAttributeNames.count();
+        NSMutableDictionary result = new NSMutableDictionary( attrCount );
+        for( int i = 0; i < attrCount; i++ ) {
+            String currentAttributeName = (String)pkAttributeNames.objectAtIndex( i );
+            EOAttribute currentAttribute = entity.attributeNamed( currentAttributeName );
+            Object currentValue = values.objectAtIndex( i );
+            switch ( currentAttribute.adaptorValueType() ) {
+                case 3:
+                    NSTimestampFormatter tsf = new NSTimestampFormatter();
+                    try {
+                        currentValue = tsf.parseObject( (String) currentValue );    
+                    } catch( java.text.ParseException ex ) {
+                        log.error( "Error while trying to parse: "+currentValue );
+                        throw new NSForwardException( ex );
+                    }
+                    case 1:
+                        if( currentAttribute.valueFactoryMethodName() != null ) {
+                            currentValue = currentAttribute.newValueForString( (String) currentValue );
+                        }
+                    case 0:
+                        currentValue = new java.math.BigDecimal( (String) currentValue );
+            }
+            result.setObjectForKey( currentValue, currentAttributeName );
+        }
+        return result;
+    }
+    
 }

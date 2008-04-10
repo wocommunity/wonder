@@ -6,11 +6,15 @@
  * included with this distribution in the LICENSE.NPL file.  */
 package er.extensions;
 
-import com.webobjects.foundation.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.eoaccess.*;
-import com.webobjects.appserver.*;
-import java.util.*;
+import java.util.Enumeration;
+
+import org.apache.log4j.Logger;
+
+import com.webobjects.appserver.WOContext;
+import com.webobjects.eocontrol.EOEnterpriseObject;
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSMutableArray;
 
 /**
  * This component can be used for two things:<br/>
@@ -52,7 +56,7 @@ public class ERXDirectActionHyperlink extends ERXStatelessComponent {
     public final static String SUFFIX_MARKER="**SUFFIX**";
 
     /** logging support */
-    public static final ERXLogger log = ERXLogger.getERXLogger(ERXDirectActionHyperlink.class);
+    public static final Logger log = Logger.getLogger(ERXDirectActionHyperlink.class);
 
 	
     // Constructor -------------------------------------------------

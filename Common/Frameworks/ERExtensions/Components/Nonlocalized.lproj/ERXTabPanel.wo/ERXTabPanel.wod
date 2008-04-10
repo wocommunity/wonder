@@ -11,14 +11,14 @@ ContentCellContainer: WOGenericContainer {
 }
 
 DoNotUseLinkForTabSwitch: WOConditional {
-  condition=useLinkForTabSwitch;
-  negate=true;
+  condition = useLinkForTabSwitch;
+  negate = true;
 }
 
 GenericContainer1: WOGenericContainer {
-    bgcolor=bgcolor;
-       colspan = contentColSpan;
-       elementName = "TD";
+	bgcolor = bgcolor;
+	colspan = contentColSpan;
+	elementName = "td";
 }
 
 HasNoSubmitAction: WOConditional {
@@ -31,12 +31,12 @@ HasSubmitAction: WOConditional {
 }
 
 Hyperlink1: WOHyperlink {
-//WOElementName="a";
+	//WOElementName="a";
 	class = cellTabClass;
-	 // "javascript:document.EditForm.submit();";
-	elementName = "A";
-	onClick = submitString;
-    action = switchSubmitTab;
+	// "javascript:document.EditForm.submit();";
+	elementName = "a";
+	onclick = submitString;
+	action = switchSubmitTab;
 }
 
 
@@ -70,10 +70,10 @@ Image5: WOImage {
 }
 
 Image6: WOImage {
-    height = 8;
+	height = 8;
 	framework = "ERExtensions";
 	filename = "s.gif";
-    width = 1;
+	width = 1;
 }
 
 LeftTabImage: WOImage {
@@ -95,8 +95,8 @@ MainTableContainer: WOGenericContainer {
 }
 
 NoBorder: WOConditional {
-condition=true; // renderBorder;
-negate=true;
+	condition = true; // renderBorder;
+	negate = true;
 }
 
 NotSelectedTabConditional: WOConditional {
@@ -104,12 +104,12 @@ NotSelectedTabConditional: WOConditional {
 }
 
 RenderBorder: WOConditional {
-condition=true; // renderBorder;
+	condition = true; // renderBorder;
 }
 
 RenderTop: WOConditional {
-    condition=^doNotRenderTop;
-    negate=true;
+	condition = ^doNotRenderTop;
+	negate = true;
 }
 
 RightTabImage: WOImage {
@@ -143,8 +143,8 @@ TabContainer: WOGenericContainer {
 	bgcolor = tabBgColor;
 	elementName = "td";
 	valign = "top";
-    otherTagString="NOWRAP";
-        class = cellTabClass;
+	otherTagString="nowrap";
+	class = cellTabClass;
 }
 
 TabImage: WOActiveImage {
@@ -161,8 +161,7 @@ TabImage: WOActiveImage {
 
 
 
-TabImageContainer: WOGenericContainer 
-{
+TabImageContainer: WOGenericContainer {
 	align = "baseline";
 	bgcolor = tabBgColor;
 	elementName = "td";
@@ -172,7 +171,7 @@ TabImageContainer: WOGenericContainer
 TabImageContainer2: WOGenericContainer {
 	align = "baseline";
 	bgcolor = tabBgColor;
-	elementName = "TD";
+	elementName = "td";
 	valign = "top";
 }
 
@@ -217,23 +216,23 @@ Table: WOGenericContainer {
 	cellspacing = 0;
 	elementName = "TABLE";
 	width = ^width;
-   bgcolor=^bgcolor;
+	bgcolor=^bgcolor;
 }
 
 UseLinkForTabSwitch: WOConditional {
-    condition=useLinkForTabSwitch;
+	condition = useLinkForTabSwitch;
 }
 
 td1: WOGenericContainer {
-   elementName="TD";
-   colspan=4;
-   bgcolor=^borderColor;
-   height=1;
+   elementName = "td";
+   colspan = 4;
+   bgcolor = ^borderColor;
+   height = 1;
 }
 
 td2: WOGenericContainer {
-   elementName="TD";
-   rowspan=6;
-   bgcolor=^borderColor;
-   width=1;
+   elementName = "td";
+   rowspan = 6;
+   bgcolor = ^borderColor;
+   width = 1;
 }
