@@ -177,6 +177,10 @@ public class AjaxTabbedPanel extends AjaxDynamicElement {
 
 	protected void addRequiredWebResources(WOResponse response, WOContext context) {
 		AjaxUtils.addScriptResourceInHead(context, response, "prototype.js");
+		// Wonder is not needed by this component, but it is often used when Ajax components are used
+		// on the tabs.  It is included here to make it a little easier to use Ajax components on tabs.
+		// Otherwise, the page needs to load the needed scripts manually.
+		AjaxUtils.addScriptResourceInHead(context, response, "wonder.js");
 		AjaxUtils.addScriptResourceInHead(context, response, "switchtabs.js");
 	}
 
