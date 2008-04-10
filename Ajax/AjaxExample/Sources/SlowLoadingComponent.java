@@ -2,12 +2,13 @@
 
 import com.webobjects.appserver.*;
 
-public class SlowLoadingComponent extends WOComponent {
+public class SlowLoadingComponent extends DragAndDropExample {
 
     public SlowLoadingComponent(WOContext context) {
         super(context);
     }
 
+    @Override
 	public void appendToResponse(WOResponse aResponse, WOContext aContext) {
 		try {
 			Thread.sleep(5000);
