@@ -570,37 +570,44 @@ public class ERTaggableEntity<T extends ERXGenericRecord> {
     NSMutableSet<String> tagNames = new NSMutableSet<String>();
     if (tags != null) {
       if (tags instanceof String) {
-        for (String strTag : ((String) tags).split(_separator)) {
-          String normalizedTag = _normalizer.normalize(strTag);
-          if (normalizedTag != null && normalizedTag.length() > 0) {
-            tagNames.addObject(normalizedTag);
-          }
-        }
+        String[] strTags = ((String) tags).split(_separator);
+        addNormalizedTags(tagNames, strTags);
       }
       else if (tags instanceof ERTag) {
         tagNames.addObject(((ERTag) tags).name());
       }
       else if (tags instanceof NSArray) {
-        tagNames.addObjectsFromArray((NSArray<String>) tags);
-      }
-      else if (tags instanceof String[]) {
-        tagNames.addObjectsFromArray(new NSArray<String>((String[]) tags));
+        addNormalizedTags(tagNames, ((NSArray<Object>) tags).objects());
       }
       else if (tags instanceof Object[]) {
-        for (Object objTag : (Object[]) tags) {
-          if (objTag instanceof String) {
-            tagNames.addObject((String) objTag);
-          }
-          else {
-            throw new IllegalArgumentException("Unknown tag type '" + objTag.getClass().getName() + "' (" + objTag + " ).");
-          }
-        }
+        addNormalizedTags(tagNames, (Object[]) tags);
       }
       else {
         throw new IllegalArgumentException("Unknown tag type '" + tags.getClass().getName() + "' (" + tags + " ).");
       }
     }
     return tagNames.allObjects();
+  }
+
+  /**
+   * Normalizes tags from tags array and adds them to set
+   * 
+   * @param set set that normalized tags should be added to
+   * @param tags array of unclean tags
+   */
+  private void addNormalizedTags(NSMutableSet<String> set, Object[] tags) {
+    for (Object objTag : tags) {
+      if (objTag instanceof String) {
+        String strTag = (String) objTag;
+        String normalizedTag = _normalizer.normalize(strTag);
+        if (normalizedTag != null && normalizedTag.length() > 0) {
+          set.addObject(normalizedTag);
+        }
+      }
+      else {
+        throw new IllegalArgumentException("Unknown tag type '" + objTag.getClass().getName() + "' (" + objTag + " ).");
+      }
+    }
   }
 
   /**
