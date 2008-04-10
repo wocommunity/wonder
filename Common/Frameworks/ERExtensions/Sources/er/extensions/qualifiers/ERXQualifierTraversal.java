@@ -98,10 +98,10 @@ public class ERXQualifierTraversal {
 	 */
 	private boolean traverseQualifier(EOQualifierEvaluation q) {
 		Boolean result = null;
-		visit(q);
 		if (q == null)
 			result = Boolean.TRUE;
 		else {
+			visit(q);
 			if (q instanceof EOOrQualifier) {
 				EOOrQualifier aq = (EOOrQualifier) q;
 				result = traverseOrQualifier(aq) ? Boolean.TRUE : Boolean.FALSE;
