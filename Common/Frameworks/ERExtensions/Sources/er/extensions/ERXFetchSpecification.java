@@ -2,7 +2,6 @@ package er.extensions;
 
 import java.util.Iterator;
 
-import com.webobjects.eoaccess.EOAttribute;
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.eocontrol.EOEnterpriseObject;
 import com.webobjects.eocontrol.EOFetchSpecification;
@@ -13,6 +12,8 @@ import com.webobjects.eocontrol.EOQualifierEvaluation;
 import com.webobjects.eocontrol.EOSortOrdering;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSMutableDictionary;
+import com.webobjects.foundation.NSPropertyListSerialization;
 
 import er.extensions.qualifiers.ERXQualifierTraversal;
 
@@ -42,7 +43,7 @@ public class ERXFetchSpecification<T extends EOEnterpriseObject> extends EOFetch
 	
 	private NSArray<String> _groupingKeyPaths = NSArray.EmptyArray;
 	private EOQualifier _havingQualifier;
-	private NSDictionary _userInfo = NSDictionary.EmptyDictionary;
+	private NSMutableDictionary _userInfo;
 	
 	public ERXFetchSpecification(String entityName, EOQualifier qualifier, NSArray sortOrderings, boolean usesDistinct, boolean isDeep, NSDictionary hints) {
 		super(entityName, qualifier, sortOrderings, usesDistinct, isDeep, hints);
@@ -62,14 +63,10 @@ public class ERXFetchSpecification<T extends EOEnterpriseObject> extends EOFetch
 	}
 
 	public ERXFetchSpecification(ERXFetchSpecification<T> spec) {
-		this(spec.entityName(), spec.qualifier(), spec.sortOrderings(), spec.usesDistinct(), spec.isDeep(), spec.hints());
-		setFetchesRawRows(spec.fetchesRawRows());
-		setFetchLimit(spec.fetchLimit());
-		setLocksObjects(spec.locksObjects());
-		setRawRowKeyPaths(spec.rawRowKeyPaths());
-		setPromptsAfterFetchLimit(spec.promptsAfterFetchLimit());
+		this((EOFetchSpecification)spec);
 		setGroupingKeyPaths(spec.groupingKeyPaths());
-		setUserInfo(spec.userInfo());
+		setHavingQualifier(spec.havingQualifier());
+		_userInfo = spec.userInfo().count() > 0 ? null : spec.userInfo().mutableClone();
 	}
 
 	public NSArray<String> groupingKeyPaths() {
@@ -84,24 +81,33 @@ public class ERXFetchSpecification<T extends EOEnterpriseObject> extends EOFetch
 		return _havingQualifier;
 	}
 
-	public void havingQualifier(EOQualifier qualifier) {
+	public void setHavingQualifier(EOQualifier qualifier) {
 		_havingQualifier = qualifier;
 	}
 
 	/**
-	 * User info to stuff arbitary stuff into.
+	 * Sets a arbitrary value.
 	 * @return
 	 */
-	public NSDictionary userInfo() {
-		return _userInfo == null ? NSDictionary.EmptyDictionary : _userInfo;
+	public void setObjectForKey(Object value, String key) {
+		_userInfo = _userInfo == null ? new NSMutableDictionary() : _userInfo;
+		_userInfo.takeValueForKey(value, key);
 	}
 
 	/**
-	 * Set the user info dictionary.
-	 * @param info
+	 * Gets an arbitrary value.
+	 * @param key
 	 */
-	public void setUserInfo(NSDictionary info) {
-		_userInfo = info != null ? info.immutableClone() : null;
+	public Object objectForKey(String key) {
+		return _userInfo!= null ? _userInfo.valueForKey(key) : null;
+	}
+	
+	/**
+	 * Gets the user info.
+	 * @return
+	 */
+	public NSDictionary userInfo() {
+		return _userInfo == null ? NSDictionary.EmptyDictionary : _userInfo.immutableClone(); 
 	}
 	
 	/**
@@ -133,6 +139,43 @@ public class ERXFetchSpecification<T extends EOEnterpriseObject> extends EOFetch
 	 * @return
 	 */
 	public String identifier() {
+		return identifierForFetchSpec(this);
+	}
+	
+	/**
+	 * Converts a normal fetch spec to an ERX one.
+	 * @param <T>
+	 * @param fs
+	 * @param clazz
+	 * @return
+	 */
+	public static <T extends EOEnterpriseObject> ERXFetchSpecification<T> fetchSpec(EOFetchSpecification fs, Class<T> clazz) {
+		if (fs instanceof ERXFetchSpecification) {
+			return (ERXFetchSpecification) fs;
+		}
+		return new ERXFetchSpecification<T>(fs);
+	}
+	
+	/**
+	 * Converts a normal fetch spec to an ERX one.
+	 * @param <T>
+	 * @param fs
+	 * @param clazz
+	 * @return
+	 */
+	public static <T extends EOEnterpriseObject> ERXFetchSpecification<T> fetchSpec(EOFetchSpecification fs) {
+		if (fs instanceof ERXFetchSpecification) {
+			return (ERXFetchSpecification) fs;
+		}
+		return new ERXFetchSpecification<T>(fs);
+	}
+	
+	/**
+	 * Builds an identifier for the given fetch spec which is suitable for caching.
+	 * @param fs
+	 * @return
+	 */
+	public static String identifierForFetchSpec(EOFetchSpecification fs) {
 		final StringBuilder sb = new StringBuilder();
 		
 		ERXQualifierTraversal traversal = new ERXQualifierTraversal() {
@@ -161,7 +204,7 @@ public class ERXFetchSpecification<T extends EOEnterpriseObject> extends EOFetch
 							EOEnterpriseObject eo = (EOEnterpriseObject) object;
 							s += ERXEOControlUtilities.primaryKeyStringForObject(eo);
 						} else {
-							s +=object;
+							s += NSPropertyListSerialization.stringFromPropertyList(object);
 						}
 					}
 					value = s;
@@ -170,23 +213,19 @@ public class ERXFetchSpecification<T extends EOEnterpriseObject> extends EOFetch
 				return super.traverseKeyValueQualifier(q);
 			}
 		};
-		for (Iterator iterator = sortOrderings().iterator(); iterator.hasNext();) {
+		for (Iterator iterator = fs.sortOrderings().iterator(); iterator.hasNext();) {
 			EOSortOrdering so = (EOSortOrdering) iterator.next();
 			sb.append(so.key()).append(so.selector().name());
 		}
-		traversal.traverse(qualifier());
-		traversal.traverse(havingQualifier());
-		sb.append(fetchesRawRows()).append(fetchLimit()).append(locksObjects()).append(isDeep());
-		sb.append(entityName());
-		sb.append(hints());
-		return sb.toString();
-	}
-	
-	public static <T extends EOEnterpriseObject> ERXFetchSpecification<T> fetchSpec(EOFetchSpecification fs, Class<T> clazz) {
-		return new ERXFetchSpecification<T>(fs);
-	}
-	
-	public static <T extends EOEnterpriseObject> ERXFetchSpecification<T> fetchSpec(EOFetchSpecification fs) {
-		return new ERXFetchSpecification<T>(fs);
+		traversal.traverse(fs.qualifier());
+		sb.append(fs.fetchesRawRows()).append(fs.fetchLimit()).append(fs.locksObjects()).append(fs.isDeep());
+		sb.append(fs.entityName());
+		sb.append(fs.hints());
+		if (fs instanceof ERXFetchSpecification) {
+			traversal.traverse(((ERXFetchSpecification) fs).havingQualifier());
+		}
+		String result = sb.toString();
+		result = ERXCrypto.base64HashedString(result);
+		return result;
 	}
 }
