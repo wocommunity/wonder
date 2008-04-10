@@ -50,6 +50,18 @@ public class ERTagCloud extends ERXComponent {
   public boolean synchronizesVariablesWithBindings() {
     return false;
   }
+  
+  @Override
+  public boolean isStateless() {
+    return true;
+  }
+  
+  @Override
+  public void reset() {
+    super.reset();
+    _tagCloud = null;
+    _repetitionTag = null;
+  }
 
   @SuppressWarnings( { "cast", "unchecked" })
   public NSArray<String> tagNames() {
