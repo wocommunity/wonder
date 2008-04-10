@@ -1,27 +1,38 @@
 package er.extensions;
 
+import java.util.Iterator;
+
 import com.webobjects.eoaccess.EOAttribute;
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.eocontrol.EOEnterpriseObject;
 import com.webobjects.eocontrol.EOFetchSpecification;
+import com.webobjects.eocontrol.EOKeyComparisonQualifier;
+import com.webobjects.eocontrol.EOKeyValueQualifier;
 import com.webobjects.eocontrol.EOQualifier;
+import com.webobjects.eocontrol.EOQualifierEvaluation;
+import com.webobjects.eocontrol.EOSortOrdering;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
 
+import er.extensions.qualifiers.ERXQualifierTraversal;
+
 /**
- * Extended fetch specification. This is just an idea so far...
+ * Extended fetch specification. 
  * <ul>
  * <li>has an identifier for caching</li>
- * <li>can fetch objects of a certain type</li>
- * <li>has grouping support</li>
+ * <li>type-safe, can fetch objects of a certain type</li>
  * <li>has a user info</li>
+ * <li>has grouping support (not done yet)</li>
  * </ul>
  * @author ak
  *
- * @param <T>
+ * @param &lt;T&gt;
  */
 public class ERXFetchSpecification<T extends EOEnterpriseObject> extends EOFetchSpecification {
 
+	/**
+	 * List of supported aggregate operators.
+	 */
 	public static interface Operators {
 		public String SUM = "sum";
 		public String AVG = "avg";
@@ -77,20 +88,93 @@ public class ERXFetchSpecification<T extends EOEnterpriseObject> extends EOFetch
 		_havingQualifier = qualifier;
 	}
 
+	/**
+	 * User info to stuff arbitary stuff into.
+	 * @return
+	 */
 	public NSDictionary userInfo() {
 		return _userInfo == null ? NSDictionary.EmptyDictionary : _userInfo;
 	}
 
+	/**
+	 * Set the user info dictionary.
+	 * @param info
+	 */
 	public void setUserInfo(NSDictionary info) {
 		_userInfo = info != null ? info.immutableClone() : null;
 	}
 	
+	/**
+	 * Type-safe method to fetch objects for this fetch spec.
+	 * @param ec
+	 * @return
+	 */
 	public NSArray<T> fetchObjects(EOEditingContext ec) {
 		return ec.objectsWithFetchSpecification(this);
 	}
+	
+	/**
+	 * Type-safe method to fetch raw rows.
+	 * @param ec
+	 * @return
+	 */
+	public NSArray<NSDictionary<String, Object>> fetchRawRows(EOEditingContext ec) {
+		boolean old = fetchesRawRows();
+		setFetchesRawRows(true);
+		try {
+			return ec.objectsWithFetchSpecification(this);
+		} finally {
+			setFetchesRawRows(old);
+		}
+	}
 
+	/**
+	 * Collects all relevant attributes and the bindings and returns a key suitable for caching.
+	 * @return
+	 */
 	public String identifier() {
-		// AK: this is just an idea so far. we need to get the qualifier string and loop through the parameters. 
-		return "" + hashCode();
+		final StringBuilder sb = new StringBuilder();
+		
+		ERXQualifierTraversal traversal = new ERXQualifierTraversal() {
+			
+			protected void visit(EOQualifierEvaluation q) {
+				sb.append(q.getClass().getName());
+			}
+			
+			@Override
+			protected boolean traverseKeyComparisonQualifier(EOKeyComparisonQualifier q) {
+				sb.append(q.leftKey()).append(q.selector().name()).append(q.rightKey());
+				return super.traverseKeyComparisonQualifier(q);
+			}
+			
+			@Override
+			protected boolean traverseKeyValueQualifier(EOKeyValueQualifier q) {
+				Object value = q.value();
+				if (value instanceof EOEnterpriseObject) {
+					EOEnterpriseObject eo = (EOEnterpriseObject) value;
+					value = ERXEOControlUtilities.primaryKeyStringForObject(eo);
+				}
+				sb.append(q.key()).append(q.selector().name()).append(value);
+				return super.traverseKeyValueQualifier(q);
+			}
+		};
+		for (Iterator iterator = sortOrderings().iterator(); iterator.hasNext();) {
+			EOSortOrdering so = (EOSortOrdering) iterator.next();
+			sb.append(so.key()).append(so.selector().name());
+		}
+		traversal.traverse(qualifier());
+		traversal.traverse(havingQualifier());
+		sb.append(fetchesRawRows()).append(fetchLimit()).append(locksObjects()).append(isDeep());
+		sb.append(entityName());
+		sb.append(hints());
+		return sb.toString();
+	}
+	
+	public static <T extends EOEnterpriseObject> ERXFetchSpecification<T> fetchSpec(EOFetchSpecification fs, Class<T> clazz) {
+		return new ERXFetchSpecification<T>(fs);
+	}
+	
+	public static <T extends EOEnterpriseObject> ERXFetchSpecification<T> fetchSpec(EOFetchSpecification fs) {
+		return new ERXFetchSpecification<T>(fs);
 	}
 }
