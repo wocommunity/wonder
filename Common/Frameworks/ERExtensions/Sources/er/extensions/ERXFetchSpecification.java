@@ -153,6 +153,18 @@ public class ERXFetchSpecification<T extends EOEnterpriseObject> extends EOFetch
 				if (value instanceof EOEnterpriseObject) {
 					EOEnterpriseObject eo = (EOEnterpriseObject) value;
 					value = ERXEOControlUtilities.primaryKeyStringForObject(eo);
+				} else if (value instanceof NSArray) {
+					NSArray arr = (NSArray) value;
+					String s = "";
+					for (Object object : arr) {
+						if (object instanceof EOEnterpriseObject) {
+							EOEnterpriseObject eo = (EOEnterpriseObject) object;
+							s += ERXEOControlUtilities.primaryKeyStringForObject(eo);
+						} else {
+							s +=object;
+						}
+					}
+					value = s;
 				}
 				sb.append(q.key()).append(q.selector().name()).append(value);
 				return super.traverseKeyValueQualifier(q);
