@@ -1,16 +1,16 @@
 <html>
 <body>
-<h1>ERRESTAdaptor (Experimental Still!)</h1>
+<h1>JavaRESTAdaptor (Experimental Still!)</h1>
 
 <h2>Overview</h2>
 <p>
-ERRESTAdaptor is an EOF adaptor implementation on top of a RESTful web service, similar to ActiveResource
-in Rails.  Currently ERRESTAdaptor is read-only, but should be sufficient for consuming RESTful services.
+JavaRESTAdaptor is an EOF adaptor implementation on top of a RESTful web service, similar to ActiveResource
+in Rails.  Currently JavaRESTAdaptor is read-only, but should be sufficient for consuming RESTful services.
 </p>
 
 <h2>Usage</h2>
 <p>
-The usage of ERRESTAdaptor is best explained in an example.  This example is adapted from an ActiveResource
+The usage of JavaRESTAdaptor is best explained in an example.  This example is adapted from an ActiveResource
 tutorial, but it provides several examples of common techniques. The service we're going to communicate with
 is a Beast installation.  Beast is a simple Rails forum application.  We'll use http://beast.caboo.se as
 our example service provider.
@@ -24,7 +24,7 @@ in the wizard.</li>
 	<li>In the default database config (assuming you're using a recent WOLips), select the 
 prototype "EORESTPrototypes" and select the Adaptor "REST".</li>
 	<li>In the URL, enter "http://beast.caboo.se" and leave the username and password 
-blank (currently ERRESTAdaptor does not support HTTP authentication).</li>
+blank (currently JavaRESTAdaptor does not support HTTP authentication).</li>
 </ol>
 
 <h2>Creating Entites</h2>
@@ -34,13 +34,13 @@ Beast provides four entities that we want to interact with: Forum, Topic, Post, 
 <ol>
 	<li>Create an entity named Forum.</li>
 	<li>
-		The "table name" of Forum will tell ERRESTAdaptor the URL extensions and XML tags that can be used to 
+		The "table name" of Forum will tell JavaRESTAdaptor the URL extensions and XML tags that can be used to 
 		access the entity.  In the case of Forum, the XML tag name comes in two variants -- a singular and a plural
 		form.  For the Forum entity, set the table name to "forum,forums".
 		<p>
-			Table name for ERRESTAdaptor comes in  several forms:
+			Table name for JavaRESTAdaptor comes in  several forms:
 			<ul>
-				<li>If you do not set a table name, ERRESTAdaptor will simply use the entity name as the singular form,
+				<li>If you do not set a table name, JavaRESTAdaptor will simply use the entity name as the singular form,
 				and use ERXLocalizer to generate a plural form.</li>
 				<li>If you only set a single value (i.e. "forum"), the adaptor will use that as the singular form and 
 				use ERXLocalizer to generate a plural form.</li>
@@ -66,7 +66,7 @@ Beast provides four entities that we want to interact with: Forum, Topic, Post, 
 	with modeling, because Beast does not allow you to select topics from the top level, rather you can only
 	select topics through a Forum.  For example, there is no /topics/1.xml there is only /forums/1/topics/1.xml.
 	This oddity does cause some problems for EOF, because EOF expects to be able to fetch objects
-	with only a primary key.  ERRESTAdaptor provides the ability to model fetching these entities, but you
+	with only a primary key.  JavaRESTAdaptor provides the ability to model fetching these entities, but you
 	should be careful of places where EOF may cause faults for individual objects.  You may find it safer to
 	model relationships to entities of this type in code with fetch specs, or if you're using the Wonder eogen 
 	templates, traverse these kind of relationships with forum.topics(null, true), which will force a refetch of
@@ -74,16 +74,16 @@ Beast provides four entities that we want to interact with: Forum, Topic, Post, 
 	<li>Request http://beast.caboo.se/forums/1/topics.xml to see an example of what topics look like.  Follow the
 	same procedure as for Forum, creating attributes from the XML.  For dates, use the prototype "dateTime".  For
 	foreign keys, use the attribute "id" and mark them as non-class attributes.</li>
-	<li>Now to address the URL issue for Topics.  Because there is no /topics.xml, we need to tell ERRESTAdaptor
+	<li>Now to address the URL issue for Topics.  Because there is no /topics.xml, we need to tell JavaRESTAdaptor
 	how to find topic objects.  Edit the Topic entity and set the table name to "/forums/[forumID]/topics,topic,topics".
 	This says that to fetch a topic, you must use the URL "/forums/[forumID]/topics" where forumID is a variable 
 	that corresponds to the Topic attribute of the same name.  Any time a fetch is performed on a Topic, a forumID
-	must appear in the qualifier or an exception will be thrown from ERRESTAdaptor.  When traversing a to-many 
+	must appear in the qualifier or an exception will be thrown from JavaRESTAdaptor.  When traversing a to-many 
 	relationship from a Forum to a Topic, this happens automatically inside of EOF.  However, if you are trying to
 	fetch a particular topic, you must provide its forum in your qualifier to prevent an error.</li>
 	<li>Now create the Post entity.  Posts are similar to Topics in that you cannot access them from the top level
 	of the service, but they can be accessed in several different ways.  It turns out that you can get posts for
-	a user, for a forum, or for a topic (which requires a forum). ERRESTAdaptor allows you to model these methods
+	a user, for a forum, or for a topic (which requires a forum). JavaRESTAdaptor allows you to model these methods
 	as alternative URLs in the table name by separating the URLs with a pipe.  For instance, the table name for
 	Post is "/users/[userID]/posts|/forums/[forumID]/posts|/forums/[forumID]/topics/[topicID]/posts,post,posts".  I
 	admit this is ugly, and ideally these definitions would be defined on the relationships instead of the entity,
@@ -116,7 +116,7 @@ The "problem child" relationships are, for instance, topic.posts().  Traversing 
 will only provide a topicID.  Unfortunately Posts requires a topicID AND a forumID.  It turns out that this
 can be modeled by putting both topicID and forumID in the joins of the to-many relationship definition.  The
 downside of this is that it will not be symmetric with the other side of the relationship, and will not be
-updated automatically when write ability is added to ERRESTAdaptor.  The other problem is that, while this
+updated automatically when write ability is added to JavaRESTAdaptor.  The other problem is that, while this
 technique works on to-many relationships, it does not work on to-one relationships.  EOF does not allow
 a to-one relationship to be defined with a join on anything expect a primary key attribute.
 </p>
@@ -135,7 +135,7 @@ or
 aForum.topics(ERXQ.equals("id", 633), true)
 </p>
 <p>
-Note that ERRESTAdaptor allows fetching on non-class attributes.
+Note that JavaRESTAdaptor allows fetching on non-class attributes.
 </p>
 
 <h2>Fetching Notes</h2>
