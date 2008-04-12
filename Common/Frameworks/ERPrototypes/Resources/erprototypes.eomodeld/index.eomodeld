@@ -8,6 +8,7 @@
         {className = EOGenericRecord; name = EOJDBCOraclePrototypes; }, 
         {className = EOGenericRecord; name = EOJDBCPostgresqlPrototypes; }, 
         {className = EOGenericRecord; name = EOJDBCPrototypes; },
-        {className = EOGenericRecord; name = EOMemoryPrototypes; }
+        {className = EOGenericRecord; name = EOMemoryPrototypes; },
+        {className = EOGenericRecord; name = EORESTPrototypes; }
     ); 
 }
