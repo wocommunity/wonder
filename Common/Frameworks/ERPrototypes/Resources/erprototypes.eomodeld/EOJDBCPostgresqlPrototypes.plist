@@ -2,12 +2,12 @@
     attributes = (
         {
             columnName = ""; 
-            externalType = decimal; 
+            externalType = numeric; 
             name = amount; 
             precision = 38; 
             scale = 2; 
             valueClassName = NSDecimalNumber; 
-            valueType = B;
+            valueType = B; 
         }, 
         {columnName = ""; externalType = bytea; name = blob; valueClassName = NSData; }, 
         {
@@ -46,7 +46,7 @@
             precision = 38; 
             scale = 4; 
             valueClassName = NSDecimalNumber; 
-            valueType = B;
+            valueType = B; 
         }, 
         {
             columnName = ""; 
