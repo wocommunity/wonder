@@ -599,6 +599,16 @@
             <param name="use.wonder.openid" value="true" />
         </antcall>
     </target>
+    <target name="JavaRESTAdaptorExample.all">
+        <antcall target="global.application.${build.action}" >
+            <param name="project.type" value="application" />
+            <param name="project.principal.class" value="Application" />
+            <param name="project.name" value="JavaRESTAdaptorExample" />
+            <param name="project.dir" value="Common/Examples/JavaRESTAdaptorExample" />
+	        	<param name="use.additional.framework.1" value="JavaRESTAdaptor.framework" />
+            <param name="use.wonder.core" value="true" />
+        </antcall>
+    </target>
     <target name="ExcelGenerator.all">
         <antcall target="global.framework.${build.action}" >
             <param name="project.principal.class" value="" />
@@ -791,7 +801,7 @@
     
     <target name="common.applications.all" depends="BugTracker.all, ERMailer.all" />
 
-    <target name="common.examples.all" depends="ERMiniUglyLook.all, NetStruxrCaseStudy.all, D2WListExample.all, D2WInspectExample.all, ERSeleniumExample.all, ERMovies.all, D2WComponentTour.all, AjaxExample.all, YUIExample.all, EROpenIDExample.all" />
+    <target name="common.examples.all" depends="ERMiniUglyLook.all, NetStruxrCaseStudy.all, D2WListExample.all, D2WInspectExample.all, ERSeleniumExample.all, ERMovies.all, D2WComponentTour.all, AjaxExample.all, YUIExample.all, EROpenIDExample.all, JavaRESTAdaptorExample.all" />
     
     <target name="dynareporting.frameworks.all" depends="DRGrouping.all, WRReporting.all" />
     <target name="dynareporting.examples.all" depends="DocsByExample.all, DynaReporter.all, DRGroupingTest.all" />
