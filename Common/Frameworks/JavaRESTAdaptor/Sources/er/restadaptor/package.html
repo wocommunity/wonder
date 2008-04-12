@@ -1,0 +1,205 @@
+<html>
+<body>
+<h1>ERRESTAdaptor</h1>
+
+<h2>Overview</h2>
+<p>
+ERRESTAdaptor is an EOF adaptor implementation on top of a RESTful web service, similar to ActiveResource
+in Rails.  Currently ERRESTAdaptor is read-only, but should be sufficient for consuming RESTful services.
+</p>
+
+<h2>Usage</h2>
+<p>
+The usage of ERRESTAdaptor is best explained in an example.  This example is adapted from an ActiveResource
+tutorial, but it provides several examples of common techniques. The service we're going to communicate with
+is a Beast installation.  Beast is a simple Rails forum application.  We'll use http://beast.caboo.se as
+our example service provider.
+</p>
+
+<h2>Creating the Model</h2>
+<ol>
+	<li>Create a Wonder project.</li>
+	<li>Create an EOModel (of any name) and choose "None" from the list of adaptors 
+in the wizard.</li>
+	<li>In the default database config (assuming you're using a recent WOLips), select the 
+prototype "EORESTPrototypes" and select the Adaptor "REST".</li>
+	<li>In the URL, enter "http://beast.caboo.se" and leave the username and password 
+blank (currently ERRESTAdaptor does not support HTTP authentication).</li>
+</ol>
+
+<h2>Creating Entites</h2>
+<p>
+Beast provides four entities that we want to interact with: Forum, Topic, Post, User.
+</p>
+<ol>
+	<li>Create an entity named Forum.</li>
+	<li>
+		The "table name" of Forum will tell ERRESTAdaptor the URL extensions and XML tags that can be used to 
+		access the entity.  In the case of Forum, the XML tag name comes in two variants -- a singular and a plural
+		form.  For the Forum entity, set the table name to "forum,forums".
+		<p>
+			Table name for ERRESTAdaptor comes in  several forms:
+			<ul>
+				<li>If you do not set a table name, ERRESTAdaptor will simply use the entity name as the singular form,
+				and use ERXLocalizer to generate a plural form.</li>
+				<li>If you only set a single value (i.e. "forum"), the adaptor will use that as the singular form and 
+				use ERXLocalizer to generate a plural form.</li>
+				<li>If you specify two values (i.e. "forum,forums"), the adaptor will use the first value as the singular
+				form and the second value as the plural form.</li>
+				<li>Additionally, as you will see later, you can specify a set of possibly URL prefixes to use to access 
+				the entity.  When you do not specify a URL prefix (as in our Forum example), the adaptor will assume that
+				it can go to /[plural form].xml and /[plural form]/[id].xml to retrieve objects of this entity type.</li>
+			</ul>
+		</p>
+	</li>
+	<li>We need to determine the attributes of Forum, so open http://beast.caboo.se/forums.xml in your browser and
+	view the source. ActiveRecord (or more importantly Ruby) can one-up us here, because they automatically 
+	determine the attributes of records based on queries to the service.  We ultimately want to generate Java code,
+	so we need to create an EOModel with attributes.</li>
+	<li>Forum has the attributes: description, description-html, id, name, position, posts-count, and topics-count.
+	Create attributes in your entity with the names converted to camelCase (description-html becomes descriptionHtml,
+	etc).  For each attribute, select a representative prototype, and set the external name to be the original name
+	from the XML.  For example, descriptionHtml is a "varcharLarge" prototype (we could pick one with a smaller 
+	restriction if we want to limit the values) and its external name is "description-html".  postsCount is an
+	"intNumber" and its external name is "posts-count".  Do this for the rest of the attributes of Forum.</li>
+	<li>In Beast, forums contain topics, so let's create the Topic entity.  Topics present an interesting issue
+	with modeling, because Beast does not allow you to select topics from the top level, rather you can only
+	select topics through a Forum.  For example, there is no /topics/1.xml there is only /forums/1/topics/1.xml.
+	This oddity does cause some problems for EOF, because EOF expects to be able to fetch objects
+	with only a primary key.  ERRESTAdaptor provides the ability to model fetching these entities, but you
+	should be careful of places where EOF may cause faults for individual objects.  You may find it safer to
+	model relationships to entities of this type in code with fetch specs, or if you're using the Wonder eogen 
+	templates, traverse these kind of relationships with forum.topics(null, true), which will force a refetch of
+	the entities.</li>
+	<li>Request http://beast.caboo.se/forums/1/topics.xml to see an example of what topics look like.  Follow the
+	same procedure as for Forum, creating attributes from the XML.  For dates, use the prototype "dateTime".  For
+	foreign keys, use the attribute "id" and mark them as non-class attributes.</li>
+	<li>Now to address the URL issue for Topics.  Because there is no /topics.xml, we need to tell ERRESTAdaptor
+	how to find topic objects.  Edit the Topic entity and set the table name to "/forums/[forumID]/topics,topic,topics".
+	This says that to fetch a topic, you must use the URL "/forums/[forumID]/topics" where forumID is a variable 
+	that corresponds to the Topic attribute of the same name.  Any time a fetch is performed on a Topic, a forumID
+	must appear in the qualifier or an exception will be thrown from ERRESTAdaptor.  When traversing a to-many 
+	relationship from a Forum to a Topic, this happens automatically inside of EOF.  However, if you are trying to
+	fetch a particular topic, you must provide its forum in your qualifier to prevent an error.</li>
+	<li>Now create the Post entity.  Posts are similar to Topics in that you cannot access them from the top level
+	of the service, but they can be accessed in several different ways.  It turns out that you can get posts for
+	a user, for a forum, or for a topic (which requires a forum). ERRESTAdaptor allows you to model these methods
+	as alternative URLs in the table name by separating the URLs with a pipe.  For instance, the table name for
+	Post is "/users/[userID]/posts|/forums/[forumID]/posts|/forums/[forumID]/topics/[topicID]/posts,post,posts".  I
+	admit this is ugly, and ideally these definitions would be defined on the relationships instead of the entity,
+	but unfortunately at the adaptor level, the EORelationship that was used to fetch the objects is long gone. What
+	ERREST does in this case is that it looks at the qualifier provided and finds the URL that matches the most 
+	variables from your qualifier keys and uses that as the fetching URL.  For instance, if your qualifier only 
+	has a userID in it, the /users/[userID]/posts URL will be used.  However, if you qualifier has a forumID and
+	a topicID in it, the /forums/[forumID]/topics/[topicID]/posts will be used.  An exception will be thrown if
+	a suitable URL cannot be found given the provided qualifier.</li>
+	<li>Lastly, create your User entity.  Nothing fancy here, and top-level fetches are allowed, so take a look
+	at http://beast.caboo.se/users.xml to create your attributes, and use the table name "user,users" on this
+	entity.</li>
+</ol>
+
+<h2>Relationships</h2>
+<p>
+You have created all of the entities for reading information from Beast.  You can now create the
+relationships between these entities.  For entities that can be fetched from the top level, or when modeling
+relationships that will provide enough context for the fetch, relationships can be modeled just like a 
+normal eomodel.
+</p>
+<p>
+For instance, from post.user() is a completely normal to-one relationship because User can be 
+fetched from the top level, and post will provide the "id" necessary to execute the fetch.  Similarly, 
+forum.topics() is a normal to-many relationship, because while Topic does not have a topic level fetch URL,
+traversing the relationship from Forum will provide the "forumID" necessary to complete the fetch.
+</p>
+<p>
+The "problem child" relationships are, for instance, topic.posts().  Traversing the posts relationship on Topic
+will only provide a topicID.  Unfortunately Posts requires a topicID AND a forumID.  It turns out that this
+can be modeled by putting both topicID and forumID in the joins of the to-many relationship definition.  The
+downside of this is that it will not be symmetric with the other side of the relationship, and will not be
+updated automatically when write ability is added to ERRESTAdaptor.  The other problem is that, while this
+technique works on to-many relationships, it does not work on to-one relationships.  EOF does not allow
+a to-one relationship to be defined with a join on anything expect a primary key attribute.
+</p>
+In this  situation, you will need to construct the relationship using a fetch spec, and not using normal 
+relationship definitions in the model.  Your fetch spec will work just like a normal fetch spec, but you must
+provide all variables necessary to complete a fetch.  As an example, if you want to fetch a particular topic,
+you must fetch it like:
+</p>
+<p>
+Topic singleTopic = Topic.fetchRequiredTopic(editingContext, Topic.FORUM.eq(aForum).and(ERXQ.equals("id", 633)));
+</p>
+<p>
+or
+</p>
+<p>
+aForum.topics(ERXQ.equals("id", 633), true)
+</p>
+<p>
+Note that ERRESTAdaptor allows fetching on non-class attributes.
+</p>
+
+<h2>Fetching Notes</h2>
+<p>
+When fetching against the remote service, only topic level EOKeyValueQualifiers, EOAndQualifiers, and 
+EOOrQualifiers with a single entry will be processed for constructing the remote URL.  Complex qualifiers
+can be constructed, but they will be evaluated in-memory against the most restrictive URL that could
+be constructed given your qualifier attributes.
+</p>
+
+<h2>Examples</h2>
+<pre>
+EOEditingContext editingContext = ERXEC.newEditingContext();
+
+NSArray<Forum> forums = Forum.fetchAllForums(editingContext);
+System.out.println("Application.Application: Fetching all forums");
+for (Forum forum : forums) {
+  System.out.println("Application.Application:   " + forum.name() + ", " + forum.postsCount() + ", " + forum.topicsCount());
+}
+
+System.out.println("Application.Application: Fetching forum w/ PK");
+Forum singleForum = (Forum) EOUtilities.objectWithPrimaryKeyValue(editingContext, Forum.ENTITY_NAME, "3");
+System.out.println("Application.Application:   " + singleForum.name());
+
+System.out.println("Application.Application: Fetching topics for " + singleForum.name());
+NSArray<Topic> topics = singleForum.topics();
+for (Topic topic : topics) {
+  System.out.println("Application.Application:   " + topic.title() + " created " + topic.createdAt());
+}
+
+System.out.println("Application.Application: Fetching posts for forum");
+NSArray<Post> forumPosts = singleForum.posts();
+for (Post post : forumPosts) {
+  System.out.println("Application.Application:   " + post.createdAt());
+}
+
+System.out.println("Application.Application: Refetching single topic w/ PK");
+Topic singleTopic = Topic.fetchRequiredTopic(editingContext, Topic.FORUM.eq(singleForum).and(ERXQ.equals("id", 633)));
+System.out.println("Application.Application:   " + singleTopic.title());
+
+System.out.println("Application.Application: Fetching topic user");
+User user = singleTopic.user();
+System.out.println("Application.Application:   " + user.displayName());
+
+System.out.println("Application.Application: Fetching posts for topic (composite pk, which is kind of interesting)");
+NSArray<Post> topicPosts = singleTopic.posts();
+for (Post post : topicPosts) {
+  System.out.println("Application.Application:   " + post.createdAt());
+}
+
+Post randomPost = topicPosts.lastObject();
+System.out.println("Application.Application: Fetching the topic for a post (this will break if topic is not already fetched)");
+System.out.println("Application.Application:   " + randomPost.topic().title());
+
+System.out.println("Application.Application: Fetch author of post");
+User postedByUser = randomPost.user();
+System.out.println("Application.Application:   " + postedByUser.displayName());
+
+System.out.println("Application.Application: Fetching posts by author");
+NSArray<Post> userPosts = postedByUser.posts();
+for (Post post : userPosts) {
+  System.out.println("Application.Application:   " + post.createdAt());
+}
+</pre>
+
+</body>
+</html>
