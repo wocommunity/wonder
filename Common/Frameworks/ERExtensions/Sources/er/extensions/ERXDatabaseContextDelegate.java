@@ -76,28 +76,75 @@ public class ERXDatabaseContextDelegate {
     /** Holds onto the singleton of the default delegate */
     private static ERXDatabaseContextDelegate _defaultDelegate = new ERXDatabaseContextDelegate();
     
-    private ERXArrayFaultCache arrayFaultCache = null;
+    private ERXArrayFaultCache _arrayFaultCache = null;
+    private ERXFetchResultCache _fetchResultCache = null;
     
     /** Returns the singleton of the database context delegate */
     public static ERXDatabaseContextDelegate defaultDelegate() {
         return _defaultDelegate;
     }
 
+    
+    ERXDatabaseContextDelegate() {
+    	//_fetchResultCache = new ERXFetchResultCache();
+    }
+    
     public ERXArrayFaultCache arrayFaultCache() {
-        return arrayFaultCache;
+        return _arrayFaultCache;
     }
 
     public void setArrayFaultCache(ERXArrayFaultCache value) {
-        arrayFaultCache = value;
+        _arrayFaultCache = value;
     }
 
+    public ERXFetchResultCache fetchResultCache() {
+        return _fetchResultCache;
+    }
+    
+    public void setFetchResultCache(ERXFetchResultCache value) {
+    	_fetchResultCache = value;
+    }
+    
     /**
-     * Provides for a hook to get at the original exceptions from the JDBC driver, as opposed to the cooked
-     * EOGeneralAdaptorException you get from EOF. To see the exceptions trace, set the logger 
-     * er.transaction.adaptor.Exceptions to DEBUG. 
-     * @param databaseContext
-     * @param throwable
-     */
+	 * Returns an array of already fetched objects or null if they were not already fetched.
+	 * @param dbc
+	 * @param fs
+	 * @param ec
+	 * @return
+	 */
+	public NSArray databaseContextShouldFetchObjects(EODatabaseContext dbc, EOFetchSpecification fs, EOEditingContext ec) {
+		NSArray result = null;
+		ERXFetchResultCache fetchResultCache = fetchResultCache();
+		if (fetchResultCache != null) {
+			result = fetchResultCache.objectsForFetchSpecification(ec, fs);
+		}
+		return result;
+	}
+
+	/**
+	 * Sets the cache enty for the fetched objects.
+	 * @param dbc
+	 * @param eos
+	 * @param fs
+	 * @param ec
+	 */
+	public void databaseContextDidFetchObjects(EODatabaseContext dbc, NSArray eos, EOFetchSpecification fs, EOEditingContext ec) {
+		NSArray result = null;
+		ERXFetchResultCache fetchResultCache = fetchResultCache();
+		if (fetchResultCache != null) {
+			fetchResultCache.setObjectsForFetchSpecification(eos, fs);
+		}
+	}
+
+    /**
+	 * Provides for a hook to get at the original exceptions from the JDBC
+	 * driver, as opposed to the cooked EOGeneralAdaptorException you get from
+	 * EOF. To see the exceptions trace, set the logger
+	 * er.transaction.adaptor.Exceptions to DEBUG.
+	 * 
+	 * @param databaseContext
+	 * @param throwable
+	 */
     public boolean databaseContextShouldHandleDatabaseException(EODatabaseContext databaseContext, Throwable throwable) {
     	if(exLog.isDebugEnabled()) {
     		exLog.debug("Database Exception occured: " + throwable, throwable);
@@ -265,8 +312,8 @@ public class ERXDatabaseContextDelegate {
     * @param obj
     */
     public boolean databaseContextShouldFetchArrayFault(EODatabaseContext eodatabasecontext, Object obj) {
-        if(arrayFaultCache != null) {
-            arrayFaultCache.clearFault(obj);
+        if(_arrayFaultCache != null) {
+            _arrayFaultCache.clearFault(obj);
             if(!EOFaultHandler.isFault(obj)) {
                 return false;
             }
