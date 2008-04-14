@@ -1836,11 +1836,13 @@ public class ERXArrayUtilities extends Object {
 		
 		int indexOfA = array.indexOf(a);
 		
-		if (indexOfA >= 0 && indexOfB >= 0 && indexOfA != indexOfB) {
-			ERXArrayUtilities.swapObjectsAtIndexesInArray(array, indexOfA, indexOfB);
+		if (indexOfA >= 0 && indexOfB >= 0) {
+			if (indexOfA != indexOfB) {
+				ERXArrayUtilities.swapObjectsAtIndexesInArray(array, indexOfA, indexOfB);
+			}
 		}
 		else {
-			throw new RuntimeException ("At least one of the objects is not element of the array or the two objects are the same!");
+			throw new RuntimeException ("At least one of the objects is not element of the array!");
 		}
 	}
 
