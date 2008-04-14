@@ -926,9 +926,11 @@ public class ERXArrayUtilities extends Object {
      * <br/>
      * This allows for key value paths like:<br/>
      * <br/>
-     * <code>myArray.valueForKeyPath("@subarrayWithRange.3-20.name");</code><br/>
+     * <code>myArray.valueForKeyPath("@subarrayWithRange.20-3.name");</code><br/>
      * <br/>
-     *
+     * Note that the syntax is slightly misleading, implying that you provide a start and end index.  In fact, the
+     * API matches NSRange and you must provide a start index and a length.  Unfortunately changing this either
+     * syntax or implementation will break backwards compatibility (and subtly), so we have to suck it up for now.
      */
     public static class SubarrayWithRangeOperator extends BaseOperator {
         /** public empty constructor */
