@@ -597,8 +597,8 @@ public class ERXEOControlUtilities {
      * @param ec editing context to use for the count qualification
      * @param entityName name of the entity to fetch
      * @param qualifier to find the matching objects
+     * @param attributeName name of attribute in same entity to consider in order to determine uniqueness
      * @return number of matching objects
-     * @attributeName name of attribute in same entity to consider in order to determine uniqueness
      */
     public static Integer objectCountUniqueWithQualifierAndAttribute(EOEditingContext ec, String entityName, EOQualifier qualifier, String attributeName) {
         EOEntity entity = EOUtilities.entityNamed(ec, entityName);
