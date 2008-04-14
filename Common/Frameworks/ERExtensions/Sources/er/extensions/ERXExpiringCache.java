@@ -155,17 +155,27 @@ public class ERXExpiringCache<K, V> {
 	 * @param currentVersionKey
 	 *            the version of the object right now
 	 */
-	public synchronized void setObjectForKeyWithVersion(V object, K key, Object currentVersionKey) {
+	public synchronized void setObjectForKeyWithVersion(V object, K key, Object currentVersionKey, long expirationTime) {
 		removeStaleEntries();
-		long expirationTime;
-		if (_expiryTime == ERXExpiringCache.NO_TIMEOUT) {
-			expirationTime = ERXExpiringCache.NO_TIMEOUT;
-		}
-		else {
-			expirationTime = System.currentTimeMillis() + _expiryTime;
+		if (expirationTime != ERXExpiringCache.NO_TIMEOUT) {
+			expirationTime = System.currentTimeMillis() + expirationTime;
 		}
 		Entry<V> entry = new Entry<V>(object, expirationTime, currentVersionKey);
 		_backingDictionary.setObjectForKey(entry, key);
+	}
+
+	/**
+	 * Sets the object for the specified key and current version key.
+	 * 
+	 * @param object
+	 *            the object to set
+	 * @param key
+	 *            the lookup key
+	 * @param currentVersionKey
+	 *            the version of the object right now
+	 */
+	public synchronized void setObjectForKeyWithVersion(V object, K key, Object currentVersionKey) {
+		setObjectForKeyWithVersion(object, key, currentVersionKey, _expiryTime);
 	}
 
 	/**
