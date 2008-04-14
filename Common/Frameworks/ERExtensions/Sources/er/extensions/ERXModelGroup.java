@@ -683,6 +683,50 @@ public class ERXModelGroup extends EOModelGroup {
 		model.setConnectionDictionary(newConnectionDictionary);
 	}
 
+	/**
+	 * Similar to fixJDBCDictionary, but for JNDI EOModels.
+	 * 
+	 * @param model the JNDI EOModel to fix
+	 * @property [modelName].serverUrl the per-model server URL to set
+	 * @property [modelName].user the per-model username to set
+	 * @property [modelName].password the per-model password to set
+	 * @property [modelName].authenticationModel the per-model authenticationMethod to set
+	 * @property JNDI.global.serverUrl the global JNDI serverUrl to use by default
+	 * @property JNDI.global.username the global JNDI username to use by default
+	 * @property JNDI.global.password the global JNDI password to use by default
+	 * @property JNDI.global.authenticationMethod the global JNDI authenticationMethod to use by default
+	 */
+	protected void fixJNDIDictionary(EOModel model) {
+		String modelName = model.name();
+		String serverUrl = getProperty(modelName + ".serverUrl", "JNDI.global.serverUrl");
+		String userName = getProperty(modelName + ".username", "JNDI.global.username");
+		String password = decryptProperty(modelName + ".password", "JNDI.global.password");
+		String authenticationMethod = getProperty(modelName + ".authenticationMethod", "JNDI.global.authenticationMethod");
+		
+		NSDictionary<String, Object> connectionDictionary = model.connectionDictionary();
+		if (connectionDictionary == null) {
+			connectionDictionary = new NSMutableDictionary<String, Object>();
+			ERXModelGroup.log.warn("The EOModel '" + model.name() + "' does not have a connection dictionary, providing an empty one");
+			model.setConnectionDictionary(connectionDictionary);
+		}
+
+		NSMutableDictionary<String, Object> newConnectionDictionary = new NSMutableDictionary<String, Object>(connectionDictionary);
+		if (serverUrl != null) {
+			newConnectionDictionary.setObjectForKey(serverUrl, "serverUrl");
+		}
+		if (userName != null) {
+			newConnectionDictionary.setObjectForKey(userName, "username");
+		}
+		if (password != null) {
+			newConnectionDictionary.setObjectForKey(password, "password");
+		}
+		if (authenticationMethod != null) {
+			newConnectionDictionary.setObjectForKey(authenticationMethod, "authenticationMethod");
+		}
+
+		model.setConnectionDictionary(newConnectionDictionary);
+	}
+	
 	protected void fixJDBCDictionary(EOModel model) {
 		String aModelName = model.name();
 
@@ -860,6 +904,9 @@ public class ERXModelGroup extends EOModelGroup {
 		}
 		else if (model.adaptorName().indexOf("JDBC") != -1) {
 			fixJDBCDictionary(model);
+		}
+		else if (model.adaptorName().indexOf("JNDI") != -1) {
+			fixJNDIDictionary(model);
 		}
 
 		if (log.isDebugEnabled() && old != null && !old.equals(model.connectionDictionary()) && model.connectionDictionary() != null) {
