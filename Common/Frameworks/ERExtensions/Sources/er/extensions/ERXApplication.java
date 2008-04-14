@@ -694,11 +694,11 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 	 */
 	public ERXApplication() {
 		super();
-		if (!ERXConfigurationManager.defaultManager().isDeployedAsServlet() && !wasERXApplicationMainInvoked || allFrameworks == null) {
+		if (!ERXConfigurationManager.defaultManager().isDeployedAsServlet() && (!wasERXApplicationMainInvoked || allFrameworks == null)) {
 			_displayMainMethodWarning();
 		}
 		if (allFrameworks == null || allFrameworks.size() > 0) {
-			throw new RuntimeException("ERXExtensions have not been initialized. Please report the classpath and the rest of the bundles to the Wonder mailing list: " + "\nRemaining" + allFrameworks + "\n" + System.getProperty("java.class.path"));
+			throw new RuntimeException("ERXExtensions have not been initialized. Please report the classpath and the rest of the bundles to the Wonder mailing list: " + "\nRemaining frameworks: " + allFrameworks + "\nClasspath: " + System.getProperty("java.class.path"));
 		}
 		if ("JavaFoundation".equals(NSBundle.mainBundle().name())) {
 			throw new RuntimeException("Your main bundle is \"JavaFoundation\".  You are not launching this WO application properly.  If you are using Eclipse, most likely you launched your WOA as a \"Java Application\" instead of a \"WO Application\".");
