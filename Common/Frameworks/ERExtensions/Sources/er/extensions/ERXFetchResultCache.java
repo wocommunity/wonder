@@ -7,7 +7,7 @@ import com.webobjects.eocontrol.EOGlobalID;
 import com.webobjects.foundation.NSArray;
 
 /**
- * Transparent cache for fetch results.
+ * Transparent cache for fetch results, uses ERXFetchSpecifictation.identifier() as a key.
  * @author ak
  *
  */
@@ -62,7 +62,7 @@ public class ERXFetchResultCache {
 			boolean isSafe = true;
 			for (Object object : eos) {
 				if (!(object instanceof EOEnterpriseObject)) {
-
+					return;
 				}
 				if (excludedEntities().containsObject(((EOEnterpriseObject)object).entityName())) {
 					return;
