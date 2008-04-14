@@ -1818,6 +1818,29 @@ public class ERXArrayUtilities extends Object {
 			throw new RuntimeException();
 		}
 	}
+	
+	/**
+	* Swaps the object a with the object at the given index
+	*
+	* @author edgar - Apr 14, 2008
+	* @param array the array
+	* @param a - first object
+	* @param indexOfB - index of second object
+	*/
+	public static void swapObjectWithObjectAtIndexInArray(NSMutableArray array, Object a, int indexOfB) {
+		if (array == null || array.count() < 2) {
+			throw new RuntimeException ("Array is either null or does not have enough elements.");
+		}
+		
+		int indexOfA = array.indexOf(a);
+		
+		if (indexOfA >= 0 && indexOfB >= 0 && indexOfA != indexOfB) {
+			ERXArrayUtilities.swapObjectsAtIndexesInArray(array, indexOfA, indexOfB);
+		}
+		else {
+			throw new RuntimeException ("At least one of the objects is not element of the array or the two objects are the same!");
+		}
+	}
 
 	@SuppressWarnings("unchecked")
      /**
@@ -1876,4 +1899,12 @@ public class ERXArrayUtilities extends Object {
 		}
 		return clonedSet;
     }
+	
+	public static NSArray subArray (NSArray array, int startIndex, int numberOfObjects) {
+		NSMutableArray result = new NSMutableArray();
+		for (int i = startIndex; i < startIndex + numberOfObjects; i++) {
+			result.addObject(array.objectAtIndex(i));
+		}
+		return result.immutableClone();
+	}
 }
