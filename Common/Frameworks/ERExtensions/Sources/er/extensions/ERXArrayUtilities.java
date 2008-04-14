@@ -1900,11 +1900,4 @@ public class ERXArrayUtilities extends Object {
 		return clonedSet;
     }
 	
-	public static NSArray subArray (NSArray array, int startIndex, int numberOfObjects) {
-		NSMutableArray result = new NSMutableArray();
-		for (int i = startIndex; i < startIndex + numberOfObjects; i++) {
-			result.addObject(array.objectAtIndex(i));
-		}
-		return result.immutableClone();
-	}
 }
