@@ -116,7 +116,7 @@ public class ERXDatabaseContextDelegate {
 		NSArray result = null;
 		ERXFetchResultCache fetchResultCache = fetchResultCache();
 		if (fetchResultCache != null) {
-			result = fetchResultCache.objectsForFetchSpecification(ec, fs);
+			result = fetchResultCache.objectsForFetchSpecification(dbc, ec, fs);
 		}
 		return result;
 	}
@@ -132,7 +132,7 @@ public class ERXDatabaseContextDelegate {
 		NSArray result = null;
 		ERXFetchResultCache fetchResultCache = fetchResultCache();
 		if (fetchResultCache != null) {
-			fetchResultCache.setObjectsForFetchSpecification(eos, fs);
+			fetchResultCache.setObjectsForFetchSpecification(dbc, ec, eos, fs);
 		}
 	}
 
