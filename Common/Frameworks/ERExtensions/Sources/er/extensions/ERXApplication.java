@@ -1423,6 +1423,10 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 	 */
 	@Override
 	public WOResponse dispatchRequest(WORequest request) {
+		if (ERXApplication.requestHandlingLog.isDebugEnabled()) {
+			ERXApplication.requestHandlingLog.debug(request);
+		}
+
 		WOResponse response = null;
 		try {
 			ERXApplication._startRequest();
@@ -1445,9 +1449,6 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 				response = super.dispatchRequest(request);
 			}
 
-			if (ERXApplication.requestHandlingLog.isDebugEnabled()) {
-				ERXApplication.requestHandlingLog.debug(request);
-			}
 		}
 		finally {
 			ERXStats.logStatisticsForOperation(statsLog, "sum");
