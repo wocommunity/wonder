@@ -3,7 +3,8 @@ package er.extensions;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
 
-import com.webobjects.appserver.*;
+import com.webobjects.appserver.WOContext;
+import com.webobjects.appserver.WOResponse;
 
 /**
  * Simple RSS feed provider.
@@ -26,7 +27,7 @@ public class ERXRssPage extends ERXStatelessComponent {
 	}
 
 	public Object dateFormatter() {
-		return new SimpleDateFormat("E, dd MMM yyyy hh:mm:ss Z", Locale.ENGLISH);
+		return new SimpleDateFormat("E, dd MMM yyyy HH:mm:ss Z", Locale.ENGLISH);
 	}
 	
 	public Object itemGuid() {
