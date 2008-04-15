@@ -95,7 +95,7 @@ public class ERXDatabaseContextMulticastingDelegate extends ERXMulticastingDeleg
      * @see com.webobjects.eoaccess.EODatabaseContext.Delegate#databaseContextDidSelectObjects(com.webobjects.eoaccess.EODatabaseContext, com.webobjects.eocontrol.EOFetchSpecification, com.webobjects.eoaccess.EODatabaseChannel)
      */
     public void databaseContextDidSelectObjects(EODatabaseContext dbCtxt, EOFetchSpecification fetchSpec, EODatabaseChannel dbChannel) {
-        perform("databaseContextDidSelectObjects", new Object[] {dbCtxt, fetchSpec, fetchSpec, dbChannel}, null);
+        perform("databaseContextDidSelectObjects", new Object[] {dbCtxt, fetchSpec, dbChannel}, null);
     }
 
 
