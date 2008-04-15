@@ -60,23 +60,19 @@ public class ERXFetchResultCache {
 				EODatabase database = dbc.database();
 				for (EOGlobalID gid : gids) {
 					NSDictionary snapshotForGlobalID = database.snapshotForGlobalID(gid);
-					if(snapshotForGlobalID != null) {
-						
-					} else {
-						log.error("Error: " + gid);
+					if(snapshotForGlobalID == null || dbc.snapshotForGlobalID(gid, ec.fetchTimestamp()) == null) {
+						// not found with recent timestamp
+						return null;
 					}
-					//database.recordSnapshotForGlobalID(snapshotForGlobalID, gid);
-					database.incrementSnapshotCountForGlobalID(gid);
-					//dbc.recordSnapshotForGlobalID(dbc.snapshotForGlobalID(gid), gid);
+					database.recordSnapshotForGlobalID(snapshotForGlobalID, gid);
 		            EOEnterpriseObject eo = ec.faultForGlobalID(gid, ec);
-		            //ec.initializeObject(eo, gid, ec);
 		            eos.addObject(eo);
 				}
 				result = eos;
-				currentDatabase = null;
 			}
-			boolean hit = result != null;
-			if(hit) {
+			currentDatabase = null;
+			if(log.isDebugEnabled()) {
+				boolean hit = result != null;
 				log.info("Cache : " + (hit ? "HIT" : "MISS") + " on " + fs.entityName());
 			}
 			return result;			
@@ -92,26 +88,26 @@ public class ERXFetchResultCache {
 	}
 
 	/**
-	 * Returns true if the given fetch spec is not to be cached.
+	 * Returns the time the result should stay in the cache. Less or equal than zero means don't cache.
 	 * @param fs
 	 * @return
 	 */
-	protected boolean shouldCache(NSArray eos, EOFetchSpecification fs) {
+	protected long cacheTime(NSArray eos, EOFetchSpecification fs) {
 		if(fs.fetchesRawRows() || fs.refreshesRefetchedObjects()) {
-			return false;
+			return 0;
 		}
 		for (Object object : eos) {
 			if (!(object instanceof EOEnterpriseObject)) {
-				return false;
+				return 0;
 			}
 			if (EOFaultHandler.isFault(object)) {
-				return false;
+				return 0;
 			}
 			if (excludedEntities().containsObject(((EOEnterpriseObject)object).entityName())) {
-				return false;
+				return 0;
 			}
 		}
-		return true;
+		return 100L;
 	}
 
 	/**
@@ -126,12 +122,14 @@ public class ERXFetchResultCache {
 		synchronized (cache) {
 			currentDatabase = dbc.database();
 
-			boolean shouldCache = shouldCache(eos, fs);
-			if(shouldCache) {
+			long cacheTime = cacheTime(eos, fs);
+			if(cacheTime > 0) {
 				NSArray<EOGlobalID> gids = ERXEOControlUtilities.globalIDsForObjects(eos);
-				cache.setObjectForKeyWithVersion(gids, identifier, null, 60000L);
+				cache.setObjectForKeyWithVersion(gids, identifier, null, cacheTime);
 			}
-			log.debug("Cache : " + (shouldCache ? "SET" : "DROP") + " on " + fs.entityName());
+			if(log.isDebugEnabled()) {
+				log.debug("Cache : " + (cacheTime > 0 ? "SET" : "DROP") + " on " + fs.entityName());
+			}
 			currentDatabase = null;
 		}
 	}
