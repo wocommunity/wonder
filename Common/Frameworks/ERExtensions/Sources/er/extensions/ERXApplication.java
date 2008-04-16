@@ -1009,7 +1009,6 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 	 * 
 	 * @author ak
 	 */
-	private boolean refusingByMemoryCheck = false;
 	
 	protected void checkMemory() {
 		if (memoryThreshold != null) {
@@ -1034,23 +1033,27 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 				if (isRefusingNewSessions() != shouldRefuse) {
 					if(isRefusingNewSessions()) {
 						// not changing anything when refuseNewSessions was called externally.
-						if(refusingByMemoryCheck) {
-							refusingByMemoryCheck = false;
+						if(!refusingByMonitor) {
 							refuseNewSessions(false);
 							log.error("Refuse new sessions set to: false");
 						} else {
 							log.info("Refuse new sessions should be set to false, but we were refusing externally");
 						}
-					} else {
-						refusingByMemoryCheck = true;
+					}
+					else {
+						// we are currently not refusing sessions, so start refusing, but reset the kill timer
 						refuseNewSessions(true);
 						resetKillTimer(false);
+						refusingByMonitor = false;
 						log.error("Refuse new sessions set to: true");
 					}
 				}
 			}
 		}
 	}
+
+	/** flag to indicate if we are refusing sessions by a call to refuseNewSessions() */
+	private boolean refusingByMonitor = false;
 
 	/**
 	 * Overridden to install/uninstall a timer that will terminate the
@@ -1062,7 +1065,8 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 	@Override
 	public void refuseNewSessions(boolean value) {
 		super.refuseNewSessions(value);
-		resetKillTimer(isRefusingNewSessions());
+		refusingByMonitor = isRefusingNewSessions();
+		resetKillTimer(refusingByMonitor);
 	}
 
 	/**
@@ -1075,7 +1079,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 			_killTimer.invalidate();
 			_killTimer = null;
 		}
-		if (isRefusingNewSessions()) {
+		if (install) {
 			int timeToKill = ERXProperties.intForKey("ERTimeToKill");
 			if (timeToKill > 0) {
 				log.warn("Registering kill timer in " + timeToKill + "seconds");
