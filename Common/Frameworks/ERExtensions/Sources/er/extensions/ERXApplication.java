@@ -1009,6 +1009,8 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 	 * 
 	 * @author ak
 	 */
+	private boolean refusingByMemoryCheck = false;
+	
 	protected void checkMemory() {
 		if (memoryThreshold != null) {
 			long max = Runtime.getRuntime().maxMemory();
@@ -1030,21 +1032,20 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 
 				boolean shouldRefuse = (used > threshold);
 				if (isRefusingNewSessions() != shouldRefuse) {
-					// not changing anything when the kill timer is set (we
-					// already refusing session by monitor)
-					boolean hasKillTimerSetting = ERXProperties.intForKey("ERTimeToKill") > 0;
-					if (_killTimer == null && hasKillTimerSetting) {
-						// using super, so we don't interfere with the kill
-						// timer, as
-						// this is called when we actually have a lot of
-						// sessions at the moment
-						super.refuseNewSessions(shouldRefuse);
-						log.error("Refuse new sessions set to: " + shouldRefuse);
-					}
-					else {
-						if (hasKillTimerSetting) {
-							log.info("Refuse new sessions should be set to " + shouldRefuse + ", but kill timer is active or not set at all via ERTimeToKill");
+					if(isRefusingNewSessions()) {
+						// not changing anything when refuseNewSessions was called externally.
+						if(refusingByMemoryCheck) {
+							refusingByMemoryCheck = false;
+							refuseNewSessions(false);
+							log.error("Refuse new sessions set to: false");
+						} else {
+							log.info("Refuse new sessions should be set to false, but we were refusing externally");
 						}
+					} else {
+						refusingByMemoryCheck = true;
+						refuseNewSessions(true);
+						resetKillTimer(false);
+						log.error("Refuse new sessions set to: true");
 					}
 				}
 			}
@@ -1061,6 +1062,14 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 	@Override
 	public void refuseNewSessions(boolean value) {
 		super.refuseNewSessions(value);
+		resetKillTimer(isRefusingNewSessions());
+	}
+
+	/**
+	 * Sets the kill timer. 
+	 * @param install
+	 */
+	private void resetKillTimer(boolean install) {
 		// we assume that we changed our mind about killing the instance.
 		if (_killTimer != null) {
 			_killTimer.invalidate();
