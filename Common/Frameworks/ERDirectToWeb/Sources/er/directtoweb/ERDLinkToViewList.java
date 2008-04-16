@@ -52,7 +52,7 @@ public class ERDLinkToViewList extends ERDCustomEditComponent {
     }
 
     public WOComponent view() {
-    	String listConfigurationName = (String)valueForBinding("listPageConfigurationName");
+    	String listConfigurationName = (String)valueForBinding("listConfigurationName");
         ListPageInterface ipi = (ListPageInterface)D2W.factory().pageForConfigurationNamed(listConfigurationName, session());
         ipi.setNextPage(context().page());
         ipi.setDataSource(ERXEOControlUtilities.dataSourceForArray(list()));
