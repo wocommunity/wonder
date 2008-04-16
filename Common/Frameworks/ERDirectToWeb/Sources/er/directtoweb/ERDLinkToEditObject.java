@@ -14,9 +14,9 @@ import er.extensions.ERXEOControlUtilities;
  * Generic link component used to view or edit an object.<br />
  * @binding object object to get list from
  * @binding key keypath to get list from object
+ * @binding keyWhenRelationship in case the object is the value at the keypath, defines the display key
  * @binding editConfigurationName name of the page configuration to jump to
  * @binding useNestedEditingContext if the EC should be nested (default is peer)
- *
  * @author ak
  */
 public class ERDLinkToEditObject extends ERDCustomEditComponent {
@@ -38,12 +38,24 @@ public class ERDLinkToEditObject extends ERDCustomEditComponent {
     public void reset() {
     	super.reset();
     }
+    
+    public Object displayValue() {
+        Object value = objectKeyPathValue();
+        if (value instanceof EOEnterpriseObject) {
+            return ((EOEnterpriseObject) value).valueForKey((String) valueForBinding("keyWhenRelationship"));
+        }
+        return value;
+    }
 
     public WOComponent view() {
-    	String pageConfigurationName = (String)valueForBinding("editConfigurationName");
-    	InspectPageInterface ipi = (InspectPageInterface)D2W.factory().pageForConfigurationNamed(pageConfigurationName, session());
-    	EOEnterpriseObject eo = object();
-    	eo = ERXEOControlUtilities.editableInstanceOfObject(eo, booleanValueForBinding("useNestedEditingContext"));
+        EOEnterpriseObject eo = object();
+        Object value = objectKeyPathValue();
+        if (value instanceof EOEnterpriseObject) {
+            eo = (EOEnterpriseObject) value;
+        }
+        String pageConfigurationName = (String)valueForBinding("editConfigurationName");
+        InspectPageInterface ipi = (InspectPageInterface)D2W.factory().pageForConfigurationNamed(pageConfigurationName, session());
+     	eo = ERXEOControlUtilities.editableInstanceOfObject(eo, booleanValueForBinding("useNestedEditingContext"));
     	ipi.setNextPage(context().page());
     	ipi.setObject(eo);
     	return (WOComponent)ipi;
