@@ -1035,9 +1035,9 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 						// not changing anything when refuseNewSessions was called externally.
 						if(!refusingByMonitor) {
 							refuseNewSessions(false);
-							log.error("Refuse new sessions set to: false");
+							log.warn("Refuse new sessions set to: false");
 						} else {
-							log.info("Refuse new sessions should be set to false, but we were refusing externally");
+							log.debug("Refuse new sessions should be set to false, but we were refusing externally");
 						}
 					}
 					else {
@@ -1064,8 +1064,10 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 
 	@Override
 	public void refuseNewSessions(boolean value) {
+		boolean old = isRefusingNewSessions();
 		super.refuseNewSessions(value);
 		refusingByMonitor = isRefusingNewSessions();
+		log.debug("Refusing new sessions, was: " + old + ", should: " + value +  "  is:" + refusingByMonitor);
 		resetKillTimer(refusingByMonitor);
 	}
 
