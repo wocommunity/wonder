@@ -46,6 +46,7 @@ import com.webobjects.appserver.WOResourceManager;
 import com.webobjects.appserver.WOResponse;
 import com.webobjects.appserver.WOSession;
 import com.webobjects.appserver.WOTimer;
+import com.webobjects.appserver._private.WOProperties;
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.eocontrol.EOTemporaryGlobalID;
 import com.webobjects.foundation.NSArray;
@@ -1063,9 +1064,17 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 	 */
 
 	@Override
-	public void refuseNewSessions(boolean value) {
+	public synchronized void refuseNewSessions(boolean value) {
 		boolean old = isRefusingNewSessions();
+		boolean oldDirectConnect = isDirectConnectEnabled();
+		if(oldDirectConnect) {
+			WOProperties.TheDirectConnectEnabledFlag = false;
+		}
 		super.refuseNewSessions(value);
+		if(oldDirectConnect) {
+			WOProperties.TheDirectConnectEnabledFlag = oldDirectConnect;
+		}
+
 		refusingByMonitor = isRefusingNewSessions();
 		log.debug("Refusing new sessions, was: " + old + ", should: " + value +  "  is:" + refusingByMonitor);
 		resetKillTimer(refusingByMonitor);
