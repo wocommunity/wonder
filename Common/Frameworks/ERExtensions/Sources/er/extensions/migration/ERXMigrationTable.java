@@ -623,7 +623,8 @@ public class ERXMigrationTable {
 		entity.setPrimaryKeyAttributes(attributes);
 		NSArray<EOSQLExpression> expressions = schemaGeneration.primaryKeyConstraintStatementsForEntityGroup(new NSArray<EOEntity>(entity));
 		ERXMigrationDatabase._ensureNotEmpty(expressions);
-		return expressions;
+		NSArray<EOSQLExpression> supportExpressions = schemaGeneration.primaryKeySupportStatementsForEntityGroup(new NSArray<EOEntity>(entity));
+		return expressions.arrayByAddingObjectsFromArray(supportExpressions);
 	}
 
 	/**
