@@ -3,6 +3,6 @@ ViewLink: WOHyperlink {
 }
 
 Description: WOString {
-	value = objectKeyPathValue;
+	value = displayValue;
 }
 
