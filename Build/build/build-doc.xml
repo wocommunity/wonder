@@ -36,8 +36,10 @@
     <!-- ==================================================== -->
     <path id="classpath">
         <fileset dir="${wonder.root}/Build/lib">
-            <include name="cayenne.jar"/>
-            <include name="jdom*.jar"/>
+            <include name="Build/lib/cayenne.jar"/>
+            <include name="Build/lib/jdom*.jar"/>
+            <include name="Ajax/Ajax/Libraries/jabsorb-1.2.2.jar"/>
+            <include name="Common/Frameworks/ERCaptcha/Libraries/jcaptcha-all-1.0-RC3.jar"/>
         </fileset>
         <fileset dir="${wo.frameworks}">
             <include name="Java**/Resources/Java/*.jar" />
@@ -145,9 +147,9 @@
             <bottom><![CDATA[Copyright &#169; 2002 &#8211; 2007  Project Wonder.]]></bottom>
             <footer><![CDATA[Last updated: ${updated.date} &#149; ${updated.time}]]></footer>
             <link href="http://java.sun.com/j2se/1.4/docs/api/"/>
-            <link href="http://developer.apple.com/documentation/WebObjects/Reference/API/" packagelistLoc="${wonder.root}/Build/build/webobjects-package-list"/>
+            <link href="http://developer.apple.com/documentation/WebObjects/Reference/WO53_Reference/" packagelistLoc="${wonder.root}/Build/build/webobjects-package-list"/>
             <link href="http://jakarta.apache.org/log4j/docs/api/"/>
-            <link href="http://www.junit.org/junit/javadoc/3.7/"/>
+            <link href="http://junit.sourceforge.net/javadoc/"/>
             <taglet name="BindingTaglet" path="${wonder.root}/Build/lib/" />
             <taglet name="D2WKeyTaglet" path="${wonder.root}/Build/lib/" />
         </javadoc>
