@@ -93,7 +93,7 @@ public class AjaxSubmitButton extends AjaxDynamicElement {
     return options;
   }
 
-  public static void fillInAjaxOptions(AjaxDynamicElement element, WOComponent component, String submitButtonName, NSMutableDictionary options) {
+  public static void fillInAjaxOptions(IAjaxElement element, WOComponent component, String submitButtonName, NSMutableDictionary options) {
     StringBuffer parametersBuffer = new StringBuffer();
     String systemDefaultFormSerializer = "Form.serializeWithoutSubmits";
     String defaultFormSerializer = ERXProperties.stringForKeyWithDefault("er.ajax.formSerializer", systemDefaultFormSerializer);
