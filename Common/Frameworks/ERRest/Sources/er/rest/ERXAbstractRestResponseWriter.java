@@ -24,31 +24,33 @@ public abstract class ERXAbstractRestResponseWriter implements IERXRestResponseW
 	}
 
 	protected void appendArrayToResponse(ERXRestContext context, WOResponse response, ERXRestKey result, int indent, NSMutableSet visitedObjects) throws ERXRestException, ERXRestSecurityException, ERXRestNotFoundException, ParseException {
-		String arrayName;
 		EOEntity entity = result.nextEntity();
 		IERXRestEntityDelegate entityDelegate = context.delegate().entityDelegate(entity);
-		String entityAlias = entityDelegate.entityAliasForEntityNamed(entity.name());
-		if (result.keyAlias() == null) {
-			arrayName = entityAlias;
+		if (!(entityDelegate instanceof ERXDenyRestEntityDelegate)) {
+			String arrayName;
+			String entityAlias = entityDelegate.entityAliasForEntityNamed(entity.name());
+			if (result.keyAlias() == null) {
+				arrayName = entityAlias;
+			}
+			else {
+				arrayName = result.keyAlias();
+			}
+			NSArray values = (NSArray) result.value();
+			if (arrayName.equals(entityAlias)) {
+				arrayName = ERXLocalizer.currentLocalizer().plurifiedString(arrayName, 2);
+			}
+			entityDelegate.preprocess(entity, values, context);
+	
+			NSMutableArray valueKeys = new NSMutableArray();
+			Enumeration valuesEnum = values.objectEnumerator();
+			while (valuesEnum.hasMoreElements()) {
+				EOEnterpriseObject eo = (EOEnterpriseObject) valuesEnum.nextElement();
+				ERXRestKey eoKey = result.extend(ERXRestUtils.stringIDForEO(eo), eo);
+				valueKeys.addObject(eoKey);
+			}
+	
+			appendArrayToResponse(context, response, result, arrayName, entityAlias, valueKeys, indent, visitedObjects);
 		}
-		else {
-			arrayName = result.keyAlias();
-		}
-		NSArray values = (NSArray) result.value();
-		if (arrayName.equals(entityAlias)) {
-			arrayName = ERXLocalizer.currentLocalizer().plurifiedString(arrayName, 2);
-		}
-		entityDelegate.preprocess(entity, values, context);
-
-		NSMutableArray valueKeys = new NSMutableArray();
-		Enumeration valuesEnum = values.objectEnumerator();
-		while (valuesEnum.hasMoreElements()) {
-			EOEnterpriseObject eo = (EOEnterpriseObject) valuesEnum.nextElement();
-			ERXRestKey eoKey = result.extend(ERXRestUtils.stringIDForEO(eo), eo);
-			valueKeys.addObject(eoKey);
-		}
-
-		appendArrayToResponse(context, response, result, arrayName, entityAlias, valueKeys, indent, visitedObjects);
 	}
 
 	protected void appendToResponse(ERXRestContext context, WOResponse response, ERXRestKey result, int indent, NSMutableSet visitedObjects) throws ERXRestException, ERXRestSecurityException, ERXRestNotFoundException, ParseException {
