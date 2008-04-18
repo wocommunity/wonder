@@ -23,6 +23,9 @@ import org.apache.log4j.Logger;
 
 import com.webobjects.appserver.WOApplication;
 import com.webobjects.appserver.WOAssociation;
+import com.webobjects.appserver._private.WOBindingNameAssociation;
+import com.webobjects.appserver._private.WOConstantValueAssociation;
+import com.webobjects.appserver._private.WOKeyValueAssociation;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableArray;
@@ -59,8 +62,8 @@ public class WOOgnl {
     	associationMappings.put(prefix, clazz);
     }
     
-    private WOAssociation createAssociationForClass(Class clazz, String value) {
-    	return (WOAssociation) _NSUtilities.instantiateObject(clazz, new Class[]{String.class}, new Object[]{value}, true, false);
+    private WOAssociation createAssociationForClass(Class clazz, String value, boolean isConstant) {
+    	return (WOAssociation) _NSUtilities.instantiateObject(clazz, new Class[]{Object.class, boolean.class}, new Object[]{value, Boolean.valueOf(isConstant)}, true, false);
     }
 
     public static class Observer {
@@ -120,44 +123,55 @@ public class WOOgnl {
         for (Enumeration e = associations.keyEnumerator(); e.hasMoreElements();) {
         	String name = (String)e.nextElement();
         	WOAssociation association = (WOAssociation) associations.objectForKey(name);
-            if(association.isValueConstant()) {
-            	//AK: shouldn't this be "instanceof WOConstantAssociation"?
-                Object constantValue = association.valueInComponent(null);
-                if (constantValue != null && constantValue instanceof String) {
-                	if(associationMappings.size() != 0) {
-                		int index = name.indexOf(':');
-                		if(index > 0) {
-                			String prefix = name.substring(0, index);
-                			if(prefix != null) {
-                				Class c = (Class) associationMappings.get(prefix);
-                				if(c != null) {
-                					String postfix = name.substring(index+1);
-                					WOAssociation newAssociation = createAssociationForClass(c, constantValue.toString());
-                					associations.removeObjectForKey(name);
-                					associations.setObjectForKey(newAssociation, postfix);
-                				}
-                			}
-                		}
-                	}
-                	if(((String)constantValue).startsWith(ognlBindingFlag())) {
-                		String ognlExpression = ((String)constantValue).substring(ognlBindingFlag().length(),
-                				((String)constantValue).length());
-                		if (ognlExpression.length() > 0) {
-                			WOAssociation newAssociation = new WOOgnlAssociation(ognlExpression);
-                			NSArray keys = associations.allKeysForObject(association);
-                			//if (log.isDebugEnabled())
-                			//    log.debug("Constructing Ognl association for binding key(s): "
-                			//              + (keys.count() == 1 ? keys.lastObject() : keys) + " expression: " + ognlExpression);
-                			if (keys.count() == 1) {
-                				associations.setObjectForKey(newAssociation, keys.lastObject());
-                			} else {
-                				for (Enumeration ee = keys.objectEnumerator(); ee.hasMoreElements();) {
-                					associations.setObjectForKey(newAssociation, e.nextElement());    
-                				}
-                			}
-                		}
-                	}
-                }
+        	boolean isConstant = false;
+        	String keyPath = null;
+        	if (association instanceof WOConstantValueAssociation) {
+				WOConstantValueAssociation constantAssociation = (WOConstantValueAssociation) association;
+				// AK: this sucks, but there is no API to get at the value
+				Object value = constantAssociation.valueInComponent(null);
+				if (value instanceof String) {
+					keyPath = (String) value;
+				}
+				isConstant = true;
+			} else if(association instanceof WOKeyValueAssociation) {
+				keyPath = association.keyPath();
+			} else if(association instanceof WOBindingNameAssociation) {
+				keyPath = "^" + association.keyPath();
+			}
+        	if(keyPath != null) {
+        		if(associationMappings.size() != 0) {
+        			int index = name.indexOf(':');
+        			if(index > 0) {
+        				String prefix = name.substring(0, index);
+        				if(prefix != null) {
+        					Class c = (Class) associationMappings.get(prefix);
+        					if(c != null) {
+        						String postfix = name.substring(index+1);
+        						WOAssociation newAssociation = createAssociationForClass(c, keyPath, isConstant);
+        						associations.removeObjectForKey(name);
+        						associations.setObjectForKey(newAssociation, postfix);
+        					}
+        				}
+        			}
+        		}
+        		if(isConstant && keyPath != null && keyPath.startsWith(ognlBindingFlag())) {
+        			String ognlExpression = keyPath.substring(ognlBindingFlag().length(),
+        					keyPath.length());
+        			if (ognlExpression.length() > 0) {
+        				WOAssociation newAssociation = new WOOgnlAssociation(ognlExpression);
+        				NSArray keys = associations.allKeysForObject(association);
+        				//if (log.isDebugEnabled())
+        				//    log.debug("Constructing Ognl association for binding key(s): "
+        				//              + (keys.count() == 1 ? keys.lastObject() : keys) + " expression: " + ognlExpression);
+        				if (keys.count() == 1) {
+        					associations.setObjectForKey(newAssociation, keys.lastObject());
+        				} else {
+        					for (Enumeration ee = keys.objectEnumerator(); ee.hasMoreElements();) {
+        						associations.setObjectForKey(newAssociation, e.nextElement());    
+        					}
+        				}
+        			}
+        		}
             }
         }
     }
