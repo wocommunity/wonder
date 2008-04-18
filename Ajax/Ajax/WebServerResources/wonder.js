@@ -24,7 +24,7 @@ Object.extend(Event, {
 		return keynum;
 	},
 	
-	pressingAltKey : function(event) {
+	pressingAltKey: function(event) {
 	  if (document.all) {
 	  	return window.event.altKey;
 	  }
@@ -39,7 +39,7 @@ Object.extend(Event, {
 	  }
 	},
 	
-	pressingShiftKey : function(event) {
+	pressingShiftKey: function(event) {
 	  if (document.all) {
 	  	return window.event.shiftKey;
 	  }
@@ -54,7 +54,7 @@ Object.extend(Event, {
 	  }
 	},
 	
-	pressingControlKey : function(event) {
+	pressingControlKey: function(event) {
 	  if (document.all) {
 	  	return window.event.ctrlKey;
 	  }
@@ -69,7 +69,7 @@ Object.extend(Event, {
 	  }
 	},
 	
-	pressingMetaKey : function(event) {
+	pressingMetaKey: function(event) {
 	  if (document.all) {
 	  	return window.event.metaKey;
 	  }
@@ -128,26 +128,26 @@ Object.extend(Form, {
 });  
 
 var AjaxInPlace = {
-	saveFunctionName : function(id) {
+	saveFunctionName: function(id) {
 		return "window." + id + "Save";
 	},
 	
-	cancelFunctionName : function(id) {
+	cancelFunctionName: function(id) {
 		return "window." + id + "Cancel";
 	},
 	
-	editFunctionName : function(id) {
+	editFunctionName: function(id) {
 		return "window." + id + "Edit";
 	},
 	
-	cleanupEdit : function(id) {
+	cleanupEdit: function(id) {
 		var saveFunctionName = this.saveFunctionName(id);
 		var cancelFunctionName = this.cancelFunctionName(id);
 		if (typeof eval(saveFunctionName) != 'undefined') { eval(saveFunctionName + " = null"); }
 		if (typeof eval(cancelFunctionName) != 'undefined') { eval(cancelFunctionName + " = null"); }
 	},
 	
-	cleanupView : function(id) {
+	cleanupView: function(id) {
 		var editFunctionName = this.editFunctionName(id);
 		if (typeof eval(editFunctionName) != 'undefined') { eval(editFunctionName + " = null"); }
 	}
@@ -163,7 +163,26 @@ var AjaxOptions = {
 }
 
 var AjaxUpdateContainer = {
-	insertionFunc : function(effectPairName, beforeDuration, afterDuration) {
+	registerPeriodic: function(id, canStop, stopped, options) {
+		var url = $(id).getAttribute('updateUrl');
+		var updater;
+		if (!canStop) {
+			updater = new Ajax.PeriodicalUpdater(id, url, options);
+		}
+		else if (stopped) {
+			var newOptions = Object.extend({}, options);
+			newOptions.stopped = true;
+			updater = new Ajax.StoppedPeriodicalUpdater(id, url, options);
+		}
+		else {
+			updater = new Ajax.ActivePeriodicalUpdater(id, url, options);
+		}
+		
+		eval(id + "PeriodicalUpdater = updater;");
+		eval(id + "Stop = function() { " + id + "PeriodicalUpdater.stop() };");
+	},
+	
+	insertionFunc: function(effectPairName, beforeDuration, afterDuration) {
 		var insertionFunction;
 		
 		var showEffect = 0;
@@ -210,14 +229,14 @@ var AjaxUpdateContainer = {
 		return insertionFunction;
 	},
 	
-	register : function(id, options) {
+	register: function(id, options) {
 		if (!options) {
 			options = {};
 		}
 		eval(id + "Update = function() { AjaxUpdateContainer.update(id, options) }");
 	},
 	
-	update : function(id, options) {
+	update: function(id, options) {
 		var actionUrl = $(id).getAttribute('updateUrl');
 		actionUrl = actionUrl.addQueryParameters('__updateID='+ id);
 		new Ajax.Updater(id, actionUrl, AjaxOptions.defaultOptions(options));
@@ -226,18 +245,24 @@ var AjaxUpdateContainer = {
 var AUC = AjaxUpdateContainer;
 
 var AjaxUpdateLink = {
-	updateFunc : function(id, options, elementID) {
+	updateFunc: function(id, options, elementID) {
 		var updateFunction = function(queryParams) {
 			AjaxUpdateLink.update(id, options, elementID, queryParams);
 		};
 		return updateFunction;
 	},
 	
-	update : function(id, options, elementID, queryParams) {
+	update: function(id, options, elementID, queryParams) {
 		var actionUrl = $(id).getAttribute('updateUrl').sub('[^/]+$', elementID);
 		actionUrl = actionUrl.addQueryParameters(queryParams);
 		actionUrl = actionUrl.addQueryParameters('__updateID='+ id);
 		new Ajax.Updater(id, actionUrl, AjaxOptions.defaultOptions(options));
+	},
+	
+	request: function(actionUrl, options, elementID, queryParams) {
+		var actionUrl = actionUrl.sub('[^/]+$', elementID);
+		actionUrl = actionUrl.addQueryParameters(queryParams);
+		new Ajax.Request(actionUrl, AjaxOptions.defaultOptions(options));
 	}
 };
 var AUL = AjaxUpdateLink;
@@ -256,7 +281,7 @@ var AjaxSubmitButton = {
 	generateActionUrl: function(id, form, queryParams) {
 		var actionUrl = form.action;
 		if (queryParams != null) {
-			actionUrl.addQueryParameters(queryParams);
+			actionUrl = actionUrl.addQueryParameters(queryParams);
 		}
 		actionUrl = actionUrl.sub('/wo/', '/ajax/', 1);
 		if (id != null) {
@@ -365,25 +390,115 @@ var AjaxSubmitButton = {
 };
 var ASB = AjaxSubmitButton;
 
+var AjaxDraggable = {
+	register: function(draggableContainerID, options) {
+		var draggableContainerName = 'draggable_' + draggableContainerID;
+		var draggableContainerType = eval("typeof " + draggableContainerName);
+		if (draggableContainerType != 'undefined') {
+			eval(draggableContainerName).destroy();
+		}
+		var draggableContainer = new Draggable(draggableContainerID, options);
+		eval(draggableContainerName + "=draggableContainer");
+	}
+};
+var ADG = AjaxDraggable;
+
+var AjaxDroppable = Class.create({
+	contextID: null,
+	elementID: null,
+	droppableElementID: null,
+	draggableKeyName: null,
+	updateContainerID: null,
+	actionUrl: null,
+	submit: null,
+	form: null,
+	onbeforedrop: null,
+	ondrop: null,
+	options: null,
+	
+	initialize: function(contextID, elementID, droppableElementID, draggableKeyName, updateContainerID, actionUrl, form, onbeforedrop, ondrop, options) {
+		this.contextID = contextID;
+		this.elementID = elementID;
+		this.droppableElementID = droppableElementID;
+		this.draggableKeyName = draggableKeyName;
+		this.updateContainerID = updateContainerID;
+		this.actionUrl = actionUrl;
+		this.form = form;
+		this.onbeforedrop = onbeforedrop;
+		this.ondrop = ondrop;
+		this.options = options;
+	},
+	
+	dropped: function(element, droppableElement) {
+    if (droppableElement.id == this.droppableElementID) {
+			if (this.onbeforedrop) {
+				this.onbeforedrop(element, droppableElement);
+			}
+
+    	var data = this.draggableKeyName + '=' + element.getAttribute('draggableID');
+    	
+			if (this.updateContainerID == null) {
+				if (this.form) {
+					ASB.request(this.form, data, this.options);
+				}
+				else {
+					AUL.request(this.actionUrl, this.options, this.contextID + '.' + this.elementID, data);
+				}
+			}
+			else {
+				if (this.form) {
+					ASB.update(this.updateContainerID, this.form, data, this.options);
+				}
+				else {
+					AUL.update(this.updateContainerID, this.options, this.contextID + '.' + this.elementID, data);
+				}
+			}
+			
+			if (this.ondrop) {
+				this.ondrop(element, droppableElement);
+			}
+    }
+	}
+});
+Object.extend(AjaxDroppable, {
+	register: function(droppableContainerID, options) {
+		var droppableContainerName = 'droppable_' + droppableContainerID;
+		var droppableContainerType = eval("typeof " + droppableContainerName);
+		if (droppableContainerType != 'undefined') {
+			Droppables.remove(eval(droppableContainerName));
+		}
+		var droppableContainer = $(droppableContainerID);
+		eval(droppableContainerName + '=droppableContainer');
+		Droppables.add(droppableContainer, options);
+	},
+	
+	droppedFunc: function(contextID, elementID, droppableElementID, draggableKeyName, updateContainerID, actionUrl, form, onbeforedrop, ondrop, options) {
+		var adp = new AjaxDroppable(contextID, elementID, droppableElementID, draggableKeyName, updateContainerID, actionUrl, form, onbeforedrop, ondrop, options);
+		return adp.dropped.bind(adp);
+	}
+});
+var ADP = AjaxDroppable;
+
 var AjaxPeriodicUpdater = Class.create();
 AjaxPeriodicUpdater.prototype = {
-	initialize : function(id) {
+	initialize: function(id) {
 		this.id = id;
 	},
 	
-	start : function() {
+	start: function() {
 		var actionUrl = $(this.id).getAttribute('updateUrl');
 		actionUrl = actionUrl.addQueryParameters('__updateID='+ id);
 		this.updater = new Ajax.PeriodicalUpdater(this.id, actionUrl, { evalScripts: true, frequency: 2.0 });
 	},
 
-	stop : function() {
+	stop: function() {
 		if (this.updater) {
 			this.updater.stop();
 			this.updater = null;
 		}
 	}
 };
+
 Ajax.ActivePeriodicalUpdater = Class.create(Ajax.Base, {
   initialize: function($super, container, url, options) {
     $super(options);
