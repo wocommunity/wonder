@@ -429,7 +429,7 @@ public class ERXRestRequestHandler extends WORequestHandler {
 			finally {
 				editingContext.unlock();
 			}
-			
+
 			if (response != null) {
 				response._finalizeInContext(woContext);
 				response.disableClientCaching();
@@ -489,7 +489,8 @@ public class ERXRestRequestHandler extends WORequestHandler {
 		}
 		ERXDefaultRestDelegate restDelegate = new ERXDefaultRestDelegate(defaultEntityDelegate);
 		IERXRestAuthenticationDelegate authenticationDelegate = new ERXUnsafeRestAuthenticationDelegate();
-		//IERXRestResponseWriter responseWriter = new ERXJSONRestResponseWriter(true, displayToMany); // DON'T COMMIT YET
+		// IERXRestResponseWriter responseWriter = new ERXJSONRestResponseWriter(true, displayToMany); // DON'T COMMIT
+		// YET
 		IERXRestResponseWriter responseWriter = new ERXXmlRestResponseWriter(true, displayToMany);
 		IERXRestRequestParser requestParser = new ERXXmlRestRequestParser();
 		return new ERXRestRequestHandler(authenticationDelegate, restDelegate, responseWriter, requestParser);
@@ -528,5 +529,26 @@ public class ERXRestRequestHandler extends WORequestHandler {
 		ERXDefaultRestDelegate restDelegate = new ERXDefaultRestDelegate();
 		ERXRestRequestHandler.register(authenticationDelegate, restDelegate);
 		return restDelegate;
+	}
+
+	/**
+	 * Registers an ERXRestRequestHandler with the WOApplication for the handler key "rest" using an
+	 * ERXDefaultRestDelegate, ERXXmlRestResponseWriter, and ERXXmlRestRequestParser.
+	 * 
+	 * @param authenticationDelegate
+	 *            the authentication delegate
+	 * @param delegate
+	 *            the rest delegate
+	 * @param displayAllProperties
+	 *            if true, by default all properties are eligible to be displayed (probably should only be true in
+	 *            development, but it won't really hurt anything). Note that entity delegates will still control
+	 *            permissions on the properties, it just defaults to checking all of them.
+	 * @param displayAllToMany
+	 *            if true, all to-many relationships will be displayed
+	 */
+	public static final ERXRestRequestHandler register(IERXRestAuthenticationDelegate authenticationDelegate, boolean displayAllProperties, boolean displayAllToMany) {
+		ERXRestRequestHandler requestHandler = new ERXRestRequestHandler(authenticationDelegate, new ERXDefaultRestDelegate(), new ERXXmlRestResponseWriter(displayAllProperties, displayAllToMany), new ERXXmlRestRequestParser());
+		ERXRestRequestHandler.register(requestHandler);
+		return requestHandler;
 	}
 }
