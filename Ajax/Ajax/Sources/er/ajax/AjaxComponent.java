@@ -39,8 +39,16 @@ public abstract class AjaxComponent extends WOComponent implements IAjaxElement 
         return value;
     }
     
+    public Object valueForBinding(String name, WOComponent component) {
+    	return valueForBinding(name, (Object)null);
+    }
+    
+	public Object valueForBinding(String name, Object defaultValue, WOComponent component) {
+		return valueForBinding(name, (Object)defaultValue);
+	}
+
     protected void addScriptResourceInHead(WOResponse _response, String _fileName) {
-	AjaxUtils.addScriptResourceInHead(context(), _response, _fileName);
+    	AjaxUtils.addScriptResourceInHead(context(), _response, _fileName);
     }
 
     protected void addScriptResourceInHead(WOResponse _response, String _framework, String _fileName) {
