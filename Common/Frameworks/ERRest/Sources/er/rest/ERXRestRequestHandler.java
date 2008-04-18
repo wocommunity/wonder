@@ -7,6 +7,7 @@ import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WORequest;
 import com.webobjects.appserver.WORequestHandler;
 import com.webobjects.appserver.WOResponse;
+import com.webobjects.appserver.WOSession;
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.foundation.NSMutableDictionary;
 
@@ -30,7 +31,7 @@ import er.extensions.ERXEC;
  * To use the unsafe development example delegates, you can add the following code to your application constructor:
  * 
  * <pre>
- * registerRequestHandler(ERXRestRequestHandler.createUnsafeRequestHandler(), &quot;rest&quot;);
+ * registerRequestHandler(ERXRestRequestHandler.createUnsafeRequestHandler(true, false), &quot;rest&quot;);
  * </pre>
  * 
  * </p>
@@ -345,6 +346,7 @@ public class ERXRestRequestHandler extends WORequestHandler {
 	 * @param request
 	 *            the request
 	 */
+	@Override
 	public WOResponse handleRequest(WORequest request) {
 		WOApplication application = WOApplication.application();
 		WOContext woContext = application.createContextForRequest(request);
@@ -364,10 +366,32 @@ public class ERXRestRequestHandler extends WORequestHandler {
 		// }
 		woContext._setRequestSessionID(wosid);
 
+		WOSession session = null;
 		if (woContext._requestSessionID() != null) {
-			WOApplication.application().restoreSessionWithID(wosid, woContext);
+			session = WOApplication.application().restoreSessionWithID(wosid, woContext);
+		}
+		if (session != null) {
+			session.awake();
 		}
 		try {
+			if (woContext._session() != null) {
+				WOSession contextSession = woContext._session();
+				// If this is a new session, then we have to force it to be a cookie session
+				if (wosid == null) {
+					boolean storesIDsInCookies = contextSession.storesIDsInCookies();
+					try {
+						contextSession.setStoresIDsInCookies(true);
+						contextSession._appendCookieToResponse(response);
+					}
+					finally {
+						contextSession.setStoresIDsInCookies(storesIDsInCookies);
+					}
+				}
+				else {
+					contextSession._appendCookieToResponse(response);
+				}
+			}
+
 			EOEditingContext editingContext = newEditingContext();
 			ERXRestContext restContext = new ERXRestContext(woContext, editingContext);
 			restContext.setDelegate(_delegate);
@@ -405,6 +429,11 @@ public class ERXRestRequestHandler extends WORequestHandler {
 			finally {
 				editingContext.unlock();
 			}
+			
+			if (response != null) {
+				response._finalizeInContext(woContext);
+				response.disableClientCaching();
+			}
 		}
 		catch (ERXRestNotFoundException e) {
 			response.setStatus(404);
@@ -422,7 +451,16 @@ public class ERXRestRequestHandler extends WORequestHandler {
 			ERXRestRequestHandler.log.error("Request failed.", e);
 		}
 		finally {
-			WOApplication.application().saveSessionForContext(woContext);
+			try {
+				if (session != null) {
+					session.sleep();
+				}
+			}
+			finally {
+				if (woContext._session() != null) {
+					WOApplication.application().saveSessionForContext(woContext);
+				}
+			}
 		}
 
 		return response;
@@ -432,8 +470,10 @@ public class ERXRestRequestHandler extends WORequestHandler {
 	 * Creates an unsafe request handler for you to try out in development mode. THIS SHOULD NOT BE DEPLOYED (and in
 	 * fact it will throw an exception if development mode is false).
 	 * 
-	 * @param readOnly if true, the unsafe read-only delegate will be used
-	 * @param displayToMany if true, to-many relationships will display by default
+	 * @param readOnly
+	 *            if true, the unsafe read-only delegate will be used
+	 * @param displayToMany
+	 *            if true, to-many relationships will display by default
 	 * @return an unsafe request handler
 	 */
 	public static final ERXRestRequestHandler createUnsafeRequestHandler(boolean readOnly, boolean displayToMany) {
@@ -449,8 +489,44 @@ public class ERXRestRequestHandler extends WORequestHandler {
 		}
 		ERXDefaultRestDelegate restDelegate = new ERXDefaultRestDelegate(defaultEntityDelegate);
 		IERXRestAuthenticationDelegate authenticationDelegate = new ERXUnsafeRestAuthenticationDelegate();
+		//IERXRestResponseWriter responseWriter = new ERXJSONRestResponseWriter(true, displayToMany); // DON'T COMMIT YET
 		IERXRestResponseWriter responseWriter = new ERXXmlRestResponseWriter(true, displayToMany);
 		IERXRestRequestParser requestParser = new ERXXmlRestRequestParser();
 		return new ERXRestRequestHandler(authenticationDelegate, restDelegate, responseWriter, requestParser);
+	}
+
+	/**
+	 * Registers an ERXRestRequestHandler with the WOApplication for the handler key "rest".
+	 * 
+	 * @param requestHandler
+	 *            the rest request handler to register
+	 */
+	public static void register(ERXRestRequestHandler requestHandler) {
+		WOApplication.application().registerRequestHandler(requestHandler, "rest");
+	}
+
+	/**
+	 * Registers an ERXRestRequestHandler with the WOApplication for the handler key "rest".
+	 * 
+	 * @param authenticationDelegate
+	 *            the authentication delegate
+	 * @param delegate
+	 *            the rest delegate
+	 */
+	public static void register(IERXRestAuthenticationDelegate authenticationDelegate, IERXRestDelegate delegate) {
+		ERXRestRequestHandler.register(new ERXRestRequestHandler(authenticationDelegate, delegate));
+	}
+
+	/**
+	 * Registers an ERXRestRequestHandler with the WOApplication for the handler key "rest" and an
+	 * ERXDefaultRestDelegate.
+	 * 
+	 * @param authenticationDelegate
+	 *            the authentication delegate
+	 */
+	public static ERXDefaultRestDelegate register(IERXRestAuthenticationDelegate authenticationDelegate) {
+		ERXDefaultRestDelegate restDelegate = new ERXDefaultRestDelegate();
+		ERXRestRequestHandler.register(authenticationDelegate, restDelegate);
+		return restDelegate;
 	}
 }

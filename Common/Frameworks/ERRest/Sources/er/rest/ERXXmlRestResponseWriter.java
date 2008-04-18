@@ -1,9 +1,5 @@
 package er.rest;
 
-import com.webobjects.foundation.NSArray;
-
-import er.extensions.ERXProperties;
-
 /**
  * <p>
  * ERXXmlRestResponseWriter provides a concrete implementation of a restful response writer that can generate XML
@@ -108,12 +104,7 @@ import er.extensions.ERXProperties;
  * @author mschrag
  */
 public class ERXXmlRestResponseWriter extends ERXAbstractXmlRestResponseWriter {
-	public static final String REST_PREFIX = "ERXRest.";
-	public static final String DETAILS_PREFIX = ".details";
-	public static final String DETAILS_PROPERTIES_PREFIX = ".detailsProperties";
-
 	private boolean _displayAllProperties;
-	private boolean _displayAllDetails;
 	private boolean _displayAllToMany;
 
 	/**
@@ -138,58 +129,13 @@ public class ERXXmlRestResponseWriter extends ERXAbstractXmlRestResponseWriter {
 		_displayAllToMany = displayAllToMany;
 	}
 
-	protected String cascadingValue(ERXRestContext context, ERXRestKey result, String propertyPrefix, String propertySuffix, String defaultValue) throws ERXRestException, ERXRestNotFoundException, ERXRestSecurityException {
-		ERXRestKey cascadingKey = result.firstKey();
-		String cascadingValue = defaultValue;
-		boolean matchFound = false;
-		while (!matchFound && cascadingKey != null) {
-			String keypathWithoutGIDs = cascadingKey.path(true);
-			String propertyName = propertyPrefix + keypathWithoutGIDs.replace('/', '.') + propertySuffix;
-			String propertyValueStr = ERXProperties.stringForKey(propertyName);
-			if (propertyValueStr != null) {
-				cascadingValue = propertyValueStr;
-				matchFound = true;
-			}
-			else if (cascadingKey.nextKey() == null) {
-				cascadingKey = null;
-			}
-			else {
-				cascadingKey = cascadingKey.nextKey();
-			}
-		}
-		return cascadingValue;
-	}
-
+	@Override
 	protected boolean displayDetails(ERXRestContext context, ERXRestKey result) throws ERXRestException, ERXRestNotFoundException, ERXRestSecurityException {
-		boolean displayDetails;
-		String displayDetailsStr = cascadingValue(context, result, ERXXmlRestResponseWriter.REST_PREFIX, ERXXmlRestResponseWriter.DETAILS_PREFIX, null);
-		if (displayDetailsStr == null) {
-			displayDetails = result.previousKey() == null;
-		}
-		else {
-			displayDetails = Boolean.valueOf(displayDetailsStr).booleanValue();
-		}
-		return displayDetails;
+		return _displayDetailsFromProperties(context, result);
 	}
 
+	@Override
 	protected String[] displayProperties(ERXRestContext context, ERXRestKey result) throws ERXRestException, ERXRestNotFoundException, ERXRestSecurityException {
-		String[] displayPropertyNames;
-		String displayPropertyNamesStr = cascadingValue(context, result, ERXXmlRestResponseWriter.REST_PREFIX, ERXXmlRestResponseWriter.DETAILS_PROPERTIES_PREFIX, null);
-		if (displayPropertyNamesStr == null) {
-			if (_displayAllProperties) {
-				NSArray allPropertyNames = ERXUnsafeRestEntityDelegate.allPropertyNames(result.entity(), _displayAllToMany);
-				displayPropertyNames = new String[allPropertyNames.count()];
-				for (int propertyNum = 0; propertyNum < displayPropertyNames.length; propertyNum++) {
-					displayPropertyNames[propertyNum] = (String) allPropertyNames.objectAtIndex(propertyNum);
-				}
-			}
-			else {
-				displayPropertyNames = null;
-			}
-		}
-		else {
-			displayPropertyNames = displayPropertyNamesStr.split(",");
-		}
-		return displayPropertyNames;
+		return _displayPropertiesFromProperties(context, result, _displayAllProperties, _displayAllToMany);
 	}
 }

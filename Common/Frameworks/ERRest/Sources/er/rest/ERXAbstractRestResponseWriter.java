@@ -11,6 +11,7 @@ import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableSet;
 
 import er.extensions.ERXLocalizer;
+import er.extensions.ERXProperties;
 
 /**
  * ERXAbstractRestResponseWriter provides the output-method-agnostic methods for processing a rest response.
@@ -79,6 +80,10 @@ public abstract class ERXAbstractRestResponseWriter implements IERXRestResponseW
 				appendVisitedToResponse(context, response, entity, eo, objectName, entityAlias, id, indent);
 			}
 			else {
+				if (!result.isKeyGID()) {
+					result = result.extend(ERXRestUtils.stringIDForEO(eo), eo);
+				}
+				
 				visitedObjects.addObject(eo);
 				boolean displayDetails = displayDetails(context, result);
 				if (!displayDetails) {
@@ -107,11 +112,73 @@ public abstract class ERXAbstractRestResponseWriter implements IERXRestResponseW
 						appendDetailsToResponse(context, response, entity, eo, objectName, entityAlias, id, displayKeys, indent, visitedObjects);
 					}
 				}
+				visitedObjects.removeObject(eo);
 			}
 		}
 		else {
 			appendPrimitiveToResponse(context, response, result, indent, value);
 		}
+	}
+
+	protected void indent(WOResponse response, int indent) {
+		for (int i = 0; i < indent; i++) {
+			response.appendContentString("  ");
+		}
+	}
+
+	protected String cascadingValue(ERXRestContext context, ERXRestKey result, String propertyPrefix, String propertySuffix, String defaultValue) throws ERXRestException, ERXRestNotFoundException, ERXRestSecurityException {
+		ERXRestKey cascadingKey = result.firstKey();
+		String cascadingValue = defaultValue;
+		boolean matchFound = false;
+		while (!matchFound && cascadingKey != null) {
+			String keypathWithoutGIDs = cascadingKey.path(true);
+			String propertyName = propertyPrefix + keypathWithoutGIDs.replace('/', '.') + propertySuffix;
+			String propertyValueStr = ERXProperties.stringForKey(propertyName);
+			if (propertyValueStr != null) {
+				cascadingValue = propertyValueStr;
+				matchFound = true;
+			}
+			else if (cascadingKey.nextKey() == null) {
+				cascadingKey = null;
+			}
+			else {
+				cascadingKey = cascadingKey.nextKey();
+			}
+		}
+		return cascadingValue;
+	}
+
+	protected boolean _displayDetailsFromProperties(ERXRestContext context, ERXRestKey result) throws ERXRestException, ERXRestNotFoundException, ERXRestSecurityException {
+		boolean displayDetails;
+		String displayDetailsStr = cascadingValue(context, result, ERXXmlRestResponseWriter.REST_PREFIX, ERXXmlRestResponseWriter.DETAILS_PREFIX, null);
+		if (displayDetailsStr == null) {
+			displayDetails = result.previousKey() == null;
+		}
+		else {
+			displayDetails = Boolean.valueOf(displayDetailsStr).booleanValue();
+		}
+		return displayDetails;
+	}
+
+	protected String[] _displayPropertiesFromProperties(ERXRestContext context, ERXRestKey result, boolean displayAllProperties, boolean displayAllToMany) throws ERXRestException, ERXRestNotFoundException, ERXRestSecurityException {
+		String[] displayPropertyNames;
+		String displayPropertyNamesStr = cascadingValue(context, result, ERXXmlRestResponseWriter.REST_PREFIX, ERXXmlRestResponseWriter.DETAILS_PROPERTIES_PREFIX, null);
+		if (displayPropertyNamesStr == null) {
+			if (displayAllProperties) {
+				NSArray allPropertyNames = ERXUnsafeRestEntityDelegate.allPropertyNames(result.nextEntity(), displayAllToMany);
+				displayPropertyNames = new String[allPropertyNames.count()];
+				for (int propertyNum = 0; propertyNum < displayPropertyNames.length; propertyNum++) {
+					displayPropertyNames[propertyNum] = (String) allPropertyNames.objectAtIndex(propertyNum);
+				}
+			}
+			else {
+				displayPropertyNames = null;
+			}
+		}
+		else {
+			displayPropertyNames = displayPropertyNamesStr.split(",");
+		}
+		return displayPropertyNames;
 	}
 
 	/**

@@ -185,6 +185,7 @@ public abstract class ERXStandardRestEntityDelegate extends ERXAbstractRestEntit
 	 * @param entityName the name of the entity
 	 * @return the entity alias
 	 */
+	@Override
 	public String entityAliasForEntityNamed(String entityName) {
 		String entityAlias = ERXProperties.stringForKey(ERXXmlRestResponseWriter.REST_PREFIX + entityName + ".alias");
 		if (entityAlias == null) {
@@ -202,6 +203,7 @@ public abstract class ERXStandardRestEntityDelegate extends ERXAbstractRestEntit
 	 * @param propertyName the name of the property
 	 * @return the property alias
 	 */
+	@Override
 	public String propertyAliasForPropertyNamed(EOEntity entity, String propertyName) {
 		String propertyAlias = (String) _propertyAliasForPropertyName.objectForKey(entity.name() + "." + propertyName);
 		if (propertyAlias == null) {
@@ -219,6 +221,7 @@ public abstract class ERXStandardRestEntityDelegate extends ERXAbstractRestEntit
 	 * @param propertyAlias the name of the property alias
 	 * @return the property name
 	 */
+	@Override
 	public String propertyNameForPropertyAlias(EOEntity entity, String propertyAlias) {
 		String propertyName = (String) _propertyNameForPropertyAlias.objectForKey(entity.name() + "." + propertyAlias);
 		if (propertyName == null) {
@@ -404,6 +407,7 @@ public abstract class ERXStandardRestEntityDelegate extends ERXAbstractRestEntit
 	 * @throws ERXRestException if a general error occurs
 	 * @throws ERXRestSecurityException if a security exception occurs
 	 */
+	@Override
 	public void inserted(EOEntity entity, EOEnterpriseObject eo, ERXRestContext context) throws ERXRestException, ERXRestSecurityException {
 		// DO NOTHING
 	}
@@ -417,6 +421,7 @@ public abstract class ERXStandardRestEntityDelegate extends ERXAbstractRestEntit
 	 * @throws ERXRestException if a general error occurs
 	 * @throws ERXRestSecurityException if a security exception occurs
 	 */
+	@Override
 	public void updated(EOEntity entity, EOEnterpriseObject eo, ERXRestContext context) throws ERXRestException, ERXRestSecurityException {
 		// DO NOTHING
 	}

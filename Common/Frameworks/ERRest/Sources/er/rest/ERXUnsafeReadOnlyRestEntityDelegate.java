@@ -24,6 +24,7 @@ public class ERXUnsafeReadOnlyRestEntityDelegate extends ERXStandardRestEntityDe
 		_initializedEntityNames = new NSMutableSet();
 	}
 	
+	@Override
 	public void initializeEntityNamed(String entityName) {
 		if (!_initializedEntityNames.containsObject(entityName)) {
 			super.initializeEntityNamed(entityName);
@@ -37,22 +38,27 @@ public class ERXUnsafeReadOnlyRestEntityDelegate extends ERXStandardRestEntityDe
 		}
 	}
 
+	@Override
 	public void delete(EOEntity entity, EOEnterpriseObject eo, ERXRestContext context) throws ERXRestException, ERXRestSecurityException {
 		throw new ERXRestSecurityException("You are not allowed to delete objects for the entity '" + entity.name() + ".");
 	}
 
+	@Override
 	public void updated(EOEntity entity, EOEnterpriseObject eo, ERXRestContext context) throws ERXRestException, ERXRestSecurityException {
 		throw new ERXRestSecurityException("You are not allowed to update objects for the entity '" + entity.name() + ".");
 	}
 
+	@Override
 	public void inserted(EOEntity entity, EOEnterpriseObject eo, ERXRestContext context) throws ERXRestException, ERXRestSecurityException {
 		throw new ERXRestSecurityException("You are not allowed to insert objects for the entity '" + entity.name() + ".");
 	}
 
+	@Override
 	public boolean canInsertProperty(EOEntity entity, EOEnterpriseObject eo, String propertyName, ERXRestContext context) {
 		return false;
 	}
 
+	@Override
 	public boolean canUpdateProperty(EOEntity entity, EOEnterpriseObject eo, String propertyName, ERXRestContext context) {
 		return false;
 	}
@@ -83,6 +89,7 @@ public class ERXUnsafeReadOnlyRestEntityDelegate extends ERXStandardRestEntityDe
 		return true;
 	}
 
+	@Override
 	public boolean canViewProperty(EOEntity entity, Object obj, String propertyName, ERXRestContext context) {
 		return true;
 	}
