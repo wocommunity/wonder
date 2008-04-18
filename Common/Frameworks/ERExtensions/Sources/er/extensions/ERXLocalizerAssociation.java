@@ -48,4 +48,14 @@ public class ERXLocalizerAssociation extends WOAssociation {
 	public String keyPath() {
 		return _isConstant ? "<none>" : _value.toString();
 	}
+
+	@Override
+	public Object clone() {
+		return new ERXLocalizerAssociation(_value, _isConstant);
+	}
+
+	@Override
+	public String toString() {
+		return "<" + getClass().getName() + ": value=" + _value + ", isConstant=" + _isConstant + ">";
+	}
 }
