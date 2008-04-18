@@ -34,6 +34,7 @@ import er.extensions.ERXAjaxApplication;
  * @binding observeFieldID the ID of the field to observe
  * @binding updateContainerID the ID of the container to update
  * @binding action the action to call when the observer fires
+ * @binding onBeforeSubmit called prior to submitting the observed content; return false to deny the submit
  */
 public class AjaxObserveField extends AjaxDynamicElement {
 	public AjaxObserveField(String name, NSDictionary associations, WOElement children) {
@@ -53,6 +54,7 @@ public class AjaxObserveField extends AjaxDynamicElement {
 		ajaxOptionsArray.addObject(new AjaxOption("observeFieldFrequency", AjaxOption.NUMBER));
 		ajaxOptionsArray.addObject(new AjaxOption("onLoading", AjaxOption.SCRIPT));
 		ajaxOptionsArray.addObject(new AjaxOption("onComplete", AjaxOption.SCRIPT));
+		ajaxOptionsArray.addObject(new AjaxOption("onBeforeSubmit", AjaxOption.SCRIPT));
 		ajaxOptionsArray.addObject(new AjaxOption("onSuccess", AjaxOption.SCRIPT));
 		ajaxOptionsArray.addObject(new AjaxOption("onFailure", AjaxOption.SCRIPT));
 		ajaxOptionsArray.addObject(new AjaxOption("onException", AjaxOption.SCRIPT));

@@ -8,6 +8,7 @@
 		<binding name="action"/>
 		<binding name="elementName"/>
 		<binding name="id"/>
+		<binding name="onBeforeSubmit"/>
 		
 		<binding name="evalScripts"/>
 		<binding name="insertion"/>
