@@ -361,17 +361,23 @@ var AjaxSubmitButton = {
 			// senderID is on the real WOForm. Unfortunately we can't hook into the real WOForm to do
 			// this :(
 			submitFunction = function(element, value) {
-				ASB.partial(updateContainerID, formFieldID, options);
+				if (!options.onBeforeSubmit || options.onBeforeSubmit(formFieldID)) {
+					ASB.partial(updateContainerID, formFieldID, options);
+				}
 			}
 		}
 		else if (updateContainerID != null) {
 			submitFunction = function(element, value) {
-				ASB.update(updateContainerID, $(formFieldID).form, null, options);
+				if (!options.onBeforeSubmit || options.onBeforeSubmit(formFieldID)) {
+					ASB.update(updateContainerID, $(formFieldID).form, null, options);
+				}
 			}
 		}
 		else {
 			submitFunction = function(element, value) {
-				ASB.request($(formFieldID).form, null, options);
+				if (!options.onBeforeSubmit || options.onBeforeSubmit(formFieldID)) {
+					ASB.request($(formFieldID).form, null, options);
+				}
 			}
 		}
 
