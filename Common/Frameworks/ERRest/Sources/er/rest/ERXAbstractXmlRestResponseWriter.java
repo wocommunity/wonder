@@ -19,6 +19,7 @@ import er.extensions.ERXStringUtilities;
  * @author mschrag
  */
 public abstract class ERXAbstractXmlRestResponseWriter extends ERXAbstractRestResponseWriter {
+	@Override
 	public void appendToResponse(ERXRestContext context, WOResponse response, ERXRestKey result) throws ERXRestException, ERXRestSecurityException, ERXRestNotFoundException, ParseException {
 		response.setHeader("text/xml", "Content-Type");
 		response.appendContentString("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
@@ -52,12 +53,7 @@ public abstract class ERXAbstractXmlRestResponseWriter extends ERXAbstractRestRe
 		}
 	}
 
-	protected void indent(WOResponse response, int indent) {
-		for (int i = 0; i < indent; i++) {
-			response.appendContentString("  ");
-		}
-	}
-
+	@Override
 	protected void appendArrayToResponse(ERXRestContext context, WOResponse response, ERXRestKey result, String arrayName, String entityName, NSArray valueKeys, int indent, NSMutableSet visitedObjects) throws ERXRestException, ERXRestSecurityException, ERXRestNotFoundException, ParseException {
 		indent(response, indent);
 		response.appendContentString("<");
@@ -83,6 +79,7 @@ public abstract class ERXAbstractXmlRestResponseWriter extends ERXAbstractRestRe
 		response.appendContentString("\n");
 	}
 	
+	@Override
 	protected void appendVisitedToResponse(ERXRestContext context, WOResponse response, EOEntity entity, EOEnterpriseObject eo, String objectName, String entityName, Object id, int indent) {
 		indent(response, indent);
 		response.appendContentString("<");
@@ -102,6 +99,7 @@ public abstract class ERXAbstractXmlRestResponseWriter extends ERXAbstractRestRe
 		response.appendContentString("\n");
 	}
 	
+	@Override
 	protected void appendNoDetailsToResponse(ERXRestContext context, WOResponse response, EOEntity entity, EOEnterpriseObject eo, String objectName, String entityName, Object id, int indent) {
 		indent(response, indent);
 		response.appendContentString("<");
@@ -113,13 +111,20 @@ public abstract class ERXAbstractXmlRestResponseWriter extends ERXAbstractRestRe
 			response.appendContentString("\"");
 		}
 		
-		response.appendContentString(">");
-
+		response.appendContentString(" id = \"");
 		response.appendContentString(String.valueOf(id));
-
-		response.appendContentString("</");
-		response.appendContentString(objectName);
-		response.appendContentString(">\n");
+		response.appendContentString("\"");
+		
+		response.appendContentString("/>");
+		response.appendContentString("\n");
+		
+//		response.appendContentString(">");
+//
+//		response.appendContentString(String.valueOf(id));
+//
+//		response.appendContentString("</");
+//		response.appendContentString(objectName);
+//		response.appendContentString(">\n");
 		
 //		response.appendContentString(" id = \"");
 //		response.appendContentString(String.valueOf(id));
@@ -142,6 +147,7 @@ public abstract class ERXAbstractXmlRestResponseWriter extends ERXAbstractRestRe
 //		response.appendContentString(">\n");
 	}
 
+	@Override
 	protected void appendDetailsToResponse(ERXRestContext context, WOResponse response, EOEntity entity, EOEnterpriseObject eo, String objectName, String entityName, Object id, NSArray displayKeys, int indent, NSMutableSet visitedObjects) throws ERXRestException, ERXRestSecurityException, ERXRestNotFoundException, ParseException {
 		indent(response, indent);
 		response.appendContentString("<");
@@ -202,6 +208,7 @@ public abstract class ERXAbstractXmlRestResponseWriter extends ERXAbstractRestRe
 		response.appendContentString("\n");
 	}
 	
+	@Override
 	protected void appendPrimitiveToResponse(ERXRestContext context, WOResponse response, ERXRestKey result, int indent, Object value) throws ERXRestException {
 		indent(response, indent);
 		response.appendContentString(String.valueOf(value));

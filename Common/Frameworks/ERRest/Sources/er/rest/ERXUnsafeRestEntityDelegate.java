@@ -34,6 +34,7 @@ public class ERXUnsafeRestEntityDelegate extends ERXStandardRestEntityDelegate {
 		}
 	}
 
+	@Override
 	public void initializeEntityNamed(String entityName) {
 		if (!_initializedEntityNames.containsObject(entityName)) {
 			super.initializeEntityNamed(entityName);
@@ -47,10 +48,12 @@ public class ERXUnsafeRestEntityDelegate extends ERXStandardRestEntityDelegate {
 		}
 	}
 
+	@Override
 	public boolean canInsertProperty(EOEntity entity, EOEnterpriseObject eo, String propertyName, ERXRestContext context) {
 		return canUpdateProperty(entity, eo, propertyName, context);
 	}
 
+	@Override
 	public boolean canUpdateProperty(EOEntity entity, EOEnterpriseObject eo, String propertyName, ERXRestContext context) {
 		NSArray allPropertyNames = ERXUnsafeRestEntityDelegate.allPropertyNames(entity, true);
 		return allPropertyNames.containsObject(propertyName);
@@ -82,6 +85,7 @@ public class ERXUnsafeRestEntityDelegate extends ERXStandardRestEntityDelegate {
 		return true;
 	}
 
+	@Override
 	public boolean canViewProperty(EOEntity entity, Object obj, String propertyName, ERXRestContext context) {
 		return true;
 	}

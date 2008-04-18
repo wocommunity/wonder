@@ -7,8 +7,10 @@ import com.webobjects.eocontrol.EOEnterpriseObject;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
+import com.webobjects.foundation._NSUtilities;
 
 import er.extensions.ERXLocalizer;
+import er.extensions.ERXProperties;
 
 /**
  * ERXDefaultRestDelegate is the default implementation of the IERXRestDelegate interface. It provides support for
@@ -212,10 +214,34 @@ public class ERXDefaultRestDelegate implements IERXRestDelegate {
 		return entityName;
 	}
 
+	@SuppressWarnings("unchecked")
 	public IERXRestEntityDelegate entityDelegate(EOEntity entity) {
 		IERXRestEntityDelegate entityDelegate = (IERXRestEntityDelegate) _entityDelegates.objectForKey(entity.name());
 		if (entityDelegate == null) {
-			entityDelegate = _defaultDelegate;
+			String entityDelegateClassName = ERXProperties.stringForKey("ERXRest." + entity.name() + ".delegate");
+			Class<IERXRestEntityDelegate> entityDelegateClass;
+			if (entityDelegateClassName == null) {
+				entityDelegateClassName = entity.name() + "RestEntityDelegate";
+				entityDelegateClass = _NSUtilities.classWithName(entityDelegateClassName);
+			}
+			else {
+				entityDelegateClass = _NSUtilities.classWithName(entityDelegateClassName);
+				if (entityDelegateClass == null) {
+					throw new IllegalArgumentException("There is no entity delegate named '" + entityDelegateClassName + "'.");
+				}
+			}
+			if (entityDelegateClass != null) {
+				try {
+					entityDelegate = entityDelegateClass.newInstance();
+				}
+				catch (Exception e) {
+					throw new RuntimeException("Failed to instantiate the entity delegate '" + entityDelegateClassName + "'.", e);
+				}
+			}
+			else {
+				entityDelegate = _defaultDelegate;
+			}
+			_entityDelegates.setObjectForKey(entity, entityDelegate);
 		}
 		entityDelegate.initializeEntityNamed(entity.name());
 		return entityDelegate;
