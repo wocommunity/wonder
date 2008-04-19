@@ -5,6 +5,7 @@
         <binding name = "id"/>
         <binding name = "isSelected" defaults = "Boolean" />
         <binding name = "refreshOnSelect" defaults = "Boolean" />
+        <binding name = "onLoad" />
 	</wo>
 	
 		
