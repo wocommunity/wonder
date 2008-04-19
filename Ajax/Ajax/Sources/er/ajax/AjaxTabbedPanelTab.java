@@ -20,6 +20,8 @@ import com.webobjects.foundation.*;
             when it is no longer the selected tab.
  * @binding id optional, String the id attribute of the A element selecting
  *          this panel, [id]_panel is the id of LI element implementing this tab
+ * @binding refreshOnSelect optional, if true the tab content will reload each
+ *          time the tab is selected.  Defaults to false.
  *
  * @author Chuck Hill
  */
@@ -29,6 +31,7 @@ public class AjaxTabbedPanelTab extends AjaxDynamicElement {
     private WOAssociation name;
     private WOAssociation id;
     private WOAssociation isSelected;
+    private WOAssociation refreshOnSelect;
 
 
     public AjaxTabbedPanelTab(String aName, NSDictionary associations, WOElement template) {
@@ -38,6 +41,7 @@ public class AjaxTabbedPanelTab extends AjaxDynamicElement {
         name = (WOAssociation) associations.objectForKey("name");
         id = (WOAssociation) associations.objectForKey("id");
         isSelected = (WOAssociation) associations.objectForKey("isSelected");
+        refreshOnSelect = (WOAssociation) associations.objectForKey("refreshOnSelect");
 
         if (name == null)
         {
@@ -157,6 +161,17 @@ public class AjaxTabbedPanelTab extends AjaxDynamicElement {
      */
     public WOAssociation name() {
         return name;
+    }
+
+    /**
+     * Returns current component's value for the refreshOnSelect binding.
+     *
+     * @param component the component this is being rendered in
+     * @return Boolean value for refreshOnSelect binding, Boolean.FALSE if unset
+     */
+    public Boolean refreshesOnSelect(WOComponent component)
+    {
+       return (refreshOnSelect != null) ? (Boolean)refreshOnSelect.valueInComponent(component): Boolean.FALSE;
     }
 
 }

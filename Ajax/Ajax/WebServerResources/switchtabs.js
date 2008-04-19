@@ -39,7 +39,7 @@ var AjaxTabbedPanel = {
     },
 
     // Loads the panel contents if not already loaded
-    loadPanel : function(paneID, busyDivID) {
+    loadPanel : function(paneID, busyDivID, shouldReload) {
 
       // Determine what to show if the panel takes a while to  load
       var busyContent = 'Loading, please wait...';
@@ -48,9 +48,11 @@ var AjaxTabbedPanel = {
       }
 
       var pane = $(paneID);
-      if (pane.innerHTML=='' || pane.innerHTML==busyContent) {
-         new PeriodicalExecuter(function(pe) { if (pane.innerHTML=='' || pane.innerHTML==busyContent) {pane.innerHTML=busyContent}; pe.stop()}, 0.5);
-         new Ajax.Updater(pane, pane.getAttribute('updateUrl'), {asynchronous:1, evalScripts:true});
+      if (pane.innerHTML=='' || pane.innerHTML==busyContent || shouldReload) {
+         pe = new PeriodicalExecuter(function(pe) { pane.innerHTML=busyContent; pe.stop()}, 0.25);
+         new Ajax.Updater(pane, pane.getAttribute('updateUrl'), {asynchronous: 1, 
+         														 evalScripts: true, 
+         														 onSuccess: function(a, b) {pe.stop();}});
       }
     },
 
