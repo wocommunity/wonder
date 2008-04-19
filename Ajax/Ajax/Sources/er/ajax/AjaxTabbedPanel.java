@@ -49,6 +49,7 @@ import com.webobjects.foundation.*;
  * @binding id required, String the id of the UL that wraps the tabs
  * @binding busyDiv optional, String the id of a div that should be shown when a
  *          tab is loading
+ * @binding onLoad optional, String JavaScript to execute after the whole tabbed panel loads
  *
  * @author Chuck Hill
  */
@@ -58,6 +59,7 @@ public class AjaxTabbedPanel extends AjaxDynamicElement {
     private NSMutableArray tabs = new NSMutableArray();
     private WOAssociation id;
     private WOAssociation busyDiv;
+    private WOAssociation onLoad;
 
 
     public AjaxTabbedPanel(String name, NSDictionary associations, WOElement template) {
@@ -65,6 +67,7 @@ public class AjaxTabbedPanel extends AjaxDynamicElement {
         content = template;
         id = (WOAssociation) associations.objectForKey("id");
         busyDiv = (WOAssociation) associations.objectForKey("busyDiv");
+        onLoad = (WOAssociation) associations.objectForKey("onLoad");
         findTabs((WODynamicGroup)template);
 
         if (id == null)
@@ -117,6 +120,9 @@ public class AjaxTabbedPanel extends AjaxDynamicElement {
         // UL for tabs
         response.appendContentString("<ul class=\"ajaxTabbedPanel\"");
         appendTagAttributeToResponse(response, "id", idString);
+        if (onLoad != null) {
+            appendTagAttributeToResponse(response, "onLoad", onLoad.valueInComponent(component));
+        }
         response.appendContentString(">\n");
 
         String paneControlID = idString + "_panecontrol";
@@ -172,6 +178,10 @@ public class AjaxTabbedPanel extends AjaxDynamicElement {
         }
         response.appendContentString("</ul>\n");
         super.appendToResponse(response, context);
+
+        response.appendContentString("<script>AjaxTabbedPanel.onLoad('");
+        response.appendContentString(idString);
+        response.appendContentString("');</script>\n");
     }
 
 

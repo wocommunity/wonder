@@ -1,6 +1,11 @@
 // Functions for AjaxTabbedPanel
 var AjaxTabbedPanel = {
 
+	// Called to perform any onLoad function
+	onLoad : function(elementID) {
+		this.runOnLoad($(elementID));	
+	},
+	
     // Change which tab appears in selected state
     selectTab : function(tabControlID, selectedTabID) {
       var selectedTab = $(selectedTabID);
@@ -52,11 +57,19 @@ var AjaxTabbedPanel = {
          pe = new PeriodicalExecuter(function(pe) { pane.innerHTML=busyContent; pe.stop()}, 0.25);
          new Ajax.Updater(pane, pane.getAttribute('updateUrl'), {asynchronous: 1, 
          														 evalScripts: true, 
-         														 onSuccess: function(a, b) {pe.stop();}});
+         														 onSuccess: function(a, b) {pe.stop(); AjaxTabbedPanel.runOnLoad(pane); }});
       }
     },
 
 
+    runOnLoad : function(element) {
+    	var onLoadScript = element.getAttribute('onLoad');
+		if (onLoadScript) {
+			eval(onLoadScript);	
+		}
+    },
+    
+    
     // Returns an element's children that have a specific tag name as an array
     getChildrenByTagName : function(element, tag_name) {
         child_array      = new Array();

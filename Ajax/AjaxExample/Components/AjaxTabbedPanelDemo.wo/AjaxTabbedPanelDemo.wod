@@ -5,6 +5,7 @@ AjaxExampleComponent : AjaxExampleComponent {
 TabbedPanel: AjaxTabbedPanel {
 	id = "tabbedPanel";
 	busyDiv = "busydiv";
+	onLoad = "alert('Tabbed Panel onLoad event')";
 }
 
 Tab1: AjaxTabbedPanelTab {
@@ -22,6 +23,7 @@ Tab3: AjaxTabbedPanelTab {
 	name = "Refreshing Content";
 	isSelected = isRefreshingContentSelected;
 	refreshOnSelect = true;
+	onLoad = "alert('Refreshing Content tab onLoad event')";
 }
 
 CurrentTime: WOString {
