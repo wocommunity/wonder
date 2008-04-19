@@ -18,7 +18,16 @@ Tab2: AjaxTabbedPanelTab {
 	isSelected = isInlineContentSelected;
 }
 
+Tab3: AjaxTabbedPanelTab {
+	name = "Refreshing Content";
+	isSelected = isRefreshingContentSelected;
+	refreshOnSelect = true;
+}
 
+CurrentTime: WOString {
+	value = now;
+}
+	
 SlowLoadingComponent: SlowLoadingComponent {
 }
 
