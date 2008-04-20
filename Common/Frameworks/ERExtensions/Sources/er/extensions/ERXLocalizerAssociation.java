@@ -36,7 +36,7 @@ public class ERXLocalizerAssociation extends WOAssociation {
 				key = value.toString();
 			}
 		}
-		return ERXLocalizer.defaultLocalizer().localizedValueForKeyWithDefault(key);
+		return ERXLocalizer.currentLocalizer().localizedValueForKeyWithDefault(key);
 	}
 
 	@Override
