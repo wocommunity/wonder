@@ -1459,9 +1459,13 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 	 * 
 	 */
 	public static class DelayedRequestHandler extends WORequestHandler {
+
+		public static final Logger log = Logger.getLogger(DelayedRequestHandler.class);
+
 		private static String KEY = "erxf";
 		
 		private ERXExpiringCache<String, DelayedRequest> _futures;
+		private ERXExpiringCache<String, String> _urls;
 		private ExecutorService _executor;
 
 		protected int _refresh;
@@ -1482,12 +1486,20 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 				final ERXApplication app = erxApplication();
 				WOResponse response = app.dispatchRequestImmediately(_request);
 				// testing
-				// Thread.sleep(10000);
+				if(app.responseCompressionEnabled()) {
+					if("gzip".equals(response.headerForKey("content-encoding"))) {
+						response.removeHeadersForKey("content-encoding");
+						byte bytes[] = response.content()._bytesNoCopy();
+						
+						response.setContent(ERXCompressionUtilities.gunzipByteArrayAsString(bytes));
+					}
+				}
+				Thread.sleep(6000);
 				return response;
 			}
 
-			public void setFuture(Future<WOResponse> value) {
-				_future = value;
+			public WORequest request() {
+				return _request;
 			}
 			
 			public Future<WOResponse> future() {
@@ -1508,6 +1520,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 			_refresh = refresh;
 			_maxRequestTime = maxRequestTime;
 			_futures = new ERXExpiringCache(_refresh * 5);
+			_urls = new ERXExpiringCache(_refresh * 5);
 			_executor = Executors.newCachedThreadPool();
 		}
 
@@ -1523,14 +1536,18 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 			String id;
 			log.debug("Handling: " + uri);
 
-			// flag to show we are 
 			if(KEY.equals(request.requestHandlerKey())) {
 				id = request.stringFormValueForKey("id");
 				delayedRequest = _futures.objectForKey(id);
-				// FIXME, this happens a lot when you reload...
-				// we could store the url in the session and swap that out later on...
 				if(delayedRequest == null) {
-					return createErrorResponse(request);
+					String url = _urls.objectForKey(id);
+					if(url == null) {
+						return createErrorResponse(request);
+					}
+					response = new WOResponse();
+					response.setStatus(302);
+					response.setHeader(url, "location");
+					return response;
 				}
 				// refresh entry, so it doesn't time out
 				_futures.setObjectForKey(delayedRequest, id);
@@ -1571,6 +1588,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 							if(sessionID != null) {
 								args += "&wosid=" + sessionID;
 							}
+							args += "&_time=" + System.currentTimeMillis();
 							url = app.createContextForRequest((WORequest) request.clone()).urlWithRequestHandlerKey(KEY, "wait", args); 
 						}
 						log.debug("Delaying: " + request.uri());
@@ -1581,14 +1599,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 					// the real response is used.
 					response = delayedRequest.future().get(_maxRequestTime, TimeUnit.MILLISECONDS);
 					_futures.removeObjectForKey(id);
-					if(app.responseCompressionEnabled()) {
-						if("gzip".equals(response.headerForKey("content-encoding"))) {
-							response.removeHeadersForKey("content-encoding");
-							byte bytes[] = response.content()._bytesNoCopy();
-							
-							response.setContent(ERXCompressionUtilities.gunzipByteArrayAsString(bytes));
-						}
-					}
+					_urls.setObjectForKey(delayedRequest._request.uri(), id);
 				}
 			}
 			catch (InterruptedException e1) {
@@ -1598,7 +1609,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 				throw NSForwardException._runtimeExceptionForThrowable(e1.getCause());
 			}
 			catch (TimeoutException e) {
-				log.info("Timed out, redirecting");
+				log.debug("Timed out, redirecting: " + request.uri());
 			}
 			return response;
 		}
@@ -1621,7 +1632,10 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 		 */
 		protected WOResponse createStopResponse(WORequest request) {
 			final ERXApplication app = erxApplication();
-			WOResponse result = app.dispatchRequestImmediately(app.createRequest("GET", app.applicationBaseURL(), "HTTP/1.0", (Map)NSDictionary.EmptyDictionary, null, null));
+			String args = (request.sessionID() != null ? "wosid=" + request.sessionID() : "");
+			
+			WORequest home = app.createRequest("GET", request.applicationURLPrefix() + "?" + args, "HTTP/1.0", (Map)request.headers(), null, null);
+			WOResponse result = app.dispatchRequestImmediately(home);
 			return result;
 		}
 		
@@ -1720,7 +1734,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 
 		if (responseCompressionEnabled()) {
 			String contentType = response.headerForKey("content-type");
-			if ((contentType != null) && (contentType.startsWith("text/") || contentType.equals("application/x-javascript"))) {
+			if (!"gzip".equals(response.headerForKey("content-encoding")) && (contentType != null) && (contentType.startsWith("text/") || contentType.equals("application/x-javascript"))) {
 				String acceptEncoding = request.headerForKey("accept-encoding");
 				if ((acceptEncoding != null) && (acceptEncoding.toLowerCase().indexOf("gzip") != -1)) {
 					long start = System.currentTimeMillis();
