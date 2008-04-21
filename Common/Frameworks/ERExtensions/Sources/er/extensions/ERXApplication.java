@@ -702,8 +702,6 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 	 */
 	public ERXApplication() {
 		super();
-		// AK: remove comment to get delayed request handling
-		registerRequestHandler(new DelayedRequestHandler(), DelayedRequestHandler.KEY);
 
 		if (!ERXConfigurationManager.defaultManager().isDeployedAsServlet() && (!wasERXApplicationMainInvoked || allFrameworks == null)) {
 			_displayMainMethodWarning();
@@ -739,6 +737,8 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 			}
 		}
 		registerRequestHandler(new ERXDirectActionRequestHandler(ERXDirectAction.class.getName(), "stats", false), "erxadm");
+		// AK: remove comment to get delayed request handling
+		// registerRequestHandler(new DelayedRequestHandler(), DelayedRequestHandler.KEY);
 
 		Long timestampLag = Long.getLong("EOEditingContextDefaultFetchTimestampLag");
 		if (timestampLag != null)
