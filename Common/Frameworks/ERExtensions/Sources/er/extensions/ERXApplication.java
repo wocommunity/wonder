@@ -26,6 +26,13 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.Random;
 import java.util.Set;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
@@ -1436,7 +1443,19 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 	public static boolean isInRequest() {
 		return ERXApplication.isInRequest.get() != null;
 	}
-
+	
+	/**
+	 * Override to return a prettier page... should be a request handler...
+	 * @param timeout
+	 * @param url
+	 * @return
+	 */
+	protected WOResponse createDelayedResponse(int timeout, String url) {
+		WOResponse result = new WOResponse();
+		result.appendContentString("<html><meta http-equiv=\"refresh\" content=\"" + timeout +"; url=" + url + "\"><body>Please stand by..." + url + "</body></html>");
+		return result;
+	}
+	
 	/**
 	 * Overridden to allow for redirected responses and null the thread local
 	 * storage.
@@ -1446,12 +1465,62 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 	 * @return response
 	 */
 	@Override
-	public WOResponse dispatchRequest(WORequest request) {
+
+	public WOResponse dispatchRequest(final WORequest request) {
+		WOResponse response = null;
+		if(executor == null) {
+			response = _dispatchRequest(request);
+		} else {
+			String uri = request.uri();
+			try {
+				Future<WOResponse> future;
+				String id;
+				// flag to show we are 
+				if(uri.contains("/erxf/")) {
+					id = request.stringFormValueForKey("id");
+					future = futures.objectForKey(id);
+
+					if(future == null) {
+						log.error("oops");
+					}
+				} else {
+					future = executor.submit(new Callable<WOResponse>() {
+						public WOResponse call() throws Exception {
+							WOResponse response = _dispatchRequest(request);
+							return response;
+						}
+					});
+					id = ERXRandomGUID.newGid();
+					futures.setObjectForKey(future, id);
+				}
+				String url = (isDirectConnectEnabled() ? directConnectURL():webserverConnectURL()) + "/erxf/?id=" + id;
+				response = createDelayedResponse(5, url);
+				final long timeout = 1000L;
+				response = future.get(timeout, TimeUnit.MILLISECONDS);
+				futures.removeObjectForKey(id);
+			}
+			catch (InterruptedException e1) {
+				throw NSForwardException._runtimeExceptionForThrowable(e1.getCause());
+			}
+			catch (ExecutionException e1) {
+				throw NSForwardException._runtimeExceptionForThrowable(e1.getCause());
+			}
+			catch (TimeoutException e) {
+				log.info("Timed out, redirecting");
+			}
+		}
+		return response;
+	}
+
+	private ERXExpiringCache<String, Future> futures = new ERXExpiringCache();
+	private ExecutorService executor; //remove this so start the futures = Executors.newCachedThreadPool();
+
+	private WOResponse _dispatchRequest(WORequest request) {
+		WOResponse response;
 		if (ERXApplication.requestHandlingLog.isDebugEnabled()) {
 			ERXApplication.requestHandlingLog.debug(request);
 		}
 
-		WOResponse response = null;
 		try {
 			ERXApplication._startRequest();
 			ERXStats.initStatisticsIfNecessary();
@@ -1517,7 +1586,6 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 				}
 			}
 		}
-
 		return response;
 	}
 
