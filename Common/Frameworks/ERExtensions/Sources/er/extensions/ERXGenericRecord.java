@@ -583,15 +583,7 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
 	 */
 	@Override
 	public void addObjectToBothSidesOfRelationshipWithKey(EORelationshipManipulation eo, String key) {
-		if (eo != null && ((EOEnterpriseObject) eo).editingContext() != editingContext() && !(editingContext() instanceof EOSharedEditingContext) && !(((EOEnterpriseObject) eo).editingContext() instanceof EOSharedEditingContext)) {
-			if (((EOEnterpriseObject) eo).editingContext() == null || editingContext() == null) {
-				if (editingContext() == null)
-					throw new RuntimeException("******** Attempted to link to EOs through " + key + " when one of them was not in an editing context: " + this + ":" + editingContext() + " and " + eo + ":" + ((EOEnterpriseObject) eo).editingContext());
-			}
-			else {
-				throw new RuntimeException("******** Attempted to link to EOs through " + key + " in different editing contexts: " + this + " and " + eo);
-			}
-		}
+		ERXGenericRecord.checkMatchingEditingContexts(this, key, (EOEnterpriseObject) eo);
 		super.addObjectToBothSidesOfRelationshipWithKey(eo, key);
 	}
 
@@ -1225,6 +1217,35 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
 	 */
 	
 	/**
+	 * Checks that the editing contexts in source and destination matches and throws an exception if they do not.
+	 * 
+	 * @param source the source object
+	 * @param relationshipName the name of the relationship that is being updated
+	 * @param destination the destination object
+	 * @throws RuntimeException if the editing contexts do not match
+	 */
+	public static void checkMatchingEditingContexts(EOEnterpriseObject source, String relationshipName, EOEnterpriseObject destination) {
+		if (destination != null) {
+			EOEditingContext sourceEditingContext = source.editingContext();
+			EOEditingContext destinationEditingContext = destination.editingContext();
+			if (destinationEditingContext != sourceEditingContext && !(sourceEditingContext instanceof EOSharedEditingContext) && !(destinationEditingContext instanceof EOSharedEditingContext)) {
+				if (destinationEditingContext == null || sourceEditingContext == null) {
+					if (sourceEditingContext == null) {
+						throw new RuntimeException("You crossed editing context boundaries attempting to set the '" + relationshipName + "' relationship of " + source + " (which is not an in editing context) to " + destination + " (in EC " + destinationEditingContext + ").");
+					}
+					else {
+						// MS: Why is this not considered an error?
+						//throw new RuntimeException("You crossed editing context boundaries attempting to set the '" + relationshipName + "' relationship of " + source + " (in EC " + sourceEditingContext + ") to " + destination + " (which is not an in editing context).");
+					}
+				}
+				else {
+					throw new RuntimeException("You crossed editing context boundaries attempting to set the '" + relationshipName + "' relationship of " + source + " (in EC " + sourceEditingContext + ") to " + destination + " (in EC " + destinationEditingContext + ").");
+				}
+			}
+		}
+	}
+	
+	/**
 	 * Provides automatic inverse relationship updating for ERXGenericRecord and ERXCustomObject.
 	 * 
 	 * @property er.extensions.ERXEnterpriseObject.updateInverseRelationships if true, inverse relationships are automatically updated
@@ -1359,6 +1380,9 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
 						}
 						
 						ERXEnterpriseObject newValueEO = (ERXEnterpriseObject) value;
+						
+						ERXGenericRecord.checkMatchingEditingContexts(object, key, newValueEO);
+
 						//object._superTakeValueForKey(value, key);
 						if (newValueEO.isToManyKey(inverse)) {
 							NSArray inverseOldValues = (NSArray) newValueEO.valueForKey(inverse);
