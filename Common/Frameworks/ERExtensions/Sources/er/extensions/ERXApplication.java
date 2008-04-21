@@ -1486,15 +1486,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 				final ERXApplication app = erxApplication();
 				WOResponse response = app.dispatchRequestImmediately(_request);
 				// testing
-				if(app.responseCompressionEnabled()) {
-					if("gzip".equals(response.headerForKey("content-encoding"))) {
-						response.removeHeadersForKey("content-encoding");
-						byte bytes[] = response.content()._bytesNoCopy();
-						
-						response.setContent(ERXCompressionUtilities.gunzipByteArrayAsString(bytes));
-					}
-				}
-				Thread.sleep(6000);
+				// Thread.sleep(6000);
 				return response;
 			}
 
