@@ -1480,7 +1480,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 					futures.setObjectForKey(future, id);
 				}
 				String url = (app.isDirectConnectEnabled() ? app.directConnectURL():app.webserverConnectURL()) + "/" + KEY + "/?id=" + id;
-				response = createDelayedResponse(5, url);
+				response = createDelayedResponse(request, 5, url);
 				final long timeout = 1000L;
 				response = future.get(timeout, TimeUnit.MILLISECONDS);
 				futures.removeObjectForKey(id);
@@ -1499,11 +1499,12 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 		
 		/**
 		 * Override to return a prettier page...
+		 * @param request 
 		 * @param timeout
 		 * @param url
 		 * @return
 		 */
-		protected WOResponse createDelayedResponse(int timeout, String url) {
+		protected WOResponse createDelayedResponse(WORequest request, int timeout, String url) {
 			WOResponse result = new WOResponse();
 			result.appendContentString("<html><meta http-equiv=\"refresh\" content=\"" + timeout +"; url=" + url + "\"><body>Please stand by..." + url + "</body></html>");
 			return result;
