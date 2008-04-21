@@ -54,6 +54,7 @@ import com.webobjects.appserver.WOResponse;
 import com.webobjects.appserver.WOSession;
 import com.webobjects.appserver.WOTimer;
 import com.webobjects.appserver._private.WOProperties;
+import com.webobjects.eoaccess.EOObjectNotAvailableException;
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.eocontrol.EOTemporaryGlobalID;
 import com.webobjects.foundation.NSArray;
@@ -1447,43 +1448,148 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 		return ERXApplication.isInRequest.get() != null;
 	}
 	
+	/**
+	 * When this request handler is set via <code>registerRequestHandlerForKey(new
+	 * DelayedRequestHandler(), DelayedRequestHandler.KEY)</code>, then a request that
+	 * takes too long is automatically detached and a poor man's long response
+	 * is returned. This is pretty cool in that the users don't get the adaptor
+	 * timeout and also get immediate feedback with no code changes on your
+	 * part. You can subclass this handler to provide for better responses.
+	 * @author ak
+	 * 
+	 */
 	public static class DelayedRequestHandler extends WORequestHandler {
 		private static String KEY = "erxf";
 		
-		private ERXExpiringCache<String, Future> futures = new ERXExpiringCache();
-		private ExecutorService executor = Executors.newCachedThreadPool();
+		private ERXExpiringCache<String, DelayedRequest> _futures;
+		private ExecutorService _executor;
 
+		protected int _refresh;
+		protected int _maxRequestTime;
+		
+		protected class DelayedRequest implements Callable<WOResponse> {
+			
+			protected WORequest _request;
+			protected Future<WOResponse> _future;
+			
+			public DelayedRequest(WORequest request) {
+				super();
+				_request = request;
+				_future = _executor.submit(this);
+			}
+
+			public WOResponse call() throws Exception {
+				final ERXApplication app = erxApplication();
+				WOResponse response = app.dispatchRequestImmediately(_request);
+				// testing
+				// Thread.sleep(10000);
+				return response;
+			}
+
+			public void setFuture(Future<WOResponse> value) {
+				_future = value;
+			}
+			
+			public Future<WOResponse> future() {
+				return _future;
+			}
+		}
+		
+		public DelayedRequestHandler() {
+			this(5, 3000);
+		}
+		
+		/**
+		 * Creates a request handler instance.
+		 * @param refresh time for the refresh of the page
+		 * @param maxRequestTime time that a request can take at most before the delayed page is returned.
+		 */
+		public DelayedRequestHandler(int refresh, int maxRequestTime) {
+			_refresh = refresh;
+			_maxRequestTime = maxRequestTime;
+			_futures = new ERXExpiringCache(_refresh * 5);
+			_executor = Executors.newCachedThreadPool();
+		}
+
+		/**
+		 * Handles the request and returns the applicable response.
+		 */
 		@Override
 		public WOResponse handleRequest(final WORequest request) {
 			WOResponse response = null;
 			final ERXApplication app = erxApplication();
 			String uri = request.uri();
-			try {
-				Future<WOResponse> future;
-				String id;
-				// flag to show we are 
-				if(uri.contains("/" + KEY + "/")) {
-					id = request.stringFormValueForKey("id");
-					future = futures.objectForKey(id);
+			DelayedRequest delayedRequest;
+			String id;
+			log.debug("Handling: " + uri);
 
-					if(future == null) {
-						log.error("oops");
+			// flag to show we are 
+			if(KEY.equals(request.requestHandlerKey())) {
+				id = request.stringFormValueForKey("id");
+				delayedRequest = _futures.objectForKey(id);
+				// FIXME, this happens a lot when you reload...
+				// we could store the url in the session and swap that out later on...
+				if(delayedRequest == null) {
+					return createErrorResponse(request);
+				}
+				// refresh entry, so it doesn't time out
+				_futures.setObjectForKey(delayedRequest, id);
+			} else {
+				delayedRequest = new DelayedRequest(request);
+				id = ERXRandomGUID.newGid();
+				_futures.setObjectForKey(delayedRequest, id);
+			}
+			response = handle(request, delayedRequest, id);
+			return response;
+		}
+
+		/**
+		 * Override to handle specific actions for the current future.
+		 * @param request
+		 * @param delayedRequest
+		 * @param id
+		 * @return
+		 */
+		protected WOResponse handle(WORequest request, DelayedRequest delayedRequest, String id) {
+			final ERXApplication app = erxApplication();
+			WOResponse response = null;
+			try {
+				String action = request.stringFormValueForKey("action");
+				if("stop".equals(action)) {
+					if(!delayedRequest.future().isDone()) {
+						delayedRequest.future().cancel(true);
+						_futures.removeObjectForKey(id);
+						response = createStopResponse(request);
 					}
 				} else {
-					future = executor.submit(new Callable<WOResponse>() {
-						public WOResponse call() throws Exception {
-							WOResponse response = app._dispatchRequest(request);
-							return response;
+					if(!delayedRequest.future().isDone()) {
+						String url = request.uri();
+						if(!KEY.equals(request.requestHandlerKey())) {
+							
+							String args = "id=" + id;
+							String sessionID = request.sessionID();
+							if(sessionID != null) {
+								args += "&wosid=" + sessionID;
+							}
+							url = app.createContextForRequest((WORequest) request.clone()).urlWithRequestHandlerKey(KEY, "wait", args); 
 						}
-					});
-					id = ERXRandomGUID.newGid();
-					futures.setObjectForKey(future, id);
+						log.debug("Delaying: " + request.uri());
+						response = createDelayedResponse(request, url);
+					}
+					// AK: this double assignment is not an error, when we time out
+					// the old value from above will be returned, if we don't 
+					// the real response is used.
+					response = delayedRequest.future().get(_maxRequestTime, TimeUnit.MILLISECONDS);
+					_futures.removeObjectForKey(id);
+					if(app.responseCompressionEnabled()) {
+						if("gzip".equals(response.headerForKey("content-encoding"))) {
+							response.removeHeadersForKey("content-encoding");
+							byte bytes[] = response.content()._bytesNoCopy();
+							
+							response.setContent(ERXCompressionUtilities.gunzipByteArrayAsString(bytes));
+						}
+					}
 				}
-				String url = (app.isDirectConnectEnabled() ? app.directConnectURL():app.webserverConnectURL()) + "/" + KEY + "/?id=" + id;
-				response = createDelayedResponse(request, 5, url);
-				final long timeout = 1000L;
-				response = future.get(timeout, TimeUnit.MILLISECONDS);
-				futures.removeObjectForKey(id);
 			}
 			catch (InterruptedException e1) {
 				throw NSForwardException._runtimeExceptionForThrowable(e1.getCause());
@@ -1496,6 +1602,28 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 			}
 			return response;
 		}
+
+		/**
+		 * Create a nice looking error page
+		 * @param request
+		 * @return
+		 */
+		protected WOResponse createErrorResponse(WORequest request) {
+			final ERXApplication app = erxApplication();
+			return app.handleException(new EOObjectNotAvailableException("Action not found"), app.createContextForRequest(request));
+		}
+		
+		/**
+		 * Create a nice looking stop page
+		 * @param request
+		 * @param url
+		 * @return
+		 */
+		protected WOResponse createStopResponse(WORequest request) {
+			final ERXApplication app = erxApplication();
+			WOResponse result = app.dispatchRequestImmediately(app.createRequest("GET", app.applicationBaseURL(), "HTTP/1.0", (Map)NSDictionary.EmptyDictionary, null, null));
+			return result;
+		}
 		
 		/**
 		 * Override to return a prettier page...
@@ -1504,16 +1632,27 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 		 * @param url
 		 * @return
 		 */
-		protected WOResponse createDelayedResponse(WORequest request, int timeout, String url) {
+		protected WOResponse createDelayedResponse(WORequest request, String url) {
 			WOResponse result = new WOResponse();
-			result.appendContentString("<html><meta http-equiv=\"refresh\" content=\"" + timeout +"; url=" + url + "\"><body>Please stand by..." + url + "</body></html>");
+			result.setHeader(_refresh +"; url=" + url + "\"", "refresh");
+			// ak: create a simple template
+			result.appendContentString("<html><meta http-equiv=\"refresh\" content=\"" + _refresh +"; url=" + url + "\"><body><h1>Please stand by...</h1>");
+			result.appendContentString("<p>The action you selected is taking longer than "  + (_maxRequestTime/1000) + " seconds. The result will be shown as soon as it is ready.</p>");
+			result.appendContentString("<p>This page will refresh automatically in " + _refresh + " seconds.</p>");
+			result.appendContentString("<p><a href=\"" + url + "\">Refresh now</a> ");
+			result.appendContentString("<a href=\"" + url + "&action=stop\">Stop now</a></p>");
+			result.appendContentString("</body></html>");
 			return result;
 		}
-		
+
 	}
 	
-	protected DelayedRequestHandler delayedRequestHandler() {
-		return (DelayedRequestHandler) requestHandlerForKey("erxf");
+	/**
+	 * Returns the delayedRequestHandler, if any is registered.
+	 * @return
+	 */
+	public DelayedRequestHandler delayedRequestHandler() {
+		return (DelayedRequestHandler) requestHandlerForKey(DelayedRequestHandler.KEY);
 	}
 	
 	/**
@@ -1526,18 +1665,24 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 	 */
 	@Override
 
-	public WOResponse dispatchRequest(final WORequest request) {
+	public WOResponse dispatchRequest(WORequest request) {
 		WOResponse response = null;
 		DelayedRequestHandler delayedRequestHandler = delayedRequestHandler();
-		if(delayedRequestHandler == null) {
-			response = _dispatchRequest(request);
+		String key = request.requestHandlerKey();
+		if(delayedRequestHandler == null || (key != null && !(key.equals(componentRequestHandlerKey()) || key.equals(directActionRequestHandlerKey())))) {
+			response = dispatchRequestImmediately(request);
 		} else {
 			response = delayedRequestHandler.handleRequest(request);
 		}
 		return response;
 	}
 
-	protected WOResponse _dispatchRequest(WORequest request) {
+	/**
+	 * Dispatches the request without checking for the delayedRequestHandler()
+	 * @param request
+	 * @return
+	 */
+	public WOResponse dispatchRequestImmediately(WORequest request) {
 		WOResponse response;
 		if (ERXApplication.requestHandlingLog.isDebugEnabled()) {
 			ERXApplication.requestHandlingLog.debug(request);
