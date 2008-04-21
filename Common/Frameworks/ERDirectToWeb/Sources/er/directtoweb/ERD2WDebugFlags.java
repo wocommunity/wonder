@@ -8,10 +8,10 @@
 
 package er.directtoweb;
 
-import com.webobjects.foundation.*;
-import com.webobjects.appserver.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.eoaccess.*;
+import com.webobjects.appserver.WOComponent;
+import com.webobjects.appserver.WOContext;
+
+import er.extensions.ERXExtensions;
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
 // This component can be used in the wrapper of a D2W app to provide convenient development time 
@@ -37,6 +37,12 @@ public class ERD2WDebugFlags extends WOComponent {
         return null;
     }
     
+    public WOComponent toggleAdaptorLogging() {
+        boolean currentState=ERXExtensions.adaptorLogging();
+        ERXExtensions.setAdaptorLogging(!currentState);
+        return null;
+    }
+
     public WOComponent clearD2WRuleCache() {
         ERD2WModel.erDefaultModel().clearD2WRuleCache();
         return null;

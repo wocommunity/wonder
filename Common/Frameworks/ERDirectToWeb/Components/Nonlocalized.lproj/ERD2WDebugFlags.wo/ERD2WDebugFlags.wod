@@ -1,21 +1,52 @@
-Conditional1: WOConditional {
+Show: WOConditional {
 	condition = application.isCachingEnabled;
 	negate = true;
 }
 
-Hyperlink1: WOHyperlink {
-	actionClass = "er.extensions.ERXDirectAction";
+Log4J: WOHyperlink {
 	class = ^linkClass;
+	actionClass = "er.extensions.ERXDirectAction";
 	directActionName = "log4j";
 	target = "log4J";
 }
 
-Hyperlink2: WOHyperlink {
+D2W: WOHyperlink {
 	action = toggleD2WInfo;
 	class = ^linkClass;
 }
 
-Hyperlink3: WOHyperlink {
+SQL: WOHyperlink {
+	action = toggleAdaptorLogging;
+	class = ^linkClass;
+}
+
+CSSUrl : WOResourceURL {
+	framework = "ERExtensions";
+	filename = "css-debug.css";
+}
+
+CSS: WOHyperlink {
+	href = "#";
+	onclick = "ERD2WDebugFlags_cssDebug();void(0);";
+	class = ^linkClass;
+}
+
+Clear: WOHyperlink {
 	action = clearD2WRuleCache;
+	class = ^linkClass;
+}
+
+Dump: WOHyperlink {
+	actionClass = "er.extensions.ERXDirectAction";
+	directActionName = "dumpCreatedKeys";
+	class = ^linkClass;
+}
+Edit: WOHyperlink {
+	actionClass = "er.extensions.ERXDirectAction";
+	directActionName = "editLocalizedFiles";
+	class = ^linkClass;
+}
+Test: WOHyperlink {
+	actionClass = "er.selenium.SeleniumStartTesting";
 	class = ^linkClass;
 }
