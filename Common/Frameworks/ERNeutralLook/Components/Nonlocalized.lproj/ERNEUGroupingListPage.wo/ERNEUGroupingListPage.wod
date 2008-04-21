@@ -269,6 +269,10 @@ SelectImage: WOImage {
 	framework = "JavaDirectToWeb";
 }
 
+ShowBatchNavigationConditional: WOConditional {
+	condition = shouldShowBatchNavigation;
+}
+
 ShowCancel: WOConditional {
 	condition = showCancel;
 }
@@ -277,9 +281,9 @@ ShowCancel2: WOConditional {
 	condition = showCancel;
 }
 
-TableCellForBottomBatchNaviationGenericContainer: WOGenericContainer {
+TableCellForBottomBatchNavigationGenericContainer: WOGenericContainer {
 	colspan = colspanForNavBar;
-	elementName = "TD";
+	elementName = "td";
 }
 
 TableRowForBottomBatchNavigationGenericContainer: WOGenericContainer {

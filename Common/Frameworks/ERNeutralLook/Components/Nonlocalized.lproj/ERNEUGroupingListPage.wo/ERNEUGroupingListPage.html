@@ -6,6 +6,7 @@
 	<webobject name="ListNotEmpty">
 		<webobject name="ERTableWithBorder1">
 			<webobject name="ListTable">
+				<webobject name="ShowBatchNavigationConditional">
 				<webobject name="GenericContainer1">
 					<webobject name="GenericContainer2">
 						<table cellspacing="0" cellpadding="0" border="0" width="100%">
@@ -26,6 +27,7 @@
 				<td></td>
 				<td></td>
 				<td></td>
+				</webobject>
 				</webobject>
 				
 				<webobject name="ListTableHeaderRow">
@@ -51,16 +53,16 @@
 			</webobject>
 			
 			<webobject name="EntityRepetition">
-				<tr height="1">
-					<webobject name="GenericContainer3">
-						<img alt="" height="1" src="/nsi/s.gif">
-					</webobject>
-				</tr>
+			<tr>
+				<webobject name="GenericContainer3">
+					<img alt="" height="1" src="/nsi/s.gif" />
+				</webobject>
+			</tr>
 			<webobject name="ListTableRow">
 				<td bgcolor="#ffffff">
 					<table>
-						<tr height="15">
-							<td>
+						<tr>
+							<td height="15">
 								<webobject name="IsSelecting">
 									<webobject name="SelectEO2"><webobject name="SelectImage"></webobject></webobject>
 								</webobject>
@@ -73,15 +75,15 @@
 									</webobject>
 								</webobject>
 							</td>
-							<td></td>
+							<td>&nbsp;</td>
 						</tr>
 					</table>
 				</td>
 				<webobject name="AttributeRepetition">
-					<webobject name="AttributeCell">
-						<font size="-1"><webobject name="AttributeDisplay"></webobject></font>
-					</webobject>
-					<td width="1"></td>
+				<webobject name="AttributeCell">
+					<font size="-1"><webobject name="AttributeDisplay"></webobject></font>
+				</webobject>
+				<td width="1"></td>
 				</webobject>
 				<td>
 					<webobject name="IsListing2">
@@ -92,49 +94,53 @@
 				</td>
 			</webobject>
 		</webobject>
-	<webobject name="DisplayBottomBatchNavigationConditional">
-	<webobject name="TableRowForBottomBatchNavigationGenericContainer">
-		<webobject name="TableCellForBottomBatchNaviationGenericContainer">
-			<table cellspacing="0" cellpadding="0" border="0" width="100%">
-				<tr>
-					<td>
-						<webobject name="NavBar2"></webobject>
-					</td>
-					<td align="right" width="20" valign="middle">
-						<webobject name="HasPrinterFriendlyVersionConditional2">
-							<webobject name="ERPrinterButton2"></webobject>
-						</webobject>
-					</td>
-					<td>&nbsp;</td>
-					<td></td>
-				</tr>
-			</table>
+		
+		<webobject name="ShowBatchNavigationConditional">
+		<webobject name="DisplayBottomBatchNavigationConditional">
+		<webobject name="TableRowForBottomBatchNavigationGenericContainer">
+			<webobject name="TableCellForBottomBatchNavigationGenericContainer">
+				<table cellspacing="0" cellpadding="0" border="0" width="100%">
+					<tr>
+						<td>
+							<webobject name="NavBar2"></webobject>
+						</td>
+						<td align="right" width="20" valign="middle">
+							<webobject name="HasPrinterFriendlyVersionConditional2">
+								<webobject name="ERPrinterButton2"></webobject>
+							</webobject>
+						</td>
+						<td>&nbsp;</td>
+						<td></td>
+					</tr>
+				</table>
+			</webobject>
+			<td></td>
+			<td></td>
+			<td></td>
 		</webobject>
-	<td></td>
-	<td></td>
-	<td></td>
-</webobject>
-</webobject>
-</webobject>
-</webobject>
-		<br>
+		</webobject>
+		</webobject>
+	
+	</webobject>
+	</webobject>
+		<br />
 		<webobject name="HideReturnOnSelect1">
 			<webobject name="ShowCancel">
 				<webobject name="Return"></webobject>
 			</webobject>
 		</webobject>
 		</webobject>
-		<webobject name="ListEmpty">
-			<webobject name="EmptyMessageComponent"></webobject>
-		<br>
-		<br>
+	
+	<webobject name="ListEmpty">
+		<webobject name="EmptyMessageComponent"></webobject>
+		
 		<webobject name="HideReturnOnSelect2">
 			<webobject name="ShowCancel2">
 				<webobject name="Return2"></webobject>
 			</webobject>
-        </webobject>
-    </webobject>
+		</webobject>
+	</webobject>
 
-    <webobject name="BelowDisplayPropertyKeys"></webobject>
+	<webobject name="BelowDisplayPropertyKeys"></webobject>
 
 </webobject>

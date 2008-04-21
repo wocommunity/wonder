@@ -297,8 +297,8 @@ public class ERD2WListPage extends ERD2WPage implements ERDListPageInterface, Se
                 }
                 NSArray sortOrderings=sortOrderings();
                 setSortOrderingsOnDisplayGroup(sortOrderings, dg);
-                dg.setNumberOfObjectsPerBatch(numberOfObjectsPerBatch());
-		// Disabling to prevent double fetching
+                dg.setNumberOfObjectsPerBatch(shouldShowBatchNavigation() ? numberOfObjectsPerBatch() : 0);
+				// Disabling to prevent double fetching
                 //dg.fetch();
                 dg.updateDisplayedObjects();
                 _hasBeenInitialized=true;
@@ -413,7 +413,7 @@ public class ERD2WListPage extends ERD2WPage implements ERDListPageInterface, Se
     }
 
     public boolean shouldShowSelectAll() {
-        return listSize()>10 || ERXValueUtilities.booleanValue(d2wContext().valueForKey("shouldShowSelectAll"));
+        return ERXValueUtilities.booleanValueWithDefault(d2wContext().valueForKey("shouldShowSelectAll"), listSize() > 10);
     }
 
     public void warmUpForDisplay(){
@@ -443,5 +443,14 @@ public class ERD2WListPage extends ERD2WPage implements ERDListPageInterface, Se
             }
         }
         return _referenceEOs;
+    }
+    
+    /**
+     * Determines if the batch navigation should be shown.  By default it will be shown if the list size is greater than
+     * the batch size.  It can be explicitly disabled by setting the D2W key <code>showBatchNavigation</code> to false.
+     * @return true if the batch navigation should be shown
+     */
+    public boolean shouldShowBatchNavigation() {
+        return ERXValueUtilities.booleanValueWithDefault(d2wContext().valueForKey("showBatchNavigation"), true);
     }
 }

@@ -193,7 +193,7 @@ ListTable: WOGenericContainer {
 	border = 0;
 	cellpadding = 1;
 	cellspacing = 0;
-	elementName = "Table";
+	elementName = "table";
 }
 
 ListTableHeaderRow: WOGenericContainer {
@@ -214,7 +214,7 @@ NavBar: WOSwitchComponent {
 	objectName = d2wContext.displayNameForEntity;
 	textColor = d2wContext.textColor;
 	width = 550;
-	 d2wContext = d2wContext;
+	d2wContext = d2wContext;
 }
 
 NavBar2: WOSwitchComponent {
@@ -223,7 +223,7 @@ NavBar2: WOSwitchComponent {
 	displayGroup = displayGroup;
 	objectName = d2wContext.displayNameForEntity;
 	textColor = d2wContext.textColor;
-	 d2wContext = d2wContext;
+	d2wContext = d2wContext;
 }
 
 NumberOfItems: WOString {
@@ -245,6 +245,10 @@ ReturnButton2: WOImage {
 	filename = "ReturnMetalBtn.gif";
 	framework = "JavaDirectToWeb";
 	name = "Returns to the previous page";
+}
+
+ShowBatchNavigationConditional: WOConditional {
+	condition = shouldShowBatchNavigation;
 }
 
 ShowCancel: WOConditional {

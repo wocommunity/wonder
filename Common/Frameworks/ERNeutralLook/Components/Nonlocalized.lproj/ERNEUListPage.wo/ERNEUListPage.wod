@@ -3,10 +3,6 @@ AboveDisplayPropertyKeys: ERD2WExtraDisplayPropertyKeysComponent {
 	extraPropertiesKey = "aboveDisplayPropertyKeys";
 }
 
-AreThereBackgroundColors: ERXNonNullConditional {
-	condition = d2wContext.referenceRelationshipForBackgroupColor;
-}
-
 AreThereReferenceEO: ERXNonNullConditional {
 	condition = referenceEOs;
 }
@@ -239,22 +235,22 @@ ListTableRow: WOGenericContainer {
 }
 
 NavBar: WOSwitchComponent {
-    WOComponentName = d2wContext.batchNavigationBarComponentName;
+	WOComponentName = d2wContext.batchNavigationBarComponentName;
 	bgcolor = backgroundColorForTable;
 	displayGroup = displayGroup;
 	objectName = d2wContext.displayNameForEntity;
 	textColor = d2wContext.textColor;
 	width = 550;
-       	 d2wContext = d2wContext;
+	d2wContext = d2wContext;
 }
 
 NavBar2: WOSwitchComponent {
-    WOComponentName = d2wContext.batchNavigationBarComponentName;
+	WOComponentName = d2wContext.batchNavigationBarComponentName;
 	bgcolor = backgroundColorForTable;
 	displayGroup = displayGroup;
 	objectName = d2wContext.displayNameForEntity;
 	textColor = d2wContext.textColor;
-       	 d2wContext = d2wContext;
+	d2wContext = d2wContext;
 }
 
 NumberOfItems: WOString {
@@ -309,6 +305,10 @@ SelectImage: WOImage {
 	height = "21";
 	name = "Select that Object";
 	width = "51";
+}
+
+ShowBatchNavigationConditional: WOConditional {
+	condition = shouldShowBatchNavigation;
 }
 
 ShowCancel: WOConditional {

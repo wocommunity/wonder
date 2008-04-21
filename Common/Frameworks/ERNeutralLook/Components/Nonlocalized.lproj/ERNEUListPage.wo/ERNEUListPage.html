@@ -1,104 +1,142 @@
-<WEBOBJECT NAME=PageWrapper>
-	<WEBOBJECT NAME=Help></WEBOBJECT>
-	<WEBOBJECT NAME=BannerConditional><WEBOBJECT NAME=Banner></WEBOBJECT></WEBOBJECT>
+<webobject name="PageWrapper">
+	<webobject name="Help"></webobject>
+	<webobject name="BannerConditional"><webobject name="Banner"></webobject></webobject>
 	
 	<webobject name="AboveDisplayPropertyKeys"></webobject>
 	
-	<WEBOBJECT NAME=ListNotEmpty>
-		<TABLE>
-			<TR>
-				<TD>
-					<WEBOBJECT NAME=NavBar>
-						<WEBOBJECT NAME=FilterDisplayGroupButton></WEBOBJECT>
-						<WEBOBJECT NAME=IsGenericExportButtonKnown><WEBOBJECT NAME=ExcelExportButton></WEBOBJECT></WEBOBJECT>
-					</WEBOBJECT>
-				</TD>
-				<WEBOBJECT NAME=AreThereReferenceEO>
-					<TD>
-						<TABLE>
-							<TR>
-								<TD COLSPAN=3><B>Legend</B></TD>
-							</TR>
-							<WEBOBJECT NAME=Repetition1>
-								<TR>
-									<TD><WEBOBJECT NAME=String1></WEBOBJECT></TD>
-									<TD>&nbsp;</TD>
-									<WEBOBJECT NAME=Generic1>&nbsp;&nbsp;&nbsp;&nbsp;</WEBOBJECT>
-								</TR>
-							</WEBOBJECT>
-						</TABLE>
-					</TD>
-				</WEBOBJECT>
-			</TR>
-		</TABLE>
-		<CENTER><BR>
-         <WEBOBJECT NAME=ListTable><WEBOBJECT NAME=ListTableHeaderRow>
-               <TH></TH>
-               <WEBOBJECT NAME=ColumnLabelRepetition>
-                  <TH ALIGN=CENTER NOWRAP VALIGN=bottom>
-                     <TABLE>
-                        <TR>
-                           <TH><WEBOBJECT NAME=SwitchComponent1></WEBOBJECT></TH>
-                           <TH><WEBOBJECT NAME=IsPropertySortable><WEBOBJECT NAME=SortOrder></WEBOBJECT></WEBOBJECT></TH>
-                        </TR>
-                     </TABLE>
-                  </TH>
-               </WEBOBJECT>
-               <TH></TH>
-               
-            </WEBOBJECT>
-            <WEBOBJECT NAME=EntityRepetition><WEBOBJECT NAME=ListTableRow>
-                  <TD>
-                     <TABLE>
-                        <TR>
-                           <TD> <WEBOBJECT NAME=IsSelecting>
-                                 <WEBOBJECT NAME=SelectEO><WEBOBJECT NAME=SelectImage></WEBOBJECT></WEBOBJECT>
-                              </WEBOBJECT>
-                              <WEBOBJECT NAME=IsListing>
-                                 <WEBOBJECT NAME=IsEntityWritable>
-                                 <WEBOBJECT NAME=Conditional1><WEBOBJECT NAME=ERXNonNullConditional2><WEBOBJECT NAME=SwitchComponent2></WEBOBJECT></WEBOBJECT><WEBOBJECT NAME=ERXNonNullConditional1><WEBOBJECT NAME=EditButton></WEBOBJECT></WEBOBJECT></WEBOBJECT></WEBOBJECT>
-                                 <WEBOBJECT NAME=IsEntityNotWritable><WEBOBJECT NAME=InspectButton></WEBOBJECT></WEBOBJECT>
-                              </WEBOBJECT>
-                           </TD>
-                           <TD> </TD>
-                        </TR>
-                     </TABLE>
-                  </TD>
-                  <WEBOBJECT NAME=AttributeRepetition>
-                     <WEBOBJECT NAME=AttributeCell>
-                        <WEBOBJECT NAME=AttributeDisplay></WEBOBJECT>
-                     </WEBOBJECT>
-                  </WEBOBJECT>
-                  <TD>
-                     <TABLE>
-                        <TR>
-                           <TD><WEBOBJECT NAME=IsListing2><WEBOBJECT NAME=IsEntityWritable2>
-                                    <TABLE>
-                                       <TR>
-                                          <TD><WEBOBJECT NAME=Trash></WEBOBJECT></TD>
-                                       </TR>
-                                    </TABLE>
-                                 </WEBOBJECT></WEBOBJECT></TD>
-                        </TR>
-                     </TABLE>
-                  </TD>
-               </WEBOBJECT>
-               <TR HEIGHT=2>
-                  <TD BGCOLOR="#ffffff" COLSPAN=<WEBOBJECT NAME=ColSpanNumber></WEBOBJECT>><IMG BORDER=0 HEIGHT=2 WIDTH=1></TD>
-               </TR>
-            </WEBOBJECT></WEBOBJECT><br><webobject name="DisplayBottomBatchNavigationConditional"><table><tr><td><webobject name="NavBar2"> <webobject name="FilterDisplayGroupButton2"></webobject> <webobject name="IsGenericExportButtonKnown2"><webobject name="ExcelExportButton2"></webobject></webobject> </webobject></td><webobject name="AreThereReferenceEO2"><td><table><tr><td colspan="3"><b>Legend</b></td></tr><webobject name="Repetition2"><tr><td><webobject name="String2"></webobject></td><td>&nbsp;</td><webobject name="Generic2">&nbsp;&nbsp;&nbsp;&nbsp;</webobject></tr></webobject></table></td></webobject></tr></table></webobject><br><WEBOBJECT NAME=AreThereBackgroundColors></WEBOBJECT><BR>
-         
-            <WEBOBJECT NAME=ShowCancel><WEBOBJECT NAME=BackLink><WEBOBJECT NAME=ReturnButton></WEBOBJECT></WEBOBJECT></WEBOBJECT>
-         
-      </CENTER>
-   </WEBOBJECT>
-   <WEBOBJECT NAME=ListEmpty>
-       <webobject name="EmptyMessageComponent"></webobject>
-      <BR>
-      <BR>
-         <WEBOBJECT NAME=ShowCancel2><WEBOBJECT NAME=BackLink2><WEBOBJECT NAME=ReturnButton2></WEBOBJECT></WEBOBJECT></WEBOBJECT>
-      </WEBOBJECT>
-      
-      <webobject name="BelowDisplayPropertyKeys"></webobject>
-      
-</WEBOBJECT>
+	<webobject name="ListNotEmpty">
+		<center>
+		<webobject name="ShowBatchNavigationConditional">
+		<table>
+			<tr>
+				<td>
+					<webobject name="NavBar">
+						<webobject name="FilterDisplayGroupButton"></webobject>
+						<webobject name="IsGenericExportButtonKnown"><webobject name="ExcelExportButton"></webobject></webobject>
+					</webobject>
+				</td>
+				<webobject name="AreThereReferenceEO">
+					<td>
+						<table>
+							<tr>
+								<th colspan="3">Legend</th>
+							</tr>
+							<webobject name="Repetition1">
+								<tr>
+									<td><webobject name="String1"></webobject></td>
+									<td>&nbsp;</td>
+									<webobject name="Generic1">&nbsp;&nbsp;&nbsp;&nbsp;</webobject>
+								</tr>
+							</webobject>
+						</table>
+					</td>
+				</webobject>
+			</tr>
+		</table>
+		</webobject>
+		
+		<br />
+		<webobject name="ListTable">
+			<webobject name="ListTableHeaderRow">
+				<th>&nbsp;</th>
+				<webobject name="ColumnLabelRepetition">
+				<th nowrap="nowrap" valign="bottom">
+					<table>
+						<tr>
+							<th><webobject name="SwitchComponent1"></webobject></th>
+							<td><webobject name="IsPropertySortable"><webobject name="SortOrder"></webobject></webobject></td>
+						</tr>
+					</table>
+				</th>
+				</webobject>
+				<th>&nbsp;</th>
+			</webobject>
+			<webobject name="EntityRepetition">
+			<webobject name="ListTableRow">
+				<td>
+					<webobject name="IsSelecting">
+						<webobject name="SelectEO"><webobject name="SelectImage"></webobject></webobject>
+					</webobject>
+					<webobject name="IsListing">
+						<webobject name="IsEntityWritable">
+							<webobject name="Conditional1">
+								<webobject name="ERXNonNullConditional2">
+									<webobject name="SwitchComponent2"></webobject>
+								</webobject>
+								<webobject name="ERXNonNullConditional1">
+									<webobject name="EditButton"></webobject>
+								</webobject>
+							</webobject>
+						</webobject>
+						<webobject name="IsEntityNotWritable">
+							<webobject name="InspectButton"></webobject>
+						</webobject>
+					</webobject>
+				</td>
+				<webobject name="AttributeRepetition">
+				<webobject name="AttributeCell">
+						<webobject name="AttributeDisplay"></webobject>
+				</webobject>
+				</webobject>
+				<td>
+					<webobject name="IsListing2">
+					<webobject name="IsEntityWritable2">
+						<webobject name="Trash"></webobject>
+					</webobject>
+					</webobject>
+				</td>
+			</webobject>
+			<tr>
+				<td bgcolor="#ffffff" colspan='<webobject name="ColSpanNumber"></webobject>'><img border="0" height="2" width="1" /></td>
+			</tr>
+			</webobject>
+		</webobject>
+		
+		<webobject name="ShowBatchNavigationConditional"><br />
+		<webobject name="DisplayBottomBatchNavigationConditional">
+			<table>
+				<tr>
+					<td>
+						<webobject name="NavBar2"> 
+							<webobject name="FilterDisplayGroupButton2"></webobject> 
+							<webobject name="IsGenericExportButtonKnown2"><webobject name="ExcelExportButton2"></webobject></webobject>
+						</webobject>
+					</td>
+					<webobject name="AreThereReferenceEO2">
+					<td>
+						<table>
+							<tr>
+								<th colspan="3">Legend</th>
+							</tr>
+							<webobject name="Repetition2">
+							<tr>
+								<td><webobject name="String2"></webobject></td>
+								<td>&nbsp;</td>
+								<webobject name="Generic2">&nbsp;&nbsp;&nbsp;&nbsp;</webobject>
+							</tr>
+							</webobject>
+						</table>
+					</td>
+				</webobject>
+				</tr>
+			</table>
+		</webobject>
+		</webobject>
+
+		<webobject name="ShowCancel">
+			<webobject name="BackLink"><webobject name="ReturnButton"></webobject></webobject>
+		</webobject>
+
+		</center>
+	</webobject>
+
+   <webobject name="ListEmpty">
+	   <webobject name="EmptyMessageComponent"></webobject>
+	   <webobject name="ShowCancel2">
+			<webobject name="BackLink2"><webobject name="ReturnButton2"></webobject></webobject>
+		</webobject>
+   </webobject>
+	  
+	  <webobject name="BelowDisplayPropertyKeys"></webobject>
+	  
+</webobject>
