@@ -702,6 +702,9 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 	 */
 	public ERXApplication() {
 		super();
+		// AK: remove comment to get delayed request handling
+		registerRequestHandler(new DelayedRequestHandler(), DelayedRequestHandler.KEY);
+
 		if (!ERXConfigurationManager.defaultManager().isDeployedAsServlet() && (!wasERXApplicationMainInvoked || allFrameworks == null)) {
 			_displayMainMethodWarning();
 		}
@@ -1444,39 +1447,22 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 		return ERXApplication.isInRequest.get() != null;
 	}
 	
-	/**
-	 * Override to return a prettier page... should be a request handler...
-	 * @param timeout
-	 * @param url
-	 * @return
-	 */
-	protected WOResponse createDelayedResponse(int timeout, String url) {
-		WOResponse result = new WOResponse();
-		result.appendContentString("<html><meta http-equiv=\"refresh\" content=\"" + timeout +"; url=" + url + "\"><body>Please stand by..." + url + "</body></html>");
-		return result;
-	}
-	
-	/**
-	 * Overridden to allow for redirected responses and null the thread local
-	 * storage.
-	 * 
-	 * @param request
-	 *            object
-	 * @return response
-	 */
-	@Override
+	public static class DelayedRequestHandler extends WORequestHandler {
+		private static String KEY = "erxf";
+		
+		private ERXExpiringCache<String, Future> futures = new ERXExpiringCache();
+		private ExecutorService executor = Executors.newCachedThreadPool();
 
-	public WOResponse dispatchRequest(final WORequest request) {
-		WOResponse response = null;
-		if(executor == null) {
-			response = _dispatchRequest(request);
-		} else {
+		@Override
+		public WOResponse handleRequest(final WORequest request) {
+			WOResponse response = null;
+			final ERXApplication app = erxApplication();
 			String uri = request.uri();
 			try {
 				Future<WOResponse> future;
 				String id;
 				// flag to show we are 
-				if(uri.contains("/erxf/")) {
+				if(uri.contains("/" + KEY + "/")) {
 					id = request.stringFormValueForKey("id");
 					future = futures.objectForKey(id);
 
@@ -1486,14 +1472,14 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 				} else {
 					future = executor.submit(new Callable<WOResponse>() {
 						public WOResponse call() throws Exception {
-							WOResponse response = _dispatchRequest(request);
+							WOResponse response = app._dispatchRequest(request);
 							return response;
 						}
 					});
 					id = ERXRandomGUID.newGid();
 					futures.setObjectForKey(future, id);
 				}
-				String url = (isDirectConnectEnabled() ? directConnectURL():webserverConnectURL()) + "/erxf/?id=" + id;
+				String url = (app.isDirectConnectEnabled() ? app.directConnectURL():app.webserverConnectURL()) + "/" + KEY + "/?id=" + id;
 				response = createDelayedResponse(5, url);
 				final long timeout = 1000L;
 				response = future.get(timeout, TimeUnit.MILLISECONDS);
@@ -1508,14 +1494,49 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 			catch (TimeoutException e) {
 				log.info("Timed out, redirecting");
 			}
+			return response;
+		}
+		
+		/**
+		 * Override to return a prettier page...
+		 * @param timeout
+		 * @param url
+		 * @return
+		 */
+		protected WOResponse createDelayedResponse(int timeout, String url) {
+			WOResponse result = new WOResponse();
+			result.appendContentString("<html><meta http-equiv=\"refresh\" content=\"" + timeout +"; url=" + url + "\"><body>Please stand by..." + url + "</body></html>");
+			return result;
+		}
+		
+	}
+	
+	protected DelayedRequestHandler delayedRequestHandler() {
+		return (DelayedRequestHandler) requestHandlerForKey("erxf");
+	}
+	
+	/**
+	 * Overridden to allow for redirected responses and null the thread local
+	 * storage.
+	 * 
+	 * @param request
+	 *            object
+	 * @return response
+	 */
+	@Override
+
+	public WOResponse dispatchRequest(final WORequest request) {
+		WOResponse response = null;
+		DelayedRequestHandler delayedRequestHandler = delayedRequestHandler();
+		if(delayedRequestHandler == null) {
+			response = _dispatchRequest(request);
+		} else {
+			response = delayedRequestHandler.handleRequest(request);
 		}
 		return response;
 	}
 
-	private ERXExpiringCache<String, Future> futures = new ERXExpiringCache();
-	private ExecutorService executor; //remove this so start the futures = Executors.newCachedThreadPool();
-
-	private WOResponse _dispatchRequest(WORequest request) {
+	protected WOResponse _dispatchRequest(WORequest request) {
 		WOResponse response;
 		if (ERXApplication.requestHandlingLog.isDebugEnabled()) {
 			ERXApplication.requestHandlingLog.debug(request);
