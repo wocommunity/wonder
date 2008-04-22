@@ -1819,4 +1819,29 @@ public class ERXStringUtilities {
         return buffer.toString();
     }
     
+    /**
+     * Inserts the a string into a nother string at a particular offset.
+     * 
+     * @param destinationString the string to insert into
+     * @param contentToInsert the string to insert
+     * @param insertOffset the offset in destinationString to insert
+     * @return the resulting string
+     */
+    public static String insertString(String destinationString, String contentToInsert, int insertOffset) {
+    	String result;
+    	if (destinationString == null) {
+    		if (insertOffset > 0) {
+    			throw new IndexOutOfBoundsException("You attempted to insert '" + contentToInsert + "' into an empty string at the offset " + insertOffset + ".");
+    		}
+    		result = contentToInsert;
+    	}
+    	else {
+			StringBuffer sb = new StringBuffer(destinationString.length() + contentToInsert.length());
+			sb.append(destinationString.substring(0, insertOffset));
+			sb.append(contentToInsert);
+			sb.append(destinationString.substring(insertOffset));
+			result = sb.toString();
+    	}
+		return result;
+    }
 }
