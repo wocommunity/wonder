@@ -23,26 +23,12 @@ import er.extensions.qualifiers.ERXQualifierTraversal;
  * <li>has an identifier for caching</li>
  * <li>type-safe, can fetch objects of a certain type</li>
  * <li>has a user info</li>
- * <li>has grouping support (not done yet)</li>
  * </ul>
  * @author ak
  *
  * @param &lt;T&gt;
  */
 public class ERXFetchSpecification<T extends EOEnterpriseObject> extends EOFetchSpecification {
-
-	/**
-	 * List of supported aggregate operators.
-	 */
-	public static interface Operators {
-		public String SUM = "sum";
-		public String AVG = "avg";
-		public String MIN = "min";
-		public String MAX = "max";
-	}
-	
-	private NSArray<String> _groupingKeyPaths = NSArray.EmptyArray;
-	private EOQualifier _havingQualifier;
 	private NSMutableDictionary _userInfo;
 	
 	public ERXFetchSpecification(String entityName, EOQualifier qualifier, NSArray sortOrderings, boolean usesDistinct, boolean isDeep, NSDictionary hints) {
@@ -64,25 +50,7 @@ public class ERXFetchSpecification<T extends EOEnterpriseObject> extends EOFetch
 
 	public ERXFetchSpecification(ERXFetchSpecification<T> spec) {
 		this((EOFetchSpecification)spec);
-		setGroupingKeyPaths(spec.groupingKeyPaths());
-		setHavingQualifier(spec.havingQualifier());
 		_userInfo = spec.userInfo().count() > 0 ? null : spec.userInfo().mutableClone();
-	}
-
-	public NSArray<String> groupingKeyPaths() {
-		return _groupingKeyPaths;
-	}
-
-	public void setGroupingKeyPaths(NSArray<String> attributes) {
-		_groupingKeyPaths = attributes;
-	}
-
-	public EOQualifier havingQualifier() {
-		return _havingQualifier;
-	}
-
-	public void setHavingQualifier(EOQualifier qualifier) {
-		_havingQualifier = qualifier;
 	}
 
 	/**
@@ -142,6 +110,15 @@ public class ERXFetchSpecification<T extends EOEnterpriseObject> extends EOFetch
 		return identifierForFetchSpec(this);
 	}
 	
+	protected String additionalIdentifierInfo() {
+		return "";
+	}
+	
+	@Override
+	public Object clone() {
+		return super.clone();
+	}
+	
 	/**
 	 * Converts a normal fetch spec to an ERX one.
 	 * @param <T>
@@ -171,25 +148,25 @@ public class ERXFetchSpecification<T extends EOEnterpriseObject> extends EOFetch
 	}
 	
 	/**
-	 * Builds an identifier for the given fetch spec which is suitable for caching.
-	 * @param fs
+	 * Helper to create a string from a qualifier.
+	 * @param q
 	 * @return
 	 */
-	public static String identifierForFetchSpec(EOFetchSpecification fs) {
+	protected static String identifierForQualifier(EOQualifier q) {
 		final StringBuilder sb = new StringBuilder();
-		
+
 		ERXQualifierTraversal traversal = new ERXQualifierTraversal() {
-			
+
 			protected void visit(EOQualifierEvaluation q) {
 				sb.append(q.getClass().getName());
 			}
-			
+
 			@Override
 			protected boolean traverseKeyComparisonQualifier(EOKeyComparisonQualifier q) {
 				sb.append(q.leftKey()).append(q.selector().name()).append(q.rightKey());
 				return super.traverseKeyComparisonQualifier(q);
 			}
-			
+
 			@Override
 			protected boolean traverseKeyValueQualifier(EOKeyValueQualifier q) {
 				Object value = q.value();
@@ -213,16 +190,25 @@ public class ERXFetchSpecification<T extends EOEnterpriseObject> extends EOFetch
 				return super.traverseKeyValueQualifier(q);
 			}
 		};
+		return sb.toString();
+	}
+	
+	/**
+	 * Builds an identifier for the given fetch spec which is suitable for caching.
+	 * @param fs
+	 * @return
+	 */
+	public static String identifierForFetchSpec(EOFetchSpecification fs) {
+		StringBuilder sb = new StringBuilder( identifierForQualifier(fs.qualifier()));
 		for (Iterator iterator = fs.sortOrderings().iterator(); iterator.hasNext();) {
 			EOSortOrdering so = (EOSortOrdering) iterator.next();
 			sb.append(so.key()).append(so.selector().name());
 		}
-		traversal.traverse(fs.qualifier());
 		sb.append(fs.fetchesRawRows()).append(fs.fetchLimit()).append(fs.locksObjects()).append(fs.isDeep());
 		sb.append(fs.entityName());
 		sb.append(fs.hints());
 		if (fs instanceof ERXFetchSpecification) {
-			traversal.traverse(((ERXFetchSpecification) fs).havingQualifier());
+			sb.append(((ERXFetchSpecification) fs).additionalIdentifierInfo());
 		}
 		String result = sb.toString();
 		result = ERXCrypto.base64HashedString(result);
