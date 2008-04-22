@@ -143,21 +143,17 @@ public class AjaxSelectionList extends AjaxComponent {
 			}
 			else {
 				int index = Integer.parseInt(_value);
-				System.out.println("AjaxSelectionList.takeValuesFromRequest: " + index);
 				NSArray list = list();
 				Object selection = null;
 				if (index >= 0 && index < list.count()) {
 					selection = list.objectAtIndex(index);
-					System.out.println("AjaxSelectionList.takeValuesFromRequest: selection = " + selection);
 				}
 				if (selection instanceof NSKeyValueCoding.Null || selection == null) {
 					if (selection() != null) {
 						setSelection(null);
 					}
-					System.out.println("AjaxSelectionList.takeValuesFromRequest: null selection");
 				}
 				else if (!selection.equals(selection())) {
-					System.out.println("AjaxSelectionList.takeValuesFromRequest: setting to " + selection);
 					setSelection(selection);
 				}
 			}
