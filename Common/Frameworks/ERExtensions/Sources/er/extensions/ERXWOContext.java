@@ -18,6 +18,7 @@ import com.webobjects.appserver.WORequest;
 import com.webobjects.appserver.WOResourceManager;
 import com.webobjects.appserver.WOResponse;
 import com.webobjects.appserver.WOSession;
+import com.webobjects.eoaccess.EOAdaptorChannel;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSForwardException;
@@ -108,6 +109,18 @@ public class ERXWOContext extends ERXAjaxContext implements ERXMutableUserInfoHo
 
 	public ERXWOContext(WORequest worequest) {
 		super(worequest);
+	}
+
+	/**
+	 * Implemented so the the thread checks if it should get interrupted.
+	 * 
+	 * @param eoadaptorchannel
+	 * @param nsmutabledictionary
+	 */
+	@Override
+	public void _setCurrentComponent(WOComponent wocomponent) {
+		ERXRuntimeUtilities.checkThreadInterrupt();
+		super._setCurrentComponent(wocomponent);
 	}
 
 	@Override
