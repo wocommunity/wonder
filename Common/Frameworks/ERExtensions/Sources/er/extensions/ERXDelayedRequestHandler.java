@@ -2,6 +2,7 @@ package er.extensions;
 
 import java.util.Map;
 import java.util.concurrent.Callable;
+import java.util.concurrent.CancellationException;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -17,6 +18,7 @@ import com.webobjects.appserver.WOResponse;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSForwardException;
 import com.webobjects.foundation.NSMutableArray;
+import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation.NSTimestamp;
 
 /**
@@ -47,10 +49,50 @@ public class ERXDelayedRequestHandler extends WORequestHandler {
 	private ERXExpiringCache<String, String> _urls;
 	private ExecutorService _executor;
 	private String _cssUrl;
-
+	private Thread _currentThread;
+	
 	private int _refresh;
 	private int _maxRequestTime;
 
+	private static NSMutableDictionary<Thread, String> flags = new NSMutableDictionary<Thread, String>();
+	
+	/**
+	 * When you have an inner loop and you want to be able to bail out on a stop request, call this method an you will get interrupted.
+	 */
+	public static void checkThreadInterrupt() {
+		synchronized (flags) {
+			Thread currentThread = Thread.currentThread();
+			if(flags.containsKey(currentThread)) {
+				String message = clearThreadInterrupt(currentThread);
+				throw NSForwardException._runtimeExceptionForThrowable(new InterruptedException(message));
+			}
+		}
+	}
+	
+	/**
+	 * Call this to get the thread in question interrupted on the next call to interruptIfNeeded().
+	 * @param thread
+	 * @param message
+	 */
+	public static void addThreadInterrupt(Thread thread, String message) {
+		synchronized (flags) {
+			if(thread != null) {
+				flags.setObjectForKey(message, thread);
+			}
+		}
+	}
+
+	/**
+	 * Clear the interrupt flag for the thread.
+	 * @param thread
+	 * @return
+	 */
+	public static String clearThreadInterrupt(Thread thread) {
+		synchronized (flags) {
+			return flags.removeObjectForKey(thread);
+		}
+	}
+	
 	/**
 	 * Helper to wrap a future and the accompanying request.
 	 * 
@@ -66,20 +108,25 @@ public class ERXDelayedRequestHandler extends WORequestHandler {
 
 		public DelayedRequest(WORequest request) {
 			super();
-			_request = request;
+			_request = (WORequest) request.clone();
 			_future = _executor.submit(this);
 			_id = ERXRandomGUID.newGid();
 			_start = new NSTimestamp();
 		}
 
 		public WOResponse call() throws Exception {
-			final ERXApplication app = ERXApplication.erxApplication();
-			WOResponse response = app.dispatchRequestImmediately(request());
-			// testing
-			// Thread.sleep(6000);
-			// log.info("done: " + this);
-			
-			return response;
+			_currentThread = Thread.currentThread();
+			try {
+				final ERXApplication app = ERXApplication.erxApplication();
+				WOResponse response = app.dispatchRequestImmediately(request());
+				// testing
+				// Thread.sleep(6000);
+				// log.info("Done: " + this);
+				return response;
+			} finally {
+				clearThreadInterrupt(_currentThread);
+				_currentThread = null;
+			}
 		}
 
 		public WORequest request() {
@@ -103,11 +150,22 @@ public class ERXDelayedRequestHandler extends WORequestHandler {
 		}
 		
 		public boolean isDone() {
-			return future().isDone();
+			return _currentThread == null;
 		}
 		
 		public boolean cancel() {
-			return future().cancel(true);
+			long start = System.currentTimeMillis();
+			if(_currentThread != null) {
+				addThreadInterrupt(_currentThread, "ERXDelayedRequestHandler: stop requested");
+
+				//while(System.currentTimeMillis() - start < 5000 && !isDone()) {
+					if(future().cancel(true)) {
+						log.info("Cancelled: " + _currentThread + ": " + isDone());
+					}
+				//}
+				log.info("Thread done after cancel: " + isDone());
+			}
+			return isDone();
 		}
 
 		@Override
@@ -136,8 +194,8 @@ public class ERXDelayedRequestHandler extends WORequestHandler {
 			@Override
 			protected synchronized void removeEntryForKey(Entry<DelayedRequest> entry, String key) {
 				Future future = entry.object().future();
-				if (!future.isDone()) {
-					if (!future.cancel(true)) {
+				if (!entry.object().isDone()) {
+					if (!entry.object().cancel()) {
 						log.error("Delayed was running, but couldn't be cancelled: " + entry.object());
 					}
 					else {
@@ -275,6 +333,10 @@ public class ERXDelayedRequestHandler extends WORequestHandler {
 		catch (ExecutionException e1) {
 			throw NSForwardException._runtimeExceptionForThrowable(e1.getCause());
 		}
+		catch (CancellationException e) {
+			log.info("Cancelled, redirecting: " + request.uri());
+			response = createStoppedResponse(request);
+		}
 		catch (TimeoutException e) {
 			log.debug("Timed out, redirecting: " + request.uri());
 		}
@@ -301,7 +363,8 @@ public class ERXDelayedRequestHandler extends WORequestHandler {
 
 	/**
 	 * Create a "stopped" page. Note that the session has not been awakened yet
-	 * and you probably shouldn't do it either.
+	 * and you probably shouldn't do it either. The default implementation redirect to 
+	 * the entry.
 	 * 
 	 * @param request
 	 * @param url
@@ -311,8 +374,10 @@ public class ERXDelayedRequestHandler extends WORequestHandler {
 		final ERXApplication app = ERXApplication.erxApplication();
 		String args = (request.sessionID() != null ? "wosid=" + request.sessionID() : "");
 
-		WORequest home = app.createRequest("GET", request.applicationURLPrefix() + "?" + args, "HTTP/1.0", (Map) request.headers(), null, null);
-		WOResponse result = app.dispatchRequestImmediately(home);
+		String url = request.applicationURLPrefix() + "?" + args;
+		WOResponse result = new WOResponse();
+		result.setHeader(url, "location");
+		result.setStatus(302);
 		return result;
 	}
 
