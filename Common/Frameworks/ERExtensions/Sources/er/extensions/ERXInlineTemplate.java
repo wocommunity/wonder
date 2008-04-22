@@ -46,7 +46,7 @@ import com.webobjects.foundation.NSMutableDictionary;
 public class ERXInlineTemplate extends ERXNonSynchronizingComponent {
 	public static Logger log = Logger.getLogger(ERXInlineTemplate.class);
 
-	private static final String ERROR_TEMPLATE_DEFAULT = "<div style=\"background-color: #faa; border: 2px dotted red;\"><b>ERROR in ERXInlineTemplate.@@method@@</b><br />@@message@@</div>";
+	private static final String ERROR_TEMPLATE_DEFAULT = "<div class=\"ERXInlineTemplateError\" style=\"background-color: #faa; border: 2px dotted red;\"><b>ERROR in ERXInlineTemplate.@@method@@</b><br />@@message@@</div>";
 
 	private static final String ERROR_TEMPLATE_BINDING = "errorTemplate";
 
