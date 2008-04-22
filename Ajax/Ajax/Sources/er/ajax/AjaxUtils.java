@@ -134,6 +134,7 @@ public class AjaxUtils {
 	 * @param fileName
 	 * @param startTag
 	 * @param endTag
+	 * @deprecated this is not called by anything anymore and does not use the new support for loading-on-demand
 	 */
 	public static void addResourceInHead(WOContext context, WOResponse response, String framework, String fileName, String startTag, String endTag) {
 		ERXResponseRewriter.addResourceInHead(response, context, framework, fileName, startTag, endTag, ERXResponseRewriter.TagMissingBehavior.Top);
