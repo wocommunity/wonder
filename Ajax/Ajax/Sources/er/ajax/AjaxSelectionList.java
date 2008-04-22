@@ -9,6 +9,7 @@ import com.webobjects.foundation.NSKeyValueCoding;
 import com.webobjects.foundation.NSMutableArray;
 
 import er.extensions.ERXComponentUtilities;
+import er.extensions.ERXStringUtilities;
 
 /**
  * AjaxSelectionList provides a list component that supports keyboard navigation and component renderers. Externally,
@@ -96,7 +97,7 @@ public class AjaxSelectionList extends AjaxComponent {
 		if (_id == null) {
 			_id = (String) valueForBinding("id");
 			if (_id == null) {
-				_id = AjaxUtils.toSafeElementID(context().elementID());
+				_id = ERXStringUtilities.safeIdentifierName(context().elementID());
 			}
 		}
 		return _id;
@@ -142,15 +143,21 @@ public class AjaxSelectionList extends AjaxComponent {
 			}
 			else {
 				int index = Integer.parseInt(_value);
+				System.out.println("AjaxSelectionList.takeValuesFromRequest: " + index);
 				NSArray list = list();
 				Object selection = null;
-				if (index < list.count()) {
+				if (index >= 0 && index < list.count()) {
 					selection = list.objectAtIndex(index);
+					System.out.println("AjaxSelectionList.takeValuesFromRequest: selection = " + selection);
 				}
-				if (selection instanceof NSKeyValueCoding.Null) {
-					setSelection(null);
+				if (selection instanceof NSKeyValueCoding.Null || selection == null) {
+					if (selection() != null) {
+						setSelection(null);
+					}
+					System.out.println("AjaxSelectionList.takeValuesFromRequest: null selection");
 				}
-				else {
+				else if (!selection.equals(selection())) {
+					System.out.println("AjaxSelectionList.takeValuesFromRequest: setting to " + selection);
 					setSelection(selection);
 				}
 			}

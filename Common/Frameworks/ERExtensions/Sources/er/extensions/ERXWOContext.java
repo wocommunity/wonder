@@ -8,14 +8,12 @@ package er.extensions;
 
 import java.lang.reflect.Method;
 import java.net.MalformedURLException;
-import java.util.Enumeration;
 
 import com.webobjects.appserver.WOApplication;
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WODirectAction;
 import com.webobjects.appserver.WORequest;
-import com.webobjects.appserver.WOResourceManager;
 import com.webobjects.appserver.WOResponse;
 import com.webobjects.appserver.WOSession;
 import com.webobjects.eoaccess.EOAdaptorChannel;
@@ -24,9 +22,10 @@ import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSForwardException;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
-import com.webobjects.foundation.NSMutableSet;
 import com.webobjects.foundation.NSNotification;
 import com.webobjects.foundation.NSNotificationCenter;
+
+import er.extensions.ERXResponseRewriter.TagMissingBehavior;
 
 /**
  * Replacement of WOContext. This subclass is installed when the frameworks
@@ -38,15 +37,10 @@ public class ERXWOContext extends ERXAjaxContext implements ERXMutableUserInfoHo
 
 	public static final String CONTEXT_KEY = "wocontext";
 	private static final String CONTEXT_DICTIONARY_KEY = "ERXWOContext.dict";
-	private static final String SECURE_RESOURCES_KEY = "er.ajax.secureResources";
 
 	public static class Observer {
 		public void applicationDidHandleRequest(NSNotification n) {
 			WOResponse response = (WOResponse) n.object();
-			NSMutableDictionary contextDictionary = ERXWOContext._contextDictionary();
-			if (contextDictionary != null) {
-				ERXWOContext._insertPendingInResponse(response);
-			}
 			ERXWOContext.setCurrentContext(null);
 			ERXThreadStorage.removeValueForKey(ERXWOContext.CONTEXT_DICTIONARY_KEY);
 		}
@@ -250,161 +244,69 @@ public class ERXWOContext extends ERXAjaxContext implements ERXMutableUserInfoHo
 		}
 		return result;
 	}
-
+	
 	/**
-	 * Returns the tag name that scripts and resources should be inserted above.
-	 * Defaults to &lt;/head&gt;, but this can be overridden by setting the
-	 * property er.ajax.AJComponent.htmlCloseHead.
 	 * 
+	 * @deprecated replaced by ERXResponseRewriter
 	 */
 	public static String _htmlCloseHeadTag() {
-		String closeHeadTag = System.getProperty("er.ajax.AJComponent.htmlCloseHead");
-		if (closeHeadTag == null) {
-			closeHeadTag = "</head>";
-		}
-		return closeHeadTag;
+		return ERXResponseRewriter._htmlCloseHeadTag(); 
 	}
-
+	
 	/**
-	 * Utility to add the given text before the given tag. Used to add stuff in
-	 * the HEAD.
 	 * 
-	 * @param response
-	 * @param content
-	 * @param tag
+	 * @deprecated replaced by ERXResponseRewriter
 	 */
-	public static void insertInResponseBeforeTag(WOResponse response, String content, String tag, boolean appendIfTagMissing, boolean enqueueIfTagMissing) {
-		ERXWOContext._insertInResponseBeforeTag(response, content, tag, appendIfTagMissing, enqueueIfTagMissing);
+	public static void insertInResponseBeforeTag(WOContext context, WOResponse response, String content, String tag, TagMissingBehavior tagMissingBehavior) {
+		ERXResponseRewriter.insertInResponseBeforeTag(response, context, content, tag, tagMissingBehavior);
 	}
-
-	protected static void _insertPendingInResponse(WOResponse response) {
-		NSMutableDictionary contextDictionary = ERXWOContext.contextDictionary();
-		NSMutableDictionary pendingInserts = (NSMutableDictionary) contextDictionary.objectForKey("ERXWOContext.pendingInserts");
-		String contentType = response.headerForKey("content-type");
-		if (pendingInserts != null && contentType != null && contentType.startsWith("text/html")) {
-			Enumeration tagEnum = pendingInserts.keyEnumerator();
-			while (tagEnum.hasMoreElements()) {
-				String tag = (String) tagEnum.nextElement();
-				NSMutableArray contents = (NSMutableArray) pendingInserts.objectForKey(tag);
-				if (contents != null) {
-					Enumeration contentsEnum = contents.objectEnumerator();
-					while (contentsEnum.hasMoreElements()) {
-						String content = (String) contentsEnum.nextElement();
-						ERXWOContext._insertInResponseBeforeTag(response, content, tag, true, false);
-					}
-				}
-			}
-		}
-	}
-
-	@SuppressWarnings("unchecked")
-	protected static void _insertInResponseBeforeTag(WOResponse response, String content, String tag, boolean appendIfTagMissing, boolean enqueueIfTagMissing) {
-		String stream = response.contentString();
-		int tagIndex = stream.indexOf(tag);
-		if (tagIndex < 0) {
-			tagIndex = stream.toLowerCase().indexOf(tag.toLowerCase());
-		}
-		if (tagIndex >= 0) {
-			StringBuffer sb = new StringBuffer(stream.length() + content.length());
-			sb.append(stream.substring(0, tagIndex));
-			sb.append(content);
-			sb.append(stream.substring(tagIndex));
-			response.setContent(sb.toString());
-		}
-		else if (appendIfTagMissing) {
-			response.appendContentString(content);
-		}
-		else if (enqueueIfTagMissing) {
-			NSMutableDictionary contextDictionary = ERXWOContext.contextDictionary();
-			NSMutableDictionary pendingInserts = (NSMutableDictionary) contextDictionary.objectForKey("ERXWOContext.pendingInserts");
-			if (pendingInserts == null) {
-				pendingInserts = new NSMutableDictionary();
-				contextDictionary.setObjectForKey(pendingInserts, "ERXWOContext.pendingInserts");
-			}
-			NSMutableArray pendingInsertsForTag = (NSMutableArray) pendingInserts.objectForKey(tag);
-			if (pendingInsertsForTag == null) {
-				pendingInsertsForTag = new NSMutableArray();
-				pendingInserts.setObjectForKey(pendingInsertsForTag, tag);
-			}
-			pendingInsertsForTag.addObject(content);
-		}
-	}
-
+	
 	/**
-	 * Adds a script tag with a correct resource url in the html head tag if it
-	 * isn't already present in the response.
 	 * 
-	 * @param context
-	 *            the context
-	 * @param response
-	 *            the response
-	 * @param framework
-	 *            the framework that contains the file
-	 * @param fileName
-	 *            the name of the javascript file to add
+	 * @deprecated replaced by ERXResponseRewriter
 	 */
 	public static void addScriptResourceInHead(WOContext context, WOResponse response, String framework, String fileName) {
-		String startTag = "<script type=\"text/javascript\" src=\"";
-		String endTag = "\"></script>";
-		ERXWOContext.addResourceInHead(context, response, framework, fileName, startTag, endTag);
+		ERXResponseRewriter.addScriptResourceInHead(response, context, framework, fileName);
 	}
-
+	
 	/**
-	 * Adds a stylesheet link tag with a correct resource url in the html head
-	 * tag if it isn't already present in the response.
 	 * 
-	 * @param context
-	 *            the context
-	 * @param response
-	 *            the response
-	 * @param framework
-	 *            the framework that contains the file
-	 * @param fileName
-	 *            the name of the css file to add
+	 * @deprecated replaced by ERXResponseRewriter
 	 */
 	public static void addStylesheetResourceInHead(WOContext context, WOResponse response, String framework, String fileName) {
-		String startTag = "<link rel = \"stylesheet\" type = \"text/css\" href = \"";
-		String endTag;
-		if (ERXStyleSheet.shouldCloseLinkTags()) {
-			endTag = "\"/>";
-		}
-		else {
-			endTag = "\">";
-		}
-		ERXWOContext.addResourceInHead(context, response, framework, fileName, startTag, endTag);
+		ERXResponseRewriter.addStylesheetResourceInHead(response, context, framework, fileName);
 	}
-
+	
 	/**
-	 * Adds javascript code in a script tag in the html head tag (without a
-	 * name). If you call this method multiple times with the same script code,
-	 * it will add multiple times. To prevent this, call
-	 * addScriptCodeInHead(WOResponse, String, String) passing in a name for
-	 * your script.
 	 * 
-	 * @param response
-	 *            the response to write into
-	 * @param script
-	 *            the javascript code to insert
+	 * @deprecated replaced by ERXResponseRewriter
 	 */
-	public static void addScriptCodeInHead(WOResponse response, String script) {
-		ERXWOContext.addScriptCodeInHead(response, script, null);
+	public static void addScriptCodeInHead(WOContext context, WOResponse response, String script) {
+		ERXResponseRewriter.addScriptCodeInHead(response, context, script);
 	}
-
+	
 	/**
-	 * Adds javascript code in a script tag in the html head tag.
 	 * 
-	 * @param response
-	 *            the response to write into
-	 * @param script
-	 *            the javascript code to insert
-	 * @param scriptName
-	 *            the name of the script to insert (for duplicate checking)
+	 * @deprecated replaced by ERXResponseRewriter
 	 */
-	public static void addScriptCodeInHead(WOResponse response, String script, String scriptName) {
-		if (scriptName == null || !ERXWOContext.isResourceAddedToHead(scriptName)) {
-			String js = "<script type=\"text/javascript\">\n" + script + "\n</script>";
-			ERXWOContext.insertInResponseBeforeTag(response, js, ERXWOContext._htmlCloseHeadTag(), false, true);
-		}
+	public static void addScriptCodeInHead(WOContext context, WOResponse response, String script, String scriptName) {
+		ERXResponseRewriter.addScriptCodeInHead(response, context, script, scriptName);
+	}
+	
+	/**
+	 * 
+	 * @deprecated replaced by ERXResponseRewriter
+	 */
+	public static void addResourceInHead(WOContext context, WOResponse response, String framework, String fileName, String startTag, String endTag) {
+		ERXResponseRewriter.addResourceInHead(response, context, framework, fileName, startTag, endTag);
+	}
+	
+	/**
+	 * 
+	 * @deprecated replaced by ERXResponseRewriter
+	 */
+	public static void addResourceInHead(WOContext context, WOResponse response, String framework, String fileName, String startTag, String endTag, TagMissingBehavior tagMissingBehavior) {
+		ERXResponseRewriter.addResourceInHead(response, context, framework, fileName, startTag, endTag, tagMissingBehavior);
 	}
 
 	/**
@@ -413,92 +315,10 @@ public class ERXWOContext extends ERXAjaxContext implements ERXMutableUserInfoHo
 	 * @see ERXStringUtilities#safeIdentifierName(String, String, char)
 	 * @param elementID
 	 *            the element ID
-	 * @return a javascript-safe version (i.e. "wo_1_2_3_10")
+	 * @return a javascript-safe version (i.e. "_1_2_3_10")
 	 */
 	public static String toSafeElementID(String elementID) {
-		return ERXStringUtilities.safeIdentifierName(elementID, "wo_", '_');
-	}
-
-	/**
-	 * Adds a reference to an arbitrary file with a correct resource url wrapped
-	 * between startTag and endTag in the html head tag if it isn't already
-	 * present in the response.
-	 * 
-	 * @param context
-	 *            the context
-	 * @param response
-	 *            the response
-	 * @param framework
-	 *            the framework that contains the file
-	 * @param fileName
-	 *            the name of the file to add
-	 * @param startTag
-	 *            the HTML to prepend before the URL
-	 * @param endTag
-	 *            the HTML to append after the URL
-	 */
-	public static void addResourceInHead(WOContext context, WOResponse response, String framework, String fileName, String startTag, String endTag) {
-		boolean enqueueIfTagMissing = !ERXAjaxApplication.isAjaxRequest(context.request());
-		ERXWOContext.addResourceInHead(context, response, framework, fileName, startTag, endTag, false, enqueueIfTagMissing);
-	}
-
-	/**
-	 * Returns whether or not the given resource has been added to the HEAD tag.
-	 * 
-	 * @param resourceName
-	 *            the name of the resource to check
-	 * @return true if the resource has been added to head
-	 */
-	@SuppressWarnings("unchecked")
-	protected static boolean isResourceAddedToHead(String resourceName) {
-		NSMutableDictionary<String, Object> userInfo = contextDictionary();
-		NSMutableSet<String> addedResources = (NSMutableSet<String>) userInfo.objectForKey("ERXWOContext.addedResources");
-		if (addedResources == null) {
-			addedResources = new NSMutableSet<String>();
-			userInfo.setObjectForKey(addedResources, "ERXWOContext.addedResources");
-		}
-		boolean resourceAdded = true;
-		if (!addedResources.containsObject(resourceName)) {
-			resourceAdded = false;
-			addedResources.addObject(resourceName);
-		}
-		return resourceAdded;
-	}
-
-	/**
-	 * Adds a reference to an arbitrary file with a correct resource url wrapped
-	 * between startTag and endTag in the html head tag if it isn't already
-	 * present in the response.
-	 * 
-	 * @param response
-	 * @param fileName
-	 * @param startTag
-	 * @param endTag
-	 */
-	@SuppressWarnings("unchecked")
-	public static void addResourceInHead(WOContext context, WOResponse response, String framework, String fileName, String startTag, String endTag, boolean appendIfTagMissing, boolean enqueueIfTagMissing) {
-		if (!ERXWOContext.isResourceAddedToHead(fileName)) {
-			String url;
-			if (fileName.indexOf("://") != -1 || fileName.startsWith("/")) {
-				url = fileName;
-			}
-			else {
-				WOResourceManager rm = WOApplication.application().resourceManager();
-				NSArray languages = null;
-				if (context.hasSession()) {
-					languages = context.session().languages();
-				}
-				url = rm.urlForResourceNamed(fileName, framework, languages, context.request());
-				if (ERXProperties.stringForKey(SECURE_RESOURCES_KEY) != null) {
-					StringBuffer urlBuffer = new StringBuffer();
-					context.request()._completeURLPrefix(urlBuffer, ERXProperties.booleanForKey(SECURE_RESOURCES_KEY), 0);
-					urlBuffer.append(url);
-					url = urlBuffer.toString();
-				}
-			}
-			String html = startTag + url + endTag + "\n";
-			ERXWOContext.insertInResponseBeforeTag(response, html, ERXWOContext._htmlCloseHeadTag(), appendIfTagMissing, enqueueIfTagMissing);
-		}
+		return ERXStringUtilities.safeIdentifierName(elementID);
 	}
 
 	/**

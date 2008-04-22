@@ -10,7 +10,7 @@ import com.webobjects.foundation.NSBundle;
 import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableDictionary;
 
-import er.extensions.ERXWOContext;
+import er.extensions.ERXResponseRewriter;
 import er.wolips.WOLipsUtilities;
 
 /**
@@ -32,7 +32,7 @@ public class WOLComponentLink extends WODynamicGroup {
   @Override
   public void appendToResponse(WOResponse woresponse, WOContext wocontext) {
     WOLipsUtilities.includePrototype(woresponse, wocontext);
-    ERXWOContext.addScriptResourceInHead(wocontext, woresponse, "WOLips", "wolips.js");
+    ERXResponseRewriter.addScriptResourceInHead(woresponse, wocontext, "WOLips", "wolips.js");
 
     WOComponent component = wocontext.component();
     String componentName = (String) _component.valueInComponent(component);

@@ -3,6 +3,8 @@ package er.ajax;
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 
+import er.extensions.ERXStringUtilities;
+
 /**
  * <p>
  * AjaxPing provides support for refreshing a large content area based on a series
@@ -51,7 +53,7 @@ public class AjaxPing extends WOComponent {
 	 */
 	public String id() {
 		if (_id == null) {
-			_id = AjaxUtils.toSafeElementID(context().elementID());
+			_id = ERXStringUtilities.safeIdentifierName(context().elementID());
 		}
 		return _id;
 	}

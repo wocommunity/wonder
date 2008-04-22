@@ -13,6 +13,7 @@ import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 
 import er.extensions.ERXAjaxApplication;
+import er.extensions.ERXStringUtilities;
 
 /**
  * AjaxObserveField allows you to perform an Ajax submit (and optional update) based
@@ -81,7 +82,7 @@ public class AjaxObserveField extends AjaxDynamicElement {
 			observeFieldDescendents = true;
 			observeFieldID = (String)valueForBinding("id", component);
 			if (observeFieldID == null) {
-				observeFieldID = AjaxUtils.toSafeElementID(context.elementID());
+				observeFieldID = ERXStringUtilities.safeIdentifierName(context.elementID());
 			}
 			String elementName = (String)valueForBinding("elementName", component);
 			if (elementName == null) {

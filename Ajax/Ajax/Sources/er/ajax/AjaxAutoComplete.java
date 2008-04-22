@@ -141,7 +141,7 @@ public class AjaxAutoComplete extends AjaxComponent {
 					NSMutableDictionary userInfo = AjaxUtils.mutableUserInfo(res);
 					if (userInfo.objectForKey(varName) == null) {
 						String ljs = listeJS();
-						AjaxUtils.addScriptCodeInHead(res, "var " + varName + " = " + ljs + ";");
+						AjaxUtils.addScriptCodeInHead(res, ctx, "var " + varName + " = " + ljs + ";");
 						userInfo.setObjectForKey(ljs, varName);
 					}
 					listJS = varName;

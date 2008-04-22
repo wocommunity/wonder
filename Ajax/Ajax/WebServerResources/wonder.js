@@ -1,3 +1,29 @@
+Object.extend(Prototype, {
+  exec: (function(){
+    var script, scriptId = '__prototype_exec_script',
+    head = document.getElementsByTagName('HEAD')[0]; //how often is there no head? 
+    (script = document.createElement('script')).type = 'text/javascript';
+    try { script.appendChild( document.createTextNode('') )} catch (e) {}
+    
+    return  function(code){
+      if((code+='').blank()) return;
+      
+      var s = script.cloneNode(true);
+      if(document.loaded){
+        s.text = code;
+        if(s.firstChild) s.firstChild.data = code;
+        head.appendChild(s);
+      }
+      else{
+        //firefox 2.0.0.2/camino 1.0.4 don't execute inserted scripts synchronously when dom not loaded
+        document.write('<script id="'+scriptId+'" type="text/javascript">'+ code +'<\/script>');
+        s = $(scriptId);
+      }
+      s.parentNode.removeChild(s);
+    }
+  })()
+});
+
 Object.extend(String.prototype, {
 	addQueryParameters: function(additionalParameters) {
 		if (additionalParameters) {
@@ -126,6 +152,29 @@ Object.extend(Form, {
     	}
     }
 });  
+
+var AjaxOnDemand = {
+	loadScript: function(script) {
+		new Ajax.Request(script, { method: 'get', asynchronous: false, evalJS: false, onComplete: AjaxOnDemand.loadedScript });
+	},
+	
+	loadedScript: function(request) {
+		Prototype.exec(request.responseText);
+	},
+	
+	loadCSS: function(css) {
+		var linkElement = document.createElement("link");
+  	linkElement.setAttribute("rel", "stylesheet");
+  	linkElement.setAttribute("type", "text/css");
+  	linkElement.setAttribute("href", css);
+  	document.getElementsByTagName('HEAD')[0].appendChild(linkElement);
+		//new Ajax.Request(script, { method: 'get', asynchronous: false, onComplete: AjaxOnDemand.loadedCSS });
+	},
+	
+	loadedCSS: function(request) {
+	}
+};
+var AOD = AjaxOnDemand;
 
 var AjaxInPlace = {
 	saveFunctionName: function(id) {

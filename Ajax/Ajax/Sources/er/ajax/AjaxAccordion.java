@@ -10,6 +10,8 @@ import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 
+import er.extensions.ERXStringUtilities;
+
 public class AjaxAccordion extends AjaxComponent {
   private String _accordionID;
   
@@ -26,7 +28,7 @@ public class AjaxAccordion extends AjaxComponent {
   }
 
   public void appendToResponse(WOResponse response, WOContext context) {
-    _accordionID = (String) valueForBinding("id", AjaxUtils.toSafeElementID(context().elementID()) + "Accordion");
+    _accordionID = (String) valueForBinding("id", ERXStringUtilities.safeIdentifierName(context().elementID()) + "Accordion");
     super.appendToResponse(response, context);
   }
 
