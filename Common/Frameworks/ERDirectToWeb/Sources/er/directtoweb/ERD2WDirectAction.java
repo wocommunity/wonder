@@ -57,7 +57,9 @@ import er.extensions.ERXValueUtilities;
  * Automatically creates page configurations from URLs.<br />
  * Examples:
  * <ul>
- *   <li><code>http://localhost/cgi-bin/WebObjects/MyApp.woa/wa/QueryArticle</code><br >
+ *   <li><code>http://localhost/cgi-bin/WebObjects/MyApp.woa/wa/QueryAll</code><br >
+ * will create an query page all entities.
+*   <li><code>http://localhost/cgi-bin/WebObjects/MyApp.woa/wa/QueryArticle</code><br >
  * will create an query page for articles.
  *
  *   <li><code>http://localhost/cgi-bin/WebObjects/MyApp.woa/wa/QueryArticle?__fs=findNewArticles</code><br >
@@ -82,6 +84,8 @@ import er.extensions.ERXValueUtilities;
  *   <li><code>http://localhost/cgi-bin/WebObjects/MyApp.woa/wa/ListArticle?__fs=&author.name=*foo*&__fs_fetchLimit=0</code><br >
  * will list the articles by creating a fetch spec with the supplied attributes. 
  * When the value contains "*", then it will be regarded as a LIKE query, otherwise as a EQUAL
+ *   <li><code>http://localhost/cgi-bin/WebObjects/MyApp.woa/wa/ErrorSomeStuff?__message=Some+Test</code><br >
+ * will create an error page with the title "Error Some Stuff" (or whatever your localizer does with it) and the message "Some Test".
  * </ul>
  * To provide some security, you should override {@link #allowPageConfiguration(String)}. Also, this
  * class is abstract, so you need to subclass it.
@@ -332,7 +336,7 @@ public abstract class ERD2WDirectAction extends ERXDirectAction {
             context.setDynamicPage(anActionName);
         }
         EOEntity entity = (EOEntity)context.entity();
-        
+
         if(entity != null) {
             String entityName = entity.name();
             String taskName = (String)context.task();
@@ -345,11 +349,37 @@ public abstract class ERD2WDirectAction extends ERXDirectAction {
                 prepareQueryPage(context, (QueryPageInterface)newPage, entityName);
             } else if(newPage instanceof ListPageInterface) {
                 prepareListPage(context, (ListPageInterface)newPage, entityName);
+            } else if(newPage instanceof ErrorPageInterface) {
+                prepareErrorPage(context, (ErrorPageInterface)newPage);
             }
+        } else if(newPage instanceof ErrorPageInterface) {
+            prepareErrorPage(context, (ErrorPageInterface)newPage);
         }
         return (WOActionResults)newPage;
     }
 
+    /**
+     * Returns an error page and sets the message to the key<code> __message</code>.
+     * @return
+     */
+    protected WOActionResults prepareErrorPage(D2WContext d2wContext, ErrorPageInterface epi) {
+        WOActionResults newPage = null;
+        try {
+            String message = context().request().stringFormValueForKey("__message");
+            epi.setMessage(message);
+            epi.setNextPage(previousPageFromRequest());
+            newPage = (WOActionResults)epi;
+        } catch (Exception otherException) {
+            log.error("Exception while trying to report exception!", otherException);
+        }
+        return newPage;
+    }
+    
+    /**
+     * Creates an error page with the given exception.
+     * @param ex
+     * @return
+     */
     public WOActionResults reportException(Exception ex) {
         WOActionResults newPage = null;
         try {
