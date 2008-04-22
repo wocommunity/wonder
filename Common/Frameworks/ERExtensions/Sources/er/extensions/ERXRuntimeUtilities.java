@@ -531,12 +531,16 @@ public class ERXRuntimeUtilities {
     }
 
 
-    private static NSMutableDictionary<Thread, String> flags = new NSMutableDictionary<Thread, String>();
+    private static NSMutableDictionary<Thread, String> flags;
 
     /**
-	 * When you have an inner loop and you want to be able to bail out on a stop request, call this method an you will get interrupted.
+	 * When you have an inner loop and you want to be able to bail out on a stop
+	 * request, call this method and you will get interrupted when another thread wants you to.
 	 */
 	public static void checkThreadInterrupt() {
+		if(flags == null) {
+			return;
+		}
 		synchronized (flags) {
 			Thread currentThread = Thread.currentThread();
 			if (flags.containsKey(currentThread)) {
@@ -547,11 +551,14 @@ public class ERXRuntimeUtilities {
 	}
 
 	/**
-	 * Call this to get the thread in question interrupted on the next call to interruptIfNeeded().
+	 * Call this to get the thread in question interrupted on the next call to checkThreadInterrupt().
 	 * @param thread
 	 * @param message
 	 */
-	public static void addThreadInterrupt(Thread thread, String message) {
+	public static synchronized void addThreadInterrupt(Thread thread, String message) {
+		if(flags == null) {
+			flags = new NSMutableDictionary<Thread, String>();
+		}
 		synchronized (flags) {
 			if (!flags.containsKey(thread)) {
 				log.debug("Adding thread interrupt request: " + message, new RuntimeException());
@@ -565,7 +572,10 @@ public class ERXRuntimeUtilities {
 	 * @param thread
 	 * @return
 	 */
-	public static String clearThreadInterrupt(Thread thread) {
+	public static synchronized String clearThreadInterrupt(Thread thread) {
+		if(flags == null) {
+			return null;
+		}
 		synchronized (flags) {
 			return flags.removeObjectForKey(thread);
 		}
