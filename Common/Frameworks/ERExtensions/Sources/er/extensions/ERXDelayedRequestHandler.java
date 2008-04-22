@@ -62,7 +62,7 @@ public class ERXDelayedRequestHandler extends WORequestHandler {
 			final ERXApplication app = ERXApplication.erxApplication();
 			WOResponse response = app.dispatchRequestImmediately(request());
 			// testing
-			// Thread.sleep(6000);s
+			Thread.sleep(6000);
 			return response;
 		}
 
@@ -109,37 +109,53 @@ public class ERXDelayedRequestHandler extends WORequestHandler {
 	 */
 	@Override
 	public WOResponse handleRequest(final WORequest request) {
+		ERXApplication app = ERXApplication.erxApplication();
+		String key = request.requestHandlerKey();
 		WOResponse response = null;
-		final ERXApplication app = ERXApplication.erxApplication();
-		String uri = request.uri();
-		DelayedRequest delayedRequest;
-		String id;
-		log.debug("Handling: " + uri);
+		if(canHandleRequest(key)) {
+			String uri = request.uri();
+			DelayedRequest delayedRequest;
+			String id;
+			log.debug("Handling: " + uri);
 
-		if(KEY.equals(request.requestHandlerKey())) {
-			id = request.stringFormValueForKey("id");
-			delayedRequest = _futures.objectForKey(id);
-			if(delayedRequest == null) {
-				String url = _urls.objectForKey(id);
-				if(url == null) {
-					return createErrorResponse(request);
+			if(KEY.equals(key)) {
+				id = request.stringFormValueForKey("id");
+				delayedRequest = _futures.objectForKey(id);
+				if(delayedRequest == null) {
+					String url = _urls.objectForKey(id);
+					if(url == null) {
+						return createErrorResponse(request);
+					}
+					response = new WOResponse();
+					response.setStatus(302);
+					response.setHeader(url, "location");
+					// refresh entry, so it doesn't time out
+					_urls.setObjectForKey(url, id);
+					return response;
 				}
-				response = new WOResponse();
-				response.setStatus(302);
-				response.setHeader(url, "location");
 				// refresh entry, so it doesn't time out
-				_urls.setObjectForKey(url, id);
-				return response;
+				_futures.setObjectForKey(delayedRequest, id);
+			} else {
+				delayedRequest = new DelayedRequest(request);
+				id = delayedRequest.id();
+				_futures.setObjectForKey(delayedRequest, id);
 			}
-			// refresh entry, so it doesn't time out
-			_futures.setObjectForKey(delayedRequest, id);
+			response = handle(request, delayedRequest, id);
 		} else {
-			delayedRequest = new DelayedRequest(request);
-			id = delayedRequest.id();
-			_futures.setObjectForKey(delayedRequest, id);
+			// not handled
+			response = app.dispatchRequestImmediately(request);
 		}
-		response = handle(request, delayedRequest, id);
 		return response;
+	}
+
+	/**
+	 * Returns true if the request handler key can be handled.
+	 * @param key
+	 * @return
+	 */
+	protected boolean canHandleRequest(String key) {
+		ERXApplication app = ERXApplication.erxApplication();
+		return key == null || KEY.equals(key) || app.componentRequestHandlerKey().equals(key) || app.directActionRequestHandlerKey().equals(key);
 	}
 
 	/**
