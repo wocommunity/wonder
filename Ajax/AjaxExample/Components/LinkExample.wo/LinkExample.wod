@@ -84,3 +84,9 @@ ClickableContainer : ERXClickableContainer {
 	directActionName = "default";
 	style = "border: 1px solid black; background-color: red";
 }
+
+AjaxClickableContainer : AjaxUpdateLink {
+	action = exampleAction;
+	elementName = "div";
+	style = "border: 1px solid black; background-color: red";
+}
