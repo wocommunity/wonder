@@ -8,6 +8,7 @@ import com.webobjects.eoaccess.EOAdaptorChannel;
 import com.webobjects.eoaccess.EODatabaseChannel;
 import com.webobjects.eoaccess.EODatabaseContext;
 import com.webobjects.eoaccess.EOSQLExpression;
+import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation.NSNotification;
 import com.webobjects.foundation.NSNotificationCenter;
 import com.webobjects.foundation.NSSelector;
@@ -59,6 +60,15 @@ public class ERXAdaptorChannelDelegate {
 	public static ERXAdaptorChannelDelegate delegate() {
 		return _delegate;
 	}
+	
+	/**
+	 * Implemented so the the thread checks if it should get interrupted.
+	 * @param eoadaptorchannel
+	 * @param nsmutabledictionary
+	 */
+    public void adaptorChannelDidFetchRow(EOAdaptorChannel eoadaptorchannel, NSMutableDictionary nsmutabledictionary) {
+    	ERXRuntimeUtilities.checkThreadInterrupt();
+    }
 
 	public void adaptorChannelDidEvaluateExpression(EOAdaptorChannel channel, EOSQLExpression expression) {
 		if (this.collectLastStatements()) {
