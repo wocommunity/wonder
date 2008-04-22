@@ -154,42 +154,44 @@ public class ERXFetchSpecification<T extends EOEnterpriseObject> extends EOFetch
 	 */
 	protected static String identifierForQualifier(EOQualifier q) {
 		final StringBuilder sb = new StringBuilder();
+		if(q != null) {
+			ERXQualifierTraversal traversal = new ERXQualifierTraversal() {
 
-		ERXQualifierTraversal traversal = new ERXQualifierTraversal() {
-
-			protected void visit(EOQualifierEvaluation q) {
-				sb.append(q.getClass().getName());
-			}
-
-			@Override
-			protected boolean traverseKeyComparisonQualifier(EOKeyComparisonQualifier q) {
-				sb.append(q.leftKey()).append(q.selector().name()).append(q.rightKey());
-				return super.traverseKeyComparisonQualifier(q);
-			}
-
-			@Override
-			protected boolean traverseKeyValueQualifier(EOKeyValueQualifier q) {
-				Object value = q.value();
-				if (value instanceof EOEnterpriseObject) {
-					EOEnterpriseObject eo = (EOEnterpriseObject) value;
-					value = ERXEOControlUtilities.primaryKeyStringForObject(eo);
-				} else if (value instanceof NSArray) {
-					NSArray arr = (NSArray) value;
-					String s = "";
-					for (Object object : arr) {
-						if (object instanceof EOEnterpriseObject) {
-							EOEnterpriseObject eo = (EOEnterpriseObject) object;
-							s += ERXEOControlUtilities.primaryKeyStringForObject(eo);
-						} else {
-							s += NSPropertyListSerialization.stringFromPropertyList(object);
-						}
-					}
-					value = s;
+				protected void visit(EOQualifierEvaluation q) {
+					sb.append(q.getClass().getName());
 				}
-				sb.append(q.key()).append(q.selector().name()).append(value);
-				return super.traverseKeyValueQualifier(q);
-			}
-		};
+
+				@Override
+				protected boolean traverseKeyComparisonQualifier(EOKeyComparisonQualifier q) {
+					sb.append(q.leftKey()).append(q.selector().name()).append(q.rightKey());
+					return super.traverseKeyComparisonQualifier(q);
+				}
+
+				@Override
+				protected boolean traverseKeyValueQualifier(EOKeyValueQualifier q) {
+					Object value = q.value();
+					if (value instanceof EOEnterpriseObject) {
+						EOEnterpriseObject eo = (EOEnterpriseObject) value;
+						value = ERXEOControlUtilities.primaryKeyStringForObject(eo);
+					} else if (value instanceof NSArray) {
+						NSArray arr = (NSArray) value;
+						String s = "";
+						for (Object object : arr) {
+							if (object instanceof EOEnterpriseObject) {
+								EOEnterpriseObject eo = (EOEnterpriseObject) object;
+								s += ERXEOControlUtilities.primaryKeyStringForObject(eo);
+							} else {
+								s += NSPropertyListSerialization.stringFromPropertyList(object);
+							}
+						}
+						value = s;
+					}
+					sb.append(q.key()).append(q.selector().name()).append(value);
+					return super.traverseKeyValueQualifier(q);
+				}
+			};
+			traversal.traverse(q);
+		}
 		return sb.toString();
 	}
 	
