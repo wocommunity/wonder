@@ -62,7 +62,7 @@ public class ERXDelayedRequestHandler extends WORequestHandler {
 			final ERXApplication app = ERXApplication.erxApplication();
 			WOResponse response = app.dispatchRequestImmediately(request());
 			// testing
-			Thread.sleep(6000);
+			// Thread.sleep(6000);
 			return response;
 		}
 
