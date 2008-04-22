@@ -15,6 +15,8 @@ import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSNotificationCenter;
 import com.webobjects.foundation._NSDelegate;
 
+import er.extensions.ERXRecursiveBatchFetching;
+
 /**
  * Extends {@link WODisplayGroup} in order to provide real batching. This is
  * done by adding database specific code to the select statement from the
@@ -231,6 +233,21 @@ public class ERXBatchingDisplayGroup extends ERXDisplayGroup {
 		}
 		
 		_displayedObjects = objectsInRange(start, end);
+		
+		batchFetchPrefetchingRelationshipKeyPaths();
+	}
+	
+	protected void batchFetchPrefetchingRelationshipKeyPaths() {
+		EOFetchSpecification fetchSpec = fetchSpecification();
+	    if (fetchSpec != null) {
+	    	NSArray prefetchingRelationshipKeyPaths = fetchSpec.prefetchingRelationshipKeyPaths();
+	    	if (prefetchingRelationshipKeyPaths != null && prefetchingRelationshipKeyPaths.count() > 0) {
+	    		NSArray displayedObject = displayedObjects();
+	    		if (displayedObject != null && displayedObject.count() > 0) {
+	    			ERXRecursiveBatchFetching.batchFetch(displayedObject, prefetchingRelationshipKeyPaths);
+	    		}
+	    	}
+	    }
 	}
 	
 	protected void updateBatchCount() {
