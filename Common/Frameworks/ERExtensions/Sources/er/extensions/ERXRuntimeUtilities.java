@@ -25,6 +25,13 @@ import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation.NSSelector;
 import com.webobjects.jdbcadaptor.JDBCAdaptorException;
 
+/**
+ * Collection of utilities dealing with threads and processes.
+ * 
+ *
+ * @author ak
+ * @author david
+ */
 public class ERXRuntimeUtilities {
 
     /** logging support */
@@ -522,4 +529,46 @@ public class ERXRuntimeUtilities {
             }
         }
     }
+
+
+    private static NSMutableDictionary<Thread, String> flags = new NSMutableDictionary<Thread, String>();
+
+    /**
+	 * When you have an inner loop and you want to be able to bail out on a stop request, call this method an you will get interrupted.
+	 */
+	public static void checkThreadInterrupt() {
+		synchronized (flags) {
+			Thread currentThread = Thread.currentThread();
+			if (flags.containsKey(currentThread)) {
+				String message = clearThreadInterrupt(currentThread);
+				throw NSForwardException._runtimeExceptionForThrowable(new InterruptedException(message));
+			}
+		}
+	}
+
+	/**
+	 * Call this to get the thread in question interrupted on the next call to interruptIfNeeded().
+	 * @param thread
+	 * @param message
+	 */
+	public static void addThreadInterrupt(Thread thread, String message) {
+		synchronized (flags) {
+			if (!flags.containsKey(thread)) {
+				log.debug("Adding thread interrupt request: " + message, new RuntimeException());
+				flags.setObjectForKey(message, thread);
+			}
+		}
+	}
+
+	/**
+	 * Clear the interrupt flag for the thread.
+	 * @param thread
+	 * @return
+	 */
+	public static String clearThreadInterrupt(Thread thread) {
+		synchronized (flags) {
+			return flags.removeObjectForKey(thread);
+		}
+	}
+
 }

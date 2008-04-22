@@ -18,7 +18,6 @@ import com.webobjects.appserver.WOResponse;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSForwardException;
 import com.webobjects.foundation.NSMutableArray;
-import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation.NSTimestamp;
 
 /**
@@ -52,46 +51,6 @@ public class ERXDelayedRequestHandler extends WORequestHandler {
 	
 	private int _refresh;
 	private int _maxRequestTime;
-
-	private static NSMutableDictionary<Thread, String> flags = new NSMutableDictionary<Thread, String>();
-	
-	/**
-	 * When you have an inner loop and you want to be able to bail out on a stop request, call this method an you will get interrupted.
-	 */
-	public static void checkThreadInterrupt() {
-		synchronized (flags) {
-			Thread currentThread = Thread.currentThread();
-			if(flags.containsKey(currentThread)) {
-				String message = clearThreadInterrupt(currentThread);
-				throw NSForwardException._runtimeExceptionForThrowable(new InterruptedException(message));
-			}
-		}
-	}
-	
-	/**
-	 * Call this to get the thread in question interrupted on the next call to interruptIfNeeded().
-	 * @param thread
-	 * @param message
-	 */
-	public static void addThreadInterrupt(Thread thread, String message) {
-		synchronized (flags) {
-			if(!flags.containsKey(thread)) {
-				log.debug("Adding thread interrupt request: " + message, new RuntimeException());
-				flags.setObjectForKey(message, thread);
-			}
-		}
-	}
-
-	/**
-	 * Clear the interrupt flag for the thread.
-	 * @param thread
-	 * @return
-	 */
-	public static String clearThreadInterrupt(Thread thread) {
-		synchronized (flags) {
-			return flags.removeObjectForKey(thread);
-		}
-	}
 	
 	/**
 	 * Helper to wrap a future and the accompanying request.
@@ -125,7 +84,7 @@ public class ERXDelayedRequestHandler extends WORequestHandler {
 				// log.info("Done: " + this);
 				return response;
 			} finally {
-				clearThreadInterrupt(_currentThread);
+				ERXRuntimeUtilities.clearThreadInterrupt(_currentThread);
 				_currentThread = null;
 			}
 		}
@@ -157,7 +116,7 @@ public class ERXDelayedRequestHandler extends WORequestHandler {
 		public boolean cancel() {
 			long start = System.currentTimeMillis();
 			if(_currentThread != null) {
-				addThreadInterrupt(_currentThread, "ERXDelayedRequestHandler: stop requested " + this);
+				ERXRuntimeUtilities.addThreadInterrupt(_currentThread, "ERXDelayedRequestHandler: stop requested " + this);
 
 				//while(System.currentTimeMillis() - start < 5000 && !isDone()) {
 					if(future().cancel(true)) {
