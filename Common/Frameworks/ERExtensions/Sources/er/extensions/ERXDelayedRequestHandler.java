@@ -49,7 +49,6 @@ public class ERXDelayedRequestHandler extends WORequestHandler {
 	private ERXExpiringCache<String, String> _urls;
 	private ExecutorService _executor;
 	private String _cssUrl;
-	private Thread _currentThread;
 	
 	private int _refresh;
 	private int _maxRequestTime;
@@ -76,7 +75,8 @@ public class ERXDelayedRequestHandler extends WORequestHandler {
 	 */
 	public static void addThreadInterrupt(Thread thread, String message) {
 		synchronized (flags) {
-			if(thread != null) {
+			if(!flags.containsKey(thread)) {
+				log.debug("Adding thread interrupt request: " + message, new RuntimeException());
 				flags.setObjectForKey(message, thread);
 			}
 		}
@@ -105,6 +105,7 @@ public class ERXDelayedRequestHandler extends WORequestHandler {
 		protected Future<WOResponse> _future;
 		protected String _id;
 		protected NSTimestamp _start;
+		private volatile Thread _currentThread;
 
 		public DelayedRequest(WORequest request) {
 			super();
@@ -156,7 +157,7 @@ public class ERXDelayedRequestHandler extends WORequestHandler {
 		public boolean cancel() {
 			long start = System.currentTimeMillis();
 			if(_currentThread != null) {
-				addThreadInterrupt(_currentThread, "ERXDelayedRequestHandler: stop requested");
+				addThreadInterrupt(_currentThread, "ERXDelayedRequestHandler: stop requested " + this);
 
 				//while(System.currentTimeMillis() - start < 5000 && !isDone()) {
 					if(future().cancel(true)) {
