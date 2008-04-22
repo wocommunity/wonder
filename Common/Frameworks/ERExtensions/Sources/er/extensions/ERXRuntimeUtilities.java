@@ -122,7 +122,10 @@ public class ERXRuntimeUtilities {
 				if(context.request().headers() != null) {
 					NSMutableDictionary<String, Object> headers = new NSMutableDictionary<String, Object>();
 					for (Object key : context.request().headerKeys()) {
-						headers.setObjectForKey(context.request().headerForKey(key), key.toString());
+						String value = context.request().headerForKey(key);
+						if(value != null) {
+							headers.setObjectForKey(value, key.toString());
+						}
 					}
 					extraInfo.setObjectForKey(headers, "Headers");
 				}
