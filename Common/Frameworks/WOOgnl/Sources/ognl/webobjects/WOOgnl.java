@@ -131,6 +131,12 @@ public class WOOgnl {
 				Object value = constantAssociation.valueInComponent(null);
 				if (value instanceof String) {
 					keyPath = (String) value;
+				} else if (value instanceof String) {
+					keyPath = value.toString();
+				} else if (value instanceof Boolean) {
+					keyPath = value.toString();
+				} else {
+					keyPath = value != null ? value.toString() : null;
 				}
 				isConstant = true;
 			} else if(association instanceof WOKeyValueAssociation) {
