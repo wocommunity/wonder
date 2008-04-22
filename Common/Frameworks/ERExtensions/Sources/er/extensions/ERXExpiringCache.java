@@ -6,6 +6,8 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
+import com.webobjects.foundation.NSArray;
+import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 
 /**
@@ -420,5 +422,17 @@ public class ERXExpiringCache<K, V> {
 			}
 			while (!stopped);
 		}
+	}
+
+	/**
+	 * Returns all keys.
+	 * @return
+	 */
+	public synchronized NSArray<K> allKeys() {
+		NSMutableArray<K> result = new NSMutableArray<K>(_backingDictionary.count());
+		for (K key : _backingDictionary.allKeys()) {
+			result.addObject(key);
+		}
+		return result;
 	}
 }
