@@ -7,7 +7,6 @@
 
 package er.extensions;
 
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Enumeration;
 
@@ -296,7 +295,7 @@ public class ERXWOForm extends com.webobjects.appserver._private.WOHTMLDynamicEl
 			formName = (String) _formName.valueInComponent(context.component());
 		}
 		if (formName == null) {
-			formName = "form_" + ERXWOContext.toSafeElementID(context.elementID());
+			formName = "f" + ERXStringUtilities.safeIdentifierName(context.elementID());
 		}
 		return formName;
 	}

@@ -9,7 +9,8 @@ import com.webobjects.foundation.NSDictionary;
 
 import er.extensions.ERXArrayUtilities;
 import er.extensions.ERXQ;
-import er.extensions.ERXWOContext;
+import er.extensions.ERXResponseRewriter;
+import er.extensions.ERXStringUtilities;
 import er.taggable.ERTaggable;
 
 /**
@@ -116,7 +117,7 @@ public class ERTagField extends er.extensions.ERXComponent {
     if (_id == null) {
       _id = stringValueForBinding("id");
       if (_id == null) {
-        _id = ERXWOContext.toSafeElementID(context().elementID());
+        _id = ERXStringUtilities.safeIdentifierName(context().elementID());
       }
     }
     return _id;
@@ -133,9 +134,9 @@ public class ERTagField extends er.extensions.ERXComponent {
 
   @Override
   public void appendToResponse(WOResponse response, WOContext context) {
-    ERXWOContext.addScriptResourceInHead(context, response, "Ajax", "prototype.js");
-    ERXWOContext.addScriptResourceInHead(context, response, "ERTaggable", "ERTagField.js");
-    ERXWOContext.addStylesheetResourceInHead(context, response, "ERTaggable", "ERTagField.css");
+	ERXResponseRewriter.addScriptResourceInHead(response, context, "Ajax", "prototype.js");
+    ERXResponseRewriter.addScriptResourceInHead(response, context, "ERTaggable", "ERTagField.js");
+    ERXResponseRewriter.addStylesheetResourceInHead(response, context, "ERTaggable", "ERTagField.css");
     super.appendToResponse(response, context);
   }
 }

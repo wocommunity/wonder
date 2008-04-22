@@ -106,6 +106,10 @@ public class ERXJavaScript extends WOHTMLDynamicElement {
 	public void appendAttributesToResponse(WOResponse woresponse, WOContext wocontext) {
 		WOComponent wocomponent = wocontext.component();
 		woresponse._appendContentAsciiString(" type=\"text/javascript\"");
+		
+		String framework = null;
+		String scriptName = null;
+		
 		String src = null;
 		if(_scriptSource != null || _filename != null) {
 			String srcFromBindings;
@@ -120,13 +124,13 @@ public class ERXJavaScript extends WOHTMLDynamicElement {
 					src = srcFromBindings;
 				} else {
 					if(!WOStaticURLUtilities.isFragmentURL(srcFromBindings)) {
-						String framework = null;
 						if(_scriptFramework != null) {
 							framework = (String) _scriptFramework.valueInComponent(wocomponent);
 						}
 						else if (_framework != null) {
 							framework = (String) _framework.valueInComponent(wocomponent);
 						}
+						scriptName = srcFromBindings;
 						src = wocontext._urlForResourceNamed(srcFromBindings, framework, true);
 						if(src == null) {
 							src = wocomponent.baseURL() + "/" + srcFromBindings;
@@ -137,6 +141,7 @@ public class ERXJavaScript extends WOHTMLDynamicElement {
 				}
 			}
 		}
+		
 		Object key = null;
 		if(src == null && _scriptKey != null) {
 			key = _scriptKey.valueInComponent(wocomponent);
@@ -153,12 +158,18 @@ public class ERXJavaScript extends WOHTMLDynamicElement {
 				src = wocontext.directActionURLForActionNamed(Script.class.getName() + "/" + key, null);
 			}
 		}
+		
 		if(src != null) {
 			woresponse._appendContentAsciiString(" src=\"");
 			woresponse.appendContentString(src);
 			woresponse.appendContentCharacter('"');
 		}
+		
 		super.appendAttributesToResponse(woresponse, wocontext);
+		
+		if (scriptName != null) {
+			ERXResponseRewriter.resourceAddedToHead(wocontext, framework, scriptName);
+		}
 	}
 
 

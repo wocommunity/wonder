@@ -15,6 +15,8 @@ import er.extensions.ERXAjaxSession;
 import er.extensions.ERXApplication;
 import er.extensions.ERXProperties;
 import er.extensions.ERXResourceManager;
+import er.extensions.ERXResponseRewriter;
+import er.extensions.ERXStringUtilities;
 import er.extensions.ERXWOContext;
 
 public class AjaxUtils {
@@ -100,7 +102,7 @@ public class AjaxUtils {
 		if (ERXProperties.booleanForKey("er.ajax.compressed") && ("prototype.js".equals(fileName) || "scriptaculous.js".equals(fileName))) {
 			processedFileName = "sc-17-proto-15-compressed.js";
 		}
-		ERXWOContext.addScriptResourceInHead(context, response, framework, processedFileName);
+		ERXResponseRewriter.addScriptResourceInHead(response, context, framework, processedFileName);
 	}
 
 	/**
@@ -114,7 +116,7 @@ public class AjaxUtils {
 	 * Calls ERXWOContext.addStylesheetResourceInHead
 	 */
 	public static void addStylesheetResourceInHead(WOContext context, WOResponse response, String framework, String fileName) {
-		ERXWOContext.addStylesheetResourceInHead(context, response, framework, fileName);
+		ERXResponseRewriter.addStylesheetResourceInHead(response, context, framework, fileName);
 	}
 
 	/**
@@ -134,7 +136,7 @@ public class AjaxUtils {
 	 * @param endTag
 	 */
 	public static void addResourceInHead(WOContext context, WOResponse response, String framework, String fileName, String startTag, String endTag) {
-		ERXWOContext.addResourceInHead(context, response, framework, fileName, startTag, endTag, true, !ERXApplication.isAjaxRequest(context.request()));
+		ERXResponseRewriter.addResourceInHead(response, context, framework, fileName, startTag, endTag, ERXResponseRewriter.TagMissingBehavior.Top);
 		
 		// MS: OK ... Sheesh.  If you're not using Wonder's ERXResourceManager #1, you're a bad person, but #2 in development mode
 		// you have a lame resource URL that does not act like a path (wr/wodata=/path/to/your/resource), rather it acts like a query string
@@ -148,26 +150,26 @@ public class AjaxUtils {
 		// better.  But if you're holding out and scared like a child, then we'll do this for you. 
 		if (!(WOApplication.application().resourceManager() instanceof ERXResourceManager) && "Ajax".equals(framework) && "scriptaculous.js".equals(fileName) && !(context.request() == null || context.request() != null && context.request().isUsingWebServer() && !WOApplication.application()._rapidTurnaroundActiveForAnyProject())) {
 			boolean enqueueIfTagMissing = !AjaxUtils.isAjaxRequest(context.request());
-			ERXWOContext.addResourceInHead(context, response, framework, "builder.js", startTag, endTag, false, enqueueIfTagMissing);
-			ERXWOContext.addResourceInHead(context, response, framework, "effects.js", startTag, endTag, false, enqueueIfTagMissing);
-			ERXWOContext.addResourceInHead(context, response, framework, "dragdrop.js", startTag, endTag, false, enqueueIfTagMissing);
-			ERXWOContext.addResourceInHead(context, response, framework, "controls.js", startTag, endTag, false, enqueueIfTagMissing);
-			ERXWOContext.addResourceInHead(context, response, framework, "slider.js", startTag, endTag, false, enqueueIfTagMissing);
+			ERXResponseRewriter.addResourceInHead(response, context, framework, "builder.js", startTag, endTag, ERXResponseRewriter.TagMissingBehavior.Top);
+			ERXResponseRewriter.addResourceInHead(response, context, framework, "effects.js", startTag, endTag, ERXResponseRewriter.TagMissingBehavior.Top);
+			ERXResponseRewriter.addResourceInHead(response, context, framework, "dragdrop.js", startTag, endTag, ERXResponseRewriter.TagMissingBehavior.Top);
+			ERXResponseRewriter.addResourceInHead(response, context, framework, "controls.js", startTag, endTag, ERXResponseRewriter.TagMissingBehavior.Top);
+			ERXResponseRewriter.addResourceInHead(response, context, framework, "slider.js", startTag, endTag, ERXResponseRewriter.TagMissingBehavior.Top);
 		}
 	}
 
 	/**
 	 * Calls ERXWOContext.addScriptCodeInHead.
 	 */
-	public static void addScriptCodeInHead(WOResponse response, String script) {
-		ERXWOContext.addScriptCodeInHead(response, script);
+	public static void addScriptCodeInHead(WOResponse response, WOContext context, String script) {
+		ERXResponseRewriter.addScriptCodeInHead(response, context, script);
 	}
 
 	/**
-	 * Calls ERXWOContext.toSafeElementID.
+	 * @deprecated replaced by ERXStringUtilities.safeIdentifierName
 	 */
 	public static String toSafeElementID(String elementID) {
-		return ERXWOContext.toSafeElementID(elementID);
+		return ERXStringUtilities.safeIdentifierName(elementID);
 	}
 
 	public static boolean shouldHandleRequest(WORequest request, WOContext context, String containerID) {

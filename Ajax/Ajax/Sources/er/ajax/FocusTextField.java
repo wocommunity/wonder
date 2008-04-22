@@ -7,6 +7,7 @@ import com.webobjects.appserver.WOElement;
 import com.webobjects.appserver.WOResponse;
 import com.webobjects.foundation.NSDictionary;
 
+import er.extensions.ERXStringUtilities;
 import er.extensions.ERXWOTextField;
 
 /**
@@ -43,7 +44,7 @@ public class FocusTextField extends ERXWOTextField {
       id = (String) _id.valueInComponent(component);
     }
 	  if (id == null) {
-	    id = AjaxUtils.toSafeElementID(context.elementID());
+	    id = ERXStringUtilities.safeIdentifierName(context.elementID());
 	  }
 	  return id;
 	}
