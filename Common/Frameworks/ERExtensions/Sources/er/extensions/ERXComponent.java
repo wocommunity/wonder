@@ -337,7 +337,7 @@ public abstract class ERXComponent extends WOComponent {
 				defaultCSSPath += "/";
 			}
 			String frameworkName = _frameworkName();
-			ERXWOContext.addStylesheetResourceInHead(context, response, frameworkName, defaultCSSPath + primaryCSSFile);
+			ERXResponseRewriter.addStylesheetResourceInHead(response, context, frameworkName, defaultCSSPath + primaryCSSFile);
 		}
 
 		NSArray<String> additionalCSSFiles = additionalCSSFiles();
@@ -348,7 +348,7 @@ public abstract class ERXComponent extends WOComponent {
 			}
 			String frameworkName = _frameworkName();
 			for (String additionalCSSFile : additionalCSSFiles) {
-				ERXWOContext.addStylesheetResourceInHead(context, response, frameworkName, defaultCSSPath + additionalCSSFile);
+				ERXResponseRewriter.addStylesheetResourceInHead(response, context, frameworkName, defaultCSSPath + additionalCSSFile);
 			}
 		}
 	}
@@ -403,7 +403,7 @@ public abstract class ERXComponent extends WOComponent {
 				defaultJavascriptPath += "/";
 			}
 			String frameworkName = _frameworkName();
-			ERXWOContext.addScriptResourceInHead(context, response, frameworkName, defaultJavascriptPath + primaryJavascriptFile);
+			ERXResponseRewriter.addScriptResourceInHead(response, context, frameworkName, defaultJavascriptPath + primaryJavascriptFile);
 		}
 
 		NSArray<String> additionalJavascriptFiles = additionalJavascriptFiles();
@@ -414,7 +414,7 @@ public abstract class ERXComponent extends WOComponent {
 			}
 			String frameworkName = _frameworkName();
 			for (String additionalJavascriptFile : additionalJavascriptFiles) {
-				ERXWOContext.addScriptResourceInHead(context, response, frameworkName, defaultJavascriptPath + additionalJavascriptFile);
+				ERXResponseRewriter.addScriptResourceInHead(response, context, frameworkName, defaultJavascriptPath + additionalJavascriptFile);
 			}
 		}
 	}

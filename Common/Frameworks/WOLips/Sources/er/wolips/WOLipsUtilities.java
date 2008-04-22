@@ -8,7 +8,7 @@ import com.webobjects.appserver.WOResponse;
 import com.webobjects.foundation.NSDictionary;
 
 import er.extensions.ERXProperties;
-import er.extensions.ERXWOContext;
+import er.extensions.ERXResponseRewriter;
 
 /**
  * WOLipsUtilities provide handy-dandy WOLips communication methods.
@@ -19,7 +19,7 @@ public class WOLipsUtilities {
   public static void includePrototype(WOResponse response, WOContext context) {
     String prototypeFrameworkName = ERXProperties.stringForKeyWithDefault("wolips.prototype.framework", "Ajax");
     String prototypeFileName = ERXProperties.stringForKeyWithDefault("wolips.prototype.fileName", "prototype.js");
-    ERXWOContext.addScriptResourceInHead(context, response, prototypeFrameworkName, prototypeFileName);
+    ERXResponseRewriter.addScriptResourceInHead(response, context, prototypeFrameworkName, prototypeFileName);
   }
   
   public static boolean isWOLipsPasswordDefinde() {

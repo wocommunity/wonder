@@ -11,6 +11,7 @@ import com.webobjects.foundation.NSDictionary;
 import com.webobjects.foundation.NSMutableDictionary;
 
 import er.extensions.ERXEOControlUtilities;
+import er.extensions.ERXStringUtilities;
 import er.extensions.ERXWOContext;
 
 /**
@@ -96,7 +97,7 @@ public class AjaxHighlight extends WODynamicGroup {
 		}
 		String id;
 		if (_id == null) {
-			id = AjaxUtils.toSafeElementID(context.elementID());
+			id = ERXStringUtilities.safeIdentifierName(context.elementID());
 		}
 		else {
 			id = (String) _id.valueInComponent(component);

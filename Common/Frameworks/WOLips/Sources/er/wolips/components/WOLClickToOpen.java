@@ -7,7 +7,7 @@ import com.webobjects.foundation.NSBundle;
 import com.webobjects.foundation.NSMutableDictionary;
 
 import er.extensions.ERXProperties;
-import er.extensions.ERXWOContext;
+import er.extensions.ERXResponseRewriter;
 import er.wolips.WOLipsUtilities;
 
 /**
@@ -45,7 +45,7 @@ public class WOLClickToOpen extends WOComponent {
   @Override
   public void appendToResponse(WOResponse woresponse, WOContext wocontext) {
     WOLipsUtilities.includePrototype(woresponse, wocontext);
-    ERXWOContext.addScriptResourceInHead(wocontext, woresponse, "WOLips", "wolips.js");
+    ERXResponseRewriter.addScriptResourceInHead(woresponse, wocontext, "WOLips", "wolips.js");
     super.appendToResponse(woresponse, wocontext);
   }
 }

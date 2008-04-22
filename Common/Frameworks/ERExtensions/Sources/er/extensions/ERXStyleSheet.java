@@ -139,12 +139,15 @@ public class ERXStyleSheet extends ERXStatelessComponent {
 	/**
 	 * Returns the languages for the request.
 	 */
+	@SuppressWarnings("unchecked")
 	private NSArray<String> languages() {
-		if (hasSession())
+		if (hasSession()) {
 			return session().languages();
+		}
 		WORequest request = context().request();
-		if (request != null)
+		if (request != null) {
 			return request.browserLanguages();
+		}
 		return null;
 	}
 
@@ -154,44 +157,64 @@ public class ERXStyleSheet extends ERXStatelessComponent {
 	 * it.
 	 */
 	@Override
-	public void appendToResponse(WOResponse r, WOContext wocontext) {
-		String href = styleSheetUrl();
-		// default to inline for ajax requests
-		boolean inline = booleanValueForBinding("inline", ERXAjaxApplication.isAjaxRequest(wocontext.request()));
-		WOResponse response = inline ? r : new WOResponse();
-		response._appendContentAsciiString("<link ");
-		response._appendTagAttributeAndValue("rel", "stylesheet", false);
-		response._appendTagAttributeAndValue("type", "text/css", false);
-
-		if (href == null) {
-			String key = styleSheetKey();
-			ERXExpiringCache<String, WOResponse> cache = cache(session());
-			if (cache.isStale(key) || ERXApplication.isDevelopmentModeSafe()) {
-				WOResponse newresponse = new WOResponse();
-				super.appendToResponse(newresponse, wocontext);
-				// appendToResponse above will change the response of
-				// "wocontext" to "newresponse". When this happens during an
-				// Ajax request, it will lead to backtracking errors on
-				// subsequent requests, so restore the original response "r"
-				wocontext._setResponse(r);  
-				newresponse.setHeader("text/css", "content-type");
-				cache.setObjectForKey(newresponse, key);
+	public void appendToResponse(WOResponse originalResponse, WOContext wocontext) {
+		String styleSheetFrameworkName = styleSheetFrameworkName();
+		String styleSheetName = styleSheetName();
+		boolean isResourceStyleSheet = styleSheetName != null;
+		if (isResourceStyleSheet && ERXResponseRewriter.isResourceAddedToHead(wocontext, styleSheetFrameworkName, styleSheetName)) {
+			// Skip, because this has already been added ... 
+		}
+		else {
+			// default to inline for ajax requests
+			boolean inline = booleanValueForBinding("inline", ERXAjaxApplication.isAjaxRequest(wocontext.request()));
+			WOResponse response = inline ? originalResponse : new WOResponse();
+	
+			String href = styleSheetUrl();
+			if (href == null) {
+				String key = styleSheetKey();
+				ERXExpiringCache<String, WOResponse> cache = cache(session());
+				if (cache.isStale(key) || ERXApplication.isDevelopmentModeSafe()) {
+					WOResponse newresponse = new WOResponse();
+					super.appendToResponse(newresponse, wocontext);
+					// appendToResponse above will change the response of
+					// "wocontext" to "newresponse". When this happens during an
+					// Ajax request, it will lead to backtracking errors on
+					// subsequent requests, so restore the original response "r"
+					wocontext._setResponse(originalResponse);  
+					newresponse.setHeader("text/css", "content-type");
+					cache.setObjectForKey(newresponse, key);
+				}
+				href = wocontext.directActionURLForActionNamed(Sheet.class.getName() + "/" + key, null);
 			}
-			href = wocontext.directActionURLForActionNamed(Sheet.class.getName() + "/" + key, null);
-		}
-		response._appendTagAttributeAndValue("href", href, false);
-
-		String media = mediaType();
-		if (media != null) {
-			response._appendTagAttributeAndValue("media", media, false);
-		}
-
-		response._appendContentAsciiString(">");
-		if (ERXStyleSheet.shouldCloseLinkTags()) {
-			response._appendContentAsciiString("</link>");
-		}
-		if (!inline) {
-			ERXWOContext.insertInResponseBeforeTag(r, response.contentString(), ERXWOContext._htmlCloseHeadTag(), false, true);
+			
+			response._appendContentAsciiString("<link ");
+			response._appendTagAttributeAndValue("rel", "stylesheet", false);
+			response._appendTagAttributeAndValue("type", "text/css", false);
+			response._appendTagAttributeAndValue("href", href, false);
+	
+			String media = mediaType();
+			if (media != null) {
+				response._appendTagAttributeAndValue("media", media, false);
+			}
+	
+			response._appendContentAsciiString(">");
+			if (ERXStyleSheet.shouldCloseLinkTags()) {
+				response._appendContentAsciiString("</link>");
+			}
+			response.appendContentString("\n");
+			boolean inserted = true;
+			if (!inline) {
+				String stylesheetLink = response.contentString();
+				inserted = ERXResponseRewriter.insertInResponseBeforeHead(originalResponse, wocontext, stylesheetLink, ERXResponseRewriter.TagMissingBehavior.Inline);
+			}
+			if (inserted) {
+				if (isResourceStyleSheet) {
+					ERXResponseRewriter.resourceAddedToHead(wocontext, styleSheetFrameworkName, styleSheetName);
+				}
+				else if (href != null) {
+					ERXResponseRewriter.resourceAddedToHead(wocontext, null, href);
+				}
+			}
 		}
 	}
 

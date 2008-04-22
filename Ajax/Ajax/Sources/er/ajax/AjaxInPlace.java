@@ -11,7 +11,7 @@ import com.webobjects.appserver.WORequest;
 import com.webobjects.appserver.WOResponse;
 
 import er.extensions.ERXComponentUtilities;
-import er.extensions.ERXWOContext;
+import er.extensions.ERXStringUtilities;
 import er.extensions.ERXWOForm;
 
 /**
@@ -141,7 +141,7 @@ public class AjaxInPlace extends WOComponent {
 				_id = (String) valueForBinding("id");
 			}
 			else {
-				_id = AjaxUtils.toSafeElementID(context().elementID());
+				_id = ERXStringUtilities.safeIdentifierName(context().elementID());
 			}
 		}
 		return _id;

@@ -129,6 +129,14 @@ SelectionList : WOHyperlink {
 	pageName = "AjaxSelectionListExample";
 }
 
+Browser : WOHyperlink {
+	pageName = "AjaxBrowserExample";
+}
+
 JSONExample : WOHyperlink {
 	pageName = "JSONExample";
+}
+
+ComponentReveal : WOHyperlink {
+	pageName = "ComponentRevealExample";
 }
