@@ -94,11 +94,15 @@ public class ERXFetchSpecification<T extends EOEnterpriseObject> extends EOFetch
 	 */
 	public NSArray<NSDictionary<String, Object>> fetchRawRows(EOEditingContext ec) {
 		boolean old = fetchesRawRows();
-		setFetchesRawRows(true);
+		if(!old) {
+			setFetchesRawRows(true);
+		}
 		try {
 			return ec.objectsWithFetchSpecification(this);
 		} finally {
-			setFetchesRawRows(old);
+			if(!old) {
+				setFetchesRawRows(old);
+			}
 		}
 	}
 
