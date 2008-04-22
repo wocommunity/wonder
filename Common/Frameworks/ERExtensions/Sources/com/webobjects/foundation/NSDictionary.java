@@ -539,7 +539,7 @@ public class NSDictionary<K, V> implements Cloneable, Serializable, NSCoding, NS
 				buffer.append(((Boolean) object).booleanValue() ? "true" : "false");
 			}
 			else {
-				buffer.append(object.toString());
+				buffer.append(object);
 			}
 			buffer.append("; ");
 		}
