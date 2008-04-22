@@ -1461,8 +1461,7 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 	public WOResponse dispatchRequest(WORequest request) {
 		WOResponse response = null;
 		ERXDelayedRequestHandler delayedRequestHandler = delayedRequestHandler();
-		String key = request.requestHandlerKey();
-		if(delayedRequestHandler == null || (key != null && !(key.equals(componentRequestHandlerKey()) || key.equals(directActionRequestHandlerKey())))) {
+		if(delayedRequestHandler == null) {
 			response = dispatchRequestImmediately(request);
 		} else {
 			response = delayedRequestHandler.handleRequest(request);
