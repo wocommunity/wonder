@@ -134,7 +134,10 @@ public class WOOgnl {
 			} else if(association instanceof WOKeyValueAssociation) {
 				keyPath = association.keyPath();
 			} else if(association instanceof WOBindingNameAssociation) {
-				keyPath = "^" + association.keyPath();
+				WOBindingNameAssociation b = (WOBindingNameAssociation)association;
+				// AK: strictly speaking, this is not correct, as we only get the first part of 
+				// the path. But take a look at WOBindingNameAssociation for a bit of fun...
+				keyPath = "^" + b._parentBindingName;
 			}
         	if(keyPath != null) {
         		if(associationMappings.size() != 0) {
