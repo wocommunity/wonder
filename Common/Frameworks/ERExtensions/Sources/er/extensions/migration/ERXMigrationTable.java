@@ -692,6 +692,18 @@ public class ERXMigrationTable {
 	 * Executes the SQL operations to add this foreign key constraint (only supports single attribute FK's right now).
 	 * 
 	 * @param sourceColumnName the source column name of the relationship
+	 * @param destinationTableName the destination table of the relationship (should be the PK of the destination table)
+	 * @param destinationColumnName the destination column of the relationship (should be the PK of the destination table)
+	 * @throws SQLException if the add fails
+	 */
+	public void addForeignKey(String sourceColumnName, String destinationTableName, String destinationColumnName) throws SQLException {
+		addForeignKey(existingColumnNamed(sourceColumnName), database().existingColumnNamed(destinationTableName, sourceColumnName));
+	}
+
+	/**
+	 * Executes the SQL operations to add this foreign key constraint (only supports single attribute FK's right now).
+	 * 
+	 * @param sourceColumnName the source column name of the relationship
 	 * @param destinationColumn the destination column of the relationship (should be the PK of the destination table)
 	 * @throws SQLException if the add fails
 	 */
