@@ -1,7 +1,8 @@
 // Created by Direct to Web's Project Builder Wizard
 package er.examples.movies;
 
-import com.webobjects.appserver.*;
+import com.webobjects.appserver.WOComponent;
+import com.webobjects.appserver.WOContext;
 
 public class PageWrapper extends WOComponent {
 

@@ -6,13 +6,23 @@
 //
 package er.examples.movies;
 
-import com.webobjects.foundation.*;
-import com.webobjects.appserver.*;
-import com.webobjects.directtoweb.*;
-import com.webobjects.eocontrol.*;
-import com.webobjects.eoaccess.*;
-import er.extensions.*;
-import er.directtoweb.*;
+import com.webobjects.appserver.WOComponent;
+import com.webobjects.appserver.WOContext;
+import com.webobjects.eoaccess.EOUtilities;
+import com.webobjects.eocontrol.EOEditingContext;
+import com.webobjects.eocontrol.EOEnterpriseObject;
+
+import com.webobjects.directtoweb.EditPageInterface;
+import com.webobjects.directtoweb.NextPageDelegate;
+
+import er.extensions.ERXEC;
+import er.extensions.ERXLogger;
+import er.extensions.ERXUtilities;
+
+import er.directtoweb.ERDEditPageInterface;
+import er.directtoweb.ERDObjectSaverInterface;
+
+import com.webobjects.directtoweb.D2W;
 
 public class EditOrCreateDirectors extends WOComponent {
 

@@ -1,11 +1,20 @@
 // Created by Direct to Web's Project Builder Wizard
 package er.examples.movies;
 
-import com.webobjects.foundation.*;
-import com.webobjects.appserver.*;
-import com.webobjects.directtoweb.*;
-import com.webobjects.eocontrol.*;
-import er.extensions.*;
+import com.webobjects.appserver.WOComponent;
+import com.webobjects.appserver.WOContext;
+import com.webobjects.appserver.WORedirect;
+import com.webobjects.eocontrol.EOEditingContext;
+import com.webobjects.eocontrol.EOEnterpriseObject;
+import com.webobjects.foundation.NSArray;
+
+import com.webobjects.directtoweb.D2W;
+import com.webobjects.directtoweb.EditPageInterface;
+import com.webobjects.directtoweb.ErrorPageInterface;
+import com.webobjects.directtoweb.QueryPageInterface;
+
+import er.extensions.ERXEC;
+import er.extensions.ERXUtilities;
 
 public class MenuHeader extends WOComponent {
     public String entityNameInList;
