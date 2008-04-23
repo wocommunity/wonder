@@ -549,6 +549,9 @@ public class ERXEOAccessUtilities {
         if (valueType != null) {
         	aggregate.setValueType(valueType);
         }
+        else {
+        	aggregate.setValueType(attribute.valueType());
+        }
         
         // MS: This "t0." is totally wrong, but it is required.  It should be dynamically
         // generated, but this function doesn't have an EOSQLExpression to operate on
