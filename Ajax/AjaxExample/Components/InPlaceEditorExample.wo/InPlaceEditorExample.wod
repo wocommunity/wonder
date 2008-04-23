@@ -1,5 +1,5 @@
 InLineEditorUpdater : AjaxUpdateContainer {
-	id = "updateContainerID";
+	id = "exampleContainer";
 	evalScripts = true;
 	elementName = "div";
 }
@@ -28,4 +28,8 @@ InPlaceEditorNumeric : AjaxInPlaceEditor {
 
 AjaxExampleComponent : AjaxExampleComponent {
 	title = "AjaxInPlaceEditor";
+}
+AjaxUpdateLink : AjaxUpdateLink {
+  updateContainerID = "exampleContainer";
+  action = someAction;
 }

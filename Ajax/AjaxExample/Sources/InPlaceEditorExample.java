@@ -2,6 +2,7 @@
 
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
+import com.webobjects.appserver.WOActionResults;
 
 public class InPlaceEditorExample extends WOComponent {
 	private String _multilineValue;
@@ -23,5 +24,10 @@ public class InPlaceEditorExample extends WOComponent {
 
 	public String multilineValue() {
 		return (_multilineValue == null) ? null : _multilineValue.replaceAll("\n\n", "<p>").replaceAll("\n", "<br>");
+	}
+
+	public WOActionResults someAction() {
+		System.out.println("InPlaceEditorExample.someAction: Some action was performed ...");
+		return null;
 	}
 }
