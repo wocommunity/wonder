@@ -17,7 +17,7 @@
         qualifier = {
             class = EOKeyValueQualifier; 
             key = movieID; 
-            selectorName = "isEqualTo:"; 
+            selectorName = isEqualTo; 
             value = {"_key" = myMovie; class = EOQualifierVariable; }; 
         }; 
     }; 
@@ -32,25 +32,25 @@
                 {
                     class = EOKeyValueQualifier; 
                     key = studio; 
-                    selectorName = "isEqualTo:"; 
+                    selectorName = isEqualTo; 
                     value = {"_key" = studio; class = EOQualifierVariable; }; 
                 }, 
                 {
                     class = EOKeyValueQualifier; 
                     key = title; 
-                    selectorName = "isCaseInsensitiveLike:"; 
+                    selectorName = isCaseInsensitiveLike; 
                     value = {"_key" = title; class = EOQualifierVariable; }; 
                 }, 
                 {
                     class = EOKeyValueQualifier; 
                     key = "studio.name"; 
-                    selectorName = "isCaseInsensitiveLike:"; 
+                    selectorName = isCaseInsensitiveLike; 
                     value = {"_key" = studioName; class = EOQualifierVariable; }; 
                 }, 
                 {
                     class = EOKeyValueQualifier; 
                     key = revenue; 
-                    selectorName = "isGreaterThan:"; 
+                    selectorName = isGreaterThan; 
                     value = {"_key" = revenue; class = EOQualifierVariable; }; 
                 }
             ); 

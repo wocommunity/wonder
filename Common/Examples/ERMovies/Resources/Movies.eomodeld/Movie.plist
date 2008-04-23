@@ -105,7 +105,6 @@
         "_clientClassPropertyNames" = (
             category, 
             dateReleased, 
-            language, 
             title, 
             directors, 
             revenue, 

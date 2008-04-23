@@ -6,10 +6,10 @@
 //
 package er.examples.movies;
 
-import com.webobjects.foundation.*;
-import com.webobjects.appserver.*;
-import com.webobjects.eocontrol.*;
-import er.directtoweb.*;
+import com.webobjects.appserver.WOActionResults;
+import com.webobjects.appserver.WORequest;
+
+import er.directtoweb.ERD2WDirectAction;
 
 public class DirectAction extends ERD2WDirectAction {
 

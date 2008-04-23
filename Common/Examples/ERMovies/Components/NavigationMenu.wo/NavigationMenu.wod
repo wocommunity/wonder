@@ -1,4 +1,4 @@
-Flags: ERD2WDebugFlags {
+Flags: er.directtoweb.ERD2WDebugFlags {
 	linkClass = "white";
 }
 

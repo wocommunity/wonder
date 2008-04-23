@@ -1,8 +1,12 @@
-// Created by Direct to Web's Project Builder Wizard
+	// Created by Direct to Web's Project Builder Wizard
+package er.examples.movies;
 
-import com.webobjects.foundation.*;
-import com.webobjects.appserver.*;
-import com.webobjects.directtoweb.*;
+import com.webobjects.appserver.WOComponent;
+import com.webobjects.appserver.WOContext;
+
+import com.webobjects.directtoweb.D2W;
+
+import com.webobjects.foundation.NSPropertyListSerialization;
 
 public class Main extends WOComponent {
     public String username;
