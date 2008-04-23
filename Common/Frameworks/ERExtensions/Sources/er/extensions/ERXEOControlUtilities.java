@@ -294,9 +294,9 @@ public class ERXEOControlUtilities {
         if (cd==null)
             throw new RuntimeException("Could not find class description for entity named "+entityName);
         EOEnterpriseObject newEO=cd.createInstanceWithEditingContext(editingContext,null);
+        editingContext.insertObject(newEO);
         if (objectInfo != null)
             newEO.takeValuesFromDictionary(objectInfo);
-        editingContext.insertObject(newEO);
         return newEO;
     }
 
