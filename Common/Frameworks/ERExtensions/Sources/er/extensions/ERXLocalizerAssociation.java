@@ -2,6 +2,7 @@ package er.extensions;
 
 import com.webobjects.appserver.WOAssociation;
 import com.webobjects.appserver.WOComponent;
+import com.webobjects.foundation.NSKeyValueCodingAdditions;
 
 /**
  * Localizes the value it is bound to. Can handle both <code>loc:value="SomeKey"</code> and
@@ -14,11 +15,21 @@ public class ERXLocalizerAssociation extends WOAssociation {
 
 	private boolean _isConstant;
 	private String _value;
+	private String _parentBinding;
 	
 	public ERXLocalizerAssociation(Object value, boolean isConstant) {
-		super();
 		_value = value != null ? value.toString() : null;
 		_isConstant = isConstant;
+		if(!_isConstant && _value != null && _value.startsWith("^")) {
+			_parentBinding = _value;
+			if(_parentBinding.indexOf('.') > 0) {
+				_parentBinding = ERXStringUtilities.keyPathWithoutLastProperty(_value);
+				_value = ERXStringUtilities.keyPathWithoutFirstProperty(_value);
+			} else {
+				_value = null;
+			}
+			_parentBinding = _parentBinding.substring(1);
+		}
 	}
 	
 	@Override
@@ -31,7 +42,15 @@ public class ERXLocalizerAssociation extends WOAssociation {
 		if(_isConstant) {
 			key = _value;
 		} else {
-			Object value =  wocomponent.valueForKeyPath(keyPath());
+			Object value = null;
+			if(_parentBinding  != null) {
+				value = wocomponent.valueForBinding(_parentBinding);
+				if(_value != null && value != null) {
+					value = NSKeyValueCodingAdditions.Utility.valueForKeyPath(value, _value);
+				}
+			} else {
+				value = wocomponent.valueForKeyPath(keyPath());
+			}
 			if(value != null) {
 				key = value.toString();
 			}
@@ -46,12 +65,16 @@ public class ERXLocalizerAssociation extends WOAssociation {
 
 	@Override
 	public String keyPath() {
-		return _isConstant ? "<none>" : _value.toString();
+		return _isConstant ? "<none>" : (_parentBinding != null ? _parentBinding : _value);
 	}
 
 	@Override
 	public Object clone() {
-		return new ERXLocalizerAssociation(_value, _isConstant);
+		String path = _value;
+		if(_parentBinding != null) {
+			path = "^" + _parentBinding + (_value != null ? "." + _value : "");
+		}
+		return new ERXLocalizerAssociation(path, _isConstant);
 	}
 
 	@Override
