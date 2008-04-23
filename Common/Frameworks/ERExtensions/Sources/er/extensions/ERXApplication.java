@@ -1421,6 +1421,8 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 	/**
 	 * Cleans up the current thread after a request is complete.
 	 */
+	// CHECKME: as one can call dispatchRequest() in normal code, it may not be such a good 
+	// to clean everything...
 	public static void _endRequest() {
 		ERXApplication.isInRequest.remove();
 		// We always want to clean up the thread storage variables, so they
@@ -1429,6 +1431,8 @@ public abstract class ERXApplication extends ERXAjaxApplication implements ERXGr
 		ERXThreadStorage.reset();
 		// We *always* want to unlock left over ECs.
 		ERXEC.unlockAllContextsForCurrentThread();
+		// we don't want this hanging around
+		ERXRuntimeUtilities.clearThreadInterrupt(Thread.currentThread());
 	}
 
 	/**
