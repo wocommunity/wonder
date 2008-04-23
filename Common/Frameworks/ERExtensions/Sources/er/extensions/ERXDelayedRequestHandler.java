@@ -75,17 +75,21 @@ public class ERXDelayedRequestHandler extends WORequestHandler {
 		}
 
 		public WOResponse call() throws Exception {
-			_currentThread = Thread.currentThread();
+			synchronized (this) {
+				_currentThread = Thread.currentThread();
+			}
 			try {
 				final ERXApplication app = ERXApplication.erxApplication();
 				WOResponse response = app.dispatchRequestImmediately(request());
 				// testing
-				// Thread.sleep(6000);
+				// Thread.sleep(16000);
 				// log.info("Done: " + this);
 				return response;
 			} finally {
-				ERXRuntimeUtilities.clearThreadInterrupt(_currentThread);
-				_currentThread = null;
+				synchronized (this) {
+					ERXRuntimeUtilities.clearThreadInterrupt(_currentThread);
+					_currentThread = null;
+				}
 			}
 		}
 
@@ -115,15 +119,17 @@ public class ERXDelayedRequestHandler extends WORequestHandler {
 		
 		public boolean cancel() {
 			long start = System.currentTimeMillis();
-			if(_currentThread != null) {
-				ERXRuntimeUtilities.addThreadInterrupt(_currentThread, "ERXDelayedRequestHandler: stop requested " + this);
+			synchronized (this) {
+				if(_currentThread != null) {
+					ERXRuntimeUtilities.addThreadInterrupt(_currentThread, "ERXDelayedRequestHandler: stop requested " + this);
 
-				//while(System.currentTimeMillis() - start < 5000 && !isDone()) {
+					//while(System.currentTimeMillis() - start < 5000 && !isDone()) {
 					if(future().cancel(true)) {
 						log.info("Cancelled: " + _currentThread + ": " + isDone());
 					}
-				//}
-				log.info("Thread done after cancel: " + isDone());
+					//}
+					log.info("Thread done after cancel: " + isDone());
+				}
 			}
 			return isDone();
 		}
@@ -153,13 +159,15 @@ public class ERXDelayedRequestHandler extends WORequestHandler {
 		_futures = new ERXExpiringCache<String, DelayedRequest>(refresh() * 5) {
 			@Override
 			protected synchronized void removeEntryForKey(Entry<DelayedRequest> entry, String key) {
-				Future future = entry.object().future();
-				if (!entry.object().isDone()) {
-					if (!entry.object().cancel()) {
-						log.error("Delayed was running, but couldn't be cancelled: " + entry.object());
-					}
-					else {
-						log.info("Stopped delayed request that was still running: " + entry.object());
+				DelayedRequest request = entry.object();
+				synchronized (request) {
+					if (!request.isDone()) {
+						if (!request.cancel()) {
+							log.error("Delayed was running, but couldn't be cancelled: " + request);
+						}
+						else {
+							log.info("Stopped delayed request that was still running: " + request);
+						}
 					}
 				}
 				super.removeEntryForKey(entry, key);
@@ -275,6 +283,8 @@ public class ERXDelayedRequestHandler extends WORequestHandler {
 						args += "&__start=" + delayedRequest.start().getTime();
 						args += "&__time=" + System.currentTimeMillis();
 						url = app.createContextForRequest((WORequest) request.clone()).urlWithRequestHandlerKey(KEY, "wait", args);
+					} else {
+						url = url.replaceAll("__time=(.*)", "__time=" + System.currentTimeMillis());
 					}
 					log.debug("Delaying: " + request.uri());
 					response = createRefreshResponse(request, url);
