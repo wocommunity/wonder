@@ -193,6 +193,18 @@ public class ERXMigrationDatabase {
 	}
 
 	/**
+	 * Shortcut to ERXMigrationTable.existingColumnNamed(String).
+	 * 
+	 * @param tableName the name of the existing table
+	 * @param columnName the name of the existing column
+	 * @return the ERXMigrationColumn
+	 */
+	public ERXMigrationColumn existingColumnNamed(String tableName, String columnName) {
+	    ERXMigrationTable table = existingTableNamed(tableName);
+	    return table.existingColumnNamed(columnName);
+	}
+	
+	/**
 	 * Creates a new blank ERXMigrationTable. This is essentially the same as
 	 * calling existingTableNamed except that it performs some simple validation
 	 * to make sure this table hasn't been created in this ERXMigrationDatabase
