@@ -7,3 +7,8 @@ Text : WOText {
 Src: ERXJavaScript {
 	scriptSource = sourceUrl;
 }
+
+Mode: WOString {
+	value = ^richTextMode;
+	escapeHTML = false;
+}
