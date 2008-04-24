@@ -1,0 +1,12 @@
+dbConnectURLGLOBAL=jdbc:derby:bug;create=true
+dbConnectUserGLOBAL=
+dbConnectPluginGLOBAL=
+dbConnectDriverGLOBAL=
+dbEOPrototypesEntityGLOBAL=EOJDBCDerbyPrototypes
+er.javamail.adminEmail=foo@localhost.com
+
+BugTracker.processMail=false
+BugTracker.mailStore=pop3
+BugTracker.server=localhost
+BugTracker.user=ak
+BugTracker.password=
