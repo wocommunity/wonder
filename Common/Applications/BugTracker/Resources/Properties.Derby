@@ -1,4 +1,4 @@
-dbConnectURLGLOBAL=jdbc:derby:bug;create=true
+dbConnectURLGLOBAL=jdbc:derby:bug
 dbConnectUserGLOBAL=
 dbConnectPluginGLOBAL=
 dbConnectDriverGLOBAL=
