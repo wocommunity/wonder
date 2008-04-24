@@ -76,17 +76,17 @@ delete from REQ_TEST_ITEM;
 delete from TEST_ITEM;
          */
         
-        NSMutableArray users = new NSMutableArray();
-        NSMutableArray components = new NSMutableArray();
-        NSMutableArray bugs = new NSMutableArray();
-        NSMutableArray requirements = new NSMutableArray();
-        NSMutableArray testItems = new NSMutableArray();
-        NSMutableArray priorities = new NSMutableArray();
-        NSMutableArray testItemStates = new NSMutableArray();
-        NSMutableArray states = new NSMutableArray();
-        NSMutableArray releases = new NSMutableArray();
-        NSMutableArray requirementTypes = new NSMutableArray();
-        NSMutableArray requirementSubTypes = new NSMutableArray();
+        NSMutableArray<People> users = new NSMutableArray();
+        NSMutableArray<Component> components = new NSMutableArray();
+        NSMutableArray<Bug> bugs = new NSMutableArray();
+        NSMutableArray<Requirement> requirements = new NSMutableArray();
+        NSMutableArray<TestItem> testItems = new NSMutableArray();
+        NSMutableArray<Priority> priorities = new NSMutableArray();
+        NSMutableArray<TestItemState> testItemStates = new NSMutableArray();
+        NSMutableArray<State> states = new NSMutableArray();
+        NSMutableArray<Release> releases = new NSMutableArray();
+        NSMutableArray<RequirementType> requirementTypes = new NSMutableArray();
+        NSMutableArray<RequirementSubType> requirementSubTypes = new NSMutableArray();
                
         private int randomInt(int max) {
             return new Random().nextInt(max);
@@ -159,7 +159,9 @@ delete from TEST_ITEM;
                 comment.setOriginator(randomUser());
                 comment.setTextDescription(randomText(5));
                 last = hours;
+                comment.setBug(bug);
                 bug.addToComments(comment);
+                comment.validateForSave();
             }
         }
 
@@ -193,12 +195,12 @@ delete from TEST_ITEM;
                     
                     String sqlScript = syncFactory.schemaCreationScriptForEntities(eomodel.entities(), options);
                     log.info("Creating tables: " + eomodel.name());
-                    ERXJDBCUtilities.executeUpdateScript(channel, sqlScript);
+                    ERXJDBCUtilities.executeUpdateScriptIgnoringErrors(channel, sqlScript);
                     if(eomodel.name().equals("BugTracker")) {
                         InputStream is = ERXFileUtilities.inputStreamForResourceNamed("populate.sql", "BTBusinessLogic", null);
                         String sql = ERXFileUtilities.stringFromInputStream(is);
                         log.info("Populating: " + eomodel.name());
-                        ERXJDBCUtilities.executeUpdateScript(channel, sql);
+                        ERXJDBCUtilities.executeUpdateScriptIgnoringErrors(channel, sql);
                         // re-read shared data, the first time around it probably wasn't there
                         // strictly speaking, we'd also need to do this for ERC too
                         BTBusinessLogic.sharedInstance().initializeSharedData();
@@ -315,10 +317,9 @@ delete from TEST_ITEM;
                 bug.setState(randomState());
                 bug.setIsFeatureRequest(i % 4 == 0);
                 bug.setTargetRelease(randomRelease());
-
                 addComments(bug);
-            }
-
+           }
+            
             log.info("Creating requirements: "+ MAX);
             
             for(int i = 0; i < MAX; i++) {
@@ -369,7 +370,7 @@ delete from TEST_ITEM;
                 }
                 testItem.setComponent(component);
             }
-
+ 
             People user = (People)People.clazz.createAndInsertObject(ec);
             user.setLogin("admin");
             user.setName("Administrator");
