@@ -9,22 +9,23 @@ import com.webobjects.foundation.NSSelector;
 import er.extensions.ERXQ;
 
 /**
- * ERXKeyComparisonQualifier is a chainable extension of EOKeyComparisonQualifier.
+ * ERXKeyComparisonQualifier is a chainable extension of
+ * EOKeyComparisonQualifier.
  * 
  * @author mschrag
  */
 public class ERXKeyComparisonQualifier extends EOKeyComparisonQualifier implements IERXChainableQualifier {
 	public ERXKeyComparisonQualifier(String leftKey, NSSelector selector, String rightKey) {
 		super(leftKey, selector, rightKey);
-    if (leftKey == null) {
-      throw new IllegalArgumentException("A KeyComparisonQualifier must have a left key.");
-    }
-    if (rightKey == null) {
-      throw new IllegalArgumentException("A KeyComparisonQualifier must have a right key.");
-    }
-    if (selector == null) {
-      throw new IllegalArgumentException("A KeyComparisonQualifier must have a selector.");
-    }
+		if (leftKey == null) {
+			throw new IllegalArgumentException("A KeyComparisonQualifier must have a left key.");
+		}
+		if (rightKey == null) {
+			throw new IllegalArgumentException("A KeyComparisonQualifier must have a right key.");
+		}
+		if (selector == null) {
+			throw new IllegalArgumentException("A KeyComparisonQualifier must have a selector.");
+		}
 	}
 
 	public ERXAndQualifier and(EOQualifier... qualifiers) {
@@ -38,13 +39,17 @@ public class ERXKeyComparisonQualifier extends EOKeyComparisonQualifier implemen
 	public ERXOrQualifier or(EOQualifier... qualifiers) {
 		return ERXChainedQualifierUtils.or(this, qualifiers);
 	}
-	
+
 	public void filter(NSMutableArray<?> array) {
 		ERXQ.filter(array, this);
 	}
-	
+
 	public <T> NSArray<T> filtered(NSArray<T> array) {
 		return ERXQ.filtered(array, this);
+	}
+
+	public <T> T first(NSArray<T> array) {
+		return ERXQ.first(array, this);
 	}
 
 	public <T> T one(NSArray<T> array) {

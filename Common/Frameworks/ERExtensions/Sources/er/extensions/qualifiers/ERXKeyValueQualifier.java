@@ -44,6 +44,10 @@ public class ERXKeyValueQualifier extends EOKeyValueQualifier implements IERXCha
 		return ERXQ.filtered(array, this);
 	}
 
+	public <T> T first(NSArray<T> array) {
+		return ERXQ.first(array, this);
+	}
+
 	public <T> T one(NSArray<T> array) {
 		return ERXQ.one(array, this);
 	}
