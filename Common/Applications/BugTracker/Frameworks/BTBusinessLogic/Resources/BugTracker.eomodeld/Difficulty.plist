@@ -18,6 +18,7 @@
     className = "er.bugtracker.Difficulty"; 
     classProperties = (difficultyDescription); 
     externalName = DIFFICULTY; 
+    fetchSpecificationDictionary = {}; 
     isReadOnly = Y; 
     name = Difficulty; 
     primaryKeyAttributes = (id); 

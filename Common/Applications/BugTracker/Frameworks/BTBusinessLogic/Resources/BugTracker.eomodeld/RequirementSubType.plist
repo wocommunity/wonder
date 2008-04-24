@@ -18,9 +18,9 @@
     className = "er.bugtracker.RequirementSubType"; 
     classProperties = (subTypeDescription); 
     externalName = "REQ_SUB_TYPE"; 
+    fetchSpecificationDictionary = {}; 
     isReadOnly = Y; 
     name = RequirementSubType; 
     primaryKeyAttributes = (id); 
-    sharedObjectFetchSpecificationNames = (FetchAll); 
     userInfo = {modificationDate = "2002-05-06 07:47:04 +0200"; }; 
 }

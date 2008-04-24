@@ -24,9 +24,9 @@
     className = "er.bugtracker.Priority"; 
     classProperties = (sortOrder, textDescription); 
     externalName = PRIORITY; 
+    fetchSpecificationDictionary = {}; 
     isReadOnly = Y; 
     name = Priority; 
     primaryKeyAttributes = (id); 
-    sharedObjectFetchSpecificationNames = (FetchAll); 
     userInfo = {modificationDate = "2002-05-04 13:06:03 +0200"; }; 
 }
