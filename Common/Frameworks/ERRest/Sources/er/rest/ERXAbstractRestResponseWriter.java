@@ -45,7 +45,7 @@ public abstract class ERXAbstractRestResponseWriter implements IERXRestResponseW
 			Enumeration valuesEnum = values.objectEnumerator();
 			while (valuesEnum.hasMoreElements()) {
 				EOEnterpriseObject eo = (EOEnterpriseObject) valuesEnum.nextElement();
-				ERXRestKey eoKey = result.extend(ERXRestUtils.stringIDForEO(eo), eo);
+				ERXRestKey eoKey = result.extend(entityDelegate.stringIDForEO(entity, eo), eo);
 				valueKeys.addObject(eoKey);
 			}
 	
@@ -75,7 +75,7 @@ public abstract class ERXAbstractRestResponseWriter implements IERXRestResponseW
 			}
 
 			EOEnterpriseObject eo = (EOEnterpriseObject) value;
-			Object id = ERXRestUtils.idForEO(eo);
+			Object id = entityDelegate.idForEO(entity, eo);
 
 			boolean alreadyVisited = visitedObjects.containsObject(eo);
 			if (alreadyVisited) {
@@ -83,7 +83,7 @@ public abstract class ERXAbstractRestResponseWriter implements IERXRestResponseW
 			}
 			else {
 				if (!result.isKeyGID()) {
-					result = result.extend(ERXRestUtils.stringIDForEO(eo), eo);
+					result = result.extend(entityDelegate.stringIDForEO(entity, eo), eo);
 				}
 				
 				visitedObjects.addObject(eo);

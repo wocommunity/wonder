@@ -6,13 +6,11 @@ import com.webobjects.foundation.NSKeyValueCoding;
 import com.webobjects.foundation.NSMutableDictionary;
 
 /**
- * ERXRestContext contains all the state for a single REST request.  ERXRestContext
- * provides access to the WOContext, which will allow you to access the session should
- * you desire (only cookie sessions can be used by clients right now).  Additionally,
- * ERXRestContext acts as a dictionary, so you can put arbitrary values into it if you
- * just want to use it to pass the current User around that way.  The EOEditingContext
- * provided by this context is locked at the request level, similar to the session
- * defaultEditingContext.
+ * ERXRestContext contains all the state for a single REST request. ERXRestContext provides access to the WOContext,
+ * which will allow you to access the session should you desire (only cookie sessions can be used by clients right now).
+ * Additionally, ERXRestContext acts as a dictionary, so you can put arbitrary values into it if you just want to use it
+ * to pass the current User around that way. The EOEditingContext provided by this context is locked at the request
+ * level, similar to the session defaultEditingContext.
  * 
  * @author mschrag
  */
@@ -21,17 +19,21 @@ public class ERXRestContext implements NSKeyValueCoding, NSKeyValueCoding.ErrorH
 	private EOEditingContext _editingContext;
 	private IERXRestDelegate _delegate;
 	private NSMutableDictionary _attributes;
+	private boolean _localObjects;
 
 	/**
 	 * Constructs a rest context.
 	 * 
-	 * @param context the WOContext
-	 * @param editingContext the EOEditingContext
+	 * @param context
+	 *            the WOContext
+	 * @param editingContext
+	 *            the EOEditingContext
 	 */
 	public ERXRestContext(WOContext context, EOEditingContext editingContext) {
 		_context = context;
 		_editingContext = editingContext;
 		_attributes = new NSMutableDictionary();
+		_localObjects = true;
 	}
 
 	/**
@@ -64,7 +66,8 @@ public class ERXRestContext implements NSKeyValueCoding, NSKeyValueCoding.ErrorH
 	/**
 	 * Sets the REST delegate for this context (called by ERXRestRequestHandler).
 	 * 
-	 * @param delegate the REST delegate for this context
+	 * @param delegate
+	 *            the REST delegate for this context
 	 */
 	public void setDelegate(IERXRestDelegate delegate) {
 		_delegate = delegate;
@@ -88,5 +91,25 @@ public class ERXRestContext implements NSKeyValueCoding, NSKeyValueCoding.ErrorH
 
 	public Object valueForKey(String key) {
 		return NSKeyValueCoding.DefaultImplementation.valueForKey(this, key);
+	}
+	
+	/**
+	 * Specifies if the objects in an update represent local objects that can be looked up with their ids or remote
+	 * objects that need to be synced (and have different PK's).
+	 * 
+	 * @param localObjects true if the objects are local
+	 */
+	public void setLocalObjects(boolean localObjects) {
+		_localObjects = localObjects;
+	}
+
+	/**
+	 * Returns true if the objects in an update represent local objects that can be looked up with their ids or remote
+	 * objects that need to be synced (and have different PK's).
+	 * 
+	 * @return true if the objects are local
+	 */
+	public boolean localObjects() {
+		return _localObjects;
 	}
 }

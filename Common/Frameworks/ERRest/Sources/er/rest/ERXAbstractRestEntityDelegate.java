@@ -9,7 +9,9 @@ import com.webobjects.eoaccess.EOEntity;
 import com.webobjects.eoaccess.EORelationship;
 import com.webobjects.eoaccess.EOUtilities;
 import com.webobjects.eocontrol.EOEnterpriseObject;
+import com.webobjects.eocontrol.EOFetchSpecification;
 import com.webobjects.eocontrol.EOGlobalID;
+import com.webobjects.eocontrol.EOKeyGlobalID;
 import com.webobjects.eocontrol.EOKeyValueCoding;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSKeyValueCoding;
@@ -19,6 +21,8 @@ import com.webobjects.foundation.NSTimestampFormatter;
 
 import er.extensions.ERXEOGlobalIDUtilities;
 import er.extensions.ERXGuardedObjectInterface;
+import er.extensions.ERXQ;
+import er.extensions.ERXStringUtilities;
 
 /**
  * Provides default implementations of many of the common entity delegate behaviors.
@@ -41,7 +45,7 @@ public abstract class ERXAbstractRestEntityDelegate implements IERXRestEntityDel
 	public String entityAliasForEntityNamed(String entityName) {
 		return entityName;
 	}
-	
+
 	/**
 	 * Returns propertyAlias.
 	 * 
@@ -88,10 +92,158 @@ public abstract class ERXAbstractRestEntityDelegate implements IERXRestEntityDel
 		// }
 		// }
 	}
+	
+	/**
+	 * Returns whether or not the given key value is the primary key of
+	 * an EO.  This is crazy -- It tries to guess if it's looking at
+	 * a key or not.
+	 * 
+	 * @param restKey the possible EO key
+         *
+	 * @return true if key is a primary key
+	 */
+	public boolean isEOID(ERXRestKey restKey) {
+		boolean isID = false;
+		String key = restKey.key();
+		if (key != null) {
+			EOEntity entity = restKey.entity();
+			if (_isEOID(entity, key)) {
+				isID = true;
+			}
+			else if (restKey.previousKey() == null) {
+				if (!restKey.isKeyAll()) {
+					isID = true;
+				}
+			}
+			else {
+				if (restKey.previousKey().isKeyAll()) {
+					isID = true;
+				}
+				else {
+					try {
+						Object previousValue = restKey.previousKey()._value(false);
+						if (previousValue instanceof NSArray) {
+							isID = true;
+						}
+					}
+					catch (ERXRestException e) {
+						throw new RuntimeException("Failed to check key '" + key + "'.", e);
+					}
+					catch (ERXRestSecurityException e) {
+						throw new RuntimeException("Failed to check key '" + key + "'.", e);
+					}
+					catch (ERXRestNotFoundException e) {
+						throw new RuntimeException("Failed to check key '" + key + "'.", e);
+					}
+				}
+			}
+		}
+		return isID;
+	}
+	
+	protected String idAttributeName(EOEntity entity) {
+		return null;
+	}
+	
+	public boolean isUUIDIDs(EOEntity entity) {
+		return false;
+	}
+	
+	protected boolean _isEOID(EOEntity entity, String key) {
+		boolean isID;
+		if (isUUIDIDs(entity)) {
+			isID = key.length() == 36 && key.split("-").length == 5;
+		}
+		else {
+			isID = ERXStringUtilities.isDigitsOnly(key);
+		}
+		return isID;
+	}
 
+	/**
+	 * Returns the string form of the primary key of the given EO.
+	 * 
+	 * @param eo the EO to get a primary key for
+	 * @return the primary key
+	 */
+	public String stringIDForEO(EOEntity entity, EOEnterpriseObject eo) {
+		Object id = idForEO(entity, eo);
+		String idStr;
+		if (id instanceof Object[]) {
+			throw new IllegalArgumentException(eo.entityName() + " has a compound primary key, which is currently not supported.");
+		}
+		else {
+			idStr = String.valueOf(id);
+		}
+		return idStr;
+	}
+	
+	/**
+	 * Returns the primary key of the given EO.
+	 * 
+	 * @param eo the EO to get a primary key for
+	 * @return the primary key
+	 */
+	public Object idForEO(EOEntity entity, EOEnterpriseObject eo) {
+		String idAttributeName = idAttributeName(entity);
+		Object id;
+		if (idAttributeName != null) {
+			id = eo.valueForKey(idAttributeName);
+		}
+		else {
+			EOGlobalID gid = eo.editingContext().globalIDForObject(eo);
+			if (!(gid instanceof EOKeyGlobalID)) {
+				throw new IllegalArgumentException("Unsupported primary key type '" + gid + "'.");
+			}
+			EOKeyGlobalID keyGID = (EOKeyGlobalID) gid;
+			Object[] keyValues = keyGID.keyValues();
+			if (keyValues.length > 1) {
+				throw new IllegalArgumentException("Compound primary keys (" + eo.entityName() + ") are not currently supported.");
+			}
+			if (keyValues.length == 1) {
+				id = keyValues[0];
+			}
+			else {
+				id = keyValues;
+			}
+		}
+		return id;
+	}
+	
 	public EOEnterpriseObject objectWithKey(EOEntity entity, String key, ERXRestContext context) throws ERXRestException, ERXRestNotFoundException, ERXRestSecurityException {
-		EOGlobalID gid = ERXRestUtils.gidForID(entity, key);
-		EOEnterpriseObject obj = ERXEOGlobalIDUtilities.fetchObjectWithGlobalID(context.editingContext(), gid);
+		EOEnterpriseObject obj;
+		String idAttributeName = idAttributeName(entity);
+		if (idAttributeName == null) {
+			EOGlobalID gid;
+			if (ERXStringUtilities.isDigitsOnly(key)) {
+				gid = EOKeyGlobalID.globalIDWithEntityName(entity.name(), new Object[] { Integer.valueOf(key) });
+			}
+			else {
+				NSArray primaryKeyAttributes = entity.primaryKeyAttributes();
+				if (primaryKeyAttributes.count() > 1) {
+					throw new IllegalArgumentException("Compound primary keys (" + entity + ") are not currently supported.");
+				}
+				EOAttribute primaryKeyAttribute = (EOAttribute) primaryKeyAttributes.objectAtIndex(0);
+				String valueType = primaryKeyAttribute.valueType();
+				gid = EOKeyGlobalID.globalIDWithEntityName(entity.name(), new Object[] { key });
+			}
+		
+			obj = ERXEOGlobalIDUtilities.fetchObjectWithGlobalID(context.editingContext(), gid);
+		}
+		else {
+			EOFetchSpecification fetchSpec = new EOFetchSpecification(entity.name(), ERXQ.equals(idAttributeName, key), null);
+			fetchSpec.setIsDeep(true);
+			NSArray matchingObjects = context.editingContext().objectsWithFetchSpecification(fetchSpec);
+			if (matchingObjects.count() == 0) {
+				obj = null;
+			}
+			else if (matchingObjects.count() == 1) {
+				obj = (EOEnterpriseObject) matchingObjects.objectAtIndex(0);
+			}
+			else {
+				throw new ERXRestException("There was more than one " + entityAliasForEntityNamed(entity.name()) + " with the id '" + key + "'.");
+			}
+		}
 		if (obj == null) {
 			throw new ERXRestNotFoundException("There is no " + entityAliasForEntityNamed(entity.name()) + " with the id '" + key + "'.");
 		}
@@ -106,7 +258,7 @@ public abstract class ERXAbstractRestEntityDelegate implements IERXRestEntityDel
 		Enumeration objsEnum = objs.objectEnumerator();
 		while (objsEnum.hasMoreElements()) {
 			EOEnterpriseObject eo = (EOEnterpriseObject) objsEnum.nextElement();
-			if (ERXRestUtils.stringIDForEO(eo).equals(key)) {
+			if (stringIDForEO(entity, eo).equals(key)) {
 				filteredObjs.addObject(eo);
 			}
 		}
@@ -121,6 +273,10 @@ public abstract class ERXAbstractRestEntityDelegate implements IERXRestEntityDel
 	}
 
 	public void delete(EOEntity entity, EOEnterpriseObject eo, ERXRestContext context) throws ERXRestException, ERXRestSecurityException {
+		if (!canDeleteObject(entity, eo, context)) {
+			throw new ERXRestSecurityException("You are not allowed to delete the given object.");
+		}
+
 		if (eo instanceof ERXGuardedObjectInterface) {
 			((ERXGuardedObjectInterface) eo).delete();
 		}
@@ -135,7 +291,7 @@ public abstract class ERXAbstractRestEntityDelegate implements IERXRestEntityDel
 			formattedValue = null;
 		}
 		else if (attributeValue instanceof NSTimestamp) {
-			NSTimestamp timestamp = (NSTimestamp)attributeValue;
+			NSTimestamp timestamp = (NSTimestamp) attributeValue;
 			formattedValue = new NSTimestampFormatter("%Y-%m-%dT%H:%M:%SZ").format(timestamp);
 		}
 		else {
@@ -147,13 +303,19 @@ public abstract class ERXAbstractRestEntityDelegate implements IERXRestEntityDel
 	/**
 	 * Parses the given String and returns an object.
 	 * 
-	 * @param entity the entity
-	 * @param object the object
-	 * @param attributeName the name of the property
-	 * @param attributeValue the value of the property
+	 * @param entity
+	 *            the entity
+	 * @param object
+	 *            the object
+	 * @param attributeName
+	 *            the name of the property
+	 * @param attributeValue
+	 *            the value of the property
 	 * @return a parsed version of the String
-	 * @throws ParseException if a parse failure occurs
-	 * @throws ERXRestException if a general failure occurs
+	 * @throws ParseException
+	 *             if a parse failure occurs
+	 * @throws ERXRestException
+	 *             if a general failure occurs
 	 */
 	public Object parseAttributeValue(EOEntity entity, Object object, String attributeName, String attributeValue) throws ParseException, ERXRestException {
 		NSKeyValueCoding._KeyBinding binding = NSKeyValueCoding.DefaultImplementation._keyGetBindingForKey(object, attributeName);
@@ -215,9 +377,20 @@ public abstract class ERXAbstractRestEntityDelegate implements IERXRestEntityDel
 		return parsedValue;
 	}
 
-	public EOEnterpriseObject insertObjectFromDocument(EOEntity entity, ERXRestRequestNode insertNode, EOEnterpriseObject parentObject, String parentKey, ERXRestContext context) throws ERXRestSecurityException, ERXRestException, ERXRestNotFoundException {
+	public EOEnterpriseObject insertObjectFromDocument(EOEntity entity, ERXRestRequestNode insertNode, EOEntity parentEntity, EOEnterpriseObject parentObject, String parentKey, ERXRestContext context) throws ERXRestSecurityException, ERXRestException, ERXRestNotFoundException {
+		boolean canInsert;
+		if (parentObject == null) {
+			canInsert = canInsertObject(entity, context);
+		}
+		else {
+			canInsert = canInsertObject(parentEntity, parentObject, parentKey, entity, context);
+		}
+		if (!canInsert) {
+			throw new ERXRestSecurityException("You are not allowed to insert this object.");
+		}
+
 		EOEnterpriseObject eo = EOUtilities.createAndInsertInstance(context.editingContext(), entity.name());
-		_updateObjectFromDocument(true, entity, eo, insertNode, context);
+		_updatePropertiesFromDocument(true, entity, eo, insertNode, context);
 		if (parentObject != null) {
 			parentObject.addObjectToBothSidesOfRelationshipWithKey(eo, parentKey);
 		}
@@ -226,12 +399,58 @@ public abstract class ERXAbstractRestEntityDelegate implements IERXRestEntityDel
 	}
 
 	public void updateObjectFromDocument(EOEntity entity, EOEnterpriseObject eo, ERXRestRequestNode eoNode, ERXRestContext context) throws ERXRestSecurityException, ERXRestException, ERXRestNotFoundException {
-		_updateObjectFromDocument(false, entity, eo, eoNode, context);
+		if (!canUpdateObject(entity, eo, context)) {
+			throw new ERXRestSecurityException("You are not allowed to update this object.");
+		}
+
+		_updatePropertiesFromDocument(false, entity, eo, eoNode, context);
 	}
 
-	public void _updateObjectFromDocument(boolean inserting, EOEntity entity, EOEnterpriseObject eo, ERXRestRequestNode eoNode, ERXRestContext context) throws ERXRestSecurityException, ERXRestException, ERXRestNotFoundException {
-		if (!entityAliasForEntityNamed(entity.name()).equals(eoNode.name())) {
-			throw new ERXRestException("You attempted to put a " + eoNode.name() + " into a " + entityAliasForEntityNamed(entity.name()) + ".");
+	public void _updateRelationshipFromDocument(EOEntity entity, EOEnterpriseObject eo, EORelationship relationship, ERXRestRequestNode relationshipNode, ERXRestContext context) throws ERXRestException, ERXRestNotFoundException, ERXRestSecurityException {
+		String relationshipName = relationship.name();
+		EOEntity destinationEntity = relationship.destinationEntity();
+		if (!relationship.isToMany()) {
+			EOEnterpriseObject originalObject = (EOEnterpriseObject) valueForKey(entity, eo, relationship.name(), context);
+			EOEnterpriseObject newObject = context.delegate().entityDelegate(destinationEntity).objectForNode(destinationEntity, relationshipNode, context);
+			
+			// MS: ignore nil="true" to-one?
+			if (relationshipNode.isNull() || newObject == null) {
+				if (!relationship.isMandatory()) {
+					eo.removeObjectFromBothSidesOfRelationshipWithKey(originalObject, relationshipName);
+				}
+				else {
+					// MS: Throw?
+				}
+			}
+			else {
+				if (originalObject == null && newObject != null) {
+					eo.addObjectToBothSidesOfRelationshipWithKey(newObject, relationshipName);
+				}
+				else if (originalObject != null && !originalObject.equals(newObject)) {
+					eo.removeObjectFromBothSidesOfRelationshipWithKey(originalObject, relationshipName);
+					if (newObject != null) {
+						eo.addObjectToBothSidesOfRelationshipWithKey(newObject, relationshipName);
+					}
+				}
+			}
+		}
+		else {
+			NSArray originalObjects = (NSArray) valueForKey(entity, eo, relationshipName, context);
+			NSArray newNodes = relationshipNode.children();
+			// MS: ignore nil="true" to-many?
+			if (!relationshipNode.isNull()) {
+				updateArrayFromDocument(entity, eo, relationshipName, destinationEntity, originalObjects, newNodes, context);
+			}
+			else {
+				// MS: ???
+			}
+		}
+	}
+	
+	public void _updatePropertiesFromDocument(boolean inserting, EOEntity entity, EOEnterpriseObject eo, ERXRestRequestNode eoNode, ERXRestContext context) throws ERXRestSecurityException, ERXRestException, ERXRestNotFoundException {
+		String entityAlias = entityAliasForEntityNamed(entity.name());
+		if (!entityAlias.equals(eoNode.name())) {
+			throw new ERXRestException("You attempted to put a " + eoNode.name() + " into a " + entityAlias + ".");
 		}
 
 		IERXRestEntityDelegate entityDelegate = context.delegate().entityDelegate(entity);
@@ -247,10 +466,10 @@ public abstract class ERXAbstractRestEntityDelegate implements IERXRestEntityDel
 			
 			if (updateAttribute) {
 				if (inserting && !canInsertProperty(entity, eo, attributeName, context)) {
-					throw new ERXRestSecurityException("You are not allowed to insert the property '" + attributeName + "' on " + entityAliasForEntityNamed(entity.name()) + ".");
+					throw new ERXRestSecurityException("You are not allowed to insert the property '" + attributeName + "' on " + entityAlias + ".");
 				}
 				else if (!inserting && !canUpdateProperty(entity, eo, attributeName, context)) {
-					throw new ERXRestSecurityException("You are not allowed to update the property '" + attributeName + "' on " + entityAliasForEntityNamed(entity.name()) + ".");
+					throw new ERXRestSecurityException("You are not allowed to update the property '" + attributeName + "' on " + entityAlias + ".");
 				}
 
 				EORelationship relationship = entity.relationshipNamed(attributeName);
@@ -260,7 +479,7 @@ public abstract class ERXAbstractRestEntityDelegate implements IERXRestEntityDel
 						EOEnterpriseObject originalObject = (EOEnterpriseObject) valueForKey(entity, eo, attributeName, context);
 						String id = idForNode(attributeNode);
 						// MS: ignore nil="true" to-one?
-						if (id == null || attributeNode.isNull()) {
+						if (attributeNode.isNull()) {
 							if (!relationship.isMandatory()) {
 								eo.removeObjectFromBothSidesOfRelationshipWithKey(originalObject, attributeName);
 							}
@@ -318,8 +537,62 @@ public abstract class ERXAbstractRestEntityDelegate implements IERXRestEntityDel
 		}
 		return id;
 	}
-	
+
+	public EOEnterpriseObject objectForNode(EOEntity entity, ERXRestRequestNode node, ERXRestContext context) throws ERXRestException, ERXRestNotFoundException, ERXRestSecurityException {
+		EOEnterpriseObject eo;
+		if (context.localObjects()) {
+			eo = objectForLocalNode(entity, node, context);
+		}
+		else {
+			eo = objectForRemoteNode(entity, node, context);
+		}
+		return eo;
+	}
+
+	protected EOEnterpriseObject objectForLocalNode(EOEntity entity, ERXRestRequestNode node, ERXRestContext context) throws ERXRestException, ERXRestNotFoundException, ERXRestSecurityException {
+		String idForNode = idForNode(node);
+		EOEnterpriseObject eo;
+		if (node.isNull()) {
+			eo = null;
+		}
+		else if (idForNode == null) {
+			if (node.children().count() == 0) {
+				eo = null;
+			}
+			else {
+				eo = null;
+			}
+		}
+		else {
+			eo = objectWithKey(entity, idForNode, context);
+		}
+		return eo;
+	}
+
+	protected EOEnterpriseObject objectForRemoteNode(EOEntity entity, ERXRestRequestNode node, ERXRestContext context) throws ERXRestException, ERXRestNotFoundException, ERXRestSecurityException {
+		String idForNode = idForNode(node);
+		EOEnterpriseObject eo;
+		if (node.isNull()) {
+			eo = null;
+		}
+		else if (node.children().count() == 0) {
+			throw new ERXRestException(node + " specified a remote object that did not provide enough information to resolve it locally.");
+		}
+		else {
+			eo = objectWithKey(entity, idForNode, context);
+		}
+		return eo;
+	}
+
 	public void updateArrayFromDocument(EOEntity parentEntity, EOEnterpriseObject parentObject, String attributeName, EOEntity entity, NSArray currentObjects, NSArray toManyNodes, ERXRestContext context) throws ERXRestException, ERXRestNotFoundException, ERXRestSecurityException {
+		IERXRestEntityDelegate parentEntityDelegate = context.delegate().entityDelegate(entity);
+		if (parentObject != null && !parentEntityDelegate.canUpdateObject(parentEntity, parentObject, context)) {
+			throw new ERXRestSecurityException("You are not allowed to update this object.");
+		}
+		if (parentObject != null && attributeName != null && !parentEntityDelegate.canUpdateProperty(parentEntity, parentObject, attributeName, context)) {
+			throw new ERXRestSecurityException("You are not allowed to update this object.");
+		}
+
 		NSMutableArray keepObjects = new NSMutableArray();
 		NSMutableArray addObjects = new NSMutableArray();
 		NSMutableArray removeObjects = new NSMutableArray();
@@ -363,28 +636,38 @@ public abstract class ERXAbstractRestEntityDelegate implements IERXRestEntityDel
 	}
 
 	/**
-	 * Called after performing the user's requested updates.  This provides support for subclasses to extend
-	 * and perform "automatic" updates.  For instance, if you wanted to set a last modified date, or a
-	 * modified-by-user field, you could do that here.
-	 *  
-	 * @param entity the entity of the object being updated
-	 * @param eo the updated object
-	 * @param context the rest context
-	 * @throws ERXRestException if a general error occurs
-	 * @throws ERXRestSecurityException if a security error occurs
+	 * Called after performing the user's requested updates. This provides support for subclasses to extend and perform
+	 * "automatic" updates. For instance, if you wanted to set a last modified date, or a modified-by-user field, you
+	 * could do that here.
+	 * 
+	 * @param entity
+	 *            the entity of the object being updated
+	 * @param eo
+	 *            the updated object
+	 * @param context
+	 *            the rest context
+	 * @throws ERXRestException
+	 *             if a general error occurs
+	 * @throws ERXRestSecurityException
+	 *             if a security error occurs
 	 */
 	public abstract void updated(EOEntity entity, EOEnterpriseObject eo, ERXRestContext context) throws ERXRestException, ERXRestSecurityException;
 
 	/**
-	 * Called after performing the user's requested insert.  This provides support for subclasses to extend
-	 * and set "automatic" attributes.  For instance, if you wanted to set a creation date, or a
-	 * created-by-user field, you could do that here.
-	 *  
-	 * @param entity the entity of the object being inserted
-	 * @param eo the inserted object
-	 * @param context the rest context
-	 * @throws ERXRestException if a general error occurs
-	 * @throws ERXRestSecurityException if a security error occurs
+	 * Called after performing the user's requested insert. This provides support for subclasses to extend and set
+	 * "automatic" attributes. For instance, if you wanted to set a creation date, or a created-by-user field, you could
+	 * do that here.
+	 * 
+	 * @param entity
+	 *            the entity of the object being inserted
+	 * @param eo
+	 *            the inserted object
+	 * @param context
+	 *            the rest context
+	 * @throws ERXRestException
+	 *             if a general error occurs
+	 * @throws ERXRestSecurityException
+	 *             if a security error occurs
 	 */
 	public abstract void inserted(EOEntity entity, EOEnterpriseObject eo, ERXRestContext context) throws ERXRestException, ERXRestSecurityException;
 
