@@ -10,8 +10,10 @@ package er.directtoweb;
 
 import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
+import com.webobjects.woextensions.WOStatsPage;
 
 import er.extensions.ERXExtensions;
+import er.extensions.ERXProperties;
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
 // This component can be used in the wrapper of a D2W app to provide convenient development time 
@@ -31,6 +33,12 @@ public class ERD2WDebugFlags extends WOComponent {
         return true;
     }
 
+    public WOComponent statisticsPage() {
+        WOStatsPage nextPage = (WOStatsPage) pageWithName("ERXStatisticsPage");
+        nextPage.password = ERXProperties.stringForKey("WOStatisticsPassword");
+        return nextPage.submit();
+    }
+    
     public WOComponent toggleD2WInfo() {
         boolean currentState=ERDirectToWeb.d2wDebuggingEnabled(session());
         ERDirectToWeb.setD2wDebuggingEnabled(session(), !currentState);
