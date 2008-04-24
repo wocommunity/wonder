@@ -2,13 +2,14 @@
     EOModelVersion = "2.1"; 
     adaptorName = JDBC; 
     entities = (
+        {className = EOGenericRecord; name = EOJDBCDerbyPrototypes; }, 
         {className = EOGenericRecord; name = EOJDBCFrontBasePrototypes; }, 
         {className = EOGenericRecord; name = EOJDBCMySQLPrototypes; }, 
         {className = EOGenericRecord; name = EOJDBCOpenBasePrototypes; }, 
         {className = EOGenericRecord; name = EOJDBCOraclePrototypes; }, 
         {className = EOGenericRecord; name = EOJDBCPostgresqlPrototypes; }, 
-        {className = EOGenericRecord; name = EOJDBCPrototypes; },
-        {className = EOGenericRecord; name = EOMemoryPrototypes; },
+        {className = EOGenericRecord; name = EOJDBCPrototypes; }, 
+        {className = EOGenericRecord; name = EOMemoryPrototypes; }, 
         {className = EOGenericRecord; name = EORESTPrototypes; }
     ); 
 }
