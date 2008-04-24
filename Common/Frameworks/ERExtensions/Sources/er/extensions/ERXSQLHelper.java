@@ -1271,6 +1271,13 @@ public class ERXSQLHelper {
 		}
 	}
 
+	public static class DerbySQLHelper extends ERXSQLHelper {
+
+		public boolean shouldExecute(String sql) {
+			return sql != null && !sql.startsWith("--");
+		}
+	}
+
 	public static class FrontBaseSQLHelper extends ERXSQLHelper {
 		private static final String PREFIX_ISOLATION_LEVEL = "isolation=";
 		private static final String PREFIX_LOCKING = "locking=";
