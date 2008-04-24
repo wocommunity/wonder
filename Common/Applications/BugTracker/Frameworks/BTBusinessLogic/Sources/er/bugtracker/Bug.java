@@ -42,6 +42,7 @@ public class Bug extends _Bug implements Markable {
         setDateModified(new NSTimestamp());
         Comment comment = (Comment) Comment.clazz.createAndInsertObject(ec);
         comment.setOriginator(originator());
+        comment.setBug(this);
         addToComments(comment);
     }
 
