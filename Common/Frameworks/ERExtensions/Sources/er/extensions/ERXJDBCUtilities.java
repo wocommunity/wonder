@@ -560,6 +560,43 @@ public class ERXJDBCUtilities {
 	}
 
 	/**
+	 * Runs a given sql script and executes each of the statements in a
+	 * one transaction.
+	 * 
+	 * @param channel
+	 *            the JDBCChannel to work with
+	 * @param script
+	 *            the array of sql scripts to execute
+	 * 
+	 * @return the number of rows updated
+	 * @throws SQLException
+	 *             if there is a problem
+	 */
+	public static int executeUpdateScriptIgnoringErrors(EOAdaptorChannel channel, String script) throws SQLException {
+		ERXSQLHelper sqlHelper = ERXSQLHelper.newSQLHelper(channel);
+		int rowsUpdated = 0;
+		Enumeration sqlStatementsEnum = sqlHelper.splitSQLStatements(script).objectEnumerator();
+		while (sqlStatementsEnum.hasMoreElements()) {
+			String sql = (String) sqlStatementsEnum.nextElement();
+			if (sqlHelper.shouldExecute(sql)) {
+				if (ERXJDBCUtilities.log.isInfoEnabled()) {
+					ERXJDBCUtilities.log.info("Executing " + sql);
+				}
+				try {
+					rowsUpdated += executeUpdate(channel, sql);
+				} catch(SQLException ex) {
+					ERXJDBCUtilities.log.warn("Ignoring Error: " + sql + " " + ex);
+				}
+			} else {
+				if (ERXJDBCUtilities.log.isInfoEnabled()) {
+					ERXJDBCUtilities.log.info("Skipping " + sql);
+				}
+			}
+		}
+		return rowsUpdated;
+	}
+
+	/**
 	 * Executes a SQL script that is stored as a resource.
 	 * 
 	 * @param channel
