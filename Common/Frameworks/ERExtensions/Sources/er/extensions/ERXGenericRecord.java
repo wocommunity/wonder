@@ -501,20 +501,20 @@ public class ERXGenericRecord extends EOGenericRecord implements ERXGuardedObjec
 				insertionTrackingLog.debug("inserted " + getClass().getName() + " at " + insertionStackTrace);
 			}
 			super.awakeFromInsertion(editingContext);
-			EOGlobalID gid = editingContext.globalIDForObject(this);
-			if (gid.isTemporary()) {
-				init(editingContext);
-				if (applyRestrictingQualifierOnInsert()) {
-					EOEntity entity = ERXEOAccessUtilities.entityNamed(editingContext, entityName());
-					EOQualifier restrictingQualifier = entity.restrictingQualifier();
-					if (restrictingQualifier != null) {
-						ERXEOControlUtilities.makeQualifierTrue(restrictingQualifier, this);
-					}
-				}
-			}
 		}
 		finally {
 			_setUpdateInverseRelationships(old);
+		}
+		EOGlobalID gid = editingContext.globalIDForObject(this);
+		if (gid.isTemporary()) {
+			init(editingContext);
+			if (applyRestrictingQualifierOnInsert()) {
+				EOEntity entity = ERXEOAccessUtilities.entityNamed(editingContext, entityName());
+				EOQualifier restrictingQualifier = entity.restrictingQualifier();
+				if (restrictingQualifier != null) {
+					ERXEOControlUtilities.makeQualifierTrue(restrictingQualifier, this);
+				}
+			}
 		}
 	}
 
