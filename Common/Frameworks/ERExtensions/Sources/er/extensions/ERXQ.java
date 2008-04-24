@@ -145,6 +145,37 @@ public class ERXQ {
 	}
 
 	/**
+	 * Returns the first object that matches the qualifier in the given array (or
+	 * null if there is no match).
+	 * 
+	 * @param <T>
+	 *            the type of the objects
+	 * @param array
+	 *            the array to filter
+	 * @param qualifier
+	 *            the qualifier to filter on
+	 * @return one matching object or null
+	 * @throw IllegalStateException if more than one object matched
+	 */
+	public static <T> T first(NSArray<T> array, EOQualifier qualifier) {
+		T object;
+		if (array == null) {
+			object = null;
+		}
+		else {
+			NSArray<T> objects = ERXQ.filtered(array, qualifier);
+			int count = objects.count();
+			if (count == 0) {
+				object = null;
+			}
+			else {
+				object = objects.objectAtIndex(0);
+			}
+		}
+		return object;
+	}
+
+	/**
 	 * Returns the one object that matches the qualifier in the given array (or
 	 * throws if there is no match).
 	 * 

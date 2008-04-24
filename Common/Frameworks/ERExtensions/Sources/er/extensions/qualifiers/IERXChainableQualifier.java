@@ -64,6 +64,19 @@ public interface IERXChainableQualifier {
 	public void filter(NSMutableArray<?> array);
 
 	/**
+	 * Equivalent to EOQualifier.first(NSMutableArray, EOQualfier)
+	 * 
+	 * @param <T>
+	 *            the type of the array
+	 * @param array
+	 *            the array to filter (in place)
+	 * @param qualifier
+	 *            the qualifier to filter with
+	 * @return the first matching object or null
+	 */
+	public <T> T first(NSArray<T> array);
+
+	/**
 	 * Equivalent to EOQualifier.one(NSMutableArray, EOQualfier)
 	 * 
 	 * @param <T>
