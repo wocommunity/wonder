@@ -41,6 +41,10 @@ public class DerbyPlugIn extends JDBCPlugIn {
             return new NSArray(_expressionForString("drop table " + pkTable));
         }
 
+        public NSArray dropTableStatementsForEntityGroup(NSArray entityGroup) {
+            return new NSArray(_expressionForString("drop table " + ((EOEntity) entityGroup.objectAtIndex(0)).externalName()));
+        }
+
         public NSArray _statementsToDropPrimaryKeyConstraintsOnTableNamed(String tableName) {
             return new NSArray(_expressionForString("alter table " + tableName + " drop primary key"));
         }
