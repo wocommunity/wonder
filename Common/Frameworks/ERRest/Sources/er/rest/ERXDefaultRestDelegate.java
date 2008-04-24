@@ -74,20 +74,21 @@ public class ERXDefaultRestDelegate implements IERXRestDelegate {
 	protected ERXRestKey insertInto(EOEntity entity, ERXRestRequest insertRequest, EOEntity parentEntity, EOEnterpriseObject parentObject, String parentKey, ERXRestContext context) throws ERXRestSecurityException, ERXRestException, ERXRestNotFoundException {
 		ERXRestKey insertResult;
 		ERXRestRequestNode insertRootNode = insertRequest.rootNode();
-		String entityAlias = entityDelegate(entity).entityAliasForEntityNamed(entity.name());
-		String pluralEntityAlis = ERXLocalizer.currentLocalizer().plurifiedString(entityAlias, 2);
+		IERXRestEntityDelegate entityDelegate = entityDelegate(entity);
+		String entityAlias = entityDelegate.entityAliasForEntityNamed(entity.name());
+		String pluralEntityAlias = ERXLocalizer.currentLocalizer().plurifiedString(entityAlias, 2);
 
 		String nodeName = insertRootNode.name();
 		if (entityAlias.equals(nodeName)) {
-			EOEnterpriseObject eo = insert(entity, insertRootNode, parentEntity, parentObject, parentKey, context);
+			EOEnterpriseObject eo = entityDelegate.insertObjectFromDocument(entity, insertRootNode, parentEntity, parentObject, parentKey, context);
 			insertResult = new ERXRestKey(context, entity, "inserted", eo);
 		}
-		else if (pluralEntityAlis.equals(nodeName)) {
+		else if (pluralEntityAlias.equals(nodeName)) {
 			NSMutableArray eos = new NSMutableArray();
 			Enumeration insertNodesEnum = insertRootNode.children().objectEnumerator();
 			while (insertNodesEnum.hasMoreElements()) {
 				ERXRestRequestNode insertNode = (ERXRestRequestNode) insertNodesEnum.nextElement();
-				EOEnterpriseObject eo = insert(entity, insertNode, parentEntity, parentObject, parentKey, context);
+				EOEnterpriseObject eo = entityDelegate.insertObjectFromDocument(entity, insertNode, parentEntity, parentObject, parentKey, context);
 				eos.addObject(eo);
 			}
 			insertResult = new ERXRestKey(context, entity, "inserted", eos);
@@ -96,22 +97,6 @@ public class ERXDefaultRestDelegate implements IERXRestDelegate {
 			throw new ERXRestException("You attempted to put a " + nodeName + " into a " + entityAlias + ".");
 		}
 		return insertResult;
-	}
-
-	protected EOEnterpriseObject insert(EOEntity entity, ERXRestRequestNode insertNode, EOEntity parentEntity, EOEnterpriseObject parentObject, String parentKey, ERXRestContext context) throws ERXRestSecurityException, ERXRestException, ERXRestNotFoundException {
-		boolean canInsert;
-		if (parentObject == null) {
-			canInsert = entityDelegate(entity).canInsertObject(entity, context);
-		}
-		else {
-			canInsert = entityDelegate(entity).canInsertObject(parentEntity, parentObject, parentKey, entity, context);
-		}
-		if (!canInsert) {
-			throw new ERXRestSecurityException("You are not allowed to insert this object.");
-		}
-
-		EOEnterpriseObject eo = entityDelegate(entity).insertObjectFromDocument(entity, insertNode, parentObject, parentKey, context);
-		return eo;
 	}
 
 	public void update(ERXRestRequest updateRequest, ERXRestContext context) throws ERXRestException, ERXRestSecurityException, ERXRestNotFoundException {
@@ -124,11 +109,6 @@ public class ERXDefaultRestDelegate implements IERXRestDelegate {
 		Object lastValue = lastKey.value();
 		if (lastValue instanceof EOEnterpriseObject) {
 			EOEnterpriseObject eo = (EOEnterpriseObject) lastValue;
-
-			if (!entityDelegate(lastEntity).canUpdateObject(lastEntity, eo, context)) {
-				throw new ERXRestSecurityException("You are not allowed to update this object.");
-			}
-
 			ERXRestRequestNode updateNode = updateRequest.rootNode();
 			context.delegate().entityDelegate(lastEntity).updateObjectFromDocument(lastEntity, eo, updateNode, context);
 		}
@@ -138,9 +118,6 @@ public class ERXDefaultRestDelegate implements IERXRestDelegate {
 			if (nextToLastValue instanceof EOEnterpriseObject) {
 				EOEntity previousEntity = nextToLastKey.entity();
 				EOEnterpriseObject eo = (EOEnterpriseObject) nextToLastValue;
-				if (!entityDelegate(previousEntity).canUpdateObject(previousEntity, eo, context)) {
-					throw new ERXRestSecurityException("You are not allowed to update this object.");
-				}
 
 				NSArray currentObjects = (NSArray) lastValue;
 				ERXRestRequestNode arrayNode = updateRequest.rootNode();
@@ -183,26 +160,18 @@ public class ERXDefaultRestDelegate implements IERXRestDelegate {
 		}
 
 		EOEntity entity = lastKey.entity();
+		IERXRestEntityDelegate entityDelegate = entityDelegate(entity);
 		Object value = lastKey.value();
 		if (value instanceof NSArray) {
 			NSArray values = (NSArray) value;
 			Enumeration valuesEnum = values.objectEnumerator();
 			while (valuesEnum.hasMoreElements()) {
 				EOEnterpriseObject eo = (EOEnterpriseObject) valuesEnum.nextElement();
-				_delete(entity, eo, context);
+				entityDelegate.delete(entity, eo, context);
 			}
 		}
 		else {
-			_delete(entity, (EOEnterpriseObject) value, context);
-		}
-	}
-
-	protected void _delete(EOEntity entity, EOEnterpriseObject eo, ERXRestContext context) throws ERXRestException, ERXRestSecurityException {
-		if (!entityDelegate(entity).canDeleteObject(entity, eo, context)) {
-			throw new ERXRestSecurityException("You are not allowed to delete the given obj.");
-		}
-		else {
-			entityDelegate(entity).delete(entity, eo, context);
+			entityDelegate.delete(entity, (EOEnterpriseObject) value, context);
 		}
 	}
 

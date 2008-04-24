@@ -29,16 +29,36 @@ public class ERXDenyRestEntityDelegate implements IERXRestEntityDelegate {
 	public String propertyAliasForPropertyNamed(EOEntity entity, String propertyName) {
 		return propertyName;
 	}
+	
+	public Object idForEO(EOEntity entity, EOEnterpriseObject eo) {
+		return null;
+	}
+	
+	public boolean isEOID(ERXRestKey restKey) {
+		return false;
+	}
+	
+	public String stringIDForEO(EOEntity entity, EOEnterpriseObject eo) {
+		return null;
+	}
 
 	public EOEnterpriseObject objectWithKey(EOEntity entity, String key, ERXRestContext context) throws ERXRestException, ERXRestNotFoundException, ERXRestSecurityException {
 		throw new ERXRestSecurityException("You are not allowed to access the " + entity.name() + " with the id '" + key + "'.");
+	}
+	
+	public EOEnterpriseObject objectForNode(EOEntity entity, ERXRestRequestNode node, ERXRestContext context) throws ERXRestException, ERXRestNotFoundException, ERXRestSecurityException {
+		throw new ERXRestSecurityException("You are not allowed to access the requested " + entity.name() + ".");
+	}
+	
+	public EOEnterpriseObject objectFromNode(EOEntity entity, ERXRestRequestNode node, ERXRestContext context) throws ERXRestException, ERXRestNotFoundException, ERXRestSecurityException {
+		throw new ERXRestSecurityException("You are not allowed to access the specified " + entity.name() + ".");
 	}
 
 	public EOEnterpriseObject objectWithKey(EOEntity entity, String key, NSArray objs, ERXRestContext context) throws ERXRestException, ERXRestSecurityException, ERXRestNotFoundException {
 		throw new ERXRestSecurityException("You are not allowed to access the " + entity.name() + " with the id '" + key + "'.");
 	}
 
-	public EOEnterpriseObject insertObjectFromDocument(EOEntity entity, ERXRestRequestNode insertNode, EOEnterpriseObject parentObject, String parentKey, ERXRestContext context) throws ERXRestSecurityException, ERXRestException, ERXRestNotFoundException {
+	public EOEnterpriseObject insertObjectFromDocument(EOEntity entity, ERXRestRequestNode insertNode, EOEntity parentEntity, EOEnterpriseObject parentObject, String parentKey, ERXRestContext context) throws ERXRestSecurityException, ERXRestException, ERXRestNotFoundException {
 		return null;
 	}
 
