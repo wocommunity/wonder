@@ -695,7 +695,7 @@ public class ERXJDBCUtilities {
 				ResultSet rs = stmt.executeQuery(query);
 				try {
 					while (rs.next()) {
-						processor.processRow(rs);
+						processor.processRow(adaptorChannel, rs);
 					}
 				}
 				finally {
@@ -725,11 +725,13 @@ public class ERXJDBCUtilities {
 		 * For each row in the ResultSet, this method is called to give you the
 		 * opportunity to process the row.
 		 * 
+		 * @param adaptorChannel
+		 *            the original adaptor channel
 		 * @param rs
 		 *            the ResultSet (pointing to the current row)
 		 * @throws Exception
 		 *             if something goes wrong
 		 */
-		public void processRow(ResultSet rs) throws Exception;
+		public void processRow(EOAdaptorChannel adaptorChannel, ResultSet rs) throws Exception;
 	}
 }
