@@ -334,7 +334,7 @@
             <param name="project.dir" value="Common/Examples/ERMovies" />
  
             <param name="use.webobjects.d2w" value="true" />
-            <param name="use.wonder.d2w" value="true" />
+            <param name="wonder.lib.root.bundles" value="ERPrototypes/ERJars/ERExtensions/ERDirectToWeb/JavaWOExtensions/DerbyPlugIn" />
             <param name="use.movies" value="true" />
        </antcall>
     </target>
@@ -746,6 +746,13 @@
             <param name="project.dir" value="PlugIns/PostgresqlPlugIn" />
         </antcall>
     </target>
+    <target name="DerbyPlugIn.all">
+        <antcall target="global.framework.${build.action}" >
+            <param name="project.principal.class" value="com.webobjects.jdbcadaptor.DerbyPlugIn" />
+            <param name="project.name" value="DerbyPlugIn" />
+            <param name="project.dir" value="PlugIns/DerbyPlugIn" />
+        </antcall>
+    </target>
     <target name="FrontBasePlugIn.all">
         <antcall target="global.framework.${build.action}" >
             <param name="project.principal.class" value="com.webobjects.jdbcadaptor.FrontbasePlugIn" />
@@ -814,7 +821,7 @@
     <target name="ajax.frameworks.all" depends="Ajax.all, YUI.all, AjaxLook.all" />
     <target name="ajax.examples.all" depends="AjaxExample.all, YUIExample.all, AjaxLookExample.all" />
     
-    <target name="plugins.all" depends="PostgresqlPlugIn.all,FrontBasePlugIn.all" />
+    <target name="plugins.all" depends="PostgresqlPlugIn.all,FrontBasePlugIn.all,DerbyPlugIn.all" />
 
     <target name="validity.frameworks.all" depends="Validity.all" />
     <target name="validity.applications.all" depends="ValidityModeler.all" />
@@ -832,10 +839,7 @@
      
      <target name="frameworks.patch54.all">
        <property name="woognl.pre" value="WOOgnl54.pre" />
-       <property name="erx.class.exclude.0" value="com/webobjects/appserver/_private/WOHTTPIO.*" />  
-       <property name="erx.class.exclude.1" value="com/webobjects/foundation/*.*" /> 
-
-        <antcall target="_frameworks.all" />
+       <antcall target="_frameworks.all" />
      </target>
      
      <target name="frameworks.patch53.all">
