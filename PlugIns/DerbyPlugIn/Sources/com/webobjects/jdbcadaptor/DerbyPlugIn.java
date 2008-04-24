@@ -5,6 +5,7 @@ import java.io.InputStream;
 
 import com.webobjects.eoaccess.EOAdaptor;
 import com.webobjects.eoaccess.EOEntity;
+import com.webobjects.eoaccess.EORelationship;
 import com.webobjects.eoaccess.EOSynchronizationFactory;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSData;
@@ -49,6 +50,13 @@ public class DerbyPlugIn extends JDBCPlugIn {
             return new NSArray(_expressionForString("alter table " + tableName + " drop primary key"));
         }
 
+        @Override
+        public NSArray foreignKeyConstraintStatementsForRelationship(EORelationship aArg0) {
+            // AK: I currently have some probs with it...
+            return NSArray.EmptyArray;
+            //return super.foreignKeyConstraintStatementsForRelationship(aArg0);
+        }
+        
         public boolean supportsSchemaSynchronization() {
             return true;
         }
