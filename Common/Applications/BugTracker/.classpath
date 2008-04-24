@@ -23,5 +23,6 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/ERExcelLook"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/ERSelenium"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/WOOgnl"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/DerbyPlugIn"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
