@@ -37,6 +37,7 @@
     className = "er.bugtracker.Framework"; 
     classProperties = (name, ordering, ownedSince, owner); 
     externalName = FRAMEWORK; 
+    fetchSpecificationDictionary = {}; 
     name = Framework; 
     primaryKeyAttributes = (id); 
     relationships = (

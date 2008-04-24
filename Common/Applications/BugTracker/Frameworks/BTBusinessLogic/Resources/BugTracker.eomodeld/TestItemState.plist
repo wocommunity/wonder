@@ -24,9 +24,9 @@
     className = "er.bugtracker.TestItemState"; 
     classProperties = (name, sortOrder); 
     externalName = "TEST_ITEM_STATE"; 
+    fetchSpecificationDictionary = {}; 
     isReadOnly = Y; 
     name = TestItemState; 
     primaryKeyAttributes = (oid); 
-    sharedObjectFetchSpecificationNames = (FetchAll); 
     userInfo = {modificationDate = "2002-05-04 13:06:03 +0200"; }; 
 }
