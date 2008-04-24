@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <wodefinitions>
-    <wo class="ERDEditHTML.java" wocomponentcontent="false">
+    <wo class="ERDEditHTML" wocomponentcontent="false">
         <binding name="object"/>
         <binding name="key"/>
         <binding name="size"/>
@@ -11,5 +11,6 @@
         <validation message="'key' is a required binding">
             <unbound name="key"/>
         </validation>
+    <binding name="richTextMode"/>
     </wo>
 </wodefinitions>
