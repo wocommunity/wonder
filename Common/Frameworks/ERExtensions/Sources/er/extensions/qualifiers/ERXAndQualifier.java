@@ -13,6 +13,7 @@ import er.extensions.ERXQ;
  * @author mschrag
  */
 public class ERXAndQualifier extends EOAndQualifier implements IERXChainableQualifier {
+	@SuppressWarnings("cast")
 	public ERXAndQualifier(NSArray<EOQualifier> qualifiers) {
 		super((NSArray)qualifiers);
 	}
@@ -43,4 +44,12 @@ public class ERXAndQualifier extends EOAndQualifier implements IERXChainableQual
 	public <T> NSArray<T> filtered(NSArray<T> array) {
 		return ERXQ.filtered(array, this);
 	}
+
+  public <T> T one(NSArray<T> array) {
+    return ERXQ.one(array, this);
+  }
+
+  public <T> T requiredOne(NSArray<T> array) {
+    return ERXQ.requiredOne(array, this);
+  }
 }

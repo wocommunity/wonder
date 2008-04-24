@@ -46,4 +46,12 @@ public class ERXKeyComparisonQualifier extends EOKeyComparisonQualifier implemen
 	public <T> NSArray<T> filtered(NSArray<T> array) {
 		return ERXQ.filtered(array, this);
 	}
+
+	public <T> T one(NSArray<T> array) {
+		return ERXQ.one(array, this);
+	}
+
+	public <T> T requiredOne(NSArray<T> array) {
+		return ERXQ.requiredOne(array, this);
+	}
 }
