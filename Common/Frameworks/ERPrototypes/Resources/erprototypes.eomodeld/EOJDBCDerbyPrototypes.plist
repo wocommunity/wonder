@@ -68,7 +68,7 @@
         }, 
         {
             columnName = ""; 
-            externalType = TINYINT; 
+            externalType = SMALLINT; 
             name = flag; 
             valueClassName = NSNumber; 
             valueType = c; 
@@ -97,11 +97,10 @@
         }, 
         {
             columnName = ""; 
-            externalType = VARCHAR; 
+            externalType = CLOB; 
             name = longText; 
             valueClassName = NSString; 
             valueType = c; 
-            width = 100000000; 
         }, 
         {
             adaptorValueConversionMethodName = toBlob; 
@@ -193,11 +192,10 @@
         }, 
         {
             columnName = ""; 
-            externalType = VARCHAR; 
+            externalType = CLOB; 
             name = varcharLarge; 
             valueClassName = NSString; 
             valueType = c; 
-            width = 10000000; 
         }
     ); 
     attributesUsedForLocking = (boolean, id); 
