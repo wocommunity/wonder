@@ -11,6 +11,7 @@ import com.webobjects.foundation.NSLog;
 
 import er.bugtracker.mail.MailReader;
 import er.extensions.ERXApplication;
+import er.extensions.ERXDelayedRequestHandler;
 import er.extensions.ERXNavigationManager;
 import er.extensions.ERXPatcher;
 import er.extensions.ERXProperties;
@@ -31,6 +32,7 @@ public class Application extends ERXApplication {
         ERXNavigationManager.manager().configureNavigation();
         setContextClassName("er.extensions.ERXWOContext");
         registerRequestHandler(ERXRestRequestHandler.createUnsafeRequestHandler(false, false), "rest");
+        registerRequestHandler(new ERXDelayedRequestHandler(), ERXDelayedRequestHandler.KEY);
         setPageRefreshOnBacktrackEnabled(true);
         ERXPatcher.setClassForName(ERXSubmitButton.class, "WOSubmitButton");
         // ERXPatcher.setClassForName(WOSubmitButton.class, "WOSubmitButton");
