@@ -19,81 +19,108 @@ import com.webobjects.foundation.NSMutableArray;
 import er.extensions.ERXConstant;
 import er.extensions.ERXValueUtilities;
 
-// The pick interface is nice in that it doesn't require passing back an EO as the SelectPageInterface requires.
+// The pick interface is nice in that it doesn't require passing back an EO as
+// the SelectPageInterface requires.
 // Important D2W Keys:
-//	explanationComponentName - Used if you want to add an explanation to the top of the page.
-//	choices - Array of choices to be displayed.
-//	choiceKeyPath - keypath from the component to return a list of choices, ie session.choicesForUser
-//	choiceErrorMessage - error message displayed if the user decides they don't want to pick anything.
-//	choiceDisplayKey - defaults to toString.  Allows you to provide custom choice objects.
-//	uiStyle - defaults to radio button, can also be a checkbox list, "radio" or "checkbox"
+// explanationComponentName - Used if you want to add an explanation to the top
+// of the page.
+// choices - Array of choices to be displayed.
+// choiceKeyPath - keypath from the component to return a list of choices, ie
+// session.choicesForUser
+// choiceErrorMessage - error message displayed if the user decides they don't
+// want to pick anything.
+// choiceDisplayKey - defaults to toString. Allows you to provide custom choice
+// objects.
+// uiStyle - defaults to radio button, can also be a checkbox list, "radio" or
+// "checkbox"
 
-public class ERD2WPickTypePage extends ERD2WInspectPage implements ERDPickPageInterface {
+public class ERD2WPickTypePage extends ERD2WPage implements ERDPickPageInterface {
 
-    public ERD2WPickTypePage(WOContext context) {super(context);}
-    
+    public ERD2WPickTypePage(WOContext context) {
+        super(context);
+    }
+
     /** logging support */
-    public static final Logger log = Logger.getLogger("er.directtoweb.templates.ERD2WPickTypePageTemplate");
+    public static final Logger log = Logger.getLogger(ERD2WPickTypePage.class);
 
-    public boolean selectionManditory() { return ERXValueUtilities.booleanValue(d2wContext().valueForKey("selectionManditory")); }
+    public boolean selectionManditory() {
+        return ERXValueUtilities.booleanValue(d2wContext().valueForKey("selectionManditory"));
+    }
 
     public NSMutableArray selections = new NSMutableArray();
+
     public Object item;
 
-    public Object selection() { return selections.count() > 0 ? selections.lastObject() : null; }
+    public Object selection() {
+        return selections.count() > 0 ? selections.lastObject() : null;
+    }
+
     public void setSelection(Object value) {
         selections = value != null ? new NSMutableArray(value) : new NSMutableArray();
     }
 
-    public NSArray selectedObjects() { return selections; }
-    public void setSelectedObjects(NSArray value) { selections = new NSMutableArray(value); }
-
-    private WOComponent _cancelPage;
-    public WOComponent cancelPage() { return _cancelPage; }
-    public void setCancelPage(WOComponent cp) { _cancelPage = cp; }
-
-    private String _choiceDisplayKey;
-    public String choiceDisplayKey() {
-        if (_choiceDisplayKey == null)
-            _choiceDisplayKey = (String)d2wContext().valueForKey("choiceDisplayKey");
-        return _choiceDisplayKey;
+    public NSArray selectedObjects() {
+        return selections;
     }
 
-    private String _choiceErrorMessage;
+    public void setSelectedObjects(NSArray value) {
+        selections = new NSMutableArray(value);
+    }
+
+    private WOComponent _cancelPage;
+
+    public WOComponent cancelPage() {
+        return _cancelPage;
+    }
+
+    public void setCancelPage(WOComponent cp) {
+        _cancelPage = cp;
+    }
+
+    public String choiceDisplayKey() {
+        return (String) d2wContext().valueForKey("choiceDisplayKey");
+    }
+
     public String choiceErrorMessage() {
-        if (_choiceErrorMessage == null)
-            _choiceErrorMessage = (String)d2wContext().valueForKey("choiceErrorMessage");
-        return _choiceErrorMessage;
+        return (String) d2wContext().valueForKey("choiceErrorMessage");
     }
 
     private NSArray _choices;
+
     public NSArray choices() {
         if (_choices == null) {
             if (d2wContext().valueForKey("choices") != null) {
-                _choices = (NSArray)d2wContext().valueForKey("choices");
+                _choices = (NSArray) d2wContext().valueForKey("choices");
             } else if (d2wContext().valueForKey("choiceKeyPath") != null) {
-                _choices = (NSArray)valueForKeyPath((String)d2wContext().valueForKey("choiceKeyPath"));
+                _choices = (NSArray) valueForKeyPath((String) d2wContext().valueForKey("choiceKeyPath"));
+            } else if (dataSource() != null) {
+                _choices = dataSource().fetchObjects();
             } else {
-                log.error("Unable to create choices list for pageConfiguration: " +
-                          d2wContext().valueForKey("pageConfiguration") + " context: " + d2wContext());
+                log.error("Unable to create choices list for pageConfiguration: " + d2wContext().valueForKey("pageConfiguration") + " context: " + d2wContext());
                 _choices = ERXConstant.EmptyArray;
             }
         }
         return _choices;
     }
-    public void setChoices(NSArray choices) { _choices = choices; }
+
+    public void setChoices(NSArray choices) {
+        _choices = choices;
+    }
 
     public String displayName() {
         String displayName = null;
         if (item != null) {
             if (item instanceof String) {
-                displayName = (String)item;
-            } else if (item instanceof EOEnterpriseObject) {
-                displayName = (String)((EOEnterpriseObject)item).valueForKeyPath(choiceDisplayKey());
-            } else if (item instanceof Object && choiceDisplayKey().indexOf(".") == -1) {
-                displayName = (String)((NSKeyValueCoding)item).valueForKey(choiceDisplayKey());
+                displayName = (String) item;
             } else {
-                displayName = (String)NSKeyValueCodingAdditions.Utility.valueForKeyPath(item, choiceDisplayKey());
+                String choiceDisplayKey = choiceDisplayKey();
+                if (item instanceof EOEnterpriseObject) {
+                    displayName = (String) ((EOEnterpriseObject) item).valueForKeyPath(choiceDisplayKey);
+                } else if (item instanceof Object && choiceDisplayKey.indexOf(".") == -1) {
+                    displayName = (String) ((NSKeyValueCoding) item).valueForKey(choiceDisplayKey);
+                } else {
+                    displayName = (String) NSKeyValueCodingAdditions.Utility.valueForKeyPath(item, choiceDisplayKey);
+                }
             }
         }
         return displayName != null ? displayName : " <null> ";
@@ -106,12 +133,12 @@ public class ERD2WPickTypePage extends ERD2WInspectPage implements ERDPickPageIn
             errorMessage = "";
         }
         WOComponent result = null;
-    	if(errorMessage.equals("")) {
-        	result = nextPageFromDelegate();
-        	if(result == null) {
-        		result = super.nextPage();
-        	}
-    	}
+        if (errorMessage.equals("")) {
+            result = nextPageFromDelegate();
+            if (result == null) {
+                result = super.nextPage();
+            }
+        }
         return result;
     }
 }
