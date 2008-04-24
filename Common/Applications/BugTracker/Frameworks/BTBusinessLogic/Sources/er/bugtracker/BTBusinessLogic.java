@@ -26,6 +26,7 @@ import com.webobjects.eoaccess.EOUtilities;
 import com.webobjects.eocontrol.EOEditingContext;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSForwardException;
 import com.webobjects.foundation.NSMutableArray;
 import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.foundation.NSTimestamp;
@@ -256,6 +257,8 @@ delete from TEST_ITEM;
                 user.setIsCustomerService(i % 3 != 0);
                 user.setIsEngineering(i % 3 != 0 && !user.isAdmin());
             }
+            log.info("Saving...");
+            ec.saveChanges();
 
             log.info("Creating releases, frameworks and components");
             
@@ -272,7 +275,6 @@ delete from TEST_ITEM;
                 Release release = (Release) releases.objectAtIndex(i);
                 release.setDateDue(dateDue);
                 dateDue = dateDue.timestampByAddingGregorianUnits(0, -(randomInt(2)+1), 0, 0, 0, 0);
-                log.info(dateDue);
             }
 
             for(int i = 0; i < 10; i++) {
@@ -281,7 +283,7 @@ delete from TEST_ITEM;
                 component.setTextDescription("Component " + i/2);
                 if(i % 2 == 1) {
                     Component parent = (Component) components.lastObject();
-                    parent.addToChildren(component);
+                    component.setParent(parent);
                     component.setTextDescription("Component " + i/2 + ".1");
                 }
                 components.addObject(component);
@@ -401,9 +403,34 @@ delete from TEST_ITEM;
         try {
             EOModel model = EOModelGroup.defaultGroup().modelNamed("BugTracker");
             EOEntity release = model.entityNamed("Release");
-            if(model.connectionDictionary().toString().toLowerCase().indexOf("mysql") >= 0) {
+            if(model.connectionDictionary().toString().toLowerCase().indexOf(":mysql") >= 0) {
                 release.setExternalName("`RELEASE`");
+            } else if(model.connectionDictionary().toString().toLowerCase().indexOf(":derby") >= 0) {
+                // AK: if we set the connection string to ;create=true, then subsequent model create scripts will 
+                // delete former entries, so we set this once here.
+                String url = ""+ model.connectionDictionary().objectForKey("URL");
+                if(!url.contains(";create=true")) {
+                    java.sql.Connection conn = null;
+                    try {
+                        Class foundDriver = Class.forName("org.apache.derby.jdbc.EmbeddedDriver");
+                        conn = java.sql.DriverManager.getConnection(url +";create=true");
+                        java.sql.Statement s = conn.createStatement();
+                    } catch (SQLException e) {
+                        //ignore
+                    } catch (ClassNotFoundException e) {
+                        throw NSForwardException._runtimeExceptionForThrowable(e);
+                    } finally {
+                        if(conn !=null) {
+                            try {
+                                conn.close();
+                            } catch (SQLException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+                }
             }
+
             initializeSharedData();
             ERCoreBusinessLogic.sharedInstance().addPreferenceRelationshipToActorEntity("People", "id");
         } catch(JDBCAdaptorException ex) {
