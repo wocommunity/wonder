@@ -362,7 +362,8 @@ public class ERXJDBCUtilities {
 	}
 
 	/**
-	 * Copies all rows from one database to another database. The tables must exist before calling this method.
+	 * Copies all rows from one database to another database. The tables must
+	 * exist before calling this method.
 	 * 
 	 * Example:
 	 * 
@@ -390,19 +391,24 @@ public class ERXJDBCUtilities {
 	 * </pre>
 	 * 
 	 * @param sourceDict
-	 *            a NSDictionary containing the following keys for the source database:
+	 *            a NSDictionary containing the following keys for the source
+	 *            database:
 	 *            <ol>
 	 *            <li>username, the username for the connection
 	 *            <li>password, the password for the connection
 	 *            <li>url, the JDBC URL for the connection, for FrontBase its
-	 *            <code>jdbc:FrontBase://host/database</code> , for PostgreSQL its
-	 *            <code>jdbc:postgresql://host/database</code>
-	 *            <li>driver, the full class name of the driver, for FrontBase its
-	 *            <code>com.frontbase.jdbc.FBJDriver</code> , for PostgreSQL its <code>org.postgresql.Driver</code>
-	 *            <li>autoCommit, a Boolean defining if autoCommit should be on or off, default is true
-	 *            <li>readOnly, a Boolean defining if the Connection is readOnly or not, default is false. Its a good
-	 *            <li>quote, a Boolean defining if the table and field names should be "quoted" idea to make the
-	 *            sourceDict readOnly, because one does not write.
+	 *            <code>jdbc:FrontBase://host/database</code> , for PostgreSQL
+	 *            its <code>jdbc:postgresql://host/database</code>
+	 *            <li>driver, the full class name of the driver, for FrontBase
+	 *            its <code>com.frontbase.jdbc.FBJDriver</code> , for
+	 *            PostgreSQL its <code>org.postgresql.Driver</code>
+	 *            <li>autoCommit, a Boolean defining if autoCommit should be on
+	 *            or off, default is true
+	 *            <li>readOnly, a Boolean defining if the Connection is
+	 *            readOnly or not, default is false. Its a good
+	 *            <li>quote, a Boolean defining if the table and field names
+	 *            should be "quoted" idea to make the sourceDict readOnly,
+	 *            because one does not write.
 	 *            </ol>
 	 * @param destDict
 	 *            same as sourceDict just used for the destination database.
@@ -422,10 +428,14 @@ public class ERXJDBCUtilities {
 	}
 
 	/**
-	 * @see _copyDatabaseDefinedByEOModelAndConnectionDictionaryToDatabaseWithConnectionDictionary(EOModel, NSDictionary, NSDictionary)
-	 * @param modelGroup the model group to copy
-	 * @param sourceDict the source connection dictionary
-	 * @param destDict the destination connection dictionary
+	 * @see _copyDatabaseDefinedByEOModelAndConnectionDictionaryToDatabaseWithConnectionDictionary(EOModel,
+	 *      NSDictionary, NSDictionary)
+	 * @param modelGroup
+	 *            the model group to copy
+	 * @param sourceDict
+	 *            the source connection dictionary
+	 * @param destDict
+	 *            the destination connection dictionary
 	 */
 	public static void _copyDatabaseDefinedByEOModelAndConnectionDictionaryToDatabaseWithConnectionDictionary(EOModelGroup modelGroup, NSDictionary sourceDict, NSDictionary destDict) {
 		try {
@@ -442,7 +452,8 @@ public class ERXJDBCUtilities {
 	}
 
 	/**
-	 * Shortcut to java.sql.Statement.executeUpdate(..) that operates on an EOAdaptorChannel.
+	 * Shortcut to java.sql.Statement.executeUpdate(..) that operates on an
+	 * EOAdaptorChannel.
 	 * 
 	 * @param channel
 	 *            the JDBCChannel to work with
@@ -477,7 +488,8 @@ public class ERXJDBCUtilities {
 	}
 
 	/**
-	 * Splits the given sqlscript and executes each of the statements in a single transaction
+	 * Splits the given sqlscript and executes each of the statements in a
+	 * single transaction
 	 * 
 	 * @param channel
 	 *            the JDBCChannel to work with
@@ -493,13 +505,14 @@ public class ERXJDBCUtilities {
 	}
 
 	/**
-	 * Splits the given sqlscript and executes each of the statements in a single transaction
+	 * Splits the given sqlscript and executes each of the statements in a
+	 * single transaction
 	 * 
 	 * @param channel
 	 *            the JDBCChannel to work with
 	 * @param sqlStatements
 	 *            the array of sql scripts to execute
-         *
+	 * 
 	 * @return the number of rows updated
 	 * @throws SQLException
 	 *             if there is a problem
@@ -580,8 +593,8 @@ public class ERXJDBCUtilities {
 	}
 
 	/**
-	 * Creates tables, primary keys, and foreign keys for the tables in the given model. This is useful in your
-	 * Migration #0 class.
+	 * Creates tables, primary keys, and foreign keys for the tables in the
+	 * given model. This is useful in your Migration #0 class.
 	 * 
 	 * @param channel
 	 *            the channel to use for execution
@@ -595,8 +608,8 @@ public class ERXJDBCUtilities {
 	}
 
 	/**
-	 * Creates tables, primary keys, and foreign keys for the given list of entities. This is useful in your Migration
-	 * #0 class.
+	 * Creates tables, primary keys, and foreign keys for the given list of
+	 * entities. This is useful in your Migration #0 class.
 	 * 
 	 * @param channel
 	 *            the channel to use for execution
@@ -621,24 +634,26 @@ public class ERXJDBCUtilities {
 	}
 
 	/**
-	 * Returns the name of the database product for the given channel (handy when loading database-vendor-specific sql
-	 * scripts in migrations).
+	 * Returns the name of the database product for the given channel (handy
+	 * when loading database-vendor-specific sql scripts in migrations).
 	 * 
 	 * @param channel
 	 *            the channel
-	 * @return the database the database product name ("FrontBase", "PostgreSQL")
+	 * @return the database the database product name ("FrontBase",
+	 *         "PostgreSQL")
 	 */
 	public static String databaseProductName(EOAdaptorChannel channel) {
 		return ((JDBCAdaptor) channel.adaptorContext().adaptor()).plugIn().databaseProductName();
 	}
 
 	/**
-	 * Returns the name of the database product for the given an eomodel (handy when loading database-vendor-specific
-	 * sql scripts in migrations).
+	 * Returns the name of the database product for the given an eomodel (handy
+	 * when loading database-vendor-specific sql scripts in migrations).
 	 * 
 	 * @param model
 	 *            the EOModel
-	 * @return the database the database product name ("FrontBase", "PostgreSQL")
+	 * @return the database the database product name ("FrontBase",
+	 *         "PostgreSQL")
 	 */
 	public static String databaseProductName(EOModel model) {
 		EODatabaseContext databaseContext = EODatabaseContext.registeredDatabaseContextForModel(model, ERXEC.newEditingContext());
@@ -651,5 +666,70 @@ public class ERXJDBCUtilities {
 			databaseProductName = adaptor.name();
 		}
 		return databaseProductName;
+	}
+
+	/**
+	 * Using the backing connection from the adaptor context, executes the given
+	 * query and calls processor.process(rs) for each row of the ResultSet. This
+	 * can be useful for more complicated migrations. This handles properly
+	 * closing all the underlying JDBC resources.
+	 * 
+	 * @param adaptorChannel
+	 *            the adaptor channel
+	 * @param query
+	 *            the query to execute
+	 * @param processor
+	 *            the processor delegate
+	 * @throws Exception
+	 *             if something goes wrong
+	 */
+	public static void processResultSet(EOAdaptorChannel adaptorChannel, String query, IResultSetDelegate processor) throws Exception {
+		boolean wasOpen = adaptorChannel.isOpen();
+		if (!wasOpen) {
+			adaptorChannel.openChannel();
+		}
+		try {
+			Connection conn = ((JDBCContext) adaptorChannel.adaptorContext()).connection();
+			Statement stmt = conn.createStatement();
+			try {
+				ResultSet rs = stmt.executeQuery(query);
+				try {
+					while (rs.next()) {
+						processor.processRow(rs);
+					}
+				}
+				finally {
+					rs.close();
+				}
+			}
+			finally {
+				stmt.close();
+			}
+		}
+		finally {
+			if (!wasOpen) {
+				adaptorChannel.closeChannel();
+			}
+		}
+
+	}
+
+	/**
+	 * IResultSetDelegate is used by ERXJDBCUtilities.processResultSet for
+	 * callbacks.
+	 * 
+	 * @author mschrag
+	 */
+	public static interface IResultSetDelegate {
+		/**
+		 * For each row in the ResultSet, this method is called to give you the
+		 * opportunity to process the row.
+		 * 
+		 * @param rs
+		 *            the ResultSet (pointing to the current row)
+		 * @throws Exception
+		 *             if something goes wrong
+		 */
+		public void processRow(ResultSet rs) throws Exception;
 	}
 }
