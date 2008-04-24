@@ -22,7 +22,7 @@
         {
             columnName = DESCRIPTION; 
             name = textDescription; 
-            prototypeName = longText; 
+            prototypeName = varchar1000; 
             userInfo = {modificationDate = "2002-05-06 07:27:37 +0200"; }; 
         }
     ); 
