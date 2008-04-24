@@ -52,9 +52,7 @@ public class DerbyPlugIn extends JDBCPlugIn {
 
         @Override
         public NSArray foreignKeyConstraintStatementsForRelationship(EORelationship aArg0) {
-            // AK: I currently have some probs with it...
-            return NSArray.EmptyArray;
-            //return super.foreignKeyConstraintStatementsForRelationship(aArg0);
+            return super.foreignKeyConstraintStatementsForRelationship(aArg0);
         }
         
         public boolean supportsSchemaSynchronization() {
