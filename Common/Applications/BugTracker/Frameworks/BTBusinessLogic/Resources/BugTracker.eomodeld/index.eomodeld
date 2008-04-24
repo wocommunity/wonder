@@ -19,6 +19,4 @@
         {className = EOGenericRecord; name = XBugTestItem; }, 
         {className = EOGenericRecord; name = XRequirementTestItem; }
     ); 
-    entitiesWithSharedObjects = (Priority, RequirementSubType, RequirementType, TestItemState); 
-    internalInfo = {"_deletedEntityNamesInObjectStore" = (Comment, Component); }; 
 }
