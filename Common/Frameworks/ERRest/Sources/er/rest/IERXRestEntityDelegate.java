@@ -20,10 +20,11 @@ import com.webobjects.foundation.NSArray;
  */
 public interface IERXRestEntityDelegate {
 	/**
-	 * Called by the rest delegate for each entity that gets requested.  This is called every time,
-	 * so your entity delegate should manage only executing one time if necessary.
-	 *  
-	 * @param entityName the name of the entity to initialize
+	 * Called by the rest delegate for each entity that gets requested. This is called every time, so your entity
+	 * delegate should manage only executing one time if necessary.
+	 * 
+	 * @param entityName
+	 *            the name of the entity to initialize
 	 */
 	public void initializeEntityNamed(String entityName);
 
@@ -111,6 +112,25 @@ public interface IERXRestEntityDelegate {
 	public EOEnterpriseObject objectWithKey(EOEntity entity, String key, NSArray objs, ERXRestContext context) throws ERXRestException, ERXRestSecurityException, ERXRestNotFoundException;
 
 	/**
+	 * Returns the object that is associated with the given node.
+	 * 
+	 * @param entity
+	 *            the entity
+	 * @param node
+	 *            the node that represents the object
+	 * @param context
+	 *            the rest context
+	 * @return the matching object
+	 * @throws ERXRestException
+	 *             if a general failure occurs
+	 * @throws ERXRestNotFoundException
+	 *             if there is no object with the given key
+	 * @throws ERXRestSecurityException
+	 *             if the caller is not permitted to view the requested object
+	 */
+	public EOEnterpriseObject objectForNode(EOEntity entity, ERXRestRequestNode node, ERXRestContext context) throws ERXRestException, ERXRestNotFoundException, ERXRestSecurityException;
+
+	/**
 	 * Returns the value for the specified property name on the given object. This method does not need to deal with
 	 * security issues.
 	 * 
@@ -149,8 +169,7 @@ public interface IERXRestEntityDelegate {
 	public void takeValueForKey(EOEntity entity, Object obj, String propertyName, String value, ERXRestContext context) throws ParseException, ERXRestException;
 
 	/**
-	 * Deletes the given object. canDeleteObject has already been called by the time this method is called, so the only
-	 * security checks that need to to happen are ones that might not have been known when canDeleteObject was called.
+	 * Deletes the given object.
 	 * 
 	 * @param entity
 	 *            the entity of the object
@@ -166,13 +185,14 @@ public interface IERXRestEntityDelegate {
 	public void delete(EOEntity entity, EOEnterpriseObject eo, ERXRestContext context) throws ERXRestException, ERXRestSecurityException;
 
 	/**
-	 * Insert a new object of the given type into a parent object's keypath from an XML document. canInsertObject has
-	 * already been called by this time.
+	 * Insert a new object of the given type into a parent object's keypath from an XML document.
 	 * 
 	 * @param entity
 	 *            the entity of the object to insert
 	 * @param insertNode
 	 *            the node that describes the insert
+	 * @param parentEntity
+	 *            the entity of the parent object to insert into
 	 * @param parentObject
 	 *            the parent object of the insert
 	 * @param parentKey
@@ -187,12 +207,11 @@ public interface IERXRestEntityDelegate {
 	 * @throws ERXRestNotFoundException
 	 *             if a related object cannot be found
 	 */
-	public EOEnterpriseObject insertObjectFromDocument(EOEntity entity, ERXRestRequestNode insertNode, EOEnterpriseObject parentObject, String parentKey, ERXRestContext context) throws ERXRestSecurityException, ERXRestException, ERXRestNotFoundException;
+	public EOEnterpriseObject insertObjectFromDocument(EOEntity entity, ERXRestRequestNode insertNode, EOEntity parentEntity, EOEnterpriseObject parentObject, String parentKey, ERXRestContext context) throws ERXRestSecurityException, ERXRestException, ERXRestNotFoundException;
 
 	/**
-	 * Updates an array of objects for a to-many relationship from an XML document. canUpdateObject has already been
-	 * called on the parent object by this time. This method is responsible for deleting and inserting objects into the
-	 * specified relationship.
+	 * Updates an array of objects for a to-many relationship from an XML document. This method is responsible for
+	 * deleting and inserting objects into the specified relationship.
 	 * 
 	 * @param parentEntity
 	 *            the entity of the parent object
@@ -218,7 +237,7 @@ public interface IERXRestEntityDelegate {
 	public void updateArrayFromDocument(EOEntity parentEntity, EOEnterpriseObject parentObject, String attributeName, EOEntity entity, NSArray currentObjects, NSArray toManyNodes, ERXRestContext context) throws ERXRestException, ERXRestNotFoundException, ERXRestSecurityException;
 
 	/**
-	 * Updates an existing object from an XML document. canUpdateObject has already been called by this time.
+	 * Updates an existing object from an XML document.
 	 * 
 	 * @param entity
 	 *            the entity of the object to update
@@ -446,4 +465,31 @@ public interface IERXRestEntityDelegate {
 	 * @return the destination entity for the given key (or null if there isn't one)
 	 */
 	public EOEntity nextEntity(EOEntity entity, String key);
+	
+	/**
+	 * Returns whether or not the given key value is the primary key of
+	 * an EO.  This is crazy -- It tries to guess if it's looking at
+	 * a key or not.
+	 * 
+	 * @param restKey the possible EO key
+         *
+	 * @return true if key is a primary key
+	 */
+	public boolean isEOID(ERXRestKey restKey);
+	
+	/**
+	 * Returns the string form of the primary key of the given EO.
+	 * 
+	 * @param eo the EO to get a primary key for
+	 * @return the primary key
+	 */
+	public String stringIDForEO(EOEntity entity, EOEnterpriseObject eo);
+	
+	/**
+	 * Returns the primary key of the given EO.
+	 * 
+	 * @param eo the EO to get a primary key for
+	 * @return the primary key
+	 */
+	public Object idForEO(EOEntity entity, EOEnterpriseObject eo);
 }

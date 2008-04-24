@@ -177,6 +177,16 @@ public abstract class ERXStandardRestEntityDelegate extends ERXAbstractRestEntit
 	public ERXStandardRestEntityDelegate(String entityName) {
 		this(entityName, true);
 	}
+	
+	@Override
+	public boolean isUUIDIDs(EOEntity entity) {
+		return ERXProperties.booleanForKey(ERXXmlRestResponseWriter.REST_PREFIX + entity.name() + ".uuid");
+	}
+	
+	@Override
+	protected String idAttributeName(EOEntity entity) {
+		return ERXProperties.stringForKey(ERXXmlRestResponseWriter.REST_PREFIX + entity.name() + ".id");
+	}
 
 	/**
 	 * Returns the entity alias for the given entity name.  This looks in the

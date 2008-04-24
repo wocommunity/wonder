@@ -90,7 +90,8 @@ public class ERXRestKey {
 		ERXRestKey trimmedKey = cloneKey(false);
 		trimmedKey._entity = nextEntity();
 		if (value instanceof EOEnterpriseObject) {
-			trimmedKey._key = ERXRestUtils.stringIDForEO((EOEnterpriseObject) value);
+			IERXRestEntityDelegate entityDelegate = _context.delegate().entityDelegate(trimmedKey._entity);
+			trimmedKey._key =  entityDelegate.stringIDForEO(trimmedKey._entity, (EOEnterpriseObject) value);
 		}
 		else {
 			trimmedKey._key = null;
@@ -451,7 +452,12 @@ public class ERXRestKey {
 	 * @return whether or not this key requests a primary key
 	 */
 	public boolean isKeyGID() {
-		return ERXRestUtils.isEOID(this);
+		return _context.delegate().entityDelegate(_entity).isEOID(this);
+	}
+	
+	@Override
+	public String toString() {
+		return "[ERXRestKey: entity = " + _entity + "; key = " + _key + "]";
 	}
 
 	/**
