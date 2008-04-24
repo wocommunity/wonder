@@ -37,7 +37,7 @@ public interface IERXChainableQualifier {
 	 * @return an ERXNotQualifier
 	 */
 	public ERXNotQualifier not();
-	
+
 	/**
 	 * Equivalent to EOQualifier.filteredArrayWithQualifier(NSArray,
 	 * EOQualifier)
@@ -62,4 +62,33 @@ public interface IERXChainableQualifier {
 	 *            the qualifier to filter with
 	 */
 	public void filter(NSMutableArray<?> array);
+
+	/**
+	 * Equivalent to EOQualifier.one(NSMutableArray, EOQualfier)
+	 * 
+	 * @param <T>
+	 *            the type of the array
+	 * @param array
+	 *            the array to filter (in place)
+	 * @param qualifier
+	 *            the qualifier to filter with
+	 * @return one matching object or null
+	 * @throw IllegalStateException if more than one object matched
+	 */
+	public <T> T one(NSArray<T> array);
+
+	/**
+	 * Equivalent to EOQualifier.requiredOne(NSArray, EOQualfier)
+	 * 
+	 * @param <T>
+	 *            the type of the array
+	 * @param array
+	 *            the array to filter (in place)
+	 * @param qualifier
+	 *            the qualifier to filter with
+	 * @return one matching object
+	 * @throw IllegalStateException if more than one object matched
+	 * @throw NoSuchElementException if no objects matched
+	 */
+	public <T> T requiredOne(NSArray<T> array);
 }

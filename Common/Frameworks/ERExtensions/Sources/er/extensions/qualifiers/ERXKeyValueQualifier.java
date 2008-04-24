@@ -35,12 +35,20 @@ public class ERXKeyValueQualifier extends EOKeyValueQualifier implements IERXCha
 	public ERXOrQualifier or(EOQualifier... qualifiers) {
 		return ERXChainedQualifierUtils.or(this, qualifiers);
 	}
-	
+
 	public void filter(NSMutableArray<?> array) {
 		ERXQ.filter(array, this);
 	}
-	
+
 	public <T> NSArray<T> filtered(NSArray<T> array) {
 		return ERXQ.filtered(array, this);
+	}
+
+	public <T> T one(NSArray<T> array) {
+		return ERXQ.one(array, this);
+	}
+
+	public <T> T requiredOne(NSArray<T> array) {
+		return ERXQ.requiredOne(array, this);
 	}
 }

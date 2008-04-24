@@ -96,6 +96,7 @@ public class ERXQualifierTraversal {
 	 * @param q
 	 * @return
 	 */
+	@SuppressWarnings("cast")
 	private boolean traverseQualifier(EOQualifierEvaluation q) {
 		Boolean result = null;
 		if (q == null)
