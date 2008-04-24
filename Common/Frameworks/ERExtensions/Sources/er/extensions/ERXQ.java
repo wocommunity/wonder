@@ -1,6 +1,7 @@
 package er.extensions;
 
 import java.util.Enumeration;
+import java.util.NoSuchElementException;
 
 import com.webobjects.eocontrol.EOKeyValueQualifier;
 import com.webobjects.eocontrol.EOQualifier;
@@ -110,6 +111,62 @@ public class ERXQ {
 	}
 
 	/**
+	 * Returns the one object that matches the qualifier in the given array (or
+	 * null if there is no match).
+	 * 
+	 * @param <T>
+	 *            the type of the objects
+	 * @param array
+	 *            the array to filter
+	 * @param qualifier
+	 *            the qualifier to filter on
+	 * @return one matching object or null
+	 * @throw IllegalStateException if more than one object matched
+	 */
+	public static <T> T one(NSArray<T> array, EOQualifier qualifier) {
+		T object;
+		if (array == null) {
+			object = null;
+		}
+		else {
+			NSArray<T> objects = ERXQ.filtered(array, qualifier);
+			int count = objects.count();
+			if (count == 0) {
+				object = null;
+			}
+			else if (count == 1) {
+				object = objects.lastObject();
+			}
+			else {
+				throw new IllegalStateException("There was more than one object that matched the qualifier '" + qualifier + "'.");
+			}
+		}
+		return object;
+	}
+
+	/**
+	 * Returns the one object that matches the qualifier in the given array (or
+	 * throws if there is no match).
+	 * 
+	 * @param <T>
+	 *            the type of the objects
+	 * @param array
+	 *            the array to filter
+	 * @param qualifier
+	 *            the qualifier to filter on
+	 * @return one matching object
+	 * @throw IllegalStateException if more than one object matched
+	 * @throw NoSuchElementException if no objects matched
+	 */
+	public static <T> T requiredOne(NSArray<T> array, EOQualifier qualifier) {
+		T object = ERXQ.one(array, qualifier);
+		if (object == null) {
+			throw new NoSuchElementException("There was no object that matched the qualifier '" + qualifier + "'.");
+		}
+		return object;
+	}
+
+	/**
 	 * Equivalent to new ERXOrQualifier(new NSArray(qualifiersArray). Nulls are
 	 * skipped.
 	 * 
@@ -185,6 +242,20 @@ public class ERXQ {
 	 */
 	public static ERXKeyValueQualifier equals(String key, Object value) {
 		return new ERXKeyValueQualifier(key, ERXQ.EQ, value);
+	}
+
+	/**
+	 * Equivalent to new ERXKeyValueQualifier(key,
+	 * EOQualifier.QualifierOperatorEqual, value);
+	 * 
+	 * @param key
+	 *            the key
+	 * @param value
+	 *            the value
+	 * @return an EOKeyValueQualifier
+	 */
+	public static ERXKeyValueQualifier is(String key, Object value) {
+		return ERXQ.equals(key, value);
 	}
 
 	/**

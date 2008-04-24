@@ -1,6 +1,5 @@
 package er.extensions;
 
-import com.webobjects.eoaccess.EOStoredProcedure;
 import com.webobjects.eocontrol.EOQualifier;
 import com.webobjects.eocontrol.EOSortOrdering;
 import com.webobjects.foundation.NSArray;
@@ -564,6 +563,7 @@ public class ERXKey<T> {
 	 * @param obj the target object to apply this keypath on
 	 * @return the value of the keypath on the target object
 	 */
+	@SuppressWarnings("unchecked")
 	public NSArray<T> arrayValueInObject(Object obj) {
 		return (NSArray<T>)rawValueInObject(obj);
 	}
