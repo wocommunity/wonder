@@ -40,7 +40,11 @@ Dump: WOHyperlink {
 	directActionName = "dumpCreatedKeys";
 	class = ^linkClass;
 }
-Edit: WOHyperlink {
+WOStats: WOHyperlink {
+	action = statisticsPage;
+	class = ^linkClass;
+}
+Localization: WOHyperlink {
 	actionClass = "er.extensions.ERXDirectAction";
 	directActionName = "editLocalizedFiles";
 	class = ^linkClass;
