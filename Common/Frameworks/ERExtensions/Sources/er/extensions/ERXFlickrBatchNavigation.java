@@ -364,7 +364,7 @@ public class ERXFlickrBatchNavigation extends ERXComponent {
 		if(booleanValueForBinding("showBatchSizes") || valueForBinding("batchSizes") != null) {
 			return true;
 		}
-		return true;
+		return false;
 	}
 	
 	public NSArray<Number> possibleBatchSizes() {
