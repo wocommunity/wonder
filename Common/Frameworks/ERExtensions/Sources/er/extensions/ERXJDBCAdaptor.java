@@ -171,10 +171,11 @@ public class ERXJDBCAdaptor extends JDBCAdaptor {
 		public NSArray primaryKeysForNewRowsWithEntity(int cnt, EOEntity entity) {
 			if (defaultBatchSize > 0) {
 				synchronized (pkCache) {
-					NSMutableArray pks = pkCache.objectForKey(entity.name());
+					String key = entity.primaryKeyRootName();
+					NSMutableArray pks = pkCache.objectForKey(key);
 					if (pks == null) {
 						pks = new NSMutableArray();
-						pkCache.setObjectForKey(pks, entity.name());
+						pkCache.setObjectForKey(pks, key);
 					}
 					if (pks.count() < cnt) {
 						Object batchSize = (String) (entity.userInfo() != null ? entity.userInfo().objectForKey("ERXPrimaryKeyBatchSize") : null);
@@ -188,12 +189,12 @@ public class ERXJDBCAdaptor extends JDBCAdaptor {
 						if (batchSize != null) {
 							size = ERXValueUtilities.intValue(batchSize);
 						}
-						pks.addObjectsFromArray(_plugIn().newPrimaryKeys((size - pks.count()) + cnt, entity, this));
+						pks.addObjectsFromArray(_plugIn().newPrimaryKeys(size + cnt, entity, this));
 					}
 					NSMutableArray batch = new NSMutableArray();
 					for (Iterator iterator = pks.iterator(); iterator.hasNext() && --cnt >= 0;) {
-						Object key = (Object) iterator.next();
-						batch.addObject(key);
+						Object pk = (Object) iterator.next();
+						batch.addObject(pk);
 						iterator.remove();
 					}
 					return batch;
