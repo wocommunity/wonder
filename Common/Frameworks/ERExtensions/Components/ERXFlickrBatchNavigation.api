@@ -31,5 +31,7 @@
         <binding name="parentActionName"/>
         <binding name="maxNumberOfObjects"/>
         <binding name="numberOfObjectsPerBatch"/>
+    <binding defaults="Boolean" name="showBatchSizes"/>
+        <binding name="batchSizes"/>
     </wo>
 </wodefinitions>
