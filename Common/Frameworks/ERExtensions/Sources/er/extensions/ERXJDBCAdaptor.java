@@ -2,6 +2,7 @@ package er.extensions;
 
 import java.lang.reflect.Field;
 import java.sql.Connection;
+import java.util.Iterator;
 
 import org.apache.log4j.Logger;
 
@@ -14,17 +15,22 @@ import com.webobjects.eoaccess.EOGeneralAdaptorException;
 import com.webobjects.eocontrol.EOFetchSpecification;
 import com.webobjects.foundation.NSArray;
 import com.webobjects.foundation.NSDictionary;
+import com.webobjects.foundation.NSMutableArray;
+import com.webobjects.foundation.NSMutableDictionary;
 import com.webobjects.jdbcadaptor.ERXJDBCColumn;
 import com.webobjects.jdbcadaptor.JDBCAdaptor;
 import com.webobjects.jdbcadaptor.JDBCAdaptorException;
 import com.webobjects.jdbcadaptor.JDBCChannel;
 import com.webobjects.jdbcadaptor.JDBCContext;
+import com.webobjects.jdbcadaptor.JDBCPlugIn;
 
 /**
- * Subclass of the JDBC adaptor and accompanying classes that supports connection pooling and posting of adaptor
- * operation notifications. Will get patched into the runtime via the usual class name magic if the property
- * <code>er.extensions.ERXJDBCAdaptor.className</code> is set to this class's name or another subclass of JDBCAdaptor.
- * The connection pooling will be enabled if the system property
+ * Subclass of the JDBC adaptor and accompanying classes that supports
+ * connection pooling and posting of adaptor operation notifications. Will get
+ * patched into the runtime via the usual class name magic if the property
+ * <code>er.extensions.ERXJDBCAdaptor.className</code> is set to this class's
+ * name or another subclass of JDBCAdaptor. The connection pooling will be
+ * enabled if the system property
  * <code>er.extensions.ERXJDBCAdaptor.useConnectionBroker</code> is set.
  * 
  * @author ak
@@ -33,10 +39,11 @@ import com.webobjects.jdbcadaptor.JDBCContext;
 public class ERXJDBCAdaptor extends JDBCAdaptor {
 
 	public static interface ConnectionBroker {
-		   public void freeConnection(Connection conn);
-		   public Connection getConnection();
+		public void freeConnection(Connection conn);
+
+		public Connection getConnection();
 	}
-	
+
 	public static final Logger log = Logger.getLogger(ERXJDBCAdaptor.class);
 
 	public static final String USE_CONNECTION_BROKER_KEY = "er.extensions.ERXJDBCAdaptor.useConnectionBroker";
@@ -146,6 +153,54 @@ public class ERXJDBCAdaptor extends JDBCAdaptor {
 			ERXAdaptorOperationWrapper.adaptorOperationsDidPerform(ops);
 		}
 
+		private JDBCPlugIn _plugIn() {
+			JDBCAdaptor jdbcadaptor = (JDBCAdaptor) adaptorContext().adaptor();
+			return jdbcadaptor.plugIn();
+		}
+
+		private static NSMutableDictionary<String, NSMutableArray> pkCache = new NSMutableDictionary<String, NSMutableArray>();
+		private int defaultBatchSize = ERXProperties.intForKeyWithDefault("er.extensions.ERXPrimaryKeyBatchSize", -1);
+		
+		/**
+		 * Batch-fetches new primary keys. Set the property
+		 * <code> er.extensions.ERXPrimaryKeyBatchSize</code> to a number
+		 * larger than 0. Also, you can fine-tune the size by adding a key
+		 * <code>ERXPrimaryKeyBatchSize</code> to your model or entity user
+		 * info.
+		 */
+		public NSArray primaryKeysForNewRowsWithEntity(int cnt, EOEntity entity) {
+			if (defaultBatchSize > 0) {
+				synchronized (pkCache) {
+					NSMutableArray pks = pkCache.objectForKey(entity.name());
+					if (pks == null) {
+						pks = new NSMutableArray();
+						pkCache.setObjectForKey(pks, entity.name());
+					}
+					if (pks.count() < cnt) {
+						Object batchSize = (String) (entity.userInfo() != null ? entity.userInfo().objectForKey("ERXPrimaryKeyBatchSize") : null);
+						if (batchSize == null) {
+							batchSize = (String) (entity.model().userInfo() != null ? entity.model().userInfo().objectForKey("ERXPrimaryKeyBatchSize") : null);
+						}
+						if (batchSize == null) {
+							batchSize = ERXProperties.stringForKey("er.extensions.ERXPrimaryKeyBatchSize");
+						}
+						int size = defaultBatchSize;
+						if (batchSize != null) {
+							size = ERXValueUtilities.intValue(batchSize);
+						}
+						pks.addObjectsFromArray(_plugIn().newPrimaryKeys((size - pks.count()) + cnt, entity, this));
+					}
+					NSMutableArray batch = new NSMutableArray();
+					for (Iterator iterator = pks.iterator(); iterator.hasNext() && --cnt >= 0;) {
+						Object key = (Object) iterator.next();
+						batch.addObject(key);
+						iterator.remove();
+					}
+					return batch;
+				}
+			}
+			return _plugIn().newPrimaryKeys(cnt, entity, this);
+		}
 	}
 
 	/**
