@@ -179,11 +179,6 @@ public abstract class ERXStandardRestEntityDelegate extends ERXAbstractRestEntit
 	}
 	
 	@Override
-	public boolean isUUIDIDs(EOEntity entity) {
-		return ERXProperties.booleanForKey(ERXXmlRestResponseWriter.REST_PREFIX + entity.name() + ".uuid");
-	}
-	
-	@Override
 	protected String idAttributeName(EOEntity entity) {
 		return ERXProperties.stringForKey(ERXXmlRestResponseWriter.REST_PREFIX + entity.name() + ".id");
 	}
