@@ -79,9 +79,45 @@
 	text-decoration: none;
 }
 
-.paginatorContainer div.paginatorResults {
+.paginatorContainer .paginatorResults {
 	text-align: center;
 	font: 11px/15px Arial, Helvetica;
 	color: rgb(160, 160, 160);
 	margin-top: 8px; 
+}
+
+.paginatorContainer .paginatorBatchSizes {
+	text-align: center;
+	font: 11px/15px Arial, Helvetica;
+	margin-top: 8px; 
+}
+
+.paginatorBatchSizeList {
+	font-weight: bold;
+}
+
+.paginatorBatchSizes a {
+	color: rgb(50, 50, 150);
+	padding: 2px 6px;
+	border: solid 1px rgb(208, 208, 208);
+	background: rgb(255, 255, 255);
+	font-weight: plain;
+	text-decoration: none;
+}
+
+.paginatorBatchSizes a:hover {
+	color: rgb(255, 255, 255);
+	background: rgb(50, 50, 150);
+	border-color: rgb(0, 48, 96);
+	text-decoration: none;
+}
+
+.paginatorBatchSizes .paginatorCurrentPage {
+	padding: 2px 6px;
+	border: 1px solid rgb(144, 144, 144);
+	font-weight: bold;
+	font-size: 13px;
+	vertical-align: top;
+	background: rgb(255, 255, 255);
+	color: rgb(50, 50, 150);
 }

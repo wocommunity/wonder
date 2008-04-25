@@ -3,7 +3,6 @@ package er.extensions;
 
 
 import com.webobjects.appserver.WOActionResults;
-import com.webobjects.appserver.WOComponent;
 import com.webobjects.appserver.WOContext;
 import com.webobjects.appserver.WODisplayGroup;
 import com.webobjects.foundation.NSArray;
@@ -28,6 +27,8 @@ import com.webobjects.foundation.NSMutableArray;
  * @binding displayGroup the display group to paginate
  * @binding displayName the name of the items that are being display ("photo", "bug", etc)
  * @binding showPageRange if true, the page of items on the page is shown, for example "(1-7 of 200 items)"
+ * @binding showBatchSizes if true, a menu to change the items per page is shown "Show: (10) 20 (100) (All) items per page"
+ * @binding batchSizes can be either a string or an NSArray of numbers that define the batch sizes to chose from.
  * @binding small if true, a compressed page count style is used 
  * 
  * @binding parentActionName (if you don't provide a displayGroup) the action to be executed on the parent component to get the next batch of items.
@@ -35,12 +36,14 @@ import com.webobjects.foundation.NSMutableArray;
  * @binding maxNumberOfObjects (if you don't provide a displayGroup) used to get the total number of objects that are being paginated.
  * @binding numberOfObjectsPerBatch (if you don't provide a displayGroup) the number of objects per batch (page)
  */
-public class ERXFlickrBatchNavigation extends WOComponent {
+public class ERXFlickrBatchNavigation extends ERXComponent {
 	private int _lastPageCount;
 	private int _lastPageSize;
 	private int _lastCurrentPageNumber;
 	private NSMutableArray<PageNumber> _pageNumbers;
 	private PageNumber _repetitionPageNumber; 
+	
+	public Integer currentBatchSize;
 	
 	//Note: Lazily Cached
 	private String _parentActionName;
@@ -83,9 +86,25 @@ public class ERXFlickrBatchNavigation extends WOComponent {
 	}
 	
 	public boolean hasMultiplePages() {
-		return batchCount() > 1;
+		if(batchCount() > 1) {
+			return true;
+		}
+		if(showBatchSizes() && possibleBatchSizes().objectAtIndex(0).intValue() < displayNameCount()) {
+			return true;
+		}
+		return false;
 	}
-		
+	
+	public boolean showLabels() {
+		if(batchCount() > 1) {
+			return true;
+		}
+		if(showBatchSizes()) {
+			return batchSize() != 0;
+		}
+		return false;
+	}
+
 	public boolean hasPreviousPage() {
 		return currentBatchIndex() > 1;
 	}
@@ -143,6 +162,9 @@ public class ERXFlickrBatchNavigation extends WOComponent {
 
 	public String displayName() {
 		String displayName = (String) valueForBinding("displayName");
+		if (displayName == null) {
+			displayName = (String) valueForBinding("objectName");
+		}
 		if (displayName == null) {
 			displayName = ERXLocalizer.currentLocalizer().localizedStringForKey("ERXFlickrBatchNavigation.item");
 		}
@@ -336,5 +358,54 @@ public class ERXFlickrBatchNavigation extends WOComponent {
 			lastIndex = currentBatchIndex * numberOfObjectsPerBatch;
 		}
 		return lastIndex;
+	}
+	
+	public boolean showBatchSizes() {
+		if(booleanValueForBinding("showBatchSizes") || valueForBinding("batchSizes") != null) {
+			return true;
+		}
+		return true;
+	}
+	
+	public NSArray<Number> possibleBatchSizes() {
+		Object value = valueForBinding("batchSizes");
+		if(value == null) {
+			return new NSArray(new Object[] {10, 50, 100, 0});
+		}
+		NSMutableArray result = new NSMutableArray();
+		if (value instanceof String) {
+			String[] parts = value.toString().split("\\s*,");
+			for (int i = 0; i < parts.length; i++) {
+				String part = parts[i];
+				result.addObject(Integer.valueOf(part));
+			}
+		} else if (value instanceof NSArray) {
+			result.addObjectsFromArray((NSArray)value);
+		}
+		result.addObject(new Integer(0));
+		return result;
+	}
+
+	public int batchSize() {
+		if(displayGroup() == null) {
+			return 0;
+		}
+		return displayGroup().numberOfObjectsPerBatch() ;
+	}
+	
+	public String currentBatchSizeString() {
+		return currentBatchSize == 0 ? ERXLocalizer.currentLocalizer().localizedStringForKeyWithDefault("ERXFlickrBatchNavigation.all") :  (currentBatchSize + "");
+	}
+	
+	public boolean isCurrentBatchSizeSelected() {
+		if(currentBatchSize == null) {
+			return batchSize() == 0;
+		}
+		return currentBatchSize.equals(batchSize());
+	}
+	
+	public WOActionResults selectBatchSize() {
+		displayGroup().setNumberOfObjectsPerBatch(currentBatchSize);
+		return context().page();
 	}
 }

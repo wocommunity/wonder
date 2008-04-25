@@ -12,4 +12,7 @@
    	"ERXFlickrBatchNavigation.previous" = " Prev";
    	"ERXFlickrBatchNavigation.next" = "Next ";
    	"ERXFlickrBatchNavigation.item" = "item";
+	"ERXFlickrBatchNavigation.page" = "per Page";
+	"ERXFlickrBatchNavigation.show" = "Show: ";
+	"ERXFlickrBatchNavigation.all" = "All";
 }

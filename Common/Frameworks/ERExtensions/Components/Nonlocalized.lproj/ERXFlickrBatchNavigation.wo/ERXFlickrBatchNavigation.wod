@@ -25,6 +25,13 @@ PreviousLabel : ERXLocalizedString {
 	value = "ERXFlickrBatchNavigation.previous";
 }
 
+ShowLabel : ERXLocalizedString {
+	value = "ERXFlickrBatchNavigation.show";
+}
+
+PerPageLabel : ERXLocalizedString {
+	value = "ERXFlickrBatchNavigation.page";
+}
 HasNextPageConditional : WOConditional {
 	condition = hasNextPage;
 }
@@ -81,7 +88,33 @@ LastIndex : WOString {
 	value = lastIndex;
 }
 
+ShowLabels : WOConditional {
+	condition = showLabels;
+}
+
 DisplayName : ERXPluralString {
 	count = displayNameCount;
 	value = displayName;
+}
+
+
+DisplayName2 : ERXPluralString {
+	count = displayNameCount;
+	value = displayName;
+	showNumber = false;
+}
+
+BatchSizes : WORepetition {
+	list = possibleBatchSizes;
+	item = currentBatchSize;
+}
+
+SelectBatchSize : WOHyperlink {
+	action = selectBatchSize;
+	string = currentBatchSizeString;
+	disabled = isCurrentBatchSizeSelected;
+}
+
+ShowBatchSizes : WOConditional {
+  condition = showBatchSizes;
 }
