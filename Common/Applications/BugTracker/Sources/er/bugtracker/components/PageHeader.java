@@ -38,7 +38,7 @@ public class PageHeader extends ERDCustomComponent {
     
     private Object tolerantValueForKeyPath(String key) {
         if (parent() instanceof ERD2WPage) {
-            ERD2WListPage page = (ERD2WListPage) parent();
+            ERD2WPage page = (ERD2WPage) parent();
             return parent().valueForKeyPath(key);
         }        
         return null;
