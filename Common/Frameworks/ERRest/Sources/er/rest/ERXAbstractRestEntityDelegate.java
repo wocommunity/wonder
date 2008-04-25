@@ -145,18 +145,8 @@ public abstract class ERXAbstractRestEntityDelegate implements IERXRestEntityDel
 		return null;
 	}
 	
-	public boolean isUUIDIDs(EOEntity entity) {
-		return false;
-	}
-	
 	protected boolean _isEOID(EOEntity entity, String key) {
-		boolean isID;
-		if (isUUIDIDs(entity)) {
-			isID = key.length() == 36 && key.split("-").length == 5;
-		}
-		else {
-			isID = ERXStringUtilities.isDigitsOnly(key);
-		}
+		boolean isID = !entity._propertyNames().containsObject(key);
 		return isID;
 	}
 
