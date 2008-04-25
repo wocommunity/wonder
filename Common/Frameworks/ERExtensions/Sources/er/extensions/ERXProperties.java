@@ -865,6 +865,13 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
             }
         }
 
+        /** /etc/WebObjects/AppName/Properties -- per-Application-per-Machine properties */
+        String applicationMachinePropertiesPath = ERXProperties.applicationMachinePropertiesPath("Properties");
+        if (applicationMachinePropertiesPath != null) {
+           projectsInfo.addObject("Application " + mainBundleName + "/Application-Machine Properties: " + aPropertiesPath);
+           propertiesPaths.addObject(applicationMachinePropertiesPath);
+        }
+
         /** Properties.<userName> -- per-Application-per-User properties */
         String applicationUserPropertiesPath = ERXProperties.applicationUserProperties();
         if (applicationUserPropertiesPath != null) {
@@ -948,6 +955,32 @@ public class ERXProperties extends Properties implements NSKeyValueCoding {
             }
         }
         return applicationUserPropertiesPath;
+    }
+    
+    /**
+     * Returns the path to the application-specific system-wide file "fileName".  By default this path is /etc/WebObjects, 
+     * and the application name will be appended.  For instance, if you are asking for the MyApp Properties file for the
+     * system, it would go in /etc/WebObjects/MyApp/Properties.
+     * 
+     * @return the path, or null if the path does not exist
+     */
+    public static String applicationMachinePropertiesPath(String fileName) {
+    	String applicationMachinePropertiesPath = null;
+    	String machinePropertiesPath = ERXSystem.getProperty("er.extensions.ERXProperties.machinePropertiesPath", "/etc/WebObjects");
+    	WOApplication application = WOApplication.application();
+    	if (application != null) {
+    		String applicationName = application.name();
+    		File applicationPropertiesFile = new File(machinePropertiesPath + File.separator + applicationName + File.separator + fileName);
+    		if (applicationPropertiesFile.exists()) {
+    			try {
+    				applicationMachinePropertiesPath = applicationPropertiesFile.getCanonicalPath();
+    			}
+    			catch (IOException e) {
+    				ERXProperties.log.error("Failed to load machine Properties file '" + fileName + "'.", e);
+    			}
+    		}
+    	}
+        return applicationMachinePropertiesPath;
     }
 
     /**
