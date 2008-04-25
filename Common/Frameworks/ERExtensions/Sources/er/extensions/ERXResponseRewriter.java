@@ -34,6 +34,8 @@ public class ERXResponseRewriter {
 
 	private static final String TOP_INDEX_KEY = "ERXResponseRewriter.topIndex";
 
+	private static Map<WOComponent, NSMutableDictionary<String, Object>> _ajaxPageUserInfos;
+
 	private static Map<WOComponent, NSMutableDictionary<String, Object>> _pageUserInfos;
 	
 	/**
@@ -73,6 +75,7 @@ public class ERXResponseRewriter {
 
 	static {
 		ERXResponseRewriter._pageUserInfos = Collections.synchronizedMap(new WeakHashMap<WOComponent, NSMutableDictionary<String, Object>>());
+		ERXResponseRewriter._ajaxPageUserInfos = Collections.synchronizedMap(new WeakHashMap<WOComponent, NSMutableDictionary<String, Object>>());
 	}
 
 	/**
@@ -80,16 +83,16 @@ public class ERXResponseRewriter {
 	 * this is the first request for the page user info for a non-ajax request,
 	 * the user info will be cleared (so that reloading a page doesn't make the
 	 * system believe it has already rendered script and css tags, for
-	 * instance). This particular behavior may be restricted further at some
-	 * point (so that only certain keys exhibit this behavior).
+	 * instance). If you do not want this behavior, use pageUserInfo(WOContext)
+	 * instead.
 	 * 
 	 * @param context
 	 *            the context to lookup
 	 * @return the user info for the page component of the given context
 	 */
-	public static NSMutableDictionary<String, Object> pageUserInfo(WOContext context) {
+	public static NSMutableDictionary<String, Object> ajaxPageUserInfo(WOContext context) {
 		WOComponent page = context.page();
-		NSMutableDictionary<String, Object> pageInfo = ERXResponseRewriter._pageUserInfos.get(page);
+		NSMutableDictionary<String, Object> pageInfo = ERXResponseRewriter._ajaxPageUserInfos.get(page);
 		String contextID = context.contextID();
 		if (contextID == null) {
 			contextID = "none";
@@ -100,6 +103,25 @@ public class ERXResponseRewriter {
 		if (pageInfo == null) {
 			pageInfo = new NSMutableDictionary<String, Object>();
 			pageInfo.setObjectForKey(contextID, ERXResponseRewriter.ORIGINAL_CONTEXT_ID_KEY);
+			ERXResponseRewriter._ajaxPageUserInfos.put(page, pageInfo);
+		}
+		return pageInfo;
+	}
+
+	/**
+	 * Returns the page userInfo for the page component of the given context.  Unlike
+	 * ajaxPageUserInfo, information put into pageUserInfo will stay associated with
+	 * the page as long as the page exists.
+	 * 
+	 * @param context
+	 *            the context to lookup
+	 * @return the user info for the page component of the given context
+	 */
+	public static NSMutableDictionary<String, Object> pageUserInfo(WOContext context) {
+		WOComponent page = context.page();
+		NSMutableDictionary<String, Object> pageInfo = ERXResponseRewriter._pageUserInfos.get(page);
+		if (pageInfo == null) {
+			pageInfo = new NSMutableDictionary<String, Object>();
 			ERXResponseRewriter._pageUserInfos.put(page, pageInfo);
 		}
 		return pageInfo;
@@ -172,7 +194,7 @@ public class ERXResponseRewriter {
 			inserted = true;
 		}
 		else if (tagMissingBehavior == TagMissingBehavior.Top) {
-			NSMutableDictionary<String, Object> pageInfo = ERXResponseRewriter.pageUserInfo(context);
+			NSMutableDictionary<String, Object> pageInfo = ERXResponseRewriter.ajaxPageUserInfo(context);
 			Integer topIndex = (Integer) pageInfo.objectForKey(ERXResponseRewriter.TOP_INDEX_KEY);
 			if (topIndex == null) {
 				topIndex = Integer.valueOf(0);
@@ -356,7 +378,7 @@ public class ERXResponseRewriter {
 	 */
 	@SuppressWarnings("unchecked")
 	public static NSMutableSet<String> resourcesAddedToHead(WOContext context) {
-		NSMutableDictionary<String, Object> userInfo = ERXResponseRewriter.pageUserInfo(context);
+		NSMutableDictionary<String, Object> userInfo = ERXResponseRewriter.ajaxPageUserInfo(context);
 		NSMutableSet<String> addedResources = (NSMutableSet<String>) userInfo.objectForKey(ERXResponseRewriter.ADDED_RESOURCES_KEY);
 		if (addedResources == null) {
 			addedResources = new NSMutableSet<String>();
