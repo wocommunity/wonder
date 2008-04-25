@@ -11,4 +11,8 @@
 	"WOToOneRelationship.noneString" = "- none -";
 	"ERXFlickrBatchNavigation.previous" = " Zur\U00fcck";
    	"ERXFlickrBatchNavigation.next" = "Weiter ";
+   	"ERXFlickrBatchNavigation.item" = "item";
+	"ERXFlickrBatchNavigation.page" = "pro Seite";
+	"ERXFlickrBatchNavigation.show" = "Zeige: ";
+	"ERXFlickrBatchNavigation.all" = "Alle";
 }
