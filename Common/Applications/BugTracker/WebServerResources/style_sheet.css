@@ -420,7 +420,6 @@ H6
 	top: -4px;
 }
 .ActionCell {
-	background-color: #E7E7E7;
 	margin-bottom: 5px;
 	padding-bottom: 0px;
 	vertical-align: middle;
@@ -523,7 +522,11 @@ H6
 }
 
 .AttributeRow1 {
-	background-color: blue;
+	background-color: none;
+}
+
+.AttributeRow1 .ActionCell {
+	background-color: none;
 }
 
 button {
