@@ -29,11 +29,14 @@ public class ERCPreference extends _ERCPreference {
     public String userPresentableDescription() {
         return key() + ": " + decodedValue();
     }
-    
+
     protected Object decodedValue() {
         NSDictionary d = (NSDictionary )NSPropertyListSerialization.propertyListFromString(value());
-        EOKeyValueUnarchiver u = new EOKeyValueUnarchiver(d);
-        return u.decodeObjectForKey(VALUE);
+        if(d != null) {
+            EOKeyValueUnarchiver u = new EOKeyValueUnarchiver(d);
+            return u.decodeObjectForKey(VALUE);
+        }
+        return null;
     }    
 
     // Class methods go here
