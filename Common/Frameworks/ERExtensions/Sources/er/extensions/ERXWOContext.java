@@ -308,6 +308,40 @@ public class ERXWOContext extends ERXAjaxContext implements ERXMutableUserInfoHo
 		ERXResponseRewriter.addResourceInHead(response, context, framework, fileName, startTag, endTag, tagMissingBehavior);
 	}
 
+	private static final String SAFE_IDENTIFIER_NAME_KEY = "ERXWOContext.safeIdentifierName";
+	/**
+	 * Returns a safe identifier for the current component.  If willCache is true, your
+	 * component should cache the identifier name so that it does not change.  In this case,
+	 * your component will be given an incrementing counter value that is unique on the 
+	 * current page.  If willCache is false (because you cannot cache the value), the 
+	 * identifier returned will be based on the context.elementID().  While unique on the
+	 * page at any point in time, be aware that structural changes to the page can 
+	 * cause the elementID of your component to change. 
+	 * 
+	 * @param context the WOContext
+	 * @param willCache if true, you should cache the resulting value in your component
+	 * @return a safe identifier name
+	 */
+	public static String safeIdentifierName(WOContext context, boolean willCache) {
+		String safeIdentifierName;
+		if (willCache) {
+			NSMutableDictionary<String, Object> pageUserInfo = ERXResponseRewriter.pageUserInfo(context);
+			Integer counter = (Integer) pageUserInfo.objectForKey(ERXWOContext.SAFE_IDENTIFIER_NAME_KEY);
+			if (counter == null) {
+				counter = Integer.valueOf(0);
+			}
+			else {
+				counter = Integer.valueOf(counter.intValue() + 1);
+			}
+			pageUserInfo.setObjectForKey(counter, ERXWOContext.SAFE_IDENTIFIER_NAME_KEY);
+			safeIdentifierName = ERXStringUtilities.safeIdentifierName(counter.toString());
+		}
+		else {
+			safeIdentifierName = ERXStringUtilities.safeIdentifierName("e_" + context.elementID());	
+		}
+		return safeIdentifierName;
+	}
+	
 	/**
 	 * Returns a javascript-safe version of the given element ID.
 	 * 
@@ -315,6 +349,7 @@ public class ERXWOContext extends ERXAjaxContext implements ERXMutableUserInfoHo
 	 * @param elementID
 	 *            the element ID
 	 * @return a javascript-safe version (i.e. "_1_2_3_10")
+	 * @deprecated for ERXStringUtilities.safeIdentifierName(String)
 	 */
 	public static String toSafeElementID(String elementID) {
 		return ERXStringUtilities.safeIdentifierName(elementID);
